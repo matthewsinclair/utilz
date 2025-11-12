@@ -1,0 +1,173 @@
+name: PR Checks
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  check-documentation:
+    name: Documentation Checks
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Check for documentation updates
+      run: |
+        echo "Checking if documentation needs updates..."
+
+        # Check if any scripts or implementations were modified
+        if git diff --name-only origin/main..HEAD | grep -qE "(bin/|opt/.*/[^/]+$)"; then
+          echo "Scripts or utilities were modified - checking for documentation updates"
+
+          # Check if any documentation was also updated
+          if git diff --name-only origin/main..HEAD | grep -qE "(\.md$|help/)"; then
+            echo "Documentation updates found"
+          else
+            echo "Warning: Scripts/utilities modified but no documentation updates found"
+            echo "Consider updating relevant documentation in help/ or README files"
+          fi
+        fi
+
+  test-coverage:
+    name: Test Coverage Check
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Check for test updates
+      run: |
+        echo "Checking test coverage for changes..."
+
+        # Check if any utility implementations were modified
+        if git diff --name-only origin/main..HEAD | grep -qE "opt/.*/[^/]+$"; then
+          echo "Utility implementations were modified - checking for test updates"
+
+          # Check if any tests were also updated
+          if git diff --name-only origin/main..HEAD | grep -q "test/"; then
+            echo "Test updates found"
+          else
+            echo "Warning: Utility implementations modified but no test updates found"
+            echo "Consider adding or updating tests for your changes"
+          fi
+        fi
+
+        # Check if common library was modified
+        if git diff --name-only origin/main..HEAD | grep -q "opt/utilz/lib/common.sh"; then
+          echo "Common library modified - checking for test updates"
+
+          if git diff --name-only origin/main..HEAD | grep -q "opt/utilz/test/"; then
+            echo "Framework tests updated"
+          else
+            echo "Warning: Common library modified but framework tests not updated"
+            echo "Consider adding tests for common library changes"
+          fi
+        fi
+
+  commit-message-check:
+    name: Commit Message Format
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Check commit messages
+      run: |
+        echo "Checking commit message format..."
+
+        # Get commits in this PR
+        COMMITS=$(git log --format="%s" origin/main..HEAD)
+
+        # Check each commit message
+        echo "$COMMITS" | while read -r commit; do
+          echo "Checking: $commit"
+
+          # Basic checks
+          if [ ${#commit} -lt 10 ]; then
+            echo "Warning: Very short commit message"
+          fi
+
+          if [ ${#commit} -gt 72 ]; then
+            echo "Warning: Commit message exceeds 72 characters"
+          fi
+        done
+
+        echo "Commit message check completed"
+
+  pr-size-check:
+    name: PR Size Check
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Check PR size
+      run: |
+        echo "Checking PR size..."
+
+        # Count changed lines
+        ADDITIONS="${{ github.event.pull_request.additions }}"
+        DELETIONS="${{ github.event.pull_request.deletions }}"
+        TOTAL_CHANGES=$((ADDITIONS + DELETIONS))
+
+        echo "Lines added: $ADDITIONS"
+        echo "Lines deleted: $DELETIONS"
+        echo "Total changes: $TOTAL_CHANGES"
+
+        if [ $TOTAL_CHANGES -gt 1000 ]; then
+          echo "Warning: Large PR (>1000 lines changed)"
+          echo "Consider breaking this into smaller PRs"
+        elif [ $TOTAL_CHANGES -gt 500 ]; then
+          echo "Note: Medium-sized PR (>500 lines changed)"
+        else
+          echo "PR size is reasonable"
+        fi
+
+  utility-metadata-check:
+    name: Utility Metadata Check
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Check utility metadata
+      run: |
+        echo "Checking utility metadata files..."
+
+        # Check if any new utilities were added
+        if git diff --name-only origin/main..HEAD | grep -qE "^opt/[^/]+/[^/]+$"; then
+          echo "New or modified utilities detected"
+
+          # Check for required metadata files
+          for util_dir in opt/*/; do
+            util_name=$(basename "$util_dir")
+            if [ "$util_name" == "utilz" ]; then
+              continue
+            fi
+
+            # Check if utility has metadata file
+            if [ -f "$util_dir/${util_name}.yaml" ]; then
+              echo "Found metadata: $util_dir/${util_name}.yaml"
+            else
+              echo "Warning: Missing metadata file for $util_name"
+              echo "Create $util_dir/${util_name}.yaml with version and description"
+            fi
+
+            # Check if utility has README
+            if [ -f "$util_dir/README.md" ]; then
+              echo "Found README: $util_dir/README.md"
+            else
+              echo "Warning: Missing README for $util_name"
+            fi
+
+            # Check if utility has tests
+            if [ -d "$util_dir/test" ]; then
+              echo "Found tests: $util_dir/test/"
+            else
+              echo "Warning: Missing tests directory for $util_name"
+            fi
+          done
+        fi
