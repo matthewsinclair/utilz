@@ -4,6 +4,8 @@ verblock: "12 Nov 2025:v0.1: Matthew Sinclair - Initial version"
 
 # Utilz
 
+[![Utilz Tests](https://github.com/matthewsinclair/utilz/actions/workflows/tests.yml/badge.svg)](https://github.com/matthewsinclair/utilz/actions/workflows/tests.yml)
+
 A bash/zsh framework for building and managing command-line utilities with a single dispatcher.
 
 ## What is this?
