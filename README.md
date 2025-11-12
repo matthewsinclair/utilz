@@ -66,13 +66,14 @@ utilz doctor
 ### Framework Commands
 
 ```bash
-utilz help              # Show framework help
-utilz help <utility>    # Show utility-specific help
-utilz list              # List installed utilities
-utilz version           # Show framework version
-utilz doctor            # Run diagnostics
-utilz test              # Run all tests
-utilz test <utility>    # Run tests for specific utility
+utilz help                    # Show framework help
+utilz help <utility>          # Show utility-specific help
+utilz list                    # List installed utilities
+utilz version                 # Show framework version
+utilz doctor                  # Run diagnostics
+utilz test                    # Run all tests
+utilz test <utility>          # Run tests for specific utility
+utilz generate <name> [desc]  # Generate new utility scaffold
 ```
 
 ### Calling Utilities
@@ -112,60 +113,41 @@ See `utilz help mdagg` for details.
 
 ## Creating a New Utility
 
-1. **Create the utility directory:**
+Use the built-in generator to scaffold a new utility:
 
 ```bash
-mkdir -p opt/myutil/test
+# Generate a new utility
+utilz generate myutil "My new utility description"
+
+# Or with author name
+utilz generate myutil "Does something useful" "Your Name"
 ```
 
-2. **Create the implementation:**
+This creates:
+
+- `opt/myutil/myutil` - Executable implementation with boilerplate
+- `opt/myutil/myutil.yaml` - Metadata (version, description, dependencies)
+- `opt/myutil/README.md` - Documentation
+- `opt/myutil/test/myutil.bats` - Test suite with basic tests
+- `help/myutil.md` - Help documentation
+- `bin/myutil` - Symlink to dispatcher
+
+Then customize the implementation:
 
 ```bash
-cat > opt/myutil/myutil <<'EOF'
-#!/usr/bin/env bash
-set -euo pipefail
+# Edit the implementation
+vim opt/myutil/myutil
 
-# Source common functions if not already loaded
-if [[ "$(type -t info 2>/dev/null)" != "function" ]]; then
-    SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-    UTILZ_HOME="${UTILZ_HOME:-$(cd "$SCRIPT_DIR/../.." && pwd)}"
+# Test it
+utilz myutil --help
+utilz myutil
 
-    if [[ -f "$UTILZ_HOME/opt/utilz/lib/common.sh" ]]; then
-        source "$UTILZ_HOME/opt/utilz/lib/common.sh"
-    fi
-fi
+# Run tests
+utilz test myutil
 
-# Your implementation here
-echo "Hello from myutil!"
-EOF
-
-chmod +x opt/myutil/myutil
-```
-
-3. **Create metadata:**
-
-```bash
-cat > opt/myutil/myutil.yaml <<'EOF'
-name: myutil
-version: 1.0.0
-utilz_version: "^1.0.0"
-description: My new utility
-author: Your Name
-EOF
-```
-
-4. **Create the symlink:**
-
-```bash
-ln -s utilz bin/myutil
-```
-
-5. **Test it:**
-
-```bash
-myutil
-utilz list
+# Check everything is working
 utilz doctor
+utilz list
 ```
 
 ## Testing

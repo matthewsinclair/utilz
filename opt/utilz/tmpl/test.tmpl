@@ -1,0 +1,46 @@
+#!/usr/bin/env bats
+# {{NAME}}.bats - Tests for {{NAME}} utility
+
+# Load test helper from core utilz tests
+load "../../utilz/test/test_helper.bash"
+
+# ============================================================================
+# BASIC TESTS
+# ============================================================================
+
+@test "{{NAME}} --help shows usage" {
+    run_{{NAME}} --help
+    assert_success
+    assert_output_contains "Usage"
+    assert_output_contains "{{NAME}}"
+}
+
+@test "{{NAME}} --version shows version" {
+    run_{{NAME}} --version
+    assert_success
+    assert_output_contains "{{NAME}}"
+    assert_output_contains "v"
+}
+
+@test "{{NAME}} with unknown option shows error" {
+    run_{{NAME}} --invalid-option
+    assert_failure
+    assert_output_contains "Unknown option"
+}
+
+# ============================================================================
+# HELPER FUNCTIONS
+# ============================================================================
+
+run_{{NAME}}() {
+    run "$UTILZ_BIN_DIR/{{NAME}}" "$@"
+}
+
+# ============================================================================
+# FUNCTIONALITY TESTS
+# ============================================================================
+
+# Add your tests here
+@test "{{NAME}} basic functionality" {
+    skip "Not implemented yet"
+}

@@ -1,0 +1,103 @@
+# {{NAME}}
+
+**Version**: 1.0.0
+**Part of**: [Utilz Framework](../../README.md)
+
+---
+
+## Overview
+
+{{DESCRIPTION}}
+
+---
+
+## Installation
+
+As part of the Utilz framework, `{{NAME}}` is automatically available once the symlink is created:
+
+```bash
+cd $UTILZ_HOME/bin
+ln -s utilz {{NAME}}
+```
+
+---
+
+## Usage
+
+```bash
+{{NAME}} [OPTIONS] [ARGS]
+```
+
+For detailed help: `utilz help {{NAME}}`
+
+---
+
+## Examples
+
+```bash
+# Show help
+{{NAME}} --help
+
+# Show version
+{{NAME}} --version
+```
+
+---
+
+## Implementation
+
+### Architecture
+
+```
+{{NAME}}
+├── Invoked via: $UTILZ_HOME/bin/{{NAME}} (symlink)
+├── Dispatched by: $UTILZ_HOME/bin/utilz
+├── Has access to: $UTILZ_HOME/opt/utilz/lib/common.sh
+└── Help from: $UTILZ_HOME/help/{{NAME}}.md
+```
+
+### Dependencies
+
+**Required:**
+- Bash 4.0+ or Zsh
+
+**Optional:**
+- None
+
+---
+
+## Testing
+
+```bash
+# Run tests
+utilz test {{NAME}}
+
+# Run tests directly
+cd opt/{{NAME}}/test
+bats {{NAME}}.bats
+```
+
+---
+
+## Development
+
+### Making Changes
+
+1. Edit `{{IMPL_PATH}}`
+2. Test changes: `{{NAME}} --help`
+3. Run tests: `utilz test {{NAME}}`
+4. Update help if needed: `{{HELP_PATH}}`
+
+---
+
+## License
+
+Part of Utilz framework. Personal use.
+Copyright (c) {{YEAR}} {{AUTHOR}}
+
+---
+
+## See Also
+
+- [Utilz Framework Documentation](../../README.md)
+- [{{NAME}} Help](../../help/{{NAME}}.md) - Run: `utilz help {{NAME}}`

@@ -571,3 +571,113 @@ run_tests() {
         return 1
     fi
 }
+
+# ============================================================================
+# GENERATE UTILITY
+# ============================================================================
+
+generate_utility() {
+    local util_name="${1:-}"
+    local util_desc="${2:-A new utility}"
+    local author="${3:-$(git config user.name 2>/dev/null || echo "Your Name")}"
+    local year=$(date +%Y)
+
+    if [[ -z "$util_name" ]]; then
+        error "Usage: utilz generate <name> [description] [author]"
+        echo ""
+        echo "Example:"
+        echo "  utilz generate mytool \"Does something useful\" \"Your Name\""
+        return 1
+    fi
+
+    # Validate name
+    if [[ ! "$util_name" =~ ^[a-z][a-z0-9-]*$ ]]; then
+        error "Invalid utility name: $util_name"
+        echo "Name must start with a letter and contain only lowercase letters, numbers, and hyphens"
+        return 1
+    fi
+
+    local util_dir="$UTILZ_HOME/opt/$util_name"
+    local bin_link="$UTILZ_HOME/bin/$util_name"
+
+    # Check if utility already exists
+    if [[ -d "$util_dir" ]]; then
+        error "Utility already exists: $util_dir"
+        return 1
+    fi
+
+    if [[ -L "$bin_link" ]] || [[ -f "$bin_link" ]]; then
+        error "Binary already exists: $bin_link"
+        return 1
+    fi
+
+    info "Generating utility: $util_name"
+    echo ""
+
+    # Create directory structure
+    info "Creating directory structure..."
+    mkdir -p "$util_dir/test"
+
+    # Generate files from templates
+    local tmpl_dir="$UTILZ_HOME/opt/utilz/tmpl"
+    local impl_path="$util_dir/$util_name"
+    local help_path="$UTILZ_HOME/help/$util_name.md"
+
+    info "Generating implementation..."
+    sed -e "s/{{NAME}}/$util_name/g" \
+        -e "s/{{DESCRIPTION}}/$util_desc/g" \
+        -e "s/{{AUTHOR}}/$author/g" \
+        -e "s/{{YEAR}}/$year/g" \
+        "$tmpl_dir/script.tmpl" > "$impl_path"
+    chmod +x "$impl_path"
+
+    info "Generating metadata..."
+    sed -e "s/{{NAME}}/$util_name/g" \
+        -e "s/{{DESCRIPTION}}/$util_desc/g" \
+        -e "s/{{AUTHOR}}/$author/g" \
+        "$tmpl_dir/metadata.tmpl" > "$util_dir/$util_name.yaml"
+
+    info "Generating README..."
+    sed -e "s/{{NAME}}/$util_name/g" \
+        -e "s/{{DESCRIPTION}}/$util_desc/g" \
+        -e "s/{{AUTHOR}}/$author/g" \
+        -e "s/{{YEAR}}/$year/g" \
+        -e "s|{{IMPL_PATH}}|$impl_path|g" \
+        -e "s|{{HELP_PATH}}|$help_path|g" \
+        "$tmpl_dir/README.tmpl" > "$util_dir/README.md"
+
+    info "Generating help file..."
+    sed -e "s/{{NAME}}/$util_name/g" \
+        -e "s/{{DESCRIPTION}}/$util_desc/g" \
+        -e "s/{{AUTHOR}}/$author/g" \
+        -e "s/{{YEAR}}/$year/g" \
+        "$tmpl_dir/help.tmpl" > "$help_path"
+
+    info "Generating test file..."
+    sed -e "s/{{NAME}}/$util_name/g" \
+        "$tmpl_dir/test.tmpl" > "$util_dir/test/$util_name.bats"
+    chmod +x "$util_dir/test/$util_name.bats"
+
+    info "Creating symlink..."
+    cd "$UTILZ_HOME/bin"
+    ln -s utilz "$util_name"
+    cd - >/dev/null
+
+    echo ""
+    success "Utility '$util_name' generated successfully!"
+    echo ""
+    echo "Next steps:"
+    echo "  1. Edit implementation: $impl_path"
+    echo "  2. Add tests: $util_dir/test/$util_name.bats"
+    echo "  3. Update help: $help_path"
+    echo "  4. Test it: $util_name --help"
+    echo "  5. Run tests: utilz test $util_name"
+    echo ""
+    echo "Generated files:"
+    echo "  - $impl_path"
+    echo "  - $util_dir/$util_name.yaml"
+    echo "  - $util_dir/README.md"
+    echo "  - $util_dir/test/$util_name.bats"
+    echo "  - $help_path"
+    echo "  - $bin_link -> utilz"
+}

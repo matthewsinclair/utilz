@@ -93,6 +93,12 @@ if [[ "$INVOKED_AS" == "utilz" ]]; then
             show_version
             ;;
 
+        generate)
+            # Generate a new utility
+            shift  # Remove 'generate' from arguments
+            generate_utility "$@"
+            ;;
+
         *)
             # Check if this is an installed utility
             UTIL_NAME="$COMMAND"
@@ -112,6 +118,7 @@ if [[ "$INVOKED_AS" == "utilz" ]]; then
                 echo "  utilz list              - List available utilities"
                 echo "  utilz test [utility]    - Run tests"
                 echo "  utilz version           - Show version"
+                echo "  utilz generate <name>   - Generate new utility"
                 echo ""
                 echo "Installed utilities:"
                 for symlink in "$UTILZ_HOME"/bin/*; do
