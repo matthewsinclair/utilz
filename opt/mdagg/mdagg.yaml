@@ -1,0 +1,39 @@
+name: mdagg
+version: 1.0.0
+utilz_version: "^1.0.0"  # Compatible with Utilz 1.x.x
+description: Markdown aggregator for concatenating multiple markdown files into a single document
+author: Matthew Sinclair
+website: https://matthewsinclair.com
+help_file: ../../help/mdagg.md
+
+# Required external dependencies
+dependencies:
+  - name: yq
+    required: true
+    install: brew install yq
+    purpose: YAML configuration file parsing
+
+# Optional dependencies for enhanced functionality
+optional_dependencies:
+  - name: bat
+    install: brew install bat
+    purpose: Enhanced help display with syntax highlighting
+  - name: mdcat
+    install: brew install mdcat
+    purpose: Render markdown in terminal
+
+# Supported input modes
+modes:
+  - yaml     # YAML configuration file
+  - glob     # Shell glob patterns
+  - stdin    # Piped file list
+
+# Main features
+features:
+  - Concatenate multiple markdown files
+  - YAML-driven configuration
+  - Glob pattern matching with natural sort
+  - Optional page breaks for PDF generation
+  - Section dividers with titles
+  - Strip YAML frontmatter
+  - Remove navigation back links

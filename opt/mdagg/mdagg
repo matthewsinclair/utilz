@@ -1,0 +1,434 @@
+#!/usr/bin/env bash
+#
+# mdagg - Markdown Aggregator
+#
+# Concatenates multiple markdown files into a single document.
+# Supports YAML config files, glob patterns, and stdin input.
+#
+
+set -euo pipefail
+
+# Source common functions if not already loaded (from dispatcher)
+if [[ "$(type -t info 2>/dev/null)" != "function" ]]; then
+    # Determine UTILZ_HOME from script location
+    SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+    UTILZ_HOME="${UTILZ_HOME:-$(cd "$SCRIPT_DIR/../.." && pwd)}"
+
+    if [[ -f "$UTILZ_HOME/opt/utilz/lib/common.sh" ]]; then
+        source "$UTILZ_HOME/opt/utilz/lib/common.sh"
+    else
+        echo "ERROR: Cannot find common.sh library" >&2
+        exit 1
+    fi
+fi
+
+# ============================================================================
+# DEFAULT SETTINGS
+# ============================================================================
+
+OUTPUT_FILE=""
+PAGE_BREAKS=false
+SECTION_DIVIDERS=false
+STRIP_FRONT_MATTER=false
+STRIP_BACK_LINKS=false
+VERBOSE=false
+WORKING_DIR="$(pwd)"
+INPUT_MODE=""  # yaml, glob, or stdin
+INPUT_SOURCE=""
+
+# ============================================================================
+# FUNCTIONS
+# ============================================================================
+
+usage() {
+    cat <<EOF
+Usage: mdagg [OPTIONS] [INPUT]
+
+Markdown Aggregator - Concatenate markdown files for PDF generation
+
+INPUT MODES:
+  config.yaml              Use YAML configuration file
+  "*.md"                   Use glob pattern
+  --stdin                  Read file list from stdin
+  (none)                   Auto-discover .mdagg.yaml in current directory
+
+OPTIONS:
+  -c, --config FILE        YAML config file (explicit)
+  -g, --glob PATTERN       Glob pattern (explicit)
+  -o, --output FILE        Output file (default: stdout)
+  -p, --page-breaks        Insert page breaks between files
+  -d, --section-dividers   Insert section dividers with titles
+  -s, --strip-front-matter Strip YAML front matter from files
+  -b, --strip-back-links   Strip navigation links like [← Index]
+  -w, --working-dir DIR    Working directory for relative paths
+  -v, --verbose            Verbose output
+  -h, --help               Show this help
+  --version                Show version
+
+EXAMPLES:
+  # YAML mode
+  mdagg config.yaml -o output.md
+
+  # Glob mode
+  mdagg "*.md" -o combined.md -p
+  mdagg "0[1-9]-*.md" -d -b
+
+  # Stdin mode
+  find . -name "*.md" | sort | mdagg --stdin -o all.md
+
+  # Quick preview
+  mdagg "chapter-*.md" | less
+
+For detailed help, run: utilz help mdagg
+EOF
+}
+
+# Process a single markdown file
+process_file() {
+    local file="$1"
+    local title="${2:-}"
+    local add_page_break="${3:-$PAGE_BREAKS}"
+
+    if [[ ! -f "$file" ]]; then
+        warn "File not found: $file"
+        return 1
+    fi
+
+    if [[ "$VERBOSE" == true ]]; then
+        info "  Adding: $file"
+    fi
+
+    # Read file content
+    local content
+    content=$(<"$file")
+
+    # Strip YAML front matter if requested
+    if [[ "$STRIP_FRONT_MATTER" == true ]]; then
+        # Remove everything from first --- to second --- at start of file
+        content=$(echo "$content" | awk '
+            BEGIN { in_frontmatter=0; started=0 }
+            /^---$/ && !started { in_frontmatter=1; started=1; next }
+            /^---$/ && in_frontmatter { in_frontmatter=0; next }
+            !in_frontmatter { print }
+        ')
+    fi
+
+    # Strip back links if requested
+    if [[ "$STRIP_BACK_LINKS" == true ]]; then
+        # Remove lines like [← Index](./00-file.md) or [↑ Top](#)
+        content=$(echo "$content" | grep -v '^\[←↑].*\](.*)')
+    fi
+
+    # Output section divider if title provided
+    if [[ -n "$title" ]] && [[ "$SECTION_DIVIDERS" == true ]]; then
+        echo ""
+        echo "---"
+        echo ""
+        echo "# $title"
+        echo ""
+        echo '<div style="page-break-after: always; break-after: page;"></div>'
+        echo ""
+    fi
+
+    # Output file content
+    echo "$content"
+
+    # Add page break if requested
+    if [[ "$add_page_break" == true ]]; then
+        echo ""
+        echo '<div style="page-break-after: always; break-after: page;"></div>'
+        echo ""
+    fi
+}
+
+# Process YAML config mode
+process_yaml_config() {
+    local config_file="$1"
+
+    if [[ ! -f "$config_file" ]]; then
+        error "Config file not found: $config_file"
+        exit 1
+    fi
+
+    # Check if yq is installed
+    if ! require_command "yq" "brew install yq"; then
+        exit 1
+    fi
+
+    if [[ "$VERBOSE" == true ]]; then
+        info "Processing YAML config: $config_file"
+    fi
+
+    # Parse settings from YAML (if present)
+    if yq eval '.settings' "$config_file" >/dev/null 2>&1; then
+        local yaml_page_breaks=$(yq eval '.settings.page_breaks // false' "$config_file")
+        local yaml_section_dividers=$(yq eval '.settings.section_dividers // false' "$config_file")
+        local yaml_strip_front=$(yq eval '.settings.strip_front_matter // false' "$config_file")
+        local yaml_strip_back=$(yq eval '.settings.strip_back_links // false' "$config_file")
+        local yaml_working_dir=$(yq eval '.settings.working_dir // "."' "$config_file")
+
+        # Override defaults if not explicitly set via CLI
+        [[ "$yaml_page_breaks" == "true" ]] && PAGE_BREAKS=true
+        [[ "$yaml_section_dividers" == "true" ]] && SECTION_DIVIDERS=true
+        [[ "$yaml_strip_front" == "true" ]] && STRIP_FRONT_MATTER=true
+        [[ "$yaml_strip_back" == "true" ]] && STRIP_BACK_LINKS=true
+        [[ "$yaml_working_dir" != "." ]] && WORKING_DIR="$yaml_working_dir"
+    fi
+
+    # Get file count
+    local file_count=$(yq eval '.files | length' "$config_file")
+
+    if [[ "$VERBOSE" == true ]]; then
+        info "Found $file_count files to process"
+    fi
+
+    # Process each file
+    for ((i=0; i<file_count; i++)); do
+        local file_path=$(yq eval ".files[$i].file" "$config_file")
+        local file_title=$(yq eval ".files[$i].title // \"\"" "$config_file")
+        local file_page_break=$(yq eval ".files[$i].page_break // \"$PAGE_BREAKS\"" "$config_file")
+
+        # Make path absolute if relative
+        if [[ ! "$file_path" =~ ^/ ]]; then
+            file_path="$WORKING_DIR/$file_path"
+        fi
+
+        process_file "$file_path" "$file_title" "$file_page_break"
+    done
+}
+
+# Process glob pattern mode
+process_glob_pattern() {
+    local pattern="$1"
+
+    if [[ "$VERBOSE" == true ]]; then
+        info "Processing glob pattern: $pattern"
+    fi
+
+    # Expand glob pattern (with nullglob to handle no matches)
+    shopt -s nullglob
+    local files=("$WORKING_DIR"/$pattern)
+    shopt -u nullglob
+
+    if [[ ${#files[@]} -eq 0 ]]; then
+        error "No files match pattern: $pattern"
+        exit 1
+    fi
+
+    # Sort files naturally (1, 2, 10 instead of 1, 10, 2)
+    IFS=$'\n' files=($(sort -V <<<"${files[*]}"))
+    unset IFS
+
+    if [[ "$VERBOSE" == true ]]; then
+        info "Found ${#files[@]} files"
+    fi
+
+    # Process each file
+    for file in "${files[@]}"; do
+        # Extract title from filename if section dividers enabled
+        local title=""
+        if [[ "$SECTION_DIVIDERS" == true ]]; then
+            # Remove directory, extension, and leading numbers/hyphens
+            title=$(basename "$file" .md | sed 's/^[0-9]*-*//')
+            title=$(echo "$title" | tr '-' ' ' | sed 's/\b\(.\)/\u\1/g')  # Title case
+        fi
+
+        process_file "$file" "$title" "$PAGE_BREAKS"
+    done
+}
+
+# Process stdin mode
+process_stdin() {
+    if [[ "$VERBOSE" == true ]]; then
+        info "Reading file list from stdin..."
+    fi
+
+    local files=()
+    while IFS= read -r line; do
+        [[ -n "$line" ]] && files+=("$line")
+    done
+
+    if [[ ${#files[@]} -eq 0 ]]; then
+        error "No files provided via stdin"
+        exit 1
+    fi
+
+    if [[ "$VERBOSE" == true ]]; then
+        info "Found ${#files[@]} files"
+    fi
+
+    # Process each file
+    for file in "${files[@]}"; do
+        # Make path absolute if relative
+        if [[ ! "$file" =~ ^/ ]]; then
+            file="$WORKING_DIR/$file"
+        fi
+
+        local title=""
+        if [[ "$SECTION_DIVIDERS" == true ]]; then
+            title=$(basename "$file" .md | sed 's/^[0-9]*-*//')
+            title=$(echo "$title" | tr '-' ' ' | sed 's/\b\(.\)/\u\1/g')
+        fi
+
+        process_file "$file" "$title" "$PAGE_BREAKS"
+    done
+}
+
+# ============================================================================
+# ARGUMENT PARSING
+# ============================================================================
+
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        -h|--help)
+            usage
+            exit 0
+            ;;
+        --version)
+            # Show version (may be called directly or via dispatcher)
+            if [[ "$(type -t show_version 2>/dev/null)" == "function" ]]; then
+                # Called via dispatcher - common.sh is loaded
+                show_version "mdagg"
+            else
+                # Called directly - manually show version
+                local yaml_file="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/mdagg.yaml"
+                if command -v yq >/dev/null 2>&1 && [[ -f "$yaml_file" ]]; then
+                    local version=$(yq eval ".version" "$yaml_file" 2>/dev/null)
+                    local desc=$(yq eval ".description" "$yaml_file" 2>/dev/null)
+                    echo "mdagg v$version"
+                    [[ "$desc" != "null" ]] && echo "$desc"
+                else
+                    echo "mdagg v1.0.0"
+                fi
+            fi
+            exit 0
+            ;;
+        -c|--config)
+            INPUT_MODE="yaml"
+            INPUT_SOURCE="$2"
+            shift 2
+            ;;
+        -g|--glob)
+            INPUT_MODE="glob"
+            INPUT_SOURCE="$2"
+            shift 2
+            ;;
+        --stdin)
+            INPUT_MODE="stdin"
+            shift
+            ;;
+        -o|--output)
+            OUTPUT_FILE="$2"
+            shift 2
+            ;;
+        -p|--page-breaks)
+            PAGE_BREAKS=true
+            shift
+            ;;
+        -d|--section-dividers)
+            SECTION_DIVIDERS=true
+            shift
+            ;;
+        -s|--strip-front-matter)
+            STRIP_FRONT_MATTER=true
+            shift
+            ;;
+        -b|--strip-back-links)
+            STRIP_BACK_LINKS=true
+            shift
+            ;;
+        -w|--working-dir)
+            WORKING_DIR="$2"
+            shift 2
+            ;;
+        -v|--verbose)
+            VERBOSE=true
+            shift
+            ;;
+        -*)
+            error "Unknown option: $1"
+            echo ""
+            usage
+            exit 1
+            ;;
+        *)
+            # Positional argument - determine mode
+            if [[ -z "$INPUT_MODE" ]]; then
+                if [[ "$1" == *.yaml ]] || [[ "$1" == *.yml ]]; then
+                    INPUT_MODE="yaml"
+                    INPUT_SOURCE="$1"
+                else
+                    INPUT_MODE="glob"
+                    INPUT_SOURCE="$1"
+                fi
+            fi
+            shift
+            ;;
+    esac
+done
+
+# ============================================================================
+# VALIDATION
+# ============================================================================
+
+# If no input specified, look for .mdagg.yaml in current directory
+if [[ -z "$INPUT_MODE" ]]; then
+    if [[ -f ".mdagg.yaml" ]]; then
+        info "Using .mdagg.yaml from current directory"
+        INPUT_MODE="yaml"
+        INPUT_SOURCE=".mdagg.yaml"
+    elif [[ -f ".mdagg.yml" ]]; then
+        info "Using .mdagg.yml from current directory"
+        INPUT_MODE="yaml"
+        INPUT_SOURCE=".mdagg.yml"
+    else
+        error "No input specified and no .mdagg.yaml found in current directory"
+        echo ""
+        usage
+        exit 1
+    fi
+fi
+
+if [[ ! -d "$WORKING_DIR" ]]; then
+    error "Working directory does not exist: $WORKING_DIR"
+    exit 1
+fi
+
+# ============================================================================
+# MAIN EXECUTION
+# ============================================================================
+
+# Redirect output to file if specified
+if [[ -n "$OUTPUT_FILE" ]]; then
+    exec > "$OUTPUT_FILE"
+    if [[ "$VERBOSE" == true ]]; then
+        info "Writing to: $OUTPUT_FILE" >&2
+    fi
+fi
+
+# Process based on input mode
+case "$INPUT_MODE" in
+    yaml)
+        process_yaml_config "$INPUT_SOURCE"
+        ;;
+    glob)
+        process_glob_pattern "$INPUT_SOURCE"
+        ;;
+    stdin)
+        process_stdin
+        ;;
+    *)
+        error "Unknown input mode: $INPUT_MODE"
+        exit 1
+        ;;
+esac
+
+# Summary (to stderr if writing to file)
+if [[ "$VERBOSE" == true ]]; then
+    if [[ -n "$OUTPUT_FILE" ]]; then
+        file_size=$(wc -c < "$OUTPUT_FILE" | tr -d ' ')
+        success "Assembly complete! Output: $OUTPUT_FILE ($file_size bytes)" >&2
+    else
+        success "Assembly complete!" >&2
+    fi
+fi

@@ -1,0 +1,172 @@
+#!/usr/bin/env bash
+#
+# Utilz - Universal utilities framework dispatcher
+#
+# This is the master script that dispatches to individual utility implementations.
+# All utilities in bin/ are symlinks to this script.
+#
+
+set -euo pipefail
+
+# ============================================================================
+# ENVIRONMENT SETUP
+# ============================================================================
+
+# Determine UTILZ_HOME from the real location of this script
+# Works with symlinks (e.g., ~/bin/utilz -> ~/Devel/prj/Utilz/bin/utilz)
+determine_utilz_home() {
+    local script="$0"
+
+    # Follow symlink chain to find the real script location
+    while [[ -L "$script" ]]; do
+        local link_target=$(readlink "$script")
+
+        # Handle relative symlinks
+        if [[ "$link_target" != /* ]]; then
+            script="$(dirname "$script")/$link_target"
+        else
+            script="$link_target"
+        fi
+    done
+
+    # Get the directory containing the real script
+    local script_dir="$(cd "$(dirname "$script")" && pwd)"
+
+    # UTILZ_HOME is the parent of bin/
+    echo "$(cd "$script_dir/.." && pwd)"
+}
+
+# Detect UTILZ_HOME from script location if not already set
+if [[ -z "${UTILZ_HOME:-}" ]]; then
+    export UTILZ_HOME="$(determine_utilz_home)"
+fi
+
+# Detect which utility was invoked
+INVOKED_AS="$(basename "$0")"
+
+# Source common functions
+if [[ -f "$UTILZ_HOME/opt/utilz/lib/common.sh" ]]; then
+    # shellcheck source=opt/utilz/lib/common.sh
+    source "$UTILZ_HOME/opt/utilz/lib/common.sh"
+else
+    echo "ERROR: Cannot find common.sh library" >&2
+    echo "Expected: $UTILZ_HOME/opt/utilz/lib/common.sh" >&2
+    exit 1
+fi
+
+# ============================================================================
+# UTILZ BUILT-IN COMMANDS (when invoked as 'utilz')
+# ============================================================================
+
+if [[ "$INVOKED_AS" == "utilz" ]]; then
+    COMMAND="${1:-help}"
+
+    case "$COMMAND" in
+        help)
+            # Show help for utilz or a specific utility
+            UTIL="${2:-}"
+            if [[ -z "$UTIL" ]]; then
+                show_help "utilz"
+            else
+                show_help "$UTIL"
+            fi
+            ;;
+
+        doctor)
+            # Run diagnostics
+            run_doctor
+            ;;
+
+        list)
+            # List all available utilities
+            list_utilities
+            ;;
+
+        test)
+            # Run tests for utilities
+            shift  # Remove 'test' from arguments
+            run_tests "$@"
+            ;;
+
+        version)
+            # Show version
+            show_version
+            ;;
+
+        *)
+            # Check if this is an installed utility
+            UTIL_NAME="$COMMAND"
+            UTIL_IMPL="$UTILZ_HOME/opt/$UTIL_NAME/$UTIL_NAME"
+
+            if [[ -L "$UTILZ_HOME/bin/$UTIL_NAME" && -f "$UTIL_IMPL" && -x "$UTIL_IMPL" ]]; then
+                # Valid utility - dispatch to it with remaining arguments
+                shift  # Remove utility name from arguments
+                exec "$UTIL_IMPL" "$@"
+            else
+                # Not a valid utility or command
+                error "Unknown command: $COMMAND"
+                echo ""
+                echo "Available commands:"
+                echo "  utilz help [utility]    - Show help"
+                echo "  utilz doctor            - Run diagnostics"
+                echo "  utilz list              - List available utilities"
+                echo "  utilz test [utility]    - Run tests"
+                echo "  utilz version           - Show version"
+                echo ""
+                echo "Installed utilities:"
+                for symlink in "$UTILZ_HOME"/bin/*; do
+                    local name=$(basename "$symlink")
+                    if [[ "$name" != "utilz" && -L "$symlink" ]]; then
+                        echo "  utilz $name [args]      - Run $name utility"
+                    fi
+                done
+                exit 1
+            fi
+            ;;
+    esac
+
+    exit 0
+fi
+
+# ============================================================================
+# UTILITY DISPATCH
+# ============================================================================
+
+# At this point, we're invoked via a symlink (e.g., 'mdagg')
+UTIL_NAME="$INVOKED_AS"
+UTIL_IMPL="$UTILZ_HOME/opt/$UTIL_NAME/$UTIL_NAME"
+
+# Check if utility implementation exists
+if [[ ! -f "$UTIL_IMPL" ]]; then
+    error "Utility implementation not found: $UTIL_IMPL"
+    echo ""
+    echo "Expected structure:"
+    echo "  $UTILZ_HOME/bin/$UTIL_NAME -> utilz (symlink)"
+    echo "  $UTILZ_HOME/opt/$UTIL_NAME/$UTIL_NAME (implementation)"
+    echo ""
+    echo "Run 'utilz doctor' for diagnostics."
+    exit 1
+fi
+
+# Check if implementation is executable
+if [[ ! -x "$UTIL_IMPL" ]]; then
+    error "Utility implementation is not executable: $UTIL_IMPL"
+    echo ""
+    echo "Fix with: chmod +x $UTIL_IMPL"
+    exit 1
+fi
+
+# Handle --help before dispatching
+if [[ "${1:-}" == "--help" ]] || [[ "${1:-}" == "-h" ]]; then
+    show_help "$UTIL_NAME"
+    exit 0
+fi
+
+# Handle --version before dispatching
+if [[ "${1:-}" == "--version" ]]; then
+    show_version "$UTIL_NAME"
+    exit 0
+fi
+
+# Dispatch to utility implementation
+exec "$UTIL_IMPL" "$@"

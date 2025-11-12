@@ -1,0 +1,17 @@
+name: utilz
+version_file: ../../VERSION
+description: Universal utilities framework and dispatcher
+author: Matthew Sinclair
+website: https://matthewsinclair.com
+help_file: ../../help/utilz.md
+
+# Core framework - no additional dependencies beyond bash
+dependencies: []
+
+# Framework metadata
+framework:
+  is_core: true
+  provides:
+    - dispatcher
+    - common_library
+    - test_runner

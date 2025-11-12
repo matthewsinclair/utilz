@@ -1,0 +1,15 @@
+settings:
+  page_breaks: true
+  section_dividers: true
+  strip_front_matter: false
+  strip_back_links: false
+
+files:
+  - file: "simple.md"
+    title: "Simple Document"
+
+  - file: "with_frontmatter.md"
+    title: "Document with Frontmatter"
+
+  - file: "with_backlinks.md"
+    title: "Document with Navigation"
