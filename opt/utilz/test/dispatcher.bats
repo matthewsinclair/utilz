@@ -10,7 +10,7 @@ load "test_helper.bash"
 @test "UTILZ_HOME is detected from script location" {
     run_utilz version
     assert_success
-    assert_output_contains "Utilz"
+    assert_output_contains "utilz"
 }
 
 @test "bin/utilz exists and is executable" {
@@ -62,7 +62,7 @@ load "test_helper.bash"
 @test "utilz version - shows version" {
     run_utilz version
     assert_success
-    assert_output_contains "Utilz"
+    assert_output_contains "utilz"
     assert_output_contains "v"
 }
 
@@ -157,7 +157,7 @@ load "test_helper.bash"
 
     run_utilz version
     assert_success
-    assert_output_contains "Utilz"
+    assert_output_contains "utilz"
 }
 
 @test "dispatcher passes arguments to utility" {

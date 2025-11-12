@@ -48,9 +48,9 @@ load "../../utilz/test/test_helper.bash"
 
     # Check order by looking at positions in output
     local output_lines="$output"
-    local pos_1=$(echo "$output_lines" | grep -n "Chapter 1" | cut -d: -f1)
-    local pos_2=$(echo "$output_lines" | grep -n "Chapter 2" | cut -d: -f1)
-    local pos_10=$(echo "$output_lines" | grep -n "Chapter 10" | cut -d: -f1)
+    local pos_1=$(echo "$output_lines" | grep -n "Chapter 1" | head -1 | cut -d: -f1)
+    local pos_2=$(echo "$output_lines" | grep -n "Chapter 2" | head -1 | cut -d: -f1)
+    local pos_10=$(echo "$output_lines" | grep -n "Chapter 10" | head -1 | cut -d: -f1)
 
     # pos_2 should be after pos_1
     [[ $pos_2 -gt $pos_1 ]]
@@ -177,7 +177,7 @@ EOF
 @test "stdin mode: reads file list from stdin" {
     create_markdown_files 2
 
-    echo -e "test1.md\ntest2.md" | run_mdagg --stdin
+    run bash -c "echo -e 'test1.md\ntest2.md' | $UTILZ_BIN_DIR/mdagg --stdin"
     assert_success
     assert_output_contains "Test File 1"
     assert_output_contains "Test File 2"
@@ -186,7 +186,7 @@ EOF
 @test "stdin mode: processes files in order received" {
     create_markdown_files 3
 
-    echo -e "test3.md\ntest1.md\ntest2.md" | run_mdagg --stdin
+    run bash -c "echo -e 'test3.md\ntest1.md\ntest2.md' | $UTILZ_BIN_DIR/mdagg --stdin"
     assert_success
 
     # Check order
@@ -198,7 +198,7 @@ EOF
 }
 
 @test "stdin mode: handles empty stdin gracefully" {
-    echo "" | run_mdagg --stdin
+    run bash -c "echo '' | $UTILZ_BIN_DIR/mdagg --stdin"
     assert_failure
 }
 

@@ -35,6 +35,7 @@ VERBOSE=false
 WORKING_DIR="$(pwd)"
 INPUT_MODE=""  # yaml, glob, or stdin
 INPUT_SOURCE=""
+IS_FIRST_FILE=true  # Track first file to preserve YAML front matter
 
 # ============================================================================
 # FUNCTIONS
@@ -115,12 +116,13 @@ process_file() {
 
     # Strip back links if requested
     if [[ "$STRIP_BACK_LINKS" == true ]]; then
-        # Remove lines like [← Index](./00-file.md) or [↑ Top](#)
-        content=$(echo "$content" | grep -v '^\[←↑].*\](.*)')
+        # Remove lines like [← Back to Index](index.md) or [↑ Top](#)
+        # Match lines containing ← or ↑ arrows in markdown links
+        content=$(echo "$content" | grep -v '[←↑]')
     fi
 
-    # Output section divider if title provided
-    if [[ -n "$title" ]] && [[ "$SECTION_DIVIDERS" == true ]]; then
+    # Output section divider if title provided (skip for first file to preserve YAML front matter)
+    if [[ -n "$title" ]] && [[ "$SECTION_DIVIDERS" == true ]] && [[ "$IS_FIRST_FILE" == false ]]; then
         echo ""
         echo "---"
         echo ""
@@ -132,6 +134,9 @@ process_file() {
 
     # Output file content
     echo "$content"
+
+    # Mark that we've processed the first file
+    IS_FIRST_FILE=false
 
     # Add page break if requested
     if [[ "$add_page_break" == true ]]; then

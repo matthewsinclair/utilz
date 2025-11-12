@@ -33,11 +33,11 @@ fi
 # ============================================================================
 
 info() {
-    echo -e "${BLUE}ℹ${RESET} $*"
+    echo -e "${BLUE}ℹ${RESET} $*" >&2
 }
 
 success() {
-    echo -e "${GREEN}✓${RESET} $*"
+    echo -e "${GREEN}✓${RESET} $*" >&2
 }
 
 warn() {
@@ -228,10 +228,10 @@ run_doctor() {
     echo -e "${BOLD}[1/6]${RESET} Checking UTILZ_HOME..."
     if [[ -z "${UTILZ_HOME:-}" ]]; then
         error "UTILZ_HOME is not set"
-        ((issues++))
+        issues=$((issues + 1))
     elif [[ ! -d "$UTILZ_HOME" ]]; then
         error "UTILZ_HOME points to non-existent directory: $UTILZ_HOME"
-        ((issues++))
+        issues=$((issues + 1))
     else
         success "UTILZ_HOME=$UTILZ_HOME"
     fi
@@ -250,7 +250,7 @@ run_doctor() {
 
     if [[ ${#missing_dirs[@]} -gt 0 ]]; then
         error "Missing directories: ${missing_dirs[*]}"
-        ((issues++))
+        issues=$((issues + 1))
     else
         success "All required directories present"
     fi
@@ -260,11 +260,11 @@ run_doctor() {
     echo -e "${BOLD}[3/6]${RESET} Checking bin/utilz..."
     if [[ ! -f "$UTILZ_HOME/bin/utilz" ]]; then
         error "bin/utilz not found"
-        ((issues++))
+        issues=$((issues + 1))
     elif [[ ! -x "$UTILZ_HOME/bin/utilz" ]]; then
         warn "bin/utilz is not executable"
         echo "  Fix with: chmod +x $UTILZ_HOME/bin/utilz"
-        ((issues++))
+        issues=$((issues + 1))
     else
         success "bin/utilz exists and is executable"
     fi
@@ -280,7 +280,7 @@ run_doctor() {
         echo "  Add to your shell config (~/.zshrc or ~/.bashrc):"
         echo "    export UTILZ_HOME=\"$UTILZ_HOME\""
         echo "    export PATH=\"\$UTILZ_HOME/bin:\$PATH\""
-        ((issues++))
+        issues=$((issues + 1))
     fi
     echo ""
 
@@ -300,7 +300,7 @@ run_doctor() {
         fi
 
         if [[ -L "$symlink" ]]; then
-            ((util_count++))
+            util_count=$((util_count + 1))
 
             # Check if implementation exists
             local impl="$UTILZ_HOME/opt/$name/$name"
@@ -339,7 +339,7 @@ run_doctor() {
                 echo "    - $util"
             done
         fi
-        ((issues++))
+        issues=$((issues + 1))
     else
         success "Found $util_count utilities, all properly configured"
     fi
@@ -410,7 +410,7 @@ run_doctor() {
                 echo -e "    Install: $dep_install"
             fi
         done
-        ((issues++))
+        issues=$((issues + 1))
     else
         success "All required dependencies installed"
     fi
@@ -519,7 +519,6 @@ run_tests() {
         local test_dir="$UTILZ_HOME/opt/$util/test"
 
         if [[ ! -d "$test_dir" ]]; then
-            info "No tests found for $util (expected: $test_dir)"
             continue
         fi
 
@@ -530,7 +529,6 @@ run_tests() {
         done < <(find "$test_dir" -name "*.bats" -type f -print0 2>/dev/null)
 
         if [[ ${#bats_files[@]} -eq 0 ]]; then
-            info "No .bats files found in $test_dir"
             continue
         fi
 
@@ -539,8 +537,16 @@ run_tests() {
         echo -e ""
 
         # Run bats on all test files
-        ((total_tested++))
-        if bats "${bats_files[@]}"; then
+        total_tested=$((total_tested + 1))
+
+        # Run bats (allow failures, we handle exit code)
+        local bats_exit=0
+        (
+            cd "$test_dir" || exit 1
+            bats *.bats
+        ) || bats_exit=$?
+
+        if [[ $bats_exit -eq 0 ]]; then
             echo -e ""
             success "$util tests passed"
             echo -e ""
@@ -548,7 +554,7 @@ run_tests() {
             echo -e ""
             error "$util tests failed"
             echo -e ""
-            ((total_failed++))
+            total_failed=$((total_failed + 1))
         fi
     done
 

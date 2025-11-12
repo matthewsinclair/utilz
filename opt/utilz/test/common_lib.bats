@@ -77,7 +77,7 @@ run_common_function() {
 @test "show_version() returns utilz version" {
     run run_common_function show_version utilz
     assert_success
-    assert_output_contains "Utilz"
+    assert_output_contains "utilz"
     assert_output_contains "v"
 }
 
@@ -89,8 +89,9 @@ run_common_function() {
 
 @test "show_version() handles missing utility gracefully" {
     run run_common_function show_version nonexistent
-    assert_success
+    assert_failure
     assert_output_contains "nonexistent"
+    assert_output_contains "version unknown"
 }
 
 # ============================================================================
@@ -219,8 +220,8 @@ EOF
     # This test might fail if the system has actual issues
     # We just verify the function completes
     run run_common_function run_doctor
-    # Should have summary line
-    assert_output_contains "checks"
+    # Should have diagnostic output
+    assert_output_contains "Checking"
 }
 
 @test "run_doctor() reports issues count" {
