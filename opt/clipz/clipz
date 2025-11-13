@@ -1,0 +1,210 @@
+#!/usr/bin/env bash
+#
+# clipz - Cross-platform clipboard copy and paste utility
+#
+
+set -euo pipefail
+
+# Source common functions if not already loaded (from dispatcher)
+if [[ "$(type -t info 2>/dev/null)" != "function" ]]; then
+    SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+    UTILZ_HOME="${UTILZ_HOME:-$(cd "$SCRIPT_DIR/../.." && pwd)}"
+
+    if [[ -f "$UTILZ_HOME/opt/utilz/lib/common.sh" ]]; then
+        source "$UTILZ_HOME/opt/utilz/lib/common.sh"
+    else
+        echo "ERROR: Cannot find common.sh library" >&2
+        exit 1
+    fi
+fi
+
+# ============================================================================
+# PLATFORM DETECTION
+# ============================================================================
+
+detect_platform() {
+    case "$OSTYPE$(uname)" in
+        [dD]arwin*)
+            echo "macos"
+            ;;
+        [lL]inux*)
+            echo "linux"
+            ;;
+        *)
+            echo "unknown"
+            ;;
+    esac
+}
+
+is_wayland() {
+    [[ "${XDG_SESSION_TYPE:-}" == "wayland" ]]
+}
+
+get_copy_command() {
+    local platform=$(detect_platform)
+
+    case "$platform" in
+        macos)
+            echo "pbcopy"
+            ;;
+        linux)
+            if is_wayland; then
+                if command -v wl-copy >/dev/null 2>&1; then
+                    echo "wl-copy"
+                else
+                    error "wl-copy not found (install wl-clipboard for Wayland)"
+                    return 1
+                fi
+            else
+                if command -v xclip >/dev/null 2>&1; then
+                    echo "xclip -sel c"
+                elif command -v xsel >/dev/null 2>&1; then
+                    echo "xsel --clipboard --input"
+                else
+                    error "Neither xclip nor xsel found (install xclip or xsel for X11)"
+                    return 1
+                fi
+            fi
+            ;;
+        *)
+            error "Unsupported platform: $OSTYPE (Windows support coming soon)"
+            return 1
+            ;;
+    esac
+}
+
+get_paste_command() {
+    local platform=$(detect_platform)
+
+    case "$platform" in
+        macos)
+            echo "pbpaste"
+            ;;
+        linux)
+            if is_wayland; then
+                if command -v wl-paste >/dev/null 2>&1; then
+                    echo "wl-paste"
+                else
+                    error "wl-paste not found (install wl-clipboard for Wayland)"
+                    return 1
+                fi
+            else
+                if command -v xclip >/dev/null 2>&1; then
+                    echo "xclip -sel c -o"
+                elif command -v xsel >/dev/null 2>&1; then
+                    echo "xsel --clipboard --output"
+                else
+                    error "Neither xclip nor xsel found (install xclip or xsel for X11)"
+                    return 1
+                fi
+            fi
+            ;;
+        *)
+            error "Unsupported platform: $OSTYPE (Windows support coming soon)"
+            return 1
+            ;;
+    esac
+}
+
+# ============================================================================
+# COMMANDS
+# ============================================================================
+
+cmd_copy() {
+    local input_file="${1:-}"
+    local copy_cmd=$(get_copy_command) || exit 1
+
+    if [[ -n "$input_file" ]]; then
+        # Copy from file
+        if [[ ! -f "$input_file" ]]; then
+            error "File not found: $input_file"
+            exit 1
+        fi
+        $copy_cmd < "$input_file"
+    else
+        # Copy from stdin
+        $copy_cmd
+    fi
+}
+
+cmd_paste() {
+    local paste_cmd=$(get_paste_command) || exit 1
+    $paste_cmd
+}
+
+# ============================================================================
+# USAGE
+# ============================================================================
+
+usage() {
+    cat <<EOF
+Usage: clipz <command> [options] [args]
+
+Cross-platform clipboard copy and paste utility
+
+COMMANDS:
+  copy [file]     Copy to clipboard from file or stdin
+  paste           Paste from clipboard to stdout
+
+OPTIONS:
+  -h, --help      Show this help
+  --version       Show version
+
+EXAMPLES:
+  # Copy from stdin
+  echo "hello" | clipz copy
+
+  # Copy from file
+  clipz copy file.txt
+
+  # Paste to stdout
+  clipz paste
+
+  # Paste to file
+  clipz paste > output.txt
+
+SUPPORTED PLATFORMS:
+  - macOS (pbcopy/pbpaste)
+  - Linux X11 (xclip or xsel)
+  - Linux Wayland (wl-clipboard)
+  - Windows (coming soon)
+
+For detailed help, run: utilz help clipz
+EOF
+}
+
+# ============================================================================
+# MAIN
+# ============================================================================
+
+# Parse command
+if [[ $# -eq 0 ]]; then
+    usage
+    exit 0
+fi
+
+COMMAND="$1"
+shift
+
+case "$COMMAND" in
+    copy)
+        cmd_copy "$@"
+        ;;
+    paste)
+        cmd_paste "$@"
+        ;;
+    -h|--help)
+        usage
+        exit 0
+        ;;
+    --version)
+        show_version "clipz"
+        exit 0
+        ;;
+    *)
+        error "Unknown command: $COMMAND"
+        echo ""
+        usage
+        exit 1
+        ;;
+esac

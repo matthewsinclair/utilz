@@ -1,0 +1,6 @@
+name: retry
+version: 1.0.0
+utilz_version: "^1.0.0"
+description: Retry command until success with configurable wait time
+author: Matthew Sinclair
+dependencies: []

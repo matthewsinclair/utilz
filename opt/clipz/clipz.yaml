@@ -1,0 +1,6 @@
+name: clipz
+version: 1.0.0
+utilz_version: "^1.0.0"
+description: Cross-platform clipboard copy and paste utility
+author: Matthew Sinclair
+dependencies: []

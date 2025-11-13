@@ -1,0 +1,6 @@
+name: macoz
+version: 1.0.0
+utilz_version: "^1.0.0"
+description: macOS system utilities
+author: Matthew Sinclair
+dependencies: []

@@ -1,0 +1,6 @@
+name: gitz
+version: 1.0.0
+utilz_version: "^1.0.0"
+description: Git multi-repository operations
+author: Matthew Sinclair
+dependencies: []

@@ -1,0 +1,125 @@
+#!/usr/bin/env bash
+#
+# macoz - macOS system utilities
+#
+
+set -euo pipefail
+
+# Source common functions if not already loaded (from dispatcher)
+if [[ "$(type -t info 2>/dev/null)" != "function" ]]; then
+    SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+    UTILZ_HOME="${UTILZ_HOME:-$(cd "$SCRIPT_DIR/../.." && pwd)}"
+
+    if [[ -f "$UTILZ_HOME/opt/utilz/lib/common.sh" ]]; then
+        source "$UTILZ_HOME/opt/utilz/lib/common.sh"
+    else
+        echo "ERROR: Cannot find common.sh library" >&2
+        exit 1
+    fi
+fi
+
+# ============================================================================
+# PLATFORM CHECK
+# ============================================================================
+
+check_macos() {
+    if [[ "$(uname)" != "Darwin" ]]; then
+        error "macoz utilities require macOS"
+        exit 1
+    fi
+}
+
+# ============================================================================
+# COMMANDS
+# ============================================================================
+
+cmd_background() {
+    local image_path="$1"
+
+    # Validate image exists
+    if [[ ! -f "$image_path" ]]; then
+        error "Image file not found: $image_path"
+        exit 1
+    fi
+
+    # Convert to absolute path
+    local absolute_path=$(cd "$(dirname "$image_path")" && pwd)/$(basename "$image_path")
+
+    info "Setting desktop background to: $absolute_path"
+
+    # Set background using osascript
+    if osascript -e "tell application \"System Events\" to tell every desktop to set picture to \"$absolute_path\""; then
+        success "Desktop background updated"
+    else
+        error "Failed to set desktop background"
+        exit 1
+    fi
+}
+
+# ============================================================================
+# USAGE
+# ============================================================================
+
+usage() {
+    cat <<EOF
+Usage: macoz <command> [args]
+
+macOS system utilities
+
+COMMANDS:
+  background <image>     Set desktop background image
+
+OPTIONS:
+  -h, --help             Show this help
+  --version              Show version
+
+EXAMPLES:
+  # Set desktop background
+  macoz background ~/Pictures/wallpaper.jpg
+
+PLATFORM:
+  Requires macOS
+
+For detailed help, run: utilz help macoz
+EOF
+}
+
+# ============================================================================
+# MAIN
+# ============================================================================
+
+# Check platform
+check_macos
+
+# Parse command
+if [[ $# -eq 0 ]]; then
+    usage
+    exit 0
+fi
+
+COMMAND="$1"
+shift
+
+case "$COMMAND" in
+    background|bg)
+        if [[ $# -eq 0 ]]; then
+            error "No image path specified"
+            exit 1
+        fi
+        cmd_background "$1"
+        ;;
+    -h|--help)
+        usage
+        exit 0
+        ;;
+    --version)
+        show_version "macoz"
+        exit 0
+        ;;
+    *)
+        error "Unknown command: $COMMAND"
+        echo ""
+        usage
+        exit 1
+        ;;
+esac

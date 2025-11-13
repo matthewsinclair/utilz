@@ -1,0 +1,132 @@
+#!/usr/bin/env bash
+#
+# gitz - Git multi-repository operations
+#
+
+set -euo pipefail
+
+# Source common functions if not already loaded (from dispatcher)
+if [[ "$(type -t info 2>/dev/null)" != "function" ]]; then
+    SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+    UTILZ_HOME="${UTILZ_HOME:-$(cd "$SCRIPT_DIR/../.." && pwd)}"
+
+    if [[ -f "$UTILZ_HOME/opt/utilz/lib/common.sh" ]]; then
+        source "$UTILZ_HOME/opt/utilz/lib/common.sh"
+    else
+        echo "ERROR: Cannot find common.sh library" >&2
+        exit 1
+    fi
+fi
+
+# ============================================================================
+# COMMANDS
+# ============================================================================
+
+cmd_status_all() {
+    local search_path="${1:-.}"
+    local repo_count=0
+
+    # Check for git
+    require_command "git" "Git is required"
+
+    info "Searching for git repositories in: $search_path"
+    echo ""
+
+    # Find all .git directories, excluding those with '_' or '.work' in path
+    while IFS= read -r git_dir; do
+        # Get repository directory (parent of .git)
+        local repo_dir=$(dirname "$git_dir")
+
+        # Skip if path contains _ or .work
+        if [[ "$repo_dir" == *"_"* ]] || [[ "$repo_dir" == *".work"* ]]; then
+            continue
+        fi
+
+        repo_count=$((repo_count + 1))
+
+        # Show repository path
+        echo "Repository: $repo_dir"
+        echo "$(printf '=%.0s' {1..80})"
+
+        # Change to repo and show status
+        (
+            cd "$repo_dir"
+            git status
+        )
+
+        echo ""
+        echo "$(printf '─%.0s' {1..80})"
+        echo ""
+    done < <(find "$search_path" -name .git -type d 2>/dev/null)
+
+    if [[ $repo_count -eq 0 ]]; then
+        warn "No git repositories found in $search_path"
+    else
+        success "Checked $repo_count repositories"
+    fi
+}
+
+# ============================================================================
+# USAGE
+# ============================================================================
+
+usage() {
+    cat <<EOF
+Usage: gitz <command> [args]
+
+Git multi-repository operations
+
+COMMANDS:
+  status-all [path]      Show git status for all repos (default: current dir)
+
+OPTIONS:
+  -h, --help             Show this help
+  --version              Show version
+
+EXAMPLES:
+  # Check all repos in current directory
+  gitz status-all
+
+  # Check all repos in specific path
+  gitz status-all ~/Projects
+
+NOTES:
+  - Excludes repositories with '_' or '.work' in their path
+  - Recursively searches all subdirectories
+
+For detailed help, run: utilz help gitz
+EOF
+}
+
+# ============================================================================
+# MAIN
+# ============================================================================
+
+# Parse command
+if [[ $# -eq 0 ]]; then
+    usage
+    exit 0
+fi
+
+COMMAND="$1"
+shift
+
+case "$COMMAND" in
+    status-all|status)
+        cmd_status_all "${1:-.}"
+        ;;
+    -h|--help)
+        usage
+        exit 0
+        ;;
+    --version)
+        show_version "gitz"
+        exit 0
+        ;;
+    *)
+        error "Unknown command: $COMMAND"
+        echo ""
+        usage
+        exit 1
+        ;;
+esac

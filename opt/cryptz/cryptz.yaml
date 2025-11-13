@@ -1,0 +1,6 @@
+name: cryptz
+version: 1.0.0
+utilz_version: "^1.0.0"
+description: GPG encryption and decryption utility
+author: Matthew Sinclair
+dependencies: []
