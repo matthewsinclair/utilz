@@ -94,6 +94,74 @@ Both methods work identically.
 
 ## Included Utilities
 
+### clipz
+
+Cross-platform clipboard copy and paste utility. Supports macOS (pbcopy/pbpaste), Linux X11 (xclip/xsel), and Wayland (wl-clipboard).
+
+```bash
+# Copy from stdin
+echo "hello" | clipz copy
+
+# Copy from file
+clipz copy file.txt
+
+# Paste to stdout
+clipz paste
+```
+
+See `utilz help clipz` for details.
+
+### cryptz
+
+GPG encryption and decryption wrapper with sensible defaults.
+
+```bash
+# Encrypt a file
+cryptz encrypt secret.txt
+
+# Decrypt a file
+cryptz decrypt secret.txt.gpg
+
+# Specify recipient
+CRYPTZ_EMAIL=user@example.com cryptz encrypt file.txt
+```
+
+See `utilz help cryptz` for details.
+
+### gitz
+
+Git multi-repository operations. Recursively find and check git repositories, excluding paths with leading underscores or `.work`.
+
+```bash
+# Check all repos in current directory
+gitz status-all
+
+# Check repos in specific path
+gitz status-all ~/Projects
+```
+
+See `utilz help gitz` for details.
+
+### macoz
+
+macOS system utilities. Currently includes seasonal wallpaper management.
+
+```bash
+# Auto-select current seasonal wallpaper
+macoz bg
+
+# Random autumn wallpaper
+macoz bg autumn
+
+# Specific seasonal wallpaper
+macoz bg autumn 02
+
+# Custom image
+macoz bg ~/Pictures/wallpaper.jpg
+```
+
+See `utilz help macoz` for details.
+
 ### mdagg
 
 Markdown aggregator for concatenating multiple markdown files into a single document. Useful for assembling multi-file documents into PDFs.
@@ -110,6 +178,20 @@ find docs -name "*.md" | sort | mdagg --stdin -o docs.md
 ```
 
 See `utilz help mdagg` for details.
+
+### retry
+
+Retry command until success with configurable wait time and max attempts.
+
+```bash
+# Retry with defaults (10s wait, unlimited retries)
+retry "curl https://example.com"
+
+# Retry with custom settings
+retry --wait 5 --retries 3 "ping -c 1 google.com"
+```
+
+See `utilz help retry` for details.
 
 ## Creating a New Utility
 

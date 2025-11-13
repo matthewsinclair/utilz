@@ -14,16 +14,23 @@
 ## Synopsis
 
 ```bash
-clipz [OPTIONS] [ARGS]
+clipz <command> [options] [args]
 ```
 
 ---
 
 ## Description
 
-Cross-platform clipboard copy and paste utility
+Cross-platform clipboard copy and paste utility.
 
-Add more detailed description here.
+Supports macOS (pbcopy/pbpaste), Linux X11 (xclip/xsel), and Linux Wayland (wl-clipboard).
+
+---
+
+## Commands
+
+- `copy [file]` - Copy to clipboard from file or stdin
+- `paste` - Paste from clipboard to stdout
 
 ---
 
@@ -38,14 +45,30 @@ Add more detailed description here.
 
 ## Examples
 
-### Basic Usage
+### Copy Operations
 
 ```bash
-# Show help
-clipz --help
+# Copy from stdin
+echo "hello" | clipz copy
 
-# Show version
-clipz --version
+# Copy from file
+clipz copy file.txt
+
+# Copy multi-line text
+cat document.txt | clipz copy
+```
+
+### Paste Operations
+
+```bash
+# Paste to stdout
+clipz paste
+
+# Paste to file
+clipz paste > output.txt
+
+# Pipe to another command
+clipz paste | grep "pattern"
 ```
 
 ---
@@ -75,6 +98,7 @@ clipz --version
 
 - `utilz(1)` - Utilz framework dispatcher
 - `utilz-help(1)` - Show help for utilities
+- [clipz README]($UTILZ_HOME/opt/clipz/README.md) - Detailed documentation
 
 ---
 

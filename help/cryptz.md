@@ -75,6 +75,7 @@ cryptz --version
 
 - `utilz(1)` - Utilz framework dispatcher
 - `utilz-help(1)` - Show help for utilities
+- [cryptz README]($UTILZ_HOME/opt/cryptz/README.md) - Detailed documentation
 
 ---
 

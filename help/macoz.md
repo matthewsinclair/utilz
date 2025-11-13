@@ -14,16 +14,27 @@
 ## Synopsis
 
 ```bash
-macoz [OPTIONS] [ARGS]
+macoz <command> [args]
 ```
 
 ---
 
 ## Description
 
-macOS system utilities
+macOS system utilities - various macOS-specific operations.
 
-Add more detailed description here.
+**Platform**: Requires macOS (Darwin)
+
+---
+
+## Commands
+
+- `background [season] [id]` - Set desktop background image
+  - No args: auto-select current seasonal wallpaper
+  - season: random wallpaper from specified season
+  - season id: specific seasonal wallpaper
+  - image path: use custom image
+- `bg [season] [id]` - Alias for background
 
 ---
 
@@ -38,15 +49,38 @@ Add more detailed description here.
 
 ## Examples
 
-### Basic Usage
+### Seasonal Wallpapers
 
 ```bash
-# Show help
-macoz --help
+# Auto-select current seasonal wallpaper
+macoz bg
 
-# Show version
-macoz --version
+# Random autumn wallpaper
+macoz bg autumn
+
+# Specific seasonal wallpaper
+macoz bg autumn 02
+
+# Using background command (same as bg)
+macoz background winter 01
 ```
+
+### Custom Images
+
+```bash
+# Set custom desktop background
+macoz bg ~/Pictures/wallpaper.jpg
+```
+
+### Seasonal Selection
+
+Current season is automatically selected based on month:
+- **spring** (March, April, May)
+- **summer** (June, July, August)
+- **autumn** (September, October, November)
+- **winter** (December, January, February)
+
+Each season has 4 wallpaper variants numbered 01-04.
 
 ---
 
@@ -75,6 +109,7 @@ macoz --version
 
 - `utilz(1)` - Utilz framework dispatcher
 - `utilz-help(1)` - Show help for utilities
+- [macoz README]($UTILZ_HOME/opt/macoz/README.md) - Detailed documentation
 
 ---
 

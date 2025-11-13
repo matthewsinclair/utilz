@@ -111,6 +111,13 @@ if [[ "$INVOKED_AS" == "utilz" ]]; then
             else
                 # Not a valid utility or command
                 error "Unknown command: $COMMAND"
+
+                # Check for common typos
+                if [[ "$COMMAND" == "macos" ]]; then
+                    echo ""
+                    echo "Did you mean 'macoz'?"
+                fi
+
                 echo ""
                 echo "Available commands:"
                 echo "  utilz help [utility]    - Show help"
@@ -122,7 +129,7 @@ if [[ "$INVOKED_AS" == "utilz" ]]; then
                 echo ""
                 echo "Installed utilities:"
                 for symlink in "$UTILZ_HOME"/bin/*; do
-                    local name=$(basename "$symlink")
+                    name=$(basename "$symlink")
                     if [[ "$name" != "utilz" && -L "$symlink" ]]; then
                         echo "  utilz $name [args]      - Run $name utility"
                     fi

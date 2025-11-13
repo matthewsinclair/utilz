@@ -118,11 +118,11 @@ fi
 echo ""
 
 # Main retry loop
-attempt=0
+attempt=1
 
 while true; do
-    # Execute command and stream output
-    if eval "$COMMAND" 2>&1; then
+    # Execute command and stream output (in subshell to prevent exit from killing script)
+    if (eval "$COMMAND") 2>&1; then
         # Success!
         success "Command succeeded"
         exit 0
@@ -131,13 +131,13 @@ while true; do
 
         # Check if we've hit max retries
         if [[ $MAX_RETRIES -ne 0 && $attempt -ge $MAX_RETRIES ]]; then
-            error "Maximum retries reached ($MAX_RETRIES attempts)"
+            error "Maximum retries reached ($attempt attempts)"
             exit $exit_status
         fi
 
         # Increment and retry
         attempt=$((attempt + 1))
-        warn "Command failed (attempt $attempt). Retrying in ${WAIT_TIME}s..."
+        warn "Command failed (attempt $((attempt - 1))). Retrying in ${WAIT_TIME}s..."
         sleep "$WAIT_TIME"
 
         if [[ $MAX_RETRIES -eq 0 ]]; then

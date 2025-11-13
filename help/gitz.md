@@ -14,16 +14,23 @@
 ## Synopsis
 
 ```bash
-gitz [OPTIONS] [ARGS]
+gitz <command> [args]
 ```
 
 ---
 
 ## Description
 
-Git multi-repository operations
+Git multi-repository operations - recursively find and check git repositories.
 
-Add more detailed description here.
+Excludes repositories with '_' or '.work' in their path.
+
+---
+
+## Commands
+
+- `status-all [path]` - Show git status for all repositories (default: current directory)
+- `status [path]` - Alias for status-all
 
 ---
 
@@ -38,14 +45,17 @@ Add more detailed description here.
 
 ## Examples
 
-### Basic Usage
+### Check Repositories
 
 ```bash
-# Show help
-gitz --help
+# Check all repos in current directory
+gitz status-all
 
-# Show version
-gitz --version
+# Check all repos in specific path
+gitz status-all ~/Projects
+
+# Using the alias
+gitz status
 ```
 
 ---
@@ -75,6 +85,7 @@ gitz --version
 
 - `utilz(1)` - Utilz framework dispatcher
 - `utilz-help(1)` - Show help for utilities
+- [gitz README]($UTILZ_HOME/opt/gitz/README.md) - Detailed documentation
 
 ---
 

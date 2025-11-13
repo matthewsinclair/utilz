@@ -32,13 +32,13 @@ cmd_status_all() {
     info "Searching for git repositories in: $search_path"
     echo ""
 
-    # Find all .git directories, excluding those with '_' or '.work' in path
+    # Find all .git directories, excluding those with path components starting with '_' or containing '.work'
     while IFS= read -r git_dir; do
         # Get repository directory (parent of .git)
         local repo_dir=$(dirname "$git_dir")
 
-        # Skip if path contains _ or .work
-        if [[ "$repo_dir" == *"_"* ]] || [[ "$repo_dir" == *".work"* ]]; then
+        # Skip if any path component starts with '_' or path contains '.work'
+        if [[ "$repo_dir" == *"/_"* ]] || [[ "$repo_dir" == "_"* ]] || [[ "$repo_dir" == *".work"* ]]; then
             continue
         fi
 

@@ -30,11 +30,95 @@ check_macos() {
 }
 
 # ============================================================================
+# HELPER FUNCTIONS
+# ============================================================================
+
+get_season() {
+    local month=$(date +%-m)
+
+    case $month in
+        3|4|5)
+            echo "spring"
+            ;;
+        6|7|8)
+            echo "summer"
+            ;;
+        9|10|11)
+            echo "autumn"
+            ;;
+        12|1|2)
+            echo "winter"
+            ;;
+    esac
+}
+
+get_seasonal_image() {
+    local season=$(get_season)
+    local images_dir="$UTILZ_HOME/opt/macoz/images/backgrounds"
+
+    # Find all images for the current season
+    local -a season_images
+    while IFS= read -r -d '' image; do
+        season_images+=("$image")
+    done < <(find "$images_dir" -name "${season}-*.png" -print0 2>/dev/null)
+
+    if [[ ${#season_images[@]} -eq 0 ]]; then
+        error "No images found for season: $season"
+        exit 1
+    fi
+
+    # Pick a random image
+    local random_index=$((RANDOM % ${#season_images[@]}))
+    echo "${season_images[$random_index]}"
+}
+
+# ============================================================================
 # COMMANDS
 # ============================================================================
 
 cmd_background() {
-    local image_path="$1"
+    local arg1="${1:-}"
+    local arg2="${2:-}"
+    local image_path=""
+
+    # Check if first arg is a season name
+    if [[ "$arg1" =~ ^(spring|summer|autumn|winter)$ ]]; then
+        local season="$arg1"
+        local images_dir="$UTILZ_HOME/opt/macoz/images/backgrounds"
+
+        if [[ -n "$arg2" ]]; then
+            # Specific seasonal image requested
+            image_path="$images_dir/${season}-${arg2}.png"
+            if [[ ! -f "$image_path" ]]; then
+                error "Seasonal image not found: ${season}-${arg2}.png"
+                exit 1
+            fi
+            info "Selected $season wallpaper #$arg2"
+        else
+            # Random image from specified season
+            local -a season_images
+            while IFS= read -r -d '' image; do
+                season_images+=("$image")
+            done < <(find "$images_dir" -name "${season}-*.png" -print0 2>/dev/null)
+
+            if [[ ${#season_images[@]} -eq 0 ]]; then
+                error "No images found for season: $season"
+                exit 1
+            fi
+
+            local random_index=$((RANDOM % ${#season_images[@]}))
+            image_path="${season_images[$random_index]}"
+            info "Random $season wallpaper selected"
+        fi
+    elif [[ -z "$arg1" ]]; then
+        # No arguments - auto-select based on current season
+        image_path=$(get_seasonal_image)
+        local season=$(get_season)
+        info "Auto-selected $season wallpaper"
+    else
+        # Custom image path provided
+        image_path="$arg1"
+    fi
 
     # Validate image exists
     if [[ ! -f "$image_path" ]]; then
@@ -45,7 +129,7 @@ cmd_background() {
     # Convert to absolute path
     local absolute_path=$(cd "$(dirname "$image_path")" && pwd)/$(basename "$image_path")
 
-    info "Setting desktop background to: $absolute_path"
+    info "Setting desktop background to: $(basename "$absolute_path")"
 
     # Set background using osascript
     if osascript -e "tell application \"System Events\" to tell every desktop to set picture to \"$absolute_path\""; then
@@ -67,15 +151,33 @@ Usage: macoz <command> [args]
 macOS system utilities
 
 COMMANDS:
-  background <image>     Set desktop background image
+  background [season] [id]  Set desktop background image
+                            - No args: auto-select current seasonal wallpaper
+                            - season: random wallpaper from specified season
+                            - season id: specific seasonal wallpaper (e.g., autumn 02)
+                            - image path: use custom image
+
+  bg                        Alias for background
 
 OPTIONS:
-  -h, --help             Show this help
-  --version              Show version
+  -h, --help                Show this help
+  --version                 Show version
 
 EXAMPLES:
-  # Set desktop background
-  macoz background ~/Pictures/wallpaper.jpg
+  # Auto-select current seasonal wallpaper
+  macoz bg
+
+  # Random autumn wallpaper
+  macoz bg autumn
+
+  # Specific seasonal wallpaper
+  macoz bg autumn 02
+
+  # Custom image
+  macoz bg ~/Pictures/wallpaper.jpg
+
+SEASONS:
+  spring, summer, autumn, winter
 
 PLATFORM:
   Requires macOS
@@ -102,11 +204,8 @@ shift
 
 case "$COMMAND" in
     background|bg)
-        if [[ $# -eq 0 ]]; then
-            error "No image path specified"
-            exit 1
-        fi
-        cmd_background "$1"
+        # Arguments are optional - will auto-select seasonal if not provided
+        cmd_background "${1:-}" "${2:-}"
         ;;
     -h|--help)
         usage
