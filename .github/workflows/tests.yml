@@ -29,9 +29,9 @@ jobs:
 
     - name: Install dependencies
       run: |
-        # Install yq for YAML parsing
+        # Install yq for YAML parsing and xclip for clipboard support
         sudo apt-get update
-        sudo apt-get install -y jq
+        sudo apt-get install -y jq xclip
         sudo wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O /usr/bin/yq
         sudo chmod +x /usr/bin/yq
         yq --version
@@ -78,9 +78,10 @@ jobs:
 
     - name: Install dependencies
       run: |
-        # Install yq for YAML parsing
-        brew install yq
+        # Install yq for YAML parsing and fileicon for macOS folder icons
+        brew install yq fileicon
         yq --version
+        fileicon --version || echo "fileicon installed"
 
     - name: Set up Utilz
       run: |
