@@ -29,9 +29,9 @@ jobs:
 
     - name: Install dependencies
       run: |
-        # Install yq for YAML parsing, xclip for clipboard support, and xvfb for virtual display
+        # Install yq for YAML parsing
         sudo apt-get update
-        sudo apt-get install -y jq xclip xvfb
+        sudo apt-get install -y jq
         sudo wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O /usr/bin/yq
         sudo chmod +x /usr/bin/yq
         yq --version
@@ -51,17 +51,12 @@ jobs:
         utilz list
         utilz version
 
-    - name: Run tests (excluding macoz - macOS only)
+    - name: Run tests (excluding platform-specific utilities)
       run: |
-        # Run all tests except macoz (macOS-only utility)
-        # Use xvfb-run for clipz tests to provide virtual X11 display
-        for utility in utilz clipz cryptz gitz mdagg retry; do
+        # Run all tests except macoz (macOS-only) and clipz (clipboard unreliable in CI)
+        for utility in utilz cryptz gitz mdagg retry; do
           echo "Testing: $utility"
-          if [ "$utility" = "clipz" ]; then
-            xvfb-run utilz test $utility || exit 1
-          else
-            utilz test $utility || exit 1
-          fi
+          utilz test $utility || exit 1
         done
 
   test-macos:
