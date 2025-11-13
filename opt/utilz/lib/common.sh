@@ -131,10 +131,10 @@ show_help() {
     local help_file="$UTILZ_HOME/help/$util.md"
 
     if [[ -f "$help_file" ]]; then
-        if command -v bat >/dev/null 2>&1; then
+        if command -v glow >/dev/null 2>&1; then
+            glow "$help_file"
+        elif command -v bat >/dev/null 2>&1; then
             bat --style=plain --language=markdown "$help_file"
-        elif command -v mdcat >/dev/null 2>&1; then
-            mdcat "$help_file"
         else
             cat "$help_file"
         fi
@@ -313,7 +313,7 @@ run_doctor() {
                 local required_utilz_version=$(get_util_metadata "$name" ".utilz_version")
                 if [[ -n "$required_utilz_version" && "$required_utilz_version" != "null" ]]; then
                     # Simple compatibility check - just check major version for now
-                    local required_major=$(echo "$required_utilz_version" | sed 's/[^0-9].*//' | sed 's/^\^//')
+                    local required_major=$(echo "$required_utilz_version" | sed 's/^\^//' | sed 's/[^0-9].*//')
                     local framework_major=$(echo "$framework_version" | cut -d. -f1)
 
                     if [[ "$required_major" != "$framework_major" ]]; then
@@ -390,10 +390,10 @@ run_doctor() {
         fi
     done
 
-    # Check for bat or mdcat (nice-to-have for help)
-    if ! check_command "bat" && ! check_command "mdcat"; then
-        info "Optional: Install 'bat' or 'mdcat' for better help display"
-        echo -e "    brew install bat"
+    # Check for glow (nice-to-have for help)
+    if ! check_command "glow"; then
+        info "Optional: Install 'glow' for beautiful markdown rendering"
+        echo -e "    brew install glow"
     fi
 
     if [[ ${#missing_deps[@]} -gt 0 ]]; then

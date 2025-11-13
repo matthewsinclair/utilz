@@ -15,12 +15,9 @@ dependencies:
 
 # Optional dependencies for enhanced functionality
 optional_dependencies:
-  - name: bat
-    install: brew install bat
-    purpose: Enhanced help display with syntax highlighting
-  - name: mdcat
-    install: brew install mdcat
-    purpose: Render markdown in terminal
+  - name: glow
+    install: brew install glow
+    purpose: Beautiful markdown rendering for help documentation
 
 # Supported input modes
 modes:

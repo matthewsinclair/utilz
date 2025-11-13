@@ -8,6 +8,18 @@ help_file: ../../help/utilz.md
 # Core framework - no additional dependencies beyond bash
 dependencies: []
 
+# Optional dependencies for enhanced functionality
+optional_dependencies:
+  - name: glow
+    install: brew install glow
+    purpose: Beautiful markdown rendering for help documentation
+  - name: bat
+    install: brew install bat
+    purpose: Fallback markdown syntax highlighting for help
+  - name: bats-core
+    install: brew install bats-core
+    purpose: Run test suite with 'utilz test'
+
 # Framework metadata
 framework:
   is_core: true

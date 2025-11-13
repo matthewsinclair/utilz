@@ -110,3 +110,41 @@ load "test_helper.bash"
     # Cleanup
     rm -f "$UTILZ_BIN_DIR/brokenutil"
 }
+
+@test "version compatibility: ^1.0.0 matches 1.0.0" {
+    # Create a test utility with version requirement
+    local util_name="versiontest"
+    local util_dir="$UTILZ_HOME/opt/$util_name"
+
+    # Create utility directory
+    mkdir -p "$util_dir"
+
+    # Create YAML metadata with caret version requirement
+    cat > "$util_dir/$util_name.yaml" <<'EOF'
+name: versiontest
+version: 1.0.0
+utilz_version: "^1.0.0"
+description: Test utility for version compatibility testing
+EOF
+
+    # Create minimal utility script
+    cat > "$util_dir/$util_name" <<'EOF'
+#!/usr/bin/env bash
+echo "Version test utility"
+exit 0
+EOF
+
+    chmod +x "$util_dir/$util_name"
+
+    # Create symlink
+    ln -sf utilz "$UTILZ_BIN_DIR/$util_name"
+
+    # Run doctor - should NOT report version incompatibility
+    run_utilz doctor
+    refute_output_contains "incompatibilities detected"
+    refute_output_contains "versiontest (requires"
+
+    # Cleanup
+    rm -f "$UTILZ_BIN_DIR/$util_name"
+    rm -rf "$util_dir"
+}
