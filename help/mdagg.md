@@ -307,56 +307,6 @@ mdagg assembly.yaml -o output.md
 
 ---
 
-## Implementation Considerations
-
-### Language Choice
-
-**Option A: Bash Script**
-- ✅ Pros: Universal, no dependencies, fast for simple operations
-- ❌ Cons: YAML parsing is complex in pure bash (would need `yq` or `python` for parsing)
-
-**Option B: Python Script**
-- ✅ Pros: Good YAML support (PyYAML), rich stdlib, readable code
-- ❌ Cons: Requires Python 3.x (but usually available)
-
-**Option C: Elixir Script** (like the inspiration)
-- ✅ Pros: Pattern matching makes YAML parsing clean
-- ❌ Cons: Elixir not as universally available as Python
-
-**Recommendation**: Python 3 with PyYAML
-- Most portable
-- Best YAML support
-- Easy to extend
-- Can still be a single-file script with shebang
-
-### Minimal Dependencies
-```python
-#!/usr/bin/env python3
-import sys
-import yaml  # Only external dependency (could inline simple parser)
-import glob
-import os
-import re
-```
-
-If PyYAML is not available, fall back to a simple YAML parser for our specific format (like the Elixir script does).
-
-### Edge Cases to Handle
-
-1. **Missing files**: Warn and skip, or error and exit? (Make configurable)
-2. **Empty files**: Include with warning, or skip silently?
-3. **Circular references**: Detect and error (if YAML allows includes)
-4. **Binary files**: Detect and skip with warning
-5. **Encoding issues**: Handle UTF-8, warn on other encodings
-6. **Relative vs absolute paths**: Resolve relative to YAML file location or CWD?
-7. **Large files**: Stream processing for files > 100MB?
-
-### Performance Considerations
-- For typical documentation (< 100 files, < 10MB total): Simple string concatenation is fine
-- For large assemblies: Stream line-by-line to avoid memory issues
-
----
-
 ## File Processing Details
 
 ### Stripping Back Links
@@ -469,20 +419,3 @@ mdagg "*.md" -o combined.md -v
 mdagg config.yaml -o sow-complete.md
 pandoc sow-complete.md -o sow.pdf
 ```
-
----
-
-## Questions to Resolve Before Implementation
-
-1. **YAML dependency**: Require PyYAML, or bundle a simple parser for our format?
-2. **Default behavior**: If just given a directory, what should it do?
-3. **File ordering**: For glob mode, alphabetical or natural sort (1, 2, 10 vs 1, 10, 2)?
-4. **Overwrite protection**: Prompt before overwriting existing output file?
-5. **Config file location**: Support default config name (e.g., `mdagg.yaml` in CWD)?
-6. **Strip options**: Should they be mutually exclusive or combinable?
-7. **Error handling**: Fail-fast or collect all errors and report at end?
-8. **Logging**: Use Python's logging module or simple print statements?
-
----
-
-**End of README**
