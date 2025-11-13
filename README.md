@@ -144,20 +144,20 @@ See `utilz help gitz` for details.
 
 ### macoz
 
-macOS system utilities. Currently includes seasonal wallpaper management.
+macOS system utilities - desktop backgrounds and folder icons.
 
 ```bash
-# Auto-select current seasonal wallpaper
-macoz bg
+# Desktop backgrounds with seasonal auto-selection
+macoz bg                              # Auto-select current season
+macoz bg autumn                       # Random autumn wallpaper
+macoz bg autumn 02                    # Specific seasonal wallpaper
+macoz bg ~/Pictures/wallpaper.jpg     # Custom image
 
-# Random autumn wallpaper
-macoz bg autumn
-
-# Specific seasonal wallpaper
-macoz bg autumn 02
-
-# Custom image
-macoz bg ~/Pictures/wallpaper.jpg
+# Folder icons
+macoz setpicfor icon.png              # Set icon for current directory
+macoz setpicfor photo.jpg ~/Projects  # Set icon for specific directory
+macoz setpicfor --all                 # Batch: set icons for subdirectories
+macoz setpicfor --all --dry-run       # Preview changes
 ```
 
 See `utilz help macoz` for details.

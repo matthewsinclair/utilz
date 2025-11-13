@@ -1,0 +1,51 @@
+name: Utilz Tests
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    name: Test on \${{ matrix.os }}
+    runs-on: \${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Install dependencies (Ubuntu)
+      if: runner.os == 'Linux'
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y bats yq
+
+    - name: Install dependencies (macOS)
+      if: runner.os == 'macOS'
+      run: |
+        brew install bats-core yq glow fileicon
+
+    - name: Set up environment
+      run: |
+        echo "UTILZ_HOME=\$GITHUB_WORKSPACE" >> \$GITHUB_ENV
+        echo "\$GITHUB_WORKSPACE/bin" >> \$GITHUB_PATH
+
+    - name: Run doctor
+      run: bin/utilz doctor
+
+    - name: Run all tests (macOS)
+      if: runner.os == 'macOS'
+      run: bin/utilz test
+
+    - name: Run tests except macoz (Ubuntu)
+      if: runner.os == 'Linux'
+      run: |
+        # Run all tests except macoz (macOS-only)
+        for utility in utilz clipz cryptz gitz mdagg retry; do
+          echo "Testing: \$utility"
+          bin/utilz test \$utility
+        done

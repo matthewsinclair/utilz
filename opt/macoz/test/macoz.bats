@@ -113,3 +113,99 @@ is_macos() {
     run_macoz bg
     assert_output_contains "Auto-selected"
 }
+
+# ============================================================================
+# SETPICFOR COMMAND TESTS
+# ============================================================================
+
+@test "macoz setpicfor with no arguments shows error" {
+    if ! is_macos; then
+        skip "Not on macOS"
+    fi
+
+    run_macoz setpicfor
+    assert_failure
+    assert_output_contains "No image file specified"
+}
+
+@test "macoz setpicfor with missing image shows error" {
+    if ! is_macos; then
+        skip "Not on macOS"
+    fi
+
+    run_macoz setpicfor /nonexistent/image.png
+    assert_failure
+    assert_output_contains "Image file not found"
+}
+
+@test "macoz setpicfor with missing directory shows error" {
+    if ! is_macos; then
+        skip "Not on macOS"
+    fi
+
+    # Create a test image
+    touch "$BATS_TEST_TMPDIR/test.png"
+
+    run_macoz setpicfor "$BATS_TEST_TMPDIR/test.png" /nonexistent/directory
+    assert_failure
+    assert_output_contains "Directory not found"
+
+    rm -f "$BATS_TEST_TMPDIR/test.png"
+}
+
+@test "macoz setpicfor dry-run mode" {
+    if ! is_macos; then
+        skip "Not on macOS"
+    fi
+
+    # Create test image and directory
+    touch "$BATS_TEST_TMPDIR/test.png"
+    mkdir -p "$BATS_TEST_TMPDIR/testdir"
+
+    run_macoz setpicfor --dry-run "$BATS_TEST_TMPDIR/test.png" "$BATS_TEST_TMPDIR/testdir"
+    assert_success
+    assert_output_contains "[DRY RUN]"
+    assert_output_contains "Would set icon for"
+
+    rm -f "$BATS_TEST_TMPDIR/test.png"
+    rm -rf "$BATS_TEST_TMPDIR/testdir"
+}
+
+@test "macoz setpicfor requires fileicon" {
+    if ! is_macos; then
+        skip "Not on macOS"
+    fi
+
+    if ! command -v fileicon >/dev/null 2>&1; then
+        # fileicon not installed - test error message
+        touch "$BATS_TEST_TMPDIR/test.png"
+
+        run_macoz setpicfor "$BATS_TEST_TMPDIR/test.png"
+        assert_failure
+        assert_output_contains "fileicon command not found"
+        assert_output_contains "brew install fileicon"
+
+        rm -f "$BATS_TEST_TMPDIR/test.png"
+    else
+        skip "fileicon is installed"
+    fi
+}
+
+@test "macoz setpicfor --all dry-run mode" {
+    if ! is_macos; then
+        skip "Not on macOS"
+    fi
+
+    # Create test structure
+    mkdir -p "$BATS_TEST_TMPDIR/testparent/subdir1"
+    mkdir -p "$BATS_TEST_TMPDIR/testparent/subdir2"
+    touch "$BATS_TEST_TMPDIR/testparent/subdir1/icon.png"
+    touch "$BATS_TEST_TMPDIR/testparent/subdir2/folder.jpg"
+
+    run_macoz setpicfor --all --dry-run --data-dir "$BATS_TEST_TMPDIR/testparent"
+    assert_success
+    assert_output_contains "[DRY RUN]"
+    assert_output_contains "Would process"
+
+    rm -rf "$BATS_TEST_TMPDIR/testparent"
+}

@@ -140,6 +140,210 @@ cmd_background() {
     fi
 }
 
+cmd_setpicfor() {
+    local batch_mode=false
+    local data_dir="."
+    local pattern="icon.*|folder.*"
+    local dry_run=false
+    local verbose=false
+    local image_path=""
+    local target_dir=""
+
+    # Parse options
+    while [[ $# -gt 0 ]]; do
+        case "$1" in
+            -h|--help)
+                cat <<'EOFHELP'
+Usage: macoz setpicfor <image> [directory]
+       macoz setpicfor --all [options]
+
+Set folder icon from image file.
+
+ARGUMENTS:
+  <image>      Path to image file (jpg, png)
+  [directory]  Target directory (default: current directory)
+
+OPTIONS:
+  --all              Batch mode: set icons for subdirectories
+  --data-dir <dir>   Directory to process (default: current)
+  --pattern <pat>    Image pattern for --all mode
+  --dry-run          Preview changes without applying
+  -v, --verbose      Show detailed output
+  -h, --help         Show this help
+
+EXAMPLES:
+  macoz setpicfor icon.png
+  macoz setpicfor photo.jpg ~/Projects
+  macoz setpicfor --all
+  macoz setpicfor --all --dry-run --verbose
+
+For more help: utilz help macoz
+EOFHELP
+                exit 0
+                ;;
+            --all)
+                batch_mode=true
+                shift
+                ;;
+            --data-dir)
+                if [[ -z "${2:-}" ]]; then
+                    error "No directory specified for --data-dir"
+                    exit 1
+                fi
+                data_dir="$2"
+                shift 2
+                ;;
+            --pattern)
+                if [[ -z "${2:-}" ]]; then
+                    error "No pattern specified for --pattern"
+                    exit 1
+                fi
+                pattern="$2"
+                shift 2
+                ;;
+            --dry-run)
+                dry_run=true
+                shift
+                ;;
+            -v|--verbose)
+                verbose=true
+                shift
+                ;;
+            -*)
+                error "Unknown option: $1"
+                exit 1
+                ;;
+            *)
+                # Positional arguments
+                if [[ -z "$image_path" ]]; then
+                    image_path="$1"
+                elif [[ -z "$target_dir" ]]; then
+                    target_dir="$1"
+                else
+                    error "Too many arguments"
+                    exit 1
+                fi
+                shift
+                ;;
+        esac
+    done
+
+    # Check for fileicon dependency
+    if ! command -v fileicon >/dev/null 2>&1; then
+        error "fileicon command not found"
+        echo ""
+        echo "Install with: brew install fileicon"
+        exit 1
+    fi
+
+    if $batch_mode; then
+        # Batch mode: scan directories for images matching pattern
+        if [[ ! -d "$data_dir" ]]; then
+            error "Directory not found: $data_dir"
+            exit 1
+        fi
+
+        $verbose && info "Scanning directories in: $data_dir"
+        $verbose && info "Image pattern: $pattern"
+
+        local count=0
+        # Find all subdirectories
+        while IFS= read -r -d '' dir; do
+            local dir_name=$(basename "$dir")
+
+            # Look for image files matching pattern or directory name
+            local found_image=""
+
+            # First try exact pattern match
+            for ext in png jpg jpeg PNG JPG JPEG; do
+                if [[ -f "$dir/icon.$ext" ]]; then
+                    found_image="$dir/icon.$ext"
+                    break
+                elif [[ -f "$dir/folder.$ext" ]]; then
+                    found_image="$dir/folder.$ext"
+                    break
+                elif [[ -f "$dir/$dir_name.$ext" ]]; then
+                    found_image="$dir/$dir_name.$ext"
+                    break
+                fi
+            done
+
+            if [[ -n "$found_image" ]]; then
+                count=$((count + 1))
+                if $dry_run; then
+                    echo "[DRY RUN] Would set icon for: $dir"
+                    echo "          Using image: $(basename "$found_image")"
+                else
+                    $verbose && info "Setting icon for: $dir"
+                    if fileicon set "$dir" "$found_image" 2>&1; then
+                        success "Set icon for: $dir"
+                    else
+                        warn "Failed to set icon for: $dir"
+                    fi
+                fi
+            fi
+        done < <(find "$data_dir" -mindepth 1 -maxdepth 1 -type d -print0)
+
+        if [[ $count -eq 0 ]]; then
+            warn "No directories with matching images found"
+        else
+            if $dry_run; then
+                info "Would process $count directories"
+            else
+                success "Processed $count directories"
+            fi
+        fi
+    else
+        # Single directory mode
+        if [[ -z "$image_path" ]]; then
+            error "No image file specified"
+            echo ""
+            echo "Usage: macoz setpicfor <image> [directory]"
+            exit 1
+        fi
+
+        # Default to current directory if not specified
+        if [[ -z "$target_dir" ]]; then
+            target_dir="."
+        fi
+
+        # Validate image exists
+        if [[ ! -f "$image_path" ]]; then
+            error "Image file not found: $image_path"
+            exit 1
+        fi
+
+        # Validate directory exists
+        if [[ ! -d "$target_dir" ]]; then
+            error "Directory not found: $target_dir"
+            exit 1
+        fi
+
+        # Convert to absolute paths
+        local abs_image=$(cd "$(dirname "$image_path")" && pwd)/$(basename "$image_path")
+        local abs_dir=$(cd "$target_dir" && pwd)
+
+        $verbose && info "Image: $abs_image"
+        $verbose && info "Directory: $abs_dir"
+
+        if $dry_run; then
+            echo "[DRY RUN] Would set icon for: $abs_dir"
+            echo "          Using image: $(basename "$abs_image")"
+        else
+            info "Setting folder icon..."
+            if fileicon set "$abs_dir" "$abs_image" 2>&1; then
+                success "Folder icon updated: $abs_dir"
+                echo ""
+                echo "Note: You may need to restart Finder to see the changes:"
+                echo "  killall Finder"
+            else
+                error "Failed to set folder icon"
+                exit 1
+            fi
+        fi
+    fi
+}
+
 # ============================================================================
 # USAGE
 # ============================================================================
@@ -159,22 +363,33 @@ COMMANDS:
 
   bg                        Alias for background
 
+  setpicfor <image> [dir]   Set folder icon from image file
+                            - image: path to image file (jpg, png)
+                            - dir: target directory (default: current directory)
+                            Options:
+                              --all           Batch mode: set icons for subdirectories
+                              --data-dir DIR  Directory to process (default: current)
+                              --pattern PAT   Image pattern for --all mode
+                              --dry-run       Preview changes without applying
+                              -v, --verbose   Show detailed output
+
 OPTIONS:
   -h, --help                Show this help
   --version                 Show version
 
 EXAMPLES:
-  # Auto-select current seasonal wallpaper
-  macoz bg
+  # Desktop background
+  macoz bg                              # Auto-select seasonal wallpaper
+  macoz bg autumn                       # Random autumn wallpaper
+  macoz bg autumn 02                    # Specific seasonal wallpaper
+  macoz bg ~/Pictures/wallpaper.jpg     # Custom image
 
-  # Random autumn wallpaper
-  macoz bg autumn
-
-  # Specific seasonal wallpaper
-  macoz bg autumn 02
-
-  # Custom image
-  macoz bg ~/Pictures/wallpaper.jpg
+  # Folder icons
+  macoz setpicfor icon.png              # Set icon for current directory
+  macoz setpicfor photo.jpg ~/Projects  # Set icon for specific directory
+  macoz setpicfor --all                 # Set icons for all subdirectories with icon.*
+  macoz setpicfor --all --dry-run       # Preview what would be changed
+  macoz setpicfor --all --verbose       # Show detailed progress
 
 SEASONS:
   spring, summer, autumn, winter
@@ -206,6 +421,10 @@ case "$COMMAND" in
     background|bg)
         # Arguments are optional - will auto-select seasonal if not provided
         cmd_background "${1:-}" "${2:-}"
+        ;;
+    setpicfor)
+        # Set folder icon from image file
+        cmd_setpicfor "$@"
         ;;
     -h|--help)
         usage

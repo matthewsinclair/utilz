@@ -7,7 +7,7 @@
 
 ## Overview
 
-macOS system utilities
+macOS system utilities - desktop backgrounds and folder icons.
 
 ---
 
@@ -25,10 +25,53 @@ ln -s utilz macoz
 ## Usage
 
 ```bash
-macoz [OPTIONS] [ARGS]
+macoz <command> [OPTIONS] [ARGS]
 ```
 
 For detailed help: `utilz help macoz`
+
+---
+
+## Commands
+
+### Desktop Backgrounds
+
+Set desktop wallpaper with seasonal auto-selection:
+
+```bash
+# Auto-select current seasonal wallpaper
+macoz bg
+
+# Random autumn wallpaper
+macoz bg autumn
+
+# Specific seasonal wallpaper
+macoz bg autumn 02
+
+# Custom image
+macoz bg ~/Pictures/wallpaper.jpg
+```
+
+### Folder Icons
+
+Set folder icons from image files:
+
+```bash
+# Set icon for current directory
+macoz setpicfor icon.png
+
+# Set icon for specific directory
+macoz setpicfor photo.jpg ~/Documents/Projects
+
+# Set icons for all subdirectories with icon.* files
+macoz setpicfor --all
+
+# Preview changes without applying
+macoz setpicfor --all --dry-run
+
+# Process specific directory tree
+macoz setpicfor --all --data-dir ~/Projects --verbose
+```
 
 ---
 
@@ -40,6 +83,16 @@ macoz --help
 
 # Show version
 macoz --version
+
+# Desktop backgrounds
+macoz bg                                # Auto seasonal
+macoz bg winter 01                      # Specific seasonal
+macoz bg ~/Pictures/sunset.jpg          # Custom
+
+# Folder icons
+macoz setpicfor icon.png                # Current directory
+macoz setpicfor --all                   # Batch process subdirectories
+macoz setpicfor --dry-run icon.png      # Preview only
 ```
 
 ---

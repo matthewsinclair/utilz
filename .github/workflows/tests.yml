@@ -51,9 +51,13 @@ jobs:
         utilz list
         utilz version
 
-    - name: Run tests
+    - name: Run tests (excluding macoz - macOS only)
       run: |
-        utilz test
+        # Run all tests except macoz (macOS-only utility)
+        for utility in utilz clipz cryptz gitz mdagg retry; do
+          echo "Testing: $utility"
+          utilz test $utility || exit 1
+        done
 
   test-macos:
     name: Test on macOS
