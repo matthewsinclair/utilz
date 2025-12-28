@@ -1,0 +1,563 @@
+#!/usr/bin/env bash
+#
+# cleanz - LLM text cleaner - removes hidden characters and formatting artifacts
+#
+# Cleans text copied from LLM interfaces (ChatGPT, Claude, Gemini, etc.) by removing:
+# - Zero-width spaces and other invisible Unicode characters
+# - HTML attributes injected by LLM UIs
+# - Excessive whitespace
+# - Optionally: smart quotes
+#
+
+set -euo pipefail
+
+# Source common functions if not already loaded (from dispatcher)
+if [[ "$(type -t info 2>/dev/null)" != "function" ]]; then
+    SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+    UTILZ_HOME="${UTILZ_HOME:-$(cd "$SCRIPT_DIR/../.." && pwd)}"
+
+    if [[ -f "$UTILZ_HOME/opt/utilz/lib/common.sh" ]]; then
+        source "$UTILZ_HOME/opt/utilz/lib/common.sh"
+    else
+        echo "ERROR: Cannot find common.sh library" >&2
+        exit 1
+    fi
+fi
+
+# ============================================================================
+# CONFIGURATION
+# ============================================================================
+
+# Options (set by argument parsing)
+OPT_CLIPBOARD=false
+OPT_INPLACE=false
+OPT_OUTPUT=""
+OPT_DETECT=false
+OPT_VERBOSE=false
+OPT_NO_HTML=false
+OPT_NO_WHITESPACE=false
+OPT_NORMALIZE_QUOTES=false
+INPUT_FILE=""
+
+# ============================================================================
+# UNICODE BYTE SEQUENCES
+# ============================================================================
+
+# Define UTF-8 byte sequences for invisible characters
+# Using printf for portability across different shells
+
+# Zero-width characters (remove completely)
+ZWSP=$(printf '\xe2\x80\x8b')      # U+200B Zero-width space
+ZWNJ=$(printf '\xe2\x80\x8c')      # U+200C Zero-width non-joiner
+ZWJ=$(printf '\xe2\x80\x8d')       # U+200D Zero-width joiner
+WJ=$(printf '\xe2\x81\xa0')        # U+2060 Word joiner
+BOM=$(printf '\xef\xbb\xbf')       # U+FEFF Byte order mark
+SHY=$(printf '\xc2\xad')           # U+00AD Soft hyphen
+
+# Directional formatting (remove completely)
+LRE=$(printf '\xe2\x80\xaa')       # U+202A Left-to-right embedding
+RLE=$(printf '\xe2\x80\xab')       # U+202B Right-to-left embedding
+PDF=$(printf '\xe2\x80\xac')       # U+202C Pop directional formatting
+LRO=$(printf '\xe2\x80\xad')       # U+202D Left-to-right override
+RLO=$(printf '\xe2\x80\xae')       # U+202E Right-to-left override
+
+# Invisible math operators (remove completely)
+FNAPPLY=$(printf '\xe2\x81\xa1')   # U+2061 Function application
+INVTIMES=$(printf '\xe2\x81\xa2')  # U+2062 Invisible times
+INVSEP=$(printf '\xe2\x81\xa3')    # U+2063 Invisible separator
+INVPLUS=$(printf '\xe2\x81\xa4')   # U+2064 Invisible plus
+
+# Spaces to convert to regular space
+NBSP=$(printf '\xc2\xa0')          # U+00A0 Non-breaking space
+HAIRSP=$(printf '\xe2\x80\x8a')    # U+200A Hair space
+
+# Smart quotes (for optional normalization)
+LSQUO=$(printf '\xe2\x80\x98')     # U+2018 Left single quote
+RSQUO=$(printf '\xe2\x80\x99')     # U+2019 Right single quote
+LDQUO=$(printf '\xe2\x80\x9c')     # U+201C Left double quote
+RDQUO=$(printf '\xe2\x80\x9d')     # U+201D Right double quote
+
+# ============================================================================
+# CLEANING FUNCTIONS
+# ============================================================================
+
+# Clean Unicode control characters
+clean_unicode() {
+    local text="$1"
+
+    # Remove zero-width characters
+    text="${text//$ZWSP/}"
+    text="${text//$ZWNJ/}"
+    text="${text//$ZWJ/}"
+    text="${text//$WJ/}"
+    text="${text//$BOM/}"
+    text="${text//$SHY/}"
+
+    # Remove directional formatting
+    text="${text//$LRE/}"
+    text="${text//$RLE/}"
+    text="${text//$PDF/}"
+    text="${text//$LRO/}"
+    text="${text//$RLO/}"
+
+    # Remove invisible math operators
+    text="${text//$FNAPPLY/}"
+    text="${text//$INVTIMES/}"
+    text="${text//$INVSEP/}"
+    text="${text//$INVPLUS/}"
+
+    # Convert special spaces to regular space
+    text="${text//$NBSP/ }"
+    text="${text//$HAIRSP/ }"
+
+    # Remove DEL character (U+007F)
+    text=$(printf '%s' "$text" | tr -d '\177')
+
+    # Remove control characters except newline, tab, carriage return
+    # Control chars are U+0000-001F except 0x09 (tab), 0x0A (newline), 0x0D (CR)
+    text=$(printf '%s' "$text" | tr -d '\000-\010\013\014\016-\037')
+
+    printf '%s' "$text"
+}
+
+# Clean HTML attributes from LLM UIs
+clean_html() {
+    local text="$1"
+
+    # Remove common LLM-specific data attributes
+    # data-start="..." data-end="..." data-sourcepos="..."
+    text=$(printf '%s' "$text" | sed -E 's/ data-start="[^"]*"//g')
+    text=$(printf '%s' "$text" | sed -E 's/ data-end="[^"]*"//g')
+    text=$(printf '%s' "$text" | sed -E 's/ data-sourcepos="[^"]*"//g')
+
+    # Remove other common data-* attributes from LLM UIs
+    text=$(printf '%s' "$text" | sed -E 's/ data-[a-z-]+="[^"]*"//g')
+
+    printf '%s' "$text"
+}
+
+# Normalize whitespace
+clean_whitespace() {
+    local text="$1"
+
+    # Remove trailing whitespace from each line
+    text=$(printf '%s' "$text" | sed 's/[[:space:]]*$//')
+
+    # Collapse multiple spaces to single space (but preserve newlines)
+    text=$(printf '%s' "$text" | sed 's/  */ /g')
+
+    # Collapse more than 2 consecutive blank lines to max 2
+    text=$(printf '%s' "$text" | sed '/^$/N;/^\n$/N;/^\n\n$/d')
+
+    printf '%s' "$text"
+}
+
+# Normalize smart quotes to straight quotes
+clean_quotes() {
+    local text="$1"
+
+    text="${text//$LSQUO/\'}"
+    text="${text//$RSQUO/\'}"
+    text="${text//$LDQUO/\"}"
+    text="${text//$RDQUO/\"}"
+
+    printf '%s' "$text"
+}
+
+# Main cleaning pipeline
+clean_text() {
+    local text="$1"
+    local original_len=${#text}
+
+    # Always clean Unicode
+    text=$(clean_unicode "$text")
+
+    # Clean HTML unless disabled
+    if [[ "$OPT_NO_HTML" == "false" ]]; then
+        text=$(clean_html "$text")
+    fi
+
+    # Clean whitespace unless disabled
+    if [[ "$OPT_NO_WHITESPACE" == "false" ]]; then
+        text=$(clean_whitespace "$text")
+    fi
+
+    # Normalize quotes if requested
+    if [[ "$OPT_NORMALIZE_QUOTES" == "true" ]]; then
+        text=$(clean_quotes "$text")
+    fi
+
+    # Verbose output
+    if [[ "$OPT_VERBOSE" == "true" ]]; then
+        local new_len=${#text}
+        local removed=$((original_len - new_len))
+        if [[ $removed -gt 0 ]]; then
+            info "Removed $removed hidden characters" >&2
+        else
+            info "No hidden characters found" >&2
+        fi
+    fi
+
+    printf '%s' "$text"
+}
+
+# ============================================================================
+# DETECTION FUNCTIONS
+# ============================================================================
+
+# Count occurrences of a pattern in text
+count_pattern() {
+    local text="$1"
+    local pattern="$2"
+    local count=0
+    local temp="$text"
+
+    while [[ "$temp" == *"$pattern"* ]]; do
+        count=$((count + 1))
+        temp="${temp#*"$pattern"}"
+    done
+
+    echo "$count"
+}
+
+# Detect hidden characters without removing them
+detect_hidden() {
+    local text="$1"
+    local found=0
+
+    echo "Hidden character analysis:"
+    echo "=========================="
+    echo ""
+
+    # Zero-width characters
+    local zwsp_count=$(count_pattern "$text" "$ZWSP")
+    local zwnj_count=$(count_pattern "$text" "$ZWNJ")
+    local zwj_count=$(count_pattern "$text" "$ZWJ")
+    local wj_count=$(count_pattern "$text" "$WJ")
+    local bom_count=$(count_pattern "$text" "$BOM")
+    local shy_count=$(count_pattern "$text" "$SHY")
+
+    if [[ $zwsp_count -gt 0 ]]; then
+        echo "  Zero-width space (U+200B): $zwsp_count"
+        found=$((found + zwsp_count))
+    fi
+    if [[ $zwnj_count -gt 0 ]]; then
+        echo "  Zero-width non-joiner (U+200C): $zwnj_count"
+        found=$((found + zwnj_count))
+    fi
+    if [[ $zwj_count -gt 0 ]]; then
+        echo "  Zero-width joiner (U+200D): $zwj_count"
+        found=$((found + zwj_count))
+    fi
+    if [[ $wj_count -gt 0 ]]; then
+        echo "  Word joiner (U+2060): $wj_count"
+        found=$((found + wj_count))
+    fi
+    if [[ $bom_count -gt 0 ]]; then
+        echo "  Byte order mark (U+FEFF): $bom_count"
+        found=$((found + bom_count))
+    fi
+    if [[ $shy_count -gt 0 ]]; then
+        echo "  Soft hyphen (U+00AD): $shy_count"
+        found=$((found + shy_count))
+    fi
+
+    # Directional formatting
+    local lre_count=$(count_pattern "$text" "$LRE")
+    local rle_count=$(count_pattern "$text" "$RLE")
+    local pdf_count=$(count_pattern "$text" "$PDF")
+    local lro_count=$(count_pattern "$text" "$LRO")
+    local rlo_count=$(count_pattern "$text" "$RLO")
+
+    local dir_total=$((lre_count + rle_count + pdf_count + lro_count + rlo_count))
+    if [[ $dir_total -gt 0 ]]; then
+        echo "  Directional formatting chars: $dir_total"
+        found=$((found + dir_total))
+    fi
+
+    # Special spaces
+    local nbsp_count=$(count_pattern "$text" "$NBSP")
+    local hair_count=$(count_pattern "$text" "$HAIRSP")
+
+    if [[ $nbsp_count -gt 0 ]]; then
+        echo "  Non-breaking space (U+00A0): $nbsp_count"
+        found=$((found + nbsp_count))
+    fi
+    if [[ $hair_count -gt 0 ]]; then
+        echo "  Hair space (U+200A): $hair_count"
+        found=$((found + hair_count))
+    fi
+
+    # Smart quotes
+    local lsq_count=$(count_pattern "$text" "$LSQUO")
+    local rsq_count=$(count_pattern "$text" "$RSQUO")
+    local ldq_count=$(count_pattern "$text" "$LDQUO")
+    local rdq_count=$(count_pattern "$text" "$RDQUO")
+
+    local quote_total=$((lsq_count + rsq_count + ldq_count + rdq_count))
+    if [[ $quote_total -gt 0 ]]; then
+        echo "  Smart quotes: $quote_total (use --normalize-quotes to convert)"
+    fi
+
+    # Check for HTML data attributes
+    local data_attrs=$(printf '%s' "$text" | grep -oE ' data-[a-z-]+="[^"]*"' 2>/dev/null | wc -l | tr -d ' ')
+    if [[ $data_attrs -gt 0 ]]; then
+        echo "  HTML data-* attributes: $data_attrs"
+        found=$((found + data_attrs))
+    fi
+
+    echo ""
+    if [[ $found -gt 0 ]]; then
+        echo "Total hidden elements found: $found"
+        echo ""
+        echo "Run without --detect to clean the text."
+    else
+        echo "No hidden elements detected."
+    fi
+}
+
+# ============================================================================
+# I/O FUNCTIONS
+# ============================================================================
+
+# Read input from file, stdin, or clipboard
+read_input() {
+    local text=""
+
+    if [[ "$OPT_CLIPBOARD" == "true" ]]; then
+        # Read from clipboard using clipz
+        if ! command -v clipz >/dev/null 2>&1; then
+            # Try using utilz clipz
+            if [[ -x "$UTILZ_HOME/bin/clipz" ]]; then
+                text=$("$UTILZ_HOME/bin/clipz" paste 2>/dev/null) || {
+                    error "Failed to read from clipboard"
+                    exit 1
+                }
+            else
+                error "clipz not found - required for clipboard operations"
+                exit 1
+            fi
+        else
+            text=$(clipz paste 2>/dev/null) || {
+                error "Failed to read from clipboard"
+                exit 1
+            }
+        fi
+    elif [[ -n "$INPUT_FILE" ]]; then
+        # Read from file
+        if [[ ! -f "$INPUT_FILE" ]]; then
+            error "File not found: $INPUT_FILE"
+            exit 1
+        fi
+        text=$(cat "$INPUT_FILE")
+    else
+        # Read from stdin
+        text=$(cat)
+    fi
+
+    printf '%s' "$text"
+}
+
+# Write output to file, stdout, or clipboard
+write_output() {
+    local text="$1"
+
+    if [[ "$OPT_CLIPBOARD" == "true" ]]; then
+        # Write to clipboard using clipz
+        if ! command -v clipz >/dev/null 2>&1; then
+            if [[ -x "$UTILZ_HOME/bin/clipz" ]]; then
+                printf '%s' "$text" | "$UTILZ_HOME/bin/clipz" copy || {
+                    error "Failed to write to clipboard"
+                    exit 1
+                }
+            else
+                error "clipz not found - required for clipboard operations"
+                exit 1
+            fi
+        else
+            printf '%s' "$text" | clipz copy || {
+                error "Failed to write to clipboard"
+                exit 1
+            }
+        fi
+        success "Clipboard cleaned"
+    elif [[ "$OPT_INPLACE" == "true" && -n "$INPUT_FILE" ]]; then
+        # In-place editing with temp file for safety
+        local tmpfile=$(mktemp)
+        printf '%s' "$text" > "$tmpfile"
+        mv "$tmpfile" "$INPUT_FILE"
+        success "File cleaned: $INPUT_FILE"
+    elif [[ -n "$OPT_OUTPUT" ]]; then
+        # Write to output file
+        printf '%s' "$text" > "$OPT_OUTPUT"
+        success "Output written to: $OPT_OUTPUT"
+    else
+        # Write to stdout
+        printf '%s\n' "$text"
+    fi
+}
+
+# ============================================================================
+# USAGE
+# ============================================================================
+
+usage() {
+    cat <<EOF
+Usage: cleanz [OPTIONS] [FILE]
+
+LLM text cleaner - removes hidden characters and formatting artifacts from
+text copied from ChatGPT, Claude, Gemini, and other LLM interfaces.
+
+INPUT:
+  FILE                   Read from file (optional, defaults to stdin)
+  -c, --clipboard        Read from and write to clipboard
+
+OUTPUT:
+  (default)              Write to stdout
+  -o, --output FILE      Write to file
+  -i, --in-place         Edit input file in place
+
+MODES:
+  -d, --detect           Show hidden characters without cleaning
+  -v, --verbose          Show cleaning summary
+
+OPTIONS:
+  --no-html              Skip HTML attribute cleaning
+  --no-whitespace        Skip whitespace normalization
+  --normalize-quotes     Convert smart quotes to straight quotes
+  -h, --help             Show this help
+  --version              Show version
+
+WHAT GETS CLEANED:
+  - Zero-width spaces and joiners (U+200B, U+200C, U+200D, U+2060)
+  - Byte order mark (U+FEFF)
+  - Soft hyphens (U+00AD)
+  - Directional formatting (U+202A-E)
+  - Non-breaking and hair spaces (converted to regular spaces)
+  - Control characters (except newline, tab, carriage return)
+  - HTML data-* attributes from LLM UIs
+  - Excessive whitespace (multiple spaces, blank lines, trailing)
+
+EXAMPLES:
+  # Clean file and output to stdout
+  cleanz document.txt
+
+  # Clean file in place
+  cleanz -i document.txt
+
+  # Clean with verbose output
+  cleanz -v document.txt
+
+  # Clean clipboard contents
+  cleanz --clipboard
+
+  # Pipe mode
+  cat document.txt | cleanz > cleaned.txt
+  pbpaste | cleanz | pbcopy
+
+  # Detect hidden characters
+  cleanz --detect document.txt
+
+  # Full cleaning with quote normalization
+  cleanz --normalize-quotes document.txt
+
+For detailed help, run: utilz help cleanz
+EOF
+}
+
+# ============================================================================
+# MAIN
+# ============================================================================
+
+# Parse arguments
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        -h|--help)
+            usage
+            exit 0
+            ;;
+        --version)
+            show_version "cleanz"
+            exit 0
+            ;;
+        -c|--clipboard)
+            OPT_CLIPBOARD=true
+            shift
+            ;;
+        -i|--in-place)
+            OPT_INPLACE=true
+            shift
+            ;;
+        -o|--output)
+            if [[ -z "${2:-}" ]]; then
+                error "Option --output requires a filename"
+                exit 1
+            fi
+            OPT_OUTPUT="$2"
+            shift 2
+            ;;
+        -d|--detect)
+            OPT_DETECT=true
+            shift
+            ;;
+        -v|--verbose)
+            OPT_VERBOSE=true
+            shift
+            ;;
+        --no-html)
+            OPT_NO_HTML=true
+            shift
+            ;;
+        --no-whitespace)
+            OPT_NO_WHITESPACE=true
+            shift
+            ;;
+        --normalize-quotes)
+            OPT_NORMALIZE_QUOTES=true
+            shift
+            ;;
+        -*)
+            error "Unknown option: $1"
+            echo ""
+            usage
+            exit 1
+            ;;
+        *)
+            if [[ -n "$INPUT_FILE" ]]; then
+                error "Too many arguments"
+                exit 1
+            fi
+            INPUT_FILE="$1"
+            shift
+            ;;
+    esac
+done
+
+# Validate options
+if [[ "$OPT_INPLACE" == "true" && -z "$INPUT_FILE" ]]; then
+    error "Option --in-place requires a file argument"
+    exit 1
+fi
+
+if [[ "$OPT_INPLACE" == "true" && -n "$OPT_OUTPUT" ]]; then
+    error "Options --in-place and --output are mutually exclusive"
+    exit 1
+fi
+
+if [[ "$OPT_CLIPBOARD" == "true" && -n "$INPUT_FILE" ]]; then
+    error "Options --clipboard and file input are mutually exclusive"
+    exit 1
+fi
+
+# Read input
+text=$(read_input)
+
+# Process based on mode
+if [[ "$OPT_DETECT" == "true" ]]; then
+    # Detection mode - just analyze, don't clean
+    detect_hidden "$text"
+else
+    # Cleaning mode
+    cleaned=$(clean_text "$text")
+    write_output "$cleaned"
+fi

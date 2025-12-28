@@ -1,0 +1,6 @@
+name: cleanz
+version: 1.1.0
+utilz_version: "^1.1.0"
+description: LLM text cleaner - removes hidden characters and formatting artifacts
+author: Matthew Sinclair
+dependencies: []

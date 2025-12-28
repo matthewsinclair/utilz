@@ -94,6 +94,29 @@ Both methods work identically.
 
 ## Included Utilities
 
+### cleanz
+
+LLM text cleaner that removes hidden characters and formatting artifacts from text copied from ChatGPT, Claude, Gemini, and other LLM interfaces.
+
+```bash
+# Clean a file
+cleanz document.txt
+
+# Clean file in place
+cleanz -i document.txt
+
+# Clean clipboard contents
+cleanz --clipboard
+
+# Detect hidden characters without cleaning
+cleanz --detect document.txt
+
+# Pipe mode
+pbpaste | cleanz | pbcopy
+```
+
+See `utilz help cleanz` for details.
+
 ### clipz
 
 Cross-platform clipboard copy and paste utility. Supports macOS (pbcopy/pbpaste), Linux X11 (xclip/xsel), and Wayland (wl-clipboard).
