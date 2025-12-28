@@ -666,6 +666,12 @@ fi
 # Process based on mode
 if [[ "$OPT_IMAGE" == "true" ]]; then
     # Image mode - handle C2PA metadata
+    # Check file exists first (before exiftool check)
+    if [[ ! -f "$INPUT_FILE" ]]; then
+        error "Image file not found: $INPUT_FILE"
+        exit 1
+    fi
+
     check_exiftool || exit 1
 
     if [[ "$OPT_DETECT" == "true" ]]; then
