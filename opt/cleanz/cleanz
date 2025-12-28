@@ -37,6 +37,7 @@ OPT_VERBOSE=false
 OPT_NO_HTML=false
 OPT_NO_WHITESPACE=false
 OPT_NORMALIZE_QUOTES=false
+OPT_IMAGE=false
 INPUT_FILE=""
 
 # ============================================================================
@@ -155,11 +156,13 @@ clean_whitespace() {
 # Normalize smart quotes to straight quotes
 clean_quotes() {
     local text="$1"
+    local SQ="'"
+    local DQ='"'
 
-    text="${text//$LSQUO/\'}"
-    text="${text//$RSQUO/\'}"
-    text="${text//$LDQUO/\"}"
-    text="${text//$RDQUO/\"}"
+    text="${text//$LSQUO/$SQ}"
+    text="${text//$RSQUO/$SQ}"
+    text="${text//$LDQUO/$DQ}"
+    text="${text//$RDQUO/$DQ}"
 
     printf '%s' "$text"
 }
@@ -317,6 +320,85 @@ detect_hidden() {
 }
 
 # ============================================================================
+# IMAGE/C2PA FUNCTIONS
+# ============================================================================
+
+# Check if exiftool is available
+check_exiftool() {
+    if ! command -v exiftool &>/dev/null; then
+        error "exiftool required for --image mode"
+        info "Install with: brew install exiftool"
+        return 1
+    fi
+    return 0
+}
+
+# Detect C2PA and other AI-related metadata in image
+detect_c2pa() {
+    local image="$1"
+
+    if [[ ! -f "$image" ]]; then
+        error "Image file not found: $image"
+        return 1
+    fi
+
+    echo "C2PA/AI metadata analysis: $image"
+    echo "=================================="
+    echo ""
+
+    # Get all metadata and filter for C2PA/AI-related fields
+    local metadata
+    metadata=$(exiftool -G1 -a -s "$image" 2>/dev/null)
+
+    # Look for C2PA, creator, credit, AI-related metadata
+    local c2pa_data
+    c2pa_data=$(echo "$metadata" | grep -iE "(c2pa|creator|credit|jumbf|ai|generated|openai|dalle|chatgpt|sora|midjourney)" 2>/dev/null || true)
+
+    if [[ -n "$c2pa_data" ]]; then
+        echo "Found AI/C2PA metadata:"
+        echo "$c2pa_data"
+        echo ""
+        echo "Run without --detect to strip this metadata."
+    else
+        echo "No C2PA/AI metadata found."
+    fi
+
+    # Verbose mode shows all metadata
+    if [[ "$OPT_VERBOSE" == "true" ]]; then
+        echo ""
+        echo "Full metadata:"
+        echo "--------------"
+        echo "$metadata"
+    fi
+}
+
+# Strip all metadata from image (including C2PA)
+strip_c2pa() {
+    local image="$1"
+    local output="$2"
+
+    if [[ ! -f "$image" ]]; then
+        error "Image file not found: $image"
+        return 1
+    fi
+
+    if [[ "$OPT_INPLACE" == "true" ]]; then
+        # Strip in place
+        exiftool -all= -overwrite_original "$image" 2>/dev/null
+        success "Metadata stripped: $image"
+    elif [[ -n "$output" ]]; then
+        # Output to new file
+        exiftool -all= -o "$output" "$image" 2>/dev/null
+        success "Cleaned image written to: $output"
+    else
+        # No output specified - require -o or -i
+        error "Image mode requires -o <output-file> or -i (in-place)"
+        info "Example: cleanz --image photo.png -o cleaned.png"
+        return 1
+    fi
+}
+
+# ============================================================================
 # I/O FUNCTIONS
 # ============================================================================
 
@@ -420,6 +502,7 @@ OUTPUT:
 MODES:
   -d, --detect           Show hidden characters without cleaning
   -v, --verbose          Show cleaning summary
+  --image                Image mode: handle C2PA/AI metadata (requires exiftool)
 
 OPTIONS:
   --no-html              Skip HTML attribute cleaning
@@ -429,6 +512,7 @@ OPTIONS:
   --version              Show version
 
 WHAT GETS CLEANED:
+  Text mode:
   - Zero-width spaces and joiners (U+200B, U+200C, U+200D, U+2060)
   - Byte order mark (U+FEFF)
   - Soft hyphens (U+00AD)
@@ -437,6 +521,11 @@ WHAT GETS CLEANED:
   - Control characters (except newline, tab, carriage return)
   - HTML data-* attributes from LLM UIs
   - Excessive whitespace (multiple spaces, blank lines, trailing)
+
+  Image mode (--image):
+  - C2PA content credentials metadata
+  - AI generation provenance data
+  - Creator/credit metadata from DALL-E, ChatGPT, Sora, etc.
 
 EXAMPLES:
   # Clean file and output to stdout
@@ -460,6 +549,15 @@ EXAMPLES:
 
   # Full cleaning with quote normalization
   cleanz --normalize-quotes document.txt
+
+  # Image mode: detect C2PA metadata
+  cleanz --image --detect photo.png
+
+  # Image mode: strip metadata to new file
+  cleanz --image photo.png -o cleaned.png
+
+  # Image mode: strip metadata in place
+  cleanz --image -i photo.png
 
 For detailed help, run: utilz help cleanz
 EOF
@@ -516,6 +614,10 @@ while [[ $# -gt 0 ]]; do
             OPT_NORMALIZE_QUOTES=true
             shift
             ;;
+        --image)
+            OPT_IMAGE=true
+            shift
+            ;;
         -*)
             error "Unknown option: $1"
             echo ""
@@ -549,15 +651,39 @@ if [[ "$OPT_CLIPBOARD" == "true" && -n "$INPUT_FILE" ]]; then
     exit 1
 fi
 
-# Read input
-text=$(read_input)
+# Image mode validation
+if [[ "$OPT_IMAGE" == "true" ]]; then
+    if [[ -z "$INPUT_FILE" ]]; then
+        error "Image mode requires an image file argument"
+        exit 1
+    fi
+    if [[ "$OPT_CLIPBOARD" == "true" ]]; then
+        error "Image mode does not support clipboard"
+        exit 1
+    fi
+fi
 
 # Process based on mode
-if [[ "$OPT_DETECT" == "true" ]]; then
-    # Detection mode - just analyze, don't clean
-    detect_hidden "$text"
+if [[ "$OPT_IMAGE" == "true" ]]; then
+    # Image mode - handle C2PA metadata
+    check_exiftool || exit 1
+
+    if [[ "$OPT_DETECT" == "true" ]]; then
+        detect_c2pa "$INPUT_FILE"
+    else
+        strip_c2pa "$INPUT_FILE" "$OPT_OUTPUT"
+    fi
 else
-    # Cleaning mode
-    cleaned=$(clean_text "$text")
-    write_output "$cleaned"
+    # Text mode
+    # Read input
+    text=$(read_input)
+
+    if [[ "$OPT_DETECT" == "true" ]]; then
+        # Detection mode - just analyze, don't clean
+        detect_hidden "$text"
+    else
+        # Cleaning mode
+        cleaned=$(clean_text "$text")
+        write_output "$cleaned"
+    fi
 fi

@@ -1,33 +1,42 @@
 ---
-verblock: "06 Mar 2025:v0.1: Matthew Sinclair - Initial version"
+verblock: "28 Dec 2025:v0.3: Matthew Sinclair - Updated after cleanz C2PA image mode"
 ---
 # Work In Progress
 
 ## Current Focus
 
-**002: [Brief description of the current development focus 2]**
+**No active work** - All tasks complete.
 
-- Note 1
-- Note 2
-
-**001: [Brief description of the current development focus 1]**
-
-- Note 1
-- Note 2
+The cleanz utility (ST0001) was completed with C2PA image mode and released as Utilz v1.1.0 on 28 Dec 2025.
 
 ## Active Steel Threads
 
-- ST####: [Brief description]
-- ...
+None - All steel threads complete.
+
+## Recently Completed
+
+- ST0001: cleanz - LLM Text Cleaner Utility (DONE 28 Dec 2025)
+  - Pure bash implementation (~690 lines with image mode)
+  - Text mode: removes hidden Unicode, HTML attrs, normalizes whitespace
+  - Image mode: strips C2PA/AI metadata via exiftool
+  - 55 tests, all passing on macOS and Linux CI
+  - Released as Utilz v1.1.0
 
 ## Upcoming Work
 
-- [Item 1]
-- ...
+No planned work. Ready for new requests.
 
 ## Notes
 
-[Any additional notes about the current work]
+The Utilz framework is stable with 8 utilities:
+- cleanz - LLM text cleaner + C2PA image metadata (NEW in v1.1.0)
+- clipz - Cross-platform clipboard
+- cryptz - GPG encryption wrapper
+- gitz - Git multi-repo operations
+- macoz - macOS utilities (bg, setpicfor)
+- mdagg - Markdown aggregator
+- retry - Retry command utility
+- utilz - Core framework
 
 ## Context for LLM
 

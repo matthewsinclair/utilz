@@ -1,5 +1,7 @@
 # Design - ST0001: cleanz - LLM Text Cleaner Utility
 
+**Status**: AS-BUILT (Implemented 28 Dec 2025)
+
 ## Command Interface
 
 ```
@@ -23,6 +25,7 @@ cleanz [options] [file]
 - (default) - Clean and output
 - `-d, --detect` - Show hidden chars without cleaning
 - `-v, --verbose` - Show cleaning summary
+- `--image` - Image mode: handle C2PA/AI metadata (requires exiftool)
 
 ### Feature Flags
 
@@ -67,13 +70,22 @@ cleanz [options] [file]
 - U+201C/D -> "
 - U+2018/9 -> '
 
+### Image Mode (--image)
+
+With `--image` flag, handles C2PA (Content Credentials) metadata from AI-generated images:
+- C2PA content credentials manifest
+- AI generation provenance data
+- Creator/credit metadata from DALL-E, ChatGPT, Sora, Midjourney
+- Uses exiftool for metadata stripping
+
 ## Design Decisions
 
-### Pure bash/sed Implementation
+### Pure bash Implementation
 
 - No external dependencies beyond coreutils
-- Use UTF-8 byte sequences for Unicode handling
-- Compatible with both macOS sed and GNU sed
+- Use UTF-8 byte sequences via printf for Unicode handling
+- Compatible with both macOS and Linux
+- Uses bash parameter expansion for string replacement (no sed)
 
 ### Clipboard Integration
 
@@ -85,33 +97,71 @@ cleanz [options] [file]
 - Use temp file + mv pattern for safety
 - Atomic replacement to prevent data loss
 
-## Architecture
+## Architecture (As-Built)
 
 ```
-cleanz
+cleanz (~690 lines)
   |
-  +-- parse_args()        # Argument parsing
+  +-- Unicode byte sequences (defined via printf)
+  |     ZWSP, ZWNJ, ZWJ, WJ, NBSP, HAIR, BOM, SHY
+  |     LSQUO, RSQUO, LDQUO, RDQUO
+  |     LRE, RLE, PDF, LRO, RLO
+  |     Invisible math operators, control chars, DEL
   |
-  +-- read_input()        # File/stdin/clipboard input
+  +-- parse_args()        # Argument parsing with getopts
   |
-  +-- clean_text()        # Main cleaning pipeline
-  |     |
-  |     +-- clean_unicode()      # Remove/convert Unicode chars
-  |     +-- clean_html()         # Strip HTML attributes
-  |     +-- clean_whitespace()   # Normalize whitespace
-  |     +-- clean_quotes()       # Optional quote conversion
+  +-- Text Mode Functions:
+  |     +-- read_input()        # File/stdin/clipboard input
+  |     +-- clean_text()        # Main cleaning pipeline
+  |     |     +-- clean_unicode()      # Bash parameter expansion
+  |     |     +-- clean_html()         # Bash parameter expansion
+  |     |     +-- clean_whitespace()   # Bash parameter expansion
+  |     |     +-- clean_quotes()       # Bash parameter expansion
+  |     +-- detect_hidden()     # Count occurrences of each char type
+  |     |     +-- count_pattern()      # Helper function
+  |     +-- write_output()      # File/stdout/clipboard output
   |
-  +-- detect_hidden()     # Detection mode (--detect)
+  +-- Image Mode Functions (--image):
+  |     +-- check_exiftool()    # Verify exiftool is installed
+  |     +-- detect_c2pa()       # Show C2PA/AI metadata
+  |     +-- strip_c2pa()        # Remove all metadata via exiftool
   |
-  +-- write_output()      # File/stdout/clipboard output
+  +-- main()              # Entry point with dispatcher integration
 ```
+
+## Implementation Notes
+
+### Unicode Handling
+
+All Unicode characters defined as bash variables using printf:
+```bash
+ZWSP=$(printf '\xe2\x80\x8b')     # U+200B Zero-width space
+NBSP=$(printf '\xc2\xa0')         # U+00A0 Non-breaking space
+```
+
+### String Replacement
+
+Uses bash parameter expansion instead of sed:
+```bash
+text="${text//$ZWSP/}"            # Remove
+text="${text//$NBSP/ }"           # Convert to space
+```
+
+### Test Compatibility
+
+BATS tests use file-based input rather than pipes due to `run` command limitations with stdin.
 
 ## Alternatives Considered
+
+### sed-based implementation
+
+- Initial approach considered
+- Rejected: bash parameter expansion is more portable and easier to maintain
 
 ### Perl-based implementation
 
 - More robust Unicode regex support
-- Rejected: adds dependency, bash/sed sufficient for this use case
+- Rejected: adds dependency, bash sufficient for this use case
 
 ### Python fallback
 

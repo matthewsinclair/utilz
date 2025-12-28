@@ -96,7 +96,7 @@ Both methods work identically.
 
 ### cleanz
 
-LLM text cleaner that removes hidden characters and formatting artifacts from text copied from ChatGPT, Claude, Gemini, and other LLM interfaces.
+LLM text cleaner that removes hidden characters and formatting artifacts from text copied from ChatGPT, Claude, Gemini, and other LLM interfaces. Also supports stripping C2PA metadata from AI-generated images.
 
 ```bash
 # Clean a file
@@ -113,6 +113,10 @@ cleanz --detect document.txt
 
 # Pipe mode
 pbpaste | cleanz | pbcopy
+
+# Image mode: strip C2PA/AI metadata
+cleanz --image photo.png -o cleaned.png
+cleanz --image --detect dalle-image.png
 ```
 
 See `utilz help cleanz` for details.

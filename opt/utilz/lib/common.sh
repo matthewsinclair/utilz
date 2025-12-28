@@ -396,6 +396,12 @@ run_doctor() {
         echo -e "    brew install glow"
     fi
 
+    # Check for exiftool (optional for cleanz --image mode)
+    if ! check_command "exiftool"; then
+        info "Optional: Install 'exiftool' for cleanz image metadata stripping"
+        echo -e "    brew install exiftool"
+    fi
+
     if [[ ${#missing_deps[@]} -gt 0 ]]; then
         # Remove duplicates
         local unique_deps=($(printf '%s\n' "${missing_deps[@]}" | sort -u))

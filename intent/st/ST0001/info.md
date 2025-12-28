@@ -1,9 +1,9 @@
 ---
-verblock: "28 Dec 2025:v0.1: matts - Initial version"
+verblock: "28 Dec 2025:v0.2: matts - Marked complete"
 intent_version: 2.2.0
-status: WIP
+status: DONE
 created: 20251228
-completed:
+completed: 20251228
 ---
 # ST0001: cleanz - LLM Text Cleaner Utility
 
@@ -23,6 +23,15 @@ When copying text from LLM chat interfaces, invisible Unicode characters and HTM
 
 cleanz provides a simple CLI tool to strip these artifacts, following the Utilz dispatcher pattern with full stdin/stdout/file/clipboard support.
 
+## Outcome
+
+**COMPLETED** - Released as part of Utilz v1.1.0 on 28 Dec 2025.
+
+- Full implementation in `opt/cleanz/cleanz` (~560 lines)
+- 46 comprehensive tests in `opt/cleanz/test/cleanz.bats`
+- Documentation in `help/cleanz.md` and `opt/cleanz/README.md`
+- All tests passing on macOS and Linux CI
+
 ## Related Steel Threads
 
 - None (first utility of this type)
@@ -30,15 +39,4 @@ cleanz provides a simple CLI tool to strip these artifacts, following the Utilz 
 ## References
 
 - <https://www.gptcleanup.com> - Inspiration for feature set
-
-## Context for LLM
-
-This document represents a single steel thread - a self-contained unit of work focused on implementing a specific piece of functionality. When working with an LLM on this steel thread, start by sharing this document to provide context about what needs to be done.
-
-### How to update this document
-
-1. Update the status as work progresses
-2. Update related documents (design.md, impl.md, etc.) as needed
-3. Mark the completion date when finished
-
-The LLM should assist with implementation details and help maintain this document as work progresses.
+- GitHub Release: <https://github.com/matthewsinclair/utilz/releases/tag/v1.1.0>

@@ -41,6 +41,7 @@ cleanz removes invisible Unicode characters, HTML attributes, and formatting art
 
 - `-d, --detect` - Show hidden characters without cleaning
 - `-v, --verbose` - Show cleaning summary
+- `--image` - Image mode: handle C2PA/AI metadata (requires exiftool)
 
 ### Feature Flags
 
@@ -90,6 +91,13 @@ cleanz removes invisible Unicode characters, HTML attributes, and formatting art
 With `--normalize-quotes`:
 - Curly double quotes -> straight `"`
 - Curly single quotes -> straight `'`
+
+### Image Mode (--image)
+
+With `--image`, strips C2PA and AI-related metadata from images:
+- C2PA content credentials manifest
+- AI generation provenance data
+- Creator/credit metadata from DALL-E, ChatGPT, Sora, Midjourney
 
 ---
 
@@ -142,6 +150,22 @@ cleanz --no-html --no-whitespace document.txt
 cleanz --normalize-quotes document.txt
 ```
 
+### Image Mode
+
+```bash
+# Detect C2PA/AI metadata in image
+cleanz --image --detect photo.png
+
+# Strip metadata to new file
+cleanz --image photo.png -o cleaned.png
+
+# Strip metadata in place
+cleanz --image -i photo.png
+
+# Verbose detection with full metadata
+cleanz --image --detect -v dalle-image.png
+```
+
 ---
 
 ## Files
@@ -168,6 +192,7 @@ cleanz --normalize-quotes document.txt
 ## Dependencies
 
 - `clipz` (optional) - Required for `--clipboard` operations
+- `exiftool` (optional) - Required for `--image` mode
 
 ---
 

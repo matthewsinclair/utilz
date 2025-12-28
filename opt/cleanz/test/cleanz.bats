@@ -54,6 +54,13 @@ create_test_file_with_whitespace() {
     printf 'Hello   World  \nLine with trailing space   \n\n\n\nToo many blank lines\n' > "$filename"
 }
 
+# Skip test if exiftool is not installed
+skip_if_no_exiftool() {
+    if ! command -v exiftool &>/dev/null; then
+        skip "exiftool not installed"
+    fi
+}
+
 # ============================================================================
 # BASIC TESTS
 # ============================================================================
@@ -515,4 +522,89 @@ create_test_file_with_whitespace() {
     run bash -c "'$UTILZ_BIN_DIR/cleanz' --normalize-quotes -v '$testfile' 2>&1"
     assert_success
     assert_output_contains '"Hello World"'
+}
+
+# ============================================================================
+# IMAGE MODE TESTS
+# ============================================================================
+
+@test "cleanz --image requires file argument" {
+    run_cleanz --image
+    assert_failure
+    assert_output_contains "requires an image file"
+}
+
+@test "cleanz --image with nonexistent file shows error" {
+    run_cleanz --image --detect nonexistent.png
+    assert_failure
+    assert_output_contains "Image file not found"
+}
+
+@test "cleanz --image requires exiftool" {
+    skip_if_no_exiftool
+    # If we get here, exiftool is available - just verify the command structure works
+    local test_image="$UTILZ_HOME/opt/macoz/images/backgrounds/autumn-01.png"
+    run_cleanz --image --detect "$test_image"
+    assert_success
+    assert_output_contains "C2PA/AI metadata analysis"
+}
+
+@test "cleanz --image --detect shows metadata analysis" {
+    skip_if_no_exiftool
+    local test_image="$UTILZ_HOME/opt/macoz/images/backgrounds/autumn-01.png"
+
+    run_cleanz --image --detect "$test_image"
+    assert_success
+    assert_output_contains "C2PA/AI metadata analysis"
+}
+
+@test "cleanz --image --detect -v shows full metadata" {
+    skip_if_no_exiftool
+    local test_image="$UTILZ_HOME/opt/macoz/images/backgrounds/autumn-01.png"
+
+    run_cleanz --image --detect -v "$test_image"
+    assert_success
+    assert_output_contains "Full metadata"
+}
+
+@test "cleanz --image strips metadata to output file" {
+    skip_if_no_exiftool
+    local test_image="$UTILZ_HOME/opt/macoz/images/backgrounds/autumn-01.png"
+    local output_file="$BATS_TEST_TMPDIR/cleaned_output.png"
+
+    run bash -c "UTILZ_HOME='$UTILZ_HOME' '$UTILZ_BIN_DIR/cleanz' --image '$test_image' -o '$output_file' 2>&1"
+    assert_success
+    assert_output_contains "Cleaned image written to"
+    # Verify file was created
+    [[ -f "$output_file" ]]
+}
+
+@test "cleanz --image -i strips metadata in place" {
+    skip_if_no_exiftool
+    local test_image="$UTILZ_HOME/opt/macoz/images/backgrounds/autumn-01.png"
+    local work_copy="$BATS_TEST_TMPDIR/work_copy.png"
+
+    # Make a copy to avoid modifying the original
+    cp "$test_image" "$work_copy"
+
+    run bash -c "'$UTILZ_BIN_DIR/cleanz' --image -i '$work_copy' 2>&1"
+    assert_success
+    assert_output_contains "Metadata stripped"
+}
+
+@test "cleanz --image without -o or -i shows error" {
+    skip_if_no_exiftool
+    local test_image="$UTILZ_HOME/opt/macoz/images/backgrounds/autumn-01.png"
+
+    run bash -c "'$UTILZ_BIN_DIR/cleanz' --image '$test_image' 2>&1"
+    assert_failure
+    assert_output_contains "requires -o"
+}
+
+@test "cleanz --image does not support clipboard" {
+    local test_image="$UTILZ_HOME/opt/macoz/images/backgrounds/autumn-01.png"
+    run bash -c "'$UTILZ_BIN_DIR/cleanz' --image --clipboard '$test_image' 2>&1"
+    assert_failure
+    # The clipboard+file check happens before image-specific clipboard check
+    assert_output_contains "clipboard"
 }

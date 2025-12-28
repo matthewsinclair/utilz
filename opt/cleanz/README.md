@@ -7,15 +7,20 @@
 
 ## Overview
 
-cleanz is an LLM text cleaner that removes hidden characters and formatting artifacts from text copied from ChatGPT, Claude, Gemini, and other LLM interfaces.
+cleanz is an LLM text cleaner that removes hidden characters and formatting artifacts from text copied from ChatGPT, Claude, Gemini, and other LLM interfaces. It also supports stripping C2PA metadata from AI-generated images.
 
 ### What Gets Cleaned
 
+**Text mode (default):**
 - **Zero-width characters**: ZWSP, ZWNJ, ZWJ, word joiners
 - **Special spaces**: Non-breaking spaces, hair spaces (converted to regular spaces)
 - **Control characters**: BOM, soft hyphens, directional formatting, DEL
 - **HTML attributes**: `data-start`, `data-end`, `data-sourcepos`, and other LLM-injected attrs
 - **Whitespace**: Multiple spaces, excessive blank lines, trailing whitespace
+
+**Image mode (--image):**
+- **C2PA metadata**: Content credentials manifest from AI image generators
+- **AI provenance**: Creator/credit metadata from DALL-E, ChatGPT, Sora, Midjourney
 
 ---
 
@@ -42,6 +47,8 @@ For detailed help: `utilz help cleanz`
 
 ## Examples
 
+### Text Mode
+
 ```bash
 # Clean file to stdout
 cleanz document.txt
@@ -60,6 +67,19 @@ cat file.txt | cleanz > cleaned.txt
 pbpaste | cleanz | pbcopy
 ```
 
+### Image Mode
+
+```bash
+# Detect C2PA/AI metadata in image
+cleanz --image --detect photo.png
+
+# Strip metadata to new file
+cleanz --image photo.png -o cleaned.png
+
+# Strip metadata in place
+cleanz --image -i photo.png
+```
+
 ---
 
 ## Options
@@ -74,6 +94,7 @@ pbpaste | cleanz | pbcopy
 | `--no-html` | Skip HTML attribute cleaning |
 | `--no-whitespace` | Skip whitespace normalization |
 | `--normalize-quotes` | Convert smart quotes to straight |
+| `--image` | Image mode: handle C2PA/AI metadata |
 
 ---
 
@@ -98,6 +119,7 @@ cleanz
 **Optional:**
 
 - `clipz` - For `--clipboard` functionality
+- `exiftool` - For `--image` functionality (`brew install exiftool`)
 
 ---
 
