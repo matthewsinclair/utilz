@@ -1,7 +1,7 @@
 ---
 verblock: "28 Dec 2025:v0.2: matts - Marked complete"
 intent_version: 2.2.0
-status: DONE
+status: Completed
 created: 20251228
 completed: 20251228
 ---
