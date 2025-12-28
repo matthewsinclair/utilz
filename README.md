@@ -26,21 +26,24 @@ Utilz/
 ├── VERSION                    # Framework version (single source of truth)
 ├── bin/
 │   ├── utilz                 # Dispatcher script
-│   └── mdagg -> utilz        # Utility symlinks
+│   ├── cleanz -> utilz       # Utility symlinks...
+│   ├── clipz -> utilz
+│   ├── ...                   # (7 utilities total)
+│   └── retry -> utilz
 ├── opt/
 │   ├── utilz/
 │   │   ├── lib/
 │   │   │   └── common.sh    # Shared functions
 │   │   ├── test/            # Framework tests
 │   │   └── utilz.yaml       # Framework metadata
-│   └── mdagg/
-│       ├── mdagg            # Implementation
-│       ├── mdagg.yaml       # Utility metadata
-│       ├── test/            # Utility tests
-│       └── README.md        # Utility docs
+│   └── <utility>/            # Each utility has its own directory
+│       ├── <utility>         # Implementation
+│       ├── <utility>.yaml    # Utility metadata
+│       ├── test/             # Utility tests
+│       └── README.md         # Utility docs
 └── help/
-    ├── utilz.md             # Framework help
-    └── mdagg.md             # Utility help
+    ├── utilz.md              # Framework help
+    └── <utility>.md          # Utility help files
 ```
 
 ## Installation
