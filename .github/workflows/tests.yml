@@ -54,7 +54,7 @@ jobs:
     - name: Run tests (excluding platform-specific utilities)
       run: |
         # Run all tests except macoz (macOS-only) and clipz (clipboard unreliable in CI)
-        for utility in utilz cryptz gitz mdagg retry; do
+        for utility in utilz cryptz gitz mdagg retry syncz; do
           echo "Testing: $utility"
           utilz test $utility || exit 1
         done

@@ -1,6 +1,6 @@
 # Utilz Documentation
 
-**Version**: 1.0.0
+**Version**: 1.2.0
 
 Utilz is a bash/zsh framework for building and managing command-line utilities with a single dispatcher pattern. All utilities are symlinks to `bin/utilz`, which routes execution to the appropriate implementation.
 

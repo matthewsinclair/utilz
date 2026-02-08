@@ -28,8 +28,9 @@ Utilz/
 │   ├── utilz                 # Dispatcher script
 │   ├── cleanz -> utilz       # Utility symlinks...
 │   ├── clipz -> utilz
-│   ├── ...                   # (7 utilities total)
-│   └── retry -> utilz
+│   ├── ...                   # (8 utilities total)
+│   ├── retry -> utilz
+│   └── syncz -> utilz
 ├── opt/
 │   ├── utilz/
 │   │   ├── lib/
@@ -222,6 +223,29 @@ retry --wait 5 --retries 3 "ping -c 1 google.com"
 ```
 
 See `utilz help retry` for details.
+
+### syncz
+
+Simple directory-to-directory syncer using rsync. Provides conflict resolution strategies (newer-wins, source-wins, dest-wins), confirmation prompts, dry-run, backup, and delete support.
+
+```bash
+# Preview what would be synced
+syncz --dry-run ~/src /dst
+
+# Sync with confirmation prompts
+syncz --confirm ~/src /dst
+
+# Force sync, delete extra files, create backups
+syncz --force --delete --backup ~/src /dst
+
+# Quick confirm-and-go
+syncz --just-do-it --delete ~/src /dst
+
+# Source always wins, exclude .git
+syncz --source-wins --exclude ".git" ~/src /dst
+```
+
+See `utilz help syncz` for details.
 
 ## Creating a New Utility
 

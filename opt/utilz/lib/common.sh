@@ -402,6 +402,12 @@ run_doctor() {
         echo -e "    brew install exiftool"
     fi
 
+    # Check for rsync (required for syncz)
+    if ! check_command "rsync"; then
+        info "Required: Install 'rsync' for syncz directory syncing"
+        echo -e "    Pre-installed on most systems; brew install rsync (macOS)"
+    fi
+
     if [[ ${#missing_deps[@]} -gt 0 ]]; then
         # Remove duplicates
         local unique_deps=($(printf '%s\n' "${missing_deps[@]}" | sort -u))

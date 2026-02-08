@@ -1,6 +1,6 @@
 # Utilz - Universal Utilities Framework
 
-**Version**: 1.0.0
+**Version**: 1.2.0
 **Author**: Matthew Sinclair
 **Location**: `$UTILZ_HOME` (typically `~/Devel/prj/Utilz`)
 

@@ -1,0 +1,11 @@
+name: syncz
+version: 1.2.0
+utilz_version: "^1.2.0"
+description: Simple directory-to-directory syncer
+author: Matthew Sinclair
+
+dependencies:
+  - name: rsync
+    required: true
+    install: brew install rsync
+    purpose: File synchronization engine

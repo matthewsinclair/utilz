@@ -1,0 +1,553 @@
+#!/usr/bin/env bash
+#
+# syncz - Simple directory-to-directory syncer
+#
+# Wraps rsync to provide user-friendly directory sync with conflict resolution,
+# confirmation prompts, and dry-run support.
+#
+
+set -euo pipefail
+
+# Source common functions if not already loaded (from dispatcher)
+if [[ "$(type -t info 2>/dev/null)" != "function" ]]; then
+    SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+    UTILZ_HOME="${UTILZ_HOME:-$(cd "$SCRIPT_DIR/../.." && pwd)}"
+
+    if [[ -f "$UTILZ_HOME/opt/utilz/lib/common.sh" ]]; then
+        source "$UTILZ_HOME/opt/utilz/lib/common.sh"
+    else
+        echo "ERROR: Cannot find common.sh library" >&2
+        exit 1
+    fi
+fi
+
+# ============================================================================
+# CONFIGURATION
+# ============================================================================
+
+OPT_DRY_RUN=false
+OPT_FORCE=false
+OPT_CONFIRM=false
+OPT_SOURCE_WINS=false
+OPT_DEST_WINS=false
+OPT_DELETE=false
+OPT_BACKUP=false
+OPT_VERBOSE=false
+OPT_PROGRESS=false
+OPT_JUST_DO_IT=false
+EXCLUDE_PATTERNS=()
+SOURCE_DIR=""
+DEST_DIR=""
+
+# State for Y/N/A prompt
+CONFIRM_ALL=false
+
+# ============================================================================
+# USAGE
+# ============================================================================
+
+usage() {
+    cat <<EOF
+Usage: syncz [OPTIONS] <source-dir> <dest-dir>
+
+Simple directory-to-directory syncer using rsync.
+
+CONFLICT RESOLUTION:
+  --source-wins            Source always overwrites dest
+  --dest-wins              Dest files are never overwritten
+  (default)                Only overwrite if source is newer
+
+SAFETY:
+  -n, --dry-run            Show what would happen without doing it
+  -c, --confirm            Prompt before destructive actions (Y/N/A)
+  -f, --force              Force sync (no safety checks)
+  --just-do-it             Show summary, single Y/N confirm, then run all
+
+OPTIONS:
+  -x, --exclude PAT        Exclude files matching pattern (repeatable)
+  --delete                 Remove dest files not in source
+  -b, --backup             Create .syncz-bak copies of overwritten files
+  -v, --verbose            Show detailed per-file output
+  -p, --progress           Show per-file transfer progress
+  -h, --help               Show this help
+  --version                Show version
+
+EXAMPLES:
+  # Preview what would be synced
+  syncz --dry-run ~/Documents/project /backup/project
+
+  # Sync with confirmation prompts
+  syncz --confirm ~/src /dst
+
+  # Force sync, delete extra files, create backups
+  syncz --force --delete --backup ~/src /dst
+
+  # Quick confirm-and-go
+  syncz --just-do-it --delete ~/src /dst
+
+For detailed help, run: utilz help syncz
+EOF
+}
+
+# ============================================================================
+# FUNCTIONS
+# ============================================================================
+
+# Resolve a path to an absolute path
+resolve_path() {
+    local dir="$1"
+    if [[ -d "$dir" ]]; then
+        (cd "$dir" && pwd)
+    else
+        echo "$dir"
+    fi
+}
+
+# Validate inputs before syncing
+validate_inputs() {
+    # Check rsync is available
+    if ! command -v rsync >/dev/null 2>&1; then
+        error "rsync is required but not installed"
+        info "Install with: brew install rsync"
+        exit 1
+    fi
+
+    # Check source and dest are provided
+    if [[ -z "$SOURCE_DIR" || -z "$DEST_DIR" ]]; then
+        error "Both source and destination directories are required"
+        echo ""
+        usage
+        exit 1
+    fi
+
+    # Check source exists and is a directory
+    if [[ ! -e "$SOURCE_DIR" ]]; then
+        error "Source does not exist: $SOURCE_DIR"
+        exit 1
+    fi
+    if [[ ! -d "$SOURCE_DIR" ]]; then
+        error "Source is not a directory: $SOURCE_DIR"
+        exit 1
+    fi
+
+    # Check dest exists and is a directory
+    if [[ ! -e "$DEST_DIR" ]]; then
+        error "Destination does not exist: $DEST_DIR"
+        exit 1
+    fi
+    if [[ ! -d "$DEST_DIR" ]]; then
+        error "Destination is not a directory: $DEST_DIR"
+        exit 1
+    fi
+
+    # Resolve to absolute paths
+    SOURCE_DIR="$(resolve_path "$SOURCE_DIR")"
+    DEST_DIR="$(resolve_path "$DEST_DIR")"
+
+    # Check source and dest are not the same
+    if [[ "$SOURCE_DIR" == "$DEST_DIR" ]]; then
+        error "Source and destination are the same directory: $SOURCE_DIR"
+        exit 1
+    fi
+
+    # Check mutual exclusivity of conflict resolution flags
+    if [[ "$OPT_SOURCE_WINS" == "true" && "$OPT_DEST_WINS" == "true" ]]; then
+        error "--source-wins and --dest-wins are mutually exclusive"
+        exit 1
+    fi
+
+    # Check mutual exclusivity of confirmation flags
+    local confirm_count=0
+    [[ "$OPT_FORCE" == "true" ]] && confirm_count=$((confirm_count + 1))
+    [[ "$OPT_CONFIRM" == "true" ]] && confirm_count=$((confirm_count + 1))
+    [[ "$OPT_JUST_DO_IT" == "true" ]] && confirm_count=$((confirm_count + 1))
+    if [[ $confirm_count -gt 1 ]]; then
+        error "--force, --confirm, and --just-do-it are mutually exclusive"
+        exit 1
+    fi
+
+    # --delete requires --confirm, --force, or --just-do-it
+    if [[ "$OPT_DELETE" == "true" ]]; then
+        if [[ "$OPT_CONFIRM" != "true" && "$OPT_FORCE" != "true" && "$OPT_JUST_DO_IT" != "true" ]]; then
+            error "--delete requires --confirm, --force, or --just-do-it"
+            info "This prevents accidental deletion of files"
+            exit 1
+        fi
+    fi
+}
+
+# Build rsync argument array from options
+build_rsync_args() {
+    local -n args_ref=$1
+    local include_delete=${2:-true}
+
+    # Base flags: recursive, links, permissions, timestamps, devices
+    args_ref+=("-rlptD")
+
+    # Conflict resolution
+    if [[ "$OPT_SOURCE_WINS" == "true" ]]; then
+        : # No --update flag, source always overwrites
+    elif [[ "$OPT_DEST_WINS" == "true" ]]; then
+        args_ref+=("--ignore-existing")
+    else
+        # Default: newer-wins
+        args_ref+=("--update")
+    fi
+
+    # Verbose mode
+    if [[ "$OPT_VERBOSE" == "true" ]]; then
+        args_ref+=("--itemize-changes")
+    fi
+
+    # Progress mode
+    if [[ "$OPT_PROGRESS" == "true" ]]; then
+        args_ref+=("--progress")
+    fi
+
+    # Delete mode
+    if [[ "$OPT_DELETE" == "true" && "$include_delete" == "true" ]]; then
+        args_ref+=("--delete")
+    fi
+
+    # Backup mode
+    if [[ "$OPT_BACKUP" == "true" ]]; then
+        args_ref+=("--backup" "--suffix=.syncz-bak")
+    fi
+
+    # Exclude patterns
+    for pattern in "${EXCLUDE_PATTERNS[@]}"; do
+        args_ref+=("--exclude=$pattern")
+    done
+}
+
+# Generate a summary by running rsync in dry-run mode
+generate_summary() {
+    local rsync_args=()
+    build_rsync_args rsync_args true
+
+    # Add dry-run and stats
+    rsync_args+=("--dry-run" "--stats")
+
+    # Add source and dest with trailing slashes
+    rsync_args+=("${SOURCE_DIR}/" "${DEST_DIR}/")
+
+    # Run rsync and capture output
+    local rsync_output
+    rsync_output=$(rsync "${rsync_args[@]}" 2>&1) || true
+
+    # Parse stats
+    local files_transferred=0
+    local total_size=0
+    local files_deleted=0
+
+    # Handle both old rsync ("Number of files transferred:") and new ("Number of regular files transferred:")
+    files_transferred=$(echo "$rsync_output" | grep -E "^Number of (regular )?files transferred:" | head -1 | sed 's/[^0-9]//g' || echo "0")
+    [[ -z "$files_transferred" ]] && files_transferred=0
+
+    if [[ "$OPT_DELETE" == "true" ]]; then
+        files_deleted=$(echo "$rsync_output" | grep -E "^Number of deleted files:" | head -1 | sed 's/[^0-9,]//g' | tr -d ',' || echo "0")
+        [[ -z "$files_deleted" ]] && files_deleted=0
+    fi
+
+    # Determine conflict mode label
+    local mode="newer-wins (default)"
+    if [[ "$OPT_SOURCE_WINS" == "true" ]]; then
+        mode="source-wins"
+    elif [[ "$OPT_DEST_WINS" == "true" ]]; then
+        mode="dest-wins"
+    fi
+
+    # Display summary
+    echo ""
+    echo "Sync Summary"
+    echo "============"
+    echo "  Source:    ${SOURCE_DIR}/"
+    echo "  Dest:     ${DEST_DIR}/"
+    echo "  Mode:     $mode"
+    echo "  Files:    $files_transferred to transfer"
+    if [[ "$OPT_DELETE" == "true" ]]; then
+        echo "  Delete:   $files_deleted to remove from dest"
+    fi
+    if [[ "$OPT_BACKUP" == "true" ]]; then
+        echo "  Backup:   .syncz-bak copies of overwritten files"
+    fi
+    echo ""
+
+    # Return counts via globals
+    SUMMARY_FILES_TRANSFERRED=$files_transferred
+    SUMMARY_FILES_DELETED=$files_deleted
+
+    # If verbose or dry-run, show the itemized output
+    if [[ "$OPT_VERBOSE" == "true" || "$OPT_DRY_RUN" == "true" ]]; then
+        # Re-run with itemize for detailed listing
+        local detail_args=()
+        build_rsync_args detail_args true
+        detail_args+=("--dry-run" "--itemize-changes")
+        detail_args+=("${SOURCE_DIR}/" "${DEST_DIR}/")
+        local detail_output
+        detail_output=$(rsync "${detail_args[@]}" 2>&1 | grep -v "^$" | head -50) || true
+        if [[ -n "$detail_output" ]]; then
+            echo "Changes:"
+            echo "$detail_output"
+            echo ""
+        fi
+    fi
+}
+
+# Prompt Y/N/A - returns 0 for yes/all, 1 for no
+# Sets CONFIRM_ALL=true if user answers A
+prompt_yna() {
+    local message="$1"
+
+    # If already confirmed all, return yes
+    if [[ "$CONFIRM_ALL" == "true" ]]; then
+        return 0
+    fi
+
+    printf '%s [Y/N/A] ' "$message" >&2
+    local answer
+    # Read from /dev/tty for interactive use; fall back to stdin for piped input
+    if [[ ! -t 0 ]]; then
+        read -r answer
+    else
+        read -r answer </dev/tty
+    fi
+
+    case "${answer,,}" in
+        y|yes)
+            return 0
+            ;;
+        a|all)
+            CONFIRM_ALL=true
+            return 0
+            ;;
+        *)
+            return 1
+            ;;
+    esac
+}
+
+# Simple Y/N prompt - returns 0 for yes, 1 for no
+prompt_yn() {
+    local message="$1"
+
+    printf '%s [Y/N] ' "$message" >&2
+    local answer
+    # Read from /dev/tty for interactive use; fall back to stdin for piped input
+    if [[ ! -t 0 ]]; then
+        read -r answer
+    else
+        read -r answer </dev/tty
+    fi
+
+    case "${answer,,}" in
+        y|yes)
+            return 0
+            ;;
+        *)
+            return 1
+            ;;
+    esac
+}
+
+# Execute a delete-only pass (used by --confirm mode)
+execute_delete() {
+    local delete_args=("-rlptD" "--delete")
+    for pattern in "${EXCLUDE_PATTERNS[@]}"; do
+        delete_args+=("--exclude=$pattern")
+    done
+    delete_args+=("${SOURCE_DIR}/" "${DEST_DIR}/")
+    rsync "${delete_args[@]}" || true
+    success "Delete complete"
+}
+
+# Execute the actual rsync sync
+execute_sync() {
+    local include_delete=${1:-true}
+    local rsync_args=()
+    build_rsync_args rsync_args "$include_delete"
+
+    # Add source and dest with trailing slashes
+    rsync_args+=("${SOURCE_DIR}/" "${DEST_DIR}/")
+
+    # Run rsync
+    local exit_code=0
+    rsync "${rsync_args[@]}" || exit_code=$?
+
+    if [[ $exit_code -eq 0 ]]; then
+        success "Sync complete"
+    elif [[ $exit_code -eq 23 ]]; then
+        # Exit 23 = partial transfer due to permission errors (common for non-root syncs)
+        warn "Sync complete with some permission warnings (rsync exit 23)"
+    else
+        error "rsync exited with code $exit_code"
+        return $exit_code
+    fi
+}
+
+# ============================================================================
+# MAIN
+# ============================================================================
+
+# Parse arguments
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        -h|--help)
+            usage
+            exit 0
+            ;;
+        --version)
+            show_version "syncz"
+            exit 0
+            ;;
+        -n|--dry-run)
+            OPT_DRY_RUN=true
+            shift
+            ;;
+        -f|--force)
+            OPT_FORCE=true
+            shift
+            ;;
+        -c|--confirm)
+            OPT_CONFIRM=true
+            shift
+            ;;
+        --source-wins)
+            OPT_SOURCE_WINS=true
+            shift
+            ;;
+        --dest-wins)
+            OPT_DEST_WINS=true
+            shift
+            ;;
+        -x|--exclude)
+            if [[ -z "${2:-}" ]]; then
+                error "Option --exclude requires a pattern"
+                exit 1
+            fi
+            EXCLUDE_PATTERNS+=("$2")
+            shift 2
+            ;;
+        --delete)
+            OPT_DELETE=true
+            shift
+            ;;
+        -b|--backup)
+            OPT_BACKUP=true
+            shift
+            ;;
+        -v|--verbose)
+            OPT_VERBOSE=true
+            shift
+            ;;
+        -p|--progress)
+            OPT_PROGRESS=true
+            shift
+            ;;
+        --just-do-it)
+            OPT_JUST_DO_IT=true
+            shift
+            ;;
+        -*)
+            error "Unknown option: $1"
+            echo ""
+            usage
+            exit 1
+            ;;
+        *)
+            # Positional arguments: source and dest
+            if [[ -z "$SOURCE_DIR" ]]; then
+                SOURCE_DIR="$1"
+            elif [[ -z "$DEST_DIR" ]]; then
+                DEST_DIR="$1"
+            else
+                error "Too many arguments"
+                echo ""
+                usage
+                exit 1
+            fi
+            shift
+            ;;
+    esac
+done
+
+# Validate inputs
+validate_inputs
+
+# Generate summary
+SUMMARY_FILES_TRANSFERRED=0
+SUMMARY_FILES_DELETED=0
+generate_summary
+
+# --- Dry-run mode: display summary and exit ---
+if [[ "$OPT_DRY_RUN" == "true" ]]; then
+    info "Dry run - no changes made"
+    exit 0
+fi
+
+# --- Force mode: no prompts, just run ---
+if [[ "$OPT_FORCE" == "true" ]]; then
+    execute_sync true
+    exit $?
+fi
+
+# --- Just-do-it mode: single Y/N prompt ---
+if [[ "$OPT_JUST_DO_IT" == "true" ]]; then
+    local_msg="This will sync ${SUMMARY_FILES_TRANSFERRED} file(s)"
+    if [[ "$OPT_DELETE" == "true" && "$SUMMARY_FILES_DELETED" -gt 0 ]]; then
+        local_msg="$local_msg and delete ${SUMMARY_FILES_DELETED} file(s)"
+    fi
+    local_msg="$local_msg. Continue?"
+
+    if prompt_yn "$local_msg"; then
+        execute_sync true
+        exit $?
+    else
+        info "Aborted"
+        exit 0
+    fi
+fi
+
+# --- Confirm mode: prompt at each destructive step ---
+if [[ "$OPT_CONFIRM" == "true" ]]; then
+    # Step 1: Confirm sync
+    if [[ "$SUMMARY_FILES_TRANSFERRED" -gt 0 ]]; then
+        if prompt_yna "Sync ${SUMMARY_FILES_TRANSFERRED} file(s) from source to dest?"; then
+            if [[ "$OPT_DELETE" == "true" && "$CONFIRM_ALL" != "true" ]]; then
+                # Execute sync without delete first
+                execute_sync false
+                # Step 2: Confirm delete
+                if [[ "$SUMMARY_FILES_DELETED" -gt 0 ]]; then
+                    if prompt_yna "Delete ${SUMMARY_FILES_DELETED} file(s) from dest not in source?"; then
+                        execute_delete
+                    else
+                        info "Skipped deletion"
+                    fi
+                else
+                    info "No files to delete"
+                fi
+            else
+                # No delete requested or CONFIRM_ALL set
+                execute_sync true
+            fi
+        else
+            info "Aborted"
+            exit 0
+        fi
+    else
+        info "Nothing to sync"
+        if [[ "$OPT_DELETE" == "true" && "$SUMMARY_FILES_DELETED" -gt 0 ]]; then
+            if prompt_yna "Delete ${SUMMARY_FILES_DELETED} file(s) from dest not in source?"; then
+                execute_delete
+            else
+                info "Skipped deletion"
+            fi
+        else
+            info "Already in sync"
+        fi
+    fi
+    exit 0
+fi
+
+# --- Default mode: no prompts, just sync (no delete possible without flags) ---
+execute_sync true
