@@ -177,53 +177,54 @@ validate_inputs() {
 }
 
 # Build rsync argument array from options
+# Sets global _RSYNC_ARGS array (avoids bash 4.3+ namerefs for portability)
 build_rsync_args() {
-    local -n args_ref=$1
-    local include_delete=${2:-true}
+    local include_delete=${1:-true}
+    _RSYNC_ARGS=()
 
     # Base flags: recursive, links, permissions, timestamps, devices
-    args_ref+=("-rlptD")
+    _RSYNC_ARGS+=("-rlptD")
 
     # Conflict resolution
     if [[ "$OPT_SOURCE_WINS" == "true" ]]; then
         : # No --update flag, source always overwrites
     elif [[ "$OPT_DEST_WINS" == "true" ]]; then
-        args_ref+=("--ignore-existing")
+        _RSYNC_ARGS+=("--ignore-existing")
     else
         # Default: newer-wins
-        args_ref+=("--update")
+        _RSYNC_ARGS+=("--update")
     fi
 
     # Verbose mode
     if [[ "$OPT_VERBOSE" == "true" ]]; then
-        args_ref+=("--itemize-changes")
+        _RSYNC_ARGS+=("--itemize-changes")
     fi
 
     # Progress mode
     if [[ "$OPT_PROGRESS" == "true" ]]; then
-        args_ref+=("--progress")
+        _RSYNC_ARGS+=("--progress")
     fi
 
     # Delete mode
     if [[ "$OPT_DELETE" == "true" && "$include_delete" == "true" ]]; then
-        args_ref+=("--delete")
+        _RSYNC_ARGS+=("--delete")
     fi
 
     # Backup mode
     if [[ "$OPT_BACKUP" == "true" ]]; then
-        args_ref+=("--backup" "--suffix=.syncz-bak")
+        _RSYNC_ARGS+=("--backup" "--suffix=.syncz-bak")
     fi
 
     # Exclude patterns
     for pattern in "${EXCLUDE_PATTERNS[@]}"; do
-        args_ref+=("--exclude=$pattern")
+        _RSYNC_ARGS+=("--exclude=$pattern")
     done
 }
 
 # Generate a summary by running rsync in dry-run mode
 generate_summary() {
-    local rsync_args=()
-    build_rsync_args rsync_args true
+    build_rsync_args true
+    local rsync_args=("${_RSYNC_ARGS[@]}")
 
     # Add dry-run and stats
     rsync_args+=("--dry-run" "--stats")
@@ -280,8 +281,8 @@ generate_summary() {
     # If verbose or dry-run, show the itemized output
     if [[ "$OPT_VERBOSE" == "true" || "$OPT_DRY_RUN" == "true" ]]; then
         # Re-run with itemize for detailed listing
-        local detail_args=()
-        build_rsync_args detail_args true
+        build_rsync_args true
+        local detail_args=("${_RSYNC_ARGS[@]}")
         detail_args+=("--dry-run" "--itemize-changes")
         detail_args+=("${SOURCE_DIR}/" "${DEST_DIR}/")
         local detail_output
@@ -313,7 +314,9 @@ prompt_yna() {
         read -r answer </dev/tty
     fi
 
-    case "${answer,,}" in
+    # Lowercase for comparison (portable, avoids bash 4.0+ ${var,,})
+    answer=$(echo "$answer" | tr '[:upper:]' '[:lower:]')
+    case "$answer" in
         y|yes)
             return 0
             ;;
@@ -340,7 +343,9 @@ prompt_yn() {
         read -r answer </dev/tty
     fi
 
-    case "${answer,,}" in
+    # Lowercase for comparison (portable, avoids bash 4.0+ ${var,,})
+    answer=$(echo "$answer" | tr '[:upper:]' '[:lower:]')
+    case "$answer" in
         y|yes)
             return 0
             ;;
@@ -364,8 +369,8 @@ execute_delete() {
 # Execute the actual rsync sync
 execute_sync() {
     local include_delete=${1:-true}
-    local rsync_args=()
-    build_rsync_args rsync_args "$include_delete"
+    build_rsync_args "$include_delete"
+    local rsync_args=("${_RSYNC_ARGS[@]}")
 
     # Add source and dest with trailing slashes
     rsync_args+=("${SOURCE_DIR}/" "${DEST_DIR}/")
