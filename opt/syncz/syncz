@@ -215,10 +215,12 @@ build_rsync_args() {
         _RSYNC_ARGS+=("--backup" "--suffix=.syncz-bak")
     fi
 
-    # Exclude patterns
-    for pattern in "${EXCLUDE_PATTERNS[@]}"; do
-        _RSYNC_ARGS+=("--exclude=$pattern")
-    done
+    # Exclude patterns (guard for bash 3.2 where empty array is unbound with set -u)
+    if [[ ${#EXCLUDE_PATTERNS[@]} -gt 0 ]]; then
+        for pattern in "${EXCLUDE_PATTERNS[@]}"; do
+            _RSYNC_ARGS+=("--exclude=$pattern")
+        done
+    fi
 }
 
 # Generate a summary by running rsync in dry-run mode
@@ -358,9 +360,11 @@ prompt_yn() {
 # Execute a delete-only pass (used by --confirm mode)
 execute_delete() {
     local delete_args=("-rlptD" "--delete")
-    for pattern in "${EXCLUDE_PATTERNS[@]}"; do
-        delete_args+=("--exclude=$pattern")
-    done
+    if [[ ${#EXCLUDE_PATTERNS[@]} -gt 0 ]]; then
+        for pattern in "${EXCLUDE_PATTERNS[@]}"; do
+            delete_args+=("--exclude=$pattern")
+        done
+    fi
     delete_args+=("${SOURCE_DIR}/" "${DEST_DIR}/")
     rsync "${delete_args[@]}" || true
     success "Delete complete"

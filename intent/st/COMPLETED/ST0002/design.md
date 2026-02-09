@@ -1,8 +1,10 @@
 # Design - ST0002: Syncz - a simple directory-to-directory syncer
 
+**Status**: As-built (completed 08 Feb 2026)
+
 ## Approach
 
-Implement syncz as a bash script following the Utilz dispatcher pattern. The script wraps rsync with user-friendly options, conflict resolution strategies, and confirmation flows for destructive operations.
+Implemented syncz as a bash script following the Utilz dispatcher pattern. The script wraps rsync with user-friendly options, conflict resolution strategies, and confirmation flows for destructive operations.
 
 ## Design Decisions
 
@@ -35,22 +37,30 @@ Four modes for handling destructive operations:
 
 syncz always adds trailing slashes to source and dest paths, ensuring rsync syncs directory *contents* rather than nesting the source directory inside the destination.
 
-## Architecture
+### Bash 3.2 compatibility
+
+macOS ships with bash 3.2 which lacks namerefs (`local -n`, bash 4.3+) and lowercase expansion (`${var,,}`, bash 4.0+). We avoid both:
+
+- `build_rsync_args()` uses a global `_RSYNC_ARGS` array instead of namerefs
+- Prompt functions use `tr '[:upper:]' '[:lower:]'` instead of `${answer,,}`
+
+## Architecture (as-built)
 
 ```
-syncz (~280 lines)
+syncz (~555 lines)
   |
-  +-- Config variables
+  +-- Config variables (OPT_DRY_RUN, OPT_FORCE, etc.)
   +-- usage()
   +-- resolve_path()         # Resolve to absolute path
   +-- validate_inputs()      # Dirs exist, not same, options valid
-  +-- build_rsync_args()     # Construct rsync arg array from options
+  +-- build_rsync_args()     # Construct rsync flags -> global _RSYNC_ARGS
   +-- generate_summary()     # Run dry-run rsync, parse stats
-  +-- prompt_yna()           # Y/N/A prompt helper
+  +-- prompt_yna()           # Y/N/A prompt helper, sets CONFIRM_ALL
   +-- prompt_yn()            # Simple Y/N prompt for --just-do-it
-  +-- execute_sync()         # Run rsync, handle exit code
+  +-- execute_delete()       # Delete-only rsync pass (for --confirm mode)
+  +-- execute_sync()         # Run rsync, handle exit code (incl. code 23)
   +-- Argument parsing       # while/case loop
-  +-- Main flow
+  +-- Main flow              # dry-run -> force -> just-do-it -> confirm -> default
 ```
 
 ## Alternatives Considered

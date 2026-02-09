@@ -1,5 +1,5 @@
 ---
-verblock: "28 Dec 2025:v0.3: Matthew Sinclair - Updated after cleanz C2PA image mode"
+verblock: "09 Feb 2026:v0.4: matts - Updated after syncz v1.2.0 release"
 ---
 # Work In Progress
 
@@ -7,13 +7,20 @@ verblock: "28 Dec 2025:v0.3: Matthew Sinclair - Updated after cleanz C2PA image 
 
 **No active work** - All tasks complete.
 
-The cleanz utility (ST0001) was completed with C2PA image mode and released as Utilz v1.1.0 on 28 Dec 2025.
+The syncz utility (ST0002) was completed and released as Utilz v1.2.0 on 08 Feb 2026.
 
 ## Active Steel Threads
 
 None - All steel threads complete.
 
 ## Recently Completed
+
+- ST0002: syncz - Directory-to-Directory Syncer (DONE 08 Feb 2026)
+  - rsync wrapper with conflict resolution (newer-wins, source-wins, dest-wins)
+  - Confirmation modes: --confirm (Y/N/A), --force, --just-do-it
+  - --delete with safety gate, --backup, --exclude, --dry-run
+  - 45 tests, all passing on macOS and Linux CI
+  - Released as Utilz v1.2.0
 
 - ST0001: cleanz - LLM Text Cleaner Utility (DONE 28 Dec 2025)
   - Pure bash implementation (~690 lines with image mode)
@@ -28,15 +35,16 @@ No planned work. Ready for new requests.
 
 ## Notes
 
-The Utilz framework is stable with 8 utilities:
-- cleanz - LLM text cleaner + C2PA image metadata (NEW in v1.1.0)
-- clipz - Cross-platform clipboard
-- cryptz - GPG encryption wrapper
-- gitz - Git multi-repo operations
-- macoz - macOS utilities (bg, setpicfor)
-- mdagg - Markdown aggregator
-- retry - Retry command utility
-- utilz - Core framework
+The Utilz framework is stable at v1.2.0 with 9 utilities:
+- cleanz  - LLM text cleaner + C2PA image metadata (v1.1.0)
+- clipz   - Cross-platform clipboard
+- cryptz  - GPG encryption wrapper
+- gitz    - Git multi-repo operations
+- macoz   - macOS utilities (bg, setpicfor)
+- mdagg   - Markdown aggregator
+- retry   - Retry command utility
+- syncz   - Directory-to-directory syncer (NEW in v1.2.0)
+- utilz   - Core framework
 
 ## Context for LLM
 

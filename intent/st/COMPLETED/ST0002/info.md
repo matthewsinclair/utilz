@@ -1,9 +1,9 @@
 ---
-verblock: "08 Feb 2026:v0.1: matts - Initial version"
+verblock: "09 Feb 2026:v0.2: matts - Marked complete, added as-built notes"
 intent_version: 2.2.0
 status: Completed
 created: 20260208
-completed:
+completed: 20260208
 ---
 # ST0002: Syncz - a simple directory-to-directory syncer
 
@@ -22,18 +22,10 @@ Key design principles:
 - Uses `-rlptD` instead of `-a` to avoid group/owner warnings for non-root syncs
 - Trailing slashes are always normalized for predictable behavior
 
+## Outcome
+
+Released as Utilz v1.2.0 on 08 Feb 2026. Single bash script (~555 lines), 45 BATS tests, full documentation. All CI passing on both macOS and Linux after fixing bash 3.2 compatibility issues (namerefs and lowercase expansion).
+
 ## Related Steel Threads
 
 - ST0001: cleanz - established patterns for Utilz utility implementation, testing, and documentation
-
-## Context for LLM
-
-This document represents a single steel thread - a self-contained unit of work focused on implementing a specific piece of functionality. When working with an LLM on this steel thread, start by sharing this document to provide context about what needs to be done.
-
-### How to update this document
-
-1. Update the status as work progresses
-2. Update related documents (design.md, impl.md, etc.) as needed
-3. Mark the completion date when finished
-
-The LLM should assist with implementation details and help maintain this document as work progresses.
