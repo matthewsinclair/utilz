@@ -517,26 +517,34 @@ resolve_orphans() {
 
     # Dry-run: just list and return
     if [[ "$OPT_DRY_RUN" == "true" ]]; then
-        for f in "${ORPHANS_DIR1[@]}"; do
-            echo "  [$label1] $f"
-        done
-        for f in "${ORPHANS_DIR2[@]}"; do
-            echo "  [$label2] $f"
-        done
+        if [[ ${#ORPHANS_DIR1[@]} -gt 0 ]]; then
+            for f in "${ORPHANS_DIR1[@]}"; do
+                echo "  [$label1] $f"
+            done
+        fi
+        if [[ ${#ORPHANS_DIR2[@]} -gt 0 ]]; then
+            for f in "${ORPHANS_DIR2[@]}"; do
+                echo "  [$label2] $f"
+            done
+        fi
         echo ""
         return 0
     fi
 
     # --delete mode: silently delete all orphans
     if [[ "$OPT_DELETE" == "true" ]]; then
-        for f in "${ORPHANS_DIR1[@]}"; do
-            rm -f "$dir1/$f"
-            [[ "$OPT_VERBOSE" == "true" ]] && echo "  Deleted [$label1] $f"
-        done
-        for f in "${ORPHANS_DIR2[@]}"; do
-            rm -f "$dir2/$f"
-            [[ "$OPT_VERBOSE" == "true" ]] && echo "  Deleted [$label2] $f"
-        done
+        if [[ ${#ORPHANS_DIR1[@]} -gt 0 ]]; then
+            for f in "${ORPHANS_DIR1[@]}"; do
+                rm -f "$dir1/$f"
+                if [[ "$OPT_VERBOSE" == "true" ]]; then echo "  Deleted [$label1] $f"; fi
+            done
+        fi
+        if [[ ${#ORPHANS_DIR2[@]} -gt 0 ]]; then
+            for f in "${ORPHANS_DIR2[@]}"; do
+                rm -f "$dir2/$f"
+                if [[ "$OPT_VERBOSE" == "true" ]]; then echo "  Deleted [$label2] $f"; fi
+            done
+        fi
         echo "  Deleted $total orphan(s)."
         echo ""
         return 0
@@ -545,60 +553,64 @@ resolve_orphans() {
     # Interactive or --confirm arg mode
     local delete_all=false
 
-    for f in "${ORPHANS_DIR1[@]}"; do
-        echo "  [$label1] $f"
-        if [[ "$delete_all" == "true" ]]; then
-            rm -f "$dir1/$f"
-            [[ "$OPT_VERBOSE" == "true" ]] && echo "  Deleted."
-        elif [[ -n "$CONFIRM_ANSWER" ]]; then
-            case "$CONFIRM_ANSWER" in
-                yes|all) rm -f "$dir1/$f" ;;
-                no)      : ;; # keep — sync will copy it
-            esac
-        else
-            # Interactive prompt: Y/Enter = delete, n = skip, a = delete all remaining
-            printf '  Delete? [Y/n/a] ' >&2
-            local answer
-            if [[ ! -t 0 ]]; then
-                read -r answer
+    if [[ ${#ORPHANS_DIR1[@]} -gt 0 ]]; then
+        for f in "${ORPHANS_DIR1[@]}"; do
+            echo "  [$label1] $f"
+            if [[ "$delete_all" == "true" ]]; then
+                rm -f "$dir1/$f"
+                if [[ "$OPT_VERBOSE" == "true" ]]; then echo "  Deleted."; fi
+            elif [[ -n "$CONFIRM_ANSWER" ]]; then
+                case "$CONFIRM_ANSWER" in
+                    yes|all) rm -f "$dir1/$f" ;;
+                    no)      : ;; # keep — sync will copy it
+                esac
             else
-                read -r answer </dev/tty
+                # Interactive prompt: Y/Enter = delete, n = skip, a = delete all remaining
+                printf '  Delete? [Y/n/a] ' >&2
+                local answer
+                if [[ ! -t 0 ]]; then
+                    read -r answer
+                else
+                    read -r answer </dev/tty
+                fi
+                answer=$(echo "$answer" | tr '[:upper:]' '[:lower:]')
+                case "$answer" in
+                    ""|y|yes) rm -f "$dir1/$f" ;;
+                    a|all)    delete_all=true; rm -f "$dir1/$f" ;;
+                    *)        : ;; # skip
+                esac
             fi
-            answer=$(echo "$answer" | tr '[:upper:]' '[:lower:]')
-            case "$answer" in
-                ""|y|yes) rm -f "$dir1/$f" ;;
-                a|all)    delete_all=true; rm -f "$dir1/$f" ;;
-                *)        : ;; # skip
-            esac
-        fi
-    done
+        done
+    fi
 
-    for f in "${ORPHANS_DIR2[@]}"; do
-        echo "  [$label2] $f"
-        if [[ "$delete_all" == "true" ]]; then
-            rm -f "$dir2/$f"
-            [[ "$OPT_VERBOSE" == "true" ]] && echo "  Deleted."
-        elif [[ -n "$CONFIRM_ANSWER" ]]; then
-            case "$CONFIRM_ANSWER" in
-                yes|all) rm -f "$dir2/$f" ;;
-                no)      : ;;
-            esac
-        else
-            printf '  Delete? [Y/n/a] ' >&2
-            local answer
-            if [[ ! -t 0 ]]; then
-                read -r answer
+    if [[ ${#ORPHANS_DIR2[@]} -gt 0 ]]; then
+        for f in "${ORPHANS_DIR2[@]}"; do
+            echo "  [$label2] $f"
+            if [[ "$delete_all" == "true" ]]; then
+                rm -f "$dir2/$f"
+                if [[ "$OPT_VERBOSE" == "true" ]]; then echo "  Deleted."; fi
+            elif [[ -n "$CONFIRM_ANSWER" ]]; then
+                case "$CONFIRM_ANSWER" in
+                    yes|all) rm -f "$dir2/$f" ;;
+                    no)      : ;;
+                esac
             else
-                read -r answer </dev/tty
+                printf '  Delete? [Y/n/a] ' >&2
+                local answer
+                if [[ ! -t 0 ]]; then
+                    read -r answer
+                else
+                    read -r answer </dev/tty
+                fi
+                answer=$(echo "$answer" | tr '[:upper:]' '[:lower:]')
+                case "$answer" in
+                    ""|y|yes) rm -f "$dir2/$f" ;;
+                    a|all)    delete_all=true; rm -f "$dir2/$f" ;;
+                    *)        : ;;
+                esac
             fi
-            answer=$(echo "$answer" | tr '[:upper:]' '[:lower:]')
-            case "$answer" in
-                ""|y|yes) rm -f "$dir2/$f" ;;
-                a|all)    delete_all=true; rm -f "$dir2/$f" ;;
-                *)        : ;;
-            esac
-        fi
-    done
+        done
+    fi
 
     echo ""
 }
