@@ -459,8 +459,13 @@ detect_orphans() {
 
     # Get sorted file lists relative to each dir
     local files1 files2
-    files1=$(cd "$dir1" && find . -type f "${find_excludes[@]}" 2>/dev/null | sort) || true
-    files2=$(cd "$dir2" && find . -type f "${find_excludes[@]}" 2>/dev/null | sort) || true
+    if [[ ${#find_excludes[@]} -gt 0 ]]; then
+        files1=$(cd "$dir1" && find . -type f "${find_excludes[@]}" 2>/dev/null | sort) || true
+        files2=$(cd "$dir2" && find . -type f "${find_excludes[@]}" 2>/dev/null | sort) || true
+    else
+        files1=$(cd "$dir1" && find . -type f 2>/dev/null | sort) || true
+        files2=$(cd "$dir2" && find . -type f 2>/dev/null | sort) || true
+    fi
 
     # Files only in dir1 (orphans on dir1 side)
     local only_in_dir1
