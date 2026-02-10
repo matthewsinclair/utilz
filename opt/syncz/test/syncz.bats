@@ -55,7 +55,7 @@ create_dest_dir_with_files() {
     run bash -c "'$UTILZ_BIN_DIR/syncz' --version 2>&1"
     assert_success
     assert_output_contains "syncz"
-    assert_output_contains "1.2.0"
+    assert_output_contains "1.3.0"
 }
 
 @test "syncz with unknown option shows error" {
@@ -514,4 +514,328 @@ create_dest_dir_with_files() {
     run bash -c "printf 'N\n' | '$UTILZ_BIN_DIR/syncz' --just-do-it --delete '$src' '$dst' 2>&1"
     assert_success
     assert_output_contains "Delete:"
+}
+
+# ============================================================================
+# BIDI HELPERS
+# ============================================================================
+
+create_bidi_dirs() {
+    local dir1="$BATS_TEST_TMPDIR/dir1"
+    local dir2="$BATS_TEST_TMPDIR/dir2"
+    mkdir -p "$dir1/subdir" "$dir2/subdir"
+    echo "common content" > "$dir1/common.txt"
+    echo "common content" > "$dir2/common.txt"
+    echo "only in dir1" > "$dir1/only1.txt"
+    echo "only in dir2" > "$dir2/only2.txt"
+    echo "sub1 content" > "$dir1/subdir/sub1.txt"
+    echo "sub2 content" > "$dir2/subdir/sub2.txt"
+    echo "$dir1 $dir2"
+}
+
+# ============================================================================
+# BIDI VALIDATION TESTS
+# ============================================================================
+
+@test "bidi: --bidi --source-wins shows error" {
+    local dirs=$(create_bidi_dirs)
+    local dir1="${dirs%% *}"
+    local dir2="${dirs##* }"
+
+    run_syncz --bidi --source-wins "$dir1" "$dir2"
+    assert_failure
+    assert_output_contains "cannot be used with --bidi"
+}
+
+@test "bidi: --bidi --dest-wins shows error" {
+    local dirs=$(create_bidi_dirs)
+    local dir1="${dirs%% *}"
+    local dir2="${dirs##* }"
+
+    run_syncz --bidi --dest-wins "$dir1" "$dir2"
+    assert_failure
+    assert_output_contains "cannot be used with --bidi"
+}
+
+@test "bidi: --bidi --delete allowed without safety flag" {
+    local dirs=$(create_bidi_dirs)
+    local dir1="${dirs%% *}"
+    local dir2="${dirs##* }"
+
+    run_syncz --bidi --delete "$dir1" "$dir2"
+    assert_success
+}
+
+# ============================================================================
+# BIDI DRY-RUN TESTS
+# ============================================================================
+
+@test "bidi: --bidi --dry-run lists orphans, no files changed" {
+    local dirs=$(create_bidi_dirs)
+    local dir1="${dirs%% *}"
+    local dir2="${dirs##* }"
+
+    run_syncz --bidi --dry-run "$dir1" "$dir2"
+    assert_success
+    assert_output_contains "Orphans"
+    assert_output_contains "Dry run"
+
+    # Files should not have changed
+    assert_file_not_exists "$dir1/only2.txt"
+    assert_file_not_exists "$dir2/only1.txt"
+}
+
+@test "bidi: --bidi --dry-run with identical dirs shows clean output" {
+    local dir1="$BATS_TEST_TMPDIR/id1"
+    local dir2="$BATS_TEST_TMPDIR/id2"
+    mkdir -p "$dir1" "$dir2"
+    echo "same" > "$dir1/file.txt"
+    echo "same" > "$dir2/file.txt"
+
+    run_syncz --bidi --dry-run "$dir1" "$dir2"
+    assert_success
+    assert_output_contains "0 to transfer"
+}
+
+@test "bidi: --bidi --dry-run --verbose shows Pass labels" {
+    local dirs=$(create_bidi_dirs)
+    local dir1="${dirs%% *}"
+    local dir2="${dirs##* }"
+
+    run_syncz --bidi --dry-run --verbose "$dir1" "$dir2"
+    assert_success
+    assert_output_contains "Pass 1"
+    assert_output_contains "Pass 2"
+}
+
+# ============================================================================
+# BIDI SYNC TESTS
+# ============================================================================
+
+@test "bidi: --bidi --delete deletes orphans from both sides" {
+    local dirs=$(create_bidi_dirs)
+    local dir1="${dirs%% *}"
+    local dir2="${dirs##* }"
+
+    run_syncz --bidi --delete "$dir1" "$dir2"
+    assert_success
+
+    # Orphans should be deleted
+    assert_file_not_exists "$dir1/only1.txt"
+    assert_file_not_exists "$dir2/only2.txt"
+    assert_file_not_exists "$dir1/subdir/sub1.txt"
+    assert_file_not_exists "$dir2/subdir/sub2.txt"
+
+    # Common file should still exist on both sides
+    assert_file_exists "$dir1/common.txt"
+    assert_file_exists "$dir2/common.txt"
+}
+
+@test "bidi: --bidi --confirm yes auto-deletes orphans" {
+    local dirs=$(create_bidi_dirs)
+    local dir1="${dirs%% *}"
+    local dir2="${dirs##* }"
+
+    run_syncz --bidi --confirm yes "$dir1" "$dir2"
+    assert_success
+
+    # Orphans deleted
+    assert_file_not_exists "$dir1/only1.txt"
+    assert_file_not_exists "$dir2/only2.txt"
+}
+
+@test "bidi: --bidi --confirm no keeps orphans and syncs them" {
+    local dirs=$(create_bidi_dirs)
+    local dir1="${dirs%% *}"
+    local dir2="${dirs##* }"
+
+    run_syncz --bidi --confirm no "$dir1" "$dir2"
+    assert_success
+
+    # Orphans survive (not deleted)
+    assert_file_exists "$dir1/only1.txt"
+    assert_file_exists "$dir2/only2.txt"
+
+    # Rsync passes copy surviving orphans to the other side
+    assert_file_exists "$dir2/only1.txt"
+    assert_file_exists "$dir1/only2.txt"
+}
+
+@test "bidi: newer file wins in both directions" {
+    local dir1="$BATS_TEST_TMPDIR/nw1"
+    local dir2="$BATS_TEST_TMPDIR/nw2"
+    mkdir -p "$dir1" "$dir2"
+
+    # Create file on both sides with same name, different content
+    echo "old dir1 content" > "$dir1/shared.txt"
+    echo "old dir2 content" > "$dir2/shared.txt"
+    # Make dir1's version older
+    touch -t 202001010000 "$dir1/shared.txt"
+    # Make dir2's version newer (current time)
+
+    run_syncz --bidi "$dir1" "$dir2"
+    assert_success
+
+    # dir2's version is newer, so dir1 should get dir2's content
+    assert_file_contains "$dir1/shared.txt" "old dir2 content"
+    # dir2 should keep its own content
+    assert_file_contains "$dir2/shared.txt" "old dir2 content"
+}
+
+@test "bidi: --exclude prevents files from being treated as orphans" {
+    local dirs=$(create_bidi_dirs)
+    local dir1="${dirs%% *}"
+    local dir2="${dirs##* }"
+
+    # Add an excluded file only in dir1
+    echo "ignore me" > "$dir1/notes.log"
+
+    run_syncz --bidi --delete --exclude "*.log" "$dir1" "$dir2"
+    assert_success
+
+    # .log file should NOT be deleted (excluded from orphan detection)
+    assert_file_exists "$dir1/notes.log"
+    # .log file should NOT be synced to dir2
+    assert_file_not_exists "$dir2/notes.log"
+}
+
+# ============================================================================
+# BIDI INTERACTIVE TESTS
+# ============================================================================
+
+@test "bidi: --bidi --confirm with piped Y deletes orphan" {
+    local dir1="$BATS_TEST_TMPDIR/iy1"
+    local dir2="$BATS_TEST_TMPDIR/iy2"
+    mkdir -p "$dir1" "$dir2"
+    echo "common" > "$dir1/common.txt"
+    echo "common" > "$dir2/common.txt"
+    echo "orphan" > "$dir1/orphan.txt"
+
+    run bash -c "printf 'Y\n' | '$UTILZ_BIN_DIR/syncz' --bidi --confirm '$dir1' '$dir2' 2>&1"
+    assert_success
+    # Orphan should be deleted (user answered Y)
+    assert_file_not_exists "$dir1/orphan.txt"
+}
+
+@test "bidi: --bidi --confirm with piped N keeps orphan" {
+    local dir1="$BATS_TEST_TMPDIR/in1"
+    local dir2="$BATS_TEST_TMPDIR/in2"
+    mkdir -p "$dir1" "$dir2"
+    echo "common" > "$dir1/common.txt"
+    echo "common" > "$dir2/common.txt"
+    echo "orphan" > "$dir1/orphan.txt"
+
+    run bash -c "printf 'n\n' | '$UTILZ_BIN_DIR/syncz' --bidi --confirm '$dir1' '$dir2' 2>&1"
+    assert_success
+    # Orphan should survive (user answered N)
+    assert_file_exists "$dir1/orphan.txt"
+    # Rsync pass should copy it to dir2
+    assert_file_exists "$dir2/orphan.txt"
+}
+
+@test "bidi: --bidi --confirm with piped A deletes all orphans" {
+    local dir1="$BATS_TEST_TMPDIR/ia1"
+    local dir2="$BATS_TEST_TMPDIR/ia2"
+    mkdir -p "$dir1" "$dir2"
+    echo "common" > "$dir1/common.txt"
+    echo "common" > "$dir2/common.txt"
+    echo "orphan1" > "$dir1/orphan1.txt"
+    echo "orphan2" > "$dir2/orphan2.txt"
+
+    run bash -c "printf 'A\n' | '$UTILZ_BIN_DIR/syncz' --bidi --confirm '$dir1' '$dir2' 2>&1"
+    assert_success
+    # Both orphans should be deleted
+    assert_file_not_exists "$dir1/orphan1.txt"
+    assert_file_not_exists "$dir2/orphan2.txt"
+}
+
+# ============================================================================
+# BIDI EDGE CASES
+# ============================================================================
+
+@test "bidi: --bidi with empty dirs succeeds" {
+    local dir1="$BATS_TEST_TMPDIR/e1"
+    local dir2="$BATS_TEST_TMPDIR/e2"
+    mkdir -p "$dir1" "$dir2"
+
+    run_syncz --bidi "$dir1" "$dir2"
+    assert_success
+}
+
+@test "bidi: --bidi with identical dirs shows 0 to transfer" {
+    local dir1="$BATS_TEST_TMPDIR/eq1"
+    local dir2="$BATS_TEST_TMPDIR/eq2"
+    mkdir -p "$dir1" "$dir2"
+    echo "same" > "$dir1/file.txt"
+    echo "same" > "$dir2/file.txt"
+
+    run_syncz --bidi --dry-run "$dir1" "$dir2"
+    assert_success
+    assert_output_contains "0 to transfer"
+}
+
+@test "bidi: rsync --delete not passed in bidi mode" {
+    local dirs=$(create_bidi_dirs)
+    local dir1="${dirs%% *}"
+    local dir2="${dirs##* }"
+
+    # With --confirm no, orphans are kept. Without rsync --delete, unique files survive both passes.
+    run_syncz --bidi --confirm no "$dir1" "$dir2"
+    assert_success
+
+    # All files should exist on both sides (no rsync --delete, orphans kept)
+    assert_file_exists "$dir1/only1.txt"
+    assert_file_exists "$dir1/only2.txt"
+    assert_file_exists "$dir2/only1.txt"
+    assert_file_exists "$dir2/only2.txt"
+    assert_file_exists "$dir1/subdir/sub1.txt"
+    assert_file_exists "$dir1/subdir/sub2.txt"
+    assert_file_exists "$dir2/subdir/sub1.txt"
+    assert_file_exists "$dir2/subdir/sub2.txt"
+}
+
+# ============================================================================
+# --CONFIRM OPTIONAL ARGUMENT TESTS (UNIDIRECTIONAL)
+# ============================================================================
+
+@test "confirm-arg: --confirm yes auto-syncs without input" {
+    local src=$(create_source_dir)
+    local dst=$(create_dest_dir)
+
+    run_syncz --confirm yes "$src" "$dst"
+    assert_success
+    assert_output_contains "Sync complete"
+    assert_file_exists "$dst/file1.txt"
+}
+
+@test "confirm-arg: --confirm no aborts without input" {
+    local src=$(create_source_dir)
+    local dst=$(create_dest_dir)
+
+    run_syncz --confirm no "$src" "$dst"
+    assert_success
+    assert_output_contains "Aborted"
+    assert_file_not_exists "$dst/file1.txt"
+}
+
+@test "confirm-arg: --confirm yes --delete auto-syncs and deletes" {
+    local src=$(create_source_dir)
+    local dst=$(create_dest_dir_with_files)
+
+    run_syncz --confirm yes --delete "$src" "$dst"
+    assert_success
+    assert_output_contains "Sync complete"
+    assert_file_exists "$dst/file1.txt"
+    assert_file_not_exists "$dst/extra.txt"
+}
+
+@test "confirm-arg: --confirm followed by positional arg works" {
+    local src=$(create_source_dir)
+    local dst=$(create_dest_dir)
+
+    # --confirm with no yes/no/all, then positional args
+    run bash -c "printf 'Y\n' | '$UTILZ_BIN_DIR/syncz' --confirm '$src' '$dst' 2>&1"
+    assert_success
+    assert_output_contains "Sync complete"
+    assert_file_exists "$dst/file1.txt"
 }

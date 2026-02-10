@@ -35,12 +35,14 @@ OPT_BACKUP=false
 OPT_VERBOSE=false
 OPT_PROGRESS=false
 OPT_JUST_DO_IT=false
+OPT_BIDI=false
 EXCLUDE_PATTERNS=()
 SOURCE_DIR=""
 DEST_DIR=""
 
 # State for Y/N/A prompt
 CONFIRM_ALL=false
+CONFIRM_ANSWER=""
 
 # ============================================================================
 # USAGE
@@ -59,9 +61,16 @@ CONFLICT RESOLUTION:
 
 SAFETY:
   -n, --dry-run            Show what would happen without doing it
-  -c, --confirm            Prompt before destructive actions (Y/N/A)
+  -c, --confirm [yes|no|all]
+                           Prompt before destructive actions (Y/N/A)
+                           Optional arg auto-answers all prompts
   -f, --force              Force sync (no safety checks)
   --just-do-it             Show summary, single Y/N confirm, then run all
+
+BIDIRECTIONAL:
+  --bidi                   Two-way sync with orphan detection
+                           Combine with --delete to prune orphans silently
+                           Combine with --confirm [yes|no|all] for scripting
 
 OPTIONS:
   -x, --exclude PAT        Exclude files matching pattern (repeatable)
@@ -84,6 +93,12 @@ EXAMPLES:
 
   # Quick confirm-and-go
   syncz --just-do-it --delete ~/src /dst
+
+  # Bidirectional sync with orphan prompts
+  syncz --bidi ~/dir1 ~/dir2
+
+  # Bidirectional sync, auto-delete orphans
+  syncz --bidi --delete ~/dir1 ~/dir2
 
 For detailed help, run: utilz help syncz
 EOF
@@ -148,6 +163,17 @@ validate_inputs() {
     if [[ "$SOURCE_DIR" == "$DEST_DIR" ]]; then
         error "Source and destination are the same directory: $SOURCE_DIR"
         exit 1
+    fi
+
+    # Bidi mode validations
+    if [[ "$OPT_BIDI" == "true" ]]; then
+        if [[ "$OPT_SOURCE_WINS" == "true" || "$OPT_DEST_WINS" == "true" ]]; then
+            error "--source-wins and --dest-wins cannot be used with --bidi"
+            info "Bidirectional mode uses newer-wins only"
+            exit 1
+        fi
+        # In bidi mode, --delete is allowed without --confirm/--force/--just-do-it
+        return 0
     fi
 
     # Check mutual exclusivity of conflict resolution flags
@@ -302,6 +328,14 @@ generate_summary() {
 prompt_yna() {
     local message="$1"
 
+    # Auto-answer from --confirm arg
+    if [[ -n "$CONFIRM_ANSWER" ]]; then
+        case "$CONFIRM_ANSWER" in
+            yes|all) CONFIRM_ALL=true; return 0 ;;
+            no)      return 1 ;;
+        esac
+    fi
+
     # If already confirmed all, return yes
     if [[ "$CONFIRM_ALL" == "true" ]]; then
         return 0
@@ -335,6 +369,14 @@ prompt_yna() {
 # Simple Y/N prompt - returns 0 for yes, 1 for no
 prompt_yn() {
     local message="$1"
+
+    # Auto-answer from --confirm arg
+    if [[ -n "$CONFIRM_ANSWER" ]]; then
+        case "$CONFIRM_ANSWER" in
+            yes|all) return 0 ;;
+            no)      return 1 ;;
+        esac
+    fi
 
     printf '%s [Y/N] ' "$message" >&2
     local answer
@@ -395,6 +437,224 @@ execute_sync() {
 }
 
 # ============================================================================
+# BIDI FUNCTIONS
+# ============================================================================
+
+# Detect files that exist on only one side (orphans)
+# Populates ORPHANS_DIR1 and ORPHANS_DIR2 arrays
+detect_orphans() {
+    local dir1="$1"
+    local dir2="$2"
+
+    ORPHANS_DIR1=()
+    ORPHANS_DIR2=()
+
+    # Build exclude args for find
+    local find_excludes=()
+    if [[ ${#EXCLUDE_PATTERNS[@]} -gt 0 ]]; then
+        for pattern in "${EXCLUDE_PATTERNS[@]}"; do
+            find_excludes+=(-not -name "$pattern")
+        done
+    fi
+
+    # Get sorted file lists relative to each dir
+    local files1 files2
+    files1=$(cd "$dir1" && find . -type f "${find_excludes[@]}" 2>/dev/null | sort) || true
+    files2=$(cd "$dir2" && find . -type f "${find_excludes[@]}" 2>/dev/null | sort) || true
+
+    # Files only in dir1 (orphans on dir1 side)
+    local only_in_dir1
+    only_in_dir1=$(comm -23 <(echo "$files1") <(echo "$files2")) || true
+
+    # Files only in dir2 (orphans on dir2 side)
+    local only_in_dir2
+    only_in_dir2=$(comm -13 <(echo "$files1") <(echo "$files2")) || true
+
+    # Populate arrays (strip leading ./)
+    while IFS= read -r f; do
+        if [[ -n "$f" ]]; then
+            ORPHANS_DIR1+=("${f#./}")
+        fi
+    done <<< "$only_in_dir1"
+
+    while IFS= read -r f; do
+        if [[ -n "$f" ]]; then
+            ORPHANS_DIR2+=("${f#./}")
+        fi
+    done <<< "$only_in_dir2"
+}
+
+# Resolve orphans by deleting, prompting, or skipping
+resolve_orphans() {
+    local dir1="$1"
+    local dir2="$2"
+
+    local total=$(( ${#ORPHANS_DIR1[@]} + ${#ORPHANS_DIR2[@]} ))
+    if [[ $total -eq 0 ]]; then
+        if [[ "$OPT_VERBOSE" == "true" ]]; then
+            echo ""
+            echo "No orphaned files detected."
+            echo ""
+        fi
+        return 0
+    fi
+
+    # Labels: use last path component for readability
+    local label1 label2
+    label1=$(basename "$dir1")
+    label2=$(basename "$dir2")
+
+    echo ""
+    echo "Orphans"
+    echo "======="
+    echo "  $total file(s) exist on one side only."
+    echo ""
+
+    # Dry-run: just list and return
+    if [[ "$OPT_DRY_RUN" == "true" ]]; then
+        for f in "${ORPHANS_DIR1[@]}"; do
+            echo "  [$label1] $f"
+        done
+        for f in "${ORPHANS_DIR2[@]}"; do
+            echo "  [$label2] $f"
+        done
+        echo ""
+        return 0
+    fi
+
+    # --delete mode: silently delete all orphans
+    if [[ "$OPT_DELETE" == "true" ]]; then
+        for f in "${ORPHANS_DIR1[@]}"; do
+            rm -f "$dir1/$f"
+            [[ "$OPT_VERBOSE" == "true" ]] && echo "  Deleted [$label1] $f"
+        done
+        for f in "${ORPHANS_DIR2[@]}"; do
+            rm -f "$dir2/$f"
+            [[ "$OPT_VERBOSE" == "true" ]] && echo "  Deleted [$label2] $f"
+        done
+        echo "  Deleted $total orphan(s)."
+        echo ""
+        return 0
+    fi
+
+    # Interactive or --confirm arg mode
+    local delete_all=false
+
+    for f in "${ORPHANS_DIR1[@]}"; do
+        echo "  [$label1] $f"
+        if [[ "$delete_all" == "true" ]]; then
+            rm -f "$dir1/$f"
+            [[ "$OPT_VERBOSE" == "true" ]] && echo "  Deleted."
+        elif [[ -n "$CONFIRM_ANSWER" ]]; then
+            case "$CONFIRM_ANSWER" in
+                yes|all) rm -f "$dir1/$f" ;;
+                no)      : ;; # keep — sync will copy it
+            esac
+        else
+            # Interactive prompt: Y/Enter = delete, n = skip, a = delete all remaining
+            printf '  Delete? [Y/n/a] ' >&2
+            local answer
+            if [[ ! -t 0 ]]; then
+                read -r answer
+            else
+                read -r answer </dev/tty
+            fi
+            answer=$(echo "$answer" | tr '[:upper:]' '[:lower:]')
+            case "$answer" in
+                ""|y|yes) rm -f "$dir1/$f" ;;
+                a|all)    delete_all=true; rm -f "$dir1/$f" ;;
+                *)        : ;; # skip
+            esac
+        fi
+    done
+
+    for f in "${ORPHANS_DIR2[@]}"; do
+        echo "  [$label2] $f"
+        if [[ "$delete_all" == "true" ]]; then
+            rm -f "$dir2/$f"
+            [[ "$OPT_VERBOSE" == "true" ]] && echo "  Deleted."
+        elif [[ -n "$CONFIRM_ANSWER" ]]; then
+            case "$CONFIRM_ANSWER" in
+                yes|all) rm -f "$dir2/$f" ;;
+                no)      : ;;
+            esac
+        else
+            printf '  Delete? [Y/n/a] ' >&2
+            local answer
+            if [[ ! -t 0 ]]; then
+                read -r answer
+            else
+                read -r answer </dev/tty
+            fi
+            answer=$(echo "$answer" | tr '[:upper:]' '[:lower:]')
+            case "$answer" in
+                ""|y|yes) rm -f "$dir2/$f" ;;
+                a|all)    delete_all=true; rm -f "$dir2/$f" ;;
+                *)        : ;;
+            esac
+        fi
+    done
+
+    echo ""
+}
+
+# Execute bidirectional sync: detect orphans → resolve → two-pass sync
+execute_bidi() {
+    local dir1="$SOURCE_DIR"
+    local dir2="$DEST_DIR"
+
+    # Step 1: Detect and resolve orphans
+    detect_orphans "$dir1" "$dir2"
+    resolve_orphans "$dir1" "$dir2"
+
+    # Step 2: Pass 1 — dir1 → dir2 (never pass --delete to rsync in bidi mode)
+    local saved_delete="$OPT_DELETE"
+    OPT_DELETE=false
+
+    if [[ "$OPT_VERBOSE" == "true" || "$OPT_DRY_RUN" == "true" ]]; then
+        echo "Pass 1: $(basename "$dir1") → $(basename "$dir2")"
+        echo "---"
+    fi
+
+    SUMMARY_FILES_TRANSFERRED=0
+    SUMMARY_FILES_DELETED=0
+    generate_summary
+
+    if [[ "$OPT_DRY_RUN" != "true" ]]; then
+        execute_sync false
+    fi
+
+    # Step 3: Pass 2 — dir2 → dir1 (swap source/dest)
+    local orig_source="$SOURCE_DIR"
+    local orig_dest="$DEST_DIR"
+    SOURCE_DIR="$dir2"
+    DEST_DIR="$dir1"
+
+    if [[ "$OPT_VERBOSE" == "true" || "$OPT_DRY_RUN" == "true" ]]; then
+        echo ""
+        echo "Pass 2: $(basename "$dir2") → $(basename "$dir1")"
+        echo "---"
+    fi
+
+    SUMMARY_FILES_TRANSFERRED=0
+    SUMMARY_FILES_DELETED=0
+    generate_summary
+
+    if [[ "$OPT_DRY_RUN" != "true" ]]; then
+        execute_sync false
+    fi
+
+    # Restore state
+    SOURCE_DIR="$orig_source"
+    DEST_DIR="$orig_dest"
+    OPT_DELETE="$saved_delete"
+
+    if [[ "$OPT_DRY_RUN" == "true" ]]; then
+        info "Dry run - no changes made"
+    fi
+}
+
+# ============================================================================
 # MAIN
 # ============================================================================
 
@@ -419,6 +679,16 @@ while [[ $# -gt 0 ]]; do
             ;;
         -c|--confirm)
             OPT_CONFIRM=true
+            # Peek at next arg for optional value
+            if [[ "${2:-}" =~ ^(yes|no|all)$ ]]; then
+                CONFIRM_ANSWER="$2"
+                shift 2
+            else
+                shift
+            fi
+            ;;
+        --bidi)
+            OPT_BIDI=true
             shift
             ;;
         --source-wins)
@@ -482,6 +752,12 @@ done
 
 # Validate inputs
 validate_inputs
+
+# --- Bidi mode: delegate to execute_bidi ---
+if [[ "$OPT_BIDI" == "true" ]]; then
+    execute_bidi
+    exit $?
+fi
 
 # Generate summary
 SUMMARY_FILES_TRANSFERRED=0

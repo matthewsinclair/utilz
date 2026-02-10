@@ -1,13 +1,13 @@
 # syncz
 
-**Version**: 1.2.0
+**Version**: 1.3.0
 **Part of**: [Utilz Framework](../../README.md)
 
 ---
 
 ## Overview
 
-Simple directory-to-directory syncer using rsync. Provides conflict resolution strategies, confirmation prompts, and dry-run support.
+Simple directory-to-directory syncer using rsync. Provides conflict resolution strategies, confirmation prompts, dry-run support, and bidirectional sync with orphan detection.
 
 ---
 
@@ -26,6 +26,7 @@ ln -s utilz syncz
 
 ```bash
 syncz [OPTIONS] <source-dir> <dest-dir>
+syncz --bidi [OPTIONS] <dir1> <dir2>
 ```
 
 For detailed help: `utilz help syncz`
@@ -49,6 +50,15 @@ syncz --just-do-it --delete ~/src /dst
 
 # Source always wins, exclude .git
 syncz --source-wins --exclude ".git" ~/src /dst
+
+# Two-way sync between directories
+syncz --bidi ~/dir1 ~/dir2
+
+# Bidi sync, auto-delete orphans
+syncz --bidi --delete ~/dir1 ~/dir2
+
+# Bidi sync, fully scripted (keep orphans)
+syncz --bidi --confirm no ~/dir1 ~/dir2
 ```
 
 ---
@@ -70,13 +80,16 @@ syncz
 | Function             | Purpose                                        |
 |----------------------|------------------------------------------------|
 | `resolve_path()`    | Resolve directory to absolute path              |
-| `validate_inputs()` | Check dirs exist, not same, options valid        |
-| `build_rsync_args()` | Construct rsync flag array from options         |
+| `validate_inputs()` | Check dirs exist, not same, options valid       |
+| `build_rsync_args()` | Construct rsync flag array from options        |
 | `generate_summary()` | Run dry-run rsync, parse stats for summary     |
 | `prompt_yna()`      | Y/N/A prompt helper with CONFIRM_ALL state      |
 | `prompt_yn()`       | Simple Y/N prompt for --just-do-it              |
 | `execute_delete()`  | Delete-only rsync pass for --confirm mode       |
 | `execute_sync()`    | Run rsync with built args                       |
+| `detect_orphans()`  | Find files on only one side using find + comm   |
+| `resolve_orphans()` | Delete, prompt, or skip orphaned files          |
+| `execute_bidi()`    | Orchestrate bidi: orphans → pass 1 → pass 2     |
 
 ### Dependencies
 
@@ -98,7 +111,7 @@ cd opt/syncz/test
 bats syncz.bats
 ```
 
-45 tests covering: basic flags, validation, core sync, conflict resolution, features, confirmation prompts, just-do-it mode, and edge cases.
+66 tests covering: basic flags, validation, core sync, conflict resolution, features, confirmation prompts, just-do-it mode, edge cases, bidirectional sync, and --confirm optional argument.
 
 ---
 

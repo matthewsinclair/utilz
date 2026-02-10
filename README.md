@@ -226,7 +226,7 @@ See `utilz help retry` for details.
 
 ### syncz
 
-Simple directory-to-directory syncer using rsync. Provides conflict resolution strategies (newer-wins, source-wins, dest-wins), confirmation prompts, dry-run, backup, and delete support.
+Simple directory-to-directory syncer using rsync. Provides conflict resolution strategies (newer-wins, source-wins, dest-wins), confirmation prompts, dry-run, backup, delete support, and bidirectional sync with orphan detection.
 
 ```bash
 # Preview what would be synced
@@ -243,6 +243,12 @@ syncz --just-do-it --delete ~/src /dst
 
 # Source always wins, exclude .git
 syncz --source-wins --exclude ".git" ~/src /dst
+
+# Two-way sync between directories
+syncz --bidi ~/dir1 ~/dir2
+
+# Bidi sync, auto-delete orphans
+syncz --bidi --delete ~/dir1 ~/dir2
 ```
 
 See `utilz help syncz` for details.

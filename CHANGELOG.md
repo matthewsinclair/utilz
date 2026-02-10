@@ -5,6 +5,31 @@ All notable changes to the Utilz framework will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.1] - 2026-02-10
+
+### Added
+
+- **syncz** - Bidirectional sync mode (`--bidi`)
+  - Two-way sync with automatic orphan detection using `find` + `comm`
+  - Orphan resolution: interactive prompts, `--delete` (silent), `--confirm yes/no/all` (scriptable)
+  - Two-pass rsync (dir1→dir2, dir2→dir1) with newer-wins strategy
+  - rsync `--delete` never passed in bidi mode (orphan resolution handles deletions)
+  - `--source-wins` and `--dest-wins` blocked in bidi mode
+- **syncz** - `--confirm` optional argument (`yes`, `no`, `all`)
+  - Auto-answers all prompts for fully scriptable operation
+  - Works in both unidirectional and bidirectional modes
+  - Peek-ahead parsing preserves positional argument compatibility
+
+### Fixed
+
+- syncz: empty orphan arrays caused silent exit on bash 3.2 (`set -e` + `&&` short-circuit)
+- syncz: `--confirm yes --delete` now correctly deletes (macOS rsync missing delete count in stats)
+
+### Changed
+
+- syncz version bumped to 1.3.0
+- Framework version bumped to 1.2.1
+
 ## [1.2.0] - 2026-02-08
 
 ### Added

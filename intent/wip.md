@@ -1,5 +1,5 @@
 ---
-verblock: "09 Feb 2026:v0.4: matts - Updated after syncz v1.2.0 release"
+verblock: "10 Feb 2026:v0.5: matts - Updated after syncz v1.3.0 and framework v1.2.1"
 ---
 # Work In Progress
 
@@ -7,13 +7,21 @@ verblock: "09 Feb 2026:v0.4: matts - Updated after syncz v1.2.0 release"
 
 **No active work** - All tasks complete.
 
-The syncz utility (ST0002) was completed and released as Utilz v1.2.0 on 08 Feb 2026.
+The syncz v1.3.0 bidi mode (ST0003) was completed and released as Utilz v1.2.1 on 10 Feb 2026.
 
 ## Active Steel Threads
 
 None - All steel threads complete.
 
 ## Recently Completed
+
+- ST0003: syncz --bidi mode and --confirm enhancement (DONE 10 Feb 2026)
+  - Bidirectional sync with orphan detection (find + comm) and resolution
+  - --confirm optional argument (yes/no/all) for fully scriptable operation
+  - Fixed bash 3.2 empty array issue in detect_orphans
+  - Fixed --confirm yes --delete not deleting on macOS rsync
+  - 21 new tests (66 total), all passing on macOS and Linux CI
+  - Released as Utilz v1.2.1
 
 - ST0002: syncz - Directory-to-Directory Syncer (DONE 08 Feb 2026)
   - rsync wrapper with conflict resolution (newer-wins, source-wins, dest-wins)
@@ -35,7 +43,7 @@ No planned work. Ready for new requests.
 
 ## Notes
 
-The Utilz framework is stable at v1.2.0 with 9 utilities:
+The Utilz framework is stable at v1.2.1 with 9 utilities:
 - cleanz  - LLM text cleaner + C2PA image metadata (v1.1.0)
 - clipz   - Cross-platform clipboard
 - cryptz  - GPG encryption wrapper
@@ -43,7 +51,7 @@ The Utilz framework is stable at v1.2.0 with 9 utilities:
 - macoz   - macOS utilities (bg, setpicfor)
 - mdagg   - Markdown aggregator
 - retry   - Retry command utility
-- syncz   - Directory-to-directory syncer (NEW in v1.2.0)
+- syncz   - Directory-to-directory syncer with bidi mode (v1.3.0)
 - utilz   - Core framework
 
 ## Context for LLM
