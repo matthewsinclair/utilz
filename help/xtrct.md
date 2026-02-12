@@ -34,14 +34,14 @@ On first run, xtrct automatically creates a Python virtual environment at `lib/.
 
 ## Options
 
-| Flag              | Short | Description                                     |
-|-------------------|-------|-------------------------------------------------|
-| `--schema <file>` |       | JSON schema template (required)                 |
-| `--format <fmt>`  |       | Output format: json (default), csv, table       |
-| `--model <model>` |       | Claude model (default: claude-haiku-4-5-latest) |
-| `--verbose`       |       | Show progress and token usage to stderr         |
-| `--help`          | `-h`  | Show help message                               |
-| `--version`       |       | Show version information                        |
+| Flag              | Short | Description                                       |
+|-------------------|-------|---------------------------------------------------|
+| `--schema <file>` |       | JSON schema template (required)                   |
+| `--format <fmt>`  |       | Output format: json (default), csv, table         |
+| `--model <model>` |       | Claude model (default: claude-haiku-4-5-20251001) |
+| `--verbose`       |       | Show progress and token usage to stderr           |
+| `--help`          | `-h`  | Show help message                                 |
+| `--version`       |       | Show version information                          |
 
 ---
 

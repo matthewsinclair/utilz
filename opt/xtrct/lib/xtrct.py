@@ -19,7 +19,7 @@ import sys
 import anthropic
 
 
-DEFAULT_MODEL = "claude-haiku-4-5-latest"
+DEFAULT_MODEL = "claude-haiku-4-5-20251001"
 
 
 # ============================================================================
