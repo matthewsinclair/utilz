@@ -26,7 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - PDF input auto-converts via pdf2md
   - Stdin support for piping
   - Output formats: json (pretty-print), csv, table (aligned columns)
-  - Model selection (`--model`) with default claude-sonnet-4-5-20250929
+  - Model selection (`--model`) with default claude-haiku-4-5-latest
   - Verbose mode with token usage stats
   - `ANTHROPIC_API_KEY` fail-fast check before venv creation
   - Python venv auto-management at `lib/.venv/`

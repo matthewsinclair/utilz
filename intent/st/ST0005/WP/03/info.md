@@ -18,8 +18,8 @@ Implement `opt/pdf2md/lib/pdf2md.py` — the core PDF-to-markdown conversion alg
 | 3     | Group into lines by Y-position (tolerance ~2px), sort by X within lines      |
 | 4     | Detect headings: `font_size > body` → H1-H6 by descending unique sizes      |
 | 5     | Detect list items: bullets, `-`, `*`, `1.`, `(a)` patterns                   |
-| 6     | Remove repetitive headers/footers (same text+Y on >50% of pages)            |
-| 7     | Compact and emit: merge fragments, join paragraphs, emit markdown            |
+| 6     | Remove repetitive headers/footers (same text+Y on >50% of pages)             |
+| 7     | Compact and emit: merge fragments, join paragraphs, emit markdown             |
 
 ## Tasks
 

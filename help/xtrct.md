@@ -34,14 +34,14 @@ On first run, xtrct automatically creates a Python virtual environment at `lib/.
 
 ## Options
 
-| Flag                 | Short | Description                                        |
-|----------------------|-------|----------------------------------------------------|
-| `--schema <file>`    |       | JSON schema template (required)                    |
-| `--format <fmt>`     |       | Output format: json (default), csv, table          |
-| `--model <model>`    |       | Claude model (default: claude-sonnet-4-5-20250929) |
-| `--verbose`          |       | Show progress and token usage to stderr            |
-| `--help`             | `-h`  | Show help message                                  |
-| `--version`          |       | Show version information                           |
+| Flag              | Short | Description                                     |
+|-------------------|-------|-------------------------------------------------|
+| `--schema <file>` |       | JSON schema template (required)                 |
+| `--format <fmt>`  |       | Output format: json (default), csv, table       |
+| `--model <model>` |       | Claude model (default: claude-haiku-4-5-latest) |
+| `--verbose`       |       | Show progress and token usage to stderr         |
+| `--help`          | `-h`  | Show help message                               |
+| `--version`       |       | Show version information                        |
 
 ---
 
@@ -70,13 +70,13 @@ The schema is a JSON file describing what data to extract:
 
 ### Field Types
 
-| Type      | Description                              |
-|-----------|------------------------------------------|
-| `string`  | Text value                               |
-| `number`  | Numeric value (integers or decimals)     |
-| `boolean` | True/false value                         |
-| `date`    | Date value (format in description)       |
-| `array`   | List of items (define `items` sub-fields)|
+| Type      | Description                               |
+|-----------|-------------------------------------------|
+| `string`  | Text value                                |
+| `number`  | Numeric value (integers or decimals)      |
+| `boolean` | True/false value                          |
+| `date`    | Date value (format in description)        |
+| `array`   | List of items (define `items` sub-fields) |
 
 ### Schema Design Tips
 
@@ -201,10 +201,10 @@ pdf2md invoice.pdf --pages 1-3 | xtrct --schema schema.json
 
 ## Environment
 
-| Variable           | Description                                    |
-|--------------------|------------------------------------------------|
-| `ANTHROPIC_API_KEY`| Required. Your Anthropic API key               |
-| `UTILZ_HOME`       | Root directory of Utilz framework              |
+| Variable            | Description                       |
+|---------------------|-----------------------------------|
+| `ANTHROPIC_API_KEY` | Required. Your Anthropic API key  |
+| `UTILZ_HOME`        | Root directory of Utilz framework |
 
 ---
 
