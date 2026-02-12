@@ -1,0 +1,15 @@
+name: xtrct
+version: 1.0.0
+utilz_version: "^1.2.0"
+description: Schema-driven semantic data extraction
+author: Matthew Sinclair
+
+dependencies:
+  - name: python3
+    required: true
+    install: brew install python3
+    purpose: Python runtime for extraction engine
+  - name: pdf2md
+    required: false
+    install: "Part of utilz framework"
+    purpose: PDF to Markdown conversion (required for .pdf input)

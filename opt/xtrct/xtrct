@@ -1,0 +1,69 @@
+#!/usr/bin/env bash
+#
+# xtrct - Schema-driven semantic data extraction
+#
+
+set -euo pipefail
+
+# Source common functions if not already loaded (from dispatcher)
+if [[ "$(type -t info 2>/dev/null)" != "function" ]]; then
+    SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+    UTILZ_HOME="${UTILZ_HOME:-$(cd "$SCRIPT_DIR/../.." && pwd)}"
+
+    if [[ -f "$UTILZ_HOME/opt/utilz/lib/common.sh" ]]; then
+        source "$UTILZ_HOME/opt/utilz/lib/common.sh"
+    else
+        echo "ERROR: Cannot find common.sh library" >&2
+        exit 1
+    fi
+fi
+
+# ============================================================================
+# USAGE
+# ============================================================================
+
+usage() {
+    cat <<EOF
+Usage: xtrct [OPTIONS] [ARGS]
+
+Schema-driven semantic data extraction
+
+OPTIONS:
+  -h, --help               Show this help
+  --version                Show version
+
+EXAMPLES:
+  xtrct --help
+  xtrct --version
+
+For detailed help, run: utilz help xtrct
+EOF
+}
+
+# ============================================================================
+# MAIN
+# ============================================================================
+
+# Parse arguments
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        -h|--help)
+            usage
+            exit 0
+            ;;
+        --version)
+            show_version "xtrct"
+            exit 0
+            ;;
+        *)
+            error "Unknown option: $1"
+            echo ""
+            usage
+            exit 1
+            ;;
+    esac
+done
+
+# Your implementation here
+info "xtrct is working!"
+success "Implementation goes here"

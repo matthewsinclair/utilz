@@ -1,0 +1,11 @@
+name: pdf2md
+version: 1.0.0
+utilz_version: "^1.2.0"
+description: PDF to Markdown converter
+author: Matthew Sinclair
+
+dependencies:
+  - name: python3
+    required: true
+    install: brew install python3
+    purpose: Python runtime for PDF conversion engine
