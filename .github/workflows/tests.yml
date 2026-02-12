@@ -29,9 +29,9 @@ jobs:
 
     - name: Install dependencies
       run: |
-        # Install yq for YAML parsing
+        # Install yq for YAML parsing and python3-venv for pdf2md/xtrct
         sudo apt-get update
-        sudo apt-get install -y jq
+        sudo apt-get install -y jq python3-venv
         sudo wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O /usr/bin/yq
         sudo chmod +x /usr/bin/yq
         yq --version
@@ -54,7 +54,7 @@ jobs:
     - name: Run tests (excluding platform-specific utilities)
       run: |
         # Run all tests except macoz (macOS-only) and clipz (clipboard unreliable in CI)
-        for utility in utilz cryptz gitz mdagg retry syncz; do
+        for utility in utilz cryptz gitz mdagg retry syncz pdf2md xtrct; do
           echo "Testing: $utility"
           utilz test $utility || exit 1
         done

@@ -7,7 +7,7 @@
 
 ## Overview
 
-PDF to Markdown converter
+PDF to Markdown converter using pdfplumber. Detects headings, list items, and paragraph structure from font size and position metadata. Python port of [pdf2md.morethan.io](https://pdf2md.morethan.io/).
 
 ---
 
@@ -20,12 +20,14 @@ cd $UTILZ_HOME/bin
 ln -s utilz pdf2md
 ```
 
+On first run, pdf2md automatically creates a Python venv at `lib/.venv/` and installs pdfplumber.
+
 ---
 
 ## Usage
 
 ```bash
-pdf2md [OPTIONS] [ARGS]
+pdf2md <file> [OPTIONS]
 ```
 
 For detailed help: `utilz help pdf2md`
@@ -35,11 +37,17 @@ For detailed help: `utilz help pdf2md`
 ## Examples
 
 ```bash
-# Show help
-pdf2md --help
+# Convert PDF to stdout
+pdf2md invoice.pdf
 
-# Show version
-pdf2md --version
+# Save to file
+pdf2md invoice.pdf -o invoice.md
+
+# Specific pages only
+pdf2md large.pdf --pages 1-5
+
+# Pipe to xtrct for semantic extraction
+pdf2md invoice.pdf | xtrct --schema invoice_schema.json
 ```
 
 ---
@@ -50,19 +58,23 @@ pdf2md --version
 
 ```
 pdf2md
-├── Invoked via: $UTILZ_HOME/bin/pdf2md (symlink)
-├── Dispatched by: $UTILZ_HOME/bin/utilz
-├── Has access to: $UTILZ_HOME/opt/utilz/lib/common.sh
-└── Help from: $UTILZ_HOME/help/pdf2md.md
+├── Bash wrapper: opt/pdf2md/pdf2md
+│   ├── Sources common.sh
+│   ├── Manages venv at lib/.venv/
+│   └── Execs into Python engine
+├── Python engine: opt/pdf2md/lib/pdf2md.py
+│   ├── pdfplumber for text extraction
+│   └── 7-stage conversion pipeline
+├── Dependencies: opt/pdf2md/lib/requirements.txt
+├── Help from: help/pdf2md.md
+└── Symlink: bin/pdf2md → utilz
 ```
 
 ### Dependencies
 
 **Required:**
-- Bash 4.0+ or Zsh
-
-**Optional:**
-- None
+- python3
+- pdfplumber (auto-installed in venv)
 
 ---
 
@@ -79,17 +91,6 @@ bats pdf2md.bats
 
 ---
 
-## Development
-
-### Making Changes
-
-1. Edit `/Users/matts/Devel/prj/Utilz/opt/pdf2md/pdf2md`
-2. Test changes: `pdf2md --help`
-3. Run tests: `utilz test pdf2md`
-4. Update help if needed: `/Users/matts/Devel/prj/Utilz/help/pdf2md.md`
-
----
-
 ## License
 
 Part of Utilz framework. Personal use.
@@ -101,3 +102,4 @@ Copyright (c) 2026 Matthew Sinclair
 
 - [Utilz Framework Documentation](../../README.md)
 - [pdf2md Help](../../help/pdf2md.md) - Run: `utilz help pdf2md`
+- [xtrct](../xtrct/README.md) - Schema-driven semantic extraction (composes with pdf2md)

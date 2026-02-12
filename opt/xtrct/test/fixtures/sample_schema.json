@@ -1,0 +1,59 @@
+{
+  "description": "Australian trade invoice",
+  "fields": {
+    "supplier_name": {
+      "type": "string",
+      "description": "Business name of the supplier"
+    },
+    "supplier_abn": {
+      "type": "string",
+      "description": "Australian Business Number (11 digits)"
+    },
+    "invoice_number": {
+      "type": "string",
+      "description": "Invoice or reference number"
+    },
+    "invoice_date": {
+      "type": "string",
+      "description": "Invoice date as YYYY-MM-DD"
+    },
+    "due_date": {
+      "type": "string",
+      "description": "Payment due date as YYYY-MM-DD, or null"
+    },
+    "subtotal": {
+      "type": "number",
+      "description": "Subtotal excluding GST"
+    },
+    "gst": {
+      "type": "number",
+      "description": "GST amount"
+    },
+    "total": {
+      "type": "number",
+      "description": "Total including GST"
+    },
+    "line_items": {
+      "type": "array",
+      "description": "Individual line items on the invoice",
+      "items": {
+        "description": {
+          "type": "string",
+          "description": "Description of work or item"
+        },
+        "quantity": {
+          "type": "number",
+          "description": "Quantity, or null"
+        },
+        "unit_price": {
+          "type": "number",
+          "description": "Per-unit price, or null"
+        },
+        "amount": {
+          "type": "number",
+          "description": "Line total"
+        }
+      }
+    }
+  }
+}

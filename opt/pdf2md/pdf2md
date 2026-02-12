@@ -2,6 +2,9 @@
 #
 # pdf2md - PDF to Markdown converter
 #
+# Converts PDF files to clean markdown using pdfplumber.
+# Manages a Python venv at lib/.venv/ for dependencies.
+#
 
 set -euo pipefail
 
@@ -19,34 +22,65 @@ if [[ "$(type -t info 2>/dev/null)" != "function" ]]; then
 fi
 
 # ============================================================================
+# CONFIGURATION
+# ============================================================================
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+LIB_DIR="$SCRIPT_DIR/lib"
+VENV_DIR="$LIB_DIR/.venv"
+REQUIREMENTS="$LIB_DIR/requirements.txt"
+
+# ============================================================================
 # USAGE
 # ============================================================================
 
 usage() {
     cat <<EOF
-Usage: pdf2md [OPTIONS] [ARGS]
+Usage: pdf2md <file> [OPTIONS]
 
 PDF to Markdown converter
 
+ARGUMENTS:
+  file                     Path to PDF file
+
 OPTIONS:
+  -o, --output <file>      Write to file instead of stdout
+  --pages <range>          Page range (e.g., "1-5", "3,7,10-12")
+  --verbose                Show progress to stderr
   -h, --help               Show this help
   --version                Show version
 
 EXAMPLES:
-  pdf2md --help
-  pdf2md --version
+  pdf2md invoice.pdf
+  pdf2md invoice.pdf -o invoice.md
+  pdf2md large.pdf --pages 1-5
+  pdf2md invoice.pdf | grep "Total"
 
 For detailed help, run: utilz help pdf2md
 EOF
 }
 
 # ============================================================================
+# VENV MANAGEMENT
+# ============================================================================
+
+ensure_venv() {
+    if [[ ! -d "$VENV_DIR" ]]; then
+        info "Creating Python virtual environment..."
+        python3 -m venv "$VENV_DIR"
+        info "Installing dependencies..."
+        "$VENV_DIR/bin/pip" install --quiet -r "$REQUIREMENTS"
+        success "Virtual environment ready"
+    fi
+}
+
+# ============================================================================
 # MAIN
 # ============================================================================
 
-# Parse arguments
-while [[ $# -gt 0 ]]; do
-    case "$1" in
+# Fast path: --help and --version before any venv/python checks
+for arg in "$@"; do
+    case "$arg" in
         -h|--help)
             usage
             exit 0
@@ -55,15 +89,18 @@ while [[ $# -gt 0 ]]; do
             show_version "pdf2md"
             exit 0
             ;;
-        *)
-            error "Unknown option: $1"
-            echo ""
-            usage
-            exit 1
-            ;;
     esac
 done
 
-# Your implementation here
-info "pdf2md is working!"
-success "Implementation goes here"
+# Check python3 is available
+if ! check_command python3; then
+    error "python3 is required but not found"
+    error "Install with: brew install python3"
+    exit 1
+fi
+
+# Ensure venv exists and has dependencies
+ensure_venv
+
+# Exec into Python
+exec "$VENV_DIR/bin/python3" "$LIB_DIR/pdf2md.py" "$@"

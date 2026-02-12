@@ -5,6 +5,40 @@ All notable changes to the Utilz framework will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.0] - 2026-02-12
+
+### Added
+
+- **pdf2md** - New PDF to Markdown converter utility
+  - Converts PDF files to clean markdown using pdfplumber
+  - 7-stage pipeline: text extraction, stats, line grouping, heading detection, list detection, header/footer removal, markdown emission
+  - Heading detection via font size analysis (H1-H6 by descending unique sizes)
+  - List item detection (bullets, dashes, numbered, lettered, parenthesized)
+  - Repetitive header/footer removal (same text+Y on >50% of pages)
+  - Page range selection (`--pages 1-5,7,10-12`)
+  - File output (`-o output.md`) or stdout
+  - Verbose mode with progress to stderr
+  - Python venv auto-management at `lib/.venv/`
+  - 15 comprehensive tests
+- **xtrct** - New schema-driven semantic data extraction utility
+  - Uses Claude API to extract structured data from documents via JSON schema
+  - Descriptive schema format: `description` fields guide semantic extraction
+  - PDF input auto-converts via pdf2md
+  - Stdin support for piping
+  - Output formats: json (pretty-print), csv, table (aligned columns)
+  - Model selection (`--model`) with default claude-sonnet-4-5-20250929
+  - Verbose mode with token usage stats
+  - `ANTHROPIC_API_KEY` fail-fast check before venv creation
+  - Python venv auto-management at `lib/.venv/`
+  - 12 tests (8 tier-1 always run, 4 tier-2 require API key)
+- Composable pipeline: `pdf2md invoice.pdf | xtrct --schema invoice_schema.json`
+- Python venv pattern for utilities with Python dependencies
+- python3-venv added to CI Ubuntu dependencies
+
+### Changed
+
+- Framework version bumped to 1.3.0
+
 ## [1.2.1] - 2026-02-10
 
 ### Added

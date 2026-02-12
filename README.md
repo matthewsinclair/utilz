@@ -28,9 +28,10 @@ Utilz/
 │   ├── utilz                 # Dispatcher script
 │   ├── cleanz -> utilz       # Utility symlinks...
 │   ├── clipz -> utilz
-│   ├── ...                   # (8 utilities total)
-│   ├── retry -> utilz
-│   └── syncz -> utilz
+│   ├── pdf2md -> utilz
+│   ├── ...                   # (10 utilities total)
+│   ├── syncz -> utilz
+│   └── xtrct -> utilz
 ├── opt/
 │   ├── utilz/
 │   │   ├── lib/
@@ -197,6 +198,7 @@ See `utilz help macoz` for details.
 
 Markdown aggregator for concatenating multiple markdown files into a single document. Useful for assembling multi-file documents into PDFs.
 
+
 ```bash
 # Using YAML config
 mdagg assembly.yaml -o output.md
@@ -209,6 +211,26 @@ find docs -name "*.md" | sort | mdagg --stdin -o docs.md
 ```
 
 See `utilz help mdagg` for details.
+
+### pdf2md
+
+PDF to Markdown converter using pdfplumber. Detects headings, list items, and paragraph structure from font metadata. Composes with `xtrct` for semantic data extraction.
+
+```bash
+# Convert PDF to stdout
+pdf2md invoice.pdf
+
+# Save to file
+pdf2md invoice.pdf -o invoice.md
+
+# Specific pages
+pdf2md large.pdf --pages 1-5
+
+# Pipeline with xtrct
+pdf2md invoice.pdf | xtrct --schema invoice_schema.json
+```
+
+See `utilz help pdf2md` for details.
 
 ### retry
 
@@ -252,6 +274,24 @@ syncz --bidi --delete ~/dir1 ~/dir2
 ```
 
 See `utilz help syncz` for details.
+
+### xtrct
+
+Schema-driven semantic data extraction using Claude API. Takes a document and a JSON schema template, then extracts structured data as JSON. Works with any document type.
+
+```bash
+# Extract from markdown
+xtrct invoice.md --schema invoice_schema.json
+
+# Extract from PDF (auto-converts via pdf2md)
+xtrct invoice.pdf --schema invoice_schema.json
+
+# Different output formats
+xtrct doc.md --schema schema.json --format csv
+xtrct doc.md --schema schema.json --format table
+```
+
+Requires `ANTHROPIC_API_KEY` environment variable. See `utilz help xtrct` for details.
 
 ## Creating a New Utility
 

@@ -7,7 +7,7 @@
 
 ## Overview
 
-Schema-driven semantic data extraction
+Schema-driven semantic data extraction using Claude API. Takes a document and a JSON schema template, then uses Claude to semantically extract structured data as JSON. Works with any document type — you just write a different schema.
 
 ---
 
@@ -20,12 +20,16 @@ cd $UTILZ_HOME/bin
 ln -s utilz xtrct
 ```
 
+On first run, xtrct automatically creates a Python venv at `lib/.venv/` and installs the anthropic SDK.
+
+Requires `ANTHROPIC_API_KEY` environment variable.
+
 ---
 
 ## Usage
 
 ```bash
-xtrct [OPTIONS] [ARGS]
+xtrct <file> --schema <schema-file> [OPTIONS]
 ```
 
 For detailed help: `utilz help xtrct`
@@ -35,11 +39,18 @@ For detailed help: `utilz help xtrct`
 ## Examples
 
 ```bash
-# Show help
-xtrct --help
+# Extract from markdown
+xtrct invoice.md --schema invoice_schema.json
 
-# Show version
-xtrct --version
+# Extract from PDF (auto-converts via pdf2md)
+xtrct invoice.pdf --schema invoice_schema.json
+
+# Pipe from pdf2md
+pdf2md invoice.pdf | xtrct --schema invoice_schema.json
+
+# Different output formats
+xtrct invoice.md --schema schema.json --format csv
+xtrct invoice.md --schema schema.json --format table
 ```
 
 ---
@@ -50,43 +61,43 @@ xtrct --version
 
 ```
 xtrct
-├── Invoked via: $UTILZ_HOME/bin/xtrct (symlink)
-├── Dispatched by: $UTILZ_HOME/bin/utilz
-├── Has access to: $UTILZ_HOME/opt/utilz/lib/common.sh
-└── Help from: $UTILZ_HOME/help/xtrct.md
+├── Bash wrapper: opt/xtrct/xtrct
+│   ├── Sources common.sh
+│   ├── Checks ANTHROPIC_API_KEY
+│   ├── Checks pdf2md for .pdf input
+│   ├── Manages venv at lib/.venv/
+│   └── Execs into Python engine
+├── Python engine: opt/xtrct/lib/xtrct.py
+│   ├── anthropic SDK for Claude API
+│   ├── JSON schema-driven prompt construction
+│   └── json/csv/table output formatting
+├── Dependencies: opt/xtrct/lib/requirements.txt
+├── Help from: help/xtrct.md
+└── Symlink: bin/xtrct → utilz
 ```
 
 ### Dependencies
 
 **Required:**
-- Bash 4.0+ or Zsh
+- python3
+- anthropic SDK (auto-installed in venv)
+- `ANTHROPIC_API_KEY` environment variable
 
 **Optional:**
-- None
+- pdf2md (for .pdf input)
 
 ---
 
 ## Testing
 
 ```bash
-# Run tests
+# Run tests (tier 1 always passes, tier 2 requires API key)
 utilz test xtrct
 
 # Run tests directly
 cd opt/xtrct/test
 bats xtrct.bats
 ```
-
----
-
-## Development
-
-### Making Changes
-
-1. Edit `/Users/matts/Devel/prj/Utilz/opt/xtrct/xtrct`
-2. Test changes: `xtrct --help`
-3. Run tests: `utilz test xtrct`
-4. Update help if needed: `/Users/matts/Devel/prj/Utilz/help/xtrct.md`
 
 ---
 
@@ -101,3 +112,4 @@ Copyright (c) 2026 Matthew Sinclair
 
 - [Utilz Framework Documentation](../../README.md)
 - [xtrct Help](../../help/xtrct.md) - Run: `utilz help xtrct`
+- [pdf2md](../pdf2md/README.md) - PDF to Markdown converter (composes with xtrct)

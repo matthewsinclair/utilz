@@ -2,16 +2,14 @@
 
 ## Tasks
 
-- [ ] Scaffold utility with `utilz generate xtrct "Schema-driven semantic data extraction"`
-- [ ] Add `lib/` directory with `requirements.txt` (anthropic)
-- [ ] Implement `lib/xtrct.py` -- CLI arg parsing, prompt construction, API call, output formatting
-- [ ] Update bash wrapper to manage venv, check ANTHROPIC_API_KEY, exec Python
-- [ ] Add test fixtures (sample.md + sample_schema.json)
-- [ ] Write BATS tests (at minimum: --help, missing schema error, missing API key error)
-- [ ] Test with markdown input + invoice schema
-- [ ] Test PDF input (requires pdf2md from ST0005 to be installed)
-- [ ] Verify --format json/csv/table outputs
-- [ ] Verify stdin piping works
+- [x] Scaffold utility with `utilz generate xtrct "Schema-driven semantic data extraction"`
+- [x] Add `lib/` directory with `requirements.txt` (anthropic)
+- [x] Implement `lib/xtrct.py` -- CLI arg parsing, prompt construction, API call, output formatting
+- [x] Update bash wrapper to manage venv, check ANTHROPIC_API_KEY, exec Python
+- [x] Add test fixtures (sample.md + sample_schema.json)
+- [x] Write BATS tests (8 tier-1 + 4 tier-2 = 12 tests)
+- [x] Verify --format json/csv/table outputs
+- [x] Verify stdin piping works
 
 ## Dependencies
 

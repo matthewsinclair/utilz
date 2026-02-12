@@ -2,6 +2,9 @@
 #
 # xtrct - Schema-driven semantic data extraction
 #
+# Uses Claude API to semantically extract structured data from documents
+# according to a JSON schema template. Manages a Python venv at lib/.venv/.
+#
 
 set -euo pipefail
 
@@ -19,34 +22,72 @@ if [[ "$(type -t info 2>/dev/null)" != "function" ]]; then
 fi
 
 # ============================================================================
+# CONFIGURATION
+# ============================================================================
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+LIB_DIR="$SCRIPT_DIR/lib"
+VENV_DIR="$LIB_DIR/.venv"
+REQUIREMENTS="$LIB_DIR/requirements.txt"
+
+# ============================================================================
 # USAGE
 # ============================================================================
 
 usage() {
     cat <<EOF
-Usage: xtrct [OPTIONS] [ARGS]
+Usage: xtrct <file> --schema <schema-file> [OPTIONS]
 
-Schema-driven semantic data extraction
+Schema-driven semantic data extraction using Claude API
+
+ARGUMENTS:
+  file                     Path to input document (.md, .txt, or .pdf)
+                           Reads from stdin if no file given
+
+REQUIRED:
+  --schema <file>          JSON schema template describing what to extract
 
 OPTIONS:
+  --format <fmt>           Output format: json (default), csv, table
+  --model <model>          Claude model (default: claude-sonnet-4-5-20250929)
+  --verbose                Show progress and token usage to stderr
   -h, --help               Show this help
   --version                Show version
 
+ENVIRONMENT:
+  ANTHROPIC_API_KEY        Required. Your Anthropic API key
+
 EXAMPLES:
-  xtrct --help
-  xtrct --version
+  xtrct invoice.md --schema invoice_schema.json
+  xtrct invoice.pdf --schema schema.json
+  pdf2md invoice.pdf | xtrct --schema schema.json
+  xtrct doc.md --schema schema.json --format table
 
 For detailed help, run: utilz help xtrct
 EOF
 }
 
 # ============================================================================
+# VENV MANAGEMENT
+# ============================================================================
+
+ensure_venv() {
+    if [[ ! -d "$VENV_DIR" ]]; then
+        info "Creating Python virtual environment..."
+        python3 -m venv "$VENV_DIR"
+        info "Installing dependencies..."
+        "$VENV_DIR/bin/pip" install --quiet -r "$REQUIREMENTS"
+        success "Virtual environment ready"
+    fi
+}
+
+# ============================================================================
 # MAIN
 # ============================================================================
 
-# Parse arguments
-while [[ $# -gt 0 ]]; do
-    case "$1" in
+# Fast path: --help and --version before any venv/python/API key checks
+for arg in "$@"; do
+    case "$arg" in
         -h|--help)
             usage
             exit 0
@@ -55,15 +96,42 @@ while [[ $# -gt 0 ]]; do
             show_version "xtrct"
             exit 0
             ;;
-        *)
-            error "Unknown option: $1"
-            echo ""
-            usage
-            exit 1
+    esac
+done
+
+# Check ANTHROPIC_API_KEY is set (fail-fast before venv creation)
+if [[ -z "${ANTHROPIC_API_KEY:-}" ]]; then
+    error "ANTHROPIC_API_KEY environment variable is not set"
+    error "Get your API key from: https://console.anthropic.com/"
+    exit 1
+fi
+
+# Check if any argument is a .pdf file — if so, require pdf2md
+for arg in "$@"; do
+    case "$arg" in
+        *.pdf)
+            if ! command -v pdf2md >/dev/null 2>&1; then
+                error "pdf2md is required to process PDF files but was not found"
+                error "Ensure pdf2md is installed and in your PATH"
+                exit 1
+            fi
+            break
             ;;
     esac
 done
 
-# Your implementation here
-info "xtrct is working!"
-success "Implementation goes here"
+# Check python3 is available
+if ! check_command python3; then
+    error "python3 is required but not found"
+    error "Install with: brew install python3"
+    exit 1
+fi
+
+# Ensure venv exists and has dependencies
+ensure_venv
+
+# Export UTILZ_HOME so Python can locate pdf2md binary
+export UTILZ_HOME
+
+# Exec into Python
+exec "$VENV_DIR/bin/python3" "$LIB_DIR/xtrct.py" "$@"
