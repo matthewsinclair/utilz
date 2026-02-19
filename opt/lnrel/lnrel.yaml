@@ -1,0 +1,6 @@
+name: lnrel
+version: 1.0.0
+utilz_version: "^1.0.0"
+description: Create symlinks with relative paths
+author: Matthew Sinclair
+dependencies: []

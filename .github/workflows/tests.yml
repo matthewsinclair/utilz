@@ -54,7 +54,7 @@ jobs:
     - name: Run tests (excluding platform-specific utilities)
       run: |
         # Run all tests except macoz (macOS-only) and clipz (clipboard unreliable in CI)
-        for utility in utilz cryptz gitz mdagg retry syncz pdf2md xtrct; do
+        for utility in utilz cryptz gitz mdagg retry syncz pdf2md xtrct lnrel; do
           echo "Testing: $utility"
           utilz test $utility || exit 1
         done
@@ -79,7 +79,7 @@ jobs:
     - name: Install dependencies
       run: |
         # Install yq for YAML parsing and fileicon for macOS folder icons
-        brew install yq fileicon
+        brew install yq fileicon coreutils
         yq --version
         fileicon --version || echo "fileicon installed"
 
