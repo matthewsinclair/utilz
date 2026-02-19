@@ -1,6 +1,6 @@
 # Utilz - Universal Utilities Framework
 
-**Version**: 1.2.0
+**Version**: 1.3.1
 **Author**: Matthew Sinclair
 **Location**: `$UTILZ_HOME` (typically `~/Devel/prj/Utilz`)
 
@@ -338,6 +338,11 @@ This will identify and suggest fixes for common configuration issues.
 ## Installed Utilities
 
 Run `utilz list` to see all installed utilities, or check the list below:
+
+### lnrel - Relative Symlink Creator
+Creates symlinks with relative paths. Portable symlinks that survive directory tree moves.
+
+See `utilz help lnrel` for details.
 
 ### mdagg - Markdown Aggregator
 Concatenates multiple markdown files into a single document for PDF generation.

@@ -29,7 +29,8 @@ Utilz/
 │   ├── cleanz -> utilz       # Utility symlinks...
 │   ├── clipz -> utilz
 │   ├── pdf2md -> utilz
-│   ├── ...                   # (10 utilities total)
+│   ├── lnrel -> utilz
+│   ├── ...                   # (11 utilities total)
 │   ├── syncz -> utilz
 │   └── xtrct -> utilz
 ├── opt/
@@ -173,6 +174,23 @@ gitz status-all ~/Projects
 ```
 
 See `utilz help gitz` for details.
+
+### lnrel
+
+Create symlinks with relative paths. Computes the relative path from link directory to target using GNU `realpath`, then creates the symlink. Portable symlinks that survive directory tree moves.
+
+```bash
+# Link to a file (creates ./file.txt in cwd)
+lnrel /path/to/file.txt
+
+# Explicit link name
+lnrel ../shared/config.yaml config.yaml
+
+# Cross-directory
+lnrel /opt/data/db.sqlite ./data/db.sqlite
+```
+
+Requires GNU coreutils on macOS (`brew install coreutils`). See `utilz help lnrel` for details.
 
 ### macoz
 
