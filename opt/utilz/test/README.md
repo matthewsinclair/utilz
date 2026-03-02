@@ -5,6 +5,7 @@ Comprehensive test suite for the Utilz framework and all its utilities.
 ## Overview
 
 The Utilz test system uses **BATS (Bash Automated Testing System)** to provide thorough test coverage of:
+
 - Core framework functionality (dispatcher, common library)
 - Individual utilities (mdagg, etc.)
 - Integration workflows
@@ -12,6 +13,7 @@ The Utilz test system uses **BATS (Bash Automated Testing System)** to provide t
 ### Test Organization
 
 Tests are organized by utility:
+
 ```
 opt/
 ├── utilz/
@@ -61,6 +63,7 @@ utilz test
 ```
 
 This runs tests for:
+
 - Core framework (utilz)
 - All installed utilities (mdagg, etc.)
 
@@ -92,7 +95,9 @@ bats -t opt/utilz/test/dispatcher.bats
 ### Core Framework Tests (opt/utilz/test/)
 
 #### dispatcher.bats (21 tests)
+
 Tests the main dispatcher (`bin/utilz`):
+
 - UTILZ_HOME detection from script location
 - Built-in commands (help, doctor, list, test, version)
 - Symlink dispatch mechanism
@@ -100,7 +105,9 @@ Tests the main dispatcher (`bin/utilz`):
 - Argument passing to utilities
 
 #### common_lib.bats (25 tests)
+
 Tests shared library functions (`opt/utilz/lib/common.sh`):
+
 - Logging functions (info, success, warn, error, debug)
 - Help rendering (show_help)
 - Version extraction (show_version)
@@ -110,16 +117,20 @@ Tests shared library functions (`opt/utilz/lib/common.sh`):
 - Doctor diagnostics (run_doctor)
 
 #### integration.bats (6 tests)
+
 End-to-end workflow tests:
+
 - Complete user workflows
 - Creating and using test utilities
 - Error recovery scenarios
 - Multi-step operations
 
-### Utility Tests (opt/*/test/)
+### Utility Tests (opt/\*/test/)
 
 #### mdagg.bats (31 tests)
+
 Tests mdagg utility functionality:
+
 - Basic invocation (--help, --version)
 - Glob mode (pattern matching, natural sorting)
 - YAML config mode (settings, file ordering)
@@ -133,17 +144,20 @@ Tests mdagg utility functionality:
 The `test_helper.bash` file provides common functions for all tests:
 
 ### Setup/Teardown
+
 - `setup_file()` - Runs once per test file
 - `teardown_file()` - Cleanup after all tests in file
 - `setup()` - Runs before each test (creates temp dir)
 - `teardown()` - Cleanup after each test
 
 ### Execution Helpers
+
 - `run_utilz <args>` - Run utilz command
 - `run_utility <name> <args>` - Run specific utility
 - `run_mdagg <args>` - Run mdagg utility
 
 ### Test Data Creation
+
 - `create_test_utility(name)` - Create minimal test utility
 - `create_markdown_files(count)` - Generate test markdown files
 - `create_numbered_markdown_files()` - Generate 01, 02, 10 for sort testing
@@ -152,6 +166,7 @@ The `test_helper.bash` file provides common functions for all tests:
 - `create_mdagg_yaml_config(file)` - Create sample YAML config
 
 ### Assertions
+
 - `assert_success()` - Check command succeeded (exit 0)
 - `assert_failure()` - Check command failed (non-zero exit)
 - `assert_exit_code(N)` - Check specific exit code
@@ -168,6 +183,7 @@ The `test_helper.bash` file provides common functions for all tests:
 - `fail(message)` - Explicit test failure
 
 ### Utilities
+
 - `get_utilz_version()` - Extract version from help file
 - `command_exists(cmd)` - Check if command is installed
 - `require_command(cmd, msg)` - Skip test if command missing
@@ -231,17 +247,21 @@ setup() {
 ## Best Practices
 
 ### 1. Test Isolation
+
 - Each test runs in a fresh temporary directory
 - Don't rely on state from previous tests
 - Clean up any modifications to the Utilz project
 
 ### 2. Clear Test Names
+
 Use descriptive test names that explain what's being tested:
+
 ```bash
 @test "mdagg glob mode: processes files in natural sort order"
 ```
 
 ### 3. Arrange-Act-Assert Pattern
+
 ```bash
 @test "example" {
     # Arrange - set up test conditions
@@ -257,13 +277,16 @@ Use descriptive test names that explain what's being tested:
 ```
 
 ### 4. Test Both Success and Failure
+
 ```bash
 @test "success case: valid input processes correctly" { ... }
 @test "failure case: invalid input shows error" { ... }
 ```
 
 ### 5. Use Helper Functions
+
 Leverage test_helper.bash functions to keep tests readable:
+
 ```bash
 # Good
 create_markdown_files 3
@@ -279,6 +302,7 @@ if [[ "$output" != *"Test File 1"* ]]; then fail; fi
 ```
 
 ### 6. Handle Optional Dependencies
+
 ```bash
 @test "feature requiring yq" {
     require_command yq  # Automatically skips if not installed
@@ -325,6 +349,7 @@ bats opt/utilz/test/dispatcher.bats
 ### Inspect Test Directory
 
 Temporarily disable cleanup to inspect test directory:
+
 ```bash
 @test "example" {
     create_markdown_files 3
@@ -383,19 +408,20 @@ utilz test myutil
 
 Current test coverage:
 
-| Component | Test File | Test Count | Status |
-|-----------|-----------|------------|--------|
-| Dispatcher | dispatcher.bats | 21 | ✓ |
-| Common Library | common_lib.bats | 25 | ✓ |
-| Integration | integration.bats | 6 | ✓ |
-| mdagg Utility | mdagg.bats | 31 | ✓ |
-| **Total** | | **83** | **✓** |
+| Component      | Test File        | Test Count | Status |
+| -------------- | ---------------- | ---------- | ------ |
+| Dispatcher     | dispatcher.bats  | 21         | ✓      |
+| Common Library | common_lib.bats  | 25         | ✓      |
+| Integration    | integration.bats | 6          | ✓      |
+| mdagg Utility  | mdagg.bats       | 31         | ✓      |
+| **Total**      |                  | **83**     | **✓**  |
 
 ## Continuous Integration
 
 ### Local Pre-commit
 
 Run tests before committing:
+
 ```bash
 utilz test && git commit -m "message"
 ```
@@ -426,6 +452,7 @@ jobs:
 ### "bats: command not found"
 
 Install BATS:
+
 ```bash
 brew install bats-core
 ```
@@ -433,6 +460,7 @@ brew install bats-core
 ### Tests fail with "Permission denied"
 
 Ensure scripts are executable:
+
 ```bash
 chmod +x bin/utilz
 chmod +x opt/*/[utility-name]
@@ -441,6 +469,7 @@ chmod +x opt/*/[utility-name]
 ### "yq: command not found" in YAML tests
 
 Install yq:
+
 ```bash
 brew install yq
 ```
@@ -456,6 +485,7 @@ Or tests requiring yq will be automatically skipped.
 ### Strange PATH issues
 
 Tests set PATH to include UTILZ_HOME/bin:
+
 ```bash
 export PATH="$UTILZ_BIN_DIR:$PATH"
 ```
@@ -472,6 +502,7 @@ If issues persist, check your shell config for conflicting PATH modifications.
 ## Contributing
 
 When adding tests:
+
 1. Follow existing patterns and conventions
 2. Use descriptive test names
 3. Keep tests focused (one assertion per test when possible)

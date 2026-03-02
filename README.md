@@ -216,7 +216,6 @@ See `utilz help macoz` for details.
 
 Markdown aggregator for concatenating multiple markdown files into a single document. Useful for assembling multi-file documents into PDFs.
 
-
 ```bash
 # Using YAML config
 mdagg assembly.yaml -o output.md
@@ -399,7 +398,7 @@ version_file: ../../VERSION
 
 ```yaml
 version: 1.0.0
-utilz_version: "^1.0.0"  # Compatible framework versions
+utilz_version: "^1.0.0" # Compatible framework versions
 ```
 
 ## Requirements

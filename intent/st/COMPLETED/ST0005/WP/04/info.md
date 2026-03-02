@@ -19,6 +19,7 @@ Generate a deterministic test PDF fixture and write comprehensive BATS tests (~1
 ## Test Tiers
 
 ### Always run (no python3 required)
+
 - `--help` shows help
 - `--version` shows version
 - Unknown option shows error
@@ -27,6 +28,7 @@ Generate a deterministic test PDF fixture and write comprehensive BATS tests (~1
 - Non-PDF file shows error
 
 ### Require python3
+
 - Converts sample PDF to markdown
 - `-o` writes output file
 - Detects headings in output

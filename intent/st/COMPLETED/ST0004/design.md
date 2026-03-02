@@ -3,6 +3,7 @@
 ## Approach
 
 Build a thin Python CLI that:
+
 1. Reads a document (markdown/text from file or stdin; PDF via pdf2md)
 2. Reads a JSON schema template
 3. Constructs a prompt with schema + document content
@@ -73,6 +74,7 @@ Output in requested format:
 ### Prompt Design
 
 System prompt:
+
 ```
 You are a precise document data extractor. Given a document and a schema,
 extract the requested data and return it as JSON. Only include data that
@@ -81,6 +83,7 @@ be determined. Do not invent or hallucinate data.
 ```
 
 User message:
+
 ```
 ## Schema
 
@@ -96,16 +99,19 @@ Extract the data according to the schema above. Return only valid JSON.
 ## Alternatives Considered
 
 ### Using OpenAI API instead
+
 - Claude is better at structured extraction and following schemas
 - We already have ANTHROPIC_API_KEY in the environment
 - Consistent with the rest of the tooling
 
 ### Building extraction rules (regex/position-based)
+
 - Brittle -- breaks when document format changes
 - Requires per-document-type rule writing
 - Claude handles format variation naturally
 
 ### Using function calling / tool_use for structured output
+
 - Could use Claude's tool_use feature to enforce JSON schema
 - Adds complexity, and simple prompting works well for this use case
 - Worth revisiting if output quality is inconsistent

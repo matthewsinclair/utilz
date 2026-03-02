@@ -23,7 +23,7 @@ gitz <command> [args]
 
 Git multi-repository operations - recursively find and check git repositories.
 
-Excludes repositories with '_' or '.work' in their path.
+Excludes repositories with '\_' or '.work' in their path.
 
 ---
 

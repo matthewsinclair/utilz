@@ -1,10 +1,11 @@
 ---
 verblock: "12 Feb 2026:v0.1: matts - Initial version"
 intent_version: 2.2.0
-status: WIP
+status: Completed
 created: 20260212
 completed:
 ---
+
 # ST0005: pdf2md - PDF to Markdown Converter
 
 ## Objective

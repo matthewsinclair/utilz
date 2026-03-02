@@ -12,6 +12,7 @@ Write comprehensive BATS tests (~12 tests) in two tiers: tier 1 always runs (no 
 ## Test Tiers
 
 ### Tier 1 (always run)
+
 - `--help` shows help
 - `--version` shows version
 - Unknown option shows error
@@ -22,6 +23,7 @@ Write comprehensive BATS tests (~12 tests) in two tiers: tier 1 always runs (no 
 - `.pdf` input without pdf2md available shows error
 
 ### Tier 2 (skip without API key)
+
 - Extract from sample.md produces valid JSON
 - `--format csv` produces CSV output
 - `--format table` produces table output

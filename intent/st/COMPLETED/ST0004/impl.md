@@ -24,13 +24,14 @@ result = message.content[0].text
 ### JSON extraction from response
 
 Claude may wrap JSON in markdown code fences. Strip them before parsing:
-```python
+
+````python
 text = result.strip()
 if text.startswith("```"):
     text = text.split("\n", 1)[1]  # remove first line
     text = text.rsplit("```", 1)[0]  # remove last fence
 json.loads(text)
-```
+````
 
 ### CSV output for nested data
 

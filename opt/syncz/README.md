@@ -77,19 +77,19 @@ syncz
 
 ### Key Functions
 
-| Function             | Purpose                                        |
-|----------------------|------------------------------------------------|
-| `resolve_path()`    | Resolve directory to absolute path              |
-| `validate_inputs()` | Check dirs exist, not same, options valid       |
-| `build_rsync_args()` | Construct rsync flag array from options        |
-| `generate_summary()` | Run dry-run rsync, parse stats for summary     |
-| `prompt_yna()`      | Y/N/A prompt helper with CONFIRM_ALL state      |
-| `prompt_yn()`       | Simple Y/N prompt for --just-do-it              |
-| `execute_delete()`  | Delete-only rsync pass for --confirm mode       |
-| `execute_sync()`    | Run rsync with built args                       |
-| `detect_orphans()`  | Find files on only one side using find + comm   |
-| `resolve_orphans()` | Delete, prompt, or skip orphaned files          |
-| `execute_bidi()`    | Orchestrate bidi: orphans → pass 1 → pass 2     |
+| Function             | Purpose                                       |
+| -------------------- | --------------------------------------------- |
+| `resolve_path()`     | Resolve directory to absolute path            |
+| `validate_inputs()`  | Check dirs exist, not same, options valid     |
+| `build_rsync_args()` | Construct rsync flag array from options       |
+| `generate_summary()` | Run dry-run rsync, parse stats for summary    |
+| `prompt_yna()`       | Y/N/A prompt helper with CONFIRM_ALL state    |
+| `prompt_yn()`        | Simple Y/N prompt for --just-do-it            |
+| `execute_delete()`   | Delete-only rsync pass for --confirm mode     |
+| `execute_sync()`     | Run rsync with built args                     |
+| `detect_orphans()`   | Find files on only one side using find + comm |
+| `resolve_orphans()`  | Delete, prompt, or skip orphaned files        |
+| `execute_bidi()`     | Orchestrate bidi: orphans → pass 1 → pass 2   |
 
 ### Dependencies
 

@@ -67,15 +67,18 @@ Emit markdown:
 ## Alternatives Considered
 
 ### Using PyMuPDF (fitz)
+
 - More feature-rich but larger dependency
 - Has C extensions that can complicate venv setup
 - More than we need for text extraction
 
 ### Using pdfminer.six directly
+
 - Lower-level API, more code to write
 - `pdfplumber` is built on top of it and provides a cleaner interface
 
 ### Using an ML-based approach (e.g., nougat, marker)
+
 - Much heavier dependencies (PyTorch, etc.)
 - Overkill for structured invoices where text is already machine-readable
 - Would make the utility slow and hard to install

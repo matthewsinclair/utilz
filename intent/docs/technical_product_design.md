@@ -1,6 +1,7 @@
 ---
 verblock: "2025-12-28:v0.1: matts - Initial version"
 ---
+
 # Technical Product Design - Utilz
 
 ## Preamble to Claude

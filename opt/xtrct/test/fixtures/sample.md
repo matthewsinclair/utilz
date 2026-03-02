@@ -20,11 +20,11 @@ Rothbury NSW 2320
 
 ## Line Items
 
-| Description                          | Qty | Unit Price | Amount     |
-|--------------------------------------|-----|------------|------------|
-| Electrical wiring - kitchen          |   1 |     850.00 |     850.00 |
-| LED downlight supply and install     |   6 |      45.50 |     273.00 |
-| Switchboard upgrade                  |   1 |     272.85 |     272.85 |
+| Description                      | Qty | Unit Price | Amount |
+| -------------------------------- | --- | ---------- | ------ |
+| Electrical wiring - kitchen      | 1   | 850.00     | 850.00 |
+| LED downlight supply and install | 6   | 45.50      | 273.00 |
+| Switchboard upgrade              | 1   | 272.85     | 272.85 |
 
 ---
 

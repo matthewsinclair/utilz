@@ -72,9 +72,11 @@ lnrel
 ### Dependencies
 
 **Required:**
+
 - GNU coreutils `realpath` (with `-m` and `--relative-to` support)
 
 **Platform:**
+
 - Linux: built-in (`realpath` from coreutils)
 - macOS: `brew install coreutils` (provides `grealpath`)
 

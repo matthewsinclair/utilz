@@ -40,7 +40,7 @@ cleanz [options] [file]
 ### Unicode Control Characters
 
 | Code      | Name                   | Action                 |
-|-----------|------------------------|------------------------|
+| --------- | ---------------------- | ---------------------- |
 | U+200B    | Zero-width space       | Remove                 |
 | U+200C    | Zero-width non-joiner  | Remove                 |
 | U+200D    | Zero-width joiner      | Remove                 |
@@ -73,6 +73,7 @@ cleanz [options] [file]
 ### Image Mode (--image)
 
 With `--image` flag, handles C2PA (Content Credentials) metadata from AI-generated images:
+
 - C2PA content credentials manifest
 - AI generation provenance data
 - Creator/credit metadata from DALL-E, ChatGPT, Sora, Midjourney
@@ -134,6 +135,7 @@ cleanz (~690 lines)
 ### Unicode Handling
 
 All Unicode characters defined as bash variables using printf:
+
 ```bash
 ZWSP=$(printf '\xe2\x80\x8b')     # U+200B Zero-width space
 NBSP=$(printf '\xc2\xa0')         # U+00A0 Non-breaking space
@@ -142,6 +144,7 @@ NBSP=$(printf '\xc2\xa0')         # U+00A0 Non-breaking space
 ### String Replacement
 
 Uses bash parameter expansion instead of sed:
+
 ```bash
 text="${text//$ZWSP/}"            # Remove
 text="${text//$NBSP/ }"           # Convert to space

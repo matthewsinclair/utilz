@@ -35,7 +35,7 @@ On first run, xtrct automatically creates a Python virtual environment at `lib/.
 ## Options
 
 | Flag              | Short | Description                                       |
-|-------------------|-------|---------------------------------------------------|
+| ----------------- | ----- | ------------------------------------------------- |
 | `--schema <file>` |       | JSON schema template (required)                   |
 | `--format <fmt>`  |       | Output format: json (default), csv, table         |
 | `--model <model>` |       | Claude model (default: claude-haiku-4-5-20251001) |
@@ -61,7 +61,7 @@ The schema is a JSON file describing what data to extract:
       "type": "array",
       "description": "What these items represent",
       "items": {
-        "sub_field": {"type": "string", "description": "..."}
+        "sub_field": { "type": "string", "description": "..." }
       }
     }
   }
@@ -71,7 +71,7 @@ The schema is a JSON file describing what data to extract:
 ### Field Types
 
 | Type      | Description                               |
-|-----------|-------------------------------------------|
+| --------- | ----------------------------------------- |
 | `string`  | Text value                                |
 | `number`  | Numeric value (integers or decimals)      |
 | `boolean` | True/false value                          |
@@ -166,21 +166,39 @@ pdf2md invoice.pdf --pages 1-3 | xtrct --schema schema.json
 {
   "description": "Australian trade invoice",
   "fields": {
-    "supplier_name": {"type": "string", "description": "Business name of the supplier"},
-    "supplier_abn": {"type": "string", "description": "Australian Business Number (11 digits)"},
-    "invoice_number": {"type": "string", "description": "Invoice or reference number"},
-    "invoice_date": {"type": "string", "description": "Invoice date as YYYY-MM-DD"},
-    "subtotal": {"type": "number", "description": "Subtotal excluding GST"},
-    "gst": {"type": "number", "description": "GST amount"},
-    "total": {"type": "number", "description": "Total including GST"},
+    "supplier_name": {
+      "type": "string",
+      "description": "Business name of the supplier"
+    },
+    "supplier_abn": {
+      "type": "string",
+      "description": "Australian Business Number (11 digits)"
+    },
+    "invoice_number": {
+      "type": "string",
+      "description": "Invoice or reference number"
+    },
+    "invoice_date": {
+      "type": "string",
+      "description": "Invoice date as YYYY-MM-DD"
+    },
+    "subtotal": { "type": "number", "description": "Subtotal excluding GST" },
+    "gst": { "type": "number", "description": "GST amount" },
+    "total": { "type": "number", "description": "Total including GST" },
     "line_items": {
       "type": "array",
       "description": "Individual line items on the invoice",
       "items": {
-        "description": {"type": "string", "description": "Description of work or item"},
-        "quantity": {"type": "number", "description": "Quantity, or null"},
-        "unit_price": {"type": "number", "description": "Per-unit price, or null"},
-        "amount": {"type": "number", "description": "Line total"}
+        "description": {
+          "type": "string",
+          "description": "Description of work or item"
+        },
+        "quantity": { "type": "number", "description": "Quantity, or null" },
+        "unit_price": {
+          "type": "number",
+          "description": "Per-unit price, or null"
+        },
+        "amount": { "type": "number", "description": "Line total" }
       }
     }
   }
@@ -202,7 +220,7 @@ pdf2md invoice.pdf --pages 1-3 | xtrct --schema schema.json
 ## Environment
 
 | Variable            | Description                       |
-|---------------------|-----------------------------------|
+| ------------------- | --------------------------------- |
 | `ANTHROPIC_API_KEY` | Required. Your Anthropic API key  |
 | `UTILZ_HOME`        | Root directory of Utilz framework |
 

@@ -1,4 +1,4 @@
-# Implementation - ST0003: Add --bidi to syncz
+# Implementation - ST0006: Move syncz to use unison with rsync fallback
 
 ## Implementation
 

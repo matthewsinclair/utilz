@@ -79,11 +79,13 @@ xtrct
 ### Dependencies
 
 **Required:**
+
 - python3
 - anthropic SDK (auto-installed in venv)
 - `ANTHROPIC_API_KEY` environment variable
 
 **Optional:**
+
 - pdf2md (for .pdf input)
 
 ---

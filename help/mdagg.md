@@ -11,6 +11,7 @@
 `mdagg` (Markdown Aggregator) is a utility for concatenating multiple markdown files into a single aggregate document, typically for PDF generation or documentation assembly.
 
 It supports two modes of operation:
+
 1. **YAML-driven**: Use a YAML configuration file to specify files, order, titles, and formatting
 2. **Glob-driven**: Use shell glob patterns to quickly concatenate files (alphabetical or natural order)
 
@@ -19,7 +20,9 @@ It supports two modes of operation:
 ## Use Cases
 
 ### Primary Use Case: SOW Assembly
+
 You have a multi-file Statement of Work with 13 discrete markdown files:
+
 ```
 00-index.md
 01-executive-summary.md
@@ -29,6 +32,7 @@ You have a multi-file Statement of Work with 13 discrete markdown files:
 ```
 
 You want to:
+
 - Concatenate them in a specific order
 - Add section dividers and page breaks for PDF generation
 - Include or exclude certain files (e.g., skip the index)
@@ -36,6 +40,7 @@ You want to:
 - Output to a single file for PDF conversion
 
 ### Secondary Use Cases
+
 - Quick concatenation of all `.md` files in a directory for review
 - Assembling documentation chapters with custom ordering
 - Creating aggregate markdown for conversion to other formats (HTML, DOCX, etc.)
@@ -57,6 +62,7 @@ You want to:
 ## Command-Line Interface
 
 ### Basic Syntax
+
 ```bash
 mdagg [OPTIONS] [INPUT]
 ```
@@ -64,6 +70,7 @@ mdagg [OPTIONS] [INPUT]
 ### Input Modes
 
 **Mode 1: YAML Config File**
+
 ```bash
 mdagg config.yaml
 mdagg --config assembly.yaml
@@ -71,6 +78,7 @@ mdagg -c files.yaml -o output.md
 ```
 
 **Mode 2: Glob Pattern**
+
 ```bash
 mdagg "*.md"                    # All .md files (alphabetical)
 mdagg "0*.md"                   # All files starting with 0
@@ -78,32 +86,34 @@ mdagg --glob "chapter-*.md"     # Explicit glob mode
 ```
 
 **Mode 3: Stdin** (for piping)
+
 ```bash
 find . -name "*.md" | sort | mdagg --stdin
 ```
 
 ### Options
 
-| Option | Short | Description | Default |
-|--------|-------|-------------|---------|
-| `--config FILE` | `-c` | Path to YAML config file | Auto-detect from input |
-| `--output FILE` | `-o` | Output file (if omitted, writes to stdout) | stdout |
-| `--glob PATTERN` | `-g` | Glob pattern for files | - |
-| `--stdin` | - | Read file list from stdin (one per line) | - |
-| `--page-breaks` | `-p` | Insert page breaks between files | false |
-| `--section-dividers` | `-d` | Insert section divider pages with titles | false |
-| `--strip-front-matter` | `-s` | Strip YAML front matter from each file | false |
-| `--strip-back-links` | `-b` | Strip back navigation links (e.g., "[← Index]") | false |
-| `--working-dir DIR` | `-w` | Working directory for relative paths | current dir |
-| `--verbose` | `-v` | Verbose output (show files being processed) | false |
-| `--help` | `-h` | Show help message | - |
-| `--version` | - | Show version | - |
+| Option                 | Short | Description                                     | Default                |
+| ---------------------- | ----- | ----------------------------------------------- | ---------------------- |
+| `--config FILE`        | `-c`  | Path to YAML config file                        | Auto-detect from input |
+| `--output FILE`        | `-o`  | Output file (if omitted, writes to stdout)      | stdout                 |
+| `--glob PATTERN`       | `-g`  | Glob pattern for files                          | -                      |
+| `--stdin`              | -     | Read file list from stdin (one per line)        | -                      |
+| `--page-breaks`        | `-p`  | Insert page breaks between files                | false                  |
+| `--section-dividers`   | `-d`  | Insert section divider pages with titles        | false                  |
+| `--strip-front-matter` | `-s`  | Strip YAML front matter from each file          | false                  |
+| `--strip-back-links`   | `-b`  | Strip back navigation links (e.g., "[← Index]") | false                  |
+| `--working-dir DIR`    | `-w`  | Working directory for relative paths            | current dir            |
+| `--verbose`            | `-v`  | Verbose output (show files being processed)     | false                  |
+| `--help`               | `-h`  | Show help message                               | -                      |
+| `--version`            | -     | Show version                                    | -                      |
 
 ---
 
 ## YAML Configuration Format
 
 ### Basic Structure
+
 ```yaml
 # Assembly configuration for mdagg
 
@@ -114,17 +124,17 @@ date: "2025-01-12"
 
 # Optional: global settings
 settings:
-  page_breaks: true           # Insert page breaks between sections
-  section_dividers: true      # Insert divider pages with titles
-  strip_front_matter: false   # Remove YAML front matter from files
-  strip_back_links: true      # Remove "[← Index]" style links
-  working_dir: "."            # Base directory for relative file paths
+  page_breaks: true # Insert page breaks between sections
+  section_dividers: true # Insert divider pages with titles
+  strip_front_matter: false # Remove YAML front matter from files
+  strip_back_links: true # Remove "[← Index]" style links
+  working_dir: "." # Base directory for relative file paths
 
 # Required: list of files to concatenate
 files:
   - file: "01-executive-summary.md"
-    title: "Executive Summary"           # Optional: custom title for section divider
-    page_break: true                     # Optional: override global page_break setting
+    title: "Executive Summary" # Optional: custom title for section divider
+    page_break: true # Optional: override global page_break setting
 
   - file: "02-project-context.md"
     title: "Project Context"
@@ -139,6 +149,7 @@ files:
 ```
 
 ### Minimal Example
+
 ```yaml
 files:
   - file: "chapter1.md"
@@ -147,6 +158,7 @@ files:
 ```
 
 ### Advanced Example with Exclusions and Custom Formatting
+
 ```yaml
 settings:
   page_breaks: true
@@ -165,12 +177,12 @@ files:
 
   - file: "03-scope-of-work.md"
     title: "3. Scope of Work"
-    page_break: true           # Force page break even if global setting is false
+    page_break: true # Force page break even if global setting is false
 
   # Include a custom markdown snippet
   - file: "_custom-disclaimer.md"
-    title: null                # No title, just insert content
-    page_break: false          # No page break after this
+    title: null # No title, just insert content
+    page_break: false # No page break after this
 
   - file: "12-appendices.md"
     title: "Appendices"
@@ -181,6 +193,7 @@ files:
 ## Output Format
 
 ### Without Options (Plain Concatenation)
+
 ```markdown
 [Content of file 1]
 
@@ -190,6 +203,7 @@ files:
 ```
 
 ### With `--page-breaks`
+
 ```markdown
 [Content of file 1]
 
@@ -203,6 +217,7 @@ files:
 ```
 
 ### With `--section-dividers` (implies page breaks)
+
 ```markdown
 ---
 
@@ -228,6 +243,7 @@ files:
 ## Usage Examples
 
 ### Example 1: Quick Concatenation (No Config)
+
 ```bash
 # Concatenate all .md files alphabetically, output to stdout
 mdagg "*.md"
@@ -240,6 +256,7 @@ mdagg "*.md" -o combined.md -v
 ```
 
 **Output:**
+
 ```
 Assembling markdown files:
   Found 13 files matching "*.md"
@@ -254,6 +271,7 @@ Assembling markdown files:
 ```
 
 ### Example 2: YAML-Driven Assembly with PDF Formatting
+
 ```bash
 # Create a YAML config
 cat > sow-assembly.yaml <<EOF
@@ -280,18 +298,21 @@ pandoc vistajet-sow-complete.md -o vistajet-sow.pdf --pdf-engine=xelatex
 ```
 
 ### Example 3: Piping from Find
+
 ```bash
 # Find all markdown files, sort naturally, concatenate
 find . -name "*.md" -type f | sort -V | mdagg --stdin -o all-docs.md
 ```
 
 ### Example 4: Quick Review (Stdout to Less)
+
 ```bash
 # Quickly review all chapters in order
 mdagg "0[1-9]-*.md" | less
 ```
 
 ### Example 5: Exclude Files
+
 ```bash
 # Use YAML to explicitly exclude certain files
 cat > assembly.yaml <<EOF
@@ -310,7 +331,9 @@ mdagg assembly.yaml -o output.md
 ## File Processing Details
 
 ### Stripping Back Links
+
 When `strip_back_links: true`, remove lines matching patterns like:
+
 - `[← Index](./00-vistajet-private-dining-sow.md)`
 - `[← Back to Index](...)`
 - `[↑ Top](#)`
@@ -318,7 +341,9 @@ When `strip_back_links: true`, remove lines matching patterns like:
 Regex: `^\[←↑].*\]\(.*\)$` (lines that are purely navigation links)
 
 ### Stripping Front Matter
+
 When `strip_front_matter: true`, remove YAML front matter blocks:
+
 ```markdown
 ---
 title: "Chapter 1"
@@ -331,7 +356,9 @@ author: "Matt"
 Remove everything from first `---` to second `---` (inclusive) if it appears at the start of the file.
 
 ### Section Dividers
+
 When `section_dividers: true` and a title is provided:
+
 ```markdown
 ---
 
@@ -348,13 +375,13 @@ If no title provided, use the filename (without extension) as title.
 
 ## Exit Codes
 
-| Code | Meaning |
-|------|---------|
-| 0 | Success |
-| 1 | General error (invalid arguments, file not found) |
-| 2 | YAML parsing error |
-| 3 | File read error |
-| 4 | Output write error |
+| Code | Meaning                                           |
+| ---- | ------------------------------------------------- |
+| 0    | Success                                           |
+| 1    | General error (invalid arguments, file not found) |
+| 2    | YAML parsing error                                |
+| 3    | File read error                                   |
+| 4    | Output write error                                |
 
 ---
 

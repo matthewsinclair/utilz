@@ -1,4 +1,4 @@
-# Design - ST0003: Add --bidi to syncz
+# Design - ST0006: Move syncz to use unison with rsync fallback
 
 ## Approach
 

@@ -35,7 +35,7 @@ Four modes for handling destructive operations:
 
 ### Trailing slash normalization
 
-syncz always adds trailing slashes to source and dest paths, ensuring rsync syncs directory *contents* rather than nesting the source directory inside the destination.
+syncz always adds trailing slashes to source and dest paths, ensuring rsync syncs directory _contents_ rather than nesting the source directory inside the destination.
 
 ### Bash 3.2 compatibility
 

@@ -1,6 +1,7 @@
 ---
 verblock: "02 Mar 2026:v0.6: matts - Updated after syncz v1.4.0 safe orphan defaults"
 ---
+
 # Work In Progress
 
 ## Current Focus
@@ -50,17 +51,18 @@ No planned work. Ready for new requests.
 ## Notes
 
 The Utilz framework is stable at v1.3.2 with 11 utilities:
-- cleanz  - LLM text cleaner + C2PA image metadata (v1.1.0)
-- clipz   - Cross-platform clipboard
-- cryptz  - GPG encryption wrapper
-- gitz    - Git multi-repo operations
-- lnrel   - Portable relative symlinks
-- macoz   - macOS utilities (bg, setpicfor)
-- mdagg   - Markdown aggregator
-- pdf2md  - PDF to Markdown converter
-- retry   - Retry command utility
-- syncz   - Directory-to-directory syncer with bidi mode (v1.4.0)
-- xtrct   - Schema-driven semantic data extraction
+
+- cleanz - LLM text cleaner + C2PA image metadata (v1.1.0)
+- clipz - Cross-platform clipboard
+- cryptz - GPG encryption wrapper
+- gitz - Git multi-repo operations
+- lnrel - Portable relative symlinks
+- macoz - macOS utilities (bg, setpicfor)
+- mdagg - Markdown aggregator
+- pdf2md - PDF to Markdown converter
+- retry - Retry command utility
+- syncz - Directory-to-directory syncer with bidi mode (v1.4.0)
+- xtrct - Schema-driven semantic data extraction
 
 ## Context for LLM
 

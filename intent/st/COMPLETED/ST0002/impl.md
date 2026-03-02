@@ -8,19 +8,19 @@ syncz is implemented as a single bash script (~555 lines) at `opt/syncz/syncz` f
 
 ### Key Files
 
-| File                         | Purpose                            |
-|------------------------------|------------------------------------|
-| `opt/syncz/syncz`            | Main implementation                |
-| `opt/syncz/syncz.yaml`       | Metadata (rsync dependency)        |
-| `opt/syncz/test/syncz.bats`  | 45 BATS tests                      |
-| `opt/syncz/README.md`        | Utility README                     |
-| `help/syncz.md`              | Help file (via `utilz help syncz`) |
-| `bin/syncz -> utilz`         | Dispatcher symlink                 |
+| File                        | Purpose                            |
+| --------------------------- | ---------------------------------- |
+| `opt/syncz/syncz`           | Main implementation                |
+| `opt/syncz/syncz.yaml`      | Metadata (rsync dependency)        |
+| `opt/syncz/test/syncz.bats` | 45 BATS tests                      |
+| `opt/syncz/README.md`       | Utility README                     |
+| `help/syncz.md`             | Help file (via `utilz help syncz`) |
+| `bin/syncz -> utilz`        | Dispatcher symlink                 |
 
 ### rsync Flag Mapping
 
 | syncz mode                 | rsync flags                         | Behavior                        |
-|----------------------------|-------------------------------------|---------------------------------|
+| -------------------------- | ----------------------------------- | ------------------------------- |
 | default (no conflict flag) | `-rlptD --update`                   | Copy only where source is newer |
 | `--source-wins`            | `-rlptD` (no `--update`)            | Source always overwrites        |
 | `--dest-wins`              | `-rlptD --ignore-existing`          | Only copy new files to dest     |

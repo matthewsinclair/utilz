@@ -52,7 +52,7 @@ macOS system utilities - various macOS-specific operations.
 
 - `--all` - Batch mode: set icons for subdirectories
 - `--data-dir <dir>` - Directory to process (default: current directory)
-- `--pattern <pattern>` - Image filename pattern for --all mode (default: icon.*|folder.*)
+- `--pattern <pattern>` - Image filename pattern for --all mode (default: icon._|folder._)
 - `--dry-run` - Preview changes without applying them
 - `-v, --verbose` - Show detailed operation steps
 
@@ -104,6 +104,7 @@ macoz setpicfor --all --verbose
 ### Seasonal Selection
 
 Current season is automatically selected based on month:
+
 - **spring** (March, April, May)
 - **summer** (June, July, August)
 - **autumn** (September, October, November)
@@ -114,6 +115,7 @@ Each season has 4 wallpaper variants numbered 01-04.
 ### Folder Icon Pattern Matching
 
 When using `--all` mode, the command looks for image files in each subdirectory:
+
 - `icon.*` - Any image file named "icon" (icon.png, icon.jpg, etc.)
 - `folder.*` - Any image file named "folder"
 - `<dirname>.*` - Image file matching the directory name

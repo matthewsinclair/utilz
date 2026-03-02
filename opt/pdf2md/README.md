@@ -73,6 +73,7 @@ pdf2md
 ### Dependencies
 
 **Required:**
+
 - python3
 - pdfplumber (auto-installed in venv)
 

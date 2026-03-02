@@ -188,30 +188,30 @@ files:
 ```yaml
 # Global settings (optional)
 settings:
-  page_breaks: true           # Insert page breaks between sections
-  section_dividers: true      # Add title pages before each section
-  strip_front_matter: false   # Remove YAML front matter from files
-  strip_back_links: true      # Remove navigation links like [← Index]
-  working_dir: "."            # Base directory for relative paths
+  page_breaks: true # Insert page breaks between sections
+  section_dividers: true # Add title pages before each section
+  strip_front_matter: false # Remove YAML front matter from files
+  strip_back_links: true # Remove navigation links like [← Index]
+  working_dir: "." # Base directory for relative paths
 
 # File list (required)
 files:
   - file: "01-intro.md"
-    title: "Introduction"           # Optional: custom section title
-    page_break: true                # Optional: override global setting
+    title: "Introduction" # Optional: custom section title
+    page_break: true # Optional: override global setting
 
   - file: "02-background.md"
     title: "Background"
 
   - file: "03-analysis.md"
     title: "Analysis"
-    page_break: false               # No page break after this section
+    page_break: false # No page break after this section
 ```
 
 ### Settings Reference
 
 | Setting              | Type    | Default | Description                            |
-|----------------------|---------|---------|----------------------------------------|
+| -------------------- | ------- | ------- | -------------------------------------- |
 | `page_breaks`        | boolean | `false` | Insert page breaks between files       |
 | `section_dividers`   | boolean | `false` | Add section title pages                |
 | `strip_front_matter` | boolean | `false` | Remove YAML front matter blocks        |
@@ -221,10 +221,10 @@ files:
 ### Per-File Settings
 
 | Setting      | Type    | Default    | Description                                  |
-|--------------|---------|------------|----------------------------------------------|
-| `file`       | string  | *required* | Path to markdown file (relative or absolute) |
-| `title`      | string  | *optional* | Section title (used with `section_dividers`) |
-| `page_break` | boolean | *inherits* | Override global `page_breaks` setting        |
+| ------------ | ------- | ---------- | -------------------------------------------- |
+| `file`       | string  | _required_ | Path to markdown file (relative or absolute) |
+| `title`      | string  | _optional_ | Section title (used with `section_dividers`) |
+| `page_break` | boolean | _inherits_ | Override global `page_breaks` setting        |
 
 ---
 

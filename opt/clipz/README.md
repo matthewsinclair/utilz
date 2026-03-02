@@ -59,9 +59,11 @@ clipz
 ### Dependencies
 
 **Required:**
+
 - Bash 4.0+ or Zsh
 
 **Optional:**
+
 - None
 
 ---

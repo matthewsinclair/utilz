@@ -9,14 +9,14 @@ cleanz was implemented as a pure bash utility (~560 lines) following the Utilz d
 
 ## Key Files
 
-| File | Purpose |
-|------|---------|
-| `opt/cleanz/cleanz` | Main implementation (~560 lines) |
-| `opt/cleanz/cleanz.yaml` | Metadata (version 1.1.0) |
-| `opt/cleanz/README.md` | Utility documentation |
-| `opt/cleanz/test/cleanz.bats` | Test suite (46 tests) |
-| `help/cleanz.md` | Help documentation |
-| `bin/cleanz` | Symlink to dispatcher |
+| File                          | Purpose                          |
+| ----------------------------- | -------------------------------- |
+| `opt/cleanz/cleanz`           | Main implementation (~560 lines) |
+| `opt/cleanz/cleanz.yaml`      | Metadata (version 1.1.0)         |
+| `opt/cleanz/README.md`        | Utility documentation            |
+| `opt/cleanz/test/cleanz.bats` | Test suite (46 tests)            |
+| `help/cleanz.md`              | Help documentation               |
+| `bin/cleanz`                  | Symlink to dispatcher            |
 
 ## Technical Approach
 
@@ -66,7 +66,7 @@ text="${text//$LSQUO/$SQ}"
 ### Function Structure
 
 1. **clean_unicode()** - Removes/converts all Unicode control characters
-2. **clean_html()** - Strips data-* attributes from HTML
+2. **clean_html()** - Strips data-\* attributes from HTML
 3. **clean_whitespace()** - Normalizes spaces, blank lines, trailing whitespace
 4. **clean_quotes()** - Converts smart quotes to straight (optional)
 5. **detect_hidden()** - Counts occurrences without modifying text
@@ -79,6 +79,7 @@ text="${text//$LSQUO/$SQ}"
 **Problem**: BATS `run` command doesn't work well with piped input. Tests using `printf '...' | run_cleanz` failed silently.
 
 **Solution**: Rewrote all tests to use file-based input:
+
 ```bash
 @test "cleanz removes zero-width space" {
     local testfile="$BATS_TEST_TMPDIR/input.txt"
@@ -93,6 +94,7 @@ text="${text//$LSQUO/$SQ}"
 **Problem**: Using `\'` in bash parameter expansion produced literal backslash on some systems (CI macOS runner).
 
 **Solution**: Use variable assignment instead of escape sequences:
+
 ```bash
 # Before (broken on some systems)
 text="${text//$LSQUO/\'}"
@@ -107,6 +109,7 @@ text="${text//$LSQUO/$SQ}"
 **Problem**: Need to collapse multiple spaces and blank lines while preserving intentional formatting.
 
 **Solution**: Multiple passes with bash parameter expansion:
+
 ```bash
 # Collapse multiple spaces (iterative)
 while [[ "$text" == *"  "* ]]; do

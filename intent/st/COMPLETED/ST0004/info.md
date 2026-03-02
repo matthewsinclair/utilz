@@ -1,10 +1,11 @@
 ---
 verblock: "12 Feb 2026:v0.1: matts - Initial version"
 intent_version: 2.2.0
-status: WIP
+status: Completed
 created: 20260212
 completed:
 ---
+
 # ST0004: xtrct - Semantic Data Extraction
 
 ## Objective
@@ -73,7 +74,7 @@ xtrct invoice.pdf --schema schema.json --model claude-opus-4-6
       "type": "array",
       "description": "What these items represent",
       "items": {
-        "sub_field": {"type": "string", "description": "..."}
+        "sub_field": { "type": "string", "description": "..." }
       }
     }
   }
@@ -110,6 +111,7 @@ opt/xtrct/
 ### Bash Wrapper Pattern
 
 Standard utilz pattern:
+
 - Sources `common.sh` if not already loaded
 - Checks `python3` is available
 - Checks `ANTHROPIC_API_KEY` is set
@@ -124,31 +126,54 @@ Standard utilz pattern:
 ## Test Data for Verification
 
 Use `pdf2md` output from the real invoice at:
+
 ```
 /Users/matts/Library/CloudStorage/Dropbox/Sinclair-Shared/Property/AU/127 Talga Road Rothbury/Commercial/Suppliers/LAM - Eddie Lamb Electrical/Invoices/Paid/[PAID] 20241108 Lambs Electrical Invoice Nov-2153 1,536.13.pdf
 ```
 
 With this invoice schema:
+
 ```json
 {
   "description": "Australian trade invoice",
   "fields": {
-    "supplier_name": {"type": "string", "description": "Business name of the supplier"},
-    "supplier_abn": {"type": "string", "description": "Australian Business Number (11 digits)"},
-    "invoice_number": {"type": "string", "description": "Invoice or reference number"},
-    "invoice_date": {"type": "string", "description": "Invoice date as YYYY-MM-DD"},
-    "due_date": {"type": "string", "description": "Payment due date as YYYY-MM-DD, or null"},
-    "subtotal": {"type": "number", "description": "Subtotal excluding GST"},
-    "gst": {"type": "number", "description": "GST amount"},
-    "total": {"type": "number", "description": "Total including GST"},
+    "supplier_name": {
+      "type": "string",
+      "description": "Business name of the supplier"
+    },
+    "supplier_abn": {
+      "type": "string",
+      "description": "Australian Business Number (11 digits)"
+    },
+    "invoice_number": {
+      "type": "string",
+      "description": "Invoice or reference number"
+    },
+    "invoice_date": {
+      "type": "string",
+      "description": "Invoice date as YYYY-MM-DD"
+    },
+    "due_date": {
+      "type": "string",
+      "description": "Payment due date as YYYY-MM-DD, or null"
+    },
+    "subtotal": { "type": "number", "description": "Subtotal excluding GST" },
+    "gst": { "type": "number", "description": "GST amount" },
+    "total": { "type": "number", "description": "Total including GST" },
     "line_items": {
       "type": "array",
       "description": "Individual line items on the invoice",
       "items": {
-        "description": {"type": "string", "description": "Description of work or item"},
-        "quantity": {"type": "number", "description": "Quantity, or null"},
-        "unit_price": {"type": "number", "description": "Per-unit price, or null"},
-        "amount": {"type": "number", "description": "Line total"}
+        "description": {
+          "type": "string",
+          "description": "Description of work or item"
+        },
+        "quantity": { "type": "number", "description": "Quantity, or null" },
+        "unit_price": {
+          "type": "number",
+          "description": "Per-unit price, or null"
+        },
+        "amount": { "type": "number", "description": "Line total" }
       }
     }
   }

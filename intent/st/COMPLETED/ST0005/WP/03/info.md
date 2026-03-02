@@ -11,15 +11,15 @@ Implement `opt/pdf2md/lib/pdf2md.py` — the core PDF-to-markdown conversion alg
 
 ## Pipeline Stages
 
-| Stage | Description                                                                  |
-|-------|------------------------------------------------------------------------------|
+| Stage | Description                                                                 |
+| ----- | --------------------------------------------------------------------------- |
 | 1     | Extract text items via `page.chars` → `{x, y, w, h, text, font_name, size}` |
-| 2     | Calculate global stats: `most_used_height` (mode), `most_used_font`          |
-| 3     | Group into lines by Y-position (tolerance ~2px), sort by X within lines      |
+| 2     | Calculate global stats: `most_used_height` (mode), `most_used_font`         |
+| 3     | Group into lines by Y-position (tolerance ~2px), sort by X within lines     |
 | 4     | Detect headings: `font_size > body` → H1-H6 by descending unique sizes      |
-| 5     | Detect list items: bullets, `-`, `*`, `1.`, `(a)` patterns                   |
-| 6     | Remove repetitive headers/footers (same text+Y on >50% of pages)             |
-| 7     | Compact and emit: merge fragments, join paragraphs, emit markdown             |
+| 5     | Detect list items: bullets, `-`, `*`, `1.`, `(a)` patterns                  |
+| 6     | Remove repetitive headers/footers (same text+Y on >50% of pages)            |
+| 7     | Compact and emit: merge fragments, join paragraphs, emit markdown           |
 
 ## Tasks
 

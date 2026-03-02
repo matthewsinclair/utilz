@@ -599,7 +599,7 @@ version: 1.0.0
 Declare compatible framework version with caret notation:
 
 ```yaml
-utilz_version: "^1.0.0"  # Compatible with 1.x.x
+utilz_version: "^1.0.0" # Compatible with 1.x.x
 ```
 
 **Version Compatibility Rules**:

@@ -12,6 +12,7 @@ cleanz is an LLM text cleaner that removes hidden characters and formatting arti
 ### What Gets Cleaned
 
 **Text mode (default):**
+
 - **Zero-width characters**: ZWSP, ZWNJ, ZWJ, word joiners
 - **Special spaces**: Non-breaking spaces, hair spaces (converted to regular spaces)
 - **Control characters**: BOM, soft hyphens, directional formatting, DEL
@@ -19,6 +20,7 @@ cleanz is an LLM text cleaner that removes hidden characters and formatting arti
 - **Whitespace**: Multiple spaces, excessive blank lines, trailing whitespace
 
 **Image mode (--image):**
+
 - **C2PA metadata**: Content credentials manifest from AI image generators
 - **AI provenance**: Creator/credit metadata from DALL-E, ChatGPT, Sora, Midjourney
 
@@ -84,17 +86,17 @@ cleanz --image -i photo.png
 
 ## Options
 
-| Option | Description |
-|--------|-------------|
-| `-c, --clipboard` | Read from and write to clipboard |
-| `-o, --output FILE` | Write to specified file |
-| `-i, --in-place` | Edit file in place |
-| `-d, --detect` | Show hidden chars without cleaning |
-| `-v, --verbose` | Show cleaning summary |
-| `--no-html` | Skip HTML attribute cleaning |
-| `--no-whitespace` | Skip whitespace normalization |
-| `--normalize-quotes` | Convert smart quotes to straight |
-| `--image` | Image mode: handle C2PA/AI metadata |
+| Option               | Description                         |
+| -------------------- | ----------------------------------- |
+| `-c, --clipboard`    | Read from and write to clipboard    |
+| `-o, --output FILE`  | Write to specified file             |
+| `-i, --in-place`     | Edit file in place                  |
+| `-d, --detect`       | Show hidden chars without cleaning  |
+| `-v, --verbose`      | Show cleaning summary               |
+| `--no-html`          | Skip HTML attribute cleaning        |
+| `--no-whitespace`    | Skip whitespace normalization       |
+| `--normalize-quotes` | Convert smart quotes to straight    |
+| `--image`            | Image mode: handle C2PA/AI metadata |
 
 ---
 

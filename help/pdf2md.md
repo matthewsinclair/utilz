@@ -31,13 +31,13 @@ On first run, pdf2md automatically creates a Python virtual environment at `lib/
 
 ## Options
 
-| Flag                 | Short | Description                               |
-|----------------------|-------|-------------------------------------------|
-| `--output <file>`    | `-o`  | Write to file instead of stdout           |
-| `--pages <range>`    |       | Page range (e.g., "1-5", "3,7,10-12")    |
-| `--verbose`          |       | Show progress to stderr                   |
-| `--help`             | `-h`  | Show help message                         |
-| `--version`          |       | Show version information                  |
+| Flag              | Short | Description                           |
+| ----------------- | ----- | ------------------------------------- |
+| `--output <file>` | `-o`  | Write to file instead of stdout       |
+| `--pages <range>` |       | Page range (e.g., "1-5", "3,7,10-12") |
+| `--verbose`       |       | Show progress to stderr               |
+| `--help`          | `-h`  | Show help message                     |
+| `--version`       |       | Show version information              |
 
 ---
 
@@ -56,15 +56,15 @@ Page numbers are 1-based.
 
 ## Conversion Pipeline
 
-| Stage | Description                                                             |
-|-------|-------------------------------------------------------------------------|
-| 1     | Extract text items with position/font metadata via pdfplumber           |
-| 2     | Calculate body text font size (statistical mode) and font name          |
-| 3     | Group characters into lines by Y-position, sort by X within lines       |
-| 4     | Detect headings: font size > body → H1-H6 by descending unique sizes   |
-| 5     | Detect list items: bullets, dashes, numbered, lettered patterns         |
-| 6     | Remove repetitive headers/footers (same text+Y on >50% of pages)       |
-| 7     | Compact and emit: merge fragments, join paragraphs, emit markdown       |
+| Stage | Description                                                          |
+| ----- | -------------------------------------------------------------------- |
+| 1     | Extract text items with position/font metadata via pdfplumber        |
+| 2     | Calculate body text font size (statistical mode) and font name       |
+| 3     | Group characters into lines by Y-position, sort by X within lines    |
+| 4     | Detect headings: font size > body → H1-H6 by descending unique sizes |
+| 5     | Detect list items: bullets, dashes, numbered, lettered patterns      |
+| 6     | Remove repetitive headers/footers (same text+Y on >50% of pages)     |
+| 7     | Compact and emit: merge fragments, join paragraphs, emit markdown    |
 
 ---
 

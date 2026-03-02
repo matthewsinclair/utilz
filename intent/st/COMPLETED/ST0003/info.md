@@ -5,6 +5,7 @@ status: Completed
 created: 20260210
 completed: 20260210
 ---
+
 # ST0003: syncz --bidi mode and --confirm enhancement
 
 ## Objective

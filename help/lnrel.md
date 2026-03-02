@@ -32,7 +32,7 @@ The target does not need to exist; `lnrel` uses `realpath -m` to resolve paths w
 ## Options
 
 | Flag        | Short | Description              |
-|-------------|-------|--------------------------|
+| ----------- | ----- | ------------------------ |
 | `--help`    | `-h`  | Show help message        |
 | `--version` |       | Show version information |
 
@@ -40,9 +40,9 @@ The target does not need to exist; `lnrel` uses `realpath -m` to resolve paths w
 
 ## Arguments
 
-| Argument      | Required | Description                                           |
-|---------------|----------|-------------------------------------------------------|
-| `<target>`    | Yes      | Path to the symlink target (file or directory)        |
+| Argument      | Required | Description                                               |
+| ------------- | -------- | --------------------------------------------------------- |
+| `<target>`    | Yes      | Path to the symlink target (file or directory)            |
 | `<link_name>` | No       | Path for the symlink (default: basename of target in cwd) |
 
 ---
@@ -81,10 +81,10 @@ lnrel ../future/file.txt placeholder.txt
 
 ## Platform Requirements
 
-| Platform | Requirement              | Install                  |
-|----------|--------------------------|--------------------------|
-| macOS    | GNU coreutils            | `brew install coreutils` |
-| Linux    | coreutils (pre-installed)| Usually built-in         |
+| Platform | Requirement               | Install                  |
+| -------- | ------------------------- | ------------------------ |
+| macOS    | GNU coreutils             | `brew install coreutils` |
+| Linux    | coreutils (pre-installed) | Usually built-in         |
 
 macOS ships BSD `realpath` which lacks the `-m` and `--relative-to` flags. `lnrel` automatically detects `grealpath` (installed by Homebrew coreutils) and falls back to `realpath` if it supports the required flags.
 
@@ -100,9 +100,9 @@ macOS ships BSD `realpath` which lacks the `-m` and `--relative-to` flags. `lnre
 
 ## Environment
 
-| Variable    | Description                       |
-|-------------|-----------------------------------|
-| `UTILZ_HOME`| Root directory of Utilz framework |
+| Variable     | Description                       |
+| ------------ | --------------------------------- |
+| `UTILZ_HOME` | Root directory of Utilz framework |
 
 ---
 

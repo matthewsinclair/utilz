@@ -5,6 +5,7 @@ status: Completed
 created: 20260208
 completed: 20260208
 ---
+
 # ST0002: Syncz - a simple directory-to-directory syncer
 
 ## Objective

@@ -33,43 +33,43 @@ syncz uses `-rlptD` instead of rsync's `-a` flag to avoid group/owner warnings f
 
 ### Conflict Resolution
 
-| Flag             | Description                          |
-|------------------|--------------------------------------|
-| `--source-wins`  | Source always overwrites dest        |
-| `--dest-wins`    | Dest files are never overwritten     |
-| (default)        | Only overwrite if source is newer    |
+| Flag            | Description                       |
+| --------------- | --------------------------------- |
+| `--source-wins` | Source always overwrites dest     |
+| `--dest-wins`   | Dest files are never overwritten  |
+| (default)       | Only overwrite if source is newer |
 
 ### Safety Options
 
-| Flag                        | Short | Description                                       |
-|-----------------------------|-------|---------------------------------------------------|
-| `--dry-run`                 | `-n`  | Show what would happen without doing it           |
-| `--confirm [yes\|no\|all]`  | `-c`  | Prompt before destructive actions (Y/N/A). Optional arg auto-answers all prompts |
-| `--force`                   | `-f`  | Force sync (no safety checks)                     |
-| `--just-do-it`              |       | Show summary, single Y/N confirm, then run all    |
+| Flag                       | Short | Description                                                                      |
+| -------------------------- | ----- | -------------------------------------------------------------------------------- |
+| `--dry-run`                | `-n`  | Show what would happen without doing it                                          |
+| `--confirm [yes\|no\|all]` | `-c`  | Prompt before destructive actions (Y/N/A). Optional arg auto-answers all prompts |
+| `--force`                  | `-f`  | Force sync (no safety checks)                                                    |
+| `--just-do-it`             |       | Show summary, single Y/N confirm, then run all                                   |
 
 ### Bidirectional Options
 
-| Flag      | Description                                                |
-|-----------|------------------------------------------------------------|
-| `--bidi`  | Two-way sync with orphan detection                         |
+| Flag     | Description                        |
+| -------- | ---------------------------------- |
+| `--bidi` | Two-way sync with orphan detection |
 
 ### Feature Options
 
-| Flag                        | Short | Description                                       |
-|-----------------------------|-------|---------------------------------------------------|
-| `--exclude PAT`             | `-x`  | Exclude files matching pattern (repeatable)       |
-| `--delete`                  |       | Remove dest files not in source                   |
-| `--backup`                  | `-b`  | Create .syncz-bak copies of overwritten files     |
-| `--verbose`                 | `-v`  | Show detailed per-file output                     |
-| `--progress`                | `-p`  | Show per-file transfer progress                   |
+| Flag            | Short | Description                                   |
+| --------------- | ----- | --------------------------------------------- |
+| `--exclude PAT` | `-x`  | Exclude files matching pattern (repeatable)   |
+| `--delete`      |       | Remove dest files not in source               |
+| `--backup`      | `-b`  | Create .syncz-bak copies of overwritten files |
+| `--verbose`     | `-v`  | Show detailed per-file output                 |
+| `--progress`    | `-p`  | Show per-file transfer progress               |
 
 ### General Options
 
-| Flag                        | Short | Description                                       |
-|-----------------------------|-------|---------------------------------------------------|
-| `--help`                    | `-h`  | Show help message                                 |
-| `--version`                 |       | Show version information                          |
+| Flag        | Short | Description              |
+| ----------- | ----- | ------------------------ |
+| `--help`    | `-h`  | Show help message        |
+| `--version` |       | Show version information |
 
 ---
 
@@ -124,15 +124,15 @@ This works in both unidirectional and bidirectional modes.
 
 ### Orphan handling
 
-| Flags                   | Behavior                                         |
-|-------------------------|--------------------------------------------------|
-| `--bidi`                | Lists orphans, keeps all (synced to both sides)  |
-| `--bidi --delete`       | Deletes all orphans with irreversibility warning |
-| `--bidi --confirm`      | Interactive per-file prompt (y/N/a, Enter=keep)  |
-| `--bidi --confirm yes`  | Auto-answer yes = delete all orphans             |
-| `--bidi --confirm no`   | Auto-answer no = keep all (sync copies them)     |
-| `--bidi --confirm all`  | Same as `--confirm yes`                          |
-| `--bidi --dry-run`      | List orphans + show what would sync              |
+| Flags                  | Behavior                                         |
+| ---------------------- | ------------------------------------------------ |
+| `--bidi`               | Lists orphans, keeps all (synced to both sides)  |
+| `--bidi --delete`      | Deletes all orphans with irreversibility warning |
+| `--bidi --confirm`     | Interactive per-file prompt (y/N/a, Enter=keep)  |
+| `--bidi --confirm yes` | Auto-answer yes = delete all orphans             |
+| `--bidi --confirm no`  | Auto-answer no = keep all (sync copies them)     |
+| `--bidi --confirm all` | Same as `--confirm yes`                          |
+| `--bidi --dry-run`     | List orphans + show what would sync              |
 
 ### Restrictions
 
@@ -144,18 +144,18 @@ This works in both unidirectional and bidirectional modes.
 
 ## rsync Flag Mapping
 
-| syncz mode                 | rsync flags                          | Behavior                           |
-|----------------------------|--------------------------------------|------------------------------------|
-| default (no conflict flag) | `-rlptD --update`                    | Copy only where source is newer    |
-| `--source-wins`            | `-rlptD`                             | Source always overwrites           |
-| `--dest-wins`              | `-rlptD --ignore-existing`           | Only copy new files to dest        |
-| `--dry-run`                | adds `--dry-run`                     | No transfers, just report          |
-| `--verbose`                | adds `--itemize-changes`             | Per-file action output             |
-| `--delete`                 | adds `--delete`                      | Remove extraneous dest files       |
-| `--backup`                 | adds `--backup --suffix=.syncz-bak`  | Backup overwritten files           |
-| `--exclude PAT`            | adds `--exclude=PAT`                 | Exclude matching files             |
-| `--progress`               | adds `--progress`                    | Per-file transfer progress         |
-| `--bidi`                   | does NOT add `--delete`              | Orphan resolution handles deletions |
+| syncz mode                 | rsync flags                         | Behavior                            |
+| -------------------------- | ----------------------------------- | ----------------------------------- |
+| default (no conflict flag) | `-rlptD --update`                   | Copy only where source is newer     |
+| `--source-wins`            | `-rlptD`                            | Source always overwrites            |
+| `--dest-wins`              | `-rlptD --ignore-existing`          | Only copy new files to dest         |
+| `--dry-run`                | adds `--dry-run`                    | No transfers, just report           |
+| `--verbose`                | adds `--itemize-changes`            | Per-file action output              |
+| `--delete`                 | adds `--delete`                     | Remove extraneous dest files        |
+| `--backup`                 | adds `--backup --suffix=.syncz-bak` | Backup overwritten files            |
+| `--exclude PAT`            | adds `--exclude=PAT`                | Exclude matching files              |
+| `--progress`               | adds `--progress`                   | Per-file transfer progress          |
+| `--bidi`                   | does NOT add `--delete`             | Orphan resolution handles deletions |
 
 ---
 

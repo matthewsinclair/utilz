@@ -67,6 +67,7 @@ utilz help mdagg
 Run diagnostics to check that Utilz is properly configured.
 
 Checks:
+
 - `$UTILZ_HOME` is set and valid
 - Directory structure is correct
 - `bin/utilz` exists and is executable
@@ -136,6 +137,7 @@ $UTILZ_HOME/
 All utilities have access to shared functions in `opt/utilz/lib/common.sh`:
 
 **Logging**:
+
 - `info "message"` - Informational message (blue ℹ)
 - `success "message"` - Success message (green ✓)
 - `warn "message"` - Warning message (yellow ⚠)
@@ -143,12 +145,14 @@ All utilities have access to shared functions in `opt/utilz/lib/common.sh`:
 - `debug "message"` - Debug message (only if `UTILZ_DEBUG=1`)
 
 **Utilities**:
+
 - `show_help "utility"` - Display help from `help/{utility}.md`
 - `check_command "cmd"` - Check if command exists
 - `require_command "cmd" "install hint"` - Require command or exit with hint
 - `parse_yaml "file.yaml" "query"` - Parse YAML using `yq`
 
 **Colors** (automatically disabled when not a TTY):
+
 - `$BOLD`, `$RED`, `$GREEN`, `$YELLOW`, `$BLUE`, `$RESET`
 
 ---
@@ -187,7 +191,7 @@ ln -s utilz myutil
 
 ### 3. Create Help File
 
-```bash
+````bash
 cat > $UTILZ_HOME/help/myutil.md <<'EOF'
 # myutil - My Custom Utility
 
@@ -199,12 +203,14 @@ Brief description of what myutil does.
 ## Usage
 ```bash
 myutil [options] <args>
-```
+````
 
 ## Examples
+
 ...
 EOF
-```
+
+````
 
 ### 4. Test
 
@@ -215,7 +221,7 @@ utilz doctor
 # Test utility
 myutil --help
 myutil
-```
+````
 
 ---
 
@@ -224,12 +230,14 @@ myutil
 Utilities can be written in any language:
 
 ### Bash/Zsh (Default)
+
 ```bash
 #!/usr/bin/env bash
 # opt/myutil/myutil
 ```
 
 ### Rust
+
 ```bash
 #!/usr/bin/env bash
 # opt/myutil/myutil (wrapper script)
@@ -237,18 +245,21 @@ exec "$UTILZ_HOME/opt/myutil/target/release/myutil" "$@"
 ```
 
 Then build Rust binary in `opt/myutil/`:
+
 ```bash
 cd $UTILZ_HOME/opt/myutil
 cargo build --release
 ```
 
 ### Elixir
+
 ```bash
 #!/usr/bin/env elixir
 # opt/myutil/myutil
 ```
 
 ### Python (if you must)
+
 ```bash
 #!/usr/bin/env python3
 # opt/myutil/myutil
@@ -301,6 +312,7 @@ The dispatcher doesn't care about the implementation language - it just needs an
 **Problem**: `$UTILZ_HOME/bin` is not in your `$PATH`.
 
 **Fix**:
+
 ```bash
 echo 'export UTILZ_HOME="$HOME/Devel/prj/Utilz"' >> ~/.zshrc
 echo 'export PATH="$UTILZ_HOME/bin:$PATH"' >> ~/.zshrc
@@ -312,6 +324,7 @@ source ~/.zshrc
 **Problem**: Symlink exists but implementation is missing.
 
 **Fix**: Run `utilz doctor` to diagnose. Ensure:
+
 1. `opt/{utility}/{utility}` exists
 2. File is executable: `chmod +x opt/{utility}/{utility}`
 
@@ -320,6 +333,7 @@ source ~/.zshrc
 **Problem**: YAML utilities require `yq`.
 
 **Fix**:
+
 ```bash
 brew install yq
 ```
@@ -327,6 +341,7 @@ brew install yq
 ### General Issues
 
 Always start with:
+
 ```bash
 utilz doctor
 ```
@@ -340,11 +355,13 @@ This will identify and suggest fixes for common configuration issues.
 Run `utilz list` to see all installed utilities, or check the list below:
 
 ### lnrel - Relative Symlink Creator
+
 Creates symlinks with relative paths. Portable symlinks that survive directory tree moves.
 
 See `utilz help lnrel` for details.
 
 ### mdagg - Markdown Aggregator
+
 Concatenates multiple markdown files into a single document for PDF generation.
 
 See `utilz help mdagg` for details.
@@ -354,6 +371,7 @@ See `utilz help mdagg` for details.
 ## Version History
 
 ### 1.0.0 (2025-01-12)
+
 - Initial release
 - Core dispatcher framework
 - `utilz help`, `utilz doctor`, `utilz list` commands
@@ -370,7 +388,7 @@ This is a personal utilities framework, but the architecture can be adapted for 
 
 1. **Simple**: Each utility does one thing well
 2. **Consistent**: Unified UX across all utilities
-3. **Portable**: Works on any *nix system
+3. **Portable**: Works on any \*nix system
 4. **Extensible**: Easy to add new utilities
 5. **Self-contained**: Minimal external dependencies
 

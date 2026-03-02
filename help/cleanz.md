@@ -60,20 +60,20 @@ cleanz removes invisible Unicode characters, HTML attributes, and formatting art
 
 ### Unicode Control Characters
 
-| Character | Code | Action |
-|-----------|------|--------|
-| Zero-width space | U+200B | Remove |
-| Zero-width non-joiner | U+200C | Remove |
-| Zero-width joiner | U+200D | Remove |
-| Word joiner | U+2060 | Remove |
-| Non-breaking space | U+00A0 | Convert to space |
-| Hair space | U+200A | Convert to space |
-| Byte order mark | U+FEFF | Remove |
-| Soft hyphen | U+00AD | Remove |
-| Directional formatting | U+202A-E | Remove |
-| Invisible math operators | U+2061-64 | Remove |
-| Control characters | U+0000-1F | Remove (keep \\n \\t \\r) |
-| DEL character | U+007F | Remove |
+| Character                | Code      | Action                    |
+| ------------------------ | --------- | ------------------------- |
+| Zero-width space         | U+200B    | Remove                    |
+| Zero-width non-joiner    | U+200C    | Remove                    |
+| Zero-width joiner        | U+200D    | Remove                    |
+| Word joiner              | U+2060    | Remove                    |
+| Non-breaking space       | U+00A0    | Convert to space          |
+| Hair space               | U+200A    | Convert to space          |
+| Byte order mark          | U+FEFF    | Remove                    |
+| Soft hyphen              | U+00AD    | Remove                    |
+| Directional formatting   | U+202A-E  | Remove                    |
+| Invisible math operators | U+2061-64 | Remove                    |
+| Control characters       | U+0000-1F | Remove (keep \\n \\t \\r) |
+| DEL character            | U+007F    | Remove                    |
 
 ### HTML Attributes
 
@@ -89,12 +89,14 @@ cleanz removes invisible Unicode characters, HTML attributes, and formatting art
 ### Smart Quotes (optional)
 
 With `--normalize-quotes`:
+
 - Curly double quotes -> straight `"`
 - Curly single quotes -> straight `'`
 
 ### Image Mode (--image)
 
 With `--image`, strips C2PA and AI-related metadata from images:
+
 - C2PA content credentials manifest
 - AI generation provenance data
 - Creator/credit metadata from DALL-E, ChatGPT, Sora, Midjourney

@@ -11,6 +11,7 @@ This is an Intent v2.3.3 project.
 ## Steel Threads
 
 Steel threads are organized as directories under `intent/st/`:
+
 - Each steel thread has its own directory (e.g., ST0001/)
 - Minimum required file is `info.md` with metadata
 - Optional files: design.md, impl.md, tasks.md

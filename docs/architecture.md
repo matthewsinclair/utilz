@@ -249,7 +249,7 @@ Example: `opt/mdagg/mdagg.yaml`
 ```yaml
 name: mdagg
 version: 1.0.0
-utilz_version: "^1.0.0"  # Compatible framework version
+utilz_version: "^1.0.0" # Compatible framework version
 description: Markdown aggregator for concatenating multiple markdown files
 author: Matthew Sinclair
 website: https://matthewsinclair.com
@@ -276,7 +276,7 @@ The framework itself uses a version file reference:
 ```yaml
 # opt/utilz/utilz.yaml
 name: utilz
-version_file: ../../VERSION  # Points to /VERSION file
+version_file: ../../VERSION # Points to /VERSION file
 description: Universal utilities framework and dispatcher
 ```
 
@@ -330,7 +330,7 @@ version: 1.0.0
 Utilities declare framework version compatibility using caret notation:
 
 ```yaml
-utilz_version: "^1.0.0"  # Compatible with 1.x.x
+utilz_version: "^1.0.0" # Compatible with 1.x.x
 ```
 
 The `run_doctor()` function checks compatibility:
