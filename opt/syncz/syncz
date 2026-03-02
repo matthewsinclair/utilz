@@ -462,7 +462,11 @@ _compute_path_labels() {
     local -a suffix=()
     while [[ $i1 -ge 0 && $i2 -ge 0 ]]; do
         if [[ "${parts1[$i1]}" == "${parts2[$i2]}" ]]; then
-            suffix=("${parts1[$i1]}" "${suffix[@]}")
+            if [[ ${#suffix[@]} -gt 0 ]]; then
+                suffix=("${parts1[$i1]}" "${suffix[@]}")
+            else
+                suffix=("${parts1[$i1]}")
+            fi
             i1=$((i1 - 1))
             i2=$((i2 - 1))
         else
@@ -472,6 +476,11 @@ _compute_path_labels() {
 
     # Build the suffix string
     _PATH_SUFFIX=""
+    if [[ ${#suffix[@]} -eq 0 ]]; then
+        _PATH_ROOT1="$p1"
+        _PATH_ROOT2="$p2"
+        return
+    fi
     for part in "${suffix[@]}"; do
         if [[ -n "$_PATH_SUFFIX" ]]; then
             _PATH_SUFFIX="$_PATH_SUFFIX/$part"
