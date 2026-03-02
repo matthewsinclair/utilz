@@ -1,6 +1,6 @@
 # syncz
 
-**Version**: 1.3.0
+**Version**: 1.4.0
 **Author**: Matthew Sinclair
 
 ---
@@ -124,14 +124,15 @@ This works in both unidirectional and bidirectional modes.
 
 ### Orphan handling
 
-| Flags                   | Behavior                              |
-|-------------------------|---------------------------------------|
-| `--bidi`                | Interactive prompt per orphan (Y/n/a) |
-| `--bidi --delete`       | Silently delete all orphans           |
-| `--bidi --confirm yes`  | Auto-answer yes = delete all orphans  |
-| `--bidi --confirm no`   | Auto-answer no = keep all (sync copies them) |
-| `--bidi --confirm all`  | Same as `--confirm yes`               |
-| `--bidi --dry-run`      | List orphans + show what would sync   |
+| Flags                   | Behavior                                         |
+|-------------------------|--------------------------------------------------|
+| `--bidi`                | Lists orphans, keeps all (synced to both sides)  |
+| `--bidi --delete`       | Deletes all orphans with irreversibility warning |
+| `--bidi --confirm`      | Interactive per-file prompt (y/N/a, Enter=keep)  |
+| `--bidi --confirm yes`  | Auto-answer yes = delete all orphans             |
+| `--bidi --confirm no`   | Auto-answer no = keep all (sync copies them)     |
+| `--bidi --confirm all`  | Same as `--confirm yes`                          |
+| `--bidi --dry-run`      | List orphans + show what would sync              |
 
 ### Restrictions
 
@@ -202,7 +203,7 @@ syncz --just-do-it --delete ~/src /dst
 ### Bidirectional
 
 ```bash
-# Two-way sync with interactive orphan prompts
+# Two-way sync (keeps orphans, syncs to both sides)
 syncz --bidi ~/dir1 ~/dir2
 
 # Preview bidi sync (dry-run)
@@ -213,6 +214,9 @@ syncz --bidi --delete ~/dir1 ~/dir2
 
 # Bidi sync, keep all orphans (copy to both sides)
 syncz --bidi --confirm no ~/dir1 ~/dir2
+
+# Bidi sync, prompt per-orphan (y/N/a, Enter=keep)
+syncz --bidi --confirm ~/dir1 ~/dir2
 
 # Fully non-interactive bidi with orphan deletion
 syncz --bidi --confirm yes ~/dir1 ~/dir2

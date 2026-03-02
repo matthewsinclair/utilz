@@ -1,5 +1,5 @@
 ---
-verblock: "10 Feb 2026:v0.5: matts - Updated after syncz v1.3.0 and framework v1.2.1"
+verblock: "02 Mar 2026:v0.6: matts - Updated after syncz v1.4.0 safe orphan defaults"
 ---
 # Work In Progress
 
@@ -7,13 +7,19 @@ verblock: "10 Feb 2026:v0.5: matts - Updated after syncz v1.3.0 and framework v1
 
 **No active work** - All tasks complete.
 
-The syncz v1.3.0 bidi mode (ST0003) was completed and released as Utilz v1.2.1 on 10 Feb 2026.
+syncz v1.4.0 safe orphan defaults released as Utilz v1.3.2 on 02 Mar 2026.
 
 ## Active Steel Threads
 
 None - All steel threads complete.
 
 ## Recently Completed
+
+- syncz v1.4.0: Safe orphan defaults in --bidi mode (02 Mar 2026)
+  - Bare --bidi now keeps orphans and syncs to both sides (was interactive delete-by-default)
+  - --bidi --delete shows irreversibility warning
+  - --bidi --confirm interactive prompt flipped to [y/N/a] (Enter=keep)
+  - Released as Utilz v1.3.2
 
 - ST0003: syncz --bidi mode and --confirm enhancement (DONE 10 Feb 2026)
   - Bidirectional sync with orphan detection (find + comm) and resolution
@@ -43,16 +49,18 @@ No planned work. Ready for new requests.
 
 ## Notes
 
-The Utilz framework is stable at v1.2.1 with 9 utilities:
+The Utilz framework is stable at v1.3.2 with 11 utilities:
 - cleanz  - LLM text cleaner + C2PA image metadata (v1.1.0)
 - clipz   - Cross-platform clipboard
 - cryptz  - GPG encryption wrapper
 - gitz    - Git multi-repo operations
+- lnrel   - Portable relative symlinks
 - macoz   - macOS utilities (bg, setpicfor)
 - mdagg   - Markdown aggregator
+- pdf2md  - PDF to Markdown converter
 - retry   - Retry command utility
-- syncz   - Directory-to-directory syncer with bidi mode (v1.3.0)
-- utilz   - Core framework
+- syncz   - Directory-to-directory syncer with bidi mode (v1.4.0)
+- xtrct   - Schema-driven semantic data extraction
 
 ## Context for LLM
 

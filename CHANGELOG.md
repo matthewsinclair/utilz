@@ -5,6 +5,20 @@ All notable changes to the Utilz framework will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.2] - 2026-03-02
+
+### Fixed
+
+- **syncz** - Safe orphan defaults in `--bidi` mode (syncz v1.4.0)
+  - Bare `--bidi` now keeps all orphans and syncs them to both sides (was interactive delete-by-default)
+  - `--bidi --delete` shows irreversibility warning before deleting
+  - `--bidi --confirm` interactive prompt flipped to `[y/N/a]` where Enter = keep (was `[Y/n/a]` Enter = delete)
+  - Prevents accidental mass-deletion when one side is mostly empty
+
+### Changed
+
+- Framework version bumped to 1.3.2
+
 ## [1.3.1] - 2026-02-19
 
 ### Added

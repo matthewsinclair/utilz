@@ -68,9 +68,10 @@ SAFETY:
   --just-do-it             Show summary, single Y/N confirm, then run all
 
 BIDIRECTIONAL:
-  --bidi                   Two-way sync with orphan detection
-                           Combine with --delete to prune orphans silently
-                           Combine with --confirm [yes|no|all] for scripting
+  --bidi                   Two-way sync (default: keeps orphans, syncs to both)
+                           Use --delete to prune orphans silently
+                           Use --confirm to prompt per-file (y/N/a)
+                           Use --confirm yes|no|all for scripting
 
 OPTIONS:
   -x, --exclude PAT        Exclude files matching pattern (repeatable)
@@ -531,8 +532,10 @@ resolve_orphans() {
         return 0
     fi
 
-    # --delete mode: silently delete all orphans
+    # --delete mode: delete all orphans with warning
     if [[ "$OPT_DELETE" == "true" ]]; then
+        echo "  WARNING: Deleting $total orphan(s). This is IRREVERSIBLE."
+        echo ""
         if [[ ${#ORPHANS_DIR1[@]} -gt 0 ]]; then
             for f in "${ORPHANS_DIR1[@]}"; do
                 rm -f "$dir1/$f"
@@ -553,20 +556,65 @@ resolve_orphans() {
     # Interactive or --confirm arg mode
     local delete_all=false
 
+    # No explicit orphan handling → default: keep orphans (rsync will copy them)
+    if [[ -z "$CONFIRM_ANSWER" && "$OPT_CONFIRM" != "true" ]]; then
+        if [[ ${#ORPHANS_DIR1[@]} -gt 0 ]]; then
+            for f in "${ORPHANS_DIR1[@]}"; do
+                echo "  [$label1] $f"
+            done
+        fi
+        if [[ ${#ORPHANS_DIR2[@]} -gt 0 ]]; then
+            for f in "${ORPHANS_DIR2[@]}"; do
+                echo "  [$label2] $f"
+            done
+        fi
+        echo ""
+        echo "  Keeping all orphans (will be synced to both sides)."
+        echo "  Use --delete to remove, or --confirm to prompt per-file."
+        echo ""
+        return 0
+    fi
+
+    # --confirm arg mode (yes/no/all)
+    if [[ -n "$CONFIRM_ANSWER" ]]; then
+        if [[ ${#ORPHANS_DIR1[@]} -gt 0 ]]; then
+            for f in "${ORPHANS_DIR1[@]}"; do
+                echo "  [$label1] $f"
+                case "$CONFIRM_ANSWER" in
+                    yes|all) rm -f "$dir1/$f" ;;
+                    no)      : ;; # keep — sync will copy it
+                esac
+            done
+        fi
+        if [[ ${#ORPHANS_DIR2[@]} -gt 0 ]]; then
+            for f in "${ORPHANS_DIR2[@]}"; do
+                echo "  [$label2] $f"
+                case "$CONFIRM_ANSWER" in
+                    yes|all) rm -f "$dir2/$f" ;;
+                    no)      : ;;
+                esac
+            done
+        fi
+        echo ""
+        return 0
+    fi
+
+    # --confirm (no arg) → interactive prompts with KEEP as default
+    echo "  ┌─────────────────────────────────────────────────────────┐"
+    echo "  │  WARNING: Deleting orphans is IRREVERSIBLE.            │"
+    echo "  │  Files deleted here are permanently removed, not moved │"
+    echo "  │  to trash. Press Enter or 'n' to keep (safe default).  │"
+    echo "  └─────────────────────────────────────────────────────────┘"
+    echo ""
+
     if [[ ${#ORPHANS_DIR1[@]} -gt 0 ]]; then
         for f in "${ORPHANS_DIR1[@]}"; do
             echo "  [$label1] $f"
             if [[ "$delete_all" == "true" ]]; then
                 rm -f "$dir1/$f"
                 if [[ "$OPT_VERBOSE" == "true" ]]; then echo "  Deleted."; fi
-            elif [[ -n "$CONFIRM_ANSWER" ]]; then
-                case "$CONFIRM_ANSWER" in
-                    yes|all) rm -f "$dir1/$f" ;;
-                    no)      : ;; # keep — sync will copy it
-                esac
             else
-                # Interactive prompt: Y/Enter = delete, n = skip, a = delete all remaining
-                printf '  Delete? [Y/n/a] ' >&2
+                printf '  Delete? [y/N/a] ' >&2
                 local answer
                 if [[ ! -t 0 ]]; then
                     read -r answer
@@ -575,9 +623,9 @@ resolve_orphans() {
                 fi
                 answer=$(echo "$answer" | tr '[:upper:]' '[:lower:]')
                 case "$answer" in
-                    ""|y|yes) rm -f "$dir1/$f" ;;
+                    y|yes)    rm -f "$dir1/$f" ;;
                     a|all)    delete_all=true; rm -f "$dir1/$f" ;;
-                    *)        : ;; # skip
+                    *)        : ;; # default: keep
                 esac
             fi
         done
@@ -589,13 +637,8 @@ resolve_orphans() {
             if [[ "$delete_all" == "true" ]]; then
                 rm -f "$dir2/$f"
                 if [[ "$OPT_VERBOSE" == "true" ]]; then echo "  Deleted."; fi
-            elif [[ -n "$CONFIRM_ANSWER" ]]; then
-                case "$CONFIRM_ANSWER" in
-                    yes|all) rm -f "$dir2/$f" ;;
-                    no)      : ;;
-                esac
             else
-                printf '  Delete? [Y/n/a] ' >&2
+                printf '  Delete? [y/N/a] ' >&2
                 local answer
                 if [[ ! -t 0 ]]; then
                     read -r answer
@@ -604,9 +647,9 @@ resolve_orphans() {
                 fi
                 answer=$(echo "$answer" | tr '[:upper:]' '[:lower:]')
                 case "$answer" in
-                    ""|y|yes) rm -f "$dir2/$f" ;;
+                    y|yes)    rm -f "$dir2/$f" ;;
                     a|all)    delete_all=true; rm -f "$dir2/$f" ;;
-                    *)        : ;;
+                    *)        : ;; # default: keep
                 esac
             fi
         done

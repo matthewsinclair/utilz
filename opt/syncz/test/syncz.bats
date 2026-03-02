@@ -55,7 +55,7 @@ create_dest_dir_with_files() {
     run bash -c "'$UTILZ_BIN_DIR/syncz' --version 2>&1"
     assert_success
     assert_output_contains "syncz"
-    assert_output_contains "1.3.0"
+    assert_output_contains "1.4.0"
 }
 
 @test "syncz with unknown option shows error" {
