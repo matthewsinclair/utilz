@@ -1,13 +1,13 @@
 # syncz
 
-**Version**: 1.3.0
+**Version**: 2.0.0
 **Part of**: [Utilz Framework](../../README.md)
 
 ---
 
 ## Overview
 
-Simple directory-to-directory syncer using rsync. Provides conflict resolution strategies, confirmation prompts, dry-run support, and bidirectional sync with orphan detection.
+Simple directory-to-directory syncer with dual-backend architecture. Uses rsync for unidirectional sync and unison (when available) for state-tracked bidirectional sync. Provides conflict resolution strategies, confirmation prompts, and dry-run support.
 
 ---
 
@@ -51,14 +51,23 @@ syncz --just-do-it --delete ~/src /dst
 # Source always wins, exclude .git
 syncz --source-wins --exclude ".git" ~/src /dst
 
-# Two-way sync between directories
+# Two-way sync (auto-selects unison if available)
 syncz --bidi ~/dir1 ~/dir2
 
-# Bidi sync, auto-delete orphans
-syncz --bidi --delete ~/dir1 ~/dir2
+# Preview bidi sync
+syncz --bidi --dry-run ~/dir1 ~/dir2
 
-# Bidi sync, fully scripted (keep orphans)
-syncz --bidi --confirm no ~/dir1 ~/dir2
+# Cloud filesystem sync (ignore xattrs/resource forks)
+syncz --bidi --no-metadata ~/Dropbox/project ~/GDrive/project
+
+# Force dir1 to win all conflicts
+syncz --bidi --fresh --prefer d1 ~/dir1 ~/dir2
+
+# Use an ignore file for exclude patterns
+syncz --bidi --ignore .synczignore ~/dir1 ~/dir2
+
+# Force rsync backend
+syncz --bidi --backend rsync ~/dir1 ~/dir2
 ```
 
 ---
@@ -77,19 +86,20 @@ syncz
 
 ### Key Functions
 
-| Function             | Purpose                                       |
-| -------------------- | --------------------------------------------- |
-| `resolve_path()`     | Resolve directory to absolute path            |
-| `validate_inputs()`  | Check dirs exist, not same, options valid     |
-| `build_rsync_args()` | Construct rsync flag array from options       |
-| `generate_summary()` | Run dry-run rsync, parse stats for summary    |
-| `prompt_yna()`       | Y/N/A prompt helper with CONFIRM_ALL state    |
-| `prompt_yn()`        | Simple Y/N prompt for --just-do-it            |
-| `execute_delete()`   | Delete-only rsync pass for --confirm mode     |
-| `execute_sync()`     | Run rsync with built args                     |
-| `detect_orphans()`   | Find files on only one side using find + comm |
-| `resolve_orphans()`  | Delete, prompt, or skip orphaned files        |
-| `execute_bidi()`     | Orchestrate bidi: orphans → pass 1 → pass 2   |
+| Function                      | Purpose                                             |
+| ----------------------------- | --------------------------------------------------- |
+| `resolve_path()`              | Resolve directory to absolute path                  |
+| `validate_inputs()`           | Check dirs exist, not same, options valid           |
+| `select_backend()`            | Auto-detect unison for bidi, validate availability  |
+| `build_rsync_args()`          | Construct rsync flag array from options             |
+| `generate_summary()`          | Run dry-run rsync, parse stats for summary          |
+| `_compute_path_labels()`      | Split paths into D1/D2 roots + common Dir suffix    |
+| `_unison_build_common_args()` | Shared unison arg builder for dry-run and real sync |
+| `unison_bidi_dryrun()`        | Mutation-blocking dry-run with parsed output        |
+| `unison_bidi()`               | Bidirectional sync via unison                       |
+| `detect_orphans()`            | Find files on only one side (rsync fallback)        |
+| `resolve_orphans()`           | Delete, prompt, or skip orphaned files (rsync)      |
+| `execute_bidi()`              | Orchestrate rsync bidi: orphans → pass 1 → pass 2   |
 
 ### Dependencies
 
@@ -97,6 +107,10 @@ syncz
 
 - Bash 4.0+ or Zsh
 - rsync
+
+**Optional:**
+
+- unison — Bidirectional sync engine with state tracking (`brew install unison`)
 
 ---
 
@@ -111,7 +125,7 @@ cd opt/syncz/test
 bats syncz.bats
 ```
 
-66 tests covering: basic flags, validation, core sync, conflict resolution, features, confirmation prompts, just-do-it mode, edge cases, bidirectional sync, and --confirm optional argument.
+78 tests covering: basic flags, validation, core sync, conflict resolution, features, confirmation prompts, just-do-it mode, edge cases, bidirectional sync, --confirm optional argument, backend selection, and unison bidi sync.
 
 ---
 

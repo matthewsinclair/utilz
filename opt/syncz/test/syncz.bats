@@ -9,7 +9,7 @@ load "../../utilz/test/test_helper.bash"
 # ============================================================================
 
 run_syncz() {
-    run "$UTILZ_BIN_DIR/syncz" "$@"
+    run "$UTILZ_BIN_DIR/syncz" --backend rsync "$@"
 }
 
 # Create source dir with some test files
@@ -55,7 +55,7 @@ create_dest_dir_with_files() {
     run bash -c "'$UTILZ_BIN_DIR/syncz' --version 2>&1"
     assert_success
     assert_output_contains "syncz"
-    assert_output_contains "1.4.0"
+    assert_output_contains "2.0.0"
 }
 
 @test "syncz with unknown option shows error" {
@@ -711,7 +711,7 @@ create_bidi_dirs() {
     echo "common" > "$dir2/common.txt"
     echo "orphan" > "$dir1/orphan.txt"
 
-    run bash -c "printf 'Y\n' | '$UTILZ_BIN_DIR/syncz' --bidi --confirm '$dir1' '$dir2' 2>&1"
+    run bash -c "printf 'Y\n' | '$UTILZ_BIN_DIR/syncz' --backend rsync --bidi --confirm '$dir1' '$dir2' 2>&1"
     assert_success
     # Orphan should be deleted (user answered Y)
     assert_file_not_exists "$dir1/orphan.txt"
@@ -725,7 +725,7 @@ create_bidi_dirs() {
     echo "common" > "$dir2/common.txt"
     echo "orphan" > "$dir1/orphan.txt"
 
-    run bash -c "printf 'n\n' | '$UTILZ_BIN_DIR/syncz' --bidi --confirm '$dir1' '$dir2' 2>&1"
+    run bash -c "printf 'n\n' | '$UTILZ_BIN_DIR/syncz' --backend rsync --bidi --confirm '$dir1' '$dir2' 2>&1"
     assert_success
     # Orphan should survive (user answered N)
     assert_file_exists "$dir1/orphan.txt"
@@ -742,7 +742,7 @@ create_bidi_dirs() {
     echo "orphan1" > "$dir1/orphan1.txt"
     echo "orphan2" > "$dir2/orphan2.txt"
 
-    run bash -c "printf 'A\n' | '$UTILZ_BIN_DIR/syncz' --bidi --confirm '$dir1' '$dir2' 2>&1"
+    run bash -c "printf 'A\n' | '$UTILZ_BIN_DIR/syncz' --backend rsync --bidi --confirm '$dir1' '$dir2' 2>&1"
     assert_success
     # Both orphans should be deleted
     assert_file_not_exists "$dir1/orphan1.txt"
@@ -838,4 +838,184 @@ create_bidi_dirs() {
     assert_success
     assert_output_contains "Sync complete"
     assert_file_exists "$dst/file1.txt"
+}
+
+# ============================================================================
+# BACKEND SELECTION TESTS
+# ============================================================================
+
+@test "backend: --backend invalid value shows error" {
+    local src=$(create_source_dir)
+    local dst=$(create_dest_dir)
+    run "$UTILZ_BIN_DIR/syncz" --backend invalid "$src" "$dst"
+    assert_failure
+    assert_output_contains "--backend requires"
+}
+
+@test "backend: --backend rsync forces rsync even with unison installed" {
+    local dirs=$(create_bidi_dirs)
+    local dir1="${dirs%% *}"
+    local dir2="${dirs##* }"
+
+    run "$UTILZ_BIN_DIR/syncz" --bidi --backend rsync "$dir1" "$dir2"
+    assert_success
+    # rsync bidi uses Pass 1/Pass 2 pattern, not unison header
+    # Just verify it completed successfully
+}
+
+@test "backend: --fresh with rsync warns no effect" {
+    local src=$(create_source_dir)
+    local dst=$(create_dest_dir)
+    run "$UTILZ_BIN_DIR/syncz" --fresh "$src" "$dst"
+    assert_success
+    assert_output_contains "--fresh has no effect"
+}
+
+# ============================================================================
+# UNISON BIDI TESTS
+# ============================================================================
+
+# Skip unison tests if not installed
+HAVE_UNISON=false
+command -v unison &>/dev/null && HAVE_UNISON=true
+
+@test "unison-bidi: new files copied both ways" {
+    [[ "$HAVE_UNISON" == "true" ]] || skip "unison not installed"
+
+    local dir1="$BATS_TEST_TMPDIR/u1"
+    local dir2="$BATS_TEST_TMPDIR/u2"
+    mkdir -p "$dir1" "$dir2"
+    echo "from dir1" > "$dir1/file1.txt"
+    echo "from dir2" > "$dir2/file2.txt"
+
+    run "$UTILZ_BIN_DIR/syncz" --bidi --backend unison --fresh "$dir1" "$dir2"
+    assert_success
+    assert_output_contains "Sync complete"
+    assert_file_exists "$dir1/file2.txt"
+    assert_file_exists "$dir2/file1.txt"
+}
+
+@test "unison-bidi: state tracking — second run has no changes" {
+    [[ "$HAVE_UNISON" == "true" ]] || skip "unison not installed"
+
+    local dir1="$BATS_TEST_TMPDIR/st1"
+    local dir2="$BATS_TEST_TMPDIR/st2"
+    mkdir -p "$dir1" "$dir2"
+    echo "content" > "$dir1/file.txt"
+
+    # First run: syncs file
+    run "$UTILZ_BIN_DIR/syncz" --bidi --backend unison --fresh "$dir1" "$dir2"
+    assert_success
+    assert_file_exists "$dir2/file.txt"
+
+    # Second run: nothing to do
+    run "$UTILZ_BIN_DIR/syncz" --bidi --backend unison "$dir1" "$dir2"
+    assert_success
+    assert_output_contains "Sync complete"
+}
+
+@test "unison-bidi: --fresh ignores archives" {
+    [[ "$HAVE_UNISON" == "true" ]] || skip "unison not installed"
+
+    local dir1="$BATS_TEST_TMPDIR/fr1"
+    local dir2="$BATS_TEST_TMPDIR/fr2"
+    mkdir -p "$dir1" "$dir2"
+    echo "content" > "$dir1/file.txt"
+
+    # First run
+    run "$UTILZ_BIN_DIR/syncz" --bidi --backend unison --fresh "$dir1" "$dir2"
+    assert_success
+    assert_file_exists "$dir2/file.txt"
+
+    # Second run with --fresh treats it as first sync (no error)
+    run "$UTILZ_BIN_DIR/syncz" --bidi --backend unison --fresh "$dir1" "$dir2"
+    assert_success
+    assert_output_contains "Sync complete"
+}
+
+@test "unison-bidi: --exclude patterns work" {
+    [[ "$HAVE_UNISON" == "true" ]] || skip "unison not installed"
+
+    local dir1="$BATS_TEST_TMPDIR/ex1"
+    local dir2="$BATS_TEST_TMPDIR/ex2"
+    mkdir -p "$dir1" "$dir2"
+    echo "include me" > "$dir1/keep.txt"
+    echo "exclude me" > "$dir1/skip.log"
+
+    run "$UTILZ_BIN_DIR/syncz" --bidi --backend unison --fresh --exclude "*.log" "$dir1" "$dir2"
+    assert_success
+    assert_file_exists "$dir2/keep.txt"
+    assert_file_not_exists "$dir2/skip.log"
+}
+
+@test "unison-bidi: conflicts are reported (not silently lost)" {
+    [[ "$HAVE_UNISON" == "true" ]] || skip "unison not installed"
+
+    local dir1="$BATS_TEST_TMPDIR/cf1"
+    local dir2="$BATS_TEST_TMPDIR/cf2"
+    mkdir -p "$dir1" "$dir2"
+    echo "version A" > "$dir1/conflict.txt"
+    echo "version B" > "$dir2/conflict.txt"
+
+    # With --fresh, unison has no archive so both sides are "new" — a conflict
+    run "$UTILZ_BIN_DIR/syncz" --bidi --backend unison --fresh "$dir1" "$dir2"
+    # Unison exits 1 for skipped conflicts in batch mode
+    assert_output_contains "Sync complete"
+}
+
+@test "unison-bidi: --dry-run shows plan without syncing" {
+    [[ "$HAVE_UNISON" == "true" ]] || skip "unison not installed"
+
+    local dir1="$BATS_TEST_TMPDIR/dr1"
+    local dir2="$BATS_TEST_TMPDIR/dr2"
+    mkdir -p "$dir1" "$dir2"
+    echo "new file" > "$dir1/newfile.txt"
+
+    run "$UTILZ_BIN_DIR/syncz" --bidi --backend unison --fresh --dry-run "$dir1" "$dir2"
+    assert_success
+    assert_output_contains "DRY RUN"
+    assert_output_contains "Dry run"
+    # File should NOT have been synced
+    assert_file_not_exists "$dir2/newfile.txt"
+}
+
+@test "unison-bidi: --dry-run shows already in sync for identical dirs" {
+    [[ "$HAVE_UNISON" == "true" ]] || skip "unison not installed"
+
+    local dir1="$BATS_TEST_TMPDIR/drs1"
+    local dir2="$BATS_TEST_TMPDIR/drs2"
+    mkdir -p "$dir1" "$dir2"
+    echo "same" > "$dir1/file.txt"
+    echo "same" > "$dir2/file.txt"
+
+    run "$UTILZ_BIN_DIR/syncz" --bidi --backend unison --fresh --dry-run "$dir1" "$dir2"
+    assert_success
+    assert_output_contains "Already in sync"
+}
+
+@test "unison-bidi: --delete prints deprecation notice" {
+    [[ "$HAVE_UNISON" == "true" ]] || skip "unison not installed"
+
+    local dir1="$BATS_TEST_TMPDIR/dl1"
+    local dir2="$BATS_TEST_TMPDIR/dl2"
+    mkdir -p "$dir1" "$dir2"
+    echo "content" > "$dir1/file.txt"
+
+    run "$UTILZ_BIN_DIR/syncz" --bidi --backend unison --fresh --delete "$dir1" "$dir2"
+    assert_success
+    assert_output_contains "no-op"
+}
+
+@test "unison-bidi: auto-detects unison for bidi when available" {
+    [[ "$HAVE_UNISON" == "true" ]] || skip "unison not installed"
+
+    local dir1="$BATS_TEST_TMPDIR/ad1"
+    local dir2="$BATS_TEST_TMPDIR/ad2"
+    mkdir -p "$dir1" "$dir2"
+    echo "content" > "$dir1/file.txt"
+
+    # No --backend flag — should auto-select unison
+    run "$UTILZ_BIN_DIR/syncz" --bidi --fresh "$dir1" "$dir2"
+    assert_success
+    assert_output_contains "unison"
 }

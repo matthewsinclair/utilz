@@ -2,8 +2,9 @@
 #
 # syncz - Simple directory-to-directory syncer
 #
-# Wraps rsync to provide user-friendly directory sync with conflict resolution,
-# confirmation prompts, and dry-run support.
+# Uses unison for bidirectional sync (state-tracked) and rsync for
+# unidirectional sync. Falls back to rsync for bidi when unison is
+# not available.
 #
 
 set -euo pipefail
@@ -40,6 +41,13 @@ EXCLUDE_PATTERNS=()
 SOURCE_DIR=""
 DEST_DIR=""
 
+# Backend selection
+OPT_BACKEND=""       # User-forced backend: "", "unison", "rsync"
+OPT_FRESH=false      # --fresh: ignore unison archives
+OPT_PREFER=""        # --prefer d1|d2|newer: force conflict resolution
+OPT_NO_METADATA=false  # --no-metadata: ignore xattrs and resource forks
+SYNCZ_BACKEND=""     # Resolved backend (set by select_backend)
+
 # State for Y/N/A prompt
 CONFIRM_ALL=false
 CONFIRM_ANSWER=""
@@ -52,7 +60,7 @@ usage() {
     cat <<EOF
 Usage: syncz [OPTIONS] <source-dir> <dest-dir>
 
-Simple directory-to-directory syncer using rsync.
+Simple directory-to-directory syncer.
 
 CONFLICT RESOLUTION:
   --source-wins            Source always overwrites dest
@@ -68,13 +76,18 @@ SAFETY:
   --just-do-it             Show summary, single Y/N confirm, then run all
 
 BIDIRECTIONAL:
-  --bidi                   Two-way sync (default: keeps orphans, syncs to both)
-                           Use --delete to prune orphans silently
-                           Use --confirm to prompt per-file (y/N/a)
-                           Use --confirm yes|no|all for scripting
+  --bidi                   Two-way sync (uses unison when available)
+  --backend unison|rsync   Force a specific sync backend
+  --fresh                  Ignore saved state, treat as first sync
+  --prefer d1|d2|newer     Force conflict resolution (unison only)
+  --no-metadata            Ignore xattrs and resource forks (for cloud fs)
+
+  When unison is available, --bidi uses it automatically (state-tracked sync).
+  Falls back to rsync otherwise.
 
 OPTIONS:
   -x, --exclude PAT        Exclude files matching pattern (repeatable)
+  --ignore FILE            Read exclude patterns from file (one per line)
   --delete                 Remove dest files not in source
   -b, --backup             Create .syncz-bak copies of overwritten files
   -v, --verbose            Show detailed per-file output
@@ -95,11 +108,11 @@ EXAMPLES:
   # Quick confirm-and-go
   syncz --just-do-it --delete ~/src /dst
 
-  # Bidirectional sync with orphan prompts
+  # Bidirectional sync (uses unison if available)
   syncz --bidi ~/dir1 ~/dir2
 
-  # Bidirectional sync, auto-delete orphans
-  syncz --bidi --delete ~/dir1 ~/dir2
+  # Preview bidi sync without making changes
+  syncz --bidi --dry-run ~/dir1 ~/dir2
 
 For detailed help, run: utilz help syncz
 EOF
@@ -121,13 +134,6 @@ resolve_path() {
 
 # Validate inputs before syncing
 validate_inputs() {
-    # Check rsync is available
-    if ! command -v rsync >/dev/null 2>&1; then
-        error "rsync is required but not installed"
-        info "Install with: brew install rsync"
-        exit 1
-    fi
-
     # Check source and dest are provided
     if [[ -z "$SOURCE_DIR" || -z "$DEST_DIR" ]]; then
         error "Both source and destination directories are required"
@@ -438,7 +444,297 @@ execute_sync() {
 }
 
 # ============================================================================
-# BIDI FUNCTIONS
+# PATH DISPLAY
+# ============================================================================
+
+# Find the longest common directory suffix of two paths.
+# Sets _PATH_SUFFIX (common tail) and _PATH_ROOT1, _PATH_ROOT2 (unique prefixes).
+_compute_path_labels() {
+    local p1="$1" p2="$2"
+
+    # Split into arrays by /
+    local IFS='/'
+    local -a parts1=($p1) parts2=($p2)
+
+    # Walk backwards from the end to find common suffix
+    local i1=$(( ${#parts1[@]} - 1 ))
+    local i2=$(( ${#parts2[@]} - 1 ))
+    local -a suffix=()
+    while [[ $i1 -ge 0 && $i2 -ge 0 ]]; do
+        if [[ "${parts1[$i1]}" == "${parts2[$i2]}" ]]; then
+            suffix=("${parts1[$i1]}" "${suffix[@]}")
+            i1=$((i1 - 1))
+            i2=$((i2 - 1))
+        else
+            break
+        fi
+    done
+
+    # Build the suffix string
+    _PATH_SUFFIX=""
+    for part in "${suffix[@]}"; do
+        if [[ -n "$_PATH_SUFFIX" ]]; then
+            _PATH_SUFFIX="$_PATH_SUFFIX/$part"
+        else
+            _PATH_SUFFIX="$part"
+        fi
+    done
+
+    # Build root strings (everything before the common suffix)
+    if [[ -n "$_PATH_SUFFIX" ]]; then
+        _PATH_ROOT1="${p1%/$_PATH_SUFFIX}"
+        _PATH_ROOT2="${p2%/$_PATH_SUFFIX}"
+    else
+        _PATH_ROOT1="$p1"
+        _PATH_ROOT2="$p2"
+    fi
+}
+
+# ============================================================================
+# BACKEND SELECTION
+# ============================================================================
+
+select_backend() {
+    if [[ -n "$OPT_BACKEND" ]]; then
+        SYNCZ_BACKEND="$OPT_BACKEND"
+    elif [[ "$OPT_BIDI" == "true" ]] && command -v unison &>/dev/null; then
+        SYNCZ_BACKEND=unison
+    else
+        SYNCZ_BACKEND=rsync
+    fi
+
+    # Validate backend is available
+    if [[ "$SYNCZ_BACKEND" == "unison" ]] && ! command -v unison &>/dev/null; then
+        error "unison not found. Install: brew install unison"
+        exit 1
+    fi
+    if [[ "$SYNCZ_BACKEND" == "rsync" ]] && ! command -v rsync &>/dev/null; then
+        error "rsync not found. Install: brew install rsync"
+        exit 1
+    fi
+
+    # Warn about rsync fallback in bidi mode
+    if [[ "$OPT_BIDI" == "true" && "$SYNCZ_BACKEND" == "rsync" && -z "$OPT_BACKEND" ]]; then
+        warn "unison not found; falling back to rsync (no state tracking for bidi)"
+    fi
+}
+
+# ============================================================================
+# UNISON BIDI
+# ============================================================================
+
+# Build common unison args from syncz options
+# Sets _UNISON_ARGS array
+_unison_build_common_args() {
+    local dir1="$1"
+    local dir2="$2"
+    _UNISON_ARGS=("$dir1" "$dir2" -times -ui text)
+
+    # Ignore macOS metadata (xattrs, resource forks) — useful for cloud filesystems
+    if [[ "$OPT_NO_METADATA" == "true" ]]; then
+        _UNISON_ARGS+=(-xattrs=false -rsrc=false)
+    fi
+
+    # Prefer: force one side to win conflicts
+    if [[ -n "${OPT_PREFER:-}" ]]; then
+        if [[ "$OPT_PREFER" == "dir1" || "$OPT_PREFER" == "d1" ]]; then
+            _UNISON_ARGS+=(-prefer "$dir1")
+        elif [[ "$OPT_PREFER" == "dir2" || "$OPT_PREFER" == "d2" ]]; then
+            _UNISON_ARGS+=(-prefer "$dir2")
+        elif [[ "$OPT_PREFER" == "newer" ]]; then
+            _UNISON_ARGS+=(-prefer newer)
+        else
+            _UNISON_ARGS+=(-prefer "$OPT_PREFER")
+        fi
+    fi
+
+    # Fresh: ignore saved archives
+    [[ "$OPT_FRESH" == "true" ]] && _UNISON_ARGS+=(-ignorearchives)
+
+    # Exclude patterns
+    if [[ ${#EXCLUDE_PATTERNS[@]} -gt 0 ]]; then
+        for pat in "${EXCLUDE_PATTERNS[@]}"; do
+            _UNISON_ARGS+=(-ignore "Name $pat")
+        done
+    fi
+
+    # Backup
+    [[ "$OPT_BACKUP" == "true" ]] && _UNISON_ARGS+=(-backup "Name *" -backupsuffix .syncz-bak)
+
+    # Verbose: unison default is informative; suppress with -terse when not verbose
+    if [[ "$OPT_VERBOSE" != "true" ]]; then
+        _UNISON_ARGS+=(-terse)
+    fi
+}
+
+# Dry-run for unison bidi: block all mutations, show what would happen
+unison_bidi_dryrun() {
+    local dir1="$SOURCE_DIR"
+    local dir2="$DEST_DIR"
+
+    _unison_build_common_args "$dir1" "$dir2"
+    local -a args=("${_UNISON_ARGS[@]}")
+    args+=(-batch -auto)
+
+    # Block all changes on both sides
+    args+=(-nocreation "$dir1" -nocreation "$dir2")
+    args+=(-nodeletion "$dir1" -nodeletion "$dir2")
+    args+=(-noupdate "$dir1" -noupdate "$dir2")
+
+    # Compute display labels
+    _compute_path_labels "$dir1" "$dir2"
+
+    # Header (skip roots if caller already printed them)
+    if [[ -z "${SYNCZ_ROOTS_SHOWN:-}" ]]; then
+        echo ""
+        echo "Bidirectional sync (unison) — DRY RUN"
+        echo "======================================"
+        echo "  D1:  $_PATH_ROOT1"
+        echo "  D2:  $_PATH_ROOT2"
+        if [[ -n "$_PATH_SUFFIX" ]]; then
+            echo "  Dir: $_PATH_SUFFIX/"
+        fi
+        echo ""
+    fi
+
+    # Run unison with all mutations blocked; capture output
+    local output
+    output=$(unison "${args[@]}" 2>&1) || true
+
+    # Parse and display the plan
+    local line filename action_count=0
+
+    # Parse skipped lines to get filenames, check filesystem for direction
+    # Format: "  skipped: filename (would create/update ...)"
+    while IFS= read -r line; do
+        if [[ ! "$line" =~ skipped:\ (.+)\ \( ]]; then
+            continue
+        fi
+        filename="${BASH_REMATCH[1]}"
+        # Determine action type from the reason in parentheses
+        local reason=""
+        if [[ "$line" =~ \((.+)\)$ ]]; then
+            reason="${BASH_REMATCH[1]}"
+        fi
+        # Skip directory entries (unison reports dirs separately)
+        if [[ -d "$dir1/$filename" || -d "$dir2/$filename" ]] && \
+           [[ ! -f "$dir1/$filename" && ! -f "$dir2/$filename" ]]; then
+            continue
+        fi
+        if [[ "$reason" =~ "contents changed on both sides" ]]; then
+            echo "  [CONFLICT]  $filename  (modified on both sides)"
+        elif [[ -f "$dir1/$filename" && ! -f "$dir2/$filename" ]]; then
+            echo "  [new]  D1 → D2  $filename"
+        elif [[ -f "$dir2/$filename" && ! -f "$dir1/$filename" ]]; then
+            echo "  [new]  D2 → D1  $filename"
+        elif [[ -f "$dir1/$filename" && -f "$dir2/$filename" ]]; then
+            echo "  [changed]  $filename"
+        fi
+        action_count=$((action_count + 1))
+    done <<< "$output"
+
+    # Summary
+    echo ""
+    if [[ $action_count -gt 0 ]]; then
+        echo "  $action_count file(s) would be synced."
+    else
+        echo "  Already in sync."
+    fi
+
+    # Show verbose detail if requested
+    if [[ "$OPT_VERBOSE" == "true" ]]; then
+        local skipped_lines
+        skipped_lines=$(echo "$output" | grep "skipped:" || true)
+        if [[ -n "$skipped_lines" ]]; then
+            echo ""
+            echo "Details:"
+            echo "$skipped_lines" | while IFS= read -r line; do
+                echo "  $line"
+            done
+        fi
+    fi
+
+    echo ""
+    info "Dry run - no changes made"
+}
+
+unison_bidi() {
+    local dir1="$SOURCE_DIR"
+    local dir2="$DEST_DIR"
+
+    # Dry-run: use blocking approach
+    if [[ "$OPT_DRY_RUN" == "true" ]]; then
+        unison_bidi_dryrun
+        return $?
+    fi
+
+    _unison_build_common_args "$dir1" "$dir2"
+    local -a args=("${_UNISON_ARGS[@]}")
+
+    # --delete deprecation in unison bidi
+    if [[ "$OPT_DELETE" == "true" ]]; then
+        warn "--delete is a no-op in unison bidi mode (deletions are state-tracked)"
+    fi
+
+    # Confirmation modes → -batch/-auto control
+    if [[ "$OPT_CONFIRM" == "true" && -z "$CONFIRM_ANSWER" ]]; then
+        : # Bare --confirm: no -batch, unison prompts per-file interactively
+    elif [[ "$CONFIRM_ANSWER" == "no" ]]; then
+        info "Aborted."
+        return 0
+    elif [[ "$OPT_JUST_DO_IT" == "true" ]]; then
+        _compute_path_labels "$dir1" "$dir2"
+        echo ""
+        echo "Bidirectional sync (unison)"
+        echo "==========================="
+        echo "  D1:  $_PATH_ROOT1"
+        echo "  D2:  $_PATH_ROOT2"
+        if [[ -n "$_PATH_SUFFIX" ]]; then
+            echo "  Dir: $_PATH_SUFFIX/"
+        fi
+        echo ""
+        if ! prompt_yn "Proceed with bidirectional sync?"; then
+            info "Aborted."
+            return 0
+        fi
+        args+=(-batch -auto)
+    else
+        # Default, --force, --confirm yes/all: batch mode
+        args+=(-batch -auto)
+    fi
+
+    # Compute display labels (if not already done by --just-do-it)
+    if [[ -z "${_PATH_ROOT1:-}" ]]; then
+        _compute_path_labels "$dir1" "$dir2"
+    fi
+
+    # Header (skip roots if caller already printed them)
+    if [[ -z "${SYNCZ_ROOTS_SHOWN:-}" ]]; then
+        echo ""
+        echo "Bidirectional sync (unison)"
+        echo "==========================="
+        echo "  D1:  $_PATH_ROOT1"
+        echo "  D2:  $_PATH_ROOT2"
+        if [[ -n "$_PATH_SUFFIX" ]]; then
+            echo "  Dir: $_PATH_SUFFIX/"
+        fi
+        echo ""
+    fi
+
+    # Execute
+    local rc=0
+    unison "${args[@]}" || rc=$?
+
+    echo ""
+    case $rc in
+        0) echo "Sync complete." ;;
+        1) echo "Sync complete (some items skipped — see above for conflicts)." ;;
+        *) error "unison exited with code $rc"; return $rc ;;
+    esac
+}
+
+# ============================================================================
+# BIDI FUNCTIONS (rsync fallback)
 # ============================================================================
 
 # Detect files that exist on only one side (orphans)
@@ -767,6 +1063,22 @@ while [[ $# -gt 0 ]]; do
             EXCLUDE_PATTERNS+=("$2")
             shift 2
             ;;
+        --ignore)
+            if [[ -z "${2:-}" ]]; then
+                error "Option --ignore requires a file path"
+                exit 1
+            fi
+            if [[ ! -f "$2" ]]; then
+                error "Ignore file not found: $2"
+                exit 1
+            fi
+            while IFS= read -r line || [[ -n "$line" ]]; do
+                line="${line%%#*}"     # strip comments
+                line="${line// /}"     # strip whitespace
+                [[ -n "$line" ]] && EXCLUDE_PATTERNS+=("$line")
+            done < "$2"
+            shift 2
+            ;;
         --delete)
             OPT_DELETE=true
             shift
@@ -785,6 +1097,32 @@ while [[ $# -gt 0 ]]; do
             ;;
         --just-do-it)
             OPT_JUST_DO_IT=true
+            shift
+            ;;
+        --backend)
+            if [[ "${2:-}" =~ ^(unison|rsync)$ ]]; then
+                OPT_BACKEND="$2"
+                shift 2
+            else
+                error "--backend requires 'unison' or 'rsync'"
+                exit 1
+            fi
+            ;;
+        --fresh)
+            OPT_FRESH=true
+            shift
+            ;;
+        --prefer)
+            if [[ -n "${2:-}" ]]; then
+                OPT_PREFER="$2"
+                shift 2
+            else
+                error "--prefer requires an argument: d1, d2, newer, or a path"
+                exit 1
+            fi
+            ;;
+        --no-metadata)
+            OPT_NO_METADATA=true
             shift
             ;;
         -*)
@@ -813,9 +1151,21 @@ done
 # Validate inputs
 validate_inputs
 
-# --- Bidi mode: delegate to execute_bidi ---
+# Select sync backend
+select_backend
+
+# Backend-aware validations
+if [[ "$OPT_FRESH" == "true" && "$SYNCZ_BACKEND" == "rsync" ]]; then
+    warn "--fresh has no effect with rsync backend (rsync has no state)"
+fi
+
+# --- Bidi mode: delegate to backend ---
 if [[ "$OPT_BIDI" == "true" ]]; then
-    execute_bidi
+    if [[ "$SYNCZ_BACKEND" == "unison" ]]; then
+        unison_bidi
+    else
+        execute_bidi
+    fi
     exit $?
 fi
 

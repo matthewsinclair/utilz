@@ -29,9 +29,9 @@ jobs:
 
     - name: Install dependencies
       run: |
-        # Install yq for YAML parsing and python3-venv for pdf2md/xtrct
+        # Install yq for YAML parsing, python3-venv for pdf2md/xtrct, unison for syncz bidi
         sudo apt-get update
-        sudo apt-get install -y jq python3-venv
+        sudo apt-get install -y jq python3-venv unison
         sudo wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O /usr/bin/yq
         sudo chmod +x /usr/bin/yq
         yq --version
@@ -78,8 +78,8 @@ jobs:
 
     - name: Install dependencies
       run: |
-        # Install yq for YAML parsing and fileicon for macOS folder icons
-        brew install yq fileicon coreutils
+        # Install yq for YAML parsing, fileicon for macOS folder icons, unison for syncz bidi
+        brew install yq fileicon coreutils unison
         yq --version
         fileicon --version || echo "fileicon installed"
 

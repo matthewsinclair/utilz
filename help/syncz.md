@@ -1,13 +1,13 @@
 # syncz
 
-**Version**: 1.4.0
+**Version**: 2.0.0
 **Author**: Matthew Sinclair
 
 ---
 
 ## Name
 
-`syncz` - Simple directory-to-directory syncer using rsync
+`syncz` - Simple directory-to-directory syncer
 
 ---
 
@@ -21,11 +21,11 @@ syncz [OPTIONS] <source-dir> <dest-dir>
 
 ## Description
 
-syncz wraps rsync to provide user-friendly directory-to-directory synchronization with conflict resolution strategies, confirmation prompts, and dry-run support.
+syncz provides user-friendly directory-to-directory synchronization with conflict resolution strategies, confirmation prompts, and dry-run support.
 
-By default, syncz uses a "newer-wins" strategy: only files where the source is newer than the destination are transferred. Two alternative strategies are available: `--source-wins` (always overwrite) and `--dest-wins` (never overwrite existing files).
+For **unidirectional** sync, syncz uses rsync with a "newer-wins" strategy by default. Two alternatives: `--source-wins` (always overwrite) and `--dest-wins` (never overwrite existing).
 
-syncz uses `-rlptD` instead of rsync's `-a` flag to avoid group/owner warnings for non-root user-level syncs.
+For **bidirectional** sync (`--bidi`), syncz uses [unison](https://www.cis.upenn.edu/~bcpierce/unison/) when available, which provides archive-based state tracking — it knows whether a file is new or was deleted since the last sync. When unison is not available, syncz falls back to rsync with a two-pass approach (no state tracking).
 
 ---
 
@@ -50,19 +50,24 @@ syncz uses `-rlptD` instead of rsync's `-a` flag to avoid group/owner warnings f
 
 ### Bidirectional Options
 
-| Flag     | Description                        |
-| -------- | ---------------------------------- |
-| `--bidi` | Two-way sync with orphan detection |
+| Flag                      | Description                                              |
+| ------------------------- | -------------------------------------------------------- |
+| `--bidi`                  | Two-way sync (uses unison when available)                |
+| `--backend unison\|rsync` | Force a specific sync backend                            |
+| `--fresh`                 | Ignore saved state, treat as first sync                  |
+| `--prefer d1\|d2\|newer`  | Force conflict resolution (unison only)                  |
+| `--no-metadata`           | Ignore xattrs and resource forks (for cloud filesystems) |
 
 ### Feature Options
 
-| Flag            | Short | Description                                   |
-| --------------- | ----- | --------------------------------------------- |
-| `--exclude PAT` | `-x`  | Exclude files matching pattern (repeatable)   |
-| `--delete`      |       | Remove dest files not in source               |
-| `--backup`      | `-b`  | Create .syncz-bak copies of overwritten files |
-| `--verbose`     | `-v`  | Show detailed per-file output                 |
-| `--progress`    | `-p`  | Show per-file transfer progress               |
+| Flag            | Short | Description                                    |
+| --------------- | ----- | ---------------------------------------------- |
+| `--exclude PAT` | `-x`  | Exclude files matching pattern (repeatable)    |
+| `--ignore FILE` |       | Read exclude patterns from file (one per line) |
+| `--delete`      |       | Remove dest files not in source                |
+| `--backup`      | `-b`  | Create .syncz-bak copies of overwritten files  |
+| `--verbose`     | `-v`  | Show detailed per-file output                  |
+| `--progress`    | `-p`  | Show per-file transfer progress                |
 
 ### General Options
 
@@ -113,16 +118,82 @@ This works in both unidirectional and bidirectional modes.
 
 ## Bidirectional Mode
 
-`--bidi` enables two-way sync between two directories. Instead of source→dest, both directories are treated symmetrically.
+`--bidi` enables two-way sync between two directories. Both directories are treated symmetrically.
 
-### How it works
+### Backend selection
 
-1. **Orphan detection** — Files that exist on only one side are identified using `find` + `comm`
-2. **Orphan resolution** — Orphans are handled based on flags (see below)
+When `--bidi` is used, syncz automatically selects the best backend:
+
+| Condition                     | Backend | Behavior                                |
+| ----------------------------- | ------- | --------------------------------------- |
+| unison available (default)    | unison  | State-tracked bidi with archive history |
+| unison not available          | rsync   | Two-pass sync, no state tracking        |
+| `--backend unison` (explicit) | unison  | Error if unison not installed           |
+| `--backend rsync` (explicit)  | rsync   | Forces rsync even if unison available   |
+
+### Unison backend (preferred)
+
+Unison maintains archive state between runs, so it can distinguish new files from deleted files. This prevents the "initial sync wipes everything" problem that rsync bidi has.
+
+- `--fresh` — Ignore saved archives, treat as first sync
+- `--dry-run` — Shows what would be synced without making changes (uses mutation blocking internally)
+- `--prefer d1|d2|newer` — Force conflict resolution: `d1` = first arg wins, `d2` = second arg wins, `newer` = most recently modified wins. Maps to unison `-prefer`
+- `--no-metadata` — Ignore extended attributes and resource forks (`-xattrs=false -rsrc=false`). Essential for cloud filesystem sync where Dropbox, Google Drive, etc. stamp their own metadata onto files, causing false conflicts
+- `--delete` — No-op (unison state-tracks deletions automatically)
+- `--exclude PAT` — Maps to unison `-ignore "Name PAT"`
+- `--ignore FILE` — Read exclude patterns from a file (one per line, `#` comments supported). Each pattern is added as if passed via `--exclude`
+- `--backup` — Maps to unison `-backup "Name *" -backupsuffix .syncz-bak`
+- `--confirm` (bare) — Unison prompts per-file interactively
+- Default/`--force` — Runs in batch mode (`-batch -auto`)
+
+For full unison documentation, see `man unison` or <https://www.cis.upenn.edu/~bcpierce/unison/>.
+
+### Path display
+
+In bidi mode, syncz displays paths using shortened labels to avoid repeating long common prefixes:
+
+```
+Bidirectional sync (unison)
+===========================
+  D1:  /path/to/root1
+  D2:  /path/to/root2
+  Dir: shared/subdir/
+```
+
+`D1` and `D2` show the unique root prefixes. `Dir` shows the common directory suffix (if any). These labels are also used in dry-run output (`[new] D1 → D2`, `[new] D2 → D1`).
+
+### Dry-run output (unison)
+
+```
+Bidirectional sync (unison) — DRY RUN
+======================================
+  D1:  /path/to/root1
+  D2:  /path/to/root2
+
+  [new]       D1 → D2  reports/q4.pdf
+  [new]       D2 → D1  notes/meeting.md
+  [changed]   readme.md
+  [CONFLICT]  config.yaml  (modified on both sides)
+
+  4 file(s) would be synced.
+
+ℹ Dry run - no changes made
+```
+
+### SYNCZ_ROOTS_SHOWN environment variable
+
+When set (e.g., `export SYNCZ_ROOTS_SHOWN=1`), syncz suppresses the per-invocation `D1:/D2:` header. This is useful for wrapper scripts that print roots once at the top and then invoke syncz multiple times for subdirectories.
+
+### rsync backend (fallback)
+
+The rsync backend uses a two-pass approach:
+
+1. **Orphan detection** — Files on only one side identified via `find` + `comm`
+2. **Orphan resolution** — Handled based on flags (see table below)
 3. **Pass 1** — dir1 → dir2 (newer-wins rsync, no `--delete`)
 4. **Pass 2** — dir2 → dir1 (newer-wins rsync, no `--delete`)
 
-### Orphan handling
+#### Orphan handling (rsync backend)
 
 | Flags                  | Behavior                                         |
 | ---------------------- | ------------------------------------------------ |
@@ -138,7 +209,6 @@ This works in both unidirectional and bidirectional modes.
 
 - `--source-wins` and `--dest-wins` are errors in bidi mode (only newer-wins makes sense)
 - `--delete` does NOT require `--confirm`/`--force`/`--just-do-it` in bidi mode
-- rsync `--delete` is never passed to rsync in bidi mode (orphan resolution handles deletions)
 
 ---
 
@@ -203,23 +273,29 @@ syncz --just-do-it --delete ~/src /dst
 ### Bidirectional
 
 ```bash
-# Two-way sync (keeps orphans, syncs to both sides)
+# Two-way sync (auto-selects unison if available)
 syncz --bidi ~/dir1 ~/dir2
 
 # Preview bidi sync (dry-run)
-syncz --bidi --dry-run --verbose ~/dir1 ~/dir2
+syncz --bidi --dry-run ~/dir1 ~/dir2
 
-# Bidi sync, auto-delete orphans
-syncz --bidi --delete ~/dir1 ~/dir2
+# First sync with fresh state
+syncz --bidi --fresh ~/dir1 ~/dir2
 
-# Bidi sync, keep all orphans (copy to both sides)
-syncz --bidi --confirm no ~/dir1 ~/dir2
+# Cloud filesystem sync (ignore xattrs/resource forks)
+syncz --bidi --no-metadata ~/Dropbox/project ~/GDrive/project
 
-# Bidi sync, prompt per-orphan (y/N/a, Enter=keep)
+# Force dir1 to win all conflicts
+syncz --bidi --fresh --prefer d1 ~/dir1 ~/dir2
+
+# Use an ignore file for exclude patterns
+syncz --bidi --ignore .synczignore ~/dir1 ~/dir2
+
+# Force rsync backend
+syncz --bidi --backend rsync ~/dir1 ~/dir2
+
+# Interactive per-file confirmation (unison prompts)
 syncz --bidi --confirm ~/dir1 ~/dir2
-
-# Fully non-interactive bidi with orphan deletion
-syncz --bidi --confirm yes ~/dir1 ~/dir2
 ```
 
 ### Advanced
@@ -240,6 +316,18 @@ syncz --confirm --delete --backup --verbose ~/src /dst
 
 ---
 
+## Known Patterns
+
+### .webloc conflicts
+
+When syncing between cloud storage providers (e.g., Dropbox and Google Drive), `.webloc` bookmark files may appear as `[CONFLICT]` in dry-run output. Both providers rewrite bookmark metadata, so unison correctly identifies them as "modified on both sides." If you don't care about bookmark metadata differences, exclude them:
+
+```bash
+syncz --bidi --exclude "*.webloc" ~/dir1 ~/dir2
+```
+
+---
+
 ## Files
 
 - `$UTILZ_HOME/opt/syncz/syncz` - Implementation
@@ -250,20 +338,24 @@ syncz --confirm --delete --backup --verbose ~/src /dst
 
 ## Environment
 
-- `UTILZ_HOME` - Root directory of Utilz framework
+| Variable            | Description                                             |
+| ------------------- | ------------------------------------------------------- |
+| `UTILZ_HOME`        | Root directory of Utilz framework                       |
+| `SYNCZ_ROOTS_SHOWN` | When set, suppresses D1/D2 header (for wrapper scripts) |
 
 ---
 
 ## Exit Status
 
 - `0` - Success
-- `1` - Error (invalid option, missing directory, etc.)
+- `1` - Error (invalid option, missing directory, etc.), or unison conflicts skipped
 
 ---
 
 ## Dependencies
 
-- `rsync` (required) - Pre-installed on most systems; `brew install rsync` on macOS
+- `unison` (optional) — Bidirectional sync engine with state tracking; `brew install unison`
+- `rsync` (required) — Pre-installed on most systems; `brew install rsync` on macOS
 
 ---
 
@@ -271,6 +363,7 @@ syncz --confirm --delete --backup --verbose ~/src /dst
 
 - `utilz` - Utilz framework dispatcher
 - `rsync(1)` - Remote file copy program
+- `unison(1)` - File synchronizer
 
 ---
 

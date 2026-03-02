@@ -1,7 +1,7 @@
 ---
-verblock: "02 Mar 2026:v0.2: matts - Full requirements spec"
+verblock: "02 Mar 2026:v0.3: matts - Implementation complete (thin bidi wrapper)"
 intent_version: 2.4.0
-status: WIP
+status: Completed
 slug: move-syncz-to-use-unison-with-rsync-fallback
 created: 20260302
 completed:
@@ -142,10 +142,13 @@ When unison is not available, syncz falls back to rsync. The behavior should be 
 
 **New flags:**
 
-| Flag                      | Description                                                         |
-| ------------------------- | ------------------------------------------------------------------- |
-| `--backend unison\|rsync` | Force a specific sync backend                                       |
-| `--fresh`                 | Ignore saved state, treat as first sync (unison: `-ignorearchives`) |
+| Flag                      | Description                                                            |
+| ------------------------- | ---------------------------------------------------------------------- |
+| `--backend unison\|rsync` | Force a specific sync backend                                          |
+| `--fresh`                 | Ignore saved state, treat as first sync (unison: `-ignorearchives`)    |
+| `--prefer d1\|d2\|newer`  | Force conflict resolution (unison only, maps to `-prefer`)             |
+| `--no-metadata`           | Ignore xattrs and resource forks (unison: `-xattrs=false -rsrc=false`) |
+| `--ignore FILE`           | Read exclude patterns from file (one per line, `#` comments)           |
 
 **Changed semantics:**
 

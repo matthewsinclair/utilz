@@ -5,6 +5,28 @@ All notable changes to the Utilz framework will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.0] - 2026-03-02
+
+### Changed
+
+- **syncz** - Unison backend for bidirectional sync (syncz v2.0.0)
+  - `--bidi` now uses unison when available for archive-based state tracking
+  - Automatically distinguishes new files from deleted files (no more mass-deletion risk)
+  - Falls back to rsync two-pass when unison is not installed
+  - `--backend unison|rsync` flag to force a specific backend
+  - `--fresh` flag to ignore saved unison archives (treat as first sync)
+  - `--prefer d1|d2|newer` flag to force conflict resolution (unison only)
+  - `--no-metadata` flag to ignore xattrs and resource forks (for cloud filesystems)
+  - `--ignore FILE` flag to read exclude patterns from a file (one per line, `#` comments supported)
+  - `--dry-run` works with unison via mutation blocking (`-nocreation/-nodeletion/-noupdate`)
+  - `--delete` is a no-op in unison mode (deletions are state-tracked)
+  - Path display uses `D1:/D2:` root labels with common suffix extraction (`Dir:`)
+  - `SYNCZ_ROOTS_SHOWN` env var to suppress per-invocation headers in wrapper scripts
+  - Dry-run output shows `[new]`, `[changed]`, `[CONFLICT]` tags with direction labels
+  - unison added as optional dependency
+  - 12 new tests (9 unison bidi + 3 backend selection); existing 66 tests pinned to rsync
+  - unison added to CI dependencies (Ubuntu and macOS)
+
 ## [1.3.2] - 2026-03-02
 
 ### Fixed
