@@ -1,6 +1,6 @@
 name: mdagg
 version: 1.0.0
-utilz_version: "^1.0.0"  # Compatible with Utilz 1.x.x
+utilz_version: "^2.0.0"
 description: Markdown aggregator for concatenating multiple markdown files into a single document
 author: Matthew Sinclair
 website: https://matthewsinclair.com
