@@ -111,7 +111,7 @@ load "test_helper.bash"
     rm -f "$UTILZ_BIN_DIR/brokenutil"
 }
 
-@test "version compatibility: ^1.0.0 matches 1.0.0" {
+@test "version compatibility: ^2.0.0 matches 2.x.x" {
     # Create a test utility with version requirement
     local util_name="versiontest"
     local util_dir="$UTILZ_HOME/opt/$util_name"
@@ -123,7 +123,7 @@ load "test_helper.bash"
     cat > "$util_dir/$util_name.yaml" <<'EOF'
 name: versiontest
 version: 1.0.0
-utilz_version: "^1.0.0"
+utilz_version: "^2.0.0"
 description: Test utility for version compatibility testing
 EOF
 
