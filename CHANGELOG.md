@@ -5,6 +5,25 @@ All notable changes to the Utilz framework will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.1.0] - 2026-03-25
+
+### Added
+
+- **expz** - New batch expense receipt PDF extraction utility
+  - Recursively finds PDF receipts in category subdirectories
+  - Extracts structured data via `xtrct` (Claude API) using a JSON schema
+  - Outputs CSV with columns: Date, Category, Supplier, Description, Currency, Subtotal, VAT, Total, Reference, File
+  - Category derived from parent directory name
+  - Bundled default schema at `lib/expense_schema.json`, overridable with `--schema`
+  - Output to stdout or `--out <file>`
+  - Verbose mode with progress to stderr
+  - Handles JSON array responses from xtrct (normalises to first element)
+  - 9 comprehensive tests
+
+### Changed
+
+- Framework version bumped to 2.1.0
+
 ## [2.0.0] - 2026-03-02
 
 ### Changed

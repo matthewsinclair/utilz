@@ -1,0 +1,37 @@
+{
+  "description": "Expense receipt or invoice. Extract payment/purchase details from this document.",
+  "fields": {
+    "date": {
+      "type": "string",
+      "description": "Date of the receipt, invoice, or transaction as YYYY-MM-DD"
+    },
+    "supplier": {
+      "type": "string",
+      "description": "Name of the supplier, vendor, merchant, or service provider"
+    },
+    "description": {
+      "type": "string",
+      "description": "Short one-line summary of what was purchased or paid for (max 80 chars)"
+    },
+    "currency": {
+      "type": "string",
+      "description": "ISO 4217 currency code (e.g. GBP, USD, EUR), or null if unclear"
+    },
+    "subtotal": {
+      "type": "number",
+      "description": "Subtotal amount before tax/VAT, or null if not shown separately"
+    },
+    "vat": {
+      "type": "number",
+      "description": "VAT or sales tax amount, or 0 if no tax was charged, or null if unclear"
+    },
+    "total": {
+      "type": "number",
+      "description": "Total amount paid including any tax/VAT"
+    },
+    "reference": {
+      "type": "string",
+      "description": "Invoice number, receipt number, order ID, or reference, or null if none"
+    }
+  }
+}

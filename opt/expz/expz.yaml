@@ -1,0 +1,15 @@
+name: expz
+version: 1.0.0
+utilz_version: "^1.0.0"
+description: Batch expense receipt PDF extraction to CSV
+author: Matthew Sinclair
+
+dependencies:
+  - name: xtrct
+    required: true
+    install: "Part of utilz framework"
+    purpose: Schema-driven semantic data extraction from PDFs
+  - name: jq
+    required: true
+    install: brew install jq
+    purpose: JSON parsing and CSV assembly

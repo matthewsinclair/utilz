@@ -30,7 +30,7 @@ Utilz/
 │   ├── clipz -> utilz
 │   ├── pdf2md -> utilz
 │   ├── lnrel -> utilz
-│   ├── ...                   # (11 utilities total)
+│   ├── ...                   # (12 utilities total)
 │   ├── syncz -> utilz
 │   └── xtrct -> utilz
 ├── opt/
@@ -160,6 +160,23 @@ CRYPTZ_EMAIL=user@example.com cryptz encrypt file.txt
 ```
 
 See `utilz help cryptz` for details.
+
+### expz
+
+Batch expense receipt PDF extraction to CSV. Recursively finds PDF receipts in category subdirectories, extracts structured data via `xtrct` (Claude API), and outputs CSV.
+
+```bash
+# Output CSV to stdout
+expz receipts/
+
+# Write to file with progress
+expz receipts/ --out expenses.csv --verbose
+
+# Custom extraction schema
+expz receipts/ --schema custom_schema.json
+```
+
+Requires `ANTHROPIC_API_KEY` environment variable. See `utilz help expz` for details.
 
 ### gitz
 
