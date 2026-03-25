@@ -1,5 +1,5 @@
 ---
-verblock: "02 Mar 2026:v0.6: matts - Updated after syncz v1.4.0 safe orphan defaults"
+verblock: "25 Mar 2026:v0.7: matts - Updated after expz v1.0.0 and framework v2.1.0"
 ---
 
 # Work In Progress
@@ -8,60 +8,32 @@ verblock: "02 Mar 2026:v0.6: matts - Updated after syncz v1.4.0 safe orphan defa
 
 **No active work** - All tasks complete.
 
-syncz v1.4.0 safe orphan defaults released as Utilz v1.3.2 on 02 Mar 2026.
+expz v1.0.0 released as Utilz v2.1.0 on 25 Mar 2026.
 
 ## Active Steel Threads
 
 None - All steel threads complete.
 
-## Recently Completed
-
-- syncz v1.4.0: Safe orphan defaults in --bidi mode (02 Mar 2026)
-  - Bare --bidi now keeps orphans and syncs to both sides (was interactive delete-by-default)
-  - --bidi --delete shows irreversibility warning
-  - --bidi --confirm interactive prompt flipped to [y/N/a] (Enter=keep)
-  - Released as Utilz v1.3.2
-
-- ST0003: syncz --bidi mode and --confirm enhancement (DONE 10 Feb 2026)
-  - Bidirectional sync with orphan detection (find + comm) and resolution
-  - --confirm optional argument (yes/no/all) for fully scriptable operation
-  - Fixed bash 3.2 empty array issue in detect_orphans
-  - Fixed --confirm yes --delete not deleting on macOS rsync
-  - 21 new tests (66 total), all passing on macOS and Linux CI
-  - Released as Utilz v1.2.1
-
-- ST0002: syncz - Directory-to-Directory Syncer (DONE 08 Feb 2026)
-  - rsync wrapper with conflict resolution (newer-wins, source-wins, dest-wins)
-  - Confirmation modes: --confirm (Y/N/A), --force, --just-do-it
-  - --delete with safety gate, --backup, --exclude, --dry-run
-  - 45 tests, all passing on macOS and Linux CI
-  - Released as Utilz v1.2.0
-
-- ST0001: cleanz - LLM Text Cleaner Utility (DONE 28 Dec 2025)
-  - Pure bash implementation (~690 lines with image mode)
-  - Text mode: removes hidden Unicode, HTML attrs, normalizes whitespace
-  - Image mode: strips C2PA/AI metadata via exiftool
-  - 55 tests, all passing on macOS and Linux CI
-  - Released as Utilz v1.1.0
-
 ## Upcoming Work
 
-No planned work. Ready for new requests.
+- Add expz to CI test loop in `.github/workflows/tests.yml` (Ubuntu + macOS)
+- Consider whether other utilities should bump their `utilz_version` to `^2.0.0` in a follow-up
 
 ## Notes
 
-The Utilz framework is stable at v1.3.2 with 11 utilities:
+The Utilz framework is at v2.1.0 with 12 utilities:
 
 - cleanz - LLM text cleaner + C2PA image metadata (v1.1.0)
 - clipz - Cross-platform clipboard
 - cryptz - GPG encryption wrapper
+- expz - Batch expense receipt PDF extraction to CSV (v1.0.0)
 - gitz - Git multi-repo operations
 - lnrel - Portable relative symlinks
 - macoz - macOS utilities (bg, setpicfor)
 - mdagg - Markdown aggregator
 - pdf2md - PDF to Markdown converter
 - retry - Retry command utility
-- syncz - Directory-to-directory syncer with bidi mode (v1.4.0)
+- syncz - Directory-to-directory syncer with bidi/unison mode (v2.0.0)
 - xtrct - Schema-driven semantic data extraction
 
 ## Context for LLM
