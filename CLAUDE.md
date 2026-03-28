@@ -1,6 +1,6 @@
 # Utilz Project Guidelines
 
-This is an Intent v2.3.3 project.
+This is an Intent v2.8.0 project.
 
 ## Project Structure
 
