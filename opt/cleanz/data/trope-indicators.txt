@@ -1,0 +1,106 @@
+# Machine-readable patterns file for llm-tropes
+# Generated from trope files with detection: automated or mixed
+#
+# Format:
+#   Section header: # {id}:{slug}:{severity}:{threshold}[:{density_count}]
+#   Lines below: one pattern per line
+#     - plain word/phrase = case-insensitive match
+#     - regex with \b = word-boundary-aware match
+#
+# Consumers: grep -iP (for regex) or grep -iF (for plain phrases)
+
+# WC-01:magic-adverbs:low:density:3
+\b(quietly|deeply|fundamentally|remarkably|arguably|incredibly|essentially|notably|significantly|undeniably|particularly|crucially)\b
+
+# WC-02:delve-and-friends:medium:single
+\b(delve|delving|utilize|utilizing|leverage[ds]?|leveraging|robust|streamline[ds]?|streamlining|harness(es|ed|ing)?|certainly|foster(s|ed|ing)?|facilitate[ds]?|facilitating|encompass(es|ed|ing)?)\b
+
+# WC-03:tapestry-and-landscape:low:density:2
+\b(tapestry|landscape|paradigm|synergy|ecosystem|realm|nexus|fabric)\b
+
+# WC-04:serves-as-dodge:low:single
+\b(serves? as|stands? as|acts? as a testament|functions? as)\b
+
+# SS-01:negative-parallelism:high:mixed
+(?i)(it'?s not\b.{1,40}\bit'?s\b|isn'?t\b.{1,40}\bit'?s\b|not because\b.{1,40}\bbut because\b)
+
+# SS-02:countdown-pattern:medium:mixed
+(?i)(?:not [^.]{1,30}\.\s*){2,}(?:but |just |only )?[A-Z]
+
+# SS-03:rhetorical-self-question:low:density:2
+(?i)\bthe (result|worst part|best part|scary part|answer|catch|kicker|takeaway|problem|irony|twist)\?
+
+# SS-04:its-worth-noting:low:single
+(?i)\b(it'?s worth noting|it bears mentioning|it should be noted|it'?s important to note|worth mentioning)\b
+
+# SS-06:false-ranges:medium:single
+(?i)\b(from\s+\w+\s+to\s+\w+\s+to\s+|ranging from\s+|everything from\s+)
+
+# TN-01:heres-the-kicker:medium:single
+\b[Hh]ere['']s (the (kicker|thing|real question|catch)|where it gets interesting|what (most people|nobody))
+
+# TN-02:think-of-it-as:low:single
+\b([Tt]hink of it (like|as)|[Ii]t['']s (like|similar to) a|[Pp]icture a|[Cc]onsider it like|[Yy]ou can think of this as)\b
+
+# TN-03:imagine-a-world:medium:single
+\b([Ii]magine (a (world|future)|if)|[Pp]icture a world|[Nn]ow imagine|[Ee]nvision a|[Ww]hat if every)\b
+
+# TN-05:the-truth-is-simple:medium:single
+\b([Tt]he (reality|truth|fact|bottom line|answer) is|[Ii]t['']s (clear|obvious) that|[Hh]istory is (clear|unambiguous)|[Ss]imply put|[Mm]ake no mistake)\b
+
+# TN-06:grandiose-stakes-inflation:low:density:2
+\b(fundamentally (reshape|transform|change|alter)|define the next era|change everything|transform how we|revolutionary|game[- ]changing|unprecedented|paradigm shift|redefine what it means|nothing short of|forever change)\b
+
+# TN-07:lets-break-this-down:medium:single
+\b[Ll]et['']?s (break this down|unpack|explore|dive in(to)?|take a closer look|walk through|examine|dig into)\b|[Ll]et me explain
+
+# TN-08:vague-attributions:low:single
+\b([Ee]xperts (argue|say|suggest)|[Oo]bservers have cited|[Ii]ndustry reports suggest|[Rr]esearch has shown|[Ss]tudies have found|[Mm]any researchers|[Cc]ritics point out|[Ss]ome have argued|[Ii]t is widely believed|[Aa]ccording to experts|[Ll]eading voices in)\b
+
+# TN-10:despite-its-challenges:low:single
+\b[Dd]espite (its |these |facing )?(challenges|limitations|concerns|shortcomings)|[Ww]hile (challenges remain|not without (its |their )?(challenges|flaws))|[Cc]hallenges notwithstanding|[Tt]hough not without (its |their )?(challenges|flaws)\b
+
+# FMT-01:em-dash-addiction:low:density:3
+ -- |—
+
+# FMT-02:bold-first-bullets:medium:single
+^\s*[-*]\s+\*\*[^*]+\*\*[:\s]
+
+# FMT-03:unicode-decoration:low:density:2
+[→←⟶⟵""''✓✗•◦▸▹]
+
+# CMP-05:content-duplication:high:single
+# No grep-ready patterns -- requires structural similarity analysis (Jaccard/cosine)
+
+# CMP-06:signposted-conclusion:medium:single
+(?i)\b(in conclusion|to sum up|in summary|to conclude|in closing|to wrap up|all in all)\b
+
+# NAR-01:greeting-cliches:high:single
+(?i)(well,?\s+well,?\s+well|ah,?\s+you must be|so,?\s+we meet again|i'?ve been expecting you|what do we have here|look who decided to|if it isn'?t|to what do i owe the pleasure|we'?ve been expecting you|at last,?\s+we meet)
+
+# NAR-02:filler-phrases:medium:single
+(?i)\b(i must say|you see,|in point of fact|if i'?m being honest|to be perfectly frank|as a matter of fact|truth be told|i have to admit|i dare say|i'?ll be honest with you|let me be frank|honestly speaking)\b
+
+# NAR-03:emotive-cliches:high:single
+(?i)(heart sank|chill ran down|shivers down|knot in (my|her|his|their) stomach|eyes widened|blood ran cold|breath caught|jaw dropped|stomach lurched|heart hammered|pulse quickened|world seemed to stop|tears pricked|throat tightened)
+
+# NAR-04:dialog-tag-cliches:medium:single
+(?i)(intoned|"\s*\w+\s+breathed|murmured softly|exclaimed loudly|whispered quietly|stated firmly|replied curtly|"\s*\w+\s+mused|"\s*\w+\s+quipped|"\s*\w+\s+opined|"\s*\w+\s+proclaimed|hissed\b)
+
+# NAR-05:action-cliches:medium:single
+(?i)(\*\s*(raises?\s+(an?\s+)?eyebrow|smiles?\s+knowingly|sighs?\s+heavily|nods?\s+slowly|tilts?\s+(head|their head|his head|her head)|leans?\s+(back|forward)|cross(es)?\s+arms|narrows?\s+(eyes|their eyes|his eyes|her eyes)|furrows?\s+brow)|raises?\s+(an?\s+)?eyebrow|smiles?\s+knowingly|sighs?\s+heavily|nods?\s+slowly|narrows?\s+(his|her|their)\s+eyes|furrows?\s+(his|her|their)\s+brow)
+
+# NAR-06:melodramatic-phrases:medium:single
+(?i)(only time will tell|little did (he|she|they|I|we)\b|the rest,?\s+as they say,?\s+is history|nothing would ever be the same|if only (he|she|they|I|we) had known|and so it begins|the die was cast|there was no turning back|fate had other plans|the clock was ticking|everything was about to change|a storm was brewing)
+
+# NAR-07:exposition-hand-holding:low:single
+(?i)(let me explain|you might be wondering|allow me to clarify|as you may know|for those unfamiliar|as you can see|needless to say|it goes without saying|as (previously|I) mentioned|it should be noted|in case you were wondering)
+
+# ASR-01:ai-identity-leaks:high:single
+(?i)(i'?m an AI|as an AI|being a language model|i was (created|trained|programmed) (by|to)|my (training data|programming|instructions)|i don'?t (actually )?have (real )?feelings|i'?m just a (program|machine)|i can'?t (actually )?(experience|feel))
+
+# ASR-02:fourth-wall-breaks:high:single
+(?i)(in this (story|narrative|game|roleplay|scenario)\b|the player\b|player character|you'?re (playing|roleplaying)|breaking character|out of character|OOC:|the (author|writer|creator)\b|game master|dungeon master|let'?s continue the (story|roleplay)|back to the story|as a character)
+
+# ASR-03:meta-knowledge-leaks:high:single
+(?i)(system prompt|context window|token (limit|budget)|instructions i was given|ignore previous instructions|jailbreak|prompt injection|my (parameters|weights)|fine-?tuned|RLHF|reinforcement learning|safety filter|content policy|i'?ve been instructed to|my guidelines say|i'?m not allowed to)

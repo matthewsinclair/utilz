@@ -608,3 +608,83 @@ skip_if_no_exiftool() {
     # The clipboard+file check happens before image-specific clipboard check
     assert_output_contains "clipboard"
 }
+
+# ============================================================================
+# DETROPE DETECTION TESTS
+# ============================================================================
+
+@test "cleanz --detrope detects delve family" {
+    local test_file="$BATS_TEST_TMPDIR/trope_test.md"
+    printf 'We must delve into how to leverage these robust frameworks.\n' > "$test_file"
+    run bash -c "'$UTILZ_BIN_DIR/cleanz' --detrope '$test_file' 2>&1"
+    assert_success
+    assert_output_contains "delve-and-friends"
+    assert_output_contains "MEDIUM"
+}
+
+@test "cleanz --detrope detects negative parallelism" {
+    local test_file="$BATS_TEST_TMPDIR/trope_test.md"
+    printf "Here's the thing: it's not about tools. It's about people.\n" > "$test_file"
+    run bash -c "'$UTILZ_BIN_DIR/cleanz' --detrope '$test_file' 2>&1"
+    assert_success
+    assert_output_contains "negative-parallelism"
+    assert_output_contains "HIGH"
+}
+
+@test "cleanz --detrope respects density thresholds" {
+    local test_file="$BATS_TEST_TMPDIR/trope_test.md"
+    # Single "remarkably" should NOT trigger (threshold: 3)
+    printf 'This is a remarkably good approach to the problem.\n' > "$test_file"
+    run bash -c "'$UTILZ_BIN_DIR/cleanz' --detrope '$test_file' 2>&1"
+    assert_success
+    refute_output_contains "magic-adverbs"
+}
+
+@test "cleanz --detrope flags density tropes above threshold" {
+    local test_file="$BATS_TEST_TMPDIR/trope_test.md"
+    # Three magic adverbs on separate lines should trigger (threshold: 3)
+    printf 'This is remarkably good.\nIt is fundamentally different.\nIncredibly useful stuff.\n' > "$test_file"
+    run bash -c "'$UTILZ_BIN_DIR/cleanz' --detrope '$test_file' 2>&1"
+    assert_success
+    assert_output_contains "magic-adverbs"
+    assert_output_contains "3 occurrences"
+}
+
+@test "cleanz --detrope shows summary counts" {
+    local test_file="$BATS_TEST_TMPDIR/trope_test.md"
+    printf "We must delve into this. Imagine a world where everything works.\n" > "$test_file"
+    run bash -c "'$UTILZ_BIN_DIR/cleanz' --detrope '$test_file' 2>&1"
+    assert_success
+    assert_output_contains "SUMMARY:"
+    assert_output_contains "Medium:"
+}
+
+@test "cleanz --detrope reports clean text" {
+    local test_file="$BATS_TEST_TMPDIR/trope_test.md"
+    printf 'The server handles 1000 requests per second under load.\n' > "$test_file"
+    run bash -c "'$UTILZ_BIN_DIR/cleanz' --detrope '$test_file' 2>&1"
+    assert_success
+    assert_output_contains "No tropes detected"
+}
+
+@test "cleanz --detrope works with stdin" {
+    run bash -c "printf 'We must delve into this problem.\n' | '$UTILZ_BIN_DIR/cleanz' --detrope 2>&1"
+    assert_success
+    assert_output_contains "delve-and-friends"
+}
+
+@test "cleanz --detrope combines with other cleaning" {
+    local test_file="$BATS_TEST_TMPDIR/trope_test.md"
+    printf 'We must delve\xe2\x80\x8b into this.\n' > "$test_file"
+    run bash -c "'$UTILZ_BIN_DIR/cleanz' --detrope '$test_file' 2>&1"
+    assert_success
+    assert_output_contains "delve-and-friends"
+}
+
+@test "cleanz --detrope with --image is rejected" {
+    local test_file="$BATS_TEST_TMPDIR/test.png"
+    touch "$test_file"
+    run bash -c "'$UTILZ_BIN_DIR/cleanz' --detrope --image '$test_file' 2>&1"
+    assert_failure
+    assert_output_contains "not supported in image mode"
+}

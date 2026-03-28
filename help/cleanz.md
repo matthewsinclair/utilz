@@ -1,6 +1,6 @@
 # cleanz
 
-**Version**: 1.1.0
+**Version**: 1.2.0
 **Author**: Matthew Sinclair
 
 ---
@@ -48,6 +48,7 @@ cleanz removes invisible Unicode characters, HTML attributes, and formatting art
 - `--no-html` - Skip HTML attribute cleaning
 - `--no-whitespace` - Skip whitespace normalization
 - `--normalize-quotes` - Convert smart quotes to straight quotes
+- `--detrope` - Detect LLM writing tropes (word choice, structure, tone)
 
 ### General Options
 
@@ -152,6 +153,19 @@ cleanz --no-html --no-whitespace document.txt
 cleanz --normalize-quotes document.txt
 ```
 
+### Trope Detection
+
+```bash
+# Detect LLM writing tropes in a file
+cleanz --detrope document.md
+
+# Combine trope detection with cleaning
+cleanz --detrope --normalize-quotes document.md
+
+# Trope detection from stdin
+cat article.md | cleanz --detrope
+```
+
 ### Image Mode
 
 ```bash
@@ -174,6 +188,7 @@ cleanz --image --detect -v dalle-image.png
 
 - `$UTILZ_HOME/opt/cleanz/cleanz` - Implementation
 - `$UTILZ_HOME/opt/cleanz/cleanz.yaml` - Metadata
+- `$UTILZ_HOME/opt/cleanz/data/trope-indicators.txt` - Trope patterns
 - `$UTILZ_HOME/bin/cleanz` - Symlink to dispatcher
 
 ---
