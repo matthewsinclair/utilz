@@ -1,7 +1,7 @@
 ---
 verblock: "23 Apr 2026:v0.1: matts - Initial version"
 intent_version: 2.4.0
-status: WIP
+status: Completed
 slug: emacs-bindings-for-utilz-utilities
 created: 20260423
 completed:
