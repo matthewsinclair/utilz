@@ -1,12 +1,12 @@
 ---
-verblock: "23 Apr 2026:v0.3: matts - Mid-ST0007 snapshot; WP03 done, WP04 pending"
+verblock: "23 Apr 2026:v1.0: matts - ST0007 closed, framework at 2.2.0"
 ---
 
 # Restart Context
 
 ## Key Context (as of 23 Apr 2026)
 
-- **Mid-ST0007** (Emacs bindings for Utilz utilities). WP01 + Reindent + WP02 + WP03 committed. WP04 (E2E in Doom + README + CHANGELOG) is the next work.
+- **ST0007 CLOSED** (Emacs bindings for Utilz utilities). All four WPs plus the 4-to-2-space reindent committed. Framework bumped to 2.2.0. Emacs bridge live in user's Doom (`~/.config/doom/custom/160-utilz.el` -> symlink to `static/emacs/utilz.el`). 34-test batch E2E + live Doom spot-check both green.
 - Framework version is still **2.1.0** (ST0007 will land in v2.2.0 on close).
 - 12 utilities installed, all passing `utilz doctor` and `utilz test`.
 - Two remotes: `local` (Dropbox) and `upstream` (GitHub) — push to both.
@@ -32,7 +32,8 @@ verblock: "23 Apr 2026:v0.3: matts - Mid-ST0007 snapshot; WP03 done, WP04 pendin
 ## Commit Graph This Session
 
 ```
-<WP03 commit — pending>  ST0007/WP03: elisp bridge static/emacs/utilz.el
+<WP04 commit — pending>  ST0007/WP04: E2E verification + docs + VERSION bump to 2.2.0 + close ST
+2a5b743  ST0007/WP03: elisp bridge static/emacs/utilz.el
 c75381a  ST0007: update wip.md and restart.md for mid-ST compact
 eb7264e  ST0007/WP02: utilz integration + utilz emacs subcommands
 9c9c439  Reindent bash from 4-space to 2-space (Intent project standard)
@@ -44,14 +45,17 @@ eb7264e  ST0007/WP02: utilz integration + utilz emacs subcommands
 
 ## For Next Session
 
-1. Confirm `git log -6` matches the graph above.
-2. `utilz test` — expect 13 suites green (including `bridge.bats` with 16 tests post-WP03).
-3. `utilz integration commands | column -t -s$'\t'` — expect 12-row table.
-4. `utilz emacs doctor` — expect three green checks (canonical elisp now present).
-5. `emacs -Q --batch -f batch-byte-compile static/emacs/utilz.el` — expect zero warnings.
-6. Pick up WP04: start with `intent wp start ST0007/04`.
-   - Symlink the bridge into Doom: `ln -s "$UTILZ_HOME/static/emacs/utilz.el" ~/.config/doom/custom/160-utilz.el`
-   - Add `(load "160-utilz.el")` to `~/.config/doom/config.el` between `150-corfu.el` and `999-finalise.el`.
-   - Restart Doom; walk the design.md §5 checklist (cleanz replace, xtrct buffer, C-u flag prompt, pdf2md non-PDF stderr pop).
-   - Write README "Using Utilz from Emacs" section + CHANGELOG v2.2.0 entry.
-   - Close with `intent st done ST0007`; consider version bump to v2.2.0.
+No active steel thread. Framework at v2.2.0 with 12 utilities + editor integration surface + Emacs bridge. Opportunistic next candidates:
+
+1. Add `expz` to CI test loop in `.github/workflows/tests.yml` (carry-over from prior session).
+2. Consider tagging v2.2.0 (`git tag v2.2.0 && git push --tags`).
+3. Potential future ST: VSCode / Zed / Vim integration families (same TSV manifest, new editor-specific installers).
+4. Potential future ST: Emacs bridge v2 — Transient grouped menu (currently deferred to future enhancement per design.md §3).
+
+### Verification checklist on fresh checkout
+
+- `utilz version` — expect `utilz v2.2.0`.
+- `utilz doctor` + `utilz emacs doctor` — both green.
+- `utilz test` — expect 13 suites green (70 tests utilz.bats + bridge.bats; full suite covers all 12 utilities).
+- `utilz integration commands | column -t -s$'\t'` — 12-row table.
+- Optional batch E2E: `UTILZ_HOME=$PWD emacs -Q --batch -l static/emacs/e2e-smoke.el` — expects `34 PASS / 0 FAIL / exit 0`.

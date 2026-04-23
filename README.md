@@ -327,6 +327,78 @@ xtrct doc.md --schema schema.json --format table
 
 Requires `ANTHROPIC_API_KEY` environment variable. See `utilz help xtrct` for details.
 
+## Using Utilz from Emacs
+
+Utilz ships with a Doom-ready elisp bridge that exposes every utility with an `integration:` block in its YAML to Emacs. `M-x utilz` opens a `completing-read` menu of the available utilities, annotated with their description and I/O shape; picking one runs the utility on the current region, buffer, file, or directory, and dispatches the result per the utility's declared output kind (replace region, pop a result buffer, echo a message, or discard).
+
+### Install
+
+The canonical elisp lives in the Utilz repo at `static/emacs/utilz.el`. Install it into your Doom custom directory via the bundled installer (preferred: symlink, so `git pull` rolls the bridge forward automatically):
+
+```bash
+utilz emacs install --dest ~/.config/doom/custom/160-utilz.el --symlink
+```
+
+Then add the printed `(load ...)` line to `~/.config/doom/config.el` (near your other `(load "NNN-<name>.el")` statements — anywhere before `999-finalise.el`):
+
+```elisp
+(load "160-utilz.el")
+```
+
+Run `doom sync && doom doctor` and restart Emacs. Sanity-check with:
+
+```bash
+utilz emacs doctor
+```
+
+All three checks should be green: `utilz` on PATH, all utilities carry an `integration:` block, canonical elisp present.
+
+### Everyday usage
+
+The motivating case is cleaning LLM-pasted text in place:
+
+```
+M-x utilz RET cleanz RET
+```
+
+With an active region, the region is piped through `cleanz` and replaced with the cleaned output (one `undo-boundary` — a single `C-/` reverts cleanly). With no active region, the whole buffer is the input.
+
+Other common flows:
+
+| Invocation              | Input                          | Output                                   |
+| ----------------------- | ------------------------------ | ---------------------------------------- |
+| `M-x utilz` -> `cleanz` | active region or whole buffer  | region/buffer replaced in place          |
+| `M-x utilz` -> `xtrct`  | active region or whole buffer  | JSON/CSV in `*utilz-xtrct*` buffer       |
+| `M-x utilz` -> `mdagg`  | active region or whole buffer  | concatenated markdown in `*utilz-mdagg*` |
+| `M-x utilz` -> `pdf2md` | current buffer's file (or ask) | converted markdown in `*utilz-pdf2md*`   |
+| `M-x utilz` -> `expz`   | directory (prompted)           | CSV of receipts in `*utilz-expz*`        |
+| `M-x utilz` -> `gitz`   | directory (prompted)           | git status dump in `*utilz-gitz*`        |
+| `M-x utilz` -> `clipz`  | none                           | clipboard op; single-line echo           |
+
+### Prefix arguments
+
+- `M-x utilz` — default flags only (whatever the YAML declares).
+- `C-u M-x utilz` — prompts for extra flags via `read-string`; passed through to the utility (e.g. `--detrope` for cleanz).
+- `C-u C-u M-x utilz` — shows the full command line in a yes/no confirm before running. Useful before you let `cryptz` or `syncz` fire.
+
+### Refreshing the manifest
+
+After adding a new utility (or editing an `integration:` block), re-read the manifest without restarting Emacs:
+
+```
+M-x utilz-refresh
+```
+
+### Keybinding
+
+The bridge binds `C-c u` to `utilz`. Override in your Doom config if you want a different prefix.
+
+### How it works
+
+The bridge is a thin coordinator. It reads a TSV manifest from `utilz integration commands` at load time (cached in `utilz--commands-alist`) and never parses YAML directly — the TSV is the single cross-boundary contract, so future editor integrations (VSCode, Zed, Vim) can consume the same surface without duplicating the walker. On failure (non-zero exit from the underlying utility), the bridge pops a stderr buffer and leaves your region/buffer untouched.
+
+See `intent/st/ST0007/design.md` for the full design and `static/emacs/utilz.el` for the bridge source (~270 lines).
+
 ## Creating a New Utility
 
 Use the built-in generator to scaffold a new utility:

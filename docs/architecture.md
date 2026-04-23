@@ -267,6 +267,14 @@ optional_dependencies:
   - name: glow
     install: brew install glow
     purpose: Beautiful markdown rendering for help documentation
+
+# Editor integration manifest (optional; absence means the utility is not
+# auto-exposed to editor bridges like Emacs/VSCode/Zed/Vim).
+integration:
+  input: stdin # stdin | file | path | none
+  output: buffer # replace | buffer | message | discard
+  flags: [] # always-pass flags (rare)
+  prompts: [] # optional suggestions for the C-u flag prompt
 ```
 
 ### Version File References
@@ -296,6 +304,21 @@ description=$(get_util_metadata "mdagg" ".description")
 # Get required framework version
 utilz_version=$(get_util_metadata "mdagg" ".utilz_version")
 ```
+
+### Integration Manifest
+
+Utilities that want to be auto-exposed to editor bridges (Emacs, and future VSCode / Zed / Vim) declare an `integration:` block in their YAML. The block has four fields:
+
+- `input`: one of `stdin` (pipe region/buffer to the utility), `file` (pass the current buffer's file path), `path` (prompt for a directory), or `none` (run with no input).
+- `output`: one of `replace` (replace the region/buffer with stdout), `buffer` (dump stdout into a `*utilz-<name>*` side buffer), `message` (single-line echo), or `discard` (run and report exit status only).
+- `flags`: a list of always-pass flags (rarely used).
+- `prompts`: optional suggestions shown to the user when they hit `C-u` to add extra flags.
+
+The manifest is exposed as TSV via `utilz integration commands` — one row per utility that has an `integration:` block. Format: `name<TAB>description<TAB>input<TAB>output<TAB>flags`. The single walker is `emit_integration_tsv` in `opt/utilz/lib/common.sh` (Highlander: no editor parses YAML itself; the TSV is the only cross-boundary contract).
+
+Editor-specific installers live alongside the neutral manifest: `utilz emacs install` and `utilz emacs doctor` ship today; additional editor families (`utilz vscode …`, `utilz vim …`, `utilz zed …`) slot in parallel without needing a new walker.
+
+The canonical Emacs bridge lives in the repo at `static/emacs/utilz.el` and is distributed by symlinking into the user's Doom custom directory. See [ST0007 design](../intent/st/ST0007/design.md) for the full design rationale and the [README Emacs section](../README.md#using-utilz-from-emacs) for installer invocation and usage.
 
 ## Version Management
 

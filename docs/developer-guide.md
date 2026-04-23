@@ -286,6 +286,34 @@ website: https://github.com/you/logtool
 version_file: ../../VERSION
 ```
 
+**Editor Integration Block**:
+
+Utilities that should be auto-exposed to editor bridges (Emacs today; VSCode / Zed / Vim in future) declare an `integration:` block. The block is optional — absence means the utility is not surfaced in the integration manifest.
+
+```yaml
+integration:
+  input: stdin # stdin | file | path | none
+  output: buffer # replace | buffer | message | discard
+  flags: [] # always-pass flags (rare)
+  prompts: [] # optional flag suggestions for the C-u prompt
+```
+
+Pick `input` by what the utility reads:
+
+- `stdin` — reads from stdin (Emacs pipes the active region or whole buffer via `shell-command-on-region`).
+- `file` — needs a real file path (Emacs uses the current buffer's `buffer-file-name`, or prompts).
+- `path` — needs a directory (Emacs prompts for a directory, defaulting to `default-directory`).
+- `none` — takes no input (e.g. clipboard operators, system actions).
+
+Pick `output` by what the user wants to see:
+
+- `replace` — replaces the region/buffer with stdout (one `undo-boundary`, single `C-/` reverts).
+- `buffer` — dumps stdout into a `*utilz-<name>*` side buffer.
+- `message` — echoes stdout as a single-line minibuffer message.
+- `discard` — runs and reports exit status only.
+
+Once an `integration:` block is declared, `utilz integration commands` surfaces the utility in the TSV manifest, and `M-x utilz` in Emacs picks it up without any code changes. See [docs/architecture.md - Integration Manifest](architecture.md#integration-manifest) for the cross-boundary contract.
+
 ### Dependencies
 
 **Required Dependencies**:
@@ -312,7 +340,7 @@ optional_dependencies:
 ```yaml
 name: logtool
 version: 1.0.0
-utilz_version: "^1.0.0"
+utilz_version: "^2.0.0"
 description: Process and analyze log files
 author: Jane Developer
 website: https://github.com/janedev/logtool
@@ -328,6 +356,14 @@ optional_dependencies:
   - name: bat
     install: brew install bat
     purpose: Colorized output
+
+# Exposed to editor bridges via `utilz integration commands'. logtool
+# accepts a log file path and writes its analysis to stdout; the Emacs
+# bridge runs it and shows the result in a *utilz-logtool* side buffer.
+integration:
+  input: file
+  output: buffer
+  flags: []
 
 features:
   - Parse JSON logs

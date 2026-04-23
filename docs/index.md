@@ -1,6 +1,6 @@
 # Utilz Documentation
 
-**Version**: 1.2.1
+**Version**: 2.2.0
 
 Utilz is a bash/zsh framework for building and managing command-line utilities with a single dispatcher pattern. All utilities are symlinks to `bin/utilz`, which routes execution to the appropriate implementation.
 
@@ -10,35 +10,46 @@ Utilz is a bash/zsh framework for building and managing command-line utilities w
 
 Start here if you want to install and use Utilz utilities:
 
-- **[README](../README.md)** - Installation, quick start, and basic usage
-- **[Framework Help](../help/utilz.md)** - Complete command reference (`utilz help`, `test`, `doctor`, etc.)
-- **[mdagg Help](../help/mdagg.md)** - Markdown aggregator utility documentation
+- **[README](../README.md)** - Installation, quick start, basic usage, and the Emacs bridge.
+- **[Framework Help](../help/utilz.md)** - Complete command reference (`utilz help`, `test`, `doctor`, `integration`, `emacs`, etc.).
+- **Per-utility help** - Run `utilz help <name>` or see `help/<name>.md` directly. All 12 shipped utilities have their own help files: `cleanz`, `clipz`, `cryptz`, `expz`, `gitz`, `lnrel`, `macoz`, `mdagg`, `pdf2md`, `retry`, `syncz`, `xtrct`.
+
+### I want to integrate Utilz with my editor
+
+- **[README - Using Utilz from Emacs](../README.md#using-utilz-from-emacs)** - Installer invocation, `(load ...)` line, usage table, prefix-arg semantics.
+- **[ST0007 Design](../intent/st/ST0007/design.md)** - Editor-neutral `integration:` YAML block, `utilz integration commands` TSV surface, PFIC/Thin-Coordinator shape of the bridge.
+- **[Bridge source](../static/emacs/utilz.el)** - The canonical elisp bridge (~270 lines).
+
+Future integration targets (VSCode, Zed, Vim) slot in as parallel `utilz <editor>` subcommand families that consume the same `utilz integration commands` TSV - no per-editor YAML walker.
 
 ### I want to create utilities
 
 Start here if you want to build your own utilities with Utilz:
 
-- **[Developer Guide](developer-guide.md)** - Creating utilities, using the generator, testing
-- **[Architecture](architecture.md)** - How the dispatcher pattern works
-- **[Design Principles](design-principles.md)** - Philosophy and when to use Utilz
+- **[Developer Guide](developer-guide.md)** - Creating utilities, using the generator, testing, `integration:` metadata.
+- **[Architecture](architecture.md)** - How the dispatcher pattern works.
+- **[Design Principles](design-principles.md)** - Philosophy and when to use Utilz.
 
 ### I want to understand the codebase
 
-- **[Architecture](architecture.md)** - Dispatcher pattern, common library, metadata system
-- **[Testing Guide](../opt/utilz/test/README.md)** - Test framework and best practices
-- **[CI/CD Workflows](../.github/workflows/README.md)** - GitHub Actions setup
+- **[Architecture](architecture.md)** - Dispatcher pattern, common library, metadata system, integration manifest.
+- **[Testing Guide](../opt/utilz/test/README.md)** - Test framework and best practices.
+- **[CI/CD Workflows](../.github/workflows/README.md)** - GitHub Actions setup.
 
 ## Quick Reference
 
 ### Framework Commands
 
 ```bash
-utilz help [utility]    # Show help documentation
-utilz list              # List available utilities
-utilz version           # Show framework version
-utilz doctor            # Run system diagnostics
-utilz test [utility]    # Run test suite
-utilz generate <name>   # Create new utility scaffold
+utilz help [utility]          # Show help documentation
+utilz list                    # List available utilities
+utilz version                 # Show framework version
+utilz doctor                  # Run system diagnostics
+utilz test [utility]          # Run test suite
+utilz generate <name>         # Create new utility scaffold
+utilz integration commands    # Emit the editor-neutral TSV manifest
+utilz emacs install [args]    # Install the Emacs elisp bridge
+utilz emacs doctor            # Health-check the Emacs bridge surface
 ```
 
 ### File Structure
