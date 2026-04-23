@@ -8,143 +8,143 @@ load "test_helper.bash"
 # ============================================================================
 
 @test "complete workflow: run doctor, list utilities, get help" {
-    # Run doctor
-    run_utilz doctor
-    assert_output_contains "Utilz Doctor"
+  # Run doctor
+  run_utilz doctor
+  assert_output_contains "Utilz Doctor"
 
-    # List utilities
-    run_utilz list
-    assert_success
-    assert_output_contains "mdagg"
+  # List utilities
+  run_utilz list
+  assert_success
+  assert_output_contains "mdagg"
 
-    # Get help for a utility
-    run_utilz help mdagg
-    assert_success
-    assert_output_contains "mdagg"
+  # Get help for a utility
+  run_utilz help mdagg
+  assert_success
+  assert_output_contains "mdagg"
 }
 
 @test "complete workflow: create markdown files, aggregate with mdagg" {
-    # Create test markdown files
-    create_markdown_files 3
+  # Create test markdown files
+  create_markdown_files 3
 
-    # Aggregate with glob mode
-    run_mdagg "test*.md"
-    assert_success
-    assert_output_contains "Test File 1"
-    assert_output_contains "Test File 2"
-    assert_output_contains "Test File 3"
+  # Aggregate with glob mode
+  run_mdagg "test*.md"
+  assert_success
+  assert_output_contains "Test File 1"
+  assert_output_contains "Test File 2"
+  assert_output_contains "Test File 3"
 }
 
 @test "complete workflow: create YAML config, run mdagg with config" {
-    # Create test markdown files
-    create_markdown_files 2
+  # Create test markdown files
+  create_markdown_files 2
 
-    # Create YAML config
-    create_mdagg_yaml_config "config.yaml"
+  # Create YAML config
+  create_mdagg_yaml_config "config.yaml"
 
-    # Run mdagg with config (requires yq)
-    if ! command_exists yq; then
-        skip "yq not installed"
-    fi
+  # Run mdagg with config (requires yq)
+  if ! command_exists yq; then
+    skip "yq not installed"
+  fi
 
-    run_mdagg config.yaml
-    assert_success
-    assert_output_contains "Test File 1"
-    assert_output_contains "Test File 2"
+  run_mdagg config.yaml
+  assert_success
+  assert_output_contains "Test File 1"
+  assert_output_contains "Test File 2"
 }
 
 @test "complete workflow: help system works for all utilities" {
-    # Get list of utilities
-    run_utilz list
-    assert_success
+  # Get list of utilities
+  run_utilz list
+  assert_success
 
-    # Test help for utilz itself
-    run_utilz help
-    assert_success
-    assert_output_contains "Utilz"
+  # Test help for utilz itself
+  run_utilz help
+  assert_success
+  assert_output_contains "Utilz"
 
-    # Test help for mdagg
-    run_utilz help mdagg
-    assert_success
-    assert_output_contains "mdagg"
+  # Test help for mdagg
+  run_utilz help mdagg
+  assert_success
+  assert_output_contains "mdagg"
 }
 
 @test "complete workflow: create test utility, invoke it, clean up" {
-    # Create a test utility
-    local util_name="testutil"
-    create_test_utility "$util_name" > /dev/null
+  # Create a test utility
+  local util_name="testutil"
+  create_test_utility "$util_name" > /dev/null
 
-    # Verify it appears in list
-    run_utilz list
-    assert_success
-    assert_output_contains "$util_name"
+  # Verify it appears in list
+  run_utilz list
+  assert_success
+  assert_output_contains "$util_name"
 
-    # Invoke it
-    run_utility "$util_name" arg1 arg2
-    assert_success
-    assert_output_contains "Test utility invoked"
-    assert_output_contains "arg1 arg2"
+  # Invoke it
+  run_utility "$util_name" arg1 arg2
+  assert_success
+  assert_output_contains "Test utility invoked"
+  assert_output_contains "arg1 arg2"
 
-    # Get help
-    run_utilz help "$util_name"
-    assert_success
+  # Get help
+  run_utilz help "$util_name"
+  assert_success
 
-    # Clean up
-    remove_test_utility "$util_name"
+  # Clean up
+  remove_test_utility "$util_name"
 
-    # Verify it's gone
-    run_utilz list
-    assert_success
-    refute_output_contains "$util_name"
+  # Verify it's gone
+  run_utilz list
+  assert_success
+  refute_output_contains "$util_name"
 }
 
 @test "error recovery: broken utility detected by doctor" {
-    # Create a utility with missing implementation
-    ln -sf utilz "$UTILZ_BIN_DIR/brokenutil"
+  # Create a utility with missing implementation
+  ln -sf utilz "$UTILZ_BIN_DIR/brokenutil"
 
-    # Doctor should detect the issue
-    run_utilz doctor
-    # Doctor may pass or warn, but should mention the broken utility
-    assert_output_contains "brokenutil"
+  # Doctor should detect the issue
+  run_utilz doctor
+  # Doctor may pass or warn, but should mention the broken utility
+  assert_output_contains "brokenutil"
 
-    # Cleanup
-    rm -f "$UTILZ_BIN_DIR/brokenutil"
+  # Cleanup
+  rm -f "$UTILZ_BIN_DIR/brokenutil"
 }
 
 @test "version compatibility: ^2.0.0 matches 2.x.x" {
-    # Create a test utility with version requirement
-    local util_name="versiontest"
-    local util_dir="$UTILZ_HOME/opt/$util_name"
+  # Create a test utility with version requirement
+  local util_name="versiontest"
+  local util_dir="$UTILZ_HOME/opt/$util_name"
 
-    # Create utility directory
-    mkdir -p "$util_dir"
+  # Create utility directory
+  mkdir -p "$util_dir"
 
-    # Create YAML metadata with caret version requirement
-    cat > "$util_dir/$util_name.yaml" <<'EOF'
+  # Create YAML metadata with caret version requirement
+  cat > "$util_dir/$util_name.yaml" <<'EOF'
 name: versiontest
 version: 1.0.0
 utilz_version: "^2.0.0"
 description: Test utility for version compatibility testing
 EOF
 
-    # Create minimal utility script
-    cat > "$util_dir/$util_name" <<'EOF'
+  # Create minimal utility script
+  cat > "$util_dir/$util_name" <<'EOF'
 #!/usr/bin/env bash
 echo "Version test utility"
 exit 0
 EOF
 
-    chmod +x "$util_dir/$util_name"
+  chmod +x "$util_dir/$util_name"
 
-    # Create symlink
-    ln -sf utilz "$UTILZ_BIN_DIR/$util_name"
+  # Create symlink
+  ln -sf utilz "$UTILZ_BIN_DIR/$util_name"
 
-    # Run doctor - should NOT report version incompatibility
-    run_utilz doctor
-    refute_output_contains "incompatibilities detected"
-    refute_output_contains "versiontest (requires"
+  # Run doctor - should NOT report version incompatibility
+  run_utilz doctor
+  refute_output_contains "incompatibilities detected"
+  refute_output_contains "versiontest (requires"
 
-    # Cleanup
-    rm -f "$UTILZ_BIN_DIR/$util_name"
-    rm -rf "$util_dir"
+  # Cleanup
+  rm -f "$UTILZ_BIN_DIR/$util_name"
+  rm -rf "$util_dir"
 }

@@ -10,15 +10,15 @@ set -euo pipefail
 
 # Source common functions if not already loaded (from dispatcher)
 if [[ "$(type -t info 2>/dev/null)" != "function" ]]; then
-    SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-    UTILZ_HOME="${UTILZ_HOME:-$(cd "$SCRIPT_DIR/../.." && pwd)}"
+  SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+  UTILZ_HOME="${UTILZ_HOME:-$(cd "$SCRIPT_DIR/../.." && pwd)}"
 
-    if [[ -f "$UTILZ_HOME/opt/utilz/lib/common.sh" ]]; then
-        source "$UTILZ_HOME/opt/utilz/lib/common.sh"
-    else
-        echo "ERROR: Cannot find common.sh library" >&2
-        exit 1
-    fi
+  if [[ -f "$UTILZ_HOME/opt/utilz/lib/common.sh" ]]; then
+    source "$UTILZ_HOME/opt/utilz/lib/common.sh"
+  else
+    echo "ERROR: Cannot find common.sh library" >&2
+    exit 1
+  fi
 fi
 
 # ============================================================================
@@ -33,7 +33,7 @@ DEFAULT_SCHEMA="$SCRIPT_DIR/lib/expense_schema.json"
 # ============================================================================
 
 usage() {
-    cat <<EOF
+  cat <<EOF
 Usage: expz <directory> [OPTIONS]
 
 Batch expense receipt PDF extraction to CSV.
@@ -72,49 +72,49 @@ dir=""
 
 # Fast path: --help and --version before expensive checks
 for arg in "$@"; do
-    case "$arg" in
-        -h|--help)    show_help "expz"; exit 0 ;;
-        --version)    show_version "expz"; exit 0 ;;
-    esac
+  case "$arg" in
+    -h|--help)    show_help "expz"; exit 0 ;;
+    --version)    show_version "expz"; exit 0 ;;
+  esac
 done
 
 # Parse arguments
 while [[ $# -gt 0 ]]; do
-    case "$1" in
-        -h|--help)
-            show_help "expz"
-            exit 0
-            ;;
-        --version)
-            show_version "expz"
-            exit 0
-            ;;
-        --out)
-            [[ $# -lt 2 ]] && { error "--out requires a filename"; exit 1; }
-            outfile="$2"
-            shift 2
-            ;;
-        --schema)
-            [[ $# -lt 2 ]] && { error "--schema requires a filename"; exit 1; }
-            schema="$2"
-            shift 2
-            ;;
-        --verbose)
-            verbose=true
-            shift
-            ;;
-        -*)
-            error "Unknown option: $1"
-            echo ""
-            usage
-            exit 1
-            ;;
-        *)
-            [[ -n "$dir" ]] && { error "Only one directory argument allowed"; exit 1; }
-            dir="$1"
-            shift
-            ;;
-    esac
+  case "$1" in
+    -h|--help)
+      show_help "expz"
+      exit 0
+      ;;
+    --version)
+      show_version "expz"
+      exit 0
+      ;;
+    --out)
+      [[ $# -lt 2 ]] && { error "--out requires a filename"; exit 1; }
+      outfile="$2"
+      shift 2
+      ;;
+    --schema)
+      [[ $# -lt 2 ]] && { error "--schema requires a filename"; exit 1; }
+      schema="$2"
+      shift 2
+      ;;
+    --verbose)
+      verbose=true
+      shift
+      ;;
+    -*)
+      error "Unknown option: $1"
+      echo ""
+      usage
+      exit 1
+      ;;
+    *)
+      [[ -n "$dir" ]] && { error "Only one directory argument allowed"; exit 1; }
+      dir="$1"
+      shift
+      ;;
+  esac
 done
 
 # --- Validation ---
@@ -129,22 +129,22 @@ require_command "jq" "brew install jq"
 
 pdf_list=()
 while IFS= read -r -d '' pdf; do
-    pdf_list+=("$pdf")
+  pdf_list+=("$pdf")
 done < <(find "$dir" -iname '*.pdf' -print0 | sort -z)
 
 total=${#pdf_list[@]}
 if [[ $total -eq 0 ]]; then
-    error "No PDF files found in: $dir"
-    exit 1
+  error "No PDF files found in: $dir"
+  exit 1
 fi
 
 # Now that we know there's work to do, check extraction tools
 require_command "xtrct" "Part of utilz framework"
 
 if [[ -z "${ANTHROPIC_API_KEY:-}" ]]; then
-    error "ANTHROPIC_API_KEY environment variable is not set"
-    error "Required by xtrct for Claude API access"
-    exit 1
+  error "ANTHROPIC_API_KEY environment variable is not set"
+  error "Required by xtrct for Claude API access"
+  exit 1
 fi
 
 info "Found $total PDF files in $dir"
@@ -154,24 +154,24 @@ info "Found $total PDF files in $dir"
 csv_header="Date,Category,Supplier,Description,Currency,Subtotal,VAT,Total,Reference,File"
 
 if [[ -n "$outfile" ]]; then
-    echo "$csv_header" > "$outfile"
+  echo "$csv_header" > "$outfile"
 else
-    echo "$csv_header"
+  echo "$csv_header"
 fi
 
 emit() {
-    if [[ -n "$outfile" ]]; then
-        echo "$1" >> "$outfile"
-    else
-        echo "$1"
-    fi
+  if [[ -n "$outfile" ]]; then
+    echo "$1" >> "$outfile"
+  else
+    echo "$1"
+  fi
 }
 
 # --- Helper: build an error/empty CSV row ---
 
 empty_row() {
-    local cat="$1" file="$2"
-    printf '"","%s","","","","","","","","%s"' "$cat" "$file"
+  local cat="$1" file="$2"
+  printf '"","%s","","","","","","","","%s"' "$cat" "$file"
 }
 
 # --- Process each PDF ---
@@ -180,49 +180,49 @@ count=0
 errors=0
 
 for pdf in "${pdf_list[@]}"; do
-    count=$((count + 1))
-    category=$(basename "$(dirname "$pdf")")
-    relative_path="${pdf#"$dir"/}"
+  count=$((count + 1))
+  category=$(basename "$(dirname "$pdf")")
+  relative_path="${pdf#"$dir"/}"
 
-    if [[ "$verbose" == true ]]; then
-        info "[$count/$total] Processing: $relative_path"
-    fi
+  if [[ "$verbose" == true ]]; then
+    info "[$count/$total] Processing: $relative_path"
+  fi
 
-    # Extract structured data via xtrct
-    if [[ "$verbose" == true ]]; then
-        json=$(xtrct "$pdf" --schema "$schema" --format json) || true
-    else
-        json=$(xtrct "$pdf" --schema "$schema" --format json 2>/dev/null) || true
-    fi
+  # Extract structured data via xtrct
+  if [[ "$verbose" == true ]]; then
+    json=$(xtrct "$pdf" --schema "$schema" --format json) || true
+  else
+    json=$(xtrct "$pdf" --schema "$schema" --format json 2>/dev/null) || true
+  fi
 
-    if [[ -n "$json" ]] && echo "$json" | jq empty 2>/dev/null; then
-        # Normalise: if xtrct returned an array, take the first element
-        json=$(echo "$json" | jq 'if type == "array" then .[0] else . end')
+  if [[ -n "$json" ]] && echo "$json" | jq empty 2>/dev/null; then
+    # Normalise: if xtrct returned an array, take the first element
+    json=$(echo "$json" | jq 'if type == "array" then .[0] else . end')
 
-        # Parse JSON with jq and emit CSV row
-        row=$(echo "$json" | jq -r \
-            --arg cat "$category" \
-            --arg file "$relative_path" \
-            '[.date // "", $cat, .supplier // "", .description // "", .currency // "", (.subtotal // "" | tostring), (.vat // "" | tostring), (.total // "" | tostring), .reference // "", $file] | @csv'
-        ) || {
-            warn "[$count/$total] Failed to parse JSON for: $relative_path"
-            row=$(empty_row "$category" "$relative_path")
-            errors=$((errors + 1))
-        }
-    else
-        warn "[$count/$total] Failed to extract: $relative_path"
-        row=$(empty_row "$category" "$relative_path")
-        errors=$((errors + 1))
-    fi
+    # Parse JSON with jq and emit CSV row
+    row=$(echo "$json" | jq -r \
+      --arg cat "$category" \
+      --arg file "$relative_path" \
+      '[.date // "", $cat, .supplier // "", .description // "", .currency // "", (.subtotal // "" | tostring), (.vat // "" | tostring), (.total // "" | tostring), .reference // "", $file] | @csv'
+    ) || {
+      warn "[$count/$total] Failed to parse JSON for: $relative_path"
+      row=$(empty_row "$category" "$relative_path")
+      errors=$((errors + 1))
+    }
+  else
+    warn "[$count/$total] Failed to extract: $relative_path"
+    row=$(empty_row "$category" "$relative_path")
+    errors=$((errors + 1))
+  fi
 
-    emit "$row"
+  emit "$row"
 done
 
 # --- Summary ---
 
 if [[ "$verbose" == true ]]; then
-    info "Done. Processed $count files ($errors errors)."
-    if [[ -n "$outfile" ]]; then
-        info "Output written to: $outfile"
-    fi
+  info "Done. Processed $count files ($errors errors)."
+  if [[ -n "$outfile" ]]; then
+    info "Output written to: $outfile"
+  fi
 fi

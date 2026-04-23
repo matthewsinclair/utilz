@@ -10,15 +10,15 @@ set -euo pipefail
 
 # Source common functions if not already loaded (from dispatcher)
 if [[ "$(type -t info 2>/dev/null)" != "function" ]]; then
-    SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-    UTILZ_HOME="${UTILZ_HOME:-$(cd "$SCRIPT_DIR/../.." && pwd)}"
+  SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+  UTILZ_HOME="${UTILZ_HOME:-$(cd "$SCRIPT_DIR/../.." && pwd)}"
 
-    if [[ -f "$UTILZ_HOME/opt/utilz/lib/common.sh" ]]; then
-        source "$UTILZ_HOME/opt/utilz/lib/common.sh"
-    else
-        echo "ERROR: Cannot find common.sh library" >&2
-        exit 1
-    fi
+  if [[ -f "$UTILZ_HOME/opt/utilz/lib/common.sh" ]]; then
+    source "$UTILZ_HOME/opt/utilz/lib/common.sh"
+  else
+    echo "ERROR: Cannot find common.sh library" >&2
+    exit 1
+  fi
 fi
 
 # ============================================================================
@@ -35,7 +35,7 @@ REQUIREMENTS="$LIB_DIR/requirements.txt"
 # ============================================================================
 
 usage() {
-    cat <<EOF
+  cat <<EOF
 Usage: xtrct <file> --schema <schema-file> [OPTIONS]
 
 Schema-driven semantic data extraction using Claude API
@@ -72,13 +72,13 @@ EOF
 # ============================================================================
 
 ensure_venv() {
-    if [[ ! -d "$VENV_DIR" ]]; then
-        info "Creating Python virtual environment..."
-        python3 -m venv "$VENV_DIR"
-        info "Installing dependencies..."
-        "$VENV_DIR/bin/pip" install --quiet -r "$REQUIREMENTS"
-        success "Virtual environment ready"
-    fi
+  if [[ ! -d "$VENV_DIR" ]]; then
+    info "Creating Python virtual environment..."
+    python3 -m venv "$VENV_DIR"
+    info "Installing dependencies..."
+    "$VENV_DIR/bin/pip" install --quiet -r "$REQUIREMENTS"
+    success "Virtual environment ready"
+  fi
 }
 
 # ============================================================================
@@ -87,44 +87,44 @@ ensure_venv() {
 
 # Fast path: --help and --version before any venv/python/API key checks
 for arg in "$@"; do
-    case "$arg" in
-        -h|--help)
-            usage
-            exit 0
-            ;;
-        --version)
-            show_version "xtrct"
-            exit 0
-            ;;
-    esac
+  case "$arg" in
+    -h|--help)
+      usage
+      exit 0
+      ;;
+    --version)
+      show_version "xtrct"
+      exit 0
+      ;;
+  esac
 done
 
 # Check ANTHROPIC_API_KEY is set (fail-fast before venv creation)
 if [[ -z "${ANTHROPIC_API_KEY:-}" ]]; then
-    error "ANTHROPIC_API_KEY environment variable is not set"
-    error "Get your API key from: https://console.anthropic.com/"
-    exit 1
+  error "ANTHROPIC_API_KEY environment variable is not set"
+  error "Get your API key from: https://console.anthropic.com/"
+  exit 1
 fi
 
 # Check if any argument is a .pdf file — if so, require pdf2md
 for arg in "$@"; do
-    case "$arg" in
-        *.pdf)
-            if ! command -v pdf2md >/dev/null 2>&1; then
-                error "pdf2md is required to process PDF files but was not found"
-                error "Ensure pdf2md is installed and in your PATH"
-                exit 1
-            fi
-            break
-            ;;
-    esac
+  case "$arg" in
+    *.pdf)
+      if ! command -v pdf2md >/dev/null 2>&1; then
+        error "pdf2md is required to process PDF files but was not found"
+        error "Ensure pdf2md is installed and in your PATH"
+        exit 1
+      fi
+      break
+      ;;
+  esac
 done
 
 # Check python3 is available
 if ! check_command python3; then
-    error "python3 is required but not found"
-    error "Install with: brew install python3"
-    exit 1
+  error "python3 is required but not found"
+  error "Install with: brew install python3"
+  exit 1
 fi
 
 # Ensure venv exists and has dependencies

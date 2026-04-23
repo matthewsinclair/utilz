@@ -11,15 +11,15 @@ set -euo pipefail
 
 # Source common functions if not already loaded (from dispatcher)
 if [[ "$(type -t info 2>/dev/null)" != "function" ]]; then
-    SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-    UTILZ_HOME="${UTILZ_HOME:-$(cd "$SCRIPT_DIR/../.." && pwd)}"
+  SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+  UTILZ_HOME="${UTILZ_HOME:-$(cd "$SCRIPT_DIR/../.." && pwd)}"
 
-    if [[ -f "$UTILZ_HOME/opt/utilz/lib/common.sh" ]]; then
-        source "$UTILZ_HOME/opt/utilz/lib/common.sh"
-    else
-        echo "ERROR: Cannot find common.sh library" >&2
-        exit 1
-    fi
+  if [[ -f "$UTILZ_HOME/opt/utilz/lib/common.sh" ]]; then
+    source "$UTILZ_HOME/opt/utilz/lib/common.sh"
+  else
+    echo "ERROR: Cannot find common.sh library" >&2
+    exit 1
+  fi
 fi
 
 # ============================================================================
@@ -27,23 +27,23 @@ fi
 # ============================================================================
 
 find_gnu_realpath() {
-    # Try grealpath first (Homebrew coreutils on macOS)
-    if command -v grealpath >/dev/null 2>&1; then
-        if grealpath -m --relative-to=/ / >/dev/null 2>&1; then
-            echo "grealpath"
-            return 0
-        fi
+  # Try grealpath first (Homebrew coreutils on macOS)
+  if command -v grealpath >/dev/null 2>&1; then
+    if grealpath -m --relative-to=/ / >/dev/null 2>&1; then
+      echo "grealpath"
+      return 0
     fi
+  fi
 
-    # Try system realpath
-    if command -v realpath >/dev/null 2>&1; then
-        if realpath -m --relative-to=/ / >/dev/null 2>&1; then
-            echo "realpath"
-            return 0
-        fi
+  # Try system realpath
+  if command -v realpath >/dev/null 2>&1; then
+    if realpath -m --relative-to=/ / >/dev/null 2>&1; then
+      echo "realpath"
+      return 0
     fi
+  fi
 
-    return 1
+  return 1
 }
 
 # ============================================================================
@@ -51,7 +51,7 @@ find_gnu_realpath() {
 # ============================================================================
 
 usage() {
-    cat <<EOF
+  cat <<EOF
 Usage: lnrel <target> [<link_name>]
 
 Create symlinks with relative paths
@@ -88,41 +88,41 @@ EOF
 # Parse arguments
 POSITIONAL=()
 while [[ $# -gt 0 ]]; do
-    case "$1" in
-        -h|--help)
-            usage
-            exit 0
-            ;;
-        --version)
-            show_version "lnrel"
-            exit 0
-            ;;
-        -*)
-            error "Unknown option: $1"
-            echo ""
-            usage
-            exit 1
-            ;;
-        *)
-            POSITIONAL+=("$1")
-            shift
-            ;;
-    esac
+  case "$1" in
+    -h|--help)
+      usage
+      exit 0
+      ;;
+    --version)
+      show_version "lnrel"
+      exit 0
+      ;;
+    -*)
+      error "Unknown option: $1"
+      echo ""
+      usage
+      exit 1
+      ;;
+    *)
+      POSITIONAL+=("$1")
+      shift
+      ;;
+  esac
 done
 
 # Validate argument count
 if [[ ${#POSITIONAL[@]} -eq 0 ]]; then
-    error "No target specified"
-    echo ""
-    usage
-    exit 1
+  error "No target specified"
+  echo ""
+  usage
+  exit 1
 fi
 
 if [[ ${#POSITIONAL[@]} -gt 2 ]]; then
-    error "Too many arguments (expected 1-2, got ${#POSITIONAL[@]})"
-    echo ""
-    usage
-    exit 1
+  error "Too many arguments (expected 1-2, got ${#POSITIONAL[@]})"
+  echo ""
+  usage
+  exit 1
 fi
 
 # Strip shell escape characters from path arguments
@@ -131,27 +131,27 @@ fi
 # backslashes instead of spaces). Backslashes in Unix filenames are pathological.
 TARGET="${POSITIONAL[0]//\\/}"
 if [[ ${#POSITIONAL[@]} -eq 2 ]]; then
-    LINK_NAME="${POSITIONAL[1]//\\/}"
+  LINK_NAME="${POSITIONAL[1]//\\/}"
 else
-    LINK_NAME="$(basename "$TARGET")"
+  LINK_NAME="$(basename "$TARGET")"
 fi
 
 # Resolve link directory and check it exists
 LINK_DIR="$(dirname "$LINK_NAME")"
 if [[ ! -d "$LINK_DIR" ]]; then
-    error "Link directory does not exist: $LINK_DIR"
-    exit 1
+  error "Link directory does not exist: $LINK_DIR"
+  exit 1
 fi
 
 # Find GNU realpath
 REALPATH=""
 if ! REALPATH="$(find_gnu_realpath)"; then
-    error "GNU coreutils realpath is required but not found"
-    error ""
-    error "Install instructions:"
-    error "  macOS:  brew install coreutils"
-    error "  Linux:  sudo apt-get install coreutils  (usually pre-installed)"
-    exit 1
+  error "GNU coreutils realpath is required but not found"
+  error ""
+  error "Install instructions:"
+  error "  macOS:  brew install coreutils"
+  error "  Linux:  sudo apt-get install coreutils  (usually pre-installed)"
+  exit 1
 fi
 
 # Resolve absolute paths (using -m so target need not exist)

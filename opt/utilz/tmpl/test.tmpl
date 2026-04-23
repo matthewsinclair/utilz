@@ -9,23 +9,23 @@ load "../../utilz/test/test_helper.bash"
 # ============================================================================
 
 @test "{{NAME}} --help shows usage" {
-    run_{{NAME}} --help
-    assert_success
-    assert_output_contains "Usage"
-    assert_output_contains "{{NAME}}"
+  run_{{NAME}} --help
+  assert_success
+  assert_output_contains "Usage"
+  assert_output_contains "{{NAME}}"
 }
 
 @test "{{NAME}} --version shows version" {
-    run_{{NAME}} --version
-    assert_success
-    assert_output_contains "{{NAME}}"
-    assert_output_contains "v"
+  run_{{NAME}} --version
+  assert_success
+  assert_output_contains "{{NAME}}"
+  assert_output_contains "v"
 }
 
 @test "{{NAME}} with unknown option shows error" {
-    run_{{NAME}} --invalid-option
-    assert_failure
-    assert_output_contains "Unknown option"
+  run_{{NAME}} --invalid-option
+  assert_failure
+  assert_output_contains "Unknown option"
 }
 
 # ============================================================================
@@ -33,7 +33,7 @@ load "../../utilz/test/test_helper.bash"
 # ============================================================================
 
 run_{{NAME}}() {
-    run "$UTILZ_BIN_DIR/{{NAME}}" "$@"
+  run "$UTILZ_BIN_DIR/{{NAME}}" "$@"
 }
 
 # ============================================================================
@@ -42,5 +42,5 @@ run_{{NAME}}() {
 
 # Add your tests here
 @test "{{NAME}} basic functionality" {
-    skip "Not implemented yet"
+  skip "Not implemented yet"
 }

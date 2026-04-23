@@ -7,15 +7,15 @@ set -euo pipefail
 
 # Source common functions if not already loaded (from dispatcher)
 if [[ "$(type -t info 2>/dev/null)" != "function" ]]; then
-    SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-    UTILZ_HOME="${UTILZ_HOME:-$(cd "$SCRIPT_DIR/../.." && pwd)}"
+  SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+  UTILZ_HOME="${UTILZ_HOME:-$(cd "$SCRIPT_DIR/../.." && pwd)}"
 
-    if [[ -f "$UTILZ_HOME/opt/utilz/lib/common.sh" ]]; then
-        source "$UTILZ_HOME/opt/utilz/lib/common.sh"
-    else
-        echo "ERROR: Cannot find common.sh library" >&2
-        exit 1
-    fi
+  if [[ -f "$UTILZ_HOME/opt/utilz/lib/common.sh" ]]; then
+    source "$UTILZ_HOME/opt/utilz/lib/common.sh"
+  else
+    echo "ERROR: Cannot find common.sh library" >&2
+    exit 1
+  fi
 fi
 
 # ============================================================================
@@ -30,7 +30,7 @@ MAX_RETRIES=0  # 0 means unlimited
 # ============================================================================
 
 usage() {
-    cat <<EOF
+  cat <<EOF
 Usage: retry [OPTIONS] <command>
 
 Retry a command until it succeeds with configurable wait time
@@ -61,59 +61,59 @@ EOF
 
 # Parse arguments
 while [[ $# -gt 0 ]]; do
-    case "$1" in
-        -w|--wait)
-            if [[ -z "${2:-}" ]] || [[ ! "$2" =~ ^[0-9]+$ ]]; then
-                error "Wait time must be a positive integer"
-                exit 1
-            fi
-            WAIT_TIME="$2"
-            shift 2
-            ;;
-        -r|--retries)
-            if [[ -z "${2:-}" ]] || [[ ! "$2" =~ ^[0-9]+$ ]]; then
-                error "Retries must be a positive integer or 0 (unlimited)"
-                exit 1
-            fi
-            MAX_RETRIES="$2"
-            shift 2
-            ;;
-        -h|--help)
-            usage
-            exit 0
-            ;;
-        --version)
-            show_version "retry"
-            exit 0
-            ;;
-        -*)
-            error "Unknown option: $1"
-            echo ""
-            usage
-            exit 1
-            ;;
-        *)
-            # Rest is the command
-            break
-            ;;
-    esac
+  case "$1" in
+    -w|--wait)
+      if [[ -z "${2:-}" ]] || [[ ! "$2" =~ ^[0-9]+$ ]]; then
+        error "Wait time must be a positive integer"
+        exit 1
+      fi
+      WAIT_TIME="$2"
+      shift 2
+      ;;
+    -r|--retries)
+      if [[ -z "${2:-}" ]] || [[ ! "$2" =~ ^[0-9]+$ ]]; then
+        error "Retries must be a positive integer or 0 (unlimited)"
+        exit 1
+      fi
+      MAX_RETRIES="$2"
+      shift 2
+      ;;
+    -h|--help)
+      usage
+      exit 0
+      ;;
+    --version)
+      show_version "retry"
+      exit 0
+      ;;
+    -*)
+      error "Unknown option: $1"
+      echo ""
+      usage
+      exit 1
+      ;;
+    *)
+      # Rest is the command
+      break
+      ;;
+  esac
 done
 
 # Validate command
 if [[ $# -eq 0 ]]; then
-    error "No command provided"
-    echo ""
-    usage
-    exit 1
+  error "No command provided"
+  echo ""
+  usage
+  exit 1
 fi
 
 COMMAND="$*"
 
 # Display retry configuration
 if [[ $MAX_RETRIES -eq 0 ]]; then
-    info "Executing: '$COMMAND' with ${WAIT_TIME}s delay (unlimited retries)"
+  info "Executing: '$COMMAND' with ${WAIT_TIME}s delay (unlimited retries)"
 else
-    info "Executing: '$COMMAND' with ${WAIT_TIME}s delay and max $MAX_RETRIES retries"
+  info "Executing: '$COMMAND' with ${WAIT_TIME}s delay and max $MAX_RETRIES retries"
 fi
 echo ""
 
@@ -121,30 +121,30 @@ echo ""
 attempt=1
 
 while true; do
-    # Execute command and stream output (in subshell to prevent exit from killing script)
-    if (eval "$COMMAND") 2>&1; then
-        # Success!
-        success "Command succeeded"
-        exit 0
-    else
-        exit_status=$?
+  # Execute command and stream output (in subshell to prevent exit from killing script)
+  if (eval "$COMMAND") 2>&1; then
+    # Success!
+    success "Command succeeded"
+    exit 0
+  else
+    exit_status=$?
 
-        # Check if we've hit max retries
-        if [[ $MAX_RETRIES -ne 0 && $attempt -ge $MAX_RETRIES ]]; then
-            error "Maximum retries reached ($attempt attempts)"
-            exit $exit_status
-        fi
-
-        # Increment and retry
-        attempt=$((attempt + 1))
-        warn "Command failed (attempt $((attempt - 1))). Retrying in ${WAIT_TIME}s..."
-        sleep "$WAIT_TIME"
-
-        if [[ $MAX_RETRIES -eq 0 ]]; then
-            info "Retry attempt $attempt (unlimited)"
-        else
-            info "Retry attempt $attempt of $MAX_RETRIES"
-        fi
-        echo ""
+    # Check if we've hit max retries
+    if [[ $MAX_RETRIES -ne 0 && $attempt -ge $MAX_RETRIES ]]; then
+      error "Maximum retries reached ($attempt attempts)"
+      exit $exit_status
     fi
+
+    # Increment and retry
+    attempt=$((attempt + 1))
+    warn "Command failed (attempt $((attempt - 1))). Retrying in ${WAIT_TIME}s..."
+    sleep "$WAIT_TIME"
+
+    if [[ $MAX_RETRIES -eq 0 ]]; then
+      info "Retry attempt $attempt (unlimited)"
+    else
+      info "Retry attempt $attempt of $MAX_RETRIES"
+    fi
+    echo ""
+  fi
 done

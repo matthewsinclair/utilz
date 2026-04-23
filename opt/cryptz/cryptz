@@ -7,15 +7,15 @@ set -euo pipefail
 
 # Source common functions if not already loaded (from dispatcher)
 if [[ "$(type -t info 2>/dev/null)" != "function" ]]; then
-    SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-    UTILZ_HOME="${UTILZ_HOME:-$(cd "$SCRIPT_DIR/../.." && pwd)}"
+  SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+  UTILZ_HOME="${UTILZ_HOME:-$(cd "$SCRIPT_DIR/../.." && pwd)}"
 
-    if [[ -f "$UTILZ_HOME/opt/utilz/lib/common.sh" ]]; then
-        source "$UTILZ_HOME/opt/utilz/lib/common.sh"
-    else
-        echo "ERROR: Cannot find common.sh library" >&2
-        exit 1
-    fi
+  if [[ -f "$UTILZ_HOME/opt/utilz/lib/common.sh" ]]; then
+    source "$UTILZ_HOME/opt/utilz/lib/common.sh"
+  else
+    echo "ERROR: Cannot find common.sh library" >&2
+    exit 1
+  fi
 fi
 
 # ============================================================================
@@ -30,115 +30,115 @@ DEFAULT_EMAIL="${CRYPTZ_EMAIL:-matthew.sinclair@gmail.com}"
 # ============================================================================
 
 cmd_encrypt() {
-    local input_file=""
-    local output_file=""
-    local email="$DEFAULT_EMAIL"
+  local input_file=""
+  local output_file=""
+  local email="$DEFAULT_EMAIL"
 
-    # Parse arguments
-    while [[ $# -gt 0 ]]; do
-        case "$1" in
-            --email)
-                email="$2"
-                shift 2
-                ;;
-            *)
-                if [[ -z "$input_file" ]]; then
-                    input_file="$1"
-                elif [[ -z "$output_file" ]]; then
-                    output_file="$1"
-                else
-                    error "Too many arguments"
-                    return 1
-                fi
-                shift
-                ;;
-        esac
-    done
+  # Parse arguments
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      --email)
+        email="$2"
+        shift 2
+        ;;
+      *)
+        if [[ -z "$input_file" ]]; then
+          input_file="$1"
+        elif [[ -z "$output_file" ]]; then
+          output_file="$1"
+        else
+          error "Too many arguments"
+          return 1
+        fi
+        shift
+        ;;
+    esac
+  done
 
-    # Validate input
-    if [[ -z "$input_file" ]]; then
-        error "No input file specified"
-        return 1
-    fi
+  # Validate input
+  if [[ -z "$input_file" ]]; then
+    error "No input file specified"
+    return 1
+  fi
 
-    if [[ ! -f "$input_file" ]]; then
-        error "Input file not found: $input_file"
-        return 1
-    fi
+  if [[ ! -f "$input_file" ]]; then
+    error "Input file not found: $input_file"
+    return 1
+  fi
 
-    # Default output filename
-    if [[ -z "$output_file" ]]; then
-        output_file="${input_file}.gpg"
-    fi
+  # Default output filename
+  if [[ -z "$output_file" ]]; then
+    output_file="${input_file}.gpg"
+  fi
 
-    # Check for gpg
-    require_command "gpg" "GPG is required for encryption (install with: brew install gnupg)"
+  # Check for gpg
+  require_command "gpg" "GPG is required for encryption (install with: brew install gnupg)"
 
-    # Encrypt
-    info "Encrypting $input_file to $output_file"
-    info "Using recipient: $email"
+  # Encrypt
+  info "Encrypting $input_file to $output_file"
+  info "Using recipient: $email"
 
-    if gpg --output "$output_file" --encrypt --recipient "$email" "$input_file"; then
-        success "File encrypted successfully: $output_file"
-    else
-        error "Encryption failed"
-        return 1
-    fi
+  if gpg --output "$output_file" --encrypt --recipient "$email" "$input_file"; then
+    success "File encrypted successfully: $output_file"
+  else
+    error "Encryption failed"
+    return 1
+  fi
 }
 
 cmd_decrypt() {
-    local input_file=""
-    local output_file=""
+  local input_file=""
+  local output_file=""
 
-    # Parse arguments
-    while [[ $# -gt 0 ]]; do
-        case "$1" in
-            *)
-                if [[ -z "$input_file" ]]; then
-                    input_file="$1"
-                elif [[ -z "$output_file" ]]; then
-                    output_file="$1"
-                else
-                    error "Too many arguments"
-                    return 1
-                fi
-                shift
-                ;;
-        esac
-    done
-
-    # Validate input
-    if [[ -z "$input_file" ]]; then
-        error "No input file specified"
-        return 1
-    fi
-
-    if [[ ! -f "$input_file" ]]; then
-        error "Input file not found: $input_file"
-        return 1
-    fi
-
-    # Default output filename (strip .gpg extension)
-    if [[ -z "$output_file" ]]; then
-        output_file="${input_file%.gpg}"
-        # If filename didn't end with .gpg, add .decrypted
-        if [[ "$output_file" == "$input_file" ]]; then
-            output_file="${input_file}.decrypted"
+  # Parse arguments
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      *)
+        if [[ -z "$input_file" ]]; then
+          input_file="$1"
+        elif [[ -z "$output_file" ]]; then
+          output_file="$1"
+        else
+          error "Too many arguments"
+          return 1
         fi
+        shift
+        ;;
+    esac
+  done
+
+  # Validate input
+  if [[ -z "$input_file" ]]; then
+    error "No input file specified"
+    return 1
+  fi
+
+  if [[ ! -f "$input_file" ]]; then
+    error "Input file not found: $input_file"
+    return 1
+  fi
+
+  # Default output filename (strip .gpg extension)
+  if [[ -z "$output_file" ]]; then
+    output_file="${input_file%.gpg}"
+    # If filename didn't end with .gpg, add .decrypted
+    if [[ "$output_file" == "$input_file" ]]; then
+      output_file="${input_file}.decrypted"
     fi
+  fi
 
-    # Check for gpg
-    require_command "gpg" "GPG is required for decryption (install with: brew install gnupg)"
+  # Check for gpg
+  require_command "gpg" "GPG is required for decryption (install with: brew install gnupg)"
 
-    # Decrypt
-    info "Decrypting $input_file to $output_file"
+  # Decrypt
+  info "Decrypting $input_file to $output_file"
 
-    if gpg --output "$output_file" --decrypt "$input_file"; then
-        success "File decrypted successfully: $output_file"
-    else
-        error "Decryption failed"
-        return 1
-    fi
+  if gpg --output "$output_file" --decrypt "$input_file"; then
+    success "File decrypted successfully: $output_file"
+  else
+    error "Decryption failed"
+    return 1
+  fi
 }
 
 # ============================================================================
@@ -146,7 +146,7 @@ cmd_decrypt() {
 # ============================================================================
 
 usage() {
-    cat <<EOF
+  cat <<EOF
 Usage: cryptz <command> [options] <input> [output]
 
 GPG encryption and decryption utility
@@ -192,32 +192,32 @@ EOF
 
 # Parse command
 if [[ $# -eq 0 ]]; then
-    usage
-    exit 0
+  usage
+  exit 0
 fi
 
 COMMAND="$1"
 shift
 
 case "$COMMAND" in
-    encrypt)
-        cmd_encrypt "$@"
-        ;;
-    decrypt)
-        cmd_decrypt "$@"
-        ;;
-    -h|--help)
-        usage
-        exit 0
-        ;;
-    --version)
-        show_version "cryptz"
-        exit 0
-        ;;
-    *)
-        error "Unknown command: $COMMAND"
-        echo ""
-        usage
-        exit 1
-        ;;
+  encrypt)
+    cmd_encrypt "$@"
+    ;;
+  decrypt)
+    cmd_decrypt "$@"
+    ;;
+  -h|--help)
+    usage
+    exit 0
+    ;;
+  --version)
+    show_version "cryptz"
+    exit 0
+    ;;
+  *)
+    error "Unknown command: $COMMAND"
+    echo ""
+    usage
+    exit 1
+    ;;
 esac

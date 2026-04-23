@@ -7,15 +7,15 @@ set -euo pipefail
 
 # Source common functions if not already loaded (from dispatcher)
 if [[ "$(type -t info 2>/dev/null)" != "function" ]]; then
-    SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-    UTILZ_HOME="${UTILZ_HOME:-$(cd "$SCRIPT_DIR/../.." && pwd)}"
+  SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+  UTILZ_HOME="${UTILZ_HOME:-$(cd "$SCRIPT_DIR/../.." && pwd)}"
 
-    if [[ -f "$UTILZ_HOME/opt/utilz/lib/common.sh" ]]; then
-        source "$UTILZ_HOME/opt/utilz/lib/common.sh"
-    else
-        echo "ERROR: Cannot find common.sh library" >&2
-        exit 1
-    fi
+  if [[ -f "$UTILZ_HOME/opt/utilz/lib/common.sh" ]]; then
+    source "$UTILZ_HOME/opt/utilz/lib/common.sh"
+  else
+    echo "ERROR: Cannot find common.sh library" >&2
+    exit 1
+  fi
 fi
 
 # ============================================================================
@@ -23,7 +23,7 @@ fi
 # ============================================================================
 
 usage() {
-    cat <<EOF
+  cat <<EOF
 Usage: {{NAME}} [OPTIONS] [ARGS]
 
 {{DESCRIPTION}}
@@ -46,22 +46,22 @@ EOF
 
 # Parse arguments
 while [[ $# -gt 0 ]]; do
-    case "$1" in
-        -h|--help)
-            usage
-            exit 0
-            ;;
-        --version)
-            show_version "{{NAME}}"
-            exit 0
-            ;;
-        *)
-            error "Unknown option: $1"
-            echo ""
-            usage
-            exit 1
-            ;;
-    esac
+  case "$1" in
+    -h|--help)
+      usage
+      exit 0
+      ;;
+    --version)
+      show_version "{{NAME}}"
+      exit 0
+      ;;
+    *)
+      error "Unknown option: $1"
+      echo ""
+      usage
+      exit 1
+      ;;
+  esac
 done
 
 # Your implementation here

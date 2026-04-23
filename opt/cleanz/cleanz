@@ -13,15 +13,15 @@ set -euo pipefail
 
 # Source common functions if not already loaded (from dispatcher)
 if [[ "$(type -t info 2>/dev/null)" != "function" ]]; then
-    SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-    UTILZ_HOME="${UTILZ_HOME:-$(cd "$SCRIPT_DIR/../.." && pwd)}"
+  SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+  UTILZ_HOME="${UTILZ_HOME:-$(cd "$SCRIPT_DIR/../.." && pwd)}"
 
-    if [[ -f "$UTILZ_HOME/opt/utilz/lib/common.sh" ]]; then
-        source "$UTILZ_HOME/opt/utilz/lib/common.sh"
-    else
-        echo "ERROR: Cannot find common.sh library" >&2
-        exit 1
-    fi
+  if [[ -f "$UTILZ_HOME/opt/utilz/lib/common.sh" ]]; then
+    source "$UTILZ_HOME/opt/utilz/lib/common.sh"
+  else
+    echo "ERROR: Cannot find common.sh library" >&2
+    exit 1
+  fi
 fi
 
 # ============================================================================
@@ -85,124 +85,124 @@ RDQUO=$(printf '\xe2\x80\x9d')     # U+201D Right double quote
 
 # Clean Unicode control characters
 clean_unicode() {
-    local text="$1"
+  local text="$1"
 
-    # Remove zero-width characters
-    text="${text//$ZWSP/}"
-    text="${text//$ZWNJ/}"
-    text="${text//$ZWJ/}"
-    text="${text//$WJ/}"
-    text="${text//$BOM/}"
-    text="${text//$SHY/}"
+  # Remove zero-width characters
+  text="${text//$ZWSP/}"
+  text="${text//$ZWNJ/}"
+  text="${text//$ZWJ/}"
+  text="${text//$WJ/}"
+  text="${text//$BOM/}"
+  text="${text//$SHY/}"
 
-    # Remove directional formatting
-    text="${text//$LRE/}"
-    text="${text//$RLE/}"
-    text="${text//$PDF/}"
-    text="${text//$LRO/}"
-    text="${text//$RLO/}"
+  # Remove directional formatting
+  text="${text//$LRE/}"
+  text="${text//$RLE/}"
+  text="${text//$PDF/}"
+  text="${text//$LRO/}"
+  text="${text//$RLO/}"
 
-    # Remove invisible math operators
-    text="${text//$FNAPPLY/}"
-    text="${text//$INVTIMES/}"
-    text="${text//$INVSEP/}"
-    text="${text//$INVPLUS/}"
+  # Remove invisible math operators
+  text="${text//$FNAPPLY/}"
+  text="${text//$INVTIMES/}"
+  text="${text//$INVSEP/}"
+  text="${text//$INVPLUS/}"
 
-    # Convert special spaces to regular space
-    text="${text//$NBSP/ }"
-    text="${text//$HAIRSP/ }"
+  # Convert special spaces to regular space
+  text="${text//$NBSP/ }"
+  text="${text//$HAIRSP/ }"
 
-    # Remove DEL character (U+007F)
-    text=$(printf '%s' "$text" | tr -d '\177')
+  # Remove DEL character (U+007F)
+  text=$(printf '%s' "$text" | tr -d '\177')
 
-    # Remove control characters except newline, tab, carriage return
-    # Control chars are U+0000-001F except 0x09 (tab), 0x0A (newline), 0x0D (CR)
-    text=$(printf '%s' "$text" | tr -d '\000-\010\013\014\016-\037')
+  # Remove control characters except newline, tab, carriage return
+  # Control chars are U+0000-001F except 0x09 (tab), 0x0A (newline), 0x0D (CR)
+  text=$(printf '%s' "$text" | tr -d '\000-\010\013\014\016-\037')
 
-    printf '%s' "$text"
+  printf '%s' "$text"
 }
 
 # Clean HTML attributes from LLM UIs
 clean_html() {
-    local text="$1"
+  local text="$1"
 
-    # Remove common LLM-specific data attributes
-    # data-start="..." data-end="..." data-sourcepos="..."
-    text=$(printf '%s' "$text" | sed -E 's/ data-start="[^"]*"//g')
-    text=$(printf '%s' "$text" | sed -E 's/ data-end="[^"]*"//g')
-    text=$(printf '%s' "$text" | sed -E 's/ data-sourcepos="[^"]*"//g')
+  # Remove common LLM-specific data attributes
+  # data-start="..." data-end="..." data-sourcepos="..."
+  text=$(printf '%s' "$text" | sed -E 's/ data-start="[^"]*"//g')
+  text=$(printf '%s' "$text" | sed -E 's/ data-end="[^"]*"//g')
+  text=$(printf '%s' "$text" | sed -E 's/ data-sourcepos="[^"]*"//g')
 
-    # Remove other common data-* attributes from LLM UIs
-    text=$(printf '%s' "$text" | sed -E 's/ data-[a-z-]+="[^"]*"//g')
+  # Remove other common data-* attributes from LLM UIs
+  text=$(printf '%s' "$text" | sed -E 's/ data-[a-z-]+="[^"]*"//g')
 
-    printf '%s' "$text"
+  printf '%s' "$text"
 }
 
 # Normalize whitespace
 clean_whitespace() {
-    local text="$1"
+  local text="$1"
 
-    # Remove trailing whitespace from each line
-    text=$(printf '%s' "$text" | sed 's/[[:space:]]*$//')
+  # Remove trailing whitespace from each line
+  text=$(printf '%s' "$text" | sed 's/[[:space:]]*$//')
 
-    # Collapse multiple spaces to single space (but preserve newlines)
-    text=$(printf '%s' "$text" | sed 's/  */ /g')
+  # Collapse multiple spaces to single space (but preserve newlines)
+  text=$(printf '%s' "$text" | sed 's/  */ /g')
 
-    # Collapse more than 2 consecutive blank lines to max 2
-    text=$(printf '%s' "$text" | sed '/^$/N;/^\n$/N;/^\n\n$/d')
+  # Collapse more than 2 consecutive blank lines to max 2
+  text=$(printf '%s' "$text" | sed '/^$/N;/^\n$/N;/^\n\n$/d')
 
-    printf '%s' "$text"
+  printf '%s' "$text"
 }
 
 # Normalize smart quotes to straight quotes
 clean_quotes() {
-    local text="$1"
-    local SQ="'"
-    local DQ='"'
+  local text="$1"
+  local SQ="'"
+  local DQ='"'
 
-    text="${text//$LSQUO/$SQ}"
-    text="${text//$RSQUO/$SQ}"
-    text="${text//$LDQUO/$DQ}"
-    text="${text//$RDQUO/$DQ}"
+  text="${text//$LSQUO/$SQ}"
+  text="${text//$RSQUO/$SQ}"
+  text="${text//$LDQUO/$DQ}"
+  text="${text//$RDQUO/$DQ}"
 
-    printf '%s' "$text"
+  printf '%s' "$text"
 }
 
 # Main cleaning pipeline
 clean_text() {
-    local text="$1"
-    local original_len=${#text}
+  local text="$1"
+  local original_len=${#text}
 
-    # Always clean Unicode
-    text=$(clean_unicode "$text")
+  # Always clean Unicode
+  text=$(clean_unicode "$text")
 
-    # Clean HTML unless disabled
-    if [[ "$OPT_NO_HTML" == "false" ]]; then
-        text=$(clean_html "$text")
+  # Clean HTML unless disabled
+  if [[ "$OPT_NO_HTML" == "false" ]]; then
+    text=$(clean_html "$text")
+  fi
+
+  # Clean whitespace unless disabled
+  if [[ "$OPT_NO_WHITESPACE" == "false" ]]; then
+    text=$(clean_whitespace "$text")
+  fi
+
+  # Normalize quotes if requested
+  if [[ "$OPT_NORMALIZE_QUOTES" == "true" ]]; then
+    text=$(clean_quotes "$text")
+  fi
+
+  # Verbose output
+  if [[ "$OPT_VERBOSE" == "true" ]]; then
+    local new_len=${#text}
+    local removed=$((original_len - new_len))
+    if [[ $removed -gt 0 ]]; then
+      info "Removed $removed hidden characters" >&2
+    else
+      info "No hidden characters found" >&2
     fi
+  fi
 
-    # Clean whitespace unless disabled
-    if [[ "$OPT_NO_WHITESPACE" == "false" ]]; then
-        text=$(clean_whitespace "$text")
-    fi
-
-    # Normalize quotes if requested
-    if [[ "$OPT_NORMALIZE_QUOTES" == "true" ]]; then
-        text=$(clean_quotes "$text")
-    fi
-
-    # Verbose output
-    if [[ "$OPT_VERBOSE" == "true" ]]; then
-        local new_len=${#text}
-        local removed=$((original_len - new_len))
-        if [[ $removed -gt 0 ]]; then
-            info "Removed $removed hidden characters" >&2
-        else
-            info "No hidden characters found" >&2
-        fi
-    fi
-
-    printf '%s' "$text"
+  printf '%s' "$text"
 }
 
 # ============================================================================
@@ -211,113 +211,113 @@ clean_text() {
 
 # Count occurrences of a pattern in text
 count_pattern() {
-    local text="$1"
-    local pattern="$2"
-    local count=0
-    local temp="$text"
+  local text="$1"
+  local pattern="$2"
+  local count=0
+  local temp="$text"
 
-    while [[ "$temp" == *"$pattern"* ]]; do
-        count=$((count + 1))
-        temp="${temp#*"$pattern"}"
-    done
+  while [[ "$temp" == *"$pattern"* ]]; do
+    count=$((count + 1))
+    temp="${temp#*"$pattern"}"
+  done
 
-    echo "$count"
+  echo "$count"
 }
 
 # Detect hidden characters without removing them
 detect_hidden() {
-    local text="$1"
-    local found=0
+  local text="$1"
+  local found=0
 
-    echo "Hidden character analysis:"
-    echo "=========================="
+  echo "Hidden character analysis:"
+  echo "=========================="
+  echo ""
+
+  # Zero-width characters
+  local zwsp_count=$(count_pattern "$text" "$ZWSP")
+  local zwnj_count=$(count_pattern "$text" "$ZWNJ")
+  local zwj_count=$(count_pattern "$text" "$ZWJ")
+  local wj_count=$(count_pattern "$text" "$WJ")
+  local bom_count=$(count_pattern "$text" "$BOM")
+  local shy_count=$(count_pattern "$text" "$SHY")
+
+  if [[ $zwsp_count -gt 0 ]]; then
+    echo "  Zero-width space (U+200B): $zwsp_count"
+    found=$((found + zwsp_count))
+  fi
+  if [[ $zwnj_count -gt 0 ]]; then
+    echo "  Zero-width non-joiner (U+200C): $zwnj_count"
+    found=$((found + zwnj_count))
+  fi
+  if [[ $zwj_count -gt 0 ]]; then
+    echo "  Zero-width joiner (U+200D): $zwj_count"
+    found=$((found + zwj_count))
+  fi
+  if [[ $wj_count -gt 0 ]]; then
+    echo "  Word joiner (U+2060): $wj_count"
+    found=$((found + wj_count))
+  fi
+  if [[ $bom_count -gt 0 ]]; then
+    echo "  Byte order mark (U+FEFF): $bom_count"
+    found=$((found + bom_count))
+  fi
+  if [[ $shy_count -gt 0 ]]; then
+    echo "  Soft hyphen (U+00AD): $shy_count"
+    found=$((found + shy_count))
+  fi
+
+  # Directional formatting
+  local lre_count=$(count_pattern "$text" "$LRE")
+  local rle_count=$(count_pattern "$text" "$RLE")
+  local pdf_count=$(count_pattern "$text" "$PDF")
+  local lro_count=$(count_pattern "$text" "$LRO")
+  local rlo_count=$(count_pattern "$text" "$RLO")
+
+  local dir_total=$((lre_count + rle_count + pdf_count + lro_count + rlo_count))
+  if [[ $dir_total -gt 0 ]]; then
+    echo "  Directional formatting chars: $dir_total"
+    found=$((found + dir_total))
+  fi
+
+  # Special spaces
+  local nbsp_count=$(count_pattern "$text" "$NBSP")
+  local hair_count=$(count_pattern "$text" "$HAIRSP")
+
+  if [[ $nbsp_count -gt 0 ]]; then
+    echo "  Non-breaking space (U+00A0): $nbsp_count"
+    found=$((found + nbsp_count))
+  fi
+  if [[ $hair_count -gt 0 ]]; then
+    echo "  Hair space (U+200A): $hair_count"
+    found=$((found + hair_count))
+  fi
+
+  # Smart quotes
+  local lsq_count=$(count_pattern "$text" "$LSQUO")
+  local rsq_count=$(count_pattern "$text" "$RSQUO")
+  local ldq_count=$(count_pattern "$text" "$LDQUO")
+  local rdq_count=$(count_pattern "$text" "$RDQUO")
+
+  local quote_total=$((lsq_count + rsq_count + ldq_count + rdq_count))
+  if [[ $quote_total -gt 0 ]]; then
+    echo "  Smart quotes: $quote_total (use --normalize-quotes to convert)"
+  fi
+
+  # Check for HTML data attributes
+  local data_attrs=$(printf '%s' "$text" | grep -oE ' data-[a-z-]+="[^"]*"' 2>/dev/null | wc -l | tr -d ' ')
+  if [[ $data_attrs -gt 0 ]]; then
+    echo "  HTML data-* attributes: $data_attrs"
+    found=$((found + data_attrs))
+  fi
+
+  echo ""
+  if [[ $found -gt 0 ]]; then
+    echo "Total hidden elements found: $found"
     echo ""
-
-    # Zero-width characters
-    local zwsp_count=$(count_pattern "$text" "$ZWSP")
-    local zwnj_count=$(count_pattern "$text" "$ZWNJ")
-    local zwj_count=$(count_pattern "$text" "$ZWJ")
-    local wj_count=$(count_pattern "$text" "$WJ")
-    local bom_count=$(count_pattern "$text" "$BOM")
-    local shy_count=$(count_pattern "$text" "$SHY")
-
-    if [[ $zwsp_count -gt 0 ]]; then
-        echo "  Zero-width space (U+200B): $zwsp_count"
-        found=$((found + zwsp_count))
-    fi
-    if [[ $zwnj_count -gt 0 ]]; then
-        echo "  Zero-width non-joiner (U+200C): $zwnj_count"
-        found=$((found + zwnj_count))
-    fi
-    if [[ $zwj_count -gt 0 ]]; then
-        echo "  Zero-width joiner (U+200D): $zwj_count"
-        found=$((found + zwj_count))
-    fi
-    if [[ $wj_count -gt 0 ]]; then
-        echo "  Word joiner (U+2060): $wj_count"
-        found=$((found + wj_count))
-    fi
-    if [[ $bom_count -gt 0 ]]; then
-        echo "  Byte order mark (U+FEFF): $bom_count"
-        found=$((found + bom_count))
-    fi
-    if [[ $shy_count -gt 0 ]]; then
-        echo "  Soft hyphen (U+00AD): $shy_count"
-        found=$((found + shy_count))
-    fi
-
-    # Directional formatting
-    local lre_count=$(count_pattern "$text" "$LRE")
-    local rle_count=$(count_pattern "$text" "$RLE")
-    local pdf_count=$(count_pattern "$text" "$PDF")
-    local lro_count=$(count_pattern "$text" "$LRO")
-    local rlo_count=$(count_pattern "$text" "$RLO")
-
-    local dir_total=$((lre_count + rle_count + pdf_count + lro_count + rlo_count))
-    if [[ $dir_total -gt 0 ]]; then
-        echo "  Directional formatting chars: $dir_total"
-        found=$((found + dir_total))
-    fi
-
-    # Special spaces
-    local nbsp_count=$(count_pattern "$text" "$NBSP")
-    local hair_count=$(count_pattern "$text" "$HAIRSP")
-
-    if [[ $nbsp_count -gt 0 ]]; then
-        echo "  Non-breaking space (U+00A0): $nbsp_count"
-        found=$((found + nbsp_count))
-    fi
-    if [[ $hair_count -gt 0 ]]; then
-        echo "  Hair space (U+200A): $hair_count"
-        found=$((found + hair_count))
-    fi
-
-    # Smart quotes
-    local lsq_count=$(count_pattern "$text" "$LSQUO")
-    local rsq_count=$(count_pattern "$text" "$RSQUO")
-    local ldq_count=$(count_pattern "$text" "$LDQUO")
-    local rdq_count=$(count_pattern "$text" "$RDQUO")
-
-    local quote_total=$((lsq_count + rsq_count + ldq_count + rdq_count))
-    if [[ $quote_total -gt 0 ]]; then
-        echo "  Smart quotes: $quote_total (use --normalize-quotes to convert)"
-    fi
-
-    # Check for HTML data attributes
-    local data_attrs=$(printf '%s' "$text" | grep -oE ' data-[a-z-]+="[^"]*"' 2>/dev/null | wc -l | tr -d ' ')
-    if [[ $data_attrs -gt 0 ]]; then
-        echo "  HTML data-* attributes: $data_attrs"
-        found=$((found + data_attrs))
-    fi
-
-    echo ""
-    if [[ $found -gt 0 ]]; then
-        echo "Total hidden elements found: $found"
-        echo ""
-        echo "Run without --detect to clean the text."
-    else
-        echo "No hidden elements detected."
-    fi
+    echo "Run without --detect to clean the text."
+  else
+    echo "No hidden elements detected."
+  fi
 }
 
 # ============================================================================
@@ -325,141 +325,141 @@ detect_hidden() {
 # ============================================================================
 
 detect_tropes() {
-    local text="$1"
-    local script_dir
-    script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-    local data_file="$script_dir/data/trope-indicators.txt"
+  local text="$1"
+  local script_dir
+  script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+  local data_file="$script_dir/data/trope-indicators.txt"
 
-    if [[ ! -f "$data_file" ]]; then
-        error "Trope indicators file not found: $data_file"
-        return 1
+  if [[ ! -f "$data_file" ]]; then
+    error "Trope indicators file not found: $data_file"
+    return 1
+  fi
+
+  local total_words
+  total_words=$(printf '%s' "$text" | wc -w | tr -d ' ')
+
+  local current_id="" current_slug="" current_severity="" current_threshold="" current_density=0
+  local findings="" finding_count=0
+  local high_count=0 medium_count=0 low_count=0
+
+  while IFS= read -r line || [[ -n "$line" ]]; do
+    # Skip empty lines
+    [[ -z "$line" ]] && continue
+
+    # Section header: # ID:slug:severity:threshold[:density_count]
+    if [[ "$line" =~ ^#\ ([A-Z]+-[0-9]+):([a-z0-9-]+):([a-z]+):([a-z]+)(:([0-9]+))?$ ]]; then
+      current_id="${BASH_REMATCH[1]}"
+      current_slug="${BASH_REMATCH[2]}"
+      current_severity="${BASH_REMATCH[3]}"
+      current_threshold="${BASH_REMATCH[4]}"
+      current_density="${BASH_REMATCH[6]:-0}"
+      continue
     fi
 
-    local total_words
-    total_words=$(printf '%s' "$text" | wc -w | tr -d ' ')
+    # Skip comment lines
+    [[ "$line" == "#"* ]] && continue
 
-    local current_id="" current_slug="" current_severity="" current_threshold="" current_density=0
-    local findings="" finding_count=0
-    local high_count=0 medium_count=0 low_count=0
+    # Skip if no section header parsed yet
+    [[ -z "$current_id" ]] && continue
 
-    while IFS= read -r line || [[ -n "$line" ]]; do
-        # Skip empty lines
-        [[ -z "$line" ]] && continue
+    # Search for this pattern
+    # Convert PCRE patterns to ERE for macOS (no grep -P)
+    local match_count=0
+    local first_match=""
+    local grep_pattern="$line"
 
-        # Section header: # ID:slug:severity:threshold[:density_count]
-        if [[ "$line" =~ ^#\ ([A-Z]+-[0-9]+):([a-z0-9-]+):([a-z]+):([a-z]+)(:([0-9]+))?$ ]]; then
-            current_id="${BASH_REMATCH[1]}"
-            current_slug="${BASH_REMATCH[2]}"
-            current_severity="${BASH_REMATCH[3]}"
-            current_threshold="${BASH_REMATCH[4]}"
-            current_density="${BASH_REMATCH[6]:-0}"
-            continue
-        fi
+    # Strip PCRE-only syntax
+    grep_pattern="${grep_pattern#'(?i)'}"
+    grep_pattern=$(printf '%s' "$grep_pattern" | sed 's/\\b//g')
 
-        # Skip comment lines
-        [[ "$line" == "#"* ]] && continue
+    if printf '%s\n' "$text" | grep -ciE "$grep_pattern" >/dev/null 2>&1; then
+      match_count=$(printf '%s\n' "$text" | grep -ciE "$grep_pattern" 2>/dev/null | tr -d ' ')
+      first_match=$(printf '%s\n' "$text" | grep -inE "$grep_pattern" 2>/dev/null | head -1)
+    fi
 
-        # Skip if no section header parsed yet
-        [[ -z "$current_id" ]] && continue
+    if [[ $match_count -gt 0 ]]; then
+      # Check density threshold
+      if [[ "$current_threshold" == "density" && $match_count -lt $current_density ]]; then
+        # Reset for next section
+        current_id=""
+        continue
+      fi
 
-        # Search for this pattern
-        # Convert PCRE patterns to ERE for macOS (no grep -P)
-        local match_count=0
-        local first_match=""
-        local grep_pattern="$line"
+      local severity_tag
+      case "$current_severity" in
+        high)   severity_tag="HIGH";   high_count=$((high_count + 1)) ;;
+        medium) severity_tag="MEDIUM"; medium_count=$((medium_count + 1)) ;;
+        low)    severity_tag="LOW";    low_count=$((low_count + 1)) ;;
+      esac
 
-        # Strip PCRE-only syntax
-        grep_pattern="${grep_pattern#'(?i)'}"
-        grep_pattern=$(printf '%s' "$grep_pattern" | sed 's/\\b//g')
+      finding_count=$((finding_count + 1))
 
-        if printf '%s\n' "$text" | grep -ciE "$grep_pattern" >/dev/null 2>&1; then
-            match_count=$(printf '%s\n' "$text" | grep -ciE "$grep_pattern" 2>/dev/null | tr -d ' ')
-            first_match=$(printf '%s\n' "$text" | grep -inE "$grep_pattern" 2>/dev/null | head -1)
-        fi
+      local detail=""
+      if [[ "$current_threshold" == "density" ]]; then
+        detail="$match_count occurrences (threshold: $current_density)"
+      else
+        local line_ref
+        line_ref=$(printf '%s' "$first_match" | sed 's/^\([0-9]*\):/line \1: /' | head -c 80)
+        detail="$line_ref"
+      fi
 
-        if [[ $match_count -gt 0 ]]; then
-            # Check density threshold
-            if [[ "$current_threshold" == "density" && $match_count -lt $current_density ]]; then
-                # Reset for next section
-                current_id=""
-                continue
-            fi
+      local pad_sev=""
+      local sev_len=${#severity_tag}
+      local i=0
+      while [[ $i -lt $((8 - sev_len)) ]]; do
+        pad_sev="$pad_sev "
+        i=$((i + 1))
+      done
 
-            local severity_tag
-            case "$current_severity" in
-                high)   severity_tag="HIGH";   high_count=$((high_count + 1)) ;;
-                medium) severity_tag="MEDIUM"; medium_count=$((medium_count + 1)) ;;
-                low)    severity_tag="LOW";    low_count=$((low_count + 1)) ;;
-            esac
+      local pad_slug=""
+      local slug_len=${#current_slug}
+      i=0
+      while [[ $i -lt $((30 - slug_len)) ]]; do
+        pad_slug="$pad_slug "
+        i=$((i + 1))
+      done
 
-            finding_count=$((finding_count + 1))
-
-            local detail=""
-            if [[ "$current_threshold" == "density" ]]; then
-                detail="$match_count occurrences (threshold: $current_density)"
-            else
-                local line_ref
-                line_ref=$(printf '%s' "$first_match" | sed 's/^\([0-9]*\):/line \1: /' | head -c 80)
-                detail="$line_ref"
-            fi
-
-            local pad_sev=""
-            local sev_len=${#severity_tag}
-            local i=0
-            while [[ $i -lt $((8 - sev_len)) ]]; do
-                pad_sev="$pad_sev "
-                i=$((i + 1))
-            done
-
-            local pad_slug=""
-            local slug_len=${#current_slug}
-            i=0
-            while [[ $i -lt $((30 - slug_len)) ]]; do
-                pad_slug="$pad_slug "
-                i=$((i + 1))
-            done
-
-            findings="${findings}  [${severity_tag}]${pad_sev}${current_id} ${current_slug}${pad_slug}${detail}
+      findings="${findings}  [${severity_tag}]${pad_sev}${current_id} ${current_slug}${pad_slug}${detail}
 "
 
-            # Skip remaining patterns for this section
-            current_id=""
-        fi
-    done < "$data_file"
-
-    # Output report
-    echo ""
-    echo "=== Trope Analysis ==="
-    echo ""
-
-    if [[ $finding_count -eq 0 ]]; then
-        echo "ok: No tropes detected"
-    else
-        echo "FINDINGS:"
-        printf '%s' "$findings"
-
-        echo ""
-        echo "SUMMARY:"
-        printf '  High: %d | Medium: %d | Low: %d | Total: %d\n' \
-            "$high_count" "$medium_count" "$low_count" "$finding_count"
-
-        if [[ $total_words -gt 0 ]]; then
-            local density_x10=$(( finding_count * 10000 / total_words ))
-            local density_whole=$(( density_x10 / 10 ))
-            local density_frac=$(( density_x10 % 10 ))
-
-            local density_label="clean"
-            if [[ $density_x10 -gt 50 ]]; then
-                density_label="heavy"
-            elif [[ $density_x10 -gt 20 ]]; then
-                density_label="moderate"
-            fi
-
-            printf '  Trope density: %d.%d per 1000 words (%s)\n' \
-                "$density_whole" "$density_frac" "$density_label"
-        fi
+      # Skip remaining patterns for this section
+      current_id=""
     fi
+  done < "$data_file"
+
+  # Output report
+  echo ""
+  echo "=== Trope Analysis ==="
+  echo ""
+
+  if [[ $finding_count -eq 0 ]]; then
+    echo "ok: No tropes detected"
+  else
+    echo "FINDINGS:"
+    printf '%s' "$findings"
+
     echo ""
+    echo "SUMMARY:"
+    printf '  High: %d | Medium: %d | Low: %d | Total: %d\n' \
+      "$high_count" "$medium_count" "$low_count" "$finding_count"
+
+    if [[ $total_words -gt 0 ]]; then
+      local density_x10=$(( finding_count * 10000 / total_words ))
+      local density_whole=$(( density_x10 / 10 ))
+      local density_frac=$(( density_x10 % 10 ))
+
+      local density_label="clean"
+      if [[ $density_x10 -gt 50 ]]; then
+        density_label="heavy"
+      elif [[ $density_x10 -gt 20 ]]; then
+        density_label="moderate"
+      fi
+
+      printf '  Trope density: %d.%d per 1000 words (%s)\n' \
+        "$density_whole" "$density_frac" "$density_label"
+    fi
+  fi
+  echo ""
 }
 
 # ============================================================================
@@ -468,77 +468,77 @@ detect_tropes() {
 
 # Check if exiftool is available
 check_exiftool() {
-    if ! command -v exiftool &>/dev/null; then
-        error "exiftool required for --image mode"
-        info "Install with: brew install exiftool"
-        return 1
-    fi
-    return 0
+  if ! command -v exiftool &>/dev/null; then
+    error "exiftool required for --image mode"
+    info "Install with: brew install exiftool"
+    return 1
+  fi
+  return 0
 }
 
 # Detect C2PA and other AI-related metadata in image
 detect_c2pa() {
-    local image="$1"
+  local image="$1"
 
-    if [[ ! -f "$image" ]]; then
-        error "Image file not found: $image"
-        return 1
-    fi
+  if [[ ! -f "$image" ]]; then
+    error "Image file not found: $image"
+    return 1
+  fi
 
-    echo "C2PA/AI metadata analysis: $image"
-    echo "=================================="
+  echo "C2PA/AI metadata analysis: $image"
+  echo "=================================="
+  echo ""
+
+  # Get all metadata and filter for C2PA/AI-related fields
+  local metadata
+  metadata=$(exiftool -G1 -a -s "$image" 2>/dev/null)
+
+  # Look for C2PA, creator, credit, AI-related metadata
+  local c2pa_data
+  c2pa_data=$(echo "$metadata" | grep -iE "(c2pa|creator|credit|jumbf|ai|generated|openai|dalle|chatgpt|sora|midjourney)" 2>/dev/null || true)
+
+  if [[ -n "$c2pa_data" ]]; then
+    echo "Found AI/C2PA metadata:"
+    echo "$c2pa_data"
     echo ""
+    echo "Run without --detect to strip this metadata."
+  else
+    echo "No C2PA/AI metadata found."
+  fi
 
-    # Get all metadata and filter for C2PA/AI-related fields
-    local metadata
-    metadata=$(exiftool -G1 -a -s "$image" 2>/dev/null)
-
-    # Look for C2PA, creator, credit, AI-related metadata
-    local c2pa_data
-    c2pa_data=$(echo "$metadata" | grep -iE "(c2pa|creator|credit|jumbf|ai|generated|openai|dalle|chatgpt|sora|midjourney)" 2>/dev/null || true)
-
-    if [[ -n "$c2pa_data" ]]; then
-        echo "Found AI/C2PA metadata:"
-        echo "$c2pa_data"
-        echo ""
-        echo "Run without --detect to strip this metadata."
-    else
-        echo "No C2PA/AI metadata found."
-    fi
-
-    # Verbose mode shows all metadata
-    if [[ "$OPT_VERBOSE" == "true" ]]; then
-        echo ""
-        echo "Full metadata:"
-        echo "--------------"
-        echo "$metadata"
-    fi
+  # Verbose mode shows all metadata
+  if [[ "$OPT_VERBOSE" == "true" ]]; then
+    echo ""
+    echo "Full metadata:"
+    echo "--------------"
+    echo "$metadata"
+  fi
 }
 
 # Strip all metadata from image (including C2PA)
 strip_c2pa() {
-    local image="$1"
-    local output="$2"
+  local image="$1"
+  local output="$2"
 
-    if [[ ! -f "$image" ]]; then
-        error "Image file not found: $image"
-        return 1
-    fi
+  if [[ ! -f "$image" ]]; then
+    error "Image file not found: $image"
+    return 1
+  fi
 
-    if [[ "$OPT_INPLACE" == "true" ]]; then
-        # Strip in place
-        exiftool -all= -overwrite_original "$image" 2>/dev/null
-        success "Metadata stripped: $image"
-    elif [[ -n "$output" ]]; then
-        # Output to new file
-        exiftool -all= -o "$output" "$image" 2>/dev/null
-        success "Cleaned image written to: $output"
-    else
-        # No output specified - require -o or -i
-        error "Image mode requires -o <output-file> or -i (in-place)"
-        info "Example: cleanz --image photo.png -o cleaned.png"
-        return 1
-    fi
+  if [[ "$OPT_INPLACE" == "true" ]]; then
+    # Strip in place
+    exiftool -all= -overwrite_original "$image" 2>/dev/null
+    success "Metadata stripped: $image"
+  elif [[ -n "$output" ]]; then
+    # Output to new file
+    exiftool -all= -o "$output" "$image" 2>/dev/null
+    success "Cleaned image written to: $output"
+  else
+    # No output specified - require -o or -i
+    error "Image mode requires -o <output-file> or -i (in-place)"
+    info "Example: cleanz --image photo.png -o cleaned.png"
+    return 1
+  fi
 }
 
 # ============================================================================
@@ -547,79 +547,79 @@ strip_c2pa() {
 
 # Read input from file, stdin, or clipboard
 read_input() {
-    local text=""
+  local text=""
 
-    if [[ "$OPT_CLIPBOARD" == "true" ]]; then
-        # Read from clipboard using clipz
-        if ! command -v clipz >/dev/null 2>&1; then
-            # Try using utilz clipz
-            if [[ -x "$UTILZ_HOME/bin/clipz" ]]; then
-                text=$("$UTILZ_HOME/bin/clipz" paste 2>/dev/null) || {
-                    error "Failed to read from clipboard"
-                    exit 1
-                }
-            else
-                error "clipz not found - required for clipboard operations"
-                exit 1
-            fi
-        else
-            text=$(clipz paste 2>/dev/null) || {
-                error "Failed to read from clipboard"
-                exit 1
-            }
-        fi
-    elif [[ -n "$INPUT_FILE" ]]; then
-        # Read from file
-        if [[ ! -f "$INPUT_FILE" ]]; then
-            error "File not found: $INPUT_FILE"
-            exit 1
-        fi
-        text=$(cat "$INPUT_FILE")
+  if [[ "$OPT_CLIPBOARD" == "true" ]]; then
+    # Read from clipboard using clipz
+    if ! command -v clipz >/dev/null 2>&1; then
+      # Try using utilz clipz
+      if [[ -x "$UTILZ_HOME/bin/clipz" ]]; then
+        text=$("$UTILZ_HOME/bin/clipz" paste 2>/dev/null) || {
+          error "Failed to read from clipboard"
+          exit 1
+        }
+      else
+        error "clipz not found - required for clipboard operations"
+        exit 1
+      fi
     else
-        # Read from stdin
-        text=$(cat)
+      text=$(clipz paste 2>/dev/null) || {
+        error "Failed to read from clipboard"
+        exit 1
+      }
     fi
+  elif [[ -n "$INPUT_FILE" ]]; then
+    # Read from file
+    if [[ ! -f "$INPUT_FILE" ]]; then
+      error "File not found: $INPUT_FILE"
+      exit 1
+    fi
+    text=$(cat "$INPUT_FILE")
+  else
+    # Read from stdin
+    text=$(cat)
+  fi
 
-    printf '%s' "$text"
+  printf '%s' "$text"
 }
 
 # Write output to file, stdout, or clipboard
 write_output() {
-    local text="$1"
+  local text="$1"
 
-    if [[ "$OPT_CLIPBOARD" == "true" ]]; then
-        # Write to clipboard using clipz
-        if ! command -v clipz >/dev/null 2>&1; then
-            if [[ -x "$UTILZ_HOME/bin/clipz" ]]; then
-                printf '%s' "$text" | "$UTILZ_HOME/bin/clipz" copy || {
-                    error "Failed to write to clipboard"
-                    exit 1
-                }
-            else
-                error "clipz not found - required for clipboard operations"
-                exit 1
-            fi
-        else
-            printf '%s' "$text" | clipz copy || {
-                error "Failed to write to clipboard"
-                exit 1
-            }
-        fi
-        success "Clipboard cleaned"
-    elif [[ "$OPT_INPLACE" == "true" && -n "$INPUT_FILE" ]]; then
-        # In-place editing with temp file for safety
-        local tmpfile=$(mktemp)
-        printf '%s' "$text" > "$tmpfile"
-        mv "$tmpfile" "$INPUT_FILE"
-        success "File cleaned: $INPUT_FILE"
-    elif [[ -n "$OPT_OUTPUT" ]]; then
-        # Write to output file
-        printf '%s' "$text" > "$OPT_OUTPUT"
-        success "Output written to: $OPT_OUTPUT"
+  if [[ "$OPT_CLIPBOARD" == "true" ]]; then
+    # Write to clipboard using clipz
+    if ! command -v clipz >/dev/null 2>&1; then
+      if [[ -x "$UTILZ_HOME/bin/clipz" ]]; then
+        printf '%s' "$text" | "$UTILZ_HOME/bin/clipz" copy || {
+          error "Failed to write to clipboard"
+          exit 1
+        }
+      else
+        error "clipz not found - required for clipboard operations"
+        exit 1
+      fi
     else
-        # Write to stdout
-        printf '%s\n' "$text"
+      printf '%s' "$text" | clipz copy || {
+        error "Failed to write to clipboard"
+        exit 1
+      }
     fi
+    success "Clipboard cleaned"
+  elif [[ "$OPT_INPLACE" == "true" && -n "$INPUT_FILE" ]]; then
+    # In-place editing with temp file for safety
+    local tmpfile=$(mktemp)
+    printf '%s' "$text" > "$tmpfile"
+    mv "$tmpfile" "$INPUT_FILE"
+    success "File cleaned: $INPUT_FILE"
+  elif [[ -n "$OPT_OUTPUT" ]]; then
+    # Write to output file
+    printf '%s' "$text" > "$OPT_OUTPUT"
+    success "Output written to: $OPT_OUTPUT"
+  else
+    # Write to stdout
+    printf '%s\n' "$text"
+  fi
 }
 
 # ============================================================================
@@ -627,7 +627,7 @@ write_output() {
 # ============================================================================
 
 usage() {
-    cat <<EOF
+  cat <<EOF
 Usage: cleanz [OPTIONS] [FILE]
 
 LLM text cleaner - removes hidden characters and formatting artifacts from
@@ -713,142 +713,142 @@ EOF
 
 # Parse arguments
 while [[ $# -gt 0 ]]; do
-    case "$1" in
-        -h|--help)
-            usage
-            exit 0
-            ;;
-        --version)
-            show_version "cleanz"
-            exit 0
-            ;;
-        -c|--clipboard)
-            OPT_CLIPBOARD=true
-            shift
-            ;;
-        -i|--in-place)
-            OPT_INPLACE=true
-            shift
-            ;;
-        -o|--output)
-            if [[ -z "${2:-}" ]]; then
-                error "Option --output requires a filename"
-                exit 1
-            fi
-            OPT_OUTPUT="$2"
-            shift 2
-            ;;
-        -d|--detect)
-            OPT_DETECT=true
-            shift
-            ;;
-        -v|--verbose)
-            OPT_VERBOSE=true
-            shift
-            ;;
-        --no-html)
-            OPT_NO_HTML=true
-            shift
-            ;;
-        --no-whitespace)
-            OPT_NO_WHITESPACE=true
-            shift
-            ;;
-        --normalize-quotes)
-            OPT_NORMALIZE_QUOTES=true
-            shift
-            ;;
-        --image)
-            OPT_IMAGE=true
-            shift
-            ;;
-        --detrope)
-            OPT_DETROPE=true
-            shift
-            ;;
-        -*)
-            error "Unknown option: $1"
-            echo ""
-            usage
-            exit 1
-            ;;
-        *)
-            if [[ -n "$INPUT_FILE" ]]; then
-                error "Too many arguments"
-                exit 1
-            fi
-            INPUT_FILE="$1"
-            shift
-            ;;
-    esac
+  case "$1" in
+    -h|--help)
+      usage
+      exit 0
+      ;;
+    --version)
+      show_version "cleanz"
+      exit 0
+      ;;
+    -c|--clipboard)
+      OPT_CLIPBOARD=true
+      shift
+      ;;
+    -i|--in-place)
+      OPT_INPLACE=true
+      shift
+      ;;
+    -o|--output)
+      if [[ -z "${2:-}" ]]; then
+        error "Option --output requires a filename"
+        exit 1
+      fi
+      OPT_OUTPUT="$2"
+      shift 2
+      ;;
+    -d|--detect)
+      OPT_DETECT=true
+      shift
+      ;;
+    -v|--verbose)
+      OPT_VERBOSE=true
+      shift
+      ;;
+    --no-html)
+      OPT_NO_HTML=true
+      shift
+      ;;
+    --no-whitespace)
+      OPT_NO_WHITESPACE=true
+      shift
+      ;;
+    --normalize-quotes)
+      OPT_NORMALIZE_QUOTES=true
+      shift
+      ;;
+    --image)
+      OPT_IMAGE=true
+      shift
+      ;;
+    --detrope)
+      OPT_DETROPE=true
+      shift
+      ;;
+    -*)
+      error "Unknown option: $1"
+      echo ""
+      usage
+      exit 1
+      ;;
+    *)
+      if [[ -n "$INPUT_FILE" ]]; then
+        error "Too many arguments"
+        exit 1
+      fi
+      INPUT_FILE="$1"
+      shift
+      ;;
+  esac
 done
 
 # Validate options
 if [[ "$OPT_INPLACE" == "true" && -z "$INPUT_FILE" ]]; then
-    error "Option --in-place requires a file argument"
-    exit 1
+  error "Option --in-place requires a file argument"
+  exit 1
 fi
 
 if [[ "$OPT_INPLACE" == "true" && -n "$OPT_OUTPUT" ]]; then
-    error "Options --in-place and --output are mutually exclusive"
-    exit 1
+  error "Options --in-place and --output are mutually exclusive"
+  exit 1
 fi
 
 if [[ "$OPT_CLIPBOARD" == "true" && -n "$INPUT_FILE" ]]; then
-    error "Options --clipboard and file input are mutually exclusive"
-    exit 1
+  error "Options --clipboard and file input are mutually exclusive"
+  exit 1
 fi
 
 # Detrope + image validation
 if [[ "$OPT_DETROPE" == "true" && "$OPT_IMAGE" == "true" ]]; then
-    error "--detrope is not supported in image mode"
-    exit 1
+  error "--detrope is not supported in image mode"
+  exit 1
 fi
 
 # Image mode validation
 if [[ "$OPT_IMAGE" == "true" ]]; then
-    if [[ -z "$INPUT_FILE" ]]; then
-        error "Image mode requires an image file argument"
-        exit 1
-    fi
-    if [[ "$OPT_CLIPBOARD" == "true" ]]; then
-        error "Image mode does not support clipboard"
-        exit 1
-    fi
+  if [[ -z "$INPUT_FILE" ]]; then
+    error "Image mode requires an image file argument"
+    exit 1
+  fi
+  if [[ "$OPT_CLIPBOARD" == "true" ]]; then
+    error "Image mode does not support clipboard"
+    exit 1
+  fi
 fi
 
 # Process based on mode
 if [[ "$OPT_IMAGE" == "true" ]]; then
-    # Image mode - handle C2PA metadata
-    # Check file exists first (before exiftool check)
-    if [[ ! -f "$INPUT_FILE" ]]; then
-        error "Image file not found: $INPUT_FILE"
-        exit 1
-    fi
+  # Image mode - handle C2PA metadata
+  # Check file exists first (before exiftool check)
+  if [[ ! -f "$INPUT_FILE" ]]; then
+    error "Image file not found: $INPUT_FILE"
+    exit 1
+  fi
 
-    check_exiftool || exit 1
+  check_exiftool || exit 1
 
-    if [[ "$OPT_DETECT" == "true" ]]; then
-        detect_c2pa "$INPUT_FILE"
-    else
-        strip_c2pa "$INPUT_FILE" "$OPT_OUTPUT"
-    fi
+  if [[ "$OPT_DETECT" == "true" ]]; then
+    detect_c2pa "$INPUT_FILE"
+  else
+    strip_c2pa "$INPUT_FILE" "$OPT_OUTPUT"
+  fi
 else
-    # Text mode
-    # Read input
-    text=$(read_input)
+  # Text mode
+  # Read input
+  text=$(read_input)
 
-    if [[ "$OPT_DETECT" == "true" ]]; then
-        # Detection mode - just analyze, don't clean
-        detect_hidden "$text"
-    else
-        # Cleaning mode
-        cleaned=$(clean_text "$text")
-        write_output "$cleaned"
-    fi
+  if [[ "$OPT_DETECT" == "true" ]]; then
+    # Detection mode - just analyze, don't clean
+    detect_hidden "$text"
+  else
+    # Cleaning mode
+    cleaned=$(clean_text "$text")
+    write_output "$cleaned"
+  fi
 
-    # Trope detection (runs alongside other operations)
-    if [[ "$OPT_DETROPE" == "true" ]]; then
-        detect_tropes "$text"
-    fi
+  # Trope detection (runs alongside other operations)
+  if [[ "$OPT_DETROPE" == "true" ]]; then
+    detect_tropes "$text"
+  fi
 fi
