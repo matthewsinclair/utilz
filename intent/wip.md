@@ -1,5 +1,5 @@
 ---
-verblock: "23 Apr 2026:v0.8: matts - ST0007 WP01/WP02 complete; WP03 up next"
+verblock: "23 Apr 2026:v0.9: matts - ST0007 WP01/WP02/WP03 complete; WP04 up next"
 ---
 
 # Work In Progress
@@ -13,8 +13,8 @@ verblock: "23 Apr 2026:v0.8: matts - ST0007 WP01/WP02 complete; WP03 up next"
 - **WP01 — DONE** (commit `7e97cb7`): Added `integration:` block to all 12 utility YAMLs per the design matrix. Template stub updated. Rename from initial `emacs:` to editor-agnostic `integration:` so future VSCode / Zed / Vim can consume the same manifest.
 - **Reindent — DONE** (commit `9c9c439`): Project-wide bash reindent from 4-space to 2-space (Intent project standard). 32 files, pure mechanical change, all 332 tests green.
 - **WP02 — DONE** (commit `eb7264e`): `utilz integration commands` (TSV emitter) + `utilz emacs install` + `utilz emacs doctor` dispatchers. Helpers in `common.sh`. 15 new BATS tests in `opt/utilz/test/bridge.bats`. `help/utilz.md` updated.
-- **WP03 — NEXT**: Write `static/emacs/utilz.el` (the elisp bridge itself). Thin coordinator, PFIC-shaped input/output dispatch, reads TSV from `utilz integration commands`. Target ~150-200 lines. `(provide 'utilz)`.
-- **WP04 — PENDING**: End-to-end verification in real Doom, plus README "Using Utilz from Emacs" section and CHANGELOG entry.
+- **WP03 — DONE**: `static/emacs/utilz.el` written (~270 lines including header/commentary). Thin coordinator with PFIC-shaped alist dispatch for `input` and `output` kinds. Byte-compiles clean on `emacs -Q --batch`. `bridge.bats` updated: the two pre-WP03 guard tests were replaced with a happy-path install test, a `--symlink` test, and a doctor "canonical present" assertion. 16 bridge tests + all 13 suites green. Behavioural acceptance (region replace, stderr pop, C-u prompts) is WP04 E2E scope.
+- **WP04 — NEXT**: End-to-end verification in real Doom (symlink → restart → exercise §5 checklist), plus README "Using Utilz from Emacs" section and CHANGELOG entry for v2.2.0. Close with `intent st done ST0007`.
 
 ## Active Steel Threads
 

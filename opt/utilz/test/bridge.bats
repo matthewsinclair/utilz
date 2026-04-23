@@ -106,13 +106,23 @@ run_common_function() {
   assert_output_contains "--dest requires a PATH argument"
 }
 
-@test "utilz emacs install --dest PATH - errors when canonical source absent (pre-WP03)" {
-  # The canonical static/emacs/utilz.el does not yet exist; install should
-  # surface a clear No Silent Errors diagnostic rather than no-op.
+@test "utilz emacs install --dest PATH - copies canonical elisp and prints load line" {
   run_utilz emacs install --dest "$BATS_TEST_TMPDIR/utilz-out.el"
-  assert_failure
-  assert_output_contains "Canonical elisp file not found"
-  assert_file_not_exists "$BATS_TEST_TMPDIR/utilz-out.el"
+  assert_success
+  assert_file_exists "$BATS_TEST_TMPDIR/utilz-out.el"
+  assert_output_contains "Installed copy"
+  assert_output_contains "(load"
+  # Re-running is idempotent (same content = no-op).
+  run_utilz emacs install --dest "$BATS_TEST_TMPDIR/utilz-out.el"
+  assert_success
+}
+
+@test "utilz emacs install --dest PATH --symlink - creates symlink to canonical" {
+  run_utilz emacs install --dest "$BATS_TEST_TMPDIR/utilz-link.el" --symlink
+  assert_success
+  [[ -L "$BATS_TEST_TMPDIR/utilz-link.el" ]] \
+    || fail "Expected symlink at $BATS_TEST_TMPDIR/utilz-link.el"
+  assert_output_contains "Installed symlink"
 }
 
 @test "utilz emacs install --unknown-opt - errors" {
@@ -129,9 +139,8 @@ run_common_function() {
   assert_output_contains "All checks passed"
 }
 
-@test "utilz emacs doctor - reports canonical elisp as info (not error) pre-WP03" {
+@test "utilz emacs doctor - reports canonical elisp as present" {
   run_utilz emacs doctor
   assert_success
-  # Info-level line, not a failure
-  assert_output_contains "Canonical elisp not yet present"
+  assert_output_contains "Canonical elisp present"
 }

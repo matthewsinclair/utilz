@@ -1,12 +1,12 @@
 ---
-verblock: "23 Apr 2026:v0.2: matts - Mid-ST0007 snapshot; WP02 committed, WP03 pending"
+verblock: "23 Apr 2026:v0.3: matts - Mid-ST0007 snapshot; WP03 done, WP04 pending"
 ---
 
 # Restart Context
 
 ## Key Context (as of 23 Apr 2026)
 
-- **Mid-ST0007** (Emacs bindings for Utilz utilities). WP01 + Reindent + WP02 committed. WP03 (elisp bridge) is the next work.
+- **Mid-ST0007** (Emacs bindings for Utilz utilities). WP01 + Reindent + WP02 + WP03 committed. WP04 (E2E in Doom + README + CHANGELOG) is the next work.
 - Framework version is still **2.1.0** (ST0007 will land in v2.2.0 on close).
 - 12 utilities installed, all passing `utilz doctor` and `utilz test`.
 - Two remotes: `local` (Dropbox) and `upstream` (GitHub) — push to both.
@@ -32,6 +32,8 @@ verblock: "23 Apr 2026:v0.2: matts - Mid-ST0007 snapshot; WP02 committed, WP03 p
 ## Commit Graph This Session
 
 ```
+<WP03 commit — pending>  ST0007/WP03: elisp bridge static/emacs/utilz.el
+c75381a  ST0007: update wip.md and restart.md for mid-ST compact
 eb7264e  ST0007/WP02: utilz integration + utilz emacs subcommands
 9c9c439  Reindent bash from 4-space to 2-space (Intent project standard)
 7e97cb7  ST0007/WP01: integration metadata on 12 utilities + template + doc rename
@@ -42,9 +44,14 @@ eb7264e  ST0007/WP02: utilz integration + utilz emacs subcommands
 
 ## For Next Session
 
-1. Confirm `git log -5` matches the graph above.
-2. `utilz test` — expect 13 suites green (including `bridge.bats` with 15 tests).
+1. Confirm `git log -6` matches the graph above.
+2. `utilz test` — expect 13 suites green (including `bridge.bats` with 16 tests post-WP03).
 3. `utilz integration commands | column -t -s$'\t'` — expect 12-row table.
-4. `utilz emacs doctor` — expect green (canonical file absence is info, not error).
-5. Pick up WP03: write `static/emacs/utilz.el` per `intent/st/ST0007/design.md` §3 and `intent/st/ST0007/WP/03/info.md`. Start WP03 with `intent wp start ST0007/03`.
-6. WP04 afterwards: end-to-end verification in real Doom + README section + CHANGELOG entry; close ST with `intent st done ST0007`.
+4. `utilz emacs doctor` — expect three green checks (canonical elisp now present).
+5. `emacs -Q --batch -f batch-byte-compile static/emacs/utilz.el` — expect zero warnings.
+6. Pick up WP04: start with `intent wp start ST0007/04`.
+   - Symlink the bridge into Doom: `ln -s "$UTILZ_HOME/static/emacs/utilz.el" ~/.config/doom/custom/160-utilz.el`
+   - Add `(load "160-utilz.el")` to `~/.config/doom/config.el` between `150-corfu.el` and `999-finalise.el`.
+   - Restart Doom; walk the design.md §5 checklist (cleanz replace, xtrct buffer, C-u flag prompt, pdf2md non-PDF stderr pop).
+   - Write README "Using Utilz from Emacs" section + CHANGELOG v2.2.0 entry.
+   - Close with `intent st done ST0007`; consider version bump to v2.2.0.
