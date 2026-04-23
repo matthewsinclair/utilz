@@ -1,37 +1,50 @@
 ---
-verblock: "25 Mar 2026:v0.1: matts - Created after expz addition"
+verblock: "23 Apr 2026:v0.2: matts - Mid-ST0007 snapshot; WP02 committed, WP03 pending"
 ---
 
 # Restart Context
 
-## Key Context
+## Key Context (as of 23 Apr 2026)
 
-- Framework version is **2.1.0** (VERSION file is the single source of truth)
-- 12 utilities installed, all passing `utilz doctor`
-- All utility YAMLs updated to `utilz_version: "^2.0.0"`
-- Integration test updated to match v2.x major version
-- Two remotes: `local` (Dropbox) and `upstream` (GitHub) — push to both
+- **Mid-ST0007** (Emacs bindings for Utilz utilities). WP01 + Reindent + WP02 committed. WP03 (elisp bridge) is the next work.
+- Framework version is still **2.1.0** (ST0007 will land in v2.2.0 on close).
+- 12 utilities installed, all passing `utilz doctor` and `utilz test`.
+- Two remotes: `local` (Dropbox) and `upstream` (GitHub) — push to both.
 
-## Recent Decisions
+## Project-wide Conventions (re-confirmed this session)
 
-- VERSION file was bumped from 1.3.2 directly to 2.1.0 (was missed for v2.0.0)
-- All utility `utilz_version` constraints bumped from `^1.x.x` to `^2.0.0` in this session
-- Each utility maintains its own independent version (e.g. expz v1.0.0) separate from the framework version
-- `opt/utilz/utilz.yaml` uses `version_file: ../../VERSION` to track framework version; individual utilities use `version: X.Y.Z`
+- **2-space indentation everywhere**, every language, every Intent project. Any 4-space drift you find is drift — reindent it before adding new code. See memory `feedback_two_space_indent.md`.
+- **Doc before code, always**: every non-trivial change starts with `intent st new` + `intent wp new` + `design.md` committed before any source edit. See memory `feedback_doc_before_code.md`.
+- **Agnostic rule pack (Highlander / Thin Coordinator / PFIC / No Silent Errors) applies to elisp, shell, YAML** — every language, not just those with dedicated rule skills. See memory `feedback_agnostic_rules_all_languages.md`.
+- **Never manually wrap markdown prose**; paragraphs flow as single lines. Tables stay column-aligned.
+- **No Claude attribution in git commits** (existing global rule; reiterated).
 
-## Files Changed This Session
+## Recent Decisions (this session)
 
-- `VERSION` — 1.3.2 -> 2.1.0
-- `opt/expz/` — new utility (expz v1.0.0)
-- `help/expz.md` — new help file
-- `bin/expz -> utilz` — new symlink
-- `README.md` — added expz section, utility count 11 -> 12
-- `CHANGELOG.md` — added [2.1.0] entry
-- `opt/*//*.yaml` — all utilz_version bumped to ^2.0.0
-- `opt/utilz/test/integration.bats` — version compat test updated for v2.x
+- YAML integration-metadata block is named **`integration:`** (editor-neutral), not `emacs:`. Future VSCode / Zed / Vim consumers read the same block.
+- Subcommands split by scope: **`utilz integration commands`** (neutral TSV emitter, one Highlander walker) + **`utilz emacs {install,doctor}`** (Emacs-specific). Future integrations slot as parallel `utilz <editor>` families.
+- Canonical elisp file name: **`static/emacs/utilz.el`** (Emacs-convention, `(provide 'utilz)`). User symlinks it into `~/.config/doom/custom/160-utilz.el`.
+- `utilz emacs install` requires `--dest PATH`; does not edit `config.el` for the user; prints the `(load ...)` line to paste.
+- Output handling defaults: `cleanz` (stdin/replace) silently replaces region/buffer with single `undo-boundary`; non-zero exit leaves text alone and pops stderr (No Silent Errors).
+- Emacs bridge v1 is `completing-read` only (Vertico). Transient menu is a future enhancement, out of scope.
+- Project-wide 4-space → 2-space reindent landed as its own commit (`9c9c439`) — 32 files, pure mechanical.
+
+## Commit Graph This Session
+
+```
+eb7264e  ST0007/WP02: utilz integration + utilz emacs subcommands
+9c9c439  Reindent bash from 4-space to 2-space (Intent project standard)
+7e97cb7  ST0007/WP01: integration metadata on 12 utilities + template + doc rename
+631b604  ST0007: Emacs bindings for Utilz -- Phase 0 design + WP01-04
+```
+
+`.intent/config.json` (Intent 2.8.1 → 2.8.2 bump) is still uncommitted — pre-existing, not mine to commit.
 
 ## For Next Session
 
-1. Check CI passed: https://github.com/matthewsinclair/utilz/actions
-2. Consider adding expz to CI test loop in `.github/workflows/tests.yml`
-3. Run `utilz doctor` and `utilz test` to verify state
+1. Confirm `git log -5` matches the graph above.
+2. `utilz test` — expect 13 suites green (including `bridge.bats` with 15 tests).
+3. `utilz integration commands | column -t -s$'\t'` — expect 12-row table.
+4. `utilz emacs doctor` — expect green (canonical file absence is info, not error).
+5. Pick up WP03: write `static/emacs/utilz.el` per `intent/st/ST0007/design.md` §3 and `intent/st/ST0007/WP/03/info.md`. Start WP03 with `intent wp start ST0007/03`.
+6. WP04 afterwards: end-to-end verification in real Doom + README section + CHANGELOG entry; close ST with `intent st done ST0007`.
