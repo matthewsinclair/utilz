@@ -2,7 +2,7 @@
 
 ## Approach
 
-A metadata-first design. Two small additions on the Utilz side (declarative YAML block + a new `utilz emacs` dispatcher subcommand) and one new elisp file in the repo (`static/emacs/utilz.el`) that the user symlinks into `~/.config/doom/custom/160-utilz.el`. The elisp is a thin coordinator: it reads a TSV capability manifest emitted by `utilz emacs commands`, offers a Vertico `completing-read` menu, resolves input according to each utility's declared `input` kind (stdin | file | path | none), runs the utility, and dispatches output according to the declared `output` kind (replace | buffer | message | discard).
+A metadata-first design. Two small additions on the Utilz side (an editor-neutral `integration:` block in each utility YAML + new dispatcher subcommand families split by scope: `utilz integration commands` for the neutral TSV manifest, `utilz emacs {install,doctor}` for Emacs-specific verbs) and one new elisp file in the repo (`static/emacs/utilz.el`) that the user symlinks into `~/.config/doom/custom/160-utilz.el`. The elisp is a thin coordinator: it reads a TSV capability manifest emitted by `utilz integration commands`, offers a Vertico `completing-read` menu, resolves input according to each utility's declared `input` kind (stdin | file | path | none), runs the utility, and dispatches output according to the declared `output` kind (replace | buffer | message | discard).
 
 The design deliberately pushes all YAML parsing into the Utilz side. The elisp never opens a YAML file — the TSV is the only cross-boundary contract. This preserves the Highlander rule: there is one place that walks the utility corpus to build the Emacs-visible catalogue.
 
@@ -12,10 +12,10 @@ Phase 0 (this document plus its work-package siblings) lands _before_ any source
 
 ### 1. Declarative capability metadata in each YAML
 
-Each `opt/<n>/<n>.yaml` gains an optional `emacs:` block. Absence means "not auto-exposed to the bridge". Shape:
+Each `opt/<n>/<n>.yaml` gains an optional `integration:` block. Absence means "not auto-exposed to the bridge". Shape:
 
 ```yaml
-emacs:
+integration:
   input: stdin # stdin | file | path | none
   output: replace # replace | buffer | message | discard
   flags: [] # always-pass flags (rare)
@@ -39,19 +39,26 @@ Categories per utility:
 | macoz   | none  | message | System actions                                |
 | retry   | none  | buffer  | Wraps any command; shows transcript           |
 
-### 2. New dispatcher subcommand: `utilz emacs <verb>`
+### 2. Two new dispatcher subcommand families: `utilz integration` + `utilz emacs`
 
-Lives in `opt/utilz/utilz`, dispatched alongside the existing `list`, `doctor`, `generate`, `test`. Three verbs:
+Live in `opt/utilz/utilz`, dispatched alongside the existing `list`, `doctor`, `generate`, `test`. The split is by scope: a neutral manifest surface shared across all integration targets, and editor-specific installers layered on top.
 
-- `commands` emits TSV (one row per utility): `name<TAB>description<TAB>input<TAB>output<TAB>flags`. TSV over JSON so the bridge doesn't pull in a `jq` dependency.
+**`utilz integration <verb>`** — editor-neutral manifest surface.
+
+- `commands` emits TSV (one row per utility that has an `integration:` block): `name<TAB>description<TAB>input<TAB>output<TAB>flags`. TSV over JSON so consumers don't pull in a `jq` dependency. Any integration target (Emacs, future VSCode / Zed / Vim plugins) consumes this directly — there is no per-editor walker.
+
+**`utilz emacs <verb>`** — Emacs-specific installer + health check.
+
 - `install [--dest PATH] [--symlink]` copies (or symlinks) `static/emacs/utilz.el` to PATH, prints the `(load "...")` line the user adds to their loader. Does not edit the user's config for them. Idempotent.
-- `doctor` verifies `utilz` is on the PATH Emacs will see, all YAMLs parse, every utility has an `emacs:` block (or is explicitly marked `none`/`discard`), and — if an install destination exists — that the installed file matches the repo copy.
+- `doctor` verifies `utilz` is on the PATH Emacs will see, all YAMLs parse, every utility has an `integration:` block (or is explicitly absent), and — if an install destination exists — that the installed file matches the repo copy.
+
+Future integration targets slot in as parallel families (e.g. `utilz vscode install`, `utilz vim install`) — they all consume the same `utilz integration commands` TSV, so the editor-neutral and editor-specific seams stay clean.
 
 ### 3. Elisp shape — Thin Coordinator + PFIC
 
 `static/emacs/utilz.el` at ~150-200 lines max. Responsibilities:
 
-- **Discover** — `utilz-refresh` shells out to `utilz emacs commands`, parses TSV into `utilz--commands-alist`. Cached on load.
+- **Discover** — `utilz-refresh` shells out to `utilz integration commands`, parses TSV into `utilz--commands-alist`. Cached on load.
 - **Dispatch** — one interactive `utilz` command. `completing-read` over the alist with an `:annotation-function` for descriptions. Looks up capability, resolves input, runs, renders output.
 - **Input helpers** (one small function per kind): `utilz--input-stdin`, `utilz--input-file`, `utilz--input-path`, `utilz--input-none`.
 - **Output helpers** (one per kind): `utilz--output-replace`, `utilz--output-buffer`, `utilz--output-message`, `utilz--output-discard`.
@@ -97,7 +104,7 @@ The bridge never parses YAML. The manifest TSV is read once per Emacs session (o
 
 ### Agnostic rule enforcement
 
-- **Highlander**: `emit_emacs_commands_tsv` in `opt/utilz/lib/common.sh` is the single walker of the YAML corpus. No parallel path.
+- **Highlander**: `emit_integration_tsv` in `opt/utilz/lib/common.sh` is the single walker of the YAML corpus. Both `utilz integration commands` and the Emacs bridge (and any future VSCode / Zed / Vim integration) consume it — no parallel walker.
 - **Thin Coordinator**: `utilz-run` in elisp parses intent -> calls utility -> renders output. No inline transformation logic.
 - **PFIC**: dispatch on `input`/`output` kind via small composable functions, not a monolithic `cond`.
 - **No Silent Errors**: non-zero exits always surface; region/buffer is never replaced on failure.

@@ -14,7 +14,7 @@ Phase 0 — documentation (this change):
 Phase 1 — code (each WP ends on green tests and `intent wp done`):
 
 - [ ] WP01 — YAML metadata + `metadata.tmpl` update
-- [ ] WP02 — `utilz emacs` subcommand (`commands` / `install` / `doctor`) + BATS tests
+- [ ] WP02 — `utilz integration commands` + `utilz emacs {install,doctor}` subcommands + BATS tests
 - [ ] WP03 — `static/emacs/utilz.el` elisp bridge
 - [ ] WP04 — End-to-end verification + README + CHANGELOG
 
@@ -26,6 +26,6 @@ Phase 1 — code (each WP ends on green tests and `intent wp done`):
 
 ## Dependencies
 
-- WP02 depends on WP01 (TSV emitter consumes the `emacs:` block).
+- WP02 depends on WP01 (TSV emitter consumes the `integration:` block).
 - WP03 depends on WP02 (elisp consumes the TSV).
 - WP04 depends on WP03 (E2E verification needs the full bridge).

@@ -4,3 +4,12 @@ utilz_version: "^1.0.0"
 description: {{DESCRIPTION}}
 author: {{AUTHOR}}
 dependencies: []
+
+# Editor integration capability declaration (see ST0007). Uncomment to
+# expose this utility to external integrators like the Doom Emacs bridge
+# (`M-x utilz`) or future VSCode / Zed / Vim plugins. Without this block
+# the utility is absent from any integration's command menu.
+# integration:
+#   input: stdin      # stdin | file | path | none
+#   output: buffer    # replace | buffer | message | discard
+#   flags: []

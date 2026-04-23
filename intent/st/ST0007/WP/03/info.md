@@ -10,7 +10,7 @@ status: Not Started
 
 ## Objective
 
-Write `static/emacs/utilz.el` — the canonical elisp file that powers the bridge. Thin Coordinator: parse intent, call `utilz <n>`, render result. PFIC-shaped dispatch: small composable helpers per `input` kind and per `output` kind, composed by a single entry function, not a monolithic `cond`. No YAML parsing in elisp — only TSV from `utilz emacs commands`.
+Write `static/emacs/utilz.el` — the canonical elisp file that powers the bridge. Thin Coordinator: parse intent, call `utilz <n>`, render result. PFIC-shaped dispatch: small composable helpers per `input` kind and per `output` kind, composed by a single entry function, not a monolithic `cond`. No YAML parsing in elisp — only TSV from `utilz integration commands`.
 
 ## Deliverables
 
@@ -18,7 +18,7 @@ Write `static/emacs/utilz.el` — the canonical elisp file that powers the bridg
 - Exposed interactive commands: `utilz` (entry point, `completing-read` picker), `utilz-refresh` (re-read manifest).
 - Keybinding: `C-c u` -> `utilz` (user can override).
 - Internal helpers (one per kind): `utilz--input-stdin`, `utilz--input-file`, `utilz--input-path`, `utilz--input-none`; `utilz--output-replace`, `utilz--output-buffer`, `utilz--output-message`, `utilz--output-discard`.
-- Cache: `utilz--commands-alist`, populated from `utilz emacs commands` TSV.
+- Cache: `utilz--commands-alist`, populated from `utilz integration commands` TSV.
 
 ## Acceptance Criteria
 
@@ -36,5 +36,5 @@ Write `static/emacs/utilz.el` — the canonical elisp file that powers the bridg
 
 ## Dependencies
 
-- Depends on WP02 (requires `utilz emacs commands` to be available in PATH).
+- Depends on WP02 (requires `utilz integration commands` to be available in PATH).
 - Verification step (acceptance criteria) requires the user to symlink the file into `~/.config/doom/custom/160-utilz.el` and add the `(load ...)` line. Documented in WP04.

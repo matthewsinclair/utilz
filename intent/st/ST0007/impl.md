@@ -25,6 +25,6 @@ Reserved for representative snippets as implementation progresses (YAML block sh
 
 Empty until challenges actually surface. Candidates to watch:
 
-- YAML `emacs:` block parsing in bash — confirm `yq` handles nested keys predictably without JSON coercion.
+- YAML `integration:` block parsing in bash — confirm `yq` handles nested keys predictably without JSON coercion.
 - `shell-command-on-region` with `replace=t` plus non-zero exit — need to confirm region is preserved when the command fails (may require shelling out via `call-process-region` and handling replacement ourselves).
 - Doom's numbered-custom load order — ensure `utilz.el` is idempotent-on-reload so users can `M-x eval-buffer` safely.

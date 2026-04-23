@@ -4,3 +4,8 @@ utilz_version: "^2.0.0"
 description: Retry command until success with configurable wait time
 author: Matthew Sinclair
 dependencies: []
+
+integration:
+  input: none
+  output: buffer
+  flags: []

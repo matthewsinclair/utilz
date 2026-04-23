@@ -4,3 +4,8 @@ utilz_version: "^2.0.0"
 description: GPG encryption and decryption utility
 author: Matthew Sinclair
 dependencies: []
+
+integration:
+  input: file
+  output: message
+  flags: []

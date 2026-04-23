@@ -13,3 +13,8 @@ dependencies:
     required: true
     install: brew install jq
     purpose: JSON parsing and CSV assembly
+
+integration:
+  input: path
+  output: buffer
+  flags: []

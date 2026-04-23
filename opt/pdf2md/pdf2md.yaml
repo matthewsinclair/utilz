@@ -9,3 +9,8 @@ dependencies:
     required: true
     install: brew install python3
     purpose: Python runtime for PDF conversion engine
+
+integration:
+  input: file
+  output: buffer
+  flags: []

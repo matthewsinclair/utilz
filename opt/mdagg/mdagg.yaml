@@ -34,3 +34,8 @@ features:
   - Section dividers with titles
   - Strip YAML frontmatter
   - Remove navigation back links
+
+integration:
+  input: stdin
+  output: buffer
+  flags: []

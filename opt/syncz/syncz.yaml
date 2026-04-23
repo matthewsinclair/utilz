@@ -13,3 +13,8 @@ dependencies:
     required: true
     install: brew install rsync
     purpose: Unidirectional sync engine and bidi fallback
+
+integration:
+  input: path
+  output: buffer
+  flags: []

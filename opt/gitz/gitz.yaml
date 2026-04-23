@@ -4,3 +4,8 @@ utilz_version: "^2.0.0"
 description: Git multi-repository operations
 author: Matthew Sinclair
 dependencies: []
+
+integration:
+  input: path
+  output: buffer
+  flags: []
