@@ -585,6 +585,294 @@ run_tests() {
 }
 
 # ============================================================================
+# INTEGRATION METADATA & EDITOR BRIDGES
+# ============================================================================
+
+# Emit a TSV manifest of utilities that declare an `integration:` block.
+# Columns (tab-separated): name  description  input  output  flags
+# `flags` is a comma-separated list (empty for default `flags: []`).
+# Skips: utilz core, utilities without an integration block, non-symlinks.
+# Warns (to stderr) and skips utilities whose integration values are missing.
+#
+# This is the single walker of the YAML corpus (Highlander). Every editor
+# integration (Emacs, future VSCode / Zed / Vim) consumes this TSV directly.
+emit_integration_tsv() {
+  if ! check_command "yq"; then
+    error "yq is required to emit the integration manifest"
+    echo "Install with: brew install yq" >&2
+    return 1
+  fi
+
+  local symlink name yaml_file has_integration desc input output flags
+
+  for symlink in "$UTILZ_HOME"/bin/*; do
+    name=$(basename "$symlink")
+    if [[ "$name" == "utilz" ]]; then continue; fi
+    if [[ ! -L "$symlink" ]]; then continue; fi
+
+    yaml_file="$UTILZ_HOME/opt/$name/$name.yaml"
+    if [[ ! -f "$yaml_file" ]]; then continue; fi
+
+    has_integration=$(yq eval '.integration' "$yaml_file" 2>/dev/null)
+    if [[ "$has_integration" == "null" ]]; then continue; fi
+
+    desc=$(yq eval '.description' "$yaml_file" 2>/dev/null)
+    input=$(yq eval '.integration.input' "$yaml_file" 2>/dev/null)
+    output=$(yq eval '.integration.output' "$yaml_file" 2>/dev/null)
+    flags=$(yq eval '.integration.flags | join(",")' "$yaml_file" 2>/dev/null)
+
+    if [[ "$flags" == "null" ]]; then flags=""; fi
+    if [[ "$desc" == "null" ]]; then desc=""; fi
+
+    if [[ -z "$input" || "$input" == "null" ]]; then
+      warn "$name: integration.input missing or null; skipping"
+      continue
+    fi
+    if [[ -z "$output" || "$output" == "null" ]]; then
+      warn "$name: integration.output missing or null; skipping"
+      continue
+    fi
+
+    printf '%s\t%s\t%s\t%s\t%s\n' "$name" "$desc" "$input" "$output" "$flags"
+  done
+}
+
+# Health-check the Emacs bridge: PATH reachability, integration metadata
+# validity on every installed utility, canonical elisp file presence.
+# Returns 0 when all hard checks pass; canonical-elisp absence is info only
+# (expected before ST0007/WP03 lands the bridge file).
+emacs_doctor() {
+  echo -e "${BOLD}Utilz Emacs Bridge Doctor${RESET}"
+  echo "========================="
+  echo ""
+
+  local issues=0
+
+  # Check 1: utilz on PATH (so Emacs child processes can find it)
+  echo -e "${BOLD}[1/3]${RESET} Checking utilz command on PATH..."
+  if command -v utilz >/dev/null 2>&1; then
+    success "utilz is on PATH: $(command -v utilz)"
+  else
+    warn "utilz is not on PATH"
+    echo "  Emacs child processes need to find 'utilz'. Ensure"
+    echo "  \$UTILZ_HOME/bin is in PATH before Emacs starts."
+    issues=$((issues + 1))
+  fi
+  echo ""
+
+  # Check 2: integration metadata on every installed utility
+  echo -e "${BOLD}[2/3]${RESET} Checking integration metadata..."
+  local missing=()
+  local invalid=()
+  local exposed=0
+
+  local symlink name yaml_file has_integration input output
+  for symlink in "$UTILZ_HOME"/bin/*; do
+    name=$(basename "$symlink")
+    if [[ "$name" == "utilz" ]]; then continue; fi
+    if [[ ! -L "$symlink" ]]; then continue; fi
+
+    yaml_file="$UTILZ_HOME/opt/$name/$name.yaml"
+    if [[ ! -f "$yaml_file" ]]; then continue; fi
+
+    has_integration=$(yq eval '.integration' "$yaml_file" 2>/dev/null)
+    if [[ "$has_integration" == "null" ]]; then
+      missing+=("$name")
+      continue
+    fi
+
+    input=$(yq eval '.integration.input' "$yaml_file" 2>/dev/null)
+    output=$(yq eval '.integration.output' "$yaml_file" 2>/dev/null)
+
+    case "$input" in
+      stdin|file|path|none) ;;
+      *) invalid+=("$name (input='$input')") ; continue ;;
+    esac
+    case "$output" in
+      replace|buffer|message|discard) ;;
+      *) invalid+=("$name (output='$output')") ; continue ;;
+    esac
+
+    exposed=$((exposed + 1))
+  done
+
+  if [[ ${#missing[@]} -gt 0 ]]; then
+    warn "${#missing[@]} utility/utilities without an integration: block:"
+    for name in "${missing[@]}"; do
+      echo "    - $name (opt/$name/$name.yaml)"
+    done
+    issues=$((issues + 1))
+  fi
+  if [[ ${#invalid[@]} -gt 0 ]]; then
+    error "${#invalid[@]} utility/utilities with invalid integration values:"
+    for name in "${invalid[@]}"; do
+      echo "    - $name"
+    done
+    issues=$((issues + 1))
+  fi
+  if [[ ${#missing[@]} -eq 0 && ${#invalid[@]} -eq 0 ]]; then
+    success "$exposed utility/utilities exposed via integration metadata"
+  fi
+  echo ""
+
+  # Check 3: canonical elisp file (info only — absence expected pre-WP03)
+  echo -e "${BOLD}[3/3]${RESET} Checking canonical elisp file..."
+  local canonical="$UTILZ_HOME/static/emacs/utilz.el"
+  if [[ -f "$canonical" ]]; then
+    success "Canonical elisp present: $canonical"
+  else
+    info "Canonical elisp not yet present: $canonical"
+    echo "  (expected before ST0007/WP03 lands the bridge file)"
+  fi
+  echo ""
+
+  echo "========================="
+  if [[ $issues -eq 0 ]]; then
+    echo -e "${GREEN}${BOLD}✓ All checks passed!${RESET}"
+    return 0
+  else
+    echo -e "${YELLOW}${BOLD}⚠ Found $issues issue(s)${RESET}"
+    return 1
+  fi
+}
+
+# Install the canonical elisp file to a user-specified destination.
+# Usage: emacs_install --dest PATH [--symlink] [--force]
+#
+# Idempotent: re-running on an unchanged destination is a no-op. Requires
+# --force to overwrite a destination whose content/target differs from the
+# canonical source.
+emacs_install() {
+  local dest=""
+  local use_symlink=0
+  local force=0
+
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      --dest)
+        if [[ -z "${2:-}" ]]; then
+          error "--dest requires a PATH argument"
+          return 1
+        fi
+        dest="$2"
+        shift 2
+        ;;
+      --symlink)
+        use_symlink=1
+        shift
+        ;;
+      --force)
+        force=1
+        shift
+        ;;
+      --help|-h)
+        _emacs_install_usage
+        return 0
+        ;;
+      *)
+        error "Unknown option: $1"
+        _emacs_install_usage >&2
+        return 1
+        ;;
+    esac
+  done
+
+  if [[ -z "$dest" ]]; then
+    error "--dest PATH is required"
+    _emacs_install_usage >&2
+    return 1
+  fi
+
+  local src="$UTILZ_HOME/static/emacs/utilz.el"
+  if [[ ! -f "$src" ]]; then
+    error "Canonical elisp file not found: $src"
+    echo "The Emacs bridge file has not been created yet." >&2
+    echo "This is expected before ST0007/WP03 completes." >&2
+    return 1
+  fi
+
+  # Expand leading ~ in dest
+  dest="${dest/#\~/$HOME}"
+
+  local dest_dir
+  dest_dir=$(dirname "$dest")
+  if [[ ! -d "$dest_dir" ]]; then
+    error "Destination directory does not exist: $dest_dir"
+    echo "Create it first, then re-run install." >&2
+    return 1
+  fi
+
+  # Idempotency: skip if the destination already matches the source
+  if [[ -L "$dest" ]]; then
+    local target
+    target=$(readlink "$dest")
+    if [[ "$target" == "$src" ]]; then
+      success "Already installed as symlink: $dest -> $src"
+      _emacs_install_hint "$dest"
+      return 0
+    fi
+    if [[ $force -eq 0 ]]; then
+      error "Destination is a symlink to a different target:"
+      echo "  $dest -> $target" >&2
+      echo "Use --force to replace." >&2
+      return 1
+    fi
+  elif [[ -f "$dest" ]]; then
+    if cmp -s "$src" "$dest" 2>/dev/null; then
+      success "Already installed (content matches): $dest"
+      _emacs_install_hint "$dest"
+      return 0
+    fi
+    if [[ $force -eq 0 ]]; then
+      error "Destination exists and differs from source: $dest"
+      echo "Use --force to overwrite." >&2
+      return 1
+    fi
+  fi
+
+  if [[ $use_symlink -eq 1 ]]; then
+    ln -sfn "$src" "$dest"
+    success "Installed symlink: $dest -> $src"
+  else
+    cp "$src" "$dest"
+    success "Installed copy: $dest"
+  fi
+
+  _emacs_install_hint "$dest"
+}
+
+_emacs_install_usage() {
+  cat <<'EOF'
+Usage: utilz emacs install --dest PATH [--symlink] [--force]
+
+Install the canonical Utilz elisp bridge to PATH so Emacs can load it.
+
+Options:
+  --dest PATH   Destination path (required). For a Doom setup:
+                ~/.config/doom/custom/160-utilz.el
+  --symlink     Create a symlink instead of a copy. Recommended for
+                development: 'git pull' in Utilz rolls the bridge forward.
+  --force       Overwrite existing destination even if content differs.
+
+After install, add the printed load statement to your Emacs config. For
+Doom that lives in ~/.config/doom/config.el alongside the existing custom/
+load statements.
+EOF
+}
+
+_emacs_install_hint() {
+  local dest="$1"
+  local base
+  base=$(basename "$dest")
+  echo ""
+  echo "Next: add to your Emacs config:"
+  echo "  (load \"$base\")"
+  echo ""
+  echo "For Doom, that lives in ~/.config/doom/config.el alongside the"
+  echo "existing custom/ load statements."
+}
+
+# ============================================================================
 # GENERATE UTILITY
 # ============================================================================
 

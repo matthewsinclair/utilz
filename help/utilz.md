@@ -99,6 +99,47 @@ utilz version
 mdagg --version
 ```
 
+### `utilz integration <verb>`
+
+Editor-neutral integration manifest surface. Consumed by the Utilz Emacs bridge and by any future VSCode / Zed / Vim integration.
+
+Verbs:
+
+- `commands` — emit a TSV manifest of every utility that declares an `integration:` block in its YAML. One row per utility; columns are `name`, `description`, `input`, `output`, `flags` (tab-separated).
+
+```bash
+# Render as an aligned table
+utilz integration commands | column -t -s$'\t'
+
+# Feed directly to an integration (Emacs, VSCode, ...)
+utilz integration commands
+```
+
+The walker lives in `opt/utilz/lib/common.sh` as `emit_integration_tsv` and is the single source of truth (Highlander). Utilities without an `integration:` block are silently omitted.
+
+### `utilz emacs <verb>`
+
+Emacs-specific installer and health check for the Utilz elisp bridge. See `intent/st/ST0007/` for the design.
+
+Verbs:
+
+- `install --dest PATH [--symlink] [--force]` — copy (or symlink with `--symlink`) the canonical `static/emacs/utilz.el` to `PATH`. Idempotent: re-running with the same destination is a no-op; use `--force` to overwrite a differing destination. Prints the `(load ...)` line to add to your Emacs config.
+- `doctor` — verify `utilz` is on `PATH` (reachable by Emacs child processes), every installed utility has a valid `integration:` block, and the canonical elisp file is present (info-level check; absence is expected pre-WP03).
+
+```bash
+# Install into Doom config as a symlink (rolls forward on 'git pull')
+utilz emacs install \
+  --dest ~/.config/doom/custom/160-utilz.el \
+  --symlink
+
+# Then add the printed load statement to ~/.config/doom/config.el
+
+# Health-check
+utilz emacs doctor
+```
+
+Future integration targets (VSCode, Zed, Vim) are expected to land as parallel `utilz <editor>` subcommand families that consume the same `utilz integration commands` TSV.
+
 ---
 
 ## Architecture

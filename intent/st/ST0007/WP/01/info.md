@@ -3,7 +3,7 @@ verblock: "23 Apr 2026:v0.1: matts - Initial version"
 wp_id: WP-01
 title: "YAML emacs metadata and template update"
 scope: Small
-status: WIP
+status: Done
 ---
 
 # WP-01: YAML emacs metadata and template update

@@ -99,6 +99,64 @@ if [[ "$INVOKED_AS" == "utilz" ]]; then
       generate_utility "$@"
       ;;
 
+    integration)
+      # Editor-neutral integration manifest surface
+      shift  # Remove 'integration' from arguments
+      case "${1:-}" in
+        commands)
+          emit_integration_tsv
+          ;;
+        ""|help|--help|-h)
+          cat <<'EOF'
+Usage: utilz integration <verb>
+
+Editor-neutral manifest surface. Consumed by the Emacs bridge and by any
+future VSCode / Zed / Vim integration.
+
+Verbs:
+  commands    Emit TSV manifest of utilities with integration metadata
+              (columns: name<TAB>description<TAB>input<TAB>output<TAB>flags)
+EOF
+          ;;
+        *)
+          error "Unknown verb: utilz integration $1"
+          echo "Try: utilz integration commands" >&2
+          exit 1
+          ;;
+      esac
+      ;;
+
+    emacs)
+      # Emacs-specific installer and health check
+      shift  # Remove 'emacs' from arguments
+      case "${1:-}" in
+        install)
+          shift
+          emacs_install "$@"
+          ;;
+        doctor)
+          emacs_doctor
+          ;;
+        ""|help|--help|-h)
+          cat <<'EOF'
+Usage: utilz emacs <verb>
+
+Emacs-specific installer and health check for the Utilz elisp bridge.
+
+Verbs:
+  install --dest PATH [--symlink] [--force]
+              Install the canonical utilz.el into your Emacs config
+  doctor      Health-check the Emacs bridge setup
+EOF
+          ;;
+        *)
+          error "Unknown verb: utilz emacs $1"
+          echo "Try: utilz emacs install | utilz emacs doctor" >&2
+          exit 1
+          ;;
+      esac
+      ;;
+
     *)
       # Check if this is an installed utility
       UTIL_NAME="$COMMAND"
