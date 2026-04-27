@@ -3,3 +3,6 @@ opt/*/lib/.venv/
 
 # Ignore intent upgrade backups
 .backup/backup-*
+
+# AGENTS.md regeneration safety net (intent agents sync writes this; transient).
+/AGENTS.md.bak
