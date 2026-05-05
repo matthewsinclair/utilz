@@ -3,7 +3,7 @@
   "author": "matts",
   "created": "2025-12-28",
   "st_prefix": "ST",
-  "intent_version": "2.10.0",
+  "intent_version": "2.11.5",
   "plugins": {
     "claude": {
       "subagents_path": "intent/plugins/claude/subagents"
@@ -11,5 +11,8 @@
     "agents": {
       "config_path": "intent/plugins/agents"
     }
-  }
+  },
+  "languages": [
+    "shell"
+  ]
 }
