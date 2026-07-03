@@ -28,10 +28,11 @@ run_common_function() {
 @test "emit_integration_tsv emits one row per utility with an integration block" {
   run run_common_function emit_integration_tsv
   assert_success
-  # 12 utilities currently declare integration blocks (per ST0007 design matrix)
+  # 13 utilities currently declare integration blocks: the ST0007 design matrix
+  # of 12, plus todo (ST0008).
   local row_count
   row_count=$(printf '%s\n' "$output" | awk 'NF' | wc -l | tr -d ' ')
-  [[ "$row_count" -eq 12 ]] || fail "Expected 12 rows, got $row_count"
+  [[ "$row_count" -eq 13 ]] || fail "Expected 13 rows, got $row_count"
 }
 
 @test "emit_integration_tsv includes cleanz with stdin/replace" {

@@ -1,0 +1,646 @@
+#!/usr/bin/env bash
+#
+# todo - Simple DOING/TODO/DONE manager for a plain-text todo.md
+#
+# A standalone fork of Intent's `intent todo`, factored out of Intent. Unlike
+# Intent (where todo.md is a read-only projection of steel-thread status), here
+# the todo.md file IS the source of truth: items are freeform one-line strings,
+# addressed by a positional number, in three buckets -- DOING / TODO / DONE.
+#
+# The file format stays mutually compatible with Intent (same bucket headings,
+# `[ ]`/`[-]`/`[x]` glyphs, `## DONE:<watermark>`), with two additions: YAML
+# frontmatter (title + history pointer) and per-item numbers.
+#
+# Design: intent/st/ST0008/design.md
+
+set -euo pipefail
+
+# Source common functions if not already loaded (from dispatcher)
+if [[ "$(type -t info 2>/dev/null)" != "function" ]]; then
+  SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+  UTILZ_HOME="${UTILZ_HOME:-$(cd "$SCRIPT_DIR/../.." && pwd)}"
+
+  if [[ -f "$UTILZ_HOME/opt/utilz/lib/common.sh" ]]; then
+    source "$UTILZ_HOME/opt/utilz/lib/common.sh"
+  else
+    echo "ERROR: Cannot find common.sh library" >&2
+    exit 1
+  fi
+fi
+
+# ============================================================================
+# STATE (populated by parse_file; consumed by write_file / renderers)
+# ============================================================================
+
+TODO_FILE=""
+TITLE="# TODO"
+HISTORY="_history/YYYYMMDD-done.md"
+WATERMARK=""
+
+# One indexed array per bucket, holding item TEXT only (glyph is derived from
+# the bucket). Orphan arrays hold unrecognized non-blank lines, preserved
+# verbatim at the tail of their bucket (No Silent Errors: warned, never dropped).
+DOING_ITEMS=(); TODO_ITEMS=(); DONE_ITEMS=()
+DOING_ORPHANS=(); TODO_ORPHANS=(); DONE_ORPHANS=()
+
+# Set by _counts / _resolve_n
+A=0; B=0; C=0; TOTAL=0; WIDTH=1
+SRC_BUCKET=""; SRC_IDX=-1; SPLICED=""
+
+# ============================================================================
+# TIME HELPERS
+# ============================================================================
+
+_now_iso() { date -u +%Y-%m-%dT%H:%M:%SZ; }
+_now_day() { date -u +%Y-%m-%dT00:00:00Z; }
+
+# ============================================================================
+# PARSE (the single tolerant reader -- Highlander)
+# ============================================================================
+
+# Strip a `key: ` frontmatter prefix, returning the value.
+_fm_val() { printf '%s' "${1#*: }"; }
+
+# Normalize the title so the body H1 always carries a leading `# `.
+_normalize_title() {
+  case "$TITLE" in
+  \#*) : ;;
+  *) TITLE="# $TITLE" ;;
+  esac
+}
+
+# Read TODO_FILE into the bucket arrays. Missing file -> empty structure with
+# defaults (so the first write materializes a template). Glyph is authoritative:
+# an item is routed to a bucket by its checkbox, not by the section it sits under.
+parse_file() {
+  DOING_ITEMS=(); TODO_ITEMS=(); DONE_ITEMS=()
+  DOING_ORPHANS=(); TODO_ORPHANS=(); DONE_ORPHANS=()
+  TITLE="# TODO"
+  HISTORY="_history/YYYYMMDD-done.md"
+  WATERMARK=""
+
+  # A create-time title override applies only to a fresh file; an existing
+  # file's `title:` wins (preserved) because it is read after this.
+  if [[ -n "${TITLE_OPT:-}" ]]; then TITLE="$TITLE_OPT"; fi
+
+  if [[ ! -f "$TODO_FILE" ]]; then
+    WATERMARK="$(_now_day)"
+    _normalize_title
+    return 0
+  fi
+
+  local item_re='^[[:space:]]*(- )?([0-9]+:)?\[([ xX-])\] ?(.*)$'
+  local in_fm=0 seen_fm=0 section="" line g txt
+
+  while IFS= read -r line || [[ -n "$line" ]]; do
+    # Frontmatter block (only the first `---`-delimited block at the top)
+    if [[ $seen_fm -eq 0 && "$line" == "---" ]]; then
+      in_fm=1; seen_fm=1; continue
+    fi
+    if [[ $in_fm -eq 1 ]]; then
+      if [[ "$line" == "---" ]]; then in_fm=0; continue; fi
+      case "$line" in
+      title:*)
+        TITLE="$(_fm_val "$line")"
+        TITLE="${TITLE%\"}"; TITLE="${TITLE#\"}"
+        ;;
+      history:*) HISTORY="$(_fm_val "$line")" ;;
+      esac
+      continue
+    fi
+
+    # Bucket headings + inert lines
+    case "$line" in
+    "## DOING") section="DOING"; continue ;;
+    "## TODO") section="TODO"; continue ;;
+    "## DONE:"*) section="DONE"; WATERMARK="${line#\#\# DONE:}"; continue ;;
+    "#"*) continue ;;
+    "") continue ;;
+    "_(none)_") continue ;;
+    esac
+
+    # Item line? (tolerant: optional GFM dash, optional number, loose spacing)
+    if [[ "$line" =~ $item_re ]]; then
+      g="${BASH_REMATCH[3]}"
+      txt="${BASH_REMATCH[4]}"
+      case "$g" in
+      "-") DOING_ITEMS+=("$txt") ;;
+      " ") TODO_ITEMS+=("$txt") ;;
+      x | X) DONE_ITEMS+=("$txt") ;;
+      esac
+      continue
+    fi
+
+    # Unrecognized non-blank line: warn + preserve under its bucket.
+    warn "todo: unrecognized line under ${section:-<preamble>}: $line"
+    case "$section" in
+    DOING) DOING_ORPHANS+=("$line") ;;
+    DONE) DONE_ORPHANS+=("$line") ;;
+    *) TODO_ORPHANS+=("$line") ;;
+    esac
+  done < "$TODO_FILE"
+
+  if [[ -z "$WATERMARK" ]]; then WATERMARK="$(_now_day)"; fi
+  _normalize_title
+}
+
+# ============================================================================
+# RENDER + WRITE (the single writer -- Highlander, atomic)
+# ============================================================================
+
+_counts() {
+  A=${#DOING_ITEMS[@]}
+  B=${#TODO_ITEMS[@]}
+  C=${#DONE_ITEMS[@]}
+  TOTAL=$((A + B + C))
+  WIDTH=${#TOTAL} # "0" -> 1, "10" -> 2, "100" -> 3
+}
+
+# Emit numbered item lines: <glyphchar> <width> <startnum> <text...>
+_emit_bucket_lines() {
+  local g="$1" w="$2" s="$3"
+  shift 3
+  local t
+  for t in "$@"; do
+    printf '%0*d:[%s] %s\n' "$w" "$s" "$g" "$t"
+    s=$((s + 1))
+  done
+}
+
+write_file() {
+  _counts
+  local tmp
+  tmp=$(mktemp)
+  {
+    printf -- '---\n'
+    printf 'title: "%s"\n' "$TITLE"
+    printf 'history: %s\n' "$HISTORY"
+    printf -- '---\n\n'
+    printf '%s\n\n' "$TITLE"
+
+    printf '## DOING\n\n'
+    if [[ $A -gt 0 ]]; then _emit_bucket_lines '-' "$WIDTH" 1 "${DOING_ITEMS[@]}"; fi
+    if [[ ${#DOING_ORPHANS[@]} -gt 0 ]]; then printf '%s\n' "${DOING_ORPHANS[@]}"; fi
+    if [[ $A -eq 0 && ${#DOING_ORPHANS[@]} -eq 0 ]]; then printf '_(none)_\n'; fi
+
+    printf '\n## TODO\n\n'
+    if [[ $B -gt 0 ]]; then _emit_bucket_lines ' ' "$WIDTH" $((A + 1)) "${TODO_ITEMS[@]}"; fi
+    if [[ ${#TODO_ORPHANS[@]} -gt 0 ]]; then printf '%s\n' "${TODO_ORPHANS[@]}"; fi
+    if [[ $B -eq 0 && ${#TODO_ORPHANS[@]} -eq 0 ]]; then printf '_(none)_\n'; fi
+
+    printf '\n## DONE:%s\n\n' "$WATERMARK"
+    if [[ $C -gt 0 ]]; then _emit_bucket_lines 'x' "$WIDTH" $((A + B + 1)) "${DONE_ITEMS[@]}"; fi
+    if [[ ${#DONE_ORPHANS[@]} -gt 0 ]]; then printf '%s\n' "${DONE_ORPHANS[@]}"; fi
+    if [[ $C -eq 0 && ${#DONE_ORPHANS[@]} -eq 0 ]]; then printf '_(none)_\n'; fi
+  } >"$tmp"
+  mv "$tmp" "$TODO_FILE"
+}
+
+# ============================================================================
+# ITEM ADDRESSING + MOVES
+# ============================================================================
+
+# Resolve a global item number to SRC_BUCKET + SRC_IDX (0-based within bucket).
+# Numbering is DOING(1..A), TODO(A+1..A+B), DONE(A+B+1..A+B+C).
+_resolve_n() {
+  local n="$1"
+  [[ "$n" =~ ^[0-9]+$ ]] || return 1
+  _counts
+  if ((n >= 1 && n <= A)); then SRC_BUCKET="DOING"; SRC_IDX=$((n - 1)); return 0; fi
+  if ((n >= A + 1 && n <= A + B)); then SRC_BUCKET="TODO"; SRC_IDX=$((n - A - 1)); return 0; fi
+  if ((n >= A + B + 1 && n <= A + B + C)); then SRC_BUCKET="DONE"; SRC_IDX=$((n - A - B - 1)); return 0; fi
+  return 1
+}
+
+# Remove element <idx0> from the named array, setting SPLICED to its value.
+_splice_out() {
+  local __name="$1" __idx="$2" __n __i
+  eval "__n=\${#${__name}[@]}"
+  local -a __new=()
+  for ((__i = 0; __i < __n; __i++)); do
+    if [[ $__i -eq $__idx ]]; then
+      eval "SPLICED=\"\${${__name}[$__i]}\""
+    else
+      eval "__new+=(\"\${${__name}[$__i]}\")"
+    fi
+  done
+  if [[ ${#__new[@]} -gt 0 ]]; then
+    eval "${__name}=(\"\${__new[@]}\")"
+  else
+    eval "${__name}=()"
+  fi
+}
+
+# Add text to a bucket at top or bottom.
+_add_to() {
+  local b="$1" pos="$2" t="$3"
+  case "$b:$pos" in
+  DOING:top) DOING_ITEMS=("$t" "${DOING_ITEMS[@]+"${DOING_ITEMS[@]}"}") ;;
+  DOING:bottom) DOING_ITEMS=("${DOING_ITEMS[@]+"${DOING_ITEMS[@]}"}" "$t") ;;
+  TODO:top) TODO_ITEMS=("$t" "${TODO_ITEMS[@]+"${TODO_ITEMS[@]}"}") ;;
+  TODO:bottom) TODO_ITEMS=("${TODO_ITEMS[@]+"${TODO_ITEMS[@]}"}" "$t") ;;
+  DONE:top) DONE_ITEMS=("$t" "${DONE_ITEMS[@]+"${DONE_ITEMS[@]}"}") ;;
+  DONE:bottom) DONE_ITEMS=("${DONE_ITEMS[@]+"${DONE_ITEMS[@]}"}" "$t") ;;
+  esac
+}
+
+# Move item <n> to <dest> bucket at <pos>. Errors (non-zero exit) on bad number.
+move_item() {
+  local dest="$1" pos="$2" n="$3"
+  if ! _resolve_n "$n"; then
+    error "todo: no item numbered '$n'"
+    exit 1
+  fi
+  _splice_out "${SRC_BUCKET}_ITEMS" "$SRC_IDX"
+  _add_to "$dest" "$pos" "$SPLICED"
+}
+
+# ============================================================================
+# FILE RESOLUTION
+# ============================================================================
+
+_global_todo_path() {
+  printf '%s/utilz/todo/todo.md' "${XDG_CONFIG_HOME:-$HOME/.config}"
+}
+
+# ============================================================================
+# HISTORY (prune)
+# ============================================================================
+
+# Expand the frontmatter `history:` pattern to an absolute path: YYYYMMDD ->
+# today (UTC), resolved relative to the todo.md directory when not absolute.
+_resolve_history() {
+  local pat="$HISTORY" day dir
+  day=$(date -u +%Y%m%d)
+  pat="${pat//YYYYMMDD/$day}"
+  if [[ "$pat" == /* ]]; then
+    printf '%s' "$pat"
+  else
+    dir=$(cd "$(dirname "$TODO_FILE")" && pwd)
+    printf '%s/%s' "$dir" "$pat"
+  fi
+}
+
+# Prepend a block of text to a file (newest batch on top).
+_prepend_file() {
+  local f="$1" block="$2" tmp
+  tmp=$(mktemp)
+  printf '%s\n' "$block" >"$tmp"
+  if [[ -s "$f" ]]; then
+    printf '\n' >>"$tmp"
+    cat "$f" >>"$tmp"
+  fi
+  mv "$tmp" "$f"
+}
+
+# ============================================================================
+# COMMANDS
+# ============================================================================
+
+cmd_list() {
+  if [[ "${JSON:-0}" -eq 1 ]]; then
+    cmd_json
+    return
+  fi
+  if [[ ! -f "$TODO_FILE" ]]; then
+    parse_file
+    write_file
+  fi
+  cat "$TODO_FILE"
+}
+
+cmd_add() {
+  local pos="bottom"
+  if [[ "${1:-}" == "--top" ]]; then pos="top"; shift; fi
+  local text="$*"
+  if [[ -z "$text" ]]; then
+    error "todo add: item text required"
+    exit 1
+  fi
+  parse_file
+  _add_to "TODO" "$pos" "$text"
+  write_file
+  info "added: $text"
+}
+
+cmd_start() {
+  local pos="bottom"
+  if [[ "${1:-}" == "--top" ]]; then pos="top"; shift; fi
+  local n="${1:-}"
+  if [[ -z "$n" ]]; then
+    error "todo start: item number required"
+    exit 1
+  fi
+  parse_file
+  move_item "DOING" "$pos" "$n"
+  write_file
+}
+
+cmd_done_n() {
+  local n="$1"
+  parse_file
+  move_item "DONE" "top" "$n"
+  write_file
+}
+
+cmd_notdone() {
+  local n="${1:-}"
+  if [[ -z "$n" ]]; then
+    error "todo notdone: item number required"
+    exit 1
+  fi
+  parse_file
+  move_item "TODO" "bottom" "$n"
+  write_file
+}
+
+cmd_toggle() {
+  local n="${1:-}"
+  if [[ -z "$n" ]]; then
+    error "todo toggle: item number required"
+    exit 1
+  fi
+  parse_file
+  if ! _resolve_n "$n"; then
+    error "todo: no item numbered '$n'"
+    exit 1
+  fi
+  if [[ "$SRC_BUCKET" == "DONE" ]]; then
+    move_item "TODO" "bottom" "$n"
+  else
+    move_item "DONE" "top" "$n"
+  fi
+  write_file
+}
+
+# Print the items of one bucket, with their global numbers.
+cmd_print_bucket() {
+  local bucket="$1"
+  parse_file
+  _counts
+  case "$bucket" in
+  DOING) if [[ $A -gt 0 ]]; then _emit_bucket_lines '-' "$WIDTH" 1 "${DOING_ITEMS[@]}"; fi ;;
+  TODO) if [[ $B -gt 0 ]]; then _emit_bucket_lines ' ' "$WIDTH" $((A + 1)) "${TODO_ITEMS[@]}"; fi ;;
+  DONE) if [[ $C -gt 0 ]]; then _emit_bucket_lines 'x' "$WIDTH" $((A + B + 1)) "${DONE_ITEMS[@]}"; fi ;;
+  esac
+}
+
+# Print the next <n> open items (DOING first, then TODO).
+cmd_next() {
+  local n="${1:-1}"
+  if [[ ! "$n" =~ ^[0-9]+$ || "$n" -lt 1 ]]; then
+    error "todo next: count must be a positive integer"
+    exit 1
+  fi
+  parse_file
+  _counts
+  local count=0 line
+  while IFS= read -r line; do
+    printf '%s\n' "$line"
+    count=$((count + 1))
+    if [[ $count -ge $n ]]; then break; fi
+  done < <(
+    if [[ $A -gt 0 ]]; then _emit_bucket_lines '-' "$WIDTH" 1 "${DOING_ITEMS[@]}"; fi
+    if [[ $B -gt 0 ]]; then _emit_bucket_lines ' ' "$WIDTH" $((A + 1)) "${TODO_ITEMS[@]}"; fi
+  )
+}
+
+cmd_count() {
+  parse_file
+  _counts
+  printf 'DOING %d\n' "$A"
+  printf 'TODO  %d\n' "$B"
+  printf 'DONE  %d\n' "$C"
+}
+
+cmd_sync() {
+  parse_file
+  write_file
+  info "synced: $TODO_FILE"
+}
+
+cmd_edit() {
+  if [[ ! -f "$TODO_FILE" ]]; then
+    parse_file
+    write_file
+  fi
+  local ed="${VISUAL:-${EDITOR:-vi}}"
+  local edcmd="${ed%% *}"
+  if ! command -v "$edcmd" >/dev/null 2>&1; then
+    error "todo edit: no usable editor ('$ed'); set \$VISUAL or \$EDITOR"
+    exit 1
+  fi
+  # shellcheck disable=SC2086  # $ed may carry args; intentional word split
+  $ed "$TODO_FILE"
+  cmd_sync
+}
+
+cmd_prune() {
+  parse_file
+  _counts
+  if [[ $C -eq 0 ]]; then
+    info "todo: nothing to prune"
+    return 0
+  fi
+  local hist block t
+  hist=$(_resolve_history)
+  mkdir -p "$(dirname "$hist")"
+  block=""
+  for t in "${DONE_ITEMS[@]}"; do
+    block+="[x] $t"$'\n'
+  done
+  # Strip the trailing newline the loop appended (block is passed to printf %s\n)
+  block="${block%$'\n'}"
+  _prepend_file "$hist" "$block"
+  DONE_ITEMS=()
+  WATERMARK="$(_now_iso)"
+  write_file
+  info "todo: pruned $C item(s) to $hist"
+}
+
+cmd_flush() {
+  local force="$1"
+  parse_file
+  _counts
+  if [[ $C -eq 0 ]]; then
+    info "todo: nothing to flush"
+    return 0
+  fi
+  if [[ "$force" -ne 1 ]]; then
+    printf 'Discard %d done item(s) WITHOUT archiving? [y/N] ' "$C" >&2
+    local reply=""
+    if ! read -r reply; then reply=""; fi
+    case "$reply" in
+    y | Y | yes | YES) : ;;
+    *)
+      info "todo: flush aborted"
+      return 0
+      ;;
+    esac
+  fi
+  DONE_ITEMS=()
+  WATERMARK="$(_now_iso)"
+  write_file
+  info "todo: flushed done items (not archived)"
+}
+
+# JSON array of {num, text} for a bucket: <startnum> <text...>
+_bucket_json() {
+  local s="$1"
+  shift
+  local out="[]" t
+  for t in "$@"; do
+    out=$(printf '%s' "$out" | jq --argjson n "$s" --arg t "$t" '. + [{num: $n, text: $t}]')
+    s=$((s + 1))
+  done
+  printf '%s' "$out"
+}
+
+cmd_json() {
+  require_command "jq" "brew install jq" || exit 1
+  parse_file
+  _counts
+  local dj tj cj
+  dj=$(_bucket_json 1 "${DOING_ITEMS[@]+"${DOING_ITEMS[@]}"}")
+  tj=$(_bucket_json $((A + 1)) "${TODO_ITEMS[@]+"${TODO_ITEMS[@]}"}")
+  cj=$(_bucket_json $((A + B + 1)) "${DONE_ITEMS[@]+"${DONE_ITEMS[@]}"}")
+  jq -n \
+    --arg title "$TITLE" \
+    --argjson doing "$dj" \
+    --argjson todo "$tj" \
+    --argjson done "$cj" \
+    --arg wm "$WATERMARK" \
+    '{title: $title, doing: $doing, todo: $todo, done: $done, done_watermark: $wm}'
+}
+
+# ============================================================================
+# USAGE
+# ============================================================================
+
+usage() {
+  cat <<'EOF'
+Usage: todo [OPTIONS] [COMMAND] [ARGS]
+
+Simple DOING/TODO/DONE manager for a plain-text todo.md.
+
+COMMANDS:
+  (none), list          Show the todo file (creates it from a template if absent)
+  add [--top] <text>    Add an item to TODO (bottom by default, top with --top)
+  start [--top] <id>    Move item <id> to DOING
+  done <id>             Move item <id> to DONE (newest at the top)
+  notdone <id>          Move item <id> back to TODO
+  toggle <id>           Flip item <id> between done and not-done
+  next [n]              Show the next n open items (DOING first, then TODO); n=1
+  doing | todo | done   Show a single bucket
+  count                 Show item counts per bucket
+  sync (alias update)   Normalize the file: reconcile checkboxes, renumber
+  edit                  Open the file in $VISUAL/$EDITOR/vi, then sync
+  done --prune          Archive DONE to the history file, then clear it
+  done --flush          Clear DONE WITHOUT archiving (use --force to skip prompt)
+  help                  Show this help
+
+OPTIONS:
+  --file <path>         Operate on <path> instead of ./todo.md
+  -g, --global          Operate on ~/.config/utilz/todo/todo.md
+  --title <text>        Set the H1 title when creating a new file
+  --json                Emit the view as JSON (with list / no command)
+  -h, --help            Show this help
+  --version             Show version
+
+CHECKBOX LEGEND:  [ ] todo   [-] doing   [x] done
+
+For detailed help, run: utilz help todo
+EOF
+}
+
+# ============================================================================
+# MAIN (thin coordinator: parse args -> resolve file -> dispatch)
+# ============================================================================
+
+FILE_OPT=""
+USE_GLOBAL=0
+JSON=0
+TITLE_OPT=""
+ARGS=()
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+  --file)
+    FILE_OPT="${2:-}"
+    if [[ -z "$FILE_OPT" ]]; then error "--file requires a path"; exit 1; fi
+    shift 2
+    ;;
+  --file=*) FILE_OPT="${1#--file=}"; shift ;;
+  -g | --global) USE_GLOBAL=1; shift ;;
+  --json) JSON=1; shift ;;
+  --title)
+    TITLE_OPT="${2:-}"
+    if [[ -z "$TITLE_OPT" ]]; then error "--title requires text"; exit 1; fi
+    shift 2
+    ;;
+  --title=*) TITLE_OPT="${1#--title=}"; shift ;;
+  -h | --help) usage; exit 0 ;;
+  *) ARGS+=("$1"); shift ;;
+  esac
+done
+
+if [[ -n "$FILE_OPT" && $USE_GLOBAL -eq 1 ]]; then
+  error "--file and -g/--global are mutually exclusive"
+  exit 1
+fi
+
+if [[ -n "$FILE_OPT" ]]; then
+  TODO_FILE="$FILE_OPT"
+elif [[ $USE_GLOBAL -eq 1 ]]; then
+  TODO_FILE="$(_global_todo_path)"
+  mkdir -p "$(dirname "$TODO_FILE")"
+else
+  TODO_FILE="./todo.md"
+fi
+
+COMMAND="${ARGS[0]:-list}"
+REST=()
+if [[ ${#ARGS[@]} -gt 1 ]]; then REST=("${ARGS[@]:1}"); fi
+
+case "$COMMAND" in
+list) cmd_list ;;
+add) cmd_add "${REST[@]+"${REST[@]}"}" ;;
+start) cmd_start "${REST[@]+"${REST[@]}"}" ;;
+notdone) cmd_notdone "${REST[0]:-}" ;;
+toggle) cmd_toggle "${REST[0]:-}" ;;
+next) cmd_next "${REST[0]:-1}" ;;
+doing) cmd_print_bucket "DOING" ;;
+todo) cmd_print_bucket "TODO" ;;
+count) cmd_count ;;
+sync | update) cmd_sync ;;
+edit) cmd_edit ;;
+done)
+  case "${REST[0]:-}" in
+  --flush)
+    force=0
+    if [[ ${#REST[@]} -gt 1 ]]; then
+      for a in "${REST[@]:1}"; do
+        case "$a" in
+        --force | --just-do-it) force=1 ;;
+        esac
+      done
+    fi
+    cmd_flush "$force"
+    ;;
+  --prune) cmd_prune ;;
+  "") cmd_print_bucket "DONE" ;;
+  --*)
+    error "todo done: unknown option '${REST[0]}'"
+    exit 1
+    ;;
+  *) cmd_done_n "${REST[0]}" ;;
+  esac
+  ;;
+help) usage ;;
+*)
+  error "Unknown command: $COMMAND"
+  echo "" >&2
+  usage >&2
+  exit 1
+  ;;
+esac
