@@ -528,3 +528,46 @@ EOF
   refute_output_contains "refusing"
   file_has proj/todo.md "generator: utilz todo"
 }
+
+@test "refuses to create a fresh default todo.md inside an Intent project" {
+  mkdir -p proj/intent/.config
+  echo '{}' > proj/intent/.config/config.json
+  local bin
+  bin="$(_stub_intent)"
+  # bare `utilz todo` with cwd inside the project, default ./todo.md, none yet
+  run env PATH="$bin:$PATH" bash -c "cd proj && \"$UTILZ_BIN_DIR/todo\""
+  assert_failure
+  assert_output_contains "Intent project"
+  assert_file_not_exists proj/todo.md
+}
+
+@test "an existing utilz todo.md inside an Intent project still works" {
+  mkdir -p proj/intent/.config
+  echo '{}' > proj/intent/.config/config.json
+  local bin
+  bin="$(_stub_intent)"
+  cat > proj/todo.md <<'EOF'
+---
+generator: utilz todo
+title: "# TODO"
+history: _history/YYYYMMDD-done.md
+---
+
+# TODO
+
+## DOING
+
+_(none)_
+
+## TODO
+
+1:[ ] existing
+
+## DONE:2026-01-01T00:00:00Z
+
+_(none)_
+EOF
+  run env PATH="$bin:$PATH" bash -c "cd proj && \"$UTILZ_BIN_DIR/todo\" add more"
+  assert_success
+  file_has proj/todo.md "more"
+}

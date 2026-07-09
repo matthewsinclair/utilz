@@ -68,6 +68,8 @@ generator: utilz todo
 
 `todo` refuses to overwrite a `todo.md` whose `generator:` names a different tool (eg `intent todo`). The refusal is **Intent-aware**: it fires only when Intent is actually installed _and_ the file sits inside an Intent project (a directory tree containing `intent/.config/config.json`, searched upward from the file). Anywhere else -- Intent not installed, or a plain `todo.md` outside any Intent project -- `todo` just works, silently, and takes ownership by stamping its own marker. A file with no frontmatter, or one already marked `generator: utilz todo`, is always safe to write.
 
+For the same reason, `todo` will not **create** a fresh default `./todo.md` inside an Intent project: a bare `utilz todo` there refuses and points you to `intent todo` (or `--file`/`-g`), so it never plants a competing todo file in an Intent directory. Explicit `--file`/`-g`, an existing utilz `./todo.md`, and read-only queries are unaffected.
+
 ---
 
 ## Commands

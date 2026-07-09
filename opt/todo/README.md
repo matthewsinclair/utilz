@@ -86,6 +86,8 @@ history: _history/YYYYMMDD-done.md
 
 utilz's refusal is **Intent-aware**: it fires only when Intent is installed _and_ the target file sits inside an Intent project (a tree containing `intent/.config/config.json`, searched upward from the file). Anywhere Intent is not in play -- not installed, or a `todo.md` outside any Intent project (eg the global `-g` file) -- `todo` runs silently and takes ownership by stamping its own marker. Files with no frontmatter, or already marked `generator: utilz todo`, are always safe to write.
 
+The same awareness gates **creation** on the default path: a bare `utilz todo` inside an Intent project (with no `./todo.md` yet) refuses rather than plant a competing todo file -- use `intent todo`, or pass `--file`/`-g`. Explicit `--file`/`-g`, an existing utilz `./todo.md`, and read-only queries are unaffected.
+
 ## JSON
 
 ```bash

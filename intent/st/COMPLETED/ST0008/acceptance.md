@@ -72,6 +72,7 @@ None -- WP-distributed.
 - AC-08.2 On a mutating command whose target file's frontmatter `generator:` names a different tool (eg `intent todo`), utilz refuses with a clear error and non-zero exit -- but only when BOTH `command -v intent` succeeds AND the file's own directory tree contains a valid Intent project (`intent/.config/config.json`, walking upward from the file's directory). On refusal the file is left byte-unchanged and no history file is created.
 - AC-08.3 A file safe to write is written without error and gains the marker: no frontmatter (legacy Intent / fresh), frontmatter without a `generator:` (utilz's pre-marker `title:`/`history:` file), or `generator: utilz todo` (utilz's own). A foreign-marked file that is NOT inside an Intent project is taken over and re-stamped `generator: utilz todo`.
 - AC-08.4 With Intent absent, utilz never fails or emits an Intent-related message on account of the guard, even for a foreign-marked file inside an Intent project tree (the `command -v intent` gate short-circuits to proceed).
+- AC-08.5 With its DEFAULT path (no `--file`/`-g`) and no `./todo.md` present yet, utilz refuses to CREATE a new file inside an Intent project (Intent installed AND cwd's tree contains `intent/.config/config.json`), directing the user to `intent todo` or `--file`/`-g`; the file is not created and exit is non-zero. Unaffected (all proceed): explicit `--file`/`-g`, an already-existing utilz `./todo.md`, read-only queries that never write, non-Intent directories, and Intent-absent.
 
 ## Acceptance Tests
 
@@ -127,3 +128,5 @@ None -- WP-distributed.
 - AT-08.3 [opt/todo/test/todo.bats::safe files own no-frontmatter and no-generator are written] -- covers AC-08.3 -- status: green
 - AT-08.4 [opt/todo/test/todo.bats::foreign file outside an Intent project is taken over and re-stamped] -- covers AC-08.3 -- status: green
 - AT-08.5 [opt/todo/test/todo.bats::foreign file with intent absent proceeds without error] -- covers AC-08.4 -- status: green
+- AT-08.6 [opt/todo/test/todo.bats::refuses to create a fresh default todo.md inside an Intent project] -- covers AC-08.5 -- status: green
+- AT-08.7 [opt/todo/test/todo.bats::an existing utilz todo.md inside an Intent project still works] -- covers AC-08.5 -- status: green

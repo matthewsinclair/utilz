@@ -165,6 +165,12 @@ Otherwise proceed silently and re-stamp the file as utilz. Where Intent is absen
 
 The guard runs at the single writer (`write_file`), plus an early call in the two verbs with a side effect _before_ the write: `done --prune` (archives to the history file first) and `edit` (launches `$EDITOR` on the file first). Each is a distinct "mutation begins" point; the extra calls are read-only and idempotent.
 
+### Default-path creation guard (follow-up)
+
+The overwrite guard above protects the _same-file_ case, but the two tools default to _different_ paths -- `utilz todo` -> `./todo.md`, `intent todo` -> `intent/todo.md` -- so default-vs-default never collides and the overwrite guard never fires for it. That left a real gap in first use: a bare `utilz todo` run inside an Intent project happily _created_ a stray `./todo.md`, which is not what the user wants (Intent owns todos there).
+
+So creation on the **default path** is also gated. When the resolved file is the default `./todo.md` (no `--file`/`-g`, tracked by the `DEFAULT_PATH` flag), does not yet exist, and would be created inside an Intent project (Intent installed AND cwd's tree contains `intent/.config/config.json`), utilz refuses and points the user to `intent todo` or `--file`/`-g`. It reuses the same `_intent_present` + `_in_intent_project` gates. Unaffected: read-only queries (`next`, `count`, `doing`, ...) never create a file; an already-existing utilz `./todo.md` in an Intent project is honoured (own-marker short-circuit); explicit `--file`/`-g` always proceed; outside an Intent project, or with Intent absent, creation is normal.
+
 ### Testability
 
 The `command -v intent` result is overridable via `UTILZ_TODO_INTENT_PRESENT` (`1`/`0`; unset = auto-detect), so the installed/absent branches are deterministic across CI (no Intent) and dev (Intent present); the in/out-of-project branches are driven by a fixture `intent/.config/config.json`.

@@ -184,7 +184,15 @@ _in_intent_project() {
 # refused ONLY when Intent is present AND the file sits in an Intent project --
 # utilz stays silent and never fails where Intent is not in play.
 guard_foreign_todo() {
-  [[ -f "$TODO_FILE" ]] || return 0
+  if [[ ! -f "$TODO_FILE" ]]; then
+    # Fresh file. Refuse to CREATE a default ./todo.md inside an Intent project
+    # (Intent owns todos there); explicit --file/-g and non-project dirs proceed.
+    if [[ "${DEFAULT_PATH:-0}" -eq 1 ]] && _intent_present && _in_intent_project; then
+      error "todo: refusing to create '$TODO_FILE' inside an Intent project -- use 'intent todo' here, or pass --file/-g for a standalone list."
+      exit 1
+    fi
+    return 0
+  fi
   head -1 "$TODO_FILE" | grep -q '^---[[:space:]]*$' || return 0
   local fm gen
   fm=$(sed -n '2,/^---[[:space:]]*$/p' "$TODO_FILE")
@@ -618,6 +626,7 @@ FILE_OPT=""
 USE_GLOBAL=0
 JSON=0
 TITLE_OPT=""
+DEFAULT_PATH=0
 ARGS=()
 
 while [[ $# -gt 0 ]]; do
@@ -653,6 +662,7 @@ elif [[ $USE_GLOBAL -eq 1 ]]; then
   mkdir -p "$(dirname "$TODO_FILE")"
 else
   TODO_FILE="./todo.md"
+  DEFAULT_PATH=1
 fi
 
 COMMAND="${ARGS[0]:-list}"
