@@ -66,6 +66,13 @@ None -- WP-distributed.
 - AC-07.1 (non-test) `opt/todo/README.md` and `help/todo.md` document every verb and option. -- evidence: doc review (both written) -- satisfied: yes
 - AC-07.2 (non-test) `utilz doctor` and `utilz list` pass with `todo` registered and its deps declared in YAML. -- evidence: `utilz doctor` (todo properly configured; only pre-existing PATH warning) + `utilz list` shows todo -- satisfied: yes
 
+### WP-08 -- Mutual guard with intent todo (status: WIP)
+
+- AC-08.1 Every `todo.md` utilz writes carries `generator: utilz todo` in its YAML frontmatter (alongside `title:`/`history:`); the stamp is unconditional -- independent of whether Intent is installed or the file is in an Intent project.
+- AC-08.2 On a mutating command whose target file's frontmatter `generator:` names a different tool (eg `intent todo`), utilz refuses with a clear error and non-zero exit -- but only when BOTH `command -v intent` succeeds AND the file's own directory tree contains a valid Intent project (`intent/.config/config.json`, walking upward from the file's directory). On refusal the file is left byte-unchanged and no history file is created.
+- AC-08.3 A file safe to write is written without error and gains the marker: no frontmatter (legacy Intent / fresh), frontmatter without a `generator:` (utilz's pre-marker `title:`/`history:` file), or `generator: utilz todo` (utilz's own). A foreign-marked file that is NOT inside an Intent project is taken over and re-stamped `generator: utilz todo`.
+- AC-08.4 With Intent absent, utilz never fails or emits an Intent-related message on account of the guard, even for a foreign-marked file inside an Intent project tree (the `command -v intent` gate short-circuits to proceed).
+
 ## Acceptance Tests
 
 ### WP-01
@@ -112,3 +119,11 @@ None -- WP-distributed.
 ### WP-07
 
 - Coverage: WP-07 ACs are both non-test (doc review + `utilz doctor`); no ATs.
+
+### WP-08
+
+- AT-08.1 [opt/todo/test/todo.bats::write stamps generator: utilz todo] -- covers AC-08.1 -- status: green
+- AT-08.2 [opt/todo/test/todo.bats::foreign file in an Intent project with intent present is refused unchanged] -- covers AC-08.2 -- status: green
+- AT-08.3 [opt/todo/test/todo.bats::safe files own no-frontmatter and no-generator are written] -- covers AC-08.3 -- status: green
+- AT-08.4 [opt/todo/test/todo.bats::foreign file outside an Intent project is taken over and re-stamped] -- covers AC-08.3 -- status: green
+- AT-08.5 [opt/todo/test/todo.bats::foreign file with intent absent proceeds without error] -- covers AC-08.4 -- status: green

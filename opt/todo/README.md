@@ -5,7 +5,7 @@
 
 Simple DOING/TODO/DONE manager for a plain-text `todo.md`.
 
-`todo` manages a flat markdown todo file with three buckets and a small set of subcommands for adding, moving, querying, and archiving items. The file is the single source of truth -- drive it from the CLI, or hand-edit it and run `todo sync` to normalize. It is a standalone fork of Intent's `intent todo`, with a mutually compatible file format.
+`todo` manages a flat markdown todo file with three buckets and a small set of subcommands for adding, moving, querying, and archiving items. The file is the single source of truth -- drive it from the CLI, or hand-edit it and run `todo sync` to normalize. It is a standalone fork of Intent's `intent todo`, with a mutually compatible file format; each tool stamps a `generator:` marker and refuses to overwrite a file the other owns (see [Interop with intent todo](#interop-with-intent-todo)).
 
 ## Quick start
 
@@ -22,6 +22,7 @@ todo done --prune                    # archive DONE to _history/YYYYMMDD-done.md
 
 ```markdown
 ---
+generator: utilz todo
 title: "# TODO"
 history: _history/YYYYMMDD-done.md
 ---
@@ -44,7 +45,7 @@ history: _history/YYYYMMDD-done.md
 - Each item is `<number>:[<glyph>] <text>`. Numbers are global, positional, and zero-padded to a shared width; they are re-derived on every write.
 - Glyphs: `[ ]` todo, `[-]` doing, `[x]` done.
 - In DOING/TODO top-to-bottom is priority; in DONE (and the history file) newest is on top.
-- Frontmatter `title` is the H1; `history` is the archive path pattern for `done --prune` (`YYYYMMDD` expands to the purge date, relative to the file's directory).
+- Frontmatter: `generator` marks the file as utilz-owned (see [Interop](#interop-with-intent-todo)); `title` is the H1; `history` is the archive path pattern for `done --prune` (`YYYYMMDD` expands to the purge date, relative to the file's directory).
 
 ## Commands
 
@@ -78,6 +79,12 @@ history: _history/YYYYMMDD-done.md
 ## Checkbox reconciliation (glyph wins)
 
 `sync` treats the checkbox as authoritative. Flip an item's box to `[x]` in your editor and `sync` files it under DONE -- even if the line is still sitting under `## TODO`. To reclassify an item by hand, change its checkbox, not the heading it sits under.
+
+## Interop with intent todo
+
+`todo` and Intent's `intent todo` share the file format closely enough that each could parse -- and accidentally rewrite -- the other's `todo.md`. Both stamp an ownership marker (`generator: utilz todo` / `generator: intent todo`) and refuse to overwrite a file the other owns.
+
+utilz's refusal is **Intent-aware**: it fires only when Intent is installed _and_ the target file sits inside an Intent project (a tree containing `intent/.config/config.json`, searched upward from the file). Anywhere Intent is not in play -- not installed, or a `todo.md` outside any Intent project (eg the global `-g` file) -- `todo` runs silently and takes ownership by stamping its own marker. Files with no frontmatter, or already marked `generator: utilz todo`, are always safe to write.
 
 ## JSON
 

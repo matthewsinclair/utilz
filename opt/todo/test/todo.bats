@@ -387,3 +387,144 @@ EOF
   echo "$output" | jq -e '.todo[0].text == "a todo"'
   echo "$output" | jq -e '.done[0].text == "a done"'
 }
+
+# ----------------------------------------------------------------------------
+# WP-08 -- mutual guard with intent todo
+# ----------------------------------------------------------------------------
+
+# A foreign (intent-owned) todo.md body written to $1.
+_seed_intent_todo() {
+  cat > "$1" <<'EOF'
+---
+generator: intent todo
+---
+
+## DOING
+
+_(none)_
+
+## TODO
+
+- [ ] ST0001: intent-owned item
+
+## DONE:2026-01-01T00:00:00Z
+
+_(none)_
+EOF
+}
+
+# Put an executable `intent` stub on PATH so `command -v intent` succeeds
+# regardless of host. Echoes the dir to prepend.
+_stub_intent() {
+  mkdir -p "$PWD/fakebin"
+  printf '#!/usr/bin/env bash\nexit 0\n' > "$PWD/fakebin/intent"
+  chmod +x "$PWD/fakebin/intent"
+  printf '%s' "$PWD/fakebin"
+}
+
+@test "write stamps generator: utilz todo" {
+  TODO add "anything"
+  file_has todo.md "generator: utilz todo"
+}
+
+@test "foreign file in an Intent project with intent present is refused unchanged" {
+  mkdir -p proj/intent/.config
+  echo '{"project_name":"x"}' > proj/intent/.config/config.json
+  _seed_intent_todo proj/todo.md
+  cp proj/todo.md expected.md
+  local bin
+  bin="$(_stub_intent)"
+  run env PATH="$bin:$PATH" "$UTILZ_BIN_DIR/todo" --file proj/todo.md sync
+  assert_failure
+  assert_output_contains "refusing to overwrite"
+  # left byte-unchanged
+  run diff expected.md proj/todo.md
+  assert_success
+}
+
+@test "safe files own no-frontmatter and no-generator are written" {
+  # (a) our own marked file, even inside an Intent project with intent present,
+  # writes -- the marker check short-circuits before the refuse gate.
+  mkdir -p proj/intent/.config
+  echo '{}' > proj/intent/.config/config.json
+  local bin
+  bin="$(_stub_intent)"
+  cat > proj/todo.md <<'EOF'
+---
+generator: utilz todo
+title: "# TODO"
+history: _history/YYYYMMDD-done.md
+---
+
+# TODO
+
+## DOING
+
+_(none)_
+
+## TODO
+
+1:[ ] mine
+
+## DONE:2026-01-01T00:00:00Z
+
+_(none)_
+EOF
+  run env PATH="$bin:$PATH" "$UTILZ_BIN_DIR/todo" --file proj/todo.md add "another"
+  assert_success
+  file_has proj/todo.md "another"
+
+  # (b) no frontmatter at all (legacy intent / fresh) -> writable, gains marker
+  printf '## DOING\n\n_(none)_\n\n## TODO\n\n1:[ ] legacy\n\n## DONE:2026-01-01T00:00:00Z\n\n_(none)_\n' > legacy.md
+  run "$UTILZ_BIN_DIR/todo" --file legacy.md add "new one"
+  assert_success
+  file_has legacy.md "generator: utilz todo"
+
+  # (c) frontmatter but no generator (utilz pre-marker) -> writable, gains marker
+  cat > premarker.md <<'EOF'
+---
+title: "# TODO"
+history: _history/YYYYMMDD-done.md
+---
+
+# TODO
+
+## DOING
+
+_(none)_
+
+## TODO
+
+1:[ ] premarker
+
+## DONE:2026-01-01T00:00:00Z
+
+_(none)_
+EOF
+  run "$UTILZ_BIN_DIR/todo" --file premarker.md add "x"
+  assert_success
+  file_has premarker.md "generator: utilz todo"
+}
+
+@test "foreign file outside an Intent project is taken over and re-stamped" {
+  # foreign marker, but cwd is a bare temp dir (no Intent project above it)
+  _seed_intent_todo todo.md
+  local bin
+  bin="$(_stub_intent)"   # even with intent present, no project here -> proceed
+  run env PATH="$bin:$PATH" "$UTILZ_BIN_DIR/todo" --file todo.md sync
+  assert_success
+  refute_output_contains "refusing"
+  file_has todo.md "generator: utilz todo"
+  file_lacks todo.md "generator: intent todo"
+}
+
+@test "foreign file with intent absent proceeds without error" {
+  # foreign marker, inside an Intent project, but Intent not installed
+  mkdir -p proj/intent/.config
+  echo '{}' > proj/intent/.config/config.json
+  _seed_intent_todo proj/todo.md
+  run env UTILZ_TODO_INTENT_PRESENT=0 "$UTILZ_BIN_DIR/todo" --file proj/todo.md sync
+  assert_success
+  refute_output_contains "refusing"
+  file_has proj/todo.md "generator: utilz todo"
+}

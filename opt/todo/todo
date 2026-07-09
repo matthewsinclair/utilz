@@ -37,6 +37,11 @@ TITLE="# TODO"
 HISTORY="_history/YYYYMMDD-done.md"
 WATERMARK=""
 
+# Ownership marker stamped into frontmatter. Highlander with `intent todo`: each
+# tool writes `generator: <tool> todo` and refuses to overwrite a file owned by
+# the other. See guard_foreign_todo. (ST0008/WP-08.)
+TODO_GENERATOR="utilz todo"
+
 # One indexed array per bucket, holding item TEXT only (glyph is derived from
 # the bucket). Orphan arrays hold unrecognized non-blank lines, preserved
 # verbatim at the tail of their bucket (No Silent Errors: warned, never dropped).
@@ -145,6 +150,54 @@ parse_file() {
 }
 
 # ============================================================================
+# OWNERSHIP GUARD (mutual non-clobber with intent todo -- ST0008/WP-08)
+# ============================================================================
+
+# Is Intent installed? Overridable via UTILZ_TODO_INTENT_PRESENT (1=yes, 0=no;
+# unset = auto-detect) for deterministic tests and as a manual override.
+_intent_present() {
+  case "${UTILZ_TODO_INTENT_PRESENT:-}" in
+  1) return 0 ;;
+  0) return 1 ;;
+  *) command -v intent >/dev/null 2>&1 ;;
+  esac
+}
+
+# Does TODO_FILE sit inside an Intent project? Walk upward from the file's own
+# directory for the v2.0 marker intent/.config/config.json. Mirrors Intent's
+# find_project_root but anchored on the file we are about to overwrite (not on
+# cwd), so pointing --file at another project's todo.md is still caught.
+_in_intent_project() {
+  local dir
+  dir=$(cd "$(dirname "$TODO_FILE")" 2>/dev/null && pwd) || return 1
+  while [[ "$dir" != "/" ]]; do
+    if [[ -f "$dir/intent/.config/config.json" ]]; then return 0; fi
+    dir=$(dirname "$dir")
+  done
+  return 1
+}
+
+# Refuse to overwrite a todo.md owned by a different generator. Mirrors Intent's
+# guard_foreign_todo: read the leading --- block's generator:. Proceed when the
+# file is absent, frontmatter-less, carries no generator (utilz's own pre-marker
+# title:/history: file), or is our own. A foreign marker (eg intent todo) is
+# refused ONLY when Intent is present AND the file sits in an Intent project --
+# utilz stays silent and never fails where Intent is not in play.
+guard_foreign_todo() {
+  [[ -f "$TODO_FILE" ]] || return 0
+  head -1 "$TODO_FILE" | grep -q '^---[[:space:]]*$' || return 0
+  local fm gen
+  fm=$(sed -n '2,/^---[[:space:]]*$/p' "$TODO_FILE")
+  gen=$(printf '%s\n' "$fm" | sed -n 's/^generator:[[:space:]]*//p' | head -1)
+  [[ -z "$gen" ]] && return 0
+  [[ "$gen" == "$TODO_GENERATOR" ]] && return 0
+  _intent_present || return 0
+  _in_intent_project || return 0
+  error "todo: refusing to overwrite '$TODO_FILE' -- managed by '$gen', not '$TODO_GENERATOR' (an Intent project owns it). Let '$gen' manage this file, or use --file elsewhere."
+  exit 1
+}
+
+# ============================================================================
 # RENDER + WRITE (the single writer -- Highlander, atomic)
 # ============================================================================
 
@@ -168,11 +221,13 @@ _emit_bucket_lines() {
 }
 
 write_file() {
+  guard_foreign_todo
   _counts
   local tmp
   tmp=$(mktemp)
   {
     printf -- '---\n'
+    printf 'generator: %s\n' "$TODO_GENERATOR"
     printf 'title: "%s"\n' "$TITLE"
     printf 'history: %s\n' "$HISTORY"
     printf -- '---\n\n'
@@ -424,6 +479,7 @@ cmd_edit() {
     parse_file
     write_file
   fi
+  guard_foreign_todo   # refuse before launching $EDITOR on a foreign file
   local ed="${VISUAL:-${EDITOR:-vi}}"
   local edcmd="${ed%% *}"
   if ! command -v "$edcmd" >/dev/null 2>&1; then
@@ -437,6 +493,7 @@ cmd_edit() {
 
 cmd_prune() {
   parse_file
+  guard_foreign_todo   # refuse before the pre-write history archive (No partial mutation)
   _counts
   if [[ $C -eq 0 ]]; then
     info "todo: nothing to prune"

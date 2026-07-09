@@ -25,12 +25,13 @@ todo [OPTIONS] [COMMAND] [ARGS]
 
 The file is the single source of truth: you can drive it entirely from the CLI, or open it in an editor and hand-edit it, then run `todo sync` to normalize. Numbers are re-derived on every write and zero-padded to a shared column width so the file always stays aligned.
 
-`todo` is a standalone fork of Intent's `intent todo`. The two file formats are mutually compatible (same bucket headings, same `[ ]`/`[-]`/`[x]` glyphs, same `## DONE:<watermark>` line), so a `todo.md` written by one is readable by the other.
+`todo` is a standalone fork of Intent's `intent todo`. The two file formats are mutually compatible (same bucket headings, same `[ ]`/`[-]`/`[x]` glyphs, same `## DONE:<watermark>` line), so a `todo.md` written by one is readable by the other. Because the formats are that close, each tool stamps a `generator:` frontmatter marker and refuses to overwrite a file the other owns -- see [Interop with intent todo](#interop-with-intent-todo).
 
 ### File format
 
 ```markdown
 ---
+generator: utilz todo
 title: "# TODO"
 history: _history/YYYYMMDD-done.md
 ---
@@ -50,12 +51,22 @@ history: _history/YYYYMMDD-done.md
 03:[x] Something already finished
 ```
 
-The frontmatter carries the H1 `title` and a `history` pattern (where `todo done --prune` archives completed items; `YYYYMMDD` expands to the purge date, resolved relative to the `todo.md` directory).
+The frontmatter carries the `generator` ownership marker (see [Interop with intent todo](#interop-with-intent-todo)), the H1 `title`, and a `history` pattern (where `todo done --prune` archives completed items; `YYYYMMDD` expands to the purge date, resolved relative to the `todo.md` directory).
 
 ### Ordering
 
 - In DOING and TODO, top-to-bottom is priority: the next / most important item is at the top.
 - In DONE (and in the history file), newest completion is at the top.
+
+### Interop with intent todo
+
+`todo` and Intent's `intent todo` share the file format closely enough that each could parse -- and accidentally rewrite -- the other's `todo.md`. To prevent that, both stamp an ownership marker in the frontmatter:
+
+```
+generator: utilz todo
+```
+
+`todo` refuses to overwrite a `todo.md` whose `generator:` names a different tool (eg `intent todo`). The refusal is **Intent-aware**: it fires only when Intent is actually installed _and_ the file sits inside an Intent project (a directory tree containing `intent/.config/config.json`, searched upward from the file). Anywhere else -- Intent not installed, or a plain `todo.md` outside any Intent project -- `todo` just works, silently, and takes ownership by stamping its own marker. A file with no frontmatter, or one already marked `generator: utilz todo`, is always safe to write.
 
 ---
 

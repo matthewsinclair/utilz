@@ -134,3 +134,41 @@ The `## DONE:<T>` watermark is **reinterpreted as "last purge/flush time"** -- i
 - **Per-bucket numbering:** rejected -- three item-1s collide; global is unambiguous.
 - **Separate `update` (regenerate) and `sync`:** collapsed -- utilz has nothing to regenerate from but the file; `update` is a back-compat alias for `sync`.
 - **Text-substring addressing** (`done "fix parser"`): rejected as primary for ambiguity; positional number is the handle. Possible convenience later.
+
+## WP-08: mutual guard with `intent todo`
+
+`utilz todo` and `intent todo` share the `todo.md` on-disk format closely enough to **cross-parse**: utilz's item regex reads Intent's `- [x] STID: title` lines as items, so an unguarded `utilz todo sync` pointed at Intent's projection would renumber it into utilz's positional shape and silently clobber it. Intent 2.16.1 shipped its half of a symmetric ownership guard (`bin/intent_todo:guard_foreign_todo`); this WP is the utilz half.
+
+### Contract
+
+Each tool stamps a YAML frontmatter marker `generator: <tool> todo` and refuses to overwrite a file whose marker names a different generator. The **guard, not a merge**, is the seam: the two files are not merge-compatible (Intent's is a read-only projection keyed by ST id; utilz's is a source-of-truth keyed by position), so preventing mutual clobber is the whole goal.
+
+### utilz behaviour
+
+- **Stamp (unconditional).** Every `write_file` emits `generator: utilz todo` in the frontmatter, alongside `title:`/`history:`. `parse_file` already tolerates unknown frontmatter keys, so the marker round-trips.
+- **Guard.** `guard_foreign_todo` (mirroring Intent's) reads the leading `---` block:
+  - absent file, no frontmatter, frontmatter without a `generator:` (utilz's own pre-marker `title:`/`history:` file), or `generator: utilz todo` -> **proceed** (silently);
+  - a foreign `generator:` (eg `intent todo`) -> the **foreign branch** below.
+
+### Intent-aware gating (the utilz-only refinement)
+
+utilz is a standalone tool that must run anywhere, including where Intent was never installed. So the stamp is unconditional but the **refusal is the only error path, and it fires only when Intent is genuinely in play**. On the foreign branch, refuse **only if BOTH**:
+
+1. `command -v intent` succeeds (Intent installed), AND
+2. the **target file's own directory tree** contains a valid Intent project (`intent/.config/config.json`, walking upward from `dirname($TODO_FILE)`).
+
+Otherwise proceed silently and re-stamp the file as utilz. Where Intent is absent, or the file is not inside an Intent project, utilz emits nothing and never fails -- covering the global `~/.config/utilz/todo/todo.md` and any `todo.md` in a non-Intent directory.
+
+**Why file-dir-rooted, not cwd-rooted.** Intent's own `find_project_root` walks up from cwd because it answers "what project am I operating in?". The guard answers a different question -- "does the file I am about to overwrite belong to an Intent project?" -- so it anchors on the file. This closes the accidental cross-tree clobber: `utilz todo sync --file ../other-proj/intent/todo.md` run from outside that project is still refused. It never causes a false refusal, because a utilz-owned or unmarked file short-circuits on the marker check before the project test runs.
+
+### Seam placement
+
+The guard runs at the single writer (`write_file`), plus an early call in the two verbs with a side effect _before_ the write: `done --prune` (archives to the history file first) and `edit` (launches `$EDITOR` on the file first). Each is a distinct "mutation begins" point; the extra calls are read-only and idempotent.
+
+### Testability
+
+The `command -v intent` result is overridable via `UTILZ_TODO_INTENT_PRESENT` (`1`/`0`; unset = auto-detect), so the installed/absent branches are deterministic across CI (no Intent) and dev (Intent present); the in/out-of-project branches are driven by a fixture `intent/.config/config.json`.
+
+### Out of scope
+
+Intent's legacy STP project markers (`stp/.config`, `.stp-config`, `stp/prj/st`) are not detected -- only the v2.0 `intent/.config/config.json`. A utilz / legacy-STP coexistence is implausible and can be added if it ever arises.
