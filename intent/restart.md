@@ -36,10 +36,9 @@ d4f88e8  utilz todo: guard against clobbering intent todo files (ST0008/WP-08)
 
 No active steel thread. Framework at v2.2.0, 13 utilities, editor-integration surface + Emacs bridge, and a live issue tracker. Opportunistic next candidates:
 
-1. Add `expz` to the CI test loop in `.github/workflows/tests.yml`. Blocked on an `ANTHROPIC_API_KEY` CI secret + a skip-when-absent-vs-hard-require decision (carry-over across several sessions).
-2. Tag `v2.2.0` (`git tag v2.2.0 && git push --tags` to both remotes) -- not yet tagged.
-3. Potential future ST: VSCode / Zed / Vim integration families (same TSV manifest, new editor-specific installers).
-4. Potential future ST: Emacs bridge v2 -- Transient grouped menu (deferred per ST0007 `design.md`).
+1. Tag `v2.2.0` (`git tag v2.2.0 && git push --tags` to both remotes) -- not yet tagged.
+2. Potential future ST: VSCode / Zed / Vim integration families (same TSV manifest, new editor-specific installers).
+3. Potential future ST: Emacs bridge v2 -- Transient grouped menu (deferred per ST0007 `design.md`).
 
 ### Verification checklist on fresh checkout
 

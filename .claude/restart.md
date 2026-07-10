@@ -106,10 +106,10 @@ Utilz/
 
 **Test Strategy**:
 
-- **Ubuntu (test-linux)**: Tests: utilz, cryptz, gitz, mdagg, retry, syncz, pdf2md, xtrct, lnrel, todo
+- **Ubuntu (test-linux)**: Tests: utilz, cryptz, gitz, mdagg, retry, syncz, pdf2md, xtrct, lnrel, todo, expz
 - **macOS (test-macos)**: Tests all utilities including macoz, clipz, cleanz, syncz
 - **ShellCheck**: Static analysis on all shell scripts
-- **Note**: expz not yet in CI test loop (needs ANTHROPIC_API_KEY in CI)
+- **Note**: expz IS in the CI loop (added 2026-07-10). Its BATS suite is entirely offline -- every test hits arg/schema validation paths that return before the `ANTHROPIC_API_KEY` check -- so no key or secret is needed in CI.
 
 ---
 
