@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: 7b111465-0f7d-406c-a6ac-1ff28917efdb
-heartbeat_at: 2026-07-10T15:45Z
+heartbeat_at: 2026-07-10T16:04Z
 status: active
-focus: "issue-0001 (mdagg C-locale Unicode drop) + both follow-ups fixed & pushed; doc reconciliation done (wip/restart/acceptance refreshed, board localfolded). Idle."
+focus: "Session done: mdagg issue-0001 + follow-ups fixed, expz->CI, doc reconciliation, and v2.3.0 cut (VERSION+CHANGELOG+tag pushed both remotes). All landed. Idle."
 claims: [ST0008]
 ---
 
@@ -20,11 +20,12 @@ claims: [ST0008]
 - **expz -> CI Linux loop** (`.github/workflows/tests.yml`). The "needs ANTHROPIC_API_KEY" blocker was a stale assumption: expz's BATS suite is fully offline (every test returns before the key check), verified green with the key unset; macOS CI already ran it via `utilz test`. One-word diff, no secret, no skip logic. Docs updated to match.
 - **issue-0001** (mdagg silently dropped Unicode content lines under `LC_ALL=C`) FIXED + CLOSED. Primary `7d3128c`: `[←↑]` bracket class -> byte-safe grep. Follow-ups `4c38cae`: anchored the strip to link structure (`grep -vE '^[[:space:]]*\[(←|↑)'`), replaced the GNU-sed `\b`/`\u` title-case (a no-op on BSD sed -> un-cased titles on macOS) with portable POSIX awk, and extracted the duplicated title derivation into `derive_title()` (Highlander). 31 mdagg BATS green, shellcheck net-zero vs baseline, e2e verified under `LC_ALL=C`.
 - Introduced the **file-based issue tracker** at `intent/issues/` (`OPEN/` / `CLOSED/` / `_templ/`); 0001 recorded, resolved, filed under CLOSED.
-- **Doc reconciliation**: `intent/wip.md`, `intent/restart.md`, `.claude/restart.md` refreshed to reality (framework v2.2.0, 13 utilities incl `todo`, all STs COMPLETE, issue tracker). `ST0008/acceptance.md` WP-08 heading WIP->Done. This board localfolded (prior-session content -> `.history/20260710/`).
+- **Doc reconciliation**: `intent/wip.md`, `intent/restart.md`, `.claude/restart.md` refreshed to reality (13 utilities incl `todo`, all STs COMPLETE, issue tracker). `ST0008/acceptance.md` WP-08 heading WIP->Done. This board localfolded (prior-session content -> `.history/20260710/`).
+- **v2.3.0 released.** Discovered `v2.2.0` was already tagged (at ST0007 close, on both remotes) -- so NOT re-tagged (never force-move a published tag). Instead cut a proper release for the unreleased trove on top of it (todo utility + mdagg fixes): `VERSION` 2.2.0->2.3.0, CHANGELOG `## [2.3.0]`, annotated tag `v2.3.0` pushed to both remotes. All "current version" doc references bumped 2.2.0->2.3.0.
 
 ## TODO
 
-- (opportunistic) Tag `v2.2.0` -- shipped but untagged.
+- _(none)_
 
 ## Watch-outs
 

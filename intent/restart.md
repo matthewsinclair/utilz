@@ -7,7 +7,7 @@ verblock: "10 Jul 2026:v1.2: matts - ST0008 closed; issue tracker + mdagg 0001 f
 ## Key Context (as of 10 Jul 2026)
 
 - **No active steel thread.** All eight threads (ST0001-ST0008) are complete and filed under `intent/st/COMPLETED/`. `intent st list` is empty by design.
-- **Framework version is `VERSION` = 2.2.0** (single source of truth). Do not confuse it with the `intent` tooling version (~2.14.x); the `2.13.0` in an older commit message is an Intent-tooling bump, not the framework.
+- **Framework version is `VERSION` = 2.3.0** (single source of truth; tagged `v2.3.0`, 2026-07-10). Do not confuse it with the `intent` tooling version (~2.14.x); the `2.13.0` in an older commit message is an Intent-tooling bump, not the framework.
 - **13 utilities** (core `utilz` + 12 tools), all passing `utilz doctor` and `utilz test`. The `todo` utility (ST0008) is the newest; `cleanz` is at 1.2.0.
 - **File-based issue tracker** lives at `intent/issues/` (`OPEN/` / `CLOSED/` / `_templ/`) for defects a single issue can drive without a steel thread. Issue **0001** (mdagg silent Unicode line-drop under C locale) is fixed and CLOSED.
 - Two remotes: `local` (Dropbox) and `upstream` (GitHub) -- push to both (`git push local main && git push upstream main`).
@@ -34,15 +34,14 @@ d4f88e8  utilz todo: guard against clobbering intent todo files (ST0008/WP-08)
 
 ## For Next Session
 
-No active steel thread. Framework at v2.2.0, 13 utilities, editor-integration surface + Emacs bridge, and a live issue tracker. Opportunistic next candidates:
+No active steel thread. Framework at v2.3.0, 13 utilities, editor-integration surface + Emacs bridge, and a live issue tracker. Opportunistic next candidates:
 
-1. Tag `v2.2.0` (`git tag v2.2.0 && git push --tags` to both remotes) -- not yet tagged.
-2. Potential future ST: VSCode / Zed / Vim integration families (same TSV manifest, new editor-specific installers).
-3. Potential future ST: Emacs bridge v2 -- Transient grouped menu (deferred per ST0007 `design.md`).
+1. Potential future ST: VSCode / Zed / Vim integration families (same TSV manifest, new editor-specific installers).
+2. Potential future ST: Emacs bridge v2 -- Transient grouped menu (deferred per ST0007 `design.md`).
 
 ### Verification checklist on fresh checkout
 
-- `utilz version` -- expect `utilz v2.2.0`.
+- `utilz version` -- expect `utilz v2.3.0`.
 - `utilz doctor` + `utilz emacs doctor` -- both green.
 - `utilz test` -- full suite green (covers all 13 utilities incl `todo`).
 - `utilz integration commands | column -t -s$'\t'` -- one row per user-facing utility.

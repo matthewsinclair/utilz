@@ -1,7 +1,7 @@
 # Utilz Project - Claude Code Restart Document
 
 **Last Updated**: 10 July 2026
-**Version**: 2.2.0
+**Version**: 2.3.0
 **Repository**: <https://github.com/matthewsinclair/utilz>
 **Working Directory**: `/Users/matts/Devel/prj/Utilz`
 
@@ -24,9 +24,9 @@ Utilz is a bash/zsh utility framework providing a dispatcher-based CLI system. A
 
 ## Current State
 
-No active work. All eight steel threads (ST0001-ST0008) complete and filed under `intent/st/COMPLETED/`. Framework stable at **v2.2.0** with 13 utilities (core `utilz` + 12 tools; the `todo` utility was added by ST0008). A file-based issue tracker lives at `intent/issues/` (`OPEN/` / `CLOSED/` / `_templ/`); issue 0001 (mdagg silent Unicode drop under C locale) is fixed and CLOSED. Repo clean, pushed to both remotes.
+No active work. All eight steel threads (ST0001-ST0008) complete and filed under `intent/st/COMPLETED/`. Framework stable at **v2.3.0** with 13 utilities (core `utilz` + 12 tools; the `todo` utility was added by ST0008). A file-based issue tracker lives at `intent/issues/` (`OPEN/` / `CLOSED/` / `_templ/`); issue 0001 (mdagg silent Unicode drop under C locale) is fixed and CLOSED. Repo clean, pushed to both remotes.
 
-Note: the framework `VERSION` (2.2.0) is distinct from the `intent` tooling version (~2.14.x) -- don't conflate them.
+Note: the framework `VERSION` (2.3.0) is distinct from the `intent` tooling version (~2.14.x) -- don't conflate them.
 
 ### Project Structure
 
@@ -57,7 +57,7 @@ Utilz/
 +-- .github/workflows/      # CI/CD (tests.yml)
 +-- intent/                 # Steel threads (st/COMPLETED/) + issues/ tracker
 +-- CHANGELOG.md            # Release history
-+-- VERSION                 # Current version (2.2.0) - single source of truth
++-- VERSION                 # Current version (2.3.0) - single source of truth
 +-- README.md               # Main documentation
 ```
 
@@ -65,7 +65,7 @@ Utilz/
 
 | Utility | Description                                        | Version |
 | ------- | -------------------------------------------------- | ------- |
-| utilz   | Core framework (help, version, list, doctor, test) | 2.2.0   |
+| utilz   | Core framework (help, version, list, doctor, test) | 2.3.0   |
 | cleanz  | LLM text cleaner + C2PA image metadata stripping   | 1.2.0   |
 | clipz   | Cross-platform clipboard (pbcopy/xclip/xsel)       | 1.0.0   |
 | cryptz  | GPG encryption/decryption wrapper                  | 1.0.0   |
@@ -82,7 +82,7 @@ Utilz/
 
 ### Version Management
 
-- **Framework version**: `VERSION` file (single source of truth), currently 2.2.0
+- **Framework version**: `VERSION` file (single source of truth), currently 2.3.0
 - **Utility versions**: each `opt/<name>/<name>.yaml` has its own `version:` field (independent)
 - **Compatibility**: each utility declares `utilz_version: "^2.0.0"` for framework compat
 - **utilz.yaml** uses `version_file: ../../VERSION` to track framework version
@@ -98,7 +98,7 @@ Utilz/
 
 **Current branch**: `main`
 
-**Latest tag**: `v2.1.0` (v2.2.0 shipped but not yet tagged)
+**Latest tag**: `v2.3.0` (2026-07-10)
 
 ### GitHub Actions CI/CD
 
@@ -232,4 +232,4 @@ When starting a new session:
 4. **Check git status**: `git status` and `git log --oneline -5`
 5. **Ask user** what they want to work on
 
-The framework is stable at v2.2.0. Future work involves adding utilities or enhancements based on user needs. Open defects (if any) live under `intent/issues/OPEN/`.
+The framework is stable at v2.3.0. Future work involves adding utilities or enhancements based on user needs. Open defects (if any) live under `intent/issues/OPEN/`.

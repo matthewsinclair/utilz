@@ -5,6 +5,28 @@ All notable changes to the Utilz framework will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.3.0] - 2026-07-10
+
+### Added
+
+- **todo** - New standalone DOING / TODO / DONE task manager (ST0008). A single-file manager for a plain-text `todo.md` with positional item numbers and history sweep / purge subcommands. Forked from Intent's `intent todo` but made independent of steel threads: the `todo.md` is the source of truth, not a projection. File-location precedence: `--file <path>` wins, then `-g`/`--global` (`${XDG_CONFIG_HOME:-$HOME/.config}/utilz/todo/todo.md`), else default `./todo.md`. Verbs: `add`/`start`/`done`/`notdone`/`toggle`, `next`/`doing`/`todo`/`done`/`count`, `done --prune`/`--flush`, `sync`/`update`/`edit`, `--json`. The `todo.md` format stays mutually compatible with `intent todo` (same bucket headings and glyphs).
+- **`utilz todo` <-> `intent todo` mutual guard** (ST0008/WP-08). `utilz todo` stamps `generator: utilz todo` on every write and refuses to clobber a `todo.md` owned by a different generator (eg `intent todo`) - but only when Intent is actually present (a silent `command -v intent` plus a `intent/.config/config.json` check rooted at the target file's directory), so utilz stays a zero-dependency standalone tool that runs silently and never fails where Intent is absent. It also refuses to create a fresh default `./todo.md` inside an Intent project. Mirrors Intent's `guard_foreign_todo` without taking a runtime dependency on Intent.
+- **File-based issue tracker** at `intent/issues/` (`OPEN/` / `CLOSED/` / `_templ/`) - lightweight, git-tracked, steel-thread-independent, for defects a single issue can drive without a full ST.
+
+### Fixed
+
+- **mdagg: silent Unicode data loss under a C locale** (issue 0001). With `--strip-back-links`, mdagg used a `[←↑]` grep bracket class that, under `LC_ALL=C`, degraded to a byte set (`0xE2` is the UTF-8 lead byte for the whole U+2000-U+2FFF block) and silently deleted any content line containing a `→ ∥ ∈ — ...` character - invisible in a UTF-8 terminal, data-destroying in CI / agent sandboxes that export `LC_ALL=C`. Fixed with an anchored, byte-safe ERE (`grep -vE '^[[:space:]]*\[(←|↑)'`) that also tightens the strip to genuine navigation-link lines (inline arrows in prose now survive). The sibling title-case (`sed 's/\b\(.\)/\u\1/g'`, whose `\b`/`\u` are GNU-sed no-ops on BSD sed - so section titles came out un-cased on macOS) was replaced with a portable POSIX-awk title-case, and the duplicated title derivation extracted into a single `derive_title()` (Highlander).
+
+### Changed
+
+- Framework version bumped to 2.3.0 (additive minor bump - new `todo` utility; no breaking changes).
+- CI: **expz** added to the Ubuntu (test-linux) test loop. Its BATS suite is entirely offline (every test returns before expz's `ANTHROPIC_API_KEY` check), so no CI secret is required; macOS already exercised it via `utilz test`.
+
+### Tests
+
+- `opt/todo/test/todo.bats` - full BATS coverage for the todo utility, including the WP-08 mutual-guard acceptance tests (stamp present; foreign-refusal inside an Intent project with a stubbed `intent` on PATH; foreign-proceed outside a project; own / legacy / fresh pass-through; default-path creation refused in an Intent project).
+- `opt/mdagg/test/mdagg.bats` - regression tests for issue 0001 under `LC_ALL=C` (Unicode content survives while navigation links are stripped; a link-only file strips without a `set -e` abort; inline arrows preserved; portable title-casing).
+
 ## [2.2.0] - 2026-04-23
 
 ### Added
