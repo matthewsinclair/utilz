@@ -2,10 +2,10 @@
 node: cc
 name: Control Claude
 role: control
-session_id: 70162578-40cf-482f-b6fa-c779b1cac8ab
-heartbeat_at: 2026-07-09T10:50Z
+session_id: 7b111465-0f7d-406c-a6ac-1ff28917efdb
+heartbeat_at: 2026-07-10T15:09Z
 status: active
-focus: "utilz todo mutual guard (ST0008/WP-08) -- shipped + pushed (d4f88e8 + fix 81dbb03)"
+focus: "issue-0001 FIXED (mdagg silently dropped Unicode lines under C locale): grep -vF at opt/mdagg/mdagg:121 + 2 C-locale regression tests; suite green, shellcheck clean, issue CLOSED. Uncommitted -- awaiting hv commit/push go."
 claims: [ST0008]
 ---
 
@@ -13,7 +13,7 @@ claims: [ST0008]
 
 ## DOING
 
-- (idle -- WP-08 complete, awaiting hv next / push decision)
+- issue-0001 (mdagg unicode-drop under C locale) -- FIXED + verified, issue moved to intent/issues/CLOSED/. Uncommitted; awaiting hv commit/push decision. Two flagged follow-ups (NOT done): title-case `sed \u\1` locale fragility (~mdagg:238/275) + tightening the strip to only link-structured lines.
 
 ## Done this session
 

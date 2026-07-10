@@ -253,6 +253,46 @@ EOF
   assert_output_contains "Test Document"
 }
 
+@test "option: -b/--strip-back-links preserves Unicode content under a C locale (issue 0001)" {
+  # Regression for intent/issues 0001: under LC_ALL=C the old [←↑] bracket
+  # class matched any byte of a U+2000-U+2FFF character, silently deleting
+  # content lines with → ∥ ∈ — etc. The back-link lines must still be dropped.
+  cat > test.md <<EOF
+# Test Document
+[← Back](index.md)
+[↑ Top](#)
+gather(a) ∥ gather(b)
+→ reason about the result
+membership x ∈ S holds
+an em — dash and en – dash survive
+EOF
+
+  run bash -c "LC_ALL=C '$UTILZ_BIN_DIR/mdagg' -b test.md"
+  assert_success
+  # Navigation links are still stripped
+  refute_output_contains "← Back"
+  refute_output_contains "↑ Top"
+  # Unicode content lines survive (the bug deleted every one of these)
+  assert_output_contains "gather(a) ∥ gather(b)"
+  assert_output_contains "→ reason about the result"
+  assert_output_contains "membership x ∈ S holds"
+  assert_output_contains "an em — dash and en – dash survive"
+}
+
+@test "option: -b/--strip-back-links strips a link-only file without a set -e abort" {
+  # When every line is a back-link, grep -v selects no lines and exits 1;
+  # the fix must treat that as success, not let set -e abort mdagg.
+  cat > test.md <<EOF
+[← Back](index.md)
+[↑ Top](#)
+EOF
+
+  run bash -c "LC_ALL=C '$UTILZ_BIN_DIR/mdagg' -b test.md"
+  assert_success
+  refute_output_contains "← Back"
+  refute_output_contains "↑ Top"
+}
+
 @test "option: -v/--verbose shows progress" {
   create_markdown_files 2
 

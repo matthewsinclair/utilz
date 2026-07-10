@@ -117,8 +117,15 @@ process_file() {
   # Strip back links if requested
   if [[ "$STRIP_BACK_LINKS" == true ]]; then
     # Remove lines like [← Back to Index](index.md) or [↑ Top](#)
-    # Match lines containing ← or ↑ arrows in markdown links
-    content=$(echo "$content" | grep -v '[←↑]')
+    # Match lines containing ← or ↑ arrows in markdown links.
+    # Use fixed-string (-F) matching of the literal characters, NOT a [←↑]
+    # bracket class: under a C locale grep is byte-oriented, so the class
+    # degrades to the byte set {E2 86 90 91} and silently drops any line
+    # holding a U+2000-U+2FFF character (→ ∥ ∈ — etc). See intent/issues 0001.
+    # `|| [[ $? -eq 1 ]]` keeps set -e happy when every line is stripped
+    # (grep -v exit 1 = "no lines selected", not an error); a real grep
+    # failure (exit 2) still propagates and aborts.
+    content=$(echo "$content" | grep -vF -e '←' -e '↑' || [[ $? -eq 1 ]])
   fi
 
   # Output section divider if title provided (skip for first file to preserve YAML front matter)
