@@ -96,14 +96,32 @@ Regression coverage added in `opt/mdagg/test/mdagg.bats`, both running under
 stripped; (2) a link-only file strips cleanly without a set -e abort. Full suite
 green (29 tests), shellcheck clean, e2e reproduced-then-verified under `LC_ALL=C`.
 
-Deliberately NOT done (with rationale):
+Rejected (with rationale):
 
 - The suggested locale pin `export LC_ALL="${LC_ALL:-en_US.UTF-8}"` is rejected: when
   the hostile shell _exports_ `LC_ALL=C` the var is set, so `:-` never substitutes --
   it would not fix the reported scenario. An unconditional override is also
   non-portable (no single UTF-8 locale name spans macOS + minimal-Linux CI:
   `C.UTF-8` is absent on macOS, `en_US.UTF-8` is not guaranteed on Linux). The
-  byte-exact `grep -F` fix is locale-independent and needs no pin.
-- The related title-case `sed 's/\b\(.\)/\u\1/g'` (~lines 238/275) and the "strip is
-  broader than link lines" tightening are left as separate follow-ups -- lower
-  severity and distinct from this silent-data-loss defect. Flagged for hv.
+  byte-exact grep fix is locale-independent and needs no pin.
+
+**2026-07-10 -- Both flagged follow-ups also fixed (same session).**
+
+- Secondary tightening: the strip is now anchored to link structure. The grep
+  moved from fixed-string to an anchored ERE, `grep -vE '^[[:space:]]*\[(←|↑)'`,
+  so only a line whose first non-space character is `[` immediately followed by
+  `←`/`↑` is dropped. Inline arrows in prose (`see [the ← inline]`), non-arrow
+  bracket lines (`[note]: ...`), and content arrows/math are preserved even under
+  a UTF-8 locale. Byte-safety is retained: an ERE alternation of two literal
+  3-byte sequences matches the same bytes under C and UTF-8 (unlike a `[←↑]`
+  class). New BATS test asserts the tightening.
+- Title-case sibling: the `sed 's/\b\(.\)/\u\1/g'` at ~lines 238/275 used GNU
+  sed's `\b`/`\u`, which are no-ops on BSD sed -- so section-divider titles came
+  out **un-cased on macOS** (verified: `my-cool-doc` -> `my cool doc`). Replaced
+  with a POSIX-awk title-case (`toupper(substr($i,1,1)) substr($i,2)` per word):
+  portable across GNU/BSD, and `toupper` touches only ASCII a-z so a
+  multibyte-leading word is left intact, never byte-mangled under C locale. The
+  two identical derivation blocks were extracted into a single `derive_title()`
+  (Highlander). New BATS test asserts `02-my-cool-doc.md` -> `# My Cool Doc`.
+- Verification: full mdagg suite green (31 tests), shellcheck net-zero vs
+  baseline, e2e confirmed under `LC_ALL=C`.

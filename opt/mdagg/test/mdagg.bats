@@ -293,6 +293,40 @@ EOF
   refute_output_contains "↑ Top"
 }
 
+@test "option: -b/--strip-back-links strips only link-structured lines, not inline arrows (issue 0001)" {
+  # Tightening: only a line whose first non-space char is '[' followed by ← / ↑
+  # is a nav link. Inline arrows and non-arrow bracket lines must survive.
+  cat > test.md <<EOF
+[← Back](index.md)
+see [the ← arrow] used inline in prose
+a plain → arrow in a sentence
+[note]: a reference-style link, not navigation
+EOF
+
+  run bash -c "LC_ALL=C '$UTILZ_BIN_DIR/mdagg' -b test.md"
+  assert_success
+  refute_output_contains "← Back"
+  assert_output_contains "see [the ← arrow] used inline in prose"
+  assert_output_contains "a plain → arrow in a sentence"
+  assert_output_contains "[note]: a reference-style link, not navigation"
+}
+
+@test "option: -d/--section-dividers title-cases derived titles portably (issue 0001 sibling)" {
+  # Old code title-cased with GNU sed \b\u, a no-op on BSD sed (macOS), so
+  # titles came out un-cased there. Section dividers skip the first file, so
+  # assert on the second.
+  cat > 01-alpha.md <<EOF
+# Alpha
+EOF
+  cat > 02-my-cool-doc.md <<EOF
+Body of the cool doc.
+EOF
+
+  run bash -c "LC_ALL=C '$UTILZ_BIN_DIR/mdagg' -d '*.md'"
+  assert_success
+  assert_output_contains "# My Cool Doc"
+}
+
 @test "option: -v/--verbose shows progress" {
   create_markdown_files 2
 
