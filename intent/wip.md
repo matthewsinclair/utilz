@@ -1,52 +1,43 @@
 ---
-verblock: "23 Apr 2026:v1.0: matts - ST0007 closed; framework bumped to 2.2.0"
+verblock: "10 Jul 2026:v1.2: matts - ST0008 closed; issue tracker + mdagg 0001 fix landed"
 ---
 
 # Work In Progress
 
 ## Current Focus
 
-No active steel thread. Framework at v2.2.0 with 12 utilities + editor integration surface and Emacs bridge landed. Next work is opportunistic (add expz to CI loop, backlog triage).
+No active steel thread. Framework at **v2.2.0** with 13 utilities (core `utilz` + 12 tools, plus the `todo` utility added by ST0008), an editor-integration surface, and the Emacs bridge. All eight steel threads (ST0001-ST0008) are complete and live under `intent/st/COMPLETED/`. Repo is clean and pushed to both remotes. Next work is opportunistic (add `expz` to the CI loop, backlog triage).
 
 ## Just Landed
 
-**ST0007: Emacs bindings for Utilz utilities** — metadata-driven bridge exposing Utilz commands inside Doom Emacs via `M-x utilz` (Vertico `completing-read`). Editor-neutral `integration:` YAML block + `utilz integration commands` + `utilz emacs {install,doctor}` subcommands + canonical elisp bridge at `static/emacs/utilz.el`. User symlinks it into `~/.config/doom/custom/160-utilz.el`.
-
-### WP status (all DONE)
-
-- **WP01** (commit `7e97cb7`): Added `integration:` block to all 12 utility YAMLs. Template stub updated. Editor-agnostic naming so future VSCode / Zed / Vim can consume the same manifest.
-- **Reindent** (commit `9c9c439`): Project-wide bash reindent from 4-space to 2-space. 32 files, pure mechanical change.
-- **WP02** (commit `eb7264e`): `utilz integration commands` (TSV emitter) + `utilz emacs install` + `utilz emacs doctor`. Helpers in `common.sh`. 15 BATS tests in `opt/utilz/test/bridge.bats`. `help/utilz.md` updated.
-- **WP03** (commit `2a5b743`): `static/emacs/utilz.el` — thin coordinator, PFIC-shaped alist dispatch, byte-compiles clean. `bridge.bats` updated (16 tests).
-- **WP04** (commit `<final>`): README "Using Utilz from Emacs" section + CHANGELOG v2.2.0 entry + VERSION bump 2.1.1 -> 2.2.0. Live Doom E2E confirmed by user (`M-x utilz` -> cleanz on region works). Batch E2E (34 PASS / 0 FAIL) covers every declared input/output kind, the No-Silent-Errors failure path, and path-arg shell-quoting. ST0007 closed via `intent st done ST0007`.
+- **Issue 0001 (mdagg silent Unicode line-drop under C locale)** -- fixed at source and closed. `mdagg`'s `strip_back_links` used a `[←↑]` bracket class that, under `LC_ALL=C`, degraded to a byte set and silently deleted any content line holding a U+2000-U+2FFF character (`→ ∥ ∈ — ...`). Fixed with an anchored, byte-safe ERE (`grep -vE '^[[:space:]]*\[(←|↑)'`) that also tightens the strip to genuine link lines; the sibling GNU-sed title-case (`\b`/`\u`, a no-op on BSD sed) was replaced with portable POSIX awk and the duplicated derivation extracted into `derive_title()` (Highlander). Commits `7d3128c` + `4c38cae`; 31 mdagg BATS green; issue recorded in the new tracker.
+- **File-based issue tracker** introduced at `intent/issues/` (`OPEN/`, `CLOSED/`, `_templ/`). Lightweight, git-tracked, ST-independent -- for defects that a single issue can drive without a full steel thread.
+- **ST0008: `utilz todo`** (completed 2026-07-03, 8 WPs). A standalone DOING/TODO/DONE manager forked from `intent todo`; the `todo.md` is the source of truth (not an ST projection). WP-08 added the `utilz todo <-> intent todo` mutual guard: `utilz todo` stamps `generator: utilz todo` and refuses to clobber an Intent-owned `todo.md`, but only when Intent is actually present, so it stays a zero-dependency standalone tool. Acceptance contract in `intent/st/COMPLETED/ST0008/acceptance.md`.
+- **ST0007: Emacs bindings** (closed 23 Apr 2026). Metadata-driven bridge exposing Utilz commands inside Doom Emacs via `M-x utilz`; editor-neutral `integration:` YAML block + `utilz integration commands` + `utilz emacs {install,doctor}` + canonical elisp at `static/emacs/utilz.el`.
 
 ## Active Steel Threads
 
-- ST0007 (WIP) — Emacs bindings for Utilz utilities. See `intent/st/ST0007/design.md` for the canonical design.
+None. ST0001-ST0008 all complete (`intent/st/COMPLETED/`). `intent st list` is empty by design -- completed threads are filed under `COMPLETED/`.
 
 ## Upcoming Work
 
-- Finish ST0007 (WP03 + WP04).
-- Add expz to CI test loop in `.github/workflows/tests.yml` (carry-over from prior session).
-- Consider bumping framework to v2.2.0 on ST0007 close (new subcommand families are an additive minor bump).
+- Add `expz` to the CI test loop in `.github/workflows/tests.yml`. Blocked: needs an `ANTHROPIC_API_KEY` CI secret and a skip-when-absent-vs-hard-require decision (No-Silent-Errors favours a clear skip). Carry-over across several sessions.
+- Optional: tag `v2.2.0` (`git tag v2.2.0 && git push --tags` to both remotes) -- not yet tagged.
+- Follow-on issue-0001 hygiene is done; no open mdagg items.
+- Potential future STs: VSCode / Zed / Vim integration families (same TSV manifest); Emacs bridge v2 (Transient grouped menu, deferred per ST0007 design.md).
 
 ## Notes
 
-Utilz 2.1.0, 12 utilities. Framework stable. ST0007 is the first non-trivial addition in this cycle.
-
-### Editor integration shape (for future plugin authors)
-
-- Every utility with a user-facing invocation declares an `integration:` block in its YAML: `input: stdin | file | path | none`, `output: replace | buffer | message | discard`, `flags: []`.
-- The single walker is `emit_integration_tsv` in `opt/utilz/lib/common.sh`. The TSV is the only cross-boundary contract. Editor plugins never parse YAML directly.
-- `utilz integration commands` is the neutral public entry point. `utilz emacs {install,doctor}` is the first editor-specific installer. Future `utilz vscode / zed / vim` subcommand families slot in parallel.
+- **Version disambiguation.** The Utilz _framework_ version is `VERSION` = **2.2.0** (single source of truth). The `intent` _tooling_ version (~2.14.x) is separate; don't conflate them. The `2.13.0` in commit `e000db5`'s message refers to an Intent-tooling bump, not the framework.
+- Editor-integration shape: every user-facing utility declares an `integration:` block in its YAML (`input`, `output`, `flags`); the single walker `emit_integration_tsv` in `opt/utilz/lib/common.sh` emits the only cross-boundary contract (TSV). `utilz integration commands` is the neutral entry point; `utilz emacs {install,doctor}` is the first editor-specific installer.
 
 ## Context for LLM
 
-This document captures the current state of development. Read it first, then `intent/restart.md` for cross-session continuity, then `intent/st/ST0007/` for the active ST.
+This document captures the current state of development. Read it first, then `intent/restart.md` for cross-session continuity. Completed steel threads live under `intent/st/COMPLETED/<ID>/`; open defects live under `intent/issues/OPEN/`.
 
 ### How to use this document
 
-1. Update "Current Focus" with what's currently being worked on.
+1. Update "Current Focus" with what is currently being worked on.
 2. List active steel threads with their IDs and brief descriptions.
 3. Keep track of upcoming work items.
 4. Add relevant notes that might be helpful for yourself or the LLM.

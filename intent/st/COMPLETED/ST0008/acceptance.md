@@ -66,7 +66,7 @@ None -- WP-distributed.
 - AC-07.1 (non-test) `opt/todo/README.md` and `help/todo.md` document every verb and option. -- evidence: doc review (both written) -- satisfied: yes
 - AC-07.2 (non-test) `utilz doctor` and `utilz list` pass with `todo` registered and its deps declared in YAML. -- evidence: `utilz doctor` (todo properly configured; only pre-existing PATH warning) + `utilz list` shows todo -- satisfied: yes
 
-### WP-08 -- Mutual guard with intent todo (status: WIP)
+### WP-08 -- Mutual guard with intent todo (status: Done)
 
 - AC-08.1 Every `todo.md` utilz writes carries `generator: utilz todo` in its YAML frontmatter (alongside `title:`/`history:`); the stamp is unconditional -- independent of whether Intent is installed or the file is in an Intent project.
 - AC-08.2 On a mutating command whose target file's frontmatter `generator:` names a different tool (eg `intent todo`), utilz refuses with a clear error and non-zero exit -- but only when BOTH `command -v intent` succeeds AND the file's own directory tree contains a valid Intent project (`intent/.config/config.json`, walking upward from the file's directory). On refusal the file is left byte-unchanged and no history file is created.
