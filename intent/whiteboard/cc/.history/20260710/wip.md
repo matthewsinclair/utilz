@@ -21,3 +21,11 @@ These were pre-WP-08 planning notes. WP-08 was subsequently created, implemented
 - Change 2: symmetric guard mirroring intent's `guard_foreign_todo()`. DONE (WP-08).
 - Tests: BATS coverage for stamp + refusal + fresh/own-file pass-through. DONE (AT-08.1..08.7 green).
 - Docs: help/todo.md + README shared-file ownership contract. DONE (WP-08).
+
+## Done (2026-07-10 session)
+
+- **mdagg issue-0001** (silent Unicode content drop under `LC_ALL=C`) FIXED + CLOSED. Primary `7d3128c`: `[←↑]` bracket class -> byte-safe grep. Follow-ups `4c38cae`: anchored the strip to link structure (`grep -vE '^[[:space:]]*\[(←|↑)'`), portable POSIX-awk title-case replacing the GNU-sed `\b`/`\u` (a no-op on BSD sed -> un-cased titles on macOS), `derive_title()` Highlander extraction. 31 mdagg BATS green, shellcheck net-zero vs baseline, e2e verified under `LC_ALL=C`.
+- **File-based issue tracker** introduced at `intent/issues/` (`OPEN/` / `CLOSED/` / `_templ/`); 0001 recorded + CLOSED.
+- **expz -> CI Linux loop** (`08ac751`). The "needs ANTHROPIC_API_KEY" blocker was a stale assumption: the expz suite is fully offline (verified green with the key unset); macOS CI already ran it via `utilz test`. One-word diff.
+- **Doc reconciliation** (`7a4bf68`): `intent/wip.md` + `intent/restart.md` + `.claude/restart.md` refreshed to reality; `ST0008/acceptance.md` WP-08 heading WIP->Done.
+- **v2.3.0 released** (`8808314` + tag `v2.3.0`). `v2.2.0` was already tagged (ST0007 close, both remotes) -> NOT re-tagged; cut a proper release for the unreleased trove: `VERSION` 2.2.0->2.3.0, CHANGELOG `## [2.3.0]`, annotated tag pushed both remotes, `done.md` updated.

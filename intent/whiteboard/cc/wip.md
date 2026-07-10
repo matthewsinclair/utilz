@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: 7b111465-0f7d-406c-a6ac-1ff28917efdb
-heartbeat_at: 2026-07-10T16:04Z
-status: active
-focus: "Session done: mdagg issue-0001 + follow-ups fixed, expz->CI, doc reconciliation, and v2.3.0 cut (VERSION+CHANGELOG+tag pushed both remotes). All landed. Idle."
+heartbeat_at: 2026-07-10T16:10Z
+status: paused
+focus: "Session closed 2026-07-10. v2.3.0 released; mdagg issue-0001 fixed; expz->CI; docs reconciled. All landed + pushed. Detail in .history/20260710/."
 claims: [ST0008]
 ---
 
@@ -13,15 +13,11 @@ claims: [ST0008]
 
 ## DOING
 
-- (idle) All this-session work is landed and pushed. Nothing in flight.
+- (idle) Session closed, board released. Nothing in flight.
 
-## Done this session (2026-07-10)
+## Last session (2026-07-10)
 
-- **expz -> CI Linux loop** (`.github/workflows/tests.yml`). The "needs ANTHROPIC_API_KEY" blocker was a stale assumption: expz's BATS suite is fully offline (every test returns before the key check), verified green with the key unset; macOS CI already ran it via `utilz test`. One-word diff, no secret, no skip logic. Docs updated to match.
-- **issue-0001** (mdagg silently dropped Unicode content lines under `LC_ALL=C`) FIXED + CLOSED. Primary `7d3128c`: `[←↑]` bracket class -> byte-safe grep. Follow-ups `4c38cae`: anchored the strip to link structure (`grep -vE '^[[:space:]]*\[(←|↑)'`), replaced the GNU-sed `\b`/`\u` title-case (a no-op on BSD sed -> un-cased titles on macOS) with portable POSIX awk, and extracted the duplicated title derivation into `derive_title()` (Highlander). 31 mdagg BATS green, shellcheck net-zero vs baseline, e2e verified under `LC_ALL=C`.
-- Introduced the **file-based issue tracker** at `intent/issues/` (`OPEN/` / `CLOSED/` / `_templ/`); 0001 recorded, resolved, filed under CLOSED.
-- **Doc reconciliation**: `intent/wip.md`, `intent/restart.md`, `.claude/restart.md` refreshed to reality (13 utilities incl `todo`, all STs COMPLETE, issue tracker). `ST0008/acceptance.md` WP-08 heading WIP->Done. This board localfolded (prior-session content -> `.history/20260710/`).
-- **v2.3.0 released.** Discovered `v2.2.0` was already tagged (at ST0007 close, on both remotes) -- so NOT re-tagged (never force-move a published tag). Instead cut a proper release for the unreleased trove on top of it (todo utility + mdagg fixes): `VERSION` 2.2.0->2.3.0, CHANGELOG `## [2.3.0]`, annotated tag `v2.3.0` pushed to both remotes. All "current version" doc references bumped 2.2.0->2.3.0.
+Fixed mdagg issue-0001 (silent Unicode drop under C locale) + both follow-ups; added the `intent/issues/` tracker; added `expz` to CI; reconciled the stale tracking docs; cut and pushed release **v2.3.0** (todo utility + mdagg fix). Five commits + tag `v2.3.0` on both remotes. Full detail archived in `.history/20260710/wip.md`.
 
 ## TODO
 
