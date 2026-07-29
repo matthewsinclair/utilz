@@ -105,7 +105,7 @@ syncz
 
 **Required:**
 
-- Bash 4.0+ or Zsh
+- Bash 3.2+ or Zsh (bash 3.2 is what macOS ships, and is the floor the framework targets)
 - rsync
 
 **Optional:**

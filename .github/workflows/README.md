@@ -156,7 +156,7 @@ The PR checks will validate that all these files are present.
 
 The workflows expect:
 
-- Bash 4.0+ or Zsh
+- Bash 3.2+ or Zsh (bash 3.2 is what macOS ships, and is the floor the framework targets)
 - yq for YAML parsing
 - bats-core for testing
 - Standard Unix utilities (grep, sed, awk, find)
