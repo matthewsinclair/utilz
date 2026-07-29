@@ -5,7 +5,7 @@ role: control
 session_id: 536a4f85-7490-4324-8c8d-6c09420b6de3
 heartbeat_at: 2026-07-29T11:05Z
 status: active
-focus: "ST0009 landed: the three framework-core defects vboot-cc fixed inline are now documented (ST + 3 WPs + design + issue 0002), tested (12 new BATS, 11 red at HEAD), doc-reconciled, and released as v2.4.0. Reply delivered to vboot-cc. Open: the stale elixir language declaration; v2.4.0 not yet tagged or pushed."
+focus: "ST0009 landed and shipped: v2.4.0 tagged and pushed to both remotes. Whiteboard brought up to the Lamplight / Baize standard (hv node + roster README). Nothing in flight."
 claims: [ST0009]
 ---
 
@@ -13,7 +13,7 @@ claims: [ST0009]
 
 ## DOING
 
-- (idle) ST0009 complete, v2.4.0 cut, reply delivered to vboot-cc. One question with hv -- see TODO.
+- (idle) Nothing in flight. ST0009 complete, v2.4.0 tagged + pushed, reply delivered to vboot-cc, whiteboard at SOTA.
 
 ## Last session (2026-07-10)
 
@@ -29,7 +29,7 @@ Two claims in vboot-cc's report were checked rather than taken at face value: it
 
 ## TODO
 
-- **`languages: ["shell", "elixir"]` in `intent/.config/config.json` is stale.** No `mix.exs`, no `.ex`/`.exs`, pure bash -- yet `/in-session` loads two Elixir skills off that declaration every session, and `intent/llm/RULES-elixir.md` exists. Independently spotted from both sides (this node at pickup, vboot-cc from `config.json`). Fix is `intent lang remove elixir`, but removing a declared language is hv's call, not mine.
+- _(none)_
 
 ## Watch-outs
 
@@ -43,6 +43,7 @@ Two claims in vboot-cc's report were checked rather than taken at face value: it
 
 ## Decisions
 
+- (2026-07-29) Whiteboard brought to the Lamplight / Baize standard: `hv` provisioned via `intent claude ws new hv` (Workstream Zero is present in every Intent project), plus a hand-authored `README.md` roster. Roster deliberately stays at two nodes -- Utilz is single-stream, and nodes are made to order, not in anticipation. An external correspondent (`vboot-cc`) gets an inbox but no node directory, because it has no workstream here.
 - (2026-07-29) A shipped defect fixed inside a steel thread still gets its own `intent/issues/` entry (0002 alongside ST0009/WP-03), following the 0001 precedent. The ST carries the work; the issue carries the defect record.
 - (2026-07-29) Retroactive paperwork is the remediation for a doc-before-code violation when the code is already correct and verified -- not reverting it. Red-first is then proven retrospectively by running the new tests against `HEAD` in a scratch copy, and the retrospective verification is stated as such in `acceptance.md` rather than presented as genuine red-first.
 - (2026-07-10) A tracked issue in `intent/issues/` may drive a focused bugfix without a full ST (hv-approved for issue 0001). Doc-before-code still holds for feature work.
