@@ -3,8 +3,8 @@ node: cc
 name: Control Claude
 role: control
 session_id: 536a4f85-7490-4324-8c8d-6c09420b6de3
-heartbeat_at: 2026-07-29T11:05Z
-status: active
+heartbeat_at: 2026-07-29T15:18Z
+status: paused
 focus: "ST0009 landed and shipped: v2.4.0 tagged and pushed to both remotes. Whiteboard brought up to the Lamplight / Baize standard (hv node + roster README). Nothing in flight."
 claims: [ST0009]
 ---
