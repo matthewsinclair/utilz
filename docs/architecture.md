@@ -224,13 +224,19 @@ The library provides these categories of functions:
    - Check for external dependencies
    - Provide helpful error messages
 
-4. **Metadata**: `get_util_metadata()`
-   - Parses YAML files using `yq`
-   - Extracts version, description, dependencies
+4. **Metadata**: `get_util_metadata()`, `require_yq()`
+   - `yq` is the single YAML parser and a hard dependency; `require_yq()` is the one place that reports its absence
+   - Extracts version, description, dependencies; resolves a `version_file:` reference where present
+   - Returns non-zero when the YAML file or `yq` is missing, rather than an empty string a caller would read as an absent key
 
-5. **Testing**: `run_tests()`, `run_doctor()`
+5. **Discovery**: `each_utility()`
+   - The single walker of `bin/`: emits the name of every symlink resolving to the dispatcher, one per line
+   - Consume with process substitution (`< <(each_utility)`), never a pipe, so accumulator variables survive the loop
+
+6. **Testing**: `run_tests()`, `run_doctor()`
    - Auto-discovers test suites
    - Validates framework installation
+   - `run_doctor()` deliberately does not gate on `require_yq()` -- it is the command you run to discover that `yq` is missing
 
 ## Metadata System
 
@@ -292,7 +298,7 @@ This allows a single source of truth for the framework version (`/VERSION` file)
 
 ### Reading Metadata
 
-Utilities use `get_util_metadata()` to read their metadata:
+The framework reads utility metadata through `get_util_metadata()` -- it backs `utilz list`, `utilz doctor`, and the editor-integration manifest. It is a framework-internal helper, not a utility-facing API; utilities do not call it:
 
 ```bash
 # Get utility version

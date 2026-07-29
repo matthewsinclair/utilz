@@ -191,6 +191,8 @@ All utilities have access to shared functions in `opt/utilz/lib/common.sh`:
 - `check_command "cmd"` - Check if command exists
 - `require_command "cmd" "install hint"` - Require command or exit with hint
 - `parse_yaml "file.yaml" "query"` - Parse YAML using `yq`
+- `require_yq` - Gate on the `yq` hard dependency; call ONCE before a loop, never per-iteration
+- `each_utility` - Emit every installed utility name, one per line; consume with `< <(each_utility)`, not a pipe
 
 **Colors** (automatically disabled when not a TTY):
 
@@ -327,15 +329,17 @@ The dispatcher doesn't care about the implementation language - it just needs an
 
 ### Required
 
-- Bash 4.0+ or Zsh
+- Bash 3.2+ or Zsh (bash 3.2 is what macOS ships, and is the floor the framework targets)
 - Standard Unix tools (`grep`, `sed`, `awk`, `cat`)
-
-### Utility-Specific
-
-- **mdagg**: Requires `yq` for YAML parsing
+- `yq` -- the single YAML parser for all utility metadata. Required by the framework itself, not by any one utility: `utilz list`, `utilz doctor`, and `utilz generate` all read `opt/<name>/<name>.yaml` through it.
   ```bash
   brew install yq
   ```
+
+### Utility-Specific
+
+- **syncz**: `unison` for `--bidi` state-tracked mode (rsync fallback otherwise)
+- **cleanz**: `exiftool` for `--image` metadata stripping
 
 ### Optional (Recommended)
 

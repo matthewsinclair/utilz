@@ -70,59 +70,38 @@ get_utilz_version() {
 
 # Get utility metadata from YAML file
 # Usage: get_util_metadata "mdagg" ".description"
+#
+# yq is the single YAML parser in Utilz. This function previously carried a
+# grep-based fallback covering four hardcoded queries; every other query
+# returned an empty string, which a caller cannot distinguish from "key is
+# absent". One parser, one answer. require_yq surfaces a missing yq once per
+# process rather than silently degrading.
 get_util_metadata() {
   local util_name="$1"
   local query="$2"
   local yaml_file="$UTILZ_HOME/opt/$util_name/$util_name.yaml"
 
-  if [[ -f "$yaml_file" ]]; then
-    if check_command "yq"; then
-      local result=$(yq eval "$query" "$yaml_file" 2>/dev/null)
+  [[ -f "$yaml_file" ]] || return 1
+  require_yq || return 1
 
-      # Special handling for version_file reference
-      if [[ "$query" == ".version" && "$result" == "null" ]]; then
-        local version_file_ref=$(yq eval ".version_file" "$yaml_file" 2>/dev/null)
-        if [[ -n "$version_file_ref" && "$version_file_ref" != "null" ]]; then
-          # Resolve relative path from yaml_file location
-          local yaml_dir=$(dirname "$yaml_file")
-          local abs_version_file="$yaml_dir/$version_file_ref"
-          if [[ -f "$abs_version_file" ]]; then
-            cat "$abs_version_file"
-            return
-          fi
-        fi
+  local result
+  result=$(yq eval "$query" "$yaml_file" 2>/dev/null)
+
+  # A utility may defer its version to a shared file rather than inline it:
+  # utilz itself points version_file at the repo-root VERSION.
+  if [[ "$query" == ".version" && "$result" == "null" ]]; then
+    local version_file_ref
+    version_file_ref=$(yq eval ".version_file" "$yaml_file" 2>/dev/null)
+    if [[ -n "$version_file_ref" && "$version_file_ref" != "null" ]]; then
+      local abs_version_file="$(dirname "$yaml_file")/$version_file_ref"
+      if [[ -f "$abs_version_file" ]]; then
+        cat "$abs_version_file"
+        return 0
       fi
-
-      echo "$result"
-    else
-      # Fallback: simple grep-based parsing for common queries
-      case "$query" in
-        .description)
-          grep "^description:" "$yaml_file" | sed 's/^description: *//' | sed 's/^"//' | sed 's/"$//'
-          ;;
-        .version)
-          # Check for version_file reference first
-          local version_file_ref=$(grep "^version_file:" "$yaml_file" | sed 's/^version_file: *//')
-          if [[ -n "$version_file_ref" ]]; then
-            local yaml_dir=$(dirname "$yaml_file")
-            local abs_version_file="$yaml_dir/$version_file_ref"
-            if [[ -f "$abs_version_file" ]]; then
-              cat "$abs_version_file"
-              return
-            fi
-          fi
-          # Otherwise get direct version
-          grep "^version:" "$yaml_file" | sed 's/^version: *//'
-          ;;
-        .name)
-          grep "^name:" "$yaml_file" | sed 's/^name: *//'
-          ;;
-        .utilz_version)
-          grep "^utilz_version:" "$yaml_file" | sed 's/^utilz_version: *//' | sed 's/^"//' | sed 's/"$//'
-          ;;
-      esac
     fi
   fi
+
+  echo "$result"
 }
 
 # Show help for a utility
@@ -165,28 +144,19 @@ show_version() {
 
 # List all available utilities
 list_utilities() {
+  # Once, before the loop: every description below is a get_util_metadata
+  # call, and each of those runs in its own subshell.
+  require_yq || return 1
+
   echo "Available utilities:"
   echo ""
 
-  for symlink in "$UTILZ_HOME"/bin/*; do
-    local name=$(basename "$symlink")
+  local name desc
+  while IFS= read -r name; do
+    desc=$(get_util_metadata "$name" ".description") || desc=""
+    printf "  ${BOLD}%-15s${RESET} %s\n" "$name" "${desc:-No description available}"
+  done < <(each_utility)
 
-    # Skip utilz itself
-    if [[ "$name" == "utilz" ]]; then
-      continue
-    fi
-
-    # Check if it's a symlink to utilz
-    if [[ -L "$symlink" ]]; then
-      local target=$(readlink "$symlink")
-      if [[ "$target" == "utilz" ]] || [[ "$target" == "./utilz" ]]; then
-        # Get description from YAML metadata
-        local desc=$(get_util_metadata "$name" ".description")
-
-        printf "  ${BOLD}%-15s${RESET} %s\n" "$name" "${desc:-No description available}"
-      fi
-    fi
-  done
   echo ""
   echo "Run 'utilz help <utility>' for detailed information."
 }
@@ -213,6 +183,63 @@ require_command() {
   return 0
 }
 
+# THE gate for the yq hard dependency. yq is the only YAML parser in Utilz
+# (see get_util_metadata), so it is declared as a required dependency in
+# opt/utilz/utilz.yaml.
+#
+# A caller that loops over utilities must call this ONCE before its loop.
+# get_util_metadata runs inside a command substitution, so it cannot memoise
+# anything -- a subshell's variables die with it -- and relying on its
+# per-call guard alone reprints the install hint once per utility.
+require_yq() {
+  if check_command yq; then
+    return 0
+  fi
+
+  error "yq is required for YAML parsing"
+  echo "" >&2
+  echo "Install with:" >&2
+  echo "  brew install yq" >&2
+  return 1
+}
+
+# THE walker of bin/. Emits the name of every installed utility -- a symlink
+# in bin/ pointing at the dispatcher -- one per line, excluding the
+# dispatcher itself.
+#
+# Every consumer iterates this and nothing else: list_utilities, run_doctor,
+# run_tests, emit_integration_tsv, emacs_doctor. Those five previously
+# open-coded the same glob-and-filter loop, and had already drifted -- two
+# checked that the symlink resolved to utilz, three accepted any symlink in
+# bin/ at all, so a stray link was a utility to doctor and not to list.
+#
+# Consume with process substitution, not a pipe, so accumulator variables
+# survive the loop:
+#   while IFS= read -r name; do ...; done < <(each_utility)
+each_utility() {
+  local symlink name target
+
+  for symlink in "$UTILZ_HOME"/bin/*; do
+    if [[ ! -L "$symlink" ]]; then
+      continue
+    fi
+
+    name=$(basename "$symlink")
+    if [[ "$name" == "utilz" ]]; then
+      continue
+    fi
+
+    target=$(readlink "$symlink")
+    if [[ "$target" != "utilz" && "$target" != "./utilz" ]]; then
+      continue
+    fi
+
+    echo "$name"
+  done
+
+  return 0
+}
+
 # ============================================================================
 # DOCTOR COMMAND
 # ============================================================================
@@ -223,6 +250,14 @@ run_doctor() {
   echo -e ""
 
   local issues=0
+
+  # Resolved once, up front. doctor is the command you run to find out that
+  # yq is missing, so it must not require yq to complete -- checks 5 and 6
+  # both branch on this rather than calling require_yq and bailing.
+  local have_yq=0
+  if check_command yq; then
+    have_yq=1
+  fi
 
   # Check 1: UTILZ_HOME is set and valid
   echo -e "${BOLD}[1/6]${RESET} Checking UTILZ_HOME..."
@@ -290,39 +325,38 @@ run_doctor() {
   local broken_utils=()
   local incompatible_utils=()
   local framework_version=$(get_utilz_version)
+  local framework_major=$(echo "$framework_version" | cut -d. -f1)
+  local name impl required_utilz_version required_major
 
-  for symlink in "$UTILZ_HOME"/bin/*; do
-    local name=$(basename "$symlink")
+  while IFS= read -r name; do
+    util_count=$((util_count + 1))
 
-    # Skip utilz itself
-    if [[ "$name" == "utilz" ]]; then
+    impl="$UTILZ_HOME/opt/$name/$name"
+    if [[ ! -f "$impl" ]]; then
+      broken_utils+=("$name (no implementation)")
+      continue
+    fi
+    if [[ ! -x "$impl" ]]; then
+      broken_utils+=("$name (not executable)")
       continue
     fi
 
-    if [[ -L "$symlink" ]]; then
-      util_count=$((util_count + 1))
-
-      # Check if implementation exists
-      local impl="$UTILZ_HOME/opt/$name/$name"
-      if [[ ! -f "$impl" ]]; then
-        broken_utils+=("$name (no implementation)")
-      elif [[ ! -x "$impl" ]]; then
-        broken_utils+=("$name (not executable)")
-      else
-        # Check version compatibility
-        local required_utilz_version=$(get_util_metadata "$name" ".utilz_version")
-        if [[ -n "$required_utilz_version" && "$required_utilz_version" != "null" ]]; then
-          # Simple compatibility check - just check major version for now
-          local required_major=$(echo "$required_utilz_version" | sed 's/^\^//' | sed 's/[^0-9].*//')
-          local framework_major=$(echo "$framework_version" | cut -d. -f1)
-
-          if [[ "$required_major" != "$framework_major" ]]; then
-            incompatible_utils+=("$name (requires Utilz $required_utilz_version, have $framework_version)")
-          fi
-        fi
-      fi
+    # Version compatibility needs the YAML; check 6 reports the missing yq.
+    if [[ $have_yq -eq 0 ]]; then
+      continue
     fi
-  done
+
+    required_utilz_version=$(get_util_metadata "$name" ".utilz_version") || required_utilz_version=""
+    if [[ -z "$required_utilz_version" || "$required_utilz_version" == "null" ]]; then
+      continue
+    fi
+
+    # Major version only.
+    required_major=$(echo "$required_utilz_version" | sed 's/^\^//' | sed 's/[^0-9].*//')
+    if [[ "$required_major" != "$framework_major" ]]; then
+      incompatible_utils+=("$name (requires Utilz $required_utilz_version, have $framework_version)")
+    fi
+  done < <(each_utility)
 
   if [[ $util_count -eq 0 ]]; then
     info "No utilities installed yet"
@@ -349,46 +383,42 @@ run_doctor() {
   echo -e "${BOLD}[6/6]${RESET} Checking external dependencies..."
   local missing_deps=()
   local missing_dep_info=()
+  local yaml_file dep_count dep_name dep_install i
 
-  # Check dependencies for each installed utility
-  for symlink in "$UTILZ_HOME"/bin/*; do
-    local name=$(basename "$symlink")
-
-    # Skip utilz itself and non-symlinks
-    if [[ "$name" == "utilz" ]] || [[ ! -L "$symlink" ]]; then
-      continue
-    fi
-
-    local yaml_file="$UTILZ_HOME/opt/$name/$name.yaml"
-    if [[ -f "$yaml_file" ]]; then
-      # Check if yq is available for proper parsing
-      if check_command "yq"; then
-        local dep_count=$(yq eval '.dependencies | length' "$yaml_file" 2>/dev/null)
-        if [[ "$dep_count" != "null" && "$dep_count" != "0" ]]; then
-          for ((i=0; i<dep_count; i++)); do
-            local dep_name=$(yq eval ".dependencies[$i].name" "$yaml_file" 2>/dev/null)
-            local dep_install=$(yq eval ".dependencies[$i].install" "$yaml_file" 2>/dev/null)
-
-            if ! check_command "$dep_name"; then
-              missing_deps+=("$dep_name")
-              missing_dep_info+=("$dep_name|$dep_install|$name")
-            fi
-          done
-        fi
-      else
-        # Basic grep fallback for dependencies
-        if grep -q "^  - name:" "$yaml_file"; then
-          while IFS= read -r line; do
-            local dep_name=$(echo "$line" | sed 's/.*name: *//')
-            if ! check_command "$dep_name"; then
-              missing_deps+=("$dep_name")
-              missing_dep_info+=("$dep_name||$name")
-            fi
-          done < <(grep "^  - name:" "$yaml_file")
-        fi
+  # yq is reported by hand, and first: it is the framework's own hard
+  # dependency and the only YAML parser, so nothing below can read a single
+  # dependency declaration until it is present. Parsing YAML to discover that
+  # the YAML parser is missing does not work.
+  if [[ $have_yq -eq 1 ]]; then
+    # utilz is in this walk, unlike the checks above -- opt/utilz/utilz.yaml
+    # declares its own dependencies, and one that no check ever reads is a
+    # declaration in name only.
+    while IFS= read -r name; do
+      yaml_file="$UTILZ_HOME/opt/$name/$name.yaml"
+      if [[ ! -f "$yaml_file" ]]; then
+        continue
       fi
-    fi
-  done
+
+      dep_count=$(yq eval '.dependencies | length' "$yaml_file" 2>/dev/null)
+      if [[ "$dep_count" == "null" || "$dep_count" == "0" ]]; then
+        continue
+      fi
+
+      for ((i = 0; i < dep_count; i++)); do
+        dep_name=$(yq eval ".dependencies[$i].name" "$yaml_file" 2>/dev/null)
+        dep_install=$(yq eval ".dependencies[$i].install" "$yaml_file" 2>/dev/null)
+
+        if ! check_command "$dep_name"; then
+          missing_deps+=("$dep_name")
+          missing_dep_info+=("$dep_name|$dep_install|$name")
+        fi
+      done
+    done < <(printf '%s\n' "utilz"; each_utility)
+  else
+    error "yq is not installed; it is required to parse utility metadata"
+    missing_deps+=("yq")
+    missing_dep_info+=("yq|brew install yq|utilz")
+  fi
 
   # Check for glow (nice-to-have for help)
   if ! check_command "glow"; then
@@ -449,13 +479,7 @@ parse_yaml() {
   local yaml_file="$1"
   local query="$2"
 
-  if ! check_command "yq"; then
-    error "yq is required for YAML parsing"
-    echo ""
-    echo "Install with:"
-    echo "  brew install yq"
-    return 1
-  fi
+  require_yq || return 1
 
   yq eval "$query" "$yaml_file"
 }
@@ -504,23 +528,10 @@ run_tests() {
     # Test all utilities (core + all installed)
     utils_to_test=("utilz")  # Always include core tests
 
-    # Add all installed utilities
-    for symlink in "$UTILZ_HOME"/bin/*; do
-      local name=$(basename "$symlink")
-
-      # Skip utilz itself
-      if [[ "$name" == "utilz" ]]; then
-        continue
-      fi
-
-      # Check if it's a symlink to utilz
-      if [[ -L "$symlink" ]]; then
-        local target=$(readlink "$symlink")
-        if [[ "$target" == "utilz" ]] || [[ "$target" == "./utilz" ]]; then
-          utils_to_test+=("$name")
-        fi
-      fi
-    done
+    local name
+    while IFS= read -r name; do
+      utils_to_test+=("$name")
+    done < <(each_utility)
   fi
 
   # Run tests for each utility
@@ -597,19 +608,11 @@ run_tests() {
 # This is the single walker of the YAML corpus (Highlander). Every editor
 # integration (Emacs, future VSCode / Zed / Vim) consumes this TSV directly.
 emit_integration_tsv() {
-  if ! check_command "yq"; then
-    error "yq is required to emit the integration manifest"
-    echo "Install with: brew install yq" >&2
-    return 1
-  fi
+  require_yq || return 1
 
-  local symlink name yaml_file has_integration desc input output flags
+  local name yaml_file has_integration desc input output flags
 
-  for symlink in "$UTILZ_HOME"/bin/*; do
-    name=$(basename "$symlink")
-    if [[ "$name" == "utilz" ]]; then continue; fi
-    if [[ ! -L "$symlink" ]]; then continue; fi
-
+  while IFS= read -r name; do
     yaml_file="$UTILZ_HOME/opt/$name/$name.yaml"
     if [[ ! -f "$yaml_file" ]]; then continue; fi
 
@@ -634,7 +637,7 @@ emit_integration_tsv() {
     fi
 
     printf '%s\t%s\t%s\t%s\t%s\n' "$name" "$desc" "$input" "$output" "$flags"
-  done
+  done < <(each_utility)
 }
 
 # Health-check the Emacs bridge: PATH reachability, integration metadata
@@ -666,12 +669,10 @@ emacs_doctor() {
   local invalid=()
   local exposed=0
 
-  local symlink name yaml_file has_integration input output
-  for symlink in "$UTILZ_HOME"/bin/*; do
-    name=$(basename "$symlink")
-    if [[ "$name" == "utilz" ]]; then continue; fi
-    if [[ ! -L "$symlink" ]]; then continue; fi
+  require_yq || return 1
 
+  local name yaml_file has_integration input output
+  while IFS= read -r name; do
     yaml_file="$UTILZ_HOME/opt/$name/$name.yaml"
     if [[ ! -f "$yaml_file" ]]; then continue; fi
 
@@ -694,7 +695,7 @@ emacs_doctor() {
     esac
 
     exposed=$((exposed + 1))
-  done
+  done < <(each_utility)
 
   if [[ ${#missing[@]} -gt 0 ]]; then
     warn "${#missing[@]} utility/utilities without an integration: block:"
@@ -931,10 +932,17 @@ generate_utility() {
     "$tmpl_dir/script.tmpl" > "$impl_path"
   chmod +x "$impl_path"
 
+  # The compatibility floor is derived from the framework's own VERSION, never
+  # written into the template. metadata.tmpl used to hardcode "^1.0.0"; once
+  # the framework reached 2.x, every generated utility was born incompatible
+  # and run_doctor flagged it until someone hand-edited the yaml by hand.
+  local utilz_floor="^$(get_utilz_version | cut -d. -f1).0.0"
+
   info "Generating metadata..."
   sed -e "s/{{NAME}}/$util_name/g" \
     -e "s/{{DESCRIPTION}}/$util_desc/g" \
     -e "s/{{AUTHOR}}/$author/g" \
+    -e "s/{{UTILZ_FLOOR}}/$utilz_floor/g" \
     "$tmpl_dir/metadata.tmpl" > "$util_dir/$util_name.yaml"
 
   info "Generating README..."

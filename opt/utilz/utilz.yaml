@@ -5,8 +5,15 @@ author: Matthew Sinclair
 website: https://matthewsinclair.com
 help_file: ../../help/utilz.md
 
-# Core framework - no additional dependencies beyond bash
-dependencies: []
+# yq is the framework's only YAML parser: every metadata read goes through
+# get_util_metadata in opt/utilz/lib/common.sh. It is required, not optional.
+# A grep-based fallback used to stand in for it, answering four hardcoded
+# queries and returning empty for everything else, which a caller could not
+# tell apart from an absent key.
+dependencies:
+  - name: yq
+    install: brew install yq
+    purpose: Parse utility metadata (opt/<name>/<name>.yaml)
 
 # Optional dependencies for enhanced functionality
 optional_dependencies:

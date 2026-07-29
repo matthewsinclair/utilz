@@ -487,13 +487,15 @@ version_file: ../../VERSION
 
 ```yaml
 version: 1.0.0
-utilz_version: "^1.0.0" # Compatible framework versions
+utilz_version: "^2.0.0" # Compatible framework versions
 ```
+
+`utilz generate` stamps `utilz_version` from the framework's own `VERSION` (major only), so a generated utility is always compatible with the framework that generated it. Do not hardcode a floor in the template.
 
 ## Requirements
 
-- Bash 4.0+ or Zsh
-- `yq` for YAML parsing (install: `brew install yq`)
+- Bash 3.2+ or Zsh (bash 3.2 is what macOS ships, and is the floor the framework targets)
+- `yq` for YAML parsing (install: `brew install yq`) -- required, not optional: it is the single parser for all utility metadata
 - `bats-core` for testing (install: `brew install bats-core`)
 
 ## License
