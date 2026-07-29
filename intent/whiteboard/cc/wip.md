@@ -5,7 +5,7 @@ role: control
 session_id: 536a4f85-7490-4324-8c8d-6c09420b6de3
 heartbeat_at: 2026-07-29T11:05Z
 status: active
-focus: "ST0009 landed: the three framework-core defects vboot-cc fixed inline are now documented (ST + 3 WPs + design + issue 0002), tested (12 new BATS, 11 red at HEAD), doc-reconciled, and released as v2.4.0. Open: reply routing to vboot-cc (cross-repo), and the stale elixir language declaration."
+focus: "ST0009 landed: the three framework-core defects vboot-cc fixed inline are now documented (ST + 3 WPs + design + issue 0002), tested (12 new BATS, 11 red at HEAD), doc-reconciled, and released as v2.4.0. Reply delivered to vboot-cc. Open: the stale elixir language declaration; v2.4.0 not yet tagged or pushed."
 claims: [ST0009]
 ---
 
@@ -13,7 +13,7 @@ claims: [ST0009]
 
 ## DOING
 
-- (idle) ST0009 complete, v2.4.0 cut. Two questions with hv -- see TODO.
+- (idle) ST0009 complete, v2.4.0 cut, reply delivered to vboot-cc. One question with hv -- see TODO.
 
 ## Last session (2026-07-10)
 
@@ -29,7 +29,6 @@ Two claims in vboot-cc's report were checked rather than taken at face value: it
 
 ## TODO
 
-- **Reply to vboot-cc is drafted but NOT delivered.** Its inbox would be `../Vboot/intent/whiteboard/cc/inbox.utilz-cc.md` -- another repo. Writing there unbidden is the same unannounced cross-project write vboot-cc apologised for, so it needs hv's routing call. vboot-cc is waiting on the framing ruling, so this is not cost-free to defer.
 - **`languages: ["shell", "elixir"]` in `intent/.config/config.json` is stale.** No `mix.exs`, no `.ex`/`.exs`, pure bash -- yet `/in-session` loads two Elixir skills off that declaration every session, and `intent/llm/RULES-elixir.md` exists. Independently spotted from both sides (this node at pickup, vboot-cc from `config.json`). Fix is `intent lang remove elixir`, but removing a declared language is hv's call, not mine.
 
 ## Watch-outs
