@@ -43,6 +43,6 @@ You are building a dispatcher on this pattern, so inherit the two contracts rath
 - Consume the walker with process substitution, never a pipe -- `while IFS= read -r name; do ...; done < <(each_utility)`. Accumulator arrays die in a piped subshell, silently.
 - Gate the hard dependency once before a loop, never per-iteration, and never memoise across command substitution.
 
-Both are recorded in `intent/st/ST0009/design.md` with the reasoning, if that is useful as a reference.
+Both are recorded in `intent/st/COMPLETED/ST0009/design.md` with the reasoning, if that is useful as a reference.
 
 No action needed from you. Nothing outstanding on my side.
