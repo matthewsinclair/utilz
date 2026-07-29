@@ -93,7 +93,8 @@ get_util_metadata() {
     local version_file_ref
     version_file_ref=$(yq eval ".version_file" "$yaml_file" 2>/dev/null)
     if [[ -n "$version_file_ref" && "$version_file_ref" != "null" ]]; then
-      local abs_version_file="$(dirname "$yaml_file")/$version_file_ref"
+      local abs_version_file
+      abs_version_file="$(dirname "$yaml_file")/$version_file_ref"
       if [[ -f "$abs_version_file" ]]; then
         cat "$abs_version_file"
         return 0
@@ -127,9 +128,12 @@ show_help() {
 show_version() {
   local util="${1:-utilz}"
 
-  # Get version from YAML metadata (single source of truth)
-  local version=$(get_util_metadata "$util" ".version")
-  local description=$(get_util_metadata "$util" ".description")
+  # Get version from YAML metadata (single source of truth). Absence is a
+  # handled case here (reported below as "version unknown"), so tolerate the
+  # non-zero explicitly rather than masking it inside a `local` assignment.
+  local version description
+  version=$(get_util_metadata "$util" ".version") || version=""
+  description=$(get_util_metadata "$util" ".description") || description=""
 
   if [[ -n "$version" && "$version" != "null" ]]; then
     echo "$util v$version"
@@ -324,9 +328,10 @@ run_doctor() {
   local util_count=0
   local broken_utils=()
   local incompatible_utils=()
-  local framework_version=$(get_utilz_version)
-  local framework_major=$(echo "$framework_version" | cut -d. -f1)
   local name impl required_utilz_version required_major
+  local framework_version framework_major
+  framework_version=$(get_utilz_version)
+  framework_major=$(echo "$framework_version" | cut -d. -f1)
 
   while IFS= read -r name; do
     util_count=$((util_count + 1))
@@ -439,8 +444,14 @@ run_doctor() {
   fi
 
   if [[ ${#missing_deps[@]} -gt 0 ]]; then
-    # Remove duplicates
-    local unique_deps=($(printf '%s\n' "${missing_deps[@]}" | sort -u))
+    # Remove duplicates. Read into the array a line at a time rather than
+    # splitting a command substitution: a dependency name is not guaranteed
+    # whitespace-free, and `mapfile` is bash 4 (macOS ships 3.2).
+    local unique_deps=()
+    local dep
+    while IFS= read -r dep; do
+      unique_deps+=("$dep")
+    done < <(printf '%s\n' "${missing_deps[@]}" | sort -u)
 
     warn "Missing dependencies: ${unique_deps[*]}"
     echo -e ""
@@ -566,7 +577,7 @@ run_tests() {
     local bats_exit=0
     (
       cd "$test_dir" || exit 1
-      bats *.bats
+      bats ./*.bats
     ) || bats_exit=$?
 
     if [[ $bats_exit -eq 0 ]]; then
@@ -881,7 +892,8 @@ generate_utility() {
   local util_name="${1:-}"
   local util_desc="${2:-A new utility}"
   local author="${3:-$(git config user.name 2>/dev/null || echo "Your Name")}"
-  local year=$(date +%Y)
+  local year
+  year=$(date +%Y)
 
   if [[ -z "$util_name" ]]; then
     error "Usage: utilz generate <name> [description] [author]"
@@ -936,7 +948,8 @@ generate_utility() {
   # written into the template. metadata.tmpl used to hardcode "^1.0.0"; once
   # the framework reached 2.x, every generated utility was born incompatible
   # and run_doctor flagged it until someone hand-edited the yaml by hand.
-  local utilz_floor="^$(get_utilz_version | cut -d. -f1).0.0"
+  local utilz_floor
+  utilz_floor="^$(get_utilz_version | cut -d. -f1).0.0"
 
   info "Generating metadata..."
   sed -e "s/{{NAME}}/$util_name/g" \
@@ -967,9 +980,13 @@ generate_utility() {
   chmod +x "$util_dir/test/$util_name.bats"
 
   info "Creating symlink..."
-  cd "$UTILZ_HOME/bin"
-  ln -s utilz "$util_name"
-  cd - >/dev/null
+  # Subshell so the cd is scoped and a failure cannot leave the caller in
+  # bin/ -- the old form used a bare `cd` plus `cd -`, which silently
+  # continued into `ln` from the wrong directory if bin/ was missing.
+  ( cd "$UTILZ_HOME/bin" && ln -s utilz "$util_name" ) || {
+    error "Failed to create symlink for $util_name in $UTILZ_HOME/bin"
+    return 1
+  }
 
   echo ""
   success "Utility '$util_name' generated successfully!"

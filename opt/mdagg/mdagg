@@ -318,22 +318,17 @@ while [[ $# -gt 0 ]]; do
       exit 0
       ;;
     --version)
-      # Show version (may be called directly or via dispatcher)
-      if [[ "$(type -t show_version 2>/dev/null)" == "function" ]]; then
-        # Called via dispatcher - common.sh is loaded
-        show_version "mdagg"
-      else
-        # Called directly - manually show version
-        local yaml_file="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/mdagg.yaml"
-        if command -v yq >/dev/null 2>&1 && [[ -f "$yaml_file" ]]; then
-          local version=$(yq eval ".version" "$yaml_file" 2>/dev/null)
-          local desc=$(yq eval ".description" "$yaml_file" 2>/dev/null)
-          echo "mdagg v$version"
-          [[ "$desc" != "null" ]] && echo "$desc"
-        else
-          echo "mdagg v1.0.0"
-        fi
-      fi
+      # show_version is THE implementation (common.sh). It is unconditionally
+      # available here: the header above sources common.sh and exits 1 if it
+      # is missing, so there is no "called directly, no library" case to
+      # handle.
+      #
+      # This branch used to carry a hand-rolled fallback for that impossible
+      # case. It was unreachable, it duplicated show_version with a hardcoded
+      # "mdagg v1.0.0" that would have gone stale, and it declared `local` at
+      # top level (the arg loop is not a function) -- so had it ever run it
+      # would have died with "local: can only be used in a function".
+      show_version "mdagg"
       exit 0
       ;;
     -c|--config)

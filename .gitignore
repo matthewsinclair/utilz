@@ -1,6 +1,10 @@
 .claude/settings.local.json
 opt/*/lib/.venv/
 
+# macOS Finder droppings. Untracked today, but nothing stopped a
+# `git add -A` from sweeping them in.
+.DS_Store
+
 # Ignore intent upgrade backups
 .backup/backup-*
 

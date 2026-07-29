@@ -372,9 +372,28 @@ detect_tropes() {
     grep_pattern="${grep_pattern#'(?i)'}"
     grep_pattern=$(printf '%s' "$grep_pattern" | sed 's/\\b//g')
 
-    if printf '%s\n' "$text" | grep -ciE "$grep_pattern" >/dev/null 2>&1; then
-      match_count=$(printf '%s\n' "$text" | grep -ciE "$grep_pattern" 2>/dev/null | tr -d ' ')
-      first_match=$(printf '%s\n' "$text" | grep -inE "$grep_pattern" 2>/dev/null | head -1)
+    # grep exits 0 (matched), 1 (no match), or 2 (bad pattern -- eg a PCRE-ism
+    # this platform's ERE rejects). The previous form was
+    # `grep ... >/dev/null 2>&1` inside an `if`, which collapsed 2 into "no
+    # match": a pattern the platform could not compile made its trope silently
+    # undetectable, with no error and a clean exit. No shipped pattern trips
+    # this today, but data/trope-indicators.txt is editable, so a hand-added
+    # PCRE-ism would disable a detector without saying so.
+    #
+    # Run grep ONCE and keep the three outcomes distinct (it previously ran
+    # three times over the same text for the same pattern).
+    local matches="" grep_status=0
+    matches=$(printf '%s\n' "$text" | grep -inE "$grep_pattern" 2>/dev/null) || grep_status=$?
+
+    if [[ $grep_status -gt 1 ]]; then
+      error "Trope pattern for ${current_id:-unknown} is not a valid regex on this platform; skipping it: $grep_pattern"
+      current_id=""
+      continue
+    fi
+
+    if [[ -n "$matches" ]]; then
+      match_count=$(printf '%s\n' "$matches" | wc -l | tr -d ' ')
+      first_match=$(printf '%s\n' "$matches" | head -1)
     fi
 
     if [[ $match_count -gt 0 ]]; then
