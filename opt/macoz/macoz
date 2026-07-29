@@ -34,7 +34,8 @@ check_macos() {
 # ============================================================================
 
 get_season() {
-  local month=$(date +%-m)
+  local month
+  month=$(date +%-m)
 
   case $month in
     3|4|5)
@@ -53,7 +54,8 @@ get_season() {
 }
 
 get_seasonal_image() {
-  local season=$(get_season)
+  local season
+  season=$(get_season)
   local images_dir="$UTILZ_HOME/opt/macoz/images/backgrounds"
 
   # Find all images for the current season
@@ -113,7 +115,8 @@ cmd_background() {
   elif [[ -z "$arg1" ]]; then
     # No arguments - auto-select based on current season
     image_path=$(get_seasonal_image)
-    local season=$(get_season)
+    local season
+    season=$(get_season)
     info "Auto-selected $season wallpaper"
   else
     # Custom image path provided
@@ -126,8 +129,16 @@ cmd_background() {
     exit 1
   fi
 
-  # Convert to absolute path
-  local absolute_path=$(cd "$(dirname "$image_path")" && pwd)/$(basename "$image_path")
+  # Convert to absolute path. The cd is checked rather than masked: if the
+  # image's directory does not exist, the old form silently produced a path
+  # rooted at the CURRENT directory (empty cd output + "/" + basename) and
+  # went on to set the wallpaper from a path that was never asked for.
+  local absolute_path image_dir
+  image_dir=$(cd "$(dirname "$image_path")" && pwd) || {
+    error "Cannot resolve directory for: $image_path"
+    exit 1
+  }
+  absolute_path="$image_dir/$(basename "$image_path")"
 
   info "Setting desktop background to: $(basename "$absolute_path")"
 
@@ -249,7 +260,8 @@ EOFHELP
     local count=0
     # Find all subdirectories
     while IFS= read -r -d '' dir; do
-      local dir_name=$(basename "$dir")
+      local dir_name
+      dir_name=$(basename "$dir")
 
       # Look for image files matching pattern or directory name
       local found_image=""
@@ -319,9 +331,19 @@ EOFHELP
       exit 1
     fi
 
-    # Convert to absolute paths
-    local abs_image=$(cd "$(dirname "$image_path")" && pwd)/$(basename "$image_path")
-    local abs_dir=$(cd "$target_dir" && pwd)
+    # Convert to absolute paths. Both cds are checked -- see the note in the
+    # background command; an unchecked cd here yields a path silently rooted
+    # at the current directory.
+    local abs_image abs_dir img_dir
+    img_dir=$(cd "$(dirname "$image_path")" && pwd) || {
+      error "Cannot resolve directory for: $image_path"
+      exit 1
+    }
+    abs_image="$img_dir/$(basename "$image_path")"
+    abs_dir=$(cd "$target_dir" && pwd) || {
+      error "Cannot resolve directory: $target_dir"
+      exit 1
+    }
 
     $verbose && info "Image: $abs_image"
     $verbose && info "Directory: $abs_dir"

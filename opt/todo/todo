@@ -573,7 +573,7 @@ cmd_json() {
     --arg title "$TITLE" \
     --argjson doing "$dj" \
     --argjson todo "$tj" \
-    --argjson done "$cj" \
+    --argjson 'done' "$cj" \
     --arg wm "$WATERMARK" \
     '{title: $title, doing: $doing, todo: $todo, done: $done, done_watermark: $wm}'
 }

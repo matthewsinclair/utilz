@@ -41,7 +41,8 @@ is_wayland() {
 }
 
 get_copy_command() {
-  local platform=$(detect_platform)
+  local platform
+  platform=$(detect_platform)
 
   case "$platform" in
     macos)
@@ -74,7 +75,8 @@ get_copy_command() {
 }
 
 get_paste_command() {
-  local platform=$(detect_platform)
+  local platform
+  platform=$(detect_platform)
 
   case "$platform" in
     macos)
@@ -112,7 +114,15 @@ get_paste_command() {
 
 cmd_copy() {
   local input_file="${1:-}"
-  local copy_cmd=$(get_copy_command) || exit 1
+  # `local cmd=$(...) || exit 1` does NOT work: `local` is a builtin that
+  # returns its own status (0), so the || guard never fired and
+  # get_copy_command's `return 1` was discarded. On an unsupported platform,
+  # or Linux without xclip/xsel/wl-copy, copy_cmd was left empty -- and
+  # `$copy_cmd < file` with an empty command is a bare redirect, which does
+  # nothing and exits 0. clipz printed an error, copied nothing, and reported
+  # success. Declare first, assign second, so the status is the command's.
+  local copy_cmd
+  copy_cmd=$(get_copy_command) || exit 1
 
   if [[ -n "$input_file" ]]; then
     # Copy from file
@@ -128,7 +138,9 @@ cmd_copy() {
 }
 
 cmd_paste() {
-  local paste_cmd=$(get_paste_command) || exit 1
+  # Same dead guard as cmd_copy -- see the note there.
+  local paste_cmd
+  paste_cmd=$(get_paste_command) || exit 1
   $paste_cmd
 }
 

@@ -271,9 +271,10 @@ generate_summary() {
   local rsync_output
   rsync_output=$(rsync "${rsync_args[@]}" 2>&1) || true
 
-  # Parse stats
+  # Parse stats. `total_size` was declared and never read or written -- dead
+  # since the stats block was written; removed rather than left to look like
+  # a value someone forgot to populate.
   local files_transferred=0
-  local total_size=0
   local files_deleted=0
 
   # Handle both old rsync ("Number of files transferred:") and new ("Number of regular files transferred:")
@@ -452,9 +453,14 @@ execute_sync() {
 _compute_path_labels() {
   local p1="$1" p2="$2"
 
-  # Split into arrays by /
-  local IFS='/'
-  local -a parts1=($p1) parts2=($p2)
+  # Split into arrays by /.
+  # `read -ra` rather than an unquoted array assignment: the old form ran the
+  # split words through pathname expansion, so a directory legitimately named
+  # with a glob character (eg "reports[2024]") could expand against the
+  # filesystem and silently produce the wrong label. read does no globbing.
+  local -a parts1 parts2
+  IFS='/' read -ra parts1 <<< "$p1"
+  IFS='/' read -ra parts2 <<< "$p2"
 
   # Walk backwards from the end to find common suffix
   local i1=$(( ${#parts1[@]} - 1 ))
@@ -491,8 +497,11 @@ _compute_path_labels() {
 
   # Build root strings (everything before the common suffix)
   if [[ -n "$_PATH_SUFFIX" ]]; then
-    _PATH_ROOT1="${p1%/$_PATH_SUFFIX}"
-    _PATH_ROOT2="${p2%/$_PATH_SUFFIX}"
+    # Suffix quoted inside the expansion: unquoted, ${var%pattern} treats it
+    # as a GLOB, so a common suffix containing [ ] * or ? would strip the
+    # wrong amount (or nothing) and mislabel the sync roots.
+    _PATH_ROOT1="${p1%/"$_PATH_SUFFIX"}"
+    _PATH_ROOT2="${p2%/"$_PATH_SUFFIX"}"
   else
     _PATH_ROOT1="$p1"
     _PATH_ROOT2="$p2"

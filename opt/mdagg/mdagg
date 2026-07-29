@@ -197,22 +197,33 @@ process_yaml_config() {
 
   # Parse settings from YAML (if present)
   if yq eval '.settings' "$config_file" >/dev/null 2>&1; then
-    local yaml_page_breaks=$(yq eval '.settings.page_breaks // false' "$config_file")
-    local yaml_section_dividers=$(yq eval '.settings.section_dividers // false' "$config_file")
-    local yaml_strip_front=$(yq eval '.settings.strip_front_matter // false' "$config_file")
-    local yaml_strip_back=$(yq eval '.settings.strip_back_links // false' "$config_file")
-    local yaml_working_dir=$(yq eval '.settings.working_dir // "."' "$config_file")
+    local yaml_page_breaks yaml_section_dividers yaml_strip_front
+    local yaml_strip_back yaml_working_dir
+    yaml_page_breaks=$(yq eval '.settings.page_breaks // false' "$config_file")
+    yaml_section_dividers=$(yq eval '.settings.section_dividers // false' "$config_file")
+    yaml_strip_front=$(yq eval '.settings.strip_front_matter // false' "$config_file")
+    yaml_strip_back=$(yq eval '.settings.strip_back_links // false' "$config_file")
+    yaml_working_dir=$(yq eval '.settings.working_dir // "."' "$config_file")
 
-    # Override defaults if not explicitly set via CLI
-    [[ "$yaml_page_breaks" == "true" ]] && PAGE_BREAKS=true
-    [[ "$yaml_section_dividers" == "true" ]] && SECTION_DIVIDERS=true
-    [[ "$yaml_strip_front" == "true" ]] && STRIP_FRONT_MATTER=true
-    [[ "$yaml_strip_back" == "true" ]] && STRIP_BACK_LINKS=true
-    [[ "$yaml_working_dir" != "." ]] && WORKING_DIR="$yaml_working_dir"
+    # Override defaults if not explicitly set via CLI.
+    #
+    # Written as if/fi rather than `[[ ... ]] && VAR=x`. The && form is a known
+    # trap in this codebase: when the test is false the list returns 1, and if
+    # such a line is ever the last statement of a function or loop body, `set
+    # -e` takes the whole thing down. It is currently harmless here (a
+    # short-circuited list is exempt, and statements follow), but working_dir
+    # defaults to "." so the false branch is the COMMON path -- one edit that
+    # moved it to the end of a block would arm it.
+    if [[ "$yaml_page_breaks" == "true" ]]; then PAGE_BREAKS=true; fi
+    if [[ "$yaml_section_dividers" == "true" ]]; then SECTION_DIVIDERS=true; fi
+    if [[ "$yaml_strip_front" == "true" ]]; then STRIP_FRONT_MATTER=true; fi
+    if [[ "$yaml_strip_back" == "true" ]]; then STRIP_BACK_LINKS=true; fi
+    if [[ "$yaml_working_dir" != "." ]]; then WORKING_DIR="$yaml_working_dir"; fi
   fi
 
   # Get file count
-  local file_count=$(yq eval '.files | length' "$config_file")
+  local file_count
+  file_count=$(yq eval '.files | length' "$config_file")
 
   if [[ "$VERBOSE" == true ]]; then
     info "Found $file_count files to process"
@@ -220,9 +231,10 @@ process_yaml_config() {
 
   # Process each file
   for ((i=0; i<file_count; i++)); do
-    local file_path=$(yq eval ".files[$i].file" "$config_file")
-    local file_title=$(yq eval ".files[$i].title // \"\"" "$config_file")
-    local file_page_break=$(yq eval ".files[$i].page_break // \"$PAGE_BREAKS\"" "$config_file")
+    local file_path file_title file_page_break
+    file_path=$(yq eval ".files[$i].file" "$config_file")
+    file_title=$(yq eval ".files[$i].title // \"\"" "$config_file")
+    file_page_break=$(yq eval ".files[$i].page_break // \"$PAGE_BREAKS\"" "$config_file")
 
     # Make path absolute if relative
     if [[ ! "$file_path" =~ ^/ ]]; then
@@ -241,8 +253,11 @@ process_glob_pattern() {
     info "Processing glob pattern: $pattern"
   fi
 
-  # Expand glob pattern (with nullglob to handle no matches)
+  # Expand glob pattern (with nullglob to handle no matches).
+  # $pattern is deliberately unquoted -- quoting it would defeat the glob,
+  # which is the entire point of this function.
   shopt -s nullglob
+  # shellcheck disable=SC2206  # intentional glob expansion, not word splitting
   local files=("$WORKING_DIR"/$pattern)
   shopt -u nullglob
 
@@ -251,9 +266,19 @@ process_glob_pattern() {
     exit 1
   fi
 
-  # Sort files naturally (1, 2, 10 instead of 1, 10, 2)
-  IFS=$'\n' files=($(sort -V <<<"${files[*]}"))
-  unset IFS
+  # Sort files naturally (1, 2, 10 instead of 1, 10, 2).
+  #
+  # Read a line at a time rather than word-splitting a command substitution:
+  # the old `IFS=$'\n' files=($(...))` re-globbed any result containing [*?[]
+  # and leaked IFS into the rest of the shell (hence the `unset IFS` that had
+  # to follow it). mapfile would be the obvious tool but it is bash 4, and
+  # macOS ships 3.2.
+  local sorted=()
+  local f
+  while IFS= read -r f; do
+    sorted+=("$f")
+  done < <(printf '%s\n' "${files[@]}" | sort -V)
+  files=("${sorted[@]}")
 
   if [[ "$VERBOSE" == true ]]; then
     info "Found ${#files[@]} files"

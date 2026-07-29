@@ -19,7 +19,8 @@ determine_utilz_home() {
 
   # Follow symlink chain to find the real script location
   while [[ -L "$script" ]]; do
-    local link_target=$(readlink "$script")
+    local link_target
+    link_target=$(readlink "$script")
 
     # Handle relative symlinks
     if [[ "$link_target" != /* ]]; then
@@ -29,16 +30,26 @@ determine_utilz_home() {
     fi
   done
 
-  # Get the directory containing the real script
-  local script_dir="$(cd "$(dirname "$script")" && pwd)"
+  # Get the directory containing the real script. This whole function runs
+  # inside a command substitution, so the cd is already subshell-scoped and
+  # cannot move the caller.
+  local script_dir
+  script_dir=$(cd "$(dirname "$script")" && pwd) || return 1
 
   # UTILZ_HOME is the parent of bin/
-  echo "$(cd "$script_dir/.." && pwd)"
+  cd "$script_dir/.." && pwd
 }
 
 # Detect UTILZ_HOME from script location if not already set
 if [[ -z "${UTILZ_HOME:-}" ]]; then
-  export UTILZ_HOME="$(determine_utilz_home)"
+  # Assigned before export: `export VAR=$(cmd)` reports export's status (0),
+  # so a failure to resolve UTILZ_HOME would be swallowed and every later
+  # path built from it would be silently wrong.
+  UTILZ_HOME=$(determine_utilz_home) || {
+    echo "ERROR: Cannot determine UTILZ_HOME from $0" >&2
+    exit 1
+  }
+  export UTILZ_HOME
 fi
 
 # Detect which utility was invoked

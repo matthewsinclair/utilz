@@ -35,7 +35,8 @@ cmd_status_all() {
   # Find all .git directories, excluding those with path components starting with '_' or containing '.work'
   while IFS= read -r git_dir; do
     # Get repository directory (parent of .git)
-    local repo_dir=$(dirname "$git_dir")
+    local repo_dir
+    repo_dir=$(dirname "$git_dir")
 
     # Skip if any path component starts with '_' or path contains '.work'
     if [[ "$repo_dir" == *"/_"* ]] || [[ "$repo_dir" == "_"* ]] || [[ "$repo_dir" == *".work"* ]]; then
@@ -46,7 +47,7 @@ cmd_status_all() {
 
     # Show repository path
     echo "Repository: $repo_dir"
-    echo "$(printf '=%.0s' {1..80})"
+    printf '=%.0s' {1..80}; echo
 
     # Change to repo and show status
     (
@@ -55,7 +56,7 @@ cmd_status_all() {
     )
 
     echo ""
-    echo "$(printf '─%.0s' {1..80})"
+    printf '─%.0s' {1..80}; echo
     echo ""
   done < <(find "$search_path" -name .git -type d 2>/dev/null)
 

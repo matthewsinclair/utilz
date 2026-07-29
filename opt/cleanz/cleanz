@@ -233,13 +233,17 @@ detect_hidden() {
   echo "=========================="
   echo ""
 
-  # Zero-width characters
-  local zwsp_count=$(count_pattern "$text" "$ZWSP")
-  local zwnj_count=$(count_pattern "$text" "$ZWNJ")
-  local zwj_count=$(count_pattern "$text" "$ZWJ")
-  local wj_count=$(count_pattern "$text" "$WJ")
-  local bom_count=$(count_pattern "$text" "$BOM")
-  local shy_count=$(count_pattern "$text" "$SHY")
+  # Zero-width characters. Declared then assigned: `local x=$(cmd)` always
+  # exits 0, so it hides a failing command from `set -e`. count_pattern is
+  # pure bash and cannot fail, so this is presentational here -- but the
+  # habit is what stops the pattern spreading to calls that can.
+  local zwsp_count zwnj_count zwj_count wj_count bom_count shy_count
+  zwsp_count=$(count_pattern "$text" "$ZWSP")
+  zwnj_count=$(count_pattern "$text" "$ZWNJ")
+  zwj_count=$(count_pattern "$text" "$ZWJ")
+  wj_count=$(count_pattern "$text" "$WJ")
+  bom_count=$(count_pattern "$text" "$BOM")
+  shy_count=$(count_pattern "$text" "$SHY")
 
   if [[ $zwsp_count -gt 0 ]]; then
     echo "  Zero-width space (U+200B): $zwsp_count"
@@ -267,11 +271,12 @@ detect_hidden() {
   fi
 
   # Directional formatting
-  local lre_count=$(count_pattern "$text" "$LRE")
-  local rle_count=$(count_pattern "$text" "$RLE")
-  local pdf_count=$(count_pattern "$text" "$PDF")
-  local lro_count=$(count_pattern "$text" "$LRO")
-  local rlo_count=$(count_pattern "$text" "$RLO")
+  local lre_count rle_count pdf_count lro_count rlo_count
+  lre_count=$(count_pattern "$text" "$LRE")
+  rle_count=$(count_pattern "$text" "$RLE")
+  pdf_count=$(count_pattern "$text" "$PDF")
+  lro_count=$(count_pattern "$text" "$LRO")
+  rlo_count=$(count_pattern "$text" "$RLO")
 
   local dir_total=$((lre_count + rle_count + pdf_count + lro_count + rlo_count))
   if [[ $dir_total -gt 0 ]]; then
@@ -280,8 +285,9 @@ detect_hidden() {
   fi
 
   # Special spaces
-  local nbsp_count=$(count_pattern "$text" "$NBSP")
-  local hair_count=$(count_pattern "$text" "$HAIRSP")
+  local nbsp_count hair_count
+  nbsp_count=$(count_pattern "$text" "$NBSP")
+  hair_count=$(count_pattern "$text" "$HAIRSP")
 
   if [[ $nbsp_count -gt 0 ]]; then
     echo "  Non-breaking space (U+00A0): $nbsp_count"
@@ -293,18 +299,24 @@ detect_hidden() {
   fi
 
   # Smart quotes
-  local lsq_count=$(count_pattern "$text" "$LSQUO")
-  local rsq_count=$(count_pattern "$text" "$RSQUO")
-  local ldq_count=$(count_pattern "$text" "$LDQUO")
-  local rdq_count=$(count_pattern "$text" "$RDQUO")
+  local lsq_count rsq_count ldq_count rdq_count
+  lsq_count=$(count_pattern "$text" "$LSQUO")
+  rsq_count=$(count_pattern "$text" "$RSQUO")
+  ldq_count=$(count_pattern "$text" "$LDQUO")
+  rdq_count=$(count_pattern "$text" "$RDQUO")
 
   local quote_total=$((lsq_count + rsq_count + ldq_count + rdq_count))
   if [[ $quote_total -gt 0 ]]; then
     echo "  Smart quotes: $quote_total (use --normalize-quotes to convert)"
   fi
 
-  # Check for HTML data attributes
-  local data_attrs=$(printf '%s' "$text" | grep -oE ' data-[a-z-]+="[^"]*"' 2>/dev/null | wc -l | tr -d ' ')
+  # Check for HTML data attributes. `|| data_attrs=0` is load-bearing, not
+  # decoration: grep exits 1 when it finds nothing, and under `pipefail` that
+  # fails the whole pipeline -- so a plain split here would abort cleanz on any
+  # text WITHOUT data attributes, which is the common case. Zero matches is a
+  # normal result, not an error.
+  local data_attrs
+  data_attrs=$(printf '%s' "$text" | grep -oE ' data-[a-z-]+="[^"]*"' 2>/dev/null | wc -l | tr -d ' ') || data_attrs=0
   if [[ $data_attrs -gt 0 ]]; then
     echo "  HTML data-* attributes: $data_attrs"
     found=$((found + data_attrs))
@@ -626,8 +638,14 @@ write_output() {
     fi
     success "Clipboard cleaned"
   elif [[ "$OPT_INPLACE" == "true" && -n "$INPUT_FILE" ]]; then
-    # In-place editing with temp file for safety
-    local tmpfile=$(mktemp)
+    # In-place editing with temp file for safety. mktemp is checked rather
+    # than masked by `local`: this path ends in `mv <tmp> <the user's file>`,
+    # so a failure that slipped through would clobber their input.
+    local tmpfile
+    tmpfile=$(mktemp) || {
+      error "Failed to create temp file for in-place edit of $INPUT_FILE"
+      return 1
+    }
     printf '%s' "$text" > "$tmpfile"
     mv "$tmpfile" "$INPUT_FILE"
     success "File cleaned: $INPUT_FILE"
