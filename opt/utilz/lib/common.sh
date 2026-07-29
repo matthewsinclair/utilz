@@ -349,15 +349,57 @@ run_doctor() {
   echo ""
 
   # Check 4: PATH configuration
+  #
+  # Two ways to have a working install, and this check used to recognise only
+  # the first -- so a symlink install was reported as a problem and doctor said
+  # "Found 1 issue(s)" about a setup that worked. Issue 0005.
+  #
+  # The old test was `echo "$PATH" | grep -q "$UTILZ_HOME/bin"`, which also
+  # matched by unanchored regex: $UTILZ_HOME went in unescaped (a `.` or `+` in
+  # the path is a metacharacter) and any substring satisfied it, so a stray
+  # /opt/Utilz/binaries passed a test for /opt/Utilz/bin. `case` on a delimited
+  # PATH is an exact element match with no regex in play.
   echo -e "${BOLD}[4/6]${RESET} Checking PATH configuration..."
-  if echo "$PATH" | grep -q "$UTILZ_HOME/bin"; then
+  local bin_dir="$UTILZ_HOME/bin"
+  local dispatcher="$bin_dir/utilz"
+  local path_entry reached_via=""
+
+  case ":$PATH:" in
+    *":$bin_dir:"*) reached_via="$bin_dir" ;;
+  esac
+
+  if [[ -z "$reached_via" ]]; then
+    # A `utilz` symlink on PATH pointing back here (eg ~/.local/bin/utilz) is
+    # an equally working install. `-ef` compares device and inode THROUGH
+    # symlinks, so this needs no path resolver of its own -- the only one in
+    # the codebase, determine_utilz_home in bin/utilz, cannot be reused because
+    # it runs before common.sh is sourced (it is what finds common.sh).
+    while IFS= read -r path_entry; do
+      # An empty PATH element means cwd; never treat that as an install.
+      if [[ -z "$path_entry" ]]; then
+        continue
+      fi
+      if [[ -x "$path_entry/utilz" && "$path_entry/utilz" -ef "$dispatcher" ]]; then
+        reached_via="$path_entry/utilz"
+        break
+      fi
+    done < <(printf '%s\n' "$PATH" | tr ':' '\n')
+  fi
+
+  if [[ "$reached_via" == "$bin_dir" ]]; then
     success "\$UTILZ_HOME/bin is in \$PATH"
+  elif [[ -n "$reached_via" ]]; then
+    # Named, not just accepted: which route resolved it is the diagnostic.
+    success "utilz is on \$PATH via $reached_via"
   else
     warn "\$UTILZ_HOME/bin is not in \$PATH"
     echo ""
     echo "  Add to your shell config (~/.zshrc or ~/.bashrc):"
     echo "    export UTILZ_HOME=\"$UTILZ_HOME\""
     echo "    export PATH=\"\$UTILZ_HOME/bin:\$PATH\""
+    echo ""
+    echo "  Or symlink the dispatcher onto a directory already on \$PATH:"
+    echo "    ln -s \"$dispatcher\" ~/.local/bin/utilz"
     issues=$((issues + 1))
   fi
   echo ""

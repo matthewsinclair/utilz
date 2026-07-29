@@ -71,6 +71,16 @@ run_in_fake_home() {
   run /bin/bash -c "export UTILZ_HOME='$home'; source '$UTILZ_HOME/opt/utilz/lib/common.sh'; $*"
 }
 
+# As run_in_fake_home, but with extra entries prepended to PATH. The real PATH
+# is kept on the tail so yq and the core tools stay reachable -- these tests are
+# about what doctor concludes from PATH, not about a stripped environment.
+run_in_fake_home_with_path() {
+  local home="$1"
+  local extra_path="$2"
+  shift 2
+  run /bin/bash -c "export UTILZ_HOME='$home'; export PATH='$extra_path':\"\$PATH\"; source '$UTILZ_HOME/opt/utilz/lib/common.sh'; $*"
+}
+
 # A PATH carrying the tools common.sh needs, minus yq. Built by symlinking real
 # tool paths into a sandbox rather than by filtering $PATH: CI installs yq into
 # /usr/bin on Linux, so filtering out its directory would take the core tools
@@ -292,6 +302,59 @@ EOF
 @test "run_doctor() checks PATH configuration" {
   run run_common_function run_doctor
   assert_output_contains "PATH"
+}
+
+# ----------------------------------------------------------------------------
+# doctor check 4 -- PATH reachability (issue 0005)
+# ----------------------------------------------------------------------------
+#
+# The old test was `echo "$PATH" | grep -q "$UTILZ_HOME/bin"`: one expression,
+# two faults. It could only ever recognise $UTILZ_HOME/bin as a literal PATH
+# entry, so a working symlink-on-PATH install was reported as a problem; and it
+# matched by unanchored regex, so any substring satisfied it.
+
+@test "doctor check 4 passes when UTILZ_HOME/bin is on PATH" {
+  local home
+  home="$(make_fake_home)"
+
+  run_in_fake_home_with_path "$home" "$home/bin" run_doctor
+  assert_output_contains "is in \$PATH"
+  refute_output_contains "is not in \$PATH"
+}
+
+@test "doctor check 4 accepts a utilz symlink on PATH (issue 0005)" {
+  local home shim
+  home="$(make_fake_home)"
+  shim="$BATS_TEST_TMPDIR/shim"
+  mkdir -p "$shim"
+  ln -s "$home/bin/utilz" "$shim/utilz"
+
+  # PATH carries the shim but NOT $home/bin, so the only route to the
+  # dispatcher is through the symlink -- a working install either way.
+  run_in_fake_home_with_path "$home" "$shim" run_doctor
+  assert_output_contains "$shim/utilz"
+  refute_output_contains "is not in \$PATH"
+}
+
+@test "doctor check 4 warns when the dispatcher is unreachable on PATH (issue 0005)" {
+  local home
+  home="$(make_fake_home)"
+
+  # Neither $home/bin nor any utilz resolving to it. The real repo's own
+  # dispatcher may well be on PATH, but it is a different file, so -ef is false.
+  run_in_fake_home_with_path "$home" "$BATS_TEST_TMPDIR/nowhere" run_doctor
+  assert_output_contains "is not in \$PATH"
+}
+
+@test "doctor check 4 rejects a PATH substring match (issue 0005)" {
+  local home
+  home="$(make_fake_home)"
+  mkdir -p "$home/binaries"
+
+  # "$home/binaries" contains "$home/bin" as a substring. The grep form passed
+  # on this; an exact PATH-element match must not.
+  run_in_fake_home_with_path "$home" "$home/binaries" run_doctor
+  assert_output_contains "is not in \$PATH"
 }
 
 @test "run_doctor() discovers utilities" {

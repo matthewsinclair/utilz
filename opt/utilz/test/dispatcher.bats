@@ -85,6 +85,86 @@ load "test_helper.bash"
 }
 
 # ============================================================================
+# TOP-LEVEL FLAG ALIASES (issue 0003)
+# ============================================================================
+#
+# Every utility accepts --version/--help/-h, and the dispatcher's own nested
+# `integration` and `emacs` verbs accept --help/-h. The top level accepted only
+# the bare words, so `utilz --version` -- the form a first-time user and a
+# probing script both reach for -- exited 1 with "Unknown command".
+
+@test "utilz --version - flag form of 'version' (issue 0003)" {
+  run_utilz --version
+  assert_success
+  assert_output_contains "utilz v"
+}
+
+@test "utilz --help - flag form of 'help' (issue 0003)" {
+  run_utilz --help
+  assert_success
+  assert_output_contains "Utilz"
+}
+
+@test "utilz -h - short flag form of 'help' (issue 0003)" {
+  run_utilz -h
+  assert_success
+  assert_output_contains "Utilz"
+}
+
+@test "utilz --help <utility> - flag form still takes a utility argument (issue 0003)" {
+  run_utilz --help mdagg
+  assert_success
+  assert_output_contains "mdagg"
+}
+
+@test "utilz -v is NOT bound (issue 0003)" {
+  # Deliberately unbound: -v reads as verbose, and no utility binds it. Pinned
+  # so a later "while we're here" change has to argue with a test.
+  run_utilz -v
+  assert_failure
+  assert_output_contains "Unknown command"
+}
+
+# ============================================================================
+# UNKNOWN-COMMAND SUGGESTION LIST (issue 0004)
+# ============================================================================
+
+@test "unknown-command list omits a stray non-utilz symlink (issue 0004)" {
+  # each_utility() requires the link to resolve to utilz; this list is a sixth
+  # open-coded walk that only tested -L, so a stray link read as a utility.
+  ln -sf /bin/echo "$UTILZ_BIN_DIR/zzstray"
+  run_utilz boguscommand
+  rm -f "$UTILZ_BIN_DIR/zzstray"
+
+  assert_failure
+  assert_output_contains "Unknown command"
+  assert_output_contains "Installed utilities"
+  if [[ "$output" == *"zzstray"* ]]; then
+    echo "stray symlink leaked into the installed-utilities list" >&2
+    return 1
+  fi
+}
+
+@test "unknown-command list names a real utility (issue 0004)" {
+  run_utilz boguscommand
+  assert_failure
+  assert_output_contains "utilz mdagg"
+}
+
+@test "unknown-command list aligns its description column (issue 0004)" {
+  run_utilz boguscommand
+  assert_failure
+
+  # Every "- Run <x> utility" must begin at the same column. The old form used
+  # a hardcoded run of spaces, so the column tracked the name length.
+  local distinct
+  distinct=$(printf '%s\n' "$output" \
+    | awk '/^  utilz .* \[args\].*- Run /  { print index($0, "- Run ") }' \
+    | sort -u | wc -l | tr -d ' ')
+  [[ "$distinct" == "1" ]]
+}
+
+# ============================================================================
 # SYMLINK DISPATCH
 # ============================================================================
 

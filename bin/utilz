@@ -73,8 +73,14 @@ if [[ "$INVOKED_AS" == "utilz" ]]; then
   COMMAND="${1:-help}"
 
   case "$COMMAND" in
-    help)
-      # Show help for utilz or a specific utility
+    help|-h|--help)
+      # Show help for utilz or a specific utility.
+      #
+      # The flag spellings are aliases, not a second code path: every utility
+      # accepts -h/--help, and the nested `integration` and `emacs` verbs below
+      # accept them too, so the top level was the one place in Utilz where the
+      # conventional form failed. `utilz --help mdagg` works like `utilz help
+      # mdagg` -- the utility name is still $2 either way. See issue 0003.
       UTIL="${2:-}"
       if [[ -z "$UTIL" ]]; then
         show_help "utilz"
@@ -99,8 +105,9 @@ if [[ "$INVOKED_AS" == "utilz" ]]; then
       run_tests "$@"
       ;;
 
-    version)
-      # Show version
+    version|--version)
+      # Show version. `-v` is deliberately NOT bound: it reads as verbose, and
+      # no utility binds it. See issue 0003.
       show_version
       ;;
 
@@ -197,12 +204,34 @@ EOF
         echo "  utilz generate <name>   - Generate new utility"
         echo ""
         echo "Installed utilities:"
-        for symlink in "$UTILZ_HOME"/bin/*; do
-          name=$(basename "$symlink")
-          if [[ "$name" != "utilz" && -L "$symlink" ]]; then
-            echo "  utilz $name [args]      - Run $name utility"
+
+        # each_utility() is THE walker of bin/ (see its header in common.sh).
+        # This block used to be a sixth open-coded copy, and it had drifted the
+        # same way the five in common.sh had: it filtered on `-L` alone, so any
+        # stray symlink in bin/ was suggested here as a utility while `utilz
+        # list` correctly omitted it. Issue 0004.
+        #
+        # Process substitution, never a pipe: the loop accumulates into
+        # UTIL_LABELS, and a pipe would subshell it away.
+        UTIL_NAMES=()
+        LABEL_WIDTH=0
+        while IFS= read -r name; do
+          UTIL_NAMES+=("$name")
+          label="utilz $name [args]"
+          if [[ ${#label} -gt $LABEL_WIDTH ]]; then
+            LABEL_WIDTH=${#label}
           fi
-        done
+        done < <(each_utility)
+
+        # Width computed from the longest label rather than a hardcoded run of
+        # spaces, so the descriptions line up whatever the names are. Guarded
+        # expansion: bash 3.2 under `set -u` treats "${empty[@]}" as unbound.
+        if [[ ${#UTIL_NAMES[@]} -gt 0 ]]; then
+          for name in "${UTIL_NAMES[@]}"; do
+            printf '  %-*s - Run %s utility\n' \
+              "$LABEL_WIDTH" "utilz $name [args]" "$name"
+          done
+        fi
         exit 1
       fi
       ;;

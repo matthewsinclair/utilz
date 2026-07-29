@@ -1,6 +1,6 @@
 # Utilz - Universal Utilities Framework
 
-**Version**: 2.2.0
+**Version**: run `utilz version` (the framework version lives in `VERSION`, and `opt/utilz/utilz.yaml` points at it via `version_file` -- hardcoding it here drifted it to 2.2.0 while 2.4.0 shipped)
 **Author**: Matthew Sinclair
 **Location**: `$UTILZ_HOME` (typically `~/Devel/prj/Utilz`)
 
@@ -62,6 +62,14 @@ utilz help
 utilz help mdagg
 ```
 
+`-h` and `--help` are accepted as aliases, and take the same optional utility argument:
+
+```bash
+utilz --help
+utilz -h
+utilz --help mdagg
+```
+
 ### `utilz doctor`
 
 Run diagnostics to check that Utilz is properly configured.
@@ -95,9 +103,14 @@ Show version information for Utilz or a specific utility.
 # Utilz version
 utilz version
 
+# --version is accepted as an alias
+utilz --version
+
 # Specific utility version (if invoked as utility)
 mdagg --version
 ```
+
+`-v` is deliberately unbound: it reads as a verbose flag, and no utility binds it.
 
 ### `utilz integration <verb>`
 
