@@ -6,7 +6,7 @@ session_id: 536a4f85-7490-4324-8c8d-6c09420b6de3
 heartbeat_at: 2026-07-29T21:48Z
 status: paused
 focus: "Released at fe8eecf. v2.4.0 shipped, repo-wide shell audit landed, then a health check found three more dispatcher/doctor defects (issues 0003-0005) -- all fixed, closed, 407 tests green. Nothing in flight; fe8eecf + c5694d6 unpushed."
-claims: [ST0009]
+claims: []
 ---
 
 # Control Claude (cc)
