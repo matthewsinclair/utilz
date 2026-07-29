@@ -5,6 +5,25 @@ All notable changes to the Utilz framework will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.4.0] - 2026-07-29
+
+### Changed
+
+- **BREAKING (soft): `yq` is now a hard dependency of the framework** (ST0009/WP-02). `get_util_metadata` previously carried two parsers -- a `yq` path and a grep fallback that answered four hardcoded queries and returned an empty string for everything else, which a caller cannot distinguish from an absent key. The fallback is gone; `yq` is the single YAML parser, declared in `opt/utilz/utilz.yaml` and gated by a single `require_yq`. Without `yq`, `utilz list` now fails loudly with an install hint where it previously degraded silently and gave wrong answers. `utilz doctor` deliberately still completes without `yq` and names it as the missing dependency -- it is the command you run to discover exactly that. This is the change that makes the bump minor rather than patch.
+- **One walker of `bin/`** (ST0009/WP-01). `list_utilities`, `run_doctor` (twice), `run_tests`, `emit_integration_tsv`, and `emacs_doctor` each open-coded the same glob-and-filter over `bin/*`, and had already drifted: two verified the symlink resolved to the dispatcher, three accepted any symlink, so a stray link in `bin/` was a utility to `doctor` and not to `list`. All five now read a single `each_utility()` (Highlander), consumed via process substitution so accumulator arrays survive the loop.
+
+### Fixed
+
+- **`utilz generate` stamped a compatibility floor no 2.x framework could satisfy** (issue 0002, ST0009/WP-03). `opt/utilz/tmpl/metadata.tmpl` hardcoded `utilz_version: "^1.0.0"` while `VERSION` read 2.3.0, and `run_doctor` compares major versions -- so every generated utility was born incompatible and stayed that way until someone hand-edited the yaml. The floor is now derived from the framework's own `VERSION` via a `{{UTILZ_FLOOR}}` placeholder substituted at generation time. Latent rather than observed: all 13 shipped utilities already carried `^2.0.0`, so nothing in the repo was ever broken by it.
+
+### Docs
+
+- `docs/architecture.md`, `help/utilz.md`, `README.md` reconciled with the as-built: `yq` documented as a framework-level hard requirement rather than an mdagg-specific one, `each_utility` / `require_yq` added to the common-library reference, and the claim that utilities call `get_util_metadata()` corrected (it has no callers outside `common.sh` -- it is framework-internal). The stated bash floor is corrected from "4.0+" to 3.2, which is what macOS ships and what the code has always targeted.
+
+### Tests
+
+- `opt/utilz/test/common_lib.bats` -- 12 new tests covering the three seams, 11 of which fail against the pre-change code. `each_utility` distinguishing a dispatcher symlink from a stray symlink and a plain file; the drift regression asserting a stray link is invisible to `list_utilities` **and** `run_doctor` (the old code counted it in one and not the other); `list_utilities` failing loudly without `yq`; the install hint printed **once** rather than once per utility (a regression test for a defect hit during this work -- `require_yq` originally memoised into a variable, which does nothing across the command substitution `get_util_metadata` runs in); `run_doctor` completing without `yq`; `get_util_metadata` returning non-zero rather than an empty string; and the generator stamping a floor that tracks a fabricated `VERSION` of 7.3.1, proving derivation rather than coincidence.
+
 ## [2.3.0] - 2026-07-10
 
 ### Added
