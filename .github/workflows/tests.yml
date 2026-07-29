@@ -111,20 +111,40 @@ jobs:
 
     - name: Run ShellCheck
       run: |
-        echo "Running ShellCheck on Utilz scripts..."
-        # Run shellcheck on dispatcher
-        if file bin/utilz | grep -q "shell script"; then
-          echo "Checking: bin/utilz"
-          shellcheck bin/utilz || echo "  ShellCheck found issues (non-blocking)"
+        set -euo pipefail
+        # Collect every shell file: executables under bin/ and opt/, PLUS
+        # sourced libraries (*.sh), which are not executable and were skipped
+        # entirely by the previous `find -executable` form. That gap left
+        # opt/utilz/lib/common.sh -- the file every utility sources -- with no
+        # static analysis at all, and 15 findings accumulated in it unseen.
+        #
+        # -perm -u+x rather than -executable: portable to BSD find.
+        # Collected into an array rather than a word-split string, so paths
+        # with spaces survive and the step does not depend on the shell's
+        # splitting rules.
+        FILES=()
+        while IFS= read -r s; do
+          case "$s" in
+            *.sh) FILES+=("$s") ;;
+            *) if file "$s" | grep -q "shell script"; then FILES+=("$s"); fi ;;
+          esac
+        done < <(find bin opt -type f \( -perm -u+x -o -name '*.sh' \) \
+                   -not -path "*/test/*" -not -path "*/.venv/*" | sort -u)
+
+        if [ ${#FILES[@]} -eq 0 ]; then
+          echo "No shell scripts found -- the collector is broken, failing loudly."
+          exit 1
         fi
-        # Run shellcheck on utility implementations
-        find opt -type f -executable -not -path "*/test/*" | while read -r script; do
-          if file "$script" | grep -q "shell script"; then
-            echo "Checking: $script"
-            shellcheck "$script" || echo "  ShellCheck found issues (non-blocking)"
-          fi
-        done
-        echo "ShellCheck analysis completed"
+
+        echo "Running ShellCheck on ${#FILES[@]} file(s):"
+        printf '  %s\n' "${FILES[@]}"
+        echo ""
+
+        # BLOCKING. This step used to end every invocation with
+        # `|| echo "(non-blocking)"`, so it could never fail the build and
+        # regressions landed silently. -x follows `source` into common.sh.
+        shellcheck -x "${FILES[@]}"
+        echo "ShellCheck clean."
 
   test-summary:
     name: Test Summary
