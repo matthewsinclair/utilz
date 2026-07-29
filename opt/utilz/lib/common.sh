@@ -207,6 +207,45 @@ require_yq() {
   return 1
 }
 
+# THE Python virtualenv bootstrapper for utilities with Python backends.
+# Creates the venv and installs requirements on first use; a no-op thereafter.
+#
+# Usage: ensure_venv "$VENV_DIR" "$REQUIREMENTS"
+#
+# pdf2md and xtrct each carried a byte-identical private copy of this. They had
+# not drifted yet -- but neither had the five bin/ walkers this library used to
+# have, right up until two of them started answering differently. Identical
+# copies are the state a Highlander violation is in before it becomes a bug.
+#
+# Failures are surfaced rather than left for the caller to trip over later: a
+# half-built venv produces a confusing "module not found" from the Python side
+# instead of the real cause.
+ensure_venv() {
+  local venv_dir="$1"
+  local requirements="$2"
+
+  if [[ -d "$venv_dir" ]]; then
+    return 0
+  fi
+
+  info "Creating Python virtual environment..."
+  if ! python3 -m venv "$venv_dir"; then
+    error "Failed to create virtual environment at $venv_dir"
+    return 1
+  fi
+
+  info "Installing dependencies..."
+  if ! "$venv_dir/bin/pip" install --quiet -r "$requirements"; then
+    error "Failed to install dependencies from $requirements"
+    # Leave no half-built venv behind: its presence would make every later
+    # run skip this function and fail further downstream instead.
+    rm -rf "$venv_dir"
+    return 1
+  fi
+
+  success "Virtual environment ready"
+}
+
 # THE walker of bin/. Emits the name of every installed utility -- a symlink
 # in bin/ pointing at the dispatcher -- one per line, excluding the
 # dispatcher itself.

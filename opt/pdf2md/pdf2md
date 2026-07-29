@@ -64,15 +64,6 @@ EOF
 # VENV MANAGEMENT
 # ============================================================================
 
-ensure_venv() {
-  if [[ ! -d "$VENV_DIR" ]]; then
-    info "Creating Python virtual environment..."
-    python3 -m venv "$VENV_DIR"
-    info "Installing dependencies..."
-    "$VENV_DIR/bin/pip" install --quiet -r "$REQUIREMENTS"
-    success "Virtual environment ready"
-  fi
-}
 
 # ============================================================================
 # MAIN
@@ -100,7 +91,7 @@ if ! check_command python3; then
 fi
 
 # Ensure venv exists and has dependencies
-ensure_venv
+ensure_venv "$VENV_DIR" "$REQUIREMENTS"
 
 # Exec into Python
 exec "$VENV_DIR/bin/python3" "$LIB_DIR/pdf2md.py" "$@"
