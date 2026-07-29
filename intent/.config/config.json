@@ -13,7 +13,6 @@
     }
   },
   "languages": [
-    "shell",
-    "elixir"
+    "shell"
   ]
 }
