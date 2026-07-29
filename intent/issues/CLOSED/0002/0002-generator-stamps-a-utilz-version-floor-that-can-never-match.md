@@ -3,9 +3,9 @@ id: "0002"
 title: utilz generate stamps a utilz_version floor of ^1.0.0 that no 2.x framework can satisfy
 date: 2026-07-29
 reporter: vboot-cc (Vboot project, via hv)
-status: OPEN
+status: CLOSED
 severity: low
-resolved:
+resolved: 2026-07-29
 ---
 
 # 0002: utilz generate stamps a utilz_version floor of ^1.0.0 that no 2.x framework can satisfy
@@ -85,3 +85,37 @@ A hardcoded floor is a constant that has to be hand-maintained in lockstep with 
 - ST0009 / WP-03 -- the work package that lands this fix, together with two Highlander collapses that share the same file.
 - Issue 0001 -- precedent for tracking a shipped defect as an issue alongside (not instead of) the steel thread that fixes it.
 - Found by the `cc` node of the Vboot project while reading Utilz as a reference implementation, and fixed inline at hv's instruction before this issue was filed. The paperwork follows the code here; see ST0009 info.md Context for the full provenance.
+
+## Resolutions
+
+**2026-07-29 -- Fixed under ST0009/WP-03, shipped in v2.4.0 (cc node).**
+
+Applied exactly as proposed above: `{{UTILZ_FLOOR}}` placeholder in
+`opt/utilz/tmpl/metadata.tmpl`, with `generate_utility` deriving the value from
+the framework's own `VERSION`:
+
+    -utilz_version: "^1.0.0"
+    +utilz_version: "{{UTILZ_FLOOR}}"
+
+    +  local utilz_floor="^$(get_utilz_version | cut -d. -f1).0.0"
+
+Regression coverage in `opt/utilz/test/common_lib.bats`:
+
+- `metadata.tmpl carries a placeholder, not a literal version floor` -- asserts
+  the template line is exactly `utilz_version: "{{UTILZ_FLOOR}}"`.
+- `generate stamps a utilz_version floor matching VERSION's major` -- generates
+  into a fabricated `UTILZ_HOME` whose `VERSION` reads **7.3.1** and asserts the
+  stamped floor is `^7.0.0`. Deliberately not asserted against the real 2.x: a
+  test expecting `^2.0.0` would pass even with the floor still hardcoded to a
+  value that happened to match, and so would prove nothing.
+- `a generated utility passes doctor's version compatibility check` -- the
+  end-to-end bar from the Reproduction section, at framework 7.3.1.
+
+All three fail against the pre-fix code. Full suite green (14 suites).
+
+**Evidence correction (same session).** The Impact section above was revised
+before closing: the original report cited `opt/todo/todo.yaml` as a fossil of a
+hand-fix caused by this defect. `git log` does not support that -- `todo.yaml`
+was born `^2.0.0` in `03ccded`, its first and only version, and all 13 utilities
+carry `^2.0.0`. The defect is real but never bit this repo. Severity was set to
+`low` on that basis rather than on the severity the fossil narrative implied.
