@@ -24,7 +24,11 @@ Utilz is a bash/zsh utility framework providing a dispatcher-based CLI system. A
 
 ## Current State
 
-No active work. All nine steel threads (ST0001-ST0009) complete and filed under `intent/st/COMPLETED/`. Framework stable at **v2.4.0** with 13 utilities (core `utilz` + 12 tools). The issue tracker at `intent/issues/` has nothing open -- 0001 (mdagg Unicode drop under C locale) and 0002 (generator compatibility floor) are both CLOSED. Repo clean, pushed to both remotes.
+No active work. All nine steel threads (ST0001-ST0009) complete and filed under `intent/st/COMPLETED/`. Framework stable at **v2.4.0** with 13 utilities (core `utilz` + 12 tools). The issue tracker at `intent/issues/` has nothing open -- 0001 (mdagg Unicode drop under C locale), 0002 (generator compatibility floor), 0003 (dispatcher flag aliases), 0004 (ST0009's sixth `bin/` walk) and 0005 (doctor PATH check) are all CLOSED.
+
+Suite is **407 tests / 0 failures** across 14 suites; shellcheck clean across 15 files (the CI gate is blocking as of `0566bcc`); every script parses under bash 3.2.57; `utilz doctor` and `intent doctor` both fully green.
+
+**Working tree is clean, but `fe8eecf` and `c5694d6` are unpushed** -- both remotes sit at `ad6402d`. Neither is a release, so no tag: `git push local main && git push upstream main` when hv wants it. Pushing is hv's per standing directive.
 
 **v2.4.0 changed behaviour**: `yq` is now a hard dependency. The two-parser grep fallback in `get_util_metadata` is gone, so `utilz list` fails loudly with an install hint where it previously degraded silently and returned empty strings a caller could not tell from absent keys. `utilz doctor` deliberately still completes without `yq` -- it is the command you run to discover it is missing, so do not "tidy" it into gating on `require_yq`.
 
@@ -192,8 +196,8 @@ Run `utilz doctor` to check all dependencies and configuration.
 ```bash
 # Framework
 utilz list                          # List all utilities
-utilz help [utility]                # Show help
-utilz version                       # Show version
+utilz help [utility]                # Show help (-h / --help also accepted)
+utilz version                       # Show version (--version also accepted; -v is unbound)
 utilz doctor                        # Run diagnostics
 utilz test [utility]                # Run tests
 utilz generate <name>               # Generate new utility scaffold
@@ -237,6 +241,14 @@ When starting a new session:
 5. **Ask user** what they want to work on
 
 The framework is stable at v2.4.0. Future work involves adding utilities or enhancements based on user needs. Open defects (if any) live under `intent/issues/OPEN/` -- currently empty.
+
+**First decision next session**: `fe8eecf` and `c5694d6` are unpushed (remotes at `ad6402d`). Not a release, so no tag involved.
+
+Three traps that produced real defects here, worth holding before touching shell code:
+
+- `local x=$(cmd) || handler` never runs the handler -- `local` returns its own status. Split declaration from assignment when the exit code matters. This is what made `clipz` copy nothing and report success.
+- Verify shell tooling under `/bin/bash` with an array. zsh does not word-split unquoted variables, so `shellcheck -x $FILES` there errors on one bogus path and the empty output reads as a pass -- it produced a false "all 15 clean" against a real 57 findings.
+- Never run two `utilz test` suites at once. The helper mutates `$UTILZ_HOME/bin`, so they corrupt each other; one such hang ran 2h18m and looked like a code defect.
 
 Two items carried out of the 29 Jul 2026 session, both **outside this repo** and neither blocking:
 

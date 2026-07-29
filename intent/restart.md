@@ -1,5 +1,5 @@
 ---
-verblock: "29 Jul 2026:v1.3: matts - ST0009 closed; v2.4.0 released; whiteboard to SOTA"
+verblock: "29 Jul 2026:v1.4: matts - shell audit + issues 0003-0005 closed; 407 tests green"
 ---
 
 # Restart Context
@@ -10,7 +10,9 @@ verblock: "29 Jul 2026:v1.3: matts - ST0009 closed; v2.4.0 released; whiteboard 
 - **Framework version is `VERSION` = 2.4.0** (single source of truth; tagged `v2.4.0`, 2026-07-29). Do not confuse it with the `intent` tooling version (2.17.3); the `2.13.0` in an older commit message is an Intent-tooling bump, not the framework.
 - **13 utilities** (core `utilz` + 12 tools), all passing `utilz doctor` and `utilz test`. The `todo` utility (ST0008) is the newest; `cleanz` is at 1.2.0.
 - **`yq` is a HARD dependency as of v2.4.0.** The grep YAML fallback is gone -- `utilz list` now fails loudly with an install hint where it previously degraded silently. `utilz doctor` must still complete without `yq`, because that is the command you run to discover it is missing; do not "tidy" it to gate on `require_yq`.
-- **File-based issue tracker** lives at `intent/issues/` (`OPEN/` / `CLOSED/`) for defects a single issue can drive without a steel thread. Both 0001 (mdagg Unicode/C-locale) and 0002 (generator floor) are CLOSED; `OPEN/` is empty.
+- **File-based issue tracker** lives at `intent/issues/` (`OPEN/` / `CLOSED/`) for defects a single issue can drive without a steel thread. All five are CLOSED and `OPEN/` is empty: 0001 (mdagg Unicode/C-locale), 0002 (generator floor), 0003 (dispatcher flag aliases), 0004 (ST0009's sixth `bin/` walk), 0005 (doctor PATH check).
+- **Suite is 407 tests / 0 failures across 14 suites.** shellcheck clean across 15 files via the CI collector; `intent critic shell` clean; every script parses under bash 3.2.57. `utilz doctor` and `intent doctor` both fully green -- doctor's old PATH warning is gone, since it now recognises a symlink-on-PATH install (issue 0005).
+- **`utilz` accepts `--version`, `--help` and `-h`** as of `fe8eecf`, as aliases onto the existing `version`/`help` arms. `-v` is deliberately unbound (reads as verbose) and a test pins that; do not bind it without arguing with the test first.
 - **Whiteboard has two nodes**: `hv` (Workstream Zero, the human) and `cc`. Roster in `intent/whiteboard/README.md`. `cc/inbox.vboot-cc.md` is an external correspondent from the Vboot project, not a workstream here.
 - **`languages` is `["shell"]` only.** `elixir` was removed on 2026-07-29 -- declared but never used, and it was loading two Elixir skills into every `/in-session`.
 - Two remotes: `local` (Dropbox) and `upstream` (GitHub) -- push to both (`git push local main && git push upstream main`). Releases tag the `release:` commit itself, not the session's final HEAD.
@@ -23,19 +25,24 @@ verblock: "29 Jul 2026:v1.3: matts - ST0009 closed; v2.4.0 released; whiteboard 
 - **Never manually wrap markdown prose**; paragraphs flow as single lines. Tables stay column-aligned.
 - **No Claude attribution in git commits** (global rule; commits end with the `(C) hello@matthewsinclair.com` copyright footer).
 - **bash 3.2 compatibility** (macOS ships an ancient bash): no namerefs, no `${var,,}`; guard `"${arr[@]}"` under `set -u`; avoid GNU-only sed/grep idioms (`\b`, `\u`, byte-fragile bracket classes) -- see issue 0001.
+- **`local x=$(cmd) || handler` is a trap**: `local` returns its own status, so the `||` tests the declaration and never the command. Split declaration from assignment whenever the exit code matters. It is what made `clipz` copy nothing and report success; shellcheck SC2155 catches it and the CI gate is blocking.
+- **Verify shell tooling under `/bin/bash` with an array.** zsh does not word-split unquoted variables, so `shellcheck -x $FILES` there passes one bogus path, errors, and the empty output looks like a clean run -- that produced a false "all 15 clean" against a real 57 findings.
+- **`utilz test` is not concurrency-safe.** The helper's `create_test_utility` mutates `$UTILZ_HOME/bin`, so two suites corrupt each other; one observed hang ran 2h18m. Kill strays before starting a run.
 
 ## Recent History
 
 ```
+fe8eecf  fix: dispatcher flag aliases, ST0009's sixth walk, doctor's PATH check  <- unpushed
+c5694d6  wb(cc): pickup -- record the audit, archive the handled vboot-cc inbox  <- unpushed
+ad6402d  fix: audit pass 3 -- syncz delete reported success on failure          <- remotes here
+0566bcc  ci: shellcheck covers libraries and blocks the build
+1cb66b2  fix: audit pass 2 -- dead error guards, unchecked cd, glob-unsafe splitting
+cf45371  fix: audit pass 1 -- common.sh, mdagg dead code, cleanz silent regex failure
+6b8a1fe  docs: globalfold -- snapshot v2.4.0 / ST0009, release the cc board
 3cbda7f  docs: correct the bash floor to 3.2 across the remaining READMEs
 294e3b9  chore(whiteboard): provision hv, add the roster README (Lamplight/Baize SOTA)
 3bc17ca  chore(intent): drop the unused elixir language pack
-4d5a7b6  chore(whiteboard): deliver the vboot-cc reply, drop the local draft
-014a5b5  issues: close 0002 -- generator floor fixed and shipped in v2.4.0
-703baab  release: v2.4.0 (framework core -- ST0009, issue 0002)   <- tag v2.4.0
-b468636  fix(core): one bin walker, one YAML parser, derived generator floor (ST0009)
-bac04e5  docs(st): ST0009 + issue 0002 -- paperwork for the framework-core triple
-19de6d5  chore(intent): install shell rule pack, regen AGENTS.md (intent 2.17.3)
+703baab  release: v2.4.0 (framework core -- ST0009, issue 0002)                 <- tag v2.4.0
 ```
 
 ## For Next Session
@@ -45,6 +52,8 @@ No active steel thread. Framework at v2.4.0, 13 utilities, editor-integration su
 1. Potential future ST: VSCode / Zed / Vim integration families (same TSV manifest, new editor-specific installers).
 2. Potential future ST: Emacs bridge v2 -- Transient grouped menu (deferred per ST0007 `design.md`).
 
+First thing to decide, though: **`fe8eecf` and `c5694d6` are unpushed** -- both remotes are still at `ad6402d`. Neither is a release, so no tag is involved; it is a plain `git push local main && git push upstream main` whenever hv wants it.
+
 Carried out of this session, both outside this repo and neither blocking:
 
 - **Intent issue 0008** is filed but **uncommitted** in `../Intent` (`intent/issues/OPEN/0008/`). It covers the unconditional `Bash 4.0+` line that `intent agents sync` writes into every project's `AGENTS.md`. When it is fixed, re-run `intent agents sync` here to pick up the correction -- `AGENTS.md:13` is wrong today and must not be hand-edited.
@@ -52,9 +61,11 @@ Carried out of this session, both outside this repo and neither blocking:
 
 ### Verification checklist on fresh checkout
 
-- `utilz version` -- expect `utilz v2.4.0`.
-- `utilz doctor` + `utilz emacs doctor` -- both green (`doctor` warns if `$UTILZ_HOME/bin` is not on `$PATH`; that is environmental).
-- `utilz test` -- full suite green, 14 suites. Takes several minutes; do not assume a timeout means a failure.
+- `utilz version` and `utilz --version` -- both expect `utilz v2.4.0`. `utilz --help` / `-h` work too; `utilz -v` must still fail.
+- `utilz doctor` + `utilz emacs doctor` -- both green. `doctor` warns about PATH only if neither `$UTILZ_HOME/bin` is on `$PATH` nor a `utilz` on `$PATH` resolves to the dispatcher; on this machine it passes via `~/.local/bin/utilz`.
+- `utilz test` -- full suite green, 407 tests / 14 suites. Takes several minutes; do not assume a timeout means a failure, and never run two at once (see conventions).
 - `utilz integration commands | column -t -s$'\t'` -- one row per user-facing utility.
-- Issue tracker: `ls intent/issues/OPEN` (empty), `ls intent/issues/CLOSED` (0001, 0002).
+- Issue tracker: `ls intent/issues/OPEN` (empty), `ls intent/issues/CLOSED` (0001-0005).
+- shellcheck, exactly as CI runs it: collect `find bin opt -type f \( -perm -u+x -o -name '*.sh' \) -not -path '*/test/*' -not -path '*/.venv/*'` into a bash array and `shellcheck -x` it -- 15 files, clean. Run it under `/bin/bash`, not zsh.
+- Highlander check: `grep -rn 'UTILZ_HOME"/bin/\*' bin/utilz opt/utilz/lib/common.sh` -- exactly two hits, or a seventh open-coded walk has appeared.
 - Sanity-check the v2.4.0 behaviour change: with `yq` off `PATH`, `utilz list` must fail loudly with a single install hint, and `utilz doctor` must still complete and name `yq` as missing.

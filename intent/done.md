@@ -1,8 +1,27 @@
 ---
-verblock: "25 Mar 2026:v0.1: matts - Created with expz completion"
+verblock: "29 Jul 2026:v0.2: matts - shell audit + issues 0003-0005"
 ---
 
 # Done
+
+## 29 Jul 2026 -- repo-wide shell audit + issues 0003-0005 (no release)
+
+Landed after the v2.4.0 tag, so it ships with the next release. Two phases, both prompted by hv: an audit ("are there other dumb things in there I have missed?") and then a health check ("is Utilz good?") that turned up three more defects while reading.
+
+- **57 shellcheck findings including 3 hard errors -> 0.** Commits `cf45371`, `1cb66b2`, `ad6402d`.
+- **Four real defects that no tool found** -- these came out of reading, and shellcheck was clean on all four afterwards as well as before:
+  - **`clipz` copied nothing and reported success.** `local copy_cmd=$(get_copy_command) || exit 1` never fires: `local` returns its own status, so the `||` tests the declaration. With `copy_cmd` empty, `$copy_cmd < "$input_file"` is a bare redirect -- it runs nothing and exits 0. clipz printed an error, copied nothing, and exited 0.
+  - **`syncz execute_delete` reported success on failure.** `rsync "${delete_args[@]}" || true` followed by an unconditional `success "Delete complete"`, twelve lines from an `execute_sync` that already had the correct 0/23/else convention. Now mirrors it.
+  - **`mdagg` carried a dead, broken, duplicate `--version`.** Unreachable (the header sources `common.sh` and exits 1 if absent), would have died on a top-level `local` if it were reachable, and hardcoded a stale `v1.0.0`.
+  - **`cleanz`'s trope detector stopped detecting silently.** It collapsed grep exit 2 (invalid regex on this platform) into "no match", so a broken pattern reported clean. Note the adjacent `data_attrs=$(...) || data_attrs=0` is load-bearing, not a bug: grep exits 1 on no match and pipefail propagates it, so a naive split there would abort cleanz on text _without_ data attributes.
+- **CI's shellcheck step could never fail the build.** It collected only executables, so `opt/utilz/lib/common.sh` (0644, sourced by every utility) had **no static analysis at all** -- 15 of the 57 findings had accumulated there unseen -- and the step ended with `|| echo "(non-blocking)"`. Now collects `*.sh` too, uses `-perm -u+x` for BSD portability, builds an array rather than a word-split string, fails loudly if the collection is empty, and **blocks**. Sequenced last (`0566bcc`) so turning it on never reddened CI.
+- **`ensure_venv()`** extracted from pdf2md + xtrct (Highlander).
+- **Issues 0003-0005** (`fe8eecf`), three dispatcher/doctor defects found by reading `bin/utilz`:
+  - **0003**: `utilz --version`, `--help` and `-h` each exited 1 with "Unknown command". Only the bare words worked -- while all 13 utilities accept the flag forms and the nested `integration`/`emacs` verbs accept them too, making the framework's own front door the one place the conventional spelling failed. Fixed by widening the existing case arms (aliases, not a second code path). `-v` stays unbound by design and is now pinned by a test.
+  - **0004**: the "Installed utilities" list on the unknown-command path was a **sixth** open-coded walk of `bin/*`, missed by ST0009/WP-01 because that sweep grepped `common.sh` and this copy lives in `bin/utilz`. It carried the exact `-L`-only drift ST0009 existed to remove: a stray symlink was suggested as a utility while `utilz list` correctly omitted it. Now consumes `each_utility()`; column width computed rather than a hardcoded run of spaces, so descriptions align.
+  - **0005**: doctor check 4 was `echo "$PATH" | grep -q "$UTILZ_HOME/bin"` -- one expression, two faults. It recognised only a literal `$UTILZ_HOME/bin` PATH entry, so a working symlink install reported "Found 1 issue(s)"; and it matched by unanchored regex, so `/opt/Utilz/binaries` satisfied a test for `/opt/Utilz/bin`. Now an exact PATH-element match with a fallback scan for a `utilz` that is `-ef` the dispatcher. `-ef` compares device and inode _through_ symlinks, so no resolver was added -- the only one, `determine_utilz_home`, cannot be reused because it runs before `common.sh` is sourced (it is what finds `common.sh`).
+- **Tests 395 -> 407.** 12 new across `dispatcher.bats` and `common_lib.bats`, **6 genuinely red before the fix**; the 6 that passed from the start are deliberate (they pin `-v` staying unbound, a real utility still listed, and doctor's two already-correct PATH branches).
+- **Method note worth keeping.** A false "all 15 clean" was reported early in the audit because `shellcheck -x $FILES` ran under zsh, which does not word-split unquoted variables: shellcheck got one bogus path, errored, and the empty output read as a pass. Real count under bash was 57. Verify shell tooling under `/bin/bash` with an array.
 
 ## 29 Jul 2026 — Utilz v2.4.0 (framework core: one walker, one parser, derived generator floor)
 
