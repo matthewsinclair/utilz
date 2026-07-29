@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: 536a4f85-7490-4324-8c8d-6c09420b6de3
-heartbeat_at: 2026-07-29T15:18Z
-status: paused
-focus: "ST0009 landed and shipped: v2.4.0 tagged and pushed to both remotes. Whiteboard brought up to the Lamplight / Baize standard (hv node + roster README). Nothing in flight."
+heartbeat_at: 2026-07-29T21:02Z
+status: active
+focus: "Idle at ad6402d. v2.4.0 shipped; repo-wide shell audit landed (57 shellcheck findings -> 0, four real defects fixed, CI gate now blocking). Nothing in flight."
 claims: [ST0009]
 ---
 
@@ -13,7 +13,7 @@ claims: [ST0009]
 
 ## DOING
 
-- (idle) Nothing in flight. ST0009 complete, v2.4.0 tagged + pushed, reply delivered to vboot-cc, whiteboard at SOTA.
+- (idle) Nothing in flight at `ad6402d`. ST0009 complete, v2.4.0 tagged + pushed, reply delivered to vboot-cc, whiteboard at SOTA, repo-wide shell audit landed.
 
 ## Last session (2026-07-10)
 
@@ -25,14 +25,20 @@ Picked up an uncommitted, ST-less refactor of `opt/utilz/lib/common.sh` left in 
 
 Landed as **ST0009** (WP-01 walker / WP-02 yq / WP-03 generator floor) plus **issue 0002**, and released as **v2.4.0**. The code was already green; the missing work was coverage. 12 new tests in `common_lib.bats`, verified red-first retrospectively against `HEAD` in a scratch copy -- 11 of 12 fail against the pre-change code. Also reconciled `docs/architecture.md`, `help/utilz.md`, `README.md`.
 
+Then, at hv's request, a repo-wide ULTRATHINK audit of every utility -- "are there other dumb things in there I have missed?". Yes: **57 shellcheck findings including 3 hard errors, now 0**, plus four real defects that no tool found (they came out of reading): `clipz` copy/paste silently no-op'd and reported success (`local x=$(cmd) || exit 1` never fires -- `local` returns its own status, and an empty command with a redirect runs nothing and exits 0); `syncz execute_delete` printed "Delete complete" unconditionally after `rsync || true`, twelve lines from an `execute_sync` that already had the correct 0/23/else convention; `mdagg` carried a `--version` fallback that was unreachable, would have died on a top-level `local` if reached, and hardcoded a stale `v1.0.0`; `cleanz`'s trope detector collapsed grep exit 2 (invalid regex) into "no match", so a broken pattern silently stopped detecting. One structural gap too: CI's shellcheck step never saw `common.sh` (0644, and the step only collected executables) and was `|| echo "(non-blocking)"` -- it could not fail the build. Both fixed; the gate is blocking and was sequenced last so it never reddened CI. `ensure_venv()` extracted from pdf2md+xtrct (Highlander). Four commits: `cf45371`, `1cb66b2`, `0566bcc`, `ad6402d`. Suite 395 passing / 0 failures.
+
 Two claims in vboot-cc's report were checked rather than taken at face value: its bash 3.2 belief (**correct** -- now verified under `/bin/bash 3.2.57`, it had explicitly flagged this as unverified) and its `opt/todo/todo.yaml` "fossil of a hand-fix" evidence (**wrong** -- `todo.yaml` was born `^2.0.0` in `03ccded` and all 13 utilities carry `^2.0.0`; the defect is purely latent and never bit this repo). Issue 0002 records the withdrawal.
 
 ## TODO
 
-- _(none)_
+- Two items live **outside this repo**, both hv's to land: Intent issue `0008` is filed but uncommitted in `../Intent/intent/issues/OPEN/0008/` (`intent agents sync` writes an unconditional `- Bash 4.0+, POSIX-compliant shell` into every AGENTS.md; source `intent/plugins/agents/bin/intent_agents:323`), and the reply to Vboot sits uncommitted at `../Vboot/intent/whiteboard/cc/TEMP-from-utilz-cc-20260729.md`.
+- Once the Intent fix lands, re-run `intent agents sync` here, in Lamplight and in Baize. `AGENTS.md:13` is wrong today and must NOT be hand-edited -- it is generated, and the next sync would revert the edit.
 
 ## Watch-outs
 
+- **`utilz test` is not safe to run concurrently.** The test helper's `create_test_utility` mutates `$UTILZ_HOME/bin`, so two suites corrupt each other -- observed as a 2h18m hang stalled at `common_lib.bats` test 22 on 2026-07-29, caused by an orphaned background run, not a code defect. One suite at a time; kill strays before starting.
+- Verify shell tooling under `/bin/bash` with an array, never under zsh with an unquoted variable. `shellcheck -x $FILES` in zsh does not word-split, so shellcheck receives one bogus path, errors, and the empty output reads as a pass. That mistake produced a false "all 15 clean" against a real 57 findings on 2026-07-29.
+- Do not use `perl -0pi -e` for replacements whose text contains `$(` -- Perl interpolates `$(` as the GID variable and silently corrupts the file (it mangled `gitz` this way). Use the Edit tool.
 - `each_utility()` must be consumed with process substitution -- `while IFS= read -r name; do ...; done < <(each_utility)` -- never a pipe. `run_doctor` and `run_tests` accumulate into arrays; a pipe subshells the loop body and both would silently report nothing.
 - `require_yq` must be called ONCE before a loop, never per-iteration. `get_util_metadata` runs inside command substitution, so it cannot memoise -- a subshell's variables die with it. The first cut memoised and reprinted the install hint 13 times. AT-02.2 pins this.
 - `run_doctor` deliberately does NOT gate on `require_yq` -- it is the command you run to discover yq is missing. It resolves `have_yq` once up front and branches. Check 6 reports yq by hand and first, because parsing YAML to discover the YAML parser is missing does not work.
