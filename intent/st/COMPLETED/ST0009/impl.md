@@ -2,7 +2,7 @@
 
 ## Implementation
 
-Source changes were made by the `cc` node of the Vboot project on 2026-07-29, inline and hv-instructed, before this steel thread existed (see info.md Context). This thread supplied the paperwork, the test coverage, the documentation reconciliation, and the release.
+Source changes were made by the `cc` node of the Cdsync project on 2026-07-29, inline and hv-instructed, before this steel thread existed (see info.md Context). This thread supplied the paperwork, the test coverage, the documentation reconciliation, and the release.
 
 Landed in `opt/utilz/lib/common.sh` (+344/-173), `opt/utilz/utilz.yaml`, `opt/utilz/tmpl/metadata.tmpl`:
 

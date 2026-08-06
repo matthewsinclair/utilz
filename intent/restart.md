@@ -13,7 +13,7 @@ verblock: "29 Jul 2026:v1.4: matts - shell audit + issues 0003-0005 closed; 407 
 - **File-based issue tracker** lives at `intent/issues/` (`OPEN/` / `CLOSED/`) for defects a single issue can drive without a steel thread. All five are CLOSED and `OPEN/` is empty: 0001 (mdagg Unicode/C-locale), 0002 (generator floor), 0003 (dispatcher flag aliases), 0004 (ST0009's sixth `bin/` walk), 0005 (doctor PATH check).
 - **Suite is 407 tests / 0 failures across 14 suites.** shellcheck clean across 15 files via the CI collector; `intent critic shell` clean; every script parses under bash 3.2.57. `utilz doctor` and `intent doctor` both fully green -- doctor's old PATH warning is gone, since it now recognises a symlink-on-PATH install (issue 0005).
 - **`utilz` accepts `--version`, `--help` and `-h`** as of `fe8eecf`, as aliases onto the existing `version`/`help` arms. `-v` is deliberately unbound (reads as verbose) and a test pins that; do not bind it without arguing with the test first.
-- **Whiteboard has two nodes**: `hv` (Workstream Zero, the human) and `cc`. Roster in `intent/whiteboard/README.md`. `cc/inbox.vboot-cc.md` is an external correspondent from the Vboot project, not a workstream here.
+- **Whiteboard has two nodes**: `hv` (Workstream Zero, the human) and `cc`. Roster in `intent/whiteboard/README.md`. `cc/inbox.cdsync-cc.md` is an external correspondent from the Cdsync project, not a workstream here.
 - **`languages` is `["shell"]` only.** `elixir` was removed on 2026-07-29 -- declared but never used, and it was loading two Elixir skills into every `/in-session`.
 - Two remotes: `local` (Dropbox) and `upstream` (GitHub) -- push to both (`git push local main && git push upstream main`). Releases tag the `release:` commit itself, not the session's final HEAD.
 
@@ -33,7 +33,7 @@ verblock: "29 Jul 2026:v1.4: matts - shell audit + issues 0003-0005 closed; 407 
 
 ```
 fe8eecf  fix: dispatcher flag aliases, ST0009's sixth walk, doctor's PATH check  <- unpushed
-c5694d6  wb(cc): pickup -- record the audit, archive the handled vboot-cc inbox  <- unpushed
+c5694d6  wb(cc): pickup -- record the audit, archive the handled cdsync-cc inbox  <- unpushed
 ad6402d  fix: audit pass 3 -- syncz delete reported success on failure          <- remotes here
 0566bcc  ci: shellcheck covers libraries and blocks the build
 1cb66b2  fix: audit pass 2 -- dead error guards, unchecked cd, glob-unsafe splitting
@@ -57,7 +57,7 @@ First thing to decide, though: **`fe8eecf` and `c5694d6` are unpushed** -- both 
 Carried out of this session, both outside this repo and neither blocking:
 
 - **Intent issue 0008** is filed but **uncommitted** in `../Intent` (`intent/issues/OPEN/0008/`). It covers the unconditional `Bash 4.0+` line that `intent agents sync` writes into every project's `AGENTS.md`. When it is fixed, re-run `intent agents sync` here to pick up the correction -- `AGENTS.md:13` is wrong today and must not be hand-edited.
-- The reply to the Vboot node was delivered as `../Vboot/intent/whiteboard/cc/TEMP-from-utilz-cc-20260729.md` (uncommitted there, theirs to file or bin). Nothing here depends on it.
+- The reply to the Cdsync node was delivered as `../Cdsync/intent/whiteboard/cc/TEMP-from-utilz-cc-20260729.md` (uncommitted there, theirs to file or bin). Nothing here depends on it.
 
 ### Verification checklist on fresh checkout
 

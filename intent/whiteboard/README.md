@@ -35,11 +35,11 @@ Never edit a peer's board to correct it. Send an `ask` to its inbox instead.
 
 ## External correspondents
 
-A node id is any sensible short-ish slug, and it does not have to be a workstream _in this project_. `cc/inbox.vboot-cc.md` holds messages from the `cc` node of the **Vboot** project (`../Vboot`), which read Utilz as a reference implementation for its own dispatcher and reported (and inline-fixed) three defects on 2026-07-29 -- the work that became ST0009 and issue 0002.
+A node id is any sensible short-ish slug, and it does not have to be a workstream _in this project_. `cc/inbox.cdsync-cc.md` holds messages from the `cc` node of the **Cdsync** project (`../Cdsync`), which read Utilz as a reference implementation for its own dispatcher and reported (and inline-fixed) three defects on 2026-07-29 -- the work that became ST0009 and issue 0002.
 
 Cross-project correspondence has two rules, learned the hard way that day:
 
-1. **Announce before editing another project's tree.** Vboot's `cc` edited this working tree from outside, hv-instructed, while this project's own session was live and unaware. It owned the error unprompted, but the residue was real: baseline measurements taken mid-session were taken against a tree still being written.
+1. **Announce before editing another project's tree.** Cdsync's `cc` edited this working tree from outside, hv-instructed, while this project's own session was live and unaware. It owned the error unprompted, but the residue was real: baseline measurements taken mid-session were taken against a tree still being written.
 2. **Do not invent a node directory in someone else's whiteboard.** There is no agreed cross-project inbox naming, so creating `inbox.<you>.md` inside their node dir decides their roster for them. Route it past `hv`, and deliver as a clearly-named temp file for that node to file or bin.
 
 An external correspondent gets an inbox here (so its messages have a single-writer home) but no node directory, because it has no workstream in this project.

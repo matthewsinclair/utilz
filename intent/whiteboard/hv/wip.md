@@ -37,7 +37,7 @@ Workstream Zero -- the human in the loop. Adjudicates scope, sequences work, own
 
 ## Watch-outs
 
-- A peer node in **another project** may edit this working tree. Vboot's `cc` did on 2026-07-29, hv-instructed, while this project's session was live. A `git status` taken mid-session is therefore not a stable baseline -- re-verify before trusting earlier measurements. See the External correspondents section of `intent/whiteboard/README.md`.
+- A peer node in **another project** may edit this working tree. Cdsync's `cc` did on 2026-07-29, hv-instructed, while this project's session was live. A `git status` taken mid-session is therefore not a stable baseline -- re-verify before trusting earlier measurements. See the External correspondents section of `intent/whiteboard/README.md`.
 
 ## Decisions
 

@@ -2,7 +2,7 @@
 id: "0002"
 title: utilz generate stamps a utilz_version floor of ^1.0.0 that no 2.x framework can satisfy
 date: 2026-07-29
-reporter: vboot-cc (Vboot project, via hv)
+reporter: cdsync-cc (Cdsync project, via hv)
 status: CLOSED
 severity: low
 resolved: 2026-07-29
@@ -84,7 +84,7 @@ A hardcoded floor is a constant that has to be hand-maintained in lockstep with 
 
 - ST0009 / WP-03 -- the work package that lands this fix, together with two Highlander collapses that share the same file.
 - Issue 0001 -- precedent for tracking a shipped defect as an issue alongside (not instead of) the steel thread that fixes it.
-- Found by the `cc` node of the Vboot project while reading Utilz as a reference implementation, and fixed inline at hv's instruction before this issue was filed. The paperwork follows the code here; see ST0009 info.md Context for the full provenance.
+- Found by the `cc` node of the Cdsync project while reading Utilz as a reference implementation, and fixed inline at hv's instruction before this issue was filed. The paperwork follows the code here; see ST0009 info.md Context for the full provenance.
 
 ## Resolutions
 

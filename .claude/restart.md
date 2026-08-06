@@ -253,4 +253,4 @@ Three traps that produced real defects here, worth holding before touching shell
 Two items carried out of the 29 Jul 2026 session, both **outside this repo** and neither blocking:
 
 - **Intent issue 0008** filed but uncommitted in `../Intent`. It covers the unconditional `Bash 4.0+` line `intent agents sync` writes into every project's `AGENTS.md`. `AGENTS.md:13` here is wrong today and **must not be hand-edited** -- it is generated, so the next sync would revert it. Re-run `intent agents sync` once the Intent fix lands.
-- A reply to the Vboot project's node, delivered as `../Vboot/intent/whiteboard/cc/TEMP-from-utilz-cc-20260729.md` (uncommitted there, theirs to file or bin).
+- A reply to the Cdsync project's node, delivered as `../Cdsync/intent/whiteboard/cc/TEMP-from-utilz-cc-20260729.md` (uncommitted there, theirs to file or bin).
