@@ -199,5 +199,158 @@
         "is": "computed"
       }
     }
+  ],
+  "tests": [
+    {
+      "id": "AT-01.1",
+      "kind": "test",
+      "covers": [
+        "AC-01.1"
+      ],
+      "status": "green",
+      "note": "(red at HEAD: `each_utility: command not found`)",
+      "legacy": {
+        "raw": "each_utility() lists installed utilities one per line"
+      }
+    },
+    {
+      "id": "AT-01.2",
+      "kind": "test",
+      "file": "each_utility() ignores a bin/ symlink that does not resolve to utilz",
+      "covers": [
+        "AC-01.2"
+      ],
+      "status": "green",
+      "note": "(red at HEAD)"
+    },
+    {
+      "id": "AT-01.3",
+      "kind": "test",
+      "file": "each_utility() ignores a plain file in bin/",
+      "covers": [
+        "AC-01.3"
+      ],
+      "status": "green",
+      "note": "(red at HEAD)"
+    },
+    {
+      "id": "AT-01.4",
+      "kind": "test",
+      "file": "a stray bin/ symlink is invisible to both list_utilities and run_doctor",
+      "covers": [
+        "AC-01.2",
+        "AC-01.5"
+      ],
+      "status": "green",
+      "note": "the drift itself) -- (red at HEAD: doctor reported `Found 3 utilities, but 1 have issues: - zzstray (no implementation)` while list showed 2 -- the drift itself)"
+    },
+    {
+      "id": "AT-02.1",
+      "kind": "test",
+      "covers": [
+        "AC-02.1"
+      ],
+      "status": "green",
+      "note": "(red at HEAD)",
+      "legacy": {
+        "raw": "list_utilities() without yq fails loudly with an install hint"
+      }
+    },
+    {
+      "id": "AT-02.2",
+      "kind": "test",
+      "covers": [
+        "AC-02.2"
+      ],
+      "status": "green",
+      "note": "(red at HEAD)",
+      "legacy": {
+        "raw": "the yq install hint is printed once, not once per utility"
+      }
+    },
+    {
+      "id": "AT-02.3",
+      "kind": "test",
+      "covers": [
+        "AC-02.3"
+      ],
+      "status": "green",
+      "note": "(red at HEAD)",
+      "legacy": {
+        "raw": "run_doctor() completes without yq and names it as missing"
+      }
+    },
+    {
+      "id": "AT-02.4",
+      "kind": "test",
+      "covers": [
+        "AC-02.4"
+      ],
+      "status": "green",
+      "note": "the old code returned 0 with empty output) -- (red at HEAD -- the old code returned 0 with empty output)",
+      "legacy": {
+        "raw": "get_util_metadata() returns non-zero for a missing yaml file"
+      }
+    },
+    {
+      "id": "AT-02.5",
+      "kind": "test",
+      "covers": [
+        "AC-02.5"
+      ],
+      "status": "green",
+      "note": "this is a regression guard for behaviour the refactor had to preserve, not new behaviour; it is the 1 of 12 that was not red) -- (**passes at HEAD too** -- this is a regression guard for behaviour the refactor had to preserve, not new behaviour; it is the 1 of 12 that was not red)",
+      "legacy": {
+        "raw": "get_util_metadata() resolves both an inline version and a version_file"
+      }
+    },
+    {
+      "id": "AT-03.1",
+      "kind": "test",
+      "covers": [
+        "AC-03.3"
+      ],
+      "status": "green",
+      "note": "(red at HEAD)",
+      "legacy": {
+        "raw": "metadata.tmpl carries a placeholder, not a literal version floor"
+      }
+    },
+    {
+      "id": "AT-03.2",
+      "kind": "test",
+      "covers": [
+        "AC-03.1"
+      ],
+      "status": "green",
+      "note": "(red at HEAD). Asserts against a fake home reporting `VERSION` 7.3.1 and expects `^7.0.0`, so it proves derivation; asserting `^2.0.0` against the real VERSION would pass even with the floor still hardcoded.",
+      "legacy": {
+        "raw": "generate stamps a utilz_version floor matching VERSION's major"
+      }
+    },
+    {
+      "id": "AT-03.3",
+      "kind": "test",
+      "covers": [
+        "AC-03.2"
+      ],
+      "status": "green",
+      "note": "(red at HEAD)",
+      "legacy": {
+        "raw": "a generated utility passes doctor's version compatibility check"
+      }
+    },
+    {
+      "id": "AT-00.1",
+      "kind": "test",
+      "covers": [
+        "AC-00.1"
+      ],
+      "status": "green",
+      "note": "(14/14 suites, 41 tests in `common_lib.bats`, 2026-07-29)",
+      "legacy": {
+        "raw": "Full suite via `utilz test"
+      }
+    }
   ]
 }
