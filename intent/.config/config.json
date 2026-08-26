@@ -1,18 +1,19 @@
 {
-  "project_name": "Utilz",
   "author": "matts",
   "created": "2025-12-28",
-  "st_prefix": "ST",
-  "intent_version": "2.18.0",
-  "plugins": {
-    "claude": {
-      "subagents_path": "intent/plugins/claude/subagents"
-    },
-    "agents": {
-      "config_path": "intent/plugins/agents"
-    }
-  },
+  "intent_version": "3.0.0",
   "languages": [
     "shell"
-  ]
+  ],
+  "plugins": {
+    "agents": {
+      "config_path": "intent/plugins/agents"
+    },
+    "claude": {
+      "subagents_path": "intent/plugins/claude/subagents"
+    }
+  },
+  "project_id": "5eb479d0-9963-4a5d-91f7-be56abae704e",
+  "project_name": "Utilz",
+  "st_prefix": "ST"
 }

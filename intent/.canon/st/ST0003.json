@@ -1,0 +1,18 @@
+{
+  "schema": "intent/thread@3.0",
+  "id": "ST0003",
+  "title": "syncz --bidi mode and --confirm enhancement",
+  "status": "completed",
+  "created": "2026-02-10",
+  "completed": "2026-02-10",
+  "objective": "Add bidirectional sync mode (`--bidi`) with orphan detection/resolution, and a `--confirm [yes|no|all]` optional argument for fully scriptable operation. Write comprehensive tests for the new features, update all documentation, and bump framework version to 1.2.1.",
+  "context": "syncz v1.2.0 (ST0002) delivered unidirectional sync with three conflict resolution strategies, confirmation modes, and safety gates. Users need two-way sync between peer directories (e.g. laptop ↔ NAS) where neither side is authoritative. The `--bidi` flag adds:\n\n- Orphan detection via `find` + `comm`\n- Orphan resolution: interactive prompts, `--delete` (silent), `--confirm yes/no/all` (scriptable)\n- Two-pass rsync (dir1→dir2, dir2→dir1) with newer-wins strategy\n- rsync `--delete` never passed in bidi mode (orphan resolution handles deletions)\n\nThe `--confirm` optional argument (`yes`, `no`, `all`) enables fully non-interactive operation in both uni and bidi modes.",
+  "body": "## Related Steel Threads\n\n- ST0002: syncz - Directory-to-Directory Syncer (predecessor, established unidirectional sync)",
+  "preamble": "",
+  "related": [
+    {
+      "id": "ST0002",
+      "note": "syncz - Directory-to-Directory Syncer (predecessor, established unidirectional sync"
+    }
+  ]
+}

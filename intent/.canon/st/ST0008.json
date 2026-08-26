@@ -1,0 +1,653 @@
+{
+  "schema": "intent/thread@3.0",
+  "id": "ST0008",
+  "title": "Add todo to utilz",
+  "slug": "add-todo-to-utilz",
+  "status": "completed",
+  "created": "2026-07-03",
+  "completed": "2026-07-03T13:52:13Z",
+  "objective": "Add a `utilz todo` utility: a standalone, single-file manager for a plain-text `todo.md` with DOING / TODO / DONE buckets, positional item numbers, and history sweep/purge subcommands. It is a fork of Intent's `intent todo`, made independent of steel threads -- the `todo.md` is the source of truth rather than a projection.",
+  "context": "Factored out of `intent todo` so a plain, project-agnostic todo file can be managed anywhere (cwd `./todo.md` or a global `-g` file). Two hard constraints carry over from Intent: the `todo.md` file format stays mutually compatible (same `## DOING/TODO/DONE:<watermark>` headings, same `[ ]/[-]/[x]` glyphs), and the command names stay identical to `intent todo` wherever the standalone context allows. The full design, including the projection-vs-source-of-truth fork and the divergences (frontmatter, item numbers, no GFM dash), is in `design.md`.",
+  "body": "",
+  "preamble": "",
+  "wps": [
+    {
+      "seq": 1,
+      "title": "Scaffold + core: parse, normalize, render, write, file-location, list/add",
+      "scope": "S",
+      "status": "done",
+      "objective": "[Clear statement of what this work package aims to accomplish]",
+      "body": "",
+      "preamble": ""
+    },
+    {
+      "seq": 2,
+      "title": "Mutation verbs: start, done, notdone, toggle",
+      "scope": "S",
+      "status": "done",
+      "objective": "[Clear statement of what this work package aims to accomplish]",
+      "body": "",
+      "preamble": ""
+    },
+    {
+      "seq": 3,
+      "title": "Queries: next, doing, todo, done, count",
+      "scope": "S",
+      "status": "done",
+      "objective": "[Clear statement of what this work package aims to accomplish]",
+      "body": "",
+      "preamble": ""
+    },
+    {
+      "seq": 4,
+      "title": "Lifecycle: done --prune (history), done --flush",
+      "scope": "S",
+      "status": "done",
+      "objective": "[Clear statement of what this work package aims to accomplish]",
+      "body": "",
+      "preamble": ""
+    },
+    {
+      "seq": 5,
+      "title": "sync + edit",
+      "scope": "S",
+      "status": "done",
+      "objective": "[Clear statement of what this work package aims to accomplish]",
+      "body": "",
+      "preamble": ""
+    },
+    {
+      "seq": 6,
+      "title": "--json export + Emacs integration block",
+      "scope": "S",
+      "status": "done",
+      "objective": "[Clear statement of what this work package aims to accomplish]",
+      "body": "",
+      "preamble": ""
+    },
+    {
+      "seq": 7,
+      "title": "Docs: README + help + doctor deps",
+      "scope": "S",
+      "status": "done",
+      "objective": "[Clear statement of what this work package aims to accomplish]",
+      "body": "",
+      "preamble": ""
+    },
+    {
+      "seq": 8,
+      "title": "utilz todo <-> intent todo mutual guard (utilz side)",
+      "scope": "S",
+      "status": "done",
+      "objective": "Make `utilz todo` and `intent todo` mutually non-clobbering across the shared `todo.md` format. `utilz todo` stamps a `generator: utilz todo` ownership marker on every write, and refuses to overwrite a file owned by a different generator (eg `intent todo`) -- but only when Intent is actually present, so utilz stays a zero-dependency standalone tool that runs silently and never fails anywhere Intent isn't. This is the utilz half of the symmetric contract Intent shipped in 2.16.1 (`bin/intent_todo:guard_foreign_todo`).",
+      "body": "## Deliverables\n\n- Stamp `generator: utilz todo` into the frontmatter emitted by the single writer (`write_file`), alongside `title:` / `history:`. Unconditional -- independent of Intent's presence.\n- A `guard_foreign_todo` seam mirroring Intent's, called at the top of `write_file`: proceed silently when the file is absent, has no frontmatter, has frontmatter without a `generator:` (utilz's own pre-marker `title:`/`history:` file), or is marked `generator: utilz todo`; otherwise the file is foreign.\n- Intent-aware gating on the foreign branch only: refuse (clear error + non-zero exit) only when BOTH `command -v intent` succeeds AND the **target file's own directory tree** contains a valid Intent project (`intent/.config/config.json`, walking upward from `dirname($TODO_FILE)`). Deliberately anchored on the file, not cwd (this diverges from Intent's cwd-based `find_project_root` on purpose): the guard's question is \"does the file I'm about to overwrite belong to an Intent project?\", so pointing `--file` at another project's `intent/todo.md` from outside still triggers it. Otherwise proceed and re-stamp as utilz. No emissions when Intent is absent.\n- Default-path creation guard (follow-up): refuse to CREATE a fresh default `./todo.md` inside an Intent project (same `_intent_present` + `_in_intent_project` gates, plus a `DEFAULT_PATH` flag). Closes the first-use gap where a bare `utilz todo` littered a `todo.md` in an Intent project; explicit `--file`/`-g`, existing utilz files, read-only queries, and non-Intent dirs are unaffected.\n- BATS coverage in `opt/todo/test/todo.bats`: stamp present; foreign-refusal inside an Intent project (with a stubbed `intent` on PATH); foreign-proceed outside a project; own / legacy / fresh pass-through; default-path creation refused in an Intent project; existing utilz file in a project still works.\n- Docs: the ownership contract noted in `help/todo.md` and `opt/todo/README.md`.\n\n## Dependencies\n\n- Builds on WP-01..07 (the shipped `todo` utility). No new WP dependencies.\n- Mirrors the Intent-side guard in Intent 2.16.1 (`bin/intent_todo`), but takes **no runtime dependency on Intent** -- utilz only reads the target file's frontmatter, plus a silent `command -v intent` and an upward `intent/.config/config.json` check.",
+      "preamble": ""
+    }
+  ],
+  "criteria": [
+    {
+      "id": "AC-01.1",
+      "text": "A fresh `list` (no file present) creates `todo.md` from the template: YAML frontmatter with `title: \"# TODO\"` and `history: _history/YYYYMMDD-done.md`, the `# TODO` H1, and the three buckets `## DOING`, `## TODO`, `## DONE:<ISO-8601-UTC>`, empty buckets shown as `_(none)_`.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC-01.2",
+      "text": "`add <text>` appends the item to the bottom of TODO with `[ ]`; `add --top <text>` prepends it to the top of TODO.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC-01.3",
+      "text": "Item numbers are global and positional in file order (DOING, TODO, DONE), zero-padded to the max width present (1--9 -> `N`, 10--99 -> `NN`), rendered as `<num>:[<glyph>] <text>`.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC-01.4",
+      "text": "File-location precedence: `--file <path>` wins; `-g`/`--global` resolves `${XDG_CONFIG_HOME:-$HOME/.config}/utilz/todo/todo.md`; default is `./todo.md`; `--file` with `-g` errors non-zero.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC-01.5",
+      "text": "Writes are atomic (temp + `mv`) and normalization is idempotent: running the write path twice yields a byte-identical file.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC-02.1",
+      "text": "`start <id>` moves the item to DOING as `[-]` (bottom by default, top with `--top`).",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC-02.2",
+      "text": "`done <id>` moves the item to DONE as `[x]`, prepended so the newest completion is at the top of DONE.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC-02.3",
+      "text": "`notdone <id>` moves the item to TODO as `[ ]`.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC-02.4",
+      "text": "`toggle <id>` flips done <-> not-done from the item's current glyph.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC-02.5",
+      "text": "An unknown `<id>` errors with a clear message and non-zero exit (no silent no-op).",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC-03.1",
+      "text": "`next` prints the next open item (DOING first, then TODO); `next <n>` prints the next `n`; default 1.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC-03.2",
+      "text": "`doing`, `todo`, and bare `done` print their respective buckets.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC-03.3",
+      "text": "`count` prints the item count per bucket.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC-04.1",
+      "text": "`done --prune` prepends the DONE block to the history file (path from frontmatter `history:`, `YYYYMMDD` expanded to today UTC, resolved relative to the todo.md directory, dirs created), strips the positional number to `[x] <text>`, removes the items from `todo.md`, and stamps `## DONE:<now-UTC>`.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC-04.2",
+      "text": "`done --flush` clears the DONE bucket without archiving; it is confirm-guarded and proceeds non-interactively with `--force`/`--just-do-it`.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC-04.3",
+      "text": "A custom `history:` pattern in frontmatter is honoured (archive lands at the custom path).",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC-05.1",
+      "text": "`sync` reconciles glyph vs section with glyph authoritative: an item marked `[x]` under `## TODO` relocates to the top of DONE; a `[ ]`/`[-]` under `## DONE` relocates out to TODO/DOING.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC-05.2",
+      "text": "`sync` tolerates hand-entered lines -- missing number, stray leading `- `, `[x]foo` with no space -- normalizing and renumbering them.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC-05.3",
+      "text": "`sync` warns on stderr for an unrecognizable non-blank line under a bucket and preserves it (never silently dropped).",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC-05.4",
+      "text": "`update` is an alias that runs `sync`.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC-05.5",
+      "text": "`edit` opens the resolved file in `$VISUAL` (else `$EDITOR`, else `vi`) and runs `sync` on exit; with none resolvable it errors clearly.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC-06.1",
+      "text": "`--json` emits a valid object `{title, doing[], todo[], done[], done_watermark}` parseable by `jq`.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC-06.2",
+      "text": "`opt/todo/todo.yaml` carries an `integration:` block so the Emacs bridge lists `todo`.",
+      "kind": "non-test",
+      "state": {
+        "is": "satisfied",
+        "evidence": "`utilz emacs doctor` green (13 exposed)"
+      }
+    },
+    {
+      "id": "AC-07.1",
+      "text": "`opt/todo/README.md` and `help/todo.md` document every verb and option.",
+      "kind": "non-test",
+      "state": {
+        "is": "satisfied",
+        "evidence": "doc review (both written)"
+      }
+    },
+    {
+      "id": "AC-07.2",
+      "text": "`utilz doctor` and `utilz list` pass with `todo` registered and its deps declared in YAML.",
+      "kind": "non-test",
+      "state": {
+        "is": "satisfied",
+        "evidence": "`utilz doctor` (todo properly configured; only pre-existing PATH warning) + `utilz list` shows todo"
+      }
+    },
+    {
+      "id": "AC-08.1",
+      "text": "Every `todo.md` utilz writes carries `generator: utilz todo` in its YAML frontmatter (alongside `title:`/`history:`); the stamp is unconditional -- independent of whether Intent is installed or the file is in an Intent project.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC-08.2",
+      "text": "On a mutating command whose target file's frontmatter `generator:` names a different tool (eg `intent todo`), utilz refuses with a clear error and non-zero exit -- but only when BOTH `command -v intent` succeeds AND the file's own directory tree contains a valid Intent project (`intent/.config/config.json`, walking upward from the file's directory). On refusal the file is left byte-unchanged and no history file is created.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC-08.3",
+      "text": "A file safe to write is written without error and gains the marker: no frontmatter (legacy Intent / fresh), frontmatter without a `generator:` (utilz's pre-marker `title:`/`history:` file), or `generator: utilz todo` (utilz's own). A foreign-marked file that is NOT inside an Intent project is taken over and re-stamped `generator: utilz todo`.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC-08.4",
+      "text": "With Intent absent, utilz never fails or emits an Intent-related message on account of the guard, even for a foreign-marked file inside an Intent project tree (the `command -v intent` gate short-circuits to proceed).",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC-08.5",
+      "text": "With its DEFAULT path (no `--file`/`-g`) and no `./todo.md` present yet, utilz refuses to CREATE a new file inside an Intent project (Intent installed AND cwd's tree contains `intent/.config/config.json`), directing the user to `intent todo` or `--file`/`-g`; the file is not created and exit is non-zero. Unaffected (all proceed): explicit `--file`/`-g`, an already-existing utilz `./todo.md`, read-only queries that never write, non-Intent directories, and Intent-absent.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    }
+  ],
+  "tests": [
+    {
+      "id": "AT-01.1",
+      "kind": "test",
+      "covers": [
+        "AC-01.1"
+      ],
+      "status": "green",
+      "legacy": {
+        "raw": "[opt/todo/test/todo.bats::list creates a template file with frontmatter and buckets]"
+      }
+    },
+    {
+      "id": "AT-01.2",
+      "kind": "test",
+      "covers": [
+        "AC-01.2"
+      ],
+      "status": "green",
+      "legacy": {
+        "raw": "[opt/todo/test/todo.bats::add appends to bottom; add --top prepends]"
+      }
+    },
+    {
+      "id": "AT-01.3",
+      "kind": "test",
+      "covers": [
+        "AC-01.3"
+      ],
+      "status": "green",
+      "legacy": {
+        "raw": "[opt/todo/test/todo.bats::numbers are global, positional, zero-padded to max width]"
+      }
+    },
+    {
+      "id": "AT-01.4",
+      "kind": "test",
+      "covers": [
+        "AC-01.4"
+      ],
+      "status": "green",
+      "legacy": {
+        "raw": "[opt/todo/test/todo.bats::file-location precedence file over global over default; file+g errors]"
+      }
+    },
+    {
+      "id": "AT-01.5",
+      "kind": "test",
+      "covers": [
+        "AC-01.5"
+      ],
+      "status": "green",
+      "legacy": {
+        "raw": "[opt/todo/test/todo.bats::normalization is idempotent]"
+      }
+    },
+    {
+      "id": "AT-02.1",
+      "kind": "test",
+      "covers": [
+        "AC-02.1"
+      ],
+      "status": "green",
+      "legacy": {
+        "raw": "[opt/todo/test/todo.bats::start moves to DOING as in-progress]"
+      }
+    },
+    {
+      "id": "AT-02.2",
+      "kind": "test",
+      "covers": [
+        "AC-02.2"
+      ],
+      "status": "green",
+      "legacy": {
+        "raw": "[opt/todo/test/todo.bats::done prepends to DONE newest-first]"
+      }
+    },
+    {
+      "id": "AT-02.3",
+      "kind": "test",
+      "covers": [
+        "AC-02.3"
+      ],
+      "status": "green",
+      "legacy": {
+        "raw": "[opt/todo/test/todo.bats::notdone moves back to TODO]"
+      }
+    },
+    {
+      "id": "AT-02.4",
+      "kind": "test",
+      "covers": [
+        "AC-02.4"
+      ],
+      "status": "green",
+      "legacy": {
+        "raw": "[opt/todo/test/todo.bats::toggle flips from current glyph]"
+      }
+    },
+    {
+      "id": "AT-02.5",
+      "kind": "test",
+      "covers": [
+        "AC-02.5"
+      ],
+      "status": "green",
+      "legacy": {
+        "raw": "[opt/todo/test/todo.bats::unknown id errors non-zero]"
+      }
+    },
+    {
+      "id": "AT-03.1",
+      "kind": "test",
+      "covers": [
+        "AC-03.1"
+      ],
+      "status": "green",
+      "legacy": {
+        "raw": "[opt/todo/test/todo.bats::next prints next n open items DOING-first]"
+      }
+    },
+    {
+      "id": "AT-03.2",
+      "kind": "test",
+      "covers": [
+        "AC-03.2"
+      ],
+      "status": "green",
+      "legacy": {
+        "raw": "[opt/todo/test/todo.bats::doing todo done print their buckets]"
+      }
+    },
+    {
+      "id": "AT-03.3",
+      "kind": "test",
+      "covers": [
+        "AC-03.3"
+      ],
+      "status": "green",
+      "legacy": {
+        "raw": "[opt/todo/test/todo.bats::count prints per-bucket counts]"
+      }
+    },
+    {
+      "id": "AT-04.1",
+      "kind": "test",
+      "covers": [
+        "AC-04.1"
+      ],
+      "status": "green",
+      "legacy": {
+        "raw": "[opt/todo/test/todo.bats::prune archives DONE to history newest-first and clears bucket]"
+      }
+    },
+    {
+      "id": "AT-04.2",
+      "kind": "test",
+      "covers": [
+        "AC-04.2"
+      ],
+      "status": "green",
+      "legacy": {
+        "raw": "[opt/todo/test/todo.bats::flush clears DONE with --force and does not archive]"
+      }
+    },
+    {
+      "id": "AT-04.3",
+      "kind": "test",
+      "covers": [
+        "AC-04.3"
+      ],
+      "status": "green",
+      "legacy": {
+        "raw": "[opt/todo/test/todo.bats::custom history pattern is honoured]"
+      }
+    },
+    {
+      "id": "AT-05.1",
+      "kind": "test",
+      "covers": [
+        "AC-05.1"
+      ],
+      "status": "green",
+      "legacy": {
+        "raw": "[opt/todo/test/todo.bats::sync relocates by glyph (glyph wins)]"
+      }
+    },
+    {
+      "id": "AT-05.2",
+      "kind": "test",
+      "covers": [
+        "AC-05.2"
+      ],
+      "status": "green",
+      "legacy": {
+        "raw": "[opt/todo/test/todo.bats::sync tolerates hand-entered lines]"
+      }
+    },
+    {
+      "id": "AT-05.3",
+      "kind": "test",
+      "covers": [
+        "AC-05.3"
+      ],
+      "status": "green",
+      "legacy": {
+        "raw": "[opt/todo/test/todo.bats::sync warns and preserves an unrecognizable line]"
+      }
+    },
+    {
+      "id": "AT-05.4",
+      "kind": "test",
+      "covers": [
+        "AC-05.4"
+      ],
+      "status": "green",
+      "legacy": {
+        "raw": "[opt/todo/test/todo.bats::update aliases sync]"
+      }
+    },
+    {
+      "id": "AT-05.5",
+      "kind": "test",
+      "covers": [
+        "AC-05.5"
+      ],
+      "status": "green",
+      "legacy": {
+        "raw": "[opt/todo/test/todo.bats::edit uses EDITOR then syncs]"
+      }
+    },
+    {
+      "id": "AT-06.1",
+      "kind": "test",
+      "covers": [
+        "AC-06.1"
+      ],
+      "status": "green",
+      "legacy": {
+        "raw": "[opt/todo/test/todo.bats::--json emits keyed buckets]"
+      }
+    },
+    {
+      "id": "AT-08.1",
+      "kind": "test",
+      "covers": [
+        "AC-08.1"
+      ],
+      "status": "green",
+      "legacy": {
+        "raw": "[opt/todo/test/todo.bats::write stamps generator: utilz todo]"
+      }
+    },
+    {
+      "id": "AT-08.2",
+      "kind": "test",
+      "covers": [
+        "AC-08.2"
+      ],
+      "status": "green",
+      "legacy": {
+        "raw": "[opt/todo/test/todo.bats::foreign file in an Intent project with intent present is refused unchanged]"
+      }
+    },
+    {
+      "id": "AT-08.3",
+      "kind": "test",
+      "covers": [
+        "AC-08.3"
+      ],
+      "status": "green",
+      "legacy": {
+        "raw": "[opt/todo/test/todo.bats::safe files own no-frontmatter and no-generator are written]"
+      }
+    },
+    {
+      "id": "AT-08.4",
+      "kind": "test",
+      "covers": [
+        "AC-08.3"
+      ],
+      "status": "green",
+      "legacy": {
+        "raw": "[opt/todo/test/todo.bats::foreign file outside an Intent project is taken over and re-stamped]"
+      }
+    },
+    {
+      "id": "AT-08.5",
+      "kind": "test",
+      "covers": [
+        "AC-08.4"
+      ],
+      "status": "green",
+      "legacy": {
+        "raw": "[opt/todo/test/todo.bats::foreign file with intent absent proceeds without error]"
+      }
+    },
+    {
+      "id": "AT-08.6",
+      "kind": "test",
+      "covers": [
+        "AC-08.5"
+      ],
+      "status": "green",
+      "legacy": {
+        "raw": "[opt/todo/test/todo.bats::refuses to create a fresh default todo.md inside an Intent project]"
+      }
+    },
+    {
+      "id": "AT-08.7",
+      "kind": "test",
+      "covers": [
+        "AC-08.5"
+      ],
+      "status": "green",
+      "legacy": {
+        "raw": "[opt/todo/test/todo.bats::an existing utilz todo.md inside an Intent project still works]"
+      }
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "schema": "intent/thread@3.0",
+  "id": "ST0001",
+  "title": "cleanz - LLM Text Cleaner Utility",
+  "status": "completed",
+  "created": "2025-12-28",
+  "completed": "2025-12-28",
+  "objective": "Create a Utilz utility that cleans LLM-generated text by removing hidden characters, watermarks, and formatting artifacts that LLM interfaces (ChatGPT, Claude, Gemini, etc.) inject into copied text.",
+  "context": "When copying text from LLM chat interfaces, invisible Unicode characters and HTML attributes are often included. These cause problems with:\n\n- Text formatting in editors and CMSs\n- JSON/XML parsing\n- SEO and search indexing\n- Publishing workflows\n- Screen readers and accessibility\n\ncleanz provides a simple CLI tool to strip these artifacts, following the Utilz dispatcher pattern with full stdin/stdout/file/clipboard support.",
+  "body": "## Outcome\n\n**COMPLETED** - Released as part of Utilz v1.1.0 on 28 Dec 2025.\n\n- Full implementation in `opt/cleanz/cleanz` (~560 lines)\n- 46 comprehensive tests in `opt/cleanz/test/cleanz.bats`\n- Documentation in `help/cleanz.md` and `opt/cleanz/README.md`\n- All tests passing on macOS and Linux CI\n\n## Related Steel Threads\n\n- None (first utility of this type)\n\n## References\n\n- <https://www.gptcleanup.com> - Inspiration for feature set\n- GitHub Release: <https://github.com/matthewsinclair/utilz/releases/tag/v1.1.0>",
+  "preamble": ""
+}

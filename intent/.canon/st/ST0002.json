@@ -1,0 +1,68 @@
+{
+  "schema": "intent/thread@3.0",
+  "id": "ST0002",
+  "title": "Syncz - a simple directory-to-directory syncer",
+  "status": "completed",
+  "created": "2026-02-08",
+  "completed": "2026-02-08",
+  "objective": "Create a Utilz utility that wraps rsync to provide user-friendly directory-to-directory synchronization with conflict resolution strategies, confirmation prompts, and dry-run support.",
+  "context": "Users frequently need to sync directories - project folders, backups, deployments - but rsync's flag complexity makes it error-prone for casual use. syncz provides sensible defaults with three conflict resolution strategies (newer-wins, source-wins, dest-wins), a confirmation flow for destructive operations, and a `--just-do-it` mode for experienced users who want a single confirm-and-go.\n\nKey design principles:\n\n- Default behavior is safe (newer-wins, no deletions)\n- Destructive operations (`--delete`) require explicit opt-in via `--confirm`, `--force`, or `--just-do-it`\n- Uses `-rlptD` instead of `-a` to avoid group/owner warnings for non-root syncs\n- Trailing slashes are always normalized for predictable behavior",
+  "body": "## Outcome\n\nReleased as Utilz v1.2.0 on 08 Feb 2026. Single bash script (~555 lines), 45 BATS tests, full documentation. All CI passing on both macOS and Linux after fixing bash 3.2 compatibility issues (namerefs and lowercase expansion).\n\n## Related Steel Threads\n\n- ST0001: cleanz - established patterns for Utilz utility implementation, testing, and documentation",
+  "preamble": "",
+  "related": [
+    {
+      "id": "ST0001",
+      "note": "cleanz - established patterns for Utilz utility implementation, testing, and documentation"
+    }
+  ],
+  "wps": [
+    {
+      "seq": 1,
+      "title": "Steel Thread Docs & Scaffolding",
+      "status": "not-started",
+      "objective": "",
+      "body": "",
+      "preamble": "**Status**: Complete\n\nFill in ST0002 info.md, design.md, tasks.md, impl.md. Create WP info.md files. Run `utilz generate syncz`. Customize syncz.yaml with rsync dependency. Verify --help and --version work."
+    },
+    {
+      "seq": 2,
+      "title": "Core Sync Implementation",
+      "status": "not-started",
+      "objective": "",
+      "body": "",
+      "preamble": "**Status**: Complete\n\nArgument parsing for all options. Directory validation. build_rsync_args() to construct flags from options. execute_sync() to run rsync. Basic sync flow: validate -> build args -> execute. --dry-run passthrough. --force mode. --verbose mode. --progress mode."
+    },
+    {
+      "seq": 3,
+      "title": "Confirmation & Summary",
+      "status": "not-started",
+      "objective": "",
+      "body": "",
+      "preamble": "**Status**: Complete\n\ngenerate_summary() using rsync --dry-run --stats. Formatted summary display. prompt_yna() helper with CONFIRM_ALL state. prompt_yn() helper for --just-do-it. --confirm flow with multi-step prompts. --just-do-it flow. --delete safety gate."
+    },
+    {
+      "seq": 4,
+      "title": "Conflict Resolution & Extra Features",
+      "status": "not-started",
+      "objective": "",
+      "body": "",
+      "preamble": "**Status**: Complete\n\n--source-wins (no --update). --dest-wins (--ignore-existing). Mutual exclusivity check. --exclude pattern support (repeatable). --backup with .syncz-bak suffix. --delete flag integration."
+    },
+    {
+      "seq": 5,
+      "title": "Tests",
+      "status": "not-started",
+      "objective": "",
+      "body": "",
+      "preamble": "**Status**: Complete\n\n45 BATS tests covering: basic flags (--help, --version, unknown option, missing args), validation (missing dirs, same dir, file-not-dir, conflicting flags), core sync (dry-run, force, default newer-wins, recursive), conflict resolution (source-wins, dest-wins, mutual exclusion), features (exclude, delete, backup, verbose, progress), confirm (Y/N/A prompt behavior via stdin pipe), just-do-it (single Y/N confirmation), edge cases (empty dirs, no overlap, trailing slashes)."
+    },
+    {
+      "seq": 6,
+      "title": "Documentation & CI",
+      "status": "not-started",
+      "objective": "",
+      "body": "",
+      "preamble": "**Status**: Complete\n\nhelp/syncz.md full help file. opt/syncz/README.md utility README. Update project README.md with syncz entry. Add syncz to Linux CI test loop in tests.yml. Add rsync dependency check in utilz doctor. Version bump to 1.2.0. CHANGELOG.md update. GitHub release v1.2.0."
+    }
+  ]
+}

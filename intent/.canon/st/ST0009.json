@@ -1,0 +1,203 @@
+{
+  "schema": "intent/thread@3.0",
+  "id": "ST0009",
+  "title": "Framework core: single bin walker, single YAML parser, correct generator floor",
+  "slug": "framework-core-single-bin-walker-single-yaml",
+  "status": "completed",
+  "created": "2026-07-29",
+  "completed": "2026-07-29T09:56:19Z",
+  "objective": "Land three defects found in the framework core -- two Highlander violations in `opt/utilz/lib/common.sh` and one shipped bug in the generator template -- as a documented, tested change, and make `yq` an honestly-declared hard dependency rather than a silently-degrading optional one.",
+  "context": "This steel thread is **retroactive**, and the record should say so plainly.\n\nOn 2026-07-29 the `cc` node of the **Cdsync** project was reading `../Utilz/bin/utilz*` as the reference implementation for a new CLI API shim. It found three defects, reported them to hv, and was told \"let's nip over to Utilz and fix those, please. Just do it inline.\" It edited this repo's working tree directly, from outside the project, between roughly 09:05 and 09:25 UTC -- while this project's own `cc` session was live and unaware. Utilz's `cc` node found the changes uncommitted and uncovered during pickup triage, flagged them as an orphaned refactor, and blocked on hv for a framing ruling. Cdsync's `cc` then wrote to `cc/inbox.cdsync-cc.md` claiming provenance and owning the unannounced edit as its error. hv ruled: proceed and fix.\n\nSo the code preceded the paperwork, in violation of this project's doc-before-code rule. It is documented here rather than reverted because it is correct, verified, and fixes a real defect. What was genuinely missing -- and is the substance of this thread -- is **test coverage for the new seams**, plus the documentation reconciliation and the release call that a behaviour change requires.\n\nThe three defects:\n\n1. **Two open-coded YAML parsers** in `get_util_metadata` -- a `yq` path and a grep fallback answering four hardcoded queries, returning an empty string for every other query. A caller cannot distinguish that empty string from an absent key. (Highlander + No-Silent-Errors.) WP-02.\n2. **Five open-coded walks of `bin/*`** -- in `list_utilities`, `run_doctor` (twice), `run_tests`, `emit_integration_tsv`, and `emacs_doctor`. They had already drifted: two verified the symlink resolved to `utilz`, three accepted any symlink, so a stray link in `bin/` was a utility to `doctor` and not to `list`. (Highlander.) WP-01.\n3. **`opt/utilz/tmpl/metadata.tmpl` hardcoded `utilz_version: \"^1.0.0\"`** while `VERSION` reads 2.3.0. `run_doctor` compares major versions, so every utility `utilz generate` produced was born incompatible. Latent -- see `intent/issues/OPEN/0002`. WP-03.\n\nDefect 3 makes `yq` a hard dependency, which is user-visible behaviour change: `utilz list` now fails loudly where it previously degraded silently. That drives a minor version bump, not a patch.",
+  "body": "## Related Steel Threads\n\n- ST0007 -- introduced `emit_integration_tsv` and `emacs_doctor`, two of the five drifted `bin/` walkers this thread collapses.\n- ST0008 -- added the `todo` utility, the most recent utility generated while defect 3 was live.",
+  "preamble": "",
+  "related": [
+    {
+      "id": "ST0007",
+      "note": "introduced `emit_integration_tsv` and `emacs_doctor`, two of the five drifted `bin/` walkers this thread collapses."
+    },
+    {
+      "id": "ST0008",
+      "note": "added the `todo` utility, the most recent utility generated while defect 3 was live."
+    }
+  ],
+  "wps": [
+    {
+      "seq": 1,
+      "title": "each_utility(): one bin/ walker, five consumers",
+      "scope": "S",
+      "status": "done",
+      "objective": "Collapse five open-coded walks of `bin/*` onto a single `each_utility()` iterator, and pin the drift they had already developed with tests. Two of the five verified that the symlink resolved to `utilz`; three accepted any symlink, so a stray link in `bin/` was a utility to `doctor` and not to `list`.",
+      "body": "## Deliverables\n\n- `each_utility()` in `opt/utilz/lib/common.sh` -- emits one utility name per line, symlinks resolving to the dispatcher only, excluding `utilz`. (Code already written; see ST info.md Context.)\n- All five call sites converted: `list_utilities`, `run_doctor` (utility check and dependency check), `run_tests`, `emit_integration_tsv`, `emacs_doctor`.\n- Every consumer reads it via process substitution (`< <(each_utility)`), never a pipe, so accumulator arrays survive the loop.\n- BATS coverage AT-01.1 through AT-01.4 in `opt/utilz/test/common_lib.bats`, including the cross-consumer drift assertion.\n\n## Dependencies\n\n- None. Independent of WP-02 and WP-03 in behaviour, though it shares `opt/utilz/lib/common.sh` with both, so the three land together.",
+      "preamble": ""
+    },
+    {
+      "seq": 2,
+      "title": "yq as hard dependency: require_yq, fallback removal",
+      "scope": "S",
+      "status": "done",
+      "objective": "Make `yq` the single YAML parser and an honestly-declared hard dependency. The grep fallback it replaces answered four hardcoded queries and returned an empty string for every other query -- a value the caller cannot distinguish from an absent key.",
+      "body": "## Deliverables\n\n- `require_yq()` in `opt/utilz/lib/common.sh` as the one place that reports a missing `yq`; grep fallback removed from `get_util_metadata`. (Code already written; see ST info.md Context.)\n- Loop-callers gate ONCE before the loop -- `get_util_metadata` runs in command substitution and cannot memoise, so a per-call guard reprints the hint once per utility.\n- `run_doctor` resolves `have_yq` up front and branches rather than gating, so `doctor` still completes and reports the missing `yq` -- it is the command you run to discover exactly that.\n- `opt/utilz/utilz.yaml` declares `yq` under `dependencies:`, and doctor check 6 walks `utilz` itself so the declaration is actually read.\n- BATS coverage AT-02.1 through AT-02.5 in `opt/utilz/test/common_lib.bats`. AT-02.2 (hint printed once, not N times) is a regression test for a defect hit during this work.\n\n## Dependencies\n\n- Shares `opt/utilz/lib/common.sh` with WP-01 and WP-03; the three land together.\n- Drives the ST-level release decision (AC-00.4): this is the user-visible behaviour change that makes the bump minor rather than patch.",
+      "preamble": ""
+    },
+    {
+      "seq": 3,
+      "title": "Generator utilz_version floor derived from VERSION",
+      "scope": "S",
+      "status": "done",
+      "objective": "Fix a shipped bug: `opt/utilz/tmpl/metadata.tmpl` hardcoded `utilz_version: \"^1.0.0\"` while `VERSION` reads 2.3.0. `run_doctor` compares major versions, so every utility `utilz generate` produced was born incompatible and stayed that way until someone hand-edited the yaml.\n\nTracked separately as `intent/issues/OPEN/0002` because it shipped, following the precedent set by issue 0001.",
+      "body": "## Deliverables\n\n- `{{UTILZ_FLOOR}}` placeholder in `opt/utilz/tmpl/metadata.tmpl`, replacing the literal `\"^1.0.0\"`.\n- `generate_utility` derives the floor from the framework's own `VERSION` (`^$(get_utilz_version | cut -d. -f1).0.0`) and substitutes it alongside `{{NAME}}` / `{{DESCRIPTION}}` / `{{AUTHOR}}`. (Code already written; see ST info.md Context.)\n- BATS coverage AT-03.1 and AT-03.2 in `opt/utilz/test/utilz.bats` -- the stamped floor tracks `VERSION`'s major, and a generated utility passes doctor's compatibility check with no hand-editing.\n- Issue 0002 moved to `intent/issues/CLOSED/` with a Resolutions entry when this lands.\n\n## Dependencies\n\n- Shares `opt/utilz/lib/common.sh` with WP-01 and WP-02; the three land together.\n- The defect is latent, not observed: all 13 existing utilities already carry `^2.0.0`, and `opt/todo/todo.yaml` was born `^2.0.0` in `03ccded` rather than hand-corrected. Nothing in this repo was ever broken by it. See issue 0002.",
+      "preamble": ""
+    }
+  ],
+  "criteria": [
+    {
+      "id": "AC-00.1",
+      "text": "The full BATS suite is green and `utilz doctor` reports no framework issue on a machine with `yq` installed.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC-00.2",
+      "text": "The change is bash 3.2 safe -- `each_utility`, `require_yq`, `get_util_metadata` (both version paths), `doctor`, `list`, and the yq-absent path all behave correctly under `/bin/bash 3.2.57` with `set -euo pipefail`.",
+      "kind": "non-test",
+      "state": {
+        "is": "satisfied",
+        "evidence": "design.md Architecture, hand-run 2026-07-29"
+      }
+    },
+    {
+      "id": "AC-00.3",
+      "text": "`docs/architecture.md`, `help/utilz.md`, and `README.md` describe the as-built: one YAML parser, one `bin/` walker, `yq` required. No prose survives describing `get_util_metadata` as a utility-facing API, `yq` as mdagg-specific, or `^1.0.0` as the generated floor.",
+      "kind": "non-test",
+      "state": {
+        "is": "satisfied",
+        "evidence": "doc diff in the landing commit"
+      }
+    },
+    {
+      "id": "AC-00.4",
+      "text": "`VERSION` and `CHANGELOG.md` record 2.4.0, on the grounds that `yq` moving from optional to required is user-visible behaviour change.",
+      "kind": "non-test",
+      "state": {
+        "is": "satisfied",
+        "evidence": "`VERSION` = 2.4.0, CHANGELOG `## [2.4.0]`"
+      }
+    },
+    {
+      "id": "AC-01.1",
+      "text": "`each_utility` emits exactly the utilities installed as `bin/` symlinks resolving to the dispatcher, one name per line, excluding `utilz` itself.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC-01.2",
+      "text": "A symlink in `bin/` that does NOT resolve to the dispatcher is invisible to every consumer -- this is the drift being closed, so the assertion must cover more than one consumer.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC-01.3",
+      "text": "A non-symlink regular file in `bin/` is not treated as a utility.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC-01.4",
+      "text": "All five former walk sites (`list_utilities`, `run_doctor` x2, `run_tests`, `emit_integration_tsv`, `emacs_doctor`) read `each_utility` and no longer open-code a `bin/*` glob.",
+      "kind": "non-test",
+      "state": {
+        "is": "satisfied",
+        "evidence": "`grep -c 'UTILZ_HOME\"/bin/\\*' opt/utilz/lib/common.sh` returns 1, at line 222, inside `each_utility` itself"
+      }
+    },
+    {
+      "id": "AC-01.5",
+      "text": "Consumers that accumulate into arrays (`run_doctor`, `run_tests`) still see their accumulated values after the loop -- ie the process-substitution contract holds, not a pipe.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC-02.1",
+      "text": "With `yq` absent from `PATH`, `utilz list` fails loudly, names `yq`, gives the install hint, and exits non-zero.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC-02.2",
+      "text": "With `yq` absent, the install hint appears exactly ONCE, not once per utility. (Regression test for the subshell-memo defect hit during this work.)",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC-02.3",
+      "text": "With `yq` absent, `utilz doctor` still completes and reports `yq` as a missing required dependency rather than bailing -- doctor is the command you run to discover this.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC-02.4",
+      "text": "`get_util_metadata` returns non-zero (rather than an empty string) when the YAML file is absent or `yq` is missing.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC-02.5",
+      "text": "`get_util_metadata` resolves both version forms: an inline `version:` and a `version_file:` reference (as `utilz` itself uses, pointing at the repo-root `VERSION`).",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC-02.6",
+      "text": "`opt/utilz/utilz.yaml` declares `yq` under `dependencies:` with an install hint, and doctor check 6 walks `utilz` itself so that declaration is actually read.",
+      "kind": "non-test",
+      "state": {
+        "is": "satisfied",
+        "evidence": "check 6 with yq off PATH emits \"yq is not installed\", then \"Missing dependencies: yq\" / \"yq (required by utilz)\" / \"Install: brew install yq\""
+      }
+    },
+    {
+      "id": "AC-03.1",
+      "text": "A utility created by `utilz generate` is stamped with a `utilz_version` whose major matches the major in `VERSION` -- no hardcoded floor.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC-03.2",
+      "text": "A freshly generated utility passes `utilz doctor`'s version-compatibility check with no hand-editing.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC-03.3",
+      "text": "`opt/utilz/tmpl/metadata.tmpl` contains no literal version floor; the floor arrives via the `{{UTILZ_FLOOR}}` placeholder.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    }
+  ]
+}
