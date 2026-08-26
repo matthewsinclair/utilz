@@ -14,5 +14,25 @@
       "id": "ST0002",
       "note": "syncz - Directory-to-Directory Syncer (predecessor, established unidirectional sync"
     }
+  ],
+  "attachments": [
+    {
+      "path": "design.md",
+      "text": "# Design - ST0003: Add --bidi to syncz\n\n## Approach\n\n[Planned approach for implementing this steel thread, including methodology and key steps]\n\n## Design Decisions\n\n[Key design decisions and their rationale]\n\n## Architecture\n\n[Architectural considerations and diagrams if applicable]\n\n## Alternatives Considered\n\n[Other approaches that were considered and why they were not chosen]\n",
+      "bytes": 383,
+      "sha256": "0a594f5b4ccec8b698859c9f38a93e24a9a991cc6bdd8447396d001733681391"
+    },
+    {
+      "path": "impl.md",
+      "text": "# Implementation - ST0003: Add --bidi to syncz\n\n## Implementation\n\n[Notes on implementation details, decisions, challenges, and their resolutions]\n\n## Code Examples\n\n[Key code snippets and examples]\n\n## Technical Details\n\n[Specific technical details and considerations]\n\n## Challenges & Solutions\n\n[Challenges encountered during implementation and how they were resolved]\n",
+      "bytes": 372,
+      "sha256": "bf2f4587b615b4f44e75aaad48b42b82c3f62d233049224f6ed55b4cf0af8e03"
+    },
+    {
+      "path": "tasks.md",
+      "text": "# Tasks - ST0003: syncz --bidi mode and --confirm enhancement\n\n## Tasks\n\n- [x] Implement --bidi mode (code complete)\n- [x] Implement --confirm optional argument (code complete)\n- [x] Fix stale version assertion in existing tests\n- [x] Write BATS tests for --bidi mode (17 tests)\n- [x] Write BATS tests for --confirm optional argument (4 tests)\n- [x] Fix detect_orphans empty array bash 3.2 bug\n- [x] Fix --confirm yes --delete not deleting on macOS rsync\n- [x] Verify all 66 tests pass\n- [x] Update help/syncz.md\n- [x] Update CHANGELOG.md\n- [x] Update README.md syncz section\n- [x] Update opt/syncz/README.md\n- [x] Bump VERSION and docs/index.md to 1.2.1\n- [x] Update intent/wip.md\n- [x] Final verification (tests, doctor, help rendering)\n\n## Dependencies\n\n- Implementation code was completed in prior session\n- Tests and documentation completed in this session\n",
+      "bytes": 862,
+      "sha256": "98739bf7cfb396ce60f54a9ecdcca4a80121895508ef85f3a24b5634d5b9f03a"
+    }
   ]
 }
