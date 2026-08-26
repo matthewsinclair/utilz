@@ -6,7 +6,7 @@ verblock: "29 Jul 2026:v1.4: matts - shell audit + issues 0003-0005 closed; 407 
 
 ## Key Context (as of 29 Jul 2026)
 
-- **No active steel thread.** All nine threads (ST0001-ST0009) are complete and filed under `intent/st/COMPLETED/`. `intent st list` is empty by design.
+- **No active steel thread.** All nine threads (ST0001-ST0009) are complete and closed in the store (`intent st list --all`). `intent st list` is empty by design.
 - **Framework version is `VERSION` = 2.4.0** (single source of truth; tagged `v2.4.0`, 2026-07-29). Do not confuse it with the `intent` tooling version (2.17.3); the `2.13.0` in an older commit message is an Intent-tooling bump, not the framework.
 - **13 utilities** (core `utilz` + 12 tools), all passing `utilz doctor` and `utilz test`. The `todo` utility (ST0008) is the newest; `cleanz` is at 1.2.0.
 - **`yq` is a HARD dependency as of v2.4.0.** The grep YAML fallback is gone -- `utilz list` now fails loudly with an install hint where it previously degraded silently. `utilz doctor` must still complete without `yq`, because that is the command you run to discover it is missing; do not "tidy" it to gate on `require_yq`.

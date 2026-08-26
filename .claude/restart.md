@@ -24,7 +24,7 @@ Utilz is a bash/zsh utility framework providing a dispatcher-based CLI system. A
 
 ## Current State
 
-No active work. All nine steel threads (ST0001-ST0009) complete and filed under `intent/st/COMPLETED/`. Framework stable at **v2.4.0** with 13 utilities (core `utilz` + 12 tools). The issue tracker at `intent/issues/` has nothing open -- 0001 (mdagg Unicode drop under C locale), 0002 (generator compatibility floor), 0003 (dispatcher flag aliases), 0004 (ST0009's sixth `bin/` walk) and 0005 (doctor PATH check) are all CLOSED.
+No active work. All nine steel threads (ST0001-ST0009) complete and closed in the store (`intent st list --all`). Framework stable at **v2.4.0** with 13 utilities (core `utilz` + 12 tools). The issue tracker at `intent/issues/` has nothing open -- 0001 (mdagg Unicode drop under C locale), 0002 (generator compatibility floor), 0003 (dispatcher flag aliases), 0004 (ST0009's sixth `bin/` walk) and 0005 (doctor PATH check) are all CLOSED.
 
 Suite is **407 tests / 0 failures** across 14 suites; shellcheck clean across 15 files (the CI gate is blocking as of `0566bcc`); every script parses under bash 3.2.57; `utilz doctor` and `intent doctor` both fully green.
 
@@ -63,7 +63,7 @@ Utilz/
 +-- help/                   # Help documentation (*.md files)
 +-- docs/                   # Architecture and developer guides
 +-- .github/workflows/      # CI/CD (tests.yml)
-+-- intent/                 # Steel threads (st/COMPLETED/) + issues/ tracker
++-- intent/                 # Steel threads (in the store) + issues/ tracker
 +-- CHANGELOG.md            # Release history
 +-- VERSION                 # Current version (2.4.0) - single source of truth
 +-- README.md               # Main documentation

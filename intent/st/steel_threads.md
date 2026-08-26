@@ -6,10 +6,10 @@ An index of every steel thread in the project. A steel thread is a self-containe
 | ------ | -------------------------------------------- | --------- | ---------- | -------------------- |
 | ST0009 | framework-core-single-bin-walker-single-yaml | Completed | 2026-07-29 | 2026-07-29T09:56:19Z |
 | ST0008 | add-todo-to-utilz                            | Completed | 2026-07-03 | 2026-07-03T13:52:13Z |
-| ST0007 | emacs-bindings-for-utilz-utilities           | Completed | 2026-04-23 |                      |
-| ST0006 | move-syncz-to-use-unison-with-rsync-fallback | Completed | 2026-03-02 |                      |
-| ST0005 |                                              | Completed | 2026-02-12 |                      |
-| ST0004 |                                              | Completed | 2026-02-12 |                      |
+| ST0007 | emacs-bindings-for-utilz-utilities           | Completed | 2026-04-23 | 2026-04-23           |
+| ST0006 | move-syncz-to-use-unison-with-rsync-fallback | Completed | 2026-03-02 | 2026-03-02           |
+| ST0005 |                                              | Completed | 2026-02-12 | 2026-03-02           |
+| ST0004 |                                              | Completed | 2026-02-12 | 2026-03-02           |
 | ST0003 |                                              | Completed | 2026-02-10 | 2026-02-10           |
 | ST0002 |                                              | Completed | 2026-02-08 | 2026-02-08           |
 | ST0001 |                                              | Completed | 2025-12-28 | 2025-12-28           |

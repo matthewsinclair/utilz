@@ -28,7 +28,7 @@ No active steel thread. Framework at **v2.4.0** with 13 utilities (core `utilz` 
 
 ## Active Steel Threads
 
-None. ST0001-ST0009 all complete (`intent/st/COMPLETED/`). `intent st list` is empty by design -- completed threads are filed under `COMPLETED/`.
+None. ST0001-ST0009 all complete. `intent st list` shows open threads by design; the closed ones are in the store (`intent st list --all`).
 
 ## Upcoming Work
 
