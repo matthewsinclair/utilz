@@ -1,0 +1,28 @@
+# Generated views have ONE writer, and it is the renderer -- hv, 2026-08-19,
+# ST0056 AC-03.17 in Intent's own tree. Confirmed to apply here by reading
+# `.git/hooks/pre-commit` rather than by assuming the fleet shape: the mix
+# format block is gone from that hook but the markdown block is not, so every
+# staged .md still goes through `prettier --write` and is `git add`ed back.
+#
+# MEASURED HERE, 2026-08-26: NO SKEW TODAY. `intent doctor` reports one
+# finding and it is ST0009 status-gate-disagreement, nothing to do with views;
+# both on-disk views render byte-identical under prettier. Preventive, then --
+# and worth doing while the writers still agree, because the failure mode is a
+# skew that survives its own remedy: `sync --to-disk` repairs the file and the
+# next commit strips the repair straight back out.
+#
+# HONEST SCOPE: only `intent/st/steel_threads.md` and `intent/todo.md` exist
+# on disk here. This repo carries 9 threads in the store and 0 thread extracts
+# on disk, so the two `intent/st/**` lines below match NOTHING today -- they
+# are forward cover for a rehydration, not a description of files being
+# fenced. Said plainly because an exclusion nothing reads is a claim, not a fix.
+#
+# Renderer-owned paths only. intent/wip.md and intent/done.md are authored,
+# stay formatted, and are deliberately absent.
+#
+# `**` not `*`: .prettierignore is gitignore syntax, where a single `*` will
+# not cross a `/`.
+intent/st/**/info.md
+intent/st/**/acceptance.md
+intent/st/steel_threads.md
+intent/todo.md
