@@ -524,6 +524,26 @@ run_doctor() {
     echo -e "    Pre-installed on most systems; brew install rsync (macOS)"
   fi
 
+  # Check for cargo, but ONLY when this checkout actually carries a Rust crate.
+  #
+  # Unlike glow/exiftool/rsync above, this one is conditional: cargo is a
+  # BUILD-time need of whichever utilities ship a crate, and reporting it on a
+  # checkout with no Rust in it would be advice about nothing. The condition is
+  # the same convention the test runner and CI use -- opt/<name>/crate/Cargo.toml
+  # -- so a second crate is covered without touching this line.
+  #
+  # It stays advisory rather than a missing_deps entry: a utility with a crate
+  # builds on first use through its own shim, and that shim refuses by name
+  # when cargo is absent. Doctor points at the toolchain; it does not duplicate
+  # the refusal the shim already makes well.
+  local crate_count
+  crate_count=$(find "$UTILZ_HOME/opt" -mindepth 3 -maxdepth 3 \
+    -path "$UTILZ_HOME/opt/*/crate/Cargo.toml" 2>/dev/null | wc -l | tr -d ' ')
+  if [[ "$crate_count" -gt 0 ]] && ! check_command "cargo"; then
+    info "Required: Install Rust for the $crate_count utility/utilities that build from source"
+    echo -e "    brew install rust  (they build on first use)"
+  fi
+
   if [[ ${#missing_deps[@]} -gt 0 ]]; then
     # Remove duplicates. Read into the array a line at a time rather than
     # splitting a command substitution: a dependency name is not guaranteed
@@ -580,6 +600,93 @@ parse_yaml() {
 # TEST RUNNER
 # ============================================================================
 
+# A utility can carry up to THREE kinds of suite, discovered by CONVENTION so
+# that the next utility of a given shape inherits the driver for free and
+# nothing below names a specific utility:
+#
+#   opt/<name>/crate/Cargo.toml        Rust unit tests      (cargo test)
+#   opt/<name>/test/*.bats             shell-level tests    (bats)
+#   opt/<name>/crate/test/acceptance.sh  black-box suite    (--strict, always)
+#
+# run_tests() is the coordinator: it decides WHICH sources a utility has and
+# folds the results together. The three helpers below decide nothing -- each
+# knows only how to invoke one kind of suite and returns its exit status.
+#
+# Every helper returns rather than exits, so a caller under `set -e` must
+# invoke it in a condition context (`_run_x ... || rc=$?`). Calling one bare
+# would abort the whole run on the first failing suite and report nothing.
+
+# Rust unit tests for a utility with a crate.
+_run_crate_tests() {
+  local util="$1"
+  local manifest="$2"
+
+  # A crate with no toolchain is a named finding, never a bare
+  # "cargo: command not found" from three frames down.
+  require_command "cargo" "brew install rust" || return 1
+
+  echo -e "${BOLD}Testing: $util${RESET} (cargo)"
+  echo -e "Manifest: $manifest"
+  echo -e ""
+
+  cargo test --manifest-path "$manifest"
+}
+
+# The existing BATS path, unchanged in behaviour and moved here so the
+# coordinator reads as three symmetrical calls rather than one inline block
+# and two additions.
+_run_bats_suite() {
+  local util="$1"
+  local test_dir="$2"
+
+  echo -e "${BOLD}Testing: $util${RESET}"
+  echo -e "Location: $test_dir"
+  echo -e ""
+
+  (
+    cd "$test_dir" || exit 1
+    bats ./*.bats
+  )
+}
+
+# The black-box acceptance suite, ALWAYS with --strict.
+#
+# --strict is what makes a missing browser or missing node a FAILURE rather
+# than a skip. Without it the suite degrades to skips and exits 0, so the run
+# goes green having driven nothing -- a check that reads plausibly and
+# measures something adjacent to what it names. The flag existing is not the
+# same as the flag being passed, which is why it is hard-coded here rather
+# than left to a caller.
+_run_acceptance_suite() {
+  local util="$1"
+  local script="$2"
+
+  echo -e "${BOLD}Testing: $util${RESET} (acceptance, --strict)"
+  echo -e "Script: $script"
+  echo -e ""
+
+  "$script" --strict
+}
+
+# Print one suite's verdict. Shared so the three sources report identically;
+# bash 3.2 has no namerefs, so the counters stay with the coordinator and this
+# passes the status back through its own return.
+_report_suite() {
+  local util="$1"
+  local kind="$2"
+  local rc="$3"
+
+  echo -e ""
+  if [[ $rc -eq 0 ]]; then
+    success "$util $kind passed"
+  else
+    error "$util $kind failed"
+  fi
+  echo -e ""
+
+  return "$rc"
+}
+
 run_tests() {
   local target_util="${1:-}"
 
@@ -632,44 +739,54 @@ run_tests() {
 
   for util in "${utils_to_test[@]}"; do
     local test_dir="$UTILZ_HOME/opt/$util/test"
+    local crate_dir="$UTILZ_HOME/opt/$util/crate"
+    local manifest="$crate_dir/Cargo.toml"
+    local acceptance="$crate_dir/test/acceptance.sh"
+    local suite_exit=0
 
-    if [[ ! -d "$test_dir" ]]; then
-      continue
+    # Source 1 -- Rust unit tests, first because they are the fastest signal
+    # and a broken crate makes the suites below meaningless.
+    if [[ -f "$manifest" ]]; then
+      total_tested=$((total_tested + 1))
+      suite_exit=0
+      _run_crate_tests "$util" "$manifest" || suite_exit=$?
+      _report_suite "$util" "cargo tests" "$suite_exit" \
+        || total_failed=$((total_failed + 1))
     fi
 
-    # Find .bats files in test directory
-    local bats_files=()
-    while IFS= read -r -d '' file; do
-      bats_files+=("$file")
-    done < <(find "$test_dir" -name "*.bats" -type f -print0 2>/dev/null)
+    # Source 2 -- BATS.
+    if [[ -d "$test_dir" ]]; then
+      local bats_files=()
+      while IFS= read -r -d '' file; do
+        bats_files+=("$file")
+      done < <(find "$test_dir" -name "*.bats" -type f -print0 2>/dev/null)
 
-    if [[ ${#bats_files[@]} -eq 0 ]]; then
-      continue
+      if [[ ${#bats_files[@]} -gt 0 ]]; then
+        total_tested=$((total_tested + 1))
+        suite_exit=0
+        _run_bats_suite "$util" "$test_dir" || suite_exit=$?
+        _report_suite "$util" "tests" "$suite_exit" \
+          || total_failed=$((total_failed + 1))
+      fi
     fi
 
-    echo -e "${BOLD}Testing: $util${RESET}"
-    echo -e "Location: $test_dir"
-    echo -e ""
-
-    # Run bats on all test files
-    total_tested=$((total_tested + 1))
-
-    # Run bats (allow failures, we handle exit code)
-    local bats_exit=0
-    (
-      cd "$test_dir" || exit 1
-      bats ./*.bats
-    ) || bats_exit=$?
-
-    if [[ $bats_exit -eq 0 ]]; then
-      echo -e ""
-      success "$util tests passed"
-      echo -e ""
-    else
-      echo -e ""
-      error "$util tests failed"
-      echo -e ""
-      total_failed=$((total_failed + 1))
+    # Source 3 -- black-box acceptance.
+    if [[ -f "$acceptance" ]]; then
+      if [[ ! -x "$acceptance" ]]; then
+        # Refuse rather than skip. A non-executable acceptance script is the
+        # silent-pass shape this whole driver exists to avoid: the file is
+        # right there, the suite it represents never runs, and the summary
+        # says everything passed.
+        error "$util acceptance suite is not executable: $acceptance"
+        total_tested=$((total_tested + 1))
+        total_failed=$((total_failed + 1))
+      else
+        total_tested=$((total_tested + 1))
+        suite_exit=0
+        _run_acceptance_suite "$util" "$acceptance" || suite_exit=$?
+        _report_suite "$util" "acceptance suite" "$suite_exit" \
+          || total_failed=$((total_failed + 1))
+      fi
     fi
   done
 

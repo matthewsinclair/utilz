@@ -19,4 +19,16 @@ intent/.cache/
 # D53: the event log lives in the store; its file form is produced by `intent export`.
 intent/events.jsonl
 intent/.backup/
-intent/.backup/
+
+# Rust build output. This rule lands BEFORE the first in-tree `cargo build`,
+# not after it: the release profile drops a few hundred MB under target/, and
+# an untracked tree that size is discovered by `git status` at the worst
+# possible moment rather than by anyone reading this file.
+#
+# _tools, where the prez crate was built, never needed this rule -- its
+# `bin/devbin build` redirects CARGO_TARGET_DIR out of the repo, and its
+# validation asserts `find native -name target -type d` comes back empty. We
+# inherit no such redirection and deliberately do not add one: Utilz is a
+# plain local checkout (bare local remote, not a synced folder), so the default
+# in-crate target/ is the right place and this line is the whole fence.
+opt/*/crate/target/

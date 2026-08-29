@@ -146,13 +146,127 @@ jobs:
         shellcheck -x "${FILES[@]}"
         echo "ShellCheck clean."
 
+  rust:
+    name: Rust (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+
+    steps:
+    - uses: actions/checkout@v4
+
+    # AT12 (determinism) drives Chrome over CDP from a plain .mjs with no
+    # dependencies -- it relies on Node's GLOBAL WebSocket, which is why the
+    # version floor is real and not a default.
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '26'
+
+    - name: Toolchain versions
+      run: |
+        set -euo pipefail
+        rustc --version
+        cargo --version
+        node --version
+
+    # Convention-driven, exactly like the test driver in common.sh: a Rust
+    # utility is one with opt/<name>/crate/Cargo.toml, so the next crate is
+    # covered by this job the day it lands and needs no edit here.
+    #
+    # The zero-crate case exits 0 DELIBERATELY and says so loudly. This job
+    # lands in WP-02 and the prez crate arrives in WP-03, so there is a window
+    # where the honest answer is "nothing to verify yet" -- the same sequencing
+    # that kept the shellcheck gate from reddening CI when it became blocking.
+    # It is a vacuum with a message, not a silent pass; WP-04 asserts this job
+    # actually built something once the crate is home.
+    - name: Build, test and accept every Rust crate
+      run: |
+        set -euo pipefail
+        CRATES=()
+        while IFS= read -r m; do
+          CRATES+=("$m")
+        done < <(find opt -mindepth 3 -maxdepth 3 -path 'opt/*/crate/Cargo.toml' | sort)
+
+        if [ ${#CRATES[@]} -eq 0 ]; then
+          echo "No Rust crates found (no opt/*/crate/Cargo.toml)."
+          echo "Nothing to verify yet -- this is expected until ST0010/WP-03 lands the prez crate."
+          exit 0
+        fi
+
+        echo "Found ${#CRATES[@]} crate(s):"
+        printf '  %s\n' "${CRATES[@]}"
+
+        for manifest in "${CRATES[@]}"; do
+          crate_dir="$(dirname "$manifest")"
+          echo "::group::$manifest"
+          cargo build --release --manifest-path "$manifest"
+          cargo test --release --manifest-path "$manifest"
+
+          # The black-box suite, always --strict. Without it six of nine ATs
+          # degrade to skips and the job goes green having driven no browser,
+          # which is the precise adjacent-measure failure this thread inherits
+          # its vocabulary for.
+          if [ -x "$crate_dir/test/acceptance.sh" ]; then
+            out="$(mktemp)"
+            "$crate_dir/test/acceptance.sh" --strict 2>&1 | tee "$out"
+
+            # PROVE a browser was actually found. A suite that skipped every
+            # browser AT can still exit 0; the only durable evidence is the
+            # suite naming the binary it drove.
+            if ! grep -qiE 'chrom|browser: ' "$out"; then
+              echo "acceptance.sh --strict produced no evidence of a browser."
+              echo "Refusing to call this a pass -- see the output above."
+              exit 1
+            fi
+          fi
+          echo "::endgroup::"
+        done
+
+  clippy:
+    name: Rust Lint (clippy)
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    # BLOCKING FROM DAY ONE, deliberately, with -D warnings.
+    #
+    # The shellcheck step in this same file spent its entire life ending in
+    # `|| echo "(non-blocking)"`, could not fail a build, and quietly
+    # accumulated 57 findings including 3 hard errors before anyone looked.
+    # That is the recorded argument against phasing a gate in "once things
+    # settle". Verified clean at the source before this landed, so there is no
+    # backlog to grandfather and no reason to start soft.
+    - name: Run clippy
+      run: |
+        set -euo pipefail
+        CRATES=()
+        while IFS= read -r m; do
+          CRATES+=("$m")
+        done < <(find opt -mindepth 3 -maxdepth 3 -path 'opt/*/crate/Cargo.toml' | sort)
+
+        if [ ${#CRATES[@]} -eq 0 ]; then
+          echo "No Rust crates found -- nothing to lint yet (expected until ST0010/WP-03)."
+          exit 0
+        fi
+
+        for manifest in "${CRATES[@]}"; do
+          echo "Linting $manifest"
+          cargo clippy --all-targets --manifest-path "$manifest" -- -D warnings
+        done
+        echo "clippy clean."
+
   test-summary:
     name: Test Summary
     runs-on: ubuntu-latest
     # shellcheck included deliberately. A failing job already fails the workflow
     # run, so the gate worked without it -- but if branch protection is ever
-    # keyed on "Test Summary" alone, an omitted job is an ungated job.
-    needs: [test-linux, test-macos, shellcheck]
+    # keyed on "Test Summary" alone, an omitted job is an ungated job. The same
+    # reasoning adds rust and clippy: they arrive gated rather than gated later.
+    # `needs.rust.result` aggregates the whole os matrix, so one red leg is red.
+    needs: [test-linux, test-macos, shellcheck, rust, clippy]
     if: always()
 
     steps:
@@ -165,7 +279,9 @@ jobs:
         # Check job results
         if [ "${{ needs.test-linux.result }}" == "success" ] \
           && [ "${{ needs.test-macos.result }}" == "success" ] \
-          && [ "${{ needs.shellcheck.result }}" == "success" ]; then
+          && [ "${{ needs.shellcheck.result }}" == "success" ] \
+          && [ "${{ needs.rust.result }}" == "success" ] \
+          && [ "${{ needs.clippy.result }}" == "success" ]; then
           echo "All tests passed!"
         else
           echo "Some tests failed. Please review the logs."
