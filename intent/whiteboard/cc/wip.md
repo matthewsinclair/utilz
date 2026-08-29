@@ -3,7 +3,7 @@ node: cc
 name: Control Claude
 role: control
 session_id: 7caf919e-ca57-4a02-8804-1e44225cea04
-heartbeat_at: 2026-08-29 15:19Z
+heartbeat_at: 2026-08-29 15:30Z
 status: active
 focus: "AC19 (window geometry, --start-fullscreen removed) and AC20 (close shortcut resolved at view time) built at f5253a9. 128 tests, AT17 probe at 37 checks. Blocked only on hv authorising a browser run."
 claims: [ST0010]
@@ -37,6 +37,8 @@ claims: [ST0010]
 
 ## Watch-outs
 
+- **A process you spawn and walk away from writes to the terminal AFTER your prompt returns.** Chrome's "Opening in existing browser session." landed under hv's next shell prompt, looking like output from whatever they typed next. `Stdio::null()` on the launch is the fix; nothing is lost, because the parent has exited long before anything interesting arrives and a failure to LAUNCH is still caught synchronously.
+- **A check placed before the thing it measures passes for the wrong reason.** Two "the log stays clean" assertions sat above the loop that waits for the stub to run, so they were true because nothing had happened yet. The red-first run is what exposed it: the other three checks failed and these two did not, which is the tell.
 - **A flag can be passed on every launch and silently ignored.** `--start-fullscreen` was sent to Chrome for as long as `open_presenting` existed, never took effect for an `--app` window on macOS, and produced no warning, no error and nothing in the exit status. It took a screenshot to find. The only place this is catchable is the ARGV -- a browser test cannot tell a flag that was not sent from one that was ignored -- so argv construction is now its own function with a test asserting ABSENCE as well as presence.
 - **Anything resolved at BUILD time is wrong for a portable artifact.** A deck built on a Mac and opened on Linux must say ctrl-W. Baking the build host's answer in is right on the author's machine, wrong everywhere else, and invisible to everyone who could fix it -- whoever reads the wrong text is never whoever built the deck. Assert on the artifact (both branches ship), not on the source.
 - **A source-grep check can match itself.** A test grepped its own file via `include_str!` for `target_os` and failed forever, because the test contains the word it looks for. A check that cannot pass is not strict, it is broken.
