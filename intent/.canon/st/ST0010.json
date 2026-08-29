@@ -208,7 +208,8 @@
       "text": "Every green recorded in this repo names the instrument that produced it, and that instrument is provably this repo's: the binary under test is built from a clean checkout of the recorded pin (3e16597), and WP-04 records the build's provenance alongside its numbers. The seam is real rather than theoretical -- at the pin, _tools-vc found the binary on disk predated its own source commit by three and a half minutes (cc had compiled a working tree and committed afterwards), so the first green there was true but unattributable until forced to rebuild from HEAD. The first Utilz build at the pin is the first moment the sha and the binary are provably the same artifact; if this repo's numbers disagree with _tools', that seam is checked BEFORE the port is suspected.",
       "kind": "non-test",
       "state": {
-        "is": "unsatisfied"
+        "is": "satisfied",
+        "evidence": "Cold build 2026-08-29: rm -rf opt/prez/crate/target (180M), release build in 6.44s from a clean crate tree at HEAD fdf161a (crate tree sha 98ace738), binary landing in-crate and postdating its source commit. The seam AC17 names was LIVE here and is closed: before the rebuild, target/release/prez had mtime 15:29:34Z against a source commit at 15:30:29Z -- 55 seconds older than its own source, the same defect _tools-vc found at the pin, and every number cc had reported was true but unattributable. Sizes matched byte-for-byte across warm and cold (4384816), which is what showed the numbers had been right all along. Every green on this thread cites the instrument and this run: acceptance.sh --strict 12/0/0 exit 0 with real Chrome, cargo test 128/0, utilz test 430 ok / 0 not ok across 17 suites exit 0, shellcheck 16 files exit 0 on CI's own file set, utilz doctor 6/6, intent doctor 0 findings."
       }
     },
     {
@@ -244,8 +245,8 @@
       "covers": [
         "AC11"
       ],
-      "status": "to-write",
-      "note": "Block AT01, rewritten by hoist-adapt.sh step 3 to prove the UTILZ build mechanism (build lands in-crate, git sees no litter, 8 MB ceiling with a stat -c %s fallback). At b600306 the upstream block still proves _tools' devbin redirect, so this row's meaning DEPENDS on that adaptation surviving every re-archive. AT id == the acceptance.sh block id the suite PRINTS. The carried suite has no AT10/AT11 (those were _tools' estate-side tests and stayed behind), so those ids are free for Utilz-native rows."
+      "status": "green",
+      "note": "Instrument: opt/prez/crate/test/acceptance.sh --strict, run 2026-08-29 16:40Z, REAL Chrome, no browser override: 12 blocks, 0 failed, 0 SKIPPED, exit 0. Binary: cold build at HEAD fdf161a, crate tree 98ace738, rm -rf target then a 6.44s release build; binary postdates its source commit (the seam AC17 names, found live here this morning at -55s and closed)."
     },
     {
       "id": "AT02",
@@ -254,8 +255,8 @@
       "covers": [
         "AC01"
       ],
-      "status": "to-write",
-      "note": "Block AT02, 'dependency posture: comrak and std, nothing else'. Carried from _tools ST0002, re-derived against pin b600306 on 2026-08-29. Green THERE under --strict (10 passed / 0 failed / 0 skipped, exit 0, 69s, _tools-vc's own run, not relayed). UNVERIFIED HERE until WP-04 reproduces it with instruments run in this repo."
+      "status": "green",
+      "note": "Instrument: opt/prez/crate/test/acceptance.sh --strict, run 2026-08-29 16:40Z, REAL Chrome, no browser override: 12 blocks, 0 failed, 0 SKIPPED, exit 0. Binary: cold build at HEAD fdf161a, crate tree 98ace738, rm -rf target then a 6.44s release build; binary postdates its source commit (the seam AC17 names, found live here this morning at -55s and closed)."
     },
     {
       "id": "AT03",
@@ -265,8 +266,8 @@
         "AC02",
         "AC03"
       ],
-      "status": "to-write",
-      "note": "Block AT03, 'self-contained artifact, and notes that reach no artifact' -- one block, two criteria. Carried from _tools ST0002, re-derived against pin b600306 on 2026-08-29. Green THERE under --strict (10 passed / 0 failed / 0 skipped, exit 0, 69s, _tools-vc's own run, not relayed). UNVERIFIED HERE until WP-04 reproduces it with instruments run in this repo."
+      "status": "green",
+      "note": "Instrument: opt/prez/crate/test/acceptance.sh --strict, run 2026-08-29 16:40Z, REAL Chrome, no browser override: 12 blocks, 0 failed, 0 SKIPPED, exit 0. Binary: cold build at HEAD fdf161a, crate tree 98ace738, rm -rf target then a 6.44s release build; binary postdates its source commit (the seam AC17 names, found live here this morning at -55s and closed)."
     },
     {
       "id": "AT04",
@@ -275,8 +276,8 @@
       "covers": [
         "AC04"
       ],
-      "status": "to-write",
-      "note": "Block AT04, 'base runtime in a real browser: keys, counter, overview, hash, fullscreen'. Launches Chrome backgrounded with a disposable profile and --use-mock-keychain. Carried from _tools ST0002, re-derived against pin b600306 on 2026-08-29. Green THERE under --strict (10 passed / 0 failed / 0 skipped, exit 0, 69s, _tools-vc's own run, not relayed). UNVERIFIED HERE until WP-04 reproduces it with instruments run in this repo."
+      "status": "green",
+      "note": "RED-FIRST OBSERVED HERE, not carried. AT04's first ever run with a real browser (2026-08-29) failed 2 of 52: bar_starts_hidden and bar_hidden_again, both reporting the bar ON where the check wanted it OFF. The runtime was correct; the checks sat 38 lines below an Escape press, and Escape is bound to quit(), which pops the close-shortcut message for 4000ms while settle() holds the bar open for any live panel. Proven by a scratch copy with a 4.5s wait, which passed both with nothing else changed. Fixed at c5c6a14 by moving the block ahead of the Escape press, where its name is true. Green at 16:37Z: 52/52. Binary: cold build at HEAD fdf161a, crate tree 98ace738, 6.44s release build, binary postdating its source commit."
     },
     {
       "id": "AT05",
@@ -285,8 +286,8 @@
       "covers": [
         "AC05"
       ],
-      "status": "to-write",
-      "note": "Block AT05, 'pdf: one slide per page, and a refusal that names what it probed'. Carried from _tools ST0002, re-derived against pin b600306 on 2026-08-29. Green THERE under --strict (10 passed / 0 failed / 0 skipped, exit 0, 69s, _tools-vc's own run, not relayed). UNVERIFIED HERE until WP-04 reproduces it with instruments run in this repo."
+      "status": "green",
+      "note": "Instrument: opt/prez/crate/test/acceptance.sh --strict, run 2026-08-29 16:40Z, REAL Chrome, no browser override: 12 blocks, 0 failed, 0 SKIPPED, exit 0. Binary: cold build at HEAD fdf161a, crate tree 98ace738, rm -rf target then a 6.44s release build; binary postdates its source commit (the seam AC17 names, found live here this morning at -55s and closed)."
     },
     {
       "id": "AT06",
@@ -295,8 +296,8 @@
       "covers": [
         "AC06"
       ],
-      "status": "to-write",
-      "note": "Block AT06, 'present: launches de-chromed, then the tool gets out of the way'. Carried from _tools ST0002, re-derived against pin b600306 on 2026-08-29. Green THERE under --strict (10 passed / 0 failed / 0 skipped, exit 0, 69s, _tools-vc's own run, not relayed). UNVERIFIED HERE until WP-04 reproduces it with instruments run in this repo."
+      "status": "green",
+      "note": "Instrument: opt/prez/crate/test/acceptance.sh --strict, run 2026-08-29 16:40Z, REAL Chrome, no browser override: 12 blocks, 0 failed, 0 SKIPPED, exit 0. Binary: cold build at HEAD fdf161a, crate tree 98ace738, rm -rf target then a 6.44s release build; binary postdates its source commit (the seam AC17 names, found live here this morning at -55s and closed)."
     },
     {
       "id": "AT07",
@@ -305,8 +306,8 @@
       "covers": [
         "AC07"
       ],
-      "status": "to-write",
-      "note": "Block AT07, 'mermaid is opt-in, and opting out costs zero bytes'. Waits on a command substitution, so it carries NO --user-data-dir: adding one made --dump-dom hang forever, measured five ways on Chrome 151. Point it at test_pres.md, never demo.md. Carried from _tools ST0002, re-derived against pin b600306 on 2026-08-29. Green THERE under --strict (10 passed / 0 failed / 0 skipped, exit 0, 69s, _tools-vc's own run, not relayed). UNVERIFIED HERE until WP-04 reproduces it with instruments run in this repo."
+      "status": "green",
+      "note": "Instrument: opt/prez/crate/test/acceptance.sh --strict, run 2026-08-29 16:40Z, REAL Chrome, no browser override: 12 blocks, 0 failed, 0 SKIPPED, exit 0. Binary: cold build at HEAD fdf161a, crate tree 98ace738, rm -rf target then a 6.44s release build; binary postdates its source commit (the seam AC17 names, found live here this morning at -55s and closed)."
     },
     {
       "id": "AT08",
@@ -315,8 +316,8 @@
       "covers": [
         "AC08"
       ],
-      "status": "to-write",
-      "note": "Block AT08, 'themes are orthogonal, offline, and the default carries no brand'. Same command-substitution form and same no-profile-dir rule as AT07. Carried from _tools ST0002, re-derived against pin b600306 on 2026-08-29. Green THERE under --strict (10 passed / 0 failed / 0 skipped, exit 0, 69s, _tools-vc's own run, not relayed). UNVERIFIED HERE until WP-04 reproduces it with instruments run in this repo."
+      "status": "green",
+      "note": "Instrument: opt/prez/crate/test/acceptance.sh --strict, run 2026-08-29 16:40Z, REAL Chrome, no browser override: 12 blocks, 0 failed, 0 SKIPPED, exit 0. Binary: cold build at HEAD fdf161a, crate tree 98ace738, rm -rf target then a 6.44s release build; binary postdates its source commit (the seam AC17 names, found live here this morning at -55s and closed)."
     },
     {
       "id": "AT09",
@@ -325,8 +326,8 @@
       "covers": [
         "AC09"
       ],
-      "status": "to-write",
-      "note": "Block AT09, 'the source is standalone, and both code gates are run' -- estate paths, estate imports, tabs, odd indent, intent critic rust AND cargo clippy named separately because the critic arms 1 of 7 rules. Carried from _tools ST0002, re-derived against pin b600306 on 2026-08-29. Green THERE under --strict (10 passed / 0 failed / 0 skipped, exit 0, 69s, _tools-vc's own run, not relayed). UNVERIFIED HERE until WP-04 reproduces it with instruments run in this repo."
+      "status": "green",
+      "note": "RED-FIRST OBSERVED HERE for the widened check. AT09's path assertion required a leading quote and so saw string literals only; a real client path sat in a deck.rs comment, green, for as long as the check existed. Widened at fdf161a to the whole of src, comments included, and proven in both directions: 0 files clean, 1 with an injected violation, 0 again on restore. Green under acceptance.sh --strict with real Chrome, 0 skipped. Binary: cold build at HEAD fdf161a, crate tree 98ace738, 6.44s release build, binary postdating its source commit."
     },
     {
       "id": "AT10",
@@ -335,8 +336,8 @@
       "covers": [
         "AC11"
       ],
-      "status": "to-write",
-      "note": "Utilz-native. Co-covers AC11 with acceptance.sh's AT01, and this is NOT duplication: AC11 has two clauses and each row anchors a different one. AT10 proves the ignore rule is PRESENT AND COMMITTED (clause 1, a repo-history property a build cannot show); AT01 proves a build PRODUCES nothing tracked (clause 2). Neither is redundant, so do not tidy one away. ID RULE: an ST0010 AT id equals the acceptance.sh block id wherever that suite prints one (AT01-AT09, AT12). The carried suite has NO AT10/AT11 -- those were _tools' estate-side tests and stayed behind -- so those ids are free and hold Utilz-native rows. AT13-AT15 are new acceptance.sh blocks this thread adds; AT16 is Utilz-native."
+      "status": "green",
+      "note": "Instrument: opt/prez/test/prez.bats, driven by `utilz test`, run 2026-08-29 16:41Z: 430 ok / 0 not ok across all 17 framework suites, exit 0 -- the first run in which every suite passed, because prez acceptance now runs a real browser rather than skipping under the override. Binary: cold build at HEAD fdf161a, crate tree 98ace738, 6.44s release build, binary postdating its source commit."
     },
     {
       "id": "AT11",
@@ -345,8 +346,8 @@
       "covers": [
         "AC12"
       ],
-      "status": "to-write",
-      "note": "Shim black-box: version/help through the dispatcher, the no-cargo refusal names the remedy and fires BEFORE any build attempt, freshness rebuilds on Cargo.*, src/, themes/ AND assets/ (the last two are include_str! embeds -- a check watching only src/ calls a stale binary current). Note --version and --help are intercepted by the dispatcher and answered from prez.yaml, so any case meaning to exercise the binary must use a real verb. ID RULE: an ST0010 AT id equals the acceptance.sh block id wherever that suite prints one (AT01-AT09, AT12). The carried suite has NO AT10/AT11 -- those were _tools' estate-side tests and stayed behind -- so those ids are free and hold Utilz-native rows. AT13-AT15 are new acceptance.sh blocks this thread adds; AT16 is Utilz-native."
+      "status": "green",
+      "note": "Instrument: opt/prez/test/prez.bats, driven by `utilz test`, run 2026-08-29 16:41Z: 430 ok / 0 not ok across all 17 framework suites, exit 0 -- the first run in which every suite passed, because prez acceptance now runs a real browser rather than skipping under the override. Binary: cold build at HEAD fdf161a, crate tree 98ace738, 6.44s release build, binary postdating its source commit."
     },
     {
       "id": "AT12",
@@ -355,8 +356,8 @@
       "covers": [
         "AC10"
       ],
-      "status": "to-write",
-      "note": "Block AT12, 'determinism: one artifact renders the same on every machine'. Backgrounded launch, ONE reused profile for the whole sweep (eight fresh profiles was the keychain-modal amplifier). Carried from _tools ST0002, re-derived against pin b600306 on 2026-08-29. Green THERE under --strict (10 passed / 0 failed / 0 skipped, exit 0, 69s, _tools-vc's own run, not relayed). UNVERIFIED HERE until WP-04 reproduces it with instruments run in this repo."
+      "status": "green",
+      "note": "Instrument: opt/prez/crate/test/acceptance.sh --strict, run 2026-08-29 16:40Z, REAL Chrome, no browser override: 12 blocks, 0 failed, 0 SKIPPED, exit 0. Binary: cold build at HEAD fdf161a, crate tree 98ace738, rm -rf target then a 6.44s release build; binary postdates its source commit (the seam AC17 names, found live here this morning at -55s and closed)."
     },
     {
       "id": "AT13",
@@ -365,8 +366,8 @@
       "covers": [
         "AC14"
       ],
-      "status": "to-write",
-      "note": "New case post-hoist: a search-path theme resolving announces its source directory on stderr; a built-in resolving stays silent."
+      "status": "green",
+      "note": "Instrument: opt/prez/crate/test/acceptance.sh --strict, run 2026-08-29 16:40Z, REAL Chrome, no browser override: 12 blocks, 0 failed, 0 SKIPPED, exit 0. Binary: cold build at HEAD fdf161a, crate tree 98ace738, rm -rf target then a 6.44s release build; binary postdates its source commit (the seam AC17 names, found live here this morning at -55s and closed)."
     },
     {
       "id": "AT14",
@@ -395,8 +396,8 @@
       "covers": [
         "AC13"
       ],
-      "status": "to-write",
-      "note": "Framework integration: list/help/doctor/test surfaces observed through the dispatcher; the CI half is evidenced by the first green run on both OSes, and the log must PROVE a browser was found because a skip surviving into green is the measured failure mode. Was AT12 until 2026-08-29; moved because acceptance.sh PRINTS its own AT12 (determinism) and two instruments cannot share an id. ID RULE: an ST0010 AT id equals the acceptance.sh block id wherever that suite prints one (AT01-AT09, AT12). The carried suite has NO AT10/AT11 -- those were _tools' estate-side tests and stayed behind -- so those ids are free and hold Utilz-native rows. AT13-AT15 are new acceptance.sh blocks this thread adds; AT16 is Utilz-native."
+      "status": "green",
+      "note": "Instrument: opt/prez/test/prez.bats, driven by `utilz test`, run 2026-08-29 16:41Z: 430 ok / 0 not ok across all 17 framework suites, exit 0 -- the first run in which every suite passed, because prez acceptance now runs a real browser rather than skipping under the override. Binary: cold build at HEAD fdf161a, crate tree 98ace738, 6.44s release build, binary postdating its source commit."
     },
     {
       "id": "AT17",
@@ -405,8 +406,8 @@
       "covers": [
         "AC04"
       ],
-      "status": "to-write",
-      "note": "Block AT17, 'the runtime's key handling, driven with no browser at all' -- runs test/runtime-logic-probe.mjs, 29 checks, over a synthetic deck AND test_pres.md. Co-covers AC04 with AT04 and is NOT duplication: AT04 proves a real browser does the thing, AT17 proves the dispatch table routes correctly, and the boundary is written into the probe. It exists because a keyboard runtime is exactly what gets shipped on 'it compiles' -- two of hv's runtime changes had only a build behind them. Extracts the runtime by its own IIFE terminator, never the first script tag: html.rs appends mermaid AFTER the runtime, so on a mermaid deck the first (and only) script is 3.5 MB of vendored bundle. The extraction CHECKS ITSELF and exits 2 if it finds no binding table or any sign of esbuild -- a boundary read out of a text file starts selecting the wrong span silently, and the symptom is a probe that passes having tested something else. Red-first proven: unreachable commit binding -> 6 failures, exit 1. Minted by utilz-cc at c3307c5 and verified here as the id the suite prints."
+      "status": "green",
+      "note": "Instrument: opt/prez/crate/test/acceptance.sh --strict, run 2026-08-29 16:40Z, REAL Chrome, no browser override: 12 blocks, 0 failed, 0 SKIPPED, exit 0. Binary: cold build at HEAD fdf161a, crate tree 98ace738, rm -rf target then a 6.44s release build; binary postdates its source commit (the seam AC17 names, found live here this morning at -55s and closed)."
     },
     {
       "id": "AT18",
@@ -415,8 +416,8 @@
       "covers": [
         "AC19"
       ],
-      "status": "to-write",
-      "note": "To write, utilz-cc's. Two layers: a cargo unit test over open_presenting's constructed argv (browserless, catches a flag that is passed and ignored), plus a browser check that the window that appears has the deck's aspect. The argv half must assert the ABSENCE of any flag proven inert as well as the presence of the geometry, or a build that keeps --start-fullscreen alongside a working --window-size passes a check that only looks for the new flag -- the same both-directions rule as AC04(b)."
+      "status": "green",
+      "note": "ARGV LAYER ONLY, which is what this row now cites after the 2026-08-29 split. Instrument: the unit tests under drive.rs's \"AT18's argv half\" header, plus three assertions inside AT06's block (launched at the deck's aspect, no flag that Chrome silently ignores, --window overrides the default). cargo test --release: 128 passed, 0 failed. AC19 does NOT follow from this alone -- AT20 carries the browser layer and is unwritten, so the window that actually appears remains unmeasured. Binary: cold build at HEAD fdf161a, crate tree 98ace738, 6.44s release build, binary postdating its source commit."
     },
     {
       "id": "AT19",
@@ -425,8 +426,8 @@
       "covers": [
         "AC20"
       ],
-      "status": "to-write",
-      "note": "To write, utilz-cc's. AT17's probe already stubs the DOM and holds BINDINGS, so it is the cheap home. Four assertions: the bar's close row shows the platform shortcut; q and Esc are still caught and say it; the message TEXT is asserted, not merely its existence, because the defect was a truthful-looking sentence with a false remedy in it; and the platform branch is driven BOTH ways from a stubbed navigator, since a check run only on the build host proves nothing about the portable artifact -- that is clause (d), and a single-platform test would pass on a Mac while the Linux path stayed unexercised."
+      "status": "green",
+      "note": "Instrument: opt/prez/crate/test/runtime-logic-probe.mjs, driven under acceptance.sh's AT17 block (the runner prints AT17; this row's id is the probe's own, which the probe emits). Run 2026-08-29 16:41Z: 37 checks on the synthetic deck and 37 on the mermaid deck, exit 0 both. Browserless by design -- it stubs the DOM and drives keydown at the script extracted from a BUILT artifact, so it claims dispatch and state and explicitly nothing visual. Binary: cold build at HEAD fdf161a, crate tree 98ace738, 6.44s release build, binary postdating its source commit."
     },
     {
       "id": "AT20",
