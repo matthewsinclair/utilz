@@ -33,7 +33,7 @@ The extraction line is already drawn and should not be redrawn. `_tools-vc` and 
 
 `_tools` AC10 required from the start that there be no estate paths in string literals and no estate imports in `src/`, grep-validated. The Geodica brand theme was deliberately placed OUTSIDE the crate at `themes/geopres/geodica/`, reached only because the shim puts `themes/geopres` on `GEOPRES_THEME_PATH`. hv's ruling of 28 Aug: no built-in is ever a brand.
 
-That decision is what makes today cheap, and it is also the thing this move can quietly destroy. The guarantee is a REFUSAL: run the binary with the theme path unset and `--theme=geodica` must fail, naming every directory it searched. If that starts passing, the crate has stopped being liftable and no other check will say so.
+That decision is what makes today cheap, and it is also the thing this move can quietly destroy. The guarantee is a REFUSAL: run the binary with the theme path unset and `--theme=<the consumer's brand>` must fail, naming every directory it searched. If that starts passing, the crate has stopped being liftable and no other check will say so.
 
 ### The shape hv has already settled
 
