@@ -114,6 +114,15 @@ Verified independently here: Utilz is at `/Users/matts/Devel/prj/Utilz`, outside
 
 The hygiene LESSONS above still apply and are restated as this thread's own criteria. The Dropbox JUSTIFICATION does not come with them, because a comment asserting a reason that is false in this tree is worse than no comment.
 
+## Work Packages
+
+| WP    | Title                                                              | Size | Status      |
+| ----- | ------------------------------------------------------------------ | ---- | ----------- |
+| WP-01 | Contract: design.md + AC/AT transcription from _tools ST0002       | S    | WIP         |
+| WP-02 | Framework Rust substrate: lang, gitignore, CI, test driver, doctor | S    | Not Started |
+| WP-03 | The hoist: crate at the pin, rename to prez, shim, yaml, help      | S    | Not Started |
+| WP-04 | Validation: every carried green re-produced in the new home        | S    | Not Started |
+
 ## Acceptance
 
 Acceptance Criteria and Acceptance Tests are RENDERED into `acceptance.md`, which is a GENERATED VIEW -- a row authored there is discarded by the next sync. The contract is canon in this thread's model: change a state with the `intent ac` / `intent at` verbs, and mint or reword a row in `.canon/st/ST0010.json`, then `intent sync --to-store`. This cover never restates them.
