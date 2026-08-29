@@ -229,7 +229,13 @@ make_fixture() {
 }
 
 # ============================================================================
-# AT12 -- the framework surfaces, observed through the dispatcher
+# AT16 -- the framework surfaces, observed through the dispatcher
+#
+# AT16, not AT12. vc renumbered on 2026-08-29 because acceptance.sh PRINTS
+# its own AT12 (determinism) and two instruments cannot share an id. The
+# rule is worth holding: an ST0010 AT id equals the acceptance.sh block id
+# wherever that suite prints one, so AT10/AT11/AT16 are the free ids that
+# hold Utilz-native rows.
 # ============================================================================
 
 @test "prez appears in utilz list with its yaml metadata" {

@@ -132,6 +132,24 @@ builtins_list() {
   sed -n 's/.*built in: //p' "$err" | tr -d ','
 }
 
+# Mirrors src/drive.rs's probe: APP_PATHS then PATH_NAMES. It used to carry
+# only the first two macOS app paths, so on Linux the TOOL found Chrome and
+# worked while the HARNESS did not -- five call sites skipped, and --strict
+# turned that into a failing run on a correct build. The message said "no
+# Chrome or Chromium installed" and measured "no Chrome at a macOS app path".
+# Invisible here forever; it would have surfaced on Utilz's first Ubuntu job
+# looking exactly like the port broke something. (_tools-vc, 29 Aug.)
+#
+# A MIRROR IS NOT THE RIGHT ANSWER AND THIS COMMENT IS NOT AN EXCUSE FOR IT.
+# Two lists of the same fact drift, which is precisely what happened: drive.rs
+# gained the PATH names and this did not, and nothing reported it because both
+# only ever ran on macOS. builtins_list() above avoids this by ASKING the
+# binary, and the same trick does not work here -- the tool only enumerates its
+# browser probe when its own auto-probe fails, which cannot be provoked on a
+# machine that has a browser. The durable fix is for the tool to expose its
+# resolution (a --print-browser, or the refusal naming the list unconditionally)
+# so this function can ask instead of copy. Raised for Utilz; the mirror is the
+# stopgap that at least makes the two lists agree today.
 chrome() {
   local p
   # THE OVERRIDE (AC18b), checked BEFORE the probe so it wins outright:
@@ -162,11 +180,49 @@ chrome() {
     return 1
   fi
   for p in "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" \
-           "/Applications/Chromium.app/Contents/MacOS/Chromium"; do
+           "/Applications/Chromium.app/Contents/MacOS/Chromium" \
+           "/Applications/Microsoft Edge.app/Contents/MacOS/Microsoft Edge" \
+           "/Applications/Brave Browser.app/Contents/MacOS/Brave Browser"; do
     [ -x "$p" ] && { printf '%s' "$p"; return 0; }
+  done
+  for p in google-chrome google-chrome-stable chromium chromium-browser \
+           microsoft-edge brave-browser; do
+    command -v "$p" >/dev/null 2>&1 && { command -v "$p"; return 0; }
   done
   return 1
 }
+
+# EVERY headless launch goes through these. --use-mock-keychain because a fresh
+# profile otherwise makes Chrome ask macOS for a Safe Storage keychain entry,
+# which opens an INTERACTIVE MODAL -- at the human, mid-run, in a suite that is
+# not interactive. It blocks rather than fails, so --strict cannot tell "hung on
+# a dialog" from "still working", and it only fires on a machine with a keychain
+# to prompt about: invisible on the Linux box, waiting on the user's Mac. hv
+# screenshotted one on 29 Aug and asked whether it was us. It was.
+#
+# ONLY the flag. NOT --user-data-dir, and the reason is a mistake worth leaving
+# written down.
+#
+# I added --user-data-dir to the two --dump-dom sites believing they ran against
+# the user's DEFAULT profile, since they passed no profile flag. THAT WAS FALSE.
+# Headless Chrome with no --user-data-dir creates its own scoped throwaway --
+# ~/Library/Application Support/Google/Chrome-headless/scoped_dirXXXX -- fresh
+# per launch and discarded after. Chrome-headless, not Chrome. There was nothing
+# to contain.
+#
+# And the containment I added for that non-problem HUNG THE SUITE. An explicit
+# --user-data-dir with --dump-dom dumps the DOM correctly and then never exits.
+# The two sites using $(...) wait on stdout closing, so they hang forever; the
+# two using & and a kill never noticed. Isolated by _tools-vc across five runs,
+# and attribution settled by swapping --use-mock-keychain for
+# --password-store=basic and watching it hang identically: the keychain flag is
+# innocent, --user-data-dir is the cause.
+#
+# So: the flag goes on all four launches, because that is where the modal was.
+# The profile flag goes only where it already was, at the two sites that
+# background-and-kill. A fix aimed at a problem nobody verified cost four
+# ten-minute hangs and two orphaned browsers on hv's machine.
+CHROME_SAFE="--use-mock-keychain"
 
 # ---------------------------------------------------------------- AT01 -- AC01
 
@@ -284,7 +340,7 @@ if want AT04; then
   else
     art="$WORK/runtime.html"
     "$BIN" build "$DEMO" -o "$art" >/dev/null 2>&1
-    "$BROWSER" --headless=new --remote-debugging-port=9333 --window-size=1280,800 \
+    "$BROWSER" --headless=new $CHROME_SAFE --remote-debugging-port=9333 --window-size=1280,800 \
       --user-data-dir="$WORK/chrome" "file://$art" >"$WORK/chrome.log" 2>&1 &
     CHROME_PID=$!
     sleep 2
@@ -411,7 +467,8 @@ if want AT07; then
 })();
 </script>
 PROBE
-    measured=$("$BROWSER" --headless --disable-gpu --window-size=1400,900 --virtual-time-budget=9000 \
+    measured=$("$BROWSER" --headless $CHROME_SAFE \
+      --disable-gpu --window-size=1400,900 --virtual-time-budget=9000 \
       --dump-dom "file://$WORK/m-probe.html" 2>/dev/null \
       | grep -oE '<div id="probe">[^<]*' | sed 's/.*>//')
     # BOTH dimensions over 40, not spec 10.7's literal 100x40. The defect
@@ -522,7 +579,8 @@ if want AT08; then
       unchecked "$name: legibility unmeasured, no Chrome or Chromium installed"
     else
       cat "$WORK/b-$name.html" "$HERE/theme-legibility-probe.html" > "$WORK/lp-$name.html"
-      measured=$("$BROWSER" --headless --disable-gpu --window-size=1400,900 \
+      measured=$("$BROWSER" --headless $CHROME_SAFE \
+        --disable-gpu --window-size=1400,900 \
         --virtual-time-budget=9000 --dump-dom "file://$WORK/lp-$name.html" 2>/dev/null \
         | grep -oE '<div id="probe">[^<]*' | sed 's/.*>//')
       worst=$(printf '%s' "$measured" | tr ' ' '\n' | cut -d: -f2 | cut -d/ -f1 | sort -n | head -1)
@@ -585,8 +643,15 @@ if want AT12; then
       port=9350
       "$BIN" build "$deck" --theme="$theme" -o "$art" >/dev/null 2>&1 || {
         bad "$label/$theme: build failed"; at12_fail=1; return; }
-      "$BROWSER" --headless=new --remote-debugging-port=$port --window-size=1280,800 \
-        --user-data-dir="$WORK/chrome-at12-$theme-$label" "file://$art" \
+      # ONE profile for the whole sweep, not one per theme. This loop runs eight
+      # times (seven themes on the mermaid deck, plus the no-mermaid control),
+      # and it used to mint a fresh --user-data-dir each time: eight profile
+      # creations, which is eight keychain prompts and eight cold starts. The
+      # profile is what is expensive and what triggers the modal, not the
+      # launch, so reusing it removes the amplifier. Each instance is still
+      # killed before the next starts, so the profile is never contended.
+      "$BROWSER" --headless=new $CHROME_SAFE --remote-debugging-port=$port \
+        --window-size=1280,800 --user-data-dir="$WORK/chrome-at12" "file://$art" \
         >"$WORK/chrome-at12.log" 2>&1 &
       local pid=$!
       sleep 2
