@@ -4,18 +4,15 @@ verblock: "29 Jul 2026:v1.4: matts - shell audit + issues 0003-0005 closed; 407 
 
 # Restart Context
 
-## Key Context (as of 29 Jul 2026)
+## Key Context (as of 29 Aug 2026)
 
-- **No active steel thread.** All nine threads (ST0001-ST0009) are complete and closed in the store (`intent st list --all`). `intent st list` is empty by design.
-- **Framework version is `VERSION` = 2.4.0** (single source of truth; tagged `v2.4.0`, 2026-07-29). Do not confuse it with the `intent` tooling version (2.17.3); the `2.13.0` in an older commit message is an Intent-tooling bump, not the framework.
-- **13 utilities** (core `utilz` + 12 tools), all passing `utilz doctor` and `utilz test`. The `todo` utility (ST0008) is the newest; `cleanz` is at 1.2.0.
-- **`yq` is a HARD dependency as of v2.4.0.** The grep YAML fallback is gone -- `utilz list` now fails loudly with an install hint where it previously degraded silently. `utilz doctor` must still complete without `yq`, because that is the command you run to discover it is missing; do not "tidy" it to gate on `require_yq`.
-- **File-based issue tracker** lives at `intent/issues/` (`OPEN/` / `CLOSED/`) for defects a single issue can drive without a steel thread. All five are CLOSED and `OPEN/` is empty: 0001 (mdagg Unicode/C-locale), 0002 (generator floor), 0003 (dispatcher flag aliases), 0004 (ST0009's sixth `bin/` walk), 0005 (doctor PATH check).
-- **Suite is 407 tests / 0 failures across 14 suites.** shellcheck clean across 15 files via the CI collector; `intent critic shell` clean; every script parses under bash 3.2.57. `utilz doctor` and `intent doctor` both fully green -- doctor's old PATH warning is gone, since it now recognises a symlink-on-PATH install (issue 0005).
-- **`utilz` accepts `--version`, `--help` and `-h`** as of `fe8eecf`, as aliases onto the existing `version`/`help` arms. `-v` is deliberately unbound (reads as verbose) and a test pins that; do not bind it without arguing with the test first.
-- **Whiteboard has two nodes**: `hv` (Workstream Zero, the human) and `cc`. Roster in `intent/whiteboard/README.md`. `cc/inbox.cdsync-cc.md` is an external correspondent from the Cdsync project, not a workstream here.
-- **`languages` is `["shell"]` only.** `elixir` was removed on 2026-07-29 -- declared but never used, and it was loading two Elixir skills into every `/in-session`.
-- Two remotes: `local` (Dropbox) and `upstream` (GitHub) -- push to both (`git push local main && git push upstream main`). Releases tag the `release:` commit itself, not the session's final HEAD.
+- **ST0010 is live: `utilz prez`, the first Rust utility.** Framework carries **14 utilities** (core + 13). vc holds the contract pen, cc builds, hv adjudicates. WP-01/02/03 done; WP-04 is vc's and opens on hoist-green.
+- **`opt/prez/crate` is a FORK of the `_tools` pin, not a mirror.** AC14, AT13, AC18(b), AT17/AT19, AC19 and AC20 exist only here. **Never `tar -x` a new pin over it** -- that deletes them silently, leaving a green build and a passing suite because the proving tests go too. Use `hoist-rebase.sh`, attached to ST0010, `--dry-run` first.
+- **`opt/prez/prez` is a shim, not the tool.** It resolves, rebuilds on staleness, and execs a Rust binary under `crate/`. `crate/` is INDIVISIBLE: `src/`, `themes/` and `assets/` are `include_str!` siblings and must keep their relative positions.
+- **No browser has been launched in this repo, deliberately.** AC18(c)'s Chrome Safe-Storage dialog reached hv's screen; the fix is in the pin but "no dialog appeared on someone else's screen" is not observable from a shell. `PREZ_TEST_BROWSER=/nonexistent` forces the browserless path so the suite stays runnable. AT04, AT18's browser half, eleven acceptance checks and AC17's cold build are all queued behind one hv authorisation.
+- Suite: 128 cargo + 23 shim BATS + acceptance (9 passed / 11 skipped under the override). Framework-wide `utilz test` is green. clippy and shellcheck clean. `intent doctor` has one pre-existing finding (ST0009's status/gate disagreement).
+- **`VERSION` reads 2.4.0 and `prez.yaml` declares `^2.5.0`.** ST0010 releases as 2.5.0; the bump, the tag and the push are hv's.
+- `intent/issues/OPEN/` is empty. 0001-0006 are all CLOSED.
 
 ## Project-wide Conventions
 

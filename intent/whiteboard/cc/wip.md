@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: 7caf919e-ca57-4a02-8804-1e44225cea04
-heartbeat_at: 2026-08-29 15:30Z
+heartbeat_at: 2026-08-29 15:44Z
 status: active
-focus: "AC19 (window geometry, --start-fullscreen removed) and AC20 (close shortcut resolved at view time) built at f5253a9. 128 tests, AT17 probe at 37 checks. Blocked only on hv authorising a browser run."
+focus: "ST0010 WP-02 and WP-03 closed; hv's runtime work landed over four commits. Everything buildable is built. Blocked on ONE thing: hv authorising a browser run."
 claims: [ST0010]
 ---
 
@@ -13,74 +13,69 @@ claims: [ST0010]
 
 ## DOING
 
-**ST0010 (`utilz prez`) -- vc owns the contract, I am the build hand.** WP-02 and WP-03 are DONE. The crate is hoisted, the pin is merged, and the framework carries Rust.
+**ST0010 (`utilz prez`) -- vc owns the contract, I build.** WP-02 and WP-03 are DONE and the pin is merged. Session narrative is archived in `.history/20260829/`.
 
-- **WP-02** `0ebfa85` -- gitignore fence, `intent lang init rust`, two CI jobs, the three-source test driver, doctor's conditional cargo line.
-- **WP-03** `64d375b` hoist, `8a53457` AC14, `93702cb` AT13 + AC18(b), `844f1aa` surfaces, `673e4db` **the pin merged at `b600306`**.
-- **hv's runtime** `4ed491e` -- key bar, `q`/`i`/`r`/`g`/`?`, esc closes instead of toggling the index.
-- **Issue 0006 CLOSED** `406af49` (mine, half a) + `d39422e` (vc's, half b). `intent/issues/OPEN/` is empty.
+**Landed:** `0ebfa85` WP-02 substrate, `95b650a` CI red fixed, `64d375b` hoist, `8a53457` AC14, `93702cb` AT13 + AC18(b), `844f1aa` surfaces, `673e4db` **pin `b600306` merged**, `406af49` issue 0006, `4ed491e` key bar, `c3307c5` index commit keys + AT17, `f5253a9` AC19 + AC20, `5de4b0e` presenting output.
 
-**THE CRATE IS A FORK, NOT A MIRROR.** AC14, AT13 and the AC18(b) hook live only here. Every future pin move goes through `hoist-rebase.sh` (attached to ST0010), never `tar -x` -- which deletes cleanly and would report a green merge having lost all three. The script now asserts that postcondition itself; proven red against a pin-fresh tree.
+**State:** 128 cargo tests, 23 shim BATS, acceptance 9 passed / 11 skipped under the browser override, clippy clean, shellcheck clean across 16. `intent/issues/OPEN/` is empty.
 
-**BLOCKED ON HV, and it is one authorisation:** a browser run. AT04's probe is rewritten for the new runtime (+18 checks) and unrun; AC17's cold build is queued behind it. AC18(c)'s keychain flag IS in the pin now and `_tools`' gate passed under it, but "no dialog appeared on hv's screen" is not observable from a shell.
+**THE ONE BLOCKER, and it is hv's:** authorisation to launch a browser. Queued behind it, in order:
 
-**AC04 IS WRONG IN CANON** -- it still reads "Esc toggles a clickable overview". vc's contract text, flagged not edited.
+1. `utilz test prez` with no override -- the eleven skipped acceptance checks.
+2. **AT04** rewritten for hv's runtime and never run (+28 checks: index on `i`, esc not opening it, the bar, `g`, the clamp, enter/space committing).
+3. **AT18's browser half** -- the presenting window's actual geometry.
+4. **AC17's cold build** -- `rm -rf opt/prez/crate/target` first, then assert the binary landed where isolation put it AND that the wall time is a real build's. Both levers work now: the shim honours `CARGO_TARGET_DIR` as of `f5253a9`.
 
-**For the release (hv's):** `VERSION` reads 2.4.0, `prez.yaml` declares `^2.5.0`. `main` is 27 ahead of both remotes with the CI fix among them, so main reads red on the remote until hv pushes.
+**THE CRATE IS A FORK, NOT A MIRROR.** AC14, AT13, AC18(b), AT17/AT19, AC19 and AC20 live only here. Every pin move goes through `hoist-rebase.sh` (attached to ST0010), never `tar -x` -- which deletes cleanly and would report a green merge having lost all of it. The script asserts 18 postconditions itself; proven red against a pin-fresh tree. Run `--dry-run` first.
+
+**Open question I could not close:** when Chrome is already running, the launch forwards to the existing instance -- and `--window-size` may not apply on that path. AC19's geometry could be cold-only. Needs a browser.
+
+**For the release (hv's):** `VERSION` reads 2.4.0, `prez.yaml` declares `^2.5.0`. `main` is well ahead of both remotes with the CI fix among them, so main reads red on the remote until hv pushes.
 
 ## TODO
 
-- **RESOLVED 2026-08-29:** Intent issue `0008` (the unconditional `Bash 4.0+` line in every generated AGENTS.md) is fixed upstream. Intent is now 3.0.0 and `AGENTS.md:13` here reads "Bash or Zsh (see the project's own docs for the target version)". No action left; kept as a closed note because the previous entry told the next session to go chase it.
-- Still outstanding and hv's: the reply to Cdsync at `../Cdsync/intent/whiteboard/cc/TEMP-from-utilz-cc-20260729.md`, uncommitted in their tree, theirs to file or bin.
-- **ST0002's six work packages read `not-started` under a thread completed 2026-02-08**, and `intent doctor` reports nothing about it. The v2 WP files carried no frontmatter -- status was prose (`**Status**: Complete`) -- so the v3 migrator silently defaulted all six. hv has ruled this not-today (records blemish, no effect on code or tests). Distinct from ST0009's gate, which at least produces a doctor finding; this one is invisible.
-- `ST0007/WP-04` is `wip` under a completed thread. NOT the migrator -- the v2 source itself says `status: WIP`, so ST0007 was closed 2026-04-23 with WP-04 left open. Ours to fix, small.
+- **WP-04 is vc's**, on hoist-green. WP-05 (polish), WP-06 (AC15 theme addressing split), WP-07 (possibly un-deferred: two consumers now blocked by prez keeping its browser list and determinism probe private -- vc has it with hv).
+- **`prez build examples/demo.md` warns `class 'escape' has no effect`** -- prez's own example ships a warning. vc's WP-05 note, deck content, not urgent.
+- `ST0007/WP-04` is `wip` under a completed thread. Not the migrator: the v2 source itself says WIP. Ours to fix, small.
+- **ST0002's six WPs read `not-started`** under a thread completed 2026-02-08 -- the v3 migrator defaulted them and `intent doctor` reports nothing. hv ruled not-today.
 
 ## Watch-outs
 
-- **A process you spawn and walk away from writes to the terminal AFTER your prompt returns.** Chrome's "Opening in existing browser session." landed under hv's next shell prompt, looking like output from whatever they typed next. `Stdio::null()` on the launch is the fix; nothing is lost, because the parent has exited long before anything interesting arrives and a failure to LAUNCH is still caught synchronously.
-- **A check placed before the thing it measures passes for the wrong reason.** Two "the log stays clean" assertions sat above the loop that waits for the stub to run, so they were true because nothing had happened yet. The red-first run is what exposed it: the other three checks failed and these two did not, which is the tell.
-- **A flag can be passed on every launch and silently ignored.** `--start-fullscreen` was sent to Chrome for as long as `open_presenting` existed, never took effect for an `--app` window on macOS, and produced no warning, no error and nothing in the exit status. It took a screenshot to find. The only place this is catchable is the ARGV -- a browser test cannot tell a flag that was not sent from one that was ignored -- so argv construction is now its own function with a test asserting ABSENCE as well as presence.
-- **Anything resolved at BUILD time is wrong for a portable artifact.** A deck built on a Mac and opened on Linux must say ctrl-W. Baking the build host's answer in is right on the author's machine, wrong everywhere else, and invisible to everyone who could fix it -- whoever reads the wrong text is never whoever built the deck. Assert on the artifact (both branches ship), not on the source.
-- **A source-grep check can match itself.** A test grepped its own file via `include_str!` for `target_os` and failed forever, because the test contains the word it looks for. A check that cannot pass is not strict, it is broken.
-- **A truthful sentence can carry a false remedy.** The old quit message correctly said the browser refused, then named `prez present` as the fix -- to someone standing inside a `prez present` window. Assert message TEXT, never that "a message appeared".
-- **A `<script>` block is not one script.** A mermaid deck concatenates 3.5MB of vendored bundle into the same tag as the runtime, so "take the first script" and "take the block containing X" both select the wrong span. Cut on the artifact's own structure and make the extraction CHECK ITSELF -- a boundary read out of a text file silently starts selecting the wrong thing, and the symptom is a probe that passes having tested something else.
-- **A test that only ever runs on a synthetic fixture is half a test.** Both probe defects surfaced the moment it was pointed at the shipped decks; the synthetic four-slide deck would have gone on passing forever.
-- **The shipped example decks DOCUMENT the tool**, so a UX change makes them wrong and nothing reports it. hv's own screenshot was `test_pres.md` advertising the `Esc` overview grid we had just removed.
-- **`assemble()`'s placeholder fill is single-pass now, and the reason generalises.** Chained `.replace()` calls substitute into their own output: `{{style}}` went in first, and the next call expanded any placeholder sitting inside the stylesheet just injected. Any "replace A then replace B" over one string has this shape whenever A's replacement can contain B's needle.
-- **The `hidden` attribute loses to any author `display:` rule.** `[hidden] { display: none }` is a UA rule, and author rules beat the entire UA sheet regardless of specificity -- so `.gp-bar { display: flex }` silently pins a "hidden" element on screen. Use an explicit class.
-- **`window.close()` is ignored, silently, in a window script did not open.** No error, no return value, no exception. A close key looks broken rather than refused unless the page says so itself.
-- **A cold-build lever must be asserted, not trusted.** The prez shim hardcoded its binary path while cargo honoured `CARGO_TARGET_DIR`, so isolation was accepted and ignored: an empty target dir stayed empty while the build "succeeded" off the warm binary. _tools lost an afternoon to the mirror-image bug. Assert the artifact is where isolation put it AND that the wall time is a real build's.
-- **`intent st attach` writes canon and regenerates views**, so it is not a private operation when a peer has the store open. Check `git status -- intent/.canon` BEFORE attaching, not after.
-- **A red-first probe that does not apply is not a red-first proof.** Two of mine this session patched the wrong function and changed nothing, and the test passed for the wrong reason -- which is the class being proved against. Assert the patch applied before trusting the red.
-- **`git apply --3way` cannot three-way-merge a `diff -ruN` patch.** No blob hashes in the patch means git has nothing to merge WITH, so it prints "repository lacks the necessary blob", falls back to straight application, and -- because `git apply` is atomic -- one conflicting hunk makes the whole patch a no-op that changed nothing. `git merge-file ours base theirs` is the right primitive: no repo needed, ships with every git, writes ordinary conflict markers. Found by testing `hoist-rebase.sh` against a synthetic upstream change; an empty delta passes a no-op test even when the mechanism is broken.
-- **`utilz help <anything>` HANGS when stdin is a TTY** -- glow's pager, not prez and not new (`mdagg`'s existing help test hangs identically). It bites `bats --filter` run from a terminal and looks exactly like the test you are debugging has hung. `< /dev/null` fixes it; `utilz test` and CI never see it because bats' stdin is not a tty.
-- **`find DIR -newer X` tests the DIRECTORY as well as its contents.** A freshly `mkdir -p`'d fixture tree is therefore always stale however old the files inside it are. Correct in the real shim -- adding a file to `src/` updates the directory and should force a rebuild, erring toward rebuilding too often rather than too rarely -- but a freshness fixture must stamp the directories too, LAST, because writing a file inside one bumps it again.
-- **Stamping a test binary FORWARD to dodge same-second ties defeats the tests it protects.** A touched source lands at `now`, which is not newer than a binary a minute ahead, so every "makes it stale" case quietly reports fresh. Stamp the SOURCES back instead: sources at -2min, binary at -1min, and a plain `touch` is cleanly newer.
-- **A refutation must name the failure, not a substring of the fix.** `refute_output_contains "command not found"` failed against a correct refusal, because `require_command` says "Required command not found: cargo". The failure being refused is the bare shell form `cargo: command not found`. Refute that.
-- **Run prettier yourself before committing markdown**, rather than letting the pre-commit hook be an unnamed third writer. Doing it in-band also avoids the `git commit --only` index residue entirely -- `git add` + plain `git commit` leaves nothing behind.
-- **This tree has THREE concurrent writers: me, `vc`, and `hv` (running devbin).** Always commit with an explicit pathspec (`git commit --only <paths>`), never `-A`. A `git status` taken earlier in a session is not a stable baseline -- during one turn the remotes moved from `367a75a` to `05bca08` under me, and `bin/devbin` rewrote itself mid-session.
-- **`git commit --only` leaves an index residue when the pre-commit hook reformats.** The hook runs `prettier --write` + `git add`, but `--only` commits the worktree snapshot, so the index keeps the prettier'd copy and shows a phantom staged diff afterwards. HEAD and disk agreed; the index was the odd one out. Harmless if pathspecs are always explicit; `git restore --staged <path>` clears it.
-- **prettier is a THIRD writer to hoisted crate content.** The pre-commit hook reformatted `opt/prez/crate/examples/*.md` on their first commit (the rename left the tables ragged). That is fine and even correct, but it breaks the AC17 provenance claim unless the adaptation script does the same pass -- "archive + script == committed tree" must hold exactly, or prettier is an unnamed writer in the reproduction. `hoist-adapt.sh` step 5 now does it.
-- **A `grep` whose SUCCESS is "no matches" kills a `set -euo pipefail` script.** grep exits 1 on no match, pipefail propagates it, and the script dies at the moment it succeeded -- silently, after earlier steps have already written to disk. Bit `hoist-adapt.sh` twice in one sitting (the residual-count check, then the file-list loop on a second run). Guard with `{ grep ... || true; }` or feed the loop from a process substitution that cannot fail the pipeline.
-- **`utilz prez --version` and `--help` never reach the shim** -- the dispatcher intercepts both and answers from `prez.yaml`. Any test meaning to exercise the binary must use a real verb (`prez build <deck>`), or it measures the dispatcher's metadata path and reports it as the tool's.
-- **`pgrep -fl bats` matches peer Claude sessions**, whose system prompts mention bats, not just real suites. The stray-suite check reads plausibly and measures something adjacent; confirm with the actual process, not the grep.
-- **geopres/ST0010: three sibling directories travel or the crate does not build.** Every compile-time embed: `src/mermaid.rs:21` = `include_str!("../assets/mermaid.min.js")` (3.5MB vendored, the largest thing in the binary) and `src/theme.rs:55-61` = `include_str!("../themes/<name>/theme.css")` x7. `include_str!` resolves relative to the SOURCE FILE at compile time, so `src/`, `themes/` and `assets/` keep their relative positions as siblings. This kills any `opt/prez/` layout that rearranges them. Verified by reading, 2026-08-29.
-- **geopres: `--gp-accent` is the trap in the mermaid fix; the universal token set is exactly five.** Measured across all 7 built-ins: `--gp-bg` `--gp-fg` `--gp-muted` `--gp-rule` `--gp-code-bg` are 7/7; `--gp-accent` is 4/7 (absent from simple, steampunk, 8bit). An undeclared custom property returns `""`, and mermaid handed `""` falls back to its own default -- silently re-entering the non-determinism through a missing token instead of through the OS. Build `themeVariables` from the five only.
-- **geopres `src/mermaid.rs:37` is deliberately unfixed, and fixing it ALONE is worse than leaving it.** It keys the diagram palette off `window.matchMedia('(prefers-color-scheme: dark)')` rather than the theme. Make the diagram track the theme on its own and a dark theme on a light-mode laptop renders light AND draws a light diagram -- they agree, the visible mismatch that made the bug findable disappears, and the artifact is still non-deterministic. A fix that destroys the symptom and keeps the disease is the one that gets closed as done. The theme flattening it had to land with is now committed (`bfd0349`), so it is unblocked.
-- **geopres `examples/demo.md` does NOT opt into mermaid** -- its `mermaid: true` sits inside a fenced yaml block as documentation. A determinism or diagram check pointed at demo.md goes GREEN on the very defect it was written for. Measured over there: blueprint+demo.md passes, blueprint+test_pres.md fails, same theme, same binary. Point any diagram check at `examples/test_pres.md`.
-- **A grep-based check must target a string the artifact can only contain if the thing is really there** -- never a token the deck might legitimately discuss. This class has bitten the geopres thread four times: the `notes:` key, the bare word `mermaid`, and most recently `grep -rn 'prefers-color-scheme' themes/`, which goes RED on a correctly flattened theme whose comment documents the removal. That last one was handed to me to verify with; I caught it only because the match text read as prose. Strip comments before counting, or use a sentinel, a library-internal symbol (`mermaidAPI`, not `mermaid`), or a size gap.
-- **Any worst-case contrast figure must cite its selector and commit or it goes stale.** The geopres number moved four times in two days -- 8bit 5.4 (headings only) -> mono 4.92 -> 8bit 4.7 (table cells) -> mono 4.9 (post-flatten, 8bit to 6.2) -- each from a strictly wider selector, nobody careless at any step. Current set at `bfd0349`: simple 6.0, mono 4.9, manuscript 5.7, contrast 14.2, blueprint 7.6, steampunk 5.5, 8bit 6.2, geodica 6.9, floor 4.5. Also: a legibility probe must declare SVG text UNMEASURED rather than report on it -- `painted()` walks DOM ancestors, and a mermaid label sits in a `<foreignObject>` whose background is a sibling `<rect>`, so the walk misses the fill and reports 1.3:1 on text that is perfectly legible.
-- **`each_utility()` now has six consumers, one of them in `bin/utilz`.** ST0009's sweep missed that file because it grepped `common.sh` only. The check that proves there is no seventh copy is `grep -rn 'UTILZ_HOME"/bin/\*' bin/utilz opt/utilz/lib/common.sh` -- it must return exactly two hits, the walker's own loop and nothing else open-coded. Run it after any change that adds a listing surface.
-- **`utilz test` is not safe to run concurrently.** The test helper's `create_test_utility` mutates `$UTILZ_HOME/bin`, so two suites corrupt each other -- observed as a 2h18m hang stalled at `common_lib.bats` test 22 on 2026-07-29, caused by an orphaned background run, not a code defect. One suite at a time; kill strays before starting.
-- Verify shell tooling under `/bin/bash` with an array, never under zsh with an unquoted variable. `shellcheck -x $FILES` in zsh does not word-split, so shellcheck receives one bogus path, errors, and the empty output reads as a pass. That mistake produced a false "all 15 clean" against a real 57 findings on 2026-07-29.
-- Do not use `perl -0pi -e` for replacements whose text contains `$(` -- Perl interpolates `$(` as the GID variable and silently corrupts the file (it mangled `gitz` this way). Use the Edit tool.
-- `each_utility()` must be consumed with process substitution -- `while IFS= read -r name; do ...; done < <(each_utility)` -- never a pipe. `run_doctor` and `run_tests` accumulate into arrays; a pipe subshells the loop body and both would silently report nothing.
-- `require_yq` must be called ONCE before a loop, never per-iteration. `get_util_metadata` runs inside command substitution, so it cannot memoise -- a subshell's variables die with it. The first cut memoised and reprinted the install hint 13 times. AT-02.2 pins this.
-- `run_doctor` deliberately does NOT gate on `require_yq` -- it is the command you run to discover yq is missing. It resolves `have_yq` once up front and branches. Check 6 reports yq by hand and first, because parsing YAML to discover the YAML parser is missing does not work.
-- A peer node in another project may edit this working tree. `cdsync-cc` did so on 2026-07-29 while this session was live, so a `git status` taken mid-session is not a stable baseline. Re-verify before trusting measurements taken earlier in a session.
-- mdagg strip + title-case are locale/BSD-sed sensitive -- see `intent/issues/CLOSED/0001`. Byte-safe rule of thumb: match multibyte literals with `grep -F` or an ERE alternation `(←|↑)`, never a `[←↑]` class (degrades to bytes under C locale); title-case with POSIX awk, not GNU sed `\b`/`\u` (no-ops on BSD sed).
-- todo guard: utilz `item_re` parses intent's `- [x] STID: title` lines as items, so a `utilz todo sync` on an intent file would silently clobber it -- that cross-parse is why the guard (not merge) is the seam. The STAMP is unconditional; the REFUSAL fires only when intent is present. Where intent is absent, utilz must be fully silent and never fail.
-- No Claude attribution in commits (project + global rule). Commits end with the `(C) hello@matthewsinclair.com` footer. 2-space indent, bash 3.2 compat.
+**Measurement discipline -- the class this project keeps hitting.** Every one of these produced a green that meant nothing.
+
+- **A check placed before the thing it measures passes for the wrong reason.** Two "the terminal stays clean" assertions sat above the loop that waits for the stub to run. The red-first run is what exposed it: the other three checks failed and these two did not, which is the tell.
+- **A red-first probe that did not APPLY is not a red-first proof.** Three of mine patched the wrong function, changed nothing, and the test passed for the wrong reason. Assert the patch landed before trusting the red.
+- **A grep-based check must target a string the artifact can only contain if the thing is really there** -- a sentinel, a library-internal symbol, a size gap. Never a token the deck might legitimately discuss. This class has bitten five times.
+- **A source-grep check can match itself.** A test grepped its own file via `include_str!` and failed forever, because it contains the word it looks for. Assert on the ARTIFACT instead.
+- **A test that only runs on a synthetic fixture is half a test.** Both AT17 probe defects surfaced the moment it was pointed at the shipped decks.
+- **Never pipe a command whose exit code is the assertion.** `$?` is the last stage's. Bit me twice today and vc twice.
+
+**This tree has THREE concurrent writers: me, `vc`, and `hv`.**
+
+- Commit with an explicit pathspec, never `-A` over the whole tree. A `git status` from earlier in a session is not a stable baseline; remotes and `bin/devbin` have both moved mid-session.
+- **`intent st attach` writes canon and regenerates views**, so it is not private when a peer has the store open. Check `git status -- intent/.canon` BEFORE attaching.
+- **Run prettier yourself before committing markdown.** Otherwise the pre-commit hook is an unnamed third writer, and `git commit --only` leaves a phantom staged diff (`git restore --staged` clears it). `git add` + plain `git commit` avoids it entirely.
+- A peer node in ANOTHER project may edit this tree; Cdsync's `cc` did on 2026-07-29.
+
+**Shell and tooling.**
+
+- **A `grep` whose SUCCESS is "no matches" kills a `set -euo pipefail` script** -- grep exits 1, pipefail propagates, and the script dies at the moment it succeeded, silently, after earlier steps wrote to disk. Guard with `{ grep ... || true; }`.
+- **`utilz help <anything>` HANGS when stdin is a TTY** (glow's pager -- `mdagg` does it too). It bites `bats --filter` from a terminal and looks like the test hung. `< /dev/null` fixes it; `utilz test` and CI never see it.
+- **`utilz test` is not safe to run concurrently** -- the helper mutates `$UTILZ_HOME/bin`. One suite at a time. `pgrep -fl bats` matches peer Claude sessions, not just real suites.
+- Verify shell tooling under `/bin/bash` with an ARRAY. zsh does not word-split, so `shellcheck -x $FILES` errors on one bogus path and the empty output reads as a pass -- a false "all 15 clean" against 57 real findings.
+- Do not use `perl -0pi -e` where the text contains `$(` -- Perl interpolates it as GID and corrupts the file.
+
+**Framework internals.**
+
+- **`each_utility()` has six consumers, one in `bin/utilz`.** The no-seventh-copy check is `grep -rn 'UTILZ_HOME"/bin/\*' bin/utilz opt/utilz/lib/common.sh` -- exactly two hits.
+- `each_utility()` must be consumed with process substitution, never a pipe: `run_doctor` and `run_tests` accumulate into arrays and a pipe subshells the loop body.
+- `require_yq` ONCE before a loop, never per-iteration -- `get_util_metadata` runs in command substitution and cannot memoise.
+- `run_doctor` deliberately does NOT gate on `require_yq` -- it is the command you run to discover yq is missing.
+- **`prez --version` and `--help` never reach the shim** -- the dispatcher answers from `prez.yaml`. A test meaning to exercise the binary must use a real verb.
+- **`examples/demo.md` does NOT opt into mermaid** (its `mermaid: true` is documentation inside a fence). Point diagram checks at `test_pres.md`; demo.md is the labelled negative control.
+- mdagg strip + title-case are locale/BSD-sed sensitive -- `intent/issues/CLOSED/0001`. Match multibyte literals with `grep -F` or an ERE alternation, never a character class.
+- todo guard: utilz `item_re` parses intent's `- [x] STID: title` lines as items, so `utilz todo sync` on an intent file would clobber it. The STAMP is unconditional; the REFUSAL fires only when intent is present.
+- No Claude attribution in commits, ever. Commits end with `(C) hello@matthewsinclair.com`. 2-space indent, bash 3.2, no em dashes, column-aligned tables.
 
 ## Decisions
 
