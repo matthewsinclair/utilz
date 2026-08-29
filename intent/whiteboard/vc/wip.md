@@ -3,92 +3,76 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 3d40d776-e1d0-40da-b5c5-7926017d5ce1
-heartbeat_at: 2026-08-29 13:47Z
+heartbeat_at: 2026-08-29 15:42Z
 status: active
-focus: "Two workstreams: ST0010 (pen; WP-03 awaiting the re-archive) and the Intent v3 upgrade with intent-vc. Six findings live, two filed upstream against Intent itself, one that breaks the geodica cutover."
+focus: "ST0010 pen. WP-01/02/03 Done, WP-04 (validation) is mine and next. EVERYTHING remaining needs hv to authorise a browser run. Contract 20 ACs / 19 ATs, gate 0/20 BLOCKED, at lint clean, doctor 0."
 claims: [ST0010]
 ---
 
 # Validation Claude (vc)
 
-Validation node. For ST0010, hv additionally gave vc the coordination pen ("utilz-vc has the plan"). Coordination is not ownership of code: cc builds, vc contracts and verifies, hv adjudicates. Session history in `.history/20260829/`.
+Validation node; for ST0010 hv also gave vc the coordination pen. cc builds, vc contracts and verifies, hv adjudicates. Two sessions archived in `.history/20260829/` -- read that before concluding anything is new.
 
-Status stays `active` through the compact deliberately -- `/compact` does not end a session (whiteboard invariant 6), and hv has said work continues on the bounce. A `release` here would put a false `paused` on the board.
+`status` stays `active` through the compact deliberately: `/compact` does not end a session (whiteboard invariant 6) and hv is holding on the bounce. A `release` here would put a false `paused` on the board.
 
-## THE BLOCKING FACT, restated after pickup -- and CORRECTED
+## THE ONE THING BLOCKING EVERYTHING
 
-**CORRECTION, 13:47Z: the pin is MID-FLIGHT, not stalled.** `_tools-vc` messaged directly to say they are folding for a compact at hv's instruction and that the modified `acceptance.sh` is `_tools-cc`'s in-flight keychain patch, resuming on the bounce. I had written "stalled" on this board and in my escalation to hv. From outside that repo, stalled and mid-flight look identical -- but I had a way to say which one I could not tell, and asserted the worse reading instead. Cheap error, safe direction, corrected here and with them.
+**hv has not authorised a browser run, and nothing else is in the way.** Queued behind that single decision: AT04, AT18's browser half, the eleven browser-dependent acceptance checks, and the AC17 cold build. That is the whole remaining distance to WP-04 closing. The keychain fix is in the pin, so the dialog risk is far lower than this morning -- but it is hv's screen and hv's call. **Do not launch a browser without it.**
 
-**The new `_tools` pin is written but NOT COMMITTED, and both `_tools` nodes are paused.** `_tools` HEAD is `42320af` (vc's localfold); `native/rust/geopres/test/acceptance.sh` sits modified in their working tree. Read the diff 2026-08-29 13:32Z: all four items are present and correct -- `--use-mock-keychain` at all four launch sites, disposable `--user-data-dir` at `:407`/`:519`, AT12 down to one profile for the whole eight-launch sweep, and `chrome()` extended to 4 app paths + 6 PATH names.
+**AC16 is hv's by construction** -- a human renders every theme and looks. vc prepares the renders; vc cannot be the eye.
 
-So the work is done and the freeze cannot advance until an `_tools` session resumes to commit it. **That resumption is hv's, not mine** -- nothing in Utilz can commit into that repo, and the standing rule forbids editing it from here.
+## State, verified not relayed
 
-**On receipt of the sha: relay to utilz-cc immediately.** cc has already archived once from `3e16597` and has scripted the adaptations (`hoist-adapt.sh`, attached to ST0010, verified idempotent and byte-reproducing), so the re-archive is now cheap and deterministic rather than a redo.
+- **Pin `b600306`.** Landed as a MERGE via cc's `hoist-rebase.sh`, not a re-archive -- the crate is a FORK (AC14, AT13, AC18(b) exist only here). Its postcondition check is 16 items and asserts our work survived; a `tar -x` over the top goes red rather than reporting a clean merge.
+- **Contract 20 ACs / 19 ATs / 7 WPs.** WP-01/02/03 Done. WP-04 (validation) mine and next. WP-05 default theme polish, WP-06 theme addressing split, WP-07 expose the determinism probe -- all after.
+- **`intent doctor` 0 findings. `intent at lint ST0010` ok, 19 rows.** Gate 0/20 BLOCKED, which is correct: nothing goes green until instruments run here.
+- cc reports 128 cargo tests, clippy clean, shellcheck clean across 16, acceptance 9 passed / 11 skipped under the browser override.
+- **AC19 and AC20 spot-verified by me** at `f5253a9`: `--start-fullscreen` gone from the launch path, `--window` guarded to `present` and refusing in pixels, the Rust naming no platform, and ONE artifact carrying both `cmd-W` and `ctrl-W` chosen at view time. Ran the browserless probe myself: **37 passed, 0 failed, exit 0**. These are spot checks, NOT AT greens -- my artifact came from the warm dev tree and so fails AC17's provenance. Statuses left alone deliberately.
 
-## Findings from this pickup -- all three are new
+## WP-04, when the browser is authorised
 
-**1. THE CUTOVER IS BROKEN AND NOBODY'S TESTS CAN SEE IT.** The rename sweep changed the search-path variable to `PREZ_THEME_PATH` (`opt/prez/crate/src/theme.rs:80`). The estate's shim still sets `GEOPRES_THEME_PATH` (`bin/geodica_present:125`), and `_tools-cc`'s recorded shim-rewrite parameters do not mention the rename. Land that rewrite as specified and `geodica present deck.md` sets a variable prez does not read, the search path is empty, and `--theme=geodica` **REFUSES** -- correctly, loudly, naming an empty path, and looking exactly like the port broke the brand theme. Eight more references trail it: `bin/geodica_design:114,178`, `bin/help/geodica_present.md:20,34`, `themes/geopres/geodica/theme.css:10`. This is a seam defect: `_tools`' suite never runs prez, our suite never runs the shim, so it is invisible on both sides until a human types the command. Must reach `_tools-cc` before their cutover commit.
+Re-produce every carried green with instruments run HERE, and state what was not checked.
 
-**2. THE AT MAP DOES NOT MATCH THE INSTRUMENT IT NAMES.** ST0010's canon assigns AT01->AC01, AT02->AC02+AC03, AT03->AC04. The file says otherwise, verified by reading the blocks: `acceptance.sh` AT01 is the rewritten build-hygiene test (our AC11), AT02 is dependency posture (our AC01), AT03 is self-contained-artifact + the notes sentinel (our AC02+AC03). The head of the range is shifted by one because ST0010 dropped `_tools`' Dropbox AC01 and renumbered while the ATs kept their own sequence. The tail may or may not shift with it -- **the whole map needs re-deriving line by line from the file, not patching by inference.** Fourth, separate: the suite's own assertion strings still cite `_tools` AC ids (`absent "AC04 sentinel is nowhere in the HTML"` at `:218` is our AC03), so a green it prints names an AC that means something different in this repo. **This is a WP-04 PREREQUISITE, not part of it.** Greening through a wrong map manufactures exactly what `_tools` is stuck at 11/13 for right now: a green that does not name its instrument.
-
-**3. `chrome()` WAS FIXED AS A MIRROR, AND `_tools-vc` HANDED US THE DURABLE FIX IN WRITING.** Their patch comment: "A MIRROR IS NOT THE RIGHT ANSWER AND THIS COMMENT IS NOT AN EXCUSE FOR IT... The durable fix is for the tool to expose its resolution (a `--print-browser`, or the refusal naming the list unconditionally) so this function can ask instead of copy. Raised for Utilz; the mirror is the stopgap." So AC18(a) is no longer "port their one-list fix" -- the pin carries two lists that agree today, and Utilz inherits the drift unless prez is made to answer. `builtins_list()` in the same file is the precedent: it asks the binary. Same shape as `_tools-cc`'s open ask about the determinism probe (below) -- **two consumers, two days apart, both blocked by prez keeping something private, both reaching for a copy.** One design answer, not two.
-
-## Intent v3 upgrade (hv, 13:40Z: work this with intent-vc)
-
-Six findings, all measured here on intent 3.0.0 (8177b53e), two batches sent to `intent-vc [a7c8dc]`. **Two of them are live in Intent's own tree, not just ours.**
-
-- **(1) ST0009's gate is BLOCKED by three malformed AT rows.** `intent at lint ST0009` names them: v2 free-text descriptions sitting in the `file` field. All three name real tests at `opt/utilz/test/common_lib.bats:402,411,424`, so the repair is unambiguous. **Held, not repaired** -- asked intent-vc whether they want the broken state preserved as a migrator reproduction first. Canon backed up.
-- **(2) The migrator has TWO behaviours for one input shape, in one thread.** `AT-01.1` has no `file` and parks its v2 text in `legacy.raw` -- honest, lints clean. `AT-01.2/3/4` have the same kind of text promoted into `file` with no `legacy` block -- lints as a nonexistent file. Nine rows took the first branch, three the second. The asymmetry is the finding; only one branch is detectable.
-- **(3) `intent at lint --fix` is in `--help` and refuses when called** (`not implemented in v3`). The refusal reasoning is right; the flag still being in the surface is not.
-- **(4) ST0002's six WPs read `Not Started` under a thread completed 2026-02-08, Scope blank where every other thread reads `S`, and doctor says NOTHING.** utilz-cc traced it to v2 prose status; I verified the current state, not the v2 source. hv ruled it not-today. The invisibility is the interesting half.
-- **(5) `intent sync --to-disk` DOES NOT WRITE ATTACHMENTS, and doctor's `attachment-drift` remedy says it does.** Measured three ways -- with an ID, bare, and against `git status` -- all no-ops, both reporting `ok: extract written`. A user follows the remedy, gets a success line and an unchanged file, having been told their backup was about to be overwritten. **RESOLVED HERE by hand**: canon `.text` written to disk, sha byte-verified to `bec63dc1`, doctor 2 -> 1.
-- **(6) THE FORMATTER FENCE WAS BUILT BY ENUMERATION AND ST0010 FELL THROUGH IT.** `d791e49` fenced `info.md` and `acceptance.md` and said honestly the `intent/st/**` lines matched nothing that day. ST0010 was the rehydration it was cover for; `design.md` is an attachment, nothing named it, prettier realigned its tables, the hash stopped matching canon. **Exactly the failure that commit's own comment predicted.** Fixed at `2affb2f`: enumeration replaced by the principle (`intent/st/**` -- everything the renderer writes has one writer), and proven by committing the repair and confirming the hash survived the hook's prettier pass. **Intent's own tree has the identical hole open**: five `design.md` files on disk under `intent/st/*/`, none fenced. Not yet bitten there -- their doctor reports 3 findings and none is attachment-drift -- which is the state we were in three days ago.
-
-**Not a defect, checked so nobody chases it:** `.wps[].id` is `null` in every thread including v3-native ST0010. That is the schema being positional.
-
-**The synthesis I put to intent-vc.** v3's rule is that a green must name its instrument. Three repos hit it today in three forms: ST0009's migrated rows, ST0010's AT map that I broke myself by renumbering, and `_tools` ST0002 stuck at 11/13 for a test file with no literal AT ids. The rule is right every time. But the migrator cannot manufacture instrument names v2 never recorded, so **every v2 project with free-text ATs inherits a blocked gate on upgrade with hand-repair the only exit** -- met by the consumer as "my closed thread is now blocked and I do not know why".
-
-## DOING
-
-- Holding the pen. WP-03 is cc's and continuing on its pin-independent half.
-- Answering `_tools-cc`'s open ask: they want to know whether prez exposes its determinism probe to consumers or whether the estate needs its own, so the Geodica theme (which arrives over the search path and takes a DIFFERENT branch of `theme.rs` than any built-in) gets a determinism check. It is WP-07 here and currently deferred. Finding 3 is the argument for un-deferring: the same "expose it" answer serves both.
-
-## TODO
-
-- **Fix the AT map (finding 2) before anything is greened.** Re-derive AT->AC from `opt/prez/crate/test/acceptance.sh` block by block, correct the canon, and re-stamp the suite's own assertion strings onto this repo's AC ids. Contract work, mine, and it does not wait on the pin.
-- **WP-04, on cc's hoist-green signal.** Re-produce every carried green with instruments run HERE: `cargo test` (111 at the pin), `acceptance.sh --strict` (10/0/0 there), AT12, the post-`ec3564a` legibility probe, the liftability refusal, the standalone greps. Walk ATs through red where the lifecycle requires. Satisfy AC16 (prepare the renders; hv supplies the eye) and AC17 (provenance) by named evidence. State what was NOT checked. `_tools-vc` has offered its eyes on whether my instruments measure what they name -- take that up.
-- Announce prez-green to `_tools-cc`: their trigger to land the `geodica present` client rewrite + `geodica doctor` check in one commit. **Send finding 1 with it, or ahead of it.**
-- WP-06 spec is written (design section 10); WP-05 last; WP-07 pending the finding-3 ruling.
+- **AC17 first**, because it gates the meaning of everything after it: `rm -rf opt/prez/crate/target`, cold build at `b600306`, provenance recorded beside the numbers. `_tools-vc` has sent the literal procedure -- **use their line, not a parallel one**, so the two measurements are the same measurement taken twice.
+- **The trap in it**, theirs, paid for: `_tools`' devbin `export`s `CARGO_TARGET_DIR` and overwrote their isolation, so a "cold" build ran warm, finished in 0.05s and reported exit 0. Whatever lever forces cold, **assert afterwards that it went cold** -- the artifact is where isolation put it, and the wall time is a release build's. cc found the same class here from the other end: the shim hardcoded `$CRATE_DIR/target` while cargo honoured the variable. Fixed; 8.50s now.
+- Then `cargo test`, `acceptance.sh --strict`, the runtime probe, the legibility probe, the liftability refusal, the standalone greps. Walk ATs through red where the lifecycle requires.
+- **`_tools-vc` is standing by to re-run our greens on their machine** against the cold-built binary; their numbers go beside ours. Send the exact command with the corrected map. Their figures: 10 ATs `--strict`, 0/0, exit 0, 69s. Contrast, flattened, floor 4.5: simple 6.0, **mono 4.9 nearest**, manuscript 5.7, contrast 14.2, blueprint 7.6, steampunk 5.5, 8bit 6.2, geodica 6.9.
+- Then announce prez-green to `_tools-cc`: their trigger to land the `geodica present` client rewrite plus a `geodica doctor` check in ONE commit.
 
 ## Open with hv
 
-- **The pin is stalled on a paused repo.** Only hv can resume a `_tools` session to commit the patch. Everything else in ST0010 has unblocked work in front of it, so this is not idling the thread -- but WP-03 cannot close and WP-04 cannot start.
-- **`geodica doctor` must report whether `utilz prez` is available** -- hv's estate requirement, still with no AC anywhere. `_tools-vc` put it to hv rather than minting it. It is an estate AC, not ours, but it is on nobody's contract today.
-- **Did a Keychain dialog pop at ~14:18 local?** I ran one bounded `--use-mock-keychain` verification. Flag accepted, Chrome renders, no keychain error -- but absence of a dialog on hv's screen is not observable from a shell, and AT15's note records that limit rather than papering it.
-- 18 unpushed commits. Pushing is hv's.
-- **RETIRED: CI red on `main`.** Fixed at `95b650a` -- the blocking shellcheck gate no longer lints vendored devbin. No longer open.
+- **The browser authorisation** (above). Everything waits on it.
+- **AC16**, hv's eye.
+- **41 commits unpushed**, both remotes behind, CI fix among them -- so `main` reads red on the remote until hv pushes.
+- **The 2.5.0 release.** `prez.yaml` declares `utilz_version "^2.5.0"`; `VERSION` still reads 2.4.0. `run_doctor` compares majors only so nothing false-alarms meanwhile. Bump, tag and push are hv's.
+- **`geodica doctor` must report whether `utilz prez` is available** -- hv's estate requirement, still on no contract anywhere.
+
+## Live with other nodes
+
+- **`_tools-cc`'s cutover is a seam neither suite can fully see.** The rename made the search-path variable `PREZ_THEME_PATH`; the estate shim still sets `GEOPRES_THEME_PATH`. `_tools-vc` corrected my scope: 19 references across 8 files, and their suite catches the BREAK on its first run while going silently vacuous on the GUARANTEE -- the AC10 extractability assertion scrubs a variable prez no longer reads. **Completion check, both repos: `git grep GEOPRES_THEME_PATH` returns zero.**
+- **Ruled and closed: no deprecated `GEOPRES_THEME_PATH` fallback.** It would silence the one tripwire of three that works, to protect an ordering a grep enforces for free. `_tools-vc` accepted and added the better argument: "for one release" requires someone to remove it and nobody ever does.
+- **`intent-vc`: do NOT re-run the ingest damage probe until they say the tiebreak has landed.** Utilz's exposure to issue `0133` is **UNMEASURED, which is not zero**. The bound that still holds: nothing here went through legacy ingest -- `intent at new` through the API gate and `sync --to-disk` only, no `sync --to-store` -- so whatever exposure exists came from the original hop and has not grown.
 
 ## Watch-outs
 
-- **The working tree has three writers and is dirty in two places that are not mine.** `bin/devbin` + `bin/.devbin/manifest.sha256` are hv's devbin running (`_tools-vc` records the identical class over there). `opt/prez/crate/examples/*.md` and `cc/.history/20260829/wip.md` are staged -- cc's documented prettier index residue from `git commit --only`. **Do not stage, do not commit, do not tidy.** Explicit pathspecs on every commit.
-- **One known harness cause will still redden the FIRST Linux CI run, and one is now fixed at source.** Fixed in the pending pin: the browser-probe drift (finding 3's mirror). Still live: `AT01` sizing the binary with BSD-only `stat -f %z`, which returns nothing on Ubuntu, reads 0, and fails the 8 MB ceiling -- cc added a `stat -c %s` fallback in the hoisted copy, so confirm it survives the re-archive, because the fix lives HERE and the archive comes from THERE.
-- **The rename sweep has three coordinated sets and must stay atomic**: theme const + refusal string + the AT asserting it; the `SENTINEL=` literal and its twin payload in `examples/demo.md`; the binary name throughout. cc measured 107 lines across 19 files.
-- **The liftability refusal is the guarantee.** An unknown theme must REFUSE naming built-ins + search path. If `--theme=geodica` ever resolves on bare prez, the crate has stopped being liftable and nothing else reports it. Confirmed intact: the hoisted crate ships seven themes and no geodica.
-- **`include_str!` pins the layout**: `src/`, `themes/`, `assets/` are compile-time siblings. The crate travels as one unit or it does not compile.
-- **`examples/demo.md` does not opt into mermaid** (its `mermaid: true` is documentation inside a fence). Diagram and determinism checks must point at `examples/test_pres.md`; demo.md is the labelled negative control. Bit `_tools` three times.
+- **A green is a licence to look, not a substitute for looking (AC16).** hv found three defects today by looking at output; none had a red test.
+- **`utilz help <anything>` HANGS when stdin is a TTY** (glow's pager, not new and not prez's). It bites `bats --filter` from a terminal and looks exactly like the test you are debugging hanging. `< /dev/null` fixes it; CI never sees it.
+- **Never pipe a command whose exit code is the assertion.** `$?` after a pipeline is the last command's, and zsh has no `PIPESTATUS`.
+- **A check whose green is "no matches" aborts on success** under `set -euo pipefail` -- grep exits 1 when it matches nothing. Bit cc's adaptation script twice, after it had already written to disk.
+- **`examples/demo.md` does not opt into mermaid** (its `mermaid: true` is inside a fence). Point diagram and determinism checks at `test_pres.md`; demo.md is the labelled negative control. Bit `_tools` three times.
 - **`acceptance.sh` defaults to exit 0 with named SKIPs.** Always `--strict`, and in CI prove a browser was found.
-- **Contrast figures go stale by selector** -- four corrections in two days. Current honest floor-nearest is mono 4.9:1 (flattened, every text element, `bfd0349`). Any quoted figure cites selector + palette + commit.
-- **A green is a licence to look, not a substitute for looking** (AC16). `_tools-cc`'s diagram-font defect passed a green determinism probe.
-- **Build provenance is a real seam** (AC17). At the pin a binary predated its own source commit by 3.5 minutes. If our numbers disagree with `_tools`' (10/0/0, 111), check provenance before suspecting the port.
-- `utilz test` is not safe to run concurrently (the helper mutates `$UTILZ_HOME/bin`). Verify shell tooling under `/bin/bash` with an array, never zsh with an unquoted variable.
-- Framework `VERSION` 2.4.0 and `intent` 3.0.0 are different numbers. ST0010 releases as **2.5.0**; tag and push are hv's.
+- **Contrast figures go stale by selector.** Any quoted figure cites selector + palette + commit.
+- **`include_str!` pins the crate layout**: `src/`, `themes/`, `assets/` are compile-time siblings.
+- **Three concurrent writers in this tree** (vc, cc, hv running devbin). Explicit pathspecs on every commit, never `-A`. A `git status` from earlier in a session is not a stable baseline.
+- `utilz test` is not safe to run concurrently. Verify shell tooling under `/bin/bash` with an array, never zsh with an unquoted variable.
 
-## Decisions
+## Decisions that still decide things
 
-- (2026-08-29) ST0010 claimed by vc as coordinator; cc executes the build WPs. Explicit exception to vc's no-claims default, at hv's direction.
-- (2026-08-29) `_tools` AC01 NOT transcribed: Utilz is outside Dropbox and its `local` remote is bare, so it would gate a hazard that does not exist here. The hygiene lessons transfer as this thread's own criteria; the Dropbox justification does not. **This renumbering is the root of finding 2** -- dropping an AC while the ATs kept their own sequence is what broke the map, and nothing reported it because both numbers still existed.
-- (2026-08-29) AC08's addressing clause is excised to AC15 rather than transcribed then edited -- validating a resolution order we are about to break yields a green that means nothing, and one AC is never edited twice.
-- (2026-08-29) Two non-test ACs, satisfied by named evidence rather than a passing test: AC16 (a human looks at the render) and AC17 (the binary was built from a clean checkout of the pin). Both exist because the suite provably could not stand in for them.
-- (2026-08-29) **The freeze protects utilz-cc from drift; it does not make the pin sacred.** Two findings, opposite rulings, and the difference is in the facts: the keychain modal is actively harming and testable where it lives, so it is patched in `_tools` and the pin moves; the Linux browser-probe drift is invisible and untestable there, so it is fixed in Utilz. `_tools` then went further than the ruling and put a mirror in the pin -- which fixes the false red at source and leaves the Highlander violation for us, exactly as their comment says.
-- (2026-08-29) Two checks measuring the same PROPERTY by different mechanisms are duplication; two measuring DIFFERENT properties are not (`_tools-cc`'s refinement). So the estate's static grep on its generated CSS and prez's runtime determinism verb both stand, and neither is a second home.
-- (2026-08-29) **A cross-repo rename has no owning suite.** Neither side's tests can see finding 1, because each repo's suite stops at its own boundary. Where two repos share a contract, the contract needs a check that runs one against the other -- or a named human step. Currently it has neither.
+- (2026-08-29) **An ST0010 AT id EQUALS the acceptance.sh block id the suite prints.** The carried suite has no AT10/AT11 -- `_tools`' estate tests stayed behind -- so those ids plus AT16 hold Utilz-native rows. A green is reported by the runner as "AT07"; if the contract's AT07 covers something else, the green names the wrong instrument.
+- (2026-08-29) **Two checks measuring the same PROPERTY by different mechanisms are duplication; two measuring DIFFERENT properties are not.** So AT01+AT10 both cover AC11 (build-produces-nothing-tracked vs the-ignore-rule-is-committed) and AT04+AT17 both cover AC04 (a real browser vs the dispatch table). Both pairs say so on the row, so neither is tidied away.
+- (2026-08-29) **Delete the second home rather than check it.** The deck rosters went, rather than gaining a prose-vs-table comparison that would have been brittle enough to false-red -- and a false red is the more expensive direction, because it sends a peer to disprove it and spends the credibility the next finding needs.
+- (2026-08-29) **A criterion pins properties, not enumerations.** AC04 lists no keys; it names BINDINGS as the one roster and pins four structural facts about it.
+- (2026-08-29) **No fallback message names as its remedy the case in which it fired** (AC20b). The general form of hv's `q` finding, and the checkable one.
+- (2026-08-29) **A platform-dependent string in a portable artifact resolves when the deck is VIEWED, never when it is built** (AC20d). Whoever sees the wrong text is never whoever built the deck.
+- (2026-08-29) **The freeze protects utilz-cc from drift; it does not make the pin sacred.** Same rule, opposite answers, and the axis is in the facts: harming and testable where it lives -> patch there; invisible and untestable there -> fix here.
+- (2026-08-29) Two non-test ACs -- AC16 (a human looks) and AC17 (provenance) -- exist because the suite provably could not stand in for either.
