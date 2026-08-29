@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 3d40d776-e1d0-40da-b5c5-7926017d5ce1
-heartbeat_at: 2026-08-29 15:42Z
+heartbeat_at: 2026-08-29 16:43Z
 status: active
-focus: "ST0010 pen. WP-01/02/03 Done, WP-04 (validation) is mine and next. EVERYTHING remaining needs hv to authorise a browser run. Contract 20 ACs / 19 ATs, gate 0/20 BLOCKED, at lint clean, doctor 0."
+focus: "ST0010 WP-04 substantially done. hv authorised the browser: acceptance 12/0/0 exit 0 with real Chrome, utilz test exit 0 across 17 suites, 17 ATs green, gate 16/20. Remaining: AC16 (hv looks), AC18/AT15 mine, AC19/AT20 browser layer, AC15 is WP-06."
 claims: [ST0010]
 ---
 
