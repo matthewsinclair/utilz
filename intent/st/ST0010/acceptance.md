@@ -85,6 +85,14 @@ title: Add prez to utilz to support markdown presentation pipeline
 
 - AC18 The harness must not lie, block, or be unreproducible -- three inherited defects, all invisible on the machine that wrote them, all fixed HERE because here is where they can be tested. (a) ONE browser resolution, not two: test/acceptance.sh's chrome() carries two macOS app paths and no PATH names, while src/drive.rs carries four app paths AND six PATH names (google-chrome, google-chrome-stable, chromium, chromium-browser, microsoft-edge, brave-browser). On Linux the tool finds a browser and the harness does not, so five ATs (AT04, AT05, AT07's diagram measurement, AT08's per-theme legibility, AT12) degrade to skips and --strict turns a correct build RED -- while the message says 'no Chrome or Chromium installed' about a browser the tool under test is happily driving. A Highlander violation that has already drifted once, unreported because both were only ever run on macOS; the harness resolves through the tool's list or asks the tool, never a second copy. (b) An override hook (eg GP_TEST_BROWSER=/nonexistent) so the browserless path is reproducible on a machine that HAS a browser -- today the control proving --strict matters cannot be exercised anywhere Chrome is installed, which makes it a control that cannot go red, the exact class this thread inherited its vocabulary for. The tool already has the shape (--browser /nonexistent); the harness lacks it. (c) NO INTERACTIVE MODAL: every headless launch passes --use-mock-keychain (or --password-store=basic), because a fresh --user-data-dir makes macOS prompt for a Safe Storage keychain entry -- an interactive dialog in a non-interactive suite, which HANGS rather than fails, and which --strict cannot distinguish from still working. It reached hv's screen on 2026-08-29; AT04 has done it since it was written and AT12's per-theme profiles made it eight times per run. -- satisfied: no (computed)
 
+### Group AC19
+
+- AC19 The presenting window opens at the deck's own shape, and the shape is overridable. prez pdf already renders 16:9 by default (--paper 254x142.9mm); prez present passed --app, --start-fullscreen and --new-window and set no geometry at all, so an app window inherited whatever Chrome last remembered and hv got a PORTRAIT window for a 16:9 deck. Three clauses: (a) present sizes the window to the deck's aspect by default, matching pdf's default rather than a second opinion about it; (b) a --window WxH flag overrides, mirroring --paper's grammar so the two verbs read the same way; (c) NO FLAG IS PASSED THAT HAS NO OBSERVABLE EFFECT ON A PLATFORM WE SHIP TO -- --start-fullscreen is passed today and demonstrably did not take on macOS, which is AC18's class (a check or a flag that reads plausibly and does something adjacent to what it names) applied to the tool rather than the harness. Either it works and that is shown, or it goes. VERIFIED IN TWO LAYERS, the same split as AC04: a unit test asserts the ARGV open_presenting builds, which needs no browser and is where a silently-dropped flag is caught; the browser AT asserts the window that actually appears, which is the only thing that can prove a flag took effect. (Minted 2026-08-29 from hv's screenshot -- the second defect this thread found by hv looking at output rather than by any green.) -- satisfied: no (computed)
+
+### Group AC20
+
+- AC20 A binding does what its label says, or the bar and the runtime say what will actually happen. hv pressed q and got 'this browser will not let a page close itself -- q closes the window that prez present opens' IN THE WINDOW prez present had just opened. The fallback names as its remedy the exact case in which it fired. Underneath it is a false premise, stated in the code comment at src/html.rs:418: 'window.close() only acts on a window script opened -- which is what prez present produces, since it launches a dedicated app window.' A command-line --app window is NOT script-opened; Chrome refuses window.close() there, so q has never closed that window and the bar advertises 'close' for a key that cannot. Two clauses: (a) every entry in BINDINGS either performs its label or the bar shows what it will really do -- a key that cannot do the thing is not advertised as doing it; (b) NO FALLBACK MESSAGE NAMES AS ITS REMEDY THE CASE IN WHICH IT FIRED. That second clause is the general form and the checkable one: a message written for the failure it does not cover reads as help and sends the reader back to the thing that just failed. Which fix -- make q close, or make q tell the truth and point at the OS shortcut -- is utilz-cc's to choose by measuring what Chrome actually permits; this criterion does not pick, it only forbids the current state where the label, the comment and the message all assert something the runtime cannot do. (Minted 2026-08-29 from hv's second screenshot. Both of today's runtime defects were found by hv looking at output; no green had either.) -- satisfied: no (computed)
+
 ### Group AT01
 
 _(no criteria in this group)_
@@ -150,6 +158,14 @@ _(no criteria in this group)_
 _(no criteria in this group)_
 
 ### Group AT17
+
+_(no criteria in this group)_
+
+### Group AT18
+
+_(no criteria in this group)_
+
+### Group AT19
 
 _(no criteria in this group)_
 
@@ -227,6 +243,14 @@ _(no tests in this group)_
 
 _(no tests in this group)_
 
+### Group AC19
+
+_(no tests in this group)_
+
+### Group AC20
+
+_(no tests in this group)_
+
 ### Group AT01
 
 - AT01 `opt/prez/crate/test/acceptance.sh` -- covers AC11 -- status: to-write -- Block AT01, rewritten by hoist-adapt.sh step 3 to prove the UTILZ build mechanism (build lands in-crate, git sees no litter, 8 MB ceiling with a stat -c %s fallback). At b600306 the upstream block still proves _tools' devbin redirect, so this row's meaning DEPENDS on that adaptation surviving every re-archive. AT id == the acceptance.sh block id the suite PRINTS. The carried suite has no AT10/AT11 (those were _tools' estate-side tests and stayed behind), so those ids are free for Utilz-native rows.
@@ -294,6 +318,14 @@ _(no tests in this group)_
 ### Group AT17
 
 - AT17 `opt/prez/crate/test/acceptance.sh` -- covers AC04 -- status: to-write -- Block AT17, 'the runtime's key handling, driven with no browser at all' -- runs test/runtime-logic-probe.mjs, 29 checks, over a synthetic deck AND test_pres.md. Co-covers AC04 with AT04 and is NOT duplication: AT04 proves a real browser does the thing, AT17 proves the dispatch table routes correctly, and the boundary is written into the probe. It exists because a keyboard runtime is exactly what gets shipped on 'it compiles' -- two of hv's runtime changes had only a build behind them. Extracts the runtime by its own IIFE terminator, never the first script tag: html.rs appends mermaid AFTER the runtime, so on a mermaid deck the first (and only) script is 3.5 MB of vendored bundle. The extraction CHECKS ITSELF and exits 2 if it finds no binding table or any sign of esbuild -- a boundary read out of a text file starts selecting the wrong span silently, and the symptom is a probe that passes having tested something else. Red-first proven: unreachable commit binding -> 6 failures, exit 1. Minted by utilz-cc at c3307c5 and verified here as the id the suite prints.
+
+### Group AT18
+
+- AT18 `opt/prez/crate/test/acceptance.sh` -- covers AC19 -- status: to-write -- To write, utilz-cc's. Two layers: a cargo unit test over open_presenting's constructed argv (browserless, catches a flag that is passed and ignored), plus a browser check that the window that appears has the deck's aspect. The argv half must assert the ABSENCE of any flag proven inert as well as the presence of the geometry, or a build that keeps --start-fullscreen alongside a working --window-size passes a check that only looks for the new flag -- the same both-directions rule as AC04(b).
+
+### Group AT19
+
+- AT19 `opt/prez/crate/test/runtime-logic-probe.mjs` -- covers AC20 -- status: to-write -- To write, utilz-cc's. AT17's probe already stubs the DOM and holds BINDINGS, so it is the cheap home: stub window.close() as a no-op (which is what Chrome does -- no error, no return value, no exception) and assert what the runtime then SAYS. The assertion is on the message text, not merely on the message existing, because the defect is a truthful-looking sentence with a false remedy in it. Browserless by construction: the refusal is what is being tested, and a real browser is the one place it is awkward to provoke.
 
 ---
 
