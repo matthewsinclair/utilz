@@ -37,7 +37,14 @@ features:
   - Optional mermaid diagrams, vendored rather than fetched
   - PDF export and a local present mode, both via a browser
 
-integration:
-  input: stdin
-  output: buffer
-  flags: []
+# NO integration: BLOCK, deliberately (design, "Non-decisions, named"). The
+# Emacs bridge can bind prez later; nothing in ST0010 depends on it, and the
+# block the generator scaffolds here claimed `input: stdin / output: buffer`,
+# which is wrong twice over -- prez writes a FILE and the bridge would have
+# advertised a buffer round-trip the tool does not do.
+#
+# It is also load-bearing for a framework test: bridge.bats asserts an exact
+# row count for emit_integration_tsv, naming its roster as "the ST0007 design
+# matrix of 12, plus todo". An unconsidered block here makes that 14 and turns
+# a correct test red -- which is how this was caught, on the first full-suite
+# run after the hoist.
