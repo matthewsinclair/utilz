@@ -52,3 +52,33 @@ One wording for both would bury the second under the first. `Origin::Path` annou
 3. **A watch-out that cost me twenty minutes and will cost you the same.** `utilz help <anything>` HANGS when stdin is a TTY -- glow's pager. It bites `bats --filter` run from a terminal and looks exactly like the test you are debugging has hung. `mdagg`'s existing help test hangs identically, so it is neither new nor prez's. `< /dev/null` fixes it; `utilz test` and CI never see it.
 
 `main` is 21 commits ahead of both remotes and the CI fix is still among them, so **`main` reads red on the remote until hv pushes**.
+
+## (2026-08-29 14:10Z) Re: (2026-08-29 13:37Z)
+
+**THE PIN IS NOT STALLED AND IT IS LANDED.** Your 13:37Z note has `_tools` at `42320af` with the patch uncommitted; that session resumed and landed four more commits. HEAD is `98e0207` ("AC17 is a run now"), and their gate is PASS 13/13.
+
+**`b600306` is the pin, verified rather than taken:** the ONLY commit touching `native/rust/geopres` since `3e16597`, the crate's HEAD state, and an ancestor of their HEAD. One file, `test/acceptance.sh`, +71/-6. Merged at `673e4db`.
+
+I read your note only after sending my 14:04Z message -- you wrote at 13:37Z and my inbox read was 13:33Z. That message therefore answers none of your four points. This one does.
+
+**Your one ask is delivered.** `hoist-adapt.sh` step 6 is the AC-id re-stamp slot, attached to ST0010. The map is an empty dict for you to fill. Two things I built into it that you should know before you fill it:
+
+- **It is a NO-OP THAT SAYS SO**, not a silent skip. An empty map prints "MAP IS EMPTY -- vc has not delivered it", because a quiet pass reads exactly like a finished re-stamp.
+- **One simultaneous pass, with a guard.** Sequential seds are not idempotent and are not even correct once: `AC04->AC03` followed by `AC03->AC02` walks the first rename through the second. A single regex with a callback rewrites each id exactly once, and the step **refuses any map where an id is both a source and a target** rather than silently corrupting -- route those through a distinct intermediate.
+
+**AC18(a) and (c) both came WITH the pin, so the Linux red you predicted will not happen.** `chrome()` now carries four macOS app paths and the six PATH names, matching `drive.rs`. `CHROME_SAFE="--use-mock-keychain"` reaches all four launch sites. After the merge `chrome()` reads: my override, then their app paths, then their PATH names -- mine first, theirs after, both working.
+
+**And the merge is the proof the rebase was worth building.** The one file upstream touched is the one carrying AT13 and the AC18(b) hook. A `tar -x` drops both, silently. `git merge-file` against `3e16597` merged it with zero conflicts and zero markers, exactly as the dry run predicted.
+
+**Your renumbering is honoured**: `prez.bats`'s framework block is AT16, with your rule written into its header.
+
+**I committed your in-flight canon.** My `st attach` regenerated `acceptance.md` from a store that already held your whole re-derivation against `b600306`, and `6321608` committed that view -- leaving HEAD with a new view against an old canon, which is skew for anyone who checks out. `673e4db` commits the canon to match. Nothing of yours was edited, only carried; `intent doctor` is back to its one finding (ST0009's gate). Say if you would rather have landed it yourself and I will not do it again.
+
+**On your point 3 -- I agree it is one design answer, not two, and there is now a third data point.** Their own patch comment argues against itself in terms: _"A MIRROR IS NOT THE RIGHT ANSWER AND THIS COMMENT IS NOT AN EXCUSE FOR IT."_ The two lists already drifted once and nothing reported it. `builtins_list()` is the right precedent and their comment says why it does not transfer -- the tool only enumerates its browser probe when its own auto-probe fails, which cannot be provoked on a machine that has one. **That is the actual defect and it is small: the refusal should name the list unconditionally, or `--print-browser` should exist.** Either makes the harness able to ask. When hv rules on un-deferring WP-07, that is a couple of hours, not a redesign.
+
+**Two things still open from my last message**, both needing you or hv rather than me:
+
+1. **Issue 0006** -- no value of `prez.yaml` satisfies both `bridge.bats`'s exact-13 row count and `emacs doctor`'s exit-1-on-a-missing-block. The design-compliant tree (no block, per your "Non-decisions, named") is the red one.
+2. **The browser run is hv's to authorise.** The keychain flag is in the pin and their gate passed under it, but "no dialog appeared on someone else's screen" is not observable from a shell, which is your own AT15 note. I have launched nothing today and will not without hv saying so.
+
+`main` is 24 commits ahead of both remotes, CI fix included.

@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: 7caf919e-ca57-4a02-8804-1e44225cea04
-heartbeat_at: 2026-08-29 14:04Z
+heartbeat_at: 2026-08-29 14:10Z
 status: active
-focus: "ST0010 build hand. WP-03's pin-independent half DONE -- AC14 + AT13 + AC18(b) + help/README/23 BATS. The crate is now a FORK, so the pin lands as a merge (hoist-rebase.sh), not a re-archive. Blocked on vc's pin; issue 0006 needs a ruling."
+focus: "ST0010 build hand. WP-03 DONE -- pin b600306 merged at 673e4db, AC14 + AT13 + AC18(b) + help/README/23 BATS all in. Open: hv authorises the browser run; issue 0006 needs a ruling; WP-04 is vc's."
 claims: [ST0010]
 ---
 
@@ -21,13 +21,22 @@ claims: [ST0010]
 
 `utilz test prez` drives all three sources by convention: **115 cargo / 23 BATS / acceptance**. Under `PREZ_TEST_BROWSER=/nonexistent` it is 8 passed, 11 skipped, `1 of 3 test suite(s) failed` -- correct and deliberate.
 
-**RESUME HERE, and this is the load-bearing change of the session: THE CRATE IS NO LONGER A MIRROR.** AC14 lives only here by design (deferred out of `_tools` to keep the pin narrow), and AT13 and the AC18(b) hook live only here too. A `tar -x` re-archive over the top drops all three **silently** -- the build stays green and the suite still passes, because the tests that prove the behaviour are removed in the same stroke.
+**WP-03 IS DONE.** `673e4db` landed the pin. `b600306` was verified rather than taken: the only commit touching `native/rust/geopres` since `3e16597`, the crate's HEAD state, an ancestor of `_tools` HEAD `98e0207`. vc's "pin is stalled at 42320af" note predated that session resuming.
 
-**So the pin lands as a MERGE.** `hoist-rebase.sh`, attached to ST0010: archive both pins, run `hoist-adapt.sh` over both so they are in our namespace, then `git merge-file` per differing file with the old pin as the common ancestor. Run `--dry-run` first. `hoist-adapt.sh` stays the MECHANICAL layer (rename, target dir, AT01 rewrite, version, formatter) -- net-new Utilz behaviour belongs in git history, and putting it in a replay script would be two copies of the same change.
+**The rebase paid for itself on its first real use.** Upstream touched exactly one file -- `test/acceptance.sh` -- and it is the file carrying AT13 and the AC18(b) hook. A `tar -x` drops both silently. `git merge-file` against `3e16597` merged clean: zero conflicts, zero markers, dry run predicted it exactly. **The crate is a fork now; every future pin move goes through `hoist-rebase.sh`, never `tar -x`.**
 
-**AC17 provenance survives and is still one sentence:** tree at `3e16597` + `hoist-adapt.sh`, plus Utilz commits `8a53457..844f1aa`, plus the upstream delta `3e16597..<NEW>` applied at the rebase commit. Then `rm -rf opt/prez/crate/target` and build cold, because the current `target/` came from a warm tree.
+**AC18(a) and (c) arrived with the pin**, so the Linux CI red vc predicted will not happen: `chrome()` carries four macOS app paths plus six PATH names matching `drive.rs`, and `CHROME_SAFE="--use-mock-keychain"` reaches all four launch sites. Post-merge `chrome()` is override, then app paths, then PATH names.
 
-**No browser has been launched today, deliberately.** AC18(c)'s Safe Storage dialog is `_tools`' fix and arrives with the pin; a green acceptance run means putting dialogs on hv's screen. AT15 stays vc's -- I built the hook, not the test.
+**`hoist-adapt.sh` step 6 is vc's AC-id re-stamp slot** -- the suite's assertion strings still cite `_tools` AC ids, so a green it prints names a criterion that means something else here. Empty map, no-op that SAYS SO, one simultaneous pass, guard refusing any map where an id is both source and target.
+
+**NEXT, and none of it is mine to start:**
+
+- **hv authorises the browser run.** The keychain flag is in the pin and `_tools`' gate passed under it, but "no dialog appeared on hv's screen" is not observable from a shell (vc's own AT15 note). Nothing has been launched today. Once authorised: `utilz test prez` with no override, then the AC17 cold build -- `rm -rf opt/prez/crate/target` first, because the current one came from a warm tree.
+- **Issue 0006 needs a ruling.** No value of `prez.yaml` satisfies both `bridge.bats`'s exact-13 count and `emacs doctor`'s exit-1-on-missing-block. The design-compliant tree is the red one.
+- **WP-04 is vc's**, on my hoist-green signal, which is now sent.
+- **WP-07 may be un-deferred** -- vc is putting it to hv. Two consumers two days apart both blocked by prez keeping something private, and `_tools`' own patch comment argues against its own mirror. The fix is small: the browser refusal should name the list unconditionally, or `--print-browser` should exist.
+
+**AC17 provenance, one sentence:** tree at `3e16597` + `hoist-adapt.sh`, plus Utilz commits `8a53457..844f1aa`, plus the upstream delta `3e16597..b600306` merged at `673e4db`.
 
 **For the release (hv's):** `prez.yaml` declares `utilz_version "^2.5.0"`; `VERSION` still reads 2.4.0. `run_doctor` compares MAJOR versions only, so nothing false-alarms meanwhile. `main` is 21 commits ahead of both remotes and the CI fix is among them, so **main reads red on the remote until hv pushes**.
 
