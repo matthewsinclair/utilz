@@ -5,7 +5,7 @@ A DOING / TODO / DONE view, projected from steel-thread and work-package status:
 ## DOING
 
 - [-] ST0010: Add prez to utilz to support markdown presentation pipeline
-  - [-] 01: Contract: design.md + AC/AT transcription from _tools ST0002
+  - [x] 01: Contract: design.md + AC/AT transcription from _tools ST0002
   - [-] 02: Framework Rust substrate: lang, gitignore, CI, test driver, doctor
   - [ ] 03: The hoist: crate at the pin, rename to prez, shim, yaml, help
   - [ ] 04: Validation: every carried green re-produced in the new home

@@ -73,6 +73,14 @@ title: Add prez to utilz to support markdown presentation pipeline
 
 - AC15 Theme addressing, split by mode (hv 2026-08-29): --theme=NAME resolves names ONLY -- search path then built-ins, never the working directory (killing the measured cwd-shadowing: --theme=simple beside a ./simple/ directory resolved the local one, elsewhere the built-in, silently); --theme-file=FILE resolves a path ONLY, mutually exclusive with --theme, its refusal saying no-such-file rather than offering a theme roster; --theme-path=PATHSTR PREPENDS colon-separated directories to PREZ_THEME_PATH for the invocation (prepend, not replace: flag and env compose); front matter splits identically into theme: (name) and theme-file: (deck-relative path), or the ambiguity moves into the deck where it travels; --theme=./x.css is thereby refused as a name carrying a separator -- a breaking change taken deliberately at the rename, the cheapest moment it will ever have. -- satisfied: no (computed)
 
+### Group AC16
+
+- AC16 (non-test) A human has LOOKED at the output. Every built-in theme is rendered and viewed -- not merely measured -- and the render is compared against what the criteria claim, with the observation recorded as evidence. This is a gate rather than a note because the automated suite demonstrably cannot stand in for it: on _tools, hv's screenshots found four defects a full day of tests had missed, and the diagram-font defect (labels resolving to a serif off documentElement while the deck ran its own sans) passed a GREEN determinism probe -- deterministically wrong is still wrong, and nothing in the suite connected the two. The operational rule, in _tools-cc's words: a green determinism probe is a licence to look at the output, not a substitute for looking at it. -- satisfied: no
+
+### Group AC17
+
+- AC17 (non-test) Every green recorded in this repo names the instrument that produced it, and that instrument is provably this repo's: the binary under test is built from a clean checkout of the recorded pin (3e16597), and WP-04 records the build's provenance alongside its numbers. The seam is real rather than theoretical -- at the pin, _tools-vc found the binary on disk predated its own source commit by three and a half minutes (cc had compiled a working tree and committed afterwards), so the first green there was true but unattributable until forced to rebuild from HEAD. The first Utilz build at the pin is the first moment the sha and the binary are provably the same artifact; if this repo's numbers disagree with _tools', that seam is checked BEFORE the port is suspected. -- satisfied: no
+
 ### Group AT01
 
 _(no criteria in this group)_
@@ -188,6 +196,14 @@ _(no tests in this group)_
 _(no tests in this group)_
 
 ### Group AC15
+
+_(no tests in this group)_
+
+### Group AC16
+
+_(no tests in this group)_
+
+### Group AC17
 
 _(no tests in this group)_
 

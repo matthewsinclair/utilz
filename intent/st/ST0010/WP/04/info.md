@@ -9,7 +9,7 @@ status: Not Started
 
 ## Objective
 
-Validation in the new home: every carried green re-produced by instruments run HERE -- cargo test (111 at the pin), acceptance.sh --strict (10/0/0 at the pin), the probes, the liftability refusal, the standalone greps -- ATs walked to green through red where the lifecycle requires, and a coverage statement naming what was NOT checked.
+Validation in the new home: every carried green re-produced by instruments run HERE -- cargo test (111 at the pin), acceptance.sh --strict (10/0/0 at the pin), the probes, the liftability refusal, the standalone greps -- ATs walked to green through red where the lifecycle requires, and a coverage statement naming what was NOT checked. Two non-test gates land here by named evidence: AC16 (a human renders and LOOKS at every theme -- the automated suite provably cannot stand in for it) and AC17 (the binary under test built from a clean checkout of the pin, provenance recorded beside the numbers).
 
 ## Acceptance
 

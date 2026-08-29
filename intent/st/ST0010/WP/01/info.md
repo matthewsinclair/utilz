@@ -2,7 +2,7 @@
 wp_id: WP-01
 title: Contract: design.md + AC/AT transcription from _tools ST0002
 scope: S
-status: WIP
+status: Done
 ---
 
 # WP-01: Contract: design.md + AC/AT transcription from _tools ST0002
