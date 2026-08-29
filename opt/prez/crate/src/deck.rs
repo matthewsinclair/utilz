@@ -55,7 +55,29 @@ fn present(cmd: &Command) -> Result<(), Failure> {
   };
   write(&out, &compiled.artifact)?;
   drive::open_presenting(cmd.browser.as_deref(), &out, cmd.window.as_deref())?;
-  println!("prez: presenting {}", out.display());
+
+  // NAME THE DECK, NOT THE SCRATCH FILE. Without `-o` the artifact is staged in
+  // temp, and printing that path meant a line like
+  //   prez: presenting /var/folders/nn/p40.../T/prez-41685-1788017121547340000.html
+  // -- forty characters of machine detail about a file the reader did not ask
+  // for, cannot use, and will not find again. The deck they typed and the
+  // number of slides they got are the two facts worth confirming.
+  //
+  // With `-o` the artifact IS the ask, so it is named: that file is being kept
+  // on purpose.
+  // The NAME, not the path. hv's deck lives at
+  //   /Users/.../CloudStorage/Dropbox/Geodica/Consulting/Clients/.../20260824/
+  // and echoing all of it back is no better than echoing the temp path it
+  // replaced -- the reader typed that string a second ago and does not need it
+  // read out. `weekly-summary.prez.md (12 slides)` confirms the two things they
+  // could not already know: that the right file was found, and what came out.
+  let name = Path::new(&cmd.input).file_name().map_or(cmd.input.clone(), |n| n.to_string_lossy().into_owned());
+  match &cmd.out {
+    // With `-o` the artifact is being kept ON PURPOSE, so it is named -- and
+    // named as the user wrote it, not as it resolves.
+    Some(kept) => println!("prez: presenting {name} ({} slides) -> {kept}", compiled.slides),
+    None => println!("prez: presenting {name} ({} slides)", compiled.slides),
+  }
   Ok(())
 }
 

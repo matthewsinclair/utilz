@@ -13,7 +13,7 @@
 use crate::html;
 use crate::Failure;
 use std::path::{Path, PathBuf};
-use std::process::Command;
+use std::process::{Command, Stdio};
 
 /// Where a Chromium-family browser lives on macOS, in preference order.
 const APP_PATHS: &[&str] = &[
@@ -306,9 +306,29 @@ pub fn open_presenting(
 }
 
 fn spawn(command: &mut Command, what: &str) -> Result<(), Failure> {
-  command.spawn().map(|_| ()).map_err(|e| {
-    Failure::new(format!("could not launch '{what}': {e}"), "name a browser with --browser PATH")
-  })
+  // THE BROWSER'S OUTPUT IS DISCARDED, and it is noise rather than diagnostics.
+  //
+  // prez hands over and exits, so the launched process outlives it and writes
+  // to the terminal WHENEVER IT LIKES -- which in practice is after the shell
+  // has already drawn the next prompt. Chrome greets a running instance with
+  // "Opening in existing browser session." and it lands under the prompt,
+  // looking like output from whatever the user types next. It is unreadable as
+  // a diagnostic and it belongs to a process nobody is waiting on.
+  //
+  // Nothing is lost by dropping it: prez never reads these streams, cannot
+  // wait for them without breaking the anti-requirement that it gets out of the
+  // way, and would have exited long before anything interesting arrived. A
+  // failure to LAUNCH is still a named Failure below -- that is the part with a
+  // remedy attached, and it is the part that happens while prez is still here.
+  command
+    .stdin(Stdio::null())
+    .stdout(Stdio::null())
+    .stderr(Stdio::null())
+    .spawn()
+    .map(|_| ())
+    .map_err(|e| {
+      Failure::new(format!("could not launch '{what}': {e}"), "name a browser with --browser PATH")
+    })
 }
 
 fn code(status: &std::process::ExitStatus) -> String {

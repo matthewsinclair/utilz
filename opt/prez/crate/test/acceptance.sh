@@ -395,16 +395,46 @@ if want AT06; then
   # whether a window appeared. It also has to be waited for: prez exits the
   # moment it spawns, so reading the record too early reports "invoked nothing"
   # (vc caught exactly this in its own instrument, 28 Aug).
+  # The stub CHATTERS, on both streams, the way a real browser does. Chrome
+  # greets an already-running instance with "Opening in existing browser
+  # session." and libGL/gpu lines go to stderr -- and because prez has exited by
+  # then, all of it lands under the user's next shell prompt looking like output
+  # from whatever they type next. hv saw exactly that.
   cat > "$WORK/fake-browser" <<'STUB'
 #!/usr/bin/env bash
 printf '%s\n' "$@" > "$(dirname "$0")/argv.txt"
+echo "Opening in existing browser session."
+echo "[12345:ERROR:gpu_init.cc(42)] libGL noise" >&2
 STUB
   chmod +x "$WORK/fake-browser"
 
   "$BIN" present "$DEMO" --browser "$WORK/fake-browser" >"$WORK/present.log" 2>&1
   check "prez exit code" "$?" "0"
 
+  # WAIT FOR THE STUB TO HAVE RUN before reading anything it might have
+  # written. The cleanliness checks below were originally above this loop and
+  # could not go red: the browser had not chattered yet, so "the log does not
+  # contain the chatter" was true because nothing had happened. Caught by the
+  # red-first run, where the two message checks failed and these two did not.
   for _ in 1 2 3 4 5 6 7 8 9 10; do [ -f "$WORK/argv.txt" ] && break; sleep 0.2; done
+  # argv.txt is written BEFORE the stub's echoes, so its existence is not proof
+  # they have landed. One more beat, then assert.
+  sleep 0.3
+
+  # THE TERMINAL STAYS CLEAN. Both streams, because the launched process
+  # inherits both and prez is not around to catch either -- and because prez
+  # has exited by then, anything they write lands under the user's next shell
+  # prompt looking like output from whatever they type next.
+  absent "the browser's stdout does not reach the terminal" "Opening in existing" "$WORK/present.log"
+  absent "nor its stderr" "libGL noise" "$WORK/present.log"
+
+  # And what prez DOES say is about the deck, not about a scratch file. The
+  # line used to name a temp path -- forty characters of machine detail about a
+  # file the reader did not ask for and cannot find again.
+  present "names the deck" "presenting demo.md" "$WORK/present.log"
+  present "and how many slides came out" "slides)" "$WORK/present.log"
+  absent "and not the scratch path" "/prez-" "$WORK/present.log"
+
   if [ -f "$WORK/argv.txt" ]; then
     present "launched with --app on a file:// URL" "--app=file://" "$WORK/argv.txt"
     present "launched in its own window" "--new-window" "$WORK/argv.txt"
