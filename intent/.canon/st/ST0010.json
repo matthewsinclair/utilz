@@ -226,13 +226,23 @@
       "kind": "test",
       "file": "opt/prez/crate/test/acceptance.sh",
       "covers": [
-        "AC01"
+        "AC11"
       ],
       "status": "to-write",
-      "note": "Carried from _tools ST0002 at pin 3e16597 (green there under --strict at the pin: 10 passed / 0 failed / 0 skipped, run by _tools-cc). Unverified in this repo until produced by instruments run here (WP-04); to-write because the file does not exist in this tree until WP-03 lands."
+      "note": "Block AT01, rewritten by hoist-adapt.sh step 3 to prove the UTILZ build mechanism (build lands in-crate, git sees no litter, 8 MB ceiling with a stat -c %s fallback). At b600306 the upstream block still proves _tools' devbin redirect, so this row's meaning DEPENDS on that adaptation surviving every re-archive. AT id == the acceptance.sh block id the suite PRINTS. The carried suite has no AT10/AT11 (those were _tools' estate-side tests and stayed behind), so those ids are free for Utilz-native rows."
     },
     {
       "id": "AT02",
+      "kind": "test",
+      "file": "opt/prez/crate/test/acceptance.sh",
+      "covers": [
+        "AC01"
+      ],
+      "status": "to-write",
+      "note": "Block AT02, 'dependency posture: comrak and std, nothing else'. Carried from _tools ST0002, re-derived against pin b600306 on 2026-08-29. Green THERE under --strict (10 passed / 0 failed / 0 skipped, exit 0, 69s, _tools-vc's own run, not relayed). UNVERIFIED HERE until WP-04 reproduces it with instruments run in this repo."
+    },
+    {
+      "id": "AT03",
       "kind": "test",
       "file": "opt/prez/crate/test/acceptance.sh",
       "covers": [
@@ -240,77 +250,67 @@
         "AC03"
       ],
       "status": "to-write",
-      "note": "Carried from _tools ST0002 at pin 3e16597 (green there under --strict at the pin: 10 passed / 0 failed / 0 skipped, run by _tools-cc). Unverified in this repo until produced by instruments run here (WP-04); to-write because the file does not exist in this tree until WP-03 lands."
-    },
-    {
-      "id": "AT03",
-      "kind": "test",
-      "file": "opt/prez/crate/test/acceptance.sh",
-      "covers": [
-        "AC04"
-      ],
-      "status": "to-write",
-      "note": "Carried from _tools ST0002 at pin 3e16597 (green there under --strict at the pin: 10 passed / 0 failed / 0 skipped, run by _tools-cc). Unverified in this repo until produced by instruments run here (WP-04); to-write because the file does not exist in this tree until WP-03 lands."
+      "note": "Block AT03, 'self-contained artifact, and notes that reach no artifact' -- one block, two criteria. Carried from _tools ST0002, re-derived against pin b600306 on 2026-08-29. Green THERE under --strict (10 passed / 0 failed / 0 skipped, exit 0, 69s, _tools-vc's own run, not relayed). UNVERIFIED HERE until WP-04 reproduces it with instruments run in this repo."
     },
     {
       "id": "AT04",
       "kind": "test",
       "file": "opt/prez/crate/test/acceptance.sh",
       "covers": [
-        "AC05"
+        "AC04"
       ],
       "status": "to-write",
-      "note": "Carried from _tools ST0002 at pin 3e16597 (green there under --strict at the pin: 10 passed / 0 failed / 0 skipped, run by _tools-cc). Unverified in this repo until produced by instruments run here (WP-04); to-write because the file does not exist in this tree until WP-03 lands."
+      "note": "Block AT04, 'base runtime in a real browser: keys, counter, overview, hash, fullscreen'. Launches Chrome backgrounded with a disposable profile and --use-mock-keychain. Carried from _tools ST0002, re-derived against pin b600306 on 2026-08-29. Green THERE under --strict (10 passed / 0 failed / 0 skipped, exit 0, 69s, _tools-vc's own run, not relayed). UNVERIFIED HERE until WP-04 reproduces it with instruments run in this repo."
     },
     {
       "id": "AT05",
       "kind": "test",
       "file": "opt/prez/crate/test/acceptance.sh",
       "covers": [
-        "AC06"
+        "AC05"
       ],
       "status": "to-write",
-      "note": "Carried from _tools ST0002 at pin 3e16597 (green there under --strict at the pin: 10 passed / 0 failed / 0 skipped, run by _tools-cc). Unverified in this repo until produced by instruments run here (WP-04); to-write because the file does not exist in this tree until WP-03 lands."
+      "note": "Block AT05, 'pdf: one slide per page, and a refusal that names what it probed'. Carried from _tools ST0002, re-derived against pin b600306 on 2026-08-29. Green THERE under --strict (10 passed / 0 failed / 0 skipped, exit 0, 69s, _tools-vc's own run, not relayed). UNVERIFIED HERE until WP-04 reproduces it with instruments run in this repo."
     },
     {
       "id": "AT06",
       "kind": "test",
       "file": "opt/prez/crate/test/acceptance.sh",
       "covers": [
-        "AC07"
+        "AC06"
       ],
       "status": "to-write",
-      "note": "Carried from _tools ST0002 at pin 3e16597 (green there under --strict at the pin: 10 passed / 0 failed / 0 skipped, run by _tools-cc). Unverified in this repo until produced by instruments run here (WP-04); to-write because the file does not exist in this tree until WP-03 lands."
+      "note": "Block AT06, 'present: launches de-chromed, then the tool gets out of the way'. Carried from _tools ST0002, re-derived against pin b600306 on 2026-08-29. Green THERE under --strict (10 passed / 0 failed / 0 skipped, exit 0, 69s, _tools-vc's own run, not relayed). UNVERIFIED HERE until WP-04 reproduces it with instruments run in this repo."
     },
     {
       "id": "AT07",
       "kind": "test",
       "file": "opt/prez/crate/test/acceptance.sh",
       "covers": [
-        "AC08"
+        "AC07"
       ],
       "status": "to-write",
-      "note": "Carried from _tools ST0002 at pin 3e16597 (green there under --strict at the pin: 10 passed / 0 failed / 0 skipped, run by _tools-cc). Unverified in this repo until produced by instruments run here (WP-04); to-write because the file does not exist in this tree until WP-03 lands."
+      "note": "Block AT07, 'mermaid is opt-in, and opting out costs zero bytes'. Waits on a command substitution, so it carries NO --user-data-dir: adding one made --dump-dom hang forever, measured five ways on Chrome 151. Point it at test_pres.md, never demo.md. Carried from _tools ST0002, re-derived against pin b600306 on 2026-08-29. Green THERE under --strict (10 passed / 0 failed / 0 skipped, exit 0, 69s, _tools-vc's own run, not relayed). UNVERIFIED HERE until WP-04 reproduces it with instruments run in this repo."
     },
     {
       "id": "AT08",
       "kind": "test",
       "file": "opt/prez/crate/test/acceptance.sh",
       "covers": [
-        "AC09"
+        "AC08"
       ],
       "status": "to-write",
-      "note": "Carried from _tools ST0002 at pin 3e16597 (green there under --strict at the pin: 10 passed / 0 failed / 0 skipped, run by _tools-cc). Unverified in this repo until produced by instruments run here (WP-04); to-write because the file does not exist in this tree until WP-03 lands."
+      "note": "Block AT08, 'themes are orthogonal, offline, and the default carries no brand'. Same command-substitution form and same no-profile-dir rule as AT07. Carried from _tools ST0002, re-derived against pin b600306 on 2026-08-29. Green THERE under --strict (10 passed / 0 failed / 0 skipped, exit 0, 69s, _tools-vc's own run, not relayed). UNVERIFIED HERE until WP-04 reproduces it with instruments run in this repo."
     },
     {
       "id": "AT09",
       "kind": "test",
       "file": "opt/prez/crate/test/acceptance.sh",
       "covers": [
-        "AC10"
+        "AC09"
       ],
       "status": "to-write",
-      "note": "Carried from _tools ST0002 at pin 3e16597 (green there under --strict at the pin: 10 passed / 0 failed / 0 skipped, run by _tools-cc). Unverified in this repo until produced by instruments run here (WP-04); to-write because the file does not exist in this tree until WP-03 lands. Includes the AT12 determinism probe (bfb33cd + the 3e16597 comment-strip hardening) and the post-ec3564a legibility probe; demo.md appears once, labelled as the negative control."
+      "note": "Block AT09, 'the source is standalone, and both code gates are run' -- estate paths, estate imports, tabs, odd indent, intent critic rust AND cargo clippy named separately because the critic arms 1 of 7 rules. Carried from _tools ST0002, re-derived against pin b600306 on 2026-08-29. Green THERE under --strict (10 passed / 0 failed / 0 skipped, exit 0, 69s, _tools-vc's own run, not relayed). UNVERIFIED HERE until WP-04 reproduces it with instruments run in this repo."
     },
     {
       "id": "AT10",
@@ -320,7 +320,7 @@
         "AC11"
       ],
       "status": "to-write",
-      "note": "Asserts the ignore rule is present, a build leaves git status clean, and no tracked path sits under opt/prez/crate/target/."
+      "note": "Utilz-native. Co-covers AC11 with acceptance.sh's AT01, and this is NOT duplication: AC11 has two clauses and each row anchors a different one. AT10 proves the ignore rule is PRESENT AND COMMITTED (clause 1, a repo-history property a build cannot show); AT01 proves a build PRODUCES nothing tracked (clause 2). Neither is redundant, so do not tidy one away. ID RULE: an ST0010 AT id equals the acceptance.sh block id wherever that suite prints one (AT01-AT09, AT12). The carried suite has NO AT10/AT11 -- those were _tools' estate-side tests and stayed behind -- so those ids are free and hold Utilz-native rows. AT13-AT15 are new acceptance.sh blocks this thread adds; AT16 is Utilz-native."
     },
     {
       "id": "AT11",
@@ -330,17 +330,17 @@
         "AC12"
       ],
       "status": "to-write",
-      "note": "Shim black-box: version/help through the dispatcher, the no-cargo refusal names the remedy (never bare command-not-found), a touched crate source triggers the freshness rebuild. Never pipe a command whose exit code is the assertion (the $?-was-head's lesson)."
+      "note": "Shim black-box: version/help through the dispatcher, the no-cargo refusal names the remedy and fires BEFORE any build attempt, freshness rebuilds on Cargo.*, src/, themes/ AND assets/ (the last two are include_str! embeds -- a check watching only src/ calls a stale binary current). Note --version and --help are intercepted by the dispatcher and answered from prez.yaml, so any case meaning to exercise the binary must use a real verb. ID RULE: an ST0010 AT id equals the acceptance.sh block id wherever that suite prints one (AT01-AT09, AT12). The carried suite has NO AT10/AT11 -- those were _tools' estate-side tests and stayed behind -- so those ids are free and hold Utilz-native rows. AT13-AT15 are new acceptance.sh blocks this thread adds; AT16 is Utilz-native."
     },
     {
       "id": "AT12",
       "kind": "test",
-      "file": "opt/prez/test/prez.bats",
+      "file": "opt/prez/crate/test/acceptance.sh",
       "covers": [
-        "AC13"
+        "AC10"
       ],
       "status": "to-write",
-      "note": "list/help/doctor/test surfaces observed through the dispatcher; the CI half is evidenced by the first green Actions run of the rust + clippy jobs, its URL recorded in this note when it exists."
+      "note": "Block AT12, 'determinism: one artifact renders the same on every machine'. Backgrounded launch, ONE reused profile for the whole sweep (eight fresh profiles was the keychain-modal amplifier). Carried from _tools ST0002, re-derived against pin b600306 on 2026-08-29. Green THERE under --strict (10 passed / 0 failed / 0 skipped, exit 0, 69s, _tools-vc's own run, not relayed). UNVERIFIED HERE until WP-04 reproduces it with instruments run in this repo."
     },
     {
       "id": "AT13",
@@ -371,6 +371,16 @@
       ],
       "status": "to-write",
       "note": "Three clauses, each red-first and separately checkable: (a) chrome() resolves a browser on a PATH-only box -- exercised for real by the Linux CI job, which is where this first becomes visible; (b) the override forces the refusal path on a machine that has Chrome, so the --strict control is finally reproducible; (c) a fresh-profile headless launch completes with no keychain prompt. Note the LIMIT of (c) as verified so far: vc confirmed --use-mock-keychain is accepted and Chrome renders normally under it, but absence-of-a-dialog-on-someone-else's-screen is not observable from a shell -- hv confirms, or the AT asserts no Safe Storage entry is created."
+    },
+    {
+      "id": "AT16",
+      "kind": "test",
+      "file": "opt/prez/test/prez.bats",
+      "covers": [
+        "AC13"
+      ],
+      "status": "to-write",
+      "note": "Framework integration: list/help/doctor/test surfaces observed through the dispatcher; the CI half is evidenced by the first green run on both OSes, and the log must PROVE a browser was found because a skip surviving into green is the measured failure mode. Was AT12 until 2026-08-29; moved because acceptance.sh PRINTS its own AT12 (determinism) and two instruments cannot share an id. ID RULE: an ST0010 AT id equals the acceptance.sh block id wherever that suite prints one (AT01-AT09, AT12). The carried suite has NO AT10/AT11 -- those were _tools' estate-side tests and stayed behind -- so those ids are free and hold Utilz-native rows. AT13-AT15 are new acceptance.sh blocks this thread adds; AT16 is Utilz-native."
     }
   ],
   "attachments": [
@@ -385,6 +395,12 @@
       "text": "#!/usr/bin/env bash\n# Hoist adaptation: turn a freshly archived geopres crate into Utilz's prez.\n#\n# Run against a tree produced by:\n#   git -C <_tools> archive <PIN> native/rust/geopres \\\n#     | tar -x --strip-components=3 -C opt/prez/crate\n#\n# Idempotent and deterministic, so a moving pin costs a re-run rather than a\n# re-remembering. Every change here is a Utilz-side adaptation; nothing is a\n# fix to the tool, which is why none of it belongs upstream in _tools.\n#\n# Usage: hoist-adapt.sh <crate-dir>\nset -euo pipefail\n\nCRATE=\"${1:?usage: hoist-adapt.sh <crate-dir>}\"\n[ -f \"$CRATE/Cargo.toml\" ] || { echo \"not a crate: $CRATE\" >&2; exit 1; }\n\n# ---------------------------------------------------------------- 1. rename\n# ATOMIC, across every file at once. Three sets must move together or the\n# suite goes red on the rename itself:\n#   - theme.rs's SEARCH_PATH const + its refusal string + the AT asserting it\n#   - acceptance.sh's SENTINEL + the same literal as notes payload in demo.md\n#   - the binary name in acceptance.sh, at04 and at12 probes\n# Doing the whole tree in one pass keeps them coordinated by construction.\n# Both counts brace-guard the grep. grep exits 1 when it matches NOTHING, and\n# under `set -euo pipefail` that propagates and kills the script -- so the\n# SUCCESS condition (zero remaining occurrences) is what would abort the run,\n# silently, after the rename had already been written to disk. Caught by\n# diffing this script's output against the hand-edited tree it was meant to\n# reproduce: steps 2 and 3 had never run and nothing said so.\nbefore=$( { grep -rniI 'geopres' \"$CRATE\" || true; } | wc -l | tr -d ' ')\n# Same guard on the file list, for the same reason one step further on: an\n# ALREADY-ADAPTED tree matches nothing here, so the second run died where the\n# first succeeded. Idempotency is not decoration for this script -- a moving\n# pin means it runs again, possibly over a tree someone has partly fixed.\nwhile IFS= read -r f; do\n  [ -n \"$f\" ] || continue\n  sed -i '' -e 's/GEOPRES/PREZ/g' -e 's/geopres/prez/g' \"$f\"\ndone < <(grep -rlI 'geopres\\|GEOPRES' \"$CRATE\" || true)\nafter=$( { grep -rniI 'geopres' \"$CRATE\" || true; } | wc -l | tr -d ' ')\necho \"rename: $before occurrence(s) -> $after\"\n[ \"$after\" -eq 0 ] || { echo \"rename incomplete\" >&2; exit 1; }\n\n# ------------------------------------------------------- 2. target dir default\n# _tools redirects CARGO_TARGET_DIR out of a Dropbox-synced checkout. Utilz is\n# a plain local checkout, so the default in-crate target/ is correct here and\n# .gitignore's opt/*/crate/target/ is the whole fence. The env var still wins,\n# which is what lets CI or a cold run redirect without editing the file.\npython3 - \"$CRATE/test/acceptance.sh\" <<'PY'\nimport sys, re\np = sys.argv[1]\ns = open(p).read()\nold = 'TARGET=\"${CARGO_TARGET_DIR:-${XDG_CACHE_HOME:-$HOME/.cache}/geodica/cargo-target}\"'\nnew = ('# The DEFAULT in-crate target/, not a redirect. _tools pointed this at\\n'\n       '# ~/.cache/geodica/cargo-target because its checkout lives in a Dropbox-synced\\n'\n       '# tree that must not carry build output. Utilz is a plain local checkout, so\\n'\n       '# the default is correct here and .gitignore\\'s opt/*/crate/target/ is the whole\\n'\n       '# fence. CARGO_TARGET_DIR still wins if a caller sets it, which is what lets CI\\n'\n       '# or a cold-build run point somewhere else without editing this file.\\n'\n       'TARGET=\"${CARGO_TARGET_DIR:-$CRATE/target}\"')\nif old not in s:\n    if 'TARGET=\"${CARGO_TARGET_DIR:-$CRATE/target}\"' in s:\n        sys.exit(0)          # already applied\n    sys.exit(\"TARGET line not found and not already adapted\")\nopen(p, 'w').write(s.replace(old, new))\nPY\necho \"target: default is now the in-crate target/\"\n\n# ------------------------------------------------------------------- 3. AT01\n# AT01 proved _tools' AC01 -- devbin's CARGO_TARGET_DIR redirect, holding cold.\n# That AC stays behind: Utilz has no redirect, so as written the step measures\n# a mechanism this repo deliberately does not have. The INTENT survives -- a\n# build must not leave litter anyone has to notice -- so the subject changes\n# and the step stays. Rewritten rather than dropped, because \"we do not need\n# that check here\" is how a hoist quietly loses one.\n#\n# Also fixes a portability bug that is independent of the rewrite: the size\n# check used `stat -f %z`, which is BSD-only, so on Linux it returns nothing,\n# the size reads 0 and the 8MB ceiling FAILS ON A CORRECT BUILD. A check that\n# reads plausibly and measures \"stat succeeded\" rather than \"the binary is\n# small enough\" -- and one that can only fail on the platform nobody develops on.\npython3 - \"$CRATE/test/acceptance.sh\" <<'PY'\nimport sys\np = sys.argv[1]\ns = open(p).read()\nstart = s.find('if want AT01; then')\nif start == -1:\n    sys.exit(\"AT01 block not found\")\nend = s.find('# ---', start)\nif end == -1:\n    sys.exit(\"AT01 block terminator not found\")\nif 'in-crate target dir' in s[start:end]:\n    sys.exit(0)              # already applied\nnew = '''if want AT01; then\n  start AT01 \"build hygiene: the build lands in-crate and leaves no litter in git\"\n  # REWRITTEN ON THE HOIST, and the AC underneath it changed rather than the\n  # test drifting. In _tools this proved AC01 -- that `bin/devbin build`\n  # redirected CARGO_TARGET_DIR out of a Dropbox-synced tree, and that the\n  # redirect held COLD as well as warm. That AC stays behind: Utilz is a plain\n  # local checkout, there is no redirect to hold, and a test asserting one\n  # would be measuring a mechanism this repo deliberately does not have.\n  #\n  # The INTENT survives -- a build must not leave litter someone has to notice\n  # -- so the same step now proves the Utilz mechanism: the default in-crate\n  # target/ is where the binary goes, and .gitignore fences it. Kept as a test\n  # rather than dropped, because \"we do not need that check here\" is how a\n  # hoist quietly loses one.\n  if cargo build --release --manifest-path \"$CRATE/Cargo.toml\" >\"$WORK/at01.log\" 2>&1; then\n    ok \"release build succeeded\"\n  else\n    bad \"release build failed\"; sed 's/^/        /' \"$WORK/at01.log\" | tail -5\n  fi\n\n  [ -x \"$CRATE/target/release/prez\" ] \\\\\n    && ok \"binary landed in the in-crate target dir\" \\\\\n    || bad \"binary is not at $CRATE/target/release/prez\"\n\n  # THE FENCE IS THE POINT. A few hundred MB of target/ showing up as\n  # untracked is the failure this replaces the redirect with, so assert git\n  # cannot see it rather than asserting the directory is absent -- it is\n  # supposed to be present, just invisible.\n  untracked=\"$(cd \"$REPO\" && git status --porcelain --untracked-files=all -- opt/prez/ | grep -c 'target/' || true)\"\n  check \"build litter visible to git under opt/prez/\" \"$untracked\" \"0\"\n\n  size=$(stat -f %z \"$CRATE/target/release/prez\" 2>/dev/null || stat -c %s \"$CRATE/target/release/prez\" 2>/dev/null || echo 0)\n  if [ \"$size\" -gt 0 ] && [ \"$size\" -le 8388608 ]; then ok \"binary $((size / 1048576)) MB <= 8 MB ceiling\"\n  else bad \"binary is $size bytes against an 8 MB ceiling\"; fi\n  finish\nfi\n\ncargo build --release --manifest-path \"$CRATE/Cargo.toml\" >/dev/null 2>&1\n\n'''\nopen(p, 'w').write(s[:start] + new + s[end:])\nPY\necho \"AT01: rewritten for the Utilz build mechanism\"\n\n# --------------------------------------------------------------- 4. version\n# 1.0.0 on arrival, matching every other utility's arrival convention here.\n# _tools carried 0.1.0 because the crate was pre-release inside that estate;\n# landing in Utilz is the release. Cargo.toml is the single source --\n# CARGO_PKG_VERSION drives `prez --version` from inside the binary -- and\n# prez.yaml mirrors it for the dispatcher's own metadata path.\npython3 - \"$CRATE/Cargo.toml\" <<'PY'\nimport sys, re\np = sys.argv[1]\ns = open(p).read()\ns2 = re.sub(r'(?m)^version = \"0\\.1\\.0\"$', 'version = \"1.0.0\"', s, count=1)\nif s2 != s:\n    open(p, 'w').write(s2)\nPY\n# Cargo.lock records the package version too; let cargo reconcile it rather\n# than hand-editing a generated file.\nif command -v cargo >/dev/null 2>&1; then\n  cargo update --workspace --manifest-path \"$CRATE/Cargo.toml\" --offline >/dev/null 2>&1 || true\nfi\necho \"version: $(grep -m1 '^version' \"$CRATE/Cargo.toml\")\"\n\n# ---------------------------------------------------------------- 5. format\n# The rename shortens table cells by three characters wherever `geopres`\n# appeared, leaving the example decks' markdown tables ragged -- and this\n# project requires column-aligned tables. Utilz's pre-commit hook runs\n# prettier over staged .md and adds the result back, so those two files get\n# reformatted whether or not this script does it.\n#\n# Doing it HERE is what keeps the AC17 provenance claim honest. The claim is\n# \"tree at <sha>, plus adaptations at <commit>\", and it only holds if running\n# this script over a fresh archive reproduces the committed tree exactly. Left\n# to the hook, prettier is a third writer nobody named, and the reproduction\n# diverges on two files for reasons no artifact records. Measured, not\n# guessed: the first commit of this crate came back with both decks reflowed.\nif command -v prettier >/dev/null 2>&1; then\n  prettier --write \"$CRATE\"/examples/*.md >/dev/null 2>&1 || true\n  echo \"format: example decks aligned (matching the pre-commit hook's own pass)\"\nelse\n  echo \"format: prettier absent, skipped -- the pre-commit hook will do it instead\"\nfi\n\necho \"adaptation complete: $CRATE\"\n",
       "bytes": 9393,
       "sha256": "37eaa83d5e8247a03a9649184a971a8b1696b4d241510e31217f5ed8667761a7"
+    },
+    {
+      "path": "hoist-rebase.sh",
+      "text": "#!/usr/bin/env bash\n# Move opt/prez/crate to a new _tools pin WITHOUT discarding Utilz's own work.\n#\n# WHY THIS EXISTS, AND WHY hoist-adapt.sh IS NOT ENOUGH.\n#\n# The first hoist could re-archive over the top, because the crate was a pure\n# mirror of the pin plus a set of mechanical adaptations that hoist-adapt.sh\n# replays. That stopped being true at 8a53457: AC14 (announce-on-resolve) is\n# net-new Utilz behaviour in src/theme.rs and src/deck.rs, AT13 proves it in\n# test/acceptance.sh, and the AC18(b) override hook lives in the same file.\n# `tar -x` over the top would silently drop all three -- the build would still\n# be green, the tests would still pass, and nothing would say the behaviour had\n# gone, because the tests that prove it would have gone with it.\n#\n# Nor do those changes belong in hoist-adapt.sh. That script's job is the\n# MECHANICAL translation of a foreign tree into this one -- rename, target dir,\n# the AT01 rewrite, the version, the formatter pass -- all of which are derived\n# from the archive and must be replayed on every new one. AC14 is not derived\n# from anything; it is Utilz's own source, and its home is git history. Putting\n# it in a replay script would be two copies of the same change: the file, and\n# the script that regenerates the file.\n#\n# So the pin moves as a REBASE rather than a replacement. Archive both pins,\n# run hoist-adapt.sh over both so they are in Utilz's namespace, diff them to\n# get exactly what _tools changed, and apply that delta to our tree. Upstream's\n# work arrives, ours survives, and a conflict is reported rather than resolved\n# by whoever wrote last.\n#\n# AC17 provenance still holds and is still one sentence:\n#   tree at <OLD_PIN> + hoist-adapt.sh, plus Utilz commits <A>..<B>,\n#   plus the upstream delta <OLD_PIN>..<NEW_PIN> applied at <C>\n# Every term is nameable and every step is re-runnable.\n#\n# Usage: hoist-rebase.sh <old-pin> <new-pin> [--dry-run]\nset -euo pipefail\n\nTOOLS=\"${TOOLS_REPO:-$HOME/Dropbox/Geodica/_tools}\"\nSUBDIR=\"native/rust/geopres\"\nHERE=\"$(cd \"$(dirname \"${BASH_SOURCE[0]}\")\" && pwd)\"\nADAPT=\"${HOIST_ADAPT:-$HERE/hoist-adapt.sh}\"\n\nOLD=\"${1:?usage: hoist-rebase.sh <old-pin> <new-pin> [--dry-run]}\"\nNEW=\"${2:?usage: hoist-rebase.sh <old-pin> <new-pin> [--dry-run]}\"\nDRY=0\n[ \"${3:-}\" = \"--dry-run\" ] && DRY=1\n\nREPO=\"$(git rev-parse --show-toplevel)\"\nCRATE=\"$REPO/opt/prez/crate\"\n\n[ -d \"$TOOLS/.git\" ] || { echo \"no _tools repo at $TOOLS\" >&2; exit 1; }\n[ -x \"$ADAPT\" ]      || { echo \"hoist-adapt.sh not executable at $ADAPT\" >&2; exit 1; }\n[ -d \"$CRATE\" ]      || { echo \"no crate at $CRATE\" >&2; exit 1; }\n\n# A dirty crate would make the delta ambiguous: git apply reports a conflict\n# against uncommitted work as though it were an upstream disagreement.\nif [ -n \"$(git -C \"$REPO\" status --porcelain -- opt/prez/crate)\" ]; then\n  echo \"opt/prez/crate has uncommitted changes -- commit or stash first\" >&2\n  exit 1\nfi\n\nWORK=\"$(mktemp -d \"${TMPDIR:-/tmp}/prez-rebase.XXXXXX\")\"\ntrap 'rm -rf \"$WORK\"' EXIT\n\n# ------------------------------------------------- 1. both pins, both adapted\n# ADAPTED BEFORE DIFFING, not after. The rename alone touches 110 occurrences\n# across 19 files; diffing raw archives would produce a delta that is almost\n# entirely `geopres` -> `prez` noise and would not apply to our tree at all.\n# Adapting both sides first means the delta contains exactly what _tools\n# changed and nothing about the hoist.\nfor pin_dir in \"old:$OLD\" \"new:$NEW\"; do\n  label=\"${pin_dir%%:*}\"; pin=\"${pin_dir#*:}\"\n  mkdir -p \"$WORK/$label\"\n  git -C \"$TOOLS\" archive \"$pin\" \"$SUBDIR\" | tar -x --strip-components=3 -C \"$WORK/$label\"\n  \"$ADAPT\" \"$WORK/$label\" >/dev/null\n  echo \"$label: $pin adapted ($(find \"$WORK/$label\" -type f | wc -l | tr -d ' ') files)\"\ndone\n\n# ------------------------------- 2. a real three-way merge, file by file\n# `git merge-file ours base theirs` -- the right primitive, and the reason this\n# is not `git apply`. A `diff -ruN` patch carries no blob hashes, so git's\n# --3way has nothing to do a three-way merge WITH and silently falls back to\n# straight application: the first version of this script did exactly that, and\n# a single conflicting hunk in chrome() made the whole patch a no-op, because\n# git apply is atomic. Measured against a synthetic upstream change, not\n# reasoned about.\n#\n# merge-file needs no repository, ships with every git, and writes ordinary\n# conflict markers a person can resolve. The base is the OLD adapted pin, which\n# is precisely the common ancestor both sides diverged from.\nmerged=0; copied=0; conflicted=0\nCONFLICTS=()\n\nwhile IFS= read -r rel; do\n  ours=\"$CRATE/$rel\"\n  base=\"$WORK/old/$rel\"\n  theirs=\"$WORK/new/$rel\"\n\n  # Upstream deleted it. Never removed automatically: a file Utilz added under\n  # the same name would be indistinguishable from one upstream dropped.\n  if [ ! -f \"$theirs\" ]; then\n    echo \"  UPSTREAM DELETED (left in place, decide by hand): $rel\"\n    CONFLICTS+=(\"$rel (deleted upstream)\")\n    conflicted=$((conflicted + 1))\n    continue\n  fi\n\n  # New upstream file, or one Utilz never had: take it whole.\n  if [ ! -f \"$ours\" ]; then\n    mkdir -p \"$(dirname \"$ours\")\"\n    if [ \"$DRY\" -eq 0 ]; then cp \"$theirs\" \"$ours\"; fi\n    echo \"  new from upstream: $rel\"\n    copied=$((copied + 1))\n    continue\n  fi\n\n  target=\"$ours\"\n  if [ \"$DRY\" -eq 1 ]; then\n    target=\"$WORK/dry-$(echo \"$rel\" | tr / _)\"\n    cp \"$ours\" \"$target\"\n  fi\n\n  if git merge-file -L \"utilz (ours)\" -L \"pin $OLD (base)\" -L \"pin $NEW (theirs)\" \\\n       \"$target\" \"$base\" \"$theirs\" >/dev/null 2>&1; then\n    echo \"  merged clean: $rel\"\n    merged=$((merged + 1))\n  else\n    echo \"  CONFLICT: $rel\"\n    CONFLICTS+=(\"$rel\")\n    conflicted=$((conflicted + 1))\n  fi\ndone < <(cd \"$WORK\" && diff -rq old new 2>/dev/null \\\n           | sed -n -e 's/^Files old\\/\\(.*\\) and new\\/.* differ$/\\1/p' \\\n                    -e 's/^Only in new\\/*\\(.*\\): \\(.*\\)$/\\1\\/\\2/p' \\\n                    -e 's/^Only in old\\/*\\(.*\\): \\(.*\\)$/\\1\\/\\2/p' \\\n           | sed 's|^/||' | sort -u)\n\necho \"\"\necho \"merged $merged   new $copied   conflicted $conflicted\"\n\nif [ \"$conflicted\" -gt 0 ]; then\n  echo \"\"\n  echo \"CONFLICTS ARE THE OUTCOME TO WANT over a silent overwrite: they are the\"\n  echo \"two sides having changed the same lines, and only a person knows which\"\n  echo \"is right. Each merged file now carries <<<<<<< markers naming ours,\"\n  echo \"the base pin and theirs.\"\n  for c in \"${CONFLICTS[@]}\"; do echo \"  - $c\"; done\n  [ \"$DRY\" -eq 1 ] && echo \"(dry run: nothing was written)\"\n  exit 1\nfi\n\nif [ \"$DRY\" -eq 1 ]; then\n  echo \"DRY RUN: everything merges clean. Nothing was written.\"\n  exit 0\nfi\n\necho \"\"\necho \"Now: cargo test, PREZ_TEST_BROWSER=/nonexistent test/acceptance.sh --strict,\"\necho \"and record the new pin plus this rebase in impl.md (AC17).\"\n",
+      "bytes": 6783,
+      "sha256": "ca3530022f1265c5514ec7f6fe6ce0206f2e8bbc33e553f86ae083ad4e06dd3a"
     }
   ]
 }
