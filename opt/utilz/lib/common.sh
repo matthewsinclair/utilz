@@ -906,12 +906,19 @@ emacs_doctor() {
     exposed=$((exposed + 1))
   done < <(each_utility)
 
+  # NOT BOUND IS NOT BROKEN (issue 0006, hv 2026-08-29). The bridge is opt-in,
+  # so a utility that declares no integration: block has not failed at anything
+  # -- it has declined something optional. Counting it as an issue made every
+  # utility added after ST0007 born red, which is a default nobody chose rather
+  # than a rule anyone set, and it matches run_doctor two functions away, where
+  # an absent optional dependency is an `info` and never a failure.
+  #
+  # The list stays, because it is the useful half. Only the exit code goes.
   if [[ ${#missing[@]} -gt 0 ]]; then
-    warn "${#missing[@]} utility/utilities without an integration: block:"
+    info "${#missing[@]} utility/utilities not bound to the bridge (no integration: block):"
     for name in "${missing[@]}"; do
       echo "    - $name (opt/$name/$name.yaml)"
     done
-    issues=$((issues + 1))
   fi
   if [[ ${#invalid[@]} -gt 0 ]]; then
     error "${#invalid[@]} utility/utilities with invalid integration values:"
@@ -920,7 +927,12 @@ emacs_doctor() {
     done
     issues=$((issues + 1))
   fi
-  if [[ ${#missing[@]} -eq 0 && ${#invalid[@]} -eq 0 ]]; then
+  # Gated on `invalid` ALONE, deliberately. This line is the only place the
+  # phrase "integration metadata" reaches the output, and bridge.bats asserts
+  # on it -- so leaving `missing` in the condition would have kept the test red
+  # for a second reason after the first was fixed, which is how a two-part
+  # defect gets half-repaired and declared done.
+  if [[ ${#invalid[@]} -eq 0 ]]; then
     success "$exposed utility/utilities exposed via integration metadata"
   fi
   echo ""
