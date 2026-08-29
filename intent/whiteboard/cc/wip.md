@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: 7caf919e-ca57-4a02-8804-1e44225cea04
-heartbeat_at: 2026-08-29 14:10Z
+heartbeat_at: 2026-08-29 14:31Z
 status: active
-focus: "ST0010 build hand. WP-03 DONE -- pin b600306 merged at 673e4db, AC14 + AT13 + AC18(b) + help/README/23 BATS all in. Open: hv authorises the browser run; issue 0006 needs a ruling; WP-04 is vc's."
+focus: "WP-03 done (pin b600306 merged). hv's runtime landed at 4ed491e -- key bar, go-to-page, esc no longer a mode toggle. Blocked on hv authorising a browser run for AT04 + the AC17 cold build."
 claims: [ST0010]
 ---
 
@@ -13,32 +13,20 @@ claims: [ST0010]
 
 ## DOING
 
-**ST0010 (`utilz prez`) -- vc owns the contract, I am the build hand (WP-02, WP-03).** The Rust presentation pipeline built in the Geodica `_tools` estate is hoisted into Utilz; `geodica present` becomes a CLIENT of `utilz prez`. First Rust in this project, so the framework itself was hoisted to support it. Contract: 18 ACs / 15 ATs / 7 WPs in the store. Design at `intent/st/ST0010/design.md` -- read it first, every section names its owner.
+**ST0010 (`utilz prez`) -- vc owns the contract, I am the build hand.** WP-02 and WP-03 are DONE. The crate is hoisted, the pin is merged, and the framework carries Rust.
 
-- **WP-02 DONE** (`0ebfa85`): gitignore fence, `intent lang init rust`, two CI jobs (rust matrix + blocking clippy), the three-source test driver in `common.sh`, doctor's conditional cargo line.
-- **WP-03, pin-independent half DONE**: `64d375b` (crate hoisted at `3e16597`, rename sweep, shim, yaml, symlink), `8a53457` (AC14 announce-on-resolve), `93702cb` (AT13 + the AC18(b) `PREZ_TEST_BROWSER` hook), `844f1aa` (help/prez.md, README, 23 shim BATS, the yaml fix).
-- **Also landed:** `95b650a` fixed CI red on main; `7e2a61b` filed issue 0006.
+- **WP-02** `0ebfa85` -- gitignore fence, `intent lang init rust`, two CI jobs, the three-source test driver, doctor's conditional cargo line.
+- **WP-03** `64d375b` hoist, `8a53457` AC14, `93702cb` AT13 + AC18(b), `844f1aa` surfaces, `673e4db` **the pin merged at `b600306`**.
+- **hv's runtime** `4ed491e` -- key bar, `q`/`i`/`r`/`g`/`?`, esc closes instead of toggling the index.
+- **Issue 0006 CLOSED** `406af49` (mine, half a) + `d39422e` (vc's, half b). `intent/issues/OPEN/` is empty.
 
-`utilz test prez` drives all three sources by convention: **115 cargo / 23 BATS / acceptance**. Under `PREZ_TEST_BROWSER=/nonexistent` it is 8 passed, 11 skipped, `1 of 3 test suite(s) failed` -- correct and deliberate.
+**THE CRATE IS A FORK, NOT A MIRROR.** AC14, AT13 and the AC18(b) hook live only here. Every future pin move goes through `hoist-rebase.sh` (attached to ST0010), never `tar -x` -- which deletes cleanly and would report a green merge having lost all three. The script now asserts that postcondition itself; proven red against a pin-fresh tree.
 
-**WP-03 IS DONE.** `673e4db` landed the pin. `b600306` was verified rather than taken: the only commit touching `native/rust/geopres` since `3e16597`, the crate's HEAD state, an ancestor of `_tools` HEAD `98e0207`. vc's "pin is stalled at 42320af" note predated that session resuming.
+**BLOCKED ON HV, and it is one authorisation:** a browser run. AT04's probe is rewritten for the new runtime (+18 checks) and unrun; AC17's cold build is queued behind it. AC18(c)'s keychain flag IS in the pin now and `_tools`' gate passed under it, but "no dialog appeared on hv's screen" is not observable from a shell.
 
-**The rebase paid for itself on its first real use.** Upstream touched exactly one file -- `test/acceptance.sh` -- and it is the file carrying AT13 and the AC18(b) hook. A `tar -x` drops both silently. `git merge-file` against `3e16597` merged clean: zero conflicts, zero markers, dry run predicted it exactly. **The crate is a fork now; every future pin move goes through `hoist-rebase.sh`, never `tar -x`.**
+**AC04 IS WRONG IN CANON** -- it still reads "Esc toggles a clickable overview". vc's contract text, flagged not edited.
 
-**AC18(a) and (c) arrived with the pin**, so the Linux CI red vc predicted will not happen: `chrome()` carries four macOS app paths plus six PATH names matching `drive.rs`, and `CHROME_SAFE="--use-mock-keychain"` reaches all four launch sites. Post-merge `chrome()` is override, then app paths, then PATH names.
-
-**`hoist-adapt.sh` step 6 is vc's AC-id re-stamp slot** -- the suite's assertion strings still cite `_tools` AC ids, so a green it prints names a criterion that means something else here. Empty map, no-op that SAYS SO, one simultaneous pass, guard refusing any map where an id is both source and target.
-
-**NEXT, and none of it is mine to start:**
-
-- **hv authorises the browser run.** The keychain flag is in the pin and `_tools`' gate passed under it, but "no dialog appeared on hv's screen" is not observable from a shell (vc's own AT15 note). Nothing has been launched today. Once authorised: `utilz test prez` with no override, then the AC17 cold build -- `rm -rf opt/prez/crate/target` first, because the current one came from a warm tree.
-- **Issue 0006 needs a ruling.** No value of `prez.yaml` satisfies both `bridge.bats`'s exact-13 count and `emacs doctor`'s exit-1-on-missing-block. The design-compliant tree is the red one.
-- **WP-04 is vc's**, on my hoist-green signal, which is now sent.
-- **WP-07 may be un-deferred** -- vc is putting it to hv. Two consumers two days apart both blocked by prez keeping something private, and `_tools`' own patch comment argues against its own mirror. The fix is small: the browser refusal should name the list unconditionally, or `--print-browser` should exist.
-
-**AC17 provenance, one sentence:** tree at `3e16597` + `hoist-adapt.sh`, plus Utilz commits `8a53457..844f1aa`, plus the upstream delta `3e16597..b600306` merged at `673e4db`.
-
-**For the release (hv's):** `prez.yaml` declares `utilz_version "^2.5.0"`; `VERSION` still reads 2.4.0. `run_doctor` compares MAJOR versions only, so nothing false-alarms meanwhile. `main` is 21 commits ahead of both remotes and the CI fix is among them, so **main reads red on the remote until hv pushes**.
+**For the release (hv's):** `VERSION` reads 2.4.0, `prez.yaml` declares `^2.5.0`. `main` is 27 ahead of both remotes with the CI fix among them, so main reads red on the remote until hv pushes.
 
 ## TODO
 
@@ -49,6 +37,12 @@ claims: [ST0010]
 
 ## Watch-outs
 
+- **`assemble()`'s placeholder fill is single-pass now, and the reason generalises.** Chained `.replace()` calls substitute into their own output: `{{style}}` went in first, and the next call expanded any placeholder sitting inside the stylesheet just injected. Any "replace A then replace B" over one string has this shape whenever A's replacement can contain B's needle.
+- **The `hidden` attribute loses to any author `display:` rule.** `[hidden] { display: none }` is a UA rule, and author rules beat the entire UA sheet regardless of specificity -- so `.gp-bar { display: flex }` silently pins a "hidden" element on screen. Use an explicit class.
+- **`window.close()` is ignored, silently, in a window script did not open.** No error, no return value, no exception. A close key looks broken rather than refused unless the page says so itself.
+- **A cold-build lever must be asserted, not trusted.** The prez shim hardcoded its binary path while cargo honoured `CARGO_TARGET_DIR`, so isolation was accepted and ignored: an empty target dir stayed empty while the build "succeeded" off the warm binary. _tools lost an afternoon to the mirror-image bug. Assert the artifact is where isolation put it AND that the wall time is a real build's.
+- **`intent st attach` writes canon and regenerates views**, so it is not a private operation when a peer has the store open. Check `git status -- intent/.canon` BEFORE attaching, not after.
+- **A red-first probe that does not apply is not a red-first proof.** Two of mine this session patched the wrong function and changed nothing, and the test passed for the wrong reason -- which is the class being proved against. Assert the patch applied before trusting the red.
 - **`git apply --3way` cannot three-way-merge a `diff -ruN` patch.** No blob hashes in the patch means git has nothing to merge WITH, so it prints "repository lacks the necessary blob", falls back to straight application, and -- because `git apply` is atomic -- one conflicting hunk makes the whole patch a no-op that changed nothing. `git merge-file ours base theirs` is the right primitive: no repo needed, ships with every git, writes ordinary conflict markers. Found by testing `hoist-rebase.sh` against a synthetic upstream change; an empty delta passes a no-op test even when the mechanism is broken.
 - **`utilz help <anything>` HANGS when stdin is a TTY** -- glow's pager, not prez and not new (`mdagg`'s existing help test hangs identically). It bites `bats --filter` run from a terminal and looks exactly like the test you are debugging has hung. `< /dev/null` fixes it; `utilz test` and CI never see it because bats' stdin is not a tty.
 - **`find DIR -newer X` tests the DIRECTORY as well as its contents.** A freshly `mkdir -p`'d fixture tree is therefore always stale however old the files inside it are. Correct in the real shim -- adding a file to `src/` updates the directory and should force a rebuild, erring toward rebuilding too often rather than too rarely -- but a freshness fixture must stamp the directories too, LAST, because writing a file inside one bumps it again.
