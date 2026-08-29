@@ -5,6 +5,27 @@ All notable changes to the Utilz framework will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.5.0] - 2026-08-29
+
+### Added
+
+- **`prez` -- markdown in, one self-contained HTML presentation out** (ST0010). The first Rust utility in the framework. It is a pipeline, not a presentation tool: it writes a file and stops, the browser presents, and there is no server and no viewer. One `.html` carries everything inside it, so a deck opens offline, from a USB stick, in five years. `prez build`, `prez pdf` (one slide per 254x142.9mm page), `prez present` (a de-chromed window at the deck's own aspect). Seven brand-free built-in themes, `--theme NAME` resolving through `PREZ_THEME_PATH`, mermaid diagrams opt-in via front matter (and costing zero bytes when not opted into). Hoisted from an upstream estate at a recorded pin rather than rewritten, with the adaptation captured as an idempotent script so a moving pin costs a re-run rather than a re-remembering. `comrak` is its only dependency.
+- **Rust support in the framework itself** (ST0010/WP-02). Utilz had never held compiled code. `utilz test` now discovers up to three suites per utility BY CONVENTION, so the next utility of a given shape inherits the driver for free: `crate/Cargo.toml` drives `cargo test`, `test/*.bats` drives BATS, and `crate/test/acceptance.sh` drives a black-box suite with `--strict` always passed -- hard-coded, because a suite that degrades to skips exits 0 having driven nothing. `utilz doctor` treats `cargo` as optional rather than as a declared dependency. `.gitignore` fences `opt/*/crate/target/` in a commit that landed before any in-tree build existed. CI gains `rust` and `clippy` jobs (the latter with `-D warnings`), both feeding the `all-green` gate.
+- **A shell shim per compiled utility.** `opt/prez/prez` resolves a built binary and refuses with a remedy when it is absent, following the existing `ensure_venv()` precedent rather than committing a binary that could not serve both Ubuntu CI and macOS from one artifact. It honours `CARGO_TARGET_DIR`, which is what lets a cold build be forced and then verified.
+
+### Fixed
+
+- **Adding any 14th utility reddened the suite whichever way it declared integration** (issue 0006). `bridge.bats` asserted `emit_integration_tsv` emits exactly 13 rows while `utilz emacs doctor` counted a utility without an `integration:` block as an issue and returned 1, which two other tests asserted did not happen -- so no value of a new utility's yaml satisfied both. The row count is now a property rather than a number pinned to a moment, and a utility not bound to the Emacs bridge is not treated as broken. Latent since both checks were written; `prez` is the first utility added since.
+- **The CI shellcheck gate was aimed at code with a different owner.** The vendored `devbin` tool sources files resolved at runtime, which shellcheck cannot resolve statically, so every one was an SC1091 and the gate exited non-zero at default severity. Excluded by pattern rather than annotated, because devbin ships a manifest that would make an in-file directive detectable drift.
+
+### Changed
+
+- `test-macos` derives its utility roster from the dispatcher instead of carrying a hardcoded list, so a new utility is covered there the day it lands. `prez` is deliberately excluded from that leg: its acceptance suite needs Chrome, node and a toolchain, and `--strict` correctly counts a skip as a failure, which makes it the wrong instrument for a runner that legitimately lacks the tools. The crate is covered by the `rust` and `clippy` jobs instead.
+
+### Known
+
+- **The `prez` slide counter drops below the 4.5:1 contrast floor on dark slides** (issue 0007). It is `position: fixed` and a sibling of the deck, so no theme can reach it per-slide; the fix belongs in the compiler. `aria-hidden` decorative chrome, so low severity.
+
 ## [2.4.0] - 2026-07-29
 
 ### Changed
