@@ -122,6 +122,26 @@ jobs:
         # Collected into an array rather than a word-split string, so paths
         # with spaces survive and the step does not depend on the shell's
         # splitting rules.
+        #
+        # devbin is EXCLUDED because it is vendored, not ours. `Installed
+        # devbin` (05bca08) added bin/devbin and bin/.devbin/, of which this
+        # collector picks up 18 shell files -- 15 files became 33 and the gate
+        # went red on main. The launcher sources "$DEVBIN_LIB/<name>" at
+        # runtime, which shellcheck cannot resolve statically, so each one is
+        # SC1091. That is info-level, this step runs at default severity, and
+        # info findings exit non-zero: the gate did exactly what it was built
+        # to do, aimed at code with a different owner. Zero findings came from
+        # outside devbin, which is the load-bearing half of the diagnosis.
+        #
+        # Excluded rather than annotated: devbin ships a manifest.sha256 that
+        # declares those files, so a `# shellcheck source=` directive inside
+        # one is not merely revertible by the next devbin upgrade, it is
+        # manifest-detectable drift -- the AGENTS.md lesson, do not hand-edit a
+        # generated or vendored file.
+        #
+        # Patterned `*/.devbin/*` and `-name devbin` rather than anchored at
+        # bin/, to match the */test/* and */.venv/* idiom beside it and to keep
+        # working if devbin is ever vendored somewhere other than bin/.
         FILES=()
         while IFS= read -r s; do
           case "$s" in
@@ -129,7 +149,8 @@ jobs:
             *) if file "$s" | grep -q "shell script"; then FILES+=("$s"); fi ;;
           esac
         done < <(find bin opt -type f \( -perm -u+x -o -name '*.sh' \) \
-                   -not -path "*/test/*" -not -path "*/.venv/*" | sort -u)
+                   -not -path "*/test/*" -not -path "*/.venv/*" \
+                   -not -path "*/.devbin/*" -not -name "devbin" | sort -u)
 
         if [ ${#FILES[@]} -eq 0 ]; then
           echo "No shell scripts found -- the collector is broken, failing loudly."
