@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: 7caf919e-ca57-4a02-8804-1e44225cea04
-heartbeat_at: 2026-08-29 14:57Z
+heartbeat_at: 2026-08-29 15:19Z
 status: active
-focus: "WP-03 done. hv's runtime landed over three commits -- key bar, go-to-page, esc closes, enter/space commit in the index. AT17 verifies it browserless. Blocked only on hv authorising a browser run for AT04 + the AC17 cold build."
+focus: "AC19 (window geometry, --start-fullscreen removed) and AC20 (close shortcut resolved at view time) built at f5253a9. 128 tests, AT17 probe at 37 checks. Blocked only on hv authorising a browser run."
 claims: [ST0010]
 ---
 
@@ -37,6 +37,10 @@ claims: [ST0010]
 
 ## Watch-outs
 
+- **A flag can be passed on every launch and silently ignored.** `--start-fullscreen` was sent to Chrome for as long as `open_presenting` existed, never took effect for an `--app` window on macOS, and produced no warning, no error and nothing in the exit status. It took a screenshot to find. The only place this is catchable is the ARGV -- a browser test cannot tell a flag that was not sent from one that was ignored -- so argv construction is now its own function with a test asserting ABSENCE as well as presence.
+- **Anything resolved at BUILD time is wrong for a portable artifact.** A deck built on a Mac and opened on Linux must say ctrl-W. Baking the build host's answer in is right on the author's machine, wrong everywhere else, and invisible to everyone who could fix it -- whoever reads the wrong text is never whoever built the deck. Assert on the artifact (both branches ship), not on the source.
+- **A source-grep check can match itself.** A test grepped its own file via `include_str!` for `target_os` and failed forever, because the test contains the word it looks for. A check that cannot pass is not strict, it is broken.
+- **A truthful sentence can carry a false remedy.** The old quit message correctly said the browser refused, then named `prez present` as the fix -- to someone standing inside a `prez present` window. Assert message TEXT, never that "a message appeared".
 - **A `<script>` block is not one script.** A mermaid deck concatenates 3.5MB of vendored bundle into the same tag as the runtime, so "take the first script" and "take the block containing X" both select the wrong span. Cut on the artifact's own structure and make the extraction CHECK ITSELF -- a boundary read out of a text file silently starts selecting the wrong thing, and the symptom is a probe that passes having tested something else.
 - **A test that only ever runs on a synthetic fixture is half a test.** Both probe defects surfaced the moment it was pointed at the shipped decks; the synthetic four-slide deck would have gone on passing forever.
 - **The shipped example decks DOCUMENT the tool**, so a UX change makes them wrong and nothing reports it. hv's own screenshot was `test_pres.md` advertising the `Esc` overview grid we had just removed.
