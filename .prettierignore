@@ -11,18 +11,29 @@
 # skew that survives its own remedy: `sync --to-disk` repairs the file and the
 # next commit strips the repair straight back out.
 #
-# HONEST SCOPE: only `intent/st/steel_threads.md` and `intent/todo.md` exist
-# on disk here. This repo carries 9 threads in the store and 0 thread extracts
-# on disk, so the two `intent/st/**` lines below match NOTHING today -- they
-# are forward cover for a rehydration, not a description of files being
-# fenced. Said plainly because an exclusion nothing reads is a claim, not a fix.
+# THE FORWARD COVER WAS TAKEN UP ON 2026-08-29, AND IT WAS TOO NARROW.
+# ST0010 rehydrated seven WP extracts plus info/design/acceptance, and the
+# enumeration below covered info.md and acceptance.md and nothing else. The
+# first attachment to land on disk, `intent/st/ST0010/design.md`, fell straight
+# through: prettier realigned its tables, `prettier --check` now calls it clean,
+# and the renderer's own output is NOT prettier-clean -- so the file no longer
+# hashes to what the store records and doctor reports `attachment-drift`.
+#
+# THAT IS THE FAILURE THE PARAGRAPH ABOVE PREDICTED, one file over. The skew
+# survives its own remedy: `sync --to-disk` rewrites design.md and the next
+# commit that stages it reformats the repair back out, silently, forever.
+#
+# So the enumeration is replaced by the PRINCIPLE it was standing in for.
+# Everything under `intent/st/` is written by the renderer from the canon
+# store -- generated views and rendered attachments alike -- so all of it has
+# one writer and none of it is the formatter's to touch. An enumeration has to
+# be extended every time the store learns a new file name, and nothing reports
+# the gap in between; a prefix cannot develop that gap.
 #
 # Renderer-owned paths only. intent/wip.md and intent/done.md are authored,
 # stay formatted, and are deliberately absent.
 #
 # `**` not `*`: .prettierignore is gitignore syntax, where a single `*` will
 # not cross a `/`.
-intent/st/**/info.md
-intent/st/**/acceptance.md
-intent/st/steel_threads.md
+intent/st/**
 intent/todo.md
