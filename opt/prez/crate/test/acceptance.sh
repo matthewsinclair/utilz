@@ -224,12 +224,12 @@ chrome() {
 # ten-minute hangs and two orphaned browsers on hv's machine.
 CHROME_SAFE="--use-mock-keychain"
 
-# ---------------------------------------------------------------- AT01 -- AC01
+# ---------------------------------------------------------------- AT01 -- AC11
 
 if want AT01; then
   start AT01 "build hygiene: the build lands in-crate and leaves no litter in git"
   # REWRITTEN ON THE HOIST, and the AC underneath it changed rather than the
-  # test drifting. In _tools this proved AC01 -- that `bin/devbin build`
+  # test drifting. Upstream this proved their AC01 -- that `bin/devbin build`
   # redirected CARGO_TARGET_DIR out of a Dropbox-synced tree, and that the
   # redirect held COLD as well as warm. That AC stays behind: Utilz is a plain
   # local checkout, there is no redirect to hold, and a test asserting one
@@ -265,14 +265,14 @@ fi
 
 cargo build --release --manifest-path "$CRATE/Cargo.toml" >/dev/null 2>&1
 
-# ---------------------------------------------------------------- AT02 -- AC02
+# ---------------------------------------------------------------- AT02 -- AC01
 
 if want AT02; then
   start AT02 "dependency posture: comrak and std, nothing else"
   declared="$(awk '/^\[dependencies\]/{f=1;next} /^\[/{f=0} f && /^[a-zA-Z]/ {print $1}' "$CRATE/Cargo.toml" | sort | tr '\n' ' ')"
   check "declared dependencies" "$declared" "comrak "
 
-  # The other half of AC02: the named jobs are HAND-ROLLED, which shows up as
+  # The other half of AC01: the named jobs are HAND-ROLLED, which shows up as
   # every `use` resolving to std, this crate, or comrak. A new crate would have
   # to appear here even if someone forgot to look at Cargo.toml.
   foreign="$(grep -rhoE '^\s*use [a-zA-Z_][a-zA-Z0-9_]*' "$CRATE/src" \
@@ -286,7 +286,7 @@ if want AT02; then
   finish
 fi
 
-# ------------------------------------------------------------ AT03 -- AC03/04
+# ------------------------------------------------------------ AT03 -- AC02/03
 
 if want AT03; then
   start AT03 "self-contained artifact, and notes that reach no artifact"
@@ -296,9 +296,9 @@ if want AT03; then
   size=$(stat -f %z "$art")
   if [ "$size" -le 102400 ]; then ok "artifact $size bytes <= 100 KB"; else bad "artifact is $size bytes"; fi
 
-  # AC04. The SENTINEL, never the `notes:` token: the demo shows a fenced notes
+  # AC03. The SENTINEL, never the `notes:` token: the demo shows a fenced notes
   # example on purpose, so a token grep would fail a correct build.
-  absent "AC04 sentinel is nowhere in the HTML" "$SENTINEL" "$art"
+  absent "AC03 sentinel is nowhere in the HTML" "$SENTINEL" "$art"
   present "the fenced notes example survived as author content" "only the speaker sees this" "$art"
 
   ext=$(grep -coE '(src|href)="https?://' "$art" || true)
@@ -331,7 +331,7 @@ if want AT03; then
   finish
 fi
 
-# ---------------------------------------------------------------- AT04 -- AC05
+# ---------------------------------------------------------------- AT04 -- AC04
 
 if want AT04; then
   start AT04 "base runtime in a real browser: keys, counter, overview, hash, fullscreen"
@@ -350,7 +350,7 @@ if want AT04; then
   fi
 fi
 
-# ---------------------------------------------------------------- AT05 -- AC06
+# ---------------------------------------------------------------- AT05 -- AC05
 
 if want AT05; then
   start AT05 "pdf: one slide per page, and a refusal that names what it probed"
@@ -387,7 +387,7 @@ if want AT05; then
   fi
 fi
 
-# ---------------------------------------------------------------- AT06 -- AC07
+# ---------------------------------------------------------------- AT06 -- AC06
 
 if want AT06; then
   start AT06 "present: launches de-chromed, then prez gets out of the way"
@@ -466,7 +466,7 @@ STUB
   finish
 fi
 
-# ---------------------------------------------------------------- AT07 -- AC08
+# ---------------------------------------------------------------- AT07 -- AC07
 
 if want AT07; then
   start AT07 "mermaid is opt-in, and opting out costs zero bytes"
@@ -538,7 +538,7 @@ PROBE
   finish
 fi
 
-# ---------------------------------------------------------------- AT08 -- AC09
+# ---------------------------------------------------------------- AT08 -- AC08
 
 if want AT08; then
   start AT08 "themes are orthogonal, offline, and the default carries no brand"
@@ -660,7 +660,7 @@ if want AT08; then
   finish
 fi
 
-# ---------------------------------------------------------------- AT12 -- AC13
+# ---------------------------------------------------------------- AT12 -- AC10
 
 if want AT12; then
   start AT12 "determinism: one artifact renders the same on every machine"
@@ -723,7 +723,7 @@ if want AT12; then
   fi
 fi
 
-# ---------------------------------------------------------------- AT09 -- AC10
+# ---------------------------------------------------------------- AT09 -- AC09
 
 if want AT09; then
   start AT09 "the source is standalone, and both code gates are run"
@@ -754,13 +754,37 @@ if want AT09; then
   # BOTH gates, named separately, because the per-file critic arms 1 of its 7
   # rust rules and declines the three clippy-backed ones out loud. A clean
   # critic alone is a control that cannot go red on them.
-  if (cd "$REPO" && intent critic rust --files "$CRATE"/src/*.rs 2>&1 | tail -1 | grep -q '^ok:'); then
+  # PROBE THE TOOL, NEVER THE OUTPUT. Both gates below used to conflate "the
+  # tool is not here" with an answer about the code, and they did it in
+  # OPPOSITE directions -- which is why each needed its own fix rather than one
+  # shared guard.
+  #
+  #   intent absent -> the last line does not start with 'ok:' -> "reported
+  #     findings". A FALSE RED that names the Rust, on a green codebase. Found
+  #     by _tools-vc on their CI (run 33263160164: AT01-AT12 all pass, AT09 the
+  #     single failure), reproduced here by scrubbing PATH.
+  #   cargo absent -> "command not found" does not match ^warning|^error -> the
+  #     count is 0 -> the check PASSES having measured nothing. A FALSE GREEN,
+  #     and the worse direction: this is the control AC09 names explicitly
+  #     BECAUSE a clean critic alone cannot go red, carrying the same defect.
+  #
+  # This matters on a runner, not here. test-macos runs a bare `utilz test`,
+  # so it runs this file; .github/workflows/tests.yml mentions `intent` zero
+  # times. An `unchecked` still fails --strict, which is correct -- it just
+  # fails saying the tool is missing instead of blaming the code.
+  if ! command -v intent >/dev/null 2>&1; then
+    unchecked "intent critic rust unmeasured, intent is not installed"
+  elif (cd "$REPO" && intent critic rust --files "$CRATE"/src/*.rs 2>&1 | tail -1 | grep -q '^ok:'); then
     ok "intent critic rust is clean"
   else bad "intent critic rust reported findings"; fi
 
-  clippy=$(cd "$REPO" && CARGO_TARGET_DIR="$TARGET" cargo clippy --manifest-path "$CRATE/Cargo.toml" \
-    --all-targets 2>&1 | grep -cE '^(warning|error)(\[|:)' || true)
-  check "clippy warnings and errors" "${clippy:-0}" "0"
+  if ! command -v cargo >/dev/null 2>&1; then
+    unchecked "clippy unmeasured, cargo is not installed"
+  else
+    clippy=$(cd "$REPO" && CARGO_TARGET_DIR="$TARGET" cargo clippy --manifest-path "$CRATE/Cargo.toml" \
+      --all-targets 2>&1 | grep -cE '^(warning|error)(\[|:)' || true)
+    check "clippy warnings and errors" "${clippy:-0}" "0"
+  fi
   finish
 fi
 
