@@ -41,7 +41,7 @@ Status stays `active` through this compact deliberately -- `/compact` does not e
 
 - **CI is RED on `main`** and it is not ours. `05bca08 Installed devbin` vendored 33 files; the blocking shellcheck gate sees 34 SC1091 findings, **all inside devbin, none in Utilz-owned files**. Fix verified by me: exclude devbin from the collector -> 15 files, clean, exit 0. Annotating inside devbin is wrong -- `bin/.devbin/manifest.sha256` declares those files, so a directive there is manifest-detectable drift. hv's call under the issue-driven standing directive. It blocks WP-02/03 from ever _reading_ green.
 - **Did a Keychain dialog pop at ~14:18 local?** I ran one bounded `--use-mock-keychain` verification. Flag accepted, Chrome renders, no keychain error -- but absence of a dialog on hv's screen is not observable from a shell, and AT15's note records that limit rather than papering it.
-- ~16 unpushed commits, both remotes at `367a75a`. Pushing is hv's.
+- 16 unpushed commits, both remotes at `367a75a`. Pushing is hv's.
 
 ## Watch-outs
 
