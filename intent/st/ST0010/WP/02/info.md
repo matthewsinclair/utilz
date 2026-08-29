@@ -2,7 +2,7 @@
 wp_id: WP-02
 title: Framework Rust substrate: lang, gitignore, CI, test driver, doctor
 scope: S
-status: WIP
+status: Done
 ---
 
 # WP-02: Framework Rust substrate: lang, gitignore, CI, test driver, doctor

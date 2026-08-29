@@ -6,11 +6,12 @@ A DOING / TODO / DONE view, projected from steel-thread and work-package status:
 
 - [-] ST0010: Add prez to utilz to support markdown presentation pipeline
   - [x] 01: Contract: design.md + AC/AT transcription from _tools ST0002
-  - [-] 02: Framework Rust substrate: lang, gitignore, CI, test driver, doctor
+  - [x] 02: Framework Rust substrate: lang, gitignore, CI, test driver, doctor
   - [ ] 03: The hoist: crate at the pin, rename to prez, shim, yaml, help
   - [ ] 04: Validation: every carried green re-produced in the new home
   - [ ] 05: Default theme polish: basic but cool enough out of the box
   - [ ] 06: Theme addressing split + --theme-path (hv's CLI asks)
+  - [ ] 07: Expose theme determinism checking as a prez capability (deferred)
 
 ## TODO
 
