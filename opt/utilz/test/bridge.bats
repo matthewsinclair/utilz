@@ -27,12 +27,35 @@ run_common_function() {
 
 @test "emit_integration_tsv emits one row per utility with an integration block" {
   run run_common_function emit_integration_tsv
+
   assert_success
-  # 13 utilities currently declare integration blocks: the ST0007 design matrix
-  # of 12, plus todo (ST0008).
+
+  # THE PROPERTY, NOT THE COUNT (issue 0006). This asserted `-eq 13` and named
+  # its own roster in a comment -- "the ST0007 design matrix of 12, plus todo".
+  # A count is a second home for a fact the yaml corpus already holds, so it was
+  # wrong on the first day a utility was added, which is the day prez landed.
+  # The title of this test always claimed the property; now it measures it.
+  #
+  # Derived by walking the corpus rather than by listing names, so the next
+  # utility is covered without touching this file. `.integration` is `null` in
+  # yq when the key is absent -- the same test emit_integration_tsv itself uses,
+  # so the two agree by construction rather than by coincidence.
+  local expected=0 name yaml
+  while IFS= read -r name; do
+    yaml="$UTILZ_HOME/opt/$name/$name.yaml"
+    [[ -f "$yaml" ]] || continue
+    [[ "$(yq eval '.integration' "$yaml" 2>/dev/null)" == "null" ]] && continue
+    expected=$((expected + 1))
+  done < <(cd "$UTILZ_HOME" && ls -1 opt | grep -v '^utilz$')
+
   local row_count
   row_count=$(printf '%s\n' "$output" | awk 'NF' | wc -l | tr -d ' ')
-  [[ "$row_count" -eq 13 ]] || fail "Expected 13 rows, got $row_count"
+
+  # Both halves. A corpus where NOTHING declares an integration block would make
+  # 0 == 0 pass while proving the walker never ran, so the floor is asserted
+  # separately -- an empty measurement is not a passing one.
+  [[ "$expected" -gt 0 ]] || fail "no utility declares an integration block; the walk found nothing to compare against"
+  [[ "$row_count" -eq "$expected" ]] || fail "Expected $expected rows (one per declaring utility), got $row_count"
 }
 
 @test "emit_integration_tsv includes cleanz with stdin/replace" {

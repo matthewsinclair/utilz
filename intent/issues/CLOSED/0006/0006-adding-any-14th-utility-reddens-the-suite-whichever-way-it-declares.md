@@ -3,7 +3,7 @@ id: "0006"
 title: Adding any 14th utility reddens the suite whichever way it declares integration
 date: 2026-08-29
 reporter: matts
-status: OPEN
+status: CLOSED
 severity: medium
 ---
 
@@ -71,3 +71,21 @@ Whether (2) is right is a judgement about what the bridge intends, so it wants h
 
 - ST0010 -- the thread that surfaced it; its design's "Non-decisions, named" section is the reason prez declares no block
 - 0002 -- the other latent defect that only fires on a new utility (generator's `utilz_version` floor)
+
+## Resolutions
+
+Fixed 2026-08-29, both halves, on vc's ruling.
+
+**(a) `opt/utilz/test/bridge.bats`** now derives the expected row count by walking the yaml corpus for `.integration != null` -- the same test `emit_integration_tsv` itself applies, so the two agree by construction rather than by coincidence. The test's title always claimed the property; it now measures it, and the next utility is covered without touching the file.
+
+Two assertions rather than one: the floor (`expected > 0`) is checked separately, because a corpus where nothing declared an integration block would make `0 == 0` pass while proving the walk never ran. An empty measurement is not a passing one.
+
+Proven red-first by making `emit_integration_tsv` silently drop one declaring utility: "Expected 13 rows (one per declaring utility), got 12". The first attempt at that proof was a no-op -- it patched `emacs_doctor`'s walk instead of `emit_integration_tsv`'s, changed nothing, and the test passed for the wrong reason. Worth recording, because a red-first check that never went red is the same class of defect as the one being fixed.
+
+**(b) `run_emacs_doctor`** reports unbound utilities with `info` and no longer counts them as issues, per hv 2026-08-29. The list stays -- it is how you discover a utility you meant to bind is not bound -- and an INVALID integration value still fails, which is the distinction that matters: a declared binding that cannot work is a defect, an absent one is a choice.
+
+That fix also had to move the success line's gate off `missing` and onto `invalid` alone. Leaving `missing` in the condition would have kept the test red for a second reason after the first was repaired, which is how a two-part defect gets half-fixed and declared done.
+
+`prez` stays design-compliant with no `integration:` block, per ST0010's "Non-decisions, named". The red was 0006's to clear, not prez's to work around by declaring something false.
+
+`utilz test utilz`: 95 passing, 0 failures.
