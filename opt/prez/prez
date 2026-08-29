@@ -38,7 +38,28 @@ fi
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 CRATE_DIR="$SCRIPT_DIR/crate"
 MANIFEST="$CRATE_DIR/Cargo.toml"
-BINARY="$CRATE_DIR/target/release/prez"
+
+# CARGO_TARGET_DIR IS HONOURED, and this is not politeness -- it is the only
+# thing that makes "build this cold, in isolation" a lever that works.
+#
+# The first cut hardcoded $CRATE_DIR/target. cargo honours the variable and the
+# shim did not, so the two disagreed about where the binary lives: a caller who
+# set it got their build directed into their chosen directory while the shim
+# went on resolving, freshness-checking and exec'ing the WARM one in the crate.
+# Measured -- CARGO_TARGET_DIR pointed at an empty temp dir, `prez build` wrote
+# a correct artifact, and that directory stayed EMPTY. Nothing failed and
+# nothing said the isolation had been ignored.
+#
+# That is the shape AC17 exists to catch: _tools lost the same afternoon to it,
+# where devbin exported CARGO_TARGET_DIR unconditionally, their "cold" build ran
+# against the warm shared cache in 0.05s, and exit 0 laundered a stale binary
+# into a verified one. Same defect, opposite cause, identical symptom -- a cold
+# build that reports success having built nothing.
+#
+# test/acceptance.sh already resolved it this way, so the hardcode was also two
+# answers to one question with only one of them right.
+TARGET_DIR="${CARGO_TARGET_DIR:-$CRATE_DIR/target}"
+BINARY="$TARGET_DIR/release/prez"
 
 # ============================================================================
 # BUILD MANAGEMENT

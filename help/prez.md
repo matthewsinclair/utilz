@@ -77,6 +77,35 @@ Every flag takes its value either way: `--theme=simple` or `--theme simple`.
 
 ---
 
+## Presenting: the keys
+
+The artifact is self-driving -- every key below is in the file, so they work from a USB stick with no network and nothing installed.
+
+Press `?` (or `h`) to pop up the key bar at the bottom of the screen. It is deliberately the same visual weight as the page counter opposite it: a presentation tool that decorates the presentation has misunderstood the job.
+
+| Key                | Does                                                |
+| ------------------ | --------------------------------------------------- |
+| `→` `space` `PgDn` | Next slide                                          |
+| `←` `PgUp`         | Previous slide                                      |
+| `home`             | First slide                                         |
+| `end`              | Last slide                                          |
+| `g`                | Go to a page -- type a number, press enter          |
+| `i`                | Index: every slide at once, click one to jump to it |
+| `f`                | Fullscreen                                          |
+| `r`                | Reload the artifact from disk, keeping your place   |
+| `?` or `h`         | Show or hide the key bar                            |
+| `q` or `esc`       | Close the window                                    |
+
+**`g` clamps rather than complains.** Ask for page 99 in a ten-slide deck and you get page ten -- that is plainly what you wanted, and an error message would be a worse answer than the slide. Press `esc` while the number box is open to cancel it; `esc` only closes the window when the box is not open.
+
+**`q` and `esc` can only close a window the page is allowed to close** -- which is the one `prez present` opens for you. Open a `.html` in an ordinary browser tab and the browser refuses, silently, as it does for every page. prez says so on screen rather than letting the key look broken.
+
+**`r` is not a workaround for a missing autoreload -- there is nothing to autoreload.** The artifact is one static file with no server behind it, by design, so nothing can push a change to it. `prez build --watch` rebuilds the file on every save; `r` is how the open window picks that up. Your position lives in the URL hash, so a reload lands you back on the slide you were on. Watch in one terminal, press `r` in the browser: that is the whole loop.
+
+**Every position is a URL.** The counter shows `4 / 12`, and `deck.html#4` opens on slide four. Send someone a link to a slide, not to a deck.
+
+---
+
 ## Deck format
 
 A deck is markdown with optional YAML front matter.

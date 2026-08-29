@@ -33,11 +33,7 @@ pub fn assemble(doc: &Document) -> String {
   let script = script(doc);
 
   match &doc.theme.layout {
-    Some(layout) => layout
-      .replace("{{title}}", &escape_text(title))
-      .replace("{{style}}", &style)
-      .replace("{{slides}}", &slides)
-      .replace("{{script}}", &script),
+    Some(layout) => fill(layout, &escape_text(title), &style, &slides, &script),
     None => format!(
       "<!doctype html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n\
        <meta name=\"viewport\" content=\"width=device-width,initial-scale=1\">\n\
@@ -169,6 +165,48 @@ fn script(doc: &Document) -> String {
   }
 }
 
+/// Fill a theme layout's placeholders in ONE PASS.
+///
+/// **CHAINED `replace` CALLS SUBSTITUTE INTO THEIR OWN OUTPUT, and that is a
+/// real defect rather than a tidiness point.** The old form ran
+/// `.replace("{{style}}", ..)` and then `.replace("{{slides}}", ..)` over the
+/// whole string -- so any `{{slides}}` occurring INSIDE the stylesheet just
+/// injected got expanded too, and the entire deck was duplicated into the
+/// theme's CSS. A theme author writing `/* the {{slides}} placeholder */` in
+/// their own `theme.css` would have shipped every slide's markup inside a
+/// comment, doubling the artifact and putting deck content somewhere no reader
+/// would look for it.
+///
+/// Found by writing exactly that string into a comment in this file's own CSS,
+/// where `a_theme_layout_replaces_the_default_skeleton` caught it. The bug was
+/// older than the comment; the comment is what made it reachable.
+///
+/// One pass also settles what an UNKNOWN placeholder does: it survives
+/// literally. That is the honest answer -- prez does not know what
+/// `{{author}}` means, and silently deleting a theme author's text would be
+/// worse than leaving it where they can see it.
+fn fill(layout: &str, title: &str, style: &str, slides: &str, script: &str) -> String {
+  let table = [("{{title}}", title), ("{{style}}", style), ("{{slides}}", slides), ("{{script}}", script)];
+  let mut out = String::with_capacity(layout.len() + style.len() + slides.len() + script.len());
+  let mut rest = layout;
+  while let Some(at) = rest.find("{{") {
+    out.push_str(&rest[..at]);
+    rest = &rest[at..];
+    match table.iter().find(|(key, _)| rest.starts_with(key)) {
+      Some((key, value)) => {
+        out.push_str(value);
+        rest = &rest[key.len()..];
+      }
+      None => {
+        out.push_str("{{");
+        rest = &rest[2..];
+      }
+    }
+  }
+  out.push_str(rest);
+  out
+}
+
 /// Escape text for an attribute value.
 ///
 /// Directive values are the author's own words and are not a trust boundary --
@@ -230,7 +268,67 @@ body.gp-measuring .gp-slide.gp-current { visibility: visible; }
 .gp-slide.gp-on-dark blockquote { border-left-color: rgba(255,255,255,.3); color: inherit; }
 .gp-slide.gp-on-dark th, .gp-slide.gp-on-dark td { border-color: rgba(255,255,255,.25); }
 
-/* Overview: every slide at once, click to jump. Esc toggles it. */
+/* THE BAR: help, go-to-page, and transient messages, at the bottom centre.
+  Deliberately the same visual weight as the counter opposite it -- 12px mono at
+  low opacity, out of the way until asked for -- because a presentation tool
+  that decorates the presentation has misunderstood the job.
+
+  It is BUILT BY THE RUNTIME rather than emitted in the skeleton, and that is
+  not an implementation detail: a theme may supply its own layout.html, which
+  carries only the four placeholders assemble() fills. Markup baked into the
+  default skeleton would simply be missing under any custom layout, so the
+  feature would work for seven themes and vanish for the eighth with nothing
+  reporting it.
+
+  (This comment names those placeholders in prose ON PURPOSE. Writing them
+  literally put them in every artifact's stylesheet, where assemble()'s own
+  substitution then found them -- see the single-pass fill() below for the
+  defect that exposed.) */
+/* VISIBILITY IS A CLASS, NOT THE `hidden` ATTRIBUTE, and that is load-bearing.
+  `[hidden] { display: none }` lives in the UA stylesheet, and ANY author rule
+  beats the whole UA sheet regardless of specificity -- so `.gp-bar { display:
+  flex }` would silently defeat `hidden` and the bar would be permanently on
+  screen. Explicit classes cannot be undone by a rule somewhere else. */
+.gp-bar { display: none; }
+.gp-bar.gp-on { display: flex; }
+.gp-bar-goto { display: none; }
+.gp-bar-goto.gp-on { display: inline-flex; align-items: baseline; }
+.gp-bar-msg { display: none; }
+.gp-bar-msg.gp-on { display: inline-block; max-width: 34rem; text-align: center; }
+.gp-bar-keys { display: none; }
+.gp-bar-keys.gp-on { display: flex; gap: 0.75rem; flex-wrap: wrap; justify-content: center; }
+
+.gp-bar {
+  position: fixed; left: 50%; transform: translateX(-50%); bottom: 0.8rem;
+  z-index: 11; gap: 0.75rem; align-items: center;
+  max-width: min(92vw, 60rem); flex-wrap: wrap; justify-content: center;
+  font: 12px/1.6 ui-monospace, SFMono-Regular, Menlo, monospace;
+  opacity: 0.5; user-select: none; transition: opacity .12s ease-out;
+}
+/* Readable the moment it is actually being used. The low resting opacity is
+  right for something glanced at and wrong for something typed into. */
+.gp-bar:focus-within, .gp-bar.gp-bar-lit { opacity: 1; }
+.gp-bar-item { display: inline-flex; gap: 0.3rem; align-items: baseline; white-space: nowrap; }
+
+/* The keycap. currentColor throughout, so it inherits whatever the theme has
+  set for the slide and needs no palette of its own -- the same reason nothing
+  else in this file names a colour. */
+.gp-key {
+  display: inline-block; min-width: 0.75rem; padding: 0.12em 0.34em;
+  border: 1px solid currentColor; border-radius: 3px;
+  font-size: 11px; line-height: 1.25; text-align: center; opacity: 0.85;
+}
+.gp-bar-goto input {
+  width: 3.4rem; margin: 0 0.35rem; padding: 0.12em 0.3em;
+  border: 1px solid currentColor; border-radius: 3px;
+  background: transparent; color: inherit; font: inherit; text-align: center;
+}
+/* The number spinners are noise at this size and the arrows are already keys. */
+.gp-bar-goto input::-webkit-outer-spin-button,
+.gp-bar-goto input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.gp-bar-goto input { -moz-appearance: textfield; appearance: textfield; }
+
+/* Overview: every slide at once, click to jump. `i` toggles it. */
 body.gp-overview { overflow: auto; }
 body.gp-overview .gp-deck {
   display: grid; grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
@@ -261,10 +359,14 @@ const PRINT_BREAK_CSS: &str = r#"
   }
   .gp-slide:last-child { break-after: auto; page-break-after: auto; }
   .gp-counter { display: none; }
+  /* Chrome's own print path is what produces the PDF, so anything visible here
+    lands on page one of the artifact. The bar is a control surface, not
+    content. */
+  .gp-bar { display: none; }
 }
 "#;
 
-/// The base runtime: navigation, counter, deep-linking, overview.
+/// The base runtime: navigation, counter, deep-linking, index, and the bar.
 ///
 /// Written to ES5 and with no build step, because it is read as source inside
 /// every artifact prez ever emits and a reader should be able to audit it
@@ -296,38 +398,166 @@ const RUNTIME_JS: &str = r#"
     // on equality keeps it out of the history on a no-op.
     if (location.hash !== want) { location.hash = want; } else { paint(); }
   }
-  function overview(on) {
+  function index(on) {
     document.body.classList.toggle('gp-overview', on);
     if (!on) { slides[at].scrollIntoView({ block: 'nearest' }); }
   }
+  function indexing() { return document.body.classList.contains('gp-overview'); }
   function fullscreen() {
     if (document.fullscreenElement) { document.exitFullscreen(); }
     else if (document.documentElement.requestFullscreen) {
       document.documentElement.requestFullscreen();
     }
   }
+  // The position is in the hash, so a reload lands back on the same slide.
+  // That is what makes `r` the answer to `prez build --watch`: the file on disk
+  // is rebuilt, and this picks the new one up without losing your place.
+  function reload() { location.reload(); }
+
+  // CLOSING A WINDOW IS NOT ALWAYS ALLOWED, AND THE FAILURE IS SILENT.
+  // window.close() only acts on a window script opened -- which is what
+  // `prez present` produces, since it launches a dedicated app window. Open the
+  // same artifact as an ordinary tab and the call is IGNORED with no error, no
+  // return value and no exception. Pressing q would then do nothing at all and
+  // look like a broken key.
+  //
+  // So say so. If the close worked this timer dies with the page; if it did not,
+  // the message is the only thing that distinguishes "refused" from "broken".
+  function quit() {
+    window.close();
+    setTimeout(function () {
+      say('this browser will not let a page close itself -- q closes the window that `prez present` opens');
+    }, 150);
+  }
+
+  // ------------------------------------------------------------------ the bar
+  //
+  // ONE TABLE. The keys this handler acts on and the keys the bar advertises
+  // are the same list read twice, because two lists would drift the moment a
+  // key is added -- and the copy that drifts is the printed one, which is the
+  // half a reader trusts. `show` is what appears on the keycaps; `keys` is what
+  // KeyboardEvent.key actually reports.
+  var BINDINGS = [
+    { show: ['→', 'space'], keys: ['ArrowRight', ' ', 'PageDown'], label: 'next', act: function () { go(at + 1); } },
+    { show: ['←'], keys: ['ArrowLeft', 'PageUp'], label: 'previous', act: function () { go(at - 1); } },
+    { show: ['home'], keys: ['Home'], label: 'first', act: function () { go(0); } },
+    { show: ['end'], keys: ['End'], label: 'last', act: function () { go(total - 1); } },
+    { show: ['g'], keys: ['g', 'G'], label: 'go to page', act: function () { goto_(true); } },
+    { show: ['i'], keys: ['i', 'I'], label: 'index', act: function () { index(!indexing()); } },
+    { show: ['f'], keys: ['f', 'F'], label: 'fullscreen', act: fullscreen },
+    { show: ['r'], keys: ['r', 'R'], label: 'reload', act: reload },
+    { show: ['?'], keys: ['?', 'h', 'H'], label: 'keys', act: function () { keys(!showing('gp-bar-keys')); } },
+    { show: ['q', 'esc'], keys: ['q', 'Q', 'Escape'], label: 'close', act: quit }
+  ];
+
+  var bar = document.createElement('div');
+  bar.className = 'gp-bar';
+  var keycaps = document.createElement('div');
+  keycaps.className = 'gp-bar-keys';
+  var form = document.createElement('form');
+  form.className = 'gp-bar-goto';
+  var input = document.createElement('input');
+  input.type = 'number';
+  input.min = '1';
+  input.setAttribute('aria-label', 'go to page');
+  var msg = document.createElement('div');
+  msg.className = 'gp-bar-msg';
+
+  for (var b = 0; b < BINDINGS.length; b++) {
+    var item = document.createElement('span');
+    item.className = 'gp-bar-item';
+    for (var k = 0; k < BINDINGS[b].show.length; k++) {
+      var cap = document.createElement('kbd');
+      cap.className = 'gp-key';
+      cap.textContent = BINDINGS[b].show[k];
+      item.appendChild(cap);
+    }
+    var what = document.createElement('span');
+    what.textContent = BINDINGS[b].label;
+    item.appendChild(what);
+    keycaps.appendChild(item);
+  }
+  form.appendChild(document.createTextNode('go to'));
+  form.appendChild(input);
+  form.appendChild(document.createTextNode('/ ' + total));
+  bar.appendChild(keycaps);
+  bar.appendChild(form);
+  bar.appendChild(msg);
+  document.body.appendChild(bar);
+
+  function showing(cls) {
+    var el = bar.querySelector('.' + cls);
+    return !!el && el.classList.contains('gp-on');
+  }
+  // One place decides whether the bar is on screen at all: it is on when any of
+  // its three panels is. Letting each panel toggle the container as well was
+  // the first cut and it left the bar visible-but-empty whenever two panels
+  // closed in the wrong order.
+  function settle() {
+    var any = showing('gp-bar-keys') || showing('gp-bar-goto') || showing('gp-bar-msg');
+    bar.classList.toggle('gp-on', any);
+  }
+  function panel(el, on) { el.classList.toggle('gp-on', on); settle(); }
+
+  function keys(on) { panel(keycaps, on); }
+  function say(text) {
+    msg.textContent = text;
+    panel(msg, true);
+    bar.classList.add('gp-bar-lit');
+    clearTimeout(say.timer);
+    say.timer = setTimeout(function () {
+      panel(msg, false);
+      bar.classList.remove('gp-bar-lit');
+    }, 4000);
+  }
+  function goto_(on) {
+    panel(form, on);
+    if (on) { input.value = ''; input.focus(); }
+    else { input.blur(); }
+  }
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var n = parseInt(input.value, 10);
+    // Out of range is CLAMPED, not refused: 99 on a ten-slide deck is a request
+    // for the end, and an error message would be a worse answer than the slide
+    // the reader plainly wanted.
+    if (!isNaN(n)) { go(n - 1); }
+    goto_(false);
+  });
 
   window.addEventListener('hashchange', function () { at = fromHash(); paint(); });
 
   document.addEventListener('keydown', function (e) {
     if (e.metaKey || e.ctrlKey || e.altKey) { return; }
-    var overviewing = document.body.classList.contains('gp-overview');
-    switch (e.key) {
-      case 'ArrowRight': case ' ': case 'PageDown': go(at + 1); break;
-      case 'ArrowLeft': case 'PageUp': go(at - 1); break;
-      case 'Home': go(0); break;
-      case 'End': go(total - 1); break;
-      case 'f': case 'F': fullscreen(); break;
-      case 'Escape': overview(!overviewing); break;
-      default: return;
+
+    // WHILE THE NUMBER BOX IS OPEN IT OWNS THE KEYBOARD. Without this, typing
+    // 4 into it would also advance a slide, and typing g would reopen the box
+    // on top of itself.
+    if (e.target === input) {
+      // Escape here CANCELS THE INPUT rather than closing the window, and that
+      // is a deliberate reading of "esc closes the window": the complaint was
+      // that esc was a mode toggle for the index, not that esc must be
+      // destructive from inside a text field. Closing the whole deck because
+      // someone changed their mind about a page number would be a worse trap
+      // than the one being removed.
+      if (e.key === 'Escape') { goto_(false); e.preventDefault(); }
+      return;
     }
-    e.preventDefault();
+
+    for (var b = 0; b < BINDINGS.length; b++) {
+      if (BINDINGS[b].keys.indexOf(e.key) !== -1) {
+        BINDINGS[b].act();
+        e.preventDefault();
+        return;
+      }
+    }
   });
 
   for (var i = 0; i < total; i++) {
     (function (n) {
       slides[n].addEventListener('click', function () {
-        if (document.body.classList.contains('gp-overview')) { overview(false); go(n); }
+        if (indexing()) { index(false); go(n); }
       });
     })(i);
   }
@@ -516,6 +746,131 @@ mod tests {
     let out = build(&[slide("<pre><code class=\"language-mermaid\">graph TD;</code></pre>")]);
     assert!(!out.contains("mermaid.min"), "{}", out.len());
     assert!(!out.to_lowercase().contains("mermaid.initialize"));
+  }
+
+  // ---- hv's runtime, 29 Aug 2026 -------------------------------------------
+
+  #[test]
+  fn a_placeholder_inside_a_theme_is_not_a_placeholder() {
+    // THE DEFECT fill() EXISTS FOR. Chained replaces substitute into their own
+    // output: {{style}} went in first, and the {{slides}} sitting inside that
+    // stylesheet was then expanded by the next call, duplicating the whole deck
+    // into the theme's CSS. A theme author writing the placeholder's name in a
+    // comment -- the most natural thing to write when documenting a layout --
+    // shipped every slide twice and had no way to see why.
+    let theme = Theme {
+      css: "/* fill this with the {{slides}} placeholder */\nbody{}".into(),
+      js: None,
+      layout: Some("<html><head>{{style}}</head><body>{{slides}}{{script}}</body></html>".into()),
+      name: "t".into(),
+      origin: crate::theme::Origin::BuiltIn,
+    };
+    let slides = [slide("<p>UNIQUE-DECK-MARKER</p>")];
+    let out = assemble(&Document {
+      title: Some("T"),
+      slides: &slides,
+      theme: &theme,
+      mermaid: false,
+      paper: None,
+    });
+    assert_eq!(
+      out.matches("UNIQUE-DECK-MARKER").count(),
+      1,
+      "the deck appears once, not once per placeholder mentioned in the theme: {out}"
+    );
+    assert!(out.contains("the {{slides}} placeholder"), "the author's comment survives verbatim");
+  }
+
+  #[test]
+  fn an_unknown_placeholder_survives_rather_than_vanishing() {
+    // prez does not know what {{author}} means. Leaving it visible is the
+    // honest answer; deleting a theme author's text because it was not on a
+    // list of four would be a silent edit to someone else's file.
+    let theme = Theme {
+      css: "body{}".into(),
+      js: None,
+      layout: Some("<html>{{author}}{{slides}}{{script}}{{style}}</html>".into()),
+      name: "t".into(),
+      origin: crate::theme::Origin::BuiltIn,
+    };
+    let slides = [slide("<p>x</p>")];
+    let out = assemble(&Document {
+      title: None, slides: &slides, theme: &theme, mermaid: false, paper: None,
+    });
+    assert!(out.contains("{{author}}"), "{out}");
+  }
+
+  #[test]
+  fn every_key_the_bar_advertises_is_a_key_the_handler_binds() {
+    // THE POINT OF THE SINGLE BINDING TABLE, asserted rather than trusted. The
+    // bar is rendered from BINDINGS and the keydown handler dispatches through
+    // BINDINGS, so a key can never be advertised and unhandled -- but only for
+    // as long as both really read the one table. This fails the moment someone
+    // adds a `case` to the handler or a literal to the bar.
+    assert!(!RUNTIME_JS.contains("switch (e.key)"), "the handler dispatches through BINDINGS, not a switch");
+    assert_eq!(RUNTIME_JS.matches("var BINDINGS").count(), 1, "exactly one binding table");
+    for key in ["ArrowRight", "ArrowLeft", "Home", "End", "'g'", "'i'", "'f'", "'r'", "'q'", "'?'"] {
+      assert!(RUNTIME_JS.contains(key), "no binding for {key}");
+    }
+  }
+
+  #[test]
+  fn escape_closes_the_window_and_no_longer_toggles_the_index() {
+    // hv, 29 Aug: "Using ESC to go to the index and ESC to come back from it is
+    // not an intuitive UX, so that goes entirely." Both halves asserted, because
+    // binding Escape to close while ALSO leaving it on the index would satisfy
+    // a check that only looked for the new behaviour.
+    assert!(RUNTIME_JS.contains("keys: ['q', 'Q', 'Escape'], label: 'close'"));
+    assert!(!RUNTIME_JS.contains("case 'Escape': overview"), "the old mode toggle is gone");
+    assert!(RUNTIME_JS.contains("keys: ['i', 'I'], label: 'index'"), "the index moved to i");
+  }
+
+  #[test]
+  fn the_bar_is_built_by_the_runtime_and_not_by_the_skeleton() {
+    // THE CUSTOM-LAYOUT CASE, and the reason the bar is created in JS. A theme's
+    // layout.html carries {{slides}} {{style}} {{script}} and nothing else, so
+    // markup baked into the default skeleton would be silently absent under any
+    // custom layout -- the feature working for seven themes and vanishing for
+    // the eighth, with nothing reporting it.
+    let theme = Theme {
+      css: "body{}".into(),
+      js: None,
+      layout: Some("<html><head>{{style}}</head><body>{{slides}}{{script}}</body></html>".into()),
+      name: "t".into(),
+      origin: crate::theme::Origin::BuiltIn,
+    };
+    let slides = [slide("<p>x</p>")];
+    let out = assemble(&Document {
+      title: Some("T"),
+      slides: &slides,
+      theme: &theme,
+      mermaid: false,
+      paper: None,
+    });
+    assert!(!out.contains("<div class=\"gp-bar\""), "no bar markup in the document itself");
+    assert!(out.contains("gp-bar"), "but the runtime that builds it is present");
+    assert!(out.contains("document.body.appendChild(bar)"), "and it appends it at run time");
+  }
+
+  #[test]
+  fn the_bar_never_reaches_the_pdf() {
+    // Chrome's own print path produces the PDF, so anything on screen lands on
+    // the page. The counter has been fenced since it existed; the bar is a
+    // control surface and belongs behind the same fence.
+    let printed = PRINT_BREAK_CSS;
+    assert!(printed.contains(".gp-bar { display: none; }"));
+    assert!(printed.contains(".gp-counter { display: none; }"));
+  }
+
+  #[test]
+  fn the_bar_hides_by_class_rather_than_by_the_hidden_attribute() {
+    // `[hidden] { display: none }` is a UA rule, and ANY author rule beats the
+    // whole UA sheet regardless of specificity -- so `.gp-bar { display: flex }`
+    // would silently defeat the attribute and pin the bar on screen. Explicit
+    // classes cannot be undone from somewhere else in the cascade.
+    assert!(BASE_CSS.contains(".gp-bar { display: none; }"));
+    assert!(BASE_CSS.contains(".gp-bar.gp-on { display: flex; }"));
+    assert!(!RUNTIME_JS.contains(".hidden = "), "visibility is a class, not the attribute");
   }
 
   #[test]

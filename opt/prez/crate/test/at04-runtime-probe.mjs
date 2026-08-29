@@ -54,11 +54,12 @@ const KEYS = {
   PageDown: [34, 'PageDown'], PageUp: [33, 'PageUp'],
   Home: [36, 'Home'], End: [35, 'End'],
   Escape: [27, 'Escape'], ' ': [32, 'Space'], f: [70, 'KeyF'],
+  i: [73, 'KeyI'], g: [71, 'KeyG'], '?': [191, 'Slash'],
 };
 
 async function press(cdp, key) {
   const [vk, code] = KEYS[key];
-  const printable = key === ' ' || key === 'f';
+  const printable = key === ' ' || key === 'f' || key === 'i' || key === 'g' || key === '?';
   for (const type of printable ? ['rawKeyDown', 'char', 'keyUp'] : ['rawKeyDown', 'keyUp']) {
     await cdp.send('Input.dispatchKeyEvent', {
       type, key, code,
@@ -111,14 +112,67 @@ await press(cdp, 'ArrowRight'); check('past_end_stays', await cdp.eval(current),
 await press(cdp, 'Home');       check('home', await cdp.eval(current), 1);
 await press(cdp, 'ArrowLeft');  check('before_start_stays', await cdp.eval(current), 1);
 
-await press(cdp, 'Escape');     check('overview_on', await cdp.eval(overviewing), true);
-await press(cdp, 'Escape');     check('overview_toggles_off', await cdp.eval(overviewing), false);
-await press(cdp, 'Escape');     check('overview_on_again', await cdp.eval(overviewing), true);
+// THE INDEX IS ON `i` NOW, NOT ON Escape (hv, 29 Aug). Escape toggling a mode
+// was the complaint -- one key that meant "open this" and "close this"
+// depending on invisible state. These three lines used to press Escape.
+await press(cdp, 'i');          check('index_on', await cdp.eval(overviewing), true);
+await press(cdp, 'i');          check('index_toggles_off', await cdp.eval(overviewing), false);
+await press(cdp, 'i');          check('index_on_again', await cdp.eval(overviewing), true);
 await cdp.eval('document.querySelectorAll(".gp-slide")[2].click()');
 await sleep(150);
-check('overview_click_jumps', await cdp.eval(current), 3);
-check('overview_closed_by_click', await cdp.eval(overviewing), false);
+check('index_click_jumps', await cdp.eval(current), 3);
+check('index_closed_by_click', await cdp.eval(overviewing), false);
 check('click_wrote_the_hash', await cdp.eval('location.hash'), '#3');
+
+// AND ESCAPE MUST NOT TOUCH THE INDEX ANY MORE. Asserted as its own check
+// rather than left implied by the three above: "i works" and "Escape no longer
+// does" are two claims, and a runtime that bound BOTH would satisfy the first
+// while the change hv asked for had not happened.
+await press(cdp, 'Escape');
+check('escape_does_not_open_the_index', await cdp.eval(overviewing), false);
+
+// ---- the bar, and the keys that drive it ----
+const barOn = 'document.querySelector(".gp-bar").classList.contains("gp-on")';
+const keysOn = 'document.querySelector(".gp-bar-keys").classList.contains("gp-on")';
+const gotoOn = 'document.querySelector(".gp-bar-goto").classList.contains("gp-on")';
+
+check('bar_exists', await cdp.eval('!!document.querySelector(".gp-bar")'), true);
+check('bar_starts_hidden', await cdp.eval(barOn), false);
+// The keycaps are BUILT FROM THE BINDING TABLE, so this count is the number of
+// bindings. It is asserted because an empty bar would render, be styled, be
+// toggleable, and advertise nothing.
+check('bar_lists_every_binding', await cdp.eval('document.querySelectorAll(".gp-bar-item").length'), 10);
+check('keycaps_are_kbd_elements', await cdp.eval('document.querySelectorAll(".gp-bar .gp-key").length > 0'), true);
+
+await press(cdp, '?');          check('help_opens', await cdp.eval(keysOn), true);
+check('bar_visible_with_help', await cdp.eval(barOn), true);
+await press(cdp, '?');          check('help_toggles_off', await cdp.eval(keysOn), false);
+check('bar_hidden_again', await cdp.eval(barOn), false);
+
+// go-to-page: open, type, submit, and the clamp hv asked for by name.
+await press(cdp, 'g');          check('goto_opens', await cdp.eval(gotoOn), true);
+check('goto_focuses_its_input', await cdp.eval('document.activeElement === document.querySelector(".gp-bar-goto input")'), true);
+await cdp.eval('(function(){var i=document.querySelector(".gp-bar-goto input");i.value="2";' +
+  'i.form.dispatchEvent(new Event("submit",{cancelable:true,bubbles:true}));return 1})()');
+await sleep(150);
+check('goto_jumps', await cdp.eval(current), 2);
+check('goto_closes_after_submit', await cdp.eval(gotoOn), false);
+
+// "99 on a 10 page doc goes to page 10" -- hv's own example, as its own check.
+await press(cdp, 'g');
+await cdp.eval('(function(){var i=document.querySelector(".gp-bar-goto input");i.value="99";' +
+  'i.form.dispatchEvent(new Event("submit",{cancelable:true,bubbles:true}));return 1})()');
+await sleep(150);
+check('goto_clamps_past_the_end', await cdp.eval(current), total);
+
+// Escape INSIDE the input cancels the input. It must not reach the quit path,
+// or changing your mind about a page number closes the deck.
+await press(cdp, 'g');          check('goto_reopens', await cdp.eval(gotoOn), true);
+await press(cdp, 'Escape');     check('escape_cancels_the_input', await cdp.eval(gotoOn), false);
+check('escape_in_input_did_not_navigate', await cdp.eval(current), total);
+
+await cdp.eval('location.hash = "#3"');
+await sleep(150);
 
 // Fullscreen: three separate claims, and the toggle is the one a synthetic
 // event could never reach.
