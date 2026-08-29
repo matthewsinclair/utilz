@@ -35,6 +35,28 @@
 use crate::Failure;
 use std::path::{Path, PathBuf};
 
+/// WHICH BRANCH OF `load` PRODUCED THIS THEME.
+///
+/// Carried rather than inferred from `name`. `name` is a diagnostic string --
+/// `"the built-in 'mono'"` for one, a bare path for the others -- and deciding
+/// provenance by parsing it would make the announcement below a property of
+/// that prose, so rewording a diagnostic would silently change which builds
+/// warn. The resolver already knows which branch it took; it records it, and
+/// `deck` decides what to say about it.
+#[derive(Debug, PartialEq, Eq)]
+pub enum Origin {
+  /// Compiled into the binary.
+  BuiltIn,
+  /// A path that existed, given by `--theme` or by the deck's `theme:` key.
+  Path,
+  /// A NAME found in `dir`, one of the directories on `PREZ_THEME_PATH`.
+  ///
+  /// `name` is kept because it is the only thing that can answer "did this
+  /// shadow a built-in?", and by this point `name` on the Theme is the path it
+  /// resolved to rather than the word the user typed.
+  SearchPath { dir: PathBuf, name: String },
+}
+
 #[derive(Debug)]
 pub struct Theme {
   pub css: String,
@@ -44,6 +66,8 @@ pub struct Theme {
   pub layout: Option<String>,
   /// What to call this theme in a diagnostic.
   pub name: String,
+  /// Where it came from. See `provenance`.
+  pub origin: Origin,
 }
 
 /// Themes compiled into the binary. Brand-free by rule (AC09) -- see the module
@@ -126,9 +150,55 @@ pub fn declares(theme: &Theme, class: &str) -> bool {
   theme.css.contains(&format!(".{class}"))
 }
 
+/// What to say on stderr when a theme did NOT come out of the binary (AC14).
+///
+/// **THE ARTIFACT'S LOOK BECOMES A PROPERTY OF THE ENVIRONMENT the moment a
+/// name resolves off `PREZ_THEME_PATH`, and nothing in the deck records that.**
+/// Two people building the same file from the same commit get different decks,
+/// or one of them gets none, and until this line existed neither could tell
+/// which had happened. Naming the directory is the whole point: a user with two
+/// directories on the path can always answer which one won.
+///
+/// The two cases read differently because they FAIL differently, and the
+/// asymmetry is the reason one of them is dangerous:
+///
+/// - A name that is not a built-in refuses elsewhere. Loud, immediate,
+///   self-explaining -- the unknown-theme refusal already names every directory
+///   it searched.
+/// - A name that shadows a built-in SILENTLY builds something else elsewhere.
+///   Same command, same deck, same commit, different output, no diagnostic.
+///   That is the local-wins failure this exists for.
+///
+/// Returns `None` for a built-in -- silence is the correct report for "the
+/// binary supplied its own" -- and `None` for `Origin::Path`, deliberately. A
+/// path the user typed is already visible in what they typed. The cwd-shadowing
+/// case that hides behind `Origin::Path` (`--theme=mono` beside a `./mono/`
+/// directory) is real, is measured, and is NOT fixed by announcing it: AC15
+/// splits the flag so a name can never resolve against the working directory at
+/// all. Left here, an announcement would be a warning that the tool is doing
+/// the wrong thing, which is not a fix and would take the pressure off one.
+pub fn provenance(theme: &Theme) -> Option<String> {
+  let Origin::SearchPath { dir, name } = &theme.origin else {
+    return None;
+  };
+  let shadowed = BUILT_IN.iter().any(|(id, _)| id == name);
+  Some(match shadowed {
+    true => format!(
+      "theme '{name}' came from {} (on {SEARCH_PATH}), SHADOWING the built-in of the same name. \
+       Elsewhere the same command builds a different deck and says nothing -- rename the local theme if that is not what you want.",
+      dir.display()
+    ),
+    false => format!(
+      "theme '{name}' came from {} (on {SEARCH_PATH}), not from the built-ins. \
+       Elsewhere this deck refuses to build until that directory is on the path.",
+      dir.display()
+    ),
+  })
+}
+
 fn from_file(path: &Path) -> Result<Theme, Failure> {
   let css = read(path)?;
-  Ok(Theme { css, js: None, layout: None, name: path.display().to_string() })
+  Ok(Theme { css, js: None, layout: None, name: path.display().to_string(), origin: Origin::Path })
 }
 
 fn built_in(name: &str) -> Option<Theme> {
@@ -137,6 +207,7 @@ fn built_in(name: &str) -> Option<Theme> {
     js: None,
     layout: None,
     name: format!("the built-in '{id}'"),
+    origin: Origin::BuiltIn,
   })
 }
 
@@ -151,13 +222,17 @@ fn on_search_path(name: &str) -> Result<Option<Theme>, Failure> {
     return Ok(None);
   }
   for dir in search_directories() {
+    // from_directory and from_file both stamp Origin::Path, because on their
+    // own they cannot tell a path the user typed from a path this loop built.
+    // Only here is that known, so only here is it overwritten.
+    let found = |theme: Theme| Theme { origin: Origin::SearchPath { dir: dir.clone(), name: name.to_string() }, ..theme };
     let as_dir = dir.join(name);
     if as_dir.join("theme.css").is_file() {
-      return from_directory(&as_dir).map(Some);
+      return from_directory(&as_dir).map(found).map(Some);
     }
     let as_file = dir.join(format!("{name}.css"));
     if as_file.is_file() {
-      return from_file(&as_file).map(Some);
+      return from_file(&as_file).map(found).map(Some);
     }
   }
   Ok(None)
@@ -208,6 +283,7 @@ fn from_directory(dir: &Path) -> Result<Theme, Failure> {
     js: optional(&dir.join("theme.js"))?,
     layout: optional(&dir.join("layout.html"))?,
     name: dir.display().to_string(),
+    origin: Origin::Path,
   })
 }
 
@@ -388,6 +464,68 @@ mod tests {
   fn a_protocol_relative_url_is_still_external() {
     let e = refuse_external("body{background:url(//cdn/x.png)}", "t").unwrap_err();
     assert!(e.message.contains("url(//"), "{}", e.message);
+  }
+
+  // ---- AC14: announce-on-resolve -----------------------------------------
+  //
+  // provenance() is tested DIRECTLY, on a Theme built by hand, rather than by
+  // setting PREZ_THEME_PATH and calling load(). Two reasons, both about the
+  // test rather than the code. std::env::set_var mutates the whole process and
+  // cargo runs these on parallel threads, so an env-driven test here would
+  // race every other test in this binary -- intermittently, which is the worst
+  // way to learn it. And the end-to-end path is worth proving black-box
+  // against the real binary in a real subprocess anyway: AT13 does that, with
+  // the env var set where it cannot reach anything else.
+
+  fn from_search_path(name: &str, dir: &str) -> Theme {
+    Theme {
+      css: String::new(),
+      js: None,
+      layout: None,
+      name: format!("{dir}/{name}"),
+      origin: Origin::SearchPath { dir: PathBuf::from(dir), name: name.to_string() },
+    }
+  }
+
+  #[test]
+  fn a_search_path_theme_names_the_directory_it_came_from() {
+    let notice = provenance(&from_search_path("geodica", "/opt/themes")).expect("announced");
+    assert!(notice.contains("'geodica'"), "{notice}");
+    assert!(notice.contains("/opt/themes"), "the directory is the point: {notice}");
+    assert!(notice.contains(SEARCH_PATH), "{notice}");
+  }
+
+  #[test]
+  fn shadowing_a_built_in_is_said_differently_from_merely_being_external() {
+    // The asymmetry is the content. A name that is not a built-in REFUSES
+    // elsewhere -- loud, self-explaining. A name that shadows one builds
+    // something else elsewhere and says nothing, which is the failure this
+    // whole criterion exists for, so it must not read like the benign case.
+    let shadowing = provenance(&from_search_path("mono", "/opt/themes")).expect("announced");
+    let external = provenance(&from_search_path("geodica", "/opt/themes")).expect("announced");
+    assert!(shadowing.contains("SHADOWING"), "{shadowing}");
+    assert!(!external.contains("SHADOWING"), "{external}");
+    assert_ne!(shadowing, external);
+  }
+
+  #[test]
+  fn a_built_in_announces_nothing() {
+    // Silence is the correct report for "the binary supplied its own". A line
+    // on every default build would be noise, and noise is how a real notice
+    // stops being read.
+    assert_eq!(provenance(&built_in("simple").unwrap()), None);
+  }
+
+  #[test]
+  fn a_typed_path_announces_nothing() {
+    // Deliberate, and NOT an oversight: a path the user typed is already
+    // visible in what they typed. The cwd-shadowing case hiding behind this
+    // origin is AC15's to remove, not this line's to narrate.
+    let d = dir("provenance");
+    std::fs::write(d.join("theme.css"), "body{}").unwrap();
+    let t = load(Some(d.to_str().unwrap()), None, Path::new(".")).unwrap();
+    assert_eq!(t.origin, Origin::Path);
+    assert_eq!(provenance(&t), None);
   }
 
   #[test]

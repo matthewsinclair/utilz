@@ -150,6 +150,11 @@ fn compile(cmd: &Command, paper: Option<String>) -> Result<Compiled, Failure> {
   }
 
   let theme = theme::load(cmd.theme.as_deref(), front.theme.as_deref(), base)?;
+  // AC14. Through the same single door as every other warning: theme.rs decides
+  // WHAT is worth saying because it owns the resolution order, and this line
+  // decides only that it gets said. A second eprintln! in theme.rs would be the
+  // drift report() exists to prevent.
+  warnings.extend(theme::provenance(&theme));
   warn_undeclared_classes(&slides, &theme, &mut warnings);
   let artifact = html::assemble(&html::Document {
     title: front.title.as_deref(),

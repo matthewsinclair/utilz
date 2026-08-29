@@ -466,6 +466,9 @@ mod tests {
       js: None,
       layout: None,
       name: "t".into(),
+      // A hand-made fixture is not something the resolver produced. BuiltIn is
+      // the origin that announces nothing, which is what these tests want.
+      origin: crate::theme::Origin::BuiltIn,
     };
     let slides = [slide("<p>x</p>")];
     let out = stylesheet(&Document {
@@ -489,6 +492,9 @@ mod tests {
       js: None,
       layout: None,
       name: "t".into(),
+      // A hand-made fixture is not something the resolver produced. BuiltIn is
+      // the origin that announces nothing, which is what these tests want.
+      origin: crate::theme::Origin::BuiltIn,
     };
     let slides = [slide("<p>x</p>")];
     let out = stylesheet(&Document {
@@ -519,6 +525,9 @@ mod tests {
       js: None,
       layout: Some("<html><head>{{style}}</head><body>{{slides}}{{script}}</body></html>".into()),
       name: "t".into(),
+      // A hand-made fixture is not something the resolver produced. BuiltIn is
+      // the origin that announces nothing, which is what these tests want.
+      origin: crate::theme::Origin::BuiltIn,
     };
     let slides = [slide("<p>x</p>")];
     let out = assemble(&Document {
