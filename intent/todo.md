@@ -4,7 +4,7 @@ A DOING / TODO / DONE view, projected from steel-thread and work-package status:
 
 ## DOING
 
-_(none)_
+- [-] ST0010: Add prez to utilz to support markdown presentation pipeline
 
 ## TODO
 
