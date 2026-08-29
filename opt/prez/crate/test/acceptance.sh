@@ -134,6 +134,33 @@ builtins_list() {
 
 chrome() {
   local p
+  # THE OVERRIDE (AC18b), checked BEFORE the probe so it wins outright:
+  #   PREZ_TEST_BROWSER=/nonexistent      -> no browser; every browser AT skips
+  #   PREZ_TEST_BROWSER=/path/to/chromium -> drive exactly that one
+  #
+  # Without it the browserless path CANNOT BE EXERCISED on a machine that has
+  # Chrome, so the control proving --strict matters is a control that can never
+  # go red -- the exact class this file is written against, sitting in the file
+  # itself. Every browser AT resolves through this one function, so the hook has
+  # one home and reaches all five.
+  #
+  # A set-but-not-executable value returns 1 rather than falling through to the
+  # probe. Falling through would make "force the refusal path" mean "force it
+  # unless this machine happens to have Chrome", which is the thing being fixed.
+  if [ -n "${PREZ_TEST_BROWSER:-}" ]; then
+    if [ -x "$PREZ_TEST_BROWSER" ]; then
+      printf '%s' "$PREZ_TEST_BROWSER"
+      return 0
+    fi
+    # SAY WHY. The five call sites all skip with "no Chrome or Chromium
+    # installed", which is FALSE when the override caused it -- and a skip
+    # carrying the wrong reason is the class AC18 is about, so producing one
+    # here to test for it would be its own joke. Reported from the one place
+    # that knows, rather than by editing five messages _tools is patching now.
+    printf 'note: PREZ_TEST_BROWSER=%s is not executable, so no browser is offered.\n' \
+      "$PREZ_TEST_BROWSER" >&2
+    return 1
+  fi
   for p in "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" \
            "/Applications/Chromium.app/Contents/MacOS/Chromium"; do
     [ -x "$p" ] && { printf '%s' "$p"; return 0; }
@@ -615,6 +642,68 @@ if want AT09; then
   clippy=$(cd "$REPO" && CARGO_TARGET_DIR="$TARGET" cargo clippy --manifest-path "$CRATE/Cargo.toml" \
     --all-targets 2>&1 | grep -cE '^(warning|error)(\[|:)' || true)
   check "clippy warnings and errors" "${clippy:-0}" "0"
+  finish
+fi
+
+# ---------------------------------------------------------------- AT13 -- AC14
+
+if want AT13; then
+  start AT13 "announce-on-resolve: a theme off PREZ_THEME_PATH says which directory dressed the deck"
+  # NET-NEW IN UTILZ, not carried. The announcement is this repo's one
+  # behavioural addition to the crate (design 7.5), deferred out of _tools to
+  # keep the pin narrow -- so unlike its neighbours this AT has never been green
+  # anywhere else and proves the behaviour rather than re-proving a port.
+  #
+  # A MINIMAL DECK, NOT $DEMO. Half of this is a silence check, and demo.md
+  # legitimately produces other warnings; measuring silence against a deck that
+  # has things to say would be testing the deck.
+  AT13DIR="$WORK/at13"
+  mkdir -p "$AT13DIR/first/geodica" "$AT13DIR/second/geodica" "$AT13DIR/second/mono"
+  printf 'body{background:#111}\n' > "$AT13DIR/first/geodica/theme.css"
+  printf 'body{background:#222}\n' > "$AT13DIR/second/geodica/theme.css"
+  printf 'body{background:#333}\n' > "$AT13DIR/second/mono/theme.css"
+  printf '# One\n\ntext\n' > "$AT13DIR/deck.md"
+
+  # 1. An external name announces itself. The deck records nothing about the
+  #    environment that dressed it, so without this line the artifact's look is
+  #    a property of a variable nobody mentioned.
+  PREZ_THEME_PATH="$AT13DIR/second" "$BIN" build "$AT13DIR/deck.md" --theme=geodica \
+    -o "$AT13DIR/a.html" 2>"$AT13DIR/a.err" >/dev/null
+  present "an external theme announces itself" "came from" "$AT13DIR/a.err"
+  present "and names the variable it came off" "PREZ_THEME_PATH" "$AT13DIR/a.err"
+
+  # 2. WHICH directory won, as an exact path rather than as presence. Both
+  #    directories hold a 'geodica', so only the real resolution order produces
+  #    the first one -- a hardcoded or approximate message cannot pass here.
+  #    This is AC14's own clause: two directories, and the user can still answer.
+  PREZ_THEME_PATH="$AT13DIR/first:$AT13DIR/second" "$BIN" build "$AT13DIR/deck.md" \
+    --theme=geodica -o "$AT13DIR/b.html" 2>"$AT13DIR/b.err" >/dev/null
+  won=$(sed -n 's/.*came from \(.*\) (on PREZ_THEME_PATH).*/\1/p' "$AT13DIR/b.err")
+  check "the directory named as the winner" "$won" "$AT13DIR/first"
+
+  # 3. Shadowing a built-in must READ differently, because it FAILS differently:
+  #    an external name refuses elsewhere, loudly; a shadowing one silently
+  #    builds a different deck. One wording for both would bury the second.
+  PREZ_THEME_PATH="$AT13DIR/second" "$BIN" build "$AT13DIR/deck.md" --theme=mono \
+    -o "$AT13DIR/c.html" 2>"$AT13DIR/c.err" >/dev/null
+  present "shadowing a built-in is called shadowing" "SHADOWING" "$AT13DIR/c.err"
+  absent "and the merely-external case is not" "SHADOWING" "$AT13DIR/a.err"
+
+  # 4. THE CONTROL: a built-in resolving says nothing. A line on every default
+  #    build would be noise, and noise is how a real notice stops being read.
+  "$BIN" build "$AT13DIR/deck.md" --theme=mono -o "$AT13DIR/d.html" \
+    2>"$AT13DIR/d.err" >/dev/null
+  absent "a built-in announces nothing" "came from" "$AT13DIR/d.err"
+
+  # 5. The announcement is not the whole guarantee. Where the directory is
+  #    absent an external name must still REFUSE, never fall back. If this check
+  #    ever goes quiet, the lines above are decorating a tool that has started
+  #    guessing. Exit code read with no pipe in the way -- see the AT discipline
+  #    note; a piped $? is head's, and it reads as 0.
+  "$BIN" build "$AT13DIR/deck.md" --theme=geodica -o "$AT13DIR/e.html" \
+    >/dev/null 2>"$AT13DIR/e.err"
+  check "an external name off the path is refused" "$?" "2"
+  present "and the refusal names the search path" "PREZ_THEME_PATH" "$AT13DIR/e.err"
   finish
 fi
 
