@@ -27,7 +27,7 @@ title: Add prez to utilz to support markdown presentation pipeline
 
 ### Group AC04
 
-- AC04 Base runtime, verified in a real browser on the demo artifact: arrows/space/PgUp/PgDn navigate, Home/End jump to first/last, a slide counter shows n/N, and #n hash addressing deep-links and survives reload. Single-key bindings, each dispatched through the BINDINGS table rather than a switch: f fullscreen, i index (a clickable grid), g go-to-page, r reload, ?/h the key bar, q/Esc close. ESC MUST NOT OPEN THE INDEX -- it closes, like q. Asserting the new binding alone is insufficient: a runtime that bound esc to BOTH would satisfy a check that only looked for i, so the absence is asserted separately from the presence. (Carried from _tools AC05, then rewritten 2026-08-29 for hv's runtime change at 4ed491e -- the old text said 'Esc toggles a clickable overview grid', which was hv's actual complaint: one key meaning open-this and close-this depending on invisible state.) -- satisfied: no (computed)
+- AC04 Base runtime, on the demo artifact: arrows/space/PgUp/PgDn navigate, Home/End jump to first/last, a slide counter shows n/N, and #n hash addressing deep-links and survives reload. FOUR STRUCTURAL PROPERTIES, which are what this criterion actually pins, because the key roster itself lives in ONE place -- the BINDINGS table in src/html.rs -- and re-listing it here would make this a second home for it: (a) every key dispatches THROUGH that table, never a switch, so the table is the roster; (b) i opens the index and ESC MUST NOT -- esc closes, like q, and the absence is asserted separately from the presence, because a runtime binding esc to BOTH would satisfy a check that only looked for i and hv's actual complaint (one key meaning open-this and close-this by invisible state) would survive its own fix; (c) the conditional commit binding (enter/space, while indexing) must PRECEDE the unconditional next binding in the table -- both are individually correct and only their ORDER makes them work, so the position is asserted, not just the presence; (d) the key bar re-renders per mode, since a static list advertises keys that do nothing in the current one. VERIFIED TWO WAYS WITH THE BOUNDARY STATED: AT04 drives real Chrome and is the only thing that can prove fullscreen, focus and real key events; AT17 stubs the DOM and drives keydown at the script extracted from a BUILT artifact, claiming dispatch and state and explicitly nothing visual. Neither replaces the other -- they measure different properties, so this is not the duplication rule's case. (Carried from _tools AC05; rewritten 2026-08-29 for hv's runtime changes at 4ed491e and the commit binding after it.) -- satisfied: no (computed)
 
 ### Group AC05
 
@@ -146,6 +146,10 @@ _(no criteria in this group)_
 _(no criteria in this group)_
 
 ### Group AT16
+
+_(no criteria in this group)_
+
+### Group AT17
 
 _(no criteria in this group)_
 
@@ -286,6 +290,10 @@ _(no tests in this group)_
 ### Group AT16
 
 - AT16 `opt/prez/test/prez.bats` -- covers AC13 -- status: to-write -- Framework integration: list/help/doctor/test surfaces observed through the dispatcher; the CI half is evidenced by the first green run on both OSes, and the log must PROVE a browser was found because a skip surviving into green is the measured failure mode. Was AT12 until 2026-08-29; moved because acceptance.sh PRINTS its own AT12 (determinism) and two instruments cannot share an id. ID RULE: an ST0010 AT id equals the acceptance.sh block id wherever that suite prints one (AT01-AT09, AT12). The carried suite has NO AT10/AT11 -- those were _tools' estate-side tests and stayed behind -- so those ids are free and hold Utilz-native rows. AT13-AT15 are new acceptance.sh blocks this thread adds; AT16 is Utilz-native.
+
+### Group AT17
+
+- AT17 `opt/prez/crate/test/acceptance.sh` -- covers AC04 -- status: to-write -- Block AT17, 'the runtime's key handling, driven with no browser at all' -- runs test/runtime-logic-probe.mjs, 29 checks, over a synthetic deck AND test_pres.md. Co-covers AC04 with AT04 and is NOT duplication: AT04 proves a real browser does the thing, AT17 proves the dispatch table routes correctly, and the boundary is written into the probe. It exists because a keyboard runtime is exactly what gets shipped on 'it compiles' -- two of hv's runtime changes had only a build behind them. Extracts the runtime by its own IIFE terminator, never the first script tag: html.rs appends mermaid AFTER the runtime, so on a mermaid deck the first (and only) script is 3.5 MB of vendored bundle. The extraction CHECKS ITSELF and exits 2 if it finds no binding table or any sign of esbuild -- a boundary read out of a text file starts selecting the wrong span silently, and the symptom is a probe that passes having tested something else. Red-first proven: unreachable commit binding -> 6 failures, exit 1. Minted by utilz-cc at c3307c5 and verified here as the id the suite prints.
 
 ---
 
