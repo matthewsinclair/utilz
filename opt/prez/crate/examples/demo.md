@@ -78,7 +78,7 @@ Raw HTML passes through untouched, so a slide can do whatever it likes:
 
 ## Keys
 
-`->` `space` `PgDn` next &middot; `<-` `PgUp` prev &middot; `Home` `End` &middot; `f` fullscreen &middot; `Esc` overview grid, click to jump
+`->` `space` `PgDn` next &middot; `<-` `PgUp` prev &middot; `Home` `End` &middot; `g` go to page &middot; `i` index, then `enter` to open &middot; `f` fullscreen &middot; `?` all keys &middot; `q` close
 
 The counter is bottom-right, and `#3` in the URL deep-links to slide three and survives a reload.
 

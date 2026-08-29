@@ -83,18 +83,21 @@ The artifact is self-driving -- every key below is in the file, so they work fro
 
 Press `?` (or `h`) to pop up the key bar at the bottom of the screen. It is deliberately the same visual weight as the page counter opposite it: a presentation tool that decorates the presentation has misunderstood the job.
 
-| Key                | Does                                                |
-| ------------------ | --------------------------------------------------- |
-| `→` `space` `PgDn` | Next slide                                          |
-| `←` `PgUp`         | Previous slide                                      |
-| `home`             | First slide                                         |
-| `end`              | Last slide                                          |
-| `g`                | Go to a page -- type a number, press enter          |
-| `i`                | Index: every slide at once, click one to jump to it |
-| `f`                | Fullscreen                                          |
-| `r`                | Reload the artifact from disk, keeping your place   |
-| `?` or `h`         | Show or hide the key bar                            |
-| `q` or `esc`       | Close the window                                    |
+| Key                | Does                                              |
+| ------------------ | ------------------------------------------------- |
+| `→` `space` `PgDn` | Next slide                                        |
+| `←` `PgUp`         | Previous slide                                    |
+| `home`             | First slide                                       |
+| `end`              | Last slide                                        |
+| `g`                | Go to a page -- type a number, press enter        |
+| `i`                | Index: every slide at once                        |
+| `enter` `space`    | In the index, open the highlighted slide          |
+| `f`                | Fullscreen                                        |
+| `r`                | Reload the artifact from disk, keeping your place |
+| `?` or `h`         | Show or hide the key bar                          |
+| `q` or `esc`       | Close the window                                  |
+
+**In the index, the arrows move the highlight and `enter` or `space` opens it** -- or click any slide. `i` again closes the index without moving. Outside the index `space` means next slide as usual, and `enter` does nothing: the key bar only ever lists what the keys do in the mode you are actually in.
 
 **`g` clamps rather than complains.** Ask for page 99 in a ten-slide deck and you get page ten -- that is plainly what you wanted, and an error message would be a worse answer than the slide. Press `esc` while the number box is open to cancel it; `esc` only closes the window when the box is not open.
 

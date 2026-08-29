@@ -772,6 +772,58 @@ if want AT13; then
   finish
 fi
 
+# ---------------------------------------------------------------- AT17 -- AC04
+
+if want AT17; then
+  start AT17 "the runtime's key handling, driven with no browser at all"
+  # ID IS PROVISIONAL. vc owns the AT map and AT17 is the next free number under
+  # their rule (an id equals the acceptance.sh block id the suite prints);
+  # renumber freely, the block does not care what it is called.
+  #
+  # WHY THIS SITS BESIDE AT04 RATHER THAN INSIDE IT. AT04 drives real Chrome and
+  # is the only thing that can prove fullscreen, focus and real key events. It
+  # also cannot run without a browser -- which means every runtime change stays
+  # unverified until someone with Chrome runs it, and a keyboard runtime is
+  # exactly what gets shipped on "it compiles". This stubs the DOM surfaces the
+  # runtime touches, loads the script OUT OF A BUILT ARTIFACT so what ships is
+  # what is tested, and dispatches keydown events at it.
+  #
+  # It claims dispatch and state, and nothing visual. That boundary is the
+  # reason both exist.
+  if ! command -v node >/dev/null 2>&1; then
+    skip "node is not installed"
+  else
+    at17deck="$WORK/at17.md"
+    printf '# 1\n\na\n\n---\n\n# 2\n\nb\n\n---\n\n# 3\n\nc\n\n---\n\n# 4\n\nd\n' > "$at17deck"
+    "$BIN" build "$at17deck" -o "$WORK/at17.html" >/dev/null 2>&1
+    # No pipe: $? must be the probe's, not a formatter's. The AT discipline note
+    # this file opens with, applied to the newest block in it.
+    # TWO DECKS, and the second is the one that matters. test_pres.md opts into
+    # mermaid, so its runtime shares a <script> with 3.5 MB of vendored bundle
+    # -- which is what caught the probe selecting the wrong span. A synthetic
+    # deck alone would have gone on passing.
+    "$BIN" build "$CRATE/examples/test_pres.md" -o "$WORK/at17-mermaid.html" >/dev/null 2>&1
+    for at17case in "synthetic:$WORK/at17.html" "mermaid deck:$WORK/at17-mermaid.html"; do
+      at17name="${at17case%%:*}"; at17file="${at17case#*:}"
+      # No pipe: $? must be the probe's, not a formatter's. The AT discipline
+      # note this file opens with, applied to the newest block in it.
+      node "$HERE/runtime-logic-probe.mjs" "$at17file" > "$WORK/at17.out" 2>&1
+      at17rc=$?
+      check "runtime logic probe exit ($at17name)" "$at17rc" "0"
+      # The count is asserted too: a probe that ran zero checks, or that bailed
+      # on its own extraction guard, would otherwise be indistinguishable from
+      # one that passed.
+      at17n=$(grep -c '^  ok    ' "$WORK/at17.out" || true)
+      if [ "${at17n:-0}" -ge 25 ]; then ok "$at17name: $at17n checks ran"
+      else
+        bad "$at17name: only ${at17n:-0} checks ran, expected at least 25"
+        sed 's/^/        /' "$WORK/at17.out" | tail -6
+      fi
+    done
+    finish
+  fi
+fi
+
 # ---------------------------------------------------------------------- report
 
 printf '\n=======================================\n'

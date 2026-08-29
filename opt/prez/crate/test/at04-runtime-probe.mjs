@@ -54,7 +54,7 @@ const KEYS = {
   PageDown: [34, 'PageDown'], PageUp: [33, 'PageUp'],
   Home: [36, 'Home'], End: [35, 'End'],
   Escape: [27, 'Escape'], ' ': [32, 'Space'], f: [70, 'KeyF'],
-  i: [73, 'KeyI'], g: [71, 'KeyG'], '?': [191, 'Slash'],
+  i: [73, 'KeyI'], g: [71, 'KeyG'], '?': [191, 'Slash'], Enter: [13, 'Enter'],
 };
 
 async function press(cdp, key) {
@@ -131,6 +131,23 @@ check('click_wrote_the_hash', await cdp.eval('location.hash'), '#3');
 await press(cdp, 'Escape');
 check('escape_does_not_open_the_index', await cdp.eval(overviewing), false);
 
+// hv, 29 Aug: enter or space COMMITS the highlighted slide in the index. Both
+// asserted in a real browser as well as in the browserless logic probe,
+// because `space` carries a `char` event here that a stub cannot reproduce --
+// and space having two meanings by binding ORDER is exactly the kind of thing
+// a real key event can falsify.
+await press(cdp, 'i');          check('index_reopens', await cdp.eval(overviewing), true);
+await press(cdp, 'Home');       check('arrows_move_the_highlight_in_the_index', await cdp.eval(current), 1);
+await press(cdp, 'ArrowRight'); check('highlight_keeps_moving', await cdp.eval(current), 2);
+await press(cdp, ' ');          check('space_commits_rather_than_advancing', await cdp.eval(current), 2);
+check('space_closed_the_index', await cdp.eval(overviewing), false);
+
+await press(cdp, 'i');          check('index_reopens_again', await cdp.eval(overviewing), true);
+await press(cdp, 'ArrowRight'); check('highlight_moved', await cdp.eval(current), 3);
+await press(cdp, 'Enter');      check('enter_commits_too', await cdp.eval(current), 3);
+check('enter_closed_the_index', await cdp.eval(overviewing), false);
+await press(cdp, 'Enter');      check('enter_outside_the_index_is_inert', await cdp.eval(current), 3);
+
 // ---- the bar, and the keys that drive it ----
 const barOn = 'document.querySelector(".gp-bar").classList.contains("gp-on")';
 const keysOn = 'document.querySelector(".gp-bar-keys").classList.contains("gp-on")';
@@ -141,7 +158,9 @@ check('bar_starts_hidden', await cdp.eval(barOn), false);
 // The keycaps are BUILT FROM THE BINDING TABLE, so this count is the number of
 // bindings. It is asserted because an empty bar would render, be styled, be
 // toggleable, and advertise nothing.
-check('bar_lists_every_binding', await cdp.eval('document.querySelectorAll(".gp-bar-item").length'), 10);
+// Ten OUTSIDE the index: the commit binding is conditional and the bar renders
+// only what applies right now, which is the property being asserted.
+check('bar_lists_every_applicable_binding', await cdp.eval('document.querySelectorAll(".gp-bar-item").length'), 10);
 check('keycaps_are_kbd_elements', await cdp.eval('document.querySelectorAll(".gp-bar .gp-key").length > 0'), true);
 
 await press(cdp, '?');          check('help_opens', await cdp.eval(keysOn), true);

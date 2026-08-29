@@ -437,7 +437,18 @@ const RUNTIME_JS: &str = r#"
   // key is added -- and the copy that drifts is the printed one, which is the
   // half a reader trusts. `show` is what appears on the keycaps; `keys` is what
   // KeyboardEvent.key actually reports.
+  //
+  // `when` makes a binding CONDITIONAL, and order decides who wins: the handler
+  // takes the first binding whose key matches AND whose `when` passes. That is
+  // the whole mechanism behind space meaning two things -- commit in the index,
+  // next slide everywhere else -- without either meaning being written twice.
   var BINDINGS = [
+    // hv, 29 Aug: enter or space commits the highlighted slide. FIRST in the
+    // list, because it must claim space before `next` sees it; arrows are
+    // deliberately left unconditional, since moving the highlight is how you
+    // choose which slide to commit to.
+    { show: ['enter', 'space'], keys: ['Enter', ' '], label: 'open this slide', when: indexing,
+      act: function () { index(false); go(at); } },
     { show: ['→', 'space'], keys: ['ArrowRight', ' ', 'PageDown'], label: 'next', act: function () { go(at + 1); } },
     { show: ['←'], keys: ['ArrowLeft', 'PageUp'], label: 'previous', act: function () { go(at - 1); } },
     { show: ['home'], keys: ['Home'], label: 'first', act: function () { go(0); } },
@@ -463,20 +474,32 @@ const RUNTIME_JS: &str = r#"
   var msg = document.createElement('div');
   msg.className = 'gp-bar-msg';
 
-  for (var b = 0; b < BINDINGS.length; b++) {
-    var item = document.createElement('span');
-    item.className = 'gp-bar-item';
-    for (var k = 0; k < BINDINGS[b].show.length; k++) {
-      var cap = document.createElement('kbd');
-      cap.className = 'gp-key';
-      cap.textContent = BINDINGS[b].show[k];
-      item.appendChild(cap);
+  function applies(binding) { return !binding.when || binding.when(); }
+
+  // REBUILT, not built once, because a binding can now be conditional. A bar
+  // that listed every binding regardless of mode would advertise `enter open
+  // this slide` on a deck where enter does nothing, and would go on saying
+  // `space next` while space had come to mean commit. The bar exists to be
+  // believed; a static list stops being true the moment a `when` appears.
+  function renderKeys() {
+    while (keycaps.firstChild) { keycaps.removeChild(keycaps.firstChild); }
+    for (var b = 0; b < BINDINGS.length; b++) {
+      if (!applies(BINDINGS[b])) { continue; }
+      var item = document.createElement('span');
+      item.className = 'gp-bar-item';
+      for (var k = 0; k < BINDINGS[b].show.length; k++) {
+        var cap = document.createElement('kbd');
+        cap.className = 'gp-key';
+        cap.textContent = BINDINGS[b].show[k];
+        item.appendChild(cap);
+      }
+      var what = document.createElement('span');
+      what.textContent = BINDINGS[b].label;
+      item.appendChild(what);
+      keycaps.appendChild(item);
     }
-    var what = document.createElement('span');
-    what.textContent = BINDINGS[b].label;
-    item.appendChild(what);
-    keycaps.appendChild(item);
   }
+  renderKeys();
   form.appendChild(document.createTextNode('go to'));
   form.appendChild(input);
   form.appendChild(document.createTextNode('/ ' + total));
@@ -499,7 +522,7 @@ const RUNTIME_JS: &str = r#"
   }
   function panel(el, on) { el.classList.toggle('gp-on', on); settle(); }
 
-  function keys(on) { panel(keycaps, on); }
+  function keys(on) { if (on) { renderKeys(); } panel(keycaps, on); }
   function say(text) {
     msg.textContent = text;
     panel(msg, true);
@@ -546,9 +569,13 @@ const RUNTIME_JS: &str = r#"
     }
 
     for (var b = 0; b < BINDINGS.length; b++) {
-      if (BINDINGS[b].keys.indexOf(e.key) !== -1) {
+      if (BINDINGS[b].keys.indexOf(e.key) !== -1 && applies(BINDINGS[b])) {
         BINDINGS[b].act();
         e.preventDefault();
+        // The mode may have just changed, so what the bar says may have gone
+        // stale in the same keystroke. Cheap, and it keeps the bar honest
+        // without anything having to know WHICH keys change modes.
+        if (showing('gp-bar-keys')) { renderKeys(); }
         return;
       }
     }
@@ -809,7 +836,7 @@ mod tests {
     // adds a `case` to the handler or a literal to the bar.
     assert!(!RUNTIME_JS.contains("switch (e.key)"), "the handler dispatches through BINDINGS, not a switch");
     assert_eq!(RUNTIME_JS.matches("var BINDINGS").count(), 1, "exactly one binding table");
-    for key in ["ArrowRight", "ArrowLeft", "Home", "End", "'g'", "'i'", "'f'", "'r'", "'q'", "'?'"] {
+    for key in ["ArrowRight", "ArrowLeft", "Home", "End", "'g'", "'i'", "'f'", "'r'", "'q'", "'?'", "'Enter'"] {
       assert!(RUNTIME_JS.contains(key), "no binding for {key}");
     }
   }
@@ -823,6 +850,20 @@ mod tests {
     assert!(RUNTIME_JS.contains("keys: ['q', 'Q', 'Escape'], label: 'close'"));
     assert!(!RUNTIME_JS.contains("case 'Escape': overview"), "the old mode toggle is gone");
     assert!(RUNTIME_JS.contains("keys: ['i', 'I'], label: 'index'"), "the index moved to i");
+  }
+
+  #[test]
+  fn space_means_two_things_and_the_index_one_is_first() {
+    // hv, 29 Aug: enter or space opens the highlighted slide in the index.
+    // ORDER IS THE MECHANISM -- the handler takes the first binding whose key
+    // matches and whose `when` passes, so the conditional commit must appear
+    // before the unconditional `next` or space would advance a slide instead.
+    // Asserted as a position, because the two bindings are individually
+    // correct and only their order makes them work.
+    let commit = RUNTIME_JS.find("label: 'open this slide'").expect("the commit binding exists");
+    let next = RUNTIME_JS.find("label: 'next'").expect("the next binding exists");
+    assert!(commit < next, "the index commit must be matched before next claims space");
+    assert!(RUNTIME_JS.contains("when: indexing"), "and it is conditional on the index being open");
   }
 
   #[test]

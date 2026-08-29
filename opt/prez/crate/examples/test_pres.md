@@ -106,6 +106,6 @@ Opt in with `mermaid: true`. Leave it out and the artifact carries zero mermaid 
 
 ## Press `f`
 
-`→` `space` next · `←` prev · `Home` `End` · `f` fullscreen · `Esc` overview grid, click to jump
+`→` `space` next · `←` prev · `Home` `End` · `g` go to page · `i` index, then `enter` to open · `f` fullscreen · `?` all keys · `q` close
 
 The counter is bottom-right, and `#5` in the URL deep-links to slide five and survives a reload.
