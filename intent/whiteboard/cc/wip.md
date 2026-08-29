@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: 7caf919e-ca57-4a02-8804-1e44225cea04
-heartbeat_at: 2026-08-29 14:31Z
+heartbeat_at: 2026-08-29 14:57Z
 status: active
-focus: "WP-03 done (pin b600306 merged). hv's runtime landed at 4ed491e -- key bar, go-to-page, esc no longer a mode toggle. Blocked on hv authorising a browser run for AT04 + the AC17 cold build."
+focus: "WP-03 done. hv's runtime landed over three commits -- key bar, go-to-page, esc closes, enter/space commit in the index. AT17 verifies it browserless. Blocked only on hv authorising a browser run for AT04 + the AC17 cold build."
 claims: [ST0010]
 ---
 
@@ -37,6 +37,9 @@ claims: [ST0010]
 
 ## Watch-outs
 
+- **A `<script>` block is not one script.** A mermaid deck concatenates 3.5MB of vendored bundle into the same tag as the runtime, so "take the first script" and "take the block containing X" both select the wrong span. Cut on the artifact's own structure and make the extraction CHECK ITSELF -- a boundary read out of a text file silently starts selecting the wrong thing, and the symptom is a probe that passes having tested something else.
+- **A test that only ever runs on a synthetic fixture is half a test.** Both probe defects surfaced the moment it was pointed at the shipped decks; the synthetic four-slide deck would have gone on passing forever.
+- **The shipped example decks DOCUMENT the tool**, so a UX change makes them wrong and nothing reports it. hv's own screenshot was `test_pres.md` advertising the `Esc` overview grid we had just removed.
 - **`assemble()`'s placeholder fill is single-pass now, and the reason generalises.** Chained `.replace()` calls substitute into their own output: `{{style}}` went in first, and the next call expanded any placeholder sitting inside the stylesheet just injected. Any "replace A then replace B" over one string has this shape whenever A's replacement can contain B's needle.
 - **The `hidden` attribute loses to any author `display:` rule.** `[hidden] { display: none }` is a UA rule, and author rules beat the entire UA sheet regardless of specificity -- so `.gp-bar { display: flex }` silently pins a "hidden" element on screen. Use an explicit class.
 - **`window.close()` is ignored, silently, in a window script did not open.** No error, no return value, no exception. A close key looks broken rather than refused unless the page says so itself.
