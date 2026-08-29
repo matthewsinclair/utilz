@@ -1,0 +1,169 @@
+/* steampunk -- brass and copper on aged paper.
+ *
+ * Ornament from CSS alone: no webfont, no image, no external anything, because
+ * a theme that reached out would take the artifact's offline guarantee with it.
+ * The display face is whatever serif the machine already has, in preference
+ * order, degrading to the generic rather than to something arbitrary.
+ *
+ * Every custom property is namespaced --gp-, which AT08 checks: a theme
+ * borrowing a house palette shows up as a property outside the namespace.
+ */
+
+:root {
+  --gp-bg: #efe4cd;
+  --gp-fg: #2a1e14;
+  --gp-muted: #6b5640;
+  --gp-rule: #b99b62;
+  --gp-brass: #a8842c;
+  --gp-copper: #9c5533;
+  --gp-code-bg: #e3d5b8;
+}
+/* NO prefers-color-scheme block, deliberately -- see AC13 (determinism).
+ *
+ * This theme used to redefine the whole --gp- palette under
+ * @media (prefers-color-scheme: dark), which meant ONE .html rendering as a
+ * light deck on one laptop and a dark deck on another. The mermaid palette
+ * doing the same thing was the symptom hv's eye caught; this was the disease,
+ * and it was in six of the seven built-ins.
+ *
+ * A viewer who wants the other look picks another theme BY NAME. That turns a
+ * silent machine-dependent choice into an author's choice that travels in the
+ * file -- which is the whole promise of a self-contained artifact.
+ */
+body {
+  background: var(--gp-bg);
+  color: var(--gp-fg);
+  font: 400 clamp(18px, 3vmin, 50px)/1.55 "Iowan Old Style", "Palatino Linotype",
+        Palatino, Georgia, "Times New Roman", serif;
+}
+
+h1, h2, h3 {
+  margin: 0 0 0.5em;
+  line-height: 1.1;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--gp-fg);
+}
+h1 { font-size: 2.2em; }
+h2 {
+  font-size: 1.6em;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  font-size: 1.35em;
+  border-bottom: 3px double var(--gp-rule);
+  padding-bottom: 0.25em;
+}
+h3 { font-size: 1.15em; font-style: italic; font-weight: 600; }
+
+p, ul, ol, blockquote, table, pre { margin: 0 0 0.85em; }
+ul, ol { padding-left: 1.4em; }
+li { margin: 0.25em 0; }
+li::marker { color: var(--gp-copper); }
+a { color: var(--gp-copper); text-decoration: underline; text-underline-offset: 0.18em; }
+strong { font-weight: 700; color: var(--gp-fg); }
+em { font-style: italic; }
+
+blockquote {
+  margin-left: 0;
+  padding: 0.2em 0 0.2em 1em;
+  border-left: 5px double var(--gp-brass);
+  color: var(--gp-muted);
+  font-style: italic;
+}
+
+code, pre, kbd {
+  font-family: "Courier New", ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+code {
+  background: var(--gp-code-bg);
+  border: 1px solid var(--gp-rule);
+  padding: 0.05em 0.3em;
+  font-size: 0.85em;
+}
+pre {
+  background: var(--gp-code-bg);
+  border: 2px solid var(--gp-rule);
+  border-left-width: 6px;
+  padding: 0.7em 0.9em;
+  overflow: auto;
+}
+pre code { background: none; border: 0; padding: 0; font-size: 0.8em; }
+
+table { border-collapse: collapse; font-size: 0.9em; }
+th, td { border: 1px solid var(--gp-rule); padding: 0.4em 0.8em; text-align: left; }
+th {
+  background: var(--gp-code-bg);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  font-size: 0.85em;
+  border-bottom: 3px double var(--gp-rule);
+}
+
+img { max-width: 100%; height: auto; border: 3px double var(--gp-rule); }
+hr {
+  border: 0;
+  height: 0;
+  border-top: 3px double var(--gp-rule);
+  margin: 1.1em 0;
+}
+.footnotes { font-size: 0.75em; color: var(--gp-muted); border-top: 3px double var(--gp-rule); }
+
+/* The standard class vocabulary -- all six, as every theme must. */
+.gp-slide.title { text-align: center; align-items: center; }
+.gp-slide.title h1, .gp-slide.title h2 {
+  font-size: 2.9em;
+  border: 0;
+  text-transform: none;
+  letter-spacing: 0.01em;
+  margin-bottom: 0.25em;
+}
+.gp-slide.title h1::after, .gp-slide.title h2::after {
+  content: "";
+  display: block;
+  width: 5em;
+  margin: 0.35em auto 0;
+  border-top: 3px double var(--gp-brass);
+}
+.gp-slide.title p { color: var(--gp-muted); font-style: italic; }
+
+.gp-slide.section {
+  text-align: center;
+  align-items: center;
+  background: var(--gp-code-bg);
+  box-shadow: inset 0 0 0 8px var(--gp-bg), inset 0 0 0 11px var(--gp-brass);
+}
+.gp-slide.section h1, .gp-slide.section h2 { font-size: 2.4em; border: 0; margin: 0; }
+
+.gp-slide.quote { align-items: center; text-align: center; }
+.gp-slide.quote blockquote {
+  border: 0;
+  padding: 0;
+  margin: 0 auto;
+  max-width: 22em;
+  font-size: 1.5em;
+  line-height: 1.35;
+  color: var(--gp-fg);
+}
+.gp-slide.quote blockquote::before {
+  content: "\201C";
+  display: block;
+  font-size: 2.4em;
+  line-height: 0.6;
+  color: var(--gp-brass);
+}
+
+.gp-slide.full { padding: 0; }
+.gp-slide.full img { width: 100%; height: 100%; object-fit: cover; border: 0; }
+.gp-slide.center { text-align: center; align-items: center; }
+.gp-slide.small { font-size: 0.78em; }
+
+@media print {
+  :root {
+    --gp-bg: #ffffff;
+    --gp-fg: #1b1209;
+    --gp-muted: #5a4936;
+    --gp-rule: #8a7247;
+    --gp-code-bg: #f2ece0;
+  }
+  body { font-size: 20px; }
+}

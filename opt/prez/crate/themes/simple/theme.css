@@ -1,0 +1,99 @@
+/* simple -- the built-in default: neutral, legible, brand-free.
+ *
+ * It styles only what a deck actually needs and leaves structure to the base
+ * runtime, so a replacement theme can be short. It follows the reader's
+ * light/dark preference on screen and forces ink-on-paper for print, because a
+ * dark deck printed as-is is a solid black page.
+ *
+ * Every custom property is namespaced --gp-. That is not decoration: AT08
+ * asserts brand-freeness structurally by checking no property escapes the
+ * namespace, which catches a borrowed palette that a denylist of house names
+ * would not.
+ */
+
+:root {
+  --gp-bg: #ffffff;
+  --gp-fg: #16181d;
+  --gp-muted: #5c6370;
+  --gp-rule: #d8dbe0;
+  --gp-code-bg: #f4f5f7;
+}
+/* NO prefers-color-scheme block, deliberately -- see AC13 (determinism).
+ *
+ * This theme used to redefine the whole --gp- palette under
+ * @media (prefers-color-scheme: dark), which meant ONE .html rendering as a
+ * light deck on one laptop and a dark deck on another. The mermaid palette
+ * doing the same thing was the symptom hv's eye caught; this was the disease,
+ * and it was in six of the seven built-ins.
+ *
+ * A viewer who wants the other look picks another theme BY NAME. That turns a
+ * silent machine-dependent choice into an author's choice that travels in the
+ * file -- which is the whole promise of a self-contained artifact.
+ */
+/* The type scale is the difference between a deck and a document. A cap of 30px
+ * looked fine in a 1280px window and was small on a fullscreen display, which is
+ * the only size that matters when presenting -- so the ceiling is high enough
+ * that vmin, not the clamp, is what decides at presentation size. */
+body {
+  background: var(--gp-bg);
+  color: var(--gp-fg);
+  font: 400 clamp(18px, 3.1vmin, 52px)/1.5 -apple-system, BlinkMacSystemFont,
+        "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+h1, h2, h3 { line-height: 1.15; margin: 0 0 0.6em; font-weight: 650; letter-spacing: -0.01em; }
+h1 { font-size: 2.1em; }
+h2 { font-size: 1.55em; }
+h3 { font-size: 1.2em; }
+p, ul, ol, blockquote, table, pre { margin: 0 0 0.8em; }
+ul, ol { padding-left: 1.3em; }
+li { margin: 0.2em 0; }
+a { color: inherit; text-decoration: underline; text-underline-offset: 0.15em; }
+strong { font-weight: 680; }
+blockquote {
+  margin-left: 0;
+  padding-left: 0.9em;
+  border-left: 3px solid var(--gp-rule);
+  color: var(--gp-muted);
+}
+code, pre, kbd { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+code { background: var(--gp-code-bg); padding: 0.12em 0.3em; border-radius: 3px; font-size: 0.86em; }
+pre { background: var(--gp-code-bg); padding: 0.7em 0.9em; border-radius: 5px; overflow: auto; }
+pre code { background: none; padding: 0; font-size: 0.8em; }
+table { border-collapse: collapse; font-size: 0.9em; }
+th, td { border: 1px solid var(--gp-rule); padding: 0.35em 0.7em; text-align: left; }
+th { background: var(--gp-code-bg); font-weight: 650; }
+img { max-width: 100%; height: auto; }
+hr { border: 0; border-top: 1px solid var(--gp-rule); margin: 1em 0; }
+.footnotes { font-size: 0.75em; color: var(--gp-muted); border-top: 1px solid var(--gp-rule); }
+
+/* The standard class vocabulary. EVERY built-in theme must declare all of
+ * these, because a `<!-- class: -->` directive is content and content must not
+ * bind a deck to one theme. A deck written against these renders sensibly
+ * under any of them. */
+/* h1 AND h2: a title slide written with `##` is just as much a title slide, and
+ * sizing only h1 left hv's closing slide reading like body text. */
+.gp-slide.title { text-align: center; align-items: center; }
+.gp-slide.title h1, .gp-slide.title h2 { font-size: 2.9em; margin-bottom: 0.35em; }
+.gp-slide.title p { color: var(--gp-muted); }
+.gp-slide.section { text-align: center; align-items: center; background: var(--gp-code-bg); }
+.gp-slide.section h1, .gp-slide.section h2 { font-size: 2.6em; margin: 0; }
+.gp-slide.quote { align-items: center; text-align: center; }
+.gp-slide.quote blockquote {
+  border: 0; padding: 0; margin: 0 auto; max-width: 24em;
+  font-size: 1.5em; line-height: 1.35; color: var(--gp-fg);
+}
+.gp-slide.full { padding: 0; }
+.gp-slide.full img { width: 100%; height: 100%; object-fit: cover; }
+.gp-slide.center { text-align: center; align-items: center; }
+.gp-slide.small { font-size: 0.78em; }
+
+@media print {
+  :root {
+    --gp-bg: #ffffff;
+    --gp-fg: #000000;
+    --gp-muted: #444444;
+    --gp-rule: #bbbbbb;
+    --gp-code-bg: #f2f2f2;
+  }
+  body { font-size: 20px; }
+}

@@ -1,0 +1,152 @@
+/* manuscript -- a book on a wall: high-contrast serif, generous measure.
+ *
+ * For decks that are mostly prose, where the argument is carried in sentences
+ * rather than bullets. The measure is capped rather than filling the slide,
+ * because a line of text 40 words wide is unreadable at any size, and a deck is
+ * read from further away than a page.
+ *
+ * The serif stack is whatever the machine already has, in preference order,
+ * degrading to the generic -- no webfont, because a theme that reached out would
+ * take the artifact's offline guarantee with it.
+ */
+
+:root {
+  --gp-bg: #fdfcf8;
+  --gp-fg: #191714;
+  --gp-muted: #6a6459;
+  --gp-rule: #d6cfc0;
+  --gp-accent: #7a2f22;
+  --gp-code-bg: #f2eee4;
+}
+/* NO prefers-color-scheme block, deliberately -- see AC13 (determinism).
+ *
+ * This theme used to redefine the whole --gp- palette under
+ * @media (prefers-color-scheme: dark), which meant ONE .html rendering as a
+ * light deck on one laptop and a dark deck on another. The mermaid palette
+ * doing the same thing was the symptom hv's eye caught; this was the disease,
+ * and it was in six of the seven built-ins.
+ *
+ * A viewer who wants the other look picks another theme BY NAME. That turns a
+ * silent machine-dependent choice into an author's choice that travels in the
+ * file -- which is the whole promise of a self-contained artifact.
+ */
+body {
+  background: var(--gp-bg);
+  color: var(--gp-fg);
+  font: 400 clamp(18px, 3.2vmin, 54px)/1.5 "Iowan Old Style", "Palatino Linotype",
+        Palatino, "Book Antiqua", Georgia, "Times New Roman", serif;
+}
+
+/* Prose gets a measure. Everything else may use the full width. */
+.gp-slide > p, .gp-slide > blockquote { max-width: 26em; }
+
+h1, h2, h3 { margin: 0 0 0.55em; line-height: 1.12; font-weight: 600; letter-spacing: -0.012em; }
+h1 { font-size: 2.3em; }
+h2 { font-size: 1.65em; }
+h3 { font-size: 1.2em; font-style: italic; font-weight: 400; color: var(--gp-muted); }
+
+p, ul, ol, blockquote, table, pre { margin: 0 0 0.75em; }
+p + p { text-indent: 1.2em; margin-top: -0.75em; }
+ul, ol { padding-left: 1.2em; }
+li { margin: 0.25em 0; }
+li::marker { color: var(--gp-muted); }
+a { color: var(--gp-accent); text-decoration: none; border-bottom: 1px solid var(--gp-rule); }
+strong { font-weight: 600; }
+em { font-style: italic; }
+
+blockquote {
+  margin-left: 0;
+  padding-left: 1.1em;
+  border-left: 2px solid var(--gp-rule);
+  color: var(--gp-muted);
+  font-style: italic;
+}
+
+code, pre, kbd { font-family: "Iowan Old Style", ui-monospace, Menlo, monospace; }
+code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  background: var(--gp-code-bg);
+  padding: 0.05em 0.3em;
+  font-size: 0.82em;
+}
+pre {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  background: var(--gp-code-bg);
+  padding: 0.7em 1em;
+  overflow: auto;
+  border-left: 3px solid var(--gp-rule);
+}
+pre code { background: none; padding: 0; font-size: 0.78em; }
+
+table { border-collapse: collapse; font-size: 0.88em; }
+th, td { border-bottom: 1px solid var(--gp-rule); padding: 0.4em 0.9em 0.4em 0; text-align: left; }
+th { font-weight: 600; font-style: italic; border-bottom-width: 2px; }
+
+img { max-width: 100%; height: auto; }
+hr {
+  border: 0;
+  margin: 1.4em auto;
+  text-align: center;
+}
+hr::after { content: "\2766"; color: var(--gp-muted); font-size: 1.2em; }
+.footnotes { font-size: 0.7em; color: var(--gp-muted); border-top: 1px solid var(--gp-rule); }
+
+/* The standard class vocabulary -- all six, as every theme must. */
+.gp-slide.title { text-align: center; align-items: center; }
+.gp-slide.title h1, .gp-slide.title h2 {
+  font-size: 3em;
+  font-weight: 400;
+  letter-spacing: -0.015em;
+  margin-bottom: 0.3em;
+}
+.gp-slide.title p {
+  color: var(--gp-muted);
+  font-style: italic;
+  text-indent: 0;
+  max-width: none;
+}
+
+.gp-slide.section { text-align: center; align-items: center; }
+.gp-slide.section h1, .gp-slide.section h2 {
+  font-size: 2.4em;
+  font-weight: 400;
+  font-style: italic;
+  margin: 0;
+}
+.gp-slide.section h1::after, .gp-slide.section h2::after {
+  content: "";
+  display: block;
+  width: 4em;
+  margin: 0.5em auto 0;
+  border-top: 1px solid var(--gp-rule);
+}
+
+.gp-slide.quote { align-items: center; text-align: center; }
+.gp-slide.quote blockquote {
+  border: 0;
+  padding: 0;
+  margin: 0 auto;
+  max-width: 20em;
+  font-size: 1.7em;
+  line-height: 1.35;
+  font-style: italic;
+  color: var(--gp-fg);
+}
+
+.gp-slide.full { padding: 0; }
+.gp-slide.full img { width: 100%; height: 100%; object-fit: cover; }
+.gp-slide.center { text-align: center; align-items: center; }
+.gp-slide.center > p { margin-left: auto; margin-right: auto; }
+.gp-slide.small { font-size: 0.76em; }
+
+@media print {
+  :root {
+    --gp-bg: #ffffff;
+    --gp-fg: #100e0b;
+    --gp-muted: #55504a;
+    --gp-rule: #b8b0a0;
+    --gp-accent: #5e2419;
+    --gp-code-bg: #f4f1ea;
+  }
+  body { font-size: 19px; }
+}

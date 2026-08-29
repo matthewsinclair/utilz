@@ -1,0 +1,140 @@
+/* mono -- everything monospace: the engineering-notes register.
+ *
+ * One typeface, hairline rules, no colour doing any work that structure could
+ * do instead. It suits a deck that is mostly code, terminal output, tables and
+ * short declarative lines, and it is deliberately the plainest theme in the
+ * pack -- the point is that nothing competes with the content.
+ *
+ * Custom properties are namespaced --gp-, which AT08 checks.
+ */
+
+:root {
+  --gp-bg: #fbfbfa;
+  --gp-fg: #1c1c1c;
+  --gp-muted: #6e6e6e;
+  --gp-rule: #cfcfcb;
+  --gp-accent: #1c1c1c;
+  --gp-code-bg: #f0f0ee;
+}
+/* NO prefers-color-scheme block, deliberately -- see AC13 (determinism).
+ *
+ * This theme used to redefine the whole --gp- palette under
+ * @media (prefers-color-scheme: dark), which meant ONE .html rendering as a
+ * light deck on one laptop and a dark deck on another. The mermaid palette
+ * doing the same thing was the symptom hv's eye caught; this was the disease,
+ * and it was in six of the seven built-ins.
+ *
+ * A viewer who wants the other look picks another theme BY NAME. That turns a
+ * silent machine-dependent choice into an author's choice that travels in the
+ * file -- which is the whole promise of a self-contained artifact.
+ */
+body {
+  background: var(--gp-bg);
+  color: var(--gp-fg);
+  font: 400 clamp(16px, 2.7vmin, 44px)/1.6 ui-monospace, SFMono-Regular, "SF Mono",
+        Menlo, Consolas, "DejaVu Sans Mono", monospace;
+  letter-spacing: -0.01em;
+}
+
+h1, h2, h3 { margin: 0 0 0.7em; line-height: 1.25; font-weight: 700; }
+h1 { font-size: 1.7em; }
+h2 {
+  font-size: 1.25em;
+  border-bottom: 1px solid var(--gp-rule);
+  padding-bottom: 0.3em;
+}
+h2::before, h3::before { content: "# "; color: var(--gp-muted); font-weight: 400; }
+h1::before { content: "## "; color: var(--gp-muted); font-weight: 400; }
+h3 { font-size: 1.05em; color: var(--gp-muted); }
+
+p, ul, ol, blockquote, table, pre { margin: 0 0 0.9em; }
+ul, ol { padding-left: 1.6em; list-style: none; }
+li { margin: 0.3em 0; position: relative; }
+ul li::before { content: "- "; position: absolute; left: -1.4em; color: var(--gp-muted); }
+a { color: inherit; text-decoration: underline; text-underline-offset: 0.2em; }
+strong { font-weight: 700; }
+em { font-style: normal; background: var(--gp-code-bg); padding: 0 0.2em; }
+
+blockquote {
+  margin-left: 0;
+  padding-left: 1em;
+  border-left: 1px solid var(--gp-rule);
+  color: var(--gp-muted);
+}
+blockquote::before { content: "> "; }
+
+code, pre, kbd { font-family: inherit; }
+code { background: var(--gp-code-bg); padding: 0.05em 0.3em; font-size: 0.95em; }
+pre {
+  background: var(--gp-code-bg);
+  border-left: 2px solid var(--gp-rule);
+  padding: 0.8em 1em;
+  overflow: auto;
+  font-size: 0.9em;
+}
+pre code { background: none; padding: 0; font-size: 1em; }
+
+table { border-collapse: collapse; font-size: 0.9em; width: auto; }
+th, td { border-bottom: 1px solid var(--gp-rule); padding: 0.35em 1.2em 0.35em 0; text-align: left; }
+th { font-weight: 700; border-bottom-width: 2px; }
+
+img { max-width: 100%; height: auto; }
+hr { border: 0; border-top: 1px dashed var(--gp-rule); margin: 1.2em 0; }
+.footnotes { font-size: 0.8em; color: var(--gp-muted); border-top: 1px solid var(--gp-rule); }
+
+/* The standard class vocabulary -- all six, as every theme must. */
+.gp-slide.title { text-align: left; align-items: flex-start; justify-content: center; }
+.gp-slide.title h1, .gp-slide.title h2 {
+  font-size: 2.4em;
+  border: 0;
+  padding: 0;
+  margin-bottom: 0.4em;
+}
+.gp-slide.title h1::before, .gp-slide.title h2::before { content: ""; }
+.gp-slide.title h1::after, .gp-slide.title h2::after {
+  content: "";
+  display: block;
+  width: 3.5em;
+  margin-top: 0.4em;
+  border-top: 2px solid var(--gp-accent);
+}
+.gp-slide.title p { color: var(--gp-muted); }
+
+.gp-slide.section {
+  align-items: center;
+  text-align: center;
+  border: 1px solid var(--gp-rule);
+  border-left: 0;
+  border-right: 0;
+}
+.gp-slide.section h1, .gp-slide.section h2 { font-size: 2em; border: 0; padding: 0; margin: 0; }
+.gp-slide.section h1::before, .gp-slide.section h2::before { content: ""; }
+
+.gp-slide.quote { align-items: center; text-align: left; }
+.gp-slide.quote blockquote {
+  border-left: 2px solid var(--gp-accent);
+  padding-left: 1em;
+  margin: 0 auto;
+  max-width: 26em;
+  font-size: 1.3em;
+  line-height: 1.45;
+  color: var(--gp-fg);
+}
+.gp-slide.quote blockquote::before { content: ""; }
+
+.gp-slide.full { padding: 0; }
+.gp-slide.full img { width: 100%; height: 100%; object-fit: cover; }
+.gp-slide.center { text-align: center; align-items: center; }
+.gp-slide.small { font-size: 0.75em; }
+
+@media print {
+  :root {
+    --gp-bg: #ffffff;
+    --gp-fg: #000000;
+    --gp-muted: #555555;
+    --gp-rule: #aaaaaa;
+    --gp-accent: #000000;
+    --gp-code-bg: #f2f2f2;
+  }
+  body { font-size: 18px; }
+}

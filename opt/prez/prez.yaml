@@ -1,0 +1,43 @@
+name: prez
+version: 1.0.0
+utilz_version: "^2.5.0"
+description: Markdown to a self-contained HTML presentation -- a pipeline, not a viewer
+author: Matthew Sinclair
+website: https://matthewsinclair.com
+help_file: ../../help/prez.md
+
+# NO RUNTIME DEPENDENCIES. The built binary is self-contained: comrak is the
+# only crate, and the seven themes plus mermaid.min.js are embedded at compile
+# time with include_str!. Nothing is resolved from the filesystem at run time.
+#
+# cargo is a BUILD-time need rather than a runtime one, so it is deliberately
+# NOT declared here -- doctor's declared-dependency walk would report it as
+# missing on every machine that has already built the binary. The shim refuses
+# by name when cargo is absent, and doctor carries a separate conditional check
+# that fires only when a crate is present.
+#
+# A browser is needed only by the `pdf` and `present` verbs. The tool probes
+# for one and refuses with every path it tried, so doctor does not duplicate a
+# refusal the tool already makes well.
+dependencies: []
+
+optional_dependencies: []
+
+# Supported input modes
+modes:
+  - file # a markdown deck on disk
+  - stdin # a deck on standard input
+
+# Main features
+features:
+  - Markdown to a single self-contained HTML file
+  - Slide splitting, front matter, speaker notes
+  - Seven brand-free built-in themes, plus external themes over PREZ_THEME_PATH
+  - Images inlined as data URIs -- the artifact opens offline
+  - Optional mermaid diagrams, vendored rather than fetched
+  - PDF export and a local present mode, both via a browser
+
+integration:
+  input: stdin
+  output: buffer
+  flags: []

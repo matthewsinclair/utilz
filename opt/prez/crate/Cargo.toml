@@ -1,0 +1,31 @@
+[package]
+name = "prez"
+version = "1.0.0"
+edition = "2021"
+description = "Markdown to a self-contained HTML presentation. A pipeline, not a viewer."
+license = "MIT"
+
+# ---- DEPENDENCIES: comrak AND NOTHING ELSE (AC02, hv's ruling) ----
+#
+# Args, front matter, slide splitting, asset inlining, base64 and shell-outs are
+# all hand-rolled against std. Adding a crate here needs hv's sign-off, named in
+# the commit that adds it.
+#
+# `default-features = false` is doing real work and is not a style choice.
+# comrak's defaults pull syntect for syntax highlighting, which locks 104
+# packages; without them it locks 25, and a binary linking it measures 434 KB
+# against the 8 MB ceiling that has to accommodate mermaid's 3.5 MB as well.
+# We do no server-side highlighting -- the artifact's theme handles code
+# presentation -- so the feature buys nothing and costs most of the budget.
+[dependencies]
+comrak = { version = "0.54", default-features = false }
+
+# The artifact is shipped to people, so size is a feature. `strip` and `lto`
+# together are worth roughly half the binary; `panic = "abort"` drops the
+# unwinding tables, which a CLI that reports and exits has no use for.
+[profile.release]
+opt-level = "z"
+lto = true
+codegen-units = 1
+panic = "abort"
+strip = true

@@ -1,0 +1,109 @@
+#!/usr/bin/env bash
+#
+# prez - Markdown to a self-contained HTML presentation
+#
+# THIS FILE IS A SHIM, NOT THE TOOL. The tool is a Rust crate under crate/,
+# and this resolves it, builds it when it is missing or stale, and execs it.
+#
+# Why a shim rather than the binary at opt/prez/prez, which the dispatcher
+# would happily exec: one committed binary cannot serve Ubuntu CI and macOS
+# both, and a repo that is cloned-and-symlinked has nowhere to ship per-platform
+# artifacts. So the binary is BUILT on this machine and this file is the thing
+# that is portable. It also keeps opt/prez/prez inside the shellcheck gate and
+# inside doctor's existing model, both of which assume a script.
+#
+# The precedent is ensure_venv() in common.sh: an interpreted-runtime wrapper
+# that provisions on first use, loudly. Same shape, different runtime.
+#
+
+set -euo pipefail
+
+# Source common functions if not already loaded (from dispatcher)
+if [[ "$(type -t info 2>/dev/null)" != "function" ]]; then
+  SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+  UTILZ_HOME="${UTILZ_HOME:-$(cd "$SCRIPT_DIR/../.." && pwd)}"
+
+  if [[ -f "$UTILZ_HOME/opt/utilz/lib/common.sh" ]]; then
+    source "$UTILZ_HOME/opt/utilz/lib/common.sh"
+  else
+    echo "ERROR: Cannot find common.sh library" >&2
+    exit 1
+  fi
+fi
+
+# ============================================================================
+# CONFIGURATION
+# ============================================================================
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+CRATE_DIR="$SCRIPT_DIR/crate"
+MANIFEST="$CRATE_DIR/Cargo.toml"
+BINARY="$CRATE_DIR/target/release/prez"
+
+# ============================================================================
+# BUILD MANAGEMENT
+# ============================================================================
+
+# Is the built binary older than anything it was built from?
+#
+# Sources are src/, themes/ and assets/ -- the last two because theme.rs and
+# mermaid.rs embed them with include_str! at COMPILE time, so editing a
+# theme.css changes the binary and touching nothing else. A freshness check
+# that watched only src/ would report a stale binary as current, which is the
+# silent-wrong-answer shape rather than a missing feature.
+#
+# `find -newer` rather than comparing mtimes arithmetically: bash 3.2 has no
+# portable stat, and BSD and GNU stat disagree on flags.
+prez_is_stale() {
+  [[ ! -x "$BINARY" ]] && return 0
+
+  local newer
+  newer=$(find "$CRATE_DIR/src" "$CRATE_DIR/themes" "$CRATE_DIR/assets" \
+    "$MANIFEST" "$CRATE_DIR/Cargo.lock" \
+    -newer "$BINARY" -print -quit 2>/dev/null || true)
+
+  [[ -n "$newer" ]]
+}
+
+# Build the crate, or refuse by name.
+#
+# The refusal comes BEFORE any build attempt so a missing toolchain is a named
+# finding with a remedy, never a bare `cargo: command not found` from inside a
+# subshell three frames down.
+prez_ensure_built() {
+  if ! prez_is_stale; then
+    return 0
+  fi
+
+  require_command "cargo" "brew install rust" || return 1
+
+  if [[ -x "$BINARY" ]]; then
+    info "prez: sources changed, rebuilding..."
+  else
+    info "prez: first use, building (this happens once)..."
+  fi
+
+  if ! cargo build --release --manifest-path "$MANIFEST"; then
+    error "prez: build failed"
+    return 1
+  fi
+
+  success "prez: built"
+}
+
+# ============================================================================
+# MAIN
+# ============================================================================
+
+# Thin Coordinator: resolve, ensure, exec. This shim decides NOTHING about
+# presentations -- no argument parsing, no defaults, no pass-through filtering.
+# Every flag, every verb and every refusal belongs to the tool, so `prez --help`
+# is the tool's help and not a second copy that can drift from it.
+#
+# There is deliberately no `prez build-self` verb: `prez build <deck>` already
+# means "build the deck" in the tool's own grammar, and minting a colliding
+# verb to expose something the shim does automatically would be a worse trade
+# than provisioning on use.
+prez_ensure_built || exit 1
+
+exec "$BINARY" "$@"

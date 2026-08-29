@@ -1,0 +1,152 @@
+/* blueprint -- cyanotype: white and cyan on deep blue, over a drafting grid.
+ *
+ * The grid is a repeating-linear-gradient, not an image: a background image
+ * would mean either an external URL, which is refused outright, or a data: URI
+ * of a tile that CSS can draw exactly. It scales with the slide and costs
+ * nothing.
+ *
+ * This one commits to a single look rather than following the reader's
+ * light/dark preference, because a light cyanotype is not a cyanotype. Print
+ * inverts to ink on paper, since a solid blue page is not a handout.
+ */
+
+:root {
+  --gp-bg: #0d2137;
+  --gp-fg: #e8f3fb;
+  --gp-muted: #8fb6d4;
+  --gp-rule: #2f5c85;
+  --gp-accent: #56c9f5;
+  --gp-grid: rgba(140, 190, 225, 0.14);
+  --gp-code-bg: rgba(255, 255, 255, 0.06);
+}
+
+body {
+  background: var(--gp-bg);
+  color: var(--gp-fg);
+  font: 400 clamp(17px, 2.8vmin, 46px)/1.55 "Avenir Next", Avenir, "Helvetica Neue",
+        -apple-system, BlinkMacSystemFont, Helvetica, Arial, sans-serif;
+}
+
+/* The drafting grid: 1px lines every 2.5em, both axes. */
+.gp-deck {
+  background-image:
+    repeating-linear-gradient(to right, var(--gp-grid) 0 1px, transparent 1px 2.5em),
+    repeating-linear-gradient(to bottom, var(--gp-grid) 0 1px, transparent 1px 2.5em);
+}
+
+h1, h2, h3 {
+  margin: 0 0 0.6em;
+  line-height: 1.15;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--gp-accent);
+}
+h1 { font-size: 1.85em; }
+h2 { font-size: 1.35em; }
+h3 { font-size: 1.05em; color: var(--gp-muted); letter-spacing: 0.09em; }
+
+p, ul, ol, blockquote, table, pre { margin: 0 0 0.85em; }
+ul, ol { padding-left: 1.5em; list-style: none; }
+li { margin: 0.3em 0; position: relative; }
+ul li::before {
+  content: "";
+  position: absolute;
+  left: -1.2em;
+  top: 0.62em;
+  width: 0.5em;
+  height: 0.5em;
+  border: 1px solid var(--gp-accent);
+}
+a { color: var(--gp-accent); text-decoration: underline; text-underline-offset: 0.2em; }
+strong { color: #ffffff; font-weight: 600; }
+
+blockquote {
+  margin-left: 0;
+  padding: 0.4em 1em;
+  border: 1px dashed var(--gp-rule);
+  color: var(--gp-muted);
+}
+
+code, pre, kbd { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+code { background: var(--gp-code-bg); padding: 0.05em 0.35em; font-size: 0.85em; }
+pre {
+  background: var(--gp-code-bg);
+  border: 1px solid var(--gp-rule);
+  padding: 0.8em 1em;
+  overflow: auto;
+}
+pre code { background: none; padding: 0; font-size: 0.8em; }
+
+table { border-collapse: collapse; font-size: 0.88em; }
+th, td { border: 1px solid var(--gp-rule); padding: 0.4em 0.85em; text-align: left; }
+th {
+  color: var(--gp-accent);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  font-size: 0.85em;
+  font-weight: 600;
+}
+
+img { max-width: 100%; height: auto; border: 1px solid var(--gp-rule); }
+hr { border: 0; border-top: 1px dashed var(--gp-rule); margin: 1.2em 0; }
+.footnotes { font-size: 0.75em; color: var(--gp-muted); border-top: 1px dashed var(--gp-rule); }
+
+/* The standard class vocabulary -- all six, as every theme must. */
+.gp-slide.title { text-align: center; align-items: center; }
+.gp-slide.title h1, .gp-slide.title h2 {
+  font-size: 2.5em;
+  letter-spacing: 0.1em;
+  color: #ffffff;
+  margin-bottom: 0.4em;
+}
+.gp-slide.title h1::after, .gp-slide.title h2::after {
+  content: "";
+  display: block;
+  width: 6em;
+  margin: 0.5em auto 0;
+  border-top: 1px solid var(--gp-accent);
+  border-bottom: 1px solid var(--gp-accent);
+  height: 4px;
+}
+.gp-slide.title p { color: var(--gp-muted); letter-spacing: 0.05em; }
+
+.gp-slide.section {
+  align-items: center;
+  text-align: center;
+  box-shadow: inset 0 0 0 1px var(--gp-rule), inset 0 0 0 9px transparent,
+              inset 0 0 0 10px var(--gp-rule);
+}
+.gp-slide.section h1, .gp-slide.section h2 { font-size: 2.1em; margin: 0; color: #ffffff; }
+
+.gp-slide.quote { align-items: center; text-align: center; }
+.gp-slide.quote blockquote {
+  border: 1px dashed var(--gp-accent);
+  padding: 1em 1.3em;
+  margin: 0 auto;
+  max-width: 22em;
+  font-size: 1.35em;
+  line-height: 1.4;
+  color: var(--gp-fg);
+}
+
+.gp-slide.full { padding: 0; }
+.gp-slide.full img { width: 100%; height: 100%; object-fit: cover; border: 0; }
+.gp-slide.center { text-align: center; align-items: center; }
+.gp-slide.small { font-size: 0.76em; }
+
+@media print {
+  :root {
+    --gp-bg: #ffffff;
+    --gp-fg: #0d2137;
+    --gp-muted: #46688a;
+    --gp-rule: #7ea3c4;
+    --gp-accent: #0f4d75;
+    --gp-grid: rgba(13, 33, 55, 0.07);
+    --gp-code-bg: #eef4f9;
+  }
+  body { font-size: 19px; }
+  strong { color: #0d2137; }
+  .gp-slide.title h1, .gp-slide.title h2,
+  .gp-slide.section h1, .gp-slide.section h2 { color: var(--gp-accent); }
+}
