@@ -40,6 +40,7 @@ Two things blocking their own progress rather than each other:
 
 **Housekeeping, small and each independently true**
 
+- **`chrome()` should name the browser it resolved.** One `printf ... >&2` on the resolve path in `crate/test/acceptance.sh`, matching the note it already prints when it refuses. Today it is silent exactly where it is about to launch Chrome on someone's machine, so an acceptance number carries no evidence of which mode produced it. Found by cc at EOD from a 12/0/0 where the morning's identical command gave 9 passed / 11 skipped.
 - **cc's `hoist-rebase.sh` carries one dead postcondition.** `post "test/acceptance.sh" "AT13: PASS" 0` sets the minimum to zero against a `-ge` test, so it prints `ok` unconditionally -- including at the count of zero it exists to catch. Redundant rather than a hole (two other checks cover AT13), but it is the measures-nothing shape sitting inside the script that guards against silent loss. cc's; the canon-writing conflict that was holding it is cleared.
 - **cc's issue `0006` exists only as a flat view and was never written to canon**, so `intent doctor` counts one fewer issue than the tracker shows. cc's to fill or leave.
 - **`ST0007/WP-04` reads `wip` under a completed thread.** Not the migrator -- the v2 source itself says WIP. Small.
