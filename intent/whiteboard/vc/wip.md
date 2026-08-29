@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 3d40d776-e1d0-40da-b5c5-7926017d5ce1
-heartbeat_at: 2026-08-29 17:31Z
-status: active
-focus: "v2.5.0 cut, green on all seven CI jobs and pushed; HEAD, both remotes and the v2.5.0 tag all at 72ee931. ST0010 gate 16/20, unchanged and re-measured after the compact. Remaining: AC16 (hv looks), AC18/AT15 mine, AC19/AT20 browser half, AC15 is WP-06."
+heartbeat_at: 2026-08-29 18:06Z
+status: paused
+focus: "EOD. v2.5.0 shipped and green at 72ee931. ST0010 open at 16/20 -- AC16 is hv's, AC18/AC19 mine, AC15 is WP-06. Tag needs moving to the release commit 4b6eb07; the recreate was classifier-blocked, so it is hv's to run."
 claims: [ST0010]
 ---
 
@@ -13,33 +13,13 @@ claims: [ST0010]
 
 Validation node; for ST0010 hv also gave vc the coordination pen. cc builds, vc contracts and verifies, hv adjudicates. Two sessions archived in `.history/20260829/` -- read that before concluding anything is new.
 
-`status` stays `active` through the compact deliberately: `/compact` does not end a session (whiteboard invariant 6) and hv is holding on the bounce. A `release` here would put a false `paused` on the board.
+Released at EOD on hv's instruction. Two folds archived in `.history/20260829/` -- read that before concluding anything here is new.
 
-## WHERE THIS STANDS
+## DOING
 
-**Nothing is blocked, and the browser question is closed.** hv authorised the run; every launch was headless against a scoped profile; hv's own Chrome was never touched. `utilz test` exits 0 across all 17 suites, acceptance is 12/0/0 with a real browser, and the numbers are recorded against ONE cold build (AC17's provenance seam closed).
+**ST0010 is shipped as v2.5.0 and NOT closed.** Gate **16/20**, read off the view. Four remain: **AC16** (hv renders every built-in theme and looks -- hv's by construction, and the suite is not allowed to stand in for it), **AC18** (AT15, mine, never run against a real Safe-Storage dialog), **AC19** (AT20's browser half, mine), **AC15** (WP-06).
 
-**v2.5.0 is cut, green and pushed.** CI run `33265456630` passed all seven jobs. `HEAD`, `local/main`, `upstream/main` and the `v2.5.0` tag are all at `72ee931`; working tree clean.
-
-**AC16 is hv's by construction** -- a human renders every theme and looks. vc prepares the renders; vc cannot be the eye. It is the only remaining item nobody else can take, and both of the day's runtime defects came from hv looking rather than from any red.
-
-## State, verified not relayed
-
-- **Pin `b600306`.** Landed as a MERGE via cc's `hoist-rebase.sh`, not a re-archive -- the crate is a FORK (AC14, AT13, AC18(b) exist only here). Its postcondition check is 16 items and asserts our work survived; a `tar -x` over the top goes red rather than reporting a clean merge.
-- **Contract 20 ACs / 19 ATs / 7 WPs.** WP-01/02/03 Done. WP-04 (validation) mine and next. WP-05 default theme polish, WP-06 theme addressing split, WP-07 expose the determinism probe -- all after.
-- **`intent doctor` 0 findings. `intent at lint ST0010` ok, 19 rows.** Gate **16/20**, read off the view -- `intent ac gate` cannot read it at all (see Watch-outs). Unsatisfied: AC15, AC16, AC18, AC19.
-- cc reports 128 cargo tests, clippy clean, shellcheck clean across 16, acceptance 9 passed / 11 skipped under the browser override.
-- **AC19 and AC20 spot-verified by me** at `f5253a9`: `--start-fullscreen` gone from the launch path, `--window` guarded to `present` and refusing in pixels, the Rust naming no platform, and ONE artifact carrying both `cmd-W` and `ctrl-W` chosen at view time. Ran the browserless probe myself: **37 passed, 0 failed, exit 0**. These are spot checks, NOT AT greens -- my artifact came from the warm dev tree and so fails AC17's provenance. Statuses left alone deliberately.
-
-## WP-04, as run
-
-Done, except where noted. Kept because the traps are what stop the next run repeating them, and because WP-04 still reads `Not Started` in the WP table -- the work happened, the status did not follow it.
-
-- **AC17 was first and is DONE**, because it gates the meaning of everything after it: `rm -rf opt/prez/crate/target`, cold build at `b600306`, provenance recorded beside the numbers. `_tools-vc` has sent the literal procedure -- **use their line, not a parallel one**, so the two measurements are the same measurement taken twice.
-- **The trap in it**, theirs, paid for: `_tools`' devbin `export`s `CARGO_TARGET_DIR` and overwrote their isolation, so a "cold" build ran warm, finished in 0.05s and reported exit 0. Whatever lever forces cold, **assert afterwards that it went cold** -- the artifact is where isolation put it, and the wall time is a release build's. cc found the same class here from the other end: the shim hardcoded `$CRATE_DIR/target` while cargo honoured the variable. Fixed; 8.50s now.
-- Then `cargo test`, `acceptance.sh --strict`, the runtime probe, the legibility probe, the liftability refusal, the standalone greps. Walk ATs through red where the lifecycle requires.
-- **`_tools-vc` is standing by to re-run our greens on their machine** against the cold-built binary; their numbers go beside ours. Send the exact command with the corrected map. Their figures: 10 ATs `--strict`, 0/0, exit 0, 69s. Contrast, flattened, floor 4.5: simple 6.0, **mono 4.9 nearest**, manuscript 5.7, contrast 14.2, blueprint 7.6, steampunk 5.5, 8bit 6.2, geodica 6.9.
-- Then announce prez-green to `_tools-cc`: their trigger to land the `geodica present` client rewrite plus a `geodica doctor` check in ONE commit.
+**WP-04 still reads `Not Started`** while its work is substantially done. Held deliberately: advancing it runs through `intent wp done`, which consults the acceptance gate this session found unreadable. See Watch-outs.
 
 ## Open with hv
 
