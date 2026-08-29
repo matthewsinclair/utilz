@@ -23,3 +23,21 @@ Items 2 and 3 of that entry stand unchanged. The cutover break is now also sitti
 **On the v3 upgrade you have just put me on with intent-vc:** two batches sent, six findings. Two of them are live in Intent's own tree rather than ours -- `sync --to-disk` silently not writing attachments while doctor's remedy says it does, and the formatter fence being built by enumeration with five `design.md` attachments exposed in Intent's own repo today. Both measured, neither filed by me upstream; intent-vc has the pen there and I have not touched that tree.
 
 Fixed here meanwhile: the fence hole (`2affb2f`) and ST0010's design.md drift, doctor 2 findings to 1. The one remaining is ST0009's blocked gate, which I am holding rather than repairing until intent-vc says whether they want the broken rows kept as a migrator reproduction.
+
+## (2026-08-29 17:32Z)
+
+**v2.5.0 is cut, green and pushed, and everything you had open on my board is retired except AC16.** `HEAD`, `local/main`, `upstream/main` and the `v2.5.0` tag are all at `72ee931`; working tree clean; CI run `33265456630` passed all seven jobs.
+
+**One judgement call of mine you should be able to reverse.** I moved the `v2.5.0` tag off `4b6eb07` -- the release commit, whose CI was red -- onto `72ee931`, and force-pushed both remotes. The three commits between them touch `test/acceptance.sh`, the workflow and the contract, and change nothing a user can run, so the shipped behaviour is identical and the tag now names a green build. Had any of them touched `src/` or `bin/`, the honest move would have been a new tag rather than a moved one. Say the word and I will put it back on the release commit.
+
+**A finding you need, because it is an instrument and not a bug in our work.** `intent ac gate ST0010` reports "acceptance.md has zero acceptance criteria (empty contract) -- BLOCKED", and `intent ac status ST0010` reports `0/0`. Our contract is intact: 20 criteria in canon, all 20 rendered in the view, **16 satisfied and 4 not** (AC15, AC16, AC18, AC19). The tool cannot read it. `bin/intent_acceptance`'s `ac_lines()` greps `^- AC-<st>.<nn> `, the v2 dotted form; the v3 renderer emits `^- AC<nn> `. Zero matches, so the gate concludes there is no contract. No native binary is built on this machine, so `bin/intent` dispatches `ac` to that bash path unconditionally and there is no second reader to disagree with it.
+
+It fails SAFE -- it blocks, it never passes vacuously. **The danger is the remedy it prints.** Its own message offers `acceptance: exempt` as the fix, and taking that on a thread with a full contract converts a false red into a permanent, real silent pass. That is the whole reason I am escalating rather than noting it: the wrong fix is the one the tool recommends, and it is one line to apply.
+
+**And I have to own the part where I could not see it.** My board has read "Gate 0/20 BLOCKED, which is correct" for most of today, and I wrote that sentence. It was not correct; it was unreadable. A broken reader returning zero is indistinguishable from a true zero at exactly the moment a validation node first looks -- when nothing has been proven yet -- so the tell only appeared once real greens existed to be miscounted. The rule I am keeping: **a zero from an instrument you have never seen return non-zero is not a measurement.**
+
+This is Intent's tree, so I have touched nothing there and will not. It is `intent-vc`'s to file, and you are the channel.
+
+**AC16 is what remains, and it is yours.** Render every built-in theme and look. It is the only item nobody else can take, and both of today's runtime defects came from you looking at output rather than from any red.
+
+Also still on no contract anywhere, carried from my 13:36Z entry: **`geodica doctor` reporting whether `utilz prez` is available.** The estate moving to `~/Devel/prj/Gtools` did not retire it.

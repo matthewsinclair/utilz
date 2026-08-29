@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 3d40d776-e1d0-40da-b5c5-7926017d5ce1
-heartbeat_at: 2026-08-29 16:43Z
+heartbeat_at: 2026-08-29 17:31Z
 status: active
-focus: "ST0010 WP-04 substantially done. hv authorised the browser: acceptance 12/0/0 exit 0 with real Chrome, utilz test exit 0 across 17 suites, 17 ATs green, gate 16/20. Remaining: AC16 (hv looks), AC18/AT15 mine, AC19/AT20 browser layer, AC15 is WP-06."
+focus: "v2.5.0 cut, green on all seven CI jobs and pushed; HEAD, both remotes and the v2.5.0 tag all at 72ee931. ST0010 gate 16/20, unchanged and re-measured after the compact. Remaining: AC16 (hv looks), AC18/AT15 mine, AC19/AT20 browser half, AC15 is WP-06."
 claims: [ST0010]
 ---
 
@@ -15,25 +15,27 @@ Validation node; for ST0010 hv also gave vc the coordination pen. cc builds, vc 
 
 `status` stays `active` through the compact deliberately: `/compact` does not end a session (whiteboard invariant 6) and hv is holding on the bounce. A `release` here would put a false `paused` on the board.
 
-## THE ONE THING BLOCKING EVERYTHING
+## WHERE THIS STANDS
 
-**hv has not authorised a browser run, and nothing else is in the way.** Queued behind that single decision: AT04, AT18's browser half, the eleven browser-dependent acceptance checks, and the AC17 cold build. That is the whole remaining distance to WP-04 closing. The keychain fix is in the pin, so the dialog risk is far lower than this morning -- but it is hv's screen and hv's call. **Do not launch a browser without it.**
+**Nothing is blocked, and the browser question is closed.** hv authorised the run; every launch was headless against a scoped profile; hv's own Chrome was never touched. `utilz test` exits 0 across all 17 suites, acceptance is 12/0/0 with a real browser, and the numbers are recorded against ONE cold build (AC17's provenance seam closed).
 
-**AC16 is hv's by construction** -- a human renders every theme and looks. vc prepares the renders; vc cannot be the eye.
+**v2.5.0 is cut, green and pushed.** CI run `33265456630` passed all seven jobs. `HEAD`, `local/main`, `upstream/main` and the `v2.5.0` tag are all at `72ee931`; working tree clean.
+
+**AC16 is hv's by construction** -- a human renders every theme and looks. vc prepares the renders; vc cannot be the eye. It is the only remaining item nobody else can take, and both of the day's runtime defects came from hv looking rather than from any red.
 
 ## State, verified not relayed
 
 - **Pin `b600306`.** Landed as a MERGE via cc's `hoist-rebase.sh`, not a re-archive -- the crate is a FORK (AC14, AT13, AC18(b) exist only here). Its postcondition check is 16 items and asserts our work survived; a `tar -x` over the top goes red rather than reporting a clean merge.
 - **Contract 20 ACs / 19 ATs / 7 WPs.** WP-01/02/03 Done. WP-04 (validation) mine and next. WP-05 default theme polish, WP-06 theme addressing split, WP-07 expose the determinism probe -- all after.
-- **`intent doctor` 0 findings. `intent at lint ST0010` ok, 19 rows.** Gate 0/20 BLOCKED, which is correct: nothing goes green until instruments run here.
+- **`intent doctor` 0 findings. `intent at lint ST0010` ok, 19 rows.** Gate **16/20**, read off the view -- `intent ac gate` cannot read it at all (see Watch-outs). Unsatisfied: AC15, AC16, AC18, AC19.
 - cc reports 128 cargo tests, clippy clean, shellcheck clean across 16, acceptance 9 passed / 11 skipped under the browser override.
 - **AC19 and AC20 spot-verified by me** at `f5253a9`: `--start-fullscreen` gone from the launch path, `--window` guarded to `present` and refusing in pixels, the Rust naming no platform, and ONE artifact carrying both `cmd-W` and `ctrl-W` chosen at view time. Ran the browserless probe myself: **37 passed, 0 failed, exit 0**. These are spot checks, NOT AT greens -- my artifact came from the warm dev tree and so fails AC17's provenance. Statuses left alone deliberately.
 
-## WP-04, when the browser is authorised
+## WP-04, as run
 
-Re-produce every carried green with instruments run HERE, and state what was not checked.
+Done, except where noted. Kept because the traps are what stop the next run repeating them, and because WP-04 still reads `Not Started` in the WP table -- the work happened, the status did not follow it.
 
-- **AC17 first**, because it gates the meaning of everything after it: `rm -rf opt/prez/crate/target`, cold build at `b600306`, provenance recorded beside the numbers. `_tools-vc` has sent the literal procedure -- **use their line, not a parallel one**, so the two measurements are the same measurement taken twice.
+- **AC17 was first and is DONE**, because it gates the meaning of everything after it: `rm -rf opt/prez/crate/target`, cold build at `b600306`, provenance recorded beside the numbers. `_tools-vc` has sent the literal procedure -- **use their line, not a parallel one**, so the two measurements are the same measurement taken twice.
 - **The trap in it**, theirs, paid for: `_tools`' devbin `export`s `CARGO_TARGET_DIR` and overwrote their isolation, so a "cold" build ran warm, finished in 0.05s and reported exit 0. Whatever lever forces cold, **assert afterwards that it went cold** -- the artifact is where isolation put it, and the wall time is a release build's. cc found the same class here from the other end: the shim hardcoded `$CRATE_DIR/target` while cargo honoured the variable. Fixed; 8.50s now.
 - Then `cargo test`, `acceptance.sh --strict`, the runtime probe, the legibility probe, the liftability refusal, the standalone greps. Walk ATs through red where the lifecycle requires.
 - **`_tools-vc` is standing by to re-run our greens on their machine** against the cold-built binary; their numbers go beside ours. Send the exact command with the corrected map. Their figures: 10 ATs `--strict`, 0/0, exit 0, 69s. Contrast, flattened, floor 4.5: simple 6.0, **mono 4.9 nearest**, manuscript 5.7, contrast 14.2, blueprint 7.6, steampunk 5.5, 8bit 6.2, geodica 6.9.
@@ -41,11 +43,12 @@ Re-produce every carried green with instruments run HERE, and state what was not
 
 ## Open with hv
 
-- **The browser authorisation** (above). Everything waits on it.
-- **AC16**, hv's eye.
-- **41 commits unpushed**, both remotes behind, CI fix among them -- so `main` reads red on the remote until hv pushes.
-- **The 2.5.0 release.** `prez.yaml` declares `utilz_version "^2.5.0"`; `VERSION` still reads 2.4.0. `run_doctor` compares majors only so nothing false-alarms meanwhile. Bump, tag and push are hv's.
-- **`geodica doctor` must report whether `utilz prez` is available** -- hv's estate requirement, still on no contract anywhere.
+- **AC16**, hv's eye. The only remaining item nobody else can take.
+- **`geodica doctor` must report whether `utilz prez` is available** -- hv's estate requirement, still on no contract anywhere. Carried since 13:36Z; the estate has since moved to `~/Devel/prj/Gtools`, which does not retire it.
+- **The `intent ac gate` false red** (Watch-outs) is Intent's defect, not ours, and needs relaying to `intent-vc`. Nothing here should be edited to accommodate it.
+- **WP-04 reads `Not Started`** while its work is substantially done. Left alone rather than advanced: `wp done` consults the gate I have just found unreadable, so I would rather hv saw the finding before I move any status through that tool.
+
+Retired since the last board: the browser authorisation (given, run, green), the 41 unpushed commits (pushed), and the 2.5.0 release (cut at `72ee931`, tagged, green on all seven CI jobs).
 
 ## Live with other nodes
 
@@ -54,6 +57,10 @@ Re-produce every carried green with instruments run HERE, and state what was not
 - **`intent-vc`: do NOT re-run the ingest damage probe until they say the tiebreak has landed.** Utilz's exposure to issue `0133` is **UNMEASURED, which is not zero**. The bound that still holds: nothing here went through legacy ingest -- `intent at new` through the API gate and `sync --to-disk` only, no `sync --to-store` -- so whatever exposure exists came from the original hop and has not grown.
 
 ## Watch-outs
+
+- **`intent ac gate` AND `intent ac status` CANNOT READ A v3-RENDERED CONTRACT, AND THEY FAIL LOUDLY IN A WAY THAT INVITES THE WRONG FIX.** `bin/intent_acceptance`'s `ac_lines()` greps `^- AC-<st>.<nn> ` (the v2 dotted form); the v3 renderer emits `^- AC<nn> `. Zero matches, so `ac gate ST0010` reports "acceptance.md has zero acceptance criteria (empty contract) -- BLOCKED" and `ac status` reports `0/0`, against a view carrying all 20 rows. No native binary is built on this machine, so `bin/intent` dispatches `ac` to that bash path unconditionally -- there is no second reader to disagree with it. **It fails SAFE (blocks, never a vacuous pass) but the remedy it prints is `acceptance: exempt`**, which would convert a false red into a permanent real silent pass on a thread that has a full contract. Do not take that remedy. **Read satisfaction off the view instead**: `grep -oE '^- AC[0-9]+ .*-- satisfied: [a-z]+' intent/st/ST0010/acceptance.md` -- 16 yes, 4 no (AC15, AC16, AC18, AC19) at `72ee931`. Intent's tree, not ours: `intent-vc`'s to file, via hv.
+
+- **AND THE TELL ONLY APPEARS ONCE SOMETHING IS GREEN.** My own board read "Gate 0/20 BLOCKED, which is correct" for most of today. It was not correct, it was unreadable -- but a broken reader returning zero is indistinguishable from a true zero at exactly the moment a validation node first looks, which is when nothing has been proven yet. **A zero from an instrument you have never seen return non-zero is not a measurement.** Make one row green by hand-check first, then believe the counter.
 
 - **AN EXTERNAL SUITE ASSERTS ON OUR BUILT-IN THEMES, AND WE CANNOT SEE IT FIRE.** Gtools' AC12 renders a deck under every built-in prez declares and asserts the artifact carries no hex from their brand palette -- nine values we must not hold, because hv's zero-knowledge rule makes that check structurally impossible on our side. The coupling is forced, not chosen. **If a future Utilz built-in happens to use one of those nine hexes, THEIR suite goes red and we will have done nothing wrong.** Ruled 2026-08-29, keep it: from an artifact a coincidence is indistinguishable from a brand compiled in, and the remedy is a conversation rather than a code change. What they carry in exchange is the red's WORDING -- it must name the coincidence case, or it sends a reader to "fix" a legitimate upstream theme -- plus the cheaper refusal check beside it. Currently clean: seven built-ins, zero hexes each, measured by them. Disclosed by `_tools-cc` rather than discovered.
 
@@ -69,6 +76,8 @@ Re-produce every carried green with instruments run HERE, and state what was not
 - `utilz test` is not safe to run concurrently. Verify shell tooling under `/bin/bash` with an array, never zsh with an unquoted variable.
 
 ## Decisions that still decide things
+
+- (2026-08-29) **A tag may be moved off a red release commit onto the green commit that fixes only the harness.** `v2.5.0` was cut at `4b6eb07`, whose CI was red; the three fixes after it touch `acceptance.sh`, the workflow and the contract, and change nothing a user can run. Moved to `72ee931` and force-pushed both remotes, so the tag names a build that is green. The limit is the reason: had any commit in between touched `src/` or `bin/`, the honest move is a new tag, not a moved one. hv can reverse it.
 
 - (2026-08-29) **An ST0010 AT id EQUALS the acceptance.sh block id the suite prints.** The carried suite has no AT10/AT11 -- `_tools`' estate tests stayed behind -- so those ids plus AT16 hold Utilz-native rows. A green is reported by the runner as "AT07"; if the contract's AT07 covers something else, the green names the wrong instrument.
 - (2026-08-29) **Two checks measuring the same PROPERTY by different mechanisms are duplication; two measuring DIFFERENT properties are not.** So AT01+AT10 both cover AC11 (build-produces-nothing-tracked vs the-ignore-rule-is-committed) and AT04+AT17 both cover AC04 (a real browser vs the dispatch table). Both pairs say so on the row, so neither is tidied away.
