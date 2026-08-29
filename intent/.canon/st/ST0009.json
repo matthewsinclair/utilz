@@ -216,33 +216,33 @@
     {
       "id": "AT-01.2",
       "kind": "test",
-      "file": "each_utility() ignores a bin/ symlink that does not resolve to utilz",
+      "file": "opt/utilz/test/common_lib.bats",
       "covers": [
         "AC-01.2"
       ],
       "status": "green",
-      "note": "(red at HEAD)"
+      "note": "BATS: \"each_utility() ignores a bin/ symlink that does not resolve to utilz\" (common_lib.bats:402). The test name was in the file field until 2026-08-29 -- a v2->v3 ingest artefact, not an authored path."
     },
     {
       "id": "AT-01.3",
       "kind": "test",
-      "file": "each_utility() ignores a plain file in bin/",
+      "file": "opt/utilz/test/common_lib.bats",
       "covers": [
         "AC-01.3"
       ],
       "status": "green",
-      "note": "(red at HEAD)"
+      "note": "BATS: \"each_utility() ignores a plain file in bin/\" (common_lib.bats:411). The test name was in the file field until 2026-08-29 -- a v2->v3 ingest artefact, not an authored path."
     },
     {
       "id": "AT-01.4",
       "kind": "test",
-      "file": "a stray bin/ symlink is invisible to both list_utilities and run_doctor",
+      "file": "opt/utilz/test/common_lib.bats",
       "covers": [
         "AC-01.2",
         "AC-01.5"
       ],
       "status": "green",
-      "note": "the drift itself) -- (red at HEAD: doctor reported `Found 3 utilities, but 1 have issues: - zzstray (no implementation)` while list showed 2 -- the drift itself)"
+      "note": "BATS: \"a stray bin/ symlink is invisible to both list_utilities and run_doctor\" (common_lib.bats:424). The test name was in the file field until 2026-08-29 -- a v2->v3 ingest artefact, not an authored path."
     },
     {
       "id": "AT-02.1",
