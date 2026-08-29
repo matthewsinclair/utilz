@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 3d40d776-e1d0-40da-b5c5-7926017d5ce1
-heartbeat_at: 2026-08-29 13:34Z
+heartbeat_at: 2026-08-29 13:47Z
 status: active
-focus: "ST0010 coordination pen. WP-01/02 Done, WP-03 hoisted at the OLD pin and awaiting re-archive. Pin patch written but UNCOMMITTED in _tools with both its nodes paused. Three new findings this pickup, one of which breaks the cutover."
+focus: "Two workstreams: ST0010 (pen; WP-03 awaiting the re-archive) and the Intent v3 upgrade with intent-vc. Six findings live, two filed upstream against Intent itself, one that breaks the geodica cutover."
 claims: [ST0010]
 ---
 
@@ -15,11 +15,13 @@ Validation node. For ST0010, hv additionally gave vc the coordination pen ("util
 
 Status stays `active` through the compact deliberately -- `/compact` does not end a session (whiteboard invariant 6), and hv has said work continues on the bounce. A `release` here would put a false `paused` on the board.
 
-## THE BLOCKING FACT, restated after pickup
+## THE BLOCKING FACT, restated after pickup -- and CORRECTED
+
+**CORRECTION, 13:47Z: the pin is MID-FLIGHT, not stalled.** `_tools-vc` messaged directly to say they are folding for a compact at hv's instruction and that the modified `acceptance.sh` is `_tools-cc`'s in-flight keychain patch, resuming on the bounce. I had written "stalled" on this board and in my escalation to hv. From outside that repo, stalled and mid-flight look identical -- but I had a way to say which one I could not tell, and asserted the worse reading instead. Cheap error, safe direction, corrected here and with them.
 
 **The new `_tools` pin is written but NOT COMMITTED, and both `_tools` nodes are paused.** `_tools` HEAD is `42320af` (vc's localfold); `native/rust/geopres/test/acceptance.sh` sits modified in their working tree. Read the diff 2026-08-29 13:32Z: all four items are present and correct -- `--use-mock-keychain` at all four launch sites, disposable `--user-data-dir` at `:407`/`:519`, AT12 down to one profile for the whole eight-launch sweep, and `chrome()` extended to 4 app paths + 6 PATH names.
 
-So the work is done and the freeze cannot advance, because committing it is a live `_tools` session's job and there is no live `_tools` session. **This is hv's to unstick, not mine** -- nothing in Utilz can commit into that repo, and the standing rule forbids editing it from here.
+So the work is done and the freeze cannot advance until an `_tools` session resumes to commit it. **That resumption is hv's, not mine** -- nothing in Utilz can commit into that repo, and the standing rule forbids editing it from here.
 
 **On receipt of the sha: relay to utilz-cc immediately.** cc has already archived once from `3e16597` and has scripted the adaptations (`hoist-adapt.sh`, attached to ST0010, verified idempotent and byte-reproducing), so the re-archive is now cheap and deterministic rather than a redo.
 
@@ -30,6 +32,21 @@ So the work is done and the freeze cannot advance, because committing it is a li
 **2. THE AT MAP DOES NOT MATCH THE INSTRUMENT IT NAMES.** ST0010's canon assigns AT01->AC01, AT02->AC02+AC03, AT03->AC04. The file says otherwise, verified by reading the blocks: `acceptance.sh` AT01 is the rewritten build-hygiene test (our AC11), AT02 is dependency posture (our AC01), AT03 is self-contained-artifact + the notes sentinel (our AC02+AC03). The head of the range is shifted by one because ST0010 dropped `_tools`' Dropbox AC01 and renumbered while the ATs kept their own sequence. The tail may or may not shift with it -- **the whole map needs re-deriving line by line from the file, not patching by inference.** Fourth, separate: the suite's own assertion strings still cite `_tools` AC ids (`absent "AC04 sentinel is nowhere in the HTML"` at `:218` is our AC03), so a green it prints names an AC that means something different in this repo. **This is a WP-04 PREREQUISITE, not part of it.** Greening through a wrong map manufactures exactly what `_tools` is stuck at 11/13 for right now: a green that does not name its instrument.
 
 **3. `chrome()` WAS FIXED AS A MIRROR, AND `_tools-vc` HANDED US THE DURABLE FIX IN WRITING.** Their patch comment: "A MIRROR IS NOT THE RIGHT ANSWER AND THIS COMMENT IS NOT AN EXCUSE FOR IT... The durable fix is for the tool to expose its resolution (a `--print-browser`, or the refusal naming the list unconditionally) so this function can ask instead of copy. Raised for Utilz; the mirror is the stopgap." So AC18(a) is no longer "port their one-list fix" -- the pin carries two lists that agree today, and Utilz inherits the drift unless prez is made to answer. `builtins_list()` in the same file is the precedent: it asks the binary. Same shape as `_tools-cc`'s open ask about the determinism probe (below) -- **two consumers, two days apart, both blocked by prez keeping something private, both reaching for a copy.** One design answer, not two.
+
+## Intent v3 upgrade (hv, 13:40Z: work this with intent-vc)
+
+Six findings, all measured here on intent 3.0.0 (8177b53e), two batches sent to `intent-vc [a7c8dc]`. **Two of them are live in Intent's own tree, not just ours.**
+
+- **(1) ST0009's gate is BLOCKED by three malformed AT rows.** `intent at lint ST0009` names them: v2 free-text descriptions sitting in the `file` field. All three name real tests at `opt/utilz/test/common_lib.bats:402,411,424`, so the repair is unambiguous. **Held, not repaired** -- asked intent-vc whether they want the broken state preserved as a migrator reproduction first. Canon backed up.
+- **(2) The migrator has TWO behaviours for one input shape, in one thread.** `AT-01.1` has no `file` and parks its v2 text in `legacy.raw` -- honest, lints clean. `AT-01.2/3/4` have the same kind of text promoted into `file` with no `legacy` block -- lints as a nonexistent file. Nine rows took the first branch, three the second. The asymmetry is the finding; only one branch is detectable.
+- **(3) `intent at lint --fix` is in `--help` and refuses when called** (`not implemented in v3`). The refusal reasoning is right; the flag still being in the surface is not.
+- **(4) ST0002's six WPs read `Not Started` under a thread completed 2026-02-08, Scope blank where every other thread reads `S`, and doctor says NOTHING.** utilz-cc traced it to v2 prose status; I verified the current state, not the v2 source. hv ruled it not-today. The invisibility is the interesting half.
+- **(5) `intent sync --to-disk` DOES NOT WRITE ATTACHMENTS, and doctor's `attachment-drift` remedy says it does.** Measured three ways -- with an ID, bare, and against `git status` -- all no-ops, both reporting `ok: extract written`. A user follows the remedy, gets a success line and an unchanged file, having been told their backup was about to be overwritten. **RESOLVED HERE by hand**: canon `.text` written to disk, sha byte-verified to `bec63dc1`, doctor 2 -> 1.
+- **(6) THE FORMATTER FENCE WAS BUILT BY ENUMERATION AND ST0010 FELL THROUGH IT.** `d791e49` fenced `info.md` and `acceptance.md` and said honestly the `intent/st/**` lines matched nothing that day. ST0010 was the rehydration it was cover for; `design.md` is an attachment, nothing named it, prettier realigned its tables, the hash stopped matching canon. **Exactly the failure that commit's own comment predicted.** Fixed at `2affb2f`: enumeration replaced by the principle (`intent/st/**` -- everything the renderer writes has one writer), and proven by committing the repair and confirming the hash survived the hook's prettier pass. **Intent's own tree has the identical hole open**: five `design.md` files on disk under `intent/st/*/`, none fenced. Not yet bitten there -- their doctor reports 3 findings and none is attachment-drift -- which is the state we were in three days ago.
+
+**Not a defect, checked so nobody chases it:** `.wps[].id` is `null` in every thread including v3-native ST0010. That is the schema being positional.
+
+**The synthesis I put to intent-vc.** v3's rule is that a green must name its instrument. Three repos hit it today in three forms: ST0009's migrated rows, ST0010's AT map that I broke myself by renumbering, and `_tools` ST0002 stuck at 11/13 for a test file with no literal AT ids. The rule is right every time. But the migrator cannot manufacture instrument names v2 never recorded, so **every v2 project with free-text ATs inherits a blocked gate on upgrade with hand-repair the only exit** -- met by the consumer as "my closed thread is now blocked and I do not know why".
 
 ## DOING
 
