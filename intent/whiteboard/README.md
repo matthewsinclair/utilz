@@ -8,12 +8,24 @@ The full protocol lives in the `/in-whiteboard` skill (pickup / ask / announce /
 
 `hv` is **Workstream Zero** -- the always-present human node, present in every Intent project. The working nodes are **made to order** per project (never assumed). Discovery is by listing the immediate subdirectories of `intent/whiteboard/`.
 
-Utilz is a small single-stream project, so the roster is deliberately short. Add nodes with `intent claude ws new <wsid>` when a second concurrent stream actually exists -- not in anticipation of one.
+Nodes are **made to order** when a concurrent stream actually exists, never in anticipation of one -- `intent claude ws new <wsid>`. Utilz ran single-stream (`hv` + `cc`) from 2026-07-29 until 2026-08-29, when `vc` was provisioned to take the validation role on ST0010.
 
 | Node | Name                   | Scope (Utilz)                                                                                                               |
 | ---- | ---------------------- | --------------------------------------------------------------------------------------------------------------------------- |
 | `hv` | Hypervisor (the human) | Workstream Zero: adjudicates scope, sequences work, owns releases + tags + pushes; standing directives + escalation landing |
 | `cc` | Control Claude         | the whole framework: `bin/utilz` dispatcher, `opt/utilz/lib/common.sh`, every utility under `opt/`, help, docs, CI          |
+| `vc` | Validation Claude      | the independent check on `cc`'s landed and claimed work; **the named reader of `hv/inbox.*`** -- see "The hv inbox" below   |
+
+## The hv inbox has a named reader, and it is `vc`
+
+**A write surface with no named reader is a queue, not a channel.** Writing to `hv/inbox.<you>.md` succeeds every time whether or not a human ever reads it, and nothing observable distinguishes the two -- so a roster that does not name the reader retires the durable escalation surface at exactly the moments it was designed for, silently. Measured on this protocol in August 2026: four nodes wrote correctly into `hv` inboxes for four days, in the right format, and the human was reading none of it.
+
+So, hv's ruling on 2026-08-29, in hv's own framing: **`vc` + `hv` is the protocol for resolving hv inbox items.** `vc` reads `hv/inbox.*` and surfaces its contents to the human; `hv` adjudicates. This obligation is `vc`'s standing duty, not a task it is assigned per item.
+
+Two corollaries that follow from the obligation rather than from the mechanism:
+
+- **A node reporting an escalation is not finished when the write returns.** It is finished when `vc` has it. Where a live channel to the human exists, the inbox write is redundant _for that exchange_ and not for the project -- reachability is a property of a run, not of a project, and the same human is reachable in an interactive session and unreachable at 3am.
+- **Before `vc` existed, this roster named nobody.** Every `hv/inbox.*` write between 2026-07-29 and 2026-08-29 was a queue write. The inboxes were empty across that window, so nothing was actually lost -- recorded here because a gap that cost nothing this time is still the gap.
 
 ## Layout
 

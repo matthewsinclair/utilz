@@ -2,10 +2,10 @@
 node: cc
 name: Control Claude
 role: control
-session_id: 536a4f85-7490-4324-8c8d-6c09420b6de3
-heartbeat_at: 2026-07-29T21:48Z
-status: paused
-focus: "Released at fe8eecf. v2.4.0 shipped, repo-wide shell audit landed, then a health check found three more dispatcher/doctor defects (issues 0003-0005) -- all fixed, closed, 407 tests green. Nothing in flight; fe8eecf + c5694d6 unpushed."
+session_id: 7caf919e-ca57-4a02-8804-1e44225cea04
+heartbeat_at: 2026-08-29 12:52Z
+status: active
+focus: "ST0010 (utilz prez) -- vc in charge, I am the build hand. Verified the hoist source: _tools HEAD 6c94605, themes flattened at bfd0349, 0 live prefers-color-scheme rules. Awaiting vc's assignment; nothing written."
 claims: []
 ---
 
@@ -13,7 +13,8 @@ claims: []
 
 ## DOING
 
-- (idle) Nothing in flight at `fe8eecf`. ST0009 complete, v2.4.0 tagged + pushed, reply delivered to cdsync-cc, whiteboard at SOTA, repo-wide shell audit landed, issues 0003-0005 fixed and closed.
+- **ST0010 (`utilz prez`) -- vc is in charge, I am the build hand.** hv's scope, verbatim via _tools-vc: the Rust presentation pipeline built in the Geodica `_tools` estate is hoisted out into Utilz; `geodica present` then becomes a CLIENT of `utilz prez`, and `geodica doctor` checks `utilz prez` is available. `mdagg` is the named model. **First Rust in this project** -- hv to me directly: "the project itself will need to be hoisted to support rust, too." No design.md yet, so nothing written; doc-before-code holds. Awaiting vc's assignment.
+- Framework-side Rust support is MY lane and unstarted: `intent lang init rust`; CI (4 jobs -- toolchain + `cargo build`/`test` on Ubuntu AND macOS, plus clippy); `run_tests()` hard-requires bats and drives BATS only; `run_doctor` is YAML declare-and-check with no build concept; `utilz generate` scaffolds bash; `.gitignore` needs `target/`.
 
 ## Last session (2026-07-10)
 
@@ -38,6 +39,12 @@ Two claims in cdsync-cc's report were checked rather than taken at face value: i
 
 ## Watch-outs
 
+- **geopres/ST0010: three sibling directories travel or the crate does not build.** Every compile-time embed: `src/mermaid.rs:21` = `include_str!("../assets/mermaid.min.js")` (3.5MB vendored, the largest thing in the binary) and `src/theme.rs:55-61` = `include_str!("../themes/<name>/theme.css")` x7. `include_str!` resolves relative to the SOURCE FILE at compile time, so `src/`, `themes/` and `assets/` keep their relative positions as siblings. This kills any `opt/prez/` layout that rearranges them. Verified by reading, 2026-08-29.
+- **geopres: `--gp-accent` is the trap in the mermaid fix; the universal token set is exactly five.** Measured across all 7 built-ins: `--gp-bg` `--gp-fg` `--gp-muted` `--gp-rule` `--gp-code-bg` are 7/7; `--gp-accent` is 4/7 (absent from simple, steampunk, 8bit). An undeclared custom property returns `""`, and mermaid handed `""` falls back to its own default -- silently re-entering the non-determinism through a missing token instead of through the OS. Build `themeVariables` from the five only.
+- **geopres `src/mermaid.rs:37` is deliberately unfixed, and fixing it ALONE is worse than leaving it.** It keys the diagram palette off `window.matchMedia('(prefers-color-scheme: dark)')` rather than the theme. Make the diagram track the theme on its own and a dark theme on a light-mode laptop renders light AND draws a light diagram -- they agree, the visible mismatch that made the bug findable disappears, and the artifact is still non-deterministic. A fix that destroys the symptom and keeps the disease is the one that gets closed as done. The theme flattening it had to land with is now committed (`bfd0349`), so it is unblocked.
+- **geopres `examples/demo.md` does NOT opt into mermaid** -- its `mermaid: true` sits inside a fenced yaml block as documentation. A determinism or diagram check pointed at demo.md goes GREEN on the very defect it was written for. Measured over there: blueprint+demo.md passes, blueprint+test_pres.md fails, same theme, same binary. Point any diagram check at `examples/test_pres.md`.
+- **A grep-based check must target a string the artifact can only contain if the thing is really there** -- never a token the deck might legitimately discuss. This class has bitten the geopres thread four times: the `notes:` key, the bare word `mermaid`, and most recently `grep -rn 'prefers-color-scheme' themes/`, which goes RED on a correctly flattened theme whose comment documents the removal. That last one was handed to me to verify with; I caught it only because the match text read as prose. Strip comments before counting, or use a sentinel, a library-internal symbol (`mermaidAPI`, not `mermaid`), or a size gap.
+- **Any worst-case contrast figure must cite its selector and commit or it goes stale.** The geopres number moved four times in two days -- 8bit 5.4 (headings only) -> mono 4.92 -> 8bit 4.7 (table cells) -> mono 4.9 (post-flatten, 8bit to 6.2) -- each from a strictly wider selector, nobody careless at any step. Current set at `bfd0349`: simple 6.0, mono 4.9, manuscript 5.7, contrast 14.2, blueprint 7.6, steampunk 5.5, 8bit 6.2, geodica 6.9, floor 4.5. Also: a legibility probe must declare SVG text UNMEASURED rather than report on it -- `painted()` walks DOM ancestors, and a mermaid label sits in a `<foreignObject>` whose background is a sibling `<rect>`, so the walk misses the fill and reports 1.3:1 on text that is perfectly legible.
 - **`each_utility()` now has six consumers, one of them in `bin/utilz`.** ST0009's sweep missed that file because it grepped `common.sh` only. The check that proves there is no seventh copy is `grep -rn 'UTILZ_HOME"/bin/\*' bin/utilz opt/utilz/lib/common.sh` -- it must return exactly two hits, the walker's own loop and nothing else open-coded. Run it after any change that adds a listing surface.
 - **`utilz test` is not safe to run concurrently.** The test helper's `create_test_utility` mutates `$UTILZ_HOME/bin`, so two suites corrupt each other -- observed as a 2h18m hang stalled at `common_lib.bats` test 22 on 2026-07-29, caused by an orphaned background run, not a code defect. One suite at a time; kill strays before starting.
 - Verify shell tooling under `/bin/bash` with an array, never under zsh with an unquoted variable. `shellcheck -x $FILES` in zsh does not word-split, so shellcheck receives one bogus path, errors, and the empty output reads as a pass. That mistake produced a false "all 15 clean" against a real 57 findings on 2026-07-29.
