@@ -112,6 +112,33 @@ await press(cdp, 'ArrowRight'); check('past_end_stays', await cdp.eval(current),
 await press(cdp, 'Home');       check('home', await cdp.eval(current), 1);
 await press(cdp, 'ArrowLeft');  check('before_start_stays', await cdp.eval(current), 1);
 
+// THIS BLOCK MUST STAY AHEAD OF THE Escape PRESS BELOW, and the reason is not
+// stylistic. Escape is bound to quit(), which pops the close-shortcut message
+// for 4000ms, and the bar is on screen whenever ANY of its panels is -- so a
+// bar check taken after that press samples a bar the message is holding open.
+// Measured 2026-08-29 on this probe's first real run: bar_starts_hidden and
+// bar_hidden_again both failed, and both passed with a 4.5s wait inserted.
+// The check named "starts hidden" was reading a bar 38 lines into the run.
+// ---- the bar, and the keys that drive it ----
+const barOn = 'document.querySelector(".gp-bar").classList.contains("gp-on")';
+const keysOn = 'document.querySelector(".gp-bar-keys").classList.contains("gp-on")';
+const gotoOn = 'document.querySelector(".gp-bar-goto").classList.contains("gp-on")';
+
+check('bar_exists', await cdp.eval('!!document.querySelector(".gp-bar")'), true);
+check('bar_starts_hidden', await cdp.eval(barOn), false);
+// The keycaps are BUILT FROM THE BINDING TABLE, so this count is the number of
+// bindings. It is asserted because an empty bar would render, be styled, be
+// toggleable, and advertise nothing.
+// Ten OUTSIDE the index: the commit binding is conditional and the bar renders
+// only what applies right now, which is the property being asserted.
+check('bar_lists_every_applicable_binding', await cdp.eval('document.querySelectorAll(".gp-bar-item").length'), 10);
+check('keycaps_are_kbd_elements', await cdp.eval('document.querySelectorAll(".gp-bar .gp-key").length > 0'), true);
+
+await press(cdp, '?');          check('help_opens', await cdp.eval(keysOn), true);
+check('bar_visible_with_help', await cdp.eval(barOn), true);
+await press(cdp, '?');          check('help_toggles_off', await cdp.eval(keysOn), false);
+check('bar_hidden_again', await cdp.eval(barOn), false);
+
 // THE INDEX IS ON `i` NOW, NOT ON Escape (hv, 29 Aug). Escape toggling a mode
 // was the complaint -- one key that meant "open this" and "close this"
 // depending on invisible state. These three lines used to press Escape.
@@ -148,25 +175,6 @@ await press(cdp, 'Enter');      check('enter_commits_too', await cdp.eval(curren
 check('enter_closed_the_index', await cdp.eval(overviewing), false);
 await press(cdp, 'Enter');      check('enter_outside_the_index_is_inert', await cdp.eval(current), 3);
 
-// ---- the bar, and the keys that drive it ----
-const barOn = 'document.querySelector(".gp-bar").classList.contains("gp-on")';
-const keysOn = 'document.querySelector(".gp-bar-keys").classList.contains("gp-on")';
-const gotoOn = 'document.querySelector(".gp-bar-goto").classList.contains("gp-on")';
-
-check('bar_exists', await cdp.eval('!!document.querySelector(".gp-bar")'), true);
-check('bar_starts_hidden', await cdp.eval(barOn), false);
-// The keycaps are BUILT FROM THE BINDING TABLE, so this count is the number of
-// bindings. It is asserted because an empty bar would render, be styled, be
-// toggleable, and advertise nothing.
-// Ten OUTSIDE the index: the commit binding is conditional and the bar renders
-// only what applies right now, which is the property being asserted.
-check('bar_lists_every_applicable_binding', await cdp.eval('document.querySelectorAll(".gp-bar-item").length'), 10);
-check('keycaps_are_kbd_elements', await cdp.eval('document.querySelectorAll(".gp-bar .gp-key").length > 0'), true);
-
-await press(cdp, '?');          check('help_opens', await cdp.eval(keysOn), true);
-check('bar_visible_with_help', await cdp.eval(barOn), true);
-await press(cdp, '?');          check('help_toggles_off', await cdp.eval(keysOn), false);
-check('bar_hidden_again', await cdp.eval(barOn), false);
 
 // go-to-page: open, type, submit, and the clamp hv asked for by name.
 await press(cdp, 'g');          check('goto_opens', await cdp.eval(gotoOn), true);
