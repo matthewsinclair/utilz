@@ -13,7 +13,239 @@ title: Add prez to utilz to support markdown presentation pipeline
 
 ## Acceptance Criteria
 
+### Group AC01
+
+- AC01 Dependency posture: the crate's Cargo.toml declares comrak as its ONLY dependency, with default-features = false (the syntect default locks 104 packages against 25 and funds nothing here -- the theme owns code presentation). Args, front matter, slide split, inlining, base64 and shell-outs stay hand-rolled against std. Any further crate needs hv sign-off named in the adding commit. (Carried from _tools AC02.) -- satisfied: no (computed)
+
+### Group AC02
+
+- AC02 Self-contained artifact: `utilz prez build examples/demo.md` emits one .html that opens fully offline from file:// -- no prez-emitted http(s) references -- with local images inlined as data: URIs, and the text-only demo artifact <= 100 KB. (Carried from _tools AC03.) -- satisfied: no (computed)
+
+### Group AC03
+
+- AC03 Notes stripped: the demo deck's notes comment carries a distinctive sentinel string and that sentinel appears nowhere in the built artifact (grep on the demo build proves it). Stripping is a REMOVAL wherever a notes comment appears on a depth-zero line, mid-line included, not a whole-line rule; a notes comment INSIDE a code fence is author content and is shown, so the grep targets the sentinel payload, never the literal notes: token. (Carried from _tools AC04.) -- satisfied: no (computed)
+
+### Group AC04
+
+- AC04 Base runtime: arrows/space/PgUp/PgDn/Home/End navigate, f toggles fullscreen, Esc toggles a clickable overview grid, a slide counter shows n/N, and #n hash addressing deep-links and survives reload -- verified in a real browser on the demo artifact. (Carried from _tools AC05.) -- satisfied: no (computed)
+
+### Group AC05
+
+- AC05 PDF: `utilz prez pdf examples/demo.md` produces one slide per 254x142.9mm page via a probed installed browser; with --browser /nonexistent it refuses non-zero, listing every path probed and the remedy. (Carried from _tools AC06.) -- satisfied: no (computed)
+
+### Group AC06
+
+- AC06 Present: `utilz prez present` builds, launches the browser de-chromed/fullscreen on the artifact, then exits -- no prez process left behind, no server, ever (hv's standing anti-requirement: the browser presents; prez writes a file and stops). (Carried from _tools AC07.) -- satisfied: no (computed)
+
+### Group AC07
+
+- AC07 Mermaid opt-in: with `mermaid: true` in front matter a fenced mermaid block renders as a diagram offline; without the opt-in the artifact carries zero mermaid bytes, proven by a grep for a library-internal symbol, never a token a deck might legitimately discuss. (Carried from _tools AC08.) -- satisfied: no (computed)
+
+### Group AC08
+
+- AC08 Theme system: a single .css restyles the deck without touching the md; --theme NAME and --theme=NAME produce byte-identical output; an unresolvable theme is REFUSED non-zero -- naming the built-ins and the search path, and, with PREZ_THEME_PATH unset, saying no theme directories were searched -- never falling back to the default, and leaving no partial artifact. A theme carrying an external URL is refused at build naming file, line and offender; a URL inside a CSS comment is documentation and builds. EVERY built-in: builds the demo, declares all six standard classes, emits no custom property outside the --gp- namespace, carries zero external references, overflows no slide, and measures >= 4.5:1 worst-case text contrast -- any quoted figure citing selector + palette + commit (worked example: 8bit th at 4.18:1, hidden by headless Chrome defaulting light AND a probe that never reached a table cell; removing either blind spot alone would not have shown it). There is no theme named `default` in either tree: prez's no-flag default is `simple`, and a caller's default is the caller's argument (hv 2026-08-29). Addressing-mode semantics live in AC15. (Carried from _tools AC09; the addressing clause is deliberately excised to its successor.) -- satisfied: no (computed)
+
+### Group AC09
+
+- AC09 Standalone source: no estate paths and no estate imports in opt/prez/crate/src -- grep-validated on use statements and string literals; comments may reference provenance (a comment creates no coupling). 2-space indent. `intent critic rust` clean AND `cargo clippy --all-targets` clean -- clippy named explicitly because the critic arms 1 of 7 rules and declines the clippy-backed ones, so a clean critic alone is a control that cannot go red. (Carried from _tools AC10.) -- satisfied: no (computed)
+
+### Group AC10
+
+- AC10 Deterministic artifact: nothing in a built .html branches on a VIEWER PREFERENCE -- no prefers-color-scheme, prefers-reduced-motion, prefers-contrast, forced-colors or navigator.language in any emitted script or stylesheet, theme CSS included, and no runtime palette choice; mermaid's themeVariables are built from the five universal tokens only (--gp-bg, --gp-fg, --gp-muted, --gp-rule, --gp-code-bg -- --gp-accent is declared by 4 of 7 themes, and an undeclared token's empty string re-enters the defect). Scoped to BRANCHING, not pixel-identity: system font stacks legitimately resolve per machine, and a green determinism probe says the artifact renders the SAME everywhere, not that it renders CORRECTLY anywhere (recorded limit: diagram labels took documentElement's serif while the deck ran its own sans -- deterministically wrong, caught by screenshot after the green). Verified by grepping emitted output AND by CDP light/dark emulation agreeing on the computed palette, swept on examples/test_pres.md with demo.md present only as the labelled negative control (its mermaid: true is documentation inside a fence; a sweep pointed at demo.md alone goes green on the exact defect this criterion exists for). (Carried from _tools AC13.) -- satisfied: no (computed)
+
+### Group AC11
+
+- AC11 Repo build hygiene: opt/prez/crate/target/ is gitignored in a commit that lands BEFORE any in-tree build exists; no build-generated file is ever tracked (the pres_*.html litter class stays behind by hoisting from git at the pin, tracked content only, never cp -R). The Dropbox rationale of _tools AC01 is recorded as NOT transferring: Utilz sits outside Dropbox and its local remote is bare. -- satisfied: no (computed)
+
+### Group AC12
+
+- AC12 The shim: opt/prez/prez is bash, shellcheck-clean inside the blocking gate, and does resolve-ensure-exec only -- rebuilds when the binary is missing or older than any crate source (Cargo.*, src/, themes/, assets/), refuses without cargo BEFORE any build attempt naming the install remedy, and execs the binary with no presentation logic of its own. The dispatcher is untouched: zero changes to bin/utilz. -- satisfied: no (computed)
+
+### Group AC13
+
+- AC13 Framework integration: prez appears in utilz list with its yaml metadata; utilz help prez renders help/prez.md; utilz doctor keeps its declare-and-check posture (cargo appears as a manual optional line, not a hard dependency); utilz test prez drives cargo test + shim BATS + crate/test/acceptance.sh --strict by CONVENTION (crate/Cargo.toml, test/*.bats, crate/test/acceptance.sh -- the next Rust utility inherits the driver unedited), with counters aggregated across all three sources; CI gains a rust job (both OSes; the log PROVES a browser was found, because a skip surviving into green is the measured failure mode) and a clippy job (-D warnings, blocking from day one), both wired into test-summary. -- satisfied: no (computed)
+
+### Group AC14
+
+- AC14 Announce-on-resolve: when a theme NAME resolves from PREZ_THEME_PATH rather than the built-ins, the build says so on stderr, naming the directory it came from -- local-wins shadowing stays visible, and under --theme-path a user with two directories can always answer which one won. -- satisfied: no (computed)
+
+### Group AC15
+
+- AC15 Theme addressing, split by mode (hv 2026-08-29): --theme=NAME resolves names ONLY -- search path then built-ins, never the working directory (killing the measured cwd-shadowing: --theme=simple beside a ./simple/ directory resolved the local one, elsewhere the built-in, silently); --theme-file=FILE resolves a path ONLY, mutually exclusive with --theme, its refusal saying no-such-file rather than offering a theme roster; --theme-path=PATHSTR PREPENDS colon-separated directories to PREZ_THEME_PATH for the invocation (prepend, not replace: flag and env compose); front matter splits identically into theme: (name) and theme-file: (deck-relative path), or the ambiguity moves into the deck where it travels; --theme=./x.css is thereby refused as a name carrying a separator -- a breaking change taken deliberately at the rename, the cheapest moment it will ever have. -- satisfied: no (computed)
+
+### Group AT01
+
+_(no criteria in this group)_
+
+### Group AT02
+
+_(no criteria in this group)_
+
+### Group AT03
+
+_(no criteria in this group)_
+
+### Group AT04
+
+_(no criteria in this group)_
+
+### Group AT05
+
+_(no criteria in this group)_
+
+### Group AT06
+
+_(no criteria in this group)_
+
+### Group AT07
+
+_(no criteria in this group)_
+
+### Group AT08
+
+_(no criteria in this group)_
+
+### Group AT09
+
+_(no criteria in this group)_
+
+### Group AT10
+
+_(no criteria in this group)_
+
+### Group AT11
+
+_(no criteria in this group)_
+
+### Group AT12
+
+_(no criteria in this group)_
+
+### Group AT13
+
+_(no criteria in this group)_
+
+### Group AT14
+
+_(no criteria in this group)_
+
 ## Acceptance Tests
+
+### Group AC01
+
+_(no tests in this group)_
+
+### Group AC02
+
+_(no tests in this group)_
+
+### Group AC03
+
+_(no tests in this group)_
+
+### Group AC04
+
+_(no tests in this group)_
+
+### Group AC05
+
+_(no tests in this group)_
+
+### Group AC06
+
+_(no tests in this group)_
+
+### Group AC07
+
+_(no tests in this group)_
+
+### Group AC08
+
+_(no tests in this group)_
+
+### Group AC09
+
+_(no tests in this group)_
+
+### Group AC10
+
+_(no tests in this group)_
+
+### Group AC11
+
+_(no tests in this group)_
+
+### Group AC12
+
+_(no tests in this group)_
+
+### Group AC13
+
+_(no tests in this group)_
+
+### Group AC14
+
+_(no tests in this group)_
+
+### Group AC15
+
+_(no tests in this group)_
+
+### Group AT01
+
+- AT01 `opt/prez/crate/test/acceptance.sh` -- covers AC01 -- status: to-write -- Carried from _tools ST0002 at pin 3e16597 (green there under --strict at the pin: 10 passed / 0 failed / 0 skipped, run by _tools-cc). Unverified in this repo until produced by instruments run here (WP-04); to-write because the file does not exist in this tree until WP-03 lands.
+
+### Group AT02
+
+- AT02 `opt/prez/crate/test/acceptance.sh` -- covers AC02, AC03 -- status: to-write -- Carried from _tools ST0002 at pin 3e16597 (green there under --strict at the pin: 10 passed / 0 failed / 0 skipped, run by _tools-cc). Unverified in this repo until produced by instruments run here (WP-04); to-write because the file does not exist in this tree until WP-03 lands.
+
+### Group AT03
+
+- AT03 `opt/prez/crate/test/acceptance.sh` -- covers AC04 -- status: to-write -- Carried from _tools ST0002 at pin 3e16597 (green there under --strict at the pin: 10 passed / 0 failed / 0 skipped, run by _tools-cc). Unverified in this repo until produced by instruments run here (WP-04); to-write because the file does not exist in this tree until WP-03 lands.
+
+### Group AT04
+
+- AT04 `opt/prez/crate/test/acceptance.sh` -- covers AC05 -- status: to-write -- Carried from _tools ST0002 at pin 3e16597 (green there under --strict at the pin: 10 passed / 0 failed / 0 skipped, run by _tools-cc). Unverified in this repo until produced by instruments run here (WP-04); to-write because the file does not exist in this tree until WP-03 lands.
+
+### Group AT05
+
+- AT05 `opt/prez/crate/test/acceptance.sh` -- covers AC06 -- status: to-write -- Carried from _tools ST0002 at pin 3e16597 (green there under --strict at the pin: 10 passed / 0 failed / 0 skipped, run by _tools-cc). Unverified in this repo until produced by instruments run here (WP-04); to-write because the file does not exist in this tree until WP-03 lands.
+
+### Group AT06
+
+- AT06 `opt/prez/crate/test/acceptance.sh` -- covers AC07 -- status: to-write -- Carried from _tools ST0002 at pin 3e16597 (green there under --strict at the pin: 10 passed / 0 failed / 0 skipped, run by _tools-cc). Unverified in this repo until produced by instruments run here (WP-04); to-write because the file does not exist in this tree until WP-03 lands.
+
+### Group AT07
+
+- AT07 `opt/prez/crate/test/acceptance.sh` -- covers AC08 -- status: to-write -- Carried from _tools ST0002 at pin 3e16597 (green there under --strict at the pin: 10 passed / 0 failed / 0 skipped, run by _tools-cc). Unverified in this repo until produced by instruments run here (WP-04); to-write because the file does not exist in this tree until WP-03 lands.
+
+### Group AT08
+
+- AT08 `opt/prez/crate/test/acceptance.sh` -- covers AC09 -- status: to-write -- Carried from _tools ST0002 at pin 3e16597 (green there under --strict at the pin: 10 passed / 0 failed / 0 skipped, run by _tools-cc). Unverified in this repo until produced by instruments run here (WP-04); to-write because the file does not exist in this tree until WP-03 lands.
+
+### Group AT09
+
+- AT09 `opt/prez/crate/test/acceptance.sh` -- covers AC10 -- status: to-write -- Carried from _tools ST0002 at pin 3e16597 (green there under --strict at the pin: 10 passed / 0 failed / 0 skipped, run by _tools-cc). Unverified in this repo until produced by instruments run here (WP-04); to-write because the file does not exist in this tree until WP-03 lands. Includes the AT12 determinism probe (bfb33cd + the 3e16597 comment-strip hardening) and the post-ec3564a legibility probe; demo.md appears once, labelled as the negative control.
+
+### Group AT10
+
+- AT10 `opt/prez/test/prez.bats` -- covers AC11 -- status: to-write -- Asserts the ignore rule is present, a build leaves git status clean, and no tracked path sits under opt/prez/crate/target/.
+
+### Group AT11
+
+- AT11 `opt/prez/test/prez.bats` -- covers AC12 -- status: to-write -- Shim black-box: version/help through the dispatcher, the no-cargo refusal names the remedy (never bare command-not-found), a touched crate source triggers the freshness rebuild. Never pipe a command whose exit code is the assertion (the $?-was-head's lesson).
+
+### Group AT12
+
+- AT12 `opt/prez/test/prez.bats` -- covers AC13 -- status: to-write -- list/help/doctor/test surfaces observed through the dispatcher; the CI half is evidenced by the first green Actions run of the rust + clippy jobs, its URL recorded in this note when it exists.
+
+### Group AT13
+
+- AT13 `opt/prez/crate/test/acceptance.sh` -- covers AC14 -- status: to-write -- New case post-hoist: a search-path theme resolving announces its source directory on stderr; a built-in resolving stays silent.
+
+### Group AT14
+
+- AT14 `opt/prez/crate/test/acceptance.sh` -- covers AC15 -- status: to-write -- GENUINELY red-first: --theme=NAME must resolve identically from two working directories, one containing a ./NAME/ directory -- RED against the pinned binary today (path.exists() wins). Goes green only when the split lands (WP-06).
 
 ---
 

@@ -9,7 +9,7 @@ status: WIP
 
 ## Objective
 
-_(not yet written)_
+Own the contract: design.md, this AC/AT set (AC01-AC10 carried from _tools ST0002 at pin 3e16597; AC11-AC15 native), the recorded non-transcriptions (_tools AC01/AC11/AC12), and the discipline notes every AT runs under.
 
 ## Acceptance
 

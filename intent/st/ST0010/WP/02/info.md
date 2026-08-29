@@ -2,14 +2,14 @@
 wp_id: WP-02
 title: Framework Rust substrate: lang, gitignore, CI, test driver, doctor
 scope: S
-status: Not Started
+status: WIP
 ---
 
 # WP-02: Framework Rust substrate: lang, gitignore, CI, test driver, doctor
 
 ## Objective
 
-_(not yet written)_
+Framework Rust substrate, ahead of any crate landing: the target/ gitignore fence, intent lang init rust, CI's rust + clippy jobs (blocking from day one; browser presence proven in the log), the convention-driven run_tests extension (cargo test + BATS + acceptance --strict), the doctor optional line.
 
 ## Acceptance
 

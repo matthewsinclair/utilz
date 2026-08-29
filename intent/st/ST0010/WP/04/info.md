@@ -9,7 +9,7 @@ status: Not Started
 
 ## Objective
 
-_(not yet written)_
+Validation in the new home: every carried green re-produced by instruments run HERE -- cargo test (111 at the pin), acceptance.sh --strict (10/0/0 at the pin), the probes, the liftability refusal, the standalone greps -- ATs walked to green through red where the lifecycle requires, and a coverage statement naming what was NOT checked.
 
 ## Acceptance
 

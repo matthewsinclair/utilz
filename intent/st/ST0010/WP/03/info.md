@@ -9,7 +9,7 @@ status: Not Started
 
 ## Objective
 
-_(not yet written)_
+The hoist: git-archive the crate from _tools at 3e16597 into opt/prez/crate/, the geopres->prez rename sweep (Cargo.toml, error prefix, USAGE, SEARCH_PATH const + refusal strings + the AT that asserts them, acceptance.sh + probes), the ensure-built shim, prez.yaml, bin/prez symlink, help/prez.md, README.
 
 ## Acceptance
 
