@@ -65,6 +65,31 @@ file_size() {
   stat -c %s "$1" 2>/dev/null || stat -f %z "$1" 2>/dev/null || echo 0
 }
 
+# WAIT FOR THE PORT TO ANSWER, NEVER FOR A DURATION.
+#
+# Both CDP launches used `sleep 2` and then connected. That measures two
+# seconds, not readiness -- so it passes on a warm developer laptop where
+# Chrome opens its port in well under a second, and races on anything slower.
+#
+# Measured on CI 2026-08-29, the first run off this machine: AT04 died with
+# `TypeError: fetch failed / ECONNREFUSED 127.0.0.1:9333` on BOTH matrix legs,
+# with 128 unit tests green and every other block passing. Nothing was wrong
+# with the runtime or the probe; the browser had simply not finished starting.
+#
+# The suite already had the right idiom -- the argv checks below poll for a
+# file rather than sleeping at it. This applies the same shape to the port.
+# /dev/tcp is a bash builtin, so it needs neither curl nor node, and the
+# subshell closes the descriptor for us.
+wait_for_cdp() {
+  local port="$1" tries=200          # 200 x 0.05s = a 10s ceiling
+  while [ "$tries" -gt 0 ]; do
+    if (exec 3<>"/dev/tcp/127.0.0.1/$port") 2>/dev/null; then return 0; fi
+    tries=$((tries - 1))
+    sleep 0.05
+  done
+  return 1
+}
+
 WORK="$(mktemp -d "${TMPDIR:-/tmp}/prez-at.XXXXXX")"
 trap 'rm -rf "$WORK"' EXIT
 
@@ -362,7 +387,7 @@ if want AT04; then
     "$BROWSER" --headless=new $CHROME_SAFE --remote-debugging-port=9333 --window-size=1280,800 \
       --user-data-dir="$WORK/chrome" "file://$art" >"$WORK/chrome.log" 2>&1 &
     CHROME_PID=$!
-    sleep 2
+    wait_for_cdp 9333 || bad "chrome never opened its debugging port on 9333"
     if node "$HERE/at04-runtime-probe.mjs" 9333; then ok "every runtime check passed"; else bad "the runtime probe reported failures"; fi
     kill "$CHROME_PID" 2>/dev/null; wait "$CHROME_PID" 2>/dev/null
     finish
@@ -721,7 +746,7 @@ if want AT12; then
         --window-size=1280,800 --user-data-dir="$WORK/chrome-at12" "file://$art" \
         >"$WORK/chrome-at12.log" 2>&1 &
       local pid=$!
-      sleep 2
+      wait_for_cdp "$port" || bad "chrome never opened its debugging port on $port"
       if node "$HERE/at12-determinism-probe.mjs" "$port" "$theme/$label" >"$WORK/at12-$theme-$label.out" 2>&1; then
         ok "$theme ($label): deterministic"
       else
