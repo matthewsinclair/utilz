@@ -47,7 +47,7 @@ title: Add prez to utilz to support markdown presentation pipeline
 
 ### Group AC09
 
-- AC09 Standalone source: no estate paths and no estate imports in opt/prez/crate/src -- grep-validated on use statements and string literals; comments may reference provenance (a comment creates no coupling). 2-space indent. `intent critic rust` clean AND `cargo clippy --all-targets` clean -- clippy named explicitly because the critic arms 1 of 7 rules and declines the clippy-backed ones, so a clean critic alone is a control that cannot go red. (Carried from _tools AC10.) -- satisfied: no (computed)
+- AC09 Standalone source: NO REFERENCE TO THE ESTATE THIS CRATE CAME FROM -- paths, organisation or project names, or imports -- anywhere in opt/prez/crate/src, COMMENTS INCLUDED, grep-validated. The comment exemption is withdrawn (hv 2026-08-29: Utilz carries zero knowledge of that estate). It was defensible on its own terms, since a comment creates no coupling and nothing executes it -- but it is not only coupling that travels: the check that enforced this required a leading quote, so it saw string literals only, and a real client path sat in a deck.rs comment, green, for as long as the check existed. A rule the check cannot see is a rule nobody enforces. The tripwire keeps naming the estate deliberately, because a grep that cannot say what it is looking for cannot look for it; it lives in test/, never in src/, so it cannot match itself. 2-space indent. `intent critic rust` clean AND `cargo clippy --all-targets` clean -- clippy named explicitly because the critic arms 1 of 7 rules and declines the clippy-backed ones, so a clean critic alone is a control that cannot go red. (Carried from upstream AC10; the comment clause tightened here.) -- satisfied: no (computed)
 
 ### Group AC10
 
@@ -71,7 +71,7 @@ title: Add prez to utilz to support markdown presentation pipeline
 
 ### Group AC15
 
-- AC15 Theme addressing, split by mode (hv 2026-08-29): --theme=NAME resolves names ONLY -- search path then built-ins, never the working directory (killing the measured cwd-shadowing: --theme=simple beside a ./simple/ directory resolved the local one, elsewhere the built-in, silently); --theme-file=FILE resolves a path ONLY, mutually exclusive with --theme, its refusal saying no-such-file rather than offering a theme roster; --theme-path=PATHSTR PREPENDS colon-separated directories to PREZ_THEME_PATH for the invocation (prepend, not replace: flag and env compose); front matter splits identically into theme: (name) and theme-file: (deck-relative path), or the ambiguity moves into the deck where it travels; --theme=./x.css is thereby refused as a name carrying a separator -- a breaking change taken deliberately at the rename, the cheapest moment it will ever have. -- satisfied: no (computed)
+- AC15 Theme addressing, split by mode (hv 2026-08-29): --theme=NAME resolves names ONLY -- search path then built-ins, never the working directory (killing the measured cwd-shadowing: --theme=simple beside a ./simple/ directory resolved the local one, elsewhere the built-in, silently); --theme-file=FILE resolves a path ONLY, mutually exclusive with --theme, its refusal saying no-such-file rather than offering a theme roster; --theme-path=PATHSTR PREPENDS colon-separated directories to PREZ_THEME_PATH for the invocation (prepend, not replace: flag and env compose); front matter splits identically into theme: (name) and theme-file: (deck-relative path), or the ambiguity moves into the deck where it travels; --theme=./x.css is thereby refused as a name carrying a separator -- a breaking change taken deliberately at the rename, the cheapest moment it will ever have. (f) THE REFUSAL OF A PATH GIVEN TO --theme MUST NAME --theme-file, because this split breaks an invocation that is already in use. Measured 2026-08-29: hv presented a real 14-slide client deck with `prez present <deck> --theme <path>`, which is in hv's shell history and in that deck's build instructions. On the day WP-06 lands, that exact command starts failing, and a refusal that only says a name cannot contain a separator reads as the port having broken the deck. Naming the replacement flag turns a breakage into a migration. This is the general rule of AC20(b) pointing the other way: a refusal must name the remedy for the case that actually fired. -- satisfied: no (computed)
 
 ### Group AC16
 
@@ -166,6 +166,10 @@ _(no criteria in this group)_
 _(no criteria in this group)_
 
 ### Group AT19
+
+_(no criteria in this group)_
+
+### Group AT20
 
 _(no criteria in this group)_
 
@@ -321,11 +325,15 @@ _(no tests in this group)_
 
 ### Group AT18
 
-- AT18 `opt/prez/crate/test/acceptance.sh` -- covers AC19 -- status: to-write -- To write, utilz-cc's. Two layers: a cargo unit test over open_presenting's constructed argv (browserless, catches a flag that is passed and ignored), plus a browser check that the window that appears has the deck's aspect. The argv half must assert the ABSENCE of any flag proven inert as well as the presence of the geometry, or a build that keeps --start-fullscreen alongside a working --window-size passes a check that only looks for the new flag -- the same both-directions rule as AC04(b).
+- AT18 `opt/prez/crate/src/drive.rs` -- covers AC19 -- status: to-write -- To write, utilz-cc's. Two layers: a cargo unit test over open_presenting's constructed argv (browserless, catches a flag that is passed and ignored), plus a browser check that the window that appears has the deck's aspect. The argv half must assert the ABSENCE of any flag proven inert as well as the presence of the geometry, or a build that keeps --start-fullscreen alongside a working --window-size passes a check that only looks for the new flag -- the same both-directions rule as AC04(b).
 
 ### Group AT19
 
 - AT19 `opt/prez/crate/test/runtime-logic-probe.mjs` -- covers AC20 -- status: to-write -- To write, utilz-cc's. AT17's probe already stubs the DOM and holds BINDINGS, so it is the cheap home. Four assertions: the bar's close row shows the platform shortcut; q and Esc are still caught and say it; the message TEXT is asserted, not merely its existence, because the defect was a truthful-looking sentence with a false remedy in it; and the platform branch is driven BOTH ways from a stubbed navigator, since a check run only on the build host proves nothing about the portable artifact -- that is clause (d), and a single-platform test would pass on a Mac while the Linux path stayed unexercised.
+
+### Group AT20
+
+- AT20 `opt/prez/crate/test/acceptance.sh` -- covers AC19 -- status: to-write -- AC19's BROWSER layer, split out of AT18 on 2026-08-29 because nothing covered it and AT18 green alone would have satisfied AC19 with half its clauses unproven. AT18 keeps the argv layer, which is real: the unit tests under drive.rs's "AT18's argv half" header, plus three assertions inside AT06's block (launched at the deck's aspect, no flag that Chrome silently ignores, --window overrides the default). This row is the other half and it needs a REAL window, not a headless one, so it is the only check in the suite that puts something on the human's screen. Two things it must settle, both open: whether the window that actually appears carries the deck's aspect, and utilz-cc's unclosed question -- when Chrome is ALREADY RUNNING the launch forwards to the existing instance, and --window-size may not apply on that path, so AC19's geometry could be cold-start-only. A green taken on a machine with no Chrome running would not answer that and must not be recorded as if it had.
 
 ---
 

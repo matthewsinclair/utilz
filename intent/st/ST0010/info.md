@@ -18,7 +18,7 @@ The move must preserve the single property that makes it possible: the tool carr
 
 ### What is being moved
 
-`geopres` is one Rust crate at `~/Dropbox/Geodica/_tools/native/rust/geopres`: 3,378 lines across 13 modules, `comrak` as its only dependency, 111 unit tests plus a 9-test black-box acceptance suite. Markdown in, one self-contained HTML presentation out. It is `_tools` ST0002; WP01 (core) and WP03 (theme system) are done and validated, WP02 (estate binding) is in flight in `_tools-cc`'s hands.
+`geopres` is one Rust crate at `~/Devel/prj/Gtools/native/rust/geopres` (the estate moved and was renamed on 2026-08-29, from `Geodica/_tools` to `Gtools`; the pin `3e16597` and every commit id in this thread predate the move and still resolve there): 3,378 lines across 13 modules, `comrak` as its only dependency, 111 unit tests plus a 9-test black-box acceptance suite. Markdown in, one self-contained HTML presentation out. It is `_tools` ST0002; WP01 (core) and WP03 (theme system) are done and validated, WP02 (estate binding) is in flight in `_tools-cc`'s hands.
 
 The extraction line is already drawn and should not be redrawn. `_tools-vc` and `_tools-cc` both state it in the same terms:
 
@@ -120,7 +120,7 @@ The hygiene LESSONS above still apply and are restated as this thread's own crit
 | ----- | ------------------------------------------------------------------ | ---- | ----------- |
 | WP-01 | Contract: design.md + AC/AT transcription from _tools ST0002       | S    | Done        |
 | WP-02 | Framework Rust substrate: lang, gitignore, CI, test driver, doctor | S    | Done        |
-| WP-03 | The hoist: crate at the pin, rename to prez, shim, yaml, help      | S    | WIP         |
+| WP-03 | The hoist: crate at the pin, rename to prez, shim, yaml, help      | S    | Done        |
 | WP-04 | Validation: every carried green re-produced in the new home        | S    | Not Started |
 | WP-05 | Default theme polish: basic but cool enough out of the box         | S    | Not Started |
 | WP-06 | Theme addressing split + --theme-path (hv's CLI asks)              | S    | Not Started |

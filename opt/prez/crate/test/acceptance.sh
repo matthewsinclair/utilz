@@ -35,9 +35,9 @@ set -uo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 CRATE="$(dirname "$HERE")"
 REPO="$(cd "$CRATE" && git rev-parse --show-toplevel)"
-# The DEFAULT in-crate target/, not a redirect. _tools pointed this at
-# ~/.cache/geodica/cargo-target because its checkout lives in a Dropbox-synced
-# tree that must not carry build output. Utilz is a plain local checkout, so
+# The DEFAULT in-crate target/, not a redirect. Upstream redirected it out of
+# the tree because that checkout lives in a cloud-synced folder that must not
+# carry build output. Utilz is a plain local checkout, so
 # the default is correct here and .gitignore's opt/*/crate/target/ is the whole
 # fence. CARGO_TARGET_DIR still wins if a caller sets it, which is what lets CI
 # or a cold-build run point somewhere else without editing this file.
@@ -727,8 +727,14 @@ fi
 
 if want AT09; then
   start AT09 "the source is standalone, and both code gates are run"
-  paths=$(grep -rlE '"(/Users/|.*Dropbox)' "$CRATE/src" 2>/dev/null | wc -l | tr -d ' ')
-  check "estate paths in string literals" "$paths" "0"
+  # ANYWHERE IN src, COMMENTS INCLUDED (hv 2026-08-29: Utilz carries zero
+  # knowledge of the estate this crate came from). The earlier form required
+  # a leading quote, so it saw string literals only -- and a real client path
+  # sat in a deck.rs comment, green, for as long as this check existed. A
+  # comment creates no coupling, which is why AC09 once allowed it; it does
+  # leak, which is why it is refused now.
+  paths=$(grep -rlE '(/Users/|Dropbox|[Gg]eodica)' "$CRATE/src" 2>/dev/null | wc -l | tr -d ' ')
+  check "estate paths or names anywhere in src" "$paths" "0"
   imports=$(grep -rhE '^\s*use .*(geodica|gtools)' "$CRATE/src" 2>/dev/null | wc -l | tr -d ' ')
   check "estate imports" "$imports" "0"
 
@@ -771,26 +777,26 @@ if want AT13; then
   # legitimately produces other warnings; measuring silence against a deck that
   # has things to say would be testing the deck.
   AT13DIR="$WORK/at13"
-  mkdir -p "$AT13DIR/first/geodica" "$AT13DIR/second/geodica" "$AT13DIR/second/mono"
-  printf 'body{background:#111}\n' > "$AT13DIR/first/geodica/theme.css"
-  printf 'body{background:#222}\n' > "$AT13DIR/second/geodica/theme.css"
+  mkdir -p "$AT13DIR/first/housestyle" "$AT13DIR/second/housestyle" "$AT13DIR/second/mono"
+  printf 'body{background:#111}\n' > "$AT13DIR/first/housestyle/theme.css"
+  printf 'body{background:#222}\n' > "$AT13DIR/second/housestyle/theme.css"
   printf 'body{background:#333}\n' > "$AT13DIR/second/mono/theme.css"
   printf '# One\n\ntext\n' > "$AT13DIR/deck.md"
 
   # 1. An external name announces itself. The deck records nothing about the
   #    environment that dressed it, so without this line the artifact's look is
   #    a property of a variable nobody mentioned.
-  PREZ_THEME_PATH="$AT13DIR/second" "$BIN" build "$AT13DIR/deck.md" --theme=geodica \
+  PREZ_THEME_PATH="$AT13DIR/second" "$BIN" build "$AT13DIR/deck.md" --theme=housestyle \
     -o "$AT13DIR/a.html" 2>"$AT13DIR/a.err" >/dev/null
   present "an external theme announces itself" "came from" "$AT13DIR/a.err"
   present "and names the variable it came off" "PREZ_THEME_PATH" "$AT13DIR/a.err"
 
   # 2. WHICH directory won, as an exact path rather than as presence. Both
-  #    directories hold a 'geodica', so only the real resolution order produces
+  #    directories hold a 'housestyle', so only the real resolution order produces
   #    the first one -- a hardcoded or approximate message cannot pass here.
   #    This is AC14's own clause: two directories, and the user can still answer.
   PREZ_THEME_PATH="$AT13DIR/first:$AT13DIR/second" "$BIN" build "$AT13DIR/deck.md" \
-    --theme=geodica -o "$AT13DIR/b.html" 2>"$AT13DIR/b.err" >/dev/null
+    --theme=housestyle -o "$AT13DIR/b.html" 2>"$AT13DIR/b.err" >/dev/null
   won=$(sed -n 's/.*came from \(.*\) (on PREZ_THEME_PATH).*/\1/p' "$AT13DIR/b.err")
   check "the directory named as the winner" "$won" "$AT13DIR/first"
 
@@ -813,7 +819,7 @@ if want AT13; then
   #    ever goes quiet, the lines above are decorating a tool that has started
   #    guessing. Exit code read with no pipe in the way -- see the AT discipline
   #    note; a piped $? is head's, and it reads as 0.
-  "$BIN" build "$AT13DIR/deck.md" --theme=geodica -o "$AT13DIR/e.html" \
+  "$BIN" build "$AT13DIR/deck.md" --theme=housestyle -o "$AT13DIR/e.html" \
     >/dev/null 2>"$AT13DIR/e.err"
   check "an external name off the path is refused" "$?" "2"
   present "and the refusal names the search path" "PREZ_THEME_PATH" "$AT13DIR/e.err"

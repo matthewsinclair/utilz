@@ -103,6 +103,6 @@ Without that hook the control proving `--strict` matters cannot be exercised any
 
 ## Provenance
 
-The crate was hoisted from the Geodica `_tools` estate, where it was `geopres`. It arrived by `git archive` at a recorded pin, was renamed wholesale, and carries its own acceptance suite with it. Steel thread: `intent/st/ST0010`. The hoist adaptations are a single idempotent script attached to that thread, so a moving pin costs a re-run rather than a re-remembering.
+The crate was hoisted from an upstream estate, where it was `geopres`. It arrived by `git archive` at a recorded pin, was renamed wholesale, and carries its own acceptance suite with it. Steel thread: `intent/st/ST0010`. The hoist adaptations are a single idempotent script attached to that thread, so a moving pin costs a re-run rather than a re-remembering.
 
 Net-new behaviour added here rather than upstream is marked in the source by its acceptance criterion -- currently AC14, announce-on-resolve.

@@ -15,8 +15,8 @@
 // **NO BUILT-IN IS EVER A BRAND.** The estate's own look is not compiled in and
 // must not be: prez is designed to be extracted, and a binary carrying one
 // organisation's palette cannot be. Branded themes live outside and arrive via
-// the search path, which is why `--theme=geodica` works inside the estate and
-// correctly fails anywhere else.
+// the search path, which is why a consumer's own `--theme=<brand>` resolves
+// where that consumer put it and correctly fails anywhere else.
 //
 // **A THEME CARRYING AN EXTERNAL URL IS A BUILD ERROR.** That is the load-
 // bearing rule of the whole feature, not a nicety. Orthogonality means the deck
@@ -489,8 +489,8 @@ mod tests {
 
   #[test]
   fn a_search_path_theme_names_the_directory_it_came_from() {
-    let notice = provenance(&from_search_path("geodica", "/opt/themes")).expect("announced");
-    assert!(notice.contains("'geodica'"), "{notice}");
+    let notice = provenance(&from_search_path("housestyle", "/opt/themes")).expect("announced");
+    assert!(notice.contains("'housestyle'"), "{notice}");
     assert!(notice.contains("/opt/themes"), "the directory is the point: {notice}");
     assert!(notice.contains(SEARCH_PATH), "{notice}");
   }
@@ -502,7 +502,7 @@ mod tests {
     // something else elsewhere and says nothing, which is the failure this
     // whole criterion exists for, so it must not read like the benign case.
     let shadowing = provenance(&from_search_path("mono", "/opt/themes")).expect("announced");
-    let external = provenance(&from_search_path("geodica", "/opt/themes")).expect("announced");
+    let external = provenance(&from_search_path("housestyle", "/opt/themes")).expect("announced");
     assert!(shadowing.contains("SHADOWING"), "{shadowing}");
     assert!(!external.contains("SHADOWING"), "{external}");
     assert_ne!(shadowing, external);

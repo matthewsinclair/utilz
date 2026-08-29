@@ -65,9 +65,9 @@ fn present(cmd: &Command) -> Result<(), Failure> {
   //
   // With `-o` the artifact IS the ask, so it is named: that file is being kept
   // on purpose.
-  // The NAME, not the path. hv's deck lives at
-  //   /Users/.../CloudStorage/Dropbox/Geodica/Consulting/Clients/.../20260824/
-  // and echoing all of it back is no better than echoing the temp path it
+  // The NAME, not the path. A real deck can sit a dozen directories down a
+  // synced client folder, and echoing all of that back is no better than
+  // echoing the temp path it
   // replaced -- the reader typed that string a second ago and does not need it
   // read out. `weekly-summary.prez.md (12 slides)` confirms the two things they
   // could not already know: that the right file was found, and what came out.

@@ -25,9 +25,9 @@ intent/.backup/
 # an untracked tree that size is discovered by `git status` at the worst
 # possible moment rather than by anyone reading this file.
 #
-# _tools, where the prez crate was built, never needed this rule -- its
-# `bin/devbin build` redirects CARGO_TARGET_DIR out of the repo, and its
-# validation asserts `find native -name target -type d` comes back empty. We
+# The upstream estate this crate came from never needed this rule -- its build
+# wrapper redirects CARGO_TARGET_DIR out of the repo, and its validation
+# asserts no target/ directory appeared anyway. We
 # inherit no such redirection and deliberately do not add one: Utilz is a
 # plain local checkout (bare local remote, not a synced folder), so the default
 # in-crate target/ is the right place and this line is the whole fence.

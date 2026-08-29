@@ -1,0 +1,11 @@
+{
+  "schema": "intent/issue@3.0",
+  "number": 7,
+  "slug": "prez-slide-counter-drops-below-the-4-5-1-contras",
+  "title": "prez slide counter drops below the 4.5:1 contrast floor on dark slides and no theme can reach it",
+  "status": "open",
+  "severity": "low",
+  "created": "2026-08-29",
+  "reporter": "Matthew Sinclair",
+  "body": "## Summary\n\n`prez`'s slide counter is `position: fixed` and a **sibling** of `.gp-deck`, not a descendant of the current slide. No theme selector can reach it per-slide, so on a dark section slide it renders at **3.42:1** against its background, below the 4.5:1 floor AC09 sets for every built-in.\n\nReported by `_tools-cc` as a consumer, from hv presenting a real 14-slide client deck on 2026-08-29. Not found by any check: AT08 measures per-theme legibility and passed.\n\n## Why the suite did not catch it\n\nTwo reasons, and both are worth keeping.\n\n- The counter is `aria-hidden` decorative chrome, so a contrast probe scoped to *text* legitimately skips it. Whether the floor applies to decorative chrome is a real question, not an oversight.\n- Even a probe that measured it could not attribute the failure to a theme, because **no theme can fix it**. It needs the compiler to inherit the current slide's colour or carry a blend mode.\n\n## Severity\n\nLow. It is decorative, `aria-hidden`, and legible on most slides. Filed rather than fixed inline because it shipped: hv presented with it today, and a defect that shipped earns an issue even when the fix lands inside a steel thread (hv, 2026-07-29 precedent).\n\n## Where the fix belongs\n\nST0010/WP-05 (default theme polish). The fix is in the compiler, not in any theme.\n"
+}
