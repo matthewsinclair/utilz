@@ -2,7 +2,7 @@
 wp_id: WP-03
 title: The hoist: crate at the pin, rename to prez, shim, yaml, help
 scope: S
-status: Not Started
+status: WIP
 ---
 
 # WP-03: The hoist: crate at the pin, rename to prez, shim, yaml, help

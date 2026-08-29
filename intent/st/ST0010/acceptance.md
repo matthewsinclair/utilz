@@ -81,6 +81,10 @@ title: Add prez to utilz to support markdown presentation pipeline
 
 - AC17 (non-test) Every green recorded in this repo names the instrument that produced it, and that instrument is provably this repo's: the binary under test is built from a clean checkout of the recorded pin (3e16597), and WP-04 records the build's provenance alongside its numbers. The seam is real rather than theoretical -- at the pin, _tools-vc found the binary on disk predated its own source commit by three and a half minutes (cc had compiled a working tree and committed afterwards), so the first green there was true but unattributable until forced to rebuild from HEAD. The first Utilz build at the pin is the first moment the sha and the binary are provably the same artifact; if this repo's numbers disagree with _tools', that seam is checked BEFORE the port is suspected. -- satisfied: no
 
+### Group AC18
+
+- AC18 The harness must not lie, block, or be unreproducible -- three inherited defects, all invisible on the machine that wrote them, all fixed HERE because here is where they can be tested. (a) ONE browser resolution, not two: test/acceptance.sh's chrome() carries two macOS app paths and no PATH names, while src/drive.rs carries four app paths AND six PATH names (google-chrome, google-chrome-stable, chromium, chromium-browser, microsoft-edge, brave-browser). On Linux the tool finds a browser and the harness does not, so five ATs (AT04, AT05, AT07's diagram measurement, AT08's per-theme legibility, AT12) degrade to skips and --strict turns a correct build RED -- while the message says 'no Chrome or Chromium installed' about a browser the tool under test is happily driving. A Highlander violation that has already drifted once, unreported because both were only ever run on macOS; the harness resolves through the tool's list or asks the tool, never a second copy. (b) An override hook (eg GP_TEST_BROWSER=/nonexistent) so the browserless path is reproducible on a machine that HAS a browser -- today the control proving --strict matters cannot be exercised anywhere Chrome is installed, which makes it a control that cannot go red, the exact class this thread inherited its vocabulary for. The tool already has the shape (--browser /nonexistent); the harness lacks it. (c) NO INTERACTIVE MODAL: every headless launch passes --use-mock-keychain (or --password-store=basic), because a fresh --user-data-dir makes macOS prompt for a Safe Storage keychain entry -- an interactive dialog in a non-interactive suite, which HANGS rather than fails, and which --strict cannot distinguish from still working. It reached hv's screen on 2026-08-29; AT04 has done it since it was written and AT12's per-theme profiles made it eight times per run. -- satisfied: no (computed)
+
 ### Group AT01
 
 _(no criteria in this group)_
@@ -134,6 +138,10 @@ _(no criteria in this group)_
 _(no criteria in this group)_
 
 ### Group AT14
+
+_(no criteria in this group)_
+
+### Group AT15
 
 _(no criteria in this group)_
 
@@ -207,6 +215,10 @@ _(no tests in this group)_
 
 _(no tests in this group)_
 
+### Group AC18
+
+_(no tests in this group)_
+
 ### Group AT01
 
 - AT01 `opt/prez/crate/test/acceptance.sh` -- covers AC01 -- status: to-write -- Carried from _tools ST0002 at pin 3e16597 (green there under --strict at the pin: 10 passed / 0 failed / 0 skipped, run by _tools-cc). Unverified in this repo until produced by instruments run here (WP-04); to-write because the file does not exist in this tree until WP-03 lands.
@@ -262,6 +274,10 @@ _(no tests in this group)_
 ### Group AT14
 
 - AT14 `opt/prez/crate/test/acceptance.sh` -- covers AC15 -- status: to-write -- GENUINELY red-first: --theme=NAME must resolve identically from two working directories, one containing a ./NAME/ directory -- RED against the pinned binary today (path.exists() wins). Goes green only when the split lands (WP-06).
+
+### Group AT15
+
+- AT15 `opt/prez/crate/test/acceptance.sh` -- covers AC18 -- status: to-write -- Three clauses, each red-first and separately checkable: (a) chrome() resolves a browser on a PATH-only box -- exercised for real by the Linux CI job, which is where this first becomes visible; (b) the override forces the refusal path on a machine that has Chrome, so the --strict control is finally reproducible; (c) a fresh-profile headless launch completes with no keychain prompt. Note the LIMIT of (c) as verified so far: vc confirmed --use-mock-keychain is accepted and Chrome renders normally under it, but absence-of-a-dialog-on-someone-else's-screen is not observable from a shell -- hv confirms, or the AT asserts no Safe Storage entry is created.
 
 ---
 

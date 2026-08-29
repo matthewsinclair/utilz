@@ -32,7 +32,7 @@
       "seq": 3,
       "title": "The hoist: crate at the pin, rename to prez, shim, yaml, help",
       "scope": "S",
-      "status": "not-started",
+      "status": "wip",
       "objective": "The hoist: git-archive the crate from _tools at 3e16597 into opt/prez/crate/, the geopres->prez rename sweep (Cargo.toml, error prefix, USAGE, SEARCH_PATH const + refusal strings + the AT that asserts them, acceptance.sh + probes), the ensure-built shim, prez.yaml, bin/prez symlink, help/prez.md, README.",
       "body": "",
       "preamble": ""
@@ -210,6 +210,14 @@
       "state": {
         "is": "unsatisfied"
       }
+    },
+    {
+      "id": "AC18",
+      "text": "The harness must not lie, block, or be unreproducible -- three inherited defects, all invisible on the machine that wrote them, all fixed HERE because here is where they can be tested. (a) ONE browser resolution, not two: test/acceptance.sh's chrome() carries two macOS app paths and no PATH names, while src/drive.rs carries four app paths AND six PATH names (google-chrome, google-chrome-stable, chromium, chromium-browser, microsoft-edge, brave-browser). On Linux the tool finds a browser and the harness does not, so five ATs (AT04, AT05, AT07's diagram measurement, AT08's per-theme legibility, AT12) degrade to skips and --strict turns a correct build RED -- while the message says 'no Chrome or Chromium installed' about a browser the tool under test is happily driving. A Highlander violation that has already drifted once, unreported because both were only ever run on macOS; the harness resolves through the tool's list or asks the tool, never a second copy. (b) An override hook (eg GP_TEST_BROWSER=/nonexistent) so the browserless path is reproducible on a machine that HAS a browser -- today the control proving --strict matters cannot be exercised anywhere Chrome is installed, which makes it a control that cannot go red, the exact class this thread inherited its vocabulary for. The tool already has the shape (--browser /nonexistent); the harness lacks it. (c) NO INTERACTIVE MODAL: every headless launch passes --use-mock-keychain (or --password-store=basic), because a fresh --user-data-dir makes macOS prompt for a Safe Storage keychain entry -- an interactive dialog in a non-interactive suite, which HANGS rather than fails, and which --strict cannot distinguish from still working. It reached hv's screen on 2026-08-29; AT04 has done it since it was written and AT12's per-theme profiles made it eight times per run.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
     }
   ],
   "tests": [
@@ -353,6 +361,16 @@
       ],
       "status": "to-write",
       "note": "GENUINELY red-first: --theme=NAME must resolve identically from two working directories, one containing a ./NAME/ directory -- RED against the pinned binary today (path.exists() wins). Goes green only when the split lands (WP-06)."
+    },
+    {
+      "id": "AT15",
+      "kind": "test",
+      "file": "opt/prez/crate/test/acceptance.sh",
+      "covers": [
+        "AC18"
+      ],
+      "status": "to-write",
+      "note": "Three clauses, each red-first and separately checkable: (a) chrome() resolves a browser on a PATH-only box -- exercised for real by the Linux CI job, which is where this first becomes visible; (b) the override forces the refusal path on a machine that has Chrome, so the --strict control is finally reproducible; (c) a fresh-profile headless launch completes with no keychain prompt. Note the LIMIT of (c) as verified so far: vc confirmed --use-mock-keychain is accepted and Chrome renders normally under it, but absence-of-a-dialog-on-someone-else's-screen is not observable from a shell -- hv confirms, or the AT asserts no Safe Storage entry is created."
     }
   ],
   "attachments": [
