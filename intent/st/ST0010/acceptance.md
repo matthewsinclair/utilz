@@ -145,6 +145,10 @@ _(no criteria in this group)_
 
 _(no criteria in this group)_
 
+### Group AT16
+
+_(no criteria in this group)_
+
 ## Acceptance Tests
 
 ### Group AC01
@@ -221,51 +225,51 @@ _(no tests in this group)_
 
 ### Group AT01
 
-- AT01 `opt/prez/crate/test/acceptance.sh` -- covers AC01 -- status: to-write -- Carried from _tools ST0002 at pin 3e16597 (green there under --strict at the pin: 10 passed / 0 failed / 0 skipped, run by _tools-cc). Unverified in this repo until produced by instruments run here (WP-04); to-write because the file does not exist in this tree until WP-03 lands.
+- AT01 `opt/prez/crate/test/acceptance.sh` -- covers AC11 -- status: to-write -- Block AT01, rewritten by hoist-adapt.sh step 3 to prove the UTILZ build mechanism (build lands in-crate, git sees no litter, 8 MB ceiling with a stat -c %s fallback). At b600306 the upstream block still proves _tools' devbin redirect, so this row's meaning DEPENDS on that adaptation surviving every re-archive. AT id == the acceptance.sh block id the suite PRINTS. The carried suite has no AT10/AT11 (those were _tools' estate-side tests and stayed behind), so those ids are free for Utilz-native rows.
 
 ### Group AT02
 
-- AT02 `opt/prez/crate/test/acceptance.sh` -- covers AC02, AC03 -- status: to-write -- Carried from _tools ST0002 at pin 3e16597 (green there under --strict at the pin: 10 passed / 0 failed / 0 skipped, run by _tools-cc). Unverified in this repo until produced by instruments run here (WP-04); to-write because the file does not exist in this tree until WP-03 lands.
+- AT02 `opt/prez/crate/test/acceptance.sh` -- covers AC01 -- status: to-write -- Block AT02, 'dependency posture: comrak and std, nothing else'. Carried from _tools ST0002, re-derived against pin b600306 on 2026-08-29. Green THERE under --strict (10 passed / 0 failed / 0 skipped, exit 0, 69s, _tools-vc's own run, not relayed). UNVERIFIED HERE until WP-04 reproduces it with instruments run in this repo.
 
 ### Group AT03
 
-- AT03 `opt/prez/crate/test/acceptance.sh` -- covers AC04 -- status: to-write -- Carried from _tools ST0002 at pin 3e16597 (green there under --strict at the pin: 10 passed / 0 failed / 0 skipped, run by _tools-cc). Unverified in this repo until produced by instruments run here (WP-04); to-write because the file does not exist in this tree until WP-03 lands.
+- AT03 `opt/prez/crate/test/acceptance.sh` -- covers AC02, AC03 -- status: to-write -- Block AT03, 'self-contained artifact, and notes that reach no artifact' -- one block, two criteria. Carried from _tools ST0002, re-derived against pin b600306 on 2026-08-29. Green THERE under --strict (10 passed / 0 failed / 0 skipped, exit 0, 69s, _tools-vc's own run, not relayed). UNVERIFIED HERE until WP-04 reproduces it with instruments run in this repo.
 
 ### Group AT04
 
-- AT04 `opt/prez/crate/test/acceptance.sh` -- covers AC05 -- status: to-write -- Carried from _tools ST0002 at pin 3e16597 (green there under --strict at the pin: 10 passed / 0 failed / 0 skipped, run by _tools-cc). Unverified in this repo until produced by instruments run here (WP-04); to-write because the file does not exist in this tree until WP-03 lands.
+- AT04 `opt/prez/crate/test/acceptance.sh` -- covers AC04 -- status: to-write -- Block AT04, 'base runtime in a real browser: keys, counter, overview, hash, fullscreen'. Launches Chrome backgrounded with a disposable profile and --use-mock-keychain. Carried from _tools ST0002, re-derived against pin b600306 on 2026-08-29. Green THERE under --strict (10 passed / 0 failed / 0 skipped, exit 0, 69s, _tools-vc's own run, not relayed). UNVERIFIED HERE until WP-04 reproduces it with instruments run in this repo.
 
 ### Group AT05
 
-- AT05 `opt/prez/crate/test/acceptance.sh` -- covers AC06 -- status: to-write -- Carried from _tools ST0002 at pin 3e16597 (green there under --strict at the pin: 10 passed / 0 failed / 0 skipped, run by _tools-cc). Unverified in this repo until produced by instruments run here (WP-04); to-write because the file does not exist in this tree until WP-03 lands.
+- AT05 `opt/prez/crate/test/acceptance.sh` -- covers AC05 -- status: to-write -- Block AT05, 'pdf: one slide per page, and a refusal that names what it probed'. Carried from _tools ST0002, re-derived against pin b600306 on 2026-08-29. Green THERE under --strict (10 passed / 0 failed / 0 skipped, exit 0, 69s, _tools-vc's own run, not relayed). UNVERIFIED HERE until WP-04 reproduces it with instruments run in this repo.
 
 ### Group AT06
 
-- AT06 `opt/prez/crate/test/acceptance.sh` -- covers AC07 -- status: to-write -- Carried from _tools ST0002 at pin 3e16597 (green there under --strict at the pin: 10 passed / 0 failed / 0 skipped, run by _tools-cc). Unverified in this repo until produced by instruments run here (WP-04); to-write because the file does not exist in this tree until WP-03 lands.
+- AT06 `opt/prez/crate/test/acceptance.sh` -- covers AC06 -- status: to-write -- Block AT06, 'present: launches de-chromed, then the tool gets out of the way'. Carried from _tools ST0002, re-derived against pin b600306 on 2026-08-29. Green THERE under --strict (10 passed / 0 failed / 0 skipped, exit 0, 69s, _tools-vc's own run, not relayed). UNVERIFIED HERE until WP-04 reproduces it with instruments run in this repo.
 
 ### Group AT07
 
-- AT07 `opt/prez/crate/test/acceptance.sh` -- covers AC08 -- status: to-write -- Carried from _tools ST0002 at pin 3e16597 (green there under --strict at the pin: 10 passed / 0 failed / 0 skipped, run by _tools-cc). Unverified in this repo until produced by instruments run here (WP-04); to-write because the file does not exist in this tree until WP-03 lands.
+- AT07 `opt/prez/crate/test/acceptance.sh` -- covers AC07 -- status: to-write -- Block AT07, 'mermaid is opt-in, and opting out costs zero bytes'. Waits on a command substitution, so it carries NO --user-data-dir: adding one made --dump-dom hang forever, measured five ways on Chrome 151. Point it at test_pres.md, never demo.md. Carried from _tools ST0002, re-derived against pin b600306 on 2026-08-29. Green THERE under --strict (10 passed / 0 failed / 0 skipped, exit 0, 69s, _tools-vc's own run, not relayed). UNVERIFIED HERE until WP-04 reproduces it with instruments run in this repo.
 
 ### Group AT08
 
-- AT08 `opt/prez/crate/test/acceptance.sh` -- covers AC09 -- status: to-write -- Carried from _tools ST0002 at pin 3e16597 (green there under --strict at the pin: 10 passed / 0 failed / 0 skipped, run by _tools-cc). Unverified in this repo until produced by instruments run here (WP-04); to-write because the file does not exist in this tree until WP-03 lands.
+- AT08 `opt/prez/crate/test/acceptance.sh` -- covers AC08 -- status: to-write -- Block AT08, 'themes are orthogonal, offline, and the default carries no brand'. Same command-substitution form and same no-profile-dir rule as AT07. Carried from _tools ST0002, re-derived against pin b600306 on 2026-08-29. Green THERE under --strict (10 passed / 0 failed / 0 skipped, exit 0, 69s, _tools-vc's own run, not relayed). UNVERIFIED HERE until WP-04 reproduces it with instruments run in this repo.
 
 ### Group AT09
 
-- AT09 `opt/prez/crate/test/acceptance.sh` -- covers AC10 -- status: to-write -- Carried from _tools ST0002 at pin 3e16597 (green there under --strict at the pin: 10 passed / 0 failed / 0 skipped, run by _tools-cc). Unverified in this repo until produced by instruments run here (WP-04); to-write because the file does not exist in this tree until WP-03 lands. Includes the AT12 determinism probe (bfb33cd + the 3e16597 comment-strip hardening) and the post-ec3564a legibility probe; demo.md appears once, labelled as the negative control.
+- AT09 `opt/prez/crate/test/acceptance.sh` -- covers AC09 -- status: to-write -- Block AT09, 'the source is standalone, and both code gates are run' -- estate paths, estate imports, tabs, odd indent, intent critic rust AND cargo clippy named separately because the critic arms 1 of 7 rules. Carried from _tools ST0002, re-derived against pin b600306 on 2026-08-29. Green THERE under --strict (10 passed / 0 failed / 0 skipped, exit 0, 69s, _tools-vc's own run, not relayed). UNVERIFIED HERE until WP-04 reproduces it with instruments run in this repo.
 
 ### Group AT10
 
-- AT10 `opt/prez/test/prez.bats` -- covers AC11 -- status: to-write -- Asserts the ignore rule is present, a build leaves git status clean, and no tracked path sits under opt/prez/crate/target/.
+- AT10 `opt/prez/test/prez.bats` -- covers AC11 -- status: to-write -- Utilz-native. Co-covers AC11 with acceptance.sh's AT01, and this is NOT duplication: AC11 has two clauses and each row anchors a different one. AT10 proves the ignore rule is PRESENT AND COMMITTED (clause 1, a repo-history property a build cannot show); AT01 proves a build PRODUCES nothing tracked (clause 2). Neither is redundant, so do not tidy one away. ID RULE: an ST0010 AT id equals the acceptance.sh block id wherever that suite prints one (AT01-AT09, AT12). The carried suite has NO AT10/AT11 -- those were _tools' estate-side tests and stayed behind -- so those ids are free and hold Utilz-native rows. AT13-AT15 are new acceptance.sh blocks this thread adds; AT16 is Utilz-native.
 
 ### Group AT11
 
-- AT11 `opt/prez/test/prez.bats` -- covers AC12 -- status: to-write -- Shim black-box: version/help through the dispatcher, the no-cargo refusal names the remedy (never bare command-not-found), a touched crate source triggers the freshness rebuild. Never pipe a command whose exit code is the assertion (the $?-was-head's lesson).
+- AT11 `opt/prez/test/prez.bats` -- covers AC12 -- status: to-write -- Shim black-box: version/help through the dispatcher, the no-cargo refusal names the remedy and fires BEFORE any build attempt, freshness rebuilds on Cargo.*, src/, themes/ AND assets/ (the last two are include_str! embeds -- a check watching only src/ calls a stale binary current). Note --version and --help are intercepted by the dispatcher and answered from prez.yaml, so any case meaning to exercise the binary must use a real verb. ID RULE: an ST0010 AT id equals the acceptance.sh block id wherever that suite prints one (AT01-AT09, AT12). The carried suite has NO AT10/AT11 -- those were _tools' estate-side tests and stayed behind -- so those ids are free and hold Utilz-native rows. AT13-AT15 are new acceptance.sh blocks this thread adds; AT16 is Utilz-native.
 
 ### Group AT12
 
-- AT12 `opt/prez/test/prez.bats` -- covers AC13 -- status: to-write -- list/help/doctor/test surfaces observed through the dispatcher; the CI half is evidenced by the first green Actions run of the rust + clippy jobs, its URL recorded in this note when it exists.
+- AT12 `opt/prez/crate/test/acceptance.sh` -- covers AC10 -- status: to-write -- Block AT12, 'determinism: one artifact renders the same on every machine'. Backgrounded launch, ONE reused profile for the whole sweep (eight fresh profiles was the keychain-modal amplifier). Carried from _tools ST0002, re-derived against pin b600306 on 2026-08-29. Green THERE under --strict (10 passed / 0 failed / 0 skipped, exit 0, 69s, _tools-vc's own run, not relayed). UNVERIFIED HERE until WP-04 reproduces it with instruments run in this repo.
 
 ### Group AT13
 
@@ -278,6 +282,10 @@ _(no tests in this group)_
 ### Group AT15
 
 - AT15 `opt/prez/crate/test/acceptance.sh` -- covers AC18 -- status: to-write -- Three clauses, each red-first and separately checkable: (a) chrome() resolves a browser on a PATH-only box -- exercised for real by the Linux CI job, which is where this first becomes visible; (b) the override forces the refusal path on a machine that has Chrome, so the --strict control is finally reproducible; (c) a fresh-profile headless launch completes with no keychain prompt. Note the LIMIT of (c) as verified so far: vc confirmed --use-mock-keychain is accepted and Chrome renders normally under it, but absence-of-a-dialog-on-someone-else's-screen is not observable from a shell -- hv confirms, or the AT asserts no Safe Storage entry is created.
+
+### Group AT16
+
+- AT16 `opt/prez/test/prez.bats` -- covers AC13 -- status: to-write -- Framework integration: list/help/doctor/test surfaces observed through the dispatcher; the CI half is evidenced by the first green run on both OSes, and the log must PROVE a browser was found because a skip surviving into green is the measured failure mode. Was AT12 until 2026-08-29; moved because acceptance.sh PRINTS its own AT12 (determinism) and two instruments cannot share an id. ID RULE: an ST0010 AT id equals the acceptance.sh block id wherever that suite prints one (AT01-AT09, AT12). The carried suite has NO AT10/AT11 -- those were _tools' estate-side tests and stayed behind -- so those ids are free and hold Utilz-native rows. AT13-AT15 are new acceptance.sh blocks this thread adds; AT16 is Utilz-native.
 
 ---
 

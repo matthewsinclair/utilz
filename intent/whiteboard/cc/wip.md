@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: 7caf919e-ca57-4a02-8804-1e44225cea04
-heartbeat_at: 2026-08-29 13:29Z
+heartbeat_at: 2026-08-29 14:04Z
 status: active
-focus: "ST0010 build hand. WP-02 done (0ebfa85), CI red on main fixed (95b650a), WP-03 crate hoisted and building (64d375b). Next: help/README/bats, announce-on-resolve, AC18(b) -- then re-archive when vc sends the new pin."
+focus: "ST0010 build hand. WP-03's pin-independent half DONE -- AC14 + AT13 + AC18(b) + help/README/23 BATS. The crate is now a FORK, so the pin lands as a merge (hoist-rebase.sh), not a re-archive. Blocked on vc's pin; issue 0006 needs a ruling."
 claims: [ST0010]
 ---
 
@@ -13,19 +13,23 @@ claims: [ST0010]
 
 ## DOING
 
-**ST0010 (`utilz prez`) -- vc owns the contract, I am the build hand (WP-02, WP-03).** The Rust presentation pipeline built in the Geodica `_tools` estate is hoisted into Utilz; `geodica present` becomes a CLIENT of `utilz prez`. First Rust in this project, so the framework itself was hoisted to support it. Contract: 17 ACs / 14 ATs / 6 WPs in the store. Design at `intent/st/ST0010/design.md` -- read it first, every section names its owner.
+**ST0010 (`utilz prez`) -- vc owns the contract, I am the build hand (WP-02, WP-03).** The Rust presentation pipeline built in the Geodica `_tools` estate is hoisted into Utilz; `geodica present` becomes a CLIENT of `utilz prez`. First Rust in this project, so the framework itself was hoisted to support it. Contract: 18 ACs / 15 ATs / 7 WPs in the store. Design at `intent/st/ST0010/design.md` -- read it first, every section names its owner.
 
 - **WP-02 DONE** (`0ebfa85`): gitignore fence, `intent lang init rust`, two CI jobs (rust matrix + blocking clippy), the three-source test driver in `common.sh`, doctor's conditional cargo line.
-- **WP-03 IN PROGRESS** (`64d375b`): crate hoisted at pin `3e16597`, rename sweep, shim, yaml, `bin/prez` symlink. Builds and runs; `utilz list` shows 14.
-- **Also landed:** `95b650a` fixed CI red on main (the blocking shellcheck gate was linting vendored devbin).
+- **WP-03, pin-independent half DONE**: `64d375b` (crate hoisted at `3e16597`, rename sweep, shim, yaml, symlink), `8a53457` (AC14 announce-on-resolve), `93702cb` (AT13 + the AC18(b) `PREZ_TEST_BROWSER` hook), `844f1aa` (help/prez.md, README, 23 shim BATS, the yaml fix).
+- **Also landed:** `95b650a` fixed CI red on main; `7e2a61b` filed issue 0006.
 
-**RESUME HERE -- WP-03 remainder:** `help/prez.md`, `opt/prez/README.md`, `opt/prez/test/prez.bats` (shim-level: version/help via dispatcher, refusal-without-cargo shape, freshness rebuild trigger), announce-on-resolve (design 7.5 -- when a theme resolves from `PREZ_THEME_PATH` rather than a built-in, say so on stderr; local-wins shadowing must be visible), and **AC18(b)**: an override hook so the browserless refusal path is reproducible on a machine that HAS Chrome. AC18(a) browser-resolution drift and (c) the Chrome keychain flag are _tools' and arrive with the pin -- do NOT fix `chrome()` here or the re-archive reverts it.
+`utilz test prez` drives all three sources by convention: **115 cargo / 23 BATS / acceptance**. Under `PREZ_TEST_BROWSER=/nonexistent` it is 8 passed, 11 skipped, `1 of 3 test suite(s) failed` -- correct and deliberate.
 
-**THE PIN IS MOVING.** vc will send a new sha (_tools is patching the Chrome Safe-Storage dialog at four launch sites, plus AC18(a), then re-freezing). When it lands: **re-archive, do not patch forward.** `git -C ~/Dropbox/Geodica/_tools archive <PIN> native/rust/geopres | tar -x --strip-components=3 -C opt/prez/crate`, then re-run `hoist-adapt.sh` (attached to ST0010 in the store; also in this session's scratchpad). It is idempotent and verified to reproduce the committed tree byte-for-byte from a bare archive.
+**RESUME HERE, and this is the load-bearing change of the session: THE CRATE IS NO LONGER A MIRROR.** AC14 lives only here by design (deferred out of `_tools` to keep the pin narrow), and AT13 and the AC18(b) hook live only here too. A `tar -x` re-archive over the top drops all three **silently** -- the build stays green and the suite still passes, because the tests that prove the behaviour are removed in the same stroke.
 
-**AC17 (build provenance):** the binary under test must be built from a CLEAN checkout of the pin, provenance recorded beside the numbers. `rm -rf opt/prez/crate/target` before that build -- the current target/ was built from a warm tree. If my numbers disagree with _tools' (10/0/0 under `--strict`, 111 unit tests), check the provenance and harness seams BEFORE suspecting the port.
+**So the pin lands as a MERGE.** `hoist-rebase.sh`, attached to ST0010: archive both pins, run `hoist-adapt.sh` over both so they are in our namespace, then `git merge-file` per differing file with the old pin as the common ancestor. Run `--dry-run` first. `hoist-adapt.sh` stays the MECHANICAL layer (rename, target dir, AT01 rewrite, version, formatter) -- net-new Utilz behaviour belongs in git history, and putting it in a replay script would be two copies of the same change.
 
-**For the release (hv's):** `prez.yaml` declares `utilz_version "^2.5.0"` per design; `VERSION` still reads 2.4.0. The framework gained observable behaviour this session, so 2.5.0 is the honest minor. `run_doctor` compares MAJOR versions only, so nothing false-alarms meanwhile.
+**AC17 provenance survives and is still one sentence:** tree at `3e16597` + `hoist-adapt.sh`, plus Utilz commits `8a53457..844f1aa`, plus the upstream delta `3e16597..<NEW>` applied at the rebase commit. Then `rm -rf opt/prez/crate/target` and build cold, because the current `target/` came from a warm tree.
+
+**No browser has been launched today, deliberately.** AC18(c)'s Safe Storage dialog is `_tools`' fix and arrives with the pin; a green acceptance run means putting dialogs on hv's screen. AT15 stays vc's -- I built the hook, not the test.
+
+**For the release (hv's):** `prez.yaml` declares `utilz_version "^2.5.0"`; `VERSION` still reads 2.4.0. `run_doctor` compares MAJOR versions only, so nothing false-alarms meanwhile. `main` is 21 commits ahead of both remotes and the CI fix is among them, so **main reads red on the remote until hv pushes**.
 
 ## TODO
 
@@ -36,6 +40,12 @@ claims: [ST0010]
 
 ## Watch-outs
 
+- **`git apply --3way` cannot three-way-merge a `diff -ruN` patch.** No blob hashes in the patch means git has nothing to merge WITH, so it prints "repository lacks the necessary blob", falls back to straight application, and -- because `git apply` is atomic -- one conflicting hunk makes the whole patch a no-op that changed nothing. `git merge-file ours base theirs` is the right primitive: no repo needed, ships with every git, writes ordinary conflict markers. Found by testing `hoist-rebase.sh` against a synthetic upstream change; an empty delta passes a no-op test even when the mechanism is broken.
+- **`utilz help <anything>` HANGS when stdin is a TTY** -- glow's pager, not prez and not new (`mdagg`'s existing help test hangs identically). It bites `bats --filter` run from a terminal and looks exactly like the test you are debugging has hung. `< /dev/null` fixes it; `utilz test` and CI never see it because bats' stdin is not a tty.
+- **`find DIR -newer X` tests the DIRECTORY as well as its contents.** A freshly `mkdir -p`'d fixture tree is therefore always stale however old the files inside it are. Correct in the real shim -- adding a file to `src/` updates the directory and should force a rebuild, erring toward rebuilding too often rather than too rarely -- but a freshness fixture must stamp the directories too, LAST, because writing a file inside one bumps it again.
+- **Stamping a test binary FORWARD to dodge same-second ties defeats the tests it protects.** A touched source lands at `now`, which is not newer than a binary a minute ahead, so every "makes it stale" case quietly reports fresh. Stamp the SOURCES back instead: sources at -2min, binary at -1min, and a plain `touch` is cleanly newer.
+- **A refutation must name the failure, not a substring of the fix.** `refute_output_contains "command not found"` failed against a correct refusal, because `require_command` says "Required command not found: cargo". The failure being refused is the bare shell form `cargo: command not found`. Refute that.
+- **Run prettier yourself before committing markdown**, rather than letting the pre-commit hook be an unnamed third writer. Doing it in-band also avoids the `git commit --only` index residue entirely -- `git add` + plain `git commit` leaves nothing behind.
 - **This tree has THREE concurrent writers: me, `vc`, and `hv` (running devbin).** Always commit with an explicit pathspec (`git commit --only <paths>`), never `-A`. A `git status` taken earlier in a session is not a stable baseline -- during one turn the remotes moved from `367a75a` to `05bca08` under me, and `bin/devbin` rewrote itself mid-session.
 - **`git commit --only` leaves an index residue when the pre-commit hook reformats.** The hook runs `prettier --write` + `git add`, but `--only` commits the worktree snapshot, so the index keeps the prettier'd copy and shows a phantom staged diff afterwards. HEAD and disk agreed; the index was the odd one out. Harmless if pathspecs are always explicit; `git restore --staged <path>` clears it.
 - **prettier is a THIRD writer to hoisted crate content.** The pre-commit hook reformatted `opt/prez/crate/examples/*.md` on their first commit (the rename left the tables ragged). That is fine and even correct, but it breaks the AC17 provenance claim unless the adaptation script does the same pass -- "archive + script == committed tree" must hold exactly, or prettier is an unnamed writer in the reproduction. `hoist-adapt.sh` step 5 now does it.
