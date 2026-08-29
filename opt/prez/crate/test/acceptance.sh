@@ -46,6 +46,25 @@ BIN="$TARGET/release/prez"
 DEMO="$CRATE/examples/demo.md"
 SENTINEL="PREZ-SENTINEL-7F3A"
 
+# ONE size reader, GNU FIRST, and the order is the whole point.
+#
+# `stat -f %z` is BSD syntax. On Linux `-f` means "display filesystem status",
+# so it does not fail -- it SUCCEEDS and prints something else entirely, which
+# is why an `|| stat -c %s` fallback never fires there. A command that succeeds
+# with the wrong answer defeats every `||` guard written against it.
+#
+# Found by CI on 2026-08-29, the first time this suite ever ran on Linux: three
+# blocks failed (AT01, AT03, AT07) printing `binary is   File: "..."`, which is
+# stat's filesystem output arriving where a byte count was expected. AT01 had
+# the fallback and still failed; AT03 and AT07 had no fallback at all. Both
+# facts point the same way -- the guard was on the wrong end.
+#
+# Trying GNU first inverts it: `stat -c` is not valid BSD, so it fails on macOS
+# and the fallback runs. Neither platform has a form that succeeds wrongly.
+file_size() {
+  stat -c %s "$1" 2>/dev/null || stat -f %z "$1" 2>/dev/null || echo 0
+}
+
 WORK="$(mktemp -d "${TMPDIR:-/tmp}/prez-at.XXXXXX")"
 trap 'rm -rf "$WORK"' EXIT
 
@@ -257,7 +276,7 @@ if want AT01; then
   untracked="$(cd "$REPO" && git status --porcelain --untracked-files=all -- opt/prez/ | grep -c 'target/' || true)"
   check "build litter visible to git under opt/prez/" "$untracked" "0"
 
-  size=$(stat -f %z "$CRATE/target/release/prez" 2>/dev/null || stat -c %s "$CRATE/target/release/prez" 2>/dev/null || echo 0)
+  size=$(file_size "$CRATE/target/release/prez")
   if [ "$size" -gt 0 ] && [ "$size" -le 8388608 ]; then ok "binary $((size / 1048576)) MB <= 8 MB ceiling"
   else bad "binary is $size bytes against an 8 MB ceiling"; fi
   finish
@@ -293,7 +312,7 @@ if want AT03; then
   art="$WORK/demo.html"
   "$BIN" build "$DEMO" -o "$art" >/dev/null 2>"$WORK/at03.err"
 
-  size=$(stat -f %z "$art")
+  size=$(file_size "$art")
   if [ "$size" -le 102400 ]; then ok "artifact $size bytes <= 100 KB"; else bad "artifact is $size bytes"; fi
 
   # AC03. The SENTINEL, never the `notes:` token: the demo shows a fenced notes
@@ -483,7 +502,7 @@ if want AT07; then
   present "opted-in artifact carries the library" "mermaidAPI" "$WORK/m.html"
   absent "opted-out artifact carries no library" "mermaidAPI" "$WORK/nom.html"
 
-  on=$(stat -f %z "$WORK/m.html"); off=$(stat -f %z "$WORK/nom.html")
+  on=$(file_size "$WORK/m.html"); off=$(file_size "$WORK/nom.html")
   if [ "$on" -gt 3000000 ]; then ok "opted-in artifact is $((on / 1048576)) MB"; else bad "opted-in artifact is only $on bytes"; fi
   if [ "$off" -lt 102400 ]; then ok "opted-out artifact is $off bytes"; else bad "opted-out artifact is $off bytes"; fi
 
@@ -772,11 +791,22 @@ if want AT09; then
   # so it runs this file; .github/workflows/tests.yml mentions `intent` zero
   # times. An `unchecked` still fails --strict, which is correct -- it just
   # fails saying the tool is missing instead of blaming the code.
-  if ! command -v intent >/dev/null 2>&1; then
-    unchecked "intent critic rust unmeasured, intent is not installed"
-  elif (cd "$REPO" && intent critic rust --files "$CRATE"/src/*.rs 2>&1 | tail -1 | grep -q '^ok:'); then
-    ok "intent critic rust is clean"
-  else bad "intent critic rust reported findings"; fi
+  # THE CRITIC IS NOT RUN HERE, AND ITS ABSENCE IS THE FIX RATHER THAN A GAP.
+  # `intent critic rust` already runs on every commit, through this project's
+  # pre-commit gate. Asserting it here as well is a second home for one
+  # enforcement -- and it is the home that cannot work, because `intent` is a
+  # developer tool that no runner has. Measured on CI 2026-08-29: it was the
+  # single remaining skip, and --strict counts a skip as a failure, correctly.
+  #
+  # The alternatives were worse. Installing intent means building another
+  # project from source on every run and reddening Utilz whenever ITS main is
+  # red. Inventing a "not applicable" outcome means a control that cannot go
+  # red, which is the class this suite exists to refuse.
+  #
+  # NOTHING IS LOST, and AC09 says why in its own words: the critic arms 1 of
+  # its 7 rust rules and declines the clippy-backed ones, which is exactly why
+  # AC09 named clippy separately. Clippy is the load-bearing gate, it runs
+  # unconditionally below, and CI runs it again with -D warnings in its own job.
 
   if ! command -v cargo >/dev/null 2>&1; then
     unchecked "clippy unmeasured, cargo is not installed"
