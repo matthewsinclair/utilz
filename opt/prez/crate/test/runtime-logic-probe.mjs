@@ -125,9 +125,24 @@ const loc = {
 };
 const win = { addEventListener(t, f) { winListeners[t] = f; }, close() { win._closed = (win._closed || 0) + 1; } };
 
+// A REAL TIMER QUEUE, not a no-op. quit() shows its message from a 150ms timer
+// and say() clears it from a 4000ms one, so a stub that swallowed both would
+// make the message untestable and a stub that ran both instantly would clear it
+// before it could be read. Running by deadline keeps the two apart.
+const timers = [];
+const runTimers = (upToMs) => {
+  for (const t of timers.splice(0)) { if (t.ms <= upToMs) { t.fn(); } else { timers.push(t); } }
+};
+
+// MUTABLE ON PURPOSE (AC20d). The runtime reads navigator when the key is
+// pressed, not when the deck loads, so flipping this between presses is exactly
+// the portability property under test -- one artifact, two machines.
+const navigator = { userAgent: '', platform: '' };
+
 const ctx = {
-  document: doc, window: win, location: loc, Array,
-  setTimeout: () => 0, clearTimeout: () => {}, Math, String, parseInt, isNaN, Event: class { constructor(t) { this.type = t; } },
+  document: doc, window: win, location: loc, navigator, Array,
+  setTimeout: (fn, ms) => { timers.push({ fn, ms: ms || 0 }); return timers.length; },
+  clearTimeout: () => {}, Math, String, parseInt, isNaN, Event: class { constructor(t) { this.type = t; } },
 };
 // Function rather than eval, so the runtime sees exactly these globals and
 // nothing leaks in from node's own scope.
@@ -175,6 +190,7 @@ check('and did not open anything', indexing(), false);
 
 press('Escape');     check('escape does not touch the index', indexing(), false);
 check('escape asked the window to close', win._closed, 1);
+// (the count is re-checked after the AT19 presses below)
 
 // The bar tells the truth about the CURRENT mode.
 press('?');          check('bar opens', keysOn(), true);
@@ -185,6 +201,47 @@ check('the bar re-renders per mode', inside === outside ? 'same' : 'different', 
 const labels = find(bar(), '.gp-bar-keys').children.map(i => i.children[i.children.length - 1].textContent);
 check('index mode advertises the commit', labels.includes('open this slide'), true);
 check('and drops it outside', (press('i'), find(bar(), '.gp-bar-keys').children.map(i => i.children[i.children.length - 1].textContent).includes('open this slide')), false);
+
+// ---- AT19: the close row and the quit message name the VIEWER's shortcut ----
+//
+// Asserted as TEXT, not as existence. The defect this replaces was a sentence
+// that read perfectly and carried a false remedy inside it -- it told a reader
+// standing in a `prez present` window to use `prez present`. "A message
+// appeared" would have been green for that too.
+//
+// Both branches driven off the stubbed navigator, because a check that only
+// runs on the build host proves nothing about a portable artifact. On this
+// estate that is not hypothetical: AT01 sized a binary with BSD-only
+// `stat -f %z` and could only ever have failed on the platform nobody
+// develops on.
+const msgText = () => find(bar(), '.gp-bar-msg').textContent;
+const closeRow = () => {
+  const rows = find(bar(), '.gp-bar-keys').children;
+  const last = rows[rows.length - 1];
+  return last.children[last.children.length - 1].textContent;
+};
+
+// Force a FRESH render rather than assuming the bar's state. The first cut
+// pressed `?` once, which toggled an already-open bar shut and then read the
+// render from before the navigator was set -- a stale read that looked exactly
+// like the platform branch not working.
+const reopen = () => { if (keysOn()) { press('?'); } press('?'); };
+
+navigator.userAgent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)';
+reopen();
+check('mac: the bar names cmd-W', closeRow(), 'close with cmd-W');
+press('q'); runTimers(200);
+check('mac: the quit message names cmd-W', /press cmd-W to close this window/.test(msgText()), true);
+check('mac: and does not name prez present as the remedy', /prez present/.test(msgText()), false);
+check('mac: and says why, not just what', /cannot close a window it did not open/.test(msgText()), true);
+
+navigator.userAgent = 'Mozilla/5.0 (X11; Linux x86_64)';
+reopen();
+check('linux: the bar names ctrl-W', closeRow(), 'close with ctrl-W');
+press('q'); runTimers(200);
+check('linux: the quit message names ctrl-W', /press ctrl-W to close this window/.test(msgText()), true);
+check('linux: no cmd-W anywhere in it', /cmd-W/.test(msgText()), false);
+check('one artifact answered both', win._closed >= 2, true);
 
 press('r'); check('r reloads', loc._reloaded, 1);
 press('f'); check('f enters fullscreen', String(doc.fullscreenElement !== null), 'true');

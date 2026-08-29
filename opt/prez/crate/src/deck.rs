@@ -54,7 +54,7 @@ fn present(cmd: &Command) -> Result<(), Failure> {
     false => scratch("html"),
   };
   write(&out, &compiled.artifact)?;
-  drive::open_presenting(cmd.browser.as_deref(), &out)?;
+  drive::open_presenting(cmd.browser.as_deref(), &out, cmd.window.as_deref())?;
   println!("prez: presenting {}", out.display());
   Ok(())
 }
@@ -341,6 +341,7 @@ mod tests {
       watch: false,
       paper: None,
       browser: None,
+          window: None,
     };
     assert_eq!(output_path(&cmd(None), "html"), PathBuf::from("decks/talk.html"));
     assert_eq!(output_path(&cmd(None), "pdf"), PathBuf::from("decks/talk.pdf"));

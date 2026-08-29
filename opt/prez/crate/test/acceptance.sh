@@ -407,8 +407,26 @@ STUB
   for _ in 1 2 3 4 5 6 7 8 9 10; do [ -f "$WORK/argv.txt" ] && break; sleep 0.2; done
   if [ -f "$WORK/argv.txt" ]; then
     present "launched with --app on a file:// URL" "--app=file://" "$WORK/argv.txt"
-    present "launched fullscreen" "--start-fullscreen" "$WORK/argv.txt"
     present "launched in its own window" "--new-window" "$WORK/argv.txt"
+
+    # AC19. THE WINDOW HAS A SHAPE NOW, and the default is the deck's own 16:9
+    # rather than whatever the browser last remembered -- hv got a portrait
+    # window for a 16:9 deck, which is not a bad default but the absence of one.
+    present "launched at the deck's aspect" "--window-size=1280,720" "$WORK/argv.txt"
+
+    # AND THE INERT FLAG IS GONE. Asserted as an ABSENCE, which is the half
+    # that matters: a build keeping --start-fullscreen beside a working
+    # --window-size would pass every check above, and the flag would live on
+    # behind a green. It was passed on every launch for as long as this test
+    # existed, never took effect on macOS, and said nothing -- this check
+    # replaces the one that asserted its presence.
+    absent "no flag that Chrome silently ignores" "--start-fullscreen" "$WORK/argv.txt"
+
+    # --window is honoured, measured rather than assumed.
+    rm -f "$WORK/argv.txt"
+    "$BIN" present "$DEMO" --browser "$WORK/fake-browser" --window 1920x1080 >/dev/null 2>&1
+    for _ in 1 2 3 4 5 6 7 8 9 10; do [ -f "$WORK/argv.txt" ] && break; sleep 0.2; done
+    present "--window overrides the default" "--window-size=1920,1080" "$WORK/argv.txt"
   else
     bad "the browser was never invoked"
   fi

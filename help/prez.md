@@ -73,6 +73,7 @@ Every flag takes its value either way: `--theme=simple` or `--theme simple`.
 | `--theme T`      | all          | A built-in name, a `.css` file, or a directory holding `theme.css`. |
 | `--watch`        | build        | Rebuild on every save. A failed rebuild is reported and survived.   |
 | `--paper WxH`    | pdf          | Page size in millimetres, eg `254x142.9` (the 16:9 default).        |
+| `--window WxH`   | present      | Window size in pixels. Default `1280x720`, the deck's own 16:9.     |
 | `--browser P`    | pdf, present | Drive this browser instead of probing.                              |
 
 ---
@@ -95,13 +96,15 @@ Press `?` (or `h`) to pop up the key bar at the bottom of the screen. It is deli
 | `f`                | Fullscreen                                        |
 | `r`                | Reload the artifact from disk, keeping your place |
 | `?` or `h`         | Show or hide the key bar                          |
-| `q` or `esc`       | Close the window                                  |
+| `q` or `esc`       | Names the shortcut that closes the window         |
 
 **In the index, the arrows move the highlight and `enter` or `space` opens it** -- or click any slide. `i` again closes the index without moving. Outside the index `space` means next slide as usual, and `enter` does nothing: the key bar only ever lists what the keys do in the mode you are actually in.
 
 **`g` clamps rather than complains.** Ask for page 99 in a ten-slide deck and you get page ten -- that is plainly what you wanted, and an error message would be a worse answer than the slide. Press `esc` while the number box is open to cancel it; `esc` only closes the window when the box is not open.
 
-**`q` and `esc` can only close a window the page is allowed to close** -- which is the one `prez present` opens for you. Open a `.html` in an ordinary browser tab and the browser refuses, silently, as it does for every page. prez says so on screen rather than letting the key look broken.
+**`q` and `esc` do not close the window, and no longer claim to.** A page can only close a window it opened itself, and that is not the window `prez present` gives you either -- a command-line `--app` window is the browser's, not the page's. So `q` and `esc` tell you the shortcut that does work: **cmd-W** on a Mac, **ctrl-W** elsewhere. The key bar's close row says the same thing.
+
+Which one it says is decided **when you open the deck, not when it was built**. The artifact is portable by design, so a deck built on a Mac and opened on Linux says ctrl-W. Baking in the author's platform would be right on their machine and wrong on everyone else's -- and invisible to the only people who could notice.
 
 **`r` is not a workaround for a missing autoreload -- there is nothing to autoreload.** The artifact is one static file with no server behind it, by design, so nothing can push a change to it. `prez build --watch` rebuilds the file on every save; `r` is how the open window picks that up. Your position lives in the URL hash, so a reload lands you back on the slide you were on. Watch in one terminal, press `r` in the browser: that is the whole loop.
 
@@ -205,6 +208,14 @@ A theme referencing anything outside the artifact -- `http://`, `https://`, a pr
 `pdf` and `present` drive a Chromium-family browser. prez probes for one and, failing that, refuses **naming every path it tried** -- so the fix is always in front of you. `--browser PATH` overrides the probe.
 
 `present` launches the window and exits. It does not stay resident, watch, or manage the browser.
+
+---
+
+### The presenting window
+
+`present` opens a de-chromed window sized to the deck's own 16:9 -- `1280x720` by default, or whatever `--window WxH` says. Press `f` for fullscreen.
+
+It used to pass `--start-fullscreen` instead, which Chrome does not honour for an `--app` window on macOS and ignores **silently**: no warning, no error, nothing in the exit status. It came up windowed, in whatever shape the browser last remembered, and nothing said why. A flag nobody can observe working is worse than an honest key, so it is gone and `f` is advertised in the key bar.
 
 ---
 

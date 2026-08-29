@@ -13,7 +13,7 @@ prez -- markdown in, one self-contained HTML presentation out.
 Usage:
   prez build   <deck.md> [-o out.html] [--theme=T] [--watch]
   prez pdf     <deck.md> [-o out.pdf]  [--theme=T] [--paper=WxH] [--browser=PATH]
-  prez present <deck.md> [--theme=T] [--browser=PATH]
+  prez present <deck.md> [--theme=T] [--window=WxH] [--browser=PATH]
   prez --help | --version
 
 Every flag below takes its value either way: --theme=simple or --theme simple.
@@ -25,6 +25,8 @@ Options:
                     Beats the deck's front-matter 'theme:' key.
       --watch       Rebuild whenever the input changes (build only).
       --paper WxH   PDF page size in millimetres, eg 254x142.9 (16:9 default).
+      --window WxH  Presenting window size in pixels. Default: 1280x720, the
+                    deck's own 16:9. Press f for fullscreen.
       --browser P   Browser to drive for pdf/present. Default: probe the
                     Chromium family, then fall back to the system opener.
 
@@ -46,6 +48,7 @@ pub struct Command {
   pub theme: Option<String>,
   pub watch: bool,
   pub paper: Option<String>,
+  pub window: Option<String>,
   pub browser: Option<String>,
 }
 
@@ -96,6 +99,7 @@ pub fn parse(argv: &[String]) -> Result<Invocation, Failure> {
     theme: None,
     watch: false,
     paper: None,
+    window: None,
     browser: None,
   };
   let mut input: Option<String> = None;
@@ -124,6 +128,7 @@ pub fn parse(argv: &[String]) -> Result<Invocation, Failure> {
       "-o" | "--out" => cmd.out = Some(value("-o")?),
       "--theme" => cmd.theme = Some(value("--theme")?),
       "--paper" => cmd.paper = Some(value("--paper")?),
+      "--window" => cmd.window = Some(value("--window")?),
       "--browser" => cmd.browser = Some(value("--browser")?),
       "--watch" => cmd.watch = true,
       // A bare "-" is a filename in some tools and a stdin convention in
@@ -154,6 +159,15 @@ pub fn parse(argv: &[String]) -> Result<Invocation, Failure> {
     return Err(Failure::new(
       format!("--watch is not available for 'prez {}'", verb),
       "only 'prez build' watches; pdf and present are one-shot",
+    ));
+  }
+  // Same shape as --paper's guard below: a flag that belongs to one verb is an
+  // ERROR on the others, never quietly ignored. `prez build --window 800x600`
+  // has misunderstood something, and saying so beats writing the file anyway.
+  if cmd.window.is_some() && verb != Verb::Present {
+    return Err(Failure::new(
+      format!("--window is not available for 'prez {}'", verb),
+      "--window sizes the presenting window; use --paper for PDF page size",
     ));
   }
   if cmd.paper.is_some() && verb != Verb::Pdf {

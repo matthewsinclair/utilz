@@ -414,19 +414,34 @@ const RUNTIME_JS: &str = r#"
   // is rebuilt, and this picks the new one up without losing your place.
   function reload() { location.reload(); }
 
-  // CLOSING A WINDOW IS NOT ALWAYS ALLOWED, AND THE FAILURE IS SILENT.
-  // window.close() only acts on a window script opened -- which is what
-  // `prez present` produces, since it launches a dedicated app window. Open the
-  // same artifact as an ordinary tab and the call is IGNORED with no error, no
-  // return value and no exception. Pressing q would then do nothing at all and
-  // look like a broken key.
+  // THE PLATFORM'S OWN WINDOW-CLOSE SHORTCUT, RESOLVED WHEN THE DECK IS VIEWED
+  // AND NEVER WHEN IT IS BUILT (AC20d). This is the whole care point. The
+  // artifact is portable by design -- offline, a USB stick, another machine,
+  // five years -- so a deck built on a Mac and opened on Linux must say ctrl-W.
+  // Baking the build host's platform in would be right on the author's machine
+  // and wrong everywhere else, and INVISIBLE TO EVERYONE WHO COULD FIX IT,
+  // because whoever reads the wrong text is never whoever built the deck.
+  function closeShortcut() {
+    var ua = (navigator.userAgent || '') + ' ' + (navigator.platform || '');
+    return /Mac|iPhone|iPad|iPod/.test(ua) ? 'cmd-W' : 'ctrl-W';
+  }
+
+  // CLOSING IS NOT SOMETHING THIS PAGE CAN DO, and the first version of this
+  // message got that wrong in the most confusing possible way -- it was
+  // truthful about the refusal and then named `prez present` as the remedy.
+  // hv pressed q INSIDE a window prez present had just opened and was told to
+  // use prez present. A command-line `--app` window is not script-opened
+  // either, so window.close() has never closed it.
   //
-  // So say so. If the close worked this timer dies with the page; if it did not,
-  // the message is the only thing that distinguishes "refused" from "broken".
+  // The attempt stays, because it does work for a window another page opened
+  // with window.open() and costs nothing when it does not: if the close
+  // succeeds this timer dies with the page. What changed is the sentence,
+  // which now names the shortcut that actually works, on the machine actually
+  // looking at it.
   function quit() {
     window.close();
     setTimeout(function () {
-      say('this browser will not let a page close itself -- q closes the window that `prez present` opens');
+      say('press ' + closeShortcut() + ' to close this window -- a page cannot close a window it did not open');
     }, 150);
   }
 
@@ -458,7 +473,13 @@ const RUNTIME_JS: &str = r#"
     { show: ['f'], keys: ['f', 'F'], label: 'fullscreen', act: fullscreen },
     { show: ['r'], keys: ['r', 'R'], label: 'reload', act: reload },
     { show: ['?'], keys: ['?', 'h', 'H'], label: 'keys', act: function () { keys(!showing('gp-bar-keys')); } },
-    { show: ['q', 'esc'], keys: ['q', 'Q', 'Escape'], label: 'close', act: quit }
+    // The label is a FUNCTION because the answer depends on who is looking, and
+    // the bar re-renders, so it is re-asked every time rather than frozen at
+    // load. `q` and `esc` stay CAUGHT rather than unbound: a key that silently
+    // does nothing reads as broken, which is the state this message exists to
+    // prevent. The fix was aimed at the false remedy, not at the message.
+    { show: ['q', 'esc'], keys: ['q', 'Q', 'Escape'],
+      label: function () { return 'close with ' + closeShortcut(); }, act: quit }
   ];
 
   var bar = document.createElement('div');
@@ -494,7 +515,7 @@ const RUNTIME_JS: &str = r#"
         item.appendChild(cap);
       }
       var what = document.createElement('span');
-      what.textContent = BINDINGS[b].label;
+      what.textContent = typeof BINDINGS[b].label === 'function' ? BINDINGS[b].label() : BINDINGS[b].label;
       item.appendChild(what);
       keycaps.appendChild(item);
     }
@@ -847,9 +868,42 @@ mod tests {
     // not an intuitive UX, so that goes entirely." Both halves asserted, because
     // binding Escape to close while ALSO leaving it on the index would satisfy
     // a check that only looked for the new behaviour.
-    assert!(RUNTIME_JS.contains("keys: ['q', 'Q', 'Escape'], label: 'close'"));
+    assert!(RUNTIME_JS.contains("keys: ['q', 'Q', 'Escape'],"));
     assert!(!RUNTIME_JS.contains("case 'Escape': overview"), "the old mode toggle is gone");
     assert!(RUNTIME_JS.contains("keys: ['i', 'I'], label: 'index'"), "the index moved to i");
+  }
+
+  #[test]
+  fn the_close_shortcut_is_read_from_the_viewer_never_from_the_build_host() {
+    // AC20(d). The artifact is portable, so a deck built on a Mac and opened on
+    // Linux must say ctrl-W. Asserted structurally -- the runtime reads
+    // `navigator` and the Rust side names no platform at all -- because the
+    // failure mode is a build that hardcodes whatever the author was using and
+    // is only ever wrong on someone else's machine.
+    assert!(RUNTIME_JS.contains("navigator.userAgent"), "the shortcut is resolved at view time");
+    assert!(RUNTIME_JS.contains("'cmd-W'") && RUNTIME_JS.contains("'ctrl-W'"), "both branches ship");
+    assert!(
+      !RUNTIME_JS.contains("prez present` opens"),
+      "the old message named prez present as the remedy from inside a prez present window"
+    );
+    // Nothing on the Rust side may decide this, and that is asserted on the
+    // ARTIFACT rather than on the source. A `cfg!(target_os)` in here would
+    // compile the build host's answer in and ship only one branch -- so the
+    // property is "a built deck carries both", which is directly observable.
+    //
+    // The first version of this grepped its own source for "target_os" via
+    // include_str!, and failed forever: the test contains the word it is
+    // looking for. A check that cannot pass is not a strict check, it is a
+    // broken one.
+    let theme = Theme {
+      css: "body{}".into(), js: None, layout: None, name: "t".into(),
+      origin: crate::theme::Origin::BuiltIn,
+    };
+    let slides = [slide("<p>x</p>")];
+    let out = assemble(&Document {
+      title: None, slides: &slides, theme: &theme, mermaid: false, paper: None,
+    });
+    assert!(out.contains("cmd-W") && out.contains("ctrl-W"), "a built deck must carry both branches");
   }
 
   #[test]

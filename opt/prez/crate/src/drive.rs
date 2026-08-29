@@ -10,6 +10,7 @@
 // PATH TRIED, because "no browser found" on a machine with four browsers
 // installed is a report the user cannot act on.
 
+use crate::html;
 use crate::Failure;
 use std::path::{Path, PathBuf};
 use std::process::Command;
@@ -196,18 +197,101 @@ fn page_count(pdf: &[u8]) -> Option<usize> {
   (count > 0).then_some(count)
 }
 
+/// The presenting window, in device-independent pixels.
+///
+/// **A DECK HAS A DESIGNED SHAPE AND PRESENTING IS THE ONE PATH THAT USED TO
+/// IGNORE IT.** `pdf` has laid its pages out at `html::DEFAULT_PAPER` --
+/// 254 x 142.9 mm, exactly 16:9 -- since it existed, while `present` set no
+/// geometry at all and inherited whatever Chrome last remembered. hv got a
+/// PORTRAIT window for a 16:9 deck, which is not a bad default; it is the
+/// absence of one.
+///
+/// 1280 x 720 is that same 16:9 at a size that fits a laptop screen with room
+/// for the OS chrome. It is derived rather than typed: DEFAULT_ASPECT comes off
+/// the paper default, so the two cannot drift into disagreeing about what shape
+/// a deck is.
+pub const DEFAULT_WINDOW_WIDTH: u32 = 1280;
+
+/// The deck's aspect, read off the same constant `pdf` lays pages out at.
+fn default_window() -> (u32, u32) {
+  let (w, h) = html::DEFAULT_PAPER
+    .split_once(' ')
+    .map(|(w, h)| (w.trim_end_matches("mm"), h.trim_end_matches("mm")))
+    .unwrap_or(("16", "9"));
+  let ratio = match (w.parse::<f64>(), h.parse::<f64>()) {
+    (Ok(w), Ok(h)) if w > 0.0 && h > 0.0 => h / w,
+    _ => 9.0 / 16.0,
+  };
+  (DEFAULT_WINDOW_WIDTH, (f64::from(DEFAULT_WINDOW_WIDTH) * ratio).round() as u32)
+}
+
+/// Parse `--window WxH` into pixels.
+///
+/// Mirrors `--paper`'s grammar deliberately -- same `x`, same trimming, same
+/// shape of refusal -- because someone who has learned one flag should not have
+/// to learn the other. The UNIT differs and the refusal says so: a window is
+/// pixels, a page is millimetres.
+pub fn window_size(spec: Option<&str>) -> Result<(u32, u32), Failure> {
+  let Some(spec) = spec else {
+    return Ok(default_window());
+  };
+  let refuse = || {
+    Failure::new(
+      format!("--window '{spec}' is not a window size"),
+      "give width x height in pixels, eg --window 1280x720",
+    )
+  };
+  let (w, h) = spec.split_once(['x', 'X']).ok_or_else(refuse)?;
+  let (w, h) = (w.trim().parse::<u32>().map_err(|_| refuse())?, h.trim().parse::<u32>().map_err(|_| refuse())?);
+  if w == 0 || h == 0 {
+    return Err(refuse());
+  }
+  Ok((w, h))
+}
+
+/// The exact argv the presenting launch uses.
+///
+/// **SPLIT OUT SO IT CAN BE ASSERTED WITHOUT LAUNCHING ANYTHING**, which is the
+/// only place a silently-dropped flag is catchable. `--start-fullscreen` was
+/// passed on every launch for as long as this function existed and never took
+/// effect; nothing in the process, the exit status or the logs said so, and it
+/// took a screenshot of a portrait window to find. A browser test cannot see
+/// the difference between a flag that was not sent and one that was ignored --
+/// only the argv can.
+pub fn presenting_argv(artifact: &Path, width: u32, height: u32) -> Vec<String> {
+  vec![
+    format!("--app={}", file_url(artifact)),
+    format!("--window-size={width},{height}"),
+    "--new-window".to_string(),
+  ]
+}
+
 /// Launch the artifact for presenting, then return so prez can exit.
-pub fn open_presenting(explicit: Option<&str>, artifact: &Path) -> Result<(), Failure> {
+pub fn open_presenting(
+  explicit: Option<&str>,
+  artifact: &Path,
+  window: Option<&str>,
+) -> Result<(), Failure> {
+  let (w, h) = window_size(window)?;
   // `--app` drops the tab strip, the address bar and the bookmarks -- the
   // difference between a presentation and a browser window with slides in it.
+  //
+  // **`--start-fullscreen` USED TO BE HERE AND IS GONE ON PURPOSE.** It was
+  // passed on every launch and demonstrably did not take: hv's window came up
+  // with traffic lights on it, in portrait. Chrome does not honour it for an
+  // `--app` window on macOS, and it fails SILENTLY -- no warning, no error,
+  // nothing in the exit status -- which is precisely the class this thread has
+  // been removing from the harness, pointed at the tool instead.
+  //
+  // Deleted rather than fixed, because there is nothing to fix: the flag has no
+  // working form here. What replaces it is a window that is the right SHAPE,
+  // plus `f` in the runtime for a fullscreen the browser actually performs and
+  // the key bar actually advertises. A flag nobody can observe working is worse
+  // than an honest key.
   if let Ok(browser) = find(explicit) {
-    return spawn(
-      Command::new(&browser)
-        .arg(format!("--app={}", file_url(artifact)))
-        .arg("--start-fullscreen")
-        .arg("--new-window"),
-      &browser.display().to_string(),
-    );
+    let mut command = Command::new(&browser);
+    command.args(presenting_argv(artifact, w, h));
+    return spawn(&mut command, &browser.display().to_string());
   }
   if explicit.is_some() {
     // A named browser that could not be found is an error, never a fallback.
@@ -253,6 +337,56 @@ fn file_url(path: &Path) -> String {
 #[cfg(test)]
 mod tests {
   use super::*;
+
+  // ---- AC19: the presenting window has a shape -----------------------------
+
+  #[test]
+  fn the_default_window_is_the_deck_s_own_aspect() {
+    // Derived from html::DEFAULT_PAPER rather than typed here, so `pdf` and
+    // `present` cannot drift into disagreeing about what shape a deck is.
+    let (w, h) = default_window();
+    let ratio = f64::from(w) / f64::from(h);
+    assert!((ratio - 254.0 / 142.9).abs() < 0.01, "{w}x{h} is {ratio}, not the deck's aspect");
+  }
+
+  #[test]
+  fn window_mirrors_paper_s_grammar_and_says_pixels_when_refusing() {
+    assert_eq!(window_size(Some("1920x1080")).unwrap(), (1920, 1080));
+    assert_eq!(window_size(Some("1920X1080")).unwrap(), (1920, 1080));
+    assert_eq!(window_size(Some(" 800 x 600 ")).unwrap(), (800, 600));
+    let e = window_size(Some("wide")).unwrap_err();
+    assert!(e.message.contains("not a window size"), "{}", e.message);
+    // The UNIT is the one thing that differs from --paper, so the remedy has to
+    // say it: copying --paper's "millimetres" here would be a plausible,
+    // wrong sentence.
+    assert!(e.remedy.as_deref().unwrap().contains("pixels"), "{:?}", e.remedy);
+    assert!(window_size(Some("0x600")).is_err(), "a zero dimension is not a window");
+  }
+
+  #[test]
+  fn no_window_flag_means_the_deck_s_shape_not_whatever_chrome_remembered() {
+    assert_eq!(window_size(None).unwrap(), default_window());
+  }
+
+  // ---- AT18's argv half ----------------------------------------------------
+
+  #[test]
+  fn the_presenting_argv_carries_the_geometry_and_no_inert_flag() {
+    let argv = presenting_argv(Path::new("/tmp/deck.html"), 1280, 720);
+
+    // PRESENCE, which is the easy half.
+    assert!(argv.iter().any(|a| a == "--window-size=1280,720"), "{argv:?}");
+    assert!(argv.iter().any(|a| a.starts_with("--app=")), "{argv:?}");
+
+    // AND ABSENCE, which is the half that matters. A build that kept
+    // --start-fullscreen beside a working --window-size would pass a check
+    // that only looked for the new flag, and the inert flag would live on
+    // forever behind a green. It never worked here and nothing ever said so.
+    assert!(
+      !argv.iter().any(|a| a == "--start-fullscreen"),
+      "--start-fullscreen is inert for an --app window and must not be sent: {argv:?}"
+    );
+  }
 
   #[test]
   fn an_explicit_browser_that_does_not_exist_is_refused_rather_than_replaced() {
