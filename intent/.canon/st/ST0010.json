@@ -101,7 +101,7 @@
     },
     {
       "id": "AC04",
-      "text": "Base runtime: arrows/space/PgUp/PgDn/Home/End navigate, f toggles fullscreen, Esc toggles a clickable overview grid, a slide counter shows n/N, and #n hash addressing deep-links and survives reload -- verified in a real browser on the demo artifact. (Carried from _tools AC05.)",
+      "text": "Base runtime, verified in a real browser on the demo artifact: arrows/space/PgUp/PgDn navigate, Home/End jump to first/last, a slide counter shows n/N, and #n hash addressing deep-links and survives reload. Single-key bindings, each dispatched through the BINDINGS table rather than a switch: f fullscreen, i index (a clickable grid), g go-to-page, r reload, ?/h the key bar, q/Esc close. ESC MUST NOT OPEN THE INDEX -- it closes, like q. Asserting the new binding alone is insufficient: a runtime that bound esc to BOTH would satisfy a check that only looked for i, so the absence is asserted separately from the presence. (Carried from _tools AC05, then rewritten 2026-08-29 for hv's runtime change at 4ed491e -- the old text said 'Esc toggles a clickable overview grid', which was hv's actual complaint: one key meaning open-this and close-this depending on invisible state.)",
       "kind": "test",
       "state": {
         "is": "computed"
