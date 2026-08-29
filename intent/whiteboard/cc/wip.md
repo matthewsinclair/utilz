@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: 7caf919e-ca57-4a02-8804-1e44225cea04
-heartbeat_at: 2026-08-29 15:52Z
+heartbeat_at: 2026-08-29 18:08Z
 status: active
-focus: "ST0010 WP-02 and WP-03 closed; hv's runtime work landed over four commits. Everything buildable is built. Blocked on ONE thing: hv authorising a browser run."
+focus: "ST0010 build side is in and shipped in v2.5.0. The browser blocker cleared at ~16:43Z while I was holding; vc ran the greens and owns WP-04. Nothing of mine in flight."
 claims: [ST0010]
 ---
 
@@ -13,24 +13,17 @@ claims: [ST0010]
 
 ## DOING
 
-**ST0010 (`utilz prez`) -- vc owns the contract, I build.** WP-02 and WP-03 are DONE and the pin is merged. Session narrative is archived in `.history/20260829/`.
+**ST0010 (`utilz prez`) -- vc owns the contract, I build. The blocker cleared while I was holding.** hv authorised the browser at ~16:43Z, vc ran the greens, and **`v2.5.0` shipped at 17:09Z** (`4b6eb07`). CI has now run the suite off this machine for the first time. Session narrative is archived in `.history/20260829/`.
 
-**Landed:** `0ebfa85` WP-02 substrate, `95b650a` CI red fixed, `64d375b` hoist, `8a53457` AC14, `93702cb` AT13 + AC18(b), `844f1aa` surfaces, `673e4db` **pin `b600306` merged**, `406af49` issue 0006, `4ed491e` key bar, `c3307c5` index commit keys + AT17, `f5253a9` AC19 + AC20, `5de4b0e` presenting output.
+**My build side, all landed:** `0ebfa85` WP-02 substrate, `95b650a` CI red, `64d375b` hoist, `8a53457` AC14, `93702cb` AT13 + AC18(b), `844f1aa` surfaces, `673e4db` **pin `b600306` merged**, `406af49` issue 0006, `4ed491e` key bar, `c3307c5` index commit keys + AT17, `f5253a9` AC19 + AC20, `5de4b0e` presenting output, `8417ed7` devbin seam.
 
-**State:** 128 cargo tests, 23 shim BATS, acceptance 9 passed / 11 skipped under the browser override, clippy clean, shellcheck clean across 16. `intent/issues/OPEN/` is empty.
+**vc's afternoon, read from the log rather than measured by me:** `c5c6a14` AT04's bar checks were measuring a bar Escape held open; `fdf161a` the estate is out of the code; `7cd45cd` + `229fa6b` greens recorded, each naming its run; `341ff46` the Gtools tripwire on our built-in themes; `832e53d` AT09 + the AC ids are ours; `be93866` two Linux defects CI found; `72ee931` CDP launches wait for the port instead of two seconds.
 
-**THE ONE BLOCKER, and it is hv's:** authorisation to launch a browser. Queued behind it, in order:
+**Tree at EOD:** HEAD `de0b6b0`, both remotes `72ee931` -- one unpushed. vc is mid-globalfold, so `intent/{wip,restart,done}.md` are dirty and **theirs**; I stayed out of them (localfold scope, and the coordinating node owns the project-wide docs).
 
-1. `utilz test prez` with no override -- the eleven skipped acceptance checks.
-2. **AT04** rewritten for hv's runtime and never run (+28 checks: index on `i`, esc not opening it, the bar, `g`, the clamp, enter/space committing).
-3. **AT18's browser half** -- the presenting window's actual geometry.
-4. **AC17's cold build** -- `rm -rf opt/prez/crate/target` first, then assert the binary landed where isolation put it AND that the wall time is a real build's. Both levers work now: the shim honours `CARGO_TARGET_DIR` as of `f5253a9`.
+**My last measurement, and it is a smoke test not a green:** full suite 17/17 green; `utilz test prez` reports acceptance **12 passed / 0 failed / 0 skipped**, off the warm dev tree. Not an AT green -- AC17's provenance gates that and this binary did not come from a cold build. WP-04 still reads Not Started, correctly.
 
-**THE CRATE IS A FORK, NOT A MIRROR.** AC14, AT13, AC18(b), AT17/AT19, AC19 and AC20 live only here. Every pin move goes through `hoist-rebase.sh` (attached to ST0010), never `tar -x` -- which deletes cleanly and would report a green merge having lost all of it. The script asserts 18 postconditions itself; proven red against a pin-fresh tree. Run `--dry-run` first.
-
-**Open question I could not close:** when Chrome is already running, the launch forwards to the existing instance -- and `--window-size` may not apply on that path. AC19's geometry could be cold-only. Needs a browser.
-
-**For the release (hv's):** `VERSION` reads 2.4.0, `prez.yaml` declares `^2.5.0`. `main` is well ahead of both remotes with the CI fix among them, so main reads red on the remote until hv pushes.
+**THE CRATE IS A FORK, NOT A MIRROR.** AC14, AT13, AC18(b), AT17/AT19, AC19 and AC20 live only here. Every pin move goes through `hoist-rebase.sh` (attached to ST0010), never `tar -x` -- which deletes cleanly and would report a green merge having lost all of it. It carries 18 checks that can fail, plus one dead line (see TODO). **Re-verified at EOD against vc's changed tree: 17 needles, 0 stale.** Run `--dry-run` first.
 
 ## TODO
 
@@ -57,6 +50,8 @@ claims: [ST0010]
 - **`intent st attach` writes canon and regenerates views**, so it is not private when a peer has the store open. Check `git status -- intent/.canon` BEFORE attaching.
 - **Run prettier yourself before committing markdown.** Otherwise the pre-commit hook is an unnamed third writer, and `git commit --only` leaves a phantom staged diff (`git restore --staged` clears it). `git add` + plain `git commit` avoids it entirely.
 - A peer node in ANOTHER project may edit this tree; Cdsync's `cc` did on 2026-07-29.
+
+- **The browser gate in the prez acceptance suite is an ENVIRONMENT VARIABLE, so its absence is invisible.** `utilz test` drives `acceptance.sh --strict`, and with `PREZ_TEST_BROWSER` unset `chrome()` probes, finds Chrome, and AT04/AT07/AT08/AT12 each launch it. The override does not survive a new shell, so the same command is browserless in one terminal and browser-driving in the next with nothing said either way. Every launch does carry `--use-mock-keychain` via `$CHROME_SAFE`, which is what keeps the Safe-Storage modal off hv's screen. If a run must be browserless, set the variable in that shell and check it landed.
 
 **Shell and tooling.**
 
