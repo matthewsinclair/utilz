@@ -1,0 +1,268 @@
+{
+  "schema": "intent/thread@3.0",
+  "id": "ST0011",
+  "title": "stampz -- recipient watermarking for PDF document packs",
+  "slug": "stampz-recipient-watermarking-for-pdf-document-p",
+  "status": "wip",
+  "created": "2026-09-03",
+  "objective": "Promote the pack watermarker built in Lamplight (`design/system/docs/bin/stamp-pack.sh`, 129 lines, committed `fc31caf6a`) into Utilz as the `stampz` utility, so that stamping a recipient watermark across every page of a PDF document pack is available to every project rather than living in one repo's `docs/bin/`. hv's call, in hv's framing: move it out of Lamplight so it is available everywhere.\n\n**\"Available everywhere\" is the whole requirement, and it is the one thing the reference cannot do.** It resolves headless Chrome at a hardcoded `/Applications/Google Chrome.app/...` and pulls JetBrains Mono from `fonts.googleapis.com`, so it runs on a Mac, online, and nowhere else. Neither CI runner has Chrome. A port that carries both dependencies across would satisfy the letter of the promotion and leave the tool exactly as unportable as the day it was written -- and would land `stampz` in `prez`'s position, with a suite only a developer machine can green.\n\nWhat must survive the move is the part the reference earned the hard way: guards against failures that are **silent**, each producing an output that passes every check short of rendering the page and looking at it. The promotion is judged on whether those guards come across as tests rather than as comments.",
+  "context": "### Where it comes from\n\n`stamp-pack.sh` was built in Lamplight to mark investor document packs: a pack handed to a named person carries their name diagonally across every page. It is in production use there. Routed here on 2026-09-03 by `lamplight-ac` on hv's instruction, with the reference left in place and that node standing down from it.\n\nIts shape, which the promotion keeps: `stamp-pack.sh <pack-dir> \"<recipient>\" [YYYYMMDD] [out-dir]` stamps `CONFIDENTIAL <date> <recipient>` rotated -30 degrees through the page centre, mid-grey at 30% opacity, and writes `STAMP-MANIFEST.txt` recording the recipient, the date, and the sha256 of every file before and after. Geometry is read per document with `pdfinfo`, the stamp is rendered to match, and stamps are cached per geometry so a mixed pack renders each size once.\n\n### What it is, and what it is not\n\n**THIS DETERS, IT DOES NOT PROTECT.** An overlay is strippable in seconds by anyone with a PDF tool. The glyphs do land in the text layer, but the rotation scatters them one per line in scrambled order, so no contiguous search finds the recipient -- which cuts both ways: a naive grep will not leak the recipient out of the file, and will not identify a leaked copy either. This sentence is the one thing a user could reasonably misunderstand about what they are getting, it stays in the utility's header, and AC08 pins it with a test rather than trusting it to a comment.\n\n### The traps, all of which fail silently\n\nThree came from `lamplight-ac`, verbatim in substance. The fourth was found here while spiking the renderer.\n\n1. **`--underlay` is the wrong verb even though \"a watermark behind the page\" is the natural description.** Underlay draws beneath page content, and any page painting an opaque background covers it completely. The output is byte-different from the input and pixel-identical to it, so every check short of rendering says it worked. Reproduced here: on a light page painting an opaque white rect, an underlay build differs from the original by **zero pixels**.\n2. **One colour does not fit all pages, and the failure is per-page rather than per-document.** Lamplight's decks mix near-black and light slides inside one file, so white vanishes on some pages and black on others. Mid-grey (128,128,128) at 30% is the value that holds on both, picked there by rendering a dark slide and a light slide and looking at them. Confirmed here by measurement: 0.67% of pixels changed on a white page, 0.94% on a near-black one.\n3. **Font size must be derived, not configured.** A fixed size overruns the page the moment the recipient's name is long. A rotated single line's horizontal extent is `len * advance * cos(30)`; solve for ~85% of page width. The reference's first attempt used a fixed 40px and the string ran off both margins.\n4. **The font arrives over the network, and its absence is silent.** The reference `<link>`s JetBrains Mono from `fonts.googleapis.com`; offline, Chrome falls back to generic `monospace` and renders a stamp that looks approximately right at a different advance width -- which also invalidates the trap-3 formula, whose 0.74 constant is that font's advance plus tracking. Not a defect in Lamplight, where the machine is online and the output is eyeballed. It is a defect in a utility that claims to run anywhere.\n\n### The renderer decision, measured rather than reasoned about\n\nThe reference renders its one-page stamp by generating HTML and driving headless Chrome with `--print-to-pdf`. The alternative is to write the stamp PDF directly: base-14 Courier-Bold (no embedding, present in every PDF consumer), rotation via the text matrix, opacity via an `ExtGState`. Spiked on 2026-09-03 against both a light and a near-black fixture, each painting an opaque background:\n\n| Property                       | Chrome reference             | Native PDF (measured)         |\n| ------------------------------ | ---------------------------- | ----------------------------- |\n| Stamp artifact                 | Chrome, 10s time budget      | 794 bytes, no subprocess      |\n| Network                        | Google Fonts CDN             | none                          |\n| Visible on a white page        | yes                          | yes, 0.67% of pixels          |\n| Visible on a near-black page   | yes                          | yes, 0.94% of pixels          |\n| The 96/72 px-to-pt conversion  | live, and costs a round      | gone -- authored in points    |\n| Runs on either CI runner       | no                           | yes, with qpdf + poppler      |\n| Font                           | JetBrains Mono               | Courier-Bold                  |\n\n**Decision: native.** The only loss is JetBrains Mono specifically. What it buys is the difference between \"a Mac with Chrome, online\" and \"anywhere qpdf runs\", which is what the objective requires; it deletes trap 4 outright and trap 3's dependence on a downloaded advance width; and it removes the 96/72 conversion that `lamplight-ac` flagged as costing a round (Chrome's `--print-to-pdf` takes CSS px and emits points at 72/96, so a 1440pt page needs a 1920px render and the obvious guess of 1440px yields 1080pt). Authoring the stamp in points removes the units mismatch rather than documenting it.\n\n### The measurement trap this thread inherits, found in its own spike\n\nThe spike's first visibility check counted pixels differing anywhere on the page and called anything above 0.05% visible. It reported the **underlay** build -- the one that must be invisible -- as visible at 0.30% on the dark fixture. The diagnostic: 468 differing pixels across 468 of 469 rows, every delta exactly 83. One pixel per row is a single-pixel column down the page edge, a rasteriser seam where the overlay page composites against the fixture's painted rect, and not the mark at all.\n\n**A whole-page pixel-diff check greens the wrong verb.** Visibility must be measured in the centre region where the mark actually lands, and AT01/AT02 are written that way. This is the same class as the existing board watch-out that a grep-based check must target a string the artifact can only contain if the thing is really there.\n\n### What the framework requires of a new utility\n\n- `opt/stampz/{stampz,stampz.yaml,README.md,test/stampz.bats}`, `help/stampz.md`, `bin/stampz -> utilz`. Scaffolded by `utilz generate`, which derives the `utilz_version` floor from the framework's own VERSION rather than hardcoding it.\n- Dependencies declared in `stampz.yaml` so `utilz doctor` checks them without a second registration: `qpdf` and `poppler` (for `pdfinfo`), both required; `pdftoppm` (also poppler) is what the tests render with.\n- **CI has two rosters and they do not agree.** `test-macos` derives its roster from `utilz list`, so `stampz` is covered there the day it lands; `test-linux` carries a hardcoded list and a new utility goes untested on that leg with nothing reporting it. `stampz` must be added there explicitly, and both legs need `qpdf` and `poppler-utils` / `poppler` installed. The existing comment in `tests.yml` names this second-roster hazard; this thread pays it rather than fixing it.\n- `shellcheck -x` is blocking and collects every executable under `bin/` and `opt/` plus every `*.sh`, excluding `*/test/*`. bash 3.2 (macOS), 2-space indent, no em dashes, column-aligned tables.\n\n### Open, and hv's to rule\n\n- **In-place is the reference's default and is a footgun outside Lamplight.** It was safe there because the originals regenerate from `docs/pdf/investor/`, which the header says in terms. Pointed at someone's only copy of a pack, an in-place default rewrites it. The design proposes an out-dir default with an explicit `--in-place`, which changes the reference's behaviour and is therefore hv's call, not this thread's.\n- **Mixed page geometry stays refused in v1.** The reference refuses rather than stamping every page at the first size and clipping the rest. Native rendering makes a per-geometry stamp nearly free, but `qpdf --overlay --repeat=1` applies one stamp page to all pages, so per-page variation is real work and is deferred rather than smuggled in.",
+  "body": "",
+  "preamble": "",
+  "wps": [
+    {
+      "seq": 1,
+      "title": "Design and acceptance contract",
+      "scope": "S",
+      "status": "wip",
+      "objective": "",
+      "body": "",
+      "preamble": ""
+    },
+    {
+      "seq": 2,
+      "title": "Native stamp renderer and geometry probe",
+      "scope": "S",
+      "status": "not-started",
+      "objective": "",
+      "body": "",
+      "preamble": ""
+    },
+    {
+      "seq": 3,
+      "title": "Utility surface, manifest and guards",
+      "scope": "S",
+      "status": "not-started",
+      "objective": "",
+      "body": "",
+      "preamble": ""
+    },
+    {
+      "seq": 4,
+      "title": "Test suite and fixtures",
+      "scope": "S",
+      "status": "not-started",
+      "objective": "",
+      "body": "",
+      "preamble": ""
+    },
+    {
+      "seq": 5,
+      "title": "CI wiring on both legs",
+      "scope": "S",
+      "status": "not-started",
+      "objective": "",
+      "body": "",
+      "preamble": ""
+    },
+    {
+      "seq": 6,
+      "title": "Docs and acceptance run",
+      "scope": "S",
+      "status": "not-started",
+      "objective": "",
+      "body": "",
+      "preamble": ""
+    }
+  ],
+  "criteria": [
+    {
+      "id": "AC01",
+      "text": "Portability and dependency posture: a stamp run drives no browser and makes no network request. The only external tools are qpdf and poppler (pdfinfo; pdftoppm in the test path), both declared in stampz.yaml so utilz doctor checks them without a second registration. The stamp page is generated as PDF directly, so no font, stylesheet or script is fetched at run time. This is the criterion the promotion exists for: the Lamplight reference needed Chrome at a hardcoded macOS path and a Google Fonts CDN, and could therefore run on one platform, online, and nowhere else.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC02",
+      "text": "The mark is visible on a light page AND on a near-black page at the shipped defaults (mid-grey 0.5 at 30% opacity), measured as the count of pixels differing from the unstamped render of the same page. MEASURED IN THE CENTRE BAND THE ROTATED LINE CROSSES, never whole-page: a whole-page count reported the underlay build (which must be invisible) as visible at 0.30%, because a one-pixel rasteriser seam down the page edge put a delta of exactly 83 on 468 of 469 rows. A threshold tuned above that seam is a number that drifts with the renderer; cropping excludes it by construction.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC03",
+      "text": "Output disposition is explicit. Stamped copies are written to an out-dir by default and --in-place is required to overwrite the source pack. PENDING hv RULING: this inverts the Lamplight default, which stamps in place and is safe there only because the originals regenerate from docs/pdf/investor/. Pointed at a pack that exists in one copy, an in-place default rewrites it. If hv rules for the reference default, this criterion moves with the ruling rather than being quietly dropped.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC04",
+      "text": "Font size is derived from the recipient length, never configured: fs = 0.85 * width / (n * 0.74 * cos 30), floored at 8pt. A 3-character and a 60-character recipient both produce a mark whose rendered extent stays inside the page box. The 0.74 constant is the mono advance plus tracking and is exact by construction under base-14 Courier, whose advance is 0.600 em for every glyph; under a downloaded font it was true only when the download succeeded.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC05",
+      "text": "Page count survives the overlay. The count reported by pdfinfo on the output equals the count on the input, and a mismatch is a refusal that names both numbers, not a warning. Cheap, and it catches a class of silent corruption that leaves a file which opens.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC06",
+      "text": "A PDF whose pages carry more than one geometry is REFUSED, naming how many distinct sizes were found, rather than stamped at the first size. Stamping them all at one size clips the rest, and a clipped page still looks stamped. Deferred rather than solved: qpdf --overlay --repeat=1 applies one stamp page to every page, so per-page variation is real work and is named in the design as deferred.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC07",
+      "text": "STAMP-MANIFEST.txt records the recipient, the date carried in the mark, the stamp time read from date -u, the source directory, and for every file stamped its page count and its sha256 before and after. This is the audit trail that makes a run attributable and an in-place run recoverable by re-copying rather than by trusting a backup nobody made.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC08",
+      "text": "The deterrence boundary is stated and true. Three parts, each asserted: the page own text remains extractable after stamping (nothing is rasterised); the recipient name is NOT contiguously extractable from the stamped file, because the rotation scatters the glyphs one per line in scrambled order; and the utility header carries the sentence that this DETERS and does NOT protect. An overlay is strippable in seconds by anyone with a PDF tool. The third part is tested rather than trusted to a comment, because it is the one thing a user could reasonably misunderstand about what they are getting.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC09",
+      "text": "The wrong verb is pinned by a CONTROL THAT CAN GO RED. An --underlay build of the same stamp over the same opaque fixture produces no centre-region change, asserted as an absence. qpdf --underlay draws beneath page content and any page painting an opaque background covers it completely, so the output is byte-different from the input and pixel-identical to it: every check short of rendering the page and looking at it says it worked. The reason --overlay is the verb therefore lives in a test, not in a header comment that the next tidy-up can delete.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC10",
+      "text": "Framework integration on the repo conventions: bin/stampz is a symlink to utilz and dispatches, stampz --help and stampz --version answer, utilz list shows the utility with its description, and utilz doctor checks the dependencies declared in stampz.yaml. Scaffolded with utilz generate so the utilz_version floor is derived from the framework VERSION rather than hardcoded.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC11",
+      "text": "Green on BOTH CI legs, evidenced by a named run. stampz must be added explicitly to the hardcoded roster in test-linux; test-macos derives its roster from utilz list and picks the utility up for free. That asymmetry is the second-roster hazard the comment in tests.yml already names, and this thread pays the toll rather than fixing the roster, which is its own change. Both legs install qpdf and poppler so that the suite skip path is never the path CI takes.",
+      "kind": "non-test",
+      "state": {
+        "is": "unsatisfied"
+      }
+    }
+  ],
+  "tests": [
+    {
+      "id": "AT01",
+      "kind": "test",
+      "file": "opt/stampz/test/stampz.bats",
+      "covers": [
+        "AC02"
+      ],
+      "status": "to-write",
+      "note": "Renders light and dark fixtures with pdftoppm before and after stamping, counts differing pixels in the centre band only. Must be written red-first against an unstamped output."
+    },
+    {
+      "id": "AT02",
+      "kind": "test",
+      "file": "opt/stampz/test/stampz.bats",
+      "covers": [
+        "AC09"
+      ],
+      "status": "to-write",
+      "note": "The control. Builds the same stamp with --underlay over the same opaque fixture and asserts NO centre-region change. Goes red if someone switches the verb."
+    },
+    {
+      "id": "AT03",
+      "kind": "test",
+      "file": "opt/stampz/test/stampz.bats",
+      "covers": [
+        "AC04"
+      ],
+      "status": "to-write",
+      "note": "Three-character and sixty-character recipients; asserts the rendered mark stays inside the page box in both."
+    },
+    {
+      "id": "AT04",
+      "kind": "test",
+      "file": "opt/stampz/test/stampz.bats",
+      "covers": [
+        "AC05"
+      ],
+      "status": "to-write",
+      "note": "Page count before and after; and a forced mismatch refuses rather than warns."
+    },
+    {
+      "id": "AT05",
+      "kind": "test",
+      "file": "opt/stampz/test/stampz.bats",
+      "covers": [
+        "AC06"
+      ],
+      "status": "to-write",
+      "note": "A two-geometry fixture is refused with the size count named."
+    },
+    {
+      "id": "AT06",
+      "kind": "test",
+      "file": "opt/stampz/test/stampz.bats",
+      "covers": [
+        "AC07"
+      ],
+      "status": "to-write",
+      "note": "Manifest carries recipient, date, stamp time, source, and per-file pages plus sha256 before and after."
+    },
+    {
+      "id": "AT07",
+      "kind": "test",
+      "file": "opt/stampz/test/stampz.bats",
+      "covers": [
+        "AC08"
+      ],
+      "status": "to-write",
+      "note": "Three assertions: pdftotext still finds the page own text; it does NOT find the recipient contiguously; and the implementation header carries the deters-does-not-protect sentence."
+    },
+    {
+      "id": "AT08",
+      "kind": "test",
+      "file": "opt/stampz/test/stampz.bats",
+      "covers": [
+        "AC03"
+      ],
+      "status": "to-write",
+      "note": "Default run leaves the source pack byte-identical and writes to the out-dir; --in-place is what overwrites. Moves if hv rules for the reference default."
+    },
+    {
+      "id": "AT09",
+      "kind": "test",
+      "file": "opt/stampz/test/stampz.bats",
+      "covers": [
+        "AC01"
+      ],
+      "status": "to-write",
+      "note": "No browser and no network during a stamp run, plus the yaml declares qpdf and poppler. Assert on the artifact and the process, never on a comment."
+    },
+    {
+      "id": "AT10",
+      "kind": "test",
+      "file": "opt/stampz/test/stampz.bats",
+      "covers": [
+        "AC10"
+      ],
+      "status": "to-write",
+      "note": "Dispatch through bin/stampz, --help and --version answer, utilz list shows it, utilz doctor checks the declared deps."
+    }
+  ],
+  "attachments": [
+    {
+      "path": "design.md",
+      "text": "# ST0011 Design -- utilz stampz\n\nAs-designed decisions for the promotion. Provenance, the traps and the renderer measurements live in this thread's Context; this file states what gets built and why each choice beat its alternative. Owner: cc.\n\n## 1. Layout\n\n```\nopt/stampz/\n  stampz            # the implementation -- bash, the opt/<name>/<name> convention\n  stampz.yaml       # utility metadata, including the dependency declarations\n  README.md         # per-utility readme (repo convention)\n  test/\n    stampz.bats     # BATS suite\n    fixtures/       # generated at test time, not committed -- see 6\nbin/stampz -> utilz # standard dispatcher symlink\nhelp/stampz.md      # help file (repo convention)\n```\n\nScaffolded with `utilz generate stampz \"...\"`, which creates all of the above from `opt/utilz/tmpl/` and derives the `utilz_version` floor from the framework's own VERSION. Hand-creating the tree instead would reintroduce the hardcoded-floor defect the generator's comment records.\n\n**The dispatcher is untouched.** `bin/utilz` requires only that `opt/stampz/stampz` be a regular file and executable before `exec`-ing it.\n\n## 2. The CLI surface\n\n```\nstampz <pack-dir> \"<recipient>\" [options]\n\n  --out <dir>          write stamped copies here (DEFAULT: <pack-dir>.stamped)\n  --in-place           overwrite the pack in place (see 2.1)\n  --date <YYYYMMDD>    default: today, UTC\n  --colour <0..1>      grey level, default 0.5 (see 3.3)\n  --opacity <0..1>     default 0.30\n  -h, --help / --version\n```\n\nCommand-less, unlike `cryptz encrypt|decrypt`: the utility does one thing, and minting a verb for a single operation would make `stampz stamp` the only legal form. `mdagg` and `lnrel` are the in-repo precedent for a verbless utility.\n\n### 2.1 In-place is opt-in, not the default -- PENDING hv\n\nThe reference stamps **in place** by default and takes an out-dir as an optional fourth positional. That is safe in Lamplight and says so in its own header: the originals regenerate from `docs/pdf/investor/`, so an in-place run is reversible by re-copying. A general-purpose utility has no such guarantee and will be pointed at packs that exist in one copy only.\n\nSo the default inverts: stamped copies go to `<pack-dir>.stamped` and `--in-place` is an explicit request. **This changes the reference's behaviour and is hv's ruling to make, not this thread's.** Recorded here as the proposal; AC03 is written against it and moves with the ruling. The manifest's before/after sha256 columns make an in-place run auditable either way, which is why the reference could afford the other default.\n\n## 3. The stamp renderer\n\nOne page, generated directly as PDF. No Chrome, no HTML, no network. The measurements behind this choice are in Context; what follows is the construction.\n\n### 3.1 Assembly, and why byte offsets are measured rather than computed\n\nA PDF's `xref` table is a list of byte offsets into its own file. Three ways to get them, and only one is honest:\n\n| Approach                                       | Verdict                                                                              |\n| ---------------------------------------------- | ------------------------------------------------------------------------------------ |\n| Emit a bogus xref, let `qpdf` reconstruct it   | Rejected. qpdf repairs damaged files with a warning and exit 3 -- a silent-repair dependency in a thread whose whole subject is silent failure. |\n| Compute offsets from string lengths in bash    | Rejected. `${#s}` counts characters, not bytes; correct only under `LC_ALL=C` and only for a recipient that is pure ASCII. |\n| **Append each object, then measure the file**  | **Chosen.** `wc -c < \"$f\"` before each append is the offset of the object about to be written. Byte-exact by construction, locale-independent, no arithmetic to get wrong. |\n\nThe stamp is small enough (794 bytes measured in the spike) that the extra `wc` per object costs nothing.\n\n### 3.2 Type and geometry\n\nBase-14 **Courier-Bold**: present in every conforming PDF consumer, never embedded, no download. This is what deletes trap 4 -- and it does something the reference could not, because Courier is fixed-pitch with an advance of exactly **0.600 em for every glyph**. The reference's font-size formula uses `0.74 = 0.60 advance + 0.14 tracking`, and with a CDN font that constant is true only if the download succeeded. With Courier it is true by construction.\n\nSize is derived, never configured (trap 3). For a line of `n` characters rotated by `d` degrees, spanning 85% of page width `w`:\n\n```\n  fs = 0.85 * w / (n * 0.74 * |cos d|)      floored at 8pt\n```\n\nRotation and centring go in the text matrix, so the line's midpoint sits at the page centre:\n\n```\n  tw = n * 0.74 * fs                        unrotated width\n  Tm = [cos d, sin d, -sin d, cos d, w/2 - (tw/2)cos d, h/2 - (tw/2)sin d]\n```\n\n`d = -30`. Tracking is the `Tc` operator at `0.14 * fs`. All of this is arithmetic over `pdfinfo`'s reported point size, so **the 96/72 px-to-pt conversion never arises** -- the trap that cost `lamplight-ac` a round is not mitigated here, it is absent.\n\n### 3.3 Colour and opacity\n\nMid-grey `0.5 0.5 0.5 rg` under an `ExtGState` with `/ca` and `/CA` at `0.30`, which is the value Lamplight measured against a near-black slide and a light slide, and which this thread re-measured (0.67% of pixels changed on white, 0.94% on near-black). Both are flags because with a native renderer they are numbers in a content stream rather than a re-render, but the defaults are the measured ones and AC02 is written against the defaults.\n\n`/CA` (stroke alpha) is set alongside `/ca` (fill alpha) even though the mark only fills. A future outline variant that strokes would otherwise draw at full opacity, and the failure would be visual-only.\n\n## 4. Per-document probe and the two guards\n\nPer PDF, before stamping:\n\n1. `pdfinfo` reports `Pages:` and `Page size:`. A document whose size cannot be read is a refusal, not a default.\n2. **Mixed-geometry guard.** `pdfinfo -f 1 -l <pages>` reports per-page sizes; more than one distinct size is a refusal. Stamping every page at the first size would clip the rest, and the clipped pages still look stamped. Native rendering makes per-geometry stamps cheap, but `qpdf --overlay --repeat=1` applies one stamp page to all pages, so per-page variation is genuine work and is deferred rather than smuggled in.\n3. Stamps are cached per geometry in the work directory, so a pack of ten A4 files renders one stamp.\n4. **Page-count guard.** After the overlay, `pdfinfo` on the output must report the same page count. Cheap, and it catches a class of silent corruption.\n\n`qpdf ... --overlay <stamp> --repeat=1 --` is the verb. **Never `--underlay`** (trap 1); AT03 pins that as a control rather than a comment.\n\n## 5. The manifest\n\n`STAMP-MANIFEST.txt` in the output directory: recipient, date, stamp time (`date -u`), source directory, then a row per file with page count and the sha256 before and after. This is the audit trail that makes an in-place run recoverable and a leaked copy attributable to a run, and it is the reason the reference could default to in-place at all.\n\n## 6. Testing\n\nThe suite is BATS, per repo convention, and generates its own fixtures at test time rather than committing binary PDFs. Two fixture pages, both painting an **opaque background rect**, because an opaque background is the precondition for trap 1 and a fixture without one cannot detect the wrong verb:\n\n- `light.pdf` -- white ground, dark text\n- `dark.pdf` -- near-black ground, light text\n\nFixtures are built by the same offset-measuring assembler the renderer uses, exercised through a `--emit-fixture` hidden flag rather than a second copy of the PDF-writing code in the test tree. **A second assembler in `test/` would be a Highlander violation and would also be the wrong instrument**: a bug in the shared assembler would cancel out, with the fixture and the stamp wrong in the same direction.\n\n### 6.1 Visibility is measured in the centre region, never whole-page\n\nRendering is `pdftoppm -gray`; visibility is the count of pixels differing from the unstamped render of the same page.\n\n**The threshold is not whole-page.** The spike's first attempt counted differences anywhere on the page and reported the underlay build -- the one that must be invisible -- as visible at 0.30%: 468 differing pixels spread one per row across 468 of 469 rows, every delta exactly 83, which is a single-pixel column down the page edge where the composited page meets the fixture's painted rect. A rasteriser seam, not a mark.\n\nSo the measurement crops to the central band the rotated line actually crosses before counting. The seam is excluded by construction rather than by choosing a threshold above it, because a threshold tuned to today's seam is a number that drifts with the renderer.\n\n## 7. CI\n\nBoth legs need the tools: `qpdf poppler-utils` on Ubuntu, `qpdf poppler` on macOS.\n\n**`stampz` must be added to `test-linux`'s hardcoded roster.** `test-macos` derives its roster from `utilz list` and picks the utility up for free; `test-linux` lists utilities by hand, and the comment in `tests.yml` already names this as the second-roster hazard it is. This thread pays the toll rather than fixing the roster, which is its own change and not this one.\n\nThe suite skips cleanly with a named reason when `qpdf` or `pdftoppm` is absent, so a developer without the tools gets a stated skip rather than a failure -- and, per the `prez` lesson, the CI legs install the tools so that the skip path is never the path CI takes.\n\n## 8. Deferred, with the reason\n\n| Deferred                          | Why                                                                                    |\n| --------------------------------- | ---------------------------------------------------------------------------------------- |\n| Mixed page geometry within a file | `--repeat=1` applies one stamp to all pages; per-page overlay ranges are real work (4). |\n| A configurable text template      | The `CONFIDENTIAL <date> <recipient>` format is what the mark means; a template is a v2 question once there is a second caller. |\n| Font choice beyond base-14        | Embedding a font reintroduces the download, and base-14 is what makes the advance constant exact (3.2). |\n| Stripping or detecting a stamp    | Out of scope, and the honest answer is that an overlay is trivially strippable -- which the header says. |\n",
+      "bytes": 10467,
+      "sha256": "daf87f7070c67e8119c814c4ff3f43bea830cb705d2de8263d9955f44a036792"
+    }
+  ]
+}
