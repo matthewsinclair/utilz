@@ -55,7 +55,7 @@ title: stampz -- recipient watermarking for PDF document packs
 
 ### Group AC11
 
-- AC11 (non-test) Green on BOTH CI legs, evidenced by a named run. stampz must be added explicitly to the hardcoded roster in test-linux; test-macos derives its roster from utilz list and picks the utility up for free. That asymmetry is the second-roster hazard the comment in tests.yml already names, and this thread pays the toll rather than fixing the roster, which is its own change. Both legs install qpdf and poppler so that the suite skip path is never the path CI takes. -- satisfied: no
+- AC11 (non-test) Green on BOTH CI legs, evidenced by a named run. stampz must be added explicitly to the hardcoded roster in test-linux; test-macos derives its roster from utilz list and picks the utility up for free. That asymmetry is the second-roster hazard the comment in tests.yml already names, and this thread pays the toll rather than fixing the roster, which is its own change. Both legs install qpdf and poppler so that the suite skip path is never the path CI takes. -- evidence: CI run 33785732770 at 560ac49, all 7 jobs green. stampz ran 22/22 with ZERO skips on BOTH legs -- Test on Ubuntu (qpdf + poppler-utils via apt) and Test on macOS (qpdf + poppler via brew, roster derived from utilz list). Zero skips citing missing tools on either leg, verified by grepping the logs for the suite's own 'needs qpdf and poppler' skip reason: 0 occurrences. Every AT executed, including the pixel-level visibility measurements, on machines that had never built a stamp. -- satisfied: yes
 
 ### Group AT01
 

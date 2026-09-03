@@ -4,7 +4,9 @@ verblock: "03 Sep 2026:v0.4: matts - stampz (ST0011) and the roster/doc sweep, n
 
 # Done
 
-## 3 Sep 2026 -- `stampz` (ST0011) + a roster and documentation sweep (no release)
+## 3 Sep 2026 -- `stampz` (ST0011, CLOSED) + a roster and documentation sweep (no release)
+
+**ST0011 closed the same day at 11/11 criteria.** CI run `33785732770` at `560ac49`, all seven jobs green: `stampz` ran **22/22 with zero skips on both legs** -- Ubuntu with `qpdf`+`poppler-utils` via apt, macOS with `qpdf`+`poppler` via brew and its roster derived from `utilz list`. Zero skips citing missing tools on either leg, checked by grepping for the suite's own skip reason rather than inferred from the green. Every acceptance test executed, including the pixel-level visibility measurements, on machines that had never built a stamp.
 
 The Lamplight PDF pack watermarker promoted into Utilz on hv's call, so a recipient watermark is available everywhere rather than living in one repo's `docs/bin/`. Framework goes to **15 utilities** (core + 14). Version NOT bumped and nothing tagged -- releases are hv's, and `stampz` is 2.6.0 material. Two nodes: `cc` built, `hv` adjudicated the name, the renderer call and the in-place default; `lamplight-ac` routed the design and measured two of the findings back.
 

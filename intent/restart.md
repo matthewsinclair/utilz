@@ -8,16 +8,31 @@ Cross-session continuity. `intent/wip.md` holds DOING and TODO; `intent/done.md`
 
 ## Key Context (as of 3 Sep 2026)
 
-- **Framework at v2.5.0 with 15 utilities** (core `utilz` + 14 tools) -- `stampz` landed 3 Sep and the version has NOT been bumped, because releases and tags are hv's. The `v2.5.0` tag is at `72ee931`; `main` is ahead of both remotes and unpushed.
-- **ST0011 (`stampz`) is built and green but NOT closed.** 10 of 11 criteria satisfied; AC11 is CI-green-on-both-legs and cannot be satisfied until hv pushes. WP-01..04 done, WP-05 (CI wiring, written) and WP-06 (acceptance run) open.
+- **Framework at v2.5.0 with 15 utilities** (core `utilz` + 14 tools). `stampz` landed 3 Sep and **the version has NOT been bumped** -- releases and tags are hv's, and stampz is 2.6.0 material. `HEAD`, `local/main` and `upstream/main` are all at `560ac49`; the `v2.5.0` tag is still at `72ee931`, so the tag no longer names the tip.
+- **ST0011 (`stampz`) is CLOSED**, 11/11, CI run `33785732770` green on all seven jobs with stampz at 22/22 and zero skips on both legs.
 - **ST0010 (`utilz prez`) is shipped but NOT closed.** Gate 16/20; AC15, AC16, AC18, AC19 remain. AC16 is hv's by construction -- a human renders every built-in theme and looks -- and the suite is not allowed to stand in for it.
 - **`opt/prez/crate` is a FORK of the `_tools` pin, not a mirror.** AC14, AT13, AC18(b), AT17/AT19, AC19 and AC20 exist only here. **Never `tar -x` a new pin over it**: that deletes them silently, leaving a green build and a passing suite because the proving tests go too. Use `hoist-rebase.sh`, attached to ST0010, `--dry-run` first.
 - **`opt/prez/prez` is a shim, not the tool.** It resolves, rebuilds on staleness, and execs a Rust binary under `crate/`. `crate/` is INDIVISIBLE: `src/`, `themes/` and `assets/` are `include_str!` siblings and must keep their relative positions.
 - **Utilz carries ZERO knowledge of `Geodica/` or its `_tools`** (which moved to `~/Devel/prj/Gtools`). hv's standing ruling. Gtools is a consumer of prez, never the reverse. AT09's tripwire greps all of `src/` including comments for estate paths or names; it is in `test/`, so it cannot match itself.
+- **The `M-x utilz` menu is SIX utilities, not the whole roster** (issue 0009): `cleanz`, `expz`, `mdagg`, `pdf2md`, `prez`, `todo`. Absence is a decision -- nine blocks were removed after measuring what the bridge actually invokes, four of which could never have worked and one of which created a symlink on selection. A framework test now invokes the command form the bridge builds for every declaring utility.
 - **`intent/issues/OPEN/` is empty BY POLICY and always will be, so do not read it as "no open defects".** `intent/.intentfiles` declares that only OPEN THREADS get a realised form on disk; no issue is ever written there, and the files under `intent/issues/CLOSED/` are v2 artefacts predating that policy. Use `intent issues list`. Open: `0007` (prez slide-counter contrast, WP-05). An empty directory confirms a false answer where a missing one would announce itself.
 - **The `intent` CLI is at `~/Devel/prj/Intent/bin/intent` and may not be on `PATH` in a fresh tool shell.** `INTENT_HOME` is inert for v3. No native binary is built, so every `intent` subcommand runs the bash implementation.
 
-## The one instrument you cannot trust
+## The one instrument you cannot trust -- UNLESS YOUR `intent` IS THE NATIVE BINARY
+
+**RE-MEASURED 2026-09-03 AND THE ANSWER FLIPPED. Check which binary you have before following the rest of this section:**
+
+```
+readlink -f "$(command -v intent)"
+```
+
+On this machine it now resolves to `Intent/native/rust/target/release/intent`, and `intent ac gate` and `ac status` are **correct**: `ST0011 PASS -- 11/11`, and `ST0010 BLOCKED -- 16/20 satisfied; unsatisfied: AC15 AC16 AC18 AC19`, which matches the view exactly. The whole thread below was written when no native binary was built here and `intent` was the shell dispatcher.
+
+**The defect is NOT fixed -- it is bypassed.** `Intent/bin/intent_acceptance:295` still reads `ac_lines() { grep -E '^- AC-[0-9]+\.[0-9]+ ' ... }`, the v2 dotted form, and `bin/intent` still `exec`s those shell scripts. A machine without a built native binary gets the old behaviour, unchanged. So the escalation stands as a bug report and the operational advice below does not apply to a native build.
+
+**Do not delete this section on the strength of one green.** It is conditional on a build artefact that a fresh checkout does not have.
+
+## The instrument you cannot trust on a SHELL-DISPATCHED `intent`
 
 **`intent ac gate` and `intent ac status` cannot read a v3-rendered acceptance contract.** `bin/intent_acceptance`'s `ac_lines()` greps `^- AC-[0-9]+\.[0-9]+ ` (the v2 dotted form); the v3 renderer emits `^- AC[0-9]+ `. Zero matches, so the gate reports "acceptance.md has zero acceptance criteria (empty contract) -- BLOCKED" and `ac status` reports `0/0` against a contract with all 20 rows present.
 
