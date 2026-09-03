@@ -3,7 +3,7 @@ node: cc
 name: Control Claude
 role: control
 session_id: 5d94b174-72a1-4eca-9eb0-674adfd6414d
-heartbeat_at: 2026-09-03 15:49Z
+heartbeat_at: 2026-09-03 15:55Z
 status: active
 focus: "ST0011 green and checked in. ST/WP hygiene done, docs synced to as-built across all 15 utilities, issue 0008 raised and closed. AC11 (CI) is the only thing left and needs hv's push."
 claims: [ST0010, ST0011]
@@ -52,7 +52,10 @@ claims: [ST0010, ST0011]
 - **"I would notice a wrong stamp" is not available as a defence.** You would notice an implausible one. This class produces plausible ones, which is what a real read looks like.
 - **Knowing the rule did nothing.** The discipline was loaded from the protocol at boot and we had both spent the afternoon on instruments reporting unmeasured values -- a dead awk guard, a misparsed PGM header, a whole-page diff greening the wrong verb. Then we both wrote an unmeasured value into a record while cataloguing exactly that.
 - **Mine was REFUSED by the pre-commit clock guard; theirs was caught by read-back, ie luck.** That asymmetry is the whole argument for the mechanical control over attention.
-- **Four known fabrications now, all POSITIVE drift** (Intent's two at +60s, ours at +7 and +9 min), none past-dated. The guard's own note names the past-dated fake as the residual it cannot catch; this says the observed generator does not produce them, so check A is load-bearing rather than one of three. Escalated to `hv/inbox.cc.md` for routing to `intent-cc` -- Intent's tree, nothing of theirs touched.
+- **I then made the day's own mistake inside the escalation, and `lamplight-ac` caught it.** I tabled four known fabrications, all positive drift, and inferred the past-dated residual was a smaller target. **The table is a list of what FIRED.** Check A only detects future-dated stamps, and Intent's two were found by an audit of future stamps in board history -- so three of four came from direction-shaped detection and the past-dated fake can never enter the sample. Unbiased n=1 (theirs, by read-back), not 4. The inference is struck and the correction is appended to `hv/inbox.cc.md` above the routing ask: **unmeasured is not small.** What stands is that check A at tolerance 0 catches every instance we have, and that a fabricated value is plausible by construction. Escalated for `intent-cc` -- Intent's tree, nothing of theirs touched.
+
+- **`intent sync --to-store` reports success and discards the edit.** Repro'd three times on ST0011: edit `context` in canon, sync, and the extract reverts while the message says _"store replaced from the canon extract"_. It even warns `differs on disk` first, so it detects the difference and then goes the other way. **Not unconditional** -- the same sequence landed twice earlier today on the same field, and the failures started after this session ran `at green` x10 and `wp done` x8 on that thread, so a version comparison declining to regress the store is the plausible mechanism and only the message would be wrong. Escalated to `hv/inbox.cc.md`; Intent's tree. Cost here was one banned stylistic phrase left in ST0011's context and nothing substantive -- the correction that mattered went to the inbox and this board, neither of which is modelled.
+- **My own report of that fix printed a number that could not fail.** `print(f"{before} instance(s) rephrased")` where `before` was the PRE-count: it reads identically whether the replace landed or not, and it hadn't. Third instrument today that cannot report its own failure, after the dead awk guard and the whole-page pixel diff. Redone with `assert after == 0` before the write.
 
 **ST0010 -- untouched today, apart from `prez.bats`.** Gate still 16/20; vc owns the remainder.
 
