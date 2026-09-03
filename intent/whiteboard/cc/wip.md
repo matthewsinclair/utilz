@@ -3,7 +3,7 @@ node: cc
 name: Control Claude
 role: control
 session_id: 5d94b174-72a1-4eca-9eb0-674adfd6414d
-heartbeat_at: 2026-09-03 15:39Z
+heartbeat_at: 2026-09-03 15:46Z
 status: active
 focus: "ST0011 green and checked in. ST/WP hygiene done, docs synced to as-built across all 15 utilities, issue 0008 raised and closed. AC11 (CI) is the only thing left and needs hv's push."
 claims: [ST0010, ST0011]
@@ -42,6 +42,10 @@ claims: [ST0010, ST0011]
 **ST/WP HYGIENE.** ST0002's six WPs read `not-started` and ST0007/WP-04 read `wip`, both under completed threads. Closed via the CLI. **I declared `acceptance: exempt` on ST0002 and ST0007 and that is NOT the remedy this project ruled against** -- both hold **zero criteria in canon** (verified), so their contract is genuinely absent, where ST0010's is present and unreadable. The discriminator is the criteria count, not the error text, because the gate prints the same sentence either way. ST0010 and ST0011 keep their real contracts and are not exempt. Written into `restart.md` so the next reader does not think the ruling was broken. Issue 0006 also written into canon, where it had been a flat view only.
 
 **NOT DONE, deliberately:** `intent organize --apply` wants to hydrate two ST0010 attachments (`hoist-adapt.sh`, `hoist-rebase.sh`). vc's thread, so I previewed and left it.
+
+**FIRST NON-SYNTHETIC RUN, and it came from outside.** All 22 of my tests run on fixtures I generate, which this board already calls half a test. `lamplight-ac` deleted `stamp-pack.sh` (`34ad04d3f`) and ran `utilz stampz` over the real investor pack: **10 files, 55 pages, two geometries including the 1440x810 deck. All 55 marked, 0 unmarked.** It verified by comparing each stamped page against its unstamped source rather than looking for ink -- the same construction AT01 uses, reached independently, and for the same stated reason: a zero there means genuinely no mark, so the instrument can report a failure.
+
+**THEIR GENERALISATION IS BETTER THAN MINE AND I HAVE TAKEN IT.** I called the dead guard a case-sensitivity bug with a bad default. They separated the two: the regex caused it, **the `${varied:-1}` is why it was SILENT**, and that generalises past the script -- _a default is a claim about what an unreadable answer means, and unreadable almost never means fine_. Acted on rather than banked: audited every utility for a `:-` default downstream of a parse. One instance remains, `${desc:-No description available}` in `list_utilities()`, and it is a visible label rather than a guard. Recorded in `intent/restart.md` as a project trap, not a stampz note.
 
 **ST0010 -- untouched today, apart from `prez.bats`.** Gate still 16/20; vc owns the remainder.
 
