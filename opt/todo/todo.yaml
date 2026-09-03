@@ -12,7 +12,3 @@ dependencies:
 
 # Editor integration (see ST0007). `todo` is stateful, not a region transform:
 # the bridge runs it with no input and shows the rendered list in a buffer.
-integration:
-  input: none
-  output: buffer
-  flags: []

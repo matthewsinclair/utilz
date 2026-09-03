@@ -8,8 +8,3 @@ dependencies:
     required: true
     install: brew install git
     purpose: Repository status inspection; gitz calls require_command git
-
-integration:
-  input: path
-  output: buffer
-  flags: []
