@@ -4,6 +4,7 @@ An index of every steel thread in the project. A steel thread is a self-containe
 
 | ID     | Title                                                                          | Status    | Created    | Completed            |
 | ------ | ------------------------------------------------------------------------------ | --------- | ---------- | -------------------- |
+| ST0011 | stampz -- recipient watermarking for PDF document packs                        | WIP       | 2026-09-03 |                      |
 | ST0010 | Add prez to utilz to support markdown presentation pipeline                    | WIP       | 2026-08-29 |                      |
 | ST0009 | Framework core: single bin walker, single YAML parser, correct generator floor | Completed | 2026-07-29 | 2026-07-29T09:56:19Z |
 | ST0008 | Add todo to utilz                                                              | Completed | 2026-07-03 | 2026-07-03T13:52:13Z |

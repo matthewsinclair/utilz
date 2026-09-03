@@ -2,31 +2,31 @@
 node: cc
 name: Control Claude
 role: control
-session_id: 7caf919e-ca57-4a02-8804-1e44225cea04
-heartbeat_at: 2026-08-29 18:08Z
+session_id: 5d94b174-72a1-4eca-9eb0-674adfd6414d
+heartbeat_at: 2026-09-03 13:00Z
 status: active
-focus: "ST0010 build side is in and shipped in v2.5.0. The browser blocker cleared at ~16:43Z while I was holding; vc ran the greens and owns WP-04. Nothing of mine in flight."
-claims: [ST0010]
+focus: "ST0011 (stampz) opened and WP-01 in flight -- the Lamplight PDF pack watermarker promoted into Utilz. Renderer decision made on measurement: native PDF, no Chrome, no network."
+claims: [ST0010, ST0011]
 ---
 
 # Control Claude (cc)
 
 ## DOING
 
-**ST0010 (`utilz prez`) -- vc owns the contract, I build. The blocker cleared while I was holding.** hv authorised the browser at ~16:43Z, vc ran the greens, and **`v2.5.0` shipped at 17:09Z** (`4b6eb07`). CI has now run the suite off this machine for the first time. Session narrative is archived in `.history/20260829/`.
+**ST0011 (`stampz`) -- promoting Lamplight's PDF pack watermarker into Utilz. WP-01 in flight.** hv's call, routed by `lamplight-ac` on 2026-09-03 with the reference left in place (`Lamplight/design/system/docs/bin/stamp-pack.sh`, `fc31caf6a`). Name is hv's: `stampz`, chosen over `markz` because `mark` reads as _markdown_ in a roster that already has `mdagg` and `pdf2md`. Thread opened, objective + context + `design.md` written, 11 ACs and 10 ATs minted, six WPs created.
 
-**My build side, all landed:** `0ebfa85` WP-02 substrate, `95b650a` CI red, `64d375b` hoist, `8a53457` AC14, `93702cb` AT13 + AC18(b), `844f1aa` surfaces, `673e4db` **pin `b600306` merged**, `406af49` issue 0006, `4ed491e` key bar, `c3307c5` index commit keys + AT17, `f5253a9` AC19 + AC20, `5de4b0e` presenting output, `8417ed7` devbin seam.
+**THE RENDERER IS NATIVE PDF, NOT CHROME, AND THAT IS THE WHOLE PROMOTION.** The reference needs headless Chrome at a hardcoded `/Applications/...` path and pulls JetBrains Mono from a CDN, so it runs on one platform, online, and nowhere else -- and neither CI leg has Chrome. Spiked the alternative before planning: a 794-byte hand-built stamp page (base-14 Courier-Bold, rotation in the text matrix, alpha via ExtGState) overlays correctly and measures **0.67% of pixels changed on a white page, 0.94% on a near-black one**. It also deletes the 96/72 px-to-pt trap outright, because the stamp is authored in points.
 
-**vc's afternoon, read from the log rather than measured by me:** `c5c6a14` AT04's bar checks were measuring a bar Escape held open; `fdf161a` the estate is out of the code; `7cd45cd` + `229fa6b` greens recorded, each naming its run; `341ff46` the Gtools tripwire on our built-in themes; `832e53d` AT09 + the AC ids are ours; `be93866` two Linux defects CI found; `72ee931` CDP launches wait for the port instead of two seconds.
+**MY OWN SPIKE PRODUCED THE MEASUREMENT DEFECT THIS THREAD IS ABOUT.** The first visibility check counted pixels differing anywhere on the page and called the **underlay** build -- the one that must be invisible -- visible at 0.30%. Diagnostic: 468 differing pixels, one per row across 468 of 469 rows, every delta exactly 83. A single-pixel column down the page edge, a rasteriser seam, not the mark. **A whole-page pixel-diff greens the wrong verb.** AC02 and AT01 are written to crop to the centre band before counting, and AT02 keeps the underlay control as a test that can go red.
 
-**Tree at EOD:** HEAD `de0b6b0`, both remotes `72ee931` -- one unpushed. vc is mid-globalfold, so `intent/{wip,restart,done}.md` are dirty and **theirs**; I stayed out of them (localfold scope, and the coordinating node owns the project-wide docs).
+**Open and hv's, not mine to decide:** the reference stamps **in place** by default, which is safe in Lamplight only because the originals regenerate. `design.md` 2.1 proposes inverting it (out-dir default, explicit `--in-place`) and AC03 is written against the proposal; it moves with hv's ruling rather than being quietly dropped.
 
-**My last measurement, and it is a smoke test not a green:** full suite 17/17 green; `utilz test prez` reports acceptance **12 passed / 0 failed / 0 skipped**, off the warm dev tree. Not an AT green -- AC17's provenance gates that and this binary did not come from a cold build. WP-04 still reads Not Started, correctly.
-
-**THE CRATE IS A FORK, NOT A MIRROR.** AC14, AT13, AC18(b), AT17/AT19, AC19 and AC20 live only here. Every pin move goes through `hoist-rebase.sh` (attached to ST0010), never `tar -x` -- which deletes cleanly and would report a green merge having lost all of it. It carries 18 checks that can fail, plus one dead line (see TODO). **Re-verified at EOD against vc's changed tree: 17 needles, 0 stale.** Run `--dry-run` first.
+**ST0010 -- my build side is all landed; vc owns the remainder.** Gate at 16/20 (AC15, AC16, AC18, AC19 outstanding). Untouched today.
 
 ## TODO
 
+- **ST0011/WP-02 next: the native stamp renderer.** Byte offsets for the xref are MEASURED (`wc -c` before each append), never computed from `${#s}`, which counts characters rather than bytes and is correct only under `LC_ALL=C` on a pure-ASCII recipient. Do not fall back on letting qpdf reconstruct a bogus xref: it repairs with a warning and exit 3, and a silent-repair dependency in this thread would be self-parody.
+- **ST0011/WP-05 must add `stampz` to the hardcoded roster in `test-linux`.** `test-macos` derives its roster from `utilz list` and picks it up for free; Linux does not, and nothing reports the gap. Both legs need `qpdf` + poppler installed so the suite's skip path is never the path CI takes.
 - **WP-04 is vc's**, on hoist-green. WP-05 (polish), WP-06 (AC15 theme addressing split), WP-07 (possibly un-deferred: two consumers now blocked by prez keeping its browser list and determinism probe private -- vc has it with hv).
 - **`prez build examples/demo.md` warns `class 'escape' has no effect`** -- prez's own example ships a warning. vc's WP-05 note, deck content, not urgent.
 - `ST0007/WP-04` is `wip` under a completed thread. Not the migrator: the v2 source itself says WIP. Ours to fix, small.
