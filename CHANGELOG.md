@@ -5,6 +5,31 @@ All notable changes to the Utilz framework will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+Version not bumped and nothing tagged: releases, tags and pushes are hv's. Adding a utility is an additive minor, so this is 2.6.0 material when hv cuts it.
+
+### Added
+
+- **`stampz` -- stamp a recipient watermark across every page of a PDF pack** (ST0011). Promoted out of a Lamplight tool so it is available everywhere rather than living in one repo's `docs/bin/`. One rotated line of mono type reading `CONFIDENTIAL <date> <recipient>`, mid-grey at 30%, plus a `STAMP-MANIFEST.txt` recording the page count and the sha256 of every file before and after. Two guards that refuse rather than approximate: mixed page geometry, and any change in page count. **It deters and does not protect** -- an overlay is strippable in seconds, and the header, the README and the help all say so, with a test asserting the sentence is there.
+- **The stamp is built as a PDF, not rendered.** The reference drove headless Chrome at a hardcoded `/Applications` path over a generated HTML file and pulled its font from a CDN, which made it a one-platform, online-only tool. `stampz` assembles an 823-byte one-page PDF directly in base-14 Courier-Bold: no browser, no network, no embedded font, and it runs anywhere `qpdf` and `poppler` do. Courier is fixed-pitch at 0.600 em, so the size formula's constant is exact by construction rather than contingent on which font arrived. Object offsets are measured with `wc -c` per append rather than summed from `${#s}`, which counts characters and would shift every xref entry on a non-ASCII recipient.
+- **Out-dir is the default and `--in-place` is explicit**, inverting the reference. In-place is only safe when the originals regenerate from somewhere else, which is a property of the pack and not of the tool.
+
+### Fixed
+
+- **Issue 0006's sweep left a third hardcoded roster copy** (issue 0008). `prez.bats` asserted `"14 utilities"`, so adding the fifteenth reddened a suite in a thread that never touched it -- the same count-pinned-to-a-moment defect 0006 fixed in two other places on the same day. The count is now derived from `utilz list`, the idiom CI's macOS leg already uses. Two prose copies went with it: `docs/index.md` claimed "All 12 shipped utilities" and named twelve while the tree held fifteen, and `README.md`'s tree comment said "(12 utilities total)".
+- **A dead mixed-geometry guard, inherited from the reference.** `pdfinfo` prints `Page    1 size:`; the guard matched `/page *[0-9]+ size:/` against a case-sensitive awk, so it matched nothing, `wc -l` returned 0, and the caller's `${varied:-1}` read that zero as "one geometry, carry on". The check could not fire on any input. A probe that reads nothing is now a refusal rather than a pass.
+- **`cryptz` and `gitz` declared no dependencies while hard-requiring `gpg` and `git`.** Both call `require_command`, so the failure arrived at use rather than from `utilz doctor`. Declared, and now checked up front. (`prez` still declares none deliberately: `cargo` is a build-time need and a test pins that distinction.)
+- **`help/cryptz.md` was still the generated template** -- "Add more detailed description here", a generic `[OPTIONS] [ARGS]` synopsis, no commands, and no `--email`. Rewritten from the as-built surface. It was the only help file left in that state.
+- **`docs/index.md` restated the framework version as 2.2.0** while `VERSION` read 2.5.0 -- a second copy of the single source of truth, stale across three releases. Replaced with a pointer, matching the fix `help/utilz.md` already carried.
+- **`.claude/restart.md` documented `intent st list --all`**, which has never worked (the flag is `--status all`), and pointed at `intent/issues/OPEN/` for open defects. That directory is permanently empty by policy, so it confirmed "no open defects" while one was filed.
+
+### Changed
+
+- `README.md`'s `## Included Utilities` gained `prez`, `stampz` and `todo`. `prez` and `todo` had shipped in earlier releases and were never added.
+- ST0002 and ST0007 carry `acceptance: exempt`. Both completed before the v3 contract model and hold zero criteria, so the close gate blocked their work packages with a remedy the project otherwise rules against; exempt is correct for a genuinely contract-free unit and is not the ST0010 case, where a full contract exists and the gate cannot read it.
+- Issue 0006 was written into canon. It had existed only as a flat view, so `intent doctor` counted one fewer issue than the tracker showed.
+
 ## [2.5.0] - 2026-08-29
 
 ### Added

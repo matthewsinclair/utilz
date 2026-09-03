@@ -2,7 +2,7 @@
 wp_id: WP-06
 title: Docs and acceptance run
 scope: S
-status: Not Started
+status: WIP
 ---
 
 # WP-06: Docs and acceptance run

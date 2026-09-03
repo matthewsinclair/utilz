@@ -1,6 +1,6 @@
 # Utilz Documentation
 
-**Version**: 2.2.0
+**Version**: see `VERSION` at the repo root, or run `utilz version`. It is not restated here -- this file read `2.2.0` for three releases, because a version copied into prose goes stale silently.
 
 Utilz is a bash/zsh framework for building and managing command-line utilities with a single dispatcher pattern. All utilities are symlinks to `bin/utilz`, which routes execution to the appropriate implementation.
 
@@ -12,7 +12,7 @@ Start here if you want to install and use Utilz utilities:
 
 - **[README](../README.md)** - Installation, quick start, basic usage, and the Emacs bridge.
 - **[Framework Help](../help/utilz.md)** - Complete command reference (`utilz help`, `test`, `doctor`, `integration`, `emacs`, etc.).
-- **Per-utility help** - Run `utilz help <name>` or see `help/<name>.md` directly. All 12 shipped utilities have their own help files: `cleanz`, `clipz`, `cryptz`, `expz`, `gitz`, `lnrel`, `macoz`, `mdagg`, `pdf2md`, `retry`, `syncz`, `xtrct`.
+- **Per-utility help** - Run `utilz help <name>` or see `help/<name>.md` directly. Every shipped utility has its own help file; `utilz list` is the roster. The roster is deliberately NOT enumerated here: this line said "All 12" and listed twelve names while the tree held fifteen, which is the same count-pinned-to-a-moment defect as issue 0006.
 
 ### I want to integrate Utilz with my editor
 

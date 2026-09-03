@@ -103,14 +103,14 @@ Not yet green: AC11, which is CI on both legs and is WP-05.
 
 ## Work Packages
 
-| WP    | Title                                    | Size | Status      |
-| ----- | ---------------------------------------- | ---- | ----------- |
-| WP-01 | Design and acceptance contract           | S    | Done        |
-| WP-02 | Native stamp renderer and geometry probe | S    | Done        |
-| WP-03 | Utility surface, manifest and guards     | S    | Done        |
-| WP-04 | Test suite and fixtures                  | S    | Done        |
-| WP-05 | CI wiring on both legs                   | S    | WIP         |
-| WP-06 | Docs and acceptance run                  | S    | Not Started |
+| WP    | Title                                    | Size | Status |
+| ----- | ---------------------------------------- | ---- | ------ |
+| WP-01 | Design and acceptance contract           | S    | Done   |
+| WP-02 | Native stamp renderer and geometry probe | S    | Done   |
+| WP-03 | Utility surface, manifest and guards     | S    | Done   |
+| WP-04 | Test suite and fixtures                  | S    | Done   |
+| WP-05 | CI wiring on both legs                   | S    | WIP    |
+| WP-06 | Docs and acceptance run                  | S    | WIP    |
 
 ## Acceptance
 

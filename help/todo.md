@@ -86,7 +86,7 @@ For the same reason, `todo` will not **create** a fresh default `./todo.md` insi
 - `sync` (alias `update`) - Normalize the file: reconcile checkboxes, relocate, renumber
 - `edit` - Open the file in `$VISUAL`/`$EDITOR`/`vi`, then `sync` on exit
 - `done --prune` - Archive DONE to the history file, then clear it
-- `done --flush` - Clear DONE WITHOUT archiving (add `--force` to skip the prompt)
+- `done --flush` - Clear DONE WITHOUT archiving (add `--force`, or its alias `--just-do-it`, to skip the prompt)
 - `help` - Show help
 
 ### Checkbox reconciliation (glyph wins)

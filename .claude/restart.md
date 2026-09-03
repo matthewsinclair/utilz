@@ -11,16 +11,24 @@
 
 ## Where everything else lives
 
-| You want                         | Read                                              |
-| -------------------------------- | ------------------------------------------------- |
-| What shipped, and when           | `intent/done.md`, `CHANGELOG.md`                  |
-| Steel threads and work packages  | `intent st list --all`, `intent st show <ID>`     |
-| Open defects                     | `intent/issues/OPEN/`                             |
-| The tool-agnostic agent contract | `AGENTS.md` (generated -- never hand-edit)        |
-| Claude-specific overlay          | `CLAUDE.md`                                       |
-| Architecture and how to extend   | `docs/architecture.md`, `docs/developer-guide.md` |
-| Framework version                | `VERSION` (single source of truth)                |
-| Per-utility command reference    | `help/<name>.md`, or `utilz help <name>`          |
+| You want                         | Read                                                 |
+| -------------------------------- | ---------------------------------------------------- |
+| What shipped, and when           | `intent/done.md`, `CHANGELOG.md`                     |
+| Steel threads and work packages  | `intent st list --status all`, `intent st show <ID>` |
+| Open defects                     | `intent issues list` (see note below)                |
+| The tool-agnostic agent contract | `AGENTS.md` (generated -- never hand-edit)           |
+| Claude-specific overlay          | `CLAUDE.md`                                          |
+| Architecture and how to extend   | `docs/architecture.md`, `docs/developer-guide.md`    |
+| Framework version                | `VERSION` (single source of truth)                   |
+| Per-utility command reference    | `help/<name>.md`, or `utilz help <name>`             |
+
+### Two corrections to this table, 2026-09-03
+
+`intent st list --all` was wrong and had never worked: the flag is `--status all`, and the documented form exits non-zero with `unexpected argument '--all'`.
+
+`intent/issues/OPEN/` was wrong in a subtler way -- the path exists and is EMPTY, which reads as "no open defects" rather than as a broken pointer. `intent/.intentfiles` declares that only OPEN THREADS get a realised form on disk, so no issue is ever written there; the six files under `intent/issues/CLOSED/` are v2 artefacts predating that policy. There is an open defect (0007) and the directory that was supposed to show it cannot.
+
+**A pointer at an empty directory is worse than a pointer at a missing one**, which is why this note exists rather than a silent edit: the missing path announces itself and the empty one confirms a false answer.
 
 ## The three rules that are not negotiable
 

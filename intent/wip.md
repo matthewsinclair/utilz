@@ -1,5 +1,5 @@
 ---
-verblock: "29 Aug 2026:v1.6: matts - globalfold; wip carries DOING and TODO only, done work folded to done.md"
+verblock: "03 Sep 2026:v1.7: matts - ST0011 (stampz) added to DOING; doc and roster sweep folded to done.md"
 ---
 
 # Work In Progress
@@ -7,6 +7,16 @@ verblock: "29 Aug 2026:v1.6: matts - globalfold; wip carries DOING and TODO only
 This file carries **DOING and TODO only**. Completed work belongs in `intent/done.md`; durable context and conventions belong in `intent/restart.md`. Nothing done is recorded here, ever -- a "just landed" list here is the same narrative in two files with two values, and nothing reports the divergence.
 
 ## DOING
+
+**ST0011 -- `utilz stampz`, the recipient watermarker.** Built, green, committed, NOT released. 10 of 11 criteria satisfied; **AC11 is CI-green-on-both-legs and needs hv's push** -- it is the only thing outstanding and no further code will move it. WP-01..04 done; WP-05 (CI wiring, written) and WP-06 (acceptance run) open on that push.
+
+Promoted out of a Lamplight tool on hv's call. The renderer was rebuilt rather than ported: the reference needed headless Chrome at a hardcoded path plus a CDN font, and `stampz` assembles its own 823-byte stamp PDF in base-14 Courier-Bold, so it needs no browser and no network and runs anywhere `qpdf` and `poppler` do.
+
+| Whose | What is left                                                |
+| ----- | ----------------------------------------------------------- |
+| hv    | push, so CI runs both legs and AC11 can be satisfied        |
+| hv    | version bump + tag when ready -- `stampz` is 2.6.0 material |
+| cc    | `wp done` on WP-05 and WP-06 once CI is green               |
 
 **ST0010 -- `utilz prez`, the first Rust utility.** Shipped as **v2.5.0**, tagged, both remotes at `72ee931`, CI green on all seven jobs. The thread is not closed: four acceptance criteria remain.
 
@@ -31,6 +41,12 @@ Two things blocking their own progress rather than each other:
 - **Move the `v2.5.0` tag onto the release commit `4b6eb07`** per the standing directive ("annotated tag on the `release:` commit itself"). It currently sits at `72ee931`. The rewritten tag message is composed and ready; the recreate + force-push was blocked by the permission classifier, so the three commands are hv's to run. The reason the tag was moved in the first place stands on the record: `4b6eb07`'s CI was red, and the three commits after it are harness-only.
 - **Relay the `intent ac gate` defect to `intent-vc`.** `bin/intent_acceptance`'s `ac_lines()` greps the v2 dotted form `^- AC-<st>.<nn> `; the v3 renderer emits `^- AC<nn> `. Zero matches, so `ac gate` reports "empty contract -- BLOCKED" and `ac status` reports `0/0` against a full 20-row contract. It fails safe, but **the remedy it prints is `acceptance: exempt`**, which on a thread with a real contract converts a false red into a permanent silent pass. Intent's tree; nothing here should be edited to accommodate it.
 - **`geodica doctor` must report whether `utilz prez` is available.** hv's estate requirement, raised 13:36Z, still on no contract in any repo. The estate's move to `~/Devel/prj/Gtools` did not retire it.
+
+**ST0011, after the push**
+
+- **Close WP-05 and WP-06 and satisfy AC11** off a named CI run. Nothing else is outstanding on the thread.
+- **`stampz` declares no `integration:` block**, so the Emacs bridge does not expose it. That is a choice rather than an omission (issue 0006's fix made an unbound utility a non-failure), but `input: path` / `output: message` would be the obvious shape if hv wants it bound.
+- **Mixed page geometry within one PDF is still refused, not handled.** Deferred deliberately: `qpdf --overlay --repeat=1` applies one stamp to every page, so per-page variation needs overlay ranges. `lamplight-ac` has offered its real pack (ten files, two geometries, 55 pages) as a corpus if this is ever un-deferred.
 
 **ST0010, remaining work packages**
 
