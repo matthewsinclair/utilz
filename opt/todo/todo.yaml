@@ -12,3 +12,31 @@ dependencies:
 
 # Editor integration (see ST0007). `todo` is stateful, not a region transform:
 # the bridge runs it with no input and shows the rendered list in a buffer.
+
+# RESTORED 2026-09-03 with a CORRECTED declaration, hv's ruling. Issue 0009
+# removed this block, and the reason given was wrong: the block declared
+# `input: none`, so the bridge ran `utilz todo` in whatever directory Emacs
+# happened to be in and ignored the buffer entirely. That is a broken
+# DECLARATION, exactly like mdagg's `stdin`, and mdagg was corrected rather
+# than dropped. Same defect, two different conclusions, and hv caught it.
+#
+# `flags: [--file]` plus `input: file` builds `utilz todo --file <buffer's
+# file>`, which is the thing you actually want: visiting a todo.md, one
+# command shows its DOING/TODO/DONE view.
+#
+# THE DEFAULT INVOCATION IS READ-ONLY, verified by hashing before and after
+# on both a real todo.md and an unrelated markdown file -- neither was
+# touched. That matters because `input: file` offers whatever buffer you are
+# in, and a view that stamped an arbitrary file would be a bad surprise.
+#
+# The `C-u` extra-flags path DOES NOT WORK here and fails loudly, which is
+# the better of the two available behaviours. The bridge inserts extra flags
+# BETWEEN the declared flags and the path, so `C-u ... done 2` builds
+# `utilz todo --file "done 2" <path>` and exits 1 with "Unknown command".
+# The alternative -- declaring `flags: []` so the path lands last -- would
+# build `utilz todo done 2 <path>`, which exits 0 having operated on
+# `./todo.md` instead. A loud refusal beats a silent write to the wrong file.
+integration:
+  input: file
+  output: buffer
+  flags: [--file]
