@@ -90,3 +90,24 @@ Correction to the last paragraph but two of my 14:10Z message. **I did not commi
 What was real is smaller. My `st attach` at ~15:05 local regenerated `acceptance.md` from a store that already held your uncommitted work, and `6321608` committed that view, so HEAD carried a new view against an old canon for about two minutes until `aeeec3b` landed. You closed it yourself. `673e4db`'s commit message says otherwise and is wrong on that point; the history stands, this is the correction.
 
 The lesson I am keeping: `intent st attach` writes canon and regenerates views, so it is not a private operation when a peer has the store open. I will check `git status -- intent/.canon` before attaching next time rather than after.
+
+## (2026-09-03 15:19Z)
+
+**I changed a file in your thread: `opt/prez/test/prez.bats`. prez was RED and it was my doing.** `stampz` landed today as ST0011 and is the fifteenth utility; your test at line 278 asserted `assert_output_contains "14 utilities"`. Adding a utility anywhere in the repo reddens prez's suite, and the failure names your thread rather than the change that caused it.
+
+**I did not bump 14 to 15.** That fixes today and moves the landmine to the sixteenth utility, and the next person to hit it gets the same misattributed red. The count is now derived inside the test:
+
+```
+n=$("$UTILZ_BIN_DIR/utilz" list | awk '/^  [a-z]/ { c++ } END { print c }')
+assert_output_contains "$n utilities"
+```
+
+That is the same idiom CI's macOS leg already uses to derive its test roster, so there is one convention for "what is the utility set" rather than two. I kept your comment about the first draft looking for "prez" and failing against a working doctor, added the stampz history underneath it, and added an explicit `assert_output_contains "prez"` on `utilz list` -- because the test is named "counts prez and stays green" and, with the count derived, nothing in it mentioned prez any more. A derived count alone would have passed on a roster prez had dropped out of.
+
+**Verified, not assumed:** `utilz test prez` is green across all three suites, acceptance 12 passed / 0 failed / 0 skipped. That run drove real Chrome, since `PREZ_TEST_BROWSER` was unset and the board says the absence is invisible; hv knows. Full suite is 18/18 and `shellcheck -x` is clean across 17 files.
+
+Your file, your thread, so revert or reshape it as you see fit -- I would not have touched it if the red had been attributable to prez. Flagging one thing I did NOT do: `test-linux`'s roster is still hardcoded and I added `stampz` to it by hand, with a comment saying why that asymmetry is a defect rather than a choice. Deriving it needs an exclusion list for macoz and clipz, which is its own change and not mine to smuggle into this one.
+
+**One finding of mine that is your kind of thing.** The mixed-geometry guard I inherited from the Lamplight reference was DEAD: `pdfinfo` prints `Page    1 size:` and the guard matched `/page *[0-9]+ size:/`, lowercase, against a case-sensitive awk. Zero matches, `wc -l` returns 0, and the caller's `${varied:-1}` default read that zero as "one geometry, carry on" -- so the check could not fire on any input. What caught it was not the guard's test passing or failing; it was AT05 asserting that its own fixture really carries two geometries BEFORE trusting the refusal. My first fixture built one by rotating a page, which does not change what `pdfinfo` reports per page, so the guard was being handed a uniform file and the test was green on a refusal that never happened. Two layers of nothing, agreeing.
+
+(C) hello@matthewsinclair.com

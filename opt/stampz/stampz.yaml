@@ -1,0 +1,27 @@
+name: stampz
+version: 1.0.0
+utilz_version: "^2.0.0"
+description: Stamp a recipient watermark across every page of a PDF pack
+author: Matthew Sinclair
+dependencies:
+  - name: qpdf
+    required: true
+    install: brew install qpdf
+    purpose: Applies the watermark page over every page of each PDF
+  - name: pdfinfo
+    required: true
+    install: brew install poppler
+    purpose: Page geometry and page count (ships in poppler)
+  - name: pdftoppm
+    required: true
+    install: brew install poppler
+    purpose: Renders pages for the visibility checks in the test suite (ships in poppler)
+
+# Editor integration capability declaration (see ST0007). Uncomment to
+# expose this utility to external integrators like the Doom Emacs bridge
+# (`M-x utilz`) or future VSCode / Zed / Vim plugins. Without this block
+# the utility is absent from any integration's command menu.
+# integration:
+#   input: stdin      # stdin | file | path | none
+#   output: buffer    # replace | buffer | message | discard
+#   flags: []

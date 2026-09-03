@@ -2,7 +2,7 @@
 wp_id: WP-01
 title: Design and acceptance contract
 scope: S
-status: WIP
+status: Done
 ---
 
 # WP-01: Design and acceptance contract

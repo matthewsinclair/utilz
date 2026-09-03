@@ -2,7 +2,7 @@
 wp_id: WP-03
 title: Utility surface, manifest and guards
 scope: S
-status: Not Started
+status: Done
 ---
 
 # WP-03: Utility surface, manifest and guards

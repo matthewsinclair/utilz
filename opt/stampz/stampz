@@ -1,0 +1,475 @@
+#!/usr/bin/env bash
+#
+# stampz - Stamp a recipient watermark across every page of a PDF pack
+#
+#     stampz <pack-dir> "<recipient>" [options]
+#
+# Draws one line of mono type, rotated -30 degrees through the page centre:
+# `CONFIDENTIAL <date> <recipient>`. Mid-grey at 30% opacity. Writes
+# STAMP-MANIFEST.txt recording the recipient, the date, and the sha256 of
+# every file before and after.
+#
+# THIS DETERS, IT DOES NOT PROTECT. An overlay is strippable in seconds by
+# anyone with a PDF tool, and the mark is not contiguously text-extractable,
+# so a search of the document will not find the recipient's name. It marks a
+# copy; it does not secure one.
+#
+# WHY OVERLAY AND NOT UNDERLAY. `qpdf --underlay` draws BENEATH the page, so
+# any page painting an opaque background covers the mark completely. The
+# output is byte-different from the input and pixel-identical to it, which
+# means every check short of rendering the page and looking at it reports
+# success. This is asserted as a control in the test suite, not merely
+# written down here.
+#
+# WHY MID-GREY. A pack is not uniformly light or dark -- a deck mixes
+# near-black and light slides inside one file -- so white vanishes on some
+# pages and black on others. Mid-grey at 30% is the value that holds on
+# both, measured against a light and a near-black fixture rather than
+# reasoned about.
+#
+# WHY THE STAMP IS BUILT AS PDF RATHER THAN RENDERED. The reference this was
+# promoted from drove headless Chrome over a generated HTML file and pulled
+# its font from a CDN, which made it a one-platform, online-only tool and
+# made its font-size constant true only when the download succeeded. The
+# stamp here is a hand-assembled one-page PDF in base-14 Courier-Bold, which
+# needs no browser, no network and no embedding, and whose advance width is
+# exactly 0.600 em by definition.
+#
+
+set -euo pipefail
+
+# Source common functions if not already loaded (from dispatcher)
+if [[ "$(type -t info 2>/dev/null)" != "function" ]]; then
+  SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+  UTILZ_HOME="${UTILZ_HOME:-$(cd "$SCRIPT_DIR/../.." && pwd)}"
+
+  if [[ -f "$UTILZ_HOME/opt/utilz/lib/common.sh" ]]; then
+    source "$UTILZ_HOME/opt/utilz/lib/common.sh"
+  else
+    echo "ERROR: Cannot find common.sh library" >&2
+    exit 1
+  fi
+fi
+
+# ============================================================================
+# CONFIGURATION
+# ============================================================================
+
+# The mark's geometry and colour. These are the measured defaults; --colour
+# and --opacity move them, and the acceptance criteria are written against
+# the values here.
+readonly STAMPZ_ANGLE=-30
+readonly STAMPZ_WIDTH_FRACTION=0.85
+readonly STAMPZ_MIN_FONT_SIZE=8
+
+# Courier is FIXED PITCH: every glyph advances exactly 0.600 em. That is what
+# makes the derived font size exact rather than contingent on which font
+# actually arrived. Tracking is applied with the Tc operator, so the em
+# consumed per character is the sum of the two.
+readonly STAMPZ_ADVANCE=0.60
+readonly STAMPZ_TRACKING=0.14
+
+# Ink height of the face, in em: Courier-Bold's ascender to descender is
+# about 0.79. Used to bound the ROTATED bounding box, which a width-only
+# solve gets wrong for short strings -- see _stamp_geometry.
+readonly STAMPZ_INK_HEIGHT=0.80
+
+DEFAULT_GREY="0.5"
+DEFAULT_OPACITY="0.30"
+
+# ============================================================================
+# PDF ASSEMBLY
+# ============================================================================
+
+# _pdf_stream_obj <content> -- a stream object with a byte-exact /Length.
+_pdf_stream_obj() {
+  local content="$1" len
+  len=$(printf '%s' "$content" | wc -c | tr -d ' ')
+  printf '<< /Length %s >>\nstream\n%s\nendstream' "$len" "$content"
+}
+
+# _pdf_write <dest> <obj-body>...
+#
+# Assembles numbered objects into a PDF with a byte-exact xref table.
+#
+# OFFSETS ARE MEASURED, NEVER COMPUTED. `wc -c` on the file so far is the
+# offset of the object about to be appended. The alternative -- summing
+# ${#body} -- counts CHARACTERS, so a recipient carrying any non-ASCII byte
+# shifts every entry under a UTF-8 locale and produces a file that opens in
+# a forgiving reader and is broken in a strict one. The third alternative,
+# emitting a bogus table and letting `qpdf` reconstruct it, makes correctness
+# depend on a silent repair, in a tool whose entire subject is silent failure.
+_pdf_write() {
+  local dest="$1"
+  shift
+  [[ $# -gt 0 ]] || { error "_pdf_write: no objects"; return 1; }
+
+  local offsets=() body off n=0 xref
+  printf '%%PDF-1.4\n' > "$dest"
+  for body in "$@"; do
+    n=$((n + 1))
+    offsets+=("$(wc -c < "$dest" | tr -d ' ')")
+    printf '%d 0 obj\n%s\nendobj\n' "$n" "$body" >> "$dest"
+  done
+
+  xref=$(wc -c < "$dest" | tr -d ' ')
+  {
+    printf 'xref\n0 %d\n' "$((n + 1))"
+    printf '0000000000 65535 f \n'
+    for off in "${offsets[@]}"; do
+      printf '%010d 00000 n \n' "$off"
+    done
+    printf 'trailer\n<< /Size %d /Root 1 0 R >>\nstartxref\n%s\n%%%%EOF\n' \
+      "$((n + 1))" "$xref"
+  } >> "$dest"
+}
+
+# _pdf_text <utf8-string> -- a PDF literal-string body.
+#
+# The font is declared /WinAnsiEncoding, so the text is transcoded to CP1252
+# and any byte outside printable ASCII is written as an octal escape. A name
+# that CP1252 cannot represent is a named refusal rather than a mark rendered
+# in the wrong glyphs, which would be legible, wrong, and permanent.
+_pdf_text() {
+  local enc
+  if ! enc=$(printf '%s' "$1" | iconv -f UTF-8 -t CP1252 2>/dev/null); then
+    error "recipient contains characters outside WinAnsi: $1"
+    echo "  The mark uses a base-14 font, which cannot represent them." >&2
+    echo "  Use a Latin-1 spelling of the name, or raise it as a feature." >&2
+    return 1
+  fi
+  printf '%s' "$enc" | od -An -v -tu1 | tr -s ' ' '\n' | awk '
+    /^[0-9]+$/ {
+      b = $1 + 0
+      if (b == 40 || b == 41 || b == 92 || b < 32 || b > 126) printf "\\%03o", b
+      else printf "%c", b
+    }'
+}
+
+# _stamp_geometry <width-pt> <height-pt> <charcount>
+#
+# Prints: fontsize tracking a b c d tx ty
+#
+# SIZE IS DERIVED, NEVER CONFIGURED. A longer recipient shrinks the mark
+# instead of running off the edge. The centring puts the LINE'S MIDPOINT at
+# the page centre, which is not the same as putting its start point there.
+#
+# BOTH AXES ARE CONSTRAINED, and the reference formula constrained only one.
+# Solving `len * em * cos(angle)` for a fraction of the page WIDTH says
+# nothing about the page HEIGHT, and a rotated line consumes both. The error
+# grows as the string shortens, because a short line takes a large derived
+# size and the glyph height then dominates the bounding box.
+#
+# MEASURED, and the case that shows it is not the obvious one. On A4 a
+# three-character name takes the width-only solve to 263pt, whose bounding
+# box exceeds the page arithmetically and yet lands NO ink in the margins,
+# because glyph ink is inset from the em box. The failure is real on a WIDE
+# page: on 1440x810 the same name takes it to 636pt and puts 2761 ink pixels
+# into the top and bottom margins. Two-axis gives 382pt and 141.
+#
+# Recorded this way because the first version of this comment claimed the A4
+# case overran, on the word of a fit check that was itself broken -- it was
+# miscounting PGM header bytes as pixels. The claim was wrong, the fix was
+# right, and only one of those was verified at the time.
+#
+#   rotated bbox width  = n*em*fs*|cos| + hgt*fs*|sin|
+#   rotated bbox height = n*em*fs*|sin| + hgt*fs*|cos|
+#
+# Solve each for its page dimension and take the smaller size.
+_stamp_geometry() {
+  awk -v w="$1" -v h="$2" -v n="$3" \
+    -v adv="$STAMPZ_ADVANCE" -v trk="$STAMPZ_TRACKING" \
+    -v hgt="$STAMPZ_INK_HEIGHT" \
+    -v frac="$STAMPZ_WIDTH_FRACTION" -v ang="$STAMPZ_ANGLE" \
+    -v minfs="$STAMPZ_MIN_FONT_SIZE" '
+    BEGIN {
+      rad = ang * atan2(0, -1) / 180
+      c = cos(rad); s = sin(rad)
+      ac = (c < 0) ? -c : c
+      as = (s < 0) ? -s : s
+      em = adv + trk
+      if (n < 1) n = 1
+      fsw = frac * w / (n * em * ac + hgt * as)
+      fsh = frac * h / (n * em * as + hgt * ac)
+      fs = (fsw < fsh) ? fsw : fsh
+      if (fs < minfs) fs = minfs
+      tw = n * em * fs
+      printf "%.3f %.3f %.5f %.5f %.5f %.5f %.2f %.2f",
+        fs, trk * fs, c, s, -s, c,
+        w / 2 - (tw / 2) * c, h / 2 - (tw / 2) * s
+    }'
+}
+
+# _render_stamp <width-pt> <height-pt> <text> <grey> <opacity> <dest>
+_render_stamp() {
+  local w="$1" h="$2" text="$3" grey="$4" opacity="$5" dest="$6"
+  local escaped fs tc a b c d tx ty content
+
+  escaped=$(_pdf_text "$text") || return 1
+
+  # shellcheck disable=SC2046
+  read -r fs tc a b c d tx ty <<< "$(_stamp_geometry "$w" "$h" "${#text}")"
+
+  content=$(printf 'q\n/GS1 gs\n%s %s %s rg\nBT\n/F1 %s Tf\n%s Tc\n%s %s %s %s %s %s Tm\n(%s) Tj\nET\nQ\n' \
+    "$grey" "$grey" "$grey" "$fs" "$tc" "$a" "$b" "$c" "$d" "$tx" "$ty" "$escaped")
+
+  _pdf_write "$dest" \
+    '<< /Type /Catalog /Pages 2 0 R >>' \
+    '<< /Type /Pages /Kids [3 0 R] /Count 1 >>' \
+    "<< /Type /Page /Parent 2 0 R /MediaBox [0 0 $w $h] /Resources << /Font << /F1 5 0 R >> /ExtGState << /GS1 6 0 R >> >> /Contents 4 0 R >>" \
+    "$(_pdf_stream_obj "$content")" \
+    '<< /Type /Font /Subtype /Type1 /BaseFont /Courier-Bold /Encoding /WinAnsiEncoding >>' \
+    "<< /Type /ExtGState /ca $opacity /CA $opacity >>"
+
+  [[ -s "$dest" ]] || { error "failed to build a stamp at ${w}x${h}"; return 1; }
+}
+
+# _emit_fixture <kind> <dest> [width-pt] [height-pt] -- light | dark | blank
+#
+# Test fixtures come out of the SAME assembler the stamp does, reached by
+# sourcing this file with STAMPZ_SOURCE_ONLY set. A second PDF writer in the
+# test tree would be a Highlander violation and, worse, the wrong instrument:
+# a bug in the shared assembler would cancel out, with the fixture and the
+# stamp wrong in the same direction.
+#
+# Both page kinds paint an OPAQUE background rect, because an opaque
+# background is the precondition for the underlay trap. A fixture without one
+# cannot detect the wrong verb.
+_emit_fixture() {
+  local kind="$1" dest="$2" bg fg label w="${3:-595}" h="${4:-842}"
+
+  case "$kind" in
+    light) bg="1 1 1"; fg="0 0 0"; label="A light page" ;;
+    dark)  bg="0.06 0.06 0.08"; fg="1 1 1"; label="A near-black page" ;;
+    blank) bg="1 1 1"; fg="1 1 1"; label=" " ;;
+    *)     error "unknown fixture kind: $kind"; return 1 ;;
+  esac
+
+  local content
+  content=$(printf '%s rg 0 0 %s %s re f\nBT /F1 24 Tf %s rg 72 %s Td (%s) Tj ET\n' \
+    "$bg" "$w" "$h" "$fg" "$((h - 100))" "$label")
+
+  _pdf_write "$dest" \
+    '<< /Type /Catalog /Pages 2 0 R >>' \
+    '<< /Type /Pages /Kids [3 0 R] /Count 1 >>' \
+    "<< /Type /Page /Parent 2 0 R /MediaBox [0 0 $w $h] /Resources << /Font << /F1 5 0 R >> >> /Contents 4 0 R >>" \
+    "$(_pdf_stream_obj "$content")" \
+    '<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>'
+}
+
+# ============================================================================
+# PROBE AND GUARDS
+# ============================================================================
+
+# _page_count <pdf>
+_page_count() {
+  pdfinfo "$1" 2>/dev/null | awk '/^Pages:/ { print $2 }'
+}
+
+# _page_size <pdf> -- "<width> <height>" in points, from page 1.
+_page_size() {
+  pdfinfo "$1" 2>/dev/null | awk '/^Page size:/ { print $3, $5 }'
+}
+
+# _distinct_geometries <pdf> <pages>
+#
+# More than one distinct page size is a REFUSAL, not a best effort. Stamping
+# every page at the first size clips the rest, and a clipped page still looks
+# stamped -- so the failure is invisible in exactly the way this tool must
+# not be. `--repeat=1` applies one stamp page to every page, so handling this
+# properly means per-page overlay ranges, which is deferred work and not a
+# thing to smuggle in behind a silent approximation.
+# THE PATTERN IS CASE-SENSITIVE AND pdfinfo PRINTS `Page    1 size:`. The
+# reference this was promoted from matched /page *[0-9]+ size:/ -- lowercase
+# -- which matches nothing, so `wc -l` returned 0 and the caller's
+# ${varied:-1} default read that zero as "one geometry, carry on". The guard
+# could not fire. Not a latent bug in that codebase, because its packs are
+# one geometry per file; a guard that cannot go red nonetheless.
+_distinct_geometries() {
+  pdfinfo -f 1 -l "$2" "$1" 2>/dev/null |
+    awk '/^Page +[0-9]+ size:/ { print $4 "x" $6 }' | sort -u | wc -l | tr -d ' '
+}
+
+# ============================================================================
+# USAGE
+# ============================================================================
+
+usage() {
+  cat <<EOF
+Usage: stampz <pack-dir> "<recipient>" [OPTIONS]
+
+Stamp a recipient watermark across every page of every PDF in a directory.
+
+OPTIONS:
+  --out <dir>              Write stamped copies here
+                           (default: <pack-dir>.stamped)
+  --in-place               Overwrite the pack in place instead
+  --date <YYYYMMDD>        Date carried in the mark (default: today, UTC)
+  --colour <0..1>          Grey level of the mark (default: $DEFAULT_GREY)
+  --opacity <0..1>         Opacity of the mark (default: $DEFAULT_OPACITY)
+  -h, --help               Show this help
+  --version                Show version
+
+EXAMPLES:
+  # Stamp a pack into <pack>.stamped
+  stampz ~/packs/seriesA "Matthew Sinclair"
+
+  # Stamp into a named directory, dated
+  stampz ~/packs/seriesA "Matthew Sinclair" --out /tmp/ms --date 20260903
+
+  # Overwrite the pack itself
+  stampz ~/packs/seriesA "Matthew Sinclair" --in-place
+
+THIS DETERS, IT DOES NOT PROTECT. An overlay is strippable in seconds by
+anyone with a PDF tool. It marks a copy; it does not secure one.
+
+For detailed help, run: utilz help stampz
+EOF
+}
+
+# ============================================================================
+# MAIN
+# ============================================================================
+
+main() {
+  local src="" recipient="" out="" in_place=0
+  local date_str="" grey="$DEFAULT_GREY" opacity="$DEFAULT_OPACITY"
+
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      --out)      out="${2:-}"; shift 2 ;;
+      --in-place) in_place=1; shift ;;
+      --date)     date_str="${2:-}"; shift 2 ;;
+      --colour|--color) grey="${2:-}"; shift 2 ;;
+      --opacity)  opacity="${2:-}"; shift 2 ;;
+      -h|--help)  usage; exit 0 ;;
+      --version)  show_version "stampz"; exit 0 ;;
+      -*)         error "Unknown option: $1"; echo ""; usage; exit 1 ;;
+      *)
+        if [[ -z "$src" ]]; then
+          src="${1%/}"
+        elif [[ -z "$recipient" ]]; then
+          recipient="$1"
+        else
+          error "Too many arguments: $1"
+          exit 1
+        fi
+        shift
+        ;;
+    esac
+  done
+
+  [[ -n "$src" ]] || { error "No pack directory given"; echo ""; usage; exit 1; }
+  [[ -n "$recipient" ]] || { error "No recipient given"; echo ""; usage; exit 1; }
+  [[ -d "$src" ]] || { error "No such directory: $src"; exit 1; }
+
+  require_command qpdf "brew install qpdf"
+  require_command pdfinfo "brew install poppler"
+
+  if [[ $in_place -eq 1 && -n "$out" ]]; then
+    error "--in-place and --out are mutually exclusive"
+    exit 1
+  fi
+
+  # Out-dir is the DEFAULT and --in-place is the explicit request. The
+  # reference inverted this, which was safe there because its originals
+  # regenerate from a source tree; pointed at a pack that exists in one
+  # copy, an in-place default rewrites it.
+  if [[ $in_place -eq 1 ]]; then
+    out="$src"
+  elif [[ -z "$out" ]]; then
+    out="${src}.stamped"
+  fi
+
+  [[ -n "$date_str" ]] || date_str=$(date -u +%Y%m%d)
+
+  local text="CONFIDENTIAL ${date_str} ${recipient}"
+
+  mkdir -p "$out"
+  local work
+  work=$(mktemp -d)
+  # shellcheck disable=SC2064
+  trap "rm -rf '$work'" EXIT
+
+  local manifest="$out/STAMP-MANIFEST.txt"
+  {
+    printf 'Recipient : %s\n' "$recipient"
+    printf 'Dated     : %s\n' "$date_str"
+    printf 'Stamped   : %s\n' "$(date -u +'%Y-%m-%d %H:%MZ')"
+    printf 'Source    : %s\n' "$src"
+    printf 'Mode      : %s\n\n' "$([[ $in_place -eq 1 ]] && echo in-place || echo copy)"
+    printf '%-42s %-7s %-18s %s\n' "FILE" "PAGES" "SHA256-BEFORE" "SHA256-AFTER"
+  } > "$manifest"
+
+  local count=0 f base pages size w h stamp before after got varied
+  for f in "$src"/*.pdf; do
+    [[ -f "$f" ]] || continue
+    base=$(basename "$f")
+
+    pages=$(_page_count "$f")
+    size=$(_page_size "$f")
+    [[ -n "$pages" && -n "$size" ]] || { error "$base: could not read its page geometry"; exit 1; }
+
+    # A probe that read NOTHING is a refusal, not a pass. Defaulting an
+    # unreadable answer to "one geometry" is how the reference's guard came
+    # to be permanently green.
+    varied=$(_distinct_geometries "$f" "$pages")
+    if [[ -z "$varied" || "$varied" -lt 1 ]]; then
+      error "$base: could not read its per-page geometry"
+      exit 1
+    fi
+    if [[ "$varied" -gt 1 ]]; then
+      error "$base: mixed page geometry ($varied distinct sizes) -- not handled"
+      echo "  Stamping every page at the first size would clip the rest," >&2
+      echo "  and a clipped page still looks stamped. Split the file." >&2
+      exit 1
+    fi
+
+    w=${size% *}
+    h=${size#* }
+
+    stamp="$work/stamp-${w}x${h}.pdf"
+    [[ -f "$stamp" ]] || _render_stamp "$w" "$h" "$text" "$grey" "$opacity" "$stamp"
+
+    before=$(shasum -a 256 "$f" | cut -c1-16)
+
+    qpdf "$f" --overlay "$stamp" --repeat=1 -- "$work/out-$base" ||
+      { error "$base: qpdf overlay failed"; exit 1; }
+
+    got=$(_page_count "$work/out-$base")
+    if [[ "$got" != "$pages" ]]; then
+      error "$base: page count changed $pages -> $got"
+      exit 1
+    fi
+
+    mv "$work/out-$base" "$out/$base"
+    after=$(shasum -a 256 "$out/$base" | cut -c1-16)
+
+    printf '%-42s %-7s %-18s %s\n' "$base" "$pages" "$before" "$after" >> "$manifest"
+    printf '  %-42s %s pages\n' "$base" "$pages"
+    count=$((count + 1))
+  done
+
+  if [[ $count -eq 0 ]]; then
+    error "No PDFs found in $src"
+    exit 1
+  fi
+
+  echo ""
+  success "Stamped $count file(s) for $recipient"
+  info "Manifest: $manifest"
+}
+
+# Sourcing this file defines the functions above and runs nothing, so the
+# test suite reaches the ONE PDF assembler rather than carrying a second copy
+# of it. Executing it runs main.
+#
+# THE TEST IS SELF-DETECTING, NOT AN ENVIRONMENT VARIABLE. The first version
+# of this guard keyed on STAMPZ_SOURCE_ONLY, which a child process inherits:
+# with that variable exported, `stampz <pack> <recipient>` defined its
+# functions, ran nothing, and EXITED 0. A silent no-op reporting success, in
+# the tool whose entire subject is silent failure -- caught because the suite
+# asserted on the output files rather than on the exit code.
+if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
+  main "$@"
+fi

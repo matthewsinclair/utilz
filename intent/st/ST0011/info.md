@@ -71,15 +71,45 @@ The spike's first visibility check counted pixels differing anywhere on the page
 - **In-place is the reference's default and is a footgun outside Lamplight.** It was safe there because the originals regenerate from `docs/pdf/investor/`, which the header says in terms. Pointed at someone's only copy of a pack, an in-place default rewrites it. The design proposes an out-dir default with an explicit `--in-place`, which changes the reference's behaviour and is therefore hv's call, not this thread's.
 - **Mixed page geometry stays refused in v1.** The reference refuses rather than stamping every page at the first size and clipping the rest. Native rendering makes a per-geometry stamp nearly free, but `qpdf --overlay --repeat=1` applies one stamp page to all pages, so per-page variation is real work and is deferred rather than smuggled in.
 
+### What the build found, 2026-09-03
+
+Four defects, three of them in checks rather than in behaviour. Each is recorded because it passed something that looked like verification.
+
+**1. TRAP 4 IS REAL BUT SMALLER THAN STATED, AND `lamplight-ac` MEASURED IT RATHER THAN ACCEPTING IT.** The claim above -- that the reference's font arrives over the network and vanishes silently offline -- is true in form and wrong about the dependency that was actually load-bearing. JetBrains Mono is installed locally on that machine (`~/Library/Fonts`), so Chrome resolved it from the font book and the CDN `<link>` was never on the resolution path: rendering with the link and with it deleted gave byte-comparable output and an identical 661x389 ink box, both embedding `JetBrainsMono-Medium`. Forcing the fallback with a nonexistent family gives Menlo, and the ink box moves 661x389 -> 661x390, because the plausible fallbacks on macOS all share the 0.600 em advance the formula assumes. So the geometric consequence is **one pixel on a Mac and unbounded off one**, where nothing constrains what a foreign `monospace` resolves to. The Courier-Bold decision stands unchanged and for a better-stated reason: it makes the advance exact by construction rather than contingent in two ways.
+
+**2. THE MIXED-GEOMETRY GUARD WAS DEAD, HERE AND IN THE REFERENCE.** `pdfinfo` prints `Page    1 size:  595 x 842 pts`. The reference matches `/page *[0-9]+ size:/` -- lowercase, and awk regexes are case-sensitive -- so it matches nothing, `wc -l` returns 0, and the caller's `${varied:-1}` default reads that zero as "one geometry, carry on". The check could not fire under any input. Inherited here verbatim and caught only because AT05 asserts its own fixture really carries two geometries before trusting the refusal; the first version of that test built its fixture by rotating a page, which does not change what `pdfinfo` reports, so the guard was being handed a uniform file and the test was passing on a refusal that never happened. **A test whose fixture does not exercise the guard is indistinguishable from a working guard.** Not a live defect in Lamplight, whose packs are one geometry per file; a check that cannot go red nonetheless, and it has been reported back.
+
+**3. THE SIZE SOLVE IGNORED THE PAGE HEIGHT, AND THE OBVIOUS CASE HIDES IT.** The reference solves `len * em * cos(angle)` for a fraction of page WIDTH, which says nothing about height, and the error grows as the string shortens because a short line takes a large derived size and the glyph height then dominates the rotated bounding box. On A4 a three-character name takes the solve to 263pt, whose bbox exceeds the page arithmetically and yet lands **no** ink in the margins, because glyph ink is inset from the em box -- so an A4 fit check passes a formula that is wrong. On a 1440x810 deck page the same name goes to 636pt and puts **2761 ink pixels** into the top and bottom margins. Both axes are now constrained; the same case gives 382pt and 141. AT03 carries the wide-page case and goes red without the fix.
+
+**4. THE SOURCE GUARD MADE THE SHIPPED TOOL A SILENT NO-OP.** So the test suite could reach the one PDF assembler, the implementation first detected "am I being sourced" with an environment variable. A child process inherits it: with `STAMPZ_SOURCE_ONLY` exported, `stampz <pack> <recipient>` defined its functions, did nothing, and **exited 0**. A success-reporting no-op, in the tool whose whole subject is silent failure. Replaced with `[[ "${BASH_SOURCE[0]}" == "${0}" ]]`, which is self-detecting and cannot be set from outside. Caught only because the tests assert on the output files rather than on the exit code -- and the exit code was the thing that was wrong.
+
+### The instrument that produced two of these
+
+The first fit check hand-parsed the PGM header by skipping a guessed twelve fields (`NR > 12`) and counting bytes below a brightness threshold. It miscounted header bytes as pixels, reported "6 ink pixels in the margins" for a mark that fits, and that false reading went into an implementation comment as the justification for a real fix. **The fix was right and its stated reason was invented by a broken instrument** -- which is the same failure as the whole-page pixel diff greening the wrong verb, one level up: not a wrong measurement of the artifact, but a wrong measurement used as evidence in prose that outlives it.
+
+Every visibility check now renders the SAME crop of two files and compares them byte for byte, so the headers are identical by construction and nothing parses them. The corrected comment records both the fix and the fact that its first justification was false.
+
+### Verification standing at the end of WP-04
+
+22 BATS tests green, `utilz doctor` clean, `shellcheck -x` clean. Three controls proven red-first by injecting the defect into the implementation and confirming the patch landed before trusting the red:
+
+| Injected defect                              | Goes red         |
+| -------------------------------------------- | ----------------- |
+| `--overlay` swapped for `--underlay`         | AT01 (both pages) |
+| the reference's lowercase geometry pattern   | AT05              |
+| the width-only size solve                    | AT03 (wide page)  |
+
+Not yet green: AC11, which is CI on both legs and is WP-05.
+
 ## Work Packages
 
 | WP    | Title                                    | Size | Status      |
 | ----- | ---------------------------------------- | ---- | ----------- |
-| WP-01 | Design and acceptance contract           | S    | WIP         |
-| WP-02 | Native stamp renderer and geometry probe | S    | Not Started |
-| WP-03 | Utility surface, manifest and guards     | S    | Not Started |
-| WP-04 | Test suite and fixtures                  | S    | Not Started |
-| WP-05 | CI wiring on both legs                   | S    | Not Started |
+| WP-01 | Design and acceptance contract           | S    | Done        |
+| WP-02 | Native stamp renderer and geometry probe | S    | Done        |
+| WP-03 | Utility surface, manifest and guards     | S    | Done        |
+| WP-04 | Test suite and fixtures                  | S    | Done        |
+| WP-05 | CI wiring on both legs                   | S    | WIP         |
 | WP-06 | Docs and acceptance run                  | S    | Not Started |
 
 ## Acceptance
