@@ -428,13 +428,14 @@ Other common flows:
 
 **The menu is deliberately short.** Every entry is one that works and that makes sense from inside a buffer; the roster is not "every utility". See below.
 
-| Invocation              | Input                          | Output                                   |
-| ----------------------- | ------------------------------ | ---------------------------------------- |
-| `M-x utilz` -> `cleanz` | active region or whole buffer  | region/buffer replaced in place          |
-| `M-x utilz` -> `mdagg`  | directory (prompted)           | concatenated markdown in `*utilz-mdagg*` |
-| `M-x utilz` -> `pdf2md` | current buffer's file (or ask) | converted markdown in `*utilz-pdf2md*`   |
-| `M-x utilz` -> `expz`   | directory (prompted)           | CSV of receipts in `*utilz-expz*`        |
-| `M-x utilz` -> `prez`   | current buffer's file (or ask) | builds the deck; echoes the written path |
+| Invocation              | Input                          | Output                                        |
+| ----------------------- | ------------------------------ | --------------------------------------------- |
+| `M-x utilz` -> `cleanz` | active region or whole buffer  | region/buffer replaced in place               |
+| `M-x utilz` -> `mdagg`  | directory (prompted)           | concatenated markdown in `*utilz-mdagg*`      |
+| `M-x utilz` -> `pdf2md` | current buffer's file (or ask) | converted markdown in `*utilz-pdf2md*`        |
+| `M-x utilz` -> `expz`   | directory (prompted)           | CSV of receipts in `*utilz-expz*`             |
+| `M-x utilz` -> `prez`   | current buffer's file (or ask) | builds the deck; echoes the written path      |
+| `M-x utilz` -> `todo`   | current buffer's file (or ask) | that file's DOING/TODO/DONE in `*utilz-todo*` |
 
 ### Why most utilities are NOT in the menu
 
@@ -444,7 +445,11 @@ Nine blocks were removed on 2026-09-03 (issue 0009) after the menu was measured 
 
 - **Four could never have worked.** The bridge builds `utilz <name> <flags> <path>`, and `cryptz`, `gitz` and `retry` each need a verb the block did not supply, while `mdagg` was declared `stdin` and does not read stdin. All four exited non-zero on selection.
 - **Two mutated the filesystem on selection.** `lnrel` created a symlink in the prompted directory and reported success; `syncz` would fire a directory sync. Neither belongs one keystroke from a fuzzy-match menu.
-- **Three were coherent but pointless here.** `clipz` duplicates Emacs' own clipboard and kill ring, `macoz` is not buffer work, and `xtrct` needs both an API key and a `--schema` the menu cannot supply.
+- **Two were coherent but pointless here.** `clipz` duplicates Emacs' own clipboard and kill ring, and `macoz` is not buffer work. `xtrct` went too: it needs both an API key and a `--schema` the menu cannot supply.
+
+`todo` was removed in that same pass and **restored**, because the reason was wrong. Its block declared `input: none`, so the bridge ran `utilz todo` in whatever directory Emacs happened to be in and ignored the buffer -- a broken declaration, exactly like `mdagg`'s, and `mdagg` was corrected rather than dropped. It is now `file -> buffer` with `flags: [--file]`, so visiting a `todo.md` and picking it shows that file's view. The default invocation is read-only, verified by hashing an ordinary markdown file before and after.
+
+**`C-u` does not work with `todo`, and fails loudly rather than quietly.** The bridge inserts extra flags between the declared flags and the path, so `C-u ... done 2` builds `utilz todo --file "done 2" <path>` and exits 1. Declaring `flags: []` instead would put the path last and build `utilz todo done 2 <path>`, which exits 0 having modified `./todo.md` rather than the file you were looking at. Use the shell for `todo` verbs.
 
 `stampz` declares no block either: `path -> message` is the right shape, but it needs a recipient, which only reaches it through the `C-u` extra-flags prompt.
 
