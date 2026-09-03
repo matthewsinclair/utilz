@@ -12,13 +12,6 @@ A DOING / TODO / DONE view, projected from steel-thread and work-package status:
   - [ ] 05: Default theme polish: basic but cool enough out of the box
   - [ ] 06: Theme addressing split + --theme-path (hv's CLI asks)
   - [ ] 07: Expose theme determinism checking as a prez capability (deferred)
-- [-] ST0011: stampz -- recipient watermarking for PDF document packs
-  - [x] 01: Design and acceptance contract
-  - [x] 02: Native stamp renderer and geometry probe
-  - [x] 03: Utility surface, manifest and guards
-  - [x] 04: Test suite and fixtures
-  - [-] 05: CI wiring on both legs
-  - [-] 06: Docs and acceptance run
 
 ## TODO
 
@@ -66,6 +59,13 @@ _(none)_
   - [x] 01: each_utility(): one bin/ walker, five consumers
   - [x] 02: yq as hard dependency: require_yq, fallback removal
   - [x] 03: Generator utilz_version floor derived from VERSION
+- [x] ST0011: stampz -- recipient watermarking for PDF document packs
+  - [x] 01: Design and acceptance contract
+  - [x] 02: Native stamp renderer and geometry probe
+  - [x] 03: Utility surface, manifest and guards
+  - [x] 04: Test suite and fixtures
+  - [x] 05: CI wiring on both legs
+  - [x] 06: Docs and acceptance run
 
 ---
 

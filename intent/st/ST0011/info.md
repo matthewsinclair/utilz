@@ -1,9 +1,9 @@
 ---
 st_id: ST0011
 title: stampz -- recipient watermarking for PDF document packs
-status: WIP
+status: Completed
 created: 2026-09-03
-completed:
+completed: 2026-09-03
 ---
 
 # ST0011: stampz -- recipient watermarking for PDF document packs
@@ -120,8 +120,8 @@ Two things it corrected or sharpened, both taken:
 | WP-02 | Native stamp renderer and geometry probe | S    | Done   |
 | WP-03 | Utility surface, manifest and guards     | S    | Done   |
 | WP-04 | Test suite and fixtures                  | S    | Done   |
-| WP-05 | CI wiring on both legs                   | S    | WIP    |
-| WP-06 | Docs and acceptance run                  | S    | WIP    |
+| WP-05 | CI wiring on both legs                   | S    | Done   |
+| WP-06 | Docs and acceptance run                  | S    | Done   |
 
 ## Acceptance
 
