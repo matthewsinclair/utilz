@@ -3,7 +3,7 @@ node: cc
 name: Control Claude
 role: control
 session_id: 5d94b174-72a1-4eca-9eb0-674adfd6414d
-heartbeat_at: 2026-09-03 17:43Z
+heartbeat_at: 2026-09-03 17:50Z
 status: active
 focus: "ST0011 (stampz) CLOSED -- 11/11, CI run 33785732770 green on all seven jobs, 22/22 on both legs with zero skips. Nothing of mine in flight."
 claims: [ST0010]
@@ -13,19 +13,14 @@ claims: [ST0010]
 
 ## DOING
 
-**Nothing in flight.** ST0011 (`stampz`) closed 3 Sep at 11/11. hv pushed at `560ac49`; CI run `33785732770` is green on all seven jobs and **stampz ran 22/22 with ZERO skips on both legs** -- checked by grepping the logs for the suite's own `needs qpdf and poppler` skip reason (0 occurrences) rather than inferred from the green, because a suite that skipped everything exits 0 too. Every AT executed on machines that had never built a stamp.
-
-The day's full narrative -- four defects, three of them in checks; the Emacs menu pruned 13 -> 6; the corrections traded with `lamplight-ac` -- is in ST0011's Context, `intent/done.md`, and this board's history. **ST0010 remains vc's and untouched apart from `prez.bats`.**
+**Nothing in flight.** ST0011 (`stampz`) closed 3 Sep at 11/11, CI run `33785732770` green on all seven jobs, 22/22 on both legs with zero skips. Narrative archived to `.history/20260903/`; substance is in ST0011's Context and `intent/done.md`. **ST0010 remains vc's**, untouched today apart from `prez.bats`.
 
 ## TODO
 
-- **ST0011/WP-02 next: the native stamp renderer.** Byte offsets for the xref are MEASURED (`wc -c` before each append), never computed from `${#s}`, which counts characters rather than bytes and is correct only under `LC_ALL=C` on a pure-ASCII recipient. Do not fall back on letting qpdf reconstruct a bogus xref: it repairs with a warning and exit 3, and a silent-repair dependency in this thread would be self-parody.
-- **ST0011/WP-05 must add `stampz` to the hardcoded roster in `test-linux`.** `test-macos` derives its roster from `utilz list` and picks it up for free; Linux does not, and nothing reports the gap. Both legs need `qpdf` + poppler installed so the suite's skip path is never the path CI takes.
 - **WP-04 is vc's**, on hoist-green. WP-05 (polish), WP-06 (AC15 theme addressing split), WP-07 (possibly un-deferred: two consumers now blocked by prez keeping its browser list and determinism probe private -- vc has it with hv).
 - **`prez build examples/demo.md` warns `class 'escape' has no effect`** -- prez's own example ships a warning. vc's WP-05 note, deck content, not urgent.
-- `ST0007/WP-04` is `wip` under a completed thread. Not the migrator: the v2 source itself says WIP. Ours to fix, small.
-- **`hoist-rebase.sh` carries one dead postcondition.** `post "test/acceptance.sh" "AT13: PASS" 0 ...` sets the minimum to ZERO and `post()` tests `-ge`, so it prints `ok` unconditionally -- including at a count of zero, which is the case it exists to catch. Redundant rather than a hole: two other checks cover AT13 and both go red. But it is the measures-nothing shape sitting inside the script that guards against silent loss. Fix is `0` -> `1` and a re-attach; held because re-attaching writes canon while vc has the store open.
-- **ST0002's six WPs read `not-started`** under a thread completed 2026-02-08 -- the v3 migrator defaulted them and `intent doctor` reports nothing. hv ruled not-today.
+- **`chrome()` announces the harmless outcome and stays silent on the one that launches a browser.** vc's finding, 2026-08-29, RE-STATED HERE so its inbox entry can be archived without losing it. The refusal path prints `note: PREZ_TEST_BROWSER=... is not executable, so no browser is offered`; the resolve path prints nothing at all. That is the same asymmetry as a skip carrying a false reason, sitting in the function AC18 was implemented in. Fix is one `printf ... >&2` mirroring the note already there. vc offered it either way; ST0010 is vc's thread, so coordinate before touching it.
+- **`hoist-rebase.sh` carries one dead postcondition.** `post "test/acceptance.sh" "AT13: PASS" 0 ...` sets the minimum to ZERO and `post()` tests `-ge`, so it prints `ok` unconditionally -- including at a count of zero, which is the case it exists to catch. Redundant rather than a hole: two other checks cover AT13 and both go red. But it is the measures-nothing shape sitting inside the script that guards against silent loss. Fix is `0` -> `1` and a re-attach. **The hold reason is retired** -- vc confirmed the store is closed and `intent/.canon` is clean, so a re-attach writes into nobody's open transaction. Not done; no longer blocked.
 
 ## Watch-outs
 
