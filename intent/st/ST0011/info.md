@@ -101,6 +101,17 @@ Every visibility check now renders the SAME crop of two files and compares them 
 
 Not yet green: AC11, which is CI on both legs and is WP-05.
 
+### External validation, 2026-09-03 -- the first non-synthetic run
+
+**Every one of this thread's 22 tests runs on a fixture this thread generates**, which the project's own board calls half a test. `lamplight-ac` closed that gap from the outside: having deleted `stamp-pack.sh` from Lamplight (`34ad04d3f`), it ran `utilz stampz` over the real investor pack -- **10 files, 55 pages, two geometries, one of them the 1440x810 deck** -- and reported all 55 pages marked, none unmarked.
+
+**Its verification method is worth more than its verdict, and it arrived at it independently.** It compared each STAMPED page against its UNSTAMPED source rather than looking for ink, on the reasoning that a zero there means genuinely no mark, so the instrument is capable of reporting a failure. That is the same construction AT01 uses and it was reached without having read the message describing it.
+
+Two things it corrected or sharpened, both taken:
+
+- **The height overrun is not reachable on that pack** -- `CONFIDENTIAL 20260903 <recipient>` runs to 34 characters, so the solve stays small. It is reachable on that geometry with an initials-only recipient, which is the case the two-axis bound exists for.
+- **The `${varied:-1}` default is the reason the dead guard was silent**, separable from the regex that caused it: a default is a claim about what an unreadable answer means, and unreadable almost never means fine. Generalised past this script, audited across every Utilz utility (one benign display label remains), and recorded in `intent/restart.md` as a project-wide trap rather than a stampz note.
+
 ## Work Packages
 
 | WP    | Title                                    | Size | Status |
