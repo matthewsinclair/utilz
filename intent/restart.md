@@ -58,7 +58,19 @@ It also means `st done` / `wp done` will refuse on any thread here for a reason 
 - **Never manually wrap markdown prose**; paragraphs flow as single lines. Tables stay column-aligned. No em dashes.
 - **No Claude attribution in git commits.** Commits end with the `(C) hello@matthewsinclair.com` footer.
 - **Releases, tags and pushes are hv's.** Annotated tag on the `release:` commit itself, then both remotes.
+- **A diagnosed defect gets its own `intent/issues/` entry, even when fixed inside a steel thread** (0002 alongside ST0009/WP-03, following the 0001 precedent). The ST carries the work; the issue carries the root cause, the evidence and the resolution. A set of small independent defects may be driven by one issue each rather than a thread, even when fixed in a single commit -- the commit body carries the narrative. Doc-before-code still holds for feature work. Migrated off cc's board at the 3 Sep globalfold; these bind anyone working here, not one node.
+- **Retroactive paperwork is the remediation for a doc-before-code violation when the code is already correct and verified** -- not reverting it. Red-first is then proven retrospectively by running the new tests against `HEAD` in a scratch copy, and the retrospective verification is STATED AS SUCH in `acceptance.md` rather than presented as genuine red-first.
 - **bash 3.2 compatibility** (macOS ships 3.2.57 and CI runs it): no namerefs, no `${var,,}`; guard `"${arr[@]}"` under `set -u`; avoid GNU-only sed/grep idioms (`\b`, `\u`, byte-fragile bracket classes).
+
+## Two entry-point pointers that were wrong until 3 Sep
+
+Moved here out of `.claude/restart.md`, which holds NO STATE and was starting to grow a dated correction note -- the shape that turns an entry point into a third copy of the narrative. The table there is now simply correct; this is the why.
+
+`intent st list --all` never worked. The flag is `--status all`, and the documented form exits non-zero with `unexpected argument '--all'`.
+
+`intent/issues/OPEN/` was wrong in a subtler way: the path exists and is EMPTY, which reads as "no open defects" rather than as a broken pointer. `intent/.intentfiles` declares that only OPEN THREADS get a realised form on disk, so no issue is ever written there, and the files under `intent/issues/CLOSED/` are v2 artefacts predating that policy. Use `intent issues list`.
+
+**A pointer at an empty directory is worse than a pointer at a missing one**, which is why this is recorded rather than silently edited: the missing path announces itself and the empty one confirms a false answer.
 
 ## Traps that each produced a real defect here
 

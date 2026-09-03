@@ -1,5 +1,5 @@
 ---
-verblock: "03 Sep 2026:v1.8: matts - ST0011 closed, 11/11, CI green; folded out of DOING to done.md"
+verblock: "03 Sep 2026:v1.9: matts - globalfold; four completed items folded out, em-dash count re-measured"
 ---
 
 # Work In Progress
@@ -32,10 +32,10 @@ Two things blocking their own progress rather than each other:
 - **Relay the `intent ac gate` defect to `intent-vc` -- WITH THE 3 SEP UPDATE.** It is bypassed here rather than fixed: `intent` now resolves to `Intent/native/rust/target/release/intent` and the gate is correct (`ST0010 BLOCKED -- 16/20, unsatisfied AC15 AC16 AC18 AC19`, matching the view). `bin/intent_acceptance:295` still greps the v2 dotted form, so a machine without a native build is unchanged. The report stands; the urgency does not. `bin/intent_acceptance`'s `ac_lines()` greps the v2 dotted form `^- AC-<st>.<nn> `; the v3 renderer emits `^- AC<nn> `. Zero matches, so `ac gate` reports "empty contract -- BLOCKED" and `ac status` reports `0/0` against a full 20-row contract. It fails safe, but **the remedy it prints is `acceptance: exempt`**, which on a thread with a real contract converts a false red into a permanent silent pass. Intent's tree; nothing here should be edited to accommodate it.
 - **`geodica doctor` must report whether `utilz prez` is available.** hv's estate requirement, raised 13:36Z, still on no contract in any repo. The estate's move to `~/Devel/prj/Gtools` did not retire it.
 
-**ST0011 is CLOSED** -- `stampz` shipped 3 Sep, 11/11 criteria, CI green on both legs (run `33785732770`). Two things it deliberately left open, neither blocking:
+**Deferred out of ST0011 (`stampz`), neither blocking**
 
-- **Mixed page geometry within one PDF is refused, not handled.** `qpdf --overlay --repeat=1` applies one stamp to every page, so per-page variation needs overlay ranges. `lamplight-ac` has offered its real pack as a corpus (10 files, 55 pages, two geometries) if this is ever un-deferred.
-- **`todo` verbs are unreachable from Emacs** (issue 0009). The bridge inserts `C-u` extra flags BETWEEN the declared flags and the path, so `utilz todo --file "done 2" <path>` exits 1. Fixing it means the elisp appending the path before extra flags -- a bridge change, not a declaration one.
+- **Mixed page geometry within one PDF is refused, not handled.** `qpdf --overlay --repeat=1` applies one stamp to every page, so per-page variation needs overlay ranges. `lamplight-ac` has offered its real pack as a corpus (10 files, 55 pages, two geometries, one of them a 1440x810 deck).
+- **`todo` verbs are unreachable from Emacs** (issue 0009). The bridge inserts `C-u` extra flags BETWEEN the declared flags and the path, so `utilz todo --file "done 2" <path>` exits 1. The default view works. Fixing it means the elisp appending the path before extra flags -- a bridge change, not a declaration.
 
 **ST0010, remaining work packages**
 
@@ -47,15 +47,11 @@ Two things blocking their own progress rather than each other:
 
 - **`chrome()` should name the browser it resolved.** One `printf ... >&2` on the resolve path in `crate/test/acceptance.sh`, matching the note it already prints when it refuses. Today it is silent exactly where it is about to launch Chrome on someone's machine, so an acceptance number carries no evidence of which mode produced it. Found by cc at EOD from a 12/0/0 where the morning's identical command gave 9 passed / 11 skipped.
 - **cc's `hoist-rebase.sh` carries one dead postcondition.** `post "test/acceptance.sh" "AT13: PASS" 0` sets the minimum to zero against a `-ge` test, so it prints `ok` unconditionally -- including at the count of zero it exists to catch. Redundant rather than a hole (two other checks cover AT13), but it is the measures-nothing shape sitting inside the script that guards against silent loss. cc's; the canon-writing conflict that was holding it is cleared.
-- **cc's issue `0006` exists only as a flat view and was never written to canon**, so `intent doctor` counts one fewer issue than the tracker shows. cc's to fill or leave.
-- **`ST0007/WP-04` reads `wip` under a completed thread.** Not the migrator -- the v2 source itself says WIP. Small.
-- **ST0002's six WPs read `not-started`** under a thread completed 2026-02-08; the v3 migrator defaulted them and `intent doctor` reports nothing. hv ruled not-today.
 - **Intent issue 0008** is filed but uncommitted in `../Intent`. It covers the unconditional `Bash 4.0+` line `intent agents sync` writes into every project's `AGENTS.md`. `AGENTS.md:13` is wrong here today and **must not be hand-edited** -- re-run `intent agents sync` once the Intent fix lands.
 
 **Opportunistic, no owner**
 
-- **Em dashes across 18 tracked docs**, against the no-em-dash convention: `CHANGELOG.md`, `README.md`, both `docs/*.md`, six `help/*.md`, five `opt/*/README.md`, `usage-rules.md`, `intent/llm/RULES.md` and one closed issue. Cleared from the tracking docs at the 29 Aug globalfold; the rest is a mechanical sweep nobody has run. Find them with `git grep -l $'\u2014' -- '*.md'`.
-- **`intent doctor` reports all checks passed as of the 29 Aug globalfold.** It had carried one finding all day (ST0009's status/gate disagreement). Nothing in this session's doc fold could have cleared it, so either it was resolved elsewhere or the check changed. Not chased at EOD; worth one minute of confirmation next session, because a finding that disappears without anyone fixing it is the same shape as a check that stopped looking.
+- **Em dashes across 18 tracked docs**, against the no-em-dash convention. **Re-measured 3 Sep: still 18 files, 94 occurrences.** Worst offenders `usage-rules.md` (24) and `help/syncz.md` (21); the rest are single digits. Two of the 18 are arguably out of scope -- `intent/issues/CLOSED/0001/` is a closed historical record and `opt/prez/crate/examples/test_pres.md` is crate content that moves with the pin.
 
 - VSCode / Zed / Vim integration families (same TSV manifest, new editor-specific installers).
 - Emacs bridge v2: Transient grouped menu, deferred per ST0007 `design.md`.
