@@ -36,6 +36,10 @@ features:
   - Remove navigation back links
 
 integration:
-  input: stdin
+  # `path`, NOT `stdin`. mdagg does not read stdin: piping a region at it
+  # exits 1 with "No input specified and no .mdagg.yaml found". The block
+  # declared stdin from 2.2.0 until issue 0009, so the menu entry could
+  # never have worked. Verified against what the bridge builds.
+  input: path
   output: buffer
   flags: []

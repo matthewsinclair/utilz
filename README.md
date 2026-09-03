@@ -426,15 +426,29 @@ With an active region, the region is piped through `cleanz` and replaced with th
 
 Other common flows:
 
+**The menu is deliberately short.** Every entry is one that works and that makes sense from inside a buffer; the roster is not "every utility". See below.
+
 | Invocation              | Input                          | Output                                   |
 | ----------------------- | ------------------------------ | ---------------------------------------- |
 | `M-x utilz` -> `cleanz` | active region or whole buffer  | region/buffer replaced in place          |
-| `M-x utilz` -> `xtrct`  | active region or whole buffer  | JSON/CSV in `*utilz-xtrct*` buffer       |
-| `M-x utilz` -> `mdagg`  | active region or whole buffer  | concatenated markdown in `*utilz-mdagg*` |
+| `M-x utilz` -> `mdagg`  | directory (prompted)           | concatenated markdown in `*utilz-mdagg*` |
 | `M-x utilz` -> `pdf2md` | current buffer's file (or ask) | converted markdown in `*utilz-pdf2md*`   |
 | `M-x utilz` -> `expz`   | directory (prompted)           | CSV of receipts in `*utilz-expz*`        |
-| `M-x utilz` -> `gitz`   | directory (prompted)           | git status dump in `*utilz-gitz*`        |
-| `M-x utilz` -> `clipz`  | none                           | clipboard op; single-line echo           |
+| `M-x utilz` -> `prez`   | current buffer's file (or ask) | builds the deck; echoes the written path |
+
+### Why most utilities are NOT in the menu
+
+A utility appears only if it declares an `integration:` block, and most deliberately do not. Absence is a decision, not an oversight -- `utilz emacs doctor` reports an unbound utility without failing.
+
+Nine blocks were removed on 2026-09-03 (issue 0009) after the menu was measured against what the bridge actually invokes:
+
+- **Four could never have worked.** The bridge builds `utilz <name> <flags> <path>`, and `cryptz`, `gitz` and `retry` each need a verb the block did not supply, while `mdagg` was declared `stdin` and does not read stdin. All four exited non-zero on selection.
+- **Two mutated the filesystem on selection.** `lnrel` created a symlink in the prompted directory and reported success; `syncz` would fire a directory sync. Neither belongs one keystroke from a fuzzy-match menu.
+- **Three were coherent but pointless here.** `clipz` duplicates Emacs' own clipboard and kill ring, `macoz` is not buffer work, and `xtrct` needs both an API key and a `--schema` the menu cannot supply.
+
+`stampz` declares no block either: `path -> message` is the right shape, but it needs a recipient, which only reaches it through the `C-u` extra-flags prompt.
+
+A framework test now invokes the command line the bridge would build for every declaring utility and fails if the utility rejects the form, which is the check whose absence let four impossible entries sit in the menu since v2.2.0.
 
 ### Prefix arguments
 

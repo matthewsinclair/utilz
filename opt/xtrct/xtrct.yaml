@@ -13,8 +13,3 @@ dependencies:
     required: false
     install: "Part of utilz framework"
     purpose: PDF to Markdown conversion (required for .pdf input)
-
-integration:
-  input: stdin
-  output: buffer
-  flags: []

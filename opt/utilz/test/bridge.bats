@@ -83,8 +83,26 @@ run_common_function() {
 @test "utilz integration commands - emits TSV to stdout" {
   run_utilz integration commands
   assert_success
+
+  # SHAPE, PLUS ONE DELIBERATE ANCHOR. This asserted `cleanz` AND `xtrct` by
+  # name, which pinned two arbitrary members of the roster inside a test about
+  # the OUTPUT FORMAT. Issue 0009 removed xtrct's integration block -- a
+  # correct change -- and this test went red for a reason that had nothing to
+  # do with emitting TSV. Same class as 0006 and 0008: a snapshot of the
+  # roster standing in for a property.
+  #
+  # `cleanz` STAYS as a named anchor and is not arbitrary: it is the bridge's
+  # motivating case and its only `replace` consumer, so a manifest without it
+  # means the walker is broken rather than that the roster moved.
   assert_output_contains "cleanz"
-  assert_output_contains "xtrct"
+
+  # Every row carries the five tab-separated fields the elisp parses, and
+  # there is at least one -- an empty manifest would satisfy any per-row
+  # assertion vacuously.
+  local rows
+  rows="$(printf '%s' "$output" | grep -c . || true)"
+  [ "$rows" -gt 0 ]
+  printf '%s' "$output" | awk -F'\t' 'NF < 4 { bad++ } END { exit (bad > 0) }'
 }
 
 @test "utilz integration (no verb) - shows usage" {
@@ -167,4 +185,73 @@ run_common_function() {
   run_utilz emacs doctor
   assert_success
   assert_output_contains "Canonical elisp present"
+}
+
+# ============================================================================
+# THE COMMAND LINE THE BRIDGE ACTUALLY BUILDS (issue 0009)
+# ============================================================================
+
+@test "every declaring utility ACCEPTS the command form the bridge builds" {
+  # THE CHECK WHOSE ABSENCE COST US THIRTEEN MENU ENTRIES, FOUR OF WHICH
+  # COULD NEVER HAVE WORKED. `utilz emacs doctor` validates that a block's
+  # VALUES are legal, and every one of those four blocks was legal --
+  # `cryptz` declared `file -> message` and the bridge dutifully built
+  # `utilz cryptz <path>`, which the utility rejects because it wants an
+  # `encrypt`/`decrypt` verb. A valid declaration can describe an impossible
+  # command line, and nothing here looked at the command line.
+  #
+  # So this asserts the ONE failure that means the declaration is wrong:
+  # the utility refusing the command FORM. A utility failing on a bogus
+  # path is fine and expected -- that is the argument being wrong, not the
+  # shape. `Unknown command` is the dispatcher's and the utilities' shared
+  # refusal for a verb they do not have.
+  #
+  # Red-first, by construction rather than by anecdote: run the same probe
+  # against the two utilities whose blocks issue 0009 REMOVED for exactly
+  # this reason, and it must fire on both. If that stops firing, this test
+  # has stopped discriminating and is worth nothing.
+  local name input flags probe out
+  local -a offenders=()
+
+  while IFS=$'\t' read -r name _desc input _output flags; do
+    case "$input" in
+      stdin) probe="printf '' | '$UTILZ_BIN_DIR/utilz' $name" ;;
+      file)  probe="'$UTILZ_BIN_DIR/utilz' $name ${flags//,/ } /nonexistent-probe.dat" ;;
+      path)  probe="'$UTILZ_BIN_DIR/utilz' $name ${flags//,/ } /nonexistent-probe-dir" ;;
+      none)  probe="'$UTILZ_BIN_DIR/utilz' $name ${flags//,/ }" ;;
+      *)     offenders+=("$name: unknown input kind '$input'"); continue ;;
+    esac
+    out="$(eval "$probe" 2>&1 </dev/null || true)"
+    if printf '%s' "$out" | grep -q 'Unknown command'; then
+      offenders+=("$name: bridge builds a form the utility rejects -- $probe")
+    fi
+  done < <("$UTILZ_BIN_DIR/utilz" list < /dev/null | awk '/^  [a-z]/ { print $1 }' |
+    while IFS= read -r u; do
+      y="$UTILZ_HOME/opt/$u/$u.yaml"
+      [[ -f "$y" ]] || continue
+      [[ "$(yq eval '.integration' "$y" 2>/dev/null)" == "null" ]] && continue
+      printf '%s\t%s\t%s\t%s\t%s\n' "$u" \
+        "$(yq eval -r '.description // ""' "$y")" \
+        "$(yq eval -r '.integration.input' "$y")" \
+        "$(yq eval -r '.integration.output' "$y")" \
+        "$(yq eval -r '.integration.flags // [] | join(",")' "$y")"
+    done)
+
+  if [[ ${#offenders[@]} -gt 0 ]]; then
+    printf 'declared blocks describing a command the utility refuses:\n' >&2
+    printf '  %s\n' "${offenders[@]}" >&2
+    return 1
+  fi
+
+  # THE PROBE MUST STILL DISCRIMINATE. cryptz and gitz both take a verb and
+  # both had their blocks removed by 0009; the same probe against them must
+  # still report the refusal, or the loop above is passing vacuously.
+  local ctl
+  for ctl in cryptz gitz; do
+    out="$("$UTILZ_BIN_DIR/utilz" "$ctl" /nonexistent-probe-dir 2>&1 </dev/null || true)"
+    printf '%s' "$out" | grep -q 'Unknown command' || {
+      echo "control failed: '$ctl <path>' no longer refuses, so this test proves nothing" >&2
+      return 1
+    }
+  done
 }

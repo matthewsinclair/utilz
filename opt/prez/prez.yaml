@@ -37,14 +37,28 @@ features:
   - Optional mermaid diagrams, vendored rather than fetched
   - PDF export and a local present mode, both via a browser
 
-# NO integration: BLOCK, deliberately (design, "Non-decisions, named"). The
-# Emacs bridge can bind prez later; nothing in ST0010 depends on it, and the
-# block the generator scaffolds here claimed `input: stdin / output: buffer`,
-# which is wrong twice over -- prez writes a FILE and the bridge would have
-# advertised a buffer round-trip the tool does not do.
+# INTEGRATION BLOCK ADDED 2026-09-03, hv's ruling, issue 0009. This file used
+# to explain at length why there was none. Both of its reasons are retired:
 #
-# It is also load-bearing for a framework test: bridge.bats asserts an exact
-# row count for emit_integration_tsv, naming its roster as "the ST0007 design
-# matrix of 12, plus todo". An unconsidered block here makes that 14 and turns
-# a correct test red -- which is how this was caught, on the first full-suite
-# run after the hoist.
+#   1. ST0010's design deferred the binding rather than refusing it -- "the
+#      Emacs bridge can bind prez later". Later is now.
+#   2. It warned that a block here would make bridge.bats' hardcoded row count
+#      wrong and redden a correct test. Issue 0006 fixed that test to DERIVE
+#      the count by walking the yaml corpus, so a new block no longer reddens
+#      anything. Verified in bridge.bats before this was added, because the
+#      warning was specific enough to be worth checking rather than assuming.
+#
+# The old comment was also right that the GENERATOR's scaffolded block would
+# have been wrong twice over -- `stdin -> buffer` advertises a round-trip prez
+# does not do, since it writes a FILE. That is why this one is `file ->
+# message`: the bridge echoes the "wrote deck.html" line rather than pretending
+# to hand back a document.
+#
+# `flags: [build]` supplies the verb. Without it the bridge builds
+# `utilz prez <file>` and the dispatcher refuses with "Unknown command" -- the
+# exact defect issue 0009 found in four other utilities, all of which declared
+# `flags: []` and none of which could ever have worked.
+integration:
+  input: file
+  output: message
+  flags: [build]
