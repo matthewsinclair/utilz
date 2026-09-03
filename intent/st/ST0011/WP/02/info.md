@@ -2,7 +2,7 @@
 wp_id: WP-02
 title: Native stamp renderer and geometry probe
 scope: S
-status: Not Started
+status: Done
 ---
 
 # WP-02: Native stamp renderer and geometry probe

@@ -273,10 +273,31 @@ make_fixture() {
   # looked for "prez" in the output and failed against a working doctor -- a
   # test measuring something adjacent to what it named, caught only by running
   # it.
+  #
+  # THE COUNT IS DERIVED, NOT WRITTEN DOWN. It read "14 utilities" until
+  # stampz landed as the fifteenth (ST0011) and reddened this suite, which has
+  # nothing to do with stampz. A hardcoded roster size is a second roster: it
+  # goes stale on a change somewhere else entirely, and the failure names the
+  # wrong thread. The number now comes from the same dispatcher listing CI's
+  # macOS leg derives its test roster from, so what this test asserts is that
+  # doctor counts the whole roster and stays green -- which is what its name
+  # says -- rather than how many utilities the repo happens to hold today.
+  local n
+  n=$("$UTILZ_BIN_DIR/utilz" list | awk '/^  [a-z]/ { c++ } END { print c }')
+  [ "$n" -gt 0 ] || {
+    echo "derived a roster of $n utilities; the listing is broken" >&2
+    return 1
+  }
+
   run_utilz doctor
   assert_success
-  assert_output_contains "14 utilities"
+  assert_output_contains "$n utilities"
   assert_output_contains "All checks passed"
+
+  # And prez is in that roster, which is the part the name promises.
+  run_utilz list
+  assert_success
+  assert_output_contains "prez"
 }
 
 @test "doctor does not report cargo as a missing dependency when it is present" {

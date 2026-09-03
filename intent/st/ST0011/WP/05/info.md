@@ -2,7 +2,7 @@
 wp_id: WP-05
 title: CI wiring on both legs
 scope: S
-status: Not Started
+status: WIP
 ---
 
 # WP-05: CI wiring on both legs

@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: 5d94b174-72a1-4eca-9eb0-674adfd6414d
-heartbeat_at: 2026-09-03 13:00Z
+heartbeat_at: 2026-09-03 15:18Z
 status: active
-focus: "ST0011 (stampz) opened and WP-01 in flight -- the Lamplight PDF pack watermarker promoted into Utilz. Renderer decision made on measurement: native PDF, no Chrome, no network."
+focus: "ST0011 (stampz) built and green: 22 BATS tests, 18/18 suites, shellcheck clean, doctor clean. WP-01..04 done, WP-05 (CI) written and awaiting a push. AC11 is the only unsatisfied criterion."
 claims: [ST0010, ST0011]
 ---
 
@@ -13,15 +13,24 @@ claims: [ST0010, ST0011]
 
 ## DOING
 
-**ST0011 (`stampz`) -- promoting Lamplight's PDF pack watermarker into Utilz. WP-01 in flight.** hv's call, routed by `lamplight-ac` on 2026-09-03 with the reference left in place (`Lamplight/design/system/docs/bin/stamp-pack.sh`, `fc31caf6a`). Name is hv's: `stampz`, chosen over `markz` because `mark` reads as _markdown_ in a roster that already has `mdagg` and `pdf2md`. Thread opened, objective + context + `design.md` written, 11 ACs and 10 ATs minted, six WPs created.
+**ST0011 (`stampz`) -- the Lamplight PDF pack watermarker, promoted. WP-01 through WP-04 DONE, WP-05 written and waiting on a push.** hv named it `stampz` (over `markz`: `mark` reads as _markdown_ next to `mdagg` and `pdf2md`) and ruled "Go" on the design, which ratified the out-dir default with an explicit `--in-place`. 22 BATS tests green, all 18 suites green, `shellcheck -x` clean across 17 files, `utilz doctor` clean. **AC11 (CI green on both legs) is the only unsatisfied criterion and it needs hv's push.**
 
-**THE RENDERER IS NATIVE PDF, NOT CHROME, AND THAT IS THE WHOLE PROMOTION.** The reference needs headless Chrome at a hardcoded `/Applications/...` path and pulls JetBrains Mono from a CDN, so it runs on one platform, online, and nowhere else -- and neither CI leg has Chrome. Spiked the alternative before planning: a 794-byte hand-built stamp page (base-14 Courier-Bold, rotation in the text matrix, alpha via ExtGState) overlays correctly and measures **0.67% of pixels changed on a white page, 0.94% on a near-black one**. It also deletes the 96/72 px-to-pt trap outright, because the stamp is authored in points.
+**THE RENDERER IS NATIVE PDF AND THAT IS THE WHOLE PROMOTION.** The reference needed Chrome at a hardcoded `/Applications` path plus a CDN font; the stamp here is a hand-assembled 823-byte one-page PDF (base-14 Courier-Bold, rotation in the text matrix, alpha via ExtGState). `qpdf --check` finds no syntax errors, so the xref is byte-exact and nothing is being silently repaired. Offsets are MEASURED with `wc -c` per object, never summed from `${#s}`, which counts characters and would shift every entry on a non-ASCII recipient.
 
-**MY OWN SPIKE PRODUCED THE MEASUREMENT DEFECT THIS THREAD IS ABOUT.** The first visibility check counted pixels differing anywhere on the page and called the **underlay** build -- the one that must be invisible -- visible at 0.30%. Diagnostic: 468 differing pixels, one per row across 468 of 469 rows, every delta exactly 83. A single-pixel column down the page edge, a rasteriser seam, not the mark. **A whole-page pixel-diff greens the wrong verb.** AC02 and AT01 are written to crop to the centre band before counting, and AT02 keeps the underlay control as a test that can go red.
+**FOUR DEFECTS FOUND, THREE OF THEM IN CHECKS RATHER THAN IN BEHAVIOUR. Full write-up is in ST0011's Context.**
 
-**Open and hv's, not mine to decide:** the reference stamps **in place** by default, which is safe in Lamplight only because the originals regenerate. `design.md` 2.1 proposes inverting it (out-dir default, explicit `--in-place`) and AC03 is written against the proposal; it moves with hv's ruling rather than being quietly dropped.
+- **The mixed-geometry guard was DEAD, here and in the reference.** `pdfinfo` prints `Page    1 size:`; the reference matches `/page *[0-9]+ size:/`, lowercase, and awk is case-sensitive. Zero matches, `wc -l` returns 0, and the caller's `${varied:-1}` reads that zero as "one geometry, carry on". Caught only because AT05 asserts its own fixture really carries two geometries first -- my first fixture built one by ROTATING a page, which does not change what `pdfinfo` reports, so the guard was handed a uniform file and the test passed on a refusal that never happened. Reported to `lamplight-ac`.
+- **The size solve ignored page height, and the obvious case hides it.** On A4 a 3-char name goes to 263pt, whose bbox exceeds the page arithmetically and lands NO ink in the margins, because glyph ink is inset from the em box -- so an A4 fit check passes a wrong formula. On 1440x810 the same name goes to 636pt and puts 2761 ink pixels in the top/bottom margins. Both axes constrained now.
+- **My source-guard made the shipped tool a silent no-op.** `STAMPZ_SOURCE_ONLY` is inherited by children: with it exported, `stampz <pack> <recipient>` did nothing and **exited 0**. Now `[[ "${BASH_SOURCE[0]}" == "${0}" ]]`, self-detecting and unsettable from outside. Caught because the tests assert on output files, not on the exit code -- and the exit code was the wrong thing.
+- **`poppler` is a PACKAGE, not a command.** doctor resolves deps with `command -v`, so declaring `poppler` was a permanent false red on a machine that had it. Declared `pdfinfo` and `pdftoppm`; AT09 now asserts every declared dep is a real command name.
 
-**ST0010 -- my build side is all landed; vc owns the remainder.** Gate at 16/20 (AC15, AC16, AC18, AC19 outstanding). Untouched today.
+**A false claim reached a code comment before I caught it.** The first fit check hand-parsed the PGM header by skipping a guessed twelve fields and miscounted header bytes as pixels, reporting "6 ink pixels in the margins" for a mark that fits. That reading became the stated justification for a real fix. The fix was right and its reason was invented by a broken instrument. Every visibility check now renders the SAME crop of two files and compares byte for byte, so headers match by construction and nothing parses them.
+
+**Three controls proven red-first, patch-landed-then-red, never reasoned about:** `--underlay` for `--overlay` reddens AT01; the reference's lowercase pattern reddens AT05; the width-only solve reddens AT03's wide-page case.
+
+**I CHANGED A FILE IN vc's THREAD.** `opt/prez/test/prez.bats` asserted `"14 utilities"` and stampz is the fifteenth, so adding a utility reddened prez's suite. Bumping 14 to 15 moves the landmine to the next utility, so the count is now derived from `utilz list` -- the same idiom CI's macOS leg uses. prez is green again across all three suites (12 acceptance, 0 skipped). Told vc.
+
+**ST0010 -- untouched today.** Gate still 16/20; vc owns the remainder.
 
 ## TODO
 

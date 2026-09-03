@@ -29,9 +29,12 @@ jobs:
 
     - name: Install dependencies
       run: |
-        # Install yq for YAML parsing, python3-venv for pdf2md/xtrct, unison for syncz bidi
+        # Install yq for YAML parsing, python3-venv for pdf2md/xtrct, unison for syncz
+        # bidi, qpdf + poppler-utils for stampz (pdfinfo, pdftoppm, pdftotext).
+        # stampz's suite SKIPS with a named reason when those are absent, so
+        # installing them here is what keeps the skip path off CI's path.
         sudo apt-get update
-        sudo apt-get install -y jq python3-venv unison
+        sudo apt-get install -y jq python3-venv unison qpdf poppler-utils
         sudo wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O /usr/bin/yq
         sudo chmod +x /usr/bin/yq
         yq --version
@@ -54,7 +57,13 @@ jobs:
     - name: Run tests (excluding platform-specific utilities)
       run: |
         # Run all tests except macoz (macOS-only) and clipz (clipboard unreliable in CI)
-        for utility in utilz cryptz gitz mdagg retry syncz pdf2md xtrct lnrel todo expz; do
+        # NOTE THE ASYMMETRY, which is a known defect and not a style choice:
+        # this roster is hardcoded while test-macos derives its own from
+        # `utilz list`, so a new utility is covered there for free and must be
+        # added HERE by hand or it goes untested on this leg with nothing
+        # reporting the gap. stampz (ST0011) was added on 2026-09-03. Fixing
+        # the roster is its own change; this line is the toll until then.
+        for utility in utilz cryptz gitz mdagg retry syncz pdf2md xtrct lnrel todo expz stampz; do
           echo "Testing: $utility"
           utilz test $utility || exit 1
         done
@@ -78,8 +87,9 @@ jobs:
 
     - name: Install dependencies
       run: |
-        # Install yq for YAML parsing, fileicon for macOS folder icons, unison for syncz bidi
-        brew install yq fileicon coreutils unison
+        # Install yq for YAML parsing, fileicon for macOS folder icons, unison for
+        # syncz bidi, qpdf + poppler for stampz
+        brew install yq fileicon coreutils unison qpdf poppler
         yq --version
         fileicon --version || echo "fileicon installed"
 

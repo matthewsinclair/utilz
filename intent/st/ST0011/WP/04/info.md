@@ -2,7 +2,7 @@
 wp_id: WP-04
 title: Test suite and fixtures
 scope: S
-status: Not Started
+status: Done
 ---
 
 # WP-04: Test suite and fixtures
