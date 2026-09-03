@@ -14,25 +14,41 @@
 ## Synopsis
 
 ```bash
-cryptz [OPTIONS] [ARGS]
+cryptz encrypt <input> [output] [--email <address>]
+cryptz decrypt <input> [output]
 ```
 
 ---
 
 ## Description
 
-GPG encryption and decryption utility
+A thin, predictable wrapper over GPG for the two things you actually do with it: encrypt a file to a recipient, and decrypt one back. It decides the output filename for you unless you name one -- `encrypt` appends `.gpg`, `decrypt` strips it (or appends `.decrypted` when the input was not named `.gpg`) -- so the round trip needs no bookkeeping.
 
-Add more detailed description here.
+It is not a key manager. It creates no keys, imports none, and edits no GPG configuration; the recipient must already be in your keyring. `gpg` itself is a hard requirement and is reported by `utilz doctor`.
 
 ---
 
+## Commands
+
+| Command                    | Description                                                       |
+| -------------------------- | ----------------------------------------------------------------- |
+| `encrypt <input> [output]` | Encrypt a file to a recipient. Output defaults to `<input>.gpg`   |
+| `decrypt <input> [output]` | Decrypt a file. Output defaults to `<input>` with `.gpg` stripped |
+
 ## Options
+
+### Encrypt Options
+
+| Option              | Description                                              |
+| ------------------- | -------------------------------------------------------- |
+| `--email <address>` | Recipient key to encrypt to. Defaults to `$CRYPTZ_EMAIL` |
 
 ### General Options
 
-- `-h, --help` - Show help message
-- `--version` - Show version information
+| Option         | Description              |
+| -------------- | ------------------------ |
+| `-h`, `--help` | Show help message        |
+| `--version`    | Show version information |
 
 ---
 

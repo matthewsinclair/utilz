@@ -3,7 +3,11 @@ version: 1.0.0
 utilz_version: "^2.0.0"
 description: GPG encryption and decryption utility
 author: Matthew Sinclair
-dependencies: []
+dependencies:
+  - name: gpg
+    required: true
+    install: brew install gnupg
+    purpose: Encryption and decryption engine; cryptz calls require_command gpg on both paths
 
 integration:
   input: file

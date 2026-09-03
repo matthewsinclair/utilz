@@ -57,10 +57,9 @@ The stamp is assembled directly as a PDF using base-14 Courier-Bold. There is no
 | `--date <YYYYMMDD>` | Date carried in the mark (default: today, UTC)            |
 | `--colour <0..1>`   | Grey level of the mark (default: `0.5`)                   |
 | `--opacity <0..1>`  | Opacity of the mark (default: `0.30`)                     |
+| `--color <0..1>`    | Accepted spelling of `--colour`                           |
 | `-h`, `--help`      | Show help                                                 |
 | `--version`         | Show version                                              |
-
-`--color` is accepted as a spelling of `--colour`.
 
 ### Why the defaults are what they are
 

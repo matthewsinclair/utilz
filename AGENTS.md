@@ -6,10 +6,13 @@ This is the primary tool-agnostic config file for AI coding agents working on th
 
 Utilz -- an Intent project. See `CLAUDE.md` for the Claude-specific overlay.
 
+**Run `intent llm guide` before you start.** It prints the agent guide for the exact build you are standing on: every command this build ships, what each one is for, whether it reads or mutates, and whether it can be undone. It is generated from the tool rather than maintained by hand, so it cannot describe a command that is not there or omit one that is -- which is the failure a written command reference has whenever the tool moves and the document does not.
+
 ## Development Environment
 
 ### Prerequisites
 
+- Rust toolchain (see `Cargo.toml` for edition)
 - Bash or Zsh (see the project's own docs for the target version)
 - Bats testing framework
 
@@ -19,15 +22,27 @@ Utilz -- an Intent project. See `CLAUDE.md` for the Claude-specific overlay.
 intent doctor     # verify Intent configuration
 ```
 
+```bash
+cargo build
+```
+
 ## Build and Test Commands
 
 ### Test commands
+
+```bash
+cargo test
+```
 
 ```bash
 bats tests/
 ```
 
 ### Building
+
+```bash
+cargo build
+```
 
 ### Validation
 
@@ -38,6 +53,7 @@ intent st list      # list steel threads
 
 ## Code Style
 
+- Follow Rust conventions enforced by `cargo fmt`.
 - Shell scripts: 2-space indentation, POSIX-compliant where practical.
 - Markdown: no manual line wrapping; verblock frontmatter on persistent docs.
 - See `usage-rules.md` for the terse "DO / NEVER" contract.
@@ -83,7 +99,7 @@ The installed Intent tool's headless runner (`intent critic <lang>`, Greppable-p
 Four cross-language principles govern all Intent projects. Every language pack concretises them; the critics enforce them.
 
 - **Highlander** (`IN-AG-HIGHLANDER-001`) -- there can be only one; no divergent copies of the same concern.
-- **PFIC** (`IN-AG-PFIC-001`) -- Pure-Functional-Idiomatic-Coordination; pattern match, pipe, tag, compose.
+- **PFIC** (`IN-AG-PFIC-001`) -- Pure Function, Impure Coordination. Read it with `intent claude rules show IN-AG-PFIC-001`.
 - **Thin Coordinator** (`IN-AG-THIN-COORD-001`) -- coordinators parse to call to render; business logic lives elsewhere.
 - **No Silent Errors** (`IN-AG-NO-SILENT-001`) -- every failure surfaces; rescue-and-swallow is forbidden.
 
@@ -98,18 +114,6 @@ intent claude rules list        # enumerate
 intent claude rules show <id>   # inspect
 intent claude rules validate    # schema check
 ```
-
-## Extensions
-
-User extensions live at `~/.intent/ext/<name>/` and contribute subagents, skills, or rule packs without modifying canon.
-
-```bash
-intent ext list
-intent ext show <name>
-intent ext new <name>
-```
-
-Authoring guide: `intent/docs/writing-extensions.md` at the Intent install.
 
 ## Session Hooks
 

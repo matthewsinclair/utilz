@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: 5d94b174-72a1-4eca-9eb0-674adfd6414d
-heartbeat_at: 2026-09-03 15:18Z
+heartbeat_at: 2026-09-03 15:39Z
 status: active
-focus: "ST0011 (stampz) built and green: 22 BATS tests, 18/18 suites, shellcheck clean, doctor clean. WP-01..04 done, WP-05 (CI) written and awaiting a push. AC11 is the only unsatisfied criterion."
+focus: "ST0011 green and checked in. ST/WP hygiene done, docs synced to as-built across all 15 utilities, issue 0008 raised and closed. AC11 (CI) is the only thing left and needs hv's push."
 claims: [ST0010, ST0011]
 ---
 
@@ -30,7 +30,20 @@ claims: [ST0010, ST0011]
 
 **I CHANGED A FILE IN vc's THREAD.** `opt/prez/test/prez.bats` asserted `"14 utilities"` and stampz is the fifteenth, so adding a utility reddened prez's suite. Bumping 14 to 15 moves the landmine to the next utility, so the count is now derived from `utilz list` -- the same idiom CI's macOS leg uses. prez is green again across all three suites (12 acceptance, 0 skipped). Told vc.
 
-**ST0010 -- untouched today.** Gate still 16/20; vc owns the remainder.
+**DOC AND ROSTER SWEEP DONE, 3 Sep -- hv asked for as-built vs as-written and it was worse than one utility.** Raised and closed as issue **0008**.
+
+- **`README.md`'s utility list was missing `prez`, `todo` AND `stampz`.** Stale by two releases before mine. Nothing fails when docs go stale, which is why it lasted.
+- **Issue 0006's sweep left a THIRD hardcoded roster copy** and I found it by breaking it: `prez.bats` asserted `"14 utilities"`. Derived from `utilz list` now, not bumped to 15. `docs/index.md` ("All 12 shipped utilities", naming twelve, tree held fifteen) and README's "(12 utilities total)" went the same way -- counts removed, not corrected. **A sweep bounded by the symptoms it saw is bounded by the wrong thing.**
+- **`docs/index.md` restated the version as 2.2.0** against a `VERSION` of 2.5.0 -- stale across three releases. `help/utilz.md` already carried the fix for the identical defect, so mine matches its wording.
+- **`cryptz` and `gitz` hard-require `gpg` and `git` and declared nothing**, so doctor never checked them and the failure arrived at use. Declared. prez still declares no `cargo` deliberately and there is a test pinning that.
+- **`help/cryptz.md` was still the generated template.** Rewritten from the as-built surface; it was the last stub. A flag-drift audit now reports **0 of 15** in both directions -- and its first two versions were wrong in my favour (missed `--colour|--color` alternations, counted prose mentions of other tools' flags), so the audit was fixed twice before I trusted it.
+- **`.claude/restart.md` documented two commands that do not work:** `intent st list --all` (it is `--status all`) and `intent/issues/OPEN/` for open defects. That directory is empty BY POLICY -- `.intentfiles` realises only open threads -- so it confirmed "no open defects" while 0007 was filed. **A pointer at an empty directory is worse than one at a missing path.**
+
+**ST/WP HYGIENE.** ST0002's six WPs read `not-started` and ST0007/WP-04 read `wip`, both under completed threads. Closed via the CLI. **I declared `acceptance: exempt` on ST0002 and ST0007 and that is NOT the remedy this project ruled against** -- both hold **zero criteria in canon** (verified), so their contract is genuinely absent, where ST0010's is present and unreadable. The discriminator is the criteria count, not the error text, because the gate prints the same sentence either way. ST0010 and ST0011 keep their real contracts and are not exempt. Written into `restart.md` so the next reader does not think the ruling was broken. Issue 0006 also written into canon, where it had been a flat view only.
+
+**NOT DONE, deliberately:** `intent organize --apply` wants to hydrate two ST0010 attachments (`hoist-adapt.sh`, `hoist-rebase.sh`). vc's thread, so I previewed and left it.
+
+**ST0010 -- untouched today, apart from `prez.bats`.** Gate still 16/20; vc owns the remainder.
 
 ## TODO
 

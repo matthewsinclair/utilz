@@ -18,7 +18,7 @@ A DOING / TODO / DONE view, projected from steel-thread and work-package status:
   - [x] 03: Utility surface, manifest and guards
   - [x] 04: Test suite and fixtures
   - [-] 05: CI wiring on both legs
-  - [ ] 06: Docs and acceptance run
+  - [-] 06: Docs and acceptance run
 
 ## TODO
 
@@ -28,12 +28,12 @@ _(none)_
 
 - [x] ST0001: cleanz - LLM Text Cleaner Utility
 - [x] ST0002: Syncz - a simple directory-to-directory syncer
-  - [ ] 01: Steel Thread Docs & Scaffolding
-  - [ ] 02: Core Sync Implementation
-  - [ ] 03: Confirmation & Summary
-  - [ ] 04: Conflict Resolution & Extra Features
-  - [ ] 05: Tests
-  - [ ] 06: Documentation & CI
+  - [x] 01: Steel Thread Docs & Scaffolding
+  - [x] 02: Core Sync Implementation
+  - [x] 03: Confirmation & Summary
+  - [x] 04: Conflict Resolution & Extra Features
+  - [x] 05: Tests
+  - [x] 06: Documentation & CI
 - [x] ST0003: syncz --bidi mode and --confirm enhancement
 - [x] ST0004: xtrct - Semantic Data Extraction
   - [x] 01: WP/01: Scaffold & Metadata
@@ -52,7 +52,7 @@ _(none)_
   - [x] 01: YAML emacs metadata and template update
   - [x] 02: utilz emacs subcommand: commands, install, doctor
   - [x] 03: Elisp bridge static emacs utilz el
-  - [-] 04: End-to-end verification and user docs
+  - [x] 04: End-to-end verification and user docs
 - [x] ST0008: Add todo to utilz
   - [x] 01: Scaffold + core: parse, normalize, render, write, file-location, list/add
   - [x] 02: Mutation verbs: start, done, notdone, toggle

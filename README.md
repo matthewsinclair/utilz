@@ -30,7 +30,7 @@ Utilz/
 │   ├── clipz -> utilz
 │   ├── pdf2md -> utilz
 │   ├── lnrel -> utilz
-│   ├── ...                   # (12 utilities total)
+│   ├── ...                   # one symlink per utility (`utilz list`)
 │   ├── syncz -> utilz
 │   └── xtrct -> utilz
 ├── opt/
@@ -266,6 +266,26 @@ pdf2md invoice.pdf | xtrct --schema invoice_schema.json
 
 See `utilz help pdf2md` for details.
 
+### prez
+
+Markdown in, one self-contained HTML presentation out. A pipeline, not a viewer: it writes a file and stops, the browser presents, and there is no server. The single `.html` carries everything inside it, so a deck opens offline. The first Rust utility in the framework.
+
+```bash
+# Build a deck
+prez build talk.md
+
+# One slide per page, as PDF
+prez pdf talk.md
+
+# Present in a de-chromed window at the deck's own aspect
+prez present talk.md
+
+# Pick a built-in theme
+prez build --theme slate talk.md
+```
+
+See `utilz help prez` for details.
+
 ### retry
 
 Retry command until success with configurable wait time and max attempts.
@@ -279,6 +299,25 @@ retry --wait 5 --retries 3 "ping -c 1 google.com"
 ```
 
 See `utilz help retry` for details.
+
+### stampz
+
+Stamp a recipient watermark diagonally across every page of every PDF in a directory, so a pack handed to a named person carries their name. Writes a manifest recording the sha256 of every file before and after. Builds its own stamp page, so it needs no browser and no network.
+
+**This deters, it does not protect.** An overlay is strippable in seconds by anyone with a PDF tool. It marks a copy; it does not secure one.
+
+```bash
+# Stamp a pack; copies land in <pack-dir>.stamped
+stampz ~/packs/seriesA "Matthew Sinclair"
+
+# Stamp into a named directory, with an explicit date in the mark
+stampz ~/packs/seriesA "Matthew Sinclair" --out /tmp/ms --date 20260903
+
+# Overwrite the pack itself
+stampz ~/packs/seriesA "Matthew Sinclair" --in-place
+```
+
+See `utilz help stampz` for details.
 
 ### syncz
 
@@ -308,6 +347,28 @@ syncz --bidi --delete ~/dir1 ~/dir2
 ```
 
 See `utilz help syncz` for details.
+
+### todo
+
+A DOING / TODO / DONE manager for a plain-text `todo.md`. Refuses to clobber an Intent project's own `intent/todo.md`.
+
+```bash
+# Show the view
+todo
+
+# Add an item, or add it at the top
+todo add "write the thing"
+todo add --top "write the thing first"
+
+# Move things along
+todo start 3
+todo done 3
+
+# Archive completed items
+todo done --flush
+```
+
+See `utilz help todo` for details.
 
 ### xtrct
 

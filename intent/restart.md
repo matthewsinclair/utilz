@@ -6,14 +6,15 @@ verblock: "29 Aug 2026:v1.5: matts - globalfold after v2.5.0; prez shipped, ST00
 
 Cross-session continuity. `intent/wip.md` holds DOING and TODO; `intent/done.md` holds the record of what shipped. This file holds what the next session needs to know before it touches anything.
 
-## Key Context (as of 29 Aug 2026)
+## Key Context (as of 3 Sep 2026)
 
-- **Framework at v2.5.0, 14 utilities** (core `utilz` + 13 tools). `HEAD`, `local/main`, `upstream/main` and the `v2.5.0` tag are all at `72ee931`; CI green on all seven jobs (run `33265456630`).
+- **Framework at v2.5.0 with 15 utilities** (core `utilz` + 14 tools) -- `stampz` landed 3 Sep and the version has NOT been bumped, because releases and tags are hv's. The `v2.5.0` tag is at `72ee931`; `main` is ahead of both remotes and unpushed.
+- **ST0011 (`stampz`) is built and green but NOT closed.** 10 of 11 criteria satisfied; AC11 is CI-green-on-both-legs and cannot be satisfied until hv pushes. WP-01..04 done, WP-05 (CI wiring, written) and WP-06 (acceptance run) open.
 - **ST0010 (`utilz prez`) is shipped but NOT closed.** Gate 16/20; AC15, AC16, AC18, AC19 remain. AC16 is hv's by construction -- a human renders every built-in theme and looks -- and the suite is not allowed to stand in for it.
 - **`opt/prez/crate` is a FORK of the `_tools` pin, not a mirror.** AC14, AT13, AC18(b), AT17/AT19, AC19 and AC20 exist only here. **Never `tar -x` a new pin over it**: that deletes them silently, leaving a green build and a passing suite because the proving tests go too. Use `hoist-rebase.sh`, attached to ST0010, `--dry-run` first.
 - **`opt/prez/prez` is a shim, not the tool.** It resolves, rebuilds on staleness, and execs a Rust binary under `crate/`. `crate/` is INDIVISIBLE: `src/`, `themes/` and `assets/` are `include_str!` siblings and must keep their relative positions.
 - **Utilz carries ZERO knowledge of `Geodica/` or its `_tools`** (which moved to `~/Devel/prj/Gtools`). hv's standing ruling. Gtools is a consumer of prez, never the reverse. AT09's tripwire greps all of `src/` including comments for estate paths or names; it is in `test/`, so it cannot match itself.
-- `intent/issues/OPEN/` is empty. `0007` (slide-counter contrast) is filed and belongs to WP-05.
+- **`intent/issues/OPEN/` is empty BY POLICY and always will be, so do not read it as "no open defects".** `intent/.intentfiles` declares that only OPEN THREADS get a realised form on disk; no issue is ever written there, and the files under `intent/issues/CLOSED/` are v2 artefacts predating that policy. Use `intent issues list`. Open: `0007` (prez slide-counter contrast, WP-05). An empty directory confirms a false answer where a missing one would announce itself.
 - **The `intent` CLI is at `~/Devel/prj/Intent/bin/intent` and may not be on `PATH` in a fresh tool shell.** `INTENT_HOME` is inert for v3. No native binary is built, so every `intent` subcommand runs the bash implementation.
 
 ## The one instrument you cannot trust
@@ -27,6 +28,10 @@ grep -oE '^- AC[0-9]+ .*-- satisfied: [a-z]+' intent/st/ST0010/acceptance.md
 ```
 
 It also means `st done` / `wp done` will refuse on any thread here for a reason that has nothing to do with the thread.
+
+**`acceptance: exempt` WAS taken on two threads on 3 Sep, and that is not this case.** ST0002 and ST0007 completed before the v3 contract model and hold **zero criteria in canon** -- verified, not assumed -- so their contract is genuinely absent rather than present-and-unreadable. The gate blocked their work packages, `wp done` is declared only from `wip`, and Intent's own test suite calls exempt "the estate's own mechanism for a deliberately contract-free unit". Nothing further will ever be closed under those two threads, so there is no future pass to hide.
+
+**The distinction that matters is the count of criteria, not the wording of the error.** The gate prints the same sentence either way. Before declaring exempt on anything, read `criteria` out of `intent/.canon/st/<ID>.json`: zero means the contract was never written, and any other number means the reader is broken and exempt would bury a real contract. ST0010 and ST0011 both carry real contracts and are deliberately NOT exempt.
 
 **And the reason this survived a full day of use is worth more than the defect.** This project's boards read "Gate 0/20 BLOCKED, which is correct" for hours, and that reading was reasonable: a broken reader returning zero is indistinguishable from a true zero at exactly the moment a validation node first looks, when nothing has been proven yet. The tell only appears once real greens exist to be miscounted. **A zero from an instrument you have never seen return non-zero is not a measurement.**
 
