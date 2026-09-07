@@ -16,6 +16,22 @@ _(not yet written)_
 
 _(not yet written)_
 
+## Work Packages
+
+| WP    | Title                                                                                                       | Size | Status      |
+| ----- | ----------------------------------------------------------------------------------------------------------- | ---- | ----------- |
+| WP-01 | Owned set and manifest: the file list, symlink target-string checksums, manifest write and check            | S    | Not Started |
+| WP-02 | utilz install: prefix from utilz.yaml, the three refusals, mode announcement, prez built at publish         | S    | Not Started |
+| WP-03 | utilz upgrade: the mirror refusal, and edited files reported and left alone                                 | S    | Not Started |
+| WP-04 | Runnable-install guards: utilz test refuses, the prez shim refuses to build, install reports its provenance | S    | Not Started |
+| WP-05 | AC01 end to end: the install runs with the source tree moved aside                                          | S    | Not Started |
+| WP-06 | The install library: owned set, predicates, prefix, manifest                                                | S    | Cancelled   |
+| WP-07 | utilz install -- publish a runnable install, with the gates                                                 | S    | Cancelled   |
+| WP-08 | utilz upgrade -- replace an install, preserving edits                                                       | S    | Cancelled   |
+| WP-09 | prez: build at publish, and refuse to build from an install                                                 | S    | Cancelled   |
+| WP-10 | utilz test refuses from an install tree                                                                     | S    | Cancelled   |
+| WP-11 | The explicit relink verb for the PATH symlinks                                                              | S    | Cancelled   |
+
 ## Acceptance
 
 Acceptance Criteria and Acceptance Tests are RENDERED into `acceptance.md`, which is a GENERATED VIEW -- a row authored there is discarded by the next sync. The contract is canon in this thread's model: change a state with the `intent ac` / `intent at` verbs, and mint or reword a row in `.canon/st/ST0014.json`, then `intent sync --to-store`. This cover never restates them.

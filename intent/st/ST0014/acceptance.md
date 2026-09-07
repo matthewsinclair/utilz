@@ -35,7 +35,7 @@ title: Make utilz insallable in to opt/ just like devbin
 
 ### Group AC06
 
-- AC06 The fifteen bin/ symlinks arrive as SYMLINKS pointing at utilz, not as dereferenced copies, and the manifest checksums each link's TARGET STRING rather than the file it resolves to. Checksumming the resolved file gives all fifteen the same hash, so a link retargeted at the wrong utility reads as intact. Fifteen symlinks and two real files (utilz, and the vendored devbin) -- measured, and the manifest's roll-call IS the owned set, so a count one high carries a phantom entry and one low leaves a file nothing checks. -- satisfied: no (computed)
+- AC06 The fifteen bin/ symlinks arrive as SYMLINKS pointing at utilz, not as dereferenced copies, and the manifest checksums each link's TARGET STRING rather than the file it resolves to. Checksumming the resolved file gives all fifteen the same hash, so a link retargeted at the wrong utility reads as intact. Fifteen symlinks and two real files (utilz, and the vendored devbin) -- measured. THE SYMLINKS ARE THE DISPATCH PREDICATE, NOT DECORATION: bin/utilz:183 dispatches only when -L "$UTILZ_HOME/bin/$UTIL_NAME" holds, so a utility whose symlink did not arrive does not dispatch at all AND the error path offers it as a typo, which sends the reader after a misspelling rather than a missing file. The manifest's roll-call IS the owned set, so a count one high carries a phantom entry and one low leaves a file nothing checks. Dispatch-predicate point found by cc. -- satisfied: no (computed)
 
 ### Group AC07
 
