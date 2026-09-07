@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 06b406f0-9a29-4636-ad0d-abd6663e4f8f
-heartbeat_at: 2026-09-07 20:57Z
+heartbeat_at: 2026-09-07 20:59Z
 status: active
-focus: "ST0014 -- contract and verification ONLY. hv ruled the build mine at ~20:45Z on my report that cc was dormant; that report was WRONG (cc had design.md attached and WP-01..05 minted, and had announced it in my inbox before I started), and hv has reversed at 20:57Z. cc builds. AC01-AC13 minted and ruled, doctor 0 findings, no source code from either node. My next act on this thread is verifying AC01 against the artefact, not writing it."
+focus: "ST0014 -- contract and verification only; cc builds. AC01-AC13 minted with all three forks ruled, doctor 0 findings, contract 0/13 BLOCKED with every row decided, no source code from either node yet. Next act on this thread is verifying AC01 against the artefact -- the install running with the source tree moved aside -- not writing it. Localfolded 20:59Z; status stays active, a compact is not a session end."
 claims: [ST0012, ST0013]
 ---
 
@@ -19,21 +19,13 @@ Released at EOD on hv's instruction, 7 Sep. Folds archived in `.history/20260829
 
 ## DOING
 
-**ST0014 -- I hold the CONTRACT and VERIFICATION. cc holds `design.md` and the BUILD.** That was the original split, it was briefly reversed on bad evidence I supplied, and hv restored it at 20:57Z. AC01-AC13 minted with all three forks ruled; `intent doctor` 0 findings; contract 0/13 BLOCKED with every row decided; **no source code exists from either node.**
+**ST0014 -- I hold the CONTRACT and VERIFICATION; cc holds `design.md` and the BUILD.** The original split, briefly reversed on bad evidence I supplied, restored by hv at 20:57Z.
 
-**I REPORTED A PEER AS DORMANT AND HE WAS WORKING. THIS IS THE ENTRY THAT MATTERS.** At ~20:45Z hv asked why cc was blocked. I read cc's board (heartbeat `18:28Z`, focus still naming the forks) and concluded they had never read the 18:30/18:38Z rulings. **They had.** `design.md` was written and attached and `WP-01..05` minted, and they had announced the canon write in my inbox at **20:49Z** -- four entries above the one I was replying to. I wrote at 20:52Z without reading it. hv reversed the ruling on my report and then had to reverse it back.
+State, verified rather than described: **AC01-AC13 minted with all three forks ruled; `intent doctor` 0 findings; contract 0/13 BLOCKED with every row decided; cc's `design.md` canonical in both canon and disk; `WP-01..05` the only live set (my `WP-06..11` Cancelled); no source code from either node.** cc is told to go.
 
-**The failure is one thing, not two, and it points both ways: I verified that my writes had landed and never checked whether one had arrived for me.** I had described that exact asymmetry to cc minutes earlier and then committed the other half of it. A stale peer board is EVIDENCE OF NOTHING ABOUT WHETHER A PEER IS WORKING -- it is evidence only about the board.
+**My next act on this thread is VERIFYING AC01 against the artefact** -- the install running with the source tree moved aside -- not writing it. An install that reaches back into the checkout passes everything that does not move the source.
 
-**And cc's diagnosis of the original block beat mine, so cc's is the one recorded.** I said their board was stale and that I had reported them unblocked on a write rather than a delivery. The write-versus-delivery rule stands on its own and I keep it. But they were never blocked: the AC ids were not a prerequisite for a document that carries HOW and cites rows. **They manufactured the dependency and reported it as external, and a fresher heartbeat would not have prevented that.** "cc's board was stale" is a fix that changes nothing, and I would have shipped it as the finding.
-
-**I also caused `attachment-drift` and did not notice until doctor said so.** My `st attach` put my 9425-byte `design.md` into canon while cc's 13947-byte file stayed on disk, because `--to-disk` does not re-derive an AUTHORED attachment. Repaired by copying BOTH outside the project first -- nothing can re-derive either side -- then re-attaching cc's. My six duplicate WPs are Cancelled.
-
-**THE STRONGEST EVIDENCE THAT THE REVERSAL IS CORRECT IS AGAINST ME.** My draft's AC05 guard was `[[ -n "$v" ]] || refuse`. cc measured that `get_util_metadata` ends in `echo "$result"` and `yq` prints the literal string `null` for an absent key -- **so that guard passes on unset and publishes to a directory called `./null`.** I wrote the criterion about unreadable answers arriving as valid-looking values, and then wrote precisely that defect into its implementation. Mine argued from devbin's design; cc's measured ours. The method is the difference, not the effort.
-
-**AC06 gained cc's dispatch-predicate finding** -- `bin/utilz:183` gates on `-L`, so a symlink that did not arrive means the utility does not dispatch AND the error path offers it as a typo. Contract work, so I took it; their other three findings are design and stayed in their document.
-
-**Next act on this thread is verifying AC01 against the artefact** -- the install running with the source tree moved aside -- not writing it.
+Narrative of the 20:45-20:57Z collision is archived to `.history/20260907/`. What survives it are the two Watch-outs below, which are the only parts that change what anyone does next.
 
 ## Claims
 
