@@ -122,7 +122,17 @@ The mode is announced before anything is written (AC10), and before the refusals
 
 ## D8. Telling the two trees apart at the prompt (AC12)
 
-`utilz version` reports which tree answered and what it was cut from: `installed 2.5.0 (<commit>) at <prefix>` against `source 2.5.0 at <root>`, discriminated by the manifest. Without it the two-tree arrangement is invisible in precisely the situation it exists for -- someone debugging behaviour cannot tell which copy produced it, and the version string is identical either way.
+`utilz version` adds one line saying which tree answered and what it was cut from, discriminated by the manifest:
+
+```
+utilz v2.5.0
+Universal utilities framework and dispatcher
+installed at /Users/matts/Devel/opt/utilz (5a15b81)
+```
+
+against `source at /Users/matts/Devel/prj/Utilz` for a checkout. Without it the two-tree arrangement is invisible in precisely the situation it exists for -- someone debugging behaviour cannot tell which copy produced it, and the version string is identical either way.
+
+**The manifest's filename lives in `common.sh` as `UTILZ_MANIFEST_NAME`, not in `install.sh`.** It is not install machinery: it is the discriminator between the two kinds of tree, and the RUNTIME needs it as much as the installer does -- `show_version` here, `run_tests`'s refusal for AC13, and the prez shim's install branch for AC09 all ask the same question. `install.sh` reads the constant from there rather than carrying a second copy, because a second answer to "which tree is this" is the one thing this thread cannot afford to have two of.
 
 ## D9. The PATH cutover is its own verb (AC11, AC16, WP-12)
 

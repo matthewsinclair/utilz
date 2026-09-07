@@ -261,11 +261,11 @@ _(no tests in this group)_
 
 ### Group AT14
 
-- AT14 `opt/utilz/test/install_manifest.bats` -- covers AC14 -- status: to-write -- Publish, then run pdf2md --version or whatever the cheapest venv-creating path is, then run the manifest check: it must report the install intact. Assert the .venv actually got created first, or the test passes by never exercising the case. Then edit an OWNED file and assert the same check DOES report that -- one leg without the other proves only that the check is silent.
+- AT14 `opt/utilz/test/install_guards.bats` -- covers AC14 -- status: to-write -- Publish, then run pdf2md --version or whatever the cheapest venv-creating path is, then run the manifest check: it must report the install intact. Assert the .venv actually got created first, or the test passes by never exercising the case. Then edit an OWNED file and assert the same check DOES report that -- one leg without the other proves only that the check is silent.
 
 ### Group AT15
 
-- AT15 `opt/utilz/test/install_e2e.bats` -- covers AC15 -- status: to-write -- Four legs. (1) publish to a temp prefix with a marker VERSION, leave the source in place, run <prefix>/bin/utilz version with UTILZ_HOME EXPORTED at the source: the divergence is ANNOUNCED on stderr and the SOURCE version comes back, because the ruling honours the inherited value. (2) the same call under env -u UTILZ_HOME: the marker comes back and stderr is SILENT. (3) UTILZ_HOME exported at the prefix ITSELF, which is the bats harness's own shape: no announcement, because the trees agree. (4) the announcement goes to STDERR and not stdout -- assert stdout is byte-identical to the unset run, or every caller parsing utilz output gains a line it did not have.
+- AT15 `opt/utilz/test/install_guards.bats` -- covers AC15 -- status: to-write -- Four legs. (1) publish to a temp prefix with a marker VERSION, leave the source in place, run <prefix>/bin/utilz version with UTILZ_HOME EXPORTED at the source: the divergence is ANNOUNCED on stderr and the SOURCE version comes back, because the ruling honours the inherited value. (2) the same call under env -u UTILZ_HOME: the marker comes back and stderr is SILENT. (3) UTILZ_HOME exported at the prefix ITSELF, which is the bats harness's own shape: no announcement, because the trees agree. (4) the announcement goes to STDERR and not stdout -- assert stdout is byte-identical to the unset run, or every caller parsing utilz output gains a line it did not have.
 
 ### Group AT16
 

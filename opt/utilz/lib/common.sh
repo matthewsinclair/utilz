@@ -140,6 +140,10 @@ show_version() {
     if [[ -n "$description" && "$description" != "null" ]]; then
       echo "$description"
     fi
+    # AC12: which tree answered, and what it was cut from.
+    if [[ "$util" == "utilz" ]]; then
+      utilz_tree_provenance
+    fi
   else
     echo "$util (version unknown - missing $util.yaml)"
     return 1
@@ -186,6 +190,30 @@ check_command() {
 expand_tilde() {
   local path="$1"
   printf '%s\n' "${path/#\~/$HOME}"
+}
+
+# The manifest's filename at an install root. It is NOT install machinery: it
+# is the discriminator between an install tree and a source tree, and both the
+# installer that writes it and the runtime that reports provenance need this
+# one name. install.sh reads it from here rather than carrying a second copy.
+UTILZ_MANIFEST_NAME="manifest.sha256"
+
+# Echo one line describing the tree utilz is running from, and what it was cut
+# from if it is an install.
+#
+# Without this the two-tree arrangement is invisible in precisely the situation
+# it exists for (AC12): the version string is identical either way, so someone
+# debugging behaviour cannot tell which copy produced it.
+utilz_tree_provenance() {
+  local manifest="$UTILZ_HOME/$UTILZ_MANIFEST_NAME"
+  local commit
+
+  if [[ -f "$manifest" ]]; then
+    commit=$(awk -F'\t' '$1 == "source-commit" { print substr($2, 1, 7); exit }' "$manifest")
+    printf 'installed at %s (%s)\n' "$UTILZ_HOME" "${commit:-unknown}"
+  else
+    printf 'source at %s\n' "$UTILZ_HOME"
+  fi
 }
 
 # Check if a required command is installed
@@ -706,6 +734,31 @@ _report_suite() {
 }
 
 run_tests() {
+  # AC13: the suite mutates $UTILZ_HOME/bin -- which is why it is not safe to
+  # run concurrently -- so from a runnable install it would rewrite the very
+  # files the manifest checksums, and the install would then report drift
+  # nobody caused. Refusing cannot corrupt anything.
+  #
+  # Re-checksumming after a run was rejected as the remedy: it makes the
+  # manifest re-bless whatever the run left behind, which is the refuse-then-
+  # bless failure. Devbin never meets this because their install cannot run.
+  #
+  # This is the FIRST thing run_tests does. A gate placed after any step that
+  # touches bin/ has already done the damage it exists to prevent.
+  if [[ -f "$UTILZ_HOME/$UTILZ_MANIFEST_NAME" ]]; then
+    error "utilz test cannot run from an install tree"
+    echo "" >&2
+    echo "  This tree is an install: $UTILZ_HOME" >&2
+    echo "" >&2
+    echo "  The suite mutates \$UTILZ_HOME/bin, so running it here would rewrite" >&2
+    echo "  the files the manifest checksums and the install would then report" >&2
+    echo "  drift that nobody caused." >&2
+    echo "" >&2
+    echo "  Run it from the Utilz SOURCE tree instead -- the checkout this" >&2
+    echo "  install was published from. An install ships no test suites." >&2
+    return 1
+  fi
+
   local target_util="${1:-}"
 
   echo -e "${BOLD}Utilz Test Runner${RESET}"

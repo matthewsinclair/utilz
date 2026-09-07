@@ -40,17 +40,50 @@ determine_utilz_home() {
   cd "$script_dir/.." && pwd
 }
 
-# Detect UTILZ_HOME from script location if not already set
+# THE HOME IS ALWAYS COMPUTED FROM $0, AND AN INHERITED UTILZ_HOME THAT NAMES A
+# DIFFERENT TREE IS ANNOUNCED AND THEN HONOURED. Behaviour preserved, silence
+# removed. See ST0014 design.md D12; ruled 2026-09-07.
+#
+# This block used to derive the home ONLY when the variable was unset, so a
+# published install invoked by its own absolute path silently ran whatever tree
+# UTILZ_HOME named. Measured 7 Sep against a prefix carrying a marker VERSION:
+# unset gave the marker, UTILZ_HOME=<source> gave the source, and nothing said
+# so. An ambient login-shell export makes that the NORMAL case, not the edge.
+#
+# Ignoring the variable was the obvious fix and it is wrong: it is load-bearing
+# in five places -- test_helper.bash:20 exports it for the whole bats suite,
+# prez.bats sandboxes a shim, common_lib.bats binds a temp home per test,
+# e2e-smoke.el documents `UTILZ_HOME=$PWD emacs -Q --batch`, and install.sh
+# binds it in a subshell to read a foreign tree's yaml. The variable is not the
+# defect; the silence is.
+#
+# Assigned before export: `export VAR=$(cmd)` reports export's status (0), so a
+# failure to resolve UTILZ_HOME would be swallowed and every later path built
+# from it would be silently wrong.
+UTILZ_HOME_DERIVED=$(determine_utilz_home) || {
+  echo "ERROR: Cannot determine UTILZ_HOME from $0" >&2
+  exit 1
+}
+
 if [[ -z "${UTILZ_HOME:-}" ]]; then
-  # Assigned before export: `export VAR=$(cmd)` reports export's status (0),
-  # so a failure to resolve UTILZ_HOME would be swallowed and every later
-  # path built from it would be silently wrong.
-  UTILZ_HOME=$(determine_utilz_home) || {
-    echo "ERROR: Cannot determine UTILZ_HOME from $0" >&2
-    exit 1
-  }
-  export UTILZ_HOME
+  UTILZ_HOME="$UTILZ_HOME_DERIVED"
+elif [[ "$UTILZ_HOME" != "$UTILZ_HOME_DERIVED" ]]; then
+  # Only pay for path normalisation when the cheap comparison disagrees: a
+  # trailing slash or a `..` segment is a different string and the same tree,
+  # and announcing that would be a false red on every invocation.
+  UTILZ_HOME_REAL=$(cd "$UTILZ_HOME" 2>/dev/null && pwd) || UTILZ_HOME_REAL="$UTILZ_HOME"
+
+  if [[ "$UTILZ_HOME_REAL" != "$UTILZ_HOME_DERIVED" ]]; then
+    # STDERR, never stdout. A caller parsing utilz output must not gain a line
+    # it did not have.
+    echo "utilz: UTILZ_HOME names a different tree than the one this script lives in." >&2
+    echo "  inherited: $UTILZ_HOME_REAL" >&2
+    echo "  this tree: $UTILZ_HOME_DERIVED" >&2
+    echo "  Honouring the inherited value. Unset UTILZ_HOME to run this tree." >&2
+  fi
 fi
+
+export UTILZ_HOME
 
 # Detect which utility was invoked
 INVOKED_AS="$(basename "$0")"

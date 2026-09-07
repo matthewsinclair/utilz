@@ -2,14 +2,41 @@
 wp_id: WP-04
 title: Runnable-install guards: utilz test refuses, the prez shim refuses to build, install reports its provenance
 scope: S
-status: Not Started
+status: Done
 ---
 
 # WP-04: Runnable-install guards: utilz test refuses, the prez shim refuses to build, install reports its provenance
 
 ## Objective
 
-_(not yet written)_
+The guards that only exist because our install RUNS. Devbin's install tree cannot run and therefore meets none of these; ours inverts that (D33), and every one of these rows is the cost of the inversion.
+
+## As built
+
+Four sites, 13 tests in `opt/utilz/test/install_guards.bats`.
+
+| Row  | Site                          | Guard                                                             |
+| ---- | ----------------------------- | ------------------------------------------------------------------- |
+| AC15 | `bin/utilz`                   | the home is ALWAYS derived from `$0`; a divergent inherited value is announced on stderr and then honoured |
+| AC12 | `common.sh` `show_version`    | one line saying which tree answered and what it was cut from      |
+| AC13 | `common.sh` `run_tests`       | refuses from an install, first thing, naming the source tree      |
+| AC09 | `opt/prez/prez`               | an explicit install branch that refuses to build, and ignores `CARGO_TARGET_DIR` |
+
+**`UTILZ_MANIFEST_NAME` moved to `common.sh`.** Three runtime sites now ask "is this an install" and the installer asks it too. The manifest filename is not install machinery; it is the discriminator between the two kinds of tree, and a second answer to that question is the one duplication this thread cannot afford.
+
+## The accident that had to become a decision
+
+AC09 was already satisfied and satisfied for the wrong reason. With no crate shipped, `prez_is_stale`'s `find` errors on every path, `2>/dev/null || true` swallows it, the empty result reads as "not stale", and the shim execs the binary. **A suppressed error standing in for a decision passes until somebody tidies the suppression away** -- and then a fresh install tries to build a crate that is not there. The branch is now explicit, keyed on the manifest at the shim's OWN tree root rather than `$UTILZ_HOME`, which may have been inherited and may name a different tree.
+
+## What red-first caught this time
+
+**Two of the thirteen were green before the code existed.** The `utilz test` manifest-verifies leg passed because an install ships no suites, so nothing ran and nothing was mutated -- true, but not the refusal it was written to measure. It stays as a regression guard on the exclusion with the reason recorded.
+
+**And one test of mine measured nothing at all.** The source shim's `CARGO_TARGET_DIR` leg was a grep over the file, which passes whether or not the variable is honoured. It is now behavioural: point the variable at an empty directory, take cargo off PATH, and the shim must reach for cargo rather than exec the crate-local binary. Proven to bite by injecting the regression.
+
+## Measured, not reasoned
+
+The AC15 defect reproduced independently before anything was built on it. A prefix carrying a marker VERSION: `env -u UTILZ_HOME` returns the marker, `UTILZ_HOME=<source>` returns the source version, and **this session's own shell already carries the export**, so the ambient case is the broken case rather than the edge.
 
 ## Acceptance
 

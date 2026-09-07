@@ -39,16 +39,37 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 CRATE_DIR="$SCRIPT_DIR/crate"
 MANIFEST="$CRATE_DIR/Cargo.toml"
 
-# CARGO_TARGET_DIR IS HONOURED, and this is not politeness -- it is the only
-# thing that makes "build this cold, in isolation" a lever that works.
+# THE INSTALL BRANCH, AND IT IS EXPLICIT ON PURPOSE (AC09, ST0014 design.md D5).
 #
-# The first cut hardcoded $CRATE_DIR/target. cargo honours the variable and the
-# shim did not, so the two disagreed about where the binary lives: a caller who
-# set it got their build directed into their chosen directory while the shim
-# went on resolving, freshness-checking and exec'ing the WARM one in the crate.
-# Measured -- CARGO_TARGET_DIR pointed at an empty temp dir, `prez build` wrote
-# a correct artifact, and that directory stayed EMPTY. Nothing failed and
-# nothing said the isolation had been ignored.
+# An install SHIPS the built binary and never builds one. The discriminator is
+# the manifest at the shim's OWN tree root -- not $UTILZ_HOME, which may have
+# been inherited and may name a different tree entirely.
+#
+# It has to be an explicit branch rather than an emergent one. Without it the
+# shim still refuses, and it refuses for the wrong reason: with no crate
+# shipped, prez_is_stale's `find` errors on every path, `2>/dev/null || true`
+# swallows the error, the empty result reads as "not stale", and the shim execs
+# the binary. It works, and it works by a suppressed error standing in for a
+# decision -- which passes until someone tidies the suppression away, and then
+# a fresh install tries to cargo build a crate that is not there.
+PREZ_TREE_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
+PREZ_INSTALL_MODE=0
+
+if [[ -f "$PREZ_TREE_ROOT/$UTILZ_MANIFEST_NAME" ]]; then
+  PREZ_INSTALL_MODE=1
+fi
+
+# CARGO_TARGET_DIR IS HONOURED IN A SOURCE TREE AND IGNORED IN AN INSTALL, and
+# neither half is politeness.
+#
+# Honouring it is the only thing that makes "build this cold, in isolation" a
+# lever that works. The first cut hardcoded $CRATE_DIR/target. cargo honours the
+# variable and the shim did not, so the two disagreed about where the binary
+# lives: a caller who set it got their build directed into their chosen
+# directory while the shim went on resolving, freshness-checking and exec'ing
+# the WARM one in the crate. Measured -- CARGO_TARGET_DIR pointed at an empty
+# temp dir, `prez build` wrote a correct artifact, and that directory stayed
+# EMPTY. Nothing failed and nothing said the isolation had been ignored.
 #
 # That is the shape AC17 exists to catch: _tools lost the same afternoon to it,
 # where devbin exported CARGO_TARGET_DIR unconditionally, their "cold" build ran
@@ -58,7 +79,17 @@ MANIFEST="$CRATE_DIR/Cargo.toml"
 #
 # test/acceptance.sh already resolved it this way, so the hardcode was also two
 # answers to one question with only one of them right.
-TARGET_DIR="${CARGO_TARGET_DIR:-$CRATE_DIR/target}"
+#
+# IGNORING it in an install is the same argument from the other side. An install
+# resolves its binary at a path fixed at publish time and has no crate to build,
+# so a caller who happens to carry the variable in their shell would send the
+# install looking somewhere it never wrote -- and the shim would then report a
+# missing binary in a tree that shipped one.
+if [[ $PREZ_INSTALL_MODE -eq 1 ]]; then
+  TARGET_DIR="$CRATE_DIR/target"
+else
+  TARGET_DIR="${CARGO_TARGET_DIR:-$CRATE_DIR/target}"
+fi
 BINARY="$TARGET_DIR/release/prez"
 
 # ============================================================================
@@ -92,6 +123,23 @@ prez_is_stale() {
 # finding with a remedy, never a bare `cargo: command not found` from inside a
 # subshell three frames down.
 prez_ensure_built() {
+  # AC09: an install refuses rather than falling back to a build. It ships the
+  # binary, has no crate, and reaching for cargo here would be reaching for a
+  # toolchain to compile source that was deliberately not published.
+  if [[ $PREZ_INSTALL_MODE -eq 1 ]]; then
+    if [[ -x "$BINARY" ]]; then
+      return 0
+    fi
+    error "prez: the installed binary is missing"
+    echo "" >&2
+    echo "  Expected: $BINARY" >&2
+    echo "" >&2
+    echo "  This tree is an install, which SHIPS the built binary and never" >&2
+    echo "  builds one -- it carries no crate to build from. Re-publish from" >&2
+    echo "  the Utilz source tree with 'utilz upgrade'." >&2
+    return 1
+  fi
+
   if ! prez_is_stale; then
     return 0
   fi
