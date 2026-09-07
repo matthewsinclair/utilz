@@ -253,7 +253,7 @@ _(no tests in this group)_
 
 ### Group AT12
 
-- AT12 `opt/utilz/test/install.bats` -- covers AC11 -- status: to-write -- Snapshot the filesystem outside the prefix before and after install and upgrade: unchanged. Specifically ~/.local/bin is untouched -- point a fixture link there and assert it is neither relinked nor removed. Implicit relinking mutates hv's environment.
+- AT12 `opt/utilz/test/relink.bats` -- covers AC11 -- status: to-write -- Snapshot the filesystem outside the prefix before and after install and upgrade: unchanged. Specifically ~/.local/bin is untouched -- point a fixture link there and assert it is neither relinked nor removed. Implicit relinking mutates hv's environment.
 
 ### Group AT13
 
@@ -269,7 +269,7 @@ _(no tests in this group)_
 
 ### Group AT16
 
-- AT16 `opt/utilz/test/install_guards.bats` -- covers AC16 -- status: to-write -- Run the verb against a fixture bin/ holding both link shapes -- absolute-to-own-name, and the relative-to-dispatcher shape ~/.local/bin/prez actually has. Assert: every link now resolves into the named tree; the odd-shaped one still dispatches; the verb REPORTS what it changed; a link pointing at neither tree is left untouched and reported as skipped. Then assert install and upgrade with no verb change NOTHING in that directory -- the AC11 half. One leg without the other proves only that something moved.
+- AT16 `opt/utilz/test/relink.bats` -- covers AC16 -- status: to-write -- Run the verb against a fixture bin/ holding both link shapes -- absolute-to-own-name, and the relative-to-dispatcher shape ~/.local/bin/prez actually has. Assert: every link now resolves into the named tree; the odd-shaped one still dispatches; the verb REPORTS what it changed; a link pointing at neither tree is left untouched and reported as skipped. Then assert install and upgrade with no verb change NOTHING in that directory -- the AC11 half. One leg without the other proves only that something moved.
 
 ---
 

@@ -1,0 +1,11 @@
+{
+  "schema": "intent/issue@3.0",
+  "number": 10,
+  "slug": "eight-utility-readmes-ship-hv-s-absolute-home-pa",
+  "title": "Eight utility READMEs ship hv's absolute home path into an install",
+  "status": "open",
+  "severity": "low",
+  "created": "2026-09-07",
+  "reporter": "Matthew Sinclair",
+  "body": "Eight `opt/*/README.md` carry a literal `/Users/matts/Devel/prj/Utilz`, two occurrences each, in a \"Development\" section pointing at where to edit the source:\n\n```\n1. Edit `/Users/matts/Devel/prj/Utilz/opt/stampz/stampz`\n4. Update help if needed: `/Users/matts/Devel/prj/Utilz/help/stampz.md`\n```\n\n`cryptz`, `clipz`, `expz`, `gitz`, `macoz`, `mdagg`, `retry`, `stampz`. The other seven READMEs are clean.\n\n**Found by ST0014/WP-05's end-to-end, not by reading.** READMEs are in the install's owned set, so a published install carries hv's home directory path in eight files. It is inert -- **zero CODE files in the owned set name any absolute home path**, which is what makes the install relocatable and is pinned by a test -- but it is someone's home directory shipping inside a distributable tree.\n\n**The generator is NOT the cause and does not need changing.** `opt/utilz/tmpl/README.tmpl` ships the literal string `$UTILZ_HOME` (lines 19, 53-56) and produces correct output today; the seven clean READMEs are the newer ones. This is historical drift from an older template, so the fix is a one-time edit of eight files and not a code change.\n\n**Do NOT add these eight to an exception list in `install_e2e.bats`.** The suite deliberately asserts the strict property over non-`.md` files instead, so that fixing one README does not require also remembering to prune a list -- an exception list rots the first time somebody does the right thing.\n"
+}

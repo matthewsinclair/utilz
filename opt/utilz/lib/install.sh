@@ -776,3 +776,154 @@ install_verb_upgrade() {
     success "upgraded to $(cat "$src/VERSION") ($commit) at $prefix -- $count paths"
   fi
 }
+
+# Echo the Utilz tree root that <link> points into, or return 1 if it points
+# somewhere else. Resolution follows the kernel's rule: a relative target is
+# resolved from the LINK's own directory, not from the caller's cwd.
+_install_link_root() {
+  local link="$1"
+  local target tdir root
+
+  target=$(readlink "$link") || return 1
+
+  if [[ "$target" == /* ]]; then
+    tdir=$(cd "$(dirname "$target")" 2>/dev/null && pwd) || return 1
+  else
+    tdir=$(cd "$(dirname "$link")" 2>/dev/null && cd "$(dirname "$target")" 2>/dev/null && pwd) || return 1
+  fi
+
+  # Every Utilz link, whatever its shape, lands in <root>/bin.
+  [[ "$(basename "$tdir")" == "bin" ]] || return 1
+  root=$(cd "$tdir/.." 2>/dev/null && pwd) || return 1
+
+  case "$(install_tree_kind "$root")" in
+    install | source) printf '%s\n' "$root" ;;
+    *) return 1 ;;
+  esac
+}
+
+install_usage_relink() {
+  cat <<'USAGE'
+Usage: utilz relink [--prefix DIR] [--bin-dir DIR]
+
+Repoint the PATH symlinks at a Utilz tree.
+
+  --prefix DIR   The tree to point at. Default: install.prefix
+  --bin-dir DIR  Where the links live. Default: ~/.local/bin
+
+Links that resolve into a Utilz tree are repointed; anything else is left
+alone and reported as skipped. install and upgrade NEVER do this implicitly.
+USAGE
+}
+
+# `utilz relink` -- the explicit PATH cutover (AC16).
+#
+# AC11 and AC16 are one policy from two sides: never implicitly, always
+# available explicitly. A --relink flag on install was rejected because a flag
+# becomes habitual, and habitual relinking is implicit relinking with a longer
+# spelling.
+install_verb_relink() {
+  local prefix=""
+  local bindir=""
+  local src="$UTILZ_HOME"
+
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      --prefix)
+        if [[ $# -lt 2 ]]; then
+          error "--prefix requires a DIR argument"
+          return 2
+        fi
+        prefix=$(expand_tilde "$2")
+        shift 2
+        ;;
+      --bin-dir)
+        if [[ $# -lt 2 ]]; then
+          error "--bin-dir requires a DIR argument"
+          return 2
+        fi
+        bindir=$(expand_tilde "$2")
+        shift 2
+        ;;
+      -h | --help)
+        install_usage_relink
+        return 0
+        ;;
+      *)
+        error "Unknown option: $1"
+        install_usage_relink >&2
+        return 2
+        ;;
+    esac
+  done
+
+  if [[ -z "$prefix" ]]; then
+    prefix=$(install_prefix_configured "$src") || return 1
+  fi
+  if [[ -z "$bindir" ]]; then
+    bindir="$HOME/.local/bin"
+  fi
+
+  case "$(install_tree_kind "$prefix")" in
+    install | source) ;;
+    *)
+      error "not a Utilz tree: $prefix"
+      echo "  relink points PATH symlinks at a tree that already exists. Publish" >&2
+      echo "  one with 'utilz install' first." >&2
+      return 1
+      ;;
+  esac
+
+  if [[ ! -d "$bindir" ]]; then
+    error "no such directory: $bindir"
+    return 1
+  fi
+
+  echo "relink: $bindir into $prefix"
+
+  local entry name target root newtarget
+  local changed=0 already=0 left=0
+
+  for entry in "$bindir"/*; do
+    [[ -L "$entry" ]] || continue
+    name=$(basename "$entry")
+
+    if ! root=$(_install_link_root "$entry"); then
+      # Not ours. Leaving it is the whole point of the row: a verb that
+      # quietly tidies what it was not pointed at is the same shape as a
+      # manifest check that re-blesses a file it refused.
+      echo "  skipped:   $name (not a Utilz link)"
+      left=$((left + 1))
+      continue
+    fi
+
+    target=$(readlink "$entry")
+
+    if [[ "$root" == "$prefix" ]]; then
+      echo "  unchanged: $name"
+      already=$((already + 1))
+      continue
+    fi
+
+    # WHICH FILE the link names is preserved. bin/utilz and bin/<name> both
+    # dispatch, because the dispatcher reads basename "$0", so choosing
+    # between them would be normalising a convention rather than relinking
+    # (design.md D9). ~/.local/bin/prez names the dispatcher and stays that
+    # way.
+    #
+    # What is NOT preserved is relative-ness, and it cannot be: a relative
+    # target names the OLD tree by construction, so a repoint has to rewrite
+    # it, and recomputing a relative path across a tree move is arithmetic
+    # that produces a silently broken link when it is wrong.
+    newtarget="$prefix/bin/$(basename "$target")"
+
+    ln -sfn "$newtarget" "$entry" || {
+      error "could not relink $name"
+      return 1
+    }
+    echo "  relinked:  $name -> $newtarget"
+    changed=$((changed + 1))
+  done
+
+  success "$changed changed, $already already correct, $left left alone"
+}

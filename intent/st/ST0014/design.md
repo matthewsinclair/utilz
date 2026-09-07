@@ -144,6 +144,10 @@ against `source at /Users/matts/Devel/prj/Utilz` for a checkout. Without it the 
 
 Measured baseline for WP-12: **sixteen links in `~/.local/bin`** resolve into the source tree -- all fifteen utilities plus `utilz` -- and exactly one of them is the odd one.
 
+**AS BUILT: WHICH FILE A LINK NAMES IS PRESERVED; ITS RELATIVE-NESS CANNOT BE.** `bin/utilz` and `bin/<name>` both dispatch, because the dispatcher reads `basename "$0"`, so choosing between them is normalising a convention rather than relinking -- `~/.local/bin/prez` names the dispatcher and stays that way. Relative-ness is a different case and the difference is not a preference: a relative target names the OLD tree by construction, so a repoint must rewrite it, and recomputing a relative path across a tree move is arithmetic that produces a silently broken link when it is wrong. The verb writes an absolute target and says so in its output.
+
+**A link that resolves into no Utilz tree is left alone and reported as skipped**, which is the row's whole point. The predicate is derived, not listed: resolve the link the way the kernel does, require its directory to be a `bin/`, and ask `install_tree_kind` about the parent. A name list would have to be maintained against the fifteen and would answer wrongly the day a sixteenth arrived.
+
 ## D10. What is shared with `emacs_install`, and what is not
 
 `emacs_install` already implements `--dest`, `--symlink`, `--force` and tilde expansion. **The tilde expansion is extracted and shared as of WP-01** -- `expand_tilde` in `common.sh`, called by `emacs_install --dest` and by `install_prefix_configured` (IN-AG-HIGHLANDER-001). The flag parsing follows when `install` needs it (WP-02).

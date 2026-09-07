@@ -2,14 +2,40 @@
 wp_id: WP-12
 title: utilz relink: the explicit PATH-symlink verb, and AC11's never-implicitly half
 scope: S
-status: Not Started
+status: Done
 ---
 
 # WP-12: utilz relink: the explicit PATH-symlink verb, and AC11's never-implicitly half
 
 ## Objective
 
-_(not yet written)_
+`utilz relink`: the explicit PATH cutover. AC11 and AC16 are one policy from two sides -- never implicitly, always available explicitly -- and this is the half the operator types.
+
+## As built
+
+`install_verb_relink` and `_install_link_root` in `opt/utilz/lib/install.sh`, a `relink` arm on the dispatcher's install branch, 8 tests in `opt/utilz/test/relink.bats`.
+
+```
+utilz relink [--prefix DIR] [--bin-dir DIR]
+```
+
+Every test uses a FIXTURE bin directory. Nothing here may touch the real `~/.local/bin`, which on this machine holds sixteen links into the checkout.
+
+## What is preserved, and the one thing that cannot be
+
+**Which file a link names is preserved.** `bin/utilz` and `bin/<name>` both dispatch, because the dispatcher reads `basename "$0"`, so choosing between them would be normalising a convention rather than relinking. `~/.local/bin/prez` names the dispatcher and stays that way.
+
+**Relative-ness cannot be preserved, and that is forced rather than chosen.** A relative target names the OLD tree by construction, so a repoint has to rewrite it; recomputing a relative path across a tree move is arithmetic that produces a silently broken link when it is wrong. The verb writes an absolute target and says so.
+
+## The predicate is derived, not listed
+
+A link is ours when it resolves -- the way the kernel resolves it, from the LINK's own directory -- into a directory named `bin` whose parent `install_tree_kind` calls an install or a source tree. A name list of the fifteen would have to be maintained, and would answer wrongly the day a sixteenth utility arrived.
+
+Anything else is left alone and reported as `skipped`, which is the row's whole point: a verb that quietly tidies what it was not pointed at is the same shape as a manifest check that re-blesses a file it refused.
+
+## The AC11 half, in the same file
+
+The last test snapshots the fixture bin directory around an install AND an upgrade and asserts nothing moved. One leg without the other proves only that something moved.
 
 ## Acceptance
 

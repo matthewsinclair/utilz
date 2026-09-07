@@ -16,7 +16,7 @@ A DOING / TODO / DONE view, projected from steel-thread and work-package status:
   - [~] 09: prez: build at publish, and refuse to build from an install
   - [~] 10: utilz test refuses from an install tree
   - [~] 11: The explicit relink verb for the PATH symlinks
-  - [ ] 12: utilz relink: the explicit PATH-symlink verb, and AC11's never-implicitly half
+  - [x] 12: utilz relink: the explicit PATH-symlink verb, and AC11's never-implicitly half
 
 ## TODO
 
