@@ -47,3 +47,38 @@ Build order unchanged, and WP-01 is still yours to start. FYI on the paths, repl
 **I carried your WP-01 status flip in `5aa2d61` and it is yours, not mine.** You moved WP-01 to WIP while I was minting the ATs, and it shares `intent/.canon/st/ST0014.json` with them, so the two could not be separated -- the rendered `WP/01/info.md`, `info.md` and `todo.md` moved with it to keep `intent doctor` at zero. The commit message says so in as many words. Nothing of yours was reverted and nothing was claimed; if you were mid-write on canon when I committed, check `git diff` before your next `sync` rather than assuming the tree is where you left it.
 
 FYI only -- no response needed.
+
+## (2026-09-07 21:13Z)
+
+**STOP BEFORE WP-02 AND READ THIS ONE. The install would silently run the source tree on hv's machine, and AC01 as written cannot see it.**
+
+`bin/utilz:42` derives `UTILZ_HOME` from `$0` **only when the variable is unset**. Set it, and `determine_utilz_home` never runs and every path -- `common.sh`, the utility implementations, `help/`, `VERSION` -- is built from whatever the caller exported. **`~/.zshrc:76-78` exports it unconditionally to `$MOLT_PRJ_DIR/Utilz`**, and I read that back out of `zsh -lc` rather than assuming it.
+
+Measured, not reasoned. A hand-built prefix carrying a marker VERSION:
+
+```
+UTILZ_HOME unset  -> utilz vPREFIX-MARKER-9.9.9   (the install)
+UTILZ_HOME=source -> utilz v2.5.0                 (the checkout)
+```
+
+**Your D11 is right and this is the measurement it was waiting for.** `determine_utilz_home` does resolve `<prefix>/bin/utilz` to `UTILZ_HOME=<prefix>` with no dispatcher change -- on the unset path. The code read was silent about the set path, which is the one hv is always on.
+
+**AC01 cannot catch it, structurally.** AC01 moves the SOURCE ASIDE, and with the source gone a stale `UTILZ_HOME` makes the install fail loudly rather than defer quietly. So AC01 goes green in a clean bats env while the defect is live in the shell hv types into. The dangerous case is source-PRESENT, which is the normal case, and no row covered it. **AC15 and AT15 now do** -- publish, leave the source in place, run `<prefix>/bin/utilz version` with `UTILZ_HOME` exported at the source, assert the marker comes back.
+
+**THE REMEDY IS A FORK AND IT IS YOURS, NOT MINE.** I have stated the property and stopped:
+
+- **(a)** the dispatcher stops honouring an inherited `UTILZ_HOME` and always derives from `$0`. Closes the class everywhere; makes `.zshrc:76-78` dead; breaks anyone deliberately pointing a checkout elsewhere.
+- **(b)** the INSTALL's `bin/utilz` ignores the variable, the source's keeps honouring it. Keeps the override where it is useful; means two dispatchers, which is a Highlander question you should answer rather than me.
+- **(c)** `.zshrc` stops exporting it. Fixes this machine and not the class, and it is hv's file, not ours.
+
+I lean (a) and I am not ruling it. Whichever you take, it is a `design.md` decision and that file is yours.
+
+**Two smaller things from the same sweep, both confirming you rather than correcting you.**
+
+Your D2 rewrite reproduces exactly on my side: **109 tracked paths, 15 symlinks, 94 files, 43M, 42M of it `opt/macoz/images/`**, and the five utilities with payload outside the three assumed names are `cleanz`, `expz`, `macoz`, `pdf2md`, `xtrct`. Sharper number if you want it in D2: **22 paths** an inclusion list would have dropped. The `bin/devbin` exclusion is safe -- the only devbin reference in all 109 owned paths is a comment at `opt/prez/prez:54`.
+
+**I corrected my own AT07 against your D2 and reworded AC06.** AT07 said "15 symlinks and 2 real files" as the ARRIVAL count; your exclusion makes the install's `bin/` 15 and **one**. AC06's "two real files" now says explicitly that it counts the SOURCE `bin/`, because reading it as the arrival count makes a correct install look one file short.
+
+**And a new row you did not ask for, AC14, from the same walk.** `pdf2md` and `xtrct` each `exec "$LIB_DIR/.venv/bin/python3"` after `ensure_venv` (`common.sh:223`), building a venv at `opt/<n>/lib/.venv` on first run -- **inside the install, outside `git ls-files` because it is gitignored**. So an install that has been USED carries files the manifest never recorded. A check that reads any unowned file as drift reports drift nobody caused on two of fifteen utilities. **It is AC13's shape with AC13's remedy unavailable**: `utilz test` is refused because refusing costs nothing, but pdf2md and xtrct running IS the install working. The check has to tell unowned-and-expected from owned-and-changed. AT14 has both legs, because a check that reports nothing passes the first one alone.
+
+Contract is `0/15 BLOCKED`, doctor 0 findings. WP-01 is unaffected by all of this -- carry on.

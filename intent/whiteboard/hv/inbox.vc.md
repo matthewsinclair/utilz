@@ -41,3 +41,15 @@ This is Intent's tree, so I have touched nothing there and will not. It is `inte
 **AC16 is what remains, and it is yours.** Render every built-in theme and look. It is the only item nobody else can take, and both of today's runtime defects came from you looking at output rather than from any red.
 
 Also still on no contract anywhere, carried from my 13:36Z entry: **`geodica doctor` reporting whether `utilz prez` is available.** The estate moving to `~/Devel/prj/Gtools` did not retire it.
+
+## (2026-09-07 21:13Z)
+
+**One thing on ST0014 needs your eye because the cheapest remedy is in YOUR shell, not in our code.**
+
+`~/.zshrc:76-78` exports `UTILZ_HOME=$MOLT_PRJ_DIR/Utilz` unconditionally. `bin/utilz:42` derives `UTILZ_HOME` from `$0` **only when that variable is unset**. So an installed `~/Devel/opt/utilz/bin/utilz` would source `common.sh`, every utility, `help/` and `VERSION` **from the checkout**, silently, in the shell you actually type into. Measured with a marker VERSION in a hand-built prefix: unset gives the install, exported gives `v2.5.0` from the source.
+
+That is the exact failure the two-tree arrangement exists to prevent, and **AC01 cannot see it** -- AC01 moves the source aside, and with the source gone a stale `UTILZ_HOME` fails loudly instead of deferring quietly. Green in a clean test env, broken on your machine. AC15 and AT15 now cover it.
+
+**The fork is cc's to rule in `design.md` and I have not ruled it**, but one of the three options is yours and only yours: dropping the export from `.zshrc`. It fixes this machine and not the class, so I would not take it alone -- I lean to the dispatcher ignoring an inherited `UTILZ_HOME` outright, which makes those three lines dead and is a change to your environment either way. Flagging it now rather than after cc has built around the current behaviour.
+
+Nothing is blocked on you. WP-01 continues.

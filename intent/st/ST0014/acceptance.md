@@ -35,7 +35,7 @@ title: Make utilz insallable in to opt/ just like devbin
 
 ### Group AC06
 
-- AC06 The fifteen bin/ symlinks arrive as SYMLINKS pointing at utilz, not as dereferenced copies, and the manifest checksums each link's TARGET STRING rather than the file it resolves to. Checksumming the resolved file gives all fifteen the same hash, so a link retargeted at the wrong utility reads as intact. Fifteen symlinks and two real files (utilz, and the vendored devbin) -- measured. THE SYMLINKS ARE THE DISPATCH PREDICATE, NOT DECORATION: bin/utilz:183 dispatches only when -L "$UTILZ_HOME/bin/$UTIL_NAME" holds, so a utility whose symlink did not arrive does not dispatch at all AND the error path offers it as a typo, which sends the reader after a misspelling rather than a missing file. The manifest's roll-call IS the owned set, so a count one high carries a phantom entry and one low leaves a file nothing checks. Dispatch-predicate point found by cc. -- satisfied: no (computed)
+- AC06 The fifteen bin/ symlinks arrive as SYMLINKS pointing at utilz, not as dereferenced copies, and the manifest checksums each link's TARGET STRING rather than the file it resolves to. Checksumming the resolved file gives all fifteen the same hash, so a link retargeted at the wrong utility reads as intact. THE SOURCE bin/ HOLDS FIFTEEN SYMLINKS AND TWO REAL FILES (utilz, and the vendored devbin); THE INSTALL'S bin/ HOLDS FIFTEEN AND ONE, because D2 excludes devbin as not ours to publish -- verified 7 Sep, the only devbin reference in the 109 owned paths is a comment at opt/prez/prez:54. Read the source count as the arrival count and a correct install looks one file short. THE SYMLINKS ARE THE DISPATCH PREDICATE, NOT DECORATION: bin/utilz:183 dispatches only when -L "$UTILZ_HOME/bin/$UTIL_NAME" holds, so a utility whose symlink did not arrive does not dispatch at all AND the error path offers it as a typo, which sends the reader after a misspelling rather than a missing file. The manifest's roll-call IS the owned set, so a count one high carries a phantom entry and one low leaves a file nothing checks. Dispatch-predicate point found by cc. -- satisfied: no (computed)
 
 ### Group AC07
 
@@ -64,6 +64,14 @@ title: Make utilz insallable in to opt/ just like devbin
 ### Group AC13
 
 - AC13 `utilz test` run against an INSTALL tree REFUSES, and names the source tree as where to run it. RULED by hv 2026-09-07. The suite mutates $UTILZ_HOME/bin -- which is why it is not concurrency-safe -- so from a runnable install it rewrites the very files the manifest checksums and the install reports drift nobody caused. Refusing cannot corrupt anything; re-checksumming after a run was rejected because it makes the manifest re-bless whatever the run left behind, which is devbin's refuse-then-bless failure. Devbin never meets this because their install cannot run. Found by cc. -- satisfied: no (computed)
+
+### Group AC14
+
+- AC14 (non-test) A file that NORMAL USE creates inside the prefix, and that the owned set does not name, is not drift. Two of fifteen utilities build a Python venv on first run -- pdf2md and xtrct each exec "$LIB_DIR/.venv/bin/python3" after ensure_venv (opt/utilz/lib/common.sh:223), at opt/<n>/lib/.venv, INSIDE the install and outside git ls-files because it is gitignored. So an install that has been USED carries files the manifest never recorded, and a check that reads any unowned file as drift reports drift nobody caused on two of fifteen utilities. THIS IS AC13'S SHAPE WITH AC13'S REMEDY UNAVAILABLE: utilz test is refused because refusing costs nothing, but pdf2md and xtrct RUNNING IS THE INSTALL WORKING (AC01), so the check must distinguish unowned-and-expected from owned-and-changed rather than refuse. Found by vc 7 Sep while verifying cc's D2 exclusion list; 22 paths across 5 utilities live outside opt/<n>/{<n>,<n>.yaml,README.md}, and these two are the pair that keep writing after install. -- satisfied: no
+
+### Group AC15
+
+- AC15 (non-test) AN INHERITED UTILZ_HOME MUST NOT MAKE AN INSTALL RUN THE SOURCE TREE. bin/utilz:42 derives UTILZ_HOME from $0 only when the variable is UNSET; when it is set, determine_utilz_home never runs and every path -- common.sh, the utility implementations, help/, VERSION -- is built from whatever the caller exported. MEASURED 7 Sep, not reasoned: a hand-built prefix carrying a marker VERSION answers 'utilz vPREFIX-MARKER-9.9.9' with the variable unset and 'utilz v2.5.0', the SOURCE tree's, with it exported. AND hv'S LOGIN SHELL EXPORTS IT -- ~/.zshrc:76-78 sets UTILZ_HOME=$MOLT_PRJ_DIR/Utilz unconditionally, confirmed by reading it out of zsh -lc. So the install would silently run the checkout for the one person the two-tree arrangement exists for. AC01 DOES NOT COVER THIS AND CANNOT: its test moves the SOURCE ASIDE, where a stale UTILZ_HOME makes the install fail loudly rather than defer quietly, so AC01 passes in a clean bats env while the defect is live in the shell hv actually types into. The dangerous case is source-PRESENT, which is the normal case. Found by vc 7 Sep, verifying cc's D11, which correctly records the determine_utilz_home reasoning as a code read rather than a measurement -- this is that measurement, and it says the code read was right about the unset path and silent about the set one. -- satisfied: no
 
 ### Group AT01
 
@@ -114,6 +122,14 @@ _(no criteria in this group)_
 _(no criteria in this group)_
 
 ### Group AT13
+
+_(no criteria in this group)_
+
+### Group AT14
+
+_(no criteria in this group)_
+
+### Group AT15
 
 _(no criteria in this group)_
 
@@ -171,6 +187,14 @@ _(no tests in this group)_
 
 _(no tests in this group)_
 
+### Group AC14
+
+_(no tests in this group)_
+
+### Group AC15
+
+_(no tests in this group)_
+
 ### Group AT01
 
 - AT01 `opt/utilz/test/install_e2e.bats` -- covers AC01 -- status: to-write -- Publish to a temp prefix, move the Utilz source tree aside, then run <prefix>/bin/utilz and a dispatched utility from it. Moving the source is the measurement; asserting files arrived is not.
@@ -197,7 +221,7 @@ _(no tests in this group)_
 
 ### Group AT07
 
-- AT07 `opt/utilz/test/install_manifest.bats` -- covers AC06 -- status: to-write -- Count the arrivals: 15 symlinks and 2 real files. Each of the 15 is -L and its readlink target string matches the source link. Then retarget one link at a different utility WITHOUT changing what it resolves to being a valid file, and assert the manifest check reports it. Checksumming the resolved file gives all 15 one hash and this case reads as intact.
+- AT07 `opt/utilz/test/install_manifest.bats` -- covers AC06 -- status: to-write -- Count the arrivals in the install's bin/: 15 symlinks and ONE real file, utilz. NOT two -- D2 excludes bin/devbin and bin/.devbin/ from the owned set, and AC06's 'two real files' counts the SOURCE bin/. Verified 7 Sep that the exclusion is safe: the only reference to devbin anywhere in the 109 owned paths is a comment at opt/prez/prez:54. Each of the 15 is -L and its readlink target string matches the source link. Then retarget one link at a different utility and assert the manifest check reports it: checksumming the resolved file gives all 15 one hash and this case reads as intact.
 
 ### Group AT08
 
@@ -222,6 +246,14 @@ _(no tests in this group)_
 ### Group AT13
 
 - AT13 `opt/utilz/test/install_guards.bats` -- covers AC13 -- status: to-write -- utilz test run with UTILZ_HOME at an install tree: refused, and the message names the SOURCE tree as where to run it. Then assert the install's manifest still verifies -- a refusal that ran anything first has already rewritten bin/.
+
+### Group AT14
+
+- AT14 `opt/utilz/test/install_manifest.bats` -- covers AC14 -- status: to-write -- Publish, then run pdf2md --version or whatever the cheapest venv-creating path is, then run the manifest check: it must report the install intact. Assert the .venv actually got created first, or the test passes by never exercising the case. Then edit an OWNED file and assert the same check DOES report that -- one leg without the other proves only that the check is silent.
+
+### Group AT15
+
+- AT15 `opt/utilz/test/install_e2e.bats` -- covers AC15 -- status: to-write -- Publish to a temp prefix with a marker VERSION, leave the source tree in place, and run <prefix>/bin/utilz version with UTILZ_HOME EXPORTED to the source tree. Assert the marker comes back. Running it with a clean env proves nothing -- that leg already passes today and is what makes this invisible. Pair it with the same call under env -u UTILZ_HOME so a fix that breaks the unset path is caught too.
 
 ---
 
