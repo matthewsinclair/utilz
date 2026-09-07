@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: caa8cc75-2476-437c-b48f-569234f336f9
-heartbeat_at: 2026-09-07 14:28Z
+heartbeat_at: 2026-09-07 16:24Z
 status: active
-focus: "Pickup 7 Sep. Nothing of mine in flight. Actioned vc's 14:22Z report: the no-seventh-copy tripwire was false-red and is corrected; ST0010 claim dropped, the thread is vc's."
+focus: "Localfold 7 Sep, holding for a compact. No claims, nothing in flight. ST0010 closed under this fold at 17:26 -- board re-read against it rather than committed stale. One item owed, and it now needs hv: the hoist-rebase AT13 postcondition against closed canon."
 claims: []
 ---
 
@@ -13,14 +13,25 @@ claims: []
 
 ## DOING
 
-**Nothing in flight.** ST0011 (`stampz`) closed 3 Sep at 11/11, CI run `33785732770` green on all seven jobs. Narrative archived to `.history/20260903/`; substance is in ST0011's Context and `intent/done.md`. **ST0010 is vc's** -- the stale `claims: [ST0010]` my header carried until this pickup is dropped, so the header and this text now agree.
+**Nothing in flight, and no claims.** ST0010 is vc's (17/20 as of their 7 Sep board); ST0011 closed 3 Sep. Today's session record is archived to `.history/20260907/` -- pickup, vc's inbox actioned, and the pre-commit-gate investigation whose durable half is in Watch-outs below.
 
 ## TODO
 
-- **WP-04 is vc's**, on hoist-green. WP-05 (polish), WP-06 (AC15 theme addressing split), WP-07 (possibly un-deferred: two consumers now blocked by prez keeping its browser list and determinism probe private -- vc has it with hv).
-- **`prez build examples/demo.md` warns `class 'escape' has no effect`** -- prez's own example ships a warning. vc's WP-05 note, deck content, not urgent.
-- **`chrome()` announces the harmless outcome and stays silent on the one that launches a browser.** vc's finding, 2026-08-29, RE-STATED HERE so its inbox entry can be archived without losing it. The refusal path prints `note: PREZ_TEST_BROWSER=... is not executable, so no browser is offered`; the resolve path prints nothing at all. That is the same asymmetry as a skip carrying a false reason, sitting in the function AC18 was implemented in. Fix is one `printf ... >&2` mirroring the note already there. vc offered it either way; ST0010 is vc's thread, so coordinate before touching it.
-- **`hoist-rebase.sh` carries one dead postcondition.** `post "test/acceptance.sh" "AT13: PASS" 0 ...` sets the minimum to ZERO and `post()` tests `-ge`, so it prints `ok` unconditionally -- including at a count of zero, which is the case it exists to catch. Redundant rather than a hole: two other checks cover AT13 and both go red. But it is the measures-nothing shape sitting inside the script that guards against silent loss. Fix is `0` -> `1` and a re-attach. **The hold reason is retired** -- vc confirmed the store is closed and `intent/.canon` is clean, so a re-attach writes into nobody's open transaction. Not done; no longer blocked.
+**Mine, unblocked, verified this session against the artefact.**
+
+- **`hoist-rebase.sh` carries one dead postcondition.** Extracted from canon and read: line 205 is `post "test/acceptance.sh" "AT13: PASS" 0 "AT13 (presence only)"`, and `post()` at line 193 tests `-ge`, so it prints `ok` at any count including the zero it exists to catch. **Redundant rather than a hole** -- line 204 covers block presence at min 1, and lines 222-229 count AT13's eight individual checks -- but it is the measures-nothing shape sitting inside the script that guards against silent loss. Fix is `0` -> `1` and a re-attach. The hold reason is retired. **ST0010 CLOSED at 17:26 on 7 Sep, so the re-attach now writes a closed thread's canon** -- that is a different proposition from the one this item was written under and needs hv's call before anyone touches it. The defect itself is unchanged and still real.
+
+**ST0010 CLOSED 7 Sep**, while this fold was being written (`f8c560f`). WP-04 and WP-07 Done; **WP-05 and WP-06 CANCELLED**. WP-06's work moved to **ST0013** (`prez theme addressing: split --theme, --theme-file and --theme-path`, Triage). **WP-05's did not move anywhere, and one of its two items now has no tracked home:**
+
+- **Issue `0007` (slide-counter contrast below 4.5:1 on dark) is still OPEN** and survives the cancellation, because an issue is a legitimate home on its own (hv, 2026-07-10). Fine.
+- **The `prez build examples/demo.md` warning `class 'escape' has no effect` is NOT an issue and was only ever carried by WP-05.** With WP-05 cancelled it is tracked nowhere -- prez's own example ships a warning and nothing now says so. **Either open an issue or accept it deliberately**; what it must not do is quietly leave the record in a cancellation.
+
+**ST0012** (estate file policy) and **ST0013** are vc's, both Triage.
+
+**Opportunistic, needs hv's call.**
+
+- **Em dashes, re-measured 7 Sep rather than carried.** All tracked files: 34 files / 201 occurrences. Excluding canon, `.history/`, closed issues and the crate (which moves with the pin): **27 files / 110 occurrences**, worst `usage-rules.md` (24) and `help/syncz.md` (21). **THREE OF THE 27 MUST NOT BE TOUCHED**: `opt/macoz/images/backgrounds/autumn-0{1,3}.png` are binaries where the byte sequence is coincidental, and `opt/cleanz/data/trope-indicators.txt` is a cleanz DETECTOR LIST -- the em dash there is the thing the utility hunts, so rewriting it breaks the utility. A blind `sed` over the sweep is a defect, not a tidy.
+- **The Emacs bridge ordering limitation has no tracked home.** `intent/wip.md` carries it as TODO citing issue 0009, but **0009 is CLOSED** having deliberately accepted the limitation (a loud refusal beats a silent write to the wrong file). wip.md proposes a third option the issue never weighed -- the elisp appending the path BEFORE extra flags, which would make both work. No open issue, no ST, so doc-before-code blocks it. hv opens an issue or cuts the item.
 
 ## Watch-outs
 
@@ -33,7 +44,14 @@ claims: []
 - **A test that only runs on a synthetic fixture is half a test.** Both AT17 probe defects surfaced the moment it was pointed at the shipped decks.
 - **Never pipe a command whose exit code is the assertion.** `$?` is the last stage's. Bit me twice today and vc twice.
 
-**This tree has THREE concurrent writers: me, `vc`, and `hv`.**
+**The commit gate, and the tooling that rewrites it (all measured 7 Sep).**
+
+- **THE PRE-COMMIT GATE IS NOW EXEC-LIVE, NOT A FROZEN COPY, AND THERE IS A PROVENANCE PROBE.** hv ran `intent claude upgrade --apply`; `.git/hooks/pre-commit.intent` went **20899 -> 7332 bytes** and is now `pre-commit-shim.sh` byte-identical. It holds no gate logic and `exec`s `$INTENT_HOME/lib/templates/hooks/pre-commit.sh` live, so the gate can no longer go stale. **`.git/hooks/pre-commit.intent --where`** prints pointer, root and the resolved gate path -- reach for it before ever asking which copy is running again. Verified by running the gate read-only: `guards: 4 ran, 0 skipped` and `critic gate: 2 of 2 declared language(s) enforced (shell rust)`. Roster (in the install, not the carrier): both whiteboard guards, `canon-ignore-guard`, `append-only-guard`.
+- **The advisory that led here was TRUE AND DID NOT MEAN WHAT IT LOOKED LIKE.** `intent doctor -v` reported the carrier stale by 16719 bytes; the obvious inference -- "so this repo runs August's guards" -- was wrong, because the carrier held no roster and delegated to the install. Chased it to the artefact rather than acting on the headline. **Doctor said so itself** (`not counted in the verdict`), which is the part worth keeping: an advisory is a finding someone already decided you do not owe anything for.
+- **`intent claude upgrade --apply` REWRITES `CLAUDE.md`, and in v3 there is NO FLAG TO DECLINE `.claude/settings.json`.** v2's `--skip-settings` was not carried; the verb's flags are `--apply` and `--force`. The 7 Sep run rewrote `CLAUDE.md` (+14/-3) and reversed its standing position on the four principles -- they are now restated in `CLAUDE.md` rather than pointed at, because `AGENTS.md` is the one file the Claude Code agent never receives. **The new text asserts a byte-identity drift test and the claim holds here**: `CLAUDE.md:32-35` and `AGENTS.md:101-104` are byte-identical, and the upgrade did not touch `AGENTS.md`. Verify it again after any future run rather than assume it.
+- **`intent/issues/{OPEN,CLOSED}/` on disk is a STALE RENDERING of canon.** Canon holds 9 issues; `OPEN/` is empty and `CLOSED/` holds only 0001-0006, while `intent issues show 0008`/`0009` both answer CLOSED. `intent doctor` counts canon and reports no skew, so nothing flags it. **Read issues with `intent issues list`, never with `ls`** -- the directory says zero open when 0007 is open.
+
+**This tree has THREE concurrent writers: me, `vc`, and `hv`.** **On 7 Sep all three were visibly modifying it at once** -- vc landing AT20 (`crate/test/acceptance.sh` + an untracked `at20-window-probe.mjs`), hv re-vendoring `bin/devbin` and `bin/.devbin/**`, and my own board. A `git add -A` from any of us sweeps the other two into the commit.
 
 - Commit with an explicit pathspec, never `-A` over the whole tree. A `git status` from earlier in a session is not a stable baseline; remotes and `bin/devbin` have both moved mid-session.
 - **`intent st attach` writes canon and regenerates views**, so it is not private when a peer has the store open. Check `git status -- intent/.canon` BEFORE attaching.
