@@ -67,14 +67,14 @@ Every flag takes its value either way: `--theme=simple` or `--theme simple`.
 
 `prez --help` is the **authoritative** flag reference: it is compiled into the binary beside the parser, so it cannot drift from what the tool actually accepts. This table is the guide.
 
-| Option           | Applies to   | Notes                                                               |
-| ---------------- | ------------ | ------------------------------------------------------------------- |
-| `-o, --out PATH` | build, pdf   | Default: beside the input with the extension swapped.               |
-| `--theme T`      | all          | A built-in name, a `.css` file, or a directory holding `theme.css`. |
-| `--watch`        | build        | Rebuild on every save. A failed rebuild is reported and survived.   |
-| `--paper WxH`    | pdf          | Page size in millimetres, eg `254x142.9` (the 16:9 default).        |
-| `--window WxH`   | present      | Window size in pixels. Default `1280x720`, the deck's own 16:9.     |
-| `--browser P`    | pdf, present | Drive this browser instead of probing.                              |
+| Option           | Applies to   | Notes                                                                                         |
+| ---------------- | ------------ | --------------------------------------------------------------------------------------------- |
+| `-o, --out PATH` | build, pdf   | Default: beside the input with the extension swapped.                                         |
+| `--theme T`      | all          | A built-in name, a `.css` file, or a directory holding `theme.css`.                           |
+| `--watch`        | build        | Rebuild on every save. A failed rebuild is reported and survived.                             |
+| `--paper WxH`    | pdf          | Page size in millimetres, eg `254x142.9` (the 16:9 default).                                  |
+| `--window WxH`   | present      | Window size in pixels. Default `1280x720`, the deck's own 16:9. Cold start only -- see below. |
+| `--browser P`    | pdf, present | Drive this browser instead of probing.                                                        |
 
 ---
 
@@ -216,6 +216,10 @@ A theme referencing anything outside the artifact -- `http://`, `https://`, a pr
 `present` opens a de-chromed window sized to the deck's own 16:9 -- `1280x720` by default, or whatever `--window WxH` says. Press `f` for fullscreen.
 
 It used to pass `--start-fullscreen` instead, which Chrome does not honour for an `--app` window on macOS and ignores **silently**: no warning, no error, nothing in the exit status. It came up windowed, in whatever shape the browser last remembered, and nothing said why. A flag nobody can observe working is worse than an honest key, so it is gone and `f` is advertised in the key bar.
+
+**IF CHROME IS ALREADY RUNNING, THE SIZE IS NOT prez's TO SET, AND THIS IS THE CASE YOU WILL USUALLY BE IN.** Chrome forwards a new launch into the instance you already have open and ignores `--window-size` on that path, so the window arrives carrying the geometry of the window already on screen -- whatever `--window` said. Measured: with a 1024x768 window open, `present --window 640x480` produced another 1024x768.
+
+This is Chrome's behaviour and prez cannot override it; no flag combination changes it. It is also, almost certainly, the original portrait window -- so the default in the row above reaches you on a cold start and not otherwise. **If the shape matters, quit Chrome first, or press `f` for fullscreen once the deck is open.** Documented rather than fixed because there is nothing here to fix: the alternative is a flag that silently means something different depending on what else you have open, which is the thing this page keeps refusing to ship.
 
 ---
 

@@ -1277,18 +1277,30 @@ WRAP
 
       # SAME PROFILE, still running. This is the launch that forwards.
       "$BIN" present "$at20second" --browser "$at20wrap" --window 640x480 >>"$WORK/at20-present.log" 2>&1
-      node "$HERE/at20-window-probe.mjs" "$AT20_PORT" 640 480 "forwarded" "$WORK/at20-before.urls" > "$WORK/at20-c2.out" 2>&1
+      # AC19(d), reworded 7 Sep: the forwarded window is EXPECTED to inherit.
+      # This asserted 640x480 and went red for a real reason -- Chrome forwards
+      # into the running instance and ignores --window-size. The criterion now
+      # says so, so the check asserts the MEASURED behaviour rather than the
+      # wish, and it can still go red: if a future Chrome starts honouring the
+      # flag on this path, the inheritance assertion fails and sends someone
+      # back to the criterion, which is the correct outcome rather than a
+      # silent improvement nobody notices.
+      node "$HERE/at20-window-probe.mjs" "$AT20_PORT" 1024 768 "forwarded" "$WORK/at20-before.urls" > "$WORK/at20-c2.out" 2>&1
       at20rc=$?
       sed -n 's/^/    /p' "$WORK/at20-c2.out"
       if [ "$at20rc" -eq 0 ]; then
-        ok "geometry applies on the FORWARDED path too -- AC19 is not cold-start-only"
+        ok "the forwarded window inherits the running instance's geometry, as AC19(d) documents"
       else
-        # A FINDING ABOUT prez's REACH, recorded as the answer to the question
-        # rather than swept into a bare red. If this fires, AC19(a) is true only
-        # of a cold start and the criterion needs rewording before it can be
-        # satisfied honestly.
-        bad "geometry did NOT apply on the forwarded path: AC19 is COLD-START-ONLY. This is the answer to utilz-cc's 29 Aug question and AC19 must be reworded before it can be satisfied"
+        bad "the forwarded window did NOT inherit -- AC19(d) describes behaviour this build does not have, so the criterion is now wrong and needs re-measuring"
       fi
+
+      # THE DOCUMENTATION CLAUSE IS PART OF THE CRITERION, SO IT IS CHECKED.
+      # AC19(d) requires the limit to be stated where a user meets it. A clause
+      # satisfied only by someone remembering to write the page is not
+      # satisfied; the whole point is that a user who passes --window and gets
+      # another size can find out why.
+      present "help/prez.md states the forwarding limit" "Chrome forwards a new launch" "$REPO/help/prez.md"
+      present "and says what to do about it" "quit Chrome first" "$REPO/help/prez.md"
     fi
 
     at20kill
