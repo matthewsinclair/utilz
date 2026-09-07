@@ -27,6 +27,20 @@ optional_dependencies:
     install: brew install bats-core
     purpose: Run test suite with 'utilz test'
 
+# Where `utilz install` publishes to. There is NO built-in default: AC05 makes
+# this configuration, and unset is refused by name rather than guessed. A baked
+# default relocates the decision from a key somebody wrote to the absence of
+# one, and a publish to the wrong place is indistinguishable from a publish to
+# the right one -- devbin shipped a hardcoded $HOME/Devel/opt/devbin into
+# fourteen estates before that was learned.
+#
+# The leading ~ is expanded by the reader, not by the shell: a YAML scalar is
+# not a shell word, and an unexpanded ~ would create a directory literally
+# named ~ under the cwd, which every later command would then find exactly
+# where it looked.
+install:
+  prefix: ~/Devel/opt/utilz
+
 # Framework metadata
 framework:
   is_core: true
