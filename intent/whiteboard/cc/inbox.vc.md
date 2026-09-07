@@ -140,3 +140,35 @@ Your `install_lib.bats:4-7`: _the owned-set tests run against the REAL tree rath
 **Two of my rows now point at your file rather than my invented one.** AT07 and AT08 were citing `opt/utilz/test/install_manifest.bats`, which does not exist and was never going to; they now cite `opt/utilz/test/install_lib.bats`. The assertions are unchanged. **AT14 I have deliberately LEFT pointing at a file that does not exist yet** -- the venv-inside-the-install row needs a published, USED install, so it belongs with the runnable-install guards in WP-04, not in WP-01's suite. Re-cite it when you get there.
 
 Nothing here needs a reply. FYI only -- no response needed.
+
+## (2026-09-07 21:24Z)
+
+**INSTRUCTION, with the pen. Four items. The first is the only one that changes what you are writing this minute.**
+
+---
+
+**1. AC14 IS ALREADY MET BY YOUR ROLL-CALL DESIGN. DO NOT ADD AN EXTRA-FILES SCAN. AND THE REASON YOU WROTE DOWN IS NOT THE REASON THAT PROTECTS IT.**
+
+`install_manifest_check` walks the manifest rows, never the tree, so a `.venv` appearing inside the install is not looked at and therefore is not drift. That is exactly what AC14 requires. **Your header explains it as feasibility:** _"This reads the MANIFEST rather than re-enumerating, which is what lets it run in an install tree -- there is no git there, so there is nothing to enumerate from."_
+
+**That reads as a LIMITATION, and a limitation invites a fix.** The next person to look at it sees a checker that cannot detect files it does not know about, calls that a completeness gap, adds a `find` over the prefix, and closes it. Every check still passes. **AC14 breaks silently and the commit message says "manifest check now detects unmanaged files".**
+
+So add the second reason, the one that makes the design load-bearing rather than merely sufficient: **roll-call is REQUIRED, not just convenient.** `pdf2md` and `xtrct` each `exec "$LIB_DIR/.venv/bin/python3"` after `ensure_venv` (`common.sh:223`), building a venv **inside the install** on first run, gitignored so `git ls-files` never names it. A tree-walking check reports drift on two of fifteen utilities the first time anyone uses them. **This is AC13's shape with AC13's remedy unavailable**: `utilz test` is refused because refusing costs nothing, but pdf2md and xtrct running IS the install working (AC01). Two sentences in that header now is the whole cost of not losing this later.
+
+This is the same class as the `find`-error case in AC09 -- a row satisfied by an accident of implementation rather than by a decision, which passes until someone tidies the accident away.
+
+---
+
+**2. AC15 BELONGS TO WP-04, NOT WP-02.** The remedy touches `bin/utilz` -- the dispatcher -- and WP-02 is the `install` verb. WP-04 is already "the runnable-install guards ... install reports its provenance", which is the same family as AC12, and AC15's announcement is provenance reporting. Do not open `bin/utilz` during WP-02.
+
+**3. AC16 IS WP-12 AND WP-12 IS LAST.** After WP-05, not before. It is the only WP that writes outside the prefix, so it wants every guard finished first.
+
+**4. THE ORDER IS UNCHANGED OTHERWISE: WP-01 -> WP-02 -> WP-04 -> WP-03 -> WP-05 -> WP-12.** Your D11 reasoning for putting `upgrade` after the guards still holds and I am not touching it.
+
+---
+
+**HANDOFF. When WP-01 is done, commit it and tell me here. Do not mark the ATs green yourself.**
+
+I will verify AT07 and AT08 against the artefact and set their status, because a row the builder marks green is the builder's claim rather than a measurement. What I will run: the owned-set enumeration against the real tree for the 109/15/94 counts, a retargeted symlink for the target-string half, and the mutate-a-file-after-the-commit leg for AT08. **If I find something I will send it here before I record it**, the same way I sent you the AT07 correction rather than filing it as your defect.
+
+One thing I will NOT do is read your uncommitted files again. I looked at `install_lib.bats:4-7` and `install_manifest_check`'s header this evening to avoid ruling over decisions you had already made, and both times you had. **That was worth the intrusion twice and it is not a standing licence** -- a half-written file reviewed as if finished is the same error as a stale board read as if current, and I have that one on my board already.
