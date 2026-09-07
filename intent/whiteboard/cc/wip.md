@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: caa8cc75-2476-437c-b48f-569234f336f9
-heartbeat_at: 2026-09-07 16:24Z
-status: active
-focus: "Localfold 7 Sep, holding for a compact. No claims, nothing in flight. ST0010 closed under this fold at 17:26 -- board re-read against it rather than committed stale. One item owed, and it now needs hv: the hoist-rebase AT13 postcondition against closed canon."
+heartbeat_at: 2026-09-07 16:51Z
+status: paused
+focus: "RELEASED at EOD 7 Sep. No claims, nothing in flight. The day ended on a history rewrite: main was scrubbed of a harness-injected Claude-Session trailer and force-pushed to both remotes, hv-authorised. Backup refs are LIVE and must not be deleted without hv."
 claims: []
 ---
 
@@ -43,6 +43,14 @@ claims: []
 - **A source-grep check can match itself.** A test grepped its own file via `include_str!` and failed forever, because it contains the word it looks for. Assert on the ARTIFACT instead.
 - **A test that only runs on a synthetic fixture is half a test.** Both AT17 probe defects surfaced the moment it was pointed at the shipped decks.
 - **Never pipe a command whose exit code is the assertion.** `$?` is the last stage's. Bit me twice today and vc twice.
+
+**The 7 Sep history rewrite, and the one setting that caused it.**
+
+- **`main` WAS REWRITTEN AND FORCE-PUSHED TO BOTH REMOTES ON 7 SEP, hv-AUTHORISED.** Ten commits (all `devbin` re-vendors, 1-6 Sep) carried a `Claude-Session: https://claude.ai/code/...` trailer injected by the Claude Code harness, which is forbidden by the global rule, `CLAUDE.md` and hv's standing directive. Bounded to `11ed17b..HEAD`, 50 commits, **messages only** -- HEAD tree `da1a98f` before and after, 50 commits in range both sides, and every tag untouched because they all precede the base. `main` went `b99cda3` -> `1357612`.
+- **THE KILL SWITCH IS `attribution.sessionUrl: false` IN `~/.claude/settings.json`, AND IT DEFAULTS TO TRUE.** It is a THIRD field beside `attribution.commit` and `attribution.pr`; setting a custom `commit` string does NOT suppress it, and neither does the deprecated `includeCoAuthoredBy`. Found by grepping the CLI binary's own schema: _"Whether to append the claude.ai session link to commits and PRs created from web or Remote Control sessions (default: true)."_ The ten that landed were all sweeps run through that path, which is why ordinary cc commits never carried one and nobody noticed for five days.
+- **`backup/pre-scrub-20260907` and `refs/original/refs/heads/main` are the ONLY surviving copies of the old messages. DO NOT DELETE THEM without hv.** Both local-only.
+- **`git cat-file -e` IS NOT THE TEST FOR WHETHER A SHA SURVIVED A REWRITE.** The old objects are still in the object database via those backup refs, so an existence check returns a FALSE GREEN for every orphaned hash -- it told me two dead SHAs were alive. The test is reachability: `git merge-base --is-ancestor <sha> main`.
+- **THIS IS NOT WRITTEN DOWN IN THE PROJECT YET.** It belongs in `intent/restart.md` as a convention that binds anyone working here, and `restart.md` is a globalfold file -- vc's, not mine. Flagged to hv at EOD; a copy on this board is the wrong permanent home for it.
 
 **The commit gate, and the tooling that rewrites it (all measured 7 Sep).**
 
