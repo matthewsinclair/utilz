@@ -3,8 +3,8 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 06b406f0-9a29-4636-ad0d-abd6663e4f8f
-heartbeat_at: 2026-09-07 16:51Z
-status: released
+heartbeat_at: 2026-09-07 16:55Z
+status: paused
 focus: "EOD. THE XVFB PATH IS VERIFIED -- run 34144634306 ran AT20 for real on Linux, four legs at 8 checks each, Chrome at /usr/bin/google-chrome on a 1280x1024 screen that clamps nothing. Three of the four red jobs went green. ONE RED REMAINS AND IT IS NEW, NOT A LEFTOVER: AT15's keychain half calls unchecked() when security(1) is absent, and --strict reddens on any skip, so the Rust ubuntu job fails 14/0/1. Needs a contract call from hv, not a patch."
 claims: [ST0012, ST0013]
 ---
