@@ -3,7 +3,7 @@ node: cc
 name: Control Claude
 role: control
 session_id: 221775b1-d498-41c0-b937-4d10094711a8
-heartbeat_at: 2026-09-07 22:08Z
+heartbeat_at: 2026-09-07 22:10Z
 status: active
 focus: "ST0014 BUILD COMPLETE AND HANDED OVER. vc HOLDS THE PEN, confirmed by hv at 2026-09-07 22:08Z -- I take instruction from them and start nothing on this thread without it. All six WPs Done across seven commits, 78 tests, 174 of 174 core, doctor 0 findings, and all sixteen ATs still to-write because setting them is vc's. Two items open with vc: the AC09-versus-AC11 reading, and whether a cp -a copy is an acceptable form for AC01's removed source. Nothing written to hv's estate."
 claims: [ST0014]
@@ -32,6 +32,22 @@ claims: [ST0014]
 **TWO THINGS ARE OPEN AND NEITHER IS MINE TO CLOSE.**
 
 - **AC09 versus AC11, flagged to vc at 21:36Z and still unanswered.** `cargo build --release` writes into the source tree's gitignored `opt/prez/crate/target/`, which is outside the prefix, and AC11 says the publish writes nothing outside it. I built on the reading that AC11 protects the operator's environment and their files, not the crate's own build output, because the other reading makes AC09 and AC11 unsatisfiable together. It is stated in `design.md` D7. If vc reads it the other way the remedy is `install_build_prez` building into a temp `CARGO_TARGET_DIR`: one function.
+  **THE ROLLOUT HAS A MANDATORY ORDER AND IT IS NOT THE OBVIOUS ONE. MEASURED 2026-09-07 22:10Z, NOT REASONED.**
+
+`~/.zshrc:76-78` exports `UTILZ_HOME` at the checkout unconditionally. Against a real relinked install carrying a marker VERSION:
+
+| Invocation                                            | What answers                          |
+| ----------------------------------------------------- | ------------------------------------- |
+| `UTILZ_HOME=<checkout> ~/.local/bin/utilz version`    | 4 lines stderr, then **the CHECKOUT** |
+| `UTILZ_HOME=<checkout> ~/.local/bin/cleanz --version` | 4 lines stderr, then **the CHECKOUT** |
+| `env -u UTILZ_HOME ~/.local/bin/utilz version`        | the marker, `installed at <prefix>`   |
+
+**The relink is a NO-OP IN EFFECT while the export stands** -- the announcement fires and the dispatcher then honours the inherited value, so sixteen links get repointed and every one of them goes on answering from the checkout. vc had this as a noise problem on their board; the measurement makes it blocking.
+
+**ORDER: remove `~/.zshrc:76-78`, THEN `utilz install`, THEN `utilz relink`.** hv and vc both told at 2026-09-07 22:10Z.
+
+**NO CODE CHANGE IS PROPOSED AND THAT IS DELIBERATE.** The obvious reaction is to quieten the announcement, and it is wrong: this is AC15 catching the exact case it was written for, on the run where it matters. Suppressing it would restore the silence the ruling removed, in the situation that motivated the ruling.
+
 - **NOTHING HAS BEEN WRITTEN TO hv's ESTATE AND NOTHING WILL BE WITHOUT THEM SAYING SO.** `install.prefix` is set, so `utilz install` with no arguments now targets `~/Devel/opt/utilz`; that directory does not exist. Creating it is a write outside this repo, and `utilz relink` afterwards would repoint sixteen links in `~/.local/bin`. Both are hv's to trigger, in that order.
 
 ## TODO
