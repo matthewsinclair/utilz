@@ -50,7 +50,8 @@
       "seq": 5,
       "title": "Default theme polish: basic but cool enough out of the box",
       "scope": "S",
-      "status": "not-started",
+      "status": "cancelled",
+      "status_reason": "Cancelled at hv's 7 Sep ruling, not abandoned. Its concrete half is already tracked as issue 0007 (the slide counter drops below the 4.5:1 contrast floor on dark slides), and this project's rule is that a tracked issue may drive a focused bugfix without a full steel thread. Its other half -- hv's 'basic but cool enough out of the box' -- is a taste goal with no acceptance criterion behind it on this thread, so it earns its own thread when hv wants it rather than sitting Not Started as a standing reproach on a thread that is otherwise finished.",
       "objective": "Default theme polish: prez's no-flag look brought to hv's 'basic but cool enough' without touching determinism or the contrast floor; every re-quoted figure cites selector + palette + commit. Sequenced LAST: a theme edit mid-validation invalidates the figures validation is busy citing.",
       "body": "",
       "preamble": ""
@@ -69,7 +70,7 @@
       "seq": 7,
       "title": "Expose theme determinism checking as a prez capability (deferred)",
       "scope": "S",
-      "status": "wip",
+      "status": "done",
       "objective": "DEFERRED, not blocking the hoist. A consumer with a GENERATED theme (the estate's brand, built from tokens.yaml) needs to re-check determinism on every regeneration, and today's drift check proves the CSS matches the tokens without proving the result is deterministic. The estate must NOT copy the probe -- two homes for one check is the drift this thread exists to remove -- and must not reach into prez's internal test/ directory, which is the coupling the hoist removed. Split by what each side actually needs: the ESTATE's risk is static (did regeneration put a preference query into the CSS?) and is answerable by a grep on the generated file alone, with no CCD, no Node and no dependency on prez internals -- that goes in _tools' cutover commit and is _tools-cc's. The RUNTIME question (does the computed palette agree under emulated light and dark) is the tool's, and prez should expose it as a first-class verb rather than as a test file. Scope, sequencing and the verb's name are open; mint ACs when it is picked up.",
       "body": "",
       "preamble": ""

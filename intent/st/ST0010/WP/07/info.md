@@ -2,7 +2,7 @@
 wp_id: WP-07
 title: Expose theme determinism checking as a prez capability (deferred)
 scope: S
-status: WIP
+status: Done
 ---
 
 # WP-07: Expose theme determinism checking as a prez capability (deferred)

@@ -2,7 +2,8 @@
 wp_id: WP-05
 title: Default theme polish: basic but cool enough out of the box
 scope: S
-status: Not Started
+status: Cancelled
+status_reason: Cancelled at hv's 7 Sep ruling, not abandoned. Its concrete half is already tracked as issue 0007 (the slide counter drops below the 4.5:1 contrast floor on dark slides), and this project's rule is that a tracked issue may drive a focused bugfix without a full steel thread. Its other half -- hv's 'basic but cool enough out of the box' -- is a taste goal with no acceptance criterion behind it on this thread, so it earns its own thread when hv wants it rather than sitting Not Started as a standing reproach on a thread that is otherwise finished.
 ---
 
 # WP-05: Default theme polish: basic but cool enough out of the box
