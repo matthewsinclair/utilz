@@ -15,7 +15,7 @@ A DOING / TODO / DONE view, projected from steel-thread and work-package status:
 
 ## TODO
 
-_(none)_
+- [?] ST0012: Estate file policy: what must be proved before a realised file is removed
 
 ## DONE
 
