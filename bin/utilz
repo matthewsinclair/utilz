@@ -150,8 +150,8 @@ if [[ "$INVOKED_AS" == "utilz" ]]; then
       generate_utility "$@"
       ;;
 
-    install)
-      # The install library is sourced HERE and nowhere else. Line 58 above
+    install|upgrade)
+      # The install library is sourced HERE and nowhere else. The block above
       # sources common.sh unconditionally for every one of the fifteen
       # utilities on every invocation; folding the install machinery in would
       # roughly double what cleanz parses in order to do something cleanz will
@@ -163,8 +163,12 @@ if [[ "$INVOKED_AS" == "utilz" ]]; then
       fi
       # shellcheck source=opt/utilz/lib/install.sh
       source "$UTILZ_HOME/opt/utilz/lib/install.sh"
-      shift  # Remove 'install' from arguments
-      install_verb_install "$@"
+      VERB="$COMMAND"
+      shift  # Remove the verb from arguments
+      case "$VERB" in
+        install) install_verb_install "$@" ;;
+        upgrade) install_verb_upgrade "$@" ;;
+      esac
       ;;
 
     integration)
@@ -252,6 +256,8 @@ EOF
         echo "  utilz test [utility]    - Run tests"
         echo "  utilz version           - Show version"
         echo "  utilz generate <name>   - Generate new utility"
+        echo "  utilz install           - Publish a runnable install"
+        echo "  utilz upgrade           - Replace an existing install"
         echo ""
         echo "Installed utilities:"
 

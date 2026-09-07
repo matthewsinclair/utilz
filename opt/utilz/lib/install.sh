@@ -261,7 +261,15 @@ install_manifest_write() {
     return 1
   }
 
-  rows=$(install_manifest_rows "$tree") || return 1
+  # Rows may be supplied by the caller: upgrade composes them so a file it
+  # declined to overwrite keeps its install-time row (install_manifest_rows_
+  # preserving). One writer either way -- the header is composed in exactly
+  # one place.
+  if [[ $# -ge 3 ]]; then
+    rows="$3"
+  else
+    rows=$(install_manifest_rows "$tree") || return 1
+  fi
 
   # NO generated-at timestamp. A timestamp makes two manifests of identical
   # bytes compare unequal, which turns the one instrument that reports drift
@@ -385,9 +393,12 @@ install_manifest_check() {
 # ============================================================================
 
 # Copy the owned set of <src> into <dst>, creating parents as it goes.
+# <skip> is an optional newline-separated list of owned paths to leave alone.
+# upgrade uses it for files edited in place (AC08); install never passes one.
 install_copy_owned() {
   local src="$1"
   local dst="$2"
+  local skip="${3:-}"
   local paths path target
 
   paths=$(install_owned_paths "$src") || return 1
@@ -399,6 +410,10 @@ install_copy_owned() {
 
   while IFS= read -r path; do
     [[ -n "$path" ]] || continue
+
+    if [[ -n "$skip" ]] && printf '%s\n' "$skip" | grep -qxF "$path"; then
+      continue
+    fi
 
     mkdir -p "$dst/$(dirname "$path")" || {
       error "could not create the directory for $path under $dst"
@@ -586,4 +601,178 @@ install_verb_install() {
   local count
   count=$(grep -c -v '^utilz-version	\|^source-commit	' "$prefix/$UTILZ_MANIFEST_NAME")
   success "installed $(cat "$src/VERSION") ($commit) at $prefix -- $count paths"
+}
+
+# Echo the manifest rows for <src>, except that any path listed in <preserved>
+# (newline-separated) keeps its row from <old_manifest> verbatim.
+#
+# A file the upgrade declined to overwrite keeps its INSTALL-TIME row, and the
+# two wrong answers are both worse in the same direction. Re-checksumming what
+# is on disk records the edit as canonical and the next check pronounces the
+# file intact -- the refusal still prints, and the evidence that made it
+# necessary is destroyed by the same pass. Writing the NEW source's checksum
+# claims a file was updated that was not. The install-time row leaves the
+# drift visible, which is the only one of the three that stays true.
+install_manifest_rows_preserving() {
+  local src="$1"
+  local old_manifest="$2"
+  local preserved="$3"
+  local rows row path old
+
+  rows=$(install_manifest_rows "$src") || return 1
+
+  if [[ -z "$preserved" ]]; then
+    printf '%s\n' "$rows"
+    return 0
+  fi
+
+  while IFS= read -r row; do
+    [[ -n "$row" ]] || continue
+
+    # The path is the third TAB-separated field; no owned path contains a tab.
+    path=${row##*$'\t'}
+
+    if printf '%s\n' "$preserved" | grep -qxF "$path"; then
+      old=$(awk -F'\t' -v p="$path" '$3 == p { print; exit }' "$old_manifest")
+      if [[ -n "$old" ]]; then
+        printf '%s\n' "$old"
+        continue
+      fi
+      # No old row for a path we chose to preserve means the manifest and the
+      # drift report disagree, which is a state neither can be trusted in.
+      error "preserved path has no row in $old_manifest: $path"
+      return 1
+    fi
+
+    printf '%s\n' "$row"
+  done <<< "$rows"
+}
+
+install_usage_upgrade() {
+  cat <<'USAGE'
+Usage: utilz upgrade [--prefix DIR] [--force]
+
+Replace an existing install with this Utilz checkout.
+
+  --prefix DIR  Upgrade the install here instead of install.prefix
+  --force       Overwrite files that were edited in place
+
+Files edited in place are REPORTED and left alone, and keep their install-time
+checksum so the next check still reports them. The source tree must be clean;
+no flag overrides that.
+USAGE
+}
+
+# `utilz upgrade` -- replace an install, preserving what someone edited.
+#
+# The mirror of install (AC04) plus the one behaviour install does not have.
+install_verb_upgrade() {
+  local prefix=""
+  local force=0
+  local src="$UTILZ_HOME"
+
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      --prefix)
+        if [[ $# -lt 2 ]]; then
+          error "--prefix requires a DIR argument"
+          return 2
+        fi
+        prefix=$(expand_tilde "$2")
+        shift 2
+        ;;
+      --force)
+        force=1
+        shift
+        ;;
+      -h | --help)
+        install_usage_upgrade
+        return 0
+        ;;
+      *)
+        error "Unknown option: $1"
+        install_usage_upgrade >&2
+        return 2
+        ;;
+    esac
+  done
+
+  if [[ -z "$prefix" ]]; then
+    prefix=$(install_prefix_configured "$src") || return 1
+  fi
+
+  local state kind commit
+  state=$(install_tree_state "$src")
+  kind=$(install_tree_kind "$prefix")
+  commit=$(git -C "$src" rev-parse --short HEAD 2>/dev/null) || commit="none"
+
+  install_announce "upgrade" "$src" "$state" "$commit" "$prefix" "$kind"
+
+  case "$state" in
+    dirty)
+      error "source tree is dirty: $src"
+      echo "  The manifest records the commit the bytes came from, and that is" >&2
+      echo "  only true when nothing is uncommitted. There is no flag for this" >&2
+      echo "  one. Commit or stash first." >&2
+      return 1
+      ;;
+    unknown)
+      error "cannot establish provenance: $src is not a git repository"
+      return 1
+      ;;
+  esac
+
+  if [[ "$kind" != "install" ]]; then
+    error "no install at $prefix"
+    echo "  Use 'utilz install' to publish one. upgrade replaces an install" >&2
+    echo "  that is already there; it will not create the first one, because" >&2
+    echo "  there would be nothing to preserve and nothing to report." >&2
+    return 1
+  fi
+
+  # The drift is computed BEFORE anything is written. A report taken after the
+  # copy would describe the tree the copy just made, not the one someone edited.
+  local drift check_rc=0
+  drift=$(install_manifest_check "$prefix") || check_rc=$?
+
+  if [[ $check_rc -eq 2 ]]; then
+    error "the install at $prefix has a manifest this cannot read"
+    return 1
+  fi
+
+  local preserved="" reason path kept=0
+  if [[ $force -eq 0 && -n "$drift" ]]; then
+    while IFS=$'\t' read -r reason path; do
+      [[ -n "$path" ]] || continue
+      case "$reason" in
+        modified | retargeted | not-a-link | not-a-file)
+          warn "left alone ($reason): $path"
+          preserved="${preserved}${path}"$'\n'
+          kept=$((kept + 1))
+          ;;
+        missing)
+          # Nothing was authored there, so there is nothing to preserve. The
+          # copy restores it.
+          ;;
+      esac
+    done <<< "$drift"
+  fi
+
+  install_build_prez "$src" || return 1
+  install_copy_owned "$src" "$prefix" "$preserved" || return 1
+
+  local rows
+  rows=$(install_manifest_rows_preserving "$src" "$prefix/$UTILZ_MANIFEST_NAME" "$preserved") || return 1
+  install_manifest_write "$src" "$prefix/$UTILZ_MANIFEST_NAME" "$rows" || return 1
+
+  local count
+  count=$(grep -c -v '^utilz-version	\|^source-commit	' "$prefix/$UTILZ_MANIFEST_NAME")
+
+  if [[ $kept -gt 0 ]]; then
+    success "upgraded to $(cat "$src/VERSION") ($commit) at $prefix -- $count paths, $kept left alone"
+    echo "  The $kept file(s) above keep their install-time checksum, so the" >&2
+    echo "  next check still reports them. Re-run with --force to overwrite." >&2
+  else
+    success "upgraded to $(cat "$src/VERSION") ($commit) at $prefix -- $count paths"
+  fi
 }

@@ -7,7 +7,7 @@ A DOING / TODO / DONE view, projected from steel-thread and work-package status:
 - [-] ST0014: Make utilz insallable in to opt/ just like devbin
   - [x] 01: Owned set and manifest: the file list, symlink target-string checksums, manifest write and check
   - [x] 02: utilz install: prefix from utilz.yaml, the three refusals, mode announcement, prez built at publish
-  - [ ] 03: utilz upgrade: the mirror refusal, and edited files reported and left alone
+  - [x] 03: utilz upgrade: the mirror refusal, and edited files reported and left alone
   - [x] 04: Runnable-install guards: utilz test refuses, the prez shim refuses to build, install reports its provenance
   - [ ] 05: AC01 end to end: the install runs with the source tree moved aside
   - [~] 06: The install library: owned set, predicates, prefix, manifest

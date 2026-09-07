@@ -2,14 +2,42 @@
 wp_id: WP-03
 title: utilz upgrade: the mirror refusal, and edited files reported and left alone
 scope: S
-status: Not Started
+status: Done
 ---
 
 # WP-03: utilz upgrade: the mirror refusal, and edited files reported and left alone
 
 ## Objective
 
-_(not yet written)_
+`utilz upgrade`: the mirror of install (AC04) plus the one behaviour install does not have -- a file edited in place is reported, left alone, and keeps its install-time checksum so the drift stays visible.
+
+## As built
+
+`install_verb_upgrade` and `install_manifest_rows_preserving` in `opt/utilz/lib/install.sh`, an `install|upgrade` branch in `bin/utilz`, 10 tests in `opt/utilz/test/upgrade.bats`.
+
+Two refactors rather than two copies: `install_copy_owned` gained an optional skip list, and `install_manifest_write` accepts pre-composed rows. One copier and one writer, both shared with `install`, so the header is composed in exactly one place.
+
+## The row for a file that was left alone
+
+Three candidate values and only one of them stays true:
+
+| Value                       | What the next check then says              |
+| --------------------------- | -------------------------------------------- |
+| re-checksum of the edit     | intact -- the refuse-then-bless failure     |
+| the NEW source's checksum   | modified, but it lies about what was shipped |
+| **the install-time row**    | **modified, truthfully**                     |
+
+The test discriminates all three: the source is moved on between the install and the upgrade, so the install-time checksum, the edited checksum and the upstream checksum are three different values, and the row is asserted equal to the first and unequal to the other two. Without moving the source, the first and third coincide and the test cannot tell them apart.
+
+## Two decisions the drift report forced
+
+**`missing` is not drift to preserve.** Nothing was authored at a path that is not there, so the copy restores it. Only `modified`, `retargeted`, `not-a-link` and `not-a-file` are edits someone made.
+
+**The drift is computed BEFORE anything is written.** A report taken after the copy would describe the tree the copy just made, not the one someone edited -- the check-placed-before-the-thing-it-measures error with the arrow reversed.
+
+## A refusal with a reason rather than a shrug
+
+`upgrade` against an empty prefix names `install` (AT05), and says why it will not simply create one: there would be nothing to preserve and nothing to report, which is the whole of what upgrade adds.
 
 ## Acceptance
 
