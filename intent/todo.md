@@ -9,7 +9,7 @@ A DOING / TODO / DONE view, projected from steel-thread and work-package status:
   - [x] 02: utilz install: prefix from utilz.yaml, the three refusals, mode announcement, prez built at publish
   - [x] 03: utilz upgrade: the mirror refusal, and edited files reported and left alone
   - [x] 04: Runnable-install guards: utilz test refuses, the prez shim refuses to build, install reports its provenance
-  - [ ] 05: AC01 end to end: the install runs with the source tree moved aside
+  - [x] 05: AC01 end to end: the install runs with the source tree moved aside
   - [~] 06: The install library: owned set, predicates, prefix, manifest
   - [~] 07: utilz install -- publish a runnable install, with the gates
   - [~] 08: utilz upgrade -- replace an install, preserving edits
