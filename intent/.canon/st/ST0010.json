@@ -41,7 +41,7 @@
       "seq": 4,
       "title": "Validation: every carried green re-produced in the new home",
       "scope": "S",
-      "status": "wip",
+      "status": "done",
       "objective": "Validation in the new home: every carried green re-produced by instruments run HERE -- cargo test (111 at the pin), acceptance.sh --strict (10/0/0 at the pin), the probes, the liftability refusal, the standalone greps -- ATs walked to green through red where the lifecycle requires, and a coverage statement naming what was NOT checked. Two non-test gates land here by named evidence: AC16 (a human renders and LOOKS at every theme -- the automated suite provably cannot stand in for it) and AC17 (the binary under test built from a clean checkout of the pin, provenance recorded beside the numbers).",
       "body": "",
       "preamble": ""
@@ -59,7 +59,8 @@
       "seq": 6,
       "title": "Theme addressing split + --theme-path (hv's CLI asks)",
       "scope": "S",
-      "status": "not-started",
+      "status": "cancelled",
+      "status_reason": "Moved to ST0013 with AC15 at hv's 7 Sep re-scope. The theme addressing split is that thread's whole subject; leaving a stub here would be a second home for one piece of work.",
       "objective": "hv's CLI asks: --theme-path (a CLI door prepending to PREZ_THEME_PATH -- the resolver already speaks split_paths), and the addressing split (--theme names-only, --theme-file paths-only, front matter theme:/theme-file:, split refusals, --theme=./x.css refused). AT14 goes red against the pinned binary before any code. Sequenced after WP-04 so the carried contract is proven before the surface moves; announce-on-resolve (AC14) lands here, where theme.rs is already open.",
       "body": "",
       "preamble": ""
@@ -192,7 +193,9 @@
       "text": "Theme addressing, split by mode (hv 2026-08-29): --theme=NAME resolves names ONLY -- search path then built-ins, never the working directory (killing the measured cwd-shadowing: --theme=simple beside a ./simple/ directory resolved the local one, elsewhere the built-in, silently); --theme-file=FILE resolves a path ONLY, mutually exclusive with --theme, its refusal saying no-such-file rather than offering a theme roster; --theme-path=PATHSTR PREPENDS colon-separated directories to PREZ_THEME_PATH for the invocation (prepend, not replace: flag and env compose); front matter splits identically into theme: (name) and theme-file: (deck-relative path), or the ambiguity moves into the deck where it travels; --theme=./x.css is thereby refused as a name carrying a separator -- a breaking change taken deliberately at the rename, the cheapest moment it will ever have. (f) THE REFUSAL OF A PATH GIVEN TO --theme MUST NAME --theme-file, because this split breaks an invocation that is already in use. Measured 2026-08-29: hv presented a real 14-slide client deck with `prez present <deck> --theme <path>`, which is in hv's shell history and in that deck's build instructions. On the day WP-06 lands, that exact command starts failing, and a refusal that only says a name cannot contain a separator reads as the port having broken the deck. Naming the replacement flag turns a breakage into a migration. This is the general rule of AC20(b) pointing the other way: a refusal must name the remedy for the case that actually fired.",
       "kind": "test",
       "state": {
-        "is": "computed"
+        "is": "descoped",
+        "to": "ST0013",
+        "by": "hv"
       }
     },
     {
@@ -378,7 +381,7 @@
         "AC15"
       ],
       "status": "to-write",
-      "note": "GENUINELY red-first: --theme=NAME must resolve identically from two working directories, one containing a ./NAME/ directory -- RED against the pinned binary today (path.exists() wins). Goes green only when the split lands (WP-06)."
+      "note": "MOVED TO ST0013/AT01 on 2026-09-07 with the criterion it covers. Left on this thread as the record that the test was planned here and did not simply vanish; it is to-write, the AC it covers is descoped, and the gate counts neither. Do not write it here -- ST0013 owns it."
     },
     {
       "id": "AT15",

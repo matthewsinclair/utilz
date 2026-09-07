@@ -2,7 +2,8 @@
 wp_id: WP-06
 title: Theme addressing split + --theme-path (hv's CLI asks)
 scope: S
-status: Not Started
+status: Cancelled
+status_reason: Moved to ST0013 with AC15 at hv's 7 Sep re-scope. The theme addressing split is that thread's whole subject; leaving a stub here would be a second home for one piece of work.
 ---
 
 # WP-06: Theme addressing split + --theme-path (hv's CLI asks)

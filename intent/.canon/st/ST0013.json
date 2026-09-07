@@ -1,0 +1,34 @@
+{
+  "schema": "intent/thread@3.0",
+  "id": "ST0013",
+  "title": "prez theme addressing: split --theme, --theme-file and --theme-path",
+  "slug": "prez-theme-addressing-split-theme-theme-file-and",
+  "status": "triage",
+  "created": "2026-09-07",
+  "objective": "",
+  "context": "",
+  "body": "",
+  "preamble": "",
+  "criteria": [
+    {
+      "id": "AC01",
+      "text": "CARRIED VERBATIM FROM ST0010/AC15 on 2026-09-07, hv's re-scope. ST0010 was 'add prez to utilz' and prez is added, shipped, green and eyeballed; this is a redesign of theme addressing that arrived mid-thread from hv's CLI asks, and it wears its own badge now. The text below is unchanged -- a re-scope that reworded the requirement would be a quiet renegotiation of it. || Theme addressing, split by mode (hv 2026-08-29): --theme=NAME resolves names ONLY -- search path then built-ins, never the working directory (killing the measured cwd-shadowing: --theme=simple beside a ./simple/ directory resolved the local one, elsewhere the built-in, silently); --theme-file=FILE resolves a path ONLY, mutually exclusive with --theme, its refusal saying no-such-file rather than offering a theme roster; --theme-path=PATHSTR PREPENDS colon-separated directories to PREZ_THEME_PATH for the invocation (prepend, not replace: flag and env compose); front matter splits identically into theme: (name) and theme-file: (deck-relative path), or the ambiguity moves into the deck where it travels; --theme=./x.css is thereby refused as a name carrying a separator -- a breaking change taken deliberately at the rename, the cheapest moment it will ever have. (f) THE REFUSAL OF A PATH GIVEN TO --theme MUST NAME --theme-file, because this split breaks an invocation that is already in use. Measured 2026-08-29: hv presented a real 14-slide client deck with `prez present <deck> --theme <path>`, which is in hv's shell history and in that deck's build instructions. On the day WP-06 lands, that exact command starts failing, and a refusal that only says a name cannot contain a separator reads as the port having broken the deck. Naming the replacement flag turns a breakage into a migration. This is the general rule of AC20(b) pointing the other way: a refusal must name the remedy for the case that actually fired.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    }
+  ],
+  "tests": [
+    {
+      "id": "AT01",
+      "kind": "test",
+      "file": "opt/prez/crate/test/acceptance.sh",
+      "covers": [
+        "AC01"
+      ],
+      "status": "to-write",
+      "note": "Carried from ST0010/AT14 at hv's 7 Sep re-scope, still to-write and still GENUINELY red-first: --theme=NAME must resolve identically from two working directories, one of them containing a ./NAME/ directory. It is RED against the pinned binary today, because path.exists() is tried first and wins. It goes green only when the split lands."
+    }
+  ]
+}

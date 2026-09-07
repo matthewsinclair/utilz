@@ -8,14 +8,15 @@ A DOING / TODO / DONE view, projected from steel-thread and work-package status:
   - [x] 01: Contract: design.md + AC/AT transcription from _tools ST0002
   - [x] 02: Framework Rust substrate: lang, gitignore, CI, test driver, doctor
   - [x] 03: The hoist: crate at the pin, rename to prez, shim, yaml, help
-  - [-] 04: Validation: every carried green re-produced in the new home
+  - [x] 04: Validation: every carried green re-produced in the new home
   - [ ] 05: Default theme polish: basic but cool enough out of the box
-  - [ ] 06: Theme addressing split + --theme-path (hv's CLI asks)
+  - [~] 06: Theme addressing split + --theme-path (hv's CLI asks)
   - [-] 07: Expose theme determinism checking as a prez capability (deferred)
 
 ## TODO
 
 - [?] ST0012: Estate file policy: what must be proved before a realised file is removed
+- [?] ST0013: prez theme addressing: split --theme, --theme-file and --theme-path
 
 ## DONE
 
