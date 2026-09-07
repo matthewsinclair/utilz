@@ -73,3 +73,25 @@ Devbin does not have this problem because it is not on your PATH that way at all
 **I am not ruling this and I have not minted an AC for it**, because all three are defensible and the third is a legitimate answer that costs nothing. Say which and I will put it on the contract; say "not now" and I will record that it was raised and declined, so it is not rediscovered as a bug in a month.
 
 One detail worth having whichever way you go: **`~/.local/bin/prez` is the odd one out** -- a RELATIVE link to `bin/utilz` rather than an absolute one to `bin/prez`. It works, because dispatch keys on `basename $0`. But any relinking code that assumes one shape will either skip it or normalise it, and normalising it is a change to your environment nobody asked for.
+
+## (2026-09-07 21:20Z)
+
+**Pen taken. Both forks ruled, contract `0/16 BLOCKED`, doctor 0 findings. One item needs your hands and it is three lines in `~/.zshrc`.**
+
+**AC15 -- I ruled AGAINST the option I recommended to you an hour ago.** I said I leaned to the dispatcher ignoring an inherited `UTILZ_HOME`. Measured, that breaks `test_helper.bash:20` which exports it for the entire bats suite, `prez.bats:132` which runs a sandboxed shim against the project root deliberately, the documented `static/emacs/e2e-smoke.el` path, and **cc's own new `install.sh:124`**, which binds it in a subshell to read a foreign tree's yaml. The variable is load-bearing. **The silence is the defect, not the variable.** So: the dispatcher always computes its own home from `$0`, and when an inherited `UTILZ_HOME` names a different tree it says so on stderr and honours it. Nothing that works today stops working; the run that was silently wrong becomes loud.
+
+**AC16 and WP-12 -- `utilz relink`, an explicit verb.** Your opening question this morning now has a row against it. It is a separate verb rather than a flag on install, because a flag becomes habitual and then relinking is implicit by habit, which AC11 forbids. Doing nothing was rejected: it leaves a manual sixteen-link step with no record, rediscovered as a bug rather than a decision. It repoints at a tree you name, reports what it changed, reverses by naming the source, and leaves `~/.local/bin/prez` alone -- relative, pointing at `bin/utilz`, works because dispatch keys on `basename $0`, and normalising it is a change to your environment nobody asked for.
+
+**YOUR HANDS: delete `~/.zshrc:76-78`, the `export UTILZ_HOME="$MOLT_PRJ_DIR/Utilz"` block.**
+
+```
+if [ -n "$MOLT_PRJ_DIR" ] && [ -d "$MOLT_PRJ_DIR/Utilz" ]; then
+  export UTILZ_HOME="$MOLT_PRJ_DIR/Utilz"
+fi
+```
+
+An ambient login-shell export makes every `utilz` invocation everywhere carry the checkout, which defeats the two-tree arrangement by construction -- the AC15 announcement would fire on every install run, and an announcement that always fires is noise nobody reads. **The variable is for scoped, deliberate, foreign-tree invocation**: the bats harness, the emacs e2e path, cc's metadata read. Nothing needs it ambient, and I checked rather than assumed -- the suite sets its own, emacs documents its own.
+
+**I did NOT mint an AC for it.** We cannot test your dotfile from this repo, and a criterion nothing can measure is worse than a sentence you can act on. It is recorded as a thread precondition on my board, so it does not get lost and does not get counted as satisfied by anyone.
+
+Nothing is blocked on you. cc has both rulings and carries on with WP-01; WP-12 is ruled LAST, since it is the only one that writes outside the prefix.

@@ -71,7 +71,11 @@ title: Make utilz insallable in to opt/ just like devbin
 
 ### Group AC15
 
-- AC15 (non-test) AN INHERITED UTILZ_HOME MUST NOT MAKE AN INSTALL RUN THE SOURCE TREE. bin/utilz:42 derives UTILZ_HOME from $0 only when the variable is UNSET; when it is set, determine_utilz_home never runs and every path -- common.sh, the utility implementations, help/, VERSION -- is built from whatever the caller exported. MEASURED 7 Sep, not reasoned: a hand-built prefix carrying a marker VERSION answers 'utilz vPREFIX-MARKER-9.9.9' with the variable unset and 'utilz v2.5.0', the SOURCE tree's, with it exported. AND hv'S LOGIN SHELL EXPORTS IT -- ~/.zshrc:76-78 sets UTILZ_HOME=$MOLT_PRJ_DIR/Utilz unconditionally, confirmed by reading it out of zsh -lc. So the install would silently run the checkout for the one person the two-tree arrangement exists for. AC01 DOES NOT COVER THIS AND CANNOT: its test moves the SOURCE ASIDE, where a stale UTILZ_HOME makes the install fail loudly rather than defer quietly, so AC01 passes in a clean bats env while the defect is live in the shell hv actually types into. The dangerous case is source-PRESENT, which is the normal case. Found by vc 7 Sep, verifying cc's D11, which correctly records the determine_utilz_home reasoning as a code read rather than a measurement -- this is that measurement, and it says the code read was right about the unset path and silent about the set one. -- satisfied: no
+- AC15 (non-test) AN INHERITED UTILZ_HOME MUST NOT SILENTLY REDIRECT AN INSTALL, AND THE REMEDY IS TO ANNOUNCE THE DIVERGENCE, NOT TO IGNORE THE VARIABLE. bin/utilz:42 derives UTILZ_HOME from $0 only when the variable is UNSET; set, determine_utilz_home never runs and common.sh, every utility, help/ and VERSION are built from whatever the caller exported. MEASURED 7 Sep: a prefix carrying a marker VERSION answers 'vPREFIX-MARKER-9.9.9' unset and 'v2.5.0', the SOURCE tree's, exported -- and ~/.zshrc:76-78 exports it unconditionally. RULED by vc 7 Sep with the pen: the dispatcher ALWAYS computes its own home from $0, and when an inherited UTILZ_HOME names a DIFFERENT tree it says so on stderr and HONOURS THE INHERITED VALUE. Behaviour is preserved and the silence is removed. IGNORING THE VARIABLE WAS THE OBVIOUS RULING AND IT IS WRONG, measured rather than argued: opt/utilz/test/test_helper.bash:20 exports UTILZ_HOME for the ENTIRE bats suite, opt/prez/test/prez.bats:132 invokes a sandboxed shim against the project root as a DELIBERATE foreign-tree run, common_lib.bats:71 binds a temp home, static/emacs/e2e-smoke.el:11 documents UTILZ_HOME=$PWD, and install.sh:124 binds it in a subshell to read a foreign tree's yaml. The variable is load-bearing; the silence is the defect. Two dispatchers, one honouring it and one not, was rejected as a Highlander violation on the one file that must have exactly one answer. AC01 CANNOT COVER THIS: AC01 moves the source ASIDE, where a stale UTILZ_HOME fails loudly rather than deferring quietly, so AC01 goes green in a clean env while the defect is live in the shell hv types into. The dangerous case is source-PRESENT. -- satisfied: no
+
+### Group AC16
+
+- AC16 (non-test) AN EXPLICIT VERB REPOINTS THE PATH SYMLINKS AT A TREE THE CALLER NAMES, AND NOTHING ELSE EVER TOUCHES THEM. RULED by vc 7 Sep with the pen, closing the gap between the contract and hv's opening question -- why ~/.local/bin/utilz points at the checkout rather than the install. Measured: SIXTEEN links in ~/.local/bin resolve into the Utilz source tree, all fifteen utilities plus utilz. Without this row a green ST0014 leaves hv typing utilz and getting the checkout, and no criterion reports it. THE VERB IS SEPARATE FROM install AND upgrade, NOT A FLAG ON THEM: a --relink flag becomes habitual and then the relinking is implicit by habit, which is the thing AC11 forbids. AC11 and this row are the same policy from two sides -- never implicitly, always available explicitly. SHELL-INIT IN DEVBIN'S SHAPE WAS REJECTED: devbin has one entry point and is reached by absolute path from .zshrc:27-28, which does not transfer to sixteen PATH entries, and resolving by PATH order would make which-tree-answers depend on shell state, which is the defect AC15 exists to remove. DOING NOTHING WAS REJECTED because it leaves a manual sixteen-link step with no record, rediscovered as a bug rather than a decision. The verb reports what it changed and what it left, is reversible by naming the source tree, and LEAVES A LINK IT DID NOT WRITE ALONE -- ~/.local/bin/prez is relative and points at bin/utilz rather than bin/prez, which works because dispatch keys on basename $0, and normalising it is a change to hv's environment nobody asked for. -- satisfied: no
 
 ### Group AT01
 
@@ -130,6 +134,10 @@ _(no criteria in this group)_
 _(no criteria in this group)_
 
 ### Group AT15
+
+_(no criteria in this group)_
+
+### Group AT16
 
 _(no criteria in this group)_
 
@@ -195,6 +203,10 @@ _(no tests in this group)_
 
 _(no tests in this group)_
 
+### Group AC16
+
+_(no tests in this group)_
+
 ### Group AT01
 
 - AT01 `opt/utilz/test/install_e2e.bats` -- covers AC01 -- status: to-write -- Publish to a temp prefix, move the Utilz source tree aside, then run <prefix>/bin/utilz and a dispatched utility from it. Moving the source is the measurement; asserting files arrived is not.
@@ -253,7 +265,11 @@ _(no tests in this group)_
 
 ### Group AT15
 
-- AT15 `opt/utilz/test/install_e2e.bats` -- covers AC15 -- status: to-write -- Publish to a temp prefix with a marker VERSION, leave the source tree in place, and run <prefix>/bin/utilz version with UTILZ_HOME EXPORTED to the source tree. Assert the marker comes back. Running it with a clean env proves nothing -- that leg already passes today and is what makes this invisible. Pair it with the same call under env -u UTILZ_HOME so a fix that breaks the unset path is caught too.
+- AT15 `opt/utilz/test/install_e2e.bats` -- covers AC15 -- status: to-write -- Four legs. (1) publish to a temp prefix with a marker VERSION, leave the source in place, run <prefix>/bin/utilz version with UTILZ_HOME EXPORTED at the source: the divergence is ANNOUNCED on stderr and the SOURCE version comes back, because the ruling honours the inherited value. (2) the same call under env -u UTILZ_HOME: the marker comes back and stderr is SILENT. (3) UTILZ_HOME exported at the prefix ITSELF, which is the bats harness's own shape: no announcement, because the trees agree. (4) the announcement goes to STDERR and not stdout -- assert stdout is byte-identical to the unset run, or every caller parsing utilz output gains a line it did not have.
+
+### Group AT16
+
+- AT16 `opt/utilz/test/install_guards.bats` -- covers AC16 -- status: to-write -- Run the verb against a fixture bin/ holding both link shapes -- absolute-to-own-name, and the relative-to-dispatcher shape ~/.local/bin/prez actually has. Assert: every link now resolves into the named tree; the odd-shaped one still dispatches; the verb REPORTS what it changed; a link pointing at neither tree is left untouched and reported as skipped. Then assert install and upgrade with no verb change NOTHING in that directory -- the AC11 half. One leg without the other proves only that something moved.
 
 ---
 

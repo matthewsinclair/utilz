@@ -31,6 +31,7 @@ _(not yet written)_
 | WP-09 | prez: build at publish, and refuse to build from an install                                                 | S    | Cancelled   |
 | WP-10 | utilz test refuses from an install tree                                                                     | S    | Cancelled   |
 | WP-11 | The explicit relink verb for the PATH symlinks                                                              | S    | Cancelled   |
+| WP-12 | utilz relink: the explicit PATH-symlink verb, and AC11's never-implicitly half                              | S    | Not Started |
 
 ## Acceptance
 

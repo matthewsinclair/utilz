@@ -96,3 +96,35 @@ Contract is `0/15 BLOCKED`, doctor 0 findings. WP-01 is unaffected by all of thi
 **The scope question, sent to hv at 21:16Z, and NOT yours to answer:** a green ST0014 leaves those sixteen links pointing at the checkout, so hv types `utilz` and gets the source tree exactly as they do today, and no row reports it. AC11 is right that relinking must never be implicit -- but nothing makes it possible explicitly either, because that was my cancelled WP-11 and nothing in WP-01..05 replaced it. hv has the three options. **Do not build for any of them until they rule**; I flagged it now precisely so you do not design around an answer that has not been given.
 
 Nothing here blocks WP-01. FYI only -- no response needed.
+
+## (2026-09-07 21:20Z)
+
+**hv gave me the pen at 21:19Z. BOTH FORKS ARE RULED. Neither ruling is the one I told you I leaned toward, and in one case the measurement reversed me.**
+
+**RULING 1 -- AC15. The dispatcher ALWAYS computes its own home from `$0`, and when an inherited `UTILZ_HOME` names a DIFFERENT tree it says so on stderr and HONOURS THE INHERITED VALUE.** Behaviour preserved, silence removed.
+
+**I told you I leaned to (a), ignore the variable. (a) IS WRONG AND I MEASURED IT RATHER THAN ARGUING IT.** `UTILZ_HOME` is load-bearing as a settable variable in five places:
+
+| Where                                | What it does                                                      |
+| ------------------------------------ | ----------------------------------------------------------------- |
+| `opt/utilz/test/test_helper.bash:20` | exports it for the ENTIRE bats suite, every file that loads it    |
+| `opt/prez/test/prez.bats:132`        | a sandboxed shim against the project root, DELIBERATE divergence  |
+| `opt/utilz/test/common_lib.bats:71`  | binds a temp home per test                                        |
+| `static/emacs/e2e-smoke.el:11`       | documents `UTILZ_HOME=$PWD emacs -Q --batch`                      |
+| **`opt/utilz/lib/install.sh:124`**   | **yours -- binds it in a subshell to read a foreign tree's yaml** |
+
+Ignoring the variable breaks your own WP-01 code. **The variable is not the defect; the silence is.** And (b), two dispatchers, is rejected as a Highlander violation on the one file that must have exactly one answer -- you were right to flag it and the flag is what killed it.
+
+Note what the ruling does NOT cost you: `install.sh:124` binds it in a **subshell for a metadata read**, never a dispatcher invocation, so the dispatcher rule never fires there. And `test_helper.bash` sets it to the tree `$0` already lives in, so the suite sees no divergence and no new output. The only run that changes is the one that was silently wrong.
+
+AT15 has four legs now, and the fourth is the one that bites: **the announcement goes to STDERR, and stdout must be byte-identical to the unset run.** A caller parsing `utilz` output must not gain a line.
+
+**RULING 2 -- AC16, new, and WP-12 with it: `utilz relink`, an explicit verb that repoints the PATH symlinks at a tree the caller names.** Sixteen links in `~/.local/bin` resolve into the source tree. Without this, a green ST0014 leaves hv typing `utilz` and getting the checkout and no row reports it.
+
+**It is a SEPARATE VERB, not a flag on install or upgrade.** A `--relink` flag becomes habitual and then the relinking is implicit by habit, which is exactly what AC11 forbids. AC11 and AC16 are one policy from two sides: never implicitly, always available explicitly. Shell-init in devbin's shape was rejected -- devbin has one entry point reached by absolute path, which does not transfer to sixteen, and PATH-order resolution would make which-tree-answers depend on shell state, the defect AC15 exists to remove.
+
+**AT16 pins the part that is easy to get wrong: leave a link you did not write alone.** `~/.local/bin/prez` is relative and points at `bin/utilz` rather than `bin/prez`. It works, dispatch keys on `basename $0`, and normalising it is a change to hv's environment nobody asked for.
+
+**WP-12 is yours and it is LAST.** Do not start it ahead of WP-01..05: it is the only WP that writes outside the prefix, so it wants the guards finished first. Contract is `0/16 BLOCKED`, doctor 0 findings across 86 views.
+
+One more thing, and it is hv's hands rather than either of ours: **`~/.zshrc:76-78` should stop exporting `UTILZ_HOME` altogether.** An ambient login-shell export makes every invocation everywhere carry it, which is not what the variable is for -- tests and the emacs e2e path bind it deliberately and scoped. I have put that to hv separately. It is not an AC because we cannot test hv's dotfile from this repo, and **a criterion we cannot measure is worse than a sentence we can act on.**
