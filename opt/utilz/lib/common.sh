@@ -170,6 +170,24 @@ check_command() {
   command -v "$1" >/dev/null 2>&1
 }
 
+# THE leading-tilde expander. A YAML scalar or a --dest argument is not a shell
+# word, so an unexpanded ~ creates a directory literally named ~ under the cwd,
+# and every later command then finds it exactly where it looked -- silent and
+# self-consistent.
+#
+# Two callers: emacs_install's --dest, and install_prefix_configured's
+# install.prefix (ST0014 design.md D10). The MECHANISM is shared; the refusal
+# policy around it deliberately is not.
+#
+# `~user` is not handled -- it becomes "$HOMEuser". That is the pre-existing
+# behaviour of the one implementation this was extracted from, recorded here
+# rather than quietly changed: neither caller supports ~user, and adding it
+# under cover of an extraction would be inventing a requirement.
+expand_tilde() {
+  local path="$1"
+  printf '%s\n' "${path/#\~/$HOME}"
+}
+
 # Check if a required command is installed
 require_command() {
   local cmd="$1"
@@ -1013,8 +1031,8 @@ emacs_install() {
     return 1
   fi
 
-  # Expand leading ~ in dest
-  dest="${dest/#\~/$HOME}"
+  # Expand leading ~ in dest. Shared with install_prefix_configured.
+  dest=$(expand_tilde "$dest")
 
   local dest_dir
   dest_dir=$(dirname "$dest")

@@ -14,26 +14,34 @@ So: **`opt/utilz/lib/install.sh`, sourced only from the `install` / `upgrade` / 
 
 The library depends on `common.sh` for `error` / `require_command` / `get_util_metadata` and on nothing else. It must never reach for state that describes the tree it is RUNNING in, because every function in it operates on a tree that is not that one.
 
-## D2. The owned set
+## D2. The owned set is enumerated by EXCLUSION, and git is the authority
 
-| Ships                                             | Why                                                                       |
-| ------------------------------------------------- | ------------------------------------------------------------------------- |
-| `bin/utilz`                                       | the dispatcher                                                            |
-| the 15 `bin/<name>` symlinks                      | AC06, and see D3 -- they are the dispatch predicate, not decoration       |
-| `opt/<name>/<name>`, `<name>.yaml`, `README.md`   | the implementations and the metadata every read goes through              |
-| `opt/utilz/lib/`, `opt/utilz/tmpl/`               | the framework library and the generator templates                         |
-| `help/*.md`                                       | `utilz help` reads these at runtime                                       |
-| `VERSION`                                         | `utilz.yaml` points `version_file` at it                                  |
-| `static/emacs/utilz.el`                           | `utilz emacs install` reads it from `$UTILZ_HOME`                         |
-| `opt/prez/crate/target/release/prez`              | built at publish, AC09                                                    |
+`git ls-files` over four roots plus `VERSION`, minus the excluded subtrees, plus the one built artefact:
 
-| Excluded                     | Why                                                                                                     |
-| ---------------------------- | -------------------------------------------------------------------------------------------------------- |
-| `opt/*/test/`                | AC13 refuses `utilz test` from an install, so shipping the suites ships the input to a command that says no |
-| `opt/prez/crate/` (source)   | `include_str!` compiles `themes/` and `assets/` INTO the binary, so the crate is build-time only. 170M     |
-| `intent/`, `docs/`, `.git`   | project record, not runtime                                                                              |
+| Root      | Excluded within it   | Why                                                                                                         |
+| --------- | -------------------- | ----------------------------------------------------------------------------------------------------------- |
+| `bin/`    | `devbin`, `.devbin/` | vendored devbin, not ours to publish                                                                        |
+| `opt/`    | `*/test/`            | AC13 refuses `utilz test` from an install, so shipping the suites ships the input to a command that says no  |
+| `opt/`    | `prez/crate/`        | `include_str!` compiles `themes/` and `assets/` INTO the binary, so the crate is build-time only. 170M       |
+| `help/`   | --                   | `utilz help` reads these at runtime                                                                         |
+| `static/` | --                   | `utilz emacs install` reads `utilz.el` from `$UTILZ_HOME`                                                    |
+| `VERSION` | --                   | `utilz.yaml` points `version_file` at it                                                                    |
 
-**The owned set is enumerated in exactly one function** and both `install` and `upgrade` read it from there (IN-AG-HIGHLANDER-001). The manifest's roll-call IS the owned set, so a second enumeration is a second answer about what the tool owns, and the one that drifts is whichever nobody is reading.
+Plus `opt/prez/crate/target/release/prez`, which is built at publish and gitignored, so it is named rather than enumerated (D5).
+
+**Measured 7 Sep: 109 tracked paths -- 15 symlinks and 94 files -- and one built binary. 43M, of which 42M is `opt/macoz/images/`.**
+
+**THIS SECTION CARRIED AN INCLUSION LIST UNTIL 7 SEP AND THE LIST WAS WRONG.** It shipped `opt/<name>/<name>`, `<name>.yaml` and `README.md` per utility, which is the shape the tree APPEARS to have. A walk of all sixteen directories says otherwise: **five utilities keep runtime payload outside those three names** -- `opt/cleanz/data/trope-indicators.txt` (the detector list, read at `cleanz:343`), `opt/expz/lib/expense_schema.json` (the default schema), `opt/pdf2md/lib/pdf2md.py` and `opt/xtrct/lib/xtrct.py` (the actual implementations, each shell file being a venv wrapper around one), and `opt/macoz/images/backgrounds/` (read at `macoz:59`). An inclusion list publishes an install in which five of fifteen utilities are broken, **each failing only when someone reaches the one code path that needs the file that never arrived.**
+
+**The inversion is the keeper, not the corrected list.** An inclusion list asserts that today's layout is the layout, so the next utility to add a data directory is dropped silently, and the drop surfaces as a bug report against that utility rather than against the installer. An exclusion list fails the other way -- a new subtree ships until someone says not to -- which costs bytes rather than correctness.
+
+**Git is the authority here for the same reason it is in the manifest.** The manifest's claim is "these bytes are commit X"; `git ls-files` is exactly "the files commit X names". Any other enumeration makes the file list and the provenance claim two authorities that agree right up until they do not. After AC02's dirty gate the two are identical by construction -- a tracked file missing from the worktree IS a dirty tree, and that is already refused -- so the gate is what makes this correct rather than merely convenient. It also disposes of `.venv/` (101M across two utilities) and `crate/target/` at no cost: both are gitignored, so neither was ever a candidate.
+
+**The owned set is enumerated in exactly one function**, and `install` and `upgrade` both read it from there (IN-AG-HIGHLANDER-001). The manifest CHECKER does not: it reads the manifest, which is the roll-call written from that one enumeration. That is the same single answer at one remove, and it is what lets the checker run in an install tree, which has no git and therefore nothing to enumerate from. A second enumeration would be a second answer about what the tool owns, and the one that drifts is whichever nobody is reading.
+
+**The built prez binary is owned wherever the tree carries the crate to build it from, and nowhere else.** That predicate is the same one the publish uses to decide whether to run cargo at all (D5), so the binary cannot leave the owned set while there is still something to build. Built as-implemented on 7 Sep: naming it unconditionally made every tree without a prez crate fail its own manifest write, which is a correct refusal aimed at the wrong tree.
+
+**One file ships that has no business in an install, and it is named here rather than special-cased: `static/emacs/e2e-smoke.el`.** It is a test -- its own header says to run it from the repo root -- and it escapes the `*/test/` exclusion by not living in a `test/` directory. Six kilobytes, inert, reached by no verb. Excluding it by filename would set a second KIND of rule, name-matching, beside one that is otherwise purely structural, to save 6KB. The honest fix is to move the file in the source tree, and that is not this thread's.
 
 ## D3. Symlinks are copied as target STRINGS, and they are load-bearing
 
@@ -48,14 +56,16 @@ They are not cosmetic. `bin/utilz:183` dispatches only when `-L "$UTILZ_HOME/bin
 
 ## D4. The manifest
 
-One file at the install root, three columns, one row per owned path, sorted with `LC_ALL=C` so it is stable across filesystems:
+One file at the install root, `manifest.sha256`, three TAB-separated columns, one row per owned path, sorted with `LC_ALL=C` so the order is stable across filesystems:
 
 ```
-utilz-version   2.5.0
-source-commit   <sha>
-file            <sha256>   bin/utilz
-link            utilz      bin/cleanz
+utilz-version	2.5.0
+source-commit	<sha>
+file	<sha256>	bin/utilz
+link	utilz	bin/cleanz
 ```
+
+**The separator is one TAB, not aligned spaces.** No owned path contains a space today -- measured, 0 of 109 -- but a space separator makes the third column unparseable the day one does, and the day one does is not a day anybody announces.
 
 The type discriminator is what lets the checker pick the right comparison without inferring it from the path (AC06, AC07). **No generated-at timestamp**: a timestamp makes two manifests of identical bytes compare unequal, which turns the one instrument that reports drift into a thing that always reports drift.
 
@@ -117,7 +127,9 @@ It normalises while it is there. Today `~/.local/bin/prez` is a RELATIVE link to
 
 ## D10. What is shared with `emacs_install`, and what is not
 
-`emacs_install` (`opt/utilz/lib/common.sh:967`) already implements `--dest`, `--symlink`, `--force` and tilde expansion. The tilde expansion and the flag parsing are extracted and shared (IN-AG-HIGHLANDER-001).
+`emacs_install` already implements `--dest`, `--symlink`, `--force` and tilde expansion. **The tilde expansion is extracted and shared as of WP-01** -- `expand_tilde` in `common.sh`, called by `emacs_install --dest` and by `install_prefix_configured` (IN-AG-HIGHLANDER-001). The flag parsing follows when `install` needs it (WP-02).
+
+**The extraction carried the behaviour across unchanged, including the part that is wrong.** `~user` becomes `"$HOMEuser"`, because that is what the one implementation did. It is recorded in the helper rather than quietly fixed: neither caller supports `~user`, and improving a mechanism under cover of extracting it is how an extraction stops being a refactor.
 
 **The refusal policy is NOT shared, and that boundary is deliberate.** `emacs_install` writes into a directory the user nominates; publish refuses a dirty tree, refuses an existing install and refuses a source tree. Common mechanism, different contract. Folding the refusals into the shared half would give `emacs_install` three gates nobody asked it for, which is a worse defect than the small duplication it would remove.
 

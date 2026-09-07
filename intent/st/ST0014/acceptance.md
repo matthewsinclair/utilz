@@ -233,11 +233,11 @@ _(no tests in this group)_
 
 ### Group AT07
 
-- AT07 `opt/utilz/test/install_manifest.bats` -- covers AC06 -- status: to-write -- Count the arrivals in the install's bin/: 15 symlinks and ONE real file, utilz. NOT two -- D2 excludes bin/devbin and bin/.devbin/ from the owned set, and AC06's 'two real files' counts the SOURCE bin/. Verified 7 Sep that the exclusion is safe: the only reference to devbin anywhere in the 109 owned paths is a comment at opt/prez/prez:54. Each of the 15 is -L and its readlink target string matches the source link. Then retarget one link at a different utility and assert the manifest check reports it: checksumming the resolved file gives all 15 one hash and this case reads as intact.
+- AT07 `opt/utilz/test/install_lib.bats` -- covers AC06 -- status: to-write -- Count the arrivals in the install's bin/: 15 symlinks and ONE real file, utilz. NOT two -- D2 excludes bin/devbin and bin/.devbin/ from the owned set, and AC06's 'two real files' counts the SOURCE bin/. Verified 7 Sep that the exclusion is safe: the only reference to devbin anywhere in the 109 owned paths is a comment at opt/prez/prez:54. Each of the 15 is -L and its readlink target string matches the source link. Then retarget one link at a different utility and assert the manifest check reports it: checksumming the resolved file gives all 15 one hash and this case reads as intact.
 
 ### Group AT08
 
-- AT08 `opt/utilz/test/install_manifest.bats` -- covers AC07 -- status: to-write -- Manifest records the utilz version, the source commit and a checksum per owned file. The commit must describe the SHIPPED bytes: mutate one owned file in the source after the commit and before the publish, and assert the publish refuses rather than recording a commit the bytes do not match. AC02's dirty gate is what makes this reachable.
+- AT08 `opt/utilz/test/install_lib.bats` -- covers AC07 -- status: to-write -- Manifest records the utilz version, the source commit and a checksum per owned file. The commit must describe the SHIPPED bytes: mutate one owned file in the source after the commit and before the publish, and assert the publish refuses rather than recording a commit the bytes do not match. AC02's dirty gate is what makes this reachable.
 
 ### Group AT09
 

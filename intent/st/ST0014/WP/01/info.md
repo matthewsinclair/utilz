@@ -2,14 +2,44 @@
 wp_id: WP-01
 title: Owned set and manifest: the file list, symlink target-string checksums, manifest write and check
 scope: S
-status: WIP
+status: Done
 ---
 
 # WP-01: Owned set and manifest: the file list, symlink target-string checksums, manifest write and check
 
 ## Objective
 
-_(not yet written)_
+The PURE half of the install library: what utilz owns in a tree, what that tree is configured to publish to, and the manifest that records both. Every function takes a tree path and returns a fact about it, so the copying and the refusals built on top (WP-02, WP-03) have something to be correct against rather than deciding it inline.
+
+## As built
+
+`opt/utilz/lib/install.sh`, sourced only from the install / upgrade / link branches (D1), plus `expand_tilde` extracted into `common.sh` (D10) and `opt/utilz/test/install_lib.bats` at 22 tests.
+
+| Function                     | Answers                                                       |
+| ---------------------------- | ------------------------------------------------------------- |
+| `install_owned_paths`        | what utilz owns in a source tree, LC_ALL=C sorted             |
+| `install_prefix_configured`  | where it is configured to publish, tilde-expanded             |
+| `install_tree_kind`          | install / source / other                                      |
+| `install_tree_state`         | clean / dirty / unknown                                       |
+| `install_manifest_rows`      | one TAB-separated row per owned path                          |
+| `install_manifest_write`     | the manifest at an install root                               |
+| `install_manifest_check`     | which owned paths drifted, and how                            |
+
+## What measurement changed
+
+**D2's inclusion list was wrong and the tree said so.** Shipping `opt/<n>/<n>`, `<n>.yaml` and `README.md` per utility is the shape the tree APPEARS to have; five of fifteen utilities keep runtime payload outside those three names (`cleanz/data/`, `expz/lib/`, `pdf2md/lib/`, `xtrct/lib/`, `macoz/images/`). The enumeration is now by EXCLUSION from `git ls-files`, which also makes the file list and the manifest's provenance claim one authority instead of two. Design updated before the code landed.
+
+**The built prez binary is owned only where the crate is.** Naming it unconditionally made every tree without a prez crate fail its own manifest write: a correct refusal aimed at the wrong tree.
+
+## Conventions this work package set
+
+**Three answers get three exit codes, never two.** `install_manifest_check` returns 0 no-drift, 1 drift, 2 cannot-read; `install_tree_state` echoes clean / dirty / unknown. "Matches" and "cannot tell" must not collide, which is the same rule in two places.
+
+**The red-first run caught two of its own tests passing for the wrong reason.** Both asserted a bare `assert_failure` and got it from rc 127 -- the library failing to load -- rather than from the refusal they exist to check. Every refusal test now asserts a specific rc AND the message.
+
+## Deliberately not here
+
+The copying, the four refusals, the mode announcement and the verbs. Those are coordination over these facts and belong to WP-02 / WP-03 / WP-04.
 
 ## Acceptance
 
