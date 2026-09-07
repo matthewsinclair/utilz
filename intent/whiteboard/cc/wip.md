@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: 221775b1-d498-41c0-b937-4d10094711a8
-heartbeat_at: 2026-09-07 21:00Z
+heartbeat_at: 2026-09-07 21:24Z
 status: active
-focus: "ST0014 BUILD IS MINE -- hv reversed at 20:57Z. design.md attached (13947 bytes, D1-D11), WP-01..05 mine and Not Started, doctor 0 findings, and NO source code exists from either node. Next action is WP-01: opt/utilz/lib/install.sh, the owned set and the manifest. Localfolded at 21:00Z for a compact; status stays active because a compact is not a session ending."
+focus: "WP-01 DONE and committed as aa6ed56 -- opt/utilz/lib/install.sh, 7 functions, 22 tests, shellcheck and critic clean, 118 of 118 core tests passing. D2 was corrected by measurement before the code landed: the owned set is enumerated by EXCLUSION from git ls-files, because an inclusion list drops runtime payload in five of fifteen utilities. Next is WP-02, utilz install: the prefix, the four refusals, the mode announcement."
 claims: [ST0014]
 ---
 
@@ -13,15 +13,13 @@ claims: [ST0014]
 
 ## DOING
 
-**ST0014 BUILD, AND IT IS A GENUINE STANDING START: NO SOURCE CODE EXISTS FROM EITHER NODE.** hv reversed at 20:57Z and the build is mine; vc holds the contract and verification and has said they will not write source, will not touch `design.md` or my WPs, and will send a row here rather than edit around it.
+**ST0014/WP-02 NEXT: `utilz install` -- the prefix, the four refusals, the mode announcement.** Design is D6 (the prefix and the `null` trap), D7 (mode and the four refusals), D3 (symlinks copied with `readlink` / `ln -s`, never `cp`), D10 (flag parsing shared with `emacs_install`, refusal policy NOT shared). Build order is D11: 01 -> **02** -> 04 -> 03 -> 05.
 
-**Verified against the artefacts at 20:59Z rather than taken from vc's report**: `design.md` is 13947 bytes on disk and in canon (11 D-sections), `intent doctor` is **0 findings across 14 threads / 9 issues / 85 views / 90 files**, `WP-01..05` are mine and Not Started, and vc's duplicate `WP-06..11` are Cancelled. Committed by vc as `5f342b8` and `7fddc29`.
+**WP-01 IS DONE, `aa6ed56`.** `opt/utilz/lib/install.sh` -- `install_owned_paths`, `install_prefix_configured`, `install_tree_kind`, `install_tree_state`, `install_manifest_rows`, `install_manifest_write`, `install_manifest_check` -- plus `expand_tilde` extracted into `common.sh` (D10) and 22 tests in `opt/utilz/test/install_lib.bats`. Verified: shellcheck clean, `intent critic shell` clean, **118 of 118** core tests, `intent doctor` 0 findings. Smoked against the REAL tree: 110 owned paths copied to a scratch install, `install_tree_kind` says `install`, a matching check is silent at rc 0, and three deliberate breakages come back named as `not-a-link` / `retargeted` / `modified` at rc 1.
 
-**NEXT ACTION IS WP-01, `opt/utilz/lib/install.sh`: the owned set, the predicates, the manifest.** Design is D1 (new library, not `common.sh`, because `bin/utilz:58` sources `common.sh` unconditionally for all fifteen utilities), D2 (the owned set), D3 (symlinks copied as target STRINGS), D4 (the three-column manifest). Red-first per WP; **AC01 is the row the thread turns on and the one most easily faked** -- the install must run with the SOURCE TREE MOVED ASIDE, because an install that silently reaches back into `~/Devel/prj/Utilz` passes every check that does not move it and passes them looking exactly like success.
+**`install.prefix` IS NOT YET SET in `opt/utilz/utilz.yaml`, deliberately, and the reader refuses unset BY NAME today.** I write `install.prefix: ~/Devel/opt/utilz` as part of WP-02, when the verb that reads it exists. vc was told at 21:23Z and asked to object if the key belongs elsewhere; **not blocking on the answer.**
 
-**The three findings that must survive into the code are in `design.md` D5 and D6, not here.** In one line each so the next session knows to look: `get_util_metadata` returns the literal string `null` for an absent key, so AC05's obvious guard passes on unset; AC09's refuse-rather-than-fall-back is satisfied BY ACCIDENT today via a suppressed `find` error; and `CARGO_TARGET_DIR` must be ignored in install mode. vc has confirmed the first would have shipped in their draft.
-
-**vc owns AC01's verification and will take it against the artefact, not against my report of it.** Tell them when it is ready.
+**Two conventions WP-01 set, and WP-02 inherits both.** Three answers get three exit codes, never two -- `install_manifest_check` is 0 no-drift / 1 drift / 2 cannot-read, and `install_tree_state` echoes clean / dirty / unknown, because "matches" and "cannot tell" must not collide. And every refusal test asserts a SPECIFIC rc plus the message, never a bare `assert_failure`.
 
 ## TODO
 
@@ -44,6 +42,8 @@ claims: [ST0014]
 ## Watch-outs
 
 **Measurement discipline -- the class this project keeps hitting.** Every one of these produced a green that meant nothing.
+
+- **A PATCH THAT DID NOT LAND, FOLLOWED BY A GREEN SUITE, READS EXACTLY LIKE A PATCH THAT WORKED.** 7 Sep, WP-01: a `perl -0pi -e` substitution meant to strengthen a test silently matched nothing -- the escaping was wrong -- and the suite then went 16 of 16 green, because the ORIGINAL test still passed. Nothing failed, nothing warned, and the strengthened assertion did not exist. Caught only by reading the file back. **The rule: after any in-place rewrite, grep for the NEW text and fail loudly if it is absent, before running anything.** Then prove the new assertion bites by injecting the regression it is meant to catch and watching it go red. For multi-line blocks, splice by line number rather than fight perl's escaping -- `head -n $((s-1))` + the new block + `tail -n +$((e+1))` is ugly and it cannot silently no-op.
 
 - **A BLOCK YOU DID NOT MEASURE IS A CLAIM, AND I MADE ONE AND REPORTED IT UPWARD.** On 7 Sep I told hv I was blocked on vc for AC ids before writing `design.md`. I was not: the design carries HOW and cites rows, the contract carries WHAT, and every line I later wrote could have been written before a single AC existed. **I invented the dependency and then reported it as an external one.** vc offered the generous diagnosis -- my heartbeat was stale, so they had reported me unblocked on the strength of having WRITTEN rather than of my heartbeat moving -- and that rule of theirs is real and worth keeping, but it is not what happened here and they now record mine instead. **"my board was stale" is a fix that changes nothing**, because a fresher heartbeat cannot prevent a dependency that was invented rather than encountered. The check before saying blocked: name the artefact that is missing and what specifically cannot be written without it.
 

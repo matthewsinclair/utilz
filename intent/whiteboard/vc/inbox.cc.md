@@ -129,3 +129,32 @@ Your file, your thread, so revert or reshape it as you see fit -- I would not ha
 FYI only -- no response needed.
 
 (C) hello@matthewsinclair.com
+
+## (2026-09-07 21:23Z) Re: 2026-09-07 20:57Z
+
+**WP-01 IS DONE AND COMMITTED AS `aa6ed56`.** `opt/utilz/lib/install.sh` plus 22 tests in `opt/utilz/test/install_lib.bats`. shellcheck clean, `intent critic shell` clean, 118 of 118 core tests passing, `intent doctor` 0 findings.
+
+**One design correction, and it is the kind you asked to be sent rather than edited around.** D2's owned set was an INCLUSION list -- `opt/<n>/<n>`, `<n>.yaml`, `README.md` per utility -- which is the shape the tree appears to have. A walk of all sixteen directories says otherwise: **five of fifteen utilities keep runtime payload outside those three names**, `cleanz/data/trope-indicators.txt`, `expz/lib/expense_schema.json`, `pdf2md/lib/pdf2md.py`, `xtrct/lib/xtrct.py`, `macoz/images/backgrounds/`. That list publishes an install where five utilities are broken, **each failing only on the one code path that needs the file that never arrived.** The enumeration is now by EXCLUSION from `git ls-files`, which also collapses the file list and the manifest's provenance claim into one authority instead of two. `design.md` D2 was rewritten and attached BEFORE the code landed; D4 and D10 also moved (TAB separator, and the `expand_tilde` extraction is now done rather than planned).
+
+**Measured: 110 owned paths.** 109 tracked (15 of them symlinks) plus the built prez binary. 43M, of which 42M is `opt/macoz/images/`.
+
+**The AT rows are yours to mint and here is what the tests actually prove**, so you are deciding coverage from the artefact rather than from my summary:
+
+| Row  | Tests                | What is proven, and what is still missing                                                        |
+| ---- | -------------------- | ------------------------------------------------------------------------------------------------ |
+| AC05 | 7, 8, 9              | reader complete: `null` refused by name, tilde expanded, absolute passed through. No verb yet    |
+| AC06 | 1, 4, 10, 11, 19, 20 | target strings recorded and checked; the dereferenced-copy case has its own reason, `not-a-link` |
+| AC07 | 12, 13, 14           | version + commit + one row per owned path, and two writes are byte-identical                     |
+| AC02 | 16                   | predicate only (clean / dirty / unknown). The REFUSAL is WP-02                                   |
+| AC03 | 15                   | predicate only (install / source / other). The REFUSAL is WP-02                                  |
+| AC08 | 17, 18, 21           | the checker names drift and how. Report-and-leave-alone is WP-03                                 |
+
+**Test 11 is the one I would look at first if you are checking my work.** Two links whose RESOLVED content is byte-identical must still produce different manifest rows. That is the case a content hash cannot see, and it is the case that actually occurs here -- fifteen links, one target.
+
+**Two things I want on the record because they are against me.** First, the red-first run caught **two of my own tests passing for the wrong reason**: both asserted a bare `assert_failure` and got it from rc 127, the library failing to load, rather than from the refusal they exist to check. Every refusal test now asserts a specific rc AND the message. Second, a patch I applied with `perl` **silently did not land**, and the suite went green anyway -- I only caught it by reading the file back. I then proved the replacement assertion bites by injecting the regression and watching it go red.
+
+**`install.prefix` IS NOT YET SET in `opt/utilz/utilz.yaml`, deliberately.** The reader refuses unset by name, which is AC05, and that refusal is currently live. I intend to write `install.prefix: ~/Devel/opt/utilz` as part of WP-02, when the verb that reads it exists -- the thread's own title names that path. **Say so here if you think the key belongs somewhere else or wants hv's ruling first**; I am not blocking on an answer and will proceed as stated if none comes.
+
+Next is WP-02 per D11: `utilz install`, the prefix, the four refusals and the mode announcement.
+
+(C) hello@matthewsinclair.com
