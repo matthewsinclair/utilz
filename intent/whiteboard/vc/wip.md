@@ -2,10 +2,10 @@
 node: vc
 name: Validation Claude
 role: validation
-session_id: 3d40d776-e1d0-40da-b5c5-7926017d5ce1
-heartbeat_at: 2026-08-29 18:06Z
-status: paused
-focus: "EOD. v2.5.0 shipped and green at 72ee931. ST0010 open at 16/20 -- AC16 is hv's, AC18/AC19 mine, AC15 is WP-06. Tag needs moving to the release commit 4b6eb07; the recreate was classifier-blocked, so it is hv's to run."
+session_id: 06b406f0-9a29-4636-ad0d-abd6663e4f8f
+heartbeat_at: 2026-09-07 14:00Z
+status: active
+focus: "Pickup 7 Sep. ST0010 open at 16/20 -- AC16 hv's, AC18/AC19 mine, AC15 is WP-06. Retired since the last board: the v2.5.0 tag move (verified at 4b6eb07 on both remotes) and the Gtools cutover (zero GEOPRES_THEME_PATH in live code, both repos). Awaiting hv on the day's sequencing."
 claims: [ST0010]
 ---
 
@@ -17,22 +17,22 @@ Released at EOD on hv's instruction. Two folds archived in `.history/20260829/` 
 
 ## DOING
 
-**ST0010 is shipped as v2.5.0 and NOT closed.** Gate **16/20**, read off the view. Four remain: **AC16** (hv renders every built-in theme and looks -- hv's by construction, and the suite is not allowed to stand in for it), **AC18** (AT15, mine, never run against a real Safe-Storage dialog), **AC19** (AT20's browser half, mine), **AC15** (WP-06).
+**ST0010 is shipped as v2.5.0 and NOT closed.** Gate **16/20**, read off the view. Four remain: **AC16** (hv renders every built-in theme and looks -- hv's by construction, and the suite is not allowed to stand in for it), **AC18** (AT15, mine, **UNWRITTEN** -- the board said "written, never run" until 7 Sep; `intent at list` reports to-write and `acceptance.sh` carries no AT15 block. What IS in the tree is the code AT15 would prove: the `PREZ_TEST_BROWSER` hook checked before the probe with a named refusal, and `CHROME_SAFE=--use-mock-keychain` at every launch site), **AC19** (AT20's browser half, mine), **AC15** (WP-06).
 
-**WP-04 still reads `Not Started`** while its work is substantially done. Held deliberately: advancing it runs through `intent wp done`, which consults the acceptance gate this session found unreadable. See Watch-outs.
+**WP-04 still reads `Not Started`** while its work is substantially done. **The hold is released, not lifted**: it was conditioned on the acceptance gate being unreadable, and on a native `intent` the gate reads correctly (16/20, matching the view). Whether `wp done` refuses on a legitimately BLOCKED gate is a separate and untested question. Advancing it is a state verb, so it waits on hv's sequencing rather than on a condition.
 
 ## Open with hv
 
 - **AC16**, hv's eye. The only remaining item nobody else can take.
 - **`geodica doctor` must report whether `utilz prez` is available** -- hv's estate requirement, still on no contract anywhere. Carried since 13:36Z; the estate has since moved to `~/Devel/prj/Gtools`, which does not retire it.
-- **The `intent ac gate` false red** (Watch-outs) is Intent's defect, not ours, and needs relaying to `intent-vc`. Nothing here should be edited to accommodate it.
-- **WP-04 reads `Not Started`** while its work is substantially done. Left alone rather than advanced: `wp done` consults the gate I have just found unreadable, so I would rather hv saw the finding before I move any status through that tool.
+- **The `intent ac gate` false red** (Watch-outs) still needs relaying to `intent-vc`, with the qualifier that it is **bypassed here, not fixed**: this machine's `intent` is the native binary and reads the contract correctly. Re-verified 7 Sep that `Intent/bin/intent_acceptance:295` still greps the v2 dotted form, so a machine with no native build is unchanged. Intent's tree; nothing here should be edited to accommodate it.
+- **WP-04 reads `Not Started`** while its work is substantially done, and its hold condition is now released (above). Still not advanced: it is a state verb and yours to sequence.
 
-Retired since the last board: the browser authorisation (given, run, green), the 41 unpushed commits (pushed), and the 2.5.0 release (cut at `72ee931`, tagged, green on all seven CI jobs).
+Retired since the last board, each verified against the artefact rather than taken on report: the browser authorisation (given, run, green); the 41 unpushed commits (pushed); the 2.5.0 release; and **the `v2.5.0` tag move** -- the tag object `0ba1c2c` resolves to `4b6eb07`, the release commit, on both remotes, so the standing directive is satisfied and the item is off my board and off `intent/wip.md`. One commit is unpushed today (`0ab1ac2`, devbin re-vendor); pushing is yours.
 
 ## Live with other nodes
 
-- **`_tools-cc`'s cutover is a seam neither suite can fully see.** The rename made the search-path variable `PREZ_THEME_PATH`; the estate shim still sets `GEOPRES_THEME_PATH`. `_tools-vc` corrected my scope: 19 references across 8 files, and their suite catches the BREAK on its first run while going silently vacuous on the GUARANTEE -- the AC10 extractability assertion scrubs a variable prez no longer reads. **Completion check, both repos: `git grep GEOPRES_THEME_PATH` returns zero.**
+- **RETIRED 7 Sep: the Gtools cutover landed, and the completion check I set is met.** `git grep GEOPRES_THEME_PATH` returns zero live-code hits in both repos -- the only survivors either side are ST docs, canon and whiteboard history, which are the record of the change rather than the change. Verified in their tree, not taken on report: `bin/geodica_present` sets `PREZ_THEME_PATH` (lines 64, 110), the estate theme dir is `themes/prez/geodica/`, and `bin/geodica_design` and `bin/help/geodica_present.md` are consistent. The seam neither suite could see is closed.
 - **Ruled and closed: no deprecated `GEOPRES_THEME_PATH` fallback.** It would silence the one tripwire of three that works, to protect an ordering a grep enforces for free. `_tools-vc` accepted and added the better argument: "for one release" requires someone to remove it and nobody ever does.
 - **`intent-vc`: do NOT re-run the ingest damage probe until they say the tiebreak has landed.** Utilz's exposure to issue `0133` is **UNMEASURED, which is not zero**. The bound that still holds: nothing here went through legacy ingest -- `intent at new` through the API gate and `sync --to-disk` only, no `sync --to-store` -- so whatever exposure exists came from the original hop and has not grown.
 
@@ -42,7 +42,7 @@ Retired since the last board: the browser authorisation (given, run, green), the
 
 - **cc's EOD numbers are NOT greens and I have not recorded them as such.** 17/17 and acceptance 12/0/0, off the warm dev tree. cc said so themselves before I could. My own 12/0/0 stands separately because it was taken against the cold build at `fdf161a` -- same figure, different provenance, and by AC17's own sequencing the provenance is what makes it mean anything. Do not let the two merge on a later read.
 
-- **`intent ac gate` AND `intent ac status` CANNOT READ A v3-RENDERED CONTRACT, AND THEY FAIL LOUDLY IN A WAY THAT INVITES THE WRONG FIX.** `bin/intent_acceptance`'s `ac_lines()` greps `^- AC-<st>.<nn> ` (the v2 dotted form); the v3 renderer emits `^- AC<nn> `. Zero matches, so `ac gate ST0010` reports "acceptance.md has zero acceptance criteria (empty contract) -- BLOCKED" and `ac status` reports `0/0`, against a view carrying all 20 rows. No native binary is built on this machine, so `bin/intent` dispatches `ac` to that bash path unconditionally -- there is no second reader to disagree with it. **It fails SAFE (blocks, never a vacuous pass) but the remedy it prints is `acceptance: exempt`**, which would convert a false red into a permanent real silent pass on a thread that has a full contract. Do not take that remedy. **Read satisfaction off the view instead**: `grep -oE '^- AC[0-9]+ .*-- satisfied: [a-z]+' intent/st/ST0010/acceptance.md` -- 16 yes, 4 no (AC15, AC16, AC18, AC19) at `72ee931`. Intent's tree, not ours: `intent-vc`'s to file, via hv.
+- **`intent ac gate` AND `intent ac status` CANNOT READ A v3-RENDERED CONTRACT -- ON A SHELL-DISPATCHED `intent`. THIS MACHINE IS NO LONGER ONE.** Re-measured 7 Sep: `intent` resolves to `Intent/native/rust/target/release/intent`, and both verbs are correct here (`16/20, unsatisfied AC15 AC16 AC18 AC19`). The rest of this entry describes the bash path, which a fresh checkout with no native build still takes, and which `Intent/bin/intent_acceptance:295` still implements. `bin/intent_acceptance`'s `ac_lines()` greps `^- AC-<st>.<nn> ` (the v2 dotted form); the v3 renderer emits `^- AC<nn> `. Zero matches, so `ac gate ST0010` reports "acceptance.md has zero acceptance criteria (empty contract) -- BLOCKED" and `ac status` reports `0/0`, against a view carrying all 20 rows. No native binary is built on this machine, so `bin/intent` dispatches `ac` to that bash path unconditionally -- there is no second reader to disagree with it. **It fails SAFE (blocks, never a vacuous pass) but the remedy it prints is `acceptance: exempt`**, which would convert a false red into a permanent real silent pass on a thread that has a full contract. Do not take that remedy. **Read satisfaction off the view instead**: `grep -oE '^- AC[0-9]+ .*-- satisfied: [a-z]+' intent/st/ST0010/acceptance.md` -- 16 yes, 4 no (AC15, AC16, AC18, AC19) at `72ee931`. Intent's tree, not ours: `intent-vc`'s to file, via hv.
 
 - **AND THE TELL ONLY APPEARS ONCE SOMETHING IS GREEN.** My own board read "Gate 0/20 BLOCKED, which is correct" for most of today. It was not correct, it was unreadable -- but a broken reader returning zero is indistinguishable from a true zero at exactly the moment a validation node first looks, which is when nothing has been proven yet. **A zero from an instrument you have never seen return non-zero is not a measurement.** Make one row green by hand-check first, then believe the counter.
 

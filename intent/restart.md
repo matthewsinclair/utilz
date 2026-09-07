@@ -1,14 +1,14 @@
 ---
-verblock: "29 Aug 2026:v1.5: matts - globalfold after v2.5.0; prez shipped, ST0010 open at 16/20"
+verblock: "07 Sep 2026:v1.6: matts - as-written tidy; refs, native-intent contradiction, Highlander count corrected"
 ---
 
 # Restart Context
 
 Cross-session continuity. `intent/wip.md` holds DOING and TODO; `intent/done.md` holds the record of what shipped. This file holds what the next session needs to know before it touches anything.
 
-## Key Context (as of 3 Sep 2026)
+## Key Context (as of 7 Sep 2026)
 
-- **Framework at v2.5.0 with 15 utilities** (core `utilz` + 14 tools). `stampz` landed 3 Sep and **the version has NOT been bumped** -- releases and tags are hv's, and stampz is 2.6.0 material. `HEAD`, `local/main` and `upstream/main` are all at `560ac49`; the `v2.5.0` tag is still at `72ee931`, so the tag no longer names the tip.
+- **Framework at v2.5.0 with 15 utilities**, dispatched by `utilz` on top of them (`utilz list` and `utilz doctor` both say 15; `bin/` holds those 15 symlinks plus `utilz` itself and the vendored `devbin`). `stampz` landed 3 Sep and **the version has NOT been bumped** -- releases and tags are hv's, and stampz is 2.6.0 material. Refs re-read 7 Sep: `local/main` and `upstream/main` are at `5dcc317`, `HEAD` is one commit further at `0ab1ac2` (devbin re-vendor, unpushed), and the `v2.5.0` tag names `4b6eb07` -- the release commit, per the standing directive, so it correctly does not name the tip.
 - **ST0011 (`stampz`) is CLOSED**, 11/11, CI run `33785732770` green on all seven jobs with stampz at 22/22 and zero skips on both legs.
 - **ST0010 (`utilz prez`) is shipped but NOT closed.** Gate 16/20; AC15, AC16, AC18, AC19 remain. AC16 is hv's by construction -- a human renders every built-in theme and looks -- and the suite is not allowed to stand in for it.
 - **`opt/prez/crate` is a FORK of the `_tools` pin, not a mirror.** AC14, AT13, AC18(b), AT17/AT19, AC19 and AC20 exist only here. **Never `tar -x` a new pin over it**: that deletes them silently, leaving a green build and a passing suite because the proving tests go too. Use `hoist-rebase.sh`, attached to ST0010, `--dry-run` first.
@@ -16,7 +16,7 @@ Cross-session continuity. `intent/wip.md` holds DOING and TODO; `intent/done.md`
 - **Utilz carries ZERO knowledge of `Geodica/` or its `_tools`** (which moved to `~/Devel/prj/Gtools`). hv's standing ruling. Gtools is a consumer of prez, never the reverse. AT09's tripwire greps all of `src/` including comments for estate paths or names; it is in `test/`, so it cannot match itself.
 - **The `M-x utilz` menu is SIX utilities, not the whole roster** (issue 0009): `cleanz`, `expz`, `mdagg`, `pdf2md`, `prez`, `todo`. Absence is a decision -- nine blocks were removed after measuring what the bridge actually invokes, four of which could never have worked and one of which created a symlink on selection. A framework test now invokes the command form the bridge builds for every declaring utility.
 - **`intent/issues/OPEN/` is empty BY POLICY and always will be, so do not read it as "no open defects".** `intent/.intentfiles` declares that only OPEN THREADS get a realised form on disk; no issue is ever written there, and the files under `intent/issues/CLOSED/` are v2 artefacts predating that policy. Use `intent issues list`. Open: `0007` (prez slide-counter contrast, WP-05). An empty directory confirms a false answer where a missing one would announce itself.
-- **The `intent` CLI is at `~/Devel/prj/Intent/bin/intent` and may not be on `PATH` in a fresh tool shell.** `INTENT_HOME` is inert for v3. No native binary is built, so every `intent` subcommand runs the bash implementation.
+- **The `intent` CLI may not be on `PATH` in a fresh tool shell.** `INTENT_HOME` is inert for v3. **On this machine `intent` is the NATIVE binary** -- `readlink -f "$(command -v intent)"` resolves `~/.local/bin/intent` to `Intent/native/rust/target/release/intent` (re-read 7 Sep), so subcommands do NOT run the bash implementation and the shell-dispatch caveats below do not apply here. A fresh checkout on a machine with no native build gets the bash path and does. This bullet asserted the opposite until 7 Sep, contradicting the section immediately below it that had already re-measured and flipped.
 
 ## The one instrument you cannot trust -- UNLESS YOUR `intent` IS THE NATIVE BINARY
 
@@ -92,7 +92,7 @@ Moved here out of `.claude/restart.md`, which holds NO STATE and was starting to
 ## Framework internals that are silent when broken
 
 - **THE ACCEPTANCE SUITE'S BROWSER GATE IS AN ENVIRONMENT VARIABLE, SO ITS ABSENCE IS INVISIBLE, AND THE SILENT PATH IS THE ONE THAT LAUNCHES CHROME.** `chrome()` in `crate/test/acceptance.sh` announces the refusal path loudly -- an override pointing at something non-executable prints `note: PREZ_TEST_BROWSER=... is not executable` -- and prints **nothing** when it probes, finds a real browser, and hands it to four ATs to launch headless. The louder half is the harmless half. `PREZ_TEST_BROWSER` does not survive a new shell, so the same `utilz test prez` on the same tree gives 12 passed / 0 skipped in one shell and 9 passed / 11 skipped in another, with nothing in the output naming the difference. **Before quoting any acceptance number, say which shell it ran in and whether the override landed.** If a run must be browserless, `export` it in that shell and check it took.
-- **`each_utility()` has six consumers, one in `bin/utilz`.** ST0009 consolidated five and missed the sixth because its sweep grepped `common.sh` only. The no-seventh-copy check is `grep -rn 'UTILZ_HOME"/bin/\*' bin/utilz opt/utilz/lib/common.sh` -- exactly two hits. Run it after adding any listing surface.
+- **`each_utility()` is THE walker of `bin/`, and it has SEVEN consumers** -- six in `common.sh` (lines 162, 445, 502, 733, 849, 907) and one in `bin/utilz` (224). ST0009 consolidated five and missed the sixth because its sweep grepped `common.sh` only; issue 0004 then converted `bin/utilz`'s open-coded copy into a consumer, which is why there is now exactly ONE walk in the tree. **Re-measured 7 Sep -- the check below had gone stale in the safe direction and would have read as a false red.** The no-second-walker check is `grep -rn 'UTILZ_HOME"/bin/\*' bin/utilz opt/utilz/lib/common.sh` -- **exactly ONE hit**, `common.sh:265`, inside `each_utility()` itself. Two hits means a second open-coded walk has appeared. Run it after adding any listing surface.
 - **Consume `each_utility` with process substitution, never a pipe.** A pipe subshells the loop body and the accumulator arrays are discarded, so `run_doctor` / `run_tests` report nothing, successfully.
 - **Call `require_yq` once before a loop**, never per-iteration and never memoised: `get_util_metadata` runs inside command substitution, so a memo dies with the subshell.
 - **`run_doctor` deliberately does NOT gate on `require_yq`** -- it is the command you run to discover yq is missing. Do not "tidy" it.
@@ -111,7 +111,10 @@ The Utilz **framework** version is `VERSION` = **2.5.0** (single source of truth
 - `utilz doctor` + `utilz emacs doctor` -- both green.
 - `utilz test` -- full suite green. Takes several minutes; do not assume a timeout means a failure, and never run two at once.
 - `utilz test prez` -- drives three sources: 128 cargo tests, 23 shim BATS, and `crate/test/acceptance.sh --strict`. The acceptance suite needs a real browser; under `PREZ_TEST_BROWSER=/nonexistent` it takes the browserless path and says why it refused.
-- shellcheck exactly as CI runs it: collect `find bin opt -type f \( -perm -u+x -o -name '*.sh' \) -not -path '*/test/*' -not -path '*/.venv/*'` into a bash **array** and `shellcheck -x` it. Under `/bin/bash`, not zsh.
-- Highlander check: `grep -rn 'UTILZ_HOME"/bin/\*' bin/utilz opt/utilz/lib/common.sh` -- exactly two hits, or a seventh open-coded walk has appeared.
+- shellcheck exactly as CI runs it (`.github/workflows/tests.yml`, the `shellcheck` job) -- **read the workflow rather than retyping the `find` from here**, because the collector has two filters that a shortened form drops and both matter:
+  - a `file "$s" | grep -q "shell script"` sniff on every non-`.sh` candidate, WITHOUT which `-perm -u+x` sweeps the compiled Rust artefacts under `opt/prez/crate/target/` and shellcheck parses binaries. Measured 7 Sep: the form previously documented here collected **57 "files"** on a built tree and exited 1 on parse errors against `build-script-build`. **A checkout that has never been built does not reproduce it**, which is why it survived here.
+  - `-not -path "*/.devbin/*" -not -name "devbin"`, because devbin is vendored and its `source` lines are SC1091 at info level, which exits non-zero.
+  - The true form collects **17 files and is clean** (re-measured 7 Sep). Under `/bin/bash` with a bash **array**, never zsh: zsh does not word-split, so a string form passes one bogus path, errors, and the empty output reads as a clean run.
+- Highlander check: `grep -rn 'UTILZ_HOME"/bin/\*' bin/utilz opt/utilz/lib/common.sh` -- **exactly ONE hit** (`common.sh:265`, inside `each_utility()`), or a second open-coded walk has appeared. This read "exactly two hits" until 7 Sep, which is a count the correct tree has not produced since issue 0004 folded `bin/utilz`'s copy into a consumer.
 - Estate zero-knowledge: `grep -rlE '(/Users/|Dropbox|[Gg]eodica)' opt/prez/crate/src` -- no hits.
 - With `yq` off `PATH`: `utilz list` must fail loudly with a single install hint, and `utilz doctor` must still complete and name `yq` as missing.
