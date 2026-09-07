@@ -136,16 +136,45 @@ if (boundsW !== null) {
   results.push({ name: `${label}_browser_bounds`, got: 'UNAVAILABLE', want: 'a number', pass: false });
 }
 
-near(`${label}_width`, outerW, wantW, 40);
-near(`${label}_height`, outerH, wantH, 90);
+// A REQUESTED SIZE IS CLAMPED TO THE DISPLAY, and the check has to know that
+// or it asserts something only true on a big monitor. Measured on macOS CI
+// 2026-09-07: a request for 1280x720 produced 1024x677 -- the runner's work
+// area -- and the check failed on a build that was behaving correctly. The
+// screen is therefore read rather than assumed, and the expectation is what
+// Chrome can actually give: the request, or the screen, whichever is smaller.
+const availW = await cdp.eval('window.screen.availWidth');
+const availH = await cdp.eval('window.screen.availHeight');
+const fitW = Math.min(wantW, availW);
+const fitH = Math.min(wantH, availH);
+const clamped = fitW !== wantW || fitH !== wantH;
+results.push({
+  name: `${label}_screen`,
+  got: `${availW}x${availH}${clamped ? ` (clamps ${wantW}x${wantH} to ${fitW}x${fitH})` : ' (fits)'}`,
+  want: 'read, not assumed',
+  pass: Number.isFinite(availW) && availW > 0,
+});
+
+near(`${label}_width`, outerW, fitW, 40);
+near(`${label}_height`, outerH, fitH, 90);
 
 // THE CLAUSE THAT MATTERS. AC19(a) is about SHAPE -- hv's window came up
-// portrait for a 16:9 deck -- so the aspect is asserted tightly even where the
-// absolute pixels are allowed to drift.
-const wantAspect = wantW / wantH;
-const gotAspect = outerW / outerH;
+// portrait for a 16:9 deck -- so the aspect is asserted tightly.
+//
+// ONLY WHEN THE REQUEST FITS. A clamped window has the SCREEN's proportions,
+// not the deck's, and asserting the deck's aspect against a clamped window
+// tests the monitor rather than prez. Landscape still holds either way, which
+// is the half that actually caught hv's portrait window.
 check(`${label}_is_landscape`, outerW > outerH, true);
-near(`${label}_aspect`, Number(gotAspect.toFixed(2)), Number(wantAspect.toFixed(2)), 0.25);
+if (clamped) {
+  results.push({
+    name: `${label}_aspect`,
+    got: `${(outerW / outerH).toFixed(2)} -- NOT ASSERTED, window clamped to a ${availW}x${availH} screen`,
+    want: 'skipped for cause',
+    pass: true,
+  });
+} else {
+  near(`${label}_aspect`, Number((outerW / outerH).toFixed(2)), Number((wantW / wantH).toFixed(2)), 0.25);
+}
 
 ws.close();
 

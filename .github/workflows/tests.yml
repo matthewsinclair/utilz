@@ -241,6 +241,25 @@ jobs:
     # that kept the shellcheck gate from reddening CI when it became blocking.
     # It is a vacuum with a message, not a silent pass; WP-04 asserts this job
     # actually built something once the crate is home.
+    # A DISPLAY FOR THE ONE AT THAT NEEDS A REAL WINDOW.
+    #
+    # AT20 measures the window `prez present` actually opens, which is the only
+    # thing that can prove --window-size took effect rather than merely being
+    # sent. It is the single non-headless check in the suite, so on a runner
+    # with no display Chrome opens nothing, the debugging port never appears,
+    # and a correct build goes red saying "the presenting window never opened
+    # its debugging port". Measured here 2026-09-07.
+    #
+    # Xvfb rather than skipping it: a skip would redden --strict anyway, and
+    # excluding the check would leave the one AT that needs a window as the one
+    # AT CI never runs -- which is how AC18(a)'s browser-list drift stayed
+    # invisible for weeks. macOS runners have a window server already.
+    - name: Virtual display, so the presenting window has somewhere to open
+      if: runner.os == 'Linux'
+      run: |
+        sudo apt-get update -qq
+        sudo apt-get install -y -qq xvfb
+
     - name: Build, test and accept every Rust crate
       run: |
         set -euo pipefail
@@ -270,7 +289,11 @@ jobs:
           # its vocabulary for.
           if [ -x "$crate_dir/test/acceptance.sh" ]; then
             out="$(mktemp)"
-            "$crate_dir/test/acceptance.sh" --strict 2>&1 | tee "$out"
+            # ONE invocation, prefixed rather than duplicated in an if/else --
+            # two copies of the command line drift, and the flags matter.
+            RUNNER=()
+            if command -v xvfb-run >/dev/null 2>&1; then RUNNER=(xvfb-run -a); fi
+            "${RUNNER[@]+"${RUNNER[@]}"}" "$crate_dir/test/acceptance.sh" --strict 2>&1 | tee "$out"
 
             # PROVE a browser was actually found. A suite that skipped every
             # browser AT can still exit 0; the only durable evidence is the

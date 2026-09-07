@@ -246,6 +246,12 @@ _emit_bucket_lines() {
   shift 3
   local t
   for t in "$@"; do
+    # shellcheck disable=SC2016
+    # The backticks are LITERAL -- markdown code fencing around the item
+    # number, in a printf FORMAT string. Single quotes are the correct quoting
+    # here and double quotes would be the bug: the format holds %s and %0*d,
+    # which printf expands, and the shell must not. SC2016 reads the backticks
+    # as an attempted command substitution and cannot tell the difference.
     printf -- '- [%s] `%0*d` %s\n' "$g" "$w" "$s" "$t"
     s=$((s + 1))
   done

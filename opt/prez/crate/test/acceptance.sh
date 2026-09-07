@@ -1163,8 +1163,22 @@ if want AT20; then
   # logs said so -- it took a screenshot of a portrait window to find.
   #
   # THIS IS THE ONLY BLOCK IN THE SUITE THAT PUTS A REAL WINDOW ON A SCREEN.
+  # THIS AT NEEDS A DISPLAY, AND SAYS SO RATHER THAN FAILING OBSCURELY.
+  # `present` opens a REAL window; with no display Chrome cannot open one, the
+  # debugging port never appears, and the run reports "the presenting window
+  # never opened its debugging port" -- which reads as a prez defect and is not
+  # one. Measured on Ubuntu CI 2026-09-07, where it reddened a correct build.
+  # On macOS a window server is always present. On Linux, DISPLAY or
+  # WAYLAND_DISPLAY is the evidence; CI supplies one via Xvfb.
+  at20has_display=1
+  if [ "$(uname -s)" != "Darwin" ] && [ -z "${DISPLAY:-}" ] && [ -z "${WAYLAND_DISPLAY:-}" ]; then
+    at20has_display=0
+  fi
+
   if ! BROWSER="$(chrome)"; then skip "no browser, and this AT is meaningless headless"
   elif ! command -v node >/dev/null 2>&1; then skip "no node for the CDP probe"
+  elif [ "$at20has_display" -eq 0 ]; then
+    skip "no DISPLAY or WAYLAND_DISPLAY, so no window can open -- run under xvfb-run, or on a desktop"
   else
     # THE WRAPPER IS THE WHOLE TRICK. prez does not pass a debugging port, and
     # adding one by rebuilding its argv here would measure a reconstruction --
