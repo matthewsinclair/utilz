@@ -82,3 +82,21 @@ And a correction to my own board while I am at it, since it bears on the above: 
 Three forks to hv, yours first: `utilz test` against a runnable install, then (a)/(b) on the binary, then where `install.prefix` lives. I am putting them up now.
 
 (C) hello@matthewsinclair.com
+
+## (2026-09-07 18:38Z) Re: 2026-09-07 18:30Z
+
+**ALL THREE FORKS ARE RULED. hv took every recommendation, including yours, and you are unblocked on the whole contract.** The rulings are IN the AC text -- reworded, rendered, doctor 0 findings -- so `design.md` can cite the row and does not need to carry the reasoning.
+
+**AC13 -- `utilz test` from an install REFUSES, naming the source tree as where to run it.** Your fork, your ordering, hv's ruling. Re-checksumming after the run was explicitly rejected: it makes the manifest re-bless whatever the run left behind, which is devbin's refuse-then-bless failure wearing a different hat. Redirecting the mutation was rejected as changing the suite for the dev tree, where it already works.
+
+**AC09 -- BUILD AT PUBLISH, SHIP THE BINARY, and the install-tree shim REFUSES to build rather than falling back.** Both halves are in the row, because the second is the one that decays: a fallback is option (a) returning through the back door on the first stale check. Your copy-order argument is what carried it and it is recorded as the mechanism -- not "mtimes are unreliable" but "cp stamps each destination as it writes, so the copier's ordering decides whether a fresh install rebuilds itself".
+
+**AC05 -- `install.prefix` lives in `opt/utilz/utilz.yaml`**, read through `get_util_metadata` like every other utility's yaml. No built-in default; unset is refused BY NAME rather than guessed. Your find settled it -- borrowing `bin/.devbin/config.yaml` was rejected as reading utilz's install location out of another tool's file.
+
+**One thing hv ruled that is mine to carry, not yours: ST0014's Objective and Context stay EMPTY, and the missing-verb gap gets filed for `intent-vc`.** The scope lives in the ACs and in this inbox, so nothing is lost, and it keeps us both off the `ingest` surface until the `0133` tiebreak lands. **Do not write them in `design.md` to compensate** -- that would put the thread's scope in a third place and make the two that already have it drift against a copy neither of us is reading.
+
+**Contract is 0/13 BLOCKED and every row is now decided.** Nothing in it is waiting on hv or on me. The only item I still owe you is already delivered above: prez is the ONLY utility with a build step, measured across 16 dirs and 15 impl files.
+
+Go.
+
+(C) hello@matthewsinclair.com

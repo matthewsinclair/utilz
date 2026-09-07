@@ -31,7 +31,7 @@ title: Make utilz insallable in to opt/ just like devbin
 
 ### Group AC05
 
-- AC05 The install prefix is CONFIGURATION with no built-in default, and unset is refused by name rather than guessed. A baked default relocates the decision from a key somebody wrote to the absence of one, and a publish to the wrong place is indistinguishable from a publish to the right one. Where the key lives is open: bin/.devbin/config.yaml is devbin's config for utilz, not utilz's own. -- satisfied: no (computed)
+- AC05 The install prefix is CONFIGURATION read from `install.prefix` in `opt/utilz/utilz.yaml`, with NO built-in default, and unset is refused BY NAME rather than guessed. RULED by hv 2026-09-07: utilz's own metadata file, read through get_util_metadata like every other utility's yaml, rather than borrowing bin/.devbin/config.yaml, which is devbin's config FOR utilz. A baked default relocates the decision from a key somebody wrote to the absence of one, and a publish to the wrong place is indistinguishable from a publish to the right one -- devbin shipped a hardcoded $HOME/Devel/opt/devbin into fourteen estates before this was learned. -- satisfied: no (computed)
 
 ### Group AC06
 
@@ -47,7 +47,7 @@ title: Make utilz insallable in to opt/ just like devbin
 
 ### Group AC09
 
-- AC09 prez runs from the install. This is the thread's one genuinely open design fork and it is hv's: ship crate source and build on first use, or build at publish and ship the binary. Building on first use makes the install tree write to itself, voiding the manifest the moment anyone uses it, and prez_is_stale() decides via find -newer against src/themes/assets, so the mtimes a copy happens to leave would decide whether a fresh install rebuilds itself. -- satisfied: no (computed)
+- AC09 prez runs from the install because the install SHIPS THE BUILT BINARY, built at publish time; the install-tree shim REFUSES to build rather than falling back to one. RULED by hv 2026-09-07. Building on first use was rejected on a mechanism rather than a preference: prez_is_stale() uses `find -newer` against src/, themes/ and assets/, and cp stamps each destination as it writes, so whether a fresh install rebuilt itself would be decided by COPY ORDER -- deterministic per implementation, invisible in the output, and flipping on a reordering nobody would classify as behavioural. A build fallback in the shim reintroduces exactly that on the first stale check. prez is the only utility with a build step: 16 utility dirs, 15 impl files read, 1 hit. -- satisfied: no (computed)
 
 ### Group AC10
 
@@ -63,7 +63,7 @@ title: Make utilz insallable in to opt/ just like devbin
 
 ### Group AC13
 
-- AC13 `utilz test` against an INSTALL tree does not silently corrupt it. The suite mutates $UTILZ_HOME/bin, which is why it is not concurrency-safe; devbin never meets this because their install cannot run, and ours must. Run from an install it rewrites the very files the manifest checksums, so the install reports drift nobody caused. Refuse with a reason or redirect the mutation -- what it must not do is quietly pass. Found by cc. -- satisfied: no (computed)
+- AC13 `utilz test` run against an INSTALL tree REFUSES, and names the source tree as where to run it. RULED by hv 2026-09-07. The suite mutates $UTILZ_HOME/bin -- which is why it is not concurrency-safe -- so from a runnable install it rewrites the very files the manifest checksums and the install reports drift nobody caused. Refusing cannot corrupt anything; re-checksumming after a run was rejected because it makes the manifest re-bless whatever the run left behind, which is devbin's refuse-then-bless failure. Devbin never meets this because their install cannot run. Found by cc. -- satisfied: no (computed)
 
 ## Acceptance Tests
 
