@@ -3,7 +3,7 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 06b406f0-9a29-4636-ad0d-abd6663e4f8f
-heartbeat_at: 2026-09-07 14:00Z
+heartbeat_at: 2026-09-07 14:22Z
 status: active
 focus: "Pickup 7 Sep. ST0010 open at 16/20 -- AC16 hv's, AC18/AC19 mine, AC15 is WP-06. Retired since the last board: the v2.5.0 tag move (verified at 4b6eb07 on both remotes) and the Gtools cutover (zero GEOPRES_THEME_PATH in live code, both repos). Awaiting hv on the day's sequencing."
 claims: [ST0010]
