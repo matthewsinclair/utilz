@@ -1,5 +1,5 @@
 ---
-verblock: "07 Sep 2026:v1.10: matts - as-written tidy; tag move and Intent 0008 retired, AT15 corrected to unwritten"
+verblock: "07 Sep 2026:v1.11: matts - globalfold; ST0010 closed and dehydrated, work carried out of it"
 ---
 
 # Work In Progress
@@ -8,44 +8,37 @@ This file carries **DOING and TODO only**. Completed work belongs in `intent/don
 
 ## DOING
 
-**ST0010 -- `utilz prez`, the first Rust utility.** Shipped as **v2.5.0**, CI green on all seven jobs. The thread is not closed: four acceptance criteria remain. Release state as of 7 Sep: the `v2.5.0` tag names `4b6eb07`, the release commit, on both remotes -- the standing directive satisfied. `main` has since moved on: both remotes are at `5dcc317` and `HEAD` is one commit further at `0ab1ac2` (devbin re-vendor), so the tag deliberately no longer names the tip.
+**Nothing in flight.** ST0010 closed 7 Sep; ST0011 closed 3 Sep. Both are dehydrated, so neither has files on disk and both are whole in canon.
 
-Gate **16/20**. Unsatisfied: AC15, AC16, AC18, AC19.
+Two open threads, neither started:
 
-| AC   | What it needs                                                | Whose |
-| ---- | ------------------------------------------------------------ | ----- |
-| AC16 | a human renders every built-in theme and looks               | hv    |
-| AC18 | AT15 -- UNWRITTEN; the code it would prove is in the tree    | vc    |
-| AC19 | AT20's browser half: the presenting window's actual geometry | vc    |
-| AC15 | theme addressing split + `--theme-path` (WP-06)              | vc    |
-
-Two things blocking their own progress rather than each other:
-
-- **AC19's open question needs a browser to answer.** When Chrome is already running, the launch forwards to the existing instance, and `--window-size` may not apply on that path -- so AC19's geometry could be cold-only. AT20 exists to find out; nothing else can.
-- **WP-04 still reads `Not Started`** while its work is substantially done. **Its hold condition is now released**: it was held because `intent wp done` consults an acceptance gate that could not be read, and on a native `intent` the gate reads correctly (16/20, matching the view). Whether `wp done` nonetheless refuses on a gate that is legitimately BLOCKED is a different question and is **untested** -- do not assume either answer. Advancing it is a state verb and hv's to sequence.
+- **ST0013 -- prez theme addressing** (`--theme` names-only, `--theme-file`, `--theme-path`). 0/1. Carries ST0010's AC15 verbatim, and AT01 is genuinely red-first: `--theme=NAME` must resolve identically from two working directories, one holding a `./NAME/` directory, and it is red against the pinned binary today because `path.exists()` wins. **It is a BREAKING change to `prez present <deck> --theme <path>`, which is in hv's shell history**, so clause (f) requires the refusal to name `--theme-file`.
+- **ST0012 -- estate file policy.** 4/4 PASS. Open because the policy is standing, not because work is outstanding. It declares the dehydration preconditions that let a closed thread's files leave the tree.
 
 ## TODO
 
 **Immediate, hv's**
 
-- **Relay the `intent ac gate` defect to `intent-vc`.** Bypassed here, not fixed. On this machine `intent` resolves to `Intent/native/rust/target/release/intent` and the gate is correct: `ST0010 BLOCKED -- 16/20, unsatisfied AC15 AC16 AC18 AC19`, matching the view. **Re-verified 7 Sep: `Intent/bin/intent_acceptance:295` still reads `ac_lines() { grep -E '^- AC-[0-9]+\.[0-9]+ ' ... }`**, the v2 dotted form, while the v3 renderer emits `^- AC<nn> ` -- so a machine with no native build still gets `0/0` against a full 20-row contract. It fails safe, but **the remedy it prints is `acceptance: exempt`**, which on a thread with a real contract converts a false red into a permanent silent pass. The report stands; the urgency does not. Intent's tree; nothing here should be edited to accommodate it.
-- **`geodica doctor` must report whether `utilz prez` is available.** hv's estate requirement, raised 13:36Z, still on no contract in any repo. The estate's move to `~/Devel/prj/Gtools` did not retire it.
+- **Push.** Two commits sit unpushed: the CI fix and a board update. `upstream/main` is an ancestor, so a plain push works and no force is needed.
+- **Relay the `intent ac gate` defect to `intent-vc`, now with a SECOND instance.** `Intent/bin/intent_acceptance:295` still greps the v2 dotted form while the v3 renderer emits `^- AC<nn> `, so a machine with no native build reports `0/0` against a full contract. **And the dehydration gate's `<<PRECONDITIONS ... PRECONDITIONS>>` block parses only the v2 dotted id too** -- `intent ac new` mints `AC91` happily and the gate then rejects it as "not an AC id". Same mismatch, two readers. Intent's tree; nothing here should be edited to accommodate either.
+- **`geodica doctor` must report whether `utilz prez` is available.** hv's estate requirement, still on no contract in any repo. The move to `~/Devel/prj/Gtools` did not retire it.
 
 **Deferred out of ST0011 (`stampz`), neither blocking**
 
-- **Mixed page geometry within one PDF is refused, not handled.** `qpdf --overlay --repeat=1` applies one stamp to every page, so per-page variation needs overlay ranges. `lamplight-ac` has offered its real pack as a corpus (10 files, 55 pages, two geometries, one of them a 1440x810 deck).
-- **`todo` verbs are unreachable from Emacs** (issue 0009). The bridge inserts `C-u` extra flags BETWEEN the declared flags and the path, so `utilz todo --file "done 2" <path>` exits 1. The default view works. Fixing it means the elisp appending the path before extra flags -- a bridge change, not a declaration.
+- **Mixed page geometry within one PDF is refused, not handled.** `qpdf --overlay --repeat=1` applies one stamp to every page, so per-page variation needs overlay ranges. `lamplight-ac` has offered its real pack as a corpus (10 files, 55 pages, two geometries).
+- **`todo` verbs are unreachable from Emacs** (issue 0009). The bridge inserts `C-u` extra flags BETWEEN the declared flags and the path. The default view works. Fixing it means the elisp appending the path before extra flags.
 
-**ST0010, remaining work packages**
+**Carried out of ST0010 when it closed**
 
-- **WP-05 -- default theme polish.** Carries issue `0007` (slide-counter contrast) and the `prez build examples/demo.md` warning that `class 'escape' has no effect` -- prez's own example ships a warning.
-- **WP-06 -- AC15, the theme addressing split** plus `--theme-path`.
-- **WP-07 -- expose the theme determinism probe** (deferred, possibly to be un-deferred). Two consumers, two days apart, were both blocked by prez keeping something private and both reached for a copy: the browser list and the determinism probe. That is one design answer, not two. The ruling is hv's, because it grows the crate's public surface and the crate's whole claim is that it is liftable.
+- **Issue `0007` -- the prez slide counter drops below the 4.5:1 contrast floor on dark slides.** OPEN, and it now drives the fix directly: WP-05 was cancelled on the rule that a tracked issue may drive a focused bugfix without a full thread.
+- **prez's default look, "basic but cool enough out of the box."** hv's words, no criterion behind it, no thread. It earns one when hv wants it.
+- **`prez build examples/demo.md` warns `class 'escape' has no effect`** -- prez's own example ships a warning. Deck content.
+- **The theme determinism probe is still deferred.** WP-07's browser half shipped as the `browser` verb; the probe half was never un-deferred and has no consumer. `design.md` section 12 in ST0010's canon is the record.
 
-**Housekeeping, small and each independently true**
+**Housekeeping**
 
-- **`chrome()` should name the browser it resolved.** One `printf ... >&2` on the resolve path in `crate/test/acceptance.sh`, matching the note it already prints when it refuses. Today it is silent exactly where it is about to launch Chrome on someone's machine, so an acceptance number carries no evidence of which mode produced it. Found by cc at EOD from a 12/0/0 where the morning's identical command gave 9 passed / 11 skipped.
-- **cc's `hoist-rebase.sh` carries one dead postcondition.** `post "test/acceptance.sh" "AT13: PASS" 0` sets the minimum to zero against a `-ge` test, so it prints `ok` unconditionally -- including at the count of zero it exists to catch. Redundant rather than a hole (two other checks cover AT13), but it is the measures-nothing shape sitting inside the script that guards against silent loss. cc's; the canon-writing conflict that was holding it is cleared.
+- **cc's `hoist-rebase.sh` carries one dead postcondition.** `post "test/acceptance.sh" "AT13: PASS" 0` sets the minimum to zero against a `-ge` test, so it prints `ok` unconditionally, including at the count of zero it exists to catch. Re-verified 7 Sep at canon line 205. cc's, and it is a re-attach into ST0010's canon -- which is now a CLOSED, dehydrated thread, so it needs a hydrate first.
+- **`intent/issues/CLOSED/` renders only 0001-0006** while canon holds 9. `intent doctor` reports 0 findings and does not treat it as skew, but a reader who lists that directory sees a stale set. cc's finding, 7 Sep.
 
 **Opportunistic, no owner**
 

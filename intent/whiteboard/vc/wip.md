@@ -35,7 +35,6 @@ Released at EOD on hv's instruction. Two folds archived in `.history/20260829/` 
 - **AC16**, hv's eye. The only remaining item nobody else can take.
 - **`geodica doctor` must report whether `utilz prez` is available** -- hv's estate requirement, still on no contract anywhere. Carried since 13:36Z; the estate has since moved to `~/Devel/prj/Gtools`, which does not retire it.
 - **The `intent ac gate` false red** (Watch-outs) still needs relaying to `intent-vc`, with the qualifier that it is **bypassed here, not fixed**: this machine's `intent` is the native binary and reads the contract correctly. Re-verified 7 Sep that `Intent/bin/intent_acceptance:295` still greps the v2 dotted form, so a machine with no native build is unchanged. Intent's tree; nothing here should be edited to accommodate it.
-- **WP-04 reads `Not Started`** while its work is substantially done, and its hold condition is now released (above). Still not advanced: it is a state verb and yours to sequence.
 
 Retired since the last board, each verified against the artefact rather than taken on report: the browser authorisation (given, run, green); the 41 unpushed commits (pushed); the 2.5.0 release; and **the `v2.5.0` tag move** -- the tag object `0ba1c2c` resolves to `4b6eb07`, the release commit, on both remotes, so the standing directive is satisfied and the item is off my board and off `intent/wip.md`. One commit is unpushed today (`0ab1ac2`, devbin re-vendor); pushing is yours.
 
