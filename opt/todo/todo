@@ -297,6 +297,9 @@ write_file() {
 _resolve_n() {
   local n="$1"
   [[ "$n" =~ ^[0-9]+$ ]] || return 1
+  # Ids are rendered zero-padded ("08"), so force base 10: bash arithmetic
+  # would otherwise read a leading zero as octal and reject 08 and 09.
+  n=$((10#$n))
   _counts
   if ((n >= 1 && n <= A)); then SRC_BUCKET="DOING"; SRC_IDX=$((n - 1)); return 0; fi
   if ((n >= A + 1 && n <= A + B)); then SRC_BUCKET="TODO"; SRC_IDX=$((n - A - 1)); return 0; fi
