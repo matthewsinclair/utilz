@@ -2,18 +2,18 @@
 node: cc
 name: Control Claude
 role: control
-session_id: 5d94b174-72a1-4eca-9eb0-674adfd6414d
-heartbeat_at: 2026-09-03 18:04Z
+session_id: caa8cc75-2476-437c-b48f-569234f336f9
+heartbeat_at: 2026-09-07 14:28Z
 status: active
-focus: "ST0011 (stampz) CLOSED -- 11/11, CI run 33785732770 green on all seven jobs, 22/22 on both legs with zero skips. Nothing of mine in flight."
-claims: [ST0010]
+focus: "Pickup 7 Sep. Nothing of mine in flight. Actioned vc's 14:22Z report: the no-seventh-copy tripwire was false-red and is corrected; ST0010 claim dropped, the thread is vc's."
+claims: []
 ---
 
 # Control Claude (cc)
 
 ## DOING
 
-**Nothing in flight.** ST0011 (`stampz`) closed 3 Sep at 11/11, CI run `33785732770` green on all seven jobs, 22/22 on both legs with zero skips. Narrative archived to `.history/20260903/`; substance is in ST0011's Context and `intent/done.md`. **ST0010 remains vc's**, untouched today apart from `prez.bats`.
+**Nothing in flight.** ST0011 (`stampz`) closed 3 Sep at 11/11, CI run `33785732770` green on all seven jobs. Narrative archived to `.history/20260903/`; substance is in ST0011's Context and `intent/done.md`. **ST0010 is vc's** -- the stale `claims: [ST0010]` my header carried until this pickup is dropped, so the header and this text now agree.
 
 ## TODO
 
@@ -48,11 +48,12 @@ claims: [ST0010]
 - **`utilz help <anything>` HANGS when stdin is a TTY** (glow's pager -- `mdagg` does it too). It bites `bats --filter` from a terminal and looks like the test hung. `< /dev/null` fixes it; `utilz test` and CI never see it.
 - **`utilz test` is not safe to run concurrently** -- the helper mutates `$UTILZ_HOME/bin`. One suite at a time. `pgrep -fl bats` matches peer Claude sessions, not just real suites.
 - Verify shell tooling under `/bin/bash` with an ARRAY. zsh does not word-split, so `shellcheck -x $FILES` errors on one bogus path and the empty output reads as a pass -- a false "all 15 clean" against 57 real findings.
+- **A documented shellcheck form that RESTATES CI drifts from it, and the drift only shows on a built tree.** `restart.md` claimed to mirror CI and had dropped both the `file "$s" | grep -q "shell script"` sniff and `-not -name "devbin"`, so `-perm -u+x` swept `opt/prez/crate/target/` and shellcheck parsed **compiled Rust binaries** -- 57 "files", exit 1, parse errors on `build-script-build`. The real form collects **17 files and is clean**. Neither defect reproduces on a checkout that has never been built, which is how both survived. vc corrected `restart.md` to point AT the workflow rather than restate it; kept here because "restate the CI command in prose" is the shape, not that one file.
 - Do not use `perl -0pi -e` where the text contains `$(` -- Perl interpolates it as GID and corrupts the file.
 
 **Framework internals.**
 
-- **`each_utility()` has six consumers, one in `bin/utilz`.** The no-seventh-copy check is `grep -rn 'UTILZ_HOME"/bin/\*' bin/utilz opt/utilz/lib/common.sh` -- exactly two hits.
+- **`each_utility()` has SEVEN consumers, one of them in `bin/utilz`** -- six in `common.sh` (162, 445, 502, 733, 849, 907) and `bin/utilz:224`. **The check this board documented until 7 Sep was FALSE-RED and had been since July.** It read _"six consumers ... exactly two hits"_ on `grep -rn 'UTILZ_HOME"/bin/\*' ...`; issue 0004 folded `bin/utilz`'s open-coded copy into a consumer, so the correct tree has returned **ONE** hit ever since -- `common.sh:265`, inside `each_utility()` itself. A reader running the documented form today reads the one hit as a walker having gone missing and re-adds one, which is the exact duplication the tripwire exists to prevent. Reported by vc; re-measured here rather than taken on report. **The check that actually holds: `grep -c 'UTILZ_HOME"/bin/\*' opt/utilz/lib/common.sh` is 1 (the walker), and `grep -rn 'each_utility' bin/utilz opt/utilz/lib/common.sh` shows every consumer going through it.**
 - `each_utility()` must be consumed with process substitution, never a pipe: `run_doctor` and `run_tests` accumulate into arrays and a pipe subshells the loop body.
 - `require_yq` ONCE before a loop, never per-iteration -- `get_util_metadata` runs in command substitution and cannot memoise.
 - `run_doctor` deliberately does NOT gate on `require_yq` -- it is the command you run to discover yq is missing.
