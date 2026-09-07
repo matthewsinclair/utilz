@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 06b406f0-9a29-4636-ad0d-abd6663e4f8f
-heartbeat_at: 2026-09-07 21:18Z
+heartbeat_at: 2026-09-07 21:20Z
 status: active
-focus: "ST0014 -- contract and verification only; cc builds. AC01-AC13 minted with all three forks ruled, doctor 0 findings, contract 0/13 BLOCKED with every row decided, no source code from either node yet. Next act on this thread is verifying AC01 against the artefact -- the install running with the source tree moved aside -- not writing it. Localfolded 20:59Z; status stays active, a compact is not a session end."
+focus: "ST0014 -- vc HOLDS THE PEN from 21:19Z. Both forks ruled: AC15 announces an inherited UTILZ_HOME divergence rather than ignoring the variable (measured -- ignoring it breaks the bats suite and cc's own install.sh:124), and AC16 + WP-12 add an explicit utilz relink verb. Contract 0/16 BLOCKED, doctor 0 findings, cc building WP-01. One item is hv's hands: delete the ambient UTILZ_HOME export at ~/.zshrc:76-78, deliberately given no AC because nothing here can measure a dotfile."
 claims: [ST0012, ST0013]
 ---
 
@@ -35,6 +35,10 @@ State, verified rather than described: **AC01-AC13 minted with all three forks r
 **cc's D2 rewrite reproduces exactly on my side**: 109 tracked paths, 15 symlinks, 94 files, 43M, 42M of it `opt/macoz/images/`, same five utilities. Sharper figure I gave them: 22 paths an inclusion list would have dropped. `bin/devbin` excluded safely -- one reference in all 109, a comment at `opt/prez/prez:54`.
 
 **I CORRECTED TWO OF MY OWN ROWS AGAINST cc'S WORK RATHER THAN DEFENDING THEM.** AT07 said "15 symlinks and 2 real files" as the ARRIVAL count; the exclusion makes the install's `bin/` 15 and one, and AC06 now says in the row that its count is of the SOURCE `bin/`. And AT06 gained a fourth leg after I nearly filed cc's literal-`null` finding as unreproducible -- **my probe passed `install.prefix` without the leading dot, which is not a yq path, so it returned empty.** With `.install.prefix` the finding is exact: the four-character string `null`, `[[ -n ]]` passes, a bare guard publishes to `./null`. Both the null and the empty case have to be refused; a guard written for one lets the other through. **The near-miss is the lesson: I was one malformed argument away from telling a peer their measured finding did not reproduce.**
+
+**I HOLD THE PEN FROM 21:19Z AND HAVE RULED BOTH FORKS. The AC15 ruling reverses my own recommendation of an hour earlier, and it was the measurement that reversed it, not an argument.**
+
+**PRECONDITION, hv's hands, DELIBERATELY NOT AN AC: `~/.zshrc:76-78` must stop exporting `UTILZ_HOME`.** An ambient login-shell export makes every invocation carry the checkout, so the AC15 announcement fires on every install run, and an announcement that always fires is noise nobody reads. It gets no criterion because nothing in this repo can measure hv's dotfile -- **a criterion nothing can measure is worse than a sentence that can be acted on**, and minting one would let it be counted as satisfied by someone who never touched the file.
 
 **My next act on this thread is VERIFYING AC01 against the artefact** -- the install running with the source tree moved aside -- not writing it. An install that reaches back into the checkout passes everything that does not move the source.
 
@@ -88,6 +92,9 @@ Retired since the last board, each verified against the artefact rather than tak
 - `utilz test` is not safe to run concurrently. Verify shell tooling under `/bin/bash` with an array, never zsh with an unquoted variable.
 
 ## Decisions that still decide things
+
+- (2026-09-07) **THE VARIABLE IS NOT THE DEFECT; THE SILENCE IS.** Ruled with the pen on AC15, against my own prior recommendation. `UTILZ_HOME` is load-bearing as a SETTABLE variable in five places -- `test_helper.bash:20` for the whole bats suite, `prez.bats:132` as a deliberate foreign-tree run, `common_lib.bats:71`, the documented `e2e-smoke.el` path, and cc's own `install.sh:124` reading a foreign tree's yaml in a subshell. So the dispatcher derives its own home from `$0` always, ANNOUNCES a divergence with an inherited value, and HONOURS the inherited value. **The general form: when a capability is silent in the failing case and load-bearing in the working ones, remove the silence rather than the capability.** Two dispatchers was rejected as a Highlander violation on the one file that must have exactly one answer -- cc flagged that risk and the flag is what killed the option.
+- (2026-09-07) **NEVER IMPLICITLY, ALWAYS AVAILABLE EXPLICITLY.** AC11 and AC16 are one policy from two sides, and AC16 is a SEPARATE VERB rather than a flag on install: **a `--relink` flag becomes habitual, and a habitual flag is implicit by habit**, which is the thing AC11 forbids. Shell-init in devbin's shape was rejected because devbin has one entry point reached by absolute path and that does not transfer to sixteen, and because PATH-order resolution makes which-tree-answers depend on shell state -- the defect AC15 exists to remove. Doing nothing was rejected: a manual sixteen-link step with no record is rediscovered as a bug rather than a decision.
 
 - (2026-08-29) **A tag may be moved off a red release commit onto the green commit that fixes only the harness.** `v2.5.0` was cut at `4b6eb07`, whose CI was red; the three fixes after it touch `acceptance.sh`, the workflow and the contract, and change nothing a user can run. Moved to `72ee931` and force-pushed both remotes, so the tag names a build that is green. The limit is the reason: had any commit in between touched `src/` or `bin/`, the honest move is a new tag, not a moved one. hv can reverse it.
 
