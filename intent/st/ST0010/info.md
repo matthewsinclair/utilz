@@ -124,7 +124,7 @@ The hygiene LESSONS above still apply and are restated as this thread's own crit
 | WP-04 | Validation: every carried green re-produced in the new home        | S    | WIP         |
 | WP-05 | Default theme polish: basic but cool enough out of the box         | S    | Not Started |
 | WP-06 | Theme addressing split + --theme-path (hv's CLI asks)              | S    | Not Started |
-| WP-07 | Expose theme determinism checking as a prez capability (deferred)  | S    | Not Started |
+| WP-07 | Expose theme determinism checking as a prez capability (deferred)  | S    | WIP         |
 
 ## Acceptance
 

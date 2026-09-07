@@ -122,6 +122,26 @@ AT14 is written red-first against the PINNED binary (cwd-identical resolution fa
 
 hv: prez's out-of-box look should be "basic but cool enough". `simple` is the plainest of the seven at 96 lines and is the no-flag default, so this is a real gap -- and it is cleanly prez's business now that geodica is just a caller. Deliberately sequenced after validation: it touches nothing the pin or WP-04 depend on, and a theme edit mid-validation would invalidate contrast figures the validation is busy citing.
 
+## 12. Expose the browser resolution (WP-07, BROWSER HALF ONLY -- hv 7 Sep, runs before WP-06)
+
+**AC18(a) says the harness "resolves through the tool's list or asks the tool, NEVER a second copy", and what the pin actually carries is a second copy.** `chrome()` in `test/acceptance.sh` hand-mirrors `APP_PATHS` (4 entries) and `PATH_NAMES` (6 entries) out of `src/drive.rs:20-28`. `_tools-vc` wrote the objection into the patch comment themselves: *"A MIRROR IS NOT THE RIGHT ANSWER AND THIS COMMENT IS NOT AN EXCUSE FOR IT... The durable fix is for the tool to expose its resolution (a `--print-browser`, or the refusal naming the list unconditionally) so this function can ask instead of copy. Raised for Utilz; the mirror is the stopgap."*
+
+The two lists have already drifted once, in this exact pair: `drive.rs` gained the PATH names and the harness did not, so on Linux the tool found a browser and the harness did not, five ATs degraded to skips, and `--strict` turned a correct build red while reporting *"no Chrome or Chromium installed"* about a browser the tool under test was driving. Nothing reported it because both only ever ran on macOS.
+
+**The door: a deck-less `browser` verb.** `prez browser` prints the resolved browser path to stdout and exits 0; finding none, it refuses with the probe list it already builds. That is all.
+
+- **A verb, not a flag.** `Invocation` already carries deck-less variants (`Help`, `Version`) matched ahead of verb dispatch, so a fourth costs nothing in `Command` and no surgery on the positional parser that requires a deck. A `--print-browser` flag would be recognised in the same place and would read as modifying an action when there is no action to modify.
+- **NOT "make the refusal name the list unconditionally", which was the other candidate `_tools-vc` offered.** The refusal fires only when nothing is found, and that cannot be provoked on a machine that HAS a browser -- which is every machine the harness runs on except CI's browserless leg. A door that only opens when the room is empty is not a door. This is the same limit their own comment names.
+- **It reaches the binary.** The dispatcher answers `--version` and `--help` from `prez.yaml` and never lets them through; `browser` is a real verb, so it goes shim -> binary, which is what a test meaning to exercise the tool requires.
+
+**`chrome()` then keeps exactly one thing of its own and asks for the rest.** The `PREZ_TEST_BROWSER` override (AC18b) stays where it is and stays checked FIRST, because its whole job is to force an answer the tool would not give. Everything after it becomes `"$BIN" browser`. The ten literals go.
+
+**The resolve-path announcement lands in the same change** rather than as the standalone one-liner cc's board carries it as. `chrome()` announces loudly when it REFUSES and says nothing when it resolves and hands a browser to four ATs to launch -- the louder half is the harmless half, and an acceptance figure therefore carries no evidence of which mode produced it (AC17). One `printf ... >&2` on the resolve path, at ONE site: the restructure funnels every resolution through a single tail, so the note cannot drift from the value actually returned. Doing this separately would touch the same eight lines twice.
+
+**What this makes provable, which is the point.** AT15(a) stops being *"the two lists agree today"* -- a check that passes right up until the moment it matters -- and becomes a Highlander assertion that can actually fire: **the harness holds no browser literal at all**, greppable, plus the behavioural check on CI's Linux leg where the drift first became visible.
+
+**Scope limit, deliberate: the theme determinism probe stays deferred.** WP-07 was minted covering both, on the argument that two consumers blocked two days apart by prez keeping something private is one design answer rather than two. That argument is about the DIAGNOSIS and does not compel shipping both at once. The browser half has a criterion on this thread waiting on it (AC18a) and the determinism probe has none; public surface on a crate whose whole claim is liftability is a one-way door, so the half with a proven consumer goes through it and the other waits for a consumer that is real rather than anticipated. hv ruled this on 7 Sep with the tension named.
+
 ## Non-decisions, named
 
 - No `utilz generate` Rust scaffolding -- one crate does not justify template machinery; revisit at the second crate alongside the workspace rule.

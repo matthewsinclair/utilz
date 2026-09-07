@@ -11,7 +11,7 @@ A DOING / TODO / DONE view, projected from steel-thread and work-package status:
   - [-] 04: Validation: every carried green re-produced in the new home
   - [ ] 05: Default theme polish: basic but cool enough out of the box
   - [ ] 06: Theme addressing split + --theme-path (hv's CLI asks)
-  - [ ] 07: Expose theme determinism checking as a prez capability (deferred)
+  - [-] 07: Expose theme determinism checking as a prez capability (deferred)
 
 ## TODO
 
