@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 06b406f0-9a29-4636-ad0d-abd6663e4f8f
-heartbeat_at: 2026-09-07 16:51Z
-status: released
-focus: "EOD. THE XVFB PATH IS VERIFIED -- run 34144634306 ran AT20 for real on Linux, four legs at 8 checks each, Chrome at /usr/bin/google-chrome on a 1280x1024 screen that clamps nothing. Three of the four red jobs went green. ONE RED REMAINS AND IT IS NEW, NOT A LEFTOVER: AT15's keychain half calls unchecked() when security(1) is absent, and --strict reddens on any skip, so the Rust ubuntu job fails 14/0/1. Needs a contract call from hv, not a patch."
+heartbeat_at: 2026-09-07 16:22Z
+status: active
+focus: "CI fix at 035e9e2 AWAITING hv's PUSH -- run 34142119571 was red on three jobs. AT20 needs a display (Xvfb added to the Linux leg) and a window size is clamped to the screen (probe now reads it); shellcheck SC2016 in opt/todo/todo was a false positive, disabled by id. Local: acceptance 14/0/0, shellcheck 17 clean. The Xvfb path is UNVERIFIED until CI runs it."
 claims: [ST0012, ST0013]
 ---
 
@@ -13,21 +13,17 @@ claims: [ST0012, ST0013]
 
 Validation node; for ST0010 hv also gave vc the coordination pen. cc builds, vc contracts and verifies, hv adjudicates. Two sessions archived in `.history/20260829/` -- read that before concluding anything is new.
 
-Released at EOD on hv's instruction, 7 Sep. Folds archived in `.history/20260829/` and `.history/20260907/` -- read those before concluding anything here is new.
-
-**EVERY SHA ON THIS BOARD IS POST-REWRITE.** `main` was rewritten and force-pushed at 16:45Z on hv's instruction, to strip a `Claude-Session` trailer the harness had injected into ten devbin commits. Only commit messages changed -- HEAD tree `da1a98f` before and after, 50 commits both sides, tags untouched. cc mapped the orphans and I have applied the mapping here rather than leaving dead hashes to be chased. **Reachability from `main` is the test for whether a SHA survived; `git cat-file -e` is not** -- the old objects are still in the object database via `backup/pre-scrub-20260907`, so an existence check returns a false green for every orphan. cc got that wrong first and said so.
+Released at EOD on hv's instruction. Two folds archived in `.history/20260829/` -- read that before concluding anything here is new.
 
 ## DOING
 
-**Nothing in flight. Closed for EOD.**
+**CI fix committed at `035e9e2`, awaiting hv's push.** Run `34142119571` went red on three jobs after the ST0010 work landed.
 
-**THE CI FIX IS PUSHED AND MOSTLY LANDED.** It went up with hv's history rewrite as `81ec490` (was `035e9e2` before the rewrite; the range was force-pushed, not re-run). Run `34144634306` at 16:44Z: **Ubuntu tests, Shell Script Analysis, macOS tests and both Rust macOS jobs are green.** The three failures from run `34142119571` are closed.
+- **AT20 needs a real display; Ubuntu CI has none.** It is the only non-headless check in the suite, so Chrome opened nothing and a correct build reported "the presenting window never opened its debugging port". AT20 now detects and skips saying so, AND the Linux job gets **Xvfb** so it actually runs -- a skip alone reddens `--strict`, and excluding it would leave the one AT needing a window as the one AT CI never runs.
+- **A THIRD QUALIFIER ON AC19, found by macOS CI: a requested size is CLAMPED TO THE DISPLAY.** It asked 1280x720 and got 1024x677, the runner's work area. The probe reads `screen.availWidth/availHeight` now and expects the request or the screen, whichever is smaller; the aspect assertion is skipped FOR CAUSE when clamped, because a clamped window carries the screen's proportions and asserting the deck's would test the monitor. **AC19's geometry is now: cold-start only, clamped to the display, honoured as a request.**
+- **shellcheck SC2016 at `opt/todo/todo:249` was a false positive** -- literal backticks inside a printf FORMAT string, where single quotes are correct. Disabled by id with the reason. Not mine: `b650a77` landed at 16:52, after the run in which I measured that collector clean, so restart.md's "17 files and is clean" was true when written and stale when pushed.
 
-**THE XVFB PATH IS VERIFIED -- this retires the UNVERIFIED flag I carried all day.** I could not exercise it from macOS and said so rather than implying otherwise. CI has now run it: the `Virtual display` step is green, `note: browser resolved to /usr/bin/google-chrome`, and **AT20 ran all four legs at 8 checks each** -- default 1280x720, override 900x600, first-instance 1024x768, and the forwarded window inheriting 1024x768 exactly as AC19(d) documents. The Linux runner's screen is 1280x1024, so nothing clamped and every aspect assertion actually fired. **The one AT that needs a window is no longer the one AT that CI never runs.**
-
-**ONE RED REMAINS, AND IT IS A NEW FINDING RATHER THAN A LEFTOVER.** `Rust (ubuntu-latest)` fails at **14 passed / 0 failed / 1 skipped**. The skip is AT15's keychain half: `acceptance.sh:1123` calls `unchecked "no security(1), so the keychain half did not run (not macOS)"`, `unchecked()` increments `SKIPPED`, and `--strict` fails the run if `SKIPPED > 0`. **Nothing is broken; the run is telling the truth under a rule that has no word for this case.**
-
-**And the rule is right in general, which is why this needs hv rather than a patch.** `unchecked()` currently conflates two different situations: _a tool that is missing from this machine and could be installed_ (a real gap -- AT20's Linux skip was exactly this, and the fix was to make it runnable), and _a check that cannot exist on this platform at all_ (`security(1)` is macOS's keychain tool; no Ubuntu runner will ever have it, and the macOS job DOES run that half). **The estate covers the check; a single job cannot.** The shape of a remedy is a third outcome beside `ok`/`unchecked` -- not-applicable-by-platform, which prints its reason but does not count as did-not-run -- and the danger of adding it is obvious: it is a licence to declare any inconvenient skip out of scope. **Whoever adds it must make the platform predicate the condition, never the check's difficulty.** My own board says a SKIP is not a pass; this would be the first exception to that and it should be hv's to grant.
+**THE XVFB PATH IS UNVERIFIED** and cannot be exercised from macOS. It only proves itself on the next CI run.
 
 ## Claims
 
@@ -40,7 +36,7 @@ Released at EOD on hv's instruction, 7 Sep. Folds archived in `.history/20260829
 - **`geodica doctor` must report whether `utilz prez` is available** -- hv's estate requirement, still on no contract anywhere. Carried since 13:36Z; the estate has since moved to `~/Devel/prj/Gtools`, which does not retire it.
 - **The `intent ac gate` false red** (Watch-outs) still needs relaying to `intent-vc`, with the qualifier that it is **bypassed here, not fixed**: this machine's `intent` is the native binary and reads the contract correctly. Re-verified 7 Sep that `Intent/bin/intent_acceptance:295` still greps the v2 dotted form, so a machine with no native build is unchanged. Intent's tree; nothing here should be edited to accommodate it.
 
-Retired since the last board, each verified against the artefact rather than taken on report: the browser authorisation (given, run, green); the 41 unpushed commits (pushed); the 2.5.0 release; and **the `v2.5.0` tag move** -- the tag object `0ba1c2c` resolves to `4b6eb07`, the release commit, on both remotes, so the standing directive is satisfied and the item is off my board and off `intent/wip.md`. The devbin re-vendor went up with the rewritten range as `5d99764` (was `0ab1ac2`). **One commit is unpushed as I close: `1a1e7ea`, cc's briefing to me; pushing is yours.**
+Retired since the last board, each verified against the artefact rather than taken on report: the browser authorisation (given, run, green); the 41 unpushed commits (pushed); the 2.5.0 release; and **the `v2.5.0` tag move** -- the tag object `0ba1c2c` resolves to `4b6eb07`, the release commit, on both remotes, so the standing directive is satisfied and the item is off my board and off `intent/wip.md`. One commit is unpushed today (`0ab1ac2`, devbin re-vendor); pushing is yours.
 
 ## Live with other nodes
 

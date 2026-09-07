@@ -1,5 +1,5 @@
 ---
-verblock: "07 Sep 2026:v1.11: matts - globalfold; ST0010 closed and dehydrated, work carried out of it"
+verblock: "07 Sep 2026:v1.12: matts - EOD; CI fix landed and Xvfb verified, one red left needing hv's call"
 ---
 
 # Work In Progress
@@ -19,7 +19,8 @@ Two open threads, neither started:
 
 **Immediate, hv's**
 
-- **Push.** Two commits sit unpushed: the CI fix and a board update. `upstream/main` is an ancestor, so a plain push works and no force is needed.
+- **Push.** The CI fix and both board updates went up with the 16:45Z history rewrite; what is unpushed at EOD is cc's briefing commit and this fold.
+- **ONE CI JOB IS STILL RED, AND IT NEEDS A CONTRACT CALL RATHER THAN A PATCH.** Run `34144634306` cleared three of the four failures -- including the Xvfb path, now VERIFIED: AT20 ran all four legs on Linux at 8 checks each. `Rust (ubuntu-latest)` still fails at **14 passed / 0 failed / 1 skipped**, because AT15's keychain half calls `unchecked()` when `security(1)` is absent and `--strict` reddens on any skip. **Nothing is broken.** `unchecked()` conflates a tool that is missing but installable (a real gap) with a check that cannot exist on this platform at all (`security(1)` is macOS-only, and the macOS job does run that half). A remedy means a third outcome that prints its reason without counting as did-not-run -- **which is a licence to wave away inconvenient skips unless the platform predicate, never the check's difficulty, is the condition.** It would be the first exception to "a SKIP is not a pass", so it is hv's to grant.
 - **Relay the `intent ac gate` defect to `intent-vc`, now with a SECOND instance.** `Intent/bin/intent_acceptance:295` still greps the v2 dotted form while the v3 renderer emits `^- AC<nn> `, so a machine with no native build reports `0/0` against a full contract. **And the dehydration gate's `<<PRECONDITIONS ... PRECONDITIONS>>` block parses only the v2 dotted id too** -- `intent ac new` mints `AC91` happily and the gate then rejects it as "not an AC id". Same mismatch, two readers. Intent's tree; nothing here should be edited to accommodate either.
 - **`geodica doctor` must report whether `utilz prez` is available.** hv's estate requirement, still on no contract in any repo. The move to `~/Devel/prj/Gtools` did not retire it.
 
