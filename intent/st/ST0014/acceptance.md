@@ -65,6 +65,58 @@ title: Make utilz insallable in to opt/ just like devbin
 
 - AC13 `utilz test` run against an INSTALL tree REFUSES, and names the source tree as where to run it. RULED by hv 2026-09-07. The suite mutates $UTILZ_HOME/bin -- which is why it is not concurrency-safe -- so from a runnable install it rewrites the very files the manifest checksums and the install reports drift nobody caused. Refusing cannot corrupt anything; re-checksumming after a run was rejected because it makes the manifest re-bless whatever the run left behind, which is devbin's refuse-then-bless failure. Devbin never meets this because their install cannot run. Found by cc. -- satisfied: no (computed)
 
+### Group AT01
+
+_(no criteria in this group)_
+
+### Group AT02
+
+_(no criteria in this group)_
+
+### Group AT03
+
+_(no criteria in this group)_
+
+### Group AT04
+
+_(no criteria in this group)_
+
+### Group AT05
+
+_(no criteria in this group)_
+
+### Group AT06
+
+_(no criteria in this group)_
+
+### Group AT07
+
+_(no criteria in this group)_
+
+### Group AT08
+
+_(no criteria in this group)_
+
+### Group AT09
+
+_(no criteria in this group)_
+
+### Group AT10
+
+_(no criteria in this group)_
+
+### Group AT11
+
+_(no criteria in this group)_
+
+### Group AT12
+
+_(no criteria in this group)_
+
+### Group AT13
+
+_(no criteria in this group)_
+
 ## Acceptance Tests
 
 ### Group AC01
@@ -118,6 +170,58 @@ _(no tests in this group)_
 ### Group AC13
 
 _(no tests in this group)_
+
+### Group AT01
+
+- AT01 `opt/utilz/test/install_e2e.bats` -- covers AC01 -- status: to-write -- Publish to a temp prefix, move the Utilz source tree aside, then run <prefix>/bin/utilz and a dispatched utility from it. Moving the source is the measurement; asserting files arrived is not.
+
+### Group AT02
+
+- AT02 `opt/utilz/test/install.bats` -- covers AC02 -- status: to-write -- Publish from a tree with one uncommitted change: refused. Then repeat with every flag the verb accepts, including --force, and assert each is still refused. A gate with an escape hatch is not a gate.
+
+### Group AT03
+
+- AT03 `opt/utilz/test/install.bats` -- covers AC03 -- status: to-write -- Publish INTO a Utilz source tree is refused, and the refusal is driven from the TARGET: run it with a source that is not the target too. A src-equals-dst comparison passes this and is the exact guard devbin's vendored copy walked past on 2026-09-07.
+
+### Group AT04
+
+- AT04 `opt/utilz/test/install.bats` -- covers AC04 -- status: to-write -- install against a prefix that already holds an install: refused, and the message NAMES upgrade. Assert the word, not just the non-zero rc.
+
+### Group AT05
+
+- AT05 `opt/utilz/test/upgrade.bats` -- covers AC04 -- status: to-write -- upgrade against a prefix holding no install: refused, and the message NAMES install. The mirror half of AT04; both halves or the mirror is untested.
+
+### Group AT06
+
+- AT06 `opt/utilz/test/install.bats` -- covers AC05 -- status: to-write -- Prefix comes from install.prefix in opt/utilz/utilz.yaml. Three cases: key set (publishes there), key ABSENT (refused BY NAME, naming the key and the file), and the get_util_metadata literal-null case -- an absent key returns the string null, so a bare -n test passes and publishes to ./null. Assert no ./null is created.
+
+### Group AT07
+
+- AT07 `opt/utilz/test/install_manifest.bats` -- covers AC06 -- status: to-write -- Count the arrivals: 15 symlinks and 2 real files. Each of the 15 is -L and its readlink target string matches the source link. Then retarget one link at a different utility WITHOUT changing what it resolves to being a valid file, and assert the manifest check reports it. Checksumming the resolved file gives all 15 one hash and this case reads as intact.
+
+### Group AT08
+
+- AT08 `opt/utilz/test/install_manifest.bats` -- covers AC07 -- status: to-write -- Manifest records the utilz version, the source commit and a checksum per owned file. The commit must describe the SHIPPED bytes: mutate one owned file in the source after the commit and before the publish, and assert the publish refuses rather than recording a commit the bytes do not match. AC02's dirty gate is what makes this reachable.
+
+### Group AT09
+
+- AT09 `opt/utilz/test/upgrade.bats` -- covers AC08 -- status: to-write -- Edit an installed file in place, upgrade without --force: the edit is REPORTED, the file is left alone, and its recorded checksum is still the install-time one. Re-checksumming a file the upgrade declined to overwrite would bless the edit and every later check would call it intact.
+
+### Group AT10
+
+- AT10 `opt/utilz/test/install_guards.bats` -- covers AC09 -- status: to-write -- The published install carries a built prez binary and runs it. Then make the install look stale to prez_is_stale and assert the shim REFUSES rather than building. Run that leg with CARGO_TARGET_DIR set to a junk path: install mode must ignore it, or the shim looks past the shipped binary.
+
+### Group AT11
+
+- AT11 `opt/utilz/test/install.bats` -- covers AC10 -- status: to-write -- The mode is on stdout before the first write. Measure it as ordering, not presence: run with the prefix unwritable so the publish fails at its first write, and assert the mode line was still printed.
+
+### Group AT12
+
+- AT12 `opt/utilz/test/install.bats` -- covers AC11 -- status: to-write -- Snapshot the filesystem outside the prefix before and after install and upgrade: unchanged. Specifically ~/.local/bin is untouched -- point a fixture link there and assert it is neither relinked nor removed. Implicit relinking mutates hv's environment.
+
+### Group AT13
+
+- AT13 `opt/utilz/test/install_guards.bats` -- covers AC13 -- status: to-write -- utilz test run with UTILZ_HOME at an install tree: refused, and the message names the SOURCE tree as where to run it. Then assert the install's manifest still verifies -- a refusal that ran anything first has already rewritten bin/.
 
 ---
 

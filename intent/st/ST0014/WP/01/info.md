@@ -2,7 +2,7 @@
 wp_id: WP-01
 title: Owned set and manifest: the file list, symlink target-string checksums, manifest write and check
 scope: S
-status: Not Started
+status: WIP
 ---
 
 # WP-01: Owned set and manifest: the file list, symlink target-string checksums, manifest write and check

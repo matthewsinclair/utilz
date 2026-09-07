@@ -14,7 +14,7 @@
       "seq": 1,
       "title": "Owned set and manifest: the file list, symlink target-string checksums, manifest write and check",
       "scope": "S",
-      "status": "not-started",
+      "status": "wip",
       "objective": "",
       "body": "",
       "preamble": ""
@@ -220,6 +220,138 @@
       "state": {
         "is": "computed"
       }
+    }
+  ],
+  "tests": [
+    {
+      "id": "AT01",
+      "kind": "test",
+      "file": "opt/utilz/test/install_e2e.bats",
+      "covers": [
+        "AC01"
+      ],
+      "status": "to-write",
+      "note": "Publish to a temp prefix, move the Utilz source tree aside, then run <prefix>/bin/utilz and a dispatched utility from it. Moving the source is the measurement; asserting files arrived is not."
+    },
+    {
+      "id": "AT02",
+      "kind": "test",
+      "file": "opt/utilz/test/install.bats",
+      "covers": [
+        "AC02"
+      ],
+      "status": "to-write",
+      "note": "Publish from a tree with one uncommitted change: refused. Then repeat with every flag the verb accepts, including --force, and assert each is still refused. A gate with an escape hatch is not a gate."
+    },
+    {
+      "id": "AT03",
+      "kind": "test",
+      "file": "opt/utilz/test/install.bats",
+      "covers": [
+        "AC03"
+      ],
+      "status": "to-write",
+      "note": "Publish INTO a Utilz source tree is refused, and the refusal is driven from the TARGET: run it with a source that is not the target too. A src-equals-dst comparison passes this and is the exact guard devbin's vendored copy walked past on 2026-09-07."
+    },
+    {
+      "id": "AT04",
+      "kind": "test",
+      "file": "opt/utilz/test/install.bats",
+      "covers": [
+        "AC04"
+      ],
+      "status": "to-write",
+      "note": "install against a prefix that already holds an install: refused, and the message NAMES upgrade. Assert the word, not just the non-zero rc."
+    },
+    {
+      "id": "AT05",
+      "kind": "test",
+      "file": "opt/utilz/test/upgrade.bats",
+      "covers": [
+        "AC04"
+      ],
+      "status": "to-write",
+      "note": "upgrade against a prefix holding no install: refused, and the message NAMES install. The mirror half of AT04; both halves or the mirror is untested."
+    },
+    {
+      "id": "AT06",
+      "kind": "test",
+      "file": "opt/utilz/test/install.bats",
+      "covers": [
+        "AC05"
+      ],
+      "status": "to-write",
+      "note": "Prefix comes from install.prefix in opt/utilz/utilz.yaml. Three cases: key set (publishes there), key ABSENT (refused BY NAME, naming the key and the file), and the get_util_metadata literal-null case -- an absent key returns the string null, so a bare -n test passes and publishes to ./null. Assert no ./null is created."
+    },
+    {
+      "id": "AT07",
+      "kind": "test",
+      "file": "opt/utilz/test/install_manifest.bats",
+      "covers": [
+        "AC06"
+      ],
+      "status": "to-write",
+      "note": "Count the arrivals: 15 symlinks and 2 real files. Each of the 15 is -L and its readlink target string matches the source link. Then retarget one link at a different utility WITHOUT changing what it resolves to being a valid file, and assert the manifest check reports it. Checksumming the resolved file gives all 15 one hash and this case reads as intact."
+    },
+    {
+      "id": "AT08",
+      "kind": "test",
+      "file": "opt/utilz/test/install_manifest.bats",
+      "covers": [
+        "AC07"
+      ],
+      "status": "to-write",
+      "note": "Manifest records the utilz version, the source commit and a checksum per owned file. The commit must describe the SHIPPED bytes: mutate one owned file in the source after the commit and before the publish, and assert the publish refuses rather than recording a commit the bytes do not match. AC02's dirty gate is what makes this reachable."
+    },
+    {
+      "id": "AT09",
+      "kind": "test",
+      "file": "opt/utilz/test/upgrade.bats",
+      "covers": [
+        "AC08"
+      ],
+      "status": "to-write",
+      "note": "Edit an installed file in place, upgrade without --force: the edit is REPORTED, the file is left alone, and its recorded checksum is still the install-time one. Re-checksumming a file the upgrade declined to overwrite would bless the edit and every later check would call it intact."
+    },
+    {
+      "id": "AT10",
+      "kind": "test",
+      "file": "opt/utilz/test/install_guards.bats",
+      "covers": [
+        "AC09"
+      ],
+      "status": "to-write",
+      "note": "The published install carries a built prez binary and runs it. Then make the install look stale to prez_is_stale and assert the shim REFUSES rather than building. Run that leg with CARGO_TARGET_DIR set to a junk path: install mode must ignore it, or the shim looks past the shipped binary."
+    },
+    {
+      "id": "AT11",
+      "kind": "test",
+      "file": "opt/utilz/test/install.bats",
+      "covers": [
+        "AC10"
+      ],
+      "status": "to-write",
+      "note": "The mode is on stdout before the first write. Measure it as ordering, not presence: run with the prefix unwritable so the publish fails at its first write, and assert the mode line was still printed."
+    },
+    {
+      "id": "AT12",
+      "kind": "test",
+      "file": "opt/utilz/test/install.bats",
+      "covers": [
+        "AC11"
+      ],
+      "status": "to-write",
+      "note": "Snapshot the filesystem outside the prefix before and after install and upgrade: unchanged. Specifically ~/.local/bin is untouched -- point a fixture link there and assert it is neither relinked nor removed. Implicit relinking mutates hv's environment."
+    },
+    {
+      "id": "AT13",
+      "kind": "test",
+      "file": "opt/utilz/test/install_guards.bats",
+      "covers": [
+        "AC13"
+      ],
+      "status": "to-write",
+      "note": "utilz test run with UTILZ_HOME at an install tree: refused, and the message names the SOURCE tree as where to run it. Then assert the install's manifest still verifies -- a refusal that ran anything first has already rewritten bin/."
     }
   ],
   "attachments": [

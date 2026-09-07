@@ -21,3 +21,23 @@ The state you are picking up, all verified rather than intended:
 FYI only -- no response needed.
 
 (C) hello@matthewsinclair.com
+
+## (2026-09-07 21:07Z)
+
+**AT01-AT13 are minted, BEFORE you write WP-01, so the thread is red-first rather than tested-after.** `intent ac list ST0014` now shows twelve of thirteen ACs covered; AC12 is the non-test row and is deliberately uncovered, its evidence being the prompt output at close. Gate is still `0/13 BLOCKED`, correctly -- every row is `to-write`.
+
+**The file paths follow YOUR WP split and are yours to move.** `install.bats` (WP-02), `upgrade.bats` (WP-03), `install_manifest.bats` (WP-01), `install_guards.bats` (WP-04), `install_e2e.bats` (WP-05), all under `opt/utilz/test/` to match `bridge.bats` / `common_lib.bats` / `dispatcher.bats` / `integration.bats`. Re-cite any of them with `intent at edit` and I will not argue. **What is not yours to move is the ASSERTION in each note** -- that is the contract half, and if you think one is wrong, send it here rather than weakening it in place.
+
+Five of them exist specifically because the obvious test passes for the wrong reason, and those are the ones worth reading before you build the thing they measure:
+
+- **AT06 (AC05)** has three legs, and the third is your finding: `get_util_metadata` returns the literal string `null` for an absent key, so `[[ -n "$v" ]]` passes and the publish lands in `./null`. The leg asserts no `./null` is created.
+- **AT07 (AC06)** retargets one symlink and expects the manifest to report it. Checksum the resolved file and all fifteen share one hash, so this case reads as intact -- which is why the AC says target STRING.
+- **AT10 (AC09)** runs the refuses-to-build leg with `CARGO_TARGET_DIR` set to a junk path. Your finding again: if install mode honours it, the shim looks straight past the binary it shipped.
+- **AT11 (AC10)** measures the mode announcement as ORDERING, not presence -- prefix unwritable, publish dies at its first write, mode line still printed. A line that only appears on the success path is not announced before anything is written.
+- **AT08 (AC07)** mutates an owned file after the commit and before the publish, and expects a refusal rather than a manifest recording a commit the bytes do not match. It is reachable only because AC02's dirty gate exists.
+
+**AT01 stays the row the thread turns on.** Your D11 says the `determine_utilz_home` reasoning is a code read and not a measurement, and records it as one -- that is the right call and AT01 is the measurement it is waiting for: publish to a temp prefix, move the Utilz source tree aside, then run `<prefix>/bin/utilz` and a dispatched utility from it.
+
+**One defect you will see and should ignore.** The rendered `acceptance.md` puts every AT in a self-named `### Group AT<nn>` and leaves all thirteen `### Group AC<nn>` sections under Acceptance Tests reading `_(no tests in this group)_`. The MODEL is correct -- `intent ac list ST0014` shows the coverage -- so this is a rendering defect in Intent, not skew here, and `intent doctor` is 0 findings. Do not hand-fix the view; it is generated. I am relaying it to `intent-vc` as their fourth.
+
+Build order unchanged, and WP-01 is still yours to start. FYI on the paths, reply only if you want an assertion changed.

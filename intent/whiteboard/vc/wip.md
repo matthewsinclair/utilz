@@ -3,7 +3,7 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 06b406f0-9a29-4636-ad0d-abd6663e4f8f
-heartbeat_at: 2026-09-07 20:59Z
+heartbeat_at: 2026-09-07 21:05Z
 status: active
 focus: "ST0014 -- contract and verification only; cc builds. AC01-AC13 minted with all three forks ruled, doctor 0 findings, contract 0/13 BLOCKED with every row decided, no source code from either node yet. Next act on this thread is verifying AC01 against the artefact -- the install running with the source tree moved aside -- not writing it. Localfolded 20:59Z; status stays active, a compact is not a session end."
 claims: [ST0012, ST0013]
@@ -23,6 +23,10 @@ Released at EOD on hv's instruction, 7 Sep. Folds archived in `.history/20260829
 
 State, verified rather than described: **AC01-AC13 minted with all three forks ruled; `intent doctor` 0 findings; contract 0/13 BLOCKED with every row decided; cc's `design.md` canonical in both canon and disk; `WP-01..05` the only live set (my `WP-06..11` Cancelled); no source code from either node.** cc is told to go.
 
+**AT01-AT13 minted 21:07Z, BEFORE cc writes WP-01**, so the thread is red-first rather than tested-after. `intent ac list ST0014` shows twelve of thirteen ACs covered; AC12 is the non-test row and is deliberately uncovered, its evidence being the prompt output at close. Gate is still `0/13 BLOCKED`, correctly -- every row is `to-write`. Five of the notes exist because the obvious test passes for the wrong reason: AT06's literal-`null` leg, AT07's target-string retarget, AT10's `CARGO_TARGET_DIR` leg, AT11 measuring the mode announcement as ORDERING rather than presence, AT08's commit-describes-the-shipped-bytes leg.
+
+**The five test-file paths follow cc's WP split and I told them so in writing: the paths are theirs to re-cite, the ASSERTIONS are not.** That is the whole boundary between my half and theirs on this thread.
+
 **My next act on this thread is VERIFYING AC01 against the artefact** -- the install running with the source tree moved aside -- not writing it. An install that reaches back into the checkout passes everything that does not move the source.
 
 Narrative of the 20:45-20:57Z collision is archived to `.history/20260907/`. What survives it are the two Watch-outs below, which are the only parts that change what anyone does next.
@@ -37,6 +41,7 @@ Narrative of the 20:45-20:57Z collision is archived to `.history/20260907/`. Wha
 - **AC16**, hv's eye. The only remaining item nobody else can take.
 - **`geodica doctor` must report whether `utilz prez` is available** -- hv's estate requirement, still on no contract anywhere. Carried since 13:36Z; the estate has since moved to `~/Devel/prj/Gtools`, which does not retire it.
 - **NEW, and the third for the same relay: there is NO VERB that sets `objective` or `context` on an EXISTING thread.** `intent st edit <id>` prints the path to `info.md`, a GENERATED VIEW whose own footer forbids editing it, and doctor then reports `view-skew` and offers to discard the text. `sync --to-store` is add-only, and `sync --to-disk` after a canon edit silently destroys it. The only working path is `intent ingest`. **So the documented way in hands you a file you are told not to edit, and the working way in is the surface we have been asked not to touch.** Filed 7 Sep on hv's ruling; goes to `intent-vc` with the two AC-id defects.
+- **NEW, and the FOURTH for the same relay: the rendered `acceptance.md` groups every AT under its OWN id, so a full contract reads as zero coverage.** Measured here at 21:07Z with thirteen ATs minted: all thirteen `### Group AC<nn>` sections under Acceptance Tests read `_(no tests in this group)_` while the rows sit in self-named `### Group AT<nn>` groups, and the phantom groups appear under Acceptance CRITERIA too, each reading `_(no criteria in this group)_`. **The MODEL is correct** -- `intent ac list ST0014` prints `AC01 covered-by: AT01` and so on -- and `intent doctor` is 0 findings, so nothing reports it. It fails in the direction that matters: a reader of the file concludes the contract is uncovered when it is fully covered.
 - **The `intent ac gate` false red** (Watch-outs) still needs relaying to `intent-vc`, with the qualifier that it is **bypassed here, not fixed**: this machine's `intent` is the native binary and reads the contract correctly. Re-verified 7 Sep that `Intent/bin/intent_acceptance:295` still greps the v2 dotted form, so a machine with no native build is unchanged. Intent's tree; nothing here should be edited to accommodate it.
 
 Retired since the last board, each verified against the artefact rather than taken on report: the browser authorisation (given, run, green); the 41 unpushed commits (pushed); the 2.5.0 release; and **the `v2.5.0` tag move** -- the tag object `0ba1c2c` resolves to `4b6eb07`, the release commit, on both remotes, so the standing directive is satisfied and the item is off my board and off `intent/wip.md`. The devbin re-vendor went up with the rewritten range as `5d99764` (was `0ab1ac2`). **Unpushed at 18:30Z: cc's briefing, my EOD fold and release, and the ST0014 contract. Pushing is yours.**

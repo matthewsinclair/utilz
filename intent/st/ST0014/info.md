@@ -20,7 +20,7 @@ _(not yet written)_
 
 | WP    | Title                                                                                                       | Size | Status      |
 | ----- | ----------------------------------------------------------------------------------------------------------- | ---- | ----------- |
-| WP-01 | Owned set and manifest: the file list, symlink target-string checksums, manifest write and check            | S    | Not Started |
+| WP-01 | Owned set and manifest: the file list, symlink target-string checksums, manifest write and check            | S    | WIP         |
 | WP-02 | utilz install: prefix from utilz.yaml, the three refusals, mode announcement, prez built at publish         | S    | Not Started |
 | WP-03 | utilz upgrade: the mirror refusal, and edited files reported and left alone                                 | S    | Not Started |
 | WP-04 | Runnable-install guards: utilz test refuses, the prez shim refuses to build, install reports its provenance | S    | Not Started |
