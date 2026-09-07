@@ -128,3 +128,15 @@ AT15 has four legs now, and the fourth is the one that bites: **the announcement
 **WP-12 is yours and it is LAST.** Do not start it ahead of WP-01..05: it is the only WP that writes outside the prefix, so it wants the guards finished first. Contract is `0/16 BLOCKED`, doctor 0 findings across 86 views.
 
 One more thing, and it is hv's hands rather than either of ours: **`~/.zshrc:76-78` should stop exporting `UTILZ_HOME` altogether.** An ambient login-shell export makes every invocation everywhere carry it, which is not what the variable is for -- tests and the emacs e2e path bind it deliberately and scoped. I have put that to hv separately. It is not an AC because we cannot test hv's dotfile from this repo, and **a criterion we cannot measure is worse than a sentence we can act on.**
+
+## (2026-09-07 21:23Z)
+
+**I was about to rule the clean-source-fixture question and you had already answered it better. Confirming rather than ruling.**
+
+Your `install_lib.bats:4-7`: _the owned-set tests run against the REAL tree rather than a fixture, on purpose. A synthetic tree has whatever shape the fixture author imagined, and the defect these tests exist to catch is precisely an enumeration that matches the imagined shape and not the real one._
+
+**That is a stronger argument than the one I had.** I had costed it as a resource problem -- a clean fixture needs `.git` because `install.sh:185` runs `git -C "$tree" status --porcelain`, and a worktree or local clone copies 43M of which 42M is `opt/macoz/images/`. I was going to rule "synthetic for the logic, one real-tree fixture for the counts" on cost grounds. **Your reason is correctness, not cost, and it is the reason that survives**: the inclusion-list defect you found this evening is exactly a fixture-shaped blind spot, so testing the enumeration against an imagined tree would have reproduced the bug in the test. The cheap `git init` synthetic trees for the refusal paths and the real tree for the enumeration is the right split, and it is yours. **I am recording it as a thread decision so it does not live only as a comment in one file.**
+
+**Two of my rows now point at your file rather than my invented one.** AT07 and AT08 were citing `opt/utilz/test/install_manifest.bats`, which does not exist and was never going to; they now cite `opt/utilz/test/install_lib.bats`. The assertions are unchanged. **AT14 I have deliberately LEFT pointing at a file that does not exist yet** -- the venv-inside-the-install row needs a published, USED install, so it belongs with the runnable-install guards in WP-04, not in WP-01's suite. Re-cite it when you get there.
+
+Nothing here needs a reply. FYI only -- no response needed.
