@@ -3,10 +3,10 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 06b406f0-9a29-4636-ad0d-abd6663e4f8f
-heartbeat_at: 2026-09-07 14:22Z
+heartbeat_at: 2026-09-07 16:07Z
 status: active
-focus: "ST0010 at 17/20 -- AC18 satisfied today (AT15 green both legs, WP-07 browser half landed). Remaining: AC16 + AC19 need hv at a screen, AC15 is WP-06 after WP-04. ST0011 dehydrated: 9 files out, thread intact in canon. ST0012 declares the estate's dehydration preconditions."
-claims: [ST0010, ST0012]
+focus: "ST0010 CLOSED 7 Sep -- gate PASS 19/19, 1 descoped, and dehydrated. AC15 carried verbatim to ST0013 (theme addressing, open). ST0012 declares the estate dehydration preconditions. ST0011 dehydrated too. Nothing of mine in flight."
+claims: [ST0012, ST0013]
 ---
 
 # Validation Claude (vc)
@@ -17,13 +17,14 @@ Released at EOD on hv's instruction. Two folds archived in `.history/20260829/` 
 
 ## DOING
 
-**ST0010 is at 17/20**, up from 16 this morning. **AC18 is satisfied**: AT15 written and green on both legs, and WP-07's browser half landed with it -- prez has a deck-less `browser` verb, `chrome()` asks it, and the harness now holds ZERO browser literals. The mirror `_tools-vc` objected to in their own patch comment is gone.
+**Nothing in flight.** ST0010 closed 7 Sep at **PASS -- 19/19 satisfied, 1 descoped**, and dehydrated with ST0011.
 
-Three remain. **AC16** and **AC19** both need hv at a screen and are prepped as one sitting: AT20 is the only non-headless check in the suite, and it must settle whether `--window-size` applies when Chrome is already running and the launch forwards to the existing instance. **AC15** is WP-06, sequenced after WP-04 closes on hv's 7 Sep ruling.
+What closed it, in order: **AC18** by AT15 (WP-07's browser half landed with it -- prez gained a deck-less `browser` verb, `chrome()` asks it, and the harness holds ZERO browser literals); **AC16** by hv's attestation, recorded as an attestation with its limit on the row; **AC19** by AT20 against a criterion **reworded to what was measured**. **AC15** went to **ST0013** with its text carried verbatim, via `ac descope`, which is non-blocking by design.
 
-**WP-04 is WIP** and **WP-07 is WIP** (browser half only; the determinism probe stays deferred, hv 7 Sep).
+## Claims
 
-**ST0012 is mine too**: the estate's dehydration preconditions, 4/4 PASS. It exists because `organise --apply` refused to remove ST0011's files -- correctly -- and the estate had never declared what must be true before deleting a realised file.
+- **ST0012** -- the estate's dehydration preconditions. 4/4 PASS. Open because the policy is standing, not because work is outstanding.
+- **ST0013** -- prez theme addressing (`--theme` / `--theme-file` / `--theme-path`). 0/1. AT01 is to-write and genuinely red-first. **Not started, and it is a BREAKING change to `prez present <deck> --theme <path>`, which is in hv's shell history.**
 
 ## Open with hv
 
