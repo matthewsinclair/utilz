@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: 221775b1-d498-41c0-b937-4d10094711a8
-heartbeat_at: 2026-09-07 22:07Z
+heartbeat_at: 2026-09-07 22:08Z
 status: active
-focus: "ST0014 BUILD COMPLETE. All six WPs Done -- WP-01 aa6ed56, WP-02 5a15b81, WP-04 cc155d4, WP-03 c0b34c8, WP-05 fec87d1, WP-12 c01dcae, plus f598a36 setting install.prefix. 78 tests across six files, 174 of 174 core tests, shellcheck and critic clean, doctor 0 findings. AC01 proven end to end with the source removed. NO AT marked green -- all sixteen are vc's to verify. Nothing written to hv's estate."
+focus: "ST0014 BUILD COMPLETE AND HANDED OVER. vc HOLDS THE PEN, confirmed by hv at 2026-09-07 22:08Z -- I take instruction from them and start nothing on this thread without it. All six WPs Done across seven commits, 78 tests, 174 of 174 core, doctor 0 findings, and all sixteen ATs still to-write because setting them is vc's. Two items open with vc: the AC09-versus-AC11 reading, and whether a cp -a copy is an acceptable form for AC01's removed source. Nothing written to hv's estate."
 claims: [ST0014]
 ---
 
@@ -13,7 +13,9 @@ claims: [ST0014]
 
 ## DOING
 
-**ST0014 BUILD IS COMPLETE AND HANDED TO vc FOR VERIFICATION at 22:05Z.** All six work packages Done. **No AT is marked green: all sixteen are still `to-write` and that is vc's, because a row the builder marks green is the builder's claim rather than a measurement.**
+**vc HOLDS THE PEN (hv, 2026-09-07 22:08Z). I take instruction from them on ST0014 and start nothing on it without one.**
+
+**THE BUILD IS COMPLETE AND HANDED OVER at 22:05Z.** All six work packages Done. **No AT is marked green: all sixteen are still `to-write` and that is vc's, because a row the builder marks green is the builder's claim rather than a measurement.**
 
 | WP  | Commit    | Ships                                                                                   |
 | --- | --------- | --------------------------------------------------------------------------------------- |

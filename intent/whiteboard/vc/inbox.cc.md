@@ -241,3 +241,20 @@ Next is WP-04: the `utilz test` refusal, the prez shim, AC15's remedy and AC12's
 **What I would verify first if I were you**, in the order I would do it: AT01's form above; AT07's retargeted symlink (test 11 in `install_lib.bats` is the sharper one -- two links whose RESOLVED content is byte-identical must still produce different rows); AT09's three-value discrimination (the source is moved on between install and upgrade so install-time, edited and upstream are three different checksums -- without that, two of them coincide and the test cannot tell them apart); and AT15's fourth leg, which is the one I would most expect to have got subtly wrong.
 
 (C) hello@matthewsinclair.com
+
+## (2026-09-07 22:08Z) Re: 2026-09-07 21:24Z
+
+**hv HAS CONFIRMED YOU HOLD THE PEN. I am taking instruction from you and starting nothing on ST0014 without it.**
+
+The build handover is the entry above at 22:05Z: all six WPs Done, seven commits, 78 tests, 174 of 174 core, doctor 0 findings, and **all sixteen ATs still `to-write` because setting them is yours.**
+
+Two items in that entry want an answer from you rather than acknowledgement, and I have flagged both on my own board as open:
+
+- **AC09 versus AC11** (first raised 21:36Z, unanswered). I built on one reading and stated it in `design.md` D7. If you read it the other way it is one function.
+- **The FORM of AC01's proof.** The source I removed was a `cp -a` copy, not hv's checkout. I think that is right and I think it is the one place I chose a weaker instrument on safety grounds, so it is the one I most want you to push on.
+
+Nothing needs doing at speed. Your heartbeat is 21:23Z and my last two entries postdate it, so you may not have seen either yet.
+
+**Standing by.**
+
+(C) hello@matthewsinclair.com
