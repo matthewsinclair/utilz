@@ -158,3 +158,35 @@ FYI only -- no response needed.
 Next is WP-02 per D11: `utilz install`, the prefix, the four refusals and the mode announcement.
 
 (C) hello@matthewsinclair.com
+
+## (2026-09-07 21:36Z) Re: 2026-09-07 21:24Z
+
+**WP-02 IS DONE, `5a15b81`. WP-01's AC14 header fix landed with it. All four of your instructions were followed and one of your rulings reversed a section of my design, which I have rewritten rather than annotated.**
+
+**AC14 first, since you flagged it as the one that changes what I write.** The header now leads with the requirement rather than the feasibility: `THIS FUNCTION MUST NEVER WALK THE TREE (AC14)`, then the convenient reason, then the load-bearing one. **I measured your venv claim rather than taking it: 1776 files under `opt/pdf2md/lib/.venv` and 2407 under `opt/xtrct/lib/.venv`, so a tree-walking check reports 4183 drift rows nobody caused.** `VENV_DIR="$LIB_DIR/.venv"` off `SCRIPT_DIR`, so in an install it lands in the install. Your reasoning was right and the magnitude is worth having in the comment.
+
+**AC15 -- I reproduced your finding independently before building on it, and it holds exactly.** Published the real tree to a temp prefix, wrote a marker VERSION, then invoked the install by its own absolute path:
+
+```
+env -u UTILZ_HOME  <prefix>/bin/utilz version  ->  utilz vPREFIX-MARKER-9.9.9
+UTILZ_HOME=<source> <prefix>/bin/utilz version ->  utilz v2.5.0
+<prefix>/bin/utilz version (this shell as-is)  ->  utilz v2.5.0
+```
+
+**The third line is the one that matters: this session's shell already carries the export, so the ambient case IS the broken case.** Recorded as `design.md` D12 with your ruling, the five load-bearing call sites, and AT15's stderr-vs-stdout leg. Remedy is WP-04's and I did not open `determine_utilz_home` during WP-02.
+
+**D9 IS REVERSED AND THAT IS YOUR AT16 DOING.** It said the relink verb should normalise the odd `~/.local/bin/prez` link while it was there, on the grounds that two conventions in one directory is a false red waiting for a doctor check. **Your argument beats mine: tidying what you were not pointed at is a change to hv's environment nobody asked for, made under cover of a command asked to do something else.** Same shape as a manifest check re-blessing a file it refused. D9 now names the verb `utilz relink`, puts it in WP-12 last, and says leave the odd one odd.
+
+**TWO THINGS FOR YOU, and the first is a contract observation I have NOT settled unilaterally.**
+
+**1. AC09 and AC11 disagree, and I built on one reading.** AC09 requires the prez binary be built at publish time; `cargo build --release` writes into the source tree's gitignored `opt/prez/crate/target/`. AC11 says the publish writes "nothing a person authored and nothing outside the prefix" -- and that directory is outside the prefix and authored by nobody. **I built on the reading that AC11 protects the operator's environment and their files, not the crate's own build output, because the other reading makes AC09 and AC11 unsatisfiable together.** It is in `design.md` D7 in as many words. If you read it the other way the remedy is small and local: `install_build_prez` builds into a temp `CARGO_TARGET_DIR` and copies from there. **Your call, and I will take either.**
+
+**2. Three AT citations want moving now that I am at WP-04.** AT14 you left pointing at `install_manifest.bats` deliberately; AT15 points at `install_e2e.bats` but you ruled AC15 into WP-04. I intend to re-cite **AT10, AT13, AT14 and AT15 to `opt/utilz/test/install_guards.bats`**, WP-04's file, leaving AT01 alone in `install_e2e.bats` for WP-05. Say if you want AT15 kept with the e2e set instead -- **the assertions are untouched either way, and I am not blocking on the answer.**
+
+**What WP-02 actually shipped**, so you are verifying against a description you can check: `install_verb_install`, `install_copy_owned`, `install_build_prez`, `install_announce`, one thin `install` branch in `bin/utilz`, 14 tests in `install.bats`. Order is facts -> announcement -> refusals -> writes, with the announcement ahead of the refusals too. Five refusals; **`--force` reaches exactly one of them** and D7 carries the table. `CARGO_TARGET_DIR` is unset for the publish build, the opposite of the shim's treatment, and the discriminator is which side of the publish you are on.
+
+**A real publish, not a fixture: 111 owned paths in 1.8s**, and `<prefix>/bin/utilz version` plus a dispatched `<prefix>/bin/lnrel` both run from it under `env -u UTILZ_HOME`. 111 rather than the 110 you and I both measured, because `opt/utilz/lib/install.sh` is now a tracked file under an owned root -- the enumeration picked it up with nothing edited, which is the exclusion rule doing the job an inclusion list would not have.
+
+Next is WP-04: the `utilz test` refusal, the prez shim, AC15's remedy and AC12's provenance at the prompt.
+
+(C) hello@matthewsinclair.com

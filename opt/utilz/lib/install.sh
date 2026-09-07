@@ -12,10 +12,12 @@
 # function operates on a tree that is not that one.
 #
 # Depends on common.sh for error() and get_util_metadata(). Nothing else.
-
-# The manifest's filename at an install root. The manifest is the discriminator
-# between an install tree and a source tree, so this name is load-bearing.
-INSTALL_MANIFEST_NAME="manifest.sha256"
+# The manifest filename is UTILZ_MANIFEST_NAME and it lives in common.sh, which
+# this file requires anyway. It is not install machinery: it is the
+# discriminator between an install tree and a source tree, and the RUNTIME asks
+# that question too -- show_version for AC12, run_tests for AC13, the prez shim
+# for AC09. An alias here would be a second NAME for the one thing this thread
+# cannot afford two answers about.
 
 # Built at publish time and gitignored, so it is named rather than enumerated.
 # It is part of the owned set whether or not it has been built: an owned path
@@ -150,7 +152,7 @@ install_prefix_configured() {
 install_tree_kind() {
   local dir="$1"
 
-  if [[ -f "$dir/$INSTALL_MANIFEST_NAME" ]]; then
+  if [[ -f "$dir/$UTILZ_MANIFEST_NAME" ]]; then
     printf 'install\n'
     return 0
   fi
@@ -310,12 +312,12 @@ install_manifest_write() {
 # The manifest is the one enumeration at one remove, not a second one.
 install_manifest_check() {
   local root="$1"
-  local manifest="$root/$INSTALL_MANIFEST_NAME"
+  local manifest="$root/$UTILZ_MANIFEST_NAME"
   local kind value path actual
   local drift=0
 
   if [[ ! -f "$manifest" ]]; then
-    error "no manifest at $root/$INSTALL_MANIFEST_NAME"
+    error "no manifest at $root/$UTILZ_MANIFEST_NAME"
     return 2
   fi
 
@@ -579,9 +581,9 @@ install_verb_install() {
 
   install_build_prez "$src" || return 1
   install_copy_owned "$src" "$prefix" || return 1
-  install_manifest_write "$src" "$prefix/$INSTALL_MANIFEST_NAME" || return 1
+  install_manifest_write "$src" "$prefix/$UTILZ_MANIFEST_NAME" || return 1
 
   local count
-  count=$(grep -c -v '^utilz-version	\|^source-commit	' "$prefix/$INSTALL_MANIFEST_NAME")
+  count=$(grep -c -v '^utilz-version	\|^source-commit	' "$prefix/$UTILZ_MANIFEST_NAME")
   success "installed $(cat "$src/VERSION") ($commit) at $prefix -- $count paths"
 }
