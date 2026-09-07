@@ -60,17 +60,17 @@ file_lacks() {
   TODO add "first task"
   TODO add "second task"
   TODO add --top "urgent task"
-  file_has todo.md "1:[ ] urgent task"
-  file_has todo.md "2:[ ] first task"
-  file_has todo.md "3:[ ] second task"
+  file_has todo.md '- [ ] `1` urgent task'
+  file_has todo.md '- [ ] `2` first task'
+  file_has todo.md '- [ ] `3` second task'
 }
 
 @test "numbers are global, positional, zero-padded to max width" {
   local i
   for i in $(seq 1 10); do TODO add "item $i"; done
   # 10 items -> width 2 -> first item is 01, tenth is 10
-  file_has todo.md "01:[ ] item 1"
-  file_has todo.md "10:[ ] item 10"
+  file_has todo.md '- [ ] `01` item 1'
+  file_has todo.md '- [ ] `10` item 10'
 }
 
 @test "file-location precedence file over global over default; file+g errors" {
@@ -110,7 +110,7 @@ file_lacks() {
 @test "start moves to DOING as in-progress" {
   TODO add "task a"
   TODO start 1
-  file_has todo.md "1:[-] task a"
+  file_has todo.md '- [-] `1` task a'
 }
 
 @test "done prepends to DONE newest-first" {
@@ -129,17 +129,17 @@ file_lacks() {
 @test "notdone moves back to TODO" {
   TODO add "task b"
   TODO done 1
-  file_has todo.md "1:[x] task b"
+  file_has todo.md '- [x] `1` task b'
   TODO notdone 1
-  file_has todo.md "1:[ ] task b"
+  file_has todo.md '- [ ] `1` task b'
 }
 
 @test "toggle flips from current glyph" {
   TODO add "task c"
   TODO toggle 1
-  file_has todo.md "1:[x] task c"
+  file_has todo.md '- [x] `1` task c'
   TODO toggle 1
-  file_has todo.md "1:[ ] task c"
+  file_has todo.md '- [ ] `1` task c'
 }
 
 @test "unknown id errors non-zero" {
@@ -287,7 +287,7 @@ EOF
   local heading_line="${output%%:*}"
   [ "$done_line" -gt "$heading_line" ]
   # and "still todo" stays a todo
-  file_has todo.md ":[ ] still todo"
+  file_has todo.md '[ ] `1` still todo'
 }
 
 @test "sync tolerates hand-entered lines" {
@@ -314,9 +314,9 @@ _(none)_
 _(none)_
 EOF
   TODO sync
-  file_has todo.md "1:[ ] no number here"
-  file_has todo.md "2:[ ] pasted intent dash"
-  file_has todo.md "3:[x] nospace"
+  file_has todo.md '- [ ] `1` no number here'
+  file_has todo.md '- [ ] `2` pasted intent dash'
+  file_has todo.md '- [x] `3` nospace'
 }
 
 @test "sync warns and preserves an unrecognizable line" {
@@ -352,7 +352,7 @@ EOF
   TODO add "alpha"
   TODO update
   assert_file_exists "todo.md"
-  file_has todo.md "1:[ ] beta"
+  file_has todo.md '- [ ] `1` beta'
 }
 
 @test "edit uses EDITOR then syncs" {
@@ -366,7 +366,7 @@ EOF
   TODO add "edit target"
   run env VISUAL= EDITOR="$stub" "$UTILZ_BIN_DIR/todo" edit
   assert_success
-  file_has todo.md "1:[x] edit target"
+  file_has todo.md '- [x] `1` edit target'
 }
 
 # ----------------------------------------------------------------------------
@@ -570,4 +570,47 @@ EOF
   run env PATH="$bin:$PATH" bash -c "cd proj && \"$UTILZ_BIN_DIR/todo\" add more"
   assert_success
   file_has proj/todo.md "more"
+}
+
+@test "a pre-2026-09 file migrates to the GFM shape on sync, ids renumbered" {
+  cat > todo.md <<'OLD'
+---
+generator: utilz todo
+title: "# TODO"
+---
+
+# TODO
+
+## DOING
+
+3:[-] in flight
+
+## TODO
+
+1:[ ] first
+2:[ ] second
+
+## DONE:2026-01-01T00:00:00Z
+
+_(none)_
+OLD
+  TODO sync
+  # written in the new shape, positionally renumbered, DOING first
+  file_has todo.md '- [-] `1` in flight'
+  file_has todo.md '- [ ] `2` first'
+  file_has todo.md '- [ ] `3` second'
+  # and nothing is left in the old shape
+  file_lacks todo.md ":[ ] first"
+  file_lacks todo.md ":[-] in flight"
+}
+
+@test "the id after the checkbox is stripped, not stored as text" {
+  TODO add "an item"
+  TODO sync
+  TODO sync
+  # a second round trip must not accrete a second id
+  file_has todo.md '- [ ] `1` an item'
+  file_lacks todo.md '`1` `1`'
+  run "$UTILZ_BIN_DIR/todo" --json
+  assert_output_contains '"text": "an item"'
 }

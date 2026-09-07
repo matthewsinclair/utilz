@@ -9,6 +9,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Version not bumped and nothing tagged: releases, tags and pushes are hv's. Adding a utility is an additive minor, so this is 2.6.0 material when hv cuts it.
 
+### Changed
+
+- **`utilz todo` writes GFM task-list items, so a `todo.md` renders as a checklist instead of a wall of prose** (todo 1.1.0). The line was `01:[ ] text`, which is not a markdown construct: a run of them collapses into a single paragraph anywhere markdown is actually rendered, which is how the estate's CMS, Obsidian and a GitHub blob all showed it. It is now ``- [ ] `01` text`` -- a real list item, with `[ ]` and `[x]` rendering as checkboxes for free. **`intent todo` had already reached the same conclusion for the same reason** (its emit comment: "plain `[-] ...` lines get reflowed into one paragraph"); the fork had not carried it across.
+- **The id moved to after the checkbox, into a code span.** A task-list marker only counts when it directly follows the bullet, so `- 01:[ ] text` is a plain list item with literal text while ``- [ ] `01` text`` is a checkbox. The id has to stay visible because it is the handle every verb takes.
+- **`[-]` for DOING is left as literal text and not forced into a checkbox.** The glyph is what `sync` and `toggle` reconcile against and what the legend documents; a DOING item under its own heading reads clearly enough without a box. Round-trip correctness over a cosmetic third state.
+- **Reading is unchanged in tolerance and now strips the id from either position**, so pre-2026-09 files, a missing id, a hand-pasted `- [ ]` line and an `intent todo` item all still parse. Writing is always the current shape and ids renumber positionally on every write, so `utilz todo sync` migrates a file in place with no separate migration. Two tests cover it: a legacy file through `sync`, and a double round trip not accreting a second id.
+
 ### Added
 
 - **`stampz` -- stamp a recipient watermark across every page of a PDF pack** (ST0011). Promoted out of a Lamplight tool so it is available everywhere rather than living in one repo's `docs/bin/`. One rotated line of mono type reading `CONFIDENTIAL <date> <recipient>`, mid-grey at 30%, plus a `STAMP-MANIFEST.txt` recording the page count and the sha256 of every file before and after. Two guards that refuse rather than approximate: mixed page geometry, and any change in page count. **It deters and does not protect** -- an overlay is strippable in seconds, and the header, the README and the help all say so, with a test asserting the sentence is there.

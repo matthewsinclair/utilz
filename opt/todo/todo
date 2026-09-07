@@ -128,6 +128,14 @@ parse_file() {
     if [[ "$line" =~ $item_re ]]; then
       g="${BASH_REMATCH[3]}"
       txt="${BASH_REMATCH[4]}"
+      # The id sits before the checkbox in the pre-2026-09 form (`01:[ ] text`,
+      # captured and discarded by the regex) and after it in the current one
+      # (`- [ ] \`01\` text`). Strip the trailing form here so the stored text is
+      # the text either way, and both forms keep parsing. Renumbering on write
+      # means a stale id is never authoritative.
+      if [[ "$txt" =~ ^\`([0-9]+)\`[[:space:]]+(.*)$ ]]; then
+        txt="${BASH_REMATCH[2]}"
+      fi
       case "$g" in
       "-") DOING_ITEMS+=("$txt") ;;
       " ") TODO_ITEMS+=("$txt") ;;
@@ -218,12 +226,27 @@ _counts() {
 }
 
 # Emit numbered item lines: <glyphchar> <width> <startnum> <text...>
+#
+# GFM task-list shape: `- [ ] \`01\` text`. The leading dash makes each item a
+# real list item, which is what stops a run of them collapsing into one
+# paragraph anywhere markdown is actually rendered - the estate's CMS, Obsidian,
+# a GitHub blob. `[ ]` and `[x]` then render as checkboxes for free.
+#
+# The id moved to AFTER the checkbox and into a code span, because a task list
+# marker only counts when it directly follows the bullet: `- 01:[ ] text` is a
+# plain list item with literal text, `- [ ] \`01\` text` is a checkbox. The id
+# still has to be visible - it is the handle every command takes.
+#
+# `[-]` for DOING is not a GFM marker and renders as literal text. That is
+# deliberate: the glyph is what `toggle` and `sync` reconcile against, it is
+# what the legend documents, and a DOING item reading `[-]` under its own
+# heading is clear enough. Correctness of the round trip beats a checkbox.
 _emit_bucket_lines() {
   local g="$1" w="$2" s="$3"
   shift 3
   local t
   for t in "$@"; do
-    printf '%0*d:[%s] %s\n' "$w" "$s" "$g" "$t"
+    printf -- '- [%s] `%0*d` %s\n' "$g" "$w" "$s" "$t"
     s=$((s + 1))
   done
 }

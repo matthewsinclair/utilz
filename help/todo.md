@@ -40,16 +40,28 @@ history: _history/YYYYMMDD-done.md
 
 ## DOING
 
-01:[-] An item currently being worked on
+- [-] `01` An item currently being worked on
 
 ## TODO
 
-02:[ ] Something to do next
+- [ ] `02` Something to do next
 
 ## DONE:2026-07-02T00:00:00Z
 
-03:[x] Something already finished
+- [x] `03` Something already finished
 ```
+
+Item lines are GFM task-list items, so a `todo.md` renders as a real checklist
+anywhere markdown is rendered rather than collapsing into one paragraph. The id
+sits **after** the checkbox, in a code span, because a task-list marker only
+counts when it directly follows the bullet. `[-]` for DOING is not a GFM marker
+and renders as literal text: the glyph is what `sync` and `toggle` reconcile
+against, and a DOING item under its own heading is clear enough without a box.
+
+Reading is tolerant of the pre-2026-09 shape (`01:[ ] text`, no dash), of a
+missing id, and of loose spacing, so an older file or a hand-pasted line parses.
+Writing is always the current shape, and ids are renumbered positionally on every
+write, so `utilz todo sync` migrates a file in place.
 
 The frontmatter carries the `generator` ownership marker (see [Interop with intent todo](#interop-with-intent-todo)), the H1 `title`, and a `history` pattern (where `todo done --prune` archives completed items; `YYYYMMDD` expands to the purge date, resolved relative to the `todo.md` directory).
 
