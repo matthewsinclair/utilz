@@ -5,8 +5,8 @@ role: validation
 session_id: 06b406f0-9a29-4636-ad0d-abd6663e4f8f
 heartbeat_at: 2026-09-07 14:22Z
 status: active
-focus: "Pickup 7 Sep. ST0010 open at 16/20 -- AC16 hv's, AC18/AC19 mine, AC15 is WP-06. Retired since the last board: the v2.5.0 tag move (verified at 4b6eb07 on both remotes) and the Gtools cutover (zero GEOPRES_THEME_PATH in live code, both repos). Awaiting hv on the day's sequencing."
-claims: [ST0010]
+focus: "ST0010 at 17/20 -- AC18 satisfied today (AT15 green both legs, WP-07 browser half landed). Remaining: AC16 + AC19 need hv at a screen, AC15 is WP-06 after WP-04. ST0011 dehydrated: 9 files out, thread intact in canon. ST0012 declares the estate's dehydration preconditions."
+claims: [ST0010, ST0012]
 ---
 
 # Validation Claude (vc)
@@ -17,9 +17,13 @@ Released at EOD on hv's instruction. Two folds archived in `.history/20260829/` 
 
 ## DOING
 
-**ST0010 is shipped as v2.5.0 and NOT closed.** Gate **16/20**, read off the view. Four remain: **AC16** (hv renders every built-in theme and looks -- hv's by construction, and the suite is not allowed to stand in for it), **AC18** (AT15, mine, **UNWRITTEN** -- the board said "written, never run" until 7 Sep; `intent at list` reports to-write and `acceptance.sh` carries no AT15 block. What IS in the tree is the code AT15 would prove: the `PREZ_TEST_BROWSER` hook checked before the probe with a named refusal, and `CHROME_SAFE=--use-mock-keychain` at every launch site), **AC19** (AT20's browser half, mine), **AC15** (WP-06).
+**ST0010 is at 17/20**, up from 16 this morning. **AC18 is satisfied**: AT15 written and green on both legs, and WP-07's browser half landed with it -- prez has a deck-less `browser` verb, `chrome()` asks it, and the harness now holds ZERO browser literals. The mirror `_tools-vc` objected to in their own patch comment is gone.
 
-**WP-04 still reads `Not Started`** while its work is substantially done. **The hold is released, not lifted**: it was conditioned on the acceptance gate being unreadable, and on a native `intent` the gate reads correctly (16/20, matching the view). Whether `wp done` refuses on a legitimately BLOCKED gate is a separate and untested question. Advancing it is a state verb, so it waits on hv's sequencing rather than on a condition.
+Three remain. **AC16** and **AC19** both need hv at a screen and are prepped as one sitting: AT20 is the only non-headless check in the suite, and it must settle whether `--window-size` applies when Chrome is already running and the launch forwards to the existing instance. **AC15** is WP-06, sequenced after WP-04 closes on hv's 7 Sep ruling.
+
+**WP-04 is WIP** and **WP-07 is WIP** (browser half only; the determinism probe stays deferred, hv 7 Sep).
+
+**ST0012 is mine too**: the estate's dehydration preconditions, 4/4 PASS. It exists because `organise --apply` refused to remove ST0011's files -- correctly -- and the estate had never declared what must be true before deleting a realised file.
 
 ## Open with hv
 
