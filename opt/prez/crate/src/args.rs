@@ -14,6 +14,7 @@ Usage:
   prez build   <deck.md> [-o out.html] [--theme=T] [--watch]
   prez pdf     <deck.md> [-o out.pdf]  [--theme=T] [--paper=WxH] [--browser=PATH]
   prez present <deck.md> [--theme=T] [--window=WxH] [--browser=PATH]
+  prez browser
   prez --help | --version
 
 Every flag below takes its value either way: --theme=simple or --theme simple.
@@ -30,6 +31,11 @@ Options:
       --browser P   Browser to drive for pdf/present. Default: probe the
                     Chromium family, then fall back to the system opener.
 
+`prez browser` takes no deck: it prints the browser pdf and present would
+drive, or refuses naming every path it probed. It exists so a caller can ASK
+which browser prez resolves instead of keeping a second copy of the probe list
+that drifts from this one. See ST0010 design section 12.
+
 The browser presents; prez only builds. There is no server and no viewer.
 ";
 
@@ -37,6 +43,10 @@ The browser presents; prez only builds. There is no server and no viewer.
 pub enum Invocation {
   Help,
   Version,
+  /// `prez browser` -- print the resolved browser and stop. Deck-less, so it
+  /// sits here beside Help and Version rather than in Command, which requires
+  /// an input path.
+  Browser,
   Command(Command),
 }
 
@@ -77,6 +87,10 @@ pub fn parse(argv: &[String]) -> Result<Invocation, Failure> {
   match first.as_str() {
     "--help" | "-h" | "help" => return Ok(Invocation::Help),
     "--version" | "-V" => return Ok(Invocation::Version),
+    // Matched HERE, ahead of verb dispatch, because it takes no deck. Putting
+    // it in Verb would mean teaching the positional parser that one verb has
+    // no required input -- a special case in the hot path to buy nothing.
+    "browser" => return Ok(Invocation::Browser),
     _ => {}
   }
 
@@ -87,7 +101,7 @@ pub fn parse(argv: &[String]) -> Result<Invocation, Failure> {
     other => {
       return Err(Failure::new(
         format!("unknown command '{}'", other),
-        "expected one of: build, pdf, present. try 'prez --help'",
+        "expected one of: build, pdf, present, browser. try 'prez --help'",
       ))
     }
   };
@@ -273,5 +287,40 @@ mod tests {
   fn two_inputs_are_refused() {
     let e = parse(&argv(&["build", "a.md", "b.md"])).unwrap_err();
     assert!(e.message.contains("more than one input"));
+  }
+
+  // AT15(a)'s argv half. The point of `browser` is that a caller can ask
+  // instead of copying the probe list, so the thing worth pinning is that it
+  // takes NO deck -- the moment it demands one, a harness cannot call it and
+  // the mirror comes back.
+  #[test]
+  fn browser_takes_no_deck() {
+    assert_eq!(parse(&argv(&["browser"])).unwrap(), Invocation::Browser);
+  }
+
+  #[test]
+  fn browser_is_not_a_verb_that_reaches_the_positional_parser() {
+    // If `browser` ever fell through to verb dispatch it would refuse for a
+    // missing input, which is the failure this test exists to catch early.
+    let e = parse(&argv(&["build"])).unwrap_err();
+    assert!(e.message.contains("needs an input deck"), "control: build does refuse");
+    assert!(parse(&argv(&["browser"])).is_ok(), "browser must not");
+  }
+
+  #[test]
+  fn the_unknown_command_hint_names_every_verb_that_exists() {
+    // A hint that enumerates is a second roster and goes stale silently; this
+    // is the cheap check that it has not. Same defect class as the hardcoded
+    // "14 utilities" count in prez.bats.
+    let e = parse(&argv(&["nope"])).unwrap_err();
+    let remedy = e.remedy.expect("an unknown command must carry a remedy");
+    for verb in ["build", "pdf", "present", "browser"] {
+      assert!(remedy.contains(verb), "hint omits '{verb}': {remedy}");
+    }
+  }
+
+  #[test]
+  fn usage_documents_the_browser_verb() {
+    assert!(USAGE.contains("prez browser"), "the verb exists and --help does not say so");
   }
 }

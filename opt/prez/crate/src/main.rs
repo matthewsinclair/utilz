@@ -69,6 +69,15 @@ fn run() -> Result<(), Failure> {
       println!("prez {}", env!("CARGO_PKG_VERSION"));
       Ok(())
     }
+    // The whole point is that a caller can ASK. Resolution goes through
+    // drive::find, the same call pdf and present make, so there is one list
+    // and no way for this answer to differ from the one they act on. The path
+    // goes to STDOUT alone so `$(prez browser)` is the natural consumption;
+    // finding none, drive::find's own refusal names every path it probed.
+    args::Invocation::Browser => {
+      println!("{}", drive::find(None)?.display());
+      Ok(())
+    }
     args::Invocation::Command(cmd) => deck::run(&cmd),
   }
 }

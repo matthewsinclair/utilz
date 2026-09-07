@@ -176,64 +176,84 @@ builtins_list() {
   sed -n 's/.*built in: //p' "$err" | tr -d ','
 }
 
-# Mirrors src/drive.rs's probe: APP_PATHS then PATH_NAMES. It used to carry
-# only the first two macOS app paths, so on Linux the TOOL found Chrome and
-# worked while the HARNESS did not -- five call sites skipped, and --strict
-# turned that into a failing run on a correct build. The message said "no
-# Chrome or Chromium installed" and measured "no Chrome at a macOS app path".
-# Invisible here forever; it would have surfaced on Utilz's first Ubuntu job
-# looking exactly like the port broke something. (_tools-vc, 29 Aug.)
+# ASKS THE TOOL. Does not mirror it. (AC18a, WP-07's browser half, 7 Sep.)
 #
-# A MIRROR IS NOT THE RIGHT ANSWER AND THIS COMMENT IS NOT AN EXCUSE FOR IT.
-# Two lists of the same fact drift, which is precisely what happened: drive.rs
-# gained the PATH names and this did not, and nothing reported it because both
-# only ever ran on macOS. builtins_list() above avoids this by ASKING the
-# binary, and the same trick does not work here -- the tool only enumerates its
-# browser probe when its own auto-probe fails, which cannot be provoked on a
-# machine that has a browser. The durable fix is for the tool to expose its
-# resolution (a --print-browser, or the refusal naming the list unconditionally)
-# so this function can ask instead of copy. Raised for Utilz; the mirror is the
-# stopgap that at least makes the two lists agree today.
+# This function used to hand-copy src/drive.rs's APP_PATHS and PATH_NAMES, and
+# the copy was wrong: drive.rs gained the six PATH names and this did not, so
+# on Linux the TOOL found a browser and the HARNESS did not -- five ATs
+# degraded to skips and --strict turned a correct build RED while the message
+# said "no Chrome or Chromium installed" about a browser the tool under test
+# was happily driving. Invisible on macOS, where both were only ever run.
+#
+# `prez browser` is the door that lets this ask. It takes no deck, prints the
+# path pdf and present would drive, and refuses through drive::find's own
+# refusal -- the one that names every path probed. There is now ONE list, in
+# Rust, and the check that this stayed true is AT15(a): the harness must hold
+# no browser literal at all, which is greppable, unlike "the two lists agree".
+#
+# The other candidate -- have the refusal name its list unconditionally -- was
+# rejected in design section 12: a refusal only fires when nothing is found,
+# which cannot be provoked on a machine that HAS a browser, and that is every
+# machine this runs on bar CI's browserless leg.
 chrome() {
-  local p
-  # THE OVERRIDE (AC18b), checked BEFORE the probe so it wins outright:
+  local found=""
+
+  # THE OVERRIDE (AC18b), checked BEFORE asking so it wins outright:
   #   PREZ_TEST_BROWSER=/nonexistent      -> no browser; every browser AT skips
   #   PREZ_TEST_BROWSER=/path/to/chromium -> drive exactly that one
   #
   # Without it the browserless path CANNOT BE EXERCISED on a machine that has
   # Chrome, so the control proving --strict matters is a control that can never
   # go red -- the exact class this file is written against, sitting in the file
-  # itself. Every browser AT resolves through this one function, so the hook has
-  # one home and reaches all five.
+  # itself. It stays ahead of the tool because its job is to force an answer
+  # the tool would not give.
   #
-  # A set-but-not-executable value returns 1 rather than falling through to the
-  # probe. Falling through would make "force the refusal path" mean "force it
-  # unless this machine happens to have Chrome", which is the thing being fixed.
+  # A set-but-not-executable value returns 1 rather than falling through.
+  # Falling through would make "force the refusal path" mean "force it unless
+  # this machine happens to have Chrome", which is the thing being fixed.
   if [ -n "${PREZ_TEST_BROWSER:-}" ]; then
     if [ -x "$PREZ_TEST_BROWSER" ]; then
-      printf '%s' "$PREZ_TEST_BROWSER"
-      return 0
+      found="$PREZ_TEST_BROWSER"
+    else
+      # SAY WHY. The call sites all skip with "no Chrome or Chromium
+      # installed", which is FALSE when the override caused it -- and a skip
+      # carrying the wrong reason is the class AC18 is about, so producing one
+      # here to test for it would be its own joke.
+      printf 'note: PREZ_TEST_BROWSER=%s is not executable, so no browser is offered.\n' \
+        "$PREZ_TEST_BROWSER" >&2
+      return 1
     fi
-    # SAY WHY. The five call sites all skip with "no Chrome or Chromium
-    # installed", which is FALSE when the override caused it -- and a skip
-    # carrying the wrong reason is the class AC18 is about, so producing one
-    # here to test for it would be its own joke. Reported from the one place
-    # that knows, rather than by editing five messages _tools is patching now.
-    printf 'note: PREZ_TEST_BROWSER=%s is not executable, so no browser is offered.\n' \
-      "$PREZ_TEST_BROWSER" >&2
+  elif [ ! -x "$BIN" ]; then
+    # A MISSING BINARY IS NOT A MISSING BROWSER. Without this the call sites
+    # skip saying "no Chrome or Chromium installed" when the truth is that the
+    # build failed -- a skip with a false reason, which is precisely what AC18
+    # exists to forbid. The build at the top of this file swallows its output,
+    # so this is the first place that can tell.
+    printf 'note: %s is not executable, so the tool cannot be asked which browser it resolves.\n' \
+      "$BIN" >&2
     return 1
+  else
+    # Relay the tool's OWN refusal rather than inventing one: it names every
+    # path it probed, which is a report the caller can act on.
+    if ! found="$("$BIN" browser 2>&1)"; then
+      printf '%s\n' "$found" >&2
+      return 1
+    fi
   fi
-  for p in "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" \
-           "/Applications/Chromium.app/Contents/MacOS/Chromium" \
-           "/Applications/Microsoft Edge.app/Contents/MacOS/Microsoft Edge" \
-           "/Applications/Brave Browser.app/Contents/MacOS/Brave Browser"; do
-    [ -x "$p" ] && { printf '%s' "$p"; return 0; }
-  done
-  for p in google-chrome google-chrome-stable chromium chromium-browser \
-           microsoft-edge brave-browser; do
-    command -v "$p" >/dev/null 2>&1 && { command -v "$p"; return 0; }
-  done
-  return 1
+
+  [ -n "$found" ] || return 1
+
+  # ANNOUNCE ON RESOLVE (AC17), at ONE site.
+  #
+  # This function announced loudly when it REFUSED and said nothing when it
+  # resolved and handed a browser to four ATs to launch -- the louder half was
+  # the harmless half, so the same command gave 12/0/0 in one shell and
+  # 9-passed-11-skipped in another with nothing in the output naming the
+  # difference, and an acceptance figure carried no evidence of which mode
+  # produced it. One site rather than three, so the note cannot drift from the
+  # value actually returned.
+  printf 'note: browser resolved to %s\n' "$found" >&2
+  printf '%s' "$found"
 }
 
 # EVERY headless launch goes through these. --use-mock-keychain because a fresh
@@ -955,6 +975,157 @@ if want AT17; then
     done
     finish
   fi
+fi
+
+# ---------------------------------------------------------------- AT15 -- AC18
+
+if want AT15; then
+  start AT15 "the harness must not lie, block, or be unreproducible"
+
+  # ---- (a) ONE browser resolution, not two --------------------------------
+  #
+  # The clause says the harness "resolves through the tool's list or asks the
+  # tool, NEVER a second copy". A check that the two lists AGREE would pass
+  # right up to the moment it matters -- they agreed for weeks while drifting
+  # was still possible, and the drift that did happen (drive.rs gained the PATH
+  # names, this file did not) was invisible on macOS. So the assertion is the
+  # structural one: chrome() holds NO browser literal at all.
+  #
+  # Scoped to chrome()'s body rather than the whole file, for two reasons. It
+  # is where a second list would actually live; and a whole-file grep would
+  # match THIS BLOCK's own needles, which is the self-matching defect already
+  # recorded in this suite's history.
+  at15fn="$WORK/at15-chrome.sh"
+  sed -n '/^chrome() {/,/^}/p' "$HERE/acceptance.sh" > "$at15fn"
+  at15lines=$(grep -c '' "$at15fn" || true)
+  if [ "${at15lines:-0}" -gt 10 ]; then ok "extracted chrome() ($at15lines lines)"
+  else bad "could not extract chrome() -- got ${at15lines:-0} lines, so the checks below prove nothing"; fi
+
+  # The needles are assembled rather than written, so this block does not
+  # contain the strings it forbids and cannot match itself.
+  at15app='/App''lications/'
+  at15mac='.app/Con''tents/MacOS/'
+  at15path='chrom''ium-browser'
+  for at15needle in "$at15app" "$at15mac" "$at15path"; do
+    at15hits=$(grep -c -F -- "$at15needle" "$at15fn" || true)
+    check "chrome() holds no '$at15needle'" "${at15hits:-0}" "0"
+  done
+
+  # SELF-DISCRIMINATION. A grep whose green is "no matches" passes just as
+  # happily against a file it failed to read, so prove it can count before
+  # trusting the zeros above.
+  printf 'x %s y\n' "$at15app" > "$WORK/at15-control.txt"
+  at15ctl=$(grep -c -F -- "$at15app" "$WORK/at15-control.txt" || true)
+  check "the same grep counts a planted literal" "${at15ctl:-0}" "1"
+
+  # And the positive half: it does not merely lack a list, it asks for one.
+  present "chrome() asks the binary" 'BIN" browser' "$at15fn"
+
+  # The tool's side of the same contract: a deck-less verb that answers.
+  "$BIN" browser > "$WORK/at15-browser.out" 2>"$WORK/at15-browser.err"
+  at15rc=$?
+  if [ "$at15rc" -eq 0 ]; then
+    at15got="$(cat "$WORK/at15-browser.out")"
+    if [ -x "$at15got" ]; then ok "prez browser named an executable: $at15got"
+    else bad "prez browser printed '$at15got', which is not executable"; fi
+  else
+    # Refusing is legitimate on a browserless box -- but the refusal must name
+    # what it probed, which is the whole reason this door exists.
+    present "the refusal names what it probed" "Probed:" "$WORK/at15-browser.err"
+    unchecked "no browser on this machine, so the resolved path was not checked"
+  fi
+
+  # ---- (b) the browserless path is reproducible ---------------------------
+  #
+  # Before the override existed, the control proving --strict matters could not
+  # be exercised anywhere Chrome was installed: a control that can never go red.
+  # This forces it HERE, on a machine that has a browser.
+  at15out="$WORK/at15-forced.err"
+  if PREZ_TEST_BROWSER=/nonexistent chrome 2>"$at15out" >/dev/null; then
+    bad "the override did not force the browserless path"
+  else
+    ok "the override forces the browserless path on a machine with a browser"
+    # A SKIP CARRYING THE WRONG REASON IS THE DEFECT THIS AT IS ABOUT. The
+    # refusal must blame the override, not invent an absent browser.
+    present "the refusal blames the override" "PREZ_TEST_BROWSER" "$at15out"
+    absent "the refusal does not claim no browser is installed" "no Chrome or Chromium installed" "$at15out"
+  fi
+
+  # A missing BINARY must not read as a missing BROWSER either -- same class,
+  # and the build at the top of this file swallows its output, so this is the
+  # only place that can tell them apart.
+  #
+  # PREZ_TEST_BROWSER is cleared for this ONE call, because the branch under
+  # test sits BELOW the override and the override correctly returns before
+  # reaching it. Without the clear this check passes on a normal run and FAILS
+  # on the browserless leg -- a check whose answer depends on the ambient shell,
+  # which is the defect this whole AT is named for. Caught by --strict on the
+  # browserless control, 7 Sep, which is the control doing its job.
+  at15nobin="$WORK/at15-nobin.err"
+  if PREZ_TEST_BROWSER= BIN="$WORK/definitely-not-here" chrome 2>"$at15nobin" >/dev/null; then
+    bad "chrome() resolved a browser with no binary to ask"
+  else
+    present "a missing binary says so" "cannot be asked" "$at15nobin"
+  fi
+
+  # ---- (c) no interactive modal -------------------------------------------
+  #
+  # A fresh --user-data-dir makes macOS prompt for a Safe Storage keychain
+  # entry: an interactive dialog in a non-interactive suite, which HANGS rather
+  # than fails, and which --strict cannot tell from still working. It reached
+  # hv's screen on 2026-08-29. --use-mock-keychain is the fix and $CHROME_SAFE
+  # is its one home.
+  #
+  # The STRUCTURAL half is the guard that lasts: a launch site added without
+  # $CHROME_SAFE is the regression, and it is greppable. Counted against the
+  # launches actually present rather than a number written down here, because a
+  # hardcoded count is a second roster -- the defect that reddened prez.bats.
+  at15launch=$(grep -c -E '"\$BROWSER" --headless' "$HERE/acceptance.sh" || true)
+  at15safe=$(grep -c -E '"\$BROWSER" --headless[^|]*\$CHROME_SAFE' "$HERE/acceptance.sh" || true)
+  if [ "${at15launch:-0}" -gt 0 ]; then
+    check "every headless launch carries \$CHROME_SAFE" "${at15safe:-0}" "${at15launch:-0}"
+  else
+    bad "found no headless launches to check, so this proves nothing"
+  fi
+  present "CHROME_SAFE is the mock-keychain flag" "use-mock-keychain" "$HERE/acceptance.sh"
+
+  # The BEHAVIOURAL half. vc could confirm the flag is accepted and that Chrome
+  # renders under it, but absence-of-a-dialog-on-someone-else's-screen is not
+  # observable from a shell. What IS observable is the keychain: a fresh-profile
+  # launch under --use-mock-keychain must not add a Safe Storage entry. Counted
+  # before and after, because this machine may legitimately already hold one
+  # from ordinary Chrome use, and asserting zero would fail for the wrong reason.
+  if ! BROWSER="$(chrome 2>/dev/null)"; then
+    unchecked "no browser, so the keychain half did not run"
+  elif ! command -v security >/dev/null 2>&1; then
+    unchecked "no security(1), so the keychain half did not run (not macOS)"
+  else
+    at15before=$(security find-generic-password -s "Chrome Safe Storage" 2>&1 | grep -c 'svce' || true)
+    printf '<!doctype html><title>at15</title><p>at15\n' > "$WORK/at15.html"
+    # BACKGROUND, PORT, KILL -- the shape AT04 and AT12 already use, and the
+    # only one in this suite proven to survive a fresh --user-data-dir on this
+    # machine. A foreground headless launch with a fresh profile does NOT exit
+    # here: --dump-dom is documented six lines above CHROME_SAFE as hanging
+    # exactly that way, and --screenshot was measured doing the same thing on
+    # 7 Sep. A fresh profile is not optional for this check -- it is the thing
+    # that provokes the keychain prompt -- so the launch shape has to give way
+    # instead.
+    at15port=9360
+    "$BROWSER" --headless=new $CHROME_SAFE --remote-debugging-port=$at15port \
+      --user-data-dir="$WORK/chrome-at15" "file://$WORK/at15.html" \
+      >"$WORK/at15-chrome.log" 2>&1 &
+    at15pid=$!
+    if wait_for_cdp "$at15port"; then
+      ok "a fresh-profile headless launch came up under \$CHROME_SAFE"
+    else
+      bad "chrome never opened its debugging port on $at15port with a fresh profile"
+    fi
+    kill "$at15pid" 2>/dev/null; wait "$at15pid" 2>/dev/null
+    at15after=$(security find-generic-password -s "Chrome Safe Storage" 2>&1 | grep -c 'svce' || true)
+    check "no Safe Storage entry was created" "${at15after:-0}" "${at15before:-0}"
+  fi
+
+  finish
 fi
 
 # ---------------------------------------------------------------------- report
