@@ -102,28 +102,37 @@ Two more properties, both inherited from devbin having paid for them:
 
 ## D7. Mode and the four refusals
 
-The mode is announced before anything is written (AC10). A discriminator that is merely correct is not enough: a misdetection has to arrive in the output rather than be discovered later in the filesystem.
+The mode is announced before anything is written (AC10), and before the refusals as well, so a run that is about to be refused still says what it thought it was doing. A discriminator that is merely correct is not enough: a misdetection has to arrive in the output rather than be discovered later in the filesystem.
 
-| Refusal                                    | Predicate                                                         | Row  |
-| ------------------------------------------ | ----------------------------------------------------------------- | ---- |
-| dirty source tree                          | `git status --porcelain` over the WHOLE tree, non-empty           | AC02 |
-| target is a Utilz source tree              | a property of the TARGET, never `src == dst`                      | AC03 |
-| `install` when an install already exists   | manifest present at the prefix; names `upgrade`                   | AC04 |
-| `upgrade` when none exists                 | manifest absent at the prefix; names `install`                    | AC04 |
+| Refusal                                  | Predicate                                               | `--force`? | Row  |
+| ---------------------------------------- | ------------------------------------------------------- | ---------- | ---- |
+| dirty source tree                        | `git status --porcelain` over the WHOLE tree, non-empty | never      | AC02 |
+| source is not a git repository           | distinct from clean; provenance cannot be established   | never      | AC02 |
+| target is a Utilz source tree            | a property of the TARGET, never `src == dst`            | never      | AC03 |
+| `install` when an install already exists | manifest present at the prefix; names `upgrade`         | yes        | AC04 |
+| `upgrade` when none exists               | manifest absent at the prefix; names `install`          | no         | AC04 |
 
-**The dirty gate reads the whole tree, not the owned subset.** The manifest's claim is "these bytes are commit X", and that is only true when nothing in the tree is uncommitted -- a dirty `.md` beside a clean `opt/` still means the recorded commit does not describe the checkout the bytes came from. A tree that is not a git repository at all must return a distinct status: "no changes" and "cannot tell" must not render as the same answer. **No `--force` on this one** (AC02).
+**`--force` reaches exactly one row and the table says which.** It is the only refusal whose subject is a tree the publish is entitled to replace; every other row protects something the publish would destroy or misrepresent. AT02 pins this by repeating the dirty case with every flag the verb accepts.
+
+**The dirty gate reads the whole tree, not the owned subset.** The manifest's claim is "these bytes are commit X", and that is only true when nothing in the tree is uncommitted -- a dirty `.md` beside a clean `opt/` still means the recorded commit does not describe the checkout the bytes came from. A tree that is not a git repository at all returns a distinct status: "no changes" and "cannot tell" must not render as the same answer.
 
 **AC03's predicate is a property of the target alone**, derived rather than named: a tree that could be published FROM but carries no manifest is a source checkout. Comparing source to destination was devbin's guard and it did not hold -- the harm has nothing to do with the two being equal.
+
+**ONE WRITE LANDS OUTSIDE THE PREFIX AND IT IS NAMED HERE RATHER THAN LEFT TO BE FOUND.** `cargo build --release` writes into the SOURCE tree's `opt/prez/crate/target/`, because AC09 requires the binary be built at publish time and that is where cargo puts it. AC11 says the publish writes "nothing a person authored and nothing outside the prefix", and the two halves of that sentence disagree here: the target directory is outside the prefix and is authored by nobody. **This is built on the reading that AC11 protects the operator's environment and their files, not the crate's own gitignored build output** -- the alternative reading makes AC09 and AC11 unsatisfiable together. Flagged to vc at 21:5xZ as a contract observation rather than settled unilaterally; if they read it the other way, the remedy is to build into a temporary directory and copy from there, which is a change to `install_build_prez` alone.
 
 ## D8. Telling the two trees apart at the prompt (AC12)
 
 `utilz version` reports which tree answered and what it was cut from: `installed 2.5.0 (<commit>) at <prefix>` against `source 2.5.0 at <root>`, discriminated by the manifest. Without it the two-tree arrangement is invisible in precisely the situation it exists for -- someone debugging behaviour cannot tell which copy produced it, and the version string is identical either way.
 
-## D9. The PATH cutover is its own verb (AC11)
+## D9. The PATH cutover is its own verb (AC11, AC16, WP-12)
 
-`install` and `upgrade` write nothing outside the prefix. Relinking `~/.local/bin/*` is mutating the operator's environment mid-session and needs a verb they typed: **`utilz link --prefix <dir>`**, separate and explicit.
+`install` and `upgrade` write nothing outside the prefix. Relinking `~/.local/bin/*` is mutating the operator's environment mid-command and needs a verb they typed: **`utilz relink --prefix <dir>`**, separate and explicit, and it is WP-12, LAST, after WP-05. It is the only work package that writes outside the prefix, so it wants every guard finished first.
 
-It normalises while it is there. Today `~/.local/bin/prez` is a RELATIVE link to `bin/utilz` while the other fourteen are ABSOLUTE links to `bin/<util>`. Both work, because the dispatcher reads `basename "$0"` for `INVOKED_AS` and resolves `UTILZ_HOME` from the resolved path either way. Two conventions in one directory is a false red waiting for the first doctor check that asserts one of them: one absolute link per utility, to `<prefix>/bin/<name>`.
+**AC11 and AC16 are one policy from two sides: never implicitly, always available explicitly.** A `--relink` flag on `install` was rejected because a flag becomes habitual and habitual relinking is implicit relinking with a longer spelling. Shell-init in devbin's shape was rejected too: devbin has one entry point reached by an absolute path, which does not transfer to sixteen, and PATH-order resolution would make which-tree-answers depend on shell state -- the defect AC15 exists to remove.
+
+**THIS SECTION SAID THE VERB SHOULD NORMALISE THE ODD LINK AND THAT IS NOW REVERSED (vc, ruled 21:20Z).** `~/.local/bin/prez` is a RELATIVE link to `bin/utilz` while the other fifteen are ABSOLUTE links to `bin/<util>`. It works, because the dispatcher reads `basename "$0"` for `INVOKED_AS` and resolves `UTILZ_HOME` from the resolved path either way. The argument for normalising was that two conventions in one directory is a false red waiting for the first doctor check that asserts one of them. **The argument against it wins: it is a change to hv's environment that nobody asked for, made under cover of a command asked to do something else.** A verb that quietly tidies what it was not pointed at is the same shape as a manifest check that re-blesses a file it refused. AT16 pins it: leave a link you did not write alone.
+
+Measured baseline for WP-12: **sixteen links in `~/.local/bin`** resolve into the source tree -- all fifteen utilities plus `utilz` -- and exactly one of them is the odd one.
 
 ## D10. What is shared with `emacs_install`, and what is not
 
@@ -135,8 +144,18 @@ It normalises while it is there. Today `~/.local/bin/prez` is a RELATIVE link to
 
 ## D11. Build order, and the one test that has to come first
 
-WP-01 (owned set + manifest) -> WP-02 (`install`) -> WP-04 (the runnable-install guards) -> WP-03 (`upgrade`) -> WP-05 (AC01 end to end).
+WP-01 (owned set + manifest) -> WP-02 (`install`) -> WP-04 (the runnable-install guards, and AC15) -> WP-03 (`upgrade`) -> WP-05 (AC01 end to end) -> WP-12 (`relink`). WP-12 is last because it is the only package that writes outside the prefix.
 
 `upgrade` sits after the guards because it is the mirror of `install` (AC04) and mirroring something still moving costs more than waiting.
 
 **AC01 is the row the whole thread turns on and it is the one most easily faked.** `determine_utilz_home` at `bin/utilz:17-53` walks the symlink chain, takes `dirname`, and returns the parent of `bin/`, so `<prefix>/bin/utilz` should yield `UTILZ_HOME=<prefix>` with no dispatcher change at all. **That is a code read and not a measurement, and it is recorded here as one.** An install that silently reaches back into `~/Devel/prj/Utilz` passes every check that does not move the source aside, and it passes them looking exactly like success -- which is why AC01 is written to move the source tree aside rather than to assert that files arrived.
+## D12. An inherited UTILZ_HOME is ANNOUNCED, not ignored (AC15, WP-04)
+
+**The dispatcher always computes its own home from `$0`, and when an inherited `UTILZ_HOME` names a DIFFERENT tree it says so on stderr and then HONOURS THE INHERITED VALUE.** Behaviour preserved, silence removed. Ruled by vc at 21:20Z with hv's pen; the remedy touches `bin/utilz` and belongs to WP-04, not WP-02.
+
+**The defect this closes is invisible to AC01, structurally.** `bin/utilz:42` derives `UTILZ_HOME` from `$0` only when the variable is unset, and `~/.zshrc:76-78` exports it unconditionally at the source checkout. So a published install invoked from hv's shell runs the SOURCE tree, silently. AC01 moves the source aside, and with the source gone a stale `UTILZ_HOME` makes the install fail loudly rather than defer quietly -- **so AC01 goes green in a clean test environment while the defect is live in the shell hv actually types into.** The dangerous case is source-PRESENT, which is the normal case.
+
+**IGNORING THE VARIABLE WAS THE OBVIOUS FIX AND IT IS WRONG, MEASURED RATHER THAN ARGUED.** `UTILZ_HOME` is load-bearing as a settable variable in five places: `test_helper.bash:20` exports it for the entire bats suite, `prez.bats:132` sandboxes a shim, `common_lib.bats:71` binds a temp home per test, `e2e-smoke.el:11` documents `UTILZ_HOME=$PWD emacs -Q --batch`, and `install.sh:124` -- this thread's own code -- binds it in a subshell to read a foreign tree's yaml. Ignoring it breaks WP-01. **The variable is not the defect; the silence is.** Two dispatchers, one per tree, was rejected as a Highlander violation on the one file that must have exactly one answer.
+
+**AT15's fourth leg is the one that bites: the announcement goes to STDERR, and stdout must be byte-identical to the unset run.** A caller parsing `utilz` output must not gain a line. `install.sh:124` is unaffected either way -- it binds the variable in a subshell for a metadata read, never for a dispatcher invocation, so the rule never fires there.
+

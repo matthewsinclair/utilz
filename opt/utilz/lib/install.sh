@@ -285,9 +285,29 @@ install_manifest_write() {
 # Three answers, three codes, for the same reason install_tree_state has three
 # values: "matches" and "cannot tell" must never render as the same answer.
 #
-# This reads the MANIFEST rather than re-enumerating, which is what lets it run
-# in an install tree -- there is no git there, so there is nothing to enumerate
-# from. The manifest is the one enumeration at one remove, not a second one.
+# THE ROLL-CALL IS REQUIRED, NOT MERELY CONVENIENT. THIS FUNCTION MUST NEVER
+# WALK THE TREE (AC14). It reads the manifest and looks at nothing else, so a
+# file the manifest does not name is not drift and is not reported.
+#
+# The convenient reason is that an install has no git and therefore nothing to
+# enumerate from. Read alone that sounds like a LIMITATION, and a limitation
+# invites a fix: the next reader sees a checker that cannot detect files it
+# does not know about, calls it a completeness gap, adds a find over the
+# prefix, and every existing check still passes.
+#
+# The reason that makes it load-bearing: pdf2md and xtrct each exec
+# "$LIB_DIR/.venv/bin/python3" after ensure_venv (common.sh:241), building a
+# venv INSIDE the install on first use, gitignored so git ls-files never named
+# it. Measured 7 Sep: 1776 files under opt/pdf2md/lib/.venv and 2407 under
+# opt/xtrct/lib/.venv. A tree-walking check reports 4183 drift rows that
+# nobody caused, the first time anyone runs either utility.
+#
+# This is AC13's shape with AC13's remedy unavailable. utilz test is refused
+# from an install because refusing costs nothing; pdf2md and xtrct running IS
+# the install working (AC01), so they cannot be refused. The check has to tell
+# unowned-and-expected from owned-and-changed, and reading the roll-call is how.
+#
+# The manifest is the one enumeration at one remove, not a second one.
 install_manifest_check() {
   local root="$1"
   local manifest="$root/$INSTALL_MANIFEST_NAME"
@@ -356,4 +376,212 @@ install_manifest_check() {
   done < "$manifest"
 
   return "$drift"
+}
+
+# ============================================================================
+# IMPURE: the coordination
+# ============================================================================
+
+# Copy the owned set of <src> into <dst>, creating parents as it goes.
+install_copy_owned() {
+  local src="$1"
+  local dst="$2"
+  local paths path target
+
+  paths=$(install_owned_paths "$src") || return 1
+
+  mkdir -p "$dst" || {
+    error "could not create $dst"
+    return 1
+  }
+
+  while IFS= read -r path; do
+    [[ -n "$path" ]] || continue
+
+    mkdir -p "$dst/$(dirname "$path")" || {
+      error "could not create the directory for $path under $dst"
+      return 1
+    }
+
+    if [[ -L "$src/$path" ]]; then
+      # readlink + ln -s, never cp. cp DEREFERENCES a symlink, which produces
+      # fifteen 8.5KB copies of the dispatcher in a tree that still looks
+      # right, so nothing fails and nothing says anything (D3). Making the
+      # target string the thing this code handles is what makes AC06
+      # checkable rather than incidental.
+      target=$(readlink "$src/$path") || {
+        error "could not read link target: $path"
+        return 1
+      }
+      rm -f "$dst/$path"
+      ln -s "$target" "$dst/$path" || {
+        error "could not create link: $path"
+        return 1
+      }
+    elif [[ -f "$src/$path" ]]; then
+      cp -p "$src/$path" "$dst/$path" || {
+        error "could not copy: $path"
+        return 1
+      }
+    else
+      error "owned path is missing from $src: $path"
+      return 1
+    fi
+  done <<< "$paths"
+}
+
+# Build the prez binary in <src>'s crate, if it has one. A no-op otherwise.
+install_build_prez() {
+  local src="$1"
+  local crate="$src/opt/prez/crate"
+
+  [[ -f "$crate/Cargo.toml" ]] || return 0
+
+  if ! command -v cargo >/dev/null 2>&1; then
+    error "cargo is required to publish: the install SHIPS prez's built binary"
+    echo "  AC09 -- the install-tree shim refuses to build, so the binary has to" >&2
+    echo "  exist before anyone runs it. Install Rust from https://rustup.rs." >&2
+    return 1
+  fi
+
+  echo "build:  cargo build --release (opt/prez/crate)"
+
+  # CARGO_TARGET_DIR is unset for this build so the binary lands where the
+  # owned set names it. The shim honours the variable deliberately, but a
+  # publish run by someone with it exported would send the output somewhere
+  # the copy never looks, and then ship the previous binary or none at all.
+  (
+    unset CARGO_TARGET_DIR
+    cd "$crate" && cargo build --release --quiet
+  ) || {
+    error "cargo build failed in $crate"
+    return 1
+  }
+}
+
+# Announce what is about to happen, on stdout, BEFORE anything is written.
+#
+# A discriminator that is merely correct is not enough (AC10): a misdetection
+# has to arrive in the output rather than be discovered later in the
+# filesystem. This is called before the refusals as well as before the writes,
+# so a run that is about to be refused still says what it thought it was doing.
+install_announce() {
+  local mode="$1"
+  local src="$2"
+  local state="$3"
+  local commit="$4"
+  local dst="$5"
+  local kind="$6"
+
+  printf 'mode:   %s\n' "$mode"
+  printf 'source: %s (%s, %s)\n' "$src" "$state" "$commit"
+  printf 'target: %s (%s)\n' "$dst" "$kind"
+}
+
+install_usage_install() {
+  cat <<'USAGE'
+Usage: utilz install [--prefix DIR] [--force]
+
+Publish a runnable install of this Utilz checkout.
+
+  --prefix DIR  Publish here instead of install.prefix from opt/utilz/utilz.yaml
+  --force       Publish over an existing install
+
+The source tree must be CLEAN. The manifest records the commit the bytes came
+from, and that claim holds only when nothing is uncommitted. No flag overrides
+it, --force included.
+USAGE
+}
+
+# `utilz install` -- publish a runnable install to the prefix.
+#
+# Facts first, announcement second, refusals third, writes last. Everything
+# this reads is a pure function of a tree path (above); everything it decides
+# is here (IN-AG-PFIC-001).
+install_verb_install() {
+  local prefix=""
+  local force=0
+  local src="$UTILZ_HOME"
+
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      --prefix)
+        if [[ $# -lt 2 ]]; then
+          error "--prefix requires a DIR argument"
+          return 2
+        fi
+        prefix=$(expand_tilde "$2")
+        shift 2
+        ;;
+      --force)
+        force=1
+        shift
+        ;;
+      -h | --help)
+        install_usage_install
+        return 0
+        ;;
+      *)
+        error "Unknown option: $1"
+        install_usage_install >&2
+        return 2
+        ;;
+    esac
+  done
+
+  if [[ -z "$prefix" ]]; then
+    prefix=$(install_prefix_configured "$src") || return 1
+  fi
+
+  local state kind commit
+  state=$(install_tree_state "$src")
+  kind=$(install_tree_kind "$prefix")
+  commit=$(git -C "$src" rev-parse --short HEAD 2>/dev/null) || commit="none"
+
+  install_announce "install" "$src" "$state" "$commit" "$prefix" "$kind"
+
+  case "$state" in
+    dirty)
+      error "source tree is dirty: $src"
+      echo "  An install cut from a dirty tree launders the bytes through one" >&2
+      echo "  more hop and gives them the look of provenance. Devbin measured" >&2
+      echo "  five of thirteen estates running bytes that matched no commit." >&2
+      echo "  Commit or stash first. There is no flag for this one." >&2
+      return 1
+      ;;
+    unknown)
+      error "cannot establish provenance: $src is not a git repository"
+      echo "  The manifest records the commit the bytes came from and there is" >&2
+      echo "  none to record. \"No changes\" and \"cannot tell\" are different" >&2
+      echo "  answers and this is the second one." >&2
+      return 1
+      ;;
+  esac
+
+  case "$kind" in
+    source)
+      error "target is a Utilz source tree: $prefix"
+      echo "  Publishing over a checkout would destroy work the manifest does" >&2
+      echo "  not know about. This is a property of the TARGET, not of whether" >&2
+      echo "  it happens to equal the source." >&2
+      return 1
+      ;;
+    install)
+      if [[ $force -eq 0 ]]; then
+        error "an install already exists at $prefix"
+        echo "  Use 'utilz upgrade' to replace it, which reports files edited" >&2
+        echo "  in place instead of overwriting them. Or --force to publish" >&2
+        echo "  straight over it." >&2
+        return 1
+      fi
+      ;;
+  esac
+
+  install_build_prez "$src" || return 1
+  install_copy_owned "$src" "$prefix" || return 1
+  install_manifest_write "$src" "$prefix/$INSTALL_MANIFEST_NAME" || return 1
+
+  local count
+  count=$(grep -c -v '^utilz-version	\|^source-commit	' "$prefix/$INSTALL_MANIFEST_NAME")
+  success "installed $(cat "$src/VERSION") ($commit) at $prefix -- $count paths"
 }

@@ -12,27 +12,6 @@ run_install_function() {
   bash -c "source '$UTILZ_HOME/opt/utilz/lib/common.sh'; source '$UTILZ_HOME/opt/utilz/lib/install.sh'; $*"
 }
 
-# A minimal source tree: a git repo carrying two bin symlinks with DIFFERENT
-# targets, which is the case a content-hash manifest cannot tell apart.
-make_fake_src() {
-  local home="$1"
-  mkdir -p "$home/bin" "$home/opt/utilz/lib" "$home/opt/alpha/test" "$home/help"
-  echo "9.9.9" > "$home/VERSION"
-  printf '#!/usr/bin/env bash\necho dispatcher\n' > "$home/bin/utilz"
-  printf '#!/usr/bin/env bash\necho other\n' > "$home/bin/other"
-  chmod +x "$home/bin/utilz" "$home/bin/other"
-  ln -s utilz "$home/bin/alpha"
-  ln -s other "$home/bin/beta"
-  printf 'name: alpha\n' > "$home/opt/alpha/alpha.yaml"
-  printf '#!/usr/bin/env bash\n' > "$home/opt/alpha/alpha"
-  printf 'this must not ship\n' > "$home/opt/alpha/test/alpha.bats"
-  printf 'name: utilz\n' > "$home/opt/utilz/utilz.yaml"
-  printf '# help\n' > "$home/help/alpha.md"
-  git -C "$home" init -q >/dev/null 2>&1
-  git -C "$home" add -A >/dev/null 2>&1
-  git -C "$home" -c user.email=t@example.com -c user.name=t commit -qm init >/dev/null 2>&1
-}
-
 # ============================================================================
 # THE OWNED SET (design.md D2)
 # ============================================================================

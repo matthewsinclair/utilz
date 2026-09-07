@@ -2,14 +2,44 @@
 wp_id: WP-02
 title: utilz install: prefix from utilz.yaml, the three refusals, mode announcement, prez built at publish
 scope: S
-status: Not Started
+status: Done
 ---
 
 # WP-02: utilz install: prefix from utilz.yaml, the three refusals, mode announcement, prez built at publish
 
 ## Objective
 
-_(not yet written)_
+The `utilz install` verb: resolve the prefix, announce the mode, refuse what must be refused, then build prez and copy the owned set. The coordination over WP-01's facts -- nothing here recomputes what the pure half already answers, and nothing there decides anything.
+
+## As built
+
+`install_verb_install` in `opt/utilz/lib/install.sh`, plus `install_copy_owned`, `install_build_prez`, `install_announce` and `install_usage_install`. One `install` branch in `bin/utilz` that sources the library and calls one entry point (D1, IN-AG-THIN-COORD-001). 14 tests in `opt/utilz/test/install.bats`.
+
+**The order is facts, announcement, refusals, writes.** The announcement precedes the refusals as well as the writes, so a run about to be refused still says what it thought it was doing. AT11 measures it as ORDERING rather than presence: with the prefix unwritable the publish dies at its first write and the mode line is still there.
+
+## The five refusals
+
+| Refusal                          | `--force`? |
+| -------------------------------- | ---------- |
+| dirty source tree                | never      |
+| source is not a git repository   | never      |
+| target is a Utilz source tree    | never      |
+| install exists (names `upgrade`) | yes        |
+| unset or empty `install.prefix`  | n/a        |
+
+`--force` reaches exactly one row, and the table is in `design.md` D7 rather than in anyone's memory. Every other row protects something the publish would destroy or misrepresent.
+
+## What this work package decided
+
+**`CARGO_TARGET_DIR` is unset for the publish build.** The shim honours it deliberately, but a publish run by someone with it exported would send the binary somewhere the copy never looks, and then ship the previous binary or none at all. Same variable, opposite treatment, and the discriminator is which side of the publish you are on.
+
+**One write lands outside the prefix and it is named in D7 rather than left to be found.** `cargo build --release` writes to the source tree's gitignored `opt/prez/crate/target/`, because AC09 requires the binary be built at publish time. AC11 as worded forbids writes outside the prefix; the reading built on is that AC11 protects the operator's environment and their files, not the crate's own build output, because the other reading makes AC09 and AC11 unsatisfiable together. Sent to vc as a contract observation rather than settled here.
+
+**The fixture builder moved to `test_helper.bash`.** Two suites needed it; one home before the second copy existed rather than after.
+
+## Deliberately not here
+
+`bin/utilz`'s `determine_utilz_home` was not opened. AC15's remedy -- announcing an inherited `UTILZ_HOME` that names a different tree -- is WP-04's, ruled by vc at 21:20Z and recorded as design.md D12.
 
 ## Acceptance
 

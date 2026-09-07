@@ -117,6 +117,23 @@ if [[ "$INVOKED_AS" == "utilz" ]]; then
       generate_utility "$@"
       ;;
 
+    install)
+      # The install library is sourced HERE and nowhere else. Line 58 above
+      # sources common.sh unconditionally for every one of the fifteen
+      # utilities on every invocation; folding the install machinery in would
+      # roughly double what cleanz parses in order to do something cleanz will
+      # never call (ST0014 design.md D1).
+      if [[ ! -f "$UTILZ_HOME/opt/utilz/lib/install.sh" ]]; then
+        error "Cannot find install library"
+        echo "Expected: $UTILZ_HOME/opt/utilz/lib/install.sh" >&2
+        exit 1
+      fi
+      # shellcheck source=opt/utilz/lib/install.sh
+      source "$UTILZ_HOME/opt/utilz/lib/install.sh"
+      shift  # Remove 'install' from arguments
+      install_verb_install "$@"
+      ;;
+
     integration)
       # Editor-neutral integration manifest surface
       shift  # Remove 'integration' from arguments
