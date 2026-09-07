@@ -23,7 +23,7 @@ todo [OPTIONS] [COMMAND] [ARGS]
 
 `todo` manages a plain-text `todo.md` file with three buckets -- DOING, TODO, and DONE -- and a handful of subcommands for adding, moving, querying, and archiving items. Each item is a one-line statement carrying a positional number and a checkbox glyph.
 
-The file is the single source of truth: you can drive it entirely from the CLI, or open it in an editor and hand-edit it, then run `todo sync` to normalize. Numbers are re-derived on every write and zero-padded to a shared column width so the file always stays aligned.
+The file is the single source of truth: you can drive it entirely from the CLI, or open it in an editor and hand-edit it, then run `todo sync` to normalize. Numbers are re-derived on every write and zero-padded to three, so the column keeps its shape as the list crosses ten and a hundred (a list past 999 widens rather than truncating). An id is a handle for the next command, not a name for the item.
 
 `todo` is a standalone fork of Intent's `intent todo`. The two file formats are mutually compatible (same bucket headings, same `[ ]`/`[-]`/`[x]` glyphs, same `## DONE:<watermark>` line), so a `todo.md` written by one is readable by the other. Because the formats are that close, each tool stamps a `generator:` frontmatter marker and refuses to overwrite a file the other owns -- see [Interop with intent todo](#interop-with-intent-todo).
 
@@ -40,15 +40,15 @@ history: _history/YYYYMMDD-done.md
 
 ## DOING
 
-- [-] `01` An item currently being worked on
+- [-] `001` An item currently being worked on
 
 ## TODO
 
-- [ ] `02` Something to do next
+- [ ] `002` Something to do next
 
 ## DONE:2026-07-02T00:00:00Z
 
-- [x] `03` Something already finished
+- [x] `003` Something already finished
 ```
 
 Item lines are GFM task-list items, so a `todo.md` renders as a real checklist

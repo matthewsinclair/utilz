@@ -31,11 +31,11 @@ history: _history/YYYYMMDD-done.md
 
 ## DOING
 
-- [-] `01` An item currently being worked on
+- [-] `001` An item currently being worked on
 
 ## TODO
 
-- [ ] `02` Something to do next
+- [ ] `002` Something to do next
 
 ## DONE:2026-07-02T00:00:00Z
 
@@ -54,7 +54,7 @@ missing id, and of loose spacing, so an older file or a hand-pasted line parses.
 Writing is always the current shape, and ids are renumbered positionally on every
 write, so `utilz todo sync` migrates a file in place.
 
-- Each item is `<number>:[<glyph>] <text>`. Numbers are global, positional, and zero-padded to a shared width; they are re-derived on every write.
+- Each item is a GFM task-list line: the checkbox, then the number in a code span, then the text (see the example above). Numbers are global, positional, and zero-padded to three, so the column keeps its shape as the list crosses ten and a hundred; a list past 999 widens rather than truncating. They are re-derived on every write, so an id is a handle for the next command, not a name for the item.
 - Glyphs: `[ ]` todo, `[-]` doing, `[x]` done.
 - In DOING/TODO top-to-bottom is priority; in DONE (and the history file) newest is on top.
 - Frontmatter: `generator` marks the file as utilz-owned (see [Interop](#interop-with-intent-todo)); `title` is the H1; `history` is the archive path pattern for `done --prune` (`YYYYMMDD` expands to the purge date, relative to the file's directory).

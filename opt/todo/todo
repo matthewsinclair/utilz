@@ -222,7 +222,11 @@ _counts() {
   B=${#TODO_ITEMS[@]}
   C=${#DONE_ITEMS[@]}
   TOTAL=$((A + B + C))
-  WIDTH=${#TOTAL} # "0" -> 1, "10" -> 2, "100" -> 3
+  # Ids pad to three, so the column keeps its shape as the list crosses ten
+  # and a hundred instead of renumbering every item one character wider. A
+  # list past 999 grows rather than truncating.
+  WIDTH=${#TOTAL}
+  if ((WIDTH < 3)); then WIDTH=3; fi
 }
 
 # Emit numbered item lines: <glyphchar> <width> <startnum> <text...>
@@ -483,10 +487,14 @@ cmd_print_bucket() {
 # Print the next <n> open items (DOING first, then TODO).
 cmd_next() {
   local n="${1:-1}"
-  if [[ ! "$n" =~ ^[0-9]+$ || "$n" -lt 1 ]]; then
+  # Base 10 before the compare, for the reason _resolve_n does it: a leading
+  # zero reads as octal, and "08" is what a caller copying an id would pass.
+  # `||` short-circuits, so the arithmetic only runs once the regex has passed.
+  if [[ ! "$n" =~ ^[0-9]+$ ]] || ((10#$n < 1)); then
     error "todo next: count must be a positive integer"
     exit 1
   fi
+  n=$((10#$n))
   parse_file
   _counts
   local count=0 line

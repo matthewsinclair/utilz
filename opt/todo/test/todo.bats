@@ -60,17 +60,35 @@ file_lacks() {
   TODO add "first task"
   TODO add "second task"
   TODO add --top "urgent task"
-  file_has todo.md '- [ ] `1` urgent task'
-  file_has todo.md '- [ ] `2` first task'
-  file_has todo.md '- [ ] `3` second task'
+  file_has todo.md '- [ ] `001` urgent task'
+  file_has todo.md '- [ ] `002` first task'
+  file_has todo.md '- [ ] `003` second task'
 }
 
-@test "numbers are global, positional, zero-padded to max width" {
+@test "numbers are global, positional, zero-padded to three" {
   local i
   for i in $(seq 1 10); do TODO add "item $i"; done
-  # 10 items -> width 2 -> first item is 01, tenth is 10
-  file_has todo.md '- [ ] `01` item 1'
-  file_has todo.md '- [ ] `10` item 10'
+  # Three regardless of the count, so the column does not reflow at ten
+  file_has todo.md '- [ ] `001` item 1'
+  file_has todo.md '- [ ] `010` item 10'
+}
+
+@test "a list past 999 widens rather than truncating" {
+  # Cheaper than adding a thousand items one at a time: hand-write the bucket
+  # and let sync renumber it.
+  TODO add "seed"
+  local i body=""
+  for i in $(seq 1 1000); do body+="- [ ] item $i"$'\n'; done
+  python3 - "$body" <<'PY_INNER'
+import sys, re
+src = open("todo.md", encoding="utf-8").read()
+src = re.sub(r"(?m)^- \[ \].*$\n?", "", src, count=1)
+src = src.replace("## TODO\n", "## TODO\n" + sys.argv[1])
+open("todo.md", "w", encoding="utf-8").write(src)
+PY_INNER
+  TODO sync
+  file_has todo.md '- [ ] `0001` item 1'
+  file_has todo.md '- [ ] `1000` item 1000'
 }
 
 @test "file-location precedence file over global over default; file+g errors" {
@@ -110,7 +128,7 @@ file_lacks() {
 @test "start moves to DOING as in-progress" {
   TODO add "task a"
   TODO start 1
-  file_has todo.md '- [-] `1` task a'
+  file_has todo.md '- [-] `001` task a'
 }
 
 @test "done prepends to DONE newest-first" {
@@ -129,17 +147,17 @@ file_lacks() {
 @test "notdone moves back to TODO" {
   TODO add "task b"
   TODO done 1
-  file_has todo.md '- [x] `1` task b'
+  file_has todo.md '- [x] `001` task b'
   TODO notdone 1
-  file_has todo.md '- [ ] `1` task b'
+  file_has todo.md '- [ ] `001` task b'
 }
 
 @test "toggle flips from current glyph" {
   TODO add "task c"
   TODO toggle 1
-  file_has todo.md '- [x] `1` task c'
+  file_has todo.md '- [x] `001` task c'
   TODO toggle 1
-  file_has todo.md '- [ ] `1` task c'
+  file_has todo.md '- [ ] `001` task c'
 }
 
 @test "a zero-padded id is accepted, as rendered" {
@@ -147,12 +165,12 @@ file_lacks() {
   # ids callers read back. Bash arithmetic would take "08" for octal.
   local i
   for i in 1 2 3 4 5 6 7 8 9 10; do TODO add "task $i"; done
-  file_has todo.md '- [ ] `08` task 8'
-  TODO start 08
-  file_has todo.md '- [-] `01` task 8'
-  # DONE numbers last, so completing item 01 renumbers it to 10
-  TODO done 01
-  file_has todo.md '- [x] `10` task 8'
+  file_has todo.md '- [ ] `008` task 8'
+  TODO start 008
+  file_has todo.md '- [-] `001` task 8'
+  # DONE numbers last, so completing item 001 renumbers it to 010
+  TODO done 001
+  file_has todo.md '- [x] `010` task 8'
 }
 
 @test "unknown id errors non-zero" {
@@ -300,7 +318,7 @@ EOF
   local heading_line="${output%%:*}"
   [ "$done_line" -gt "$heading_line" ]
   # and "still todo" stays a todo
-  file_has todo.md '[ ] `1` still todo'
+  file_has todo.md '[ ] `001` still todo'
 }
 
 @test "sync tolerates hand-entered lines" {
@@ -327,9 +345,9 @@ _(none)_
 _(none)_
 EOF
   TODO sync
-  file_has todo.md '- [ ] `1` no number here'
-  file_has todo.md '- [ ] `2` pasted intent dash'
-  file_has todo.md '- [x] `3` nospace'
+  file_has todo.md '- [ ] `001` no number here'
+  file_has todo.md '- [ ] `002` pasted intent dash'
+  file_has todo.md '- [x] `003` nospace'
 }
 
 @test "sync warns and preserves an unrecognizable line" {
@@ -365,7 +383,7 @@ EOF
   TODO add "alpha"
   TODO update
   assert_file_exists "todo.md"
-  file_has todo.md '- [ ] `1` beta'
+  file_has todo.md '- [ ] `001` beta'
 }
 
 @test "edit uses EDITOR then syncs" {
@@ -379,7 +397,7 @@ EOF
   TODO add "edit target"
   run env VISUAL= EDITOR="$stub" "$UTILZ_BIN_DIR/todo" edit
   assert_success
-  file_has todo.md '- [x] `1` edit target'
+  file_has todo.md '- [x] `001` edit target'
 }
 
 # ----------------------------------------------------------------------------
@@ -609,9 +627,9 @@ _(none)_
 OLD
   TODO sync
   # written in the new shape, positionally renumbered, DOING first
-  file_has todo.md '- [-] `1` in flight'
-  file_has todo.md '- [ ] `2` first'
-  file_has todo.md '- [ ] `3` second'
+  file_has todo.md '- [-] `001` in flight'
+  file_has todo.md '- [ ] `002` first'
+  file_has todo.md '- [ ] `003` second'
   # and nothing is left in the old shape
   file_lacks todo.md ":[ ] first"
   file_lacks todo.md ":[-] in flight"
@@ -622,8 +640,8 @@ OLD
   TODO sync
   TODO sync
   # a second round trip must not accrete a second id
-  file_has todo.md '- [ ] `1` an item'
-  file_lacks todo.md '`1` `1`'
+  file_has todo.md '- [ ] `001` an item'
+  file_lacks todo.md '`001` `001`'
   run "$UTILZ_BIN_DIR/todo" --json
   assert_output_contains '"text": "an item"'
 }
