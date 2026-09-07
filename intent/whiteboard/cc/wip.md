@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: 221775b1-d498-41c0-b937-4d10094711a8
-heartbeat_at: 2026-09-07 21:24Z
+heartbeat_at: 2026-09-07 22:07Z
 status: active
-focus: "WP-01 DONE and committed as aa6ed56 -- opt/utilz/lib/install.sh, 7 functions, 22 tests, shellcheck and critic clean, 118 of 118 core tests passing. D2 was corrected by measurement before the code landed: the owned set is enumerated by EXCLUSION from git ls-files, because an inclusion list drops runtime payload in five of fifteen utilities. Next is WP-02, utilz install: the prefix, the four refusals, the mode announcement."
+focus: "ST0014 BUILD COMPLETE. All six WPs Done -- WP-01 aa6ed56, WP-02 5a15b81, WP-04 cc155d4, WP-03 c0b34c8, WP-05 fec87d1, WP-12 c01dcae, plus f598a36 setting install.prefix. 78 tests across six files, 174 of 174 core tests, shellcheck and critic clean, doctor 0 findings. AC01 proven end to end with the source removed. NO AT marked green -- all sixteen are vc's to verify. Nothing written to hv's estate."
 claims: [ST0014]
 ---
 
@@ -13,13 +13,24 @@ claims: [ST0014]
 
 ## DOING
 
-**ST0014/WP-02 NEXT: `utilz install` -- the prefix, the four refusals, the mode announcement.** Design is D6 (the prefix and the `null` trap), D7 (mode and the four refusals), D3 (symlinks copied with `readlink` / `ln -s`, never `cp`), D10 (flag parsing shared with `emacs_install`, refusal policy NOT shared). Build order is D11: 01 -> **02** -> 04 -> 03 -> 05.
+**ST0014 BUILD IS COMPLETE AND HANDED TO vc FOR VERIFICATION at 22:05Z.** All six work packages Done. **No AT is marked green: all sixteen are still `to-write` and that is vc's, because a row the builder marks green is the builder's claim rather than a measurement.**
 
-**WP-01 IS DONE, `aa6ed56`.** `opt/utilz/lib/install.sh` -- `install_owned_paths`, `install_prefix_configured`, `install_tree_kind`, `install_tree_state`, `install_manifest_rows`, `install_manifest_write`, `install_manifest_check` -- plus `expand_tilde` extracted into `common.sh` (D10) and 22 tests in `opt/utilz/test/install_lib.bats`. Verified: shellcheck clean, `intent critic shell` clean, **118 of 118** core tests, `intent doctor` 0 findings. Smoked against the REAL tree: 110 owned paths copied to a scratch install, `install_tree_kind` says `install`, a matching check is silent at rc 0, and three deliberate breakages come back named as `not-a-link` / `retargeted` / `modified` at rc 1.
+| WP  | Commit    | Ships                                                                                   |
+| --- | --------- | --------------------------------------------------------------------------------------- |
+| 01  | `aa6ed56` | the pure half: owned set, prefix reader, manifest write and check                       |
+| 02  | `5a15b81` | `utilz install`: five refusals, the announcement before the refusals, the copy          |
+| 04  | `cc155d4` | AC15 in `bin/utilz`, AC12 in `show_version`, AC13 in `run_tests`, AC09 in the prez shim |
+| 03  | `c0b34c8` | `utilz upgrade`: reported, left alone, install-time row preserved                       |
+| 05  | `fec87d1` | AC01 end to end with the source removed                                                 |
+| 12  | `c01dcae` | `utilz relink`, and AC11's never-implicitly half                                        |
+|     | `f598a36` | `install.prefix: ~/Devel/opt/utilz`, deliberately its own commit so it reverts alone    |
 
-**`install.prefix` IS NOT YET SET in `opt/utilz/utilz.yaml`, deliberately, and the reader refuses unset BY NAME today.** I write `install.prefix: ~/Devel/opt/utilz` as part of WP-02, when the verb that reads it exists. vc was told at 21:23Z and asked to object if the key belongs elsewhere; **not blocking on the answer.**
+**78 tests across six files; 174 of 174 core tests; shellcheck, `intent critic shell` and `intent doctor` all clean.**
 
-**Two conventions WP-01 set, and WP-02 inherits both.** Three answers get three exit codes, never two -- `install_manifest_check` is 0 no-drift / 1 drift / 2 cannot-read, and `install_tree_state` echoes clean / dirty / unknown, because "matches" and "cannot tell" must not collide. And every refusal test asserts a SPECIFIC rc plus the message, never a bare `assert_failure`.
+**TWO THINGS ARE OPEN AND NEITHER IS MINE TO CLOSE.**
+
+- **AC09 versus AC11, flagged to vc at 21:36Z and still unanswered.** `cargo build --release` writes into the source tree's gitignored `opt/prez/crate/target/`, which is outside the prefix, and AC11 says the publish writes nothing outside it. I built on the reading that AC11 protects the operator's environment and their files, not the crate's own build output, because the other reading makes AC09 and AC11 unsatisfiable together. It is stated in `design.md` D7. If vc reads it the other way the remedy is `install_build_prez` building into a temp `CARGO_TARGET_DIR`: one function.
+- **NOTHING HAS BEEN WRITTEN TO hv's ESTATE AND NOTHING WILL BE WITHOUT THEM SAYING SO.** `install.prefix` is set, so `utilz install` with no arguments now targets `~/Devel/opt/utilz`; that directory does not exist. Creating it is a write outside this repo, and `utilz relink` afterwards would repoint sixteen links in `~/.local/bin`. Both are hv's to trigger, in that order.
 
 ## TODO
 

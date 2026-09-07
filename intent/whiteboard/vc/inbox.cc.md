@@ -190,3 +190,54 @@ UTILZ_HOME=<source> <prefix>/bin/utilz version ->  utilz v2.5.0
 Next is WP-04: the `utilz test` refusal, the prez shim, AC15's remedy and AC12's provenance at the prompt.
 
 (C) hello@matthewsinclair.com
+
+## (2026-09-07 22:05Z) Re: 2026-09-07 21:24Z
+
+**ALL SIX WORK PACKAGES ARE DONE AND COMMITTED. 78 TESTS ACROSS SIX FILES, 174 OF 174 CORE TESTS PASSING, SHELLCHECK CLEAN, CRITIC CLEAN, `intent doctor` 0 FINDINGS. NO AT IS MARKED GREEN -- ALL SIXTEEN ARE STILL `to-write`, BECAUSE THAT IS YOURS.**
+
+| WP  | Commit    | Ships                                                                                   |
+| --- | --------- | --------------------------------------------------------------------------------------- |
+| 01  | `aa6ed56` | the pure half: owned set, prefix, manifest write and check                              |
+| 02  | `5a15b81` | `utilz install`: five refusals, the announcement, the copy                              |
+| 04  | `cc155d4` | AC15 in `bin/utilz`, AC12 in `show_version`, AC13 in `run_tests`, AC09 in the prez shim |
+| 03  | `c0b34c8` | `utilz upgrade`: reported, left alone, install-time row preserved                       |
+| 05  | `fec87d1` | AC01 end to end, source removed                                                         |
+| 12  | `c01dcae` | `utilz relink`, and AC11's never-implicitly half                                        |
+|     | `f598a36` | `install.prefix: ~/Devel/opt/utilz` -- deliberately its own commit                      |
+
+**Where each AT's test now lives**, with AT12/AT14/AT15/AT16 re-cited as I said I would:
+
+| AT   | File                                | AT   | File                  |
+| ---- | ----------------------------------- | ---- | --------------------- |
+| AT01 | `install_e2e.bats`                  | AT09 | `upgrade.bats`        |
+| AT02 | `install.bats`                      | AT10 | `install_guards.bats` |
+| AT03 | `install.bats`                      | AT11 | `install.bats`        |
+| AT04 | `install.bats`                      | AT12 | `relink.bats`         |
+| AT05 | `upgrade.bats`                      | AT13 | `install_guards.bats` |
+| AT06 | `install.bats`                      | AT14 | `install_guards.bats` |
+| AT07 | `install_lib.bats`                  | AT15 | `install_guards.bats` |
+| AT08 | `install_lib.bats` + `install.bats` | AT16 | `relink.bats`         |
+
+**AT08 is the one that genuinely spans two files and I am not going to pretend otherwise.** The header half -- version, commit, a row per owned path -- is `install_lib.bats` test 13. The half that can actually fail, the mutate-after-the-commit refusal, needs the publish and is `install.bats`. Cite it wherever you prefer; I have left it where you put it.
+
+**AC01 IS PROVEN AND HERE IS EXACTLY WHAT WAS DONE, SO YOU CAN JUDGE THE FORM AS WELL AS THE RESULT.** `cp -a` the checkout to a temp path (mtimes survive, so the publish build is a 0.03s cargo no-op), commit inside the COPY so the dirty gate is satisfied without touching hv's tree, publish through the real `utilz install`, then **`rm -rf` the source**. Eleven tests then run against an install whose source does not exist. **The source is a copy rather than hv's checkout because moving hv's working tree aside is not available with three concurrent writers** -- the copy closes reach-back-to-my-own-source completely, and the case a copy cannot see (a path hardcoded to the REAL tree, which survives because that tree is still there) is closed by two grep assertions instead. **If you think that is not AC01, say so and I will take the correction** -- it is the one place I chose a weaker instrument on safety grounds rather than because the stronger one was unavailable in principle.
+
+**The crown jewel is `cleanz --detrope` running from that install.** It reads `opt/cleanz/data/trope-indicators.txt`, which is exactly the file D2's original inclusion list would have dropped. Under that list cleanz would have arrived, dispatched, and found nothing: a broken install that looks installed.
+
+**THREE FINDINGS FROM THE END-TO-END, all against me or against the tree, none against you.**
+
+**1. `utilz doctor` exits 1 from a fresh install and it is RIGHT to.** A temp prefix is not on `$PATH` and doctor says so -- WP-12's territory. My first assertion was `assert_success`, which would have meant either weakening doctor or pretending an unconfigured PATH is fine. It now asserts the four substantive checks and that PATH is the ONLY issue.
+
+**2. Eight `opt/*/README.md` ship a literal `/Users/matts/Devel/prj/Utilz`.** Filed as **issue 0010**, low. Inert -- **zero CODE files in the owned set name any absolute home path**, which is what makes the install relocatable and is pinned by its own test. Historical drift; `tmpl/README.tmpl` is clean. I deliberately did NOT add the eight to an exception list, because such a list rots the first time someone does the right thing.
+
+**3. AC09 was already satisfied and satisfied for the wrong reason, exactly as we both suspected.** The branch is explicit now, keyed on the manifest at the shim's OWN tree root rather than `$UTILZ_HOME` -- which may be inherited and name a different tree.
+
+**TWO THINGS STILL OPEN AND BOTH ARE YOURS OR HV'S.**
+
+**The AC09-versus-AC11 reading I flagged at 21:36Z is still unanswered and I have built on one side of it.** `cargo build --release` writes into the source tree's gitignored `opt/prez/crate/target/`, which is outside the prefix. `design.md` D7 states the reading in as many words. If you read it the other way, the remedy is `install_build_prez` building into a temp `CARGO_TARGET_DIR` and copying from there -- one function, and I will take the change without argument.
+
+**I have NOT published to hv's real prefix and will not without them saying so.** `install.prefix` is now set, so `utilz install` with no arguments targets `~/Devel/opt/utilz`; the directory does not exist and nothing has been written there. Creating it is a write to hv's estate outside this repo, and `utilz relink` afterwards would repoint their PATH. Both are theirs to trigger.
+
+**What I would verify first if I were you**, in the order I would do it: AT01's form above; AT07's retargeted symlink (test 11 in `install_lib.bats` is the sharper one -- two links whose RESOLVED content is byte-identical must still produce different rows); AT09's three-value discrimination (the source is moved on between install and upgrade so install-time, edited and upstream are three different checksums -- without that, two of them coincide and the test cannot tell them apart); and AT15's fourth leg, which is the one I would most expect to have got subtly wrong.
+
+(C) hello@matthewsinclair.com
