@@ -3,7 +3,7 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 06b406f0-9a29-4636-ad0d-abd6663e4f8f
-heartbeat_at: 2026-09-07 21:05Z
+heartbeat_at: 2026-09-07 21:13Z
 status: active
 focus: "ST0014 -- contract and verification only; cc builds. AC01-AC13 minted with all three forks ruled, doctor 0 findings, contract 0/13 BLOCKED with every row decided, no source code from either node yet. Next act on this thread is verifying AC01 against the artefact -- the install running with the source tree moved aside -- not writing it. Localfolded 20:59Z; status stays active, a compact is not a session end."
 claims: [ST0012, ST0013]
@@ -26,6 +26,15 @@ State, verified rather than described: **AC01-AC13 minted with all three forks r
 **AT01-AT13 minted 21:07Z, BEFORE cc writes WP-01**, so the thread is red-first rather than tested-after. `intent ac list ST0014` shows twelve of thirteen ACs covered; AC12 is the non-test row and is deliberately uncovered, its evidence being the prompt output at close. Gate is still `0/13 BLOCKED`, correctly -- every row is `to-write`. Five of the notes exist because the obvious test passes for the wrong reason: AT06's literal-`null` leg, AT07's target-string retarget, AT10's `CARGO_TARGET_DIR` leg, AT11 measuring the mode announcement as ORDERING rather than presence, AT08's commit-describes-the-shipped-bytes leg.
 
 **The five test-file paths follow cc's WP split and I told them so in writing: the paths are theirs to re-cite, the ASSERTIONS are not.** That is the whole boundary between my half and theirs on this thread.
+
+**AC14 AND AC15 WERE FOUND BY VERIFYING BEFORE THERE WAS ANYTHING TO VERIFY, WHICH IS THE ARGUMENT FOR DOING THE CONTRACT FIRST.** Contract now `0/15 BLOCKED`, doctor 0 findings.
+
+- **AC15 is the serious one, and it is measured rather than reasoned.** `bin/utilz:42` derives `UTILZ_HOME` from `$0` ONLY when the variable is unset; `~/.zshrc:76-78` exports it unconditionally, read back out of `zsh -lc`. A hand-built prefix with a marker VERSION answers `vPREFIX-MARKER-9.9.9` unset and `v2.5.0` -- the CHECKOUT -- exported. **AC01 cannot catch it**: AC01 moves the source aside, where a stale `UTILZ_HOME` fails loudly instead of deferring quietly, so AC01 goes green in a clean bats env while the defect is live in hv's shell. The remedy is a three-way fork, it is cc's to rule in `design.md`, and one branch of it is hv's `.zshrc`. Both told, 21:13Z. **I stated the property and did not rule the mechanism.**
+- **AC14**: `pdf2md` and `xtrct` build a venv at `opt/<n>/lib/.venv` on first run (`ensure_venv`, `common.sh:223`) -- inside the install, outside `git ls-files`. A used install carries files the manifest never recorded. AC13's shape with AC13's remedy unavailable, because those two running IS the install working.
+
+**cc's D2 rewrite reproduces exactly on my side**: 109 tracked paths, 15 symlinks, 94 files, 43M, 42M of it `opt/macoz/images/`, same five utilities. Sharper figure I gave them: 22 paths an inclusion list would have dropped. `bin/devbin` excluded safely -- one reference in all 109, a comment at `opt/prez/prez:54`.
+
+**I CORRECTED TWO OF MY OWN ROWS AGAINST cc'S WORK RATHER THAN DEFENDING THEM.** AT07 said "15 symlinks and 2 real files" as the ARRIVAL count; the exclusion makes the install's `bin/` 15 and one, and AC06 now says in the row that its count is of the SOURCE `bin/`. And AT06 gained a fourth leg after I nearly filed cc's literal-`null` finding as unreproducible -- **my probe passed `install.prefix` without the leading dot, which is not a yq path, so it returned empty.** With `.install.prefix` the finding is exact: the four-character string `null`, `[[ -n ]]` passes, a bare guard publishes to `./null`. Both the null and the empty case have to be refused; a guard written for one lets the other through. **The near-miss is the lesson: I was one malformed argument away from telling a peer their measured finding did not reproduce.**
 
 **My next act on this thread is VERIFYING AC01 against the artefact** -- the install running with the source tree moved aside -- not writing it. An install that reaches back into the checkout passes everything that does not move the source.
 

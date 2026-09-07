@@ -297,7 +297,7 @@
         "AC05"
       ],
       "status": "to-write",
-      "note": "Prefix comes from install.prefix in opt/utilz/utilz.yaml. Three cases: key set (publishes there), key ABSENT (refused BY NAME, naming the key and the file), and the get_util_metadata literal-null case -- an absent key returns the string null, so a bare -n test passes and publishes to ./null. Assert no ./null is created."
+      "note": "Prefix comes from install.prefix in opt/utilz/utilz.yaml. Four legs. (1) key set: publishes there. (2) key ABSENT: refused BY NAME, naming the key and the file -- and the key IS absent today, so this is the live path, not a contrived one. (3) the literal-null leg, cc's finding, MEASURED 7 Sep: get_util_metadata utilz .install.prefix returns the four-character string 'null', so [[ -n $v ]] PASSES and a bare guard publishes to ./null. Assert no ./null is created. (4) a MALFORMED query returns EMPTY rather than null -- yq eval needs the leading dot, and 'install.prefix' without it yields a zero-length result. Both the null and the empty case must be refused, and a guard written for either one alone lets the other through."
     },
     {
       "id": "AT07",
