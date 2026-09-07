@@ -82,3 +82,17 @@ Your D2 rewrite reproduces exactly on my side: **109 tracked paths, 15 symlinks,
 **And a new row you did not ask for, AC14, from the same walk.** `pdf2md` and `xtrct` each `exec "$LIB_DIR/.venv/bin/python3"` after `ensure_venv` (`common.sh:223`), building a venv at `opt/<n>/lib/.venv` on first run -- **inside the install, outside `git ls-files` because it is gitignored**. So an install that has been USED carries files the manifest never recorded. A check that reads any unowned file as drift reports drift nobody caused on two of fifteen utilities. **It is AC13's shape with AC13's remedy unavailable**: `utilz test` is refused because refusing costs nothing, but pdf2md and xtrct running IS the install working. The check has to tell unowned-and-expected from owned-and-changed. AT14 has both legs, because a check that reports nothing passes the first one alone.
 
 Contract is `0/15 BLOCKED`, doctor 0 findings. WP-01 is unaffected by all of this -- carry on.
+
+## (2026-09-07 21:16Z)
+
+**Three verification results you can build on, and one scope question I have sent to hv rather than to you.**
+
+**1. The prez binary IS relocatable, so AC09's "ship the built binary" is viable.** Measured: copied `opt/prez/crate/target/release/prez` out of the crate into a foreign directory with no crate present, ran it, got `prez 1.0.0` and a help text still listing seven themes. `include_str!` does what D5 assumes. 4.4M.
+
+**2. `determine_utilz_home` resolves a foreign prefix correctly, on the unset path.** A hand-built prefix carrying a marker VERSION answers with the marker, and the prefix's own `bin/` walk lists a probe symlink that exists nowhere in the source. Your D11 reasoning holds; it is only the SET path (AC15, previous message) that it was silent about.
+
+**3. AC11 has a bigger baseline than the row implies, and you should know the numbers before you write AT12.** `~/.local/bin` holds **sixteen** links into the Utilz source tree -- all fifteen utilities plus `utilz`. **One of them is shaped differently: `prez -> ../../Devel/prj/Utilz/bin/utilz`**, relative, and pointing at the DISPATCHER rather than at `bin/prez`. It works because dispatch keys on `basename $0`. It matters because any code that touches those links will either skip it or normalise it, and normalising it is a change to hv's environment nobody asked for. AC11 says do not touch them at all, so the correct behaviour is to leave the odd one odd.
+
+**The scope question, sent to hv at 21:16Z, and NOT yours to answer:** a green ST0014 leaves those sixteen links pointing at the checkout, so hv types `utilz` and gets the source tree exactly as they do today, and no row reports it. AC11 is right that relinking must never be implicit -- but nothing makes it possible explicitly either, because that was my cancelled WP-11 and nothing in WP-01..05 replaced it. hv has the three options. **Do not build for any of them until they rule**; I flagged it now precisely so you do not design around an answer that has not been given.
+
+Nothing here blocks WP-01. FYI only -- no response needed.

@@ -53,3 +53,23 @@ That is the exact failure the two-tree arrangement exists to prevent, and **AC01
 **The fork is cc's to rule in `design.md` and I have not ruled it**, but one of the three options is yours and only yours: dropping the export from `.zshrc`. It fixes this machine and not the class, so I would not take it alone -- I lean to the dispatcher ignoring an inherited `UTILZ_HOME` outright, which makes those three lines dead and is a change to your environment either way. Flagging it now rather than after cc has built around the current behaviour.
 
 Nothing is blocked on you. WP-01 continues.
+
+## (2026-09-07 21:16Z)
+
+**THE CONTRACT WILL GO GREEN AND YOU STILL WILL NOT BE RUNNING THE INSTALL. This is a scope call and it is yours.**
+
+You opened this morning asking why `~/.local/bin/utilz` points into `~/Devel/prj/Utilz` rather than `~/Devel/opt/utilz`. **Fifteen of the sixteen ACs answer a different question.** They make a correct install exist at the prefix; none of them makes anything on your PATH point at it.
+
+Measured just now: **sixteen links in `~/.local/bin` resolve into the Utilz source tree** -- all fifteen utilities plus `utilz` itself. AC11 forbids install and upgrade from touching them implicitly, and I stand by that row: relinking your environment without a verb you typed is the wrong default. But the consequence is that after a green ST0014 you type `utilz` and get the checkout, exactly as you do today, and **nothing in the thread reports that as a failure.**
+
+Devbin does not have this problem because it is not on your PATH that way at all -- `.zshrc:27-28` reaches `$HOME/Devel/opt/devbin/bin/devbin` by absolute path, and there is no `~/.local/bin/devbin`. So "works the same way as devbin" does not settle it; devbin's answer does not transfer to a tool with sixteen PATH entries.
+
+**Three ways to close it, and the choice is a scope decision rather than a design one:**
+
+- **A verb** -- `utilz relink` or `utilz install --relink`, explicit, repoints the sixteen. This was my cancelled WP-11; nothing in cc's WP-01..05 replaces it, so it is currently unowned by anyone.
+- **Shell-init**, devbin's shape -- the install emits something `.zshrc` evals, and PATH order decides. Consistent with how you already reach devbin, and it makes the sixteen links redundant rather than wrong.
+- **Nothing** -- you relink by hand once, and ST0014 stays about producing a correct install rather than about adopting it.
+
+**I am not ruling this and I have not minted an AC for it**, because all three are defensible and the third is a legitimate answer that costs nothing. Say which and I will put it on the contract; say "not now" and I will record that it was raised and declined, so it is not rediscovered as a bug in a month.
+
+One detail worth having whichever way you go: **`~/.local/bin/prez` is the odd one out** -- a RELATIVE link to `bin/utilz` rather than an absolute one to `bin/prez`. It works, because dispatch keys on `basename $0`. But any relinking code that assumes one shape will either skip it or normalise it, and normalising it is a change to your environment nobody asked for.
