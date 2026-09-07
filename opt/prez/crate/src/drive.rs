@@ -95,6 +95,11 @@ pub fn print_to_pdf(
   let result = Command::new(browser)
     .arg("--headless")
     .arg("--disable-gpu")
+    // Chrome's first-run experience is an interactive modal, and every launch
+    // here meets a profile it has never seen, so it fires every time. Refuse it
+    // rather than ask a human a question from inside a print pipeline.
+    .arg("--no-first-run")
+    .arg("--no-default-browser-check")
     .arg("--no-pdf-header-footer")
     .arg("--virtual-time-budget=5000")
     .arg(format!("--print-to-pdf={}", out.display()))
@@ -263,6 +268,10 @@ pub fn presenting_argv(artifact: &Path, width: u32, height: u32) -> Vec<String> 
     format!("--app={}", file_url(artifact)),
     format!("--window-size={width},{height}"),
     "--new-window".to_string(),
+    // See the headless path above: the first-run panel is a modal, and it
+    // lands in front of the deck this is opening.
+    "--no-first-run".to_string(),
+    "--no-default-browser-check".to_string(),
   ]
 }
 

@@ -286,7 +286,17 @@ chrome() {
 # The profile flag goes only where it already was, at the two sites that
 # background-and-kill. A fix aimed at a problem nobody verified cost four
 # ten-minute hangs and two orphaned browsers on hv's machine.
-CHROME_SAFE="--use-mock-keychain"
+#
+# --no-first-run --no-default-browser-check are the SECOND interactive modal,
+# found the same way: hv screenshotted Chrome's "Welcome to Google Chrome" panel
+# -- make Chrome the default browser, send usage statistics to Google -- popping
+# up on every run of this suite. It is the first-run experience, and every
+# launch here triggers it because every launch gets a profile Chrome has never
+# seen before. Same class of bug as the keychain prompt and the same fix: say no
+# to it up front rather than let a non-interactive suite ask a human a question.
+# `Courses/bin/render-cover` has carried both flags all along; this suite never
+# picked them up.
+CHROME_SAFE="--use-mock-keychain --no-first-run --no-default-browser-check"
 
 # ---------------------------------------------------------------- AT01 -- AC11
 
@@ -1062,7 +1072,7 @@ if want AT15; then
   # which is the defect this whole AT is named for. Caught by --strict on the
   # browserless control, 7 Sep, which is the control doing its job.
   at15nobin="$WORK/at15-nobin.err"
-  if PREZ_TEST_BROWSER= BIN="$WORK/definitely-not-here" chrome 2>"$at15nobin" >/dev/null; then
+  if PREZ_TEST_BROWSER='' BIN="$WORK/definitely-not-here" chrome 2>"$at15nobin" >/dev/null; then
     bad "chrome() resolved a browser with no binary to ask"
   else
     present "a missing binary says so" "cannot be asked" "$at15nobin"
@@ -1080,12 +1090,19 @@ if want AT15; then
   # $CHROME_SAFE is the regression, and it is greppable. Counted against the
   # launches actually present rather than a number written down here, because a
   # hardcoded count is a second roster -- the defect that reddened prez.bats.
-  at15launch=$(grep -c -E '"\$BROWSER" --headless' "$HERE/acceptance.sh" || true)
-  at15safe=$(grep -c -E '"\$BROWSER" --headless[^|]*\$CHROME_SAFE' "$HERE/acceptance.sh" || true)
+  # EVERY launch of $BROWSER, not just the headless ones. This counted
+  # `--headless` sites until 7 Sep, which excluded AT20's wrapper -- the single
+  # launch in this suite that opens a VISIBLE window and therefore the only one
+  # that can put a dialog in front of a human. hv got Chrome's first-run
+  # "Welcome to Google Chrome" modal from it, mid-run, which is exactly the
+  # class AC18(c) forbids, and the check written to catch that class was looking
+  # the other way. A guard scoped to the safe launches is not a guard.
+  at15launch=$(grep -c -E 'exec "\$BROWSER"|"\$BROWSER" --headless' "$HERE/acceptance.sh" || true)
+  at15safe=$(grep -c -E '(exec "\$BROWSER"|"\$BROWSER" --headless)[^|]*\$CHROME_SAFE' "$HERE/acceptance.sh" || true)
   if [ "${at15launch:-0}" -gt 0 ]; then
-    check "every headless launch carries \$CHROME_SAFE" "${at15safe:-0}" "${at15launch:-0}"
+    check "every launch of the browser carries \$CHROME_SAFE" "${at15safe:-0}" "${at15launch:-0}"
   else
-    bad "found no headless launches to check, so this proves nothing"
+    bad "found no browser launches to check, so this proves nothing"
   fi
   present "CHROME_SAFE is the mock-keychain flag" "use-mock-keychain" "$HERE/acceptance.sh"
 
@@ -1126,6 +1143,146 @@ if want AT15; then
   fi
 
   finish
+fi
+
+# ---------------------------------------------------------------- AT20 -- AC19
+
+if want AT20; then
+  start AT20 "the presenting window that actually appears, at the deck's shape"
+
+  # AT18 has the argv layer and it is the only place a silently-DROPPED flag is
+  # catchable. This is the other half: a flag that was sent and IGNORED. Chrome
+  # took --start-fullscreen on every launch for as long as the function existed
+  # and did nothing with it, and nothing in the process, the exit status or the
+  # logs said so -- it took a screenshot of a portrait window to find.
+  #
+  # THIS IS THE ONLY BLOCK IN THE SUITE THAT PUTS A REAL WINDOW ON A SCREEN.
+  if ! BROWSER="$(chrome)"; then skip "no browser, and this AT is meaningless headless"
+  elif ! command -v node >/dev/null 2>&1; then skip "no node for the CDP probe"
+  else
+    # THE WRAPPER IS THE WHOLE TRICK. prez does not pass a debugging port, and
+    # adding one by rebuilding its argv here would measure a reconstruction --
+    # a second copy of presenting_argv, which is the defect AT15 just removed
+    # from chrome(). Instead --browser (a flag prez already has) points at a
+    # shim that APPENDS the port and execs the real browser, so prez builds and
+    # sends its own argv untouched and what gets measured is prez's launch.
+    at20wrap="$WORK/at20-browser"
+    cat > "$at20wrap" <<WRAP
+#!/bin/sh
+exec "$BROWSER" $CHROME_SAFE --remote-debugging-port=\$AT20_PORT --user-data-dir="\$AT20_PROFILE" "\$@"
+WRAP
+    chmod +x "$at20wrap"
+
+    # The expected default is ASKED OF THE TOOL, never written down here: the
+    # value lives in drive.rs::default_window and a copy in this file would be
+    # a second roster that goes stale silently. If --help and the code ever
+    # disagree, this check is where that surfaces.
+    at20def=$("$BIN" --help | sed -n 's/.*Default: \([0-9][0-9]*x[0-9][0-9]*\).*/\1/p' | head -1)
+    if [ -n "$at20def" ]; then ok "default window read from the tool: $at20def"
+    else bad "could not read the default window size out of prez --help"; fi
+    at20dw="${at20def%x*}"; at20dh="${at20def#*x}"
+
+    # Killed by profile path: each launch gets a unique --user-data-dir, so this
+    # cannot reach a browser window belonging to the human. Called explicitly at
+    # each step rather than from a trap, because `trap ... RETURN` outside a
+    # function never fires and would be cleanup that only looks like cleanup.
+    at20kill() { pkill -f "at20-profile" 2>/dev/null; sleep 1; }
+
+    # ---- (a) the default: the deck's own shape ----------------------------
+    AT20_PORT=9370
+    AT20_PROFILE="$WORK/at20-profile-cold"
+    export AT20_PORT AT20_PROFILE
+    "$BIN" present "$DEMO" --browser "$at20wrap" >"$WORK/at20-present.log" 2>&1
+    check "prez present exited rather than staying resident" "$?" "0"
+    if wait_for_cdp "$AT20_PORT"; then
+      node "$HERE/at20-window-probe.mjs" "$AT20_PORT" "$at20dw" "$at20dh" "default" > "$WORK/at20-a.out" 2>&1
+      at20rc=$?
+      sed -n 's/^/    /p' "$WORK/at20-a.out"
+      check "the default window matches the deck's shape" "$at20rc" "0"
+    else
+      bad "the presenting window never opened its debugging port"
+    fi
+
+    # ---- (b) --window overrides -------------------------------------------
+    # A DIFFERENT ASPECT ON PURPOSE, not just a different size: 900x600 is 3:2
+    # against the default's 16:9, so a window that ignored --window and kept the
+    # default would fail the aspect check rather than sliding under a tolerance.
+    at20kill
+    AT20_PORT=9371
+    AT20_PROFILE="$WORK/at20-profile-override"
+    export AT20_PORT AT20_PROFILE
+    "$BIN" present "$DEMO" --browser "$at20wrap" --window 900x600 >>"$WORK/at20-present.log" 2>&1
+    if wait_for_cdp "$AT20_PORT"; then
+      node "$HERE/at20-window-probe.mjs" "$AT20_PORT" 900 600 "override" > "$WORK/at20-b.out" 2>&1
+      at20rc=$?
+      sed -n 's/^/    /p' "$WORK/at20-b.out"
+      check "--window overrides the default" "$at20rc" "0"
+    else
+      bad "the overridden presenting window never opened its debugging port"
+    fi
+
+    # ---- the open question, settled rather than dodged ---------------------
+    #
+    # utilz-cc's question, unanswered since 29 Aug: when Chrome is ALREADY
+    # RUNNING, a launch can FORWARD to the existing instance instead of starting
+    # a new one, and --window-size may not apply on that path -- so AC19's
+    # geometry could be cold-start-only. A green taken with no Chrome running
+    # does not answer it and must not be recorded as if it had.
+    #
+    # FORWARDING IS PROVOKED BY THE SHARED PROFILE, AND GETTING THIS BACKWARDS
+    # IS HOW THIS LEG FIRST PASSED FOR THE WRONG REASON. The first version used
+    # a DIFFERENT --user-data-dir for the second launch and called that a fair
+    # test; a distinct profile is precisely what makes Chrome start a fresh
+    # instance and never forward, so it measured two independent cold starts and
+    # reported the question answered. Same profile, second launch: that is the
+    # forwarding path.
+    #
+    # A SECOND ARTIFACT, so the two windows have different URLs and the probe can
+    # tell which is which. With one artifact both targets look identical and the
+    # measurement could read the FIRST window while believing it read the second.
+    at20kill
+    at20second="$WORK/at20-second.md"
+    printf '# Second\n\ntext\n' > "$at20second"
+    AT20_PORT=9372
+    AT20_PROFILE="$WORK/at20-profile-shared"
+    export AT20_PORT AT20_PROFILE
+    "$BIN" present "$DEMO" --browser "$at20wrap" --window 1024x768 >>"$WORK/at20-present.log" 2>&1
+    if ! wait_for_cdp "$AT20_PORT"; then
+      unchecked "the first shared-profile launch opened no port, so the forwarding question is still open"
+    else
+      # Prove the first window is really there and really 1024x768 before using
+      # it as the thing a second launch forwards INTO. Without this the leg below
+      # could pass by measuring nothing.
+      node "$HERE/at20-window-probe.mjs" "$AT20_PORT" 1024 768 "first" > "$WORK/at20-c1.out" 2>&1
+      at20rc=$?
+      sed -n 's/^/    /p' "$WORK/at20-c1.out"
+      check "the first instance is up at its requested size" "$at20rc" "0"
+
+      # Snapshot the windows that exist BEFORE the forwarding launch, so the
+      # probe can pick the one that appears rather than guess at its URL.
+      curl -s "http://127.0.0.1:$AT20_PORT/json/list" \
+        | sed -n 's/.*"url": "\(file:[^"]*\)".*/\1/p' > "$WORK/at20-before.urls"
+      check "one window open before the forwarding launch" "$(grep -c . "$WORK/at20-before.urls")" "1"
+
+      # SAME PROFILE, still running. This is the launch that forwards.
+      "$BIN" present "$at20second" --browser "$at20wrap" --window 640x480 >>"$WORK/at20-present.log" 2>&1
+      node "$HERE/at20-window-probe.mjs" "$AT20_PORT" 640 480 "forwarded" "$WORK/at20-before.urls" > "$WORK/at20-c2.out" 2>&1
+      at20rc=$?
+      sed -n 's/^/    /p' "$WORK/at20-c2.out"
+      if [ "$at20rc" -eq 0 ]; then
+        ok "geometry applies on the FORWARDED path too -- AC19 is not cold-start-only"
+      else
+        # A FINDING ABOUT prez's REACH, recorded as the answer to the question
+        # rather than swept into a bare red. If this fires, AC19(a) is true only
+        # of a cold start and the criterion needs rewording before it can be
+        # satisfied honestly.
+        bad "geometry did NOT apply on the forwarded path: AC19 is COLD-START-ONLY. This is the answer to utilz-cc's 29 Aug question and AC19 must be reworded before it can be satisfied"
+      fi
+    fi
+
+    at20kill
+    finish
+  fi
 fi
 
 # ---------------------------------------------------------------------- report
