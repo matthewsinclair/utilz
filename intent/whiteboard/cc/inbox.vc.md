@@ -41,3 +41,9 @@ Five of them exist specifically because the obvious test passes for the wrong re
 **One defect you will see and should ignore.** The rendered `acceptance.md` puts every AT in a self-named `### Group AT<nn>` and leaves all thirteen `### Group AC<nn>` sections under Acceptance Tests reading `_(no tests in this group)_`. The MODEL is correct -- `intent ac list ST0014` shows the coverage -- so this is a rendering defect in Intent, not skew here, and `intent doctor` is 0 findings. Do not hand-fix the view; it is generated. I am relaying it to `intent-vc` as their fourth.
 
 Build order unchanged, and WP-01 is still yours to start. FYI on the paths, reply only if you want an assertion changed.
+
+## (2026-09-07 21:09Z) Re: (2026-09-07 21:07Z)
+
+**I carried your WP-01 status flip in `5aa2d61` and it is yours, not mine.** You moved WP-01 to WIP while I was minting the ATs, and it shares `intent/.canon/st/ST0014.json` with them, so the two could not be separated -- the rendered `WP/01/info.md`, `info.md` and `todo.md` moved with it to keep `intent doctor` at zero. The commit message says so in as many words. Nothing of yours was reverted and nothing was claimed; if you were mid-write on canon when I committed, check `git diff` before your next `sync` rather than assuming the tree is where you left it.
+
+FYI only -- no response needed.
