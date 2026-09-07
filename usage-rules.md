@@ -2,7 +2,7 @@
 
 This file is the prescriptive DO / NEVER contract for working in Utilz. Narrative, rationale, and FAQs live in `AGENTS.md` and project technical docs. Each file has one job.
 
-This project uses Intent v2.10.0. See `~/.intent/ext/`, `intent claude skills list`, and `intent claude subagents list` for the full Intent-provided surface.
+This project runs Intent -- `intent --version` for the version, which is the only place it is recorded here. It read "v2.10.0" until 7 Sep against a tool at 3.0.0: a hand-copied version number in a hand-authored file has nothing to hold it in step, which is the same defect `help/utilz.md` and `docs/index.md` were both fixed for, and the same remedy. See `~/.intent/ext/`, `intent claude skills list`, and `intent claude subagents list` for the full Intent-provided surface (all three verified present 7 Sep).
 
 ## Project conventions
 

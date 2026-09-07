@@ -2,7 +2,7 @@
 wp_id: WP-04
 title: Validation: every carried green re-produced in the new home
 scope: S
-status: Not Started
+status: WIP
 ---
 
 # WP-04: Validation: every carried green re-produced in the new home
