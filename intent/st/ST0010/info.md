@@ -1,9 +1,9 @@
 ---
 st_id: ST0010
 title: Add prez to utilz to support markdown presentation pipeline
-status: WIP
+status: Completed
 created: 2026-08-29
-completed:
+completed: 2026-09-07
 ---
 
 # ST0010: Add prez to utilz to support markdown presentation pipeline

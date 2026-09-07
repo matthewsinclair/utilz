@@ -4,14 +4,7 @@ A DOING / TODO / DONE view, projected from steel-thread and work-package status:
 
 ## DOING
 
-- [-] ST0010: Add prez to utilz to support markdown presentation pipeline
-  - [x] 01: Contract: design.md + AC/AT transcription from _tools ST0002
-  - [x] 02: Framework Rust substrate: lang, gitignore, CI, test driver, doctor
-  - [x] 03: The hoist: crate at the pin, rename to prez, shim, yaml, help
-  - [x] 04: Validation: every carried green re-produced in the new home
-  - [~] 05: Default theme polish: basic but cool enough out of the box
-  - [~] 06: Theme addressing split + --theme-path (hv's CLI asks)
-  - [x] 07: Expose theme determinism checking as a prez capability (deferred)
+_(none)_
 
 ## TODO
 
@@ -60,6 +53,14 @@ A DOING / TODO / DONE view, projected from steel-thread and work-package status:
   - [x] 01: each_utility(): one bin/ walker, five consumers
   - [x] 02: yq as hard dependency: require_yq, fallback removal
   - [x] 03: Generator utilz_version floor derived from VERSION
+- [x] ST0010: Add prez to utilz to support markdown presentation pipeline
+  - [x] 01: Contract: design.md + AC/AT transcription from _tools ST0002
+  - [x] 02: Framework Rust substrate: lang, gitignore, CI, test driver, doctor
+  - [x] 03: The hoist: crate at the pin, rename to prez, shim, yaml, help
+  - [x] 04: Validation: every carried green re-produced in the new home
+  - [~] 05: Default theme polish: basic but cool enough out of the box
+  - [~] 06: Theme addressing split + --theme-path (hv's CLI asks)
+  - [x] 07: Expose theme determinism checking as a prez capability (deferred)
 - [x] ST0011: stampz -- recipient watermarking for PDF document packs
   - [x] 01: Design and acceptance contract
   - [x] 02: Native stamp renderer and geometry probe
