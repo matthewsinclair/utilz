@@ -1,0 +1,118 @@
+{
+  "schema": "intent/thread@3.0",
+  "id": "ST0014",
+  "title": "Make utilz insallable in to opt/ just like devbin",
+  "slug": "make-utilz-insallable-in-to-opt-just-like-devbin",
+  "status": "wip",
+  "created": "2026-09-07",
+  "objective": "",
+  "context": "",
+  "body": "",
+  "preamble": "",
+  "criteria": [
+    {
+      "id": "AC01",
+      "text": "`utilz install` publishes a runnable install to the configured prefix, and the installed tree RUNS with the source tree absent. Devbin's install tree is deliberately not runnable (D33); ours inverts that, so the test is that the install works when the source is moved aside, not merely that files arrived.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC02",
+      "text": "Publishing from a dirty source tree is REFUSED, and no flag overrides it. An install cut from a dirty tree launders the bytes through one more hop and gives them the look of provenance; devbin measured five of thirteen estates running bytes that matched no commit.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC03",
+      "text": "Publishing into a Utilz SOURCE tree is refused, whatever the source. The predicate is a property of the TARGET, never src-equals-dst: devbin's guard compared the two and a vendored copy landed in their dev tree past it on 2026-09-07.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC04",
+      "text": "install and upgrade mirror each other: install refuses when an install exists and names upgrade; upgrade refuses when none exists and names install. Whichever verb is reached for, the wrong one names the right one.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC05",
+      "text": "The install prefix is CONFIGURATION with no built-in default, and unset is refused by name rather than guessed. A baked default relocates the decision from a key somebody wrote to the absence of one, and a publish to the wrong place is indistinguishable from a publish to the right one. Where the key lives is open: bin/.devbin/config.yaml is devbin's config for utilz, not utilz's own.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC06",
+      "text": "The fifteen bin/ symlinks arrive as SYMLINKS pointing at utilz, not as dereferenced copies, and the manifest checksums each link's TARGET STRING rather than the file it resolves to. Checksumming the resolved file gives all fifteen the same hash, so a link retargeted at the wrong utility reads as intact. Fifteen symlinks and two real files (utilz, and the vendored devbin) -- measured, and the manifest's roll-call IS the owned set, so a count one high carries a phantom entry and one low leaves a file nothing checks.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC07",
+      "text": "The install carries a manifest recording the utilz version, the source commit and a checksum for every owned file, and the recorded commit describes the bytes actually shipped.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC08",
+      "text": "upgrade REPORTS files edited in place and leaves them alone without --force, and a file it declined to overwrite keeps its install-time checksum. Re-checksumming a file that was refused would record the edit as canonical and the next check would pronounce it intact.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC09",
+      "text": "prez runs from the install. This is the thread's one genuinely open design fork and it is hv's: ship crate source and build on first use, or build at publish and ship the binary. Building on first use makes the install tree write to itself, voiding the manifest the moment anyone uses it, and prez_is_stale() decides via find -newer against src/themes/assets, so the mtimes a copy happens to leave would decide whether a fresh install rebuilds itself.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC10",
+      "text": "The mode is ANNOUNCED before anything is written. A discriminator that is merely correct is not enough: a misdetection has to land in the output rather than be discovered later in the filesystem.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC11",
+      "text": "install and upgrade write nothing a person authored and nothing outside the prefix. In particular the ~/.local/bin PATH symlinks are NEVER relinked implicitly -- that is mutating hv's environment and needs a verb or flag they typed.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC12",
+      "text": "An installed utilz can be told apart from a source utilz AT THE PROMPT, reporting which tree it is and the commit it was cut from. Without this the two-tree arrangement is invisible in exactly the situation it exists for: a person debugging behaviour cannot tell which copy produced it.",
+      "kind": "non-test",
+      "state": {
+        "is": "unsatisfied"
+      }
+    },
+    {
+      "id": "AC13",
+      "text": "`utilz test` against an INSTALL tree does not silently corrupt it. The suite mutates $UTILZ_HOME/bin, which is why it is not concurrency-safe; devbin never meets this because their install cannot run, and ours must. Run from an install it rewrites the very files the manifest checksums, so the install reports drift nobody caused. Refuse with a reason or redirect the mutation -- what it must not do is quietly pass. Found by cc.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    }
+  ]
+}

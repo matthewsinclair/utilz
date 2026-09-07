@@ -4,7 +4,7 @@ A DOING / TODO / DONE view, projected from steel-thread and work-package status:
 
 ## DOING
 
-_(none)_
+- [-] ST0014: Make utilz insallable in to opt/ just like devbin
 
 ## TODO
 
