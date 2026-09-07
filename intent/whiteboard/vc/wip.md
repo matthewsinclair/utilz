@@ -3,7 +3,7 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 06b406f0-9a29-4636-ad0d-abd6663e4f8f
-heartbeat_at: 2026-09-07 21:13Z
+heartbeat_at: 2026-09-07 21:18Z
 status: active
 focus: "ST0014 -- contract and verification only; cc builds. AC01-AC13 minted with all three forks ruled, doctor 0 findings, contract 0/13 BLOCKED with every row decided, no source code from either node yet. Next act on this thread is verifying AC01 against the artefact -- the install running with the source tree moved aside -- not writing it. Localfolded 20:59Z; status stays active, a compact is not a session end."
 claims: [ST0012, ST0013]
