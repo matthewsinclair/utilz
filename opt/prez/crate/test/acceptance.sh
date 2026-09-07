@@ -296,7 +296,13 @@ chrome() {
 # to it up front rather than let a non-interactive suite ask a human a question.
 # `Courses/bin/render-cover` has carried both flags all along; this suite never
 # picked them up.
-CHROME_SAFE="--use-mock-keychain --no-first-run --no-default-browser-check"
+# AN ARRAY, NOT A STRING. It held one flag until hv added --no-first-run and
+# --no-default-browser-check on 7 Sep, and a multi-flag string only reaches the
+# browser as separate arguments by way of an UNQUOTED expansion -- which is
+# IN-SH-CODE-001 at critical severity, and the pre-commit critic refuses it.
+# An array is the rule's own sanctioned form and needs no exemption comment.
+# Never empty, so bash 3.2's "${arr[@]}"-under-set-u trap does not arise here.
+CHROME_SAFE=(--use-mock-keychain --no-first-run --no-default-browser-check)
 
 # ---------------------------------------------------------------- AT01 -- AC11
 
@@ -414,7 +420,7 @@ if want AT04; then
   else
     art="$WORK/runtime.html"
     "$BIN" build "$DEMO" -o "$art" >/dev/null 2>&1
-    "$BROWSER" --headless=new $CHROME_SAFE --remote-debugging-port=9333 --window-size=1280,800 \
+    "$BROWSER" --headless=new "${CHROME_SAFE[@]}" --remote-debugging-port=9333 --window-size=1280,800 \
       --user-data-dir="$WORK/chrome" "file://$art" >"$WORK/chrome.log" 2>&1 &
     CHROME_PID=$!
     wait_for_cdp 9333 || bad "chrome never opened its debugging port on 9333"
@@ -589,7 +595,7 @@ if want AT07; then
 })();
 </script>
 PROBE
-    measured=$("$BROWSER" --headless $CHROME_SAFE \
+    measured=$("$BROWSER" --headless "${CHROME_SAFE[@]}" \
       --disable-gpu --window-size=1400,900 --virtual-time-budget=9000 \
       --dump-dom "file://$WORK/m-probe.html" 2>/dev/null \
       | grep -oE '<div id="probe">[^<]*' | sed 's/.*>//')
@@ -701,7 +707,7 @@ if want AT08; then
       unchecked "$name: legibility unmeasured, no Chrome or Chromium installed"
     else
       cat "$WORK/b-$name.html" "$HERE/theme-legibility-probe.html" > "$WORK/lp-$name.html"
-      measured=$("$BROWSER" --headless $CHROME_SAFE \
+      measured=$("$BROWSER" --headless "${CHROME_SAFE[@]}" \
         --disable-gpu --window-size=1400,900 \
         --virtual-time-budget=9000 --dump-dom "file://$WORK/lp-$name.html" 2>/dev/null \
         | grep -oE '<div id="probe">[^<]*' | sed 's/.*>//')
@@ -772,7 +778,7 @@ if want AT12; then
       # profile is what is expensive and what triggers the modal, not the
       # launch, so reusing it removes the amplifier. Each instance is still
       # killed before the next starts, so the profile is never contended.
-      "$BROWSER" --headless=new $CHROME_SAFE --remote-debugging-port=$port \
+      "$BROWSER" --headless=new "${CHROME_SAFE[@]}" --remote-debugging-port=$port \
         --window-size=1280,800 --user-data-dir="$WORK/chrome-at12" "file://$art" \
         >"$WORK/chrome-at12.log" 2>&1 &
       local pid=$!
@@ -1098,7 +1104,7 @@ if want AT15; then
   # class AC18(c) forbids, and the check written to catch that class was looking
   # the other way. A guard scoped to the safe launches is not a guard.
   at15launch=$(grep -c -E 'exec "\$BROWSER"|"\$BROWSER" --headless' "$HERE/acceptance.sh" || true)
-  at15safe=$(grep -c -E '(exec "\$BROWSER"|"\$BROWSER" --headless)[^|]*\$CHROME_SAFE' "$HERE/acceptance.sh" || true)
+  at15safe=$(grep -c -E '(exec "\$BROWSER"|"\$BROWSER" --headless)[^|]*CHROME_SAFE\[' "$HERE/acceptance.sh" || true)
   if [ "${at15launch:-0}" -gt 0 ]; then
     check "every launch of the browser carries \$CHROME_SAFE" "${at15safe:-0}" "${at15launch:-0}"
   else
@@ -1128,7 +1134,7 @@ if want AT15; then
     # that provokes the keychain prompt -- so the launch shape has to give way
     # instead.
     at15port=9360
-    "$BROWSER" --headless=new $CHROME_SAFE --remote-debugging-port=$at15port \
+    "$BROWSER" --headless=new "${CHROME_SAFE[@]}" --remote-debugging-port=$at15port \
       --user-data-dir="$WORK/chrome-at15" "file://$WORK/at15.html" \
       >"$WORK/at15-chrome.log" 2>&1 &
     at15pid=$!
@@ -1166,10 +1172,15 @@ if want AT20; then
     # from chrome(). Instead --browser (a flag prez already has) points at a
     # shim that APPENDS the port and execs the real browser, so prez builds and
     # sends its own argv untouched and what gets measured is prez's launch.
+    # ${CHROME_SAFE[*]} AND NOT "${CHROME_SAFE[@]}" -- the one place in this file
+    # where the quoted array form is wrong. This is a HEREDOC: the quotes would
+    # be literal text in the generated script, so /bin/sh would receive the
+    # three flags as a single argument. Here the array is being flattened INTO
+    # source text, not expanded into an argv.
     at20wrap="$WORK/at20-browser"
     cat > "$at20wrap" <<WRAP
 #!/bin/sh
-exec "$BROWSER" $CHROME_SAFE --remote-debugging-port=\$AT20_PORT --user-data-dir="\$AT20_PROFILE" "\$@"
+exec "$BROWSER" ${CHROME_SAFE[*]} --remote-debugging-port=\$AT20_PORT --user-data-dir="\$AT20_PROFILE" "\$@"
 WRAP
     chmod +x "$at20wrap"
 
