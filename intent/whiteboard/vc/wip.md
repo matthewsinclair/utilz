@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 06b406f0-9a29-4636-ad0d-abd6663e4f8f
-heartbeat_at: 2026-09-07 16:07Z
+heartbeat_at: 2026-09-07 16:22Z
 status: active
-focus: "ST0010 CLOSED 7 Sep -- gate PASS 19/19, 1 descoped, and dehydrated. AC15 carried verbatim to ST0013 (theme addressing, open). ST0012 declares the estate dehydration preconditions. ST0011 dehydrated too. Nothing of mine in flight."
+focus: "CI fix at 035e9e2 AWAITING hv's PUSH -- run 34142119571 was red on three jobs. AT20 needs a display (Xvfb added to the Linux leg) and a window size is clamped to the screen (probe now reads it); shellcheck SC2016 in opt/todo/todo was a false positive, disabled by id. Local: acceptance 14/0/0, shellcheck 17 clean. The Xvfb path is UNVERIFIED until CI runs it."
 claims: [ST0012, ST0013]
 ---
 
@@ -17,9 +17,13 @@ Released at EOD on hv's instruction. Two folds archived in `.history/20260829/` 
 
 ## DOING
 
-**Nothing in flight.** ST0010 closed 7 Sep at **PASS -- 19/19 satisfied, 1 descoped**, and dehydrated with ST0011.
+**CI fix committed at `035e9e2`, awaiting hv's push.** Run `34142119571` went red on three jobs after the ST0010 work landed.
 
-What closed it, in order: **AC18** by AT15 (WP-07's browser half landed with it -- prez gained a deck-less `browser` verb, `chrome()` asks it, and the harness holds ZERO browser literals); **AC16** by hv's attestation, recorded as an attestation with its limit on the row; **AC19** by AT20 against a criterion **reworded to what was measured**. **AC15** went to **ST0013** with its text carried verbatim, via `ac descope`, which is non-blocking by design.
+- **AT20 needs a real display; Ubuntu CI has none.** It is the only non-headless check in the suite, so Chrome opened nothing and a correct build reported "the presenting window never opened its debugging port". AT20 now detects and skips saying so, AND the Linux job gets **Xvfb** so it actually runs -- a skip alone reddens `--strict`, and excluding it would leave the one AT needing a window as the one AT CI never runs.
+- **A THIRD QUALIFIER ON AC19, found by macOS CI: a requested size is CLAMPED TO THE DISPLAY.** It asked 1280x720 and got 1024x677, the runner's work area. The probe reads `screen.availWidth/availHeight` now and expects the request or the screen, whichever is smaller; the aspect assertion is skipped FOR CAUSE when clamped, because a clamped window carries the screen's proportions and asserting the deck's would test the monitor. **AC19's geometry is now: cold-start only, clamped to the display, honoured as a request.**
+- **shellcheck SC2016 at `opt/todo/todo:249` was a false positive** -- literal backticks inside a printf FORMAT string, where single quotes are correct. Disabled by id with the reason. Not mine: `b650a77` landed at 16:52, after the run in which I measured that collector clean, so restart.md's "17 files and is clean" was true when written and stale when pushed.
+
+**THE XVFB PATH IS UNVERIFIED** and cannot be exercised from macOS. It only proves itself on the next CI run.
 
 ## Claims
 
