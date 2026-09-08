@@ -64,12 +64,33 @@ pub enum Origin {
   BuiltIn,
   /// A path that existed, given by `--theme` or by the deck's `theme:` key.
   Path,
-  /// A NAME found in `dir`, one of the directories on `PREZ_THEME_PATH`.
+  /// A NAME found in `dir`, one of the directories on the theme search path.
   ///
   /// `name` is kept because it is the only thing that can answer "did this
   /// shadow a built-in?", and by this point `name` on the Theme is the path it
   /// resolved to rather than the word the user typed.
-  SearchPath { dir: PathBuf, name: String },
+  ///
+  /// `source` is kept for the same reason `origin` is kept at all: TWO
+  /// mechanisms now supply search directories, and `provenance` has to name the
+  /// one that actually did. Inferring it later is impossible -- by then the
+  /// directory is just a path -- and guessing it would send a user who passed
+  /// `--theme-path` to an environment variable that may not even be set.
+  SearchPath { dir: PathBuf, name: String, source: SearchSource },
+}
+
+/// WHICH MECHANISM PUT A DIRECTORY ON THE SEARCH PATH.
+///
+/// AC04. A single announcement string cannot be true of both: the reproduction
+/// for one is exporting a variable and for the other it is passing a flag
+/// again, and the cure for an unwanted theme is to rename a directory in one
+/// case and to stop passing the flag in the other. Rewording would pick a
+/// winner and lie about the other.
+#[derive(Debug, PartialEq, Eq, Clone, Copy)]
+pub enum SearchSource {
+  /// Named by the `PREZ_THEME_PATH` environment variable.
+  Env,
+  /// Given by `--theme-path` for this invocation only.
+  Flag,
 }
 
 #[derive(Debug)]
@@ -268,19 +289,34 @@ pub fn declares(theme: &Theme, class: &str) -> bool {
 /// all. Left here, an announcement would be a warning that the tool is doing
 /// the wrong thing, which is not a fix and would take the pressure off one.
 pub fn provenance(theme: &Theme) -> Option<String> {
-  let Origin::SearchPath { dir, name } = &theme.origin else {
+  let Origin::SearchPath { dir, name, source } = &theme.origin else {
     return None;
   };
   let shadowed = BUILT_IN.iter().any(|(id, _)| id == name);
+  // The mechanism, and the two remedies that follow FROM it. Four messages
+  // rather than one with a word swapped: what reproduces the situation and what
+  // cures it are different facts for the two sources, not different labels for
+  // one fact.
+  let (mechanism, elsewhere, cure) = match source {
+    SearchSource::Env => (
+      format!("on {SEARCH_PATH}"),
+      "Elsewhere this deck refuses to build until that directory is on the path.",
+      "rename the local theme if that is not what you want",
+    ),
+    SearchSource::Flag => (
+      "given by --theme-path".to_string(),
+      "Without that flag this deck refuses to build.",
+      "drop --theme-path if that is not what you want",
+    ),
+  };
   Some(match shadowed {
     true => format!(
-      "theme '{name}' came from {} (on {SEARCH_PATH}), SHADOWING the built-in of the same name. \
-       Elsewhere the same command builds a different deck and says nothing -- rename the local theme if that is not what you want.",
+      "theme '{name}' came from {} ({mechanism}), SHADOWING the built-in of the same name. \
+       Elsewhere the same command builds a different deck and says nothing -- {cure}.",
       dir.display()
     ),
     false => format!(
-      "theme '{name}' came from {} (on {SEARCH_PATH}), not from the built-ins. \
-       Elsewhere this deck refuses to build until that directory is on the path.",
+      "theme '{name}' came from {} ({mechanism}), not from the built-ins. {elsewhere}",
       dir.display()
     ),
   })
@@ -311,11 +347,14 @@ fn on_search_path(name: &str, extra: &[PathBuf]) -> Result<Option<Theme>, Failur
   if name.contains('/') || name.contains(std::path::MAIN_SEPARATOR) {
     return Ok(None);
   }
-  for dir in search_directories(extra) {
+  for (dir, source) in search_directories(extra) {
     // from_directory and from_file both stamp Origin::Path, because on their
     // own they cannot tell a path the user typed from a path this loop built.
     // Only here is that known, so only here is it overwritten.
-    let found = |theme: Theme| Theme { origin: Origin::SearchPath { dir: dir.clone(), name: name.to_string() }, ..theme };
+    let found = |theme: Theme| Theme {
+      origin: Origin::SearchPath { dir: dir.clone(), name: name.to_string(), source },
+      ..theme
+    };
     let as_dir = dir.join(name);
     if as_dir.join("theme.css").is_file() {
       return from_directory(&as_dir).map(found).map(Some);
@@ -338,10 +377,15 @@ fn on_search_path(name: &str, extra: &[PathBuf]) -> Result<Option<Theme>, Failur
 /// the note above `provenance`'s tests records what process-wide state does to
 /// this file -- it races every other test in the binary, intermittently, which
 /// is the worst way to learn it.
-fn search_directories(extra: &[PathBuf]) -> Vec<PathBuf> {
-  let mut dirs: Vec<PathBuf> = extra.to_vec();
+fn search_directories(extra: &[PathBuf]) -> Vec<(PathBuf, SearchSource)> {
+  let mut dirs: Vec<(PathBuf, SearchSource)> =
+    extra.iter().map(|d| (d.clone(), SearchSource::Flag)).collect();
   if let Some(paths) = std::env::var_os(SEARCH_PATH) {
-    dirs.extend(std::env::split_paths(&paths).filter(|p| !p.as_os_str().is_empty()));
+    dirs.extend(
+      std::env::split_paths(&paths)
+        .filter(|p| !p.as_os_str().is_empty())
+        .map(|d| (d, SearchSource::Env)),
+    );
   }
   dirs
 }
@@ -361,6 +405,19 @@ pub fn split_path_flag(value: &str) -> Vec<PathBuf> {
 /// Falling back to the default here would be the quiet failure this codebase
 /// keeps refusing to ship: `--theme=steampnk` would build a perfectly plausible
 /// deck in the wrong clothes and say nothing.
+///
+/// **THE `no theme '<name>'` PREFIX IS LOAD-BEARING ACROSS AN ESTATE BOUNDARY
+/// AND MUST NOT BE REWORDED WITHOUT NOTICE.** A downstream consumer asserts on
+/// it, with the search path scrubbed, as their EXTRACTABILITY guarantee: a zero
+/// exit there would mean their brand had become a built-in and prez could no
+/// longer be lifted out of their estate. That is the same property AC09 and
+/// AT09 protect from this side, measured from the other.
+///
+/// ST0013 rewrote the rest of this message -- the `not a path:` line went with
+/// the split -- and the prefix survived by luck rather than by design, because
+/// nothing here recorded that anyone depended on it. It is recorded now. The
+/// consumer is named in ST0013 and deliberately not here; AC09 refuses estate
+/// names anywhere in src, comments included.
 fn unknown_theme(name: &str, extra: &[PathBuf]) -> Failure {
   let names: Vec<&str> = BUILT_IN.iter().map(|(id, _)| *id).collect();
   let searched = search_directories(extra);
@@ -368,7 +425,10 @@ fn unknown_theme(name: &str, extra: &[PathBuf]) -> Failure {
     true => format!("  {SEARCH_PATH} is unset and no --theme-path was given, so no theme directories were searched"),
     false => searched
       .iter()
-      .map(|d| format!("  searched {}", d.display()))
+      .map(|(d, src)| match src {
+        SearchSource::Flag => format!("  searched {} (given by --theme-path)", d.display()),
+        SearchSource::Env => format!("  searched {} (on {SEARCH_PATH})", d.display()),
+      })
       .collect::<Vec<_>>()
       .join("\n"),
   };
@@ -592,12 +652,16 @@ mod tests {
   // the env var set where it cannot reach anything else.
 
   fn from_search_path(name: &str, dir: &str) -> Theme {
+    from_source(name, dir, SearchSource::Env)
+  }
+
+  fn from_source(name: &str, dir: &str, source: SearchSource) -> Theme {
     Theme {
       css: String::new(),
       js: None,
       layout: None,
       name: format!("{dir}/{name}"),
-      origin: Origin::SearchPath { dir: PathBuf::from(dir), name: name.to_string() },
+      origin: Origin::SearchPath { dir: PathBuf::from(dir), name: name.to_string(), source },
     }
   }
 
@@ -620,6 +684,30 @@ mod tests {
     assert!(shadowing.contains("SHADOWING"), "{shadowing}");
     assert!(!external.contains("SHADOWING"), "{external}");
     assert_ne!(shadowing, external);
+  }
+
+  #[test]
+  fn the_announcement_names_the_mechanism_that_actually_supplied_the_directory() {
+    // AC04. Four messages, not one with a word swapped: what REPRODUCES the
+    // situation and what CURES it are different facts for the two sources.
+    let flag = provenance(&from_source("house", "/opt/themes", SearchSource::Flag)).unwrap();
+    assert!(flag.contains("given by --theme-path"), "{flag}");
+    assert!(!flag.contains(SEARCH_PATH), "it must not name an unset variable: {flag}");
+    assert!(flag.contains("Without that flag"), "the flag remedy: {flag}");
+
+    let flag_shadow = provenance(&from_source("mono", "/opt/themes", SearchSource::Flag)).unwrap();
+    assert!(flag_shadow.contains("SHADOWING"), "{flag_shadow}");
+    assert!(flag_shadow.contains("drop --theme-path"), "the cure is to stop passing it: {flag_shadow}");
+    assert!(!flag_shadow.contains("rename the local theme"), "that cure is the env case's: {flag_shadow}");
+
+    // THE CONTROL. Without it, a fix that simply stopped naming the variable
+    // passes everything above and breaks the case AC14 was written for.
+    let env = provenance(&from_source("house", "/opt/themes", SearchSource::Env)).unwrap();
+    assert!(env.contains(SEARCH_PATH), "the env case still names it: {env}");
+    assert!(!env.contains("--theme-path"), "and does not name the flag: {env}");
+    assert!(env.contains("on the path"), "the env remedy survives: {env}");
+    let env_shadow = provenance(&from_source("mono", "/opt/themes", SearchSource::Env)).unwrap();
+    assert!(env_shadow.contains("rename the local theme"), "{env_shadow}");
   }
 
   #[test]

@@ -1,5 +1,12 @@
 name: prez
-version: 1.0.0
+# NO INLINE VERSION. Cargo REQUIRES a version in [package], so Cargo.toml is a
+# home that cannot be eliminated -- which makes it the only honest place for
+# this number to live. An inline `version:` here would be a second copy of a
+# fact with no gate holding the two equal, and the two answer `prez --version`
+# through DIFFERENT channels: the dispatcher reads this file, the binary
+# compiles in CARGO_PKG_VERSION. They would disagree silently and each would
+# look right on its own.
+version_file: crate/Cargo.toml
 utilz_version: "^2.5.0"
 description: Markdown to a self-contained HTML presentation -- a pipeline, not a viewer
 author: Matthew Sinclair

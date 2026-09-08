@@ -13,6 +13,7 @@ A DOING / TODO / DONE view, projected from steel-thread and work-package status:
   - [x] 06: Migration: acceptance.sh path invocations, unit tests, docs
   - [x] 07: Green and evidence: full suites, both doctors, shellcheck
   - [x] 08: Driver discovery: every suite found, a non-executable one refused
+  - [-] 09: Provenance names the source that supplied the directory
 
 ## TODO
 

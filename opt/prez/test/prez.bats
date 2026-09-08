@@ -84,7 +84,16 @@ make_fixture() {
   run_prez --version
   assert_success
   assert_output_contains "prez"
-  assert_output_contains "1.0.0"
+  # DERIVED, never hardcoded. This line read "1.0.0" and was an EIGHTH home for
+  # a number whose whole point is having one -- it went red on the 2.0.0 bump,
+  # which is the good outcome, but a test that has to be edited alongside the
+  # value it checks is a copy wearing an assertion's clothes.
+  local declared
+  declared=$(awk -F'"' '/^\[package\]/ { p = 1; next }
+                        /^\[/          { p = 0 }
+                        p && /^version[[:space:]]*=/ { print $2; exit }' "$CRATE/Cargo.toml")
+  [ -n "$declared" ] || fail "could not read a version out of $CRATE/Cargo.toml"
+  assert_output_contains "$declared"
 }
 
 @test "prez --help renders help/prez.md through the dispatcher" {
@@ -348,4 +357,39 @@ make_fixture() {
   run grep -c '"\$script" --strict' "$UTILZ_HOME/opt/utilz/lib/common.sh"
   assert_success
   assert_output "1"
+}
+
+@test "prez's version has ONE home, and both channels read that one" {
+  # HIGHLANDER, and the duplication it replaces was live: prez.yaml carried an
+  # inline `version:` AND crate/Cargo.toml carried `version =`. Cargo REQUIRES
+  # one in [package], so Cargo.toml is a home that cannot be eliminated -- which
+  # makes any second copy the removable one.
+  #
+  # The two are not two readings of one value, they are two channels: the
+  # dispatcher answers `utilz prez --version` from the yaml, the binary answers
+  # `prez --version` from a compiled-in CARGO_PKG_VERSION. They could disagree
+  # and each would look right on its own, which is drift with no reporter.
+  run grep -c '^version:' "$UTILZ_HOME/opt/prez/prez.yaml"
+  assert_output "0"
+  run grep -c '^version_file: crate/Cargo.toml' "$UTILZ_HOME/opt/prez/prez.yaml"
+  assert_success
+
+  local declared
+  declared=$(awk -F'"' '/^\[package\]/ { p = 1; next }
+                        /^\[/          { p = 0 }
+                        p && /^version[[:space:]]*=/ { print $2; exit }' "$CRATE/Cargo.toml")
+  [ -n "$declared" ] || fail "could not read a version out of $CRATE/Cargo.toml"
+
+  # BOTH channels against the ONE source. Asserting only the dispatcher would
+  # pass while the binary reported something else entirely, which is the exact
+  # divergence this test exists to make impossible.
+  run "$UTILZ_HOME/bin/utilz" prez --version
+  assert_output "prez $declared"
+
+  if [ -x "$CRATE/target/release/prez" ]; then
+    run "$CRATE/target/release/prez" --version
+    assert_output "prez $declared"
+  else
+    skip "binary not built, so the compiled channel cannot be read"
+  fi
 }

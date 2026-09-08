@@ -7,7 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-Nothing pending.
+### Changed
+
+- **BREAKING (prez v2.0.0) -- `--theme` takes a NAME and nothing else** (ST0013). It resolves on `PREZ_THEME_PATH`, extended for one invocation by the new `--theme-path`, then among the built-ins, and **never against the working directory**. Paths move to the new `--theme-file`, which accepts both shapes the old flag took: a `.css` file, or a directory holding `theme.css`. Front matter splits the same way into `theme:` (a name) and `theme-file:` (a path resolved beside the deck), or the ambiguity simply moves into the deck where it travels with the file.
+
+  **The defect was measured rather than reported.** The same deck, the same binary, `--theme=simple`: from a directory holding a `./simple/` the local theme won at 18208 bytes; from anywhere else the built-in won at 22662. **Neither run printed a word** -- `provenance()` announces only a search-path hit and a cwd hit was stamped as a typed path -- so one command built two different decks silently.
+
+  **The fix is a type change, not a branch reorder.** The resolver took one ambiguous string and asked `path.exists()` first; it now takes a name or a path as distinct variants, so the working-directory branch is unreachable rather than merely unvisited. Deleting the branch instead would have passed every test and left the cause in place for the next feature that needed a path.
+
+  **A breaking change taken deliberately, at the cheapest moment it will ever have**, and the refusal names the remedy for the case that fired: a path given to `--theme` is refused naming `--theme-file` with the value, so the message can be pasted. Both known live invocations migrated by one word. The downstream estate verified its client decks re-render **byte-identical** under the new spelling.
+
+- **`version_file:` reads the version OUT of a file that carries one, rather than requiring a file that IS one.** A plain `VERSION` file still works by `cat`; a `Cargo.toml` is read from `[package]`. **Cargo requires a version in `[package]`, so for a Rust utility that file is a home which cannot be eliminated** -- which made prez's inline `version:` the removable copy. The two were not two readings of one value but two channels: the dispatcher answered from the yaml and the binary from a compiled-in `CARGO_PKG_VERSION`, so they could disagree and each would look right alone.
+
+### Added
+
+- **`utilz test` and CI discover every black-box suite in `crate/test/` rather than one hardcoded filename, and REFUSE one that is present but not executable** (ST0013/AC03). Naming a single file meant a second suite was run by nothing: CI green, the local driver green, and its tests marked green on a manual run nothing repeats. The refusal half is not optional -- "glob and run each executable one" silently skips the non-executable and hands back a green, which is the defect the single-file guard already existed to prevent, generalised from one name to a set.
 
 ## [2.6.1] - 2026-09-08
 

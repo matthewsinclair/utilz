@@ -78,6 +78,14 @@ absent() {
   if [ "${n:-0}" -eq 0 ]; then ok "$1 (absent)"; else bad "$1: found $n occurrence(s) of '$2'"; fi
 }
 
+# shaped <description> <extended-regex> <file> -- for an assertion where the
+# STRUCTURE is the requirement and a bare substring would not see a malformed
+# string that happens to contain the token. AT05's "names theme-file:" wording
+# licensed exactly that check, and it could not see `'theme-file:'=./x.css`.
+shaped() {
+  if grep -Eq -- "$2" "$3"; then ok "$1 (shape)"; else bad "$1: no match for /$2/"; fi
+}
+
 # same <description> <fileA> <fileB> -- byte identity, the point of AT01/AT05
 same() {
   if cmp -s "$2" "$3"; then ok "$1 (identical)"
@@ -410,6 +418,57 @@ if want AT06; then
   else
     bad "the build refused: $(head -1 "$D/out.err")"
   fi
+  finish
+fi
+
+# ---------------------------------------------------------------- AT09 -- AC04
+#
+# THE ANNOUNCEMENT NAMES THE SOURCE AND A REMEDY THAT WORKS. Red-first: at
+# 271d3c6 provenance() had one string for both mechanisms, so with
+# PREZ_THEME_PATH unset it announced a flag-supplied theme as coming "(on
+# PREZ_THEME_PATH)" and offered a remedy for a case that had not fired.
+#
+# LEG 4 IS A CONTROL AND IT IS THE LEG THAT MATTERS: a fix that simply stopped
+# naming the environment variable passes legs 1-3 and silently breaks the case
+# AC14 was written for.
+
+if want AT09; then
+  start AT09 "the provenance warning names the mechanism that supplied the directory"
+  D="$WORK/at09"
+  deck_at "$D/deck.md"
+  theme_dir_at "$D/flagdir/house"  "at09-flag-sentinel"
+  theme_dir_at "$D/flagdir/mono"   "at09-flag-shadow"
+  theme_dir_at "$D/envdir/house"   "at09-env-sentinel"
+  theme_dir_at "$D/envdir/mono"    "at09-env-shadow"
+
+  # legs 1-3 -- supplied by the FLAG, with the variable UNSET
+  env -u PREZ_THEME_PATH "$BIN" build "$D/deck.md" --theme-path="$D/flagdir" \
+    --theme=house -o "$D/flag.html" 2>"$D/flag.err" >/dev/null
+  absent "with the variable unset, the warning does not name it" \
+    "PREZ_THEME_PATH" "$D/flag.err"
+  shaped "and names the flag as the mechanism, in the provenance position" \
+    "came from .+ \(given by --theme-path\)" "$D/flag.err"
+  present "with a remedy that works for the flag" "Without that flag" "$D/flag.err"
+  absent "and not the environment's remedy" "on the path" "$D/flag.err"
+
+  env -u PREZ_THEME_PATH "$BIN" build "$D/deck.md" --theme-path="$D/flagdir" \
+    --theme=mono -o "$D/flagshadow.html" 2>"$D/flagshadow.err" >/dev/null
+  present "a flag-supplied theme still announces SHADOWING" "SHADOWING" "$D/flagshadow.err"
+  present "and its cure is to stop passing the flag" "drop --theme-path" "$D/flagshadow.err"
+  absent "not to rename a directory, which is the env case's cure" \
+    "rename the local theme" "$D/flagshadow.err"
+
+  # leg 4 -- THE CONTROL. Supplied by the ENVIRONMENT, with no flag.
+  PREZ_THEME_PATH="$D/envdir" "$BIN" build "$D/deck.md" --theme=house \
+    -o "$D/env.html" 2>"$D/env.err" >/dev/null
+  present "CONTROL: the env case still names the variable" "PREZ_THEME_PATH" "$D/env.err"
+  absent "and does not name the flag" "--theme-path" "$D/env.err"
+  present "and keeps the environment's remedy" "on the path" "$D/env.err"
+
+  PREZ_THEME_PATH="$D/envdir" "$BIN" build "$D/deck.md" --theme=mono \
+    -o "$D/envshadow.html" 2>"$D/envshadow.err" >/dev/null
+  present "CONTROL: the env shadowing cure is unchanged" \
+    "rename the local theme" "$D/envshadow.err"
   finish
 fi
 

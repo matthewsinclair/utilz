@@ -1,6 +1,6 @@
 # prez - Markdown Presentation Pipeline
 
-**Version**: 1.0.0
+**Version**: 2.0.0
 **Author**: Matthew Sinclair
 **Location**: `$UTILZ_HOME/bin/prez` (part of Utilz framework)
 
@@ -26,7 +26,7 @@ Unlike every other Utilz utility, `prez` is a Rust program. `opt/prez/prez` is a
 ```
 $ prez build deck.md
 prez: first use, building (this happens once)...
-   Compiling prez v1.0.0
+   Compiling prez v2.0.0
 prez: built
 ```
 

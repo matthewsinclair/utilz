@@ -170,3 +170,24 @@ Three reasons, each measured rather than argued:
 - **It compares only the INTERSECTION, and the deliberate differences stay legal.** `theme-addressing.sh` has no `skip`, `unchecked` or `not_applicable` because no check in it can skip -- documented at its own `SKIPPED stays 0` note -- and it adds `same`, `renders` and `refuses`, which `acceptance.sh` has no use for. A check demanding identical function SETS would fail on correct code.
 
 **DESIGNED AND DELIBERATELY NOT BUILT ON THIS THREAD.** AC03 already widens ST0013 from prez into the framework, hv has that widening in front of them, and a second one should not be stacked before they rule. There is no AT row for this and there should not be one until there is. It is a few lines and can land the moment it is wanted.
+
+## D14 -- The announcement must name the mechanism that actually supplied the directory
+
+**AC04, and this thread caused it.** D6 added `--theme-path` as a second source of search directories and did not touch `provenance()`, whose entire job is to say where a theme came from. With `PREZ_THEME_PATH` unset and `--theme-path <dir>` given, the binary at `271d3c6` announced the theme as coming `(on PREZ_THEME_PATH)` -- **naming an unset environment variable as the mechanism** -- and then offered a remedy for a case that had not fired.
+
+**BOTH REMEDIES WERE WRONG, WHICH IS WHY THIS IS NOT A LABEL.**
+
+| case          | old remedy                                                       | why it is wrong under the flag                          |
+| ------------- | ---------------------------------------------------------------- | -------------------------------------------------------- |
+| non-shadowing | "Elsewhere this deck refuses to build until that directory is on the path" | the reproduction is passing the flag again, not exporting |
+| shadowing     | "rename the local theme if that is not what you want"            | the cure is to stop passing the flag                     |
+
+That is **AC01 clause (f) pointing at this thread**: a refusal must name the remedy for the case that ACTUALLY fired. ST0010's 29 Aug ruling states the general form -- no fallback message names as its remedy the case in which it fired.
+
+**THE FIX IS IN THE TYPE, FOR THE SECOND TIME ON THIS THREAD.** `Origin::SearchPath` gains the source that supplied the directory, because **two mechanisms are now real and one string cannot be true of both**. Rewording would pick a winner and lie about the other, exactly as a branch reorder in D2 would have left one `&str` meaning two things. `search_directories` therefore returns each directory paired with where it came from, rather than a bare list.
+
+**AT09's LEG 4 IS A CONTROL AND THE ROW SAYS SO.** With `PREZ_THEME_PATH` set and no flag, the message must STILL name the variable and still give the env remedy. Without that leg, **a fix that simply stopped saying `PREZ_THEME_PATH` would pass legs 1 to 3** and silently break the case AC14 was written for -- the same wrong-reason shape this thread has spent the day removing.
+
+**THE ANTICIPATED COST WAS NOT INCURRED, AND MEASURING BEAT ASSUMING.** AC04 and this section both recorded, as accepted, that `acceptance.sh`'s AT13 would need editing because it asserts the message names `PREZ_THEME_PATH` -- a second edit to ST0010's frozen suite. **It does not. AT13 passes unchanged, 8 of 8.** Every one of its legs exercises the ENV case, where naming the variable is still exactly true; the flag is this thread's and AT13 never touches it. The freeze is not disturbed a second time.
+
+That is worth keeping as a result rather than deleting as a wrong guess: **the cost was written down as real and accepted by two people, and neither had run it.** The row would have licensed an edit to a closed thread's evidence that nothing required.

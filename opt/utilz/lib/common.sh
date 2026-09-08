@@ -105,7 +105,29 @@ get_util_metadata() {
       local abs_version_file
       abs_version_file="$(dirname "$yaml_file")/$version_file_ref"
       if [[ -f "$abs_version_file" ]]; then
-        cat "$abs_version_file"
+        # `version_file` means "the file that CARRIES the version", not "a file
+        # whose whole content is the version". A plain VERSION file is the
+        # former by being the latter; a Cargo.toml carries it in [package].
+        #
+        # This exists because cargo REQUIRES a version in [package], so for a
+        # Rust utility that file is a home which cannot be eliminated -- and a
+        # second inline `version:` in the yaml would be a copy with no gate,
+        # answering `--version` through a different channel from the compiled
+        # CARGO_PKG_VERSION. One home, read two ways.
+        #
+        # Anchored on [package] so a DEPENDENCY's version can never be returned:
+        # every dependency lives under its own [[package]] or [dependencies].
+        case "$abs_version_file" in
+          *.toml)
+            awk -F'"' '/^\[package\]/ { p = 1; next }
+                       /^\[/          { p = 0 }
+                       p && /^version[[:space:]]*=/ { print $2; exit }' \
+              "$abs_version_file"
+            ;;
+          *)
+            cat "$abs_version_file"
+            ;;
+        esac
         return 0
       fi
     fi
