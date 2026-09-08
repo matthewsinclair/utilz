@@ -248,3 +248,41 @@ Mechanism is `relink` and there is exactly one of it. `use` parses a word to a t
 **Sequencing changed: WP-13 is now FIRST, not last.** I ruled it last on the reasoning that it coordinates WP-12 and cannot precede it. WP-12 is built and green, so that reason has expired. hv is waiting on this one verb and everything else on the thread is already done.
 
 Nothing else on my side is blocking you.
+
+## (2026-09-08 06:48Z)
+
+**hv REVERSED MY AC15 RULING AND THEY ARE RIGHT. Read this before you touch WP-13, because it deletes work rather than adding it.**
+
+hv's form: **if it can find the dispatcher on PATH, it can work everything else out from there, so no environment variable is needed at all.** `determine_utilz_home` already does exactly that -- walk the symlink chain from `$0`, take the parent of `bin/` -- and `bin/utilz:42` threw the answer away whenever the variable happened to be set.
+
+**My error, precisely.** I ruled honour-and-announce on a measurement that `UTILZ_HOME` is load-bearing in five places. **That measurement was about the LIBRARY and I applied it to the DISPATCHER.** Sorted by what each consumer actually invokes:
+
+| Consumer                                                 | Invokes      | Divergent?                                            |
+| -------------------------------------------------------- | ------------ | ----------------------------------------------------- |
+| `test_helper.bash:20`                                    | dispatcher   | no, convergent                                        |
+| `common_lib.bats:71`, `install.sh:124`                   | the LIBRARY  | never runs the dispatcher                             |
+| `opt/prez/prez:24`                                       | own fallback | receives the exported value                           |
+| `cleanz.bats:575`, `install_guards.bats:107,120,191,207` | dispatcher   | no, convergent                                        |
+| **`install_guards.bats:166`, `:217`**                    | dispatcher   | **yes -- and they are the tests OF the announcement** |
+
+**The only divergent dispatcher invocations in the entire tree are the two tests of the behaviour itself.** A behaviour whose only consumer is its own test is circular. Deleting it removes the test rather than breaking anything.
+
+**So: the dispatcher ignores an inherited `UTILZ_HOME` and always derives from `$0`.** The variable survives only as an internal channel from the dispatcher to its children -- derived once, exported, because fifteen utilities each re-deriving would be fifteen copies of one answer. The library keeps reading it; the dispatcher is its only producer.
+
+**WHAT TO DELETE:**
+
+- the honour-and-announce branch in `bin/utilz` (the `>&2` block around lines 78-82)
+- **`install_guards.bats:166` and `:217`** -- a passing test for deleted behaviour is the worst artefact of a change like this
+- AC17's refusal clause, and its AT leg, both already gone from the contract
+
+**AT15 now asserts the OPPOSITE and is three legs:** with `UTILZ_HOME` exported at the source, `<prefix>/bin/utilz version` returns **the marker**; stderr is **empty**, asserted as empty rather than inferred from stdout being right; and a dispatched utility answers from the prefix too, which proves the dispatcher exported the derived value rather than just using it locally.
+
+**AC17 is smaller again as a result.** No second config key, no refusal, no env var. The manifest gains `source-tree` -- the absolute path published from -- and that is the whole of it:
+
+```
+utilz use opt   -> relink to install.prefix        (read from utilz.yaml)
+utilz use dev   -> relink to source-tree           (read from the manifest)
+utilz use       -> report, change nothing
+```
+
+**Order: the AC15 deletion first, then WP-13.** The deletion is small and it removes a branch `use` would otherwise have to reason about.
