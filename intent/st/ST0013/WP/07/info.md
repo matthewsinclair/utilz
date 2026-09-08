@@ -2,7 +2,7 @@
 wp_id: WP-07
 title: Green and evidence: full suites, both doctors, shellcheck
 scope: S
-status: Not Started
+status: WIP
 ---
 
 # WP-07: Green and evidence: full suites, both doctors, shellcheck

@@ -11,7 +11,7 @@ A DOING / TODO / DONE view, projected from steel-thread and work-package status:
   - [x] 04: theme.rs: name-only resolution, Spec type, search-path threading
   - [x] 05: frontmatter.rs + deck.rs: the theme-file: key and precedence wiring
   - [x] 06: Migration: acceptance.sh path invocations, unit tests, docs
-  - [ ] 07: Green and evidence: full suites, both doctors, shellcheck
+  - [-] 07: Green and evidence: full suites, both doctors, shellcheck
   - [x] 08: Driver discovery: every suite found, a non-executable one refused
 
 ## TODO

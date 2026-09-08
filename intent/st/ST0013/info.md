@@ -22,16 +22,16 @@ This is a breaking change taken deliberately, at the cheapest moment it will eve
 
 ## Work Packages
 
-| WP    | Title                                                               | Size | Status      |
-| ----- | ------------------------------------------------------------------- | ---- | ----------- |
-| WP-01 | Design: the type split, precedence lattice and refusal catalogue    | S    | Done        |
-| WP-02 | Red-first: theme-addressing.sh, all six ATs                         | S    | Done        |
-| WP-03 | args.rs: --theme-file and --theme-path, mutual exclusion            | S    | Done        |
-| WP-04 | theme.rs: name-only resolution, Spec type, search-path threading    | S    | Done        |
-| WP-05 | frontmatter.rs + deck.rs: the theme-file: key and precedence wiring | S    | Done        |
-| WP-06 | Migration: acceptance.sh path invocations, unit tests, docs         | S    | Done        |
-| WP-07 | Green and evidence: full suites, both doctors, shellcheck           | S    | Not Started |
-| WP-08 | Driver discovery: every suite found, a non-executable one refused   | S    | Done        |
+| WP    | Title                                                               | Size | Status |
+| ----- | ------------------------------------------------------------------- | ---- | ------ |
+| WP-01 | Design: the type split, precedence lattice and refusal catalogue    | S    | Done   |
+| WP-02 | Red-first: theme-addressing.sh, all six ATs                         | S    | Done   |
+| WP-03 | args.rs: --theme-file and --theme-path, mutual exclusion            | S    | Done   |
+| WP-04 | theme.rs: name-only resolution, Spec type, search-path threading    | S    | Done   |
+| WP-05 | frontmatter.rs + deck.rs: the theme-file: key and precedence wiring | S    | Done   |
+| WP-06 | Migration: acceptance.sh path invocations, unit tests, docs         | S    | Done   |
+| WP-07 | Green and evidence: full suites, both doctors, shellcheck           | S    | WIP    |
+| WP-08 | Driver discovery: every suite found, a non-executable one refused   | S    | Done   |
 
 ## Acceptance
 
