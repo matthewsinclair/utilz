@@ -24,6 +24,18 @@
 # that is absent is a publish that must fail, not a set that quietly shrinks.
 INSTALL_PREZ_BINARY="opt/prez/crate/target/release/prez"
 
+# prez.yaml carries no inline version and points `version_file` at the crate's
+# Cargo.toml, because cargo REQUIRES a version in [package] and that makes it
+# the one home that cannot be deleted. TRUE IN A SOURCE TREE, FALSE IN A
+# PUBLISHED ONE until this line existed: the exclusion below drops all of
+# opt/prez/crate/, so the install shipped a prez.yaml pointing at a file the
+# install did not carry, and `prez --version` answered "version unknown" while
+# the binary beside it answered 2.0.0. Shipping the manifest itself keeps ONE
+# home read by both trees; the alternative -- writing the number into the
+# install's yaml at publish time -- would re-create the second copy the
+# consolidation removed, and it would be the copy nobody ever re-reads.
+INSTALL_PREZ_VERSION_FILE="opt/prez/crate/Cargo.toml"
+
 # Subtrees that are tracked but not ours to publish. See design.md D2 for why
 # the enumeration is by EXCLUSION rather than by an inclusion list: five of the
 # fifteen utilities keep runtime payload outside the three obvious filenames,
@@ -103,7 +115,8 @@ install_owned_paths() {
   # something to build -- and a tree with no prez does not name prez output.
   if [[ -f "$tree/opt/prez/crate/Cargo.toml" ]]; then
     kept="$kept
-$INSTALL_PREZ_BINARY"
+$INSTALL_PREZ_BINARY
+$INSTALL_PREZ_VERSION_FILE"
   fi
 
   printf "%s\n" "$kept" | LC_ALL=C sort

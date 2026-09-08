@@ -314,3 +314,39 @@ teardown_file() {
   assert_output_contains "Not an install tree"
   refute_output_contains "Install matches its manifest"
 }
+
+# ============================================================================
+# EVERY UTILITY ANSWERS --version FROM THE INSTALL (vc, 2026-09-08)
+# ============================================================================
+
+# THE EXISTING VERSION GUARD ASSERTS BOTH CHANNELS IN THE SOURCE TREE, WHICH IS
+# THE TREE WHERE THE ANSWER WAS NEVER IN DOUBT. prez.yaml points version_file
+# at crate/Cargo.toml -- the one home that cannot be deleted, which is true of a
+# checkout and was false of a publish: INSTALL_EXCLUDE_RE drops all of
+# opt/prez/crate/, so the install shipped a yaml pointing at a file it did not
+# carry. `prez --version` in the install said "version unknown - missing
+# prez.yaml" while prez.yaml sat beside it and the binary answered 2.0.0.
+#
+# Asserted over EVERY utility rather than prez alone: the defect is a property
+# of version_file surviving a publish, and naming prez here would pass forever
+# the day a second utility defers its version the same way.
+@test "every installed utility answers --version, and none says version unknown" {
+  local link util
+  local checked=0
+
+  for link in "$GUARD_INSTALL"/bin/*; do
+    util=$(basename "$link")
+    [[ "$util" == "utilz" ]] && continue
+
+    run env -u UTILZ_HOME "$link" --version
+    assert_success
+    refute_output_contains "version unknown"
+    refute_output_contains "missing"
+    checked=$((checked + 1))
+  done
+
+  # A loop that iterated nothing passes every assertion inside it. The count is
+  # the control: it is not a constant, it falls if the install stops shipping
+  # links, and this test is worthless without it.
+  [ "$checked" -gt 1 ] || fail "only $checked utility link(s) checked -- the loop found nothing to assert on"
+}

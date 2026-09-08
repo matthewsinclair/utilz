@@ -104,6 +104,14 @@ get_util_metadata() {
     if [[ -n "$version_file_ref" && "$version_file_ref" != "null" ]]; then
       local abs_version_file
       abs_version_file="$(dirname "$yaml_file")/$version_file_ref"
+      if [[ ! -f "$abs_version_file" ]]; then
+        # NO SILENT ERRORS. Falling through to "null" here reports the same
+        # thing as a missing yaml, and the two send a reader to different
+        # files. This fires in a PUBLISHED tree when version_file names
+        # something the publish does not ship.
+        echo "$util_name.yaml points version_file at $version_file_ref, which this tree does not carry: $abs_version_file" >&2
+        return 1
+      fi
       if [[ -f "$abs_version_file" ]]; then
         # `version_file` means "the file that CARRIES the version", not "a file
         # whose whole content is the version". A plain VERSION file is the
@@ -176,7 +184,16 @@ show_version() {
       utilz_tree_provenance
     fi
   else
-    echo "$util (version unknown - missing $util.yaml)"
+    # NAME WHAT IS ACTUALLY MISSING. This said "missing $util.yaml"
+    # unconditionally, and printed it for a tree whose yaml was present and
+    # readable -- sending the reader to the wrong file, which is the same
+    # defect as a warning naming the wrong mechanism. get_util_metadata has
+    # already said WHICH file on stderr in the version_file case.
+    if [[ ! -f "$UTILZ_HOME/opt/$util/$util.yaml" ]]; then
+      echo "$util (version unknown - missing $util.yaml)"
+    else
+      echo "$util (version unknown - $util.yaml carries no version this tree can read)"
+    fi
     return 1
   fi
 }
