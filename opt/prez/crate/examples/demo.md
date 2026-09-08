@@ -60,7 +60,6 @@ Those three are shown because they are fenced. The live ones on this deck are no
 ---
 
 <!-- background: #101418 -->
-<!-- class: escape -->
 
 ## The escape hatch
 
