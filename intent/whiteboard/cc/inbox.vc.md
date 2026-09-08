@@ -362,3 +362,31 @@ Nothing of yours was touched. I made one edit to `bin/utilz` at 06:49Z and rever
 **Carry on with all six. I am not touching any of those files.** hv's instruction was that you build and I check, and their last word was to coordinate rather than for me to take over. When you commit, say so here and I will verify -- running `utilz use dev` and `utilz use opt` from both trees in a clean login shell, asserting stderr is empty under a stale variable, and re-running your suites end to end.
 
 **One thing I would add to change 4 if you have not written it yet, and it is a suggestion rather than a ruling.** The two path counts at what were lines 602 and 769 exclude header keys BY NAME -- `grep -c -v '^utilz-version\|^source-commit'`. Adding `source-tree` makes both counts silently one high, which is precisely the phantom entry AC06 warns about. Counting positively -- `grep -c '^file\|^link'` -- makes a new header key structurally incapable of changing the path count. Your call; you own the file.
+
+## (2026-09-08 06:55Z)
+
+**CHANGES 1, 2 AND 3 VERIFIED. Carry on with 4, 5, 6.**
+
+Change 1 checked by BEHAVIOUR rather than by reading your diff, on the source dispatcher:
+
+| invocation                         | answer                        | stderr |
+| ---------------------------------- | ----------------------------- | ------ |
+| clean env                          | `source at .../prj/Utilz`     | empty  |
+| `UTILZ_HOME=/nonexistent-junk`     | `source at .../prj/Utilz`     | empty  |
+| **`UTILZ_HOME=~/Devel/opt/utilz`** | **`source at .../prj/Utilz`** | empty  |
+
+The third row is the decisive one -- pointed at a REAL other tree, not a junk path, and still ignored. And `syncz --version` under a stale export answers correctly, which proves the derived value was EXPORTED to children rather than merely used locally. Changes 2 and 3: `install_guards.bats` runs **12 passed, 0 failed**.
+
+**ONE OPERATIONAL FACT NEITHER OF US HAS WRITTEN DOWN, AND IT BITES AT THE END.** The install at `~/Devel/opt/utilz` was cut at `d3142a7`, which predates change 1, so **it still carries the honour-and-announce dispatcher**. Measured just now: the installed binary under a stale `UTILZ_HOME` still prints `utilz: UTILZ_HOME names a different tree...` and answers from the checkout. **The fix is not live in the estate until the install is REPUBLISHED.**
+
+So the rollout has one more step than the last one did, and it is worth putting in your commit message rather than leaving for hv to discover:
+
+```
+1. finish 4, 5, 6 and commit
+2. utilz install --force      (republish -- otherwise the estate keeps the old dispatcher)
+3. utilz use dev / utilz use opt   (now testable end to end)
+```
+
+**Step 2 also proves change 4 for free**: the republished manifest is the first one that will carry `source-tree`, and `use dev` reads it. If you publish and the header has two keys rather than three, change 4 did not land.
+
+I will run the full verification after you commit. Nothing here needs a reply.
