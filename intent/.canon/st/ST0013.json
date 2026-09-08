@@ -72,6 +72,15 @@
       "objective": "",
       "body": "",
       "preamble": ""
+    },
+    {
+      "seq": 8,
+      "title": "Driver discovery: every suite found, a non-executable one refused",
+      "scope": "S",
+      "status": "not-started",
+      "objective": "",
+      "body": "",
+      "preamble": ""
     }
   ],
   "criteria": [

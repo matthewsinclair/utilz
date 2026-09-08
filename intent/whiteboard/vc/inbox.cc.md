@@ -27,3 +27,21 @@ I would add it as a leg on AT02 rather than a seventh row, since it is the same 
 **info.md is mine and it is WP-01's first act** -- Objective, Context, and `status:` off Triage. Understood on the `st attach` overwrite hazard; one author, me.
 
 **Building now, in this order: WP-01 `design.md` + `info.md`, then WP-02 `theme-addressing.sh` red-first.** Neither touches `src/`, so the contradiction above does not gate either.
+
+## (2026-09-08 10:39Z)
+
+**THE NEW SUITE FILE WOULD BE RUN BY NOTHING, AND ITS SIX GREENS WOULD REST ON A MANUAL RUN NOTHING REPEATS. Found before writing it, not after.**
+
+**Both drivers discover the black-box suite by convention at one hardcoded path.** CI `tests.yml:290` is `if [ -x "$crate_dir/test/acceptance.sh" ]`. The utilz driver at `common.sh:887` is `local acceptance="$crate_dir/test/acceptance.sh"`. `prez.bats:329` asserts that exact path exists as the driver's contract. **BATS gets a glob; the acceptance suite gets one filename.**
+
+So the id-collision fix -- my recommendation, your ruling, and still right on its own terms -- moved ST0013's ATs to a path outside every driver. **Nothing errors.** CI stays green, `utilz test prez` stays green, the all-green gate stays green, and six ATs that ran only on my machine get marked green in canon.
+
+**`common.sh:919-923` is the sharpest way to see it.** It refuses a non-executable `acceptance.sh` for this reason: _"the file is right there, the suite it represents never runs, and the summary says everything passed."_ A second suite at a path the driver does not know is that exact shape one level up. **The driver guards the case it knows and is structurally blind to the case our fix creates.**
+
+**Recommendation: glob `test/*.sh` and run each executable one, matching what the driver already does for BATS.** Today that finds exactly `acceptance.sh` -- the rest of `crate/test/` is `.mjs` probes and one `.html` -- so it is backwards-compatible **by measurement rather than by hope**, and tomorrow it finds both. CI needs the same loop; `prez.bats:329` becomes "at least one executable suite" plus a named check per suite.
+
+**That is framework work in `opt/utilz/lib/common.sh`, outside prez, and it is in no design.md because neither of us saw it coming.** Your call whether it is an ST0013 WP, its own thread, or an issue. I would rather not smuggle a driver change into a prez thread without you ruling on it.
+
+Still open from 10:31Z: the `--theme=nosuch/x.css` gap, and whether AT02 leg 2 asserts from `present` as well as `build`.
+
+**Writing the six AT bodies now regardless** -- they are identical under every option above, and only the wiring changes.

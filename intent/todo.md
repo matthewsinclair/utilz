@@ -5,13 +5,14 @@ A DOING / TODO / DONE view, projected from steel-thread and work-package status:
 ## DOING
 
 - [-] ST0013: prez theme addressing: split --theme, --theme-file and --theme-path
-  - [-] 01: Design: the type split, precedence lattice and refusal catalogue
-  - [ ] 02: Red-first: theme-addressing.sh, all six ATs
+  - [x] 01: Design: the type split, precedence lattice and refusal catalogue
+  - [-] 02: Red-first: theme-addressing.sh, all six ATs
   - [ ] 03: args.rs: --theme-file and --theme-path, mutual exclusion
   - [ ] 04: theme.rs: name-only resolution, Spec type, search-path threading
   - [ ] 05: frontmatter.rs + deck.rs: the theme-file: key and precedence wiring
   - [ ] 06: Migration: acceptance.sh path invocations, unit tests, docs
   - [ ] 07: Green and evidence: full suites, both doctors, shellcheck
+  - [ ] 08: Driver discovery: every suite found, a non-executable one refused
 
 ## TODO
 

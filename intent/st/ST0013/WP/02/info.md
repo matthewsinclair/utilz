@@ -2,7 +2,7 @@
 wp_id: WP-02
 title: Red-first: theme-addressing.sh, all six ATs
 scope: S
-status: Not Started
+status: WIP
 ---
 
 # WP-02: Red-first: theme-addressing.sh, all six ATs

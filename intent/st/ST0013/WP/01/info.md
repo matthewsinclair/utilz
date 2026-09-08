@@ -2,7 +2,7 @@
 wp_id: WP-01
 title: Design: the type split, precedence lattice and refusal catalogue
 scope: S
-status: WIP
+status: Done
 ---
 
 # WP-01: Design: the type split, precedence lattice and refusal catalogue
