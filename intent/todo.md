@@ -4,7 +4,7 @@ A DOING / TODO / DONE view, projected from steel-thread and work-package status:
 
 ## DOING
 
-_(none)_
+- [-] ST0015: Version dispatch has one home, and reports both versions
 
 ## TODO
 
