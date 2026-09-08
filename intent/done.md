@@ -1,8 +1,33 @@
 ---
-verblock: "03 Sep 2026:v0.4: matts - stampz (ST0011) and the roster/doc sweep, no release"
+verblock: "08 Sep 2026:v0.5: matts - v2.6.0 and ST0014 closed; six Intent defects relayed"
 ---
 
 # Done
+
+## 8 Sep 2026 -- v2.6.0: two trees (ST0014, CLOSED), and six Intent defects relayed
+
+**ST0014 closed at 17/17 satisfied with 4 withdrawn, and v2.6.0 is cut at `4fdce3c`.** Full suite 545 passed / 0 failed across 25 suites; doctor 0 findings. Tag and push are hv's. Two nodes: `cc` built all six work packages, `vc` held the contract and the pen from 21:19Z on 7 Sep, `hv` ruled scope and reversed vc twice -- both times correctly.
+
+Utilz can now publish a runnable install of itself. `utilz install` publishes the checkout to `install.prefix`; `utilz upgrade` replaces an existing one; `utilz use dev|opt` switches which tree the PATH symlinks serve, in one word, from either tree, with no path typed. **Devbin's install tree is deliberately not runnable and ours inverts that**, so the criterion is that the install runs with the source MOVED ASIDE, not that files arrived.
+
+**The four findings worth re-reading, all of them cases where the obvious thing passes for the wrong reason.**
+
+- **An exported `UTILZ_HOME` silently redirected an install back at the checkout, and this project's own README told you to export it.** The dispatcher derived its tree from `$0` only when the variable was unset. Measured with a marker VERSION: unset gave the install, exported gave the source, and nothing said so. **AC01 could not catch it** -- AC01 moves the source aside, where a stale variable fails loudly instead of deferring quietly, so it went green in a clean test env while the defect was live in the shell hv types into. vc first ruled honour-and-announce; hv reversed it to ignore-outright, and the reversal was right: the only divergent dispatcher invocations in the whole tree were the two tests of the announcement itself, which is circular.
+- **The owned set is enumerated by EXCLUSION over `git ls-files`, because an inclusion list matched the shape the tree appears to have.** Five utilities keep runtime payload outside `opt/<n>/{<n>,<n>.yaml,README.md}` -- 22 paths -- so an inclusion list publishes an install where five of fifteen utilities break, each only when someone reaches the one path needing the file that never arrived. cc found it by walking all sixteen directories rather than trusting the pattern.
+- **`get_util_metadata` returns the four-character string `null` for an absent key**, so `[[ -n "$v" ]]` passes and a bare guard publishes to `./null`. A malformed query returns EMPTY instead, so a guard written for either case alone lets the other through.
+- **Symlinks are checksummed by their target STRING against their PATH.** All fifteen resolve to the dispatcher, so a dereferenced check gives them one hash and reads a corrupted link as intact. AC06 originally justified this as catching "a link retargeted at the wrong utility" -- that scenario cannot occur, since all fifteen legitimately share one target, and the row was corrected against the artefact.
+
+**Six Intent defects were relayed to `intent-vc` on 8 Sep, live, after being carried unrelayed for two sessions.** All six re-verified against Intent's source before sending. The headline is one defect wearing two faces: **the mint accepts what it should refuse and defaults what it should require** -- `intent ac new` never checks `<ACID>` against any grammar and defaults `--kind non-test`, and no verb changes an AC's kind afterwards.
+
+- Four ST0014 rows were minted test-backed in intent and non-test in fact, so their green ATs could not satisfy them: 17 ATs green, lint clean, 545 tests passing, and the gate reading `12/17 BLOCKED`. **Satisfying them by evidence was measured and rejected**: with a covering AT forced red, a computed row goes unsatisfied and an evidence-backed row stays satisfied. A row that cannot go red is worse than no row. Withdrawn and re-minted as AC18-AC21 with `--kind test`, 19 references migrated across 7 files.
+- `intent-vc` traced three of the six to one root -- `contract::group_of` falling back to the whole id -- and ran a fleet census: **307 of 9473 ids across 13 estates are non-conforming, in two shapes with different blast radii.** The 182 one-digit rows break only `is_ac_id`'s `group.len() == 2` and may be an over-strict rule rather than bad data; that ruling is hv's and is open.
+- **Nothing in Intent teaches the flat `AC01` form** -- its template teaches `AC-01.1`, and there are zero flat examples anywhere. Utilz's four flat threads and Gtools' three, including one contract carrying BOTH grammars, are unsanctioned rather than a rival convention.
+
+**The Xvfb path is VERIFIED and the last CI red is a contract question, not a patch.** Run `34144634306` cleared three of four failures; AT20 ran all four legs on Linux at 8 checks each on a 1280x1024 screen that clamps nothing.
+
+**Two fixes hv hit by running the full suite themselves**, neither ST0014's: `cryptz`'s round-trip blocked on a gpg passphrase prompt (`run_cryptz` did not close stdin; the test's comment handled the assertion and not the prompt, so it was green in CI and dead on a terminal), and the `utilz test` refusal described the source tree instead of naming it, which made a correct refusal read as a failure with no next step.
+
+**A rule that came out of getting a census wrong, now recorded fleet-wide by `intent-vc`: on an estate that dehydrates, THE DISK IS NOT THE POPULATION.** vc reported Utilz had two flat-id threads by grepping `intent/st/*/acceptance.md`; there are four, and ST0010 and ST0011 are dehydrated so their files do not exist. Dehydration is a shipped feature, so this is the steady state of a mature estate rather than an edge case: a probe over `intent/st/**` samples the live minority and reads as complete. The population is `intent/.canon/st/`.
 
 ## 3 Sep 2026 -- `stampz` (ST0011, CLOSED) + a roster and documentation sweep (no release)
 
