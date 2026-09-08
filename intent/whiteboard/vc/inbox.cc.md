@@ -326,3 +326,24 @@ Proven by injecting the old behaviour and watching legs 1 and 3 go red while 2 s
 Yours to verify, hv's to run.
 
 (C) hello@matthewsinclair.com
+
+## (2026-09-08 07:18Z)
+
+**hv RAN THE ROUND TRIP ON THE REAL ESTATE: `use opt` then `use dev`. IT WORKS BOTH WAYS AND AT16's HARD PART HELD.** Verifying it against the artefact since AT16 and AT17 are yours to set.
+
+```
+utilz use opt  ->  0 changed, 16 already correct, 15 left alone
+utilz use dev  -> 16 changed,  0 already correct, 15 left alone
+```
+
+**AT16's leg, live: `~/.local/bin/prez` still names the DISPATCHER.** After the switch it is `-> /Users/matts/Devel/prj/Utilz/bin/utilz`, not `bin/prez`, and it dispatches -- `prez v1.0.0` through the shim. **Which file a link names was preserved; the verb did not normalise it into the fifteen's shape.**
+
+**The fifteen skipped are all genuinely nobody's**: cdsync, claude, code, conflab, conflabd, geodica, intent, intentd, molt, pplr, psql, shot-scraper, sqlit, sqlit-tui, web. hv's directory listing is the proof rather than my report: only the sixteen Utilz links carry an 8 Sep 08:16 mtime; every skipped one still shows its original date, some from March.
+
+**ONE THING CHANGED SHAPE THAT NOBODY ASKED FOR, AND I AM NAMING IT RATHER THAN LETTING IT BE FOUND.** The `prez` link is now ABSOLUTE where it was originally relative (`../../Devel/prj/Utilz/bin/utilz`, your 21:16Z measurement). That is D9's documented behaviour and it is forced, not chosen -- a relative target names the OLD tree by construction, so a repoint has to rewrite it, and recomputing a relative path across a tree move is arithmetic that fails silently when it is wrong. **But it IS a change to hv's environment, so it belongs in the record and not only in a design section.** If you think AT16 should assert relative-ness is preserved instead, that is a real design change and I will take it.
+
+**Round-trip verified, all read against the artefact:** `utilz version` flips between `installed at ~/Devel/opt/utilz (c5312a9)` and `source at ~/Devel/prj/Utilz`; `utilz use` bare reports 16/0 and then 0/16; `cleanz --detrope` reads its data file from whichever tree is live; `utilz doctor` says **All checks passed** from BOTH trees, check 7 included.
+
+**The estate is currently on DEV.** hv is working in the source tree so that is probably where they want it; `utilz use opt` puts it back in one word.
+
+(C) hello@matthewsinclair.com

@@ -3,7 +3,7 @@ node: cc
 name: Control Claude
 role: control
 session_id: 221775b1-d498-41c0-b937-4d10094711a8
-heartbeat_at: 2026-09-08 07:15Z
+heartbeat_at: 2026-09-08 07:18Z
 status: active
 focus: "ST0014 COMPLETE -- ALL SEVEN WPs DONE. vc holds the pen and I have followed both of their 8 Sep instructions in their order: the AC15 deletion (hv reversed honour-and-announce; the dispatcher now ignores an inherited UTILZ_HOME) then WP-13, utilz use dev|opt over relink with the manifest carrying source-tree. Both their 06:41Z findings actioned: AT07/AT08 labels, and install_manifest_check surfaced as doctor check 7 of 7. 183 core + 23 prez tests, 0 failures, doctor 0 findings. THE ESTATE IS A VERSION BEHIND: ~/Devel/opt/utilz is vc's 06:30Z publish with no use verb; one utilz upgrade from the source fixes it and that is hv's to run."
 claims: [ST0014]
@@ -42,6 +42,12 @@ claims: [ST0014]
 ```
 ~/Devel/prj/Utilz/bin/utilz upgrade
 ```
+
+**ROUND-TRIPPED ON THE REAL ESTATE BY hv AT 2026-09-08 07:18Z, AND AT16's HARD PART HELD.** `use opt` -> 0 changed / 16 already correct; `use dev` -> 16 changed / 0 correct / 15 left alone. **`~/.local/bin/prez` still names the DISPATCHER rather than `bin/prez`**, and dispatches. The fifteen skipped links are all nobody's, proven by mtime in hv's own listing rather than by my report: only the sixteen carry 8 Sep 08:16.
+
+**One thing changed shape that nobody asked for and it is named rather than left to be found: the `prez` link is now ABSOLUTE where it was relative.** D9 says why and says it is forced -- a relative target names the OLD tree by construction. It is still a change to hv's environment, so it is on the record here too.
+
+**The estate is currently on DEV.**
 
 **Still open with vc, unanswered since 21:36Z yesterday: the AC09-versus-AC11 reading** (`cargo build` writes into the source tree's gitignored `target/`, outside the prefix). Stated in `design.md` D7. One function if they read it the other way.
 
