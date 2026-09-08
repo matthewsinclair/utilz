@@ -39,7 +39,39 @@ title: --help has one home, and both invocation forms agree
 
 ### Group AC07
 
-- AC07 show_help REDIRECTS THE RENDERER'S STDIN, on every renderer arm, so a tool handed a FILE cannot block waiting on a terminal. Measured 8 Sep: 'glow help/cleanz.md' with an inherited interactive stdin did not return -- killed at 120s in one instance and at a 5s timeout in two more -- while the same command with '< /dev/null' returned exit 0 and 17450 bytes. The pager is NOT the variable: it hangs identically without '-p', which is opt-in and was never passed. WHAT THIS ROW CLAIMS AND DOES NOT: it asserts the guard is PRESENT, by inspection of the call site. It does NOT claim the hang is fixed, because cc could not reproduce it under 'script -q /dev/null' (exit 1, 59 bytes of terminal-query escapes -- a third behaviour, neither hang nor clean render) and an unreproduced failure cannot be observed to stop. The behavioural form needs a faithful pty harness and is a thread, not a row. This matters now because ST0016 routes 14 more invocations into show_help, so the guard is part of not making things worse. -- satisfied: no (computed)
+- AC07 NO RENDERER IN show_help CAN BLOCK ON STDIN. Measured 8 Sep: 'glow help/cleanz.md' with an inherited interactive stdin did not return -- killed at 120s once and at a 5s timeout twice -- while the same command with '< /dev/null' returned exit 0 and 17450 bytes. The pager is NOT the variable: it hangs identically without '-p', which is opt-in and was never passed. THE ROW STATES A PROPERTY, NOT A MECHANISM, AND THIS WORDING IS A CORRECTION: it first said 'redirects stdin on every renderer arm', which is over-specified. show_help has three arms and only two need the guard -- 'cat "$help_file"' is always given a file argument and provably cannot block (measured: cat FILE exits 0 immediately; bare cat blocks at exit 124). Requiring a redirect there would add a token that protects nothing and teach the next reader that cat needs one. So: glow and bat carry '</dev/null'; cat is exempt BY MEASUREMENT rather than by omission. WHAT THIS ROW CLAIMS AND DOES NOT: it asserts the guard is present where it is needed, by inspection. It does NOT claim the hang is fixed -- cc could not reproduce it under 'script -q /dev/null' (exit 1, 59 bytes of terminal-query escapes, a third behaviour) and an unreproduced failure cannot be observed to stop. The behavioural form needs a faithful pty harness and is a thread, not a row. -- satisfied: no (computed)
+
+### Group AT01
+
+_(no criteria in this group)_
+
+### Group AT02
+
+_(no criteria in this group)_
+
+### Group AT03
+
+_(no criteria in this group)_
+
+### Group AT04
+
+_(no criteria in this group)_
+
+### Group AT05
+
+_(no criteria in this group)_
+
+### Group AT06
+
+_(no criteria in this group)_
+
+### Group AT07
+
+_(no criteria in this group)_
+
+### Group AT08
+
+_(no criteria in this group)_
 
 ## Acceptance Tests
 
@@ -70,6 +102,38 @@ _(no tests in this group)_
 ### Group AC07
 
 _(no tests in this group)_
+
+### Group AT01
+
+- AT01 `opt/utilz/test/help_dispatch.bats` -- covers AC01 -- status: to-write
+
+### Group AT02
+
+- AT02 `opt/utilz/test/help_dispatch.bats` -- covers AC02 -- status: to-write
+
+### Group AT03
+
+- AT03 `opt/utilz/test/help_dispatch.bats` -- covers AC03 -- status: to-write
+
+### Group AT04
+
+- AT04 `opt/utilz/test/help_dispatch.bats` -- covers AC04 -- status: to-write
+
+### Group AT05
+
+- AT05 `opt/utilz/test/help_dispatch.bats` -- covers AC05 -- status: to-write
+
+### Group AT06
+
+- AT06 `opt/utilz/test/help_dispatch.bats` -- covers AC06 -- status: to-write
+
+### Group AT07
+
+- AT07 `opt/utilz/test/help_dispatch.bats` -- covers AC07 -- status: to-write
+
+### Group AT08
+
+- AT08 `opt/utilz/test/help_dispatch.bats` -- covers AC07 -- status: to-write
 
 ---
 
