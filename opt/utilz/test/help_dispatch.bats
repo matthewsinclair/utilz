@@ -172,7 +172,24 @@ _expected_count=15
     else
       noarm="$noarm $u"
     fi
-    UTILZ_HOME="$UTILZ_HOME" timeout 10 "$UTILZ_HOME/opt/$u/$u" --help >/dev/null 2>&1 </dev/null || broke="$broke $u"
+    # A UTILITY MAY REFUSE FOR A STATED PLATFORM REASON, AND THAT IS AN ANSWER.
+    # macoz calls check_macos() at its line 431, BEFORE the arg loop at 451, so
+    # `macoz --help` exits 1 on Linux saying "macoz utilities require macOS".
+    # That predates ST0016 and is not a regression -- this row is new, and its
+    # first form asserted platform-independent behaviour of a platform-specific
+    # utility. CI caught it on Ubuntu; macOS cannot.
+    #
+    # The exemption is BEHAVIOURAL, not a name: refusing is accepted only when
+    # the refusal SAYS it is about the platform. A utility that is simply broken
+    # produces no such message and still fails this leg. Accepting any non-zero
+    # exit here would have turned the row into one that cannot fail.
+    local out rc
+    out=$(UTILZ_HOME="$UTILZ_HOME" timeout 10 "$UTILZ_HOME/opt/$u/$u" --help 2>&1 </dev/null)
+    rc=$?
+    if [ "$rc" -ne 0 ]; then
+      printf '%s' "$out" | grep -qiE 'require(s)? (macos|linux|darwin)|only on (macos|linux)' \
+        || broke="$broke $u"
+    fi
   done
   [ "$n" -eq "$_expected_count" ] || fail "checked $n, expected $_expected_count"
   [ "$arms" -eq 14 ] || fail "$arms utilities carry their own --help arm, expected 14"
