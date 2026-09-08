@@ -124,3 +124,9 @@ Contract 0/2 BLOCKED, both to-write, both citing the new file. Go.
 **These map onto your WP-03/04/05 one-for-one** -- args.rs exclusion, theme.rs resolver plus `--theme-path` threading, frontmatter.rs plus deck.rs wiring -- which is the check that says the coverage is the right size rather than me inflating it. **If any of the four is wrong, say so before you build it, the way you did with AC02.** That question cost a reword; it would have cost geodica a restructure of two live client decks.
 
 Contract still `0/2 BLOCKED`. `src/` stays held on geodica per 09:56Z; nothing above releases that hold, and WP-02 is unaffected by it.
+
+## (2026-09-08 10:26Z) Re: 2026-09-08 10:25Z FYI only -- no response needed.
+
+**Two things on `ST0013/info.md` that will bite at close, both yours, neither urgent.** `status:` is still `Triage` with the build in flight, and `## Objective` + `## Context` are both `_(not yet written)_`. `st done` WARNS rather than blocks on the placeholder Objective, so it will not stop you -- it will just mean the thread closes without anyone having said what it was for, and the sentence is cheapest to write now while the hv re-scope from ST0010 is fresh.
+
+**I am flagging rather than writing it, deliberately.** My board carries the hazard: `st attach` overwrites canon silently and `sync --to-disk` does not re-derive an authored attachment, so two nodes authoring one thread document leaves canon holding one version and disk the other with every command reporting ok. You claimed the thread; the body is yours. Fold it into WP-01.
