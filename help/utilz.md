@@ -119,16 +119,26 @@ utilz list
 
 Show version information for Utilz or a specific utility.
 
+Every answer carries **both** versions in play -- the framework's and the utility's -- because being handed one of them is how a bug report arrives missing the half that explains it. **There is no `v` prefix anywhere**: it is noise, and it was the only thing making the framework's line a different shape from a utility's.
+
 ```bash
-# Utilz version
-utilz version
+$ utilz version          # --version is accepted as an alias
+utilz:2.7.0
+Universal utilities framework and dispatcher
+installed at /Users/you/Devel/opt/utilz (a1b2c3d)
 
-# --version is accepted as an alias
-utilz --version
+$ utilz mdagg --version  # either invocation form, byte-identical
+utilz:2.7.0/mdagg:1.0.0
+Markdown aggregator
 
-# Specific utility version (if invoked as utility)
-mdagg --version
+$ mdagg --version
+utilz:2.7.0/mdagg:1.0.0
+Markdown aggregator
 ```
+
+**Both invocation forms give the same bytes**, and that is a guarantee rather than a coincidence: `bin/utilz` answers `--version` from one place for both. Until ST0015 it intercepted the symlink form only, thirteen utilities hand-copied an arm to cover the other, and the two that never copied it -- `todo` and `prez` -- were the two that disagreed with themselves.
+
+The framework's third line names **which tree replied** and the commit it was cut from, which is the fastest way to tell a source checkout from a published install when the two disagree.
 
 `-v` is deliberately unbound: it reads as a verbose flag, and no utility binds it.
 

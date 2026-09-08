@@ -669,9 +669,17 @@ When releasing a new version of your utility:
 3. Commit and tag:
 
    ```bash
-   git commit -am "logtool v1.1.0: Add JSON support"
-   git tag logtool-v1.1.0
+   git commit -am "logtool 1.1.0: Add JSON support"
+   git tag logtool-1.1.0
    ```
+
+   **No `v` prefix, from 2.7.0 onward** (hv's ruling). It is noise, and it was
+   the last thing making the framework's version line a different shape from a
+   utility's. Tags cut before 2.7.0 keep the `v` they were published with --
+   those are records of the name a release actually had, not assertions about
+   the convention. Nothing in this repo consumes the prefix: no workflow, lib
+   or script globs `v*` or calls `git describe` with a v-pattern, so the series
+   being non-uniform costs a reader's eye and nothing else.
 
 ## Best Practices
 

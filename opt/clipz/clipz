@@ -209,10 +209,6 @@ case "$COMMAND" in
     usage
     exit 0
     ;;
-  --version)
-    show_version "clipz"
-    exit 0
-    ;;
   *)
     error "Unknown command: $COMMAND"
     echo ""

@@ -343,7 +343,6 @@ main() {
       --colour|--color) grey="${2:-}"; shift 2 ;;
       --opacity)  opacity="${2:-}"; shift 2 ;;
       -h|--help)  usage; exit 0 ;;
-      --version)  show_version "stampz"; exit 0 ;;
       -*)         error "Unknown option: $1"; echo ""; usage; exit 1 ;;
       *)
         if [[ -z "$src" ]]; then

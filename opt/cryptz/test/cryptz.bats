@@ -33,8 +33,12 @@ run_cryptz() {
 @test "cryptz --version shows version" {
   run_cryptz --version
   assert_success
-  assert_output_contains "cryptz"
-  assert_output_contains "v"
+  # THE PAIR IS THE FORM, not merely two numbers appearing somewhere.
+  # This asserted the bare letter "v" until 2026-09-08 -- an assertion so
+  # weak it was satisfied by the "v" in "every" inside a description, which
+  # is why five of the ten tests carrying it stayed GREEN through a change
+  # that rewrote every one of these lines. ST0015/AC01.
+  assert_output_matches "^utilz:[0-9]+\.[0-9]+\.[0-9]+/cryptz:[0-9]+\.[0-9]+\.[0-9]+($|[^0-9.])"
 }
 
 @test "cryptz with no arguments shows usage" {

@@ -348,7 +348,8 @@ assert_file_contains() {
     fail "Cannot check file contents - file does not exist: $filepath"
   fi
 
-  if ! grep -q "$expected" "$filepath"; then
+  # See refute_file_contains: `--` keeps a `-`-leading pattern a PATTERN.
+  if ! grep -q -- "$expected" "$filepath"; then
     fail "Expected file '$filepath' to contain: '$expected'\nActual contents:\n$(cat "$filepath")"
   fi
 }
@@ -363,7 +364,11 @@ refute_file_contains() {
     fail "Cannot check file contents - file does not exist: $filepath"
   fi
 
-  if grep -q "$unexpected" "$filepath"; then
+  # `--` IS LOAD-BEARING: without it a pattern starting with `-` is parsed as
+  # a grep OPTION, grep errors, returns non-zero, and the refutation PASSES.
+  # A refutation that can never fail. Found 2026-09-08 by injecting the very
+  # regression a `refute_file_contains "--version)"` was written to catch.
+  if grep -q -- "$unexpected" "$filepath"; then
     fail "Expected file '$filepath' NOT to contain: '$unexpected'\nActual contents:\n$(cat "$filepath")"
   fi
 }

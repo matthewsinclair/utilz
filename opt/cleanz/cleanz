@@ -755,10 +755,6 @@ while [[ $# -gt 0 ]]; do
       usage
       exit 0
       ;;
-    --version)
-      show_version "cleanz"
-      exit 0
-      ;;
     -c|--clipboard)
       OPT_CLIPBOARD=true
       shift

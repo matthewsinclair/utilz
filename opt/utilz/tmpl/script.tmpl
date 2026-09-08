@@ -51,10 +51,12 @@ while [[ $# -gt 0 ]]; do
       usage
       exit 0
       ;;
-    --version)
-      show_version "{{NAME}}"
-      exit 0
-      ;;
+    # NO --version ARM HERE, DELIBERATELY. `bin/utilz` answers --version for
+    # every utility on both invocation forms (common.sh version_intercept),
+    # so an arm here would be unreachable -- and it would reintroduce, one
+    # generated utility at a time, exactly the fifteen-home duplication
+    # ST0015 removed. If you add one, `utilz <name> --version` and
+    # `<name> --version` can drift apart again.
     *)
       error "Unknown option: $1"
       echo ""

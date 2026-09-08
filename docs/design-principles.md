@@ -84,8 +84,9 @@ grep --perl-regexp "pattern" file.txt
 ```bash
 $ utilz list
 Available utilities:
-  mdagg v1.0.0 - Markdown aggregator
-  logtool v1.0.0 - Process log files
+
+  mdagg           Markdown aggregator
+  logtool         Process log files
 ```
 
 ### 5. Testable Over Quick-and-Dirty

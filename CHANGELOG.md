@@ -5,9 +5,21 @@ All notable changes to the Utilz framework will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [2.7.0] - 2026-09-08
+
+Minor: **every version answer changes shape**, so a user can observe it. `utilz --version` now prints `utilz:2.7.0`; every utility prints `utilz:2.7.0/<name>:<version>`. **A new tag rather than a moved `v2.6.1`**, and the first tag in this project without a `v` -- the prefix is noise and it was the last thing making the framework's line a different shape from every utility's.
 
 ### Changed
+
+- **`--version` HAS ONE HOME, AND BOTH VERSIONS ARE ON ONE GREPPABLE LINE** (ST0015). Every utility answers `utilz:<framework>/<utility>:<version>`, followed by its description; `utilz` itself answers `utilz:<version>`, keeping the description and the tree-provenance line that says which tree replied. **There is no `v` anywhere** -- hv's ruling, on the grounds that it is noise, and it was the only thing making the framework's line a different shape from a utility's. `common.sh` was the estate's single minter of one.
+
+  **The defect was that `--version` had FIFTEEN homes and two of them disagreed.** `bin/utilz` intercepted the flag on the SYMLINK path only, so thirteen utilities hand-copied an identical `--version) show_version "<name>"; exit 0` arm to cover the `utilz <util>` form. **The two that never copied it were the two that broke**: `todo` had no arm and answered `Unknown command: --version` while its own `--help` advertised the flag, and `prez` could not have one because clap answers before any shell runs -- so `prez --version` and `utilz prez --version` differed by one character, the `v`, and the quiet one is the one that survives a reviewer.
+
+  **The fix is one intercept called from both dispatch sites, and the fourteen arms are deleted.** Deletion is the proof rather than a tidy-up: "the dispatcher ALSO handles it" passes every test that "the dispatcher handles it" passes, so only their absence distinguishes the two. `expz` carried two arms, not one, which no per-file assumption and no single-line grep found -- only counting per file while removing them.
+
+  **`script.tmpl` carried the arm too, and that was the leak that mattered.** The template scaffolds every new utility, so `utilz generate` would have re-seeded the duplication one utility at a time and the fix would have decayed silently from the next utility onward. An acceptance test now generates a utility and runs it on both forms, pinning REGENERATION rather than the template's current text.
+
+  **An unreadable version is no longer a silent success.** The old arms exited 0 whatever `show_version` returned, so a utility whose `version_file` was missing from an install printed an error to stdout and reported success to the caller -- not hypothetical, it is the prez regression fixed earlier the same day.
 
 - **EVERY VERSION HAS ONE HOME, AND NOTHING RESTATES IT** (hv's ruling). The framework's is `./VERSION`; each utility now carries its own `opt/<name>/VERSION`, and its yaml points at it with `version_file` instead of repeating the number. **Thirty-two copies were removed** -- fifteen help files, fifteen utility READMEs and two templates each stated a literal `**Version**:` that nothing held equal to anything.
 
@@ -15,7 +27,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
   **`prez` is the documented exception and it is not an exception to the rule.** Cargo REQUIRES a version in `[package]`, so `crate/Cargo.toml` is a home that cannot be deleted -- which makes it the one to keep, and prez has no `VERSION` file because a second one would be the duplication being removed. The rule is **point at the one home you cannot delete**, not "use this filename".
 
-  **A utility now reports the framework it belongs to as well as itself**: `todo --version` prints `todo v1.1.0` and `part of utilz v2.6.1`. Two versions are in play whenever a utility misbehaves, and being handed one of them is how a bug report arrives missing the half that explains it.
+  **A utility now reports the framework it belongs to as well as itself.** Two versions are in play whenever a utility misbehaves, and being handed one of them is how a bug report arrives missing the half that explains it. The line's final shape is below, under ST0015.
 
   Two tests hold all of it, both proved to go red by re-introducing a literal: no help file, README or template may state a version, and no utility yaml may either -- each paired with a check that the pointer is still present, because deleting every version line satisfies an assert-absence just as well as fixing it does.
 

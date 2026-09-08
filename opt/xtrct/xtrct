@@ -83,10 +83,6 @@ for arg in "$@"; do
       usage
       exit 0
       ;;
-    --version)
-      show_version "xtrct"
-      exit 0
-      ;;
   esac
 done
 

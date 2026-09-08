@@ -210,10 +210,6 @@ case "$COMMAND" in
     usage
     exit 0
     ;;
-  --version)
-    show_version "cryptz"
-    exit 0
-    ;;
   *)
     error "Unknown command: $COMMAND"
     echo ""

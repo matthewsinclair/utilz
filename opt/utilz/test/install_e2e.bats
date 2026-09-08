@@ -84,7 +84,11 @@ teardown_file() {
 @test "AC01: utilz version runs from the install with no source tree" {
   run env -u UTILZ_HOME "$E2E_PREFIX/bin/utilz" version
   assert_success
-  assert_output_contains "utilz v"
+  assert_output_matches "^utilz:[0-9]+\.[0-9]+\.[0-9]+($|[^0-9.])"
+  # The provenance line is NOT cosmetic: ST0014/AC12 holds that an installed
+  # utilz can be told from a source utilz at the prompt, and it earned that
+  # within the hour -- it was the one command that said WHICH TREE answered
+  # when a checkout and a stale install disagreed about --version.
   assert_output_contains "installed at $E2E_PREFIX"
 }
 

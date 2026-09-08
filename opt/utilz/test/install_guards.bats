@@ -350,3 +350,40 @@ teardown_file() {
   # links, and this test is worthless without it.
   [ "$checked" -gt 1 ] || fail "only $checked utility link(s) checked -- the loop found nothing to assert on"
 }
+
+@test "AC10 (ST0015): the pair form holds from a PUBLISHED install, and the install is the thing measured" {
+  # THE ELEVEN ROWS IN version_dispatch.bats CANNOT SEE THIS. test_helper.bash
+  # exports UTILZ_HOME from its own location, overwriting whatever a caller
+  # sets -- vc proved it with a decoy: `UTILZ_HOME=/nonexistent/decoy bats`
+  # passes. So that suite is structurally a claim about the CHECKOUT alone,
+  # and the estate's whole hazard is that the install can differ. It did:
+  # measured at 15:06Z, the published install answered `prez v2.0.0` and
+  # `Unknown command: --version` for todo while the checkout was green.
+  #
+  # This row therefore asserts the tree it MEASURED before asserting anything
+  # about what that tree said. A check that silently retargets to the thing it
+  # was meant to be compared against produces identical output either way.
+  run env -u UTILZ_HOME "$GUARD_INSTALL/bin/utilz" --version
+  assert_success
+  assert_output_contains "installed at $GUARD_INSTALL"
+  assert_output_matches "^utilz:[0-9]+\\.[0-9]+\\.[0-9]+($|[^0-9.])"
+  refute_output_contains "utilz v"
+
+  local fw
+  fw=$(cat "$UTILZ_HOME/VERSION")
+
+  # Every utility the install actually shipped, through the install's OWN
+  # links, in both invocation forms. The count control is not decoration: an
+  # install that shipped three utilities would otherwise pass this silently.
+  local u n=0 bad=0 a b
+  for u in cleanz clipz cryptz expz gitz lnrel macoz mdagg pdf2md prez retry stampz syncz todo xtrct; do
+    [ -e "$GUARD_INSTALL/bin/$u" ] || continue
+    n=$((n + 1))
+    a=$(env -u UTILZ_HOME "$GUARD_INSTALL/bin/$u" --version 2>&1 | head -1)
+    b=$(env -u UTILZ_HOME "$GUARD_INSTALL/bin/utilz" "$u" --version 2>&1 | head -1)
+    [[ "$a" == "utilz:$fw/$u:"* ]] || { echo "  $u (symlink form): $a"; bad=$((bad + 1)); }
+    [ "$a" = "$b" ] || { echo "  $u: forms differ from the install"; bad=$((bad + 1)); }
+  done
+  [ "$n" -eq 15 ] || fail "the install offered $n utilities, expected 15"
+  [ "$bad" -eq 0 ] || fail "$bad install-side version failures"
+}

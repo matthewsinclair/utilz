@@ -175,20 +175,31 @@ show_version() {
   description=$(get_util_metadata "$util" ".description") || description=""
 
   if [[ -n "$version" && "$version" != "null" ]]; then
-    echo "$util v$version"
+    # BOTH VERSIONS ON ONE GREPPABLE LINE (hv, 2026-09-08, ST0015/D2). Two
+    # versions are in play whenever a utility misbehaves -- its own and the
+    # framework's -- and a bug report carrying one of them is missing the half
+    # that explains it. The pair is the FORM, not merely two numbers present:
+    # `utilz:<framework>/<util>:<version>`. Both are read, never restated.
+    #
+    # utilz itself is the degenerate case of the same form: the framework is
+    # not "part of" anything, so the pair has no second term and it prints
+    # `utilz:<version>` alone. It keeps its third line, which answers WHICH
+    # TREE replied -- load-bearing in a two-tree estate and held by an AC.
+    #
+    # NO `v` PREFIX ANYWHERE (hv, 2026-09-08, resolving D3 toward symmetry):
+    # it is noise, and it was the only thing separating the framework's shape
+    # from every utility's. This line was the estate's ONLY minter of one.
+    if [[ "$util" == "utilz" ]]; then
+      echo "$util:$version"
+    else
+      echo "utilz:$(get_utilz_version)/$util:$version"
+    fi
     if [[ -n "$description" && "$description" != "null" ]]; then
       echo "$description"
     fi
     # AC12: which tree answered, and what it was cut from.
     if [[ "$util" == "utilz" ]]; then
       utilz_tree_provenance
-    else
-      # A UTILITY REPORTS THE FRAMEWORK IT IS PART OF AS WELL AS ITSELF (hv,
-      # 2026-09-08). Two versions are in play whenever a utility misbehaves --
-      # its own and the framework's -- and asking for one of them and being
-      # given only that one is how a bug report arrives missing the half that
-      # explains it. Read from the framework's VERSION, never restated.
-      echo "part of utilz v$(get_utilz_version)"
     fi
   else
     # NAME WHAT IS ACTUALLY MISSING. This said "missing $util.yaml"
@@ -202,6 +213,28 @@ show_version() {
       echo "$util (version unknown - $util.yaml carries no version this tree can read)"
     fi
     return 1
+  fi
+}
+
+# THE one place `--version` is answered for a utility.
+#
+# It lived at the SYMLINK dispatch site only, so thirteen utilities hand-copied
+# `--version) show_version "<name>"; exit 0` to cover the `utilz <util>` form.
+# The two that never copied it were the two that broke: `todo`, which simply
+# lacked the arm while its own --help advertised the flag, and `prez`, which
+# could not have one because clap answers before any shell runs. Two homes
+# agreeing by convention is what produced that; this is the one home, called
+# from both sites in bin/utilz. ST0015/D1.
+#
+# Exit status is show_version's own: it returns non-zero when a version cannot
+# be read, and the previous inline form exited 0 regardless, which turned an
+# unreadable version into a silent success (IN-AG-NO-SILENT-001).
+version_intercept() {
+  local util="$1"
+  shift
+  if [[ "${1:-}" == "--version" ]]; then
+    show_version "$util"
+    exit $?
   fi
 }
 

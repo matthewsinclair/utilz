@@ -62,8 +62,12 @@ load "test_helper.bash"
 @test "utilz version - shows version" {
   run_utilz version
   assert_success
-  assert_output_contains "utilz"
-  assert_output_contains "v"
+  # THE PAIR IS THE FORM, not merely two numbers appearing somewhere.
+  # This asserted the bare letter "v" until 2026-09-08 -- an assertion so
+  # weak it was satisfied by the "v" in "every" inside a description, which
+  # is why five of the ten tests carrying it stayed GREEN through a change
+  # that rewrote every one of these lines. ST0015/AC01.
+  assert_output_matches "^utilz:[0-9]+\.[0-9]+\.[0-9]+($|[^0-9.])"
 }
 
 @test "utilz test - runs without bats shows error" {
@@ -96,7 +100,10 @@ load "test_helper.bash"
 @test "utilz --version - flag form of 'version' (issue 0003)" {
   run_utilz --version
   assert_success
-  assert_output_contains "utilz v"
+  # `utilz v2.6.1` until ST0015. hv dropped the `v` so the framework half is
+  # spelled identically alone and inside a pair -- `utilz:2.6.1` either way.
+  assert_output_matches "^utilz:[0-9]+\.[0-9]+\.[0-9]+($|[^0-9.])"
+  refute_output_contains "utilz v"
 }
 
 @test "utilz --help - flag form of 'help' (issue 0003)" {

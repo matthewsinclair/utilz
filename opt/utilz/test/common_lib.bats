@@ -175,8 +175,12 @@ run_without_yq() {
 @test "show_version() returns utilz version" {
   run run_common_function show_version utilz
   assert_success
-  assert_output_contains "utilz"
-  assert_output_contains "v"
+  # THE PAIR IS THE FORM, not merely two numbers appearing somewhere.
+  # This asserted the bare letter "v" until 2026-09-08 -- an assertion so
+  # weak it was satisfied by the "v" in "every" inside a description, which
+  # is why five of the ten tests carrying it stayed GREEN through a change
+  # that rewrote every one of these lines. ST0015/AC01.
+  assert_output_matches "^utilz:[0-9]+\.[0-9]+\.[0-9]+($|[^0-9.])"
 }
 
 @test "show_version() extracts version from utility help file" {

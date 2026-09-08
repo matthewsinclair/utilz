@@ -1054,10 +1054,6 @@ while [[ $# -gt 0 ]]; do
       usage
       exit 0
       ;;
-    --version)
-      show_version "syncz"
-      exit 0
-      ;;
     -n|--dry-run)
       OPT_DRY_RUN=true
       shift

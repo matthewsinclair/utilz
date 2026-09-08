@@ -93,10 +93,6 @@ while [[ $# -gt 0 ]]; do
       usage
       exit 0
       ;;
-    --version)
-      show_version "lnrel"
-      exit 0
-      ;;
     -*)
       error "Unknown option: $1"
       echo ""

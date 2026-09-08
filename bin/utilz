@@ -227,6 +227,11 @@ EOF
       if [[ -L "$UTILZ_HOME/bin/$UTIL_NAME" && -f "$UTIL_IMPL" && -x "$UTIL_IMPL" ]]; then
         # Valid utility - dispatch to it with remaining arguments
         shift  # Remove utility name from arguments
+        # THIS SITE HAD NO INTERCEPT, which is the whole of ST0015: `utilz
+        # <util> --version` fell through to the implementation, so thirteen
+        # utilities carried their own arm and the two that could not were
+        # broken. One home, called from both sites.
+        version_intercept "$UTIL_NAME" "$@"
         exec "$UTIL_IMPL" "$@"
       else
         # Not a valid utility or command
@@ -322,11 +327,9 @@ if [[ "${1:-}" == "--help" ]] || [[ "${1:-}" == "-h" ]]; then
   exit 0
 fi
 
-# Handle --version before dispatching
-if [[ "${1:-}" == "--version" ]]; then
-  show_version "$UTIL_NAME"
-  exit 0
-fi
+# Handle --version before dispatching -- the same one home as the `utilz
+# <util>` site above, so the two forms cannot drift apart again.
+version_intercept "$UTIL_NAME" "$@"
 
 # Dispatch to utility implementation
 exec "$UTIL_IMPL" "$@"

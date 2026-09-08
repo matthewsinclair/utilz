@@ -383,8 +383,20 @@ make_fixture() {
   # BOTH channels against the ONE source. Asserting only the dispatcher would
   # pass while the binary reported something else entirely, which is the exact
   # divergence this test exists to make impossible.
+  #
+  # THIS ASSERTION USED TO PIN THE DISPATCHER TO `prez <version>` -- clap's
+  # output -- and that was the DEFECT written down as the contract (ST0015).
+  # `utilz prez --version` fell through to the binary because the dispatcher
+  # intercepted only the symlink form, so the test froze the bug it was
+  # standing next to. The claim worth keeping is that both channels read the
+  # ONE declared version; the framework's own line shape is not the binary's.
   run "$UTILZ_HOME/bin/utilz" prez --version
-  assert_output "prez $declared"
+  assert_output_matches "^utilz:[0-9]+\.[0-9]+\.[0-9]+/prez:$declared($|[^0-9.])"
+
+  # And the symlink form must agree with it EXACTLY -- the form-disagreement
+  # was the defect, and a test exercising one form cannot see it.
+  run "$UTILZ_HOME/bin/prez" --version
+  assert_output_matches "^utilz:[0-9]+\.[0-9]+\.[0-9]+/prez:$declared($|[^0-9.])"
 
   if [ -x "$CRATE/target/release/prez" ]; then
     run "$CRATE/target/release/prez" --version
