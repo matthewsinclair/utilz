@@ -3,7 +3,7 @@ node: cc
 name: Control Claude
 role: control
 session_id: 221775b1-d498-41c0-b937-4d10094711a8
-heartbeat_at: 2026-09-08 12:26Z
+heartbeat_at: 2026-09-08 12:42Z
 status: active
 focus: "IDLE, FOLDED FOR A COMPACT -- status stays active because a compact is not a session ending. ST0013 closed and dehydrated; every version reduced to one home on hv's ruling; install published at 2f76209 and verified by behaviour, 126 paths, doctor 7/7. Nothing claimed, nothing held."
 claims: []
@@ -36,6 +36,8 @@ Full record is in canon, not here: `intent st show ST0013`, `design.md` D1-D14.
 - **A BLOCK YOU DID NOT MEASURE IS A CLAIM.** I told hv I was blocked on vc for AC ids before writing `design.md`. I was not: every line I later wrote could have been written before a single AC existed. **I invented the dependency and reported it as an external one.** Before saying blocked, name the artefact that is missing and what specifically cannot be written without it.
 
 - **A CONSTRUCT THAT DID NOT DO WHAT YOU READ IT AS, FOLLOWED BY A GREEN, READS EXACTLY LIKE SUCCESS.** Three instances now. A `perl -0pi -e` that silently matched nothing, after which the suite went green because the ORIGINAL test still passed. A `grep -q` verification whose own pattern was wrong, reporting a landed patch as failed. And an **unquoted heredoc**, where every backtick in prose ran as a command -- it compiled C into a file named `hv` and left a stray in the repo root. **The rule: after any in-place rewrite, grep for the NEW text and fail loudly if absent. Quote every heredoc delimiter that carries prose. Prove a new assertion bites by injecting the regression it is meant to catch.**
+
+- **A BLOCKED PROCESS HOLDING AN UNFINISHED WRITE IS NOT INERT, AND TERMINATING IT COMPLETES THE WRITE.** 8 Sep, found during a tidiness sweep two hours after the fact: the zsh from that morning's unquoted-heredoc accident was STILL ALIVE, started 10:28:30, blocked. I killed it as cleanup -- and on termination it flushed its heredoc and appended **45 corrupted lines to a peer's inbox**, stamped with a stale 09:28Z, every backticked span command-substituted and the output of `intent issues list`, `ls` and `intent doctor` spliced into the prose. **The cleanup action caused the damage the cleanup was for.** Caught because `git status` was checked immediately after; the diff was additions-only so HEAD was intact and `git checkout --` discarded only the garbage. **Before killing a stray, know what it has open and check the tree immediately after.**
 
 - **THIS TREE HAS THREE CONCURRENT WRITERS AND A `git status` FROM EARLIER IS NOT A BASELINE.** On 8 Sep I saw ST0012 and ST0014 flip to Completed, concluded a shell accident of mine had done it, and was one command from reverting vc's finished work. **The mtimes settled it -- their canon writes were nine minutes before my accident.** Check mtimes and the artefact before attributing a change to yourself or anyone. Commit with an explicit pathspec, never `-A`.
 
