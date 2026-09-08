@@ -405,6 +405,15 @@ if want AT03; then
   size=$(file_size "$art")
   if [ "$size" -le 102400 ]; then ok "artifact $size bytes <= 100 KB"; else bad "artifact is $size bytes"; fi
 
+  # THE CAPTURE IS ASSERTED, NOT MERELY TAKEN. This redirect existed to keep the
+  # terminal tidy and nothing read the file, so a build that SUCCEEDED NOISILY
+  # was indistinguishable from a silent one. prez warned on every run of this
+  # suite that demo.md applied a class no theme declares (issue 0012), the
+  # harness wrote it into at03.err each time, and the suite reported green --
+  # hv found by eye what this file had been recording all along.
+  # An exit code is not a report: assert the stream, not just the status.
+  check "the build says nothing on stderr" "$(wc -c < "$WORK/at03.err" | tr -d ' ')" "0"
+
   # AC03. The SENTINEL, never the `notes:` token: the demo shows a fenced notes
   # example on purpose, so a token grep would fail a correct build.
   absent "AC03 sentinel is nowhere in the HTML" "$SENTINEL" "$art"

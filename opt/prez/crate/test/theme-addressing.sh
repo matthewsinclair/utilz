@@ -221,7 +221,6 @@ if want AT02; then
   refuses "--theme <dir> is refused" \
     "$BIN" build "$D/deck.md" --theme "$D/asdir" -o "$D/never1.html"
   present "and the refusal names --theme-file" "--theme-file" "$WORK/refuses.err"
-  cp "$WORK/refuses.err" "$D/dir-refusal.err"
   refuses "--theme <file>.css is refused" \
     "$BIN" build "$D/deck.md" --theme "$D/asfile.css" -o "$D/never2.html"
   present "and that refusal names --theme-file too" "--theme-file" "$WORK/refuses.err"
