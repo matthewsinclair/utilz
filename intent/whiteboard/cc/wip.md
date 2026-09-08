@@ -3,7 +3,7 @@ node: cc
 name: Control Claude
 role: control
 session_id: 221775b1-d498-41c0-b937-4d10094711a8
-heartbeat_at: 2026-09-08 14:36Z
+heartbeat_at: 2026-09-08 14:39Z
 status: active
 focus: "IDLE at program close. Full suite re-run verified with its denominator: 554 ok / 0 not ok over 16 TAP suites, plan-sum 554 MATCHES, plus 135 cargo and 21 black-box ATs = 19 suites, zero failures, unpiped exit 0. Nothing claimed, nothing held. One new finding reported, not fixed: common.sh:810 labels two suites identically."
 claims: []
@@ -103,6 +103,10 @@ Full record is in canon, not here: `intent st show ST0013`, `design.md` D1-D14.
   **"zsh does not have it" would send a reader to a workaround instead of to the right spelling.** And there is a second trap under the first: **the array is reset by the very next command**, so it must be captured on the same line -- my own first test read it after an intervening `echo` and returned a plausible, wrong `0` for a pipeline whose first stage failed. **The real cure is neither spelling: redirect to a file and take `$?` with no pipe in the line at all**, which makes the totals and the status two independent claims rather than one fragile one.
 
 - **TWO DISTINCT SUITES REPORT UNDER ONE LABEL, AND IT IS THE GLOB FIX LANDING WITHOUT ITS LABEL.** Found 8 Sep in the close-out run, mine, from ST0013/AC03. `common.sh:810` prints `Testing: $util (acceptance, --strict)` -- the UTILITY name, not the SCRIPT name -- so `acceptance.sh` and `theme-addressing.sh` both head their output identically. **AC03 changed the runner from naming one file to discovering `test/*.sh` by glob, which was right; the label still assumes one suite per utility, which is now false.** In a 1226-line log the two are indistinguishable, and **if one stopped being discovered the total would fall 19 -> 18 with no name to say which** -- the count control survives, the diagnostic does not. Not fixed: a source edit, and the thread is closed. Reported to vc for hv.
+
+  **CORRECTED IN PLACE, SAME DAY: THE CONSEQUENCE ABOVE IS FALSE AND WHAT SURVIVES IS A WART.** vc caught it. `_run_acceptance_suite` prints TWO lines -- 810 the bold header, **811 `Script: $script` with the full path**, present since `0ebfa85` on 29 Aug. **Verified from the LOG rather than from vc's reading of the source**: lines 631 and 945 carry `.../acceptance.sh` and `.../theme-addressing.sh`. So the two ARE distinguishable, and a vanished suite would be named by the ABSENCE of its `Script:` line -- the better direction. What survives is only that the PROMINENT line is the uninformative one. No issue; vc agrees.
+
+  **AND THE SHAPE IS THE INVERSE OF EVERY OTHER ERROR TODAY, WHICH IS WHY IT IS THE ONE TO KEEP.** vc's naming: **I reasoned about a 1226-line log from the SOURCE OF ONE LINE, while the log sat on disk one grep away.** A population of one where the function emits two. All day the failure was trusting an ARTIFACT without checking the instrument; here I trusted the SOURCE over the artifact I had just produced. **Same root in both directions: reaching for the more convenient authority instead of the direct evidence.** The source felt authoritative because it is causal; the log was authoritative because it is what happened. **And writing this correction I asserted on my own remembered wording of the entry rather than its bytes, and the assert refused** -- third authority-versus-evidence slip in one entry, caught only because the refusal was there.
 
 **The estate, changed 8 Sep and worth knowing at the prompt.**
 
