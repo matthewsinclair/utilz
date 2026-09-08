@@ -4,16 +4,7 @@ A DOING / TODO / DONE view, projected from steel-thread and work-package status:
 
 ## DOING
 
-- [-] ST0013: prez theme addressing: split --theme, --theme-file and --theme-path
-  - [x] 01: Design: the type split, precedence lattice and refusal catalogue
-  - [x] 02: Red-first: theme-addressing.sh, all six ATs
-  - [x] 03: args.rs: --theme-file and --theme-path, mutual exclusion
-  - [x] 04: theme.rs: name-only resolution, Spec type, search-path threading
-  - [x] 05: frontmatter.rs + deck.rs: the theme-file: key and precedence wiring
-  - [x] 06: Migration: acceptance.sh path invocations, unit tests, docs
-  - [x] 07: Green and evidence: full suites, both doctors, shellcheck
-  - [x] 08: Driver discovery: every suite found, a non-executable one refused
-  - [x] 09: Provenance names the source that supplied the directory
+_(none)_
 
 ## TODO
 
@@ -77,6 +68,16 @@ _(none)_
   - [x] 05: CI wiring on both legs
   - [x] 06: Docs and acceptance run
 - [x] ST0012: Estate file policy: what must be proved before a realised file is removed
+- [x] ST0013: prez theme addressing: split --theme, --theme-file and --theme-path
+  - [x] 01: Design: the type split, precedence lattice and refusal catalogue
+  - [x] 02: Red-first: theme-addressing.sh, all six ATs
+  - [x] 03: args.rs: --theme-file and --theme-path, mutual exclusion
+  - [x] 04: theme.rs: name-only resolution, Spec type, search-path threading
+  - [x] 05: frontmatter.rs + deck.rs: the theme-file: key and precedence wiring
+  - [x] 06: Migration: acceptance.sh path invocations, unit tests, docs
+  - [x] 07: Green and evidence: full suites, both doctors, shellcheck
+  - [x] 08: Driver discovery: every suite found, a non-executable one refused
+  - [x] 09: Provenance names the source that supplied the directory
 - [x] ST0014: Make utilz insallable in to opt/ just like devbin
   - [x] 01: Owned set and manifest: the file list, symlink target-string checksums, manifest write and check
   - [x] 02: utilz install: prefix from utilz.yaml, the three refusals, mode announcement, prez built at publish
