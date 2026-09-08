@@ -14,7 +14,7 @@
       "seq": 1,
       "title": "Design: the type split, precedence lattice and refusal catalogue",
       "scope": "S",
-      "status": "wip",
+      "status": "done",
       "objective": "",
       "body": "",
       "preamble": ""
@@ -23,7 +23,7 @@
       "seq": 2,
       "title": "Red-first: theme-addressing.sh, all six ATs",
       "scope": "S",
-      "status": "not-started",
+      "status": "wip",
       "objective": "",
       "body": "",
       "preamble": ""
@@ -86,6 +86,14 @@
     {
       "id": "AC02",
       "text": "`--theme-file` TAKES A PATH IN EITHER SHAPE THE OLD `--theme` TOOK: a `.css` FILE, or a DIRECTORY holding `theme.css`. Both verified accepted by the pinned binary 8 Sep. THE FLAG'S NAME IS NOT THE SPECIFICATION -- AC01 SAYS IT 'resolves a path ONLY', AND A PATH IS BOTH SHAPES. THIS ROW WAS MINTED 8 Sep SAYING THE OPPOSITE AND IT WAS WRONG. Its first form ruled that a directory passed to `--theme` must be refused naming `--theme-path=<parent>` plus `--theme=<name>`, on the premise that a refusal naming `--theme-file` 'would send a real user to a flag that cannot take what they have'. That premise is FALSE: `--theme-file` can take exactly what they have. vc read the flag's name where hv's text said path, then built a ruling on top of it; cc caught it by asking what the flag accepts rather than assuming, before writing any of it. So AC01's clause (f) stands EXACTLY AS hv WROTE IT -- a path given to `--theme` is refused naming `--theme-file` -- and this row no longer contradicts it. WHAT THIS ROW STILL DECIDES, and why it is not withdrawn: AC01 leaves the accepted SHAPES to be inferred from the word FILE in the flag's name, which is precisely the inference that produced the wrong ruling above, so it is pinned here instead. A prez theme IS a directory containing `theme.css` -- true of every built-in -- and directory addressing must not be lost, which is a bigger breaking change than the one AC01 deliberately takes. MIGRATION IS ONE WORD: the geodica node's live invocation, `--theme=\\\"$ESTATE/Clients/<domain>/_themes/<name>\\\"`, used twice in an hour and rendering both E0024 client decks since 3 Sep, becomes `--theme-file=\\\"...\\\"` and nothing else changes. `--theme-path=<parent>` plus `--theme=<name>` remains available and composes as AC01 specifies, but it is an option rather than the required remedy.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC03",
+      "text": "BOTH DRIVERS MUST DISCOVER EVERY SUITE IN `crate/test/` RATHER THAN ONE HARDCODED FILENAME, AND MUST REFUSE A NON-EXECUTABLE ONE RATHER THAN SKIP IT. Measured by cc 2026-09-08 and verified: `opt/utilz/lib/common.sh:887` sets `acceptance=\"$crate_dir/test/acceptance.sh\"` and `.github/workflows/tests.yml:290` tests `-x \"$crate_dir/test/acceptance.sh\"` -- both name one file exactly, while the BATS source three lines above at `common.sh:902` takes a `find -name \"*.bats\"` GLOB. The asymmetry is the defect. WHY THIS IS ST0013's PROBLEM AND NOT A PASSING OBSERVATION: the id-collision ruling of this same morning moved ST0013's ATs into `theme-addressing.sh`, a path neither driver knows, so the six rows of this contract would be run by NOTHING -- CI green, `utilz test prez` green, the all-green gate green, and six ATs marked green in canon resting on a manual run nothing repeats. That is the silent pass this project refuses, and `common.sh:919-923` already refuses its smaller sibling in these words: \"the file is right there, the suite it represents never runs, and the summary says everything passed\". A second suite at a path the driver does not know is that exact shape one level up, and the existing guard is structurally blind to it because it can only guard the filename it names. THE REFUSAL HALF IS NOT OPTIONAL AND IT IS THE TRAP IN THE OBVIOUS FIX: \"glob and run each executable one\" SKIPS a non-executable `.sh` in silence, which is precisely the defect `common.sh:919-923` exists to prevent, generalised from one filename to a set. Discovering zero suites stays a skip as it is today -- a crate with no black-box suite is not a defect -- but a `.sh` that is present and not executable is a refusal. AND THE CONVENTION HAS THREE HOMES, WHICH IS THE HIGHLANDER RISK THIS ROW ALSO CARRIES: `common.sh`, `tests.yml`, and `prez.bats:329` which asserts the hardcoded path as the driver's contract. All three move together or the next reader gets two answers about what runs. THE DISCOVERY IS cc's, unprompted, BEFORE WRITING A LINE OF THE FILE -- and the honest note is that the ruling that created the hole was mine.",
       "kind": "test",
       "state": {
         "is": "computed"
@@ -153,6 +161,26 @@
       ],
       "status": "to-write",
       "note": "SEARCH PATH BEFORE BUILT-INS, AC01 clause (a) second half. `--theme=simple` with a `simple` theme on `PREZ_THEME_PATH` resolves the search-path one, not the built-in of the same name. THIS ROW IS DELIBERATELY NOT RED-FIRST AND MUST NOT BE READ AS PROOF THE SPLIT LANDED. It is already correct at 6e02020 -- `theme.rs:126-129` tries `on_search_path` before `built_in` -- so it goes green on its first run and stays green. It is minted anyway because the fix is a TYPE change that rewrites that whole cascade (ccs finding, and the reason a branch reorder was rejected), and an ordering that is currently load-bearing by accident of line order is exactly what a rewrite drops silently. Every other row here fails loudly if the split is absent; this one fails only if the split is present and got the order wrong, which is the case no red-first test can reach."
+    },
+    {
+      "id": "AT07",
+      "kind": "test",
+      "file": "opt/utilz/test/common_lib.bats",
+      "covers": [
+        "AC03"
+      ],
+      "status": "to-write",
+      "note": "THE DRIVER DISCOVERS AND REFUSES, tested as behaviour rather than by reading the source. Three legs against a fixture crate carrying a `test/` directory. (1) TWO executable `.sh` suites present: BOTH run, and the summary counts both -- today only a file named exactly `acceptance.sh` runs, so this is red-first and it is the leg that would have caught the whole defect. (2) a `.sh` present and NOT executable: the driver REFUSES, loudly, and the run fails. It must not skip it. This is `common.sh:919-923` generalised from one filename to a set, and it is the leg the obvious fix drops -- \"glob and run each executable one\" silently ignores the non-executable and hands back a green. (3) NO `.sh` at all: skipped, as today, with no failure, because a crate with no black-box suite is not a defect. PROVE LEG 1 BITES by removing the second suite and watching the count fall; a discovery test that never saw the count change is asserting on a number it cannot distinguish from a constant."
+    },
+    {
+      "id": "AT08",
+      "kind": "test",
+      "file": "opt/utilz/test/common_lib.bats",
+      "covers": [
+        "AC03"
+      ],
+      "status": "to-write",
+      "note": "THE SECOND HOME MOVES WITH THE FIRST. CI at `.github/workflows/tests.yml` must discover suites the same way the driver does, and neither may name a single suite filename any more. This row exists because the convention has THREE homes -- `common.sh`, `tests.yml`, `prez.bats:329` -- and a fix that lands in one leaves the estate with two answers to \"what actually runs\", which is the Highlander failure with a green attached. Its mechanism is a source assertion, not behaviour, because CI cannot run itself from inside a BATS suite; the precedent is already in this tree at `prez.bats:334`, which greps `common.sh` for a hardcoded `--strict` for exactly this reason. TARGET A STRING THE ARTIFACT CAN ONLY CONTAIN IF THE THING IS REALLY THERE, never a token the file might legitimately discuss -- a `grep` for the word `acceptance` would match the prose comments that surround both call sites and pass forever. Assert on the DISCOVERY construct, and assert the count of hardcoded `test/acceptance.sh` occurrences is ZERO in both files."
     }
   ],
   "attachments": [
