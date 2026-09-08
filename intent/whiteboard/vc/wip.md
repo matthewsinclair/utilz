@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 06b406f0-9a29-4636-ad0d-abd6663e4f8f
-heartbeat_at: 2026-09-08 12:03Z
+heartbeat_at: 2026-09-08 12:18Z
 status: active
-focus: "Holding on hv. ST0013 closed, dehydrated and PUBLISHED; the install answers prez v2.0.0 on all three channels. Nothing claimed, nothing in flight, inboxes empty."
+focus: "Holding on hv. Reviewed cc's version-architecture sweep read-only: four guard holes and one publish-stopper (14 VERSION files untracked, so install_owned_paths would have shipped the pointers without the targets). All five taken by cc. Nothing claimed."
 claims: []
 ---
 
@@ -19,15 +19,17 @@ Released at EOD on hv's instruction, 7 Sep. Folds archived in `.history/20260829
 
 ## DOING
 
-**Nothing. Holding on hv's instruction, 2026-09-08 12:02Z.** Folded after ST0013 closed, dehydrated and published. Status stays `active` -- a fold is not a session end.
+**Nothing. Holding on hv's instruction, 2026-09-08 12:02Z.** Status stays `active` -- a fold is not a session end.
+
+Reviewed cc's version-architecture sweep (hv-ruled, built inline, `ac7decb`) read-only while cc ran the suite. Five findings, all measured, all taken. Nothing edited: cc's tree was staged and live and moved under me twice mid-inspection.
 
 ## TODO
 
-- **Push.** 37 commits unpushed on both `local` and `upstream` at fold time. hv's.
+- **Push.** 5 commits unpushed on both `local` and `upstream` at fold time. hv's.
 - **Issue 0011** -- `install_guards.bats:267` reads a live `git rev-parse HEAD` against a fixture-time install, so a concurrent commit reddens it for the wrong reason. Open, one-line fix, unclaimed.
 - **The closed-thread evidence gap**, in cc's framing which beat mine: **the mechanism that would catch a closed thread's evidence going stale is the same one that catches a green AT citing a file that no longer contains the test. There is a gate for the live case and none for the closed one.** Three instances now -- `hoist-rebase.sh:205`, ST0010/AT05+AT08, and issue 0011. **cc's cheap version is one grep at dehydration time**, which they ran by hand when dehydrating ST0013; nothing runs it automatically. Intent's, via `intent-vc`.
 - **101 flat AC/AT ids** -- still blocked on a missing rename verb at CLI and facade level. Offer to migrate ours stands with `intent-vc`.
-- **`version_file` exists twice in the estate, and devbin got there first.** `bin/.devbin/lib/config.reference.yaml:72-75` documents "names the FILE, never how to parse it -- devbin knows how to read a version out of VERSION, mix.exs, Cargo.toml, package.json and a plist". Utilz reinvented that this afternoon in `get_util_metadata`. Not a Highlander violation (different tools, different repos) and **not raised with hv yet** -- worth a look before a third tool grows a third copy.
+- **`version_file` exists twice in the estate, and devbin got there first.** `bin/.devbin/lib/config.reference.yaml:72-75` documents "names the FILE, never how to parse it -- devbin knows how to read a version out of VERSION, mix.exs, Cargo.toml, package.json and a plist". Utilz reinvented that this afternoon in `get_util_metadata`, and the 8 Sep sweep spread `version_file` to all 16 yamls, so the second copy is now estate-wide rather than one function. Not a Highlander violation (different tools, different repos) and **not raised with hv yet** -- worth a look before a third tool grows a third copy.
 
 ## Claims
 
@@ -49,6 +51,12 @@ Released at EOD on hv's instruction, 7 Sep. Folds archived in `.history/20260829
 - **`intent-vc`: six defects relayed, one-digit ruling delivered and landed.** The flat-125 offer is outstanding.
 
 ## Watch-outs
+
+- **A CONTROL OVER A SUBSET READS EXACTLY LIKE A CONTROL OVER THE WHOLE.** 8 Sep, mine, on cc's version guards. Pairing an assert-absence with an assert-presence is the right fix and is **necessary, not sufficient**: cc's absence check spanned help files + READMEs + templates while its presence control counted help files only. **Measured: 33 files carry the line, the control guarded 16.** Deleting it from all 15 READMEs and both templates left BOTH assertions green -- the fix-by-deletion the control existed to stop. **The pair must consume ONE population, computed once**, or the control is a subset check wearing the costume of the fix. cc rebuilt both guards that way and re-injected each hole to watch it go red.
+
+- **A SUITE RUN AT ONE INDEX STATE SAYS NOTHING ABOUT ANOTHER, BECAUSE `git ls-files` READS THE INDEX AND NOT THE WORKTREE.** cc's, 8 Sep, one level below "a `git status` from earlier is not a baseline". cc's full suite went green with the 14 VERSION files STAGED, so `install_owned_paths` had them and the gate passed **honestly**. Something unstaged them; twenty minutes later the same tree would have published 16 yamls pointing at files that were not there. **"Green twenty minutes ago" is not a claim about the tree you are about to publish.** Re-measure `git ls-files` immediately before a publish, never `ls`.
+
+- **THE TWO-TREE TRAP FIRES ON THE CONTROL BUILT TO PREVENT THE THING.** Same incident. cc's new "every utility still resolves a version" control sources `common.sh` against `$UTILZ_HOME` -- the CHECKOUT, where the files exist on disk whether or not git tracks them. Green in the checkout, broken in the install. **Any control that reads the worktree cannot see a packaging defect**; only `install_guards.bats`, which builds an install through `install_owned_paths` and runs every link, bit. cc ran it while still red and confirmed it bites rather than assuming it.
 
 - **A COST ASSERTED AS "ACCEPTED" IS STILL AN UNMEASURED CLAIM, AND WRITING "ACCEPTED" NEXT TO IT DOES NOT MEASURE IT.** 8 Sep, mine, in AC04. I wrote that `acceptance.sh`'s AT13 asserts the provenance wording, so ST0010's frozen suite would be edited a SECOND time -- as settled fact, in a criterion, without running it. **cc measured instead of editing on my prediction: `acceptance.sh` is byte-unchanged and AT13 PASSES.** Every AT13 leg is the ENV case, where the old wording stays exactly true. **The clause is corrected ON THE ROW rather than deleted, because as written it would have LICENSED AN EDIT TO A CLOSED THREAD'S EVIDENCE THAT NOTHING REQUIRED** -- hours after I took that exact hazard to hv as a pattern. **Second time today a prediction of mine about an artefact was wrong where reading the artefact would have settled it** (the `src/` hold was the first). Same shape both times: reasoning from what I expected a file to say.
 
