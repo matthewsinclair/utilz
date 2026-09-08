@@ -3,17 +3,23 @@ node: cc
 name: Control Claude
 role: control
 session_id: 221775b1-d498-41c0-b937-4d10094711a8
-heartbeat_at: 2026-09-08 14:39Z
+heartbeat_at: 2026-09-08 14:45Z
 status: active
-focus: "IDLE at program close. Full suite re-run verified with its denominator: 554 ok / 0 not ok over 16 TAP suites, plan-sum 554 MATCHES, plus 135 cargo and 21 black-box ATs = 19 suites, zero failures, unpiped exit 0. Nothing claimed, nothing held. One new finding reported, not fixed: common.sh:810 labels two suites identically."
-claims: []
+focus: "ST0015 claimed and started -- one home for --version dispatch, and every utility reports BOTH versions on one greppable line (hv format ruling, 8 Sep). design.md landed. Awaiting vc contract before any source edit."
+claims: [ST0015]
 ---
 
 # Control Claude (cc)
 
 ## DOING
 
-**Nothing. ST0013 is closed, dehydrated and verified.**
+**ST0015 -- version dispatch has one home, and reports both versions.** Claimed 8 Sep on hv's instruction after they hit `utilz prez --version` returning `prez 2.0.0` with no framework line.
+
+**The measured diagnosis, which is smaller and more specific than the alarm that opened it.** The version VALUE has one home, `show_version()` has one definition, the framework line has one implementation -- hv's ruling from this morning held. **What has fifteen homes is the ROUTING**: `bin/utilz` intercepts `--version` on the symlink path only, so thirteen utilities hand-copy an identical `--version) show_version "<name>"; exit 0` arm to cover the other path. **The two that never copied it are the two that are broken** -- `todo` has no arm and errors outright while its own help documents the flag; `prez` cannot have one because clap answers first.
+
+**And the 267-file number that triggered the escalation was my sweep, not the tree.** I globbed `*.md` across `.backup/`, which holds eight full historical snapshots. Real implementations: one. **The instrument raised the alarm, in the measurement taken to open a thread about measurement.**
+
+Design D1-D5 in `intent st show ST0015`. No source edit until vc holds the contract.
 
 Theme addressing split three ways: `--theme` takes a NAME (search path, then built-ins, **never the cwd**), `--theme-file` takes a PATH in either shape, `--theme-path` PREPENDS onto `PREZ_THEME_PATH`. Front matter splits the same way. prez is **2.0.0** -- breaking change by semver -- and its version now has **one home**, `crate/Cargo.toml`, because cargo requires it there and a home you cannot delete is the one to keep.
 

@@ -1,0 +1,12 @@
+{
+  "schema": "intent/thread@3.0",
+  "id": "ST0015",
+  "title": "Version dispatch has one home, and reports both versions",
+  "slug": "version-dispatch-has-one-home-and-reports-both-v",
+  "status": "wip",
+  "created": "2026-09-08",
+  "objective": "",
+  "context": "",
+  "body": "",
+  "preamble": ""
+}
