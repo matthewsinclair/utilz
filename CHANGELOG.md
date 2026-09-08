@@ -9,6 +9,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Nothing pending.
 
+## [2.6.1] - 2026-09-08
+
+Patch: two CI gates repaired, no user-visible behaviour change. **A NEW TAG RATHER THAN A MOVED `v2.6.0`**, because the fixes touch `opt/utilz/lib/`, which is shipped code and not harness -- and because the install manifest records `source-commit`, so moving a tag would leave `v2.6.0` naming two different sets of bytes over time while an already-published install still claimed the commit the tag no longer named. That is the provenance property AC07 exists to protect.
+
+### Fixed
+
+- **ShellCheck went red on the 2.6.0 release, and the cause was one deliberate subshell reaching eighteen files.** `common.sh` began sourcing `install.sh` for doctor's install-integrity check, and `install.sh` bound the tree ambiently -- `raw=$( export UTILZ_HOME="$tree"; get_util_metadata ... )`. Under `shellcheck -x` that produced SC2031 on every later read of `UTILZ_HOME` in every file reaching `common.sh`: 39 findings, including `opt/cleanz/cleanz`, which the release never touched. **Fixed by removing the idiom rather than muting the check** -- a `# shellcheck disable` at the write site does not suppress read-site warnings, and disabling SC2031 project-wide would hide a real bug class. `get_util_metadata` now takes the tree as an optional third argument defaulting to `$UTILZ_HOME`, and `install.sh` passes it. Behaviour is unchanged and the caller's `UTILZ_HOME` is now provably untouched rather than merely subshell-scoped.
+- **The prez acceptance suite has a third outcome, `n/a`, and it is the first exception to "a SKIP is not a pass"** (ruled by hv). AT15's keychain half asks about Chrome Safe Storage, a macOS keychain concept, so on Linux there is nothing for it to be about; counting it as did-not-run demanded a run that could never happen and reddened `--strict` on every Linux leg. **The condition is the platform predicate, never the missing tool**: gating on `command -v security` would make any machine lacking it silently exempt, including a Mac that should have it, while `uname -s != Darwin` cannot. A Darwin host without `security(1)` still reports `unchecked` -- that is a broken machine, not an inapplicable one. It is only honest while some leg runs the check, and the macOS legs do; the comment says a `not_applicable` check that no leg runs is dead and should be deleted rather than excused. Verified on macOS at 14 passed / 0 failed / 0 skipped / **0 n/a**, the zero being the evidence the check genuinely ran.
+
 ## [2.6.0] - 2026-09-08
 
 Minor rather than patch: four new user-observable commands and a new utility, no breaking change to anything that existed at 2.5.0. Semver by the same reading 2.5.0 used.
