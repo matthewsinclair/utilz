@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: 221775b1-d498-41c0-b937-4d10094711a8
-heartbeat_at: 2026-09-08 11:43Z
+heartbeat_at: 2026-09-08 12:22Z
 status: active
-focus: "IDLE. ST0013 is closed and dehydrated -- nine WPs, four ACs, nine green ATs, full estate 551 ok / 0 not ok. prez shipped at 2.0.0 and hv published the install at f3470b9, verified by BEHAVIOUR rather than by its version string. Nothing claimed, nothing held."
+focus: "IDLE, FOLDED FOR A COMPACT -- status stays active because a compact is not a session ending. ST0013 closed and dehydrated; every version reduced to one home on hv's ruling; install published at 2f76209 and verified by behaviour, 126 paths, doctor 7/7. Nothing claimed, nothing held."
 claims: []
 ---
 
@@ -41,6 +41,12 @@ Full record is in canon, not here: `intent st show ST0013`, `design.md` D1-D14.
 
 - **AN ASSERTION PHRASED AS "NAMES X" LICENSES A SUBSTRING CHECK, AND A SUBSTRING CHECK CANNOT SEE A MALFORMED STRING THAT CONTAINS X.** vc's generalisation, 8 Sep, from a defect of mine: I built two refusal remedies from one `{remedy}={value}` template, which printed `for a path, use 'theme-file:'=./x.css` -- not front matter and not anything else. **Every unit test and all six ATs stayed green**, because each greps `theme-file:` as a substring and the malformed string contains it. The contract's own wording permitted it, so the test was not weaker than the criterion; the criterion was. **Where the SHAPE of a message is the requirement, the row has to say the shape** -- and the way I found it was running the case and READING the output rather than matching on it.
 
+- **A CONTROL OVER A SUBSET READS EXACTLY LIKE A CONTROL OVER THE WHOLE.** vc's, 8 Sep, from a defect of mine. Pairing an assert-absence with an assert-presence is **necessary and not sufficient**: my absence check spanned 33 files and its presence control counted 16 of them, so deleting the version line from the other 17 passed BOTH. **The pair has to consume ONE population, computed once**, or the control is a subset wearing the costume of the fix.
+
+- **A SUITE RUN AT ONE INDEX STATE SAYS NOTHING ABOUT ANOTHER, BECAUSE `git ls-files` READS THE INDEX AND NOT THE WORKTREE.** 8 Sep: 14 new `VERSION` files were STAGED when a full suite ran, so `install_owned_paths` found them and the install gate passed **honestly**. They were untracked twenty minutes later, and a publish would have shipped sixteen yamls pointing at files that were not there. **Nothing was wrong with that green -- it simply stopped describing the tree.** One level below "a `git status` from earlier is not a baseline", and sharper, because there the reading was already stale and here it was correct when taken.
+
+- **ANY CONTROL THAT READS THE WORKTREE CANNOT SEE A PACKAGING DEFECT.** The check built to prove every utility resolves a version sourced `common.sh` against the CHECKOUT, where the files exist on disk whether or not git knows about them. Green in the checkout, broken in the install: **the two-tree trap firing on the control built to prevent the thing.** Only `install_guards.bats`, which builds an install through `install_owned_paths` and runs every link, could see it -- and it did.
+
 - **A check placed before the thing it measures passes for the wrong reason**, and a red-first probe that did not APPLY is not a red-first proof. **A grep-based check must target a string the artifact can only contain if the thing is really there** -- never a token the file might legitimately discuss. **Never pipe a command whose exit code is the assertion**; `$?` is the last stage's.
 
 - **A SHARED FIXTURE THAT ANY TEST MUTATES IS A FLAKE GENERATOR.** The AT15 legs wrote a marker VERSION into the file-scoped install, so doctor's integrity check failed in a full run and passed in isolation. Mutating tests copy first.
@@ -48,13 +54,14 @@ Full record is in canon, not here: `intent st show ST0013`, `design.md` D1-D14.
 **The estate, changed 8 Sep and worth knowing at the prompt.**
 
 - **`utilz` ON PATH IS AN INSTALL, NOT THIS CHECKOUT.** `~/.local/bin` holds 16 links; `~/Devel/opt/utilz` is the published tree. `utilz use` reports which is live, `utilz use dev|opt` switches. **`utilz version` names the tree that answered**, so never guess which one produced a behaviour. The dispatcher ignores an inherited `UTILZ_HOME` entirely and always derives from `$0`.
+- **EVERY VERSION HAS ONE HOME AND NOTHING RESTATES IT** (hv, 8 Sep). Framework: `./VERSION`. Each utility: `opt/<name>/VERSION`, pointed at by `version_file`. **prez is the exception and is not an exception to the rule** -- cargo requires the version in `[package]`, so that home cannot be deleted, which makes it the one to keep. **Point at the one home you cannot delete**, never "use this filename". Two guards in `common_lib.bats` hold it; do not "fix" prez into compliance.
 - **`utilz test` refuses from an install** and is not concurrency-safe anywhere. **`utilz help <anything>` HANGS when stdin is a TTY** (glow's pager); `< /dev/null` fixes it.
 
 **Framework internals that have bitten.**
 
 - **The `each_utility` tripwire that this board documented until 7 Sep was FALSE-RED.** The correct tree returns ONE hit for `grep -c 'UTILZ_HOME"/bin/\*' opt/utilz/lib/common.sh` -- the walker itself. A reader running the old documented form reads that as a walker gone missing and re-adds one, which is the exact duplication it exists to prevent.
 - `each_utility` must be consumed with process substitution, never a pipe. `require_yq` ONCE before a loop. `run_doctor` deliberately does NOT gate on it -- it is how you discover yq is missing.
-- **`prez --version` and `--help` never reach the shim**; the dispatcher answers from `prez.yaml`. A test meaning to exercise the binary must use a real verb.
+- **`prez --version` and `--help` never reach the shim**; the dispatcher answers from `prez.yaml` -- which as of 8 Sep carries NO version and points at `crate/Cargo.toml` with `version_file`. A test meaning to exercise the binary must use a real verb.
 - Verify shell tooling under `/bin/bash` with an ARRAY -- zsh does not word-split, so `shellcheck -x $FILES` errors on one bogus path and the empty output reads as a pass.
 - Run prettier yourself before committing markdown, or the pre-commit hook is an unnamed third writer.
 
