@@ -1,0 +1,70 @@
+{
+  "schema": "intent/thread@3.0",
+  "id": "ST0016",
+  "title": "--help has one home, and both invocation forms agree",
+  "slug": "help-has-one-home-and-both-invocation-forms-agre",
+  "status": "wip",
+  "created": "2026-09-08",
+  "objective": "",
+  "context": "",
+  "body": "",
+  "preamble": "",
+  "criteria": [
+    {
+      "id": "AC01",
+      "text": "For every utility, '<util> --help' and 'utilz <util> --help' produce BYTE-IDENTICAL output. This is the defect: 14 of 15 disagreed before the change, the symlink form rendering the curated help/<name>.md and the dispatcher form falling through to the utility's terse inline usage. The covering test asserts the SIZE of the population it swept and refuses below the full set -- a discovery loop that silently narrows reports a clean pass over a partial population, and this thread's own precondition sweep (all 15 carry a curated help file) was verified with a count control rather than assumed.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC02",
+      "text": "The CURATED help/<name>.md is what both forms render, not the terse inline usage. Direction matters and is the decision: the inline block is a second home for the same concern -- cleanz carries 80 lines of it against 232 in help/cleanz.md, free to drift -- and it only ever surfaced because the dispatcher was not looking. Assert the rendered content comes from the curated file, not merely that the two forms agree: two forms agreeing on the WRONG one would satisfy AC01 completely.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC03",
+      "text": "'-h' agrees with '--help', on both invocation forms, for every utility. The intercept covers three flags and a test exercising only the long form cannot see a short form left behind -- which is exactly how this defect existed: one flag was intercepted at one site and the adjacent flag at neither.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC04",
+      "text": "'--version' is UNREGRESSED by this change: all 15 utilities, both forms, still answer the ST0015 pair form. The intercept that answers --help is the same function that answers --version, so an edit to one is an edit to both -- and a row proving --help now agrees says nothing about whether the older claim survived. ST0015 is closed and its evidence cannot be re-run from here, which is precisely why this thread must carry the check rather than assume the closed thread still holds.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC05",
+      "text": "There is ONE pre-dispatch intercept, not two. Adding a second --help-shaped intercept beside the --version one would rebuild the exact arrangement ST0015 removed -- two homes agreeing by convention, which is the arrangement that produced both defects. Proven by injection: a second intercept must turn this row red.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC06",
+      "text": "A DIRECTLY EXECUTED utility still prints its inline usage: 'opt/<name>/<name> --help' is not a dispatched invocation and this thread does not govern it. The row exists to pin the boundary cc drew in D4, where ST0016 deliberately DIFFERS from ST0015: ST0015 could delete its thirteen --version arms because show_version was the only producer either way, but here the inline block produces genuinely different text and is the only usage a directly-executed script can print. Without this row a later tidy-up reads the two threads as one pattern and deletes fifteen arms that nothing else replaces.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC07",
+      "text": "show_help REDIRECTS THE RENDERER'S STDIN, on every renderer arm, so a tool handed a FILE cannot block waiting on a terminal. Measured 8 Sep: 'glow help/cleanz.md' with an inherited interactive stdin did not return -- killed at 120s in one instance and at a 5s timeout in two more -- while the same command with '< /dev/null' returned exit 0 and 17450 bytes. The pager is NOT the variable: it hangs identically without '-p', which is opt-in and was never passed. WHAT THIS ROW CLAIMS AND DOES NOT: it asserts the guard is PRESENT, by inspection of the call site. It does NOT claim the hang is fixed, because cc could not reproduce it under 'script -q /dev/null' (exit 1, 59 bytes of terminal-query escapes -- a third behaviour, neither hang nor clean render) and an unreproduced failure cannot be observed to stop. The behavioural form needs a faithful pty harness and is a thread, not a row. This matters now because ST0016 routes 14 more invocations into show_help, so the guard is part of not making things worse.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    }
+  ]
+}
