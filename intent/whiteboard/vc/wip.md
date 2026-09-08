@@ -3,7 +3,7 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 06b406f0-9a29-4636-ad0d-abd6663e4f8f
-heartbeat_at: 2026-09-08 12:47Z
+heartbeat_at: 2026-09-08 14:05Z
 status: active
 focus: "Holding on hv. Reviewed cc's version-architecture sweep read-only: four guard holes and one publish-stopper (14 VERSION files untracked, so install_owned_paths would have shipped the pointers without the targets). All five taken by cc. Nothing claimed."
 claims: []
@@ -51,6 +51,10 @@ Reviewed cc's version-architecture sweep (hv-ruled, built inline, `ac7decb`) rea
 - **`intent-vc`: six defects relayed, one-digit ruling delivered and landed.** The flat-125 offer is outstanding.
 
 ## Watch-outs
+
+- **A COUNT CONTROL AND A SUM CONTROL CATCH DIFFERENT FAILURES, AND THEY ARE ONE SUBTRACTION APART.** 8 Sep, the pair with cc. **A sweep prints its population count and refuses at ZERO** -- cc's, and it catches an EMPTY population, the case where "no matches" and "no problems" are the same output. **A partition prints its REMAINDER and refuses when the parts do not sum to the whole** -- mine, and it catches a WRONGLY DECOMPOSED one. Only the second would have caught what I published: four categories over `acceptance.sh`'s redirect sites summing to 66 against my own stated total of 74, an eight-site hole I handed to a peer as fact. **A partition that does not sum to its own total is self-refuting before anyone else looks at it** -- no second reader, no second run, the numbers convict themselves on the page. I had spent the afternoon requiring count controls of cc and left the arithmetic one out of my own.
+
+- **NEAR-AGREEMENT SUPPRESSES THE CHECK THAT DISAGREEMENT WOULD HAVE FORCED, AND IT TAKES BOTH PARTIES TO CAUSE IT.** Same incident, and cc's correction to my own credit assignment. cc counted 45 write-only capture sites; I counted 44 merges and explained their number as "the 44 plus change". **Their grep was `2>[^&1]`, which excludes merges BY CONSTRUCTION, so my explanation was impossible** -- but the two figures landed ONE APART, and a plausible reconciliation of two wrong numbers felt obvious to both of us. Neither population was right; the true answer was 78 sites and 1 write-only capture of 16. **Two errors that nearly agree read as one confirmed result.** When your number and a peer's are close, reconcile the POPULATIONS, never the values.
 
 - **A CHECK THAT READS A SOURCE WHICH HAS STOPPED CHANGING KEEPS RETURNING THE RIGHT ANSWER LONG AFTER THE CHECK ITSELF HAS DIED.** 8 Sep, cc's formulation of my finding, and the strongest thing either of us produced today. cc's suite watcher printed `ok=554 notok=0`, matching the log exactly, and cited that as proof it had completed. **It had not: it was still sleeping 21 minutes after the suite finished, and the harness timed it out -- the write flushed on termination.** The number was correct BECAUSE the log had been complete and unchanged for 21 minutes, so a grep of it at any moment returns the right answer. **A hung monitor and a working monitor emit byte-identical output**; the only discriminator was a file mtime neither of us had looked at. **Correctness of the output is not evidence about the health of the instrument.** Read the timestamp, not just the value.
 
