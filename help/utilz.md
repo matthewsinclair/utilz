@@ -2,7 +2,7 @@
 
 **Version**: run `utilz version` (the framework version lives in `VERSION`, and `opt/utilz/utilz.yaml` points at it via `version_file` -- hardcoding it here drifted it to 2.2.0 while 2.4.0 shipped)
 **Author**: Matthew Sinclair
-**Location**: `$UTILZ_HOME` (typically `~/Devel/prj/Utilz`)
+**Location**: worked out from the dispatcher's own path -- a source checkout (typically `~/Devel/prj/Utilz`) or a published install (typically `~/Devel/opt/utilz`). `utilz version` names which one answered.
 
 ---
 
@@ -28,8 +28,7 @@ mkdir -p ~/Devel/prj/Utilz
 cd ~/Devel/prj/Utilz
 
 # Add to your shell config (~/.zshrc or ~/.bashrc)
-export UTILZ_HOME="$HOME/Devel/prj/Utilz"
-export PATH="$UTILZ_HOME/bin:$PATH"
+export PATH="$HOME/Devel/prj/Utilz/bin:$PATH"
 
 # Reload shell config
 source ~/.zshrc  # or ~/.bashrc
@@ -37,6 +36,11 @@ source ~/.zshrc  # or ~/.bashrc
 # Run diagnostics
 utilz doctor
 ```
+
+**Do NOT export `UTILZ_HOME`.** The dispatcher derives it from its own location
+and ignores an inherited value. This page told you to export it until v2.5.1;
+with two trees in play, an ambient `UTILZ_HOME` silently sent the _installed_
+utilz back to the checkout. Delete those lines if you have them.
 
 ### First Utility
 
@@ -74,14 +78,21 @@ utilz --help mdagg
 
 Run diagnostics to check that Utilz is properly configured.
 
-Checks:
+Seven checks:
 
-- `$UTILZ_HOME` is set and valid
-- Directory structure is correct
-- `bin/utilz` exists and is executable
-- `$UTILZ_HOME/bin` is in `$PATH`
-- All installed utilities are properly configured
-- External dependencies are installed (e.g., `yq`)
+1. `UTILZ_HOME` resolves to a valid tree
+2. Directory structure is correct
+3. `bin/utilz` exists and is executable
+4. `utilz` is reachable on `$PATH`
+5. All installed utilities are properly configured
+6. External dependencies are installed (eg `yq`)
+7. Install integrity -- every owned file matches the manifest it was published
+   with. In a source checkout there is no manifest, and doctor says so rather
+   than passing silently.
+
+Check results are written to **stderr** and the step headers to stdout, so
+`utilz doctor | grep` sees the headers and not the answers. Redirect both
+(`2>&1`) if you are capturing it.
 
 ```bash
 utilz doctor
@@ -111,6 +122,59 @@ mdagg --version
 ```
 
 `-v` is deliberately unbound: it reads as a verbose flag, and no utility binds it.
+
+### `utilz install` / `utilz upgrade`
+
+Publish a runnable install of this checkout, so the source can be worked on
+without disturbing the copy you use.
+
+```bash
+utilz install                 # publish to install.prefix from opt/utilz/utilz.yaml
+utilz install --prefix DIR    # publish somewhere else
+utilz install --force         # publish over an existing install
+utilz upgrade                 # replace an existing install with this checkout
+utilz upgrade --force         # overwrite files that were edited in place
+```
+
+Where it publishes is configuration with no built-in default: set
+`install.prefix` in `opt/utilz/utilz.yaml`. Unset is refused by name rather
+than guessed, because a publish to the wrong place looks exactly like a publish
+to the right one.
+
+**The source tree must be clean, and no flag overrides that, `--force`
+included.** The manifest records the commit the bytes came from, and that claim
+only holds when nothing is uncommitted.
+
+`install` and `upgrade` mirror each other: `install` refuses when an install
+already exists and names `upgrade`; `upgrade` refuses when none exists and
+names `install`. `upgrade` reports files edited in place and leaves them alone
+without `--force`, keeping their install-time checksum so the next check still
+reports them.
+
+### `utilz use [dev|opt]`
+
+Switch which tree your PATH symlinks serve. No path is typed either way -- each
+tree carries the address of the other.
+
+```bash
+utilz use opt     # point them at install.prefix
+utilz use dev     # point them at the source the install was published from
+utilz use         # report which tree they serve now, and change nothing
+```
+
+### `utilz relink`
+
+The mechanism `utilz use` is built on, when you want to name a tree yourself.
+
+```bash
+utilz relink                  # repoint at install.prefix
+utilz relink --prefix DIR     # repoint at a tree you name
+utilz relink --bin-dir DIR    # links live somewhere other than ~/.local/bin
+```
+
+Links resolving into a Utilz tree are repointed; anything else is left alone
+and reported as skipped. **`install` and `upgrade` never do this implicitly** --
+relinking your environment takes a verb you typed.
 
 ### `utilz integration <verb>`
 

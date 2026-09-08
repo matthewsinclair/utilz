@@ -55,17 +55,59 @@ Utilz/
 # Clone the repo
 git clone https://github.com/matthewsinclair/utilz.git ~/Devel/prj/Utilz
 
-# Set up environment
-export UTILZ_HOME="$HOME/Devel/prj/Utilz"
-export PATH="$UTILZ_HOME/bin:$PATH"
-
-# Add to your shell config (~/.zshrc or ~/.bashrc)
-echo 'export UTILZ_HOME="$HOME/Devel/prj/Utilz"' >> ~/.zshrc
-echo 'export PATH="$UTILZ_HOME/bin:$PATH"' >> ~/.zshrc
+# Put the dispatcher on PATH
+echo 'export PATH="$HOME/Devel/prj/Utilz/bin:$PATH"' >> ~/.zshrc
 
 # Check installation
 utilz doctor
 ```
+
+**Do NOT export `UTILZ_HOME`.** The dispatcher works out which tree it belongs
+to from its own location, following the symlink chain from `$0` and taking the
+parent of `bin/`. An exported `UTILZ_HOME` is ignored.
+
+This README told you to export it until v2.5.1, and that instruction was worse
+than redundant. Once Utilz gained a second tree (below), an ambient
+`UTILZ_HOME` pointing at the checkout silently redirected the _installed_
+utilz back to the checkout: every command answered from the source tree while
+appearing to run the install. Nothing reported it. If you have those lines in
+your shell config, delete them.
+
+## Two trees: dev and opt
+
+A Utilz checkout can publish a runnable **install** of itself, so you can work
+on the source without disturbing the copy you actually use.
+
+```bash
+utilz install                 # publish this checkout to install.prefix
+utilz use opt                 # point your PATH symlinks at the install
+utilz use dev                 # point them back at the checkout
+utilz use                     # report which tree they serve, change nothing
+```
+
+`utilz version` always names the tree that answered, so the two are never
+ambiguous at the prompt:
+
+```
+installed at /Users/you/Devel/opt/utilz (a1b2c3d)
+source at /Users/you/Devel/prj/Utilz
+```
+
+Where `utilz install` publishes is **configuration with no built-in default**:
+set `install.prefix` in `opt/utilz/utilz.yaml`. Unset is refused by name rather
+than guessed, because a publish to the wrong place looks exactly like a publish
+to the right one.
+
+Three things the install deliberately does:
+
+- **It refuses to publish from a dirty tree, and no flag overrides that.** The
+  manifest records the commit the bytes came from, and that claim only holds if
+  nothing is uncommitted.
+- **It never touches your PATH symlinks on its own.** Relinking your
+  environment needs a verb you typed: `utilz use` or `utilz relink`.
+- **It refuses `utilz test`.** The suite rewrites `bin/`, which is exactly what
+  the manifest checksums, so an install would report drift nobody caused. The
+  refusal names the source tree to run it in.
 
 ## Usage
 
@@ -81,6 +123,23 @@ utilz test                    # Run all tests
 utilz test <utility>          # Run tests for specific utility
 utilz generate <name> [desc]  # Generate new utility scaffold
 ```
+
+### Install Commands
+
+```bash
+utilz install                 # Publish a runnable install to install.prefix
+utilz install --prefix DIR    # Publish somewhere else
+utilz install --force         # Publish over an existing install
+utilz upgrade                 # Replace an install with this checkout
+utilz upgrade --force         # Overwrite files that were edited in place
+utilz use [dev|opt]           # Switch which tree the PATH symlinks serve
+utilz relink [--prefix DIR]   # Repoint the PATH symlinks at a tree
+```
+
+`upgrade` reports files that were edited in place and leaves them alone without
+`--force`, keeping their install-time checksum so the next check still reports
+them. `install` and `upgrade` mirror each other: reach for the wrong one and it
+names the right one.
 
 ### Calling Utilities
 
@@ -458,7 +517,7 @@ A framework test now invokes the command line the bridge would build for every d
 ### Prefix arguments
 
 - `M-x utilz` — default flags only (whatever the YAML declares).
-- `C-u M-x utilz` — prompts for extra flags via `read-string`; passed through to the utility (e.g. `--detrope` for cleanz).
+- `C-u M-x utilz` — prompts for extra flags via `read-string`; passed through to the utility (eg `--detrope` for cleanz).
 - `C-u C-u M-x utilz` — shows the full command line in a yes/no confirm before running. Useful before you let `cryptz` or `syncz` fire.
 
 ### Refreshing the manifest

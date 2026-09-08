@@ -7,7 +7,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-Version not bumped and nothing tagged: releases, tags and pushes are hv's. Adding a utility is an additive minor, so this is 2.6.0 material when hv cuts it.
+Nothing pending.
+
+## [2.6.0] - 2026-09-08
+
+Minor rather than patch: four new user-observable commands and a new utility, no breaking change to anything that existed at 2.5.0. Semver by the same reading 2.5.0 used.
+
+### Added
+
+- **Utilz can publish a runnable install of itself, so the source can be worked on without disturbing the copy you use** (ST0014). `utilz install` publishes this checkout to `install.prefix`; `utilz upgrade` replaces an existing one. **Devbin's install tree is deliberately not runnable and ours inverts that**, so the criterion is that the install works when the source is moved aside rather than that files arrived -- an install reaching back into the checkout passes every check that does not move the source.
+- **`utilz use dev|opt` switches which tree your PATH symlinks serve, in one word, from either tree.** No path is typed either way: the install records `source-tree` in its manifest and the checkout reads `install.prefix` from its yaml, so each tree carries the address of the other. `utilz use` with no argument reports which tree is live and changes nothing. `utilz relink` is the mechanism underneath when you want to name a tree yourself.
+- **`utilz version` names the tree that answered** -- `installed at <prefix> (<commit>)` or `source at <path>`. Without it the two-tree arrangement is invisible in exactly the situation it exists for: someone debugging behaviour cannot tell which copy produced it.
+- **`utilz doctor` gained a seventh check, install integrity**, verifying every owned file against the manifest it was published with. In a source checkout there is no manifest and doctor says so rather than passing silently.
+- **The install carries a manifest recording the version, the source commit, the source tree and a checksum per owned file.** Symlinks are checksummed by their target STRING against their path, never by the file they resolve to -- all fifteen resolve to the dispatcher, so a dereferenced check gives them one hash and reads a corrupted link as intact.
+
+### Changed
+
+- **The owned set is enumerated by EXCLUSION over `git ls-files`, not by an inclusion list.** The first cut shipped `opt/<n>/<n>`, `<n>.yaml` and `README.md` per utility, which is the shape the tree appears to have. A walk of all sixteen directories says otherwise: **five utilities keep runtime payload outside those three names** -- `cleanz`'s trope list, `expz`'s default schema, `pdf2md` and `xtrct`'s Python implementations, and `macoz`'s backgrounds -- 22 paths in total. An inclusion list publishes an install in which five of fifteen utilities are broken, each failing only when someone reaches the one code path that needs the file that never arrived. **The inversion is the keeper, not the corrected list**: an exclusion list ships a new subtree until someone says not to, which costs bytes rather than correctness.
+- **`install` and `upgrade` never touch your PATH symlinks.** Relinking your environment takes a verb you typed. Publishing from a dirty tree is refused and **no flag overrides it**, `--force` included: the manifest's commit claim only holds when nothing is uncommitted.
+
+### Fixed
+
+- **An exported `UTILZ_HOME` silently redirected an install back at the checkout, and this project's own README told you to export it.** The dispatcher derived its tree from `$0` only when the variable was unset, so a published install invoked by its own path answered from whatever tree `UTILZ_HOME` named -- measured with a marker VERSION: unset gave the install, exported gave the source, and nothing said so. An ambient login-shell export made that the normal case rather than the edge. **The dispatcher now always derives from `$0` and ignores an inherited value**; the variable survives only as an internal channel to child processes. `README.md` and `help/utilz.md` no longer tell you to set it and say plainly that the old instruction was wrong.
+- **`utilz test` from an install tree refuses and now NAMES the source tree**, printing a `cd <path> && utilz test` you can paste. It previously said "the checkout this install was published from", a description the reader has to resolve, which made a correct refusal read as a failure with no next step. The suite rewrites `bin/`, which is exactly what the manifest checksums, so running it in an install would report drift nobody caused.
+- **`cryptz`'s round-trip test blocked the whole suite on a passphrase prompt.** `run_cryptz` did not close stdin, so `cryptz decrypt` inherited the terminal and gpg asked for a passphrase; the test's own comment said "decrypt may prompt for passphrase, so we don't assert success", which handled the assertion and not the prompt. Green in CI, dead on a terminal. Stdin is now closed at the one door every cryptz call goes through, and the decrypt half is opt-in behind `CRYPTZ_TEST_DECRYPT` and asserts success when it runs -- **a call that asserts nothing and can block the suite is pure cost.**
 
 ### Changed
 
