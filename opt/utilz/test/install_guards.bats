@@ -22,10 +22,21 @@ run_install_function() {
 # VERSION straight into it, and every test after them then inherited an install
 # whose VERSION no longer matched its manifest -- which made doctor's integrity
 # check fail in a full run and pass in isolation. Measured 8 Sep.
+# HEAD IS CAPTURED EITHER SIDE OF THE PUBLISH, AND THAT IS THE POINT OF THE
+# TWO EXTRA LINES. AC12's claim is about the commit the install was BUILT from,
+# so the reading has to be pinned to the publish itself. Re-reading `git HEAD`
+# later in the run measures a different moment: this tree has three concurrent
+# writers, and a commit landing mid-run used to redden AT12 for a reason that
+# had nothing to do with what AT12 measures (issue 0011). Capturing both ends
+# lets that test say "the record could not be taken" instead of "the code is
+# wrong", which are not the same finding.
 setup_file() {
   export GUARD_SRC="$UTILZ_HOME"
   export GUARD_INSTALL="${BATS_FILE_TMPDIR:-/tmp}/guard-install"
   rm -rf "$GUARD_INSTALL"
+
+  export GUARD_SRC_HEAD_BEFORE
+  GUARD_SRC_HEAD_BEFORE=$(git -C "$UTILZ_HOME" rev-parse HEAD 2>/dev/null) || GUARD_SRC_HEAD_BEFORE=""
 
   bash -c "
     source '$UTILZ_HOME/opt/utilz/lib/common.sh'
@@ -33,6 +44,9 @@ setup_file() {
     install_copy_owned '$UTILZ_HOME' '$GUARD_INSTALL' >/dev/null
     install_manifest_write '$UTILZ_HOME' '$GUARD_INSTALL/manifest.sha256'
   " || return 1
+
+  export GUARD_SRC_HEAD_AFTER
+  GUARD_SRC_HEAD_AFTER=$(git -C "$UTILZ_HOME" rev-parse HEAD 2>/dev/null) || GUARD_SRC_HEAD_AFTER=""
 }
 
 teardown_file() {
@@ -263,14 +277,39 @@ teardown_file() {
   assert_output_contains "installed"
   assert_output_contains "$GUARD_INSTALL"
 
-  local commit
-  commit=$(git -C "$GUARD_SRC" rev-parse HEAD)
-  assert_output_contains "${commit:0:7}"
+  # THE MANIFEST IS THE RECORD; LIVE HEAD IS ONLY A PROXY FOR IT. The runtime
+  # reads `source-commit` out of the manifest, so that is the value the
+  # provenance line is a claim ABOUT. Asserting against `git rev-parse HEAD`
+  # instead tested a slightly different claim, true only while nobody committed
+  # between setup_file and here -- see issue 0011.
+  local recorded
+  recorded=$(awk -F'\t' '$1 == "source-commit" { print $2; exit }' "$GUARD_INSTALL/manifest.sha256")
+  [ -n "$recorded" ]
+  assert_output_contains "${recorded:0:7}"
 
   run env -u UTILZ_HOME "$GUARD_SRC/bin/utilz" version
   assert_success
   assert_output_contains "source"
   refute_output_contains "installed at"
+}
+
+# The check above is awk agreeing with awk unless something also checks that
+# the manifest recorded the RIGHT commit -- reading the manifest to test a line
+# derived from the manifest proves the plumbing and nothing more. That was the
+# half live HEAD used to cover, so it is kept, in its own test: a skip here
+# must not be able to take the provenance assertions above down with it.
+@test "the commit the manifest recorded is the one the install was copied from" {
+  # A publish is pinned to a commit only if HEAD held still across it. If it
+  # moved, this reading cannot be taken -- which is a skip, because "the
+  # instrument could not measure" and "the code is wrong" are different
+  # findings and only one of them is worth waking someone for (issue 0011).
+  if [ -z "$GUARD_SRC_HEAD_BEFORE" ] || [ "$GUARD_SRC_HEAD_BEFORE" != "$GUARD_SRC_HEAD_AFTER" ]; then
+    skip "HEAD moved across the fixture publish ($GUARD_SRC_HEAD_BEFORE -> $GUARD_SRC_HEAD_AFTER); the built-from commit is not pinned"
+  fi
+
+  local recorded
+  recorded=$(awk -F'\t' '$1 == "source-commit" { print $2; exit }' "$GUARD_INSTALL/manifest.sha256")
+  [ "$recorded" = "$GUARD_SRC_HEAD_BEFORE" ]
 }
 
 # ============================================================================
