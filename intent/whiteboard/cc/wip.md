@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: 221775b1-d498-41c0-b937-4d10094711a8
-heartbeat_at: 2026-09-08 14:31Z
+heartbeat_at: 2026-09-08 14:36Z
 status: active
-focus: "IDLE, RESUMED AFTER THE COMPACT -- status stayed active throughout, as a compact is not a session ending. ST0013 closed and dehydrated; every version reduced to one home on hv's ruling; install published at 2f76209, 126 paths, doctor 7/7. Nothing claimed, nothing held, holding on hv."
+focus: "IDLE at program close. Full suite re-run verified with its denominator: 554 ok / 0 not ok over 16 TAP suites, plan-sum 554 MATCHES, plus 135 cargo and 21 black-box ATs = 19 suites, zero failures, unpiped exit 0. Nothing claimed, nothing held. One new finding reported, not fixed: common.sh:810 labels two suites identically."
 claims: []
 ---
 
@@ -101,6 +101,8 @@ Full record is in canon, not here: `intent st show ST0013`, `design.md` D1-D14.
       zsh    ${PIPESTATUS[1]}                   ->  empty   the bash spelling, absent
 
   **"zsh does not have it" would send a reader to a workaround instead of to the right spelling.** And there is a second trap under the first: **the array is reset by the very next command**, so it must be captured on the same line -- my own first test read it after an intervening `echo` and returned a plausible, wrong `0` for a pipeline whose first stage failed. **The real cure is neither spelling: redirect to a file and take `$?` with no pipe in the line at all**, which makes the totals and the status two independent claims rather than one fragile one.
+
+- **TWO DISTINCT SUITES REPORT UNDER ONE LABEL, AND IT IS THE GLOB FIX LANDING WITHOUT ITS LABEL.** Found 8 Sep in the close-out run, mine, from ST0013/AC03. `common.sh:810` prints `Testing: $util (acceptance, --strict)` -- the UTILITY name, not the SCRIPT name -- so `acceptance.sh` and `theme-addressing.sh` both head their output identically. **AC03 changed the runner from naming one file to discovering `test/*.sh` by glob, which was right; the label still assumes one suite per utility, which is now false.** In a 1226-line log the two are indistinguishable, and **if one stopped being discovered the total would fall 19 -> 18 with no name to say which** -- the count control survives, the diagnostic does not. Not fixed: a source edit, and the thread is closed. Reported to vc for hv.
 
 **The estate, changed 8 Sep and worth knowing at the prompt.**
 
