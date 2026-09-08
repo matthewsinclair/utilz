@@ -11,9 +11,9 @@ pub const USAGE: &str = "\
 prez -- markdown in, one self-contained HTML presentation out.
 
 Usage:
-  prez build   <deck.md> [-o out.html] [--theme=T] [--watch]
-  prez pdf     <deck.md> [-o out.pdf]  [--theme=T] [--paper=WxH] [--browser=PATH]
-  prez present <deck.md> [--theme=T] [--window=WxH] [--browser=PATH]
+  prez build   <deck.md> [-o out.html] [--theme=NAME|--theme-file=PATH] [--watch]
+  prez pdf     <deck.md> [-o out.pdf]  [--theme=NAME|--theme-file=PATH] [--paper=WxH] [--browser=PATH]
+  prez present <deck.md> [--theme=NAME|--theme-file=PATH] [--window=WxH] [--browser=PATH]
   prez browser
   prez --help | --version
 
@@ -21,9 +21,16 @@ Every flag below takes its value either way: --theme=simple or --theme simple.
 
 Options:
   -o, --out PATH    Output path. Default: beside the input, extension swapped.
-      --theme T     Theme: a built-in name, a .css file, or a directory holding
-                    theme.css. Names are also looked up in PREZ_THEME_PATH.
+      --theme NAME  Theme NAME: looked up in PREZ_THEME_PATH, then among the
+                    built-ins. NEVER resolved against the working directory.
                     Beats the deck's front-matter 'theme:' key.
+      --theme-file PATH
+                    Theme PATH: a .css file, or a directory holding theme.css.
+                    Mutually exclusive with --theme.
+      --theme-path DIRS
+                    Colon-separated directories PREPENDED to PREZ_THEME_PATH
+                    for this invocation. Composes with it rather than
+                    replacing it.
       --watch       Rebuild whenever the input changes (build only).
       --paper WxH   PDF page size in millimetres, eg 254x142.9 (16:9 default).
       --window WxH  Presenting window size in pixels. Default: 1280x720, the
@@ -56,6 +63,10 @@ pub struct Command {
   pub input: String,
   pub out: Option<String>,
   pub theme: Option<String>,
+  /// `--theme-file`: a PATH, mutually exclusive with `theme`.
+  pub theme_file: Option<String>,
+  /// `--theme-path`: colon-separated directories PREPENDED to PREZ_THEME_PATH.
+  pub theme_path: Option<String>,
   pub watch: bool,
   pub paper: Option<String>,
   pub window: Option<String>,
@@ -111,6 +122,8 @@ pub fn parse(argv: &[String]) -> Result<Invocation, Failure> {
     input: String::new(),
     out: None,
     theme: None,
+    theme_file: None,
+    theme_path: None,
     watch: false,
     paper: None,
     window: None,
@@ -141,6 +154,12 @@ pub fn parse(argv: &[String]) -> Result<Invocation, Failure> {
     match arg {
       "-o" | "--out" => cmd.out = Some(value("-o")?),
       "--theme" => cmd.theme = Some(value("--theme")?),
+      "--theme-file" => cmd.theme_file = Some(value("--theme-file")?),
+      // LAST-WINS on repeats, like every other value flag here. PREPEND
+      // describes this value's relationship to PREZ_THEME_PATH, not the
+      // relationship between two occurrences of the flag, and a second rule for
+      // one flag is a special case nobody can predict.
+      "--theme-path" => cmd.theme_path = Some(value("--theme-path")?),
       "--paper" => cmd.paper = Some(value("--paper")?),
       "--window" => cmd.window = Some(value("--window")?),
       "--browser" => cmd.browser = Some(value("--browser")?),
@@ -164,6 +183,17 @@ pub fn parse(argv: &[String]) -> Result<Invocation, Failure> {
       }
     }
     i += 1;
+  }
+
+  // AC01 clause (b). Refused rather than one silently winning: a deck built with
+  // the theme the user did not name is the quiet-wrong-answer failure this
+  // codebase keeps refusing to ship. Either order, because the refusal is about
+  // the pair and not about which was typed first.
+  if cmd.theme.is_some() && cmd.theme_file.is_some() {
+    return Err(Failure::new(
+      "--theme and --theme-file are mutually exclusive",
+      "--theme takes a NAME resolved on the search path and among the built-ins; --theme-file takes a PATH",
+    ));
   }
 
   // Flags that belong to another verb are refused rather than ignored. Silently

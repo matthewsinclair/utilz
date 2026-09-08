@@ -655,6 +655,23 @@ EOS
   run grep -c 'test/acceptance\.sh' "$UTILZ_HOME/opt/prez/test/prez.bats"
   assert_output "0"
 
+  # THE TWO HOMES MUST AGREE ABOUT WHAT A RUN MEANS, not just about which files
+  # it finds. common.sh accumulates -- every suite runs, and the summary says
+  # "N of M failed". CI must too: under set -e it would otherwise abort on the
+  # first red suite and every later one would never run, so a contributor gets
+  # one failure per push where the local driver gives the whole picture in one.
+  # With ONE suite those behaviours were identical and the divergence could not
+  # be seen; with two it can.
+  run grep -c 'suite_failures' "$UTILZ_HOME/.github/workflows/tests.yml"
+  assert_success
+
+  # And the browser-evidence guard is scoped to the suite that declares it needs
+  # a browser, not to the union of every suite's output. The union reads as
+  # "somebody mentioned a browser", which is true today only because exactly one
+  # suite does.
+  run grep -c 'ONE OUTPUT FILE PER SUITE' "$UTILZ_HOME/.github/workflows/tests.yml"
+  assert_success
+
   # The suite's own footer warned it was wired into nothing. That warning
   # becomes a lie once this criterion lands, and a warning that outlives its
   # truth teaches readers to discount the ones still true.

@@ -4,13 +4,28 @@
 // `theme.js` and `layout.html`. `--theme` beats the deck's front-matter
 // `theme:`, and with neither the built-in `simple` is used.
 //
-// **`--theme` TAKES A NAME OR A PATH, and a name is resolved in a fixed order**
-// (hv, 28 Aug 2026): an existing path first, then a named theme on
-// `PREZ_THEME_PATH`, then a theme built into the binary. A name that matches
-// nothing is a REFUSAL listing both the built-ins and every directory searched
-// -- never a quiet fall back to the default, which would let a typo'd
+// **ADDRESSING IS SPLIT BY MODE (hv, 29 Aug 2026, ST0013/AC01).** `--theme`
+// takes a NAME and resolves it on `PREZ_THEME_PATH` -- extended for the
+// invocation by `--theme-path` -- and then among the built-ins, NEVER against
+// the working directory. `--theme-file` takes a PATH, in either shape the old
+// flag took: a `.css` file or a directory holding `theme.css`. A name that
+// matches nothing is a REFUSAL listing the built-ins and every directory
+// searched -- never a quiet fall back to the default, which would let a typo'd
 // `--theme=steampnk` produce a plausible deck in the wrong clothes and say
 // nothing.
+//
+// **THIS REVERSES AN EARLIER RULING OF hv'S, AND THE REVERSAL IS RECORDED
+// RATHER THAN THE PARAGRAPH REPLACED.** Until ST0013 this module said, in hv's
+// own words of 28 Aug 2026: *"--theme TAKES A NAME OR A PATH, and a name is
+// resolved in a fixed order: an existing path first, then a named theme on
+// PREZ_THEME_PATH, then a theme built into the binary."* That order was
+// measured to build two different decks from one command -- `--theme=simple`
+// beside a `./simple/` directory took the local one, elsewhere the built-in,
+// and `provenance()` announced neither because a cwd hit stamps `Origin::Path`.
+// hv re-scoped it the following day. **An attributed decision that simply
+// vanishes reads afterwards as one nobody ever made**, and the next person to
+// meet a cwd-first resolver would have no way to know it was considered, ruled,
+// and reversed.
 //
 // **NO BUILT-IN IS EVER A BRAND.** The estate's own look is not compiled in and
 // must not be: prez is designed to be extracted, and a binary carrying one
@@ -103,32 +118,107 @@ pub const STANDARD_CLASSES: &[&str] = &["title", "section", "quote", "full", "ce
 /// binary stays extractable.
 const SEARCH_PATH: &str = "PREZ_THEME_PATH";
 
+/// HOW A THEME WAS ADDRESSED: by NAME, or by PATH.
+///
+/// **THE SPLIT IS IN THE TYPE, AND THAT IS THE WHOLE FIX.** The previous
+/// resolver took one `&str` that might be either and asked `path.exists()`
+/// first, which is what let the working directory shadow a built-in. Deleting
+/// that branch would have made every test pass and left the cause in place --
+/// the same string would still be able to mean either thing, and the next
+/// feature needing a path would put the branch back. A `Name` cannot reach the
+/// filesystem except through the search path, and a `File` never consults the
+/// search path or the built-ins: the cwd branch is not merely unvisited, it is
+/// unreachable.
+#[derive(Debug)]
+pub enum Spec<'a> {
+  /// A theme NAME. Resolved on the search path, then among the built-ins.
+  Name(&'a str),
+  /// A theme PATH, ALREADY RESOLVED against the right base by the caller.
+  ///
+  /// Owned rather than borrowed because the two bases differ and neither is
+  /// this module's business: a flag's path is the user's, typed at a shell, so
+  /// it resolves against the cwd; a deck's `theme-file:` belongs to the deck
+  /// and resolves beside it. Deciding that here is what put an impure
+  /// coordination question in the middle of a pure lookup, so the caller
+  /// decides once and hands over a path that is already correct.
+  File(PathBuf),
+}
+
+/// Build a NAME spec, refusing anything carrying a path separator.
+///
+/// **ONE HOME FOR THE SEPARATOR RULE, called by the flag and by the deck's
+/// `theme:` key alike.** It looks like argument parsing and it is not: the deck
+/// needs the identical rule with a different remedy, and a copy in `args.rs`
+/// would mean either a second copy here or a front-matter path that quietly
+/// does not enforce it -- which is how the ambiguity "moves into the deck where
+/// it travels", the thing AC01 clause (d) exists to stop.
+///
+/// `source` names what the user typed and `remedy` is the COMPLETE remedy
+/// sentence, because AC01 clause (f) requires the refusal to name the remedy for
+/// the case that ACTUALLY FIRED -- and the two cases are not the same sentence
+/// with a word swapped. A flag's remedy is `--theme-file=<value>`; a deck key's
+/// is `theme-file: <value>`. Assembling either from a shared template produced
+/// `'theme-file:'=./x.css`, which is not front matter and not anything else. This split breaks invocations that already exist in
+/// shell histories and in consumers' build scripts, and naming the replacement
+/// flag turns a breakage into a migration.
+///
+/// (The consumers are named in ST0013, not here. AC09 refuses estate paths and
+/// names ANYWHERE in src, comments included, because this crate is meant to be
+/// extractable -- and a comment leaks even though it creates no coupling. This
+/// paragraph named one and AT09 caught it.)
+///
+/// **EXISTENCE IS NOT THE TEST, THE SEPARATOR IS.** A mistyped path must refuse
+/// the same way a real one does: falling through to the name resolver would
+/// hand someone who typo'd a filename the built-in roster, which reads as
+/// though the filename were a name they got wrong.
+pub fn name_spec<'a>(value: &'a str, source: &str, remedy: &str) -> Result<Spec<'a>, Failure> {
+  if value.contains('/') || value.contains(std::path::MAIN_SEPARATOR) {
+    return Err(Failure::new(
+      format!("{source} takes a theme NAME, and '{value}' looks like a path"),
+      // THE WHOLE REPLACEMENT, copyable, not just the flag name. Clause (f)
+      // exists to turn a breakage into a migration, and the shortest migration
+      // is one the reader can paste: they arrived here because a command that
+      // worked stopped working.
+      remedy.to_string(),
+    ));
+  }
+  Ok(Spec::Name(value))
+}
+
 /// Resolve the theme for a build.
 ///
-/// `flag` is `--theme` and beats `front` (the deck's `theme:` key), which beats
-/// the built-in default. `base` is the deck's directory, so a front-matter theme
-/// path is written relative to the deck rather than to the shell's cwd.
-pub fn load(flag: Option<&str>, front: Option<&str>, base: &Path) -> Result<Theme, Failure> {
-  let Some(spec) = flag.or(front) else {
+/// `extra` is `--theme-path`: directories PREPENDED to `PREZ_THEME_PATH` for
+/// this invocation, so the flag and the environment compose rather than the
+/// flag replacing it.
+pub fn load(spec: Option<Spec>, extra: &[PathBuf]) -> Result<Theme, Failure> {
+  let Some(spec) = spec else {
     return built_in("simple").ok_or_else(|| {
       Failure::new("the built-in default theme is missing", "this is a prez build fault")
     });
   };
-  // A --theme path is the user's, typed at a shell, so it resolves against the
-  // cwd. A front-matter one belongs to the deck and resolves beside it.
-  let path = match flag {
-    Some(_) => PathBuf::from(spec),
-    None => base.join(spec),
-  };
 
-  let theme = if path.exists() {
-    if path.is_dir() { from_directory(&path)? } else { from_file(&path)? }
-  } else if let Some(found) = on_search_path(spec)? {
-    found
-  } else if let Some(found) = built_in(spec) {
-    found
-  } else {
-    return Err(unknown_theme(spec, &path));
+  let theme = match spec {
+    Spec::File(path) => {
+      if !path.exists() {
+        // NO ROSTER HERE. A path that is not there is a missing FILE, and
+        // offering the built-in names would read as though the filename were a
+        // name the user got wrong.
+        return Err(Failure::new(
+          format!("no such file: {}", path.display()),
+          "--theme-file takes a .css file or a directory holding theme.css",
+        ));
+      }
+      if path.is_dir() { from_directory(&path)? } else { from_file(&path)? }
+    }
+    Spec::Name(name) => {
+      if let Some(found) = on_search_path(name, extra)? {
+        found
+      } else if let Some(found) = built_in(name) {
+        found
+      } else {
+        return Err(unknown_theme(name, extra));
+      }
+    }
   };
 
   refuse_external(&theme.css, &format!("{} (css)", theme.name))?;
@@ -215,13 +305,13 @@ fn built_in(name: &str) -> Option<Theme> {
 ///
 /// A name matches either `<dir>/<name>/theme.css` (a directory theme, which may
 /// also carry theme.js and layout.html) or `<dir>/<name>.css` (a file theme).
-fn on_search_path(name: &str) -> Result<Option<Theme>, Failure> {
-  // A name with a separator in it was a path that did not exist. Searching for
-  // it would turn a wrong path into a confusing "unknown theme".
+fn on_search_path(name: &str, extra: &[PathBuf]) -> Result<Option<Theme>, Failure> {
+  // A separator can no longer reach here -- `name_spec` refuses it at the door
+  // -- so this is an invariant rather than a guard, and it is cheap to keep.
   if name.contains('/') || name.contains(std::path::MAIN_SEPARATOR) {
     return Ok(None);
   }
-  for dir in search_directories() {
+  for dir in search_directories(extra) {
     // from_directory and from_file both stamp Origin::Path, because on their
     // own they cannot tell a path the user typed from a path this loop built.
     // Only here is that known, so only here is it overwritten.
@@ -238,10 +328,32 @@ fn on_search_path(name: &str) -> Result<Option<Theme>, Failure> {
   Ok(None)
 }
 
-fn search_directories() -> Vec<PathBuf> {
-  std::env::var_os(SEARCH_PATH)
-    .map(|paths| std::env::split_paths(&paths).filter(|p| !p.as_os_str().is_empty()).collect())
-    .unwrap_or_default()
+/// The directories a NAME is looked for in: `--theme-path` first, then
+/// `PREZ_THEME_PATH`.
+///
+/// **PREPEND, NOT REPLACE.** The flag composes with the environment, so a shim
+/// that exports a house theme path keeps working when a user adds one of their
+/// own. `extra` is threaded as a PARAMETER rather than held in a module static
+/// deliberately: cargo runs unit tests on parallel threads in one process, and
+/// the note above `provenance`'s tests records what process-wide state does to
+/// this file -- it races every other test in the binary, intermittently, which
+/// is the worst way to learn it.
+fn search_directories(extra: &[PathBuf]) -> Vec<PathBuf> {
+  let mut dirs: Vec<PathBuf> = extra.to_vec();
+  if let Some(paths) = std::env::var_os(SEARCH_PATH) {
+    dirs.extend(std::env::split_paths(&paths).filter(|p| !p.as_os_str().is_empty()));
+  }
+  dirs
+}
+
+/// Split a `--theme-path` value into directories.
+///
+/// Repeats of the flag are LAST-WINS, decided where the flag is parsed: every
+/// other value flag in `args.rs` is last-wins, and PREPEND describes the
+/// relationship between this value and the environment variable, not between
+/// two occurrences of the flag.
+pub fn split_path_flag(value: &str) -> Vec<PathBuf> {
+  std::env::split_paths(value).filter(|p| !p.as_os_str().is_empty()).collect()
 }
 
 /// Refuse an unrecognised theme, saying everything that was tried.
@@ -249,24 +361,23 @@ fn search_directories() -> Vec<PathBuf> {
 /// Falling back to the default here would be the quiet failure this codebase
 /// keeps refusing to ship: `--theme=steampnk` would build a perfectly plausible
 /// deck in the wrong clothes and say nothing.
-fn unknown_theme(spec: &str, tried: &Path) -> Failure {
+fn unknown_theme(name: &str, extra: &[PathBuf]) -> Failure {
   let names: Vec<&str> = BUILT_IN.iter().map(|(id, _)| *id).collect();
-  let searched = search_directories();
+  let searched = search_directories(extra);
   let where_looked = match searched.is_empty() {
-    true => format!("  {SEARCH_PATH} is unset, so no theme directories were searched"),
+    true => format!("  {SEARCH_PATH} is unset and no --theme-path was given, so no theme directories were searched"),
     false => searched
       .iter()
       .map(|d| format!("  searched {}", d.display()))
       .collect::<Vec<_>>()
       .join("\n"),
   };
+  // THE "not a path" LINE IS GONE, and its unit test with it. A name is never
+  // tried as a path any more, so the line was about to become a false
+  // statement kept alive by a passing assertion.
   Failure::new(
-    format!(
-      "no theme '{spec}'.\n  not a path: {}\n{where_looked}\n  built in: {}",
-      tried.display(),
-      names.join(", ")
-    ),
-    format!("give a path to a .css file or a theme directory, or a built-in name; add directories to {SEARCH_PATH} for more"),
+    format!("no theme '{name}'.\n{where_looked}\n  built in: {}", names.join(", ")),
+    format!("give a built-in name, or add directories to {SEARCH_PATH} or --theme-path; for a theme by PATH use --theme-file"),
   )
 }
 
@@ -291,7 +402,7 @@ fn read(path: &Path) -> Result<String, Failure> {
   std::fs::read_to_string(path).map_err(|e| {
     Failure::new(
       format!("cannot read theme '{}': {e}", path.display()),
-      "--theme takes a .css file or a directory holding theme.css",
+      "--theme-file takes a .css file or a directory holding theme.css",
     )
   })
 }
@@ -356,7 +467,7 @@ mod tests {
 
   #[test]
   fn no_theme_given_uses_the_embedded_default() {
-    let t = load(None, None, Path::new(".")).unwrap();
+    let t = load(None, &[]).unwrap();
     assert!(t.css.contains("--gp-bg"), "the default carries its own tokens");
     assert!(t.layout.is_none());
   }
@@ -402,7 +513,7 @@ mod tests {
 
   #[test]
   fn a_built_in_is_selected_by_name() {
-    let t = load(Some("simple"), None, Path::new(".")).unwrap();
+    let t = load(Some(Spec::Name("simple")), &[]).unwrap();
     assert!(t.name.contains("built-in"), "{}", t.name);
     assert!(t.css.contains("--gp-bg"));
   }
@@ -411,9 +522,12 @@ mod tests {
   fn an_unknown_theme_is_refused_saying_everything_it_tried() {
     // Never a silent fall back to the default: `--theme=simpel` must not build
     // a plausible deck in the wrong clothes and say nothing.
-    let e = load(Some("simpel"), None, Path::new(".")).unwrap_err();
+    let e = load(Some(Spec::Name("simpel")), &[]).unwrap_err();
     assert!(e.message.contains("no theme 'simpel'"), "{}", e.message);
-    assert!(e.message.contains("not a path"), "{}", e.message);
+    // THE "not a path" ASSERTION IS DELETED WITH THE LINE IT ASSERTED. A name
+    // is never tried as a path any more, so keeping it would have meant keeping
+    // a false sentence in a refusal to keep a test green.
+    assert!(!e.message.contains("not a path"), "a name is not tried as a path: {}", e.message);
     assert!(e.message.contains("simple"), "it lists the built-ins: {}", e.message);
   }
 
@@ -422,7 +536,7 @@ mod tests {
     let d = dir("file");
     let css = d.join("plain.css");
     std::fs::write(&css, "body{color:red}").unwrap();
-    let t = load(Some(css.to_str().unwrap()), None, Path::new(".")).unwrap();
+    let t = load(Some(Spec::File(css.clone())), &[]).unwrap();
     assert_eq!(t.css, "body{color:red}");
   }
 
@@ -432,7 +546,7 @@ mod tests {
     std::fs::write(d.join("theme.css"), "body{color:blue}").unwrap();
     std::fs::write(d.join("theme.js"), "console.log(1)").unwrap();
     std::fs::write(d.join("layout.html"), "<html>{{slides}}</html>").unwrap();
-    let t = load(Some(d.to_str().unwrap()), None, Path::new(".")).unwrap();
+    let t = load(Some(Spec::File(d.clone())), &[]).unwrap();
     assert_eq!(t.js.as_deref(), Some("console.log(1)"));
     assert!(t.layout.as_deref().unwrap().contains("{{slides}}"));
   }
@@ -440,7 +554,7 @@ mod tests {
   #[test]
   fn a_directory_without_theme_css_is_refused_by_name() {
     let d = dir("empty");
-    let e = load(Some(d.to_str().unwrap()), None, Path::new(".")).unwrap_err();
+    let e = load(Some(Spec::File(d.clone())), &[]).unwrap_err();
     assert!(e.message.contains("no theme.css"), "{}", e.message);
   }
 
@@ -449,7 +563,7 @@ mod tests {
     let d = dir("external");
     let css = d.join("cdn.css");
     std::fs::write(&css, "body{color:red}\n@import url(https://fonts.example/x.css);\n").unwrap();
-    let e = load(Some(css.to_str().unwrap()), None, Path::new(".")).unwrap_err();
+    let e = load(Some(Spec::File(css.clone())), &[]).unwrap_err();
     assert!(e.message.contains("line 2"), "names the line: {}", e.message);
     assert!(e.message.contains("fonts.example"), "names the offender: {}", e.message);
   }
@@ -523,17 +637,51 @@ mod tests {
     // origin is AC15's to remove, not this line's to narrate.
     let d = dir("provenance");
     std::fs::write(d.join("theme.css"), "body{}").unwrap();
-    let t = load(Some(d.to_str().unwrap()), None, Path::new(".")).unwrap();
+    let t = load(Some(Spec::File(d.clone())), &[]).unwrap();
     assert_eq!(t.origin, Origin::Path);
     assert_eq!(provenance(&t), None);
   }
 
+  // PRECEDENCE MOVED OUT OF THIS MODULE and is deck.rs's now: it is the caller
+  // that sees all four sources and knows which base each path resolves against.
+  // What is testable here is that the two SPECS cannot be confused, which is
+  // the property the old flag-beats-front test was standing in for.
+  // THE CWD CASE IS NOT TESTED HERE, DELIBERATELY, and the reason is the note
+  // above provenance()'s tests one screen up. Proving it at this level needs
+  // std::env::set_current_dir, which mutates the WHOLE PROCESS while cargo runs
+  // these on parallel threads -- it would race every other test in this binary
+  // that touches a relative path, intermittently. AT01 proves it black-box in a
+  // real subprocess from two real directories, which is where it belongs.
+  //
+  // What IS pure, and therefore lives here, is the rule that makes the cwd
+  // unreachable in the first place: a name carrying a separator never becomes a
+  // Name at all.
   #[test]
-  fn the_flag_beats_the_front_matter_key() {
-    let d = dir("beats");
-    let flagged = d.join("flag.css");
-    std::fs::write(&flagged, "body{color:green}").unwrap();
-    let t = load(Some(flagged.to_str().unwrap()), Some("never-read.css"), &d).unwrap();
-    assert_eq!(t.css, "body{color:green}");
+  fn a_name_carrying_a_separator_is_refused_naming_its_replacement() {
+    let e = name_spec("./x.css", "--theme", "for a path, use --theme-file=./x.css").unwrap_err();
+    assert!(e.message.contains("looks like a path"), "{}", e.message);
+    assert!(e.remedy.as_deref().unwrap_or_default().contains("--theme-file"), "clause (f): {:?}", e.remedy);
+    // EXISTENCE IS NOT THE TEST. A path that is not there refuses identically,
+    // or a mistyped filename falls through to the name resolver and is handed
+    // the built-in roster.
+    assert!(name_spec("nosuch/x.css", "--theme", "for a path, use --theme-file=nosuch/x.css").is_err());
+    // And the front-matter half names the front-matter remedy, not the flag.
+    let e = name_spec("./x.css", "the deck's 'theme:'", "for a path, use 'theme-file: ./x.css'").unwrap_err();
+    assert!(e.remedy.as_deref().unwrap_or_default().contains("theme-file:"), "{:?}", e.remedy);
+  }
+
+  #[test]
+  fn an_ordinary_name_is_not_refused() {
+    // The control: without this the test above passes against a name_spec that
+    // refuses everything.
+    assert!(matches!(name_spec("simple", "--theme", "unused"), Ok(Spec::Name("simple"))));
+  }
+
+  #[test]
+  fn theme_path_directories_are_searched_before_the_environment() {
+    // split_path_flag is the pure half and is what the flag hands to load().
+    let dirs = split_path_flag("/a:/b");
+    assert_eq!(dirs, vec![PathBuf::from("/a"), PathBuf::from("/b")]);
+    assert!(split_path_flag("").is_empty(), "an empty value adds no directories");
   }
 }

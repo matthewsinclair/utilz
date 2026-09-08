@@ -171,7 +171,36 @@ fn compile(cmd: &Command, paper: Option<String>) -> Result<Compiled, Failure> {
     slides.push(slide);
   }
 
-  let theme = theme::load(cmd.theme.as_deref(), front.theme.as_deref(), base)?;
+  // AC01: FOUR SOURCES, RANKED. A flag of either kind beats a front-matter key
+  // of either kind; the two flags are refused together in args.rs; the two deck
+  // keys are refused HERE, where both are visible and a Result is already in
+  // play. frontmatter::parse returns no Result, and making it one would force
+  // every caller to handle a case that is not a parse error -- two keys that
+  // conflict is a semantic conflict, not bad syntax.
+  if front.theme.is_some() && front.theme_file.is_some() {
+    return Err(Failure::new(
+      "the deck sets both 'theme:' and 'theme-file:'",
+      "they are mutually exclusive: 'theme:' takes a NAME, 'theme-file:' a path beside the deck",
+    ));
+  }
+  // WHICH BASE A PATH RESOLVES AGAINST IS DECIDED HERE AND NOWHERE ELSE. A
+  // flag's path is the user's, typed at a shell, so it resolves against the
+  // cwd; a deck's belongs to the deck and resolves beside it. theme.rs used to
+  // ask this question in the middle of its lookup, which is what put an impure
+  // coordination decision inside a pure resolver.
+  let extra = cmd.theme_path.as_deref().map(theme::split_path_flag).unwrap_or_default();
+  let spec = if let Some(name) = cmd.theme.as_deref() {
+    Some(theme::name_spec(name, "--theme", &format!("for a path, use --theme-file={name}"))?)
+  } else if let Some(path) = cmd.theme_file.as_deref() {
+    Some(theme::Spec::File(PathBuf::from(path)))
+  } else if let Some(name) = front.theme.as_deref() {
+    Some(theme::name_spec(name, "the deck's 'theme:'", &format!("for a path, use 'theme-file: {name}'"))?)
+  } else {
+    // The last arm as a map(), which is what clippy asks for and reads better
+    // here anyway: by this point exactly one Option can still be Some.
+    front.theme_file.as_deref().map(|path| theme::Spec::File(base.join(path)))
+  };
+  let theme = theme::load(spec, &extra)?;
   // AC14. Through the same single door as every other warning: theme.rs decides
   // WHAT is worth saying because it owns the resolution order, and this line
   // decides only that it gets said. A second eprintln! in theme.rs would be the
@@ -359,6 +388,8 @@ mod tests {
       verb: Verb::Build,
       input: "decks/talk.md".into(),
       out: out.map(str::to_string),
+      theme_file: None,
+      theme_path: None,
       theme: None,
       watch: false,
       paper: None,

@@ -43,13 +43,17 @@ After that the binary is self-contained -- no runtime dependencies at all, theme
 ## Synopsis
 
 ```bash
-prez build   <deck.md> [-o out.html] [--theme=T] [--watch]
-prez pdf     <deck.md> [-o out.pdf]  [--theme=T] [--paper=WxH] [--browser=PATH]
-prez present <deck.md> [--theme=T] [--browser=PATH]
+prez build   <deck.md> [-o out.html] [--theme=NAME|--theme-file=PATH] [--watch]
+prez pdf     <deck.md> [-o out.pdf]  [--theme=NAME|--theme-file=PATH] [--paper=WxH] [--browser=PATH]
+prez present <deck.md> [--theme=NAME|--theme-file=PATH] [--browser=PATH]
 prez --help | --version
 ```
 
 Every flag takes its value either way: `--theme=simple` or `--theme simple`.
+
+**`--theme` TAKES A NAME AND NOTHING ELSE (ST0013, hv 29 Aug 2026).** It resolves on `PREZ_THEME_PATH` -- extended for one run by `--theme-path` -- and then among the built-ins, and it never looks in the working directory. Passing a path to it is refused, and the refusal names `--theme-file`.
+
+**If you have `--theme <path>` in a script or a shell history, the migration is one word:** `--theme=` becomes `--theme-file=`, and both shapes it accepted before -- a `.css` file and a directory holding `theme.css` -- still work. The split exists because `--theme=simple` beside a `./simple/` directory used to resolve the local one and elsewhere the built-in, silently, so the same command built two different decks.
 
 ---
 
@@ -70,7 +74,9 @@ Every flag takes its value either way: `--theme=simple` or `--theme simple`.
 | Option           | Applies to   | Notes                                                                                         |
 | ---------------- | ------------ | --------------------------------------------------------------------------------------------- |
 | `-o, --out PATH` | build, pdf   | Default: beside the input with the extension swapped.                                         |
-| `--theme T`      | all          | A built-in name, a `.css` file, or a directory holding `theme.css`.                           |
+| `--theme NAME`   | all          | A theme NAME: `PREZ_THEME_PATH` first, then the built-ins. Never the working directory.       |
+| `--theme-file P` | all          | A theme PATH: a `.css` file, or a directory holding `theme.css`. Excludes `--theme`.          |
+| `--theme-path P` | all          | Colon-separated directories PREPENDED to `PREZ_THEME_PATH` for this run.                      |
 | `--watch`        | build        | Rebuild on every save. A failed rebuild is reported and survived.                             |
 | `--paper WxH`    | pdf          | Page size in millimetres, eg `254x142.9` (the 16:9 default).                                  |
 | `--window WxH`   | present      | Window size in pixels. Default `1280x720`, the deck's own 16:9. Cold start only -- see below. |

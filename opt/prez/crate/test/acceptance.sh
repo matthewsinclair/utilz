@@ -1,6 +1,16 @@
 #!/usr/bin/env bash
 #
-# prez acceptance tests -- the ATs behind ST0002's acceptance criteria.
+# prez acceptance tests -- the ATs behind ST0010's acceptance criteria.
+#
+# **EDITED BY ST0013 ON 2026-09-08, AND THE EDIT IS RECORDED RATHER THAN
+# SILENT.** hv's re-scope split `--theme` into `--theme` (a NAME) and
+# `--theme-file` (a PATH), so the five invocations here that passed a PATH to
+# `--theme` -- in AT05 and AT08 -- now name the flag that takes one. This is a
+# closed thread's frozen record being changed, which deserves saying out loud;
+# the alternative was worse. These tests drive a CLI whose contract changed, and
+# a test asserting the old contract would be asserting the opposite of correct.
+# Nothing else here moved: every other `--theme` in this file passes a NAME and
+# is unaffected.
 #
 # **EVERY CHECK HERE IS BLACK-BOX**: it drives the built binary and reads what
 # came out. The unit tests inside src/ prove the modules; these prove the tool.
@@ -467,7 +477,7 @@ if want AT05; then
 
     # A theme may choose the page SIZE; it may not quietly drop the page BREAK.
     printf '@media print { @page { size: 400mm 200mm } }\n' > "$WORK/wide.css"
-    "$BIN" pdf "$DEMO" --theme "$WORK/wide.css" -o "$WORK/wide.pdf" >/dev/null 2>&1
+    "$BIN" pdf "$DEMO" --theme-file "$WORK/wide.css" -o "$WORK/wide.pdf" >/dev/null 2>&1
     check "a theme may set page size" "$(paper_of "$WORK/wide.pdf")" "400x200"
     check "and still gets one page per slide" "$(pages_in "$WORK/wide.pdf")" "6"
 
@@ -475,7 +485,7 @@ if want AT05; then
     # cannot stop -- the page count control catches it. This is the check that
     # exists because the stronger claim was falsified.
     printf '@media print { section { break-after: auto !important; height: auto !important } }\n' > "$WORK/defeat.css"
-    "$BIN" pdf "$DEMO" --theme "$WORK/defeat.css" -o "$WORK/defeat.pdf" 2>"$WORK/defeat.err" >/dev/null
+    "$BIN" pdf "$DEMO" --theme-file "$WORK/defeat.css" -o "$WORK/defeat.pdf" 2>"$WORK/defeat.err" >/dev/null
     present "a collapsed PDF is reported, not shipped silently" "defeating one-slide-per-page" "$WORK/defeat.err"
 
     "$BIN" pdf "$DEMO" --browser /nonexistent -o "$WORK/never.pdf" >/dev/null 2>"$WORK/refuse.err"
@@ -644,7 +654,7 @@ if want AT08; then
   BROWSER="$(chrome || true)"
   deck_before=$(shasum "$DEMO" | cut -d' ' -f1)
   printf 'body{background:#0a0a0a;color:#00ff00}\n' > "$WORK/good.css"
-  "$BIN" build "$DEMO" --theme "$WORK/good.css" -o "$WORK/themed.html" >/dev/null 2>&1
+  "$BIN" build "$DEMO" --theme-file "$WORK/good.css" -o "$WORK/themed.html" >/dev/null 2>&1
   present "a single .css restyles the deck" "background:#0a0a0a" "$WORK/themed.html"
 
   # A NAME, not just a path -- and both flag forms, byte-identical. The whole
@@ -677,7 +687,7 @@ if want AT08; then
   check "without touching the markdown" "$(shasum "$DEMO" | cut -d' ' -f1)" "$deck_before"
 
   printf 'body{color:red}\n@import url(https://fonts.example/x.css);\n' > "$WORK/bad.css"
-  "$BIN" build "$DEMO" --theme "$WORK/bad.css" -o "$WORK/never.html" 2>"$WORK/theme.err" >/dev/null
+  "$BIN" build "$DEMO" --theme-file "$WORK/bad.css" -o "$WORK/never.html" 2>"$WORK/theme.err" >/dev/null
   check "an external URL in a theme exits" "$?" "2"
   present "the refusal names the file" "bad.css" "$WORK/theme.err"
   present "the refusal names the line" "line 2" "$WORK/theme.err"
@@ -687,7 +697,7 @@ if want AT08; then
   # An attribution URL in a comment is documentation, not a reference. Without
   # this the rule would teach theme authors to delete their attributions.
   printf '/* adapted from https://example.com/t, MIT */\nbody{color:red}\n' > "$WORK/attrib.css"
-  "$BIN" build "$DEMO" --theme "$WORK/attrib.css" -o "$WORK/attrib.html" >/dev/null 2>&1
+  "$BIN" build "$DEMO" --theme-file "$WORK/attrib.css" -o "$WORK/attrib.html" >/dev/null 2>&1
   check "a URL inside a comment does not fail a build" "$?" "0"
 
   # EVERY BUILT-IN, not just the default. A vocabulary one theme honours is not

@@ -294,9 +294,13 @@ jobs:
           # stderr to suppress when crate/test/ is absent. `*.sh` rather than any
           # executable file: runtime-logic-probe.mjs is executable and is a probe,
           # not a suite.
-          out="$(mktemp)"
-          : > "$out"
-          ran_any=0
+          # ACCUMULATE, NEVER FAIL FAST, because the local driver accumulates.
+          # common.sh runs every suite and reports "N of M failed"; if this step
+          # aborted on the first red one, the two homes of the convention would
+          # disagree about what a run MEANS -- a contributor would get one
+          # failure per push where the local run gives them the whole picture.
+          # With one suite that difference was invisible. With two it is not.
+          suite_failures=0
           for script in "$crate_dir"/test/*.sh; do
             # An unmatched glob stays literal: this crate has no black-box
             # suite, which is not a defect.
@@ -307,24 +311,45 @@ jobs:
               # represents never runs, and the summary says everything passed.
               echo "$script is present but not executable."
               echo "Refusing to call this a pass -- a suite that cannot run is not a suite that passed."
-              exit 1
+              suite_failures=$((suite_failures + 1))
+              continue
             fi
 
             # ONE invocation, prefixed rather than duplicated in an if/else --
             # two copies of the command line drift, and the flags matter.
+            # ONE OUTPUT FILE PER SUITE: see the evidence check below.
+            out="$(mktemp)"
             RUNNER=()
             if command -v xvfb-run >/dev/null 2>&1; then RUNNER=(xvfb-run -a); fi
-            "${RUNNER[@]+"${RUNNER[@]}"}" "$script" --strict 2>&1 | tee -a "$out"
-            ran_any=1
+            if ! "${RUNNER[@]+"${RUNNER[@]}"}" "$script" --strict 2>&1 | tee "$out"; then
+              suite_failures=$((suite_failures + 1))
+            fi
+
+            # PROVE a browser was actually found -- BY THE SUITE THAT NEEDS ONE.
+            # A suite that skipped every browser AT can still exit 0, and the
+            # only durable evidence is that suite naming the binary it drove.
+            #
+            # PER SUITE, against its OWN output, and the population is the point.
+            # Checking the union of every suite's output would mean "somebody
+            # mentioned a browser", which is true today only because exactly one
+            # suite does -- correct by accident, and wrong the first time any
+            # other suite prints the word chrome in a message.
+            #
+            # A suite DECLARES the requirement by mentioning a browser in its own
+            # source: acceptance.sh matches 87 times, theme-addressing.sh zero.
+            # A future suite that merely says "chrome" in a message would be held
+            # to a requirement it does not have -- but it would fail LOUDLY,
+            # which is the direction a guard should be wrong in.
+            if grep -qiE 'chrom|browser: ' "$script" \
+               && ! grep -qiE 'chrom|browser: ' "$out"; then
+              echo "$script drives a browser but produced no evidence of one."
+              echo "Refusing to call this a pass -- see the output above."
+              suite_failures=$((suite_failures + 1))
+            fi
           done
 
-          # PROVE a browser was actually found, across every suite that ran. A
-          # suite that skipped every browser AT can still exit 0; the only
-          # durable evidence is a suite naming the binary it drove. Guarded on
-          # ran_any so a crate with no black-box suite is not failed for it.
-          if [ "$ran_any" -eq 1 ] && ! grep -qiE 'chrom|browser: ' "$out"; then
-            echo "the black-box suites produced no evidence of a browser."
-            echo "Refusing to call this a pass -- see the output above."
+          if [ "$suite_failures" -gt 0 ]; then
+            echo "$suite_failures black-box suite failure(s) in $crate_dir."
             exit 1
           fi
           echo "::endgroup::"

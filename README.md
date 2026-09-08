@@ -339,8 +339,9 @@ prez pdf talk.md
 # Present in a de-chromed window at the deck's own aspect
 prez present talk.md
 
-# Pick a built-in theme
-prez build --theme slate talk.md
+# Pick a built-in theme by NAME (simple, mono, manuscript, contrast,
+# blueprint, steampunk, 8bit); --theme-file takes a path instead
+prez build --theme mono talk.md
 ```
 
 See `utilz help prez` for details.

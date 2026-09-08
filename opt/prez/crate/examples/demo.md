@@ -36,7 +36,7 @@ It is flat `key: value` lines, and the block only counts at the very top of the 
 ---
 title: A Deck
 author: Someone
-theme: themes/plain.css
+theme-file: themes/plain.css
 mermaid: true
 ---
 ```

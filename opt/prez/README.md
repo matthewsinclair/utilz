@@ -60,17 +60,23 @@ A browser is needed only by the `pdf` and `present` verbs. The tool probes for o
 ## Usage
 
 ```bash
-prez build   <deck.md> [-o out.html] [--theme=T] [--watch]
-prez pdf     <deck.md> [-o out.pdf]  [--theme=T] [--paper=WxH] [--browser=PATH]
-prez present <deck.md> [--theme=T] [--browser=PATH]
+prez build   <deck.md> [-o out.html] [--theme=NAME|--theme-file=PATH] [--watch]
+prez pdf     <deck.md> [-o out.pdf]  [--theme=NAME|--theme-file=PATH] [--paper=WxH] [--browser=PATH]
+prez present <deck.md> [--theme=NAME|--theme-file=PATH] [--browser=PATH]
 ```
 
 ```bash
 # Build one of the shipped decks
 prez build examples/demo.md -o /tmp/demo.html
 
-# A theme off the search path -- prez says which directory dressed the deck
+# A theme NAME off the search path -- prez says which directory dressed the deck
 PREZ_THEME_PATH=~/themes prez build deck.md --theme=house
+
+# The same, without exporting anything: --theme-path PREPENDS for one run
+prez build deck.md --theme-path=~/themes --theme=house
+
+# A theme by PATH -- a .css file, or a directory holding theme.css
+prez build deck.md --theme-file=./client/theme
 ```
 
 ---
@@ -81,13 +87,15 @@ PREZ_THEME_PATH=~/themes prez build deck.md --theme=house
 utilz test prez
 ```
 
-runs three suites, discovered by convention rather than by a prez special case:
+runs three kinds of suite, discovered by convention rather than by a prez special case:
 
-| Source                     | Suite                                                     |
-| -------------------------- | --------------------------------------------------------- |
-| `crate/Cargo.toml`         | `cargo test` -- the modules                               |
-| `test/*.bats`              | the shim and framework integration                        |
-| `crate/test/acceptance.sh` | black-box ATs against the built binary, always `--strict` |
+| Source             | Suite                                                     |
+| ------------------ | --------------------------------------------------------- |
+| `crate/Cargo.toml` | `cargo test` -- the modules                               |
+| `test/*.bats`      | the shim and framework integration                        |
+| `crate/test/*.sh`  | black-box ATs against the built binary, always `--strict` |
+
+**Every `.sh` in `crate/test/` is a suite, and one that is present but not executable is a REFUSAL rather than a skip** (ST0013/AC03). Naming a single file meant a second suite was run by nothing while every summary said everything passed.
 
 `--strict` is not optional here. Six of the acceptance checks need a browser, and without `--strict` a browserless machine reports "everything that ran passed" -- which is the same ambiguity one level down. A skip is printed, counted, and fails the run.
 

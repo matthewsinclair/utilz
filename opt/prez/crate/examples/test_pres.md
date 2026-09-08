@@ -37,7 +37,7 @@ deck.md  +  theme  ──prez──▶  deck.html   (is the presentation)
 | `prez present`  | a de-chromed fullscreen deck      |
 | `prez build -w` | rebuild on every save             |
 
-Themes are orthogonal to content: `--theme=simple`, or a path, or a name on `PREZ_THEME_PATH`. A name that matches nothing is refused, never quietly swapped for the default.
+Themes are orthogonal to content. `--theme=simple` is a NAME, looked up on `PREZ_THEME_PATH` and then among the built-ins; `--theme-file=./x.css` is a PATH. A name that matches nothing is refused, never quietly swapped for the default.
 
 ---
 

@@ -36,6 +36,10 @@ pub struct FrontMatter {
   pub author: Option<String>,
   pub date: Option<String>,
   pub theme: Option<String>,
+  /// `theme-file:` -- a path resolved BESIDE THE DECK, not beside the shell.
+  /// Split from `theme:` by AC01 clause (d), or the name-or-path ambiguity
+  /// simply moves into the deck, where it travels with the file.
+  pub theme_file: Option<String>,
   pub include: Vec<String>,
   pub mermaid: bool,
   /// Keys we do not know. Kept rather than dropped so the caller can warn about
@@ -57,6 +61,7 @@ impl FrontMatter {
       ("author", self.author.is_some()),
       ("date", self.date.is_some()),
       ("theme", self.theme.is_some()),
+      ("theme-file", self.theme_file.is_some()),
       ("include", !self.include.is_empty()),
       ("mermaid", self.mermaid),
     ];
@@ -139,6 +144,7 @@ fn parse_block(block: &str) -> Option<FrontMatter> {
       "author" => fm.author = Some(value.to_string()),
       "date" => fm.date = Some(value.to_string()),
       "theme" => fm.theme = Some(value.to_string()),
+      "theme-file" => fm.theme_file = Some(value.to_string()),
       "include" => {
         fm.include = value
           .split(',')
