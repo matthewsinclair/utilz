@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 06b406f0-9a29-4636-ad0d-abd6663e4f8f
-heartbeat_at: 2026-09-08 14:29Z
+heartbeat_at: 2026-09-08 14:39Z
 status: active
-focus: "Holding on hv. Reviewed cc's version-architecture sweep read-only: four guard holes and one publish-stopper (14 VERSION files untracked, so install_owned_paths would have shipped the pointers without the targets). All five taken by cc. Nothing claimed."
+focus: "Close-out state, all measured. Full estate GREEN: 554 ok / 0 not ok, plan-sum 554 matched, 19 suites, 710 assertions. ST0013 closed and published; issues 0012, 0013 and Intent 0282 filed, fixed and closed; AC16 rendered and catalogued. Nothing claimed, nothing held, inboxes empty. Open with hv: the push, 0013 scope note, AC16 placement."
 claims: []
 ---
 
@@ -51,6 +51,10 @@ Reviewed cc's version-architecture sweep (hv-ruled, built inline, `ac7decb`) rea
 - **`intent-vc`: six defects relayed, one-digit ruling delivered and landed.** The flat-125 offer is outstanding.
 
 ## Watch-outs
+
+- **THE SOURCE FEELS AUTHORITATIVE BECAUSE IT IS CAUSAL; THE ARTIFACT IS AUTHORITATIVE BECAUSE IT IS WHAT HAPPENED.** 8 Sep, closing the day, and it is the INVERSE of every other error in it. All day the failure was trusting an artifact without checking the instrument that made it. Here cc reasoned about a 1226-line log **from one line of its source** -- `common.sh:810` labels a script with the utility's name -- and concluded the two prez suites were indistinguishable in the log. **`common.sh:811` prints `Script: $script` unconditionally, has done since `0ebfa85` on 2026-08-29, and the log carries two distinct paths at lines 631 and 945.** A population of one where the function emits two, reasoned about an artifact cc had just produced and could have grepped. **Same root in both directions: reaching for the more convenient authority instead of the direct evidence.** Where an artifact exists, read the artifact.
+
+- **A MECHANICAL GUARD CATCHES WHAT DISCIPLINE DOES NOT, INCLUDING INSIDE THE CORRECTION FOR THE THING IT GUARDS.** Same exchange. Writing up the finding above, cc asserted on their REMEMBERED wording of their own board entry rather than its bytes; the `count == 1` refusal caught it and wrote nothing. **Source over log, then memory over file, twice in one entry, in the act of correcting the first.** My own instance an hour earlier was identical in shape: an injection anchor that matched twice, caught only because the rewrite refused rather than guessed. **Knowing the rule is measurably not the same as being protected by it** -- so the guard belongs in the code that does the work, not in the head of the person writing it.
 
 - **A STALE BINDING IS WORSE THAN A STALE VALUE, AND ITS TELL IS TWO CORRECT SENTENCES THAT CONTRADICT EACH OTHER.** 8 Sep, with cc, and the deepest thing either of us reached today because it is about how we WRITE to each other rather than how we measure. I said a commit landed "after your last board write"; cc said it landed before. **Both true. `8e5822a` was cc's last write when I said it and `c8da359` was when they read it, 8m16s apart.** A stale VALUE at least looks like a number somebody took at a moment, and a reader can ask when. **A stale BINDING reads as a fact about the TREE when it is only a fact about WHEN IT WAS SAID, and it survives every proofread because the grammar never breaks.** "Your last write", "the latest", "current HEAD", "now" -- every one resolves at READ time against a tree that has moved. **Two correct sentences that contradict each other means the referent moved, not that someone erred**; neither of us conceded and neither should have. **Name the commit.**
 
