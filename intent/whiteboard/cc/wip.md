@@ -3,7 +3,7 @@ node: cc
 name: Control Claude
 role: control
 session_id: 221775b1-d498-41c0-b937-4d10094711a8
-heartbeat_at: 2026-09-08 12:22Z
+heartbeat_at: 2026-09-08 12:26Z
 status: active
 focus: "IDLE, FOLDED FOR A COMPACT -- status stays active because a compact is not a session ending. ST0013 closed and dehydrated; every version reduced to one home on hv's ruling; install published at 2f76209 and verified by behaviour, 126 paths, doctor 7/7. Nothing claimed, nothing held."
 claims: []
@@ -40,6 +40,10 @@ Full record is in canon, not here: `intent st show ST0013`, `design.md` D1-D14.
 - **THIS TREE HAS THREE CONCURRENT WRITERS AND A `git status` FROM EARLIER IS NOT A BASELINE.** On 8 Sep I saw ST0012 and ST0014 flip to Completed, concluded a shell accident of mine had done it, and was one command from reverting vc's finished work. **The mtimes settled it -- their canon writes were nine minutes before my accident.** Check mtimes and the artefact before attributing a change to yourself or anyone. Commit with an explicit pathspec, never `-A`.
 
 - **AN ASSERTION PHRASED AS "NAMES X" LICENSES A SUBSTRING CHECK, AND A SUBSTRING CHECK CANNOT SEE A MALFORMED STRING THAT CONTAINS X.** vc's generalisation, 8 Sep, from a defect of mine: I built two refusal remedies from one `{remedy}={value}` template, which printed `for a path, use 'theme-file:'=./x.css` -- not front matter and not anything else. **Every unit test and all six ATs stayed green**, because each greps `theme-file:` as a substring and the malformed string contains it. The contract's own wording permitted it, so the test was not weaker than the criterion; the criterion was. **Where the SHAPE of a message is the requirement, the row has to say the shape** -- and the way I found it was running the case and READING the output rather than matching on it.
+
+- **"IT ANSWERS" AND "IT ANSWERS WITH THE RIGHT VALUE FROM THE RIGHT SOURCE" ARE DIFFERENT CLAIMS, AND THE FIRST IS THE EASY ONE.** 8 Sep, verifying the version publish: I checked every utility ANSWERS a version and carries the framework line -- liveness. vc checked the answer EQUALS THE BYTES of the file its yaml points at -- the Highlander claim. **Two numbers agreeing by luck pass mine and fail theirs.** When two people verify the same change, agreeing on the instrument wastes one of them; pick the claim the other did not make.
+
+- **AND VERIFY THE ARTIFACT, NOT ONLY THE TREE THAT TESTS IT.** Both my guards run against the checkout. vc ran the equivalent against the published INSTALL -- 31 help files and READMEs, 0 literals, pointer present in all 31 -- which is the only way to know a fix REACHED the shipped tree. Pair it with a negative control proving the pattern bites before trusting a zero.
 
 - **A CONTROL OVER A SUBSET READS EXACTLY LIKE A CONTROL OVER THE WHOLE.** vc's, 8 Sep, from a defect of mine. Pairing an assert-absence with an assert-presence is **necessary and not sufficient**: my absence check spanned 33 files and its presence control counted 16 of them, so deleting the version line from the other 17 passed BOTH. **The pair has to consume ONE population, computed once**, or the control is a subset wearing the costume of the fix.
 
