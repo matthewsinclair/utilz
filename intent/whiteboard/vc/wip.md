@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 06b406f0-9a29-4636-ad0d-abd6663e4f8f
-heartbeat_at: 2026-09-08 10:18Z
+heartbeat_at: 2026-09-08 10:26Z
 status: active
-focus: "ST0013 -- cc builds and has claimed it, I hold the contract. 0/2 BLOCKED, both to-write, WP-02 unblocked. AC02 was mine and wrong; cc caught it by asking what --theme-file accepts rather than assuming, and geodica has the corrected one-word migration. Localfolded for a compact; status stays active."
+focus: "ST0013 -- cc builds, I hold the contract. Six ATs now, not two: AT03-AT06 minted at 7aea747 covering the four clauses of AC01 that nothing reached. The block my board named -- wait for cc's design.md -- was not real, and checking it took one command. AT06 is deliberately NOT red-first and its row says so."
 claims: [ST0013 -- contract only; cc claims the build]
 ---
 
@@ -19,7 +19,7 @@ Released at EOD on hv's instruction, 7 Sep. Folds archived in `.history/20260829
 
 ## DOING
 
-**ST0013 -- cc BUILDS and has claimed it; I hold the CONTRACT.** Contract `0/2 BLOCKED`, both to-write, both citing `opt/prez/crate/test/theme-addressing.sh`. WP-02 unblocked 10:18Z.
+**ST0013 -- cc BUILDS and has claimed it; I hold the CONTRACT.** Contract `0/2 BLOCKED`, **six ATs**, all to-write, all citing `opt/prez/crate/test/theme-addressing.sh`.
 
 **AC02 IS MINE AND I GOT IT WRONG FIRST TIME.** I ruled that `--theme-file` takes only a `.css` file, so a directory needed `--theme-path=<parent>` plus `--theme=<name>`, on the premise that a refusal naming `--theme-file` would send a user to a flag that could not take their input. **False.** AC01 says the flag "resolves a path ONLY" -- **a PATH** -- and the pinned binary accepts both shapes today, measured both ways. **I read the flag's NAME where hv's text said path.** cc asked what it accepts rather than assuming, before writing any of it. Reworded; AC01 clause (f) stands as hv wrote it; geodica's migration is one word, and they have the correction.
 
@@ -27,7 +27,13 @@ Released at EOD on hv's instruction, 7 Sep. Folds archived in `.history/20260829
 
 **A NEW TEST FILE, on cc's finding: `theme-addressing.sh`.** ST0013/AT01 and ST0010/AT01 are different tests sharing one id in one file; `want()` at `acceptance.sh:108-111` is an exact string match and line 328 is ST0010's. Verified before ruling. ST0010's suite stays frozen as a closed thread's record.
 
-**My next act is minting the remaining ATs once cc's `design.md` names the files.**
+**THE BLOCK THIS LINE USED TO NAME WAS NOT REAL.** It read "my next act is minting the remaining ATs once cc's `design.md` names the files". The file was already named -- both rows cite `theme-addressing.sh`, re-cited this morning -- and **an AT row cites a test file and a criterion, neither of which `design.md` decides**. One command settled it. That is cc's own watch-out landing on me: a block I did not measure was a claim, and it would have cost cc's whole compact window.
+
+**AC01 IS ONE ROW CARRYING SIX CLAUSES OF hv's AND TWO ATs REACHED TWO OF THEM.** AT03 mutual exclusion plus the no-roster refusal; AT04 `--theme-path` PREPENDS, whose leg 1 sets env AND flag because **a replace implementation passes any test that only ever sets one of the two**; AT05 the front-matter split with `theme-file:` deck-relative; AT06 search path before built-ins. They map one-for-one onto cc's WP-03/04/05, which is the check that the coverage is the right size rather than inflated.
+
+**AT06 IS DELIBERATELY NOT RED-FIRST AND ITS ROW SAYS SO IN CAPITALS.** `theme.rs:126-129` already has that order, so it is green on first run. **Its green is not evidence the split landed.** It is minted because the fix is a type change rewriting that cascade, and an ordering that is load-bearing by accident of line order is what a rewrite drops silently -- the one case no red-first test can reach.
+
+**My next act is reading cc's `design.md` against the six rows when it lands, and ruling anything cc says is wrong before it gets built.**
 
 ## Claims
 
