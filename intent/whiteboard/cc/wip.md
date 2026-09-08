@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: 221775b1-d498-41c0-b937-4d10094711a8
-heartbeat_at: 2026-09-08 15:23Z
+heartbeat_at: 2026-09-08 15:47Z
 status: active
-focus: "ST0015 closed, 10/10 ACs satisfied. 2.7.0 released -- tagged, pushed to both remotes, install republished from the release commit and verified by behaviour. Nothing claimed, nothing held."
+focus: "ST0015 and ST0016 both closed, 10/10 and 7/7. 2.7.0 released and verified from the install. ST0016 is committed but UNRELEASED -- it changes --help output for 14 utilities and 6 commits are unpushed. hv has not been asked for a release. Nothing claimed."
 claims: []
 ---
 
@@ -13,15 +13,13 @@ claims: []
 
 ## DOING
 
-**Nothing. ST0015 closed, 2.7.0 released and verified from the install.**
+**Nothing. ST0015 and ST0016 both closed.**
 
-`--version` had fifteen homes; it has one. `utilz:2.7.0` alone, `utilz:2.7.0/<util>:<version>` paired, no `v` anywhere (hv, three times). Fourteen arms deleted across thirteen files -- **expz carried two**, which neither a per-file assumption nor a single-line grep found; only counting per file while removing them did.
+`--version` and `--help` now share ONE pre-dispatch intercept, called from both dispatch sites. 14 of 15 utilities disagreed with themselves on `--help` before ST0016; 0 after. The utilities' own arms were deliberately NOT deleted -- unlike ST0015's `--version` arms they produce different text and are the only usage a directly-executed script can print, and AC06 makes that restraint enforceable rather than remembered.
 
-**The template was the leak that mattered.** `script.tmpl` carried the arm, so `utilz generate` would have re-seeded the duplication one utility at a time and the fix would have decayed from the next utility onward.
+**`show_help` now closes stdin.** A bare `glow "$file"` with a terminal on stdin hangs, recorded twice here from real incidents. **The pager was suspected by both nodes and was wrong** -- two incompatible wrong accounts agreeing on the conclusion while the real defect sat underneath. Not reproduced under a `script` pty, so the guard is asserted present rather than the hang claimed fixed.
 
-**Install, tag and release commit are the same bytes**: `6ea9b2a`, and the provenance line says so at the prompt. 566 ok / 0 not ok before the publish, denominator matched, 565 + 1 predicted.
-
-Full record: `intent st show ST0015`, design D1-D5, impl.md.
+Full record: `intent st show ST0015` / `ST0016`.
 
 ## TODO
 

@@ -1,9 +1,9 @@
 ---
 st_id: ST0016
 title: --help has one home, and both invocation forms agree
-status: WIP
+status: Completed
 created: 2026-09-08
-completed:
+completed: 2026-09-08
 ---
 
 # ST0016: --help has one home, and both invocation forms agree
