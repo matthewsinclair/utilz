@@ -3,7 +3,7 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 06b406f0-9a29-4636-ad0d-abd6663e4f8f
-heartbeat_at: 2026-09-08 14:05Z
+heartbeat_at: 2026-09-08 14:18Z
 status: active
 focus: "Holding on hv. Reviewed cc's version-architecture sweep read-only: four guard holes and one publish-stopper (14 VERSION files untracked, so install_owned_paths would have shipped the pointers without the targets). All five taken by cc. Nothing claimed."
 claims: []
@@ -51,6 +51,10 @@ Reviewed cc's version-architecture sweep (hv-ruled, built inline, `ac7decb`) rea
 - **`intent-vc`: six defects relayed, one-digit ruling delivered and landed.** The flat-125 offer is outstanding.
 
 ## Watch-outs
+
+- **QUOTE THE COMMAND, NOT THE NUMBER -- AND WHERE YOU MUST QUOTE A NUMBER ABOUT A THING YOU ARE ALSO CHANGING, MEASURE AFTER YOUR OWN LAST WRITE. OTHERWISE YOU ARE THE DECAY.** 8 Sep, cc's diagnosis of an error we made independently and identically within minutes of each other. cc reported 8 unpushed, I reported 9, the truth was 11. **I blamed three concurrent writers and that was wrong** -- the log settles it: I measured 9 with HEAD at `a624a90` (15:14:52), committed `a3547b9` myself (15:16:42), then reported 9. cc's sequence is the same shape at `efcb5e2` -> `a624a90`. **No peer touched either figure. Each of us staled our own, with our own commit, in the exchange where we were discussing staleness.** Same family as cc's "ask, do not read" on the Intent marker: **a value copied out of a live system starts decaying at the copy, and the copier is frequently the cause.**
+
+- **A ZERO FROM SOMETHING YOU DID NOT MEAN TO INVOKE IS THE ONE READING YOUR AUTHORSHIP MAKES YOU LESS LIKELY TO QUESTION.** 8 Sep, mine, kept because cc named why it matters. Sourcing `acceptance.sh` into a subshell to inspect `file_size` also ran the suite header, printing `passed 0 failed 0` with no ATs selected -- three lines above a real measurement, in output I was reading for a different purpose. **Knowing what you MEANT to run is what stops you querying what actually ran.** It is the same shape as every other false zero today and strictly harder to catch, because the usual defence -- distrust output whose provenance you cannot see -- does not fire on your own terminal.
 
 - **A COUNT CONTROL AND A SUM CONTROL CATCH DIFFERENT FAILURES, AND THEY ARE ONE SUBTRACTION APART.** 8 Sep, the pair with cc. **A sweep prints its population count and refuses at ZERO** -- cc's, and it catches an EMPTY population, the case where "no matches" and "no problems" are the same output. **A partition prints its REMAINDER and refuses when the parts do not sum to the whole** -- mine, and it catches a WRONGLY DECOMPOSED one. Only the second would have caught what I published: four categories over `acceptance.sh`'s redirect sites summing to 66 against my own stated total of 74, an eight-site hole I handed to a peer as fact. **A partition that does not sum to its own total is self-refuting before anyone else looks at it** -- no second reader, no second run, the numbers convict themselves on the page. I had spent the afternoon requiring count controls of cc and left the arithmetic one out of my own.
 
