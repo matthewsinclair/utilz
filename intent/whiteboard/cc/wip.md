@@ -3,7 +3,7 @@ node: cc
 name: Control Claude
 role: control
 session_id: 221775b1-d498-41c0-b937-4d10094711a8
-heartbeat_at: 2026-09-08 12:58Z
+heartbeat_at: 2026-09-08 13:56Z
 status: active
 focus: "IDLE, RESUMED AFTER THE COMPACT -- status stayed active throughout, as a compact is not a session ending. ST0013 closed and dehydrated; every version reduced to one home on hv's ruling; install published at 2f76209, 126 paths, doctor 7/7. Nothing claimed, nothing held, holding on hv."
 claims: []
@@ -64,6 +64,10 @@ Full record is in canon, not here: `intent st show ST0013`, `design.md` D1-D14.
 - **A check placed before the thing it measures passes for the wrong reason**, and a red-first probe that did not APPLY is not a red-first proof. **A grep-based check must target a string the artifact can only contain if the thing is really there** -- never a token the file might legitimately discuss. **Never pipe a command whose exit code is the assertion**; `$?` is the last stage's.
 
 - **A SHARED FIXTURE THAT ANY TEST MUTATES IS A FLAKE GENERATOR.** The AT15 legs wrote a marker VERSION into the file-scoped install, so doctor's integrity check failed in a full run and passed in isolation. Mutating tests copy first.
+
+- **A CAPTURED STREAM THAT NO ASSERTION READS IS WORSE THAN ONE PRINTED ONLY ON FAILURE.** vc's finding 8 Sep, checked against my own surface and confirmed sharper here. vc redirected per-theme stderr to a file and printed it only when a build failed; all seven exited 0, so seven identical warnings sat unread and hv found them by running the command in a terminal. **My acceptance suite does not print it even then.** `acceptance.sh:403` sends AT03's build stderr to `$WORK/at03.err` and nothing ever greps that file -- the redirect exists to keep the terminal tidy. Measured, paired: the pre-fix demo deck emits **165 bytes on stderr and exits 0**; the fixed deck emits **0 bytes, same command, same exit code**. So issue 0012's warning was written into the harness's own capture on every run of the suite and read by nobody. **Exit-0-plus-noise is structurally invisible to a suite that only asserts what it already suspected.** CI escapes this by shape rather than by design -- `tests.yml:324` merges stderr into stdout and `tee`s it, so a noisy success does reach the log.
+
+- **THREE CHECKS IN A ROW RETURNED A CLEAN-LOOKING ZERO THAT WAS A TOOL ERROR, inside the check for the lesson above.** `opt/*/test/*.sh` matched nothing under zsh, which prints `no matches found` and yields empty. `mapfile` is a bash 4 builtin and `/bin/bash` here is **3.2.57**, the project's own stated floor, so the array stayed empty and the script reported `harness files found: 0` and continued. `git show --stat --name-only` included the commit MESSAGE, which quotes a path, so the filename variable became two lines of prose. **Only the third failed loudly, and only because I had added an explicit zero-count refusal after the second.** That refusal is the whole generalisation and it is one line: **a sweep prints its population count and refuses at zero.** Without it, "no matches" and "no problems" are the same output.
 
 **The estate, changed 8 Sep and worth knowing at the prompt.**
 
