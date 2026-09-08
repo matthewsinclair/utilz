@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 06b406f0-9a29-4636-ad0d-abd6663e4f8f
-heartbeat_at: 2026-09-08 11:19Z
+heartbeat_at: 2026-09-08 11:21Z
 status: active
-focus: "ST0013 contract is 3/3 satisfied -- PASS at 0daef97, verified by running every suite rather than reading cc's report. Blocked on hv for the AC03 widening ruling before the thread can close. ST0010 canon is accidentally still true, measured twice."
+focus: "ST0013 contract 3/3 PASS and hv has ruled AC03 STAYS. Only WP-07 (evidence) is open, cc running the full suite. Nothing is blocked on me."
 claims: [ST0013 -- contract only; cc claims the build]
 ---
 
@@ -27,7 +27,7 @@ Released at EOD on hv's instruction, 7 Sep. Folds archived in `.history/20260829
 
 **ST0010/AT05 + AT08 CONFIRMED GREEN BY ME, INDEPENDENTLY OF cc's RUN.** That canon is **accidentally** still true, and accidentally is the word going to hv -- nothing checked it, and nothing would have said so had it gone the other way.
 
-**BLOCKED ON hv, AND THIS IS THE ONLY THING BETWEEN ST0013 AND CLOSE: the AC03 widening.** AC03 is satisfied and inside the boundary. If hv descopes it the contract drops to 2/2 and WP-08 moves with it. Bookkeeping either way, but it is hv's boundary to set.
+**hv RULED 11:21Z: AC03 STAYS IN ST0013.** The widening is accepted, so the boundary is settled and nothing is blocked on hv. **7 of 8 WPs Done; only WP-07 (green + evidence) is WIP**, cc running the full estate suite then both doctors.
 
 ## Claims
 
@@ -83,6 +83,8 @@ Released at EOD on hv's instruction, 7 Sep. Folds archived in `.history/20260829
 - `utilz test` is not safe to run concurrently. Verify shell tooling under `/bin/bash` with an array, never zsh with an unquoted variable.
 
 ## Decisions that still decide things
+
+- (2026-09-08) **AC03 STAYS IN ST0013 -- hv's ruling, and the reason generalises.** It widened a prez theming thread into estate-wide test-driver work: both drivers discovering every suite in `crate/test/` rather than one hardcoded filename. **The work has no independent motivation** -- it exists only because ST0013's own six ATs would otherwise have been run by nothing -- so a separate thread would have opened already satisfied and closed the same hour, documenting a decision rather than tracking work. **`intent ac descope` is for a requirement that moved to other WORK, not for retroactive filing.** The cost accepted, explicitly: an estate-wide driver change is findable only inside a prez thread, and **there is no title-amend verb** (`st edit` prints a path; the title is canon), so the badge cannot be cheaply relabelled. **The general form: a thread's cost of PROOF belongs to that thread, even when the proof is built somewhere the title does not name.**
 
 - (2026-09-07) **THE VARIABLE IS NOT THE DEFECT; THE SILENCE IS.** Ruled with the pen on AC15, against my own prior recommendation. `UTILZ_HOME` is load-bearing as a SETTABLE variable in five places -- `test_helper.bash:20` for the whole bats suite, `prez.bats:132` as a deliberate foreign-tree run, `common_lib.bats:71`, the documented `e2e-smoke.el` path, and cc's own `install.sh:124` reading a foreign tree's yaml in a subshell. So the dispatcher derives its own home from `$0` always, ANNOUNCES a divergence with an inherited value, and HONOURS the inherited value. **The general form: when a capability is silent in the failing case and load-bearing in the working ones, remove the silence rather than the capability.** Two dispatchers was rejected as a Highlander violation on the one file that must have exactly one answer -- cc flagged that risk and the flag is what killed the option.
 - (2026-09-07) **A FIXTURE HAS THE SHAPE ITS AUTHOR IMAGINED, SO AN ENUMERATION IS TESTED AGAINST THE REAL TREE.** cc's, `install_lib.bats:4-7`, and it beat the ruling I was about to make on cost grounds. The defect the owned-set tests exist to catch is an enumeration matching the imagined shape rather than the real one -- which is the inclusion-list bug cc found this evening -- so a synthetic fixture would have reproduced the bug inside the test. Cheap `git init` trees for the refusal paths, the real tree for the enumeration. **The general form: a test fixture cannot catch a defect whose mechanism is the author's own model of the thing.**
