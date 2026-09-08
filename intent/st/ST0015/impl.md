@@ -38,3 +38,15 @@ After, over a population asserted at 15 and refusing below it:
 ## Adjacent defect, NOT fixed here
 
 **`--help` diverges between the two forms on 14 of 15 utilities** -- the symlink form renders the curated `help/*.md`, the dispatcher form falls through to the utility's own inline usage. Identical structure to the `--version` defect, one line above it in the same file, and a materially larger behaviour change. Reported to hv; not folded in without a ruling.
+
+## What the change flushed out of the existing tests
+
+**Ten bats tests asserted `assert_output_contains "v"` -- the bare letter -- and only five went red** on a change that rewrote every one of those lines. `stampz` and `lnrel` stayed green because their DESCRIPTIONS contain a `v`, in "e**v**ery" and "relati**v**e"; the two framework tests stayed green off `utilz v2.6.1`. **An assertion weak enough to be satisfied by prose splits a uniform change into red and green for reasons unrelated to the change.** All ten now assert the anchored form.
+
+**And one test had written the DEFECT down as its contract.** `prez.bats` asserted `utilz prez --version` equals `prez <version>` -- clap's output, which is exactly what hv reported as wrong. The test existed to prove both channels read one source, and froze the bug standing next to it by matching the whole line instead of the claim. The claim is kept; the accidental pinning of the framework's shape to the binary's is gone, and the symlink form is now asserted to agree with it exactly.
+
+**Two more asserted `"utilz v"` literally**, one of them on the line directly above `assert_output_contains "installed at $E2E_PREFIX"` -- ST0014/AC12 being load-bearing in a test rather than in an argument.
+
+## Not done here
+
+**The install is stale.** Everything above is verified against the CHECKOUT. The published install still answers the old way, and a publish is hv's. Verification from the install, by behaviour, is a separate step and is not claimed.

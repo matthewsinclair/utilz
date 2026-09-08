@@ -49,6 +49,54 @@ title: Version dispatch has one home, and reports both versions
 
 - AC09 RULED BY hv, 8 Sep, closing D3: 'utilz --version' reports 'utilz:2.6.1' on line one -- the framework's own version in the same colon form as the pair's framework half, with NO 'v' prefix, so the two renderings agree character for character on the part they share. hv considered and rejected 'utilz:v2.6.1'. The framework takes no second term because it is not part of anything. CRITICALLY, LINES TWO AND THREE ARE UNCHANGED AND MUST BE ASSERTED, NOT ASSUMED: the description, and the tree-provenance line ('source at <tree>' or 'installed at <tree> (<sha>)') which is held by ST0014/AC12 -- a closed thread. An implementation that rewrites line one and simplifies the provenance line away breaks a satisfied criterion on another thread, and this row exists partly to make that cost visible before it is paid. -- satisfied: no (computed)
 
+### Group AC10
+
+- AC10 The pair form holds FROM A PUBLISHED INSTALL, verified through the install's own links rather than the checkout's. This row exists because the other nine cannot see an install: opt/utilz/test/test_helper.bash:20 exports UTILZ_HOME from the helper's own location, so version_dispatch.bats measures the source tree no matter what the caller sets -- proved 8 Sep by running it with UTILZ_HOME=/nonexistent/decoy, which PASSES. So AT01-AT11 going green is a claim about the dev tree alone, while both defects this thread fixes were live in the published install at the moment they went green. That is the shape that shipped ab66156 the same morning: prez's --version broken in the install with the checkout entirely green. The covering test must build or address a real install, as install_guards.bats does, and must assert the install it measured is the one it meant -- the two-tree estate makes 'which tree answered' part of every claim, not a detail of it. -- satisfied: no (computed)
+
+### Group AT01
+
+_(no criteria in this group)_
+
+### Group AT02
+
+_(no criteria in this group)_
+
+### Group AT03
+
+_(no criteria in this group)_
+
+### Group AT04
+
+_(no criteria in this group)_
+
+### Group AT05
+
+_(no criteria in this group)_
+
+### Group AT06
+
+_(no criteria in this group)_
+
+### Group AT07
+
+_(no criteria in this group)_
+
+### Group AT08
+
+_(no criteria in this group)_
+
+### Group AT09
+
+_(no criteria in this group)_
+
+### Group AT10
+
+_(no criteria in this group)_
+
+### Group AT11
+
+_(no criteria in this group)_
+
 ## Acceptance Tests
 
 ### Group AC01
@@ -86,6 +134,54 @@ _(no tests in this group)_
 ### Group AC09
 
 _(no tests in this group)_
+
+### Group AC10
+
+_(no tests in this group)_
+
+### Group AT01
+
+- AT01 `opt/utilz/test/version_dispatch.bats` -- covers AC03 -- status: to-write
+
+### Group AT02
+
+- AT02 `opt/utilz/test/version_dispatch.bats` -- covers AC01 -- status: to-write
+
+### Group AT03
+
+- AT03 `opt/utilz/test/version_dispatch.bats` -- covers AC01 -- status: to-write
+
+### Group AT04
+
+- AT04 `opt/utilz/test/version_dispatch.bats` -- covers AC02 -- status: to-write
+
+### Group AT05
+
+- AT05 `opt/utilz/test/version_dispatch.bats` -- covers AC04 -- status: to-write
+
+### Group AT06
+
+- AT06 `opt/utilz/test/version_dispatch.bats` -- covers AC05 -- status: to-write
+
+### Group AT07
+
+- AT07 `opt/utilz/test/version_dispatch.bats` -- covers AC06 -- status: to-write
+
+### Group AT08
+
+- AT08 `opt/utilz/test/version_dispatch.bats` -- covers AC07 -- status: to-write
+
+### Group AT09
+
+- AT09 `opt/utilz/test/version_dispatch.bats` -- covers AC08 -- status: to-write
+
+### Group AT10
+
+- AT10 `opt/utilz/test/version_dispatch.bats` -- covers AC09 -- status: to-write
+
+### Group AT11
+
+- AT11 `opt/utilz/test/version_dispatch.bats` -- covers AC09 -- status: to-write
 
 ---
 

@@ -81,6 +81,115 @@
       "state": {
         "is": "computed"
       }
+    },
+    {
+      "id": "AC10",
+      "text": "The pair form holds FROM A PUBLISHED INSTALL, verified through the install's own links rather than the checkout's. This row exists because the other nine cannot see an install: opt/utilz/test/test_helper.bash:20 exports UTILZ_HOME from the helper's own location, so version_dispatch.bats measures the source tree no matter what the caller sets -- proved 8 Sep by running it with UTILZ_HOME=/nonexistent/decoy, which PASSES. So AT01-AT11 going green is a claim about the dev tree alone, while both defects this thread fixes were live in the published install at the moment they went green. That is the shape that shipped ab66156 the same morning: prez's --version broken in the install with the checkout entirely green. The covering test must build or address a real install, as install_guards.bats does, and must assert the install it measured is the one it meant -- the two-tree estate makes 'which tree answered' part of every claim, not a detail of it.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    }
+  ],
+  "tests": [
+    {
+      "id": "AT01",
+      "kind": "test",
+      "file": "opt/utilz/test/version_dispatch.bats",
+      "covers": [
+        "AC03"
+      ],
+      "status": "to-write"
+    },
+    {
+      "id": "AT02",
+      "kind": "test",
+      "file": "opt/utilz/test/version_dispatch.bats",
+      "covers": [
+        "AC01"
+      ],
+      "status": "to-write"
+    },
+    {
+      "id": "AT03",
+      "kind": "test",
+      "file": "opt/utilz/test/version_dispatch.bats",
+      "covers": [
+        "AC01"
+      ],
+      "status": "to-write"
+    },
+    {
+      "id": "AT04",
+      "kind": "test",
+      "file": "opt/utilz/test/version_dispatch.bats",
+      "covers": [
+        "AC02"
+      ],
+      "status": "to-write"
+    },
+    {
+      "id": "AT05",
+      "kind": "test",
+      "file": "opt/utilz/test/version_dispatch.bats",
+      "covers": [
+        "AC04"
+      ],
+      "status": "to-write"
+    },
+    {
+      "id": "AT06",
+      "kind": "test",
+      "file": "opt/utilz/test/version_dispatch.bats",
+      "covers": [
+        "AC05"
+      ],
+      "status": "to-write"
+    },
+    {
+      "id": "AT07",
+      "kind": "test",
+      "file": "opt/utilz/test/version_dispatch.bats",
+      "covers": [
+        "AC06"
+      ],
+      "status": "to-write"
+    },
+    {
+      "id": "AT08",
+      "kind": "test",
+      "file": "opt/utilz/test/version_dispatch.bats",
+      "covers": [
+        "AC07"
+      ],
+      "status": "to-write"
+    },
+    {
+      "id": "AT09",
+      "kind": "test",
+      "file": "opt/utilz/test/version_dispatch.bats",
+      "covers": [
+        "AC08"
+      ],
+      "status": "to-write"
+    },
+    {
+      "id": "AT10",
+      "kind": "test",
+      "file": "opt/utilz/test/version_dispatch.bats",
+      "covers": [
+        "AC09"
+      ],
+      "status": "to-write"
+    },
+    {
+      "id": "AT11",
+      "kind": "test",
+      "file": "opt/utilz/test/version_dispatch.bats",
+      "covers": [
+        "AC09"
+      ],
+      "status": "to-write"
     }
   ]
 }
