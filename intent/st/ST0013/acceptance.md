@@ -25,6 +25,10 @@ title: prez theme addressing: split --theme, --theme-file and --theme-path
 
 - AC03 BOTH DRIVERS MUST DISCOVER EVERY SUITE IN `crate/test/` RATHER THAN ONE HARDCODED FILENAME, AND MUST REFUSE A NON-EXECUTABLE ONE RATHER THAN SKIP IT. Measured by cc 2026-09-08 and verified: `opt/utilz/lib/common.sh:887` sets `acceptance="$crate_dir/test/acceptance.sh"` and `.github/workflows/tests.yml:290` tests `-x "$crate_dir/test/acceptance.sh"` -- both name one file exactly, while the BATS source three lines above at `common.sh:902` takes a `find -name "*.bats"` GLOB. The asymmetry is the defect. WHY THIS IS ST0013's PROBLEM AND NOT A PASSING OBSERVATION: the id-collision ruling of this same morning moved ST0013's ATs into `theme-addressing.sh`, a path neither driver knows, so the six rows of this contract would be run by NOTHING -- CI green, `utilz test prez` green, the all-green gate green, and six ATs marked green in canon resting on a manual run nothing repeats. That is the silent pass this project refuses, and `common.sh:919-923` already refuses its smaller sibling in these words: "the file is right there, the suite it represents never runs, and the summary says everything passed". A second suite at a path the driver does not know is that exact shape one level up, and the existing guard is structurally blind to it because it can only guard the filename it names. THE REFUSAL HALF IS NOT OPTIONAL AND IT IS THE TRAP IN THE OBVIOUS FIX: "glob and run each executable one" SKIPS a non-executable `.sh` in silence, which is precisely the defect `common.sh:919-923` exists to prevent, generalised from one filename to a set. Discovering zero suites stays a skip as it is today -- a crate with no black-box suite is not a defect -- but a `.sh` that is present and not executable is a refusal. AND THE CONVENTION HAS THREE HOMES, WHICH IS THE HIGHLANDER RISK THIS ROW ALSO CARRIES: `common.sh`, `tests.yml`, and `prez.bats:329` which asserts the hardcoded path as the driver's contract. All three move together or the next reader gets two answers about what runs. THE DISCOVERY IS cc's, unprompted, BEFORE WRITING A LINE OF THE FILE -- and the honest note is that the ruling that created the hole was mine. -- satisfied: yes (computed)
 
+### Group AC04
+
+- AC04 THE PROVENANCE ANNOUNCEMENT MUST NAME THE SOURCE THAT ACTUALLY SUPPLIED THE DIRECTORY, AND A REMEDY THAT WORKS FOR THE CASE THAT FIRED. Raised by cc 2026-09-08 as a wording defect and MEASURED BY vc TO BE MORE THAN THAT. With `PREZ_THEME_PATH` unset and `--theme-path <dir> --theme=NAME` given, the binary at `271d3c6` says: for a shadowing name, "came from <dir> (on PREZ_THEME_PATH), SHADOWING the built-in ... rename the local theme if that is not what you want"; for a non-shadowing name, "came from <dir> (on PREZ_THEME_PATH), not from the built-ins. Elsewhere this deck refuses to build until that directory is on the path." BOTH NAME AN ENVIRONMENT VARIABLE THAT IS UNSET AS THE MECHANISM THAT SUPPLIED THE THEME, AND BOTH REMEDIES ARE WRONG FOR THE FLAG CASE: the reproduction is to pass `--theme-path` again, not to put the directory on an env var, and the cure for an unwanted flag-supplied theme is to stop passing the flag, not to rename a directory. **THIS IS NOT COSMETIC AND IT IS NOT A LABEL.** It is `IN-AG-NO-SILENT-001`'s neighbour and it is THIS THREAD'S OWN RULE POINTING AT ITSELF: AC01 clause (f) requires a refusal to name the remedy for the case that actually fired, and ST0010's ruling of 2026-08-29 states the general form -- no fallback message names as its remedy the case in which it fired. **ST0013 CAUSED IT**, by adding a second source of search directories without updating the announcement that exists to say where a directory came from; `provenance()`'s own doc comment says naming the directory is the whole point because "a user with two directories on the path can always answer which one won", and a user who passed the flag now gets an answer that sends them to the wrong mechanism. **IT IS A ROW RATHER THAN AN ISSUE BECAUSE THIS THREAD INTRODUCED IT AND THE THREAD IS STILL OPEN.** Filing it would mean knowingly shipping the exact defect class the thread's own criterion enshrines. THE HONEST FIX records the source on `Origin::SearchPath` rather than rewording, because two mechanisms are now real and a single string cannot be true of both. NOTE THE COST, WHICH IS REAL AND ACCEPTED: `acceptance.sh`'s AT13 asserts the message names `PREZ_THEME_PATH`, so ST0010's frozen suite is edited a SECOND time by this thread -- recorded in that file's header the way the first edit was, and the freeze guards against drift rather than making the pin sacred. -- satisfied: no (computed)
+
 ### Group AT01
 
 _(no criteria in this group)_
@@ -57,6 +61,10 @@ _(no criteria in this group)_
 
 _(no criteria in this group)_
 
+### Group AT09
+
+_(no criteria in this group)_
+
 ## Acceptance Tests
 
 ### Group AC01
@@ -68,6 +76,10 @@ _(no tests in this group)_
 _(no tests in this group)_
 
 ### Group AC03
+
+_(no tests in this group)_
+
+### Group AC04
 
 _(no tests in this group)_
 
@@ -102,6 +114,10 @@ _(no tests in this group)_
 ### Group AT08
 
 - AT08 `opt/utilz/test/common_lib.bats` -- covers AC03 -- status: green -- THE SECOND HOME MOVES WITH THE FIRST. CI at `.github/workflows/tests.yml` must discover suites the same way the driver does, and neither may name a single suite filename any more. This row exists because the convention has THREE homes -- `common.sh`, `tests.yml`, `prez.bats:329` -- and a fix that lands in one leaves the estate with two answers to "what actually runs", which is the Highlander failure with a green attached. Its mechanism is a source assertion, not behaviour, because CI cannot run itself from inside a BATS suite; the precedent is already in this tree at `prez.bats:334`, which greps `common.sh` for a hardcoded `--strict` for exactly this reason. TARGET A STRING THE ARTIFACT CAN ONLY CONTAIN IF THE THING IS REALLY THERE, never a token the file might legitimately discuss -- a `grep` for the word `acceptance` would match the prose comments that surround both call sites and pass forever. Assert on the DISCOVERY construct, and assert the count of hardcoded `test/acceptance.sh` occurrences is ZERO in both files.  ||  VERIFIED BY vc 2026-09-08 at 271d3c6, run rather than read. theme-addressing.sh --strict: exit 0, passed 6 failed 0 skipped 0. acceptance.sh --strict: exit 0, passed 14 failed 0 skipped 0 n/a 0, with PREZ_TEST_BROWSER UNSET and 18 browser-evidence matches, so a real browser was driven and nothing degraded to a skip. utilz test prez: exit 0, 4 suite(s), both black-box suites named separately. utilz test utilz: exit 0, AT07 legs 1/2/3 plus the leg-1 CONTROL all green. Refusal strings READ, not substring-matched: the deck-key remedy prints valid front matter.
+
+### Group AT09
+
+- AT09 `opt/prez/crate/test/theme-addressing.sh` -- covers AC04 -- status: to-write -- THE ANNOUNCEMENT NAMES THE SOURCE AND A REMEDY THAT WORKS. Four legs, in `theme-addressing.sh` rather than `acceptance.sh` because the flag is this thread's. (1) `--theme-path <dir> --theme=NAME` with `PREZ_THEME_PATH` UNSET: the warning must NOT say `PREZ_THEME_PATH`, because it names a variable that is not set. (2) the same invocation names `--theme-path` instead. (3) the SHADOWING and NON-SHADOWING remedies are each correct for the flag case -- the reproduction is passing the flag again, not exporting a variable, and the cure for an unwanted flag-supplied theme is to stop passing the flag, not to rename a directory. (4) CONTROL, and without it this row proves nothing: with `PREZ_THEME_PATH` SET and no flag, the message still says `PREZ_THEME_PATH` and still gives the env remedy. **A fix that simply stopped naming the env var would pass legs 1-3 and break the case AC14 was written for**, which is the same wrong-reason shape this thread has been removing all day. ASSERT ON THE SHAPE, NOT ON A SUBSTRING: leg 2 must not be satisfied by a message that merely contains `--theme-path` somewhere -- this row exists partly because AT05's "names theme-file:" wording licensed a substring check that could not see a malformed string containing it. EXPECT `acceptance.sh`'s AT13 to need editing: it asserts the message names `PREZ_THEME_PATH`, which stays TRUE for the env case and must not be asserted unconditionally.
 
 ---
 
