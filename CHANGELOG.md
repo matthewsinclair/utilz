@@ -5,6 +5,22 @@ All notable changes to the Utilz framework will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.8.0] - 2026-09-08
+
+Minor: **`--help` changes for 14 of 15 utilities** when invoked as `utilz <util> --help`, so a user can observe it. It now renders the curated `help/<name>.md`, which is what `<util> --help` already gave.
+
+### Fixed
+
+- **`--help` HAD THE SAME DEFECT AS `--version`, ONE LINE UP THE SAME FILE** (ST0016). `bin/utilz` intercepted `--help` and `-h` on the **symlink** path only, so `<util> --help` rendered the curated help while `utilz <util> --help` fell through to the utility's own terse inline usage. **14 of 15 disagreed with themselves depending on how they were invoked.**
+
+  `version_intercept` became `predispatch_intercept` and answers `--version`, `--help` and `-h` from **one** home, called from both dispatch sites. A second, `--help`-shaped intercept beside the `--version` one would have rebuilt exactly the arrangement ST0015 removed.
+
+  **The utilities' own `--help` arms are deliberately NOT deleted**, unlike ST0015's `--version` arms. Those could go because `show_version` was the only producer either way; these produce genuinely different text and are the only usage a **directly executed** script can print -- `opt/<name>/<name> --help` is not a dispatched invocation and nothing intercepts it. An acceptance criterion holds that boundary, because the judgement otherwise lives in prose and prose does not fail: the next reader sees two adjacent threads, reads them as one pattern, and deletes fifteen arms that nothing replaces.
+
+  Two documented exceptions, neither a defect: **`expz`** calls `show_help` from its own arms and so has no inline usage to keep -- which is why it was the one utility that agreed before the fix -- and **`prez`** is a shim whose compiled binary answers `--help` itself.
+
+- **`show_help` closes stdin on every renderer arm.** A bare `glow "$file"` with a terminal on stdin hangs; this estate has it recorded twice from real incidents. **The pager was suspected and was wrong**: `-p` is opt-in, injecting it changed nothing, and the bare call hangs regardless. Two incompatible wrong explanations agreed on the conclusion while the real cause sat underneath the thing both were arguing about. **The hang was not reproduced under a `script`-allocated pty** -- glow exits 1 emitting terminal-query escapes there, a third behaviour -- so the guard is asserted **present** by inspection rather than the hang claimed fixed. A renderer handed a FILE has no business reading stdin either way.
+
 ## [2.7.0] - 2026-09-08
 
 Minor: **every version answer changes shape**, so a user can observe it. `utilz --version` now prints `utilz:2.7.0`; every utility prints `utilz:2.7.0/<name>:<version>`. **A new tag rather than a moved `v2.6.1`**, and the first tag in this project without a `v` -- the prefix is noise and it was the last thing making the framework's line a different shape from every utility's.
