@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 06b406f0-9a29-4636-ad0d-abd6663e4f8f
-heartbeat_at: 2026-09-08 10:47Z
+heartbeat_at: 2026-09-08 10:55Z
 status: active
-focus: "ST0013 WIP, 0/3 BLOCKED, eight ATs. WP-02 landed and I verified it by running it: 5 red, AT06 green, exit 1, shellcheck clean. Ruled WP-08 before src/ -- wiring a GREEN suite cannot distinguish a driver that runs it from one that skips it. Awaiting hv on the AC03 widening."
+focus: "ST0013 WIP. WP-08 wired the suite while RED and it worked: utilz test prez went 3 suites green to 4 suites exit 1. Two CI findings sent before cc commits -- the drivers now disagree fail-fast vs accumulate, and the browser-evidence guard reads a UNION rather than the suite meant to prove it. Awaiting hv on the AC03 widening."
 claims: [ST0013 -- contract only; cc claims the build]
 ---
 
@@ -49,7 +49,18 @@ Released at EOD on hv's instruction, 7 Sep. Folds archived in `.history/20260829
 
 **RAISED, DELIBERATELY NOT MINTED: the harness is duplicated across both suites** -- `want()` byte-identical by diff, plus `start/ok/bad/absent` and the `--strict` parsing. Not drift today, and cc's one difference (no `skip`/`not_applicable`) is deliberate and documented. **The answer is a drift test, not an extraction** -- extraction would edit `acceptance.sh`, a closed thread's frozen record, for no present defect, and this project's own CLAUDE.md already rules that a copy which cannot silently diverge is not what Highlander names. **Not minted because hv has one widening of this thread in front of them and I will not stack a second before they rule.**
 
-**My next act is reading cc's `design.md` D12 against AC03 when it lands.**
+**THE ORDERING CALL PAID OFF AND cc MEASURED IT: three suites green before, FOUR suites and exit 1 after.** That is the wiring proving itself, and it existed only while the suite was red.
+
+**Two CI findings sent before cc's commit; both are consequences of going from one suite to many, and neither was visible with one.**
+
+- **THE TWO DRIVERS NOW DISAGREE ABOUT WHAT A RUN MEANS.** `common.sh` accumulates -- every suite runs, `total_failed` adds up, "N of M failed". CI does not: `set -e` at `tests.yml:265` aborts the step at the FIRST red suite, so later suites never run. **AT08 exists to keep those two homes in step and they are now out of step in a user-visible way.**
+- **THE BROWSER-EVIDENCE GUARD'S POPULATION WIDENED SILENTLY WITH `tee -a`.** It used to mean "acceptance.sh named a browser"; it now means "SOME suite in the union did". **Measured clean today** -- theme-addressing.sh emits zero `chrom|browser: ` in source and output -- which is the correct-by-accident shape from this morning, not a present defect.
+
+**What I checked and cc had already got right:** the unmatched glob (`[[ -e ]]`, bash 3.2 leaves it literal), the `*.sh`-not-executable-bit reasoning citing the `.mjs` probe, and the pipe -- `pipefail` is set at `tests.yml:265`, so `| tee -a` does NOT swallow a red suite. I went looking for my own watch-out and it was not there.
+
+**cc improved my harness-drift proposal and the improvement is the point:** a comparison over "functions defined in both" passes trivially the moment someone renames one side, so it must assert the overlap is NON-EMPTY with a floor. **A check that goes green exactly when the drift becomes total** -- the same defect class as the four wrong-reason greens cc audited out of their own red run, in a test I proposed.
+
+**My next act is verifying WP-08 by running the driver once cc commits** -- not before, since `utilz test` is not concurrency-safe and cc is running it now.
 
 ## Claims
 
