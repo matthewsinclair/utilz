@@ -1,8 +1,8 @@
 #!/usr/bin/env bats
 # install_guards.bats - ST0014/WP-04: the guards that only exist in an install
 #
-# AT10 (AC09, the prez shim), AT13 (AC13, utilz test), AT14 (AC14, the venv),
-# AT15 (AC15, an inherited UTILZ_HOME), and AC12's provenance at the prompt.
+# AT10 (AC09, the prez shim), AT13 (AC13, utilz test), AT14 (AC18, the venv),
+# AT15 (AC19, an inherited UTILZ_HOME), and AC12's provenance at the prompt.
 #
 # THE INSTALL HERE IS BUILT BY COPYING, NOT BY PUBLISHING, AND THAT IS
 # DELIBERATE. install_copy_owned + install_manifest_write produce the same tree
@@ -150,7 +150,7 @@ teardown_file() {
 }
 
 # ============================================================================
-# AT14 (AC14) - a venv built inside the install is not drift
+# AT14 (AC18) - a venv built inside the install is not drift
 # ============================================================================
 
 @test "a venv created inside the install is not reported as drift" {
@@ -182,7 +182,7 @@ teardown_file() {
 }
 
 # ============================================================================
-# AT15 (AC15) - an inherited UTILZ_HOME has NO EFFECT on the dispatcher
+# AT15 (AC19) - an inherited UTILZ_HOME has NO EFFECT on the dispatcher
 # ============================================================================
 #
 # These legs assert the OPPOSITE of what this row used to. hv reversed the

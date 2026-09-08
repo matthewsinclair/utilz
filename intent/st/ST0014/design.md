@@ -138,11 +138,11 @@ against `source at /Users/matts/Devel/prj/Utilz` for a checkout. Without it the 
 
 **The manifest's filename lives in `common.sh` as `UTILZ_MANIFEST_NAME`, not in `install.sh`.** It is not install machinery: it is the discriminator between the two kinds of tree, and the RUNTIME needs it as much as the installer does -- `show_version` here, `run_tests`'s refusal for AC13, and the prez shim's install branch for AC09 all ask the same question. `install.sh` reads the constant from there rather than carrying a second copy, because a second answer to "which tree is this" is the one thing this thread cannot afford to have two of.
 
-## D9. The PATH cutover is its own verb (AC11, AC16, WP-12)
+## D9. The PATH cutover is its own verb (AC11, AC20, WP-12)
 
 `install` and `upgrade` write nothing outside the prefix. Relinking `~/.local/bin/*` is mutating the operator's environment mid-command and needs a verb they typed: **`utilz relink --prefix <dir>`**, separate and explicit, and it is WP-12, LAST, after WP-05. It is the only work package that writes outside the prefix, so it wants every guard finished first.
 
-**AC11 and AC16 are one policy from two sides: never implicitly, always available explicitly.** A `--relink` flag on `install` was rejected because a flag becomes habitual and habitual relinking is implicit relinking with a longer spelling. Shell-init in devbin's shape was rejected too: devbin has one entry point reached by an absolute path, which does not transfer to sixteen, and PATH-order resolution would make which-tree-answers depend on shell state -- the defect AC15 exists to remove.
+**AC11 and AC20 are one policy from two sides: never implicitly, always available explicitly.** A `--relink` flag on `install` was rejected because a flag becomes habitual and habitual relinking is implicit relinking with a longer spelling. Shell-init in devbin's shape was rejected too: devbin has one entry point reached by an absolute path, which does not transfer to sixteen, and PATH-order resolution would make which-tree-answers depend on shell state -- the defect AC19 exists to remove.
 
 **THIS SECTION SAID THE VERB SHOULD NORMALISE THE ODD LINK AND THAT IS NOW REVERSED (vc, ruled 21:20Z).** `~/.local/bin/prez` is a RELATIVE link to `bin/utilz` while the other fifteen are ABSOLUTE links to `bin/<util>`. It works, because the dispatcher reads `basename "$0"` for `INVOKED_AS` and resolves `UTILZ_HOME` from the resolved path either way. The argument for normalising was that two conventions in one directory is a false red waiting for the first doctor check that asserts one of them. **The argument against it wins: it is a change to hv's environment that nobody asked for, made under cover of a command asked to do something else.** A verb that quietly tidies what it was not pointed at is the same shape as a manifest check that re-blesses a file it refused. AT16 pins it: leave a link you did not write alone.
 
@@ -162,12 +162,12 @@ Measured baseline for WP-12: **sixteen links in `~/.local/bin`** resolve into th
 
 ## D11. Build order, and the one test that has to come first
 
-WP-01 (owned set + manifest) -> WP-02 (`install`) -> WP-04 (the runnable-install guards, and AC15) -> WP-03 (`upgrade`) -> WP-05 (AC01 end to end) -> WP-12 (`relink`). WP-12 is last because it is the only package that writes outside the prefix.
+WP-01 (owned set + manifest) -> WP-02 (`install`) -> WP-04 (the runnable-install guards, and AC19) -> WP-03 (`upgrade`) -> WP-05 (AC01 end to end) -> WP-12 (`relink`). WP-12 is last because it is the only package that writes outside the prefix.
 
 `upgrade` sits after the guards because it is the mirror of `install` (AC04) and mirroring something still moving costs more than waiting.
 
 **AC01 is the row the whole thread turns on and it is the one most easily faked.** `determine_utilz_home` at `bin/utilz:17-53` walks the symlink chain, takes `dirname`, and returns the parent of `bin/`, so `<prefix>/bin/utilz` should yield `UTILZ_HOME=<prefix>` with no dispatcher change at all. **That is a code read and not a measurement, and it is recorded here as one.** An install that silently reaches back into `~/Devel/prj/Utilz` passes every check that does not move the source aside, and it passes them looking exactly like success -- which is why AC01 is written to move the source tree aside rather than to assert that files arrived.
-## D12. An inherited UTILZ_HOME is IGNORED (AC15, WP-04)
+## D12. An inherited UTILZ_HOME is IGNORED (AC19, WP-04)
 
 **The dispatcher always derives its home from `$0` and ignores an inherited `UTILZ_HOME` entirely.** hv's form of it: if it can find the dispatcher on PATH, it can work everything else out from there, so no environment variable is needed at all. `determine_utilz_home` already does exactly that -- walk the symlink chain, take the parent of `bin/` -- and `bin/utilz:42` used to throw that answer away whenever the variable happened to be set.
 
@@ -189,7 +189,7 @@ WP-01 (owned set + manifest) -> WP-02 (`install`) -> WP-04 (the runnable-install
 
 **AT15 asserts the opposite of what it used to, in three legs that divide the space.** The marker comes back under a divergent export; stderr is asserted EMPTY rather than inferred from stdout being right; and a DISPATCHED utility answers from the prefix too, which is the leg that proves the dispatcher exported the derived value rather than merely using it locally. Measured: legs 1 and 3 bite against silently honouring, leg 2 bites only against re-adding the announcement. None is redundant.
 
-## D13. `utilz use dev|opt` is a thin coordinator over relink (AC17, WP-13)
+## D13. `utilz use dev|opt` is a thin coordinator over relink (AC21, WP-13)
 
 ```
 utilz use opt   -> relink to install.prefix        (read from utilz.yaml)

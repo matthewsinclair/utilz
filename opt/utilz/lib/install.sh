@@ -305,7 +305,7 @@ install_manifest_write() {
 # values: "matches" and "cannot tell" must never render as the same answer.
 #
 # THE ROLL-CALL IS REQUIRED, NOT MERELY CONVENIENT. THIS FUNCTION MUST NEVER
-# WALK THE TREE (AC14). It reads the manifest and looks at nothing else, so a
+# WALK THE TREE (AC18). It reads the manifest and looks at nothing else, so a
 # file the manifest does not name is not drift and is not reported.
 #
 # The convenient reason is that an install has no git and therefore nothing to
@@ -848,9 +848,9 @@ alone and reported as skipped. install and upgrade NEVER do this implicitly.
 USAGE
 }
 
-# `utilz relink` -- the explicit PATH cutover (AC16).
+# `utilz relink` -- the explicit PATH cutover (AC20).
 #
-# AC11 and AC16 are one policy from two sides: never implicitly, always
+# AC11 and AC20 are one policy from two sides: never implicitly, always
 # available explicitly. A --relink flag on install was rejected because a flag
 # becomes habitual, and habitual relinking is implicit relinking with a longer
 # spelling.
@@ -1069,7 +1069,7 @@ No path is typed either way: each tree carries the address of the other.
 USAGE
 }
 
-# `utilz use dev|opt` -- the two-word switch (AC17).
+# `utilz use dev|opt` -- the two-word switch (AC21).
 #
 # A THIN COORDINATOR OVER relink, and there is exactly one relinker. This
 # parses a word to a tree, calls relink, and renders. If it ever grows a

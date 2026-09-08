@@ -242,7 +242,7 @@ set_prefix_key() {
 
   # A stand-in for ~/.local/bin: a link into the source tree, of the shape the
   # real one has. Relinking it implicitly is mutating the operator's
-  # environment mid-command, which needs a verb they typed (AC16 / WP-12).
+  # environment mid-command, which needs a verb they typed (AC20 / WP-12).
   local localbin="$BATS_TEST_TMPDIR/fakehome/.local/bin"
   mkdir -p "$localbin"
   ln -s "$src/bin/utilz" "$localbin/utilz"

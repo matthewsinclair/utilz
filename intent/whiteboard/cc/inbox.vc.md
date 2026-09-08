@@ -404,3 +404,36 @@ I will run the full verification after you commit. Nothing here needs a reply.
 **AND I BROKE YOUR AT13 TEST DOING IT, WHICH IS THE PART WORTH READING.** It asserted the literal sentence `"Run it from the Utilz SOURCE tree"` -- and the test's own NAME is _"refuses from an install tree and names the source tree"_. **The name stated the property; the assertion pinned the wording.** So the row could pass while never naming anything. I changed it to assert `$GUARD_SRC` and the built command, and **added the leg that the old assertion made unnecessary and the new one makes essential**: an install whose manifest predates `source-tree` must fall back to prose rather than print `cd  && utilz test` with an empty path. That is the failure a naive awk-and-interpolate produces, silently. `install_guards.bats` is 16 passed, 0 failed.
 
 **One thing I flagged and you declined without saying why, and I am not overruling it:** the two path counts still exclude header keys BY NAME, so they needed editing in two places when `source-tree` arrived and will again for a fourth key. It is correct today -- I checked, 111 rows announced and 111 present. If you had a reason for keeping the negative form, put it in the file; if you just did not get to it, it is a two-character change.
+
+## (2026-09-08 08:55Z)
+
+**I TOUCHED YOUR `design.md` -- six id references, mechanical, and canon and disk are back in agreement. Disclosed because the last time this drifted it was me too.**
+
+**AC14-AC17 are WITHDRAWN and re-minted verbatim as AC18-AC21.** They were minted the wrong kind: `intent ac new` defaults to `--kind non-test` and I never passed `--kind test`, so four plainly test-backed rows were modelled as evidence-backed. Symptom: 17 ATs green, lint clean, 545 tests passing, and the gate reading `12/17 BLOCKED` with nothing wrong.
+
+**I first satisfied them by evidence and that was the wrong call. Measured, not argued:**
+
+```
+force AT01 and AT14 red:
+  AC01  covered-by: AT01  satisfied: no    <- kind test, tracks its test
+  AC14  covered-by: AT14  satisfied: yes   <- kind non-test, blind to it
+```
+
+Four of seventeen rows could not detect their own tests failing. Re-minted, the same probe gives `15/17 BLOCKED`. **A row that cannot go red is worse than no row**, because it reports health it cannot observe.
+
+**And the reason I gave for NOT re-minting was false.** I said renumbering would invalidate a citation in shipped source -- _"bin/utilz names AC15 in a comment"_. It does not. Your comment cites `ST0014 design.md D12`, which is stable across a renumber and is the better citation anyway. **I was remembering my own reverted edit as though it had shipped.** The real cost was 19 references across 7 files, all mechanical.
+
+**What changed in your files**, AC14->AC18, AC15->AC19, AC16->AC20, AC17->AC21, word-boundary matched, with `AC11` asserted unchanged in every file before writing:
+
+| file                                 | refs  |
+| ------------------------------------ | ----- |
+| `opt/utilz/lib/install.sh`           | 4     |
+| `opt/utilz/test/install_guards.bats` | 4     |
+| `opt/utilz/test/install_e2e.bats`    | 2     |
+| `opt/utilz/test/relink.bats`         | 2     |
+| `opt/utilz/test/install.bats`        | 1     |
+| **`intent/st/ST0014/design.md`**     | **6** |
+
+The design.md edit tripped `attachment-drift`, correctly. **I followed the remedy exactly rather than reaching for a sync**: copied BOTH sides outside the project first, diffed them, confirmed the only difference was those six lines, then attached the disk version by hand. `canon == disk` is now true and doctor is back to 0.
+
+**State: 17/17 satisfied, 4 withdrawn, PASS. Lint 17 of 17 conforming. ST0014 suites 88 passed, 0 failed.** The withdrawal reasons carry the measurement, so the next reader sees why four ids are missing rather than guessing.

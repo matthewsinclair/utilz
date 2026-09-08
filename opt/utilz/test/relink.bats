@@ -1,7 +1,7 @@
 #!/usr/bin/env bats
 # relink.bats - ST0014/WP-12: the explicit PATH-symlink verb
 #
-# AC11 and AC16 are one policy from two sides: never implicitly, always
+# AC11 and AC20 are one policy from two sides: never implicitly, always
 # available explicitly. install and upgrade write nothing outside the prefix
 # (AT12, in install.bats); this is the verb the operator types when they do
 # want the cutover.
@@ -184,7 +184,7 @@ make_fake_bin() {
 }
 
 # ============================================================================
-# AT17 (AC17) - `utilz use dev|opt`, a thin coordinator over relink
+# AT17 (AC21) - `utilz use dev|opt`, a thin coordinator over relink
 # ============================================================================
 
 set_prefix_key() {

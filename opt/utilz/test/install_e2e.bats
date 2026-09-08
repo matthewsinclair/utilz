@@ -104,7 +104,7 @@ teardown_file() {
   run env -u UTILZ_HOME "$E2E_PREFIX/bin/utilz" doctor
 
   # Doctor exits 1 here and is RIGHT to: a temp prefix is not on $PATH, and it
-  # says so. That is AC16 / WP-12's territory -- the explicit relink verb --
+  # says so. That is AC20 / WP-12's territory -- the explicit relink verb --
   # not a defect in the install. Asserting rc 0 would mean either weakening
   # doctor or pretending an unconfigured PATH is fine, and both are worse than
   # asserting the checks that actually speak to AC01.
@@ -175,7 +175,7 @@ teardown_file() {
   # THE MANIFEST IS EXEMPT AND THE DISTINCTION IS THE POINT, not a concession.
   # Its source-tree row is a RECORD of where the bytes came from; a path in
   # code would be a DEPENDENCY on that tree still existing. The row is what
-  # makes `utilz use dev` turnkey (AC17), and the eight tests above this one
+  # makes `utilz use dev` turnkey (AC21), and the eight tests above this one
   # prove it is inert for running: every one of them passes against an install
   # whose source-tree names a directory that no longer exists.
   run bash -c "grep -rIl -e '$E2E_SRC_PATH' '$E2E_PREFIX' 2>/dev/null || true"
