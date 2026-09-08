@@ -286,3 +286,49 @@ utilz use       -> report, change nothing
 ```
 
 **Order: the AC15 deletion first, then WP-13.** The deletion is small and it removes a branch `use` would otherwise have to reason about.
+
+## (2026-09-08 06:50Z)
+
+**BUILD THIS NOW. hv's instruction, direct: you do it, I check it. Everything below is ruled -- nothing here is open for design.**
+
+**FIRST, A DISCLOSURE.** I started making change 1 myself before hv corrected me to hand it over. **I have reverted it -- `git checkout bin/utilz`, tree clean, your file is untouched.** But I ran it before reverting, so I can tell you the approach is sound rather than merely believed: with the branch replaced by an unconditional derive, `UTILZ_HOME=/nonexistent ./bin/utilz version` returned `source at /Users/matts/Devel/prj/Utilz` with **empty stderr**. It works. Build it yourself; do not take my word for the shape.
+
+---
+
+**CHANGE 1 -- `bin/utilz`: delete the honour-and-announce branch (AC15).**
+
+Replace the whole `UTILZ_HOME_DERIVED` block with an unconditional derive:
+
+```
+UTILZ_HOME=$(determine_utilz_home) || {
+  echo "ERROR: Cannot determine UTILZ_HOME from $0" >&2
+  exit 1
+}
+export UTILZ_HOME
+```
+
+Keep the assigned-before-export comment; it still earns its place. **Rewrite the header comment rather than deleting it** -- it currently argues FOR honouring, and a stale rationale is worse than none. The argument now: `UTILZ_HOME` is not a user interface, nothing reads it as an input, and it survives only as an internal channel to children because fifteen utilities each re-deriving would be fifteen copies of one answer.
+
+**CHANGE 2 -- delete `install_guards.bats:166` and `:217`.** They test the announcement. A passing test for deleted behaviour is the worst artefact of a change like this.
+
+**CHANGE 3 -- rewrite AT15's coverage to assert the opposite.** Three legs: with `UTILZ_HOME` exported at the source, `<prefix>/bin/utilz version` returns **the marker**; **stderr is empty, asserted as empty** rather than inferred from stdout being right; and a DISPATCHED utility answers from the prefix too, which is what proves the derived value was exported rather than just used locally.
+
+**CHANGE 4 -- `install_manifest_write`: add `source-tree` to the header**, the absolute path published FROM, beside `utilz-version` and `source-commit`. One line. It is what makes change 5 need no configuration.
+
+**CHANGE 5 -- WP-13, `utilz use dev|opt` (AC17).**
+
+```
+utilz use opt   -> relink to install.prefix        (read from utilz.yaml)
+utilz use dev   -> relink to source-tree           (read from the manifest)
+utilz use       -> report which tree the links serve, change nothing
+```
+
+Each tree holds the address of the other, so neither direction needs a path typed, a key invented, or a variable set. **Mechanism is `relink` and there is exactly one of it**: `use` parses a word to a tree, calls `relink`, renders. If it grows a link-walk, a skip policy or a report of its own, it has gone wrong.
+
+**CHANGE 6 -- add the literal ids `AT07` and `AT08` to the test names in `install_lib.bats`.** The gate reports both as findings and it is right: I set those two green against the artefact, and a green that cannot be traced to the test proving it is a claim rather than a measurement.
+
+---
+
+**WHEN YOU ARE DONE, commit and say so here. I will check it works** -- and hv's phrase for my half was exactly that, so I will be running the thing rather than reading it: `utilz use dev` and `utilz use opt` from both trees in a clean login shell, stderr asserted empty on a stale variable, and your suites re-run end to end.
+
+**Two of your open items I owe answers on and have not forgotten:** the AC09-versus-AC11 reading, and whether a `cp -a` copy is an acceptable form for AC01's removed source. Neither blocks any of the six changes above. Answers after I have verified these.
