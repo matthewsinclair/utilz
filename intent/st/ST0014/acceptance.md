@@ -77,6 +77,10 @@ title: Make utilz insallable in to opt/ just like devbin
 
 - AC16 (non-test) AN EXPLICIT VERB REPOINTS THE PATH SYMLINKS AT A TREE THE CALLER NAMES, AND NOTHING ELSE EVER TOUCHES THEM. RULED by vc 7 Sep with the pen, closing the gap between the contract and hv's opening question -- why ~/.local/bin/utilz points at the checkout rather than the install. Measured: SIXTEEN links in ~/.local/bin resolve into the Utilz source tree, all fifteen utilities plus utilz. Without this row a green ST0014 leaves hv typing utilz and getting the checkout, and no criterion reports it. THE VERB IS SEPARATE FROM install AND upgrade, NOT A FLAG ON THEM: a --relink flag becomes habitual and then the relinking is implicit by habit, which is the thing AC11 forbids. AC11 and this row are the same policy from two sides -- never implicitly, always available explicitly. SHELL-INIT IN DEVBIN'S SHAPE WAS REJECTED: devbin has one entry point and is reached by absolute path from .zshrc:27-28, which does not transfer to sixteen PATH entries, and resolving by PATH order would make which-tree-answers depend on shell state, which is the defect AC15 exists to remove. DOING NOTHING WAS REJECTED because it leaves a manual sixteen-link step with no record, rediscovered as a bug rather than a decision. The verb reports what it changed and what it left, is reversible by naming the source tree, and LEAVES A LINK IT DID NOT WRITE ALONE -- ~/.local/bin/prez is relative and points at bin/utilz rather than bin/prez, which works because dispatch keys on basename $0, and normalising it is a change to hv's environment nobody asked for. -- satisfied: no
 
+### Group AC17
+
+- AC17 (non-test) `utilz use dev|opt` IS A THIN COORDINATOR OVER relink, NOT A SECOND RELINKER, AND IT REFUSES WHEN AN EXPORTED UTILZ_HOME WOULD MAKE IT LIE. RULED by vc 8 Sep with the pen, on hv's ask for a two-word switch and hv's own instruction that it be cognisant of relink. AC16's relink is the mechanism and there is exactly one of it (IN-AG-HIGHLANDER-001); use parses dev|opt to a tree, calls relink, and renders -- it owns no link-walking, no skip policy and no reporting of its own (IN-AG-THIN-COORD-001). THE REFUSAL IS THE LOAD-BEARING HALF AND IT COMES FROM A MEASUREMENT, NOT A PREFERENCE: cc measured 8 Sep that with ~/.zshrc:76-78 standing, a fully relinked ~/.local/bin prints four lines of stderr and then answers from the CHECKOUT on every one of sixteen links -- the relink is a no-op in effect. A `use` verb that repoints links and reports success while an exported UTILZ_HOME overrides them is a verb that lies, and it lies in the direction that makes the two-tree arrangement look broken rather than misconfigured. So use REFUSES while UTILZ_HOME is set, names the variable and the dotfile line, and does not touch a single link. BOTH TREES ARE CONFIGURATION WITH NO BUILT-IN DEFAULT, the AC05 rule applied unchanged: opt resolves from install.prefix, dev from its own key, and an unset one is refused BY NAME rather than guessed -- an install that publishes to the wrong place and a switch that points at the wrong place fail identically, which is invisibly. Bare `utilz use` REPORTS which tree the links currently serve and changes nothing, because a switch you cannot interrogate is one you run to find out where you are. -- satisfied: no
+
 ### Group AT01
 
 _(no criteria in this group)_
@@ -138,6 +142,10 @@ _(no criteria in this group)_
 _(no criteria in this group)_
 
 ### Group AT16
+
+_(no criteria in this group)_
+
+### Group AT17
 
 _(no criteria in this group)_
 
@@ -207,6 +215,10 @@ _(no tests in this group)_
 
 _(no tests in this group)_
 
+### Group AC17
+
+_(no tests in this group)_
+
 ### Group AT01
 
 - AT01 `opt/utilz/test/install_e2e.bats` -- covers AC01 -- status: to-write -- Publish to a temp prefix, move the Utilz source tree aside, then run <prefix>/bin/utilz and a dispatched utility from it. Moving the source is the measurement; asserting files arrived is not.
@@ -270,6 +282,10 @@ _(no tests in this group)_
 ### Group AT16
 
 - AT16 `opt/utilz/test/relink.bats` -- covers AC16 -- status: to-write -- Run the verb against a fixture bin/ holding both link shapes -- absolute-to-own-name, and the relative-to-dispatcher shape ~/.local/bin/prez actually has. Assert: every link now resolves into the named tree; the odd-shaped one still dispatches; the verb REPORTS what it changed; a link pointing at neither tree is left untouched and reported as skipped. Then assert install and upgrade with no verb change NOTHING in that directory -- the AC11 half. One leg without the other proves only that something moved.
+
+### Group AT17
+
+- AT17 `opt/utilz/test/relink.bats` -- covers AC17 -- status: to-write -- Five legs. (1) use opt then use dev round-trips: every link resolves into the named tree both ways, and the odd relative ~/.local/bin/prez shape still dispatches. (2) with UTILZ_HOME EXPORTED, use REFUSES, names the variable, and assert NO LINK MOVED -- a refusal that relinked first is the lie the row exists to stop. (3) either key unset is refused BY NAME, naming the key and the file, and the literal-null and empty cases both refused (AT06's finding applies unchanged here). (4) bare use reports the current tree and changes nothing: assert the link mtimes are untouched, not merely that the output looks right. (5) use calls relink rather than reimplementing it -- assert a link pointing at NEITHER tree is skipped and reported, which is relink's documented policy, so a second implementation would have to reproduce it to pass.
 
 ---
 

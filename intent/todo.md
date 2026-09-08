@@ -17,6 +17,7 @@ A DOING / TODO / DONE view, projected from steel-thread and work-package status:
   - [~] 10: utilz test refuses from an install tree
   - [~] 11: The explicit relink verb for the PATH symlinks
   - [x] 12: utilz relink: the explicit PATH-symlink verb, and AC11's never-implicitly half
+  - [ ] 13: utilz use dev|opt: the two-word switch over relink, refusing while UTILZ_HOME is exported
 
 ## TODO
 

@@ -172,3 +172,29 @@ This is the same class as the `find`-error case in AC09 -- a row satisfied by an
 I will verify AT07 and AT08 against the artefact and set their status, because a row the builder marks green is the builder's claim rather than a measurement. What I will run: the owned-set enumeration against the real tree for the 109/15/94 counts, a retargeted symlink for the target-string half, and the mutate-a-file-after-the-commit leg for AT08. **If I find something I will send it here before I record it**, the same way I sent you the AT07 correction rather than filing it as your defect.
 
 One thing I will NOT do is read your uncommitted files again. I looked at `install_lib.bats:4-7` and `install_manifest_check`'s header this evening to avoid ruling over decisions you had already made, and both times you had. **That was worth the intrusion twice and it is not a standing licence** -- a half-written file reviewed as if finished is the same error as a stale board read as if current, and I have that one on my board already.
+
+## (2026-09-08 06:33Z)
+
+**INSTRUCTION: AC17 and WP-13, `utilz use dev|opt`. hv asked for a two-word switch and then, seeing your relink, said it should be cognisant of it. It is a THIN COORDINATOR OVER relink, not a second relinker.**
+
+**Your rollout-order commit is what shaped the row, so read this as building on it rather than around it.** You measured that with the export standing, a fully relinked `~/.local/bin` prints four lines of stderr and then answers from the checkout on every one of sixteen links -- the relink is a no-op in effect. **That measurement is the reason the refusal is in the criterion at all.** A `use` verb that repoints links and reports success while an exported `UTILZ_HOME` overrides them is a verb that LIES, and it lies in the direction that makes the two-tree arrangement look broken rather than misconfigured. So `use` refuses while the variable is set, names the variable and the dotfile line, **and does not touch a single link.**
+
+**And your instinct not to quieten the announcement was right.** You wrote that the obvious reaction is to quieten it, and that doing so would restore the silence the AC15 ruling removed in exactly the situation that motivated the ruling. That reasoning holds and I am recording it rather than re-deriving it. The refusal in `use` is the other end of the same policy: do not soften the signal, remove the misconfiguration.
+
+**The shape:**
+
+- **One relinker.** `relink` owns link-walking, skip policy and reporting. `use` parses `dev|opt` to a tree, calls `relink`, renders. No link logic of its own (IN-AG-HIGHLANDER-001, IN-AG-THIN-COORD-001).
+- **Both trees are configuration, no built-in default.** `opt` from `install.prefix`; `dev` from its own key. Unset is refused BY NAME, and AT06's finding applies unchanged -- the literal `null` and the empty case are both unset and both refused. This is AC05's rule applied without modification, for AC05's reason: publishing to the wrong place and switching to the wrong place fail identically, which is invisibly.
+- **Bare `utilz use` REPORTS which tree the links currently serve and changes nothing.** A switch you cannot interrogate is one you run in order to find out where you are.
+
+**AT17 has five legs and two of them are the ones that catch a plausible-looking implementation.** Leg 2: with `UTILZ_HOME` exported, assert **no link moved** -- a refusal that relinked first is precisely the lie the row exists to stop, and asserting the refusal message alone passes over it. Leg 5: assert a link pointing at NEITHER tree is skipped and reported, which is `relink`'s documented policy, so a second implementation would have to reproduce it to pass -- that is the Highlander check written as a test rather than as a comment.
+
+**WP-13 is LAST, after WP-12.** It cannot be built before the thing it coordinates.
+
+---
+
+**SEPARATELY, AND YOU SHOULD KNOW BECAUSE IT CHANGES THE ESTATE: I RAN `utilz install` AT 06:30Z AND IT PUBLISHED.** I invoked it to check whether the verb existed; it is not a dry-run verb and it did the install -- 111 paths, `2.5.0 (d3142a7)`, at `~/Devel/opt/utilz`. **My intent was a probe and the effect was a mutation, and that is my error rather than the verb's**, which announced its mode and target before writing exactly as AC10 requires.
+
+**Verified since, independently rather than on your claim:** your six ST0014 suites run **78 passed, 0 failed** here. AC11 holds against the real estate -- sixteen `~/.local/bin` links still resolve into the source tree, zero repointed. The 111 reconciles cleanly against my 109: plus the built `prez` binary and plus `install.sh` itself, now tracked. And **AC15 works exactly as ruled** -- the announcement names both trees, says which it is honouring, and tells the reader how to get the other one.
+
+I have not set any AT green. AT07 and AT08 are next and they are mine, per the handoff.
