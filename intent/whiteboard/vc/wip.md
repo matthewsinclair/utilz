@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 06b406f0-9a29-4636-ad0d-abd6663e4f8f
-heartbeat_at: 2026-09-08 18:40Z
+heartbeat_at: 2026-09-08 19:29Z
 status: active
-focus: "Post-compact pickup at 2026-09-08 18:40Z; the fold before it held. 2.8.0 released, tagged, published, CI green; ST0015 10/10 and ST0016 8/8 PASS. The .intentfiles saga is SOLVED: ST0015/ST0016 carried design.md and impl.md that were never ATTACHED to the store, so organize could never claim them and every dehydration left the directory behind. Four `intent st attach` calls took unclaimed 4 -> 0 and ST0015 pruned cleanly. Nothing claimed, nothing held, inboxes empty. Every remaining TODO is an hv policy call. Awaiting hv."
+focus: "Cleared the three open items that were mine: 0011 and 0010 fixed and closed, 0013 and 0007 records corrected. Full estate 576 ok / 0 not ok across 19 suites, doctor 0 findings. Everything still open is hv's to decide -- the .intentfiles header, whether ST0016 stays hydrated, 0007 (two blockers, not one), and AC16's per-theme note, which I deliberately did not file because amending it would clear hv's own attestation. Nothing claimed, inboxes empty."
 claims: []
 ---
 
@@ -19,13 +19,19 @@ Validation node. cc builds, vc contracts and verifies, hv adjudicates. Full boar
 
 ## TODO
 
+**Everything left here is hv's to decide. The three that were mine are closed.**
+
 - **`.intentfiles` header is the root of an entire wasted afternoon and is still wrong.** It is the hand-written 2026-08-26 original -- "organize --default was not yet built" -- and names `st hydrate` **zero times**. Four of us hunted a verb the file said nothing about. The current Intent template names it and lists every writer. hv's to refresh.
 - **ST0016 is still hydrated** and `.intentfiles` declares a Completed thread while the header says only OPEN ones are. Either `organize --apply` finishes it as ST0015 was finished, or the policy changed and the header should say so. hv's call, unblocked now that nothing is unclaimed.
-- **Issue 0011** -- `install_guards.bats` reads a live `git rev-parse HEAD` against a fixture-time install. One-line fix, unclaimed, the only open medium.
-- **Issues 0010 and 0007** -- absolute home paths in eight READMEs; prez slide-counter contrast. Both low.
-- **0013's honest scope limit** is unrecorded: it closed the ONE write-only capture, not the class. The other 15 are needle-read, so a NEW unexpected warning at any of them still goes unread.
-- **AC16 catalogue placement** -- rendered and eyeballed, never filed anywhere.
-- **The closed-thread evidence gap** -- Intent's, via `intent-vc`.
+- **Issue 0007 needs hv for TWO reasons, and clearing the first would not release it.** Its stated home ST0010/WP-05 is Cancelled -- recorded, not re-homed. But the fix also answers a question the issue raises and leaves open (does the 4.5:1 floor bind `aria-hidden` decorative chrome?), and it changes output hv page-turned and approved: the counter inherits its colour, so it is `opacity: 0.45` carrying it under the floor, and correcting the colour alone will not lift it. The colour half is small and fenced and is written into the record.
+- **AC16's per-theme note, which its own evidence names as missing.** hv's 2026-09-08 page-through of all seven -- "they all LGTM, including tables and images" -- is exactly the catalogue the recorded attestation says it does not hold, and it is unfiled. **Not filed by me on purpose:** `ac` has no append, so amending it is `unsatisfy` then `satisfy`, which CLEARS hv's own attestation wording and momentarily unsatisfies an AC on a Completed thread. Attestation is hv's to give and hv's to reword.
+- **The closed-thread evidence gap** -- Intent's, via `intent-vc`. Issue 0011's fix is the third instance: it changed a test whose green is recorded in ST0014's dehydrated canon, and nothing re-verified or re-attached it.
+
+## Done since the fold
+
+- **Issue 0011 CLOSED** (`6200ac2`) -- AT12 asserted live `git rev-parse HEAD` against a fixture-time install. Red-proofed first: undisturbed both forms pass, diverged the live-HEAD form fails. **The one-line fix would have been tautological** -- the runtime reads `source-commit` from the manifest, so a test reading the same row proves the plumbing and nothing about whether the right commit was recorded, which is the half live HEAD accidentally covered. Two assertions instead, the second in its own test so its `skip` cannot take AT12's down with it. Controlled: a wrong `source-commit` leaves AT12 green and reddens the new one.
+- **Issue 0010 CLOSED** (`ca1e924`) -- and **its stated diagnosis was wrong**. It said the generator was clean and this was "not a code change"; `common.sh` was still filling `{{IMPL_PATH}}` with absolute paths, so the next `utilz generate` would have minted the ninth. Root cause was one variable doing two jobs: the filesystem target the generator writes through and the string that ships in README.md. `install_e2e.bats` then dropped its `! -name '*.md'` exemption, so the strict property covers the whole owned set instead of only files that run.
+- **Issues 0007 and 0013 records corrected** (`b413b41`) -- 0013 closed one write-only capture, not the class, and said otherwise; 0007's blockers are now written down.
 
 ## Claims
 
@@ -59,7 +65,7 @@ Validation node. cc builds, vc contracts and verifies, hv adjudicates. Full boar
 
 **A CHECK THAT READS A SOURCE WHICH HAS STOPPED CHANGING KEEPS RETURNING THE RIGHT ANSWER LONG AFTER THE CHECK ITSELF HAS DIED.** cc's hung suite watcher printed `ok=554 notok=0`, matching its log exactly, and cited that as proof of completion. It had been sleeping 21 minutes past the suite's end; the harness timed it out and the write flushed on termination. **A hung monitor and a working monitor emit byte-identical output.** Read the timestamp, not just the value.
 
-**THE INSTRUMENT IS PART OF THE CLAIM, AND A CLEAN ZERO IS THE COMMONEST LIE.** `git grep -E` does not honour `\b` and matches nothing rather than saying so (0 vs 2 vs 2 on one file). `bash -n` cannot parse a `.bats` file and blamed a pre-existing line for my new code. `mapfile` is bash 4 against a 3.2.57 `/bin/bash`. Manifest paths are repo-root-relative -- I hashed **zero** files from the wrong cwd and reported `mismatches=0`, twice, months apart. **A zero from something you did not mean to invoke is the reading your own authorship makes you LEAST likely to question.**
+**THE INSTRUMENT IS PART OF THE CLAIM, AND A CLEAN ZERO IS THE COMMONEST LIE.** `git grep -E` does not honour `\b` and matches nothing rather than saying so (0 vs 2 vs 2 on one file). `bash -n` cannot parse a `.bats` file and blamed a pre-existing line for my new code. `mapfile` is bash 4 against a 3.2.57 `/bin/bash`. Manifest paths are repo-root-relative -- I hashed **zero** files from the wrong cwd and reported `mismatches=0`, twice, months apart. **A zero from something you did not mean to invoke is the reading your own authorship makes you LEAST likely to question.** And it is not only zeros: on 8 Sep a sandbox check of a generated README came back correct because I ran it from INSIDE the sandbox, so the relative path I was testing resolved against cwd. The full estate caught what the check could not -- the real caller runs from anywhere, and generation failed outright. **A path check run from a convenient cwd measures the cwd.**
 
 **THE ARTIFACT OUTRANKS THE SOURCE; THE SOURCE ONLY FEELS AUTHORITATIVE BECAUSE IT IS CAUSAL.** cc reasoned about a 1226-line log from one line of its source and concluded two suites were indistinguishable; line 811 prints the script path and the log carried both. Where an artifact exists, read the artifact.
 
