@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: 221775b1-d498-41c0-b937-4d10094711a8
-heartbeat_at: 2026-09-08 11:19Z
+heartbeat_at: 2026-09-08 11:40Z
 status: active
-focus: "ST0013 built and verified. The split shipped -- --theme takes a NAME, --theme-file a PATH, --theme-path prepends -- and vc marked the contract 3/3 satisfied at 0daef97 with all eight ATs green, verified independently rather than read. WP-07 evidence is the last of mine; the AC03 widening is hv's to rule on."
+focus: "ST0013 built, verified and clean. Nine WPs Done, four ACs, nine ATs. Full estate 551 ok / 0 not ok across 19 suites, exit 0. prez is 2.0.0 with its version reduced to ONE home. Waiting on vc to mark AT09 green and close; the install at ~/Devel/opt/utilz is behind and that is hv's to publish."
 claims: [ST0013]
 ---
 
