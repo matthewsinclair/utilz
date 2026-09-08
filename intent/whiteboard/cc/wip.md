@@ -3,7 +3,7 @@ node: cc
 name: Control Claude
 role: control
 session_id: 221775b1-d498-41c0-b937-4d10094711a8
-heartbeat_at: 2026-09-08 14:04Z
+heartbeat_at: 2026-09-08 14:14Z
 status: active
 focus: "IDLE, RESUMED AFTER THE COMPACT -- status stayed active throughout, as a compact is not a session ending. ST0013 closed and dehydrated; every version reduced to one home on hv's ruling; install published at 2f76209, 126 paths, doctor 7/7. Nothing claimed, nothing held, holding on hv."
 claims: []
@@ -74,6 +74,10 @@ Full record is in canon, not here: `intent st show ST0013`, `design.md` D1-D14.
 - **AND THE SUBSTRING LESSON CAME BACK INSIDE THE CHECK FOR IT, IN BOTH THE SCRIPT AND THE GREP WRITTEN TO VERIFY THE SCRIPT.** Counting reads per capture file, `e.err` scored 4 writes and 7 reads against a true 1 and 1 -- because **`e.err` is a substring of `refuse.err`, `name.err` and `theme.err`**, which were correspondingly under-counted. Unanchored, it is not a filename, it is a suffix. `(?<=[/"])` was the fix. **Four tool errors in one investigation** -- zsh glob, bash-4 `mapfile` under 3.2.57, `--name-only` swallowing the commit message, and this -- **and only the one after I added a zero-count refusal failed loudly.** A short name is a substring of a longer one far more often than it feels, and every one of these produced a plausible number rather than an error.
 
 - **A NEW ASSERTION THAT WOULD HAVE BEEN RED AN HOUR AGO MUST BE WATCHED GOING RED, NOT ADOPTED GREEN.** vc's framing on the AT03 stderr assertion -- "this assertion could not have been added before the fix it would have caught" -- reads as a constraint and is the opposite. **Red-first says a check that goes red on the existing defect is the ideal case**: add it, watch it bite, then fix. Adding it AFTER 0012 landed gives a green that has never been observed to fail, which is `IN-AG-RED-CONTROL-001` exactly, and my own board's "a check placed before the thing it measures passes for the wrong reason" with the order reversed. **The sequence that proves it: re-inject the `class: escape` line, confirm red, remove, confirm green.**
+
+- **THE CASE WITH NOTHING EXPECTED ON THE STREAM IS THE CASE THAT GETS NO CHECK, AND IT IS EXACTLY WHERE UNEXPECTED OUTPUT HIDES.** 8 Sep, measured after vc landed issue 0013. Of the 16 stderr captures in `acceptance.sh`, **15 carry an assertion requiring CONTENT** -- every one is a refusal or warning leg where stderr is expected to be non-empty, so a needle-based read always had something to reach for. **`at03.err` was the only build expected to be SILENT, and it was the only capture nobody read.** The absence of an expectation is why no assertion got written, and silence is precisely the condition under which unexpected noise is invisible. **Where you expect nothing, assert nothing-ness explicitly; that is the only place the assertion has to be about the whole stream rather than a needle in it.**
+
+- **AND THE LANDED CHECK IS CORRECT BECAUSE IT AVOIDED THIS HARNESS'S OWN HELPER, WHICH A TIDIER WILL PUT BACK.** `acceptance.sh:75` defines `file_size()` as `stat -c %s ... || stat -f %z ... || echo 0` -- it **returns 0 for a MISSING file**. The assertion at AT03 uses `wc -c < "$WORK/at03.err"`, which yields EMPTY for a missing file and therefore fails. Measured both: `file_size(missing) = 0`, `wc form = <empty>`. So the check as written distinguishes **"the build was silent"** from **"the build never ran"**; rewritten to use the file's own neighbouring helper -- the obviously more idiomatic, more consistent choice, sitting 330 lines above -- it would **pass trivially if the build line were ever deleted or renamed.** `$WORK` is `mktemp -d` per run, so a stale file cannot satisfy it either. **A correct check one refactor away from a silent one, where the refactor looks like tidying.**
 
 **The estate, changed 8 Sep and worth knowing at the prompt.**
 
