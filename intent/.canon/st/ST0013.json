@@ -47,6 +47,46 @@
       ],
       "status": "to-write",
       "note": "Three legs. (1) `--theme-file <dir>` where <dir> holds theme.css renders, and `--theme-file <file>.css` renders: BOTH shapes, because the flag's name implies one and AC02 requires both. (2) `--theme <path>` in either shape is REFUSED naming `--theme-file`, which is AC01 clause (f) unchanged. (3) the remedy the refusal prints actually WORKS: take the exact path from the refused invocation, pass it to `--theme-file`, assert it renders. A refusal whose advice is untested is a message rather than a remedy, and this leg exists because the row's first form printed advice that pointed at a flag which -- on that form's own premise -- could not have taken the input."
+    },
+    {
+      "id": "AT03",
+      "kind": "test",
+      "file": "opt/prez/crate/test/theme-addressing.sh",
+      "covers": [
+        "AC01"
+      ],
+      "status": "to-write",
+      "note": "MUTUAL EXCLUSION AND THE REFUSAL WORDING, AC01 clause (b). Two legs. (1) `--theme=simple --theme-file=x.css` in one invocation is REFUSED, either order, rather than one silently winning. (2) `--theme-file` naming a path that does not exist refuses saying NO SUCH FILE and does NOT print the built-in roster. Leg 2 is red-first for a reason worth recording: today `--theme=nope.css` falls through path-does-not-exist to the search path to the built-ins and lands in `unknown_theme()`, which by design names every directory it searched and every built-in it knows. That is the RIGHT answer for a NAME and the wrong one for a PATH -- a user who mistyped a filename is handed a theme roster, which reads as though the filename were a name they got wrong. Red-first by construction: neither `--theme-file` nor the exclusion check exists in `args.rs` at 6e02020."
+    },
+    {
+      "id": "AT04",
+      "kind": "test",
+      "file": "opt/prez/crate/test/theme-addressing.sh",
+      "covers": [
+        "AC01"
+      ],
+      "status": "to-write",
+      "note": "PREPEND, NOT REPLACE, AC01 clause (c) -- and the word prepend is the whole assertion. Three legs. (1) with `PREZ_THEME_PATH=<envdir>` set and `--theme-path=<flagdir>` given, a name present ONLY in envdir still resolves: the flag COMPOSES with the env rather than replacing it, and a replace implementation passes any test that only ever sets one of the two. (2) a name present in BOTH resolves from flagdir, which is what prepend means as against append. (3) repeated `--theme-path` is LAST-WINS, ruled 8 Sep on ccs Q2: every other value flag in `args.rs` is last-wins and a second rule for this one would be a special case nobody can predict. Red-first: no `--theme-path` exists at 6e02020, so all three legs fail at argument parsing. Leg 1 is the one that matters -- it is the only leg an accidental replace cannot pass."
+    },
+    {
+      "id": "AT05",
+      "kind": "test",
+      "file": "opt/prez/crate/test/theme-addressing.sh",
+      "covers": [
+        "AC01"
+      ],
+      "status": "to-write",
+      "note": "THE FRONT MATTER SPLITS IDENTICALLY, AC01 clause (d), or the ambiguity moves into the deck where it travels. Three legs. (1) `theme: simple` in front matter resolves as a NAME and never against the deck directory -- so a deck beside a `./simple/` directory builds the same artifact as the same deck built elsewhere, which is AT01 one layer down. (2) `theme: ./x.css` is REFUSED as a name carrying a separator, and the refusal NAMES `theme-file:`, the front-matter half of AC01 clause (f). (3) `theme-file: ./x.css` resolves DECK-RELATIVE, not cwd-relative: build the same deck from two different working directories and get the same artifact. Red-first: `frontmatter.rs` at 6e02020 has one `theme` key, and `theme::load` resolves a front-matter value as `base.join(spec)` -- a path -- so leg 2 today renders instead of refusing."
+    },
+    {
+      "id": "AT06",
+      "kind": "test",
+      "file": "opt/prez/crate/test/theme-addressing.sh",
+      "covers": [
+        "AC01"
+      ],
+      "status": "to-write",
+      "note": "SEARCH PATH BEFORE BUILT-INS, AC01 clause (a) second half. `--theme=simple` with a `simple` theme on `PREZ_THEME_PATH` resolves the search-path one, not the built-in of the same name. THIS ROW IS DELIBERATELY NOT RED-FIRST AND MUST NOT BE READ AS PROOF THE SPLIT LANDED. It is already correct at 6e02020 -- `theme.rs:126-129` tries `on_search_path` before `built_in` -- so it goes green on its first run and stays green. It is minted anyway because the fix is a TYPE change that rewrites that whole cascade (ccs finding, and the reason a branch reorder was rejected), and an ordering that is currently load-bearing by accident of line order is exactly what a rewrite drops silently. Every other row here fails loudly if the split is absent; this one fails only if the split is present and got the order wrong, which is the case no red-first test can reach."
     }
   ]
 }
