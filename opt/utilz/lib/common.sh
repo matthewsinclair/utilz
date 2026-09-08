@@ -799,8 +799,26 @@ run_tests() {
     echo "  the files the manifest checksums and the install would then report" >&2
     echo "  drift that nobody caused." >&2
     echo "" >&2
-    echo "  Run it from the Utilz SOURCE tree instead -- the checkout this" >&2
-    echo "  install was published from. An install ships no test suites." >&2
+    # NAME THE PATH, DO NOT DESCRIBE IT. This said "the checkout this install
+    # was published from", which is a description the reader has to resolve
+    # themselves, and it made a correct refusal read as a failure with no next
+    # step. The manifest records source-tree exactly so this can be answered.
+    # An install published before that key existed carries no such row, so the
+    # description survives as the fallback rather than printing an empty path.
+    local src_tree
+    src_tree=$(awk -F'\t' '$1 == "source-tree" { print $2; exit }' \
+      "$UTILZ_HOME/$UTILZ_MANIFEST_NAME" 2>/dev/null || true)
+
+    if [[ -n "$src_tree" ]]; then
+      echo "  Run it from the SOURCE tree instead:" >&2
+      echo "" >&2
+      echo "      cd $src_tree && utilz test" >&2
+    else
+      echo "  Run it from the Utilz SOURCE tree instead -- the checkout this" >&2
+      echo "  install was published from." >&2
+    fi
+    echo "" >&2
+    echo "  An install ships no test suites." >&2
     return 1
   fi
 

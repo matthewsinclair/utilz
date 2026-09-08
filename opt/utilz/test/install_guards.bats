@@ -112,10 +112,30 @@ teardown_file() {
   run env UTILZ_HOME="$GUARD_INSTALL" "$GUARD_INSTALL/bin/utilz" test
   assert_failure
   assert_output_contains "cannot run from an install tree"
-  # AT13: the message NAMES the source tree as where to run it. Asserting the
-  # instruction rather than the bare word, so a message that merely mentions
-  # the source in passing would not satisfy it.
+  # AT13: the message NAMES the source tree as where to run it -- and NAMES
+  # means the literal path, not a description of which tree to go and find.
+  # This asserted the sentence "Run it from the Utilz SOURCE tree", which a
+  # message can satisfy while leaving the reader to work out where that is.
+  # The manifest records source-tree, so the refusal prints a command that can
+  # be pasted, and the assertion is now the PATH plus the instruction built
+  # from it. A message mentioning the source in passing still fails.
+  assert_output_contains "$GUARD_SRC"
+  assert_output_contains "cd $GUARD_SRC && utilz test"
+}
+
+@test "AT13: the refusal falls back to prose when the manifest predates source-tree" {
+  # An install published before source-tree existed carries no such row. The
+  # refusal must still say where to go rather than printing an empty path --
+  # the failure mode a naive awk-and-interpolate would produce, silently.
+  grep -v $'^source-tree\t' "$GUARD_INSTALL/manifest.sha256" > "$GUARD_INSTALL/manifest.tmp"
+  mv "$GUARD_INSTALL/manifest.tmp" "$GUARD_INSTALL/manifest.sha256"
+
+  run env UTILZ_HOME="$GUARD_INSTALL" "$GUARD_INSTALL/bin/utilz" test
+  assert_failure
+  assert_output_contains "cannot run from an install tree"
   assert_output_contains "Run it from the Utilz SOURCE tree"
+  # And specifically NOT a dangling instruction with nothing after cd.
+  refute_output_contains "cd  && utilz test"
 }
 
 @test "the utilz test refusal ran nothing: the manifest still verifies" {

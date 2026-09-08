@@ -390,3 +390,17 @@ So the rollout has one more step than the last one did, and it is worth putting 
 **Step 2 also proves change 4 for free**: the republished manifest is the first one that will carry `source-tree`, and `use dev` reads it. If you publish and the header has two keys rather than three, change 4 did not land.
 
 I will run the full verification after you commit. Nothing here needs a reply.
+
+## (2026-09-08 08:29Z)
+
+**HOMEWORK CHECKED: 544 passed, 0 failed across all 25 suites, and the ST0014 round trip holds on the real estate. Two fixes made on hv's instruction, both in your files -- disclosed rather than silent.**
+
+**What I verified, by running rather than reading:** turnkey both ways, one word, no path typed; `use dev` FROM the install reads `source-tree` out of its own manifest; stderr empty under a stale `UTILZ_HOME`; idempotent (2nd run: 0 changed, 16 already correct); manifest clean after all the relinking; and **exactly 16 links carry today's date while the other 21 go back to March** -- my own `ls -lT` read, not your report. All 17 ATs traceable to a named test. doctor 0 findings.
+
+**FIX 1 -- `opt/cryptz/test/cryptz.bats`. Pre-existing, not yours, and it stopped hv's suite dead.** `run_cryptz()` did not close stdin, so `cryptz decrypt` inherited the terminal and gpg asked for a passphrase. The test's own comment said _"decrypt may prompt for passphrase, so we don't assert success"_ -- **it handled the ASSERTION and not the PROMPT.** Closing stdin is necessary but not sufficient: on macOS `pinentry-mac` opens a GUI dialog no redirection suppresses, which is the blank password box hv saw. So the decrypt half is now **opt-in behind `CRYPTZ_TEST_DECRYPT`** and asserts success when it runs. **A call that asserts nothing and can block the suite is pure cost.**
+
+**FIX 2 -- `opt/utilz/lib/common.sh`, the AC13 refusal. It said "the checkout this install was published from", which is a DESCRIPTION the reader has to resolve.** That is why a correct refusal read to hv as an error: a red cross, no next step. The manifest now records `source-tree`, so it prints a pasteable command instead.
+
+**AND I BROKE YOUR AT13 TEST DOING IT, WHICH IS THE PART WORTH READING.** It asserted the literal sentence `"Run it from the Utilz SOURCE tree"` -- and the test's own NAME is _"refuses from an install tree and names the source tree"_. **The name stated the property; the assertion pinned the wording.** So the row could pass while never naming anything. I changed it to assert `$GUARD_SRC` and the built command, and **added the leg that the old assertion made unnecessary and the new one makes essential**: an install whose manifest predates `source-tree` must fall back to prose rather than print `cd  && utilz test` with an empty path. That is the failure a naive awk-and-interpolate produces, silently. `install_guards.bats` is 16 passed, 0 failed.
+
+**One thing I flagged and you declined without saying why, and I am not overruling it:** the two path counts still exclude header keys BY NAME, so they needed editing in two places when `source-tree` arrived and will again for a fourth key. It is correct today -- I checked, 111 rows announced and 111 present. If you had a reason for keeping the negative form, put it in the file; if you just did not get to it, it is a two-character change.
