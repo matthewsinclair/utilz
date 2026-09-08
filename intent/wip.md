@@ -1,5 +1,5 @@
 ---
-verblock: "08 Sep 2026:v1.15: matts - aggressive fold; done work moved to done.md, durable context to restart.md"
+verblock: "08 Sep 2026:v1.16: matts - CI contract call discharged; the n/a ruling is in restart.md"
 ---
 
 # Work In Progress
@@ -15,7 +15,6 @@ This file carries **DOING and TODO only**. Completed work belongs in `intent/don
 **Immediate, hv's**
 
 - **Tag `v2.6.0` at `4fdce3c` and push.** 48 commits unpushed.
-- **ONE CI JOB IS RED AND IT NEEDS A CONTRACT CALL RATHER THAN A PATCH.** `Rust (ubuntu-latest)` fails at 14 passed / 0 failed / 1 skipped, because AT15's keychain half calls `unchecked()` when `security(1)` is absent and `--strict` reddens on any skip. **Nothing is broken.** `unchecked()` conflates a tool that is missing but installable with a check that cannot exist on this platform at all. A remedy means a third outcome that prints its reason without counting as did-not-run -- **which is a licence to wave away inconvenient skips unless the platform predicate, never the check's difficulty, is the condition.** It would be the first exception to "a SKIP is not a pass", so it is hv's to grant.
 - **Rule whether the 182 one-digit AC ids are bad data or an over-strict `is_ac_id`.** `intent-vc`'s fleet census, open and waiting on hv. It decides what any mint-side grammar check would enforce, so it blocks the fix for the Intent defects relayed on 8 Sep.
 - **`geodica doctor` must report whether `utilz prez` is available.** hv's estate requirement, on no contract in any repo. The move to `~/Devel/prj/Gtools` did not retire it.
 

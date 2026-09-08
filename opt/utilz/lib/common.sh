@@ -76,10 +76,19 @@ get_utilz_version() {
 # returned an empty string, which a caller cannot distinguish from "key is
 # absent". One parser, one answer. require_yq surfaces a missing yq once per
 # process rather than silently degrading.
+# The TREE is an optional third argument, defaulting to the running one. It
+# exists because install and upgrade read another tree's yaml, and the previous
+# form bound it ambiently -- `raw=$( export UTILZ_HOME="$tree"; ... )`. That was
+# correct and it made shellcheck -x report SC2031 on EVERY later read of
+# UTILZ_HOME in EVERY file that reaches this one: common.sh started sourcing
+# install.sh for doctor's install-integrity check, so one deliberate subshell
+# propagated 39 findings across 18 files and reddened a gate that had been green.
+# Passing the root is also simply better than rebinding a global to fake it.
 get_util_metadata() {
   local util_name="$1"
   local query="$2"
-  local yaml_file="$UTILZ_HOME/opt/$util_name/$util_name.yaml"
+  local tree="${3:-$UTILZ_HOME}"
+  local yaml_file="$tree/opt/$util_name/$util_name.yaml"
 
   [[ -f "$yaml_file" ]] || return 1
   require_yq || return 1

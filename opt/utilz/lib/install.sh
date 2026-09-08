@@ -119,11 +119,10 @@ install_prefix_configured() {
   local tree="$1"
   local raw
 
-  # get_util_metadata resolves $UTILZ_HOME/opt/<n>/<n>.yaml, so the tree under
-  # examination is bound in the subshell rather than inherited from the tree
-  # this code is running from. AC05 requires the read go through the one
-  # metadata reader like every other utility's yaml.
-  raw=$( export UTILZ_HOME="$tree"; get_util_metadata utilz '.install.prefix' ) || raw=""
+  # The tree under examination is PASSED, not bound ambiently. AC05 requires the
+  # read go through the one metadata reader like every other utility's yaml, and
+  # that reader now takes the root as its third argument.
+  raw=$(get_util_metadata utilz '.install.prefix' "$tree") || raw=""
 
   # yq prints the four-character string `null` for an absent key and
   # get_util_metadata ends `echo "$result"`, so it passes straight through.

@@ -102,7 +102,7 @@ for arg in "$@"; do
   esac
 done
 WANT=("${ARGS[@]+"${ARGS[@]}"}")
-PASSED=0; FAILED=0; SKIPPED=0
+PASSED=0; FAILED=0; SKIPPED=0; NOT_APPLICABLE=0
 AT=""; AT_FAILS=0; AT_SKIPS=0
 
 want() {
@@ -151,6 +151,25 @@ skip() { printf '%s: SKIP -- %s\n' "$AT" "$1"; SKIPPED=$((SKIPPED + 1)); }
 # One limb of an AT that could not run. Counted, so the summary cannot call the
 # suite clean, and printed, so the reason is in front of whoever reads it.
 unchecked() { printf '  SKIP  %s\n' "$1"; AT_SKIPS=$((AT_SKIPS + 1)); SKIPPED=$((SKIPPED + 1)); }
+
+# THE THIRD OUTCOME, AND THE CONDITION IS THE PLATFORM RATHER THAN THE CHECK'S
+# DIFFICULTY. Ruled by hv 2026-09-08, the first exception to "a SKIP is not a
+# pass", and it is narrow on purpose.
+#
+# `unchecked` means DID NOT RUN and reddens --strict, which is right for a tool
+# that is missing but installable: the check exists and this machine failed to
+# perform it. `not_applicable` means the check CANNOT EXIST HERE -- it asks
+# something about a platform this run is not on -- so counting it as did-not-run
+# demands a run that can never happen.
+#
+# The discriminator must be the platform predicate, never `command -v <tool>`.
+# Gating on a missing tool makes any machine lacking it silently exempt,
+# including one that should have it; gating on `uname` cannot. And it is only
+# honest while the check runs SOMEWHERE: the keychain half runs on every macOS
+# leg, so the coverage exists and this leg is the one that cannot host it. A
+# not_applicable check with no leg that DOES run it is dead, and should be
+# deleted rather than excused.
+not_applicable() { printf '  N/A   %s\n' "$1"; NOT_APPLICABLE=$((NOT_APPLICABLE + 1)); }
 
 pages_in() { python3 -c "
 import re,sys
@@ -1120,8 +1139,14 @@ if want AT15; then
   # from ordinary Chrome use, and asserting zero would fail for the wrong reason.
   if ! BROWSER="$(chrome 2>/dev/null)"; then
     unchecked "no browser, so the keychain half did not run"
+  elif [ "$(uname -s)" != "Darwin" ]; then
+    # PLATFORM, not `command -v security`. Safe Storage is a macOS keychain
+    # concept, so there is nothing on Linux for this check to be about. The
+    # macOS legs run it, so it is covered rather than waved away.
+    not_applicable "Chrome Safe Storage is macOS-only; the macOS legs cover this"
   elif ! command -v security >/dev/null 2>&1; then
-    unchecked "no security(1), so the keychain half did not run (not macOS)"
+    # macOS WITHOUT security(1) is a broken machine, not an inapplicable one.
+    unchecked "no security(1) on a Darwin host, so the keychain half did not run"
   else
     at15before=$(security find-generic-password -s "Chrome Safe Storage" 2>&1 | grep -c 'svce' || true)
     printf '<!doctype html><title>at15</title><p>at15\n' > "$WORK/at15.html"
@@ -1325,7 +1350,8 @@ fi
 # ---------------------------------------------------------------------- report
 
 printf '\n=======================================\n'
-printf 'passed %d   failed %d   skipped %d\n' "$PASSED" "$FAILED" "$SKIPPED"
+printf 'passed %d   failed %d   skipped %d   n/a %d\n' "$PASSED" "$FAILED" "$SKIPPED" "$NOT_APPLICABLE"
+[ "$NOT_APPLICABLE" -gt 0 ] && printf 'n/a = cannot exist on this platform, and covered on one that can. Not a skip.\n'
 [ "$SKIPPED" -gt 0 ] && printf 'A SKIP is not a pass. Re-run where the missing tool exists.\n'
 
 [ "$FAILED" -gt 0 ] && exit 1
