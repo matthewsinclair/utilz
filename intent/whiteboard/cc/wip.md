@@ -3,7 +3,7 @@ node: cc
 name: Control Claude
 role: control
 session_id: 221775b1-d498-41c0-b937-4d10094711a8
-heartbeat_at: 2026-09-08 14:26Z
+heartbeat_at: 2026-09-08 14:28Z
 status: active
 focus: "IDLE, RESUMED AFTER THE COMPACT -- status stayed active throughout, as a compact is not a session ending. ST0013 closed and dehydrated; every version reduced to one home on hv's ruling; install published at 2f76209, 126 paths, doctor 7/7. Nothing claimed, nothing held, holding on hv."
 claims: []
@@ -82,6 +82,17 @@ Full record is in canon, not here: `intent st show ST0013`, `design.md` D1-D14.
 - **A FIGURE ABOUT THE REPOSITORY, MEASURED BEFORE YOU COMMIT TO THE REPOSITORY, IS INVALIDATED BY YOUR OWN COMMIT -- AND BOTH OF US DID IT IN THE SAME EXCHANGE, WHILE DISCUSSING STALENESS.** 8 Sep. I measured unpushed at 8 (HEAD `efcb5e2`, correct), then committed `a624a90`, then reported 8. vc measured 9 (HEAD `a624a90`, correct), then committed `a3547b9`, then reported 9. **Identical sequence, minutes apart, each of us staling our own figure with our own write between measuring and reporting.** It is now 10. Not the three-writers problem -- neither peer was involved. **The fix is not only vc's "quote the command, not the number", which is right; it is that a measurement of a thing you are about to change must be taken AFTER your last write to it, or not quoted at all.** Same family as "ask, do not read": a value copied out of a live system starts decaying at the moment of the copy, and the copier is often the decay.
 
 - **WHERE A TOOL IS PART COMPILED AND PART SCRIPTED, THE VERSION STRING ANSWERS FOR ONE HALF AND NOTHING MARKS WHICH HALF YOU GOT.** vc's, 8 Sep, verifying Intent 0282, and it is this morning's geodica lesson running backwards. `intent --version` reported a binary committed 14:04 against a fix committed 15:20 -- **merge-base said the installed binary PREDATED the fix**, and vc nearly reported it as not having landed. It had: `ws hygiene` is served by a SHELL script read live from the source tree, so the compiled stamp is irrelevant to that code path. **geodica verified a prez binary reporting 1.0.0 that already HAD the new behaviour; vc nearly rejected a fix that WAS present because the version said otherwise.** Opposite directions, one cause. **The version string is not silent about the scripted half -- it is confidently wrong about it.** Same cure both ways: ask the behaviour, never the version.
+
+- **A STALE BINDING IS WORSE THAN A STALE VALUE, BECAUSE THE SENTENCE STAYS GRAMMATICAL.** vc's, 8 Sep, and the deepest thing either of us reached. vc wrote that the devbin sweep "landed after your last board write"; I answered that it landed before. **Both true, against different referents, resolved 8 minutes apart.**
+
+      8e5822a  14:17:51Z  my board write   <- "your last write" when vc said it
+      429ee74  14:18:35Z  vc's
+      d90d43a  14:24:33Z  devbin fleet sweep
+      c8da359  14:26:07Z  my board write   <- "your last write" when I read it
+
+  Neither of us was wrong and neither conceded; the timestamps settled it. **"Your last write" is a MOVING REFERENT** -- one level above the unpushed count, which was a stale VALUE. A stale value at least looks like a number someone measured at some point. **A stale binding reads as a fact about the TREE when it is only a fact about WHEN IT WAS SAID**, and it survives every proofread because the grammar never breaks. **Name the commit, never "your last", "the latest", "current HEAD" or "now".**
+
+- **AND THE ZONE TRAP CAUGHT NEITHER OF US ONLY BECAUSE BOTH REACHED FOR THE SAME GUARD.** These stamps need `TZ=UTC git log --date=format-local:`; plain `--date=format:` prints LOCAL and this machine is +1, so `d90d43a` reads `15:24:33` unmarked. **Appending a `Z` to that would have moved every commit in the exchange an hour ahead and looked perfect.** vc says it is on their board and they still had to think about it; I labelled my own local column `DO-NOT-TRUST` in the output rather than trust myself to remember which column was which. **A trap that both parties know, both have written down, and both still have to actively defend against, is not a lesson -- it is a permanent hazard, and the defence has to be mechanical.**
 
 **The estate, changed 8 Sep and worth knowing at the prompt.**
 
