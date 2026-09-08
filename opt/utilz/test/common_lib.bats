@@ -530,3 +530,135 @@ beta"
   assert_output_contains "Found 3 utilities"
   refute_output_contains "zznew (requires"
 }
+
+# ----------------------------------------------------------------------------
+# ST0013 / AC03 -- the driver discovers every black-box suite, and refuses one
+# it cannot run
+# ----------------------------------------------------------------------------
+
+# A fake UTILZ_HOME carrying ONE utility whose crate/test/ the caller fills.
+# Deliberately minimal -- no Cargo.toml and no *.bats unless a test adds one --
+# so the only source run_tests can find is the black-box one under test and a
+# result cannot be produced by some other suite passing.
+make_suite_home() {
+  local home="$BATS_TEST_TMPDIR/suite-home"
+  mkdir -p "$home/bin" "$home/opt/sut/crate/test"
+  echo "9.9.9" > "$home/VERSION"
+  printf '#!/usr/bin/env bash\nexit 0\n' > "$home/bin/utilz"
+  chmod +x "$home/bin/utilz"
+  printf '#!/usr/bin/env bash\nexit 0\n' > "$home/opt/sut/sut"
+  chmod +x "$home/opt/sut/sut"
+  cat > "$home/opt/sut/sut.yaml" <<YAML
+name: sut
+version: 1.0.0
+description: Fixture utility for driver-discovery tests
+dependencies: []
+YAML
+  ln -s utilz "$home/bin/sut"
+  echo "$home"
+}
+
+# A suite that ANNOUNCES itself, so "ran" and "silently skipped" are told apart
+# by what was printed rather than by an exit code that both produce.
+write_suite() {
+  cat > "$1" <<EOS
+#!/usr/bin/env bash
+echo "RAN:$2"
+exit 0
+EOS
+  chmod +x "$1"
+}
+
+@test "AT07 leg 1: two executable suites in crate/test are BOTH run and BOTH counted" {
+  # RED-FIRST, and this is the leg that would have caught the whole defect:
+  # today only a file named exactly acceptance.sh runs, so the second suite is
+  # invisible and the summary says everything passed.
+  local home; home="$(make_suite_home)"
+  write_suite "$home/opt/sut/crate/test/acceptance.sh" "first"
+  write_suite "$home/opt/sut/crate/test/theme-addressing.sh" "second"
+
+  run_in_fake_home "$home" "run_tests sut"
+  assert_output_contains "RAN:first"
+  assert_output_contains "RAN:second"
+  assert_output_contains "2 suite(s)"
+}
+
+@test "AT07 leg 1 control: with one suite the count FALLS to 1" {
+  # THE CONTROL FOR THE LEG ABOVE. A discovery test that never saw its count
+  # change is asserting on a number it cannot tell from a constant, so this
+  # removes the second suite and requires the count to move.
+  local home; home="$(make_suite_home)"
+  write_suite "$home/opt/sut/crate/test/acceptance.sh" "first"
+
+  run_in_fake_home "$home" "run_tests sut"
+  assert_output_contains "RAN:first"
+  refute_output_contains "RAN:second"
+  assert_output_contains "1 suite(s)"
+}
+
+@test "AT07 leg 2: a present-but-non-executable suite is REFUSED, never skipped" {
+  # common.sh:919-923 generalised from one filename to a set. "Glob and run
+  # each executable one" silently ignores this file and hands back a green,
+  # which is the exact shape that guard exists to prevent.
+  local home; home="$(make_suite_home)"
+  write_suite "$home/opt/sut/crate/test/acceptance.sh" "first"
+  printf '#!/usr/bin/env bash\necho "RAN:second"\nexit 0\n' \
+    > "$home/opt/sut/crate/test/theme-addressing.sh"
+  chmod -x "$home/opt/sut/crate/test/theme-addressing.sh"
+
+  run_in_fake_home "$home" "run_tests sut"
+  assert_failure
+  assert_output_contains "theme-addressing.sh"
+  refute_output_contains "RAN:second"
+}
+
+@test "AT07 leg 3: a crate with no .sh suite at all is skipped, not failed" {
+  # A crate with no black-box suite is not a defect. The fixture carries a BATS
+  # suite so the run has something to count: without it the driver's own
+  # "No tests were run" would redden this leg for a reason it is not testing.
+  local home; home="$(make_suite_home)"
+  mkdir -p "$home/opt/sut/test"
+  cat > "$home/opt/sut/test/trivial.bats" <<'EOS'
+@test "trivial" { true; }
+EOS
+
+  run_in_fake_home "$home" "run_tests sut"
+  assert_success
+}
+
+@test "AT08: neither driver names a single suite filename, and both discover" {
+  # SOURCE ASSERTION, because CI cannot run itself from inside BATS. The
+  # precedent is the --strict check above, which greps common.sh for the same
+  # reason.
+  #
+  # NEVER grep for the word "acceptance": the prose comments around both call
+  # sites contain it, so such a check passes forever whatever the code does.
+  # Target the hardcoded PATH, which only a driver naming one file can contain.
+  run grep -c 'test/acceptance\.sh' "$UTILZ_HOME/opt/utilz/lib/common.sh"
+  assert_output "0"
+  run grep -c 'test/acceptance\.sh' "$UTILZ_HOME/.github/workflows/tests.yml"
+  assert_output "0"
+
+  # And the discovery construct is really there -- a zero count above is also
+  # what deleting the whole branch would produce.
+  run grep -c 'test/\*\.sh' "$UTILZ_HOME/opt/utilz/lib/common.sh"
+  assert_success
+  run grep -c 'test/\*\.sh' "$UTILZ_HOME/.github/workflows/tests.yml"
+  assert_success
+
+  # prez.bats is the THIRD home of the convention: it asserted the hardcoded
+  # path as the driver's contract, and that statement becomes false the moment
+  # the driver stops naming it. The count covers PROSE there as well as code,
+  # deliberately -- the third home was a comment as much as an assertion, and
+  # the sentence "behaviour is covered by crate/test/acceptance.sh" was already
+  # false with two suites in that directory. Write `crate/test/*.sh` instead.
+  run grep -c 'test/acceptance\.sh' "$UTILZ_HOME/opt/prez/test/prez.bats"
+  assert_output "0"
+
+  # The suite's own footer warned it was wired into nothing. That warning
+  # becomes a lie once this criterion lands, and a warning that outlives its
+  # truth teaches readers to discount the ones still true.
+  run grep -c 'NOT WIRED INTO ANY DRIVER YET' \
+    "$UTILZ_HOME/opt/prez/crate/test/theme-addressing.sh"
+  assert_output "0"
+}

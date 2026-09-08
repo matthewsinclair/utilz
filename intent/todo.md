@@ -12,7 +12,7 @@ A DOING / TODO / DONE view, projected from steel-thread and work-package status:
   - [ ] 05: frontmatter.rs + deck.rs: the theme-file: key and precedence wiring
   - [ ] 06: Migration: acceptance.sh path invocations, unit tests, docs
   - [ ] 07: Green and evidence: full suites, both doctors, shellcheck
-  - [ ] 08: Driver discovery: every suite found, a non-executable one refused
+  - [-] 08: Driver discovery: every suite found, a non-executable one refused
 
 ## TODO
 

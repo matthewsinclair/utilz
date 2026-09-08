@@ -126,3 +126,41 @@ That ruling is hv's and it is being reversed by hv's own 29 Aug re-scope. The re
 For the invocation actually in use -- geodica's `--theme="$ESTATE/Clients/<domain>/_themes/<name>"`, twice in an hour, rendering both E0024 client decks since 3 Sep -- `--theme=` becomes `--theme-file=` and nothing else changes. AC02 pins that `--theme-file` accepts a directory as well as a `.css` file, which is what makes the one-word migration true; the earlier ruling that would have required restructuring to `--theme-path` plus `--theme` was withdrawn on 8 Sep after the premise behind it was measured and found false.
 
 For hv's `prez present <deck> --theme <path>`, the same one word, and the refusal names it. That is clause (f)'s whole purpose: **naming the replacement flag turns a breakage into a migration.**
+
+## D12 -- Driver discovery, and why the obvious fix reintroduces the bug it fixes
+
+**AC03, and it exists because the id-collision ruling created it.** Moving ST0013's ATs into `theme-addressing.sh` put them at a path no driver knows. CI (`tests.yml:290`) and the utilz driver (`common.sh:887`) both name `<crate>/test/acceptance.sh` exactly, while the BATS source three lines above at `common.sh:902` takes a `find -name "*.bats"` glob. **The asymmetry is the defect**, and its symptom is silence: nothing errors, every summary says everything passed, and six ATs would be marked green in canon on a manual run nothing repeats.
+
+**The refusal half is not optional and it is the trap in the obvious fix.** "Glob and run each executable one" silently ignores a `.sh` that is present and not executable -- which is precisely what `common.sh:919-923` refuses today, in these words: *"the file is right there, the suite it represents never runs, and the summary says everything passed"*. The obvious fix generalises the discovery from one filename to a set and **drops the guard on the way**. So: a present-but-non-executable `.sh` is a REFUSAL; discovering zero suites stays a skip, because a crate with no black-box suite is not a defect.
+
+**The construct is a shell glob, not `find`, and not "any executable file".**
+
+```
+for script in "$crate_dir"/test/*.sh; do
+  [[ -e "$script" ]] || continue    # the no-match case leaves the glob literal
+```
+
+Three reasons, each measured rather than argued:
+
+- **`*.sh` rather than any executable file.** `crate/test/runtime-logic-probe.mjs` is `-rwxr-xr-x`. A glob on the executable bit would start driving a Node probe as a black-box suite, and it would do it silently.
+- **A glob rather than `find`.** The shell sorts glob expansion, so suite order is deterministic without depending on `sort -z`, which is GNU syntax that BSD platforms have historically lacked. `find` on a missing `test/` directory writes to stderr, and the natural `2>/dev/null` that follows is the empty-output-is-not-a-pass shape: a discovery step that errored and a directory that is genuinely empty become the same observation.
+- **`-e` rather than `-f`,** with the loop guarded so bash 3.2 under `set -u` never expands an empty array.
+
+**All three homes move together or the estate carries two answers to "what actually runs".** `common.sh`, `.github/workflows/tests.yml`, and `prez.bats:329`, which asserts the hardcoded path as the driver's contract and becomes a false statement the moment the driver stops naming it. AT08 pins the first two by source assertion -- CI cannot run itself from inside BATS, and the precedent is already in the tree at `prez.bats:334`, which greps `common.sh` for a hardcoded `--strict` for exactly this reason.
+
+**AT08 must not grep for the word `acceptance`.** The prose comments around both call sites contain it, so that check passes forever regardless of what the code does. It asserts on the discovery construct, and on a count of ZERO for the literal `test/acceptance.sh` in both files.
+
+## D13 -- The duplicated harness is held by a test, not by an extraction
+
+`theme-addressing.sh` reimplements `acceptance.sh`'s harness: `want`, `start`, `ok`, `bad`, `present`, `absent` and the `--strict` argument parsing. vc diffed them on 2026-09-08 -- `want` byte-identical, `absent` identical line for line -- so this is duplication and not yet drift.
+
+**Extraction is the obvious answer and it is rejected on cost.** Lifting a shared `test/harness.sh` edits `acceptance.sh`, a completed thread's frozen record, to buy a refactor with no present defect. Under AC03 one driver now runs both files, so a green from each has to mean the same thing, and that is a real forward risk -- but it is a risk about DRIFT, not about there being two copies today.
+
+**This project's own doctrine has the better answer and it is written down about this project's own duplicated index.** `CLAUDE.md` keeps a copy of the four agnostic principles that `AGENTS.md` also carries, and defends it in these terms: Highlander governs implementations rather than indexes, **a copy that cannot silently diverge is not the failure mode Highlander names -- drift is -- so the duplication is held by a test rather than by discipline.** The same reasoning applies here exactly.
+
+**The check, then, is a drift assertion over the shared primitives**, living in `opt/prez/test/prez.bats` beside the other framework-seam checks. It extracts each shared function's body from both suites and requires them equal. Two properties make it a control rather than a decoration:
+
+- **It asserts the overlap is NON-EMPTY, with a floor.** A comparison over "functions defined in both files" passes trivially the moment someone renames one side's helpers, which is the vacuous-green shape this thread has already met three times. The floor is the assertion; the equality is the content.
+- **It compares only the INTERSECTION, and the deliberate differences stay legal.** `theme-addressing.sh` has no `skip`, `unchecked` or `not_applicable` because no check in it can skip -- documented at its own `SKIPPED stays 0` note -- and it adds `same`, `renders` and `refuses`, which `acceptance.sh` has no use for. A check demanding identical function SETS would fail on correct code.
+
+**DESIGNED AND DELIBERATELY NOT BUILT ON THIS THREAD.** AC03 already widens ST0013 from prez into the framework, hv has that widening in front of them, and a second one should not be stacked before they rule. There is no AT row for this and there should not be one until there is. It is a few lines and can land the moment it is wanted.

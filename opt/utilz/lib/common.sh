@@ -706,7 +706,7 @@ parse_yaml() {
 #
 #   opt/<name>/crate/Cargo.toml        Rust unit tests      (cargo test)
 #   opt/<name>/test/*.bats             shell-level tests    (bats)
-#   opt/<name>/crate/test/acceptance.sh  black-box suite    (--strict, always)
+#   opt/<name>/crate/test/*.sh         black-box suites     (--strict, always)
 #
 # run_tests() is the coordinator: it decides WHICH sources a utility has and
 # folds the results together. The three helpers below decide nothing -- each
@@ -884,7 +884,6 @@ run_tests() {
     local test_dir="$UTILZ_HOME/opt/$util/test"
     local crate_dir="$UTILZ_HOME/opt/$util/crate"
     local manifest="$crate_dir/Cargo.toml"
-    local acceptance="$crate_dir/test/acceptance.sh"
     local suite_exit=0
 
     # Source 1 -- Rust unit tests, first because they are the fastest signal
@@ -913,24 +912,50 @@ run_tests() {
       fi
     fi
 
-    # Source 3 -- black-box acceptance.
-    if [[ -f "$acceptance" ]]; then
-      if [[ ! -x "$acceptance" ]]; then
-        # Refuse rather than skip. A non-executable acceptance script is the
-        # silent-pass shape this whole driver exists to avoid: the file is
-        # right there, the suite it represents never runs, and the summary
-        # says everything passed.
-        error "$util acceptance suite is not executable: $acceptance"
+    # Source 3 -- black-box suites, DISCOVERED rather than named (AC03).
+    #
+    # Naming one file meant a second suite in the same directory was run by
+    # nothing: CI green, this driver green, and its ATs marked green in canon
+    # on a manual run nothing repeats. The BATS source above already globs;
+    # the asymmetry was the defect.
+    #
+    # A SHELL GLOB rather than `find`. The shell sorts the expansion, so suite
+    # order is deterministic without depending on `sort -z` (GNU syntax BSD has
+    # historically lacked), and there is no stderr to suppress when crate/test/
+    # does not exist -- a suppressed `find` error and a genuinely empty
+    # directory are the same observation, which is how a discovery step stops
+    # discovering.
+    #
+    # `*.sh` rather than "any executable file", and this is measured rather
+    # than assumed: opt/prez/crate/test/runtime-logic-probe.mjs is -rwxr-xr-x,
+    # so a glob on the executable bit would silently start driving a Node probe
+    # as a black-box suite.
+    local script
+    for script in "$crate_dir"/test/*.sh; do
+      # An unmatched glob stays literal. That is the "this crate has no
+      # black-box suite" case, and it is not a defect.
+      [[ -e "$script" ]] || continue
+
+      if [[ ! -x "$script" ]]; then
+        # Refuse rather than skip. A non-executable suite is the silent-pass
+        # shape this whole driver exists to avoid: the file is right there, the
+        # suite it represents never runs, and the summary says everything
+        # passed. Discovering a SET rather than one filename does not retire
+        # that hazard, it multiplies it -- so the guard is inside the loop.
+        error "$util acceptance suite is not executable: $script"
         total_tested=$((total_tested + 1))
         total_failed=$((total_failed + 1))
-      else
-        total_tested=$((total_tested + 1))
-        suite_exit=0
-        _run_acceptance_suite "$util" "$acceptance" || suite_exit=$?
-        _report_suite "$util" "acceptance suite" "$suite_exit" \
-          || total_failed=$((total_failed + 1))
+        continue
       fi
-    fi
+
+      total_tested=$((total_tested + 1))
+      suite_exit=0
+      _run_acceptance_suite "$util" "$script" || suite_exit=$?
+      # NAMED per suite, not "acceptance suite" for all of them: with more than
+      # one, an unattributed failure line cannot say which suite failed.
+      _report_suite "$util" "$(basename "$script")" "$suite_exit" \
+        || total_failed=$((total_failed + 1))
+    done
   done
 
   # Summary

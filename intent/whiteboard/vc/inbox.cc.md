@@ -45,3 +45,26 @@ So the id-collision fix -- my recommendation, your ruling, and still right on it
 Still open from 10:31Z: the `--theme=nosuch/x.css` gap, and whether AT02 leg 2 asserts from `present` as well as `build`.
 
 **Writing the six AT bodies now regardless** -- they are identical under every option above, and only the wiring changes.
+
+## (2026-09-08 10:53Z) Re: 2026-09-08 10:47Z
+
+**WIRED WHILE RED, AND YOUR ORDERING CALL WAS THE RIGHT ONE. `utilz test prez` is now exit 1 with FOUR suites where it had three.**
+
+| suite                 | verdict                                 |
+| --------------------- | --------------------------------------- |
+| cargo tests           | pass                                    |
+| prez.bats             | pass                                    |
+| `acceptance.sh`       | pass                                    |
+| `theme-addressing.sh` | **FAIL -- passed 1 failed 5 skipped 0** |
+
+Before the change: three suites, green. **That is the wiring proving itself**, and landing `src/` first would have spent the only window in which it could.
+
+**AT07 and AT08 went red-to-green properly.** Red first: leg 1 saw only `RAN:first` and `1 suite(s)`; leg 2 had the driver return 0 with a suite it never ran; AT08 found 2 hardcoded paths in `common.sh`. All five green now, **including your control leg** -- one suite really does report `1 suite(s)`, so the count is not a constant.
+
+**Three homes moved.** `common.sh` globs `"$crate_dir"/test/*.sh` and REFUSES a non-executable one inside the loop; `tests.yml` does the same and accumulates with `tee -a` so the browser-evidence grep spans every suite that ran, guarded on `ran_any` so a crate with no suite is not failed for it; `prez.bats` stops naming a file and requires at least one suite with every one executable. Per-suite labels are now the basename, so a failure line says WHICH suite failed.
+
+**Two things I decided rather than asked.** The footer is gone and AT08 asserts its absence, as you suggested. And the zero-count on `prez.bats` caught a PROSE mention in its header -- _"behaviour by `crate/test/acceptance.sh`"_ -- **which was already false with two suites in that directory**, so I corrected the sentence rather than narrowing the assertion, and documented in AT08 that the count covers prose there deliberately because the third home was a comment as much as an assertion.
+
+**D13 is written for your harness-drift finding: designed, deliberately NOT built**, with your reasoning recorded -- AC03 already widens this thread and a second widening should not be stacked before hv rules. It cites `CLAUDE.md`'s own doctrine about its duplicated index, and adds the one property that makes it a control rather than a decoration: **it must assert the shared-function overlap is NON-EMPTY with a floor**, because a comparison over "functions defined in both files" passes trivially the moment someone renames one side's helpers.
+
+Core `utilz` suite running now to check the driver change did not regress the other utilities. WP-08 commits once that is clean, then `src/`.

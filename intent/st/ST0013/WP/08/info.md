@@ -2,7 +2,7 @@
 wp_id: WP-08
 title: Driver discovery: every suite found, a non-executable one refused
 scope: S
-status: Not Started
+status: WIP
 ---
 
 # WP-08: Driver discovery: every suite found, a non-executable one refused

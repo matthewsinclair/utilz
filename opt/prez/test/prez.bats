@@ -3,7 +3,7 @@
 #
 # THESE TESTS ARE ABOUT THE SHIM AND THE FRAMEWORK, NOT ABOUT PRESENTATIONS.
 # The tool is a Rust crate: its modules are covered by `cargo test` and its
-# behaviour by `crate/test/acceptance.sh`, both driven from the same
+# behaviour by the black-box suites under `crate/test/`, both driven from the same
 # `utilz test prez`. What is left over -- and what nothing else can see -- is
 # the seam between the dispatcher and a compiled utility. That is this file.
 #
@@ -326,8 +326,17 @@ make_fixture() {
   # inside is that all three sources the driver keys on actually exist, since a
   # missing one is silently skipped rather than reported.
   assert_file_exists "$CRATE/Cargo.toml"
-  assert_file_exists "$CRATE/test/acceptance.sh"
-  [ -x "$CRATE/test/acceptance.sh" ] || fail "acceptance.sh is not executable, so the driver would fail it"
+  # THE DRIVER NO LONGER NAMES A SUITE (ST0013/AC03), so neither does this. It
+  # discovers crate/test/*.sh and REFUSES any that is not executable, so the
+  # checkable contract is "at least one suite, and every one of them runnable".
+  # Naming acceptance.sh here was the third home of the old convention, and a
+  # home left behind is how an estate ends up with two answers to what runs.
+  local suites=("$CRATE"/test/*.sh)
+  [ -e "${suites[0]}" ] || fail "no black-box suite in $CRATE/test/, so the driver would run none"
+  local suite
+  for suite in "${suites[@]}"; do
+    [ -x "$suite" ] || fail "$suite is not executable, so the driver would refuse the run"
+  done
   run bash -c "ls '$UTILZ_HOME/opt/prez/test/'*.bats"
   assert_success
 }

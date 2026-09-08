@@ -10,16 +10,16 @@
 # re-cited both existing rows to it, leaving ST0010's suite frozen as a closed
 # thread's record.
 #
-# **THIS FILE IS NOT YET REACHED BY ANY DRIVER, AND THAT IS AC03 OF THIS THREAD.**
-# CI (`tests.yml:290`) and the utilz test driver (`common.sh:887`) both discover
-# the black-box suite at the single hardcoded path `<crate>/test/acceptance.sh`,
-# while the BATS source three lines above takes a glob. A second suite is
-# invisible to both: nothing errors, every summary says everything passed, and
-# greens recorded from a manual run would rest on a control removed from the
-# causal path (IN-AG-RED-CONTROL-001). AC03 makes both drivers discover every
-# suite AND REFUSE a present-but-non-executable one rather than skip it; AT07
-# and AT08 pin it. **Until that lands, a green here is a developer-machine green
-# and must not be reported as CI coverage.**
+# **THIS FILE IS REACHED BY BOTH DRIVERS, AND THAT TOOK A CRITERION.** When it
+# was written they discovered the black-box suite at one hardcoded path,
+# `<crate>/test/acceptance.sh`, while the BATS source three lines above took a
+# glob -- so this file was invisible to both. Nothing errored, every summary
+# said everything passed, and greens recorded here would have rested on a
+# control removed from the causal path (IN-AG-RED-CONTROL-001). AC03 made both
+# drivers discover every suite AND REFUSE a present-but-non-executable one
+# rather than skip it; AT07 and AT08 pin it, and AT08 asserts this file no
+# longer carries the footer that warned it was wired into nothing. **A warning
+# that outlives its truth teaches readers to discount the ones still true.**
 #
 # The harness below duplicates acceptance.sh's. Extracting a shared
 # `test/harness.sh` is the Highlander answer and it restructures a closed
@@ -418,7 +418,6 @@ fi
 printf '\n=======================================\n'
 printf 'passed %d   failed %d   skipped %d\n' "$PASSED" "$FAILED" "$SKIPPED"
 [ "$SKIPPED" -gt 0 ] && printf 'A SKIP is not a pass. Re-run where the missing tool exists.\n'
-printf 'NOT WIRED INTO ANY DRIVER YET -- a green here is a developer-machine green.\n'
 
 [ "$FAILED" -gt 0 ] && exit 1
 if [ "$STRICT" -eq 1 ] && [ "$SKIPPED" -gt 0 ]; then

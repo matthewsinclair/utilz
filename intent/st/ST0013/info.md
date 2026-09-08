@@ -31,7 +31,7 @@ This is a breaking change taken deliberately, at the cheapest moment it will eve
 | WP-05 | frontmatter.rs + deck.rs: the theme-file: key and precedence wiring | S    | Not Started |
 | WP-06 | Migration: acceptance.sh path invocations, unit tests, docs         | S    | Not Started |
 | WP-07 | Green and evidence: full suites, both doctors, shellcheck           | S    | Not Started |
-| WP-08 | Driver discovery: every suite found, a non-executable one refused   | S    | Not Started |
+| WP-08 | Driver discovery: every suite found, a non-executable one refused   | S    | WIP         |
 
 ## Acceptance
 

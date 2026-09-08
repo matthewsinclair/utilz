@@ -283,26 +283,49 @@ jobs:
           cargo build --release --manifest-path "$manifest"
           cargo test --release --manifest-path "$manifest"
 
-          # The black-box suite, always --strict. Without it six of nine ATs
-          # degrade to skips and the job goes green having driven no browser,
-          # which is the precise adjacent-measure failure this thread inherits
-          # its vocabulary for.
-          if [ -x "$crate_dir/test/acceptance.sh" ]; then
-            out="$(mktemp)"
+          # The black-box suites, always --strict, DISCOVERED rather than named
+          # (ST0013/AC03). Without --strict six of nine ATs degrade to skips and
+          # the job goes green having driven no browser, which is the precise
+          # adjacent-measure failure this thread inherits its vocabulary for.
+          # Naming ONE file was the same failure a level up: a second suite in
+          # the same directory was run by nothing and CI stayed green.
+          #
+          # A shell glob rather than find -- the shell sorts it, and there is no
+          # stderr to suppress when crate/test/ is absent. `*.sh` rather than any
+          # executable file: runtime-logic-probe.mjs is executable and is a probe,
+          # not a suite.
+          out="$(mktemp)"
+          : > "$out"
+          ran_any=0
+          for script in "$crate_dir"/test/*.sh; do
+            # An unmatched glob stays literal: this crate has no black-box
+            # suite, which is not a defect.
+            [ -e "$script" ] || continue
+
+            if [ ! -x "$script" ]; then
+              # Refuse, never skip. The file is right there, the suite it
+              # represents never runs, and the summary says everything passed.
+              echo "$script is present but not executable."
+              echo "Refusing to call this a pass -- a suite that cannot run is not a suite that passed."
+              exit 1
+            fi
+
             # ONE invocation, prefixed rather than duplicated in an if/else --
             # two copies of the command line drift, and the flags matter.
             RUNNER=()
             if command -v xvfb-run >/dev/null 2>&1; then RUNNER=(xvfb-run -a); fi
-            "${RUNNER[@]+"${RUNNER[@]}"}" "$crate_dir/test/acceptance.sh" --strict 2>&1 | tee "$out"
+            "${RUNNER[@]+"${RUNNER[@]}"}" "$script" --strict 2>&1 | tee -a "$out"
+            ran_any=1
+          done
 
-            # PROVE a browser was actually found. A suite that skipped every
-            # browser AT can still exit 0; the only durable evidence is the
-            # suite naming the binary it drove.
-            if ! grep -qiE 'chrom|browser: ' "$out"; then
-              echo "acceptance.sh --strict produced no evidence of a browser."
-              echo "Refusing to call this a pass -- see the output above."
-              exit 1
-            fi
+          # PROVE a browser was actually found, across every suite that ran. A
+          # suite that skipped every browser AT can still exit 0; the only
+          # durable evidence is a suite naming the binary it drove. Guarded on
+          # ran_any so a crate with no black-box suite is not failed for it.
+          if [ "$ran_any" -eq 1 ] && ! grep -qiE 'chrom|browser: ' "$out"; then
+            echo "the black-box suites produced no evidence of a browser."
+            echo "Refusing to call this a pass -- see the output above."
+            exit 1
           fi
           echo "::endgroup::"
         done
