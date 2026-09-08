@@ -487,10 +487,10 @@ mdagg test.yaml -p | grep 'page-break'
 
 ### Making Changes
 
-1. Edit `/Users/matts/Devel/prj/Utilz/opt/mdagg/mdagg`
+1. Edit `opt/mdagg/mdagg`
 2. Test changes: `mdagg --help` and basic functionality
 3. Run `utilz doctor` to verify no issues
-4. Update help if needed: `/Users/matts/Devel/prj/Utilz/help/mdagg.md`
+4. Update help if needed: `help/mdagg.md`
 
 ### Code Style
 

@@ -95,10 +95,10 @@ bats stampz.bats
 
 ### Making Changes
 
-1. Edit `/Users/matts/Devel/prj/Utilz/opt/stampz/stampz`
+1. Edit `opt/stampz/stampz`
 2. Test changes: `stampz --help`
 3. Run tests: `utilz test stampz`
-4. Update help if needed: `/Users/matts/Devel/prj/Utilz/help/stampz.md`
+4. Update help if needed: `help/stampz.md`
 
 ---
 

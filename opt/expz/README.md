@@ -112,10 +112,10 @@ bats expz.bats
 
 ### Making Changes
 
-1. Edit `/Users/matts/Devel/prj/Utilz/opt/expz/expz`
+1. Edit `opt/expz/expz`
 2. Test changes: `expz --help`
 3. Run tests: `utilz test expz`
-4. Update help if needed: `/Users/matts/Devel/prj/Utilz/help/expz.md`
+4. Update help if needed: `help/expz.md`
 
 ---
 

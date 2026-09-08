@@ -85,10 +85,10 @@ bats cryptz.bats
 
 ### Making Changes
 
-1. Edit `/Users/matts/Devel/prj/Utilz/opt/cryptz/cryptz`
+1. Edit `opt/cryptz/cryptz`
 2. Test changes: `cryptz --help`
 3. Run tests: `utilz test cryptz`
-4. Update help if needed: `/Users/matts/Devel/prj/Utilz/help/cryptz.md`
+4. Update help if needed: `help/cryptz.md`
 
 ---
 

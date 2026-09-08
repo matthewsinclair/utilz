@@ -201,23 +201,41 @@ teardown_file() {
   }
 }
 
-@test "no executable or library in the install names an absolute home path" {
-  # The stricter half, restricted to files that RUN. Eight opt/*/README.md
-  # carry a literal /Users/matts/Devel/prj/Utilz in a Development section --
-  # historical drift from an older generator, measured 7 Sep; the current
-  # tmpl/README.tmpl ships the literal string $UTILZ_HOME and is clean. That is
-  # a documentation wart with its own home, and NOT something to smuggle into
-  # this assertion as an exception list that would rot the first time someone
-  # fixed one of them.
+@test "nothing in the install names an absolute home path" {
+  # THE .md EXEMPTION IS GONE, AND ITS REMOVAL IS THE POINT. This was
+  # restricted to files that RUN because eight opt/*/README.md carried a
+  # literal /Users/matts/Devel/prj/Utilz in a Development section. Both halves
+  # of that are now fixed -- the eight files AND the generator that was still
+  # minting the ninth (issue 0010) -- so the property covers the whole owned
+  # set, which is where the leak actually was. Documentation ships too.
+  #
+  # It also catches what the exact-path test above structurally CANNOT: that
+  # one greps for E2E_SRC_PATH, a throwaway fixture tree, so a path naming the
+  # real checkout goes straight past it. That is how the eight survived.
+  #
+  # TWO THINGS ARE FILTERED AND NEITHER IS A PER-FILE EXCEPTION LIST.
+  # `/Users/you/` is the documented placeholder, available to any doc; the
+  # manifest is a RECORD of where the bytes came from, exempt here for the same
+  # reason and by the same argument as the test above. The control at the end
+  # fails if the placeholder stops appearing, so the filter cannot quietly come
+  # to cover nothing.
   run bash -c "
     cd '$E2E_PREFIX' || exit 1
-    find . -type f ! -name '*.md' ! -path './opt/prez/crate/*' -print0 \
-      | xargs -0 grep -Il '/Users/' 2>/dev/null || true
+    find . -type f ! -path './opt/prez/crate/*' ! -name 'manifest.sha256' -print0 \
+      | xargs -0 grep -In '/Users/' 2>/dev/null \
+      | grep -v '/Users/you/' || true
   "
   assert_success
   [[ -z "$output" ]] || {
-    echo "these installed executables name an absolute home path:" >&2
+    echo "these installed files name an absolute home path:" >&2
     printf '%s\n' "$output" >&2
+    return 1
+  }
+
+  # The placeholder really is in the shipped tree, so the filter covers
+  # something that exists rather than nothing.
+  grep -rq '/Users/you/' "$E2E_PREFIX" || {
+    echo "the /Users/you/ placeholder no longer appears; the filter above covers nothing" >&2
     return 1
   }
 }

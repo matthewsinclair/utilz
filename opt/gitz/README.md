@@ -85,10 +85,10 @@ bats gitz.bats
 
 ### Making Changes
 
-1. Edit `/Users/matts/Devel/prj/Utilz/opt/gitz/gitz`
+1. Edit `opt/gitz/gitz`
 2. Test changes: `gitz --help`
 3. Run tests: `utilz test gitz`
-4. Update help if needed: `/Users/matts/Devel/prj/Utilz/help/gitz.md`
+4. Update help if needed: `help/gitz.md`
 
 ---
 

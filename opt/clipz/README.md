@@ -85,10 +85,10 @@ bats clipz.bats
 
 ### Making Changes
 
-1. Edit `/Users/matts/Devel/prj/Utilz/opt/clipz/clipz`
+1. Edit `opt/clipz/clipz`
 2. Test changes: `clipz --help`
 3. Run tests: `utilz test clipz`
-4. Update help if needed: `/Users/matts/Devel/prj/Utilz/help/clipz.md`
+4. Update help if needed: `help/clipz.md`
 
 ---
 

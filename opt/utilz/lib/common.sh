@@ -1417,8 +1417,22 @@ generate_utility() {
 
   # Generate files from templates
   local tmpl_dir="$UTILZ_HOME/opt/utilz/tmpl"
+  # TWO SPELLINGS OF EACH PATH, BECAUSE THEY HAVE TWO JOBS AND ONLY ONE OF THEM
+  # SHIPS. The absolute pair is what the generator WRITES THROUGH and what it
+  # prints to the operator; the _rel pair is what goes into README.md, which is
+  # in the install's owned set -- so an absolute path there puts the generating
+  # machine's home directory inside every published tree. That is exactly what
+  # eight older READMEs carried (issue 0010), and the generator was still
+  # minting the ninth, so fixing the eight alone would have fixed nothing.
+  #
+  # These were ONE variable serving both jobs, which is why the leak existed:
+  # nothing could be changed for the reader without breaking the writer. The
+  # relative form is also the better documentation -- someone reading
+  # opt/foo/README.md is already standing in the tree it names.
   local impl_path="$util_dir/$util_name"
   local help_path="$UTILZ_HOME/help/$util_name.md"
+  local impl_path_rel="opt/$util_name/$util_name"
+  local help_path_rel="help/$util_name.md"
 
   info "Generating implementation..."
   sed -e "s/{{NAME}}/$util_name/g" \
@@ -1454,8 +1468,8 @@ generate_utility() {
     -e "s/{{DESCRIPTION}}/$util_desc/g" \
     -e "s/{{AUTHOR}}/$author/g" \
     -e "s/{{YEAR}}/$year/g" \
-    -e "s|{{IMPL_PATH}}|$impl_path|g" \
-    -e "s|{{HELP_PATH}}|$help_path|g" \
+    -e "s|{{IMPL_PATH}}|$impl_path_rel|g" \
+    -e "s|{{HELP_PATH}}|$help_path_rel|g" \
     "$tmpl_dir/README.tmpl" > "$util_dir/README.md"
 
   info "Generating help file..."

@@ -138,10 +138,10 @@ bats macoz.bats
 
 ### Making Changes
 
-1. Edit `/Users/matts/Devel/prj/Utilz/opt/macoz/macoz`
+1. Edit `opt/macoz/macoz`
 2. Test changes: `macoz --help`
 3. Run tests: `utilz test macoz`
-4. Update help if needed: `/Users/matts/Devel/prj/Utilz/help/macoz.md`
+4. Update help if needed: `help/macoz.md`
 
 ---
 

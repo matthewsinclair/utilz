@@ -85,10 +85,10 @@ bats retry.bats
 
 ### Making Changes
 
-1. Edit `/Users/matts/Devel/prj/Utilz/opt/retry/retry`
+1. Edit `opt/retry/retry`
 2. Test changes: `retry --help`
 3. Run tests: `utilz test retry`
-4. Update help if needed: `/Users/matts/Devel/prj/Utilz/help/retry.md`
+4. Update help if needed: `help/retry.md`
 
 ---
 
