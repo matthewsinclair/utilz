@@ -13,7 +13,55 @@ title: Version dispatch has one home, and reports both versions
 
 ## Acceptance Criteria
 
+### Group AC01
+
+- AC01 Every utility answers --version with hv's ruled pair form: line one is exactly 'utilz:<framework>/<util>:<version>' and line two is the utility's description. The FORM is the requirement, not the presence of two numbers -- an assertion that merely finds both versions somewhere in the output does not satisfy this row, because a substring check cannot see a malformed pair. Assert the whole line. -- satisfied: no (computed)
+
+### Group AC02
+
+- AC02 For every utility, '<util> --version' and 'utilz <util> --version' produce BYTE-IDENTICAL output. The form-disagreement IS the defect: measured 8 Sep before any edit, 'todo' answered on the symlink path and printed 'Unknown command: --version' via the dispatcher, and 'prez' answered BOTH ways but differently ('prez v2.0.0' against 'prez 2.0.0'). An AT exercising one invocation form cannot see either failure, so this row is not covered by any test that does not run both forms and diff them. -- satisfied: no (computed)
+
+### Group AC03
+
+- AC03 The covering test asserts the SIZE of the population it swept and refuses at anything less than the full utility set. A discovery loop that silently narrows -- a glob that matches nothing, a filter that drops the Rust utility, a walker that skips a name -- reports a clean pass over an empty or partial population, which is indistinguishable from a real one. The count is part of the claim, not a diagnostic. -- satisfied: no (computed)
+
+### Group AC04
+
+- AC04 todo and prez each answer the pair form on BOTH invocation paths. They are named explicitly because they are the two that could not inherit the convention -- todo never copied the dispatch arm, prez cannot have one because clap answers before any shell runs -- so a fix that works by the thirteen utilities' existing mechanism would leave exactly these two broken while passing a population-wide test that tolerated them. -- satisfied: no (computed)
+
+### Group AC05
+
+- AC05 The thirteen hand-copied dispatch arms are DEAD, proven by deletion rather than by inspection: with the arms removed, both invocation forms still answer correctly for all thirteen. Leaving them in place leaves two homes agreeing by convention, which is the arrangement that produced this defect -- and 'the dispatcher ALSO handles it' passes every test that 'the dispatcher handles it' passes. -- satisfied: no (computed)
+
+### Group AC06
+
+- AC06 prez's crate is untouched: crate/Cargo.toml remains the single home of prez's version, no VERSION file is added beside it, and the binary invoked directly still answers clap's own --version. The rule this preserves is 'point at the one home you cannot delete', established 8 Sep -- cargo REQUIRES the version in [package], so a second home would be the duplication the estate spent that morning removing. -- satisfied: no (computed)
+
 ## Acceptance Tests
+
+### Group AC01
+
+_(no tests in this group)_
+
+### Group AC02
+
+_(no tests in this group)_
+
+### Group AC03
+
+_(no tests in this group)_
+
+### Group AC04
+
+_(no tests in this group)_
+
+### Group AC05
+
+_(no tests in this group)_
+
+### Group AC06
+
+_(no tests in this group)_
 
 ---
 
