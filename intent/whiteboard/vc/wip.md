@@ -3,7 +3,7 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 06b406f0-9a29-4636-ad0d-abd6663e4f8f
-heartbeat_at: 2026-09-08 14:39Z
+heartbeat_at: 2026-09-08 15:14Z
 status: active
 focus: "Close-out state, all measured. Full estate GREEN: 554 ok / 0 not ok, plan-sum 554 matched, 19 suites, 710 assertions. ST0013 closed and published; issues 0012, 0013 and Intent 0282 filed, fixed and closed; AC16 rendered and catalogued. Nothing claimed, nothing held, inboxes empty. Open with hv: the push, 0013 scope note, AC16 placement."
 claims: []
@@ -51,6 +51,10 @@ Reviewed cc's version-architecture sweep (hv-ruled, built inline, `ac7decb`) rea
 - **`intent-vc`: six defects relayed, one-digit ruling delivered and landed.** The flat-125 offer is outstanding.
 
 ## Watch-outs
+
+- **`git grep -E` DOES NOT HONOUR `\b` AND MATCHES NOTHING RATHER THAN SAYING SO; PLAIN `grep -E` DOES.** 8 Sep, mine, caught while capturing a baseline to check someone else's sweep. Same file, same pattern, three answers: `git grep -cE '\bv[0-9]+\.[0-9]+\.[0-9]+' README.md` -> **0**, the same without `\b` -> **2**, `grep -cE` with `\b` -> **2**. **Both tools advertise `-E` and they are not the same `-E`.** My first baseline wrote an empty file and reported "0 tracked lines carry a v-version" a minute after I had counted them by hand -- a clean zero from a pattern that could not match, in the measurement whose entire purpose was to catch over-reach in a peer's edit. **A pattern is not portable between greps just because both take the same flag**; verify a new pattern against a line you KNOW matches before trusting a zero from it.
+
+- **A POPULATION FIXED AT INVOCATION MEASURES A TREE THAT MOVED DURING THE RUN, AND AN UNCHANGED TOTAL IS WHAT THAT LOOKS LIKE.** cc's, 8 Sep, and the fourth distinct way a population went wrong between us in one day. `bats ./*.bats` expands its glob ONCE; `version_dispatch.bats` was created 67 seconds into a full-suite run, so eleven new tests were silently excluded -- and the run returned **554, unchanged**, which is byte-identical to "the new tests ran and added nothing". Only a file-creation timestamp separated the two readings, and neither of us would have looked because the number matched the expectation. **An unchanged total is evidence only if the population was fixed for the duration; a glob expanded at start time is a claim about the tree AT START, not about the tree you are reporting on.**
 
 - **THE SOURCE FEELS AUTHORITATIVE BECAUSE IT IS CAUSAL; THE ARTIFACT IS AUTHORITATIVE BECAUSE IT IS WHAT HAPPENED.** 8 Sep, closing the day, and it is the INVERSE of every other error in it. All day the failure was trusting an artifact without checking the instrument that made it. Here cc reasoned about a 1226-line log **from one line of its source** -- `common.sh:810` labels a script with the utility's name -- and concluded the two prez suites were indistinguishable in the log. **`common.sh:811` prints `Script: $script` unconditionally, has done since `0ebfa85` on 2026-08-29, and the log carries two distinct paths at lines 631 and 945.** A population of one where the function emits two, reasoned about an artifact cc had just produced and could have grepped. **Same root in both directions: reaching for the more convenient authority instead of the direct evidence.** Where an artifact exists, read the artifact.
 
