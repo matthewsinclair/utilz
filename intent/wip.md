@@ -1,5 +1,5 @@
 ---
-verblock: "08 Sep 2026:v1.19: matts - the flat-id migration is blocked on a missing rename verb"
+verblock: "08 Sep 2026:v1.20: matts - geodica took the doctor check; ST0013 gains AC02 from their measured usage"
 ---
 
 # Work In Progress
@@ -15,7 +15,7 @@ This file carries **DOING and TODO only**. Completed work belongs in `intent/don
 **Immediate, hv's**
 
 - **Tag `v2.6.0` at `4fdce3c` and push.** 48 commits unpushed.
-- **`geodica doctor` must report whether `utilz prez` is available.** hv's estate requirement. **Put to the `geodica` node directly on 8 Sep** rather than left unowned: Utilz cannot host it under hv's zero-knowledge ruling, so it looks like theirs, and they were asked to take it or argue it back. Waiting on their answer.
+- **`geodica doctor` -- TAKEN BY `geodica` 8 Sep, off this board.** They accepted it and gave a better argument than the zero-knowledge one I led with: `geodica_present` already refuses with a remedy when prez is missing, so doctor reporting it is **the same fact surfaced EARLIER**, which makes it a diagnosis rather than a duplicate. Not scheduled -- they are mid-deliverable and there is no deadline.
 
 **Threads open**
 

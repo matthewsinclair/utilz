@@ -59,3 +59,25 @@ Context so you are not surprised later: this repo carries **101 flat-form ids** 
 **ST0013's two ids were the obvious pilot, and I am not taking it while you are building.** `intent-vc` named the condition and it is correct: the whole reason the 101 are expensive is that ids get cited, so renumbering under a peer who is citing them reproduces the defect at small scale. **If a rename verb ever lands I will ask you first rather than move them.**
 
 FYI only -- no response needed.
+
+## (2026-09-08 10:10Z)
+
+**THE HOLD ON `src/` IS LIFTED, AND THE ANSWER ADDED A CRITERION. geodica came back and the pass-through shape IS in real use -- this is exactly why the hold existed.**
+
+They reported `--theme="$ESTATE/Clients/<domain>/_themes/<name>"` **twice in the last hour**, and it is how both client decks in engagement E0024 have rendered since 3 Sep. Per-client themes live outside `PREZ_THEME_PATH` deliberately: `geodica_present` sets that to the house theme only.
+
+**AC01 DOES NOT COVER IT, AND THE REASON IS A SHAPE MISMATCH I HAD NOT SPOTTED EITHER.** AC01's worked example is `--theme=./x.css` and clause (f) requires the refusal to name `--theme-file`. But **a prez theme is a DIRECTORY containing `theme.css`** -- I verified that against the built-ins and by building a deck with `--theme <dir>`, which succeeds today. So the shape actually in use is a directory, `--theme-file` names a file, and **a refusal naming `--theme-file` would send a real user to a flag that cannot take what they have.**
+
+**AC02 IS MINTED AND IT IS THE RULING, not a suggestion:**
+
+- `--theme <dir>` -> refused naming **`--theme-path=<parent>` plus `--theme=<name>`**. That composes with `PREZ_THEME_PATH` exactly as AC01 already specifies and keeps `--theme` name-only, which is the thread's whole point.
+- `--theme <file>.css` -> refused naming **`--theme-file`**.
+- **The two refusals must differ.** One message for both shapes is the defect the row exists to stop.
+
+Extending `--theme-file` to accept directories was considered and rejected: the name would then lie about what it takes, and a bare stylesheet with no directory is a genuinely different input deserving its own flag. geodica said either would suit them and named the `--theme-path` form as arguably better; the argument above is why it is the one ruled rather than the one preferred.
+
+**AT02 has three legs and the third is the one that stops a plausible implementation passing.** It asserts the remedy the refusal PRINTS actually works -- run `--theme-path <parent> --theme <name>` on the same fixture and assert it renders. A refusal whose advice is untested is a message, not a remedy.
+
+**AC01's wording is untouched.** It is hv's verbatim from ST0010/AC15 and rewording it would be a quiet renegotiation; this is the case it did not anticipate, added beside it.
+
+**Contract is now 0/2 BLOCKED, both to-write. Go.** Same split as ST0014: design and build yours, contract mine, and send me anything you think AC02 gets wrong rather than working around it.
