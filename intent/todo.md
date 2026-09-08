@@ -4,24 +4,10 @@ A DOING / TODO / DONE view, projected from steel-thread and work-package status:
 
 ## DOING
 
-- [-] ST0014: Make utilz insallable in to opt/ just like devbin
-  - [x] 01: Owned set and manifest: the file list, symlink target-string checksums, manifest write and check
-  - [x] 02: utilz install: prefix from utilz.yaml, the three refusals, mode announcement, prez built at publish
-  - [x] 03: utilz upgrade: the mirror refusal, and edited files reported and left alone
-  - [x] 04: Runnable-install guards: utilz test refuses, the prez shim refuses to build, install reports its provenance
-  - [x] 05: AC01 end to end: the install runs with the source tree moved aside
-  - [~] 06: The install library: owned set, predicates, prefix, manifest
-  - [~] 07: utilz install -- publish a runnable install, with the gates
-  - [~] 08: utilz upgrade -- replace an install, preserving edits
-  - [~] 09: prez: build at publish, and refuse to build from an install
-  - [~] 10: utilz test refuses from an install tree
-  - [~] 11: The explicit relink verb for the PATH symlinks
-  - [x] 12: utilz relink: the explicit PATH-symlink verb, and AC11's never-implicitly half
-  - [x] 13: utilz use dev|opt: the two-word switch over relink, refusing while UTILZ_HOME is exported
+_(none)_
 
 ## TODO
 
-- [?] ST0012: Estate file policy: what must be proved before a realised file is removed
 - [?] ST0013: prez theme addressing: split --theme, --theme-file and --theme-path
 
 ## DONE
@@ -81,6 +67,21 @@ A DOING / TODO / DONE view, projected from steel-thread and work-package status:
   - [x] 04: Test suite and fixtures
   - [x] 05: CI wiring on both legs
   - [x] 06: Docs and acceptance run
+- [x] ST0012: Estate file policy: what must be proved before a realised file is removed
+- [x] ST0014: Make utilz insallable in to opt/ just like devbin
+  - [x] 01: Owned set and manifest: the file list, symlink target-string checksums, manifest write and check
+  - [x] 02: utilz install: prefix from utilz.yaml, the three refusals, mode announcement, prez built at publish
+  - [x] 03: utilz upgrade: the mirror refusal, and edited files reported and left alone
+  - [x] 04: Runnable-install guards: utilz test refuses, the prez shim refuses to build, install reports its provenance
+  - [x] 05: AC01 end to end: the install runs with the source tree moved aside
+  - [~] 06: The install library: owned set, predicates, prefix, manifest
+  - [~] 07: utilz install -- publish a runnable install, with the gates
+  - [~] 08: utilz upgrade -- replace an install, preserving edits
+  - [~] 09: prez: build at publish, and refuse to build from an install
+  - [~] 10: utilz test refuses from an install tree
+  - [~] 11: The explicit relink verb for the PATH symlinks
+  - [x] 12: utilz relink: the explicit PATH-symlink verb, and AC11's never-implicitly half
+  - [x] 13: utilz use dev|opt: the two-word switch over relink, refusing while UTILZ_HOME is exported
 
 ---
 
