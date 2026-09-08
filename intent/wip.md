@@ -1,5 +1,5 @@
 ---
-verblock: "08 Sep 2026:v1.17: matts - AC-id ruling discharged; ST0013 to cc; geodica doctor routed"
+verblock: "08 Sep 2026:v1.18: matts - cc's seven routed items actioned; em-dash and issue figures corrected"
 ---
 
 # Work In Progress
@@ -24,7 +24,7 @@ This file carries **DOING and TODO only**. Completed work belongs in `intent/don
 **Deferred out of ST0011 (`stampz`), neither blocking**
 
 - **Mixed page geometry within one PDF is refused, not handled.** `qpdf --overlay --repeat=1` applies one stamp to every page, so per-page variation needs overlay ranges. `lamplight-ac` has offered its real pack as a corpus (10 files, 55 pages, two geometries).
-- **`todo` verbs are unreachable from Emacs** (issue 0009). The bridge inserts `C-u` extra flags BETWEEN the declared flags and the path. The default view works. Fixing it means the elisp appending the path before extra flags.
+- **`todo` verbs are unreachable from Emacs, and this has NO TRACKED HOME.** The bridge inserts `C-u` extra flags BETWEEN the declared flags and the path; the default view works. **Issue 0009 is CLOSED having deliberately ACCEPTED the limitation**, so citing it here was wrong -- this proposes a third option 0009 never weighed. Doc-before-code blocks the fix until it has an issue or a thread. cc's finding, 8 Sep.
 
 **Carried out of ST0010 when it closed**
 
@@ -36,12 +36,12 @@ This file carries **DOING and TODO only**. Completed work belongs in `intent/don
 **Housekeeping**
 
 - **cc's `hoist-rebase.sh` carries one dead postcondition.** `post "test/acceptance.sh" "AT13: PASS" 0` sets the minimum to zero against a `-ge` test, so it prints `ok` unconditionally, including at the count of zero it exists to catch. cc's, and it is a re-attach into ST0010's canon -- a CLOSED, dehydrated thread, so it needs a hydrate first.
-- **`intent/issues/CLOSED/` renders only 0001-0006** while canon holds 9. `intent doctor` reports 0 findings and does not treat it as skew, but a reader who lists that directory sees a stale set.
+- **`intent/issues/OPEN/` and `CLOSED/` on disk are a STALE RENDERING of canon.** Canon holds ten; the OPEN directory is empty while **0007** (prez contrast) and **0010** (eight utility READMEs ship hv's absolute home path into an install) are both open. `intent doctor` counts canon and reports no skew, so nothing flags it. **Read issues with `intent issues list`, never with `ls`.** Corrected against cc's measurement 8 Sep; my earlier "canon holds 9, only 0007 open" was stale.
 - **`utilz doctor` writes its results to stderr and its step headers to stdout**, so `utilz doctor | grep` sees the headers and not the answers. Pre-existing and unruled: changing it could break a caller, and the help now documents it rather than assuming nobody pipes it.
 
 **Opportunistic, no owner**
 
-- **Em dashes across 18 tracked docs**, against the no-em-dash convention. 95 occurrences; worst are `usage-rules.md` (24) and `help/syncz.md` (21). Two of the 18 are arguably out of scope -- `intent/issues/CLOSED/0001/` is a closed historical record and `opt/prez/crate/examples/test_pres.md` is crate content that moves with the pin.
+- **Em dashes: 27 files, 110 occurrences**, measured by cc 7 Sep excluding canon, history, closed issues and the crate. My earlier 18/95 was the stale figure. Worst are `usage-rules.md` (24) and `help/syncz.md` (21). **THREE FILES MUST NOT BE TOUCHED AND A BLIND SED IS A DEFECT RATHER THAN A TIDY**: two `opt/macoz/images/backgrounds/autumn-*.png` are binaries where the byte sequence is coincidental, and **`opt/cleanz/data/trope-indicators.txt` is a DETECTOR LIST -- the em dash there is what the utility hunts, so rewriting it breaks cleanz.**
 - **The 15 per-utility `help/<name>.md` files each hardcode a version alongside the same value in `<name>.yaml`.** All 15 currently agree, because per-utility versions rarely move. Apply `help/utilz.md`'s treatment -- point at the command instead of carrying a number -- if another lags.
 - VSCode / Zed / Vim integration families (same TSV manifest, new editor-specific installers).
 - Emacs bridge v2: Transient grouped menu, deferred per ST0007 `design.md`.
