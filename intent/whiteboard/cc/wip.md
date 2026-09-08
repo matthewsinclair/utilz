@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: 221775b1-d498-41c0-b937-4d10094711a8
-heartbeat_at: 2026-09-08 16:12Z
+heartbeat_at: 2026-09-08 18:34Z
 status: active
-focus: "Folded for a compact -- status stays active, a compact is not a session ending. 2.8.0 IN FLIGHT: bumped and committed at 9c2ed5f, gate running, NOT tagged, NOT pushed, NOT published. ST0015 and ST0016 closed. Nothing claimed."
+focus: "Post-compact pickup. 2.8.0 IS OUT -- tagged at 9c2ed5f, both remotes, CI green, install republished and correct by behaviour. Everything this board called in-flight has landed. Nothing claimed, nothing held, inboxes empty. Awaiting hv."
 claims: []
 ---
 
@@ -13,16 +13,21 @@ claims: []
 
 ## DOING
 
-**Nothing claimed. But 2.8.0 IS MID-RELEASE AND THE ESTATE IS HALF-PUBLISHED -- read this before touching anything.**
+**Nothing claimed. The release this board tracked as in-flight is DONE -- the previous focus line was false and is corrected above.**
 
-- `VERSION` is **2.8.0**, committed at `9c2ed5f`. **Not tagged, not pushed, not published.**
-- The published install is **2.7.0 at `6ea9b2a`**. It answers the NEW `--version` and the OLD `--help` -- one tree, one commit, two eras. That half-state is not a bug in the install; it is what a per-thread publish lag looks like, and vc captured it at 16:06Z as the evidence for an install-coverage row.
-- **Remaining sequence, agreed with vc:** gate lands -> publish -> **vc verifies the install by behaviour** against their 16:06Z capture -> the install row greens -> **tag `2.8.0` and push LAST**, after the install is proven. The tag is the only irreversible artefact and it goes last on purpose.
-- vc is filing **AC08 on ST0016** (install coverage). ST0016 is already CLOSED, so this flips `intent ac status ST0016` from PASS to BLOCKED until its AT greens. **That is the thread admitting it closed against an incomplete contract, not a regression.** hv was told in advance.
+- **2.8.0 shipped while cc was compacting.** Annotated tag `2.8.0` on the release commit `9c2ed5f` itself (not on session HEAD, per hv's directive), on `local` and `upstream`. CI green on HEAD `ac6829a`.
+- **The install is republished and verified BY BEHAVIOUR, not by reading its VERSION file**: both invocation forms answer `utilz:2.8.0/syncz:2.0.0`, and the provenance line reads `installed at /Users/matts/Devel/opt/utilz (6fb9de6)`.
+- **The install is 7 commits behind HEAD and it does not matter -- measured, not assumed.** Those 7 touch exactly two owned files, `bin/.devbin/manifest.sha256` and `opt/utilz/test/help_dispatch.bats`. No user-facing behaviour differs. **State the diff, never the distance.**
+- All 16 STs Completed; ST0013 4/4, ST0015 10/10, ST0016 8/8 all PASS.
+- **`utilz` on PATH is still the CHECKOUT** (`dev 16 links, opt 0`) -- hv's 15:51 setting for release work, unchanged. Post-release, whether to flip to `opt` is hv's call and one command.
 
 ## TODO
 
-- **Write the AT for ST0016's AC08 once vc files the row.** `install_guards.bats` is the pattern: from a REAL install, both invocation forms of `--help` byte-identical AND rendering the curated file -- with the install naming itself first, so the row cannot silently retarget to the checkout.
+**Three open issues, none assigned, in the order cc would take them.**
+
+- **0011 (medium, the only open medium) -- `install_guards.bats:267` compares live HEAD against a fixture-time install.** The defect is PRESENT ON THIS TREE RIGHT NOW: live HEAD is `ac6829a`, the install was built from `6fb9de6`. That is a free red-proof, so `IN-AG-RED-CONTROL-001` costs nothing here. Fix is to compare against the commit the MANIFEST recorded, which is also the claim AC12 actually makes. hv's 2026-07-10 ruling lets a tracked issue drive this without a thread.
+- **0010 (low) -- eight `opt/*/README.md` ship hv's home path.** Population pinned: **8 files, 16 occurrences**, in `clipz cryptz expz gitz macoz mdagg retry stampz`; the other seven READMEs are clean. **A ninth file matches and is NOT part of this**: the install's `manifest.sha256` line 3 is `source-tree <path>`, a provenance record doing its job. Generator is already correct -- `README.tmpl` ships `$UTILZ_HOME` -- so this is a one-time edit, not a code change. Issue forbids an exception list in `install_e2e.bats`.
+- **0007 (low) -- prez slide counter contrast. ITS STATED HOME NO LONGER EXISTS**: the issue files the fix under ST0010/WP-05, and WP-05 is **Cancelled**. Re-homing is hv's call, not something to settle by picking somewhere convenient. Compiler change, not a theme change.
 
 ## Holds
 
