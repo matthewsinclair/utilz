@@ -183,9 +183,15 @@ _expected_count=15
     # the refusal SAYS it is about the platform. A utility that is simply broken
     # produces no such message and still fails this leg. Accepting any non-zero
     # exit here would have turned the row into one that cannot fail.
-    local out rc
-    out=$(UTILZ_HOME="$UTILZ_HOME" timeout 10 "$UTILZ_HOME/opt/$u/$u" --help 2>&1 </dev/null)
-    rc=$?
+    # `|| rc=$?` IS LOAD-BEARING, NOT STYLE. An assignment from a command
+    # substitution takes that command's exit status, and under bats' `set -e`
+    # a non-zero one aborts the test AT THIS LINE -- before any `rc=$?` on the
+    # next line can run. The first form of this did exactly that and CI caught
+    # it on Ubuntu, where macoz exits 1; macOS cannot reach the branch at all
+    # because all 15 exit 0 there. Same family as this project's note that a
+    # check whose green is "no matches" aborts on success under `set -e`.
+    local out rc=0
+    out=$(UTILZ_HOME="$UTILZ_HOME" timeout 10 "$UTILZ_HOME/opt/$u/$u" --help 2>&1 </dev/null) || rc=$?
     if [ "$rc" -ne 0 ]; then
       printf '%s' "$out" | grep -qiE 'require(s)? (macos|linux|darwin)|only on (macos|linux)' \
         || broke="$broke $u"
