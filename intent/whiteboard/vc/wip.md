@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 06b406f0-9a29-4636-ad0d-abd6663e4f8f
-heartbeat_at: 2026-09-08 10:35Z
+heartbeat_at: 2026-09-08 10:42Z
 status: active
-focus: "ST0013 is WIP (hv), cc building, contract mine and now six ATs covering AC01 across two rows. cc found the gap I left -- a separator-carrying path that does NOT exist -- and caught me re-imposing a hold I had already lifted before the compact. src/ is LIFTED; nothing is held."
+focus: "ST0013 WIP, 0/3 BLOCKED, eight ATs. cc found that the six rows would have been run by NOTHING -- both drivers hardcode acceptance.sh while BATS gets a glob -- so AC03 minted and the thread now widens past prez into the framework. Awaiting hv on whether that widening stands or descopes."
 claims: [ST0013 -- contract only; cc claims the build]
 ---
 
@@ -35,7 +35,13 @@ Released at EOD on hv's instruction, 7 Sep. Folds archived in `.history/20260829
 
 **cc's 10:31Z landed three and I ruled all three at `a857738`.** The gap is real: `--theme=nosuch/x.css` was covered by nothing, because **clause (e) makes a value a path BY ITS SEPARATOR and AT02's fixture has both shapes EXISTING**. It went on AT03 rather than AT02, against cc's suggested home, because AT03's leg 2 fixture is already a path-that-does-not-exist with a no-roster assertion -- legs 2 and 3 are one defect on two flags. **AT02 now covers AC01 as well as AC02**: its legs 2 and 3 prove clause (f) and always did, so a green was going to prove a clause and contribute nothing to it. And **leg 2 is asserted from `prez present`**, not because resolution differs per verb (measured: one `theme::load` at `deck.rs:174` in `compile()`, all three verbs reach it) but because clause (f) is justified ENTIRELY by hv's `prez present` invocation, so a `build`-only proof proves a different command from the one the criterion names.
 
-**My next act is reading cc's `design.md` against the six rows when it lands, and ruling anything cc says is wrong before it gets built.**
+**AC03 -- cc STOPPED BEFORE WRITING THE FILE AND SAID IT WOULD BE RUN BY NOTHING. THEY WERE RIGHT.** `common.sh:887` and `tests.yml:290` both name `test/acceptance.sh` exactly; three lines above, `common.sh:902` gives BATS a `find -name "*.bats"` GLOB. **The asymmetry is the defect and it was correct-by-accident** for as long as prez had one black-box suite. This morning's id-collision ruling -- cc's recommendation, MY call -- moved ST0013's ATs to a path neither driver knows, so all six would have gone green in canon on a manual run nothing repeats.
+
+**I corrected cc's proposed fix, and the correction is their own finding one level down.** "Glob and run each executable one" SKIPS a non-executable `.sh` silently, which is exactly what `common.sh:919-923` refuses in words cc quoted at me. The glob REFUSES; it does not skip. Zero suites stays a skip.
+
+**AC03 widens ST0013 past prez into the framework, deliberately and on the record.** It belongs here because the thread cannot honestly close while its own tests are undriven, and an issue is for what nobody is doing now. **hv's to reverse -- `intent ac descope ST0013 AC03 --to <ID>` is one verb and no rework.**
+
+**My next act is reading cc's `design.md` against the eight rows when it lands, and ruling anything cc says is wrong before it gets built.**
 
 ## Claims
 
@@ -60,6 +66,8 @@ Released at EOD on hv's instruction, 7 Sep. Folds archived in `.history/20260829
 ## Watch-outs
 
 - **A HOLD IS GOVERNED BY ITS CONDITION, NOT BY WHOEVER LAST MENTIONED IT -- and a stale re-announcement cannot re-impose a condition already met.** cc's rule, 8 Sep, applied against me and correct. I set the `src/` hold to lift when geodica answered, relayed that answer at 10:10Z, minted AC02 out of it, then **re-imposed the hold twice across a compact** because I reconstructed it from CC'S board, which still said held because they had not folded yet. My own sent entry was the primary source and said the opposite. **This is the AC02 error in a different costume: a secondary reading trusted over the artefact.** After any compact, the state of anything I announced is read from what I SENT, never from a peer's rendering of it. cc resolved the contradiction correctly and unblocked themselves; had they deferred to my later word they would have sat idle on a condition that was met an hour earlier.
+
+- **A DISCOVERY CONVENTION WITH ONE MEMBER IS CORRECT BY ACCIDENT, AND THE ACCIDENT ENDS THE DAY SOMETHING ADDS THE SECOND.** cc's finding, 8 Sep. Both drivers hardcoded `test/acceptance.sh` and were right for a year because prez had exactly one suite; the moment my id-collision ruling created a second, the guard at `common.sh:919-923` -- which exists precisely to refuse a suite that silently does not run -- became structurally blind, because **a guard can only guard the filename it names**. **The general form: before moving a test to a new path, name the thing that will RUN it.** I ruled the move and did not ask that question; cc asked it before writing a line.
 
 - **A FIXTURE WHOSE CASES ALL EXIST CANNOT TEST A RULE THAT TRIGGERS ON SHAPE.** cc's finding, 8 Sep. AT02 leg 2 exercised `--theme <path>` in "either shape" and both shapes EXISTED, while AC01 clause (e) makes a value a path by its SEPARATOR rather than by its existence -- so the likelier keystroke, a mistyped path, was covered by nothing and would have been handed the built-in roster. **The general form: when a criterion says a property decides, check that no fixture quietly supplies that property to every case.** The one I keep re-learning next to it -- a test that only fails against the CURRENT binary does not constrain the implementation about to replace it.
 
