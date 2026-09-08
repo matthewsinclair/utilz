@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 06b406f0-9a29-4636-ad0d-abd6663e4f8f
-heartbeat_at: 2026-09-08 10:55Z
+heartbeat_at: 2026-09-08 11:13Z
 status: active
-focus: "ST0013 WIP. WP-08 wired the suite while RED and it worked: utilz test prez went 3 suites green to 4 suites exit 1. Two CI findings sent before cc commits -- the drivers now disagree fail-fast vs accumulate, and the browser-evidence guard reads a UNION rather than the suite meant to prove it. Awaiting hv on the AC03 widening."
+focus: "ST0013: cc reports src/ done and six green, UNCOMMITTED and unverified by me -- verification waits for the commit. CI findings both fixed and the second improved on what I asked. NEW AND STRUCTURAL: cc edited acceptance.sh, so ST0010 canon records AT05/AT08 green against test bodies that changed. Second instance of the closed-dehydrated re-attach gap."
 claims: [ST0013 -- contract only; cc claims the build]
 ---
 
@@ -60,7 +60,15 @@ Released at EOD on hv's instruction, 7 Sep. Folds archived in `.history/20260829
 
 **cc improved my harness-drift proposal and the improvement is the point:** a comparison over "functions defined in both" passes trivially the moment someone renames one side, so it must assert the overlap is NON-EMPTY with a floor. **A check that goes green exactly when the drift becomes total** -- the same defect class as the four wrong-reason greens cc audited out of their own red run, in a test I proposed.
 
-**My next act is verifying WP-08 by running the driver once cc commits** -- not before, since `utilz test` is not concurrency-safe and cc is running it now.
+**BOTH CI FINDINGS FIXED, AND THE SECOND IS BETTER THAN WHAT I ASKED FOR.** CI accumulates via `suite_failures` and says why in the file. The browser-evidence check went past my fix: **a suite DECLARES the requirement by mentioning a browser in its own source**, so the population is derived rather than hardcoded -- mine still named which suite had to prove it. Fails in the loud direction and says so.
+
+**Also checked, read-only, and clean:** `html.rs` (five lines, all test call sites following `theme::load`'s new signature -- mechanical, correctly unmentioned), and cc's README finding (seven built-ins, no `slate`, `git log -S slate` on `theme.rs`/`themes/` empty, so that example never worked).
+
+**STRUCTURAL, AND THE SECOND INSTANCE: A CLOSED THREAD'S EVIDENCE CAN BE INVALIDATED BY A LATER THREAD WITH NOTHING TO NOTICE.** ST0010 is completed and DEHYDRATED; `intent/.canon/st/ST0010.json` records **AT05 and AT08 as `green`, citing `acceptance.sh`** -- the file ST0013 just edited in five places inside those two blocks. Two green rows now attest to test bodies that are not the ones that went green, and the thread has no files on disk to update. **cc's edit was RIGHT** -- a test asserting the old contract asserts the opposite of correct, and my own decision already says the freeze guards against drift rather than making the pin sacred -- **so the defect is in the methodology, not the work.** `hoist-rebase.sh:205` is the first instance and waits on the same missing capability. **Two makes it a pattern; it goes to hv on that basis.**
+
+**Asked cc for one number: are ST0010/AT05 and AT08 still green after the migration?** Green means that canon is accidentally still true. Red means a closed thread's canon is stating something false, today.
+
+**My next act is the full verification -- six ATs, acceptance.sh, the driver -- once cc commits `src/`.** Not before: `utilz test` is not concurrency-safe and a build mid-write measures nothing.
 
 ## Claims
 
@@ -75,6 +83,8 @@ Released at EOD on hv's instruction, 7 Sep. Folds archived in `.history/20260829
 ## Open with hv
 
 - **AC16 on ST0010 -- hv's eye, and the only item nobody else can take.** A human renders every built-in prez theme and looks; the suite is not allowed to stand in for it.
+- **THE CLOSED-DEHYDRATED RE-ATTACH GAP NOW HAS TWO INSTANCES AND SHOULD BE PUT AS A PATTERN.** `hoist-rebase.sh:205` was the first. The second is ST0010/AT05 + AT08, recorded `green` in dehydrated canon against `acceptance.sh` blocks that ST0013 edited on 8 Sep. **Neither can be fixed by editing a file, because a dehydrated thread has none** -- so this is a missing capability rather than a chore, and one-off workarounds will keep being invented until it is named as one.
+
 - **`hoist-rebase.sh:205` and the `class 'escape'` warning**, both routed to me by cc 8 Sep and both genuinely hv's: the first needs a re-attach into a CLOSED, dehydrated thread's canon, and the second needs an issue or a deliberate acceptance rather than a record left inside a cancellation.
 
 ## Live with other nodes
