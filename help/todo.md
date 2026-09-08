@@ -1,6 +1,6 @@
 # todo
 
-**Version**: 1.0.0
+**Version**: run `todo --version`
 **Author**: Matthew Sinclair
 
 ---

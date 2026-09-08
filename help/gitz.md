@@ -1,6 +1,6 @@
 # gitz
 
-**Version**: 1.0.0
+**Version**: run `gitz --version`
 **Author**: Matthew Sinclair
 
 ---

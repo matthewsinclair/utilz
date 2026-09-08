@@ -1,6 +1,6 @@
 # xtrct
 
-**Version**: 1.0.0
+**Version**: run `xtrct --version`
 **Author**: Matthew Sinclair
 
 ---

@@ -1,6 +1,6 @@
 # stampz
 
-**Version**: 1.0.0
+**Version**: run `stampz --version`
 **Author**: Matthew Sinclair
 
 ---

@@ -679,3 +679,115 @@ EOS
     "$UTILZ_HOME/opt/prez/crate/test/theme-addressing.sh"
   assert_output "0"
 }
+
+# ONE POPULATION, USED BY BOTH THE ABSENCE ASSERTION AND ITS CONTROL.
+#
+# vc measured the first form of these tests and found the control was narrower
+# than the thing it controlled: the absence check spanned help/*.md +
+# opt/*/README.md + the templates -- 33 files -- while the presence control
+# counted help/*.md alone, 16 of them. Deleting the version line from the other
+# 17 passed BOTH assertions. **That is the very defect a presence control exists
+# to stop, one level up**: pairing an absence with a presence is necessary and
+# not sufficient, because the pair must also cover the SAME POPULATION or the
+# control is a control over a subset and reads exactly like a control over the
+# whole.
+#
+# So the list is computed ONCE and both halves consume it. They cannot drift
+# apart because there is nothing to drift.
+_version_prose_files() {
+  ls "$UTILZ_HOME"/help/*.md \
+     "$UTILZ_HOME"/opt/*/README.md \
+     "$UTILZ_HOME"/opt/utilz/tmpl/help.tmpl \
+     "$UTILZ_HOME"/opt/utilz/tmpl/README.tmpl 2>/dev/null
+}
+
+# The metadata population: every utility yaml, PLUS the template that mints new
+# ones. vc found metadata.tmpl outside both nets in the first form -- the prose
+# guard's glob reached the templates but its regex only matched `**Version**:`,
+# and this guard's glob stopped at opt/*/*.yaml. The file named as the thing
+# that mints violations was the one nothing guarded.
+_version_metadata_files() {
+  ls "$UTILZ_HOME"/opt/*/*.yaml "$UTILZ_HOME"/opt/utilz/tmpl/metadata.tmpl 2>/dev/null
+}
+
+# A LITERAL, IN EVERY FORM THESE FILES ACTUALLY USE. An optional quote and an
+# optional leading v are not hypothetical: `utilz_version: "^2.0.0"` sits two
+# lines below in every one of these yamls, so the quoted form is the one a
+# future author copies. Measured by vc: `version: "1.0.0"` and
+# `**Version**: v1.2.0` both evaded the first form entirely.
+VERSION_LITERAL='"?v?[0-9]'
+
+@test "no help file, utility README or template states a version literal" {
+  # HIGHLANDER, and this estate has been bitten by it TWICE. A version has ONE
+  # home -- the utility's yaml, or the file its `version_file` points at. Every
+  # copy in prose is a second home with no gate holding it equal, and prose is
+  # the copy nobody re-reads.
+  #
+  # First bite, recorded in help/utilz.md's own comment: hardcoding the
+  # framework version there drifted it to 2.2.0 while 2.4.0 shipped. The fix was
+  # applied to that one file and left in fifteen others.
+  #
+  # Second bite, MEASURED when this test was written: cleanz's README said 1.1.0
+  # against a yaml of 1.2.0, and todo's help AND README both said 1.0.0 against
+  # 1.1.0. Nothing reported either.
+  local files literals present
+  files=$(_version_prose_files | wc -l | tr -d ' ')
+  # COUNT CONTROL FIRST. If the globs ever match nothing, every assertion below
+  # is satisfied by an empty set and this test greens on a tree with no docs.
+  [ "$files" -gt 30 ] || fail "only $files prose files found; the globs are wrong, not the tree"
+
+  literals=$(_version_prose_files | xargs grep -lE "^\*\*Version\*\*: *$VERSION_LITERAL" 2>/dev/null | wc -l | tr -d ' ')
+  [ "$literals" -eq 0 ] || {
+    _version_prose_files | xargs grep -lE "^\*\*Version\*\*: *$VERSION_LITERAL" 2>/dev/null
+    fail "$literals file(s) state a version literal; the fix is a pointer"
+  }
+
+  # AND THE LINE IS STILL THERE, over the SAME population. Without this,
+  # deleting every Version line passes the check above -- the assert-absence
+  # shape that an empty tree also satisfies.
+  present=$(_version_prose_files | xargs grep -lE '^\*\*Version\*\*:' 2>/dev/null | wc -l | tr -d ' ')
+  [ "$files" = "$present" ] \
+    || fail "$present of $files prose files carry a Version line; the fix is a pointer, not a deletion"
+}
+
+@test "a utility's version has ONE home: its own VERSION file, or the file it cannot delete" {
+  # hv's ruling, 2026-09-08: the framework's version is ./VERSION, every utility
+  # carries its own, and there are no rogue literals anywhere.
+  local files literals checked util resolved missing=""
+  files=$(_version_metadata_files | wc -l | tr -d ' ')
+  [ "$files" -gt 14 ] || fail "only $files metadata files found; the globs are wrong, not the tree"
+
+  # NO METADATA FILE RESTATES A VERSION -- including the template that mints
+  # them. Every utility `utilz generate` scaffolded was born with a literal that
+  # was correct exactly until its first release.
+  literals=$(_version_metadata_files | xargs grep -lE "^version: *$VERSION_LITERAL" 2>/dev/null | wc -l | tr -d ' ')
+  [ "$literals" -eq 0 ] || {
+    _version_metadata_files | xargs grep -lE "^version: *$VERSION_LITERAL" 2>/dev/null
+    fail "$literals metadata file(s) state a version literal; point at one with version_file"
+  }
+
+  # prez IS THE DOCUMENTED EXCEPTION AND IT IS NOT AN EXCEPTION TO THE RULE.
+  # Cargo REQUIRES a version in [package], so that file is a home which cannot
+  # be deleted -- which makes it the one to keep. prez has no VERSION file
+  # because a second one would be the duplication this test exists to stop. The
+  # rule is "point at the one home you cannot delete", not "use this filename",
+  # so do not "fix" prez into compliance.
+  assert_file_not_exists "$UTILZ_HOME/opt/prez/VERSION"
+  run grep -c '^version_file: crate/Cargo.toml' "$UTILZ_HOME/opt/prez/prez.yaml"
+  assert_success
+
+  # AND EVERY UTILITY STILL RESOLVES ONE, with a count control: without it an
+  # empty glob leaves `missing` empty and greens a tree with no metadata at all.
+  checked=0
+  for yaml in "$UTILZ_HOME"/opt/*/*.yaml; do
+    util=$(basename "$yaml" .yaml)
+    [ -d "$UTILZ_HOME/opt/$util" ] || continue
+    checked=$((checked + 1))
+    resolved=$(bash -c "source '$UTILZ_HOME/opt/utilz/lib/common.sh'; get_util_metadata '$util' '.version'" 2>/dev/null)
+    case "$resolved" in
+      ""|null) missing="$missing $util" ;;
+    esac
+  done
+  [ "$checked" -gt 14 ] || fail "only $checked utilities checked; the loop measured almost nothing"
+  [ -z "$missing" ] || fail "these utilities resolve no version:$missing"
+}

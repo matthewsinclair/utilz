@@ -1,5 +1,5 @@
 name: stampz
-version: 1.0.0
+version_file: VERSION
 utilz_version: "^2.0.0"
 description: Stamp a recipient watermark across every page of a PDF pack
 author: Matthew Sinclair

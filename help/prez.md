@@ -1,6 +1,6 @@
 # prez - Markdown Presentation Pipeline
 
-**Version**: 2.0.0
+**Version**: run `prez --version`
 **Author**: Matthew Sinclair
 **Location**: `$UTILZ_HOME/bin/prez` (part of Utilz framework)
 

@@ -1,6 +1,6 @@
 # pdf2md
 
-**Version**: 1.0.0
+**Version**: run `pdf2md --version`
 **Part of**: [Utilz Framework](../../README.md)
 
 ---

@@ -1,6 +1,6 @@
 # macoz
 
-**Version**: 1.0.0
+**Version**: run `macoz --version`
 **Author**: Matthew Sinclair
 
 ---

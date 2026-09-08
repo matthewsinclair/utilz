@@ -1,6 +1,6 @@
 # cryptz
 
-**Version**: 1.0.0
+**Version**: run `cryptz --version`
 **Author**: Matthew Sinclair
 
 ---

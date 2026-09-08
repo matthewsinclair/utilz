@@ -1,6 +1,6 @@
 # mdagg - Markdown Aggregator
 
-**Version**: 1.0.0
+**Version**: run `mdagg --version`
 **Language**: Bash
 **Part of**: [Utilz Framework](../../README.md)
 

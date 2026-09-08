@@ -1,6 +1,6 @@
 # lnrel
 
-**Version**: 1.0.0
+**Version**: run `lnrel --version`
 **Author**: Matthew Sinclair
 
 ---

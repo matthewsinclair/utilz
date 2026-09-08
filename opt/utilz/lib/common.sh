@@ -182,6 +182,13 @@ show_version() {
     # AC12: which tree answered, and what it was cut from.
     if [[ "$util" == "utilz" ]]; then
       utilz_tree_provenance
+    else
+      # A UTILITY REPORTS THE FRAMEWORK IT IS PART OF AS WELL AS ITSELF (hv,
+      # 2026-09-08). Two versions are in play whenever a utility misbehaves --
+      # its own and the framework's -- and asking for one of them and being
+      # given only that one is how a bug report arrives missing the half that
+      # explains it. Read from the framework's VERSION, never restated.
+      echo "part of utilz v$(get_utilz_version)"
     fi
   else
     # NAME WHAT IS ACTUALLY MISSING. This said "missing $util.yaml"
@@ -1367,6 +1374,13 @@ generate_utility() {
   # and run_doctor flagged it until someone hand-edited the yaml by hand.
   local utilz_floor
   utilz_floor="^$(get_utilz_version | cut -d. -f1).0.0"
+
+  # THE UTILITY'S VERSION GETS ITS OWN FILE, which is its one home. The yaml
+  # points at it with version_file rather than restating it: metadata.tmpl used
+  # to carry a literal 1.0.0, so every generated utility was born with a second
+  # copy that was correct exactly until its first release.
+  info "Generating VERSION..."
+  echo "1.0.0" > "$util_dir/VERSION"
 
   info "Generating metadata..."
   sed -e "s/{{NAME}}/$util_name/g" \

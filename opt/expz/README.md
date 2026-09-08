@@ -1,6 +1,6 @@
 # expz
 
-**Version**: 1.0.0
+**Version**: run `expz --version`
 **Part of**: [Utilz Framework](../../README.md)
 
 ---

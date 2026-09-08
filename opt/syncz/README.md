@@ -1,6 +1,6 @@
 # syncz
 
-**Version**: 2.0.0
+**Version**: run `syncz --version`
 **Part of**: [Utilz Framework](../../README.md)
 
 ---

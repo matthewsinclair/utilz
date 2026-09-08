@@ -1,6 +1,6 @@
 # prez
 
-**Version**: 2.0.0
+**Version**: run `prez --version`
 **Part of**: [Utilz Framework](../../README.md)
 
 ---

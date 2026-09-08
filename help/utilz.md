@@ -1,6 +1,15 @@
 # Utilz - Universal Utilities Framework
 
-**Version**: run `utilz version` (the framework version lives in `VERSION`, and `opt/utilz/utilz.yaml` points at it via `version_file` -- hardcoding it here drifted it to 2.2.0 while 2.4.0 shipped)
+**Version**: run `utilz version`
+<!-- NO VERSION LITERAL IN THIS FILE OR ANY HELP FILE, AND THIS ONE LEARNED IT
+     FIRST: hardcoding the framework version here drifted it to 2.2.0 while
+     2.4.0 shipped. The fix was applied to this file alone and left in fifteen
+     others, where it drifted again -- cleanz's README said 1.1.0 against a
+     yaml of 1.2.0, and todo's help AND README said 1.0.0 against 1.1.0. The
+     version has ONE home: the utility's yaml, or the file its version_file
+     points at. A test in common_lib.bats holds every help file and every
+     utility README to it. -->
+
 **Author**: Matthew Sinclair
 **Location**: worked out from the dispatcher's own path -- a source checkout (typically `~/Devel/prj/Utilz`) or a published install (typically `~/Devel/opt/utilz`). `utilz version` names which one answered.
 
@@ -315,7 +324,7 @@ ln -s utilz myutil
 cat > $UTILZ_HOME/help/myutil.md <<'EOF'
 # myutil - My Custom Utility
 
-**Version**: 1.0.0
+**Version**: run `myutil --version`
 
 ## Purpose
 Brief description of what myutil does.

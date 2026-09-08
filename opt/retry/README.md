@@ -1,6 +1,6 @@
 # retry
 
-**Version**: 1.0.0
+**Version**: run `retry --version`
 **Part of**: [Utilz Framework](../../README.md)
 
 ---

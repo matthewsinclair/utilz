@@ -1,6 +1,6 @@
 # mdagg - Markdown Aggregator
 
-**Version**: 1.0.0
+**Version**: run `mdagg --version`
 **Author**: Matthew Sinclair
 **Location**: `$UTILZ_HOME/bin/mdagg` (part of Utilz framework)
 

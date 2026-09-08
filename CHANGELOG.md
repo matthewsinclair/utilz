@@ -9,6 +9,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- **EVERY VERSION HAS ONE HOME, AND NOTHING RESTATES IT** (hv's ruling). The framework's is `./VERSION`; each utility now carries its own `opt/<name>/VERSION`, and its yaml points at it with `version_file` instead of repeating the number. **Thirty-two copies were removed** -- fifteen help files, fifteen utility READMEs and two templates each stated a literal `**Version**:` that nothing held equal to anything.
+
+  **This estate had already been bitten twice and only noticed once.** `help/utilz.md` carries the record of the first: hardcoding the framework version there drifted it to 2.2.0 while 2.4.0 shipped. That fix was applied to one file and left in fifteen others, where it drifted again -- measured before this change, `cleanz`'s README said 1.1.0 against a yaml of 1.2.0, and `todo`'s help AND README both said 1.0.0 against 1.1.0. **Nothing reported either, because prose is the copy nobody re-reads.** The templates were minting fresh instances: every utility `utilz generate` scaffolded was born with a literal that was correct exactly until its first release.
+
+  **`prez` is the documented exception and it is not an exception to the rule.** Cargo REQUIRES a version in `[package]`, so `crate/Cargo.toml` is a home that cannot be deleted -- which makes it the one to keep, and prez has no `VERSION` file because a second one would be the duplication being removed. The rule is **point at the one home you cannot delete**, not "use this filename".
+
+  **A utility now reports the framework it belongs to as well as itself**: `todo --version` prints `todo v1.1.0` and `part of utilz v2.6.1`. Two versions are in play whenever a utility misbehaves, and being handed one of them is how a bug report arrives missing the half that explains it.
+
+  Two tests hold all of it, both proved to go red by re-introducing a literal: no help file, README or template may state a version, and no utility yaml may either -- each paired with a check that the pointer is still present, because deleting every version line satisfies an assert-absence just as well as fixing it does.
+
 - **BREAKING (prez v2.0.0) -- `--theme` takes a NAME and nothing else** (ST0013). It resolves on `PREZ_THEME_PATH`, extended for one invocation by the new `--theme-path`, then among the built-ins, and **never against the working directory**. Paths move to the new `--theme-file`, which accepts both shapes the old flag took: a `.css` file, or a directory holding `theme.css`. Front matter splits the same way into `theme:` (a name) and `theme-file:` (a path resolved beside the deck), or the ambiguity simply moves into the deck where it travels with the file.
 
   **The defect was measured rather than reported.** The same deck, the same binary, `--theme=simple`: from a directory holding a `./simple/` the local theme won at 18208 bytes; from anywhere else the built-in won at 22662. **Neither run printed a word** -- `provenance()` announces only a search-path hit and a cwd hit was stamped as a typed path -- so one command built two different decks silently.

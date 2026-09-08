@@ -1,6 +1,6 @@
 # cleanz
 
-**Version**: 1.1.0
+**Version**: run `cleanz --version`
 **Part of**: [Utilz Framework](../../README.md)
 
 ---

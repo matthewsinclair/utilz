@@ -1,6 +1,6 @@
 # cleanz
 
-**Version**: 1.2.0
+**Version**: run `cleanz --version`
 **Author**: Matthew Sinclair
 
 ---

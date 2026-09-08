@@ -1,6 +1,6 @@
 # clipz
 
-**Version**: 1.0.0
+**Version**: run `clipz --version`
 **Part of**: [Utilz Framework](../../README.md)
 
 ---

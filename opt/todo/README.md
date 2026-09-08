@@ -1,6 +1,6 @@
 # todo
 
-**Version**: 1.0.0
+**Version**: run `todo --version`
 **Part of**: [Utilz Framework](../../README.md)
 
 Simple DOING/TODO/DONE manager for a plain-text `todo.md`.
