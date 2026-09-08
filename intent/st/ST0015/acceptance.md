@@ -15,43 +15,43 @@ title: Version dispatch has one home, and reports both versions
 
 ### Group AC01
 
-- AC01 Every utility answers --version with hv's ruled pair form: line one is exactly 'utilz:<framework>/<util>:<version>' and line two is the utility's description. The FORM is the requirement, not the presence of two numbers -- an assertion that merely finds both versions somewhere in the output does not satisfy this row, because a substring check cannot see a malformed pair. Assert the whole line. -- satisfied: no (computed)
+- AC01 Every utility answers --version with hv's ruled pair form: line one is exactly 'utilz:<framework>/<util>:<version>' and line two is the utility's description. The FORM is the requirement, not the presence of two numbers -- an assertion that merely finds both versions somewhere in the output does not satisfy this row, because a substring check cannot see a malformed pair. Assert the whole line. -- satisfied: yes (computed)
 
 ### Group AC02
 
-- AC02 For every utility, '<util> --version' and 'utilz <util> --version' produce BYTE-IDENTICAL output. The form-disagreement IS the defect: measured 8 Sep before any edit, 'todo' answered on the symlink path and printed 'Unknown command: --version' via the dispatcher, and 'prez' answered BOTH ways but differently ('prez v2.0.0' against 'prez 2.0.0'). An AT exercising one invocation form cannot see either failure, so this row is not covered by any test that does not run both forms and diff them. -- satisfied: no (computed)
+- AC02 For every utility, '<util> --version' and 'utilz <util> --version' produce BYTE-IDENTICAL output. The form-disagreement IS the defect: measured 8 Sep before any edit, 'todo' answered on the symlink path and printed 'Unknown command: --version' via the dispatcher, and 'prez' answered BOTH ways but differently ('prez v2.0.0' against 'prez 2.0.0'). An AT exercising one invocation form cannot see either failure, so this row is not covered by any test that does not run both forms and diff them. -- satisfied: yes (computed)
 
 ### Group AC03
 
-- AC03 The covering test asserts the SIZE of the population it swept and refuses at anything less than the full utility set. A discovery loop that silently narrows -- a glob that matches nothing, a filter that drops the Rust utility, a walker that skips a name -- reports a clean pass over an empty or partial population, which is indistinguishable from a real one. The count is part of the claim, not a diagnostic. -- satisfied: no (computed)
+- AC03 The covering test asserts the SIZE of the population it swept and refuses at anything less than the full utility set. A discovery loop that silently narrows -- a glob that matches nothing, a filter that drops the Rust utility, a walker that skips a name -- reports a clean pass over an empty or partial population, which is indistinguishable from a real one. The count is part of the claim, not a diagnostic. -- satisfied: yes (computed)
 
 ### Group AC04
 
-- AC04 todo and prez each answer the pair form on BOTH invocation paths. They are named explicitly because they are the two that could not inherit the convention -- todo never copied the dispatch arm, prez cannot have one because clap answers before any shell runs -- so a fix that works by the thirteen utilities' existing mechanism would leave exactly these two broken while passing a population-wide test that tolerated them. -- satisfied: no (computed)
+- AC04 todo and prez each answer the pair form on BOTH invocation paths. They are named explicitly because they are the two that could not inherit the convention -- todo never copied the dispatch arm, prez cannot have one because clap answers before any shell runs -- so a fix that works by the thirteen utilities' existing mechanism would leave exactly these two broken while passing a population-wide test that tolerated them. -- satisfied: yes (computed)
 
 ### Group AC05
 
-- AC05 The thirteen hand-copied dispatch arms are DEAD, proven by deletion rather than by inspection: with the arms removed, both invocation forms still answer correctly for all thirteen. Leaving them in place leaves two homes agreeing by convention, which is the arrangement that produced this defect -- and 'the dispatcher ALSO handles it' passes every test that 'the dispatcher handles it' passes. -- satisfied: no (computed)
+- AC05 The thirteen hand-copied dispatch arms are DEAD, proven by deletion rather than by inspection: with the arms removed, both invocation forms still answer correctly for all thirteen. Leaving them in place leaves two homes agreeing by convention, which is the arrangement that produced this defect -- and 'the dispatcher ALSO handles it' passes every test that 'the dispatcher handles it' passes. -- satisfied: yes (computed)
 
 ### Group AC06
 
-- AC06 prez's crate is untouched: crate/Cargo.toml remains the single home of prez's version, no VERSION file is added beside it, and the binary invoked directly still answers clap's own --version. The rule this preserves is 'point at the one home you cannot delete', established 8 Sep -- cargo REQUIRES the version in [package], so a second home would be the duplication the estate spent that morning removing. -- satisfied: no (computed)
+- AC06 prez's crate is untouched: crate/Cargo.toml remains the single home of prez's version, no VERSION file is added beside it, and the binary invoked directly still answers clap's own --version. The rule this preserves is 'point at the one home you cannot delete', established 8 Sep -- cargo REQUIRES the version in [package], so a second home would be the duplication the estate spent that morning removing. -- satisfied: yes (computed)
 
 ### Group AC07
 
-- AC07 The scaffolding template does not re-seed the defect: a utility freshly generated by 'utilz generate' answers the pair form on BOTH invocation paths while carrying no --version arm of its own. Pinned by GENERATING one and running it, not by inspecting the template's text -- a template can be correct today and a later edit re-adds the arm, whereas a regeneration test fails the moment the mint does. This row exists because opt/utilz/tmpl/script.tmpl carried the arm: without it the thirteen deletions would have been undone one new utility at a time, silently, starting from the next 'utilz generate'. -- satisfied: no (computed)
+- AC07 The scaffolding template does not re-seed the defect: a utility freshly generated by 'utilz generate' answers the pair form on BOTH invocation paths while carrying no --version arm of its own. Pinned by GENERATING one and running it, not by inspecting the template's text -- a template can be correct today and a later edit re-adds the arm, whereas a regeneration test fails the moment the mint does. This row exists because opt/utilz/tmpl/script.tmpl carried the arm: without it the thirteen deletions would have been undone one new utility at a time, silently, starting from the next 'utilz generate'. -- satisfied: yes (computed)
 
 ### Group AC08
 
-- AC08 The intercept exits with show_version's status, so a version that cannot be read is a FAILURE rather than a silent success. The arms it replaced exited 0 regardless of what show_version returned, which is IN-AG-NO-SILENT-001: a utility whose version_file is missing from an install would have reported an error message on stdout and success to the caller, and every scripted check of it would have passed. Assert the non-zero exit, not just the message. -- satisfied: no (computed)
+- AC08 The intercept exits with show_version's status, so a version that cannot be read is a FAILURE rather than a silent success. The arms it replaced exited 0 regardless of what show_version returned, which is IN-AG-NO-SILENT-001: a utility whose version_file is missing from an install would have reported an error message on stdout and success to the caller, and every scripted check of it would have passed. Assert the non-zero exit, not just the message. -- satisfied: yes (computed)
 
 ### Group AC09
 
-- AC09 RULED BY hv, 8 Sep, closing D3: 'utilz --version' reports 'utilz:2.6.1' on line one -- the framework's own version in the same colon form as the pair's framework half, with NO 'v' prefix, so the two renderings agree character for character on the part they share. hv considered and rejected 'utilz:v2.6.1'. The framework takes no second term because it is not part of anything. CRITICALLY, LINES TWO AND THREE ARE UNCHANGED AND MUST BE ASSERTED, NOT ASSUMED: the description, and the tree-provenance line ('source at <tree>' or 'installed at <tree> (<sha>)') which is held by ST0014/AC12 -- a closed thread. An implementation that rewrites line one and simplifies the provenance line away breaks a satisfied criterion on another thread, and this row exists partly to make that cost visible before it is paid. -- satisfied: no (computed)
+- AC09 RULED BY hv, 8 Sep, closing D3: 'utilz --version' reports 'utilz:2.6.1' on line one -- the framework's own version in the same colon form as the pair's framework half, with NO 'v' prefix, so the two renderings agree character for character on the part they share. hv considered and rejected 'utilz:v2.6.1'. The framework takes no second term because it is not part of anything. CRITICALLY, LINES TWO AND THREE ARE UNCHANGED AND MUST BE ASSERTED, NOT ASSUMED: the description, and the tree-provenance line ('source at <tree>' or 'installed at <tree> (<sha>)') which is held by ST0014/AC12 -- a closed thread. An implementation that rewrites line one and simplifies the provenance line away breaks a satisfied criterion on another thread, and this row exists partly to make that cost visible before it is paid. -- satisfied: yes (computed)
 
 ### Group AC10
 
-- AC10 The pair form holds FROM A PUBLISHED INSTALL, verified through the install's own links rather than the checkout's. This row exists because the other nine cannot see an install: opt/utilz/test/test_helper.bash:20 exports UTILZ_HOME from the helper's own location, so version_dispatch.bats measures the source tree no matter what the caller sets -- proved 8 Sep by running it with UTILZ_HOME=/nonexistent/decoy, which PASSES. So AT01-AT11 going green is a claim about the dev tree alone, while both defects this thread fixes were live in the published install at the moment they went green. That is the shape that shipped ab66156 the same morning: prez's --version broken in the install with the checkout entirely green. The covering test must build or address a real install, as install_guards.bats does, and must assert the install it measured is the one it meant -- the two-tree estate makes 'which tree answered' part of every claim, not a detail of it. -- satisfied: no (computed)
+- AC10 The pair form holds FROM A PUBLISHED INSTALL, verified through the install's own links rather than the checkout's. This row exists because the other nine cannot see an install: opt/utilz/test/test_helper.bash:20 exports UTILZ_HOME from the helper's own location, so version_dispatch.bats measures the source tree no matter what the caller sets -- proved 8 Sep by running it with UTILZ_HOME=/nonexistent/decoy, which PASSES. So AT01-AT11 going green is a claim about the dev tree alone, while both defects this thread fixes were live in the published install at the moment they went green. That is the shape that shipped ab66156 the same morning: prez's --version broken in the install with the checkout entirely green. The covering test must build or address a real install, as install_guards.bats does, and must assert the install it measured is the one it meant -- the two-tree estate makes 'which tree answered' part of every claim, not a detail of it. -- satisfied: yes (computed)
 
 ### Group AT01
 
@@ -94,6 +94,10 @@ _(no criteria in this group)_
 _(no criteria in this group)_
 
 ### Group AT11
+
+_(no criteria in this group)_
+
+### Group AT12
 
 _(no criteria in this group)_
 
@@ -141,47 +145,51 @@ _(no tests in this group)_
 
 ### Group AT01
 
-- AT01 `opt/utilz/test/version_dispatch.bats` -- covers AC03 -- status: to-write
+- AT01 `opt/utilz/test/version_dispatch.bats` -- covers AC03 -- status: green
 
 ### Group AT02
 
-- AT02 `opt/utilz/test/version_dispatch.bats` -- covers AC01 -- status: to-write
+- AT02 `opt/utilz/test/version_dispatch.bats` -- covers AC01 -- status: green
 
 ### Group AT03
 
-- AT03 `opt/utilz/test/version_dispatch.bats` -- covers AC01 -- status: to-write
+- AT03 `opt/utilz/test/version_dispatch.bats` -- covers AC01 -- status: green
 
 ### Group AT04
 
-- AT04 `opt/utilz/test/version_dispatch.bats` -- covers AC02 -- status: to-write
+- AT04 `opt/utilz/test/version_dispatch.bats` -- covers AC02 -- status: green
 
 ### Group AT05
 
-- AT05 `opt/utilz/test/version_dispatch.bats` -- covers AC04 -- status: to-write
+- AT05 `opt/utilz/test/version_dispatch.bats` -- covers AC04 -- status: green
 
 ### Group AT06
 
-- AT06 `opt/utilz/test/version_dispatch.bats` -- covers AC05 -- status: to-write
+- AT06 `opt/utilz/test/version_dispatch.bats` -- covers AC05 -- status: green
 
 ### Group AT07
 
-- AT07 `opt/utilz/test/version_dispatch.bats` -- covers AC06 -- status: to-write
+- AT07 `opt/utilz/test/version_dispatch.bats` -- covers AC06 -- status: green
 
 ### Group AT08
 
-- AT08 `opt/utilz/test/version_dispatch.bats` -- covers AC07 -- status: to-write
+- AT08 `opt/utilz/test/version_dispatch.bats` -- covers AC07 -- status: green
 
 ### Group AT09
 
-- AT09 `opt/utilz/test/version_dispatch.bats` -- covers AC08 -- status: to-write
+- AT09 `opt/utilz/test/version_dispatch.bats` -- covers AC08 -- status: green
 
 ### Group AT10
 
-- AT10 `opt/utilz/test/version_dispatch.bats` -- covers AC09 -- status: to-write
+- AT10 `opt/utilz/test/version_dispatch.bats` -- covers AC09 -- status: green
 
 ### Group AT11
 
-- AT11 `opt/utilz/test/version_dispatch.bats` -- covers AC09 -- status: to-write
+- AT11 `opt/utilz/test/version_dispatch.bats` -- covers AC09 -- status: green
+
+### Group AT12
+
+- AT12 `opt/utilz/test/install_guards.bats` -- covers AC10 -- status: green
 
 ---
 

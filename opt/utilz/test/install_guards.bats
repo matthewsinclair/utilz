@@ -351,7 +351,7 @@ teardown_file() {
   [ "$checked" -gt 1 ] || fail "only $checked utility link(s) checked -- the loop found nothing to assert on"
 }
 
-@test "AC10 (ST0015): the pair form holds from a PUBLISHED install, and the install is the thing measured" {
+@test "AT12 / AC10 (ST0015): the pair form holds from a PUBLISHED install, and the install is the thing measured" {
   # THE ELEVEN ROWS IN version_dispatch.bats CANNOT SEE THIS. test_helper.bash
   # exports UTILZ_HOME from its own location, overwriting whatever a caller
   # sets -- vc proved it with a decoy: `UTILZ_HOME=/nonexistent/decoy bats`

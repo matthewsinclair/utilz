@@ -99,7 +99,7 @@
       "covers": [
         "AC03"
       ],
-      "status": "to-write"
+      "status": "green"
     },
     {
       "id": "AT02",
@@ -108,7 +108,7 @@
       "covers": [
         "AC01"
       ],
-      "status": "to-write"
+      "status": "green"
     },
     {
       "id": "AT03",
@@ -117,7 +117,7 @@
       "covers": [
         "AC01"
       ],
-      "status": "to-write"
+      "status": "green"
     },
     {
       "id": "AT04",
@@ -126,7 +126,7 @@
       "covers": [
         "AC02"
       ],
-      "status": "to-write"
+      "status": "green"
     },
     {
       "id": "AT05",
@@ -135,7 +135,7 @@
       "covers": [
         "AC04"
       ],
-      "status": "to-write"
+      "status": "green"
     },
     {
       "id": "AT06",
@@ -144,7 +144,7 @@
       "covers": [
         "AC05"
       ],
-      "status": "to-write"
+      "status": "green"
     },
     {
       "id": "AT07",
@@ -153,7 +153,7 @@
       "covers": [
         "AC06"
       ],
-      "status": "to-write"
+      "status": "green"
     },
     {
       "id": "AT08",
@@ -162,7 +162,7 @@
       "covers": [
         "AC07"
       ],
-      "status": "to-write"
+      "status": "green"
     },
     {
       "id": "AT09",
@@ -171,7 +171,7 @@
       "covers": [
         "AC08"
       ],
-      "status": "to-write"
+      "status": "green"
     },
     {
       "id": "AT10",
@@ -180,7 +180,7 @@
       "covers": [
         "AC09"
       ],
-      "status": "to-write"
+      "status": "green"
     },
     {
       "id": "AT11",
@@ -189,7 +189,16 @@
       "covers": [
         "AC09"
       ],
-      "status": "to-write"
+      "status": "green"
+    },
+    {
+      "id": "AT12",
+      "kind": "test",
+      "file": "opt/utilz/test/install_guards.bats",
+      "covers": [
+        "AC10"
+      ],
+      "status": "green"
     }
   ]
 }

@@ -26,13 +26,13 @@ _utilities() {
 
 _expected_count=15
 
-@test "AC03: the population is the whole set, and a narrowed sweep fails loudly" {
+@test "AT01 / AC03: the population is the whole set, and a narrowed sweep fails loudly" {
   local n
   n=$(_utilities | wc -l | tr -d ' ')
   [ "$n" -eq "$_expected_count" ] || fail "swept $n utilities, expected $_expected_count -- the glob is wrong, not the tree"
 }
 
-@test "AC01: every utility reports the pair FORM, anchored, not a substring" {
+@test "AT02 / AC01: every utility reports the pair FORM, anchored, not a substring" {
   local u line bad=0 n=0
   for u in $(_utilities); do
     n=$((n + 1))
@@ -48,7 +48,7 @@ _expected_count=15
   [ "$bad" -eq 0 ] || fail "$bad utilities do not report the pair form"
 }
 
-@test "AC01: the framework half is the BYTES of ./VERSION, not merely version-shaped" {
+@test "AT03 / AC01: the framework half is the BYTES of ./VERSION, not merely version-shaped" {
   local fw u line n=0
   fw=$(cat "$UTILZ_HOME/VERSION")
   [ -n "$fw" ] || fail "./VERSION is empty"
@@ -60,7 +60,7 @@ _expected_count=15
   [ "$n" -eq "$_expected_count" ] || fail "checked $n, expected $_expected_count"
 }
 
-@test "AC02: both invocation forms are byte-identical, for every utility" {
+@test "AT04 / AC02: both invocation forms are byte-identical, for every utility" {
   local u a b bad=0 n=0
   for u in $(_utilities); do
     n=$((n + 1))
@@ -75,7 +75,7 @@ _expected_count=15
   [ "$bad" -eq 0 ] || fail "$bad utilities answer --version differently depending on how they were invoked"
 }
 
-@test "AC04: todo and prez by name -- the two that could not inherit the convention" {
+@test "AT05 / AC04: todo and prez by name -- the two that could not inherit the convention" {
   # todo never carried the arm and errored outright; prez could not carry one
   # because clap answers before any shell runs. A population-wide row that
   # tolerated them would pass while exactly these two stayed broken.
@@ -88,7 +88,7 @@ _expected_count=15
   done
 }
 
-@test "AC05: no utility carries its own --version arm" {
+@test "AT06 / AC05: no utility carries its own --version arm" {
   # Proved by DELETION rather than by inspection: fourteen arms across thirteen
   # files were removed and both forms still answer. "The dispatcher ALSO
   # handles it" passes every test that "the dispatcher handles it" passes, so
@@ -101,7 +101,7 @@ _expected_count=15
   [ -z "$found" ] || fail "these utilities have re-grown a --version arm:$found"
 }
 
-@test "AC06: prez's version keeps its one home, and no second one appears" {
+@test "AT07 / AC06: prez's version keeps its one home, and no second one appears" {
   assert_file_not_exists "$UTILZ_HOME/opt/prez/VERSION"
   run grep -c '^version_file: crate/Cargo.toml' "$UTILZ_HOME/opt/prez/prez.yaml"
   assert_success
@@ -122,7 +122,7 @@ teardown() {
   fi
 }
 
-@test "AC07: a NEWLY GENERATED utility answers on both forms, with no arm of its own" {
+@test "AT08 / AC07: a NEWLY GENERATED utility answers on both forms, with no arm of its own" {
   # THE MINT. script.tmpl carried the arm, so `utilz generate` would have
   # re-seeded the duplication one utility at a time and this fix would have
   # decayed from the next utility onward. The row pins REGENERATION, not the
@@ -147,7 +147,7 @@ teardown() {
   [ "$a" = "$b" ] || fail "generated utility answers differently by form: '$a' vs '$b'"
 }
 
-@test "AC08: an unreadable version exits NON-ZERO rather than reporting success" {
+@test "AT09 / AC08: an unreadable version exits NON-ZERO rather than reporting success" {
   # The old arms exited 0 whatever show_version returned, so a utility whose
   # version_file was missing from an install printed an error and told the
   # caller it had succeeded -- a shipped regression, not a hypothetical.
@@ -163,7 +163,7 @@ teardown() {
   assert_failure
 }
 
-@test "AC09: utilz itself is the degenerate pair, and keeps its detail lines" {
+@test "AT10 / AC09: utilz itself is the degenerate pair, and keeps its detail lines" {
   # hv's ruling: `utilz:<version>`, no `v`, so the framework half renders
   # identically in the solo and the pair form. Lines two and three are NOT
   # part of that ruling and are asserted here because ST0014/AC12 -- on a
@@ -182,7 +182,7 @@ teardown() {
   [[ "$l3" =~ ^(source|installed)\ at\  ]] || fail "the tree-provenance line is gone or reshaped: '$l3'"
 }
 
-@test "AC09: the framework half is spelled the same way alone as it is in a pair" {
+@test "AT11 / AC09: the framework half is spelled the same way alone as it is in a pair" {
   local solo pair
   solo=$("$UTILZ_BIN_DIR/utilz" --version 2>&1 | head -1)
   pair=$("$UTILZ_BIN_DIR/utilz" syncz --version 2>&1 | head -1)
