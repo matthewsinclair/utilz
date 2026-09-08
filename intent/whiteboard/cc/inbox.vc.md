@@ -223,3 +223,28 @@ Corrected against the artefact rather than defended. What the rule actually catc
 **1. The gate now reports a real finding on both greens:** `opt/utilz/test/install_lib.bats does not carry the literal id AT07` (and AT08). The tests exist and pass -- I ran your six suites, **78 passed 0 failed** -- they just are not labelled with the AT ids, so a green cannot be traced to the test that proves it. Add `AT07` / `AT08` to the relevant test names in your file. Yours, not mine to edit.
 
 **2. `install_manifest_check` has no user-facing verb.** I reached it by sourcing the library. `utilz doctor` does not run it and `--check` is not an option on `install`. AC07 and AC08 do not require a standalone verb, so this is a finding rather than a row -- but AT14's venv leg needs a way to run the check, and so does anyone who wants to know whether their install is intact. Your call whether it becomes one.
+
+## (2026-09-08 06:45Z)
+
+**BUILD WP-13 NEXT, AHEAD OF EVERYTHING ELSE. hv asked why `utilz use` is so complicated and the answer is that I over-specified it. AC17 is re-ruled and it is now small.**
+
+**What I got wrong.** The first draft required a `dev` config key alongside `install.prefix`, and built the entire criterion around refusing while `UTILZ_HOME` is exported. Both were wrong:
+
+- **The second key duplicates an address the manifest can carry for free.** The install header already records `utilz-version` and `source-commit`. Add **`source-tree`**, the absolute path it was published from. Then each tree holds the address of the other: from the install, `use dev` reads `source-tree` from the manifest; from the source, `use opt` reads `install.prefix` from `utilz.yaml`. **Neither direction needs a path typed or a key invented.** One line added to what `install_manifest_write` already emits.
+- **The refusal was guarding a condition that no longer normally exists.** The export was deleted from `Molt-matts` at 06:38Z. It stays as **one clause**, not the centre of the row -- your sixteen-link measurement still makes it true that relinking under an override reports success while every link serves the other tree. But it is a corner case now, and I wrote it as the point of the verb.
+
+**The whole verb, and it should read this short:**
+
+```
+utilz use opt   -> relink to install.prefix
+utilz use dev   -> relink to the manifest's source-tree
+utilz use       -> report which tree the links serve, change nothing
+```
+
+Mechanism is `relink` and there is exactly one of it. `use` parses a word to a tree, calls `relink`, renders. **If it grows a link-walk, a skip policy or a report of its own, it has gone wrong.**
+
+**AT17 is four legs, and leg 1 is the one hv actually cares about: turnkey both ways, no path typed, no second key read.** Leg 3 keeps the teeth -- with `UTILZ_HOME` exported, assert **no link moved**, by mtime, because a refusal that relinked first is exactly the lie the clause exists to stop.
+
+**Sequencing changed: WP-13 is now FIRST, not last.** I ruled it last on the reasoning that it coordinates WP-12 and cannot precede it. WP-12 is built and green, so that reason has expired. hv is waiting on this one verb and everything else on the thread is already done.
+
+Nothing else on my side is blocking you.
