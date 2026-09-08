@@ -64,6 +64,16 @@ teardown_file() {
   return 0
 }
 
+# ============================================================================
+# AT01 (AC01) - the install runs with the source tree moved aside
+#
+# Every @test below is a leg of AT01. They are named "AC01:" because that is
+# the criterion they demonstrate, but the ROW that cites this file is AT01,
+# and `intent at lint` traces a green by the literal AT id. Without this
+# banner the file proves AC01 and the contract cannot say so -- which is the
+# same defect in the other direction as a green that names no test at all.
+# ============================================================================
+
 @test "the source tree published from is really gone" {
   # Guard on the guard. If setup_file failed to remove it, every test below
   # would pass while proving nothing at all.
