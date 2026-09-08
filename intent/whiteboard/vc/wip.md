@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 06b406f0-9a29-4636-ad0d-abd6663e4f8f
-heartbeat_at: 2026-09-08 10:42Z
+heartbeat_at: 2026-09-08 10:47Z
 status: active
-focus: "ST0013 WIP, 0/3 BLOCKED, eight ATs. cc found that the six rows would have been run by NOTHING -- both drivers hardcode acceptance.sh while BATS gets a glob -- so AC03 minted and the thread now widens past prez into the framework. Awaiting hv on whether that widening stands or descopes."
+focus: "ST0013 WIP, 0/3 BLOCKED, eight ATs. WP-02 landed and I verified it by running it: 5 red, AT06 green, exit 1, shellcheck clean. Ruled WP-08 before src/ -- wiring a GREEN suite cannot distinguish a driver that runs it from one that skips it. Awaiting hv on the AC03 widening."
 claims: [ST0013 -- contract only; cc claims the build]
 ---
 
@@ -41,7 +41,15 @@ Released at EOD on hv's instruction, 7 Sep. Folds archived in `.history/20260829
 
 **AC03 widens ST0013 past prez into the framework, deliberately and on the record.** It belongs here because the thread cannot honestly close while its own tests are undriven, and an issue is for what nobody is doing now. **hv's to reverse -- `intent ac descope ST0013 AC03 --to <ID>` is one verb and no rework.**
 
-**My next act is reading cc's `design.md` against the eight rows when it lands, and ruling anything cc says is wrong before it gets built.**
+**WP-02 VERIFIED BY RUNNING IT, NOT BY READING THE REPORT.** `098f10c`: 5 red, AT06 green, exit 1 unpiped and under `--strict`, `shellcheck -x` clean under `/bin/bash`. AT03 leg 3 reproduced -- `--theme "$D/nosuch/x.css"` prints `built in:` AND names `steampunk`, so the roster really does go to someone who typed a filename. **Both red-first claims I made for that leg are now measurements rather than arguments.**
+
+**I hit my own watch-out inside the act of checking cc's.** Read the exit code as `${PIPESTATUS[0]}` after a pipe, in zsh, which has none -- it came back EMPTY and I nearly reported the exit code as unavailable. Re-ran unpiped.
+
+**RULED: WP-08 BEFORE `src/`, AND WIRE THE SUITE WHILE IT IS RED.** Not tidiness. **A wired GREEN suite and a silently-skipped one produce identical output**, so wiring is self-proving only while the suite is red -- `utilz test prez` must go red with five failures. Land `src/` first and that window is spent.
+
+**RAISED, DELIBERATELY NOT MINTED: the harness is duplicated across both suites** -- `want()` byte-identical by diff, plus `start/ok/bad/absent` and the `--strict` parsing. Not drift today, and cc's one difference (no `skip`/`not_applicable`) is deliberate and documented. **The answer is a drift test, not an extraction** -- extraction would edit `acceptance.sh`, a closed thread's frozen record, for no present defect, and this project's own CLAUDE.md already rules that a copy which cannot silently diverge is not what Highlander names. **Not minted because hv has one widening of this thread in front of them and I will not stack a second before they rule.**
+
+**My next act is reading cc's `design.md` D12 against AC03 when it lands.**
 
 ## Claims
 
