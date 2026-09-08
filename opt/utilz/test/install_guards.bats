@@ -387,3 +387,48 @@ teardown_file() {
   [ "$n" -eq 15 ] || fail "the install offered $n utilities, expected 15"
   [ "$bad" -eq 0 ] || fail "$bad install-side version failures"
 }
+
+@test "AT09 / AC08 (ST0016): both --help forms hold from a PUBLISHED install, rendering the curated file" {
+  # THE EIGHT ROWS IN help_dispatch.bats CANNOT SEE THIS, for the same reason
+  # AT12 above exists: test_helper.bash exports UTILZ_HOME from its own
+  # location and overrides the caller, so that suite is structurally a claim
+  # about the CHECKOUT alone.
+  #
+  # AND THE GAP IS PHOTOGRAPHED RATHER THAN ARGUED. At 16:06Z the published
+  # install at 6ea9b2a carried predispatch_intercept 0, help_dispatch.bats 0
+  # and 14 of 15 utilities disagreeing on --help -- WHILE ALREADY ANSWERING
+  # THE NEW --version from ST0015. One tree, one commit, the new behaviour on
+  # one flag and the old on the adjacent one, with all seven of ST0016's rows
+  # green throughout. A wholly stale install is conspicuous; a partially
+  # current one is not, and it is likelier, because publishing lags per
+  # thread rather than in bulk.
+  #
+  # The tree is named BEFORE anything is asserted about what it said: a check
+  # that silently retargets produces identical output either way.
+  run env -u UTILZ_HOME "$GUARD_INSTALL/bin/utilz" --version
+  assert_success
+  assert_output_contains "installed at $GUARD_INSTALL"
+
+  local u n=0 bad=0 a b marker hf
+  for u in cleanz clipz cryptz expz gitz lnrel macoz mdagg pdf2md prez retry stampz syncz todo xtrct; do
+    [ -e "$GUARD_INSTALL/bin/$u" ] || continue
+    n=$((n + 1))
+    hf="$GUARD_INSTALL/help/$u.md"
+    [ -f "$hf" ] || { echo "  $u: the install shipped no curated help file"; bad=$((bad + 1)); continue; }
+
+    a=$(env -u UTILZ_HOME "$GUARD_INSTALL/bin/$u" --help < /dev/null 2>&1)
+    b=$(env -u UTILZ_HOME "$GUARD_INSTALL/bin/utilz" "$u" --help < /dev/null 2>&1)
+    [ "$a" = "$b" ] || { echo "  $u: the two --help forms differ from the install"; bad=$((bad + 1)); }
+
+    # A CURATED-ONLY DISCRIMINATOR. The help file's FIRST line is the utility
+    # NAME, which the terse inline usage also carries -- classifying on it
+    # reported 13 of 14 backwards when cc first tried it. A `## ` section
+    # heading exists only in the curated document.
+    marker=$(grep -m1 -E '^## ' "$hf" | sed 's/^## //')
+    [ -n "$marker" ] || { echo "  $u: curated file carries no section heading to key on"; bad=$((bad + 1)); continue; }
+    printf '%s' "$a" | grep -qF "$marker" \
+      || { echo "  $u: rendered the INLINE usage, not the curated file"; bad=$((bad + 1)); }
+  done
+  [ "$n" -eq 15 ] || fail "the install offered $n utilities, expected 15"
+  [ "$bad" -eq 0 ] || fail "$bad install-side --help failures"
+}

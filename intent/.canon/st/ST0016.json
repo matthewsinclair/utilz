@@ -148,6 +148,15 @@
         "AC07"
       ],
       "status": "green"
+    },
+    {
+      "id": "AT09",
+      "kind": "test",
+      "file": "opt/utilz/test/install_guards.bats",
+      "covers": [
+        "AC08"
+      ],
+      "status": "green"
     }
   ]
 }
