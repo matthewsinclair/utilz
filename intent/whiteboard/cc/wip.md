@@ -3,7 +3,7 @@ node: cc
 name: Control Claude
 role: control
 session_id: 221775b1-d498-41c0-b937-4d10094711a8
-heartbeat_at: 2026-09-08 14:17Z
+heartbeat_at: 2026-09-08 14:26Z
 status: active
 focus: "IDLE, RESUMED AFTER THE COMPACT -- status stayed active throughout, as a compact is not a session ending. ST0013 closed and dehydrated; every version reduced to one home on hv's ruling; install published at 2f76209, 126 paths, doctor 7/7. Nothing claimed, nothing held, holding on hv."
 claims: []
@@ -80,6 +80,8 @@ Full record is in canon, not here: `intent st show ST0013`, `design.md` D1-D14.
 - **AND THE LANDED CHECK IS CORRECT BECAUSE IT AVOIDED THIS HARNESS'S OWN HELPER, WHICH A TIDIER WILL PUT BACK.** `acceptance.sh:75` defines `file_size()` as `stat -c %s ... || stat -f %z ... || echo 0` -- it **returns 0 for a MISSING file**. The assertion at AT03 uses `wc -c < "$WORK/at03.err"`, which yields EMPTY for a missing file and therefore fails. Measured both: `file_size(missing) = 0`, `wc form = <empty>`. So the check as written distinguishes **"the build was silent"** from **"the build never ran"**; rewritten to use the file's own neighbouring helper -- the obviously more idiomatic, more consistent choice, sitting 330 lines above -- it would **pass trivially if the build line were ever deleted or renamed.** `$WORK` is `mktemp -d` per run, so a stale file cannot satisfy it either. **A correct check one refactor away from a silent one, where the refactor looks like tidying.**
 
 - **A FIGURE ABOUT THE REPOSITORY, MEASURED BEFORE YOU COMMIT TO THE REPOSITORY, IS INVALIDATED BY YOUR OWN COMMIT -- AND BOTH OF US DID IT IN THE SAME EXCHANGE, WHILE DISCUSSING STALENESS.** 8 Sep. I measured unpushed at 8 (HEAD `efcb5e2`, correct), then committed `a624a90`, then reported 8. vc measured 9 (HEAD `a624a90`, correct), then committed `a3547b9`, then reported 9. **Identical sequence, minutes apart, each of us staling our own figure with our own write between measuring and reporting.** It is now 10. Not the three-writers problem -- neither peer was involved. **The fix is not only vc's "quote the command, not the number", which is right; it is that a measurement of a thing you are about to change must be taken AFTER your last write to it, or not quoted at all.** Same family as "ask, do not read": a value copied out of a live system starts decaying at the moment of the copy, and the copier is often the decay.
+
+- **WHERE A TOOL IS PART COMPILED AND PART SCRIPTED, THE VERSION STRING ANSWERS FOR ONE HALF AND NOTHING MARKS WHICH HALF YOU GOT.** vc's, 8 Sep, verifying Intent 0282, and it is this morning's geodica lesson running backwards. `intent --version` reported a binary committed 14:04 against a fix committed 15:20 -- **merge-base said the installed binary PREDATED the fix**, and vc nearly reported it as not having landed. It had: `ws hygiene` is served by a SHELL script read live from the source tree, so the compiled stamp is irrelevant to that code path. **geodica verified a prez binary reporting 1.0.0 that already HAD the new behaviour; vc nearly rejected a fix that WAS present because the version said otherwise.** Opposite directions, one cause. **The version string is not silent about the scripted half -- it is confidently wrong about it.** Same cure both ways: ask the behaviour, never the version.
 
 **The estate, changed 8 Sep and worth knowing at the prompt.**
 
