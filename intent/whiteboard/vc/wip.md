@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 06b406f0-9a29-4636-ad0d-abd6663e4f8f
-heartbeat_at: 2026-09-08 11:13Z
+heartbeat_at: 2026-09-08 11:19Z
 status: active
-focus: "ST0013: cc reports src/ done and six green, UNCOMMITTED and unverified by me -- verification waits for the commit. CI findings both fixed and the second improved on what I asked. NEW AND STRUCTURAL: cc edited acceptance.sh, so ST0010 canon records AT05/AT08 green against test bodies that changed. Second instance of the closed-dehydrated re-attach gap."
+focus: "ST0013 contract is 3/3 satisfied -- PASS at 0daef97, verified by running every suite rather than reading cc's report. Blocked on hv for the AC03 widening ruling before the thread can close. ST0010 canon is accidentally still true, measured twice."
 claims: [ST0013 -- contract only; cc claims the build]
 ---
 
@@ -19,56 +19,15 @@ Released at EOD on hv's instruction, 7 Sep. Folds archived in `.history/20260829
 
 ## DOING
 
-**ST0013 -- cc BUILDS and has claimed it; I hold the CONTRACT.** Contract `0/2 BLOCKED`, **six ATs**, all to-write, all citing `opt/prez/crate/test/theme-addressing.sh`.
+**ST0013 CONTRACT IS 3/3 SATISFIED -- PASS, at `0daef97`, VERIFIED BY RUNNING IT.** `theme-addressing.sh --strict` exit 0, 6/0/0. `acceptance.sh --strict` exit 0, 14/0/0/0. `utilz test prez` exit 0, FOUR suites, both black-box suites named separately. `utilz test utilz` exit 0, AT07 legs 1/2/3 **plus the leg-1 control** -- one suite really does report "1 suite(s)", so the count is not a constant.
 
-**AC02 IS MINE AND I GOT IT WRONG FIRST TIME.** I ruled that `--theme-file` takes only a `.css` file, so a directory needed `--theme-path=<parent>` plus `--theme=<name>`, on the premise that a refusal naming `--theme-file` would send a user to a flag that could not take their input. **False.** AC01 says the flag "resolves a path ONLY" -- **a PATH** -- and the pinned binary accepts both shapes today, measured both ways. **I read the flag's NAME where hv's text said path.** cc asked what it accepts rather than assuming, before writing any of it. Reworded; AC01 clause (f) stands as hv wrote it; geodica's migration is one word, and they have the correction.
+**Every row cites the browser state, because a green from `acceptance.sh` means different things without it:** `PREZ_TEST_BROWSER` **UNSET**, 18 browser-evidence matches, zero skips. A real browser was driven; nothing degraded.
 
-**The row was not withdrawn, deliberately.** AC01 leaves the accepted shapes to be inferred from the word FILE, and that inference is exactly what produced the error, so AC02 now pins them.
+**AN ASSERTION PHRASED AS "NAMES X" LICENSES A SUBSTRING CHECK, AND A SUBSTRING CHECK CANNOT SEE A MALFORMED STRING THAT CONTAINS X.** cc's late catch, and the defect it exposed is MINE. A shared `{remedy}={value}` template printed `remedy: for a path, use 'theme-file:'=./x.css` for the deck key -- not front matter, not anything -- and every assertion stayed green because they all grep `theme-file:` as a substring. **AT05's note is mine and says "the refusal names `theme-file:`", which a substring check satisfies exactly.** The test was not weaker than the criterion; the criterion was weak. **Where the SHAPE of a message is the requirement, the row must say the shape.** Found the same way cc did: ran the five refusal cases and READ them. All five well-formed now.
 
-**A NEW TEST FILE, on cc's finding: `theme-addressing.sh`.** ST0013/AT01 and ST0010/AT01 are different tests sharing one id in one file; `want()` at `acceptance.sh:108-111` is an exact string match and line 328 is ST0010's. Verified before ruling. ST0010's suite stays frozen as a closed thread's record.
+**ST0010/AT05 + AT08 CONFIRMED GREEN BY ME, INDEPENDENTLY OF cc's RUN.** That canon is **accidentally** still true, and accidentally is the word going to hv -- nothing checked it, and nothing would have said so had it gone the other way.
 
-**THE BLOCK THIS LINE USED TO NAME WAS NOT REAL.** It read "my next act is minting the remaining ATs once cc's `design.md` names the files". The file was already named -- both rows cite `theme-addressing.sh`, re-cited this morning -- and **an AT row cites a test file and a criterion, neither of which `design.md` decides**. One command settled it. That is cc's own watch-out landing on me: a block I did not measure was a claim, and it would have cost cc's whole compact window.
-
-**AC01 IS ONE ROW CARRYING SIX CLAUSES OF hv's AND TWO ATs REACHED TWO OF THEM.** AT03 mutual exclusion plus the no-roster refusal; AT04 `--theme-path` PREPENDS, whose leg 1 sets env AND flag because **a replace implementation passes any test that only ever sets one of the two**; AT05 the front-matter split with `theme-file:` deck-relative; AT06 search path before built-ins. They map one-for-one onto cc's WP-03/04/05, which is the check that the coverage is the right size rather than inflated.
-
-**AT06 IS DELIBERATELY NOT RED-FIRST AND ITS ROW SAYS SO IN CAPITALS.** `theme.rs:126-129` already has that order, so it is green on first run. **Its green is not evidence the split landed.** It is minted because the fix is a type change rewriting that cascade, and an ordering that is load-bearing by accident of line order is what a rewrite drops silently -- the one case no red-first test can reach.
-
-**cc's 10:31Z landed three and I ruled all three at `a857738`.** The gap is real: `--theme=nosuch/x.css` was covered by nothing, because **clause (e) makes a value a path BY ITS SEPARATOR and AT02's fixture has both shapes EXISTING**. It went on AT03 rather than AT02, against cc's suggested home, because AT03's leg 2 fixture is already a path-that-does-not-exist with a no-roster assertion -- legs 2 and 3 are one defect on two flags. **AT02 now covers AC01 as well as AC02**: its legs 2 and 3 prove clause (f) and always did, so a green was going to prove a clause and contribute nothing to it. And **leg 2 is asserted from `prez present`**, not because resolution differs per verb (measured: one `theme::load` at `deck.rs:174` in `compile()`, all three verbs reach it) but because clause (f) is justified ENTIRELY by hv's `prez present` invocation, so a `build`-only proof proves a different command from the one the criterion names.
-
-**AC03 -- cc STOPPED BEFORE WRITING THE FILE AND SAID IT WOULD BE RUN BY NOTHING. THEY WERE RIGHT.** `common.sh:887` and `tests.yml:290` both name `test/acceptance.sh` exactly; three lines above, `common.sh:902` gives BATS a `find -name "*.bats"` GLOB. **The asymmetry is the defect and it was correct-by-accident** for as long as prez had one black-box suite. This morning's id-collision ruling -- cc's recommendation, MY call -- moved ST0013's ATs to a path neither driver knows, so all six would have gone green in canon on a manual run nothing repeats.
-
-**I corrected cc's proposed fix, and the correction is their own finding one level down.** "Glob and run each executable one" SKIPS a non-executable `.sh` silently, which is exactly what `common.sh:919-923` refuses in words cc quoted at me. The glob REFUSES; it does not skip. Zero suites stays a skip.
-
-**AC03 widens ST0013 past prez into the framework, deliberately and on the record.** It belongs here because the thread cannot honestly close while its own tests are undriven, and an issue is for what nobody is doing now. **hv's to reverse -- `intent ac descope ST0013 AC03 --to <ID>` is one verb and no rework.**
-
-**WP-02 VERIFIED BY RUNNING IT, NOT BY READING THE REPORT.** `098f10c`: 5 red, AT06 green, exit 1 unpiped and under `--strict`, `shellcheck -x` clean under `/bin/bash`. AT03 leg 3 reproduced -- `--theme "$D/nosuch/x.css"` prints `built in:` AND names `steampunk`, so the roster really does go to someone who typed a filename. **Both red-first claims I made for that leg are now measurements rather than arguments.**
-
-**I hit my own watch-out inside the act of checking cc's.** Read the exit code as `${PIPESTATUS[0]}` after a pipe, in zsh, which has none -- it came back EMPTY and I nearly reported the exit code as unavailable. Re-ran unpiped.
-
-**RULED: WP-08 BEFORE `src/`, AND WIRE THE SUITE WHILE IT IS RED.** Not tidiness. **A wired GREEN suite and a silently-skipped one produce identical output**, so wiring is self-proving only while the suite is red -- `utilz test prez` must go red with five failures. Land `src/` first and that window is spent.
-
-**RAISED, DELIBERATELY NOT MINTED: the harness is duplicated across both suites** -- `want()` byte-identical by diff, plus `start/ok/bad/absent` and the `--strict` parsing. Not drift today, and cc's one difference (no `skip`/`not_applicable`) is deliberate and documented. **The answer is a drift test, not an extraction** -- extraction would edit `acceptance.sh`, a closed thread's frozen record, for no present defect, and this project's own CLAUDE.md already rules that a copy which cannot silently diverge is not what Highlander names. **Not minted because hv has one widening of this thread in front of them and I will not stack a second before they rule.**
-
-**THE ORDERING CALL PAID OFF AND cc MEASURED IT: three suites green before, FOUR suites and exit 1 after.** That is the wiring proving itself, and it existed only while the suite was red.
-
-**Two CI findings sent before cc's commit; both are consequences of going from one suite to many, and neither was visible with one.**
-
-- **THE TWO DRIVERS NOW DISAGREE ABOUT WHAT A RUN MEANS.** `common.sh` accumulates -- every suite runs, `total_failed` adds up, "N of M failed". CI does not: `set -e` at `tests.yml:265` aborts the step at the FIRST red suite, so later suites never run. **AT08 exists to keep those two homes in step and they are now out of step in a user-visible way.**
-- **THE BROWSER-EVIDENCE GUARD'S POPULATION WIDENED SILENTLY WITH `tee -a`.** It used to mean "acceptance.sh named a browser"; it now means "SOME suite in the union did". **Measured clean today** -- theme-addressing.sh emits zero `chrom|browser: ` in source and output -- which is the correct-by-accident shape from this morning, not a present defect.
-
-**What I checked and cc had already got right:** the unmatched glob (`[[ -e ]]`, bash 3.2 leaves it literal), the `*.sh`-not-executable-bit reasoning citing the `.mjs` probe, and the pipe -- `pipefail` is set at `tests.yml:265`, so `| tee -a` does NOT swallow a red suite. I went looking for my own watch-out and it was not there.
-
-**cc improved my harness-drift proposal and the improvement is the point:** a comparison over "functions defined in both" passes trivially the moment someone renames one side, so it must assert the overlap is NON-EMPTY with a floor. **A check that goes green exactly when the drift becomes total** -- the same defect class as the four wrong-reason greens cc audited out of their own red run, in a test I proposed.
-
-**BOTH CI FINDINGS FIXED, AND THE SECOND IS BETTER THAN WHAT I ASKED FOR.** CI accumulates via `suite_failures` and says why in the file. The browser-evidence check went past my fix: **a suite DECLARES the requirement by mentioning a browser in its own source**, so the population is derived rather than hardcoded -- mine still named which suite had to prove it. Fails in the loud direction and says so.
-
-**Also checked, read-only, and clean:** `html.rs` (five lines, all test call sites following `theme::load`'s new signature -- mechanical, correctly unmentioned), and cc's README finding (seven built-ins, no `slate`, `git log -S slate` on `theme.rs`/`themes/` empty, so that example never worked).
-
-**STRUCTURAL, AND THE SECOND INSTANCE: A CLOSED THREAD'S EVIDENCE CAN BE INVALIDATED BY A LATER THREAD WITH NOTHING TO NOTICE.** ST0010 is completed and DEHYDRATED; `intent/.canon/st/ST0010.json` records **AT05 and AT08 as `green`, citing `acceptance.sh`** -- the file ST0013 just edited in five places inside those two blocks. Two green rows now attest to test bodies that are not the ones that went green, and the thread has no files on disk to update. **cc's edit was RIGHT** -- a test asserting the old contract asserts the opposite of correct, and my own decision already says the freeze guards against drift rather than making the pin sacred -- **so the defect is in the methodology, not the work.** `hoist-rebase.sh:205` is the first instance and waits on the same missing capability. **Two makes it a pattern; it goes to hv on that basis.**
-
-**Asked cc for one number: are ST0010/AT05 and AT08 still green after the migration?** Green means that canon is accidentally still true. Red means a closed thread's canon is stating something false, today.
-
-**My next act is the full verification -- six ATs, acceptance.sh, the driver -- once cc commits `src/`.** Not before: `utilz test` is not concurrency-safe and a build mid-write measures nothing.
+**BLOCKED ON hv, AND THIS IS THE ONLY THING BETWEEN ST0013 AND CLOSE: the AC03 widening.** AC03 is satisfied and inside the boundary. If hv descopes it the contract drops to 2/2 and WP-08 moves with it. Bookkeeping either way, but it is hv's boundary to set.
 
 ## Claims
 
@@ -83,6 +42,8 @@ Released at EOD on hv's instruction, 7 Sep. Folds archived in `.history/20260829
 ## Open with hv
 
 - **AC16 on ST0010 -- hv's eye, and the only item nobody else can take.** A human renders every built-in prez theme and looks; the suite is not allowed to stand in for it.
+- **ONE MISSING CAPABILITY WITH TWO FACES, IN cc's FRAMING WHICH BEAT MINE: the mechanism that would catch a closed thread's evidence going stale is the SAME one that catches a green AT citing a file that no longer contains the test.** There is a gate for the live case and none for the closed one. **That is a better argument than my "two loosely related instances"**, and it names the fix rather than the symptoms.
+
 - **THE CLOSED-DEHYDRATED RE-ATTACH GAP NOW HAS TWO INSTANCES AND SHOULD BE PUT AS A PATTERN.** `hoist-rebase.sh:205` was the first. The second is ST0010/AT05 + AT08, recorded `green` in dehydrated canon against `acceptance.sh` blocks that ST0013 edited on 8 Sep. **Neither can be fixed by editing a file, because a dehydrated thread has none** -- so this is a missing capability rather than a chore, and one-off workarounds will keep being invented until it is named as one.
 
 - **`hoist-rebase.sh:205` and the `class 'escape'` warning**, both routed to me by cc 8 Sep and both genuinely hv's: the first needs a re-attach into a CLOSED, dehydrated thread's canon, and the second needs an issue or a deliberate acceptance rather than a record left inside a cancellation.
