@@ -1,5 +1,5 @@
 ---
-verblock: "08 Sep 2026:v1.18: matts - cc's seven routed items actioned; em-dash and issue figures corrected"
+verblock: "08 Sep 2026:v1.19: matts - the flat-id migration is blocked on a missing rename verb"
 ---
 
 # Work In Progress
@@ -38,6 +38,12 @@ This file carries **DOING and TODO only**. Completed work belongs in `intent/don
 - **cc's `hoist-rebase.sh` carries one dead postcondition.** `post "test/acceptance.sh" "AT13: PASS" 0` sets the minimum to zero against a `-ge` test, so it prints `ok` unconditionally, including at the count of zero it exists to catch. cc's, and it is a re-attach into ST0010's canon -- a CLOSED, dehydrated thread, so it needs a hydrate first.
 - **`intent/issues/OPEN/` and `CLOSED/` on disk are a STALE RENDERING of canon.** Canon holds ten; the OPEN directory is empty while **0007** (prez contrast) and **0010** (eight utility READMEs ship hv's absolute home path into an install) are both open. `intent doctor` counts canon and reports no skew, so nothing flags it. **Read issues with `intent issues list`, never with `ls`.** Corrected against cc's measurement 8 Sep; my earlier "canon holds 9, only 0007 open" was stale.
 - **`utilz doctor` writes its results to stderr and its step headers to stdout**, so `utilz doctor | grep` sees the headers and not the answers. Pre-existing and unruled: changing it could break a caller, and the help now documents it rather than assuming nobody pipes it.
+
+**Blocked on a missing Intent verb**
+
+- **101 flat AC/AT ids in this repo are non-conforming and there is NO WAY TO RENAME THEM.** Measured from canon 8 Sep: ST0010 40, ST0011 21, ST0013 2, ST0014 38, plus 38 distinct ids cited across 11 files in the live tree. `intent-vc` landed hv's `is_ac_id` relaxation (`93c5a53d9`), taking the fleet from 307 non-conforming to 125 with zero files touched -- **and the surviving 125 are exactly Gtools 24 and OUR 101.** The flat form is broken today regardless of Intent: it breaks `group_of`, the renderer's grouping and the ship gate.
+  **The blocker is the mechanism.** `intent ac` has `new`, `edit`, `descope`, `withdraw` and `reinstate`; there is no rename, and `edit` rewords text only. So migration is withdraw-and-re-mint, which on ST0014 cost 4 withdrawn rows and 19 reference migrations for FOUR ids -- **scaled, ~101 tombstones across four contracts, which is worse than the disease.** Three of the four threads are also CLOSED and DEHYDRATED, so each is hydrate, rewrite canon, re-dehydrate.
+  **Do not start this without a rename verb.** ST0013's 2 ids are the cheap pilot if one lands. Requested from `intent-vc` as the same root they already have filed: the mint accepts what it should refuse and nothing can correct it afterwards -- the AC-kind hole in a second field.
 
 **Opportunistic, no owner**
 
