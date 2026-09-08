@@ -274,9 +274,18 @@ install_manifest_write() {
   # NO generated-at timestamp. A timestamp makes two manifests of identical
   # bytes compare unequal, which turns the one instrument that reports drift
   # into a thing that always reports drift.
+  # source-tree is what makes `utilz use dev` turnkey (D13): each tree then
+  # holds the address of the other, so neither direction needs a path typed or
+  # a second config key invented. Resolved physically, because a relative or
+  # symlinked spelling would name a tree that only resolves from where the
+  # publish happened to be run.
+  local source_tree
+  source_tree=$(cd "$tree" 2>/dev/null && pwd) || source_tree="$tree"
+
   {
     printf 'utilz-version\t%s\n' "$version"
     printf 'source-commit\t%s\n' "$commit"
+    printf 'source-tree\t%s\n' "$source_tree"
     printf '%s\n' "$rows"
   } > "$out"
 }
@@ -331,7 +340,7 @@ install_manifest_check() {
 
   while IFS=$'\t' read -r kind value path; do
     case "$kind" in
-      utilz-version | source-commit) continue ;;
+      utilz-version | source-commit | source-tree) continue ;;
       file | link) ;;
       "") continue ;;
       *)
@@ -599,7 +608,7 @@ install_verb_install() {
   install_manifest_write "$src" "$prefix/$UTILZ_MANIFEST_NAME" || return 1
 
   local count
-  count=$(grep -c -v '^utilz-version	\|^source-commit	' "$prefix/$UTILZ_MANIFEST_NAME")
+  count=$(grep -c -v '^utilz-version	\|^source-commit	\|^source-tree	' "$prefix/$UTILZ_MANIFEST_NAME")
   success "installed $(cat "$src/VERSION") ($commit) at $prefix -- $count paths"
 }
 
@@ -766,7 +775,7 @@ install_verb_upgrade() {
   install_manifest_write "$src" "$prefix/$UTILZ_MANIFEST_NAME" "$rows" || return 1
 
   local count
-  count=$(grep -c -v '^utilz-version	\|^source-commit	' "$prefix/$UTILZ_MANIFEST_NAME")
+  count=$(grep -c -v '^utilz-version	\|^source-commit	\|^source-tree	' "$prefix/$UTILZ_MANIFEST_NAME")
 
   if [[ $kept -gt 0 ]]; then
     success "upgraded to $(cat "$src/VERSION") ($commit) at $prefix -- $count paths, $kept left alone"
@@ -800,6 +809,29 @@ _install_link_root() {
     install | source) printf '%s\n' "$root" ;;
     *) return 1 ;;
   esac
+}
+
+# Echo one row per SYMLINK in <bindir>: "<name><TAB><root>", where <root> is
+# the Utilz tree the link resolves into, or "-" when it resolves elsewhere.
+#
+# THE ONE LINK-WALK. relink acts on this census and `use` reports from it; a
+# second walk anywhere would be a second answer to "which of these links are
+# ours" (IN-AG-HIGHLANDER-001), and the one that drifted would be whichever
+# nobody was reading.
+install_link_census() {
+  local bindir="$1"
+  local entry name root
+
+  for entry in "$bindir"/*; do
+    [[ -L "$entry" ]] || continue
+    name=$(basename "$entry")
+
+    if root=$(_install_link_root "$entry"); then
+      printf '%s\t%s\n' "$name" "$root"
+    else
+      printf '%s\t-\n' "$name"
+    fi
+  done
 }
 
 install_usage_relink() {
@@ -881,14 +913,15 @@ install_verb_relink() {
 
   echo "relink: $bindir into $prefix"
 
-  local entry name target root newtarget
+  local name target root newtarget
   local changed=0 already=0 left=0
 
-  for entry in "$bindir"/*; do
-    [[ -L "$entry" ]] || continue
-    name=$(basename "$entry")
+  # Process substitution, never a pipe: the counters below accumulate in this
+  # shell and a pipe would subshell the loop body away.
+  while IFS=$'\t' read -r name root; do
+    [[ -n "$name" ]] || continue
 
-    if ! root=$(_install_link_root "$entry"); then
+    if [[ "$root" == "-" ]]; then
       # Not ours. Leaving it is the whole point of the row: a verb that
       # quietly tidies what it was not pointed at is the same shape as a
       # manifest check that re-blesses a file it refused.
@@ -897,7 +930,7 @@ install_verb_relink() {
       continue
     fi
 
-    target=$(readlink "$entry")
+    target=$(readlink "$bindir/$name")
 
     if [[ "$root" == "$prefix" ]]; then
       echo "  unchanged: $name"
@@ -917,13 +950,172 @@ install_verb_relink() {
     # that produces a silently broken link when it is wrong.
     newtarget="$prefix/bin/$(basename "$target")"
 
-    ln -sfn "$newtarget" "$entry" || {
+    ln -sfn "$newtarget" "$bindir/$name" || {
       error "could not relink $name"
       return 1
     }
     echo "  relinked:  $name -> $newtarget"
     changed=$((changed + 1))
-  done
+  done < <(install_link_census "$bindir")
 
   success "$changed changed, $already already correct, $left left alone"
+}
+
+# Echo the tree that <word> names -- `opt` or `dev` -- for the source tree
+# <src>. Returns 1, by name, when the address cannot be read.
+#
+# EACH TREE HOLDS THE ADDRESS OF THE OTHER, which is the whole reason this
+# verb is turnkey (D13). `opt` is install.prefix from utilz.yaml, which both
+# trees carry. `dev` is source-tree from the install's manifest, recorded at
+# the one moment the source path is known for certain. Neither direction needs
+# a path typed or a second config key invented, and a second key would be an
+# address that can disagree with the manifest.
+_install_use_tree() {
+  local word="$1"
+  local src="$2"
+  local prefix manifest source_tree
+
+  prefix=$(install_prefix_configured "$src") || return 1
+
+  if [[ "$word" == "opt" ]]; then
+    printf '%s\n' "$prefix"
+    return 0
+  fi
+
+  manifest="$prefix/$UTILZ_MANIFEST_NAME"
+
+  if [[ ! -f "$manifest" ]]; then
+    error "no install at $prefix, so the source tree's address cannot be read"
+    echo "  'use dev' reads source-tree from the install's manifest, which is" >&2
+    echo "  where the publish recorded it. Run 'utilz install' first." >&2
+    return 1
+  fi
+
+  source_tree=$(awk -F'\t' '$1 == "source-tree" { print $2; exit }' "$manifest")
+
+  if [[ -z "$source_tree" ]]; then
+    error "the install at $prefix records no source-tree"
+    echo "  It was published before that row existed. Run 'utilz upgrade' from" >&2
+    echo "  the source tree; the manifest is rewritten and gains the row." >&2
+    return 1
+  fi
+
+  printf '%s\n' "$source_tree"
+}
+
+# Report which tree the PATH links currently serve. Changes nothing.
+install_use_report() {
+  local src="$1"
+  local bindir="$2"
+  local prefix manifest source_tree dev_label name root
+  local opt_n=0 dev_n=0 other_n=0
+
+  prefix=$(install_prefix_configured "$src") || return 1
+
+  # THREE ANSWERS, NOT TWO. "there is no install" and "there is an install
+  # that predates the source-tree row" are different facts with different
+  # remedies, and printing them as one sends the reader to publish something
+  # that is already published. Measured 8 Sep: the live install was cut before
+  # the row existed, and the first draft of this reported it as absent.
+  source_tree=""
+  dev_label="(no install at $prefix)"
+  manifest="$prefix/$UTILZ_MANIFEST_NAME"
+
+  if [[ -f "$manifest" ]]; then
+    source_tree=$(awk -F'\t' '$1 == "source-tree" { print $2; exit }' "$manifest")
+    if [[ -n "$source_tree" ]]; then
+      dev_label="$source_tree"
+    else
+      dev_label="(install predates source-tree; 'utilz upgrade' records it)"
+    fi
+  fi
+
+  if [[ ! -d "$bindir" ]]; then
+    error "no such directory: $bindir"
+    return 1
+  fi
+
+  while IFS=$'\t' read -r name root; do
+    [[ -n "$name" ]] || continue
+
+    if [[ "$root" == "$prefix" ]]; then
+      opt_n=$((opt_n + 1))
+    elif [[ -n "$source_tree" && "$root" == "$source_tree" ]]; then
+      dev_n=$((dev_n + 1))
+    else
+      other_n=$((other_n + 1))
+    fi
+  done < <(install_link_census "$bindir")
+
+  printf 'bin:   %s\n' "$bindir"
+  printf 'opt:   %s -- %s link(s)\n' "$prefix" "$opt_n"
+  printf 'dev:   %s -- %s link(s)\n' "$dev_label" "$dev_n"
+  printf 'other: %s link(s), which relink leaves alone\n' "$other_n"
+}
+
+install_usage_use() {
+  cat <<'USAGE'
+Usage: utilz use [dev|opt] [--bin-dir DIR]
+
+Switch which tree the PATH symlinks serve.
+
+  utilz use opt   Point them at install.prefix from opt/utilz/utilz.yaml
+  utilz use dev   Point them at the source tree the install was published from
+  utilz use       Report which tree they serve now, and change nothing
+
+  --bin-dir DIR   Where the links live. Default: ~/.local/bin
+
+No path is typed either way: each tree carries the address of the other.
+USAGE
+}
+
+# `utilz use dev|opt` -- the two-word switch (AC17).
+#
+# A THIN COORDINATOR OVER relink, and there is exactly one relinker. This
+# parses a word to a tree, calls relink, and renders. If it ever grows a
+# link-walk, a skip policy or a report of its own, it has gone wrong.
+install_verb_use() {
+  local word=""
+  local bindir=""
+  local src="$UTILZ_HOME"
+
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      dev | opt)
+        word="$1"
+        shift
+        ;;
+      --bin-dir)
+        if [[ $# -lt 2 ]]; then
+          error "--bin-dir requires a DIR argument"
+          return 2
+        fi
+        bindir=$(expand_tilde "$2")
+        shift 2
+        ;;
+      -h | --help)
+        install_usage_use
+        return 0
+        ;;
+      *)
+        error "Unknown argument: $1"
+        echo "  utilz use takes the word 'dev' or 'opt', or no word at all." >&2
+        return 2
+        ;;
+    esac
+  done
+
+  if [[ -z "$bindir" ]]; then
+    bindir="$HOME/.local/bin"
+  fi
+
+  if [[ -z "$word" ]]; then
+    install_use_report "$src" "$bindir"
+    return $?
+  fi
+
+  local tree
+  tree=$(_install_use_tree "$word" "$src") || return 1
+
+  install_verb_relink --prefix "$tree" --bin-dir "$bindir"
 }

@@ -16,7 +16,7 @@ run_install_function() {
 # THE OWNED SET (design.md D2)
 # ============================================================================
 
-@test "install_owned_paths names exactly the fifteen bin symlinks" {
+@test "AT07: install_owned_paths names exactly the fifteen bin symlinks" {
   run run_install_function "install_owned_paths '$UTILZ_HOME'"
   assert_success
 
@@ -168,7 +168,7 @@ run_install_function() {
 # THE MANIFEST (design.md D4, AC06, AC07)
 # ============================================================================
 
-@test "install_manifest_rows records a symlink's TARGET STRING, never a content hash" {
+@test "AT07: install_manifest_rows records a symlink's TARGET STRING, never a content hash" {
   local src="$BATS_TEST_TMPDIR/src-links"
   make_fake_src "$src"
 
@@ -193,7 +193,7 @@ run_install_function() {
   [[ "$alpha" != "$beta" ]]
 }
 
-@test "install_manifest_rows distinguishes two links whose resolved content is identical" {
+@test "AT07: install_manifest_rows distinguishes two links whose resolved content is identical" {
   # This is the case a resolved-content hash cannot see: fifteen links all
   # pointing at bin/utilz hash identically, so a link retargeted at the wrong
   # utility reads as intact (AC06).
@@ -216,7 +216,7 @@ run_install_function() {
   [[ "$(printf '%s\n' "$alpha" | cut -f2)" != "$(printf '%s\n' "$gamma" | cut -f2)" ]]
 }
 
-@test "install_manifest_rows emits exactly one row per owned path" {
+@test "AT08: install_manifest_rows emits exactly one row per owned path" {
   local src="$BATS_TEST_TMPDIR/src-rows"
   make_fake_src "$src"
 
@@ -231,7 +231,7 @@ run_install_function() {
   [[ "$rows" -gt 0 ]]
 }
 
-@test "install_manifest_write records the utilz version and the source commit" {
+@test "AT08: install_manifest_write records the utilz version and the source commit" {
   local src="$BATS_TEST_TMPDIR/src-header"
   make_fake_src "$src"
   local out="$BATS_TEST_TMPDIR/manifest.sha256"
@@ -250,7 +250,7 @@ run_install_function() {
   }
 }
 
-@test "install_manifest_write is deterministic - no generated-at timestamp" {
+@test "AT08: install_manifest_write is deterministic - no generated-at timestamp" {
   # A timestamp makes two manifests of identical bytes compare unequal, which
   # turns the one instrument that reports drift into one that always does (D4).
   local src="$BATS_TEST_TMPDIR/src-determ"

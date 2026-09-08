@@ -17,6 +17,11 @@ run_install_function() {
   bash -c "source '$UTILZ_HOME/opt/utilz/lib/common.sh'; source '$UTILZ_HOME/opt/utilz/lib/install.sh'; $*"
 }
 
+# THE SHARED INSTALL IS READ-ONLY. A test that needs to mutate one copies it
+# first. This is not fastidiousness: the AT15 legs used to write a marker
+# VERSION straight into it, and every test after them then inherited an install
+# whose VERSION no longer matched its manifest -- which made doctor's integrity
+# check fail in a full run and pass in isolation. Measured 8 Sep.
 setup_file() {
   export GUARD_SRC="$UTILZ_HOME"
   export GUARD_INSTALL="${BATS_FILE_TMPDIR:-/tmp}/guard-install"
@@ -157,75 +162,77 @@ teardown_file() {
 }
 
 # ============================================================================
-# AT15 (AC15) - an inherited UTILZ_HOME is ANNOUNCED, then HONOURED
+# AT15 (AC15) - an inherited UTILZ_HOME has NO EFFECT on the dispatcher
 # ============================================================================
+#
+# These legs assert the OPPOSITE of what this row used to. hv reversed the
+# honour-and-announce ruling on 2026-09-08: if it can find the dispatcher on
+# PATH it can work everything else out from there, so no environment variable
+# is needed at all.
+#
+# The two tests that stood here -- an inherited value being announced, and the
+# announcement landing on stderr -- are DELETED rather than adapted. They were
+# the only divergent dispatcher invocations in the whole tree, which made them
+# a behaviour whose only consumer was its own test. A passing test for deleted
+# behaviour is the worst artefact of a change like this.
 
-@test "an inherited UTILZ_HOME naming a different tree is announced and honoured" {
-  echo "PREFIX-MARKER-9.9.9" > "$GUARD_INSTALL/VERSION"
+@test "AT15: an inherited UTILZ_HOME has no effect -- the marker comes back" {
+  local inst="$BATS_TEST_TMPDIR/at15-a"
+  cp -R "$GUARD_INSTALL" "$inst"
+  echo "PREFIX-MARKER-9.9.9" > "$inst/VERSION"
 
-  run env UTILZ_HOME="$GUARD_SRC" "$GUARD_INSTALL/bin/utilz" version
-  assert_success
-  # Honoured: the SOURCE version comes back, not the marker.
-  assert_output_contains "2."
-  refute_output_contains "PREFIX-MARKER"
-  # Announced: the divergence is stated rather than left silent.
-  assert_output_contains "UTILZ_HOME"
-}
-
-@test "with UTILZ_HOME unset the install answers and nothing is announced" {
-  echo "PREFIX-MARKER-9.9.9" > "$GUARD_INSTALL/VERSION"
-
-  run --separate-stderr env -u UTILZ_HOME "$GUARD_INSTALL/bin/utilz" version
+  run env UTILZ_HOME="$GUARD_SRC" "$inst/bin/utilz" version
   assert_success
   assert_output_contains "PREFIX-MARKER-9.9.9"
-  [[ -z "$stderr" ]] || {
-    echo "stderr was not silent for an agreeing run:" >&2
-    printf '%s\n' "$stderr" >&2
-    return 1
-  }
+  # The source's version must NOT come back: honouring the inherited value is
+  # exactly what was removed.
+  refute_output_contains "utilz v2."
 }
 
-@test "UTILZ_HOME pointing at the tree itself produces no announcement" {
-  # The bats harness's own shape: test_helper.bash:20 exports UTILZ_HOME to
-  # the tree $0 already lives in, so the suite must see no new output.
-  run --separate-stderr env UTILZ_HOME="$GUARD_INSTALL" "$GUARD_INSTALL/bin/utilz" version
+@test "AT15: stderr is SILENT -- there is no announcement to make" {
+  # Asserted as empty rather than inferred from stdout being right. A run that
+  # got the correct answer AND printed four lines of explanation would pass an
+  # stdout-only check while being the behaviour this row deleted.
+  #
+  # MEASURED: this leg does NOT bite against a dispatcher that silently
+  # honours the inherited value -- legs 1 and 3 catch that one. It bites only
+  # against re-adding the ANNOUNCEMENT. The three legs divide the space and
+  # none of them is redundant.
+  local inst="$BATS_TEST_TMPDIR/at15-b"
+  cp -R "$GUARD_INSTALL" "$inst"
+  echo "PREFIX-MARKER-9.9.9" > "$inst/VERSION"
+
+  run --separate-stderr env UTILZ_HOME="$GUARD_SRC" "$inst/bin/utilz" version
   assert_success
   [[ -z "$stderr" ]] || {
-    echo "stderr was not silent when the trees agree:" >&2
+    echo "stderr was not silent under a divergent UTILZ_HOME:" >&2
     printf '%s\n' "$stderr" >&2
     return 1
   }
 }
 
-@test "the announcement is on STDERR: stdout is byte-identical to the unset run" {
-  # A caller parsing utilz output must not gain a line it did not have.
-  echo "PREFIX-MARKER-9.9.9" > "$GUARD_INSTALL/VERSION"
+@test "AT15: a DISPATCHED utility answers from the prefix too" {
+  # This is the leg that proves the dispatcher EXPORTED the derived value
+  # rather than merely using it locally. A dispatcher that fixed its own
+  # resolution but left the stale value in the environment would pass the two
+  # legs above and hand every child the wrong tree.
+  local inst="$BATS_TEST_TMPDIR/at15-c"
+  cp -R "$GUARD_INSTALL" "$inst"
+  echo "PREFIX-MARKER-9.9.9" > "$inst/VERSION"
+  printf 'It is important to note that this delves into the tapestry.\n' \
+    > "$BATS_TEST_TMPDIR/deck.txt"
 
-  run --separate-stderr env -u UTILZ_HOME "$GUARD_INSTALL/bin/utilz" version
-  local unset_stdout="$output"
+  run env UTILZ_HOME="$GUARD_SRC" "$inst/bin/cleanz" --detrope "$BATS_TEST_TMPDIR/deck.txt"
+  assert_success
+  assert_output_contains "Trope Analysis"
 
-  run --separate-stderr env UTILZ_HOME="$GUARD_INSTALL" "$GUARD_INSTALL/bin/utilz" version
-  local agreeing_stdout="$output"
-
-  [[ "$unset_stdout" == "$agreeing_stdout" ]] || {
-    echo "stdout differed between the unset run and the agreeing run" >&2
-    diff <(printf '%s\n' "$unset_stdout") <(printf '%s\n' "$agreeing_stdout") >&2
-    return 1
-  }
-
-  # And the diverging run announces on stderr while stdout stays clean of it.
-  run --separate-stderr env UTILZ_HOME="$GUARD_SRC" "$GUARD_INSTALL/bin/utilz" version
-  printf '%s\n' "$stderr" | grep -q "UTILZ_HOME" || {
-    echo "the divergence was not announced on stderr" >&2
-    return 1
-  }
-  printf '%s\n' "$output" | grep -q "UTILZ_HOME" && {
-    echo "the announcement leaked onto stdout" >&2
-    return 1
-  }
-  return 0
+  # And the child sees the prefix, not the inherited source.
+  run env UTILZ_HOME="$GUARD_SRC" "$inst/bin/utilz" doctor
+  assert_output_contains "UTILZ_HOME=$inst"
+  refute_output_contains "UTILZ_HOME=$GUARD_SRC"
 }
 
+# ============================================================================
 # ============================================================================
 # AC12 - the two trees are told apart at the prompt
 # ============================================================================
@@ -244,4 +251,46 @@ teardown_file() {
   assert_success
   assert_output_contains "source"
   refute_output_contains "installed at"
+}
+
+# ============================================================================
+# doctor's install-integrity check (vc's finding, 2026-09-08)
+# ============================================================================
+
+@test "doctor reports a clean install as matching its manifest" {
+  # The manifest checker had no user-facing surface: it could only be reached
+  # by sourcing the library, so an operator had no way to ask whether their
+  # install still matched what was published.
+  local sandbox="$BATS_TEST_TMPDIR/d7-clean"
+  cp -R "$GUARD_INSTALL" "$sandbox"
+
+  run env -u UTILZ_HOME "$sandbox/bin/utilz" doctor
+  assert_output_contains "Checking install integrity"
+  assert_output_contains "Install matches its manifest"
+}
+
+@test "doctor names every drifted path and the remedy" {
+  local sandbox="$BATS_TEST_TMPDIR/d7-drift"
+  cp -R "$GUARD_INSTALL" "$sandbox"
+  printf '\n# hand edit\n' >> "$sandbox/opt/gitz/gitz"
+  rm "$sandbox/bin/cleanz"
+  cp "$sandbox/bin/utilz" "$sandbox/bin/cleanz"
+
+  run env -u UTILZ_HOME "$sandbox/bin/utilz" doctor
+  assert_failure
+  assert_output_contains "2 owned path(s) differ"
+  assert_output_contains "modified"
+  assert_output_contains "opt/gitz/gitz"
+  assert_output_contains "not-a-link"
+  assert_output_contains "bin/cleanz"
+  assert_output_contains "utilz upgrade"
+}
+
+@test "doctor says NOT APPLICABLE in a source tree rather than skipping" {
+  # "nothing to check" and "checked, clean" must not render as the same line.
+  # A skipped check that prints nothing looks exactly like a passing one.
+  run env -u UTILZ_HOME "$GUARD_SRC/bin/utilz" doctor
+  assert_output_contains "Checking install integrity"
+  assert_output_contains "Not an install tree"
+  refute_output_contains "Install matches its manifest"
 }

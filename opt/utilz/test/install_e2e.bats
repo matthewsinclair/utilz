@@ -24,7 +24,15 @@ setup_file() {
 
   # cp -a preserves mtimes, so cargo's fingerprints still match and the
   # publish build is a no-op rather than a cold compile.
-  cp -a "$UTILZ_HOME" "$src" || return 1
+  cp -a "$UTILZ_HOME" "$src" || {
+    echo "e2e setup: cp -a of $UTILZ_HOME failed" >&2
+    return 1
+  }
+
+  # A copied .git can carry a lock file that was live in the real tree at the
+  # instant of the copy, which makes every git call in the copy fail. Clearing
+  # it is safe here precisely because this IS a throwaway copy.
+  rm -f "$src/.git/index.lock" "$src/.git/HEAD.lock"
 
   # Commit inside the COPY so the publish's dirty gate is satisfied without
   # anything being done to the real checkout. A throwaway clone, so this is
@@ -33,7 +41,17 @@ setup_file() {
   git -C "$src" -c user.email=e2e@example.com -c user.name=e2e \
     commit -qm "e2e fixture" >/dev/null 2>&1 || true
 
-  env -u UTILZ_HOME "$src/bin/utilz" install --prefix "$E2E_PREFIX" >/dev/null 2>&1 || return 1
+  # THE PUBLISH'S OUTPUT IS NOT SWALLOWED. A setup that hides why it failed
+  # reports "setup_file failed" and nothing else, which is the exact shape
+  # this whole thread exists to avoid -- and it made a flaky failure here
+  # undiagnosable on 8 Sep.
+  local publish_log="${BATS_FILE_TMPDIR:-/tmp}/e2e-publish.log"
+  if ! env -u UTILZ_HOME "$src/bin/utilz" install --prefix "$E2E_PREFIX" > "$publish_log" 2>&1; then
+    echo "e2e setup: the publish failed. Its output:" >&2
+    cat "$publish_log" >&2
+    echo "e2e setup: source tree state was: $(git -C "$src" status --porcelain | head -5)" >&2
+    return 1
+  fi
 
   # THE SOURCE GOES AWAY. Everything below runs against an install whose
   # source tree no longer exists.
@@ -139,15 +157,32 @@ teardown_file() {
   done
 }
 
-@test "no file in the install names the tree it was published from" {
+@test "only the MANIFEST names the tree the install was published from" {
   # The case a copy-and-delete cannot see: a path hardcoded to the source would
   # survive the source going away if that source were the REAL checkout, which
   # is still there. Grepping the artefact is the only thing that catches it.
+  #
+  # THE MANIFEST IS EXEMPT AND THE DISTINCTION IS THE POINT, not a concession.
+  # Its source-tree row is a RECORD of where the bytes came from; a path in
+  # code would be a DEPENDENCY on that tree still existing. The row is what
+  # makes `utilz use dev` turnkey (AC17), and the eight tests above this one
+  # prove it is inert for running: every one of them passes against an install
+  # whose source-tree names a directory that no longer exists.
   run bash -c "grep -rIl -e '$E2E_SRC_PATH' '$E2E_PREFIX' 2>/dev/null || true"
   assert_success
-  [[ -z "$output" ]] || {
+
+  local offenders
+  offenders=$(printf '%s\n' "$output" | grep -v "^$E2E_PREFIX/manifest.sha256$" | grep -v '^$' || true)
+  [[ -z "$offenders" ]] || {
     echo "these installed files name the tree they were published from:" >&2
-    printf '%s\n' "$output" >&2
+    printf '%s\n' "$offenders" >&2
+    return 1
+  }
+
+  # And the manifest really does carry it, so the exemption is covering a row
+  # that exists rather than quietly covering nothing.
+  grep -q "^source-tree	$E2E_SRC_PATH$" "$E2E_PREFIX/manifest.sha256" || {
+    echo "the manifest does not record source-tree, so this exemption is vacuous" >&2
     return 1
   }
 }

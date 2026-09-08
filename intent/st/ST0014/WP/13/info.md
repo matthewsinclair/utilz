@@ -2,14 +2,42 @@
 wp_id: WP-13
 title: utilz use dev|opt: the two-word switch over relink, refusing while UTILZ_HOME is exported
 scope: S
-status: Not Started
+status: Done
 ---
 
 # WP-13: utilz use dev|opt: the two-word switch over relink, refusing while UTILZ_HOME is exported
 
 ## Objective
 
-_(not yet written)_
+`utilz use dev|opt`: the two-word switch, as a thin coordinator over relink. Each tree carries the address of the other, so neither direction needs a path typed or a second config key invented.
+
+## As built
+
+`install_verb_use`, `_install_use_tree`, `install_use_report` and `install_usage_use` in `opt/utilz/lib/install.sh`; a `use` arm on the dispatcher's install branch; `install_link_census` extracted so there is still exactly ONE link-walk. 7 tests in `opt/utilz/test/relink.bats`.
+
+```
+utilz use opt   -> relink to install.prefix     (from utilz.yaml)
+utilz use dev   -> relink to source-tree        (from the install's manifest)
+utilz use       -> report which tree the links serve, change nothing
+```
+
+## The manifest gains source-tree, and that is the whole mechanism
+
+One row beside `utilz-version` and `source-commit`: the absolute path the install was published from, resolved physically. **Each tree then holds the address of the other**, so `use` reads no second key and takes no path. A `dev` config key was the first draft and would have been an address that can disagree with the manifest.
+
+## What Highlander cost, and what it bought
+
+`relink` walked `bin/` itself. `use` needed the same walk to report from, so the walk was extracted into `install_link_census` and both read it. **AT17's third leg is that check written as a test rather than as a comment**: a link pointing at neither tree must be skipped and reported, which is `relink`'s documented policy, so a second implementation inside `use` would have to reproduce it to pass.
+
+## Two things the LIVE run found that the tests had not
+
+**`(no install, so unknown)` was a misdiagnosis.** Run against the real estate, the report said there was no install when there was one -- published before `source-tree` existed. Two different facts with two different remedies printing as one line, which is the defect this thread keeps meeting. There are three answers now: no install; an install predating the row, with `utilz upgrade` named as the fix; and the path itself. A test was added afterwards, because a test would have caught it.
+
+**The AC01 grep had to learn a distinction.** `no file in the install names the tree it was published from` began failing, correctly: the manifest now records exactly that. The exemption is narrow and justified rather than blanket -- **the manifest's row is a RECORD of where the bytes came from; a path in code would be a DEPENDENCY on that tree still existing** -- and the test asserts the row is actually present, so the exemption cannot come to cover nothing.
+
+## And one shared-fixture defect, mine
+
+The AT15 legs wrote a marker VERSION straight into the file-scoped install, so every test after them inherited a tree whose VERSION no longer matched its manifest. Doctor's new integrity check then failed in a full run and passed in isolation. **The shared fixture is read-only now and the invariant is stated at the top of the file**; a test that needs to mutate copies first.
 
 ## Acceptance
 

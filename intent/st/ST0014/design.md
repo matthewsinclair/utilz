@@ -69,6 +69,10 @@ link	utilz	bin/cleanz
 
 The type discriminator is what lets the checker pick the right comparison without inferring it from the path (AC06, AC07). **No generated-at timestamp**: a timestamp makes two manifests of identical bytes compare unequal, which turns the one instrument that reports drift into a thing that always reports drift.
 
+**THE CHECKER'S USER-FACING SURFACE IS `utilz doctor`, CHECK 7 OF 7, AND IT IS NOT A NEW VERB.** Until 8 Sep the checker could only be reached by sourcing the library, so an operator had no way to ask whether their install still matched what was published; found by vc. Doctor already answers "is this tree sound", and a second command answering the same question is the duplication the Highlander rule is about -- so it folds in rather than becoming `utilz verify`. **In a source tree it reports NOT APPLICABLE rather than skipping**, because "nothing to check" and "checked, clean" must not render as the same line, and a skipped check that prints nothing looks exactly like a passing one.
+
+**The manifest header now carries three rows, not two.** `utilz-version`, `source-commit`, and **`source-tree`** -- the absolute path the install was published from, resolved physically. It is what makes `utilz use dev` turnkey (D13); see there for why it is a manifest row rather than a second config key.
+
 `upgrade` reports a file whose on-disk hash differs from its manifest row and leaves it alone without `--force` (AC08). **A file it declined to overwrite keeps its install-time row, never a re-checksum of what is there now.** Re-checksumming a refused file records the edit as canonical and the next check pronounces it intact, which is the refuse-then-bless failure: the refusal still prints, and the evidence that made it necessary is destroyed by the same pass.
 
 ## D5. prez: built at publish, and the shim refuses (AC09)
@@ -163,13 +167,43 @@ WP-01 (owned set + manifest) -> WP-02 (`install`) -> WP-04 (the runnable-install
 `upgrade` sits after the guards because it is the mirror of `install` (AC04) and mirroring something still moving costs more than waiting.
 
 **AC01 is the row the whole thread turns on and it is the one most easily faked.** `determine_utilz_home` at `bin/utilz:17-53` walks the symlink chain, takes `dirname`, and returns the parent of `bin/`, so `<prefix>/bin/utilz` should yield `UTILZ_HOME=<prefix>` with no dispatcher change at all. **That is a code read and not a measurement, and it is recorded here as one.** An install that silently reaches back into `~/Devel/prj/Utilz` passes every check that does not move the source aside, and it passes them looking exactly like success -- which is why AC01 is written to move the source tree aside rather than to assert that files arrived.
-## D12. An inherited UTILZ_HOME is ANNOUNCED, not ignored (AC15, WP-04)
+## D12. An inherited UTILZ_HOME is IGNORED (AC15, WP-04)
 
-**The dispatcher always computes its own home from `$0`, and when an inherited `UTILZ_HOME` names a DIFFERENT tree it says so on stderr and then HONOURS THE INHERITED VALUE.** Behaviour preserved, silence removed. Ruled by vc at 21:20Z with hv's pen; the remedy touches `bin/utilz` and belongs to WP-04, not WP-02.
+**The dispatcher always derives its home from `$0` and ignores an inherited `UTILZ_HOME` entirely.** hv's form of it: if it can find the dispatcher on PATH, it can work everything else out from there, so no environment variable is needed at all. `determine_utilz_home` already does exactly that -- walk the symlink chain, take the parent of `bin/` -- and `bin/utilz:42` used to throw that answer away whenever the variable happened to be set.
 
-**The defect this closes is invisible to AC01, structurally.** `bin/utilz:42` derives `UTILZ_HOME` from `$0` only when the variable is unset, and `~/.zshrc:76-78` exports it unconditionally at the source checkout. So a published install invoked from hv's shell runs the SOURCE tree, silently. AC01 moves the source aside, and with the source gone a stale `UTILZ_HOME` makes the install fail loudly rather than defer quietly -- **so AC01 goes green in a clean test environment while the defect is live in the shell hv actually types into.** The dangerous case is source-PRESENT, which is the normal case.
+**The variable survives as an internal channel and nothing else.** The dispatcher derives it once, exports it, and the fifteen utilities plus `common.sh` read it from there, because fifteen utilities each re-deriving would be fifteen copies of one answer. **The dispatcher is its only producer.**
 
-**IGNORING THE VARIABLE WAS THE OBVIOUS FIX AND IT IS WRONG, MEASURED RATHER THAN ARGUED.** `UTILZ_HOME` is load-bearing as a settable variable in five places: `test_helper.bash:20` exports it for the entire bats suite, `prez.bats:132` sandboxes a shim, `common_lib.bats:71` binds a temp home per test, `e2e-smoke.el:11` documents `UTILZ_HOME=$PWD emacs -Q --batch`, and `install.sh:124` -- this thread's own code -- binds it in a subshell to read a foreign tree's yaml. Ignoring it breaks WP-01. **The variable is not the defect; the silence is.** Two dispatchers, one per tree, was rejected as a Highlander violation on the one file that must have exactly one answer.
+**THIS SECTION SAID HONOUR-AND-ANNOUNCE UNTIL 8 SEP AND THE REVERSAL IS WORTH KEEPING, BECAUSE THE ERROR WAS IN THE MEASUREMENT'S SCOPE RATHER THAN IN THE MEASUREMENT.** The earlier ruling rested on `UTILZ_HOME` being load-bearing in five places. It is -- but **four of those five invoke the LIBRARY, not the dispatcher**, and the finding was applied to the dispatcher anyway. Sorted by what each consumer actually invokes:
 
-**AT15's fourth leg is the one that bites: the announcement goes to STDERR, and stdout must be byte-identical to the unset run.** A caller parsing `utilz` output must not gain a line. `install.sh:124` is unaffected either way -- it binds the variable in a subshell for a metadata read, never for a dispatcher invocation, so the rule never fires there.
+| Consumer                                                 | Invokes           | Divergent?                                             |
+| -------------------------------------------------------- | ----------------- | -------------------------------------------------------- |
+| `test_helper.bash:20`                                    | dispatcher        | no, convergent                                          |
+| `common_lib.bats:71`, `install.sh:124`                   | the library only  | never runs the dispatcher                               |
+| `opt/prez/prez:24`                                       | its own fallback  | receives the exported value                             |
+| `cleanz.bats:575`, `install_guards.bats` (4 sites)       | dispatcher        | no, convergent                                          |
+| **`install_guards.bats:166`, `:217`**                    | dispatcher        | **yes, and they were the tests OF the announcement**    |
+
+**The only divergent dispatcher invocations in the whole tree were the two tests of the behaviour itself.** A behaviour whose only consumer is its own test is circular, and deleting it removed the test rather than breaking anything. Both are gone; a passing test for deleted behaviour is the worst artefact of a change like this.
+
+**The rollout measurement that motivated the intermediate ruling still stands and is now moot.** With an ambient export at the checkout, a fully relinked `~/.local/bin` answered from the checkout on all sixteen links -- the relink was a no-op in effect. Under this ruling the export cannot do that at all, so the dotfile precondition is a tidy-up rather than a blocker. It was removed anyway (`Molt-matts` `242330d`).
+
+**AT15 asserts the opposite of what it used to, in three legs that divide the space.** The marker comes back under a divergent export; stderr is asserted EMPTY rather than inferred from stdout being right; and a DISPATCHED utility answers from the prefix too, which is the leg that proves the dispatcher exported the derived value rather than merely using it locally. Measured: legs 1 and 3 bite against silently honouring, leg 2 bites only against re-adding the announcement. None is redundant.
+
+## D13. `utilz use dev|opt` is a thin coordinator over relink (AC17, WP-13)
+
+```
+utilz use opt   -> relink to install.prefix        (read from utilz.yaml)
+utilz use dev   -> relink to source-tree           (read from the manifest)
+utilz use       -> report which tree the links serve, change nothing
+```
+
+**There is exactly one relinker.** `relink` owns link-walking, the ours-or-not predicate, the skip policy and the reporting. `use` parses one word to a tree path, calls `relink`, and renders (IN-AG-HIGHLANDER-001, IN-AG-THIN-COORD-001). **If it grows a link-walk, a skip policy or a report of its own, it has gone wrong** -- and AT17's third leg is that check written as a test rather than as a comment: a link pointing at neither tree must be skipped and reported, which is `relink`'s documented policy, so a second implementation would have to reproduce it to pass.
+
+**THE MANIFEST GAINS `source-tree`, AND THAT IS WHAT MAKES THE VERB TURNKEY.** One line beside `utilz-version` and `source-commit`: the absolute path the install was published from. **Each tree then holds the address of the other** -- from the install, `use dev` reads `source-tree` from the manifest; from the source, `use opt` reads `install.prefix` from `utilz.yaml`. Neither direction needs a path typed or a key invented.
+
+**The second config key was the first draft and it was wrong.** A `dev` key alongside `install.prefix` duplicates an address the manifest can carry for free, and a duplicated address is one that can disagree with itself. The manifest already exists, is already written at exactly the moment the source path is known, and is already the discriminator between the two trees.
+
+**No refusal clause, and no environment variable anywhere in this verb.** An earlier draft made `use` refuse while `UTILZ_HOME` was exported, on the measurement that relinking under an override reports success while every link serves the other tree. D12's re-ruling removes the override, so there is nothing left to refuse under.
+
+**Bare `utilz use` reports and changes nothing**, and AT17 asserts that by link MTIME rather than by the output looking right. A switch you cannot interrogate is one you run in order to find out where you are.
 

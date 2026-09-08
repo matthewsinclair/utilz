@@ -349,7 +349,7 @@ run_doctor() {
   fi
 
   # Check 1: UTILZ_HOME is set and valid
-  echo -e "${BOLD}[1/6]${RESET} Checking UTILZ_HOME..."
+  echo -e "${BOLD}[1/7]${RESET} Checking UTILZ_HOME..."
   if [[ -z "${UTILZ_HOME:-}" ]]; then
     error "UTILZ_HOME is not set"
     issues=$((issues + 1))
@@ -362,7 +362,7 @@ run_doctor() {
   echo ""
 
   # Check 2: Directory structure
-  echo -e "${BOLD}[2/6]${RESET} Checking directory structure..."
+  echo -e "${BOLD}[2/7]${RESET} Checking directory structure..."
   local required_dirs=("bin" "opt" "opt/utilz" "opt/utilz/lib" "help")
   local missing_dirs=()
 
@@ -381,7 +381,7 @@ run_doctor() {
   echo ""
 
   # Check 3: bin/utilz exists and is executable
-  echo -e "${BOLD}[3/6]${RESET} Checking bin/utilz..."
+  echo -e "${BOLD}[3/7]${RESET} Checking bin/utilz..."
   if [[ ! -f "$UTILZ_HOME/bin/utilz" ]]; then
     error "bin/utilz not found"
     issues=$((issues + 1))
@@ -405,7 +405,7 @@ run_doctor() {
   # the path is a metacharacter) and any substring satisfied it, so a stray
   # /opt/Utilz/binaries passed a test for /opt/Utilz/bin. `case` on a delimited
   # PATH is an exact element match with no regex in play.
-  echo -e "${BOLD}[4/6]${RESET} Checking PATH configuration..."
+  echo -e "${BOLD}[4/7]${RESET} Checking PATH configuration..."
   local bin_dir="$UTILZ_HOME/bin"
   local dispatcher="$bin_dir/utilz"
   local path_entry reached_via=""
@@ -451,7 +451,7 @@ run_doctor() {
   echo ""
 
   # Check 5: Installed utilities
-  echo -e "${BOLD}[5/6]${RESET} Checking installed utilities..."
+  echo -e "${BOLD}[5/7]${RESET} Checking installed utilities..."
   local util_count=0
   local broken_utils=()
   local incompatible_utils=()
@@ -512,7 +512,7 @@ run_doctor() {
   echo ""
 
   # Check 6: External dependencies
-  echo -e "${BOLD}[6/6]${RESET} Checking external dependencies..."
+  echo -e "${BOLD}[6/7]${RESET} Checking external dependencies..."
   local missing_deps=()
   local missing_dep_info=()
   local yaml_file dep_count dep_name dep_install i
@@ -588,6 +588,51 @@ run_doctor() {
   if [[ "$crate_count" -gt 0 ]] && ! check_command "cargo"; then
     info "Required: Install Rust for the $crate_count utility/utilities that build from source"
     echo -e "    brew install rust  (they build on first use)"
+  fi
+
+  # ------------------------------------------------------------------------
+  echo -e ""
+  echo -e "${BOLD}[7/7]${RESET} Checking install integrity..."
+
+  # THIS CHECK EXISTS BECAUSE THE MANIFEST CHECKER HAD NO USER-FACING SURFACE.
+  # It could only be reached by sourcing the library, so an operator had no way
+  # to ask whether their install still matched what was published. Found by vc,
+  # 2026-09-08.
+  #
+  # It is folded into doctor rather than given its own verb: doctor already
+  # answers "is this tree sound", and a second command answering the same
+  # question is the duplication the Highlander rule is about. A source tree
+  # carries no manifest, so this reports NOT APPLICABLE there rather than
+  # silently skipping -- "nothing to check" and "checked, clean" must not
+  # render as the same line.
+  if [[ -f "$UTILZ_HOME/$UTILZ_MANIFEST_NAME" ]]; then
+    if [[ -f "$UTILZ_HOME/opt/utilz/lib/install.sh" ]]; then
+      local drift check_rc=0
+      # Sourced here and nowhere else in this function: install.sh is not
+      # loaded for the fifteen utilities' hot path (ST0014 design.md D1).
+      # shellcheck source=opt/utilz/lib/install.sh
+      source "$UTILZ_HOME/opt/utilz/lib/install.sh"
+      drift=$(install_manifest_check "$UTILZ_HOME") || check_rc=$?
+
+      if [[ $check_rc -eq 0 ]]; then
+        success "Install matches its manifest"
+      elif [[ $check_rc -eq 2 ]]; then
+        error "The manifest at $UTILZ_HOME could not be read"
+        issues=$((issues + 1))
+      else
+        warn "$(printf '%s\n' "$drift" | wc -l | tr -d ' ') owned path(s) differ from the manifest"
+        printf '%s\n' "$drift" | sed 's/^/    /'
+        echo ""
+        echo "  'utilz upgrade' from the source tree reports these and leaves"
+        echo "  them alone; --force overwrites them."
+        issues=$((issues + 1))
+      fi
+    else
+      error "This is an install tree but its install library is missing"
+      issues=$((issues + 1))
+    fi
+  else
+    info "Not an install tree, so there is no manifest to check"
   fi
 
   if [[ ${#missing_deps[@]} -gt 0 ]]; then

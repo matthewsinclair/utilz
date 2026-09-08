@@ -40,49 +40,37 @@ determine_utilz_home() {
   cd "$script_dir/.." && pwd
 }
 
-# THE HOME IS ALWAYS COMPUTED FROM $0, AND AN INHERITED UTILZ_HOME THAT NAMES A
-# DIFFERENT TREE IS ANNOUNCED AND THEN HONOURED. Behaviour preserved, silence
-# removed. See ST0014 design.md D12; ruled 2026-09-07.
+# THE HOME IS ALWAYS DERIVED FROM $0, AND AN INHERITED UTILZ_HOME IS IGNORED.
+# See ST0014 design.md D12; ruled by hv 2026-09-08, reversing an earlier
+# honour-and-announce ruling of the previous evening.
 #
-# This block used to derive the home ONLY when the variable was unset, so a
-# published install invoked by its own absolute path silently ran whatever tree
-# UTILZ_HOME named. Measured 7 Sep against a prefix carrying a marker VERSION:
-# unset gave the marker, UTILZ_HOME=<source> gave the source, and nothing said
-# so. An ambient login-shell export makes that the NORMAL case, not the edge.
+# hv's form of it: if it can find the dispatcher on PATH, it can work
+# everything else out from there, so no environment variable is needed at all.
+# determine_utilz_home already does exactly that -- walk the symlink chain
+# from $0 and take the parent of bin/ -- and this block used to throw that
+# answer away whenever the variable happened to be set. A published install
+# invoked by its own absolute path then silently ran whatever tree the
+# variable named, and an ambient login-shell export made that the normal case.
 #
-# Ignoring the variable was the obvious fix and it is wrong: it is load-bearing
-# in five places -- test_helper.bash:20 exports it for the whole bats suite,
-# prez.bats sandboxes a shim, common_lib.bats binds a temp home per test,
-# e2e-smoke.el documents `UTILZ_HOME=$PWD emacs -Q --batch`, and install.sh
-# binds it in a subshell to read a foreign tree's yaml. The variable is not the
-# defect; the silence is.
+# The intermediate ruling was honour-the-value-but-announce-it, on a
+# measurement that UTILZ_HOME is load-bearing in five places. THAT MEASUREMENT
+# WAS ABOUT THE LIBRARY AND WAS APPLIED TO THE DISPATCHER. Sorted by what each
+# consumer actually invokes, the only DIVERGENT dispatcher invocations in the
+# whole tree were the two tests of the announcement itself -- a behaviour whose
+# only consumer is its own test. Both tests are deleted with the branch.
+#
+# The variable survives as an internal channel from this line to the fifteen
+# utilities and to common.sh: derived once here and exported, because fifteen
+# utilities each re-deriving would be fifteen copies of one answer. The
+# dispatcher is its only producer.
 #
 # Assigned before export: `export VAR=$(cmd)` reports export's status (0), so a
 # failure to resolve UTILZ_HOME would be swallowed and every later path built
 # from it would be silently wrong.
-UTILZ_HOME_DERIVED=$(determine_utilz_home) || {
+UTILZ_HOME=$(determine_utilz_home) || {
   echo "ERROR: Cannot determine UTILZ_HOME from $0" >&2
   exit 1
 }
-
-if [[ -z "${UTILZ_HOME:-}" ]]; then
-  UTILZ_HOME="$UTILZ_HOME_DERIVED"
-elif [[ "$UTILZ_HOME" != "$UTILZ_HOME_DERIVED" ]]; then
-  # Only pay for path normalisation when the cheap comparison disagrees: a
-  # trailing slash or a `..` segment is a different string and the same tree,
-  # and announcing that would be a false red on every invocation.
-  UTILZ_HOME_REAL=$(cd "$UTILZ_HOME" 2>/dev/null && pwd) || UTILZ_HOME_REAL="$UTILZ_HOME"
-
-  if [[ "$UTILZ_HOME_REAL" != "$UTILZ_HOME_DERIVED" ]]; then
-    # STDERR, never stdout. A caller parsing utilz output must not gain a line
-    # it did not have.
-    echo "utilz: UTILZ_HOME names a different tree than the one this script lives in." >&2
-    echo "  inherited: $UTILZ_HOME_REAL" >&2
-    echo "  this tree: $UTILZ_HOME_DERIVED" >&2
-    echo "  Honouring the inherited value. Unset UTILZ_HOME to run this tree." >&2
-  fi
-fi
-
 export UTILZ_HOME
 
 # Detect which utility was invoked
@@ -150,7 +138,7 @@ if [[ "$INVOKED_AS" == "utilz" ]]; then
       generate_utility "$@"
       ;;
 
-    install|upgrade|relink)
+    install|upgrade|relink|use)
       # The install library is sourced HERE and nowhere else. The block above
       # sources common.sh unconditionally for every one of the fifteen
       # utilities on every invocation; folding the install machinery in would
@@ -169,6 +157,7 @@ if [[ "$INVOKED_AS" == "utilz" ]]; then
         install) install_verb_install "$@" ;;
         upgrade) install_verb_upgrade "$@" ;;
         relink)  install_verb_relink "$@" ;;
+        use)     install_verb_use "$@" ;;
       esac
       ;;
 
@@ -260,6 +249,7 @@ EOF
         echo "  utilz install           - Publish a runnable install"
         echo "  utilz upgrade           - Replace an existing install"
         echo "  utilz relink            - Repoint PATH symlinks at a tree"
+        echo "  utilz use [dev|opt]     - Switch which tree those links serve"
         echo ""
         echo "Installed utilities:"
 

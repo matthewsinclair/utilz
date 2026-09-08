@@ -182,3 +182,180 @@ make_fake_bin() {
     return 1
   }
 }
+
+# ============================================================================
+# AT17 (AC17) - `utilz use dev|opt`, a thin coordinator over relink
+# ============================================================================
+
+set_prefix_key() {
+  local tree="$1" value="$2"
+  printf 'name: utilz\ninstall:\n  prefix: %s\n' "$value" > "$tree/opt/utilz/utilz.yaml"
+  git -C "$tree" add -A >/dev/null 2>&1
+  git -C "$tree" -c user.email=t@example.com -c user.name=t commit -qm prefix >/dev/null 2>&1
+}
+
+# A source tree with install.prefix set, published to $2, and a fixture bin/
+# whose links currently serve the SOURCE.
+make_two_trees() {
+  local src="$1" prefix="$2" bindir="$3"
+  make_fake_src "$src"
+  set_prefix_key "$src" "$prefix"
+  run_install_function "UTILZ_HOME='$src'; install_verb_install --prefix '$prefix'" >/dev/null
+  make_fake_bin "$bindir" "$src"
+}
+
+@test "AT17: the manifest header carries source-tree, the absolute path published from" {
+  local src="$BATS_TEST_TMPDIR/moved-src" prefix="$BATS_TEST_TMPDIR/p-st"
+  make_fake_src "$src"
+  run run_install_function "UTILZ_HOME='$src'; install_verb_install --prefix '$prefix'"
+  assert_success
+
+  local recorded
+  recorded=$(awk -F'\t' '$1 == "source-tree" { print $2; exit }' "$prefix/manifest.sha256")
+  [[ -n "$recorded" ]] || {
+    echo "no source-tree row in the manifest:" >&2
+    head -4 "$prefix/manifest.sha256" >&2
+    return 1
+  }
+  # It FOLLOWS the checkout rather than naming some canonical location: publish
+  # from a differently-named directory and the recorded path is that one.
+  [[ "$recorded" == "$src" ]] || {
+    echo "source-tree is $recorded, not $src" >&2
+    return 1
+  }
+}
+
+@test "AT17: turnkey both ways, no path typed and no second key read" {
+  local src="$BATS_TEST_TMPDIR/tk-src" prefix="$BATS_TEST_TMPDIR/tk-opt"
+  local bindir="$BATS_TEST_TMPDIR/tk-bin"
+  make_two_trees "$src" "$prefix" "$bindir"
+
+  # From the SOURCE: switch to opt. One word, no path.
+  run run_install_function "UTILZ_HOME='$src'; install_verb_use opt --bin-dir '$bindir'"
+  assert_success
+
+  local link resolved
+  for link in alpha beta utilz; do
+    resolved=$(cd "$bindir" && cd "$(dirname "$(readlink "$link")")" && pwd)
+    [[ "$resolved" == "$prefix/bin" ]] || {
+      echo "after 'use opt', $link resolves into $resolved, not $prefix/bin" >&2
+      return 1
+    }
+  done
+
+  # From the INSTALL: switch back to dev. The source's address came out of the
+  # manifest, not out of a key or an argument.
+  run run_install_function "UTILZ_HOME='$prefix'; install_verb_use dev --bin-dir '$bindir'"
+  assert_success
+
+  for link in alpha beta utilz; do
+    resolved=$(cd "$bindir" && cd "$(dirname "$(readlink "$link")")" && pwd)
+    [[ "$resolved" == "$src/bin" ]] || {
+      echo "after 'use dev', $link resolves into $resolved, not $src/bin" >&2
+      return 1
+    }
+  done
+}
+
+@test "AT17: use calls relink rather than reimplementing it" {
+  # relink's documented policy is that a link pointing at neither tree is
+  # skipped and reported. A second implementation inside `use` would have to
+  # reproduce that to pass, which is the Highlander check written as a test
+  # rather than as a comment.
+  local src="$BATS_TEST_TMPDIR/hl-src" prefix="$BATS_TEST_TMPDIR/hl-opt"
+  local bindir="$BATS_TEST_TMPDIR/hl-bin"
+  make_two_trees "$src" "$prefix" "$bindir"
+
+  local before
+  before=$(readlink "$bindir/stranger")
+
+  run run_install_function "UTILZ_HOME='$src'; install_verb_use opt --bin-dir '$bindir'"
+  assert_success
+  assert_output_contains "skipped"
+  assert_output_contains "stranger"
+  [[ "$(readlink "$bindir/stranger")" == "$before" ]]
+}
+
+@test "AT17: bare use REPORTS and changes nothing, asserted by mtime" {
+  # A switch you cannot interrogate is one you run in order to find out where
+  # you are. Asserted by link mtime rather than by the output looking right:
+  # a report that relinked first would print exactly the same thing.
+  local src="$BATS_TEST_TMPDIR/rep-src" prefix="$BATS_TEST_TMPDIR/rep-opt"
+  local bindir="$BATS_TEST_TMPDIR/rep-bin"
+  make_two_trees "$src" "$prefix" "$bindir"
+
+  local before after
+  before=$(cd "$bindir" && for f in *; do printf '%s %s\n' "$f" "$(stat -f '%m %Sm' "$f" 2>/dev/null || stat -c '%Y' "$f")"; done | LC_ALL=C sort)
+
+  run run_install_function "UTILZ_HOME='$src'; install_verb_use --bin-dir '$bindir'"
+  assert_success
+  assert_output_contains "$src"
+  assert_output_contains "$prefix"
+
+  after=$(cd "$bindir" && for f in *; do printf '%s %s\n' "$f" "$(stat -f '%m %Sm' "$f" 2>/dev/null || stat -c '%Y' "$f")"; done | LC_ALL=C sort)
+  [[ "$before" == "$after" ]] || {
+    echo "bare 'use' changed link mtimes:" >&2
+    diff <(printf '%s\n' "$before") <(printf '%s\n' "$after") >&2
+    return 1
+  }
+}
+
+@test "AT17: use refuses a word that is neither dev nor opt" {
+  local src="$BATS_TEST_TMPDIR/bad-src" prefix="$BATS_TEST_TMPDIR/bad-opt"
+  local bindir="$BATS_TEST_TMPDIR/bad-bin"
+  make_two_trees "$src" "$prefix" "$bindir"
+
+  run run_install_function "UTILZ_HOME='$src'; install_verb_use sideways --bin-dir '$bindir'"
+  assert_exit_code 2
+  assert_output_contains "dev"
+  assert_output_contains "opt"
+}
+
+@test "AT17: use dev refuses by name when there is no install to read from" {
+  # The source's address lives in the install's manifest, so with no install
+  # there is nowhere to read it. That is refused by name rather than guessed
+  # at -- the same rule AC05 applies to the prefix, for the same reason.
+  local src="$BATS_TEST_TMPDIR/noinst-src" bindir="$BATS_TEST_TMPDIR/noinst-bin"
+  make_fake_src "$src"
+  set_prefix_key "$src" "$BATS_TEST_TMPDIR/nothing-published"
+  mkdir -p "$bindir"
+
+  run run_install_function "UTILZ_HOME='$src'; install_verb_use dev --bin-dir '$bindir'"
+  assert_exit_code 1
+  assert_output_contains "install"
+}
+
+@test "AT17: bare use tells 'no install' apart from 'install predates source-tree'" {
+  # Found LIVE, not by a test, which is why it is a test now. The real install
+  # was published before the source-tree row existed and the first draft
+  # reported it as no install at all -- sending the reader to publish
+  # something already published. Three answers, not two.
+  local src="$BATS_TEST_TMPDIR/3w-src" prefix="$BATS_TEST_TMPDIR/3w-opt"
+  local bindir="$BATS_TEST_TMPDIR/3w-bin"
+  make_fake_src "$src"
+  set_prefix_key "$src" "$prefix"
+  mkdir -p "$bindir"
+
+  # (a) nothing published at all
+  run run_install_function "UTILZ_HOME='$src'; install_verb_use --bin-dir '$bindir'"
+  assert_success
+  assert_output_contains "no install at $prefix"
+
+  # (b) published, but the manifest predates the row
+  run_install_function "UTILZ_HOME='$src'; install_verb_install --prefix '$prefix'" >/dev/null
+  grep -v '^source-tree	' "$prefix/manifest.sha256" > "$prefix/m.tmp"
+  mv "$prefix/m.tmp" "$prefix/manifest.sha256"
+
+  run run_install_function "UTILZ_HOME='$src'; install_verb_use --bin-dir '$bindir'"
+  assert_success
+  assert_output_contains "predates source-tree"
+  refute_output_contains "no install at"
+
+  # (c) published with the row
+  run_install_function "UTILZ_HOME='$src'; install_verb_upgrade --prefix '$prefix'" >/dev/null
+  run run_install_function "UTILZ_HOME='$src'; install_verb_use --bin-dir '$bindir'"
+  assert_success
+  assert_output_contains "$src"
+  refute_output_contains "predates source-tree"
+  refute_output_contains "no install at"
+}
