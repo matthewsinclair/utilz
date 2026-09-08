@@ -45,6 +45,10 @@ title: Version dispatch has one home, and reports both versions
 
 - AC08 The intercept exits with show_version's status, so a version that cannot be read is a FAILURE rather than a silent success. The arms it replaced exited 0 regardless of what show_version returned, which is IN-AG-NO-SILENT-001: a utility whose version_file is missing from an install would have reported an error message on stdout and success to the caller, and every scripted check of it would have passed. Assert the non-zero exit, not just the message. -- satisfied: no (computed)
 
+### Group AC09
+
+- AC09 RULED BY hv, 8 Sep, closing D3: 'utilz --version' reports 'utilz:2.6.1' on line one -- the framework's own version in the same colon form as the pair's framework half, with NO 'v' prefix, so the two renderings agree character for character on the part they share. hv considered and rejected 'utilz:v2.6.1'. The framework takes no second term because it is not part of anything. CRITICALLY, LINES TWO AND THREE ARE UNCHANGED AND MUST BE ASSERTED, NOT ASSUMED: the description, and the tree-provenance line ('source at <tree>' or 'installed at <tree> (<sha>)') which is held by ST0014/AC12 -- a closed thread. An implementation that rewrites line one and simplifies the provenance line away breaks a satisfied criterion on another thread, and this row exists partly to make that cost visible before it is paid. -- satisfied: no (computed)
+
 ## Acceptance Tests
 
 ### Group AC01
@@ -76,6 +80,10 @@ _(no tests in this group)_
 _(no tests in this group)_
 
 ### Group AC08
+
+_(no tests in this group)_
+
+### Group AC09
 
 _(no tests in this group)_
 

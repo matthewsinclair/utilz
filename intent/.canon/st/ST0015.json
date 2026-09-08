@@ -73,6 +73,14 @@
       "state": {
         "is": "computed"
       }
+    },
+    {
+      "id": "AC09",
+      "text": "RULED BY hv, 8 Sep, closing D3: 'utilz --version' reports 'utilz:2.6.1' on line one -- the framework's own version in the same colon form as the pair's framework half, with NO 'v' prefix, so the two renderings agree character for character on the part they share. hv considered and rejected 'utilz:v2.6.1'. The framework takes no second term because it is not part of anything. CRITICALLY, LINES TWO AND THREE ARE UNCHANGED AND MUST BE ASSERTED, NOT ASSUMED: the description, and the tree-provenance line ('source at <tree>' or 'installed at <tree> (<sha>)') which is held by ST0014/AC12 -- a closed thread. An implementation that rewrites line one and simplifies the provenance line away breaks a satisfied criterion on another thread, and this row exists partly to make that cost visible before it is paid.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
     }
   ]
 }
