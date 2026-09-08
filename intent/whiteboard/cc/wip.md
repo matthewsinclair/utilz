@@ -3,33 +3,31 @@ node: cc
 name: Control Claude
 role: control
 session_id: 221775b1-d498-41c0-b937-4d10094711a8
-heartbeat_at: 2026-09-08 11:40Z
+heartbeat_at: 2026-09-08 11:43Z
 status: active
-focus: "ST0013 built, verified and clean. Nine WPs Done, four ACs, nine ATs. Full estate 551 ok / 0 not ok across 19 suites, exit 0. prez is 2.0.0 with its version reduced to ONE home. Waiting on vc to mark AT09 green and close; the install at ~/Devel/opt/utilz is behind and that is hv's to publish."
-claims: [ST0013]
+focus: "IDLE. ST0013 is closed and dehydrated -- nine WPs, four ACs, nine green ATs, full estate 551 ok / 0 not ok. prez shipped at 2.0.0 and hv published the install at f3470b9, verified by BEHAVIOUR rather than by its version string. Nothing claimed, nothing held."
+claims: []
 ---
 
 # Control Claude (cc)
 
 ## DOING
 
-**ST0013 -- prez theme addressing. Built, and verified by vc independently rather than read.** `--theme` takes a NAME (search path, then built-ins, never the cwd), `--theme-file` takes a PATH in either shape, `--theme-path` PREPENDS onto `PREZ_THEME_PATH`. Front matter splits the same way. vc marked the contract **3/3 satisfied at `0daef97`, all eight ATs green**.
+**Nothing. ST0013 is closed, dehydrated and verified.**
 
-**The fix is a TYPE change, not a branch reorder**, and that is the part worth carrying forward. `theme::load` took one ambiguous `&str` and asked `path.exists()` first; it now takes `Spec::Name` or `Spec::File`, so the cwd branch is **unreachable rather than unvisited**. Deleting the branch would have passed every test and left the cause in place.
+Theme addressing split three ways: `--theme` takes a NAME (search path, then built-ins, **never the cwd**), `--theme-file` takes a PATH in either shape, `--theme-path` PREPENDS onto `PREZ_THEME_PATH`. Front matter splits the same way. prez is **2.0.0** -- breaking change by semver -- and its version now has **one home**, `crate/Cargo.toml`, because cargo requires it there and a home you cannot delete is the one to keep.
 
-**WP-07 evidence is all that remains of mine.** shellcheck CLEAN over CI's own 18-file set, `intent doctor` 0 findings; full `utilz test` running, `utilz doctor` after it because the suite mutates `$UTILZ_HOME/bin`.
+**hv published the install at `f3470b9` and I verified it by BEHAVIOUR, not by its version string**: the cwd no longer shadows, clause (f) fires from `present`, and `--theme-path` announces itself as the mechanism. A version that agrees is not the same claim as behaviour that agrees -- geodica spent a verification round on a binary reporting 1.0.0 that already had the new behaviour.
+
+Full record is in canon, not here: `intent st show ST0013`, `design.md` D1-D14.
 
 ## TODO
 
-- **WP-07** -- finish the evidence: full `utilz test`, `utilz doctor`, and record the numbers.
-- Nothing else. WP-01 through WP-06 and WP-08 are done and committed (`8326332`, `098f10c`, `09298e5`, `f57cd74`, `271d3c6`).
+**Empty.**
 
 ## Holds
 
-**None. Both conditions were met and the holds are discharged rather than left standing.**
-
-- `src/` was held on geodica's answer. **vc relayed it at 10:10Z** -- the pass-through shape is in real use, and AC02 was minted out of it. vc twice re-announced the hold afterwards from a pre-compact carry-forward; **a hold is governed by its CONDITION, not by whoever last mentions it**, and vc confirmed that reading at 10:34Z.
-- WP-02 was held on the AT01 id collision. **Ruled at 10:18Z**: new file `theme-addressing.sh`, both rows re-cited.
+**None.**
 
 ## Watch-outs
 
