@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: 221775b1-d498-41c0-b937-4d10094711a8
-heartbeat_at: 2026-09-08 10:03Z
+heartbeat_at: 2026-09-08 11:19Z
 status: active
-focus: "ST0013 claimed at 2026-09-08 10:03Z on vc's hand-off. prez theme addressing splits into --theme (name only), --theme-file (path only) and --theme-path (prepend). AT01's red-first claim is MEASURED, not assumed. src/ is HELD on geodica's answer, so today is design.md + the red-first test, neither of which touches it."
+focus: "ST0013 built and verified. The split shipped -- --theme takes a NAME, --theme-file a PATH, --theme-path prepends -- and vc marked the contract 3/3 satisfied at 0daef97 with all eight ATs green, verified independently rather than read. WP-07 evidence is the last of mine; the AC03 widening is hv's to rule on."
 claims: [ST0013]
 ---
 
@@ -13,24 +13,23 @@ claims: [ST0013]
 
 ## DOING
 
-**ST0013 -- prez theme addressing.** vc handed it over at 09:56Z, hv's call. One AC carried verbatim from ST0010/AC15 (properly descoped to here, checked), one AT, contract stays vc's.
+**ST0013 -- prez theme addressing. Built, and verified by vc independently rather than read.** `--theme` takes a NAME (search path, then built-ins, never the cwd), `--theme-file` takes a PATH in either shape, `--theme-path` PREPENDS onto `PREZ_THEME_PATH`. Front matter splits the same way. vc marked the contract **3/3 satisfied at `0daef97`, all eight ATs green**.
 
-**The defect is measured, at 2026-09-08 10:03Z, against the pinned binary.** A deck built with `--theme=simple` from a directory holding `./simple/` picked up the local theme (marker present, 18208 bytes); the same command from elsewhere picked the built-in (no marker, 22666 bytes). **And it said NOTHING in either case** -- `provenance()` only announces `Origin::SearchPath`, and a cwd hit stamps `Origin::Path`, so the shadowing is completely silent. That is sharper than the AC's own wording and it is why AT01 is genuinely red-first.
+**The fix is a TYPE change, not a branch reorder**, and that is the part worth carrying forward. `theme::load` took one ambiguous `&str` and asked `path.exists()` first; it now takes `Spec::Name` or `Spec::File`, so the cwd branch is **unreachable rather than unvisited**. Deleting the branch would have passed every test and left the cause in place.
 
-**The fix is a TYPE change, not a branch reorder.** `theme::load(flag, front, base)` takes one ambiguous string and asks `path.exists()` first. Splitting it into `Name` and `File` makes the cwd branch unreachable rather than merely unvisited -- reordering the branches would leave the same string able to mean either thing.
+**WP-07 evidence is all that remains of mine.** shellcheck CLEAN over CI's own 18-file set, `intent doctor` 0 findings; full `utilz test` running, `utilz doctor` after it because the suite mutates `$UTILZ_HOME/bin`.
 
 ## TODO
 
-- **WP-01 design.md** -- the type split, the four-source precedence lattice, the refusal catalogue, prepend semantics, the front-matter split, migration. Not blocked.
-- **WP-02 AT01 red-first** -- write it in `crate/test/`, watch it fail for `path.exists()` winning, before any `src/` edit. **Blocked on the id collision below**, not on the hold.
-- **WP-03..05 `src/`** -- args.rs flags + mutual exclusion, theme.rs resolver + `--theme-path` threading, frontmatter.rs `theme-file:` + deck.rs wiring. **Held, see below.**
-- **WP-06 migration** -- `examples/demo.md`, `help/prez.md`, README, the `opt/prez/prez` shim if it names themes.
-- **WP-07 green + evidence** -- acceptance.sh --strict, cargo test, utilz test, shellcheck, both doctors.
+- **WP-07** -- finish the evidence: full `utilz test`, `utilz doctor`, and record the numbers.
+- Nothing else. WP-01 through WP-06 and WP-08 are done and committed (`8326332`, `098f10c`, `09298e5`, `f57cd74`, `271d3c6`).
 
 ## Holds
 
-- **All of `opt/prez/crate/src/` is held until vc relays geodica's answer or 2026-09-09 passes with none.** vc's condition, set at 09:56Z: geodica forwards a user-supplied `--theme`, so a Geodica user passing a PATH starts getting the refusal, and if that shape is in use the criterion may gain a clause. **Design and the red-first test are outside `src/` and proceed today.**
-- **WP-02 is held on a contract answer, separately: ST0013/AT01 and ST0010/AT01 are two different tests with one id in one file.** Released when vc rules on the file or the id. Sent 10:03Z.
+**None. Both conditions were met and the holds are discharged rather than left standing.**
+
+- `src/` was held on geodica's answer. **vc relayed it at 10:10Z** -- the pass-through shape is in real use, and AC02 was minted out of it. vc twice re-announced the hold afterwards from a pre-compact carry-forward; **a hold is governed by its CONDITION, not by whoever last mentions it**, and vc confirmed that reading at 10:34Z.
+- WP-02 was held on the AT01 id collision. **Ruled at 10:18Z**: new file `theme-addressing.sh`, both rows re-cited.
 
 ## Watch-outs
 
@@ -41,6 +40,8 @@ claims: [ST0013]
 - **A CONSTRUCT THAT DID NOT DO WHAT YOU READ IT AS, FOLLOWED BY A GREEN, READS EXACTLY LIKE SUCCESS.** Three instances now. A `perl -0pi -e` that silently matched nothing, after which the suite went green because the ORIGINAL test still passed. A `grep -q` verification whose own pattern was wrong, reporting a landed patch as failed. And an **unquoted heredoc**, where every backtick in prose ran as a command -- it compiled C into a file named `hv` and left a stray in the repo root. **The rule: after any in-place rewrite, grep for the NEW text and fail loudly if absent. Quote every heredoc delimiter that carries prose. Prove a new assertion bites by injecting the regression it is meant to catch.**
 
 - **THIS TREE HAS THREE CONCURRENT WRITERS AND A `git status` FROM EARLIER IS NOT A BASELINE.** On 8 Sep I saw ST0012 and ST0014 flip to Completed, concluded a shell accident of mine had done it, and was one command from reverting vc's finished work. **The mtimes settled it -- their canon writes were nine minutes before my accident.** Check mtimes and the artefact before attributing a change to yourself or anyone. Commit with an explicit pathspec, never `-A`.
+
+- **AN ASSERTION PHRASED AS "NAMES X" LICENSES A SUBSTRING CHECK, AND A SUBSTRING CHECK CANNOT SEE A MALFORMED STRING THAT CONTAINS X.** vc's generalisation, 8 Sep, from a defect of mine: I built two refusal remedies from one `{remedy}={value}` template, which printed `for a path, use 'theme-file:'=./x.css` -- not front matter and not anything else. **Every unit test and all six ATs stayed green**, because each greps `theme-file:` as a substring and the malformed string contains it. The contract's own wording permitted it, so the test was not weaker than the criterion; the criterion was. **Where the SHAPE of a message is the requirement, the row has to say the shape** -- and the way I found it was running the case and READING the output rather than matching on it.
 
 - **A check placed before the thing it measures passes for the wrong reason**, and a red-first probe that did not APPLY is not a red-first proof. **A grep-based check must target a string the artifact can only contain if the thing is really there** -- never a token the file might legitimately discuss. **Never pipe a command whose exit code is the assertion**; `$?` is the last stage's.
 
