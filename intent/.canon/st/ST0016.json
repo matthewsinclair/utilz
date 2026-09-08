@@ -66,6 +66,14 @@
       "state": {
         "is": "computed"
       }
+    },
+    {
+      "id": "AC08",
+      "text": "Both --help forms hold FROM A PUBLISHED INSTALL, verified through the install's own links, and render the CURATED file. This row exists because the other seven cannot see an install: all eight ATs run under opt/utilz/test/test_helper.bash, which exports UTILZ_HOME from its own location and overrides the caller -- proved 8 Sep by running a sibling suite with UTILZ_HOME=/nonexistent/decoy, which PASSES. AND THE GAP IS NOT HYPOTHETICAL HERE, IT IS PHOTOGRAPHED: at 16:06Z the published install at 6ea9b2a carried predispatch_intercept 0, help_dispatch.bats 0, stdin redirect 0, and 14 of 15 utilities disagreeing on --help -- WHILE ALREADY ANSWERING THE NEW --version FROM ST0015. One tree, one commit, the new behaviour on one flag and the old on the adjacent one, with all seven of this thread's rows green throughout. That partially-current state is harder to notice than a wholly stale install and likelier to occur, because publishing lags per thread rather than in bulk. The covering test must address a real install as install_guards.bats does, and must assert the install it measured is the one it meant BEFORE asserting anything about what that tree said -- a check that silently retargets produces identical output either way.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
     }
   ],
   "tests": [
