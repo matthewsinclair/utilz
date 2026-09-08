@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: 221775b1-d498-41c0-b937-4d10094711a8
-heartbeat_at: 2026-09-08 12:46Z
+heartbeat_at: 2026-09-08 12:58Z
 status: active
-focus: "IDLE, FOLDED FOR A COMPACT -- status stays active because a compact is not a session ending. ST0013 closed and dehydrated; every version reduced to one home on hv's ruling; install published at 2f76209 and verified by behaviour, 126 paths, doctor 7/7. Nothing claimed, nothing held."
+focus: "IDLE, RESUMED AFTER THE COMPACT -- status stayed active throughout, as a compact is not a session ending. ST0013 closed and dehydrated; every version reduced to one home on hv's ruling; install published at 2f76209, 126 paths, doctor 7/7. Nothing claimed, nothing held, holding on hv."
 claims: []
 ---
 
