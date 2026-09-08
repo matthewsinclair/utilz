@@ -150,10 +150,22 @@ show_help() {
   local help_file="$UTILZ_HOME/help/$util.md"
 
   if [[ -f "$help_file" ]]; then
+    # STDIN IS REDIRECTED, AND THAT IS THE WHOLE OF A DOCUMENTED HANG.
+    # A bare `glow "$file"` with a terminal on stdin hangs -- this project has
+    # it recorded twice from real incidents, once as "utilz help <anything>
+    # HANGS", once as a 120-second accident while measuring it. The renderer is
+    # given a FILE; it has no business reading stdin, so closing it costs
+    # nothing and removes the hazard.
+    #
+    # It is NOT about the pager. `-p` was suspected and measured away: glow's
+    # pager is opt-in and injecting it changed nothing. Two of us reached the
+    # same wrong conclusion about `-p` from two different wrong mechanisms and
+    # nearly shipped agreeing -- the defect was underneath the thing we were
+    # both discussing. ST0016/D5.
     if command -v glow >/dev/null 2>&1; then
-      glow "$help_file"
+      glow "$help_file" </dev/null
     elif command -v bat >/dev/null 2>&1; then
-      bat --style=plain --language=markdown "$help_file"
+      bat --style=plain --language=markdown "$help_file" </dev/null
     else
       cat "$help_file"
     fi
@@ -216,26 +228,41 @@ show_version() {
   fi
 }
 
-# THE one place `--version` is answered for a utility.
+# THE one place a dispatched utility invocation is answered before its
+# implementation runs: `--version`, `--help` and `-h`.
 #
-# It lived at the SYMLINK dispatch site only, so thirteen utilities hand-copied
-# `--version) show_version "<name>"; exit 0` to cover the `utilz <util>` form.
-# The two that never copied it were the two that broke: `todo`, which simply
-# lacked the arm while its own --help advertised the flag, and `prez`, which
-# could not have one because clap answers before any shell runs. Two homes
-# agreeing by convention is what produced that; this is the one home, called
-# from both sites in bin/utilz. ST0015/D1.
+# It began as the `--version` half (ST0015) and grew the help half one thread
+# later (ST0016), because BOTH flags had the same defect from the same cause.
+# `bin/utilz` intercepted them on the SYMLINK dispatch site only, so:
 #
-# Exit status is show_version's own: it returns non-zero when a version cannot
-# be read, and the previous inline form exited 0 regardless, which turned an
-# unreadable version into a silent success (IN-AG-NO-SILENT-001).
-version_intercept() {
+#   --version  thirteen utilities hand-copied an arm to cover `utilz <util>`,
+#              and the two that could not -- todo, which never did, and prez,
+#              whose clap answers first -- were the two that broke.
+#   --help     nothing covered the other form at all, so 14 of 15 utilities
+#              answered `<util> --help` with the curated help/<name>.md and
+#              `utilz <util> --help` with their own terse inline usage.
+#
+# ONE function rather than two: a second, --help-shaped intercept beside the
+# --version one would rebuild the exact arrangement ST0015 removed -- two
+# homes agreeing by convention until they do not.
+#
+# Exit status is the renderer's own. The previous inline --version form exited
+# 0 whatever show_version returned, which turned an unreadable version into a
+# silent success (IN-AG-NO-SILENT-001); show_help likewise fails when a help
+# file is missing, and that must reach the caller.
+predispatch_intercept() {
   local util="$1"
   shift
-  if [[ "${1:-}" == "--version" ]]; then
-    show_version "$util"
-    exit $?
-  fi
+  case "${1:-}" in
+    --version)
+      show_version "$util"
+      exit $?
+      ;;
+    --help | -h)
+      show_help "$util"
+      exit $?
+      ;;
+  esac
 }
 
 # List all available utilities

@@ -231,7 +231,7 @@ EOF
         # <util> --version` fell through to the implementation, so thirteen
         # utilities carried their own arm and the two that could not were
         # broken. One home, called from both sites.
-        version_intercept "$UTIL_NAME" "$@"
+        predispatch_intercept "$UTIL_NAME" "$@"
         exec "$UTIL_IMPL" "$@"
       else
         # Not a valid utility or command
@@ -321,15 +321,10 @@ if [[ ! -x "$UTIL_IMPL" ]]; then
   exit 1
 fi
 
-# Handle --help before dispatching
-if [[ "${1:-}" == "--help" ]] || [[ "${1:-}" == "-h" ]]; then
-  show_help "$UTIL_NAME"
-  exit 0
-fi
-
-# Handle --version before dispatching -- the same one home as the `utilz
-# <util>` site above, so the two forms cannot drift apart again.
-version_intercept "$UTIL_NAME" "$@"
+# --version, --help and -h are all answered by the SAME one home as the
+# `utilz <util>` site above, so the two invocation forms cannot drift apart.
+# The inline --help block that stood here was the reason they had.
+predispatch_intercept "$UTIL_NAME" "$@"
 
 # Dispatch to utility implementation
 exec "$UTIL_IMPL" "$@"
