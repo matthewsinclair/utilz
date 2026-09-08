@@ -10,11 +10,27 @@ completed:
 
 ## Objective
 
-_(not yet written)_
+Split prez's single `--theme` flag -- which today resolves either a name or a path out of one ambiguous string, trying the working directory first -- into three flags whose modes cannot be confused: `--theme` for NAMES only (search path, then built-ins, never the cwd), `--theme-file` for PATHS only, and `--theme-path` for PREPENDING search directories onto `PREZ_THEME_PATH`. The front matter splits identically into `theme:` and `theme-file:`, or the ambiguity simply moves into the deck where it travels further. Done when `--theme=simple` builds the same artifact from every working directory on the machine.
 
 ## Context
 
-_(not yet written)_
+Carried out of ST0010 by hv's re-scope of 2026-09-07. ST0010 was "add prez to utilz" and prez is added, shipped, green and eyeballed; theme addressing was a redesign that arrived mid-thread from hv's 29 Aug CLI asks, so it wears its own badge rather than reopening a closed thread. AC01 is hv's wording carried VERBATIM -- a re-scope that reworded the requirement would be a quiet renegotiation of it.
+
+The defect is measured rather than asserted. Same deck, same pinned binary at 6e02020, `--theme=simple` from two working directories: from one holding a `./simple/` directory the local theme won, marker present at 18208 bytes; from one holding nothing the built-in won, no marker, 22666 bytes. Neither run printed a word, because `provenance()` announces only `Origin::SearchPath` and a cwd hit is stamped `Origin::Path`. The tool builds two different decks from one command and has no voice for it.
+
+This is a breaking change taken deliberately, at the cheapest moment it will ever have. Two invocations that exist today break, and both migrate by exactly one word: hv's `prez present <deck> --theme <path>`, in hv's shell history and in a 14-slide client deck's build instructions, and the geodica node's `--theme="$ESTATE/Clients/<domain>/_themes/<name>"`, which has rendered both E0024 client decks since 3 Sep. AC01 clause (f) and AC02 exist so that the refusal names the replacement flag: naming it turns a breakage into a migration.
+
+## Work Packages
+
+| WP    | Title                                                               | Size | Status      |
+| ----- | ------------------------------------------------------------------- | ---- | ----------- |
+| WP-01 | Design: the type split, precedence lattice and refusal catalogue    | S    | WIP         |
+| WP-02 | Red-first: theme-addressing.sh, all six ATs                         | S    | Not Started |
+| WP-03 | args.rs: --theme-file and --theme-path, mutual exclusion            | S    | Not Started |
+| WP-04 | theme.rs: name-only resolution, Spec type, search-path threading    | S    | Not Started |
+| WP-05 | frontmatter.rs + deck.rs: the theme-file: key and precedence wiring | S    | Not Started |
+| WP-06 | Migration: acceptance.sh path invocations, unit tests, docs         | S    | Not Started |
+| WP-07 | Green and evidence: full suites, both doctors, shellcheck           | S    | Not Started |
 
 ## Acceptance
 
