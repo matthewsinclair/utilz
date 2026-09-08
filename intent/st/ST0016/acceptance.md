@@ -41,6 +41,10 @@ title: --help has one home, and both invocation forms agree
 
 - AC07 NO RENDERER IN show_help CAN BLOCK ON STDIN. Measured 8 Sep: 'glow help/cleanz.md' with an inherited interactive stdin did not return -- killed at 120s once and at a 5s timeout twice -- while the same command with '< /dev/null' returned exit 0 and 17450 bytes. The pager is NOT the variable: it hangs identically without '-p', which is opt-in and was never passed. THE ROW STATES A PROPERTY, NOT A MECHANISM, AND THIS WORDING IS A CORRECTION: it first said 'redirects stdin on every renderer arm', which is over-specified. show_help has three arms and only two need the guard -- 'cat "$help_file"' is always given a file argument and provably cannot block (measured: cat FILE exits 0 immediately; bare cat blocks at exit 124). Requiring a redirect there would add a token that protects nothing and teach the next reader that cat needs one. So: glow and bat carry '</dev/null'; cat is exempt BY MEASUREMENT rather than by omission. WHAT THIS ROW CLAIMS AND DOES NOT: it asserts the guard is present where it is needed, by inspection. It does NOT claim the hang is fixed -- cc could not reproduce it under 'script -q /dev/null' (exit 1, 59 bytes of terminal-query escapes, a third behaviour) and an unreproduced failure cannot be observed to stop. The behavioural form needs a faithful pty harness and is a thread, not a row. -- satisfied: yes (computed)
 
+### Group AC08
+
+- AC08 Both --help forms hold FROM A PUBLISHED INSTALL, verified through the install's own links, and render the CURATED file. This row exists because the other seven cannot see an install: all eight ATs run under opt/utilz/test/test_helper.bash, which exports UTILZ_HOME from its own location and overrides the caller -- proved 8 Sep by running a sibling suite with UTILZ_HOME=/nonexistent/decoy, which PASSES. AND THE GAP IS NOT HYPOTHETICAL HERE, IT IS PHOTOGRAPHED: at 16:06Z the published install at 6ea9b2a carried predispatch_intercept 0, help_dispatch.bats 0, stdin redirect 0, and 14 of 15 utilities disagreeing on --help -- WHILE ALREADY ANSWERING THE NEW --version FROM ST0015. One tree, one commit, the new behaviour on one flag and the old on the adjacent one, with all seven of this thread's rows green throughout. That partially-current state is harder to notice than a wholly stale install and likelier to occur, because publishing lags per thread rather than in bulk. The covering test must address a real install as install_guards.bats does, and must assert the install it measured is the one it meant BEFORE asserting anything about what that tree said -- a check that silently retargets produces identical output either way. -- satisfied: yes (computed)
+
 ### Group AT01
 
 _(no criteria in this group)_
@@ -73,6 +77,10 @@ _(no criteria in this group)_
 
 _(no criteria in this group)_
 
+### Group AT09
+
+_(no criteria in this group)_
+
 ## Acceptance Tests
 
 ### Group AC01
@@ -100,6 +108,10 @@ _(no tests in this group)_
 _(no tests in this group)_
 
 ### Group AC07
+
+_(no tests in this group)_
+
+### Group AC08
 
 _(no tests in this group)_
 
@@ -134,6 +146,10 @@ _(no tests in this group)_
 ### Group AT08
 
 - AT08 `opt/utilz/test/help_dispatch.bats` -- covers AC07 -- status: green
+
+### Group AT09
+
+- AT09 `opt/utilz/test/install_guards.bats` -- covers AC08 -- status: green
 
 ---
 
