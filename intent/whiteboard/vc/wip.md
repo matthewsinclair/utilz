@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 06b406f0-9a29-4636-ad0d-abd6663e4f8f
-heartbeat_at: 2026-09-08 10:26Z
+heartbeat_at: 2026-09-08 10:35Z
 status: active
-focus: "ST0013 -- cc builds, I hold the contract. Six ATs now, not two: AT03-AT06 minted at 7aea747 covering the four clauses of AC01 that nothing reached. The block my board named -- wait for cc's design.md -- was not real, and checking it took one command. AT06 is deliberately NOT red-first and its row says so."
+focus: "ST0013 is WIP (hv), cc building, contract mine and now six ATs covering AC01 across two rows. cc found the gap I left -- a separator-carrying path that does NOT exist -- and caught me re-imposing a hold I had already lifted before the compact. src/ is LIFTED; nothing is held."
 claims: [ST0013 -- contract only; cc claims the build]
 ---
 
@@ -33,6 +33,8 @@ Released at EOD on hv's instruction, 7 Sep. Folds archived in `.history/20260829
 
 **AT06 IS DELIBERATELY NOT RED-FIRST AND ITS ROW SAYS SO IN CAPITALS.** `theme.rs:126-129` already has that order, so it is green on first run. **Its green is not evidence the split landed.** It is minted because the fix is a type change rewriting that cascade, and an ordering that is load-bearing by accident of line order is what a rewrite drops silently -- the one case no red-first test can reach.
 
+**cc's 10:31Z landed three and I ruled all three at `a857738`.** The gap is real: `--theme=nosuch/x.css` was covered by nothing, because **clause (e) makes a value a path BY ITS SEPARATOR and AT02's fixture has both shapes EXISTING**. It went on AT03 rather than AT02, against cc's suggested home, because AT03's leg 2 fixture is already a path-that-does-not-exist with a no-roster assertion -- legs 2 and 3 are one defect on two flags. **AT02 now covers AC01 as well as AC02**: its legs 2 and 3 prove clause (f) and always did, so a green was going to prove a clause and contribute nothing to it. And **leg 2 is asserted from `prez present`**, not because resolution differs per verb (measured: one `theme::load` at `deck.rs:174` in `compile()`, all three verbs reach it) but because clause (f) is justified ENTIRELY by hv's `prez present` invocation, so a `build`-only proof proves a different command from the one the criterion names.
+
 **My next act is reading cc's `design.md` against the six rows when it lands, and ruling anything cc says is wrong before it gets built.**
 
 ## Claims
@@ -40,6 +42,8 @@ Released at EOD on hv's instruction, 7 Sep. Folds archived in `.history/20260829
 - **ST0013** -- prez theme addressing. 0/1, cc building, contract mine.
 
 ## Holds
+
+- **NOTHING ON ST0013 IS HELD, AND MY OWN BOARD SAID OTHERWISE FOR AN HOUR.** The `src/` hold was LIFTED at 10:10Z when I relayed geodica's answer and minted AC02 out of it -- my own sent entry says `THE HOLD ON src/ IS LIFTED` in those words. I then re-announced it as standing at 10:25Z and again in a direct ping, both wrong.
 
 - **The `intent ingest` damage probe stays unrun until `intent-vc` says the issue `0133` tiebreak has landed.** Utilz's exposure is **UNMEASURED, which is not zero**. The bound that holds: nothing here went through legacy ingest, everything went through `intent at new` on the API gate. Corrected 7 Sep -- an earlier version of this claimed no `sync --to-store` had run and two had; both were no-ops that overwrote nothing, so the argument survives but the sentence was false as written.
 
@@ -54,6 +58,10 @@ Released at EOD on hv's instruction, 7 Sep. Folds archived in `.history/20260829
 - **`intent-vc`: six defects relayed and hv's one-digit ruling delivered.** `is_ac_id` relaxes rather than 182 rows migrating. **The flat 125 remain bad data and 101 of them are OURS** -- I offered to migrate Utilz's own once their mint-side check lands, and that offer is outstanding.
 
 ## Watch-outs
+
+- **A HOLD IS GOVERNED BY ITS CONDITION, NOT BY WHOEVER LAST MENTIONED IT -- and a stale re-announcement cannot re-impose a condition already met.** cc's rule, 8 Sep, applied against me and correct. I set the `src/` hold to lift when geodica answered, relayed that answer at 10:10Z, minted AC02 out of it, then **re-imposed the hold twice across a compact** because I reconstructed it from CC'S board, which still said held because they had not folded yet. My own sent entry was the primary source and said the opposite. **This is the AC02 error in a different costume: a secondary reading trusted over the artefact.** After any compact, the state of anything I announced is read from what I SENT, never from a peer's rendering of it. cc resolved the contradiction correctly and unblocked themselves; had they deferred to my later word they would have sat idle on a condition that was met an hour earlier.
+
+- **A FIXTURE WHOSE CASES ALL EXIST CANNOT TEST A RULE THAT TRIGGERS ON SHAPE.** cc's finding, 8 Sep. AT02 leg 2 exercised `--theme <path>` in "either shape" and both shapes EXISTED, while AC01 clause (e) makes a value a path by its SEPARATOR rather than by its existence -- so the likelier keystroke, a mistyped path, was covered by nothing and would have been handed the built-in roster. **The general form: when a criterion says a property decides, check that no fixture quietly supplies that property to every case.** The one I keep re-learning next to it -- a test that only fails against the CURRENT binary does not constrain the implementation about to replace it.
 
 - **A PEER'S STALE BOARD IS EVIDENCE ABOUT THE BOARD AND NOTHING ELSE.** 7 Sep: I read cc's heartbeat at `18:28Z` and their focus naming forks already ruled, and reported them dormant to hv, who reversed a work assignment on it. cc had design attached, five WPs minted, and an announcement sitting in MY inbox that I had not read. **Check the inbox before diagnosing the peer, and check the artefact before diagnosing either** -- `intent wp list` and `ls intent/st/<ID>/` would each have shown it in one command. The write-versus-delivery rule I already carry has a second half: verifying that my writes land says nothing about whether theirs have arrived.
 - **`sync --to-disk` does NOT re-derive an authored attachment, and `st attach` overwrites canon silently.** Two nodes attaching the same `design.md` leaves canon holding one and disk holding the other, with every command reporting ok. `intent doctor` catches it as `attachment-drift`; nothing else does. Its remedy is right and worth following exactly: copy BOTH sides outside the project first, because nothing can re-derive either.
