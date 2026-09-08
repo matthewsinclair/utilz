@@ -4,7 +4,7 @@ A DOING / TODO / DONE view, projected from steel-thread and work-package status:
 
 ## DOING
 
-- [-] ST0015: Version dispatch has one home, and reports both versions
+_(none)_
 
 ## TODO
 
@@ -92,6 +92,7 @@ _(none)_
   - [~] 11: The explicit relink verb for the PATH symlinks
   - [x] 12: utilz relink: the explicit PATH-symlink verb, and AC11's never-implicitly half
   - [x] 13: utilz use dev|opt: the two-word switch over relink, refusing while UTILZ_HOME is exported
+- [x] ST0015: Version dispatch has one home, and reports both versions
 
 ---
 

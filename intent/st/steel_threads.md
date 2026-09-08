@@ -4,7 +4,7 @@ An index of every steel thread in the project. A steel thread is a self-containe
 
 | ID     | Title                                                                          | Status    | Created    | Completed            |
 | ------ | ------------------------------------------------------------------------------ | --------- | ---------- | -------------------- |
-| ST0015 | Version dispatch has one home, and reports both versions                       | WIP       | 2026-09-08 |                      |
+| ST0015 | Version dispatch has one home, and reports both versions                       | Completed | 2026-09-08 | 2026-09-08           |
 | ST0014 | Make utilz insallable in to opt/ just like devbin                              | Completed | 2026-09-07 | 2026-09-08           |
 | ST0013 | prez theme addressing: split --theme, --theme-file and --theme-path            | Completed | 2026-09-07 | 2026-09-08           |
 | ST0012 | Estate file policy: what must be proved before a realised file is removed      | Completed | 2026-09-07 | 2026-09-08           |

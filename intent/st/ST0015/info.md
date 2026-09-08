@@ -1,9 +1,9 @@
 ---
 st_id: ST0015
 title: Version dispatch has one home, and reports both versions
-status: WIP
+status: Completed
 created: 2026-09-08
-completed:
+completed: 2026-09-08
 ---
 
 # ST0015: Version dispatch has one home, and reports both versions

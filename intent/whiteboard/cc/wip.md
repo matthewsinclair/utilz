@@ -3,29 +3,25 @@ node: cc
 name: Control Claude
 role: control
 session_id: 221775b1-d498-41c0-b937-4d10094711a8
-heartbeat_at: 2026-09-08 14:45Z
+heartbeat_at: 2026-09-08 15:23Z
 status: active
-focus: "ST0015 claimed and started -- one home for --version dispatch, and every utility reports BOTH versions on one greppable line (hv format ruling, 8 Sep). design.md landed. Awaiting vc contract before any source edit."
-claims: [ST0015]
+focus: "ST0015 closed, 10/10 ACs satisfied. 2.7.0 released -- tagged, pushed to both remotes, install republished from the release commit and verified by behaviour. Nothing claimed, nothing held."
+claims: []
 ---
 
 # Control Claude (cc)
 
 ## DOING
 
-**ST0015 -- version dispatch has one home, and reports both versions.** Claimed 8 Sep on hv's instruction after they hit `utilz prez --version` returning `prez 2.0.0` with no framework line.
+**Nothing. ST0015 closed, 2.7.0 released and verified from the install.**
 
-**The measured diagnosis, which is smaller and more specific than the alarm that opened it.** The version VALUE has one home, `show_version()` has one definition, the framework line has one implementation -- hv's ruling from this morning held. **What has fifteen homes is the ROUTING**: `bin/utilz` intercepts `--version` on the symlink path only, so thirteen utilities hand-copy an identical `--version) show_version "<name>"; exit 0` arm to cover the other path. **The two that never copied it are the two that are broken** -- `todo` has no arm and errors outright while its own help documents the flag; `prez` cannot have one because clap answers first.
+`--version` had fifteen homes; it has one. `utilz:2.7.0` alone, `utilz:2.7.0/<util>:<version>` paired, no `v` anywhere (hv, three times). Fourteen arms deleted across thirteen files -- **expz carried two**, which neither a per-file assumption nor a single-line grep found; only counting per file while removing them did.
 
-**And the 267-file number that triggered the escalation was my sweep, not the tree.** I globbed `*.md` across `.backup/`, which holds eight full historical snapshots. Real implementations: one. **The instrument raised the alarm, in the measurement taken to open a thread about measurement.**
+**The template was the leak that mattered.** `script.tmpl` carried the arm, so `utilz generate` would have re-seeded the duplication one utility at a time and the fix would have decayed from the next utility onward.
 
-Design D1-D5 in `intent st show ST0015`. No source edit until vc holds the contract.
+**Install, tag and release commit are the same bytes**: `6ea9b2a`, and the provenance line says so at the prompt. 566 ok / 0 not ok before the publish, denominator matched, 565 + 1 predicted.
 
-Theme addressing split three ways: `--theme` takes a NAME (search path, then built-ins, **never the cwd**), `--theme-file` takes a PATH in either shape, `--theme-path` PREPENDS onto `PREZ_THEME_PATH`. Front matter splits the same way. prez is **2.0.0** -- breaking change by semver -- and its version now has **one home**, `crate/Cargo.toml`, because cargo requires it there and a home you cannot delete is the one to keep.
-
-**hv published the install at `f3470b9` and I verified it by BEHAVIOUR, not by its version string**: the cwd no longer shadows, clause (f) fires from `present`, and `--theme-path` announces itself as the mechanism. A version that agrees is not the same claim as behaviour that agrees -- geodica spent a verification round on a binary reporting 1.0.0 that already had the new behaviour.
-
-Full record is in canon, not here: `intent st show ST0013`, `design.md` D1-D14.
+Full record: `intent st show ST0015`, design D1-D5, impl.md.
 
 ## TODO
 
