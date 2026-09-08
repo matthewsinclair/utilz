@@ -3,25 +3,34 @@ node: cc
 name: Control Claude
 role: control
 session_id: 221775b1-d498-41c0-b937-4d10094711a8
-heartbeat_at: 2026-09-08 09:33Z
+heartbeat_at: 2026-09-08 10:03Z
 status: active
-focus: "IDLE, NOTHING CLAIMED. ST0014 shipped and was closed by vc with all seventeen ATs green; utilz now installs to ~/Devel/opt/utilz and switches with 'utilz use dev|opt'. Every hv-gated item was routed to vc at 09:32Z, so this board holds no work. Folded hard for a compact -- status stays active because a compact is not a session ending."
-claims: []
+focus: "ST0013 claimed at 2026-09-08 10:03Z on vc's hand-off. prez theme addressing splits into --theme (name only), --theme-file (path only) and --theme-path (prepend). AT01's red-first claim is MEASURED, not assumed. src/ is HELD on geodica's answer, so today is design.md + the red-first test, neither of which touches it."
+claims: [ST0013]
 ---
 
 # Control Claude (cc)
 
 ## DOING
 
-**Nothing. ST0014 is closed and this board holds no work.**
+**ST0013 -- prez theme addressing.** vc handed it over at 09:56Z, hv's call. One AC carried verbatim from ST0010/AC15 (properly descoped to here, checked), one AT, contract stays vc's.
 
-ST0014 shipped over 7-8 Sep: seven work packages, 78 tests across six suites, `utilz install` / `upgrade` / `relink` / `use`, a manifest carrying version, commit and source-tree, and `utilz doctor` check 7 verifying an install against it. **vc closed it with all seventeen ATs green**; hv round-tripped `use opt` / `use dev` on the real estate.
+**The defect is measured, at 2026-09-08 10:03Z, against the pinned binary.** A deck built with `--theme=simple` from a directory holding `./simple/` picked up the local theme (marker present, 18208 bytes); the same command from elsewhere picked the built-in (no marker, 22666 bytes). **And it said NOTHING in either case** -- `provenance()` only announces `Origin::SearchPath`, and a cwd hit stamps `Origin::Path`, so the shadowing is completely silent. That is sharper than the AC's own wording and it is why AT01 is genuinely red-first.
 
-Full record is in the thread, not here: `intent st show ST0014`, `design.md` D1-D13.
+**The fix is a TYPE change, not a branch reorder.** `theme::load(flag, front, base)` takes one ambiguous string and asks `path.exists()` first. Splitting it into `Name` and `File` makes the cwd branch unreachable rather than merely unvisited -- reordering the branches would leave the same string able to mean either thing.
 
 ## TODO
 
-**Empty. Everything hv-gated was routed to vc at 09:32Z** -- the `hoist-rebase.sh` dead postcondition, the untracked prez `escape` warning, the em-dash sweep with its three must-not-touch files, the Emacs bridge ordering item, the unrecorded 7 Sep history rewrite, and the stale `intent/issues/` rendering. vc carries them to hv now.
+- **WP-01 design.md** -- the type split, the four-source precedence lattice, the refusal catalogue, prepend semantics, the front-matter split, migration. Not blocked.
+- **WP-02 AT01 red-first** -- write it in `crate/test/`, watch it fail for `path.exists()` winning, before any `src/` edit. **Blocked on the id collision below**, not on the hold.
+- **WP-03..05 `src/`** -- args.rs flags + mutual exclusion, theme.rs resolver + `--theme-path` threading, frontmatter.rs `theme-file:` + deck.rs wiring. **Held, see below.**
+- **WP-06 migration** -- `examples/demo.md`, `help/prez.md`, README, the `opt/prez/prez` shim if it names themes.
+- **WP-07 green + evidence** -- acceptance.sh --strict, cargo test, utilz test, shellcheck, both doctors.
+
+## Holds
+
+- **All of `opt/prez/crate/src/` is held until vc relays geodica's answer or 2026-09-09 passes with none.** vc's condition, set at 09:56Z: geodica forwards a user-supplied `--theme`, so a Geodica user passing a PATH starts getting the refusal, and if that shape is in use the criterion may gain a clause. **Design and the red-first test are outside `src/` and proceed today.**
+- **WP-02 is held on a contract answer, separately: ST0013/AT01 and ST0010/AT01 are two different tests with one id in one file.** Released when vc rules on the file or the id. Sent 10:03Z.
 
 ## Watch-outs
 
