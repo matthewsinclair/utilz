@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 06b406f0-9a29-4636-ad0d-abd6663e4f8f
-heartbeat_at: 2026-09-08 11:21Z
+heartbeat_at: 2026-09-08 11:37Z
 status: active
-focus: "ST0013 contract 3/3 PASS and hv has ruled AC03 STAYS. Only WP-07 (evidence) is open, cc running the full suite. Nothing is blocked on me."
+focus: "ST0013 is 3/4 BLOCKED on AC04, which I minted after measuring the provenance defect. cc has AT09 green but UNCOMMITTED. I wrote a cost into AC04 as settled fact without running it and cc measured it false -- corrected in place, not deleted."
 claims: [ST0013 -- contract only; cc claims the build]
 ---
 
@@ -54,6 +54,10 @@ Released at EOD on hv's instruction, 7 Sep. Folds archived in `.history/20260829
 - **`intent-vc`: six defects relayed and hv's one-digit ruling delivered.** `is_ac_id` relaxes rather than 182 rows migrating. **The flat 125 remain bad data and 101 of them are OURS** -- I offered to migrate Utilz's own once their mint-side check lands, and that offer is outstanding.
 
 ## Watch-outs
+
+- **A COST ASSERTED AS "ACCEPTED" IS STILL AN UNMEASURED CLAIM, AND WRITING "ACCEPTED" NEXT TO IT DOES NOT MEASURE IT.** 8 Sep, mine, in AC04. I wrote that `acceptance.sh`'s AT13 asserts the provenance wording, so ST0010's frozen suite would be edited a SECOND time -- as settled fact, in a criterion, without running it. **cc measured instead of editing on my prediction: `acceptance.sh` is byte-unchanged and AT13 PASSES.** Every AT13 leg is the ENV case, where the old wording stays exactly true. **The clause is corrected ON THE ROW rather than deleted, because as written it would have LICENSED AN EDIT TO A CLOSED THREAD'S EVIDENCE THAT NOTHING REQUIRED** -- hours after I took that exact hazard to hv as a pattern. **Second time today a prediction of mine about an artefact was wrong where reading the artefact would have settled it** (the `src/` hold was the first). Same shape both times: reasoning from what I expected a file to say.
+
+- **A CONTROL THAT GOES RED DURING THE RED-FIRST REVERT WAS NEVER A CONTROL.** cc's result on AT09, 8 Sep, and it is the cleanest statement of what leg 4 is for. Reverting `provenance()` to its single-string form produced 6 failures and **the control legs stayed green through both directions** -- they describe behaviour that was already correct, so they catch a fix that OVER-corrects rather than one that under-corrects.
 
 - **A HOLD IS GOVERNED BY ITS CONDITION, NOT BY WHOEVER LAST MENTIONED IT -- and a stale re-announcement cannot re-impose a condition already met.** cc's rule, 8 Sep, applied against me and correct. I set the `src/` hold to lift when geodica answered, relayed that answer at 10:10Z, minted AC02 out of it, then **re-imposed the hold twice across a compact** because I reconstructed it from CC'S board, which still said held because they had not folded yet. My own sent entry was the primary source and said the opposite. **This is the AC02 error in a different costume: a secondary reading trusted over the artefact.** After any compact, the state of anything I announced is read from what I SENT, never from a peer's rendering of it. cc resolved the contradiction correctly and unblocked themselves; had they deferred to my later word they would have sat idle on a condition that was met an hour earlier.
 
