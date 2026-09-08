@@ -1,7 +1,7 @@
 ---
 st_id: ST0013
 title: prez theme addressing: split --theme, --theme-file and --theme-path
-status: Triage
+status: WIP
 created: 2026-09-07
 completed:
 ---

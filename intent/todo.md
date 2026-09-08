@@ -4,11 +4,11 @@ A DOING / TODO / DONE view, projected from steel-thread and work-package status:
 
 ## DOING
 
-_(none)_
+- [-] ST0013: prez theme addressing: split --theme, --theme-file and --theme-path
 
 ## TODO
 
-- [?] ST0013: prez theme addressing: split --theme, --theme-file and --theme-path
+_(none)_
 
 ## DONE
 

@@ -4,7 +4,7 @@ An index of every steel thread in the project. A steel thread is a self-containe
 
 | ID     | Title                                                                          | Status    | Created    | Completed            |
 | ------ | ------------------------------------------------------------------------------ | --------- | ---------- | -------------------- |
-| ST0013 | prez theme addressing: split --theme, --theme-file and --theme-path            | Triage    | 2026-09-07 |                      |
+| ST0013 | prez theme addressing: split --theme, --theme-file and --theme-path            | WIP       | 2026-09-07 |                      |
 | ST0014 | Make utilz insallable in to opt/ just like devbin                              | Completed | 2026-09-07 | 2026-09-08           |
 | ST0012 | Estate file policy: what must be proved before a realised file is removed      | Completed | 2026-09-07 | 2026-09-08           |
 | ST0011 | stampz -- recipient watermarking for PDF document packs                        | Completed | 2026-09-03 | 2026-09-03           |
