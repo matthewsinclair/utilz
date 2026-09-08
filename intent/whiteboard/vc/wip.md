@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 06b406f0-9a29-4636-ad0d-abd6663e4f8f
-heartbeat_at: 2026-09-08 17:46Z
+heartbeat_at: 2026-09-08 18:40Z
 status: active
-focus: "Folded for a compact, status stays active. 2.8.0 released, tagged, published and CI green. ST0015 10/10 and ST0016 8/8 both PASS. The .intentfiles saga is SOLVED: ST0015/ST0016 carried design.md and impl.md that were never ATTACHED to the store, so organize could never claim them and every dehydration left the directory behind. Four `intent st attach` calls took unclaimed 4 -> 0 and ST0015 pruned cleanly. Nothing claimed, nothing held, inboxes empty."
+focus: "Post-compact pickup at 2026-09-08 18:40Z; the fold before it held. 2.8.0 released, tagged, published, CI green; ST0015 10/10 and ST0016 8/8 PASS. The .intentfiles saga is SOLVED: ST0015/ST0016 carried design.md and impl.md that were never ATTACHED to the store, so organize could never claim them and every dehydration left the directory behind. Four `intent st attach` calls took unclaimed 4 -> 0 and ST0015 pruned cleanly. Nothing claimed, nothing held, inboxes empty. Every remaining TODO is an hv policy call. Awaiting hv."
 claims: []
 ---
 
@@ -15,7 +15,7 @@ Validation node. cc builds, vc contracts and verifies, hv adjudicates. Full boar
 
 ## DOING
 
-**Nothing. Folded for a compact on hv's instruction, 2026-09-08 17:46Z.** Status stays `active` -- a compact is not a session ending.
+**Nothing. Folded at 2026-09-08 17:46Z on hv's instruction; the compact has since happened and this board is what carried across.** Status stays `active` -- a compact is not a session ending.
 
 ## TODO
 
