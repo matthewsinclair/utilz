@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: 221775b1-d498-41c0-b937-4d10094711a8
-heartbeat_at: 2026-09-07 22:10Z
+heartbeat_at: 2026-09-08 07:15Z
 status: active
-focus: "ST0014 BUILD COMPLETE AND HANDED OVER. vc HOLDS THE PEN, confirmed by hv at 2026-09-07 22:08Z -- I take instruction from them and start nothing on this thread without it. All six WPs Done across seven commits, 78 tests, 174 of 174 core, doctor 0 findings, and all sixteen ATs still to-write because setting them is vc's. Two items open with vc: the AC09-versus-AC11 reading, and whether a cp -a copy is an acceptable form for AC01's removed source. Nothing written to hv's estate."
+focus: "ST0014 COMPLETE -- ALL SEVEN WPs DONE. vc holds the pen and I have followed both of their 8 Sep instructions in their order: the AC15 deletion (hv reversed honour-and-announce; the dispatcher now ignores an inherited UTILZ_HOME) then WP-13, utilz use dev|opt over relink with the manifest carrying source-tree. Both their 06:41Z findings actioned: AT07/AT08 labels, and install_manifest_check surfaced as doctor check 7 of 7. 183 core + 23 prez tests, 0 failures, doctor 0 findings. THE ESTATE IS A VERSION BEHIND: ~/Devel/opt/utilz is vc's 06:30Z publish with no use verb; one utilz upgrade from the source fixes it and that is hv's to run."
 claims: [ST0014]
 ---
 
@@ -13,42 +13,37 @@ claims: [ST0014]
 
 ## DOING
 
-**vc HOLDS THE PEN (hv, 2026-09-07 22:08Z). I take instruction from them on ST0014 and start nothing on it without one.**
+**ST0014 IS COMPLETE. ALL SEVEN WORK PACKAGES DONE. vc HOLDS THE PEN and both of their 8 Sep instructions are followed, in their order.**
 
-**THE BUILD IS COMPLETE AND HANDED OVER at 22:05Z.** All six work packages Done. **No AT is marked green: all sixteen are still `to-write` and that is vc's, because a row the builder marks green is the builder's claim rather than a measurement.**
+| WP  | Commit    | Ships                                                                   |
+| --- | --------- | ----------------------------------------------------------------------- |
+| 01  | `aa6ed56` | the pure half: owned set, prefix reader, manifest write and check       |
+| 02  | `5a15b81` | `utilz install`: five refusals, the announcement before them, the copy  |
+| 04  | `cc155d4` | AC12 provenance, AC13 test refusal, AC09 prez shim                      |
+| 03  | `c0b34c8` | `utilz upgrade`: reported, left alone, install-time row preserved       |
+| 05  | `fec87d1` | AC01 end to end with the source removed                                 |
+| 12  | `c01dcae` | `utilz relink`, and AC11's never-implicitly half                        |
+| 13  | `c6088f8` | the AC15 DELETION, then `utilz use dev\|opt` over relink                |
+|     | `f598a36` | `install.prefix: ~/Devel/opt/utilz`, its own commit so it reverts alone |
 
-| WP  | Commit    | Ships                                                                                   |
-| --- | --------- | --------------------------------------------------------------------------------------- |
-| 01  | `aa6ed56` | the pure half: owned set, prefix reader, manifest write and check                       |
-| 02  | `5a15b81` | `utilz install`: five refusals, the announcement before the refusals, the copy          |
-| 04  | `cc155d4` | AC15 in `bin/utilz`, AC12 in `show_version`, AC13 in `run_tests`, AC09 in the prez shim |
-| 03  | `c0b34c8` | `utilz upgrade`: reported, left alone, install-time row preserved                       |
-| 05  | `fec87d1` | AC01 end to end with the source removed                                                 |
-| 12  | `c01dcae` | `utilz relink`, and AC11's never-implicitly half                                        |
-|     | `f598a36` | `install.prefix: ~/Devel/opt/utilz`, deliberately its own commit so it reverts alone    |
+**183 core tests, 23 prez tests, 0 failures. shellcheck, critic and doctor all clean. All fifteen utilities dispatch. NO AT set by me -- AT07 and AT08 are green, set by vc against the artefact.**
 
-**78 tests across six files; 174 of 174 core tests; shellcheck, `intent critic shell` and `intent doctor` all clean.**
+**AC15 WAS REVERSED BY hv AND THE REVERSAL DELETED WORK RATHER THAN ADDING IT.** The dispatcher always derives from `$0` and ignores an inherited `UTILZ_HOME`. vc's diagnosis of their own error is the part worth keeping: their five-load-bearing-sites measurement was about the LIBRARY and was applied to the DISPATCHER, and the only divergent dispatcher invocations in the tree were the two tests of the announcement itself. Both deleted with the branch.
 
-**TWO THINGS ARE OPEN AND NEITHER IS MINE TO CLOSE.**
+**TWO THINGS THE LIVE RUN FOUND THAT MY TESTS HAD NOT, both mine.**
 
-- **AC09 versus AC11, flagged to vc at 21:36Z and still unanswered.** `cargo build --release` writes into the source tree's gitignored `opt/prez/crate/target/`, which is outside the prefix, and AC11 says the publish writes nothing outside it. I built on the reading that AC11 protects the operator's environment and their files, not the crate's own build output, because the other reading makes AC09 and AC11 unsatisfiable together. It is stated in `design.md` D7. If vc reads it the other way the remedy is `install_build_prez` building into a temp `CARGO_TARGET_DIR`: one function.
-  **THE ROLLOUT HAS A MANDATORY ORDER AND IT IS NOT THE OBVIOUS ONE. MEASURED 2026-09-07 22:10Z, NOT REASONED.**
+- **Bare `utilz use` reported `(no install, so unknown)` against an install that exists** -- vc's 06:30Z publish, made before `source-tree` existed. Two facts with two remedies printing as one line. Three answers now, and a test after the fact because a test would have caught it.
+- **AT01's grep began failing, correctly**, because the manifest now records the source path. The exemption is narrow, justified in the test, and asserts the row is really present so it cannot come to cover nothing.
 
-`~/.zshrc:76-78` exports `UTILZ_HOME` at the checkout unconditionally. Against a real relinked install carrying a marker VERSION:
+**AND ONE SHARED-FIXTURE DEFECT OF MINE.** The AT15 legs wrote a marker VERSION into the file-scoped install, so doctor's new integrity check **failed in a full run and passed in isolation**. The fixture is read-only now and the invariant is stated in the file rather than left as etiquette.
 
-| Invocation                                            | What answers                          |
-| ----------------------------------------------------- | ------------------------------------- |
-| `UTILZ_HOME=<checkout> ~/.local/bin/utilz version`    | 4 lines stderr, then **the CHECKOUT** |
-| `UTILZ_HOME=<checkout> ~/.local/bin/cleanz --version` | 4 lines stderr, then **the CHECKOUT** |
-| `env -u UTILZ_HOME ~/.local/bin/utilz version`        | the marker, `installed at <prefix>`   |
+**THE ESTATE IS A VERSION BEHIND AND THAT IS hv's TO FIX.** `~/Devel/opt/utilz` is vc's 06:30Z publish: no `use` verb, no `relink` fix, no `source-tree` row, old dispatcher. `~/.local/bin` serves it, so `utilz use` from a normal shell answers `Unknown command: use` -- measured, not assumed. One command from the source tree fixes all of it, and I have not run it:
 
-**The relink is a NO-OP IN EFFECT while the export stands** -- the announcement fires and the dispatcher then honours the inherited value, so sixteen links get repointed and every one of them goes on answering from the checkout. vc had this as a noise problem on their board; the measurement makes it blocking.
+```
+~/Devel/prj/Utilz/bin/utilz upgrade
+```
 
-**ORDER: remove `~/.zshrc:76-78`, THEN `utilz install`, THEN `utilz relink`.** hv and vc both told at 2026-09-07 22:10Z.
-
-**NO CODE CHANGE IS PROPOSED AND THAT IS DELIBERATE.** The obvious reaction is to quieten the announcement, and it is wrong: this is AC15 catching the exact case it was written for, on the run where it matters. Suppressing it would restore the silence the ruling removed, in the situation that motivated the ruling.
-
-- **NOTHING HAS BEEN WRITTEN TO hv's ESTATE AND NOTHING WILL BE WITHOUT THEM SAYING SO.** `install.prefix` is set, so `utilz install` with no arguments now targets `~/Devel/opt/utilz`; that directory does not exist. Creating it is a write outside this repo, and `utilz relink` afterwards would repoint sixteen links in `~/.local/bin`. Both are hv's to trigger, in that order.
+**Still open with vc, unanswered since 21:36Z yesterday: the AC09-versus-AC11 reading** (`cargo build` writes into the source tree's gitignored `target/`, outside the prefix). Stated in `design.md` D7. One function if they read it the other way.
 
 ## TODO
 

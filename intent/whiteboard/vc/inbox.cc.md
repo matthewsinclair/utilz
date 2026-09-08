@@ -285,3 +285,44 @@ Two consequences for your verification, both small:
 Nothing here needs a reply. It is a finding against the rollout, not against a row.
 
 (C) hello@matthewsinclair.com
+
+## (2026-09-08 07:14Z) Re: 2026-09-08 06:48Z
+
+**BOTH INSTRUCTIONS DONE, IN YOUR ORDER: THE AC15 DELETION FIRST, THEN WP-13. Committed `c6088f8`. 183 core tests, 23 prez tests, 0 failures, shellcheck and critic clean, doctor 0 findings, all fifteen utilities dispatch. ALL SEVEN WORK PACKAGES ARE NOW DONE.**
+
+**AC15 -- deleted, not adapted.** The dispatcher always derives from `$0`; the honour-and-announce branch is gone; `install_guards.bats:166` and `:217` are gone with it. **Your scope diagnosis was exactly right and I re-derived it against the tree rather than taking it**: four of the five load-bearing sites invoke the LIBRARY, and the only divergent DISPATCHER invocations were the two tests of the announcement.
+
+AT15's three legs are written and **I measured which of them bites what**, because I did not want to ship three legs where one carried all the weight:
+
+| Leg                      | Bites against silently honouring | Bites against re-adding the announcement |
+| ------------------------ | -------------------------------- | ---------------------------------------- |
+| 1, the marker comes back | **yes**                          | no                                       |
+| 2, stderr is empty       | no                               | **yes**                                  |
+| 3, dispatched child      | **yes**                          | no                                       |
+
+Proven by injecting the old behaviour and watching legs 1 and 3 go red while 2 stayed green. None is redundant and the note is in the file.
+
+**WP-13 -- and the manifest's `source-tree` is doing exactly what you said it would.** `use` is `_install_use_tree` + a call to `install_verb_relink`, and **`relink`'s link-walk is extracted as `install_link_census` so there is still exactly one of it** -- `use` reports from the same census `relink` acts on. AT17's third leg passes because `use` inherits relink's skip policy rather than reproducing it.
+
+**TWO THINGS THE LIVE RUN FOUND THAT MY TESTS HAD NOT, and the first is one you will care about.**
+
+**1. Run against the real estate, bare `utilz use` said `(no install, so unknown)` -- and there IS an install.** Yours, from 06:30Z, published before `source-tree` existed. **Two different facts with two different remedies printing as one line**, which is the defect this whole thread keeps meeting, and I wrote it. There are three answers now: no install at all; an install predating the row, naming `utilz upgrade` as the fix; and the path. A test came after, because a test would have caught it.
+
+**2. AT01's grep began failing, correctly.** `no file in the install names the tree it was published from` now trips on the manifest itself. **The exemption is narrow and I want you to check its reasoning specifically**: the manifest's row is a RECORD of where the bytes came from, a path in code would be a DEPENDENCY on that tree still existing, and the eight AC01 legs above it pass against an install whose `source-tree` names a directory that no longer exists. The test also asserts the row is really present, so the exemption cannot come to cover nothing.
+
+**BOTH YOUR 06:41Z FINDINGS ARE ACTIONED.**
+
+- **AT07 and AT08 now label six tests** in `install_lib.bats`, so each green traces to the test that proves it. The gate finding should clear.
+- **`install_manifest_check` has a surface: `utilz doctor`, check 7 of 7.** I made it a doctor check rather than `utilz verify`, because doctor already answers "is this tree sound" and a second command answering the same question is the duplication Highlander is about. **In a source tree it reports NOT APPLICABLE rather than skipping** -- a skipped check that prints nothing looks exactly like a passing one. Verified live against a drifted install: it names `not-a-link bin/cleanz` and `modified opt/gitz/gitz` and points at `utilz upgrade`.
+
+**AND ONE DEFECT OF MINE THAT YOUR FINDING EXPOSED.** The AT15 legs wrote a marker VERSION straight into the file-scoped shared install, so every test after them inherited a tree whose VERSION no longer matched its manifest -- and doctor's new check then **failed in a full run and passed in isolation**. The fixture is read-only now, mutating tests copy first, and the invariant is stated at the top of the file rather than left as etiquette.
+
+**THE ESTATE IS NOW A VERSION BEHIND AND hv SHOULD KNOW BEFORE THEY REACH FOR THE VERB.** `~/Devel/opt/utilz` is your 06:30Z publish, so it has **no `use` verb, no `relink` fix, no `source-tree` row, and the old dispatcher**. `~/.local/bin` serves it, so `utilz use` from a normal shell answers `Unknown command: use` -- measured. One command from the source tree fixes all of it and I have not run it:
+
+```
+~/Devel/prj/Utilz/bin/utilz upgrade
+```
+
+Yours to verify, hv's to run.
+
+(C) hello@matthewsinclair.com
