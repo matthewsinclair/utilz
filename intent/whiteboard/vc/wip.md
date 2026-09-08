@@ -3,10 +3,10 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 06b406f0-9a29-4636-ad0d-abd6663e4f8f
-heartbeat_at: 2026-09-08 11:37Z
+heartbeat_at: 2026-09-08 12:03Z
 status: active
-focus: "ST0013 is 3/4 BLOCKED on AC04, which I minted after measuring the provenance defect. cc has AT09 green but UNCOMMITTED. I wrote a cost into AC04 as settled fact without running it and cc measured it false -- corrected in place, not deleted."
-claims: [ST0013 -- contract only; cc claims the build]
+focus: "Holding on hv. ST0013 closed, dehydrated and PUBLISHED; the install answers prez v2.0.0 on all three channels. Nothing claimed, nothing in flight, inboxes empty."
+claims: []
 ---
 
 # Validation Claude (vc)
@@ -19,39 +19,34 @@ Released at EOD on hv's instruction, 7 Sep. Folds archived in `.history/20260829
 
 ## DOING
 
-**ST0013 CONTRACT IS 3/3 SATISFIED -- PASS, at `0daef97`, VERIFIED BY RUNNING IT.** `theme-addressing.sh --strict` exit 0, 6/0/0. `acceptance.sh --strict` exit 0, 14/0/0/0. `utilz test prez` exit 0, FOUR suites, both black-box suites named separately. `utilz test utilz` exit 0, AT07 legs 1/2/3 **plus the leg-1 control** -- one suite really does report "1 suite(s)", so the count is not a constant.
+**Nothing. Holding on hv's instruction, 2026-09-08 12:02Z.** Folded after ST0013 closed, dehydrated and published. Status stays `active` -- a fold is not a session end.
 
-**Every row cites the browser state, because a green from `acceptance.sh` means different things without it:** `PREZ_TEST_BROWSER` **UNSET**, 18 browser-evidence matches, zero skips. A real browser was driven; nothing degraded.
+## TODO
 
-**AN ASSERTION PHRASED AS "NAMES X" LICENSES A SUBSTRING CHECK, AND A SUBSTRING CHECK CANNOT SEE A MALFORMED STRING THAT CONTAINS X.** cc's late catch, and the defect it exposed is MINE. A shared `{remedy}={value}` template printed `remedy: for a path, use 'theme-file:'=./x.css` for the deck key -- not front matter, not anything -- and every assertion stayed green because they all grep `theme-file:` as a substring. **AT05's note is mine and says "the refusal names `theme-file:`", which a substring check satisfies exactly.** The test was not weaker than the criterion; the criterion was weak. **Where the SHAPE of a message is the requirement, the row must say the shape.** Found the same way cc did: ran the five refusal cases and READ them. All five well-formed now.
-
-**ST0010/AT05 + AT08 CONFIRMED GREEN BY ME, INDEPENDENTLY OF cc's RUN.** That canon is **accidentally** still true, and accidentally is the word going to hv -- nothing checked it, and nothing would have said so had it gone the other way.
-
-**hv RULED 11:21Z: AC03 STAYS IN ST0013.** The widening is accepted, so the boundary is settled and nothing is blocked on hv. **7 of 8 WPs Done; only WP-07 (green + evidence) is WIP**, cc running the full estate suite then both doctors.
+- **Push.** 37 commits unpushed on both `local` and `upstream` at fold time. hv's.
+- **Issue 0011** -- `install_guards.bats:267` reads a live `git rev-parse HEAD` against a fixture-time install, so a concurrent commit reddens it for the wrong reason. Open, one-line fix, unclaimed.
+- **The closed-thread evidence gap**, in cc's framing which beat mine: **the mechanism that would catch a closed thread's evidence going stale is the same one that catches a green AT citing a file that no longer contains the test. There is a gate for the live case and none for the closed one.** Three instances now -- `hoist-rebase.sh:205`, ST0010/AT05+AT08, and issue 0011. **cc's cheap version is one grep at dehydration time**, which they ran by hand when dehydrating ST0013; nothing runs it automatically. Intent's, via `intent-vc`.
+- **101 flat AC/AT ids** -- still blocked on a missing rename verb at CLI and facade level. Offer to migrate ours stands with `intent-vc`.
+- **`version_file` exists twice in the estate, and devbin got there first.** `bin/.devbin/lib/config.reference.yaml:72-75` documents "names the FILE, never how to parse it -- devbin knows how to read a version out of VERSION, mix.exs, Cargo.toml, package.json and a plist". Utilz reinvented that this afternoon in `get_util_metadata`. Not a Highlander violation (different tools, different repos) and **not raised with hv yet** -- worth a look before a third tool grows a third copy.
 
 ## Claims
 
-- **ST0013** -- prez theme addressing. 0/1, cc building, contract mine.
+- **None.**
 
 ## Holds
 
-- **NOTHING ON ST0013 IS HELD, AND MY OWN BOARD SAID OTHERWISE FOR AN HOUR.** The `src/` hold was LIFTED at 10:10Z when I relayed geodica's answer and minted AC02 out of it -- my own sent entry says `THE HOLD ON src/ IS LIFTED` in those words. I then re-announced it as standing at 10:25Z and again in a direct ping, both wrong.
-
-- **The `intent ingest` damage probe stays unrun until `intent-vc` says the issue `0133` tiebreak has landed.** Utilz's exposure is **UNMEASURED, which is not zero**. The bound that holds: nothing here went through legacy ingest, everything went through `intent at new` on the API gate. Corrected 7 Sep -- an earlier version of this claimed no `sync --to-store` had run and two had; both were no-ops that overwrote nothing, so the argument survives but the sentence was false as written.
+- **The `intent ingest` damage probe stays unrun until `intent-vc` says the issue `0133` tiebreak has landed.** Utilz's exposure is **UNMEASURED, which is not zero**. The bound that holds: nothing here went through legacy ingest, everything went through `intent at new` on the API gate.
 
 ## Open with hv
 
 - **AC16 on ST0010 -- hv's eye, and the only item nobody else can take.** A human renders every built-in prez theme and looks; the suite is not allowed to stand in for it.
-- **ONE MISSING CAPABILITY WITH TWO FACES, IN cc's FRAMING WHICH BEAT MINE: the mechanism that would catch a closed thread's evidence going stale is the SAME one that catches a green AT citing a file that no longer contains the test.** There is a gate for the live case and none for the closed one. **That is a better argument than my "two loosely related instances"**, and it names the fix rather than the symptoms.
-
-- **THE CLOSED-DEHYDRATED RE-ATTACH GAP NOW HAS TWO INSTANCES AND SHOULD BE PUT AS A PATTERN.** `hoist-rebase.sh:205` was the first. The second is ST0010/AT05 + AT08, recorded `green` in dehydrated canon against `acceptance.sh` blocks that ST0013 edited on 8 Sep. **Neither can be fixed by editing a file, because a dehydrated thread has none** -- so this is a missing capability rather than a chore, and one-off workarounds will keep being invented until it is named as one.
-
 - **`hoist-rebase.sh:205` and the `class 'escape'` warning**, both routed to me by cc 8 Sep and both genuinely hv's: the first needs a re-attach into a CLOSED, dehydrated thread's canon, and the second needs an issue or a deliberate acceptance rather than a record left inside a cancellation.
 
 ## Live with other nodes
 
-- **`geodica`: two asks sent 8 Sep, both awaiting reply.** hv's standing requirement that `geodica doctor` report whether `utilz prez` is available -- theirs by the zero-knowledge ruling, since a check naming their estate cannot live in our tree -- and the ST0013 `--theme` pass-through question above.
-- **`intent-vc`: six defects relayed and hv's one-digit ruling delivered.** `is_ac_id` relaxes rather than 182 rows migrating. **The flat 125 remain bad data and 101 of them are OURS** -- I offered to migrate Utilz's own once their mint-side check lands, and that offer is outstanding.
+- **`cc`: idle, nothing claimed, inbox empty and archived.** ST0013 ran end to end today with the split holding: cc built, I held the contract and verified by running rather than reading.
+- **`geodica`: migrated and verified.** Byte-identical sha1 on a real client deck. Their one bug was their own shim injecting `--theme=geodica` underneath a user's `--theme-file`; the new mutual-exclusion refusal caught it.
+- **`intent-vc`: six defects relayed, one-digit ruling delivered and landed.** The flat-125 offer is outstanding.
 
 ## Watch-outs
 
@@ -70,7 +65,7 @@ Released at EOD on hv's instruction, 7 Sep. Folds archived in `.history/20260829
 
 - **THE BROWSER GATE IS AN ENV VAR AND THE SILENT PATH IS THE ONE THAT LAUNCHES CHROME.** `chrome()` says why it refuses and says nothing when it resolves, so `utilz test prez` gives 12/0/0 or 9-passed-11-skipped on the same tree depending only on whether `PREZ_TEST_BROWSER` survived into that shell -- and the output names neither. cc found it at EOD by getting a different answer to the morning's identical command. **Every acceptance figure I quote from here on cites the shell and whether the override landed**, the same way contrast figures cite selector + palette + commit. Reported by cc; the asymmetry is mine: the loud half is the harmless half.
 
-- **`intent ac gate` AND `intent ac status` CANNOT READ A v3-RENDERED CONTRACT -- ON A SHELL-DISPATCHED `intent`. THIS MACHINE IS NO LONGER ONE.** Re-measured 7 Sep: `intent` resolves to `Intent/native/rust/target/release/intent`, and both verbs are correct here (`16/20, unsatisfied AC15 AC16 AC18 AC19`). The rest of this entry describes the bash path, which a fresh checkout with no native build still takes, and which `Intent/bin/intent_acceptance:295` still implements. `bin/intent_acceptance`'s `ac_lines()` greps `^- AC-<st>.<nn> ` (the v2 dotted form); the v3 renderer emits `^- AC<nn> `. Zero matches, so `ac gate ST0010` reports "acceptance.md has zero acceptance criteria (empty contract) -- BLOCKED" and `ac status` reports `0/0`, against a view carrying all 20 rows. No native binary is built on this machine, so `bin/intent` dispatches `ac` to that bash path unconditionally -- there is no second reader to disagree with it. **It fails SAFE (blocks, never a vacuous pass) but the remedy it prints is `acceptance: exempt`**, which would convert a false red into a permanent real silent pass on a thread that has a full contract. Do not take that remedy. **Read satisfaction off the view instead**: `grep -oE '^- AC[0-9]+ .*-- satisfied: [a-z]+' intent/st/ST0010/acceptance.md` -- 16 yes, 4 no (AC15, AC16, AC18, AC19) at `72ee931`. Intent's tree, not ours: `intent-vc`'s to file, via hv.
+- **`intent ac gate` / `ac status` CANNOT READ A v3 CONTRACT ON A SHELL-DISPATCHED `intent`, AND THE REMEDY IT PRINTS IS A TRAP.** `bin/intent_acceptance:295` greps the v2 dotted form (`^- AC-<st>.<nn> `); the v3 renderer emits `^- AC<nn> `. Zero matches, so a full contract reports `0/0 -- BLOCKED`. It fails SAFE, but **its printed remedy is `acceptance: exempt`, which converts a false red into a permanent real silent pass** -- do not take it. **This machine resolves `intent` to the native binary and is CORRECT**; a fresh checkout with no native build still takes the bash path. Read satisfaction off the view instead. Intent's tree, not ours.
 
 - **AN EXTERNAL SUITE ASSERTS ON OUR BUILT-IN THEMES, AND WE CANNOT SEE IT FIRE.** Gtools' AC12 renders a deck under every built-in prez declares and asserts the artifact carries no hex from their brand palette -- nine values we must not hold, because hv's zero-knowledge rule makes that check structurally impossible on our side. The coupling is forced, not chosen. **If a future Utilz built-in happens to use one of those nine hexes, THEIR suite goes red and we will have done nothing wrong.** Ruled 2026-08-29, keep it: from an artifact a coincidence is indistinguishable from a brand compiled in, and the remedy is a conversation rather than a code change. What they carry in exchange is the red's WORDING -- it must name the coincidence case, or it sends a reader to "fix" a legitimate upstream theme -- plus the cheaper refusal check beside it. Currently clean: seven built-ins, zero hexes each, measured by them. Disclosed by `_tools-cc` rather than discovered.
 
@@ -96,11 +91,9 @@ Released at EOD on hv's instruction, 7 Sep. Folds archived in `.history/20260829
 
 - (2026-08-29) **A tag may be moved off a red release commit onto the green commit that fixes only the harness.** `v2.5.0` was cut at `4b6eb07`, whose CI was red; the three fixes after it touch `acceptance.sh`, the workflow and the contract, and change nothing a user can run. Moved to `72ee931` and force-pushed both remotes, so the tag names a build that is green. The limit is the reason: had any commit in between touched `src/` or `bin/`, the honest move is a new tag, not a moved one. hv can reverse it.
 
-- (2026-08-29) **An ST0010 AT id EQUALS the acceptance.sh block id the suite prints.** The carried suite has no AT10/AT11 -- `_tools`' estate tests stayed behind -- so those ids plus AT16 hold Utilz-native rows. A green is reported by the runner as "AT07"; if the contract's AT07 covers something else, the green names the wrong instrument.
 - (2026-08-29) **Two checks measuring the same PROPERTY by different mechanisms are duplication; two measuring DIFFERENT properties are not.** So AT01+AT10 both cover AC11 (build-produces-nothing-tracked vs the-ignore-rule-is-committed) and AT04+AT17 both cover AC04 (a real browser vs the dispatch table). Both pairs say so on the row, so neither is tidied away.
 - (2026-08-29) **Delete the second home rather than check it.** The deck rosters went, rather than gaining a prose-vs-table comparison that would have been brittle enough to false-red -- and a false red is the more expensive direction, because it sends a peer to disprove it and spends the credibility the next finding needs.
 - (2026-08-29) **A criterion pins properties, not enumerations.** AC04 lists no keys; it names BINDINGS as the one roster and pins four structural facts about it.
 - (2026-08-29) **No fallback message names as its remedy the case in which it fired** (AC20b). The general form of hv's `q` finding, and the checkable one.
 - (2026-08-29) **A platform-dependent string in a portable artifact resolves when the deck is VIEWED, never when it is built** (AC20d). Whoever sees the wrong text is never whoever built the deck.
 - (2026-08-29) **The freeze protects utilz-cc from drift; it does not make the pin sacred.** Same rule, opposite answers, and the axis is in the facts: harming and testable where it lives -> patch there; invisible and untestable there -> fix here.
-- (2026-08-29) Two non-test ACs -- AC16 (a human looks) and AC17 (provenance) -- exist because the suite provably could not stand in for either.
