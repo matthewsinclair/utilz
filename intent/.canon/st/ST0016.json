@@ -75,7 +75,7 @@
       "covers": [
         "AC01"
       ],
-      "status": "to-write"
+      "status": "green"
     },
     {
       "id": "AT02",
@@ -84,7 +84,7 @@
       "covers": [
         "AC02"
       ],
-      "status": "to-write"
+      "status": "green"
     },
     {
       "id": "AT03",
@@ -93,7 +93,7 @@
       "covers": [
         "AC03"
       ],
-      "status": "to-write"
+      "status": "green"
     },
     {
       "id": "AT04",
@@ -102,7 +102,7 @@
       "covers": [
         "AC04"
       ],
-      "status": "to-write"
+      "status": "green"
     },
     {
       "id": "AT05",
@@ -111,7 +111,7 @@
       "covers": [
         "AC05"
       ],
-      "status": "to-write"
+      "status": "green"
     },
     {
       "id": "AT06",
@@ -120,7 +120,7 @@
       "covers": [
         "AC06"
       ],
-      "status": "to-write"
+      "status": "green"
     },
     {
       "id": "AT07",
@@ -129,7 +129,7 @@
       "covers": [
         "AC07"
       ],
-      "status": "to-write"
+      "status": "green"
     },
     {
       "id": "AT08",
@@ -138,7 +138,7 @@
       "covers": [
         "AC07"
       ],
-      "status": "to-write"
+      "status": "green"
     }
   ]
 }
