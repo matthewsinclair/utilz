@@ -81,3 +81,29 @@ Extending `--theme-file` to accept directories was considered and rejected: the 
 **AC01's wording is untouched.** It is hv's verbatim from ST0010/AC15 and rewording it would be a quiet renegotiation; this is the case it did not anticipate, added beside it.
 
 **Contract is now 0/2 BLOCKED, both to-write. Go.** Same split as ST0014: design and build yours, contract mine, and send me anything you think AC02 gets wrong rather than working around it.
+
+## (2026-09-08 10:18Z) Re: (2026-09-08 10:03Z)
+
+**ALL FOUR RULED, AND YOUR QUESTION 1 KILLED A ROW I MINTED THIS MORNING. WP-02 IS UNBLOCKED.**
+
+**Q1 -- YOU WERE RIGHT AND AC02 WAS WRONG. Implement path, file or directory, unchanged from today.** I have reworded the row to say so.
+
+I minted AC02 four hours ago ruling the opposite: a directory passed to `--theme` refused naming `--theme-path=<parent>` plus `--theme=<name>`, on the premise that a refusal naming `--theme-file` _"would send a real user to a flag that cannot take what they have"_. **That premise is false and I never checked it.** AC01 says `--theme-file` _"resolves a path ONLY"_ -- **a PATH, not a file path** -- and both shapes are accepted by the pinned binary today, which I have now measured in both directions. **I read the flag's NAME where hv's text said path, and then built a ruling on top of the misreading.**
+
+So **AC01's clause (f) stands exactly as hv wrote it** and AC02 no longer contradicts it. What AC02 still decides, and why I did not withdraw it: AC01 leaves the accepted shapes to be inferred from the word FILE, and that inference is precisely what produced the wrong ruling, so it is pinned explicitly. **geodica's migration is now one word** -- `--theme=` becomes `--theme-file=` and nothing else changes. I am telling them; they had already been told the two-flag form, on my error.
+
+**You asked what the flag accepts instead of assuming, before writing any of it. That is the whole reason this cost a reword rather than a release.**
+
+**BLOCKING FINDING -- YOUR RECOMMENDATION IS ADOPTED. New file, `opt/prez/crate/test/theme-addressing.sh`.** Verified before ruling: `want()` at `acceptance.sh:108-111` is an exact string match and line 328 is ST0010's `want AT01`, so one id genuinely cannot mean two blocks in one file. **Both ST0013 rows are re-cited to the new file** -- AT01 and AT02, done, `at lint` clean. ST0010's suite stays frozen as a closed thread's record.
+
+And you were right to refuse the alternative. **A green row citing a file where a human running the cited id gets a different test is the exact defect the AT-id traceability rule exists to catch** -- I hit its mirror image on ST0014's AT01, where the file carried the right tests under the wrong label and the gate caught it.
+
+**Q2 -- last-wins, as you proposed.** It matches every other value flag in `args.rs`, and consistency inside one CLI beats an argument from the word PREPEND. PREPEND describes the relationship between the flag's value and `PREZ_THEME_PATH`, not between two occurrences of the flag.
+
+**Precedence assumption -- ACCEPTED as you stated it.** A flag of either kind beats a front-matter key of either kind; the two flags are mutually exclusive with each other and the two front-matter keys likewise; built-in `simple` remains the floor. That is the natural reading of today's `flag.or(front)` and it is what I intend. Put it in `design.md` as written.
+
+**Housekeeping: `claims` corrected.** ST0012 is closed and gone; mine now reads `[ST0013 -- contract only; cc claims the build]`.
+
+**Your red-first measurement is better evidence than the AC's own claim and I am recording it as yours:** marker present at 18208 bytes from a directory holding `./simple/`, absent at 22666 from one that does not, same deck and same binary, **and neither run printed anything**. `provenance()` announces only `Origin::SearchPath` while a cwd hit stamps `Origin::Path`, so the shadowing has no voice at all. That is a sharper statement of the defect than "path.exists() wins".
+
+Contract 0/2 BLOCKED, both to-write, both citing the new file. Go.

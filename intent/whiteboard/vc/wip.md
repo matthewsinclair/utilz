@@ -3,10 +3,10 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 06b406f0-9a29-4636-ad0d-abd6663e4f8f
-heartbeat_at: 2026-09-08 10:02Z
+heartbeat_at: 2026-09-08 10:18Z
 status: active
-focus: "ST0013 -- cc builds, I hold the contract; cc is held off src/ until geodica answers on --theme pass-through. v2.6.1 shipped, CI green on all seven jobs, ST0014 and ST0012 closed and dehydrated, six Intent defects relayed and hv's one-digit ruling delivered. Localfolded for a compact; status stays active."
-claims: [ST0012, ST0013]
+focus: "ST0013 -- cc builds and has claimed it, I hold the contract. 0/2 BLOCKED, both to-write, WP-02 unblocked. AC02 was mine and wrong; cc caught it by asking what --theme-file accepts rather than assuming, and geodica has the corrected one-word migration. Localfolded for a compact; status stays active."
+claims: [ST0013 -- contract only; cc claims the build]
 ---
 
 # Validation Claude (vc)
@@ -19,15 +19,15 @@ Released at EOD on hv's instruction, 7 Sep. Folds archived in `.history/20260829
 
 ## DOING
 
-**ST0013 -- prez theme addressing. cc BUILDS, I hold the CONTRACT.** Handed over 8 Sep on hv's instruction. Same split that worked on ST0014, and it is the only hydrated thread.
+**ST0013 -- cc BUILDS and has claimed it; I hold the CONTRACT.** Contract `0/2 BLOCKED`, both to-write, both citing `opt/prez/crate/test/theme-addressing.sh`. WP-02 unblocked 10:18Z.
 
-**THE HOLD IS LIFTED AND IT EARNED ITS KEEP.** geodica answered: `--theme=<absolute directory>` is in real use, twice in an hour, and is how both client decks in engagement E0024 have rendered since 3 Sep. **AC01 did not cover it** -- its worked example is `--theme=./x.css` and clause (f) names `--theme-file`, but **a prez theme is a DIRECTORY containing theme.css** (verified against the built-ins and by building with `--theme <dir>`, which succeeds today), so that refusal would have sent a real user to a flag that cannot take what they have. **Clause (f) reproducing its own failure.** AC02 minted: a directory is refused naming `--theme-path=<parent>` plus `--theme=<name>`, a `.css` file naming `--theme-file`, and the two messages must differ. AC01's wording untouched -- hv's verbatim, and rewording it would be a quiet renegotiation. Contract 0/2 BLOCKED, cc building.
+**AC02 IS MINE AND I GOT IT WRONG FIRST TIME.** I ruled that `--theme-file` takes only a `.css` file, so a directory needed `--theme-path=<parent>` plus `--theme=<name>`, on the premise that a refusal naming `--theme-file` would send a user to a flag that could not take their input. **False.** AC01 says the flag "resolves a path ONLY" -- **a PATH** -- and the pinned binary accepts both shapes today, measured both ways. **I read the flag's NAME where hv's text said path.** cc asked what it accepts rather than assuming, before writing any of it. Reworded; AC01 clause (f) stands as hv wrote it; geodica's migration is one word, and they have the correction.
 
-**AT01 must be RED FIRST and red for the right reason.** `--theme=NAME` resolving identically from two working directories, one holding a `./NAME/` directory. It is red against the pinned binary today because `path.exists()` wins. **If it is green before the split lands it is not testing what it says.**
+**The row was not withdrawn, deliberately.** AC01 leaves the accepted shapes to be inferred from the word FILE, and that inference is exactly what produced the error, so AC02 now pins them.
 
-**Clause (f) is the part that is easy to drop.** The refusal of a path given to `--theme` MUST name `--theme-file`, because whoever hits it is someone whose working command stopped working -- `prez present <deck> --theme <path>` is in hv's shell history against a real 14-slide client deck.
+**A NEW TEST FILE, on cc's finding: `theme-addressing.sh`.** ST0013/AT01 and ST0010/AT01 are different tests sharing one id in one file; `want()` at `acceptance.sh:108-111` is an exact string match and line 328 is ST0010's. Verified before ruling. ST0010's suite stays frozen as a closed thread's record.
 
-**My next act is minting the remaining ATs once cc's `design.md` names the files.** One AC and one AT exist; the AC is hv's own wording carried verbatim from ST0010/AC15, and a re-scope that reworded it would be a quiet renegotiation.
+**My next act is minting the remaining ATs once cc's `design.md` names the files.**
 
 ## Claims
 
