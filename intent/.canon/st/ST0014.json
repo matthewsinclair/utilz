@@ -177,7 +177,7 @@
     },
     {
       "id": "AC06",
-      "text": "The fifteen bin/ symlinks arrive as SYMLINKS pointing at utilz, not as dereferenced copies, and the manifest checksums each link's TARGET STRING rather than the file it resolves to. Checksumming the resolved file gives all fifteen the same hash, so a link retargeted at the wrong utility reads as intact. THE SOURCE bin/ HOLDS FIFTEEN SYMLINKS AND TWO REAL FILES (utilz, and the vendored devbin); THE INSTALL'S bin/ HOLDS FIFTEEN AND ONE, because D2 excludes devbin as not ours to publish -- verified 7 Sep, the only devbin reference in the 109 owned paths is a comment at opt/prez/prez:54. Read the source count as the arrival count and a correct install looks one file short. THE SYMLINKS ARE THE DISPATCH PREDICATE, NOT DECORATION: bin/utilz:183 dispatches only when -L \"$UTILZ_HOME/bin/$UTIL_NAME\" holds, so a utility whose symlink did not arrive does not dispatch at all AND the error path offers it as a typo, which sends the reader after a misspelling rather than a missing file. The manifest's roll-call IS the owned set, so a count one high carries a phantom entry and one low leaves a file nothing checks. Dispatch-predicate point found by cc.",
+      "text": "The fifteen bin/ symlinks arrive as SYMLINKS, not as dereferenced copies, and the manifest records each link's TARGET STRING against its PATH. MEASURED 8 Sep against the real install: all fifteen target strings are the identical four characters 'utilz' -- the links are distinguished by their PATH, never by their target, because dispatch keys on basename $0. So the row is 'link<TAB>utilz<TAB>bin/cleanz' and it is the third field that identifies it. THIS AC PREVIOUSLY JUSTIFIED THE TARGET-STRING RULE AS CATCHING 'A LINK RETARGETED AT THE WRONG UTILITY', AND THAT SCENARIO CANNOT OCCUR -- vc's wording, corrected against the artefact rather than defended. There is no wrong utility to point at: every link legitimately names the same target. What the rule actually catches, verified by doing it: a link pointing OUTSIDE the set reports 'retargeted bin/syncz', and restoring it returns rc 0. The real argument for not dereferencing is simpler and survives: a dereferenced copy stores the dispatcher's bytes fifteen times, loses the link-ness that AC06's own dispatch predicate depends on, and grows the install by fifteen copies of bin/utilz. THE SYMLINKS ARE THE DISPATCH PREDICATE, NOT DECORATION: bin/utilz:183 dispatches only when -L \"$UTILZ_HOME/bin/$UTIL_NAME\" holds, so a utility whose symlink did not arrive does not dispatch at all AND the error path offers it as a typo, sending the reader after a misspelling rather than a missing file. THE SOURCE bin/ HOLDS FIFTEEN SYMLINKS AND TWO REAL FILES (utilz, and the vendored devbin); THE INSTALL'S HOLDS FIFTEEN AND ONE, measured on the real install 8 Sep, because D2 excludes devbin as not ours to publish. Dispatch-predicate point found by cc.",
       "kind": "test",
       "state": {
         "is": "computed"
@@ -340,8 +340,8 @@
       "covers": [
         "AC06"
       ],
-      "status": "to-write",
-      "note": "Count the arrivals in the install's bin/: 15 symlinks and ONE real file, utilz. NOT two -- D2 excludes bin/devbin and bin/.devbin/ from the owned set, and AC06's 'two real files' counts the SOURCE bin/. Verified 7 Sep that the exclusion is safe: the only reference to devbin anywhere in the 109 owned paths is a comment at opt/prez/prez:54. Each of the 15 is -L and its readlink target string matches the source link. Then retarget one link at a different utility and assert the manifest check reports it: checksumming the resolved file gives all 15 one hash and this case reads as intact."
+      "status": "green",
+      "note": "Three legs, all three run against the REAL install 8 Sep. (1) arrivals: 15 symlinks and ONE real file, utilz -- not two, because D2 excludes bin/devbin. VERIFIED. (2) every link's target string is byte-identical to its source counterpart, and each is the literal 'utilz'. VERIFIED. (3) corruption is detected BY PATH, not by target: point bin/syncz at something outside the tree and assert the check reports 'retargeted bin/syncz', then restore and assert rc 0. VERIFIED. DO NOT WRITE THE LEG THIS ROW USED TO CARRY -- 'retarget one link at a different utility' -- it is untestable, because all fifteen legitimately share one target string and there is no wrong utility to point at. That leg was vc's and it would have passed vacuously."
     },
     {
       "id": "AT08",
@@ -350,8 +350,8 @@
       "covers": [
         "AC07"
       ],
-      "status": "to-write",
-      "note": "Manifest records the utilz version, the source commit and a checksum per owned file. The commit must describe the SHIPPED bytes: mutate one owned file in the source after the commit and before the publish, and assert the publish refuses rather than recording a commit the bytes do not match. AC02's dirty gate is what makes this reachable."
+      "status": "green",
+      "note": "Verified by vc 8 Sep against the real install: manifest header carries utilz-version 2.5.0 and source-commit d3142a7, which is an ancestor of main; 111 file/link rows; install_manifest_check returns rc 0, so every recorded checksum matches the shipped bytes. The commit-describes-the-shipped-bytes leg holds by construction here because AC02's dirty gate refused anything else -- the install announced 'clean, d3142a7' before writing. The refusal leg itself is exercised in cc's install.bats, which passes."
     },
     {
       "id": "AT09",

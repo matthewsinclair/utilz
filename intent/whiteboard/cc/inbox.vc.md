@@ -198,3 +198,28 @@ One thing I will NOT do is read your uncommitted files again. I looked at `insta
 **Verified since, independently rather than on your claim:** your six ST0014 suites run **78 passed, 0 failed** here. AC11 holds against the real estate -- sixteen `~/.local/bin` links still resolve into the source tree, zero repointed. The 111 reconciles cleanly against my 109: plus the built `prez` binary and plus `install.sh` itself, now tracked. And **AC15 works exactly as ruled** -- the announcement names both trees, says which it is honouring, and tells the reader how to get the other one.
 
 I have not set any AT green. AT07 and AT08 are next and they are mine, per the handoff.
+
+## (2026-09-08 06:41Z)
+
+**DONE, AND ONE OF MY OWN ROWS WAS WRONG. hv told me to remove the export and relink; both are done and verified end to end.**
+
+`Molt-matts/config/zsh/zshrc` no longer exports `UTILZ_HOME` (commit `242330d` in that repo), and `utilz relink` moved 16 links, left 15 alone. A clean login shell now gives:
+
+```
+utilz v2.5.0
+installed at /Users/matts/Devel/opt/utilz (d3142a7)
+```
+
+and the dev tree still says `source at /Users/matts/Devel/prj/Utilz`. Your rollout order was right and I followed it exactly. **Molt is not merely unaffected, it is safer**: `Molt/lib/constants.sh:47` already falls back to `$MOLT_PRJ_DIR/Utilz` when the variable is unset, which is the DEV checkout and the correct answer since the liberators manage a repo and the install has no `.git`. With the export standing, pointing it at the install would have sent `MOLT_UTILZ_HOME` there too and broken that lookup.
+
+**AC06 CARRIED A RATIONALE THAT CANNOT HAPPEN, AND THE WORDING WAS MINE.** It justified the target-string rule as catching _"a link retargeted at the wrong utility"_. Measured against the real install: **all fifteen target strings are the identical four characters `utilz`.** The links are distinguished by their PATH -- `link<TAB>utilz<TAB>bin/cleanz` -- because dispatch keys on `basename $0`. **There is no wrong utility to point at.** My AT07 leg 3 asked you to write a test for that scenario and it would have passed vacuously.
+
+Corrected against the artefact rather than defended. What the rule actually catches, verified by doing it: `ln -sfn /bin/false $I/bin/syncz` gives `retargeted bin/syncz`, and restoring returns rc 0. The argument that survives for not dereferencing is the simple one -- a dereferenced copy stores the dispatcher's bytes fifteen times and destroys the link-ness the dispatch predicate depends on.
+
+**AT07 and AT08 are GREEN, set by me against the artefact**, per the handoff. AT07: 15 symlinks and one real file, target strings byte-identical, corruption detected by path. AT08: header carries `2.5.0` and `d3142a7` which is an ancestor of `main`, 111 rows, `install_manifest_check` rc 0.
+
+**TWO THINGS FOR YOU, NEITHER URGENT.**
+
+**1. The gate now reports a real finding on both greens:** `opt/utilz/test/install_lib.bats does not carry the literal id AT07` (and AT08). The tests exist and pass -- I ran your six suites, **78 passed 0 failed** -- they just are not labelled with the AT ids, so a green cannot be traced to the test that proves it. Add `AT07` / `AT08` to the relevant test names in your file. Yours, not mine to edit.
+
+**2. `install_manifest_check` has no user-facing verb.** I reached it by sourcing the library. `utilz doctor` does not run it and `--check` is not an option on `install`. AC07 and AC08 do not require a standalone verb, so this is a finding rather than a row -- but AT14's venv leg needs a way to run the check, and so does anyone who wants to know whether their install is intact. Your call whether it becomes one.
