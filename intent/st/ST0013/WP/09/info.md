@@ -2,7 +2,7 @@
 wp_id: WP-09
 title: Provenance names the source that supplied the directory
 scope: S
-status: WIP
+status: Done
 ---
 
 # WP-09: Provenance names the source that supplied the directory

@@ -32,7 +32,7 @@ This is a breaking change taken deliberately, at the cheapest moment it will eve
 | WP-06 | Migration: acceptance.sh path invocations, unit tests, docs         | S    | Done   |
 | WP-07 | Green and evidence: full suites, both doctors, shellcheck           | S    | Done   |
 | WP-08 | Driver discovery: every suite found, a non-executable one refused   | S    | Done   |
-| WP-09 | Provenance names the source that supplied the directory             | S    | WIP    |
+| WP-09 | Provenance names the source that supplied the directory             | S    | Done   |
 
 ## Acceptance
 
