@@ -3,7 +3,7 @@
 # Files not listed here -- config.yaml, cmd/, help/ -- belong to the project.
 # devbin_version: 0.1.1
 # source: /Users/matts/Devel/opt/devbin
-# source_commit: 2e656963e3f65ac3f483e3ab9b0d20edcb576741
+# source_commit: d7010405163d8b3b614d0f58c92f5398967d347e
 2a88adbabe4165dcaa03552ecc702c58315e18e7f9bdc6b61ec39a9bef607181  bin/devbin
 3e804f9d6c1c601718602d9ac46bc92c5d5683f1ee4f368fb93d28f6f0aed6c1  bin/.devbin/lib/builtins
 f1b5ef34c4ef43e3eef92c69f52a90d61a4ce608995f1be04bb2e5e9684f8058  bin/.devbin/lib/cmd/check
@@ -18,7 +18,7 @@ f1b5ef34c4ef43e3eef92c69f52a90d61a4ce608995f1be04bb2e5e9684f8058  bin/.devbin/li
 01e805ad3b221df3672f1255a53caeba76960ebb8543fd7f1f6c186d1501433a  bin/.devbin/lib/cmd/fullcycle
 884240128036cf56511afae8564df22174e1f05e2809982a28adf4892d108d5f  bin/.devbin/lib/cmd/infra
 7161b80e3225e1ae1889068dc64fadeca488a57a7f4e17615e0c4ca1675757bd  bin/.devbin/lib/cmd/infra.d/mail
-f3fa13bf4d8600329b2b209009bc45a0cfe1a7b08a9d31b86f6aee232b251ff8  bin/.devbin/lib/cmd/infra.d/mail.d/dmarc
+76530f04331fa1d6c3e467364a110a1da25ffceb24fe8a223c7d37583be617d4  bin/.devbin/lib/cmd/infra.d/mail.d/dmarc
 0f8481408a757fc11c2b19ed80f7e2ca1c119d52a8c3d00eab92da67ee2cf81e  bin/.devbin/lib/cmd/infra.d/profiles
 0c2069d4c4e266b4ab2f7ce84bab120764145abe331cae7bde3a0d052fb2a7f1  bin/.devbin/lib/cmd/install
 37831edf4f91002c12dab2362ec58d68ff6aa792f15a7b07761c3e7c8db88092  bin/.devbin/lib/cmd/new
