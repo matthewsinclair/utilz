@@ -59,6 +59,8 @@ claims: []
 
 - **BEFORE KILLING A STRAY, KNOW WHAT IT HAS OPEN.** A blocked process holding an unfinished write is not inert: terminating one flushed its heredoc and appended 45 corrupted lines to a peer's inbox. **The cleanup caused the damage the cleanup was for.** Check the tree immediately after.
 
+- **EVERY BASH CALL IS A SEPARATE SHELL, SO `$$` IS A DIFFERENT NUMBER IN EACH ONE -- AND THE WRITE THAT LOST THE FILE STILL SUCCEEDED.** Splicing this board across two calls, I wrote the preserved tail to `/tmp/x.$$` in one and read it back in the next: different PID, no such file. `cat missing kept > board` then wrote the head ALONE, truncating 80 lines to 30, and the `rm` after it ran happily. **A partial `cat` is a partial success, and a redirect commits it before anything checks.** Git had the original, so the cost was two turns. Generalises past temp files: state does not survive between tool calls -- not `$$`, not `cd`, not a variable, not a trap. **Anything two calls share belongs in a path that names itself, and any splice guards its anchor and its line count BEFORE it redirects over the thing it is splicing.**
+
 ## The estate, as of 8 Sep EOD
 
 - **`utilz` ON PATH IS THE CHECKOUT RIGHT NOW, NOT THE INSTALL.** `utilz use` reports which: `dev 16 links, opt 0` since 15:51. **This inverts what this board said all morning** -- do not carry either state forward, run `utilz use`. `utilz version`'s third line names the tree that answered and the commit it was cut from, which is the one command that tells a checkout from an install.
