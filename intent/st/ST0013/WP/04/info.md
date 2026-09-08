@@ -2,7 +2,7 @@
 wp_id: WP-04
 title: theme.rs: name-only resolution, Spec type, search-path threading
 scope: S
-status: WIP
+status: Done
 ---
 
 # WP-04: theme.rs: name-only resolution, Spec type, search-path threading

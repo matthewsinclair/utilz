@@ -2,7 +2,7 @@
 wp_id: WP-03
 title: args.rs: --theme-file and --theme-path, mutual exclusion
 scope: S
-status: WIP
+status: Done
 ---
 
 # WP-03: args.rs: --theme-file and --theme-path, mutual exclusion

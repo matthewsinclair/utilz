@@ -2,7 +2,7 @@
 wp_id: WP-05
 title: frontmatter.rs + deck.rs: the theme-file: key and precedence wiring
 scope: S
-status: WIP
+status: Done
 ---
 
 # WP-05: frontmatter.rs + deck.rs: the theme-file: key and precedence wiring

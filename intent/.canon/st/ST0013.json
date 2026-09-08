@@ -32,7 +32,7 @@
       "seq": 3,
       "title": "args.rs: --theme-file and --theme-path, mutual exclusion",
       "scope": "S",
-      "status": "wip",
+      "status": "done",
       "objective": "",
       "body": "",
       "preamble": ""
@@ -41,7 +41,7 @@
       "seq": 4,
       "title": "theme.rs: name-only resolution, Spec type, search-path threading",
       "scope": "S",
-      "status": "wip",
+      "status": "done",
       "objective": "",
       "body": "",
       "preamble": ""
@@ -50,7 +50,7 @@
       "seq": 5,
       "title": "frontmatter.rs + deck.rs: the theme-file: key and precedence wiring",
       "scope": "S",
-      "status": "wip",
+      "status": "done",
       "objective": "",
       "body": "",
       "preamble": ""
@@ -59,7 +59,7 @@
       "seq": 6,
       "title": "Migration: acceptance.sh path invocations, unit tests, docs",
       "scope": "S",
-      "status": "not-started",
+      "status": "done",
       "objective": "",
       "body": "",
       "preamble": ""

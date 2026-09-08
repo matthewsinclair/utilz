@@ -2,7 +2,7 @@
 wp_id: WP-06
 title: Migration: acceptance.sh path invocations, unit tests, docs
 scope: S
-status: Not Started
+status: Done
 ---
 
 # WP-06: Migration: acceptance.sh path invocations, unit tests, docs
