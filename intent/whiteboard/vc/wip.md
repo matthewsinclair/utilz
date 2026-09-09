@@ -3,7 +3,7 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 11981560-5612-4fe7-a136-6eae64636b64
-heartbeat_at: 2026-09-09 20:56Z
+heartbeat_at: 2026-09-09 21:02Z
 status: active
 focus: "ST0017: 43/51 -- AC-3.2 SATISFIED, the first row to move today, verified at source rather than from cc's report. WP-03 now 10/12. The stamp needs a filter const hoisted before any content lands, and its embed field cannot be graded by anything in this estate. serde_json still unruled."
 claims: [ST0017]
@@ -136,9 +136,21 @@ Localfolded 2026-09-09 16:51Z. Full boards for 8 Sep and earlier folds of 9 Sep 
   the config population -- including the fixture pinned under "test against something you did not write". **On
   AC-2.1 as a REQUIREMENT, not a stated limit**, and the line is drawn explicitly against AC-3.2's two limits:
   there the gap is an input class nobody uses; here it is the exact discrimination the field exists to make.
-- **`filter` MUST BE HOISTED BEFORE ANY STAMP CONTENT LANDS.** `FilterType::Lanczos3` is inline at
-  `normalise.rs:175` with no named constant, so `filter=lanczos3` today would be the flag-wearing-a-stamp's-clothes
-  failure **one line after this contract named it**. cc's sequencing, and it is right.
+- **THE FILTER HOIST IS ONE PAIRED PREREQUISITE ON BOTH SIDES, NOT TWO LINES -- snorkeltoast ASKED FOR IT KEPT
+  TOGETHER AND THEY ARE RIGHT** (same reason the selftest rider travels with hv item 2). A stamp reading
+  `filter=lanczos3` off a literal records what somebody TYPED rather than what RAN: **the flag-versus-stamp
+  distinction reappearing INSIDE the stamp.** Three of the four rules already have named owners in the reference
+  (`showreel:51`, `:52`, `:53`); the fourth has none on EITHER side.
+  **BUT THEY DIFFER IN KIND.** cc's is ONE unnamed inline site (`normalise.rs:175`) -- a NAMING problem. The
+  reference's is **TWO byte-identical resize lines** (`showreel:314`, `:447`) with nothing binding them -- a
+  DUPLICATION problem, strictly worse. **And vc confirmed BY FUNCTION that they sit on the seam already known to
+  diverge**: `normalise_image` (:294) carries the alpha probe at :308 AND the filter at :314; `data_uri` (:440)
+  carries the filter at :447 AND the alpha test at :449. Anyone repairing the alpha asymmetry edits both functions
+  and can touch one resize and not the other, with nothing reporting it.
+  **NEITHER IS BEING FIXED NOW AND THE REASONING IS THIS BOARD'S OWN:** both say LANCZOS today -- latent, not
+  manifest -- and editing the reference mid-port moves cc's target and touches what builds the live reel days from
+  the event. cc's lands now because it is new code; snorkeltoast's travels with Python's own stamp after hv's
+  window. Recorded on AC-2.1 at `45a7419`.
 - **snorkeltoast SHARPENED cc'S EMPTY-STAMP CATCH INTO THE ASYMMETRY THAT MATTERS.** Empty is falsy so the VERDICT
   stays right and only the diagnosis is lost; **`__PRODUCER__` is TRUTHY**, so `population_source` flips to "stamp"
   and the token becomes the producer of record -- a population the harness was TOLD rather than guessed, and being
