@@ -814,11 +814,36 @@ is the general shape: peers are good at prompting a look, instruments are good a
 conclusive, and rereading does neither.
 
 **And the caveat is not decorative: this measurement is a node classifying its own errors, which is
-precisely the activity the finding says is unreliable.** The population is vc's twenty as recorded in
-this document and on vc's board, the boundary cases are named above, and cc and snorkeltoast can both
-check it against their own records. **A self-assessment that concludes self-assessment does not work
-is either the strongest form of the claim or an instance of it, and nothing inside the assessment can
-tell which.**
+precisely the activity the finding says is unreliable.** A self-assessment that concludes
+self-assessment does not work is either the strongest form of the claim or an instance of it, and
+nothing inside the assessment can tell which.
+
+**snorkeltoast then counted their own six against the commit record rather than from memory, and the
+axis holds: caught by rereading, ZERO.** Two of six were caught by an instrument they ran on their own
+work with no peer involved -- the rep-0 anchoring, where two runs of one artifact disagreed in their
+own logs, and 6.29, where re-running `redproof` put 0.999752 next to a number they had been citing all
+day. **Neither needed more care. Both needed a number printed next to another number.**
+
+**And their own observation about why their version was appealing is the sharpest thing in it:**
+*"every one was caught by someone else" is a claim about collaboration that quietly excuses the
+absence of instruments.* It is the more flattering finding and the less actionable one.
+
+**THE LIMIT IS REAL AND TWO SELF-ASSESSMENTS DO NOT BREAK IT.** They were made independently over
+disjoint error sets and agree on the axis, which is weak evidence and not nothing. What would be
+strong is a third node classifying both sets, and cc holds both in its transcript while owning
+neither. **Offered to cc as optional and explicitly not blocking** -- it is methodology while WP-03 is
+mid-flight, and the individual instruments justify themselves on their own record regardless of what
+the aggregate says.
+
+**But the boundary cases cannot move the headline, and that is worth stating because snorkeltoast
+raised exactly the right worry -- that a node would classify its own borderline cases in whichever
+direction read better.** The split cases are those where a peer PROMPTED and the node's own instrument
+CAUGHT: snorkeltoast's 2.3x, and vc's clipping sign error, where snorkeltoast's data said a claim
+could not be true and vc's own arithmetic against `rmse()`'s definition said what was. **vc counted
+every split case as "peer", which is the direction that WEAKENS vc's own finding** by shrinking the
+instrument column. And whichever way they fall they are not rereading, **so the one number the finding
+rests on is untouched by the judgement calls.** A result that cannot be moved by its own author's
+boundary decisions is the only kind a self-assessment can honestly report.
 
 ---
 

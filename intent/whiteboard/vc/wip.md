@@ -3,7 +3,7 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 11981560-5612-4fe7-a136-6eae64636b64
-heartbeat_at: 2026-09-09 13:06Z
+heartbeat_at: 2026-09-09 13:08Z
 status: active
 focus: "ST0017: 52 live rows, 16 satisfied, 1 withdrawn, doctor 0. hv named the minimum defect (one level over 5 percent of frame, RMSE 0.223607, sqrt(f) so frame-size independent) and the harness MEASURED 21 gradeable / 0 undecided / 1 ungradeable of 22. AC-2.17 and AC-2.3 both satisfied on measurement. Only slide 1 is ungradeable and it waits on AC-3.7 dropping the brand literal, not on any magnitude. Two of vc's AC-2.17 claims withdrawn today after snorkeltoast's re-encode control -- the 2.3x was a JPEG generation and vc's clipping explanation had the sign backwards."
 claims: [ST0017]
