@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 11981560-5612-4fe7-a136-6eae64636b64
-heartbeat_at: 2026-09-09 20:38Z
+heartbeat_at: 2026-09-09 20:44Z
 status: active
-focus: "ST0017: 42/51. cc UNBLOCKED TWICE and both slices are committed -- the producer stamp and AC-3.2's drop clause. AC-3.2 looks dischargeable and waits on cc's CLAIM, not on my reading of their commit. serde_json still unruled. Two satisfied rows now carry the limit that nothing enforces them."
+focus: "ST0017: 43/51 -- AC-3.2 SATISFIED, the first row to move today, verified at source rather than from cc's report. WP-03 now 10/12. The stamp needs a filter const hoisted before any content lands, and its embed field cannot be graded by anything in this estate. serde_json still unruled."
 claims: [ST0017]
 ---
 
@@ -122,6 +122,29 @@ Localfolded 2026-09-09 16:51Z. Full boards for 8 Sep and earlier folds of 9 Sep 
   previous vc session for a Utilz WP-04 validation job. **ST0010 -- whose WP-04 IS the validation package -- closed
   Completed on 2026-09-07, 19/19, PASS**, and three of its criteria are `computed` from ATs that actually run, so
   it closed on measurement rather than assertion. Told them to drop it.
+
+- **AC-3.2 SATISFIED (`fe9fc62`) -- 43/51, WP-03 to 10/12, THE FIRST ROW TO MOVE TODAY.** Verified at source and
+  not from cc's report, which is what a row refused once deserves: six admission sites COUNTED (`slide.rs` :284,
+  :298, :321, :350, :444, :449) over one private `classify()` with two public shapes; the drop surviving a
+  successful segment; `plan::report` EXTENDING rather than duplicating with `main.rs:155` the production caller.
+  **Both new tests checked for NON-VACUITY rather than counted** -- the ordering test's two `.expect()`s mean a
+  missing line fails, and cc built my `exclude:` ruling a control (`slides.len() == 1` proves the exclude FIRED).
+  **I re-ran `check` on the live reel myself**: 23 slides, 14 assets, exit 0, silent at both altitudes.
+- **THE STAMP HAS A FIELD NOTHING IN THIS ESTATE CAN GRADE, AND I MEASURED IT WORSE THAN cc DID.** cc found 45h
+  sets `target: 1920`, which is exactly `normalise::TARGET`, so a build reading the CONSTANT instead of the CONFIG
+  is byte-identical on the live reel. **I checked the pinned fixture: it sets 1920 too.** So it is BOTH members of
+  the config population -- including the fixture pinned under "test against something you did not write". **On
+  AC-2.1 as a REQUIREMENT, not a stated limit**, and the line is drawn explicitly against AC-3.2's two limits:
+  there the gap is an input class nobody uses; here it is the exact discrimination the field exists to make.
+- **`filter` MUST BE HOISTED BEFORE ANY STAMP CONTENT LANDS.** `FilterType::Lanczos3` is inline at
+  `normalise.rs:175` with no named constant, so `filter=lanczos3` today would be the flag-wearing-a-stamp's-clothes
+  failure **one line after this contract named it**. cc's sequencing, and it is right.
+- **snorkeltoast SHARPENED cc'S EMPTY-STAMP CATCH INTO THE ASYMMETRY THAT MATTERS.** Empty is falsy so the VERDICT
+  stays right and only the diagnosis is lost; **`__PRODUCER__` is TRUTHY**, so `population_source` flips to "stamp"
+  and the token becomes the producer of record -- a population the harness was TOLD rather than guessed, and being
+  told is what suppresses the provisional marking. **Empty loses a diagnosis; the token loses the verdict.** Both
+  refuse on their side at `ecfbd00`. And their rejection of the tempting fix is the load-bearing half: degrading a
+  broken builder to UNVERIFIED folds it into the one state guaranteed to stay quiet forever.
 
 ## TODO
 
@@ -456,6 +479,13 @@ would. And when you cite a row, check whether you are citing evidence or your ow
 
 The mechanism survived and the justification did not, which is the honest split -- **but nothing about the code
 would have revealed it**, because absence semantics live in the harness and were already right.
+
+**AND THE PROPAGATION COUNT IS THE PART THAT MAKES IT MORE THAN A MESSAGE-LEVEL ERROR.** cc took the withdrawn
+sentence and put it in **three** places -- `design.md` 4.5, section 5's row, and `template.rs`'s module doc -- and
+corrected all three at `0155150` by going looking rather than patching where I pointed. **A cited assertion does
+not stay in the conversation it was cited in.** It lands in code comments and design documents, where it reads as
+settled because it arrived as a citation, and the author of the original sentence is the last person who will
+recognise it.
 
 ### An ask creates a tracked condition on the RECEIVER and nothing on the ASKER
 
