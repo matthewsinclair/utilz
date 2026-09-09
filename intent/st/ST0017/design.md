@@ -30,7 +30,7 @@ branch: `prez showreel <...>` execs the showreel binary, everything else execs p
 
 | Constraint | How the layout meets it |
 | ---------- | ----------------------- |
-| AC02 -- prez depends on comrak and nothing else, hv signs off each addition by name | prez's `Cargo.toml` `[dependencies]` is not touched. showreel's budget is a NEW ruling on a NEW manifest, not an amendment to a standing one |
+| AC02 -- prez depends on comrak and nothing else, hv signs off each addition by name | prez gains **no third-party dependency**; showreel's budget is a NEW ruling on a NEW manifest, not an amendment to a standing one. The one first-party path dependency S1 requires is escalated to hv -- see 1.4 |
 | The 8 MB binary ceiling, already spending 3.5 MB on mermaid | Two binaries, two budgets. `prez build` never links `image` |
 | The Highlander violation spanning both tools | `artifact/` is the one implementation |
 | hv's command surface: showreel lives under prez | The shim dispatches. The user types `prez showreel build <dir>` |
@@ -127,6 +127,55 @@ design decision that wants its own commit and its own red-proof, but **nobody ma
 green as "the resolver is correct".** It means "the resolver is unchanged."
 
 Issue 0014 closes when R2 lands, in WP-03.
+
+
+### 1.4 Two collisions in the contract, and the layout they force
+
+cc raised both before moving a file. The first is an error in the contract and it is vc's; the
+second is an error the contract would have caused.
+
+**Collision 1 -- S1 and S2 cannot both hold, and S2 was measuring a proxy.** S1 requires one
+implementation **linked by both binaries**; linking needs a dependency edge, so prez gains
+`artifact = { path = "crates/artifact" }` and the `[dependencies]` block cannot be byte-identical.
+S2 as drafted fails by construction, and section 1's "prez's `Cargo.toml` is not touched" carried
+the same mistake.
+
+**S2 is corrected to its intent, which is not a weakening.** The test is whether the intent held
+before the edit: S2 meant *WP-01 adds no third-party cost to prez*, and byte-identity of the block
+was a proxy for that. The proxy breaks; the property does not. So S2 now asserts the property
+**and a stronger measurement than the one it replaces** -- AC02's own reasoning argues in packages
+locked (104 versus 25) and binary bytes, so the lockfile's third-party package count is the direct
+measurement that byte-identity was standing in for.
+
+**And it reads on AC02, which is hv's.** *"Adding a crate here needs hv's sign-off, named in the
+commit that adds it."* A path dependency is an addition to that block. **AC02's reasoning is about
+third-party cost, not the block's shape** -- a first-party, std-only sibling in the same workspace
+adds zero packages to the lockfile and zero third-party code -- so this sits inside AC02's intent
+and outside its letter. **That gap is hv's to close, not a typing decision**, and it is escalated
+rather than assumed. The alternative considered and rejected: `#[path]` source inclusion, which
+satisfies both rows literally with no dependency edge, **but compiles one implementation twice**
+-- Highlander in the tree and violated in the artifact -- and distorts the code to fit a row
+rather than correcting a row to its intent. Same disease as weakening a row, running the other
+way.
+
+**Collision 2 -- S3 versus any layout that moves `src/`, and the fix needs no ruling.**
+`opt/prez/README.md:40` states it outright: *"`crate/` is indivisible ... `src/`, `themes/` and
+`assets/` keep their exact sibling positions or the crate does not compile. Any tidier-looking
+layout that separates them is wrong by construction."* Verified: 7 `include_str!` built-ins
+resolve `../themes/*`, and `prez_is_stale` (`opt/prez/prez:109`) walks `$CRATE_DIR/{src,themes,assets}`.
+
+**So `crate/` becomes BOTH the workspace root AND prez's package.** Cargo permits it. Every
+`include_str!` path, the shim, `prez.bats`'s crate-shaped fixture and README:40 are all unchanged;
+the only additions are a `[workspace]` stanza and `crates/artifact/`.
+
+**The trap this avoids is silent, and it is why the layout is a criterion rather than a
+preference: `[profile.release]` is IGNORED outside a workspace root.** A separate root leaving the
+profile in prez's package manifest loses `lto` and `strip` -- roughly half the binary -- **while
+every test still passes.** S4 would then measure a blown budget with no test able to say why.
+
+One thing deliberately NOT filed: `prez_is_stale` suppresses `find`'s errors, and the shim's own
+comment (`opt/prez/prez:50-54`) records that as a considered trade for install mode rather than an
+oversight. The no-move layout does not disturb it.
 
 ---
 
@@ -337,9 +386,10 @@ gate.
 | # | Criterion |
 | - | --------- |
 | S1 | Theme resolution and base64 have exactly ONE implementation in the tree, linked by both binaries. **Data-URI inlining is NOT in this set** -- the S5 diff established it has no shared surface |
-| S2 | prez's `Cargo.toml` `[dependencies]` block is byte-identical before and after WP-01 |
+| S2 | WP-01 adds no third-party cost to prez: the `comrak` line byte-identical, the lockfile's third-party package count unchanged, and the only permitted addition the first-party std-only `artifact` path dependency. **Corrected from byte-identity of the block, which S1 makes impossible -- see 1.4.** Conditional on hv's AC02 sign-off |
 | S3 | The existing prez suite passes after extraction with no edit to any test file |
 | S4 | prez's release binary size after WP-01 is stated as a number against the budget, not as a distance |
+| S7 | `crate/` is both the workspace root and prez's package: every `include_str!` path, the shim and `prez.bats`'s fixture unchanged, and **`[profile.release]` proven in effect for the measured binary** rather than assumed from the manifest |
 | S5 | **SATISFIED 2026-09-09.** prez's and showreel's theme behaviours diffed by two independent enumerations: four behaviours, one clean match, result in 1.1 |
 | S6 | The shared resolver implements R1-R4: newline-preserving comment stripping, the ruled needle set, `theme.yaml` scanned, and prez's four provenance messages. **Closes issue 0014** |
 

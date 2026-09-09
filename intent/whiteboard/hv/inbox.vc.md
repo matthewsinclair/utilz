@@ -95,3 +95,31 @@ An ambient login-shell export makes every `utilz` invocation everywhere carry th
 **I did NOT mint an AC for it.** We cannot test your dotfile from this repo, and a criterion nothing can measure is worse than a sentence you can act on. It is recorded as a thread precondition on my board, so it does not get lost and does not get counted as satisfied by anyone.
 
 Nothing is blocked on you. cc has both rulings and carries on with WP-01; WP-12 is ruled LAST, since it is the only one that writes outside the prefix.
+
+## (2026-09-09 08:24Z)
+
+**ST0017/WP-01 needs one word from you, and it is a gap in AC02 rather than a request to overturn it.**
+
+`opt/prez/crate/Cargo.toml` carries your ruling verbatim: _"DEPENDENCIES: comrak AND NOTHING ELSE (AC02, hv's ruling) ... Adding a crate here needs hv's sign-off, named in the commit that adds it."_
+
+The consolidation that makes ST0017 a thread rather than a copy requires prez and showreel to LINK one implementation of the theme resolver. Linking needs a dependency edge, so prez's `[dependencies]` gains exactly one line:
+
+```
+artifact = { path = "crates/artifact" }
+```
+
+**That is an addition to the block your ruling governs, so it needs your sign-off by the ruling's own terms.** cc raised it before moving a file rather than after, which is right.
+
+**It sits inside AC02's reasoning and outside its letter, which is why it is yours and not ours.** The comment's own argument is about third-party cost -- it counts packages locked (104 with syntect's defaults, 25 without) and binary bytes (434 KB against an 8 MB ceiling already spending 3.5 MB on mermaid). **A first-party, std-only sibling crate in the same workspace adds zero packages to the lockfile and zero third-party code.** Nothing the ruling was defending against moves. But the ruling is written about the block, and this is a line in the block.
+
+**What we recommend: say yes, and we name it in the commit the way AC02 requires.**
+
+The alternative was considered and rejected rather than ignored: `#[path]` source inclusion satisfies both criteria literally, with no dependency edge and a byte-identical block. **It compiles one implementation twice** -- Highlander satisfied in the tree and violated in the artifact -- and it distorts the code to fit a criterion instead of correcting a criterion to its intent. That is the same disease as weakening a row, running the other way. We would rather ask you than carry a hack.
+
+**The criterion has already been corrected on our side, and the correction makes the property provable rather than proxied.** S2 said "prez's `[dependencies]` block is byte-identical before and after", which S1 makes impossible by construction -- that was vc's error, caught by cc. It now asserts what it always meant, measured the way AC02 itself argues: **the `comrak` line byte-identical, the lockfile's third-party package count unchanged, and the only permitted addition this one first-party std-only path.** Byte-identity was a proxy for third-party cost; the package count is the thing itself.
+
+**Nothing else in WP-01 is blocked.** cc is writing `artifact/`'s source, which is identical whichever way you rule, and has solved a second collision without needing you: `crate/` becomes both the workspace root and prez's package, so every `include_str!` path, the shim, `prez.bats`'s fixture and `README.md:40`'s "indivisible by construction" all stay true. That layout also avoids a silent one -- **`[profile.release]` is ignored outside a workspace root**, so a separate root would have dropped `lto` and `strip`, roughly half the binary, while every test still passed.
+
+**A yes unblocks WP-01's commit. A no means (ii) and we will say so in the thread rather than quietly.**
+
+_(entry written by vc, who is the named reader of this inbox and has also put this to hv live.)_
