@@ -214,7 +214,7 @@
     },
     {
       "id": "AC-2.11",
-      "text": "The capture window has TWO real bounds and the contract states whether both can be met. Lower: a budget before the transition has completed photographs a crossfade blend, not the slide. Upper: a budget past the dwell photographs the NEXT slide. VERIFIED from player.html:547, and the ambient multipliers make it worse rather than better: runtime dwell is scaled 1.5 and runtime ease 1.4 capped at max_ease, so a legal slide at min_dwell 2500 under ambient has a runtime dwell of 3750 against a runtime ease of up to 3000 -- a 750ms window, before counting anything else. The window does not scale with the slide. If no window exists for a legal configuration then there are legal reels no screenshot harness can grade, which is hv's to rule because the remedy is either the tool's floors or a declared ungradeable class.",
+      "text": "The capture window has two real bounds and the contract states whether both can be met. Lower: a budget before the transition completes photographs a crossfade blend. Upper: a budget past the dwell photographs the NEXT slide. VC'S EARLIER FRAMING WAS BACKWARDS AND IS CORRECTED HERE: ambient MITIGATES rather than compounds, because ease is capped at max_ease so the 1.4 multiplier never bites at the cap while dwell's 1.5 always does. Measured -- dwell 2500 ease 3000 gives a window of MINUS 500ms at default pace (the transition outlasts the slide) and PLUS 750ms under ambient. Default pace is the broken case, at any configured ease at or above 2500. vc computed only the ambient case and described it comparatively against a default case never computed: a population of one, reported as a comparison. Once AC-3.11's compile-time cap and refusal land, no config reaching the runtime can have ease >= dwell and this bound is closed at the source.",
       "kind": "non-test",
       "state": {
         "is": "unsatisfied"
@@ -251,6 +251,14 @@
       "state": {
         "is": "withdrawn",
         "reason": "Minted on snorkeltoast's migration hypothesis, which their own test refuted. Six captures each of slides 13, 14 and 17, all fifteen pairs at a fixed 1100ms budget: slide 13 zero of 15 differ, slide 17 zero of 15, slide 14 FIVE of 15 and every one at exactly 0.002196. The artefact does not migrate -- slide 14 is BIMODAL, rendering one of two ways with no intermediate value, and slide 13's 0.001500 is a rarer instance of the same class rather than the same instance relocated. So per-slide floors stand as designed and the class-floor mechanism this row required is withdrawn with its proposer's agreement. The concern survives in AC-2.3 in a better form: a floor of 0.000000 recorded for a bimodal slide is a sampling artefact, not a measurement."
+      }
+    },
+    {
+      "id": "AC-2.16",
+      "text": "The harness EXPECTS the Rust build to refuse configs the Python built, rather than discovering it as a parity failure. AC-3.11's compile-time max_ease cap and the ease >= dwell refusal are a deliberate behaviour change, so any 45h segment in that state builds under Python and refuses under Rust. A refusal that the contract predicted is a pass; the same refusal discovered mid-run reads as a port regression on whichever slide happens to carry it.",
+      "kind": "non-test",
+      "state": {
+        "is": "unsatisfied"
       }
     },
     {
@@ -336,7 +344,7 @@
     },
     {
       "id": "AC-3.11",
-      "text": "showreel's safety floors are mutually consistent, and the port does not carry the inconsistency across. VERIFIED from committed source f593de8: LIMITS is min_dwell 2500, min_ease 600, max_ease 3000, so max_ease EXCEEDS min_dwell and a legal config may specify a transition longer than the dwell it transitions into -- a slide that never fully arrives before it leaves, and for which no capture window exists at all. README section 7 publishes all three numbers without noting the interaction. The harness reports such slides as windowless, counted in the population, never silently skipped. Whether the floors themselves should forbid it is a tool decision for hv, and it crosses to Rust unchanged unless ruled.",
+      "text": "max_ease is applied by the COMPILER, not only by the runtime, and a config whose ease is greater than or equal to its dwell is refused by name. THE DEFECT IS SPLIT ENFORCEMENT, NOT AN UNLUCKY PAIR OF CONSTANTS -- cc's correction, verified from source f593de8: showreel:799-800 applies min_dwell and min_ease and NEVER applies max_ease, while the cap lives only at player.html:549, and showreel:988 comments 'the runtime enforces the same floors' when it enforces one the compiler does not have. One limit, two homes, disagreeing, and a comment asserting a parity that does not hold -- this thread's own dominant class, in the code about to be ported. README section 7's claim that compiler and player both enforce the floors is false for max_ease.",
       "kind": "non-test",
       "state": {
         "is": "unsatisfied"

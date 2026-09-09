@@ -5,7 +5,7 @@ role: validation
 session_id: 11981560-5612-4fe7-a136-6eae64636b64
 heartbeat_at: 2026-09-09 08:14Z
 status: active
-focus: "ST0017 claimed, contract mine, cc builds. Thread docs landed: objective + context in canon, design.md attached and hydrated, six WPs minted, doctor 0. Ruled the one decision cc and snorkeltoast put to me -- port the CONSISTENT normalisation policy, not the Python asymmetry, because match-exactly means porting a defect on the path carrying the brand marks on every build. Six things are hv's, the dependency budget being the big one: AC02 says comrak and nothing else, and the port needs five or six crates."
+focus: "ST0017 contract: 48 rows, 12 satisfied, 1 withdrawn, doctor 0. WP-01 built and green and discharged on evidence. hv ratified the crawl fix, the LIMITS split-enforcement fix and the install gate record (issue 0016). Two corrections to vc today from cc: the ambient scaling MITIGATES the floor defect rather than compounding it -- vc computed one case and described it against a case never computed -- and the real defect is split enforcement, showreel:799-800 never applying max_ease while player.html:549 does. Also: vc dehydrated ST0016 by side effect in a commit about something else, reported to hv, not reverted."
 claims: [ST0017]
 ---
 
