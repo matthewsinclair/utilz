@@ -3,31 +3,27 @@ node: cc
 name: Control Claude
 role: control
 session_id: a30f9092-03ed-44ba-a659-b37813af12c7
-heartbeat_at: 2026-09-09 07:55Z
+heartbeat_at: 2026-09-09 10:57Z
 status: active
-focus: "Fresh-session pickup. 0011 and 0010 closed by vc after this board was last written, so one issue is open and it is hv's. The PUBLISHED INSTALL is 6 commits behind and the diff is NOT cosmetic -- it still carries the generator defect 0010 closed, and PATH now resolves to the install. Nothing claimed, inboxes empty."
-claims: []
+focus: "ST0017 hoist. WP-01 landed and closed out -- one theme resolver in a shared crate, linked by both binaries, every gate green. WP-03 open; LIMITS is ruled and unported. Localfold before a compact -- status stays active."
+claims: [ST0017]
 ---
 
 # Control Claude (cc)
 
 ## DOING
 
-**Nothing claimed. The release this board tracked as in-flight is DONE -- the previous focus line was false and is corrected above.**
+**ST0017 -- hoisting snorkeltoast's `showreel` into Utilz as a Rust pipeline. Claimed today; this board carried `claims: []` while WP-01 was built, which was wrong and is corrected here.**
 
-- **2.8.0 shipped while cc was compacting.** Annotated tag `2.8.0` on the release commit `9c2ed5f` itself (not on session HEAD, per hv's directive), on `local` and `upstream`. CI green on HEAD `ac6829a`.
-- **The install is republished and verified BY BEHAVIOUR, not by reading its VERSION file**: both invocation forms answer `utilz:2.8.0/syncz:2.0.0`, and the provenance line reads `installed at /Users/matts/Devel/opt/utilz (6fb9de6)`.
-- **The install is 7 commits behind HEAD and it does not matter -- measured, not assumed.** Those 7 touch exactly two owned files, `bin/.devbin/manifest.sha256` and `opt/utilz/test/help_dispatch.bats`. No user-facing behaviour differs. **State the diff, never the distance.**
-- All 16 STs Completed; ST0013 4/4, ST0015 10/10, ST0016 8/8 all PASS.
-- **`utilz` on PATH is still the CHECKOUT** (`dev 16 links, opt 0`) -- hv's 15:51 setting for release work, unchanged. Post-release, whether to flip to `opt` is hv's call and one command.
+- **WP-01 is DONE and its evidence is with vc.** One theme resolver + base64 + `Failure` in `opt/prez/crate/crates/artifact/`, linked by prez. `crate/Cargo.toml` is **both the workspace root and prez's package** -- `src/`, `themes/`, `assets/` must stay exact siblings (7 `include_str!` at compile time, plus the shim's freshness walk) and `[profile.*]` is honoured only at a workspace root.
+- **WP-03 is open and I am on the parts that do not touch `LIMITS`.** Budget approved: 59 packages, union, `image` at `jpeg,png,webp,gif,tiff`, `fast_image_resize` REFUSED.
 
 ## TODO
 
-**TWO OF THE THREE ARE CLOSED. vc took 0011 (`6200ac2`) and 0010 (`ca1e924`) after this board was last written, so the list below is one issue and one artefact defect, neither of them mine to start.**
-
-- **THE PUBLISHED INSTALL STILL CARRIES THE DEFECT 0010 CLOSED, AND `utilz` ON PATH IS NOW THE INSTALL.** Measured this session, not carried forward: `manifest.sha256` records `source-commit 0c0af89`, six commits behind HEAD `60153d8`. **State the diff, never the distance -- and this time the diff is not cosmetic.** It contains `opt/utilz/lib/common.sh` (the install still fills `{{IMPL_PATH}}` from `$impl_path`, the checkout from `$impl_path_rel`), all eight corrected `opt/*/README.md`, and both install suites. `grep -rl '/Users/matts' opt/*/README.md`: **checkout 0, install 8.** So `utilz generate` run from PATH today mints hv's home path into a ninth README -- the exact thing `ca1e924` fixed. **Checkout-green and install-correct have come apart precisely where this board's own watch-out says they do.** Republish is one command; its timing is hv's.
-
-- **0007 (low) -- prez slide counter contrast. ITS STATED HOME NO LONGER EXISTS**: the issue files the fix under ST0010/WP-05, and WP-05 is **Cancelled**. Re-homing is hv's call, not something to settle by picking somewhere convenient. Compiler change, not a theme change.
+- **`LIMITS` port -- RULED, unimplemented.** Apply `max_ease` at compile time and refuse a config whose ease meets or exceeds its dwell, by name. **The defect is split enforcement, not the constants**: `showreel:799-800` applies `min_dwell`/`min_ease` and never `max_ease`; the cap lives only in `player.html:549` while `showreel:988` claims the runtime enforces _the same_ floors.
+- **Issue 0016 -- record gate state in `manifest.sha256`.** Ratified, filed, unimplemented.
+- **Ask snorkeltoast whether the 45h config has any segment with ease >= dwell.** If so the Rust build REFUSES where Python built -- a parity difference the harness must expect rather than discover.
+- **Issue 0007 (prez counter contrast) and the two homeless findings** (`todo` verbs unreachable from Emacs; `hoist-rebase.sh`'s dead postcondition) are unchanged and unowned.
 
 ## Holds
 
@@ -35,53 +31,43 @@ claims: []
 
 ## Watch-outs
 
-**One rule, stated once, with the instance that earned it. Every full instance from 8 Sep is in `.history/20260908/wip-part3-full-board-before-eod-fold.md`; this is the compression, not a summary.**
+**ONE GREEN, GENERALISED ACROSS A POPULATION NOBODY ENUMERATED. This is the dominant failure of the day -- roughly ten instances across three nodes -- and every other item here is a special case of it.** The tell, in snorkeltoast's wording, is worth keeping: _the sentence is about a set while the evidence is about a member._ Mine: a control red-proved by an injection that could not reach the code; two comments asserting more than the arms I had driven; and calling WP-01 green having run two of the six gates CI runs. vc's: telling hv the same thing off clippy-plus-build. snorkeltoast's: "all 22 byte-identical" measured on slide 3.
 
-- **A CORRECT OUTPUT SAYS NOTHING ABOUT WHETHER THE INSTRUMENT WORKED.** I read a watcher's `ok=554 notok=0`, matching its log exactly, as proof it had completed. It had not -- it was still sleeping 21 minutes after its condition went false, and the numbers were right _because_ the log had been complete and unchanged for 21 minutes. **A hung watcher and a working watcher emit byte-identical output; the discriminator is a timestamp, not the value.** Generalises: any check reading a source that has stopped changing keeps returning the right answer long after the check itself has died.
+- **A RED-PROOF NEEDS ITS OWN CONTROL, BECAUSE AN INJECTION THAT DID NOT APPLY AND ONE THAT PASSED PRODUCE THE SAME OUTPUT.** My patch anchor had its `\n` eaten by the shell, matched nothing, and the suite underneath printed `ok ... 12 passed`. Only an `assert count == 1` I had added out of habit separated that from a real proof. **Every injection must prove it applied, and refuse rather than warn, before its result may be read.**
+- **THE INSTRUMENT THAT GATES IS NOT THE INSTRUMENT YOU RAN.** Enumerate every gate before calling anything green. This estate runs six (below); I ran three and shipped a red clippy.
+- **A GATE THAT RUNS AND FINDS NOTHING HAS A VOICE; A GATE THAT NEVER ACTIVATES DOES NOT, AND THE SUMMARY COUNTS ONLY WHAT SPOKE.** `devbin check all` printed `all check options passed` with `autotests` absent entirely -- not run, not skipped, not named. Two behaviours in one run: `check format` announced its own narrowing correctly two lines above.
+- **UPDATING AN EXPECTED VALUE TO MATCH A RULED CHANGE IS IMPLEMENTATION; CHANGING AN ASSERTION'S SHAPE IS A DECISION.** vc's line, and it is the test for whether an edit to a failing test is repair or weakening. AT02 amended under it, red-proved in both arms.
+- **A TEST NAME THAT OUTRUNS ITS BODY.** Twice in one file: a name claiming reorder-sensitivity the body could not reach, and one claiming a hole was guarded when it only checked the text before it. **Name the test after what it measures, not what you hope it measures.**
+- **zsh DOES NOT WORD-SPLIT AN UNQUOTED VARIABLE.** Bit twice today -- multi-word `cargo add` flags arriving as one argument, and the shellcheck file list. Run shell tooling under `/bin/bash` with an ARRAY.
+- **A `grep` PATTERN BEGINNING `--` IS PARSED AS AN OPTION.** My token-uniqueness sweep errored on every call, printed nothing, and reported every token unique. Use `grep -- "$pat"`, and **put a control in the sweep that shows the broken and fixed forms disagree.**
+- **A COMMAND THAT DID NOT REBUILD REPORTS THE OLD ARTEFACT'S NUMBERS.** `Finished in 0.02s` meant I measured the previous day's binary and called it unchanged.
 
-- **POPULATION IS THE FAILURE MODE, IN FIVE DISTINCT DIRECTIONS, AND THEY DO NOT COST THE SAME.** Too WIDE fails loudly (a `*.md` glob reaching into `.backup/` reported 267 files and scared hv; real count was 1). Too NARROW fails GREENLY and ships. SELF-MATCHING never terminates (`pgrep -f 'utilz test'` matches the waiter). PATTERN-MATCHES-PROSE has no bound at all (`bats ` hit an unrelated project's system prompt; a marker that was a utility's own NAME appeared in both artifacts being told apart; a regex demanding `-h|--help)` missed `todo`'s `-h | --help)` with spaces). STALE-ON-ARRIVAL is correct when taken and wrong when read (`bats ./*.bats` expands its glob once, so a suite file created 67 seconds into a run is silently excluded -- and the unchanged total reads identically to "the new tests ran and added nothing"). **Every sweep prints its population count and refuses at zero; every partition prints its remainder and refuses when the parts do not sum.**
+## The gates this estate runs, enumerated
 
-- **A CONTROL THAT HAS NEVER BEEN OBSERVED TO FAIL IS NOT A CONTROL.** Inject the regression each row exists to catch and watch it go red. This found two dead tests in one afternoon: a `refute_file_contains` that could NEVER fail, because `grep` parsed its `-`-leading pattern as an option and errored; and a fixture that leaked a generated utility into the shared tree when an assertion failed before its cleanup line, poisoning three later measurements with a population of 16. **Cleanup belongs in teardown, never after an assertion.**
+**Written down because AC-1.12 exists precisely because I did not have this list.** From `.github/workflows/tests.yml`: `test-linux`, `test-macos`, `shellcheck`, `rust`, `clippy`, `test-summary`.
 
-- **VERIFY THE ARTIFACT, NOT ONLY THE TREE THAT TESTS IT.** Every suite here pins `UTILZ_HOME` from `test_helper.bash`, so it is structurally incapable of measuring a published install -- `UTILZ_HOME=/nonexistent/decoy bats` PASSES. Checkout-green and install-correct come apart, and the two-tree estate is where they do. A row that addresses an install must **name the tree it measured** before asserting anything about what that tree said.
+| gate               | command                                                                                                                                                                           |
+| ------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| unit + integration | `cargo test --release --workspace --no-fail-fast --manifest-path <m>`                                                                                                             |
+| lint               | `cargo clippy --all-targets --manifest-path <m> -- -D warnings`                                                                                                                   |
+| build              | `cargo build --release --manifest-path <m>`                                                                                                                                       |
+| shell              | `shellcheck -x "${FILES[@]}"` -- **18 real files; run locally after a build the collector sees 69, because it has no `target/` exclusion and is correct only by CI job ordering** |
+| estate             | `utilz test <utility>` -- prez has 4 suites; `acceptance.sh` is the one that caught WP-01                                                                                         |
+| devbin             | `bin/devbin check autotests` -- `2 crate(s), none with a tests/ directory`                                                                                                        |
 
-- **AGREEMENT ON A VALUE IS NOT AGREEMENT ON A POPULATION, AND NEAR-AGREEMENT SUPPRESSES THE CHECK.** Twice in one day two of us reached the same conclusion from incompatible wrong reasoning. Once it cost a wrong number (two wrong populations landing one apart, which licensed a confident wrong explanation of where the first came from). Once it would have SHIPPED A HANG: both nodes blamed `glow`'s pager for opposite reasons, both were wrong, and the real cause -- an open stdin -- sat underneath the thing we were both arguing about. **When two accounts agree, check they are the same account.**
+## The estate
 
-- **A STALE BINDING IS WORSE THAN A STALE VALUE, BECAUSE THE SENTENCE STAYS GRAMMATICAL.** vc and I disagreed about a commit's position and were both right, against "your last write" resolved eight minutes apart. A stale value looks like a measurement someone took; a stale binding reads as a fact about the TREE when it is only a fact about WHEN IT WAS SAID. **Name the commit, never "your last", "the latest", "current HEAD" or "now".** Corollary: a figure about the repository, measured before you commit to it, is invalidated by your own commit -- measure after your last write, or quote the command instead of the number.
-
-- **PROSE DOES NOT FAIL.** A judgement recorded only in a design document is not enforceable. ST0016 deliberately KEPT the utilities' `--help` arms where ST0015 deleted their `--version` arms; that distinction lived in prose until vc made it a criterion, and two adjacent threads reading as one pattern is exactly how a later reader deletes fifteen arms that nothing replaces.
-
-- **THE CASE WITH NOTHING EXPECTED ON THE STREAM IS THE ONE THAT GETS NO CHECK.** Of 16 stderr captures in one suite, 15 asserted CONTENT -- all refusal or warning legs, where a needle always had something to reach for. The 16th was the only build expected to be SILENT, and it was the only capture nobody read. **Where you expect nothing, assert nothing-ness explicitly**; it is the one place the assertion must cover the whole stream rather than a needle in it.
-
-- **AND THE INVERSE, WHICH IS THE ONE I KEEP.** I described a 1226-line log from the SOURCE OF ONE LINE while the log sat on disk one grep away. All day the failure was trusting an artifact without checking the instrument; here I trusted the source over the artifact I had just produced. **Same root both directions: reaching for the more convenient authority instead of the direct evidence.** The source feels authoritative because it is causal; the artifact is authoritative because it is what happened.
-
-- **THIS TREE HAS THREE CONCURRENT WRITERS.** A `git status` from earlier is not a baseline; `git ls-files` reads the INDEX, so a suite green at one index state says nothing about another. Commit with an explicit pathspec, never `-A`. **Never edit the tree while someone else is measuring it** -- and check mtimes before attributing a change to yourself.
-
-- **BEFORE KILLING A STRAY, KNOW WHAT IT HAS OPEN.** A blocked process holding an unfinished write is not inert: terminating one flushed its heredoc and appended 45 corrupted lines to a peer's inbox. **The cleanup caused the damage the cleanup was for.** Check the tree immediately after.
-
-- **EVERY BASH CALL IS A SEPARATE SHELL, SO `$$` IS A DIFFERENT NUMBER IN EACH ONE -- AND THE WRITE THAT LOST THE FILE STILL SUCCEEDED.** Splicing this board across two calls, I wrote the preserved tail to `/tmp/x.$$` in one and read it back in the next: different PID, no such file. `cat missing kept > board` then wrote the head ALONE, truncating 80 lines to 30, and the `rm` after it ran happily. **A partial `cat` is a partial success, and a redirect commits it before anything checks.** Git had the original, so the cost was two turns. Generalises past temp files: state does not survive between tool calls -- not `$$`, not `cd`, not a variable, not a trap. **Anything two calls share belongs in a path that names itself, and any splice guards its anchor and its line count BEFORE it redirects over the thing it is splicing.**
-
-## The estate, as of 8 Sep EOD
-
-- **`utilz` ON PATH IS THE INSTALL RIGHT NOW, NOT THE CHECKOUT -- INVERTED AGAIN SINCE 8 SEP.** `utilz use` this session: `opt 16 link(s), dev 0`; `utilz version` line three reads `installed at /Users/matts/Devel/opt/utilz (0c0af89)`. **This board has now been wrong about this in both directions, which is the argument rather than an embarrassment** -- do not carry either state forward, run `utilz use`. `utilz version`'s third line names the tree that answered and the commit it was cut from, which is the one command that tells a checkout from an install.
-- **EVERY VERSION HAS ONE HOME AND NOTHING RESTATES IT** (hv). Framework `./VERSION`; each utility `opt/<name>/VERSION` via `version_file`. **prez is the exception and is not an exception to the rule**: cargo requires it in `[package]`, so that home cannot be deleted, which makes it the one to keep. **Point at the one home you cannot delete.** Do not "fix" prez into compliance.
-- **NO `v` IN A VERSION, ANYWHERE, FROM 2.7.0 ONWARD** (hv, three times). `utilz:2.8.0` alone, `utilz:2.8.0/<util>:<version>` paired, and the git tag is bare. Tags before 2.7.0 keep the `v` they were published with -- those are records of a name a release actually had. Nothing in this repo consumes the prefix; the non-uniform series costs a reader's eye and nothing else.
-- **`--version`, `--help` and `-h` are answered by ONE `predispatch_intercept`**, from both dispatch sites. The utilities' own `--help` arms are deliberately kept and are held by a criterion; their `--version` arms are gone. `expz` delegates to `show_help` and has no inline usage; `prez` is a shim whose binary answers.
-- **`utilz test` refuses from an install** and is not concurrency-safe anywhere.
-- **THE `glow` HANG IS STDIN, NOT THE PAGER. This board said "pager" until 8 Sep and it was wrong.** `-p` is opt-in and injecting it changed nothing; a bare `glow "$file"` with a terminal on stdin hangs. `show_help` now closes stdin on both renderer arms. **Not reproduced under a `script`-allocated pty** -- glow exits 1 emitting terminal-query escapes there, a third behaviour -- so the guard is asserted present rather than the hang claimed fixed.
-
-## Framework internals that have bitten
-
-- **The `each_utility` tripwire this board carried until 7 Sep was FALSE-RED.** The correct tree returns ONE hit for `grep -c 'UTILZ_HOME"/bin/\*' opt/utilz/lib/common.sh` -- the walker itself. A reader running the old documented form reads that as a missing walker and re-adds one, which is the duplication it exists to prevent.
-- `each_utility` must be consumed with process substitution, never a pipe. `require_yq` ONCE before a loop. `run_doctor` deliberately does NOT gate on it -- that is how you discover yq is missing.
-- **`acceptance.sh:75`'s `file_size` returns 0 for a MISSING file.** A check written with it passes when the thing under test never ran; `wc -c <` yields empty and fails correctly. A tidier swapping one for the other would silently disarm the check.
-- Verify shell tooling under `/bin/bash` with an ARRAY -- zsh does not word-split, so `shellcheck -x $FILES` errors on one bogus path and the empty output reads as a pass. **`mapfile` is bash 4; `/bin/bash` here is 3.2.57.**
-- **`$PIPESTATUS` is bash-only.** zsh spells it `$pipestatus`, **lowercase and 1-indexed**, and the array is destroyed by the next command. The real cure is neither spelling: redirect to a file and take `$?` with no pipe in the line, so the totals and the status are independent claims.
-- `git log` prints LOCAL time. Stamps need `TZ=UTC git log --date=format-local:`; plain `--date=format:` prints local and appending a `Z` is an assertion, not a format.
-- Run prettier yourself before committing markdown, or the pre-commit hook is an unnamed third writer.
+- **`utilz` on PATH is the INSTALL** (`opt 16 links, dev 0`). vc republished it at `b6ca749`; 0 of 15 READMEs now carry an absolute home path. **Run `utilz use` rather than trusting this line -- it has been wrong in both directions in two days.**
+- **`utilz test` refuses from an install, and every bats suite pins `UTILZ_HOME` from `test_helper.bash`** -- so no suite here can measure a published install. That is issue 0016's root.
+- **TN001 exposure is ZERO and measured**: no Rust `tests/` directory anywhere, one unittest target per crate. `autotests` stays at its default deliberately -- setting it false with nothing declared trades a loud waste we do not have for a quiet hole we would create, and devbin's gate skips a crate with no `tests/` before it reaches that branch.
+- **Utilz declares its languages in TWO files.** devbin's gates activate off `bin/.devbin/config.yaml`; `check critic` reads `intent/.config/config.json`. Hand-kept until devbin#0062 removes one. **Change one, change both.**
+- **AC ids are `AC-<wp>.<seq>`, both parts digits, the group digit being the WORK PACKAGE.** An AT row is refused unless its id appears literally in the file it cites -- which is a better account of the 101 flat ids' cost than the missing rename verb, since a rename is two-sided by construction.
 
 ## Decisions
 
-- (2026-09-08) **`--help` renders the CURATED `help/<name>.md` from both forms**, not the terse inline usage. Agreement at the worse artifact is a strange reading of "make them agree".
-- (2026-07-29) `-v` stays **unbound** on the dispatcher. It reads as a verbose flag and no utility binds it (issue 0003).
-- (2026-07-09) todo guard's Intent-project test is anchored on the **target file's directory**, not cwd: the guard protects the file being overwritten.
+- (2026-09-09) **`artifact` is the ONE addition AC02 has been signed off for, by hv, as a one-off.** AC02's wording was NOT broadened; a second first-party dependency asks the question again from the start.
+- (2026-09-09) **showreel is a sibling binary under a `prez showreel` shim, not a merged crate.** AC02's dependency ruling is the reason that does not expire -- it gets worse as the port succeeds.
+- (2026-09-09) **Port the consistent normalisation policy, not the Python's alpha asymmetry.** A reference implementation is a reference, not a specification.
+- (2026-09-08) **`--help` renders the CURATED `help/<name>.md` from both forms**, not the terse inline usage.
+- (2026-07-29) `-v` stays **unbound** on the dispatcher (issue 0003).
+- (2026-07-09) todo guard's Intent-project test is anchored on the **target file's directory**, not cwd.
