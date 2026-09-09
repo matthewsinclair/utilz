@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: a30f9092-03ed-44ba-a659-b37813af12c7
-heartbeat_at: 2026-09-09 14:42Z
+heartbeat_at: 2026-09-09 14:50Z
 status: active
-focus: "ST0017 WP-03. Config, segments, durations and the timing envelope are built, red-proved and RUNNABLE via `showreel check`. Next: issue 0018, then the build path. 76 commits banked to local; upstream frozen."
+focus: "ST0017 WP-03, booted after compact. Config, segments, durations and the envelope are built, red-proved and runnable via `showreel check`. PICKUP MEASURED A FOURTH AC-1.16 INSTANCE AND IT IS THE SILENT ONE -- the shim's freshness check does not watch `crates/`. Next: issue 0018 + that, then the build path. Holding for context from vc."
 claims: [ST0017]
 ---
 
@@ -18,6 +18,7 @@ claims: [ST0017]
 - **WP-01 done.** One theme resolver + base64 + `Failure` in `crates/artifact/`, linked by prez. `crate/Cargo.toml` is **both the workspace root and prez's package** -- `src/`, `themes/`, `assets/` must stay exact siblings, and `[profile.*]` is honoured only at a workspace root.
 - **WP-03 in flight, and the refusal half is RUNNABLE.** `showreel check <dir>` validates a real reel and fires seven refusal classes. `crates/showreel/` carries the approved budget exactly; **prez is untouched at 4,384,896 bytes and 13 third-party packages.**
 - **NEXT: issue 0018** (high, vc's find, mine to fix under AC-3.13's ruling -- the comment exemption becomes CSS-only). **Then the build path**: payload, template, data-URI, delivery re-encode.
+- **PICKUP MEASURED A FOURTH INSTANCE OF AC-1.16'S CLASS, AND IT IS THE SILENT ONE.** `prez_is_stale`'s `find` walks `src`, `themes`, `assets`, the manifest and the lockfile and **NOT `crates/`** -- so a change to the shared crate prez LINKS leaves the shim reporting fresh and exec'ing the old binary at exit 0. **Measured with a proved control**: `theme.rs` was 30s OLDER than the binary, the touch made it newer, and the shim's own `find` verbatim still returned empty. **The other three fail loudly-ish -- a lint escapes, a binary is missing. This one hands you a stale binary and says nothing**, so 0018's fix would not reach anyone running `prez`. **It is the instrument that would misreport the very change I am about to make**, which is why it goes in 0018's commit and not after it. Issue not yet filed.
 
 ## TODO
 
@@ -71,7 +72,8 @@ claims: [ST0017]
 
 ## The estate
 
-- **NO PUSH TO `upstream` UNTIL hv LIFTS IT** (CI credits, 2026-09-09). `local` is fine and is current at `2a2651c`. **THE TRAP IS THE DEFAULT**: `branch.main.remote` is `upstream`, so a bare `git push` fires the matrix. Name the remote. Nothing auto-pushes -- hooks verified.
+- **THE SHIM IS BLIND TO `crates/` IN TWO PLACES.** `prez:155`'s `cargo build` has no `--workspace` (vc's AC-1.16, live), and `prez_is_stale`'s `find` watches no member crate. **Two mechanisms, one blindness, and the estate has FOUR instances now** -- CI clippy, CI build, shim build, shim freshness. The first three were found by reading; the fourth by touching a file and asking the shim.
+- **NO PUSH TO `upstream` UNTIL hv LIFTS IT** (CI credits, 2026-09-09). `local` is fine and is current at `e8ce0b1`; HEAD carries vc's `a7faf17` on top, which is theirs to mirror. **THE TRAP IS THE DEFAULT**: `branch.main.remote` is `upstream`, so a bare `git push` fires the matrix. Name the remote. Nothing auto-pushes -- hooks verified.
 - **THE GIT INDEX HAS NO SINGLE-WRITER RULE.** `git add -A` swept vc's in-flight canon into my commit. **Stage explicit pathspecs.** hv ruled a pre-commit WARNING not a refusal; issue 0019, not started.
 - **`utilz` on PATH is the INSTALL.** Run `utilz use` rather than trusting any line about it. `utilz test` refuses from an install -- issue 0016's root.
 - **TN001 exposure is ZERO and measured**: no Rust `tests/` directory anywhere. showreel is a **lib + bin**, which is 2 unittest targets with the bin holding none -- the honest cost of removing a permanent `allow(dead_code)`.
