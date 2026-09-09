@@ -198,12 +198,12 @@ impl Registry {
       }
     };
 
-    refuse_external(&theme.css, &format!("{} (css)", theme.name))?;
+    refuse_external(&theme.css, &format!("{} (css)", theme.name), Grammar::Css)?;
     if let Some(js) = &theme.js {
-      refuse_external(js, &format!("{} (js)", theme.name))?;
+      refuse_external(js, &format!("{} (js)", theme.name), Grammar::Verbatim)?;
     }
     if let Some(layout) = &theme.layout {
-      refuse_external(layout, &format!("{} (layout.html)", theme.name))?;
+      refuse_external(layout, &format!("{} (layout.html)", theme.name), Grammar::Verbatim)?;
     }
     Ok(theme)
   }
@@ -447,9 +447,29 @@ fn from_directory(dir: &Path, remedy: &str) -> Result<Theme, Failure> {
 
 /// Refuse a theme that reaches outside the artifact.
 ///
-/// Comments are stripped before the scan: a provenance or licence URL in a
-/// `/* ... */` block is documentation, not a reference, and failing a build over
-/// one would teach theme authors to delete their attributions.
+/// Comments are stripped before the scan ON A CSS SURFACE ONLY: a provenance or
+/// licence URL in a `/* ... */` block is documentation, not a reference, and
+/// failing a build over one would teach theme authors to delete their
+/// attributions.
+///
+/// **AND `Grammar` IS THE WHOLE OF ISSUE 0018, WHICH WAS A GRAMMAR APPLIED
+/// WHERE ITS LANGUAGE WAS NOT.** This scan runs on three surfaces -- `theme.css`,
+/// `theme.js` and `layout.html` -- and `strip_comments` implements CSS's comment
+/// and string grammar, which the other two do not share. Measured by vc
+/// 2026-09-09: `/*` and `*/` are ordinary text in HTML, so a `layout.html`
+/// carrying `<p>a /* b</p>`, a live `href` and `<p>c */ d</p>` had the href
+/// DELETED before the scan ran, and it shipped. The control -- the same href
+/// without the two markers -- refused.
+///
+/// **THE FIX IS A NARROWING AND DELIBERATELY NOT A PER-SURFACE PARSER.** A
+/// non-CSS surface is scanned with NO comment stripping at all, so nothing can
+/// hide behind markers the language does not have. The cost is over-refusal: a
+/// `/* */` attribution in `theme.js` refuses today and did not yesterday. That
+/// is the correct trade -- loud beats silent -- and it fails against a
+/// population of zero, because the estate holds nine `theme.css`, no `theme.js`
+/// and no `layout.html`. Real JS and HTML comment grammars are DEFERRED until a
+/// real one of either exists; hv authorised the narrowing on 2026-09-09 and did
+/// not widen it.
 ///
 /// **THE CHECK IS A UNION OF TWO INSTRUMENTS, BECAUSE ONE OF THEM CANNOT BE
 /// COMPLETE.** Measured 2026-09-09 over 13 fixtures with four controls (issue
@@ -476,8 +496,19 @@ fn from_directory(dir: &Path, remedy: &str) -> Result<Theme, Failure> {
 /// escape (`\75 rl(...)` for `url(...)`) defeats both instruments. It is
 /// deliberate obfuscation rather than a shape anyone writes, and the needle list
 /// did not catch it either, so closing it is not this change.
-pub fn refuse_external(source: &str, origin: &str) -> Result<(), Failure> {
-  let scanned = strip_comments(source, origin)?;
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum Grammar {
+  /// Strip `/* ... */`, honouring string literals. `theme.css`, and built-ins.
+  Css,
+  /// Scan every byte. Any surface whose language is not CSS.
+  Verbatim,
+}
+
+pub fn refuse_external(source: &str, origin: &str, grammar: Grammar) -> Result<(), Failure> {
+  let scanned = match grammar {
+    Grammar::Css => strip_comments(source, origin)?,
+    Grammar::Verbatim => source.to_string(),
+  };
   let lower = scanned.to_ascii_lowercase();
 
   // `to_ascii_lowercase` maps A-Z and nothing else, so it preserves byte offsets
@@ -715,7 +746,7 @@ mod tests {
 
   #[test]
   fn an_external_url_is_refused_naming_the_line_and_the_offender() {
-    let e = refuse_external("body{color:red}\nbody{background:url(https://cdn/x.png)}\n", "t")
+    let e = refuse_external("body{color:red}\nbody{background:url(https://cdn/x.png)}\n", "t", Grammar::Css)
       .unwrap_err();
     assert!(e.message.contains("line 2"), "{}", e.message);
     assert!(e.message.contains("cdn/x.png"), "{}", e.message);
@@ -723,7 +754,7 @@ mod tests {
 
   #[test]
   fn a_url_inside_a_comment_is_documentation_not_a_reference() {
-    refuse_external("/* adapted from https://example.com/t, MIT */\nbody{color:red}\n", "t")
+    refuse_external("/* adapted from https://example.com/t, MIT */\nbody{color:red}\n", "t", Grammar::Css)
       .expect("an attribution comment must not fail a build");
   }
 
@@ -741,7 +772,7 @@ mod tests {
   #[test]
   fn stripping_a_comment_does_not_move_the_lines_after_it() {
     let css = "/* a\n   licence\n   note */\nbody{background:url(https://cdn/x.png)}\n";
-    let e = refuse_external(css, "t").unwrap_err();
+    let e = refuse_external(css, "t", Grammar::Css).unwrap_err();
     assert!(
       e.message.contains("line 4"),
       "the offender is on line 4 of the FILE; a comment-deleting strip reports line 2: {}",
@@ -787,7 +818,7 @@ mod tests {
 
     let mut wrong = Vec::new();
     for (id, css, must_refuse) in population {
-      let refused = refuse_external(css, "t").is_err();
+      let refused = refuse_external(css, "t", Grammar::Css).is_err();
       if refused != *must_refuse {
         wrong.push(format!("{id}: expected refused={must_refuse}, got refused={refused}"));
       }
@@ -810,10 +841,67 @@ mod tests {
   /// offline guarantee. So the refusal names the comment rather than the
   /// reference -- the theme is malformed, and saying so is the smaller and truer
   /// claim than reporting a URL the author may not have written.
+  /// **ISSUE 0018: A GRAMMAR APPLIED WHERE ITS LANGUAGE WAS NOT.**
+  ///
+  /// Both directions, because a narrowing that only refuses more is satisfied by
+  /// refusing everything. The known COST is an assertion here rather than a
+  /// surprise later: an attribution comment in a non-CSS surface now refuses.
+  #[test]
+  fn the_comment_exemption_is_css_only_and_both_directions_are_asserted() {
+    // vc's fixture, verbatim. `/*` and `*/` are ordinary text in HTML.
+    const BYPASS: &str =
+      "<p>a /* b</p>\n<a href=\"http://evil.example.com\">x</a>\n<p>c */ d</p>\n";
+    // The control: the same reference with the two markers removed. It refused
+    // before this change and must still, or the fixture proves nothing.
+    const CONTROL: &str = "<p>a b</p>\n<a href=\"http://evil.example.com\">x</a>\n<p>c d</p>\n";
+    const ATTRIB: &str = "/* adapted from https://example.com/t, MIT */\nbody{color:red}\n";
+
+    assert!(refuse_external(BYPASS, "t", Grammar::Verbatim).is_err(), "the bypass must refuse");
+    assert!(refuse_external(CONTROL, "t", Grammar::Verbatim).is_err(), "the control must still refuse");
+    assert!(refuse_external(ATTRIB, "t", Grammar::Css).is_ok(), "the exemption survives where its language is real");
+    assert!(
+      refuse_external(ATTRIB, "t", Grammar::Verbatim).is_err(),
+      "THE KNOWN COST, asserted rather than discovered later"
+    );
+
+    // **THE DEFECT, PINNED.** Under CSS grammar the href is still stripped --
+    // which is why the fix is grammar SELECTION and not a change to the
+    // stripper. A later per-surface parser must come here and delete this
+    // deliberately, rather than discovering it as a failure.
+    assert!(
+      refuse_external(BYPASS, "t", Grammar::Css).is_ok(),
+      "pinned: CSS grammar still strips it, which is what makes the call site load-bearing"
+    );
+  }
+
+  /// **THROUGH `load`, BECAUSE THE DEFECT WAS IN WHICH GRAMMAR A CALL SITE
+  /// PASSED.** A test that calls `refuse_external` directly chooses the grammar
+  /// itself and so cannot see a wrong choice three lines away in `load`.
+  #[test]
+  fn a_layout_html_cannot_hide_a_reference_behind_markers_its_language_lacks() {
+    let d = dir("layout-bypass");
+    let t_dir = d.join("bypass");
+    std::fs::create_dir_all(&t_dir).unwrap();
+    std::fs::write(t_dir.join("theme.css"), "body{color:#222}\n").unwrap();
+    std::fs::write(
+      t_dir.join("layout.html"),
+      "<p>a /* b</p>\n<a href=\"http://evil.example.com\">x</a>\n<p>c */ d</p>\n",
+    )
+    .unwrap();
+
+    let e = FAKE
+      .load(Some(Spec::Name("bypass")), std::slice::from_ref(&d))
+      .expect_err("a live href between two stray comment markers must not build");
+    assert!(e.message.contains("layout.html"), "names the surface: {}", e.message);
+    assert!(e.message.contains("evil.example.com"), "names the offender: {}", e.message);
+    // Line 2 can only be reported if the line-1 marker did NOT strip anything.
+    assert!(e.message.contains("line 2"), "reports the reference's own line: {}", e.message);
+  }
+
   #[test]
   fn an_unterminated_comment_is_refused_rather_than_ending_the_scan_in_silence() {
     let css = "body{color:red}\n/* unterminated\nbody{background:url(https://cdn/x.png)}\n";
-    let e = refuse_external(css, "t").unwrap_err();
+    let e = refuse_external(css, "t", Grammar::Css).unwrap_err();
     assert!(e.message.contains("never closed"), "{}", e.message);
     assert!(e.message.contains("line 2"), "the comment OPENS on line 2: {}", e.message);
   }
@@ -828,7 +916,7 @@ mod tests {
   #[test]
   fn a_comment_opener_inside_a_string_does_not_blind_the_scan() {
     let css = "body{content:\"/*\"}\n@import \"https://cdn/x.css\";\n";
-    let e = refuse_external(css, "t").unwrap_err();
+    let e = refuse_external(css, "t", Grammar::Css).unwrap_err();
     assert!(e.message.contains("cdn/x.css"), "{}", e.message);
     assert!(e.message.contains("line 2"), "the reference is on line 2: {}", e.message);
   }
@@ -842,7 +930,7 @@ mod tests {
   /// points at the line a reader has to edit.
   #[test]
   fn an_import_that_wraps_is_one_reference_reported_at_the_url() {
-    let e = refuse_external("@import\n\"//cdn/x.css\";\n", "t").unwrap_err();
+    let e = refuse_external("@import\n\"//cdn/x.css\";\n", "t", Grammar::Css).unwrap_err();
     assert!(e.message.contains("line 2"), "the URL is on line 2, the at-rule opens on 1: {}", e.message);
     assert!(e.message.contains("cdn/x.css"), "{}", e.message);
   }
@@ -853,7 +941,7 @@ mod tests {
   #[test]
   fn an_unclosed_string_does_not_swallow_the_rest_of_the_theme() {
     let css = "body{content:\"oops}\n/* a comment */\nbody{background:url(https://cdn/x.png)}\n";
-    let e = refuse_external(css, "t").unwrap_err();
+    let e = refuse_external(css, "t", Grammar::Css).unwrap_err();
     assert!(e.message.contains("line 3"), "the comment on line 2 is still stripped: {}", e.message);
   }
 }

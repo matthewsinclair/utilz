@@ -64,7 +64,7 @@ pub use artifact::theme::{Origin, SearchSource};
 
 // Used only by this module's tests, which call the shared helpers directly.
 #[cfg(test)]
-use artifact::theme::refuse_external;
+use artifact::theme::{refuse_external, Grammar};
 
 /// Themes compiled into the binary. Brand-free by rule (AC09).
 ///
@@ -207,7 +207,7 @@ mod tests {
   #[test]
   fn every_built_in_passes_the_rule_it_enforces() {
     for (name, css) in BUILT_IN {
-      refuse_external(css, name).unwrap_or_else(|e| panic!("built-in '{name}': {}", e.message));
+      refuse_external(css, name, Grammar::Css).unwrap_or_else(|e| panic!("built-in '{name}': {}", e.message));
     }
   }
 
@@ -286,12 +286,12 @@ mod tests {
   #[test]
   fn a_url_inside_a_comment_is_documentation_not_a_reference() {
     let source = "/* adapted from https://example.com/theme, MIT */\nbody{color:red}\n";
-    refuse_external(source, "t").expect("an attribution comment must not fail a build");
+    refuse_external(source, "t", Grammar::Css).expect("an attribution comment must not fail a build");
   }
 
   #[test]
   fn a_protocol_relative_url_is_still_external() {
-    let e = refuse_external("body{background:url(//cdn/x.png)}", "t").unwrap_err();
+    let e = refuse_external("body{background:url(//cdn/x.png)}", "t", Grammar::Css).unwrap_err();
     assert!(e.message.contains("url(//"), "{}", e.message);
   }
 

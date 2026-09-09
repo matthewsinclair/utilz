@@ -41,9 +41,10 @@ make_fixture() {
   MANIFEST="$CRATE_DIR/Cargo.toml"
   BINARY="$CRATE_DIR/target/release/prez"
   mkdir -p "$CRATE_DIR/src" "$CRATE_DIR/themes/simple" "$CRATE_DIR/assets" \
-           "$CRATE_DIR/target/release"
+           "$CRATE_DIR/crates/artifact/src" "$CRATE_DIR/target/release"
   touch "$CRATE_DIR/src/main.rs" "$CRATE_DIR/themes/simple/theme.css" \
-        "$CRATE_DIR/assets/mermaid.min.js" "$MANIFEST" "$CRATE_DIR/Cargo.lock"
+        "$CRATE_DIR/assets/mermaid.min.js" "$CRATE_DIR/crates/artifact/src/lib.rs" \
+        "$MANIFEST" "$CRATE_DIR/Cargo.lock"
   # STAMPED INTO THE PAST, in two steps, and the order matters. `find -newer`
   # compares whole seconds on some filesystems, so a fixture built inside one
   # tick reports every source as newer and the baseline test is a coin toss.
@@ -59,7 +60,8 @@ make_fixture() {
   past2="$(date -v-2M +%Y%m%d%H%M 2>/dev/null || date -d '2 minutes ago' +%Y%m%d%H%M)"
   past1="$(date -v-1M +%Y%m%d%H%M 2>/dev/null || date -d '1 minute ago' +%Y%m%d%H%M)"
   touch -t "$past2" "$CRATE_DIR/src/main.rs" "$CRATE_DIR/themes/simple/theme.css" \
-    "$CRATE_DIR/assets/mermaid.min.js" "$MANIFEST" "$CRATE_DIR/Cargo.lock"
+    "$CRATE_DIR/assets/mermaid.min.js" "$CRATE_DIR/crates/artifact/src/lib.rs" \
+    "$MANIFEST" "$CRATE_DIR/Cargo.lock"
   # THE DIRECTORIES TOO, and stamped LAST because writing a file inside one
   # bumps it again. `find DIR -newer X` tests DIR itself, not only its
   # contents, so a freshly mkdir'd tree reports stale however old the files
@@ -68,7 +70,8 @@ make_fixture() {
   # often rather than too rarely, which is the safe direction. It only needs
   # stamping here because the fixture creates the whole tree at once.
   touch -t "$past2" "$CRATE_DIR/src" "$CRATE_DIR/themes/simple" "$CRATE_DIR/themes" \
-    "$CRATE_DIR/assets"
+    "$CRATE_DIR/assets" "$CRATE_DIR/crates/artifact/src" "$CRATE_DIR/crates/artifact" \
+    "$CRATE_DIR/crates"
   touch -t "$past1" "$BINARY"
 }
 
@@ -192,6 +195,20 @@ make_fixture() {
   load_staleness_fn
   make_fixture
   touch "$CRATE_DIR/assets/mermaid.min.js"
+  run prez_is_stale
+  assert_success
+}
+
+# **THE SUITE HAD THE SAME POPULATION GAP THE CODE DID, WHICH IS WHY THIS EXISTS.**
+# Tests 8 to 11 cover the four sources the walk used to list by hand, and there
+# was no case for a member crate -- so the walk could be reverted to the hand
+# list and every one of them would stay green. Measured 2026-09-09: touching
+# crates/artifact/src/theme.rs, the crate prez LINKS, left the old walk
+# reporting fresh and the shim exec'ing a stale binary at exit 0.
+@test "a newer MEMBER CRATE makes it stale -- source prez LINKS but does not contain" {
+  load_staleness_fn
+  make_fixture
+  touch "$CRATE_DIR/crates/artifact/src/lib.rs"
   run prez_is_stale
   assert_success
 }

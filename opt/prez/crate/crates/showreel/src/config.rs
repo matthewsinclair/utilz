@@ -239,7 +239,7 @@ mod tests {
   /// this test stops being an independent check and becomes a copy of whatever
   /// made it pass.
   ///
-  /// **RED-PROVED:** stripping every `deny_unknown_fields` (9 to 0, counted
+  /// **RED-PROVED:** stripping every `deny_unknown_fields` (8 to 0, counted
   /// before the result was read) fails exactly the two refusal tests and leaves
   /// this one green, which is correct -- a permissive parser still accepts a
   /// valid config. Two of eleven discriminate the guard.
