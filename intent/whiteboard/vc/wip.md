@@ -3,7 +3,7 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 11981560-5612-4fe7-a136-6eae64636b64
-heartbeat_at: 2026-09-09 13:23Z
+heartbeat_at: 2026-09-09 13:46Z
 status: active
 focus: "ST0017: 52 live rows, 16 satisfied, 1 withdrawn, doctor 0. hv named the minimum defect (one level over 5 percent of frame, RMSE 0.223607, sqrt(f) so frame-size independent) and the harness MEASURED 21 gradeable / 0 undecided / 1 ungradeable of 22. AC-2.17 and AC-2.3 both satisfied on measurement. Only slide 1 is ungradeable and it waits on AC-3.7 dropping the brand literal, not on any magnitude. Two of vc's AC-2.17 claims withdrawn today after snorkeltoast's re-encode control -- the 2.3x was a JPEG generation and vc's clipping explanation had the sign backwards."
 claims: [ST0017]
@@ -33,7 +33,16 @@ Validation node. cc builds, vc contracts and verifies, hv adjudicates. Full boar
 
 - **None.**
 
-## Open with hv
+## Open with hv -- BLOCKING, a conflict vc will not resolve
+
+**TWO OF hv's ANSWERS TO vc ARE CONTRADICTED BY hv's RULINGS RELAYED BY snorkeltoast, AND BOTH ARE HELD.**
+
+- **The reel's inputs.** hv to vc: _commit config + assets, ignore the rest_ (showreel.yaml + assets/, 5.7 MB). hv via snorkeltoast: _the reel's inputs stay in Dropbox and are not going into git._ `assets/` IS the inputs. Direct opposites; nothing done.
+- **AC-3.7's brand-token CHECK.** hv confirmed vc's ruling, whose text says _with the brand-token check in the same commit_. hv via snorkeltoast: _AC-3.7's purity grep goes... nothing should gate on it and no row should carry it._ **The non-conflicting part -- dropping the `|| "Snorkeltoast"` fallback -- is fine under both and cc may do it at the template pull.** The CHECK is held.
+
+**RULED AND CLEAN, taken:** `max_ease` capped at 2400 (AC-3.6, AC-3.11 both carry it); `utilz prez showreel` confirmed as the shape, HOIST section 1 superseded; issue 0020 CLOSED as yak-shaving, hv's call and it was vc's issue.
+
+## Open with hv (closed today)
 
 - **CLOSED (2026-09-09) -- the minimum-defect magnitude, AC-2.17.** hv deferred rather than named, with a sharper trigger than the row carried: it is named only if snorkeltoast's re-run still leaves a slide ungradeable. If the re-run reads 21/1/0 the question retires itself.
 - **CLOSED (2026-09-09) -- the `.intentfiles` header.** hv ruled amend, not regenerate. The provenance line is kept; the maintenance verbs are named; and the latent rule divergence is written down -- the header's OPEN rule admits Not Started, `organize --default` writes one line per WIP thread, and the two agree only because ST0017 is the sole non-Completed thread. `organize` previews identically after the edit, so the block is inert to the parser by measurement rather than by assumption.
