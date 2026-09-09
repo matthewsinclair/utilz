@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 11981560-5612-4fe7-a136-6eae64636b64
-heartbeat_at: 2026-09-09 17:56Z
+heartbeat_at: 2026-09-09 18:03Z
 status: active
-focus: "ST0017: 39/51 satisfied, 3 withdrawn, doctor 0. hv afk, vc has the pen. WP-01 14/15, WP-02 16/17. Everything open is with a peer or waits on cc build verb. Now AUDITING UNGRADED ROWS AHEAD OF THEIR CODE -- six rows needed their instrument corrected at grading time today, so AC-5.1, AC-5.3, AC-3.2 and AC-3.4 were fixed before the code that would have exposed them."
+focus: "ST0017: 40/51 satisfied, 3 withdrawn, doctor 0. WP-01 CLOSES AT 15/15. hv afk, vc has the pen. Every one of the 11 open rows is blocked on cc build path or on WP-04, and every ungraded row has now been audited ahead of its code. Waiting on collect_segment."
 claims: [ST0017]
 ---
 
@@ -18,9 +18,9 @@ Validation node. cc builds, vc contracts and verifies, hv adjudicates. Full boar
 **ST0017 -- showreel hoisted under `utilz prez showreel`. vc holds the contract, cc builds, snorkeltoast has closed.**
 Localfolded 2026-09-09 16:51Z. Full boards for 8 Sep and earlier folds of 9 Sep in `.history/`.
 
-- **Contract: 39 of 51 satisfied, 3 withdrawn, `intent doctor` 0.** `intent ac list ST0017` is the live contract;
+- **Contract: 40 of 51 satisfied, 3 withdrawn, `intent doctor` 0.** **WP-01 is COMPLETE at 15/15.** `intent ac list ST0017` is the live contract;
   `design.md` carries the reasoning. **Ids are `AC-<wp>.<seq>` and the group digit IS the work package.**
-- **WP-01 14/15. WP-02 16/17. WP-03 7/12. WP-04 0/2. WP-05 1/3. WP-06 1/2.**
+- **WP-01 15/15. WP-02 16/17. WP-03 7/12. WP-04 0/2. WP-05 1/3. WP-06 1/2.**
 - **`utilz prez showreel check <dir>` RUNS end to end**, both invocation forms, exit 0 against the live 45h reel.
   **WP-05's dispatch is done; WP-03's build path is the only thing between here and hv's bar** -- hv killed the
   Python shim fallback, so there is no relief valve.
@@ -82,6 +82,20 @@ captured 59 bytes of error, and `grep -c` scored it **0** -- one step from _the 
 **A census zero over an empty population reads exactly like a detector zero over a full one**; the line count is what
 gave it away, since one line of output for a 427-line help file is not a result. **When the environment cannot host
 the test, change the instrument rather than trusting its zero.**
+
+**A REAL RATIO DEGRADES; A WRONG POPULATION COLLAPSES.** snorkeltoast's form, and it is checkable without knowing
+anything about the subject: **if a measurement over a supposedly rich population returns EXACTLY NOTHING, suspect the
+population before the subject.** Mine today: a `find` over the whole Snorkeltoast tree for `manifest.json` returned
+ZERO, and for a moment that read as a peer's claim being unverified -- captures live in caller-supplied scratch that
+is `rmtree`d per run and never enters the repository. **I asked the tree for something that lives outside it.** The
+tell was not the subject; it was that the answer was zero rather than small.
+
+**AND I SAMPLED FOUR OF NINE IN THE ROW THAT IS ABOUT POPULATIONS.** `find | head -4` returned four assets at 2560px
+and I wrote "the reel's assets ARE init's masters". Nine exist; six are at the cap and three below it. **The
+inference also runs only one way** -- `normalise_image` resizes only when the long edge exceeds the cap, so a file AT
+the cap is evidence and a file below it is not. snorkeltoast caught both, and **the correction strengthened the
+conclusion**: a Rust init caps at the same number, so the dimension cannot separate population (2) from (3) even in
+principle, which turns the stamp from the neatest mechanism into the only one.
 
 **SIX ROWS NEEDED THEIR INSTRUMENT CORRECTED AT GRADING TIME TODAY, SO STOP WAITING FOR THE SEVENTH.** AC-1.2
 named the lockfile, now 79 entries. AC-1.3 named a byte diff of prez, which cannot tell a test that MOVED to the
