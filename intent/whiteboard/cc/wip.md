@@ -3,7 +3,7 @@ node: cc
 name: Control Claude
 role: control
 session_id: a30f9092-03ed-44ba-a659-b37813af12c7
-heartbeat_at: 2026-09-09 12:16Z
+heartbeat_at: 2026-09-09 12:24Z
 status: active
 focus: "ST0017 hoist. WP-01 done. WP-03 started: AC-3.5's CSS half built, issues 0014, 0015 and 0017 closed by one fix, red-proved both ways. LIMITS unblocked by snorkeltoast's parity answer and still unported."
 claims: [ST0017]
@@ -21,7 +21,7 @@ claims: [ST0017]
 
 ## TODO
 
-- **`LIMITS` port -- RULED, unimplemented.** Apply `max_ease` at compile time and refuse a config whose ease meets or exceeds its dwell, by name. **The defect is split enforcement, not the constants**: `showreel:799-800` applies `min_dwell`/`min_ease` and never `max_ease`; the cap lives only in `player.html:549` while `showreel:988` claims the runtime enforces _the same_ floors.
+- **`LIMITS`: the compiler half is DONE (`930b31c`); the ENVELOPE ITSELF is broken and that is filed, not fixed.** `MAX_EASE_MS` 3000 exceeds `MIN_DWELL_MS` 2500, the player's `dwellOf` divides by `SPEED` and its `easeOf` does not, and `SPEED` is an unclamped `parseFloat` off the query string -- so `?speed=` floors dwell at 2500 while ease sits up to 3000. Measured against the player's own formulas: **3 of 6 compile-legal cases cross.** No compile-time enforcement fixes it; every fix is a decision. Pinned by a test that must go red when ruled. **AC-3.6 is vc's row.**
 - **Issue 0016 -- record gate state in `manifest.sha256`.** Ratified, filed, unimplemented.
 - **WP-03 parity evidence CHANGED SHAPE under me, and it is better.** snorkeltoast's control was anchored on capture rep-0: slide 14 renders 12:1 bimodal, rep-0 was drawn from the minority, so every comparison ran against the minority, all read one value and the spread collapsed to zero. **A slide exactly as bimodal as before read as perfectly reproducible, about one run in thirteen.** Fixed by hashing captures into distinct renders and taking the worst distance BETWEEN renders, anchored on nothing -- and **the count of distinct renders per slide is now reported**, so a Rust build rendering a slide once where Python renders it twice is a difference the harness SHOWS rather than averages away. Take the new floor table before grading anything.
 - **Issue 0007 (prez counter contrast) and the two homeless findings** (`todo` verbs unreachable from Emacs; `hoist-rebase.sh`'s dead postcondition) are unchanged and unowned.
@@ -29,6 +29,10 @@ claims: [ST0017]
 ## Holds
 
 **None.**
+
+## Ruled by vc, pending in my hands
+
+- **AC-3.7: drop `|| "Snorkeltoast"` in OUR copy of `player.html` when WP-03 pulls the template, with the brand-token check IN THE SAME COMMIT.** Not snorkeltoast's tree -- they stopped on hv's scope call and a peer's tree is not ours to write for a one-liner. **vc's addition, which I would have missed: record the divergence where the "unchanged" claim is made.** `design.md` section 11 called the player unchanged by the port, and that stops being true the moment our copy differs -- two copies, one line apart, until WP-06 retires theirs. **Put to hv as well, since I had escalated it there first; hv may countermand and nothing is done yet.**
 
 ## Watch-outs
 
@@ -39,10 +43,11 @@ claims: [ST0017]
 - **A GATE THAT RUNS AND FINDS NOTHING HAS A VOICE; A GATE THAT NEVER ACTIVATES DOES NOT, AND THE SUMMARY COUNTS ONLY WHAT SPOKE.** `devbin check all` printed `all check options passed` with `autotests` absent entirely -- not run, not skipped, not named. Two behaviours in one run: `check format` announced its own narrowing correctly two lines above.
 - **UPDATING AN EXPECTED VALUE TO MATCH A RULED CHANGE IS IMPLEMENTATION; CHANGING AN ASSERTION'S SHAPE IS A DECISION.** vc's line, and it is the test for whether an edit to a failing test is repair or weakening. AT02 amended under it, red-proved in both arms.
 - **A TEST NAME THAT OUTRUNS ITS BODY.** Twice in one file: a name claiming reorder-sensitivity the body could not reach, and one claiming a hole was guarded when it only checked the text before it. **Name the test after what it measures, not what you hope it measures.**
+- **A GATE CHAIN JOINED BY `&&` DOES NOT GATE IF EACH GATE IS PIPED.** `cargo clippy ... | tail -1 && git commit` takes the pipeline's status from `tail`, which is always 0, so I committed on top of a FAILED clippy and the chain reported success. The failure was even visible in the output -- `warning: build failed` -- and the `&&` said otherwise, so I believed the control rather than the artefact. **Read `${pipestatus[1]}` in zsh (`${PIPESTATUS[0]}` in bash), or do not pipe a gate at all.** Same family as everything today: the instrument said clean, nothing errored, and the answer was wrong.
 - **zsh DOES NOT WORD-SPLIT AN UNQUOTED VARIABLE.** Bit twice today -- multi-word `cargo add` flags arriving as one argument, and the shellcheck file list. Run shell tooling under `/bin/bash` with an ARRAY.
 - **A `grep` PATTERN BEGINNING `--` IS PARSED AS AN OPTION.** My token-uniqueness sweep errored on every call, printed nothing, and reported every token unique. Use `grep -- "$pat"`, and **put a control in the sweep that shows the broken and fixed forms disagree.**
 - **AN INSTRUMENT THAT SHARES AN ASSUMPTION WITH ITS SUBJECT CANNOT TEST THAT ASSUMPTION.** My probe read the artifact with a line-oriented, case-sensitive `grep` while measuring a line-oriented, case-sensitive defect, and reported two escapes as clean. **Nothing errored.** Recovered only by keying the detector on the PAYLOAD -- the host fragment -- rather than on the reference's syntax. Reach for the payload first; it is the cheap move that breaks the shared assumption.
-- **A CITATION THAT NAMES A LOCATION GOES STALE SILENTLY AND READS EXACTLY LIKE A LIVE ONE.** `player.html:613` is cited by AC-3.7, AC-2.14, their two renderings, vc's board and snorkeltoast's FLOORS.md twice. The literal is at **628**; 613 is now unrelated code. `3903937` moved it -- the crawl fix **I relayed hv's ratification for** -- so the citation decayed as a consequence of a change I carried, and three nodes propagated it because each copied it from the last rather than opening the file. **Cite the TOKEN, not the line**: `REEL.producer || "Snorkeltoast"` greps forever. Our AC-id discipline already refuses an AT row whose id is not in the file it cites; line numbers inside AC TEXT sit under no such check.
+- **A CITATION THAT NAMES A LOCATION GOES STALE SILENTLY, AND RECORDING THE DEAD NUMBER RE-CREATES THE HAZARD.** The crawl fix I relayed hv's ratification for moved two `player.html` landmarks. vc swept the population: **eight line citations across six rows, four stale, and every stale one was in the file that commit touched while every correct one was in the file it did not.** I then shipped a stale `player.html` line in `limits.rs` -- the module implementing the row about that line -- an hour after writing this rule down. **Cite the TOKEN**: `REEL.producer || "Snorkeltoast"` and the player's `easeOf` grep forever. And name no numeral even when explaining that one was wrong: **to a scanner a superseded citation and a live one are the same bytes**, which is the property that made the original invisible. vc's finding, on their own repair, twice.
 - **A COMMAND THAT DID NOT REBUILD REPORTS THE OLD ARTEFACT'S NUMBERS.** `Finished in 0.02s` meant I measured the previous day's binary and called it unchanged.
 
 ## The gates this estate runs, enumerated

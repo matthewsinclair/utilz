@@ -18,16 +18,32 @@ pub struct Timing {
 
 /// Apply the envelope to one segment's authored timing, or refuse it by name.
 ///
-/// **THE DEFECT THIS FIXES IS SPLIT ENFORCEMENT, NOT AN UNLUCKY PAIR OF
-/// CONSTANTS.** Verified from the reference at `f593de8`: `showreel:799-800`
-/// applies `min_dwell` and `min_ease` and **never applies `max_ease`**, while
-/// the cap lives only at `player.html:549` -- and `showreel:988` ships the
-/// limits to the runtime under the comment *"the runtime enforces the same
-/// floors"*, when it enforces one the compiler does not have. One limit, two
-/// homes, disagreeing, plus a comment asserting a parity that does not hold.
-/// The README's claim that compiler and player both enforce the floors is false
-/// for exactly this one. `?speed=` reaches the runtime, so a limit the compiler
-/// declines to apply is a limit the URL can move.
+/// **THE DEFECT THIS FIXES IS SPLIT ENFORCEMENT.** Verified from the reference
+/// at `f593de8`: `showreel:799-800` applies `min_dwell` and `min_ease` and
+/// **never applies `max_ease`**, while the cap lives only in the player's
+/// `easeOf` -- and `showreel:988` ships the limits to the runtime under the
+/// comment *"the runtime enforces the same floors"*, when it enforces one the
+/// compiler does not have. One limit, two homes, disagreeing, plus a comment
+/// asserting a parity that does not hold. The README's claim that compiler and
+/// player both enforce the floors is false for exactly this one. `?speed=`
+/// reaches the runtime, so a limit the compiler declines to apply is a limit
+/// the URL can move.
+///
+/// **THIS PARAGRAPH READ "NOT AN UNLUCKY PAIR OF CONSTANTS" UNTIL THE
+/// CONSTANTS WERE MEASURED, AND IT IS ALSO AN UNLUCKY PAIR OF CONSTANTS.**
+/// `MAX_EASE_MS` 3000 exceeds `MIN_DWELL_MS` 2500, so the highest ease the
+/// runtime permits is longer than the shortest dwell it permits. That is a
+/// SECOND and independent defect, closing this module cannot fix it, and it has
+/// its own pinned test below. The emphatic half of the original sentence was
+/// the wrong half.
+///
+/// **CITED BY TOKEN, NOT BY LINE, AND THIS MODULE EARNED THAT RULE THE HARD
+/// WAY.** The first version of this doc cited `player.html` by line for the cap;
+/// `3903937` had already moved it, and the line it named is now an unrelated
+/// `getElementById`. **A stale citation and a live one are the same bytes to a
+/// reader**, so a greppable name is the only form that survives somebody else
+/// editing the file -- and I shipped the stale one in the module implementing
+/// the row about that very line, an hour after writing the rule down.
 ///
 /// **THE ease >= dwell REFUSAL READS THE AUTHORED VALUES, NOT THE CLAMPED
 /// ONES**, and that choice is a superset rather than a preference. Effective
@@ -138,6 +154,65 @@ mod tests {
     }
     assert_eq!(checked, 81 * 81, "the grid is the claim");
     assert!(sound > 3_000, "and it must contain real sound pairs, not just refusals: {sound}");
+  }
+
+  /// **THIS PINS A HOLE THE COMPILER CANNOT CLOSE ALONE, AND ITS NAME SAYS SO.**
+  ///
+  /// AC-3.6 requires the floors to hold in compiler AND runtime with `?speed=`
+  /// unable to cross them. **They do not and it can, and the cause is the
+  /// CONSTANTS rather than their enforcement.** The player's `dwellOf` divides
+  /// by `SPEED` and its `easeOf` does not, and `SPEED` is a `parseFloat`
+  /// straight off the query string with no clamp -- so a large enough `?speed=`
+  /// floors dwell at `MIN_DWELL_MS` while ease sits anywhere up to
+  /// `MAX_EASE_MS`, which is larger.
+  ///
+  /// Measured against the player's own formulas: `dwell: 10s, ease: 2.8s`
+  /// passes this module, and at `?speed=10` the runtime computes dwell 2500 and
+  /// ease 2800. Three of six sampled cases cross.
+  ///
+  /// **NO AMOUNT OF COMPILE-TIME ENFORCEMENT FIXES IT.** Every available fix is
+  /// a decision: refuse an authored ease at or above `MIN_DWELL_MS`, which
+  /// refuses configs that build today; clamp `SPEED` in the player; or scale
+  /// ease by `SPEED` as dwell is scaled, which changes what a reel looks like.
+  /// **Filed rather than chosen** -- AC-3.6 is vc's row.
+  ///
+  /// **THIS TEST MUST GO RED WHEN IT IS RULED, AND THAT REDNESS IS THE POINT.**
+  /// Invert it into a guarantee; do not delete it.
+  #[test]
+  #[expect(
+    clippy::assertions_on_constants,
+    reason = "the constants ARE the subject: MAX_EASE_MS exceeding MIN_DWELL_MS is the \
+              defect being pinned, so the assertion is deliberately compile-time-decidable. \
+              `expect` rather than `allow` so that restructuring which makes this no longer \
+              constant is itself reported."
+  )]
+  fn speed_can_still_cross_the_envelope_at_runtime_which_is_a_known_hole() {
+    assert!(
+      MAX_EASE_MS > MIN_DWELL_MS,
+      "EXPECTED RED IF THE ENVELOPE WAS JUST MADE CONSISTENT -- do not chase this \
+       as a regression. It RECORDS that the highest permitted ease exceeds the \
+       lowest permitted dwell. If that no longer holds, INVERT this test."
+    );
+
+    // The player's own arithmetic, transcribed from its `dwellOf` and `easeOf`.
+    let runtime = |dwell: f64, ease: f64, speed: f64| {
+      let d = (dwell / speed).max(f64::from(MIN_DWELL_MS));
+      let e = ease.clamp(f64::from(MIN_EASE_MS), f64::from(MAX_EASE_MS));
+      (d, e)
+    };
+
+    timing("legal", 10_000, 2_800).expect("the compiler accepts this config");
+    let (d, e) = runtime(10_000.0, 2_800.0, 10.0);
+    assert!(
+      e >= d,
+      "EXPECTED RED IF ?speed= WAS BOUNDED -- records that a compile-legal config \
+       still crosses at runtime: dwell {d}, ease {e}"
+    );
+
+    // Control: the reel being ported is NOT exposed, its ease being 900ms.
+    // Without this the test would read as "every reel is broken".
+    let (d, e) = runtime(6_000.0, 900.0, 99.0);
+    assert!(e < d, "the 45h reel survives any speed: dwell {d}, ease {e}");
   }
 
   /// The reel this port is graded against, so the parity question is answered
