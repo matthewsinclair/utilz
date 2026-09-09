@@ -14,7 +14,7 @@
 //! inside another's evidence.
 
 use artifact::Failure;
-use showreel::{config, limits, segment, theme};
+use showreel::{config, limits, segment, slide, theme};
 use std::path::{Path, PathBuf};
 
 fn main() {
@@ -105,47 +105,22 @@ fn check(path: &Path) -> Result<(), Failure> {
   // absent, and nothing reported it because nothing consumed them yet.
   let pace = segment::pace(cfg.pace.as_deref())?;
 
-  // Precedence: the segment's own key, then the config's `defaults:` block, then
-  // the pace preset. The reference builds the same order by dict-update.
-  let d = cfg.defaults.as_ref();
-  let default_dwell = d.and_then(|d| d.dwell.as_deref()).unwrap_or(pace.dwell);
-  let default_ease = d.and_then(|d| d.ease.as_deref()).unwrap_or(pace.ease);
-  let default_transition = d.and_then(|d| d.transition.as_deref()).unwrap_or(pace.transition);
-  let default_motion = d.and_then(|d| d.motion.as_deref()).unwrap_or(pace.motion);
-  let default_fit = d.and_then(|d| d.fit.as_deref()).unwrap_or(pace.fit);
-  let mut clamped = 0;
+  // **AND THE RESOLUTION ITSELF HAS ONE HOME.** `check` computed the five
+  // rendering fields inline until `slide::collect` needed the same thing; a
+  // second copy here is exactly the subset duplicate that hid in the pace table.
+  let defaults = slide::Defaults::resolve(pace, cfg.defaults.as_ref());
+
+  // **check NOW RESOLVES EVERY SEGMENT THE WAY A BUILD WILL**, which is what
+  // makes admission's refusals reachable from a command line. It reads no image:
+  // `collect` plans and never embeds, so this is the whole of the build's
+  // decision-making without any of its cost.
+  let mut slides = Vec::new();
   for (index, seg) in cfg.segments.iter().enumerate() {
-    let map = seg.as_mapping().expect("validated as a mapping above");
-    let id = map
-      .get(serde_yaml::Value::from("id"))
-      .and_then(|v| v.as_str())
-      .map_or_else(|| index.to_string(), str::to_string);
-    let text_of = |key: &str, fallback: &str| {
-      map
-        .get(serde_yaml::Value::from(key))
-        .map(|v| v.as_str().map_or_else(|| v.as_u64().map_or_else(String::new, |n| n.to_string()), str::to_string))
-        .unwrap_or_else(|| fallback.to_string())
-    };
-    let dwell = duration(&text_of("dwell", default_dwell), "dwell", &id)?;
-    let ease = duration(&text_of("ease", default_ease), "ease", &id)?;
-    // **VALUES, NOT ONLY KEYS.** `segment::validate` refuses `bg:` on a crawl;
-    // nothing refused `fit: cvoer`, which reached the player as a class name
-    // styling nothing. Same defect as a mistyped `type:` -- a config that builds
-    // something other than what it says.
-    let owner = format!("segment '{id}'");
-    segment::value("fit", &text_of("fit", default_fit), segment::FITS, &owner)?;
-    segment::value(
-      "transition",
-      &text_of("transition", default_transition),
-      segment::TRANSITIONS,
-      &owner,
-    )?;
-    segment::value("motion", &text_of("motion", default_motion), segment::MOTIONS, &owner)?;
-    let timing = limits::timing(&id, dwell, ease)?;
-    if timing.dwell_ms != dwell || timing.ease_ms != ease {
-      clamped += 1;
-    }
+    slides.extend(slide::collect(&reel, index, seg, &defaults, cfg.socials.len())?);
   }
+  let clamped = slides.iter().filter(|s| s.common.clamped).count();
+  let assets: std::collections::BTreeSet<&std::path::Path> =
+    slides.iter().flat_map(showreel::slide::Slide::assets).collect();
 
   println!("showreel: {} is valid", file.display());
   println!("  artist    {} ({})", cfg.artist.name, cfg.artist.handle);
@@ -160,6 +135,7 @@ fn check(path: &Path) -> Result<(), Failure> {
   // exactly twelve distinct types, so on the one reel anybody runs it looked
   // derived. Issue 0022, found by snorkeltoast.
   println!("  segments  {n} declared, {n} validated", n = cfg.segments.len());
+  println!("  slides    {} resolved, {} asset(s) read", slides.len(), assets.len());
   println!("  socials   {}", cfg.socials.len());
   println!("  theme     {}", theme.name);
   match &meta {
@@ -175,7 +151,7 @@ fn check(path: &Path) -> Result<(), Failure> {
     inlined.css.len(),
     inlined.favicon.len()
   );
-  println!("  timing    {clamped} segment(s) clamped by the envelope");
+  println!("  timing    {clamped} slide(s) clamped by the envelope");
   println!(
     "  envelope  dwell >= {}ms, ease {}..{}ms",
     limits::MIN_DWELL_MS,
@@ -183,8 +159,4 @@ fn check(path: &Path) -> Result<(), Failure> {
     limits::MAX_EASE_MS
   );
   Ok(())
-}
-
-fn duration(value: &str, field: &str, id: &str) -> Result<u32, Failure> {
-  showreel::duration::parse(value, field, &format!("segment '{id}'"))
 }

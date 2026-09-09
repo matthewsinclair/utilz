@@ -142,8 +142,28 @@ fn refuse(rel: &str, site: Site, declined: Declined) -> Failure {
   Failure::new(format!("{}: {} '{rel}' is {}", site.owner, site.field, why(declined)), remedy)
 }
 
+/// What a named site requires of the file it points at.
+///
+/// **A PARAMETER RATHER THAN A SECOND FUNCTION, SO AC-3.2 STAYS TRUE.** The row
+/// says all six sites route through ONE admission function; a `named_file`
+/// beside `named` would make that a sentence about two. And the difference is
+/// genuinely a property of the SITE rather than of admission: five sites want a
+/// picture the tool can decode, and `qr:` wants an SVG it will read as text.
+///
+/// **`AnyFile` DOES NOT MEAN UNCHECKED.** Existence and file-ness are still
+/// enforced, which is the half that carries section 5's fifth row -- a `qr:`
+/// naming a file that is not there refuses. Only the DECODABILITY question is
+/// skipped, because no image decoder is going to open it.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum Requires {
+  /// A raster this tool can decode. The five image sites.
+  Image,
+  /// Any file at all. `qr:`, whose SVG is read as text and never decoded.
+  AnyFile,
+}
+
 /// Admit a path the config NAMED. Anything wrong with it refuses.
-pub fn named(reel: &Path, rel: &str, site: Site) -> Result<PathBuf, Failure> {
+pub fn named(reel: &Path, rel: &str, site: Site, requires: Requires) -> Result<PathBuf, Failure> {
   let path = reel.join(rel);
   if !path.exists() {
     return Err(Failure::new(
@@ -157,9 +177,9 @@ pub fn named(reel: &Path, rel: &str, site: Site) -> Result<PathBuf, Failure> {
       "name an image file; a directory of images goes at from:",
     ));
   }
-  match classify(&path) {
-    None => Ok(path),
-    Some(declined) => Err(refuse(rel, site, declined)),
+  match (requires, classify(&path)) {
+    (Requires::AnyFile, _) | (Requires::Image, None) => Ok(path),
+    (Requires::Image, Some(declined)) => Err(refuse(rel, site, declined)),
   }
 }
 
@@ -249,7 +269,7 @@ mod tests {
   fn a_named_path_refuses_where_a_scanned_one_is_dropped_and_reported() {
     let r = reel("both", &["assets/art/a.jpg", "assets/art/notes.txt"]);
 
-    let e = named(&r, "assets/art/notes.txt", SEG).unwrap_err();
+    let e = named(&r, "assets/art/notes.txt", SEG, Requires::Image).unwrap_err();
     assert!(e.message.contains("segment 'hero'"), "names the segment: {}", e.message);
     assert!(e.message.contains("notes.txt"), "names the file: {}", e.message);
 
@@ -308,13 +328,13 @@ mod tests {
   fn a_document_and_a_stranger_are_not_offered_the_same_remedy() {
     let r = reel("remedies", &["a.pdf", "a.txt"]);
 
-    let pdf = named(&r, "a.pdf", SEG).unwrap_err();
+    let pdf = named(&r, "a.pdf", SEG, Requires::Image).unwrap_err();
     assert!(pdf.message.contains("document"), "{}", pdf.message);
     let remedy = pdf.remedy.expect("a document says what to do");
     assert!(remedy.contains("rasterise"), "names the action: {remedy}");
     assert!(remedy.contains("AC-3.9"), "and why it is not automatic: {remedy}");
 
-    let txt = named(&r, "a.txt", SEG).unwrap_err();
+    let txt = named(&r, "a.txt", SEG, Requires::Image).unwrap_err();
     let remedy = txt.remedy.expect("a stranger gets the roster");
     assert!(remedy.contains("png"), "lists what IS admitted: {remedy}");
     assert!(!remedy.contains("rasterise"), "and not the document remedy: {remedy}");
@@ -325,7 +345,7 @@ mod tests {
   #[test]
   fn a_missing_named_path_refuses_and_names_the_base_it_resolved_against() {
     let r = reel("missing", &[]);
-    let e = named(&r, "assets/art/gone.jpg", SEG).unwrap_err();
+    let e = named(&r, "assets/art/gone.jpg", SEG, Requires::Image).unwrap_err();
     assert!(e.message.contains("does not exist"), "{}", e.message);
     assert!(e.message.contains("gone.jpg"), "{}", e.message);
     assert!(e.remedy.unwrap().contains(&r.display().to_string()), "names the reel dir");
@@ -338,7 +358,7 @@ mod tests {
   fn each_call_shape_refuses_the_others_input_and_points_at_it() {
     let r = reel("shapes", &["assets/art/a.jpg"]);
 
-    let e = named(&r, "assets/art", SEG).unwrap_err();
+    let e = named(&r, "assets/art", SEG, Requires::Image).unwrap_err();
     assert!(e.message.contains("is not a file"), "{}", e.message);
     assert!(e.remedy.unwrap().contains("from:"), "sends a directory to from:");
 

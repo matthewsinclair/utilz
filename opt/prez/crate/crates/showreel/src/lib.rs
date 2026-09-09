@@ -22,4 +22,5 @@ pub mod duration;
 pub mod limits;
 pub mod normalise;
 pub mod segment;
+pub mod slide;
 pub mod theme;
