@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 11981560-5612-4fe7-a136-6eae64636b64
-heartbeat_at: 2026-09-09 18:52Z
+heartbeat_at: 2026-09-09 18:56Z
 status: active
-focus: "ST0017: 42/51, 3 withdrawn, doctor 0. hv AFK, vc has the pen, both peers taking instruction. AC-3.6 runtime leg SPECIFIED and sent to cc before the template-pull commit -- the harness is BLIND to it, so two source checks are the only mechanism. AC-3.2 now names report_unused population; AC-3.8 evidence corrected. AC-4.2 audit is next."
+focus: "ST0017: 42/51, 3 withdrawn, doctor 0. hv AFK, vc has the pen, both peers taking instruction. AC-3.6 runtime leg SPECIFIED and sent to cc before the template-pull commit -- the harness is BLIND to it, so two source checks are the only mechanism. AC-3.2 names report_unused population; AC-3.8 evidence corrected; AC-3.6 cites facts that survive hv item 2. AC-4.2 audit is next."
 claims: [ST0017]
 ---
 
@@ -149,6 +149,8 @@ their "a file below the cap is not evidence either way" line fired on every run,
 so it warned about a population that does not exist there. **A caveat nobody reads is worse than no caveat, because
 it still looks like diligence.** Guarded now. The pair to it: the line that IS true of every reel stays
 unconditional, so the two kinds of statement are told apart by whether they are guarded.
+
+**A CONCLUSION CONTINGENT ON A DEFECT BEING UNFIXED LOOKS EXACTLY LIKE A DURABLE ONE UNTIL THE FIX LANDS -- AND I WAS CARRYING THE FIX.** AC-3.6's runtime leg needed a negative half, proof that the harness cannot see the payload's limits, and I cited snorkeltoast's `shipped-max-ease` row for it. The row is true, the blindness is true, and **`_shipped_max_ease` returns `[]` the moment Python's `max_ease` reaches 2400** -- its docstring says it retires itself. Capping Python is hv item 2, **which is in hv's inbox under my name**, so I cited a row scheduled for deletion by a fix I am asking for. It would have dangled on a GOOD day, from the fix landing. The durable form is the two facts underneath: `signature()` walks `payload["slides"]` only, and the capture URL passes no `pace=`. **This is "cite the token, not the line" one level up, where what expires is not a line number but the FINDING** -- and the tell is not staleness, since nothing about the citation was wrong when written. **Ask what has to stay broken for this citation to keep working.**
 
 **I ALMOST ASSIGNED A PEER WORK THEY HAD ALREADY FINISHED, AND THE ONLY THING THAT STOPPED IT WAS READING THEIR FILE INSTEAD OF REASONING ABOUT IT.** I had it planned as real prep for snorkeltoast: check whether the payload's limits block enters `signature()`, because if it does then 2400-vs-3000 fires as an unpredicted structural mismatch on the first compare. **It was already built** -- `shipped-max-ease`, kind BLIND, `verified: observed`, with the reasoning I was going to ask for written out. **The instruction would have been confident, specific, correctly reasoned and entirely wasted**, and nothing in my own derivation could have told me: a gap I infer from a peer's design and a gap that exists produce the same plan. This is the artifact-outranks-the-source rule pointed at a PEER's tree rather than my own, and the cost of getting it wrong is not a bad measurement but a peer's afternoon. **Before assigning, read what they have; a queue you derived is not a queue.**
 
