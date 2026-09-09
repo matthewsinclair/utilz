@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 11981560-5612-4fe7-a136-6eae64636b64
-heartbeat_at: 2026-09-09 17:47Z
+heartbeat_at: 2026-09-09 17:56Z
 status: active
-focus: "ST0017: 36/51 satisfied, 3 withdrawn, doctor 0. hv is afk and vc has the pen. Everything still open is with a peer -- cc is fixing AC-1.16s three live gate sites now, snorkeltoast owes a redproof re-run. Five rows closed or corrected this stretch, three of them because the estate moved out from under the rows wording."
+focus: "ST0017: 39/51 satisfied, 3 withdrawn, doctor 0. hv afk, vc has the pen. WP-01 14/15, WP-02 16/17. Everything open is with a peer or waits on cc build verb. Now AUDITING UNGRADED ROWS AHEAD OF THEIR CODE -- six rows needed their instrument corrected at grading time today, so AC-5.1, AC-5.3, AC-3.2 and AC-3.4 were fixed before the code that would have exposed them."
 claims: [ST0017]
 ---
 
@@ -18,9 +18,9 @@ Validation node. cc builds, vc contracts and verifies, hv adjudicates. Full boar
 **ST0017 -- showreel hoisted under `utilz prez showreel`. vc holds the contract, cc builds, snorkeltoast has closed.**
 Localfolded 2026-09-09 16:51Z. Full boards for 8 Sep and earlier folds of 9 Sep in `.history/`.
 
-- **Contract: 38 of 51 satisfied, 3 withdrawn, `intent doctor` 0.** `intent ac list ST0017` is the live contract;
+- **Contract: 39 of 51 satisfied, 3 withdrawn, `intent doctor` 0.** `intent ac list ST0017` is the live contract;
   `design.md` carries the reasoning. **Ids are `AC-<wp>.<seq>` and the group digit IS the work package.**
-- **WP-01 14/15. WP-02 15/17. WP-03 7/12. WP-04 0/2. WP-05 1/3. WP-06 1/2.**
+- **WP-01 14/15. WP-02 16/17. WP-03 7/12. WP-04 0/2. WP-05 1/3. WP-06 1/2.**
 - **`utilz prez showreel check <dir>` RUNS end to end**, both invocation forms, exit 0 against the live 45h reel.
   **WP-05's dispatch is done; WP-03's build path is the only thing between here and hv's bar** -- hv killed the
   Python shim fallback, so there is no relief valve.
@@ -82,6 +82,18 @@ captured 59 bytes of error, and `grep -c` scored it **0** -- one step from _the 
 **A census zero over an empty population reads exactly like a detector zero over a full one**; the line count is what
 gave it away, since one line of output for a 427-line help file is not a result. **When the environment cannot host
 the test, change the instrument rather than trusting its zero.**
+
+**SIX ROWS NEEDED THEIR INSTRUMENT CORRECTED AT GRADING TIME TODAY, SO STOP WAITING FOR THE SEVENTH.** AC-1.2
+named the lockfile, now 79 entries. AC-1.3 named a byte diff of prez, which cannot tell a test that MOVED to the
+shared crate from one that was DELETED. AC-3.10 named an edge set and still under-determined the answer by two,
+because nobody had named the DEDUP KEY. AC-6.1 said no Utilz-tree file contains the popupart theme while
+`popupart.theme.yaml` sat in the tree. **Every correction made the row STRICTER, which is the tell that the property
+was right and only the instrument had aged.** The move that pays is auditing the UNGRADED rows before their code
+lands: it caught AC-5.1 (fails against a bare invocation, correctly, because 45h names `theme: popupart`), AC-5.3
+(no named population, and showreel is self-contained, so the row was satisfiable by reporting nothing), AC-3.2 (two
+of six sites exercised by no real config) and AC-3.4 (**half its population is in WP-04** -- `normalise_image` is
+init-only). **A row is cheap to fix before its code exists and expensive after, and the cost is not the edit -- it
+is that the grading already happened in someone's head.**
 
 **STAGING EXPLICIT PATHSPECS IS NOT SUFFICIENT, AND I HAD BEEN CARRYING THE RULE IN ITS INSUFFICIENT FORM.**
 `git add <paths>` followed by a bare `git commit` commits **the INDEX, not the paths** -- cc staged `design.md` and
