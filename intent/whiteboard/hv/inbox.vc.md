@@ -220,3 +220,28 @@ _(entry by vc, named reader of this inbox; also put to hv live.)_
 **On the header:** the amendment records something the file did not say and no tool could re-derive -- the header's OPEN rule admits Not Started while `organize --default` writes one line per WIP thread, and the two agree today only because ST0017 is the sole non-Completed thread. Regenerating would have produced a byte-identical thread list and thrown that away. `organize` previews identically after the edit, so the block is inert to the parser by measurement.
 
 _(entry by vc, named reader of this inbox; all four also put to hv live.)_
+
+## (2026-09-09 17:36Z) DECISION NEEDED, not urgent and not blocking: two pinned fixtures carry a named individual into a PUBLIC repo
+
+**THE FACT.** `matthewsinclair/utilz` is **public** -- confirmed with `gh repo view --json visibility`, not assumed. Two fixtures landed in the crate today:
+
+| file                                           | what it carries                                                                                                                                                              |
+| ---------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `crates/showreel/fixtures/45h.showreel.yaml`   | **220 lines of a real reel config**: artist name **Ash Sinclair**, handle `45h`, producer Snorkeltoast, wordmark POP^UP^ART, venue URLs, the six lines of opening crawl copy |
+| `crates/showreel/fixtures/popupart.theme.yaml` | the theme manifest: brand description, token source path, five font family names                                                                                             |
+
+**NOTHING IS PUBLISHED YET.** `upstream` is frozen and sits 117 commits behind, so this is decidable BEFORE it is public rather than after. That is the whole reason it is worth two minutes now.
+
+**THIS IS NOT A CONFLICT WITH AC-2.18 AND I CHECKED RATHER THAN ASSUMED.** Your ruling was that the reel's INPUTS stay in Dropbox, and the row's own measurement says _"the config costs nothing"_ -- 8 KB in 1 file against 5.7 MB of source images. That was a SIZE decision about what to track. **It was not a decision about what to publish**, and nobody has been asked the second question.
+
+**Both fixtures earn their place.** cc pinned them under _"test against something you did not write"_, and the live config has already caught a real defect -- a missing `#[serde(rename = "loop")]` that no hand-written fixture would have found. **I am not proposing to drop them.**
+
+### Options
+
+- **(a) PROCEED AS IS.** Snorkeltoast is yours, a showreel is promotional material by nature, and the artist is a collaborator. Cost: zero. The only exposure is a named individual's details entering a public repo without that being a decision anyone made deliberately.
+- **(b) DE-IDENTIFY THE REEL CONFIG, KEEP THE THEME MANIFEST.** Replace the artist name and handle with a fixture identity; keep all 220 lines of structure. Cost: cc edits one fixture, once. **The test's value is the config's SHAPE and its fifteen segments, not the name** -- the `rename = "loop"` defect would still have been caught. The theme manifest carries your own brand and needs nothing.
+- **(c) DROP BOTH.** Loses the real-manifest and real-config regression tests. **Not recommended** -- it discards the property that found the defect.
+
+### Recommendation
+
+**(a) if you consider the showreel public promotional material or have the artist's agreement; otherwise (b).** (b) costs one edit and keeps every testing property except the name, so if you are unsure, (b) is the cheap side of the decision. **A one-word answer is enough and nothing waits on it** -- work continues either way, and I will not push regardless, since pushes are yours.
