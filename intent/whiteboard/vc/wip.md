@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 11981560-5612-4fe7-a136-6eae64636b64
-heartbeat_at: 2026-09-09 17:12Z
+heartbeat_at: 2026-09-09 17:40Z
 status: active
-focus: "ST0017: 35/51 satisfied, 3 withdrawn, doctor 0. AC-1.2 and AC-2.16 both closed this turn -- prez costs 17 third-party packages before WP-01 and 17 now, and the harness now CONSULTS a predicted-difference table rather than discovering a port change as a parity failure. snorkeltoast found AC-2.16 asserting a falsehood: the max_ease cap CLAMPS, it does not refuse. WP-03s build path is the only thing between here and hvs bar."
+focus: "ST0017: 36/51 satisfied, 3 withdrawn, doctor 0. hv is afk and vc has the pen. Everything still open is with a peer -- cc is fixing AC-1.16s three live gate sites now, snorkeltoast owes a redproof re-run. Five rows closed or corrected this stretch, three of them because the estate moved out from under the rows wording."
 claims: [ST0017]
 ---
 
@@ -18,9 +18,9 @@ Validation node. cc builds, vc contracts and verifies, hv adjudicates. Full boar
 **ST0017 -- showreel hoisted under `utilz prez showreel`. vc holds the contract, cc builds, snorkeltoast has closed.**
 Localfolded 2026-09-09 16:51Z. Full boards for 8 Sep and earlier folds of 9 Sep in `.history/`.
 
-- **Contract: 35 of 51 satisfied, 3 withdrawn, `intent doctor` 0.** `intent ac list ST0017` is the live contract;
+- **Contract: 36 of 51 satisfied, 3 withdrawn, `intent doctor` 0.** `intent ac list ST0017` is the live contract;
   `design.md` carries the reasoning. **Ids are `AC-<wp>.<seq>` and the group digit IS the work package.**
-- **WP-01 13/15. WP-02 14/17. WP-03 6/12. WP-04 0/2. WP-05 1/3. WP-06 1/2.**
+- **WP-01 13/15. WP-02 14/17. WP-03 7/12. WP-04 0/2. WP-05 1/3. WP-06 1/2.**
 - **`utilz prez showreel check <dir>` RUNS end to end**, both invocation forms, exit 0 against the live 45h reel.
   **WP-05's dispatch is done; WP-03's build path is the only thing between here and hv's bar** -- hv killed the
   Python shim fallback, so there is no relief valve.
@@ -82,6 +82,25 @@ captured 59 bytes of error, and `grep -c` scored it **0** -- one step from _the 
 **A census zero over an empty population reads exactly like a detector zero over a full one**; the line count is what
 gave it away, since one line of output for a 427-line help file is not a result. **When the environment cannot host
 the test, change the instrument rather than trusting its zero.**
+
+**STAGING EXPLICIT PATHSPECS IS NOT SUFFICIENT, AND I HAD BEEN CARRYING THE RULE IN ITS INSUFFICIENT FORM.**
+`git add <paths>` followed by a bare `git commit` commits **the INDEX, not the paths** -- cc staged `design.md` and
+`main.rs` in the interval and my AC-1.16 commit took both, under my message. **`git commit --only <paths>` is the
+form that holds**, verified twice since with cc's files staged and untouched through both. Not rewritten: `local` is
+shared, cc may have built on it, and rewriting a shared branch to fix attribution is the worse trade. **The general
+shape: a rule that names the WRITE does not cover the COMMIT, because the index is a third party to both.**
+
+**A DETECTOR WHOSE POPULATION IS A STRICT SUBSET OF ITS OWN NAME, AND THE USUAL CONTROL DOES NOT CATCH IT.** Asking
+whether six harness commits touched `redproof`'s machinery, I grepped for added or removed lines matching
+`def cmd_redproof|def rmse|def capture|...` and got a clean ZERO across all six -- which would have licensed
+satisfying AC-2.4 on a record from four hours earlier. **The pattern can only fire when a SIGNATURE changes**, and
+none of those commits changed one, so it could not have fired however much the bodies moved. I had named it
+_touches redproof machinery_ and built it to measure _changes a def line of redproof machinery_. **THE NAME
+CONCEALED THE NARROWING.** And it would pass a has-it-ever-fired check, because it fires happily on any commit that
+adds a function -- so the standard control is blind here. **The control that works is asking what the detector
+CANNOT SEE**; for a line-pattern over a diff, that is everything inside a function body. The right instrument was
+hunk CONTEXT (`@@ ... @@ def foo`), which answers the question actually asked: four of five call-graph members plus
+the function itself.
 
 **THE NODE THAT HOLDS THE CONTRACT CAN MAKE ONE CLAIM NO BUILDER CAN, AND IT IS ORDERING.** snorkeltoast's
 predicted-difference table asserts in its own header that the prediction existed FIRST -- and from inside their tree
