@@ -281,7 +281,9 @@ jobs:
           crate_dir="$(dirname "$manifest")"
           echo "::group::$manifest"
           cargo build --release --manifest-path "$manifest"
-          cargo test --release --manifest-path "$manifest"
+          # --workspace or every crate but the root package is silently
+          # skipped; --no-fail-fast or the first failing crate hides the rest.
+          cargo test --release --workspace --no-fail-fast --manifest-path "$manifest"
 
           # The black-box suites, always --strict, DISCOVERED rather than named
           # (ST0013/AC03). Without --strict six of nine ATs degrade to skips and

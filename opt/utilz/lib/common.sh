@@ -835,7 +835,17 @@ _run_crate_tests() {
   echo -e "Manifest: $manifest"
   echo -e ""
 
-  cargo test --manifest-path "$manifest"
+  # --workspace AND --no-fail-fast, together, and neither is tidiness.
+  #
+  # Without --workspace, cargo operates on the ROOT PACKAGE alone -- prez -- and
+  # every other crate in the workspace is silently skipped. Measured when the
+  # workspace was introduced: 1 executable without it, 2 with. A skipped crate's
+  # tests do not fail, they never run, and the suite reports green.
+  #
+  # Without --no-fail-fast, the first failing target stops the run, so a prez
+  # failure hides every other crate's results. That cost is not incurred by
+  # adding crates later; it is incurred the moment there is more than one.
+  cargo test --workspace --no-fail-fast --manifest-path "$manifest"
 }
 
 # The existing BATS path, unchanged in behaviour and moved here so the

@@ -17,8 +17,22 @@ license = "MIT"
 # against the 8 MB ceiling that has to accommodate mermaid's 3.5 MB as well.
 # We do no server-side highlighting -- the artifact's theme handles code
 # presentation -- so the feature buys nothing and costs most of the budget.
+# **PACKAGE KEY.** This block belongs to the prez PACKAGE, not to the workspace.
+# If prez ever relocates to crates/prez/, this moves with it and `[profile.*]`
+# below does NOT -- one file, two destinies.
 [dependencies]
 comrak = { version = "0.54", default-features = false }
+
+# **`artifact` IS THE ONE ADDITION AC02 HAS BEEN SIGNED OFF FOR, BY hv, ON
+# 2026-09-09, AS A ONE-OFF.** It is a first-party crate in this workspace that
+# takes NO dependencies of its own, so it adds zero packages to the lockfile and
+# zero third-party code -- the two currencies AC02's reasoning is denominated in.
+#
+# **THE RULING WAS NOT BROADENED AND THAT IS DELIBERATE.** hv declined to rewrite
+# AC02 as a first-party/third-party distinction, so this sign-off covers THIS
+# crate and nothing else: a second first-party dependency asks the question
+# again, from the start.
+artifact = { path = "crates/artifact" }
 
 # The artifact is shipped to people, so size is a feature. `strip` and `lto`
 # together are worth roughly half the binary; `panic = "abort"` drops the
@@ -29,3 +43,29 @@ lto = true
 codegen-units = 1
 panic = "abort"
 strip = true
+
+# ---- WORKSPACE: this manifest is BOTH prez's package and the workspace root ----
+#
+# **THE ROOT IS NOT A SEPARATE DIRECTORY, AND THAT IS LOAD-BEARING RATHER THAN
+# TIDY.** src/theme.rs and src/mermaid.rs embed `../themes/*` and
+# `../assets/*` with include_str! at COMPILE time, and the shim's freshness
+# check walks src/, themes/ and assets/ as siblings. A conventional layout that
+# moved the package down into crates/ would break all three at once -- and the
+# freshness check would break SILENTLY, because it suppresses find's errors, so
+# it would report a stale binary as current forever.
+#
+# `[profile.release]` above is the other reason. Cargo honours a profile ONLY at
+# a workspace root: had the root moved elsewhere, prez would have quietly lost
+# `lto` and `strip` -- roughly half the binary -- while every test still passed.
+# **WORKSPACE KEYS.** Everything from here down belongs to the WORKSPACE ROOT
+# and stays behind if the package ever moves.
+[workspace]
+members = ["crates/artifact"]
+
+# Cargo honours a profile ONLY at a workspace root, and `cargo test` inherits
+# `dev` -- so this one key reaches every test target rather than needing a
+# `[profile.test]` beside it. `line-tables-only` keeps the file and line a person
+# actually reads off a backtrace and drops the type and variable detail only a
+# debugger consumes.
+[profile.dev]
+debug = "line-tables-only"

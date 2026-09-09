@@ -9,7 +9,6 @@
 // Anything that decides something lives in a module beside it.
 
 mod args;
-mod base64;
 mod deck;
 mod drive;
 mod fence;
@@ -43,20 +42,14 @@ fn main() -> ExitCode {
 
 /// What went wrong, and what the reader should do about it.
 ///
-/// A bare string would let a caller omit the remedy, and a failure a user
-/// cannot act on is only half reported.
-#[derive(Debug)]
-pub struct Failure {
-  pub message: String,
-  pub remedy: Option<String>,
-  pub code: u8,
-}
+/// **DEFINED IN `artifact` AND RE-EXPORTED HERE**, so every `use crate::Failure`
+/// in this crate is unchanged. A bare string would let a caller omit the remedy,
+/// and a failure a user cannot act on is only half reported -- which is why the
+/// remedy is a field rather than a convention.
+pub use artifact::Failure;
 
-impl Failure {
-  pub fn new(message: impl Into<String>, remedy: impl Into<String>) -> Self {
-    Self { message: message.into(), remedy: Some(remedy.into()), code: 2 }
-  }
-}
+/// Base64, likewise shared. `crate::base64` still resolves for `inline.rs`.
+pub(crate) use artifact::base64;
 
 fn run() -> Result<(), Failure> {
   let argv: Vec<String> = std::env::args().skip(1).collect();

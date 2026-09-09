@@ -1,0 +1,18 @@
+[package]
+name = "artifact"
+version = "0.1.0"
+edition = "2021"
+description = "Self-contained-artifact primitives shared by the tools that emit one: theme resolution, base64, and the failure vocabulary."
+license = "MIT"
+
+# ---- NO DEPENDENCIES, AND THIS IS A CONTRACT RATHER THAN A CURRENT FACT ----
+#
+# This crate exists so that two binaries with INCOMPATIBLE dependency budgets can
+# share one implementation. prez is held to comrak and nothing else (AC02); the
+# reel pipeline needs an image stack it cannot avoid. A shared crate that took a
+# dependency of its own would spend from both budgets at once and hand the
+# stricter one a cost it never agreed to.
+#
+# So: std only. A crate added here needs the same sign-off AC02 requires, from
+# every consumer, not just from one.
+[dependencies]

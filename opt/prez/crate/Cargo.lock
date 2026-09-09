@@ -3,6 +3,10 @@
 version = 4
 
 [[package]]
+name = "artifact"
+version = "0.1.0"
+
+[[package]]
 name = "caseless"
 version = "0.2.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -95,6 +99,7 @@ dependencies = [
 name = "prez"
 version = "2.0.0"
 dependencies = [
+ "artifact",
  "comrak",
 ]
 

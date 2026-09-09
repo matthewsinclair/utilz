@@ -1,8 +1,14 @@
-// Base64, hand-rolled (AC02: comrak is the only dependency).
+// Base64, hand-rolled -- because the crate it lives in takes no dependencies.
 //
-// Encoding only. prez turns bytes into `data:` URIs and never reads one back,
-// so a decoder would be dead code with tests that prove nothing about the
-// artifact.
+// **THE HAND-ROLLING IS THE POINT, NOT AN ACCIDENT OF HISTORY.** AC02 holds prez
+// to comrak and nothing else, so this was written against std rather than
+// pulled in. That ruling is what made it cheap to share: a base64 crate here
+// would have to be agreed by every consumer of this crate, and forty lines
+// against std need no one's agreement at all.
+//
+// Encoding only. These tools turn bytes into `data:` URIs and never read one
+// back, so a decoder would be dead code carrying tests that prove nothing about
+// any artifact.
 
 const ALPHABET: &[u8; 64] = b"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
