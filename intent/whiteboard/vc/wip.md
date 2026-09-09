@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 11981560-5612-4fe7-a136-6eae64636b64
-heartbeat_at: 2026-09-09 20:24Z
+heartbeat_at: 2026-09-09 20:27Z
 status: active
-focus: "ST0017: 42/51, 3 withdrawn, doctor 0. Post-compact pickup 2026-09-09 20:10Z. hv has NOT ruled on serde_json -- cc is idle and every open row is blocked behind it. hv is LIVE this session, so the four items sitting in hv/inbox.vc.md get surfaced in person rather than left in the durable channel."
+focus: "ST0017: 42/51, 3 withdrawn. hv READ the plan and left WITHOUT ruling on serde_json, so the four items are DELIVERED-AND-UNDECIDED rather than queued -- a different state, and there is no live reader again. cc is NOT idle: AC-3.2 clause and the producer stamp are both JSON-free. Emitter stays held; building the thing under decision pre-empts the decision."
 claims: [ST0017]
 ---
 
@@ -59,6 +59,24 @@ Localfolded 2026-09-09 16:51Z. Full boards for 8 Sep and earlier folds of 9 Sep 
   statement of the doctrine in the file, including the Slide-1 worked example -- and the proxy it teaches would
   give a different answer from the mechanism that ships.
 
+- **cc CORRECTED MY BOARD AND WAS RIGHT (20:11Z).** My focus said "cc is FULLY BLOCKED AND IDLE" while my own TODO
+  said "AC-3.2 WAITS ONLY ON `report_unused`" -- **only one can be true, and the detailed row was the accurate
+  one.** I wrote the focus line from the payload's SHAPE rather than from the rows. **The summary drifted from the
+  detail it was summarising, and the detail was right** -- which is the argument for grading against rows and not
+  against a narrative, applied to me.
+- **RULED FOR cc ON `exclude:` (`2a11e54`).** An excluded file is NOT a dropped segment input: an instruction
+  obeyed, not an accident. **Two attempts to break it failed** -- the textual one succeeds against the ROW'S WORDS
+  and not the property, so the words changed. A wrong `exclude:` is a real hazard, is not this row's, and is
+  recorded as a stated limit.
+- **SEQUENCING DECISION, MINE: THE EMITTER STAYS HELD.** cc offered to hand-roll it while hv is away. **Building
+  the thing under decision pre-empts the decision** -- and biases it toward the sunk cost. cc refused to spend
+  hv's vague "rock on as needed" on a crate; **I will not launder it either.** Holding is free now that two
+  JSON-free rows are live. What I DID take from their argument: the reference's field order gets a stated home in
+  design.md now, which survives either ruling.
+- **hv'S WINDOW CLOSED AT ~20:13Z AND cc FLAGGED IT.** The four items were **surfaced in person and hv left
+  without ruling** -- delivered-and-undecided, which is NOT the same as queued and must not be recorded as it.
+  The durable channel holds them again; the next live window is the next chance.
+
 ## TODO
 
 - **BOTH AUDITS ARE DONE AND ON THEIR ROWS.** AC-3.6's runtime leg reduces to ONE property -- the emitted payload's
@@ -93,6 +111,12 @@ Localfolded 2026-09-09 16:51Z. Full boards for 8 Sep and earlier folds of 9 Sep 
 - **hv OWES FOUR THINGS AND ALL FOUR ARE STILL OPEN.** `serde_json` is the one that unblocks work; the fixtures and
   the QR thread are decidable any time; the four FYIs want no ruling. hv's OWN board still reads
   "Utilz stable at v2.4.0. No stream in flight." from 2026-07-29 and is wrong in both halves -- hv's to edit.
+
+- **MY SWEEP'S LIMIT, FOUND BY cc AND NOW ON AC-3.2.** I swept for `pub fn` with no production caller.
+  `admit::Scan::report` PASSES that cleanly -- it has one, `slide.rs:425` -- and its **result is discarded on the
+  success path**, read only inside `if files.is_empty()`. **Being CALLED and having its RESULT READ are different
+  properties and I measured only the first.** The machinery-nothing-calls class one level down. Any future sweep
+  must ask both.
 
 ## Holds
 
