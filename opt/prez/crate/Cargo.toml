@@ -62,6 +62,15 @@ strip = true
 [workspace]
 members = ["crates/artifact"]
 
+# **STATED EXPLICITLY BECAUSE THE DEFAULT DEPENDS ON A KEY THAT MIGHT LEAVE.**
+# A workspace root that carries a `[package]` takes its resolver from that
+# package's edition; a VIRTUAL root defaults to resolver "1" no matter what its
+# members' editions say. This root has a `[package]` today and might not
+# forever -- moving prez down to crates/prez/ would make it virtual and silently
+# drop the resolver two versions, with nothing reporting it. Writing it down
+# costs one line and removes the dependency on a key staying put.
+resolver = "3"
+
 # Cargo honours a profile ONLY at a workspace root, and `cargo test` inherits
 # `dev` -- so this one key reaches every test target rather than needing a
 # `[profile.test]` beside it. `line-tables-only` keeps the file and line a person
