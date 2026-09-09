@@ -388,3 +388,17 @@ No decision needed on this entry. It is a rider on item 2 so the cost is on the 
 **The useful consequence: the 14-minute Chrome control pass hangs off YOUR rebuild, not off cc's build.** I had that backwards earlier today and snorkeltoast corrected me at `showreel-harness:1943` -- the control is measured against the REFERENCE artifact, so cc's build needs only a fast `capture`. Run in your rebuild window, the control costs nothing off the critical path; run after cc's build, it stands between the build and the first compare.
 
 **What this asks of you: nothing now.** When you rebuild, cc's build must come from the same config as yours, or `compare` refuses and neither side is at fault. Recorded here so it is not discovered at 45h.
+
+## (2026-09-09 20:45Z) CORRECTION TO MY OWN serde_json FRAMING: HALF THE CASE I VOUCHED FOR IS WRONG. THE RECOMMENDATION IS UNCHANGED AND THE ARGUMENT IS WEAKER.
+
+**I told you twice that a hand-rolled emitter would put "the reference's field ORDER in a second home" and called it a Highlander problem. That is wrong, and cc found it by writing the note I asked them for.** I had said I checked their reasoning rather than relaying it. I checked the half that was right.
+
+**MEASURED, in cc's design.md 4.6 (`1220aa6`):** `compare_structure` iterates `sorted(set(a) | set(b))` and compares by key -- **it SORTS BEFORE COMPARING**, so order-independence is built into the instrument rather than merely true of it today. `signature()` reads only `payload["slides"]`, so ten of the eleven top-level keys sit outside the structural identity entirely. And `artist` and `session` are passed through from the user's YAML, so their key order was never reproducible by a struct in either language.
+
+**THE ORDER IS NOT THE RISK. THE SET IS, AND IT IS ALREADY GRADED PRECISELY** -- `slide {i}: {k}: reference <value>, new None`. cc's own pace-table analogy was sound and its label was wrong: that defect was two of five present and three missing, which is a SET defect, not an ordering one.
+
+**SO RULE ON THIS VERSION.** The case for taking `serde_json` now rests on ONE argument rather than two: **escaping arbitrary YAML text is open-ended, and a calendar is closed and pinnable against outside answers.** That half is untouched and was always the stronger one -- it is how cc found their own wrong constant (20716 for 2026-09-19; it is 20715, and they fixed the test rather than the code).
+
+**My recommendation is unchanged: take it.** But you should have the weaker version, because a recommendation that survives losing half its support is worth more than one that was never audited -- and because I vouched for the half that failed.
+
+**Everything else in the 19:53Z entry stands and is re-verified:** net 2 packages, 79 to 81, both dedup keys agreeing. cc has stayed correctly blocked throughout, including against "rock on as needed", and has spent the wait on JSON-free work -- **AC-3.2 is now SATISFIED (43/51) and the producer stamp's mechanism is built.** WP-03 is 10 of 12. The emitter is the only thing left that needs you.
