@@ -1117,6 +1117,52 @@ Three consequences the port must carry:
   judgement someone tidies away. Where knowing a rule demonstrably does not prevent the error,
   the guard belongs in the code.
 
+### 3.1 The shape C1 takes, decided before the code
+
+**ONE CLASSIFIER, TWO CALL SHAPES, AND THE DIFFERENCE BETWEEN THEM IS WHO ASSERTED THE PATH.**
+That is the whole of it, and it is why "one function" does not mean one policy:
+
+- **A path the config NAMED** -- `bug.file`, `logo`'s `file:`, `strapline`'s `mark:`, `venue`'s
+  `image:`, each entry of `files:` -- is an ASSERTION by the author. Missing refuses. A type the
+  tool cannot embed refuses. **Five sites, one policy, no skipping**, because there is nothing to
+  skip past: the author wrote that filename down.
+- **A directory the config SCANNED** -- `from:` -- is a QUERY. It may legitimately hold a
+  `README`, a `.DS_Store`, a stray export. **Refusing the segment because a directory contains a
+  text file would make the feature unusable**, so non-images are dropped -- and **the drop is
+  REPORTED at the segment's altitude**, which is the half the reference does not have.
+
+**THE REPORT IS THE WHOLE OF C1'S VALUE AND IT IS NOT A REFUSAL.** `report_unused` already names
+files under `assets/` that no segment read, and AC-3.2 says to extend it rather than duplicate
+it -- but it fires at the WRONG ALTITUDE: it says an asset went unread, never that segment `x`
+asked for a directory and silently dropped three things out of it. **Those are different
+sentences and only one of them tells the author where to look.**
+
+**THE ADMISSIBLE SET IS `RASTER_EXT`, AND IT IS THE SAME SET THE MANIFEST ALREADY BUYS.** `image`
+is compiled with exactly `jpeg, png, webp, gif, tiff` (AC-3.9), and `RASTER_EXT`'s seven
+spellings are those five formats plus the second spelling of two of them -- `.jpg`/`.jpeg` and
+`.tif`/`.tiff`. **Stated so the two cannot drift silently**: a decoder feature added without its
+spellings admits nothing, and a spelling added without its feature refuses at decode instead of
+at admission, which is the wrong altitude again.
+
+**`.pdf` REFUSES BY NAME AT A NAMED SITE AND IS REPORTED AT A SCANNED ONE.** The reference gives
+three different answers to one file -- silently absent through `from:`, traceback through the
+other two -- and section 3 already calls the crash the symptom. **`rasterise_pdf` is NOT in this
+work package**: the 45h reel contains no PDF, the budget carries no rasteriser, and adding one
+needs hv's sign-off by AC-3.9. So the port says so, by name, instead of crashing or vanishing.
+
+**`.svg` IS NOT A SLIDE IMAGE, AND THAT IS MEASURED RATHER THAN ASSUMED.** All five SVGs in the
+live reel are QR codes under `assets/qr/`, reached by `load_qr` as TEXT and never by an image
+site. So SVG's absence from `RASTER_EXT` is correct and is not an oversight to helpfully fix --
+an SVG arriving at an image site is a mistake worth naming.
+
+**AND THE LIVE REEL CANNOT PROVE THIS ONE, WHICH IS WHY THE TESTS MUST.** Measured against
+45h's config: `from:` 1, `file:` 1, `mark:` 2, `image:` 1, `bug:` 1, `qr:` 3 -- and **`files:` 0,
+`exclude:` 0.** Two of the six sites are exercised by no real configuration in this estate, so
+the test population is the only thing standing behind them, exactly as `segment.rs` already
+records for the shape table.
+
+---
+
 ---
 
 ## 4. The fidelity contract
