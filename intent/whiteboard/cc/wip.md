@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: a30f9092-03ed-44ba-a659-b37813af12c7
-heartbeat_at: 2026-09-09 10:57Z
+heartbeat_at: 2026-09-09 11:16Z
 status: active
-focus: "ST0017 hoist. WP-01 landed and closed out -- one theme resolver in a shared crate, linked by both binaries, every gate green. WP-03 open; LIMITS is ruled and unported. Localfold before a compact -- status stays active."
+focus: "ST0017 hoist. WP-01 done. WP-03 started: AC-3.5's CSS half built, issues 0014, 0015 and 0017 closed by one fix, red-proved both ways. LIMITS unblocked by snorkeltoast's parity answer and still unported."
 claims: [ST0017]
 ---
 
@@ -16,13 +16,13 @@ claims: [ST0017]
 **ST0017 -- hoisting snorkeltoast's `showreel` into Utilz as a Rust pipeline. Claimed today; this board carried `claims: []` while WP-01 was built, which was wrong and is corrected here.**
 
 - **WP-01 is DONE and its evidence is with vc.** One theme resolver + base64 + `Failure` in `opt/prez/crate/crates/artifact/`, linked by prez. `crate/Cargo.toml` is **both the workspace root and prez's package** -- `src/`, `themes/`, `assets/` must stay exact siblings (7 `include_str!` at compile time, plus the shim's freshness walk) and `[profile.*]` is honoured only at a workspace root.
-- **WP-03 is open and I am on the parts that do not touch `LIMITS`.** Budget approved: 59 packages, union, `image` at `jpeg,png,webp,gif,tiff`, `fast_image_resize` REFUSED.
+- **WP-03 STARTED (`intent wp start`, `ee1ba88`/`cd0412d`). AC-3.5's CSS half is built; its `theme.yaml` half is R3 and waits on showreel's manifest existing, so the row is NOT satisfied.** `refuse_external` now reads the two sites R2 names as TOKENS rather than hunting spellings, unioned with the coarse absolute-scheme net so nothing that refused before builds now. **Issues 0014, 0015 and 0017 closed by the one fix.** Budget approved: 59 packages, union, `image` at `jpeg,png,webp,gif,tiff`, `fast_image_resize` REFUSED.
+- **`LIMITS` is UNBLOCKED.** snorkeltoast measured the 45h config: max ease 900ms against min dwell 5000ms, nothing with ease >= dwell, so the new refusal will not diverge from the Python build on that reel.
 
 ## TODO
 
 - **`LIMITS` port -- RULED, unimplemented.** Apply `max_ease` at compile time and refuse a config whose ease meets or exceeds its dwell, by name. **The defect is split enforcement, not the constants**: `showreel:799-800` applies `min_dwell`/`min_ease` and never `max_ease`; the cap lives only in `player.html:549` while `showreel:988` claims the runtime enforces _the same_ floors.
 - **Issue 0016 -- record gate state in `manifest.sha256`.** Ratified, filed, unimplemented.
-- **Ask snorkeltoast whether the 45h config has any segment with ease >= dwell.** If so the Rust build REFUSES where Python built -- a parity difference the harness must expect rather than discover.
 - **Issue 0007 (prez counter contrast) and the two homeless findings** (`todo` verbs unreachable from Emacs; `hoist-rebase.sh`'s dead postcondition) are unchanged and unowned.
 
 ## Holds
@@ -40,6 +40,7 @@ claims: [ST0017]
 - **A TEST NAME THAT OUTRUNS ITS BODY.** Twice in one file: a name claiming reorder-sensitivity the body could not reach, and one claiming a hole was guarded when it only checked the text before it. **Name the test after what it measures, not what you hope it measures.**
 - **zsh DOES NOT WORD-SPLIT AN UNQUOTED VARIABLE.** Bit twice today -- multi-word `cargo add` flags arriving as one argument, and the shellcheck file list. Run shell tooling under `/bin/bash` with an ARRAY.
 - **A `grep` PATTERN BEGINNING `--` IS PARSED AS AN OPTION.** My token-uniqueness sweep errored on every call, printed nothing, and reported every token unique. Use `grep -- "$pat"`, and **put a control in the sweep that shows the broken and fixed forms disagree.**
+- **AN INSTRUMENT THAT SHARES AN ASSUMPTION WITH ITS SUBJECT CANNOT TEST THAT ASSUMPTION.** My probe read the artifact with a line-oriented, case-sensitive `grep` while measuring a line-oriented, case-sensitive defect, and reported two escapes as clean. **Nothing errored.** Recovered only by keying the detector on the PAYLOAD -- the host fragment -- rather than on the reference's syntax. Reach for the payload first; it is the cheap move that breaks the shared assumption.
 - **A COMMAND THAT DID NOT REBUILD REPORTS THE OLD ARTEFACT'S NUMBERS.** `Finished in 0.02s` meant I measured the previous day's binary and called it unchanged.
 
 ## The gates this estate runs, enumerated

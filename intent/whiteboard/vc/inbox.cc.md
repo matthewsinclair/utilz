@@ -154,3 +154,35 @@ Diffing found a defect in **prez**, which is mine. **prez's `refuse_external` mi
 **And the fifth behaviour should come out of the argument entirely.** showreel rewrites no HTML anywhere; `inline.rs` has no counterpart to share. snorkeltoast's own words on it, which I am quoting because they are the cleanest statement of why the diff was worth doing: _a claim about philosophy dressed as a claim about code._
 
 Delivery, agreed with snorkeltoast and recorded here: **they copy nothing and stage nothing. I pull once your contract names what lands where** -- one writer on this tree, and the copy attributable to a commit carrying ST0017.
+
+## (2026-09-09 11:16Z)
+
+WP-03 opened and its first row is built. **AC-3.5's CSS half is done and its theme.yaml half is not, so the row stays unsatisfied** -- I am not asking you to mark it. Two things below need your pen.
+
+### What landed, `ee1ba88` then `cd0412d`
+
+**R2 named the right rule and I could not implement it with a needle list.** Measured before writing code, 13 fixtures against the binary rebuilt from `5e86fc5`, two behaviour controls plus two detector controls: **eight of thirteen were decided wrongly and every one of the eight shipped its reference into the artifact.** Only four of those eight were filed. The other four escape by three mechanisms neither 0014 nor 0015 names, and they are one root -- `refuse_external` matched literal bytes against single lines while a CSS reference is a token that is case-insensitive, whitespace-tolerant and newline-tolerant. Filed as **issue 0017** with the table.
+
+That is why 0014's fix must not be a longer needle list: covering `url(`, `URL(`, `Url(`, `url (`, `url(` NEWLINE crossed with each quoting form is a list sized to whatever someone happened to try. **This thread's dominant failure, wearing a security hat.** So the sites are read as tokens: a `url()` token and an `@import` prelude read to its `;`.
+
+**The change is a UNION and nothing that refused before builds now.** The coarse absolute-scheme net stays over all live text, now ASCII-case-insensitive; site-aware protocol-relative detection is added beside it. `content: "//"` -- your R2 note's false positive -- still builds, and has a row saying so.
+
+**0014, 0015 and 0017 are CLOSED**, each with its evidence written into the issue before closing. Artifact level: `built=11 refused=2` became `built=3 refused=10`, C1/F1/F2 unchanged.
+
+### Two things that are yours
+
+**1. A behaviour change beyond AC-3.5's letter: an unterminated comment is now REFUSED by name rather than truncating the scan.** Truncation is defensible on browser semantics -- the rest is commented out for a reader too -- and indefensible as silence, `IN-AG-NO-SILENT-001`, on the scan that holds the offline guarantee. I implemented it and said so in the commit rather than slipping it in. **Does it want its own row?** My reading is that it does: it is a refusal a user can hit with a theme containing no external reference at all, so AC-3.5's title does not cover it.
+
+**2. AC-3.5 says "in CSS and in theme.yaml" and I have done CSS only.** R3's half needs showreel's theme manifest to exist, and its scan is a different grammar -- YAML values, not `url()` tokens. Flagging so the row's half-done state is yours rather than discovered later.
+
+### One correction to my own commit, and it is this section's lesson landing on me
+
+`ee1ba88` says **nine** escapes. It is **eight**. Nine references reach the artifact; the ninth is F2, a url inside a comment, which is correct to ship and fetches nothing -- it is the detector's presence arm. Two nearly-equal populations, _reached the artifact_ and _decided wrongly_, read as one because they differ by a single row. **The red-proof separated them**: the inverted suite named exactly eight against a design document asserting nine. Corrected in `design.md` 1.15, in issue 0017 and in the module doc; the commit message stands as the record of what I said.
+
+**And the probe's first detector reproduced both defects it was measuring.** `grep -E 'url\([^)]*//|HTTP://'` is line-oriented and case-sensitive, so it reported E5 and E9 as clean. Nothing errored. Recovered only because the rewritten detector keyed on the host fragment rather than on the reference's shape. **A case-blind instrument measuring a case-blind defect returns a clean result** -- your "the instrument is part of the claim", in a new place.
+
+### Also
+
+snorkeltoast answered the parity question: **the 45h config has max ease 900ms against min dwell 5000ms and nothing with ease >= dwell**, so WP-03's new `LIMITS` refusal will not diverge from the Python build on that reel. That TODO is discharged and the `LIMITS` port is unblocked.
+
+Gates run: `cargo test --release --workspace --no-fail-fast` 149 pass, clippy 0, build 4,384,896 of 8,388,608, all 4 prez suites, `devbin check autotests` unchanged. No shell touched.
