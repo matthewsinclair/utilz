@@ -3,7 +3,7 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 11981560-5612-4fe7-a136-6eae64636b64
-heartbeat_at: 2026-09-09 17:40Z
+heartbeat_at: 2026-09-09 17:47Z
 status: active
 focus: "ST0017: 36/51 satisfied, 3 withdrawn, doctor 0. hv is afk and vc has the pen. Everything still open is with a peer -- cc is fixing AC-1.16s three live gate sites now, snorkeltoast owes a redproof re-run. Five rows closed or corrected this stretch, three of them because the estate moved out from under the rows wording."
 claims: [ST0017]
@@ -18,9 +18,9 @@ Validation node. cc builds, vc contracts and verifies, hv adjudicates. Full boar
 **ST0017 -- showreel hoisted under `utilz prez showreel`. vc holds the contract, cc builds, snorkeltoast has closed.**
 Localfolded 2026-09-09 16:51Z. Full boards for 8 Sep and earlier folds of 9 Sep in `.history/`.
 
-- **Contract: 36 of 51 satisfied, 3 withdrawn, `intent doctor` 0.** `intent ac list ST0017` is the live contract;
+- **Contract: 38 of 51 satisfied, 3 withdrawn, `intent doctor` 0.** `intent ac list ST0017` is the live contract;
   `design.md` carries the reasoning. **Ids are `AC-<wp>.<seq>` and the group digit IS the work package.**
-- **WP-01 13/15. WP-02 14/17. WP-03 7/12. WP-04 0/2. WP-05 1/3. WP-06 1/2.**
+- **WP-01 14/15. WP-02 15/17. WP-03 7/12. WP-04 0/2. WP-05 1/3. WP-06 1/2.**
 - **`utilz prez showreel check <dir>` RUNS end to end**, both invocation forms, exit 0 against the live 45h reel.
   **WP-05's dispatch is done; WP-03's build path is the only thing between here and hv's bar** -- hv killed the
   Python shim fallback, so there is no relief valve.
@@ -174,6 +174,17 @@ incremental.**
 **INTENT'S OWN VERBS, LEARNED THE EXPENSIVE WAY.** `intent st hydrate <ID>` adds a thread to `.intentfiles` and writes its files; `st dehydrate` is its inverse; **`st attach <ID> <path> --from <file>` puts an AUTHORED doc into the store, and until you do, `organize` reports it `unclaimed` and can never remove it -- which is why a closed thread's directory survives every dehydration.** `organize --apply` is a whole-tree reconcile that REMOVES; never point it at a tree whose declaration is unsettled. `intent edit st <ID> --path` writes a declaration as a SIDE EFFECT of printing a path. `sync --to-disk` syncs the store with the canon extract and does NOT regenerate views. **`intent/.cache/` is gitignored -- an attachment living only there is lost on a fresh clone; verify it reached `intent/.canon/` before deleting any file it claims to hold.**
 
 ## Decisions that still decide things
+
+- (2026-09-09) **vc: cc's WP-03 order STANDS; both proposed reorderings refused.** hv sent cc to vc for sequencing.
+  **Do not build early to unblock AC-6.1 leg 3, AC-2.1 leg 2 and AC-5.1 -- those three rows are vc's, on vc's
+  contract, and reordering cc's engineering so vc's scoreboard moves sooner is optimising the measurement instead of
+  the thing.** The independent engineering argument agrees: a `build` emitting a knowingly-incomplete artifact feeds
+  the harness differences that are NOT in `PORT_EXPECTATIONS`, every one lands as an unpredicted STRUCTURAL MISMATCH,
+  and the instrument becomes noise **at exactly the moment its value is highest** -- after which harness red reads as
+  "we are not done yet" and a real regression is invisible. **And do not pull AC-3.7's `|| "Snorkeltoast"` drop
+  forward**: the 21-to-22 gradeability gain cannot be realised until there is an artifact to grade, and there cannot
+  be one until the template is pulled, which is the commit the drop belongs in. vc had said "take it early" and was
+  wrong about where early is.
 
 - (2026-09-09) **hv: NO PYTHON SHIM FALLBACK. "We're only doing work that moves this FORWARD and Python is a backwards
   step."** HOIST section 1's fallback -- a dispatcher over the reference implementation, measured by snorkeltoast at
