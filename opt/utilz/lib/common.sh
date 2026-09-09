@@ -842,9 +842,16 @@ _run_crate_tests() {
   # workspace was introduced: 1 executable without it, 2 with. A skipped crate's
   # tests do not fail, they never run, and the suite reports green.
   #
-  # Without --no-fail-fast, the first failing target stops the run, so a prez
-  # failure hides every other crate's results. That cost is not incurred by
-  # adding crates later; it is incurred the moment there is more than one.
+  # Without --no-fail-fast, cargo stops after the first failing TARGET -- so
+  # whether a later crate's results appear at all depends on the order cargo
+  # happens to run targets in, which is not ours to control.
+  #
+  # DRIVEN ON THIS TREE, two arms, one injected failure in prez, counting
+  # REPORTED FAILURES rather than $? (both arms exit non-zero, so the exit code
+  # cannot tell them apart): both arms reported artifact's 12, because artifact
+  # ran first that time; the arm without the flag stopped before the third
+  # target. So the flag is not "it would hide the other crate" -- it is "every
+  # target ran, regardless of an ordering nobody promised us".
   cargo test --workspace --no-fail-fast --manifest-path "$manifest"
 }
 
