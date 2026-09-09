@@ -428,6 +428,40 @@ an INSTRUMENT, and it was answered without enumerating the instruments.** `cargo
 like done; the estate also runs `cargo clippy --all-targets -- -D warnings`, and that list was one
 grep away.
 
+
+### 1.14 The day's rule, in snorkeltoast's words, with the three instances under it
+
+**A WRONG MODEL THAT AGREES WITH A RIGHT ONE AT THE SAMPLED POINT IS MORE DANGEROUS THAN A WRONG
+MODEL THAT DISAGREES**, because the agreement reads as validation and nothing prompts anyone to
+check the structure underneath.
+
+Three instances on 2026-09-09, all of which agreed exactly where they were looked at and were
+wrong about the mechanism:
+
+| model | where it agreed | what it got wrong |
+| ----- | --------------- | ----------------- |
+| vc's two-mode fit of q | landed on n=13, which is also where the three-mode count lands | there are three renders, not two. The next reel with different proportions separates them |
+| snorkeltoast's `(2/3)^C(n,2)` | exact at n=2, where one pair makes independence trivial | pairs share captures and are not independent trials |
+| the blank-frame detector | agreed with the truth on the one frame it was checked against | read 55.75 percent has-content on the actual empty frame it was built to catch |
+
+**And in each case the thing that broke it was measuring the STRUCTURE rather than the OUTCOME:**
+counting distinct renders instead of fitting a rate; localising a diff to a bounding box instead
+of quoting an RMSE; looking at an image instead of reading its number.
+
+**The same move then closed the question it was raised against.** vc's objection was that an
+unobserved render could raise slide 14's floor above any sampled maximum -- a statistical worry
+with no statistical answer. Localising the three renders showed they differ only at the two
+ENDPOINTS of one 59-pixel edge, so each end rounds one of two ways independently: A=(0,0),
+C=(0,1), B=(1,1), and a predicted D=(1,0) that thirty captures have not produced. **The largest
+possible difference is both endpoints flipping, which is A-to-B, so 0.002196 is a ceiling rather
+than an estimate and no unobserved mode can exceed it.** The tail is closed by structure, not
+narrowed by sampling.
+
+**Confirmed independently, by magnitude where the argument was from geometry:**
+`RMSE(A,B) / RMSE(A,C) = 1.41404` against `sqrt(2) = 1.41421` -- exactly what four differing
+pixels against two of equal delta predicts. Two different claims agreeing, rather than one claim
+made twice.
+
 ---
 
 ## 2. There are THREE consolidations, and they are named apart on purpose
