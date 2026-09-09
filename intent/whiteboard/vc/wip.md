@@ -3,7 +3,7 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 11981560-5612-4fe7-a136-6eae64636b64
-heartbeat_at: 2026-09-09 11:34Z
+heartbeat_at: 2026-09-09 11:37Z
 status: active
 focus: "ST0017 contract: 52 rows, 14 satisfied, 1 withdrawn, doctor 0. Both of cc's rulings given: AC-3.12 minted and satisfied, AC-3.5 kept as ONE row and reworded to the property. cd0412d validated on the population that SHIPS -- nine real theme.css files, built=9 refused=0, both controls. Then the direction question reversed my own draft ruling: issue 0018, a live href in layout.html hidden by a stray CSS comment marker and shipped, found by the sixth case after five agreed. AC-1.16: cargo build still has no --workspace, in CI and in the shim, and the shim will never build showreel."
 claims: [ST0017]
@@ -37,7 +37,8 @@ Validation node. cc builds, vc contracts and verifies, hv adjudicates. Full boar
 
 - **The minimum-defect magnitude for a showreel** (AC-2.17). Ruled in shape -- a named injected defect, never a multiplier -- and the value is hv's when next needed. NOT blocking.
 - **The `.intentfiles` header** is still the hand-written 2026-08-26 original naming `st hydrate` zero times.
-- **A GUARD FOR THE SHARED GIT INDEX.** The protocol gives every FILE one writer; the INDEX has no such rule and cc and vc share one working tree. `git add -A` or a broad pathspec from either sweeps the other's in-flight edits, silently. Two instances in two days, one each: vc's `688974c` dehydrated ST0016, cc's `8dea619` carried three of vc's contract rulings under a message about something else. Both nodes have moved to explicit pathspecs, which is discipline, not a guard. **A real guard is a pre-commit gate change on shared infrastructure, so it is hv's to want; neither node is building it unasked.**
+- **RESOLVED -- A GUARD FOR THE SHARED GIT INDEX.** hv ruled a pre-commit WARNING, not a refusal: the refusal needs a _which node am I_ at commit time that nothing here has, and would refuse the legitimate case of one node finishing another's work. **Filed as issue 0019 with the design gap stated rather than guessed** -- the warning as worded needs a record of what this node wrote, no such state exists at commit time, and all four candidates were checked against both instances and each fails at least one. Not started: a gate change on shared infrastructure while ST0017 is mid-flight.
+- **(superseded) A GUARD FOR THE SHARED GIT INDEX.** The protocol gives every FILE one writer; the INDEX has no such rule and cc and vc share one working tree. `git add -A` or a broad pathspec from either sweeps the other's in-flight edits, silently. Two instances in two days, one each: vc's `688974c` dehydrated ST0016, cc's `8dea619` carried three of vc's contract rulings under a message about something else. Both nodes have moved to explicit pathspecs, which is discipline, not a guard. **A real guard is a pre-commit gate change on shared infrastructure, so it is hv's to want; neither node is building it unasked.**
 - **ST0016 was dehydrated by vc as a SIDE EFFECT** of `git add -- intent/` in a commit about something else (`688974c`). Not reverted -- canon intact, ST0015 is in the same state -- but it executed a decision reserved to hv. Reported.
 
 ## Claims
@@ -99,6 +100,7 @@ Validation node. cc builds, vc contracts and verifies, hv adjudicates. Full boar
 
 ## Decisions that still decide things
 
+- (2026-09-09) **hv: the shared git index gets a pre-commit WARNING, not a refusal.** A refusal needs node identity at commit time and would refuse the legitimate cross-node commit. Issue 0019 carries the two instances and the unsettled design question.
 - (2026-09-08) **hv: no `v` in any version string, anywhere, including the git tag.** `utilz:2.8.0` solo, `utilz:2.8.0/<util>:<version>` paired. Historical prose and quoted cargo output are records of what something WAS and are left alone; `docs/developer-guide.md` was teaching the v-form and was fixed, because a doc that teaches it re-seeds it. Nothing in this repo globs `v*`, so the non-uniform tag series costs a reader's eye and nothing else -- measured, and hv accepted it twice.
 - (2026-09-08) **A closed thread's contract may gain a row, and the gate going BLOCKED is the thread admitting it closed incomplete.** ST0016 went 7/7 PASS to 7/8 BLOCKED when AC08 landed, and back to 8/8 when its test did. Not a regression; the honest signal.
 - (2026-09-08) **AC03 stays with the thread that paid for it** -- hv's ruling: a thread's cost of proof belongs to that thread, even when the proof is built somewhere the title does not name.
