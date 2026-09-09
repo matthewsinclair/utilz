@@ -83,6 +83,15 @@ captured 59 bytes of error, and `grep -c` scored it **0** -- one step from _the 
 gave it away, since one line of output for a 427-line help file is not a result. **When the environment cannot host
 the test, change the instrument rather than trusting its zero.**
 
+**`git commit --only` PLUS A REFORMATTING PRE-COMMIT HOOK LEAVES A FALSE `MM`, AND IT READS AS THE OPPOSITE OF
+WHAT IT IS.** Seen three times today and diagnosed the third: `--only` stages the path into a temporary index, the
+hook reformats the file, **the hook's version is what gets committed**, and the MAIN index keeps the version I
+staged. Result: `HEAD..index` differs, `index..work` differs, and **`HEAD..work` is EMPTY** -- everything is
+committed and the working copy is correct. `git restore --staged <path>` clears it. **The trap is that `MM` in a
+shared tree reads as "I have uncommitted work" when the truth is that there is none**, and my own covering
+discipline -- read the whole tree and expect it clean -- flags it every time. **Do not stop using `--only`**: it is
+what stops a bare commit sweeping a peer's staged work, which is a real harm against a cosmetic one.
+
 **FOUR SIBLINGS, AND THEY ARE ONE FAMILY: CORRECT-LOOKING WORK SUPPRESSING THE NEXT QUESTION.** Collected across
 three nodes in one afternoon, and the fourth is snorkeltoast's and the sharpest. **(1) A DIFFERENCE RECORDED AS A
 NUMBER STOPS BEING A QUESTION** -- "23 vs 22" sat in a state file for hours as an explained thing and the 1 had a
