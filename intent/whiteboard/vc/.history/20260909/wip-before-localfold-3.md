@@ -3,7 +3,7 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 11981560-5612-4fe7-a136-6eae64636b64
-heartbeat_at: 2026-09-09 16:51Z
+heartbeat_at: 2026-09-09 16:39Z
 status: active
 focus: "ST0017: 52 live rows, 16 satisfied, 2 withdrawn, doctor 0. hv ruled four times today and TWICE AGAINST vc's scope -- AC-3.7 and issue 0020 both cut as yak-shaving, both vc's, both real findings about checks nobody needs. max_ease capped at 2400; the reel's inputs stay in Dropbox; 'utilz prez showreel' confirmed. WP-02 closed on measurement at 21 gradeable of 22. WP-03 with cc."
 claims: [ST0017]
@@ -15,27 +15,27 @@ Validation node. cc builds, vc contracts and verifies, hv adjudicates. Full boar
 
 ## DOING
 
-**ST0017 -- showreel hoisted under `utilz prez showreel`. vc holds the contract, cc builds, snorkeltoast has closed.**
-Localfolded 2026-09-09 16:51Z. Full boards for 8 Sep and earlier folds of 9 Sep in `.history/`.
+**ST0017 -- showreel hoisted under `utilz prez showreel`. vc holds the contract, cc builds, snorkeltoast has closed.** Localfolded 2026-09-09 14:43Z.
 
-- **Contract: 33 of 51 satisfied, 3 withdrawn, `intent doctor` 0.** `intent ac list ST0017` is the live contract;
-  `design.md` carries the reasoning. **Ids are `AC-<wp>.<seq>` and the group digit IS the work package.**
-- **WP-01 12/15. WP-02 13/17. WP-03 6/12. WP-04 0/2. WP-05 1/3. WP-06 1/2.**
-- **`utilz prez showreel check <dir>` RUNS end to end**, both invocation forms, exit 0 against the live 45h reel.
-  **WP-05's dispatch is done; WP-03's build path is the only thing between here and hv's bar** -- hv killed the
-  Python shim fallback, so there is no relief valve.
+- **Contract: 52 live rows, 16 satisfied, 2 withdrawn, `intent doctor` 0.** `intent ac list ST0017` is the live contract; `design.md` (1347 lines) carries the reasoning. **Ids are `AC-<wp>.<seq>` and the group digit IS the work package.**
+- **36 ROWS ARE UNSATISFIED AND THIS BOARD SAID WP-01 WAS DONE AND WP-02 CLOSED.** `intent wp list` has both at WIP
+  and always did; the divergence was in the one file vc writes, and cc reads it. Per WP: **01 six** (AC-1.2, 1.11,
+  1.13, 1.14, 1.15, 1.16), **02 thirteen**, **03 eleven** (cc's front), **04 two**, **05 three**, **06 one**.
+- **WP-02's MEASUREMENT is closed and its ROWS are not the same statement.** FLOORS.md reads 21 gradeable / 0
+  undecided / 1 ungradeable of 22 at hv's named magnitude; ten of the thirteen are properties of the harness that
+  produced it and are dischargeable against it. **AC-2.4 and AC-2.16 bind the Rust grading and correctly stay open.**
 
 ## TODO
 
-- **Verify cc's build-path slices as they land.** Next is the built-ins pull and font/favicon emission, which needs
-  `themes/default/` out of snorkeltoast's tree -- cc will announce before touching their side.
-- **AC-2.16 is the row to have ready**: cc's design table PREDICTS that a theme missing its declared favicon builds
-  under Python and refuses under Rust. **The evidence to want is the prediction, not just the behaviour** -- a
-  refusal the contract predicted is a pass, the same refusal discovered mid-run reads as a port regression.
-- **Mine and unblocked: AC-1.2** (WP-01's last vc row -- comrak line byte-identical, third-party count unchanged,
-  measurable now that AC-3.10's population work names the edge set).
-- **Waiting on WP-03 by construction:** AC-2.1's leg 2 (adjacency stops being a guess when the Rust build stamps its
-  own identity), AC-2.4, AC-2.16. **AC-2.12 stands as a recorded limit, not work.**
+- **Satisfy WP-01's six remaining rows**: AC-1.11 (census zero, print the census), AC-1.2 (against AT02),
+  AC-1.15, and AC-1.13 + AC-1.14 which need CARGO DRIVEN rather than read -- after cc's run, one target lock.
+- **With cc, all ruled and unblocked:** AC-3.13 (comment exemption becomes CSS-only now; per-surface grammar only once a real `theme.js` or `layout.html` exists); AC-1.16, **whose population the row itself under-counts** -- `cargo build` has no `--workspace` at
+  `tests.yml:283` or `opt/prez/prez:155`, AND the estate's own acceptance suite runs `cargo clippy` without it at
+  `opt/prez/crate/test/acceptance.sh:947` plus two builds at `:352` and `:375`. **947 is the sharp one: it is the
+  defect cc fixed in CI at 8dea619, still live in the gate that suite calls load-bearing**, so `artifact` and
+  `showreel` are unlinted by it. Fixing the two named homes satisfies the row BY ITS LETTER and leaves that. The
+  shim half lands on WP-05 before WP-05 starts; `max_ease` 2400.
+- **Slide 1 stays presence-UNPROVABLE and that is now PERMANENT** -- AC-3.7 withdrawn, nothing gates on the brand literal. cc may drop the fallback at the template pull, ungated. AC-2.14 names it; the reel reads 21 of 22 and says why.
 
 ## Holds
 
@@ -51,46 +51,60 @@ Localfolded 2026-09-09 16:51Z. Full boards for 8 Sep and earlier folds of 9 Sep 
 
 ## Live with other nodes
 
-- **`cc`: ACTIVE on WP-03's build path.** Dispatch and R3 landed; design.md section 5 decides three dispositions
-  before the code -- `load_theme`'s regex REPLACED not ported, a missing declared favicon REFUSED where the reference
-  warned, a `.ttf` refused by name with the conversion command. **Their board carries the gate list this estate runs.**
-- **`snorkeltoast`: CLOSED, and closed better than it started.** `FLOORS.md` at `daaa503ad7db` is the parity
-  baseline and is FINAL -- `cmd_control` takes only the artifact, so cc's next build does not supersede it, it
-  produces a different artifact needing its own run. They also fixed compare's missing budget check, pre-converted
-  the fonts, and made the reel byte-reproducible for the first time.
-- **`intent-vc` / `devbin-vc` / `lamplight-vc`:** consulted on the AC id form and on TN001. Each corrected a premise.
+- **`cc`: active on WP-03's config model** (`2b5e998`). Their board carries the enumerated gate list this estate runs, which is AC-1.12 made durable.
+- **`snorkeltoast`: CLOSED.** `FLOORS.md` is the parity baseline, their tree is stopped, build 008 is in the Sites repo. Six of vc's corrections today were theirs.
+- **`intent-vc` / `devbin-vc` / `lamplight-vc`:** consulted on the AC id form and on TN001. Each corrected a premise of ours.
 
 ## Watch-outs
 
-**MY OWN INSTRUMENT FAILED FOUR TIMES TODAY AND EVERY FAILURE PRODUCED A PLAUSIBLE FINDING ABOUT A PEER'S WORK.**
-Not one was caught by suspicion; each was caught by running the query that would NAME the thing rather than argue for
-it. **(1) A blank line.** `cargo tree --workspace --prefix none` separates member trees, the filter kept it, `wc -l`
-counted it as a package -- cc's union looked like an arithmetic sum, the exact error under discussion. Caught because
-an empty symmetric difference alongside differing counts is arithmetically impossible. **(2) A commit timestamp read
-as a file time.** Binary at 17:11, cc's fix commit at 17:17, so the binary looked stale and their new freshness walk
-looked broken -- the SOURCE was written at 17:10:21 and they built during gates before committing. **A commit
-timestamp is when the commit was made, not when the source was written.** **(3) A shared instrument.** cc measured 47
-/ 42 / 11 literal `**` in help output and vc reproduced 47 / 42 / 11 EXACTLY; both had piped stdout, and glow's
-`notty` style has no bold. **EXACT agreement is a stronger trap than near-agreement -- one-apart makes you look,
-byte-equal makes you stop.** Ask what two measurements SHARE before treating either as confirming the other. **(4) A
-test that could not run.** `script -q /dev/null` failed with `tcgetattr/ioctl: Operation not supported on socket`,
-captured 59 bytes of error, and `grep -c` scored it **0** -- one step from _the defect does not appear at a terminal_.
-**A census zero over an empty population reads exactly like a detector zero over a full one**; the line count is what
-gave it away, since one line of output for a 427-line help file is not a result. **When the environment cannot host
-the test, change the instrument rather than trusting its zero.**
+**TWO NODES REPRODUCING A FIGURE EXACTLY IS NOT INDEPENDENT VERIFICATION WHEN THEY SHARE THE INSTRUMENT.** cc
+measured issue 0021's help defect at 47 / 42 / 11 literal `**`; vc reproduced 47 / 42 / 11 exactly, and read the exact
+agreement as confirmation. **Both had piped stdout.** glow selects its `notty` style when stdout is not a terminal and
+that style has no bold, so the markers survive; forced to any real style it emits ANSI bold and ZERO literal `**`. A
+user at a terminal never saw the defect. **EXACT agreement is a stronger trap than near-agreement** -- one-apart makes
+you look, byte-equal makes you stop. Ask what the two measurements SHARE before treating one as confirming the other.
 
-**A ROW NAMING TWO HALVES IS NOT SATISFIED BY VERIFYING ONE OF THEM THOROUGHLY, AND THOROUGHNESS INSIDE THE WRONG
-POPULATION FEELS EXACTLY LIKE COMPLETENESS.** AC-3.5 says it implements R2 **and R3**. vc verified R2's three surfaces
-at the artifact in four arms with a control and out-of-band exit codes, and never asked what R3 was; it was marked
-satisfied for an hour. **The answer was written down in two places before the error was made** -- the row already
-carried vc's own sentence _the surfaces are the instances and not the criterion_, and design.md already stated that a
-half-built row stays unsatisfied. Caught only because cc mentioned R3 in passing about a row vc had closed.
+**A PTY MEASUREMENT THAT CANNOT ALLOCATE A PTY RETURNS A CLEAN ZERO.** `script -q /dev/null <cmd>` failed here with
+`tcgetattr/ioctl: Operation not supported on socket` -- this session has no controlling terminal -- and captured 59
+bytes of error, which `grep -c` scored as **0 literal `**`**. vc was one step from reporting that as _the defect does
+not appear at a terminal_. **A census zero over an empty population reads exactly like a detector zero over a full
+one.** What caught it was the line count: one line of output for a 427-line help text is not a result. The real answer
+came from forcing `glow -s dark|light|auto|notty` instead, which needs no terminal at all -- **when the environment
+cannot host the test, change the instrument rather than trusting its zero.**
 
-**WHEN A VERB ONLY REPLACES, COMPOSE THE NEW WHOLE AND PASS IT.** `intent issues edit --body` replaces, and wanting to
-APPEND is what sent vc to hand-edit canon JSON directly, minutes after using the verb correctly. Doctor caught it in
-one command (`residue: model-inconsistent`); the repair was to read canon and re-issue the whole body THROUGH the verb
-rather than run a destructive `sync --to-store`. **Do not reach around a verb because the shape of your edit is
-incremental.**
+**A BINARY'S mtime AGAINST A COMMIT'S TIMESTAMP IS NOT A FRESHNESS TEST, AND IT ALMOST COST cc A FALSE DEFECT REPORT.**
+Verifying 0018 at the artifact, vc read the prez binary at 17:11 and cc's fix commit at 17:17, concluded the binary
+predated the fix, ran a build, saw no rebuild message, and was composing a report that cc's brand-new freshness walk
+did not fire. **The source was written at 17:10:21 and the binary built at 17:11:04** -- cc edited, ran their gates
+which built it, then committed seven minutes later. **A commit timestamp is when the commit was made, not when the
+source was written**, and the only sound comparison is binary mtime against SOURCE mtime, which is exactly what the
+walk does. Running the walk by hand returned empty, correctly. **SECOND INSTRUMENT NEAR-MISS OF THE DAY AGAINST THE
+SAME PEER**, after the blank line in `cargo tree --workspace`: both times a plausible defect narrative about someone
+else's work was built out of vc's own faulty comparison, and both times what stopped it was running the query that
+would NAME the thing rather than argue for it.
+
+**`${PIPESTATUS[0]}` IS EMPTY IN zsh AND A MISSING EXIT CODE READS AS A PASS.** Four verification arms produced
+correct-looking refusal messages and `exit=` printed nothing at all, so **the claim "it refuses" rested entirely on
+the message text** -- a refusal that prints an error and exits 0 would have looked identical. zsh's array is
+`${pipestatus[1]}`, 1-indexed and lowercase. Re-run without a pipe: refusals exit 2 and write no artifact, builds exit
+0 and write one. **Read the exit code out of band, or do not claim the command failed.**
+
+**A ONE-APART DISAGREEMENT HIDES AN ERROR IN THE INSTRUMENT, AND TEN APART WOULD HAVE FORCED THE CHECK.** Reproducing
+cc's AC-3.10 figures gave five identical and two exactly one above theirs. The story that fitted -- their union was an
+arithmetic sum, mine measured workspace resolution, feature unification pulling one extra -- is coherent, on-topic, and
+was about to be sent as a correction about population discipline. **It was a blank line**: `cargo tree --workspace
+--prefix none` separates member trees, the filter kept it, `wc -l` counted it as a package. Caught only because the
+symmetric difference came back EMPTY while the counts differed, which is arithmetically impossible. **The near-miss was
+not caught by suspicion; it was caught by running the query that would have NAMED the difference.**
+
+**THE APPEND/REPLACE SHAPE IS WHAT PULLS YOU OFF THE VERB.** `intent issues edit --body` REPLACES, and wanting to
+APPEND is what sent vc to hand-edit canon JSON directly -- after using the verb correctly on the previous issue
+minutes earlier. Doctor caught it in one command (`residue: model-inconsistent`, the store behind the extract), and the
+repair was to read canon and re-issue the whole body THROUGH the verb rather than run a destructive `sync --to-store`.
+**When a verb only replaces, compose the new whole and pass it; do not reach around the verb because the shape of your
+edit is incremental.**
+
+**"FOUND SOMETHING REAL" AND "WORTH BUILDING" ARE DIFFERENT TESTS, AND I ONLY APPLIED THE FIRST.** hv cut two of mine as yak-shaving in one afternoon -- AC-3.7's brand-purity check and issue 0020's citation sweep -- and **both were true findings.** AC-3.7's red-proof held: HOIST section 4's proposed grep returns zero hits against a live brand literal, so the guard catches the instance it was written from rather than the class. A true finding about a check nobody needs. **Mine cost more than snorkeltoast's identical error because I was writing rows cc would have built against.** The tell is checkable: design.md gained nine sections in one day and **not one was requested.**
 
 **A ZERO HAS THREE KINDS AND THE THIRD READS EXACTLY LIKE THE FIRST TWO.** CENSUS -- nothing was there to count; sound, nothing to prove. DETECTOR -- nothing fired; sound **only if it could have fired**. TAUTOLOGY -- the branch was never reached; **worth nothing**, and it passes a per-detector history check because the detector HAS fired, in other runs. **Reachability is a property of the RUN.** Instances: FLOORS.md's `0 undecided` (unreachable once a magnitude is named); vc's `bare line NNN: none` (detector written in the command that ran after the fix -- red-proved retroactively, and it held).
 
