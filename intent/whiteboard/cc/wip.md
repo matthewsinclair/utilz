@@ -2,10 +2,10 @@
 node: cc
 name: Control Claude
 role: control
-session_id: 221775b1-d498-41c0-b937-4d10094711a8
-heartbeat_at: 2026-09-08 18:34Z
+session_id: a30f9092-03ed-44ba-a659-b37813af12c7
+heartbeat_at: 2026-09-09 07:55Z
 status: active
-focus: "Post-compact pickup. 2.8.0 IS OUT -- tagged at 9c2ed5f, both remotes, CI green, install republished and correct by behaviour. Everything this board called in-flight has landed. Nothing claimed, nothing held, inboxes empty. Awaiting hv."
+focus: "Fresh-session pickup. 0011 and 0010 closed by vc after this board was last written, so one issue is open and it is hv's. The PUBLISHED INSTALL is 6 commits behind and the diff is NOT cosmetic -- it still carries the generator defect 0010 closed, and PATH now resolves to the install. Nothing claimed, inboxes empty."
 claims: []
 ---
 
@@ -23,10 +23,10 @@ claims: []
 
 ## TODO
 
-**Three open issues, none assigned, in the order cc would take them.**
+**TWO OF THE THREE ARE CLOSED. vc took 0011 (`6200ac2`) and 0010 (`ca1e924`) after this board was last written, so the list below is one issue and one artefact defect, neither of them mine to start.**
 
-- **0011 (medium, the only open medium) -- `install_guards.bats:267` compares live HEAD against a fixture-time install.** The defect is PRESENT ON THIS TREE RIGHT NOW: live HEAD is `ac6829a`, the install was built from `6fb9de6`. That is a free red-proof, so `IN-AG-RED-CONTROL-001` costs nothing here. Fix is to compare against the commit the MANIFEST recorded, which is also the claim AC12 actually makes. hv's 2026-07-10 ruling lets a tracked issue drive this without a thread.
-- **0010 (low) -- eight `opt/*/README.md` ship hv's home path.** Population pinned: **8 files, 16 occurrences**, in `clipz cryptz expz gitz macoz mdagg retry stampz`; the other seven READMEs are clean. **A ninth file matches and is NOT part of this**: the install's `manifest.sha256` line 3 is `source-tree <path>`, a provenance record doing its job. Generator is already correct -- `README.tmpl` ships `$UTILZ_HOME` -- so this is a one-time edit, not a code change. Issue forbids an exception list in `install_e2e.bats`.
+- **THE PUBLISHED INSTALL STILL CARRIES THE DEFECT 0010 CLOSED, AND `utilz` ON PATH IS NOW THE INSTALL.** Measured this session, not carried forward: `manifest.sha256` records `source-commit 0c0af89`, six commits behind HEAD `60153d8`. **State the diff, never the distance -- and this time the diff is not cosmetic.** It contains `opt/utilz/lib/common.sh` (the install still fills `{{IMPL_PATH}}` from `$impl_path`, the checkout from `$impl_path_rel`), all eight corrected `opt/*/README.md`, and both install suites. `grep -rl '/Users/matts' opt/*/README.md`: **checkout 0, install 8.** So `utilz generate` run from PATH today mints hv's home path into a ninth README -- the exact thing `ca1e924` fixed. **Checkout-green and install-correct have come apart precisely where this board's own watch-out says they do.** Republish is one command; its timing is hv's.
+
 - **0007 (low) -- prez slide counter contrast. ITS STATED HOME NO LONGER EXISTS**: the issue files the fix under ST0010/WP-05, and WP-05 is **Cancelled**. Re-homing is hv's call, not something to settle by picking somewhere convenient. Compiler change, not a theme change.
 
 ## Holds
@@ -63,7 +63,7 @@ claims: []
 
 ## The estate, as of 8 Sep EOD
 
-- **`utilz` ON PATH IS THE CHECKOUT RIGHT NOW, NOT THE INSTALL.** `utilz use` reports which: `dev 16 links, opt 0` since 15:51. **This inverts what this board said all morning** -- do not carry either state forward, run `utilz use`. `utilz version`'s third line names the tree that answered and the commit it was cut from, which is the one command that tells a checkout from an install.
+- **`utilz` ON PATH IS THE INSTALL RIGHT NOW, NOT THE CHECKOUT -- INVERTED AGAIN SINCE 8 SEP.** `utilz use` this session: `opt 16 link(s), dev 0`; `utilz version` line three reads `installed at /Users/matts/Devel/opt/utilz (0c0af89)`. **This board has now been wrong about this in both directions, which is the argument rather than an embarrassment** -- do not carry either state forward, run `utilz use`. `utilz version`'s third line names the tree that answered and the commit it was cut from, which is the one command that tells a checkout from an install.
 - **EVERY VERSION HAS ONE HOME AND NOTHING RESTATES IT** (hv). Framework `./VERSION`; each utility `opt/<name>/VERSION` via `version_file`. **prez is the exception and is not an exception to the rule**: cargo requires it in `[package]`, so that home cannot be deleted, which makes it the one to keep. **Point at the one home you cannot delete.** Do not "fix" prez into compliance.
 - **NO `v` IN A VERSION, ANYWHERE, FROM 2.7.0 ONWARD** (hv, three times). `utilz:2.8.0` alone, `utilz:2.8.0/<util>:<version>` paired, and the git tag is bare. Tags before 2.7.0 keep the `v` they were published with -- those are records of a name a release actually had. Nothing in this repo consumes the prefix; the non-uniform series costs a reader's eye and nothing else.
 - **`--version`, `--help` and `-h` are answered by ONE `predispatch_intercept`**, from both dispatch sites. The utilities' own `--help` arms are deliberately kept and are held by a criterion; their `--version` arms are gone. `expz` delegates to `show_help` and has no inline usage; `prez` is a shim whose binary answers.
