@@ -253,7 +253,15 @@
     },
     {
       "id": "AC-3.10",
-      "text": "The lockfile's third-party package count for the APPROVED set is measured as a UNION and stated. The sum of individual deltas is not quotable -- cc measured 69 by sum against 59 by union at minimal image features, overstating by 10 through shared transitive deps. The union for the approved feature set has NOT been measured yet and no total may be quoted until it is.",
+      "text": "The lockfile's third-party package count for the approved set is measured as a UNION and stated. MEASURED 2026-09-09 by cc: 59 packages, against prez's 26. The sum of individual deltas is 69 and is NOT quotable -- it overstates by 10 through shared transitive deps. This row previously claimed the approved union was unmeasured; that was vc's error, inferring that cc's 'minimal features' probe meant jpeg+png when it already used jpeg,png,webp,gif,tiff. Resolved as image default-features = false with those five, fast_image_resize absent.",
+      "kind": "non-test",
+      "state": {
+        "is": "unsatisfied"
+      }
+    },
+    {
+      "id": "AC-3.11",
+      "text": "showreel's safety floors are mutually consistent, and the port does not carry the inconsistency across. VERIFIED from committed source f593de8: LIMITS is min_dwell 2500, min_ease 600, max_ease 3000, so max_ease EXCEEDS min_dwell and a legal config may specify a transition longer than the dwell it transitions into -- a slide that never fully arrives before it leaves, and for which no capture window exists at all. README section 7 publishes all three numbers without noting the interaction. The harness reports such slides as windowless, counted in the population, never silently skipped. Whether the floors themselves should forbid it is a tool decision for hv, and it crosses to Rust unchanged unless ruled.",
       "kind": "non-test",
       "state": {
         "is": "unsatisfied"
@@ -379,6 +387,17 @@
         "is": "satisfied",
         "evidence": "Snorkeltoast repo commit f593de8, verified by vc 2026-09-09: carries showreel, player.html, themes/default, themes/popupart (fonts + favicon), README.md, HOIST.md. player.html confirmed UNMODIFIED -- the reduced-motion block at :388 holds only .slide img and .wipe, .crawl appears zero times in it, so the defect is present and deliberately unfixed. The hoist now cites a real source commit at both ends."
       }
+    }
+  ],
+  "tests": [
+    {
+      "id": "AT02",
+      "kind": "test",
+      "file": "opt/prez/crate/test/acceptance.sh",
+      "covers": [
+        "AC-1.2"
+      ],
+      "status": "red"
     }
   ],
   "attachments": [

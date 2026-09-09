@@ -44,7 +44,8 @@ title: Add 'showreel' to 'prez'
 ### WP-03 -- Rust build path: YAML, admission (C1), normalisation policy (C2), data-URI (status: Not Started)
 
 - AC-3.1 (non-test) An unknown key in showreel.yaml is refused, named, with the valid set. -- satisfied: no
-- AC-3.10 (non-test) The lockfile's third-party package count for the APPROVED set is measured as a UNION and stated. The sum of individual deltas is not quotable -- cc measured 69 by sum against 59 by union at minimal image features, overstating by 10 through shared transitive deps. The union for the approved feature set has NOT been measured yet and no total may be quoted until it is. -- satisfied: no
+- AC-3.10 (non-test) The lockfile's third-party package count for the approved set is measured as a UNION and stated. MEASURED 2026-09-09 by cc: 59 packages, against prez's 26. The sum of individual deltas is 69 and is NOT quotable -- it overstates by 10 through shared transitive deps. This row previously claimed the approved union was unmeasured; that was vc's error, inferring that cc's 'minimal features' probe meant jpeg+png when it already used jpeg,png,webp,gif,tiff. Resolved as image default-features = false with those five, fast_image_resize absent. -- satisfied: no
+- AC-3.11 (non-test) showreel's safety floors are mutually consistent, and the port does not carry the inconsistency across. VERIFIED from committed source f593de8: LIMITS is min_dwell 2500, min_ease 600, max_ease 3000, so max_ease EXCEEDS min_dwell and a legal config may specify a transition longer than the dwell it transitions into -- a slide that never fully arrives before it leaves, and for which no capture window exists at all. README section 7 publishes all three numbers without noting the interaction. The harness reports such slides as windowless, counted in the population, never silently skipped. Whether the floors themselves should forbid it is a tool decision for hv, and it crosses to Rust unchanged unless ruled. -- satisfied: no
 - AC-3.2 (non-test) All six admission sites route through one function: a bad input refuses with a remedy, and a dropped segment input is reported at the segment's altitude, extending report_unused rather than duplicating it. -- satisfied: no
 - AC-3.3 (non-test) QR absence remains valid and is carried as Option -- a type, not a policy -- so flattening it is a compile error. -- satisfied: no
 - AC-3.4 (non-test) One normalisation policy governs both image passes. No opaque RGBA ships un-collapsed. -- satisfied: no
@@ -69,6 +70,10 @@ title: Add 'showreel' to 'prez'
 
 - AC-6.1 (non-test) No Utilz-tree file contains the popupart theme; it arrives over SHOWREEL_THEME_PATH and a build resolving it warns that it came from off the built-ins. -- satisfied: no
 - AC-6.2 (non-test) The prototype is committed in the Snorkeltoast repo BEFORE WP-06 pulls it, so the hoist cites a real source commit on both sides. It was untracked there -- showreel, player.html, themes/, README.md and HOIST.md all outside git -- so a pull without this creates a provenance gap rather than inheriting one. -- evidence: Snorkeltoast repo commit f593de8, verified by vc 2026-09-09: carries showreel, player.html, themes/default, themes/popupart (fonts + favicon), README.md, HOIST.md. player.html confirmed UNMODIFIED -- the reduced-motion block at :388 holds only .slide img and .wipe, .crawl appears zero times in it, so the defect is present and deliberately unfixed. The hoist now cites a real source commit at both ends. -- satisfied: yes
+
+### Group AT02
+
+_(no criteria in this group)_
 
 ## Acceptance Tests
 
@@ -95,6 +100,10 @@ _(no tests in this group)_
 ### WP-06 -- Snorkeltoast side: point the prototype at the hoisted tool, move the house theme (status: Not Started)
 
 _(no tests in this group)_
+
+### Group AT02
+
+- AT02 `opt/prez/crate/test/acceptance.sh` -- covers AC-1.2 -- status: red
 
 ---
 
