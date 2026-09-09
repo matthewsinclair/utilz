@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 11981560-5612-4fe7-a136-6eae64636b64
-heartbeat_at: 2026-09-09 18:27Z
+heartbeat_at: 2026-09-09 18:45Z
 status: active
-focus: "ST0017: 40/51 satisfied, 3 withdrawn, doctor 0. WP-01 CLOSES AT 15/15. hv afk, vc has the pen. Every one of the 11 open rows is blocked on cc build path or on WP-04, and every ungraded row has now been audited ahead of its code. Waiting on collect_segment."
+focus: "ST0017: 42/51 satisfied, 3 withdrawn, doctor 0. Nine rows open, every one blocked on cc build path or WP-04. AC-1.15 CLOSED. Today: audit AC-3.6 runtime leg BEFORE the template pull, and AC-4.2 before WP-04 -- both measured against the reference, both cheap now and expensive after."
 claims: [ST0017]
 ---
 
@@ -27,11 +27,18 @@ Localfolded 2026-09-09 16:51Z. Full boards for 8 Sep and earlier folds of 9 Sep 
 
 ## TODO
 
-- **Mine and unblocked: AC-1.15**, and it is the hardest row left on my desk because it BINDS -- every red-proof in
-  this thread must prove its injection applied before its result is read. **It cannot be discharged by restating the
-  rule**, which is the one thing prose is guaranteed to do well. It needs the thread's red-proofs ENUMERATED and each
-  checked, with the population stated and the failures named. Three instances are already on the record and one of
-  them is mine.
+- **AC-3.6's runtime leg, audited BEFORE cc pulls the template -- and it expires when they do.** Measured at the
+  reference 2026-09-09 18:45Z: `player.html:561` is `const LIM = REEL.limits`, so `easeOf`'s cap is READ FROM THE
+  PAYLOAD and is not a JS literal -- the player's own comment says why. So the whole runtime leg reduces to ONE
+  property: the emitted payload's `limits.max_ease` must DERIVE from `limits::MAX_EASE_MS`, not restate 2400.
+  **A template pull that hardcodes the limits into the emitted JSON re-creates the exact defect `limits.rs` was
+  written to fix -- one limit, two homes -- in the commit that ports the fix.** cc needs this before that commit.
+- **AC-4.2, the one BARE row on the contract, audited before WP-04 exists.** Every other open row carries paragraphs;
+  this one is a single sentence. Mechanism measured at the reference: a `<!--showreel-qr:<url>-->` stamp, ONE
+  definition, ONE write (`cmd_qr`), ONE read (`build_socials:786`). **Three findings, all recorded before the code:**
+  the detector cannot fire on an UNSTAMPED qr and embeds it anyway; `cmd_qr` KEEPS an existing file without
+  `--force`, so stale is the steady state; and the single read covers `socials:` only -- segment `qr:` and the venue
+  QR are never checked, and `build_socials` is skipped entirely under `dry`.
 - **Verify cc's build-path slices as they land.** The built-ins pull landed at `bbca403` plus an untracked
   `crates/showreel/themes/`; next is font + favicon emission, then admission, normalisation, `collect_segment`.
 - **Waiting on WP-03 by construction:** AC-2.1's leg 2 (adjacency stops being a guess when the Rust build stamps its
