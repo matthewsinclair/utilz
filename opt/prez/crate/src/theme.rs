@@ -51,7 +51,16 @@ use std::path::PathBuf;
 // module's surface is exactly what it was before the extraction. `deck.rs` and
 // `html.rs` still say `theme::Theme` and `theme::Spec`; nothing outside this
 // file knows the resolver moved.
-pub use artifact::theme::{name_spec, split_path_flag, Origin, SearchSource, Spec, Theme};
+pub use artifact::theme::{name_spec, split_path_flag, Spec, Theme};
+
+// `Origin` and `SearchSource` are named only by tests -- this module's, and
+// `html.rs`'s, which build Themes by hand rather than resolving them. Gated so
+// the non-test build does not carry an import it has no use for: prez is a
+// binary, so a `pub use` here creates no public API that would justify keeping
+// one. clippy's `-D warnings` is what makes this a build failure rather than a
+// tidiness question, and it is the gate CI runs.
+#[cfg(test)]
+pub use artifact::theme::{Origin, SearchSource};
 
 // Used only by this module's tests, which call the shared helpers directly.
 #[cfg(test)]

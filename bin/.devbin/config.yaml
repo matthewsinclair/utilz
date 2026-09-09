@@ -5,8 +5,19 @@
 
 project:
   name: utilz
-  # languages:            # elixir, rust, swift, lua, shell -- this is what
-  #   - elixir            # activates the built-in gates (design D11)
+  # **THIS IS THE SECOND PLACE THIS PROJECT DECLARES ITS LANGUAGES**, and the
+  # two are read by different arms of one command: devbin's own gates activate
+  # off THIS file, while `check critic` reads `intent/.config/config.json`.
+  # Kept in step by hand until devbin#0062 removes one of them; if you change
+  # one, change both.
+  #
+  # Silence here does not disable a gate loudly -- it removes it from `check
+  # all` entirely, which still prints "all check options passed" over whatever
+  # survived. Measured on this tree 2026-09-09: `autotests` was absent from the
+  # run and nothing named it.
+  languages:
+    - shell
+    - rust
 
 # The devbin this project expects. Enforced by: devbin doctor
 devbin_version: "^0.1.0"

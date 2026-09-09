@@ -257,7 +257,7 @@ impl Registry {
       SearchSource::Env => (
         format!("on {var}"),
         format!("Elsewhere this {noun} refuses to build until that directory is on the path."),
-        format!("rename the local theme if that is not what you want"),
+        "rename the local theme if that is not what you want".to_string(),
       ),
       SearchSource::Flag => (
         format!("given by {flag}"),
