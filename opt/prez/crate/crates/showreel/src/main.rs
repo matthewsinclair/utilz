@@ -14,7 +14,7 @@
 //! inside another's evidence.
 
 use artifact::Failure;
-use showreel::{config, limits, segment, slide, theme};
+use showreel::{config, limits, plan, theme};
 use std::path::{Path, PathBuf};
 
 fn main() {
@@ -99,28 +99,20 @@ fn check(path: &Path) -> Result<(), Failure> {
   };
   let inlined = theme::inline(&theme)?;
 
-  // **THE PACE TABLE HAS ONE HOME NOW.** This was a `match` here mapping the two
-  // preset names to a dwell and an ease, while the reference's `PACE` carries
-  // five fields -- so the transition, motion and fit defaults were silently
-  // absent, and nothing reported it because nothing consumed them yet.
-  let pace = segment::pace(cfg.pace.as_deref())?;
-
-  // **AND THE RESOLUTION ITSELF HAS ONE HOME.** `check` computed the five
-  // rendering fields inline until `slide::collect` needed the same thing; a
-  // second copy here is exactly the subset duplicate that hid in the pace table.
-  let defaults = slide::Defaults::resolve(pace, cfg.defaults.as_ref());
-
-  // **check NOW RESOLVES EVERY SEGMENT THE WAY A BUILD WILL**, which is what
-  // makes admission's refusals reachable from a command line. It reads no image:
-  // `collect` plans and never embeds, so this is the whole of the build's
+  // **check RESOLVES EVERY SEGMENT THE WAY A BUILD WILL**, which is what makes
+  // admission's refusals reachable from a command line. It reads no image:
+  // `plan` decides and never embeds, so this is the whole of the build's
   // decision-making without any of its cost.
-  let mut slides = Vec::new();
-  for (index, seg) in cfg.segments.iter().enumerate() {
-    slides.extend(slide::collect(&reel, index, seg, &defaults, cfg.socials.len())?);
-  }
-  let clamped = slides.iter().filter(|s| s.common.clamped).count();
-  let assets: std::collections::BTreeSet<&std::path::Path> =
-    slides.iter().flat_map(showreel::slide::Slide::assets).collect();
+  //
+  // **AND THE ASSET COUNT IS THE PLAN'S, NOT THE SLIDE LIST'S.** This line used
+  // to project `Slide::assets` and reported 10 against the reference's 14 on the
+  // live reel -- the bug and the social QRs are read by the ARTIFACT and by no
+  // single slide. `check` reporting the narrower number would have been a
+  // reasonable-looking figure that no build ever uses.
+  let plan = plan::plan(&reel, &cfg)?;
+  let pace = plan.pace;
+  let clamped = plan.slides.iter().filter(|s| s.common.clamped).count();
+  let used = plan.used();
 
   println!("showreel: {} is valid", file.display());
   println!("  artist    {} ({})", cfg.artist.name, cfg.artist.handle);
@@ -135,7 +127,7 @@ fn check(path: &Path) -> Result<(), Failure> {
   // exactly twelve distinct types, so on the one reel anybody runs it looked
   // derived. Issue 0022, found by snorkeltoast.
   println!("  segments  {n} declared, {n} validated", n = cfg.segments.len());
-  println!("  slides    {} resolved, {} asset(s) read", slides.len(), assets.len());
+  println!("  slides    {} resolved, {} asset(s) read", plan.slides.len(), used.len());
   println!("  socials   {}", cfg.socials.len());
   println!("  theme     {}", theme.name);
   match &meta {
@@ -158,5 +150,10 @@ fn check(path: &Path) -> Result<(), Failure> {
     limits::MIN_EASE_MS,
     limits::MAX_EASE_MS
   );
+  // The exhaust report, on the same `used` the build embeds from. Reported and
+  // never deleted: the tool does not get to decide a picture is finished with.
+  for line in plan::report(&reel, &used) {
+    println!("  {line}");
+  }
   Ok(())
 }

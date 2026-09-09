@@ -21,6 +21,7 @@ pub mod config;
 pub mod duration;
 pub mod limits;
 pub mod normalise;
+pub mod plan;
 pub mod segment;
 pub mod slide;
 pub mod template;
