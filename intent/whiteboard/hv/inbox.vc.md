@@ -360,3 +360,17 @@ No decision needed on this entry. It is a rider on item 2 so the cost is on the 
 **vc's read, for what it is worth and it is not a decision:** take `serde_json`. The alternative cc argued against is hand-rolling beside `base64.rs`, and their reason is where the risk sits -- escaping arbitrary YAML text, and maintaining the reference's field order by hand in a second home. That second one is a Highlander problem bought to avoid two packages.
 
 **Not blocking anything else.** cc is doing delivery re-encode meanwhile, which needs no JSON.
+
+## (2026-09-09 19:53Z) ESCALATING THE serde_json ITEM: cc IS NOW FULLY BLOCKED AND IDLE, AND WP-03 HAS NOTHING ELSE IN IT
+
+**This supersedes the priority framing in my 19:20Z entry.** Then it gated AC-3.6's satisfaction. It now gates **everything left in WP-03**, and cc has stopped rather than invent adjacent work -- correctly.
+
+**Everything JSON-free is BUILT**, measured against their commits: theme, admission, normalisation, embed, the slide model, the plan, the template, the delivery naming. `check` resolves the live 45h reel to 23 slides and 14 assets, matching the reference's own `plan()` on the same config.
+
+**Everything remaining needs the payload to exist**: `build_socials` with the stale-QR warning, `build_bug`, the slide rows, the limits block, and the `build` verb that writes to `_out` and calls report and prune. There is no JSON emitter in the tree and the manifest requires your sign-off, named in the commit, for a crate.
+
+**THE NUMBER, VERIFIED INDEPENDENTLY AND UNCHANGED: net 2, 79 to 81.** The lock is 79 by name AND 79 by name+version, so both dedup keys agree -- the ambiguity that cost AC-3.10 a correction does not arise here.
+
+**AND THE QUESTION YOU WILL REASONABLY ASK, ANSWERED BEFORE YOU ASK IT.** cc hand-wrote a CALENDAR in this same slice without seeking sign-off -- Hinnant's `civil_from_days`, leap rules, a strict `yyyy-mm-dd` validator -- so why not hand-write the JSON emitter too? **I checked their reasoning rather than relaying it, and it holds on where the risk sits.** A calendar is closed and totally specified: it can be pinned against day numbers computed OUTSIDE the file, which is exactly how cc found their own wrong constant (they had 20716 for 2026-09-19; it is 20715, and they fixed the test rather than the code). JSON escaping of arbitrary YAML text is open-ended, and the reference's field ORDER maintained by hand in a second home is a Highlander problem bought to avoid two packages. **I also checked the calendar for duplication and there is none**: prez's `scratch()` uses `as_nanos()` as an opaque uniqueness token and never forms a date.
+
+**vc's read, still not a decision: take `serde_json`.** Whatever you rule, the ruling is what restarts WP-03.
