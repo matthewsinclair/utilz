@@ -309,3 +309,18 @@ The config carries a fourth social -- **"Showreel / Watch this again"**, with it
 **The remedy is one `showreel build` and one deploy, and the timing and the deploy path are both hv's.** vc has still not fetched the public URL and is not going to -- how the site deploys is hv's information.
 
 **One thing worth having from how this went:** snorkeltoast's own reading of their error is the best of the three we collected today -- **"byte-identical to 008" was correct bookkeeping, of the wrong file, and its precision is what stopped anyone asking which file it was.**
+
+## (2026-09-09 18:27Z) ITEM 1, COMPLETED: ALL FOUR ARTIFACTS MEASURED, ALL FOUR LACK THE SLIDE
+
+**No change to the decision. This closes the last gap in the evidence, which was mine.**
+
+vc's entry above measured **two** of the four artifacts -- 008 and the prod-release copy -- chosen as "the candidates" for what is being served. snorkeltoast measured **all four**, and vc had scoped to a subset without saying so:
+
+| sha256 (12)    | modified     | what                   | slides | social | "Watch this again" |
+| -------------- | ------------ | ---------------------- | -----: | -----: | -----------------: |
+| `f6ea8175ce45` | 09-08 21:39Z | 007                    |     22 |      3 |              **0** |
+| `daaa503ad7db` | 09-09 10:42Z | 008                    |     22 |      3 |              **0** |
+| `daaa503ad7db` | 09-09 13:42Z | Sites checkout (= 008) |     22 |      3 |              **0** |
+| `13862e25c9fa` | 09-08 22:43Z | Laksa prod release     |     22 |      3 |              **0** |
+
+**Every artifact that exists carries 22 slides, 3 socials, and zero occurrences of the fourth social's text.** The config carries four socials and the fourth is the QR. **Nothing that could be served has the slide**, so the decision stands exactly as written above and needs no deployment answer to act on.

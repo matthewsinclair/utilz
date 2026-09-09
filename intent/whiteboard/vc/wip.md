@@ -3,7 +3,7 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 11981560-5612-4fe7-a136-6eae64636b64
-heartbeat_at: 2026-09-09 18:10Z
+heartbeat_at: 2026-09-09 18:27Z
 status: active
 focus: "ST0017: 40/51 satisfied, 3 withdrawn, doctor 0. WP-01 CLOSES AT 15/15. hv afk, vc has the pen. Every one of the 11 open rows is blocked on cc build path or on WP-04, and every ungraded row has now been audited ahead of its code. Waiting on collect_segment."
 claims: [ST0017]
@@ -18,9 +18,9 @@ Validation node. cc builds, vc contracts and verifies, hv adjudicates. Full boar
 **ST0017 -- showreel hoisted under `utilz prez showreel`. vc holds the contract, cc builds, snorkeltoast has closed.**
 Localfolded 2026-09-09 16:51Z. Full boards for 8 Sep and earlier folds of 9 Sep in `.history/`.
 
-- **Contract: 40 of 51 satisfied, 3 withdrawn, `intent doctor` 0.** **WP-01 is COMPLETE at 15/15.** `intent ac list ST0017` is the live contract;
+- **Contract: 42 of 51 satisfied, 3 withdrawn, `intent doctor` 0.** **WP-01 is COMPLETE at 15/15.** `intent ac list ST0017` is the live contract;
   `design.md` carries the reasoning. **Ids are `AC-<wp>.<seq>` and the group digit IS the work package.**
-- **WP-01 15/15. WP-02 16/17. WP-03 7/12. WP-04 0/2. WP-05 1/3. WP-06 1/2.**
+- **WP-01 15/15. WP-02 16/17. WP-03 9/12. WP-04 0/2. WP-05 1/3. WP-06 1/2.**
 - **`utilz prez showreel check <dir>` RUNS end to end**, both invocation forms, exit 0 against the live 45h reel.
   **WP-05's dispatch is done; WP-03's build path is the only thing between here and hv's bar** -- hv killed the
   Python shim fallback, so there is no relief valve.
@@ -82,6 +82,18 @@ captured 59 bytes of error, and `grep -c` scored it **0** -- one step from _the 
 **A census zero over an empty population reads exactly like a detector zero over a full one**; the line count is what
 gave it away, since one line of output for a 427-line help file is not a result. **When the environment cannot host
 the test, change the instrument rather than trusting its zero.**
+
+**FOUR SIBLINGS, AND THEY ARE ONE FAMILY: CORRECT-LOOKING WORK SUPPRESSING THE NEXT QUESTION.** Collected across
+three nodes in one afternoon, and the fourth is snorkeltoast's and the sharpest. **(1) A DIFFERENCE RECORDED AS A
+NUMBER STOPS BEING A QUESTION** -- "23 vs 22" sat in a state file for hours as an explained thing and the 1 had a
+name nobody looked up. **(2) A CAVEAT PRINTED WHERE IT DOES NOT APPLY TRAINS THE READER TO SKIP IT**, and a caveat
+nobody reads is worse than none because it still looks like diligence. **(3) A PRECISE MEASUREMENT OF THE WRONG
+OBJECT STOPS ANYONE ASKING WHICH OBJECT** -- "byte-identical to 008" was correct bookkeeping of a local checkout
+reported as a served page, and its precision is what stopped the question. **(4) A CORRECTION STOPS ANYONE ASKING
+WHETHER THE CORRECTION IS RIGHT.** snorkeltoast's repair of (3) was a second population error inside the fix for the
+first -- their `find` covered two roots and the artifact lived under a third -- and **the repair carries the
+authority of having just been careful**, so the moment after being rigorous is exactly when nobody audits. **None of
+the four is a careless act; all four are competent work whose competence is what closes the enquiry.**
 
 **A DUPLICATE THAT IS A SUBSET READS AS "NOT A DUPLICATE" UNTIL SOMEONE USES THE MISSING PART.** cc's, and it is a
 real gap in how Highlander is normally checked. `main.rs` held the pace presets as a `match` returning dwell and
