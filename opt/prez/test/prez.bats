@@ -28,6 +28,13 @@ run_prez() {
 # a second answer to "is the binary stale", and the two would drift the moment
 # someone adds a fourth watched directory. This reads the real function out of
 # the real file, so a change to the shim reaches these tests automatically.
+load_handover_fn() {
+  local fn
+  fn="$(sed -n '/^prez_is_handover() {/,/^}$/p' "$SHIM")"
+  [ -n "$fn" ] || fail "could not extract prez_is_handover from $SHIM"
+  eval "$fn"
+}
+
 load_staleness_fn() {
   local fn
   fn="$(sed -n '/^prez_is_stale() {/,/^}$/p' "$SHIM")"
@@ -40,6 +47,7 @@ make_fixture() {
   CRATE_DIR="$BATS_TEST_TMPDIR/crate"
   MANIFEST="$CRATE_DIR/Cargo.toml"
   BINARY="$CRATE_DIR/target/release/prez"
+  SHOWREEL_BINARY="$CRATE_DIR/target/release/showreel"
   mkdir -p "$CRATE_DIR/src" "$CRATE_DIR/themes/simple" "$CRATE_DIR/assets" \
            "$CRATE_DIR/crates/artifact/src" "$CRATE_DIR/target/release"
   touch "$CRATE_DIR/src/main.rs" "$CRATE_DIR/themes/simple/theme.css" \
@@ -56,6 +64,11 @@ make_fixture() {
   # quietly reported fresh.
   : > "$BINARY"
   chmod +x "$BINARY"
+  # ONE `cargo build --workspace` PRODUCES TWO ARTIFACTS, so a fixture carrying
+  # only prez models a tree that cannot exist and would pass a freshness check
+  # that must fail.
+  : > "$SHOWREEL_BINARY"
+  chmod +x "$SHOWREEL_BINARY"
   local past2 past1
   past2="$(date -v-2M +%Y%m%d%H%M 2>/dev/null || date -d '2 minutes ago' +%Y%m%d%H%M)"
   past1="$(date -v-1M +%Y%m%d%H%M 2>/dev/null || date -d '1 minute ago' +%Y%m%d%H%M)"
@@ -72,7 +85,7 @@ make_fixture() {
   touch -t "$past2" "$CRATE_DIR/src" "$CRATE_DIR/themes/simple" "$CRATE_DIR/themes" \
     "$CRATE_DIR/assets" "$CRATE_DIR/crates/artifact/src" "$CRATE_DIR/crates/artifact" \
     "$CRATE_DIR/crates"
-  touch -t "$past1" "$BINARY"
+  touch -t "$past1" "$BINARY" "$SHOWREEL_BINARY"
 }
 
 # ============================================================================
@@ -211,6 +224,45 @@ make_fixture() {
   touch "$CRATE_DIR/crates/artifact/src/lib.rs"
   run prez_is_stale
   assert_success
+}
+
+# **A MISSING SIBLING IS A STALE TREE, NOT A FRESH ONE.** One workspace build
+# produces both binaries, so prez existing while showreel does not is a
+# half-built tree -- and before WP-05 the shim would have exec'd straight into
+# a file that is not there.
+@test "a missing showreel binary is stale even when prez is current" {
+  load_staleness_fn
+  make_fixture
+  rm -f "$SHOWREEL_BINARY"
+  run prez_is_stale
+  assert_success
+}
+
+# **THE FRESHNESS REFERENCE IS THE OLDER OF THE TWO BINARIES.**
+#
+# The discriminating case is prez rebuilt while showreel was NOT: measuring
+# against prez's mtime alone reports a fresh tree while showreel is still the
+# binary built from the old source, and the shim then hands over to it. The
+# symmetric case -- showreel rebuilt, prez not -- passes either way and so
+# proves nothing; this test is the one that fails when the reference narrows.
+@test "prez rebuilt while showreel was not still reads stale" {
+  load_staleness_fn
+  make_fixture
+  touch "$CRATE_DIR/crates/artifact/src/lib.rs"   # a source BOTH are built from
+  sleep 1                                          # whole-second filesystems
+  touch "$BINARY"                                  # prez alone is rebuilt
+  run prez_is_stale
+  assert_success
+}
+
+@test "the handover is EXACT, so only 'showreel' leaves prez" {
+  load_handover_fn
+  run prez_is_handover showreel check /tmp/x
+  assert_success
+  for not_ours in build pdf present browser --help showreelish showreel-x ""; do
+    run prez_is_handover "$not_ours" extra
+    assert_failure
+  done
 }
 
 @test "a newer manifest or lockfile makes it stale" {

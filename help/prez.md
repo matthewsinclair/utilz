@@ -10,7 +10,9 @@
 
 `prez` turns a markdown deck into **one self-contained HTML file**. That file opens offline, from a USB stick, from an email attachment, in five years -- there is nothing beside it to lose.
 
-**It is a pipeline, not a viewer.** prez writes a file and stops. The browser does the presenting: there is no server, no player, no watch-me-render mode, and there never will be. Every feature request beginning "and then prez could serve..." is answered by that sentence.
+**It is a pipeline, not a viewer.** prez writes a file and stops. The browser does the presenting: there is no server, no watch-me-render mode, and there never will be. Every feature request beginning "and then prez could serve..." is answered by that sentence.
+
+**`prez showreel` does not weaken that, and the distinction is exact rather than a carve-out.** The sentence above said "no player" until 2026-09-09, and a showreel artifact carries one INSIDE the single file it writes -- the reel advances itself in a browser, from a USB stick, with nothing installed and nothing served. prez still writes a file and stops; what is new is that one of the files it writes happens to animate once opened. **The anti-requirement is about prez SERVING or WATCHING, and neither has moved.** A player that ships inside the artifact is the opposite of a server: it is what lets the output need nothing at all.
 
 Two consequences worth knowing before you start:
 
@@ -46,6 +48,7 @@ After that the binary is self-contained -- no runtime dependencies at all, theme
 prez build   <deck.md> [-o out.html] [--theme=NAME|--theme-file=PATH] [--watch]
 prez pdf     <deck.md> [-o out.pdf]  [--theme=NAME|--theme-file=PATH] [--paper=WxH] [--browser=PATH]
 prez present <deck.md> [--theme=NAME|--theme-file=PATH] [--browser=PATH]
+prez showreel <verb> [args]           # hands over to the showreel tool
 prez --help | --version
 ```
 
@@ -59,11 +62,22 @@ Every flag takes its value either way: `--theme=simple` or `--theme simple`.
 
 ## Commands
 
-| Command   | What it does                                                                  |
-| --------- | ----------------------------------------------------------------------------- |
-| `build`   | Deck to one self-contained `.html`. The default output sits beside the input. |
-| `pdf`     | Deck to a PDF, one slide per page, through a headless browser.                |
-| `present` | Build, then open the artifact in a de-chromed fullscreen window, then exit.   |
+| Command    | What it does                                                                  |
+| ---------- | ----------------------------------------------------------------------------- |
+| `build`    | Deck to one self-contained `.html`. The default output sits beside the input. |
+| `pdf`      | Deck to a PDF, one slide per page, through a headless browser.                |
+| `present`  | Build, then open the artifact in a de-chromed fullscreen window, then exit.   |
+| `showreel` | **Hands over to a different tool under a shared name.** See below.            |
+
+---
+
+## `prez showreel` is a handover, not a subcommand
+
+**Everything after `showreel` belongs to the showreel tool and nothing here describes it.** `prez showreel <...>` execs a separate binary built from the same workspace; its verbs, its flags, its refusals and its help are its own. Run `prez showreel --help` for them -- deliberately not restated here, because a second copy of another tool's grammar is one that drifts.
+
+What showreel does, in one line: a directory of pictures and a `showreel.yaml` become one self-contained looping HTML reel that plays from a USB stick with nothing installed.
+
+**Why it lives under `prez` at all.** The two tools share a real implementation -- theme resolution, the offline guarantee, base64, failure reporting -- and they share a name so a user learns one entry point. They do not share a binary: `prez build` never links showreel's image decoders, and neither budget pays for the other.
 
 ---
 

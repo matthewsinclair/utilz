@@ -92,6 +92,12 @@ else
 fi
 BINARY="$TARGET_DIR/release/prez"
 
+# **THE SECOND BINARY, AND THE SHIM RESOLVES IT THE SAME WAY IT RESOLVES THE
+# FIRST.** One workspace, one `cargo build --workspace`, two artifacts that are
+# exact siblings in the same target directory -- so this is a sibling lookup and
+# not a second resolution policy that could disagree with the one above.
+SHOWREEL_BINARY="$TARGET_DIR/release/showreel"
+
 # ============================================================================
 # BUILD MANAGEMENT
 # ============================================================================
@@ -134,13 +140,35 @@ BINARY="$TARGET_DIR/release/prez"
 #
 # `find -newer` rather than comparing mtimes arithmetically: bash 3.2 has no
 # portable stat, and BSD and GNU stat disagree on flags.
+# Does this invocation belong to the sibling tool rather than to prez?
+#
+# **EXTRACTED FOR THE SAME REASON `prez_is_stale` IS**, and prez.bats says why in
+# its header: the shim's decisions are driven over fixtures rather than by
+# building a crate. A predicate can be tested; a bare `if` at the bottom of the
+# file cannot. The exactness is the part worth a test -- `showreelish` and
+# `showreel-x` are prez's problem, not showreel's, and a prefix match would
+# hand them over.
+prez_is_handover() {
+  [[ "${1:-}" == "showreel" ]]
+}
+
 prez_is_stale() {
   [[ ! -x "$BINARY" ]] && return 0
+  [[ ! -x "$SHOWREEL_BINARY" ]] && return 0
 
-  local newer
+  # **THE REFERENCE IS THE OLDER OF THE TWO BINARIES, AND THE ALTERNATIVE LOOPS.**
+  # One `cargo build --workspace` relinks only what changed, so editing showreel
+  # alone leaves its sources NEWER than prez's binary. Measuring against prez
+  # would then report stale on every later invocation, rebuild nothing, and
+  # announce a rebuild each time. The tree is fresh only when nothing is newer
+  # than the OLDEST thing built from it.
+  local ref newer
+  ref="$BINARY"
+  [[ "$SHOWREEL_BINARY" -ot "$ref" ]] && ref="$SHOWREEL_BINARY"
+
   newer=$(find "$CRATE_DIR" -mindepth 1 \
     -name target -prune -o \
-    -newer "$BINARY" -print -quit 2>/dev/null || true)
+    -newer "$ref" -print -quit 2>/dev/null || true)
 
   [[ -n "$newer" ]]
 }
@@ -205,6 +233,20 @@ prez_ensure_built() {
 # means "build the deck" in the tool's own grammar, and minting a colliding
 # verb to expose something the shim does automatically would be a worse trade
 # than provisioning on use.
+#
+# **THE ONE BRANCH, AND IT IS NOT A CONTRADICTION OF THE PARAGRAPH ABOVE.**
+# Reading `$1` here looks like the argument parsing this shim forswears, and it
+# is a different act: choosing WHICH TOOL runs is resolution, which is the whole
+# job of a shim, where deciding what a verb MEANS is grammar and belongs to the
+# tool. Nothing below inspects a flag, supplies a default or filters a
+# pass-through -- `showreel`'s own verbs, refusals and help stay showreel's, and
+# prez's stay prez's. Design section 1: "It gains one branch: `prez showreel
+# <...>` execs the showreel binary, everything else execs prez's."
 prez_ensure_built || exit 1
+
+if prez_is_handover "$@"; then
+  shift
+  exec "$SHOWREEL_BINARY" "$@"
+fi
 
 exec "$BINARY" "$@"
