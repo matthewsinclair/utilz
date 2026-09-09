@@ -1,0 +1,20 @@
+/* default - the neutral built-in. No brand, deliberately.
+   Grey ground, system type, no motifs. It exists so `showreel build` works
+   before anyone has written a house theme, and so the shell's contract has a
+   reference implementation. Copy this directory to start one. */
+
+:root{
+  --bg:#0e0e10; --fg:#f4f4f5; --muted:rgb(244 244 245/.62);
+  --accent:#f4f4f5; --accent-2:#a1a1aa; --accent-3:#3f3f46;
+  --font-display:system-ui,-apple-system,"Segoe UI",sans-serif;
+  --font-label:system-ui,-apple-system,"Segoe UI",sans-serif;
+  --font-body:system-ui,-apple-system,"Segoe UI",sans-serif;
+  --keyline-w:2px; --keyline-color:#000;
+  --shadow:0 18px 50px rgb(0 0 0/.55);
+  --ground-matte:#161618;
+  --ground-crawl:#000;
+}
+.crawl dd{font-weight:700;letter-spacing:-.01em}
+.crawl dt{font-weight:600}
+.card h2{font-weight:800;letter-spacing:-.02em}
+.wipe{background:linear-gradient(105deg,transparent 46%,var(--fg) 46%,var(--fg) 54%,transparent 54%)}

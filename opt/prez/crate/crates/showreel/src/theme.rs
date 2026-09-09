@@ -1,4 +1,11 @@
-//! The theme's metadata sidecar: `theme.yaml`.
+//! showreel's theme concerns: WHICH themes exist, WHERE one is looked for, and
+//! the metadata sidecar that carries what CSS cannot say.
+//!
+//! **ONE HOME FOR "THEME" PER BINARY**, mirroring `prez::theme`. The roster, the
+//! search-path variable and the `theme.yaml` model are three answers to one
+//! question -- what does a theme mean to this tool -- and splitting them across
+//! modules would put the roster in one file and the reason the roster is short
+//! in another.
 //!
 //! **THIS MODULE EXISTS BECAUSE A THEME HAS A SECOND SURFACE AND ONLY ONE OF
 //! THEM IS CSS.** `artifact::theme` resolves the directory and scans
@@ -22,10 +29,81 @@
 //! this rule's business. Same correction as issue 0017's, one surface along:
 //! read the SITE, not the spelling.
 
-use artifact::theme::refuse_external_target;
+use artifact::theme::{name_spec, refuse_external_target, Registry, Theme};
 use artifact::Failure;
 use serde::Deserialize;
-use std::path::Path;
+use std::path::{Path, PathBuf};
+
+/// Themes compiled into the binary. **EXACTLY ONE, AND THE COUNT IS A RULING.**
+///
+/// `themes/default/theme.css` is 951 bytes of grey ground and `system-ui`, and
+/// it is the only theme in this tree. **The reference ships a second beside it
+/// -- `popupart` -- and it does NOT move.** It carries one organisation's
+/// palette, fonts and favicon; design.md 7 keeps it out and H3 holds the tree to
+/// that. It reaches a build over `SHOWREEL_THEME_PATH` instead, which is the
+/// mechanism prez already uses to let a house theme reach a brand-free binary.
+///
+/// **THE CONSEQUENCE, STATED HERE RATHER THAN DISCOVERED DURING A BUILD:
+/// RESOLVING THE 45h REEL NEEDS THAT VARIABLE SET, WHERE THE PYTHON NEEDED
+/// NOTHING.** Its config names `theme: popupart`, so the same command that
+/// resolved silently there refuses here and names every directory it searched.
+/// **That is the extractability guarantee working, not a port regression** --
+/// and it is exactly what H3 asks to be able to see.
+///
+/// **THE FIRST ENTRY IS THE DEFAULT.** `Registry::load` takes
+/// `built_ins.first()` when a reel names no theme, so the default has one home
+/// rather than a name written down twice and free to disagree with the roster.
+/// With one entry that is invisible; it is stated because the roster is the kind
+/// of list that grows.
+const BUILT_IN: &[(&str, &str)] = &[("default", include_str!("../themes/default/theme.css"))];
+
+/// The environment variable naming extra theme directories, path-separated.
+///
+/// **SPELLED AS THE REFERENCE SPELLS IT** (`showreel:141`), because a reel
+/// estate that already exports it must keep working across the port. Renaming it
+/// would be a silent break: the variable would simply not be read, no theme
+/// would be found, and the refusal would name a variable nobody had heard of.
+const SEARCH_PATH: &str = "SHOWREEL_THEME_PATH";
+
+/// showreel's tool-specific facts, handed to the shared resolver together.
+///
+/// The noun is `reel`: it lands mid-sentence in the provenance announcement,
+/// which is the one place the shared resolver has to describe the caller's
+/// artifact rather than its own concern.
+const REGISTRY: Registry =
+  Registry::new(BUILT_IN, SEARCH_PATH, "--theme-path", "--theme-file", "reel");
+
+/// Resolve the theme a reel's config names.
+///
+/// **A CONFIG'S `theme:` IS A NAME AND NEVER A PATH**, enforced by the shared
+/// `name_spec` rather than re-checked here. The reference took whatever the key
+/// held and joined it onto each search directory, so `theme: ../../elsewhere`
+/// resolved wherever it landed. Refusing a separator is the narrowing prez
+/// already applies to its own theme flag, and reaching for the shared helper is
+/// what keeps the rule in one place instead of two that can drift.
+///
+/// `extra` is the `--theme-path` flag's directories, PREPENDED to the
+/// environment variable for this invocation.
+pub fn for_reel(name: Option<&str>, extra: &[PathBuf]) -> Result<Theme, Failure> {
+  let spec = name
+    .map(|n| {
+      name_spec(
+        n,
+        "showreel.yaml's theme:",
+        "give a theme NAME; a theme addressed by PATH needs --theme-file",
+      )
+    })
+    .transpose()?;
+  REGISTRY.load(spec, extra)
+}
+
+/// What to say on stderr when a theme did NOT come out of the binary.
+///
+/// `None` for a built-in: silence is the correct report for "the binary supplied
+/// its own".
+pub fn provenance(theme: &Theme) -> Option<String> {
+  REGISTRY.provenance(theme)
+}
 
 /// A theme's `theme.yaml`, which is optional -- a theme may be CSS alone.
 #[derive(Debug, Deserialize)]
@@ -123,6 +201,106 @@ impl Meta {
 #[cfg(test)]
 mod tests {
   use super::*;
+
+  /// **H3 AS A TEST RATHER THAN AS A PROMISE.** The roster is exactly one entry
+  /// and it is not a brand. A second built-in arriving without a ruling fails
+  /// here, which is the only place that can notice -- a brand reaching the
+  /// roster is invisible in every other test in this crate, because everything
+  /// else would keep passing.
+  #[test]
+  fn the_roster_is_one_brand_free_built_in() {
+    let names: Vec<&str> = BUILT_IN.iter().map(|(id, _)| *id).collect();
+    assert_eq!(names, vec!["default"], "the roster IS the claim");
+
+    // **EVERY ENTRY, NOT `BUILT_IN[0]`.** This check was written against the
+    // first entry, which is this thread's own dominant failure -- one member
+    // taken to characterise a set -- inside the guard whose whole job is to
+    // notice a brand ARRIVING. A brand joining as the second entry is exactly
+    // the case it would have missed.
+    for (id, css) in BUILT_IN {
+      for brand in ["popupart", "POP^UP^ART", "Snorkeltoast", "--pop-"] {
+        assert!(!id.contains(brand), "built-in '{id}' is named for a brand: {brand}");
+        assert!(!css.contains(brand), "built-in '{id}' carries a brand token: {brand}");
+      }
+    }
+  }
+
+  /// A reel naming no theme takes the first built-in, and a built-in has nowhere
+  /// to keep an asset. **BOTH HALVES, BECAUSE THE SECOND IS THE ONE THAT
+  /// CONSTRAINS THE BUILD PATH** -- `default` can never declare a font.
+  #[test]
+  fn no_theme_named_takes_the_default_and_the_default_has_no_directory() {
+    let t = for_reel(None, &[]).expect("the default must always resolve");
+    assert!(t.name.contains("default"), "took the first built-in: {}", t.name);
+    assert!(t.dir.is_none(), "a built-in has no directory, so it can hold no sidecar");
+    assert!(provenance(&t).is_none(), "silence is the report for a built-in");
+  }
+
+  /// **THE WHOLE CHAIN THE BUILD PATH RESTS ON, IN ONE TEST**: a NAME in a
+  /// reel's config resolves off the search path, the resolved theme records the
+  /// directory it was found in, and `theme.yaml` is read from THAT directory.
+  ///
+  /// It is one test rather than three because the links are what fail: each
+  /// piece works in isolation today and the build still reads no fonts if the
+  /// directory handed to `Meta::read` is the searched one instead of the
+  /// theme's. The assertion on `dir` is what pins which of the two it is.
+  #[test]
+  fn a_named_theme_carries_the_directory_its_sidecar_is_read_from() {
+    let root = std::env::temp_dir().join(format!("showreel-reg-{}", std::process::id()));
+    let theme_dir = root.join("housestyle");
+    std::fs::create_dir_all(&theme_dir).unwrap();
+    std::fs::write(theme_dir.join("theme.css"), "body{color:#111}\n").unwrap();
+    std::fs::write(
+      theme_dir.join("theme.yaml"),
+      "name: housestyle\nfavicon: icon.svg\nfonts:\n  - {family: X, file: x.woff2, weight: 700}\n",
+    )
+    .unwrap();
+
+    let t = for_reel(Some("housestyle"), std::slice::from_ref(&root)).unwrap();
+    assert_eq!(t.dir.as_deref(), Some(theme_dir.as_path()), "the theme's own directory");
+
+    // Off the built-ins, so it announces. The reel estate depends on being told.
+    //
+    // **IT NAMES THE FLAG, NOT THE VARIABLE, AND THAT IS THE POINT.** The
+    // directory arrived through `extra`, so `SearchSource::Flag` fired and the
+    // announcement carries the mechanism that ACTUALLY resolved it -- what
+    // reproduces the situation and what cures it are different facts for the
+    // two sources. This assertion was written against the variable first and
+    // the resolver was right; the env arm is deliberately not tested here,
+    // because a process-wide variable races every other test in this binary.
+    let said = provenance(&t).expect("a search-path theme is announced");
+    assert!(said.contains("--theme-path"), "names the mechanism that fired: {said}");
+    assert!(said.contains("reel"), "uses this tool's noun, not another's: {said}");
+
+    // And the sidecar is read from the theme's directory, not the searched one.
+    let meta = Meta::read(t.dir.as_deref().unwrap()).unwrap().expect("theme.yaml is there");
+    assert_eq!(meta.fonts.len(), 1);
+    assert_eq!(meta.fonts[0].weight, 700);
+    assert_eq!(meta.favicon.as_deref(), Some("icon.svg"));
+    assert!(Meta::read(&root).unwrap().is_none(), "the SEARCHED directory has no theme.yaml");
+  }
+
+  /// A config's `theme:` is a NAME. The reference joined whatever the key held
+  /// onto each search directory, so a traversal resolved wherever it landed.
+  #[test]
+  fn a_config_theme_key_that_looks_like_a_path_is_refused_as_one() {
+    let e = for_reel(Some("../../elsewhere"), &[]).unwrap_err();
+    assert!(e.message.contains("theme NAME"), "names the rule: {}", e.message);
+    assert!(e.message.contains("showreel.yaml"), "names where it was read: {}", e.message);
+    assert!(e.remedy.unwrap().contains("--theme-file"), "offers the path route");
+  }
+
+  /// An unknown name refuses with THIS tool's roster and THIS tool's variable.
+  /// A resolver that leaked prez's built-ins here would prove the shared crate
+  /// is not parameterised at all.
+  #[test]
+  fn an_unknown_theme_names_this_tools_roster_and_not_another() {
+    let e = for_reel(Some("popupart"), &[]).unwrap_err();
+    assert!(e.message.contains("no theme 'popupart'"), "{}", e.message);
+    assert!(e.message.contains("default"), "lists this roster: {}", e.message);
+    assert!(e.message.contains("SHOWREEL_THEME_PATH"), "names this var: {}", e.message);
+    assert!(!e.message.contains("simple"), "leaked prez's roster: {}", e.message);
+  }
 
   /// The estate's one real `theme.yaml`, pinned. **TEST AGAINST SOMETHING YOU
   /// DID NOT WRITE**: the refusal cases below exercise keys I chose, this

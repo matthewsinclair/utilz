@@ -14,7 +14,7 @@
 //! inside another's evidence.
 
 use artifact::Failure;
-use showreel::{config, limits, segment};
+use showreel::{config, limits, segment, theme};
 use std::path::{Path, PathBuf};
 
 fn main() {
@@ -74,6 +74,24 @@ fn check(path: &Path) -> Result<(), Failure> {
 
   let cfg = config::parse(&text, &file.display().to_string())?;
 
+  // The theme, resolved exactly as a build will resolve it. **`check` EXISTS TO
+  // MAKE THE REFUSALS REACHABLE FROM A COMMAND LINE**, and this is the one that
+  // fires first against the live 45h reel: its config names `theme: popupart`,
+  // which is not a built-in here and never will be. Without
+  // `SHOWREEL_THEME_PATH` the resolver refuses and names every directory it
+  // searched; with it set, the theme resolves and announces that it came from
+  // off the built-ins. Both are H3 working rather than a port regression.
+  let theme = theme::for_reel(cfg.theme.as_deref(), &[])?;
+  if let Some(said) = theme::provenance(&theme) {
+    eprintln!("showreel: {said}");
+  }
+  let meta = match &theme.dir {
+    Some(dir) => theme::Meta::read(dir)?,
+    // A built-in has no directory, so it can carry no sidecar. Not an absence
+    // to report -- a shape the type already rules out.
+    None => None,
+  };
+
   // The timing envelope, per segment, using the pace preset the config names.
   let (default_dwell, default_ease) = match cfg.pace.as_deref().unwrap_or("attract") {
     "attract" => ("6s", "0.9s"),
@@ -111,6 +129,15 @@ fn check(path: &Path) -> Result<(), Failure> {
   println!("  pace      {}", cfg.pace.as_deref().unwrap_or("attract"));
   println!("  segments  {} declared, {} shapes known", cfg.segments.len(), segment::SHAPES.len());
   println!("  socials   {}", cfg.socials.len());
+  println!("  theme     {}", theme.name);
+  match &meta {
+    Some(m) => println!(
+      "  assets    {} font(s), favicon {}",
+      m.fonts.len(),
+      m.favicon.as_deref().unwrap_or("(none declared)")
+    ),
+    None => println!("  assets    no theme.yaml, so no fonts and no favicon"),
+  }
   println!("  timing    {clamped} segment(s) clamped by the envelope");
   println!(
     "  envelope  dwell >= {}ms, ease {}..{}ms",
