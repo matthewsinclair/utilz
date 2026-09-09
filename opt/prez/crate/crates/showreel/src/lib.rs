@@ -16,5 +16,6 @@
 //! links nothing. TN001's actual harm is a `tests/` directory turning every file
 //! into its own full link, and this crate has none.
 
+pub mod config;
 pub mod duration;
 pub mod limits;

@@ -1,0 +1,220 @@
+# =============================================================================
+# 45h - Ash Sinclair. POP^UP^ART showreel.
+#
+# Everything under session: is also settable from the URL, so ONE BUILD SERVES
+# EVERY VENUE. The art does not change between shops; the six lines of the
+# opening crawl do:
+#
+#   45h-showreel.html?venue=Page45&date=12+Oct
+#   45h-showreel.html?pace=ambient          <- the 4pm "can you calm it down"
+#   45h-showreel.html?kiosk                 <- no progress bar, no HUD
+# =============================================================================
+
+showreel: {version: 1}
+theme: popupart
+title: "45h - Ash Sinclair - POP^UP^ART"
+
+producer: Snorkeltoast
+wordmark: "POP^UP^ART"
+
+artist:
+  handle: 45h
+  name: Ash Sinclair
+  discipline: Character & concept art, animation
+
+session:
+  venue: Forbidden Planet
+  city: Nottingham
+  date: 19th September      # display copy, as it reads on the crawl
+  iso: 2026-09-19           # machine date, used for the _out/ filename
+  action: Come and say hello!
+  venue_url: https://forbiddenplanet.co.uk/our-stores/nottingham/
+
+# attract = window-facing, motion catches a passer-by.
+# ambient = inside, near staff who will see this a hundred times a shift.
+pace: attract
+loop: true
+
+# 1920 is a 1080p panel's native long edge. Raise to 2560 for a 4K screen at
+# roughly double the file; there is no third option worth having.
+target: 1920
+
+# The persistent corner mark. Bottom left, inside the overscan safe area,
+# above the progress line. Screened back on purpose: a mark that announces
+# itself on every slide of an eight-hour loop stops being read at all.
+# ?nobug turns it off for a screenshot.
+bug:
+  file: assets/brand/snorkeltoast-logo.png
+  caption: snorkeltoast.com
+  opacity: 0.5
+  height: 9        # vh
+  x: 1.8           # % from the left edge
+  y: 1.4           # % from the bottom
+
+# Stated once here, rendered by the `socials` segment. The same block is what
+# a roster profile or a printed artist card should read from.
+#
+# `showreel qr <dir>` pre-generates assets/qr/<label>.svg from these urls and
+# stamps the source url into each file, so a build can catch a QR still
+# pointing at an address the config has moved on from. A QR is shown only if
+# its asset exists; no asset is a valid configuration, not a missing one.
+socials:
+  - label: Instagram
+    handle: "@Ash_s_art"
+    url: https://www.instagram.com/Ash_s_art
+  - label: TikTok
+    handle: "@45h836782"
+    url: https://www.tiktok.com/@45h836782
+  - label: LinkedIn
+    handle: "Ash Sinclair"
+    url: https://www.linkedin.com/in/ash-sinclair-b79478256/
+
+  # The reel's own published address, so a person standing in front of it can
+  # take it away -- scan, watch it again later, send it to somebody who is not
+  # in the shop. `qr:` is explicit rather than conventional because the asset is
+  # named for the session, not for the label -- and NOT for the build revision:
+  # the published URL is a stable slot, so a revision in the asset name would be
+  # a second counter that has to be kept in step with nothing.
+  - label: Showreel
+    handle: "Watch this again"
+    url: https://snorkeltoast.com/showreels/2026/09/19/45h-forbiddenplanet/20260919-45h-forbiddenplanet-nottingham-001.showreel.html
+    qr: assets/qr/20260919-45h-forbiddenplanet-nottingham.showreel.qrcode.svg
+
+segments:
+
+  # -- the producer ident. FIRST, before the crawl: the studio mark precedes
+  #    the crawl, it does not interrupt it. Also the frame the loop returns to,
+  #    so a passer-by who arrives mid-reel still sees whose reel it is. -------
+  - {id: logo, type: logo, file: assets/brand/snorkeltoast-logo.png, dwell: 5s}
+
+  # -- the opening crawl. Six lines, five of them from session: above --------
+  - {id: opening, type: crawl, source: session, dwell: 21s, transition: fade}
+
+  # -- the three opening cards, native ------------------------------------
+  # These were 313x418 JPEGs -- the softest assets in the reel and the only
+  # ones that could not be fixed by re-exporting from a vector source. As
+  # templates they are sharp at any size and the words are editable here.
+  - id: brand
+    type: strapline
+    bg: yellow
+    mark: assets/brand/wordmark-popupart.png
+    lines: ["Real art.", "Real people.", "In real shops."]
+    dwell: 6s
+
+  - id: what
+    type: points
+    bg: cream
+    headline: "What is Snorkeltoast?"
+    body: "We bring local artists into independent shops to create live, in front of you."
+    points: ["Local shops", "Live art", "Stronger community"]
+    dwell: 8s
+
+  # Takes its date, venue and city from session:, so this card is per-venue
+  # for free -- the same reason the opening crawl reads from there.
+  - id: launching
+    type: venue
+    image: assets/location/forbiddenplanet-01.png
+    kicker: "Launching"
+    dwell: 8s
+
+  - id: meet
+    type: card
+    bg: blue
+    headline: "Meet Ash"
+    sub: "Australian-born, Nottingham-based. Final year Animation at NTU."
+    dwell: 6s
+    transition: wipe
+
+  # -- the work. Full bleed, slow Ken Burns: this is what stops a passer-by --
+  - id: art
+    type: gallery
+    from: assets/art
+    fit: cover
+    motion: kenburns
+    dwell: 8s
+
+  # The previous card here named two client brands. DROPPED: we have no
+  # permission to use them, and a trademark on a screen in a shop window is
+  # not the place to find that out. The claim survives without the names.
+  - id: credits
+    type: card
+    bg: red
+    headline: "Characters on commission"
+    sub: "Each one with a backstory - and professional animation credits behind them."
+    dwell: 6s
+
+  # NOTE: assets/photos is gone. The two in-store shots were shot in a record
+  # shop for a different venue, so on a Forbidden Planet reel they are a claim
+  # that isn't true. Re-shoot on the 19th and the segment comes back.
+
+  # -- native templates, replacing scans of the print collateral -----------
+  # These were A6/A4 pages photographed into the reel: portrait on a 16:9
+  # panel, print whitespace, and soft where they were scaled. Now they are
+  # HTML, sized to the screen, sharp at 4K, and the words live in this file.
+  - id: ask
+    type: statement
+    bg: blue
+    kicker: "Yes, really"
+    headline: "Ask me what I'm making."
+    body: "I don't mind being interrupted. That's the point of doing this in a shop."
+    dwell: 7s
+
+  - id: faq
+    type: faq
+    bg: cream
+    headline: "Things people usually ask"
+    dwell: 9s
+    items:
+      - {q: "How long does that take?", a: "Longer than it looks."}
+      - {q: "Can I buy it?",            a: "Sometimes. Ask."}
+      - {q: "Do you take commissions?", a: "Ask about that too."}
+
+  - id: atwork
+    type: atwork
+    bg: blue        # the card is ink; it needs a ground that is not
+    kicker: "Artist at work"
+    name: "45h"
+    strap: "Live digital illustration"
+    qr: assets/qr/venue.svg
+    caption: "Scan for this shop"
+    dwell: 8s
+
+  # NO SCANNED COLLATERAL REMAINS. Every print asset that earned a screen is
+  # now a native template above; the rest are excluded with their reasons in
+  # git history. assets/cards/ stays on disk as the source of record -- the
+  # reel simply no longer photographs a page to put it on a television.
+
+  - id: closing
+    type: card
+    bg: yellow
+    headline: "Dare to commission your own?"
+    sub: "Ask Ash at the table."
+    dwell: 7s
+    transition: wipe
+
+  # -- one network per page, each with its own QR ---------------------------
+  - id: socials
+    type: socials
+    layout: each
+    headline: "Follow Ash"
+    bgs: [blue, red, ink]
+    dwell: 9s
+
+  # -- the closing crawl ----------------------------------------------------
+  - {id: outro, type: crawl, source: outro, dwell: 16s, transition: fade}
+
+  # -- the sign-off lockup. Live type, not a picture of a logo: it stays sharp
+  #    on a 4K panel and a theme can restyle it. -----------------------------
+  - id: signoff
+    type: wordmark
+    bg: ink
+    top: "POP^UP^ART"
+    mid: "by"
+    bottom: "snorkeltoast.com"
+    dwell: 8s
+    transition: fade
+
+outro:
+  - {label: "Like what you see", value: "Talk to the artist"}
+  - {label: "Commissions",       value: "Ask at the table"}
+  - {label: "More",              value: "snorkeltoast.com"}
