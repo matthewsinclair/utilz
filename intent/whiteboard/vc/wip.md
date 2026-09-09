@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 11981560-5612-4fe7-a136-6eae64636b64
-heartbeat_at: 2026-09-09 10:59Z
+heartbeat_at: 2026-09-09 11:34Z
 status: active
-focus: "ST0017 contract: 48 rows, 12 satisfied, 1 withdrawn, doctor 0. WP-01 built and green and discharged on evidence. hv ratified the crawl fix, the LIMITS split-enforcement fix and the install gate record (issue 0016). Two corrections to vc today from cc: the ambient scaling MITIGATES the floor defect rather than compounding it -- vc computed one case and described it against a case never computed -- and the real defect is split enforcement, showreel:799-800 never applying max_ease while player.html:549 does. Also: vc dehydrated ST0016 by side effect in a commit about something else, reported to hv, not reverted."
+focus: "ST0017 contract: 52 rows, 14 satisfied, 1 withdrawn, doctor 0. Both of cc's rulings given: AC-3.12 minted and satisfied, AC-3.5 kept as ONE row and reworded to the property. cd0412d validated on the population that SHIPS -- nine real theme.css files, built=9 refused=0, both controls. Then the direction question reversed my own draft ruling: issue 0018, a live href in layout.html hidden by a stray CSS comment marker and shipped, found by the sixth case after five agreed. AC-1.16: cargo build still has no --workspace, in CI and in the shim, and the shim will never build showreel."
 claims: [ST0017]
 ---
 
@@ -17,13 +17,15 @@ Validation node. cc builds, vc contracts and verifies, hv adjudicates. Full boar
 
 **ST0017 -- showreel hoisted under prez. vc holds the contract, cc builds, snorkeltoast advises from the reference implementation.** Localfolded 2026-09-09 10:59Z for a compact. Status stays `active`: a compact is not a session ending.
 
-- **Contract: 49 rows, 12 satisfied, 1 withdrawn, `intent doctor` 0.** `intent ac list ST0017` is the live contract; `design.md` (774 lines) carries the reasoning. **Ids are `AC-<wp>.<seq>` and the group digit IS the work package** -- vc minted 30 by concern first and had to retract them.
+- **Contract: 52 rows, 14 satisfied, 1 withdrawn, `intent doctor` 0.** `intent ac list ST0017` is the live contract; `design.md` (774 lines) carries the reasoning. **Ids are `AC-<wp>.<seq>` and the group digit IS the work package** -- vc minted 30 by concern first and had to retract them.
 - **WP-01 DONE and discharged on evidence.** Workspace + `artifact` crate, prez unchanged, all four gates green. AT02 amended and green.
 - **WP-02 in flight with snorkeltoast**, WP-03 open with cc, budget approved at 59 packages.
 
 ## TODO
 
 - **Satisfy WP-01's remaining rows** as cc sends evidence: AC-1.11, 1.13, 1.14, 1.15.
+- **AC-3.13 is with cc, ruled in two parts.** NOW: the comment exemption becomes CSS-only, a non-CSS surface is scanned with no comment stripping -- closes the silent half for the price of a flag. LATER, only once a real `theme.js` or `layout.html` exists: cc's per-surface grammar. **NOT the written statement**, which was my own wording's first option and which issue 0018 refuted.
+- **AC-1.16 is with cc.** `cargo build` has no `--workspace` at `tests.yml:283` and at `opt/prez/prez:155`. Measured: CI's line verbatim rebuilds `prez` only with `showreel` deleted; the same line plus `--workspace` compiles it. **The shim half lands on WP-05 before WP-05 starts.**
 - **008 after-table LANDED and the crawl fix is validated by measurement.** Slide 20 went from four render clusters and a 4.99-12.45 spread to ONE cluster at 0.000000, every other slide unchanged. AC-2.10's contingency discharged. Reel now reads 19 gradeable / 3 ungradeable, and the three are TWO known bugs: slides 13+14 are snorkeltoast's verdict rule (flattens 0.002196 against what used to be 12.45), slide 1 is `player.html:613`'s brand literal. **With the rule fixed it should read 21 gradeable / 1 presence-unprovable / 0 ungradeable -- NOT claimable until re-run.**
 - **cc's ST0017 claim overlap** -- flagged to hv. Not a conflict: claim-by-ST has no way to say "vc validates, cc builds", and a thread with a contract-writer and a builder will always have both.
 
@@ -35,6 +37,7 @@ Validation node. cc builds, vc contracts and verifies, hv adjudicates. Full boar
 
 - **The minimum-defect magnitude for a showreel** (AC-2.17). Ruled in shape -- a named injected defect, never a multiplier -- and the value is hv's when next needed. NOT blocking.
 - **The `.intentfiles` header** is still the hand-written 2026-08-26 original naming `st hydrate` zero times.
+- **A GUARD FOR THE SHARED GIT INDEX.** The protocol gives every FILE one writer; the INDEX has no such rule and cc and vc share one working tree. `git add -A` or a broad pathspec from either sweeps the other's in-flight edits, silently. Two instances in two days, one each: vc's `688974c` dehydrated ST0016, cc's `8dea619` carried three of vc's contract rulings under a message about something else. Both nodes have moved to explicit pathspecs, which is discipline, not a guard. **A real guard is a pre-commit gate change on shared infrastructure, so it is hv's to want; neither node is building it unasked.**
 - **ST0016 was dehydrated by vc as a SIDE EFFECT** of `git add -- intent/` in a commit about something else (`688974c`). Not reverted -- canon intact, ST0015 is in the same state -- but it executed a decision reserved to hv. Reported.
 
 ## Claims
@@ -53,6 +56,10 @@ Validation node. cc builds, vc contracts and verifies, hv adjudicates. Full boar
 **THE AC MINT REFUSES NOTHING AND THE RENDERER GROUPS NOTHING, SO "CONFORMING ID" CANNOT BE INFERRED FROM BEHAVIOUR.** Measured on ST0017 today: `intent ac new` accepted `AC-HOIST-01`, `HOIST-AC-01` AND `AC01`, and the renderer then made every one its own group. Unenforced in both directions. **With no rename verb, a wrong mint is permanent** -- so the contract is drafted in `design.md` and minted only when the form is named. **Partial relief, also measured: dropping rows from `intent/.canon/st/<ID>.json` and running `intent sync --to-store` retracts them cleanly** -- no tombstone, no `withdraw`, doctor 0 after. Un-ratified rows only; the sync warns it OVERWRITES and the satisfied-row case was not tested.
 
 **FIND THE RECORD BEFORE FORMING THE HYPOTHESIS. THIS IS THE BIGGEST MISS OF THE DAY AND IT IS MINE.** Files were vanishing from `intent/st/`. I theorised through git hooks, `intent doctor`, an unnamed concurrent writer, and finally 27 leaked `intentd` daemons -- which I ESCALATED TO hv AS THE ROOT CAUSE. It was none of them. `intent/.cache/intent.db` holds an `event_log` table naming every disk mutation with a timestamp, and an `attachments` table that showed the actual defect. **Two `sqlite3` queries would have ended it before the first theory.** A real anomaly is not automatically YOUR anomaly: the daemon leak was genuine and unrelated, and I attached my symptoms to it because it was the only strange thing in view.
+
+**A POPULATION DRAWN FROM THE DISK ANSWERS FOR THE DISK; THE CODE'S POPULATION IS ITS CALL SITES.** I enumerated every theme that exists -- nine `theme.css`, `built=9 refused=0`, both controls -- and it was complete for the disk and answered for ONE surface of three. `refuse_external` also runs on `theme.js` and `layout.html`, and the estate holds zero of each, so a clean sweep of everything that exists reads exactly like a clean sweep of everything the code touches. **Enumerating the data is not enumerating the reach.**
+
+**ASK WHICH DIRECTION THE ERROR RUNS, AND BUILD THE CASE THAT ATTACKS THE ANSWER YOU EXPECT.** Five cases across both non-CSS surfaces all said the CSS-grammar mismatch OVER-refuses -- annoying, loud, deferrable on an empty population -- and I had the ruling drafted. The sixth, built to break the hypothesis rather than to confirm it, said otherwise: a live href in `layout.html` between a stray `/*` and a later `*/` is stripped before the scan and SHIPS, confirmed in the artifact against a control that refuses the same href without the markers. Issue 0018. **Five agreeing samples of a wrong model, at a sample size chosen by me, in the section documenting that exact failure.** The cheap discipline is not more samples; it is one sample designed to lose.
 
 **A POPULATION IS THE CLAIM, NOT A DETAIL OF IT.** Six ways it went wrong in one day: TOO WIDE fails loudly (36 tools in `~/.local/bin` when 15 are ours, 42 spurious failures, one minute); TOO NARROW fails greenly and ships (a control over 16 of 33 files); SELF-MATCHING fails silently and forever (`pgrep -f 'utilz test'` matching the waiter -- fix is `utilz[ ]test`); PATTERN-MATCHES-PROSE has no bound at all (`bats ` hit another project's SYSTEM PROMPT; `escape` matched a CSS comment; `session` matched ordinary commit text); DEFINED BY AUTHORSHIP misses other writers' commits; and FIXED AT INVOCATION measures a tree that moved (`bats ./*.bats` expands once -- eleven new tests silently excluded, total unchanged at 554, byte-identical to "they ran and added nothing").
 

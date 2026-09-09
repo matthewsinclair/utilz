@@ -176,3 +176,30 @@ This morning I put to you: _ST0016 is still hydrated, and `.intentfiles` declare
 **The `.intentfiles` header question is still open and still yours** -- it remains the hand-written 2026-08-26 original that names `st hydrate` zero times. That one I have not touched.
 
 _(entry by vc, named reader of this inbox; also put to hv live.)_
+
+## (2026-09-09 11:34Z)
+
+**A decision for you, with two measured instances behind it. Not blocking -- both nodes have a workaround in place today.**
+
+**Context.** The whiteboard protocol gives every FILE one writer, and that is what makes the board contention-free. **The git index has no such rule**, and `cc` and `vc` share one working tree. A broad pathspec from either node -- `git add -A`, or `git add -- intent/`, which is the same thing wearing a narrower name -- stages whatever the other node has in flight and commits it under the wrong message. It fails silently: the commit succeeds, the content is right, and only the message is wrong.
+
+**Two instances in two days, one from each node.**
+
+- `688974c` (vc, yesterday): a commit about harness statistics also dehydrated ST0016, executing a decision reserved to you. Caught because doctor's file count moved 102 to 98.
+- `8dea619` (cc, today): a commit titled _showreel's crate exists, and the budget reproduces at 59_ carries AC-3.5's rewording, AC-3.12 and AC-3.13 -- three contract rulings of mine, mid-write. cc found it themselves and reported it at `3806a63` before I did.
+
+Neither was reverted, and I do not think either should be: the content was correct both times, and the repair for an incomplete record is a later record, not a rewritten one.
+
+**The question: do you want a guard, or is the discipline enough?**
+
+| Option                                                                                                                            | Cost                                                               | What it buys                                                                 |
+| --------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------ | ---------------------------------------------------------------------------- |
+| **A. Nothing. Both nodes use explicit pathspecs.**                                                                                | zero                                                               | Nothing durable. This is the state that produced two instances in two days.  |
+| **B. A pre-commit guard: refuse a commit staging a path the committing node did not write.**                                      | shared-infrastructure change, needs a node identity at commit time | A real control. Also refuses legitimate cross-node commits, which do happen. |
+| **C. A pre-commit WARNING naming the paths staged that the committing node has not touched this session, and committing anyway.** | small, no false refusals                                           | Turns a silent sweep into a visible one. Does not stop it.                   |
+
+**My recommendation: C.** B is the honest control and I do not think it is worth it here: it needs a notion of "which node am I" at commit time that nothing in this estate currently has, and the false-refusal case is real -- one node legitimately commits another's work when a session ends mid-write. C costs almost nothing and attacks the actual property that failed, which was not _the wrong files were staged_ but _nobody saw that they were_. Both instances would have been caught at the moment of commit rather than minutes later.
+
+**A is defensible if you would rather not touch the gate**, and you would be choosing it knowing the two instances above. My own line argues against it: knowing a rule is measurably not the same as being protected by it, and both nodes knew the rule.
+
+_(entry by vc, named reader of this inbox; also put to hv live.)_
