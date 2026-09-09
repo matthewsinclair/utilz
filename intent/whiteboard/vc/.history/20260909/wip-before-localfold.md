@@ -3,7 +3,7 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 11981560-5612-4fe7-a136-6eae64636b64
-heartbeat_at: 2026-09-09 10:59Z
+heartbeat_at: 2026-09-09 08:14Z
 status: active
 focus: "ST0017 contract: 48 rows, 12 satisfied, 1 withdrawn, doctor 0. WP-01 built and green and discharged on evidence. hv ratified the crawl fix, the LIMITS split-enforcement fix and the install gate record (issue 0016). Two corrections to vc today from cc: the ambient scaling MITIGATES the floor defect rather than compounding it -- vc computed one case and described it against a case never computed -- and the real defect is split enforcement, showreel:799-800 never applying max_ease while player.html:549 does. Also: vc dehydrated ST0016 by side effect in a commit about something else, reported to hv, not reverted."
 claims: [ST0017]
@@ -15,17 +15,36 @@ Validation node. cc builds, vc contracts and verifies, hv adjudicates. Full boar
 
 ## DOING
 
-**ST0017 -- showreel hoisted under prez. vc holds the contract, cc builds, snorkeltoast advises from the reference implementation.** Localfolded 2026-09-09 10:59Z for a compact. Status stays `active`: a compact is not a session ending.
+**ST0017 -- showreel hoisted under prez. vc holds the contract; cc builds against it; snorkeltoast advises from the reference implementation.**
 
-- **Contract: 49 rows, 12 satisfied, 1 withdrawn, `intent doctor` 0.** `intent ac list ST0017` is the live contract; `design.md` (774 lines) carries the reasoning. **Ids are `AC-<wp>.<seq>` and the group digit IS the work package** -- vc minted 30 by concern first and had to retract them.
-- **WP-01 DONE and discharged on evidence.** Workspace + `artifact` crate, prez unchanged, all four gates green. AT02 amended and green.
-- **WP-02 in flight with snorkeltoast**, WP-03 open with cc, budget approved at 59 packages.
+- **Thread docs landed 2026-09-09.** Objective + context written into canon and rendered; `design.md` attached and hydrated (375 lines); WP-01..06 minted; `intent doctor` 0 findings.
+- **The architecture, in one line:** one Cargo workspace, three member crates (`artifact/` shared, `prez/` untouched, `showreel/` with its own budget), two binaries, and the existing shim gains one dispatch branch. **AC02 survives by construction rather than by exception** -- prez's `[dependencies]` is not touched, and showreel's budget is a new ruling on a new manifest.
+- **Why that beats both options HOIST.md weighed.** Its fallback was "shared name, no shared code -- do not merge the implementations", which was the best trade for a PYTHON showreel. Rust makes shared name AND shared code AND unmerged binaries reachable at once. The instruction is honoured exactly: the binaries stay apart, the duplicated library half merges.
+- **RULED: consistent normalisation policy, not the Python's asymmetry.** `data_uri`'s PNG branch is the default path for hand-placed brand marks and has no opaque-collapse, so a fully-opaque RGBA ships full-size where `init` would have made it a JPEG -- the mascot and the wordmark, every build. Match-exactly means porting that. **It costs the blanket RMSE and the cost is paid explicitly**: a named exemption list, the difference stated as a DIRECTION, plus cc's sum control and membership control, because an exemption list is a population narrowing and too narrow fails greenly.
+- **Contract drafted, NOT minted.** 22 rows across SHARE / FID / PORT / HOIST. Minting is blocked on the id format -- see the new watch-out.
 
 ## TODO
 
-- **Satisfy WP-01's remaining rows** as cc sends evidence: AC-1.11, 1.13, 1.14, 1.15.
-- **snorkeltoast's 008 after-table** -- the fifth attempt, first with a fixed player. Their verdict rule needs FIXING not researching: it flattens 0.002196 against 12.45 into one bucket, and magnitude is the discriminator where cluster count is not.
-- **cc's ST0017 claim overlap** -- flagged to hv. Not a conflict: claim-by-ST has no way to say "vc validates, cc builds", and a thread with a contract-writer and a builder will always have both.
+- **Mint the 22 contract rows** once hv or `intent-vc` names the id form.
+- **Answer cc's two open items**: whether snorkeltoast writes the harness now (yes, once the assertions are specified -- they now are) and cc's `inline.rs` assessment, which is unblocked.
+
+**Carried, and all of it hv's to decide. None of it blocks ST0017.**
+
+- **`.intentfiles` header is the root of an entire wasted afternoon and is still wrong.** It is the hand-written 2026-08-26 original -- "organize --default was not yet built" -- and names `st hydrate` **zero times**. Four of us hunted a verb the file said nothing about. The current Intent template names it and lists every writer. hv's to refresh.
+- **ST0016 is still hydrated** and `.intentfiles` declares a Completed thread while the header says only OPEN ones are. Either `organize --apply` finishes it as ST0015 was finished, or the policy changed and the header should say so. hv's call, unblocked now that nothing is unclaimed.
+- **Issue 0007 needs hv for TWO reasons, and clearing the first would not release it.** Its stated home ST0010/WP-05 is Cancelled -- recorded, not re-homed. But the fix also answers a question the issue raises and leaves open (does the 4.5:1 floor bind `aria-hidden` decorative chrome?), and it changes output hv page-turned and approved: the counter inherits its colour, so it is `opacity: 0.45` carrying it under the floor, and correcting the colour alone will not lift it. The colour half is small and fenced and is written into the record.
+- **AC16's per-theme note, which its own evidence names as missing.** hv's 2026-09-08 page-through of all seven -- "they all LGTM, including tables and images" -- is exactly the catalogue the recorded attestation says it does not hold, and it is unfiled. **Not filed by me on purpose:** `ac` has no append, so amending it is `unsatisfy` then `satisfy`, which CLEARS hv's own attestation wording and momentarily unsatisfies an AC on a Completed thread. Attestation is hv's to give and hv's to reword.
+- **The closed-thread evidence gap** -- Intent's, via `intent-vc`. Issue 0011's fix is the third instance: it changed a test whose green is recorded in ST0014's dehydrated canon, and nothing re-verified or re-attached it.
+
+## Done since the fold
+
+- **Issue 0011 CLOSED** (`6200ac2`) -- AT12 asserted live `git rev-parse HEAD` against a fixture-time install. Red-proofed first: undisturbed both forms pass, diverged the live-HEAD form fails. **The one-line fix would have been tautological** -- the runtime reads `source-commit` from the manifest, so a test reading the same row proves the plumbing and nothing about whether the right commit was recorded, which is the half live HEAD accidentally covered. Two assertions instead, the second in its own test so its `skip` cannot take AT12's down with it. Controlled: a wrong `source-commit` leaves AT12 green and reddens the new one.
+- **Issue 0010 CLOSED** (`ca1e924`) -- and **its stated diagnosis was wrong**. It said the generator was clean and this was "not a code change"; `common.sh` was still filling `{{IMPL_PATH}}` with absolute paths, so the next `utilz generate` would have minted the ninth. Root cause was one variable doing two jobs: the filesystem target the generator writes through and the string that ships in README.md. `install_e2e.bats` then dropped its `! -name '*.md'` exemption, so the strict property covers the whole owned set instead of only files that run.
+- **Issues 0007 and 0013 records corrected** (`b413b41`) -- 0013 closed one write-only capture, not the class, and said otherwise; 0007's blockers are now written down.
+
+## Claims
+
+- **ST0017** -- the contract. cc builds; no peer claimed it.
 
 ## Holds
 
@@ -33,20 +52,13 @@ Validation node. cc builds, vc contracts and verifies, hv adjudicates. Full boar
 
 ## Open with hv
 
-- **The minimum-defect magnitude for a showreel** (AC-2.17). Ruled in shape -- a named injected defect, never a multiplier -- and the value is hv's when next needed. NOT blocking.
-- **The `.intentfiles` header** is still the hand-written 2026-08-26 original naming `st hydrate` zero times.
-- **ST0016 was dehydrated by vc as a SIDE EFFECT** of `git add -- intent/` in a commit about something else (`688974c`). Not reverted -- canon intact, ST0015 is in the same state -- but it executed a decision reserved to hv. Reported.
-
-## Claims
-
-- **ST0017** -- the contract. **cc also claims it, surfaced to hv rather than resolved between us.** Not a conflict: claim-by-ST cannot express "vc validates, cc builds", and a thread with a contract-writer and a builder will always carry both.
+- The two `.intentfiles` items above, which are one decision.
+- Whether `--help` diverging on a DIRECTLY executed utility is worth a thread. cc reported it and correctly did not fold it into ST0016.
 
 ## Live with other nodes
 
-- **`cc`: localfolded `5fca14f`, status active, WP-01 done and WP-03 open.** Their board now carries an enumerated list of the gates this estate runs, which is AC-1.12 made durable.
-- **`snorkeltoast`: folded to `HARNESS-STATE.md` (`2b39d08`), status active.** The 13-capture control against reel 008 -- first with the fixed player -- finishes while they are down.
-- **`intent-vc`: gave us the AC id form with source, and carries our finding that the mint refuses nothing while the renderer groups nothing.**
-- **`devbin-vc` / `lamplight-vc`: consulted on TN001.** Both corrected a premise of ours; lamplight-vc's `resolver = "3"` went straight into the wiring commit.
+- **`cc`: folded for a compact, status active, nothing claimed.** Built ST0013, ST0015 and ST0016 today against contracts I wrote.
+- **`intent-vc`: three Intent issues from this estate today** -- 0282 (ws hygiene thresholded the wrong bytes, FIXED), 0283 (a closed thread's view goes stale and both messages misdescribe it), 0284 (27 leaked `intentd`, high, cleared).
 
 ## Watch-outs
 

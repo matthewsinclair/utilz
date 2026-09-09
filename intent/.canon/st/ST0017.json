@@ -262,6 +262,14 @@
       }
     },
     {
+      "id": "AC-2.17",
+      "text": "Gradeability is decided against a NAMED minimum defect that is injected and red-proved, not against a multiplier. hv ruled 2026-09-09. A floor is acceptable iff it sits below that defect's measured value. Rationale: RMSE scales with sqrt(area), so the red-proof's 6.29 is a property of the injected defect's EXTENT rather than of the instrument's sensitivity -- a one-level change over 4 pixels measures 0.002196, which is exactly slide 14's noise, so a multiplier chosen against 6.29 is provably blind to any defect smaller than that injection. The magnitude of visual change that matters for a showreel is hv's to name when it is next needed; it is NOT blocking, because the only genuinely ungradeable slide in the 45h reel may disappear once the crawl fix lands.",
+      "kind": "non-test",
+      "state": {
+        "is": "unsatisfied"
+      }
+    },
+    {
       "id": "AC-2.2",
       "text": "Slide count, order and ids are asserted exactly before any pixel comparison. A structural mismatch fails without reporting a pixel number at all.",
       "kind": "non-test",
