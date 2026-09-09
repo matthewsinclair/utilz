@@ -375,6 +375,59 @@ to exit 0 over one pass. **Every arm asserts the COUNT, never the exit code** --
 selects by name and checks only `$?` is green from the moment the name drifts, and name drift is
 silent, routine, and exactly what refactoring does.
 
+
+### 1.12 The contract is minted, and the group digit is the WORK PACKAGE
+
+**Form, from `intent-vc` with source (`preconditions.rs:428`, `fn is_ac_id`): `AC-<group>.<seq>`, both
+parts digits, ANY group width.** hv ruled the width out on 2026-09-08 against a 13-estate census
+that found 182 rows in the one-digit shape parsing correctly everywhere except in that one
+function. `AC-HOIST-01`, `HOIST-AC-01` and `AC01` do not conform.
+
+**And the group digit binds the row to a WORK PACKAGE.** `AC-1.x` renders under WP-01, `AC-5.x`
+under WP-05, and a WP with no rows does not appear at all.
+
+**vc minted 30 rows grouped by CONCERN, which misfiled three groups of five, and then retracted
+and re-minted them.** The contract briefly asserted that the harness criteria belonged to the
+Rust-build package and the build-topology criteria to the harness package. **The error is the
+day's own class applied to the contract itself: the FORM came from a source and the SEMANTICS
+were inferred.** Caught by reading the rendered view instead of trusting the mint's `ok`.
+
+**Retraction used the path measured this morning** -- drop `criteria` from
+`intent/.canon/st/ST0017.json`, `intent sync --to-store` -- verified PAST the daemon ingest rather
+than at the write, on `intent-vc`'s warning that Intent's issue `0216` has a canon write reporting
+`ok`, landing, and being reverted about a second later. 30 out, 33 back, `doctor` 0 both sides.
+
+**33 rows: WP-01 twelve, WP-02 seven, WP-03 eight, WP-04 two, WP-05 three, WP-06 one.** The parts
+sum to the total, which is the check a partition owes.
+
+### 1.13 The day's dominant failure, with its instances
+
+**ONE GREEN, GENERALISED ACROSS A POPULATION NOBODY MEASURED.** Eight instances, three nodes, one
+day. Recorded together because the list is the evidence that it is a class rather than a run of
+bad luck, and because each instance looked like diligence at the time.
+
+| # | Instance | Whose |
+| - | -------- | ----- |
+| 1 | A control injected against code the crate does not yet link. Reordering `BUILT_IN` failed nothing and read as a pass | cc |
+| 2 | A test named for a property its body does not check, twice in one file | cc |
+| 3 | A comment claiming a prez failure "hides every other crate's results", corrected after driving it -- both arms ran artifact, because artifact's target happens to run first | cc |
+| 4 | RMSE 0.0 measured on slide 3 and asserted of all 22 | snorkeltoast |
+| 5 | Three peer nodes reported offline from a 90-minute-old listing, in which each name ALSO had a live row | vc |
+| 6 | TN001's fail-fast example relayed as fact without driving it; lamplight-vc's mechanism reading says it runs backwards | vc |
+| 7 | A `sed` range stopping at the first blank line, read as a missing dependency | vc |
+| 8 | `0 unused-import hits` from a clippy run that exited 101 before reaching the check, read as "the gate is blind to it". Re-running to completion showed it reports both | vc |
+| 9 | `check autotests` absent from `devbin check all` -- never instantiated, so nothing announced it, and the summary spoke for the survivors | cc, measuring |
+
+**The sharpest statement of it is cc's, from #9: a gate that runs and finds nothing SAYS SO; a gate
+that never activates has no voice. To a reader the two are indistinguishable.** That is why
+`AC-1.12` requires every gate to be enumerated before a change is called green, and every gate to
+report its own population including on passes.
+
+**And cc's generalisation of their own case is the one to keep: "did it pass" is a question about
+an INSTRUMENT, and it was answered without enumerating the instruments.** `cargo test` green felt
+like done; the estate also runs `cargo clippy --all-targets -- -D warnings`, and that list was one
+grep away.
+
 ---
 
 ## 2. There are THREE consolidations, and they are named apart on purpose
@@ -576,8 +629,8 @@ they join ST0017 or take their own thread.
 
 ## 8. The contract, drafted
 
-**Provisional ids, NOT minted** -- see section 9. Ratification is the mint, and the mint is the
-gate.
+**MINTED 2026-09-09 as `AC-<wp>.<seq>` -- 33 rows, see 1.12.** The numbered draft below is kept as
+the reasoning behind each row; the live contract is `intent ac list ST0017`.
 
 ### Group SHARE -- the consolidation between tools (C3)
 
