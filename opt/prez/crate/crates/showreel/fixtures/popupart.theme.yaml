@@ -1,0 +1,18 @@
+name: popupart
+description: POP^UP^ART by Snorkeltoast. Comic four-up palette, keyline black.
+source: design/system/brand/tokens
+
+# The tab icon, from the site repo (assets/icon.svg) so the reel and
+# snorkeltoast.com carry the same mark. Inlined like the fonts.
+favicon: favicon.svg
+
+# Vendored so the artifact opens with no network, five years from now, from a
+# USB stick. SHIPPED AS WOFF2: the build inlines these bytes and converts
+# nothing. The .ttf sources are kept beside them as the provenance of the
+# conversion, and nothing reads them.
+fonts:
+  - {family: "Luckiest Guy", file: fonts/LuckiestGuy-Regular.woff2, weight: 400}
+  - {family: "Bangers",      file: fonts/Bangers-Regular.woff2,     weight: 400}
+  - {family: "Barlow",       file: fonts/Barlow-SemiBold.woff2,     weight: 600}
+  - {family: "Barlow",       file: fonts/Barlow-Black.woff2,        weight: 900}
+  - {family: "Barlow",       file: fonts/Barlow-Italic.woff2,       weight: 900, style: italic}

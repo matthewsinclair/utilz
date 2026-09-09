@@ -504,6 +504,51 @@ pub enum Grammar {
   Verbatim,
 }
 
+/// The schemes that mean "off the artifact". ASCII-lowercase; callers fold.
+///
+/// One list, because two would be the Highlander violation in the module whose
+/// whole job is that nothing reaches outside -- and a scheme added to one and
+/// not the other fails silently in exactly one of the two input shapes.
+const ABSOLUTE: [&str; 2] = ["http://", "https://"];
+
+/// Refuse a value that **IS** a reference target, rather than a document that
+/// may contain one.
+///
+/// **THE TWO SHAPES ARE NOT THE SAME PROBLEM AND ONE ENTRY POINT CANNOT SERVE
+/// BOTH.** `refuse_external` scans a DOCUMENT: absolute schemes anywhere in live
+/// text, and protocol-relative targets **at CSS's two reference sites**, `url()`
+/// and `@import`. A `theme.yaml` field has no such site -- the whole value is
+/// the target -- so the site scan finds nothing and `//cdn/x.woff2` passes.
+///
+/// **MEASURED, by a failing test rather than by reading**: showreel's R3
+/// population put a protocol-relative `fonts[].file` through `refuse_external`
+/// and it BUILT. The coarse net misses it because there is no scheme, and the
+/// site scan misses it because there is no `url(`.
+///
+/// This is a second SHAPE OF INPUT, not a second rule: what counts as external
+/// lives in `ABSOLUTE` and `protocol_relative_target`, and both entry points
+/// read the same two.
+pub fn refuse_external_target(value: &str, origin: &str) -> Result<(), Failure> {
+  let lower = value.to_ascii_lowercase();
+  if let Some(needle) = ABSOLUTE.into_iter().find(|n| lower.contains(n)) {
+    return Err(external_target(origin, needle, value));
+  }
+  if protocol_relative_target(&lower).is_some() {
+    return Err(external_target(origin, "//", value));
+  }
+  Ok(())
+}
+
+fn external_target(origin: &str, needle: &str, value: &str) -> Failure {
+  Failure::new(
+    format!(
+      "theme {origin} references something outside the artifact ({needle}): {}",
+      value.trim()
+    ),
+    "themes must work offline -- inline the font or asset, or drop the reference",
+  )
+}
+
 pub fn refuse_external(source: &str, origin: &str, grammar: Grammar) -> Result<(), Failure> {
   let scanned = match grammar {
     Grammar::Css => strip_comments(source, origin)?,
@@ -515,7 +560,7 @@ pub fn refuse_external(source: &str, origin: &str, grammar: Grammar) -> Result<(
   // AND line boundaries: these two iterators stay in step by construction, and
   // an offset into `lower` indexes the same character in `scanned`.
   for (index, (line, low)) in scanned.lines().zip(lower.lines()).enumerate() {
-    if let Some(needle) = ["http://", "https://"].into_iter().find(|n| low.contains(n)) {
+    if let Some(needle) = ABSOLUTE.into_iter().find(|n| low.contains(n)) {
       return Err(external(origin, index + 1, needle, line));
     }
   }
@@ -896,6 +941,38 @@ mod tests {
     assert!(e.message.contains("evil.example.com"), "names the offender: {}", e.message);
     // Line 2 can only be reported if the line-1 marker did NOT strip anything.
     assert!(e.message.contains("line 2"), "reports the reference's own line: {}", e.message);
+  }
+
+  /// **WHY THERE ARE TWO ENTRY POINTS, ASSERTED RATHER THAN REMEMBERED.**
+  ///
+  /// The document scanner passing a bare `//host/path` is not a defect in it:
+  /// protocol-relative is refused AT A REFERENCE SITE and deliberately not in
+  /// arbitrary string content, because `content: "//"` is a shape people write
+  /// and refusing it was the other implementation's false positive. A
+  /// `theme.yaml` field has no site because the whole value IS the target.
+  /// Found by a failing test in showreel's R3 population, not by reading.
+  #[test]
+  fn a_bare_reference_target_needs_its_own_entry_point() {
+    // Pinned: the document form passes it, and that is correct for a document.
+    assert!(refuse_external("//cdn/x.woff2", "t", Grammar::Verbatim).is_ok());
+    assert!(refuse_external_target("//cdn/x.woff2", "t").is_err());
+
+    // Where the two overlap they must AGREE, or the split is a second rule
+    // rather than a second input shape.
+    for (value, external) in
+      [("https://cdn/x", true), ("HTTP://cdn/x", true), ("fonts/x.woff2", false), ("", false)]
+    {
+      assert_eq!(
+        refuse_external(value, "t", Grammar::Verbatim).is_err(),
+        external,
+        "document form disagreed on {value:?}"
+      );
+      assert_eq!(
+        refuse_external_target(value, "t").is_err(),
+        external,
+        "target form disagreed on {value:?}"
+      );
+    }
   }
 
   #[test]
