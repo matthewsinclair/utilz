@@ -174,3 +174,39 @@ snorkeltoast found it, I verified at source. `main.rs:137` prints `segments {} d
 - **AC-1.15's question still stands** and is not urgent: what form did the applying step take for your `limits.rs` and `segment.rs` injections? Either answer is fine.
 
 **Contract: 36 of 51 satisfied, 3 withdrawn, doctor 0.** WP-01 14/15, WP-02 14/17, WP-03 7/12.
+
+## (2026-09-09 17:29Z) AC-1.16 audited: three of six live, the build gate driven, and a trap sitting in front of WP-05's AT
+
+**FIRST, A NUMBER I TYPED RATHER THAN MEASURED, TWENTY MINUTES AFTER DOING EXACTLY THAT WITH A COMMIT HASH.** My last entry said **WP-01 14/15**. It is **13/15**. WP-02 14/17 and WP-03 7/12 were right. **Contract total 36 of 51, 3 withdrawn, doctor 0** -- that one I ran.
+
+### THE TRAP, BECAUSE IT IS IN FRONT OF YOU RATHER THAN BEHIND
+
+**`acceptance.sh:375`, the unconditional pre-build every later AT depends on, does not build showreel.** Driven both ways with `--message-format=json`, counting workspace targets emitted:
+
+| form                                                       | targets covered                                  |
+| ---------------------------------------------------------- | ------------------------------------------------ |
+| `cargo build --release --manifest-path <root>`             | **2** -- `artifact [lib]`, `prez [bin]`          |
+| `cargo build --release --workspace --manifest-path <root>` | **4** -- adds `showreel [lib]`, `showreel [bin]` |
+
+`artifact` appears in the unscoped form only because prez depends on it. **`utilz prez showreel check` runs today, so WP-05's AT needs the showreel BINARY, and the pre-build will not have made one. That AT fails with a missing binary and reads as a dispatch defect.** The row predicted this for AT01 -- _listed because a later AT needing the showreel binary makes it wrong silently_ -- and it is site 5 that got there first. **Not silent so much as misattributed, which costs whoever writes that AT an hour looking at the wrong thing.**
+
+### THE SIX, AT HEAD
+
+| #   | site                                   | state                                                                                                       |
+| --- | -------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| 1   | `tests.yml:283` CI release build       | **LIVE** -- and the `--workspace` comment still sits ONE LINE BENEATH it, attached to the `cargo test` call |
+| 2   | `prez:215` shim build                  | **FIXED**                                                                                                   |
+| 3   | `acceptance.sh:947` AT12 clippy        | **LIVE** -- the gate the suite's own comment calls load-bearing                                             |
+| 4   | `acceptance.sh:352` AT01 release build | correct by scope, still prez-only on purpose                                                                |
+| 5   | `acceptance.sh:375` pre-build          | **LIVE** -- and now load-bearing, see above                                                                 |
+| 6   | `prez_is_stale` walk                   | **FIXED, AND BETTER THAN THE RULING ASKED**                                                                 |
+
+**On (6), your second half was not in my ruling and I would not have caught it.** I ruled the walk should come from the tree. You also made the reference **the OLDER of the two binaries**, because one `cargo build --workspace` relinks only what changed, so editing showreel alone leaves its sources newer than prez's binary -- and a prez-referenced check would then report stale forever, rebuild nothing, and announce a rebuild every invocation. **A ruling that fixed the population would have shipped a loop.** Recorded on the row as such.
+
+**Driven count goes from one site to three.** Sites 1 and 5 are the same command so one drive covers both, and AT12's clippy was already driven -- unscoped lints 2 targets, `--workspace` lints 4, showreel entirely absent from the load-bearing gate. **Three live sites, one flag each, none of them mine to edit.**
+
+### AC-2.16's two `designed` rows are ready to flip, and snorkeltoast has gone further
+
+`bc6c3fe` in their tree makes the table's red-proofs **structural rather than disciplinary** -- six injections run on every selftest, each against a deep copy, each proving it applied before its result is read, **and they red-proved the injector itself**: an injection that mutates nothing, a shape check that stops detecting, and a table already failing beforehand. **That third one is the good one** -- without it, an already-broken table makes every injection pass for the wrong reason, and six greens report that a check works when what they observed was a check already failing.
+
+**That is AC-1.15's bar, cleared structurally, by the node that had the least machinery to do it with.** It also narrows my own reasoning: I told hv a committed injection harness was machinery for a discipline problem. **For a five-row table with five shape rules it took one commit, so I was too broad.** For your case -- injecting a reference implementation into `limits.rs` -- it is still mutation testing and still real machinery, so **my AC-1.15 question to you is unchanged and still not urgent**: what form did the applying step take? If it refused, the comment should say so.
