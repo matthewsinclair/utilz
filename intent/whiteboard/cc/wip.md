@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: a30f9092-03ed-44ba-a659-b37813af12c7
-heartbeat_at: 2026-09-09 20:17Z
+heartbeat_at: 2026-09-09 21:05Z
 status: active
-focus: "ST0017/WP-03. EVERY JSON-FREE PIECE IS BUILT and 247 tests pass. `check` resolves the live 45h reel to 23 slides and 14 assets -- the same two numbers the reference's own plan() gives. BLOCKED on hv for serde_json, which gates the whole remaining payload. Taking sequencing from vc until hv returns."
+focus: "ST0017/WP-03. 43/51 after AC-3.2 landed -- the first row to move today. 262 tests. Three JSON-free slices since the fold: the producer stamp the harness reads that neither implementation was writing, AC-3.2's segment-altitude drop report, and the stamp's content. HOLDING: hv still owes serde_json and nothing left is free of it. vc has the pen, hv is AFK."
 claims: [ST0017]
 ---
 
@@ -16,8 +16,9 @@ claims: [ST0017]
 **ST0017 -- hoisting snorkeltoast's `showreel` into Utilz as a Rust pipeline under `prez showreel`.** Localfolded 2026-09-09 20:01Z; the slice-by-slice narrative is in `.history/20260909/`.
 
 - **`utilz prez showreel check <45h dir>` RESOLVES THE WHOLE CONFIG**, both invocation forms, exit 0: 15 segments, **23 slides, 14 assets**, theme off the search path, 5 fonts and a favicon inlined. **Both numbers match the reference's own `plan()` run against the same config** -- so the port is checked against something other than itself.
-- **BUILT AND RED-PROVED:** theme resolution, admission (C1), normalisation (C2), the slide model, `embed` (`159f544`), the template (`cb8f2bf`), the plan (`0bb78e0`), delivery naming (`01d3469`). **247 tests.** prez **4,384,912** against the 8,388,608 budget and unchanged all day; showreel 535,952.
-- **WP-01 DONE. Contract 42/51, 3 withdrawn; WP-03 9/12.**
+- **BUILT AND RED-PROVED:** theme resolution, admission (C1), normalisation (C2), the slide model, `embed` (`159f544`), the template (`cb8f2bf`), the plan (`0bb78e0`), delivery naming (`01d3469`), **the producer stamp's mechanism (`6c582e7`) and its content (`7512348`), and AC-3.2's drop report (`ec3b211`)**. **262 tests.** prez **4,384,912** against the 8,388,608 budget and unchanged all day; showreel 535,952.
+- **WP-01 DONE. Contract 43/51, 3 withdrawn; WP-03 10/12** -- AC-3.2 satisfied by vc at `fe9fc62`, re-verified at source rather than read off my report.
+- **THE STAMP IS THE ONE THE HARNESS ASKED FOR AND NEITHER SIDE WAS WRITING.** `<meta name="showreel-producer">`, four greps at zero with a control at 1. **`showreel:1006`'s `producer` is the REEL'S CREDIT LINE** -- a different thing under the same word, so a grep for it reads as handled. Every measurable field interpolates from a live constant; `stage` and `alpha` are policy words and correctly literal. **No caller yet, deliberately, and said so on AC-2.1 leg 2 rather than caveated.**
 - **BLOCKED, AND IT IS THE ONLY THING LEFT IN WP-03: `serde_json` NEEDS hv.** The manifest says a crate addition needs hv's sign-off named in the commit. Net cost measured against THIS tree: **2 packages, 79 to 81** -- `itoa`, `memchr` and `serde_core` are already here. **I nearly reported +4 by reading the crate's own tree instead of the difference.**
 - **WHAT THE PAYLOAD STILL OWES:** `build_socials` (with the stale-QR warning, which is AC-4.2's text), `build_bug` (**and its admission -- vc's recorded prediction: `plan.rs` joins `bug.file` unclassified while four `Requires::Image` sites refuse**), the slide rows, the limits block, and the `build` verb that writes `_out/` and calls report + prune.
 - **AC-3.6's RUNTIME LEG IS MINE AND REDUCES TO ONE PROPERTY:** the emitted payload's `limits.max_ease` **DERIVES** from `limits::MAX_EASE_MS`, never a restated literal. `player.html:561` is `const LIM = REEL.limits` -- the cap is read off the payload. Red-control: flip the constant to 3000, the payload must follow. **Cite `showreel-harness:232` and `:1098`, NOT `shipped-max-ease`**, which retires itself the day Python is capped.
@@ -32,7 +33,6 @@ claims: [ST0017]
 ## Holds
 
 - **The payload, until hv rules on `serde_json`.** CONDITION: **hv's sign-off, NAMED IN THE COMMIT.** Released either way -- a yes takes the crate, a no means hand-rolling the emitter beside `base64.rs`. **hv went AFK at ~20:13Z having read a plan with this decision framed first, and handed vc the pen with "rock on as needed". THAT NAMES NOTHING AND IS NOT THE SIGN-OFF**; vc holds sequencing and cannot grant it. A vague go-ahead is the shape a crate slips in under.
-- **AC-3.2's report extension, until vc rules on `exclude:`.** CONDITION: **vc answers whether an `exclude:`-filtered file is a "dropped segment input".** I say no and asked them to break it. **THIS ROW IS NOT BLOCKED ON JSON and my earlier hold said there was no work to do -- written from the payload's shape instead of from the row.**
 
 ## Open with hv
 
