@@ -429,7 +429,8 @@
       "text": "QR absence remains valid and is carried as Option -- a type, not a policy -- so flattening it is a compile error.",
       "kind": "non-test",
       "state": {
-        "is": "unsatisfied"
+        "is": "satisfied",
+        "evidence": "Verified by vc 2026-09-09 18:30Z, and the row's COMPILE-ERROR half is DRIVEN rather than argued -- which mattered, because cc's own red-proof covers the other half and not this one.\n\nTHE TYPE: `qr: Option<Qr>` at crates/showreel/src/slide.rs:106, matched as `Kind::Atwork { qr: Some(q), .. }` at :138 and constructed at :270.\n\nDRIVEN BY vc: flattening `Option<Qr>` to `Qr` -- which is exactly what the row forbids -- makes the compiler REFUSE with TWO errors, `error[E0308]: mismatched types: expected Qr, found Option<_>` at slide.rs:138 and `expected Qr, found Option<Qr>` at :278, and `cargo check` exits 101. So \"flattening it is a compile error\" is a measured fact about this code rather than a property asserted of it. THE INJECTION WAS APPLIED THROUGH A REFUSING STEP per AC-1.15 -- the anchor count was required to be exactly 1 or the run aborted -- and REVERTED IMMEDIATELY, with the file's sha256 identical before and after and the working tree clean on both sides, because the tree belongs to cc.\n\nBOTH HALVES KEPT APART, WHICH IS THE WHOLE ROW. Absent is `None` and VALID, asserted at :536. A `qr:` NAMING a file that is not there REFUSES, via `admit::named(reel, &rel, site(\"qr:\"), admit::Requires::AnyFile)?` at :270. THE REFERENCE RETURNED `\"\"` FOR BOTH, which is precisely what made them look like one thing and is why the row says a type rather than a policy.\n\ncc'S RED-PROOF COVERS THE SECOND HALF: collapsing the qr refusal into `None` fires 1 of 61, with the injection recorded verbatim in cec1645's message so it can be re-applied. The two proofs are of different halves and neither substitutes for the other -- a compile error cannot be shown by a failing test, and a wrong runtime disposition cannot be shown by the compiler."
       }
     },
     {
@@ -471,7 +472,8 @@
       "text": "The slide list and the asset list come from one walk.",
       "kind": "non-test",
       "state": {
-        "is": "unsatisfied"
+        "is": "satisfied",
+        "evidence": "Verified by vc 2026-09-09 18:30Z at source. THE PROPERTY IS STRUCTURAL RATHER THAN DISCIPLINARY, which is the strongest form this row could take.\n\nONE WALK, AND THE ASSET LIST IS A PROJECTION OF THE SLIDE LIST. crates/showreel/src/main.rs:123 reads `slides.iter().flat_map(showreel::slide::Slide::assets).collect()`. There is no second traversal of the config: `Slide::assets()` at slide.rs:132 matches on the slide's OWN kind and returns the paths that slide reads -- an image's path, a strapline's mark, a venue's image, an atwork's qr, and an empty vector for the shapes that read no file. SO THE TWO CANNOT DISAGREE BECAUSE THERE IS ONLY ONE OF THEM, and the recycler that decides an asset is safe to delete reads exactly what the build read.\n\nTHE REFERENCE'S `dry` FLAG HAS NO COUNTERPART HERE AND THAT IS THE REASON, which is cc's observation and is the part that makes this a design property rather than a coincidence: `dry` existed because the Python's `collect_segment` both PLANNED and EMBEDDED, so a caller wanting the plan without the bytes needed a flag. Separating the plan from the embedding removes the flag and removes the second walk with it.\n\ncc'S RED-PROOF: dropping a strapline's mark from the declared assets fires 1 of 61, with the injection recorded verbatim in cec1645's message so it can be re-applied. That is the discriminating direction -- it proves `assets()` actually reports what a slide reads, rather than proving only that the two lists have the same length."
       }
     },
     {
