@@ -51,7 +51,7 @@ title: Add 'showreel' to 'prez'
 - AC-2.8 (non-test) A per-slide zero is not evidence unless the frame contained the slide's content. Measured 2026-09-09: against the unmodified player, slide 1's captured frame holds the sunburst ground and wordmark chrome and NOTHING ELSE -- no venue, city, date or action -- because the crawl text has not entered frame at that capture phase. The harness returned a clean zero having seen none of the slide that carries the session details, which is the most venue-specific content in the reel and the thing 'one build serves every venue' depends on. A green over an empty frame is the failure this row exists to make impossible. -- satisfied: no
 - AC-2.9 (non-test) Frame STABILITY and frame PRESENCE are separate assertions and the harness makes both. Capturing at two virtual-time budgets and requiring identical frames establishes stability only: two identical EMPTY frames pass it, so a slide whose content never arrives within either budget is graded green while invisible. The presence half must be differential rather than thresholded -- the blankness detector it replaces read 55.75 percent 'has content' on the actual empty frame it was built to catch. The chosen budgets are themselves a parameter and are stated with their justification. -- satisfied: no
 
-### WP-03 -- Rust build path: YAML, admission (C1), normalisation policy (C2), data-URI (status: Not Started)
+### WP-03 -- Rust build path: YAML, admission (C1), normalisation policy (C2), data-URI (status: WIP)
 
 - AC-3.1 (non-test) An unknown key in showreel.yaml is refused, named, with the valid set. -- satisfied: no
 - AC-3.10 (non-test) The lockfile's third-party package count for the approved set is measured as a UNION and stated. MEASURED 2026-09-09 by cc: 59 packages, against prez's 26. The sum of individual deltas is 69 and is NOT quotable -- it overstates by 10 through shared transitive deps. This row previously claimed the approved union was unmeasured; that was vc's error, inferring that cc's 'minimal features' probe meant jpeg+png when it already used jpeg,png,webp,gif,tiff. Resolved as image default-features = false with those five, fast_image_resize absent. -- satisfied: no
@@ -95,7 +95,7 @@ _(no tests in this group)_
 
 _(no tests in this group)_
 
-### WP-03 -- Rust build path: YAML, admission (C1), normalisation policy (C2), data-URI (status: Not Started)
+### WP-03 -- Rust build path: YAML, admission (C1), normalisation policy (C2), data-URI (status: WIP)
 
 _(no tests in this group)_
 

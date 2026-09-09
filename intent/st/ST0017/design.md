@@ -464,6 +464,63 @@ made twice.
 
 ---
 
+### 1.15 R2 names the right rule and no needle list can implement it -- measured, WP-03 opening
+
+R2 ruled the RULE: *protocol-relative in `url(...)` and in `@import`, not in arbitrary string
+content.* It did not rule the INSTRUMENT, and the instrument is what fails. Measured before
+writing any code, 13 fixtures against the binary rebuilt from `5e86fc5`, two behaviour controls
+plus two detector controls. **Nine of thirteen escape and every one of the nine ships its
+reference into the artifact.** The full table lives in **issue 0017** and is not restated here.
+
+**Five mechanisms, three issues, and only four of the nine escapes were already filed:**
+
+| Mechanism                                     | Fixtures   | Owner         |
+| --------------------------------------------- | ---------- | ------------- |
+| `@import` with a bare quoted target           | E1, E2     | issue 0014    |
+| Scanner truncates before the reference        | E7, E8     | issue 0015    |
+| `url( //x )` -- whitespace inside the token   | E4         | **issue 0017** |
+| `URL(` / `HTTP://` -- ASCII case              | E5, E6     | **issue 0017** |
+| `@import` NEWLINE `"//x";` -- one at-rule, two lines | E9  | **issue 0017** |
+
+**RULED: a reference-site scanner, not a longer needle list.** The three mechanisms 0017 names
+are properties of CSS tokenisation -- case-insensitivity, whitespace tolerance, newline tolerance
+-- and a substring list cannot express any of them. Widening the list means enumerating `url(`,
+`URL(`, `Url(`, `url (`, `url(\n` crossed with each quoting form: **a list sized to the instances
+someone happened to try, which is this thread's dominant failure wearing a security hat.** The
+port therefore recognises the two SITES R2 names -- a `url()` token and an `@import` prelude --
+and reads their target, rather than hunting for spellings anywhere in the text.
+
+**And the change is a UNION, so nothing that refuses today builds tomorrow.** The coarse
+absolute-scheme net (`http://`, `https://`, now matched case-insensitively) stays, over all
+non-comment text, because it catches reference shapes nobody has enumerated -- `image-set()`,
+`@namespace`, whatever CSS gains next -- at the cost of a false positive on a URL inside a string,
+which is the cost it already has. Site-aware protocol-relative detection is ADDED beside it.
+**Loosening a check that guards the offline guarantee is a decision; this change makes none**, and
+that is deliberate so the fix needs no ruling beyond R2's.
+
+**One behaviour change beyond AC-3.5's letter, stated rather than slipped in: an unterminated
+comment is REFUSED by name.** Today `strip_comments` returns everything before an unclosable `/*`
+and the scan never sees the rest (`None => return out`). Once the scanner knows string literals,
+`content: "/*"` stops being a comment opener and 0015's serious half closes -- but a GENUINELY
+unterminated comment still ends the scan, and ending a security scan early without saying so is
+`IN-AG-NO-SILENT-001`. Truncation is defensible on browser semantics (the rest is commented out
+for a reader too) and indefensible as silence. **Refusal is the smaller claim: the theme is
+malformed, and half of it is not applying.** Flagged to vc as possibly wanting its own row rather
+than riding under AC-3.5.
+
+**THE DETECTOR REPRODUCED THE DEFECT IT WAS MEASURING, AND NOTHING ERRORED.** The probe's first
+artifact-side check was `grep -E 'url\([^)]*//|HTTP://'` -- line-oriented and case-sensitive, the
+two exact blindnesses under test. It reported E5 and E9 as **not reaching the artifact**, the
+comfortable answer and the wrong one. Both were recovered only because the rewritten detector
+(flatten newlines, match case-insensitively, key on the HOST FRAGMENT rather than on the
+reference's shape) disagreed with the first. **A case-blind instrument measuring a case-blind
+defect returns a clean result, and it looks exactly like a clean result.** The general form is
+already this board's: an instrument that shares an assumption with its subject cannot test that
+assumption. Keying the detector on the payload rather than on the syntax is what broke the shared
+assumption, and it is the cheap move worth reaching for first.
+
+---
+
 ## 2. There are THREE consolidations, and they are named apart on purpose
 
 Two of them are both "inside showreel" and collapse into each other the moment they are written
