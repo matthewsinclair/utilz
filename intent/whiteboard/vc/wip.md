@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 11981560-5612-4fe7-a136-6eae64636b64
-heartbeat_at: 2026-09-09 18:45Z
+heartbeat_at: 2026-09-09 18:52Z
 status: active
-focus: "ST0017: 42/51 satisfied, 3 withdrawn, doctor 0. Nine rows open, every one blocked on cc build path or WP-04. AC-1.15 CLOSED. Today: audit AC-3.6 runtime leg BEFORE the template pull, and AC-4.2 before WP-04 -- both measured against the reference, both cheap now and expensive after."
+focus: "ST0017: 42/51, 3 withdrawn, doctor 0. hv AFK, vc has the pen, both peers taking instruction. AC-3.6 runtime leg SPECIFIED and sent to cc before the template-pull commit -- the harness is BLIND to it, so two source checks are the only mechanism. AC-3.2 now names report_unused population; AC-3.8 evidence corrected. AC-4.2 audit is next."
 claims: [ST0017]
 ---
 
@@ -150,6 +150,8 @@ so it warned about a population that does not exist there. **A caveat nobody rea
 it still looks like diligence.** Guarded now. The pair to it: the line that IS true of every reel stays
 unconditional, so the two kinds of statement are told apart by whether they are guarded.
 
+**I ALMOST ASSIGNED A PEER WORK THEY HAD ALREADY FINISHED, AND THE ONLY THING THAT STOPPED IT WAS READING THEIR FILE INSTEAD OF REASONING ABOUT IT.** I had it planned as real prep for snorkeltoast: check whether the payload's limits block enters `signature()`, because if it does then 2400-vs-3000 fires as an unpredicted structural mismatch on the first compare. **It was already built** -- `shipped-max-ease`, kind BLIND, `verified: observed`, with the reasoning I was going to ask for written out. **The instruction would have been confident, specific, correctly reasoned and entirely wasted**, and nothing in my own derivation could have told me: a gap I infer from a peer's design and a gap that exists produce the same plan. This is the artifact-outranks-the-source rule pointed at a PEER's tree rather than my own, and the cost of getting it wrong is not a bad measurement but a peer's afternoon. **Before assigning, read what they have; a queue you derived is not a queue.**
+
 **A REAL RATIO DEGRADES; A WRONG POPULATION COLLAPSES.** snorkeltoast's form, and it is checkable without knowing
 anything about the subject: **if a measurement over a supposedly rich population returns EXACTLY NOTHING, suspect the
 population before the subject.** Mine today: a `find` over the whole Snorkeltoast tree for `manifest.json` returned
@@ -267,6 +269,9 @@ incremental.**
 **INTENT'S OWN VERBS, LEARNED THE EXPENSIVE WAY.** `intent st hydrate <ID>` adds a thread to `.intentfiles` and writes its files; `st dehydrate` is its inverse; **`st attach <ID> <path> --from <file>` puts an AUTHORED doc into the store, and until you do, `organize` reports it `unclaimed` and can never remove it -- which is why a closed thread's directory survives every dehydration.** `organize --apply` is a whole-tree reconcile that REMOVES; never point it at a tree whose declaration is unsettled. `intent edit st <ID> --path` writes a declaration as a SIDE EFFECT of printing a path. `sync --to-disk` syncs the store with the canon extract and does NOT regenerate views. **`intent/.cache/` is gitignored -- an attachment living only there is lost on a fresh clone; verify it reached `intent/.canon/` before deleting any file it claims to hold.**
 
 ## Decisions that still decide things
+
+- (2026-09-09) **vc: cc's used-set finding is AC-3.2's, and it was inside no SENTENCE of AC-3.2 -- one clause added, no row minted.** The clause named `report_unused` and never named its input, so the finding was a judgement two nodes held and the contract could not fail on. **The build's used set is a projection of the PLAN, not of the slide list**: cc measured the reference's `plan()` at fourteen used assets, ten per-slide and four reel-level, and the ten match `Slide::assets()` by name. A slide-derived `report_unused` names four files the build embeds and tells the operator to delete them -- a confident wrong instruction to destroy live inputs, not a missing warning. **AC-3.8 was NOT reopened and the error in it was mine**: the row's property (one walk) holds and improves once the plan is the source; what was false was a sentence in MY evidence claiming the recycler reads exactly what the build read. Evidence corrected through unsatisfy/satisfy. `982e7f0`.
+- (2026-09-09) **vc: AC-3.6's runtime leg closes on two SOURCE checks, and that is the only mechanism rather than the neatest one.** `player.html:561` is `const LIM = REEL.limits`, so the cap comes off the payload; and snorkeltoast's `shipped-max-ease` row is kind **BLIND** -- `signature()` walks `payload['slides']` only and `capture` never passes `pace=`. So the harness predicted the difference AND predicted its own blindness to it. The leg is: the emitted payload's `limits.max_ease` DERIVES from `limits::MAX_EASE_MS`, and the pulled template still reads `LIM = REEL.limits`. **No `pace=ambient` capture arm** -- it would photograph a divergence already predicted, chosen and recorded, on a fixture built for the purpose. Same shape as AC-4.1's stamp.
 
 - (2026-09-09) **vc: cc's WP-03 order STANDS; both proposed reorderings refused.** hv sent cc to vc for sequencing.
   **Do not build early to unblock AC-6.1 leg 3, AC-2.1 leg 2 and AC-5.1 -- those three rows are vc's, on vc's
