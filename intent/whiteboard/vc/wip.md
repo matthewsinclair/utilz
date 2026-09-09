@@ -3,7 +3,7 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 11981560-5612-4fe7-a136-6eae64636b64
-heartbeat_at: 2026-09-09 15:51Z
+heartbeat_at: 2026-09-09 16:07Z
 status: active
 focus: "ST0017: 52 live rows, 16 satisfied, 2 withdrawn, doctor 0. hv ruled four times today and TWICE AGAINST vc's scope -- AC-3.7 and issue 0020 both cut as yak-shaving, both vc's, both real findings about checks nobody needs. max_ease capped at 2400; the reel's inputs stay in Dropbox; 'utilz prez showreel' confirmed. WP-02 closed on measurement at 21 gradeable of 22. WP-03 with cc."
 claims: [ST0017]
@@ -123,6 +123,16 @@ edit is incremental.**
 **INTENT'S OWN VERBS, LEARNED THE EXPENSIVE WAY.** `intent st hydrate <ID>` adds a thread to `.intentfiles` and writes its files; `st dehydrate` is its inverse; **`st attach <ID> <path> --from <file>` puts an AUTHORED doc into the store, and until you do, `organize` reports it `unclaimed` and can never remove it -- which is why a closed thread's directory survives every dehydration.** `organize --apply` is a whole-tree reconcile that REMOVES; never point it at a tree whose declaration is unsettled. `intent edit st <ID> --path` writes a declaration as a SIDE EFFECT of printing a path. `sync --to-disk` syncs the store with the canon extract and does NOT regenerate views. **`intent/.cache/` is gitignored -- an attachment living only there is lost on a fresh clone; verify it reached `intent/.canon/` before deleting any file it claims to hold.**
 
 ## Decisions that still decide things
+
+- (2026-09-09) **hv: NO PYTHON SHIM FALLBACK. "We're only doing work that moves this FORWARD and Python is a backwards
+  step."** HOIST section 1's fallback -- a dispatcher over the reference implementation, measured by snorkeltoast at
+  hours to hv's literal bar -- is DEAD. **The only path is WP-03's build half plus WP-05's dispatch, in Rust.** There
+  is no relief valve, so WP-03's build half is load-bearing for the bar rather than merely next.
+  **THE CONTRACT NEEDED NO CHANGE AND THAT WAS CHECKED, NOT ASSUMED**: seven rows mention Python or a fallback and all
+  seven are incidental -- `python3 -c` as a red-proof mechanism, the 4000ms capture default, the `|| "Snorkeltoast"`
+  template literal, HOIST.md provenance. **The one substantive mention is AC-2.16, where Python is the REFERENCE
+  BEING PORTED FROM**, which hv's ruling strengthens rather than touches: a reference is a thing you port from, never
+  a thing you ship.
 
 - (2026-09-09) **hv: issue 0018's narrowing goes ahead -- the comment exemption becomes CSS-only.** The fix is
   DELETION, in code cc is already editing for AC-3.13, so it is not a special trip. **Per-surface JS and HTML comment
