@@ -3,7 +3,7 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 11981560-5612-4fe7-a136-6eae64636b64
-heartbeat_at: 2026-09-09 20:10Z
+heartbeat_at: 2026-09-09 20:24Z
 status: active
 focus: "ST0017: 42/51, 3 withdrawn, doctor 0. Post-compact pickup 2026-09-09 20:10Z. hv has NOT ruled on serde_json -- cc is idle and every open row is blocked behind it. hv is LIVE this session, so the four items sitting in hv/inbox.vc.md get surfaced in person rather than left in the durable channel."
 claims: [ST0017]
@@ -31,6 +31,34 @@ Localfolded 2026-09-09 16:51Z. Full boards for 8 Sep and earlier folds of 9 Sep 
 - **EVERY OPEN ROW IS NOW AUDITED AHEAD OF ITS CODE**, which is the one move that reliably paid today. Nine open:
   AC-2.1 leg 2, AC-3.2, AC-3.4, AC-3.6, AC-4.1, AC-4.2, AC-5.1, AC-5.3, AC-6.1 leg 3.
 
+**AFTER hv WENT AFK WITHOUT RULING, WITH THE PEN: ONE CONTRACT EDIT, TWO PEERS CORRALLED, ONE SWEEP.** 2026-09-09 20:24Z.
+
+- **AC-2.1 GAINED THE STAMP SPECIFICATION (`59f33ec`).** `producer_stamp` (showreel-harness:226) reads
+  `<meta name="showreel-producer" content="...">` and **NOTHING ON EITHER SIDE WRITES IT** -- four greps, all zero,
+  with a control hit on `producer` at showreel:1006. That `:1006` hit is the trap: it is the reel's CREDIT LINE, a
+  different thing under the same word, rendered by the shell as `add("Producer", REEL.producer)`.
+  **The harness's own comment at :218-223 specifies the CONTENT and no row did**, so a stamp reading `rust` would
+  meet AC-2.1's letter and defeat the instrument. Four rules measured both sides: 2560, 1920, Lanczos, JPEG_Q 86 --
+  **three of four AGREE and the alpha rule is the deliberate divergence**, so alpha is the only one whose value
+  distinguishes a Rust build over Python masters.
+- **THE MECHANISM IS JSON-FREE, so it is cc's one piece of unblocked WP-03 work.** `MARKERS` and `subs` are two
+  deliberately separate lists, so a fifth marker is already guarded by two existing tests. Only the EMISSION needs
+  the payload. Sent with a three-option decision on the second template divergence; recommended (i), Rust-filled
+  only, because absence-derives-Python is AC-4.1's established shape and a pull that drops the marker already fails
+  `the_shell_declares_each_marker_exactly_once`.
+- **THE TAUTOLOGY SWEEP RAN AND CAME BACK CLEAN, WHICH IS ITSELF THE RESULT.** 42 satisfied rows, 10 already
+  carrying population language, 32 triaged, **16 refusal-shaped**; 4 read in depth (AC-1.4, AC-1.12, AC-3.1,
+  AC-3.3 -- all driven, AC-3.3's compile-error injection exemplary). Structural pass over **36 Rust pub fn and 90
+  Python defs**. **NO SATISFIED ROW ON EITHER SIDE IS GRADED ON MACHINERY NOTHING CALLS** -- the class that bit
+  AC-3.5 once has not recurred. Coverage stated honestly: the other 12 refusal-shaped rows got the structural pass
+  only.
+- **ONE FINDING, IN snorkeltoast'S TREE, AND IT IS NOT A REGRADE.** `content_fraction` (showreel-harness:1298) and
+  `BLANK_FRACTION` (:1295) are referenced nowhere -- a superseded proxy for the presence gate, which lives at
+  :1614-1627 and is **structurally stronger**: a differential control against a content-stripped re-render, not a
+  modal-colour proxy. **AC-2.8 stands.** What makes it worth reporting is that the DEAD copy carries the fullest
+  statement of the doctrine in the file, including the Slide-1 worked example -- and the proxy it teaches would
+  give a different answer from the mechanism that ships.
+
 ## TODO
 
 - **BOTH AUDITS ARE DONE AND ON THEIR ROWS.** AC-3.6's runtime leg reduces to ONE property -- the emitted payload's
@@ -55,6 +83,16 @@ Localfolded 2026-09-09 16:51Z. Full boards for 8 Sep and earlier folds of 9 Sep 
 - **Two harness entries flip from `designed` to `observed`** the moment cc's build path calls the theme loader --
   the missing-favicon refusal and the `.ttf` refusal. Nothing to do until then; noted so their silence is not read
   later as coverage.
+
+- **RE-RUN THE UNCALLED-FN SWEEP AT THE DELIVERY SLICE.** Four `pub fn` have zero production references --
+  `template::render`, `normalise::embed`, `deliver::prune`, `deliver::stamp` -- and all four are the build path.
+  **When the build verb lands, all four must acquire production callers; any that does not was built and
+  forgotten.** Sent to cc as a checkable definition of build-verb-complete.
+- **AC-2.1's CONTENT STRING IS snorkeltoast'S AND IS NOT YET SETTLED.** cc has been told to thread it through as a
+  value and not to fix the string. When snorkeltoast answers, the row's spec takes the exact form.
+- **hv OWES FOUR THINGS AND ALL FOUR ARE STILL OPEN.** `serde_json` is the one that unblocks work; the fixtures and
+  the QR thread are decidable any time; the four FYIs want no ruling. hv's OWN board still reads
+  "Utilz stable at v2.4.0. No stream in flight." from 2026-07-29 and is wrong in both halves -- hv's to edit.
 
 ## Holds
 
@@ -312,6 +350,22 @@ incremental.**
 **THE ESTATE, MEASURED TODAY.** `utilz` on PATH is whichever tree `utilz use` last pointed at -- **run the command, never carry the answer**; the provenance line exists so that costs one command, and it earned itself twice. `utilz test` is not concurrency-safe. **`show_help` closes the renderer's stdin now**: a bare `glow FILE` with a terminal on stdin hangs (exit 124 under `timeout 5`, once killed at 120s), and it is NOT the pager -- `-p` is opt-in and it hangs without it. The hang was never reproduced under a `script`-allocated pty, so the guard is asserted PRESENT rather than the hang claimed fixed. **A part-compiled tool's `--version` answers for one half and is confidently wrong about the other**: `intent --version` reported a commit predating a fix that was live, because that path is a shell script read from source. Ask the behaviour.
 
 **INTENT'S OWN VERBS, LEARNED THE EXPENSIVE WAY.** `intent st hydrate <ID>` adds a thread to `.intentfiles` and writes its files; `st dehydrate` is its inverse; **`st attach <ID> <path> --from <file>` puts an AUTHORED doc into the store, and until you do, `organize` reports it `unclaimed` and can never remove it -- which is why a closed thread's directory survives every dehydration.** `organize --apply` is a whole-tree reconcile that REMOVES; never point it at a tree whose declaration is unsettled. `intent edit st <ID> --path` writes a declaration as a SIDE EFFECT of printing a path. `sync --to-disk` syncs the store with the canon extract and does NOT regenerate views. **`intent/.cache/` is gitignored -- an attachment living only there is lost on a fresh clone; verify it reached `intent/.canon/` before deleting any file it claims to hold.**
+
+### A fourth kind of zero: the instrument's own match rule
+
+**THE THREE KINDS WERE CENSUS, DETECTOR AND TAUTOLOGY. THERE IS A FOURTH AND I PRODUCED IT TODAY.** Sweeping for
+`pub fn` with no production callers, I matched `name\s*\(` and got 7 of 36. **Three were false positives.**
+`main.rs:123` is `slides.iter().flat_map(showreel::slide::Slide::assets)` -- a function passed as a VALUE, with no
+parenthesis after its name -- so `assets`, `stem` and `next` were reported dead while being called.
+
+**AC-3.8's OWN EVIDENCE REFUTED MY MEASUREMENT**, because it cited `main.rs:123` by file and line. A row whose
+evidence asserts a property would have agreed with my wrong answer in silence; a row that cites source refuted it
+in one read. **That is the argument for file:line evidence, made against me rather than by me.**
+
+The rule: **a zero is only as wide as the match rule that produced it, and a match rule narrows the population
+silently.** State the match rule beside the count -- "any occurrence of the identifier", not "the function is
+uncalled" -- and run the control that proves the instrument can see the thing it is looking for. Same discipline
+as naming a population; the instrument is part of the population.
 
 ## Decisions that still decide things
 
