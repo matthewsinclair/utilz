@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 11981560-5612-4fe7-a136-6eae64636b64
-heartbeat_at: 2026-09-09 16:51Z
+heartbeat_at: 2026-09-09 17:12Z
 status: active
-focus: "ST0017: 52 live rows, 16 satisfied, 2 withdrawn, doctor 0. hv ruled four times today and TWICE AGAINST vc's scope -- AC-3.7 and issue 0020 both cut as yak-shaving, both vc's, both real findings about checks nobody needs. max_ease capped at 2400; the reel's inputs stay in Dropbox; 'utilz prez showreel' confirmed. WP-02 closed on measurement at 21 gradeable of 22. WP-03 with cc."
+focus: "ST0017: 35/51 satisfied, 3 withdrawn, doctor 0. AC-1.2 and AC-2.16 both closed this turn -- prez costs 17 third-party packages before WP-01 and 17 now, and the harness now CONSULTS a predicted-difference table rather than discovering a port change as a parity failure. snorkeltoast found AC-2.16 asserting a falsehood: the max_ease cap CLAMPS, it does not refuse. WP-03s build path is the only thing between here and hvs bar."
 claims: [ST0017]
 ---
 
@@ -18,24 +18,27 @@ Validation node. cc builds, vc contracts and verifies, hv adjudicates. Full boar
 **ST0017 -- showreel hoisted under `utilz prez showreel`. vc holds the contract, cc builds, snorkeltoast has closed.**
 Localfolded 2026-09-09 16:51Z. Full boards for 8 Sep and earlier folds of 9 Sep in `.history/`.
 
-- **Contract: 33 of 51 satisfied, 3 withdrawn, `intent doctor` 0.** `intent ac list ST0017` is the live contract;
+- **Contract: 35 of 51 satisfied, 3 withdrawn, `intent doctor` 0.** `intent ac list ST0017` is the live contract;
   `design.md` carries the reasoning. **Ids are `AC-<wp>.<seq>` and the group digit IS the work package.**
-- **WP-01 12/15. WP-02 13/17. WP-03 6/12. WP-04 0/2. WP-05 1/3. WP-06 1/2.**
+- **WP-01 13/15. WP-02 14/17. WP-03 6/12. WP-04 0/2. WP-05 1/3. WP-06 1/2.**
 - **`utilz prez showreel check <dir>` RUNS end to end**, both invocation forms, exit 0 against the live 45h reel.
   **WP-05's dispatch is done; WP-03's build path is the only thing between here and hv's bar** -- hv killed the
   Python shim fallback, so there is no relief valve.
 
 ## TODO
 
-- **Verify cc's build-path slices as they land.** Next is the built-ins pull and font/favicon emission, which needs
-  `themes/default/` out of snorkeltoast's tree -- cc will announce before touching their side.
-- **AC-2.16 is the row to have ready**: cc's design table PREDICTS that a theme missing its declared favicon builds
-  under Python and refuses under Rust. **The evidence to want is the prediction, not just the behaviour** -- a
-  refusal the contract predicted is a pass, the same refusal discovered mid-run reads as a port regression.
-- **Mine and unblocked: AC-1.2** (WP-01's last vc row -- comrak line byte-identical, third-party count unchanged,
-  measurable now that AC-3.10's population work names the edge set).
+- **Mine and unblocked: AC-1.15**, and it is the hardest row left on my desk because it BINDS -- every red-proof in
+  this thread must prove its injection applied before its result is read. **It cannot be discharged by restating the
+  rule**, which is the one thing prose is guaranteed to do well. It needs the thread's red-proofs ENUMERATED and each
+  checked, with the population stated and the failures named. Three instances are already on the record and one of
+  them is mine.
+- **Verify cc's build-path slices as they land.** The built-ins pull landed at `bbca403` plus an untracked
+  `crates/showreel/themes/`; next is font + favicon emission, then admission, normalisation, `collect_segment`.
 - **Waiting on WP-03 by construction:** AC-2.1's leg 2 (adjacency stops being a guess when the Rust build stamps its
-  own identity), AC-2.4, AC-2.16. **AC-2.12 stands as a recorded limit, not work.**
+  own identity) and AC-2.4. **AC-2.12 stands as a recorded limit, not work.**
+- **Two harness entries flip from `designed` to `observed`** the moment cc's build path calls the theme loader --
+  the missing-favicon refusal and the `.ttf` refusal. Nothing to do until then; noted so their silence is not read
+  later as coverage.
 
 ## Holds
 
@@ -54,10 +57,11 @@ Localfolded 2026-09-09 16:51Z. Full boards for 8 Sep and earlier folds of 9 Sep 
 - **`cc`: ACTIVE on WP-03's build path.** Dispatch and R3 landed; design.md section 5 decides three dispositions
   before the code -- `load_theme`'s regex REPLACED not ported, a missing declared favicon REFUSED where the reference
   warned, a `.ttf` refused by name with the conversion command. **Their board carries the gate list this estate runs.**
-- **`snorkeltoast`: CLOSED, and closed better than it started.** `FLOORS.md` at `daaa503ad7db` is the parity
-  baseline and is FINAL -- `cmd_control` takes only the artifact, so cc's next build does not supersede it, it
-  produces a different artifact needing its own run. They also fixed compare's missing budget check, pre-converted
-  the fonts, and made the reel byte-reproducible for the first time.
+- **`snorkeltoast`: REOPENED and built AC-2.16's expectation half at `03a44ce`** -- `PORT_EXPECTATIONS`, five
+  entries, three KINDS, consulted by `compare` BEFORE the structure check and not only by the new `expect` verb.
+  **They corrected the row while building it**: the row called the max_ease cap a refusal and the cap CLAMPS.
+  `FLOORS.md` at `daaa503ad7db` remains the parity baseline and is FINAL -- `cmd_control` takes only the artifact,
+  so cc's next build does not supersede it, it produces a different artifact needing its own run.
 - **`intent-vc` / `devbin-vc` / `lamplight-vc`:** consulted on the AC id form and on TN001. Each corrected a premise.
 
 ## Watch-outs
@@ -78,6 +82,16 @@ captured 59 bytes of error, and `grep -c` scored it **0** -- one step from _the 
 **A census zero over an empty population reads exactly like a detector zero over a full one**; the line count is what
 gave it away, since one line of output for a 427-line help file is not a result. **When the environment cannot host
 the test, change the instrument rather than trusting its zero.**
+
+**THE NODE THAT HOLDS THE CONTRACT CAN MAKE ONE CLAIM NO BUILDER CAN, AND IT IS ORDERING.** snorkeltoast's
+predicted-difference table asserts in its own header that the prediction existed FIRST -- and from inside their tree
+that is an assertion, because their file cannot see when this contract decided anything. **From here it is arithmetic
+on commit times**: the disposition led the code by 1h50m and 2h24m on two entries, and on three more the code does
+not exist at all. **Their two `observed` rows cite the CODE as their source and not the disposition, so the table's
+central claim is checkable from git and not from the table** -- raised with them, one field. The general form: when a
+peer builds the instrument, ask what its own evidence CANNOT reach, and supply that rather than re-running theirs.
+**And a peer correcting a row of mine is worth more than a peer agreeing with it** -- snorkeltoast read AC-2.16,
+found it asserting that a CLAMP refuses, and the row had been on the contract all day with two nodes reading it.
 
 **A ROW NAMING TWO HALVES IS NOT SATISFIED BY VERIFYING ONE OF THEM THOROUGHLY, AND THOROUGHNESS INSIDE THE WRONG
 POPULATION FEELS EXACTLY LIKE COMPLETENESS.** AC-3.5 says it implements R2 **and R3**. vc verified R2's three surfaces
