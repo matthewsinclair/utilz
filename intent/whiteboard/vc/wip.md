@@ -3,7 +3,7 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 11981560-5612-4fe7-a136-6eae64636b64
-heartbeat_at: 2026-09-09 14:43Z
+heartbeat_at: 2026-09-09 14:49Z
 status: active
 focus: "ST0017: 52 live rows, 16 satisfied, 2 withdrawn, doctor 0. hv ruled four times today and TWICE AGAINST vc's scope -- AC-3.7 and issue 0020 both cut as yak-shaving, both vc's, both real findings about checks nobody needs. max_ease capped at 2400; the reel's inputs stay in Dropbox; 'utilz prez showreel' confirmed. WP-02 closed on measurement at 21 gradeable of 22. WP-03 with cc."
 claims: [ST0017]
@@ -18,12 +18,23 @@ Validation node. cc builds, vc contracts and verifies, hv adjudicates. Full boar
 **ST0017 -- showreel hoisted under `utilz prez showreel`. vc holds the contract, cc builds, snorkeltoast has closed.** Localfolded 2026-09-09 14:43Z.
 
 - **Contract: 52 live rows, 16 satisfied, 2 withdrawn, `intent doctor` 0.** `intent ac list ST0017` is the live contract; `design.md` (1347 lines) carries the reasoning. **Ids are `AC-<wp>.<seq>` and the group digit IS the work package.**
-- **WP-01 done. WP-02 CLOSED on measurement** -- 21 gradeable / 0 undecided / 1 ungradeable of 22 at hv's named magnitude. **WP-03 with cc.** WP-04, 05, 06 not started.
+- **36 ROWS ARE UNSATISFIED AND THIS BOARD SAID WP-01 WAS DONE AND WP-02 CLOSED.** `intent wp list` has both at WIP
+  and always did; the divergence was in the one file vc writes, and cc reads it. Per WP: **01 six** (AC-1.2, 1.11,
+  1.13, 1.14, 1.15, 1.16), **02 thirteen**, **03 eleven** (cc's front), **04 two**, **05 three**, **06 one**.
+- **WP-02's MEASUREMENT is closed and its ROWS are not the same statement.** FLOORS.md reads 21 gradeable / 0
+  undecided / 1 ungradeable of 22 at hv's named magnitude; ten of the thirteen are properties of the harness that
+  produced it and are dischargeable against it. **AC-2.4 and AC-2.16 bind the Rust grading and correctly stay open.**
 
 ## TODO
 
-- **Satisfy WP-01's remaining rows** as cc sends evidence: AC-1.11, 1.13, 1.14, 1.15.
-- **With cc, all ruled and unblocked:** AC-3.13 (comment exemption becomes CSS-only now; per-surface grammar only once a real `theme.js` or `layout.html` exists); AC-1.16 (`cargo build` has no `--workspace` at `tests.yml:283` or `opt/prez/prez:155` -- the shim half lands on WP-05 before WP-05 starts); `max_ease` 2400.
+- **Satisfy WP-01's six remaining rows**: AC-1.11 (census zero, print the census), AC-1.2 (against AT02),
+  AC-1.15, and AC-1.13 + AC-1.14 which need CARGO DRIVEN rather than read -- after cc's run, one target lock.
+- **With cc, all ruled and unblocked:** AC-3.13 (comment exemption becomes CSS-only now; per-surface grammar only once a real `theme.js` or `layout.html` exists); AC-1.16, **whose population the row itself under-counts** -- `cargo build` has no `--workspace` at
+  `tests.yml:283` or `opt/prez/prez:155`, AND the estate's own acceptance suite runs `cargo clippy` without it at
+  `opt/prez/crate/test/acceptance.sh:947` plus two builds at `:352` and `:375`. **947 is the sharp one: it is the
+  defect cc fixed in CI at 8dea619, still live in the gate that suite calls load-bearing**, so `artifact` and
+  `showreel` are unlinted by it. Fixing the two named homes satisfies the row BY ITS LETTER and leaves that. The
+  shim half lands on WP-05 before WP-05 starts; `max_ease` 2400.
 - **Slide 1 stays presence-UNPROVABLE and that is now PERMANENT** -- AC-3.7 withdrawn, nothing gates on the brand literal. cc may drop the fallback at the template pull, ungated. AC-2.14 names it; the reel reads 21 of 22 and says why.
 
 ## Holds
