@@ -20,5 +20,6 @@ pub mod admit;
 pub mod config;
 pub mod duration;
 pub mod limits;
+pub mod normalise;
 pub mod segment;
 pub mod theme;

@@ -1,0 +1,342 @@
+//! ONE normalisation policy, applied by both image passes.
+//!
+//! **THE REFERENCE HAS TWO PASSES AND ONLY ONE OF THEM COLLAPSES OPAQUE ALPHA,
+//! WHICH IS THE DEFECT design.md 4.2 RULED AGAINST PORTING.** `normalise_image`
+//! demotes a fully-opaque RGBA to RGB and writes JPEG; `data_uri` has no
+//! equivalent and its PNG branch is the DEFAULT PATH FOR HAND-PLACED BRAND
+//! MARKS -- so the mascot and the wordmark ship full-size PNG on every build,
+//! where the same picture through `init` would have been a JPEG.
+//!
+//! **"MATCH PYTHON EXACTLY" HERE MEANS PORTING A KNOWN DEFECT, ON THE PATH THAT
+//! CARRIES THE BRAND MARKS, ON EVERY BUILD.** That is a fidelity requirement's
+//! costume rather than a fidelity requirement, and the ruling pays the cost of
+//! the blanket RMSE explicitly instead of absorbing it.
+//!
+//! So there is one function, and the passes differ only in the edge they target:
+//! `MASTER` for source art becoming a stored master, and a delivery size scaled
+//! by the picture's ROLE for a slide being inlined.
+
+use artifact::Failure;
+use std::io::Cursor;
+use std::path::Path;
+
+/// The long edge of a stored master.
+pub const MASTER: u32 = 2560;
+
+/// The long edge of an embedded slide, before its role scales it.
+pub const TARGET: u32 = 1920;
+
+/// JPEG quality, matching the reference so the encoders are comparable even
+/// though their bytes are not.
+pub const JPEG_Q: u8 = 86;
+
+/// How much of the panel a picture's role actually needs.
+///
+/// **A CORNER MARK AT FULL SLIDE SIZE IS THE SAME PICTURE AND FIVE TIMES THE
+/// BYTES.** The reference's numbers, ported: nothing about them is derivable, so
+/// changing one is a decision rather than a tidy-up.
+pub fn role_edge(role: Role, target: u32) -> u32 {
+  let scaled = match role {
+    Role::Slide => target,
+    Role::Mark => (f64::from(target) * 0.72).round() as u32,
+    Role::Bug => (f64::from(target) * 0.2).round() as u32,
+  };
+  scaled.max(256)
+}
+
+/// What a picture is being embedded AS.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum Role {
+  /// Fills the panel.
+  Slide,
+  /// A wordmark inside a slide.
+  Mark,
+  /// The persistent corner mark.
+  Bug,
+}
+
+/// A normalised picture, ready to store or to inline.
+#[derive(Debug)]
+pub struct Normalised {
+  pub bytes: Vec<u8>,
+  /// `image/jpeg` or `image/png`, decided by whether alpha SURVIVED the
+  /// collapse -- never by the input's format.
+  pub mime: &'static str,
+  pub width: u32,
+  pub height: u32,
+  /// Whether the output kept an alpha channel. Carried rather than re-derived
+  /// from `mime`, because a caller asking "is this transparent" should not have
+  /// to know which encoder that implies.
+  pub has_alpha: bool,
+}
+
+/// Read, orient, collapse opaque alpha, downsize, encode.
+///
+/// **THIS COMMENT CLAIMED THE ORDER WAS LOAD-BEARING AND THE RED-PROOF REFUTED
+/// IT.** It argued that resampling an opaque alpha channel can leave values that
+/// are no longer exactly 255, so a resize-first implementation would find a
+/// picture that had quietly stopped being collapsible. **Measured by injecting
+/// exactly that reordering: not one test moved.** A fully-opaque alpha channel
+/// is CONSTANT, a Lanczos kernel sums to one, and a constant channel resamples
+/// to itself -- so there is nothing for the resize to break. The same argument
+/// disposes of the orientation half: a transpose commutes with a uniform scale,
+/// so orienting after resizing lands on the same dimensions.
+///
+/// **THE ORDER IS KEPT FOR COST, WHICH IS A REAL REASON AND A SMALLER ONE.**
+/// Collapsing first means the resize resamples three channels instead of four.
+/// Stated as cost rather than correctness, because the correctness claim was
+/// mine, was plausible, and was wrong -- and a comment asserting a property no
+/// test can lose is the shape this thread keeps finding.
+pub fn normalise(path: &Path, max_edge: u32) -> Result<Normalised, Failure> {
+  let raw = std::fs::read(path).map_err(|e| {
+    Failure::new(format!("cannot read {}: {e}", path.display()), "check the file is readable")
+  })?;
+  let decoded = image::load_from_memory(&raw).map_err(|e| {
+    Failure::new(
+      format!("cannot decode {}: {e}", path.display()),
+      "the file's contents are not the image its extension claims",
+    )
+  })?;
+  let oriented = orient(decoded, orientation(&raw));
+  Ok(encode(collapse(oriented), max_edge))
+}
+
+/// Whether every alpha byte is fully opaque, and the demotion if so.
+///
+/// **THIS IS THE HALF `data_uri` DOES NOT HAVE**, and giving it to both passes is
+/// the whole of AC-3.4.
+fn collapse(img: image::DynamicImage) -> (image::DynamicImage, bool) {
+  if !img.color().has_alpha() {
+    return (img, false);
+  }
+  let rgba = img.to_rgba8();
+  let opaque = rgba.pixels().all(|p| p.0[3] == 255);
+  if opaque {
+    (image::DynamicImage::ImageRgb8(image::DynamicImage::ImageRgba8(rgba).to_rgb8()), false)
+  } else {
+    (image::DynamicImage::ImageRgba8(rgba), true)
+  }
+}
+
+fn encode((img, has_alpha): (image::DynamicImage, bool), max_edge: u32) -> Normalised {
+  let (w, h) = (img.width(), img.height());
+  let img = if w.max(h) > max_edge {
+    let s = f64::from(max_edge) / f64::from(w.max(h));
+    let nw = (f64::from(w) * s).round().max(1.0) as u32;
+    let nh = (f64::from(h) * s).round().max(1.0) as u32;
+    img.resize_exact(nw, nh, image::imageops::FilterType::Lanczos3)
+  } else {
+    img
+  };
+
+  let mut bytes = Vec::new();
+  let mime = if has_alpha {
+    img
+      .write_to(&mut Cursor::new(&mut bytes), image::ImageFormat::Png)
+      .expect("a PNG encode into memory cannot fail");
+    "image/png"
+  } else {
+    let rgb = img.to_rgb8();
+    image::codecs::jpeg::JpegEncoder::new_with_quality(&mut bytes, JPEG_Q)
+      .encode_image(&rgb)
+      .expect("a JPEG encode into memory cannot fail");
+    "image/jpeg"
+  };
+  Normalised { bytes, mime, width: img.width(), height: img.height(), has_alpha }
+}
+
+/// The EXIF orientation tag, or 1 where there is none.
+///
+/// **ABSENT IS 1 AND UNREADABLE IS ALSO 1, DELIBERATELY.** A picture with no
+/// EXIF is the common case and is not an error; a corrupt EXIF block is not a
+/// reason to refuse a picture that decodes perfectly well. This is the one place
+/// in the port where a swallowed failure is correct, and it is correct because
+/// the fallback is the IDENTITY -- nothing is silently changed, only silently
+/// not changed.
+fn orientation(raw: &[u8]) -> u32 {
+  let mut cursor = Cursor::new(raw);
+  exif::Reader::new()
+    .read_from_container(&mut cursor)
+    .ok()
+    .and_then(|e| {
+      e.get_field(exif::Tag::Orientation, exif::In::PRIMARY)
+        .and_then(|f| f.value.get_uint(0))
+    })
+    .unwrap_or(1)
+}
+
+/// Apply an EXIF orientation, all eight of them.
+///
+/// **ALL EIGHT, NOT THE THREE ANYONE MEETS.** The four transposed values are
+/// rare and are produced by real cameras; handling six and silently ignoring two
+/// would rotate most pictures correctly and mirror the rest, which is the shape
+/// of bug nobody finds until it is in front of an audience.
+fn orient(img: image::DynamicImage, orientation: u32) -> image::DynamicImage {
+  use image::DynamicImage as D;
+  match orientation {
+    2 => img.fliph(),
+    3 => img.rotate180(),
+    4 => img.flipv(),
+    5 => D::rotate90(&img.fliph()),
+    6 => img.rotate90(),
+    7 => D::rotate270(&img.fliph()),
+    8 => img.rotate270(),
+    _ => img,
+  }
+}
+
+#[cfg(test)]
+mod tests {
+  use super::*;
+
+  /// A PNG of one flat colour at a chosen alpha.
+  fn png(w: u32, h: u32, alpha: u8) -> Vec<u8> {
+    let mut img = image::RgbaImage::new(w, h);
+    for (i, p) in img.pixels_mut().enumerate() {
+      // Varied content so the encoders have something real to do; only the
+      // alpha channel is held constant, which is what these tests are about.
+      let v = u8::try_from(i % 251).unwrap_or(0);
+      *p = image::Rgba([v, 20, 30, alpha]);
+    }
+    let mut out = Vec::new();
+    image::DynamicImage::ImageRgba8(img)
+      .write_to(&mut Cursor::new(&mut out), image::ImageFormat::Png)
+      .unwrap();
+    out
+  }
+
+  fn write(tag: &str, bytes: &[u8]) -> std::path::PathBuf {
+    let d = std::env::temp_dir().join(format!("showreel-norm-{}", std::process::id()));
+    std::fs::create_dir_all(&d).unwrap();
+    let p = d.join(format!("{tag}.png"));
+    std::fs::write(&p, bytes).unwrap();
+    p
+  }
+
+  /// **THE RULING, AS ONE ASSERTION: A FULLY-OPAQUE RGBA BECOMES A JPEG.**
+  ///
+  /// This is the case the reference decides two different ways depending which
+  /// pass reaches it -- JPEG through `normalise_image`, full-size PNG through
+  /// `data_uri`, which is the path every hand-placed brand mark takes. **Both
+  /// arms are asserted here because one policy means the EDGE is the only thing
+  /// that differs between the passes.**
+  #[test]
+  fn a_fully_opaque_rgba_is_demoted_to_jpeg_at_both_edges() {
+    let p = write("opaque", &png(64, 64, 255));
+    for edge in [MASTER, TARGET] {
+      let out = normalise(&p, edge).unwrap();
+      assert_eq!(out.mime, "image/jpeg", "opaque alpha must not ship as PNG at edge {edge}");
+      assert!(!out.has_alpha, "and the flag agrees with the encoder");
+    }
+  }
+
+  /// The other direction, or the rule above is satisfied by "always JPEG".
+  #[test]
+  fn a_genuinely_transparent_image_keeps_its_alpha_and_its_encoder() {
+    let p = write("transparent", &png(64, 64, 128));
+    let out = normalise(&p, MASTER).unwrap();
+    assert_eq!(out.mime, "image/png", "real transparency survives");
+    assert!(out.has_alpha);
+  }
+
+  /// **A SINGLE NON-OPAQUE PIXEL IS ENOUGH, AND THAT IS THE POINT OF SCANNING
+  /// RATHER THAN SAMPLING.** A wordmark is opaque everywhere except its
+  /// antialiased edge, so a check that looked at a corner would demote it and
+  /// throw the edge away.
+  #[test]
+  fn one_transparent_pixel_in_a_million_stops_the_demotion() {
+    let mut img = image::RgbaImage::new(200, 200);
+    for p in img.pixels_mut() {
+      *p = image::Rgba([10, 20, 30, 255]);
+    }
+    img.put_pixel(199, 199, image::Rgba([10, 20, 30, 254]));
+    let mut bytes = Vec::new();
+    image::DynamicImage::ImageRgba8(img)
+      .write_to(&mut Cursor::new(&mut bytes), image::ImageFormat::Png)
+      .unwrap();
+    let out = normalise(&write("onepixel", &bytes), MASTER).unwrap();
+    assert_eq!(out.mime, "image/png", "254 is not 255");
+    assert!(out.has_alpha);
+  }
+
+  /// A large fully-opaque RGBA must be downsized AND demoted, and the two must
+  /// both happen rather than the resize costing the demotion.
+  ///
+  /// **WHAT THIS TEST DOES NOT PROVE, STATED BECAUSE I FIRST CLAIMED IT DID:**
+  /// it does not discriminate the ORDER of the collapse and the resize.
+  /// Injecting the reordering moved no test at all -- a fully-opaque alpha
+  /// channel is constant, a Lanczos kernel sums to one, and a constant channel
+  /// resamples to itself. The order is a cost choice, not a correctness one, and
+  /// nothing here is a control over it.
+  #[test]
+  fn a_large_opaque_rgba_is_still_demoted_after_being_downsized() {
+    let p = write("bigopaque", &png(3000, 1200, 255));
+    let out = normalise(&p, MASTER).unwrap();
+    assert_eq!(out.mime, "image/jpeg", "the collapse must precede the resize");
+    assert_eq!(out.width, MASTER, "long edge hits the cap");
+    assert_eq!(out.height, 1024, "and the short edge scales with it");
+  }
+
+  /// Under the cap, nothing is resampled -- resizing a small picture up would
+  /// invent detail and cost bytes for it.
+  #[test]
+  fn an_image_under_the_edge_is_not_resized() {
+    let p = write("small", &png(300, 200, 128));
+    let out = normalise(&p, MASTER).unwrap();
+    assert_eq!((out.width, out.height), (300, 200));
+  }
+
+  /// **ALL EIGHT ORIENTATIONS, NOT THE THREE ANYONE MEETS.** The four transposed
+  /// values are rare and real; handling six would rotate most pictures correctly
+  /// and mirror the rest, which is the shape of bug nobody finds until it is in
+  /// front of an audience. The four that TRANSPOSE swap the dimensions, and that
+  /// is what makes them observable without comparing pixels.
+  #[test]
+  fn every_exif_orientation_is_handled_and_the_transposing_four_swap_the_edges() {
+    let img = image::DynamicImage::ImageRgba8(image::RgbaImage::new(40, 10));
+    let swaps = [5u32, 6, 7, 8];
+    let keeps = [1u32, 2, 3, 4];
+    assert_eq!(swaps.len() + keeps.len(), 8, "the population IS the claim");
+
+    for o in swaps {
+      let out = orient(img.clone(), o);
+      assert_eq!((out.width(), out.height()), (10, 40), "orientation {o} must transpose");
+    }
+    for o in keeps {
+      let out = orient(img.clone(), o);
+      assert_eq!((out.width(), out.height()), (40, 10), "orientation {o} must not transpose");
+    }
+    // An out-of-range value is the identity rather than a refusal: a corrupt tag
+    // is not a reason to reject a picture that decoded perfectly well.
+    assert_eq!((orient(img.clone(), 99).width(), orient(img, 99).height()), (40, 10));
+  }
+
+  /// A file with no EXIF at all is orientation 1, which is the common case and
+  /// not an error.
+  #[test]
+  fn an_image_with_no_exif_is_upright() {
+    assert_eq!(orientation(&png(8, 8, 255)), 1);
+    assert_eq!(orientation(b"not an image at all"), 1, "and so is unreadable EXIF");
+  }
+
+  /// The role factors, ported rather than derived, with the floor that stops a
+  /// bug becoming unreadable on a small target.
+  #[test]
+  fn each_role_gets_the_edge_the_reference_gives_it() {
+    assert_eq!(role_edge(Role::Slide, 1920), 1920);
+    assert_eq!(role_edge(Role::Mark, 1920), 1382);
+    assert_eq!(role_edge(Role::Bug, 1920), 384);
+    // The 256 floor bites only at small targets, and it is the reference's.
+    assert_eq!(role_edge(Role::Bug, 640), 256, "128 would be unreadable");
+  }
+
+  /// A file that is not an image refuses by name rather than panicking. The
+  /// admission layer should have caught it first; this is the second line.
+  #[test]
+  fn a_file_that_is_not_an_image_refuses_with_its_name() {
+    let p = write("bogus", b"this is not a png");
+    let e = normalise(&p, MASTER).unwrap_err();
+    assert!(e.message.contains("cannot decode"), "{}", e.message);
+    assert!(e.message.contains("bogus"), "names the file: {}", e.message);
+  }
+}
