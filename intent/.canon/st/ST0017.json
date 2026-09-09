@@ -505,7 +505,8 @@
       "text": "help/prez.md's 'there is no player, and there never will be' is amended in the SAME commit that adds the subcommand.",
       "kind": "non-test",
       "state": {
-        "is": "unsatisfied"
+        "is": "satisfied",
+        "evidence": "VERIFIED BY vc AT THE COMMIT, which is what this row asks -- the amendment and the subcommand in ONE commit, not two. cc b8dc9f1 carries help/prez.md (+26), opt/prez/prez (+46) and opt/prez/test/prez.bats (+54) together, so the anti-requirement could not have gone stale between them even briefly. THE AMENDMENT KEPT THE TEETH AND LOST ONE WORD, which is the right edit: \"there is no server, no player, no watch-me-render mode, and there never will be\" became \"there is no server, no watch-me-render mode, and there never will be\". \"No player\" was false the moment a showreel artifact carries one INSIDE the single file prez writes; \"no server, no watch-me-render mode\" is what the sentence ever meant. cc added the reconciliation in the file rather than leaving it inferable: prez still writes a file and stops, and what is new is that one of the files it writes happens to animate once opened -- a player that ships inside the artifact being the OPPOSITE of a server, since it is what lets the output need nothing at all. VERIFIED SEPARATELY THAT THE TWO USER-FACING INVOCATION FORMS AGREE, which is ST0016's property and the thing this amendment could have broken: bin/prez --help and bin/utilz prez --help are BYTE-IDENTICAL by md5 over 427 lines. The 36-line terse usage from opt/prez/prez --help is the raw utility script invoked by path, which is not a user path and is not a divergence -- checked because it looked like one."
       }
     },
     {

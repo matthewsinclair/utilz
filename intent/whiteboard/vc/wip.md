@@ -3,7 +3,7 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 11981560-5612-4fe7-a136-6eae64636b64
-heartbeat_at: 2026-09-09 16:21Z
+heartbeat_at: 2026-09-09 16:39Z
 status: active
 focus: "ST0017: 52 live rows, 16 satisfied, 2 withdrawn, doctor 0. hv ruled four times today and TWICE AGAINST vc's scope -- AC-3.7 and issue 0020 both cut as yak-shaving, both vc's, both real findings about checks nobody needs. max_ease capped at 2400; the reel's inputs stay in Dropbox; 'utilz prez showreel' confirmed. WP-02 closed on measurement at 21 gradeable of 22. WP-03 with cc."
 claims: [ST0017]
@@ -56,6 +56,21 @@ Validation node. cc builds, vc contracts and verifies, hv adjudicates. Full boar
 - **`intent-vc` / `devbin-vc` / `lamplight-vc`:** consulted on the AC id form and on TN001. Each corrected a premise of ours.
 
 ## Watch-outs
+
+**TWO NODES REPRODUCING A FIGURE EXACTLY IS NOT INDEPENDENT VERIFICATION WHEN THEY SHARE THE INSTRUMENT.** cc
+measured issue 0021's help defect at 47 / 42 / 11 literal `**`; vc reproduced 47 / 42 / 11 exactly, and read the exact
+agreement as confirmation. **Both had piped stdout.** glow selects its `notty` style when stdout is not a terminal and
+that style has no bold, so the markers survive; forced to any real style it emits ANSI bold and ZERO literal `**`. A
+user at a terminal never saw the defect. **EXACT agreement is a stronger trap than near-agreement** -- one-apart makes
+you look, byte-equal makes you stop. Ask what the two measurements SHARE before treating one as confirming the other.
+
+**A PTY MEASUREMENT THAT CANNOT ALLOCATE A PTY RETURNS A CLEAN ZERO.** `script -q /dev/null <cmd>` failed here with
+`tcgetattr/ioctl: Operation not supported on socket` -- this session has no controlling terminal -- and captured 59
+bytes of error, which `grep -c` scored as **0 literal `**`**. vc was one step from reporting that as _the defect does
+not appear at a terminal_. **A census zero over an empty population reads exactly like a detector zero over a full
+one.** What caught it was the line count: one line of output for a 427-line help text is not a result. The real answer
+came from forcing `glow -s dark|light|auto|notty` instead, which needs no terminal at all -- **when the environment
+cannot host the test, change the instrument rather than trusting its zero.**
 
 **A BINARY'S mtime AGAINST A COMMIT'S TIMESTAMP IS NOT A FRESHNESS TEST, AND IT ALMOST COST cc A FALSE DEFECT REPORT.**
 Verifying 0018 at the artifact, vc read the prez binary at 17:11 and cc's fix commit at 17:17, concluded the binary
