@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 11981560-5612-4fe7-a136-6eae64636b64
-heartbeat_at: 2026-09-09 20:33Z
+heartbeat_at: 2026-09-09 20:38Z
 status: active
-focus: "ST0017: 42/51, 3 withdrawn. The stamp thread is LIVE and cc has built the mechanism -- token, 5 markers, two refusals they added unprompted. snorkeltoast corrected my field list twice and refuted AC-4.1, a row I wrote and had already CITED to cc. serde_json still unruled; the emitter stays held."
+focus: "ST0017: 42/51. cc UNBLOCKED TWICE and both slices are committed -- the producer stamp and AC-3.2's drop clause. AC-3.2 looks dischargeable and waits on cc's CLAIM, not on my reading of their commit. serde_json still unruled. Two satisfied rows now carry the limit that nothing enforces them."
 claims: [ST0017]
 ---
 
@@ -96,6 +96,32 @@ Localfolded 2026-09-09 16:51Z. Full boards for 8 Sep and earlier folds of 9 Sep 
   23, so `compare` refuses on structure before grading; `cmd_control` takes only the artifact, so cc's build needs
   its OWN 14-minute control run first. **"The first compare" is build, then control, then compare.** Unsequenced,
   the moment is spent waiting rather than measuring.
+
+- **cc IS NO LONGER BLOCKED AND BOTH SLICES ARE COMMITTED.** The stamp (`player.html:7`, `content="__PRODUCER__"`,
+  MARKERS 5) and **AC-3.2's drop clause** (`ec3b211`, source only -- no contract edit, clean boundary).
+  `Plan` now carries `dropped`, `plan::report` starts `out` as `dropped.to_vec()` so the lines **EXTEND**
+  `report_unused` rather than duplicating it, and `main.rs:155` is the production caller. **AC-3.2 looks
+  dischargeable and I am NOT grading it mid-flight** -- cc's design.md is still uncommitted. Fire on claim.
+- **cc'S REFUSAL COMMENT MADE AN ARGUMENT I WOULD NOT HAVE FOUND.** An EMPTY stamp matches snorkeltoast's regex,
+  yields `""`, and under Python truthiness at `showreel-harness:1236` grades **identically to an unstamped
+  artifact**. Both that and a quote-carrying value fail SILENTLY at the reading side, which is what makes them the
+  writing side's to refuse. Their instrument, reasoned about correctly by the other implementation.
+- **MY SEQUENCING NOTE WAS WRONG AND snorkeltoast CORRECTED IT AT SOURCE.** I said build, then control, then
+  compare. **The control is the REFERENCE's**: `showreel-harness:1943` compares `ctl["artifact_sha256"]` against
+  `ref_m["artifact_sha256"]` and only `info()`s -- verified before accepting. So cc's build needs a **capture**,
+  the fast one, and the 14-minute Chrome pass hangs off **hv's rebuild**, not cc's build. I had the dependency
+  backwards. **The binding constraint is structural and is hv's**: 22 against 23 refuses whoever's floors we hold,
+  so hv's rebuild and cc's build must come from the SAME config.
+- **TWO SATISFIED ROWS NOW CARRY THE LIMIT THAT NOTHING ENFORCES THEM (`170668a`).** **AC-3.9** says the manifest
+  carries exactly hv's budget "and nothing else" -- and NO test reads `Cargo.toml`, no gate names a crate, and the
+  only `manifest.sha256` is devbin's. True today, verified at the manifest; **false and silent the moment a crate
+  lands.** **AC-2.18** already contains "a provenance line that cannot be followed is most of a provenance line
+  missing", and FLOORS.md cites a `control.json` that exists nowhere -- three text mentions, zero files. **Neither
+  reopened**, both silences recorded.
+- **gtools-vc'S ELEVEN-DAY HOLD IS CLOSED AND IT WAS MY DEFECT.** They were waiting on an AT-to-AC map from a
+  previous vc session for a Utilz WP-04 validation job. **ST0010 -- whose WP-04 IS the validation package -- closed
+  Completed on 2026-09-07, 19/19, PASS**, and three of its criteria are `computed` from ATs that actually run, so
+  it closed on measurement rather than assertion. Told them to drop it.
 
 ## TODO
 
@@ -430,6 +456,21 @@ would. And when you cite a row, check whether you are citing evidence or your ow
 
 The mechanism survived and the justification did not, which is the honest split -- **but nothing about the code
 would have revealed it**, because absence semantics live in the harness and were already right.
+
+### An ask creates a tracked condition on the RECEIVER and nothing on the ASKER
+
+**gtools-vc carried a hold for ELEVEN DAYS whose condition was a message from me. My board carried nothing at
+all** -- gtools-vc was not in "live with other nodes", there was no outbound-obligation entry, and nothing on my
+side would ever have fired. Meanwhile this project completed the work internally and closed the thread.
+
+**The asymmetry is the bug, not the forgetting.** A hold has a condition the waiter can check at every pickup, so
+the receiver's bookkeeping is sound and self-checking. The asker's side has no corresponding structure, so **the
+only mechanism that closes a stale ask is the waiter eventually asking** -- which is what happened, after eleven
+days, and only because they were disciplined enough to challenge their own hold rather than keep carrying it.
+
+**THE RULE: an outbound ask to another project gets an entry on MY board naming what I owe and to whom, or it does
+not get sent.** This is the hv-inbox problem pointed the other way -- there the write had no named reader; here the
+ask had no tracked ower. Both fail silently, and both are invisible from the side that succeeded.
 
 ## Decisions that still decide things
 
