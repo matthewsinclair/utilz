@@ -267,6 +267,114 @@ than as the requirement.
 as its evidence. It never substitutes the check for the property.** Both corrections are
 strengthenings, and both were caught by cc before a file moved rather than after.
 
+
+### 1.8 hv's four rulings, 2026-09-09
+
+All four put with options and a recommendation; all four taken as recommended.
+
+| # | Ruling | Consequence |
+| - | ------ | ----------- |
+| H-A | **AC02 sign-off GRANTED for `artifact = { path = "crates/artifact" }`**, as a one-off, named in the commit exactly as AC02 requires | WP-01 unblocked. AC02's wording is UNCHANGED -- hv declined to broaden it to a first-party/third-party distinction, so **if prez ever gains a second first-party crate the question returns, and that is deliberate** |
+| H-B | **showreel gets a STANDING dependency budget in its own manifest**, mirroring AC02's shape but sized for a tool that must decode JPEGs. cc confirms current crate state and versions FIRST; hv approves the named list once at WP-03; additions thereafter need sign-off | WP-03's design point gains a gate. `HOIST.md` §6's list is a sketch and is **not** what was approved |
+| H-C | **The command is `prez showreel build <dir>`** | Every document written so far is already correct. The shim, `showreel.yaml` and `help/prez.md` are written against this |
+| H-D | **Republish the install NOW, before WP-03** | Sequenced -- see below |
+
+**H-D has an ordering constraint that is not optional and was not visible when the question was
+put.** `install.sh:582` and `:733` refuse a dirty source tree, and `:736` says plainly *"There is
+no flag for this."* WP-01's work is uncommitted, so the tree is dirty and the republish cannot
+run. The sequence is therefore:
+
+1. H-A unblocks cc to wire and commit WP-01, naming the sign-off in the commit.
+2. The tree goes clean.
+3. Republish, and **verify by behaviour rather than by reading the install's `VERSION`** -- both
+   invocation forms answer, and the provenance line names the tree and commit.
+4. WP-03 may then shell out via PATH without exercising a stale tree.
+
+Nothing before step 3 may reach `utilz` or `prez` through PATH.
+
+
+### 1.9 TN001: the Rust build trap, and what Utilz owes it
+
+hv raised this at the moment of granting H-A, citing the week lost to it in Intent and Lamplight:
+`/Users/matts/Devel/prj/Intent/intent/docs/notes/tn001-one-test-target-per-crate.md`.
+
+**The defect it names.** Cargo's `autotests` defaults to `true`, so every `.rs` file directly
+under a crate's `tests/` becomes its own target -- a separate compile and a **full link** of the
+crate and its whole dependency graph. Cost is linear in FILE COUNT, not test count. Nothing warns;
+it grows one file at a time. Intent reached 166 links.
+
+**Utilz's exposure, measured 2026-09-09: ZERO, and there is nothing to consolidate.**
+
+| Check | Result |
+| ----- | ------ |
+| Rust `tests/` directories in the estate | **none** (the one `find` hit was a vendored Python venv -- my search was too wide and is corrected here rather than quietly) |
+| `opt/prez/crate/test/` | singular, and holds `.sh`/`.mjs`/`.html` probes. **Cargo reads `tests/` only, so it is invisible to cargo entirely** |
+| All 148 tests (prez 136, artifact 12) | `#[cfg(test)] mod tests` inside `src/`, compiled into the existing target. **No extra links** |
+| `autotests` / `[[test]]` / `[profile.dev]` declared | none |
+
+**So `autotests = false` is REFUSED for now, and the refusal is the note's own reasoning rather
+than an oversight.** TN001 is explicit that consolidation without an orphan guard *"trades a LOUD
+WASTE for a QUIET HOLE"*, and devbin's gate refuses exactly the case of discovery off with nothing
+declared and `.rs` files in `tests/`. **With no waste to remove, adopting it today would create
+the hole and buy nothing.**
+
+### 1.10 But the workspace ALREADY opened a quiet hole, and it is measured
+
+The estate's two `cargo test` call sites -- `opt/utilz/lib/common.sh:838` and
+`.github/workflows/tests.yml:284` -- both pass `--manifest-path "$manifest"` and neither passes
+`--workspace`. `crate/Cargo.toml` now carries a `[package]` as well as `[workspace]`, so cargo
+operates on that package alone.
+
+Driven, both arms, from a scratch `CARGO_TARGET_DIR` so as not to disturb cc's build:
+
+| Command | Executables built |
+| ------- | ----------------- |
+| `cargo test --manifest-path Cargo.toml --no-run` (**what the estate actually runs**) | **1** -- `unittests src/main.rs` (prez) |
+| `cargo test --workspace --no-run` | **2** -- artifact's lib AND prez |
+
+**So `utilz test prez` and CI would run prez's 136 and silently skip artifact's 12.** Nothing
+errors, the suite reports green, and a whole crate's tests never ran -- TN001's quiet hole
+arriving by a different route: not `autotests`, but a call site whose scope no longer matches the
+workspace's shape. **It passes by not existing.**
+
+### 1.11 Four rulings, and the one that must not be a note
+
+**W1 -- both call sites gain `--workspace`.** Without it every crate added after prez is invisible
+to `utilz test` and to CI. Measured above: 1 executable against 2.
+
+**W2 -- and `--no-fail-fast` in the same edit, not after.** Two targets means the first failing
+crate hides the second's results. Lamplight's instance is the mirror of ours -- 17 failing targets
+became 1 and the first failure hid the other sixteen -- and TN001 is explicit that you do not lose
+a flag's benefit by omitting it, you **lose CI information you previously had**.
+
+**W3 -- `[profile.dev] debug = "line-tables-only"` at the workspace root**, which is
+`crate/Cargo.toml`. `cargo test` inherits `dev`, so one key reaches every test target. Keeps file
+and line in a backtrace, drops what only a debugger reads. Costs nothing today and compounds.
+`[profile.release]` is already there and already correct; S7 covers it.
+
+**W4 -- the standing policy, and it is a CRITERION rather than a note, deliberately.** TN001's own
+transferable lesson is that Intent ruled this estate-wide on 2026-08-27 and did not apply it until
+2026-09-01, in the estate that authored the ruling -- *"a decision and its application were
+separately tracked, and only one of them was."* **Prose does not fail.** So: **the first crate in
+this workspace to gain a `tests/` directory adopts `autotests = false`, one declared `[[test]]`
+target, and the orphan guard, in the same commit that adds the first file.** showreel is almost
+certainly that crate, because the fidelity harness needs integration tests.
+
+**The guard's subtleties, carried from TN001 so they are not rediscovered:** key on
+`#[path = "..."]` and never the `mod` name, since the two are free to diverge and only the path
+decides what compiles; plant a REAL orphan file rather than a synthetic control, because a walker
+that returns empty on a `read_dir` error finds no orphans and goes GREEN when aimed at a moved
+directory; both instruments assert their own corpus is non-empty; only the UNDECLARED direction
+needs guarding, since a declared path with no file behind it is a loud compile error; and **the
+guard cannot catch its own omission -- its declaration line in `suite.rs` is load-bearing and must
+not be tidied away.**
+
+**And the trap in proving any of it, which generalises far past this job: `cargo test <filter>`
+EXITS 0 WHEN THE FILTER MATCHES NOTHING.** Exit 0 over zero filtered-out tests is byte-identical
+to exit 0 over one pass. **Every arm asserts the COUNT, never the exit code** -- any harness that
+selects by name and checks only `$?` is green from the moment the name drifts, and name drift is
+silent, routine, and exactly what refactoring does.
+
 ---
 
 ## 2. There are THREE consolidations, and they are named apart on purpose
@@ -479,6 +587,9 @@ gate.
 | S2 | WP-01 adds no third-party cost to prez: the `comrak` line byte-identical, the lockfile's third-party package count unchanged, and the only permitted addition the first-party std-only `artifact` path dependency. **Corrected from byte-identity of the block, which S1 makes impossible -- see 1.4.** Conditional on hv's AC02 sign-off |
 | S3 | No existing prez assertion is weakened or altered: all 135 original test bodies unchanged, verifiable by diff, with the count stated before and after. **Additions are permitted and expected** -- S8 is one. Corrected from "no edit to any test file", which S8 makes false while the intent holds -- see 1.7 |
 | S4 | prez's release binary size after WP-01 is stated as a number against the budget, not as a distance |
+| S9 | Both `cargo test` call sites (`common.sh:838`, `tests.yml:284`) pass `--workspace` and `--no-fail-fast`. **Measured: without `--workspace` the estate builds 1 executable where the workspace has 2, so artifact's 12 tests never run** |
+| S10 | `[profile.dev] debug = "line-tables-only"` at the workspace root |
+| S11 | **Standing, and it binds the crate that trips it, not this WP:** the first crate in this workspace to gain a `tests/` directory adopts `autotests = false` + one declared `[[test]]` + the orphan guard, **in the same commit that adds the first file**. Per TN001, whose own lesson is a ruling tracked separately from its application |
 | S8 | prez pins which theme `load(None, ..)` resolves to, by a property unique to `simple` rather than one the whole roster shares (**`--gp-bg` is carried by all seven and does not discriminate**). **Two halves: the identity assertion is live now; the roster-reorder injection cannot fire until wiring and MUST be re-run then** -- see 1.6 |
 | S7 | `crate/` is both the workspace root and prez's package: every `include_str!` path, the shim and `prez.bats`'s fixture unchanged, and **`[profile.release]` proven in effect for the measured binary** rather than assumed from the manifest |
 | S5 | **SATISFIED 2026-09-09.** prez's and showreel's theme behaviours diffed by two independent enumerations: four behaviours, one clean match, result in 1.1 |
@@ -520,20 +631,16 @@ gate.
 
 ## 9. Not ruled by vc
 
-1. **The showreel dependency budget.** AC02's precedent: hv signs off each crate by name in the
-   commit that adds it. The port needs roughly serde, a YAML crate, `image` (possibly with
-   `fast_image_resize`), an EXIF crate and a QR crate. Largest single decision in the thread.
-   `HOIST.md` §6 calls its own crate list *"the shape of the answer, not a verified list"* and
-   asks for current state to be confirmed first.
-2. **The exact command spelling** -- `prez showreel build` vs `prez reel build`. Cheap now,
-   expensive after the shim, manifest and help are written against it.
-3. **The grading floor's number.** vc specifies the shape; the number comes from the control run
+**RULED 2026-09-09, see 1.8: the AC02 edge (H-A), showreel's dependency budget (H-B), the command
+spelling (H-C), and the install republish (H-D). What remains open:**
+
+1. **The showreel dependency LIST**, at WP-03. H-B approved the budget's SHAPE, not a list --
+   cc confirms current crate state and versions, hv approves the named set once.
+2. **The grading floor's number.** vc specifies the shape; the number comes from the control run
    and accepting it is hv's.
-4. **Whether `--watch` and `present` are in ST0017.**
-5. **The AC/AT id format** -- see 10.
-6. **Whether the published install is refreshed before this starts.** `utilz` on PATH is the
-   install, 6 commits behind, 9 owned files differ. Any hoist step shelling out via PATH
-   exercises a stale tree.
+3. **Whether `--watch` and `present` are in ST0017** or take their own thread.
+4. **The AC/AT id format** -- see 10. Blocked on hv or `intent-vc` naming the form; the 22 rows
+   stay drafted until then.
 
 Two `HOIST.md` §6 decisions vc endorses, needing no ruling because both are improvements
 independent of language:
