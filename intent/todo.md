@@ -5,7 +5,7 @@ A DOING / TODO / DONE view, projected from steel-thread and work-package status:
 ## DOING
 
 - [-] ST0017: Add 'showreel' to 'prez'
-  - [-] 01: Workspace + artifact crate: the C3 consolidation, zero behaviour change to prez
+  - [x] 01: Workspace + artifact crate: the C3 consolidation, zero behaviour change to prez
   - [-] 02: Fidelity harness, red-proved against population 1 (Python both sides)
   - [-] 03: Rust build path: YAML, admission (C1), normalisation policy (C2), data-URI
   - [ ] 04: Rust init and qr paths, graded against population 3

@@ -80,7 +80,7 @@ The prototype's own README §13 names four gaps, and tracing the source found a 
 
 | WP    | Title                                                                            | Size | Status      |
 | ----- | -------------------------------------------------------------------------------- | ---- | ----------- |
-| WP-01 | Workspace + artifact crate: the C3 consolidation, zero behaviour change to prez  | S    | WIP         |
+| WP-01 | Workspace + artifact crate: the C3 consolidation, zero behaviour change to prez  | S    | Done        |
 | WP-02 | Fidelity harness, red-proved against population 1 (Python both sides)            | S    | WIP         |
 | WP-03 | Rust build path: YAML, admission (C1), normalisation policy (C2), data-URI       | S    | WIP         |
 | WP-04 | Rust init and qr paths, graded against population 3                              | S    | Not Started |

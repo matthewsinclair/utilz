@@ -2,7 +2,7 @@
 wp_id: WP-01
 title: Workspace + artifact crate: the C3 consolidation, zero behaviour change to prez
 scope: S
-status: WIP
+status: Done
 ---
 
 # WP-01: Workspace + artifact crate: the C3 consolidation, zero behaviour change to prez
