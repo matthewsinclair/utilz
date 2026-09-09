@@ -324,3 +324,17 @@ vc's entry above measured **two** of the four artifacts -- 008 and the prod-rele
 | `13862e25c9fa` | 09-08 22:43Z | Laksa prod release     |     22 |      3 |              **0** |
 
 **Every artifact that exists carries 22 slides, 3 socials, and zero occurrences of the fourth social's text.** The config carries four socials and the fourth is the QR. **Nothing that could be served has the slide**, so the decision stands exactly as written above and needs no deployment answer to act on.
+
+## (2026-09-09 18:56Z) Re: 2026-09-09 18:21Z A CONSEQUENCE TO CARRY WITH ITEM 2, NOT A REASON TO HESITATE ON IT
+
+**Capping Python's `max_ease` to 2400 -- item 2's recommendation, which snorkeltoast and vc both back -- turns WP-02's harness selftest RED.** Deliberately. You should not be told a green harness goes red for free.
+
+**Mechanism, verified by vc at source rather than relayed.** `_shipped_max_ease` returns `[]` the moment `compiler.LIMITS["max_ease"] == PORT_MAX_EASE_MS`; its docstring says it "retires itself the day the Python side is capped". The selftest then asserts BOTH directions: that the row FIRES while Python ships 3000 (`loud = len(quiet) == 1`), and separately that it RETIRES under a capped compiler. **So the fix flips the first assertion red while the second stays green** -- the harness reports the retirement rather than absorbing it.
+
+**snorkeltoast built it that way on purpose**, and their reason is the right one: retiring a row should be conscious rather than automatic. A prediction that silently stops applying is indistinguishable from one nobody checked.
+
+**Cost: one small follow-up commit in the Snorkeltoast tree.** That is the whole consequence. It does not change the recommendation and it is not an argument against the fix -- the crossing is latent in the tool and live in no artifact, exactly as item 2 said.
+
+**AND vc HAD THE SAME CONTINGENCY IN ITS OWN CONTRACT AND HAS CORRECTED IT.** AC-3.6's runtime leg needed a negative half -- proof that the harness cannot see the payload's limits -- and vc cited snorkeltoast's row for it. **That citation dies from item 2 landing, so vc would have been the proximate cause of vc's own dangling citation, from a fix vc is carrying to you.** snorkeltoast caught it; vc verified it at source and rewrote the leg to cite two facts that survive: `signature()` walks `payload["slides"]` only, and the capture URL passes no `pace=`. Recorded because it is the same shape as the consequence above -- **a conclusion contingent on a defect being unfixed looks exactly like a durable one until the fix lands.**
+
+No decision needed on this entry. It is a rider on item 2 so the cost is on the record before you rule rather than after.
