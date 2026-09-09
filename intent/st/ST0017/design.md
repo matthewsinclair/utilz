@@ -605,6 +605,55 @@ side effect of a commit about harness statistics. Two nodes holding one pen over
 separation at COMMIT time and not only at write time: **a broad pathspec is how carefully written
 work still lands in the wrong commit, under someone else's reasoning.**
 
+### 1.17 Three numbers corrected, and a citation class that expires without saying so
+
+**AC-2.17's 6.29 was never a measurement of what the row said it was.** snorkeltoast re-measured the
+same injection at 0.999752, could not source 6.29, and recorded pre-`6c278a2` `pace=ambient`
+contamination as a HYPOTHESIS rather than a finding. **The arithmetic closes it without needing the
+hypothesis.** `showreel-harness`'s `rmse()` sums squared differences over RGB and divides by
+`3*W*H`, so a one-level change on every pixel of a 1920x1080 frame is **exactly 1.000000**, and
+0.999752 is that identity less the pixels clipping at 0. 6.29 would require an average shift of 6.29
+levels, so whatever it measured it was not a one-level injection on a clean capture. **A number that
+is an IDENTITY was read for a day as an empirical constant**, and what separates the two is one line
+of arithmetic against the estimator's own definition.
+
+**The row's small-extent example was wrong too, in the direction that strengthens it.** This row and
+FLOORS.md both said a one-level change over four pixels measures 0.002196. It measures **0.001389**.
+0.002196 is slide 14's MEASURED floor, and implies about 1.58 levels over four pixels -- which is
+exactly what 1.4's two anti-aliased endpoints rounding independently produce. **So a true one-level
+four-pixel defect sits BELOW slide 14's floor rather than equal to it, and slide 14 cannot grade
+it.** The rhetorical point survives; the constructed example was doing the opposite of what it
+claimed, and it read as support because it agreed at the one figure both sides quoted.
+
+**And no single injection can calibrate a multiplier, measured rather than argued.** The identical
+procedure reads 0.998249 to 2.280042 across the reel's eight image slides -- a 2.3x range inside one
+artifact, decided by picture content, with the readings above 1.0 being pixels that move more than
+one level where the darken clips.
+
+**THE CITATION SWEEP: FOUR OF EIGHT STALE, AND THE PARTITION IS PERFECTLY CLEAN.** cc found two rows
+citing a line for the brand literal that `3903937` had moved, and named the structural point: an AT
+row is refused unless its id appears literally in the file it cites, and **a line number inside AC
+TEXT sits under no such check.** Sweeping the whole population rather than repairing the two: eight
+line citations across six rows, **four stale and every one of them `player.html`, four correct and
+every one of them `showreel`.** The file the crawl fix touched took all of the rot; the file it did
+not touch took none. **The citations were not careless. They were true when written, and nothing
+reports the moment they stop being true.**
+
+**The fix is to cite the TOKEN, and the second half is not to record the dead number.** The re-sweep
+caught the repair twice: the rewritten rows still contained the old `player.html:613` inside the
+sentence explaining that it was wrong, and **to a scanner a superseded citation and a live one are
+the same bytes** -- which is the property that made the original invisible. Two other rows carried a
+bare `line 547` that the first detector's `file:NNN` pattern could not see, so the detector had to be
+widened by the same failure it was built to find. Final state: four citations, all `showreel`, each
+verified against the file; zero `player.html`; zero bare mentions.
+
+**RULING for cc on the brand literal.** It lands in OUR copy of `player.html` when WP-03 pulls the
+template, in a commit carrying ST0017, with AC-3.7's check in the SAME commit so the fix and its
+control arrive together. **Not in snorkeltoast's tree**: they have stopped on hv's scope call, and a
+peer's working tree is not ours to write. **And the divergence is recorded where the "unchanged"
+claim is made** -- section 11 lists the player as *unchanged by the port*, which stops being true the
+moment our copy differs by this one line. Two copies, one line apart, until WP-06 retires theirs.
+
 ---
 
 ## 2. There are THREE consolidations, and they are named apart on purpose
@@ -912,6 +961,6 @@ state or a covering AT: the sync warns that it OVERWRITES, and that case was not
 | `.../Snokeltoast/bin/showreel/README.md` | the protocol and the reasoning, 433 lines |
 | `.../Snokeltoast/bin/showreel/HOIST.md` | the move and the Rust case, 251 lines |
 | `.../Snokeltoast/bin/showreel/showreel` | the reference implementation, 1,046 lines |
-| `.../Snokeltoast/bin/showreel/player.html` | the shell, 44 KB, unchanged by the port -- data the tool inlines |
+| `.../Snokeltoast/bin/showreel/player.html` | the shell, 44 KB, data the tool inlines. **Unchanged by the port EXCEPT the brand literal** -- see 1.17: our copy loses `|| "Snorkeltoast"` when WP-03 pulls the template, so the two copies sit one line apart until WP-06 retires theirs |
 | `opt/prez/crate/Cargo.toml` | AC02, hv's dependency ruling, and the size reasoning |
 | `intent/whiteboard/vc/inbox.cc.md` (2026-09-09 08:09Z, `a225af2`) | the consolidated pre-contract brief |

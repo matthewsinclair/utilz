@@ -3,7 +3,7 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 11981560-5612-4fe7-a136-6eae64636b64
-heartbeat_at: 2026-09-09 12:06Z
+heartbeat_at: 2026-09-09 12:19Z
 status: active
 focus: "ST0017 contract: 52 rows, 14 satisfied, 1 withdrawn, doctor 0. Both of cc's rulings given: AC-3.12 minted and satisfied, AC-3.5 kept as ONE row and reworded to the property. cd0412d validated on the population that SHIPS -- nine real theme.css files, built=9 refused=0, both controls. Then the direction question reversed my own draft ruling: issue 0018, a live href in layout.html hidden by a stray CSS comment marker and shipped, found by the sixth case after five agreed. AC-1.16: cargo build still has no --workspace, in CI and in the shim, and the shim will never build showreel."
 claims: [ST0017]
@@ -26,7 +26,7 @@ Validation node. cc builds, vc contracts and verifies, hv adjudicates. Full boar
 - **Satisfy WP-01's remaining rows** as cc sends evidence: AC-1.11, 1.13, 1.14, 1.15.
 - **AC-3.13 is with cc, ruled in two parts.** NOW: the comment exemption becomes CSS-only, a non-CSS surface is scanned with no comment stripping -- closes the silent half for the price of a flag. LATER, only once a real `theme.js` or `layout.html` exists: cc's per-surface grammar. **NOT the written statement**, which was my own wording's first option and which issue 0018 refuted.
 - **AC-1.16 is with cc.** `cargo build` has no `--workspace` at `tests.yml:283` and at `opt/prez/prez:155`. Measured: CI's line verbatim rebuilds `prez` only with `showreel` deleted; the same line plus `--workspace` compiles it. **The shim half lands on WP-05 before WP-05 starts.**
-- **008 after-table LANDED and the crawl fix is validated by measurement.** Slide 20 went from four render clusters and a 4.99-12.45 spread to ONE cluster at 0.000000, every other slide unchanged. AC-2.10's contingency discharged. Reel now reads 19 gradeable / 3 ungradeable, and the three are TWO known bugs: slides 13+14 are snorkeltoast's verdict rule (flattens 0.002196 against what used to be 12.45), slide 1 is `player.html:613`'s brand literal. **With the rule fixed it should read 21 gradeable / 1 presence-unprovable / 0 ungradeable -- NOT claimable until re-run.**
+- **RE-RUN LANDED and my prediction was WRONG: FLOORS.md reads 19 gradeable / 2 UNDECIDED / 1 ungradeable of 22, not 21/1/0.** UNDECIDED is snorkeltoast's new refusal -- slides 13 and 14 render two ways and no magnitude is named, so the harness declines to call them either way. **That fires hv's AC-2.17 deferral, whose condition was exactly this.** AC-2.10 re-evidenced on FLOORS.md (sha256 `daaa503ad7db`, 13 captures) rather than on the old spread figure, which snorkeltoast has since found was anchored on the first capture. Slide 1 stays unprovable on the `REEL.producer || "Snorkeltoast"` token -- **cited by token now, because the line moved and four of eight line citations in this contract were stale.**
 - **cc's ST0017 claim overlap** -- flagged to hv. Not a conflict: claim-by-ST has no way to say "vc validates, cc builds", and a thread with a contract-writer and a builder will always have both.
 
 ## Holds
