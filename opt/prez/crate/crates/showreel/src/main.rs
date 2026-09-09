@@ -152,7 +152,7 @@ fn check(path: &Path) -> Result<(), Failure> {
   );
   // The exhaust report, on the same `used` the build embeds from. Reported and
   // never deleted: the tool does not get to decide a picture is finished with.
-  for line in plan::report(&reel, &used) {
+  for line in plan::report(&reel, &used, &plan.dropped) {
     println!("  {line}");
   }
   Ok(())

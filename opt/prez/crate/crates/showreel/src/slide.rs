@@ -198,13 +198,27 @@ impl Fields<'_> {
 /// flag to plan without embedding -- and callers that wanted only the asset list
 /// had to remember to pass it. Splitting the two makes the flag unnecessary and
 /// makes AC-3.8's single walk true by construction rather than by care.
+/// What one segment resolved to: its slides, and anything its scan DROPPED.
+///
+/// **THE DROPS ARE CARRIED RATHER THAN PRINTED**, so the segment's altitude
+/// survives the trip to `plan::report`, which is the one home this estate
+/// reports unused inputs from. AC-3.2's clause is that a dropped input is
+/// reported AT THE SEGMENT -- and a line assembled at the reel's altitude can
+/// no longer say which segment dropped it.
+pub struct Collected {
+  pub slides: Vec<Slide>,
+  /// One line per input the segment's scan declined, already carrying the
+  /// segment's name and field. Empty is the normal case and must stay silent.
+  pub dropped: Vec<String>,
+}
+
 pub fn collect(
   reel: &Path,
   index: usize,
   seg: &serde_yaml::Value,
   defaults: &Defaults,
   socials: usize,
-) -> Result<Vec<Slide>, Failure> {
+) -> Result<Collected, Failure> {
   let map = seg.as_mapping().ok_or_else(|| {
     Failure::new(
       format!("segment {index} is not a mapping"),
@@ -245,7 +259,7 @@ pub fn collect(
   let kind = f.text("type", segment::DEFAULT_SHAPE);
   let site = |field: &'static str| admit::Site { owner: &owner, field };
 
-  Ok(match kind.as_str() {
+  let slides = match kind.as_str() {
     "crawl" => still(Kind::Crawl { source: f.text("source", "session") }),
     "card" => still(Kind::Card {
       headline: f.text("headline", ""),
@@ -340,8 +354,14 @@ pub fn collect(
         kind: Kind::Image { path },
       }]
     }
-    _ => gallery(reel, &f, &id, &common, &owner)?,
-  })
+    // **ONLY A SCAN CAN DROP AN INPUT, AND THIS IS THE ONLY SHAPE THAT SCANS.**
+    // Every other shape NAMES its files, and a name that does not classify
+    // REFUSES rather than dropping -- C1's rule, and the reason this arm is the
+    // one that returns a drop list. The early return says so structurally: no
+    // other arm has to remember it has nothing to report.
+    _ => return gallery(reel, &f, &id, &common, &owner),
+  };
+  Ok(Collected { slides, dropped: Vec::new() })
 }
 
 fn faq_items(f: &Fields) -> Result<Vec<FaqItem>, Failure> {
@@ -416,7 +436,7 @@ fn gallery(
   id: &str,
   common: &Common,
   owner: &str,
-) -> Result<Vec<Slide>, Failure> {
+) -> Result<Collected, Failure> {
   let site = |field: &'static str| admit::Site { owner, field };
   let mut files: Vec<PathBuf> = Vec::new();
   let mut dropped: Vec<String> = Vec::new();
@@ -442,12 +462,24 @@ fn gallery(
     };
     return Err(f.missing(&format!("resolved to no images -- {why}"), "check from:, files: and exclude:"));
   }
-  Ok(
-    files
+  // **THE DROPS TRAVEL OUT ON THE SUCCESS PATH, WHICH IS THE WHOLE OF AC-3.2's
+  // REMAINING CLAUSE.** Until this line they were computed and read only inside
+  // the refusal above -- so a segment that dropped a `.txt` and still resolved
+  // to eight slides said nothing, and `Scan::report`'s own doc comment ("for the
+  // caller to print at the segment") described a caller that did not exist.
+  //
+  // **`exclude:` DROPS ARE DELIBERATELY NOT HERE.** vc ruled it and changed the
+  // row's words to carry the distinction: an `exclude:` drop is the author's own
+  // instruction obeyed, an admission drop is an accident nobody was told about.
+  // Reporting both would fire on every build using `exclude:`, which is the cost
+  // `Scan::report`'s comment already names.
+  Ok(Collected {
+    slides: files
       .into_iter()
       .map(|path| Slide { id: id.to_string(), common: common.clone(), kind: Kind::Image { path } })
       .collect(),
-  )
+    dropped,
+  })
 }
 
 /// The reference uses `Path.match`, which is a glob over the trailing components.
@@ -480,9 +512,13 @@ mod tests {
     Defaults::resolve(segment::pace(None).unwrap(), None)
   }
 
-  fn one(reel: &Path, yaml: &str, socials: usize) -> Result<Vec<Slide>, Failure> {
+  fn all(reel: &Path, yaml: &str, socials: usize) -> Result<Collected, Failure> {
     let seg: serde_yaml::Value = serde_yaml::from_str(yaml).unwrap();
     collect(reel, 0, &seg, &defaults(), socials)
+  }
+
+  fn one(reel: &Path, yaml: &str, socials: usize) -> Result<Vec<Slide>, Failure> {
+    all(reel, yaml, socials).map(|c| c.slides)
   }
 
   /// **ALL TWELVE SHAPES RESOLVE, AND THE COUNT IS THE CLAIM.** A shape that
@@ -600,6 +636,42 @@ mod tests {
     // `if str(x).strip()` -- so a list of whitespace is an empty list.
     let e = one(&r, r#"{id: s, type: points, points: ["", "  "]}"#, 0).unwrap_err();
     assert!(e.message.contains("points:"), "{}", e.message);
+  }
+
+  /// **AC-3.2's REMAINING CLAUSE: THE DROP SURVIVES A SEGMENT THAT SUCCEEDED.**
+  /// Until this landed, `dropped` was computed and read ONLY inside the refusal
+  /// branch -- so a segment that dropped a `.txt` and still resolved to slides
+  /// said nothing at all, and `Scan::report`'s own doc comment ("for the caller
+  /// to print at the segment") described a caller that did not exist.
+  #[test]
+  fn a_segment_that_dropped_an_input_and_still_resolved_names_it_at_the_segment() {
+    let r = reel("kept", &["art/a.jpg", "art/b.jpg", "art/notes.txt"]);
+    let got = all(&r, "{id: g, from: art}", 0).unwrap();
+    assert_eq!(got.slides.len(), 2, "the two images still resolve");
+    assert_eq!(got.dropped.len(), 1, "and the drop is reported: {:?}", got.dropped);
+    assert!(got.dropped[0].contains("notes.txt"), "names the file: {}", got.dropped[0]);
+    assert!(got.dropped[0].contains("segment 'g'"), "at the SEGMENT: {}", got.dropped[0]);
+    assert!(got.dropped[0].contains("from:"), "and the field: {}", got.dropped[0]);
+  }
+
+  /// **vc's RULING, AND THE ROW'S WORDS WERE CHANGED TO CARRY IT.** An
+  /// `exclude:` drop is the author's own instruction obeyed; an admission drop
+  /// is an accident nobody was told about. Reporting both would fire on every
+  /// build that uses `exclude:`, which is the cost `Scan::report`'s own comment
+  /// already names -- and then the one that matters is invisible too.
+  #[test]
+  fn an_excluded_file_is_not_reported_because_the_author_asked_for_it() {
+    let r = reel("silent", &["art/keep.jpg", "art/skip-me.jpg"]);
+    let got = all(&r, "{id: g, from: art, exclude: [skip-*]}", 0).unwrap();
+    assert_eq!(got.slides.len(), 1, "the exclude took effect");
+    assert!(got.dropped.is_empty(), "and said nothing about it: {:?}", got.dropped);
+  }
+
+  /// The normal case, and it must stay silent.
+  #[test]
+  fn a_clean_directory_drops_nothing_and_says_nothing() {
+    let r = reel("clean", &["art/a.jpg", "art/b.jpg"]);
+    assert!(all(&r, "{id: g, from: art}", 0).unwrap().dropped.is_empty());
   }
 
   /// `exclude:` filters what `from:` and `files:` gathered, and the refusal when

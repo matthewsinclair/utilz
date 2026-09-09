@@ -105,6 +105,13 @@ fn tidy(path: &Path) -> PathBuf {
 /// A resolved reel: every slide, and every file the reel itself reads.
 pub struct Plan {
   pub slides: Vec<slide::Slide>,
+  /// Inputs a segment's scan declined, already at the segment's altitude.
+  ///
+  /// **CARRIED ON THE PLAN BECAUSE THE PLAN IS WHAT `report` READS.** AC-3.2
+  /// says a dropped input is reported by EXTENDING `report_unused` rather than
+  /// duplicating it, so there is one reporting function over both altitudes and
+  /// no second path that could disagree with it.
+  pub dropped: Vec<String>,
   /// Files the ARTIFACT reads that no single slide does -- the bug, the social
   /// QRs, the venue QR.
   pub reel_level: Vec<PathBuf>,
@@ -133,8 +140,11 @@ pub fn plan(reel: &Path, cfg: &config::Reel) -> Result<Plan, Failure> {
   let defaults = slide::Defaults::resolve(pace, cfg.defaults.as_ref());
 
   let mut slides = Vec::new();
+  let mut dropped = Vec::new();
   for (index, seg) in cfg.segments.iter().enumerate() {
-    slides.extend(slide::collect(reel, index, seg, &defaults, cfg.socials.len())?);
+    let got = slide::collect(reel, index, seg, &defaults, cfg.socials.len())?;
+    slides.extend(got.slides);
+    dropped.extend(got.dropped);
   }
 
   let mut reel_level = Vec::new();
@@ -152,7 +162,7 @@ pub fn plan(reel: &Path, cfg: &config::Reel) -> Result<Plan, Failure> {
     reel_level.push(venue_qr_path(reel));
   }
 
-  Ok(Plan { slides, reel_level, pace })
+  Ok(Plan { slides, reel_level, pace, dropped })
 }
 
 /// Files under `assets/` that a build of this config would not read.
@@ -173,21 +183,33 @@ pub fn spare(reel: &Path, used: &BTreeSet<PathBuf>) -> Vec<PathBuf> {
   spare
 }
 
-/// Name every file under `assets/` the build did not touch.
+/// Name what the build did not use: inputs a segment DROPPED, then files under
+/// `assets/` no segment read.
 ///
 /// **REPORTED, NEVER DELETED.** A reel accumulates exhaust -- an asset stops
 /// being referenced when a segment is rewritten and nothing about the output
 /// says so -- but the tool does not get to decide that a picture is finished
 /// with. Returned as lines rather than printed, so the caller owns the stream
 /// and the tests can read it.
-pub fn report(reel: &Path, used: &BTreeSet<PathBuf>) -> Vec<String> {
+///
+/// **TWO ALTITUDES, ONE FUNCTION, WHICH IS WHAT AC-3.2 ASKS FOR IN THOSE WORDS**
+/// -- *"extending `report_unused` rather than duplicating it"*. The segment
+/// lines come FIRST because they are the narrower fact: a named file the author
+/// pointed a segment at and did not get. The reel-wide sweep follows.
+///
+/// **AND THE DROPS ARE NOT BEHIND THE `spare.is_empty()` EARLY RETURN.** They
+/// were, in the first draft of this change, which would have made a segment's
+/// drop invisible on exactly the tidy reels where it is the only thing worth
+/// saying.
+pub fn report(reel: &Path, used: &BTreeSet<PathBuf>, dropped: &[String]) -> Vec<String> {
+  let mut out: Vec<String> = dropped.to_vec();
   let spare = spare(reel, used);
   if spare.is_empty() {
-    return Vec::new();
+    return out;
   }
   let bytes: u64 = spare.iter().filter_map(|p| std::fs::metadata(p).ok()).map(|m| m.len()).sum();
   let mb = bytes as f64 / 1_048_576.0;
-  let mut out = vec![format!("{} unused asset(s) under assets/, {mb:.1} MB:", spare.len())];
+  out.push(format!("{} unused asset(s) under assets/, {mb:.1} MB:", spare.len()));
   for p in &spare {
     out.push(format!("    {}", p.strip_prefix(reel).unwrap_or(p).display()));
   }
@@ -246,7 +268,7 @@ mod tests {
     );
     let p = plan(&r, &cfg).unwrap();
 
-    let lines = report(&r, &p.used());
+    let lines = report(&r, &p.used(), &p.dropped);
     assert!(lines.iter().any(|l| l.contains("gone.jpg")), "names the real exhaust: {lines:?}");
     assert!(!lines.iter().any(|l| l.contains("corner.png")), "and NOT the bug: {lines:?}");
 
@@ -254,7 +276,7 @@ mod tests {
     let narrow: BTreeSet<PathBuf> =
       p.slides.iter().flat_map(slide::Slide::assets).map(tidy).collect();
     assert!(
-      report(&r, &narrow).iter().any(|l| l.contains("corner.png")),
+      report(&r, &narrow, &p.dropped).iter().any(|l| l.contains("corner.png")),
       "the slide-only set would tell the operator to delete the bug"
     );
   }
@@ -314,17 +336,48 @@ mod tests {
     // The form Rust handles unaided. Kept as a record, not as evidence.
     let free = parse("artist: {handle: x}\nbug: {file: ./assets/brand/corner.png}\nsegments: []\n");
     let p = plan(&r, &free).unwrap();
-    assert!(report(&r, &p.used()).is_empty(), "{:?}", report(&r, &p.used()));
+    assert!(report(&r, &p.used(), &p.dropped).is_empty(), "{:?}", report(&r, &p.used(), &p.dropped));
 
     // The form `tidy` exists for.
     let hard =
       parse("artist: {handle: x}\nbug: {file: assets/art/../brand/corner.png}\nsegments: []\n");
     let p = plan(&r, &hard).unwrap();
     assert!(
-      report(&r, &p.used()).is_empty(),
+      report(&r, &p.used(), &p.dropped).is_empty(),
       "a path through its own parent is the same file: {:?}",
-      report(&r, &p.used())
+      report(&r, &p.used(), &p.dropped)
     );
+  }
+
+  /// **THE EARLY RETURN NEARLY SWALLOWED THIS.** `report` returned `Vec::new()`
+  /// the moment `spare` was empty, which would have hidden a segment's drop on
+  /// exactly the tidy reels where it is the only thing worth saying. The fixture
+  /// carries no `assets/` at all, so the reel-wide sweep is empty BY
+  /// CONSTRUCTION and only the segment line can carry the report.
+  #[test]
+  fn a_segment_drop_is_reported_even_when_the_reel_has_no_exhaust_at_all() {
+    let r = reel("tidy", &["art/a.jpg", "art/notes.txt"]);
+    let cfg = parse("artist: {handle: x}\nsegments: [{id: g, type: gallery, from: art}]\n");
+    let p = plan(&r, &cfg).unwrap();
+    assert!(spare(&r, &p.used()).is_empty(), "no assets/ dir, so nothing is exhaust");
+    let lines = report(&r, &p.used(), &p.dropped);
+    assert_eq!(lines.len(), 1, "the drop is the whole report: {lines:?}");
+    assert!(lines[0].contains("notes.txt"), "{}", lines[0]);
+  }
+
+  /// **TWO ALTITUDES, ONE FUNCTION, NARROWER FIRST** -- AC-3.2's "extending
+  /// `report_unused` rather than duplicating it", asserted as an ORDER so a
+  /// later edit cannot quietly append the segment's named file after the
+  /// reel-wide list it is easy to stop reading.
+  #[test]
+  fn the_segment_altitude_is_reported_before_the_reel_wide_sweep() {
+    let r = reel("both", &["assets/art/a.jpg", "assets/art/notes.txt", "assets/old/gone.jpg"]);
+    let cfg = parse("artist: {handle: x}\nsegments: [{id: g, type: gallery, from: assets/art}]\n");
+    let p = plan(&r, &cfg).unwrap();
+    let lines = report(&r, &p.used(), &p.dropped);
+    let seg = lines.iter().position(|l| l.contains("segment 'g'")).expect("a segment line");
+    let sweep = lines.iter().position(|l| l.contains("unused asset(s)")).expect("a sweep line");
+    assert!(seg < sweep, "the segment's altitude comes first: {lines:?}");
   }
 
   /// `slug` names an ASSET and keeps the hyphen; `tight` names a filename FIELD
@@ -346,6 +399,6 @@ mod tests {
     let r = reel("hidden", &["assets/.DS_Store", "assets/art/a.jpg"]);
     let cfg = parse("artist: {handle: x}\nsegments: [{id: g, type: gallery, from: assets/art}]\n");
     let p = plan(&r, &cfg).unwrap();
-    assert!(report(&r, &p.used()).is_empty(), "{:?}", report(&r, &p.used()));
+    assert!(report(&r, &p.used(), &p.dropped).is_empty(), "{:?}", report(&r, &p.used(), &p.dropped));
   }
 }
