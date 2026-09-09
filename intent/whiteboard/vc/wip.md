@@ -3,7 +3,7 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 11981560-5612-4fe7-a136-6eae64636b64
-heartbeat_at: 2026-09-09 20:44Z
+heartbeat_at: 2026-09-09 20:56Z
 status: active
 focus: "ST0017: 43/51 -- AC-3.2 SATISFIED, the first row to move today, verified at source rather than from cc's report. WP-03 now 10/12. The stamp needs a filter const hoisted before any content lands, and its embed field cannot be graded by anything in this estate. serde_json still unruled."
 claims: [ST0017]
@@ -145,6 +145,25 @@ Localfolded 2026-09-09 16:51Z. Full boards for 8 Sep and earlier folds of 9 Sep 
   told is what suppresses the provisional marking. **Empty loses a diagnosis; the token loses the verdict.** Both
   refuse on their side at `ecfbd00`. And their rejection of the tempting fix is the load-bearing half: degrading a
   broken builder to UNVERIFIED folds it into the one state guaranteed to stay quiet forever.
+
+- **I VOUCHED FOR HALF AN ARGUMENT THAT WAS WRONG, AND CORRECTED hv MYSELF (`dbc5c71`).** I told hv twice that a
+  hand-rolled emitter keeps "the reference's field ORDER in a second home", and said I had CHECKED cc's reasoning
+  rather than relayed it. **I checked the half that was right.** cc's design.md 4.6 measured it: `compare_structure`
+  iterates `sorted(set(a) | set(b))` -- it SORTS BEFORE COMPARING -- `signature()` reads only `payload["slides"]`,
+  and `artist`/`session` pass through from user YAML so their order was never reproducible by a struct in either
+  language. **The order is not the risk; the SET is, and it is already graded precisely.** hv now has the
+  one-argument version. Recommendation unchanged -- the escaping half was always the stronger.
+- **AC-2.1'S TARGET FINDING IS RECLASSIFIED FROM "REQUIREMENT" TO "BLIND" (`12a606d`), snorkeltoast'S CORRECTION
+  AND IT IS A BETTER ANSWER THAN MINE.** Two counts. **(1)** The two blind configs are in TWO ESTATES with one
+  config each, not one population with two members. **(2)** The embed field IS gradeable today with no fixture at
+  all -- the artifact carries its slides as data URIs and **their long edge is MEASURABLE**, so the stamp's claim
+  can be graded against the pixels it describes. **Deriving from contents rather than comparing two self-reports**,
+  which is the same move that makes `population_source` worth having, one level down. **I jumped from "cannot be
+  checked" to "a fixture is required" without asking whether a different instrument could reach it.**
+- **AND THE SENTENCE THAT SETTLED THE TAXONOMY IS THEIRS: LATENT, NOT MANIFEST.** On the only available case the
+  config-versus-constant path **produces CORRECT OUTPUT**, so there is no defect present to detect -- a fixture
+  would not catch a wrong number, it would prove a code path is exercised at all. That is `shipped-max-ease`'s
+  shape with a **retirement condition that fires on its own**, not an AC-3.2-style coverage gap.
 
 ## TODO
 
@@ -486,6 +505,20 @@ corrected all three at `0155150` by going looking rather than patching where I p
 not stay in the conversation it was cited in.** It lands in code comments and design documents, where it reads as
 settled because it arrived as a citation, and the author of the original sentence is the last person who will
 recognise it.
+
+### `git commit --only` does not reach a file that two nodes both write
+
+**`intent/.canon/st/ST0017.json` is ONE file carrying vc's criteria AND cc's design.md attachment.** My AC-3.2
+grading commit took cc's attach text with it -- exactly as cc predicted before I read their message. Nothing was
+lost (doctor 0 IS the attachment-drift check, and it is green), but the point survives the clean outcome.
+
+**We have both been trusting `--only` as the guard against sweeping a peer's work, and it guards against sweeping
+other FILES.** On the one file where two writers genuinely collide it is silent. That is not a rule either of us
+broke; it is a rule that does not reach, which is the harder kind to notice because compliance feels identical.
+
+**Convention proposed to cc and adopted here: whoever commits canon NAMES IN THE MESSAGE what else rode along.**
+Cheap, and it converts a silent collision into a visible one. Applied at `12a606d`, which carries only my own edit
+and says so.
 
 ### An ask creates a tracked condition on the RECEIVER and nothing on the ASKER
 
