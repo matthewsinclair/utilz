@@ -245,3 +245,31 @@ _(entry by vc, named reader of this inbox; all four also put to hv live.)_
 ### Recommendation
 
 **(a) if you consider the showreel public promotional material or have the artist's agreement; otherwise (b).** (b) costs one edit and keeps every testing property except the name, so if you are unsure, (b) is the cheap side of the decision. **A one-word answer is enough and nothing waits on it** -- work continues either way, and I will not push regardless, since pushes are yours.
+
+## (2026-09-09 18:21Z) TWO ITEMS FROM snorkeltoast, SURFACED AND VERIFIED BY vc. ONE IS TIME-SENSITIVE AND IS NOT ABOUT THE PORT.
+
+_(entry by vc as the named reader of this inbox. snorkeltoast recorded both in HARNESS-STATE at `a5ca1a7`; vc re-measured each claim independently and marks below which are verified here and which are not.)_
+
+### 1. THE PUBLISHED REEL FOR THE 19 SEPTEMBER EVENT IS A BUILD BEHIND, AND THE MISSING SLIDE IS THE QR
+
+**Ten days out. This is a business decision, not a contract one, and it is hv's.**
+
+**VERIFIED BY vc, LOCALLY:** the live config's `socials:` list carries **FOUR** accounts -- Instagram, TikTok, LinkedIn, and **"Showreel / Watch this again"** -- and that fourth entry carries `qr:` pointing at `assets/qr/20260919-45h-forbiddenplanet-nottingham.showreel.qrcode.svg`. **That asset exists, 4041 bytes, generated 2026-09-09 12:39 local** -- today, and after 008 was built. The reference's `build_socials` loads a QR for every social carrying a url, so the entry is a rendered thing rather than a note.
+
+**VERIFIED INDEPENDENTLY BY BOTH OTHER NODES:** the live config plans **23** slides against 008's **22**, which is the whole of the difference that makes `compare` refuse.
+
+**NOT VERIFIED BY vc, AND FLAGGED AS SUCH:** snorkeltoast hashed the published file at `snorkeltoast.com/showreels/2026/09/19/45h-forbiddenplanet/` and found it byte-identical to 008 (`daaa503ad7db`). vc has not fetched the published URL, so that link rests on their measurement alone. **It is the load-bearing claim** -- everything else here is about the config and the assets, and only the hash says what is actually on the web.
+
+**So, if that hash holds:** the reel published for Forbidden Planet is missing the one slide whose entire purpose is letting a person standing in front of it take the reel away. snorkeltoast's own note is worth repeating -- they had the 23-against-22 difference recorded as a harness fact for hours and had not asked WHAT the extra slide was.
+
+**The fix is one `showreel build` and one `cp`, and the timing is hv's call.** Consequence for us either way: re-deriving the floors already waits on cc, and a rebuild for the event would happen sooner and for an unrelated reason.
+
+### 2. THE REFERENCE COMPILER STILL CARRIES THE HOLE hv CLOSED ON THE RUST SIDE
+
+**Not urgent. Latent in the tool, not live in the artifact, and the careless version of this is wrong.**
+
+**VERIFIED BY vc AT SOURCE, ALL OF IT:** the Python compiler ships `min_dwell 2500`, `min_ease 600` and `max_ease 3000` in its `LIMITS` at `showreel:65`. **max_ease 3000 exceeds min_dwell 2500**, which is exactly the structural crossing hv closed on the Rust side by capping at 2400. **The published reel cannot reach it:** the config declares no `ease:` on any segment, so every one inherits pace `attract`'s default of **900ms**, and the crossing needs far more.
+
+**So it is a latent hole in the tool and NOT a defect in the artifact, and anyone reporting it as the latter would be wrong.** But Python builds every reel until WP-03 lands, it applies no cap in the compiler at all -- `max_ease` lives only in the player -- and `?speed=` reaches the runtime.
+
+**hv capped the port. Nobody has ruled on whether the reference follows.** It is the same defect AC-3.11 was minted for, still live in the implementation the port is measured against. **No recommendation from vc**, because the answer depends on how long the reference stays in service, which is hv's information and not ours.
