@@ -3,7 +3,7 @@ node: cc
 name: Control Claude
 role: control
 session_id: a30f9092-03ed-44ba-a659-b37813af12c7
-heartbeat_at: 2026-09-09 12:24Z
+heartbeat_at: 2026-09-09 12:58Z
 status: active
 focus: "ST0017 hoist. WP-01 done. WP-03 started: AC-3.5's CSS half built, issues 0014, 0015 and 0017 closed by one fix, red-proved both ways. LIMITS unblocked by snorkeltoast's parity answer and still unported."
 claims: [ST0017]
@@ -65,13 +65,15 @@ claims: [ST0017]
 
 ## What WP-03 is graded by
 
-**`bin/showreel/FLOORS.md` in the Snorkeltoast tree, build 008, sha256 `daaa503ad7db`, 13 captures a slide.** Read the file, not this summary -- it is generated from `control.json` and never retyped.
+**`bin/showreel/FLOORS.md` in the Snorkeltoast tree. Read the file, not this summary** -- it is generated from `control.json` and never retyped. Artifact `daaa503ad7db`, 13 captures a slide, **hv named `--min-defect 0.223607`** so the reel now decides rather than deferring.
 
-- **Criterion:** every gradeable slide at RMSE 0.000000 against **its own floor**, slides 13 and 14 accepted by name, and **the render count matching**. A Rust build rendering a slide once where Python renders it twice is now a visible difference rather than something averaged away.
-- **19 gradeable, 2 undecided (13 and 14, both 2-render), 1 presence-unprovable (slide 1), 0 windowless, of 22.** Partition sums.
-- **`min_defect` is None, and that is a REFUSAL not an omission.** The red-proof's own injection reads 0.998249 to 2.280042 across eight image slides -- 2.3x for an identical procedure, decided by what the picture is -- so no constant taken from one injection can stand for the set. Naming a magnitude is AC-2.17 and hv's.
-- **MOST SLIDES CAN BE GRADED WITH NO BROWSER, AND THE SHORTCUT HAS A STATED DOMAIN.** Slide 6's payload figure 0.999768 against the browser's 0.999752 -- but that agreement holds for a **FULL-BLEED** image, where the frame is essentially the payload scaled to fill. **A letterboxed or contained slide puts unchanged background in the frame, so the on-screen figure falls below the payload figure by roughly the square root of the covered fraction.** Slide 0 is the one to watch: 1024x1024 into 16:9, and its payload figure of 2.280042 is the reel's highest precisely because none of that dilution is in it. **So: payload level for the pixel pipeline's tight loop, browser for the fit and layout classes** -- which is where the difference lives anyway. snorkeltoast's bound, given before I generalised one agreeing pair across every slide, which is the day's dominant failure and would have been mine.
-- **Two caveats, both mine to carry.** The table is against a RECONSTRUCTION of 008's config -- snorkeltoast rebuilt it minus the fourth socials entry **I added**, because the live config plans 23 slides against the artifact's 22 and the partition refuses. And it is SUPERSEDED, not merely dated, by the next build. **Do not rebuild the reel without saying so first.**
+- **POPULATION: 21 gradeable, 0 undecided, 1 ungradeable, 0 windowless, of 22.** Sums.
+- **THE CRITERION IS TIGHT AND THAT IS GOOD NEWS: 19 slides have a floor of EXACTLY 0.000000, so any movement at all on those is a real difference.** Only 13 and 14 have room -- 0.001500 and 0.002196 -- and slide 1 is ungradeable at any magnitude.
+- **The threshold is FRAME-SIZE INDEPENDENT, verified rather than accepted.** `rmse()` divides by `3*W*H`, so `f*W*H` pixels moving one level over three channels give `sqrt(f)` with W and H cancelling. Computed at 640x360, 1920x1080 and 3840x2160: identical to six places. **0.223607 is sqrt(0.05)** -- 5% of pixels, one level. It carries to any reel at any resolution with no recomputation.
+- **SLIDE 14'S FLOOR IS A CEILING, NOT A SAMPLED MAXIMUM, AND THIS CHANGES THE PARITY TEST.** It now shows THREE renders where the last run saw two and the floor did not move: the third is not a new mode but a COMBINATION, an anti-aliased edge's two endpoints rounding oppositely. Verified additive -- 15 + 15 = 30 squared-difference units, and 30 units is exactly 0.002196; the ratio is sqrt(2) to four places. Two binary endpoints is four states, three observed across 26 captures, and the fourth is bounded by distances already seen. **So a Rust build showing a 4TH RENDER of slide 14 is NOT a regression -- it is the predicted state finally being sampled, and it MUST land at 0.001553 or 0.002196 from the others. A 4th render at any other distance is a real difference and worth stopping for.** Strictly better than the render-count test I recorded an hour ago.
+- **MOST SLIDES CAN BE GRADED WITH NO BROWSER, AND THE SHORTCUT HAS A DOMAIN.** Slide 6's payload figure 0.999768 against the browser's 0.999752 -- but that holds for a **FULL-BLEED** image, where the frame is the payload scaled to fill. A letterboxed or contained slide puts unchanged background in the frame, so the on-screen figure falls below the payload figure by roughly the square root of the covered fraction. Slide 0 is the one to watch: 1024x1024 into 16:9, and its payload figure of 2.280042 is the reel's highest precisely because none of that dilution is in it. **Payload level for the pixel pipeline's tight loop, browser for fit and layout.**
+- **MY RUST RED-PROOF WILL NOT MATCH THEIRS, BY CONSTRUCTION, AND THAT IS NOT A PORT BUG.** Their injection is a one-level darkening **AND a q86 re-encode**, so it measures 0.030 to 0.825 across this reel's JPEG slides and 2.241 on the single PNG source where the darkening dominates. An injection without the re-encode lands at about 1.000000 every time. **A difference in the instrument, not in the compiler** -- snorkeltoast flagged it before it could look like one.
+- **Two caveats, both mine to carry.** The table is against a RECONSTRUCTION of 008's config -- rebuilt minus the fourth socials entry **I added** -- because the live config plans 23 slides against the artifact's 22 and the partition refuses. And it is SUPERSEDED, not merely dated, by the next build. **Do not rebuild the reel without saying so first.**
 
 ## The estate
 
