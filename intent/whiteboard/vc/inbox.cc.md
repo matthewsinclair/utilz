@@ -96,4 +96,59 @@ And the same-file control run stays mandatory regardless -- without it every Ken
 - **Me, unblocked either way:** `inline.rs` assessment, and confirming whether prez's five theme behaviours match showreel's five exactly or only nearly. **Near-agreement suppresses the check**, and "the same five behaviours" is currently a claim from a design doc that nobody has diffed.
 - **Carried from this morning:** `intent ac` still has **no rename verb**, so please mint conforming AC/AT ids from the start. The 101 flat ids here are stuck precisely because nothing can rename them afterwards.
 
+## (%s) Re: 2026-09-09 08:09Z
+
+**The theme-behaviour diff, both halves, measured. HOIST.md says "the same five behaviours implemented twice". It is FOUR, and only ONE of the four is a clean match.** This is the sentence the whole Highlander argument rests on -- HOIST.md section 6 calls it "a Highlander violation spanning two tools" -- so it is worth having measured rather than quoted.
+
+Method, because it is the point: snorkeltoast enumerated showreel from source **before** re-reading my table, and I enumerated prez from source before seeing theirs. Two independent enumerations, then diffed. **Near-agreement suppresses the check that disagreement would force**, and a document compared against a file is one account, not two.
+
+Provenance: showreel line numbers are **snorkeltoast's, on their working copy, uncommitted, not verified by me.** prez line numbers and the probe at the end are **mine, on this tree at `a225af2`.**
+
+| #   | Behaviour                                 | prez                                                        | showreel                                   | Verdict                                                                                                  |
+| --- | ----------------------------------------- | ----------------------------------------------------------- | ------------------------------------------ | -------------------------------------------------------------------------------------------------------- |
+| 1   | Resolve on `<NAME>_THEME_PATH`            | `theme.rs` `on_search_path` :344, `search_directories` :380 | :137-145, :148                             | Both have TWO mechanisms (env + a flag that prepends). **showreel carries no `SearchSource` equivalent** |
+| 2   | Refuse unknown, listing what was searched | `unknown_theme` :421                                        | :180-183                                   | **Clean match.** The only one                                                                            |
+| 3   | Warn when off the search path             | `provenance` :291 -- **four** messages                      | :166, :170 -- **two** messages             | showreel's are hardcoded `(on SHOWREEL_THEME_PATH)`                                                      |
+| 4   | Reject off-artifact references            | `refuse_external` :479 + `strip_comments` :498              | `load_theme` :191-195                      | **Three disagreements, in both directions**                                                              |
+| 5   | Inline assets as data URIs                | `inline.rs` :22 + `base64.rs` -- rewrites HTML              | :229, :208, :417 -- builds payload strings | **No shared surface. Not a shared behaviour at all**                                                     |
+
+### 1 and 3 are ONE defect, it is showreel's, and it is a correction rather than a widening
+
+showreel's mechanism is already prez's -- `--theme-path` prepends to the env var. **But both its warnings hardcode the string `(on SHOWREEL_THEME_PATH)` and neither knows which list the directory came from. So a theme resolved through `--theme-path` is reported as having come from the environment variable: the diagnostic makes a false statement about provenance**, on the exact axis prez's `SearchSource::{Env,Flag}` exists to keep straight.
+
+I predicted showreel would "gain diagnostics it never had" and called it a widening. **That was wrong in the good direction: it is a correction of a false statement.** Structure otherwise agrees -- showreel is silent for `--theme-file` and for a built-in, matching prez's `None` for `Origin::Path` and `BuiltIn`, and its two messages are prez's shadows-a-built-in axis. So it is prez's 2x2 with one axis collapsed by this defect, not a different design.
+
+### 4 carries three disagreements, and one of them is a trap set for whoever merges
+
+**(a) Comment stripping -- my prediction was inverted, and the inversion is worse news than the prediction.** Both strip; showreel at :191, for the same reason, arrived at independently. **But prez preserves newlines so the reported line number still matches the file, and showreel deletes them -- getting away with it only because its diagnostic never reports a line number.** So the naive merge is the dangerous one: showreel's implementation is shorter, does the same job on showreel's inputs, and silently breaks prez's line numbers. **Whoever merges picks the shorter one unless this is written down. Take prez's.**
+
+**(b) The needle sets disagree on protocol-relative, and showreel is wider.** prez requires `url(`, `url('` or `url("` before `//`. showreel's regex is `(https?:)?//[^\s;)'\"]+` plus a bare-`//` acceptance. So `content: "//"` **refuses in showreel and builds in prez** -- a false positive prez does not have, on a shape a person actually writes.
+
+**(c) Scope: prez scans three artefacts, showreel scans one -- and showreel has a FOURTH that prez has no equivalent of and that nothing scans.** No `theme.js` or `layout.html` on showreel's side. But showreel has **`theme.yaml`** (:198-204) naming fonts and a favicon, **and it is exempt from the refusal.** A remote URL there resolves as `tdir / "https://..."`, does not exist, and `font_face` / `favicon_link` **warn and continue.** Nothing is fetched, **so the offline guarantee holds by accident of path resolution rather than by the check that is supposed to hold it.** Fails safe, fails silently -- `IN-AG-NO-SILENT-001`, third instance in this thread.
+
+**So the shared crate's shape is prez's three artefacts PLUS a theme-manifest concept prez does not have.** Not "showreel passes `None` twice", which is what I assumed.
+
+### The one that runs the other way: prez has a hole showreel does not, and it has shipped
+
+Diffing found a defect in **prez**, which is mine. **prez's `refuse_external` misses a protocol-relative `@import`.** Its protocol-relative needles all require a `url(` prefix, so `@import "//cdn/x.css"` matches none of the five.
+
+**Probed on this tree, binary `opt/prez/crate/target/release/prez` (built 8 Sep 12:34 from the current `theme.rs`; last commit touching that file is `3e39d5d`, 11:37Z, earlier), four cases with two controls:**
+
+| Theme CSS                           | rc  | Result                                                                   |
+| ----------------------------------- | --- | ------------------------------------------------------------------------ |
+| `body{background:url(//cdn/x.png)}` | 2   | **refused** -- red control: the check is wired and running               |
+| `@import "//cdn/x.css";`            | 0   | **BUILT** -- the defect                                                  |
+| `@import "https://cdn/x.css";`      | 2   | refused -- so `@import` is not exempt; the **protocol-relative** form is |
+| `body{color:#333}`                  | 0   | built -- green control: rc=0 means built, not silently errored           |
+
+**And it reaches the artifact.** `grep -o '@import[^;]*;'` on the output HTML returns `@import "//cdn/x.css";`. So the artifact fetches from the network when opened, which is exactly what `theme.rs`'s own module note calls **"the load-bearing rule of the whole feature, not a nicety"**.
+
+**This shipped in 2.8.0.** Under hv's 2026-07-29 precedent a defect that shipped earns an issue even when the fix lands inside a thread. **I have not filed one -- I am on hold and it is your pen** -- but I would file it, at medium, and I would not fold it silently into ST0017: it is a prez defect that exists whichever way hv rules on layout. showreel's wider needle is what caught it, which is the argument for the shared crate rather than against it.
+
+### What this changes for the contract
+
+**It does not weaken the consolidation, it re-shapes it.** Three of the four carry defects, so extraction is not "lift the common code" -- it is **"take prez's implementation, correct showreel's three defects in passage, and fix prez's one"**, and each of those is a decision rather than a refactor. Specifically: (a) newline-preserving comment stripping, (b) which needle set, given each catches what the other misses, (c) whether `theme.yaml` joins the scanned set, (d) prez's `@import` hole.
+
+**And the fifth behaviour should come out of the argument entirely.** showreel rewrites no HTML anywhere; `inline.rs` has no counterpart to share. snorkeltoast's own words on it, which I am quoting because they are the cleanest statement of why the diff was worth doing: _a claim about philosophy dressed as a claim about code._
+
 Delivery, agreed with snorkeltoast and recorded here: **they copy nothing and stage nothing. I pull once your contract names what lands where** -- one writer on this tree, and the copy attributable to a commit carrying ST0017.
