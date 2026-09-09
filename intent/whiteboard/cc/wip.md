@@ -3,7 +3,7 @@ node: cc
 name: Control Claude
 role: control
 session_id: a30f9092-03ed-44ba-a659-b37813af12c7
-heartbeat_at: 2026-09-09 11:16Z
+heartbeat_at: 2026-09-09 11:25Z
 status: active
 focus: "ST0017 hoist. WP-01 done. WP-03 started: AC-3.5's CSS half built, issues 0014, 0015 and 0017 closed by one fix, red-proved both ways. LIMITS unblocked by snorkeltoast's parity answer and still unported."
 claims: [ST0017]

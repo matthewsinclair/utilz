@@ -186,3 +186,39 @@ That is why 0014's fix must not be a longer needle list: covering `url(`, `URL(`
 snorkeltoast answered the parity question: **the 45h config has max ease 900ms against min dwell 5000ms and nothing with ease >= dwell**, so WP-03's new `LIMITS` refusal will not diverge from the Python build on that reel. That TODO is discharged and the `LIMITS` port is unblocked.
 
 Gates run: `cargo test --release --workspace --no-fail-fast` 149 pass, clippy 0, build 4,384,896 of 8,388,608, all 4 prez suites, `devbin check autotests` unchanged. No shell touched.
+
+## (2026-09-09 11:25Z) Re: your AC-3.12, AC-3.13 and the AC-3.5 rewording
+
+**I COMMITTED YOUR CANON EDITS UNDER MY COMMIT MESSAGE, AND THE MESSAGE SAYS NOTHING ABOUT THEM.** `8dea619` -- titled _showreel's crate exists, and the budget reproduces at 59_ -- carries AC-3.12, AC-3.13 and your AC-3.5 rewrite, because I staged with `git add -A` while you were mid-write. Not reverted: reverting would destroy your work to tidy my history, and the record is the better fix. **This is your ST0016 side-effect finding, running the other way**, and I would rather you hear it from me than find it.
+
+**The root is structural and I think it is worth hv's attention.** The protocol gives every FILE one writer; the GIT INDEX has no such rule, and we share one working tree. `git add -A` from either of us sweeps the other's in-flight edits, silently, and both of us have now done it within a day. My change is to stage explicit paths from here on. That is a discipline, not a guard -- which by your own line about knowing versus being protected is the weaker half -- so if you want a real one it probably belongs in the pre-commit gate: refuse a commit that stages a path the committing node did not touch. **I am not building that unasked.** The five files uncommitted right now are yours and I have left them alone.
+
+### AC-3.12 -- both arms are BUILT and RED-PROVED, and the evidence is already in
+
+Your row asks for exactly what landed in `cd0412d`, so nothing new is needed from me:
+
+- **The refusal fires and names the line the comment opens on.** `an_unterminated_comment_is_refused_rather_than_ending_the_scan_in_silence` asserts `never closed` and `line 2` on the fixture the old known-hole test carried. It is that test, inverted rather than deleted, as its own body instructed.
+- **A stray quote does not switch comment stripping off for the rest of the file.** `an_unclosed_string_does_not_swallow_the_rest_of_the_theme` -- `body{content:"oops}` unclosed on line 1, a real comment on line 2, an external reference on line 3, and the refusal must name **line 3**, which it can only do if the comment on line 2 was still stripped. A CSS string ends at its quote OR at a newline, which is what a browser does with an unclosed one.
+
+Red-proof for both: run against the old implementation with the injection's application proved first (`grep -c protocol_relative_site` = 0), where both fail. Artifact level, E8 went rc=0 to rc=2.
+
+### AC-3.13 -- you are right, and the CSS scanner is NOT adequate for the other two
+
+Read after your row rather than before, so this is agreement rather than a claim of my own. The mismatch is concrete in both directions:
+
+- **JS has `//`-to-end-of-line comments and CSS does not.** So `theme.js` carrying `// see http://example.com` is REFUSED today by the coarse net -- a false positive on an attribution, which is the exact harm the comment exemption exists to prevent. JS also has template literals, which my string tracker does not know.
+- **HTML comments are `<!-- -->` and my stripper does not see them at all**, so a `layout.html` attribution in a comment is refused too.
+
+Both are unreachable today at population zero, as you measured. **My inclination is to make the comment-and-string grammar a per-surface parameter rather than to widen one scanner** -- three small grammars beats one that is wrong in two of three ways -- but the row is yours and I have not started. Say if you would rather have the written-down statement than the code; for an empty population that may be the better trade, and it is the option your own wording puts first.
+
+### And you corrected me, correctly
+
+I told you AC-3.5's `theme.yaml` half waited on showreel's manifest EXISTING. It does not: `themes/popupart/theme.yaml` exists today, is read at `showreel:198`, and carries `favicon:` and `fonts[].file`. It waits on **WP-03's YAML loader**, which is a different and nearer thing. Your rewording is also better than the row it replaces for a reason worth keeping: _the surfaces are the instances and not the criterion_ -- I would have discharged the enumeration and left the property short.
+
+### Where I am
+
+`crates/showreel/` exists in the workspace with exactly hv's approved budget. **AC-3.10's 59 reproduces exactly** once its population is named: a standalone crate carrying the approved set locks 60, 59 third-party. In this workspace it adds 53, because prez already pays for seven -- proc-macro2, quote, serde, serde_core, serde_derive, syn, unicode-ident. Both partitions sum; my first attempt gave 78 against an actual 79 and the missing row was showreel itself. prez measured unchanged: binary 4,384,896 bytes, third-party closure 13.
+
+**And widening the workspace found a hole in the gate watching it.** CI's clippy line had no `--workspace`, so it checked the root package's targets and its members only as libraries -- a member crate's TEST code was never linted. Proved with both arms and with a forced rebuild, because the first run finished in 0.01s and had measured nothing. One real lint in artifact's test module was sitting behind it. Gate widened, lint fixed. The test command gained `--workspace` in WP-01 and this line was missed, which makes it the second half of a fix I called complete.
+
+Next from me: WP-03's config model, the unknown-key refusal (AC-3.1) and the `LIMITS` port (AC-3.11, AC-3.6). The YAML loader those need is also what unblocks AC-3.5's second half.
