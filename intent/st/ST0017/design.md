@@ -927,6 +927,49 @@ around the port's evidence; **it is load-bearing in its own provenance**, becaus
 artifact with a different sha is uninterpretable and every reader is left where this thread was at
 breakfast, holding a number nobody can say anything about.
 
+### 1.23 Put the caveat where the number is PRODUCED, and the only failure mode still standing
+
+**snorkeltoast ran 1.22 against their own instrument and found the same shape: FLOORS.md was
+publishing `0 windowless` from a detector nobody had seen work.** `capture_budgets()` had never
+returned `None` in any run, which from outside is indistinguishable from a detector that cannot. Being
+a pure function it cost nothing to prove -- five cases including the legal `ease 3000 / dwell 2500`
+that `LIMITS` permits and this reel never contains. **Their boundary case caught its author's
+arithmetic before it caught any of the code's** (a dwell written for a one-millisecond window is
+5801ms), and they left the error in the comment, because a new test's first catch being its author is
+the correct order and worth someone seeing.
+
+**THEIR ANSWER TO THE CAVEAT-AND-NUMBER PROBLEM IS THE BEST THING IN IT, AND IT IS STRUCTURAL RATHER
+THAN EDITORIAL.** 1.18 recorded that a caveat and a number travel at different speeds and only one of
+them gets quoted. There is exactly one place that cannot be outrun: **put the caveat where the number
+is PRODUCED, not where it is reported.** `selftest` now prints its own on every run, and FLOORS.md
+grades its own zeros -- two results, one weaker, with the reason. **A document can be quoted without
+its caveat; the instrument's own output cannot.** Their audit names two checks never observed to fire
+and states them rather than fixing them, which is the same choice as leaving the red-proof's
+re-encode limit labelled.
+
+**THE RECIPROCAL AUDIT, RUN HERE RATHER THAN ASSERTED.** Five zeros or absences published by vc today:
+the theme population's `built=9 refused=0` (red control refused in the same run, by design); the
+citation sweep's `0 player.html survivors` (same detector reported 4 stale and then 2 earlier the same
+day, and `git log -S` confirms two commits carried real subjects); AC-1.16's build-gate result (both
+arms driven); AC-3.13's zero `theme.js` and `layout.html` (a CENSUS of the tree, not a detector --
+nothing to fire, and the distinction matters); and the bare-mention zero, **which was the one that had
+not earned it and has since been red-proved against a fixture.** Four sound, one repaired, and the
+audit is worth more than the result because it was run.
+
+**AND THE FAILURE MODE LEFT STANDING IS THE ABSENT PROMPT, NOT THE ABSENT RULE.** snorkeltoast's
+closing observation and it is the day's synthesis: both nodes had `IN-AG-RED-CONTROL-001` on their
+boards all day, both had it filed under injections, and **neither thought to point it at a negative
+until the other one did.** Neither of us was short of the rule. That is 1.19's unread prediction
+again, and 1.17's stale citation, and 1.20's count showing rereading catching one correction in
+twenty -- **the same hole in three costumes.** Every rule this document contains was already known to
+its author at the moment it was broken.
+
+**One last thing of theirs, against the temptation this document creates:** *the corrections that
+mattered were mostly not the clever ones.* The instrument they would put first is `load_control`'s
+stale refusal -- **nine lines**, which caught a two-render slide being described as one-render in the
+same sentence that explained why it could not be graded. Cheap, boring, and it fired on the first real
+input it saw.
+
 ---
 
 ## 2. There are THREE consolidations, and they are named apart on purpose
