@@ -3,7 +3,7 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 11981560-5612-4fe7-a136-6eae64636b64
-heartbeat_at: 2026-09-09 14:49Z
+heartbeat_at: 2026-09-09 15:51Z
 status: active
 focus: "ST0017: 52 live rows, 16 satisfied, 2 withdrawn, doctor 0. hv ruled four times today and TWICE AGAINST vc's scope -- AC-3.7 and issue 0020 both cut as yak-shaving, both vc's, both real findings about checks nobody needs. max_ease capped at 2400; the reel's inputs stay in Dropbox; 'utilz prez showreel' confirmed. WP-02 closed on measurement at 21 gradeable of 22. WP-03 with cc."
 claims: [ST0017]
@@ -57,6 +57,21 @@ Validation node. cc builds, vc contracts and verifies, hv adjudicates. Full boar
 
 ## Watch-outs
 
+**A ONE-APART DISAGREEMENT HIDES AN ERROR IN THE INSTRUMENT, AND TEN APART WOULD HAVE FORCED THE CHECK.** Reproducing
+cc's AC-3.10 figures gave five identical and two exactly one above theirs. The story that fitted -- their union was an
+arithmetic sum, mine measured workspace resolution, feature unification pulling one extra -- is coherent, on-topic, and
+was about to be sent as a correction about population discipline. **It was a blank line**: `cargo tree --workspace
+--prefix none` separates member trees, the filter kept it, `wc -l` counted it as a package. Caught only because the
+symmetric difference came back EMPTY while the counts differed, which is arithmetically impossible. **The near-miss was
+not caught by suspicion; it was caught by running the query that would have NAMED the difference.**
+
+**THE APPEND/REPLACE SHAPE IS WHAT PULLS YOU OFF THE VERB.** `intent issues edit --body` REPLACES, and wanting to
+APPEND is what sent vc to hand-edit canon JSON directly -- after using the verb correctly on the previous issue
+minutes earlier. Doctor caught it in one command (`residue: model-inconsistent`, the store behind the extract), and the
+repair was to read canon and re-issue the whole body THROUGH the verb rather than run a destructive `sync --to-store`.
+**When a verb only replaces, compose the new whole and pass it; do not reach around the verb because the shape of your
+edit is incremental.**
+
 **"FOUND SOMETHING REAL" AND "WORTH BUILDING" ARE DIFFERENT TESTS, AND I ONLY APPLIED THE FIRST.** hv cut two of mine as yak-shaving in one afternoon -- AC-3.7's brand-purity check and issue 0020's citation sweep -- and **both were true findings.** AC-3.7's red-proof held: HOIST section 4's proposed grep returns zero hits against a live brand literal, so the guard catches the instance it was written from rather than the class. A true finding about a check nobody needs. **Mine cost more than snorkeltoast's identical error because I was writing rows cc would have built against.** The tell is checkable: design.md gained nine sections in one day and **not one was requested.**
 
 **A ZERO HAS THREE KINDS AND THE THIRD READS EXACTLY LIKE THE FIRST TWO.** CENSUS -- nothing was there to count; sound, nothing to prove. DETECTOR -- nothing fired; sound **only if it could have fired**. TAUTOLOGY -- the branch was never reached; **worth nothing**, and it passes a per-detector history check because the detector HAS fired, in other runs. **Reachability is a property of the RUN.** Instances: FLOORS.md's `0 undecided` (unreachable once a magnitude is named); vc's `bare line NNN: none` (detector written in the command that ran after the fix -- red-proved retroactively, and it held).
@@ -108,6 +123,21 @@ Validation node. cc builds, vc contracts and verifies, hv adjudicates. Full boar
 **INTENT'S OWN VERBS, LEARNED THE EXPENSIVE WAY.** `intent st hydrate <ID>` adds a thread to `.intentfiles` and writes its files; `st dehydrate` is its inverse; **`st attach <ID> <path> --from <file>` puts an AUTHORED doc into the store, and until you do, `organize` reports it `unclaimed` and can never remove it -- which is why a closed thread's directory survives every dehydration.** `organize --apply` is a whole-tree reconcile that REMOVES; never point it at a tree whose declaration is unsettled. `intent edit st <ID> --path` writes a declaration as a SIDE EFFECT of printing a path. `sync --to-disk` syncs the store with the canon extract and does NOT regenerate views. **`intent/.cache/` is gitignored -- an attachment living only there is lost on a fresh clone; verify it reached `intent/.canon/` before deleting any file it claims to hold.**
 
 ## Decisions that still decide things
+
+- (2026-09-09) **hv: issue 0018's narrowing goes ahead -- the comment exemption becomes CSS-only.** The fix is
+  DELETION, in code cc is already editing for AC-3.13, so it is not a special trip. **Per-surface JS and HTML comment
+  grammars stay deferred to a population that does not exist** -- nine `theme.css` in the estate, no `theme.js` or
+  `layout.html` at all.
+- (2026-09-09) **hv: issue 0016 is a WP-05 rider, RECORD-ONLY.** `manifest.sha256` is already inside WP-05's scope.
+  **The test that separates it from 0019, and it is the one to carry:** 0019's information already existed --
+  `git show --stat` names every file in every commit -- so the guard would have been a second, worse copy. 0016's
+  information exists NOWHERE: the manifest carries no gate state, `utilz test` refuses from an install, and every
+  bats suite pins `UTILZ_HOME`, so nothing in the estate can tell a verified publish from a lucky one.
+- (2026-09-09) **hv: issue 0007 CLOSED ON PRIORITY, NOT ON THE MERITS, and the policy question is DEFERRED rather
+  than answered.** _Does 4.5:1 apply to `aria-hidden` decorative chrome_ has no answer on the record. Implementing a
+  fix would have settled it silently in code; **closing it as "vc recommended no" would settle it just as silently in
+  the other direction**, and hv ruled on neither. Reinstate condition is hv's and checkable: **someone asks, once
+  showreel is published and available in utilz.**
 
 - (2026-09-09) **hv: a dehydration made by side effect STANDS when the end state is what the declaration prescribes.** The repair is the mechanism, not the artefact. Canon intact means nothing was lost and one verb restores it.
 - (2026-09-09) **hv: amend a hand-written header, do not regenerate it.** `organize --default --force` would have produced a byte-identical thread list and discarded the provenance and the rule-divergence note, which are the only things in the file a tool cannot re-derive.
