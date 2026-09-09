@@ -1433,6 +1433,52 @@ about what they BUY. The decision to stamp in the port's own shell stands on the
 alternatives -- a second string site outside `render()`, and a shared template whose reference half
 would then have to fill it -- which is a weaker case than the one first offered and is the true one.
 
+### 4.6 The payload's field ORDER is not load-bearing; its field SET is, and it is graded by name
+
+**WRITTEN AT vc's ASK, BEFORE ANY EMITTER EXISTS AND WITHOUT WRITING ONE, BECAUSE IT IS THE HALF THAT
+SURVIVES EITHER `serde_json` RULING.** Under the crate it documents why the struct's declaration order
+is what it is; under a hand-roll it IS the spec. Neither ruling wastes it.
+
+**THE REFERENCE'S TOP LEVEL, VERBATIM AND IN ORDER** (`showreel:1002-1013`): `artist`, `session`,
+`producer`, `wordmark`, `outro`, `socials`, `bug`, `limits`, `loop`, `pace`, `slides`. Eleven keys.
+
+**AND TWO OF THEM CANNOT HAVE A FIXED ORDER AT ALL, WHICH IS WHAT SENT THIS BACK TO MEASUREMENT.**
+`artist` is `cfg.get("artist", {})` (`:973`) -- the raw YAML mapping -- and `session` is a
+comprehension over `cfg["session"].items()` (`:1000`). **Their key order is the USER'S, taken from
+whatever their `showreel.yaml` happened to say, and no Rust struct can reproduce that**: a struct
+fixes an order by definition. So "match the reference's order" was never fully achievable, and the
+question is whether it needed to be.
+
+**MEASURED: IT DOES NOT. NOTHING IN THIS PIPELINE IS ORDER-SENSITIVE.**
+
+- `signature()` (`showreel-harness`) reads **only** `payload["slides"]`, so the ten non-slide keys
+  are outside the structural identity entirely.
+- `compare_structure` iterates **`sorted(set(a) | set(b))`** and compares `a.get(k) != b.get(k)`.
+  **It sorts the keys before comparing them**, which is order-independence written into the
+  instrument rather than merely true of it.
+- The player reads `REEL.artist.name` and its siblings **by name**. JSON object order is not
+  semantic to a browser.
+
+**WHAT IS GRADED, PRECISELY, IS THE KEY SET PER SLIDE.** A key present on one side and absent on the
+other reports as `slide {i}: {k}: reference <value>, new None`, **naming the slide index and the
+key**. So the spec this section fixes is a SET and a spelling, not a sequence.
+
+**AND ONE TRAP THAT FOLLOWS DIRECTLY, WHICH THIS PORT IS SET UP TO WALK INTO.** The reference
+MUTATES each slide dict and then REMOVES two keys: `s.pop("path", None)` and `s.pop("asset", None)`
+(`:993-994`), after `s.update(src=..., w=..., h=..., name=...)`. **`Slide` in this port carries
+`path` as a live field**, so emitting the struct as it stands would put `path` in the artifact --
+and `compare_structure` would report it against every image slide. `path` and `asset` are build
+INPUTS, not payload; `src`, `w`, `h` and `name` are what replaces them.
+
+**AND THIS CORRECTS THE CASE cc PUT TO hv FOR `serde_json`, WHICH IS WHY IT IS RECORDED RATHER THAN
+SILENTLY IMPROVED.** That case argued a hand-rolled emitter would keep *"the reference's field order
+in a second place, by hand -- a subset duplicate of exactly the kind that hid in the pace table"*.
+**The ORDER is not the risk and never was; the SET is.** The pace-table analogy was sound and its
+label was wrong: that defect was two of five fields present and three missing, which is a SET defect.
+**The argument for the crate survives in a corrected and slightly weaker form** -- what a second home
+loses is a FIELD, not a sequence -- and hv should have the corrected version before ruling, not the
+one that was put to them.
+
 ---
 
 ## 5. Fixed in passage, or inherited -- decided now, not during

@@ -87,3 +87,39 @@ I nearly reported this as +4 from reading the crate's own tree. **The number tha
 **Nothing is blocked while this waits** except the payload itself: delivery re-encode has naming, revisions, pruning and `report_unused` in it, none of which need JSON. Say the word either way and I will name your ruling in the commit.
 
 (C) hello@matthewsinclair.com
+
+## (2026-09-09 20:42Z) Re: 2026-09-09 19:15Z One of my two reasons for serde_json is weaker than I told you. Recommendation unchanged.
+
+**No new decision. You should rule on the corrected case rather than the one I put to you, and this is the correction.**
+
+### What I told you, and what is actually true
+
+My second reason for the crate was that a hand-rolled emitter keeps **"the reference's field order in a second place, by hand -- a subset duplicate of exactly the kind that hid in the pace table."**
+
+**Measured since, rather than reasoned: THE FIELD ORDER IS NOT LOAD-BEARING ANYWHERE IN THIS PIPELINE.**
+
+- The harness's `compare_structure` iterates **`sorted(set(a) | set(b))`** and compares by key. **It sorts before comparing** -- order-independence written into the instrument, not merely true of it.
+- `signature()` reads **only** `payload["slides"]`, so ten of the eleven top-level keys are outside the structural identity entirely.
+- The player reads `REEL.artist.name` and its siblings **by name**. Object order is not semantic to a browser.
+
+**And two of the eleven keys could never have matched anyway.** `artist` and `session` are passed through from the user's YAML, so their key order is whatever their file happened to say. **A Rust struct fixes an order by definition**, so "match the reference's order" was not fully achievable and I had not checked whether it needed to be.
+
+### The argument survives, corrected, and it is weaker
+
+**What a second home loses is a FIELD, not a sequence.** That IS graded, and precisely: a key on one side and not the other reports as `slide {i}: {k}: reference <value>, new None`, naming the slide and the key.
+
+**The pace-table analogy was sound and my label was wrong** -- that defect was two of five fields present and three missing, which is a SET defect, so I cited the right instance under the wrong name.
+
+### What is untouched, and it was always the stronger half
+
+**JSON escaping over arbitrary YAML text.** Artist names, session copy, social handles and outro rows go into the payload as authored -- quotes, backslashes, newlines, and the `POP^UP^ART` and `@45h836782` kind of thing. An escaping bug ships an artifact that fails to parse in a browser, or worse, one that parses differently. That is where the risk actually sits and nothing about it has changed.
+
+### So: recommendation UNCHANGED, cost unchanged
+
+**Take `serde_json`. Net 2 packages, 79 to 81.** I would give you the same recommendation on the corrected case; I am telling you because the case is not the one you were handed.
+
+**And I have not built the emitter.** vc's sequencing call is that building the thing under decision pre-empts the decision -- a built emitter biases the ruling toward keeping it, and you should decide on the merits rather than against a sunk afternoon. I agree, and it is the same principle that made me decline to read "rock on as needed" as the named sign-off.
+
+**Nothing is idle while this waits.** Two JSON-free rows landed since I wrote to you: AC-3.2's segment-altitude drop report, and the producer stamp the harness reads that neither implementation was writing. The full reasoning is in design.md 4.5 and 4.6.
+
+(C) hello@matthewsinclair.com
