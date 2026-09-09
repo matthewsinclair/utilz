@@ -5,7 +5,7 @@ role: control
 session_id: a30f9092-03ed-44ba-a659-b37813af12c7
 heartbeat_at: 2026-09-09 14:50Z
 status: active
-focus: "ST0017 WP-03, booted after compact. Config, segments, durations and the envelope are built, red-proved and runnable via `showreel check`. PICKUP MEASURED A FOURTH AC-1.16 INSTANCE AND IT IS THE SILENT ONE -- the shim's freshness check does not watch `crates/`. Next: issue 0018 + that, then the build path. Holding for context from vc."
+focus: "ST0017. 0018 CLOSED and WP-05's dispatch LANDED -- `utilz prez showreel check <45h dir>` works end to end, both forms, exit 0. Next is the build path: 637 lines of reference across 22 functions, and hv has closed the Python fallback so it is the only route. Contract 32/51."
 claims: [ST0017]
 ---
 
@@ -17,7 +17,9 @@ claims: [ST0017]
 
 - **WP-01 done.** One theme resolver + base64 + `Failure` in `crates/artifact/`, linked by prez. `crate/Cargo.toml` is **both the workspace root and prez's package** -- `src/`, `themes/`, `assets/` must stay exact siblings, and `[profile.*]` is honoured only at a workspace root.
 - **WP-03 in flight, and the refusal half is RUNNABLE.** `showreel check <dir>` validates a real reel and fires seven refusal classes. `crates/showreel/` carries the approved budget exactly; **prez is untouched at 4,384,896 bytes and 13 third-party packages.**
-- **NEXT: issue 0018** (high, vc's find, mine to fix under AC-3.13's ruling -- the comment exemption becomes CSS-only). **Then the build path**: payload, template, data-URI, delivery re-encode.
+- **ISSUE 0018 CLOSED** (`538e7fe`): the comment exemption is CSS-only, `Grammar::Css | Grammar::Verbatim`. vc verified at the artifact, 4 arms, 4 of 4. **AC-3.13 and AC-3.5 both SATISFIED.**
+- **WP-05'S DISPATCH LANDED** (`b8dc9f1`): `prez showreel <...>` execs the sibling, everything else execs prez's. **`utilz prez showreel check <45h dir>` exit 0, both invocation forms.** AC-5.2 satisfied in the same commit; **AC-5.1 is NOT -- it names `build`.**
+- **NEXT: the build path.** 637 lines of Python across 22 functions, `collect_segment` alone 147. Theme resolution, C1 admission, C2 normalisation, data-URI, template, delivery re-encode. **hv killed the Python fallback -- "Python is a backwards step" -- so this is the only route to the bar.**
 - **PICKUP MEASURED A FOURTH INSTANCE OF AC-1.16'S CLASS, AND IT IS THE SILENT ONE.** `prez_is_stale`'s `find` walks `src`, `themes`, `assets`, the manifest and the lockfile and **NOT `crates/`** -- so a change to the shared crate prez LINKS leaves the shim reporting fresh and exec'ing the old binary at exit 0. **Measured with a proved control**: `theme.rs` was 30s OLDER than the binary, the touch made it newer, and the shim's own `find` verbatim still returned empty. **The other three fail loudly-ish -- a lint escapes, a binary is missing. This one hands you a stale binary and says nothing**, so 0018's fix would not reach anyone running `prez`. **It is the instrument that would misreport the very change I am about to make**, which is why it goes in 0018's commit and not after it. Issue not yet filed.
 
 ## TODO
@@ -40,6 +42,15 @@ claims: [ST0017]
 - **Payload-level grading works for FULL-BLEED slides only.** A contained slide puts unchanged background in frame, dropping the on-screen figure below the payload figure by roughly sqrt(covered fraction). **Payload for the pixel loop, browser for fit and layout.**
 - **My Rust red-proof will NOT match theirs, by construction.** Theirs injects a darkening AND a q86 re-encode (0.030-0.825, 2.241 on the one PNG); mine without the re-encode lands near 1.000000. **Instrument difference, not compiler difference.**
 - **Two caveats, mine to carry, and the second was WRONG.** The reconstruction half stands and it reaches `compare` and `redproof`, because `partition()` takes the reel dir and derives the exemption list from `plan()`. **The table is NOT superseded by my next build.** `cmd_control` takes ONE positional -- the ARTIFACT -- plus `--workdir` and `--repeats`, and reads no reel, no config and no `plan()`: verified in the subparser and in the function body, by me, after snorkeltoast raised it and vc verified it. A new build is a DIFFERENT artifact with its own sha needing its own control run. **008 stays true and stops being APPLICABLE, which is not the same as stopping being a result** -- and the wrong version would have had me discard a valid measurement. **Do not rebuild the reel without telling snorkeltoast first.**
+
+## What the build path must carry
+
+**637 lines of Python across 22 functions.** `collect_segment` 147, `cmd_build` 76, `session_stamp` 44, theme resolution 105 (`resolve_theme` + `load_theme` + `favicon_link` + `font_face`), the rest 265. The 45h reel is 6 jpg / 5 svg / 3 png and **contains no PDF**, so `rasterise_pdf` is off this reel's critical path. QR GENERATION is WP-04 -- build needs `load_qr` (12 lines), not `qr_svg` (33).
+
+- **FONTS NEED NO CONVERTER, AND THAT DELETED A DEPENDENCY I WOULD HAVE HAD TO ESCALATE.** snorkeltoast pre-converted the five TTFs to WOFF2 and committed them beside the theme (`95317bc`); `theme.yaml`'s `fonts:` entries point at the `.woff2` and the `.ttf` stay only as provenance. **The port reads the named file, base64s it, emits the `@font-face`. A theme shipping a `.ttf` is REFUSED BY NAME with the conversion command in the remedy** -- never converted, never silently embedded. My budget has no woff2 or brotli crate and hv signed it off item by item.
+- **DO NOT REPRODUCE `font_face`'s SHAPE.** It wrapped the conversion in `except Exception:` and on failure embedded the RAW TTF -- different format, roughly double the bytes, and still said "wrote". **The defect is not the exception handling; it is emitting something DIFFERENT and reporting success.** `IN-AG-NO-SILENT-001`. snorkeltoast removed it by deletion rather than repair.
+- **BYTE PARITY WITH THE PYTHON OUTPUT WAS NEVER AVAILABLE, and it costs this port nothing -- checked, not assumed.** The old TTF-to-WOFF2 conversion was non-deterministic across processes (one font gave six different sizes in an afternoon; `PYTHONHASHSEED` does not fix it). **No WP-03 or WP-05 row assumes byte-identity** -- the seven byte/sha mentions are the comrak manifest line, prez's binary size, package counts, and AC-2.18's sha-as-a-name. The harness compares CAPTURES, which is why the approach survives.
+- **TELL snorkeltoast BEFORE POINTING A BUILD AT 45h.** The live config plans **23** slides against 008's **22**, so their `compare` refuses and they re-derive the floors against whatever I build. Currently moot in a useful way: there is no build path to do it by accident.
 
 ## Watch-outs
 
