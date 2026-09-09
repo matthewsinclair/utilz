@@ -91,6 +91,27 @@ pub struct Theme {
   pub name: String,
   /// Where it came from. See `Registry::provenance`.
   pub origin: Origin,
+  /// The directory this theme's own assets resolve against, or `None` for a
+  /// built-in.
+  ///
+  /// **`None` IS A CONSTRAINT, NOT A MISSING VALUE.** A built-in is
+  /// `include_str!` output with no file behind it, so there is nowhere for a
+  /// sidecar manifest, a font or an icon to live. The `Option` makes that a
+  /// COMPILE-TIME fact for every consumer instead of a runtime surprise; a
+  /// `PathBuf` with an empty-string sentinel would let a built-in claim a
+  /// directory it does not have.
+  ///
+  /// **IT IS NOT `Origin`'s `dir` AND THE DIFFERENCE IS THE WHOLE REASON THIS
+  /// FIELD EXISTS.** `Origin::SearchPath` records the directory that was
+  /// SEARCHED -- one entry off the theme path -- and a theme found in it lives
+  /// one level down, or, for the `<name>.css` form, in that directory itself.
+  /// Only the resolver knows which, so only the resolver can record it.
+  ///
+  /// **prez READS THIS NOWHERE**, stated rather than left to be discovered: it
+  /// is showreel that has a `theme.yaml` naming `favicon:` and `fonts[].file`
+  /// as theme-relative paths. ST0017 design.md 1.26 carries the cost to prez
+  /// and the alternative that was refused.
+  pub dir: Option<PathBuf>,
 }
 
 /// HOW A THEME WAS ADDRESSED: by NAME, or by PATH.
@@ -216,6 +237,7 @@ impl Registry {
       layout: None,
       name: format!("the built-in '{id}'"),
       origin: Origin::BuiltIn,
+      dir: None,
     })
   }
 
@@ -423,9 +445,35 @@ fn optional(path: &Path, remedy: &str) -> Result<Option<String>, Failure> {
   if path.is_file() { read(path, remedy).map(Some) } else { Ok(None) }
 }
 
+/// The directory a lone `.css` theme's sibling assets resolve against.
+///
+/// **THE REFERENCE'S ANSWER, PORTED RATHER THAN INVENTED.** `resolve_theme`
+/// returns `(d.parent, d)` for a file, so two `.css` files sitting in one
+/// directory SHARE that directory's `theme.yaml`. That is a consequence worth
+/// stating rather than a bug: a theme wanting its own manifest is a theme
+/// wanting its own directory, which is the other form.
+///
+/// `parent()` of a bare filename is the EMPTY path. It joins correctly against
+/// the cwd and renders as NOTHING in a diagnostic, so it is normalised to `.`
+/// -- a message naming the directory should name something a reader can type.
+fn asset_dir(path: &Path) -> Option<PathBuf> {
+  match path.parent() {
+    None => None,
+    Some(p) if p.as_os_str().is_empty() => Some(PathBuf::from(".")),
+    Some(p) => Some(p.to_path_buf()),
+  }
+}
+
 fn from_file(path: &Path, remedy: &str) -> Result<Theme, Failure> {
   let css = read(path, remedy)?;
-  Ok(Theme { css, js: None, layout: None, name: path.display().to_string(), origin: Origin::Path })
+  Ok(Theme {
+    css,
+    js: None,
+    layout: None,
+    name: path.display().to_string(),
+    origin: Origin::Path,
+    dir: asset_dir(path),
+  })
 }
 
 fn from_directory(dir: &Path, remedy: &str) -> Result<Theme, Failure> {
@@ -442,6 +490,7 @@ fn from_directory(dir: &Path, remedy: &str) -> Result<Theme, Failure> {
     layout: optional(&dir.join("layout.html"), remedy)?,
     name: dir.display().to_string(),
     origin: Origin::Path,
+    dir: Some(dir.to_path_buf()),
   })
 }
 
@@ -785,6 +834,77 @@ mod tests {
   fn a_built_in_announces_nothing() {
     let t = FAKE.load(Some(Spec::Name("plain")), &[]).unwrap();
     assert!(FAKE.provenance(&t).is_none(), "silence is the report for a built-in");
+  }
+
+  /// **EVERY BRANCH THAT PRODUCES A THEME DECIDES A DIRECTORY, AND THE
+  /// POPULATION IS THE CLAIM.** Five cases, enumerated: a built-in, a PATH to a
+  /// directory, a PATH to a lone `.css`, and a NAME on the search path in each
+  /// of its two forms. One case per branch of `load`, so a branch added without
+  /// a decision here fails this test rather than shipping a `None` nobody chose.
+  ///
+  /// **THE TWO SEARCH-PATH CASES ARE WHY THE FIELD EXISTS AT ALL, AND THEY ARE
+  /// THE PAIR THAT PROVES IT.** They agree on `origin` -- same variant, same
+  /// searched directory -- and DISAGREE on where the theme's assets live: one
+  /// level down for `<name>/theme.css`, the searched directory itself for
+  /// `<name>.css`. A consumer resolving `theme.yaml` against `Origin`'s `dir`
+  /// would read the wrong file for one and the right one for the other, which
+  /// is the shape that passes a test written against either case alone.
+  #[test]
+  fn every_branch_that_produces_a_theme_decides_where_its_assets_live() {
+    let root = dir("assets");
+
+    // A built-in has no file behind it. `None` is a decision, not an oversight.
+    let built_in = FAKE.load(Some(Spec::Name("plain")), &[]).unwrap();
+    assert!(built_in.dir.is_none(), "a built-in has nowhere to keep an asset");
+
+    // A directory given by PATH: the directory itself.
+    let as_dir = root.join("bydir");
+    std::fs::create_dir_all(&as_dir).unwrap();
+    std::fs::write(as_dir.join("theme.css"), "body{}\n").unwrap();
+    let t = FAKE.load(Some(Spec::File(as_dir.clone())), &[]).unwrap();
+    assert_eq!(t.dir.as_deref(), Some(as_dir.as_path()), "a directory theme keeps its own");
+
+    // A lone `.css` given by PATH: its PARENT. The reference's answer, ported.
+    let loose = root.join("loose.css");
+    std::fs::write(&loose, "body{}\n").unwrap();
+    let t = FAKE.load(Some(Spec::File(loose)), &[]).unwrap();
+    assert_eq!(t.dir.as_deref(), Some(root.as_path()), "a file's assets sit beside it");
+
+    // A NAME resolving as `<searched>/<name>/theme.css`: one level DOWN.
+    let named = root.join("housestyle");
+    std::fs::create_dir_all(&named).unwrap();
+    std::fs::write(named.join("theme.css"), "body{}\n").unwrap();
+    let down = FAKE.load(Some(Spec::Name("housestyle")), std::slice::from_ref(&root)).unwrap();
+    assert_eq!(down.dir.as_deref(), Some(named.as_path()), "the theme's own directory");
+
+    // A NAME resolving as `<searched>/<name>.css`: the searched directory ITSELF.
+    std::fs::write(root.join("solo.css"), "body{}\n").unwrap();
+    let flat = FAKE.load(Some(Spec::Name("solo")), std::slice::from_ref(&root)).unwrap();
+    assert_eq!(flat.dir.as_deref(), Some(root.as_path()), "the `<name>.css` form has no subdir");
+
+    // THE DISCRIMINATING PAIR, asserted as a pair. Same origin dir, different
+    // asset dir -- so `Origin` cannot answer this question for both.
+    for (label, t) in [("<name>/theme.css", &down), ("<name>.css", &flat)] {
+      match &t.origin {
+        Origin::SearchPath { dir, .. } => {
+          assert_eq!(dir, &root, "{label}: origin keeps the SEARCHED directory");
+        }
+        other => panic!("{label}: expected a search-path origin, got {other:?}"),
+      }
+    }
+    assert_ne!(down.dir, flat.dir, "the two forms must not resolve assets to one place");
+  }
+
+  /// A bare filename's parent is the EMPTY path rather than `None`, and an empty
+  /// path renders as NOTHING in a diagnostic while still joining correctly.
+  /// Reachable from a command line -- `--theme-file theme.css` run in the
+  /// directory holding it -- so this is a real case, not defensive tidiness.
+  #[test]
+  fn a_bare_filename_resolves_its_assets_against_the_current_directory() {
+    assert_eq!(asset_dir(Path::new("theme.css")), Some(PathBuf::from(".")));
+    assert_eq!(asset_dir(Path::new("t/theme.css")), Some(PathBuf::from("t")));
+    // The filesystem root has no parent, and `None` is the honest answer there.
+    assert_eq!(asset_dir(Path::new("/")), None);
   }
 
   // ---- The offline guarantee, and the property that makes its report true ---

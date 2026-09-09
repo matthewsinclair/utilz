@@ -317,6 +317,7 @@ mod tests {
       layout: None,
       name: format!("{dir}/{name}"),
       origin: Origin::SearchPath { dir: PathBuf::from(dir), name: name.to_string(), source },
+      dir: None,
     }
   }
 

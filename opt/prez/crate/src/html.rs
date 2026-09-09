@@ -746,6 +746,7 @@ mod tests {
       // A hand-made fixture is not something the resolver produced. BuiltIn is
       // the origin that announces nothing, which is what these tests want.
       origin: crate::theme::Origin::BuiltIn,
+      dir: None,
     };
     let slides = [slide("<p>x</p>")];
     let out = stylesheet(&Document {
@@ -772,6 +773,7 @@ mod tests {
       // A hand-made fixture is not something the resolver produced. BuiltIn is
       // the origin that announces nothing, which is what these tests want.
       origin: crate::theme::Origin::BuiltIn,
+      dir: None,
     };
     let slides = [slide("<p>x</p>")];
     let out = stylesheet(&Document {
@@ -811,6 +813,7 @@ mod tests {
       layout: Some("<html><head>{{style}}</head><body>{{slides}}{{script}}</body></html>".into()),
       name: "t".into(),
       origin: crate::theme::Origin::BuiltIn,
+      dir: None,
     };
     let slides = [slide("<p>UNIQUE-DECK-MARKER</p>")];
     let out = assemble(&Document {
@@ -839,6 +842,7 @@ mod tests {
       layout: Some("<html>{{author}}{{slides}}{{script}}{{style}}</html>".into()),
       name: "t".into(),
       origin: crate::theme::Origin::BuiltIn,
+      dir: None,
     };
     let slides = [slide("<p>x</p>")];
     let out = assemble(&Document {
@@ -897,6 +901,7 @@ mod tests {
     let theme = Theme {
       css: "body{}".into(), js: None, layout: None, name: "t".into(),
       origin: crate::theme::Origin::BuiltIn,
+      dir: None,
     };
     let slides = [slide("<p>x</p>")];
     let out = assemble(&Document {
@@ -932,6 +937,7 @@ mod tests {
       layout: Some("<html><head>{{style}}</head><body>{{slides}}{{script}}</body></html>".into()),
       name: "t".into(),
       origin: crate::theme::Origin::BuiltIn,
+      dir: None,
     };
     let slides = [slide("<p>x</p>")];
     let out = assemble(&Document {
@@ -977,6 +983,7 @@ mod tests {
       // A hand-made fixture is not something the resolver produced. BuiltIn is
       // the origin that announces nothing, which is what these tests want.
       origin: crate::theme::Origin::BuiltIn,
+      dir: None,
     };
     let slides = [slide("<p>x</p>")];
     let out = assemble(&Document {
