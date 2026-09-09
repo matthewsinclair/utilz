@@ -179,6 +179,22 @@
       }
     },
     {
+      "id": "AC-2.11",
+      "text": "The capture window has TWO real bounds and the contract states whether they can both be met. Lower: a budget before the page has SETTLED photographs a frame still arriving -- measured 2026-09-09, moving the lower bound from a fixed 4000ms to ease+200 took repeat noise from 0.000000 on 21 of 22 slides to non-zero on ten, up to 10.2, with no change to the reel. Upper: a budget past the dwell photographs the NEXT slide. If settling exceeds min_dwell then a slide at the floor has no valid window at all, and there may be legal reels no screenshot harness can grade. That is a bigger question than max_ease vs min_dwell in AC-3.11 and it is hv's, because the remedy is either the tool's floors or a declared ungradeable class.",
+      "kind": "non-test",
+      "state": {
+        "is": "unsatisfied"
+      }
+    },
+    {
+      "id": "AC-2.12",
+      "text": "Settling time is a property of the ENVIRONMENT as much as the content, so a budget derived on one machine is a lucky constant somewhere else. The harness therefore does not fix a capture time: it captures until two successive frames agree, bounded, and treats hitting the bound as the MOVING verdict rather than as an error. This makes the budget an outcome rather than a parameter and collapses the stability gate into the same mechanism. Where a fixed number is used instead, it is stated with the machine and the measurement it came from.",
+      "kind": "non-test",
+      "state": {
+        "is": "unsatisfied"
+      }
+    },
+    {
       "id": "AC-2.2",
       "text": "Slide count, order and ids are asserted exactly before any pixel comparison. A structural mismatch fails without reporting a pixel number at all.",
       "kind": "non-test",
