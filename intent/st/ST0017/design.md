@@ -177,6 +177,55 @@ One thing deliberately NOT filed: `prez_is_stale` suppresses `find`'s errors, an
 comment (`opt/prez/prez:50-54`) records that as a considered trade for install mode rather than an
 oversight. The no-move layout does not disturb it.
 
+
+### 1.5 WP-01 verification: two things the report claimed that do not hold
+
+cc built WP-01 and reported it green. Verified rather than accepted; the build stands and two
+claims in the report do not.
+
+**Confirmed as reported:** the workspace stanza is appended with no reordering, `[dependencies]`
+is still `comrak` alone, `crates/artifact/` carries `Cargo.toml`/`lib.rs`/`failure.rs`/`base64.rs`/`theme.rs`,
+and artifact's `strip_comments` is **byte-identical to prez's** -- so WP-01 is a pure move on the
+point that matters most for S3.
+
+**Confirmed and important: R1's behaviour is unguarded in the tool R1 says to take it FROM.**
+`an_external_url_..._naming_the_offender` asserts "line 2" against a fixture with **no comment in
+it**, and `a_url_inside_a_comment_...` only asserts that a comment does not fail a build. Neither
+constrains newline preservation, so a tidier could swap `strip_comments` for a comment-deleting
+regex today and all 135 tests would pass. cc wrote that control into artifact and red-proved it:
+the naive strip fails exactly one test, the new one, and the other eleven pass. **R1 is now
+enforced rather than written down.**
+
+**FAILS -- the positional default has no control, and the test named as proving it does not.**
+cc made artifact's `load(None, ..)` take the FIRST built-in rather than a hardcoded `"simple"`,
+on the sound Highlander ground that a name would be a second place the default is written down.
+The reasoning is right and the change is kept. **The stated proof is not: prez's
+`no_theme_given_uses_the_embedded_default` asserts `t.css.contains("--gp-bg")`, and measured
+across the roster, ALL SEVEN built-ins declare `--gp-bg`.** The test passes with any of them as
+default.
+
+So after the swap, reordering `BUILT_IN` silently changes prez's default theme and every test
+stays green. Behaviour is preserved TODAY only because `simple` happens to be first. **The
+distinction cc's reasoning missed: a hardcoded default in the CODE is a second home; a hardcoded
+expectation in a TEST is a control.** Highlander governs implementations, not assertions. **New
+row S8** requires prez to pin which theme `load(None, ..)` resolves to, by a property unique to
+`simple` rather than one the whole roster shares.
+
+**FAILS -- a test name that overstates its assertion.**
+`an_unterminated_comment_does_not_swallow_a_reference_silently` asserts only that text BEFORE the
+comment survives. The implementation **does** swallow the reference, and the test passes anyway.
+A later reader sees a green test with that name and concludes the hole is closed. Rename it to
+what it checks, or assert the truncation explicitly so the behaviour is documented as known.
+
+**And probing that flag found issue 0015.** `strip_comments` has no notion of string literals, so
+`content: "/*"` reads as an unterminated comment and the scanner discards the rest of the file.
+Measured on the shipped binary with both controls: plain external refuses (rc=2), clean CSS builds
+(rc=0), and `body{content:"/*"}` followed by `@import "https://cdn/x.css";` **builds and ships the
+reference into the artifact**. Unlike the plain unterminated case, a browser parses that string
+correctly, so the artifact fetches from the network. **Second bypass of the offline guarantee,
+distinct from 0014 in root cause and in fix**, filed separately so R2's landing cannot be read as
+closing it.
+
 ---
 
 ## 2. There are THREE consolidations, and they are named apart on purpose
@@ -389,6 +438,7 @@ gate.
 | S2 | WP-01 adds no third-party cost to prez: the `comrak` line byte-identical, the lockfile's third-party package count unchanged, and the only permitted addition the first-party std-only `artifact` path dependency. **Corrected from byte-identity of the block, which S1 makes impossible -- see 1.4.** Conditional on hv's AC02 sign-off |
 | S3 | The existing prez suite passes after extraction with no edit to any test file |
 | S4 | prez's release binary size after WP-01 is stated as a number against the budget, not as a distance |
+| S8 | prez pins which theme `load(None, ..)` resolves to, by a property unique to `simple` rather than one the whole roster shares. **`--gp-bg` is carried by all seven built-ins and does not discriminate** |
 | S7 | `crate/` is both the workspace root and prez's package: every `include_str!` path, the shim and `prez.bats`'s fixture unchanged, and **`[profile.release]` proven in effect for the measured binary** rather than assumed from the manifest |
 | S5 | **SATISFIED 2026-09-09.** prez's and showreel's theme behaviours diffed by two independent enumerations: four behaviours, one clean match, result in 1.1 |
 | S6 | The shared resolver implements R1-R4: newline-preserving comment stripping, the ruled needle set, `theme.yaml` scanned, and prez's four provenance messages. **Closes issue 0014** |
