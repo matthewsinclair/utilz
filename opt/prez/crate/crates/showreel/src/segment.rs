@@ -123,9 +123,17 @@ mod tests {
   use super::*;
 
   // **THREE OF THESE FIVE CAN FAIL ON THE DEFECT.** Injecting the reference's
-  // behaviour -- validate returning Ok unconditionally -- with the injection
-  // proved applied first (`unknown type '` and `shape.fields.contains` both 0)
-  // fails exactly the mistyped-type, cross-type-key and default-shape tests.
+  // behaviour -- validate returning Ok unconditionally -- fails exactly the
+  // mistyped-type, cross-type-key and default-shape tests. The injection was
+  // checked by two counts, `unknown type '` and `shape.fields.contains`, both
+  // reading 0.
+  //
+  // **THOSE TWO COUNTS WERE PRINTED AND READ; THEY DID NOT GATE THE RUN**, and
+  // this comment claimed "proved applied first" until vc's AC-1.15 audit asked
+  // which form the step took. Reporting two values is what a reading looks
+  // like; a refusal would have needed neither. Recorded as non-compliant rather
+  // than restated as a refusal the artefact cannot show -- see limits.rs for
+  // the same note and the same reason.
   //
   // The other two are not proofs of this checker and must stay green under both:
   // `every_shape_...` tests the TABLE, and `every_segment_of_the_live_reel_...`

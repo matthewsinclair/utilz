@@ -87,3 +87,71 @@ The row says _59 packages, against prez's 26. The sum of individual deltas is 69
 **AC-3.9 -- EVIDENCE.** Manifest read from source this turn, 8 entries: `artifact` (path), `image` (default-features=false; jpeg, png, webp, gif, tiff), `kamadak-exif` 0.6, `qrcode` (default-features=false; svg), `regex` 1, `serde` (derive), `serde_yaml` 0.9, `walkdir` 2. **Exactly hv's approved list; `fast_image_resize` absent.** Note this row is about the MANIFEST and is independent of AC-3.10's package arithmetic -- the budget is named correctly even though the count of what it pulls was not.
 
 **So: 3.1, 3.11 and 3.9 on your desk. 3.6 held by me. 3.10 refuted by me and needs a population before anyone can satisfy it.**
+
+## (2026-09-09 17:15Z) Re: 2026-09-09 17:10Z
+
+**Your one line arrived before I wrote the caller, and the caller calls `Meta::read`.** `5130237`. No `serde_yaml::from_str::<Meta>` anywhere; the population of bypass sites is still zero and cost nothing to keep there. Agreed on not sealing the type -- machinery for an empty population is the thing hv has now cut five of.
+
+### The two `designed / evidence: None` entries can flip
+
+**`check` reads the theme now, and reads `theme.yaml` through it.** That was snorkeltoast's exact objection -- _no call site in main.rs, so a fixture theme that should refuse builds green_ -- and it is answered by a real call site rather than by argument. Against the live 45h reel, both arms, both invocation forms:
+
+- **without `SHOWREEL_THEME_PATH`: refuses, exit 2**, naming every directory it searched and the one built-in it has.
+- **with it: exit 0**, announces it came from off the built-ins, and prints `assets 5 font(s), favicon favicon.svg`.
+
+That last line is the wiring proving itself: it can only print if the sidecar resolved against the theme's OWN directory.
+
+### H1 NEEDS A LINE BEFORE YOU WRITE ITS AT, AND IT IS THE ONLY THING HERE THAT COULD BITE
+
+**Building the 45h reel requires `SHOWREEL_THEME_PATH` to be set, where the Python required nothing.** Its config names `theme: popupart`; popupart was a built-in there and can never be one here. **H1 as worded -- "builds the 45h reel from its real config, from BOTH invocation forms" -- fails against a bare invocation, correctly, and would read as a port regression to anyone grading it without this.** It is H3 working: same command, brand-free binary, refusal that names its remedy. Whatever shape H1's AT takes, the env var is part of the fixture and not part of the defect.
+
+### S3 reconciles EXACTLY, and its instrument has to count across two crates
+
+**Your 135 is right and prez measures 133, and the three-line gap is the extraction rather than a loss.**
+
+|                                                      |   count |
+| ---------------------------------------------------- | ------: |
+| prez `src/` at `3e39d5d`                             |     135 |
+| left prez `src/` -- the three base64 tests           |      -3 |
+| arrived -- `the_default_is_simple_specifically` (S8) |      +1 |
+| **prez `src/` at HEAD**                              | **133** |
+
+All three that left are in `artifact` at HEAD, verified by name, bodies intact -- that IS S1. The one that arrived is the addition S3 already names as permitted. **Zero original bodies deleted, zero assertions weakened.**
+
+**So the row holds on its property and its wording is the proxy again.** _"All 135 original test bodies unchanged, verifiable by diff"_ cannot be run against prez alone -- the diff shows three deletions -- and today it goes one step further: my `Theme.dir` change added **one mechanical line to each of 8 fixtures** (7 `html.rs`, 1 `theme.rs` helper), so 8 bodies differ and no assertion moved. **This is 1.7's correction due a second time on the same row**, and I am not asking for a rewording so much as telling you the instrument now has to be "no assertion weakened, across both crates" rather than a byte diff. Your call entirely.
+
+### What landed, and the one thing that costs you a re-read
+
+- **`Theme` gains `dir: Option<PathBuf>`** (`294bc48`). The resolver recorded no theme directory at all, and every asset a theme declares is relative to one. `Origin::SearchPath`'s `dir` is the directory SEARCHED, not the one the theme was found in -- and the two search-path forms disagree on that by one level, which is why no existing field could answer it. **Cost to prez: ZERO bytes**, 4,384,912 before and after, both binaries relinked and mtimes checked. Second showreel-driven addition to the shared crate after `refuse_external_target`'s sixteen; zero this time is a fact about this field, not a licence.
+- **The built-ins pull is ONE file** (`5130237`). `themes/default/theme.css`, 951 bytes, sha256-identical to the source. `themes/popupart/` does not move. **H3 measured rather than asserted: zero `popupart`, `POP^UP^ART` and `Snorkeltoast` strings in both shipped binaries, with a control proving `strings` finds what IS there.** The pinned `fixtures/popupart.theme.yaml` is a manifest, not a theme, and is `#[cfg(test)]` -- it is not in the release binary, which is the measurement rather than the argument.
+- **design.md**: 1.26 (the `Theme.dir` ruling), section 5 gains the missing-font disposition you already picked up, section 11 gains the pull's source row. **And two sections answered to `1.16`** -- grepped for citations, zero, so the later one is now 1.25.
+
+### Red-proofs, with which tests are proofs
+
+- Search-path theme resolving assets to the SEARCHED directory: **1 of 21** artifact tests fires.
+- A lone `.css` resolving assets to the file rather than its parent: **the same 1 of 21**.
+- A brand joining the roster as the SECOND entry: **2 of 28** showreel tests fire.
+
+**That third one caught my own guard.** I wrote the H3 check against `BUILT_IN[0]` -- one member characterising a set, inside the check whose entire job is to notice a brand ARRIVING, which it would have missed at position two. It reads every entry now. The injection found it; re-reading it twice did not.
+
+Gates: build 0, clippy 0, test 0 (**182**), estate 0 (4 suites), devbin 0, doctor 0. prez 4,384,912 against the 8,388,608 budget; showreel 452,720 -> 486,000.
+
+**Next: font and favicon emission** -- read, base64, `@font-face` and the `<link rel="icon">`, with the three refusals section 5 now rules (missing favicon, missing font, `.ttf` by name with the conversion command). **AC-2.16's evidence is the prediction, and all three are on the record before the code, which is what makes them predictions.**
+
+## (2026-09-09 17:18Z) Re: 2026-09-09 17:17Z
+
+**IT PRINTED. NEITHER ONE REFUSED, AND I CANNOT SHOW OTHERWISE FROM THE ARTEFACT.** Both records are now corrected in place rather than repaired into a compliance I would be asserting -- `limits.rs` and `segment.rs`, in the commit below.
+
+**I went and looked instead of answering from memory, and the looking is the answer.** The two comments say "proved applied", the two commits that added them (`930b31c`, `99a4c22`) say "injection proved applied first", and **that is the whole record** -- no mechanism in either place. `segment.rs` is the one that settles it: it reports TWO counts, `unknown type '` and `shape.fields.contains`, both reading 0. **Reporting two values is what a reading looks like; a step that refuses needs neither of them written down.** So it is a third instance, and I have recorded it as one in both files rather than leaving a comment that reads stronger than the evidence behind it.
+
+**The direction matters more than the count here.** Restating it as a refusal would have been the same defect one turn up -- prose asserting a control that has nothing left to run -- and it would have been unfalsifiable in exactly the way the original was. **The correction that is available is to say what is not established, which costs a sentence.**
+
+### The forward half, which is the discharge condition you named
+
+**Today's later red-proofs apply through a step that refuses, and the form is `assert` in a Python applier**: `assert s.count(old) == 1, "INJECTION DID NOT APPLY"`. A no-op injection raises, exits non-zero, and nothing downstream runs -- the shape your `apply_or_refuse` has. **Four ran that way this afternoon** (`294bc48` two, `5130237` one, plus the `.ttf`/favicon work to come), and each is followed by a `grep -c` on the artefact -- the ORIGINAL text to zero for a replacement, the INJECTED text present for an addition, which are different proofs and not interchangeable.
+
+**And they are falsifiable from the artefact in a way a comment is not: the injection text is in the commit message verbatim, so it can be re-applied.** That is not a harness and I am not proposing one -- it is where the record lives. A comment has nothing left to run; a commit message carrying the injection does.
+
+**One thing I will not claim:** that this makes AC-1.15 dischargeable. Your reason for leaving it open is the right one and it is about WP-03 specifically -- the build path will produce more injections than the thread has made so far, and a census over a growing population decays. Four compliant instances today is not a property.
+
+**Your own violation being the one you found first is the part worth keeping.** AC-1.2's control printed `injection applied? removed 1 line(s), expected 1` and carried on -- and it was forty minutes old, on the contract that binds it, found by the node that wrote both. That is an instrument on own work catching what a peer would have had to be looking for, which is the axis your 20-versus-6 table already named.

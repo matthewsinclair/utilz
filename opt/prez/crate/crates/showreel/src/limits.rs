@@ -99,10 +99,20 @@ mod tests {
   // **TWO OF THESE SEVEN CAN FAIL ON THE DEFECT; THE OTHER FIVE CANNOT, AND
   // SAYING SO IS THE POINT.** Measured by injecting the reference's own
   // implementation -- min_dwell and min_ease applied, max_ease never, no
-  // refusal -- with the injection proved applied before the result was read:
-  // exactly `max_ease_is_applied_by_the_compiler_and_not_only_by_the_player`
-  // and `an_ease_that_meets_or_exceeds_its_dwell_is_refused_by_name` went red,
-  // and the remaining five stayed green.
+  // refusal: exactly
+  // `max_ease_is_applied_by_the_compiler_and_not_only_by_the_player` and
+  // `an_ease_that_meets_or_exceeds_its_dwell_is_refused_by_name` went red, and
+  // the remaining five stayed green.
+  //
+  // **THE APPLYING STEP PRINTED AND WAS READ; IT DID NOT REFUSE, AND THIS
+  // COMMENT SAID OTHERWISE UNTIL vc AUDITED AC-1.15.** It read "with the
+  // injection proved applied before the result was read", which is a claim
+  // about an act with nothing left to run -- and neither this comment nor the
+  // commit that added it records the mechanism, so the stronger reading cannot
+  // be evidenced from the artefact. **It is recorded as non-compliant rather
+  // than repaired into a refusal I cannot show.** A red-proof that lives in a
+  // comment has no control available: PROSE DOES NOT FAIL, arriving at the one
+  // place this thread assumed it could not.
   //
   // The five are still worth having and are NOT proofs of this fix:
   // `the_two_floors_...` and `the_forty_five_h_reel_...` pin PARITY -- they must

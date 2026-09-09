@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: a30f9092-03ed-44ba-a659-b37813af12c7
-heartbeat_at: 2026-09-09 16:50Z
+heartbeat_at: 2026-09-09 17:18Z
 status: active
-focus: "ST0017. `utilz prez showreel check <45h dir>` RUNS -- dispatch landed, 0018 closed, R3 landed. Next is the built-ins pull and font emission, then admission, normalisation, collect_segment, data-URI, template. hv killed the Python fallback: the Rust build path is the only route to the bar."
+focus: "ST0017. THE BUILT-INS PULL LANDED -- one theme moves, `check` resolves it, and the 45h reel reads its theme.yaml through the new `Theme.dir`. Next is font + favicon emission with the three refusals section 5 now rules. hv killed the Python fallback: the Rust build path is the only route to the bar."
 claims: [ST0017]
 ---
 
@@ -16,8 +16,11 @@ claims: [ST0017]
 **ST0017 -- hoisting snorkeltoast's `showreel` into Utilz as a Rust pipeline under `prez showreel`.**
 
 - **THE COMMAND EXISTS AND RUNS.** `prez showreel check <dir>` and `utilz prez showreel check <dir>`, both exit 0 against the live 45h reel. The shim gained ONE branch (`b8dc9f1`); showreel's verbs, refusals and help are its own.
-- **WP-03: config, segments, durations, envelope and R3 built and red-proved.** 175 tests. **prez is at 4,384,912 bytes** against the 8,388,608 budget -- it moved 16 bytes for the first time when `artifact` gained `refuse_external_target`, and **a showreel-only addition to the shared crate costs prez something.** Watch the direction.
-- **NEXT, in order**: the built-ins pull (`themes/default/` out of snorkeltoast's tree -- **announce before touching their side**), font + favicon emission, admission (C1), normalisation (C2), `collect_segment` (147 lines, the big one), data-URI, template pull, delivery re-encode.
+- **WP-03: config, segments, durations, envelope, R3, the theme registry and the built-ins pull built and red-proved.** 182 tests. **prez is at 4,384,912 bytes** against the 8,388,608 budget; showreel 486,000.
+- **THE BUILT-INS PULL IS DONE AND IT WAS ONE FILE** (`5130237`). `themes/default/theme.css`, 951 bytes, sha256-identical to the source. **`themes/popupart/` does NOT move** -- section 7 and H3. It arrives over `SHOWREEL_THEME_PATH`, and **H3 is measured rather than asserted: zero brand strings in both shipped binaries, with a control proving `strings` finds what IS there.**
+- **`Theme` GAINED `dir: Option<PathBuf>`** (`294bc48`), because the resolver recorded no theme directory and every declared asset is relative to one. **Cost to prez: ZERO bytes, measured on relinked binaries.** Second showreel-driven addition to the shared crate after `refuse_external_target`'s sixteen -- **zero this time is a fact about this field, not a licence.**
+- **H1 NEEDS `SHOWREEL_THEME_PATH` SET AND THE PYTHON NEEDED NOTHING.** 45h names `theme: popupart`, a built-in there and never one here. A bare invocation refuses, correctly. **Told vc before they write H1's AT**, because it reads as a port regression to anyone grading it without that line.
+- **NEXT, in order**: font + favicon emission (read, base64, `@font-face` + `<link rel="icon">`, with section 5's three refusals -- missing favicon, missing font, `.ttf` by name with the conversion command), admission (C1), normalisation (C2), `collect_segment` (147 lines, the big one), data-URI, template pull, delivery re-encode.
 
 ## TODO
 
@@ -61,6 +64,7 @@ claims: [ST0017]
 **THE SECOND TEST, WHICH I KEEP FAILING: "IS IT REAL" IS NOT "IS IT WORTH BUILDING".** hv cut five items as yak-shaving and every one was a true finding. **State the disposition from the MEASUREMENT, not from taste** -- "the cost is punctuation nobody minds" invites "I mind"; "there is no punctuation" ends it.
 
 - **A RED-PROOF NEEDS ITS OWN CONTROL, AND ALSO MEASURES WHICH TESTS ARE PROOFS.** Every injection proves it applied (`grep -c` to zero) before its result is read. Of 23 theme tests only 2 fail on R3's defect; of 7 `limits` only 2; of 11 `config` only 2. **Seven green under one heading reads as seven proofs and is not.**
+- **A RED-PROOF THAT LIVES IN A COMMENT HAS NO CONTROL AVAILABLE, BECAUSE THERE IS NOTHING LEFT TO RUN.** vc's AC-1.15 audit found three non-refusing appliers and **two were mine** -- `limits.rs` and `segment.rs`, both saying "injection proved applied" with the mechanism recorded nowhere, in the comment or the commit. `segment.rs` settles its own case: it reports TWO counts, and **reporting a value is what a reading looks like; a step that refuses needs neither written down.** Recorded as non-compliant rather than restated as a refusal I cannot show -- **the correction available is to say what is NOT established.** Appliers now `assert` and exit non-zero, and **the injection text goes in the COMMIT MESSAGE, where it can be re-applied**, not in a comment. **PROSE DOES NOT FAIL, arriving at red-proofs.**
 - **A TEST CAN ASSERT NOTHING AND LOOK FINE.** My first freshness test passed with AND without the fix it guarded; the discriminating case was the opposite one. **A reading does not give you this -- the red-proof does.**
 - **A FAILED TEST'S ZERO LOOKS EXACTLY LIKE A PASSING RESULT.** vc's pty died, wrote 59 bytes of error, and `grep -c` scored zero. **The LINE COUNT caught it: one line for a 427-line file is not a result.**
 - **THE INSTRUMENT THAT GATES IS NOT THE INSTRUMENT YOU RAN.** Six sites in AC-1.16, in TWO mechanisms: five take their population from cargo's default (`--workspace` fixes them), one from a hand-written directory list (**no flag reaches it, and it is the silent one**). **Derive the population from the manifest, or from the TREE where no manifest is read.**
@@ -86,7 +90,7 @@ claims: [ST0017]
 
 ## The estate
 
-- **NO PUSH TO `upstream` UNTIL hv LIFTS IT** (CI credits, 2026-09-09). `local` is current at `151c5a7`; upstream sits at `60153d8`, **103 behind**. **THE TRAP IS THE DEFAULT** -- `branch.main.remote` is `upstream`, so a bare `git push` fires the matrix. Name the remote.
+- **NO PUSH TO `upstream` UNTIL hv LIFTS IT** (CI credits, 2026-09-09). upstream sits at `60153d8`, **114 behind**. **THE TRAP IS THE DEFAULT** -- `branch.main.remote` is `upstream`, so a bare `git push` fires the matrix. Name the remote.
 - **THE GIT INDEX HAS NO SINGLE-WRITER RULE.** Stage explicit pathspecs; `git add -A` swept a peer's in-flight work once.
 - **`artifact` TAKES NO DEPENDENCIES, AND THAT IS AC02's WHOLE SIGN-OFF** -- it adds zero packages to prez's lockfile. showreel-only machinery (`serde_yaml`, the theme.yaml loader) stays in showreel. Verified: no Rust outside the crate reads `theme.yaml`.
 - **AC-3.10's population is normal+build edges**: union 69, prez 17. The lockfile's 76 counts versions nothing builds; normal edges hide build-deps.
