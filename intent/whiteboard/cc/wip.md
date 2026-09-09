@@ -3,7 +3,7 @@ node: cc
 name: Control Claude
 role: control
 session_id: a30f9092-03ed-44ba-a659-b37813af12c7
-heartbeat_at: 2026-09-09 12:05Z
+heartbeat_at: 2026-09-09 12:14Z
 status: active
 focus: "ST0017 hoist. WP-01 done. WP-03 started: AC-3.5's CSS half built, issues 0014, 0015 and 0017 closed by one fix, red-proved both ways. LIMITS unblocked by snorkeltoast's parity answer and still unported."
 claims: [ST0017]
@@ -42,6 +42,7 @@ claims: [ST0017]
 - **zsh DOES NOT WORD-SPLIT AN UNQUOTED VARIABLE.** Bit twice today -- multi-word `cargo add` flags arriving as one argument, and the shellcheck file list. Run shell tooling under `/bin/bash` with an ARRAY.
 - **A `grep` PATTERN BEGINNING `--` IS PARSED AS AN OPTION.** My token-uniqueness sweep errored on every call, printed nothing, and reported every token unique. Use `grep -- "$pat"`, and **put a control in the sweep that shows the broken and fixed forms disagree.**
 - **AN INSTRUMENT THAT SHARES AN ASSUMPTION WITH ITS SUBJECT CANNOT TEST THAT ASSUMPTION.** My probe read the artifact with a line-oriented, case-sensitive `grep` while measuring a line-oriented, case-sensitive defect, and reported two escapes as clean. **Nothing errored.** Recovered only by keying the detector on the PAYLOAD -- the host fragment -- rather than on the reference's syntax. Reach for the payload first; it is the cheap move that breaks the shared assumption.
+- **A CITATION THAT NAMES A LOCATION GOES STALE SILENTLY AND READS EXACTLY LIKE A LIVE ONE.** `player.html:613` is cited by AC-3.7, AC-2.14, their two renderings, vc's board and snorkeltoast's FLOORS.md twice. The literal is at **628**; 613 is now unrelated code. `3903937` moved it -- the crawl fix **I relayed hv's ratification for** -- so the citation decayed as a consequence of a change I carried, and three nodes propagated it because each copied it from the last rather than opening the file. **Cite the TOKEN, not the line**: `REEL.producer || "Snorkeltoast"` greps forever. Our AC-id discipline already refuses an AT row whose id is not in the file it cites; line numbers inside AC TEXT sit under no such check.
 - **A COMMAND THAT DID NOT REBUILD REPORTS THE OLD ARTEFACT'S NUMBERS.** `Finished in 0.02s` meant I measured the previous day's binary and called it unchanged.
 
 ## The gates this estate runs, enumerated
@@ -56,6 +57,16 @@ claims: [ST0017]
 | shell              | `shellcheck -x "${FILES[@]}"` -- **18 real files; run locally after a build the collector sees 69, because it has no `target/` exclusion and is correct only by CI job ordering**               |
 | estate             | `utilz test <utility>` -- prez has 4 suites; `acceptance.sh` is the one that caught WP-01                                                                                                       |
 | devbin             | `bin/devbin check autotests` -- now `3 crate(s), none with a tests/ directory`                                                                                                                  |
+
+## What WP-03 is graded by
+
+**`bin/showreel/FLOORS.md` in the Snorkeltoast tree, build 008, sha256 `daaa503ad7db`, 13 captures a slide.** Read the file, not this summary -- it is generated from `control.json` and never retyped.
+
+- **Criterion:** every gradeable slide at RMSE 0.000000 against **its own floor**, slides 13 and 14 accepted by name, and **the render count matching**. A Rust build rendering a slide once where Python renders it twice is now a visible difference rather than something averaged away.
+- **19 gradeable, 2 undecided (13 and 14, both 2-render), 1 presence-unprovable (slide 1), 0 windowless, of 22.** Partition sums.
+- **`min_defect` is None, and that is a REFUSAL not an omission.** The red-proof's own injection reads 0.998249 to 2.280042 across eight image slides -- 2.3x for an identical procedure, decided by what the picture is -- so no constant taken from one injection can stand for the set. Naming a magnitude is AC-2.17 and hv's.
+- **MOST SLIDES CAN BE GRADED WITH NO BROWSER.** Slide 6's payload figure 0.999768 against the browser's 0.999752: the on-screen measurement tracks the payload for a full-bleed image. The tight loop of the image port is milliseconds, not minutes.
+- **Two caveats, both mine to carry.** The table is against a RECONSTRUCTION of 008's config -- snorkeltoast rebuilt it minus the fourth socials entry **I added**, because the live config plans 23 slides against the artifact's 22 and the partition refuses. And it is SUPERSEDED, not merely dated, by the next build. **Do not rebuild the reel without saying so first.**
 
 ## The estate
 
