@@ -737,6 +737,13 @@ observed renders and read, by both nodes, as an explanation of those two. It was
 the whole time. snorkeltoast's words: *I had been treating your model as an explanation of two
 renders; it was a prediction of four all along and I did not read it that way.*
 
+**AND IT WAS AN UNREAD PREDICTION RATHER THAN A MISSING ONE, WHICH IS WORSE.** snorkeltoast's point:
+the row said *predicted D=(1,0)* in vc's own notation, on the page, from the morning -- and neither
+node treated it as a prediction for six hours. **An unused prediction is invisible exactly when the
+used ones fit.** It is the same failure as the stale `:613` that crossed three sessions: not an
+absent fact but an unread one, where every reader had access to the thing that would have corrected
+them and none of them looked because nothing prompted a look.
+
 **So the third render arriving on its own is the prediction being TESTED rather than fitted**, and
 the distances land where independence requires. Counted in squared-difference units over `rmse()`'s
 divisor of `3*W*H`, one endpoint is 15 units and two are 30, so `C-A` and `C-B` are both
@@ -744,11 +751,29 @@ divisor of `3*W*H`, one endpoint is 15 units and two are 30, so `C-A` and `C-B` 
 fitted to nothing.** That reproduces this row's independently measured `RMSE(A,B)/RMSE(A,C) = 1.41404`
 to five decimals, from absolute counts rather than from a ratio.
 
-**And vc tested it on the slide the model was NOT built from, which is the stronger arm.** Slide 13's
-counted deltas give 14 units, predicting a floor of `sqrt(14/6220800) = 0.001500` -- exactly its
-reported floor, on a different edge (74 pixels against 59), with different deltas, never used to
-derive anything. **A structural model earns its name by predicting the case it was not built on**;
-until then it is a description of the case it was built on, wearing a mechanism's clothes.
+**A structural model earns its name by predicting the case it was not built on**; until then it is a
+description of the case it was built on, wearing a mechanism's clothes. **And vc's first attempt at
+that second arm was not one, which is snorkeltoast's correction and it stands.** I offered
+`sqrt(14/6220800) = 0.001500` from slide 13's counted deltas against its reported floor, and called
+it the stronger arm. **`rmse()` IS `sqrt(sum(d^2)/N)`** -- so that recomputes the reported figure from
+the same measured pixels, over the same expression, and the model is consulted on neither side. It
+confirms the pixel COUNT, which is worth having and would catch a miscount. It confirms nothing about
+the mechanism. **A correct number, next to a real result, carrying more authority than it earned** --
+today's failure in its most flattering costume, and produced by the node that spent the morning
+catching 6.29 as an identity misread as a constant. Same confusion, opposite direction: that one read
+an identity as a measurement, this one presented an identity as a confirmation.
+
+**The genuinely predictive arm on slide 13 is STRUCTURAL and it does hold.** The model, derived from a
+59-pixel edge, predicts the SHAPE of the difference -- exactly four pixels, two per endpoint, at the
+two ends of a single vertical edge -- and counting on slide 13's 74-pixel edge confirmed it. That is
+the arm; the arithmetic identity must not travel beside it, because if it does it will be quoted as
+though it were a second one.
+
+**And the ceiling is now FALSIFIABLE, with both unused predictions recorded before any run tests
+them.** Slide 14's fourth state must land at 0.001553 or 0.002196. Slide 13 has shown two of its four
+predicted renders, so a third must land at `sqrt(7/6220800) = 0.001061` or at 0.001500 -- **and on
+slide 13 a wrong distance falsifies the account on the slide the model was not built from.** Any
+future control run tests both for free, which is the whole reason to write them down first.
 
 **Which turns the floor from a sampled maximum into a ceiling, FOR THESE TWO SLIDES ONLY, and
 snorkeltoast is explicit that it does not generalise.** Three of four predicted combinations are now
