@@ -29,6 +29,7 @@
 //! this rule's business. Same correction as issue 0017's, one surface along:
 //! read the SITE, not the spelling.
 
+use artifact::base64;
 use artifact::theme::{name_spec, refuse_external_target, Registry, Theme};
 use artifact::Failure;
 use serde::Deserialize;
@@ -105,6 +106,103 @@ pub fn provenance(theme: &Theme) -> Option<String> {
   REGISTRY.provenance(theme)
 }
 
+/// The tab-icon types a browser takes from a data URI, and the only ones a
+/// theme may declare.
+const ICON_TYPES: &[(&str, &str)] =
+  &[("svg", "image/svg+xml"), ("png", "image/png"), ("ico", "image/x-icon")];
+
+/// The one format a theme may ship a font in. **THE PORT CARRIES NO CONVERTER**
+/// -- the approved budget holds no woff2 or brotli crate, so adding one needs
+/// fresh hv sign-off, and design.md 5 says so to stop one being added helpfully.
+const FONT_EXT: &str = "woff2";
+
+/// A theme's CSS and tab icon with every declared asset inlined.
+///
+/// **THE ARTIFACT OPENS FROM A USB STICK WITH NOTHING BESIDE IT**, so a font is
+/// bytes inside the CSS and an icon is bytes inside a `<link>`. Neither has any
+/// other form available here, which is why this is emission and not a choice.
+#[derive(Debug)]
+pub struct Inlined {
+  /// `@font-face` rules in `fonts:` order, followed by the theme's own CSS.
+  ///
+  /// **THE ORDER IS THE REFERENCE'S, PORTED RATHER THAN CHOSEN.** It is not
+  /// arbitrary: a face has to be declared before a later rule can override it,
+  /// so putting the theme's own CSS second is what lets a theme restyle a
+  /// family it also ships.
+  pub css: String,
+  /// The `<link rel="icon">` element, or empty where the theme declares none.
+  ///
+  /// **EMPTY IS "DECLARED NOTHING" AND IS THE ONLY WAY TO GET IT.** Every other
+  /// path that used to produce an empty string -- a missing file, an
+  /// unsupported type -- is now a refusal, so this value can no longer mean
+  /// "something went wrong and we carried on".
+  pub favicon: String,
+}
+
+/// A resolved theme's CSS and favicon, with every declared asset inlined.
+///
+/// A built-in has no directory and therefore no sidecar, so it contributes its
+/// CSS and nothing else. That is a shape the type rules out rather than a case
+/// checked here -- see `Theme::dir`.
+pub fn inline(theme: &Theme) -> Result<Inlined, Failure> {
+  let mut out = match &theme.dir {
+    Some(dir) => match Meta::read(dir)? {
+      Some(meta) => meta.inline(dir)?,
+      None => Inlined { css: String::new(), favicon: String::new() },
+    },
+    None => Inlined { css: String::new(), favicon: String::new() },
+  };
+  out.css.push_str(&theme.css);
+  Ok(out)
+}
+
+/// A declared asset's extension, lowercased. Empty where there is none.
+fn extension(path: &Path) -> String {
+  path.extension().map(|e| e.to_string_lossy().to_ascii_lowercase()).unwrap_or_default()
+}
+
+/// Read a declared theme asset, or refuse by name.
+///
+/// **A DECLARATION IS AN ASSERTION THAT THE FILE IS THERE.** The reference
+/// warned and carried on for both the font and the icon, shipping an artifact
+/// materially different from the one the theme declared while still reporting
+/// success. Missing and unreadable are one refusal deliberately: they are the
+/// same fact to a caller -- the bytes this theme named are not available -- and
+/// the OS error carries which it was.
+fn read_asset(path: &Path, what: &str, named: &str) -> Result<Vec<u8>, Failure> {
+  std::fs::read(path).map_err(|e| {
+    Failure::new(
+      format!("theme {what} '{named}': cannot read {}: {e}", path.display()),
+      format!("theme.yaml declares this {what}; add the file, or drop the entry"),
+    )
+  })
+}
+
+/// The `<link rel="icon">` for a declared favicon, with the file inlined.
+///
+/// **EXISTENCE IS CHECKED BEFORE FORMAT, WHICH IS THE REFERENCE'S ORDER AND IS
+/// KEPT FOR A REASON RATHER THAN FOR PARITY.** Format-first would report the
+/// decidable error one round trip sooner when both are wrong, and it would also
+/// hand back a remedy nobody can follow -- "convert this file" against a path
+/// that is not there. **Report the error whose remedy is complete**, and the
+/// existence one always is.
+fn favicon_link(dir: &Path, spec: &str) -> Result<String, Failure> {
+  let path = dir.join(spec);
+  let bytes = read_asset(&path, "favicon", spec)?;
+  let ext = extension(&path);
+  let Some((_, mime)) = ICON_TYPES.iter().find(|(e, _)| *e == ext) else {
+    let known: Vec<String> = ICON_TYPES.iter().map(|(e, _)| format!(".{e}")).collect();
+    return Err(Failure::new(
+      format!("theme favicon '{spec}': unsupported type '.{ext}'"),
+      format!("one of: {}", known.join(", ")),
+    ));
+  };
+  Ok(format!(
+    r#"<link rel="icon" type="{mime}" href="data:{mime};base64,{}">"#,
+    base64::encode(&bytes)
+  ))
+}
+
 /// A theme's `theme.yaml`, which is optional -- a theme may be CSS alone.
 #[derive(Debug, Deserialize)]
 #[serde(deny_unknown_fields)]
@@ -146,6 +244,44 @@ fn weight_default() -> u32 {
   400
 }
 
+impl Font {
+  /// This face as an `@font-face` rule with the file inlined.
+  ///
+  /// **THE DEFECT THIS REPLACES IS NOT THE BARE `except`; IT IS EMITTING
+  /// SOMETHING DIFFERENT AND REPORTING SUCCESS.** The reference converted TTF to
+  /// WOFF2 on every build inside `except Exception:` and, on any failure at all,
+  /// embedded the RAW TTF -- a different format at roughly double the bytes,
+  /// with no warning, so two machines building one reel produced measurably
+  /// different artifacts and both said "wrote". There is no conversion left to
+  /// fail here, which is a better answer than reporting the failure would have
+  /// been.
+  fn face(&self, dir: &Path) -> Result<String, Failure> {
+    let path = dir.join(&self.file);
+    let bytes = read_asset(&path, "font", &self.family)?;
+    let ext = extension(&path);
+    if ext != FONT_EXT {
+      return Err(Failure::new(
+        format!("theme font '{}' is not WOFF2: {}", self.family, path.display()),
+        format!(
+          "themes ship the format they want served, and this port carries no converter. \
+           Convert it once:\n    python3 -c \"from fontTools.ttLib import TTFont; \
+           f=TTFont('{}'); f.flavor='woff2'; f.save('{}')\"\n\
+           then point the theme's fonts: entry at the .{FONT_EXT}",
+          path.display(),
+          path.with_extension(FONT_EXT).display()
+        ),
+      ));
+    }
+    let style = self.style.as_deref().unwrap_or("normal");
+    let (family, weight) = (&self.family, self.weight);
+    Ok(format!(
+      "@font-face{{font-family:'{family}';font-weight:{weight};font-style:{style};\
+       font-display:block;src:url(data:font/{FONT_EXT};base64,{}) format('{FONT_EXT}')}}\n",
+      base64::encode(&bytes)
+    ))
+  }
+}
+
 impl Meta {
   /// Parse a `theme.yaml`, refusing an unknown key and any external reference.
   pub fn parse(source: &str, origin: &str) -> Result<Meta, Failure> {
@@ -175,6 +311,25 @@ impl Meta {
       )?;
     }
     Ok(())
+  }
+
+  /// Inline every asset this manifest declares, against the directory it was
+  /// read from.
+  ///
+  /// **THE DIRECTORY IS PASSED IN RATHER THAN REMEMBERED.** A `Meta` that
+  /// carried its own directory could be constructed against one and inlined
+  /// against another, and nothing would report it; taking it as an argument
+  /// makes the pairing the caller's single decision.
+  pub fn inline(&self, dir: &Path) -> Result<Inlined, Failure> {
+    let mut css = String::new();
+    for font in &self.fonts {
+      css.push_str(&font.face(dir)?);
+    }
+    let favicon = match &self.favicon {
+      Some(spec) => favicon_link(dir, spec)?,
+      None => String::new(),
+    };
+    Ok(Inlined { css, favicon })
   }
 
   /// Read a theme directory's `theme.yaml`, or `None` where there is none.
@@ -393,6 +548,130 @@ mod tests {
     std::fs::create_dir_all(&d).unwrap();
     let _ = std::fs::remove_file(d.join("theme.yaml"));
     assert!(Meta::read(&d).expect("absence is valid").is_none());
+  }
+
+  /// One row of the refusal population: a label, the `theme.yaml`, the files
+  /// sitting beside it, and whether it must refuse.
+  type Case = (&'static str, &'static str, &'static [(&'static str, &'static [u8])], bool);
+
+  /// Build a theme directory with the files named, and return it.
+  fn theme_dir(tag: &str, files: &[(&str, &[u8])]) -> PathBuf {
+    let d = std::env::temp_dir().join(format!("showreel-emit-{}-{tag}", std::process::id()));
+    let _ = std::fs::remove_dir_all(&d);
+    std::fs::create_dir_all(&d).unwrap();
+    std::fs::write(d.join("theme.css"), "body{color:#111}\n").unwrap();
+    for (name, bytes) in files {
+      std::fs::write(d.join(name), bytes).unwrap();
+    }
+    d
+  }
+
+  /// **THE FOUR REFUSALS SECTION 5 RULES, ENUMERATED, BOTH DIRECTIONS.**
+  ///
+  /// Every one of them is a site where the reference WARNED and shipped an
+  /// artifact without the asset it had declared. **The four building cases are
+  /// not padding**: without them a scan that refuses everything passes this
+  /// test, and two of them -- no `fonts:` at all, no `favicon:` at all -- are
+  /// the cases that separate "declared nothing" from "declared and lost it",
+  /// which is the distinction the whole family turns on.
+  #[test]
+  fn every_declared_asset_that_cannot_be_emitted_is_refused_and_the_rest_build() {
+    // (label, theme.yaml, files beside it, must refuse)
+    let population: &[Case] = &[
+      ("nothing declared", "name: t\n", &[], false),
+      ("a font that is there", "fonts:\n  - {family: X, file: x.woff2}\n", &[("x.woff2", b"wOF2fake")], false),
+      ("an svg favicon", "favicon: i.svg\n", &[("i.svg", b"<svg/>")], false),
+      ("a png favicon", "favicon: i.png\n", &[("i.png", b"\x89PNG")], false),
+      ("a MISSING font", "fonts:\n  - {family: X, file: gone.woff2}\n", &[], true),
+      ("a MISSING favicon", "favicon: gone.svg\n", &[], true),
+      ("a font that is not WOFF2", "fonts:\n  - {family: X, file: x.ttf}\n", &[("x.ttf", b"\x00\x01\x00\x00")], true),
+      ("an icon type nothing serves", "favicon: i.bmp\n", &[("i.bmp", b"BM")], true),
+    ];
+    let refusing = population.iter().filter(|(_, _, _, r)| *r).count();
+    assert_eq!(population.len(), 8, "the population IS the claim");
+    assert_eq!(refusing, 4, "four refuse -- one per section 5 row");
+    assert_eq!(population.len() - refusing, 4, "and four BUILD, or refuse-all passes");
+
+    let mut wrong = Vec::new();
+    for (i, (label, yaml, files, must_refuse)) in population.iter().enumerate() {
+      let d = theme_dir(&format!("pop{i}"), files);
+      std::fs::write(d.join("theme.yaml"), yaml).unwrap();
+      let meta = Meta::read(&d).unwrap().expect("theme.yaml is present");
+      let refused = meta.inline(&d).is_err();
+      if refused != *must_refuse {
+        wrong.push(format!("{label}: expected refused={must_refuse}, got {refused}"));
+      }
+    }
+    assert!(wrong.is_empty(), "{} decided wrongly:\n  {}", wrong.len(), wrong.join("\n  "));
+  }
+
+  /// A refusal has to name the thing the author has to go and fix. **THE FONT'S
+  /// REMEDY CARRIES THE CONVERSION COMMAND** because this port has no converter
+  /// and never will without fresh sign-off -- so the message is the whole of
+  /// what the user gets.
+  #[test]
+  fn each_refusal_names_the_asset_and_offers_a_remedy_that_can_be_followed() {
+    let d = theme_dir("names", &[("Barlow-Black.ttf", b"\x00\x01\x00\x00")]);
+    std::fs::write(
+      d.join("theme.yaml"),
+      "fonts:\n  - {family: Barlow, file: Barlow-Black.ttf, weight: 900}\n",
+    )
+    .unwrap();
+    let e = Meta::read(&d).unwrap().unwrap().inline(&d).unwrap_err();
+    assert!(e.message.contains("Barlow"), "names the family: {}", e.message);
+    assert!(e.message.contains("not WOFF2"), "names the defect: {}", e.message);
+    let remedy = e.remedy.expect("a font refusal carries the conversion command");
+    assert!(remedy.contains("fontTools"), "carries the command: {remedy}");
+    assert!(remedy.contains("Barlow-Black.woff2"), "names the OUTPUT path: {remedy}");
+
+    let d = theme_dir("icon", &[("mark.bmp", b"BM")]);
+    std::fs::write(d.join("theme.yaml"), "favicon: mark.bmp\n").unwrap();
+    let e = Meta::read(&d).unwrap().unwrap().inline(&d).unwrap_err();
+    assert!(e.message.contains("mark.bmp"), "names the file: {}", e.message);
+    let remedy = e.remedy.expect("an icon refusal lists what is served");
+    for want in [".svg", ".png", ".ico"] {
+      assert!(remedy.contains(want), "lists {want}: {remedy}");
+    }
+  }
+
+  /// The emitted `@font-face` carries every field the manifest declared, and the
+  /// **ORDER puts faces before the theme's own CSS** -- a face must be declared
+  /// before a later rule can override it.
+  #[test]
+  fn the_emitted_css_declares_each_face_before_the_theme_that_restyles_it() {
+    let d = theme_dir("shape", &[("i.woff2", b"wOF2"), ("r.woff2", b"wOF2")]);
+    std::fs::write(
+      d.join("theme.yaml"),
+      "fonts:\n  - {family: Barlow, file: r.woff2, weight: 600}\n  - {family: Barlow, file: i.woff2, weight: 900, style: italic}\n",
+    )
+    .unwrap();
+    let out = Meta::read(&d).unwrap().unwrap().inline(&d).unwrap();
+
+    assert!(out.css.contains("font-family:'Barlow'"), "{}", out.css);
+    assert!(out.css.contains("font-weight:600"), "the declared weight");
+    assert!(out.css.contains("font-weight:900"), "and the second face's");
+    assert!(out.css.contains("font-style:normal"), "style defaults rather than vanishing");
+    assert!(out.css.contains("font-style:italic"), "and an explicit one is carried");
+    assert!(out.css.contains("format('woff2')"), "the format the browser is told");
+    assert!(!out.css.contains("truetype"), "no path emits truetype any more");
+    // Two faces, in `fonts:` order.
+    assert_eq!(out.css.matches("@font-face").count(), 2, "one rule per declared face");
+    assert!(
+      out.css.find("font-weight:600") < out.css.find("font-weight:900"),
+      "faces keep the manifest's order"
+    );
+  }
+
+  /// A built-in contributes its CSS and nothing else, because it has no
+  /// directory to hold a sidecar. **The whole chain, from the roster to the
+  /// emitted bytes**, so that a built-in silently gaining assets fails here.
+  #[test]
+  fn a_built_in_inlines_its_css_and_declares_no_asset() {
+    let t = for_reel(None, &[]).unwrap();
+    let out = inline(&t).unwrap();
+    assert_eq!(out.favicon, "", "a built-in declares no icon");
+    assert!(!out.css.contains("@font-face"), "and no face");
+    assert_eq!(out.css, t.css, "so the emitted css IS the theme's css");
   }
 
   #[test]

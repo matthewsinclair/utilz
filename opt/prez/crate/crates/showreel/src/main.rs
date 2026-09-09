@@ -85,12 +85,19 @@ fn check(path: &Path) -> Result<(), Failure> {
   if let Some(said) = theme::provenance(&theme) {
     eprintln!("showreel: {said}");
   }
+  // **THE ASSETS ARE INLINED HERE TOO, NOT JUST COUNTED.** Reading `theme.yaml`
+  // exercises R3; inlining is what exercises the four refusals design.md 5
+  // rules -- a missing font, a missing favicon, a font that is not WOFF2, an
+  // icon type nothing serves. A verb that reported the counts without doing the
+  // work would leave all four unreachable from a command line, which is the
+  // state `check` exists to end.
   let meta = match &theme.dir {
     Some(dir) => theme::Meta::read(dir)?,
     // A built-in has no directory, so it can carry no sidecar. Not an absence
     // to report -- a shape the type already rules out.
     None => None,
   };
+  let inlined = theme::inline(&theme)?;
 
   // The timing envelope, per segment, using the pace preset the config names.
   let (default_dwell, default_ease) = match cfg.pace.as_deref().unwrap_or("attract") {
@@ -138,6 +145,11 @@ fn check(path: &Path) -> Result<(), Failure> {
     ),
     None => println!("  assets    no theme.yaml, so no fonts and no favicon"),
   }
+  println!(
+    "  inlined   {} bytes of css, {} bytes of favicon link",
+    inlined.css.len(),
+    inlined.favicon.len()
+  );
   println!("  timing    {clamped} segment(s) clamped by the envelope");
   println!(
     "  envelope  dwell >= {}ms, ease {}..{}ms",
