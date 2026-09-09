@@ -625,10 +625,42 @@ four-pixel defect sits BELOW slide 14's floor rather than equal to it, and slide
 it.** The rhetorical point survives; the constructed example was doing the opposite of what it
 claimed, and it read as support because it agreed at the one figure both sides quoted.
 
-**And no single injection can calibrate a multiplier, measured rather than argued.** The identical
+**AND THE PARAGRAPH THAT STOOD HERE WAS WRONG TWICE, BOTH TIMES MINE.** It read: *the identical
 procedure reads 0.998249 to 2.280042 across the reel's eight image slides -- a 2.3x range inside one
 artifact, decided by picture content, with the readings above 1.0 being pixels that move more than
-one level where the darken clips.
+one level where the darken clips.* **Neither half survives.**
+
+**The 2.3x was a JPEG generation, not the injection.** snorkeltoast ran the control the script had
+never had -- re-encode with NO injection at all -- and the pure injection spans **0.4 percent, not
+2.3x**. The range was the harness decoding and re-encoding at q86. On slide 0, a PNG logo on black
+with 71 percent of channels already at zero, **2.24 of the 2.28 is re-encode alone**.
+
+**And the clipping explanation was backwards on its face.** Clipping at 0 means a pixel cannot
+darken, which can only LOWER the figure -- it cannot raise one above 1.0, and 1.0 is the identity's
+ceiling. vc verified the real relation: `sqrt(1 - clipped_fraction)` predicts every pure value to six
+decimals, 0.718 percent clipped giving 0.996404 and 0.003 percent giving 0.999984. **So the injection
+is near-exact and has no picture-content dependence at all beyond the pixels that physically cannot
+move.** I asserted a mechanism in the direction that suited the argument and did not check that it
+could produce the sign it needed -- the same error as this morning's ambient scaling, where I
+described a comparison against a case I had never computed.
+
+**What survives is the sqrt-area leg, which was always the load-bearing one and is now exact.** A
+full-frame one-level defect measures 1.000000 and a four-pixel one measures 0.001389: a factor of
+720, which is `sqrt(2073600/4)` and nothing else. **Any constant taken from an injection is blind to
+defects of smaller extent by exactly the ratio of their extents.** The withdrawn leg was rhetorical
+support; this one is geometry, and it alone decides the row.
+
+**A LIMIT OF THE RED-PROOF, snorkeltoast's, and this row's earlier wording implied otherwise.**
+`redproof` darkens AND re-encodes at q86, so its reported figure is not a pure one-level injection.
+Both plausible targets on this reel are JPEG, so today's result stands; a reel of PNG sources would
+red-proof against a mostly-different defect than the one its label names. **Which is exactly why
+hv's ruling names a DESCRIPTION and computes the number from it, rather than taking an injection's
+figure** -- a decision made before this limit was known, and better founded because of it.
+
+**hv RULED THE MAGNITUDE 2026-09-09: a one-level shift over 5 percent of the frame, RMSE 0.223607.**
+The threshold is `sqrt(f)` and therefore **independent of frame size**, so it is a property of the
+defect rather than of 1920x1080 and transfers to any reel. Slide 13's floor sits 149x below it and
+slide 14's 102x, so 21 of 22 become gradeable and only slide 1 remains, waiting on AC-3.7.
 
 **THE CITATION SWEEP: FOUR OF EIGHT STALE, AND THE PARTITION IS PERFECTLY CLEAN.** cc found two rows
 citing a line for the brand literal that `3903937` had moved, and named the structural point: an AT

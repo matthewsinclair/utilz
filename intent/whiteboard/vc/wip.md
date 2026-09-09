@@ -3,7 +3,7 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 11981560-5612-4fe7-a136-6eae64636b64
-heartbeat_at: 2026-09-09 12:19Z
+heartbeat_at: 2026-09-09 12:39Z
 status: active
 focus: "ST0017 contract: 52 rows, 14 satisfied, 1 withdrawn, doctor 0. Both of cc's rulings given: AC-3.12 minted and satisfied, AC-3.5 kept as ONE row and reworded to the property. cd0412d validated on the population that SHIPS -- nine real theme.css files, built=9 refused=0, both controls. Then the direction question reversed my own draft ruling: issue 0018, a live href in layout.html hidden by a stray CSS comment marker and shipped, found by the sixth case after five agreed. AC-1.16: cargo build still has no --workspace, in CI and in the shim, and the shim will never build showreel."
 claims: [ST0017]
@@ -101,6 +101,7 @@ Validation node. cc builds, vc contracts and verifies, hv adjudicates. Full boar
 
 - (2026-09-09) **hv: a dehydration made by side effect STANDS when the end state is what the declaration prescribes.** The repair is the mechanism, not the artefact. Canon intact means nothing was lost and one verb restores it.
 - (2026-09-09) **hv: amend a hand-written header, do not regenerate it.** `organize --default --force` would have produced a byte-identical thread list and discarded the provenance and the rule-divergence note, which are the only things in the file a tool cannot re-derive.
+- (2026-09-09) **hv NAMED THE MINIMUM DEFECT: a one-level shift over 5 percent of the frame, RMSE 0.223607.** Named as a DESCRIPTION and computed, never taken from an injection's figure. The threshold is `sqrt(f)` so it is independent of frame size and transfers to any reel. Slides 13 and 14 clear it by 149x and 102x, so 21 of 22 grade and only slide 1 remains, on AC-3.7.
 - (2026-09-09) **hv: the shared git index gets a pre-commit WARNING, not a refusal.** A refusal needs node identity at commit time and would refuse the legitimate cross-node commit. Issue 0019 carries the two instances and the unsettled design question.
 - (2026-09-08) **hv: no `v` in any version string, anywhere, including the git tag.** `utilz:2.8.0` solo, `utilz:2.8.0/<util>:<version>` paired. Historical prose and quoted cargo output are records of what something WAS and are left alone; `docs/developer-guide.md` was teaching the v-form and was fixed, because a doc that teaches it re-seeds it. Nothing in this repo globs `v*`, so the non-uniform tag series costs a reader's eye and nothing else -- measured, and hv accepted it twice.
 - (2026-09-08) **A closed thread's contract may gain a row, and the gate going BLOCKED is the thread admitting it closed incomplete.** ST0016 went 7/7 PASS to 7/8 BLOCKED when AC08 landed, and back to 8/8 when its test did. Not a regression; the honest signal.
