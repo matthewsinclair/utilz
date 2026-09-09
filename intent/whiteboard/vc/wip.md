@@ -3,7 +3,7 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 11981560-5612-4fe7-a136-6eae64636b64
-heartbeat_at: 2026-09-09 13:46Z
+heartbeat_at: 2026-09-09 14:30Z
 status: active
 focus: "ST0017: 52 live rows, 16 satisfied, 1 withdrawn, doctor 0. hv named the minimum defect (one level over 5 percent of frame, RMSE 0.223607, sqrt(f) so frame-size independent) and the harness MEASURED 21 gradeable / 0 undecided / 1 ungradeable of 22. AC-2.17 and AC-2.3 both satisfied on measurement. Only slide 1 is ungradeable and it waits on AC-3.7 dropping the brand literal, not on any magnitude. Two of vc's AC-2.17 claims withdrawn today after snorkeltoast's re-encode control -- the 2.3x was a JPEG generation and vc's clipping explanation had the sign backwards."
 claims: [ST0017]
@@ -33,14 +33,11 @@ Validation node. cc builds, vc contracts and verifies, hv adjudicates. Full boar
 
 - **None.**
 
-## Open with hv -- BLOCKING, a conflict vc will not resolve
+## Open with hv
 
-**TWO OF hv's ANSWERS TO vc ARE CONTRADICTED BY hv's RULINGS RELAYED BY snorkeltoast, AND BOTH ARE HELD.**
-
-- **The reel's inputs.** hv to vc: _commit config + assets, ignore the rest_ (showreel.yaml + assets/, 5.7 MB). hv via snorkeltoast: _the reel's inputs stay in Dropbox and are not going into git._ `assets/` IS the inputs. Direct opposites; nothing done.
-- **AC-3.7's brand-token CHECK.** hv confirmed vc's ruling, whose text says _with the brand-token check in the same commit_. hv via snorkeltoast: _AC-3.7's purity grep goes... nothing should gate on it and no row should carry it._ **The non-conflicting part -- dropping the `|| "Snorkeltoast"` fallback -- is fine under both and cc may do it at the template pull.** The CHECK is held.
-
-**RULED AND CLEAN, taken:** `max_ease` capped at 2400 (AC-3.6, AC-3.11 both carry it); `utilz prez showreel` confirmed as the shape, HOIST section 1 superseded; issue 0020 CLOSED as yak-shaving, hv's call and it was vc's issue.
+- **NOTHING. Both conflicts resolved 2026-09-09 and neither went vc's way, correctly.**
+  - **Reel inputs: snorkeltoast's answer stands.** They stay in Dropbox. hv's reasoning is the part vc did not have: the reel lives in a Dropbox worktree rather than a git one, its inputs can be arbitrarily large, and **Utilz itself is fully tracked, which is what the hoist actually depends on.** vc priced a decision that was not this repository's to make. AC-2.18 restated as a PERMANENT condition rather than an action item -- the limit is true and nobody intends to close it.
+  - **AC-3.7 WITHDRAWN.** hv: _"I have no idea what that is other than I told snorkeltoast to stop yak-shaving and move on."_ Dropping the fallback stays fine and ungated; nothing gates on it and no row carries it. AC-2.14 is strengthened by the withdrawal -- its instance is now permanent, which is exactly what that row exists to name.
 
 ## Open with hv (closed today)
 
