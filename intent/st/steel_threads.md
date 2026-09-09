@@ -4,6 +4,7 @@ An index of every steel thread in the project. A steel thread is a self-containe
 
 | ID     | Title                                                                          | Status    | Created    | Completed            |
 | ------ | ------------------------------------------------------------------------------ | --------- | ---------- | -------------------- |
+| ST0017 | Add 'showreel' to 'prez'                                                       | WIP       | 2026-09-09 |                      |
 | ST0016 | --help has one home, and both invocation forms agree                           | Completed | 2026-09-08 | 2026-09-08           |
 | ST0015 | Version dispatch has one home, and reports both versions                       | Completed | 2026-09-08 | 2026-09-08           |
 | ST0014 | Make utilz insallable in to opt/ just like devbin                              | Completed | 2026-09-07 | 2026-09-08           |
