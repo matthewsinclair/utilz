@@ -4,8 +4,18 @@
 //! WHICH IS THE DEFECT design.md 4.2 RULED AGAINST PORTING.** `normalise_image`
 //! demotes a fully-opaque RGBA to RGB and writes JPEG; `data_uri` has no
 //! equivalent and its PNG branch is the DEFAULT PATH FOR HAND-PLACED BRAND
-//! MARKS -- so the mascot and the wordmark ship full-size PNG on every build,
-//! where the same picture through `init` would have been a JPEG.
+//! MARKS -- so a fully-opaque RGBA ships full-size PNG on every build, where the
+//! same picture through `init` would have been a JPEG.
+//!
+//! **THIS DOC NAMED THE MASCOT AND THE WORDMARK AS THE INSTANCE, AND MEASUREMENT
+//! REFUTED IT.** Both brand PNGs on the live 45h reel are GENUINELY transparent,
+//! so the collapse fires on neither, and no asset of that reel takes the
+//! diverging path at all. design.md 4.2 carries the table. The ruling is
+//! untouched -- one policy across both passes is right whether or not it costs
+//! anything here -- but the port does not pay for it on the only reel anybody
+//! runs, and the exemption list the harness wants is EMPTY for 45h. The arm is
+//! covered by the three synthetic tests below and by nothing on that reel, which
+//! are different facts.
 //!
 //! **"MATCH PYTHON EXACTLY" HERE MEANS PORTING A KNOWN DEFECT, ON THE PATH THAT
 //! CARRIES THE BRAND MARKS, ON EVERY BUILD.** That is a fidelity requirement's
@@ -99,6 +109,44 @@ pub fn normalise(path: &Path, max_edge: u32) -> Result<Normalised, Failure> {
   })?;
   let oriented = orient(decoded, orientation(&raw));
   Ok(encode(collapse(oriented), max_edge))
+}
+
+/// A picture inlined at the size its role needs, with what the player needs to
+/// lay it out.
+#[derive(Debug)]
+pub struct Embedded {
+  /// `data:<mime>;base64,<payload>`, ready to be an `src` attribute.
+  pub uri: String,
+  pub width: u32,
+  pub height: u32,
+  /// The ENCODED byte count, BEFORE base64 -- what the picture costs rather than
+  /// what the string costs, and the reference returns the same number. For
+  /// reporting only: the size warning is computed from the finished file, so
+  /// nothing budgets against this.
+  pub encoded: usize,
+}
+
+/// Inline a picture at the size its role actually needs.
+///
+/// **THE ROLE IS THE WHOLE OF THIS FUNCTION.** `normalise` already decides
+/// orientation, collapse, resampling and encoder; all that is left is which edge
+/// to ask it for, and that is a property of what the picture is BEING -- a full
+/// panel, a wordmark inside one, or the corner bug. A corner mark at slide size
+/// is the same picture and five times the bytes.
+///
+/// **AND THE SPLIT IS WHY THE PORT COLLAPSES ON BOTH PASSES WITHOUT A SECOND
+/// POLICY.** The reference's `data_uri` does its own resize and its own encoder
+/// choice, which is how it came to disagree with `normalise_image`; here there is
+/// one function that decides and one that says how big, so the two passes cannot
+/// drift apart without somebody editing the shared one.
+pub fn embed(path: &Path, target: u32, role: Role) -> Result<Embedded, Failure> {
+  let n = normalise(path, role_edge(role, target))?;
+  Ok(Embedded {
+    uri: format!("data:{};base64,{}", n.mime, artifact::base64::encode(&n.bytes)),
+    width: n.width,
+    height: n.height,
+    encoded: n.bytes.len(),
+  })
 }
 
 /// Whether every alpha byte is fully opaque, and the demotion if so.
@@ -338,5 +386,80 @@ mod tests {
     let e = normalise(&p, MASTER).unwrap_err();
     assert!(e.message.contains("cannot decode"), "{}", e.message);
     assert!(e.message.contains("bogus"), "names the file: {}", e.message);
+  }
+
+  /// Base64 back to bytes, WRITTEN HERE RATHER THAN BORROWED.
+  ///
+  /// **AN ENCODER CANNOT BE ITS OWN WITNESS.** Asserting the uri equals
+  /// `format!("...{}", encode(bytes))` is the implementation restated, and it
+  /// passes for a truncating encoder as happily as for a correct one. This runs
+  /// the other direction over the standard alphabet, so a byte lost between
+  /// `normalise` and the uri has somewhere to show up. It handles only what
+  /// `encode` emits and panics on anything else, which is what a test wants.
+  fn unbase64(s: &str) -> Vec<u8> {
+    const A: &[u8; 64] = b"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+    let raw: Vec<u8> = s.bytes().filter(|b| *b != b'=').collect();
+    let mut out = Vec::new();
+    for chunk in raw.chunks(4) {
+      let mut acc: u32 = 0;
+      for (i, b) in chunk.iter().enumerate() {
+        let v = A.iter().position(|a| a == b).expect("inside the base64 alphabet") as u32;
+        acc |= v << (18 - 6 * i);
+      }
+      // 4 sextets carry 3 bytes, 3 carry 2, 2 carry 1 -- the padding is what
+      // `encode` dropped and the filter above removed again.
+      for i in 0..chunk.len() - 1 {
+        out.push(((acc >> (16 - 8 * i)) & 0xff) as u8);
+      }
+    }
+    out
+  }
+
+  /// The uri carries EXACTLY the bytes the policy produced, and says what they
+  /// are. Decoded independently rather than compared against the encoder.
+  #[test]
+  fn an_embedded_picture_round_trips_to_the_bytes_normalise_produced() {
+    let p = write("embed-opaque", &png(64, 64, 255));
+    let e = embed(&p, TARGET, Role::Slide).unwrap();
+    let head = "data:image/jpeg;base64,";
+    assert!(e.uri.starts_with(head), "opaque alpha embeds as jpeg: {}", &e.uri[..40]);
+
+    let direct = normalise(&p, role_edge(Role::Slide, TARGET)).unwrap();
+    assert_eq!(unbase64(&e.uri[head.len()..]), direct.bytes, "the uri lost or changed bytes");
+    assert_eq!(e.encoded, direct.bytes.len(), "and reports the encoded count, not the string's");
+    assert_eq!((e.width, e.height), (direct.width, direct.height));
+  }
+
+  /// The mime in the uri follows the ENCODER, which follows the collapse -- so a
+  /// genuinely transparent picture keeps both. This is the path both of 45h's
+  /// brand marks actually take.
+  #[test]
+  fn a_genuinely_transparent_picture_embeds_as_png() {
+    let p = write("embed-clear", &png(64, 64, 128));
+    let e = embed(&p, TARGET, Role::Slide).unwrap();
+    assert!(e.uri.starts_with("data:image/png;base64,"), "{}", &e.uri[..40]);
+  }
+
+  /// **THE ROLE HAS TO REACH THE EDGE, AND ONLY AN EMBED CAN SHOW THAT.**
+  /// `each_role_gets_the_edge_the_reference_gives_it` proves `role_edge` computes
+  /// the three numbers; it cannot notice `embed` ignoring the role it was passed.
+  #[test]
+  fn each_role_embeds_at_the_edge_its_role_asks_for() {
+    let p = write("embed-roles", &png(3000, 3000, 255));
+    let seen: Vec<u32> = [Role::Slide, Role::Mark, Role::Bug]
+      .iter()
+      .map(|r| embed(&p, TARGET, *r).unwrap().width)
+      .collect();
+    // A square resizes to exactly the edge, so the widths ARE role_edge's answers.
+    assert_eq!(seen, vec![1920, 1382, 384], "the role must reach the resize");
+  }
+
+  /// A refusal propagates through `embed` with the file still named -- the
+  /// wrapper must not turn a diagnosable failure into an anonymous one.
+  #[test]
+  fn a_missing_file_refuses_through_embed_and_still_names_itself() {
+    let e = embed(Path::new("/nonesuch/absent-mark.png"), TARGET, Role::Bug).unwrap_err();
+    assert!(e.message.contains("cannot read"), "{}", e.message);
+    assert!(e.message.contains("absent-mark.png"), "names the file: {}", e.message);
   }
 }
