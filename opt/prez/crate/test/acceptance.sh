@@ -372,7 +372,12 @@ if want AT01; then
   finish
 fi
 
-cargo build --release --manifest-path "$CRATE/Cargo.toml" >/dev/null 2>&1
+# **--workspace, OR THIS BUILDS NO showreel BINARY.** Every AT below depends on
+# this pre-build, and the unscoped form covers 2 workspace targets where
+# --workspace covers 4 -- artifact appears at all only because prez depends on
+# it. `utilz prez showreel check` runs today, so an AT needing that binary would
+# fail on a missing file and read as a dispatch defect. AC-1.16, site 5.
+cargo build --release --workspace --manifest-path "$CRATE/Cargo.toml" >/dev/null 2>&1
 
 # ---------------------------------------------------------------- AT02 -- AC01
 
@@ -944,8 +949,12 @@ if want AT09; then
   if ! command -v cargo >/dev/null 2>&1; then
     unchecked "clippy unmeasured, cargo is not installed"
   else
+    # **--workspace, OR THE LOAD-BEARING GATE LINTS HALF THE WORKSPACE.**
+    # Unscoped it lints 2 targets and --workspace lints 4, so artifact and
+    # showreel were both absent from the check this AT's own comment calls
+    # load-bearing. AC-1.16, site 3.
     clippy=$(cd "$REPO" && CARGO_TARGET_DIR="$TARGET" cargo clippy --manifest-path "$CRATE/Cargo.toml" \
-      --all-targets 2>&1 | grep -cE '^(warning|error)(\[|:)' || true)
+      --workspace --all-targets 2>&1 | grep -cE '^(warning|error)(\[|:)' || true)
     check "clippy warnings and errors" "${clippy:-0}" "0"
   fi
   finish

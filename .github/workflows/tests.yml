@@ -280,9 +280,13 @@ jobs:
         for manifest in "${CRATES[@]}"; do
           crate_dir="$(dirname "$manifest")"
           echo "::group::$manifest"
-          cargo build --release --manifest-path "$manifest"
-          # --workspace or every crate but the root package is silently
-          # skipped; --no-fail-fast or the first failing crate hides the rest.
+          # --workspace ON BOTH, or every crate but the root package is
+          # silently skipped; --no-fail-fast or the first failing crate hides
+          # the rest. THIS COMMENT SAT ONE LINE LOWER UNTIL 2026-09-09, between
+          # the two calls, so it read as the test line's and described the build
+          # line above it exactly -- which is how the build kept its defect with
+          # the reason for the flag written at the site. AC-1.16, site 1.
+          cargo build --release --workspace --manifest-path "$manifest"
           cargo test --release --workspace --no-fail-fast --manifest-path "$manifest"
 
           # The black-box suites, always --strict, DISCOVERED rather than named
