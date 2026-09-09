@@ -3,7 +3,7 @@ node: cc
 name: Control Claude
 role: control
 session_id: a30f9092-03ed-44ba-a659-b37813af12c7
-heartbeat_at: 2026-09-09 12:14Z
+heartbeat_at: 2026-09-09 12:16Z
 status: active
 focus: "ST0017 hoist. WP-01 done. WP-03 started: AC-3.5's CSS half built, issues 0014, 0015 and 0017 closed by one fix, red-proved both ways. LIMITS unblocked by snorkeltoast's parity answer and still unported."
 claims: [ST0017]
@@ -65,7 +65,7 @@ claims: [ST0017]
 - **Criterion:** every gradeable slide at RMSE 0.000000 against **its own floor**, slides 13 and 14 accepted by name, and **the render count matching**. A Rust build rendering a slide once where Python renders it twice is now a visible difference rather than something averaged away.
 - **19 gradeable, 2 undecided (13 and 14, both 2-render), 1 presence-unprovable (slide 1), 0 windowless, of 22.** Partition sums.
 - **`min_defect` is None, and that is a REFUSAL not an omission.** The red-proof's own injection reads 0.998249 to 2.280042 across eight image slides -- 2.3x for an identical procedure, decided by what the picture is -- so no constant taken from one injection can stand for the set. Naming a magnitude is AC-2.17 and hv's.
-- **MOST SLIDES CAN BE GRADED WITH NO BROWSER.** Slide 6's payload figure 0.999768 against the browser's 0.999752: the on-screen measurement tracks the payload for a full-bleed image. The tight loop of the image port is milliseconds, not minutes.
+- **MOST SLIDES CAN BE GRADED WITH NO BROWSER, AND THE SHORTCUT HAS A STATED DOMAIN.** Slide 6's payload figure 0.999768 against the browser's 0.999752 -- but that agreement holds for a **FULL-BLEED** image, where the frame is essentially the payload scaled to fill. **A letterboxed or contained slide puts unchanged background in the frame, so the on-screen figure falls below the payload figure by roughly the square root of the covered fraction.** Slide 0 is the one to watch: 1024x1024 into 16:9, and its payload figure of 2.280042 is the reel's highest precisely because none of that dilution is in it. **So: payload level for the pixel pipeline's tight loop, browser for the fit and layout classes** -- which is where the difference lives anyway. snorkeltoast's bound, given before I generalised one agreeing pair across every slide, which is the day's dominant failure and would have been mine.
 - **Two caveats, both mine to carry.** The table is against a RECONSTRUCTION of 008's config -- snorkeltoast rebuilt it minus the fourth socials entry **I added**, because the live config plans 23 slides against the artifact's 22 and the partition refuses. And it is SUPERSEDED, not merely dated, by the next build. **Do not rebuild the reel without saying so first.**
 
 ## The estate
