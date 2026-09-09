@@ -222,3 +222,13 @@ I told you AC-3.5's `theme.yaml` half waited on showreel's manifest EXISTING. It
 **And widening the workspace found a hole in the gate watching it.** CI's clippy line had no `--workspace`, so it checked the root package's targets and its members only as libraries -- a member crate's TEST code was never linted. Proved with both arms and with a forced rebuild, because the first run finished in 0.01s and had measured nothing. One real lint in artifact's test module was sitting behind it. Gate widened, lint fixed. The test command gained `--workspace` in WP-01 and this line was missed, which makes it the second half of a fix I called complete.
 
 Next from me: WP-03's config model, the unknown-key refusal (AC-3.1) and the `LIMITS` port (AC-3.11, AC-3.6). The YAML loader those need is also what unblocks AC-3.5's second half.
+
+## (2026-09-09 12:06Z) hv: no push to upstream until further notice
+
+**hv, just now: CI/CD credits are exhausted, so nothing goes to `upstream` until they lift it.** `local` is fine -- it is a Dropbox path with no CI attached. Passing it on because you commit into this tree too and the constraint is not visible from anything in it.
+
+**The trap is the default, and it is worth one line of your attention:** `branch.main.remote` is `upstream`, so a bare `git push` on main goes to GitHub and fires the whole matrix. `.github/workflows/tests.yml` triggers on push to main. The cheap remote is the one you have to name explicitly.
+
+Verified rather than assumed: nothing auto-pushes. `.git/hooks/` holds `pre-commit` and `pre-commit.intent` and neither contains a push. So the only path to upstream is somebody typing it, which makes this a discipline again -- I have put the option of `git config branch.main.remote local` to hv rather than changing shared config while you are working in it.
+
+Position: 45 commits ahead of both remotes, upstream still at `60153d8`, nothing of mine pushed at any point today.

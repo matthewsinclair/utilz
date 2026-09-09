@@ -3,7 +3,7 @@ node: cc
 name: Control Claude
 role: control
 session_id: a30f9092-03ed-44ba-a659-b37813af12c7
-heartbeat_at: 2026-09-09 11:47Z
+heartbeat_at: 2026-09-09 12:05Z
 status: active
 focus: "ST0017 hoist. WP-01 done. WP-03 started: AC-3.5's CSS half built, issues 0014, 0015 and 0017 closed by one fix, red-proved both ways. LIMITS unblocked by snorkeltoast's parity answer and still unported."
 claims: [ST0017]
@@ -58,6 +58,8 @@ claims: [ST0017]
 | devbin             | `bin/devbin check autotests` -- now `3 crate(s), none with a tests/ directory`                                                                                                                  |
 
 ## The estate
+
+- **NO PUSH TO `upstream` UNTIL hv LIFTS IT.** hv, 2026-09-09: CI/CD credits are exhausted. `local` (a Dropbox path, no CI) is permitted. **THE TRAP IS THE DEFAULT**: `branch.main.remote` is `upstream`, so a bare `git push` on main goes to GitHub and fires the full matrix -- `.github/workflows/tests.yml` triggers on push to main. The cheap remote is the one you have to name. Nothing auto-pushes: neither `pre-commit` nor `pre-commit.intent` contains a push, verified rather than assumed.
 
 - **`utilz` on PATH is the INSTALL** (`opt 16 links, dev 0`). vc republished it at `b6ca749`; 0 of 15 READMEs now carry an absolute home path. **Run `utilz use` rather than trusting this line -- it has been wrong in both directions in two days.**
 - **`utilz test` refuses from an install, and every bats suite pins `UTILZ_HOME` from `test_helper.bash`** -- so no suite here can measure a published install. That is issue 0016's root.
