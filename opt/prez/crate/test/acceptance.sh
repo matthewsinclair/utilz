@@ -377,21 +377,48 @@ cargo build --release --manifest-path "$CRATE/Cargo.toml" >/dev/null 2>&1
 # ---------------------------------------------------------------- AT02 -- AC01
 
 if want AT02; then
-  start AT02 "dependency posture: comrak and std, nothing else"
+  # **AMENDED 2026-09-09 FOR ONE NAMED CRATE, ON hv'S SIGN-OFF, AND FOR NOTHING
+  # ELSE.** AC02 holds prez to comrak and nothing else, and requires the
+  # sign-off for any addition to be named in the commit that adds it. hv signed
+  # off `artifact` -- a first-party crate in this workspace taking NO
+  # dependencies of its own, so it adds zero packages to the lockfile and zero
+  # third-party code, which are the two currencies AC02 reasons in.
+  #
+  # **AC02'S WORDING WAS NOT BROADENED**, so this is not a first-party
+  # exemption: a SECOND first-party dependency asks the question again, from
+  # the start, and the assertions below are still shaped to refuse it.
+  #
+  # What changed here is the expected VALUE, never the SHAPE. The set match is
+  # still exact rather than a substring or an allowlist; the `use` filter is
+  # still deny-by-omission; the hand-rolled check still demands a file exists
+  # and merely follows it to its new home. A test relaxed to accommodate a
+  # change stops being able to refuse the next one.
+  start AT02 "dependency posture: comrak, the shared crate, and std -- nothing else"
   declared="$(awk '/^\[dependencies\]/{f=1;next} /^\[/{f=0} f && /^[a-zA-Z]/ {print $1}' "$CRATE/Cargo.toml" | sort | tr '\n' ' ')"
-  check "declared dependencies" "$declared" "comrak "
+  check "declared dependencies" "$declared" "artifact comrak "
 
   # The other half of AC01: the named jobs are HAND-ROLLED, which shows up as
-  # every `use` resolving to std, this crate, or comrak. A new crate would have
-  # to appear here even if someone forgot to look at Cargo.toml.
+  # every `use` resolving to std, this crate, comrak, or the shared crate. A new
+  # crate would have to appear here even if someone forgot to look at
+  # Cargo.toml -- which is the half that catches an edit to one file and not the
+  # other, in either direction.
   foreign="$(grep -rhoE '^\s*use [a-zA-Z_][a-zA-Z0-9_]*' "$CRATE/src" \
-    | awk '{print $2}' | sort -u | grep -vE '^(std|crate|super|self|comrak)$' || true)"
-  [ -z "$foreign" ] && ok "every use resolves to std, crate or comrak" \
+    | awk '{print $2}' | sort -u | grep -vE '^(std|crate|super|self|comrak|artifact)$' || true)"
+  [ -z "$foreign" ] && ok "every use resolves to std, crate, comrak or artifact" \
     || bad "foreign crate in a use statement: $foreign"
 
-  for own in base64 args frontmatter split inline; do
+  for own in args frontmatter split inline; do
     [ -f "$CRATE/src/$own.rs" ] && ok "$own is hand-rolled" || bad "$own.rs is missing"
   done
+
+  # base64 is STILL hand-rolled and is still asserted to exist -- it moved to
+  # the shared crate, because both binaries needed it and AC02 is the reason it
+  # was written against std in the first place. Following it is not the same as
+  # dropping it: deleting this row would retire a control rather than relocate
+  # one, and the property it proves is unchanged.
+  [ -f "$CRATE/crates/artifact/src/base64.rs" ] \
+    && ok "base64 is hand-rolled, in the shared crate" \
+    || bad "crates/artifact/src/base64.rs is missing"
   finish
 fi
 
