@@ -19,3 +19,4 @@
 pub mod config;
 pub mod duration;
 pub mod limits;
+pub mod segment;

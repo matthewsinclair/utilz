@@ -134,13 +134,15 @@ pub struct Defaults {
 
 /// One reel.
 ///
-/// **`segments` IS DELIBERATELY NOT VALIDATED YET AND THE ROW STAYS OPEN.** Its
-/// twelve shapes are discriminated by `type:` and each carries its own keys, so
-/// modelling it is a separate piece of work rather than a line here. Until it
-/// lands, an unknown key INSIDE a segment is still accepted silently -- so
-/// **AC-3.1 is not satisfied by this file**, and saying so is the point: a
-/// partial guard described as a whole one is worth less than no guard, because
-/// it stops anyone looking.
+/// **`segments` IS VALIDATED BY `crate::segment`, WHICH LANDED AFTER THIS
+/// STRUCT.** Its twelve shapes are discriminated by `type:` and serde cannot
+/// express them -- `flatten` and `deny_unknown_fields` are mutually exclusive --
+/// so the shapes are a table there and `parse` calls into it. The note here
+/// previously said segments were unvalidated and that the row stayed open; it is
+/// kept in this shape rather than deleted because **the honest reading of
+/// AC-3.1 is still that it is not fully closed**: the shape table is
+/// transcribed from `collect_segment`, and a field of a type the live reel does
+/// not exercise could be wrong without any test noticing.
 #[derive(Debug, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct Reel {
@@ -201,6 +203,10 @@ pub fn parse(yaml: &str, whose: &str) -> Result<Reel, Failure> {
       "every key is checked against the ones this tool reads -- check the spelling, \
        or drop the key if it was never doing anything",
     )
+  })?;
+  crate::segment::validate_all(&reel.segments).map_err(|e| Failure {
+    message: format!("{whose}: {}", e.message),
+    ..e
   })?;
   if let Some(schema) = &reel.showreel {
     if schema.version != SCHEMA_VERSION {
