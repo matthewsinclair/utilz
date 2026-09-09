@@ -4,4 +4,17 @@
 # built): every OPEN thread is declared, and nothing else. OPEN means every status
 # except Completed and Cancelled.
 #
+# HOW TO CHANGE IT, which the line above does not say. `intent st hydrate <ID>` adds a
+# thread here and writes its files; `intent st dehydrate <ID>` is the inverse. Reach for
+# those rather than editing this file by hand: the file and the tree are reconciled by
+# `intent organize`, so a hand-edit the tree does not match is removed on the next
+# `--apply`.
+#
+# AND THE RULE ABOVE IS NOT THE RULE THE TOOL IMPLEMENTS, though the two agree today.
+# `organize --default` writes one STEELTHREAD line per WIP thread; the header's rule is
+# every OPEN thread, which also admits Not Started. ST0017 is currently the only
+# non-Completed thread and it is WIP, so both rules produce this exact file -- a Not
+# Started thread is what would separate them. Measured 2026-09-09, amended on hv's
+# ruling the same day; the provenance above is kept rather than regenerated away.
+#
 STEELTHREAD:ST0017

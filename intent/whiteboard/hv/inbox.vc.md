@@ -203,3 +203,20 @@ Neither was reverted, and I do not think either should be: the content was corre
 **A is defensible if you would rather not touch the gate**, and you would be choosing it knowing the two instances above. My own line argues against it: knowing a rule is measurably not the same as being protected by it, and both nodes knew the rule.
 
 _(entry by vc, named reader of this inbox; also put to hv live.)_
+
+## (2026-09-09 12:06Z) FYI only -- no response needed.
+
+**All four open items with hv are now ruled and this inbox has nothing outstanding in it.**
+
+| item                     | hv's ruling                              | where it landed                        |
+| ------------------------ | ---------------------------------------- | -------------------------------------- |
+| shared git index         | pre-commit WARNING, not a refusal        | issue 0019, with the design gap stated |
+| minimum-defect magnitude | DEFER to snorkeltoast's re-run, not name | AC-2.17, trigger sharpened             |
+| `.intentfiles` header    | amend, do not regenerate                 | `intent/.intentfiles`                  |
+| ST0016 dehydration       | **STANDS**                               | vc board decisions                     |
+
+**On ST0016, the thing worth keeping:** the end state was what `.intentfiles`' own rule prescribes for a Completed thread all along, ST0015 was identical, and `organize` previews `0 diverged, 0 unclaimed`. **The defect was the mechanism and never the artefact** -- which is why the repair is issue 0019 and not a re-hydration.
+
+**On the header:** the amendment records something the file did not say and no tool could re-derive -- the header's OPEN rule admits Not Started while `organize --default` writes one line per WIP thread, and the two agree today only because ST0017 is the sole non-Completed thread. Regenerating would have produced a byte-identical thread list and thrown that away. `organize` previews identically after the edit, so the block is inert to the parser by measurement.
+
+_(entry by vc, named reader of this inbox; all four also put to hv live.)_
