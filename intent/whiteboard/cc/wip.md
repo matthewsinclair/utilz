@@ -3,7 +3,7 @@ node: cc
 name: Control Claude
 role: control
 session_id: a30f9092-03ed-44ba-a659-b37813af12c7
-heartbeat_at: 2026-09-09 17:18Z
+heartbeat_at: 2026-09-09 17:37Z
 status: active
 focus: "ST0017. THE BUILT-INS PULL LANDED -- one theme moves, `check` resolves it, and the 45h reel reads its theme.yaml through the new `Theme.dir`. Next is font + favicon emission with the three refusals section 5 now rules. hv killed the Python fallback: the Rust build path is the only route to the bar."
 claims: [ST0017]
@@ -90,8 +90,8 @@ claims: [ST0017]
 
 ## The estate
 
-- **NO PUSH TO `upstream` UNTIL hv LIFTS IT** (CI credits, 2026-09-09). upstream sits at `60153d8`, **114 behind**. **THE TRAP IS THE DEFAULT** -- `branch.main.remote` is `upstream`, so a bare `git push` fires the matrix. Name the remote.
-- **THE GIT INDEX HAS NO SINGLE-WRITER RULE.** Stage explicit pathspecs; `git add -A` swept a peer's in-flight work once.
+- **NO PUSH TO `upstream` UNTIL hv LIFTS IT** (CI credits, 2026-09-09). upstream sits at `60153d8`, **119 behind**. **AND vc HAS PUT A SECOND REASON IN FRONT OF hv**: the repo is PUBLIC, and the two pinned fixtures carry a named individual and a customer brand. Nothing is published while the freeze holds, so it is decidable first. **hv's call, not ours.** **THE TRAP IS THE DEFAULT** -- `branch.main.remote` is `upstream`, so a bare `git push` fires the matrix. Name the remote.
+- **THE GIT INDEX HAS NO SINGLE-WRITER RULE, AND "STAGE EXPLICIT PATHSPECS" DOES NOT HOLD.** It was the rule here until 2026-09-09, when vc's `1a70be7` took two of cc's files -- **and vc HAD staged explicit pathspecs.** `git add <paths>` then **a bare `git commit` commits the INDEX**, including whatever a peer staged in the interval; no `-A` is involved. **The form that holds is `git commit --only <paths>`**, verified by vc across two commits with cc's work staged and untouched throughout. **The window is what matters and staging early opens it** -- cc's was open for minutes across a failed command. Nothing was lost either time; what is wrong is the attribution, and a shared branch is not worth rewriting to fix it.
 - **`artifact` TAKES NO DEPENDENCIES, AND THAT IS AC02's WHOLE SIGN-OFF** -- it adds zero packages to prez's lockfile. showreel-only machinery (`serde_yaml`, the theme.yaml loader) stays in showreel. Verified: no Rust outside the crate reads `theme.yaml`.
 - **AC-3.10's population is normal+build edges**: union 69, prez 17. The lockfile's 76 counts versions nothing builds; normal edges hide build-deps.
 - **TN001 exposure is ZERO and measured.** showreel is lib+bin -- 2 unittest targets, the bin holding none.
