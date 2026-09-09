@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: a30f9092-03ed-44ba-a659-b37813af12c7
-heartbeat_at: 2026-09-09 17:37Z
+heartbeat_at: 2026-09-09 17:58Z
 status: active
-focus: "ST0017. THE BUILT-INS PULL LANDED -- one theme moves, `check` resolves it, and the 45h reel reads its theme.yaml through the new `Theme.dir`. Next is font + favicon emission with the three refusals section 5 now rules. hv killed the Python fallback: the Rust build path is the only route to the bar."
+focus: "ST0017. C1 (admission) and C2 (normalisation) both landed and red-proved. Theme resolution, fonts and favicon all inlined. NEXT IS `collect_segment`, the 147-line one, which is where the six admission sites get wired and AC-3.2 and AC-3.8 discharge. hv is afk and has delegated sequencing to vc; vc refused both my proposed reorderings and the order stands."
 claims: [ST0017]
 ---
 
@@ -20,11 +20,15 @@ claims: [ST0017]
 - **THE BUILT-INS PULL IS DONE AND IT WAS ONE FILE** (`5130237`). `themes/default/theme.css`, 951 bytes, sha256-identical to the source. **`themes/popupart/` does NOT move** -- section 7 and H3. It arrives over `SHOWREEL_THEME_PATH`, and **H3 is measured rather than asserted: zero brand strings in both shipped binaries, with a control proving `strings` finds what IS there.**
 - **`Theme` GAINED `dir: Option<PathBuf>`** (`294bc48`), because the resolver recorded no theme directory and every declared asset is relative to one. **Cost to prez: ZERO bytes, measured on relinked binaries.** Second showreel-driven addition to the shared crate after `refuse_external_target`'s sixteen -- **zero this time is a fact about this field, not a licence.**
 - **H1 NEEDS `SHOWREEL_THEME_PATH` SET AND THE PYTHON NEEDED NOTHING.** 45h names `theme: popupart`, a built-in there and never one here. A bare invocation refuses, correctly. **Told vc before they write H1's AT**, because it reads as a port regression to anyone grading it without that line.
-- **NEXT, in order**: font + favicon emission (read, base64, `@font-face` + `<link rel="icon">`, with section 5's three refusals -- missing favicon, missing font, `.ttf` by name with the conversion command), admission (C1), normalisation (C2), `collect_segment` (147 lines, the big one), data-URI, template pull, delivery re-encode.
+- **C1 LANDED** (`1d5f320`) -- one classifier, two call shapes split by WHO ASSERTED THE PATH. Named refuses; scanned drops and **REPORTS at the segment's altitude**, which is the sentence `report_unused` structurally cannot say. **AC-3.2 is NOT satisfied and I did not offer it**: the function exists, the six sites route through it at `collect_segment`.
+- **C2 LANDED** (`62b644d`) -- one normalisation policy, closing the reference's asymmetry where `data_uri` lacks the alpha collapse and is the default path for hand-placed brand marks. **AC-3.4 will NOT close on it** -- vc's catch: `normalise_image` is init-only and init is WP-04, so half the row's population is outside this work package.
+- **NEXT: `collect_segment`** (147 lines). It wires the six admission sites, discharges AC-3.2 and AC-3.8 (slide list and asset list from ONE walk), and is where **AC-3.3's `Option<Qr>` closes** -- vc's catch: the row is about the TYPE, not the generation, so it must NOT be deferred into WP-04 with `qr_svg`.
+- Then: data-URI, template pull (with AC-3.7's brand-literal drop in the SAME commit), delivery re-encode. **TELL vc BEFORE ANY BUILD POINTS AT 45h** -- they will have AC-2.1 leg 2, AC-5.1 and AC-6.1 leg 3 ready to grade in one pass, and the first `compare` against a Rust artifact happens only once.
 
 ## TODO
 
 - **Issue 0016** -- record gate state in `manifest.sha256`. Ratified; hv scheduled it as a **WP-05 rider**, not now.
+- **PFIC the scan ordering when next in `admit.rs`** -- vc's, and NOT a special trip. Extract the sort as a pure function over a `Vec` and test that, so the test stops depending on the filesystem returning unsorted entries. Do it while wiring the six sites.
 - **Optional, ungated: drop `|| "Snorkeltoast"` at the template pull.** Parity-neutral; taking it reads 22 of 22 gradeable, leaving it 21. **AC-3.7 is WITHDRAWN.**
 - Two homeless findings, unowned: `todo` verbs unreachable from Emacs; `hoist-rebase.sh`'s dead postcondition.
 
@@ -65,6 +69,8 @@ claims: [ST0017]
 
 - **A RED-PROOF NEEDS ITS OWN CONTROL, AND ALSO MEASURES WHICH TESTS ARE PROOFS.** Every injection proves it applied (`grep -c` to zero) before its result is read. Of 23 theme tests only 2 fail on R3's defect; of 7 `limits` only 2; of 11 `config` only 2. **Seven green under one heading reads as seven proofs and is not.**
 - **A RED-PROOF THAT LIVES IN A COMMENT HAS NO CONTROL AVAILABLE, BECAUSE THERE IS NOTHING LEFT TO RUN.** vc's AC-1.15 audit found three non-refusing appliers and **two were mine** -- `limits.rs` and `segment.rs`, both saying "injection proved applied" with the mechanism recorded nowhere, in the comment or the commit. `segment.rs` settles its own case: it reports TWO counts, and **reporting a value is what a reading looks like; a step that refuses needs neither written down.** Recorded as non-compliant rather than restated as a refusal I cannot show -- **the correction available is to say what is NOT established.** Appliers now `assert` and exit non-zero, and **the injection text goes in the COMMIT MESSAGE, where it can be re-applied**, not in a comment. **PROSE DOES NOT FAIL, arriving at red-proofs.**
+- **KNOWING A RULE IS MEASURABLY NOT THE SAME AS BEING PROTECTED BY IT, AND I PROVED IT ON MYSELF TODAY.** I identified "the injection proved applied before its result was read" as the TELL of a reading, corrected two files for carrying it -- **and wrote the same phrase into the next commit message three hours later.** vc found it. **A census of compliance taken at 17:18Z would have read clean and been wrong within the hour**, which is why AC-1.15's condition is forward-looking rather than a count. **The guard belongs in the code, not in the discipline of whoever is typing.**
+- **A RED-PROOF CAN REFUTE YOUR OWN COMMENT, AND ONE DID.** C2's reordering injection moved **not one test**, against three paragraphs of mine claiming the order was load-bearing. A fully-opaque alpha channel is CONSTANT, a Lanczos kernel sums to one, so a constant channel resamples to itself -- there was never anything for the resize to break. **Corrected to cost rather than correctness.** A comment asserting a property no test can lose is this thread's recurring shape, and length is not evidence.
 - **A TEST CAN ASSERT NOTHING AND LOOK FINE.** My first freshness test passed with AND without the fix it guarded; the discriminating case was the opposite one. **A reading does not give you this -- the red-proof does.**
 - **A FAILED TEST'S ZERO LOOKS EXACTLY LIKE A PASSING RESULT.** vc's pty died, wrote 59 bytes of error, and `grep -c` scored zero. **The LINE COUNT caught it: one line for a 427-line file is not a result.**
 - **THE INSTRUMENT THAT GATES IS NOT THE INSTRUMENT YOU RAN.** Six sites in AC-1.16, in TWO mechanisms: five take their population from cargo's default (`--workspace` fixes them), one from a hand-written directory list (**no flag reaches it, and it is the silent one**). **Derive the population from the manifest, or from the TREE where no manifest is read.**
