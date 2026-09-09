@@ -450,48 +450,190 @@ fn from_directory(dir: &Path, remedy: &str) -> Result<Theme, Failure> {
 /// Comments are stripped before the scan: a provenance or licence URL in a
 /// `/* ... */` block is documentation, not a reference, and failing a build over
 /// one would teach theme authors to delete their attributions.
+///
+/// **THE CHECK IS A UNION OF TWO INSTRUMENTS, BECAUSE ONE OF THEM CANNOT BE
+/// COMPLETE.** Measured 2026-09-09 over 13 fixtures with four controls (issue
+/// 0017): EIGHT were decided wrongly by the needle list this replaces, by five
+/// mechanisms, and every one of the eight shipped its reference into the
+/// artifact. Nine references reach it in all; the ninth is a comment, which is
+/// correct and fetches nothing.
+///
+/// - A **coarse net** over all live text refuses an absolute scheme wherever it
+///   appears. It false-positives on a URL inside a string, which is the price of
+///   catching reference shapes nobody enumerated -- `image-set()`, `@namespace`,
+///   whatever CSS gains next. ASCII-case-insensitive, because a scheme is.
+/// - A **site scan** refuses a protocol-relative target at the two sites R2
+///   names: a `url()` token and an `@import` prelude. Protocol-relative is
+///   deliberately NOT refused in arbitrary string content -- `content: "//"` is
+///   a shape people write, and it was the other implementation's false positive.
+///
+/// **The sites are read as tokens rather than as spellings, and that is the
+/// whole correction.** `url(`, `URL(`, `url( `, `url(` NEWLINE and each quoting
+/// form are one site; a needle list must enumerate their cross product, so it is
+/// forever sized to whatever someone happened to try.
+///
+/// **The limit, stated rather than left to be discovered:** a CSS identifier
+/// escape (`\75 rl(...)` for `url(...)`) defeats both instruments. It is
+/// deliberate obfuscation rather than a shape anyone writes, and the needle list
+/// did not catch it either, so closing it is not this change.
 pub fn refuse_external(source: &str, origin: &str) -> Result<(), Failure> {
-  for (number, line) in strip_comments(source).lines().enumerate() {
-    let found = ["http://", "https://", "url(//", "url('//", "url(\"//"]
-      .into_iter()
-      .find(|needle| line.contains(needle));
-    if let Some(needle) = found {
-      return Err(Failure::new(
-        format!(
-          "theme {origin} line {} references something outside the artifact ({needle}): {}",
-          number + 1,
-          line.trim()
-        ),
-        "themes must work offline -- inline the font or asset, or drop the reference",
-      ));
+  let scanned = strip_comments(source, origin)?;
+  let lower = scanned.to_ascii_lowercase();
+
+  // `to_ascii_lowercase` maps A-Z and nothing else, so it preserves byte offsets
+  // AND line boundaries: these two iterators stay in step by construction, and
+  // an offset into `lower` indexes the same character in `scanned`.
+  for (index, (line, low)) in scanned.lines().zip(lower.lines()).enumerate() {
+    if let Some(needle) = ["http://", "https://"].into_iter().find(|n| low.contains(n)) {
+      return Err(external(origin, index + 1, needle, line));
     }
+  }
+
+  if let Some((at, needle)) = protocol_relative_site(&lower) {
+    return Err(external(origin, line_of(&scanned, at), needle, line_at(&scanned, at)));
   }
   Ok(())
 }
 
-/// Strip `/* ... */` comments, PRESERVING newlines.
+fn external(origin: &str, line: usize, needle: &str, text: &str) -> Failure {
+  Failure::new(
+    format!(
+      "theme {origin} line {line} references something outside the artifact ({needle}): {}",
+      text.trim()
+    ),
+    "themes must work offline -- inline the font or asset, or drop the reference",
+  )
+}
+
+/// The two reference SITES R2 names, located by token rather than by spelling.
+///
+/// Takes the ASCII-lowercased scan, so matching is case-insensitive and the
+/// offsets it returns still index the original. Returns the offset of the
+/// offending `//` -- not of the `url(` or `@import` that introduced it -- so the
+/// reported line is the line the URL is on, which is a different line whenever
+/// an at-rule wraps.
+fn protocol_relative_site(lower: &str) -> Option<(usize, &'static str)> {
+  let mut hits: Vec<(usize, &'static str)> = Vec::new();
+
+  let mut from = 0;
+  while let Some(rel) = lower[from..].find("url(") {
+    let at = from + rel + 4;
+    if let Some(off) = protocol_relative_target(&lower[at..]) {
+      hits.push((at + off, "url(//"));
+    }
+    from = at;
+  }
+
+  let mut from = 0;
+  while let Some(rel) = lower[from..].find("@import") {
+    let at = from + rel + 7;
+    // The prelude runs to the end of the at-rule. Reading to `;` or `{` rather
+    // than to the end of the LINE is what catches `@import` NEWLINE `"//x";`,
+    // which is one at-rule wearing two lines.
+    let rest = &lower[at..];
+    let end = rest.find([';', '{']).unwrap_or(rest.len());
+    if let Some(off) = protocol_relative_target(&rest[..end]) {
+      hits.push((at + off, "@import //"));
+    }
+    from = at;
+  }
+
+  hits.into_iter().min_by_key(|(at, _)| *at)
+}
+
+/// Where a reference target's `//` starts, if it has one.
+///
+/// Leading whitespace and one optional quote belong to the token's spelling
+/// rather than to the target, so `url( '//x' )` and `url(//x)` are the same
+/// reference and both answer here.
+fn protocol_relative_target(rest: &str) -> Option<usize> {
+  let trimmed = rest.trim_start();
+  let mut skipped = rest.len() - trimmed.len();
+  let body = match trimmed.strip_prefix('"').or_else(|| trimmed.strip_prefix('\'')) {
+    Some(inner) => {
+      skipped += 1;
+      inner
+    }
+    None => trimmed,
+  };
+  if body.starts_with("//") { Some(skipped) } else { None }
+}
+
+fn line_of(source: &str, at: usize) -> usize {
+  source[..at].matches('\n').count() + 1
+}
+
+fn line_at(source: &str, at: usize) -> &str {
+  let start = source[..at].rfind('\n').map_or(0, |i| i + 1);
+  let end = source[at..].find('\n').map_or(source.len(), |i| at + i);
+  &source[start..end]
+}
+
+/// Strip `/* ... */` comments, PRESERVING newlines, refusing an unterminated one.
 ///
 /// **THE NEWLINES ARE THE POINT AND DELETING THEM IS THE CHEAPER MISTAKE.** The
 /// scan above reports the line a reference was found on, and that number is only
 /// true if stripping a comment does not move the lines after it. An
 /// implementation that deletes comments outright passes every test that does not
 /// assert a line number, and then misreports every one that follows a comment.
-fn strip_comments(source: &str) -> String {
+///
+/// **AND IT KNOWS STRING LITERALS, WHICH IS ISSUE 0015.** Without that,
+/// `content: "/*"` reads as a comment that never closes, the scan is discarded
+/// from that point, and a browser -- which parses the string correctly -- fetches
+/// whatever `@import` follows it. A string ends at its quote or at a newline,
+/// because an unclosed string is a parse error the browser recovers from at end
+/// of line and a scanner that ran past one would stop stripping for the whole
+/// file.
+///
+/// **AN UNTERMINATED COMMENT IS REFUSED RATHER THAN SILENTLY ENDING THE SCAN.**
+/// Truncating is defensible on browser semantics -- the rest is commented out for
+/// a reader too -- and indefensible as silence: `IN-AG-NO-SILENT-001`, and the
+/// scan that stops is the one holding the offline guarantee. Refusal makes the
+/// smaller claim: the theme is malformed, and half of it is not applying.
+fn strip_comments(source: &str, origin: &str) -> Result<String, Failure> {
+  let b = source.as_bytes();
   let mut out = String::with_capacity(source.len());
-  let mut rest = source;
-  while let Some(at) = rest.find("/*") {
-    out.push_str(&rest[..at]);
-    match rest[at..].find("*/") {
-      Some(end) => {
-        let comment = &rest[at..at + end + 2];
-        out.extend(comment.chars().filter(|c| *c == '\n'));
-        rest = &rest[at + end + 2..];
+  let mut copied = 0;
+  let mut i = 0;
+  let mut quote: Option<u8> = None;
+  while i < b.len() {
+    match quote {
+      Some(q) => {
+        if b[i] == b'\\' {
+          i += 2;
+        } else {
+          if b[i] == q || b[i] == b'\n' {
+            quote = None;
+          }
+          i += 1;
+        }
       }
-      None => return out,
+      None if b[i] == b'"' || b[i] == b'\'' => {
+        quote = Some(b[i]);
+        i += 1;
+      }
+      None if b[i] == b'/' && b.get(i + 1) == Some(&b'*') => {
+        out.push_str(&source[copied..i]);
+        let Some(end) = source[i..].find("*/") else {
+          return Err(Failure::new(
+            format!(
+              "theme {origin} line {} opens a comment that is never closed",
+              line_of(source, i)
+            ),
+            "close it with */ -- an unterminated /* comments out the rest of the theme, and the \
+             offline scan cannot see past it either",
+          ));
+        };
+        let comment = &source[i..i + end + 2];
+        out.extend(comment.chars().filter(|c| *c == '\n'));
+        i += end + 2;
+        copied = i;
+      }
+      None => i += 1,
     }
   }
-  out.push_str(rest);
-  out
+  out.push_str(&source[copied..]);
+  Ok(out)
 }
 
 #[cfg(test)]
@@ -607,38 +749,111 @@ mod tests {
     );
   }
 
-  /// **THIS PINS A KNOWN HOLE, NOT A GUARANTEE, AND ITS NAME SAYS SO.**
+  /// **THE POPULATION IS IN THE TEST, AND THAT IS THE WHOLE POINT.**
   ///
-  /// An unterminated `/*` truncates the scanned source, so every reference after
-  /// it goes unchecked. The plain case is close to self-neutralising -- a browser
-  /// also treats the rest as commented -- but the scanner has no notion of string
-  /// literals, so `content: "/*"` opens a comment that never closes while the
-  /// browser parses it correctly. The artifact then really does reach the
-  /// network. Filed separately from the needle-set defect because the root causes
-  /// differ: one is *the needle set misses a shape*, this is *the scanner never
-  /// receives the text*, and widening the needles does nothing for it.
+  /// Issue 0017's table, executed. Thirteen fixtures, five evasion mechanisms,
+  /// three issues -- and BOTH directions, because a suite in which every row
+  /// refuses is satisfied by a check that refuses everything. Three rows must
+  /// build, and one of them (`content: "//"`) is the false positive the other
+  /// implementation of this rule had.
   ///
-  /// **THIS TEST MUST GO RED WHEN THAT IS FIXED. That redness is the point** --
-  /// it is what carries the decision to whoever fixes it, rather than leaving a
-  /// green test whose name suggests the hole is already shut.
+  /// The check this replaced decided EIGHT of these thirteen wrongly and every
+  /// one of the eight shipped its reference into the artifact. That is measurable
+  /// only against an enumerated population, which is why the population lives
+  /// here rather than in a commit message.
   #[test]
-  fn an_unterminated_comment_truncates_the_scan_which_is_a_known_hole() {
+  fn the_external_reference_population_is_enumerated_and_every_member_is_decided() {
+    let population: &[(&str, &str, bool)] = &[
+      ("C1 clean css", "body{color:#333}\n", false),
+      ("C2 absolute scheme in url()", "body{background:url(https://cdn/x.png)}\n", true),
+      ("E1 @import with a \" target", "@import \"//cdn/x.css\";\n", true),
+      ("E2 @import with a ' target", "@import '//cdn/x.css';\n", true),
+      ("E3 @import url(//)", "@import url(//cdn/x.css);\n", true),
+      ("E4 url( // ) with spaces", "body{background:url( //cdn/x.png )}\n", true),
+      ("E5 URL( uppercased", "body{background:URL(//cdn/x.png)}\n", true),
+      ("E6 HTTP:// uppercased", "body{background:url(HTTP://cdn/x.png)}\n", true),
+      ("E7 a string holding /*", "body{content:\"/*\"}\n@import \"https://cdn/x.css\";\n", true),
+      ("E8 unterminated comment", "/* oops\n@import \"https://cdn/x.css\";\n", true),
+      ("E9 @import across two lines", "@import\n\"//cdn/x.css\";\n", true),
+      ("F1 // as string content", "body{content:\"//\"}\n", false),
+      ("F2 a url inside a comment", "/* see http://example.com */\nbody{color:red}\n", false),
+    ];
+
+    let refusing = population.iter().filter(|(_, _, r)| *r).count();
+    let building = population.len() - refusing;
+    assert_eq!(population.len(), 13, "the population IS the claim; a shrunk one is a weaker claim");
+    assert_eq!(refusing, 10, "ten fixtures must refuse");
+    assert_eq!(building, 3, "and three must BUILD -- without these the suite passes on refuse-all");
+
+    let mut wrong = Vec::new();
+    for (id, css, must_refuse) in population {
+      let refused = refuse_external(css, "t").is_err();
+      if refused != *must_refuse {
+        wrong.push(format!("{id}: expected refused={must_refuse}, got refused={refused}"));
+      }
+    }
+    assert!(
+      wrong.is_empty(),
+      "{} of {} decided wrongly:\n  {}",
+      wrong.len(),
+      population.len(),
+      wrong.join("\n  ")
+    );
+  }
+
+  /// **THE INVERSION THE OLD TEST ASKED FOR, KEEPING ITS FIXTURE.**
+  ///
+  /// This was `an_unterminated_comment_truncates_the_scan_which_is_a_known_hole`,
+  /// which recorded the hole and instructed whoever closed it to invert rather
+  /// than delete. Truncation was defensible on browser semantics and
+  /// indefensible as silence: the scan that stopped early is the one holding the
+  /// offline guarantee. So the refusal names the comment rather than the
+  /// reference -- the theme is malformed, and saying so is the smaller and truer
+  /// claim than reporting a URL the author may not have written.
+  #[test]
+  fn an_unterminated_comment_is_refused_rather_than_ending_the_scan_in_silence() {
     let css = "body{color:red}\n/* unterminated\nbody{background:url(https://cdn/x.png)}\n";
-    let scanned = strip_comments(css);
-    assert!(scanned.contains("color:red"), "keeps what preceded the comment: {scanned:?}");
-    assert!(
-      !scanned.contains("cdn/x.png"),
-      "EXPECTED RED IF THE SCANNER WAS JUST FIXED -- do not chase this as a regression. \
-       This test RECORDS a known hole: an unterminated comment truncates the scan, so the rest \
-       of the file goes unchecked. If the scanner now reaches this text, that is the fix landing. \
-       INVERT this test into a guarantee; do not delete it."
-    );
-    assert!(
-      refuse_external(css, "t").is_ok(),
-      "EXPECTED RED IF THE SCANNER WAS JUST FIXED -- do not chase this as a regression. \
-       Today the external reference is NOT caught, and this asserts that on the record. \
-       A refusal here means the hole is shut: INVERT this test into a guarantee, keep the \
-       fixture, and do not delete it."
-    );
+    let e = refuse_external(css, "t").unwrap_err();
+    assert!(e.message.contains("never closed"), "{}", e.message);
+    assert!(e.message.contains("line 2"), "the comment OPENS on line 2: {}", e.message);
+  }
+
+  /// **ISSUE 0015'S SERIOUS HALF, AND THE ONE A BROWSER DISAGREES WITH.**
+  ///
+  /// A browser parses `content: "/*"` as a string, so the `@import` after it is
+  /// live CSS and the artifact really does fetch. A scanner without string
+  /// literals reads the same bytes as a comment that never closes and discards
+  /// everything after them. The two readings differ, and the browser's is the one
+  /// that matters.
+  #[test]
+  fn a_comment_opener_inside_a_string_does_not_blind_the_scan() {
+    let css = "body{content:\"/*\"}\n@import \"https://cdn/x.css\";\n";
+    let e = refuse_external(css, "t").unwrap_err();
+    assert!(e.message.contains("cdn/x.css"), "{}", e.message);
+    assert!(e.message.contains("line 2"), "the reference is on line 2: {}", e.message);
+  }
+
+  /// **AN AT-RULE IS ONE REFERENCE EVEN WHEN IT WEARS TWO LINES, AND THE REPORTED
+  /// LINE IS THE URL'S.**
+  ///
+  /// The scan this replaced was `.lines()`-bound, so `@import` NEWLINE `"//x";`
+  /// matched nothing at all. Reading the prelude to its `;` finds it -- and then
+  /// the offset returned is the offending `//`, not the `@import`, so the message
+  /// points at the line a reader has to edit.
+  #[test]
+  fn an_import_that_wraps_is_one_reference_reported_at_the_url() {
+    let e = refuse_external("@import\n\"//cdn/x.css\";\n", "t").unwrap_err();
+    assert!(e.message.contains("line 2"), "the URL is on line 2, the at-rule opens on 1: {}", e.message);
+    assert!(e.message.contains("cdn/x.css"), "{}", e.message);
+  }
+
+  /// A string ends at a newline, so one stray quote cannot switch off comment
+  /// stripping for the rest of the file. Without this the fix for 0015 would open
+  /// a new hole of exactly 0015's shape, one character wide.
+  #[test]
+  fn an_unclosed_string_does_not_swallow_the_rest_of_the_theme() {
+    let css = "body{content:\"oops}\n/* a comment */\nbody{background:url(https://cdn/x.png)}\n";
+    let e = refuse_external(css, "t").unwrap_err();
+    assert!(e.message.contains("line 3"), "the comment on line 2 is still stripped: {}", e.message);
   }
 }

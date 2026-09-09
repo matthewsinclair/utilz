@@ -469,10 +469,19 @@ made twice.
 R2 ruled the RULE: *protocol-relative in `url(...)` and in `@import`, not in arbitrary string
 content.* It did not rule the INSTRUMENT, and the instrument is what fails. Measured before
 writing any code, 13 fixtures against the binary rebuilt from `5e86fc5`, two behaviour controls
-plus two detector controls. **Nine of thirteen escape and every one of the nine ships its
-reference into the artifact.** The full table lives in **issue 0017** and is not restated here.
+plus two detector controls. **EIGHT of thirteen are decided wrongly, and every one of the eight
+ships its reference into the artifact.** The full table lives in **issue 0017** and is not
+restated here.
 
-**Five mechanisms, three issues, and only four of the nine escapes were already filed:**
+**The count was NINE for one commit, and the correction is the section's own lesson landing on its
+author.** Nine references reach the artifact; only eight of them are escapes. The ninth is F2, a
+url inside a comment, which is CORRECT to ship, fetches nothing, and is present as the detector's
+presence arm. Two nearly-equal populations -- *reached the artifact* and *decided wrongly* -- were
+read as one because they differ by a single row. **The red-proof is what separated them**: the
+inverted suite named exactly eight, against a design document asserting nine, and a discrepancy of
+one is precisely the size that gets reconciled by eye instead of by counting.
+
+**Five mechanisms, three issues, and only four of the eight escapes were already filed:**
 
 | Mechanism                                     | Fixtures   | Owner         |
 | --------------------------------------------- | ---------- | ------------- |
