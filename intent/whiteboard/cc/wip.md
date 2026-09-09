@@ -3,7 +3,7 @@ node: cc
 name: Control Claude
 role: control
 session_id: a30f9092-03ed-44ba-a659-b37813af12c7
-heartbeat_at: 2026-09-09 20:01Z
+heartbeat_at: 2026-09-09 20:11Z
 status: active
 focus: "ST0017/WP-03. EVERY JSON-FREE PIECE IS BUILT and 247 tests pass. `check` resolves the live 45h reel to 23 slides and 14 assets -- the same two numbers the reference's own plan() gives. BLOCKED on hv for serde_json, which gates the whole remaining payload. Taking sequencing from vc until hv returns."
 claims: [ST0017]
