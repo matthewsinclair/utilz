@@ -51,6 +51,7 @@ claims: [ST0017]
 - **A RED-PROOF ALSO MEASURES WHICH TESTS ARE PROOFS.** Of 7 `limits` tests only 2 can fail on the defect; of 11 `config` tests only 2; of 5 `segment` tests only 3. **The rest are parity controls and bounds, and the modules say so** -- seven green under one heading reads as seven proofs.
 - **THE INSTRUMENT THAT GATES IS NOT THE INSTRUMENT YOU RAN.** CI's clippy had no `--workspace`, so a member crate's TEST code was never linted; it caught my own new code within the hour of being widened.
 - **A GATE CHAIN JOINED BY `&&` DOES NOT GATE IF EACH GATE IS PIPED.** `cargo clippy ... | tail -1 && git commit` takes its status from `tail` and is always 0. I committed over a failed clippy with `build failed` in the output I had just read. **Read `${pipestatus[1]}`, or do not pipe a gate.**
+- **A NUMBER READ OFF THE WRONG STAGE OF A PIPELINE IS A REAL MEASUREMENT AND A FALSE CLAIM.** I minted AC-1.13 saying the shellcheck collector "sees 69 files against 18 real ones, picking up compiled binaries". Re-measured against a 1.2 GB `target/`: `find` EMITS 143, 125 of them binaries, and the `file` type check rejects every one -- `FILES[]` ends at **18** and the gate is correct after a build. **69 was stage one; the claim was about stage three.** Ask which stage produced the number before writing it down.
 - **AN INSTRUMENT THAT SHARES AN ASSUMPTION WITH ITS SUBJECT CANNOT TEST THAT ASSUMPTION.** My probe read the artifact with a line-oriented, case-sensitive `grep` while measuring a line-oriented, case-sensitive defect, and reported two escapes as clean. **Key the detector on the PAYLOAD, not the syntax.**
 - **A CITATION THAT NAMES A LOCATION GOES STALE SILENTLY, AND RECORDING THE DEAD NUMBER RE-CREATES THE HAZARD.** vc's sweep: eight citations, four stale, **every stale one in the file a commit had touched**. I then shipped one in the module implementing the row about that line. **Cite the TOKEN. Name no numeral even when explaining one was wrong.**
 - **A SUPERSEDED SOURCE IS INDISTINGUISHABLE FROM A LIVE ONE TO WHOEVER HOLDS IT.** snorkeltoast asked me to restructure WP-03 against a ruling design.md had already made hours earlier; they were reasoning from their own document and nothing told them.
@@ -59,14 +60,14 @@ claims: [ST0017]
 
 ## The gates this estate runs, enumerated
 
-| gate               | command                                                                                 |
-| ------------------ | --------------------------------------------------------------------------------------- |
-| unit + integration | `cargo test --release --workspace --no-fail-fast --manifest-path <m>`                   |
-| lint               | `cargo clippy --all-targets --workspace --manifest-path <m> -- -D warnings`             |
-| build              | `cargo build --release --workspace --manifest-path <m>`                                 |
-| shell              | `shellcheck -x "${FILES[@]}"` -- 18 real files; run after a build the collector sees 69 |
-| estate             | `utilz test <utility>` -- prez has 4 suites; `acceptance.sh` caught WP-01               |
-| devbin             | `bin/devbin check autotests` -- `3 crate(s), none with a tests/ directory`              |
+| gate               | command                                                                             |
+| ------------------ | ----------------------------------------------------------------------------------- |
+| unit + integration | `cargo test --release --workspace --no-fail-fast --manifest-path <m>`               |
+| lint               | `cargo clippy --all-targets --workspace --manifest-path <m> -- -D warnings`         |
+| build              | `cargo build --release --workspace --manifest-path <m>`                             |
+| shell              | `shellcheck -x "${FILES[@]}"` -- **18 files, and 18 is correct even after a build** |
+| estate             | `utilz test <utility>` -- prez has 4 suites; `acceptance.sh` caught WP-01           |
+| devbin             | `bin/devbin check autotests` -- `3 crate(s), none with a tests/ directory`          |
 
 **Read every exit code directly. Do not pipe a gate.**
 
