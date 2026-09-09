@@ -32,7 +32,7 @@ title: Add 'showreel' to 'prez'
 
 - AC-2.1 (non-test) The harness derives its population label from what actually ran, never from a flag someone passed, and refuses a verdict without one. -- satisfied: no
 - AC-2.2 (non-test) Slide count, order and ids are asserted exactly before any pixel comparison. A structural mismatch fails without reporting a pixel number at all. -- satisfied: no
-- AC-2.3 (non-test) A same-file control run reports the noise floor; the grading floor is derived from it and stated with its reason, and may differ per population where the reason is stated. -- satisfied: no
+- AC-2.3 (non-test) A same-file control run reports the noise floor, and the control is REPEATED -- one run does not characterise noise. Measured 2026-09-09: slide 14 gave 0.000000 then 0.002196 on successive control runs, so a single control would have set a floor of zero on a slide that is not stable. The grading floor is derived from the repeated control and stated with its reason, and may differ per population where the reason is stated. -- satisfied: no
 - AC-2.4 (non-test) An injected known change shows red before the harness grades any Rust build. -- satisfied: no
 - AC-2.5 (non-test) The exemption list is named, its expected difference stated as a DIRECTION, and the harness refuses when exemptions plus covered do not sum to the slide total, or when a slide outside the named list is exempted. -- satisfied: no
 - AC-2.6 (non-test) Every determinism mechanism is named singly. Crawl determinism comes from --virtual-time-budget alone; --force-prefers-reduced-motion suppresses Ken Burns and drift and does nothing to the crawl. A single point of failure described as two reads as covered. -- satisfied: no
@@ -41,6 +41,7 @@ title: Add 'showreel' to 'prez'
 ### WP-03 -- Rust build path: YAML, admission (C1), normalisation policy (C2), data-URI (status: Not Started)
 
 - AC-3.1 (non-test) An unknown key in showreel.yaml is refused, named, with the valid set. -- satisfied: no
+- AC-3.10 (non-test) The lockfile's third-party package count for the APPROVED set is measured as a UNION and stated. The sum of individual deltas is not quotable -- cc measured 69 by sum against 59 by union at minimal image features, overstating by 10 through shared transitive deps. The union for the approved feature set has NOT been measured yet and no total may be quoted until it is. -- satisfied: no
 - AC-3.2 (non-test) All six admission sites route through one function: a bad input refuses with a remedy, and a dropped segment input is reported at the segment's altitude, extending report_unused rather than duplicating it. -- satisfied: no
 - AC-3.3 (non-test) QR absence remains valid and is carried as Option -- a type, not a policy -- so flattening it is a compile error. -- satisfied: no
 - AC-3.4 (non-test) One normalisation policy governs both image passes. No opaque RGBA ships un-collapsed. -- satisfied: no
@@ -48,6 +49,7 @@ title: Add 'showreel' to 'prez'
 - AC-3.6 (non-test) The safety floors hold in compiler and runtime, and ?speed= cannot cross them. -- satisfied: no
 - AC-3.7 (non-test) player.html carries no brand token. -- satisfied: no
 - AC-3.8 (non-test) The slide list and the asset list come from one walk. -- satisfied: no
+- AC-3.9 (non-test) showreel's manifest carries EXACTLY the budget hv approved 2026-09-09 and nothing else: image with features jpeg,png,webp,gif,tiff (matching showreel:55's RASTER_EXT, +35 where jpeg+png alone is +20); serde with derive (+7); serde_yaml (+14, published as 0.9.34+deprecated, accepted knowingly); kamadak-exif (+2); qrcode with svg only, NOT default (+1 against +8); walkdir (+5); regex (+5). fast_image_resize is REFUSED -- image carries FilterType::Lanczos3 and nothing has measured a need. Any addition needs hv's sign-off named in the commit, as AC02's precedent requires. -- satisfied: no
 
 ### WP-04 -- Rust init and qr paths, graded against population 3 (status: Not Started)
 
@@ -63,6 +65,7 @@ title: Add 'showreel' to 'prez'
 ### WP-06 -- Snorkeltoast side: point the prototype at the hoisted tool, move the house theme (status: Not Started)
 
 - AC-6.1 (non-test) No Utilz-tree file contains the popupart theme; it arrives over SHOWREEL_THEME_PATH and a build resolving it warns that it came from off the built-ins. -- satisfied: no
+- AC-6.2 (non-test) The prototype is committed in the Snorkeltoast repo BEFORE WP-06 pulls it, so the hoist cites a real source commit on both sides. It was untracked there -- showreel, player.html, themes/, README.md and HOIST.md all outside git -- so a pull without this creates a provenance gap rather than inheriting one. -- satisfied: no
 
 ## Acceptance Tests
 

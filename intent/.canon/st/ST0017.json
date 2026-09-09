@@ -180,7 +180,7 @@
     },
     {
       "id": "AC-2.3",
-      "text": "A same-file control run reports the noise floor; the grading floor is derived from it and stated with its reason, and may differ per population where the reason is stated.",
+      "text": "A same-file control run reports the noise floor, and the control is REPEATED -- one run does not characterise noise. Measured 2026-09-09: slide 14 gave 0.000000 then 0.002196 on successive control runs, so a single control would have set a floor of zero on a slide that is not stable. The grading floor is derived from the repeated control and stated with its reason, and may differ per population where the reason is stated.",
       "kind": "non-test",
       "state": {
         "is": "unsatisfied"
@@ -221,6 +221,14 @@
     {
       "id": "AC-3.1",
       "text": "An unknown key in showreel.yaml is refused, named, with the valid set.",
+      "kind": "non-test",
+      "state": {
+        "is": "unsatisfied"
+      }
+    },
+    {
+      "id": "AC-3.10",
+      "text": "The lockfile's third-party package count for the APPROVED set is measured as a UNION and stated. The sum of individual deltas is not quotable -- cc measured 69 by sum against 59 by union at minimal image features, overstating by 10 through shared transitive deps. The union for the approved feature set has NOT been measured yet and no total may be quoted until it is.",
       "kind": "non-test",
       "state": {
         "is": "unsatisfied"
@@ -283,6 +291,14 @@
       }
     },
     {
+      "id": "AC-3.9",
+      "text": "showreel's manifest carries EXACTLY the budget hv approved 2026-09-09 and nothing else: image with features jpeg,png,webp,gif,tiff (matching showreel:55's RASTER_EXT, +35 where jpeg+png alone is +20); serde with derive (+7); serde_yaml (+14, published as 0.9.34+deprecated, accepted knowingly); kamadak-exif (+2); qrcode with svg only, NOT default (+1 against +8); walkdir (+5); regex (+5). fast_image_resize is REFUSED -- image carries FilterType::Lanczos3 and nothing has measured a need. Any addition needs hv's sign-off named in the commit, as AC02's precedent requires.",
+      "kind": "non-test",
+      "state": {
+        "is": "unsatisfied"
+      }
+    },
+    {
       "id": "AC-4.1",
       "text": "init's normalisation is graded against population 3 (Rust init + Rust build), labelled as such, never against population 2.",
       "kind": "non-test",
@@ -325,6 +341,14 @@
     {
       "id": "AC-6.1",
       "text": "No Utilz-tree file contains the popupart theme; it arrives over SHOWREEL_THEME_PATH and a build resolving it warns that it came from off the built-ins.",
+      "kind": "non-test",
+      "state": {
+        "is": "unsatisfied"
+      }
+    },
+    {
+      "id": "AC-6.2",
+      "text": "The prototype is committed in the Snorkeltoast repo BEFORE WP-06 pulls it, so the hoist cites a real source commit on both sides. It was untracked there -- showreel, player.html, themes/, README.md and HOIST.md all outside git -- so a pull without this creates a provenance gap rather than inheriting one.",
       "kind": "non-test",
       "state": {
         "is": "unsatisfied"
