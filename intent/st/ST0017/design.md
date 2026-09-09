@@ -1325,6 +1325,66 @@ the harness grades a single Rust build**. This is why the harness is WP-02 and t
 an instrument built after the thing it measures gets tuned, unconsciously, to agree with what
 already exists.
 
+### 4.5 The harness reads a producer stamp that NOTHING on either side writes
+
+**FOUND BY vc 2026-09-09 20:18Z, AGAINST A PAYLOAD LIST OF MINE THAT OMITTED IT** -- and the
+harness's own comment at `showreel-harness:214-221` opens *"Agreed with cc for WP-03"*, so this was
+agreed and then dropped. `STAMP_RE` (`:222`) searches an artifact for
+`<meta name="showreel-producer" content="...">`; `producer_stamp` (`:226`) returns the content or
+`None`; `:1231` reads it and `:1236` writes `"population_source": "stamp" if stamp else
+"adjacency (UNVERIFIED)"`.
+
+**MEASURED, WITH A CONTROL PROVING THE INSTRUMENT FIRES.** Four greps for `showreel-producer` --
+the reference `player.html`, the reference compiler, the port's pulled shell, the port's `src/` --
+all **zero**. Control: a grep for `producer` returns **1** in each of the three files, so the search
+works and the zero is sound.
+
+**AND THAT CONTROL HIT IS THE TRAP.** `showreel:1006` is `"producer": cfg.get("producer", "")`,
+inside the payload dict -- **the REEL'S CREDIT LINE**, rendered by the shell as
+`add("Producer", REEL.producer)`. It is a different thing wearing the same word, and a grep for
+`producer` finds it and reads as handled. **The stamp is the BUILD's producer; `:1006` is the
+reel's.**
+
+**WHY IT IS URGENT RATHER THAN MERELY OPEN: THE FIRST `compare` AGAINST A RUST ARTIFACT HAPPENS
+EXACTLY ONCE.** AC-2.1 leg 2 says its discharge is WP-03's to give. Spent on an artifact that still
+reads `adjacency (UNVERIFIED)`, that one run grades three rows and leg 2 does not move.
+
+**THE DECISION: THE MARKER GOES IN THE PORT'S SHELL, A SECOND DELIBERATE DIVERGENCE, FILLED BY THE
+RUST BUILD ONLY.** Absence then DERIVES Python, which is the shape 4.1 already establishes for the
+init stamp. Two alternatives were weighed and rejected. **Post-render injection** puts a second
+string-manipulation site outside `render()`, which is precisely what `render`'s single-pass design
+exists to centralise. **Putting it in the reference** means Python must then FILL it -- an unfilled
+`__PRODUCER__` would ship as literal text in a Python artifact -- and once Python stamps, absence
+stops deriving anything at all. **The pull hazard is already guarded**: a future template pull that
+drops the marker takes `the_shell_declares_each_marker_exactly_once` to 0 and `render` refuses.
+
+**THE CONTENT IS NOT `rust`, AND A STAMP READING `rust` WOULD SATISFY AC-2.1'S LETTER WHILE
+DEFEATING THE INSTRUMENT.** The harness comment asks for the implementation, its version, **and a
+policy identifier covering the pixel-affecting rules** -- long edge, resampling filter, quality, and
+the alpha rule -- *"because once ST0017 C2 retires the alpha asymmetry, a Rust build over Python
+masters is a pipeline whose halves disagree about policy by construction, and `rust` alone cannot
+say that."* Measured on both sides by vc: long edge **2560 both**, embed edge **1920 both**,
+**Lanczos both**, **JPEG q86 both**. **Three of the four AGREE, and the alpha rule is the deliberate
+divergence 4.2 ruled** -- so it is the only one of the four whose value distinguishes the halves.
+**The exact form is snorkeltoast's, because it is their instrument**; the port threads the content
+through as a value and hard-codes no string.
+
+**AN EMPTY STAMP IS A SILENT ZERO, AND ONLY THE PRODUCING SIDE CAN REPORT IT.** `:1236` is Python
+truthiness: `content=""` matches `STAMP_RE`, so `producer_stamp` returns `""` -- and `""` is falsy,
+so the run falls to `adjacency (UNVERIFIED)`, **indistinguishable from an artifact carrying no stamp
+at all.** A build emitting an empty producer therefore yields a run that reads exactly like a Python
+one, leg 2 quietly fails to move, and nothing anywhere says so. The harness cannot detect it by
+construction, so **the port refuses an empty producer in `render`, at the one choke point every
+artifact passes through.** Putting the check at the build site instead would let a second build site
+skip it.
+
+**AND `template.rs`'S EXISTING ARGUMENT AGAINST VALUE-REFUSALS DOES NOT EXTEND TO THIS ONE, WHICH IS
+WHY THE EXCEPTION IS WRITTEN DOWN RATHER THAN INFERRED.** That argument concerns a value CARRYING A
+MARKER: refusing it *"would reject a config the implementation renders correctly"*, because the
+single-pass render emits such a value verbatim and the hazard is absent rather than guarded. **An
+empty producer is not a valid input rendered correctly** -- it is an artifact that misreports its own
+provenance, to an instrument that cannot tell. Different fact, opposite disposition.
+
 ---
 
 ## 5. Fixed in passage, or inherited -- decided now, not during
@@ -1338,6 +1398,7 @@ a port bug.
 | Six admission sites, three policies, two undeclared input classes (section 3) | **FIXED via C1.** One admission function, typed refusal with a remedy |
 | The `from:` silent skip | **FIXED.** A dropped segment input is reported at the segment's altitude, extending `report_unused` rather than duplicating it |
 | QR absent-is-valid | **PRESERVED, as `Option<Qr>`** -- a type, not a policy |
+| The reference writes no `showreel-producer` stamp, so every artifact it builds grades as `adjacency (UNVERIFIED)` | **PRESERVED for the reference; the PORT ADDS THE STAMP** -- a second deliberate divergence in `player.html`, so absence derives Python exactly as 4.1 has the absent init stamp derive population (2). Ruled in 4.5 |
 | The alpha asymmetry between the two image passes | **FIXED via C2** -- ruled in 4.2 |
 | Theme contract is a comment, not a check -- a brand token entered the brand-free shell and survived until an audit | **FIXED.** A shell-purity check over `player.html` |
 | Safety floors (600ms transition, 2.5s slide, 3s ceiling) enforced in compiler AND shipped to the runtime | **PRESERVED.** `?speed=` reaches the runtime, so both ends enforce. A limit written twice in two languages is one liability -- which is why it ships in the payload rather than being reimplemented |

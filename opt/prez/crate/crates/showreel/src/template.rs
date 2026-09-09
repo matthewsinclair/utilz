@@ -1,13 +1,25 @@
-//! The shell, and the four things it does not carry.
+//! The shell, and the five things it does not carry.
 //!
 //! **THE PLAYER IS DATA, NOT CODE THIS CRATE WROTE.** `player.html` is pulled
-//! from the reference and is ONE LINE different -- `add("Producer",
-//! REEL.producer)` where the reference has `|| "Snorkeltoast"` after it. That
-//! single divergence is deliberate and is measured by
+//! from the reference and is **TWO LINES different, both deliberate and both
+//! recorded** -- `diff` against the reference is the audit, and it should print
+//! exactly these two.
+//!
+//! **ONE IS A REMOVAL.** `add("Producer", REEL.producer)` where the reference has
+//! `|| "Snorkeltoast"` after it, measured by
 //! `the_shell_carries_no_brand_of_anybody_s` below: `include_str!` puts this file
 //! in the binary, so a verbatim pull would have put a brand literal in a Utilz
 //! artifact and taken the H3 strings count off zero. Nothing in the CONTRACT
 //! gates on it -- hv withdrew that row -- and the estate's own check does.
+//!
+//! **THE OTHER IS AN ADDITION, AND IT IS THE ONE A CARELESS PULL LOSES.**
+//! `<meta name="showreel-producer" content="__PRODUCER__">` is the build's stamp
+//! of its own identity, which `showreel-harness` reads to derive what produced an
+//! artifact instead of inferring it from whatever compiler sat beside it. **The
+//! reference writes no such tag, so ABSENCE derives Python** -- the same shape
+//! design.md 4.1 gives the absent init stamp. A pull that drops the marker takes
+//! `the_shell_declares_each_marker_exactly_once` to 0 and makes `render` refuse,
+//! so the loss is loud. Ruled in design.md 4.5.
 //!
 //! **AND ONE LINE IS DELIBERATELY NOT TOUCHED.** `const LIM = REEL.limits` is
 //! half of AC-3.6's runtime leg: the photosensitivity cap the runtime applies is
@@ -27,6 +39,7 @@ const THEME: &str = "/*__THEME__*/";
 const TITLE: &str = "__TITLE__";
 const FAVICON: &str = "<!--__FAVICON__-->";
 const DATA: &str = "/*__DATA__*/";
+const PRODUCER: &str = "__PRODUCER__";
 
 /// Every marker the shell is expected to carry.
 ///
@@ -37,14 +50,21 @@ const DATA: &str = "/*__DATA__*/";
 /// `subs`, the marker is checked, never substituted, and
 /// `every_marker_is_filled_and_none_survives_into_the_artifact` fails. One list
 /// used for both would agree with itself by construction and report nothing.
-const MARKERS: [&str; 4] = [THEME, TITLE, FAVICON, DATA];
+const MARKERS: [&str; 5] = [THEME, TITLE, FAVICON, DATA, PRODUCER];
 
-/// What the shell is missing, in the order the reference substitutes it.
+/// What the shell is missing, in the order the reference substitutes it --
+/// **plus one the reference never substitutes at all.**
+///
+/// `producer` is the build's own stamp, read back by `showreel-harness`'s
+/// `producer_stamp`. It is last because the reference has no such field: the
+/// four above are a port of an order, this one is an addition, and collapsing
+/// the two would lose which is which. design.md 4.5 rules it.
 pub struct Filling<'a> {
   pub theme_css: &'a str,
   pub title: &'a str,
   pub favicon: &'a str,
   pub data: &'a str,
+  pub producer: &'a str,
 }
 
 /// Fill the shell.
@@ -76,7 +96,29 @@ pub struct Filling<'a> {
 /// Control 1 stays a refusal, because a shell disagreeing with this module about
 /// the markers is a genuine defect: they ship together in one binary.
 pub fn render(shell: &str, f: &Filling) -> Result<String, Failure> {
-  let subs = [(THEME, f.theme_css), (TITLE, f.title), (FAVICON, f.favicon), (DATA, f.data)];
+  let subs =
+    [(THEME, f.theme_css), (TITLE, f.title), (FAVICON, f.favicon), (DATA, f.data), (PRODUCER, f.producer)];
+
+  // **CONTROL 2: A STAMP THE INSTRUMENT CANNOT READ IS WORSE THAN NO STAMP.**
+  // `showreel-harness:1236` is `"stamp" if stamp else "adjacency (UNVERIFIED)"`
+  // -- Python truthiness -- so an EMPTY stamp matches the harness regex, yields
+  // `""`, and grades identically to an artifact carrying no stamp at all. A
+  // double quote closes `content="..."` early and defeats both the tag and the
+  // regex's own `[^"]*`. **BOTH FAILURES ARE SILENT AT THE READING SIDE**, which
+  // is exactly what makes them this side's to refuse. design.md 4.5.
+  let fault = if f.producer.is_empty() {
+    Some("empty, which grades as 'adjacency (UNVERIFIED)' -- what an UNSTAMPED artifact grades as")
+  } else if f.producer.contains('"') {
+    Some("carrying a double quote, which closes content=\"...\" early and breaks the harness regex")
+  } else {
+    None
+  };
+  if let Some(why) = fault {
+    return Err(Failure::new(
+      format!("the producer stamp is {why}"),
+      "name the implementation, its version, and a policy identifier covering long edge, filter, quality and the alpha rule",
+    ));
+  }
 
   for marker in MARKERS {
     let found = shell.matches(marker).count();
@@ -116,7 +158,55 @@ mod tests {
   use super::*;
 
   fn filling<'a>(title: &'a str, data: &'a str) -> Filling<'a> {
-    Filling { theme_css: "body{color:red}", title, favicon: "<link rel=icon>", data }
+    Filling {
+      theme_css: "body{color:red}",
+      title,
+      favicon: "<link rel=icon>",
+      data,
+      producer: "test-producer",
+    }
+  }
+
+  /// **AC-2.1 LEG 2, TEMPLATE HALF: THE ARTIFACT SAYS WHAT BUILT IT.**
+  /// `showreel-harness`'s `STAMP_RE` is
+  /// `<meta\s+name="showreel-producer"\s+content="([^"]*)"\s*/?>`, so the
+  /// assertion below is the exact byte sequence that regex matches with one
+  /// space at each `\s+`. **The reference writes no such tag**, which is what
+  /// makes its ABSENCE derive Python rather than mean nothing -- design.md 4.5.
+  #[test]
+  fn the_artifact_stamps_its_own_producer_where_the_harness_looks_for_it() {
+    let out = render(SHELL, &filling("T", "{}")).unwrap();
+    assert!(
+      out.contains(r#"<meta name="showreel-producer" content="test-producer">"#),
+      "the stamp must land in the shape STAMP_RE reads"
+    );
+    assert_eq!(out.matches("showreel-producer").count(), 1, "and exactly once");
+  }
+
+  /// **THE SILENT ZERO THIS REFUSAL EXISTS FOR.** `showreel-harness:1236` is
+  /// `"stamp" if stamp else "adjacency (UNVERIFIED)"` -- Python truthiness -- so
+  /// an empty `content=""` MATCHES the regex, yields `""`, and grades exactly as
+  /// an unstamped artifact does. **The reading side cannot tell the two apart by
+  /// construction**, so an empty stamp would make leg 2 fail to move while every
+  /// run still looked correct. Nothing but this refusal reports it.
+  #[test]
+  fn an_empty_producer_is_refused_because_the_harness_cannot_tell_it_from_no_stamp_at_all() {
+    let mut f = filling("T", "{}");
+    f.producer = "";
+    let e = render(SHELL, &f).unwrap_err();
+    assert!(e.message.contains("empty"), "{}", e.message);
+    assert!(e.message.contains("adjacency (UNVERIFIED)"), "and says what it would grade as: {}", e.message);
+  }
+
+  /// A quote closes `content="..."` early: the tag breaks AND `[^"]*` stops
+  /// short, so the harness reads a truncated stamp rather than failing. Silent
+  /// in the same way and refused for the same reason.
+  #[test]
+  fn a_producer_carrying_a_quote_is_refused_before_it_breaks_the_tag() {
+    let mut f = filling("T", "{}");
+    f.producer = "showreel-rs \"0.1\"";
+    let e = render(SHELL, &f).unwrap_err();
+    assert!(e.message.contains("double quote"), "{}", e.message);
   }
 
   /// **H3, ASSERTED RATHER THAN MEASURED AFTER THE FACT.** `strings` on the built
