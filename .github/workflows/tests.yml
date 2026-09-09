@@ -385,9 +385,16 @@ jobs:
           exit 0
         fi
 
+        # `--workspace` is load-bearing and was missing until 2026-09-09.
+        # Without it, clippy checks the ROOT package's targets and its members
+        # only as libraries -- so a member crate's TEST code is never linted.
+        # Proved with both arms on ST0017/WP-03: a forced run of the old command
+        # recompiled artifact and prez and exited 0, while the same command plus
+        # --workspace reported a real lint in artifact's test module. The test
+        # command gained --workspace in WP-01; this line was missed.
         for manifest in "${CRATES[@]}"; do
           echo "Linting $manifest"
-          cargo clippy --all-targets --manifest-path "$manifest" -- -D warnings
+          cargo clippy --all-targets --workspace --manifest-path "$manifest" -- -D warnings
         done
         echo "clippy clean."
 

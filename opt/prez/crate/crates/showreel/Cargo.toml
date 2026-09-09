@@ -1,0 +1,46 @@
+[package]
+name = "showreel"
+version = "0.1.0"
+edition = "2021"
+description = "A directory of pictures to a self-contained looping HTML reel. A pipeline, not a viewer."
+license = "MIT"
+
+# ---- DEPENDENCIES: EXACTLY THE BUDGET hv APPROVED 2026-09-09, AND NOTHING ELSE ----
+#
+# **THIS IS A NEW RULING ON A NEW MANIFEST, NOT AN AMENDMENT TO AC02.** prez is
+# held to comrak alone and stays there; showreel needs an image stack it cannot
+# hand-roll. Two binaries, two budgets, one workspace -- which is the whole
+# reason the crates do not merge even though the commands do.
+#
+# **ADDING A CRATE HERE NEEDS hv's SIGN-OFF, NAMED IN THE COMMIT THAT ADDS IT.**
+# AC02's precedent, applied to this manifest by AC-3.9.
+#
+# Every `default-features = false` below is doing real work:
+#
+# - `image` defaults pull every decoder in the crate. The five features here are
+#   exactly showreel:55's RASTER_EXT (.png .jpg .jpeg .webp .tif .tiff .gif), so
+#   the set is derived from the formats the tool admits rather than chosen. It
+#   costs +35 packages; jpeg+png alone would cost +20 and would silently stop
+#   admitting three extensions the tool documents.
+# - `qrcode` defaults pull an image backend showreel has no use for -- the QR is
+#   emitted as SVG. `svg` alone is +1 against the default's +8.
+#
+# **`fast_image_resize` IS REFUSED.** `image` carries FilterType::Lanczos3, which
+# is the filter the reference implementation uses, and nothing has measured a
+# need for anything faster. It is named here so that "we considered it" survives
+# as a record rather than being re-proposed as an obvious win.
+#
+# **`serde_yaml` IS PUBLISHED AS 0.9.34+deprecated AND IS ACCEPTED KNOWINGLY.**
+# It is unmaintained upstream; the config it parses is small, fully enumerated
+# and validated by this crate rather than by serde's permissiveness (AC-3.1
+# refuses an unknown key, which serde would otherwise ignore). Revisit if it
+# stops building, not because the version string is unflattering.
+[dependencies]
+artifact = { path = "../artifact" }
+image = { version = "0.25", default-features = false, features = ["jpeg", "png", "webp", "gif", "tiff"] }
+kamadak-exif = "0.6"
+qrcode = { version = "0.14", default-features = false, features = ["svg"] }
+regex = "1"
+serde = { version = "1", features = ["derive"] }
+serde_yaml = "0.9"
+walkdir = "2"

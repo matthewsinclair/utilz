@@ -691,7 +691,7 @@ mod tests {
     std::fs::create_dir_all(&t_dir).unwrap();
     std::fs::write(t_dir.join("theme.css"), "body{color:#222}\n").unwrap();
 
-    let t = FAKE.load(Some(Spec::Name("housestyle")), &[d.clone()]).unwrap();
+    let t = FAKE.load(Some(Spec::Name("housestyle")), std::slice::from_ref(&d)).unwrap();
     match &t.origin {
       Origin::SearchPath { dir, name, source } => {
         assert_eq!(name, "housestyle");

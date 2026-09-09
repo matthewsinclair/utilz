@@ -13,17 +13,24 @@ minted -- see section 8.
 
 ## 1. The layout, and why it is not a compromise
 
-**One Cargo workspace, three member crates, two binaries, one dispatching shim.**
+**One Cargo workspace, three crates -- the root package plus two members -- two binaries, one dispatching shim.**
 
 ```
 opt/prez/crate/
-  Cargo.toml              [workspace] -- members below, one shared lockfile
+  Cargo.toml              [workspace] AND prez's [package] -- see 1.4, collision 2
+  src/ themes/ assets/    prez's own, at their exact existing sibling positions
   crates/
     artifact/             THE SHARED CRATE. std only. No comrak, no image, no yaml.
                           theme resolution + base64 + data-URI inlining + the Failure vocabulary
-    prez/                 the markdown pipeline. [dependencies] = comrak. UNCHANGED.
     showreel/             the reel pipeline. yaml + image + exif + qr. Its own budget.
 ```
+
+**THIS DIAGRAM READ `crates/prez/` UNTIL 2026-09-09 AND THAT LAYOUT IS REFUSED BY 1.4.** prez's
+`src/`, `themes/` and `assets/` cannot move -- seven `include_str!` and the shim's freshness walk
+resolve them as exact siblings -- so `crate/` is both the workspace root and prez's package, which
+is what WP-01 built and vc verified. Corrected here rather than left for a later reader to
+flatten the two sections into one: **a stale diagram in the section titled "the layout" is the
+first thing read and the last thing checked.**
 
 `opt/prez/prez` (the shim) already resolves, builds-on-first-use and hands over. It gains one
 branch: `prez showreel <...>` execs the showreel binary, everything else execs prez's.

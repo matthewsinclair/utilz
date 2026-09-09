@@ -60,7 +60,7 @@ strip = true
 # **WORKSPACE KEYS.** Everything from here down belongs to the WORKSPACE ROOT
 # and stays behind if the package ever moves.
 [workspace]
-members = ["crates/artifact"]
+members = ["crates/artifact", "crates/showreel"]
 
 # **STATED EXPLICITLY BECAUSE THE DEFAULT DEPENDS ON A KEY THAT MIGHT LEAVE.**
 # A workspace root that carries a `[package]` takes its resolver from that

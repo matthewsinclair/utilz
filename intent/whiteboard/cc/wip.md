@@ -47,14 +47,14 @@ claims: [ST0017]
 
 **Written down because AC-1.12 exists precisely because I did not have this list.** From `.github/workflows/tests.yml`: `test-linux`, `test-macos`, `shellcheck`, `rust`, `clippy`, `test-summary`.
 
-| gate               | command                                                                                                                                                                           |
-| ------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| unit + integration | `cargo test --release --workspace --no-fail-fast --manifest-path <m>`                                                                                                             |
-| lint               | `cargo clippy --all-targets --manifest-path <m> -- -D warnings`                                                                                                                   |
-| build              | `cargo build --release --manifest-path <m>`                                                                                                                                       |
-| shell              | `shellcheck -x "${FILES[@]}"` -- **18 real files; run locally after a build the collector sees 69, because it has no `target/` exclusion and is correct only by CI job ordering** |
-| estate             | `utilz test <utility>` -- prez has 4 suites; `acceptance.sh` is the one that caught WP-01                                                                                         |
-| devbin             | `bin/devbin check autotests` -- `2 crate(s), none with a tests/ directory`                                                                                                        |
+| gate               | command                                                                                                                                                                                         |
+| ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| unit + integration | `cargo test --release --workspace --no-fail-fast --manifest-path <m>`                                                                                                                           |
+| lint               | `cargo clippy --all-targets --workspace --manifest-path <m> -- -D warnings` -- **`--workspace` added 2026-09-09; without it a MEMBER crate's test code is never linted, proved with both arms** |
+| build              | `cargo build --release --manifest-path <m>`                                                                                                                                                     |
+| shell              | `shellcheck -x "${FILES[@]}"` -- **18 real files; run locally after a build the collector sees 69, because it has no `target/` exclusion and is correct only by CI job ordering**               |
+| estate             | `utilz test <utility>` -- prez has 4 suites; `acceptance.sh` is the one that caught WP-01                                                                                                       |
+| devbin             | `bin/devbin check autotests` -- now `3 crate(s), none with a tests/ directory`                                                                                                                  |
 
 ## The estate
 
