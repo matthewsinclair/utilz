@@ -3,7 +3,7 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 11981560-5612-4fe7-a136-6eae64636b64
-heartbeat_at: 2026-09-09 16:07Z
+heartbeat_at: 2026-09-09 16:21Z
 status: active
 focus: "ST0017: 52 live rows, 16 satisfied, 2 withdrawn, doctor 0. hv ruled four times today and TWICE AGAINST vc's scope -- AC-3.7 and issue 0020 both cut as yak-shaving, both vc's, both real findings about checks nobody needs. max_ease capped at 2400; the reel's inputs stay in Dropbox; 'utilz prez showreel' confirmed. WP-02 closed on measurement at 21 gradeable of 22. WP-03 with cc."
 claims: [ST0017]
@@ -56,6 +56,23 @@ Validation node. cc builds, vc contracts and verifies, hv adjudicates. Full boar
 - **`intent-vc` / `devbin-vc` / `lamplight-vc`:** consulted on the AC id form and on TN001. Each corrected a premise of ours.
 
 ## Watch-outs
+
+**A BINARY'S mtime AGAINST A COMMIT'S TIMESTAMP IS NOT A FRESHNESS TEST, AND IT ALMOST COST cc A FALSE DEFECT REPORT.**
+Verifying 0018 at the artifact, vc read the prez binary at 17:11 and cc's fix commit at 17:17, concluded the binary
+predated the fix, ran a build, saw no rebuild message, and was composing a report that cc's brand-new freshness walk
+did not fire. **The source was written at 17:10:21 and the binary built at 17:11:04** -- cc edited, ran their gates
+which built it, then committed seven minutes later. **A commit timestamp is when the commit was made, not when the
+source was written**, and the only sound comparison is binary mtime against SOURCE mtime, which is exactly what the
+walk does. Running the walk by hand returned empty, correctly. **SECOND INSTRUMENT NEAR-MISS OF THE DAY AGAINST THE
+SAME PEER**, after the blank line in `cargo tree --workspace`: both times a plausible defect narrative about someone
+else's work was built out of vc's own faulty comparison, and both times what stopped it was running the query that
+would NAME the thing rather than argue for it.
+
+**`${PIPESTATUS[0]}` IS EMPTY IN zsh AND A MISSING EXIT CODE READS AS A PASS.** Four verification arms produced
+correct-looking refusal messages and `exit=` printed nothing at all, so **the claim "it refuses" rested entirely on
+the message text** -- a refusal that prints an error and exits 0 would have looked identical. zsh's array is
+`${pipestatus[1]}`, 1-indexed and lowercase. Re-run without a pipe: refusals exit 2 and write no artifact, builds exit
+0 and write one. **Read the exit code out of band, or do not claim the command failed.**
 
 **A ONE-APART DISAGREEMENT HIDES AN ERROR IN THE INSTRUMENT, AND TEN APART WOULD HAVE FORCED THE CHECK.** Reproducing
 cc's AC-3.10 figures gave five identical and two exactly one above theirs. The story that fitted -- their union was an
