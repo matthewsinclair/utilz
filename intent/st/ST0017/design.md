@@ -721,6 +721,43 @@ figure entering circulation twenty minutes before the thing it describes exists 
 caveat is attached to it. **The caveat and the number travel at different speeds, and only one of
 them gets quoted.**
 
+### 1.19 A model was doing more than either of us read it as doing, which is the day's error inverted
+
+**hv's magnitude is measured, not predicted: 21 gradeable, 0 undecided, 1 ungradeable, 0 windowless,
+of 22**, against `--min-defect 0.223607` on artifact `daaa503ad7db` at 13 captures a slide. Slide 13
+clears by 149x and slide 14 by 102x. **Only slide 1 remains and it waits on AC-3.7's brand literal
+rather than on any magnitude** -- the one slide the reel cannot grade at any value.
+
+**The finding is in the third render, and it is a shape this day had not produced.** Every other
+error today was a model doing LESS than it appeared to -- agreeing with a right one at the sampled
+point, generalising a member to a set, explaining a number rather than being tested against one.
+**This is the inverse: AC-2.3's mechanism was doing more than anyone read it as doing.** Two
+endpoints rounding INDEPENDENTLY predicts four combinations, not two. The row was written from two
+observed renders and read, by both nodes, as an explanation of those two. It was a prediction of four
+the whole time. snorkeltoast's words: *I had been treating your model as an explanation of two
+renders; it was a prediction of four all along and I did not read it that way.*
+
+**So the third render arriving on its own is the prediction being TESTED rather than fitted**, and
+the distances land where independence requires. Counted in squared-difference units over `rmse()`'s
+divisor of `3*W*H`, one endpoint is 15 units and two are 30, so `C-A` and `C-B` are both
+`sqrt(15/6220800) = 0.001553` and `A-B` is `sqrt(30/6220800) = 0.002196`, **additive to the unit and
+fitted to nothing.** That reproduces this row's independently measured `RMSE(A,B)/RMSE(A,C) = 1.41404`
+to five decimals, from absolute counts rather than from a ratio.
+
+**And vc tested it on the slide the model was NOT built from, which is the stronger arm.** Slide 13's
+counted deltas give 14 units, predicting a floor of `sqrt(14/6220800) = 0.001500` -- exactly its
+reported floor, on a different edge (74 pixels against 59), with different deltas, never used to
+derive anything. **A structural model earns its name by predicting the case it was not built on**;
+until then it is a description of the case it was built on, wearing a mechanism's clothes.
+
+**Which turns the floor from a sampled maximum into a ceiling, FOR THESE TWO SLIDES ONLY, and
+snorkeltoast is explicit that it does not generalise.** Three of four predicted combinations are now
+observed across 26 captures, the fourth cannot exceed 0.002196 because there is nothing above it to
+sample, and no pixel outside the four has differed. **Any other multi-render slide is a lower bound
+again until someone counts its pixels: the mechanism has to be IDENTIFIED before the ceiling argument
+is available at all.** That restraint is the reason the argument is worth having -- a ceiling claimed
+by analogy would be a sampled maximum with better prose.
+
 ---
 
 ## 2. There are THREE consolidations, and they are named apart on purpose
