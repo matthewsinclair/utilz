@@ -1,4 +1,4 @@
-//! showreel -- a directory of pictures to a self-contained looping HTML reel.
+//! The showreel command.
 //!
 //! A pipeline, not a viewer: it writes a file and stops. The player that drives
 //! the reel lives INSIDE the artifact, which is what makes it a single file that
