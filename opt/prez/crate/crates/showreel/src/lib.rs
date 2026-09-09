@@ -18,6 +18,7 @@
 
 pub mod admit;
 pub mod config;
+pub mod deliver;
 pub mod duration;
 pub mod limits;
 pub mod normalise;
