@@ -53,3 +53,37 @@ So the drop stays optional under the contract and has become load-bearing for th
 **Worth knowing and not worth acting on: 45h sets `producer: Snorkeltoast` itself, so the fallback never fires there.** The drop changes no pixel on this reel and changes the binary. That is the whole of it.
 
 (C) hello@matthewsinclair.com
+
+## (2026-09-09 19:15Z) ONE DECISION NEEDED: serde_json, or a hand-rolled JSON emitter
+
+**This is a request, unlike my last two. The template pull is in at `cb8f2bf`; the payload cannot be written until this is answered, and vc cannot answer it.**
+
+`crates/showreel/Cargo.toml` says, in its own words: **"ADDING A CRATE HERE NEEDS hv's SIGN-OFF, NAMED IN THE COMMIT THAT ADDS IT."** So I stopped rather than adding one.
+
+### What needs it
+
+`cmd_build` renders the payload with `json.dumps`. The port needs the same: one JSON object carrying the artist, session, socials, outro, bug, limits and every slide, substituted into `const REEL = /*__DATA__*/;`. **There is no JSON emitter in the tree.**
+
+### The cost, measured rather than estimated
+
+`serde_json 1.0.151` pulls `itoa`, `memchr`, `serde_core` and `zmij`. **Three of those four are ALREADY in the Utilz lock.** The net addition is **2 packages: `serde_json` and `zmij`**, taking the workspace lock from **79 to 81**.
+
+I nearly reported this as +4 from reading the crate's own tree. **The number that matters is what this tree does not already have**, and it is half.
+
+### The alternative, stated fairly
+
+**Hand-roll it**, as `artifact/base64.rs` was hand-rolled -- and that precedent is real, so it deserves a straight answer rather than a dismissal.
+
+**I recommend AGAINST it, on where the risk actually sits.** base64 was safe to hand-roll because its input is bytes and its specification is forty lines. **A JSON emitter's risk is string escaping over arbitrary text**, and this payload carries artist names, session copy, social handles and outro rows straight out of somebody's YAML -- quotes, backslashes, newlines, and the `POP^UP^ART` and `@45h836782` kind of thing. An escaping bug produces an artifact that fails to parse in the browser, or worse, one that parses differently.
+
+**And a second reason that is about this codebase rather than about JSON.** `serde_json` derives the field order from the struct, so the payload's order matches the reference's dict order by declaration. A hand-rolled emitter means maintaining that order in a second place, by hand -- **a subset duplicate of exactly the kind that hid in the pace table**, where two of five fields were present and correct and nothing reported the missing three.
+
+### What I recommend
+
+**Take `serde_json`.** Same author and same ecosystem as the `serde` and `serde_yaml` already in the budget, 2 net packages against 79, and it removes the one part of this work where a quiet correctness bug is genuinely likely.
+
+**If you would rather not, say so and I will hand-roll it** -- it is a day's care rather than a blocker, and I would put the emitter in `artifact/` beside `base64.rs` where the no-dependency argument already lives.
+
+**Nothing is blocked while this waits** except the payload itself: delivery re-encode has naming, revisions, pruning and `report_unused` in it, none of which need JSON. Say the word either way and I will name your ruling in the commit.
+
+(C) hello@matthewsinclair.com
