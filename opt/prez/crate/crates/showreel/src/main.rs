@@ -14,7 +14,7 @@
 //! inside another's evidence.
 
 use artifact::Failure;
-use showreel::{config, limits, segment, theme};
+use showreel::{config, limits, theme};
 use std::path::{Path, PathBuf};
 
 fn main() {
@@ -134,7 +134,16 @@ fn check(path: &Path) -> Result<(), Failure> {
   println!("showreel: {} is valid", file.display());
   println!("  artist    {} ({})", cfg.artist.name, cfg.artist.handle);
   println!("  pace      {}", cfg.pace.as_deref().unwrap_or("attract"));
-  println!("  segments  {} declared, {} shapes known", cfg.segments.len(), segment::SHAPES.len());
+  // **THE SHAPE-TABLE SIZE IS GONE FROM THIS LINE, AND ITS ABSENCE IS THE FIX.**
+  // It read `{n} declared, {m} shapes known`, joining a fact about THIS config to
+  // a build-time constant with a comma, and the reading a human takes from two
+  // numbers side by side is subtraction. Both available readings were false:
+  // nothing was unrecognised, and "12 of yours were recognised" is unavailable
+  // too, because an unknown type refuses at exit 2 well before this line. The
+  // constant printed 12 for every config ever checked, and 45h happens to use
+  // exactly twelve distinct types, so on the one reel anybody runs it looked
+  // derived. Issue 0022, found by snorkeltoast.
+  println!("  segments  {n} declared, {n} validated", n = cfg.segments.len());
   println!("  socials   {}", cfg.socials.len());
   println!("  theme     {}", theme.name);
   match &meta {
