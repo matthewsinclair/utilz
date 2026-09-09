@@ -1,0 +1,945 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>__TITLE__</title>
+<!--__FAVICON__-->
+<style>
+/* ===========================================================================
+   THE SHELL. Geometry, timing and behaviour. NO BRAND.
+
+   Everything a house wants to change is a custom property declared here with a
+   neutral default and overridden by a theme. A shell carrying one
+   organisation's palette cannot be reused, which is the whole point of the
+   split -- the theme arrives on SHOWREEL_THEME_PATH, not in the tool.
+
+   THEME CONTRACT -- a theme may set any of these and add rules of its own:
+     --bg --fg --muted --accent --accent-2 --accent-3
+     --font-display --font-label --font-body
+     --keyline-w --keyline-color --shadow --safe
+     --ground-matte --ground-crawl   (any background shorthand)
+   and may style:  .crawl .card .fit-matte img .wipe #bar #hud
+   =========================================================================== */
+
+:root{
+  --bg:#111; --fg:#fff; --muted:rgb(255 255 255/.7);
+  --accent:#fff; --accent-2:#888; --accent-3:#444;
+  --font-display:system-ui,sans-serif;
+  --font-label:system-ui,sans-serif;
+  --font-body:system-ui,-apple-system,sans-serif;
+  --keyline-w:3px; --keyline-color:#000;
+  --shadow:none;
+  --ground-matte:#111;
+  --ground-crawl:#000;
+  /* The ground for a drawn panel sitting ON a slide -- an faq row, a strapline
+     plate, a QR plate. This was once hardcoded to a house colour token with a
+     literal fallback: a brand reference inside the brand-free shell, working
+     only through that fallback, and unrestylable by any other theme. That is precisely the coupling the shell/theme split exists
+     to prevent, so it is a token like everything else. */
+  --panel:#fff;
+  --panel-ink:#111;
+
+  /* The letterbox backdrop: a blurred, darkened copy of the picture filling
+     the bars. Enough blur that it does not compete with the picture in front
+     of it, little enough that it still reads as the same picture rather than a
+     grey smear. Viewport-relative, because a fixed radius is a soft focus on a
+     1920px panel and total destruction on a 402px phone. A theme may retune
+     all three. */
+  --backdrop-blur:clamp(12px,3.4vw,44px);
+  --backdrop-sat:1.4;
+  --backdrop-dim:.66;
+
+  /* Overscan. Older panels crop up to 5% of every edge and say nothing about
+     it. Pictures may bleed past this; type and marks never do. */
+  --safe:4.5%;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden;background:var(--bg)}
+body{
+  font-family:var(--font-body);color:var(--fg);
+  /* A television is not a phone: nothing here is selectable or tappable-blue. */
+  -webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent;
+  cursor:none;
+}
+#stage{position:fixed;inset:0;overflow:hidden;background:var(--bg)}
+
+/* The only thing in this file that has to look right with no script running. */
+/* Flex, not grid: `justify-items:center` on a grid sizes the item to
+   max-content, so at phone width the headline ran off the side instead of
+   wrapping. This is the ONE thing in the file that has to be right with no
+   script running, so it gets the simplest layout that cannot do that. */
+#fallback{position:fixed;inset:0;z-index:99;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;padding:8%;text-align:center;
+  background:var(--bg);color:var(--fg)}
+#fallback b{display:block;font-family:var(--font-display);
+  font-size:clamp(19px,5vw,64px);line-height:1.05;color:var(--accent);
+  margin-bottom:.7em;max-width:100%;overflow-wrap:break-word}
+#fallback p{font-family:var(--font-body);font-size:clamp(13px,2.2vw,28px);
+  line-height:1.4;max-width:min(34ch,100%);margin:0;color:var(--muted)}
+
+/* --- a slide ------------------------------------------------------------- */
+.slide{position:absolute;inset:0;opacity:0;will-change:opacity,transform}
+.slide.in{opacity:1}
+.slide .ground{position:absolute;inset:0;background:var(--bg)}
+
+/* SCOPED TO THE PICTURE FITS, not to every img in a slide. As a blanket
+   `.slide img` rule this absolutely positioned any image a template used --
+   `.strapline`'s mark landed at inset:0, out of its own centred group -- and
+   every template had to remember to undo it. Two already did; the third
+   forgot, which is the point at which the rule is wrong rather than the
+   template. */
+.fit-cover img,.fit-contain img,.fit-blur img,.fit-matte img,.fit-logo img{
+  position:absolute;inset:0;width:100%;height:100%;display:block}
+
+/* --- fit: cover -- the picture is the slide ------------------------------ */
+.fit-cover img{object-fit:cover}
+
+/* --- fit: contain -- flat ground, honest letterbox ----------------------- */
+.fit-contain img{object-fit:contain}
+
+/* --- fit: blur -- the picture's own colour fills the bars ---------------- */
+.fit-blur img{object-fit:contain}
+/* The blur radius is RELATIVE TO THE VIEWPORT. At a fixed 48px it is a modest
+   softening on a 1920px panel and total destruction on a 402px phone -- the
+   backdrop stops reading as the picture and becomes a grey gradient. */
+.fit-blur .ground{
+  background-size:cover;background-position:center;
+  filter:blur(var(--backdrop-blur)) saturate(var(--backdrop-sat))
+         brightness(var(--backdrop-dim));
+  transform:scale(1.12);
+}
+
+/* --- fit: matte -- a drawn object on a ground, not a photograph ----------
+   The plate scales the picture UP to the safe box. max-width/max-height alone
+   only ever scale down, which left a 313px title card sitting at 313px in the
+   middle of a 1920px panel -- correct CSS, useless on a television. Which of
+   the two rules applies is decided per image at mount, from the picture's own
+   aspect against the plate's. */
+.fit-matte .ground{background:var(--ground-matte)}
+.fit-matte .plate{position:absolute;inset:var(--safe);display:grid;place-items:center}
+.fit-matte img{
+  position:relative;inset:auto;width:auto;height:auto;display:block;
+  border:var(--keyline-w) solid var(--keyline-color);
+  box-shadow:var(--shadow);
+}
+.fit-matte img.wide{width:100%;height:auto}
+.fit-matte img.tall{height:100%;width:auto}
+
+/* --- fit: logo -- a mark on a ground. No keyline: a logo already carries its
+   own edge, and framing one is the mark of a deck that does not trust it. --- */
+.fit-logo .ground{background:var(--ground-matte)}
+.fit-logo .plate{position:absolute;inset:var(--safe);display:grid;place-items:center}
+.fit-logo img{position:relative;inset:auto;display:block;border:0;box-shadow:none;
+  width:auto;height:auto;max-width:74%;max-height:74%}
+.fit-logo img.wide{width:74%;height:auto}
+.fit-logo img.tall{height:74%;width:auto}
+
+/* One centred pane. This block was written out five times -- .wordmark,
+   .social, .socials, .strapline and .card each carried its own copy, and they
+   had already begun to drift. */
+.pane{position:absolute;inset:0;display:grid;place-items:center;
+  padding:var(--safe);background:var(--bg);text-align:center}
+
+/* --- the wordmark lockup ------------------------------------------------- */
+.wordmark .top{font-family:var(--font-display);line-height:.92;
+  font-size:clamp(56px,13.5vw,300px);color:var(--accent)}
+.wordmark .mid{font-family:var(--font-body);line-height:1;
+  font-size:clamp(18px,3vw,64px);color:var(--muted);margin:.22em 0 .1em}
+.wordmark .bottom{font-family:var(--font-display);line-height:1;
+  font-size:clamp(30px,7vw,150px);color:var(--fg)}
+
+/* --- one network per page, with its QR ------------------------------------
+   A QR is only worth the screen when it gets most of the screen: a code
+   squeezed into the corner of a busy page is unscannable from where a person
+   actually stands, which is why the summary layout below carries none. Given a
+   page to itself and eight seconds it is a different proposition.
+
+   The handle stays on the page underneath it, because the two routes fail
+   differently -- a QR needs someone to stop, aim and be within a few metres; a
+   handle can be remembered and typed on the bus. */
+.social .kicker{font-family:var(--font-body);color:var(--muted);
+  font-size:clamp(13px,1.5vw,30px);text-transform:uppercase;letter-spacing:.22em;
+  opacity:.75;margin-bottom:.5em}
+.social .net{font-family:var(--font-display);color:var(--fg);
+  font-size:clamp(20px,3vw,62px);letter-spacing:.02em;line-height:1}
+.social .at{font-family:var(--font-display);color:var(--accent);line-height:1;
+  font-size:clamp(30px,6vw,124px);margin:.06em 0 .3em}
+/* The quiet zone is part of the symbol -- segno emits the mandatory four
+   modules inside the SVG -- so the plate adds NO padding of its own. It did,
+   and the doubled white margin left the keyline floating off the code. */
+.social .qr{background:var(--panel);padding:0;display:inline-block;
+  border:var(--keyline-w) solid var(--keyline-color);box-shadow:var(--shadow)}
+.social .qr svg{display:block;width:min(46vh,46vw);height:auto;
+  shape-rendering:crispEdges}
+
+/* --- the socials summary page --------------------------------------------
+   Every handle at once, no QR: see above. */
+.socials h2{font-family:var(--font-display);color:var(--accent);
+  font-size:clamp(38px,7vw,132px);line-height:.96;margin-bottom:.45em}
+.socials .rows{display:grid;gap:.3em;justify-items:center}
+.socials .row{display:flex;gap:.6em;align-items:baseline;flex-wrap:wrap;
+  justify-content:center}
+.socials .net{font-family:var(--font-body);color:var(--muted);
+  font-size:clamp(18px,2.4vw,50px);text-transform:uppercase;letter-spacing:.06em}
+.socials .at{font-family:var(--font-display);color:var(--fg);
+  font-size:clamp(26px,4.6vw,96px);line-height:1}
+
+/* --- native 16:9 templates ------------------------------------------------
+   These replace photographs of print collateral. A card laid out for A6 is
+   portrait: on a 16:9 panel it either pillarboxes or fills the height and
+   leaves the shop looking at two columns of background -- and it carries
+   print whitespace, which reads on a screen as a page that failed to load.
+   Native fits the panel, stays sharp at 4K, and takes its words from the
+   config rather than from a PDF nobody can change at the venue.
+
+   All three share one measure: text is left-aligned in a column of at most
+   ~20 words a line, vertically centred, inside the overscan safe area. */
+.tpl{position:absolute;inset:0;display:grid;align-content:center;
+  padding:0 8% ;background:var(--bg)}
+.tpl .kicker{font-family:var(--font-body);font-size:clamp(14px,1.8vw,38px);
+  text-transform:uppercase;letter-spacing:.16em;color:var(--accent);
+  margin-bottom:.5em}
+.tpl h2{font-family:var(--font-display);line-height:.94;
+  font-size:clamp(38px,7.6vw,150px);color:var(--accent)}
+.tpl .body{font-family:var(--font-body);color:var(--fg);margin-top:.7em;
+  font-size:clamp(18px,2.5vw,52px);line-height:1.22;max-width:24ch}
+
+/* faq: one drawn panel per question. Three fit a 16:9 panel comfortably and
+   five do not, which is the number the config should be held to. */
+.faq .rows{display:grid;gap:2.6vh;margin-top:4vh}
+.faq .row{background:var(--panel);color:var(--panel-ink);
+  border:var(--keyline-w) solid var(--keyline-color);box-shadow:var(--shadow);
+  padding:2.2vh 1.8vw;font-family:var(--font-body);
+  font-size:clamp(16px,2.3vw,48px);line-height:1.25}
+.faq .row b{font-weight:900}
+.faq .row span{opacity:.72}
+
+/* atwork: the table card, drawn rather than photographed.
+
+   It keeps the print card's structure -- header band, rule, body -- because
+   that is the thing people will have just seen next to the artist. What it
+   does not keep is the portrait format: the card is A5 on a table and this is
+   16:9 on a wall, so the body runs as two columns and the whole card fills the
+   panel instead of leaving a column of background down each side. */
+.atwork{padding:var(--safe);align-content:stretch}
+.atwork .frame{
+  display:grid;grid-template-rows:auto auto 1fr;height:100%;
+  border:var(--keyline-w) solid var(--keyline-color);
+  box-shadow:var(--shadow);overflow:hidden;
+}
+.atwork .head{padding:3vh 3.2vw 3.4vh;text-align:center}
+.atwork .kicker{margin:0 0 .18em}
+.atwork .name{font-family:var(--font-display);line-height:.88;
+  font-size:clamp(52px,10vw,220px)}
+.atwork .rule{height:1.6vh}
+/* max-width and the top margin come from `.tpl .body`, which is right for a
+   paragraph and wrong for a two-column band -- the measure was capping this
+   grid at 24ch and stacking the QR next to the text instead of opposite it. */
+.atwork .body{display:grid;grid-template-columns:1fr auto;gap:5%;
+  align-items:center;padding:3.4vh 3.2vw;max-width:none;margin-top:0}
+.atwork .strap{font-family:var(--font-body);font-weight:900;
+  font-size:clamp(18px,2.7vw,58px);text-transform:uppercase;
+  letter-spacing:.03em;line-height:1.1}
+.atwork .caption{font-family:var(--font-body);font-weight:600;
+  font-size:clamp(13px,1.5vw,30px);text-transform:uppercase;
+  letter-spacing:.14em;margin-top:1.1em}
+.atwork .qr{background:var(--panel);padding:0;display:block;
+  border:var(--keyline-w) solid var(--keyline-color);box-shadow:var(--shadow)}
+.atwork .qr svg{display:block;width:min(42vh,30vw);height:auto;
+  shape-rendering:crispEdges}
+
+/* strapline: the identity card. Mark over a strapline in a drawn panel. */
+.strapline .mark{display:block;margin:0 auto 3.4vh;
+  width:auto;height:auto;max-width:48%;max-height:32vh}
+.strapline .panel{display:inline-block;background:var(--panel);padding:2.4vh 3vw;
+  border:var(--keyline-w) solid var(--keyline-color);box-shadow:var(--shadow);
+  transform:rotate(-1.6deg)}
+.strapline .panel div{font-family:var(--font-display);line-height:1.02;
+  font-size:clamp(28px,5.4vw,110px)}
+
+/* points: a claim, then the three things it rests on. The print card carried
+   drawn icons above these; they are not in the asset set as separate files and
+   a screen three metres away reads the words first anyway. */
+.points .lead{max-width:34ch}
+.points .row{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;
+  gap:2.4vw;margin-top:5vh}
+.points .pt{border:var(--keyline-w) solid var(--keyline-color);
+  box-shadow:var(--shadow);padding:2.6vh 1.4vw;text-align:center;
+  font-family:var(--font-display);line-height:1.02;
+  font-size:clamp(18px,2.9vw,62px)}
+
+/* venue: the launch card. A photograph of the actual shopfront, full bleed,
+   with the type on drawn panels over a scrim -- the scrim is doing real work,
+   because a yellow banner over a bright sky is unreadable and this photograph
+   is mostly bright sky. */
+.venue{position:absolute;inset:0;overflow:hidden;background:var(--bg)}
+.venue img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.venue .scrim{position:absolute;inset:0;
+  background:linear-gradient(to bottom,rgb(0 0 0/.34) 0 26%,rgb(0 0 0/.12) 46%,
+    rgb(0 0 0/.52) 78%,rgb(0 0 0/.68) 100%)}
+.venue .lay{position:absolute;inset:var(--safe);display:grid;
+  grid-template-rows:auto 1fr auto;justify-items:center;text-align:center}
+.venue .banner{padding:1.8vh 2.6vw;transform:rotate(-1.8deg);
+  border:var(--keyline-w) solid var(--keyline-color);box-shadow:var(--shadow)}
+.venue .banner .kicker{font-family:var(--font-display);line-height:1;
+  font-size:clamp(20px,3.4vw,72px);opacity:.9}
+.venue .banner .date{font-family:var(--font-display);line-height:.98;
+  font-size:clamp(30px,6.4vw,132px)}
+.venue .foot{display:grid;justify-items:center;gap:1.4vh}
+.venue .at{padding:1.4vh 2.4vw;transform:rotate(1.1deg);
+  font-family:var(--font-display);line-height:1;
+  font-size:clamp(24px,4.8vw,100px);
+  border:var(--keyline-w) solid var(--keyline-color);box-shadow:var(--shadow)}
+.venue .city{padding:.9vh 2vw;transform:rotate(-1deg);
+  font-family:var(--font-display);line-height:1;
+  font-size:clamp(18px,3.2vw,66px);
+  border:var(--keyline-w) solid var(--keyline-color);box-shadow:var(--shadow)}
+
+/* ---------------------------------------------------------------------------
+   Motion. Slow, single-direction, never a pulse and never a loop-back -- a
+   movement that reverses reads as a twitch from across a shop floor.
+   --------------------------------------------------------------------------- */
+@keyframes kb-in {from{transform:scale(1.00) translate3d(0,0,0)}      to{transform:scale(1.10) translate3d(0,-1.2%,0)}}
+@keyframes kb-out{from{transform:scale(1.10) translate3d(0,-1.2%,0)}  to{transform:scale(1.00) translate3d(0,0,0)}}
+@keyframes dr-l  {from{transform:scale(1.09) translate3d(2.4%,0,0)}   to{transform:scale(1.09) translate3d(-2.4%,0,0)}}
+@keyframes dr-r  {from{transform:scale(1.09) translate3d(-2.4%,0,0)}  to{transform:scale(1.09) translate3d(2.4%,0,0)}}
+.m-kenburns img{animation:kb-in var(--dwell) linear both}
+.m-kenburns-out img{animation:kb-out var(--dwell) linear both}
+.m-drift img,.m-drift-l img{animation:dr-l var(--dwell) linear both}
+.m-drift-r img{animation:dr-r var(--dwell) linear both}
+.fit-matte img{animation:none!important} /* a drawn object does not drift */
+
+/* --- transitions --------------------------------------------------------- */
+.t-dissolve{transition:opacity var(--ease) ease-in-out}
+.t-fade{transition:opacity calc(var(--ease)*.5) ease-in}
+.t-cut{transition:none}
+.t-push{transition:opacity var(--ease) ease-in-out,transform var(--ease) cubic-bezier(.4,0,.2,1)}
+.t-push:not(.in){transform:translate3d(6%,0,0)}
+.t-push.leaving{transform:translate3d(-6%,0,0)}
+
+/* The one loud move. A theme decides what it looks like; the shell only says
+   it travels once, in one direction, and is never a full-frame flash. */
+.wipe{position:fixed;inset:-10% -60%;pointer-events:none;z-index:40;
+  background:var(--accent);transform:translate3d(-120%,0,0)}
+.wipe.go{animation:wipe var(--ease) cubic-bezier(.5,0,.5,1) both}
+@keyframes wipe{to{transform:translate3d(120%,0,0)}}
+
+/* --- the crawl ----------------------------------------------------------- */
+.crawl{position:absolute;inset:0;background:var(--ground-crawl);overflow:hidden}
+.crawl .mark{position:absolute;top:var(--safe);left:0;right:0;text-align:center;z-index:3}
+.crawl .mark b{font-family:var(--font-display);font-size:clamp(28px,4.2vw,64px);color:var(--accent)}
+.crawl .mask{position:absolute;inset:0;z-index:2;pointer-events:none;
+  background:linear-gradient(to bottom,var(--bg) 0,rgb(0 0 0/.85) 9%,transparent 26%)}
+.crawl .runway{position:absolute;inset:0;display:flex;align-items:flex-start;
+  justify-content:center;perspective:420px;perspective-origin:50% 0}
+.crawl .text{transform-origin:50% 0;animation:crawl var(--dwell) linear both;
+  text-align:center;width:min(74%,1180px);padding-top:8%}
+.crawl dl{display:grid;gap:.28em}
+.crawl dt{font-family:var(--font-label);font-size:clamp(20px,2.5vw,42px);
+  color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.crawl dd{font-family:var(--font-display);font-size:clamp(34px,6vw,104px);
+  line-height:.98;color:var(--accent);margin-bottom:.36em}
+@keyframes crawl{
+  from{transform:translate3d(0,100%,0) rotateX(0deg) scale(1)}
+  to  {transform:translate3d(0,-118%,0) rotateX(14deg) scale(.62)}
+}
+
+/* --- a text card --------------------------------------------------------- */
+
+.card .box{max-width:min(84%,1400px);text-align:center}
+.card h2{font-family:var(--font-display);line-height:.94;
+  font-size:clamp(46px,9vw,168px);color:var(--accent)}
+.card p{font-family:var(--font-body);margin-top:.7em;
+  font-size:clamp(20px,2.6vw,46px);line-height:1.15;color:var(--fg)}
+
+/* --- the persistent corner mark ------------------------------------------
+   Inside the safe area and above the progress line, so it survives overscan
+   and never collides with the chrome. Screened back rather than solid: on a
+   reel that loops for eight hours the mark that announces itself on every
+   slide is the one that stops being read at all. */
+#bug{position:fixed;left:var(--bug-x,2.2%);bottom:var(--bug-y,1.8%);z-index:45;
+  display:grid;justify-items:center;gap:0;pointer-events:none;
+  opacity:var(--bug-opacity,.55);
+  filter:drop-shadow(0 2px 6px rgb(0 0 0/.45));}
+#bug img{display:block;height:var(--bug-height,9vh);width:auto}
+/* The mark's PNG carries its own transparent margin, so the optical gap to the
+   URL is bigger than the box gap. Closed with a negative margin rather than by
+   re-cropping the asset, which every other use of it would then inherit. */
+#bug span{font-family:var(--font-label);font-weight:900;margin-top:-.55em;
+  font-size:clamp(10px,1.15vw,22px);letter-spacing:.04em;color:var(--fg);
+  text-shadow:0 1px 3px rgb(0 0 0/.6)}
+body.kiosk #bug{opacity:calc(var(--bug-opacity,.55) * .8)}
+
+/* --- chrome --------------------------------------------------------------
+   A hairline of progress so a passer-by can see it is alive and a member of
+   staff can see it is nearly over. Everything else is on a keypress.
+   ------------------------------------------------------------------------- */
+#bar{position:fixed;left:0;bottom:0;height:5px;width:0;z-index:50;background:var(--accent)}
+#hud{position:fixed;left:var(--safe);bottom:calc(var(--safe) + 10px);z-index:60;
+  font-family:var(--font-label);font-size:22px;letter-spacing:.04em;
+  background:var(--bg);color:var(--accent);
+  border:var(--keyline-w) solid var(--accent);padding:6px 14px;
+  opacity:0;transition:opacity .25s}
+#hud.show{opacity:1}
+body.kiosk #bar,body.kiosk #hud{display:none}
+
+@media (prefers-reduced-motion:reduce){
+  .slide img{animation:none!important}
+  .wipe{display:none}
+  /* The crawl is motion too, and this block claimed to drop ALL of it while
+     naming .crawl zero times -- README section 7 said the contract was
+     complete and it was not. A rising text crawl is precisely what a reader
+     with vestibular sensitivity needs stopped.
+
+     animation:none leaves .crawl .text at its natural layout position rather
+     than parked at the `from` keyframe, so the text STAYS ON SCREEN and
+     readable -- verified by looking at the rendered frame, not inferred.
+
+     Measured consequence, same file captured three times each: the outro
+     crawl went from RMSE 4.99 / 8.28 / 10.65 between captures to 0.000000
+     three times. And the opening session crawl, which without this rule
+     shows only the ground and the wordmark at any capture phase early in its
+     dwell, renders its full session detail. */
+  .crawl .text{animation:none!important}
+}
+
+/* ===========================================================================
+   A PHONE IS NOT A SMALL TELEVISION.
+
+   Almost all of this reel was already fluid -- every size is vw, vh or a
+   clamp -- so what breaks on a handset is specific and short:
+
+     1. Grid items default to min-width:auto, so a headline whose clamp MINIMUM
+        is wider than the screen pushes the whole slide sideways. This is a
+        latent bug at any size and is fixed unconditionally below.
+     2. The clamp minimums exist so a person four metres away can read the
+        screen. At arm's length that reasoning is gone and the minimum is just
+        too big for the viewport.
+     3. Layouts that assume width -- two columns, three columns -- have to
+        stack.
+     4. object-fit:cover on a landscape painting in a portrait window shows
+        about a quarter of the painting, and the paintings are the point.
+     5. The overscan safe area is a television concern. A phone crops nothing.
+   =========================================================================== */
+
+/* (1) Unconditional: never let a long word set the width of a slide. */
+.tpl > *,.socials > *,.social > *,.strapline > *,.wordmark > *,.card > *{min-width:0}
+.tpl h2,.card h2,.socials h2,.wordmark .top,.wordmark .bottom,
+.social .at,.atwork .name,.crawl dd{overflow-wrap:break-word}
+
+@media (max-width:820px){
+  /* (5) */
+  :root{--safe:2.4%}
+  /* (2) The floor drops; the vw term and the ceiling are unchanged, so
+     nothing about the television rendering moves. */
+  .tpl h2{font-size:clamp(22px,7.6vw,150px)}
+  .card h2{font-size:clamp(26px,9vw,168px)}
+  .card p{font-size:clamp(15px,3.6vw,46px)}
+  .tpl .body{font-size:clamp(14px,3.6vw,52px);max-width:none}
+  .socials h2{font-size:clamp(22px,7vw,132px)}
+  .social .net{font-size:clamp(14px,4.4vw,62px)}
+  .social .at{font-size:clamp(20px,7.4vw,124px)}
+  .social .qr svg{width:min(62vw,52vh)}
+  .wordmark .top{font-size:clamp(34px,13.5vw,300px)}
+  .wordmark .bottom{font-size:clamp(20px,8vw,150px)}
+  .wordmark .mid{font-size:clamp(13px,4vw,64px)}
+  .strapline .panel div{font-size:clamp(17px,6.4vw,110px)}
+  .strapline .panel{padding:2vh 5vw}
+  .points .pt{font-size:clamp(14px,4.6vw,62px)}
+  .faq .row{font-size:clamp(13px,3.4vw,48px);padding:1.6vh 3.6vw}
+  .atwork .name{font-size:clamp(34px,14vw,220px)}
+  .atwork .strap{font-size:clamp(15px,4.6vw,58px)}
+  .atwork .caption{font-size:clamp(11px,3vw,30px)}
+  .crawl dd{font-size:clamp(22px,8.6vw,104px)}
+  .crawl dt{font-size:clamp(13px,3.8vw,42px)}
+  .crawl .text{width:88%}
+  .venue .banner .date{font-size:clamp(20px,8.4vw,132px)}
+  .venue .at{font-size:clamp(16px,6.2vw,100px)}
+  .venue .city{font-size:clamp(13px,4.4vw,66px)}
+  #bug img{height:6.5vh}
+  #bug span{font-size:11px}
+}
+
+@media (orientation:portrait){
+  /* (3) */
+  .points .row{grid-auto-flow:row;gap:1.6vh;margin-top:3vh}
+  .atwork .body{grid-template-columns:1fr;justify-items:center;gap:3vh;
+    text-align:center}
+  .atwork .qr svg{width:min(56vw,30vh)}
+  .atwork .head{padding:2.4vh 4vw 2.6vh}
+  .tpl{padding:0 6%}
+
+  /* (4) The painting is shown whole, against a blurred, darkened copy of
+     itself rather than a flat bar -- the same treatment `fit: blur` gives a
+     portrait picture on a landscape screen, applied the other way round. */
+  .fit-cover img{object-fit:contain}
+  .fit-cover .ground{background-size:cover;background-position:center;
+    filter:blur(var(--backdrop-blur)) saturate(var(--backdrop-sat))
+           brightness(var(--backdrop-dim));
+    transform:scale(1.14)}
+  .fit-cover img{animation:none}   /* Ken Burns on a contained image drifts it
+                                      away from its own backdrop */
+}
+
+/* THE THEME GOES LAST. It has to be able to override a shell rule of equal
+   specificity, and CSS breaks ties on source order -- with the theme injected
+   above, `.bg-blue` from a theme lost to `.social{background:var(--bg)}` here
+   and every social page came out the default ground. Custom properties resolve
+   at use time, so nothing above cares that the theme's :root arrives late. */
+/*__THEME__*/
+</style>
+</head>
+<body>
+<!-- A reel is built entirely by script: without it the four divs below are
+     empty and the page is a black rectangle with no explanation. That is
+     exactly what an iOS Quick Look preview shows, because tapping a received
+     .html in Files opens a restricted WKWebView with JavaScript disabled
+     rather than Safari.
+
+     NOT <noscript>: that element renders only when scripting is DISABLED, and
+     the failure modes that matter here -- a restricted preview WebView, a CSP
+     that refuses the inline script, a script that throws on an old engine --
+     all leave scripting enabled and <noscript> hidden. So this is an ordinary
+     div, visible by default, which the player removes as its first act. It
+     therefore covers every way the script can fail to run, not just one.
+
+     Deliberately a MESSAGE and not a server-rendered first slide: rendering
+     one would mean reimplementing a slide builder in the compiler, and the
+     whole point of the tool is that there is one of each. Explain, do not
+     duplicate. -->
+<div id="fallback">
+  <b>This reel needs JavaScript.</b>
+  <p>You are probably seeing a file preview rather than a browser.
+     Open it in Safari or Chrome &mdash; on a phone, from a web address
+     rather than from Files.</p>
+</div>
+<div id="stage"></div>
+<div id="bug" hidden></div>
+<div id="bar"></div>
+<div id="hud"></div>
+
+<script>
+"use strict";
+const REEL = /*__DATA__*/;
+
+/* ---------------------------------------------------------------------------
+   Session details come from the URL first and the build second, so ONE BUILT
+   FILE SERVES EVERY VENUE:  showreel.html?venue=Page45&date=12+Oct&pace=ambient
+   --------------------------------------------------------------------------- */
+const Q = new URLSearchParams(location.search);
+const session = Object.assign({}, REEL.session);
+for (const k of ["venue","city","date","action","artist"]) {
+  const v = Q.get(k); if (v) session[k] = v;
+}
+const KIOSK  = Q.has("kiosk");
+const NOLOOP = Q.has("noloop");
+const SPEED  = parseFloat(Q.get("speed") || "1") || 1;
+const PACE   = Q.get("pace") || REEL.pace;
+if (KIOSK) document.body.classList.add("kiosk");
+
+/* ambient at runtime, so a venue can calm the screen down without a rebuild --
+   the request that will actually come from a shop is "can you make it less
+   busy", at 4pm, by text message. */
+const AMBIENT = PACE === "ambient";
+
+const stage = document.getElementById("stage");
+const bar   = document.getElementById("bar");
+const hud   = document.getElementById("hud");
+
+const slides = REEL.slides;
+let idx = -1, paused = false, timer = null, t0 = 0, remain = 0, current = null;
+
+const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g,
+  c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+/* The photosensitivity floors are enforced here as well as at build time,
+   because ?speed= reaches the runtime and must not be able to cross one. The
+   NUMBERS come from the payload rather than being written out again: a safety
+   limit that exists twice, in two languages, is one limit and one liability. */
+const LIM = REEL.limits;
+const dwellOf = s => Math.max(LIM.min_dwell, s.dwell * (AMBIENT ? 1.5 : 1) / SPEED);
+const easeOf  = s => Math.max(LIM.min_ease,
+                              Math.min(s.ease * (AMBIENT ? 1.4 : 1), LIM.max_ease));
+
+/* --- builders -------------------------------------------------------------
+   Every builder below returns markup; `pane()` wraps it. That boilerplate --
+   create a div, set `slide t-<transition>`, assign innerHTML -- was written
+   out in each of the twelve builders, which is eleven chances for one of them
+   to spell the class list differently. */
+
+const slideEl = (s, html, extra = "") => {
+  const el = document.createElement("div");
+  el.className = `slide t-${s.transition}${extra}`;
+  el.innerHTML = html;
+  return el;
+};
+/* A centred pane on a themed ground: the shape every text slide has. */
+const pane = (s, kind, inner) =>
+  slideEl(s, `<div class="pane ${kind} bg-${esc(s.bg)}">${inner}</div>`);
+
+
+function buildImage(s){
+  const el = document.createElement("div");
+  el.className = `slide t-${s.transition} fit-${s.fit} m-${s.motion}`;
+  const ground = document.createElement("div");
+  ground.className = "ground";
+  // `cover` gets the backdrop too, unused on a landscape screen and waiting
+  // for a portrait one, where the CSS switches the picture to `contain` and
+  // this is what fills the bars. Same URL, so the browser decodes once.
+  if (s.fit === "blur" || s.fit === "cover")
+    ground.style.backgroundImage = `url("${s.src}")`;
+  el.appendChild(ground);
+  const img = document.createElement("img");
+  img.src = s.src; img.alt = ""; img.decoding = "sync";
+  if (s.fit === "matte" || s.fit === "logo") {
+    const plate = document.createElement("div");
+    plate.className = "plate"; plate.appendChild(img); el.appendChild(plate);
+    // Fill the safe box on the constraining axis. The picture's own aspect is
+    // known at build time, so this needs no decode and no layout read.
+    fitPlate(img, s.w / s.h);
+  } else {
+    el.appendChild(img);
+  }
+  return el;
+}
+
+function fitPlate(img, ar){
+  const safe = parseFloat(getComputedStyle(document.documentElement)
+                 .getPropertyValue("--safe")) / 100 || 0.045;
+  const box = (innerWidth * (1 - 2 * safe)) / (innerHeight * (1 - 2 * safe));
+  img.classList.toggle("wide", ar >= box);
+  img.classList.toggle("tall", ar < box);
+}
+addEventListener("resize", () => {
+  document.querySelectorAll(".fit-matte img").forEach(i => {
+    if (i.naturalWidth) fitPlate(i, i.naturalWidth / i.naturalHeight);
+  });
+});
+
+function buildCrawl(s){
+  const rows = [];
+  const add = (k, v) => { if (v) rows.push(`<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`); };
+  if (s.crawl === "outro") {
+    for (const r of (REEL.outro || [])) add(r.label, r.value);
+  } else {
+    add("Location", session.venue);
+    add("Producer", REEL.producer);
+    add("Artist", session.artist || REEL.artist.name);
+    add("Date", session.date);
+    add("In store", session.city);
+    add("Action", session.action);
+  }
+  return slideEl(s, `<div class="crawl">
+       <div class="runway"><div class="text"><dl>${rows.join("")}</dl></div></div>
+       <div class="mask"></div>
+       <div class="mark"><b>${esc(REEL.wordmark || "")}</b></div>
+     </div>`);
+}
+
+const buildCard = s => pane(s, "card", `<div class="box">
+       <h2>${esc(s.headline)}</h2>${s.sub ? `<p>${esc(s.sub)}</p>` : ""}
+     </div>`);
+
+const buildWordmark = s => pane(s, "wordmark", `<div>
+       <div class="top">${esc(s.top)}</div>
+       ${s.mid ? `<div class="mid">${esc(s.mid)}</div>` : ""}
+       <div class="bottom">${esc(s.bottom)}</div>
+     </div>`);
+
+const buildSocials = s => pane(s, "socials", `<div>
+       <h2>${esc(s.headline)}</h2><div class="rows">${(REEL.socials || []).map(x =>
+         `<div class="row"><span class="net">${esc(x.label)}</span>
+            <span class="at">${esc(x.handle)}</span></div>`).join("")}</div>
+     </div>`);
+
+// The QR is trusted markup throughout: an SVG this build generated from the
+// config, never anything that arrived from a page or a query string.
+const buildSocial = s => {
+  const x = (REEL.socials || [])[s.index] || {};
+  return pane(s, "social", `<div>
+       ${s.headline ? `<div class="kicker">${esc(s.headline)}</div>` : ""}
+       <div class="net">${esc(x.label)}</div>
+       <div class="at">${esc(x.handle)}</div>
+       ${x.qr ? `<div class="qr">${x.qr}</div>` : ""}
+     </div>`);
+};
+
+const buildStatement = s => slideEl(s, `<div class="tpl statement bg-${esc(s.bg)}"><div>
+       ${s.kicker ? `<div class="kicker">${esc(s.kicker)}</div>` : ""}
+       <h2>${esc(s.headline)}</h2>
+       ${s.body ? `<div class="body">${esc(s.body)}</div>` : ""}
+     </div></div>`);
+
+const buildFaq = s => slideEl(s, `<div class="tpl faq bg-${esc(s.bg)}"><div>
+       <h2>${esc(s.headline)}</h2><div class="rows">${s.items.map(i =>
+         `<div class="row"><b>${esc(i.q)}</b> <span>${esc(i.a)}</span></div>`).join("")}</div>
+     </div></div>`);
+
+const buildAtwork = s => slideEl(s, `<div class="tpl atwork bg-${esc(s.bg)}"><div class="frame">
+       <div class="head">
+         ${s.kicker ? `<div class="kicker">${esc(s.kicker)}</div>` : ""}
+         <div class="name">${esc(s.name || REEL.artist.handle || "")}</div>
+       </div>
+       <div class="rule"></div>
+       <div class="body">
+         <div>
+           ${s.strap ? `<div class="strap">${esc(s.strap)}</div>` : ""}
+           ${s.caption ? `<div class="caption">${esc(s.caption)}</div>` : ""}
+         </div>
+         ${s.qr ? `<div class="qr">${s.qr}</div>` : ""}
+       </div>
+     </div></div>`);
+
+const buildStrapline = s => pane(s, "strapline", `<div>
+       ${s.mark ? `<img class="mark" src="${s.mark}" alt="">` : ""}
+       <div class="panel">${s.lines.map(l => `<div>${esc(l)}</div>`).join("")}</div>
+     </div>`);
+
+const buildPoints = s => slideEl(s, `<div class="tpl points bg-${esc(s.bg)}"><div>
+       <h2>${esc(s.headline)}</h2>
+       ${s.body ? `<div class="body lead">${esc(s.body)}</div>` : ""}
+       <div class="row">${s.points.map(p =>
+          `<div class="pt">${esc(p)}</div>`).join("")}</div>
+     </div></div>`);
+
+function buildVenue(s){
+  const date = s.headline || session.date || "";
+  const at   = s.at   || session.venue || "";
+  const city = s.city || session.city  || "";
+  return slideEl(s, `<div class="venue bg-${esc(s.bg)}">
+       ${s.src ? `<img src="${s.src}" alt="">` : ""}
+       <div class="scrim"></div>
+       <div class="lay">
+         <div class="banner">
+           ${s.kicker ? `<div class="kicker">${esc(s.kicker)}</div>` : ""}
+           <div class="date">${esc(date)}</div>
+         </div>
+         <div></div>
+         <div class="foot">
+           ${at ? `<div class="at">At ${esc(at)}</div>` : ""}
+           ${city ? `<div class="city">${esc(city)}</div>` : ""}
+         </div>
+       </div>
+     </div>`, ` m-${s.motion}`);
+}
+
+const build = s => s.kind === "strapline" ? buildStrapline(s)
+                 : s.kind === "points"    ? buildPoints(s)
+                 : s.kind === "venue"     ? buildVenue(s)
+                 : s.kind === "statement" ? buildStatement(s)
+                 : s.kind === "faq"       ? buildFaq(s)
+                 : s.kind === "atwork"    ? buildAtwork(s)
+                 : s.kind === "crawl"    ? buildCrawl(s)
+                 : s.kind === "card"     ? buildCard(s)
+                 : s.kind === "wordmark" ? buildWordmark(s)
+                 : s.kind === "socials"  ? buildSocials(s)
+                 : s.kind === "social"   ? buildSocial(s)
+                 : buildImage(s);
+
+/* --- the driver ----------------------------------------------------------
+   Only the outgoing and incoming slides are ever in the DOM. A twenty-slide
+   reel held open would be ~170 MB of decoded bitmap, which is more than the
+   whole budget on the cheap stick this is most likely to run on.
+   ------------------------------------------------------------------------- */
+
+function show(n){
+  if (n >= slides.length) {
+    if (NOLOOP || REEL.loop === false) { finish(); return; }
+    n = 0;
+  }
+  idx = n;
+  const s = slides[idx];
+  const dwell = dwellOf(s), ease = easeOf(s);
+
+  // Sweep anything older than the outgoing slide. Nothing should ever survive
+  // two transitions; if it has, a removal timer was throttled and this is the
+  // only thing that will reclaim the memory.
+  for (const c of [...stage.children]) if (c !== current) c.remove();
+
+  const el = build(s);
+  el.style.setProperty("--dwell", dwell + "ms");
+  el.style.setProperty("--ease",  ease  + "ms");
+  stage.appendChild(el);
+
+  if (s.transition === "wipe" && !AMBIENT) {
+    const w = document.createElement("div");
+    w.className = "wipe"; w.style.setProperty("--ease", ease + "ms");
+    document.body.appendChild(w);
+    requestAnimationFrame(() => w.classList.add("go"));
+    setTimeout(() => w.remove(), ease + 120);
+  }
+
+  /* Trigger the transition with a synchronous style flush, NOT with rAF.
+     rAF does not run in a hidden tab while setTimeout keeps advancing the
+     reel, so the two clocks drift apart and the incoming slide never gets
+     .in -- slides pile up at opacity 0 and the panel goes black and STAYS
+     black. Measured, on this reel, in a background tab. */
+  const prev = current;
+  void el.offsetHeight;
+  el.classList.add("in");
+  if (prev) {
+    prev.classList.add("leaving");
+    prev.classList.remove("in");
+    setTimeout(() => prev.remove(), ease + 80);
+  }
+  current = el;
+
+  preload(idx + 1);
+  t0 = performance.now(); remain = dwell;
+  runBar(dwell);
+  arm(dwell);
+}
+
+let warm = null;
+function preload(n){
+  const s = slides[n % slides.length];
+  if (!s || s.kind !== "image") return;
+  warm = new Image(); warm.src = s.src;   // decoded ahead, so a cut never stutters
+}
+
+function arm(ms){ clearTimeout(timer); timer = setTimeout(() => show(idx + 1), ms); }
+
+function runBar(ms){
+  bar.style.transition = "none"; bar.style.width = "0%";
+  requestAnimationFrame(() => {
+    bar.style.transition = `width ${ms}ms linear`;
+    bar.style.width = "100%";
+  });
+}
+
+function finish(){ clearTimeout(timer); flash("End of reel - press R to replay"); }
+
+/* --- pause, step, and the keys a shop will actually use ------------------ */
+
+function pause(){
+  if (paused) return;
+  paused = true; clearTimeout(timer);
+  remain -= (performance.now() - t0);
+  bar.style.transition = "none"; bar.style.width = getComputedStyle(bar).width;
+  document.querySelectorAll(".slide *").forEach(n => n.style.animationPlayState = "paused");
+  flash("Paused");
+}
+function resume(){
+  if (!paused) return;
+  paused = false; t0 = performance.now();
+  document.querySelectorAll(".slide *").forEach(n => n.style.animationPlayState = "running");
+  runBar(Math.max(remain, 400)); arm(Math.max(remain, 400));
+  flash("Playing");
+}
+function step(d){
+  clearTimeout(timer); paused = false;
+  const n = (idx + d + slides.length) % slides.length;
+  if (current) { current.remove(); current = null; }
+  show(n);
+}
+
+let hudT = null;
+function flash(msg){
+  if (KIOSK) return;
+  hud.textContent = msg; hud.classList.add("show");
+  clearTimeout(hudT); hudT = setTimeout(() => hud.classList.remove("show"), 1800);
+}
+
+function restart(){
+  clearTimeout(timer); paused = false;
+  for (const c of [...stage.children]) c.remove();
+  current = null; idx = -1;
+  show(0);
+  flash("Restarted");
+}
+
+/* space pause/resume | -> forward | <- back | esc restart | f fullscreen
+   esc ALSO leaves fullscreen, and that is the browser's, not ours: a page
+   cannot suppress it. In fullscreen, esc therefore does both. Documented
+   rather than worked around, because the alternative is a key that behaves
+   differently depending on a state the person pressing it cannot see. */
+addEventListener("keydown", e => {
+  const k = e.key.toLowerCase();
+  if (k === " ")               { e.preventDefault(); paused ? resume() : pause(); }
+  else if (k === "arrowright") step(1);
+  else if (k === "arrowleft")  step(-1);
+  else if (k === "escape")     restart();
+  else if (k === "r")          restart();
+  else if (k === "f")          { document.fullscreenElement ? document.exitFullscreen()
+                                                            : document.documentElement.requestFullscreen(); }
+  keepAwake();
+});
+addEventListener("pointerdown", keepAwake);
+
+/* --- touch, for the shared-link case -------------------------------------
+   A television has a keyboard behind it somewhere; a phone does not. The
+   gesture is the one everybody already has: tap the right side for forward,
+   the left third for back, swipe either way, and long-press to hold a slide.
+   The reel still advances on its own, so all of it is an accelerator rather
+   than something a reader has to discover. */
+if (matchMedia("(hover: none)").matches) {
+  document.body.style.cursor = "auto";
+  let x0 = 0, y0 = 0, t0 = 0, held = null;
+  addEventListener("touchstart", e => {
+    const t = e.changedTouches[0];
+    x0 = t.clientX; y0 = t.clientY; t0 = Date.now();
+    held = setTimeout(() => { held = null; pause(); }, 420);
+  }, {passive: true});
+  addEventListener("touchend", e => {
+    if (held === null) return;           // long-press already paused it
+    clearTimeout(held);
+    const t = e.changedTouches[0];
+    const dx = t.clientX - x0, dy = t.clientY - y0;
+    if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy)) { step(dx < 0 ? 1 : -1); return; }
+    if (Date.now() - t0 > 400) return;
+    if (paused) { resume(); return; }
+    step(t.clientX < innerWidth / 3 ? -1 : 1);
+  }, {passive: true});
+}
+
+/* --- keeping the panel lit ------------------------------------------------
+   A reel that blanks at minute twenty is worse than no reel: the staff who
+   would have restarted it are the ones being asked not to think about it.
+   ------------------------------------------------------------------------- */
+let lock = null;
+async function keepAwake(){
+  if (!("wakeLock" in navigator) || lock) return;
+  try {
+    lock = await navigator.wakeLock.request("screen");
+    lock.addEventListener("release", () => { lock = null; });
+  } catch (_) { /* insecure context, or the OS said no. Nothing to do. */ }
+}
+/* A hidden tab throttles timers and stops rAF and CSS animations. Rather than
+   try to keep a reel running against three clocks that disagree, stop on
+   hidden and land cleanly on a freshly built slide when the panel comes back.
+   A television stick backgrounds the tab for a notification and this is the
+   difference between a two-second blink and a dead screen. */
+document.addEventListener("visibilitychange", () => {
+  if (document.visibilityState === "hidden") { clearTimeout(timer); return; }
+  keepAwake();
+  if (paused) return;
+  const n = idx < 0 ? 0 : idx;
+  for (const c of [...stage.children]) c.remove();
+  current = null; idx = -1;
+  show(n);
+});
+
+/* --- the persistent corner mark ------------------------------------------ */
+if (REEL.bug && !Q.has("nobug")) {
+  const b = document.getElementById("bug");
+  b.style.setProperty("--bug-opacity", REEL.bug.opacity);
+  b.style.setProperty("--bug-height", REEL.bug.height + "vh");
+  b.style.setProperty("--bug-x", REEL.bug.x + "%");
+  b.style.setProperty("--bug-y", REEL.bug.y + "%");
+  b.innerHTML = `<img src="${REEL.bug.src}" alt="">` +
+    (REEL.bug.caption ? `<span>${esc(REEL.bug.caption)}</span>` : "");
+  b.hidden = false;
+}
+
+/* The fallback message is in the body and visible by default, so any failure
+   to reach this line leaves an explanation on screen rather than black. */
+document.getElementById("fallback").remove();
+
+/* --- go ------------------------------------------------------------------ */
+show(Math.max(0, parseInt(Q.get("start") || "0", 10) || 0));
+keepAwake();
+</script>
+</body>
+</html>
