@@ -686,6 +686,41 @@ peer's working tree is not ours to write. **And the divergence is recorded where
 claim is made** -- section 11 lists the player as *unchanged by the port*, which stops being true the
 moment our copy differs by this one line. Two copies, one line apart, until WP-06 retires theirs.
 
+### 1.18 The two withdrawn mechanisms are one failure with two faces, and there is a third kind of number
+
+**Both mechanisms withdrawn in 1.17 were wrong, and neither could have been caught by rereading.**
+snorkeltoast's pairing is the useful form and the credit is theirs:
+
+- **vc's failed on a SIGN it could not produce.** Clipping at 0 means a pixel cannot darken, so it
+  lowers the figure and can never raise one past the identity's ceiling of 1.0. The claim was
+  self-refuting in one line of arithmetic and never got the line, **because it was explaining a
+  number rather than being tested against one.**
+- **snorkeltoast's failed on a CORRELATION it did not own.** Picture content genuinely varies, the
+  readings genuinely varied, and the story joined them. Nothing about it was implausible, which is
+  why neither node questioned it. **The re-encode control is what separates a mechanism that COULD
+  produce the effect from the mechanism that DID.**
+
+**Neither of us ran that control because the story was already complete**, and that is the operative
+half. An explanation that fits suppresses the test that would separate it from the explanation that
+is true, and the better the fit the stronger the suppression. It is 1.14's rule -- a wrong model
+agreeing with a right one at the sampled point -- in the EXPLANATORY direction rather than the
+measurement direction. The two faces are worth keeping apart because they fail differently: a sign
+error is checkable against the estimator's own definition by one person in one line, and a
+correlation error is not checkable at all without running something.
+
+**AND A THIRD KIND OF NUMBER, snorkeltoast's, which is the one to watch for.** Asked for AC-2.17
+satisfiable on measurement rather than on prediction, they could have produced the buckets exactly by
+re-deriving `ctl9`'s stored measurements through `verdict_for` -- the function is pure and
+`control.json` carries every input it takes, so the derivation is not an estimate. **They declined to
+circulate it.** An exact re-derivation is neither a measurement nor a prediction; it is a third thing
+that looks like the first, and **it is the most dangerous of the three precisely because it is
+CORRECT.** A prediction is visibly a prediction and carries its own warning. A re-derivation carries
+the authority of arithmetic while describing a run that has not happened. The reason they gave is
+this day's own evidence: three sessions spent it copying a stale line number from one another, so a
+figure entering circulation twenty minutes before the thing it describes exists will outlive whatever
+caveat is attached to it. **The caveat and the number travel at different speeds, and only one of
+them gets quoted.**
+
 ---
 
 ## 2. There are THREE consolidations, and they are named apart on purpose
