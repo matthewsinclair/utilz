@@ -118,6 +118,14 @@
       }
     },
     {
+      "id": "AC-1.15",
+      "text": "An injection must PROVE IT APPLIED before its result is read, and the applying step refuses rather than warns. Binds every red-proof in this thread, not just WP-01. Measured 2026-09-09: cc's first R1 injection went through python3 -c in double quotes, the shell ate the backslash-n in the anchor, the pattern matched nothing -- and the suite then ran and printed 'ok. 12 passed; 0 failed', which is BYTE-IDENTICAL to a control that fired and passed. Only an incidental count==1 assertion separated them. Third instance of the shape today: snorkeltoast's first injection landed inside a fenced example, cc's roster reorder could not reach the code, and this one did not apply at all. The rule is not 'controls need red-proving' -- it is that THE RED-PROOF ITSELF NEEDS A CONTROL, because a proof that did not run and a proof that passed have the same output.",
+      "kind": "non-test",
+      "state": {
+        "is": "unsatisfied"
+      }
+    },
+    {
       "id": "AC-1.2",
       "text": "WP-01 adds no third-party cost to prez -- comrak line byte-identical, lockfile third-party package count unchanged, the only addition the first-party std-only artifact path signed off by hv 2026-09-09.",
       "kind": "non-test",
@@ -148,7 +156,8 @@
       "text": "prez's and showreel's theme behaviours are diffed by two INDEPENDENT enumerations, each from source before seeing the other, before the shared crate takes either as its semantics.",
       "kind": "non-test",
       "state": {
-        "is": "unsatisfied"
+        "is": "satisfied",
+        "evidence": "vc/inbox.cc.md entry 2026-09-09 08:16Z, committed 61206a5 (stamp repaired 20326b9). Two INDEPENDENT enumerations: snorkeltoast enumerated showreel from source before re-reading cc's table, cc enumerated prez before seeing theirs. Result: FOUR behaviours not five, one clean match, and the shipped defect that became issue 0014. The row existed because near-agreement suppresses the check, and the check disagreed."
       }
     },
     {
@@ -156,7 +165,8 @@
       "text": "The shared resolver keeps prez's newline-preserving comment stripping (R1) and its four provenance messages (R4). The shorter implementation is the worse one and a naive merge takes it.",
       "kind": "non-test",
       "state": {
-        "is": "unsatisfied"
+        "is": "satisfied",
+        "evidence": "R4 verified by vc in the shared crate: artifact/src/theme.rs:270 and :275 are two templates parameterised over {mechanism} and {elsewhere}, giving four distinct messages across the shadowing and env-vs-flag axes, with prez's vocabulary (deck, --theme-path, PREZ_THEME_PATH) injected by the Registry rather than hardcoded. cc drove all four through the shim and each matches the pre-extraction wording. R1 red-proved by cc: injecting the naive strip fails stripping_a_comment_does_not_move_the_lines_after_it with 'the offender is on line 4 of the FILE; a comment-deleting strip reports line 2'; restored, sha matches, 12 pass."
       }
     },
     {
@@ -173,7 +183,8 @@
       "text": "prez pins which theme load(None,..) resolves to, by a property unique to simple rather than one the whole roster shares. The roster-reorder injection cannot fire until wiring and MUST be re-run then.",
       "kind": "non-test",
       "state": {
-        "is": "unsatisfied"
+        "is": "satisfied",
+        "evidence": "The deferred half discharged by cc, and it is the half that could not fire this morning. Reordering BUILT_IN to put mono first now FAILS the_default_is_simple_specifically while no_theme_given_uses_the_embedded_default stays ok -- which is exactly the blindness the row was minted for, since all seven built-ins carry --gp-bg. Restored, sha matches."
       }
     },
     {
