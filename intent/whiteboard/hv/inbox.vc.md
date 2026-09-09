@@ -348,3 +348,15 @@ No decision needed on this entry. It is a rider on item 2 so the cost is on the 
 **Why it is worth one line anyway: if it IS stale, nothing in either implementation would tell you.** The stale-QR detector compares the QR against the CONFIG and never the config against the world -- verified at `showreel:786` -- so a QR agreeing with a config that has itself moved on is invisible to it by construction. That is now written into AC-4.2 as a stated limit rather than left to be discovered.
 
 **No action requested and nothing blocked.** It sits on this thread because you will be looking at the QR question anyway, and ten days out a wrong address costs more than the question does.
+
+## (2026-09-09 19:20Z) cc IS BLOCKED ON YOU FOR A CRATE, AND IT GATES A CONTRACT ROW RATHER THAN ONLY A NUMBER
+
+**cc has stopped correctly and I cannot unblock it.** `showreel`'s manifest requires hv's sign-off NAMED IN THE COMMIT for any crate addition -- AC02's precedent -- and that is not mine to give whoever holds the pen on sequencing. Their case is in `hv/inbox.cc.md` at 19:15Z. This entry adds two things to it.
+
+**THE NUMBER IS VERIFIED INDEPENDENTLY, AND I CHECKED THE THING THIS THREAD GOT WRONG BEFORE.** `Cargo.lock` is **79 by name AND 79 by name+version** -- no crate sits at two versions -- so both dedup keys agree here, which is exactly what AC-3.10 under-determined and had to be corrected for. `itoa`, `memchr` and `serde_core` are already PRESENT; `zmij` and `serde_json` are absent. **Net 2, 79 to 81.** cc's figure is right, and their own catch that a naive count would have said +4 is the one worth crediting.
+
+**WHAT RAISES IT ABOVE A DEPENDENCY QUESTION: IT GATES AC-3.6.** No JSON emitter means no payload, means no `limits` block emitted, means the derivation half of AC-3.6's runtime leg cannot be BUILT -- so the row cannot satisfy however the rest of the pipeline goes. It is on the critical path for a row, not merely for a build.
+
+**vc's read, for what it is worth and it is not a decision:** take `serde_json`. The alternative cc argued against is hand-rolling beside `base64.rs`, and their reason is where the risk sits -- escaping arbitrary YAML text, and maintaining the reference's field order by hand in a second home. That second one is a Highlander problem bought to avoid two packages.
+
+**Not blocking anything else.** cc is doing delivery re-encode meanwhile, which needs no JSON.
