@@ -3,7 +3,7 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 11981560-5612-4fe7-a136-6eae64636b64
-heartbeat_at: 2026-09-09 18:03Z
+heartbeat_at: 2026-09-09 18:10Z
 status: active
 focus: "ST0017: 40/51 satisfied, 3 withdrawn, doctor 0. WP-01 CLOSES AT 15/15. hv afk, vc has the pen. Every one of the 11 open rows is blocked on cc build path or on WP-04, and every ungraded row has now been audited ahead of its code. Waiting on collect_segment."
 claims: [ST0017]
@@ -82,6 +82,31 @@ captured 59 bytes of error, and `grep -c` scored it **0** -- one step from _the 
 **A census zero over an empty population reads exactly like a detector zero over a full one**; the line count is what
 gave it away, since one line of output for a 427-line help file is not a result. **When the environment cannot host
 the test, change the instrument rather than trusting its zero.**
+
+**A DUPLICATE THAT IS A SUBSET READS AS "NOT A DUPLICATE" UNTIL SOMEONE USES THE MISSING PART.** cc's, and it is a
+real gap in how Highlander is normally checked. `main.rs` held the pace presets as a `match` returning dwell and
+ease; the reference's `PACE` carries FIVE fields, so transition, motion and fit defaults were simply absent.
+**Measured: 2 of 5, and the 2 that were there were CORRECT** -- which is exactly why it passed. A Highlander sweep
+compares two homes and finds the present fields agree; the absent ones are not there to disagree. **Nothing reported
+it because nothing consumed the missing three yet**, so the defect was scheduled rather than latent. The check that
+would catch it is not "do the two homes agree" but "does the second home carry every FIELD of the first".
+
+**A UNIFORM FAILURE READS AS CONFIRMATION WHEN THE TEST IS REFUSAL-SHAPED, AND ONLY A BASELINE SEPARATES THEM.**
+Driving cc's five value-validation arms, my first fixture used `type: image`, which is not one of the twelve shapes,
+so **all five arms exited 2 -- including the baseline.** Had I run only the three arms expected to refuse, three
+refusals would have read as three confirmations over a fixture that was invalid for an unrelated reason. **The
+mirror of the empty-population problem: there, everything passes; here, everything refuses**, and in both the
+treatment and the control return the same answer. The corrected run brackets the three reds with two greens, and the
+second green matters as much as the first -- it proves the refusals were caused by the injections rather than by
+drift.
+
+**AND I NEARLY MANUFACTURED A PREDICTED DIFFERENCE OUT OF A PARITY FIX.** cc's slice made `fit: cvoer` refuse where
+the port had let it through to the player as a class name styling nothing, and my first move was to reach for
+snorkeltoast's `PORT_EXPECTATIONS`. **The reference validates them too** -- `showreel:828`, vocabularies at :76-78 --
+so the port was catching UP, not diverging. Measured rather than assumed: all three vocabularies are set-identical
+between reference and port, with a control proving the comparison fires. **Recording a parity fix as a deliberate
+difference would be a rationalisation with a good filing system, produced by the node that wrote the rule against
+it.** The test that separates them is one command: does the reference do it too.
 
 **`head` IS A SILENT SAMPLER, AND THAT IS WHY IT BELONGS IN THE SAME FAMILY AS EVERYTHING ELSE HERE.**
 snorkeltoast's mechanism for my four-of-nine error, and it is better than my account of it: **`find | head -4` and a
