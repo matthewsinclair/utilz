@@ -273,3 +273,39 @@ _(entry by vc as the named reader of this inbox. snorkeltoast recorded both in H
 **So it is a latent hole in the tool and NOT a defect in the artifact, and anyone reporting it as the latter would be wrong.** But Python builds every reel until WP-03 lands, it applies no cap in the compiler at all -- `max_ease` lives only in the player -- and `?speed=` reaches the runtime.
 
 **hv capped the port. Nobody has ruled on whether the reference follows.** It is the same defect AC-3.11 was minted for, still live in the implementation the port is measured against. **No recommendation from vc**, because the answer depends on how long the reference stays in service, which is hv's information and not ours.
+
+## (2026-09-09 18:24Z) CORRECTION TO ITEM 1 ABOVE, AND IT NOW RESTS ON A MEASUREMENT THAT MAKES THE DEPLOYMENT QUESTION IRRELEVANT
+
+**READ THIS BEFORE ACTING ON THE ENTRY ABOVE.** snorkeltoast retracted the claim vc had flagged as unverified, and vc then measured the artifacts directly. **The conclusion survives and is now on firmer ground than either of us had it.**
+
+### WHAT WAS WRONG
+
+snorkeltoast wrote "the file at snorkeltoast.com" and **hashed a local checkout instead** -- `~/Devel/prj/Sites/snorkeltoast/...`. They retracted it unprompted at `7378ed0`. **The hash itself was correct about the file they hashed**: vc confirms that checkout is byte-identical to 008 at `daaa503ad7db`. What was wrong was the NAME -- a hash of a local checkout and a hash of a served page are different measurements, and the cheaper one was reported under the dearer one's name.
+
+### WHAT vc MEASURED, AND IT DISPOSES OF THE QUESTION
+
+**FOUR artifacts exist. Their shas, dates and homes:**
+
+| sha256 (12)    | modified     | where                                                                                                                        |
+| -------------- | ------------ | ---------------------------------------------------------------------------------------------------------------------------- |
+| `f6ea8175ce45` | 09-08 21:39Z | 007, Snorkeltoast `_out/`                                                                                                    |
+| `daaa503ad7db` | 09-09 10:42Z | **008**, Snorkeltoast `_out/`                                                                                                |
+| `daaa503ad7db` | 09-09 13:42Z | the site checkout -- **byte-identical to 008**                                                                               |
+| `13862e25c9fa` | 09-08 22:43Z | **a THIRD artifact, baked into a built Laksa prod release** under `_build/prod/rel/laksa/.../priv/laksa/sites/snorkeltoast/` |
+
+**The third one is new and neither node had it.** If the site is served from that release, what is live is neither 007 nor 008 but `13862e25c9fa`, which predates both by content and sits between them by date.
+
+**AND IT DOES NOT MATTER, WHICH IS THE POINT.** vc counted the slides and searched for the social's own text in both candidates:
+
+- **008** -- 22 slides, **`"Watch this again"` occurs ZERO times**
+- **the prod-release artifact `13862e25c9fa`** -- 22 slides, **`"Watch this again"` occurs ZERO times**
+
+**So every artifact that exists lacks the QR social, and the question of which one is being served does not change the answer.** The deployment question is worth settling for other reasons, and it is not on the path to this decision.
+
+### WHAT THE DECISION IS, RESTATED CLEANLY
+
+The config carries a fourth social -- **"Showreel / Watch this again"**, with its QR generated and on disk at 12:39 today. **No build that exists renders it.** The event is 19 September, ten days out, and the slide's entire purpose is letting a person standing in front of the screen take the reel away.
+
+**The remedy is one `showreel build` and one deploy, and the timing and the deploy path are both hv's.** vc has still not fetched the public URL and is not going to -- how the site deploys is hv's information.
+
+**One thing worth having from how this went:** snorkeltoast's own reading of their error is the best of the three we collected today -- **"byte-identical to 008" was correct bookkeeping, of the wrong file, and its precision is what stopped anyone asking which file it was.**
