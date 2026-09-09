@@ -83,6 +83,20 @@ captured 59 bytes of error, and `grep -c` scored it **0** -- one step from _the 
 gave it away, since one line of output for a 427-line help file is not a result. **When the environment cannot host
 the test, change the instrument rather than trusting its zero.**
 
+**`head` IS A SILENT SAMPLER, AND THAT IS WHY IT BELONGS IN THE SAME FAMILY AS EVERYTHING ELSE HERE.**
+snorkeltoast's mechanism for my four-of-nine error, and it is better than my account of it: **`find | head -4` and a
+directory that genuinely holds four files produce THE SAME BYTES.** `head` does not announce that it truncated, so
+the output cannot tell you whether you saw a set or a sample. That is AC-1.15's own sentence -- a proof that did not
+run and a proof that passed have the same output -- arriving in a shell pipeline. **The cure is not a bigger `head`;
+it is printing the MEMBERS rather than the count**, because a count whose members you cannot see is a claim you
+cannot check.
+
+**A CAVEAT PRINTED UNCONDITIONALLY TRAINS THE READER TO SKIP IT.** snorkeltoast's, caught against their own new code:
+their "a file below the cap is not evidence either way" line fired on every run, and on 45h there are ZERO such files,
+so it warned about a population that does not exist there. **A caveat nobody reads is worse than no caveat, because
+it still looks like diligence.** Guarded now. The pair to it: the line that IS true of every reel stays
+unconditional, so the two kinds of statement are told apart by whether they are guarded.
+
 **A REAL RATIO DEGRADES; A WRONG POPULATION COLLAPSES.** snorkeltoast's form, and it is checkable without knowing
 anything about the subject: **if a measurement over a supposedly rich population returns EXACTLY NOTHING, suspect the
 population before the subject.** Mine today: a `find` over the whole Snorkeltoast tree for `manifest.json` returned
