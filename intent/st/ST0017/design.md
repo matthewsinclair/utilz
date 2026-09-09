@@ -226,6 +226,47 @@ correctly, so the artifact fetches from the network. **Second bypass of the offl
 distinct from 0014 in root cause and in fix**, filed separately so R2's landing cannot be read as
 closing it.
 
+
+### 1.6 A control over code nothing links cannot fire, and it looks exactly like a control that passed
+
+cc's first red-proof of S8 **did not fire, and cc caught it by running it.** Reordering `BUILT_IN`
+to put `mono` first failed nothing: both tests passed. The reason is that `theme.rs:216` still
+returns `built_in("simple")` -- **the positional default lives in artifact's `load`, which prez
+does not yet link.** The injection could not reach the behaviour it was written against.
+
+**This is the estate's recurring shape in a new place.** A hung watcher and a working watcher emit
+byte-identical output; a control over unreachable code and a control over correct code emit
+byte-identical output too. The discriminator is never the result. **Had it not been run, a control
+asserted to be live would have shipped dead** -- and it would have been protecting the exact
+property that this thread minted it to protect.
+
+So the row was red-proved against what its body can actually reach: pointing prez's default at
+`mono` fails the new test and leaves `no_theme_given_uses_the_embedded_default` green. 135 pass, 1
+fails, and the one that fails is the new one. **That demonstrates the blindness finding rather
+than restating it.**
+
+**S8 therefore has a second, deferred half, and it is written down rather than remembered: the
+reorder injection becomes live at wiring and must be re-run then.** A control that cannot fire yet
+is not satisfied; it is scheduled.
+
+### 1.7 Two rows of vc's measured a proxy instead of the property, and that is now a pattern
+
+S2 said *the `[dependencies]` block is byte-identical*. S3 said *no edit to any test file*. Both
+were mechanical checks standing in for properties -- *prez picks up no third-party cost*, and *no
+existing assertion is weakened*. **Mechanical proxies are attractive because they are exactly
+checkable, and they break the moment the implementation legitimately has to touch the mechanism.**
+S1 forced a dependency edge, and S8 forced a new test; each broke its proxy while leaving the
+property untouched.
+
+**S3 is corrected the same way S2 was.** prez is now at 136 tests, so *no edit to any test file* is
+literally false while its intent holds exactly -- as written the row forbids the addition this
+thread asked for. It now reads as the property, with the mechanical check named as evidence rather
+than as the requirement.
+
+**The rule this thread is adopting: a criterion asserts the PROPERTY and names the mechanical check
+as its evidence. It never substitutes the check for the property.** Both corrections are
+strengthenings, and both were caught by cc before a file moved rather than after.
+
 ---
 
 ## 2. There are THREE consolidations, and they are named apart on purpose
@@ -436,9 +477,9 @@ gate.
 | - | --------- |
 | S1 | Theme resolution and base64 have exactly ONE implementation in the tree, linked by both binaries. **Data-URI inlining is NOT in this set** -- the S5 diff established it has no shared surface |
 | S2 | WP-01 adds no third-party cost to prez: the `comrak` line byte-identical, the lockfile's third-party package count unchanged, and the only permitted addition the first-party std-only `artifact` path dependency. **Corrected from byte-identity of the block, which S1 makes impossible -- see 1.4.** Conditional on hv's AC02 sign-off |
-| S3 | The existing prez suite passes after extraction with no edit to any test file |
+| S3 | No existing prez assertion is weakened or altered: all 135 original test bodies unchanged, verifiable by diff, with the count stated before and after. **Additions are permitted and expected** -- S8 is one. Corrected from "no edit to any test file", which S8 makes false while the intent holds -- see 1.7 |
 | S4 | prez's release binary size after WP-01 is stated as a number against the budget, not as a distance |
-| S8 | prez pins which theme `load(None, ..)` resolves to, by a property unique to `simple` rather than one the whole roster shares. **`--gp-bg` is carried by all seven built-ins and does not discriminate** |
+| S8 | prez pins which theme `load(None, ..)` resolves to, by a property unique to `simple` rather than one the whole roster shares (**`--gp-bg` is carried by all seven and does not discriminate**). **Two halves: the identity assertion is live now; the roster-reorder injection cannot fire until wiring and MUST be re-run then** -- see 1.6 |
 | S7 | `crate/` is both the workspace root and prez's package: every `include_str!` path, the shim and `prez.bats`'s fixture unchanged, and **`[profile.release]` proven in effect for the measured binary** rather than assumed from the manifest |
 | S5 | **SATISFIED 2026-09-09.** prez's and showreel's theme behaviours diffed by two independent enumerations: four behaviours, one clean match, result in 1.1 |
 | S6 | The shared resolver implements R1-R4: newline-preserving comment stripping, the ruled needle set, `theme.yaml` scanned, and prez's four provenance messages. **Closes issue 0014** |
