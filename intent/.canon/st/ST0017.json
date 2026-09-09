@@ -237,6 +237,14 @@
       }
     },
     {
+      "id": "AC-2.14",
+      "text": "Where a defect in the artifact makes a gate unprovable, the harness NAMES it and counts the slide ungradeable rather than passing it. Measured 2026-09-09: player.html:613's '|| \"Snorkeltoast\"' fallback means blanking producer swaps a configured value for a literal rather than removing the row, so the presence control cannot fully strip a session crawl. Slide 1's presence figure of 28.34 PASSED the gate for the wrong reason -- both frames lack the session details and differ elsewhere. Session crawls therefore report presence UNPROVABLE with the player line as the reason. When the literal goes the gate becomes sound with no harness change.",
+      "kind": "non-test",
+      "state": {
+        "is": "unsatisfied"
+      }
+    },
+    {
       "id": "AC-2.2",
       "text": "Slide count, order and ids are asserted exactly before any pixel comparison. A structural mismatch fails without reporting a pixel number at all.",
       "kind": "non-test",
@@ -367,7 +375,7 @@
     },
     {
       "id": "AC-3.7",
-      "text": "player.html carries no brand token.",
+      "text": "player.html carries no brand token, and the check covers STRING LITERALS in JS as well as CSS custom properties. Red-proved against the known live instance: player.html:613 is 'add(\"Producer\", REEL.producer || \"Snorkeltoast\")', a hardcoded brand name in the shell README section 28 says knows about no brand. HOIST.md section 4's proposed guard, grep for '--pop-', returns ZERO hits against it -- verified 2026-09-09 -- because it was written from the one instance that had been found, a CSS custom property, and so catches that instance rather than the class. The check applies to player.html and showreel and NOT to themes/, whose brand strings are legitimate.",
       "kind": "non-test",
       "state": {
         "is": "unsatisfied"
