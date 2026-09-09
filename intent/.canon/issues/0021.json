@@ -1,8 +1,8 @@
 {
   "schema": "intent/issue@3.0",
   "number": 21,
-  "slug": "the-help-renderer-strips-code-backticks-but-prin",
-  "title": "the help renderer strips code backticks but prints ** literally, so every bold span in every help file shows its asterisks",
+  "slug": "glow-s-notty-stylesheet-has-no-bold-so-redirecte",
+  "title": "glow's notty stylesheet has no bold, so REDIRECTED help output keeps its ** markers -- not a Utilz defect, and invisible at a terminal",
   "status": "closed",
   "severity": "low",
   "created": "2026-09-09",
