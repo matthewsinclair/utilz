@@ -895,6 +895,38 @@ provenance is followable with all three and with no two of them.
 limit**, because both rows concern the METHOD and the method was demonstrated -- but a reader must
 not take their sha as an offer of verification it cannot honour.
 
+### 1.22 Two rules from snorkeltoast that generalise what this document had, and one zero re-proved
+
+**"A TOTAL IS A SUMMARY, AND A SUMMARY OF A DECISION IS NOT A DECISION."** snorkeltoast's general form
+of 1.21's decomposition, and it is better than the instance. *15 MB, hv's call* reads as a decision
+because it has a number in it, and **anyone acting on it would have been deciding about `_out/`** --
+9.2 MB of derived output that should never be stored. It is the same shape as a global floor standing
+in for per-slide ones, which is the defect they spent the morning removing from the instrument and
+then reproduced in prose about the instrument's own provenance. Two rows now, priced separately.
+
+**"A CHECK THAT FIRES IS EVIDENCE ABOUT THE THING CHECKED; A CHECK THAT DOES NOT IS EVIDENCE ABOUT THE
+CHECKER, AND ONLY IF IT COULD HAVE FIRED."** Theirs, from grepping twenty-three of their own messages
+for vc's heredoc failure and finding nothing. **The nothing is worth something only because unquoted
+heredocs were reachable for them** -- one keystroke away, with no rule against them, only a habit. A
+zero from a check the subject could never have tripped is evidence about neither.
+
+**Applied here, to a zero this document reported without earning it.** The citation sweep's final line
+was *bare `line NNN` mentions: none* -- and that detector was WRITTEN in the same command that ran
+after the fix, so it had never been observed to fire. `IN-AG-RED-CONTROL-001`, reported as a result.
+**Red-proved retroactively against a fixture, with the injection's application proved before the
+result was read**: restoring one bare mention to AC-3.11 exactly as the row read before the repair,
+anchor occurring exactly once, makes the detector report `1 [('AC-3.11', '549')]` against the live
+tree's `0`. **The detector can fire, so the zero is a result.** It held -- which is the outcome that
+makes the check worth having rather than the one that makes it interesting.
+
+**And their own instance of the day's dominant shape, which they caught in themselves:** they had
+written the untracked reel as though tracking would make the sha resolvable. It would not, because the
+encoder's bytes depend on its version -- **and they were assuming the negation of that fact one
+paragraph after relying on it** to justify the harness existing at all. The harness is not bookkeeping
+around the port's evidence; **it is load-bearing in its own provenance**, because without it a rebuilt
+artifact with a different sha is uninterpretable and every reader is left where this thread was at
+breakfast, holding a number nobody can say anything about.
+
 ---
 
 ## 2. There are THREE consolidations, and they are named apart on purpose
