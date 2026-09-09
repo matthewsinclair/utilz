@@ -7,7 +7,21 @@ use artifact::Failure;
 /// Values are the reference's, `showreel:65`, unchanged.
 pub const MIN_DWELL_MS: u32 = 2_500;
 pub const MIN_EASE_MS: u32 = 600;
-pub const MAX_EASE_MS: u32 = 3_000;
+/// **CAPPED AT 2400 BY hv, 2026-09-09, AND THE NUMBER IS LOAD-BEARING.** The
+/// reference ships 3000, which EXCEEDS `MIN_DWELL_MS` -- so the longest ease the
+/// runtime permits was longer than the shortest dwell it permits, and `?speed=`
+/// could drive any reel into a crossfade that never finishes. 2400 closes that
+/// space STRUCTURALLY rather than by refusal: runtime ease is at most 2400,
+/// runtime dwell is at least 2500, so the crossing is unreachable instead of
+/// forbidden. Swept over 1,927,206 authored-dwell x authored-ease x pace x speed
+/// combinations: zero crossings at 2400, and crossings at 3000.
+///
+/// **A PARITY DIFFERENCE, NAMED:** a config with an authored ease above 2400
+/// (or above ~1714 under `ambient`, which scales ease by 1.4 before the cap)
+/// now renders a shorter crossfade than the Python build. The 45h reel is
+/// unaffected -- its worst authored ease is 900 and both pace modes land
+/// identically under either cap.
+pub const MAX_EASE_MS: u32 = 2_400;
 
 /// What a segment actually runs at, after the envelope.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -30,12 +44,12 @@ pub struct Timing {
 /// the URL can move.
 ///
 /// **THIS PARAGRAPH READ "NOT AN UNLUCKY PAIR OF CONSTANTS" UNTIL THE
-/// CONSTANTS WERE MEASURED, AND IT IS ALSO AN UNLUCKY PAIR OF CONSTANTS.**
-/// `MAX_EASE_MS` 3000 exceeds `MIN_DWELL_MS` 2500, so the highest ease the
-/// runtime permits is longer than the shortest dwell it permits. That is a
-/// SECOND and independent defect, closing this module cannot fix it, and it has
-/// its own pinned test below. The emphatic half of the original sentence was
-/// the wrong half.
+/// CONSTANTS WERE MEASURED, AND IT WAS ALSO AN UNLUCKY PAIR OF CONSTANTS.** The
+/// reference's `MAX_EASE_MS` of 3000 exceeded `MIN_DWELL_MS`, a SECOND defect
+/// independent of the split enforcement, which closing this module could not
+/// fix. **hv capped the constant at 2400 and it is now unreachable rather than
+/// refused.** The emphatic half of the original sentence was the wrong half,
+/// and the fix was a constant rather than any of the enforcement I proposed.
 ///
 /// **CITED BY TOKEN, NOT BY LINE, AND THIS MODULE EARNED THAT RULE THE HARD
 /// WAY.** The first version of this doc cited `player.html` by line for the cap;
@@ -156,63 +170,59 @@ mod tests {
     assert!(sound > 3_000, "and it must contain real sound pairs, not just refusals: {sound}");
   }
 
-  /// **THIS PINS A HOLE THE COMPILER CANNOT CLOSE ALONE, AND ITS NAME SAYS SO.**
+  /// **THE INVERSION THIS TEST ASKED FOR, KEEPING ITS FIXTURES.**
   ///
-  /// AC-3.6 requires the floors to hold in compiler AND runtime with `?speed=`
-  /// unable to cross them. **They do not and it can, and the cause is the
-  /// CONSTANTS rather than their enforcement.** The player's `dwellOf` divides
-  /// by `SPEED` and its `easeOf` does not, and `SPEED` is a `parseFloat`
-  /// straight off the query string with no clamp -- so a large enough `?speed=`
-  /// floors dwell at `MIN_DWELL_MS` while ease sits anywhere up to
-  /// `MAX_EASE_MS`, which is larger.
+  /// It was `speed_can_still_cross_the_envelope_at_runtime_which_is_a_known_hole`
+  /// and it recorded a hole with an instruction to invert rather than delete.
+  /// hv capped `MAX_EASE_MS` at 2400 and the hole is shut.
   ///
-  /// Measured against the player's own formulas: `dwell: 10s, ease: 2.8s`
-  /// passes this module, and at `?speed=10` the runtime computes dwell 2500 and
-  /// ease 2800. Three of six sampled cases cross.
-  ///
-  /// **NO AMOUNT OF COMPILE-TIME ENFORCEMENT FIXES IT.** Every available fix is
-  /// a decision: refuse an authored ease at or above `MIN_DWELL_MS`, which
-  /// refuses configs that build today; clamp `SPEED` in the player; or scale
-  /// ease by `SPEED` as dwell is scaled, which changes what a reel looks like.
-  /// **Filed rather than chosen** -- AC-3.6 is vc's row.
-  ///
-  /// **THIS TEST MUST GO RED WHEN IT IS RULED, AND THAT REDNESS IS THE POINT.**
-  /// Invert it into a guarantee; do not delete it.
+  /// **CLOSED STRUCTURALLY, NOT BY REFUSAL, WHICH IS THE STRONGER FORM.** The
+  /// compiler could never have closed it: at `?speed=16` a config with dwell
+  /// 20000 and ease 2600 crosses while its authored ease sits eight times under
+  /// its authored dwell, so nothing visible at compile time predicts it. With
+  /// runtime ease bounded above by 2400 and runtime dwell bounded below by 2500,
+  /// the crossing is unreachable for every config at every speed in both pace
+  /// modes -- vc's finding, that both defects reduce to one condition.
   #[test]
   #[expect(
     clippy::assertions_on_constants,
-    reason = "the constants ARE the subject: MAX_EASE_MS exceeding MIN_DWELL_MS is the \
-              defect being pinned, so the assertion is deliberately compile-time-decidable. \
-              `expect` rather than `allow` so that restructuring which makes this no longer \
-              constant is itself reported."
+    reason = "the constants ARE the subject: MAX_EASE_MS sitting below MIN_DWELL_MS is what \
+              makes the crossing unreachable, so the assertion is deliberately \
+              compile-time-decidable. `expect` rather than `allow` so that restructuring which \
+              makes this no longer constant is itself reported."
   )]
-  fn speed_can_still_cross_the_envelope_at_runtime_which_is_a_known_hole() {
+  fn the_envelope_is_closed_structurally_so_speed_cannot_cross_it() {
     assert!(
-      MAX_EASE_MS > MIN_DWELL_MS,
-      "EXPECTED RED IF THE ENVELOPE WAS JUST MADE CONSISTENT -- do not chase this \
-       as a regression. It RECORDS that the highest permitted ease exceeds the \
-       lowest permitted dwell. If that no longer holds, INVERT this test."
+      MAX_EASE_MS < MIN_DWELL_MS,
+      "the whole guarantee: the longest permitted ease must be shorter than the \
+       shortest permitted dwell, or ?speed= can drive any reel into a crossfade \
+       that never finishes"
     );
 
     // The player's own arithmetic, transcribed from its `dwellOf` and `easeOf`.
-    let runtime = |dwell: f64, ease: f64, speed: f64| {
-      let d = (dwell / speed).max(f64::from(MIN_DWELL_MS));
-      let e = ease.clamp(f64::from(MIN_EASE_MS), f64::from(MAX_EASE_MS));
+    // dwellOf divides by SPEED; easeOf does not, which is why the bound must be
+    // structural rather than proportional.
+    let runtime = |dwell: f64, ease: f64, ambient: bool, speed: f64| {
+      let d = (dwell * if ambient { 1.5 } else { 1.0 } / speed).max(f64::from(MIN_DWELL_MS));
+      let e = (ease * if ambient { 1.4 } else { 1.0 })
+        .clamp(f64::from(MIN_EASE_MS), f64::from(MAX_EASE_MS));
       (d, e)
     };
 
-    timing("legal", 10_000, 2_800).expect("the compiler accepts this config");
-    let (d, e) = runtime(10_000.0, 2_800.0, 10.0);
-    assert!(
-      e >= d,
-      "EXPECTED RED IF ?speed= WAS BOUNDED -- records that a compile-legal config \
-       still crosses at runtime: dwell {d}, ease {e}"
-    );
+    // The two cases that crossed under the reference's 3000, now closed.
+    for (dwell, ease, ambient, speed) in
+      [(10_000.0, 2_800.0, false, 10.0), (0.0, 1_800.0, true, 0.25), (20_000.0, 2_600.0, false, 16.0)]
+    {
+      let (d, e) = runtime(dwell, ease, ambient, speed);
+      assert!(e < d, "authored {dwell}/{ease} ambient={ambient} speed={speed} -> {d}/{e}");
+    }
 
-    // Control: the reel being ported is NOT exposed, its ease being 900ms.
-    // Without this the test would read as "every reel is broken".
-    let (d, e) = runtime(6_000.0, 900.0, 99.0);
-    assert!(e < d, "the 45h reel survives any speed: dwell {d}, ease {e}");
+    // Control: the reel being ported is unmoved by the cap, at any speed.
+    for speed in [1.0, 99.0] {
+      let (d, e) = runtime(6_000.0, 900.0, false, speed);
+      assert_eq!(e, 900.0, "45h's ease is untouched by the cap");
+      assert!(e < d);
+    }
   }
 
   /// The reel this port is graded against, so the parity question is answered
