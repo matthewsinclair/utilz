@@ -188,7 +188,7 @@
     },
     {
       "id": "AC-2.3",
-      "text": "A same-file control run reports the noise floor, and the control is REPEATED -- one run does not characterise noise. Measured 2026-09-09: slide 14 gave 0.000000 then 0.002196 on successive control runs, so a single control would have set a floor of zero on a slide that is not stable. The grading floor is derived from the repeated control and stated with its reason, and may differ per population where the reason is stated.",
+      "text": "A same-file control run reports the noise floor, and the control is REPEATED, because STABILITY of the noise -- not the presence of it -- decides whether a slide is gradeable. Measured 2026-09-09: slide 14 read 0.002196 four times, reproducible, so it is graded against its own floor 2800x smaller than the injected defect the red-proof measures; slide 20 read 4.99, 8.28, 10.65 and 12.45, unbounded, so no floor is safe -- a floor wide enough for the next sample is wider than the signal the instrument exists to detect. Two slides, both non-zero on a single control reading, requiring OPPOSITE treatment, and one run cannot tell them apart. Floors are per-slide, derived from the repeated control, and stated with their reason.",
       "kind": "non-test",
       "state": {
         "is": "unsatisfied"
@@ -223,7 +223,8 @@
       "text": "A deviation attributed to a slide is separated from a deviation attributable to its capture POSITION before any floor is set. Only reordering separates them; no number of repeats at one order can.",
       "kind": "non-test",
       "state": {
-        "is": "unsatisfied"
+        "is": "satisfied",
+        "evidence": "Snorkeltoast e2380f5, verified by vc 2026-09-09. Full reverse-order capture against the forward control, compared per slide: slide 14 reads 0.002196 captured 14th forward AND 7th reverse; slide 20 reads 12.453773 captured 20th forward and 1st reverse; the twenty untouched slides are 0.000000 in both orders. The deviation follows the SLIDE, not the capture position, so cc's positional hypothesis is ruled out and no run-order floor sits under every slide. Discharged before any floor was set, which was the point."
       }
     },
     {
