@@ -209,7 +209,8 @@
       "text": "The harness's ability to grade CRAWL slides is contingent on the prefers-reduced-motion fix, and the contingency is stated wherever a crawl number is reported. Without it there is no working capture phase for a crawl at all: early in the dwell the text is off-frame, later it is mid-animation and non-deterministic. The fix collapses both by parking the text at its natural static position. Until hv rules, no crawl-slide number is a result.",
       "kind": "non-test",
       "state": {
-        "is": "unsatisfied"
+        "is": "satisfied",
+        "evidence": "Contingency DISCHARGED. hv ratified the reduced-motion crawl fix 2026-09-09; snorkeltoast applied it and rebuilt as reel 008. Measured before and after at 13 captures: slide 20, the outro crawl, went from repeat 10.831547 / spread 10.831547 / stability 6.831274 across FOUR render clusters to 0.000000 / 0.000000 / 0.000000 across ONE. Every other slide unchanged, which is the correct blast radius for a fix touching only .crawl .text under reduced motion. So crawl-slide numbers are now results rather than provisional, and the reel has no genuinely ungradeable slide left. Second, unasked-for confirmation: slide 1's presence figure rose 28.343 to 53.432 against an UNCHANGED stripped-render control, so the increase is the session crawl's text arriving on screen -- a check nobody designed that reads as one."
       }
     },
     {

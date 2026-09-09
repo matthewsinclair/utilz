@@ -24,7 +24,7 @@ Validation node. cc builds, vc contracts and verifies, hv adjudicates. Full boar
 ## TODO
 
 - **Satisfy WP-01's remaining rows** as cc sends evidence: AC-1.11, 1.13, 1.14, 1.15.
-- **snorkeltoast's 008 after-table** -- the fifth attempt, first with a fixed player. Their verdict rule needs FIXING not researching: it flattens 0.002196 against 12.45 into one bucket, and magnitude is the discriminator where cluster count is not.
+- **008 after-table LANDED and the crawl fix is validated by measurement.** Slide 20 went from four render clusters and a 4.99-12.45 spread to ONE cluster at 0.000000, every other slide unchanged. AC-2.10's contingency discharged. Reel now reads 19 gradeable / 3 ungradeable, and the three are TWO known bugs: slides 13+14 are snorkeltoast's verdict rule (flattens 0.002196 against what used to be 12.45), slide 1 is `player.html:613`'s brand literal. **With the rule fixed it should read 21 gradeable / 1 presence-unprovable / 0 ungradeable -- NOT claimable until re-run.**
 - **cc's ST0017 claim overlap** -- flagged to hv. Not a conflict: claim-by-ST has no way to say "vc validates, cc builds", and a thread with a contract-writer and a builder will always have both.
 
 ## Holds
