@@ -14,7 +14,7 @@
 //! inside another's evidence.
 
 use artifact::Failure;
-use showreel::{config, limits, theme};
+use showreel::{config, limits, segment, theme};
 use std::path::{Path, PathBuf};
 
 fn main() {
@@ -99,17 +99,20 @@ fn check(path: &Path) -> Result<(), Failure> {
   };
   let inlined = theme::inline(&theme)?;
 
-  // The timing envelope, per segment, using the pace preset the config names.
-  let (default_dwell, default_ease) = match cfg.pace.as_deref().unwrap_or("attract") {
-    "attract" => ("6s", "0.9s"),
-    "ambient" => ("11s", "1.6s"),
-    other => {
-      return Err(Failure::new(
-        format!("{}: unknown pace '{other}'", file.display()),
-        "one of: attract, ambient",
-      ))
-    }
-  };
+  // **THE PACE TABLE HAS ONE HOME NOW.** This was a `match` here mapping the two
+  // preset names to a dwell and an ease, while the reference's `PACE` carries
+  // five fields -- so the transition, motion and fit defaults were silently
+  // absent, and nothing reported it because nothing consumed them yet.
+  let pace = segment::pace(cfg.pace.as_deref())?;
+
+  // Precedence: the segment's own key, then the config's `defaults:` block, then
+  // the pace preset. The reference builds the same order by dict-update.
+  let d = cfg.defaults.as_ref();
+  let default_dwell = d.and_then(|d| d.dwell.as_deref()).unwrap_or(pace.dwell);
+  let default_ease = d.and_then(|d| d.ease.as_deref()).unwrap_or(pace.ease);
+  let default_transition = d.and_then(|d| d.transition.as_deref()).unwrap_or(pace.transition);
+  let default_motion = d.and_then(|d| d.motion.as_deref()).unwrap_or(pace.motion);
+  let default_fit = d.and_then(|d| d.fit.as_deref()).unwrap_or(pace.fit);
   let mut clamped = 0;
   for (index, seg) in cfg.segments.iter().enumerate() {
     let map = seg.as_mapping().expect("validated as a mapping above");
@@ -125,6 +128,19 @@ fn check(path: &Path) -> Result<(), Failure> {
     };
     let dwell = duration(&text_of("dwell", default_dwell), "dwell", &id)?;
     let ease = duration(&text_of("ease", default_ease), "ease", &id)?;
+    // **VALUES, NOT ONLY KEYS.** `segment::validate` refuses `bg:` on a crawl;
+    // nothing refused `fit: cvoer`, which reached the player as a class name
+    // styling nothing. Same defect as a mistyped `type:` -- a config that builds
+    // something other than what it says.
+    let owner = format!("segment '{id}'");
+    segment::value("fit", &text_of("fit", default_fit), segment::FITS, &owner)?;
+    segment::value(
+      "transition",
+      &text_of("transition", default_transition),
+      segment::TRANSITIONS,
+      &owner,
+    )?;
+    segment::value("motion", &text_of("motion", default_motion), segment::MOTIONS, &owner)?;
     let timing = limits::timing(&id, dwell, ease)?;
     if timing.dwell_ms != dwell || timing.ease_ms != ease {
       clamped += 1;
@@ -133,7 +149,7 @@ fn check(path: &Path) -> Result<(), Failure> {
 
   println!("showreel: {} is valid", file.display());
   println!("  artist    {} ({})", cfg.artist.name, cfg.artist.handle);
-  println!("  pace      {}", cfg.pace.as_deref().unwrap_or("attract"));
+  println!("  pace      {} (dwell {}, ease {}, {} / {} / {})", pace.name, pace.dwell, pace.ease, pace.transition, pace.motion, pace.fit);
   // **THE SHAPE-TABLE SIZE IS GONE FROM THIS LINE, AND ITS ABSENCE IS THE FIX.**
   // It read `{n} declared, {m} shapes known`, joining a fact about THIS config to
   // a build-time constant with a comma, and the reading a human takes from two

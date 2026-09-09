@@ -53,6 +53,96 @@ pub const SHAPES: &[Shape] = &[
   Shape { name: "gallery", fields: &["from", "files", "exclude"] },
 ];
 
+/// The values `fit:` may take.
+///
+/// **A KEY CHECK AND A VALUE CHECK ARE DIFFERENT REFUSALS AND THIS MODULE OWES
+/// BOTH.** `validate` already refuses `bg:` on a crawl; until now nothing
+/// refused `fit: cvoer`, which passed every check this port had and would have
+/// reached the player as a class name that styles nothing. **The typo is the
+/// same defect as the mistyped `type:` one function up** -- a config that builds
+/// something other than what it says, silently -- and it lived in the module
+/// whose whole subject is that defect.
+pub const FITS: &[&str] = &["cover", "contain", "matte", "blur", "logo"];
+
+/// The values `transition:` may take.
+pub const TRANSITIONS: &[&str] = &["cut", "fade", "dissolve", "push", "wipe"];
+
+/// The values `motion:` may take.
+pub const MOTIONS: &[&str] =
+  &["none", "kenburns", "kenburns-out", "drift", "drift-l", "drift-r"];
+
+/// A pace preset: every rendering default, not just the two durations.
+///
+/// **THE PORT CARRIED HALF OF THIS TABLE IN A `match` IN `main.rs`** -- `attract`
+/// and `ambient` mapped to a dwell and an ease, with the transition, motion and
+/// fit silently absent. Two homes for one table, one of them incomplete, which
+/// is the Highlander shape rather than an oversight: the missing three had no
+/// consumer yet, so nothing reported that they were gone.
+#[derive(Debug, Clone, Copy)]
+pub struct Pace {
+  pub name: &'static str,
+  pub dwell: &'static str,
+  pub ease: &'static str,
+  pub transition: &'static str,
+  pub motion: &'static str,
+  pub fit: &'static str,
+}
+
+/// The two presets, with the reason each exists.
+///
+/// `attract` is window-facing -- motion catches an eye moving past at walking
+/// pace. `ambient` is indoors near staff: long dwell, slow drift, nothing that
+/// pulses.
+pub const PACES: &[Pace] = &[
+  Pace {
+    name: "attract",
+    dwell: "6s",
+    ease: "0.9s",
+    transition: "dissolve",
+    motion: "kenburns",
+    fit: "cover",
+  },
+  Pace {
+    name: "ambient",
+    dwell: "11s",
+    ease: "1.6s",
+    transition: "dissolve",
+    motion: "drift",
+    fit: "cover",
+  },
+];
+
+/// The reference's pace when a config names none.
+pub const DEFAULT_PACE: &str = "attract";
+
+/// Resolve a pace name, refusing an unknown one with the roster.
+pub fn pace(name: Option<&str>) -> Result<&'static Pace, Failure> {
+  let want = name.unwrap_or(DEFAULT_PACE);
+  PACES.iter().find(|p| p.name == want).ok_or_else(|| {
+    Failure::new(
+      format!("unknown pace '{want}'"),
+      format!("one of: {}", PACES.iter().map(|p| p.name).collect::<Vec<_>>().join(", ")),
+    )
+  })
+}
+
+/// Refuse a value that is not in its vocabulary.
+///
+/// **THE REMEDY LISTS THE WHOLE SET, SORTED.** A refusal naming only the bad
+/// value sends the author to the README; naming the alternatives ends it at the
+/// terminal.
+pub fn value(field: &str, got: &str, allowed: &[&str], owner: &str) -> Result<(), Failure> {
+  if allowed.contains(&got) {
+    return Ok(());
+  }
+  let mut names: Vec<&str> = allowed.to_vec();
+  names.sort_unstable();
+  Err(Failure::new(
+    format!("{owner}: unknown {field} '{got}'"),
+    format!("one of: {}", names.join(", ")),
+  ))
+}
+
 /// The reference's default when a segment declares no `type:`.
 pub const DEFAULT_SHAPE: &str = "gallery";
 
@@ -147,6 +237,106 @@ mod tests {
 
   fn seg(yaml: &str) -> serde_yaml::Value {
     serde_yaml::from_str(yaml).unwrap()
+  }
+
+  /// **THE THREE VOCABULARIES, WITH THEIR SIZES ASSERTED.** A set that silently
+  /// loses a member starts refusing configs that built yesterday; one that gains
+  /// a member admits a value the player styles nothing for. Both are silent, and
+  /// the count is what makes either visible.
+  #[test]
+  fn each_vocabulary_is_the_reference_set_and_its_size_is_stated() {
+    assert_eq!(FITS.len(), 5);
+    assert_eq!(TRANSITIONS.len(), 5);
+    assert_eq!(MOTIONS.len(), 6);
+    for want in ["cover", "contain", "matte", "blur", "logo"] {
+      assert!(FITS.contains(&want), "missing fit: {want}");
+    }
+    for want in ["cut", "fade", "dissolve", "push", "wipe"] {
+      assert!(TRANSITIONS.contains(&want), "missing transition: {want}");
+    }
+    for want in ["none", "kenburns", "kenburns-out", "drift", "drift-l", "drift-r"] {
+      assert!(MOTIONS.contains(&want), "missing motion: {want}");
+    }
+  }
+
+  /// A value refusal names the field, the bad value AND the whole set. **The
+  /// roster is the half that ends it at the terminal** rather than sending the
+  /// author to the README.
+  #[test]
+  fn a_value_outside_its_vocabulary_is_refused_with_the_whole_set() {
+    assert!(value("fit", "cover", FITS, "segment 'x'").is_ok());
+    let e = value("fit", "cvoer", FITS, "segment 'x'").unwrap_err();
+    assert!(e.message.contains("segment 'x'"), "names the owner: {}", e.message);
+    assert!(e.message.contains("cvoer"), "names the value: {}", e.message);
+    let remedy = e.remedy.expect("a vocabulary refusal lists the vocabulary");
+    for want in FITS {
+      assert!(remedy.contains(want), "lists {want}: {remedy}");
+    }
+    // Sorted, so two runs give one message and a reader can scan it.
+    assert_eq!(remedy, "one of: blur, contain, cover, logo, matte");
+  }
+
+  /// **THE PACE TABLE CARRIES FIVE FIELDS, NOT TWO.** The port held `attract`
+  /// and `ambient` as a dwell and an ease in a `match` in `main.rs`, with the
+  /// transition, motion and fit silently absent -- two homes for one table, one
+  /// of them incomplete, and nothing reported it because nothing consumed the
+  /// missing three yet.
+  #[test]
+  fn a_pace_preset_carries_every_rendering_default() {
+    let p = pace(Some("attract")).unwrap();
+    assert_eq!((p.dwell, p.ease), ("6s", "0.9s"));
+    assert_eq!((p.transition, p.motion, p.fit), ("dissolve", "kenburns", "cover"));
+
+    let p = pace(Some("ambient")).unwrap();
+    assert_eq!((p.dwell, p.ease), ("11s", "1.6s"));
+    assert_eq!((p.transition, p.motion, p.fit), ("dissolve", "drift", "cover"));
+
+    assert_eq!(pace(None).unwrap().name, DEFAULT_PACE, "no pace named takes the default");
+
+    // **AND EVERY PRESET'S OWN DEFAULTS MUST BE IN THE VOCABULARIES.** A preset
+    // naming a transition the player does not have would refuse every config
+    // that omits the key -- the failure would look like the config's.
+    for p in PACES {
+      assert!(TRANSITIONS.contains(&p.transition), "{}: {}", p.name, p.transition);
+      assert!(MOTIONS.contains(&p.motion), "{}: {}", p.name, p.motion);
+      assert!(FITS.contains(&p.fit), "{}: {}", p.name, p.fit);
+    }
+  }
+
+  #[test]
+  fn an_unknown_pace_is_refused_with_the_roster() {
+    let e = pace(Some("frantic")).unwrap_err();
+    assert!(e.message.contains("frantic"), "{}", e.message);
+    assert_eq!(e.remedy.unwrap(), "one of: attract, ambient");
+  }
+
+  /// **TEST AGAINST SOMETHING YOU DID NOT WRITE.** Every `fit:`, `transition:`
+  /// and `motion:` the live 45h config states must pass the vocabularies -- the
+  /// refusal cases above exercise values I chose, this exercises values a reel
+  /// author chose, which is what caught a missing serde rename one module over.
+  #[test]
+  fn every_rendering_value_the_live_reel_states_is_in_its_vocabulary() {
+    let reel: serde_yaml::Value =
+      serde_yaml::from_str(include_str!("../fixtures/45h.showreel.yaml")).unwrap();
+    let segments = reel.get("segments").and_then(|v| v.as_sequence()).expect("segments");
+    let mut checked = 0;
+    for seg in segments {
+      let map = seg.as_mapping().expect("a mapping");
+      for (field, allowed) in
+        [("fit", FITS), ("transition", TRANSITIONS), ("motion", MOTIONS)]
+      {
+        if let Some(v) = map.get(serde_yaml::Value::from(field)).and_then(|v| v.as_str()) {
+          value(field, v, allowed, "live reel").unwrap_or_else(|e| {
+            panic!("the live reel states a value this port refuses: {}", e.message)
+          });
+          checked += 1;
+        }
+      }
+    }
+    // **THE COUNT IS THE CONTROL.** A reel stating none of these keys would pass
+    // this test having checked nothing, which is a green over an empty
+    // population -- the shape this thread keeps finding.
+    assert!(checked > 0, "the live reel stated no rendering values at all; test proved nothing");
   }
 
   /// **THE SHAPE TABLE IS A POPULATION AND ITS SIZE IS ASSERTED.** Eleven
