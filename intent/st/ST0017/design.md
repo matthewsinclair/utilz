@@ -845,6 +845,56 @@ instrument column. And whichever way they fall they are not rereading, **so the 
 rests on is untouched by the judgement calls.** A result that cannot be moved by its own author's
 boundary decisions is the only kind a self-assessment can honestly report.
 
+### 1.21 A narrowed view agreeing with itself, which is the unification of two opposite mistakes
+
+**snorkeltoast ran 1.20's discipline -- stage explicitly, then read the WHOLE tree and expect it
+clean -- in place of the scoped `git status --short bin/showreel/` they had run after every commit
+all day, and it found something worse than staging drift within five minutes. The 45h reel is
+entirely untracked: 23 files, 15 MB, ZERO under git.** Verified here, and it is unadded rather than
+excluded -- no ignore rule matches it, and its parent directory carries three tracked files.
+
+**So FLOORS.md cites `sha256 daaa503ad7db` for a build that exists on one machine.** The hash
+identifies the artifact precisely and makes it no easier to obtain, and letting a reader verify was
+the sha's only function. **A provenance line that cannot be followed is most of a provenance line
+missing** -- correct, unfalsifiable by inspection, and useless in exactly the situation it was
+written for. An afternoon was spent making the table citable without checking that its subject was
+reachable.
+
+**The mechanism is 1.20's inverted, and snorkeltoast's statement of the pair is the durable one:**
+
+- **An explicit pathspec drops your own work** while the working tree stays consistent, so nothing on
+  the machine is wrong and nothing reports it.
+- **A scoped status check reports clean** while the tree is fine and the repository is not.
+
+**Both are a narrowed view agreeing with itself.** That is why the covering fix is a DISCIPLINE and
+not a rule about pathspecs: the failure is not in either command, it is in asking a question whose
+scope already excludes the answer.
+
+**THE 15 MB IS THREE DECISIONS AND MUST NOT REACH hv AS ONE.** Measured here, because *"committing
+the reel is a repository decision"* is true and is the wrong shape:
+
+| component       | size   | files | what it is                                            |
+| --------------- | ------ | ----: | ------------------------------------------------------- |
+| `showreel.yaml` | 8 KB   |     1 | the reel's DESCRIPTION -- costs nothing                |
+| `assets/`       | 5.7 MB |    16 | the source images -- **the actual decision**          |
+| `_out/`         | 9.2 MB |     3 | DERIVED, regenerable, and never a thing to commit     |
+| `.raster/`      | 256 KB |     2 | intermediate cache -- wants an ignore rule            |
+| `.DS_Store`     | 12 KB  |     1 | junk -- wants an ignore rule                          |
+
+**Nine of the fifteen megabytes are an answer nobody should store.** The question is 5.7 MB of source
+images, and the 8 KB that makes the reel describable is free.
+
+**AND OBTAINABLE IS NOT BYTE-REPRODUCIBLE, which is the distinction the sha quietly conflates.**
+Committing config and assets makes the reel REBUILDABLE, not identical: the encoder's bytes depend on
+its version, **which is the same fact that makes WP-02 necessary for the Rust port at all**. A rebuild
+yielding a different sha is not evidence of a defect and not evidence of its absence. **The sha
+identifies, the inputs make it rebuildable, and only the harness makes a rebuild gradeable** --
+provenance is followable with all three and with no two of them.
+
+**AC-2.18 carries the property. AC-2.17 and AC-2.3 stay satisfied and their evidence now states the
+limit**, because both rows concern the METHOD and the method was demonstrated -- but a reader must
+not take their sha as an offer of verification it cannot honour.
+
 ---
 
 ## 2. There are THREE consolidations, and they are named apart on purpose
