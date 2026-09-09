@@ -245,6 +245,14 @@
       }
     },
     {
+      "id": "AC-2.15",
+      "text": "A per-slide floor is not derived from a single control run, because an artefact that MIGRATES between slides is attributed to whichever one showed it that day -- and the slide left at 0.000000 goes falsely red the next time it lands there. Measured 2026-09-09: the same sub-pixel artefact appears at x=145, one pixel wide, four pixels differing, max delta 2, on slide 14 under a 4000ms budget and on slide 13 under 1100ms. Both are left-aligned content templates and 145 is the left edge of the content block in each. Where an artefact has a NAMED CAUSE spanning a class of slides, the floor is a class floor at the largest observed value for that class, justified by the phenomenon rather than by which slide exhibited it. A class floor is not the global floor this contract rejects: a global floor is set by the worst slide in the reel and is wider than the signal, whereas a class floor is three orders of magnitude below the injected defect and is derived from a cause.",
+      "kind": "non-test",
+      "state": {
+        "is": "unsatisfied"
+      }
+    },
+    {
       "id": "AC-2.2",
       "text": "Slide count, order and ids are asserted exactly before any pixel comparison. A structural mismatch fails without reporting a pixel number at all.",
       "kind": "non-test",
@@ -254,7 +262,7 @@
     },
     {
       "id": "AC-2.3",
-      "text": "A same-file control run reports the noise floor, and the control is REPEATED, because STABILITY of the noise -- not the presence of it -- decides whether a slide is gradeable. Measured 2026-09-09: slide 14 read 0.002196 four times, reproducible, so it is graded against its own floor 2800x smaller than the injected defect the red-proof measures; slide 20 read 4.99, 8.28, 10.65 and 12.45, unbounded, so no floor is safe -- a floor wide enough for the next sample is wider than the signal the instrument exists to detect. Two slides, both non-zero on a single control reading, requiring OPPOSITE treatment, and one run cannot tell them apart. Floors are per-slide, derived from the repeated control, and stated with their reason.",
+      "text": "A same-file control run reports the noise floor, and the control is REPEATED, because STABILITY of the noise -- not the presence of it -- decides whether a slide is gradeable. Two slides can both read non-zero on a single control and require OPPOSITE treatment: a reproducible reading gets a floor, an unbounded one can have no safe floor, because a floor wide enough for the next sample is wider than the signal the instrument exists to detect. One run cannot tell them apart. NO FIGURE FROM ANY PRE-6c278a2 RUN MAY BE CITED HERE: every number before that fix was taken with pace=ambient scaling the runtime timeline, so the whole earlier floor table is superseded rather than relabelled. Floors are derived from the repeated control on the corrected harness and stated with their reason.",
       "kind": "non-test",
       "state": {
         "is": "unsatisfied"
@@ -286,7 +294,7 @@
     },
     {
       "id": "AC-2.7",
-      "text": "A deviation attributed to a slide is separated from a deviation attributable to its capture POSITION before any floor is set. Only reordering separates them; no number of repeats at one order can.",
+      "text": "A deviation attributed to a slide is separated from a deviation attributable to its capture POSITION before any floor is set. Only reordering separates them; no number of repeats at one order can. SATISFIED on the reverse-order run, whose CONCLUSION stands: with the capture budget held constant, the deviation followed the slide across both orders and the untouched slides were identical in both. Its NUMBERS are superseded -- that run predates 6c278a2 and carried pace=ambient. And a THIRD variable was held constant and is now known to matter: the capture MOMENT. The artefact migrates between slides as the budget changes, so this row rules out position and does not rule out budget.",
       "kind": "non-test",
       "state": {
         "is": "satisfied",
