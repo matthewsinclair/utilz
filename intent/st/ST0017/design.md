@@ -1350,8 +1350,9 @@ EXACTLY ONCE.** AC-2.1 leg 2 says its discharge is WP-03's to give. Spent on an 
 reads `adjacency (UNVERIFIED)`, that one run grades three rows and leg 2 does not move.
 
 **THE DECISION: THE MARKER GOES IN THE PORT'S SHELL, A SECOND DELIBERATE DIVERGENCE, FILLED BY THE
-RUST BUILD ONLY.** Absence then DERIVES Python, which is the shape 4.1 already establishes for the
-init stamp. Two alternatives were weighed and rejected. **Post-render injection** puts a second
+RUST BUILD ONLY** -- and it wins on the two alternatives' COSTS, not on a benefit, because the
+benefit first offered for it was wrong and has been withdrawn (below). Two alternatives were weighed
+and rejected. **Post-render injection** puts a second
 string-manipulation site outside `render()`, which is precisely what `render`'s single-pass design
 exists to centralise. **Putting it in the reference** means Python must then FILL it -- an unfilled
 `__PRODUCER__` would ship as literal text in a Python artifact -- and once Python stamps, absence
@@ -1360,14 +1361,47 @@ drops the marker takes `the_shell_declares_each_marker_exactly_once` to 0 and `r
 
 **THE CONTENT IS NOT `rust`, AND A STAMP READING `rust` WOULD SATISFY AC-2.1'S LETTER WHILE
 DEFEATING THE INSTRUMENT.** The harness comment asks for the implementation, its version, **and a
-policy identifier covering the pixel-affecting rules** -- long edge, resampling filter, quality, and
-the alpha rule -- *"because once ST0017 C2 retires the alpha asymmetry, a Rust build over Python
-masters is a pipeline whose halves disagree about policy by construction, and `rust` alone cannot
-say that."* Measured on both sides by vc: long edge **2560 both**, embed edge **1920 both**,
-**Lanczos both**, **JPEG q86 both**. **Three of the four AGREE, and the alpha rule is the deliberate
-divergence 4.2 ruled** -- so it is the only one of the four whose value distinguishes the halves.
-**The exact form is snorkeltoast's, because it is their instrument**; the port threads the content
-through as a value and hard-codes no string.
+policy identifier covering the pixel-affecting rules** -- *"because once ST0017 C2 retires the alpha
+asymmetry, a Rust build over Python masters is a pipeline whose halves disagree about policy by
+construction, and `rust` alone cannot say that."*
+
+**THE SHAPE IS snorkeltoast's, BECAUSE IT IS THEIR INSTRUMENT:**
+
+```
+impl=<name>/<version>;stage=build;embed=<the reel's actual target>;filter=lanczos3;q=<JPEG_Q>;alpha=collapse
+```
+
+Their side stamps `alpha=mode-only`. **Distinct strings, which is what makes the divergence
+surface** rather than needing to be remembered.
+
+**TWO FIELDS vc PROPOSED AND snorkeltoast CORRECTED, BOTH MEASURED, BOTH RECORDED HERE RATHER THAN
+QUIETLY REPLACED.** (1) **`edge=2560` IS DROPPED**: `MASTER_MAX` is an INIT constant (`showreel:51`,
+read by `normalise`) and the build half never reads it, so putting it in a BUILD stamp is exactly the
+stage-mixing the field exists to prevent -- and it is the case in play, since population (2) is a
+Rust build over Python masters whose build stamp did not do the init step that field describes.
+(2) **`embed` MUST BE THE REEL'S ACTUAL TARGET, NOT `TARGET_DEFAULT`**: `showreel:989` is
+`target = int(cfg.get("target", TARGET_DEFAULT))`, per-reel overridable, so a stamp reading 1920 on a
+reel carrying `target: 1440` is false on its face.
+
+**AND THE RULE THAT GOVERNS EVERY FIELD: INTERPOLATE FROM THE LIVE CONSTANT, NEVER WRITE THE VALUE
+OUT.** A hard-coded `q=86` is **a flag wearing a stamp's clothes** -- it records what somebody
+intended when they typed it, not what the code does. That is `showreel-harness:218`'s own
+flag-versus-stamp distinction one level deeper, and it is the whole reason values beat a versioned
+policy id: an id lets two halves agree on `pixpol-3` and disagree on pixels.
+
+**THE ALPHA DIVERGENCE IS NARROWER THAN FIRST STATED.** Init at `showreel:304-309` probes and
+collapses; build at `:449` tests `im.mode` only. **In a Python-init-then-Python-build pipeline the
+asymmetry is UNREACHABLE**, because init has already collapsed the opaque case and written a `.jpg`.
+It becomes reachable only where a build meets a master init did not write -- hand-placed inputs,
+outside init's buckets. A mixed pipeline plus a hand-placed opaque-RGBA master is the whole of it.
+
+**AND THE MARKER MUST BE A TOKEN AND NEVER A LITERAL, WHICH IS A HAZARD RAISED BY snorkeltoast AND
+CLOSED BEFORE IT WAS RAISED.** `showreel:1018-1022` builds the artifact as `PLAYER.read_text()` plus
+four `.replace()` calls -- **the artifact IS `player.html` with substitutions** -- and this port
+PULLS that template. Had the tag ever shipped carrying a real value, the Rust build would have
+inherited the Python string verbatim, `producer_stamp()` would have found it, and `population_source`
+would have flipped from `adjacency (UNVERIFIED)` to `stamp`: **an honest refusal upgraded into a
+confident wrong answer, believed precisely because a stamp outranks adjacency.**
 
 **AN EMPTY STAMP IS A SILENT ZERO, AND ONLY THE PRODUCING SIDE CAN REPORT IT.** `:1236` is Python
 truthiness: `content=""` matches `STAMP_RE`, so `producer_stamp` returns `""` -- and `""` is falsy,
@@ -1385,6 +1419,20 @@ single-pass render emits such a value verbatim and the hazard is absent rather t
 empty producer is not a valid input rendered correctly** -- it is an artifact that misreports its own
 provenance, to an instrument that cannot tell. Different fact, opposite disposition.
 
+**WITHDRAWN, AND RECORDED RATHER THAN REPLACED: "ABSENCE DERIVES PYTHON" IS NOT A THING 4.1
+ESTABLISHES.** This section said so in its first form, and the sentence came from vc, who wrote the
+row it cited and then spent it here. snorkeltoast checked the row: it says *"the ABSENCE of that
+stamp derives (2), exactly as the absence of a producer stamp already derives adjacency
+(UNVERIFIED)"* -- **and `adjacency (UNVERIFIED)` is a REFUSAL TO DERIVE, not a derivation.** The
+row's own analogy contradicts its claim.
+
+**THE MECHANISM SURVIVES UNCHANGED AND THE JUSTIFICATION DOES NOT, AND NO CODE MOVES.** The port
+stamps, the reference does not, and **a missing stamp goes on meaning UNVERIFIED rather than meaning
+Python.** Absence semantics are harness-side and were already correct; what was wrong was a claim
+about what they BUY. The decision to stamp in the port's own shell stands on the costs of the two
+alternatives -- a second string site outside `render()`, and a shared template whose reference half
+would then have to fill it -- which is a weaker case than the one first offered and is the true one.
+
 ---
 
 ## 5. Fixed in passage, or inherited -- decided now, not during
@@ -1398,7 +1446,7 @@ a port bug.
 | Six admission sites, three policies, two undeclared input classes (section 3) | **FIXED via C1.** One admission function, typed refusal with a remedy |
 | The `from:` silent skip | **FIXED.** A dropped segment input is reported at the segment's altitude, extending `report_unused` rather than duplicating it |
 | QR absent-is-valid | **PRESERVED, as `Option<Qr>`** -- a type, not a policy |
-| The reference writes no `showreel-producer` stamp, so every artifact it builds grades as `adjacency (UNVERIFIED)` | **PRESERVED for the reference; the PORT ADDS THE STAMP** -- a second deliberate divergence in `player.html`, so absence derives Python exactly as 4.1 has the absent init stamp derive population (2). Ruled in 4.5 |
+| The reference writes no `showreel-producer` stamp, so every artifact it builds grades as `adjacency (UNVERIFIED)` | **PRESERVED for the reference; the PORT ADDS THE STAMP** -- a second deliberate divergence in `player.html`. **Absence goes on meaning UNVERIFIED, which is a refusal to derive and NOT a derivation of Python**: the claim that it derived Python was withdrawn in 4.5, mechanism unchanged. Ruled in 4.5 |
 | The alpha asymmetry between the two image passes | **FIXED via C2** -- ruled in 4.2 |
 | Theme contract is a comment, not a check -- a brand token entered the brand-free shell and survived until an audit | **FIXED.** A shell-purity check over `player.html` |
 | Safety floors (600ms transition, 2.5s slide, 3s ceiling) enforced in compiler AND shipped to the runtime | **PRESERVED.** `?speed=` reaches the runtime, so both ends enforce. A limit written twice in two languages is one liability -- which is why it ships in the payload rather than being reimplemented |

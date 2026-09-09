@@ -15,11 +15,24 @@
 //! **THE OTHER IS AN ADDITION, AND IT IS THE ONE A CARELESS PULL LOSES.**
 //! `<meta name="showreel-producer" content="__PRODUCER__">` is the build's stamp
 //! of its own identity, which `showreel-harness` reads to derive what produced an
-//! artifact instead of inferring it from whatever compiler sat beside it. **The
-//! reference writes no such tag, so ABSENCE derives Python** -- the same shape
-//! design.md 4.1 gives the absent init stamp. A pull that drops the marker takes
-//! `the_shell_declares_each_marker_exactly_once` to 0 and makes `render` refuse,
-//! so the loss is loud. Ruled in design.md 4.5.
+//! artifact instead of inferring it from whatever compiler sat beside it.
+//!
+//! **THE REFERENCE WRITES NO SUCH TAG, AND ITS ABSENCE GOES ON MEANING
+//! `adjacency (UNVERIFIED)` -- A REFUSAL TO DERIVE, NOT A DERIVATION OF PYTHON.**
+//! This doc claimed the latter for one commit, on reasoning vc withdrew once
+//! snorkeltoast checked the row it rested on. design.md 4.5 records the
+//! withdrawal rather than replacing it. **No code moved: the mechanism was never
+//! the part that was wrong.**
+//!
+//! **AND THE MARKER IS A TOKEN BECAUSE THE ARTIFACT IS THIS FILE WITH
+//! SUBSTITUTIONS.** `showreel:1018-1022` builds it as `read_text()` plus four
+//! replaces, and this shell is PULLED from there -- so a tag that shipped a real
+//! value would be inherited verbatim by a Rust build, `producer_stamp` would find
+//! it, and `population_source` would flip from `adjacency (UNVERIFIED)` to
+//! `stamp`: **an honest refusal upgraded into a confident wrong answer, believed
+//! precisely because a stamp outranks adjacency.** A pull that DROPS the marker
+//! takes `the_shell_declares_each_marker_exactly_once` to 0 and makes `render`
+//! refuse, so that direction is loud. Ruled in design.md 4.5.
 //!
 //! **AND ONE LINE IS DELIBERATELY NOT TOUCHED.** `const LIM = REEL.limits` is
 //! half of AC-3.6's runtime leg: the photosensitivity cap the runtime applies is
