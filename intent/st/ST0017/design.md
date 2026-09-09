@@ -970,6 +970,42 @@ stale refusal -- **nine lines**, which caught a two-render slide being described
 same sentence that explained why it could not be graded. Cheap, boring, and it fired on the first real
 input it saw.
 
+### 1.24 A zero has three kinds, and the third one reads exactly like the other two
+
+**snorkeltoast's census-versus-detector split, taken one further by the table they had published
+twenty minutes earlier grading its own zeros.** `0 undecided` was a TAUTOLOGY in that run.
+
+| kind          | why it is zero               | what it is worth                                  |
+| ------------- | ---------------------------- | --------------------------------------------------- |
+| **census**    | nothing was there to count   | sound; it cannot fail to fire and has nothing to prove |
+| **detector**  | nothing fired                | sound only if it COULD have fired                  |
+| **tautology** | the branch was never reached | **nothing.** The configuration decided it          |
+
+**Verified here in the source rather than relayed.** `verdict_for` tests `unprovable_reason`, then
+`presence <= floor`, then `if min_defect is not None` -- which returns UNCONDITIONALLY -- and the
+`renders > 1` UNDECIDED branch sits below it. **Naming any magnitude whatever makes that count zero
+before a pixel is captured.** It is not a detector that stayed silent; it is a detector that was
+switched off, printed beside two real zeros where it read as a third.
+
+**And it lands on this thread's own evidence, so AC-2.17 now grades its four figures.** `21 gradeable`
+is a measurement. `1 ungradeable` is a measurement. `0 windowless` is a real detector zero, proved in
+five cases. **`0 undecided` is evidence about nothing.** What naming 0.223607 actually decided is that
+slides 13 and 14 came out GRADEABLE rather than ungradeable -- name 0.001 instead and the undecided
+count is still zero and both slides fail. **The load-bearing figure is 21 and the row rests on it
+alone**, which the evidence line now says.
+
+**THE REFINEMENT THIS FORCES ON 0020 IS THE PART THAT GENERALISES.** 1.23 required the sweep to print
+which detectors have been observed to fire. **A tautological zero passes that check**, because the
+detector HAS fired -- in other runs, under other configurations. **Reachability is a property of the
+RUN, not of the detector**, and only the per-run form makes a zero readable. Filed.
+
+**snorkeltoast's own reading of it is the one to keep:** *a number whose meaning depends on the
+configuration that produced it, reported without it.* That is `pace=ambient` at breakfast --
+captures scaled by a query parameter, budgets computed from the payload, six decimals of agreement
+meaning nothing -- and `0 undecided` at close. **The same error at both ends of the day, once in the
+instrument and once in the table describing the instrument**, and the distance between them is the
+whole session.
+
 ---
 
 ## 2. There are THREE consolidations, and they are named apart on purpose
