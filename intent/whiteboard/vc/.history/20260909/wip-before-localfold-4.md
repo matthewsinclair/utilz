@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 11981560-5612-4fe7-a136-6eae64636b64
-heartbeat_at: 2026-09-09 20:05Z
+heartbeat_at: 2026-09-09 19:53Z
 status: active
-focus: "ST0017: 42/51, 3 withdrawn, doctor 0. Localfolded 2026-09-09 20:05Z. EVERY open row is audited ahead of its code and every one is blocked. cc is FULLY BLOCKED AND IDLE -- everything JSON-free in WP-03 is built and hv's serde_json ruling is what restarts it. Four items wait on hv; serde_json is the one that unblocks work."
+focus: "ST0017: 42/51, 3 withdrawn, doctor 0. hv AFK, vc has the pen, both peers taking instruction. AC-3.6 runtime leg SPECIFIED and sent to cc before the template-pull commit -- the harness is BLIND to it, so two source checks are the only mechanism. AC-3.2 names report_unused population; AC-3.8 evidence corrected; AC-3.6 cites facts that survive hv item 2. AC-3.4 and AC-4.2 both have their empty-population limits stated. Template pull LANDED at cb8f2bf and verified. AC-3.6 template half is a GATE and green; derivation half blocked on hv's serde_json call, which gates the ROW and not just a number. Plan landed: check reports 23/14, matching the reference. AC-3.2 waits only on report_unused. cc is FULLY BLOCKED and idle: everything JSON-free is built and the serde_json ruling is what restarts WP-03."
 claims: [ST0017]
 ---
 
@@ -18,36 +18,27 @@ Validation node. cc builds, vc contracts and verifies, hv adjudicates. Full boar
 **ST0017 -- showreel hoisted under `utilz prez showreel`. vc holds the contract, cc builds, snorkeltoast has closed.**
 Localfolded 2026-09-09 16:51Z. Full boards for 8 Sep and earlier folds of 9 Sep in `.history/`.
 
-- **Contract: 42 of 51 satisfied, 3 withdrawn, `intent doctor` 0.** `intent ac list ST0017` is the live contract;
+- **Contract: 42 of 51 satisfied, 3 withdrawn, `intent doctor` 0.** **WP-01 is COMPLETE at 15/15.** `intent ac list ST0017` is the live contract;
   `design.md` carries the reasoning. **Ids are `AC-<wp>.<seq>` and the group digit IS the work package.**
-- **WP-01 15/15 DONE. WP-02 16/17. WP-03 9/12. WP-04 0/2. WP-05 1/3. WP-06 1/2.**
-- **EVERYTHING JSON-FREE IN WP-03 IS BUILT**: theme, admission, normalisation, embed, the slide model, the plan,
-  the template, the delivery naming. `check` resolves the live 45h reel to **23 slides and 14 assets**, matching the
-  reference's own `plan()` on the same config. 247 tests.
-- **cc IS BLOCKED AND IDLE, CORRECTLY.** Everything remaining needs the PAYLOAD -- `build_socials` with the
-  stale-QR warning, `build_bug`, the slide rows, the limits block, and the `build` verb. No JSON emitter exists and
-  the manifest requires hv's sign-off, named in the commit, for a crate. **hv killed the Python shim fallback, so
-  there is no relief valve.**
-- **EVERY OPEN ROW IS NOW AUDITED AHEAD OF ITS CODE**, which is the one move that reliably paid today. Nine open:
-  AC-2.1 leg 2, AC-3.2, AC-3.4, AC-3.6, AC-4.1, AC-4.2, AC-5.1, AC-5.3, AC-6.1 leg 3.
+- **WP-01 15/15. WP-02 16/17. WP-03 9/12. WP-04 0/2. WP-05 1/3. WP-06 1/2.**
+- **`utilz prez showreel check <dir>` RUNS end to end**, both invocation forms, exit 0 against the live 45h reel.
+  **WP-05's dispatch is done; WP-03's build path is the only thing between here and hv's bar** -- hv killed the
+  Python shim fallback, so there is no relief valve.
 
 ## TODO
 
-- **BOTH AUDITS ARE DONE AND ON THEIR ROWS.** AC-3.6's runtime leg reduces to ONE property -- the emitted payload's
-  `limits.max_ease` DERIVES from `limits::MAX_EASE_MS` -- with the negative half cited as two facts that survive hv
-  item 2. AC-4.2 went from 86 characters to five measured findings. **Nothing is left to audit ahead of code.**
-- **ON THE BOUNCE, IF hv HAS RULED ON serde_json:** cc restarts on the payload, and the FIRST BUILD POINTING AT 45h
-  is the moment AC-2.1 leg 2, AC-5.1 and AC-6.1 leg 3 grade in ONE PASS. **Tell cc and snorkeltoast before it
-  happens** -- a standing commitment to both -- and read the first `compare` as **population (2)**, a green over
-  half a pipeline.
-- **AC-3.6 SATISFIES WHEN THE RED-CONTROL RUNS, NOT WHEN THE PAYLOAD LANDS.** Flip `MAX_EASE_MS` to 3000, rebuild,
-  the payload must follow. The template half is already a GATE and green -- vc ran it, 1 passed, 72 filtered.
-- **AC-3.2 WAITS ONLY ON `report_unused`.** Six sites through one `classify()` verified; `Plan::used()` projects
-  slides UNION reel-level, verified. The clause about EXTENDING `report_unused` is the only unbuilt part.
-- **A PREDICTION DUE IN THE PAYLOAD SLICE:** `bug.file` is joined unclassified at `plan.rs:143` while four
-  `Requires::Image` sites refuse, and **the reference DOES refuse it** (`build_bug`, `showreel:797`, dying by name
-  on a missing file at `:809` and on a declared bug with no file at `:806`). cc takes it in the same commit as
-  `build_bug`. Not a defect until delivery embeds the bug without refusing.
+- **AC-3.6's runtime leg, audited BEFORE cc pulls the template -- and it expires when they do.** Measured at the
+  reference 2026-09-09 18:45Z: `player.html:561` is `const LIM = REEL.limits`, so `easeOf`'s cap is READ FROM THE
+  PAYLOAD and is not a JS literal -- the player's own comment says why. So the whole runtime leg reduces to ONE
+  property: the emitted payload's `limits.max_ease` must DERIVE from `limits::MAX_EASE_MS`, not restate 2400.
+  **A template pull that hardcodes the limits into the emitted JSON re-creates the exact defect `limits.rs` was
+  written to fix -- one limit, two homes -- in the commit that ports the fix.** cc needs this before that commit.
+- **AC-4.2, the one BARE row on the contract, audited before WP-04 exists.** Every other open row carries paragraphs;
+  this one is a single sentence. Mechanism measured at the reference: a `<!--showreel-qr:<url>-->` stamp, ONE
+  definition, ONE write (`cmd_qr`), ONE read (`build_socials:786`). **Three findings, all recorded before the code:**
+  the detector cannot fire on an UNSTAMPED qr and embeds it anyway; `cmd_qr` KEEPS an existing file without
+  `--force`, so stale is the steady state; and the single read covers `socials:` only -- segment `qr:` and the venue
+  QR are never checked, and `build_socials` is skipped entirely under `dry`.
 - **Verify cc's build-path slices as they land.** The built-ins pull landed at `bbca403` plus an untracked
   `crates/showreel/themes/`; next is font + favicon emission, then admission, normalisation, `collect_segment`.
 - **Waiting on WP-03 by construction:** AC-2.1's leg 2 (adjacency stops being a guess when the Rust build stamps its
@@ -58,41 +49,11 @@ Localfolded 2026-09-09 16:51Z. Full boards for 8 Sep and earlier folds of 9 Sep 
 
 ## Holds
 
-- **The whole of WP-03's remainder, and it is not vc's to lift.** CONDITION: **hv rules on `serde_json`.** The
-  manifest requires hv's sign-off named in the commit for any crate; cc stopped rather than invent adjacent work,
-  which was right. Verified figure: **net 2, 79 to 81**, both dedup keys agreeing.
+- **None.**
 
 ## Open with hv
 
-**TYPED BY WHETHER hv OWES A RULING, on cc's point that presenting an FYI as a decision wastes the attention and burying a decision among FYIs loses it.**
-
-### Decisions hv owes
-
-- **`serde_json` -- THE ONE THAT UNBLOCKS WORK.** Gates everything left in WP-03, not just AC-3.6. hv's inbox
-  carries the verified number and a pre-answer to the question hv will ask -- why hand-write a calendar and not the
-  emitter: a calendar is closed and pinnable against outside answers; JSON escaping of arbitrary YAML text is
-  open-ended, and the reference's field order in a second home is a Highlander problem.
-- **The public-repo fixtures.** Two pinned fixtures carry a named individual and a customer brand into a public
-  repo. `upstream` is frozen, so nothing is published and it is decidable first.
-- **The QR thread.** All four artifacts lack the QR social slide; and 45h's Showreel QR and its config BOTH name
-  revision `-001` while artifacts exist at `-004` and `-007`. **vc is NOT asserting `-001` is stale** -- hv settles
-  it in one look -- but if it is, nothing in either implementation would say so.
-
-### FYI -- no ruling wanted
-
-- **Rider on hv item 2:** capping Python's `max_ease` to 2400 turns WP-02's selftest RED by design. One small
-  follow-up commit in snorkeltoast's tree. Not an argument against the fix.
-- **`prez showreel build` will need `SHOWREEL_THEME_PATH` where the Python needed nothing** (cc, 18:24Z). H3
-  working, not a regression. hv wants it BEFORE the first build, not during. A ruling only if hv wants the variable
-  set somewhere permanent.
-- **A correction to hv's own AC-3.7 reasoning** (cc, 18:51Z). hv withdrew the row saying nothing gates on the
-  producer literal; nothing in the CONTRACT does, and that part stands. But `include_str!` puts `player.html` in
-  the binary, so a verbatim pull would have taken the H3 strings count off zero. cc took the permission hv had
-  already given; the note exists so the ruling's premise carries its exception.
-- **cc retracted their own 23-vs-22 witness** (18:51Z). "My collect reaches 23 independently" was one
-  implementation agreeing with itself about a number it derived. Running the reference's `plan()` on the same
-  config gives 23 slides and 14 used assets. **The conclusion held and the witness changed** -- which is the
-  stronger position, not a weaker one.
+- **Nothing.** Four rulings taken today and closed; the day's four are in `.history/20260909/`.
 
 ## Claims
 
@@ -189,13 +150,25 @@ so it warned about a population that does not exist there. **A caveat nobody rea
 it still looks like diligence.** Guarded now. The pair to it: the line that IS true of every reel stays
 unconditional, so the two kinds of statement are told apart by whether they are guarded.
 
-**THE DOMINANT FAILURE OF 9 SEP WAS MINE AND IT HAS ONE SHAPE: I SPECIFIED AGAINST IMPLEMENTATIONS I HAD NOT READ.** Four instances in one afternoon, every one a locally reasonable sentence. **(1) I told cc a pattern with no `{nnn}` was already refused by the reference, citing `:532` and `:547`. Both TEST `if NNN not in stem` and NEITHER refuses** -- one returns `[]`, the other returns the fixed path under the comment _a pattern without {nnn}_, a supported configuration I would have made illegal. **A CONDITION IS NOT A CONSEQUENCE**, and I had the `if` on screen and never scrolled to the `return`. **(2) I specified a refusal for any substituted value containing a template marker.** `render()` reads every offset from the UNMODIFIED shell and slices, so the hazard was structurally absent and my guard would have rejected a title the port renders CORRECTLY. **(3) I told cc two of six admission sites were unexercised.** It is one: I had read a list of eight config FIELDS as the site enumeration. **A count of fields is not a count of call sites. (4) I nearly assigned snorkeltoast work they had already finished** -- checking whether the payload's limits enter `signature()` -- which was built, kind BLIND, with the reasoning I was going to ask for written out. **A gap I infer from a peer's design and a gap that exists produce the same plan.** THE CURE IS NOT CARE. **Read what the code DOES, never what its guard clause TESTS; and when specifying a refusal, name the input it would reject and go check that nobody ships it.** Two of the four would have cost a working input; the fourth would have cost a peer's afternoon.
+**I CITED TWO LINES BY THEIR CONDITION WITHOUT READING THEIR RETURNS, AND CALLED SUPPORT A GUARD.** I told cc "zero `{nnn}` is already refused by the reference at `:532` and `:547`". Both lines test `if NNN not in stem` and **neither refuses**: `:532` returns `[]`, and `:547` returns `out_dir / stem` under the comment _a pattern without {nnn}_ -- a SUPPORTED fixed filename that never revisions. **A condition is not a consequence**, and I had the `if` on screen and never scrolled to the `return`. cc caught it and split `Stem` into `Fixed` and `Counted` accordingly.
 
-**A CITATION CAN EXPIRE WITHOUT DECAYING, AND NOTHING IS WATCHING FOR THAT.** Two forms, both live. **(1) A CONCLUSION CONTINGENT ON A DEFECT BEING UNFIXED** -- I cited snorkeltoast's `shipped-max-ease` row as AC-3.6's negative half, and `_shipped_max_ease` returns `[]` the moment Python's `max_ease` reaches 2400, **which is hv item 2, which I am carrying to hv.** It would have dangled on a GOOD day, from a fix I asked for. Staleness announces itself with a date, a moved line, a renamed symbol; this announces nothing, because nothing decayed. **ASK WHAT HAS TO STAY BROKEN FOR THIS CITATION TO KEEP WORKING**, and cite the durable FACT rather than the contingent conclusion resting on it. **(2) A PEER'S LANDING STALES A TREE-WIDE ROW WITH NOBODY ERRING.** AC-6.1 leg 1 is a claim about the whole tracked tree, graded before cc's pull put a 45 KB `player.html` into it. **Re-run when the tree GROWS a file, not only when someone edits the subject.** The row survived; the first instinct -- grep the whole tree for the token -- was itself a wrong population, since documents DISCUSSING popupart are not the theme.
+**AND IT IS THE SECOND TIME IN ONE AFTERNOON I SPECIFIED A REFUSAL THAT WOULD REJECT A WORKING INPUT -- IN THE OPPOSITE DIRECTION ON THE SAME QUESTION.** First the marker control, guarding a hazard `render()` had already made structurally absent; then this, forbidding a configuration the reference deliberately supports. **Both came from a PARTIAL READ of the implementation I was specifying against**, and in both the sentence I wrote was locally reasonable. The cure is one thing and it is not care: **read what the code DOES, never what its guard clause TESTS** -- and when specifying a refusal, name the input it would reject and go and check that nobody ships it.
 
-**THE FIXTURE'S SILENCE IS NOT THE SUBJECT'S, AND 45h IS THE PROOF.** **45h is the only real config and it is a WELL-FORMED one, so it cannot exercise a single refusal path.** cc counted three arms with empty populations on it; it is at least five -- AC-3.4's artifact half (no opaque RGBA exists: six art files are JPEG, one location PNG is colour type 2, and the two RGBA brand files are genuinely transparent); the bug embed (`bug.file` IS the logo segment's file, so the total agrees for the wrong reason); AC-4.2's stale-QR warning (all five QRs stamped, every stamp matching its config exactly); AC-3.2's `files:` site; and AC-3.2's sort ordering (1 of 40 on APFS, 0 where the filesystem returns sorted entries). **THIS IS THE CONVERSE OF "TEST AGAINST SOMETHING YOU DID NOT WRITE" AND MUST SIT NEXT TO IT:** the live reel caught the missing `#[serde(rename = "loop")]` and is worth NOTHING for any detector. **Two populations wearing one fixture.** Every such arm needs a constructed fixture and the row must SAY so. Same family, different cause: **`find` does not follow a symlinked root** -- `find ~/Dropbox` returned nothing for the live reel twice, because it is a symlink to `~/Library/CloudStorage/Dropbox`, and **the output is byte-identical to a tree that holds no such file.**
+**A REFUSING APPLIER THAT DOES NOT CLEAN UP ON REFUSAL IS WORSE THAN ONE THAT NEVER REFUSES.** cc's, and it bears on AC-1.15 which is why it is on the contract now. Their injection's anchor collided with an unrelated match arm, the post-check refused **after the write with the revert on the success path only**, and the tree sat injected while the harness printed REFUSED. **The word REFUSED reads exactly like nothing happened**, and reassurance is what stops the next look. The blast radius is not one proof: every subsequent measurement in that session -- gates, counts, binary sizes, any `strings` census -- is suspect and none would look wrong. **The revert goes in a `finally`.** Both nodes use this pattern.
 
-**A REFUSING APPLIER THAT DOES NOT CLEAN UP ON REFUSAL IS WORSE THAN ONE THAT NEVER REFUSES**, and it is on AC-1.15 now. cc's injection anchor collided with an unrelated match arm, the post-check refused **after the write with the revert on the success path only**, and the tree sat injected while the harness printed REFUSED. **The word REFUSED reads exactly like nothing happened**, and reassurance is what stops the next look. **The blast radius is not one proof:** every subsequent measurement in that session -- gates, counts, binary sizes, any `strings` census -- is suspect and not one would look wrong. **The revert goes in a `finally`.** Both nodes use this pattern. Its sibling from the same commit: **a fixture whose values cannot distinguish two orderings tests neither** -- zero-padded revisions made lexical and numeric sort coincide, so the assertion held under either.
+**A COUNT OF FIELDS IS NOT A COUNT OF CALL SITES, AND I GRADED A ROW'S LIMIT ON THE WRONG ONE.** AC-3.2 said TWO of six admission sites are exercised by no real config, naming `files:` and `exclude:`. **It is ONE.** Enumerated at source, the six sites are `qr:`, `mark:`, `image:`, `file:`, `from:` and `files:` -- six `admit::` call sites over one private `classify()` with two public call shapes. **`exclude:` filters files already gathered and admits nothing; `bug.file` is joined unclassified.** I had taken cc's list of eight config FIELDS with their usage counts and read it as the site enumeration, because the two lists overlap heavily and one was in front of me. **The row grades on call sites, so the population had to be read off the CODE and not off a config census** -- the same shape as "a population drawn from the disk answers for the disk", one level over.
+
+**A PEER'S LANDING CAN STALE A TREE-WIDE ROW WITH NOBODY ERRING, AND ONLY RE-RUNNING SAYS SO.** AC-6.1 leg 1 is a claim about the WHOLE tracked tree, graded before cc's template pull put a 45 KB `player.html` into it. Neither of us did anything wrong and my measurement was stale anyway. Re-run: the new file carries zero of the six popupart tokens, `.woff2` and favicon still 0, **with a control proving the instrument reads that file at all** (`REEL.limits` 1, `easeOf` 2). The row survives -- and the discipline is the keeper: **a tree-wide claim needs re-running when the tree GROWS a file, not only when someone edits its subject.** The first instinct, grepping the whole tree for the token, was itself a wrong population: documents DISCUSSING popupart are not the theme, and that grep returned 17 files and meant nothing.
+
+**AND I PROPOSED A GUARD AGAINST A HAZARD THAT WAS STRUCTURALLY ABSENT, WHICH WOULD HAVE COST A VALID INPUT.** I told cc a marker-uniqueness control was insufficient and to refuse any substituted VALUE containing a marker. True of a sequential implementation; `render()` reads every offset from the UNMODIFIED shell and slices, so nothing a value contains can be rescanned. **My refusal would have rejected a title the port renders CORRECTLY.** cc bought the regression protection with a test that fires when someone reverts to sequential, red-proved by putting the reference's form back. **The rule I had just applied to AC-3.8 pointed the other way here: structural beats disciplinary, and a test firing on the regression beats a rule forbidding the input.** Read the implementation before specifying the guard for it.
+
+**45h IS THE ONLY REAL CONFIG AND IT IS A WELL-FORMED ONE, SO IT CANNOT EXERCISE A SINGLE REFUSAL PATH.** cc counted three, and it is at least five: AC-3.4's artifact half (no opaque RGBA exists on the reel -- six art files are JPEG, one location PNG is colour type 2, and the two RGBA brand files are genuinely transparent); the bug embed (45h's `bug.file` IS the logo segment's file, so the total agrees for the wrong reason); AC-4.2's stale-QR warning (all five QRs stamped, every stamp matching its config value exactly -- measured, members printed); AC-3.2's `files:` and `exclude:` sites (zero uses in the live config); and AC-3.2's sort ordering (1 of 40 on APFS, 0 on a filesystem returning sorted entries). **THE CONVERSE OF "TEST AGAINST SOMETHING YOU DID NOT WRITE", AND IT NEEDS TO SIT NEXT TO IT:** the live reel is genuinely valuable for the happy path -- it caught the missing `#[serde(rename = "loop")]` -- and is worth precisely NOTHING for any detector, because a well-formed input reaches no refusal. **Two populations wearing one fixture**, and a green from the reel keeps reading as coverage for arms it cannot reach. Every such arm needs a constructed fixture and the row must say so, or the silence gets read as a result.
+
+**`find` DOES NOT FOLLOW A SYMLINKED ROOT, AND THE ZERO IS TOTAL RATHER THAN SMALL.** `find ~/Dropbox -name showreel.yaml` returned NOTHING for the live 45h reel, twice, at two depths -- because `~/Dropbox` is a symlink to `~/Library/CloudStorage/Dropbox` and `find` does not traverse it without `-L`. **The output is byte-identical to a tree that genuinely holds no such file.** Caught by my own rule from this morning -- a real ratio degrades, a wrong population collapses -- and `mdfind` answered in one call. **A search root you did not `ls` is an assumption, and a symlinked one fails silently in the direction that looks like an answer.**
+
+**A CONCLUSION CONTINGENT ON A DEFECT BEING UNFIXED LOOKS EXACTLY LIKE A DURABLE ONE UNTIL THE FIX LANDS -- AND I WAS CARRYING THE FIX.** AC-3.6's runtime leg needed a negative half, proof that the harness cannot see the payload's limits, and I cited snorkeltoast's `shipped-max-ease` row for it. The row is true, the blindness is true, and **`_shipped_max_ease` returns `[]` the moment Python's `max_ease` reaches 2400** -- its docstring says it retires itself. Capping Python is hv item 2, **which is in hv's inbox under my name**, so I cited a row scheduled for deletion by a fix I am asking for. It would have dangled on a GOOD day, from the fix landing. The durable form is the two facts underneath: `signature()` walks `payload["slides"]` only, and the capture URL passes no `pace=`. **This is "cite the token, not the line" one level up, where what expires is not a line number but the FINDING** -- and the tell is not staleness, since nothing about the citation was wrong when written. **Ask what has to stay broken for this citation to keep working.**
+
+**I ALMOST ASSIGNED A PEER WORK THEY HAD ALREADY FINISHED, AND THE ONLY THING THAT STOPPED IT WAS READING THEIR FILE INSTEAD OF REASONING ABOUT IT.** I had it planned as real prep for snorkeltoast: check whether the payload's limits block enters `signature()`, because if it does then 2400-vs-3000 fires as an unpredicted structural mismatch on the first compare. **It was already built** -- `shipped-max-ease`, kind BLIND, `verified: observed`, with the reasoning I was going to ask for written out. **The instruction would have been confident, specific, correctly reasoned and entirely wasted**, and nothing in my own derivation could have told me: a gap I infer from a peer's design and a gap that exists produce the same plan. This is the artifact-outranks-the-source rule pointed at a PEER's tree rather than my own, and the cost of getting it wrong is not a bad measurement but a peer's afternoon. **Before assigning, read what they have; a queue you derived is not a queue.**
 
 **A REAL RATIO DEGRADES; A WRONG POPULATION COLLAPSES.** snorkeltoast's form, and it is checkable without knowing
 anything about the subject: **if a measurement over a supposedly rich population returns EXACTLY NOTHING, suspect the
