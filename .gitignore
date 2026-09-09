@@ -32,3 +32,13 @@ intent/.backup/
 # plain local checkout (bare local remote, not a synced folder), so the default
 # in-crate target/ is the right place and this line is the whole fence.
 opt/*/crate/target/
+
+# devbin writes every gate run's captured output here, in the PROJECT ROOT.
+# It is scratch, and it is regenerated on every `devbin check`.
+#
+# **THIS IS A TRAP RATHER THAN CLUTTER, AND THE REASON IS THIS REPO'S OWN
+# DISCIPLINE.** Commits here use an explicit pathspec precisely because several
+# sessions write this tree at once -- but a single `git add -A`, from anyone
+# who forgets, puts another tool's run logs in the history permanently. An
+# unignored scratch directory in the root is one keystroke from that.
+tmp/
