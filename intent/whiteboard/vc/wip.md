@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 11981560-5612-4fe7-a136-6eae64636b64
-heartbeat_at: 2026-09-09 20:27Z
+heartbeat_at: 2026-09-09 20:33Z
 status: active
-focus: "ST0017: 42/51, 3 withdrawn. hv READ the plan and left WITHOUT ruling on serde_json, so the four items are DELIVERED-AND-UNDECIDED rather than queued -- a different state, and there is no live reader again. cc is NOT idle: AC-3.2 clause and the producer stamp are both JSON-free. Emitter stays held; building the thing under decision pre-empts the decision."
+focus: "ST0017: 42/51, 3 withdrawn. The stamp thread is LIVE and cc has built the mechanism -- token, 5 markers, two refusals they added unprompted. snorkeltoast corrected my field list twice and refuted AC-4.1, a row I wrote and had already CITED to cc. serde_json still unruled; the emitter stays held."
 claims: [ST0017]
 ---
 
@@ -76,6 +76,26 @@ Localfolded 2026-09-09 16:51Z. Full boards for 8 Sep and earlier folds of 9 Sep 
 - **hv'S WINDOW CLOSED AT ~20:13Z AND cc FLAGGED IT.** The four items were **surfaced in person and hv left
   without ruling** -- delivered-and-undecided, which is NOT the same as queued and must not be recorded as it.
   The durable channel holds them again; the next live window is the next chance.
+
+- **THE STAMP THREAD WENT THREE WAYS IN THIRTY MINUTES AND EVERY LEG CORRECTED SOMETHING.** cc built the
+  mechanism straight off the spec -- `player.html:7` is `content="__PRODUCER__"`, `MARKERS` is 5 -- and **added two
+  refusals nobody specified**: an empty producer, and one carrying a quote that would break the tag. The empty case
+  is the one I would have missed, because **the harness cannot tell empty content from no stamp at all.**
+- **snorkeltoast RAISED A HAZARD cc HAD ALREADY CLOSED, AND IT WAS THE RIGHT HAZARD.** `showreel:1018-1022` builds
+  the artifact as `player.html` plus four `.replace()` calls, and cc PULLS that template -- so a tag shipping a
+  real VALUE in the shared shell would have been inherited verbatim, and `population_source` would have flipped
+  from "adjacency (UNVERIFIED)" to "stamp". **An honest refusal upgraded into a confident wrong answer**, believed
+  precisely because a stamp outranks adjacency. Verified in cc's working copy before relaying. **The residue is
+  snorkeltoast's and is unclosed: an artifact whose stamp is still the literal token must REFUSE, not warn.**
+- **TWO MEASURED CORRECTIONS TO MY FIELD LIST (`23a9871`).** `edge=2560` is INIT's constant and does not belong in
+  a BUILD stamp -- stage-mixing, and exactly the case in play. `embed` must be the reel's ACTUAL target
+  (`showreel:989`, `cfg.get("target", TARGET_DEFAULT)`), not the default, or a reel carrying `target: 1440` stamps
+  a lie. **And every value interpolated from the live constant, never written out** -- a hardcoded `q=86` is a flag
+  wearing a stamp's clothes.
+- **THE ONE-SHOT NEEDS THREE STEPS, NOT ONE, AND I RAISED IT.** FLOORS.md is 22 slides and the live config plans
+  23, so `compare` refuses on structure before grading; `cmd_control` takes only the artifact, so cc's build needs
+  its OWN 14-minute control run first. **"The first compare" is build, then control, then compare.** Unsequenced,
+  the moment is spent waiting rather than measuring.
 
 ## TODO
 
@@ -390,6 +410,26 @@ The rule: **a zero is only as wide as the match rule that produced it, and a mat
 silently.** State the match rule beside the count -- "any occurrence of the identifier", not "the function is
 uncalled" -- and run the control that proves the instrument can see the thing it is looking for. Same discipline
 as naming a population; the instrument is part of the population.
+
+### I cited my own row as authority, and its analogy contradicted its claim
+
+**AC-4.1 said: "the ABSENCE of that stamp derives (2) -- exactly as the absence of a producer stamp already
+derives adjacency (UNVERIFIED)". `adjacency (UNVERIFIED)` IS A REFUSAL TO DERIVE.** So the sentence cited a
+refusal-to-derive as the model for a positive derivation. **"Exactly as" did the work of an argument without being
+one**, and the analogy pointed the other way from the thing it was supporting.
+
+**I WROTE THAT SENTENCE, AND THEN QUOTED IT TO cc AS ESTABLISHED SHAPE.** That is the trap and it is worse than the
+error: **self-citation launders an assertion into a precedent.** A row I authored became, hours later, a thing I
+cited rather than a thing I was still responsible for -- and the citation carried more weight in the second
+conversation than the claim had earned in the first.
+
+**snorkeltoast CAUGHT IT FROM THE QUOTE, WITHOUT HAVING READ THE ROW**, and said so: _"I may be reading a shorthand
+as a claim."_ **The quotation was easier to falsify than the row**, because it arrived without the surrounding
+paragraphs that made it feel settled. So: when a peer quotes your own work back at you, read it as a stranger
+would. And when you cite a row, check whether you are citing evidence or your own past confidence.
+
+The mechanism survived and the justification did not, which is the honest split -- **but nothing about the code
+would have revealed it**, because absence semantics live in the harness and were already right.
 
 ## Decisions that still decide things
 
