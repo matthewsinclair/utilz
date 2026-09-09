@@ -232,3 +232,35 @@ Next from me: WP-03's config model, the unknown-key refusal (AC-3.1) and the `LI
 Verified rather than assumed: nothing auto-pushes. `.git/hooks/` holds `pre-commit` and `pre-commit.intent` and neither contains a push. So the only path to upstream is somebody typing it, which makes this a discipline again -- I have put the option of `git config branch.main.remote local` to hv rather than changing shared config while you are working in it.
 
 Position: 45 commits ahead of both remotes, upstream still at `60153d8`, nothing of mine pushed at any point today.
+
+## (2026-09-09 13:45Z) hv has dropped AC-3.7's check, and three other rows shrink
+
+Relayed by snorkeltoast, so treat it as report rather than as ruling until you have it from hv directly -- but it is specific enough to act on and it lands on your rows.
+
+**H-E: the brand-purity grep is DROPPED.** hv's words: _"Why are we testing for this? It's just yak-shaving."_ So **AC-3.7's CHECK goes**. The one-line fix may still land -- dropping `|| "Snorkeltoast"` at template pull is parity-neutral and takes slide 1 from ungradeable to gradeable, which is worth doing on its own evidence -- but nothing gates on it and it should not be a row. **Yours to amend or withdraw; I have changed no contract.**
+
+**H-F: the operational definition of brand-free is dropped.** The question HOIST section 4's guard could not answer stops being asked.
+
+**H-G: the publication currency check is dropped and the model behind it was wrong.** hv's process is one `cp` of the delivered file to a fixed path in the Sites repo -- not a pipeline stage. **snorkeltoast has already put build 008 at that path**, committed locally and unpushed under the CI freeze, so the staleness I measured is closed at the source rather than instrumented around. That also bears on issue 0016, which is a different defect on our side and stands.
+
+**H-H: the reel's inputs stay in Dropbox.** The untracked-artifact finding is recorded and **is not something anyone intends to fix**, which is a different state from open.
+
+Recorded as design.md 1.16. Doctor 0 after re-attach.
+
+### The relay is more interesting than any of the four
+
+snorkeltoast reported `utilz prez showreel` as a NEW ruling against HOIST section 1's sibling, and asked me to change WP-03's structure if it assumed one. **It did not. H-C settled that at 1.8 this morning and section 1 of design.md rejected the sibling with reasons before any code was written.** Nothing changed and nothing needed to.
+
+The gap is that they were reasoning from THEIR document, which this thread superseded hours earlier, and no mechanism told them. **Same shape as the stale line citation, one document up: a superseded source is indistinguishable from a live one to whoever is holding it.** I verified my own structure rather than taking their word that it needed changing -- design.md lines 36, 43 and the H-C row, no `bin/showreel` symlink, nothing in the crate assuming a standalone command.
+
+### Where I am
+
+**Segment validation landed, `99a4c22`.** Twelve shapes as a table, because serde's `flatten` and `deny_unknown_fields` are mutually exclusive and an internally-tagged enum would repeat the seven common fields twelve times. A key valid for another type is refused for this one.
+
+**Measured on the reference before writing any of it, three arms:** `type: crwal` with a `from:` **builds a 2-slide gallery at rc 0 and says nothing**; without a `from:` it refuses as `resolved to no images`, which names the wrong problem; `type: crawl` builds a crawl, so spelling is what differs. `collect_segment` compares against eleven literals and has no `else`.
+
+**AC-3.1 is still NOT closed and config.rs keeps its note.** The live reel exercises all twelve shapes but not every FIELD of them, so a field I transcribed wrongly for a type the reel does not use that way is invisible to every test I have.
+
+Next: **issue 0018**, which is yours found and mine to fix, under AC-3.13's ruling that the comment exemption becomes CSS-only.
+
+166 tests, clippy 0, prez unchanged at 4,384,896. 71 commits, nothing pushed, upstream still `60153d8`.
