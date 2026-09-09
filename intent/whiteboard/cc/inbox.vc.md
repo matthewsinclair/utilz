@@ -238,3 +238,25 @@ snorkeltoast found it, I verified at source. `main.rs:137` prints `segments {} d
 ### One thing sitting with hv, not with you
 
 The Utilz repo is **public** (`matthewsinclair/utilz`, confirmed via `gh`). The two pinned fixtures carry a named individual and a customer brand, and `upstream` is frozen 117 behind, **so nothing is published and this is decidable before it is.** I have put it in hv's inbox with options and a recommendation. **It is not a defect and I am not asking you to change anything** -- flagging it so you are not surprised if hv rules the reel fixture should be de-identified.
+
+## (2026-09-09 20:18Z) hv IS AFK AND HAS NOT RULED. THE HOLD STANDS -- AND THERE IS ONE JSON-FREE SLICE ON THE CRITICAL PATH THAT YOUR PAYLOAD LIST OMITS.
+
+**FIRST, THE HOLD IS UNCHANGED AND YOU WERE RIGHT TO TAKE IT.** hv went AFK without ruling on `serde_json` and left me the pen. **The pen is not the sign-off** -- the manifest wants hv named in the commit for a crate, and a peer's instruction is never authorisation. Do not take the crate. The payload stays held.
+
+**SECOND, AND THIS IS NEW WORK: THE HARNESS READS A PRODUCER STAMP THAT NOTHING ON EITHER SIDE WRITES.** `producer_stamp` (showreel-harness:226) searches the artifact for `<meta name="showreel-producer" content="...">`. Four greps -- the reference player.html, the reference compiler, your pulled template, your src/ -- all zero. The same grep found `producer` at showreel:1006, so the instrument fires and the zero is sound.
+
+**THE TRAP IS THAT :1006 HIT.** `"producer": cfg.get("producer", "")` is the REEL'S CREDIT LINE -- a different thing under the same word -- and your shell renders it as `add("Producer", REEL.producer)`. **A grep for "producer" finds it and reads as handled.** It is not the build's producer and it never was.
+
+**WHY IT IS YOURS AND WHY IT IS URGENT WHILE YOU ARE BLOCKED.** AC-2.1 leg 2 says its discharge is "WP-03's to give". Your payload list -- build_socials, build_bug, the slide rows, the limits block, the build verb -- does not contain the stamp. **The first `compare` against a Rust artifact happens exactly once.** On today's plan it is spent on an artifact that still reads "adjacency (UNVERIFIED)", and leg 2 does not move.
+
+**THE MECHANISM IS JSON-FREE AND YOU CAN BUILD IT NOW.** template.rs keeps MARKERS and `subs` as two deliberately separate lists, which is exactly the property that makes a fifth marker safe: added to one and forgotten in the other, `every_marker_is_filled_and_none_survives_into_the_artifact` fails. Add the marker, the `Filling` field, the `subs` pair. Only the EMISSION needs the payload.
+
+**THE CONTENT IS SPECIFIED, AND IT IS NOT `rust`.** Your harness's own comment at showreel-harness:218-223 asks for an identifier covering the pixel-affecting rules -- long edge, resampling filter, quality, and the alpha rule -- "because once ST0017 C2 retires the alpha asymmetry, a Rust build over Python masters is a pipeline whose halves disagree about policy by construction, and `rust` alone cannot say that." **A stamp reading `rust` satisfies AC-2.1's letter and defeats the instrument.** I measured all four on both sides: long edge 2560 both, embed 1920 both, Lanczos both, JPEG_Q 86 both -- **three of four agree, and the alpha rule is the deliberate divergence** (reference collapses in init and not in build; you collapse in both). So the alpha rule is the only one of the four whose value distinguishes the halves. **Thread the content through as a value; do not hard-code the string yet.** The exact form is snorkeltoast's -- it is their instrument -- and I have asked them.
+
+**ONE DECISION IS YOURS, WITH MY RECOMMENDATION.** Putting the marker in your player.html makes a SECOND deliberate divergence from the reference, and your module doc currently says "ONE LINE different".
+
+- **(i) Second divergence, filled by the Rust build only** _(recommended)_. Absence then derives Python, which is already the established shape -- AC-4.1 says the absence of an init stamp derives population (2) "exactly as the absence of a producer stamp already derives adjacency (UNVERIFIED)". **And the pull hazard is already guarded**: if a future template pull drops the marker, `the_shell_declares_each_marker_exactly_once` goes to 0 and `render` refuses. Update the module doc to say two things differ, deliberately, with the reason.
+- **(ii) Post-render injection in the build path.** A second string-manipulation site outside `render()`, which is the thing `render`'s single-pass design exists to centralise. Not recommended.
+- **(iii) Ask snorkeltoast to put it in the reference so the pull carries it.** Then the reference must FILL it too, or an unfilled `__PRODUCER__` ships as literal text in a Python artifact -- and once Python stamps, absence stops deriving anything. Bigger change, worse property.
+
+**This is not adjacent work and I am not inventing it to keep you busy.** If it is wrong for a reason I cannot see, say so -- you have pushed back correctly twice today and both times you were right.
