@@ -2,11 +2,11 @@
 node: vc
 name: Validation Claude
 role: validation
-session_id: 06b406f0-9a29-4636-ad0d-abd6663e4f8f
-heartbeat_at: 2026-09-08 19:29Z
+session_id: 11981560-5612-4fe7-a136-6eae64636b64
+heartbeat_at: 2026-09-09 08:14Z
 status: active
-focus: "Cleared the three open items that were mine: 0011 and 0010 fixed and closed, 0013 and 0007 records corrected. Full estate 576 ok / 0 not ok across 19 suites, doctor 0 findings. Everything still open is hv's to decide -- the .intentfiles header, whether ST0016 stays hydrated, 0007 (two blockers, not one), and AC16's per-theme note, which I deliberately did not file because amending it would clear hv's own attestation. Nothing claimed, inboxes empty."
-claims: []
+focus: "ST0017 claimed, contract mine, cc builds. Thread docs landed: objective + context in canon, design.md attached and hydrated, six WPs minted, doctor 0. Ruled the one decision cc and snorkeltoast put to me -- port the CONSISTENT normalisation policy, not the Python asymmetry, because match-exactly means porting a defect on the path carrying the brand marks on every build. Six things are hv's, the dependency budget being the big one: AC02 says comrak and nothing else, and the port needs five or six crates."
+claims: [ST0017]
 ---
 
 # Validation Claude (vc)
@@ -15,11 +15,20 @@ Validation node. cc builds, vc contracts and verifies, hv adjudicates. Full boar
 
 ## DOING
 
-**Nothing. Folded at 2026-09-08 17:46Z on hv's instruction; the compact has since happened and this board is what carried across.** Status stays `active` -- a compact is not a session ending.
+**ST0017 -- showreel hoisted under prez. vc holds the contract; cc builds against it; snorkeltoast advises from the reference implementation.**
+
+- **Thread docs landed 2026-09-09.** Objective + context written into canon and rendered; `design.md` attached and hydrated (375 lines); WP-01..06 minted; `intent doctor` 0 findings.
+- **The architecture, in one line:** one Cargo workspace, three member crates (`artifact/` shared, `prez/` untouched, `showreel/` with its own budget), two binaries, and the existing shim gains one dispatch branch. **AC02 survives by construction rather than by exception** -- prez's `[dependencies]` is not touched, and showreel's budget is a new ruling on a new manifest.
+- **Why that beats both options HOIST.md weighed.** Its fallback was "shared name, no shared code -- do not merge the implementations", which was the best trade for a PYTHON showreel. Rust makes shared name AND shared code AND unmerged binaries reachable at once. The instruction is honoured exactly: the binaries stay apart, the duplicated library half merges.
+- **RULED: consistent normalisation policy, not the Python's asymmetry.** `data_uri`'s PNG branch is the default path for hand-placed brand marks and has no opaque-collapse, so a fully-opaque RGBA ships full-size where `init` would have made it a JPEG -- the mascot and the wordmark, every build. Match-exactly means porting that. **It costs the blanket RMSE and the cost is paid explicitly**: a named exemption list, the difference stated as a DIRECTION, plus cc's sum control and membership control, because an exemption list is a population narrowing and too narrow fails greenly.
+- **Contract drafted, NOT minted.** 22 rows across SHARE / FID / PORT / HOIST. Minting is blocked on the id format -- see the new watch-out.
 
 ## TODO
 
-**Everything left here is hv's to decide. The three that were mine are closed.**
+- **Mint the 22 contract rows** once hv or `intent-vc` names the id form.
+- **Answer cc's two open items**: whether snorkeltoast writes the harness now (yes, once the assertions are specified -- they now are) and cc's `inline.rs` assessment, which is unblocked.
+
+**Carried, and all of it hv's to decide. None of it blocks ST0017.**
 
 - **`.intentfiles` header is the root of an entire wasted afternoon and is still wrong.** It is the hand-written 2026-08-26 original -- "organize --default was not yet built" -- and names `st hydrate` **zero times**. Four of us hunted a verb the file said nothing about. The current Intent template names it and lists every writer. hv's to refresh.
 - **ST0016 is still hydrated** and `.intentfiles` declares a Completed thread while the header says only OPEN ones are. Either `organize --apply` finishes it as ST0015 was finished, or the policy changed and the header should say so. hv's call, unblocked now that nothing is unclaimed.
@@ -35,7 +44,7 @@ Validation node. cc builds, vc contracts and verifies, hv adjudicates. Full boar
 
 ## Claims
 
-- **None.**
+- **ST0017** -- the contract. cc builds; no peer claimed it.
 
 ## Holds
 
@@ -52,6 +61,8 @@ Validation node. cc builds, vc contracts and verifies, hv adjudicates. Full boar
 - **`intent-vc`: three Intent issues from this estate today** -- 0282 (ws hygiene thresholded the wrong bytes, FIXED), 0283 (a closed thread's view goes stale and both messages misdescribe it), 0284 (27 leaked `intentd`, high, cleared).
 
 ## Watch-outs
+
+**THE AC MINT REFUSES NOTHING AND THE RENDERER GROUPS NOTHING, SO "CONFORMING ID" CANNOT BE INFERRED FROM BEHAVIOUR.** Measured on ST0017 today: `intent ac new` accepted `AC-HOIST-01`, `HOIST-AC-01` AND `AC01`, and the renderer then made every one its own group. Unenforced in both directions. **With no rename verb, a wrong mint is permanent** -- so the contract is drafted in `design.md` and minted only when the form is named. **Partial relief, also measured: dropping rows from `intent/.canon/st/<ID>.json` and running `intent sync --to-store` retracts them cleanly** -- no tombstone, no `withdraw`, doctor 0 after. Un-ratified rows only; the sync warns it OVERWRITES and the satisfied-row case was not tested.
 
 **FIND THE RECORD BEFORE FORMING THE HYPOTHESIS. THIS IS THE BIGGEST MISS OF THE DAY AND IT IS MINE.** Files were vanishing from `intent/st/`. I theorised through git hooks, `intent doctor`, an unnamed concurrent writer, and finally 27 leaked `intentd` daemons -- which I ESCALATED TO hv AS THE ROOT CAUSE. It was none of them. `intent/.cache/intent.db` holds an `event_log` table naming every disk mutation with a timestamp, and an `attachments` table that showed the actual defect. **Two `sqlite3` queries would have ended it before the first theory.** A real anomaly is not automatically YOUR anomaly: the daemon leak was genuine and unrelated, and I attached my symptoms to it because it was the only strange thing in view.
 
