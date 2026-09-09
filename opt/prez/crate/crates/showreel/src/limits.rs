@@ -61,8 +61,15 @@ pub struct Timing {
 ///
 /// **THE ease >= dwell REFUSAL READS THE AUTHORED VALUES, NOT THE CLAMPED
 /// ONES**, and that choice is a superset rather than a preference. Effective
-/// dwell is at least 2500 and effective ease is at most 3000, so an authored
-/// pair that is sound can never clamp into an unsound one -- proved by cases in
+/// dwell is at least `MIN_DWELL_MS` and effective ease is at most `MAX_EASE_MS`,
+/// so an authored pair that is sound can never clamp into an unsound one --
+/// and **the argument does not depend on what those numbers ARE**: clamping only
+/// ever raises dwell and only ever lowers an ease above the cap, so it holds for
+/// any cap at or above `MIN_EASE_MS`. **This sentence cited 3000 until hv's cap
+/// moved the constant to 2400, in the module whose own doc comment two
+/// paragraphs above is about shipping a stale citation** -- reported by vc, and
+/// the thing that sized it correctly was asking whether the proof leans on the
+/// number. It does not. Proved by cases in
 /// `clamping_can_never_manufacture_the_violation` below, and enforced there over
 /// a grid rather than argued for here. Reading the authored pair therefore
 /// catches everything the clamped pair would, plus the configs whose floors

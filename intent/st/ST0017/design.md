@@ -1248,6 +1248,44 @@ Why consistent wins:
 
 **The ruling costs the blanket RMSE, and that cost is paid explicitly rather than absorbed.**
 
+#### The ruling stands and its stated INSTANCE does not occur -- measured 2026-09-09 by cc
+
+**"The mascot and the wordmark, on every build" is the concrete harm this ruling was justified
+by, and neither one is affected.** Measured over every raster asset of the live 45h reel, alpha
+channel read rather than inferred from the extension:
+
+| Asset | Mode | Alpha fully opaque |
+| ----- | ---- | ------------------ |
+| the six `assets/art/*.jpg` | RGB | no alpha channel |
+| `assets/brand/snorkeltoast-logo.png` | RGBA | **NO -- genuinely transparent** |
+| `assets/brand/wordmark-popupart.png` | RGBA | **NO -- genuinely transparent** |
+| `assets/location/forbiddenplanet-01.png` | RGB | no alpha channel |
+
+**So the collapse fires on nothing this reel contains, and the named exemption list 4.3 asks for
+is EMPTY for 45h.** The six JPEGs have no alpha to collapse, the one RGB PNG has none either, and
+the two brand marks keep theirs in BOTH implementations -- which is the outcome a designer would
+want and the opposite of what this section predicted.
+
+**WHAT IS FALSE IS THE INSTANCE, NOT THE RULING.** One policy across both passes is still right,
+and its reasoning is untouched: a reference is a reference and not a specification, and porting a
+known defect because an instrument rewards it inverts what the instrument is for. What cannot be
+claimed any longer is that the port PAYS for it here -- **the blanket RMSE this section says the
+ruling costs is not, on this reel, made non-zero by this cause.**
+
+**AND THE CODE IS COVERED WHILE THE REEL IS NOT, WHICH ARE DIFFERENT FACTS.** Three synthetic
+tests in `normalise.rs` drive the arm -- `a_fully_opaque_rgba_is_demoted_to_jpeg_at_both_edges`,
+`a_large_opaque_rgba_is_still_demoted_after_being_downsized`, and
+`one_transparent_pixel_in_a_million_stops_the_demotion`, **whose own comment anticipated exactly
+this** ("a wordmark is opaque everywhere except its edges"). So nothing ships untested. But a
+green from 45h is not evidence about this arm, in the same way a green from 45h is not evidence
+about the bug embed: **the reel is silent on both, and silence is what a person reads as coverage.**
+
+**THE GENERAL FORM, WHICH THIS THREAD HAS NOW MET FOUR TIMES: a divergence decided against a
+population nobody measured.** The decision was right on its merits and its cost estimate came
+from reading the code rather than the pictures. **A predicted difference that cannot fire is not
+a wrong prediction -- it is an unstated narrowing**, and it reaches the harness as an exemption
+mechanism whose population is empty on the only reel anybody runs.
+
 ### 4.3 What the harness therefore has to be
 
 **RMSE with a named exemption list**: the slides whose assets take the un-normalised path are
