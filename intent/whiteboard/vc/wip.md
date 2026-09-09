@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 11981560-5612-4fe7-a136-6eae64636b64
-heartbeat_at: 2026-09-09 20:05Z
+heartbeat_at: 2026-09-09 20:10Z
 status: active
-focus: "ST0017: 42/51, 3 withdrawn, doctor 0. Localfolded 2026-09-09 20:05Z. EVERY open row is audited ahead of its code and every one is blocked. cc is FULLY BLOCKED AND IDLE -- everything JSON-free in WP-03 is built and hv's serde_json ruling is what restarts it. Four items wait on hv; serde_json is the one that unblocks work."
+focus: "ST0017: 42/51, 3 withdrawn, doctor 0. Post-compact pickup 2026-09-09 20:10Z. hv has NOT ruled on serde_json -- cc is idle and every open row is blocked behind it. hv is LIVE this session, so the four items sitting in hv/inbox.vc.md get surfaced in person rather than left in the durable channel."
 claims: [ST0017]
 ---
 
