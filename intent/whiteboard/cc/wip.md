@@ -3,7 +3,7 @@ node: cc
 name: Control Claude
 role: control
 session_id: a30f9092-03ed-44ba-a659-b37813af12c7
-heartbeat_at: 2026-09-09 11:25Z
+heartbeat_at: 2026-09-09 11:47Z
 status: active
 focus: "ST0017 hoist. WP-01 done. WP-03 started: AC-3.5's CSS half built, issues 0014, 0015 and 0017 closed by one fix, red-proved both ways. LIMITS unblocked by snorkeltoast's parity answer and still unported."
 claims: [ST0017]
@@ -23,6 +23,7 @@ claims: [ST0017]
 
 - **`LIMITS` port -- RULED, unimplemented.** Apply `max_ease` at compile time and refuse a config whose ease meets or exceeds its dwell, by name. **The defect is split enforcement, not the constants**: `showreel:799-800` applies `min_dwell`/`min_ease` and never `max_ease`; the cap lives only in `player.html:549` while `showreel:988` claims the runtime enforces _the same_ floors.
 - **Issue 0016 -- record gate state in `manifest.sha256`.** Ratified, filed, unimplemented.
+- **WP-03 parity evidence CHANGED SHAPE under me, and it is better.** snorkeltoast's control was anchored on capture rep-0: slide 14 renders 12:1 bimodal, rep-0 was drawn from the minority, so every comparison ran against the minority, all read one value and the spread collapsed to zero. **A slide exactly as bimodal as before read as perfectly reproducible, about one run in thirteen.** Fixed by hashing captures into distinct renders and taking the worst distance BETWEEN renders, anchored on nothing -- and **the count of distinct renders per slide is now reported**, so a Rust build rendering a slide once where Python renders it twice is a difference the harness SHOWS rather than averages away. Take the new floor table before grading anything.
 - **Issue 0007 (prez counter contrast) and the two homeless findings** (`todo` verbs unreachable from Emacs; `hoist-rebase.sh`'s dead postcondition) are unchanged and unowned.
 
 ## Holds
