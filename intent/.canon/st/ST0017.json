@@ -71,7 +71,8 @@
       "text": "Theme resolution and base64 have exactly ONE implementation, linked by both binaries. Data-URI inlining is NOT in this set: the diff established it has no shared surface.",
       "kind": "non-test",
       "state": {
-        "is": "unsatisfied"
+        "is": "satisfied",
+        "evidence": "Verified by vc 2026-09-09 at e0dd357: prez links the shared crate -- main.rs:49 'pub use artifact::Failure', main.rs:52 'pub(crate) use artifact::base64', theme.rs:3 records the resolver lives in artifact::theme. One implementation, both binaries."
       }
     },
     {
@@ -79,7 +80,8 @@
       "text": "The workspace root pins resolver = 3 explicitly and sets [profile.dev] debug = line-tables-only.",
       "kind": "non-test",
       "state": {
-        "is": "unsatisfied"
+        "is": "satisfied",
+        "evidence": "Verified by vc: crate/Cargo.toml :72 resolver = 3 with lamplight-vc's reasoning at the key, and :79-80 [profile.dev] debug = line-tables-only."
       }
     },
     {
@@ -93,6 +95,23 @@
     {
       "id": "AC-1.12",
       "text": "Every gate this estate runs is enumerated before a change is called green, and each reports its own population including on passes. A gate that never activates has no voice and is indistinguishable from one that ran and found nothing.",
+      "kind": "non-test",
+      "state": {
+        "is": "satisfied",
+        "evidence": "cc enumerated every gate CI runs and drove all seven: cargo test debug 12+133, cargo test --release 12+133 (CI's actual arm), clippy --all-targets -D warnings 0, cargo build --release clean, shellcheck 18 files, utilz test prez all 4 suites, devbin check autotests 2 crates. The row caught its own author twice on the day it was minted -- cc called WP-01 green on cargo test alone, and vc called it verified on clippy plus cargo build, two gates of four."
+      }
+    },
+    {
+      "id": "AC-1.13",
+      "text": "The shellcheck collector excludes target/ by its own rule, not by CI job ordering. Measured 2026-09-09 by cc: run locally after a build it collects 69 'files' against 18 real ones, picking up compiled binaries. It is correct in CI only because the shellcheck job never builds -- a gate whose correctness depends on another job's behaviour rather than on its own exclusions.",
+      "kind": "non-test",
+      "state": {
+        "is": "unsatisfied"
+      }
+    },
+    {
+      "id": "AC-1.14",
+      "text": "cargo test --release is driven as a distinct arm from the debug one, because CI runs release and a debug-only green is a different measurement. Both arms stated with their counts.",
       "kind": "non-test",
       "state": {
         "is": "unsatisfied"
@@ -111,7 +130,8 @@
       "text": "No existing prez assertion weakened or altered: all 135 original test bodies unchanged and verifiable by diff, count stated both sides. Additions permitted and expected.",
       "kind": "non-test",
       "state": {
-        "is": "unsatisfied"
+        "is": "satisfied",
+        "evidence": "Verified by vc 2026-09-09, and the check is the one the row asks for rather than a count. Diffed every prez test module 60153d8..HEAD: eleven of twelve BYTE-IDENTICAL (args, deck, drive, fence, frontmatter, html, inline, mermaid, notes, render, split). theme.rs differs by additions ONLY -- diff reports 13a14,15 / 18a21 / 19a23 / 21a26, no delete or change hunks -- taking it 20 to 21 tests. Counts also reconcile as a partition: 135 original + 1 new (AC-1.8) - 3 moved to artifact = 133 in prez; artifact's 12 = those 3 plus 9 new."
       }
     },
     {
@@ -119,7 +139,8 @@
       "text": "prez's release binary size is stated as a number against the budget, not as a distance.",
       "kind": "non-test",
       "state": {
-        "is": "unsatisfied"
+        "is": "satisfied",
+        "evidence": "cc measured 4,384,864 bytes against the 8,388,608 budget, stated as a number with the budget beside it rather than as a distance."
       }
     },
     {
@@ -143,7 +164,8 @@
       "text": "crate/ is both workspace root and prez's package: every include_str! path, the shim and prez.bats's fixture unchanged, and [profile.release] proven IN EFFECT for the measured binary rather than read off the manifest.",
       "kind": "non-test",
       "state": {
-        "is": "unsatisfied"
+        "is": "satisfied",
+        "evidence": "Verified by vc: crate/Cargo.toml carries [workspace] at :62 AND the [package], so every include_str! path, the shim and prez.bats's fixture are unchanged. [profile.release] proven IN EFFECT by DIFFERENCE, not read off the manifest -- cc built the same source with strip and lto disabled and measured 4,729,000 bytes / 2,534 nm entries against 4,384,832 / 108, so the profile is doing 344,168 bytes and 2,426 symbols of work."
       }
     },
     {
@@ -159,7 +181,8 @@
       "text": "Both cargo test call sites pass --workspace and --no-fail-fast, so the population comes from the manifest's members rather than a filesystem walk. An enumeration can fail to see a member; --workspace cannot.",
       "kind": "non-test",
       "state": {
-        "is": "unsatisfied"
+        "is": "satisfied",
+        "evidence": "Verified by vc at e0dd357: common.sh:855 and tests.yml:284 both carry --workspace --no-fail-fast. Measured before the fix: the estate's own command built 1 executable where --workspace builds 2, so artifact's 12 tests would never have run."
       }
     },
     {
@@ -180,7 +203,7 @@
     },
     {
       "id": "AC-2.11",
-      "text": "The capture window has TWO real bounds and the contract states whether they can both be met. Lower: a budget before the page has SETTLED photographs a frame still arriving -- measured 2026-09-09, moving the lower bound from a fixed 4000ms to ease+200 took repeat noise from 0.000000 on 21 of 22 slides to non-zero on ten, up to 10.2, with no change to the reel. Upper: a budget past the dwell photographs the NEXT slide. If settling exceeds min_dwell then a slide at the floor has no valid window at all, and there may be legal reels no screenshot harness can grade. That is a bigger question than max_ease vs min_dwell in AC-3.11 and it is hv's, because the remedy is either the tool's floors or a declared ungradeable class.",
+      "text": "The capture window has TWO real bounds and the contract states whether both can be met. Lower: a budget before the transition has completed photographs a crossfade blend, not the slide. Upper: a budget past the dwell photographs the NEXT slide. VERIFIED from player.html:547, and the ambient multipliers make it worse rather than better: runtime dwell is scaled 1.5 and runtime ease 1.4 capped at max_ease, so a legal slide at min_dwell 2500 under ambient has a runtime dwell of 3750 against a runtime ease of up to 3000 -- a 750ms window, before counting anything else. The window does not scale with the slide. If no window exists for a legal configuration then there are legal reels no screenshot harness can grade, which is hv's to rule because the remedy is either the tool's floors or a declared ungradeable class.",
       "kind": "non-test",
       "state": {
         "is": "unsatisfied"
@@ -188,7 +211,15 @@
     },
     {
       "id": "AC-2.12",
-      "text": "Settling time is a property of the ENVIRONMENT as much as the content, so a budget derived on one machine is a lucky constant somewhere else. The harness therefore does not fix a capture time: it captures until two successive frames agree, bounded, and treats hitting the bound as the MOVING verdict rather than as an error. This makes the budget an outcome rather than a parameter and collapses the stability gate into the same mechanism. Where a fixed number is used instead, it is stated with the machine and the measurement it came from.",
+      "text": "Where the harness fixes a capture time, it states the machine and measurement it came from, because settling is a property of the ENVIRONMENT as much as the content and a value measured on one box is a lucky constant elsewhere. Converge-until-two-frames-agree is the preferred shape and is to be decided on that merit alone -- NOT as a fix for the crossfade misdiagnosis that prompted it, which AC-2.13 addresses instead. Its cost is named: convergence and the transition are the same phenomenon, so a converge loop settles correctly on a crossfade but on a CRAWL only after the animation ends, which is past the dwell. The bound therefore does real work and hitting it is common rather than exceptional.",
+      "kind": "non-test",
+      "state": {
+        "is": "unsatisfied"
+      }
+    },
+    {
+      "id": "AC-2.13",
+      "text": "The harness never passes a venue-override query parameter. Measured 2026-09-09: passing pace=ambient made player.html:547 scale runtime dwell by 1.5 and ease by 1.4, so a payload ease of 900ms became a runtime 1260ms and a budget computed as payload_ease+200 = 1100ms landed INSIDE the transition. Every first-budget capture was a crossfade blend read as slide motion. pace, speed, start and the rest exist so a venue can change a shipped reel without a rebuild; a fidelity harness that passes one is grading a configuration the reel was never built for, and then doing arithmetic against the payload's un-scaled numbers as though the override were absent.",
       "kind": "non-test",
       "state": {
         "is": "unsatisfied"
@@ -413,7 +444,7 @@
       "covers": [
         "AC-1.2"
       ],
-      "status": "red"
+      "status": "green"
     }
   ],
   "attachments": [
