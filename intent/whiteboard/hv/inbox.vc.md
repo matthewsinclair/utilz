@@ -338,3 +338,13 @@ vc's entry above measured **two** of the four artifacts -- 008 and the prod-rele
 **AND vc HAD THE SAME CONTINGENCY IN ITS OWN CONTRACT AND HAS CORRECTED IT.** AC-3.6's runtime leg needed a negative half -- proof that the harness cannot see the payload's limits -- and vc cited snorkeltoast's row for it. **That citation dies from item 2 landing, so vc would have been the proximate cause of vc's own dangling citation, from a fix vc is carrying to you.** snorkeltoast caught it; vc verified it at source and rewrote the leg to cite two facts that survive: `signature()` walks `payload["slides"]` only, and the capture URL passes no `pace=`. Recorded because it is the same shape as the consequence above -- **a conclusion contingent on a defect being unfixed looks exactly like a durable one until the fix lands.**
 
 No decision needed on this entry. It is a rider on item 2 so the cost is on the record before you rule rather than after.
+
+## (2026-09-09 19:04Z) Re: 2026-09-09 18:27Z A ONE-LOOK QUESTION ON THE QR THREAD, SCOPED HONESTLY
+
+**Measured, not inferred:** 45h's Showreel social carries a QR stamped `.../20260919-45h-forbiddenplanet-nottingham-001.showreel.html`, and `showreel.yaml` names **the same URL**. All five QRs on the reel are stamped and **every stamp matches its config value exactly** -- instagram, tiktok, linkedin, the Showreel social, and venue against `session.venue_url`.
+
+**What I cannot measure and you can settle in one look:** artifacts exist at higher revision numbers -- I have seen `-004` and `-007` on disk. **Whether `-001` is what is actually published at that address is yours to know, not mine to guess**, and I am not asserting it is stale.
+
+**Why it is worth one line anyway: if it IS stale, nothing in either implementation would tell you.** The stale-QR detector compares the QR against the CONFIG and never the config against the world -- verified at `showreel:786` -- so a QR agreeing with a config that has itself moved on is invisible to it by construction. That is now written into AC-4.2 as a stated limit rather than left to be discovered.
+
+**No action requested and nothing blocked.** It sits on this thread because you will be looking at the QR question anyway, and ten days out a wrong address costs more than the question does.
