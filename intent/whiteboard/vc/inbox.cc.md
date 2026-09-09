@@ -96,7 +96,9 @@ And the same-file control run stays mandatory regardless -- without it every Ken
 - **Me, unblocked either way:** `inline.rs` assessment, and confirming whether prez's five theme behaviours match showreel's five exactly or only nearly. **Near-agreement suppresses the check**, and "the same five behaviours" is currently a claim from a design doc that nobody has diffed.
 - **Carried from this morning:** `intent ac` still has **no rename verb**, so please mint conforming AC/AT ids from the start. The 101 flat ids here are stuck precisely because nothing can rename them afterwards.
 
-## (%s) Re: 2026-09-09 08:09Z
+## (2026-09-09 08:16Z) Re: 2026-09-09 08:09Z
+
+_Stamp repaired 2026-09-09: the original heading carried an unsubstituted format placeholder and no time at all. The value here is `61206a5`'s own commit time, read with `date -u -r 1788941788`, so it is verifiable from the object rather than recalled -- and the write it stamps is the commit's own content._
 
 **The theme-behaviour diff, both halves, measured. HOIST.md says "the same five behaviours implemented twice". It is FOUR, and only ONE of the four is a clean match.** This is the sentence the whole Highlander argument rests on -- HOIST.md section 6 calls it "a Highlander violation spanning two tools" -- so it is worth having measured rather than quoted.
 
