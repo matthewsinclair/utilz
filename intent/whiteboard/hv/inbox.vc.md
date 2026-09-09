@@ -123,3 +123,34 @@ The alternative was considered and rejected rather than ignored: `#[path]` sourc
 **A yes unblocks WP-01's commit. A no means (ii) and we will say so in the thread rather than quietly.**
 
 _(entry written by vc, who is the named reader of this inbox and has also put this to hv live.)_
+
+## (2026-09-09 09:58Z)
+
+**THE `prefers-reduced-motion` DEFECT IS NO LONGER AN ACCESSIBILITY QUESTION. IT IS BLOCKING THE HARNESS, AND IT IS MAKING THE HARNESS REPORT GREEN OVER AN EMPTY FRAME.** cc raised it as a one-line fix that changes approved output. It is bigger than that, and this is the escalation.
+
+**The defect, verified by vc from the committed source (`f593de8:bin/showreel/player.html`):**
+
+```
+@media (prefers-reduced-motion:reduce){
+  .slide img{animation:none!important}
+  .wipe{display:none}
+}
+```
+
+Two rules. **`.crawl` appears ZERO times in that block**, while `.crawl .text` at line 337 carries `animation:crawl var(--dwell) linear both`. So under reduced-motion the Star Wars crawl keeps crawling -- the most motion-heavy element in the reel, in a product designed to run eight hours a day two metres from someone working a till. README section 7 claims all motion drops. That claim is false.
+
+**What snorkeltoast found by looking at the frames, and it is the part that changes the decision.**
+
+Captured from the unmodified artifact, **slide 1's frame holds the sunburst ground and the wordmark chrome and NOTHING ELSE** -- no venue, no city, no date, no action. The crawl text has not entered frame at that capture phase. From a copy with the one-line rule added, the same slide shows all of it.
+
+**So the harness returns a clean per-slide zero for slide 1 while having seen none of slide 1's content.** Slide 1 carries the session details: the most venue-specific, most likely-to-be-wrong content in the reel, and the one thing the "one build serves every venue" design depends on rendering correctly. **The instrument is structurally blind to precisely the slide it most needs to see, and it reports that blindness as a pass.**
+
+**The one-line rule is doing three jobs, not one:** it makes the accessibility claim true; it takes slide 20 from a 4.99-10.65 spread to 0.000000 three times; and **it is what makes crawl slides capturable at all.** Without it there is no working capture phase for a crawl -- early in the dwell the text is off-frame, later it is mid-animation and non-deterministic.
+
+**So a decision you are holding as cosmetic is a dependency of WP-02.** Recorded as `AC-2.10`: until it is ruled, no crawl-slide number is a result. `AC-2.8` forbids reading a per-slide zero as evidence unless the frame contained the slide's content.
+
+**vc's recommendation: rule the fix IN, as part of ST0017 rather than as a separate change.** It is one line, it is the difference between a harness that can see the reel and one that cannot, and the output it changes is output that is currently WRONG for reduced-motion users. The alternative -- grading crawl slides against a player that hides them -- is not a cheaper option, it is a green that means nothing.
+
+**Nothing is being fixed unilaterally.** snorkeltoast committed the prototype at `f593de8` with the defect deliberately unfixed, because changing approved output is not that commit's job.
+
+_(entry by vc, named reader of this inbox; also put to hv live.)_
