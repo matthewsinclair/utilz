@@ -196,6 +196,25 @@ pub const SCHEMA_VERSION: u32 = 1;
 /// which is exactly what AC-3.1 asks for, so it is carried through rather than
 /// rewritten -- a hand-written list would be a second place the field names
 /// live, and it would drift from the struct the first time anyone added one.
+impl Reel {
+  /// The long edge an embed targets for THIS reel.
+  ///
+  /// **ONE HOME, READ BY BOTH THE EMBED AND THE PRODUCER STAMP.** The reference
+  /// is `target = int(cfg.get("target", TARGET_DEFAULT))` (`showreel:989`), so
+  /// the value is per-reel overridable, and a build reaching for the constant
+  /// instead would be wrong on any reel that sets one.
+  ///
+  /// **AND NOTHING IN THIS ESTATE CAN CATCH THAT MISTAKE FROM A REEL.** The live
+  /// 45h config and the pinned fixture BOTH set `target: 1920`, which is exactly
+  /// `normalise::TARGET` -- so a build reading the constant produces
+  /// byte-identical output on both members of the config population. The
+  /// discrimination is carried by a unit test in `stamp`, not by any reel, and
+  /// the estate is blind to it by construction rather than by accident.
+  pub fn embed_target(&self) -> u32 {
+    self.target.unwrap_or(crate::normalise::TARGET)
+  }
+}
+
 pub fn parse(yaml: &str, whose: &str) -> Result<Reel, Failure> {
   let reel: Reel = serde_yaml::from_str(yaml).map_err(|e| {
     Failure::new(

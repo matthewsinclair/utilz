@@ -40,6 +40,27 @@ pub const TARGET: u32 = 1920;
 /// though their bytes are not.
 pub const JPEG_Q: u8 = 86;
 
+/// The resampling kernel, named ONCE so the resize and the build's producer
+/// stamp cannot disagree about which one ran.
+///
+/// **IT IS A CONSTANT BECAUSE THE STAMP HAS TO INTERPOLATE IT, NOT RESTATE
+/// IT.** It sat inline at the `resize_exact` call until the stamp needed to
+/// report it, and a stamp carrying a hand-typed `filter=lanczos3` would be **a
+/// flag wearing a stamp's clothes** -- recording what somebody intended when
+/// they typed it rather than what the code does. That is
+/// `showreel-harness:218`'s flag-versus-stamp distinction one level deeper, and
+/// it is the whole reason the stamp carries VALUES rather than a versioned
+/// policy id: an id lets two halves agree on `pixpol-3` and disagree on pixels.
+pub const FILTER: image::imageops::FilterType = image::imageops::FilterType::Lanczos3;
+
+/// `FILTER`'s name for the producer stamp, **derived from the value rather than
+/// written beside it**, so the two cannot drift apart. Pinned by a test, which
+/// is what makes leaning on `Debug` here safe: a variant rename fails to
+/// compile, and a formatting change fails the assertion.
+pub fn filter_name() -> String {
+  format!("{FILTER:?}").to_lowercase()
+}
+
 /// How much of the panel a picture's role actually needs.
 ///
 /// **A CORNER MARK AT FULL SLIDE SIZE IS THE SAME PICTURE AND FIVE TIMES THE
@@ -172,7 +193,7 @@ fn encode((img, has_alpha): (image::DynamicImage, bool), max_edge: u32) -> Norma
     let s = f64::from(max_edge) / f64::from(w.max(h));
     let nw = (f64::from(w) * s).round().max(1.0) as u32;
     let nh = (f64::from(h) * s).round().max(1.0) as u32;
-    img.resize_exact(nw, nh, image::imageops::FilterType::Lanczos3)
+    img.resize_exact(nw, nh, FILTER)
   } else {
     img
   };
@@ -327,6 +348,14 @@ mod tests {
 
   /// Under the cap, nothing is resampled -- resizing a small picture up would
   /// invent detail and cost bytes for it.
+  /// **THE STAMP'S TEXT IS DERIVED, NOT RESTATED.** This pins the derivation so
+  /// a change to the kernel cannot leave the stamp's name behind -- which is the
+  /// exact failure the constant was hoisted to prevent.
+  #[test]
+  fn the_filter_names_itself_from_the_value_the_resize_actually_uses() {
+    assert_eq!(filter_name(), "lanczos3");
+  }
+
   #[test]
   fn an_image_under_the_edge_is_not_resized() {
     let p = write("small", &png(300, 200, 128));

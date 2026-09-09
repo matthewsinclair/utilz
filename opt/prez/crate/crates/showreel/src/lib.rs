@@ -25,5 +25,6 @@ pub mod normalise;
 pub mod plan;
 pub mod segment;
 pub mod slide;
+pub mod stamp;
 pub mod template;
 pub mod theme;
