@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: a30f9092-03ed-44ba-a659-b37813af12c7
-heartbeat_at: 2026-09-09 18:22Z
+heartbeat_at: 2026-09-09 18:46Z
 status: active
-focus: "ST0017/WP-03. The build path's decision-making is DONE: theme, admission (C1), normalisation (C2), and the slide model. `check` resolves the live 45h reel to 23 slides and 10 assets, exit 0. NEXT is data-URI, then the template pull, then delivery. hv is afk and has delegated sequencing to vc."
+focus: "ST0017/WP-03. Contract 42/51, WP-03 9/12 -- vc closed AC-3.3 and AC-3.8 while I was folded. The reference's OWN plan reaches 23 slides on the live config, so 23-vs-22 is settled as config-vs-008. NEXT is data-URI, then the template pull, then delivery. Taking sequencing from vc until hv returns."
 claims: [ST0017]
 ---
 
@@ -16,7 +16,9 @@ claims: [ST0017]
 **ST0017 -- hoisting snorkeltoast's `showreel` into Utilz as a Rust pipeline under `prez showreel`.** Localfolded 2026-09-09 18:22Z; earlier boards in `.history/`.
 
 - **`utilz prez showreel check <45h dir>` RESOLVES THE WHOLE CONFIG**, both invocation forms, exit 0: 15 segments, **23 slides, 10 assets**, theme off the search path, 5 fonts and a favicon inlined. Everything a build decides, without embedding anything.
-- **WP-01 is DONE.** WP-03 has C1, C2, the slide model, theme resolution and asset inlining landed and red-proved. **215 tests.** prez 4,384,912 against the 8,388,608 budget; showreel 519,232.
+- **WP-01 is DONE. Contract 42/51, 3 withdrawn; WP-03 9/12** -- vc closed **AC-3.3** (driving the compile-error half my red-proof did not reach) and **AC-3.8** while I was folded. WP-03 has C1, C2, the slide model, theme resolution and asset inlining landed and red-proved. **215 tests.** prez 4,384,912 against the 8,388,608 budget; showreel 519,232.
+- **THE REFERENCE'S OWN `plan` REACHES 23 SLIDES AND 14 USED ASSETS ON THE LIVE CONFIG**, measured 2026-09-09 18:44Z in `dry` mode, and **my 10 is EXACTLY its per-slide set, file for file.** So **23-vs-22 is config-vs-008 and not port-vs-Python, and it is now settled rather than argued.** vc's four-artifact sweep names the 1: the fourth social, QR generated 12:39 today, rendered by no artifact that exists.
+- **THE BUILD'S `used` IS 14 AND A SLIDE PROJECTION CANNOT REACH IT.** `Slide::assets()` has no arm that could return the bug or a social QR; **4 social QRs sit outside it**, so a `report_unused` reading the slide projection would tell the operator to **delete assets the build embeds.** `used` must be a projection of the PLAN, not of the slide list. **AND 45h CANNOT RED-PROVE THE BUG HALF** -- its `bug.file` IS the logo segment's file, so a build that dropped the bug entirely still counts 14. A fixture with a distinct bug file, or that arm ships untested.
 - **NEXT, in order: data-URI, the template pull, delivery re-encode.** The template pull carries **AC-3.7's `|| "Snorkeltoast"` drop in the SAME commit** -- vc ruled against pulling it forward, because the gradeability gain is unreachable until there is an artifact to grade.
 - **TELL vc BEFORE ANY BUILD POINTS AT 45h.** They will have AC-2.1 leg 2, AC-5.1 and AC-6.1 leg 3 ready to grade in one pass, and **the first `compare` against a Rust artifact happens exactly once.**
 - **TELL snorkeltoast TOO.** The live config plans **23** slides against FLOORS.md's **22**, so their `compare` refuses and they re-derive. That gap is between the live config and artifact 008 -- **not** between the port and the Python; my `collect` reaches 23 independently.
@@ -85,6 +87,7 @@ claims: [ST0017]
 - **AC-3.10's population is normal+build edges, union 71 on name+version**, prez 17. vc's 71 and my 69 differ only by dedup key: two names occur at two versions. Six of six of my figures reproduce under name-dedup.
 - **TN001 exposure is ZERO and measured.** showreel is lib+bin, 2 unittest targets, the bin holding none.
 - **Utilz declares its languages in TWO files** -- `bin/.devbin/config.yaml` and `intent/.config/config.json`.
+- **THE THREE PATHS, because rediscovering them after a compact cost ten tool calls.** Reference `~/Library/CloudStorage/Dropbox/Projects/Snokeltoast/bin/showreel/` (`showreel`, `player.html`, `themes/{default,popupart}`, `FLOORS.md`); live reel `.../Snokeltoast/marketplace/artists/10-active/45h/showreel/`; pinned fixture `opt/prez/crate/crates/showreel/fixtures/45h.showreel.yaml`. **`mdfind -name` finds them and `find` under `~/Devel` does NOT** -- Dropbox lives at `~/Library/CloudStorage`, and the tree is spelled **Snokeltoast**, no `r`.
 
 ## Decisions
 
