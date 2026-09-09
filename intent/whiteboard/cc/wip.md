@@ -3,7 +3,7 @@ node: cc
 name: Control Claude
 role: control
 session_id: a30f9092-03ed-44ba-a659-b37813af12c7
-heartbeat_at: 2026-09-09 20:11Z
+heartbeat_at: 2026-09-09 20:17Z
 status: active
 focus: "ST0017/WP-03. EVERY JSON-FREE PIECE IS BUILT and 247 tests pass. `check` resolves the live 45h reel to 23 slides and 14 assets -- the same two numbers the reference's own plan() gives. BLOCKED on hv for serde_json, which gates the whole remaining payload. Taking sequencing from vc until hv returns."
 claims: [ST0017]
@@ -31,11 +31,12 @@ claims: [ST0017]
 
 ## Holds
 
-- **The payload, until hv rules on `serde_json`.** Released by that ruling either way -- a yes takes the crate, a no means hand-rolling the emitter beside `base64.rs`. Everything JSON-free is already built, so there is no adjacent work to do and inventing some would be the error.
+- **The payload, until hv rules on `serde_json`.** CONDITION: **hv's sign-off, NAMED IN THE COMMIT.** Released either way -- a yes takes the crate, a no means hand-rolling the emitter beside `base64.rs`. **hv went AFK at ~20:13Z having read a plan with this decision framed first, and handed vc the pen with "rock on as needed". THAT NAMES NOTHING AND IS NOT THE SIGN-OFF**; vc holds sequencing and cannot grant it. A vague go-ahead is the shape a crate slips in under.
+- **AC-3.2's report extension, until vc rules on `exclude:`.** CONDITION: **vc answers whether an `exclude:`-filtered file is a "dropped segment input".** I say no and asked them to break it. **THIS ROW IS NOT BLOCKED ON JSON and my earlier hold said there was no work to do -- written from the payload's shape instead of from the row.**
 
 ## Open with hv
 
-- **`serde_json` -- THE decision, in `hv/inbox.cc.md` 19:15Z.** vc escalated it and sharpened the framing: it gates **everything left in WP-03**, not a dependency count. Recommendation: take it. The alternative is a hand-rolled emitter, argued against on where the risk sits -- a calendar is closed and pinnable against outside answers, JSON escaping of arbitrary YAML text is not, and the reference's field order in a second home is a Highlander problem bought to save two packages.
+- **`serde_json` -- THE decision, in `hv/inbox.cc.md` 19:15Z. STILL UNRULED AFTER hv READ IT.** vc escalated it and sharpened the framing: it gates **everything left in WP-03**, not a dependency count. Recommendation: take it. The alternative is a hand-rolled emitter, argued against on where the risk sits -- a calendar is closed and pinnable against outside answers, JSON escaping of arbitrary YAML text is not, and the reference's field order in a second home is a Highlander problem bought to save two packages.
 - **`prez showreel build` will need `SHOWREEL_THEME_PATH` where the Python needed nothing.** 45h names `theme: popupart`, a built-in there and never one here. H3 working, not a regression -- but a workflow change to know before the first build.
 - **The public-repo question is vc's, in hv's inbox.** `matthewsinclair/utilz` is public; the two pinned fixtures carry a named individual and a customer brand. **`upstream` is frozen, so nothing is published and it is decidable first.** Not mine to act on.
 
