@@ -57,13 +57,76 @@ satisfiable at once.
 | `theme.rs` -- `STANDARD_CLASSES` + `declares()` | encode prez's slide-class vocabulary (title/section/quote/full/center/small), which showreel has no equivalent of | STAYS in prez |
 | `base64.rs` -- `encode` | 56 lines, hand-rolled **because of** AC02 | MOVES |
 | `Failure` | 4-field struct in `main.rs`, one constructor | MOVES |
-| `inline.rs` | 260 lines. **Neither cc nor snorkeltoast has read it, and neither is claiming it.** Both EXPECT it stays -- showreel builds a payload of data-URI strings rather than rewriting emitted HTML | **WP-01 assesses and reports before moving. Do not assume** |
+| `inline.rs` | 260 lines. **STAYS IN PREZ** -- the WP-01 diff established that behaviour 5 has no shared surface at all: showreel rewrites no HTML anywhere, it builds payload strings the player consumes | STAYS. cc still does the formal read and reports, but the seam is settled |
 
-**WP-01 carries one gate that is not about code moving.** `HOIST.md` §6 asserts prez and showreel
-share "the same five behaviours". That is a claim from a design document that **nobody has
-diffed**, and near-agreement suppresses the check that disagreement would force. So WP-01 diffs
-prez's five against showreel's five and reports them as *identical* or *near*, by name. A shared
-crate built on "near" silently picks one tool's semantics for both.
+### 1.1 S5, run 2026-09-09: the claim was wrong, and it is FOUR
+
+`HOIST.md` §6 asserts prez and showreel share "the same five behaviours", and the whole Highlander
+argument rests on that sentence. Nobody had diffed it. cc and snorkeltoast enumerated
+independently -- each from source, before seeing the other's table, because a document compared
+against a file is one account and not two -- and diffed.
+
+**It is four behaviours, and exactly one of them is a clean match.**
+
+| # | Behaviour | Verdict |
+| - | --------- | ------- |
+| 1 | Resolve on `<NAME>_THEME_PATH` | both have env + a prepending flag; **showreel carries no `SearchSource` equivalent** |
+| 2 | Refuse unknown, listing what was searched | **clean match. The only one** |
+| 3 | Warn when off the search path | prez has four messages, showreel two, and showreel's **hardcode `(on SHOWREEL_THEME_PATH)`** |
+| 4 | Reject off-artifact references | **three disagreements, in both directions** |
+| 5 | Inline assets as data URIs | **not a shared behaviour at all.** showreel rewrites no HTML; it builds payload strings |
+
+**This does not weaken the consolidation, it re-shapes it.** Extraction is not "lift the common
+code": it is *take prez's implementation, correct showreel's defects in passage, and fix prez's
+one*. Each of those is a decision, and they are ruled in 1.2.
+
+
+### 1.2 The four rulings the diff forced
+
+Each is a decision rather than a refactor, and each is ruled here so the merge does not decide it
+by accident.
+
+**R1 -- Comment stripping: take PREZ's, and this is the merge trap.** Both strip CSS comments,
+arrived at independently. **prez preserves newlines so a reported line number still matches the
+file; showreel deletes them, and gets away with it only because its diagnostic never reports a
+line.** So the shorter implementation is the worse one, and a naive merge takes the shorter one.
+Written down because "pick the tidier of two functions that pass the same tests" is exactly what
+an extraction does when nobody says otherwise.
+
+**R2 -- Needle set: neither as it stands, and the union is not the wider one.** prez requires a
+`url(` prefix on every protocol-relative needle, so it misses `@import "//cdn/x.css"` -- a
+shipped defect, now **issue 0014**. showreel's regex `(https?:)?//[^\s;)'\"]+` catches that and
+**false-positives on `content: "//"`**, a shape a person writes. The rule is the union of what
+each CATCHES minus showreel's false positive: **protocol-relative in `url(...)` and in
+`@import`, not in arbitrary string content.**
+
+**R3 -- `theme.yaml` joins the scanned set.** showreel has a fourth artefact prez has no
+equivalent of, naming fonts and a favicon, and **nothing scans it.** A remote URL there resolves
+as `tdir / "https://..."`, does not exist, and the loader warns and continues. Nothing is
+fetched, **so the offline guarantee holds by accident of path resolution rather than by the check
+that is supposed to hold it.** `IN-AG-NO-SILENT-001`. The shared crate's shape is therefore
+prez's three artefacts PLUS a theme-manifest concept prez does not have -- not "showreel passes
+`None` twice".
+
+**R4 -- Provenance messages: take PREZ's four.** showreel's two hardcode `(on
+SHOWREEL_THEME_PATH)` and neither knows which list a directory came from, **so a theme resolved
+through `--theme-path` is reported as having come from the environment variable.** Adopting
+prez's `SearchSource::{Env,Flag}` axis is a correction of a false statement, not a widening.
+
+### 1.3 WP-01 is a pure move, and the shared crate starts with a known hole
+
+cc raised the collision and the resolution is theirs: **WP-01 changes no behaviour, and issue
+0014's fix does not ride along.** WP-01's green means *the move changed nothing*, which is
+exactly what it should mean and is provable by the existing suite.
+
+**The consequence has to be stated or WP-01's green gets over-read.** A pure move takes prez's
+implementation verbatim, hole included -- so between WP-01 and R2 landing, **the shared crate
+carries issue 0014 and showreel now inherits it too.** The consolidation propagates the defect
+from one tool to two before it fixes it in one place. That is the right order, because R2 is a
+design decision that wants its own commit and its own red-proof, but **nobody may read WP-01's
+green as "the resolver is correct".** It means "the resolver is unchanged."
+
+Issue 0014 closes when R2 lands, in WP-03.
 
 ---
 
@@ -273,11 +336,12 @@ gate.
 
 | # | Criterion |
 | - | --------- |
-| S1 | Theme resolution, base64 and data-URI inlining have exactly ONE implementation in the tree, linked by both binaries |
+| S1 | Theme resolution and base64 have exactly ONE implementation in the tree, linked by both binaries. **Data-URI inlining is NOT in this set** -- the S5 diff established it has no shared surface |
 | S2 | prez's `Cargo.toml` `[dependencies]` block is byte-identical before and after WP-01 |
 | S3 | The existing prez suite passes after extraction with no edit to any test file |
 | S4 | prez's release binary size after WP-01 is stated as a number against the budget, not as a distance |
-| S5 | prez's five theme behaviours and showreel's five are diffed and reported identical-or-near, by name, before the shared crate takes either as its semantics |
+| S5 | **SATISFIED 2026-09-09.** prez's and showreel's theme behaviours diffed by two independent enumerations: four behaviours, one clean match, result in 1.1 |
+| S6 | The shared resolver implements R1-R4: newline-preserving comment stripping, the ruled needle set, `theme.yaml` scanned, and prez's four provenance messages. **Closes issue 0014** |
 
 ### Group FID -- the instrument
 
@@ -297,7 +361,7 @@ gate.
 | P2 | All six admission sites route through one function: a bad input refuses with a remedy, and a dropped segment input is reported at the segment's altitude |
 | P3 | QR absence remains valid and is carried as `Option`, not as a policy |
 | P4 | One normalisation policy governs both image passes; no opaque RGBA ships un-collapsed |
-| P5 | A theme referencing `http://`, `https://` or `//` is a build error |
+| P5 | A theme referencing `http://`, `https://` or a protocol-relative URL is a build error, in CSS and in `theme.yaml`. **As drafted this described behaviour prez does not have** -- cc's catch; S6 is what makes it true for both |
 | P6 | The safety floors hold in compiler and runtime, and `?speed=` cannot cross them |
 | P7 | `player.html` carries no brand token |
 | P8 | The slide list and the asset list come from one walk |
