@@ -2,7 +2,7 @@
 wp_id: WP-02
 title: Fidelity harness, red-proved against population 1 (Python both sides)
 scope: S
-status: Not Started
+status: WIP
 ---
 
 # WP-02: Fidelity harness, red-proved against population 1 (Python both sides)

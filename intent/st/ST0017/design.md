@@ -535,6 +535,76 @@ already this board's: an instrument that shares an assumption with its subject c
 assumption. Keying the detector on the payload rather than on the syntax is what broke the shared
 assumption, and it is the cheap move worth reaching for first.
 
+### 1.16 The CSS half validated on the population that ships, and the two rulings cc asked for
+
+cc's evidence for `cd0412d` is thirteen synthetic fixtures with four controls, and it is the right
+evidence for the question cc was answering. It says nothing about the themes that actually exist,
+which is the other half of the risk: a scan made stricter can refuse something that already ships.
+**Nine real `theme.css` files, built through `./bin/prez` rather than asserted through a unit test,
+with both controls over that same mechanism: `built=9 refused=0`.** Seven prez built-ins plus
+showreel's `default` and `popupart`. The red control is a WRAPPED `@import "//cdn..."` -- E9, the
+escape a line-oriented needle list cannot see -- and it refuses; the green control is
+`content: "//"`, R2's named false positive, and it builds. **The red control refusing a wrapped
+at-rule is also how the binary proved itself current**: the replaced code could not have refused
+that, so the artefact under test is `cd0412d`'s rather than yesterday's, established by behaviour
+instead of by a timestamp.
+
+**RULING 1: the unterminated-comment refusal gets its own row, AC-3.12.** cc raised it in its own
+commit rather than slipping it in, and asked. It is separate from AC-3.5 for the reason cc gave --
+it refuses a population AC-3.5 has no interest in, a malformed theme carrying no external reference
+at all, and a user can hit it with a theme that was building yesterday. The second reason is
+stronger and cc did not give it: **AC-3.5 is going to go green and stop being read.** A behaviour
+change whose only record is a satisfied row's implementation detail has the same lifetime as prose,
+and prose does not fail.
+
+**RULING 2: AC-3.5 stays ONE row, and its wording was wrong in the way this thread keeps being
+wrong.** Splitting it into a CSS half and a `theme.yaml` half would turn a property into an
+enumeration of surfaces, and a third surface would then have no row at all; the honest signal of a
+half-built row is that it stays unsatisfied, which is exactly what cc did rather than asking for a
+mark. But the row said *"in CSS and in theme.yaml"*, and that IS the enumeration, one level down --
+**the code was already broader than the row on the day the row was written.** Reworded to the
+property, with the surfaces named as the instances they are.
+
+**cc's premise for the deferral is wrong on the facts, and that is the useful half of the ruling.**
+R3 does not wait on showreel's theme manifest existing.
+`.../showreel/themes/popupart/theme.yaml` exists today, is read at `showreel:198`, and carries
+`favicon:` and `fonts[].file` -- precisely the reference-bearing fields. What R3 waits on is
+WP-03's own YAML loader, with a live example to test against, not a dependency on something
+undesigned.
+
+**AND MY OWN POPULATION WAS NARROWER THAN THE CODE'S REACH, WHICH IS A NEW SHAPE OF THE OLD
+ERROR.** Nine of nine is complete for the disk. `refuse_external` has THREE call sites --
+`theme.css`, `theme.js` and `layout.html`, at `artifact/theme.rs:201-206` -- and the estate holds
+ZERO of the last two, so a clean sweep of every theme that exists answers for one surface of three
+while reading as though it answered for all of them. `strip_comments` implements CSS's comment and
+string grammar, which JS and HTML do not share. **A population drawn from the disk answers for the
+disk; the code's population is its CALL SITES, and enumerating one is not enumerating the other.**
+
+**THEN THE DIRECTION QUESTION REVERSED THE RULING, AND FIVE AGREEING SAMPLES NEARLY STOPPED IT
+BEING ASKED.** Neither cc nor vc had asked which way the mismatch errs, and both of us had assumed
+over-refusal -- a `theme.js` attribution in a `//` comment refused, an HTML attribution in
+`<!-- -->` refused, annoying and loud. Five cases were built across both non-CSS surfaces and all
+five agreed: over-refusal, never under. On that evidence the ruling was going to be *a usability
+defect on an empty population, safe to defer.* **The sixth case was built to attack the hypothesis
+rather than to confirm it, and it reversed it.** A live `<a href="http://evil.example.com">` in
+`layout.html`, sitting between a stray `/*` and a later `*/` -- both ordinary text in HTML -- is
+stripped by the CSS comment stripper before the scan runs, and it SHIPS, confirmed at the artifact
+on line 2 as live markup, against a control that refuses the identical href without the two
+markers. **Filed as issue 0018: the same class as 0014, 0015 and 0017, on the surface none of them
+looked at.** So AC-3.13 is not dischargeable by writing down that the CSS scanner is adequate,
+because it is not; and 1.14's rule -- *a wrong model that agrees with a right one at the sampled
+point is more dangerous than one that disagrees* -- landed on its own author one section later, at
+a sample size of five.
+
+**THE THREE CONTRACT CHANGES ABOVE WERE COMMITTED BY cc, IN `8dea619`, WHOSE MESSAGE IS ABOUT
+SOMETHING ELSE.** They were minted into the working tree and not yet committed when cc staged, and
+cc's pathspec swept them up. The content is correct and is NOT being reverted: the repair for an
+incomplete record is a later record, not a rewritten one. **It is the second instance of this class
+in two days and the first was vc's** -- `git add -- intent/` in `688974c` dehydrated ST0016 as a
+side effect of a commit about harness statistics. Two nodes holding one pen over one tree need
+separation at COMMIT time and not only at write time: **a broad pathspec is how carefully written
+work still lands in the wrong commit, under someone else's reasoning.**
+
 ---
 
 ## 2. There are THREE consolidations, and they are named apart on purpose
