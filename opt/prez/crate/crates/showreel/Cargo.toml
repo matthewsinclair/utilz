@@ -42,5 +42,8 @@ kamadak-exif = "0.6"
 qrcode = { version = "0.14", default-features = false, features = ["svg"] }
 regex = "1"
 serde = { version = "1", features = ["derive"] }
+# hv 2026-09-10: approved, on the corrected one-argument case -- JSON escaping
+# over arbitrary YAML text is open-ended where a hand-written calendar is closed.
+serde_json = "1"
 serde_yaml = "0.9"
 walkdir = "2"

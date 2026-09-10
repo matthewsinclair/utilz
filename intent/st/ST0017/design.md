@@ -1479,6 +1479,19 @@ label was wrong: that defect was two of five fields present and three missing, w
 loses is a FIELD, not a sequence -- and hv should have the corrected version before ruling, not the
 one that was put to them.
 
+**RULED 2026-09-10 BY hv, ON THE CORRECTED CASE: TAKE `serde_json`.** Put to them as a ruling rather
+than as an ordering, with the field-order argument already withdrawn, so **the decision carried on
+ONE argument** -- JSON escaping over arbitrary YAML text is open-ended where a calendar is closed and
+pinnable against outside answers. AC-3.9 requires the sign-off NAMED IN THE COMMIT THAT ADDS THE
+CRATE, and it is.
+
+**AND THE SIGN-OFF WAS TAKEN FROM hv DIRECTLY RATHER THAN FROM A RELAY, DELIBERATELY.** vc reported
+the ruling accurately and cc still went back to hv for it, on the grounds that a peer's report cannot
+produce a NAMED sign-off and the name goes into git history permanently. **hv was offered the
+standing version -- that a ruling relayed by vc would count as the sign-off for this class -- and did
+not take it**, so every future crate addition returns to hv the same way. The control is a control
+because delegation does not satisfy it.
+
 ---
 
 ## 5. Fixed in passage, or inherited -- decided now, not during
