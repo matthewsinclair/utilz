@@ -599,6 +599,21 @@ mod tests {
   /// the reference adds `w`/`h`/`name` only where a `path` survived into
   /// `cmd_build`. Asserted as a pair so the natural "every picture gets
   /// src/w/h/name" rule cannot pass.
+  ///
+  /// **AND THE HARNESS IS BLIND TO HALF OF WHAT THIS TEST HOLDS, SO THIS TEST IS
+  /// THE ONLY THING OVER IT.** `signature()` builds each row as
+  /// `{k: v for k, v in s.items() if k != "src"}` -- **the `src` key is stripped
+  /// entirely** before `compare_structure` sees anything. So a venue slide
+  /// GAINING `w`/`h`/`name` is caught downstream, and a venue slide LOSING `src`
+  /// is invisible to the instrument and reaches a shop as a blank panel.
+  ///
+  /// **THE EXCLUSION IS DELIBERATE AND IT IS DOING AN UNDECLARED SECOND JOB.**
+  /// `signature`'s own docstring calls itself *"everything about every slide
+  /// EXCEPT the pixels"*, and `src` is dropped because it IS pixels -- a sound
+  /// reason that also, silently, removes the only evidence that the key was
+  /// there at all. Named by vc, 2026-09-10. It is the same narrowing this thread
+  /// keeps finding, this time in the reference harness rather than in either
+  /// port.
   #[test]
   fn a_venue_picture_is_a_src_alone_where_a_slide_picture_carries_its_size() {
     let r = reel("venue-vs-image", &[("art/.keep", "")]);

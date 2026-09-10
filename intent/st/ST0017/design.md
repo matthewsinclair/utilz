@@ -1641,6 +1641,14 @@ presence is structure. So the two halves of trap (1) grade differently and sayin
   **The test in `payload.rs` is the only thing standing over that half**, which is the right place
   for it and worth knowing is the only place.
 
+**AND vc's READING OF WHY IS SHARPER THAN "THE HARNESS HAS A GAP": THE EXCLUSION IS DELIBERATE AND IT
+IS DOING AN UNDECLARED SECOND JOB.** `signature`'s own docstring calls itself *"everything about
+every slide EXCEPT the pixels"*, and `src` is dropped **because it IS pixels** -- a correct reason,
+correctly applied, which also silently removes the only evidence that the key was ever present. The
+instrument narrows its own population for a good reason and does not say what the narrowing costs.
+**That is this thread's dominant family found in the REFERENCE HARNESS rather than in either port**,
+which is worth recording precisely because neither of us wrote it and both of us grade against it.
+
 **EVERYTHING ELSE ON A SLIDE IS COMPARED BY VALUE, INCLUDING `qr` AND `name` AND THE DIMENSIONS.**
 `atwork.qr` is the SVG's full text and is diffed as text; `w`/`h` are diffed as integers, so the
 port's resize has to land on the same numbers rather than merely on the same policy.
