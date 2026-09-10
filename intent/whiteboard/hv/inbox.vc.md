@@ -762,3 +762,50 @@ was graded while a reader takes it for the one served.
 
 **YOUR QUEUE IS UNCHANGED AT TWO DECISIONS WANTING ONE WORD:** may snorkeltoast run the pixel compare, and
 may they land the `designed` to `observed` flip on the two theme rows. **I am keeping it at two on purpose.**
+
+## (2026-09-10 17:33Z)
+
+**THE COMPARE RAN. AC-2.1 IS CLOSED AT 48/52 AND THE PIXEL COMPARE FAILED, AND BOTH OF THOSE ARE THE RIGHT
+OUTCOME.** One decision for you, measured to the point where it is binary.
+
+**WHAT SUCCEEDED:** the harness now knows what it graded by DERIVATION rather than by standing next to it.
+`population_source = stamp` on the port, `adjacency (UNVERIFIED)` on the reference. **I read both manifests
+myself rather than taking the report**, and both shas match artifacts I had hashed independently.
+
+**WHAT FAILED: 6 of 19 graded slides, every one an artist artwork JPEG, and the cause is ONE thing.**
+
+|                   | reference | port      | delta                |
+| ----------------- | --------- | --------- | -------------------- |
+| six artwork JPEGs | 1,659,365 | 2,071,163 | **+411,798**         |
+| whole artifact    | 4,817,189 | 5,462,781 | **+645,592, +13.4%** |
+
+**GEOMETRY AGREES ON EVERY SLIDE.** Not a sizing bug. **Both sides declare quality 86 and Lanczos and both
+honour both.** The reference encodes through Pillow with `optimize=True, progressive=True`; the port through
+`image`'s `JpegEncoder`, baseline with default Huffman tables. **Same rules, two encoders, different bytes.**
+
+**YOUR DECISION, AND THE MEASUREMENT THAT MAKES IT BINARY:** `image` 0.25's `JpegEncoder` exposes exactly TWO
+constructors and neither offers optimize or progressive. **So matching the reference CANNOT be done inside
+the manifest you approved.** It needs a new encoder crate -- your sign-off named in the commit, and my
+AC-3.14 gate goes red until the approved list moves in the same commit.
+
+**MY RECOMMENDATION: ACCEPT THE DIVERGENCE. DO NOT SPEND THE BUDGET.** RMSE 0.89 to 2.91 on a 0-255 scale is
+small, the reel is self-contained at 5.2 MB as well as at 4.6 MB, and neither encoder is wrong.
+**THE LIMIT ON THAT RECOMMENDATION, STATED RATHER THAN GLOSSED: I HAVE NOT MEASURED WHETHER RMSE UNDER 3 IS
+PERCEPTIBLE.** It rests on byte cost, not on a claim about what anyone can see. **If 645 KB matters to you
+more than a crate does, the other way is equally sound and I will take it without argument.**
+
+**AND ONE THING THAT HAPPENS EITHER WAY:** the divergence gets recorded as EXPECTED in snorkeltoast's
+expectation table before the next compare, or every future run re-reports six slides you have already
+adjudicated. It is on AC-3.15 as not-optional.
+
+**THE FINDING THAT OUTRANKS THE SIX SLIDES, AND IT IS snorkeltoast's:** both stamps say `q=86;filter=lanczos3`,
+both implementations obey, and the pixels still differ. **A matching stamp is not evidence of matching
+output** -- the stamp records the RULES. **An identifier is not the thing, and this time the identifier is
+the instrument we built specifically to make this path checkable.** On AC-2.1's evidence so nobody reads a
+green stamp as agreement.
+
+**snorkeltoast ALSO TURNED IT ON THEIR OWN INSTRUMENT BEFORE I COULD:** the floors derive from a control
+measuring the REFERENCE'S STABILITY -- one artifact rendered repeatedly, hence 0.000000 -- and **stability
+and cross-implementation agreement are different quantities.** A zero floor demands bit-exactness no
+cross-language port can deliver on JPEG. **The FAIL survives it anyway**, since all six also clear the
+declared noise floor.
