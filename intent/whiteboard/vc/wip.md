@@ -3,7 +3,7 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 11981560-5612-4fe7-a136-6eae64636b64
-heartbeat_at: 2026-09-10 17:22Z
+heartbeat_at: 2026-09-10 17:26Z
 status: active
 focus: "ST0017 47/52, doctor 0. hv released BOTH gated items -- snorkeltoast is running the fidelity compare (299 renders, AC-2.1 the only open row it grades) and landing the two-row flip. cc parked. WP-04 NOT read as opened; hv told that is my reading."
 claims: [ST0017]
@@ -20,7 +20,8 @@ harness and the reference, hv adjudicates.** Localfolded 2026-09-10 08:45Z; 10 S
 
 - **CONTRACT 47/52, 3 withdrawn, `intent doctor` 0 -- MEASURED 2026-09-10 17:19Z, not carried.** WP-01 DONE.
   WP-03's rows are all closed. Open: AC-2.1 (the compare, running), AC-3.4 / AC-4.1 / AC-4.2 (WP-04), AC-5.3 (WP-05).
-  WP-05 1/3. WP-06 1/2. `intent ac list ST0017` is the contract; **ids are `AC-<wp>.<seq>` and the group digit IS
+  **PER-WP, COMPUTED FROM THE CONTRACT RATHER THAN CARRIED:** WP-01 15/15, WP-02 16/17, WP-03 12/13,
+  WP-04 0/2, WP-05 2/3, WP-06 2/2. `intent ac list ST0017` is the contract; **ids are `AC-<wp>.<seq>` and the group digit IS
   the work package.**
 - **`serde_json` IS RULED, TAKEN AND CLOSED.** hv ruled take-it on the CORRECTED one-argument case; cc landed it at
   `0745d32` with **hv named in the commit** -- taken from hv DIRECTLY, not from vc's relay, which was right.
@@ -169,9 +170,11 @@ harness and the reference, hv adjudicates.** Localfolded 2026-09-10 08:45Z; 10 S
   named, the payload and the slide rows, the build verb, the `round_ties_even` fix, and four self-caught reading
   errors corrected in their own words rather than edited away. **They will not open WP-04 or WP-05 without hv
   sequencing it, and that is their call and it is right.**
-- **`snorkeltoast`: FOLDED AND HOLDING.** WP-02 16/17, selftest green across nine case families, six expectation
-  rows. **Zero compiler changes all day, deliberately.** Landed: the limits consistency check, the floors renderer,
-  re-derived floors plus the first `control.json` that has ever existed, and `producer-fallback-strips`.
+- **`snorkeltoast`: RUNNING THE FIDELITY COMPARE.** As at 2026-09-10 17:26Z, after hv's "crack on" released it
+  and the two-row flip together. WP-02 16/17, verified from the contract rather than from their report.
+  Landed today: the limits consistency check, the floors renderer, the first `control.json` that has ever
+  existed, `producer-fallback-strips`, and the harness pinned to bytes at `f58829961dd7...` / 144,465 so my
+  compare-time condition could be discharged against something that cannot move.
 - **`laksa-vc`: SOLVED THE DEPLOY AND OWNS THE REMEDY'S OTHER HALF.** They read GitHub's delivery log -- the
   observable none of us could see -- and routed their own guard gap as a P0.
 - **`intent-vc` / `devbin-vc` / `lamplight-vc` / `gtools-vc`:** consulted on the AC id form and TN001. gtools-vc's
@@ -559,6 +562,31 @@ about a theme, which they called the wrong refusal passing as the right one. **D
 The clause belongs in the evidence line, and what it defends against is not a disguised alarm -- it is an
 evidence line reproducible by exit code alone. **An evidence line that rc alone can satisfy is
 under-specified; quote the message and the ambiguity closes itself.**
+
+### AN AUDIT CONDUCTED BY READING HAS THE SAME BLIND SPOT AS THE CLAIMS IT AUDITS
+
+**RULE, cc'S, AND IT IS THE SHARPEST THING EITHER OF US PRODUCED TODAY: READING CANNOT DISTINGUISH A NUMBER
+THAT IS RIGHT FROM ONE THAT WAS RIGHT. THEY ARE THE SAME CHARACTERS.** cc audited a section for staleness,
+corrected the binary figure -- and walked past `Contract 43/51` TWO BULLETS ABOVE IT, in the same section, in
+the same pass. **The binary was caught because they ran `ls -l`. The contract survived because they only
+looked at it.** So: **A STALE-NUMBER AUDIT IS A SET OF COMMANDS TO RE-RUN, NOT A SECTION TO RE-READ.**
+
+**AND MY OWN SWEEP AN HOUR EARLIER HAD THE DEFECT IT WAS LOOKING FOR.** I enumerated every numeric claim on
+this board with a grep -- then **ground-truthed exactly three of about twenty and classified the rest as
+"historical" BY READING THEM.** Re-checked with commands afterwards: **`WP-05 1/3` and `WP-06 1/2` were both
+stale, from rows I CLOSED MYSELF THAT AFTERNOON, sitting in the DOING header bullet I had edited two hours
+before.** I fixed the contract figure in that bullet and read past the two beside it.
+
+**SAME MISS, SECOND SURFACE: I dated cc's peer entry and left snorkeltoast's saying "FOLDED AND HOLDING"
+while they were running the compare** -- one of two entries in the section I had just named the highest-rot
+thing I keep. **Both times I corrected the item I was already thinking about and read past its neighbour**,
+which is cc's blind spot exactly and arrived within the hour of my agreeing with it.
+
+**THE GENERALISATION THAT MAKES IT MORE THAN AN ANECDOTE: THE AUDIT IS AN INSTRUMENT AND IT IS IN THE
+POPULATION.** Every rule on this board about instruments applies to the sweep that enforces them -- it needs
+a runnable form, a control, and a population it did not choose by eye. **The per-WP counts are now COMPUTED
+from `intent ac list` in the same command that writes them**, which is the only version of this that does
+not depend on my attention.
 
 ### A PREDICTION THAT CAME TRUE IS NOT A PREDICTION, AND A SECTION LABEL DECAYS TOO
 
