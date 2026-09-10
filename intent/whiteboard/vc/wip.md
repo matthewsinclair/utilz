@@ -3,7 +3,7 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 11981560-5612-4fe7-a136-6eae64636b64
-heartbeat_at: 2026-09-10 17:11Z
+heartbeat_at: 2026-09-10 17:14Z
 status: active
 focus: "ST0017 47/52, doctor 0. hv released BOTH gated items -- snorkeltoast is running the fidelity compare (299 renders, AC-2.1 the only open row it grades) and landing the two-row flip. cc parked. WP-04 NOT read as opened; hv told that is my reading."
 claims: [ST0017]
@@ -87,32 +87,40 @@ harness and the reference, hv adjudicates.** Localfolded 2026-09-10 08:45Z; 10 S
 
 ## Holds
 
-- **WP-04 CONDITION, WITH A PATTERN-PINNED COMMAND -- AND MY FIRST VERSION HAD THE FLAW I HAD JUST REJECTED IN
-  SOMEBODY ELSE'S.** The fixture recipe's safety rests on the port having no write path into a reel directory
-  outside `_out`. **Censused: the port's ENTIRE production write set is THREE calls**, all in `build.rs` --
-  `create_dir_all(&out_dir)`, `write(&out, &html)`, and prune's `remove_file(&p)` -- with
-  `grep -n 'join("_out")' build.rs` returning ONE production hit, the only reel-derived write target in the
-  crate. `pdftoppm` and `".raster"` appear nowhere in either crate. **TRIGGER: a fourth site, or any site whose
-  target is not derived from `_out`.** WP-04's init trips it -- 2560px masters and a `pdftoppm` shell-out.
+- **WP-04 CONDITION -- AN ENUMERATION, NOT A PATTERN, WHICH IS cc'S SETTLING MOVE AND IT REPLACES MINE.** The
+  fixture recipe's safety rests on the port having no write path into a reel directory outside `_out`.
+  **BASELINE, VERIFIED: production code calls SEVEN `fs::` functions and exactly THREE of them write** --
+  `create_dir_all` 1, `write` 1, `remove_file` 1, all in `build.rs`; and `read_to_string` 4, `metadata` 3,
+  `read_dir` 2, `read` 2, which do not. `grep -n 'join("_out")' build.rs` returns ONE production hit, the only
+  reel-derived write target. `pdftoppm` and `".raster"` appear nowhere in either crate. **TRIGGER: an eighth
+  function, a fourth write site, or any write whose target is not derived from `_out`.** WP-04's init trips it.
 
-      PAT='fs::(write|create_dir|create_dir_all|remove_file|remove_dir_all|copy|rename)|File::create|OpenOptions'
       for f in <port>/src/*.rs; do t=$(grep -n '#\[cfg(test)\]' "$f" | head -1 | cut -d: -f1); t=${t:-999999}
-        awk -v t="$t" 'NR<t' "$f" | grep -En "$PAT" | sed "s|^|$f:|"; done      # baseline: exactly 3
+        awk -v t="$t" 'NR<t' "$f" | grep -oE 'fs::[a-z_]+'; done | sort | uniq -c | sort -rn
 
-  **THE PATTERN IS PART OF THE MEASUREMENT AND I HAD LEFT IT LOOSE.** cc counted the same thing with
-  `...|remove|...` and got a FLAT 52 against my 36 -- and, filtered, **8 against my 3.** The extra five are
-  PROSE: `format!("cannot remove {}: {e}")` in an error message and the word "remove" in two doc comments.
-  **That is exactly the over-sensitivity I rejected in snorkeltoast's `raster` grep two hours earlier, and I
-  had built it into my own trigger by quoting a count without pinning the rule that produced it.** The
-  tightened pattern requires `fs::` or `File::` call syntax and is proved BOTH WAYS: 0 against a line of prose
-  containing "cannot remove the file", 1 against `std::fs::remove_file(&p);`.
-  **A COUNT WITHOUT ITS MATCH RULE IS NOT A MEASUREMENT** -- two honest people counting the same crate got 36
-  and 52 flat, 3 and 8 filtered, and only the rule tells you which is the fact.
+  **WHY AN ENUMERATION AND NOT THE TIGHTENED REGEX I HAD: WHEN TWO MATCH RULES DISAGREE, THE ANSWER IS USUALLY
+  NOT A THIRD MATCH RULE.** cc and I counted one crate and produced FOUR honest numbers -- 43 and 36 flat, 3 and
+  8 filtered. I answered with a better pattern; cc stopped tuning and listed what the code actually calls.
+  **A pattern answers "does this line match a rule I chose"; an enumeration answers "what does the code call",
+  and someone who does not share my rule can audit the second.** My tightened pattern and cc's original produce
+  identical numbers -- **and only because this crate calls neither `fs::copy` nor `fs::rename`, which I checked
+  rather than banked.** Mine catches them, theirs would miss them silently, and on this crate that difference
+  is invisible.
 
-- **AND THE LOCATORS ARE TOKENS NOW BECAUSE MINE WAS ALREADY WRONG.** I filed this condition citing
-  `build.rs:205` for `o.dir.join("_out")`; **it is `:201`** -- cc caught it, and `build.rs` had gained a helper
-  and a test module the same day. **Filed the morning we agreed to stop citing line numbers into files that
-  move**, which is how durable the habit is without a rule that refuses it.
+- **AND THE FOUR NUMBERS CAME FROM ONE LOST PAIR OF PARENTHESES: `fs::(write|create_dir|remove)` GROUPS THE
+  PREFIX AND `fs::write|create_dir|remove` BINDS IT TO THE FIRST ALTERNATIVE ONLY**, so a bare `remove` matches
+  `format!("cannot remove {}: {e}")`. Grouped: flat 43, filtered 3. Ungrouped: flat 52, filtered 8. **The
+  pattern that ARRIVED in cc's message had no parentheses and I ran what arrived and quoted it back unchanged;
+  cc says their shell had them.** I cannot see their shell and **will not assign the loss to either end -- that
+  would be the wrong-cause error a third time, about a peer, in my own favour.** What is checkable: **the only
+  channel between the two shells is a prose message, and the structure did not survive it.**
+  **RULE: A REGEX IS CODE, AND QUOTING CODE IN PROSE LOSES STRUCTURE SILENTLY.** Parentheses, escaping and
+  whitespace all go without a diagnostic -- the same family as the whiteboard header guard's escape problem.
+  **Send the command, or send the ANSWER; a pattern re-typed into a sentence is a different pattern.**
+- **AND I FILED THE WRONG CAUSE FOR IT BEFORE ASKING -- MY OWN RULE, TWICE IN ONE DAY.** I wrote up "cc quoted
+  an unpinned pattern". The better and more general finding is theirs: **a pattern does not survive being
+  re-typed into a message.** cc declined to score it and said they would rather I kept going than got careful,
+  which is the right instinct and does not make the instance less mine.
 - **TELL hv WHEN TO FORCE A LAKSA RESYNC -- hv'S STANDING INSTRUCTION, 2026-09-10.** CONDITION: anything published
   into `~/Devel/prj/Sites/snorkeltoast` that must reach production, in practice snorkeltoast promoting a build into
   the `-001` slot. **The webhook is still 401: a push publishes nothing AND SAYS NOTHING**, and Laksa's own health
