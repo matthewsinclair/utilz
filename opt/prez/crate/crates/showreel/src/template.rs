@@ -12,6 +12,27 @@
 //! artifact and taken the H3 strings count off zero. Nothing in the CONTRACT
 //! gates on it -- hv withdrew that row -- and the estate's own check does.
 //!
+//! **AND IT BUYS SOMETHING NOBODY WAS AIMING AT, WHICH IS WHY IT IS WRITTEN DOWN
+//! RATHER THAN LEFT AS A TIDY REMOVAL.** `add` is `(k, v) => { if (v) ... }` --
+//! byte-identical in both shells -- so it SKIPS a falsy value. On the reference,
+//! blanking `producer` yields `"Snorkeltoast"`, which is truthy, so the Producer
+//! row survives and a session crawl **can never be fully stripped**. Its own
+//! harness records that as a defect it cannot fix: `UNSTRIPPABLE` names this
+//! exact string, and the comment above it says *"the fix is in the player and it
+//! is not the harness's to make."* **Dropping the fallback makes it, from the
+//! other side, while solving something else.**
+//!
+//! **THE INSTRUMENT CANNOT CURRENTLY SEE THAT, AND THE GAP IS THE INTERESTING
+//! PART.** `strip_reason` is `UNSTRIPPABLE.get((slide.kind, slide.crawl))` -- a
+//! static table keyed on nothing the artifact carries -- and `verdict_for`
+//! returns `"unprovable"` on that reason as its FIRST branch, before the measured
+//! presence number is read. So this shell's crawl is genuinely strippable and
+//! still grades ungradeable. **A hardcoded claim about the player, short-
+//! circuiting a measurement the harness already makes**: `strip_content` builds
+//! the stripped payload and the presence render measures it, which is the ground
+//! truth the table pre-empts. Reported to vc and snorkeltoast; the table is
+//! theirs.
+//!
 //! **THE OTHER IS AN ADDITION, AND IT IS THE ONE A CARELESS PULL LOSES.**
 //! `<meta name="showreel-producer" content="__PRODUCER__">` is the build's stamp
 //! of its own identity, which `showreel-harness` reads to derive what produced an
