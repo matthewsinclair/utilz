@@ -3,7 +3,7 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 11981560-5612-4fe7-a136-6eae64636b64
-heartbeat_at: 2026-09-10 09:50Z
+heartbeat_at: 2026-09-10 09:54Z
 status: active
 focus: "ST0017 47/52, doctor 0. WP-03 is DONE -- everything closable in it is closed. AC-5.1 and AC-6.1 driven by me at f2046f9; six artifacts across two sessions carry one sha. Remaining: AC-3.4/4.1/4.2 (WP-04), AC-5.3 (WP-05), AC-2.1 (the compare, gated on hv)."
 claims: [ST0017]
@@ -74,8 +74,16 @@ harness and the reference, hv adjudicates.** Localfolded 2026-09-10 08:45Z; 10 S
   one, because a cause only feels like a guess when somebody else measures it.** The mechanical form:
   **if I am about to write WHY something happened, the next command is the one that measures it, or the sentence
   does not go in.** Both peers now hold me to this and I have asked them to.
-- **Two harness entries flip `designed` to `observed`** when cc's build path calls the theme loader. Nothing to do
-  until then; noted so their silence is not later read as coverage.
+- **DONE 2026-09-10 09:54Z: `favicon-missing` AND `font-not-woff2` ARE OBSERVED, AND MY CONDITION FOR THEM WAS THE WRONG
+  ONE.** I had written that they flip _"when cc's build path calls the theme loader"_. **I read snorkeltoast's
+  `unobserved` field -- which answers "why could this not be observed" -- as if it answered "what would
+  SUFFICE to observe it".** Adjacent field, plausible value, wrong question. The loader running was never the
+  condition; a fixture that trips each refusal was, **and the refusals turned out to have been implemented for
+  some time** (`theme.rs:262-271` and `:189-191` via `read_asset` at `:172-179`). Driven with a PASSING
+  CONTROL -- real popupart rc=0 "is valid"; a declared-but-absent favicon rc=2 refused by name; a `.ttf` in
+  `fonts[]` rc=2 refused by name with the fontTools command in the remedy. **Without the control a refusal for
+  an unrelated reason is indistinguishable from the one under test.** Reported to snorkeltoast; their entries,
+  their edit. Nothing written into their tree.
 
 ## Holds
 
