@@ -3,7 +3,7 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 11981560-5612-4fe7-a136-6eae64636b64
-heartbeat_at: 2026-09-10 09:08Z
+heartbeat_at: 2026-09-10 09:11Z
 status: active
 focus: "ST0017 44/52, WP-03 10/12, doctor 0. THE MANIFEST GATE IS IN (9501b14, AT03/AC-3.14) and covers all three budgets, not the one AC-3.9 names. Next: cc's slide rows then the build verb; the canon holds both our writes and cc has the call on who commits it."
 claims: [ST0017]
@@ -354,6 +354,20 @@ answered a question ADJACENT to the one asked, and adjacency reads as an answer.
   number invisible, which is the lesson written in a comment two lines above the code we both misread. **RE-READ
   THE LOAD-BEARING LINE IN THE SAME CALL THAT WRITES THE CLAIM**, so no window exists. That saved AC-2.14 by
   accident, and accident is not a control.
+- **THE HARNESS WE GRADE WITH IS IN THE POPULATION, NOT OUTSIDE IT -- cc'S, AND THE SHARPEST OF THE DAY.** Their
+  injection applier proved a mutation had landed with `assert after.count(old) == 0`, which is invalid whenever
+  the replacement CONTAINS the anchor -- every append-style injection. **The check fires on the applier's own
+  success**, so injection 1 raised inside the `try`, the `finally` reverted, and nothing landed. Corrected to:
+  assert the file CHANGED and the new text is present, and claim "anchor gone" only when the anchor is not part
+  of the replacement. **My eight manifest probes pass the same test only by luck of shape** -- a `sed` that
+  matched nothing yields a GREEN, not a false RED, because a clean file produces no failing assertion to misread.
+- **`state.is` IS NOT THE VERDICT, AND IT SITS EXACTLY WHERE THE VERDICT WOULD BE.** cc read AC-3.14's
+  `"state":{"is":"computed"}` out of the raw canon and told me nothing claimed coverage I had not graded. The row
+  was graded: `intent ac list` computes `satisfied: yes` from AT03 green, and a test-backed row CANNOT hold
+  evidence -- the tool refuses `ac satisfy --evidence` on one. **`computed` answers "where does the verdict come
+  from", not "what is it"**, in the field a reader is looking at for the answer. **THE VERDICT IS WHAT THE CLI
+  COMPUTES; THE CANON FIELD IS WHERE IT COMPUTES IT FROM.** Reading raw canon for a status is reading the
+  provenance and calling it the state.
 - **cc'S TWO, SAME FAMILY:** an assertion SOURCING the constant it was testing (`embed={}` from `normalise::TARGET`
   -- both sides moved together and it stayed green, inside the test written to prevent exactly that); and a
   NEGATIVE assertion, `!e.message.contains("missing")`, which **passes on almost any failure**. Their rule is the
