@@ -3,7 +3,7 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 11981560-5612-4fe7-a136-6eae64636b64
-heartbeat_at: 2026-09-10 10:00Z
+heartbeat_at: 2026-09-10 10:02Z
 status: active
 focus: "ST0017 47/52, doctor 0. WP-03 is DONE -- everything closable in it is closed. AC-5.1 and AC-6.1 driven by me at f2046f9; six artifacts across two sessions carry one sha. Remaining: AC-3.4/4.1/4.2 (WP-04), AC-5.3 (WP-05), AC-2.1 (the compare, gated on hv)."
 claims: [ST0017]
@@ -439,6 +439,32 @@ seventh instance's shape, found while building the instrument that closes the si
 budget" is denominated in whatever the budget counts. If the gate counts something else and they
 usually agree, find the case where they do not before shipping it -- there was one here and it took
 one `sed` to produce.
+
+### A PATH IS AN IDENTIFIER; THE FIXTURE IS THE THING -- AND A RECIPE NOBODY RAN IS AN UNOBSERVED FIELD
+
+**RULE: EVIDENCE RECORDS THE RUN CONDITION AS FACT AND HANGS REPRODUCTION OFF A RECIPE, NEVER OFF A PATH.**
+My fixture root was `/private/tmp/.../<session-id>/scratchpad/vc-themes/themes`. **That session id outlives
+nothing** -- when the scratch is cleaned the path resolves to nothing and the evidence line becomes
+unreproducible SILENTLY, exactly the way a stale `unobserved` goes stale. snorkeltoast's framing, and it is
+the third instance of one shape: **the path is an identifier, the fixture is the thing** -- same failure as
+`player.html:613` decaying to `:628` and same failure as `control.json`'s `artifact_sha256` naming the
+artifact that was GRADED while a reader takes it for the one SERVED.
+
+**AND THE REMEDY GOT THE REMEDY'S OWN TREATMENT: I RAN THE RECIPE RATHER THAN READING IT.** Fresh
+`mktemp -d`, nothing reused, all three outcomes identical -- goodcopy rc=0 `is valid`, nofavicon rc=2 on the
+favicon, ttffont rc=2 on the Bangers `.ttf`. **A recipe nobody has run is the same class of claim as an
+unobserved field**, which is snorkeltoast's own rule turned on snorkeltoast's own fix.
+
+**RUNNING IT IS WHAT FOUND THE GAP: THE RECIPE STATED THE THEMES AND NOT THE REELS.** Three fixture themes
+with nothing to check them against produce nothing. The missing fourth step is the one carrying the assets
+-- a reel per theme, symlinking every entry of `45h/showreel` except `showreel.yaml` and `_out`, with the
+config rewritten one line. **A recipe that is 75% complete reads exactly like a recipe.**
+
+**COROLLARY ON DURABILITY, MEASURED RATHER THAN ASSUMED: the recipe's INPUTS are already durable**
+(`themes/popupart` and `45h/showreel` both live in snorkeltoast's tree). Only my COPY was ephemeral --
+**and the recipe is precisely what makes the copy not worth keeping.** So no durable fixture home is needed
+and none is being asked of hv; noted to them as an FYI rather than a third decision, because two decisions
+wanting one word must not be diluted by a nice-to-have.
 
 ### A CONTROL THAT SHARES THE REAL PATH IS NOT A CONTROL OVER THE FIXTURE MACHINERY
 

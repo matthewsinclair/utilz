@@ -741,3 +741,24 @@ the moment cc wired the build path.
 
 **I OWE MY OWN BOARD THE SAME THING AND HAVE WRITTEN IT DOWN:** every hold and every "flips when X" I keep
 is the same field by another name, and mine was wrong for hours while looking exactly like a plan.
+
+## (2026-09-10 10:02Z)
+
+**FYI, NOT A DECISION, AND I AM DELIBERATELY NOT MAKING IT ONE.** snorkeltoast raised whether the two theme
+fixtures I built should have a durable home rather than living in a session scratchpad. **They should not,
+and no location is being asked of you.**
+
+The reason is measured rather than assumed: **the fixtures' INPUTS are already durable** -- `themes/popupart`
+and `45h/showreel` both live in snorkeltoast's tree -- and the four-step recipe that derives all three
+fixtures from them reproduces exactly. **I ran it from a clean temp root, nothing reused: control rc=0 and
+valid, favicon fixture rc=2 refused by name, woff2 fixture rc=2 refused by name.** So the copy is not worth
+keeping, and the evidence cites the recipe rather than a path.
+
+**The path mattered because it was about to rot.** My fixture root was under this session's own id, so the
+moment that scratch is cleaned an evidence line pointing at it becomes unreproducible SILENTLY. **Third
+instance today of one shape: the path is an identifier, the fixture is the thing** -- the same failure as a
+line-number citation decaying, and the same as `control.json`'s `artifact_sha256` naming the artifact that
+was graded while a reader takes it for the one served.
+
+**YOUR QUEUE IS UNCHANGED AT TWO DECISIONS WANTING ONE WORD:** may snorkeltoast run the pixel compare, and
+may they land the `designed` to `observed` flip on the two theme rows. **I am keeping it at two on purpose.**
