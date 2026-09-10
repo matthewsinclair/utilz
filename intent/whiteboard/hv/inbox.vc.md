@@ -712,3 +712,32 @@ nothing in flight.
 **SO THE ONE THING THAT MOVES ANYTHING IS STILL YOUR COMPARE RULING.** Recommendation unchanged: let
 snorkeltoast run it. The structural pass has already paid for itself once, and AC-2.1 is the only row it
 grades that is not already closed.
+
+## (2026-09-10 09:56Z)
+
+**A SECOND DECISION FOR THE SAME MOMENT, SO snorkeltoast IS NOT WAITING ON TWO SEPARATE WORDS FROM YOU.**
+They are holding an edit under the same instruction as the compare, and it is not a typo fix.
+
+**WHAT IT IS:** two rows in their fidelity table, `favicon-missing` and `font-not-woff2`, flip from
+`designed` to `observed`. **I drove both refusals today with a passing control** -- unmodified popupart
+exits 0 and validates; a theme declaring a favicon that is not on disk exits 2 refused by name; a `.ttf` in
+`fonts[]` exits 2 refused by name with the conversion command in the remedy. **Six fields across the two
+rows were false and snorkeltoast verified every one at source before agreeing.**
+
+**WHY THEY WILL NOT JUST DO IT:** flipping a row across `designed`/`observed` is the exact axis their
+shape-check injections test, so it is a code change with selftest implications rather than a text
+correction. **You told them to hold and start nothing early, and they are treating that as covering this.**
+That is the right read and I have not tried to talk them out of it.
+
+**MY RECOMMENDATION: RULE ON BOTH AT ONCE** -- the compare, and this. Same session, same word.
+
+**AND THE FINDING UNDERNEATH IT IS BETTER THAN THE TWO ROWS.** Both rows passed their shape checker
+**immaculately the whole time they were false** -- carrying the right fields in the right state, asserting a
+world that had stopped being true. **A shape check measures the ROW; only a probe measures the WORLD.**
+snorkeltoast's fix already existed in their own tree ungeneralised: one row reads the reference player and
+probes it, so it RETIRES ITSELF when the thing it describes goes away. **Every "not yet observed because X"
+should carry a runnable X.** "No call site in main.rs" is a grep, and had it been one it would have gone red
+the moment cc wired the build path.
+
+**I OWE MY OWN BOARD THE SAME THING AND HAVE WRITTEN IT DOWN:** every hold and every "flips when X" I keep
+is the same field by another name, and mine was wrong for hours while looking exactly like a plan.

@@ -3,7 +3,7 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 11981560-5612-4fe7-a136-6eae64636b64
-heartbeat_at: 2026-09-10 09:54Z
+heartbeat_at: 2026-09-10 09:56Z
 status: active
 focus: "ST0017 47/52, doctor 0. WP-03 is DONE -- everything closable in it is closed. AC-5.1 and AC-6.1 driven by me at f2046f9; six artifacts across two sessions carry one sha. Remaining: AC-3.4/4.1/4.2 (WP-04), AC-5.3 (WP-05), AC-2.1 (the compare, gated on hv)."
 claims: [ST0017]
@@ -439,6 +439,32 @@ seventh instance's shape, found while building the instrument that closes the si
 budget" is denominated in whatever the budget counts. If the gate counts something else and they
 usually agree, find the case where they do not before shipping it -- there was one here and it took
 one `sed` to produce.
+
+### A ROW CAN BE WELL-FORMED AND STALE, AND THE SHAPE CHECK CANNOT TELL -- snorkeltoast's, EARNED ON THEIR OWN TABLE
+
+**RULE: A SHAPE CHECK MEASURES THE ROW; ONLY A PROBE MEASURES THE WORLD.** `favicon-missing` and
+`font-not-woff2` passed `check_table_shape` immaculately the entire time they were false -- each carrying
+`unobserved`, each carrying no `evidence`, exactly as a `designed` row must -- while asserting a state of
+the world that had stopped being true. **Six fields false across two rows, all six written by the author of
+the checker.**
+
+**THE FIX, WHICH ALREADY EXISTED IN THEIR TREE UNGENERALISED: EVERY `unobserved` MUST CARRY A PROBE THAT
+FALSIFIES IT.** `_producer_fallback_strips` reads `compiler.PLAYER` and probes it, so that row RETIRES
+ITSELF when the fallback goes -- **the claim cannot outlive its truth.** `"no call site in main.rs"` is a
+grep. Had the row carried `grep 'theme::for_reel' build.rs`, it would have gone red the moment cc wired
+`open()` and no peer would have had to catch it by hand.
+
+**AND IT CLOSES MY HALF OF THE SAME FIELD, WHICH IS WHY IT IS ONE FIX AND NOT TWO.** I misread `unobserved`
+as a SUFFICIENT condition because **it is prose with no predicate attached -- there was nothing to run, so
+there was nothing to disagree with me.** A field carrying an executable falsifier cannot be mistaken for one
+carrying a sufficient condition, because you can run it and watch what it answers. **One fix, two failure
+modes, on opposite sides of the same field: the author's claim going stale, and the reader's inference going
+wide.**
+
+**COROLLARY I OWE MY OWN BOARD: A CONDITION I WRITE IN PROSE IS THE SAME DEFECT.** Every hold and every
+"flips when X" on this board is an `unobserved` field by another name. **If the condition cannot be written
+as something runnable, it is a guess about the future dressed as a trigger** -- and mine was wrong for
+hours while looking exactly like a plan.
 
 ### ASK THE ARTIFACT: a rule fixed in advance is wrong the moment two artifacts differ
 
