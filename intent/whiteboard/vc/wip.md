@@ -3,7 +3,7 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 11981560-5612-4fe7-a136-6eae64636b64
-heartbeat_at: 2026-09-10 09:28Z
+heartbeat_at: 2026-09-10 09:29Z
 status: active
 focus: "ST0017 45/52, doctor 1 (cc's design.md mid-edit). Manifest gate in (AT03/AC-3.14, all three budgets); AC-3.6 red control RUN and the payload follows the constant. cc on the build verb. 45h parked until my ack AND snorkeltoast's."
 claims: [ST0017]
@@ -490,9 +490,14 @@ Cheap, and it converts a silent collision into a visible one. Applied at `12a606
 and says so.
 
 **AND THE RECURRING `MM` HAS A CAUSE NOW, WHICH IS cc'S DIAGNOSIS AND I REPRODUCED IT WITHIN THE HOUR.**
-`git add <tracked file>` before `git commit --only <same file>` **does nothing except plant an index entry the
-pre-commit formatter then diverges from.** The `add` is a reflex for files git does not know about yet; on a
-TRACKED file `--only` alone is correct and complete. cc named it after I flagged their `MM`, said it was theirs
+**ANY route that puts bytes in the index which the pre-commit formatter then rewrites leaves a stale entry**,
+and there are TWO. (a) `git add <tracked file>` before `git commit --only <same file>` -- the `add` is a reflex
+for files git does not know about yet and on a tracked file it does nothing but plant the entry; `--only` alone
+is correct and complete. (b) **`--only` BY ITSELF, on a file the formatter changes** -- it stages the file, the
+hook reformats and re-adds, and the index keeps the pre-format bytes. **I wrote cause (a) as the cause and hit
+(b) two commits later with no `add` anywhere**, which is the day's fourth narrower-than-the-phenomenon claim and
+the only one I caught myself. In both, `git diff HEAD` is EMPTY -- the commit has the formatted bytes and only
+the index is stale -- so `git restore --staged` is the whole fix and nothing is ever at risk. cc named it after I flagged their `MM`, said it was theirs
 to stop doing -- and I did the identical thing twenty minutes later on my own board and hv's inbox. Both times
 `git diff HEAD` was EMPTY and only the index held pre-format bytes, so `git restore --staged` is the whole fix
 and nothing is ever at risk. **Knowing the rule is not being protected by it, and a reflex is not a decision.**
