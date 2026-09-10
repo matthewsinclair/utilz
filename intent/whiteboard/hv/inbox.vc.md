@@ -402,3 +402,35 @@ No decision needed on this entry. It is a rider on item 2 so the cost is on the 
 **My recommendation is unchanged: take it.** But you should have the weaker version, because a recommendation that survives losing half its support is worth more than one that was never audited -- and because I vouched for the half that failed.
 
 **Everything else in the 19:53Z entry stands and is re-verified:** net 2 packages, 79 to 81, both dedup keys agreeing. cc has stayed correctly blocked throughout, including against "rock on as needed", and has spent the wait on JSON-free work -- **AC-3.2 is now SATISFIED (43/51) and the producer stamp's mechanism is built.** WP-03 is 10 of 12. The emitter is the only thing left that needs you.
+
+## (2026-09-10 06:47Z) CONSOLIDATED QUEUE AT THE PAUSE. SIX DECISIONS, FOUR CONSTRAINTS, AND ONE THING NOBODY HAD JOINED UP.
+
+**BOTH PEERS HAVE REPORTED AND NEITHER IS BLOCKED ON vc.** cc calls it a PAUSE, not a wrap: 43/51, 8 open, WP-03 at 10/12, 262 tests, clippy 0, doctor 0, both binaries byte-identical to yesterday morning. They pushed to `local` only -- **`local/main` is level with HEAD, `upstream` is still `60153d8` at 214 behind, and the freeze is intact.** snorkeltoast is folding: HEAD `1ceaab4`, WP-02 16/17, selftest green.
+
+### THE THING NOBODY HAD JOINED UP, AND IT CHANGES THE ORDER
+
+**FIXING THE QR SOCIAL _IS_ THE EVENT REBUILD _IS_ THE FLOORS RE-DERIVATION.** They have been three items on three boards all day. snorkeltoast's fix for the missing social is "one `showreel build` and one `cp`" -- and a `showreel build` produces a NEW reference artifact, which retires FLOORS.md by its own header (_"it stops being true the moment the artifact changes"_), which triggers the 14-minute Chrome control pass, which is snorkeltoast's standing re-derive item waiting on **you**.
+
+**AND cc BEING BLOCKED IS WHAT MAKES NOW THE FREE WINDOW.** The floors are the REFERENCE's, verified at `showreel-harness:1943` -- so the control pass hangs off YOUR rebuild and not off cc's build. Run while cc is held on `serde_json`, it costs nothing off the critical path. Run after cc's build lands, it stands between that build and the first compare, and the first compare against a Rust artifact happens exactly once.
+
+### DECISIONS YOU OWE
+
+1. **THE QR SOCIAL -- DECAYED, NINE DAYS.** All four existing artifacts lack the "Watch this again" slide: 22 slides, 3 socials, measured. The live config carries 4 socials and plans 23. Event is 19 September; it read "ten days" yesterday and is nine today. Rests on artifact CONTENTS, so the deployment question is off the path.
+2. **`serde_json` -- THE ONE THAT UNBLOCKS A PERSON.** Blocks WP-03's remainder, the build verb and the first 45h build. Net 2 packages, 79 to 81, both dedup keys agreeing. **The case is CORRECTED and now rests on ONE argument, not two** -- cc's design.md 4.6 refuted the field-order half, and vc had vouched for that half. What survives: escaping arbitrary YAML text is open-ended where a calendar is closed and pinnable. Recommendation unchanged: take it.
+3. **THE PUBLIC-REPO FIXTURES.** Two pinned fixtures carry a named individual and a customer brand into a public repo. Nothing published -- `upstream` frozen -- so it is decidable before rather than after. Recommendation: (a) if the showreel is public promotional material or you have the artist's agreement, else (b) de-identify the reel config and keep all 220 lines of structure.
+4. **`max_ease` 3000 AGAINST `min_dwell` 2500 IN THE PYTHON `LIMITS`.** Latent in the published reel -- worst authored ease is 900. **Its rider travels with it and is not a third item:** capping Python turns WP-02's selftest RED by design, one small follow-up commit of snorkeltoast's. A consequence, not an argument against.
+5. **THE QR REVISION THREAD.** 45h's Showreel QR and its config BOTH name `-001` while artifacts exist at `-004` and `-007`. **vc is not asserting `-001` is stale** -- you settle it in one look. If it is, nothing in either implementation would say so: the detector compares the QR against the CONFIG, never the config against the world.
+6. **SHOULD THE NEW SIDE BE CONTROLLED TOO? -- A DESIGN QUESTION vc IS KEEPING OPEN RATHER THAN CLOSING BY DEFAULT.** The harness runs ONE control, on the reference; grading asks whether ref-to-new exceeds what ref does against itself. If the NEW build is noisier than the reference, a real regression can sit inside the reference's floors and be invisible. Cost of changing it: a second 14-minute Chrome pass per build. **snorkeltoast has explicitly NOT taken a position** -- they reported what the harness does. No recommendation from vc either; it wants your call on whether the cost is worth the coverage.
+
+### CONSTRAINTS AND FYIs -- NO RULING WANTED
+
+- **THE SAME-CONFIG CONSTRAINT, AND YOU NEED IT BEFORE YOU CHOOSE WHEN TO REBUILD.** If you rebuild for the event and cc builds from a different config, `compare` refuses on STRUCTURE before pixels regardless of whose floors are held -- 22 against 23 fails F2. Your rebuild and cc's build must come from the SAME config. Not a ruling; a fact that gets discovered at 45h if nobody says it first.
+- **snorkeltoast WANTS TO BE TOLD AS THE REBUILD HAPPENS**, not afterwards, so the control runs inside that window.
+- **`SHOWREEL_THEME_PATH` MUST BE SET BEFORE THE FIRST BUILD.** 45h names `theme: popupart`, never a built-in here. H3 working, not a regression. A ruling only if you want the variable set somewhere permanent.
+- **AN INTENT DEFECT, NOT A UTILZ ONE: `intent ac edit --text ""` DESTROYS A CRITERION SILENTLY.** vc hit it -- a heredoc raised, the scratch file was never written, `cat` failed, `$(cat file)` expanded empty, and the edit was accepted. AC-2.1's 16,839 characters went to nothing at `c628c39`, recovered at `5d4d39e` and verified against the last good commit: ids match, no state differs, nothing else changed, and no satisfaction was lost. **vc's own failure was reading a diff STAT instead of the diff**, hours after telling cc to read the diff. A length guard is now in vc's path, which is discipline where a gate belongs.
+- **AC-3.9's RIDER STANDS:** whichever way you rule on `serde_json`, that row must be amended in the SAME commit or it becomes false silently. Nothing enforces the dependency budget -- no test reads `Cargo.toml`, no gate names a crate.
+- **Issue 0016** remains yours as a WP-05 rider. No action.
+
+### ONE SEQUENCING CALL vc MADE RATHER THAN ASKING
+
+**AC-5.3 IS GENUINELY JSON-FREE AND vc IS HOLDING IT ANYWAY.** cc offered it: a `utilz doctor` row reporting `pdftoppm` as an optional line, touching no payload and no build verb. But it is not startable -- there is no showreel manifest, no `bin/` symlink, and `common.sh` does not mention showreel -- so it needs **WP-05's dispatch shape decided first**. Opening WP-05 while WP-03 sits at 10/12, to avoid an idle hour, is inventing adjacent work: the exact thing cc correctly refused all day. **Held. Say so if you disagree.**
