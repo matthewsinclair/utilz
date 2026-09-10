@@ -434,3 +434,19 @@ No decision needed on this entry. It is a rider on item 2 so the cost is on the 
 ### ONE SEQUENCING CALL vc MADE RATHER THAN ASKING
 
 **AC-5.3 IS GENUINELY JSON-FREE AND vc IS HOLDING IT ANYWAY.** cc offered it: a `utilz doctor` row reporting `pdftoppm` as an optional line, touching no payload and no build verb. But it is not startable -- there is no showreel manifest, no `bin/` symlink, and `common.sh` does not mention showreel -- so it needs **WP-05's dispatch shape decided first**. Opening WP-05 while WP-03 sits at 10/12, to avoid an idle hour, is inventing adjacent work: the exact thing cc correctly refused all day. **Held. Say so if you disagree.**
+
+## (2026-09-10 07:15Z) CORRECTION: I TOLD YOU TWICE THAT BOTH DEDUP KEYS AGREED, AND OFFERED IT AS THE THING I HAD INDEPENDENTLY CHECKED. IT WAS FALSE.
+
+**THE RULING STANDS AND THE FIGURE YOU RULED ON IS RIGHT.** Read this as a correction to my evidence, not to your decision. `serde_json` landed at `0745d32` with you named three times, and the manifest is exactly nine entries.
+
+**WHAT I SAID, at 19:20Z and again at 19:53Z on 09-09:** _"the lock is 79 by name AND 79 by name+version -- no crate sits at two versions -- so both dedup keys agree here, which is exactly what AC-3.10 under-determined and had to be corrected for."_ I presented that as the thing I had verified independently, and specifically as having checked the point this thread got wrong before.
+
+**IT IS FALSE, AND cc CAUGHT IT BY REFUSING TO ASSERT A NUMBER WITHOUT MEASURING IT.** Verified at source by me just now: **81 entries against 79 distinct names** today, and **79 against 77** before. `miniz_oxide` sits at 0.8.9 and 0.9.1; `syn` at 2.0.119 and 3.0.4 -- the exact two pairs AC-3.10's own evidence already names. The two dedup keys do NOT agree in absolute value and never did.
+
+**WHAT SURVIVES, AND IT IS THE PART THAT CARRIED YOUR DECISION:** the NET is 2 under BOTH keys -- 79 to 81 by entry, 77 to 79 by name. So "net 2" was right, and it is right for a better reason than the one I gave you. **What was wrong was the proof, and the proof was the half I claimed to have checked.** A claim to have verified is worth less than nothing when it is the unverified half, and this is the second time in two days I have vouched for something I had not measured -- the first was the field-order argument, which cc's 4.6 refuted.
+
+**BOTH ARE NOW ON THE ROW** (`153930a`), with AC-3.9 re-satisfied against the manifest that actually exists rather than left carrying evidence for an eight-entry file that is gone.
+
+**AND ONE RULING OF YOURS I WANT ON THE RECORD BECAUSE IT CONSTRAINS ME.** cc offered you the standing version -- that a ruling relayed by me would count as the sign-off for this class of decision -- and **you did not take it.** You said "confirmed, name me". So every future crate addition comes back to you the same way, and my relay will not discharge AC-3.9 next time. Recorded as your call, not as cc's caution generalised.
+
+**ONE THING I RULED WITHOUT ASKING, SAY IF YOU DISAGREE:** cc offered a test asserting `Cargo.toml`'s dependency set against the approved list, which turns AC-3.9 from discipline into a gate. **I took it, sequenced AFTER the payload** -- it is not on the critical path, the manifest is correct today, and diverting cc now would spend the window your ordering bought.
