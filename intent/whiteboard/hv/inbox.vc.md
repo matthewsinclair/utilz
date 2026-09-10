@@ -474,3 +474,17 @@ No decision needed on this entry. It is a rider on item 2 so the cost is on the 
 **The control run was NOT at 79 of 299 and clean.** It was **KILLED at 181 of 299 when Claude was restarted** -- seven of thirteen repeats, no `control.json` written, not a usable floor. vc reported the last figure it had been given and did not re-ask before passing it on. snorkeltoast has relaunched it fully detached in its own session group so a restart cannot take it down again, fresh workdir `control-009b`, at 26 of ~299 as of this writing. **Floors when it lands, and TODO 4 with it -- that run will produce the first `control.json` that has ever existed.**
 
 **AND BOTH PEERS REFUSED A vc RELAY IN THE SAME HOUR, INDEPENDENTLY, AND BOTH WERE RIGHT.** cc went to you directly for the crate sign-off; snorkeltoast went to you directly for the promote. Neither doubted the relay's accuracy -- both held that a peer's report cannot BE the authorisation for an irreversible or attributable act. **That is the protocol working rather than a friction to smooth**, and it is worth your knowing it happened twice without either of them being prompted.
+
+## (2026-09-10 08:11Z) ITEM 1 IS LIVE BUT IT DEPLOYED BY HAND. THE WEBHOOK IS STILL 401 AND THE NEXT PUSH FAILS SILENTLY. NINE DAYS.
+
+**THE ARTIFACT IS CORRECT AND SERVING.** Verified by vc the strong way at 08:09:37Z -- downloaded the file and hashed it rather than trusting the header: sha256 `ae90d9e88b0fcdba`, 4,817,189 bytes, matching build 009 at `19e3f3f` exactly. A scanner now gets the reel that carries the QR.
+
+**BUT IT DID NOT DEPLOY BECAUSE ANYTHING WAS FIXED.** laksa-vc read the delivery log at 08:10:22Z: `07:53:07Z push 401`, `09-09 14:43:03Z push 401`, `09-08 21:59:37Z push 200`. **No delivery since 07:53Z and the hook's `last_response` is still 401.** It converged because hv ran a MANUAL RESYNC from the admin console, **which bypasses the webhook entirely**.
+
+**SO THE AUTOMATIC PATH IS EXACTLY AS DEAD AS IT WAS THIS MORNING.** Both sides of the HMAC still disagree. **The next push to that repo fails identically and silently** -- and there will almost certainly be another build before the 19th, since cc's Rust build is coming and any content change lands the same way.
+
+**WHAT WORKS TODAY: manual resync.** It is a real working path, it just has to be remembered every time. **What is outstanding: re-provisioning the hook so both sides carry the same secret.** That remains a production mutation and remains hv's.
+
+**ONE THING THE MANUAL RESYNC SETTLED FOR FREE, and it was laksa-vc's open unknown.** The console printed _"Pulling content from GitHub..."_ then _"Sync complete: 80 scanned, 80 queued, 0 unchanged"_. **A clone that runs and scans 80 files is a working clone -- so the CLONE-side credential fix IS deployed in production.** They had that queued as a question needing a release listing. **Clone half done, trigger half outstanding.**
+
+**THE ACCEPTANCE STAYS THE SAME AND IS NOW DOUBLY EARNED:** `etag ae90d9e8`. A 200 in the delivery log does not prove it, a push does not prove it, and the platform's own health check reported this site HEALTHY through two days of refused deliveries -- it treats _"secret present"_ as _"webhook configured"_. laksa-vc has that in their register as a P0 acceptance in snorkeltoast's words: **a wrong number can be argued with, a green light stops the argument happening; a gate that cannot go red is not a gate.**
