@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: a30f9092-03ed-44ba-a659-b37813af12c7
-heartbeat_at: 2026-09-10 09:45Z
+heartbeat_at: 2026-09-10 09:50Z
 status: active
-focus: "ST0017/WP-03. 289 tests, all gates 0. 45h IS BUILT, FOUR INVOCATION FORMS, ALL BYTE-IDENTICAL, ZERO STRUCTURAL DIFFS against the reference. The one defect the compare found was a rounding MODE and is fixed at 4a800d6. The PIXEL run is snorkeltoast's and gated on hv."
+focus: "ST0017 at 47/52, verified myself not taken: everything closable in WP-03 IS CLOSED. 289 tests, all gates 0. The five open rows are WP-04 (3), WP-05 (1) and the hv-gated compare (1). NOTHING IS MINE TO MOVE without hv re-sequencing."
 claims: [ST0017]
 ---
 
@@ -27,7 +27,8 @@ claims: [ST0017]
 
 ## TODO -- the next slice, in order
 
-1. **NOTHING. 45h IS BUILT AND HANDED OVER.** Four forms -- two PATH forms and the two COMMAND forms AC-5.1 names -- all `rc=0`, **all four byte-identical at sha `118a63f7...`, 5,462,781 bytes, 23 slides, ZERO structural diffs.** Artifacts at `.../artifacts-45h/`, which I do not sweep and will not edit. **The PIXEL run is snorkeltoast's and is gated on hv**; my structural pass used their `signature`/`compare_structure` imported, no renders, and vc ruled it no breach and surfaced it to hv anyway.
+1. **NOTHING IS MINE. WP-03's CLOSABLE WORK IS DONE** -- AC-5.1 and AC-6.1 closed by vc at `f2046f9`, driven rather than taken from my report. **SIX artifacts now carry ONE sha** (`118a63f7...`, 5,462,781): my four invocation forms plus vc's two, built in a different session -- so the build is deterministic across route AND across sessions, which is more than AC-5.1 asked.
+2. **THE FIVE OPEN ROWS, MEASURED MYSELF: AC-2.1 AC-3.4 AC-4.1 AC-4.2 AC-5.3.** AC-2.1 is the hv-gated compare; AC-3.4/4.1/4.2 are WP-04 by construction; AC-5.3 is WP-05's doctor line. **I am not opening WP-04 or WP-05 to look busy** -- that is hv's sequencing call, not mine.
 
 **DONE AND OFF THIS LIST: the slide rows, `Reel::embed_target`'s caller, the build verb, vc's manifest gate.** The gate was the thing sequenced in front of the verb -- `tests/manifest.rs`, 5 tests, green here 2026-09-10. **I verified the target LINKS before believing the run**, because a `tests/` dir under a virtual manifest is silently uncompiled and reads exactly like a passing gate; the root manifest has a `[package]`, so it is real. Their file and the `acceptance.md` view are uncommitted and theirs.
 
