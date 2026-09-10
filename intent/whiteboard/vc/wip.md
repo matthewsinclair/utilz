@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 11981560-5612-4fe7-a136-6eae64636b64
-heartbeat_at: 2026-09-10 09:11Z
+heartbeat_at: 2026-09-10 09:16Z
 status: active
-focus: "ST0017 44/52, WP-03 10/12, doctor 0. THE MANIFEST GATE IS IN (9501b14, AT03/AC-3.14) and covers all three budgets, not the one AC-3.9 names. Next: cc's slide rows then the build verb; the canon holds both our writes and cc has the call on who commits it."
+focus: "ST0017 45/52, doctor 1 (cc's design.md mid-edit). Manifest gate in (AT03/AC-3.14, all three budgets); AC-3.6 red control RUN and the payload follows the constant. cc on the build verb. 45h parked until my ack AND snorkeltoast's."
 claims: [ST0017]
 ---
 
@@ -42,8 +42,6 @@ harness and the reference, hv adjudicates.** Localfolded 2026-09-10 08:45Z; 10 S
 - **VERIFY `producer-fallback-strips` AGAINST THE HARNESS AS IT WILL BE AT COMPARE TIME, NOT AS IT IS NOW.** It is
   in as `designed` (`f406346`) and predicts 23 of 23 against the reference's 22. **snorkeltoast was still editing
   `strip_reason` an hour after I read it.** My own condition; cc says hold it hardest.
-- **AC-3.6 SATISFIES WHEN THE RED CONTROL RUNS**, not when the payload lands: flip `MAX_EASE_MS` to 3000, rebuild,
-  the payload must follow. Template half already a gate and green.
 - **STANDING: TELL hv WHEN TO FORCE A LAKSA RESYNC.** Fires on anything published into the site repo -- in
   practice snorkeltoast promoting a build into the `-001` slot. **Verify snorkeltoast's way: fetch the served
   bytes, hash them, AND read the payload.** Hash equality proves the served bytes are the BUILT bytes and says
@@ -361,13 +359,22 @@ answered a question ADJACENT to the one asked, and adjacency reads as an answer.
   assert the file CHANGED and the new text is present, and claim "anchor gone" only when the anchor is not part
   of the replacement. **My eight manifest probes pass the same test only by luck of shape** -- a `sed` that
   matched nothing yields a GREEN, not a false RED, because a clean file produces no failing assertion to misread.
-- **`state.is` IS NOT THE VERDICT, AND IT SITS EXACTLY WHERE THE VERDICT WOULD BE.** cc read AC-3.14's
-  `"state":{"is":"computed"}` out of the raw canon and told me nothing claimed coverage I had not graded. The row
-  was graded: `intent ac list` computes `satisfied: yes` from AT03 green, and a test-backed row CANNOT hold
-  evidence -- the tool refuses `ac satisfy --evidence` on one. **`computed` answers "where does the verdict come
-  from", not "what is it"**, in the field a reader is looking at for the answer. **THE VERDICT IS WHAT THE CLI
-  COMPUTES; THE CANON FIELD IS WHERE IT COMPUTES IT FROM.** Reading raw canon for a status is reading the
-  provenance and calling it the state.
+- **A FIELD ADJACENT TO THE ANSWER, IN THE FILE WE BOTH READ FOR ANSWERS -- cc'S, WITH THEIR NAME ON IT.**
+  Checking a claim of mine, cc walked the canon for AT03 and printed `x.get('state')`. It returned `None`, which
+  reads exactly like "AT03 has no state, vc is wrong" -- and **the key is `status`, not `state`.** Verified at the
+  committed canon: an AT row's keys are `covers,file,id,kind,status`, with no `state` at all. **`dict.get` ON THE
+  WRONG KEY IS A SILENT ZERO, AND A SILENT ZERO THAT AGREES WITH YOU IS THE DANGEROUS KIND** -- cc's sentence, and
+  they caught it only because `None` was too convenient. The criterion rows next door DO carry `state`, which is
+  what makes the wrong key plausible; and `state.is` on those reads `computed`, which is provenance sitting where
+  a verdict would sit. **THE VERDICT IS WHAT THE CLI COMPUTES; THE CANON FIELD IS WHERE IT COMPUTES IT FROM.**
+- **A RECORDED INSTANCE WITH THE WRONG CAUSE TEACHES THE WRONG GUARD, AND I FILED ONE TODAY.** I read cc's "AC-3.14
+  is `satisfied: no`" as them reading `state.is` raw, and wrote it up that way. **It was not.** They ran
+  `intent ac list`, which was RIGHT when they ran it: the store had no AT03 yet, and I created it across their
+  eight-minute-old read. The guard my version implied is "read the computed answer, not the raw field"; the guard
+  they actually needed is **RE-READ IN THE SAME COMMAND THAT WRITES THE CLAIM** -- their own watch-out, written
+  yesterday, violated the same day, with the STORE in place of the harness. **A plausible cause is not a measured
+  one, and the whole value of an instance is the guard it points at.** Ask the party that made the error before
+  writing down why they made it.
 - **cc'S TWO, SAME FAMILY:** an assertion SOURCING the constant it was testing (`embed={}` from `normalise::TARGET`
   -- both sides moved together and it stayed green, inside the test written to prevent exactly that); and a
   NEGATIVE assertion, `!e.message.contains("missing")`, which **passes on almost any failure**. Their rule is the
