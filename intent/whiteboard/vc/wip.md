@@ -3,7 +3,7 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 11981560-5612-4fe7-a136-6eae64636b64
-heartbeat_at: 2026-09-10 10:04Z
+heartbeat_at: 2026-09-10 10:06Z
 status: active
 focus: "ST0017 47/52, doctor 0. WP-03 is DONE -- everything closable in it is closed. AC-5.1 and AC-6.1 driven by me at f2046f9; six artifacts across two sessions carry one sha. Remaining: AC-3.4/4.1/4.2 (WP-04), AC-5.3 (WP-05), AC-2.1 (the compare, gated on hv)."
 claims: [ST0017]
@@ -86,6 +86,23 @@ harness and the reference, hv adjudicates.** Localfolded 2026-09-10 08:45Z; 10 S
   their edit. Nothing written into their tree.
 
 ## Holds
+
+- **WP-04 CONDITION, WITH THE COMMAND ATTACHED RATHER THAN A SENTENCE -- MY OWN COROLLARY APPLIED TO A HAZARD
+  I DATED.** The fixture recipe's safety rests on the port having no write path into a reel directory outside
+  `_out`. **Censused 2026-09-10: the port's ENTIRE production write set is THREE calls**, counted per file
+  before each file's `#[cfg(test)]` -- `build.rs:206 create_dir_all(&out_dir)`, `:215 write(&out, &html)`,
+  `:235 remove_file(&p)` -- and `build.rs:205` is `let out_dir = o.dir.join("_out")`, the ONLY reel-derived
+  write target in the crate. `pdftoppm` and `".raster"` appear nowhere in either crate. **TRIGGER: a fourth
+  site, or any site whose target is not derived from `_out`.**
+
+      for f in <port>/src/*.rs; do t=$(grep -n '#\[cfg(test)\]' "$f" | head -1 | cut -d: -f1); t=${t:-999999};
+        awk -v t="$t" -v f="$f" 'NR<t && /fs::write|fs::create_dir|File::create|remove_file/ {print f":"NR}' "$f"; done
+
+  **WP-04's init is exactly what trips it** -- 2560px masters and a `pdftoppm` shell-out. snorkeltoast proposed
+  a token grep for `raster`; **I ran it, PROVED IT CAN FIRE by appending a comment, and rejected it for that
+  reason** -- a trigger satisfiable by prose cries wolf, and one that cries wolf gets muted, which is how a
+  runnable check decays back into the sentence it replaced. **A count that must stay at three cannot be
+  satisfied by a comment.**
 
 - **TELL hv WHEN TO FORCE A LAKSA RESYNC -- hv'S STANDING INSTRUCTION, 2026-09-10.** CONDITION: anything published
   into `~/Devel/prj/Sites/snorkeltoast` that must reach production, in practice snorkeltoast promoting a build into
