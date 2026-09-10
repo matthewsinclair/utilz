@@ -450,3 +450,27 @@ No decision needed on this entry. It is a rider on item 2 so the cost is on the 
 **AND ONE RULING OF YOURS I WANT ON THE RECORD BECAUSE IT CONSTRAINS ME.** cc offered you the standing version -- that a ruling relayed by me would count as the sign-off for this class of decision -- and **you did not take it.** You said "confirmed, name me". So every future crate addition comes back to you the same way, and my relay will not discharge AC-3.9 next time. Recorded as your call, not as cc's caution generalised.
 
 **ONE THING I RULED WITHOUT ASKING, SAY IF YOU DISAGREE:** cc offered a test asserting `Cargo.toml`'s dependency set against the approved list, which turns AC-3.9 from discipline into a gate. **I took it, sequenced AFTER the payload** -- it is not on the critical path, the manifest is correct today, and diverting cc now would spend the window your ordering bought.
+
+## (2026-09-10 07:19Z) ITEM 1 HAS CHANGED SHAPE AND IS WORSE. IT IS NOT A STALE FILE -- PROMOTES TO THAT SLOT HAVE NOT REACHED PRODUCTION SINCE AT LEAST 9 SEP, AND NOTHING REPORTED IT.
+
+**VERIFIED BY vc INDEPENDENTLY, NOT RELAYED.** `curl -I` on the live URL just now: HTTP 200, `content-length: 4780047`, `etag: "13862e25c9fa00c6b39b3e38b0d043af"`. That matches snorkeltoast's measurement byte for byte and matches **NEITHER** local build -- not 008 (`daaa503a`) and not 009 (`ae90d9e8`).
+
+**THE COPY WAS NEVER THE BROKEN LINK. THE DEPLOY IS.** snorkeltoast found the local slot already held **008**, dated 9 Sep 14:42, copied in and committed as `8389486` -- **and `origin/main`'s head IS `8389486`.** So the promote was done correctly a day ago, pushed, and production never picked it up. Pushing 009 now would land in exactly the same place 008 has been sitting.
+
+**THE CLASS, AND IT IS THE ONE THIS ESTATE HAS BEEN CATCHING ALL DAY: THE PRESENCE OF A FILE IN THE SLOT IS NOT THE PUBLISHED STATE.** Adjacency one level up -- somebody did the promote correctly, and **the correctly-done promote is what made it look finished.** Had snorkeltoast not fetched the bytes over HTTP and hashed them, they would have copied 009 over 008, seen a clean commit, and reported item 1 closed -- exactly as unclosed as before.
+
+**THERE IS A CLEAN CHECK AND vc HAS CONFIRMED IT WORKS.** The etag IS the first 16 bytes of the sha256 -- production's `13862e25...` matches its measured sha exactly. **So a successful deploy makes the etag `ae90d9e8`.** One `curl -I`, repeatable by anyone, and it is a check rather than a story. **Nobody should call this done on a commit, a push, or a green log -- only on that etag changing.**
+
+**CAUSE NOT ESTABLISHED, AND THE HYPOTHESIS IS LABELLED AS ONE.** Ruled out: `showreels/` is not in `.laksaignore`. Not established: Laksa merges platform-floor default ignore patterns over the site's own, and there is a size limit referenced in `content/products/sources/site_file.ex` that nobody has chased. **The reels are 4.8 MB each, which is the kind of number that meets a limit.** snorkeltoast stopped there deliberately -- it is Laksa infrastructure, it is not WP-02, and a Laksa session would do it properly in a fraction of the time.
+
+**NO LAKSA SESSION IS LIVE.** vc checked the roster: the lamplight nodes are offline Remote Control and there is no laksa node at all. **Routing this is yours.**
+
+**snorkeltoast HAS NOT PUSHED 009.** `main` is ahead of `origin/main` by 1. Pushing replicates 008's non-outcome, and push is yours regardless.
+
+**NINE DAYS.** Whatever else happens, the artifact on the panel carries a QR promising that address, and that address currently serves a reel with 22 slides and 3 socials -- missing the very slide that sends people to it.
+
+### AND A CORRECTION TO WHAT vc TOLD YOU AN HOUR AGO
+
+**The control run was NOT at 79 of 299 and clean.** It was **KILLED at 181 of 299 when Claude was restarted** -- seven of thirteen repeats, no `control.json` written, not a usable floor. vc reported the last figure it had been given and did not re-ask before passing it on. snorkeltoast has relaunched it fully detached in its own session group so a restart cannot take it down again, fresh workdir `control-009b`, at 26 of ~299 as of this writing. **Floors when it lands, and TODO 4 with it -- that run will produce the first `control.json` that has ever existed.**
+
+**AND BOTH PEERS REFUSED A vc RELAY IN THE SAME HOUR, INDEPENDENTLY, AND BOTH WERE RIGHT.** cc went to you directly for the crate sign-off; snorkeltoast went to you directly for the promote. Neither doubted the relay's accuracy -- both held that a peer's report cannot BE the authorisation for an irreversible or attributable act. **That is the protocol working rather than a friction to smooth**, and it is worth your knowing it happened twice without either of them being prompted.
