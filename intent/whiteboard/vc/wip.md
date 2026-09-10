@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 11981560-5612-4fe7-a136-6eae64636b64
-heartbeat_at: 2026-09-10 09:29Z
+heartbeat_at: 2026-09-10 09:31Z
 status: active
-focus: "ST0017 45/52, doctor 1 (cc's design.md mid-edit). Manifest gate in (AT03/AC-3.14, all three budgets); AC-3.6 red control RUN and the payload follows the constant. cc on the build verb. 45h parked until my ack AND snorkeltoast's."
+focus: "ST0017 45/52. Manifest gate in; AC-3.6 discharged; completion metric discharged at 8bef628; producer-fallback-strips MEASURED both directions and snorkeltoast pinned the harness to bytes. ACK GIVEN for 45h: --out into scratch, TWO runs (AC-5.1 says both invocation forms)."
 claims: [ST0017]
 ---
 
@@ -518,6 +518,21 @@ not get sent.** This is the hv-inbox problem pointed the other way -- there the 
 ask had no tracked ower. Both fail silently, and both are invisible from the side that succeeded.
 
 ## Decisions that still decide things
+
+- **THE 45h GRADING BUILD USES `--out` INTO SCRATCH AND IS TWO RUNS, NOT ONE -- vc, 2026-09-10.** Ruled after
+  reading AC-2.1, AC-5.1 and AC-6.1 in full: **not one of the three names a location**, so `--out` grades all
+  three. **The decisive reason is that `_out/` is the promote SOURCE** -- a `-002` sitting there is a thing a
+  person can promote by accident, and this estate has just spent two days on a deploy serving the wrong bytes for
+  nine days. **AND IT IS TWO BUILDS BECAUSE AC-5.1 SAYS "BOTH INVOCATION FORMS"**; cc had planned one, and that
+  is precisely what gets discovered after a once-only run is spent. **WHAT `--out` COSTS, STATED SO ITS SILENCE
+  IS NOT LATER READ AS COVERAGE:** pruning is suppressed, so the `-001`/`-002` slot rotation is not graded by
+  this run -- it is not graded by these three rows either way, and it belongs to WP-06. Verified rather than
+  taken: 45h carries no `keep:` key and `deliver.rs:289-303` deletes only when `keep > 0 && sibs.len() > keep`,
+  so nothing would have been deleted regardless.
+- **45h CANNOT GRADE THE EMBED SOURCE AND ITS GREEN MUST NOT BE CITED FOR IT.** Its config is `target: 1920`,
+  which EQUALS `normalise::TARGET`, so the stamp reads `embed=1920` whether the build took the config or the
+  constant. **cc's synthetic at 640 is the only place the difference is observable and it is already measured.**
+  A reel where the config and the constant agree is a blind population, and this one agrees by coincidence.
 
 - (2026-09-10) **ITEM 1 CLOSED ON THE ARTIFACT AND THE CAUSE IS CONFIRMED: IT DEPLOYED BY HAND.** Build 009 is
   live -- verified three ways across three observers: vc's byte hash, snorkeltoast's independent hash PLUS a
