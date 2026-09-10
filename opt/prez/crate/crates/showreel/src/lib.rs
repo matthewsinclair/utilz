@@ -17,6 +17,7 @@
 //! into its own full link, and this crate has none.
 
 pub mod admit;
+pub mod build;
 pub mod config;
 pub mod deliver;
 pub mod duration;

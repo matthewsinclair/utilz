@@ -1607,9 +1607,107 @@ Rust spelling and a structural divergence**: `compare_structure` would report `q
 atwork slide that has none. The type distinction is real and it stops at the payload boundary --
 `None` emits `""`, which is where this port and the reference agree again.
 
+**AND THE SIBLING ROW ONE OBJECT ALONG IS THE OPPOSITE, WHICH LOOKS LIKE AN INCONSISTENCY AND IS
+FAITHFUL.** `socials[].qr` is **absent** when there is no QR, where `atwork.qr` is **present as
+`""`** -- and the port reproduces both. The difference is in how the reference CONSTRUCTS them:
+`row["qr"] = svg` sits INSIDE `if row["url"] and p.exists():`, so the key is only ever assigned when
+the file is there; `atwork`'s is a dict-literal keyword argument, `qr=... load_qr(...)`, so the key
+is always bound and `load_qr` returns `""`. **Conditional assignment against unconditional binding.**
+
+**RAISED BY vc AS A PROCESS QUESTION AND THE PROCESS HALF IS THE PART WORTH KEEPING.** They asked
+whether the omit was measured against the reference or was the natural Rust spelling on a row where
+nothing can catch it -- and `SocialRow.qr`'s doc comment justified it from AC-3.3's PRINCIPLE with no
+`showreel:` citation. **The answer was right and the route to it was not a measurement.** Measured
+2026-09-10 in both directions: the source is unambiguous, and the artifact **cannot** discriminate --
+all four of 45h's socials have QRs on disk, so every row reads `label handle url qr` and an
+emit-an-empty-one port would look identical. Another instance of 4.7's shape, and the one where
+asking was the only thing that could have surfaced it.
+
 **AND `logo` IS `kind: "image"` WITH `fit` FORCED TO `"logo"`**, so it is not a twelfth row: it joins
 `image` in shape and differs only in a value. `Kind::Image` already carries both, and the fit is
 resolved before the emitter sees it.
+
+**WHAT THE HARNESS ACTUALLY GRADES OF THIS, MEASURED AT `signature()` RATHER THAN ASSUMED FROM
+`compare_structure` -- AND IT CORRECTS trap (1) ABOVE.** `signature()` builds each row as
+`{k: v for k, v in s.items() if k != "src"}`: **the `src` KEY IS STRIPPED ENTIRELY** before anything
+is compared, and `mark` is replaced by the literal `<present>` because its bytes are pixels and its
+presence is structure. So the two halves of trap (1) grade differently and saying "only
+`compare_structure` would have caught it" was wrong:
+
+- **venue GAINING `w`/`h`/`name` IS CAUGHT** -- three extra keys, compared by value against the
+  reference's `None`.
+- **venue LOSING `src` IS NOT** -- the key is stripped from both signatures before comparison, so an
+  omitted `src` is invisible to the instrument and shows up only as a slide that renders blank.
+  **The test in `payload.rs` is the only thing standing over that half**, which is the right place
+  for it and worth knowing is the only place.
+
+**EVERYTHING ELSE ON A SLIDE IS COMPARED BY VALUE, INCLUDING `qr` AND `name` AND THE DIMENSIONS.**
+`atwork.qr` is the SVG's full text and is diffed as text; `w`/`h` are diffed as integers, so the
+port's resize has to land on the same numbers rather than merely on the same policy.
+
+**AND THE HARNESS's OWN DOCSTRING IS THE THIRD READING THAT AGREES ON `id`:** *"Slides carry no id --
+collect_segment does not put the segment's `id:` into the payload -- so identity is position plus
+every rendering parameter, which is strictly more than an id would give."* Written by snorkeltoast,
+found after this port had already removed `id` from the emitter on the other two readings.
+
+### 4.9 The build verb is a thin coordinator, and the port's own inversion gives it a job the reference never had
+
+**EVERY PART OF THE BUILD IS ALREADY DESIGNED AND THE ASSEMBLY IS NOT.** `cmd_build`
+(`showreel:965-1039`) is parse, call, render and nothing else, and this port's verb is the same
+shape -- `IN-AG-THIN-COORD-001` in the one place it would be easiest to violate, because a
+coordinator with every module in scope is where logic accretes. What follows is the set of decisions
+the verb makes that are NOT derivable from the parts.
+
+**THE LOAD-BEARING ONE: THIS PORT TURNED EVERY WARNING FROM A PRINT INTO A RETURN VALUE, AND THAT
+CREATES A FAILURE MODE THE REFERENCE CANNOT HAVE.** The reference calls `warn()` at the site, so a
+warning it computes is a warning it emits -- the two cannot come apart. Here they are separate
+steps, deliberately (the caller owns the stream, and a test can read what was warned instead of
+capturing stderr), and **the cost is that a returned warning nobody drains is silent and nothing
+fails.** No test goes red, no gate trips, the build succeeds, and the operator is told less than the
+reference would have told them.
+
+**SO THE SOURCES ARE CENSUSED RATHER THAN REMEMBERED.** Measured over the crate, not recalled:
+
+| source | shape | who drains it today |
+| ------------------------ | ---------------------------- | ------------------- |
+| `plan::report` | `Vec<String>` | `check` |
+| `slide::Collected.dropped` | `Vec<String>` | folded into `plan::report` |
+| `admit::Scan::report` | `Vec<String>` | folded into `Collected.dropped` |
+| `payload::socials` | `(rows, Vec<String>)` | **nobody** |
+| `deliver::stamp` | `(String, Vec<String>)` | **nobody** |
+| `deliver::prune` | `(Vec<PathBuf>, Vec<String>)` | **nobody** |
+
+**THREE OF SIX HAVE NO PRODUCTION CONSUMER AND ALL THREE ACQUIRE ONE HERE.** That is the same
+property vc's `pub fn`-with-no-caller sweep is looking for, and it is worth naming that **the sweep
+would not have found these three as a class**: `admit::Scan::report` passed that sweep cleanly
+because it HAD a caller and the caller discarded its result on the success path. **Being called and
+having its result read are different properties**, and a warning channel fails on the second one.
+
+**THE FIVE REMAINING DECISIONS, EACH WITH THE REFERENCE'S BEHAVIOUR NAMED:**
+
+1. **`--out` SUPPRESSES PRUNING.** `if not args.out: prune(...)` (`showreel:1038`). An explicit
+   destination is outside the rotation, so the retention policy must not delete alongside it.
+   Ported as-is: pruning is a property of the `_out/` slot sequence, not of writing a file.
+2. **`keep` DEFAULTS TO 0**, which in `prune`'s reading means keep the numbered set and delete
+   nothing. Not a guess: it is the reference's `getattr(args, "keep", 0)`.
+3. **THE SIZE WARNING IS COMPUTED FROM THE FINISHED FILE**, `out.stat().st_size`, and not from the
+   sum of what was embedded. `normalise::Embedded::encoded` exists and is explicitly NOT the number
+   to budget against -- it is pre-base64 and per-picture, and the artifact also carries the shell,
+   the theme and the JSON. Threshold 12 MB, the reference's, with its remedy (lower `target:`).
+4. **`title` FALLS BACK TO `"{artist.name} - showreel"`**, and `artist.name` itself falls back to the
+   handle, which falls back to the reel's parent directory name. Three levels, all the reference's.
+5. **THE PRODUCER STAMP IS FILLED HERE AND NOWHERE ELSE.** 4.5 built the mechanism and the content;
+   this is the only site that has both a `config::Reel` and a `Filling`. An unstamped artifact grades
+   as `adjacency (UNVERIFIED)`, which is what `template::render`'s second refusal exists to make
+   impossible -- and that refusal is only reachable from here.
+
+**AND ONE DELIBERATE ASYMMETRY, RECORDED SO IT IS NOT READ AS AN OVERSIGHT: CLAMPING IS SILENT IN
+`build` AND REPORTED BY `check`.** The reference clamps silently in both (`max(duration_ms(...),
+LIMITS["min_dwell"])` inside `collect_segment`, no `warn`), and this port already reports the clamped
+count in `check`. Keeping that split is the coherent reading -- **`check` is the verb whose entire
+output is a report, and `build`'s job is an artifact** -- rather than adding a sixth warning stream
+to the build. It changes no pixels either way; the operator who wants to know runs the verb that
+tells them.
 
 ---
 

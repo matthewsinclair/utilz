@@ -14,8 +14,8 @@
 //! inside another's evidence.
 
 use artifact::Failure;
-use showreel::{config, limits, plan, theme};
-use std::path::{Path, PathBuf};
+use showreel::{build, limits, plan};
+use std::path::Path;
 
 fn main() {
   let args: Vec<String> = std::env::args().skip(1).collect();
@@ -25,13 +25,17 @@ fn main() {
       Some(path) => check(Path::new(path)),
       None => Err(Failure::new("check needs a directory", "showreel check <dir>")),
     },
+    Some("build") => match args.get(1) {
+      Some(path) => flags(&args[2..]).and_then(|f| build_reel(Path::new(path), &f)),
+      None => Err(Failure::new("build needs a directory", "showreel build <dir>")),
+    },
     Some("--help" | "-h") | None => {
       println!("{USAGE}");
       return;
     }
     Some(other) => Err(Failure::new(
       format!("unknown command '{other}'"),
-      "expected one of: check. build lands in ST0017/WP-03; try 'showreel --help'",
+      "expected one of: check, build. Try 'showreel --help'",
     )),
   };
   if let Err(e) = result {
@@ -48,71 +52,24 @@ showreel -- a directory of pictures to a self-contained looping HTML reel.
 
 usage:
   showreel check <dir>    validate showreel.yaml and report what it declares
+  showreel build <dir>    write the self-contained reel into <dir>/_out/
 
-`build` is not implemented yet: ST0017/WP-03 is porting it. The command surface
-under `prez showreel` is WP-05 and is not wired.";
+build options:
+  --out <file>            write here instead of the next _out/ slot. Suppresses
+                          pruning: an explicit destination is outside the rotation
+  --keep <n>              keep the newest n revisions in _out/ and delete the rest
+                          (default 0: delete nothing, and say so past five)
 
-/// Resolve a reel directory the way the reference does: the directory itself, or
-/// a `showreel/` beneath it.
-fn resolve(path: &Path) -> PathBuf {
-  if path.file_name().is_some_and(|n| n == "showreel") || !path.join("showreel").is_dir() {
-    path.to_path_buf()
-  } else {
-    path.join("showreel")
-  }
-}
+The command surface under `prez showreel` is WP-05 and is not wired.";
 
 fn check(path: &Path) -> Result<(), Failure> {
-  let reel = resolve(path);
-  let file = reel.join("showreel.yaml");
-  let text = std::fs::read_to_string(&file).map_err(|e| {
-    Failure::new(
-      format!("cannot read {}: {e}", file.display()),
-      "point showreel at a reel directory, or at its parent",
-    )
-  })?;
-
-  let cfg = config::parse(&text, &file.display().to_string())?;
-
-  // The theme, resolved exactly as a build will resolve it. **`check` EXISTS TO
-  // MAKE THE REFUSALS REACHABLE FROM A COMMAND LINE**, and this is the one that
-  // fires first against the live 45h reel: its config names `theme: popupart`,
-  // which is not a built-in here and never will be. Without
-  // `SHOWREEL_THEME_PATH` the resolver refuses and names every directory it
-  // searched; with it set, the theme resolves and announces that it came from
-  // off the built-ins. Both are H3 working rather than a port regression.
-  let theme = theme::for_reel(cfg.theme.as_deref(), &[])?;
-  if let Some(said) = theme::provenance(&theme) {
-    eprintln!("showreel: {said}");
-  }
-  // **THE ASSETS ARE INLINED HERE TOO, NOT JUST COUNTED.** Reading `theme.yaml`
-  // exercises R3; inlining is what exercises the four refusals design.md 5
-  // rules -- a missing font, a missing favicon, a font that is not WOFF2, an
-  // icon type nothing serves. A verb that reported the counts without doing the
-  // work would leave all four unreachable from a command line, which is the
-  // state `check` exists to end.
-  let meta = match &theme.dir {
-    Some(dir) => theme::Meta::read(dir)?,
-    // A built-in has no directory, so it can carry no sidecar. Not an absence
-    // to report -- a shape the type already rules out.
-    None => None,
-  };
-  let inlined = theme::inline(&theme)?;
-
-  // **check RESOLVES EVERY SEGMENT THE WAY A BUILD WILL**, which is what makes
-  // admission's refusals reachable from a command line. It reads no image:
-  // `plan` decides and never embeds, so this is the whole of the build's
-  // decision-making without any of its cost.
-  //
-  // **AND THE ASSET COUNT IS THE PLAN'S, NOT THE SLIDE LIST'S.** This line used
-  // to project `Slide::assets` and reported 10 against the reference's 14 on the
-  // live reel -- the bug and the social QRs are read by the ARTIFACT and by no
-  // single slide. `check` reporting the narrower number would have been a
-  // reasonable-looking figure that no build ever uses.
-  let plan = plan::plan(&reel, &cfg)?;
+  let o = build::open(path)?;
+  let (cfg, plan) = (&o.cfg, &o.plan);
+  let file = o.dir.join("showreel.yaml");
   let pace = plan.pace;
   let clamped = plan.slides.iter().filter(|s| s.common.clamped).count();
   let used = plan.used();
+  let (meta, inlined, theme) = (&o.meta, &o.inlined, &o.theme);
 
   println!("showreel: {} is valid", file.display());
   println!("  artist    {} ({})", cfg.artist.name, cfg.artist.handle);
@@ -152,8 +109,57 @@ fn check(path: &Path) -> Result<(), Failure> {
   );
   // The exhaust report, on the same `used` the build embeds from. Reported and
   // never deleted: the tool does not get to decide a picture is finished with.
-  for line in plan::report(&reel, &used, &plan.dropped) {
+  for line in plan::report(&o.dir, &used, &plan.dropped) {
     println!("  {line}");
+  }
+  Ok(())
+}
+
+/// What `build` was asked for beyond the directory.
+fn flags(rest: &[String]) -> Result<build::Options, Failure> {
+  let mut f = build::Options { out: None, keep: 0 };
+  let mut i = 0;
+  while i < rest.len() {
+    let need = |what: &str| {
+      rest.get(i + 1).cloned().ok_or_else(|| {
+        Failure::new(format!("{what} needs a value"), format!("showreel build <dir> {what} <value>"))
+      })
+    };
+    match rest[i].as_str() {
+      "--out" => f.out = Some(std::path::PathBuf::from(need("--out")?)),
+      "--keep" => {
+        let v = need("--keep")?;
+        f.keep = v.parse().map_err(|_| {
+          Failure::new(format!("--keep is not a number: {v}"), "use a whole number, eg --keep 3")
+        })?;
+      }
+      other => {
+        return Err(Failure::new(
+          format!("unknown build option '{other}'"),
+          "expected --out <file> or --keep <n>",
+        ))
+      }
+    }
+    i += 2;
+  }
+  Ok(f)
+}
+
+/// **PARSE, CALL, RENDER.** The work is `build::run`'s; this owns the stream,
+/// and draining `said` is the whole of its contract -- three of its six sources
+/// have no other consumer in the crate.
+fn build_reel(path: &Path, f: &build::Options) -> Result<(), Failure> {
+  let b = build::run(path, f)?;
+  println!("showreel: wrote {}", b.path.display());
+  println!(
+    "  {} slides, {:.1} MB self-contained, theme={}, pace={}",
+    b.slides,
+    b.bytes as f64 / 1_048_576.0,
+    b.theme,
+    b.pace
+  );
+  for line in b.said {
+    eprintln!("showreel: {line}");
   }
   Ok(())
 }
