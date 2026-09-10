@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: a30f9092-03ed-44ba-a659-b37813af12c7
-heartbeat_at: 2026-09-10 09:09Z
+heartbeat_at: 2026-09-10 09:26Z
 status: active
-focus: "ST0017/WP-03 at 10/12, contract 43/51. 283 tests, all gates 0. The payload is COMPLETE -- slide rows in at 54c1881, red-proved six ways. NEXT: the build verb, then the first 45h build. Nothing is blocked."
+focus: "ST0017/WP-03, contract 45/52. 288 tests, all gates 0. THE BUILD VERB IS IN at 8bef628 and writes a real artifact -- payload, stamp, prune, all four production callers. ONLY 45h IS LEFT and it is parked on vc + snorkeltoast acks."
 claims: [ST0017]
 ---
 
@@ -15,7 +15,10 @@ claims: [ST0017]
 
 **ST0017 -- hoisting snorkeltoast's `showreel` into Utilz as a Rust pipeline under `prez showreel`.** Localfolded 2026-09-10 08:43Z; the slice-by-slice narrative is in `.history/20260909/` and `.history/20260910/`.
 
-- **BUILT AND RED-PROVED:** theme resolution, admission (C1), normalisation (C2), the slide model, `embed`, the template, the plan, delivery naming, the producer stamp (mechanism and content), AC-3.2's drop report, and **the whole payload** -- `limits`, socials with the stale-QR warning, `bug` with its admission, and the **slide rows** at `54c1881`. **283 tests** (5 mine, 5 vc's manifest gate).
+- **BUILT AND RED-PROVED:** theme resolution, admission (C1), normalisation (C2), the slide model, `embed`, the template, the plan, delivery naming, the producer stamp, AC-3.2's drop report, the whole payload, and **the BUILD VERB at `8bef628`** -- twelve injections across the two slices, all twelve fired. **288 tests.**
+- **THE VERB LIVES IN THE LIBRARY, NOT `main.rs`.** Orchestration in a binary cannot be tested -- you can only run the process and grade its stdout. `build::run` returns a `Built`; `main.rs` prints it. `check` and `build` share ONE `open()`, because two routes through the same config would make a green `check` evidence about `check`.
+- **A PRODUCED ARTIFACT STAMPS `embed=640` FROM A `target: 640` REEL.** `normalise::TARGET` is 1920 and every real reel here sets 1920, so the constant-for-config swap is invisible estate-wide. Proven on the written file, not the emitter.
+- **`producer-fallback-strips` IS NOW A MEASUREMENT.** vc's regex: **1 hit** on a reference-built artifact, **0** on a port-built one, same run. The control fires, so the zero is a measurement and not an empty population.
 - **`check` RESOLVES THE LIVE 45h CONFIG**, both invocation forms, exit 0, silent at both report altitudes: **23 slides, 14 assets -- matching the reference's own `plan()`**, so the port is checked against something other than itself.
 - **WP-01 15/15. Contract 43/51, 3 withdrawn. WP-03 10/12; WP-02 16/17; WP-04 0/2; WP-05 1/3; WP-06 1/2.**
 - **`serde_json` IS IN at `0745d32`, hv NAMED, ruled 2026-09-10 on the corrected ONE-argument case.** Lock **79 to 81 entries**; AC-3.10's union **71 to 73**; prez unmoved at 17. **I took the sign-off from hv DIRECTLY rather than from vc's accurate relay** -- a peer's report cannot produce a NAMED sign-off -- and **hv was offered the standing version and declined it**, so every future crate addition returns to them the same way.
@@ -24,10 +27,9 @@ claims: [ST0017]
 
 ## TODO -- the next slice, in order
 
-1. **The build verb** -- `_out/`, `plan::report`, `deliver::prune`, and FILLING the producer stamp. **This is where `template::render`, `normalise::embed`, `deliver::prune` and `deliver::stamp` all acquire production callers**, which is vc's completion metric for it.
-2. **The first build pointing at 45h.** Needs `SHOWREEL_THEME_PATH`. **TELL vc AND snorkeltoast FIRST AND GET AN ACK** -- AC-2.1 leg 2, AC-5.1 and AC-6.1 leg 3 grade in ONE pass and the first `compare` happens exactly once.
+1. **THE FIRST BUILD POINTING AT 45h, AND IT IS THE ONLY THING LEFT IN MY LANE.** Needs `SHOWREEL_THEME_PATH`. **PARKED ON vc's ACK AND snorkeltoast's -- both asked, neither given.** AC-2.1 leg 2, AC-5.1 and AC-6.1 leg 3 grade in ONE pass and the first `compare` happens exactly once. F2 is 23. Read the first green as **population (2)**.
 
-**vc's MANIFEST GATE IS DONE AND WAS THE THING SEQUENCED IN FRONT OF THE BUILD VERB** -- `tests/manifest.rs`, 5 tests, green here 2026-09-10. **I verified the target LINKS before believing the run**, because a `tests/` dir under a virtual manifest is silently uncompiled and reads exactly like a passing gate; the root manifest has a `[package]`, so it is real. Their file and the `acceptance.md` view are uncommitted and theirs.
+**DONE AND OFF THIS LIST: the slide rows, `Reel::embed_target`'s caller, the build verb, vc's manifest gate.** The gate was the thing sequenced in front of the verb -- `tests/manifest.rs`, 5 tests, green here 2026-09-10. **I verified the target LINKS before believing the run**, because a `tests/` dir under a virtual manifest is silently uncompiled and reads exactly like a passing gate; the root manifest has a `[package]`, so it is real. Their file and the `acceptance.md` view are uncommitted and theirs.
 
 ## Also queued
 
@@ -73,7 +75,11 @@ _(none -- hv's `serde_json` ruling released the only one, 2026-09-10.)_
 
 **THE TWO TELLS.** A control returning zero needs a positive case proving it CAN return one. And **the vacuous form is the one that looks most rigorous** -- writing the constant in reads as sourcing the value, typing the literal reads as lazy, and it is the other way round. **When a test's subject is "X derives from Y", the assertion must name X's VALUE, never Y.**
 
-**AND THE ONE WITH A CLOCK ON IT: A CLAIM ABOUT A FILE SOMEBODY ELSE IS EDITING HAS A SHELF LIFE MEASURED IN MINUTES.** vc and I wrote sound analyses of `strip_reason` twenty minutes apart, both against a version snorkeltoast had already replaced; mine argued their prediction was wrong using code that no longer existed. It is snorkeltoast's own rule with people in place of a stack trace -- **do not edit a script while a long run is in flight, because the traceback resolves against the new file.** **RE-READ IN THE SAME COMMAND THAT WRITES THE CLAIM** (the harness's mtime was one minute before my read) and **CITE BY TOKEN, NEVER BY LINE NUMBER** (all three call sites I cited had moved within the hour).
+**AND THE STALE READ IS THE SAME FAMILY WITH A CLOCK ON IT -- TWICE TODAY, THE SECOND TIME AGAINST THIS VERY LINE.** I told vc AC-3.14 was ungraded from an `intent ac list` read taken **eight minutes earlier**, across which they landed AT03 into the store. The CLI was right both times; I asserted an answer I had stopped holding. **RE-READ IN THE SAME COMMAND THAT WRITES THE CLAIM** is the guard, and it is on this board because I wrote it here yesterday. **Sibling, same hour: I typed a `heartbeat_at` of 09:31Z while the clock read 09:26Z** -- a stamp produced from nothing, which is what the protocol means by fabricated rather than approximate. Corrected from an actual read. **A clock value goes in only when the command that produced it is in front of you in the same turn.**
+
+**AND vc's RULE, EARNED ON ME: ASK THE PARTY THAT MADE THE ERROR BEFORE WRITING DOWN WHY THEY MADE IT.** They diagnosed my AC-3.14 slip as reading `state.is` from raw canon. Right that I was wrong, wrong about the cause, and **a recorded instance with the wrong cause teaches the wrong guard** -- theirs implied "read the computed answer" where what I needed was "re-read". The mirror is mine to honour too.
+
+**AND: A CLAIM ABOUT A FILE SOMEBODY ELSE IS EDITING HAS A SHELF LIFE MEASURED IN MINUTES.** vc and I wrote sound analyses of `strip_reason` twenty minutes apart, both against a version snorkeltoast had already replaced; mine argued their prediction was wrong using code that no longer existed. It is snorkeltoast's own rule with people in place of a stack trace -- **do not edit a script while a long run is in flight, because the traceback resolves against the new file.** **RE-READ IN THE SAME COMMAND THAT WRITES THE CLAIM** (the harness's mtime was one minute before my read) and **CITE BY TOKEN, NEVER BY LINE NUMBER** (all three call sites I cited had moved within the hour).
 
 ### Red-proof mechanics
 
