@@ -3,7 +3,7 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 11981560-5612-4fe7-a136-6eae64636b64
-heartbeat_at: 2026-09-10 08:12Z
+heartbeat_at: 2026-09-10 08:29Z
 status: active
 focus: "ST0017 43/51. hv RULED serde_json -- cc took it at 0745d32 with hv named, lock 79 to 81 exactly as predicted. AC-3.9 re-satisfied against the nine-entry manifest. 009 promoted to the slot. Payload next, and it MUST carry limits -- the player has no fallback and the harness cannot see it missing."
 claims: [ST0017]
@@ -562,6 +562,27 @@ merely wrong: the decision was right, so nothing downstream failed, so nothing w
 Name which parts were measured and which were taken. A peer whose argument has two legs deserves to know which leg
 I stood on -- and hv, who rules on it, deserves it more. **The tell is the word "independently": I reached for it
 both times, and both times it was doing rhetorical work rather than reporting a measurement.**
+
+### A claim about an instrument under active edit has a shelf life of minutes
+
+**THREE OF US REASONED ABOUT `strip_reason` INSIDE ONE HOUR AND TWO QUOTED A VERSION THAT HAD ALREADY CHANGED.**
+vc read it keyed on slide kind alone, wrote that into AC-2.14, and caught it only because the same command that
+composed the contract text also happened to `sed` the function -- **accident, not method.** cc then sent a
+detailed, correct, well-cited rebuttal against the same dead version twenty minutes later. Both analyses were
+rigorous. Both were about a file that had moved.
+
+**THE CAUSE IS STRUCTURAL, NOT CARELESSNESS: snorkeltoast is editing the instrument while two people reason about
+it**, and a source read carries no timestamp. A stale read and a live one are indistinguishable by inspection --
+the same property that makes a stale line-number citation invisible, which is the lesson written in a comment two
+lines above the code we both misread.
+
+**THE RULE: re-read the load-bearing line in the SAME call that writes the claim.** Not "before writing" -- in the
+same call, so no window exists between the measurement and the assertion. That is what saved AC-2.14 by luck, and
+luck is not a control.
+
+**AND IT IS snorkeltoast'S OWN RULE ONE LEVEL UP.** Theirs: do not edit a script while a long run of it is in
+flight, because the traceback resolves its line numbers against the NEW file and the diagnostics are corrupted at
+exactly the moment you need them. Same shape with people in place of a stack trace.
 
 ### A stat is not a diff, and I read one hours after telling cc to read the other
 
