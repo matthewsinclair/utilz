@@ -22,6 +22,7 @@ pub mod deliver;
 pub mod duration;
 pub mod limits;
 pub mod normalise;
+pub mod payload;
 pub mod plan;
 pub mod segment;
 pub mod slide;

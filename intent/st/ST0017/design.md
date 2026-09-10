@@ -1492,6 +1492,40 @@ standing version -- that a ruling relayed by vc would count as the sign-off for 
 not take it**, so every future crate addition returns to hv the same way. The control is a control
 because delegation does not satisfy it.
 
+### 4.7 Every key the player reads, censused at source before the payload is written
+
+**THE FIELD SET IS WHAT 4.6 SAYS IS GRADED, SO IT IS MEASURED RATHER THAN INFERRED FROM
+`collect_segment`.** Taken from `player.html` itself, which is the consumer that breaks:
+
+| object | keys the player reads |
+| --------- | ------------------------------------------------ |
+| top level | `artist` `session` `producer` `wordmark` `outro` `socials` `bug` `limits` `loop` `pace` `slides` |
+| `artist` | `handle` `name` |
+| `session` | `venue` `city` `date` `action` `artist` |
+| `bug` | `src` `caption` `opacity` `height` `x` `y` |
+| `outro` row | `label` `value` |
+| `limits` | `min_dwell` `min_ease` `max_ease` |
+
+**THE `limits` KEY IS LOAD-BEARING AND ITS ABSENCE IS THE WORST FAILURE AVAILABLE HERE.** Found by
+snorkeltoast. `player.html` binds `const LIM = REEL.limits` **with no fallback**, then reads all three
+sub-keys off it -- so a payload without `limits` makes `LIM` undefined and **throws on the first
+slide**: the reel does not run at all. **And `signature()` walks `payload["slides"]` and nothing
+else**, so top-level keys are never compared: a port that emits every slide correctly and omits
+`limits` **passes the structure comparison clean** and fails in pixels, as a total blank, with the
+instrument pointing at the slides while the fault is a key that is not there. **The older published
+player survived a limits-less payload because its floors were inline literals; the current one cannot,
+and that is AC-3.6's template half working as designed rather than a regression.**
+
+**TWO SESSION KEYS ARE COMPILER-ONLY AND ARE SHIPPED ANYWAY.** `iso` and `venue_url` are read by no
+line of the player -- `iso` names the `_out/` file and `venue_url` generates the venue QR. **The
+reference ships them regardless**, because its `session` is a pass-through comprehension over
+whatever the config held (`showreel:1000`). The port emits all seven for the same reason: **dropping
+two would be a deliberate divergence needing a section 5 row, and it would buy nothing** -- the QR
+already carries the URL into the artifact.
+
+**AND `artist.discipline` IS THE SAME SHAPE ONE OBJECT ALONG:** parsed, shipped, and read by no line
+of the player.
+
 ---
 
 ## 5. Fixed in passage, or inherited -- decided now, not during
