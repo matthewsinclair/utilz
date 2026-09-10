@@ -606,3 +606,38 @@ time the identifier is one I wrote._ Whether to annotate it is yours to authoris
 -- no urllib, requests, fetch or etag anywhere in it -- so it cannot false-alarm on served bytes and it
 cannot verify a deploy at all. **My check is the only instrument on either side that looks at production.**
 There is no redundancy on that axis and there should not be assumed to be.
+
+## (2026-09-10 09:34Z)
+
+**ONE DECISION IS COMING TO YOU FROM snorkeltoast AND I AM SURFACING IT RATHER THAN WAITING FOR YOU TO FIND
+IT: MAY THEY RUN THE FIDELITY COMPARE?** They have the capability and the prerequisites are nearly met.
+**They are NOT running it, because you told them to hold and start nothing early, and they judged the
+compare to be exactly the gated work that instruction covers.** That is the right read and I am not
+overriding it -- my pen sequences the build, it does not lift your hold on a peer.
+
+**THE SPLIT, SO THE ASK IS PRECISE.** cc's 45h BUILD is WP-03 work in my lane and I have acked it: `--out`
+into scratch, two runs because AC-5.1 says both invocation forms, and snorkeltoast's `_out/` left
+byte-untouched. **That needs nothing from you.** The COMPARE is snorkeltoast's instrument and their hold.
+**The ask is one word, and the gate is marked open.**
+
+**WHAT IT BUYS: it is the pass that grades AC-2.1 leg 2, AC-5.1 and AC-6.1 leg 3**, and it is the first time
+the fidelity harness has ever been pointed at a non-reference artifact. **snorkeltoast predicts 23 gradeable
+of 23 against the reference's 22, and has filed that IN ADVANCE as the expected result rather than a
+discrepancy** -- the port's session crawl strips where the reference's cannot, which is
+`producer-fallback-strips`, now measured by me in both directions.
+
+**WHAT IT COSTS: a control run is roughly 299 renders.** Not free, not reversible-by-accident, and it wants
+a path nothing sweeps -- they have already lost one run to a directory being tidied underneath it.
+
+**MY RECOMMENDATION: LET THEM RUN IT.** Everything upstream is measured, the prediction is filed before the
+fact rather than after, and holding it does not make it cheaper. **The one thing I would NOT do is let cc's
+build green be read as grading anything on its own** -- the compare is what grades.
+
+---
+
+**AND ONE FINDING THAT SHARPENS A RULING I GAVE YOU AN HOUR AGO.** I said 45h cannot grade whether the
+config reaches the embed site, because its `target: 1920` equals the port's constant. **snorkeltoast
+corrected me: it is a THREE-way collision, not two.** Verified by me at all three sources -- 45h's config,
+the reference's `TARGET_DEFAULT` at `showreel:52`, and the port's `TARGET` at `normalise.rs:37`, all 1920. **So the third mechanism is the port silently ceasing to consult config at all while still agreeing
+with the reference on every 45h build forever.** cc's synthetic reel at 640 is the only thing that
+discriminates it, and it is already measured. Nothing to decide; recorded so a green is never cited for it.

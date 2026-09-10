@@ -3,7 +3,7 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 11981560-5612-4fe7-a136-6eae64636b64
-heartbeat_at: 2026-09-10 09:31Z
+heartbeat_at: 2026-09-10 09:34Z
 status: active
 focus: "ST0017 45/52. Manifest gate in; AC-3.6 discharged; completion metric discharged at 8bef628; producer-fallback-strips MEASURED both directions and snorkeltoast pinned the harness to bytes. ACK GIVEN for 45h: --out into scratch, TWO runs (AC-5.1 says both invocation forms)."
 claims: [ST0017]
@@ -529,93 +529,21 @@ ask had no tracked ower. Both fail silently, and both are invisible from the sid
   this run -- it is not graded by these three rows either way, and it belongs to WP-06. Verified rather than
   taken: 45h carries no `keep:` key and `deliver.rs:289-303` deletes only when `keep > 0 && sibs.len() > keep`,
   so nothing would have been deleted regardless.
-- **45h CANNOT GRADE THE EMBED SOURCE AND ITS GREEN MUST NOT BE CITED FOR IT.** Its config is `target: 1920`,
-  which EQUALS `normalise::TARGET`, so the stamp reads `embed=1920` whether the build took the config or the
-  constant. **cc's synthetic at 640 is the only place the difference is observable and it is already measured.**
-  A reel where the config and the constant agree is a blind population, and this one agrees by coincidence.
-
-- (2026-09-10) **ITEM 1 CLOSED ON THE ARTIFACT AND THE CAUSE IS CONFIRMED: IT DEPLOYED BY HAND.** Build 009 is
-  live -- verified three ways across three observers: vc's byte hash, snorkeltoast's independent hash PLUS a
-  payload parse, and hv seeing it render. **But laksa-vc's delivery log shows 401 at `07:53:07Z`, no delivery
-  since, and `last_response` unchanged.** hv ran a manual force resync, which bypasses the webhook entirely.
-  **The automatic path is exactly as dead as it was this morning.**
-- (2026-09-10) **THE CAUSE WAS WORTH CHASING AFTER THE GREEN, AND snorkeltoast REFUSED TO LET IT COLLAPSE.** Knowing
-  it deployed is not knowing why. Had artifact and cause been ticked as one, this would have been filed fixed and
-  the next failure would have arrived looking like a new bug -- **a green outcome with an unconfirmed cause is a
-  bug with a quiet period.** The clone-side fix IS deployed, incidentally proven by the resync scanning 80 files.
-
-- (2026-09-10) **hv RULED THE ORDER, NOT THE CRATE.** Rebuild for the QR social FIRST, while cc is blocked, then
-  `serde_json`. **A sequencing choice is NOT the named sign-off the manifest requires**, so cc's hold stands and vc
-  went back for the actual ruling rather than passing an ordering off as an answer -- the "rock on as needed" shape
-  one turn later, pointed at vc instead of at cc.
-- (2026-09-10) **THE QR FIX IS THE EVENT REBUILD IS THE FLOORS RE-DERIVATION -- ONE ACTION, NOT THREE.** They sat on
-  three boards all day. `showreel build` makes a NEW reference artifact, which retires FLOORS.md by its own header,
-  which triggers snorkeltoast's 14-minute control. **cc being blocked is what makes now the free window**, because
-  the floors are the REFERENCE's (`showreel-harness:1943`) and hang off hv's rebuild, not cc's build.
-- (2026-09-10) **vc HELD AC-5.3 RATHER THAN ASKING.** Genuinely JSON-free and not startable -- no showreel manifest,
-  no `bin/` symlink, `common.sh` silent -- so it needs WP-05's dispatch shape first. Opening WP-05 at WP-03 10/12 to
-  fill an idle hour is inventing adjacent work. hv told, hv can overrule.
-- (2026-09-10) **vc IS NOT TREATING THE SEQUENCING AS AUTHORITY TO PUBLISH.** The QR fix's `cp` half puts a new
-  artifact at a published address nine days before a live event. Build and control freely; the `cp` waits on hv
-  saying that word specifically.
-
-- (2026-09-09) **vc: take cc's `Stem`, AND refuse a pattern without exactly one `{nnn}` -- the inverse of the control vc withdrew an hour earlier.** Measured at the reference: `str.replace` (`showreel:550`) and `re.escape(stem).replace` (`:534`) both replace ALL occurrences, so `{nnn}-foo-{nnn}` yields `001-foo-001` and a two-group scanner regex. A prefix/suffix `Stem` from `split_once` leaves the SECOND `{nnn}` literal in the filename. **The reference handles it and the split structurally cannot**, so here the chosen implementation CREATES the hazard where the withdrawn control guarded one that was already structurally absent. Zero `{nnn}` is refused by the reference at `:532`/`:547`, so the check is exactly-one.
-- (2026-09-09) **vc: `bug.file` is a PREDICTION for the delivery slice, not a defect today, and the reference was checked first.** `plan.rs:143` joins it unclassified while four `Requires::Image` sites refuse -- but the reference DOES refuse it, `build_bug` at `showreel:797` dying by name on a missing file (`:809`) and on a declared bug with no file (`:806`). Not a gap yet because the port has no bug embed path; it becomes one the moment delivery embeds without refusing. **Recorded before the code, because the identical sentence after it is a rationalisation.**
-
-- (2026-09-09) **vc: GO on the template pull, and it is a TWO-row commit, not three.** vc told hv three -- AC-3.6's runtime leg, AC-6.1's leg 3, AC-3.7's drop -- and **AC-6.1 leg 3 is wrong**: it discharges when `prez showreel build` EXISTS and the warning is driven through it, and the build verb completes at DELIVERY. Corrected to both hv and cc. **AC-3.6 is verified at SOURCE in that commit and NOT satisfied there**: "derives" is a claim about what runs, and the red-control (flip `MAX_EASE_MS` to 3000, the payload must follow) needs a build to emit a payload. Three two-leg rows have already cost this contract; this is not the fourth.
-- (2026-09-09) **vc: a marker-uniqueness control is necessary and not sufficient.** cc proposed "four markers each occurring exactly once" as proof a single-pass substitution equals four sequential replaces. It equals it **only if no replacement's OUTPUT contains a later marker** -- sequential can rewrite its own output and a single pass cannot. Two assertions, not one: each marker occurs exactly once in the template, AND no substituted value contains any marker.
-
-- (2026-09-09) **vc: cc's used-set finding is AC-3.2's, and it was inside no SENTENCE of AC-3.2 -- one clause added, no row minted.** The clause named `report_unused` and never named its input, so the finding was a judgement two nodes held and the contract could not fail on. **The build's used set is a projection of the PLAN, not of the slide list**: cc measured the reference's `plan()` at fourteen used assets, ten per-slide and four reel-level, and the ten match `Slide::assets()` by name. A slide-derived `report_unused` names four files the build embeds and tells the operator to delete them -- a confident wrong instruction to destroy live inputs, not a missing warning. **AC-3.8 was NOT reopened and the error in it was mine**: the row's property (one walk) holds and improves once the plan is the source; what was false was a sentence in MY evidence claiming the recycler reads exactly what the build read. Evidence corrected through unsatisfy/satisfy. `982e7f0`.
-- (2026-09-09) **vc: AC-3.6's runtime leg closes on two SOURCE checks, and that is the only mechanism rather than the neatest one.** `player.html:561` is `const LIM = REEL.limits`, so the cap comes off the payload; and snorkeltoast's `shipped-max-ease` row is kind **BLIND** -- `signature()` walks `payload['slides']` only and `capture` never passes `pace=`. So the harness predicted the difference AND predicted its own blindness to it. The leg is: the emitted payload's `limits.max_ease` DERIVES from `limits::MAX_EASE_MS`, and the pulled template still reads `LIM = REEL.limits`. **No `pace=ambient` capture arm** -- it would photograph a divergence already predicted, chosen and recorded, on a fixture built for the purpose. Same shape as AC-4.1's stamp.
-
-- (2026-09-09) **vc: cc's WP-03 order STANDS; both proposed reorderings refused.** hv sent cc to vc for sequencing.
-  **Do not build early to unblock AC-6.1 leg 3, AC-2.1 leg 2 and AC-5.1 -- those three rows are vc's, on vc's
-  contract, and reordering cc's engineering so vc's scoreboard moves sooner is optimising the measurement instead of
-  the thing.** The independent engineering argument agrees: a `build` emitting a knowingly-incomplete artifact feeds
-  the harness differences that are NOT in `PORT_EXPECTATIONS`, every one lands as an unpredicted STRUCTURAL MISMATCH,
-  and the instrument becomes noise **at exactly the moment its value is highest** -- after which harness red reads as
-  "we are not done yet" and a real regression is invisible. **And do not pull AC-3.7's `|| "Snorkeltoast"` drop
-  forward**: the 21-to-22 gradeability gain cannot be realised until there is an artifact to grade, and there cannot
-  be one until the template is pulled, which is the commit the drop belongs in. vc had said "take it early" and was
-  wrong about where early is.
-
-- (2026-09-09) **hv: NO PYTHON SHIM FALLBACK. "We're only doing work that moves this FORWARD and Python is a backwards
-  step."** HOIST section 1's fallback -- a dispatcher over the reference implementation, measured by snorkeltoast at
-  hours to hv's literal bar -- is DEAD. **The only path is WP-03's build half plus WP-05's dispatch, in Rust.** There
-  is no relief valve, so WP-03's build half is load-bearing for the bar rather than merely next.
-  **THE CONTRACT NEEDED NO CHANGE AND THAT WAS CHECKED, NOT ASSUMED**: seven rows mention Python or a fallback and all
-  seven are incidental -- `python3 -c` as a red-proof mechanism, the 4000ms capture default, the `|| "Snorkeltoast"`
-  template literal, HOIST.md provenance. **The one substantive mention is AC-2.16, where Python is the REFERENCE
-  BEING PORTED FROM**, which hv's ruling strengthens rather than touches: a reference is a thing you port from, never
-  a thing you ship.
-
-- (2026-09-09) **hv: issue 0018's narrowing goes ahead -- the comment exemption becomes CSS-only.** The fix is
-  DELETION, in code cc is already editing for AC-3.13, so it is not a special trip. **Per-surface JS and HTML comment
-  grammars stay deferred to a population that does not exist** -- nine `theme.css` in the estate, no `theme.js` or
-  `layout.html` at all.
-- (2026-09-09) **hv: issue 0016 is a WP-05 rider, RECORD-ONLY.** `manifest.sha256` is already inside WP-05's scope.
-  **The test that separates it from 0019, and it is the one to carry:** 0019's information already existed --
-  `git show --stat` names every file in every commit -- so the guard would have been a second, worse copy. 0016's
-  information exists NOWHERE: the manifest carries no gate state, `utilz test` refuses from an install, and every
-  bats suite pins `UTILZ_HOME`, so nothing in the estate can tell a verified publish from a lucky one.
-- (2026-09-09) **hv: issue 0007 CLOSED ON PRIORITY, NOT ON THE MERITS, and the policy question is DEFERRED rather
-  than answered.** _Does 4.5:1 apply to `aria-hidden` decorative chrome_ has no answer on the record. Implementing a
-  fix would have settled it silently in code; **closing it as "vc recommended no" would settle it just as silently in
-  the other direction**, and hv ruled on neither. Reinstate condition is hv's and checkable: **someone asks, once
-  showreel is published and available in utilz.**
-
-- (2026-09-09) **hv: a dehydration made by side effect STANDS when the end state is what the declaration prescribes.** The repair is the mechanism, not the artefact. Canon intact means nothing was lost and one verb restores it.
-- (2026-09-09) **hv: amend a hand-written header, do not regenerate it.** `organize --default --force` would have produced a byte-identical thread list and discarded the provenance and the rule-divergence note, which are the only things in the file a tool cannot re-derive.
-- (2026-09-09) **hv NAMED THE MINIMUM DEFECT: a one-level shift over 5 percent of the frame, RMSE 0.223607.** Named as a DESCRIPTION and computed, never taken from an injection's figure. The threshold is `sqrt(f)` so it is independent of frame size and transfers to any reel. Slides 13 and 14 clear it by 149x and 102x, so 21 of 22 grade and only slide 1 remains, on AC-3.7.
-- (2026-09-09) **hv: the shared git index gets a pre-commit WARNING, not a refusal.** A refusal needs node identity at commit time and would refuse the legitimate cross-node commit. Issue 0019 carries the two instances and the unsettled design question.
-- (2026-09-09) **hv, TWICE: a true finding is not a reason to build.** AC-3.7's brand-purity check and issue 0020's citation sweep both cut as yak-shaving, both vc's, both real. **Apply BOTH tests before minting a row: is it real, and is it worth building.**
-- (2026-09-09) **hv: the reel's inputs stay in Dropbox.** A Dropbox worktree, inputs can be arbitrarily large, and Utilz itself is fully tracked -- which is what the hoist depends on. AC-2.18's limit is TRUE and PERMANENT and is not an action item.
-- (2026-09-09) **hv: `max_ease` capped at 2400**, below `min_dwell` 2500, so runtime ease can never reach runtime dwell for any config at any speed in either pace mode. Structural, not a refusal.
-- (2026-09-08) **hv: no `v` in any version string, anywhere, including the git tag.** `utilz:2.8.0` solo, `utilz:2.8.0/<util>:<version>` paired. Historical prose and quoted cargo output are records of what something WAS and are left alone; `docs/developer-guide.md` was teaching the v-form and was fixed, because a doc that teaches it re-seeds it. Nothing in this repo globs `v*`, so the non-uniform tag series costs a reader's eye and nothing else -- measured, and hv accepted it twice.
-- (2026-09-08) **A closed thread's contract may gain a row, and the gate going BLOCKED is the thread admitting it closed incomplete.** ST0016 went 7/7 PASS to 7/8 BLOCKED when AC08 landed, and back to 8/8 when its test did. Not a regression; the honest signal.
-- (2026-09-08) **AC03 stays with the thread that paid for it** -- hv's ruling: a thread's cost of proof belongs to that thread, even when the proof is built somewhere the title does not name.
-- (2026-09-07) **THE VARIABLE IS NOT THE DEFECT; THE SILENCE IS.** Ruled against my own prior recommendation.
-- (2026-09-07) **NEVER IMPLICITLY, ALWAYS AVAILABLE EXPLICITLY.** AC11 and AC16 are one policy from two sides.
-- (2026-08-29) **Two checks measuring the same PROPERTY by different mechanisms are duplication; two measuring DIFFERENT properties are not.**
-- (2026-08-29) **A criterion pins properties, not enumerations.**
-- (2026-08-29) **No fallback message names as its remedy the case in which it fired.**
+- **45h CANNOT GRADE THE EMBED SOURCE, AND THE COLLISION IS THREE-WAY -- snorkeltoast's CORRECTION OF MY
+  TWO-WAY VERSION.** Verified at all three sources by me: 45h `showreel.yaml:40 target: 1920`; the reference
+  `showreel:52 TARGET_DEFAULT = 1920`; the port `normalise.rs:37 pub const TARGET: u32 = 1920`. **So
+  `embed=1920` is consistent with THREE mechanisms** -- the config read, the config ignored for the Python
+  default, the config ignored for the Rust constant. **The third is the one that matters for a PORT**: it is the
+  case where the port silently stops consulting config at all and still agrees with the reference on every 45h
+  build forever. cc's synthetic at 640 discriminates all three because 640 differs from both defaults, which is
+  what makes it a real control rather than a nominal one. **A green on 45h must NEVER be cited for this
+  property.** snorkeltoast is building the refusal into the stamp parser -- an embed value equal to a default
+  records NON-DISCRIMINATING rather than agreement, computed from the artifact's own config, so a 45h built at
+  1600 becomes discriminating with no table to edit.
+- **A CITATION THAT IS EXACT TODAY IS THE ONE THAT GOES WRONG QUIETLY, AND THE REMEDY NEEDS CHECKING TOO.**
+  `config.rs:203` cites `showreel:989`; line 989 IS that token, character for character. **Third line-number
+  citation into snorkeltoast's file across three sessions, and the previous one decayed `:613` to `:628` twice
+  with nobody noticing.** Cite the TOKEN. **And I checked their proposed token rather than relaying it:
+  `grep -n 'cfg.get("target"' showreel` returns TWO hits, 620 and 989, so it does not locate the line they
+  meant; `target = int(cfg.get("target"` returns exactly one.** A remedy for an imprecise locator that is itself
+  imprecise is the same defect wearing the fix's clothes.
