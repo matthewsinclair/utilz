@@ -3,7 +3,7 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 11981560-5612-4fe7-a136-6eae64636b64
-heartbeat_at: 2026-09-10 10:02Z
+heartbeat_at: 2026-09-10 10:04Z
 status: active
 focus: "ST0017 47/52, doctor 0. WP-03 is DONE -- everything closable in it is closed. AC-5.1 and AC-6.1 driven by me at f2046f9; six artifacts across two sessions carry one sha. Remaining: AC-3.4/4.1/4.2 (WP-04), AC-5.3 (WP-05), AC-2.1 (the compare, gated on hv)."
 claims: [ST0017]
@@ -439,6 +439,34 @@ seventh instance's shape, found while building the instrument that closes the si
 budget" is denominated in whatever the budget counts. If the gate counts something else and they
 usually agree, find the case where they do not before shipping it -- there was one here and it took
 one `sed` to produce.
+
+### NAME WHAT YOU INCLUDE. AN EXCLUSION LIST DECAYS IN THE DANGEROUS DIRECTION
+
+**RULE: A SET-MINUS IS A RULE FIXED IN ADVANCE ABOUT WHAT A DIRECTORY CONTAINS, AND EVERY FUTURE ENTRY JOINS
+IT BY DEFAULT, SILENTLY.** My fixture recipe said _symlink every entry of `45h/showreel` EXCEPT
+`showreel.yaml` and `_out`_. That directory also holds `.raster` -- mode `drwx------`, the compiler's PDF
+raster cache, a directory that gets WRITTEN -- and `.DS_Store`. **Following my text literally symlinks a
+private write cache into snorkeltoast's tree**, which is a wider hole than the one excluding `_out` closed.
+
+**AND THE MECHANISM IS THE FOURTH KIND OF ZERO IN ITS PUREST FORM: THE SHELL PROTECTED ME AND I WROTE DOWN
+THE RULE IT WAS NOT FOLLOWING.** My loop was `for a in "$REEL"/*`, and the zsh glob EXCLUDES DOTFILES BY
+DEFAULT. I did not decide to exclude `.raster`; I never saw it. **Measured after: `reel-goodcopy` holds
+exactly two entries, one symlink to `assets` and a real `showreel.yaml`.** So what I RAN was safe and what I
+DOCUMENTED was not, and nothing in the run could have told me -- the instrument narrowed the population and
+the write-up described the instrument I thought I had.
+
+**SECOND CORRECTION, AND IT IS THE ONE THAT MATTERS MORE: MY PROTECTION WAS REAL AND MY REASON FOR IT WAS
+FALSE.** I said the symlinked assets were _read-only from the fixture's side_. **The target is writable** --
+a symlink is a two-way door, not a barrier. What actually protects the tree is that `check` writes nothing
+and `_out` was never linked, so a `build` lands in scratch. **A reproducer leans on the stated reason the
+moment they change the verb**, which is exactly when a false reason costs something.
+
+**AND A DATE ON THE HAZARD, MEASURED RATHER THAN LEFT GENERAL:** `.raster` is written by the REFERENCE at
+`showreel:354`, and the PORT has NO `.raster` write path today -- every "raster" hit in its source is prose
+in `admit.rs` refusing documents. **So the hole is unreachable by today's port and reachable by the
+reference now and by the port the moment WP-04 lands**, since init is the verb that shells out to
+`pdftoppm`. **A recipe outlives the version of the tool current when it was written**, so a rule safe only
+against today's verb set is the same defect as the exclusion list itself.
 
 ### A PATH IS AN IDENTIFIER; THE FIXTURE IS THE THING -- AND A RECIPE NOBODY RAN IS AN UNOBSERVED FIELD
 
