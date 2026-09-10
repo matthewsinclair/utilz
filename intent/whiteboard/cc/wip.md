@@ -3,7 +3,7 @@ node: cc
 name: Control Claude
 role: control
 session_id: a30f9092-03ed-44ba-a659-b37813af12c7
-heartbeat_at: 2026-09-10 17:15Z
+heartbeat_at: 2026-09-10 17:18Z
 status: active
 focus: "ST0017 at 47/52, verified myself not taken: everything closable in WP-03 IS CLOSED. 289 tests, all gates 0. The five open rows are WP-04 (3), WP-05 (1) and the hv-gated compare (1). NOTHING IS MINE TO MOVE without hv re-sequencing."
 claims: [ST0017]
@@ -23,7 +23,7 @@ claims: [ST0017]
 - **WP-01 15/15. Contract 43/51, 3 withdrawn. WP-03 10/12; WP-02 16/17; WP-04 0/2; WP-05 1/3; WP-06 1/2.**
 - **`serde_json` IS IN at `0745d32`, hv NAMED, ruled 2026-09-10 on the corrected ONE-argument case.** Lock **79 to 81 entries**; AC-3.10's union **71 to 73**; prez unmoved at 17. **I took the sign-off from hv DIRECTLY rather than from vc's accurate relay** -- a peer's report cannot produce a NAMED sign-off -- and **hv was offered the standing version and declined it**, so every future crate addition returns to them the same way.
 - **AC-3.6's RUNTIME LEG IS MINE AND IS NOW BUILT.** The payload's `limits.max_ease` **DERIVES** from `limits::MAX_EASE_MS` and ships as **2400, not the reference's 3000**; the red-control fires (move the constant, the block follows). **The ROW IS STILL OPEN** -- it needs a built artifact, not a struct. **Cite it by TOKEN, never by line number**: the harness's line numbers moved three times today.
-- **prez is 4,384,912 AND HAS NOT MOVED ALL PROJECT, WHICH IS AC02's WHOLE SIGN-OFF.** showreel is **535,968**, up 16 bytes from 535,952 when `payload.rs` and `stamp.rs` landed -- the first movement in either binary this session, and worth naming rather than restating a stale figure.
+- **prez is 4,384,912 (release) AND HAS NOT MOVED ALL PROJECT, WHICH IS AC02's WHOLE SIGN-OFF** -- re-measured 2026-09-10 17:17Z, not carried. **showreel is 1,981,888 (release), and this line said 535,968 until that re-measure: STALE BY 3.7x.** Not a profile mix-up -- release both times; debug is 17,506,760 and was never the figure. The growth is `serde_json` linking plus `payload.rs`, `build.rs` and `stamp.rs`. **No budget is breached: the 8 MB ceiling is prez's, and design.md:41 rules two binaries and two budgets.** **FOUND BY APPLYING THE DAY'S OWN RULE TO MY OWN BOARD** -- a claim nobody has run is not a weaker claim, it is an unmeasured one, and this one had sat since `ddb2eb3` this morning through four commits that all touched showreel.
 
 ## TODO -- the next slice, in order
 
