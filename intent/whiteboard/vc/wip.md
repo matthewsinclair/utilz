@@ -353,6 +353,38 @@ remove {}: {e}")` and the word in two doc comments. **AND WHEN TWO MATCH RULES D
   measured; the MATCHER asks the artifact** -- six slide indices in a matcher would be right about 45h and
   wrong about the next reel.
 
+### A PATTERN THAT LOOKS MORE PRECISE THAN THE LOOSE ONE AND MATCHES STRICTLY LESS THAN IT SAYS
+
+**`git grep -E` DOES NOT HONOUR `\b`. POSIX ERE HAS NO WORD-BOUNDARY ESCAPE, THE ALTERNATIVE MATCHES NOTHING,
+AND GREP DOES NOT COMPLAIN.** Measured 2026-09-10 on this tree: `-iE '\b45h\b'` returns **0**, plain `-i '45h'`
+returns **338**, `-iP '\b45h\b'` returns **333**. cc caught it in a number vc had already put in front of hv.
+
+**THE PROOF THAT IT CONTRIBUTED NOTHING IS ONE COMMAND, AND IT IS THE ONE TO RUN ON ANY COMPOSITE PATTERN:**
+delete the suspect clause and re-count. `Ash Sinclair|ashsinclair|Ash.s Art|\b45h\b` and the same pattern with
+the handle clause **cut** both return 13. **vc's "identity across the tree" figure was a NAME-ONLY count wearing
+a handle clause**, and it agreed with cc's name-only run for exactly that reason -- two runs agreeing is not
+corroboration when one of them is silently the other.
+
+**THIS IS NOT THE FOURTH KIND OF ZERO, IT IS ONE LEVEL UP FROM IT.** The fourth kind is an instrument whose
+match rule narrows the population silently -- a rule that DOES something, just less than claimed. This is a
+clause that does NOTHING, written in a dialect that has no such feature, in a pattern whose extra precision is
+what makes it look more trustworthy than the loose form it lost to. **The precision is the camouflage.**
+
+**AND THE UNIT IS THE COMPANION TO THE PATTERN, NOT A DETAIL.** Same population, both counts correct: **12 LINES,
+13 OCCURRENCES**, because one fixture line carries the token twice. `grep -c` counts lines, `grep -o | wc -l`
+counts occurrences, and **nothing in either number says which it is.** So the rule is: quote the pattern AND the
+unit next to the number, or the number cannot be compared with anyone else's.
+
+**THE THIRD INSTANCE THIS WEEK AND THE ONE THAT NAMES THE CLASS.** vc's write-set pattern gave 3 where cc's gave
+8 and cc was right; vc's identity pattern gave 7 files where cc's gave 11 and vc was right. **Both disagreements
+were the match rule, and in neither case had either side stated it.** A count without its rule is not a
+measurement -- it is a number with a story attached.
+
+**AND vc DROPPED TWO INSTANCES FROM A COUNT WHILE CORRECTLY RULING THEM OUT OF SCOPE**, stating 9 over an
+enumeration that summed to 10. The two were the append-only whiteboard surfaces. **Out of SCOPE is right; out of
+the COUNT makes the repo look cleaner than it is** -- which is the precise failure vc was at that moment warning
+hv about. Scope and census are different questions and the same sentence must not answer both.
+
 ### ASK THE ARTIFACT: a rule fixed in advance is wrong the moment two artifacts differ
 
 **snorkeltoast's, earned TWICE in one day in two different tables, and the correction was the same sentence both
