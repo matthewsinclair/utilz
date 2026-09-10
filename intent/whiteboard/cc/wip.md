@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: a30f9092-03ed-44ba-a659-b37813af12c7
-heartbeat_at: 2026-09-10 09:26Z
+heartbeat_at: 2026-09-10 09:45Z
 status: active
-focus: "ST0017/WP-03, contract 45/52. 288 tests, all gates 0. THE BUILD VERB IS IN at 8bef628 and writes a real artifact -- payload, stamp, prune, all four production callers. ONLY 45h IS LEFT and it is parked on vc + snorkeltoast acks."
+focus: "ST0017/WP-03. 289 tests, all gates 0. 45h IS BUILT, FOUR INVOCATION FORMS, ALL BYTE-IDENTICAL, ZERO STRUCTURAL DIFFS against the reference. The one defect the compare found was a rounding MODE and is fixed at 4a800d6. The PIXEL run is snorkeltoast's and gated on hv."
 claims: [ST0017]
 ---
 
@@ -27,13 +27,13 @@ claims: [ST0017]
 
 ## TODO -- the next slice, in order
 
-1. **THE FIRST BUILD POINTING AT 45h, AND IT IS THE ONLY THING LEFT IN MY LANE.** Needs `SHOWREEL_THEME_PATH`. **PARKED ON vc's ACK AND snorkeltoast's -- both asked, neither given.** AC-2.1 leg 2, AC-5.1 and AC-6.1 leg 3 grade in ONE pass and the first `compare` happens exactly once. F2 is 23. Read the first green as **population (2)**.
+1. **NOTHING. 45h IS BUILT AND HANDED OVER.** Four forms -- two PATH forms and the two COMMAND forms AC-5.1 names -- all `rc=0`, **all four byte-identical at sha `118a63f7...`, 5,462,781 bytes, 23 slides, ZERO structural diffs.** Artifacts at `.../artifacts-45h/`, which I do not sweep and will not edit. **The PIXEL run is snorkeltoast's and is gated on hv**; my structural pass used their `signature`/`compare_structure` imported, no renders, and vc ruled it no breach and surfaced it to hv anyway.
 
 **DONE AND OFF THIS LIST: the slide rows, `Reel::embed_target`'s caller, the build verb, vc's manifest gate.** The gate was the thing sequenced in front of the verb -- `tests/manifest.rs`, 5 tests, green here 2026-09-10. **I verified the target LINKS before believing the run**, because a `tests/` dir under a virtual manifest is silently uncompiled and reads exactly like a passing gate; the root manifest has a `[package]`, so it is real. Their file and the `acceptance.md` view are uncommitted and theirs.
 
 ## Also queued
 
-- **AC-5.3 is JSON-free and NOT startable** -- `utilz doctor` must report `pdftoppm` as an optional line, but there is no showreel manifest, no `bin/` symlink, and `common.sh` is silent on showreel. Needs WP-05's dispatch shape. **Held on vc's call**; opening WP-05 at 10/12 to fill a gap is inventing adjacent work.
+- **AC-5.3 is JSON-free and NOT startable** -- `utilz doctor` must report `pdftoppm` as an optional line, but there is no showreel manifest, no `bin/` symlink, and `common.sh` is silent on showreel (re-measured 2026-09-10: `grep -c showreel common.sh` = 0, no `bin/showreel`). **THE `prez showreel` DISPATCH IS NOT PART OF THAT GAP AND I HAD IT WRONG** -- `opt/prez/prez:152` routes it and has since `b8dc9f1` yesterday. Needs WP-05's dispatch shape. **Held on vc's call**; opening WP-05 at 10/12 to fill a gap is inventing adjacent work.
 - **AC-3.4 AND AC-4.1 ARE OPEN AND ARE NOT MINE TO MOVE.** Both need WP-04's `init`: AC-3.4 spans two work packages by construction -- the POLICY is built here, its second application is init's -- and AC-4.1 needs population (3), which does not exist until a Rust `init` does. Named so a reader counting eight open rows against six on this board does not go looking.
 - **PFIC the scan ordering when next in `admit.rs`** -- vc's, NOT a special trip.
 - **Issue 0016** -- gate state in `manifest.sha256`, hv-scheduled as a WP-05 rider.
@@ -74,6 +74,16 @@ _(none -- hv's `serde_json` ruling released the only one, 2026-09-10.)_
 - **my red-proof applier's own proof-of-application** -- `assert after.count(old) == 0`, which is invalid whenever the replacement CONTAINS the anchor, as every append-style injection does. **THE HARNESS WE GRADE WITH IS IN THE POPULATION, NOT OUTSIDE IT**, and this one refused on a correct injection while reporting it as a failed application.
 
 **THE TWO TELLS.** A control returning zero needs a positive case proving it CAN return one. And **the vacuous form is the one that looks most rigorous** -- writing the constant in reads as sourcing the value, typing the literal reads as lazy, and it is the other way round. **When a test's subject is "X derives from Y", the assertion must name X's VALUE, never Y.**
+
+**AND THE TRUNCATED READ IS THE PUREST FORM: THREE INSTANCES IN ONE HOUR, ALL MINE, ALL REPORTED AS MEASUREMENTS.**
+
+- **`| head -3` SWALLOWED THE ANSWER.** I ran `./bin/prez showreel build ... | head -3`; the auto-rebuild banner filled all three lines, so I never saw the result -- and then reported `prez showreel` as unwired. Same shape as `${PIPESTATUS[0]}` already on this board: **the meaningful part of the output came last and the instrument only showed the first part.**
+- **I TESTED A DIFFERENT PROGRAM.** `target/release/prez` genuinely does not know `showreel`; `bin/prez` is the `utilz` DISPATCHER and routes it. I generalised from the binary to the shim and they are not the same executable. **vc measured all four forms and every one answered.**
+- **A HARDCODED LABEL ON AN UNPINNED QUERY.** I printed `commit 4a800d6 %ad` from a bare `git log -1`, which reads HEAD -- and vc had committed `ed8986a` in between, so the label named one commit and the data came from another. **The output asserted a provenance the command never queried.**
+
+**THE COMMON TELL: PIN THE SUBJECT IN THE SAME COMMAND THAT PRINTS IT**, and never `head` output whose interesting end is the bottom -- use `tail`, or read it whole.
+
+**AND A FOURTH, ON A NUMBER: I CARRIED A SIZE ACROSS A REBUILD.** I handed vc 5,462,653 bytes, measured on the PRE-FIX artifact, for a POST-FIX file that is 5,462,781. The sha I sent was right because I took it from the real file; only the figure was stale. **Measure every number from the artifact you are actually handing over, in the same command that names it.**
 
 **AND THE STALE READ IS THE SAME FAMILY WITH A CLOCK ON IT -- TWICE TODAY, THE SECOND TIME AGAINST THIS VERY LINE.** I told vc AC-3.14 was ungraded from an `intent ac list` read taken **eight minutes earlier**, across which they landed AT03 into the store. The CLI was right both times; I asserted an answer I had stopped holding. **RE-READ IN THE SAME COMMAND THAT WRITES THE CLAIM** is the guard, and it is on this board because I wrote it here yesterday. **Sibling, same hour: I typed a `heartbeat_at` of 09:31Z while the clock read 09:26Z** -- a stamp produced from nothing, which is what the protocol means by fabricated rather than approximate. Corrected from an actual read. **A clock value goes in only when the command that produced it is in front of you in the same turn.**
 

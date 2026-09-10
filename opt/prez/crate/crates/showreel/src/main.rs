@@ -8,10 +8,17 @@
 //! refusals -- config keys, segment shapes, the timing envelope -- and none of
 //! them were reachable from a command line, so the only way to exercise them was
 //! to run the test suite. A verb that runs them against a real directory makes
-//! the work observable to somebody who is not reading Rust. It does NOT go
-//! through the `prez showreel` shim yet: that dispatch is WP-05, and borrowing
-//! it early to make WP-03 demonstrable would put one work package's surface
-//! inside another's evidence.
+//! the work observable to somebody who is not reading Rust.
+//!
+//! **AND IT DOES REACH THE `prez showreel` SHIM, WHICH THIS COMMENT DENIED FOR A
+//! DAY.** It said the dispatch was WP-05 and unwired -- true when written and
+//! false from `b8dc9f1` (2026-09-09, *"prez showreel dispatches, and the help
+//! says so in the same commit"*), which is the commit that wired it. `opt/prez/
+//! prez` routes an exact `showreel` first argument to this binary, so all four
+//! of `prez showreel`, `utilz prez showreel` and both on `PATH` answer here.
+//! **A comment describing a NEIGHBOUR's state goes stale silently**, and this
+//! one was read back as evidence that AC-5.1's invocation forms did not exist.
+//! Corrected 2026-09-10 after vc measured all four.
 
 use artifact::Failure;
 use showreel::{build, limits, plan};
@@ -60,7 +67,8 @@ build options:
   --keep <n>              keep the newest n revisions in _out/ and delete the rest
                           (default 0: delete nothing, and say so past five)
 
-The command surface under `prez showreel` is WP-05 and is not wired.";
+`prez showreel <verb>` and `utilz prez showreel <verb>` reach the same binary.
+WP-05 still owns the manifest, the doctor line and a `bin/` entry of its own.";
 
 fn check(path: &Path) -> Result<(), Failure> {
   let o = build::open(path)?;
