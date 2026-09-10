@@ -500,3 +500,63 @@ No decision needed on this entry. It is a rider on item 2 so the cost is on the 
 **IT IS OWED, NOT URGENT, AND NOTHING IS BLOCKED ON IT.** The harness already handles both cases correctly -- the expectation row `producer-fallback-strips` is in at `f406346`, filed `designed` rather than `observed` because no Rust artifact exists yet, and it **retires itself** the day the reference drops the fallback. So the decision can wait without anything going stale.
 
 **AND A GENERALISATION FROM TODAY THAT IS WORTH MORE THAN EITHER INSTANCE**, snorkeltoast's, earned twice: **a rule fixed in advance about what an artifact does is wrong the moment two artifacts differ, and the sound form is answerable from the artifact alone.** First the `limits` check -- a required-key rule would have refused the sound published build. Then `UNSTRIPPABLE` -- a static table would have counted a strippable slide ungradeable. Both corrected by the same move, and neither correct form needs a policy, a version table, or an agreement anybody has to remember.
+
+## (2026-09-10 09:25Z)
+
+**NO RESYNC NEEDED -- PRODUCTION IS CURRENT, MEASURED RATHER THAN INFERRED.** I told you an hour ago that
+nothing needed one on the grounds that no new artifact had been promoted. That was true and it was not a
+measurement. It is now: the served bytes hash `c38fbc53...`, the etag is
+`c38fbc533984cf1ade2430f854a107fa` -- its first 16 -- and that matches the site repo at HEAD exactly.
+**Production is serving `096a676`, which is your latest commit, and it is pushed.**
+
+**BUT THE PUBLISHED ARTIFACT IS NOT THE ONE snorkeltoast BUILT, AND THAT IS THE REASON I AM WRITING.**
+
+Four hashes, all measured:
+
+| what                                         | sha256     | bytes     |
+| -------------------------------------------- | ---------- | --------- |
+| snorkeltoast's `_out` build 009              | `ae90d9e8` | 4,817,189 |
+| site repo at `19e3f3f` (build 009 committed) | `ae90d9e8` | 4,817,189 |
+| site repo at `096a676` (HEAD)                | `c38fbc53` | 4,817,190 |
+| **what production serves**                   | `c38fbc53` | 4,817,190 |
+
+**The copy into the repo was faithful. Something after it was not.** `096a676` "Updated 45h showreel",
+committed 08:47Z today, is **one line inserted and zero deleted**: a blank line between `<head>` and
+`<meta charset="utf-8">`. Nothing else in 4.8MB moved.
+
+**THE BLANK LINE IS HARMLESS. THE CLASS IS NOT.** Something in the promote path edits a 4.8MB
+self-contained artifact carrying inline JavaScript and base64 data URIs -- the exact kind of file that must
+not be reformatted. **I did NOT identify the agent and I am not guessing at one:** that repo has no
+pre-commit hook and no prettier config, so there is nothing on disk to blame. An editor save is the obvious
+candidate and naming it without measuring it is the error I filed against myself this morning.
+
+**AND IT WOULD HAVE FIRED MY OWN INSTRUMENT AS A FALSE ALARM, WHICH IS WHY I CAUGHT IT.** My recorded
+resync check was _fetch the served bytes and hash them against what was built_. Run that way on the reel
+that is live right now it reports MISMATCH, and I tell you production is stale when production is current.
+**A false refusal from the instrument is worse than the blind spot it replaces** -- snorkeltoast's rule,
+landing on me. Corrected on my board to two comparisons that answer two different questions: served bytes
+against the SITE REPO AT HEAD is the deploy question; `_out` against the published slot is the promote
+question.
+
+**NOTHING FOR YOU TO DO UNLESS YOU WANT TO KNOW WHAT TOUCHED IT.** No resync. Production is correct, the
+rendered page is identical, and the QR still points where it should.
+
+---
+
+**AND ONE ITEM CLOSED THAT WAS ON MY LIST AND NOT YOURS.** The manifest gate is built (`9501b14`,
+AC-3.14/AT03). It holds **all three** dependency budgets -- prez's `comrak` under AC02, showreel's nine
+under AC-3.9, and `artifact`'s deliberately empty table -- not just the one AC-3.9 names. **Your sign-off
+requirement is now enforced by a test rather than by two agents being careful.** The gate asserts whole
+lines rather than dependency names, because dropping `default-features = false` from `image` leaves the
+name set byte-identical at nine while the budget goes from five decoders to every decoder in the crate.
+Measured, not argued. Eight mutations, eight reds.
+
+**One correction to a row of mine you may have read.** AC-3.9 said the natural home for this gate was issue 0016. It is not: 0016 is the INSTALL manifest recording CI gate state at publish time, and names no crate
+and no `Cargo.toml` anywhere. Two unrelated things sharing the word "manifest". 0016 stands unchanged and
+is still your WP-05 rider.
+
+**AC-3.6 is also discharged** -- its own red control had never been run. 45 of 52 live, `doctor` clean on
+my side.
+
+**YOUR QUEUE IS UNCHANGED AND THE WEBHOOK IS STILL THE TOP OF IT.** It is still 401, which is why your
+manual force-resync remains the only path from a push to a deploy.
