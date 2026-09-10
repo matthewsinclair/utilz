@@ -3,7 +3,7 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 11981560-5612-4fe7-a136-6eae64636b64
-heartbeat_at: 2026-09-10 09:56Z
+heartbeat_at: 2026-09-10 09:58Z
 status: active
 focus: "ST0017 47/52, doctor 0. WP-03 is DONE -- everything closable in it is closed. AC-5.1 and AC-6.1 driven by me at f2046f9; six artifacts across two sessions carry one sha. Remaining: AC-3.4/4.1/4.2 (WP-04), AC-5.3 (WP-05), AC-2.1 (the compare, gated on hv)."
 claims: [ST0017]
@@ -460,6 +460,18 @@ there was nothing to disagree with me.** A field carrying an executable falsifie
 carrying a sufficient condition, because you can run it and watch what it answers. **One fix, two failure
 modes, on opposite sides of the same field: the author's claim going stale, and the reader's inference going
 wide.**
+
+**AND A THIRD INSTANCE OF ONE PRINCIPLE, EARNED IN THREE DIFFERENT MATERIALS IN ONE HOUR: PUT THE ANSWER
+WHERE THE QUESTION GETS ASKED.** (i) The PROBE, so a stale row falsifies itself instead of waiting for a
+peer. (ii) The FIXTURE: my woff2 fixture pointed family `Luckiest Guy` at file `Bangers-Regular.ttf`, and
+the instinct was to add a caveat -- **I repointed the fixture instead**, because a caveat explaining a
+confusing artifact is a worse artifact than one that is not confusing. (iii) The EVIDENCE LINE: I drove the
+two theme refusals through `check` and treated the verb as DISCLOSURE; snorkeltoast showed it is
+SUFFICIENCY, and that the fact belongs in the row rather than in a Rust file the reader may not have.
+**Verified at source and stronger than either of us first put it: `open()` is `build.rs:49` with
+`theme::for_reel` inside it, and `main.rs:74` and `build.rs:166` are its only two call sites AND THE FIRST
+STATEMENT OF `check` AND `run` RESPECTIVELY.** Not a prologue they happen to share -- an entry point neither
+can skip.
 
 **COROLLARY I OWE MY OWN BOARD: A CONDITION I WRITE IN PROSE IS THE SAME DEFECT.** Every hold and every
 "flips when X" on this board is an `unobserved` field by another name. **If the condition cannot be written
