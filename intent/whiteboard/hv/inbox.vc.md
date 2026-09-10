@@ -560,3 +560,49 @@ my side.
 
 **YOUR QUEUE IS UNCHANGED AND THE WEBHOOK IS STILL THE TOP OF IT.** It is still 401, which is why your
 manual force-resync remains the only path from a push to a deploy.
+
+## (2026-09-10 09:28Z)
+
+**CORRECTION TO MY ENTRY 40 MINUTES AGO: I NAMED THE WRONG AGENT, AND snorkeltoast MEASURED IT.** I wrote
+that "something in the promote path edits a 4.8MB self-contained artifact". **The promote path is not the
+agent and the finding is sharper without it.**
+
+**MEASURED INDEPENDENTLY BY ME AT YOUR OWN REPO, AFTER snorkeltoast PUT IT UP.** Every historical version
+of the published slot, at the byte where they differ:
+
+| commit    | bytes     | head              | committed (UTC)      |
+| --------- | --------- | ----------------- | -------------------- |
+| `096a676` | 4,817,190 | `<head>\n\n<meta` | 2026-09-10 08:47:25Z |
+| `19e3f3f` | 4,817,189 | `<head>\n<meta`   | 2026-09-10 07:14:27Z |
+| `8389486` | 4,812,977 | `<head>\n<meta`   | 2026-09-09 13:42:57Z |
+| `b6ec9e6` | 4,780,047 | `<head>\n<meta`   | 2026-09-08 21:59:33Z |
+
+**THREE OF FOUR PROMOTES WERE BYTE-FAITHFUL AND SO WAS THE FOURTH.** `19e3f3f` hashes identically to
+snorkeltoast's `_out`, which I verified myself before writing the wrong version. **The edit is its OWN
+commit, 93 minutes after the promote, with its own message.** That is a discrete in-place edit AFTER
+publication, not a lossy stage between build and slot.
+
+**THE CORRECT PREMISE IS snorkeltoast's AND IT IS MORE DURABLE THAN MINE:** _the published slot can be
+edited in place at any time, independently of promote._ **A lossy stage could be fixed once and forgotten.
+This recurs whenever anyone opens the file.** My two-comparison check survives and is right for the better
+reason -- `_out` against the slot catches a hand edit, and would have caught this one.
+
+**WHO DID IT IS NOT DETERMINED AND NEITHER OF US WILL GUESS.** Authorship cannot discriminate: every commit
+in that repo carries your identity, including snorkeltoast's. There is no prettier config, no editorconfig,
+no package.json, no CI and no installed hook. **The only signal is message style, which is weak, and
+dressing it up would be the same error twice.**
+
+**THIS IS THE THIRD TIME TODAY I HAVE WRITTEN A PLAUSIBLE CAUSE INSTEAD OF A MEASURED ONE**, and the second
+time a peer caught it -- after I filed exactly that rule against myself this morning. It is on my board with
+snorkeltoast's name on the correction. **Nothing for you to do; no resync; production is still correct.**
+
+**ONE NEW ITEM FOR YOU, snorkeltoast's, WHICH THEY ARE FLAGGING RATHER THAN FIXING BECAUSE THEY ARE FOLDED
+AND HOLDING.** `control.json`'s `artifact_sha256` is `ae90d9e8` -- the artifact they GRADED, which is the
+correct referent for a floors file. **But it is now one byte from the artifact SERVED**, so anyone reading
+that field as "the published reel" is wrong. Their words: _an identifier is not the thing, again, and this
+time the identifier is one I wrote._ Whether to annotate it is yours to authorise.
+
+**AND ONE THING WORTH KNOWING ABOUT THE SHAPE OF THE ESTATE:** snorkeltoast's harness reads local paths only
+-- no urllib, requests, fetch or etag anywhere in it -- so it cannot false-alarm on served bytes and it
+cannot verify a deploy at all. **My check is the only instrument on either side that looks at production.**
+There is no redundancy on that axis and there should not be assumed to be.

@@ -3,7 +3,7 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 11981560-5612-4fe7-a136-6eae64636b64
-heartbeat_at: 2026-09-10 09:27Z
+heartbeat_at: 2026-09-10 09:28Z
 status: active
 focus: "ST0017 45/52, doctor 1 (cc's design.md mid-edit). Manifest gate in (AT03/AC-3.14, all three budgets); AC-3.6 red control RUN and the payload follows the constant. cc on the build verb. 45h parked until my ack AND snorkeltoast's."
 claims: [ST0017]
@@ -58,11 +58,22 @@ harness and the reference, hv adjudicates.** Localfolded 2026-09-10 08:45Z; 10 S
   check calls it stale. **SO: hash the served bytes against THE SITE REPO AT HEAD -- that is the deploy question;
   and SEPARATELY diff `_out` against the published slot -- that is the promote question.** One comparison was
   answering neither cleanly. Reading the payload stays, because hash equality says nothing about correctness.
-- **AND THE PROMOTE PATH EDITS THE ARTIFACT, WHICH IS THE FINDING RATHER THAN THE BLANK LINE.** Something between
-  snorkeltoast's `_out` and the published slot rewrote a 4.8MB self-contained artifact carrying inline JS and
-  base64 data URIs. **No pre-commit hook and no prettier config in that repo, so the agent is NOT identified and
-  is not being guessed at** -- an editor save is the obvious candidate and naming it would be the wrong-cause
-  error I filed this morning. Today it was whitespace in the head. Flagged to hv and to snorkeltoast as a CLASS.
+- **THE PUBLISHED SLOT CAN BE EDITED IN PLACE AT ANY TIME, INDEPENDENTLY OF PROMOTE -- snorkeltoast's PREMISE
+  AFTER THEY REFUTED MINE.** I wrote "the promote path edits the artifact". **It does not.** Measured by them and
+  re-measured by me at the repo: `096a676` 4,817,190 `<head>\n\n<meta`; `19e3f3f` 4,817,189, `8389486` 4,812,977
+  and `b6ec9e6` 4,780,047 all `<head>\n<meta`. **Three of four promotes byte-faithful and so was the fourth** --
+  I had verified `19e3f3f == _out` myself before writing the wrong version. **The edit is its OWN commit 93
+  minutes later with its own message**, so it is a discrete in-place edit after publication. **Their premise is
+  the more durable one: a lossy stage could be fixed once and forgotten; this recurs whenever anyone opens the
+  file.** My two comparisons survive and are right for the better reason. **WHO did it is undetermined and stays
+  that way** -- every commit in that repo carries hv's identity, there is no formatter config, no CI and no
+  installed hook, and message style is too weak to discriminate.
+- **THIRD PLAUSIBLE-CAUSE-INSTEAD-OF-MEASURED-CAUSE IN ONE DAY, AND THE RULE WAS MINE, FILED THIS MORNING.**
+  cc's stale read (I said `state.is`), the promote path (I said the path, it was a later hand edit), and both
+  caught by the peer rather than by me. **The rule survives every time and I keep not applying it to the NEXT
+  one, because a cause only feels like a guess when somebody else measures it.** The mechanical form:
+  **if I am about to write WHY something happened, the next command is the one that measures it, or the sentence
+  does not go in.** Both peers now hold me to this and I have asked them to.
 - **Two harness entries flip `designed` to `observed`** when cc's build path calls the theme loader. Nothing to do
   until then; noted so their silence is not later read as coverage.
 
