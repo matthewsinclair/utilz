@@ -3,7 +3,7 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 11981560-5612-4fe7-a136-6eae64636b64
-heartbeat_at: 2026-09-09 21:02Z
+heartbeat_at: 2026-09-10 06:45Z
 status: active
 focus: "ST0017: 43/51 -- AC-3.2 SATISFIED, the first row to move today, verified at source rather than from cc's report. WP-03 now 10/12. The stamp needs a filter const hoisted before any content lands, and its embed field cannot be graded by anything in this estate. serde_json still unruled."
 claims: [ST0017]
@@ -531,6 +531,32 @@ broke; it is a rule that does not reach, which is the harder kind to notice beca
 **Convention proposed to cc and adopted here: whoever commits canon NAMES IN THE MESSAGE what else rode along.**
 Cheap, and it converts a silent collision into a visible one. Applied at `12a606d`, which carries only my own edit
 and says so.
+
+### A stat is not a diff, and I read one hours after telling cc to read the other
+
+**`c628c39` emptied AC-2.1's 16,839 characters to nothing.** The chain: a python heredoc raised on a bad `%`
+format, so the scratch file was never written; `cat` failed; `$(cat file)` expanded to an EMPTY STRING; and
+**`intent ac edit --text ""` accepted it without complaint.** Recovered at `5d4d39e` from `45a7419` and verified
+rather than assumed -- ids match, no state differs anywhere, AC-2.1 is the only row whose text differs. **State was
+never touched, so no satisfaction was lost.**
+
+**THREE GUARDS WERE AVAILABLE AND I DEFEATED ALL THREE IN ONE COMMAND.** I ran `git diff --stat` in that very
+command and read _"1 insertion, 1 deletion"_ -- which is exactly what a normal row edit looks like. The commit
+output said **29 deletions** and I did not read that either. And I had told cc, hours earlier, to **read the canon
+diff** before every canon commit. **A STAT IS NOT A DIFF**: it reports the SHAPE of a change and says nothing
+about its content, and every catastrophic single-line edit has a normal-looking shape.
+
+**THE TOOL HAS NO GUARD EITHER**: `intent ac edit --text ""` will destroy a criterion silently. That is the AC-3.9
+shape in the tooling I depend on -- a rule held by discipline. **The rule now: any generated text that OVERWRITES
+existing content gets a length assertion before the write, and the applier refuses rather than proceeds.** I added
+one after the fact; it should have been there first, and my own AC-1.15 watch-out is about exactly this class.
+
+**AND THE SWEEP INSTRUMENT FAILED TWICE THE SAME WAY EARLIER.** `name\s*\(` missed functions passed as values;
+the corrected rule then matched `fast_image_resize`, a CRATE name, as a test name -- so it called AC-3.9
+"enforced" when I had verified by hand that nothing enforces it. **Two rules, wrong in opposite directions, and
+the honest output is a BRACKET rather than a number: between 2 and 26 satisfied rows are held by inspection
+only.** The real answer needs reading, and pattern-matching prose cannot produce it. **Three instrument failures
+in one day, all silent, all mine.**
 
 ### An ask creates a tracked condition on the RECEIVER and nothing on the ASKER
 
