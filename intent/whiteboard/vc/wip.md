@@ -3,7 +3,7 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 11981560-5612-4fe7-a136-6eae64636b64
-heartbeat_at: 2026-09-10 09:58Z
+heartbeat_at: 2026-09-10 10:00Z
 status: active
 focus: "ST0017 47/52, doctor 0. WP-03 is DONE -- everything closable in it is closed. AC-5.1 and AC-6.1 driven by me at f2046f9; six artifacts across two sessions carry one sha. Remaining: AC-3.4/4.1/4.2 (WP-04), AC-5.3 (WP-05), AC-2.1 (the compare, gated on hv)."
 claims: [ST0017]
@@ -439,6 +439,29 @@ seventh instance's shape, found while building the instrument that closes the si
 budget" is denominated in whatever the budget counts. If the gate counts something else and they
 usually agree, find the case where they do not before shipping it -- there was one here and it took
 one `sed` to produce.
+
+### A CONTROL THAT SHARES THE REAL PATH IS NOT A CONTROL OVER THE FIXTURE MACHINERY
+
+**RULE: THE CONTROL MUST DIFFER FROM THE TEST IN EXACTLY THE ONE THING UNDER TEST, AND "REAL" IS NOT THE
+SAME AS "IDENTICAL BUT FOR THAT".** My first control for the two theme refusals was the REAL popupart theme,
+in its real location, driven against the real 45h reel. It proves the config reads and parses -- which is
+what rules out the two refusals that fire in `open()` BEFORE the theme is touched (`read_to_string` and
+`config::parse`, snorkeltoast's correction of my "nothing runs before the theme" overstatement). **It does
+NOT rule out my own copy-and-symlink machinery having broken something**, because it never went through it.
+
+**FIXED BY BUILDING A THIRD FIXTURE RATHER THAN ARGUING THE POINT:** `goodcopy`, an unmodified copy of
+popupart through the SAME copy, the SAME symlinked reel, the SAME rewritten config and the SAME theme root.
+rc=0, `is valid`, 15 segments, 23 slides, 14 assets, 4 socials. **Now everything is held identical but the
+one mutation, and the two rc=2s are attributable to it alone.**
+
+**AND THE FALSE-CONFIRMATION RISK snorkeltoast RAISED IS REAL AND NARROWER THAN EITHER OF US FIRST SAID --
+MEASURED, NOT REASONED.** Without `SHOWREEL_THEME_PATH` a fixture reel returns rc=2 from a theme function
+about a theme, which they called the wrong refusal passing as the right one. **Driven: the message is
+`no theme 'nofavicon'.` and lists the directories it did not search.** The two messages share no word but
+"theme". **So a reproducer comparing the MESSAGE cannot be fooled and one comparing the EXIT CODE can.**
+The clause belongs in the evidence line, and what it defends against is not a disguised alarm -- it is an
+evidence line reproducible by exit code alone. **An evidence line that rc alone can satisfy is
+under-specified; quote the message and the ambiguity closes itself.**
 
 ### A ROW CAN BE WELL-FORMED AND STALE, AND THE SHAPE CHECK CANNOT TELL -- snorkeltoast's, EARNED ON THEIR OWN TABLE
 
