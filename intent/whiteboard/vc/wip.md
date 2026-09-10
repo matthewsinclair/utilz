@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 11981560-5612-4fe7-a136-6eae64636b64
-heartbeat_at: 2026-09-10 08:45Z
+heartbeat_at: 2026-09-10 09:08Z
 status: active
-focus: "ST0017 43/51, WP-03 10/12, doctor 0. serde_json ruled and taken with hv named; 45h build 009 IS LIVE after two days of 401s. Both peers folded and hold. Next: cc's slide rows then the build verb, and the manifest gate is MINE and nearly due."
+focus: "ST0017 44/52, WP-03 10/12, doctor 0. THE MANIFEST GATE IS IN (9501b14, AT03/AC-3.14) and covers all three budgets, not the one AC-3.9 names. Next: cc's slide rows then the build verb; the canon holds both our writes and cc has the call on who commits it."
 claims: [ST0017]
 ---
 
@@ -36,9 +36,6 @@ harness and the reference, hv adjudicates.** Localfolded 2026-09-10 08:45Z; 10 S
 
 ## TODO
 
-- **THE MANIFEST GATE IS MINE AND NEARLY DUE.** I ruled it in and sequenced it AFTER the payload, BEFORE the build
-  verb; the payload is one slice from done. A test asserting `Cargo.toml`'s dependency set against hv's approved
-  nine turns AC-3.9 from discipline into a gate. **cc will not remember it for me and said so.**
 - **THE FIRST BUILD POINTING AT 45h GRADES AC-2.1 leg 2, AC-5.1 AND AC-6.1 leg 3 IN ONE PASS, AND HAPPENS EXACTLY
   ONCE.** Tell cc and snorkeltoast before it happens -- a standing commitment to both. **F2 is 23**, from 009's
   config, unchanged. Read the first `compare` as **population (2)**: a green over half a pipeline.
@@ -362,6 +359,29 @@ answered a question ADJACENT to the one asked, and adjacency reads as an answer.
   NEGATIVE assertion, `!e.message.contains("missing")`, which **passes on almost any failure**. Their rule is the
   best sentence of the day: **THE VACUOUS FORM IS THE ONE THAT LOOKS MOST RIGOROUS.** Writing the constant in
   looks like sourcing the value; typing `1920` looks lazy. It is the other way round.
+
+### A NAME SET IS NOT A BUDGET, AND THE GATE THAT CHECKS NAMES STAYS GREEN THROUGH THE BREACH
+
+**RULE: when a written budget is denominated in one currency, check the thing the currency is
+denominated in, not the thing that is easy to enumerate.** AC-3.9's budget is denominated in
+LOCKFILE PACKAGES. The obvious gate reads the `[dependencies]` keys, which is a different quantity
+that usually moves with it.
+
+**INSTANCE, MEASURED 2026-09-10 WHILE BUILDING AC-3.14.** Drop `default-features = false` from
+showreel's `image` line and the dependency NAME SET is byte-identical -- nine names before, nine
+after, `diff` empty -- while the budget goes from five decoders to every decoder in the crate, +35
+packages. A name-set gate is green the whole way through. So the gate asserts the whole normalised
+LINE for every entry, and its brittleness to cosmetic edits is the feature: any change returns to hv,
+which is what AC-3.9 already said in words.
+
+**AND IT IS THE SAME FAMILY ONE TABLE UP.** The name set is not wrong; it is ADJACENT -- it reports a
+real quantity that is not the one the rule is about, and it looks exactly like coverage. That is the
+seventh instance's shape, found while building the instrument that closes the sixth.
+
+**MECHANICAL TEST FOR THE NEXT ONE: read the rule's own words for its unit.** "Carries exactly the
+budget" is denominated in whatever the budget counts. If the gate counts something else and they
+usually agree, find the case where they do not before shipping it -- there was one here and it took
+one `sed` to produce.
 
 ### ASK THE ARTIFACT: a rule fixed in advance is wrong the moment two artifacts differ
 

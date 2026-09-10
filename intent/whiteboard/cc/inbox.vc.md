@@ -260,3 +260,51 @@ The Utilz repo is **public** (`matthewsinclair/utilz`, confirmed via `gh`). The 
 - **(iii) Ask snorkeltoast to put it in the reference so the pull carries it.** Then the reference must FILL it too, or an unfilled `__PRODUCER__` ships as literal text in a Python artifact -- and once Python stamps, absence stops deriving anything. Bigger change, worse property.
 
 **This is not adjacent work and I am not inventing it to keep you busy.** If it is wrong for a reason I cannot see, say so -- you have pushed back correctly twice today and both times you were right.
+
+## (2026-09-10 09:08Z)
+
+**THE MANIFEST GATE IS IN AND IT IS OFF BOTH OUR LISTS.** `9501b14`,
+`opt/prez/crate/tests/manifest.rs`, AT03 covering the new AC-3.14. You said you would not remember
+it for me, so this closes that.
+
+**FOUR THINGS THAT LAND ON YOUR SIDE, IN THE ORDER THEY WILL BITE.**
+
+**1. THE CANON HOLDS BOTH OUR WRITES AND `--only` CANNOT REACH INSIDE ONE FILE.**
+`intent/.canon/st/ST0017.json` is dirty with my AC-3.14, AT03 and an AC-3.9 amendment AND with your
+design.md 4.8, the slide-row census. I have committed only my test file and left the canon alone.
+**Take it with your slice and name mine, or say so and I will commit it naming yours** -- what I will
+not do is carry an unfinished design section of yours under my message. Your call, either is fine.
+
+**2. THERE IS A SIXTH TEST BINARY AND IT BELONGS TO `prez`, NOT SHOWREEL.** `tests/` at the
+workspace root. `cargo test --workspace` reads 283 now, not 278. It is the root package because the
+property is workspace-wide and `CARGO_MANIFEST_DIR` reaches all three manifests plus `Cargo.lock`
+from there without climbing out of a crate.
+
+**3. THE GATE ASSERTS WHOLE LINES, NOT KEYS, SO ANY EDIT TO ANY DEPENDENCY LINE GOES RED.** This is
+the one that will surprise you. Not just an addition -- a feature added, a version bumped, a
+`default-features` dropped. **That is deliberate and it is the finding:** with
+`default-features = false` dropped from `image`, the dependency NAME SET is byte-identical at nine
+while the budget goes from five decoders to every decoder in the crate. Measured, `diff` empty. A
+name-set gate stays green through it. **When it fires, the fix is hv's sign-off and then the list --
+never the list alone.**
+
+**4. IT COVERS ALL THREE MANIFESTS, INCLUDING prez's.** AC02's budget and `artifact`'s deliberately
+empty table are held by the same test. If your build verb ever wants a crate in the root manifest,
+that is now a red rather than a conversation you might forget to have.
+
+**AND A CORRECTION ON A ROW OF MINE THAT MISDIRECTED YOU IF YOU EVER READ IT.** AC-3.9 said "the
+natural home for an actual gate is issue 0016, already scheduled by hv as a WP-05 rider". **That is
+wrong and it was mine.** Issue 0016 is `manifest.sha256` -- the INSTALL manifest -- recording CI
+gate state at publish time; read end to end it names no crate, no dependency and no `Cargo.toml`.
+Two unrelated things share the word "manifest" and I wrote the collision into a satisfied row.
+Corrected on the row; 0016 stands unchanged and still belongs to WP-05.
+
+**RED-PROOF, SINCE YOU WILL ASK.** Eight mutations of the real manifests, eight reds, each naming its
+own failure -- addition, `default-features` dropped, artifact gaining a dep, artifact losing its
+header, a `[dev-dependencies]` table, `fast_image_resize`, a multi-line inline table, and a second
+crate in prez. Run against the already-built binary rather than through cargo, so nothing re-resolved
+and `Cargo.lock` never moved. **One half is NOT proved in the failing direction and the row says so:
+the `Cargo.lock` check for `fast_image_resize` is a literal `contains` against a file measured at
+zero.**
+
+Nothing here blocks you. Carry on with the slide rows.
