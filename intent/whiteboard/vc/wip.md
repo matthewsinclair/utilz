@@ -3,7 +3,7 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 11981560-5612-4fe7-a136-6eae64636b64
-heartbeat_at: 2026-09-10 17:16Z
+heartbeat_at: 2026-09-10 17:20Z
 status: active
 focus: "ST0017 47/52, doctor 0. hv released BOTH gated items -- snorkeltoast is running the fidelity compare (299 renders, AC-2.1 the only open row it grades) and landing the two-row flip. cc parked. WP-04 NOT read as opened; hv told that is my reading."
 claims: [ST0017]
@@ -18,7 +18,8 @@ Validation node. cc builds, vc contracts and verifies, hv adjudicates. Full boar
 **ST0017 -- showreel hoisted under `utilz prez showreel`. vc holds the contract, cc builds, snorkeltoast owns the
 harness and the reference, hv adjudicates.** Localfolded 2026-09-10 08:45Z; 10 Sep narrative in `.history/20260910/`.
 
-- **CONTRACT 43/51, 3 withdrawn, `intent doctor` 0.** WP-01 15/15 DONE. WP-02 16/17. WP-03 10/12. WP-04 0/2.
+- **CONTRACT 47/52, 3 withdrawn, `intent doctor` 0 -- MEASURED 2026-09-10 17:19Z, not carried.** WP-01 DONE.
+  WP-03's rows are all closed. Open: AC-2.1 (the compare, running), AC-3.4 / AC-4.1 / AC-4.2 (WP-04), AC-5.3 (WP-05).
   WP-05 1/3. WP-06 1/2. `intent ac list ST0017` is the contract; **ids are `AC-<wp>.<seq>` and the group digit IS
   the work package.**
 - **`serde_json` IS RULED, TAKEN AND CLOSED.** hv ruled take-it on the CORRECTED one-argument case; cc landed it at
@@ -128,7 +129,7 @@ harness and the reference, hv adjudicates.** Localfolded 2026-09-10 08:45Z; 10 S
   not a fallback, it is the only path. **A push nobody follows with a resync is a publish that did not happen.**
 - **AC-5.3, HELD ON vc'S OWN CALL and cc agrees.** Genuinely JSON-free and genuinely not startable: no showreel
   manifest, no `bin/` symlink, `common.sh` silent on showreel. CONDITION: **WP-05's dispatch shape decided.**
-  Opening WP-05 at WP-03 10/12 to fill an idle gap is inventing adjacent work. hv can overrule.
+  Opening WP-05 while WP-03 was at 10/12 (AS AT 2026-09-10 MORNING) to fill an idle gap is inventing adjacent work. hv can overrule.
 - **The reference's `Image.LANCZOS` hoist and Python's own stamp -- snorkeltoast's, and NOT vc's to chase.**
   CONDITION: **a compiler change being safe, ie not while 009 is the reference cc is building against.** They have
   made zero compiler changes all day, deliberately, so cc's target does not move mid-port.
@@ -173,10 +174,10 @@ harness and the reference, hv adjudicates.** Localfolded 2026-09-10 08:45Z; 10 S
 
 ## Live with other nodes
 
-- **`cc`: FOLDED AND HOLDING.** HEAD `0585f7b`, 273 tests, clippy 0, 43/51, pushed to `local`; `upstream` frozen at
-  `60153d8`. Landed today: `serde_json` with hv named, the payload's non-slide half, the limits invariant, the
-  producer stamp with its content and three red-proofs. **On the bounce their default is the slide rows then the
-  build verb, and they take vc's sequencing over that default.**
+- **`cc`: PARKED, NOTHING OWED, NOTHING IN FLIGHT.** As at 2026-09-10 17:19Z. Landed today: `serde_json` with hv
+  named, the payload and the slide rows, the build verb, the `round_ties_even` fix, and four self-caught reading
+  errors corrected in their own words rather than edited away. **They will not open WP-04 or WP-05 without hv
+  sequencing it, and that is their call and it is right.**
 - **`snorkeltoast`: FOLDED AND HOLDING.** WP-02 16/17, selftest green across nine case families, six expectation
   rows. **Zero compiler changes all day, deliberately.** Landed: the limits consistency check, the floors renderer,
   re-derived floors plus the first `control.json` that has ever existed, and `producer-fallback-strips`.
@@ -550,6 +551,34 @@ about a theme, which they called the wrong refusal passing as the right one. **D
 The clause belongs in the evidence line, and what it defends against is not a disguised alarm -- it is an
 evidence line reproducible by exit code alone. **An evidence line that rc alone can satisfy is
 under-specified; quote the message and the ambiguity closes itself.**
+
+### A NUMBER IN PROSE HAS NO EDGE TO THE THING IT NAMES, AND PEER-STATE HAS THE SHORTEST HALF-LIFE OF ALL
+
+**RULE, cc'S, EARNED ON THEIR OWN BOARD: A CLAIM CAN BE MEASURED, CORRECT AND SPECIFIC WHEN WRITTEN AND ROT
+IN PLACE, AND NO GATE ANYWHERE CAN SEE IT.** Their board carried showreel's release binary at 535,968 --
+right when taken, _"up 16 bytes from 535,952"_, that specific. **Re-measured this evening: 1,981,888. Stale
+by 3.7x**, through four commits that all touched showreel. Not sloppiness; **a number in prose has no
+dependency edge to the binary it names.** The load-bearing half survived and they said so as loudly as the
+correction: **prez is UNMOVED at 4,384,912, which is the whole of AC02** -- verified by me in one command
+across both binaries.
+
+**SO I SWEPT MY OWN BOARD FOR CURRENT-STATE NUMBERS RATHER THAN AGREEING WITH THEIRS, AND FOUND THREE.** The
+DOING header said **`CONTRACT 43/51 ... WP-03 10/12`** when it is 47/52 with WP-03's rows all closed -- **the
+most-read line on the board, stale.** A decision rationale cited `WP-03 10/12` as if current when it is the
+reason a MORNING call was made. And the peer-state section had cc at _"FOLDED AND HOLDING, HEAD 0585f7b,
+273 tests, 43/51"_ -- **wrong on four counts at once.**
+
+**AND THE THIRD ONE IS STRUCTURAL RATHER THAN CARELESS: A SECTION DESCRIBING A PEER'S STATE HAS THE SHORTEST
+HALF-LIFE OF ANYTHING ON A BOARD.** It is cc's rule one step further out -- **not only no dependency edge to
+the thing it names, but no edge you could ever build**, because the thing is another session's tree and
+nobody notifies you. `Live with other nodes` is the highest-rot surface I keep. **Every entry in it now
+carries the clock reading it was true at**, which does not stop the rot and does stop it being read as
+current -- the same move as dating a historical figure instead of deleting it.
+
+**COROLLARY THAT DECIDES WHICH NUMBERS ARE ALLOWED TO SIT: A NUMBER ABOUT A PAST EVENT IS FINE AND A NUMBER
+ABOUT CURRENT STATE IS A LIABILITY.** _"3 of 7 were false positives"_ is a measurement of a thing that
+happened and stays true forever. _"contract 43/51"_ is a claim about now, and now moves. **Where a
+current-state number is worth keeping, it carries the clock; where it is not, it goes.**
 
 ### SEND THE COMMAND AND ITS OWN OUTPUT, FROM ONE EXECUTION -- AND ALL SEVEN CATCHES CAME FROM RUNNING
 
