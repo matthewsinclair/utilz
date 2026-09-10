@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 11981560-5612-4fe7-a136-6eae64636b64
-heartbeat_at: 2026-09-10 10:06Z
+heartbeat_at: 2026-09-10 17:09Z
 status: active
-focus: "ST0017 47/52, doctor 0. WP-03 is DONE -- everything closable in it is closed. AC-5.1 and AC-6.1 driven by me at f2046f9; six artifacts across two sessions carry one sha. Remaining: AC-3.4/4.1/4.2 (WP-04), AC-5.3 (WP-05), AC-2.1 (the compare, gated on hv)."
+focus: "ST0017 47/52, doctor 0. hv released BOTH gated items -- snorkeltoast is running the fidelity compare (299 renders, AC-2.1 the only open row it grades) and landing the two-row flip. cc parked. WP-04 NOT read as opened; hv told that is my reading."
 claims: [ST0017]
 ---
 
@@ -658,6 +658,19 @@ not get sent.** This is the hv-inbox problem pointed the other way -- there the 
 ask had no tracked ower. Both fail silently, and both are invisible from the side that succeeded.
 
 ## Decisions that still decide things
+
+- **hv RELEASED BOTH GATED ITEMS 2026-09-10 17:09Z: "Yep, crack on."** One word on two decisions, which is the
+  shape snorkeltoast asked for and hv gave. **(1) snorkeltoast runs the fidelity compare** -- ~299 renders,
+  the first time that harness has been pointed at a non-reference artifact. **(2) `favicon-missing` and
+  `font-not-woff2` flip `designed` to `observed`.** vc discharged prerequisite five with a FRESH measurement
+  rather than the hand-over figure: all four artifacts re-hashed at 17:07Z, one distinct sha `118a63f7`,
+  5,462,781 bytes, every mtime identical to hand-over seven and a half hours earlier.
+- **AND THE SCOPE OF "CRACK ON" IS READ NARROWLY AND SAID SO OUT LOUD.** It covers the two decisions that were
+  put up. **It is NOT read as opening WP-04**, because the message it answered listed exactly two items and
+  ended by saying nothing else moves without hv's sequencing. **Both peers told to stay parked until hv
+  sequences or vc relays that they have** -- and hv told plainly that this is the reading, so correcting it
+  costs them one line. **Over-reading an approval is permission-laundering with extra steps**, and the cheap
+  fix is to state the reading rather than to act on the widest one.
 
 - **cc's STRUCTURAL COMPARE WAS NOT A BREACH OF hv's HOLD -- vc, 2026-09-10 09:41Z.** They imported the harness and called
   `payload_of`/`signature`/`compare_structure` on two files before knowing hv had told snorkeltoast to hold,
