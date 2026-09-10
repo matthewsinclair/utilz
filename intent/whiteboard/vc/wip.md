@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 11981560-5612-4fe7-a136-6eae64636b64
-heartbeat_at: 2026-09-10 06:50Z
+heartbeat_at: 2026-09-10 07:16Z
 status: active
-focus: "ST0017 43/51, WP-03 10/12. hv RULED THE ORDER -- QR rebuild first while cc is blocked, then serde_json -- and that is a SEQUENCE, not the crate sign-off. cc holds. The QR fix IS the event rebuild IS the floors re-derivation, one action not three. Both peers folded; everything left is hv's."
+focus: "ST0017 43/51. hv RULED serde_json -- cc took it at 0745d32 with hv named, lock 79 to 81 exactly as predicted. AC-3.9 re-satisfied against the nine-entry manifest. 009 promoted to the slot. Payload next, and it MUST carry limits -- the player has no fallback and the harness cannot see it missing."
 claims: [ST0017]
 ---
 
@@ -531,6 +531,27 @@ broke; it is a rule that does not reach, which is the harder kind to notice beca
 **Convention proposed to cc and adopted here: whoever commits canon NAMES IN THE MESSAGE what else rode along.**
 Cheap, and it converts a silent collision into a visible one. Applied at `12a606d`, which carries only my own edit
 and says so.
+
+### I said "verified independently" about a multi-part claim and measured one part
+
+**TWICE IN TWO DAYS, AND BOTH TIMES THE PART I HIGHLIGHTED AS CHECKED WAS THE FALSE ONE.**
+
+**(1)** I told hv _"I checked their reasoning rather than relaying it, and it holds"_ about cc's two-part case for
+`serde_json`. cc's own design.md 4.6 then refuted the field-order half -- `compare_structure` sorts before
+comparing. **I had checked the half that was right.**
+
+**(2)** I told hv, twice, _"the lock is 79 by name AND 79 by name+version, so both dedup keys agree -- which is
+exactly what AC-3.10 under-determined"_, and offered it as the thing I had independently verified. **It is 81
+entries against 79 names**; `miniz_oxide` and `syn` each sit at two versions, the two pairs AC-3.10's own evidence
+ALREADY NAMES. cc caught it by refusing to assert a figure they had not measured.
+
+**BOTH CONCLUSIONS SURVIVED AND BOTH PROOFS DID NOT**, which is the shape that makes this dangerous rather than
+merely wrong: the decision was right, so nothing downstream failed, so nothing would ever have reported it.
+
+**THE RULE: "I verified it" over a multi-part argument is a claim about the WHOLE and a measurement of a PART.**
+Name which parts were measured and which were taken. A peer whose argument has two legs deserves to know which leg
+I stood on -- and hv, who rules on it, deserves it more. **The tell is the word "independently": I reached for it
+both times, and both times it was doing rhetorical work rather than reporting a measurement.**
 
 ### A stat is not a diff, and I read one hours after telling cc to read the other
 
