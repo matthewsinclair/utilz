@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 11981560-5612-4fe7-a136-6eae64636b64
-heartbeat_at: 2026-09-10 08:29Z
+heartbeat_at: 2026-09-10 08:45Z
 status: active
-focus: "ST0017 43/51. hv RULED serde_json -- cc took it at 0745d32 with hv named, lock 79 to 81 exactly as predicted. AC-3.9 re-satisfied against the nine-entry manifest. 009 promoted to the slot. Payload next, and it MUST carry limits -- the player has no fallback and the harness cannot see it missing."
+focus: "ST0017 43/51, WP-03 10/12, doctor 0. serde_json ruled and taken with hv named; 45h build 009 IS LIVE after two days of 401s. Both peers folded and hold. Next: cc's slide rows then the build verb, and the manifest gate is MINE and nearly due."
 claims: [ST0017]
 ---
 
@@ -15,256 +15,92 @@ Validation node. cc builds, vc contracts and verifies, hv adjudicates. Full boar
 
 ## DOING
 
-**ST0017 -- showreel hoisted under `utilz prez showreel`. vc holds the contract, cc builds, snorkeltoast has closed.**
-Localfolded 2026-09-09 16:51Z. Full boards for 8 Sep and earlier folds of 9 Sep in `.history/`.
+**ST0017 -- showreel hoisted under `utilz prez showreel`. vc holds the contract, cc builds, snorkeltoast owns the
+harness and the reference, hv adjudicates.** Localfolded 2026-09-10 08:45Z; 10 Sep narrative in `.history/20260910/`.
 
-- **Contract: 42 of 51 satisfied, 3 withdrawn, `intent doctor` 0.** `intent ac list ST0017` is the live contract;
-  `design.md` carries the reasoning. **Ids are `AC-<wp>.<seq>` and the group digit IS the work package.**
-- **WP-01 15/15 DONE. WP-02 16/17. WP-03 9/12. WP-04 0/2. WP-05 1/3. WP-06 1/2.**
-- **EVERYTHING JSON-FREE IN WP-03 IS BUILT**: theme, admission, normalisation, embed, the slide model, the plan,
-  the template, the delivery naming. `check` resolves the live 45h reel to **23 slides and 14 assets**, matching the
-  reference's own `plan()` on the same config. 247 tests.
-- **cc IS BLOCKED AND IDLE, CORRECTLY.** Everything remaining needs the PAYLOAD -- `build_socials` with the
-  stale-QR warning, `build_bug`, the slide rows, the limits block, and the `build` verb. No JSON emitter exists and
-  the manifest requires hv's sign-off, named in the commit, for a crate. **hv killed the Python shim fallback, so
-  there is no relief valve.**
-- **EVERY OPEN ROW IS NOW AUDITED AHEAD OF ITS CODE**, which is the one move that reliably paid today. Nine open:
-  AC-2.1 leg 2, AC-3.2, AC-3.4, AC-3.6, AC-4.1, AC-4.2, AC-5.1, AC-5.3, AC-6.1 leg 3.
-
-**AFTER hv WENT AFK WITHOUT RULING, WITH THE PEN: ONE CONTRACT EDIT, TWO PEERS CORRALLED, ONE SWEEP.** 2026-09-09 20:24Z.
-
-- **AC-2.1 GAINED THE STAMP SPECIFICATION (`59f33ec`).** `producer_stamp` (showreel-harness:226) reads
-  `<meta name="showreel-producer" content="...">` and **NOTHING ON EITHER SIDE WRITES IT** -- four greps, all zero,
-  with a control hit on `producer` at showreel:1006. That `:1006` hit is the trap: it is the reel's CREDIT LINE, a
-  different thing under the same word, rendered by the shell as `add("Producer", REEL.producer)`.
-  **The harness's own comment at :218-223 specifies the CONTENT and no row did**, so a stamp reading `rust` would
-  meet AC-2.1's letter and defeat the instrument. Four rules measured both sides: 2560, 1920, Lanczos, JPEG_Q 86 --
-  **three of four AGREE and the alpha rule is the deliberate divergence**, so alpha is the only one whose value
-  distinguishes a Rust build over Python masters.
-- **THE MECHANISM IS JSON-FREE, so it is cc's one piece of unblocked WP-03 work.** `MARKERS` and `subs` are two
-  deliberately separate lists, so a fifth marker is already guarded by two existing tests. Only the EMISSION needs
-  the payload. Sent with a three-option decision on the second template divergence; recommended (i), Rust-filled
-  only, because absence-derives-Python is AC-4.1's established shape and a pull that drops the marker already fails
-  `the_shell_declares_each_marker_exactly_once`.
-- **THE TAUTOLOGY SWEEP RAN AND CAME BACK CLEAN, WHICH IS ITSELF THE RESULT.** 42 satisfied rows, 10 already
-  carrying population language, 32 triaged, **16 refusal-shaped**; 4 read in depth (AC-1.4, AC-1.12, AC-3.1,
-  AC-3.3 -- all driven, AC-3.3's compile-error injection exemplary). Structural pass over **36 Rust pub fn and 90
-  Python defs**. **NO SATISFIED ROW ON EITHER SIDE IS GRADED ON MACHINERY NOTHING CALLS** -- the class that bit
-  AC-3.5 once has not recurred. Coverage stated honestly: the other 12 refusal-shaped rows got the structural pass
-  only.
-- **ONE FINDING, IN snorkeltoast'S TREE, AND IT IS NOT A REGRADE.** `content_fraction` (showreel-harness:1298) and
-  `BLANK_FRACTION` (:1295) are referenced nowhere -- a superseded proxy for the presence gate, which lives at
-  :1614-1627 and is **structurally stronger**: a differential control against a content-stripped re-render, not a
-  modal-colour proxy. **AC-2.8 stands.** What makes it worth reporting is that the DEAD copy carries the fullest
-  statement of the doctrine in the file, including the Slide-1 worked example -- and the proxy it teaches would
-  give a different answer from the mechanism that ships.
-
-- **cc CORRECTED MY BOARD AND WAS RIGHT (20:11Z).** My focus said "cc is FULLY BLOCKED AND IDLE" while my own TODO
-  said "AC-3.2 WAITS ONLY ON `report_unused`" -- **only one can be true, and the detailed row was the accurate
-  one.** I wrote the focus line from the payload's SHAPE rather than from the rows. **The summary drifted from the
-  detail it was summarising, and the detail was right** -- which is the argument for grading against rows and not
-  against a narrative, applied to me.
-- **RULED FOR cc ON `exclude:` (`2a11e54`).** An excluded file is NOT a dropped segment input: an instruction
-  obeyed, not an accident. **Two attempts to break it failed** -- the textual one succeeds against the ROW'S WORDS
-  and not the property, so the words changed. A wrong `exclude:` is a real hazard, is not this row's, and is
-  recorded as a stated limit.
-- **SEQUENCING DECISION, MINE: THE EMITTER STAYS HELD.** cc offered to hand-roll it while hv is away. **Building
-  the thing under decision pre-empts the decision** -- and biases it toward the sunk cost. cc refused to spend
-  hv's vague "rock on as needed" on a crate; **I will not launder it either.** Holding is free now that two
-  JSON-free rows are live. What I DID take from their argument: the reference's field order gets a stated home in
-  design.md now, which survives either ruling.
-- **hv'S WINDOW CLOSED AT ~20:13Z AND cc FLAGGED IT.** The four items were **surfaced in person and hv left
-  without ruling** -- delivered-and-undecided, which is NOT the same as queued and must not be recorded as it.
-  The durable channel holds them again; the next live window is the next chance.
-
-- **THE STAMP THREAD WENT THREE WAYS IN THIRTY MINUTES AND EVERY LEG CORRECTED SOMETHING.** cc built the
-  mechanism straight off the spec -- `player.html:7` is `content="__PRODUCER__"`, `MARKERS` is 5 -- and **added two
-  refusals nobody specified**: an empty producer, and one carrying a quote that would break the tag. The empty case
-  is the one I would have missed, because **the harness cannot tell empty content from no stamp at all.**
-- **snorkeltoast RAISED A HAZARD cc HAD ALREADY CLOSED, AND IT WAS THE RIGHT HAZARD.** `showreel:1018-1022` builds
-  the artifact as `player.html` plus four `.replace()` calls, and cc PULLS that template -- so a tag shipping a
-  real VALUE in the shared shell would have been inherited verbatim, and `population_source` would have flipped
-  from "adjacency (UNVERIFIED)" to "stamp". **An honest refusal upgraded into a confident wrong answer**, believed
-  precisely because a stamp outranks adjacency. Verified in cc's working copy before relaying. **The residue is
-  snorkeltoast's and is unclosed: an artifact whose stamp is still the literal token must REFUSE, not warn.**
-- **TWO MEASURED CORRECTIONS TO MY FIELD LIST (`23a9871`).** `edge=2560` is INIT's constant and does not belong in
-  a BUILD stamp -- stage-mixing, and exactly the case in play. `embed` must be the reel's ACTUAL target
-  (`showreel:989`, `cfg.get("target", TARGET_DEFAULT)`), not the default, or a reel carrying `target: 1440` stamps
-  a lie. **And every value interpolated from the live constant, never written out** -- a hardcoded `q=86` is a flag
-  wearing a stamp's clothes.
-- **THE ONE-SHOT NEEDS THREE STEPS, NOT ONE, AND I RAISED IT.** FLOORS.md is 22 slides and the live config plans
-  23, so `compare` refuses on structure before grading; `cmd_control` takes only the artifact, so cc's build needs
-  its OWN 14-minute control run first. **"The first compare" is build, then control, then compare.** Unsequenced,
-  the moment is spent waiting rather than measuring.
-
-- **cc IS NO LONGER BLOCKED AND BOTH SLICES ARE COMMITTED.** The stamp (`player.html:7`, `content="__PRODUCER__"`,
-  MARKERS 5) and **AC-3.2's drop clause** (`ec3b211`, source only -- no contract edit, clean boundary).
-  `Plan` now carries `dropped`, `plan::report` starts `out` as `dropped.to_vec()` so the lines **EXTEND**
-  `report_unused` rather than duplicating it, and `main.rs:155` is the production caller. **AC-3.2 looks
-  dischargeable and I am NOT grading it mid-flight** -- cc's design.md is still uncommitted. Fire on claim.
-- **cc'S REFUSAL COMMENT MADE AN ARGUMENT I WOULD NOT HAVE FOUND.** An EMPTY stamp matches snorkeltoast's regex,
-  yields `""`, and under Python truthiness at `showreel-harness:1236` grades **identically to an unstamped
-  artifact**. Both that and a quote-carrying value fail SILENTLY at the reading side, which is what makes them the
-  writing side's to refuse. Their instrument, reasoned about correctly by the other implementation.
-- **MY SEQUENCING NOTE WAS WRONG AND snorkeltoast CORRECTED IT AT SOURCE.** I said build, then control, then
-  compare. **The control is the REFERENCE's**: `showreel-harness:1943` compares `ctl["artifact_sha256"]` against
-  `ref_m["artifact_sha256"]` and only `info()`s -- verified before accepting. So cc's build needs a **capture**,
-  the fast one, and the 14-minute Chrome pass hangs off **hv's rebuild**, not cc's build. I had the dependency
-  backwards. **The binding constraint is structural and is hv's**: 22 against 23 refuses whoever's floors we hold,
-  so hv's rebuild and cc's build must come from the SAME config.
-- **TWO SATISFIED ROWS NOW CARRY THE LIMIT THAT NOTHING ENFORCES THEM (`170668a`).** **AC-3.9** says the manifest
-  carries exactly hv's budget "and nothing else" -- and NO test reads `Cargo.toml`, no gate names a crate, and the
-  only `manifest.sha256` is devbin's. True today, verified at the manifest; **false and silent the moment a crate
-  lands.** **AC-2.18** already contains "a provenance line that cannot be followed is most of a provenance line
-  missing", and FLOORS.md cites a `control.json` that exists nowhere -- three text mentions, zero files. **Neither
-  reopened**, both silences recorded.
-- **gtools-vc'S ELEVEN-DAY HOLD IS CLOSED AND IT WAS MY DEFECT.** They were waiting on an AT-to-AC map from a
-  previous vc session for a Utilz WP-04 validation job. **ST0010 -- whose WP-04 IS the validation package -- closed
-  Completed on 2026-09-07, 19/19, PASS**, and three of its criteria are `computed` from ATs that actually run, so
-  it closed on measurement rather than assertion. Told them to drop it.
-
-- **AC-3.2 SATISFIED (`fe9fc62`) -- 43/51, WP-03 to 10/12, THE FIRST ROW TO MOVE TODAY.** Verified at source and
-  not from cc's report, which is what a row refused once deserves: six admission sites COUNTED (`slide.rs` :284,
-  :298, :321, :350, :444, :449) over one private `classify()` with two public shapes; the drop surviving a
-  successful segment; `plan::report` EXTENDING rather than duplicating with `main.rs:155` the production caller.
-  **Both new tests checked for NON-VACUITY rather than counted** -- the ordering test's two `.expect()`s mean a
-  missing line fails, and cc built my `exclude:` ruling a control (`slides.len() == 1` proves the exclude FIRED).
-  **I re-ran `check` on the live reel myself**: 23 slides, 14 assets, exit 0, silent at both altitudes.
-- **THE STAMP HAS A FIELD NOTHING IN THIS ESTATE CAN GRADE, AND I MEASURED IT WORSE THAN cc DID.** cc found 45h
-  sets `target: 1920`, which is exactly `normalise::TARGET`, so a build reading the CONSTANT instead of the CONFIG
-  is byte-identical on the live reel. **I checked the pinned fixture: it sets 1920 too.** So it is BOTH members of
-  the config population -- including the fixture pinned under "test against something you did not write". **On
-  AC-2.1 as a REQUIREMENT, not a stated limit**, and the line is drawn explicitly against AC-3.2's two limits:
-  there the gap is an input class nobody uses; here it is the exact discrimination the field exists to make.
-- **THE FILTER HOIST IS ONE PAIRED PREREQUISITE ON BOTH SIDES, NOT TWO LINES -- snorkeltoast ASKED FOR IT KEPT
-  TOGETHER AND THEY ARE RIGHT** (same reason the selftest rider travels with hv item 2). A stamp reading
-  `filter=lanczos3` off a literal records what somebody TYPED rather than what RAN: **the flag-versus-stamp
-  distinction reappearing INSIDE the stamp.** Three of the four rules already have named owners in the reference
-  (`showreel:51`, `:52`, `:53`); the fourth has none on EITHER side.
-  **BUT THEY DIFFER IN KIND.** cc's is ONE unnamed inline site (`normalise.rs:175`) -- a NAMING problem. The
-  reference's is **TWO byte-identical resize lines** (`showreel:314`, `:447`) with nothing binding them -- a
-  DUPLICATION problem, strictly worse. **And vc confirmed BY FUNCTION that they sit on the seam already known to
-  diverge**: `normalise_image` (:294) carries the alpha probe at :308 AND the filter at :314; `data_uri` (:440)
-  carries the filter at :447 AND the alpha test at :449. Anyone repairing the alpha asymmetry edits both functions
-  and can touch one resize and not the other, with nothing reporting it.
-  **NEITHER IS BEING FIXED NOW AND THE REASONING IS THIS BOARD'S OWN:** both say LANCZOS today -- latent, not
-  manifest -- and editing the reference mid-port moves cc's target and touches what builds the live reel days from
-  the event. cc's lands now because it is new code; snorkeltoast's travels with Python's own stamp after hv's
-  window. Recorded on AC-2.1 at `45a7419`.
-- **snorkeltoast SHARPENED cc'S EMPTY-STAMP CATCH INTO THE ASYMMETRY THAT MATTERS.** Empty is falsy so the VERDICT
-  stays right and only the diagnosis is lost; **`__PRODUCER__` is TRUTHY**, so `population_source` flips to "stamp"
-  and the token becomes the producer of record -- a population the harness was TOLD rather than guessed, and being
-  told is what suppresses the provisional marking. **Empty loses a diagnosis; the token loses the verdict.** Both
-  refuse on their side at `ecfbd00`. And their rejection of the tempting fix is the load-bearing half: degrading a
-  broken builder to UNVERIFIED folds it into the one state guaranteed to stay quiet forever.
-
-- **I VOUCHED FOR HALF AN ARGUMENT THAT WAS WRONG, AND CORRECTED hv MYSELF (`dbc5c71`).** I told hv twice that a
-  hand-rolled emitter keeps "the reference's field ORDER in a second home", and said I had CHECKED cc's reasoning
-  rather than relayed it. **I checked the half that was right.** cc's design.md 4.6 measured it: `compare_structure`
-  iterates `sorted(set(a) | set(b))` -- it SORTS BEFORE COMPARING -- `signature()` reads only `payload["slides"]`,
-  and `artist`/`session` pass through from user YAML so their order was never reproducible by a struct in either
-  language. **The order is not the risk; the SET is, and it is already graded precisely.** hv now has the
-  one-argument version. Recommendation unchanged -- the escaping half was always the stronger.
-- **AC-2.1'S TARGET FINDING IS RECLASSIFIED FROM "REQUIREMENT" TO "BLIND" (`12a606d`), snorkeltoast'S CORRECTION
-  AND IT IS A BETTER ANSWER THAN MINE.** Two counts. **(1)** The two blind configs are in TWO ESTATES with one
-  config each, not one population with two members. **(2)** The embed field IS gradeable today with no fixture at
-  all -- the artifact carries its slides as data URIs and **their long edge is MEASURABLE**, so the stamp's claim
-  can be graded against the pixels it describes. **Deriving from contents rather than comparing two self-reports**,
-  which is the same move that makes `population_source` worth having, one level down. **I jumped from "cannot be
-  checked" to "a fixture is required" without asking whether a different instrument could reach it.**
-- **AND THE SENTENCE THAT SETTLED THE TAXONOMY IS THEIRS: LATENT, NOT MANIFEST.** On the only available case the
-  config-versus-constant path **produces CORRECT OUTPUT**, so there is no defect present to detect -- a fixture
-  would not catch a wrong number, it would prove a code path is exercised at all. That is `shipped-max-ease`'s
-  shape with a **retirement condition that fires on its own**, not an AC-3.2-style coverage gap.
+- **CONTRACT 43/51, 3 withdrawn, `intent doctor` 0.** WP-01 15/15 DONE. WP-02 16/17. WP-03 10/12. WP-04 0/2.
+  WP-05 1/3. WP-06 1/2. `intent ac list ST0017` is the contract; **ids are `AC-<wp>.<seq>` and the group digit IS
+  the work package.**
+- **`serde_json` IS RULED, TAKEN AND CLOSED.** hv ruled take-it on the CORRECTED one-argument case; cc landed it at
+  `0745d32` with **hv named in the commit** -- taken from hv DIRECTLY, not from vc's relay, which was right.
+  Lock 79 to 81 entries, 77 to 79 names. **hv DECLINED the standing version, so every future crate returns to hv.**
+- **45h BUILD 009 IS LIVE.** Two days of GitHub webhook 401s; hv force-resynced by hand. Verified by three
+  observers across the boundary -- vc's byte hash, snorkeltoast's independent hash PLUS a payload parse, hv's eyes.
+  **The webhook is STILL 401**: a push publishes nothing and says nothing.
+- **cc's LANE, NONE STARTED:** the slide rows (minus `path` and `asset`); threading `Reel::embed_target()` to the
+  embed site; the build verb (`_out/`, `plan::report`, `deliver::prune`, filling the producer stamp); then the
+  first 45h build, coordinated, needing `SHOWREEL_THEME_PATH`.
+- **THE COMPLETION METRIC IS MINE AND IT IS MECHANICAL:** `template::render`, `normalise::embed`, `deliver::prune`
+  and `deliver::stamp` have NO production callers. **The build verb is done when all four acquire one**; any that
+  does not was built and forgotten. Re-run the sweep at the delivery slice.
 
 ## TODO
 
-- **BOTH AUDITS ARE DONE AND ON THEIR ROWS.** AC-3.6's runtime leg reduces to ONE property -- the emitted payload's
-  `limits.max_ease` DERIVES from `limits::MAX_EASE_MS` -- with the negative half cited as two facts that survive hv
-  item 2. AC-4.2 went from 86 characters to five measured findings. **Nothing is left to audit ahead of code.**
-- **ON THE BOUNCE, IF hv HAS RULED ON serde_json:** cc restarts on the payload, and the FIRST BUILD POINTING AT 45h
-  is the moment AC-2.1 leg 2, AC-5.1 and AC-6.1 leg 3 grade in ONE PASS. **Tell cc and snorkeltoast before it
-  happens** -- a standing commitment to both -- and read the first `compare` as **population (2)**, a green over
-  half a pipeline.
-- **AC-3.6 SATISFIES WHEN THE RED-CONTROL RUNS, NOT WHEN THE PAYLOAD LANDS.** Flip `MAX_EASE_MS` to 3000, rebuild,
-  the payload must follow. The template half is already a GATE and green -- vc ran it, 1 passed, 72 filtered.
-- **AC-3.2 WAITS ONLY ON `report_unused`.** Six sites through one `classify()` verified; `Plan::used()` projects
-  slides UNION reel-level, verified. The clause about EXTENDING `report_unused` is the only unbuilt part.
-- **A PREDICTION DUE IN THE PAYLOAD SLICE:** `bug.file` is joined unclassified at `plan.rs:143` while four
-  `Requires::Image` sites refuse, and **the reference DOES refuse it** (`build_bug`, `showreel:797`, dying by name
-  on a missing file at `:809` and on a declared bug with no file at `:806`). cc takes it in the same commit as
-  `build_bug`. Not a defect until delivery embeds the bug without refusing.
-- **Verify cc's build-path slices as they land.** The built-ins pull landed at `bbca403` plus an untracked
-  `crates/showreel/themes/`; next is font + favicon emission, then admission, normalisation, `collect_segment`.
-- **Waiting on WP-03 by construction:** AC-2.1's leg 2 (adjacency stops being a guess when the Rust build stamps its
-  own identity) and AC-2.4. **AC-2.12 stands as a recorded limit, not work.**
-- **Two harness entries flip from `designed` to `observed`** the moment cc's build path calls the theme loader --
-  the missing-favicon refusal and the `.ttf` refusal. Nothing to do until then; noted so their silence is not read
-  later as coverage.
-
-- **RE-RUN THE UNCALLED-FN SWEEP AT THE DELIVERY SLICE.** Four `pub fn` have zero production references --
-  `template::render`, `normalise::embed`, `deliver::prune`, `deliver::stamp` -- and all four are the build path.
-  **When the build verb lands, all four must acquire production callers; any that does not was built and
-  forgotten.** Sent to cc as a checkable definition of build-verb-complete.
-- **AC-2.1's CONTENT STRING IS snorkeltoast'S AND IS NOT YET SETTLED.** cc has been told to thread it through as a
-  value and not to fix the string. When snorkeltoast answers, the row's spec takes the exact form.
-- **hv OWES FOUR THINGS AND ALL FOUR ARE STILL OPEN.** `serde_json` is the one that unblocks work; the fixtures and
-  the QR thread are decidable any time; the four FYIs want no ruling. hv's OWN board still reads
-  "Utilz stable at v2.4.0. No stream in flight." from 2026-07-29 and is wrong in both halves -- hv's to edit.
-
-- **MY SWEEP'S LIMIT, FOUND BY cc AND NOW ON AC-3.2.** I swept for `pub fn` with no production caller.
-  `admit::Scan::report` PASSES that cleanly -- it has one, `slide.rs:425` -- and its **result is discarded on the
-  success path**, read only inside `if files.is_empty()`. **Being CALLED and having its RESULT READ are different
-  properties and I measured only the first.** The machinery-nothing-calls class one level down. Any future sweep
-  must ask both.
+- **THE MANIFEST GATE IS MINE AND NEARLY DUE.** I ruled it in and sequenced it AFTER the payload, BEFORE the build
+  verb; the payload is one slice from done. A test asserting `Cargo.toml`'s dependency set against hv's approved
+  nine turns AC-3.9 from discipline into a gate. **cc will not remember it for me and said so.**
+- **THE FIRST BUILD POINTING AT 45h GRADES AC-2.1 leg 2, AC-5.1 AND AC-6.1 leg 3 IN ONE PASS, AND HAPPENS EXACTLY
+  ONCE.** Tell cc and snorkeltoast before it happens -- a standing commitment to both. **F2 is 23**, from 009's
+  config, unchanged. Read the first `compare` as **population (2)**: a green over half a pipeline.
+- **VERIFY `producer-fallback-strips` AGAINST THE HARNESS AS IT WILL BE AT COMPARE TIME, NOT AS IT IS NOW.** It is
+  in as `designed` (`f406346`) and predicts 23 of 23 against the reference's 22. **snorkeltoast was still editing
+  `strip_reason` an hour after I read it.** My own condition; cc says hold it hardest.
+- **AC-3.6 SATISFIES WHEN THE RED CONTROL RUNS**, not when the payload lands: flip `MAX_EASE_MS` to 3000, rebuild,
+  the payload must follow. Template half already a gate and green.
+- **STANDING: TELL hv WHEN TO FORCE A LAKSA RESYNC.** Fires on anything published into the site repo -- in
+  practice snorkeltoast promoting a build into the `-001` slot. **Verify snorkeltoast's way: fetch the served
+  bytes, hash them, AND read the payload.** Hash equality proves the served bytes are the BUILT bytes and says
+  nothing about whether they are correct.
+- **Two harness entries flip `designed` to `observed`** when cc's build path calls the theme loader. Nothing to do
+  until then; noted so their silence is not later read as coverage.
 
 ## Holds
 
-- **STANDING DUTY, hv'S INSTRUCTION 2026-09-10: TELL hv WHEN TO RUN A MANUAL FORCE RESYNC ON LAKSA.**
-  CONDITION THAT FIRES IT: anything published into `~/Devel/prj/Sites/snorkeltoast` that has to reach production --
-  in practice, snorkeltoast promoting a new showreel build into the `-001` slot. **The webhook is still 401 and a
-  push deploys NOTHING**, silently, so the resync is not a fallback, it is the only path. hv is taking the Laksa
-  fix separately; until it lands, **a push that nobody follows with a resync is a publish that did not happen.**
-  **AND THE VERIFICATION IS snorkeltoast'S STANDARD, NOT vc'S**: fetch the served bytes, hash them, AND read the
-  payload. Hash equality proves the served bytes are the built bytes and says nothing about whether they are
-  CORRECT -- 23 slides, 4 socials, the Showreel slide carrying its QR, `limits` present, and the QR encoding the
-  address it was served from. **Hash equality made it certain; reading the slide made it checked.**
-
-- **The whole of WP-03's remainder, and it is not vc's to lift.** CONDITION: **hv rules on `serde_json`.** The
-  manifest requires hv's sign-off named in the commit for any crate; cc stopped rather than invent adjacent work,
-  which was right. Verified figure: **net 2, 79 to 81**, both dedup keys agreeing.
+- **TELL hv WHEN TO FORCE A LAKSA RESYNC -- hv'S STANDING INSTRUCTION, 2026-09-10.** CONDITION: anything published
+  into `~/Devel/prj/Sites/snorkeltoast` that must reach production, in practice snorkeltoast promoting a build into
+  the `-001` slot. **The webhook is still 401: a push publishes nothing AND SAYS NOTHING**, and Laksa's own health
+  check reads "secret present" as "webhook configured", so it reports the site healthy throughout. The resync is
+  not a fallback, it is the only path. **A push nobody follows with a resync is a publish that did not happen.**
+- **AC-5.3, HELD ON vc'S OWN CALL and cc agrees.** Genuinely JSON-free and genuinely not startable: no showreel
+  manifest, no `bin/` symlink, `common.sh` silent on showreel. CONDITION: **WP-05's dispatch shape decided.**
+  Opening WP-05 at WP-03 10/12 to fill an idle gap is inventing adjacent work. hv can overrule.
+- **The reference's `Image.LANCZOS` hoist and Python's own stamp -- snorkeltoast's, and NOT vc's to chase.**
+  CONDITION: **a compiler change being safe, ie not while 009 is the reference cc is building against.** They have
+  made zero compiler changes all day, deliberately, so cc's target does not move mid-port.
 
 ## Open with hv
 
-**TYPED BY WHETHER hv OWES A RULING, on cc's point that presenting an FYI as a decision wastes the attention and burying a decision among FYIs loses it.**
+**TYPED BY WHETHER hv OWES A RULING**, on cc's point that an FYI dressed as a decision spends the attention the real decision then does not get.
 
 ### Decisions hv owes
 
-- **`serde_json` -- THE ONE THAT UNBLOCKS WORK.** Gates everything left in WP-03, not just AC-3.6. hv's inbox
-  carries the verified number and a pre-answer to the question hv will ask -- why hand-write a calendar and not the
-  emitter: a calendar is closed and pinnable against outside answers; JSON escaping of arbitrary YAML text is
-  open-ended, and the reference's field order in a second home is a Highlander problem.
-- **The public-repo fixtures.** Two pinned fixtures carry a named individual and a customer brand into a public
-  repo. `upstream` is frozen, so nothing is published and it is decidable first.
-- **The QR thread.** All four artifacts lack the QR social slide; and 45h's Showreel QR and its config BOTH name
-  revision `-001` while artifacts exist at `-004` and `-007`. **vc is NOT asserting `-001` is stale** -- hv settles
-  it in one look -- but if it is, nothing in either implementation would say so.
+- **RE-PROVISION THE LAKSA WEBHOOK -- snorkeltoast calls it the highest-value open item anywhere and it is not
+  theirs.** 401 since 2026-09-09 14:43Z. One DB column holds two mutually exclusive credentials: the HMAC key that
+  validates pushes and the token used to clone. Setting it to a token to fix cloning silently kills push delivery.
+  **The clone half IS deployed** -- proved free by the resync scanning 80 files. Trigger half outstanding.
+- **`max_ease` 3000 AGAINST `min_dwell` 2500 in Python's `LIMITS`.** Unruled since 09-09, latent in the LIVE
+  artifact at the same magnitudes it was latent in the old one, untouched by the promote. Its rider travels with
+  it, not as a third item: capping to 2400 turns WP-02's `shipped-max-ease` selftest red BY DESIGN, one small
+  follow-up in snorkeltoast's tree. A consequence, not an argument against.
+- **THE PUBLIC-REPO FIXTURES.** Two pinned fixtures carry a named individual and a customer brand into a public
+  repo. `upstream` frozen, so nothing is published and it is decidable first. **Recommend (b) de-identify the reel
+  config if unsure** -- one edit, keeps every testing property except the name.
+- **DROPPING THE REFERENCE PLAYER'S BRAND FALLBACK** (new). `add("Producer", REEL.producer || "Snorkeltoast")`.
+  cc already dropped it in their copy and thereby fixed slide 1's ungradeability. It is a PRODUCT decision, not an
+  instrument one. **Recommend DEFER until after the 19th and after cc's first compare** -- doing it now moves slide
+  1's gradeability under everyone's feet and invalidates floors measured today. Owed, not urgent, nothing blocked.
+- **SHOULD THE NEW SIDE BE CONTROLLED TOO?** A design question vc is deliberately keeping open. One control, on the
+  reference; if the NEW build is noisier a real regression can sit inside the reference's floors unseen. Cost: a
+  second 14-minute Chrome pass per build. **snorkeltoast has explicitly taken no position and neither has vc.**
 
 ### FYI -- no ruling wanted
 
-- **Rider on hv item 2:** capping Python's `max_ease` to 2400 turns WP-02's selftest RED by design. One small
-  follow-up commit in snorkeltoast's tree. Not an argument against the fix.
-- **`prez showreel build` will need `SHOWREEL_THEME_PATH` where the Python needed nothing** (cc, 18:24Z). H3
-  working, not a regression. hv wants it BEFORE the first build, not during. A ruling only if hv wants the variable
-  set somewhere permanent.
-- **A correction to hv's own AC-3.7 reasoning** (cc, 18:51Z). hv withdrew the row saying nothing gates on the
-  producer literal; nothing in the CONTRACT does, and that part stands. But `include_str!` puts `player.html` in
-  the binary, so a verbatim pull would have taken the H3 strings count off zero. cc took the permission hv had
-  already given; the note exists so the ruling's premise carries its exception.
-- **cc retracted their own 23-vs-22 witness** (18:51Z). "My collect reaches 23 independently" was one
-  implementation agreeing with itself about a number it derived. Running the reference's `plan()` on the same
-  config gives 23 slides and 14 used assets. **The conclusion held and the witness changed** -- which is the
-  stronger position, not a weaker one.
+- **`prez showreel build` needs `SHOWREEL_THEME_PATH`** where the Python needed nothing. H3 working, not a
+  regression. A ruling only if hv wants the variable set somewhere permanent.
+- **AN INTENT DEFECT, NOT A UTILZ ONE: `intent ac edit --text ""` DESTROYS A CRITERION SILENTLY.** vc hit it and
+  lost AC-2.1's 16,839 characters at `c628c39`, recovered at `5d4d39e` and verified against the last good commit.
+  A length guard is now in vc's path, which is discipline where a gate belongs.
+- **Issue 0016** remains hv's WP-05 rider. No action.
 
 ## Claims
 
@@ -272,15 +108,18 @@ Localfolded 2026-09-09 16:51Z. Full boards for 8 Sep and earlier folds of 9 Sep 
 
 ## Live with other nodes
 
-- **`cc`: ACTIVE on WP-03's build path.** Dispatch and R3 landed; design.md section 5 decides three dispositions
-  before the code -- `load_theme`'s regex REPLACED not ported, a missing declared favicon REFUSED where the reference
-  warned, a `.ttf` refused by name with the conversion command. **Their board carries the gate list this estate runs.**
-- **`snorkeltoast`: REOPENED and built AC-2.16's expectation half at `03a44ce`** -- `PORT_EXPECTATIONS`, five
-  entries, three KINDS, consulted by `compare` BEFORE the structure check and not only by the new `expect` verb.
-  **They corrected the row while building it**: the row called the max_ease cap a refusal and the cap CLAMPS.
-  `FLOORS.md` at `daaa503ad7db` remains the parity baseline and is FINAL -- `cmd_control` takes only the artifact,
-  so cc's next build does not supersede it, it produces a different artifact needing its own run.
-- **`intent-vc` / `devbin-vc` / `lamplight-vc`:** consulted on the AC id form and on TN001. Each corrected a premise.
+- **`cc`: FOLDED AND HOLDING.** HEAD `0585f7b`, 273 tests, clippy 0, 43/51, pushed to `local`; `upstream` frozen at
+  `60153d8`. Landed today: `serde_json` with hv named, the payload's non-slide half, the limits invariant, the
+  producer stamp with its content and three red-proofs. **On the bounce their default is the slide rows then the
+  build verb, and they take vc's sequencing over that default.**
+- **`snorkeltoast`: FOLDED AND HOLDING.** WP-02 16/17, selftest green across nine case families, six expectation
+  rows. **Zero compiler changes all day, deliberately.** Landed: the limits consistency check, the floors renderer,
+  re-derived floors plus the first `control.json` that has ever existed, and `producer-fallback-strips`.
+- **`laksa-vc`: SOLVED THE DEPLOY AND OWNS THE REMEDY'S OTHER HALF.** They read GitHub's delivery log -- the
+  observable none of us could see -- and routed their own guard gap as a P0.
+- **`intent-vc` / `devbin-vc` / `lamplight-vc` / `gtools-vc`:** consulted on the AC id form and TN001. gtools-vc's
+  eleven-day hold on a Utilz WP-04 job is CLOSED: ST0010 completed 2026-09-07, 19/19 PASS, three criteria
+  `computed` from ATs that actually run.
 
 ## Watch-outs
 
@@ -485,21 +324,60 @@ incremental.**
 
 **INTENT'S OWN VERBS, LEARNED THE EXPENSIVE WAY.** `intent st hydrate <ID>` adds a thread to `.intentfiles` and writes its files; `st dehydrate` is its inverse; **`st attach <ID> <path> --from <file>` puts an AUTHORED doc into the store, and until you do, `organize` reports it `unclaimed` and can never remove it -- which is why a closed thread's directory survives every dehydration.** `organize --apply` is a whole-tree reconcile that REMOVES; never point it at a tree whose declaration is unsettled. `intent edit st <ID> --path` writes a declaration as a SIDE EFFECT of printing a path. `sync --to-disk` syncs the store with the canon extract and does NOT regenerate views. **`intent/.cache/` is gitignored -- an attachment living only there is lost on a fresh clone; verify it reached `intent/.canon/` before deleting any file it claims to hold.**
 
-### A fourth kind of zero: the instrument's own match rule
+### THE FAMILY OF 10 SEP: AN INSTRUMENT REPORTING SOMETHING ADJACENT TO WHAT WAS NEEDED
 
-**THE THREE KINDS WERE CENSUS, DETECTOR AND TAUTOLOGY. THERE IS A FOURTH AND I PRODUCED IT TODAY.** Sweeping for
-`pub fn` with no production callers, I matched `name\s*\(` and got 7 of 36. **Three were false positives.**
-`main.rs:123` is `slides.iter().flat_map(showreel::slide::Slide::assets)` -- a function passed as a VALUE, with no
-parenthesis after its name -- so `assets`, `stem` and `next` were reported dead while being called.
+**SEVEN INSTANCES IN ONE DAY ACROSS THREE NODES, AND EVERY ONE LOOKED CORRECT AT THE TIME.** cc's framing, and it
+is the right one to head a fold with: the reading was never absurd, never sloppy, and never announced itself. It
+answered a question ADJACENT to the one asked, and adjacency reads as an answer.
 
-**AC-3.8's OWN EVIDENCE REFUTED MY MEASUREMENT**, because it cited `main.rs:123` by file and line. A row whose
-evidence asserts a property would have agreed with my wrong answer in silence; a row that cites source refuted it
-in one read. **That is the argument for file:line evidence, made against me rather than by me.**
+- **A MATCH RULE NARROWS A POPULATION SILENTLY.** Sweeping for uncalled `pub fn`, `name\s*\(` missed every
+  function passed as a VALUE -- `flat_map(Slide::assets)` -- so 3 of 7 "dead" functions were live. **AC-3.8's own
+  evidence refuted my measurement, because it cited `main.rs:123` by file and line.** The corrected rule then
+  matched `fast_image_resize`, a CRATE name, as a test name. **Two rules wrong in opposite directions: the honest
+  output is a BRACKET, not a number.** Same shape on the admission sites -- a bare identifier gave 9 by matching
+  two doc comments; requiring the paren gave the true 7.
+- **A CONTROL WITH AN EMPTY POPULATION IS NOT A CONTROL.** I claimed comment-exclusion as the control on that
+  count and it excluded ZERO -- the paren did all the work. **A control returning zero needs a positive case
+  proving it CAN return one**, and cc made the identical error with a strings census over a shell the linker had
+  dropped. Neither of us built the positive case before quoting the result.
+- **"VERIFIED INDEPENDENTLY" OVER A MULTI-PART CLAIM IS A CLAIM ABOUT THE WHOLE AND A MEASUREMENT OF A PART.**
+  Twice to hv in two days, and **both times the half I highlighted as checked was the false one**: cc's
+  field-order argument, refuted by their own 4.6; and "the lock is 79 by name AND by name+version", when it is 81
+  entries against 79 names. **Both conclusions survived and both proofs did not** -- which is what makes it
+  dangerous, because nothing downstream fails. **The tell is the word "independently": it did rhetorical work
+  both times.**
+- **A STAT IS NOT A DIFF.** `c628c39` emptied AC-2.1's 16,839 characters to nothing -- a heredoc raised, the
+  scratch file was never written, `cat` failed, and `intent ac edit --text ""` accepted the empty string. I read
+  `1 insertion, 1 deletion` and committed; the commit itself said 29 deletions. **Three guards available, all
+  three defeated in one command, hours after telling cc to read the canon diff.** Recovered at `5d4d39e` and
+  verified rather than assumed. **Any generated text that OVERWRITES gets a length assertion before the write.**
+- **A CLAIM ABOUT AN INSTRUMENT UNDER ACTIVE EDIT HAS A SHELF LIFE OF MINUTES.** Three of us reasoned about
+  `strip_reason` inside one hour and two quoted a version that had already moved. **A source read carries no
+  timestamp, so a stale one and a live one are indistinguishable** -- the same property that makes a stale line
+  number invisible, which is the lesson written in a comment two lines above the code we both misread. **RE-READ
+  THE LOAD-BEARING LINE IN THE SAME CALL THAT WRITES THE CLAIM**, so no window exists. That saved AC-2.14 by
+  accident, and accident is not a control.
+- **cc'S TWO, SAME FAMILY:** an assertion SOURCING the constant it was testing (`embed={}` from `normalise::TARGET`
+  -- both sides moved together and it stayed green, inside the test written to prevent exactly that); and a
+  NEGATIVE assertion, `!e.message.contains("missing")`, which **passes on almost any failure**. Their rule is the
+  best sentence of the day: **THE VACUOUS FORM IS THE ONE THAT LOOKS MOST RIGOROUS.** Writing the constant in
+  looks like sourcing the value; typing `1920` looks lazy. It is the other way round.
 
-The rule: **a zero is only as wide as the match rule that produced it, and a match rule narrows the population
-silently.** State the match rule beside the count -- "any occurrence of the identifier", not "the function is
-uncalled" -- and run the control that proves the instrument can see the thing it is looking for. Same discipline
-as naming a population; the instrument is part of the population.
+### ASK THE ARTIFACT: a rule fixed in advance is wrong the moment two artifacts differ
+
+**snorkeltoast's, earned TWICE in one day in two different tables, and the correction was the same sentence both
+times.** _"Every payload must carry `limits`"_ would have refused the sound PUBLISHED build, which carries no
+`limits` key, embeds the old player and applies the floors inline. _"A session crawl is unstrippable"_ would have
+reported a false ungradeable on cc's artifact, whose player drops the brand fallback so the row genuinely strips.
+
+**BOTH ARE WORSE THAN THE BLIND SPOT THEY REPLACE.** A blind spot fails to catch a defect; these remove a sound
+artifact and a gradeable slide from consideration quietly, **with a reason attached that reads as diligence.**
+
+**THE TEST, THEIRS, AND IT IS MECHANICAL: IF THE QUESTION NEEDS A POLICY, A VERSION TABLE, OR AN AGREEMENT BETWEEN
+TWO SESSIONS, IT IS BEING ASSERTED RATHER THAN ASKED.** Both halves ship in the same file; both were answerable
+from the artifact alone. The sound forms retire themselves -- the `limits` check stops asking when a player gains
+a guard, and `producer-fallback-strips` predicts nothing the day the reference drops its literal, **proved by
+pointing the predicate at cc's file and getting zero sites** rather than by claiming it.
 
 ### I cited my own row as authority, and its analogy contradicted its claim
 
@@ -541,74 +419,6 @@ broke; it is a rule that does not reach, which is the harder kind to notice beca
 **Convention proposed to cc and adopted here: whoever commits canon NAMES IN THE MESSAGE what else rode along.**
 Cheap, and it converts a silent collision into a visible one. Applied at `12a606d`, which carries only my own edit
 and says so.
-
-### I said "verified independently" about a multi-part claim and measured one part
-
-**TWICE IN TWO DAYS, AND BOTH TIMES THE PART I HIGHLIGHTED AS CHECKED WAS THE FALSE ONE.**
-
-**(1)** I told hv _"I checked their reasoning rather than relaying it, and it holds"_ about cc's two-part case for
-`serde_json`. cc's own design.md 4.6 then refuted the field-order half -- `compare_structure` sorts before
-comparing. **I had checked the half that was right.**
-
-**(2)** I told hv, twice, _"the lock is 79 by name AND 79 by name+version, so both dedup keys agree -- which is
-exactly what AC-3.10 under-determined"_, and offered it as the thing I had independently verified. **It is 81
-entries against 79 names**; `miniz_oxide` and `syn` each sit at two versions, the two pairs AC-3.10's own evidence
-ALREADY NAMES. cc caught it by refusing to assert a figure they had not measured.
-
-**BOTH CONCLUSIONS SURVIVED AND BOTH PROOFS DID NOT**, which is the shape that makes this dangerous rather than
-merely wrong: the decision was right, so nothing downstream failed, so nothing would ever have reported it.
-
-**THE RULE: "I verified it" over a multi-part argument is a claim about the WHOLE and a measurement of a PART.**
-Name which parts were measured and which were taken. A peer whose argument has two legs deserves to know which leg
-I stood on -- and hv, who rules on it, deserves it more. **The tell is the word "independently": I reached for it
-both times, and both times it was doing rhetorical work rather than reporting a measurement.**
-
-### A claim about an instrument under active edit has a shelf life of minutes
-
-**THREE OF US REASONED ABOUT `strip_reason` INSIDE ONE HOUR AND TWO QUOTED A VERSION THAT HAD ALREADY CHANGED.**
-vc read it keyed on slide kind alone, wrote that into AC-2.14, and caught it only because the same command that
-composed the contract text also happened to `sed` the function -- **accident, not method.** cc then sent a
-detailed, correct, well-cited rebuttal against the same dead version twenty minutes later. Both analyses were
-rigorous. Both were about a file that had moved.
-
-**THE CAUSE IS STRUCTURAL, NOT CARELESSNESS: snorkeltoast is editing the instrument while two people reason about
-it**, and a source read carries no timestamp. A stale read and a live one are indistinguishable by inspection --
-the same property that makes a stale line-number citation invisible, which is the lesson written in a comment two
-lines above the code we both misread.
-
-**THE RULE: re-read the load-bearing line in the SAME call that writes the claim.** Not "before writing" -- in the
-same call, so no window exists between the measurement and the assertion. That is what saved AC-2.14 by luck, and
-luck is not a control.
-
-**AND IT IS snorkeltoast'S OWN RULE ONE LEVEL UP.** Theirs: do not edit a script while a long run of it is in
-flight, because the traceback resolves its line numbers against the NEW file and the diagnostics are corrupted at
-exactly the moment you need them. Same shape with people in place of a stack trace.
-
-### A stat is not a diff, and I read one hours after telling cc to read the other
-
-**`c628c39` emptied AC-2.1's 16,839 characters to nothing.** The chain: a python heredoc raised on a bad `%`
-format, so the scratch file was never written; `cat` failed; `$(cat file)` expanded to an EMPTY STRING; and
-**`intent ac edit --text ""` accepted it without complaint.** Recovered at `5d4d39e` from `45a7419` and verified
-rather than assumed -- ids match, no state differs anywhere, AC-2.1 is the only row whose text differs. **State was
-never touched, so no satisfaction was lost.**
-
-**THREE GUARDS WERE AVAILABLE AND I DEFEATED ALL THREE IN ONE COMMAND.** I ran `git diff --stat` in that very
-command and read _"1 insertion, 1 deletion"_ -- which is exactly what a normal row edit looks like. The commit
-output said **29 deletions** and I did not read that either. And I had told cc, hours earlier, to **read the canon
-diff** before every canon commit. **A STAT IS NOT A DIFF**: it reports the SHAPE of a change and says nothing
-about its content, and every catastrophic single-line edit has a normal-looking shape.
-
-**THE TOOL HAS NO GUARD EITHER**: `intent ac edit --text ""` will destroy a criterion silently. That is the AC-3.9
-shape in the tooling I depend on -- a rule held by discipline. **The rule now: any generated text that OVERWRITES
-existing content gets a length assertion before the write, and the applier refuses rather than proceeds.** I added
-one after the fact; it should have been there first, and my own AC-1.15 watch-out is about exactly this class.
-
-**AND THE SWEEP INSTRUMENT FAILED TWICE THE SAME WAY EARLIER.** `name\s*\(` missed functions passed as values;
-the corrected rule then matched `fast_image_resize`, a CRATE name, as a test name -- so it called AC-3.9
-"enforced" when I had verified by hand that nothing enforces it. **Two rules, wrong in opposite directions, and
-the honest output is a BRACKET rather than a number: between 2 and 26 satisfied rows are held by inspection
-only.** The real answer needs reading, and pattern-matching prose cannot produce it. **Three instrument failures
-in one day, all silent, all mine.**
 
 ### An ask creates a tracked condition on the RECEIVER and nothing on the ASKER
 
