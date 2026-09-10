@@ -3,7 +3,7 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 11981560-5612-4fe7-a136-6eae64636b64
-heartbeat_at: 2026-09-10 19:54Z
+heartbeat_at: 2026-09-10 19:57Z
 status: active
 focus: "ST0017 49/54, doctor 0, WP-01 and WP-03 DONE. The first 45h compare ran: AC-2.1, AC-3.15, AC-5.1 and AC-6.1 all closed today, and hv accepted the encoder divergence. Five rows open, none in flight, all waiting on hv sequencing WP-04. Both peers folded."
 claims: [ST0017]
@@ -122,6 +122,26 @@ no copy, not a fresher one.**
 - **`laksa-vc`: SOLVED THE DEPLOY.** They read GitHub's delivery log -- the observable none of us could see.
 
 ## Watch-outs
+
+**FOUR THINGS THE FOLD'S OWN LOSS PROBE TURNED UP -- TWO CUT BY THE FOLD, TWO NEVER HERE AT ALL.** cc ran a
+probe against their fold and found three losses, one of them mine; **I ran the same probe against mine.** The
+distinction matters: a fold loss is a regression, **a gap was always a gap and looks identical afterwards.**
+
+- **RESTORED (cut by the fold): `signature()` STRIPS `src` ENTIRELY**, so a venue slide LOSING its `src` is
+  invisible to the harness -- `showreel-harness:358`, and `mark` is flattened to `<present>` beside it.
+  **The payload test is the only thing over that half.** cc's finding and they named it as must-survive.
+- **RESTORED (cut by the fold): the harness is PINNED at `f58829961dd7...` / 144,465 bytes.** My
+  compare-time condition was discharged against those bytes, so **if the harness moves, the basis of that
+  measurement moves with it** and `producer-fallback-strips` has to be re-read rather than assumed.
+- **GAP, NEVER ON THIS BOARD: hv's `MAX_EASE_MS` 2400 CAP IS A STANDING SAFETY RULING, NOT A CLOSED ROW.**
+  cc restored it to theirs and re-framed it, and the reasoning is why it belongs here too: **AC-3.6 being
+  satisfied is exactly what makes it look safe to cut.** Anyone restoring the reference's 3000 for parity
+  would be REVERSING A DECISION rather than fixing a divergence. The cap makes runtime ease unreachable above
+  the dwell floor for every config, every speed and both pace modes.
+- **GAP, NEVER ON THIS BOARD: `min_defect` IS 0.223607 AND IT IS WHY AC-3.15 SURVIVES AC-2.19.** All six
+  divergent slides clear it by 4x to 13x, so **the FAIL does not depend on the floors defect being fixed** --
+  which is precisely the shape that makes a defect easy to leave unfixed, and the reason AC-2.19 is a separate
+  row rather than a retraction.
 
 **THE 8-9 SEP CORPUS IS ARCHIVED AND ONLY ITS HEADLINES REMAIN HERE.** Each rule's earning instance is in
 `.history/20260910/watch-outs-0809-full.md`. **The headline is the PROMPT TO APPLY, which is the half that was
