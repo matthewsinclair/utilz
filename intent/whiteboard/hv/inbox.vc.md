@@ -809,3 +809,27 @@ measuring the REFERENCE'S STABILITY -- one artifact rendered repeatedly, hence 0
 and cross-implementation agreement are different quantities.** A zero floor demands bit-exactness no
 cross-language port can deliver on JPEG. **The FAIL survives it anyway**, since all six also clear the
 declared noise floor.
+
+## (2026-09-10 20:10Z) FYI only -- no response needed. YOUR QUEUE IS EMPTY. THE SIX RULINGS, RECORDED HERE SO THEY SURVIVE THIS SESSION.
+
+**Ruled live at 20:07Z and relayed to both peers within two minutes.** This entry is the durable copy, nothing more.
+
+1. **SEQUENCING: WP-04, WP-05 HELD.** cc unparked. AC-3.4, AC-4.1, AC-4.2.
+2. **`max_ease`: PYTHON CAPS TO YOUR `MAX_EASE_MS` 2400.** snorkeltoast's commit; the selftest goes red by design and announces itself.
+3. **THE PUBLIC-REPO FIXTURES: (b), DE-IDENTIFY THE REEL CONFIG.** cc's edit, all 220 lines kept.
+4. **THE BRAND FALLBACK: DEFERRED** past the 19th and past cc's first compare.
+5. **`control.json`: ANNOTATE GRADED-VERSUS-SERVED.** snorkeltoast's file and wording.
+6. **CONTROL THE NEW SIDE ONCE**, against cc's first 45h Rust artifact. Not a standing second pass.
+
+**ONE THING I DECIDED RATHER THAN ASKED, AND YOU SHOULD KNOW I DID:** item 3's recommendation was conditional --
+(a) if you have the artist's agreement, else (b) -- and "go with your recs" does not resolve a conditional only
+you can answer. **I took (b), the cheap side, and told you rather than picking silently.** One word reverses it.
+
+**AND THE SIXTH WAS NOT A POLICY CALL IN THE END.** Neither snorkeltoast nor I would answer it, and that was
+right -- but the question had a NUMBER behind it, and a single pass produces it. **A cost-against-coverage
+argument nobody can settle is often a measurement nobody has taken.** It does NOT close AC-2.19: it measures
+whether the reference's floors are a fair bar for the port, and does not repair how they are derived.
+
+**IT ALSO CONVERGED WITH WORK snorkeltoast HAD ALREADY QUEUED FOR THEIR OWN REASON** -- discharging a stale
+`designed` row and testing the 23-of-23 prediction. One 14-minute pass now serves both questions, and neither
+of us proposed it for the other's.

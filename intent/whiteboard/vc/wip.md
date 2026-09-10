@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 11981560-5612-4fe7-a136-6eae64636b64
-heartbeat_at: 2026-09-10 20:00Z
+heartbeat_at: 2026-09-10 20:09Z
 status: active
-focus: "ST0017 49/54, doctor 0, WP-01 and WP-03 DONE. The first 45h compare ran: AC-2.1, AC-3.15, AC-5.1 and AC-6.1 all closed today, and hv accepted the encoder divergence. Five rows open, none in flight, all waiting on hv sequencing WP-04. Both peers folded."
+focus: "ST0017 49/54, doctor 0. hv ruled the whole queue at 20:07Z: WP-04 OPEN and cc unparked, WP-05 held, Python caps to 2400, the reel fixture de-identifies, the brand fallback defers, control.json gets the graded-versus-served note, and the new side gets ONE control against cc's first Rust artifact. vc's next act is the write-set check on cc's diff."
 claims: [ST0017]
 ---
 
@@ -26,14 +26,30 @@ the pre-fold board are in `.history/20260910/`.
   what it graded by DERIVATION -- `population_source = stamp` against the reference's `adjacency (UNVERIFIED)` --
   and the pixel compare FAILED on six artwork JPEGs, which hv adjudicated as an accepted divergence. **Both
   outcomes are correct and the row carries both.**
-- **WP-01 AND WP-03 ARE DONE. FIVE ROWS REMAIN AND NONE IS IN FLIGHT:** AC-2.19 (the floors derivation --
-  snorkeltoast's instrument, their own finding against it), AC-3.4 / AC-4.1 / AC-4.2 (WP-04 by construction),
-  AC-5.3 (WP-05's doctor line). **Both peers are folded and hold; neither opens WP-04 or WP-05 without hv.**
+- **WP-01 AND WP-03 ARE DONE. FIVE ROWS REMAIN:** AC-2.19 (the floors derivation -- snorkeltoast's instrument,
+  their own finding against it), AC-3.4 / AC-4.1 / AC-4.2 (WP-04 by construction), AC-5.3 (WP-05's doctor line).
+- **WP-04 IS OPEN ON hv'S CALL, 2026-09-10 20:07Z. cc IS UNPARKED AND WP-05 STAYS HELD.** Three rows: AC-3.4,
+  AC-4.1, AC-4.2. **The fixture-safety condition went to cc IN THE SAME MESSAGE THAT OPENED THE WP**, which is
+  how they asked for it -- a condition known before the code is a design constraint, the same one raised after
+  is rework.
+- **THE LIVE CHECK ON cc'S WP-04 DIFF, NOW ACTIVE RATHER THAN HELD.** The fixture recipe's safety rests on the
+  port having no write path into a reel dir outside `_out`. **BASELINE: production calls SEVEN `fs::` functions
+  and exactly THREE write** -- `create_dir_all`, `write`, `remove_file`, all in `build.rs`, with
+  `grep -n 'join("_out")' build.rs` the only reel-derived target. `pdftoppm` and `".raster"` appear nowhere.
+  **TRIGGER: an eighth function, a fourth write site, or a target not derived from `_out`.** Init's masters and
+  `pdftoppm` trip it. **AND THE ENUMERATION IS THE MATCH RULE, NOT A GREP** -- my pattern gave 3 where cc's gave
+  8, the extra five prose, which is why the command below is cc's and not mine.
+
+      for f in <port>/src/*.rs; do t=$(grep -n '#\[cfg(test)\]' "$f" | head -1 | cut -d: -f1); t=${t:-999999}
+        awk -v t="$t" 'NR<t' "$f" | grep -oE 'fs::[a-z_]+'; done | sort | uniq -c | sort -rn
 
 ## TODO
 
-- **THE FIRST THING ON THE BOUNCE IS hv'S SEQUENCING CALL, NOT WORK.** WP-04 before WP-05 is vc's read: three of
-  the five open rows live there and AC-3.4 has waited longest. **Nothing starts without it and that is right.**
+- **THE SEQUENCING CALL CAME AND WP-04 WON. vc'S NEXT ACT IS VERIFYING cc'S DIFF AGAINST THE TRIGGER ABOVE**,
+  not queuing more. **hv RULED FIVE AND MEASURED THE SIXTH** -- see `## Open with hv`.
+- **WATCH FOR cc'S FIRST 45h RUST ARTIFACT AND TELL snorkeltoast INSIDE THAT WINDOW, NOT AFTER.** The one-off
+  control on the new side is scheduled against that artifact; both peers have the dependency and neither can see
+  the other's tree. **The relay is vc's and there is no mechanism behind it.**
 - **STANDING: TELL hv WHEN TO FORCE A LAKSA RESYNC -- AND CHECK WHETHER IT IS STILL NEEDED.** snorkeltoast
   reports 2026-09-10 that **hv has fixed the webhook in Laksa and a push publishes again**; vc has NOT verified
   that and it is not verifiable from this tree. **Until vc sees a push deploy without a manual resync, treat the
@@ -44,17 +60,6 @@ the pre-fold board are in `.history/20260910/`.
   one blank line after the promote. **Reading the payload stays: hash equality says nothing about correctness.**
 
 ## Holds
-
-- **WP-04 CONDITION, WITH THE COMMAND ATTACHED -- FLAG IT THE MOMENT WP-04 OPENS, NOT WHEN THE DIFF ARRIVES.**
-  cc asked for it that way: a condition known before the code is a design constraint, the same one raised after
-  is rework. The fixture recipe's safety rests on the port having no write path into a reel dir outside `_out`.
-  **BASELINE: production calls SEVEN `fs::` functions and exactly THREE write** -- `create_dir_all`, `write`,
-  `remove_file`, all in `build.rs`, with `grep -n 'join("_out")' build.rs` the only reel-derived target.
-  `pdftoppm` and `".raster"` appear nowhere. **TRIGGER: an eighth function, a fourth write site, or a target not
-  derived from `_out`.** Init's masters and `pdftoppm` trip it.
-
-      for f in <port>/src/*.rs; do t=$(grep -n '#\[cfg(test)\]' "$f" | head -1 | cut -d: -f1); t=${t:-999999}
-        awk -v t="$t" 'NR<t' "$f" | grep -oE 'fs::[a-z_]+'; done | sort | uniq -c | sort -rn
 
 - **AC-5.3, ON vc'S OWN CALL AND cc AGREES.** Genuinely not startable: no showreel manifest, no `bin/` symlink,
   `common.sh` silent on showreel. CONDITION: **WP-05's dispatch shape decided.**
@@ -68,24 +73,39 @@ the pre-fold board are in `.history/20260910/`.
 **TYPED BY WHETHER hv OWES A RULING**, on cc's point that an FYI dressed as a decision spends the attention the
 real decision needs.
 
-### Decisions hv owes
+### Ruled by hv, 2026-09-10 20:07Z -- FIVE CLOSED AND THE SIXTH TURNED INTO A MEASUREMENT
 
-- **`max_ease` 3000 AGAINST `min_dwell` 2500 in Python's `LIMITS`.** Unruled since 09-09, latent in the LIVE
-  artifact at the same magnitudes, untouched by the promote. **Its rider travels with it:** capping to 2400 turns
-  WP-02's `shipped-max-ease` selftest red BY DESIGN -- and snorkeltoast has since built the row a VOID TEST, so
-  it will **announce its own death rather than quietly become a lie.** A consequence, not an argument against.
-- **THE PUBLIC-REPO FIXTURES.** Two pinned fixtures carry a named individual and a customer brand into a public
-  repo. `upstream` frozen, so nothing is published and it is decidable first. **Recommend de-identifying the reel
-  config if unsure** -- one edit, keeps every testing property except the name.
-- **DROPPING THE REFERENCE PLAYER'S BRAND FALLBACK.** `add("Producer", REEL.producer || "Snorkeltoast")`. A
-  PRODUCT decision, not an instrument one. **Recommend DEFER until after the 19th** -- doing it now moves slide
-  1's gradeability and invalidates floors measured today.
-- **`control.json`'s `artifact_sha256`: annotate the GRADED-versus-SERVED distinction?** snorkeltoast's, raised
-  against their own file. It names the artifact they GRADED, which is the correct referent for a floors file, and
-  it is one byte from the artifact SERVED. **An identifier is not the thing, and this one is theirs.**
-- **SHOULD THE NEW SIDE BE CONTROLLED TOO?** One control today, on the reference; if the NEW build is noisier a
-  real regression can sit inside the reference's floors unseen. Cost: a second ~14-minute pass per build.
-  **Neither snorkeltoast nor vc has taken a position, deliberately.**
+**THE QUEUE IS EMPTY. Kept here rather than archived because a ruling read months later is worth more than the
+ask that produced it** -- and because two of these are standing constraints someone could "fix" back.
+
+- **SEQUENCING: WP-04 FIRST, WP-05 HELD.** vc's read taken. Three rows against one, and AC-5.3 is not startable.
+- **`max_ease`: CAP PYTHON TO hv'S `MAX_EASE_MS` 2400.** snorkeltoast's commit. **The rider is expected and is
+  not damage:** WP-02's `shipped-max-ease` selftest goes RED by design, and the void test means it announces its
+  own death rather than quietly becoming a lie. **THE CAP IS A STANDING SAFETY RULING, NOT A CLOSED ROW** --
+  anyone restoring 3000 for parity with the reference is REVERSING A DECISION, not fixing a divergence.
+- **THE PUBLIC-REPO FIXTURES: (b), DE-IDENTIFY THE REEL CONFIG.** cc's edit. All 220 lines and all fifteen
+  segments stay; the theme manifest is hv's own brand and is untouched. **vc took the safe side of a conditional
+  it could not resolve** -- only hv knows whether the artist has agreed -- and said so rather than picking
+  silently. One word reverses it to (a).
+- **THE REFERENCE PLAYER'S BRAND FALLBACK: DEFERRED** past the 19th and past cc's first compare. Slide 1's
+  gradeability does not move under cc, and floors measured today stay true. `producer-fallback-strips` stays
+  filed `designed` and **still retires itself** the day the fallback goes.
+- **`control.json`'s `artifact_sha256`: ANNOTATE GRADED-VERSUS-SERVED.** snorkeltoast's file, snorkeltoast's
+  wording. It names the artifact GRADED, which is correct for a floors file and one byte from the one SERVED.
+
+### The sixth, and the shape of the answer is the point
+
+- **CONTROL THE NEW SIDE ONCE, AGAINST cc'S FIRST 45h RUST ARTIFACT.** Not a standing second pass per build.
+- **NEITHER vc NOR snorkeltoast WOULD ANSWER IT AS POLICY AND BOTH WERE RIGHT NOT TO.** The question -- can a
+  real regression hide inside floors derived from the reference's own stability -- **has a number behind it, and
+  a single ~14-minute pass produces it.** If the port's self-noise is comparable, one control is then justified
+  BY MEASUREMENT rather than by hope; if it is higher, the floors need widening before anyone reads the first
+  compare seriously. **A cost-against-coverage argument nobody can settle is often a measurement nobody has
+  taken.**
+- **IT DOES NOT CLOSE AC-2.19 AND MUST NOT BE READ AS CLOSING IT.** snorkeltoast's finding stands untouched: the
+  floors measure ONE artifact rendered repeatedly, the compare asks whether TWO IMPLEMENTATIONS agree, and a bar
+  nothing can clear grades nothing. **This pass measures whether the substitution is FAIR. It does not repair
+  the derivation.**
 
 ### FYI -- no ruling wanted
 
@@ -108,14 +128,19 @@ real decision needs.
 dependency edge exists to another session's tree and none could be built. **The alternative to a fresh copy is
 no copy, not a fresher one.**
 
-- **`cc`: FOLDED AND COMPACTING, NOTHING OWED EITHER WAY.** As at 19:53Z. Landed today: `serde_json` with hv
+- **`cc`: UNPARKED INTO WP-04, TOLD AT 2026-09-10 20:09Z.** Sent in one message: the three rows (read off the store,
+  not off vc), the fixture-safety condition, and the de-identify edit. Landed earlier today: `serde_json` with hv
   named, the payload, the slide rows, the build verb, and `round_ties_even`. **The encoder stays by hv's ruling
   and they said so from their side rather than leaving it look like work undone.**
 - **`snorkeltoast`: FOLDED AND COMPACTING.** As at 19:53Z. Landed: the limits invariant, the floors renderer,
   the first `control.json`, the harness pinned to bytes, the two theme rows flipped to observed, and
-  `jpeg-encoder-bytes` WITH A BOUND. **Their ledger for the bounce: a CONTROL run on the port artifact (which
-  discharges a stale row AND tests the 23-of-23 prediction), the wording that rides with it, and the
-  `Image.LANCZOS` hoist they are holding deliberately.**
+  `jpeg-encoder-bytes` WITH A BOUND. **Told at 2026-09-10 20:09Z: the 2400 cap, the graded-versus-served annotation,
+  the deferred fallback, and the one-off control.**
+- **AND THE CONTROL RULING LANDED ON WORK snorkeltoast HAD ALREADY QUEUED, FROM THE OTHER DIRECTION.** Their
+  bounce ledger already carried a control run on the port artifact -- to discharge the stale `designed` row and
+  test the 23-of-23 prediction. hv authorised it to answer a DIFFERENT question: whether the reference's floors
+  are a fair bar for the port at all. **One 14-minute pass now serves both, and neither of us proposed it for
+  the other's reason.** Their `Image.LANCZOS` hoist stays held deliberately -- it is load-bearing evidence now.
 - **`snorkeltoast` FLAGGED ONE OF THEIR OWN AS STALE ACROSS THE COMPACT:** `producer-fallback-strips` is
   `designed` on a FALSE `unobserved` -- it claims no Rust-built artifact exists and four do. **If the 23-of-23
   figure is cited as live before that control run, it is wrong and they said so first.**
