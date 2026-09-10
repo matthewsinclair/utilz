@@ -1546,6 +1546,71 @@ already carries the URL into the artifact.
 **AND `artist.discipline` IS THE SAME SHAPE ONE OBJECT ALONG:** parsed, shipped, and read by no line
 of the player.
 
+### 4.8 The slide row, censused per KIND, and the MINUS list is FOUR fields not two
+
+**4.6 NAMED `path` AND `asset` AND THAT LIST IS INCOMPLETE FOR THIS PORT.** Those two are what the
+REFERENCE removes (`showreel:993-994`); they are not the whole of what this port would add. `Slide`
+carries **`id`** -- the segment id, threaded through so every refusal can name its owner -- and
+`Common` carries **`clamped`**, whether the timing envelope moved either duration. **Neither exists
+in the reference at all**, so neither is a key the reference could have thought to pop. The Python's
+`sid` is a local used only in `die()` messages and never reaches a dict.
+
+**SO A `#[derive(Serialize)]` ON `Slide` EMITS FOUR KEYS THAT MUST NOT BE THERE, AND TWO OF THEM ARE
+INVISIBLE FROM THE REFERENCE.** Reading the reference's pops and porting exactly those would have
+left `id` and `clamped` in every slide -- a divergence introduced by faithfully copying the fix for a
+different one. The emitter is therefore explicit rather than derived: what goes in is listed, not
+what stays out.
+
+**AND THE KEY SET IS PER-KIND, MEASURED TWO WAYS THAT AGREE.** Read from `collect_segment`
+(`showreel:819-965`, thirteen branches) and independently from the JSON of the reel's own built
+artifact, `_out/20260919-45h-forbiddenplanet-nottingham-001.showreel.html`, which the reference
+produced. Every slide carries the five `common` fields plus `kind`; the rest is the variant:
+
+| kind        | additional keys                                 | in 45h |
+| ----------- | ----------------------------------------------- | ------ |
+| `image`     | `src` `w` `h` `name`                            | 7      |
+| `crawl`     | `crawl`                                         | 2      |
+| `card`      | `headline` `sub` `bg`                           | 3      |
+| `statement` | `kicker` `headline` `body` `bg`                 | 1      |
+| `faq`       | `headline` `items` `bg`                         | 1      |
+| `atwork`    | `kicker` `name` `strap` `caption` `qr` `bg`     | 1      |
+| `strapline` | `mark` `lines` `bg`                             | 1      |
+| `points`    | `headline` `body` `points` `bg`                 | 1      |
+| `venue`     | `src` `kicker` `headline` `at` `city` `bg`      | 1      |
+| `wordmark`  | `top` `mid` `bottom` `bg`                       | 1      |
+| `social`    | `index` `headline` `bg`                         | 4      |
+| `socials`   | `headline` `bg`                                 | **0**  |
+
+**`socials` IS THE ROW WITH NO OBSERVATION BEHIND IT, AND IT IS NAMED RATHER THAN LEFT TO LOOK LIKE
+THE OTHERS.** 45h uses `layout: each`, which yields N x `social`; the `list` layout yields the single
+`socials` slide and no reel here produces one. It is the same shape as everything else on this reel
+(1.13, and 4.7's limits case): the population to hand is well-formed and does not discriminate. That
+row rests on the source alone.
+
+**THREE TRAPS THE TABLE MAKES VISIBLE THAT PROSE HID:**
+
+(1) **`venue` CARRIES `src` AND NOT `w`/`h`/`name`.** The `w`/`h`/`name` update happens in `cmd_build`
+under `if s.get("path")` -- and a `venue` slide has no `path` key, because it embeds its own image
+inside `collect_segment` and stores only the URI. So two different kinds both carry `src`, by two
+different routes, and only one of them carries the dimensions. **A single "if it has an image, add
+src/w/h/name" rule in the port is wrong on exactly one kind**, and it is the kind that would still
+render, because the player reads `w`/`h` only for the image layout.
+
+(2) **`strapline` CARRIES `mark`, NOT `src`.** Same route as venue -- embedded in place -- but a
+different key and a different role (`Role::Mark`, 0.72 of target, not 1.0). The picture is a wordmark
+inside a slide, not the slide.
+
+(3) **`atwork.qr` IS ALWAYS PRESENT, AS `""` WHEN THERE IS NO QR** -- and it is the raw SVG TEXT, not
+a data URI (`load_qr`, `showreel:746-755`, `p.read_text()`). **This port models QR absence as
+`Option<Qr>` on AC-3.3's reasoning, and `skip_serializing_if` on that Option would be the natural
+Rust spelling and a structural divergence**: `compare_structure` would report `qr` missing on every
+atwork slide that has none. The type distinction is real and it stops at the payload boundary --
+`None` emits `""`, which is where this port and the reference agree again.
+
+**AND `logo` IS `kind: "image"` WITH `fit` FORCED TO `"logo"`**, so it is not a twelfth row: it joins
+`image` in shape and differs only in a value. `Kind::Image` already carries both, and the fit is
+resolved before the emitter sees it.
+
 ---
 
 ## 5. Fixed in passage, or inherited -- decided now, not during

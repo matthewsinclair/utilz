@@ -25,9 +25,10 @@
 //! fails in pixels, as a blank, with the instrument pointing at the slides.
 //! Found by snorkeltoast; design.md 4.7.
 
-use crate::{admit, config, limits, normalise, plan};
+use crate::{admit, config, limits, normalise, plan, slide};
 use artifact::Failure;
 use serde::Serialize;
+use serde_json::{Map, Value};
 use std::path::Path;
 
 /// The stamp `showreel qr` writes into the SVG it generates.
@@ -171,6 +172,196 @@ pub fn bug(reel: &Path, cfg: &config::Reel) -> Result<Option<BugRow>, Failure> {
     x: spec.x.unwrap_or(2.2),
     y: spec.y.unwrap_or(1.8),
   }))
+}
+
+/// Every slide, as the artifact carries it.
+///
+/// **THE EMITTER IS EXPLICIT RATHER THAN DERIVED, AND design.md 4.8 IS WHY.**
+/// A `Serialize` on `Slide` would emit FOUR keys the reference has none of.
+/// Two are the ones the reference itself removes -- `s.pop("path")` and
+/// `s.pop("asset")` at `showreel:993-994` -- and **two are this port's own**:
+/// `Slide::id`, threaded through so every refusal can name its owner, and
+/// `Common::clamped`, whether the timing envelope moved a duration. The
+/// reference has no `id` on a slide at all (its `sid` is a local that reaches
+/// only `die()`), so **porting exactly the two pops it names would still have
+/// leaked two keys** -- a divergence introduced by faithfully copying the fix
+/// for a different one. Listing what goes IN cannot fail that way.
+///
+/// **THE TARGET COMES FROM THE CONFIG, AND THE ARGUMENT TYPE IS WHAT ENFORCES
+/// IT.** Taking `&config::Reel` rather than a `u32` is the same control as
+/// `stamp::producer`: a caller holding a number can pass `normalise::TARGET` by
+/// mistake, and **no reel in this tree would catch it** -- 45h and the pinned
+/// fixture both set `target: 1920`, which IS the constant. This is where
+/// `Reel::embed_target` acquires its caller.
+pub fn slides(cfg: &config::Reel, slides: &[slide::Slide]) -> Result<Vec<Value>, Failure> {
+  let target = cfg.embed_target();
+  slides.iter().map(|s| row(s, target)).collect()
+}
+
+/// One slide row: the five rendering fields, `kind`, and the variant's own keys.
+fn row(s: &slide::Slide, target: u32) -> Result<Value, Failure> {
+  let mut m = Map::new();
+  let c = &s.common;
+  m.insert("dwell".into(), c.dwell_ms.into());
+  m.insert("ease".into(), c.ease_ms.into());
+  m.insert("transition".into(), c.transition.clone().into());
+  m.insert("fit".into(), c.fit.clone().into());
+  m.insert("motion".into(), c.motion.clone().into());
+  variant(&mut m, &s.kind, target)?;
+  Ok(Value::Object(m))
+}
+
+/// The `kind` discriminator and the keys that come with it.
+///
+/// **`logo` IS NOT A TWELFTH SHAPE**: it is `kind: "image"` with `fit` forced to
+/// `"logo"`, resolved before this sees it, so it needs no arm of its own.
+fn variant(m: &mut Map<String, Value>, kind: &slide::Kind, target: u32) -> Result<(), Failure> {
+  let mut put = |k: &str, v: Value| {
+    m.insert(k.to_string(), v);
+  };
+  match kind {
+    slide::Kind::Crawl { source } => {
+      put("kind", "crawl".into());
+      put("crawl", source.clone().into());
+    }
+    slide::Kind::Card { headline, sub, bg } => {
+      put("kind", "card".into());
+      put("headline", headline.clone().into());
+      put("sub", sub.clone().into());
+      put("bg", bg.clone().into());
+    }
+    slide::Kind::Statement { kicker, headline, body, bg } => {
+      put("kind", "statement".into());
+      put("kicker", kicker.clone().into());
+      put("headline", headline.clone().into());
+      put("body", body.clone().into());
+      put("bg", bg.clone().into());
+    }
+    slide::Kind::Faq { headline, items, bg } => {
+      put("kind", "faq".into());
+      put("headline", headline.clone().into());
+      let rows: Vec<Value> = items
+        .iter()
+        .map(|i| {
+          let mut o = Map::new();
+          o.insert("q".into(), i.q.clone().into());
+          o.insert("a".into(), i.a.clone().into());
+          Value::Object(o)
+        })
+        .collect();
+      put("items", Value::Array(rows));
+      put("bg", bg.clone().into());
+    }
+    slide::Kind::Atwork { kicker, name, strap, caption, qr, bg } => {
+      put("kind", "atwork".into());
+      put("kicker", kicker.clone().into());
+      put("name", name.clone().into());
+      put("strap", strap.clone().into());
+      put("caption", caption.clone().into());
+      put("qr", qr_text(qr.as_ref())?.into());
+      put("bg", bg.clone().into());
+    }
+    slide::Kind::Strapline { mark, lines, bg } => {
+      put("kind", "strapline".into());
+      put("mark", inline(mark.as_deref(), target, normalise::Role::Mark)?.into());
+      put("lines", Value::Array(lines.iter().map(|l| l.clone().into()).collect()));
+      put("bg", bg.clone().into());
+    }
+    slide::Kind::Points { headline, body, points, bg } => {
+      put("kind", "points".into());
+      put("headline", headline.clone().into());
+      put("body", body.clone().into());
+      put("points", Value::Array(points.iter().map(|p| p.clone().into()).collect()));
+      put("bg", bg.clone().into());
+    }
+    slide::Kind::Venue { image, kicker, headline, at, city, bg } => {
+      put("kind", "venue".into());
+      put("src", inline(image.as_deref(), target, normalise::Role::Slide)?.into());
+      put("kicker", kicker.clone().into());
+      put("headline", headline.clone().into());
+      put("at", at.clone().into());
+      put("city", city.clone().into());
+      put("bg", bg.clone().into());
+    }
+    slide::Kind::Wordmark { top, mid, bottom, bg } => {
+      put("kind", "wordmark".into());
+      put("top", top.clone().into());
+      put("mid", mid.clone().into());
+      put("bottom", bottom.clone().into());
+      put("bg", bg.clone().into());
+    }
+    slide::Kind::Socials { headline, bg } => {
+      put("kind", "socials".into());
+      put("headline", headline.clone().into());
+      put("bg", bg.clone().into());
+    }
+    slide::Kind::Social { index, headline, bg } => {
+      put("kind", "social".into());
+      put("index", (*index).into());
+      put("headline", headline.clone().into());
+      put("bg", bg.clone().into());
+    }
+    slide::Kind::Image { path } => {
+      let e = normalise::embed(path, target, normalise::Role::Slide)?;
+      let name = path.file_name().and_then(std::ffi::OsStr::to_str).ok_or_else(|| {
+        Failure::new(
+          format!("slide image: {} has no usable filename", path.display()),
+          "the payload carries the file's name; rename it to plain text",
+        )
+      })?;
+      put("kind", "image".into());
+      put("src", e.uri.into());
+      put("w", e.width.into());
+      put("h", e.height.into());
+      put("name", name.to_string().into());
+    }
+  }
+  Ok(())
+}
+
+/// A picture embedded in place, or `""` when the segment named none.
+///
+/// **THE EMPTY STRING IS THE REFERENCE'S OWN VALUE AND IT IS DELIBERATE HERE.**
+/// `venue` and `strapline` initialise `src`/`mark` to `""` and only overwrite it
+/// when the segment named a file, so **the key is present either way** and the
+/// player's `if (s.src)` reads it as absent. Skipping the key instead would
+/// report as a structural difference on every such slide.
+///
+/// **AND THIS IS THE ONE PLACE `w`/`h` ARE NOT ADDED ALONGSIDE `src`.** The
+/// reference's dimensions come from `cmd_build`'s `if s.get("path")` block, and
+/// a `venue` slide has no `path` -- it embedded its own image a function
+/// earlier. So two kinds carry `src` by two different routes and only `image`
+/// carries the size with it. design.md 4.8, trap (1).
+fn inline(path: Option<&Path>, target: u32, role: normalise::Role) -> Result<String, Failure> {
+  match path {
+    None => Ok(String::new()),
+    Some(p) => Ok(normalise::embed(p, target, role)?.uri),
+  }
+}
+
+/// An `atwork` QR as the payload carries it: the SVG's own text, or `""`.
+///
+/// **`Option<Qr>` STOPS AT THIS BOUNDARY, ON PURPOSE.** AC-3.3 carries QR
+/// absence as a type because absent and declared-but-missing are different facts
+/// and the reference returned `""` for both. That distinction has already done
+/// its work by the time a payload is built -- the missing one refused at
+/// admission -- and **`skip_serializing_if` here would be the natural Rust
+/// spelling and a structural divergence**: `compare_structure` would report `qr`
+/// against every atwork slide without one. So `None` emits `""`, which is where
+/// this port and the reference agree again.
+///
+/// **AND IT IS THE SVG's TEXT, NOT A DATA URI** -- `load_qr` is a bare
+/// `p.read_text()` (`showreel:746-755`). The markup goes into the page inline.
+fn qr_text(qr: Option<&slide::Qr>) -> Result<String, Failure> {
+  match qr {
+    None => Ok(String::new()),
+    Some(q) => std::fs::read_to_string(&q.path).map_err(|e| {
+      Failure::new(
+        format!("atwork qr: cannot read {}: {e}", q.path.display()),
+        "the segment declares a qr:; make it readable or drop the key",
+      )
+    }),
+  }
 }
 
 #[cfg(test)]
@@ -324,4 +515,136 @@ mod tests {
     assert!(e.message.contains("notes.txt"), "and the file: {}", e.message);
     assert!(e.remedy.is_some_and(|r| r.contains("jpg")), "and the remedy lists the types it takes");
   }
+
+  /// A real picture, because the emitter DECODES where `slide::collect` only
+  /// admits. 2000x1000 so the two targets below land on different sizes.
+  fn png(dir: &Path, name: &str) {
+    let img = image::RgbImage::from_fn(2000, 1000, |x, _| image::Rgb([(x % 256) as u8, 1, 2]));
+    image::DynamicImage::ImageRgb8(img).save(dir.join(name)).unwrap();
+  }
+
+  fn rows(dir: &Path, yaml: &str, socials: usize, target: &str) -> Vec<Value> {
+    let seg: serde_yaml::Value = serde_yaml::from_str(yaml).unwrap();
+    let d = slide::Defaults::resolve(crate::segment::pace(None).unwrap(), None);
+    let c = slide::collect(dir, 0, &seg, &d, socials).unwrap();
+    slides(&cfg(&format!("artist: {{handle: x}}\n{target}")), &c.slides).unwrap()
+  }
+
+  fn keys(v: &Value) -> Vec<String> {
+    let mut k: Vec<String> = v.as_object().unwrap().keys().cloned().collect();
+    k.sort();
+    k
+  }
+
+  fn sorted(extra: &[&str]) -> Vec<String> {
+    let mut k: Vec<String> = ["dwell", "ease", "transition", "fit", "motion", "kind"]
+      .iter()
+      .chain(extra.iter())
+      .map(|s| (*s).to_string())
+      .collect();
+    k.sort();
+    k
+  }
+
+  /// **THE KEY SET PER KIND, ASSERTED AS EQUALITY SO AN EXTRA KEY FAILS TOO.**
+  /// The table is transcribed from design.md 4.8, which took it from
+  /// `collect_segment` and from the JSON of an artifact the REFERENCE built --
+  /// two readings that agree. Equality rather than containment is the whole
+  /// point: **`id`, `clamped`, `path` and `asset` are what a derived emitter
+  /// would add**, and only an exact set can see a key that should not be there.
+  #[test]
+  fn every_slide_kind_emits_exactly_the_reference_key_set() {
+    let r = reel("kinds", &[("q.svg", "<svg/>"), ("art/.keep", "")]);
+    png(&r, "a.png");
+    png(&r, "art/one.png");
+    let cases: &[(&str, &str, usize, &[&str])] = &[
+      ("{id: s, type: crawl}", "crawl", 1, &["crawl"]),
+      ("{id: s, type: card, headline: H}", "card", 1, &["headline", "sub", "bg"]),
+      ("{id: s, type: statement}", "statement", 1, &["kicker", "headline", "body", "bg"]),
+      ("{id: s, type: faq, items: [{q: Q, a: A}]}", "faq", 1, &["headline", "items", "bg"]),
+      (
+        "{id: s, type: atwork, qr: q.svg}",
+        "atwork",
+        1,
+        &["kicker", "name", "strap", "caption", "qr", "bg"],
+      ),
+      ("{id: s, type: atwork}", "atwork", 1, &["kicker", "name", "strap", "caption", "qr", "bg"]),
+      ("{id: s, type: strapline, mark: a.png, lines: [L]}", "strapline", 1, &["mark", "lines", "bg"]),
+      ("{id: s, type: strapline, lines: [L]}", "strapline", 1, &["mark", "lines", "bg"]),
+      ("{id: s, type: points, points: [P]}", "points", 1, &["headline", "body", "points", "bg"]),
+      (
+        "{id: s, type: venue, image: a.png}",
+        "venue",
+        1,
+        &["src", "kicker", "headline", "at", "city", "bg"],
+      ),
+      ("{id: s, type: venue}", "venue", 1, &["src", "kicker", "headline", "at", "city", "bg"]),
+      ("{id: s, type: wordmark, top: T}", "wordmark", 1, &["top", "mid", "bottom", "bg"]),
+      ("{id: s, type: socials, layout: list}", "socials", 1, &["headline", "bg"]),
+      ("{id: s, type: socials, layout: each}", "social", 2, &["index", "headline", "bg"]),
+      ("{id: s, type: logo, file: a.png}", "image", 1, &["src", "w", "h", "name"]),
+      ("{id: s, from: art}", "image", 1, &["src", "w", "h", "name"]),
+    ];
+    for (yaml, kind, socials, extra) in cases {
+      for row in rows(&r, yaml, *socials, "") {
+        assert_eq!(row["kind"], Value::from(*kind), "{yaml}");
+        assert_eq!(keys(&row), sorted(extra), "{yaml} -- id/clamped/path/asset leak here");
+      }
+    }
+    assert_eq!(cases.len(), 16, "sixteen cases over twelve shapes");
+  }
+
+  /// **`venue` CARRIES `src` AND NOT THE DIMENSIONS, AND `image` CARRIES BOTH.**
+  /// design.md 4.8 trap (1): the two kinds reach `src` by different routes and
+  /// the reference adds `w`/`h`/`name` only where a `path` survived into
+  /// `cmd_build`. Asserted as a pair so the natural "every picture gets
+  /// src/w/h/name" rule cannot pass.
+  #[test]
+  fn a_venue_picture_is_a_src_alone_where_a_slide_picture_carries_its_size() {
+    let r = reel("venue-vs-image", &[("art/.keep", "")]);
+    png(&r, "a.png");
+    png(&r, "art/one.png");
+    let v = &rows(&r, "{id: s, type: venue, image: a.png}", 1, "")[0];
+    assert!(v["src"].as_str().unwrap().starts_with("data:"), "the venue image IS embedded");
+    assert!(v.get("w").is_none() && v.get("h").is_none() && v.get("name").is_none());
+    let i = &rows(&r, "{id: s, from: art}", 1, "")[0];
+    assert_eq!(i["w"], Value::from(1920));
+    assert_eq!(i["name"], Value::from("one.png"));
+  }
+
+  /// **AN ABSENT PICTURE IS AN EMPTY STRING, NOT AN ABSENT KEY.** The reference
+  /// initialises `src`/`mark` to `""` and overwrites only when the segment named
+  /// a file, so the key is there either way. `skip_serializing_if` is the
+  /// natural Rust spelling and would report against every such slide.
+  #[test]
+  fn a_segment_that_names_no_picture_still_carries_the_key_as_an_empty_string() {
+    let r = reel("empty-src", &[]);
+    assert_eq!(rows(&r, "{id: s, type: venue}", 1, "")[0]["src"], Value::from(""));
+    assert_eq!(rows(&r, "{id: s, type: strapline, lines: [L]}", 1, "")[0]["mark"], Value::from(""));
+    assert_eq!(rows(&r, "{id: s, type: atwork}", 1, "")[0]["qr"], Value::from(""));
+  }
+
+  /// **`qr` IS THE SVG's OWN TEXT, NOT A DATA URI** -- `load_qr` is a bare
+  /// `read_text` and the markup goes inline.
+  #[test]
+  fn an_atwork_qr_carries_the_svg_source_rather_than_a_data_uri() {
+    let r = reel("qr-text", &[("q.svg", "<svg id='mine'/>")]);
+    let q = rows(&r, "{id: s, type: atwork, qr: q.svg}", 1, "")[0]["qr"].clone();
+    assert_eq!(q, Value::from("<svg id='mine'/>"));
+  }
+
+  /// **THE EMBED SIZE COMES FROM THE CONFIG, NOT FROM `normalise::TARGET`.**
+  /// Asserted at **640**, a value no constant in this crate holds: 45h and the
+  /// pinned fixture both set `target: 1920`, which IS the constant, so a build
+  /// reading the constant instead of the config passes on every reel in this
+  /// tree. This is the only place that difference is observable.
+  #[test]
+  fn the_embed_size_follows_the_reels_target_and_not_the_compiled_default() {
+    let r = reel("target", &[("art/.keep", "")]);
+    png(&r, "art/one.png");
+    assert_eq!(rows(&r, "{id: s, from: art}", 1, "target: 640\n")[0]["w"], Value::from(640));
+    assert_eq!(rows(&r, "{id: s, from: art}", 1, "")[0]["w"], Value::from(1920));
+    assert_eq!(normalise::TARGET, 1920, "and the default is what the bare case fell back to");
+  }
+
 }
