@@ -22,16 +22,32 @@
 //! is not the harness's to make."* **Dropping the fallback makes it, from the
 //! other side, while solving something else.**
 //!
-//! **THE INSTRUMENT CANNOT CURRENTLY SEE THAT, AND THE GAP IS THE INTERESTING
-//! PART.** `strip_reason` is `UNSTRIPPABLE.get((slide.kind, slide.crawl))` -- a
-//! static table keyed on nothing the artifact carries -- and `verdict_for`
-//! returns `"unprovable"` on that reason as its FIRST branch, before the measured
-//! presence number is read. So this shell's crawl is genuinely strippable and
-//! still grades ungradeable. **A hardcoded claim about the player, short-
-//! circuiting a measurement the harness already makes**: `strip_content` builds
-//! the stripped payload and the presence render measures it, which is the ground
-//! truth the table pre-empts. Reported to vc and snorkeltoast; the table is
-//! theirs.
+//! **AND THE INSTRUMENT DOES SEE IT, AS OF 2026-09-10 08:29Z.** `strip_reason`
+//! takes the artifact SOURCE and probes it -- `re.compile(r"REEL\.producer\s*\|\|")`
+//! -- returning a reason only when the fallback is actually present. This shell
+//! has no `||`, so the reason is `None`, `verdict_for` does not short-circuit on
+//! it, and the measured presence figure is reached. **So this artifact's session
+//! crawl is expected to grade where the reference's cannot: 23 of 23 against 22
+//! of 23.**
+//!
+//! **THIS PARAGRAPH SAID THE OPPOSITE ONE COMMIT AGO AND THE ANALYSIS WAS SOUND
+//! -- AGAINST A FILE THAT HAD ALREADY CHANGED.** `strip_reason` was a static
+//! lookup keyed on nothing the artifact carried; snorkeltoast made it
+//! artifact-derived within the hour, and vc made the identical stale read twenty
+//! minutes before I did. **THE HARNESS IS UNDER ACTIVE EDIT, SO ANY CLAIM ABOUT
+//! IT HAS A SHELF LIFE MEASURED IN MINUTES** -- it is snorkeltoast's own rule
+//! about not editing a script while a long run is in flight, with people in
+//! place of a stack trace. Re-read at the moment of the claim, and **cite by
+//! TOKEN, never by line number**: the three call sites this doc named an hour ago
+//! were `:1769`, `:1789` and `:2374`, and every one of them has since moved.
+//!
+//! **THE NARROWER FINDING SURVIVES.** A probe on the artifact's source is still a
+//! claim ABOUT the player rather than the measurement the harness already makes:
+//! `strip_content` builds the stripped payload and the presence render measures
+//! it, and that is the ground truth for *can this slide be stripped*. The probe
+//! is a far better proxy -- artifact-derived, and it cannot go stale the way the
+//! table did -- and it buys one thing the raw measurement does not: **diagnosis.**
+//! A non-empty stripped render says stripping failed; the probe says why.
 //!
 //! **THE OTHER IS AN ADDITION, AND IT IS THE ONE A CARELESS PULL LOSES.**
 //! `<meta name="showreel-producer" content="__PRODUCER__">` is the build's stamp
@@ -66,7 +82,13 @@
 
 use artifact::Failure;
 
-/// The player shell, one line different from the reference.
+/// The player shell, TWO lines different from the reference -- a removal and an
+/// addition, both deliberate and both in the module doc above.
+///
+/// **IT SAID "one line" UNTIL THE STAMP LANDED, WHICH IS A SUMMARY CONTRADICTING
+/// THE THING IT SUMMARISES, TWENTY LINES APART IN ONE FILE.** Same shape as the
+/// board line claiming both dedup keys agreed while the row it summarised named
+/// the two crates that disagreed.
 pub const SHELL: &str = include_str!("../player.html");
 
 const THEME: &str = "/*__THEME__*/";
