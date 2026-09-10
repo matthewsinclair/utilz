@@ -3,7 +3,7 @@ node: cc
 name: Control Claude
 role: control
 session_id: a30f9092-03ed-44ba-a659-b37813af12c7
-heartbeat_at: 2026-09-10 17:24Z
+heartbeat_at: 2026-09-10 17:28Z
 status: active
 focus: "ST0017 at 47/52, verified myself not taken: everything closable in WP-03 IS CLOSED. 289 tests, all gates 0. The five open rows are WP-04 (3), WP-05 (1) and the hv-gated compare (1). NOTHING IS MINE TO MOVE without hv re-sequencing."
 claims: [ST0017]
@@ -43,7 +43,7 @@ claims: [ST0017]
 
 - **THE FIVE OPEN ROWS, MEASURED MYSELF: AC-2.1 AC-3.4 AC-4.1 AC-4.2 AC-5.3.** AC-2.1 is the hv-gated compare; AC-3.4/4.1/4.2 are WP-04 by construction; AC-5.3 is WP-05's doctor line. **I am not opening WP-04 or WP-05 to look busy** -- that is hv's sequencing call, not mine.
 
-- **AC-5.3 is JSON-free and NOT startable** -- `utilz doctor` must report `pdftoppm` as an optional line, but there is no showreel manifest, no `bin/` symlink, and `common.sh` is silent on showreel (re-measured 2026-09-10: `grep -c showreel common.sh` = 0, no `bin/showreel`). **THE `prez showreel` DISPATCH IS NOT PART OF THAT GAP AND I HAD IT WRONG** -- `opt/prez/prez:152` routes it and has since `b8dc9f1` yesterday. Needs WP-05's dispatch shape. **Held on vc's call**; opening WP-05 at 10/12 to fill a gap is inventing adjacent work.
+- **AC-5.3 is JSON-free and NOT startable** -- `utilz doctor` must report `pdftoppm` as an optional line, but there is no showreel manifest, no `bin/` symlink, and `common.sh` is silent on showreel (re-measured 2026-09-10: `grep -c showreel common.sh` = 0, no `bin/showreel`). **THE `prez showreel` DISPATCH IS NOT PART OF THAT GAP AND I HAD IT WRONG** -- `opt/prez/prez:152` routes it and has since `b8dc9f1` yesterday. Needs WP-05's dispatch shape. **Held on vc's call**; opening WP-05 **at WP-03's then-10/12, as it stood on the morning of 2026-09-10**, to fill a gap would have been inventing adjacent work. **WP-03 is 12/13 now and the hold still stands on the same reasoning** -- the figure is dated because it is the reason a MORNING call was made, not a claim about now.
 - **AC-3.4 AND AC-4.1 ARE OPEN AND ARE NOT MINE TO MOVE.** Both need WP-04's `init`: AC-3.4 spans two work packages by construction -- the POLICY is built here, its second application is init's -- and AC-4.1 needs population (3), which does not exist until a Rust `init` does. Named so a reader counting eight open rows against six on this board does not go looking.
 - **PFIC the scan ordering when next in `admit.rs`** -- vc's, NOT a special trip.
 - **Issue 0016** -- gate state in `manifest.sha256`, hv-scheduled as a WP-05 rider.
