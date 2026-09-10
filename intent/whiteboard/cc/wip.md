@@ -3,7 +3,7 @@ node: cc
 name: Control Claude
 role: control
 session_id: a30f9092-03ed-44ba-a659-b37813af12c7
-heartbeat_at: 2026-09-10 17:21Z
+heartbeat_at: 2026-09-10 17:24Z
 status: active
 focus: "ST0017 at 47/52, verified myself not taken: everything closable in WP-03 IS CLOSED. 289 tests, all gates 0. The five open rows are WP-04 (3), WP-05 (1) and the hv-gated compare (1). NOTHING IS MINE TO MOVE without hv re-sequencing."
 claims: [ST0017]
@@ -13,6 +13,10 @@ claims: [ST0017]
 
 ## DOING
 
+**NOTHING IS IN FLIGHT. I AM PARKED**, and the condition that releases it is: hv sequences WP-04 or WP-05, or the compare returns something in my lane. **This heading claimed a digest of COMPLETED work until 2026-09-10 17:23Z** -- every bullet under it true, the label wrong, which is the class vc named: the entry is right and its frame is wrong, and nothing checks a frame.
+
+## Delivered and measured -- WP-03, as at 2026-09-10 17:23Z
+
 **ST0017 -- hoisting snorkeltoast's `showreel` into Utilz as a Rust pipeline under `prez showreel`.** Localfolded 2026-09-10 08:43Z; the slice-by-slice narrative is in `.history/20260909/` and `.history/20260910/`.
 
 - **BUILT AND RED-PROVED:** theme resolution, admission (C1), normalisation (C2), the slide model, `embed`, the template, the plan, delivery naming, the producer stamp, AC-3.2's drop report, the whole payload, and **the BUILD VERB at `8bef628`** -- twelve injections across the two slices, all twelve fired. **288 tests.**
@@ -20,19 +24,24 @@ claims: [ST0017]
 - **A PRODUCED ARTIFACT STAMPS `embed=640` FROM A `target: 640` REEL.** `normalise::TARGET` is 1920 and every real reel here sets 1920, so the constant-for-config swap is invisible estate-wide. Proven on the written file, not the emitter.
 - **`producer-fallback-strips` IS NOW A MEASUREMENT.** vc's regex: **1 hit** on a reference-built artifact, **0** on a port-built one, same run. The control fires, so the zero is a measurement and not an empty population.
 - **`check` RESOLVES THE LIVE 45h CONFIG**, both invocation forms, exit 0, silent at both report altitudes: **23 slides, 14 assets -- matching the reference's own `plan()`**, so the port is checked against something other than itself.
-- **WP-01 15/15. Contract 43/51, 3 withdrawn. WP-03 10/12; WP-02 16/17; WP-04 0/2; WP-05 1/3; WP-06 1/2.**
+- **CONTRACT 47/52, 3 withdrawn, measured 2026-09-10 17:10Z -- and this line read `43/51 ... WP-03 10/12` until 17:23Z.** **I audited this very section an hour earlier for exactly this defect, corrected the binary figure two bullets BELOW it, and did not see this one.** A stale number is not found by looking at the section that contains it; it is found by re-running the command that produces it.
 - **`serde_json` IS IN at `0745d32`, hv NAMED, ruled 2026-09-10 on the corrected ONE-argument case.** Lock **79 to 81 entries**; AC-3.10's union **71 to 73**; prez unmoved at 17. **I took the sign-off from hv DIRECTLY rather than from vc's accurate relay** -- a peer's report cannot produce a NAMED sign-off -- and **hv was offered the standing version and declined it**, so every future crate addition returns to them the same way.
 - **AC-3.6's RUNTIME LEG IS MINE AND IS NOW BUILT.** The payload's `limits.max_ease` **DERIVES** from `limits::MAX_EASE_MS` and ships as **2400, not the reference's 3000**; the red-control fires (move the constant, the block follows). **The ROW IS STILL OPEN** -- it needs a built artifact, not a struct. **Cite it by TOKEN, never by line number**: the harness's line numbers moved three times today.
 - **prez is 4,384,912 (release) AND HAS NOT MOVED ALL PROJECT, WHICH IS AC02's WHOLE SIGN-OFF** -- re-measured 2026-09-10 17:17Z, not carried. **showreel is 1,981,888 (release), and this line said 535,968 until that re-measure: STALE BY 3.7x.** Not a profile mix-up -- release both times; debug is 17,506,760 and was never the figure. The growth is `serde_json` linking plus `payload.rs`, `build.rs` and `stamp.rs`. **No budget is breached: the 8 MB ceiling is prez's, and design.md:41 rules two binaries and two budgets.** **FOUND BY APPLYING THE DAY'S OWN RULE TO MY OWN BOARD** -- a claim nobody has run is not a weaker claim, it is an unmeasured one, and this one had sat since `ddb2eb3` this morning through four commits that all touched showreel.
 
-## TODO -- the next slice, in order
+## TODO
 
-1. **NOTHING IS MINE. WP-03's CLOSABLE WORK IS DONE** -- AC-5.1 and AC-6.1 closed by vc at `f2046f9`, driven rather than taken from my report. **SIX artifacts now carry ONE sha** (`118a63f7...`, 5,462,781): my four invocation forms plus vc's two, built in a different session -- so the build is deterministic across route AND across sessions, which is more than AC-5.1 asked.
-2. **THE FIVE OPEN ROWS, MEASURED MYSELF: AC-2.1 AC-3.4 AC-4.1 AC-4.2 AC-5.3.** AC-2.1 is the hv-gated compare; AC-3.4/4.1/4.2 are WP-04 by construction; AC-5.3 is WP-05's doctor line. **I am not opening WP-04 or WP-05 to look busy** -- that is hv's sequencing call, not mine.
+**EMPTY. Nothing is queued for me** -- WP-03's closable work is done and the remaining rows belong to WP-04, WP-05 or the gated compare. **RELEASED BY:** hv sequencing WP-04 or WP-05, or the compare returning something in my lane.
+
+**This heading read `TODO -- the next slice, in order` until 2026-09-10 17:25Z, promising ordered queued work over a status report.** Third instance today of a frame outliving its contents.
 
 **DONE AND OFF THIS LIST: the slide rows, `Reel::embed_target`'s caller, the build verb, vc's manifest gate.** The gate was the thing sequenced in front of the verb -- `tests/manifest.rs`, 5 tests, green here 2026-09-10. **I verified the target LINKS before believing the run**, because a `tests/` dir under a virtual manifest is silently uncompiled and reads exactly like a passing gate; the root manifest has a `[package]`, so it is real. Their file and the `acceptance.md` view are uncommitted and theirs.
 
-## Also queued
+## Not mine, held, or another node's -- nothing here is queued work of mine
+
+**THIS HEADING SAID `Also queued` UNTIL 2026-09-10 17:23Z AND FOUR OF ITS FIVE ENTRIES WERE EXPLICITLY NOT MINE TO DO** -- two named as another node's in their own text. A heading is a claim about everything beneath it and it rots while every entry under it stays true.
+
+- **THE FIVE OPEN ROWS, MEASURED MYSELF: AC-2.1 AC-3.4 AC-4.1 AC-4.2 AC-5.3.** AC-2.1 is the hv-gated compare; AC-3.4/4.1/4.2 are WP-04 by construction; AC-5.3 is WP-05's doctor line. **I am not opening WP-04 or WP-05 to look busy** -- that is hv's sequencing call, not mine.
 
 - **AC-5.3 is JSON-free and NOT startable** -- `utilz doctor` must report `pdftoppm` as an optional line, but there is no showreel manifest, no `bin/` symlink, and `common.sh` is silent on showreel (re-measured 2026-09-10: `grep -c showreel common.sh` = 0, no `bin/showreel`). **THE `prez showreel` DISPATCH IS NOT PART OF THAT GAP AND I HAD IT WRONG** -- `opt/prez/prez:152` routes it and has since `b8dc9f1` yesterday. Needs WP-05's dispatch shape. **Held on vc's call**; opening WP-05 at 10/12 to fill a gap is inventing adjacent work.
 - **AC-3.4 AND AC-4.1 ARE OPEN AND ARE NOT MINE TO MOVE.** Both need WP-04's `init`: AC-3.4 spans two work packages by construction -- the POLICY is built here, its second application is init's -- and AC-4.1 needs population (3), which does not exist until a Rust `init` does. Named so a reader counting eight open rows against six on this board does not go looking.
