@@ -3,7 +3,7 @@ node: cc
 name: Control Claude
 role: control
 session_id: a30f9092-03ed-44ba-a659-b37813af12c7
-heartbeat_at: 2026-09-10 09:50Z
+heartbeat_at: 2026-09-10 17:13Z
 status: active
 focus: "ST0017 at 47/52, verified myself not taken: everything closable in WP-03 IS CLOSED. 289 tests, all gates 0. The five open rows are WP-04 (3), WP-05 (1) and the hv-gated compare (1). NOTHING IS MINE TO MOVE without hv re-sequencing."
 claims: [ST0017]
@@ -81,6 +81,10 @@ _(none -- hv's `serde_json` ruling released the only one, 2026-09-10.)_
 - **`| head -3` SWALLOWED THE ANSWER.** I ran `./bin/prez showreel build ... | head -3`; the auto-rebuild banner filled all three lines, so I never saw the result -- and then reported `prez showreel` as unwired. Same shape as `${PIPESTATUS[0]}` already on this board: **the meaningful part of the output came last and the instrument only showed the first part.**
 - **I TESTED A DIFFERENT PROGRAM.** `target/release/prez` genuinely does not know `showreel`; `bin/prez` is the `utilz` DISPATCHER and routes it. I generalised from the binary to the shim and they are not the same executable. **vc measured all four forms and every one answered.**
 - **A HARDCODED LABEL ON AN UNPINNED QUERY.** I printed `commit 4a800d6 %ad` from a bare `git log -1`, which reads HEAD -- and vc had committed `ed8986a` in between, so the label named one commit and the data came from another. **The output asserted a provenance the command never queried.**
+
+**AND WHEN TWO PEOPLE'S GREPS DISAGREE, STOP TUNING THE GREP AND ENUMERATE THE POPULATION.** vc and I counted the same crate's write surface and got **43 and 36 flat, 3 and 8 filtered** -- four numbers, one crate, and the disagreement was entirely in the match rules. The settling move was not a better pattern: it was listing **every `fs::` call in production code and classifying it** -- 7 distinct functions, 3 of them writes, all in `build.rs`. **A pattern answers "does this line match a rule I chose"; an enumeration answers "what does the code call", and only the second can be audited by someone who does not share your rule.** vc's keeper is the general form: **a count without its match rule is not a measurement.**
+
+**AND THE ATTRIBUTION WENT WRONG IN THE SAME EXCHANGE, WHICH IS THE POINT UNDERNEATH IT.** vc diagnosed my pattern as over-sensitive; measured, **mine gives 43/3 and matches no prose**, and the over-sensitive version was their TRANSCRIPTION of it -- `fs::(write|create_dir|remove)` re-quoted as `fs::write|create_dir|remove`, where the prefix binds to the first alternative only and bare `remove` then matches an error message about removing. **Their own rule, twice in one day: ask the party that made the error before writing down why they made it.** Their fix is still the better pattern -- it catches `fs::copy` and `fs::rename`, which mine would miss -- and the crate calls neither, so the 3 was right for a reason narrower than it looked.
 
 **THE COMMON TELL: PIN THE SUBJECT IN THE SAME COMMAND THAT PRINTS IT**, and never `head` output whose interesting end is the bottom -- use `tail`, or read it whole.
 
