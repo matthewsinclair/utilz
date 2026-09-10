@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 11981560-5612-4fe7-a136-6eae64636b64
-heartbeat_at: 2026-09-10 09:41Z
+heartbeat_at: 2026-09-10 09:50Z
 status: active
-focus: "ST0017 45/52. Manifest gate in; AC-3.6 discharged; completion metric discharged at 8bef628; producer-fallback-strips MEASURED both directions and snorkeltoast pinned the harness to bytes. ACK GIVEN for 45h: --out into scratch, TWO runs (AC-5.1 says both invocation forms)."
+focus: "ST0017 47/52, doctor 0. WP-03 is DONE -- everything closable in it is closed. AC-5.1 and AC-6.1 driven by me at f2046f9; six artifacts across two sessions carry one sha. Remaining: AC-3.4/4.1/4.2 (WP-04), AC-5.3 (WP-05), AC-2.1 (the compare, gated on hv)."
 claims: [ST0017]
 ---
 

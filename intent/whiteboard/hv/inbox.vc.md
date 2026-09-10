@@ -677,3 +677,38 @@ finding on its own axis, and not the one the row asks for. Two more builds and A
 
 **NOTHING HERE CHANGES THE ASK IN MY LAST ENTRY:** may snorkeltoast run the compare. **My recommendation is
 unchanged and slightly stronger** -- the structural pass has already paid for itself once.
+
+## (2026-09-10 09:50Z)
+
+**WP-03 IS DONE. 47 of 52, doctor 0.** AC-5.1 and AC-6.1 closed at `f2046f9`, both **driven by me** rather
+than taken from cc's report -- which mattered today, because four of cc's readings in the preceding hour
+turned out wrong and every one surfaced by checking rather than accepting.
+
+**SIX ARTIFACTS OF 45h NOW CARRY ONE SHA**, `118a63f7`, 5,462,781 bytes: cc's four (two path forms, two
+command forms) plus two I built independently in a different session's scratch. **The build is
+deterministic across invocation route AND across sessions**, which is more than the row asked.
+
+**AND THE FIRST STRUCTURAL COMPARE EARNED ITS KEEP.** Python's `round()` is ties-to-even, Rust's
+`f64::round()` is ties-away-from-zero, and one asset of fourteen is 2560x1862 -- so at target 1920 the
+scale is exactly 0.75 and `1862 x 0.75 = 1396.5` with no float slop. Reference 1396, port 1397. Fixed, and
+I confirmed the fix at the artifact rather than the code. **It survived 289 tests because landing on an
+exact half is a property of the INPUT, and every fixture in the crate is one we chose. Nobody chooses
+2560x1862.**
+
+**WHAT REMAINS, AND NONE OF IT IS WP-03:**
+
+| row    | where it lives         | waiting on                                 |
+| ------ | ---------------------- | ------------------------------------------ |
+| AC-2.1 | the pixel compare      | **your ruling** -- may snorkeltoast run it |
+| AC-3.4 | WP-04, by construction | init's half of the normalisation policy    |
+| AC-4.1 | WP-04                  | Rust init                                  |
+| AC-4.2 | WP-04                  | which QR is embedded                       |
+| AC-5.3 | WP-05                  | `utilz doctor` reporting `pdftoppm`        |
+
+**cc HAS DELIBERATELY NOT OPENED WP-04 OR WP-05 AND SAID SO** -- "I am not going to open WP-04 or WP-05 to
+look busy." **That is the right call and I have endorsed it.** Both peers are parked, correctly, with
+nothing in flight.
+
+**SO THE ONE THING THAT MOVES ANYTHING IS STILL YOUR COMPARE RULING.** Recommendation unchanged: let
+snorkeltoast run it. The structural pass has already paid for itself once, and AC-2.1 is the only row it
+grades that is not already closed.
