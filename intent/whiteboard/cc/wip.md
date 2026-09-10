@@ -3,7 +3,7 @@ node: cc
 name: Control Claude
 role: control
 session_id: a30f9092-03ed-44ba-a659-b37813af12c7
-heartbeat_at: 2026-09-10 17:18Z
+heartbeat_at: 2026-09-10 17:21Z
 status: active
 focus: "ST0017 at 47/52, verified myself not taken: everything closable in WP-03 IS CLOSED. 289 tests, all gates 0. The five open rows are WP-04 (3), WP-05 (1) and the hv-gated compare (1). NOTHING IS MINE TO MOVE without hv re-sequencing."
 claims: [ST0017]
@@ -46,12 +46,15 @@ _(none -- hv's `serde_json` ruling released the only one, 2026-09-10.)_
 
 ## Open with hv
 
-**NOTHING OF MINE.** `serde_json` is ruled, named and closed. Four items remain and all are vc's to put up: `SHOWREEL_THEME_PATH` (FYI), `intent ac edit --text ""` destroying a criterion silently (an **Intent** defect, not a Utilz one), the public-repo fixtures, and the QR thread.
+**NOTHING OF MINE**, and that half I can verify: `serde_json` is ruled, named and closed. **THE REST IS A CLAIM ABOUT vc's QUEUE AND I CANNOT SEE IT** -- as of **2026-09-10 09:00Z** four items were theirs to put up (`SHOWREEL_THEME_PATH` FYI; `intent ac edit --text ""` destroying a criterion silently, an **Intent** defect not a Utilz one; the public-repo fixtures; the QR thread). vc has taken at least two further things to hv since (the `096a676` promote path, and the decisions hv answered with _"crack on"_), so **treat the four as a morning reading, not a live queue.** Peer state is the shortest-half-life thing on any board and there is no edge anyone could build to notice it moving.
 
 ## What the first compare is expected to show
 
-- **F2 IS 23**, from 009's config, unchanged. snorkeltoast's re-derived FLOORS.md against 009: **22 gradeable, 1 ungradeable, 0 undecided, 0 windowless, of 23**, reproducible over two independent 13-capture passes.
-- **EXPECT A GRADEABILITY DIFFERENCE: 23 of 23 here against 22 of 23 for the reference.** `add` is `(k,v) => { if (v) ... }`, byte-identical in both shells, so it skips falsy; the reference's `|| "Snorkeltoast"` keeps the Producer row alive under stripping and this shell's removal does not. `strip_reason` now probes the artifact's own source for `REEL.producer ||`, so the difference is visible to the instrument. **It is the port REMOVING a defect, which is the hardest difference to read correctly in the moment** -- so it goes into `PORT_EXPECTATIONS` first, and **verified against the harness AS IT WILL BE at compare time**, not as it is now.
+**STATUS 2026-09-10 17:20Z: THE STRUCTURAL HALF HAS RUN AND IS ZERO; THE PIXEL HALF IS WITH snorkeltoast AND HAS NOT RETURNED.** What follows was written as prediction; the lines that have since become measurements say so.
+
+- **F2 IS 23**, from 009's config, unchanged -- reconfirmed by vc 2026-09-10. snorkeltoast's re-derived FLOORS.md against 009: **22 gradeable, 1 ungradeable, 0 undecided, 0 windowless, of 23**, reproducible over two independent 13-capture passes.
+- **MEASURED, NO LONGER PREDICTED (2026-09-10):** the port's payload is **structurally identical to the reference's** -- 23 slides, zero diffs from `compare_structure`, from all four invocation forms, six artifacts across two sessions at one sha. The one defect it found was a rounding MODE and is fixed.
+- **EXPECT A GRADEABILITY DIFFERENCE: 23 of 23 here against 22 of 23 for the reference.** `add` is `(k,v) => { if (v) ... }`, byte-identical in both shells, so it skips falsy; the reference's `|| "Snorkeltoast"` keeps the Producer row alive under stripping and this shell's removal does not. `strip_reason` now probes the artifact's own source for `REEL.producer ||`, so the difference is visible to the instrument. **It is the port REMOVING a defect, which is the hardest difference to read correctly in the moment** -- so it went into `PORT_EXPECTATIONS` first. **THE PRECONDITION IS NOW MEASURED AND THE PREDICTION IS STILL A PREDICTION:** the probe reads **1 on a reference-built artifact and 0 on a port-built one**, same regex, same run, so the control fires; vc discharged their "harness as it will be at compare time" condition against snorkeltoast's pinned bytes on 2026-09-10. **The 23-of-23 outcome itself is observed at capture and has not been.**
 - **READ THE FIRST GREEN AS POPULATION (2), NOT (3).** 45h's masters are Python `init`'s output and **nothing in the harness distinguishes the two**.
 
 ## Watch-outs
