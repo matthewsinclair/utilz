@@ -3,7 +3,7 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 11981560-5612-4fe7-a136-6eae64636b64
-heartbeat_at: 2026-09-10 17:09Z
+heartbeat_at: 2026-09-10 17:11Z
 status: active
 focus: "ST0017 47/52, doctor 0. hv released BOTH gated items -- snorkeltoast is running the fidelity compare (299 renders, AC-2.1 the only open row it grades) and landing the two-row flip. cc parked. WP-04 NOT read as opened; hv told that is my reading."
 claims: [ST0017]
@@ -87,23 +87,32 @@ harness and the reference, hv adjudicates.** Localfolded 2026-09-10 08:45Z; 10 S
 
 ## Holds
 
-- **WP-04 CONDITION, WITH THE COMMAND ATTACHED RATHER THAN A SENTENCE -- MY OWN COROLLARY APPLIED TO A HAZARD
-  I DATED.** The fixture recipe's safety rests on the port having no write path into a reel directory outside
-  `_out`. **Censused 2026-09-10: the port's ENTIRE production write set is THREE calls**, counted per file
-  before each file's `#[cfg(test)]` -- `build.rs:206 create_dir_all(&out_dir)`, `:215 write(&out, &html)`,
-  `:235 remove_file(&p)` -- and `build.rs:205` is `let out_dir = o.dir.join("_out")`, the ONLY reel-derived
-  write target in the crate. `pdftoppm` and `".raster"` appear nowhere in either crate. **TRIGGER: a fourth
-  site, or any site whose target is not derived from `_out`.**
+- **WP-04 CONDITION, WITH A PATTERN-PINNED COMMAND -- AND MY FIRST VERSION HAD THE FLAW I HAD JUST REJECTED IN
+  SOMEBODY ELSE'S.** The fixture recipe's safety rests on the port having no write path into a reel directory
+  outside `_out`. **Censused: the port's ENTIRE production write set is THREE calls**, all in `build.rs` --
+  `create_dir_all(&out_dir)`, `write(&out, &html)`, and prune's `remove_file(&p)` -- with
+  `grep -n 'join("_out")' build.rs` returning ONE production hit, the only reel-derived write target in the
+  crate. `pdftoppm` and `".raster"` appear nowhere in either crate. **TRIGGER: a fourth site, or any site whose
+  target is not derived from `_out`.** WP-04's init trips it -- 2560px masters and a `pdftoppm` shell-out.
 
-      for f in <port>/src/*.rs; do t=$(grep -n '#\[cfg(test)\]' "$f" | head -1 | cut -d: -f1); t=${t:-999999};
-        awk -v t="$t" -v f="$f" 'NR<t && /fs::write|fs::create_dir|File::create|remove_file/ {print f":"NR}' "$f"; done
+      PAT='fs::(write|create_dir|create_dir_all|remove_file|remove_dir_all|copy|rename)|File::create|OpenOptions'
+      for f in <port>/src/*.rs; do t=$(grep -n '#\[cfg(test)\]' "$f" | head -1 | cut -d: -f1); t=${t:-999999}
+        awk -v t="$t" 'NR<t' "$f" | grep -En "$PAT" | sed "s|^|$f:|"; done      # baseline: exactly 3
 
-  **WP-04's init is exactly what trips it** -- 2560px masters and a `pdftoppm` shell-out. snorkeltoast proposed
-  a token grep for `raster`; **I ran it, PROVED IT CAN FIRE by appending a comment, and rejected it for that
-  reason** -- a trigger satisfiable by prose cries wolf, and one that cries wolf gets muted, which is how a
-  runnable check decays back into the sentence it replaced. **A count that must stay at three cannot be
-  satisfied by a comment.**
+  **THE PATTERN IS PART OF THE MEASUREMENT AND I HAD LEFT IT LOOSE.** cc counted the same thing with
+  `...|remove|...` and got a FLAT 52 against my 36 -- and, filtered, **8 against my 3.** The extra five are
+  PROSE: `format!("cannot remove {}: {e}")` in an error message and the word "remove" in two doc comments.
+  **That is exactly the over-sensitivity I rejected in snorkeltoast's `raster` grep two hours earlier, and I
+  had built it into my own trigger by quoting a count without pinning the rule that produced it.** The
+  tightened pattern requires `fs::` or `File::` call syntax and is proved BOTH WAYS: 0 against a line of prose
+  containing "cannot remove the file", 1 against `std::fs::remove_file(&p);`.
+  **A COUNT WITHOUT ITS MATCH RULE IS NOT A MEASUREMENT** -- two honest people counting the same crate got 36
+  and 52 flat, 3 and 8 filtered, and only the rule tells you which is the fact.
 
+- **AND THE LOCATORS ARE TOKENS NOW BECAUSE MINE WAS ALREADY WRONG.** I filed this condition citing
+  `build.rs:205` for `o.dir.join("_out")`; **it is `:201`** -- cc caught it, and `build.rs` had gained a helper
+  and a test module the same day. **Filed the morning we agreed to stop citing line numbers into files that
+  move**, which is how durable the habit is without a rule that refuses it.
 - **TELL hv WHEN TO FORCE A LAKSA RESYNC -- hv'S STANDING INSTRUCTION, 2026-09-10.** CONDITION: anything published
   into `~/Devel/prj/Sites/snorkeltoast` that must reach production, in practice snorkeltoast promoting a build into
   the `-001` slot. **The webhook is still 401: a push publishes nothing AND SAYS NOTHING**, and Laksa's own health
