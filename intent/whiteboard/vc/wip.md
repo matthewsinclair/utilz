@@ -3,7 +3,7 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 11981560-5612-4fe7-a136-6eae64636b64
-heartbeat_at: 2026-09-10 17:14Z
+heartbeat_at: 2026-09-10 17:16Z
 status: active
 focus: "ST0017 47/52, doctor 0. hv released BOTH gated items -- snorkeltoast is running the fidelity compare (299 renders, AC-2.1 the only open row it grades) and landing the two-row flip. cc parked. WP-04 NOT read as opened; hv told that is my reading."
 claims: [ST0017]
@@ -550,6 +550,37 @@ about a theme, which they called the wrong refusal passing as the right one. **D
 The clause belongs in the evidence line, and what it defends against is not a disguised alarm -- it is an
 evidence line reproducible by exit code alone. **An evidence line that rc alone can satisfy is
 under-specified; quote the message and the ambiguity closes itself.**
+
+### SEND THE COMMAND AND ITS OWN OUTPUT, FROM ONE EXECUTION -- AND ALL SEVEN CATCHES CAME FROM RUNNING
+
+**RULE: A REGEX IS CODE, AND QUOTING CODE IN PROSE LOSES STRUCTURE SILENTLY.** cc's shell ran
+`fs::write\|fs::create_dir\|fs::remove\|...` -- the prefix repeated on every alternative, 43 hits. Their
+MESSAGE said `fs::write|create_dir|remove|...` -- the prefix collapsed onto the first, 52 hits. **No
+diagnostic, no error, just a different pattern wearing the same words**, and I ran what arrived and got 52
+correctly. Same family as the header guard's escape problem and as `| head -3` swallowing an answer: **a
+channel between the thing and the reader that drops part of it without saying so.**
+
+**AND cc'S SHARPENING IS THE FIX, BECAUSE MINE LEFT THE HOLE OPEN.** I wrote _send the command, or send the
+answer_. **They sent BOTH -- just not from the same run.** So a pattern yielding 52 sat beside the number 43
+in their draft and **nothing in the draft could see itself.** The rule is **SEND THEM TOGETHER, FROM ONE
+EXECUTION**: paste the command beside its own output and the inconsistency is visible before the message
+leaves.
+
+**I DECLINED TO ASSIGN THE LOSS AND cc CHECKED THEIR OWN END AND FOUND IT WAS THEIRS.** Recorded because the
+refusal was right on the evidence I had -- I could not see their shell -- **and because they had already
+committed the mirror of it against me**, "the over-sensitive version was their transcription", a wrong cause
+about a peer in their own favour. They corrected it in their own words rather than editing it away.
+**Refusing to adjudicate cost nothing and would have cost something had I been wrong.**
+
+**THE OBSERVATION THAT OUTRANKS ALL OF THEM, AND IT IS cc'S: SEVEN ERRORS TODAY -- FOUR THEIRS, THREE MINE --
+AND EVERY SINGLE ONE WAS CAUGHT BY THE OTHER PARTY RUNNING THE THING, NOT READING IT.** Not by suspicion,
+not by review, not by a careful re-read. **And nothing tells us how many were not caught**, because the
+uncaught ones are exactly the claims nobody executed. **A claim nobody ran is not a weaker claim; it is an
+unmeasured one**, which is the `unobserved`-needs-a-probe rule pointed at our own assertions rather than at
+a table. **Checked against my own record today: every closing evidence line was driven, and the one thing I
+could not drive -- the `Cargo.lock` half of `fast_image_resize` -- is recorded ON the row as unproven rather
+than counted.** That is the discipline working, and it is the only defence against a number neither of us
+can see.
 
 ### A ROW CAN BE WELL-FORMED AND STALE, AND THE SHAPE CHECK CANNOT TELL -- snorkeltoast's, EARNED ON THEIR OWN TABLE
 
