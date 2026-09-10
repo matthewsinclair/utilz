@@ -3,7 +3,7 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 11981560-5612-4fe7-a136-6eae64636b64
-heartbeat_at: 2026-09-10 17:20Z
+heartbeat_at: 2026-09-10 17:22Z
 status: active
 focus: "ST0017 47/52, doctor 0. hv released BOTH gated items -- snorkeltoast is running the fidelity compare (299 renders, AC-2.1 the only open row it grades) and landing the two-row flip. cc parked. WP-04 NOT read as opened; hv told that is my reading."
 claims: [ST0017]
@@ -43,12 +43,19 @@ harness and the reference, hv adjudicates.** Localfolded 2026-09-10 08:45Z; 10 S
 
 ## TODO
 
-- **THE FIRST BUILD POINTING AT 45h GRADES AC-2.1 leg 2, AC-5.1 AND AC-6.1 leg 3 IN ONE PASS, AND HAPPENS EXACTLY
-  ONCE.** Tell cc and snorkeltoast before it happens -- a standing commitment to both. **F2 is 23**, from 009's
-  config, unchanged. Read the first `compare` as **population (2)**: a green over half a pipeline.
-- **VERIFY `producer-fallback-strips` AGAINST THE HARNESS AS IT WILL BE AT COMPARE TIME, NOT AS IT IS NOW.** It is
-  in as `designed` (`f406346`) and predicts 23 of 23 against the reference's 22. **snorkeltoast was still editing
-  `strip_reason` an hour after I read it.** My own condition; cc says hold it hardest.
+- **THE 45h BUILD HAS RUN AND TWO OF ITS THREE ROWS ARE CLOSED -- THIS WAS A PREDICTION AND IS NOW MOSTLY A
+  MEASUREMENT.** As at 2026-09-10 17:22Z. **AC-5.1 and AC-6.1 are SATISFIED** (`f2046f9`), both driven by me
+  through both command forms rather than taken from cc. **AC-2.1 leg 2 is the only part still owed**, and it is
+  observed inside `capture()`, which is snorkeltoast's run. **F2 = 23 held**: the build reports 23 slides from
+  15 segments, matching the reference's own `plan()`. Both peers were told before it happened, which was the
+  standing commitment. **Read the first `compare` as population (2): a green over half a pipeline.**
+- **DISCHARGED 2026-09-10 17:22Z: `producer-fallback-strips` VERIFIED AGAINST THE HARNESS AS IT WILL BE AT
+  COMPARE TIME.** My own condition and it is met, not waived. **snorkeltoast pinned the harness to BYTES** --
+  sha256 `f58829961dd7...`, 144,465, which I re-hashed at the file rather than taking -- and established that
+  neither named change route touches `strip_reason`. **Measured in both directions:** the probe returns 1 on
+  both reference-built artifacts and 0 on a port-built one, with cc's positive control firing. **The prediction
+  it carries -- 23 gradeable against the reference's 22 -- is still a PREDICTION**, because it is observed at
+  capture and capture has not returned.
 - **STANDING: TELL hv WHEN TO FORCE A LAKSA RESYNC.** Fires on anything published into the site repo -- in
   practice snorkeltoast promoting a build into the `-001` slot. **AND THE VERIFICATION IS TWO COMPARISONS, NOT
   ONE -- CORRECTED 2026-09-10 09:24Z BEFORE IT EVER RAN IN ANGER.** The recorded method was _fetch the served
@@ -59,22 +66,6 @@ harness and the reference, hv adjudicates.** Localfolded 2026-09-10 08:45Z; 10 S
   check calls it stale. **SO: hash the served bytes against THE SITE REPO AT HEAD -- that is the deploy question;
   and SEPARATELY diff `_out` against the published slot -- that is the promote question.** One comparison was
   answering neither cleanly. Reading the payload stays, because hash equality says nothing about correctness.
-- **THE PUBLISHED SLOT CAN BE EDITED IN PLACE AT ANY TIME, INDEPENDENTLY OF PROMOTE -- snorkeltoast's PREMISE
-  AFTER THEY REFUTED MINE.** I wrote "the promote path edits the artifact". **It does not.** Measured by them and
-  re-measured by me at the repo: `096a676` 4,817,190 `<head>\n\n<meta`; `19e3f3f` 4,817,189, `8389486` 4,812,977
-  and `b6ec9e6` 4,780,047 all `<head>\n<meta`. **Three of four promotes byte-faithful and so was the fourth** --
-  I had verified `19e3f3f == _out` myself before writing the wrong version. **The edit is its OWN commit 93
-  minutes later with its own message**, so it is a discrete in-place edit after publication. **Their premise is
-  the more durable one: a lossy stage could be fixed once and forgotten; this recurs whenever anyone opens the
-  file.** My two comparisons survive and are right for the better reason. **WHO did it is undetermined and stays
-  that way** -- every commit in that repo carries hv's identity, there is no formatter config, no CI and no
-  installed hook, and message style is too weak to discriminate.
-- **THIRD PLAUSIBLE-CAUSE-INSTEAD-OF-MEASURED-CAUSE IN ONE DAY, AND THE RULE WAS MINE, FILED THIS MORNING.**
-  cc's stale read (I said `state.is`), the promote path (I said the path, it was a later hand edit), and both
-  caught by the peer rather than by me. **The rule survives every time and I keep not applying it to the NEXT
-  one, because a cause only feels like a guess when somebody else measures it.** The mechanical form:
-  **if I am about to write WHY something happened, the next command is the one that measures it, or the sentence
-  does not go in.** Both peers now hold me to this and I have asked them to.
 - **DONE 2026-09-10 09:54Z: `favicon-missing` AND `font-not-woff2` ARE OBSERVED, AND MY CONDITION FOR THEM WAS THE WRONG
   ONE.** I had written that they flip _"when cc's build path calls the theme loader"_. **I read snorkeltoast's
   `unobserved` field -- which answers "why could this not be observed" -- as if it answered "what would
@@ -188,6 +179,23 @@ harness and the reference, hv adjudicates.** Localfolded 2026-09-10 08:45Z; 10 S
   `computed` from ATs that actually run.
 
 ## Watch-outs
+
+- **THE PUBLISHED SLOT CAN BE EDITED IN PLACE AT ANY TIME, INDEPENDENTLY OF PROMOTE -- snorkeltoast's PREMISE
+  AFTER THEY REFUTED MINE.** I wrote "the promote path edits the artifact". **It does not.** Measured by them and
+  re-measured by me at the repo: `096a676` 4,817,190 `<head>\n\n<meta`; `19e3f3f` 4,817,189, `8389486` 4,812,977
+  and `b6ec9e6` 4,780,047 all `<head>\n<meta`. **Three of four promotes byte-faithful and so was the fourth** --
+  I had verified `19e3f3f == _out` myself before writing the wrong version. **The edit is its OWN commit 93
+  minutes later with its own message**, so it is a discrete in-place edit after publication. **Their premise is
+  the more durable one: a lossy stage could be fixed once and forgotten; this recurs whenever anyone opens the
+  file.** My two comparisons survive and are right for the better reason. **WHO did it is undetermined and stays
+  that way** -- every commit in that repo carries hv's identity, there is no formatter config, no CI and no
+  installed hook, and message style is too weak to discriminate.
+- **THIRD PLAUSIBLE-CAUSE-INSTEAD-OF-MEASURED-CAUSE IN ONE DAY, AND THE RULE WAS MINE, FILED THIS MORNING.**
+  cc's stale read (I said `state.is`), the promote path (I said the path, it was a later hand edit), and both
+  caught by the peer rather than by me. **The rule survives every time and I keep not applying it to the NEXT
+  one, because a cause only feels like a guess when somebody else measures it.** The mechanical form:
+  **if I am about to write WHY something happened, the next command is the one that measures it, or the sentence
+  does not go in.** Both peers now hold me to this and I have asked them to.
 
 **MY OWN INSTRUMENT FAILED FOUR TIMES TODAY AND EVERY FAILURE PRODUCED A PLAUSIBLE FINDING ABOUT A PEER'S WORK.**
 Not one was caught by suspicion; each was caught by running the query that would NAME the thing rather than argue for
@@ -551,6 +559,30 @@ about a theme, which they called the wrong refusal passing as the right one. **D
 The clause belongs in the evidence line, and what it defends against is not a disguised alarm -- it is an
 evidence line reproducible by exit code alone. **An evidence line that rc alone can satisfy is
 under-specified; quote the message and the ambiguity closes itself.**
+
+### A PREDICTION THAT CAME TRUE IS NOT A PREDICTION, AND A SECTION LABEL DECAYS TOO
+
+**RULE, cc'S: A SECTION WRITTEN ENTIRELY IN THE FUTURE TENSE BECOMES UNREADABLE IN BOTH DIRECTIONS ONCE PART
+OF IT HAS HAPPENED** -- you cannot tell what is still owed. They found it on their own "what the first
+compare is expected to show", where the structural half had run and returned zero, the strippability
+precondition was measured, and only the 23-of-23 outcome remained predicted. **Three states wearing one
+tense.**
+
+**APPLIED HERE RATHER THAN AGREED WITH, AND MY TODO HAD TWO.** _"The first build pointing at 45h grades
+AC-2.1 leg 2, AC-5.1 and AC-6.1 leg 3 in one pass"_ -- **two of those three closed at `f2046f9` and the line
+still read as future.** And _"VERIFY `producer-fallback-strips` against the harness as it will be at compare
+time"_ -- **discharged**: snorkeltoast pinned the harness to bytes, I re-hashed it at the file, and the probe
+is measured in both directions. **An imperative left standing after it is satisfied is a claim that work is
+owed when it is not**, which costs a reader exactly as much as a stale number.
+
+**AND A THIRD THING I FOUND WHILE LOOKING, WHICH IS NOT cc'S AND IS ITS OWN CLASS: THE SECTION LABEL HAD
+STOPPED DESCRIBING THE CONTENTS.** My `## TODO` had accumulated a promote-path FINDING and a
+plausible-cause FINDING -- neither of them work anybody was going to do. **Findings belong in Watch-outs;
+TODO is queued work.** Moved, not copied. **A heading is a claim about everything under it**, and it rots the
+same way a number does, silently, while every individual entry beneath it stays true.
+
+**THE COMMON SHAPE OF ALL THREE: THE ENTRY IS RIGHT AND ITS FRAME IS WRONG.** Tense, label, or clock -- the
+container makes an assertion the contents no longer support, and nothing checks a container.
 
 ### A NUMBER IN PROSE HAS NO EDGE TO THE THING IT NAMES, AND PEER-STATE HAS THE SHORTEST HALF-LIFE OF ALL
 
