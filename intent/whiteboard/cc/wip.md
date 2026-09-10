@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: a30f9092-03ed-44ba-a659-b37813af12c7
-heartbeat_at: 2026-09-10 06:46Z
+heartbeat_at: 2026-09-10 07:54Z
 status: active
-focus: "ST0017/WP-03 at 10/12, contract 43/51. 262 tests, all gates 0. Everything JSON-free is now genuinely built -- the payload, the build verb and the first 45h build are all behind hv's serde_json ruling. PAUSE, not a wrap."
+focus: "ST0017/WP-03. UNBLOCKED: hv ruled serde_json 2026-09-10 and it is in at 0745d32 with hv named. The payload's non-slide half landed at 6cbb16b -- limits, socials with the stale-QR warning, bug with its admission. 273 tests. NEXT: the slide rows, then the build verb."
 claims: [ST0017]
 ---
 
@@ -18,8 +18,8 @@ claims: [ST0017]
 - **`utilz prez showreel check <45h dir>` RESOLVES THE WHOLE CONFIG**, both invocation forms, exit 0: 15 segments, **23 slides, 14 assets**, 5 fonts and a favicon inlined, silent at both report altitudes. **Both numbers match the reference's own `plan()` on the same config** -- the port is checked against something other than itself.
 - **BUILT AND RED-PROVED:** theme resolution, admission (C1), normalisation (C2), the slide model, `embed`, the template, the plan, delivery naming, the producer stamp's mechanism and content, AC-3.2's drop report. **262 tests.** prez **4,384,912** against the 8,388,608 budget, showreel **535,952** -- both byte-identical since 8 Sep, because nothing links the new code yet.
 - **WP-01 15/15. Contract 43/51, 3 withdrawn. WP-03 10/12; WP-02 16/17; WP-04 0/2; WP-05 1/3; WP-06 1/2.**
-- **BLOCKED, AND IT IS EVERYTHING LEFT: `serde_json` NEEDS hv's SIGN-OFF NAMED IN THE COMMIT.** Net **2 packages, 79 to 81** -- `itoa`, `memchr` and `serde_core` are already here. **I nearly reported +4 by reading the crate's own tree instead of the difference.**
-- **WHAT THE PAYLOAD OWES:** `build_socials` with the stale-QR warning (AC-4.2's text); `build_bug` **and its admission** -- `plan.rs` joins `bug.file` unclassified while four `Requires::Image` sites refuse, and the reference DOES refuse it; the slide rows **minus `path` and `asset`, which the reference pops at `:993-994`** and which `compare_structure` would report against every image slide; the limits block; threading `Reel::embed_target()` to the embed site; then the `build` verb writing `_out/` and calling report, prune and the stamp.
+- **`serde_json` IS IN at `0745d32`, hv NAMED, RULED 2026-09-10 ON THE CORRECTED ONE-ARGUMENT CASE.** Lock **79 to 81 entries** exactly as predicted; AC-3.10's union **71 to 73**, prez unmoved at 17. **I took the sign-off from hv DIRECTLY rather than from vc's accurate relay** -- a peer's report cannot produce a NAMED sign-off -- and **hv was offered the standing version and declined it**, so every future crate addition returns to them the same way.
+- **THE PAYLOAD'S NON-SLIDE HALF IS IN at `6cbb16b`:** `limits` with all three keys and `max_ease` at **2400 not the reference's 3000**; socials with the stale-QR warning **plus the unstamped case the reference is blind to**, taken because it changes no pixels; `bug` with its admission, which makes `admit`'s call sites **seven** and which vc amended AC-3.2 for at `0d781c9`. **WHAT IS LEFT:** the slide rows **minus `path` and `asset`, which the reference pops at `:993-994`** and which `compare_structure` would report against every image slide; threading `Reel::embed_target()` to the embed site; then the `build` verb writing `_out/` and calling report, prune and the stamp.
 - **AC-3.6's RUNTIME LEG IS MINE AND IS ONE PROPERTY:** the payload's `limits.max_ease` **DERIVES** from `limits::MAX_EASE_MS`. `player.html:561` is `const LIM = REEL.limits`. Red-control: flip the constant to 3000, the payload must follow. **Cite `showreel-harness:232` and `:1098`, NOT `shipped-max-ease`**, which retires itself the day Python is capped.
 - **TELL vc AND snorkeltoast BEFORE ANY BUILD POINTS AT 45h.** AC-2.1 leg 2, AC-5.1 and AC-6.1 leg 3 grade in ONE pass and **the first `compare` happens exactly once**; snorkeltoast's `compare` will REFUSE, because the live config plans **23** against FLOORS.md's **22** -- config-vs-008, no part of it the port. **And read that first green as population (2), not (3):** 45h's masters are Python `init`'s output and **nothing in the harness distinguishes the two**.
 - **THE SLIDE COUNT MAY MOVE UNDER ME, SO CHECK IT BEFORE THE FIRST BUILD RATHER THAN AFTER.** hv has sequenced a reference rebuild for the QR social AHEAD of the ruling, and **if that rebuild changes the reel's count, that is the number my build must match** -- 22 against 23 fails F2 whoever's floors are held. snorkeltoast has been asked to state the count explicitly when it lands. **The ordering also buys something real:** the 14-minute control runs inside my blocked window instead of between my build and the first `compare`, and my build gets config-matched to a freshly rebuilt reference by construction rather than by somebody remembering.
@@ -33,13 +33,13 @@ claims: [ST0017]
 
 ## Holds
 
-- **The payload, until hv rules on `serde_json`.** CONDITION: **hv's sign-off, NAMED IN THE COMMIT.** Released either way -- a yes takes the crate, a no means hand-rolling the emitter beside `base64.rs`. **hv has now ruled the ORDER -- rebuild for the QR social first -- and an ORDERING IS NOT A SIGN-OFF.** vc refused to pass it off as one and went back for the actual ruling; that is the "rock on as needed" shape one turn later, pointed at them instead of me. **Still nothing to name in a commit.**; vc holds sequencing and cannot grant it, and agrees -- building the thing under decision pre-empts the decision, and a built emitter biases the ruling toward keeping it.
+_(none -- hv's `serde_json` ruling released the only one, 2026-09-10.)_
 
 ## Open with hv
 
 **vc synthesises these; the detail is in `hv/inbox.cc.md` and `hv/inbox.vc.md`, not here.**
 
-- **`serde_json` -- THE decision.** Recommendation: **take it**. **The case now rests on ONE argument, not two:** JSON escaping over arbitrary YAML text. **The field-order half was REFUTED by my own design.md 4.6** -- `compare_structure` sorts keys before comparing, `signature()` reads only the slides, and `artist`/`session` pass through from user YAML so no struct could ever have matched their order. Corrected in hv's inbox rather than quietly improved.
+- **`serde_json` IS RULED AND CLOSED.** Nothing of mine is with hv.
 - **Four others need no work from me and are vc's to put up:** `SHOWREEL_THEME_PATH` (FYI, a ruling only if hv wants it permanent); `intent ac edit --text ""` destroying a criterion silently, an **Intent** defect rather than a Utilz one; the public-repo fixtures; and the QR thread.
 
 ## Watch-outs
