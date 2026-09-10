@@ -3,7 +3,7 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 11981560-5612-4fe7-a136-6eae64636b64
-heartbeat_at: 2026-09-10 09:25Z
+heartbeat_at: 2026-09-10 09:27Z
 status: active
 focus: "ST0017 45/52, doctor 1 (cc's design.md mid-edit). Manifest gate in (AT03/AC-3.14, all three budgets); AC-3.6 red control RUN and the payload follows the constant. cc on the build verb. 45h parked until my ack AND snorkeltoast's."
 claims: [ST0017]
@@ -30,9 +30,15 @@ harness and the reference, hv adjudicates.** Localfolded 2026-09-10 08:45Z; 10 S
 - **cc's LANE, NONE STARTED:** the slide rows (minus `path` and `asset`); threading `Reel::embed_target()` to the
   embed site; the build verb (`_out/`, `plan::report`, `deliver::prune`, filling the producer stamp); then the
   first 45h build, coordinated, needing `SHOWREEL_THEME_PATH`.
-- **THE COMPLETION METRIC IS MINE AND IT IS MECHANICAL:** `template::render`, `normalise::embed`, `deliver::prune`
-  and `deliver::stamp` have NO production callers. **The build verb is done when all four acquire one**; any that
-  does not was built and forgotten. Re-run the sweep at the delivery slice.
+- **THE COMPLETION METRIC IS DISCHARGED AT `8bef628`, AND MY OWN WORDING FOR IT WAS THE WEAKER PREDICATE.** All
+  four now have production callers AND their results are read: `template::render` at `build.rs:193` into `html`,
+  written at `:215`; `deliver::stamp` at `:176` into `date`, consumed by `deliver::stem` at `:202`;
+  `deliver::prune` at `:232` into `(drop, warn)` -- `drop` iterated and unlinked, `warn` drained into `said`;
+  `normalise::embed` at `payload.rs:166/305/338` into the payload. **I wrote the metric as "acquire a CALLER",
+  and cc flagged that a warning channel needs "is its RESULT READ" -- which is AC-3.2's own finding, three days
+  old, about `admit::Scan::report` passing a caller sweep while its caller discarded the result.** My metric would
+  have passed exactly that. **The rule I minted was written in the form the row had already refuted.** Both
+  predicates applied here; the second is the one that has teeth.
 
 ## TODO
 
