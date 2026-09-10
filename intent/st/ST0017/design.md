@@ -1506,15 +1506,35 @@ because delegation does not satisfy it.
 | `outro` row | `label` `value` |
 | `limits` | `min_dwell` `min_ease` `max_ease` |
 
-**THE `limits` KEY IS LOAD-BEARING AND ITS ABSENCE IS THE WORST FAILURE AVAILABLE HERE.** Found by
-snorkeltoast. `player.html` binds `const LIM = REEL.limits` **with no fallback**, then reads all three
+**THE INVARIANT IS INTERNAL CONSISTENCY, NOT A REQUIRED KEY -- CORRECTED 2026-09-10 AND THE
+CORRECTION IS THE USEFUL PART.** The rule was first stated, by vc, as *"the payload MUST carry a
+top-level `limits` key"*, and **snorkeltoast refuted it while building the check that would enforce
+it**: the currently-published 45h build carries no `limits` key anywhere, embeds the OLDER player,
+applies 2500 / 600 / 3000 inline, and is entirely sound. **A blanket required-key rule REFUSES a
+correct artifact**, and a false refusal from an instrument is worse than the blind spot it replaces --
+the blind spot at least only fails on the guilty.
+
+**SO THE RULE FOLLOWS THE PLAYER, NOT A POLICY: an artifact whose OWN EMBEDDED PLAYER reads
+`REEL.limits` unguarded must carry the keys that player reads.** Both halves ship in the same file,
+so it is answerable from the artifact ALONE -- no version table, no standing agreement about which
+player is current, and it lifts by itself the day a player guards its read. AC-3.6 carries it
+(`594fac7`).
+
+**WHAT IT MEANS FOR THIS PORT IS UNCHANGED.** The shell substituted into here is the current
+`player.html`, which binds `const LIM = REEL.limits` with **no fallback**. `player.html` binds `const LIM = REEL.limits` **with no fallback**, then reads all three
 sub-keys off it -- so a payload without `limits` makes `LIM` undefined and **throws on the first
 slide**: the reel does not run at all. **And `signature()` walks `payload["slides"]` and nothing
 else**, so top-level keys are never compared: a port that emits every slide correctly and omits
 `limits` **passes the structure comparison clean** and fails in pixels, as a total blank, with the
-instrument pointing at the slides while the fault is a key that is not there. **The older published
-player survived a limits-less payload because its floors were inline literals; the current one cannot,
-and that is AC-3.6's template half working as designed rather than a regression.**
+instrument pointing at the slides while the fault is a key that is not there.
+
+**AND THE POPULATION cc CAN SEE DOES NOT DISCRIMINATE THE TWO RULES, WHICH IS WORTH RECORDING RATHER
+THAN LEAVING AS A GAP.** Measured 2026-09-10 across every artifact in the reel's `_out/`: 007, 008
+and 009 **all three carry a `limits` key AND bind `REEL.limits`**, so each satisfies the blanket rule
+and the internal-consistency rule identically. **The only artifact that separates them is the
+DEPLOYED one, which is not in this tree** -- so the correction rests on snorkeltoast's measurement of
+it and not on anything reproducible here. That is the same shape as everything else on 45h: the
+population to hand is well-formed, so it cannot exercise the case that decides.
 
 **TWO SESSION KEYS ARE COMPILER-ONLY AND ARE SHIPPED ANYWAY.** `iso` and `venue_url` are read by no
 line of the player -- `iso` names the `_out/` file and `venue_url` generates the venue QR. **The

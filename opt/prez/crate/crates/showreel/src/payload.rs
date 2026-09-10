@@ -6,14 +6,24 @@
 //! to it and a MISSING key reports as `slide {i}: {k}: reference <v>, new None`.
 //! design.md 4.7 censuses every key `player.html` actually reads.
 //!
-//! **`limits` IS THE ONE WHOSE ABSENCE IS UNSURVIVABLE, AND THE HARNESS CANNOT
-//! SEE IT.** `player.html` binds `const LIM = REEL.limits` with **no fallback**
-//! and reads all three floors off it, so a payload without the key makes `LIM`
-//! undefined and throws on the first slide -- the reel does not run at all. And
-//! `signature()` walks `payload["slides"]` and NOTHING else, so a port that
-//! emits every slide correctly and omits `limits` **passes the structure
-//! comparison clean** and fails in pixels, as a blank, with the instrument
-//! pointing at the slides. Found by snorkeltoast.
+//! **`limits` IS OWED BECAUSE OF THE PLAYER THIS CRATE SHIPS, NOT BECAUSE A RULE
+//! SAYS SO.** The invariant is INTERNAL CONSISTENCY: an artifact whose own
+//! embedded player reads `REEL.limits` unguarded must carry the keys that player
+//! reads. Both halves are in the same file, so it is answerable from the
+//! artifact alone -- and it lifts by itself the day a player guards its read.
+//! **The blanket "every payload must carry `limits`" version was refuted while
+//! the check for it was being written**: the published 45h build has no such key,
+//! embeds the OLDER player, applies its floors inline, and is entirely sound. A
+//! rule that refuses a correct artifact is worse than the blind spot it replaces.
+//!
+//! **FOR THIS CRATE IT BINDS TODAY AND NOTHING CHANGES.** `player.html` binds
+//! `const LIM = REEL.limits` with **no fallback** and reads all three floors off
+//! it, so a payload without the key makes `LIM` undefined and throws on the first
+//! slide -- the reel does not run at all. And `signature()` walks
+//! `payload["slides"]` and NOTHING else, so a port that emits every slide
+//! correctly and omits `limits` **passes the structure comparison clean** and
+//! fails in pixels, as a blank, with the instrument pointing at the slides.
+//! Found by snorkeltoast; design.md 4.7.
 
 use crate::{admit, config, limits, normalise, plan};
 use artifact::Failure;
