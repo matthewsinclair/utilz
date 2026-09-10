@@ -1717,6 +1717,41 @@ output is a report, and `build`'s job is an artifact** -- rather than adding a s
 to the build. It changes no pixels either way; the operator who wants to know runs the verb that
 tells them.
 
+### 4.10 The first structural compare found exactly one defect, and it is a language, not a bug
+
+**23 SLIDES AGAINST 23, AND ONE DIFFERENCE:** `slide 7: h: reference 1396, new 1397`. Run with the
+harness's OWN `signature()` and `compare_structure()` -- imported, not reimplemented -- against the
+artifact the reference built. **After the fix: zero, from both invocation forms, which produce
+byte-identical files.**
+
+**THE CAUSE IS A ROUNDING MODE AND IT IS NOT A MISTAKE ANYONE MADE.** `data_uri` computes
+`round(h * s)` in Python, and `encode` computed `(h * s).round()` in Rust. **Python's `round()` is
+round-half-to-EVEN; Rust's `f64::round()` is round-half-AWAY-from-zero.** The two agree on every
+input except one landing exactly on `.5`. `02-burning-city-45h.jpg` is 2560x1862, target 1920, scale
+exactly 0.75, and `1862 * 0.75 = 1396.5` **with no floating-point slop at all** -- the one value in
+fourteen assets that lands dead on the half. Fixed with `f64::round_ties_even()`, which is Python's
+rule exactly.
+
+**AND THE REASON IT SURVIVED EVERY TEST IN THIS CRATE IS THE POINT, NOT AN EXCUSE.** Landing on an
+exact half is a property of the INPUT. Every fixture in this crate is one we chose, and **nobody
+chooses 2560x1862**; a generated 800x450 or 1200x675 never produces a tie. This is the sharpest
+instance yet of *test against something you did not write* -- the live reel was not a richer version
+of our fixtures, it contained a value class our fixtures could not contain.
+
+**THE RED-PROOF THEN CAUGHT THE TEST BEING HALF A TEST**, which is the same shape one level up. The
+first assertion used the 2.5 case alone, and injecting a bare `as u32` **left it GREEN**: 2.5
+truncates to 2, which is also the banker's answer. **An exact half separates the two ROUNDING MODES
+and says nothing about whether rounding happens at all.** A second case at `9 * 0.3 = 2.7` separates
+that axis -- every rounding mode gives 3, truncation gives 2 -- and both injections now fire. **Two
+independent ways to be wrong, and the obvious fixture only sees one.**
+
+**WHAT THIS DOES NOT ESTABLISH, STATED SO SILENCE IS NOT READ AS COVERAGE.** Zero structural
+difference is the F2 GATE and not a pixel result: `compare_structure` returning empty is what makes a
+pixel number legitimate to report, not a substitute for one. No pixel comparison has been run, and
+the graded run is snorkeltoast's and gated on hv. The port's artifact is also **5,462,653 bytes
+against the reference's 4,817,189** -- a ~13% difference that is entirely outside the structural
+signature (`src` is stripped from it) and belongs to the encoders.
+
 ---
 
 ## 5. Fixed in passage, or inherited -- decided now, not during

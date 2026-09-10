@@ -187,12 +187,31 @@ fn collapse(img: image::DynamicImage) -> (image::DynamicImage, bool) {
   }
 }
 
+/// Round the way PYTHON rounds, not the way Rust does.
+///
+/// **`f64::round()` IS THE WRONG FUNCTION HERE AND THE DIFFERENCE IS ONE PIXEL
+/// ON AN EXACT HALF.** Python's `round()` is round-half-to-EVEN (banker's);
+/// Rust's `f64::round()` is round-half-AWAY-from-zero. They agree on every input
+/// except a value landing exactly on `.5`, which is why this survived every
+/// synthetic fixture and every unit test in this crate.
+///
+/// **FOUND BY THE FIRST STRUCTURAL COMPARE AGAINST THE REFERENCE, ON ONE SLIDE
+/// OF TWENTY-THREE.** `02-burning-city-45h.jpg` is 2560x1862; at target 1920 the
+/// scale is exactly 0.75 and `1862 * 0.75 = 1396.5` with no floating-point slop
+/// at all. The reference emitted 1396 and this port emitted 1397. **A test
+/// written from a fixture we chose could not have found it** -- it needs an
+/// image whose short edge times the scale lands dead on a half, and 2560x1862 at
+/// 0.75 is the only one of fourteen assets on the live reel that does.
+fn round_like_python(v: f64) -> u32 {
+  v.round_ties_even().max(1.0) as u32
+}
+
 fn encode((img, has_alpha): (image::DynamicImage, bool), max_edge: u32) -> Normalised {
   let (w, h) = (img.width(), img.height());
   let img = if w.max(h) > max_edge {
     let s = f64::from(max_edge) / f64::from(w.max(h));
-    let nw = (f64::from(w) * s).round().max(1.0) as u32;
-    let nh = (f64::from(h) * s).round().max(1.0) as u32;
+    let nw = round_like_python(f64::from(w) * s);
+    let nh = round_like_python(f64::from(h) * s);
     img.resize_exact(nw, nh, FILTER)
   } else {
     img
@@ -491,4 +510,45 @@ mod tests {
     assert!(e.message.contains("cannot read"), "{}", e.message);
     assert!(e.message.contains("absent-mark.png"), "names the file: {}", e.message);
   }
+  /// **PYTHON ROUNDS HALF TO EVEN AND RUST ROUNDS HALF AWAY FROM ZERO, AND THE
+  /// PORT HAS TO ROUND PYTHON's WAY.** 8x5 at a 4px edge scales by exactly 0.5,
+  /// so the height is exactly 2.5 -- no floating-point slop, the one input class
+  /// where the two rounding modes disagree.
+  ///
+  /// **THIS IS THE ONLY DEFECT THE FIRST STRUCTURAL COMPARE AGAINST THE
+  /// REFERENCE FOUND, AND NO FIXTURE WE CHOSE COULD HAVE FOUND IT.** On the live
+  /// reel it was `02-burning-city-45h.jpg`, 2560x1862 at target 1920: scale
+  /// exactly 0.75, height exactly 1396.5, reference 1396 and this port 1397 --
+  /// **one asset of fourteen, one slide of twenty-three.** Every synthetic
+  /// fixture in this crate passed under both modes, because landing dead on a
+  /// half is a property of the input and we had never written one.
+  #[test]
+  fn a_dimension_landing_exactly_on_a_half_rounds_the_way_python_rounds() {
+    let d = std::env::temp_dir().join(format!("showreel-round-{}", std::process::id()));
+    std::fs::create_dir_all(&d).unwrap();
+    let p = d.join("half.png");
+    let img = image::RgbImage::from_fn(8, 5, |x, _| image::Rgb([(x * 30) as u8, 1, 2]));
+    image::DynamicImage::ImageRgb8(img).save(&p).unwrap();
+
+    let n = normalise(&p, 4).unwrap();
+    assert_eq!(n.width, 4, "the long edge is exact and cannot disagree");
+    assert_eq!(
+      n.height, 2,
+      "5 * 0.5 = 2.5 exactly: Python's round() gives 2 (half-to-even), \
+       Rust's f64::round() gives 3 (half-away-from-zero)"
+    );
+
+    // **AND A SECOND CASE, BECAUSE THE FIRST ONE ALONE CANNOT SEE TRUNCATION.**
+    // The red-proof caught this: injecting a bare `as u32` left the test GREEN,
+    // since 2.5 truncates to 2 and that is also the banker's answer. **A single
+    // exact half separates the two ROUNDING MODES and says nothing about
+    // whether rounding happens at all.** 9 * 0.3 = 2.7 separates the other axis:
+    // every rounding mode gives 3, truncation gives 2.
+    let q = d.join("point-seven.png");
+    let img = image::RgbImage::from_fn(10, 9, |x, _| image::Rgb([(x * 20) as u8, 1, 2]));
+    image::DynamicImage::ImageRgb8(img).save(&q).unwrap();
+    let n = normalise(&q, 3).unwrap();
+    assert_eq!(n.height, 3, "9 * 0.3 = 2.7 rounds to 3; truncation would give 2");
+  }
+
 }

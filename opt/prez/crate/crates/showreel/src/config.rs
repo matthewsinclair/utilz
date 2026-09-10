@@ -200,7 +200,13 @@ impl Reel {
   /// The long edge an embed targets for THIS reel.
   ///
   /// **ONE HOME, READ BY BOTH THE EMBED AND THE PRODUCER STAMP.** The reference
-  /// is `target = int(cfg.get("target", TARGET_DEFAULT))` (`showreel:989`), so
+  /// is `target = int(cfg.get("target", TARGET_DEFAULT))` -- locate it with
+  /// `grep 'target = int(cfg.get("target"'`, which matches once, NOT with
+  /// `grep 'cfg.get("target"'`, which matches twice. **A line number was here
+  /// until 2026-09-10 and it was correct**; the previous line citation into that
+  /// file decayed twice without anyone noticing, so the locator is a token now
+  /// and the quoted text above is the durable half. Raised by snorkeltoast,
+  /// and vc measured the remedy rather than passing it on. So
   /// the value is per-reel overridable, and a build reaching for the constant
   /// instead would be wrong on any reel that sets one.
   ///
