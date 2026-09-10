@@ -22,6 +22,7 @@ claims: [ST0017]
 - **WHAT THE PAYLOAD OWES:** `build_socials` with the stale-QR warning (AC-4.2's text); `build_bug` **and its admission** -- `plan.rs` joins `bug.file` unclassified while four `Requires::Image` sites refuse, and the reference DOES refuse it; the slide rows **minus `path` and `asset`, which the reference pops at `:993-994`** and which `compare_structure` would report against every image slide; the limits block; threading `Reel::embed_target()` to the embed site; then the `build` verb writing `_out/` and calling report, prune and the stamp.
 - **AC-3.6's RUNTIME LEG IS MINE AND IS ONE PROPERTY:** the payload's `limits.max_ease` **DERIVES** from `limits::MAX_EASE_MS`. `player.html:561` is `const LIM = REEL.limits`. Red-control: flip the constant to 3000, the payload must follow. **Cite `showreel-harness:232` and `:1098`, NOT `shipped-max-ease`**, which retires itself the day Python is capped.
 - **TELL vc AND snorkeltoast BEFORE ANY BUILD POINTS AT 45h.** AC-2.1 leg 2, AC-5.1 and AC-6.1 leg 3 grade in ONE pass and **the first `compare` happens exactly once**; snorkeltoast's `compare` will REFUSE, because the live config plans **23** against FLOORS.md's **22** -- config-vs-008, no part of it the port. **And read that first green as population (2), not (3):** 45h's masters are Python `init`'s output and **nothing in the harness distinguishes the two**.
+- **THE SLIDE COUNT MAY MOVE UNDER ME, SO CHECK IT BEFORE THE FIRST BUILD RATHER THAN AFTER.** hv has sequenced a reference rebuild for the QR social AHEAD of the ruling, and **if that rebuild changes the reel's count, that is the number my build must match** -- 22 against 23 fails F2 whoever's floors are held. snorkeltoast has been asked to state the count explicitly when it lands. **The ordering also buys something real:** the 14-minute control runs inside my blocked window instead of between my build and the first `compare`, and my build gets config-matched to a freshly rebuilt reference by construction rather than by somebody remembering.
 
 ## TODO
 
@@ -32,7 +33,7 @@ claims: [ST0017]
 
 ## Holds
 
-- **The payload, until hv rules on `serde_json`.** CONDITION: **hv's sign-off, NAMED IN THE COMMIT.** Released either way -- a yes takes the crate, a no means hand-rolling the emitter beside `base64.rs`. **hv handed vc the pen with "rock on as needed" and that NAMES NOTHING**; vc holds sequencing and cannot grant it, and agrees -- building the thing under decision pre-empts the decision, and a built emitter biases the ruling toward keeping it.
+- **The payload, until hv rules on `serde_json`.** CONDITION: **hv's sign-off, NAMED IN THE COMMIT.** Released either way -- a yes takes the crate, a no means hand-rolling the emitter beside `base64.rs`. **hv has now ruled the ORDER -- rebuild for the QR social first -- and an ORDERING IS NOT A SIGN-OFF.** vc refused to pass it off as one and went back for the actual ruling; that is the "rock on as needed" shape one turn later, pointed at them instead of me. **Still nothing to name in a commit.**; vc holds sequencing and cannot grant it, and agrees -- building the thing under decision pre-empts the decision, and a built emitter biases the ruling toward keeping it.
 
 ## Open with hv
 
