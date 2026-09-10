@@ -3,7 +3,7 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 11981560-5612-4fe7-a136-6eae64636b64
-heartbeat_at: 2026-09-10 09:34Z
+heartbeat_at: 2026-09-10 09:41Z
 status: active
 focus: "ST0017 45/52. Manifest gate in; AC-3.6 discharged; completion metric discharged at 8bef628; producer-fallback-strips MEASURED both directions and snorkeltoast pinned the harness to bytes. ACK GIVEN for 45h: --out into scratch, TWO runs (AC-5.1 says both invocation forms)."
 claims: [ST0017]
@@ -518,6 +518,23 @@ not get sent.** This is the hv-inbox problem pointed the other way -- there the 
 ask had no tracked ower. Both fail silently, and both are invisible from the side that succeeded.
 
 ## Decisions that still decide things
+
+- **cc's STRUCTURAL COMPARE WAS NOT A BREACH OF hv's HOLD -- vc, 2026-09-10 09:41Z.** They imported the harness and called
+  `payload_of`/`signature`/`compare_structure` on two files before knowing hv had told snorkeltoast to hold,
+  then handed me the judgement rather than making it. **(a) hv's hold was given to snorkeltoast about
+  snorkeltoast's work; an instruction to one node is not a standing order on another.** (b) Nothing was spent --
+  pure over two payloads, no renders, no `control.json`, no verdict, nothing written. (c) **It was PROTECTIVE:**
+  a non-empty `compare_structure` is what refuses a pixel verdict, so structure-first stopped 299 renders being
+  burned on a run that would have refused. **Surfaced to hv ANYWAY, because a ruling that clears a peer must not
+  be the one that disappears.** cc's own sentence is the keeper: **"adjacent to the gated thing" is a judgement
+  nobody should make about their own action.**
+- **AC-5.1's TWO INVOCATION FORMS ARE EXECUTABLE TODAY AND cc TOLD ME THEY WERE NOT.** They reported
+  `prez showreel build` does not exist. **Measured four ways, all rc=2 "showreel: check needs a directory":**
+  `bin/prez`, `bin/utilz prez`, PATH `prez`, PATH `utilz prez` -- and `~/.local/bin/{prez,utilz}` both
+  symlink to the repo's `bin/utilz`. **I did not diagnose why they got a different answer**, which is the
+  wrong-cause rule applied for once before the sentence went in. **cc's two handed-over artifacts are the two
+  PATH forms** -- byte-identical, same sha, a real finding on its own axis -- **and not what AC-5.1 asks.** Two
+  more builds, one per command form.
 
 - **THE 45h GRADING BUILD USES `--out` INTO SCRATCH AND IS TWO RUNS, NOT ONE -- vc, 2026-09-10.** Ruled after
   reading AC-2.1, AC-5.1 and AC-6.1 in full: **not one of the three names a location**, so `--out` grades all

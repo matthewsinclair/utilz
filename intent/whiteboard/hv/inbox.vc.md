@@ -641,3 +641,39 @@ corrected me: it is a THREE-way collision, not two.** Verified by me at all thre
 the reference's `TARGET_DEFAULT` at `showreel:52`, and the port's `TARGET` at `normalise.rs:37`, all 1920. **So the third mechanism is the port silently ceasing to consult config at all while still agreeing
 with the reference on every 45h build forever.** cc's synthetic reel at 640 is the only thing that
 discriminates it, and it is already measured. Nothing to decide; recorded so a green is never cited for it.
+
+## (2026-09-10 09:41Z)
+
+**A RULING I MADE IN A PEER'S FAVOUR, SURFACED BECAUSE IT CLEARS THEM RATHER THAN DESPITE IT.** cc ran a
+STRUCTURAL compare -- harness imported as a module, `compare_structure` over two payloads -- before they
+knew you had told snorkeltoast to hold. **They stopped, handed me the judgement, and said "adjacent to the
+gated thing is a judgement I should not be making about my own action".** That sentence is better than the
+ruling.
+
+**I RULED NO BREACH.** Your hold was given to snorkeltoast about snorkeltoast's work, and an instruction to
+one node is not a standing order on another; cc had my ack for the build. **Nothing was spent** -- no
+renders, no `control.json`, no verdict, nothing written; the once-only pixel run is intact. **And it was
+protective:** a non-empty structural compare is precisely what refuses a pixel verdict, so doing structure
+first stopped ~299 renders being burned on a run that would have refused anyway. **You can overrule me and
+I would rather you saw it than not.**
+
+**IT FOUND A REAL DEFECT AND THAT IS THE ARGUMENT FOR THE COMPARE, NOT AGAINST IT.** Python's `round()` is
+ties-to-even; Rust's `f64::round()` is ties-away-from-zero. One asset of fourteen is 2560x1862, and at
+target 1920 the scale is exactly 0.75, so `1862 x 0.75 = 1396.5` **with no floating-point slop at all** --
+reference 1396, port 1397. **Verified independently by me, and confirmed at the artifact rather than the
+code: slide 7 now carries 1920x1396.** Fixed with `round_ties_even()`.
+
+**WHY IT SURVIVED 289 TESTS IS THE PART WORTH YOUR TIME.** Landing on an exact half is a property of the
+INPUT, and every fixture in that crate is one we chose. **Nobody chooses 2560x1862.** The live reel was not
+a richer version of our fixtures -- **it contained a value class our fixtures could not contain.** That is
+the strongest case anyone has made in this thread for grading against something we did not write.
+
+**AND ONE CORRECTION TO MY OWN RULING FROM AN HOUR AGO.** I told you the 45h run was two builds because
+AC-5.1 says both invocation forms. cc reported that `prez showreel build` does not exist. **It does --
+measured four ways, all answering `showreel: check needs a directory`:** `bin/prez`, `bin/utilz prez`,
+and both PATH forms, which symlink to the repo binary. **So AC-5.1's literal text is executable and cc's two
+artifacts are the two PATH forms rather than the two command forms** -- byte-identical, which is a real
+finding on its own axis, and not the one the row asks for. Two more builds and AC-5.1 can close today.
+
+**NOTHING HERE CHANGES THE ASK IN MY LAST ENTRY:** may snorkeltoast run the compare. **My recommendation is
+unchanged and slightly stronger** -- the structural pass has already paid for itself once.
