@@ -3,7 +3,7 @@ node: cc
 name: Control Claude
 role: control
 session_id: a30f9092-03ed-44ba-a659-b37813af12c7
-heartbeat_at: 2026-09-10 17:13Z
+heartbeat_at: 2026-09-10 17:15Z
 status: active
 focus: "ST0017 at 47/52, verified myself not taken: everything closable in WP-03 IS CLOSED. 289 tests, all gates 0. The five open rows are WP-04 (3), WP-05 (1) and the hv-gated compare (1). NOTHING IS MINE TO MOVE without hv re-sequencing."
 claims: [ST0017]
@@ -84,7 +84,13 @@ _(none -- hv's `serde_json` ruling released the only one, 2026-09-10.)_
 
 **AND WHEN TWO PEOPLE'S GREPS DISAGREE, STOP TUNING THE GREP AND ENUMERATE THE POPULATION.** vc and I counted the same crate's write surface and got **43 and 36 flat, 3 and 8 filtered** -- four numbers, one crate, and the disagreement was entirely in the match rules. The settling move was not a better pattern: it was listing **every `fs::` call in production code and classifying it** -- 7 distinct functions, 3 of them writes, all in `build.rs`. **A pattern answers "does this line match a rule I chose"; an enumeration answers "what does the code call", and only the second can be audited by someone who does not share your rule.** vc's keeper is the general form: **a count without its match rule is not a measurement.**
 
-**AND THE ATTRIBUTION WENT WRONG IN THE SAME EXCHANGE, WHICH IS THE POINT UNDERNEATH IT.** vc diagnosed my pattern as over-sensitive; measured, **mine gives 43/3 and matches no prose**, and the over-sensitive version was their TRANSCRIPTION of it -- `fs::(write|create_dir|remove)` re-quoted as `fs::write|create_dir|remove`, where the prefix binds to the first alternative only and bare `remove` then matches an error message about removing. **Their own rule, twice in one day: ask the party that made the error before writing down why they made it.** Their fix is still the better pattern -- it catches `fs::copy` and `fs::rename`, which mine would miss -- and the crate calls neither, so the 3 was right for a reason narrower than it looked.
+**AND I WROTE A WRONG CAUSE INTO THIS BOARD, ABOUT A PEER, IN MY OWN FAVOUR -- WHICH IS THE WORST ENTRY OF THE DAY AND IS CORRECTED HERE RATHER THAN QUIETLY EDITED.** This line said the over-sensitive pattern was vc's TRANSCRIPTION of mine. **It was MINE.** My shell ran `fs::write\|fs::create_dir\|fs::remove\|...` -- the prefix repeated on every alternative, 43 hits. **The message I SENT said `fs::write|create_dir|remove|...`**, prefix on the first alternative only, which yields 52. **I printed the number 43 beside a pattern that does not produce it**, vc ran what arrived, got 52, and was right about everything except whose hand dropped it.
+
+**AND vc REFUSED TO ADJUDICATE IT** -- they could not see my shell, and said assigning the loss would be the wrong-cause error a third time, about a peer, in their own favour. **They declined to do the thing I had already done to them.** The record is checkable at my end, so it goes here in my words.
+
+**THE KEEPER IS THEIRS AND IT IS BETTER THAN A CULPRIT: A REGEX IS CODE, AND QUOTING CODE IN PROSE LOSES STRUCTURE SILENTLY** -- parentheses, escaping, whitespace, no diagnostic. Same family as the header guard's escape problem, one material over. **Send the command, or send the answer.** My own sharpening: **send them TOGETHER, from one execution** -- had I pasted the command beside its output, a pattern that yields 52 sitting next to the number 43 would have been visible in the message before it left.
+
+**Their pattern is still the better one and I am not keeping mine:** it catches `fs::copy` and `fs::rename`, which mine would silently miss. The crate calls neither, so my 3 was right for a reason narrower than it looked.
 
 **THE COMMON TELL: PIN THE SUBJECT IN THE SAME COMMAND THAT PRINTS IT**, and never `head` output whose interesting end is the bottom -- use `tail`, or read it whole.
 
