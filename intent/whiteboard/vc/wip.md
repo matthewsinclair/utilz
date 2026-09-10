@@ -3,7 +3,7 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 11981560-5612-4fe7-a136-6eae64636b64
-heartbeat_at: 2026-09-10 07:16Z
+heartbeat_at: 2026-09-10 08:12Z
 status: active
 focus: "ST0017 43/51. hv RULED serde_json -- cc took it at 0745d32 with hv named, lock 79 to 81 exactly as predicted. AC-3.9 re-satisfied against the nine-entry manifest. 009 promoted to the slot. Payload next, and it MUST carry limits -- the player has no fallback and the harness cannot see it missing."
 claims: [ST0017]
@@ -219,6 +219,16 @@ Localfolded 2026-09-09 16:51Z. Full boards for 8 Sep and earlier folds of 9 Sep 
   must ask both.
 
 ## Holds
+
+- **STANDING DUTY, hv'S INSTRUCTION 2026-09-10: TELL hv WHEN TO RUN A MANUAL FORCE RESYNC ON LAKSA.**
+  CONDITION THAT FIRES IT: anything published into `~/Devel/prj/Sites/snorkeltoast` that has to reach production --
+  in practice, snorkeltoast promoting a new showreel build into the `-001` slot. **The webhook is still 401 and a
+  push deploys NOTHING**, silently, so the resync is not a fallback, it is the only path. hv is taking the Laksa
+  fix separately; until it lands, **a push that nobody follows with a resync is a publish that did not happen.**
+  **AND THE VERIFICATION IS snorkeltoast'S STANDARD, NOT vc'S**: fetch the served bytes, hash them, AND read the
+  payload. Hash equality proves the served bytes are the built bytes and says nothing about whether they are
+  CORRECT -- 23 slides, 4 socials, the Showreel slide carrying its QR, `limits` present, and the QR encoding the
+  address it was served from. **Hash equality made it certain; reading the slide made it checked.**
 
 - **The whole of WP-03's remainder, and it is not vc's to lift.** CONDITION: **hv rules on `serde_json`.** The
   manifest requires hv's sign-off named in the commit for any crate; cc stopped rather than invent adjacent work,
@@ -595,6 +605,16 @@ not get sent.** This is the hv-inbox problem pointed the other way -- there the 
 ask had no tracked ower. Both fail silently, and both are invisible from the side that succeeded.
 
 ## Decisions that still decide things
+
+- (2026-09-10) **ITEM 1 CLOSED ON THE ARTIFACT AND THE CAUSE IS CONFIRMED: IT DEPLOYED BY HAND.** Build 009 is
+  live -- verified three ways across three observers: vc's byte hash, snorkeltoast's independent hash PLUS a
+  payload parse, and hv seeing it render. **But laksa-vc's delivery log shows 401 at `07:53:07Z`, no delivery
+  since, and `last_response` unchanged.** hv ran a manual force resync, which bypasses the webhook entirely.
+  **The automatic path is exactly as dead as it was this morning.**
+- (2026-09-10) **THE CAUSE WAS WORTH CHASING AFTER THE GREEN, AND snorkeltoast REFUSED TO LET IT COLLAPSE.** Knowing
+  it deployed is not knowing why. Had artifact and cause been ticked as one, this would have been filed fixed and
+  the next failure would have arrived looking like a new bug -- **a green outcome with an unconfirmed cause is a
+  bug with a quiet period.** The clone-side fix IS deployed, incidentally proven by the resync scanning 80 files.
 
 - (2026-09-10) **hv RULED THE ORDER, NOT THE CRATE.** Rebuild for the QR social FIRST, while cc is blocked, then
   `serde_json`. **A sequencing choice is NOT the named sign-off the manifest requires**, so cc's hold stands and vc
