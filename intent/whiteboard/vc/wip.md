@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 11981560-5612-4fe7-a136-6eae64636b64
-heartbeat_at: 2026-09-10 06:45Z
+heartbeat_at: 2026-09-10 06:50Z
 status: active
-focus: "ST0017: 43/51 -- AC-3.2 SATISFIED, the first row to move today, verified at source rather than from cc's report. WP-03 now 10/12. The stamp needs a filter const hoisted before any content lands, and its embed field cannot be graded by anything in this estate. serde_json still unruled."
+focus: "ST0017 43/51, WP-03 10/12. hv RULED THE ORDER -- QR rebuild first while cc is blocked, then serde_json -- and that is a SEQUENCE, not the crate sign-off. cc holds. The QR fix IS the event rebuild IS the floors re-derivation, one action not three. Both peers folded; everything left is hv's."
 claims: [ST0017]
 ---
 
@@ -574,6 +574,21 @@ not get sent.** This is the hv-inbox problem pointed the other way -- there the 
 ask had no tracked ower. Both fail silently, and both are invisible from the side that succeeded.
 
 ## Decisions that still decide things
+
+- (2026-09-10) **hv RULED THE ORDER, NOT THE CRATE.** Rebuild for the QR social FIRST, while cc is blocked, then
+  `serde_json`. **A sequencing choice is NOT the named sign-off the manifest requires**, so cc's hold stands and vc
+  went back for the actual ruling rather than passing an ordering off as an answer -- the "rock on as needed" shape
+  one turn later, pointed at vc instead of at cc.
+- (2026-09-10) **THE QR FIX IS THE EVENT REBUILD IS THE FLOORS RE-DERIVATION -- ONE ACTION, NOT THREE.** They sat on
+  three boards all day. `showreel build` makes a NEW reference artifact, which retires FLOORS.md by its own header,
+  which triggers snorkeltoast's 14-minute control. **cc being blocked is what makes now the free window**, because
+  the floors are the REFERENCE's (`showreel-harness:1943`) and hang off hv's rebuild, not cc's build.
+- (2026-09-10) **vc HELD AC-5.3 RATHER THAN ASKING.** Genuinely JSON-free and not startable -- no showreel manifest,
+  no `bin/` symlink, `common.sh` silent -- so it needs WP-05's dispatch shape first. Opening WP-05 at WP-03 10/12 to
+  fill an idle hour is inventing adjacent work. hv told, hv can overrule.
+- (2026-09-10) **vc IS NOT TREATING THE SEQUENCING AS AUTHORITY TO PUBLISH.** The QR fix's `cp` half puts a new
+  artifact at a published address nine days before a live event. Build and control freely; the `cp` waits on hv
+  saying that word specifically.
 
 - (2026-09-09) **vc: take cc's `Stem`, AND refuse a pattern without exactly one `{nnn}` -- the inverse of the control vc withdrew an hour earlier.** Measured at the reference: `str.replace` (`showreel:550`) and `re.escape(stem).replace` (`:534`) both replace ALL occurrences, so `{nnn}-foo-{nnn}` yields `001-foo-001` and a two-group scanner regex. A prefix/suffix `Stem` from `split_once` leaves the SECOND `{nnn}` literal in the filename. **The reference handles it and the split structurally cannot**, so here the chosen implementation CREATES the hazard where the withdrawn control guarded one that was already structurally absent. Zero `{nnn}` is refused by the reference at `:532`/`:547`, so the check is exactly-one.
 - (2026-09-09) **vc: `bug.file` is a PREDICTION for the delivery slice, not a defect today, and the reference was checked first.** `plan.rs:143` joins it unclassified while four `Requires::Image` sites refuse -- but the reference DOES refuse it, `build_bug` at `showreel:797` dying by name on a missing file (`:809`) and on a declared bug with no file (`:806`). Not a gap yet because the port has no bug embed path; it becomes one the moment delivery embeds without refusing. **Recorded before the code, because the identical sentence after it is a rationalisation.**
