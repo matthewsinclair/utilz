@@ -21,3 +21,19 @@ project:
 
 # The devbin this project expects. Enforced by: devbin doctor
 devbin_version: "^0.1.0"
+
+# devbin's built-in `test rust` and `test shell` assume a root Cargo.toml and a
+# root tests/ directory. Utilz has neither: the one crate is under
+# opt/prez/crate, and each utility keeps its BATS suite in opt/<name>/test/.
+# The rust line is exactly what `utilz test` runs for a crate.
+commands:
+  test:
+    options:
+      rust:
+        run: cargo test --workspace --no-fail-fast --manifest-path opt/prez/crate/Cargo.toml
+        grammar: cargo
+        log: RUST
+      shell:
+        run: bats opt/*/test
+        grammar: shell
+        log: SHELL
