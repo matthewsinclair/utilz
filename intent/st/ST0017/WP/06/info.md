@@ -2,7 +2,7 @@
 wp_id: WP-06
 title: Snorkeltoast side: point the prototype at the hoisted tool, move the house theme
 scope: S
-status: WIP
+status: Done
 ---
 
 # WP-06: Snorkeltoast side: point the prototype at the hoisted tool, move the house theme

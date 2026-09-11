@@ -85,7 +85,7 @@ The prototype's own README §13 names four gaps, and tracing the source found a 
 | WP-03 | Rust build path: YAML, admission (C1), normalisation policy (C2), data-URI       | S    | Done        |
 | WP-04 | Rust init and qr paths, graded against population 3                              | S    | Not Started |
 | WP-05 | Command surface: shim dispatch, manifest, help, doctor, prez help amendment      | S    | Done        |
-| WP-06 | Snorkeltoast side: point the prototype at the hoisted tool, move the house theme | S    | WIP         |
+| WP-06 | Snorkeltoast side: point the prototype at the hoisted tool, move the house theme | S    | Done        |
 
 ## Acceptance
 

@@ -10,7 +10,7 @@ A DOING / TODO / DONE view, projected from steel-thread and work-package status:
   - [x] 03: Rust build path: YAML, admission (C1), normalisation policy (C2), data-URI
   - [ ] 04: Rust init and qr paths, graded against population 3
   - [x] 05: Command surface: shim dispatch, manifest, help, doctor, prez help amendment
-  - [-] 06: Snorkeltoast side: point the prototype at the hoisted tool, move the house theme
+  - [x] 06: Snorkeltoast side: point the prototype at the hoisted tool, move the house theme
 
 ## TODO
 
