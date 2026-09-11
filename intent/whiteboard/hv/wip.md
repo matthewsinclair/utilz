@@ -5,7 +5,7 @@ role: hypervisor
 session_id: none
 heartbeat_at: 2026-07-29T10:21Z
 status: active
-focus: "Tag."
+focus: "Cut the release after 2.8.0."
 claims: []
 ---
 
@@ -31,5 +31,5 @@ _(none)_
 
 ## TODO
 
-- Tag `v2.6.0` at `4fdce3c`, then cut the release carrying ST0017.
+- Cut the release after `2.8.0`; it carries ST0017 (`prez showreel`).
 - Review the standing directives; they were transcribed, not authored. Cut any you never set.

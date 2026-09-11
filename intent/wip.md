@@ -10,7 +10,7 @@ _(none)_
 
 **hv**
 
-- Tag `v2.6.0` at `4fdce3c`, then cut the release carrying ST0017.
+- Cut the release after `2.8.0`; it carries ST0017 (`prez showreel`).
 - Decide whether `utilz doctor` should write its results to stdout rather than stderr.
 - Decide whether to adopt rustfmt for the prez crate: add `rustfmt.toml` (`tab_spaces = 2`), one reformat commit, then re-enable `fmt rust` in `bin/.devbin/config.yaml`.
 
