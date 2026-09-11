@@ -2,7 +2,7 @@
 wp_id: WP-05
 title: Command surface: shim dispatch, manifest, help, doctor, prez help amendment
 scope: S
-status: Not Started
+status: Done
 ---
 
 # WP-05: Command surface: shim dispatch, manifest, help, doctor, prez help amendment

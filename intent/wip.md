@@ -1,5 +1,5 @@
 ---
-verblock: "08 Sep 2026:v1.20: matts - geodica took the doctor check; ST0013 gains AC02 from their measured usage"
+verblock: "11 Sep 2026:v1.21: matts - ST0017 culled to market; one row open, WP-04 deferred"
 ---
 
 # Work In Progress
@@ -19,6 +19,7 @@ This file carries **DOING and TODO only**. Completed work belongs in `intent/don
 
 **Threads open**
 
+- **ST0017 -- showreel under prez. CULLED TO MARKET BY hv 11 Sep.** The thread's Done is met. 49 satisfied, ONE open: AC-6.3, cc's 11-line fixture de-identification (no new code). WP-04 (Rust `init`/`qr`) deferred to a follow-on thread with its four rows withdrawn under that reason. Then `intent st done ST0017`. `design.md` section 0 is the finish line.
 - **ST0013 -- prez theme addressing. ASSIGNED TO cc 8 Sep**, contract stays vc's. (`--theme` names-only, `--theme-file`, `--theme-path`). 0/1. Carries ST0010's AC15 verbatim, and AT01 is genuinely red-first: `--theme=NAME` must resolve identically from two working directories, one holding a `./NAME/` directory, and it is red against the pinned binary because `path.exists()` wins. **It is a BREAKING change to `prez present <deck> --theme <path>`, which is in hv's shell history**, so clause (f) requires the refusal to name `--theme-file`.
 
 **Deferred out of ST0011 (`stampz`), neither blocking**

@@ -6,11 +6,11 @@ A DOING / TODO / DONE view, projected from steel-thread and work-package status:
 
 - [-] ST0017: Add 'showreel' to 'prez'
   - [x] 01: Workspace + artifact crate: the C3 consolidation, zero behaviour change to prez
-  - [-] 02: Fidelity harness, red-proved against population 1 (Python both sides)
-  - [-] 03: Rust build path: YAML, admission (C1), normalisation policy (C2), data-URI
+  - [x] 02: Fidelity harness, red-proved against population 1 (Python both sides)
+  - [x] 03: Rust build path: YAML, admission (C1), normalisation policy (C2), data-URI
   - [ ] 04: Rust init and qr paths, graded against population 3
-  - [ ] 05: Command surface: shim dispatch, manifest, help, doctor, prez help amendment
-  - [ ] 06: Snorkeltoast side: point the prototype at the hoisted tool, move the house theme
+  - [x] 05: Command surface: shim dispatch, manifest, help, doctor, prez help amendment
+  - [-] 06: Snorkeltoast side: point the prototype at the hoisted tool, move the house theme
 
 ## TODO
 

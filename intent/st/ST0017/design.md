@@ -11,6 +11,26 @@ minted -- see section 8.
 
 ---
 
+## 0. Where it stands, marked to market by hv 2026-09-11
+
+**The thread's Done (info.md) is met.** `prez showreel build` produces the 45h artifact from the real config, four invocation forms byte-identical; the harness graded it per population and hv accepted the one divergence it found, the JPEG encoder (AC-3.15); theme resolution, inlining and base64 have one implementation in `crates/artifact`; prez's dependency contract and binary size are unmoved and gated by `tests/manifest.rs` (AT03).
+
+**Contract: 49 satisfied, 1 open, 8 withdrawn.** WP-01, 02, 03 and 05 done; WP-06 WIP on the one open row; WP-04 not started and deferred.
+
+**The one open row is AC-6.3**, the honest-partial de-identification of the pinned fixture: nine fixture lines and two test lines, no new code. Then `intent st done ST0017`.
+
+**Deferred out of this round, by hv:**
+
+- **WP-04, Rust `init` and `qr`.** The port dispatches `check` and `build` only. The 45h masters and QRs were rendered once by the Python init and the Rust build consumes them, which is all the Done requires. AC-3.4, AC-4.1, AC-4.2 and AC-5.3 carry the deferral reason and return under a follow-on thread if hv wants init in Rust.
+- **The harness's floors derivation (was AC-2.19).** The floors measure the reference's self-stability; the compare asks cross-implementation agreement. True, and it changes no verdict: every divergent slide clears `min_defect` 0.223607 by 4x to 13x. snorkeltoast's instrument, theirs to re-derive.
+- **The one-off control pass on the port artifact**, for the same reason.
+
+**Rulings that outlive their rows:** `MAX_EASE_MS` 2400 on both sides (hv's safety cap; the reference's 3000 crossed `MIN_DWELL_MS` 2500); the encoder divergence accepted; the dependency budget gated; the reference player's brand fallback untouched until after the 19th; `upstream` frozen for CI credits.
+
+**Sections 1.1 to 1.28 below are the daily narrative of the build, kept as record.** Nothing in them is needed to read the finish line above.
+
+---
+
 ## 1. The layout, and why it is not a compromise
 
 **One Cargo workspace, three crates -- the root package plus two members -- two binaries, one dispatching shim.**

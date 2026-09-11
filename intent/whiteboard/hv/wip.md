@@ -26,10 +26,12 @@ Workstream Zero -- the human in the loop. Adjudicates scope, sequences work, own
 - Use the Intent CLI for lifecycle -- `intent st`, `intent wp`, `intent claude ws`, `intent lang`. Never hand-create the directories or hand-edit `status:` frontmatter.
 - **Releases are hv's.** Annotated tag on the `release:` commit itself (not on the session's final HEAD -- see `v2.3.0` and `v2.4.0`), then `git push local main <tag> && git push upstream main <tag>`. Both remotes, always.
 - `yq` is a hard dependency of the framework as of v2.4.0. `utilz doctor` must still complete without it.
+- **ST0017 is culled to market (2026-09-11). No new code, no new tests, no tests of tests.** The one open row is AC-6.3 (cc, an 11-line fixture and test edit). WP-04 (Rust `init`/`qr`) is DEFERRED to a follow-on thread; AC-3.4, AC-4.1, AC-4.2, AC-5.3 withdrawn with that reason. AC-2.19 and the one-off control pass are culled as instrument work. **This line is hv's word: cc and snorkeltoast are released on it. No relay needed.**
+- **A relayed ruling is not the ruling.** Peers hold on a peer's relay of hv until hv's word reaches them here or directly. That is correct behaviour; keep it.
 
 ## DOING
 
-- (nothing in flight)
+- **ST0017 closing.** AC-6.3 then `intent st done`. Tag and push on hv's schedule; `upstream` frozen, `local` 8 behind HEAD.
 
 ## TODO
 
@@ -40,6 +42,11 @@ Workstream Zero -- the human in the loop. Adjudicates scope, sequences work, own
 - A peer node in **another project** may edit this working tree. Cdsync's `cc` did on 2026-07-29, hv-instructed, while this project's session was live. A `git status` taken mid-session is therefore not a stable baseline -- re-verify before trusting earlier measurements. See the External correspondents section of `intent/whiteboard/README.md`.
 
 ## Decisions
+
+- (2026-09-11) **ST0017 culled to market.** Done as the thread defined it is met; init/qr deferred; instrument rows withdrawn.
+- (2026-09-10) **Honest partial** on the public-repo fixture: name and socials out, stage handle and contract evidence stay.
+- (2026-09-10) **The JPEG encoder divergence is accepted.** No new crate.
+- (2026-09-10) **`max_ease` caps to 2400 on both sides.** Safety ruling, outlives its row.
 
 - (2026-07-29) Utilz declares `languages: ["shell"]` only. `elixir` was declared but never used -- no `mix.exs`, no `.ex`/`.exs` -- and was loading two Elixir skills into every session off a stale declaration. Removed via `intent lang remove elixir`.
 - (2026-07-29) v2.4.0 is a **minor** bump, not a patch: removing the grep YAML fallback makes `yq` required, so `utilz list` now fails loudly where it previously degraded. Behaviour change that a user can observe drives the minor.

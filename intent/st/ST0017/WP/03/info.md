@@ -2,7 +2,7 @@
 wp_id: WP-03
 title: Rust build path: YAML, admission (C1), normalisation policy (C2), data-URI
 scope: S
-status: WIP
+status: Done
 ---
 
 # WP-03: Rust build path: YAML, admission (C1), normalisation policy (C2), data-URI
