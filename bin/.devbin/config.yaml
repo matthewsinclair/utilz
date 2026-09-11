@@ -37,3 +37,21 @@ commands:
         run: bats opt/*/test
         grammar: shell
         log: SHELL
+  # Same layout, same fix, for clippy. --workspace for the reason `utilz test`
+  # gives: without it cargo lints the root package alone and every other crate
+  # is silently skipped.
+  check:
+    options:
+      clippy:
+        run: cargo clippy --workspace --all-targets --manifest-path opt/prez/crate/Cargo.toml -- -D warnings
+        grammar: cargo
+        log: CLIPPY
+  # The prez crate is hand-formatted at 2-space indent and has never been
+  # through rustfmt: measured 2026-09-11, `cargo fmt --check` with tab_spaces=2
+  # still reports 390 hunks. Left on, `fmt rust` would rewrite the whole crate
+  # and `check format` could never pass. Off until hv decides to adopt rustfmt;
+  # `check format` names the disabled arm rather than dropping it.
+  fmt:
+    options:
+      rust:
+        enabled: false

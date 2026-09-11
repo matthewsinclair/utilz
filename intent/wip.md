@@ -13,6 +13,7 @@ _(none)_
 - Push `local`.
 - Tag `v2.6.0` at `4fdce3c`, then cut the release carrying ST0017.
 - Decide whether `utilz doctor` should write its results to stdout rather than stderr.
+- Decide whether to adopt rustfmt for the prez crate: add `rustfmt.toml` (`tab_spaces = 2`), one reformat commit, then re-enable `fmt rust` in `bin/.devbin/config.yaml`.
 
 **Threads**
 
