@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 11981560-5612-4fe7-a136-6eae64636b64
-heartbeat_at: 2026-09-10 20:09Z
+heartbeat_at: 2026-09-11 08:19Z
 status: active
-focus: "ST0017 49/54, doctor 0. hv ruled the whole queue at 20:07Z: WP-04 OPEN and cc unparked, WP-05 held, Python caps to 2400, the reel fixture de-identifies, the brand fallback defers, control.json gets the graded-versus-served note, and the new side gets ONE control against cc's first Rust artifact. vc's next act is the write-set check on cc's diff."
+focus: "ST0017 49/55 (AC-6.3 minted, open), doctor 0. hv ruled the de-identify an HONEST PARTIAL and the exempt half is now a contract row rather than a memory. cc is holding WP-04 on hv's own word, correctly -- a relay is not the verb, and the channel that closes that gap is hv's board, not a better relay."
 claims: [ST0017]
 ---
 
@@ -92,6 +92,30 @@ ask that produced it** -- and because two of these are standing constraints some
   filed `designed` and **still retires itself** the day the fallback goes.
 - **`control.json`'s `artifact_sha256`: ANNOTATE GRADED-VERSUS-SERVED.** snorkeltoast's file, snorkeltoast's
   wording. It names the artifact GRADED, which is correct for a floors file and one byte from the one SERVED.
+
+### The de-identify, re-ruled 2026-09-11 after cc refused the price -- AC-6.3
+
+- **hv RULED THE HONEST PARTIAL.** Name and socials yes, handle no, contract evidence and append-only surfaces
+  untouched, and hv told plainly that the name stays in the repo either way.
+- **vc'S "ONE EDIT IN YOUR LANE" WAS PRICED AT ONE FILE OUT OF SEVEN** and cc refused to do a seventh of a job
+  that would produce a repo which LOOKS de-identified. **That is worse than not starting and they were right.**
+- **THE PARTIAL IS NOW A ROW, NOT A MEMORY, AND THAT IS THE WHOLE POINT OF MINTING IT.** Without AC-6.3 a reader
+  six weeks out sees a de-identified fixture, reads 338 handle occurrences as a leak nobody noticed, and
+  "finishes the job" by rewriting the contract, both boards, hv's inbox and every archived fold. **The row makes
+  that sweep read as REVERSING A DECISION rather than tidying** -- the same service the `MAX_EASE_MS` cap needed.
+- **THE ROW NAMES THE TOKEN CLASS AND NEVER THE TOKEN**, so minting it added ZERO instances to the census it
+  governs. A row about a leak that leaks is not a joke; it is the ordinary outcome of writing the example in.
+
+### cc IS PARKED ON hv'S OWN WORD AND THAT IS NOT A THING vc CAN FIX BY RELAYING BETTER
+
+- **hv HAS RULED WP-04 TWICE IN-SESSION AND cc HAS HEARD IT ONLY FROM vc.** cc holds because a peer message is
+  never authorisation -- the rule vc taught them -- and **vc agrees with the hold against vc's own interest.**
+- **THE GAP IS THE CHANNEL, NOT THE WORDING.** No relay makes a relay into hv's verb, and a more emphatic one
+  only makes the failure louder when it comes. **`hv/wip.md`'s `## Standing directives` is the durable
+  hv-authored surface peers read at pickup** -- and it is hv's file, which vc must never write.
+- **cc DECLINED TO USE THE STORE TO DISPUTE vc WHEN THE STORE DID NOT SUPPORT IT**: `intent wp list` calls WP-04
+  Not Started AND calls WP-02 and WP-03 WIP, which both boards call closed. **They named the basis for holding as
+  the standing rule rather than a contradiction they did not actually have.** That is the harder, rarer move.
 
 ### The sixth, and the shape of the answer is the point
 

@@ -833,3 +833,30 @@ whether the reference's floors are a fair bar for the port, and does not repair 
 **IT ALSO CONVERGED WITH WORK snorkeltoast HAD ALREADY QUEUED FOR THEIR OWN REASON** -- discharging a stale
 `designed` row and testing the 23-of-23 prediction. One 14-minute pass now serves both questions, and neither
 of us proposed it for the other's.
+
+## (2026-09-11 08:20Z) THE HONEST PARTIAL IS RULED AND RECORDED AS AC-6.3. ONE THING STILL NEEDS YOU AND IT IS NOT A DECISION.
+
+**AC-6.3 minted UNSATISFIED at `333cd6b`, doctor 0.** The exempt half of the partial is now a contract row
+rather than a memory: name and socials go, the handle stays at 338 occurrences, AC-6.1's evidence keeps the name
+because there the token's PRESENCE IS THE FINDING, and the append-only surfaces including this inbox are
+untouched. **Without the row, a reader six weeks out reads the residue as a leak nobody noticed and "finishes the
+job" by rewriting your own inbox and every archived fold.** The row makes that read as reversing your decision.
+
+**THE ROW NAMES THE TOKEN CLASS AND NEVER THE TOKEN**, so minting it added zero instances to the census it
+governs. It also carries the instrument defect that produced a wrong figure for you yesterday -- `git grep -E`
+does not honour `\b` -- so nobody re-drives this row with the broken pattern.
+
+### THE THING THAT NEEDS YOU: cc IS PARKED AND ONLY YOU CAN RELEASE THEM
+
+**You have ruled WP-04 twice and cc has heard it only from me.** They are holding because a peer message is never
+authorisation -- which is the rule I taught them -- and **I agree with the hold against my own interest.** They
+have a plan built, rows read off the store, nothing started and nothing edited.
+
+**THIS IS NOT FIXABLE BY RELAYING BETTER, AND I HAVE STOPPED TRYING.** No wording turns a relay into your verb; a
+more emphatic one just fails louder. **The durable surface is `hv/wip.md`'s `## Standing directives`, which
+peers read at pickup -- and it is YOUR file, which I must never write.** A line there, or one message from you to
+cc, releases them. Either costs you a sentence.
+
+**AND cc EARNED THE HOLD RATHER THAN HIDING BEHIND IT.** `intent wp list` says WP-04 Not Started, which looks
+like support -- and it ALSO says WP-02 and WP-03 are WIP, which both boards call closed. **cc said so themselves
+and refused to use it**, naming the standing rule as the basis instead of a contradiction they did not have.
