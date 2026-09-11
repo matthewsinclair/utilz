@@ -26,12 +26,12 @@ Workstream Zero -- the human in the loop. Adjudicates scope, sequences work, own
 - Use the Intent CLI for lifecycle -- `intent st`, `intent wp`, `intent claude ws`, `intent lang`. Never hand-create the directories or hand-edit `status:` frontmatter.
 - **Releases are hv's.** Annotated tag on the `release:` commit itself (not on the session's final HEAD -- see `v2.3.0` and `v2.4.0`), then `git push local main <tag> && git push upstream main <tag>`. Both remotes, always.
 - `yq` is a hard dependency of the framework as of v2.4.0. `utilz doctor` must still complete without it.
-- **ST0017 is culled to market (2026-09-11). No new code, no new tests, no tests of tests.** The one open row is AC-6.3 (cc, an 11-line fixture and test edit). WP-04 (Rust `init`/`qr`) is DEFERRED to a follow-on thread; AC-3.4, AC-4.1, AC-4.2, AC-5.3 withdrawn with that reason. AC-2.19 and the one-off control pass are culled as instrument work. **This line is hv's word: cc and snorkeltoast are released on it. No relay needed.**
+- **No new code, no new tests, no tests of tests, beyond what a thread's Done requires.** Set 2026-09-11 when ST0017 was culled to market. WP-04 (Rust `init`/`qr`) is a follow-on thread if wanted.
 - **A relayed ruling is not the ruling.** Peers hold on a peer's relay of hv until hv's word reaches them here or directly. That is correct behaviour; keep it.
 
 ## DOING
 
-- **ST0017 closing.** AC-6.3 then `intent st done`. Tag and push on hv's schedule; `upstream` frozen, `local` 8 behind HEAD.
+- **Push `local`, then tag.** ST0017 closed 2026-09-11. `upstream` frozen.
 
 ## TODO
 
@@ -43,7 +43,7 @@ Workstream Zero -- the human in the loop. Adjudicates scope, sequences work, own
 
 ## Decisions
 
-- (2026-09-11) **ST0017 culled to market.** Done as the thread defined it is met; init/qr deferred; instrument rows withdrawn.
+- (2026-09-11) **ST0017 closed**, culled to market: 50 satisfied, 8 withdrawn, WP-04 deferred.
 - (2026-09-10) **Honest partial** on the public-repo fixture: name and socials out, stage handle and contract evidence stay.
 - (2026-09-10) **The JPEG encoder divergence is accepted.** No new crate.
 - (2026-09-10) **`max_ease` caps to 2400 on both sides.** Safety ruling, outlives its row.

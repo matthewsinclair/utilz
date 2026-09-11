@@ -1,8 +1,18 @@
 ---
-verblock: "08 Sep 2026:v0.5: matts - v2.6.0 and ST0014 closed; six Intent defects relayed"
+verblock: "11 Sep 2026:v0.6: matts - ST0017 closed, culled to market"
 ---
 
 # Done
+
+## 11 Sep 2026 -- `prez showreel` (ST0017, CLOSED), culled to market (no release yet)
+
+**ST0017 closed at 50 satisfied / 0 open / 8 withdrawn; doctor 0.** Snorkeltoast's Python `showreel` is hoisted into Utilz as `prez showreel`, a Rust pipeline: `build` produces the 45h reel's artifact from its real config, four invocation forms byte-identical; a named harness graded it against the Python reference per population; theme resolution, inlining and base64 have one implementation in `crates/artifact`; prez's dependency contract and binary size are unmoved and gated by `tests/manifest.rs`. `cc` built, `vc` held the contract, `snorkeltoast` owned the reference and harness, `hv` ruled.
+
+**hv culled the tail on 11 Sep: no new code, no new tests.** WP-04 (Rust `init`/`qr`) is deferred to a follow-on thread -- the port builds from masters the Python `init` rendered once. Its four rows and the harness-correctness row are withdrawn with that reason on the record.
+
+**Rulings that outlive the thread:** `MAX_EASE_MS` is 2400 on both sides (hv's safety cap; 3000 crossed the 2500 dwell floor). The JPEG encoder divergence is accepted -- `image`'s baseline encoder against Pillow's optimised progressive, same geometry, +13% bytes. Any crate addition returns to hv. The pinned fixture is de-identified as an honest partial: the stage handle, the contract's evidence and the append-only boards keep the name by ruling.
+
+**The one lesson worth re-reading:** `git grep -E` does not honour `\b`. A word-bounded clause in a composite ERE pattern matches nothing and grep says nothing, so a count can look like it covers a population it never touched. Use `-P`, and quote the pattern and the unit with every count.
 
 ## 8 Sep 2026 -- v2.6.0: two trees (ST0014, CLOSED), and six Intent defects relayed
 

@@ -3,10 +3,10 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 11981560-5612-4fe7-a136-6eae64636b64
-heartbeat_at: 2026-09-11 08:50Z
-status: active
-focus: "ST0017 is at its Done: 50 satisfied, 0 open, 8 withdrawn, doctor 0, every WP done except WP-04 (deferred). Waiting on hv for intent st done and the push. Nothing in flight."
-claims: [ST0017]
+heartbeat_at: 2026-09-11 09:05Z
+status: paused
+focus: "ST0017 CLOSED 2026-09-11. Nothing in flight, nothing queued. Push and tag are hv's."
+claims: []
 ---
 
 # Validation Claude (vc)
@@ -19,7 +19,7 @@ _(nothing in flight)_
 
 ## TODO
 
-- **hv's: `intent st done ST0017`, then tag and push.** The ST's Done (info.md) is met. Contract 50 satisfied, 0 open, 8 withdrawn, doctor 0. AC-6.3 closed on cc's `58a0bb0`, verified by vc at `bfafbf3`.
+_(none)_
 
 ## Holds
 

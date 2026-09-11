@@ -4,13 +4,7 @@ A DOING / TODO / DONE view, projected from steel-thread and work-package status:
 
 ## DOING
 
-- [-] ST0017: Add 'showreel' to 'prez'
-  - [x] 01: Workspace + artifact crate: the C3 consolidation, zero behaviour change to prez
-  - [x] 02: Fidelity harness, red-proved against population 1 (Python both sides)
-  - [x] 03: Rust build path: YAML, admission (C1), normalisation policy (C2), data-URI
-  - [ ] 04: Rust init and qr paths, graded against population 3
-  - [x] 05: Command surface: shim dispatch, manifest, help, doctor, prez help amendment
-  - [x] 06: Snorkeltoast side: point the prototype at the hoisted tool, move the house theme
+_(none)_
 
 ## TODO
 
@@ -100,6 +94,13 @@ _(none)_
   - [x] 13: utilz use dev|opt: the two-word switch over relink, refusing while UTILZ_HOME is exported
 - [x] ST0015: Version dispatch has one home, and reports both versions
 - [x] ST0016: --help has one home, and both invocation forms agree
+- [x] ST0017: Add 'showreel' to 'prez'
+  - [x] 01: Workspace + artifact crate: the C3 consolidation, zero behaviour change to prez
+  - [x] 02: Fidelity harness, red-proved against population 1 (Python both sides)
+  - [x] 03: Rust build path: YAML, admission (C1), normalisation policy (C2), data-URI
+  - [ ] 04: Rust init and qr paths, graded against population 3
+  - [x] 05: Command surface: shim dispatch, manifest, help, doctor, prez help amendment
+  - [x] 06: Snorkeltoast side: point the prototype at the hoisted tool, move the house theme
 
 ---
 
