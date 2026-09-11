@@ -390,7 +390,6 @@ mod tests {
   #[test]
   fn tight_strips_everything_that_would_break_the_field_separator() {
     assert_eq!(tight("Forbidden Planet"), "forbiddenplanet");
-    assert_eq!(tight("Ash Sinclair"), "ashsinclair");
     assert_eq!(tight("POP^UP^ART"), "popupart");
     assert_eq!(tight("45h"), "45h");
     assert_eq!(tight("  --  "), "");

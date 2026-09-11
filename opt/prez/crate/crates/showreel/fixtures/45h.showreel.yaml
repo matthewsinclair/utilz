@@ -1,5 +1,5 @@
 # =============================================================================
-# 45h - Ash Sinclair. POP^UP^ART showreel.
+# 45h - Bea Marlow. POP^UP^ART showreel.
 #
 # Everything under session: is also settable from the URL, so ONE BUILD SERVES
 # EVERY VENUE. The art does not change between shops; the six lines of the
@@ -12,14 +12,14 @@
 
 showreel: {version: 1}
 theme: popupart
-title: "45h - Ash Sinclair - POP^UP^ART"
+title: "45h - Bea Marlow - POP^UP^ART"
 
 producer: Snorkeltoast
 wordmark: "POP^UP^ART"
 
 artist:
   handle: 45h
-  name: Ash Sinclair
+  name: Bea Marlow
   discipline: Character & concept art, animation
 
 session:
@@ -60,14 +60,14 @@ bug:
 # its asset exists; no asset is a valid configuration, not a missing one.
 socials:
   - label: Instagram
-    handle: "@Ash_s_art"
-    url: https://www.instagram.com/Ash_s_art
+    handle: "@Bea_s_art"
+    url: https://www.instagram.com/Bea_s_art
   - label: TikTok
-    handle: "@45h836782"
-    url: https://www.tiktok.com/@45h836782
+    handle: "@bea_marlow"
+    url: https://www.tiktok.com/@bea_marlow
   - label: LinkedIn
-    handle: "Ash Sinclair"
-    url: https://www.linkedin.com/in/ash-sinclair-b79478256/
+    handle: "Bea Marlow"
+    url: https://www.linkedin.com/in/bea-marlow/
 
   # The reel's own published address, so a person standing in front of it can
   # take it away -- scan, watch it again later, send it to somebody who is not

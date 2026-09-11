@@ -388,7 +388,7 @@ mod tests {
     assert_eq!(slug("TikTok"), "tiktok");
     assert_eq!(slug("Watch this again"), "watch-this-again");
     assert_eq!(slug("  Spaced  Out  "), "spaced-out");
-    assert_eq!(slug("Ash's Art!"), "ashs-art");
+    assert_eq!(slug("Bea's Art!"), "beas-art");
     assert_eq!(slug("already-hyphenated"), "already-hyphenated");
   }
 
