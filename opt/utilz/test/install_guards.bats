@@ -13,6 +13,10 @@
 
 load "test_helper.bash"
 
+# `run --separate-stderr` below needs bats >= 1.5.0; without this declaration
+# bats warns BW02 on every run.
+bats_require_minimum_version 1.5.0
+
 run_install_function() {
   bash -c "source '$UTILZ_HOME/opt/utilz/lib/common.sh'; source '$UTILZ_HOME/opt/utilz/lib/install.sh'; $*"
 }
