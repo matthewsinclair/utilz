@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 11981560-5612-4fe7-a136-6eae64636b64
-heartbeat_at: 2026-09-11 08:44Z
+heartbeat_at: 2026-09-11 08:50Z
 status: active
-focus: "ST0017 culled to market by hv 2026-09-11: 49 satisfied, ONE open (AC-6.3, an 11-line edit), 8 withdrawn. WP-01/02/03/05 done, WP-04 deferred, WP-06 WIP. No new code, no new tests."
+focus: "ST0017 is at its Done: 50 satisfied, 0 open, 8 withdrawn, doctor 0, every WP done except WP-04 (deferred). Waiting on hv for intent st done and the push. Nothing in flight."
 claims: [ST0017]
 ---
 
@@ -15,11 +15,11 @@ Validation node. cc builds, vc holds the contract, snorkeltoast owns the referen
 
 ## DOING
 
-- **Close ST0017.** The ST's Done (info.md) is met: build from the real config, verified by a named instrument, one shared crate, prez's contract unchanged. Contract 49 satisfied, 1 open, 8 withdrawn, doctor 0.
+_(nothing in flight)_
 
 ## TODO
 
-- **AC-6.3, the honest partial. cc's edit, 11 lines, no new code.** Nine fixture lines, one test literal swapped, one deleted. vc verifies with `git grep -P` over the name tokens, closes the row, marks WP-06 done, then `intent st done ST0017`.
+- **hv's: `intent st done ST0017`, then tag and push.** The ST's Done (info.md) is met. Contract 50 satisfied, 0 open, 8 withdrawn, doctor 0. AC-6.3 closed on cc's `58a0bb0`, verified by vc at `bfafbf3`.
 
 ## Holds
 
