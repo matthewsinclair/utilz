@@ -12,6 +12,8 @@ verblock: "11 Sep 2026:v0.6: matts - ST0017 closed, culled to market"
 
 **Rulings that outlive the thread:** `MAX_EASE_MS` is 2400 on both sides (hv's safety cap; 3000 crossed the 2500 dwell floor). The JPEG encoder divergence is accepted -- `image`'s baseline encoder against Pillow's optimised progressive, same geometry, +13% bytes. Any crate addition returns to hv. The pinned fixture is de-identified as an honest partial: the stage handle, the contract's evidence and the append-only boards keep the name by ruling. That ruling assumed nothing was published; hv then pushed `upstream`, so the pre-edit fixture (`2115e2c`) is in public history. hv ruled no rewrite: every token in it -- name, Instagram, TikTok, LinkedIn -- is also on the live snorkeltoast.com showreel by design, so the history exposes nothing the published reel does not.
 
+**Two fixes found at the week's close.** `dvb test all` had never run here: declaring `shell` and `rust` in devbin's config on 9 Sep switched on test gates whose defaults assume a root `Cargo.toml` and a root `tests/`; `bin/.devbin/config.yaml` now points them, and clippy, at the real layout. And `install_guards.bats` now declares the bats 1.5.0 minimum its `run --separate-stderr` needs, which silences BW02.
+
 **The one lesson worth re-reading:** `git grep -E` does not honour `\b`. A word-bounded clause in a composite ERE pattern matches nothing and grep says nothing, so a count can look like it covers a population it never touched. Use `-P`, and quote the pattern and the unit with every count.
 
 ## 8 Sep 2026 -- v2.6.0: two trees (ST0014, CLOSED), and six Intent defects relayed

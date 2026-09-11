@@ -16,19 +16,18 @@ _(none)_
 
 **Threads**
 
-- ST0013: prez theme addressing -- `--theme` names-only, `--theme-file`, `--theme-path`. Breaking for `prez present <deck> --theme <path>`; the refusal must name `--theme-file`.
 - Follow-on to ST0017, if wanted: Rust `init` and `qr` for `prez showreel`.
 - Crawl recedes as it rises (Star Wars pre-roll): a 3D transform in `player.html`.
 - prez default look, "basic but cool enough out of the box". Needs a thread.
 
 **Fixes**
 
-- Issue 0007: prez slide counter below 4.5:1 contrast on dark slides.
+- Issue 0016: `utilz install` publishes without consulting or recording the gates CI runs.
 - `examples/demo.md` warns `class 'escape' has no effect`.
 - `stampz`: handle mixed page geometry within one PDF (per-page overlay ranges).
 - `hoist-rebase.sh`: the `AT13` postcondition uses minimum 0 against `-ge`, so it always passes. Needs ST0010 hydrated.
 - Open an issue for `todo` verbs unreachable from Emacs: the bridge inserts `C-u` flags between the declared flags and the path.
-- Re-render or remove `intent/issues/OPEN/` and `CLOSED/`; they are stale against canon.
+- Remove the v2 artefacts under `intent/issues/CLOSED/`; issues are read with `intent issues list`.
 
 **Blocked**
 
