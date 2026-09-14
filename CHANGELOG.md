@@ -5,6 +5,44 @@ All notable changes to the Utilz framework will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.9.0] - 2026-09-14
+
+Minor: **`prez showreel` is new**, **a published install records CI's verdict on the commit it was cut from**, and **`PREZ_DEFAULT_THEME` gives a deck that names no theme a default**. prez goes from 2.0.0 to 2.1.0. todo goes from 1.1.0 to 2.0.0: **a breaking change to that one utility**, carried by its own major (see Changed).
+
+### Added
+
+- **`prez showreel`: a directory of pictures and a `showreel.yaml` become one self-contained, looping HTML reel that plays from a USB stick with nothing installed** (ST0017). `prez showreel <...>` hands over to a separate binary built from the same Rust workspace, so `prez build` never links showreel's image decoders and neither budget pays for the other. **The thread is the consolidation, not the port**: theme resolution, the offline guarantee, asset inlining and base64 now have one implementation, the shared `artifact` crate, serving both tools, where they had two in two languages. prez's dependency contract -- comrak and nothing else -- and its binary budget are provably unchanged.
+
+- **A published install records CI's verdict on the commit it was cut from** (issue 0016). `utilz install` and `utilz upgrade` ask CI's own record of the commit with `gh`, under a 10-second watchdog, and write the answer into the manifest: the run's conclusion, `pending`, `none` when CI has no run for the commit, or `unknown` with the reason when `gh` is absent, refuses, or does not answer in time. `utilz version` shows it from an install -- `installed at <prefix> (<commit>, CI <state>)`, and `CI not recorded` for an install published before the record existed. **Record only**: no answer refuses a publish, and nothing defaults to success. Before this, a publish from a commit whose gates were red and one from a green commit produced the same install, and nothing could tell them apart.
+
+- **`PREZ_DEFAULT_THEME`: a default theme for any deck that names none** (ST0018). The order, highest first: a flag (`--theme` or `--theme-file`), then the deck's `theme:` or `theme-file:`, then `PREZ_DEFAULT_THEME`, then the built-in `simple`. It holds a theme NAME, and it resolves and is refused exactly as `--theme` is: an unknown name keeps the unknown-theme refusal's `no theme '<name>'` prefix and gains one line saying where the name came from. Empty means unset, and a value that is not UTF-8 is refused by name. A wrapper that owns a house look can now give it to every deck without taking the choice from a deck that names its own.
+
+### Changed
+
+- **BREAKING (todo 2.0.0) -- an item's id is its name, not its position** (issue 0033). `utilz todo` renumbered every item on every write, so an id cited anywhere went stale at the next `add`, `done` or `sync`, with nothing to report it. An item now keeps its id through every write. A new item takes the next id the file has never used, recorded in a `next-id` frontmatter key, which is load-bearing: it is the only record of ids above the highest one still present. `start`, `done`, `notdone` and `toggle` address the id wherever the item sits, `--json`'s `num` carries it, and `done --prune` archives each item with its id. **A script that ran `todo done 1` to complete the top item now completes the item named 1.** A 1.x file migrates on its first write, every id unchanged.
+
+### Fixed
+
+- **An installed `prez showreel` exec'd a file the publish never produced** (issue 0024). `utilz install` built prez alone; it now builds the whole workspace and ships both binaries, and the installed shim refuses a missing one by name rather than failing at exec.
+
+- **The prez shim announced "sources changed: rebuilding..." on every run** (issues 0023, 0025). It measured freshness against a binary that a no-op build does not touch, so the rebuild it triggered could never clear the staleness it detected. It now measures against a build stamp it writes itself, one pending stamp per invocation, so a build clears it and two overlapping builds both land.
+
+- **A stray `/* ... */` in a theme's `layout.html` hid a live external reference from the offline check** (issue 0018). CSS's comment grammar was being applied to HTML; the comment exemption is now CSS-only.
+
+- **prez's offline check let external references through in shapes it had not spelled out** (issues 0014, 0015, 0017): a protocol-relative `@import` (0014); anything after a `/*` inside a string, which it took for a comment that never closed and so stopped scanning (0015); and a reference in upper case, with whitespace in it, or wrapped across lines (0017). It no longer hunts for spellings: it reads the target at the two sites a stylesheet loads from, a `url()` token and an `@import` prelude, and a refusal names the line the URL is on. The case-insensitive net for absolute schemes stays over all live text as well, so nothing that refused before builds now, and `theme.yaml` joined the scanned set (ST0017). **One refusal is new**: a theme with a genuinely unterminated comment is refused by name, where the scan used to stop at it in silence.
+
+- **`prez showreel check` printed a build-time constant beside a config fact, and the subtraction between them was false** (issue 0022). The constant is gone.
+
+- **`utilz doctor` printed step 6's dependency verdict under step 7's heading** (issue 0026).
+
+- **A publish could wait up to 10 seconds for nothing** (issue 0032). A TERM landing in a microsecond window left the CI query's watchdog sleep holding its caller's output pipe until the deadline. The watchdog's output now goes nowhere, so nothing it starts can hold the pipe.
+
+- **Eight utilities' READMEs carried an absolute path into the maintainer's home directory, and an install shipped it** (issue 0010). `utilz generate` wrote the same path into every new utility's README, so correcting the eight alone would have fixed nothing. The generator no longer writes it, the eight are corrected, and the install suite holds every owned file to the rule, where it had exempted every `.md`.
+
+- **`todo done --prune` reported "pruned 0 item(s)" whatever it archived** (issue 0034). It counted the bucket again after clearing it; the archive itself was always right.
+
+- **Harness and development only, no behaviour change**: install_guards' AT12 asserts the manifest's own record of the commit rather than a live HEAD, so a concurrent commit no longer reddens it for the wrong reason (0011); prez's AT09 walks every `src/` in the workspace rather than the root package's alone (0027); the install suites' shared fixtures have one home, and a fixture commit a hook refuses fails by name instead of surfacing later as a dirty tree (0028); AT20 reports a forwarded window that never opened as itself, rather than as a wrong criterion (0029); the acceptance suite's process matchers reach only their own run (0030); `.prettierignore` covers every generated view, so the formatter can no longer rewrite one after the doctor gate (0031); help dispatch's tests accept a platform's stated refusal and survive `set -e`, both of which had turned CI red, and install_guards gains an install-coverage test (ST0016); install_guards declares the bats version its `run --separate-stderr` needs; and the vendored devbin gates point at this project's crate and test suites, with `tmp/`, which they write into, ignored.
+
 ## [2.8.0] - 2026-09-08
 
 Minor: **`--help` changes for 14 of 15 utilities** when invoked as `utilz <util> --help`, so a user can observe it. It now renders the curated `help/<name>.md`, which is what `<util> --help` already gave.
