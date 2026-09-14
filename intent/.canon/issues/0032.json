@@ -1,0 +1,11 @@
+{
+  "schema": "intent/issue@3.0",
+  "number": 32,
+  "slug": "install-run-bounded-s-watchdog-can-hold-its-call",
+  "title": "install_run_bounded's watchdog can hold its caller's output pipe until the deadline, if a TERM lands before the sleep's pid is recorded",
+  "status": "open",
+  "severity": "low",
+  "created": "2026-09-14",
+  "reporter": "Matthew Sinclair",
+  "body": "## Summary\n\n`install_run_bounded` (`opt/utilz/lib/install.sh`, issue 0016's watchdog) starts its watchdog as a background subshell that inherits the caller's standard output. Its one caller reads it through a command substitution, `ci_state=$(install_ci_state ...)`, and a command substitution waits until every process holding the write end of its pipe has let go of it. The watchdog normally dies as soon as the query finishes, and its TERM trap takes its sleep with it. **But a TERM that lands between `sleep \"$seconds\" &` and `sleeper=$!` runs the trap with an empty `$sleeper`, the sleep outlives the watchdog, and it holds the pipe until the deadline**: a publish then waits up to 10 seconds for nothing. It can never record a wrong answer.\n\n## How it was found\n\nvc's review of 0016, 2026-09-14, after verifying the fix; routed to cc as a nit, cc's call.\n\n## Fix\n\nRedirect the whole watchdog subshell's output: `( ... ) >/dev/null 2>&1 &`. The watchdog writes nothing -- its one output is the marker file, written by path -- so nothing it starts should hold the caller's pipe, whatever the timing. vc suggested redirecting the sleep alone; redirecting the subshell covers the sleep and the subshell together.\n\nThe race is microseconds wide and cannot be driven on demand, so the proof is the mechanism, demonstrated once: a background process that inherits a command substitution's pipe holds it open for its whole life, and the same process with its output redirected does not. No new test, per hv's direction of 2026-09-11.\n\n## Severity\n\nLow. A publish can wait up to the deadline for nothing; the state it records is unaffected.\n\nFiled by cc on 2026-09-14.\n"
+}
