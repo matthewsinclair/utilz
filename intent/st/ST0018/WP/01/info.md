@@ -9,7 +9,7 @@ status: Not Started
 
 ## Objective
 
-_(not yet written)_
+Build ST0018 red-first. Write the black-box blocks and the unit tests first and run them against HEAD. Record which go red (AC-01.1, AC-01.4) and which are regression guards that pass at HEAD by construction (AC-01.2, AC-01.3, AC-01.5); if AC-01.5's rank-4 control fails at HEAD, report it as a finding about today. Then build the precedence function, the variable read once in `compile`, the one refusal line naming the variable, and the docs. Run the gates and hand to vc. The closing step is AC-01.7: tell gtools-vc the commit, and how it reaches a wrapper from each tree.
 
 ## Acceptance
 

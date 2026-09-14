@@ -81,7 +81,24 @@ The request ranks "the deck's theme:" above the fallback and does not mention th
 ## Tests
 
 - **Unit, in `deck.rs`**: the precedence function over each distinction the order draws, including unset and empty, and the refusal line naming the variable.
-- **Black-box, in `crate/test/theme-addressing.sh`, as new blocks AT10 onward**, each red against the binary at HEAD before any code lands. They are the requester's four tests restated generically, plus the unset-and-empty control and the path-shaped refusal. **The blocks join that file rather than a new one**: it is prez's theme-resolution suite, and a new suite would be a third copy of the harness its own header already names as Highlander debt. Its ids continue at AT10, so no block collides with ST0013's AT01 to AT09.
+- **Black-box, in `crate/test/theme-addressing.sh`, as new blocks AT10 onward.** They are the requester's four tests restated generically, plus the unset-and-empty control and the path-shaped refusal. **The blocks join that file rather than a new one**: it is prez's theme-resolution suite, and a new suite would be a third copy of the harness its own header already names as Highlander debt. Its ids continue at AT10, so no block collides with ST0013's AT01 to AT09.
+
+**RED-FIRST IS CLAIMED ONLY WHERE HEAD CAN FAIL, AND THE REST IS LABELLED.** HEAD never reads the variable, so any check that the variable is IGNORED passes at HEAD by construction. A green that could not have been red is not evidence of the change. An earlier draft of this section claimed every block red; vc's review of it, 2026-09-14, caught the overclaim.
+
+- **AC-01.1, red-first.** HEAD ignores the variable, so a deck naming no theme is not dressed by it.
+- **AC-01.4, red-first.** HEAD resolves nothing from the variable and refuses nothing it names.
+- **AC-01.2, NOT red-first: a regression guard.** The deck wins at HEAD because nothing else is read. It goes red only if the fix ranks the fallback above the deck.
+- **AC-01.3, NOT red-first: a regression guard.** The flags win at HEAD for the same reason.
+- **AC-01.5, NOT red-first: a regression guard.** Unset and empty are both ignored at HEAD. It goes red only if the fix reads an empty value as a name.
+
+Each guard block says so in its own header, as ST0013's AT06 does, and none is offered as evidence that the feature landed. **AC-01.5 also carries a claim about TODAY, rank 4**: a deck naming no theme, with no fallback, builds byte-identical to `--theme=simple`. It must pass at HEAD. If it does not, that is a finding about today's behaviour, reported as such, not about this thread.
+
+## Closing the loop with the requester
+
+The request's last clause -- "Tell gtools-vc when it lands: the commit, and whether the prez shim rebuilds on next use" -- is AC-01.7 and WP-01's closing step, so it cannot fall off the end of the thread. vc's review found it had no home but the quotation. The answer differs by tree, and both halves go into the message:
+
+- **From a source checkout**, the shim rebuilds ONCE on the first use after the commit, because the crate's sources are newer than the build stamp (issues 0023 and 0025), and is quiet after that.
+- **From an install**, nothing changes until `utilz upgrade` publishes a release that carries the commit. An install never builds; it ships the binary.
 
 ## Docs
 
