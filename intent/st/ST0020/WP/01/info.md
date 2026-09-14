@@ -2,7 +2,7 @@
 wp_id: WP-01
 title: prez refuses a duplicated theme name when PREZ_THEME_DUPLICATES=refuse
 scope: S
-status: WIP
+status: Done
 ---
 
 # WP-01: prez refuses a duplicated theme name when PREZ_THEME_DUPLICATES=refuse

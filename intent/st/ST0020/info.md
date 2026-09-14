@@ -1,9 +1,9 @@
 ---
 st_id: ST0020
 title: prez: a theme name defined twice on the search path refuses, when a caller asks
-status: WIP
+status: Completed
 created: 2026-09-14
-completed:
+completed: 2026-09-14
 ---
 
 # ST0020: prez: a theme name defined twice on the search path refuses, when a caller asks
@@ -41,7 +41,7 @@ Every AC is satisfied, vc has verified the thread, and gtools-vc has the commit 
 
 | WP    | Title                                                                  | Size | Status |
 | ----- | ---------------------------------------------------------------------- | ---- | ------ |
-| WP-01 | prez refuses a duplicated theme name when PREZ_THEME_DUPLICATES=refuse | S    | WIP    |
+| WP-01 | prez refuses a duplicated theme name when PREZ_THEME_DUPLICATES=refuse | S    | Done   |
 
 ## Acceptance
 

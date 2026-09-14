@@ -4,8 +4,7 @@ A DOING / TODO / DONE view, projected from steel-thread and work-package status:
 
 ## DOING
 
-- [-] ST0020: prez: a theme name defined twice on the search path refuses, when a caller asks
-  - [-] 01: prez refuses a duplicated theme name when PREZ_THEME_DUPLICATES=refuse
+_(none)_
 
 ## TODO
 
@@ -104,6 +103,8 @@ A DOING / TODO / DONE view, projected from steel-thread and work-package status:
   - [x] 06: Snorkeltoast side: point the prototype at the hoisted tool, move the house theme
 - [x] ST0018: prez: a fallback theme for decks that name none (PREZ_DEFAULT_THEME)
   - [x] 01: PREZ_DEFAULT_THEME: red-first tests, the precedence function, the docs
+- [x] ST0020: prez: a theme name defined twice on the search path refuses, when a caller asks
+  - [x] 01: prez refuses a duplicated theme name when PREZ_THEME_DUPLICATES=refuse
 
 ---
 

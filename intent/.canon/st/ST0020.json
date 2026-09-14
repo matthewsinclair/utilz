@@ -3,8 +3,9 @@
   "id": "ST0020",
   "title": "prez: a theme name defined twice on the search path refuses, when a caller asks",
   "slug": "prez-a-theme-name-defined-twice-on-the-search-pa",
-  "status": "wip",
+  "status": "completed",
   "created": "2026-09-14",
+  "completed": "2026-09-14",
   "objective": "When a caller sets `PREZ_THEME_DUPLICATES=refuse`, prez refuses a theme name that is defined in more than one place on its search path, and names every definition, instead of letting search order choose silently. With the variable unset, prez resolves a theme name by first match, exactly as it does today.\n",
   "context": "## Why\n\nGtools' `gtools present` assembles prez's theme search path from its own themes and from every client folder's themes, so one theme name can be defined twice. prez would take whichever definition sorted first and say nothing. Gtools' AC05 (its ST0010) requires such a name to refuse and name both directories, instead of letting search order choose silently.\n\nhv ruled (b): an opt-in check in prez, which the Gtools shim turns on, leaving first match for every other caller. gtools-vc relayed the ruling on 2026-09-14, and the relay was held until hv's own word arrived, per the standing directive that a relayed ruling is not the ruling. hv gave it directly to utilz-cc in session the same day: \"Yes, (b), next release\". hv also put this thread ahead of ST0019's design.\n\n**2.9.0 had already shipped** when the request arrived, so this thread ships in the next Utilz release.\n\n**This thread names the requester, and prez does not.** `intent/` never ships, and the zero-knowledge ruling binds prez's code, comments, tests and docs.\n\n## The design in brief\n\n- A new variable, `PREZ_THEME_DUPLICATES`, holds a policy: unset, empty or `first` keeps first match; `refuse` refuses a resolved name with more than one definition; any other value is refused by name.\n- A definition is a `<dir>/<name>/theme.css` or a `<dir>/<name>.css` on the search path. One file reached twice is one definition, and a built-in is not a definition.\n- The refusal exits 2, carries its own prefix, and lists every definition with its directory and the mechanism that put that directory on the path.\n- The shared resolver takes the policy as a parameter over one walk. prez reads the variable at its edge, and showreel passes first match.\n\n`design.md` carries the request verbatim and the reasons for each decision.\n\n## Closes when\n\nEvery AC is satisfied, vc has verified the thread, and gtools-vc has the commit and the variable's name.\n",
   "body": "",
@@ -14,7 +15,7 @@
       "seq": 1,
       "title": "prez refuses a duplicated theme name when PREZ_THEME_DUPLICATES=refuse",
       "scope": "S",
-      "status": "wip",
+      "status": "done",
       "objective": "When PREZ_THEME_DUPLICATES=refuse, prez refuses a theme name defined more than once on its search path, naming every definition in search order, instead of letting search order choose silently. Unset, empty or first keep first match with no new way to fail, and any other value is refused at every compile. The shared resolver takes the policy as a parameter over one walk; prez reads the variable at its edge, and showreel passes first match.\n",
       "body": "",
       "preamble": ""
@@ -34,7 +35,8 @@
       "text": "When the thread lands, gtools-vc is told the commit, the variable's name and value, and how the change reaches a wrapper: from a source checkout the prez shim rebuilds once on first use, and from an install it arrives with the next published release.",
       "kind": "non-test",
       "state": {
-        "is": "unsatisfied"
+        "is": "satisfied",
+        "evidence": "cross-session message to gtools-vc, 2026-09-14 18:14Z (the clock read beside the send), after main was pushed to both remotes (GitHub main at 49af13d): the commit (d5617b3), the variable and its value (PREZ_THEME_DUPLICATES=refuse), and how the change reaches a wrapper (a source checkout gets it once it pulls main, and the prez shim rebuilds once on its first run, issues 0023 and 0025; an install gets it with the next published release, prez 2.2.0)"
       }
     },
     {

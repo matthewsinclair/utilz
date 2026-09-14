@@ -13,10 +13,10 @@ title: prez: a theme name defined twice on the search path refuses, when a calle
 
 ## Acceptance Criteria
 
-### WP-01 -- prez refuses a duplicated theme name when PREZ_THEME_DUPLICATES=refuse (status: WIP)
+### WP-01 -- prez refuses a duplicated theme name when PREZ_THEME_DUPLICATES=refuse (status: Done)
 
 - AC-01.1 With PREZ_THEME_DUPLICATES=refuse, a theme name that two directories on the search path define is refused, byte-identical copies included: exit 2, a message beginning theme '<name>' is defined more than once, each definition named with its directory and the mechanism that put that directory on the path, listed in search order, and no output written. Answers AC05: a name that two directories define refuses and names both. Red-first: HEAD builds it. -- satisfied: yes (computed)
-- AC-01.10 (non-test) When the thread lands, gtools-vc is told the commit, the variable's name and value, and how the change reaches a wrapper: from a source checkout the prez shim rebuilds once on first use, and from an install it arrives with the next published release. -- satisfied: no
+- AC-01.10 (non-test) When the thread lands, gtools-vc is told the commit, the variable's name and value, and how the change reaches a wrapper: from a source checkout the prez shim rebuilds once on first use, and from an install it arrives with the next published release. -- evidence: cross-session message to gtools-vc, 2026-09-14 18:14Z (the clock read beside the send), after main was pushed to both remotes (GitHub main at 49af13d): the commit (d5617b3), the variable and its value (PREZ_THEME_DUPLICATES=refuse), and how the change reaches a wrapper (a source checkout gets it once it pulls main, and the prez shim rebuilds once on its first run, issues 0023 and 0025; an install gets it with the next published release, prez 2.2.0) -- satisfied: yes
 - AC-01.2 With PREZ_THEME_DUPLICATES unset, empty or first, a name that two directories define resolves by first match exactly as today, with today's provenance notice and no new refusal of any kind: the artifact and stderr are byte-identical across the three. Answers: prez's other users keep first-match. A regression guard, green at HEAD by construction. -- satisfied: yes (computed)
 - AC-01.3 Only the name being resolved is checked for a second definition: with refuse set, a build whose theme name has one definition succeeds even when another name on the path is defined twice. This limits the duplicate check only; the variable's value is checked at every compile (AC-01.7). Answers: it refuses only the name actually being resolved. A regression guard, green at HEAD by construction; AT15 is its control. -- satisfied: yes (computed)
 - AC-01.4 The default name is checked as a flag's or the deck's name is: with refuse set, PREZ_DEFAULT_THEME naming a theme that two directories define is refused, and the refusal says the name came from PREZ_DEFAULT_THEME. Red-first: HEAD builds it. -- satisfied: yes (computed)
@@ -60,7 +60,7 @@ _(no criteria in this group)_
 
 ## Acceptance Tests
 
-### WP-01 -- prez refuses a duplicated theme name when PREZ_THEME_DUPLICATES=refuse (status: WIP)
+### WP-01 -- prez refuses a duplicated theme name when PREZ_THEME_DUPLICATES=refuse (status: Done)
 
 _(no tests in this group)_
 
