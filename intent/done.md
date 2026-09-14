@@ -1,8 +1,24 @@
 ---
-verblock: "11 Sep 2026:v0.6: matts - ST0017 closed, culled to market"
+verblock: "14 Sep 2026:v0.7: matts - 2.9.0 released"
 ---
 
 # Done
+
+## 14 Sep 2026 -- 2.9.0 released: prez showreel, PREZ_DEFAULT_THEME, the install's CI verdict, todo 2.0.0
+
+**2.9.0 is out.** The release commit is `ebd0243`, with the annotated tag `2.9.0` on it, pushed to both remotes and published as a GitHub release: the first release object since v2.2.0. CI run 34866136691 was green on all seven jobs. prez goes to 2.1.0 and todo to 2.0.0. `cc` built, `vc` verified every item before it closed, and `hv` ruled scope and cut the release by hand.
+
+**What it carries.** ST0017 (`prez showreel`) and ST0018 (`PREZ_DEFAULT_THEME`, a theme for decks that name none). Issue 0016: a published install records CI's verdict on its commit, and `utilz version` shows it. Issue 0024: the install builds and ships showreel. Issue 0033, the one breaking change: an item's id is its name, not its position, so todo goes to 2.0.0 (hv accepted the break). Plus the fixes for 0010, 0011, 0014, 0015, 0018, 0022, 0023, 0025 to 0032 and 0034.
+
+**How it was verified.** Each fix was replayed red first, against the code before it, or proved by a one-off demonstration where a permanent test would have tested a test (hv, 2026-09-11). Two fixes were also driven against deliberately broken copies, to show their tests can go red. The pre-release verdict ran restart.md's checklist on the release tree with `/bin` first on PATH, so bash 3.2 end to end: 19 of 19 suites, 605 bats tests, 295 cargo tests, and the strict acceptance and theme-addressing suites.
+
+**The lessons worth re-reading.**
+
+- **`/bin/bash bin/utilz test` is bash 3.2 for the dispatcher only.** bats is `#!/usr/bin/env bash`, and Homebrew's bash comes first on PATH here, so the tests ran under 5.x while the logs said 3.2. It was caught mid-release, and 0028's Resolution carries the correction.
+- **A formatter that runs after the doctor gate can wedge every commit.** Prettier rewrote three issue views after the gate had passed, and every later commit was refused. `.prettierignore` now exempts every rendered view (0031), and Intent issue 0378 carries the upstream half.
+- **A process matcher keyed on text every run shares reaches other people's processes** (0030). The same mistake was made again the same day, in a one-off `pgrep`.
+- **An unfamiliar command's `--help` is not a safe probe.** Intent's `bin/devbin macos prepare --help` ran the real step and re-signed a staged app. Read the source instead.
+- **`git tag -F` strips lines starting with `#`**, so a CHANGELOG-derived tag message loses its `###` headings. Use `--cleanup=whitespace` (ST0019's findings).
 
 ## 11 Sep 2026 -- `prez showreel` (ST0017, CLOSED), culled to market (no release yet)
 
