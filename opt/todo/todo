@@ -656,10 +656,14 @@ cmd_prune() {
   # Strip the trailing newline the loop appended (block is passed to printf %s\n)
   block="${block%$'\n'}"
   _prepend_file "$hist" "$block"
+  # THE COUNT IS TAKEN BEFORE DONE IS CLEARED (issue 0034): write_file
+  # recounts the buckets, so C is 0 by the time it returns, and this report
+  # read it there for as long as the command existed.
+  local pruned=$C
   DONE_ITEMS=(); DONE_IDS=()
   WATERMARK="$(_now_iso)"
   write_file
-  info "todo: pruned $C item(s) to $hist"
+  info "todo: pruned $pruned item(s) to $hist"
 }
 
 cmd_flush() {

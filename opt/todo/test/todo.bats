@@ -256,6 +256,18 @@ PY_INNER
   file_lacks todo.md "second done"
 }
 
+@test "prune reports how many items it archived (issue 0034)" {
+  TODO add "first done"
+  TODO add "second done"
+  TODO done 1
+  TODO done 2
+  run TODO done --prune
+  assert_success
+  # write_file recounts the buckets after DONE is cleared, so a count read
+  # after it is always 0: the report must carry the number actually archived.
+  assert_output_contains "pruned 2 item(s)"
+}
+
 @test "flush clears DONE with --force and does not archive" {
   TODO add "throwaway"
   TODO done 1
