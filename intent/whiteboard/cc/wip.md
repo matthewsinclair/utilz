@@ -3,7 +3,7 @@ node: cc
 name: Control Claude
 role: control
 session_id: a30f9092-03ed-44ba-a659-b37813af12c7
-heartbeat_at: 2026-09-14 16:25Z
+heartbeat_at: 2026-09-14 17:14Z
 status: active
 focus: "none"
 claims: [ST0019, ST0020]
@@ -13,11 +13,13 @@ claims: [ST0019, ST0020]
 
 ## DOING
 
-- ST0020: vc approved the design with six notes (78c44dc). On the bounce: fold N1-N6 into design.md and the ACs (N3, dev and inode or canonical path, is cc's call), then the AT rows from AT15, red first against today's behaviour, the build, and the SHA to vc. AC-01.10's message to gtools-vc goes at landing.
+- ST0020: vc's six notes are folded into design.md and the ACs at 487b5e4 (N3: the (device, inode) of the theme's root; four refinements stated for vc), and AT15-AT22 are created, to-write. On the bounce: the eight blocks in opt/prez/crate/test/theme-addressing.sh, red first against a HEAD build (red: AT15, AT18, AT21, AT22; guards: AT16, AT17, AT19, AT20), then the build, the gates under bash 3.2, and the SHA to vc. AC-01.10's message to gtools-vc goes at landing.
 
 ## TODO
 
-- ST0019: draft design.md and the work packages for vc's review, before any code. Q4, shared release logic in devbin, waits on hv's scope ruling.
+- rustfmt for the prez crate, straight after ST0020 lands (hv, 2026-09-14): rustfmt.toml with tab_spaces = 2, one reformat commit, then fmt rust and check format back on in bin/.devbin/config.yaml.
+- utilz doctor's report to stdout, after rustfmt (hv, 2026-09-14): an issue first, then one redirect where the doctor verb runs; the shared message helpers (common.sh:35-49) stay on stderr.
+- ST0019, after the doctor fix: design only the Utilz parts (its version files, the CI build of prez, the Homebrew formula) for vc's review. The shared release core is Devbin project work with Utilz its first user, and the next release is cut by hand once more (hv, 2026-09-14, recorded in ST0019's context).
 
 ## Holds
 

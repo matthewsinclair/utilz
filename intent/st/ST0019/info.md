@@ -20,7 +20,11 @@ hv, 2026-09-14, raised directly to vc: bring Utilz's release process into line w
 
 **Utilz has no `build release`.** devbin ships `build` as a name with no command line (tier 4 in `bin/.devbin/lib/builtins`): each project supplies its own arms. Utilz's `bin/.devbin/config.yaml` has no `build` section, and `bin/.devbin/cmd/` is empty. Releases 2.6.1 to 2.9.0 were hand-made `release:` commits, tagged and pushed by hand, although devbin was vendored on 2026-08-29, before 2.8.0. vc reports that Utilz's last GitHub release object before 2.9.0 was v2.2.0.
 
-**2.9.0 shipped the old way**, by hv's decision on 2026-09-14. It was committed at `ebd0243` and verified GO before this thread existed, then tagged and pushed by hand, and CI passed all seven jobs on the pushed commit (run 34866136691). This thread's first release is the next one.
+**2.9.0 shipped the old way**, by hv's decision on 2026-09-14. It was committed at `ebd0243` and verified GO before this thread existed, then tagged and pushed by hand, and CI passed all seven jobs on the pushed commit (run 34866136691). **The next release is cut by hand once more** (hv's ruling on question 4), so this thread's first release is the one after it.
+
+## Scope, as hv ruled it (2026-09-14)
+
+**This thread designs the Utilz parts only: its version files, the CI build of prez, and the Homebrew formula.** The shared release core (pre-flight, version stamping, dating the CHANGELOG, commit, tag, push and the release object) is Devbin project work, with Utilz as its first user. hv ruled it directly to vc, and it is recorded as hv's decision on hv's board. Who raises the core in Devbin's tracker is with hv (vc, 2026-09-14).
 
 ## Precedents in the fleet
 
@@ -42,9 +46,9 @@ Read from source, never by running a command. On 2026-09-14 vc found that a devb
 1. **What does a Utilz formula install, for which platforms, and where is it built?** Utilz is a bash framework, fifteen utilities and a Rust workspace (prez, showreel). Is it prebuilt binaries per architecture, as Intent ships, or a formula that builds the workspace with cargo? Intent ships aarch64-apple-darwin only, while Utilz's CI already runs macOS arm64 and Ubuntu: is it macOS arm64 only, Intel as well, or Linuxbrew too? And a tag-triggered workflow can build prez and showreel on the runners, as Conflab's default path does, which Intent's local-only prepare cannot (vc, 2026-09-14).
 2. **How does a Homebrew install relate to `utilz install` and `utilz upgrade`** (ST0014): does it replace them, or sit beside them? Beneath that (vc, 2026-09-14): `UTILZ_HOME` inside a versioned Cellar prefix; the dispatcher's install-tree detection; `utilz use dev|opt` relinking; and what the manifest's `source-tree` and `ci-state` rows (issue 0016) mean for a tree brew built.
 3. **Utilz's tags carry no `v`** (hv's ruling, from 2.7.0), and Intent's carry one. The pipeline and the formula's release URLs must honour Utilz's ruling.
-4. **Where does the shared release logic live?** A handler copied from Intent's or Conflab's gives the fleet another orchestrator for the same job. Moving the shared parts (pre-flight, version stamping, tag, push, release object) into devbin is Devbin project work, and it needs hv's scope ruling before it is designed. It is a TODO on hv's board (vc, 2026-09-14).
-5. **Where do the release notes live, and how is the CHANGELOG heading dated?** Utilz's CHANGELOG is hand-authored, while Devbin generates its CHANGELOG from `RELEASES/<version>.md`. Intent authors the heading as `in progress` and dates it at cut time.
-6. **The pre-flight gate Intent's lacks: CI green on the commit being tagged.** Utilz already asks CI about a commit, through `install_ci_state` (issue 0016), and the release pre-flight should ask through that one function rather than through a second `gh` query (vc, 2026-09-14).
+4. **Where does the shared release logic live? RULED by hv, 2026-09-14: in Devbin, as Devbin project work, with Utilz as its first user** ("Scope, as hv ruled it", above). The core is the pre-flight, version stamping, dating the CHANGELOG, commit, tag, push and the release object. Utilz's own parts start in Utilz, and the next Utilz release is cut by hand once more. A handler copied from Intent's or Conflab's would have given the fleet another orchestrator for the same job, which is what the ruling avoids.
+5. **Where do the release notes live, and how is the CHANGELOG heading dated?** Utilz's CHANGELOG is hand-authored, while Devbin generates its CHANGELOG from `RELEASES/<version>.md`. Intent authors the heading as `in progress` and dates it at cut time. Dating the CHANGELOG is now the Devbin core's (question 4), so what is left here is what Utilz hands the core.
+6. **The pre-flight gate Intent's lacks: CI green on the commit being tagged.** Utilz already asks CI about a commit, through `install_ci_state` (issue 0016), and the release pre-flight should ask through that one function rather than through a second `gh` query (vc, 2026-09-14). The pre-flight is now the Devbin core's (question 4), so this becomes a requirement Utilz brings to it.
 
 ## Findings from cutting 2.9.0 by hand
 
