@@ -111,8 +111,11 @@ if [[ "$INVOKED_AS" == "utilz" ]]; then
       ;;
 
     doctor)
-      # Run diagnostics
-      run_doctor
+      # Run diagnostics. The whole report goes to stdout (hv, issue 0037):
+      # run_doctor prints its titles with echo and its verdicts through the
+      # shared message helpers, which stay on stderr for every other caller,
+      # so the redirect lives here, where the verb runs.
+      run_doctor 2>&1
       ;;
 
     list)
@@ -197,7 +200,8 @@ EOF
           emacs_install "$@"
           ;;
         doctor)
-          emacs_doctor
+          # One stream, for `utilz doctor`'s reason (issue 0037).
+          emacs_doctor 2>&1
           ;;
         ""|help|--help|-h)
           cat <<'EOF'

@@ -4,13 +4,12 @@ DOING and TODO only. Done work goes to `intent/done.md`; context to `intent/rest
 
 ## DOING
 
-- `utilz doctor` prints its report to stdout: one redirect where the doctor verb runs, while the shared message helpers stay on stderr. File it, then fix it.
+- ST0019: design the Utilz parts of the release pipeline (its version files, the CI build of prez, the Homebrew formula) for vc's review before any code. The shared release core is Devbin project work (Devbin issue 0064), and the next Utilz release is cut by hand.
 
 ## TODO
 
 **Threads**
 
-- ST0019, after the doctor fix (hv's order): release Utilz through `dvb build release` and a Homebrew tap, like Intent. hv ruled on 14 Sep that the shared release core (pre-flight, version stamping, the CHANGELOG date, commit, tag, push and the release object) is Devbin project work, with Utilz as its first user (Devbin issue 0064), and that Utilz's own parts (its version files, the CI build of prez, the Homebrew formula) start in Utilz. The next Utilz release is cut by hand once more. cc drafts the design; vc reviews it before any code.
 - Follow-on to ST0017, if wanted: Rust `init` and `qr` for `prez showreel`.
 - Crawl recedes as it rises (Star Wars pre-roll): a 3D transform in `player.html`.
 - prez default look, "basic but cool enough out of the box". Needs a thread.
