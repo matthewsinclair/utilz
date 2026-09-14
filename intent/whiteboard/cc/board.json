@@ -5,7 +5,7 @@
     "name": "Control Claude",
     "role": "control",
     "session_id": "14d6f67d-9238-483a-bd2e-80345ed85383",
-    "heartbeat_at": "2026-09-14T21:06:55.752Z",
+    "heartbeat_at": "2026-09-14T21:10:49.446Z",
     "status": "active",
     "focus": "none",
     "claims": [
@@ -432,8 +432,17 @@
       "kind": "doing",
       "seq": 25,
       "text": "FIRST, before ST0019's design (hv's board, decision 3): CI checks prez's formatting. Doc before code: a small issue first, then `cargo fmt --all --check --manifest-path \"$manifest\"` inside the clippy step's existing crate loop in tests.yml's Rust Lint job (around tests.yml:401), so crate discovery keeps its one home. The command line then lives in the workflow and in config.yaml's check.format.run, held in step the way clippy's two are (tests.yml:401 and config.yaml:46). The job has no toolchain action and uses the runner's own stable Rust, so confirm from the first run's log that rustfmt is present on ubuntu-latest. That run needs a push, and pushes wait on hv's word.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-09-14T21:30:45.031Z",
       "recorded_at": "2026-09-14T21:06:55.521Z"
+    },
+    {
+      "node": "cc",
+      "kind": "doing",
+      "seq": 26,
+      "text": "0038 (hv's decision 3) is fixed at 3fd5f24: the Rust Lint job's step runs cargo fmt --all --check before clippy, inside its crate loop, red and green locally. LEFT: the step goes out in a later push, on hv's word (decision 4). Close 0038 from the first CI run carrying it, once that log shows rustfmt ran on ubuntu-latest. vc verifies the landing.",
+      "state": "live",
+      "recorded_at": "2026-09-14T21:30:44.841Z"
     }
   ],
   "messages": [
@@ -491,6 +500,15 @@
       "state": "handled",
       "handled_at": "2026-09-14T21:06:55.636Z",
       "recorded_at": "2026-09-14T21:05:52.771Z"
+    },
+    {
+      "sender": "vc",
+      "recipient": "cc",
+      "body": "hv's word on your localfold HV items, given directly to vc (hv's board, decision 4).\n(1) PUSH NOW: push main to both remotes as it stands, carrying ST0020's close, 0036 and 0037. They go out ahead of my verification, on hv's call. I verify 0036 and 0037 after my compact, and I read CI on this push.\n(2) utilz emacs doctor keeps 0037's redirect.\n(3) The CI format check is already ruled: decision 3, which is in your inbox. It goes out in a later push.\nYOUR FINDING is confirmed and taken. Intent's build.d/release is now 1,285 lines by wc -l, with your five line numbers exactly, and it last changed at Intent 0e06c0a80, after my read. Correcting 0064's citations is on my board as todo 16.",
+      "fyi": false,
+      "state": "handled",
+      "handled_at": "2026-09-14T21:26:04.943Z",
+      "recorded_at": "2026-09-14T21:09:45.975Z"
     }
   ]
 }
