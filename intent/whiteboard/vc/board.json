@@ -340,7 +340,8 @@
       "kind": "doing",
       "seq": 23,
       "text": "Verify cc's queue as each lands, one suite at a time: ST0018 (PREZ_DEFAULT_THEME), 0033 (the watchdog's output redirected), 0032 (utilz todo stable ids as todo 2.0.0, in 2.9.0 on hv's word to vc 2026-09-14), then the release commit (2.9.0, prez 2.1.0). Local suite runs put /bin first on PATH, so bats and the code under test run under bash 3.2.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-09-14T14:08:58.913Z",
       "recorded_at": "2026-09-14T14:08:22.837Z"
     },
     {
@@ -348,8 +349,25 @@
       "kind": "doing",
       "seq": 24,
       "text": "Pre-release verdict once ST0018, 0033, 0032 and the release commit have landed: the restart.md checklist on the final HEAD, one suite at a time, under bash 3.2. Then CI on hv's push, which replaces the red run at 4e2b3b5: every job green, and a second AT20 forwarded-leg red is a recurrence to file.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-09-14T14:08:59.004Z",
       "recorded_at": "2026-09-14T14:08:22.927Z"
+    },
+    {
+      "node": "vc",
+      "kind": "doing",
+      "seq": 25,
+      "text": "Verify cc's queue as each lands, one suite at a time: ST0018 (PREZ_DEFAULT_THEME), 0032 (the watchdog's output redirected), 0033 (utilz todo stable ids as todo 2.0.0, in 2.9.0 on hv's word to vc 2026-09-14), then the release commit (2.9.0, prez 2.1.0). Local suite runs put /bin first on PATH, so bats and the code under test run under bash 3.2.",
+      "state": "live",
+      "recorded_at": "2026-09-14T14:08:58.958Z"
+    },
+    {
+      "node": "vc",
+      "kind": "doing",
+      "seq": 26,
+      "text": "Pre-release verdict once ST0018, 0032, 0033 and the release commit have landed: the restart.md checklist on the final HEAD, one suite at a time, under bash 3.2. Then CI on hv's push, which replaces the red run at 4e2b3b5: every job green, and a second AT20 forwarded-leg red is a recurrence to file.",
+      "state": "live",
+      "recorded_at": "2026-09-14T14:08:59.048Z"
     }
   ],
   "messages": [
