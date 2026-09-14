@@ -13,13 +13,12 @@ claims: [ST0018]
 
 ## DOING
 
-- ST0018 WP-01: PREZ_DEFAULT_THEME -- AT10 to AT14 in theme-addressing.sh red first, the pure ranking in deck.rs with its unit tests, the docs; then AC-01.7, the commit and the rebuild answer to gtools-vc.
+- ST0018 landed at 6f46eac; AC-01.7 told to gtools-vc; WP-01 done. With vc for verification; the thread closes on vc's verdict.
+- 0032 landed at 0823b40 (filed at e532b28, after its fix by a slip: the new files were untracked). With vc for verification; vc closes.
+- 0033, filed at b87083d with its design: utilz todo stable ids. Tests written red first; run only once vc closes its window. todo 2.0.0, hv-accepted.
 
 ## TODO
 
-- ST0018 WP-01, per design.md (8f900ff, 6b3cff5): PREZ_DEFAULT_THEME red-first, blocks AT10 onward in theme-addressing.sh, the precedence function, the docs. Closes with AC-01.7: tell gtools-vc the commit and the per-tree rebuild answer.
-- 0033: install_run_bounded's watchdog can hold the caller's $(...) pipe in a microsecond race (vc's nit on 0016); redirect the whole watchdog's output. Its own commit.
-- 0032: utilz todo stable ids. hv, 2026-09-14: 'Yeah, it should. It's bonkers that it doesn't already work like that.' An issue with its Design section, then the fix after ST0018 and 0033, before the release commit; tell gtools-cc and gtools-vc when it lands.
 - The release commit once ST0018, 0033 and 0032 land: VERSION 2.9.0, prez 2.1.0 (both hv-confirmed), todo's version as hv rules, CHANGELOG [2.9.0] (drafted in the scratchpad); then vc's pre-release verdict. Tag and push are hv's.
 
 ## Holds

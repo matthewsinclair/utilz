@@ -30,7 +30,8 @@
       "kind": "todo",
       "seq": 2,
       "text": "ST0018 WP-01, per design.md (8f900ff, 6b3cff5): PREZ_DEFAULT_THEME red-first, blocks AT10 onward in theme-addressing.sh, the precedence function, the docs. Closes with AC-01.7: tell gtools-vc the commit and the per-tree rebuild answer.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-09-14T14:19:19.419Z",
       "recorded_at": "2026-09-14T12:13:39.015Z"
     },
     {
@@ -198,7 +199,8 @@
       "kind": "doing",
       "seq": 10,
       "text": "ST0018 WP-01: PREZ_DEFAULT_THEME -- AT10 to AT14 in theme-addressing.sh red first, the pure ranking in deck.rs with its unit tests, the docs; then AC-01.7, the commit and the rebuild answer to gtools-vc.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-09-14T14:19:19.467Z",
       "recorded_at": "2026-09-14T14:05:16.956Z"
     },
     {
@@ -206,7 +208,8 @@
       "kind": "todo",
       "seq": 7,
       "text": "0033: install_run_bounded's watchdog can hold the caller's $(...) pipe in a microsecond race (vc's nit on 0016); redirect the whole watchdog's output. Its own commit.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-09-14T14:08:30.070Z",
       "recorded_at": "2026-09-14T14:05:17.005Z"
     },
     {
@@ -214,7 +217,8 @@
       "kind": "todo",
       "seq": 8,
       "text": "0032: utilz todo stable ids. hv, 2026-09-14: 'Yeah, it should. It's bonkers that it doesn't already work like that.' An issue with its Design section, then the fix after ST0018 and 0033, before the release commit; tell gtools-cc and gtools-vc when it lands.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-09-14T14:08:30.117Z",
       "recorded_at": "2026-09-14T14:05:17.054Z"
     },
     {
@@ -224,6 +228,48 @@
       "text": "The release commit once ST0018, 0033 and 0032 land: VERSION 2.9.0, prez 2.1.0 (both hv-confirmed), todo's version as hv rules, CHANGELOG [2.9.0] (drafted in the scratchpad); then vc's pre-release verdict. Tag and push are hv's.",
       "state": "live",
       "recorded_at": "2026-09-14T14:05:17.102Z"
+    },
+    {
+      "node": "cc",
+      "kind": "todo",
+      "seq": 10,
+      "text": "0032, filed: install_run_bounded's watchdog can hold the caller's $(...) pipe in a microsecond race (vc's nit on 0016). The fix redirects the whole watchdog's output. Its own commit.",
+      "state": "archived",
+      "archived_at": "2026-09-14T14:19:19.518Z",
+      "recorded_at": "2026-09-14T14:08:30.164Z"
+    },
+    {
+      "node": "cc",
+      "kind": "todo",
+      "seq": 11,
+      "text": "0033, to file: utilz todo stable ids. hv, 2026-09-14: 'Yeah, it should. It's bonkers that it doesn't already work like that.' An issue with its Design section, then the fix after ST0018 and 0032, before the release commit; tell gtools-cc and gtools-vc when it lands.",
+      "state": "archived",
+      "archived_at": "2026-09-14T14:19:19.567Z",
+      "recorded_at": "2026-09-14T14:08:30.210Z"
+    },
+    {
+      "node": "cc",
+      "kind": "doing",
+      "seq": 11,
+      "text": "ST0018 landed at 6f46eac; AC-01.7 told to gtools-vc; WP-01 done. With vc for verification; the thread closes on vc's verdict.",
+      "state": "live",
+      "recorded_at": "2026-09-14T14:19:19.617Z"
+    },
+    {
+      "node": "cc",
+      "kind": "doing",
+      "seq": 12,
+      "text": "0032 landed at 0823b40 (filed at e532b28, after its fix by a slip: the new files were untracked). With vc for verification; vc closes.",
+      "state": "live",
+      "recorded_at": "2026-09-14T14:19:19.664Z"
+    },
+    {
+      "node": "cc",
+      "kind": "doing",
+      "seq": 13,
+      "text": "0033, filed at b87083d with its design: utilz todo stable ids. Tests written red first; run only once vc closes its window. todo 2.0.0, hv-accepted.",
+      "state": "live",
+      "recorded_at": "2026-09-14T14:19:19.712Z"
     }
   ],
   "messages": []
