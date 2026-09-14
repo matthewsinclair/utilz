@@ -52,6 +52,19 @@ load "test_helper.bash"
   assert_output_contains "UTILZ_HOME"
 }
 
+@test "utilz doctor - the whole report is on stdout, and nothing on stderr" {
+  # ONE STREAM (issue 0037). BATS `run` merges stdout and stderr, so the test
+  # above passes whichever stream a line took. Doctor printed its titles on
+  # stdout and every verdict on stderr, so a saved or paged report kept the
+  # titles and lost the answers. Both directions are asserted, so an empty
+  # report cannot pass for a whole one. "UTILZ_HOME=" is check 1's verdict;
+  # its title, "Checking UTILZ_HOME...", carries no "=".
+  run bash -c '"$1" doctor 2>/dev/null' _ "$UTILZ_BIN_DIR/utilz"
+  assert_output_contains "UTILZ_HOME="
+  run bash -c '"$1" doctor 2>&1 >/dev/null' _ "$UTILZ_BIN_DIR/utilz"
+  assert_output ""
+}
+
 @test "utilz list - lists available utilities" {
   run_utilz list
   assert_success

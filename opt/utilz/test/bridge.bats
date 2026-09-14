@@ -187,6 +187,16 @@ run_common_function() {
   assert_output_contains "Canonical elisp present"
 }
 
+@test "utilz emacs doctor - the whole report is on stdout, and nothing on stderr" {
+  # ONE STREAM (issue 0037), for utilz doctor's reason. "Canonical elisp
+  # present" is step 3's verdict; its title, "Checking canonical elisp
+  # file...", does not contain it.
+  run bash -c '"$1" emacs doctor 2>/dev/null' _ "$UTILZ_BIN_DIR/utilz"
+  assert_output_contains "Canonical elisp present"
+  run bash -c '"$1" emacs doctor 2>&1 >/dev/null' _ "$UTILZ_BIN_DIR/utilz"
+  assert_output ""
+}
+
 # ============================================================================
 # THE COMMAND LINE THE BRIDGE ACTUALLY BUILDS (issue 0009)
 # ============================================================================
