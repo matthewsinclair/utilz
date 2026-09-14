@@ -122,7 +122,9 @@ fn every_dependency_table_matches_its_approved_budget() {
   for (rel, approved) in BUDGETS {
     let text = read(rel);
     let mut found = table(&text, "dependencies").unwrap_or_else(|| {
-      panic!("{rel} has no [dependencies] table -- the gate refuses to read that as an empty budget")
+      panic!(
+        "{rel} has no [dependencies] table -- the gate refuses to read that as an empty budget"
+      )
     });
     for line in &found {
       assert!(
@@ -162,7 +164,10 @@ fn fast_image_resize_is_refused_in_both_places_it_could_appear() {
   for (rel, _) in BUDGETS {
     let text = read(rel);
     let lines = table(&text, "dependencies").unwrap_or_default();
-    let named = lines.iter().filter_map(|l| dep_name(l)).any(|n| n == "fast_image_resize");
+    let named = lines
+      .iter()
+      .filter_map(|l| dep_name(l))
+      .any(|n| n == "fast_image_resize");
     assert!(
       !named,
       "{rel} depends on fast_image_resize, which AC-3.9 refuses: image carries \
@@ -202,6 +207,10 @@ fn a_line_the_gate_cannot_read_is_refused_rather_than_skipped() {
     "a multi-line inline table must leave a line the parser refuses, or a crate \
      written in that form would be invisible to this gate"
   );
-  assert_eq!(dep_name("= \"1\""), None, "a line with no key is not a dependency");
+  assert_eq!(
+    dep_name("= \"1\""),
+    None,
+    "a line with no key is not a dependency"
+  );
   assert_eq!(dep_name("serde_json = \"1\""), Some("serde_json"));
 }

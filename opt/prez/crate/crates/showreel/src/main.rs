@@ -30,11 +30,17 @@ fn main() {
   let result = match verb {
     Some("check") => match args.get(1) {
       Some(path) => check(Path::new(path)),
-      None => Err(Failure::new("check needs a directory", "showreel check <dir>")),
+      None => Err(Failure::new(
+        "check needs a directory",
+        "showreel check <dir>",
+      )),
     },
     Some("build") => match args.get(1) {
       Some(path) => flags(&args[2..]).and_then(|f| build_reel(Path::new(path), &f)),
-      None => Err(Failure::new("build needs a directory", "showreel build <dir>")),
+      None => Err(Failure::new(
+        "build needs a directory",
+        "showreel build <dir>",
+      )),
     },
     Some("--help" | "-h") | None => {
       println!("{USAGE}");
@@ -81,7 +87,10 @@ fn check(path: &Path) -> Result<(), Failure> {
 
   println!("showreel: {} is valid", file.display());
   println!("  artist    {} ({})", cfg.artist.name, cfg.artist.handle);
-  println!("  pace      {} (dwell {}, ease {}, {} / {} / {})", pace.name, pace.dwell, pace.ease, pace.transition, pace.motion, pace.fit);
+  println!(
+    "  pace      {} (dwell {}, ease {}, {} / {} / {})",
+    pace.name, pace.dwell, pace.ease, pace.transition, pace.motion, pace.fit
+  );
   // **THE SHAPE-TABLE SIZE IS GONE FROM THIS LINE, AND ITS ABSENCE IS THE FIX.**
   // It read `{n} declared, {m} shapes known`, joining a fact about THIS config to
   // a build-time constant with a comma, and the reading a human takes from two
@@ -91,8 +100,15 @@ fn check(path: &Path) -> Result<(), Failure> {
   // constant printed 12 for every config ever checked, and 45h happens to use
   // exactly twelve distinct types, so on the one reel anybody runs it looked
   // derived. Issue 0022, found by snorkeltoast.
-  println!("  segments  {n} declared, {n} validated", n = cfg.segments.len());
-  println!("  slides    {} resolved, {} asset(s) read", plan.slides.len(), used.len());
+  println!(
+    "  segments  {n} declared, {n} validated",
+    n = cfg.segments.len()
+  );
+  println!(
+    "  slides    {} resolved, {} asset(s) read",
+    plan.slides.len(),
+    used.len()
+  );
   println!("  socials   {}", cfg.socials.len());
   println!("  theme     {}", theme.name);
   match &meta {
@@ -130,7 +146,10 @@ fn flags(rest: &[String]) -> Result<build::Options, Failure> {
   while i < rest.len() {
     let need = |what: &str| {
       rest.get(i + 1).cloned().ok_or_else(|| {
-        Failure::new(format!("{what} needs a value"), format!("showreel build <dir> {what} <value>"))
+        Failure::new(
+          format!("{what} needs a value"),
+          format!("showreel build <dir> {what} <value>"),
+        )
       })
     };
     match rest[i].as_str() {
@@ -138,7 +157,10 @@ fn flags(rest: &[String]) -> Result<build::Options, Failure> {
       "--keep" => {
         let v = need("--keep")?;
         f.keep = v.parse().map_err(|_| {
-          Failure::new(format!("--keep is not a number: {v}"), "use a whole number, eg --keep 3")
+          Failure::new(
+            format!("--keep is not a number: {v}"),
+            "use a whole number, eg --keep 3",
+          )
         })?;
       }
       other => {

@@ -64,7 +64,11 @@ pub enum Origin {
   /// that actually did. Inferring it later is impossible -- by then the
   /// directory is just a path -- and guessing it would send a user who passed a
   /// flag to an environment variable that may not even be set.
-  SearchPath { dir: PathBuf, name: String, source: SearchSource },
+  SearchPath {
+    dir: PathBuf,
+    name: String,
+    source: SearchSource,
+  },
 }
 
 /// WHICH MECHANISM PUT A DIRECTORY ON THE SEARCH PATH.
@@ -201,12 +205,21 @@ impl Registry {
     theme_file_flag: &'static str,
     noun: &'static str,
   ) -> Self {
-    Self { built_ins, search_path_var, theme_path_flag, theme_file_flag, noun }
+    Self {
+      built_ins,
+      search_path_var,
+      theme_path_flag,
+      theme_file_flag,
+      noun,
+    }
   }
 
   /// The remedy offered whenever a theme addressed by PATH cannot be read.
   fn read_remedy(&self) -> String {
-    format!("{} takes a .css file or a directory holding theme.css", self.theme_file_flag)
+    format!(
+      "{} takes a .css file or a directory holding theme.css",
+      self.theme_file_flag
+    )
   }
 
   /// Resolve the theme for a build.
@@ -225,7 +238,10 @@ impl Registry {
     let Some(spec) = spec else {
       let default = self.built_ins.first().map(|(id, _)| *id).unwrap_or("");
       return self.built_in(default).ok_or_else(|| {
-        Failure::new("the built-in default theme is missing", "this is a build fault")
+        Failure::new(
+          "the built-in default theme is missing",
+          "this is a build fault",
+        )
       });
     };
 
@@ -241,7 +257,11 @@ impl Registry {
           ));
         }
         let remedy = self.read_remedy();
-        if path.is_dir() { from_directory(&path, &remedy)? } else { from_file(&path, &remedy)? }
+        if path.is_dir() {
+          from_directory(&path, &remedy)?
+        } else {
+          from_file(&path, &remedy)?
+        }
       }
       Spec::Name(name) => {
         if let Some(found) = self.on_search_path(name, extra, duplicates)? {
@@ -259,21 +279,29 @@ impl Registry {
       refuse_external(js, &format!("{} (js)", theme.name), Grammar::Verbatim)?;
     }
     if let Some(layout) = &theme.layout {
-      refuse_external(layout, &format!("{} (layout.html)", theme.name), Grammar::Verbatim)?;
+      refuse_external(
+        layout,
+        &format!("{} (layout.html)", theme.name),
+        Grammar::Verbatim,
+      )?;
     }
     Ok(theme)
   }
 
   /// The built-in of this name, if there is one.
   pub fn built_in(&self, name: &str) -> Option<Theme> {
-    self.built_ins.iter().find(|(id, _)| *id == name).map(|(id, css)| Theme {
-      css: (*css).to_string(),
-      js: None,
-      layout: None,
-      name: format!("the built-in '{id}'"),
-      origin: Origin::BuiltIn,
-      dir: None,
-    })
+    self
+      .built_ins
+      .iter()
+      .find(|(id, _)| *id == name)
+      .map(|(id, css)| Theme {
+        css: (*css).to_string(),
+        js: None,
+        layout: None,
+        name: format!("the built-in '{id}'"),
+        origin: Origin::BuiltIn,
+        dir: None,
+      })
   }
 
   /// What to say on stderr when a theme did NOT come out of the binary.
@@ -380,7 +408,14 @@ impl Registry {
       Form::Directory => from_directory(&root, &remedy)?,
       Form::File => from_file(&root, &remedy)?,
     };
-    Ok(Some(Theme { origin: Origin::SearchPath { dir, name: name.to_string(), source }, ..theme }))
+    Ok(Some(Theme {
+      origin: Origin::SearchPath {
+        dir,
+        name: name.to_string(),
+        source,
+      },
+      ..theme
+    }))
   }
 
   /// Every definition of `name` on the search path, in search order, LAZILY.
@@ -397,7 +432,12 @@ impl Registry {
     self
       .search_directories(extra)
       .into_iter()
-      .flat_map(|(dir, source)| [(dir.clone(), source, Form::Directory), (dir, source, Form::File)])
+      .flat_map(|(dir, source)| {
+        [
+          (dir.clone(), source, Form::Directory),
+          (dir, source, Form::File),
+        ]
+      })
       .filter(move |(dir, _, form)| dir.join(form.stylesheet(name)).is_file())
       .map(|(dir, source, form)| Definition { dir, source, form })
   }
@@ -412,8 +452,10 @@ impl Registry {
   /// process, so process-wide state here races every other test in the binary,
   /// intermittently, which is the worst way to learn it.
   fn search_directories(&self, extra: &[PathBuf]) -> Vec<(PathBuf, SearchSource)> {
-    let mut dirs: Vec<(PathBuf, SearchSource)> =
-      extra.iter().map(|d| (d.clone(), SearchSource::Flag)).collect();
+    let mut dirs: Vec<(PathBuf, SearchSource)> = extra
+      .iter()
+      .map(|d| (d.clone(), SearchSource::Flag))
+      .collect();
     if let Some(paths) = std::env::var_os(self.search_path_var) {
       dirs.extend(
         std::env::split_paths(&paths)
@@ -454,7 +496,12 @@ impl Registry {
     let listed = definitions
       .iter()
       .map(|d| {
-        format!("  {} ({}): {}", d.dir.display(), self.mechanism(d.source), d.form.stylesheet(name))
+        format!(
+          "  {} ({}): {}",
+          d.dir.display(),
+          self.mechanism(d.source),
+          d.form.stylesheet(name)
+        )
       })
       .collect::<Vec<_>>()
       .join("\n");
@@ -463,7 +510,9 @@ impl Registry {
         "theme '{name}' is defined more than once on the search path, and {var}={REFUSE} does \
          not let search order choose. In search order:\n{listed}"
       ),
-      format!("remove or rename all but one of them, or unset {var} to take the first in search order"),
+      format!(
+        "remove or rename all but one of them, or unset {var} to take the first in search order"
+      ),
     )
   }
 
@@ -487,9 +536,9 @@ impl Registry {
     let names: Vec<&str> = self.built_ins.iter().map(|(id, _)| *id).collect();
     let searched = self.search_directories(extra);
     let where_looked = match searched.is_empty() {
-      true => format!(
-        "  {var} is unset and no {flag} was given, so no theme directories were searched"
-      ),
+      true => {
+        format!("  {var} is unset and no {flag} was given, so no theme directories were searched")
+      }
       false => searched
         .iter()
         .map(|(d, src)| format!("  searched {} ({})", d.display(), self.mechanism(*src)))
@@ -497,7 +546,10 @@ impl Registry {
         .join("\n"),
     };
     Failure::new(
-      format!("no theme '{name}'.\n{where_looked}\n  built in: {}", names.join(", ")),
+      format!(
+        "no theme '{name}'.\n{where_looked}\n  built in: {}",
+        names.join(", ")
+      ),
       format!(
         "give a built-in name, or add directories to {var} or {flag}; for a theme by PATH use {}",
         self.theme_file_flag
@@ -580,7 +632,9 @@ pub fn duplicates_policy(var: &'static str, value: Option<&OsStr>) -> Result<Dup
 /// describes the relationship between this value and the environment variable,
 /// not between two occurrences of the flag.
 pub fn split_path_flag(value: &str) -> Vec<PathBuf> {
-  std::env::split_paths(value).filter(|p| !p.as_os_str().is_empty()).collect()
+  std::env::split_paths(value)
+    .filter(|p| !p.as_os_str().is_empty())
+    .collect()
 }
 
 /// Read a theme source file, or refuse by name.
@@ -591,11 +645,18 @@ pub fn read(path: &Path, remedy: &str) -> Result<String, Failure> {
 /// The refusal for a theme that cannot be read, in the one wording `read` and
 /// `identity` share.
 fn cannot_read(path: &Path, error: &std::io::Error, remedy: &str) -> Failure {
-  Failure::new(format!("cannot read theme '{}': {error}", path.display()), remedy)
+  Failure::new(
+    format!("cannot read theme '{}': {error}", path.display()),
+    remedy,
+  )
 }
 
 fn optional(path: &Path, remedy: &str) -> Result<Option<String>, Failure> {
-  if path.is_file() { read(path, remedy).map(Some) } else { Ok(None) }
+  if path.is_file() {
+    read(path, remedy).map(Some)
+  } else {
+    Ok(None)
+  }
 }
 
 /// The directory a lone `.css` theme's sibling assets resolve against.
@@ -854,7 +915,12 @@ pub fn refuse_external(source: &str, origin: &str, grammar: Grammar) -> Result<(
   }
 
   if let Some((at, needle)) = protocol_relative_site(&lower) {
-    return Err(external(origin, line_of(&scanned, at), needle, line_at(&scanned, at)));
+    return Err(external(
+      origin,
+      line_of(&scanned, at),
+      needle,
+      line_at(&scanned, at),
+    ));
   }
   Ok(())
 }
@@ -913,14 +979,21 @@ fn protocol_relative_site(lower: &str) -> Option<(usize, &'static str)> {
 fn protocol_relative_target(rest: &str) -> Option<usize> {
   let trimmed = rest.trim_start();
   let mut skipped = rest.len() - trimmed.len();
-  let body = match trimmed.strip_prefix('"').or_else(|| trimmed.strip_prefix('\'')) {
+  let body = match trimmed
+    .strip_prefix('"')
+    .or_else(|| trimmed.strip_prefix('\''))
+  {
     Some(inner) => {
       skipped += 1;
       inner
     }
     None => trimmed,
   };
-  if body.starts_with("//") { Some(skipped) } else { None }
+  if body.starts_with("//") {
+    Some(skipped)
+  } else {
+    None
+  }
 }
 
 fn line_of(source: &str, at: usize) -> usize {
@@ -1008,7 +1081,10 @@ mod tests {
   // against prez's built-ins they would prove the resolver works for prez and
   // nothing about whether it is parameterised at all.
   const FAKE: Registry = Registry::new(
-    &[("plain", "body{color:#111}\n"), ("loud", "body{color:#f00}\n")],
+    &[
+      ("plain", "body{color:#111}\n"),
+      ("loud", "body{color:#f00}\n"),
+    ],
     "ARTIFACT_TEST_THEME_PATH",
     "--fake-theme-path",
     "--fake-theme-file",
@@ -1028,7 +1104,11 @@ mod tests {
     // diagnostics list.
     let t = FAKE.load(None, &[], Duplicates::First).unwrap();
     assert_eq!(t.origin, Origin::BuiltIn);
-    assert!(t.name.contains("plain"), "took the first built-in: {}", t.name);
+    assert!(
+      t.name.contains("plain"),
+      "took the first built-in: {}",
+      t.name
+    );
   }
 
   #[test]
@@ -1036,16 +1116,33 @@ mod tests {
     assert!(FAKE.built_in("loud").is_some());
     // A name from a DIFFERENT tool's roster must not resolve here. This is the
     // rule "no built-in is ever a brand" made testable.
-    assert!(FAKE.built_in("simple").is_none(), "resolved another tool's built-in");
+    assert!(
+      FAKE.built_in("simple").is_none(),
+      "resolved another tool's built-in"
+    );
   }
 
   #[test]
   fn an_unknown_theme_names_this_registrys_roster_and_variable() {
-    let e = FAKE.load(Some(Spec::Name("nope")), &[], Duplicates::First).unwrap_err();
+    let e = FAKE
+      .load(Some(Spec::Name("nope")), &[], Duplicates::First)
+      .unwrap_err();
     assert!(e.message.contains("no theme 'nope'"), "{}", e.message);
-    assert!(e.message.contains("plain, loud"), "lists this roster: {}", e.message);
-    assert!(e.message.contains("ARTIFACT_TEST_THEME_PATH"), "names this var: {}", e.message);
-    assert!(!e.message.contains("simple"), "leaked another tool's roster: {}", e.message);
+    assert!(
+      e.message.contains("plain, loud"),
+      "lists this roster: {}",
+      e.message
+    );
+    assert!(
+      e.message.contains("ARTIFACT_TEST_THEME_PATH"),
+      "names this var: {}",
+      e.message
+    );
+    assert!(
+      !e.message.contains("simple"),
+      "leaked another tool's roster: {}",
+      e.message
+    );
   }
 
   #[test]
@@ -1055,7 +1152,13 @@ mod tests {
     std::fs::create_dir_all(&t_dir).unwrap();
     std::fs::write(t_dir.join("theme.css"), "body{color:#222}\n").unwrap();
 
-    let t = FAKE.load(Some(Spec::Name("housestyle")), std::slice::from_ref(&d), Duplicates::First).unwrap();
+    let t = FAKE
+      .load(
+        Some(Spec::Name("housestyle")),
+        std::slice::from_ref(&d),
+        Duplicates::First,
+      )
+      .unwrap();
     match &t.origin {
       Origin::SearchPath { dir, name, source } => {
         assert_eq!(name, "housestyle");
@@ -1064,15 +1167,28 @@ mod tests {
       }
       other => panic!("expected a search-path origin, got {other:?}"),
     }
-    let said = FAKE.provenance(&t).expect("a search-path theme is announced");
-    assert!(said.contains("--fake-theme-path"), "names the mechanism that fired: {said}");
-    assert!(said.contains("artifact"), "uses this tool's noun, not another's: {said}");
+    let said = FAKE
+      .provenance(&t)
+      .expect("a search-path theme is announced");
+    assert!(
+      said.contains("--fake-theme-path"),
+      "names the mechanism that fired: {said}"
+    );
+    assert!(
+      said.contains("artifact"),
+      "uses this tool's noun, not another's: {said}"
+    );
   }
 
   #[test]
   fn a_built_in_announces_nothing() {
-    let t = FAKE.load(Some(Spec::Name("plain")), &[], Duplicates::First).unwrap();
-    assert!(FAKE.provenance(&t).is_none(), "silence is the report for a built-in");
+    let t = FAKE
+      .load(Some(Spec::Name("plain")), &[], Duplicates::First)
+      .unwrap();
+    assert!(
+      FAKE.provenance(&t).is_none(),
+      "silence is the report for a built-in"
+    );
   }
 
   /// **EVERY BRANCH THAT PRODUCES A THEME DECIDES A DIRECTORY, AND THE
@@ -1093,33 +1209,70 @@ mod tests {
     let root = dir("assets");
 
     // A built-in has no file behind it. `None` is a decision, not an oversight.
-    let built_in = FAKE.load(Some(Spec::Name("plain")), &[], Duplicates::First).unwrap();
-    assert!(built_in.dir.is_none(), "a built-in has nowhere to keep an asset");
+    let built_in = FAKE
+      .load(Some(Spec::Name("plain")), &[], Duplicates::First)
+      .unwrap();
+    assert!(
+      built_in.dir.is_none(),
+      "a built-in has nowhere to keep an asset"
+    );
 
     // A directory given by PATH: the directory itself.
     let as_dir = root.join("bydir");
     std::fs::create_dir_all(&as_dir).unwrap();
     std::fs::write(as_dir.join("theme.css"), "body{}\n").unwrap();
-    let t = FAKE.load(Some(Spec::File(as_dir.clone())), &[], Duplicates::First).unwrap();
-    assert_eq!(t.dir.as_deref(), Some(as_dir.as_path()), "a directory theme keeps its own");
+    let t = FAKE
+      .load(Some(Spec::File(as_dir.clone())), &[], Duplicates::First)
+      .unwrap();
+    assert_eq!(
+      t.dir.as_deref(),
+      Some(as_dir.as_path()),
+      "a directory theme keeps its own"
+    );
 
     // A lone `.css` given by PATH: its PARENT. The reference's answer, ported.
     let loose = root.join("loose.css");
     std::fs::write(&loose, "body{}\n").unwrap();
-    let t = FAKE.load(Some(Spec::File(loose)), &[], Duplicates::First).unwrap();
-    assert_eq!(t.dir.as_deref(), Some(root.as_path()), "a file's assets sit beside it");
+    let t = FAKE
+      .load(Some(Spec::File(loose)), &[], Duplicates::First)
+      .unwrap();
+    assert_eq!(
+      t.dir.as_deref(),
+      Some(root.as_path()),
+      "a file's assets sit beside it"
+    );
 
     // A NAME resolving as `<searched>/<name>/theme.css`: one level DOWN.
     let named = root.join("housestyle");
     std::fs::create_dir_all(&named).unwrap();
     std::fs::write(named.join("theme.css"), "body{}\n").unwrap();
-    let down = FAKE.load(Some(Spec::Name("housestyle")), std::slice::from_ref(&root), Duplicates::First).unwrap();
-    assert_eq!(down.dir.as_deref(), Some(named.as_path()), "the theme's own directory");
+    let down = FAKE
+      .load(
+        Some(Spec::Name("housestyle")),
+        std::slice::from_ref(&root),
+        Duplicates::First,
+      )
+      .unwrap();
+    assert_eq!(
+      down.dir.as_deref(),
+      Some(named.as_path()),
+      "the theme's own directory"
+    );
 
     // A NAME resolving as `<searched>/<name>.css`: the searched directory ITSELF.
     std::fs::write(root.join("solo.css"), "body{}\n").unwrap();
-    let flat = FAKE.load(Some(Spec::Name("solo")), std::slice::from_ref(&root), Duplicates::First).unwrap();
-    assert_eq!(flat.dir.as_deref(), Some(root.as_path()), "the `<name>.css` form has no subdir");
+    let flat = FAKE
+      .load(
+        Some(Spec::Name("solo")),
+        std::slice::from_ref(&root),
+        Duplicates::First,
+      )
+      .unwrap();
+    assert_eq!(
+      flat.dir.as_deref(),
+      Some(root.as_path()),
+      "the `<name>.css` form has no subdir"
+    );
 
     // THE DISCRIMINATING PAIR, asserted as a pair. Same origin dir, different
     // asset dir -- so `Origin` cannot answer this question for both.
@@ -1131,7 +1284,10 @@ mod tests {
         other => panic!("{label}: expected a search-path origin, got {other:?}"),
       }
     }
-    assert_ne!(down.dir, flat.dir, "the two forms must not resolve assets to one place");
+    assert_ne!(
+      down.dir, flat.dir,
+      "the two forms must not resolve assets to one place"
+    );
   }
 
   /// A bare filename's parent is the EMPTY path rather than `None`, and an empty
@@ -1141,7 +1297,10 @@ mod tests {
   #[test]
   fn a_bare_filename_resolves_its_assets_against_the_current_directory() {
     assert_eq!(asset_dir(Path::new("theme.css")), Some(PathBuf::from(".")));
-    assert_eq!(asset_dir(Path::new("t/theme.css")), Some(PathBuf::from("t")));
+    assert_eq!(
+      asset_dir(Path::new("t/theme.css")),
+      Some(PathBuf::from("t"))
+    );
     // The filesystem root has no parent, and `None` is the honest answer there.
     assert_eq!(asset_dir(Path::new("/")), None);
   }
@@ -1150,16 +1309,24 @@ mod tests {
 
   #[test]
   fn an_external_url_is_refused_naming_the_line_and_the_offender() {
-    let e = refuse_external("body{color:red}\nbody{background:url(https://cdn/x.png)}\n", "t", Grammar::Css)
-      .unwrap_err();
+    let e = refuse_external(
+      "body{color:red}\nbody{background:url(https://cdn/x.png)}\n",
+      "t",
+      Grammar::Css,
+    )
+    .unwrap_err();
     assert!(e.message.contains("line 2"), "{}", e.message);
     assert!(e.message.contains("cdn/x.png"), "{}", e.message);
   }
 
   #[test]
   fn a_url_inside_a_comment_is_documentation_not_a_reference() {
-    refuse_external("/* adapted from https://example.com/t, MIT */\nbody{color:red}\n", "t", Grammar::Css)
-      .expect("an attribution comment must not fail a build");
+    refuse_external(
+      "/* adapted from https://example.com/t, MIT */\nbody{color:red}\n",
+      "t",
+      Grammar::Css,
+    )
+    .expect("an attribution comment must not fail a build");
   }
 
   /// **THE CONTROL FOR R1, AND IT PROTECTS A PROPERTY NOTHING ELSE DOES.**
@@ -1200,31 +1367,80 @@ mod tests {
   fn the_external_reference_population_is_enumerated_and_every_member_is_decided() {
     let population: &[(&str, &str, bool)] = &[
       ("C1 clean css", "body{color:#333}\n", false),
-      ("C2 absolute scheme in url()", "body{background:url(https://cdn/x.png)}\n", true),
-      ("E1 @import with a \" target", "@import \"//cdn/x.css\";\n", true),
-      ("E2 @import with a ' target", "@import '//cdn/x.css';\n", true),
+      (
+        "C2 absolute scheme in url()",
+        "body{background:url(https://cdn/x.png)}\n",
+        true,
+      ),
+      (
+        "E1 @import with a \" target",
+        "@import \"//cdn/x.css\";\n",
+        true,
+      ),
+      (
+        "E2 @import with a ' target",
+        "@import '//cdn/x.css';\n",
+        true,
+      ),
       ("E3 @import url(//)", "@import url(//cdn/x.css);\n", true),
-      ("E4 url( // ) with spaces", "body{background:url( //cdn/x.png )}\n", true),
-      ("E5 URL( uppercased", "body{background:URL(//cdn/x.png)}\n", true),
-      ("E6 HTTP:// uppercased", "body{background:url(HTTP://cdn/x.png)}\n", true),
-      ("E7 a string holding /*", "body{content:\"/*\"}\n@import \"https://cdn/x.css\";\n", true),
-      ("E8 unterminated comment", "/* oops\n@import \"https://cdn/x.css\";\n", true),
-      ("E9 @import across two lines", "@import\n\"//cdn/x.css\";\n", true),
+      (
+        "E4 url( // ) with spaces",
+        "body{background:url( //cdn/x.png )}\n",
+        true,
+      ),
+      (
+        "E5 URL( uppercased",
+        "body{background:URL(//cdn/x.png)}\n",
+        true,
+      ),
+      (
+        "E6 HTTP:// uppercased",
+        "body{background:url(HTTP://cdn/x.png)}\n",
+        true,
+      ),
+      (
+        "E7 a string holding /*",
+        "body{content:\"/*\"}\n@import \"https://cdn/x.css\";\n",
+        true,
+      ),
+      (
+        "E8 unterminated comment",
+        "/* oops\n@import \"https://cdn/x.css\";\n",
+        true,
+      ),
+      (
+        "E9 @import across two lines",
+        "@import\n\"//cdn/x.css\";\n",
+        true,
+      ),
       ("F1 // as string content", "body{content:\"//\"}\n", false),
-      ("F2 a url inside a comment", "/* see http://example.com */\nbody{color:red}\n", false),
+      (
+        "F2 a url inside a comment",
+        "/* see http://example.com */\nbody{color:red}\n",
+        false,
+      ),
     ];
 
     let refusing = population.iter().filter(|(_, _, r)| *r).count();
     let building = population.len() - refusing;
-    assert_eq!(population.len(), 13, "the population IS the claim; a shrunk one is a weaker claim");
+    assert_eq!(
+      population.len(),
+      13,
+      "the population IS the claim; a shrunk one is a weaker claim"
+    );
     assert_eq!(refusing, 10, "ten fixtures must refuse");
-    assert_eq!(building, 3, "and three must BUILD -- without these the suite passes on refuse-all");
+    assert_eq!(
+      building, 3,
+      "and three must BUILD -- without these the suite passes on refuse-all"
+    );
 
     let mut wrong = Vec::new();
     for (id, css, must_refuse) in population {
       let refused = refuse_external(css, "t", Grammar::Css).is_err();
       if refused != *must_refuse {
-        wrong.push(format!("{id}: expected refused={must_refuse}, got refused={refused}"));
+        wrong.push(format!(
+          "{id}: expected refused={must_refuse}, got refused={refused}"
+        ));
       }
     }
     assert!(
@@ -1260,9 +1476,18 @@ mod tests {
     const CONTROL: &str = "<p>a b</p>\n<a href=\"http://evil.example.com\">x</a>\n<p>c d</p>\n";
     const ATTRIB: &str = "/* adapted from https://example.com/t, MIT */\nbody{color:red}\n";
 
-    assert!(refuse_external(BYPASS, "t", Grammar::Verbatim).is_err(), "the bypass must refuse");
-    assert!(refuse_external(CONTROL, "t", Grammar::Verbatim).is_err(), "the control must still refuse");
-    assert!(refuse_external(ATTRIB, "t", Grammar::Css).is_ok(), "the exemption survives where its language is real");
+    assert!(
+      refuse_external(BYPASS, "t", Grammar::Verbatim).is_err(),
+      "the bypass must refuse"
+    );
+    assert!(
+      refuse_external(CONTROL, "t", Grammar::Verbatim).is_err(),
+      "the control must still refuse"
+    );
+    assert!(
+      refuse_external(ATTRIB, "t", Grammar::Css).is_ok(),
+      "the exemption survives where its language is real"
+    );
     assert!(
       refuse_external(ATTRIB, "t", Grammar::Verbatim).is_err(),
       "THE KNOWN COST, asserted rather than discovered later"
@@ -1294,12 +1519,28 @@ mod tests {
     .unwrap();
 
     let e = FAKE
-      .load(Some(Spec::Name("bypass")), std::slice::from_ref(&d), Duplicates::First)
+      .load(
+        Some(Spec::Name("bypass")),
+        std::slice::from_ref(&d),
+        Duplicates::First,
+      )
       .expect_err("a live href between two stray comment markers must not build");
-    assert!(e.message.contains("layout.html"), "names the surface: {}", e.message);
-    assert!(e.message.contains("evil.example.com"), "names the offender: {}", e.message);
+    assert!(
+      e.message.contains("layout.html"),
+      "names the surface: {}",
+      e.message
+    );
+    assert!(
+      e.message.contains("evil.example.com"),
+      "names the offender: {}",
+      e.message
+    );
     // Line 2 can only be reported if the line-1 marker did NOT strip anything.
-    assert!(e.message.contains("line 2"), "reports the reference's own line: {}", e.message);
+    assert!(
+      e.message.contains("line 2"),
+      "reports the reference's own line: {}",
+      e.message
+    );
   }
 
   /// **WHY THERE ARE TWO ENTRY POINTS, ASSERTED RATHER THAN REMEMBERED.**
@@ -1318,9 +1559,12 @@ mod tests {
 
     // Where the two overlap they must AGREE, or the split is a second rule
     // rather than a second input shape.
-    for (value, external) in
-      [("https://cdn/x", true), ("HTTP://cdn/x", true), ("fonts/x.woff2", false), ("", false)]
-    {
+    for (value, external) in [
+      ("https://cdn/x", true),
+      ("HTTP://cdn/x", true),
+      ("fonts/x.woff2", false),
+      ("", false),
+    ] {
       assert_eq!(
         refuse_external(value, "t", Grammar::Verbatim).is_err(),
         external,
@@ -1339,7 +1583,11 @@ mod tests {
     let css = "body{color:red}\n/* unterminated\nbody{background:url(https://cdn/x.png)}\n";
     let e = refuse_external(css, "t", Grammar::Css).unwrap_err();
     assert!(e.message.contains("never closed"), "{}", e.message);
-    assert!(e.message.contains("line 2"), "the comment OPENS on line 2: {}", e.message);
+    assert!(
+      e.message.contains("line 2"),
+      "the comment OPENS on line 2: {}",
+      e.message
+    );
   }
 
   /// **ISSUE 0015'S SERIOUS HALF, AND THE ONE A BROWSER DISAGREES WITH.**
@@ -1354,7 +1602,11 @@ mod tests {
     let css = "body{content:\"/*\"}\n@import \"https://cdn/x.css\";\n";
     let e = refuse_external(css, "t", Grammar::Css).unwrap_err();
     assert!(e.message.contains("cdn/x.css"), "{}", e.message);
-    assert!(e.message.contains("line 2"), "the reference is on line 2: {}", e.message);
+    assert!(
+      e.message.contains("line 2"),
+      "the reference is on line 2: {}",
+      e.message
+    );
   }
 
   /// **AN AT-RULE IS ONE REFERENCE EVEN WHEN IT WEARS TWO LINES, AND THE REPORTED
@@ -1367,7 +1619,11 @@ mod tests {
   #[test]
   fn an_import_that_wraps_is_one_reference_reported_at_the_url() {
     let e = refuse_external("@import\n\"//cdn/x.css\";\n", "t", Grammar::Css).unwrap_err();
-    assert!(e.message.contains("line 2"), "the URL is on line 2, the at-rule opens on 1: {}", e.message);
+    assert!(
+      e.message.contains("line 2"),
+      "the URL is on line 2, the at-rule opens on 1: {}",
+      e.message
+    );
     assert!(e.message.contains("cdn/x.css"), "{}", e.message);
   }
 
@@ -1378,7 +1634,11 @@ mod tests {
   fn an_unclosed_string_does_not_swallow_the_rest_of_the_theme() {
     let css = "body{content:\"oops}\n/* a comment */\nbody{background:url(https://cdn/x.png)}\n";
     let e = refuse_external(css, "t", Grammar::Css).unwrap_err();
-    assert!(e.message.contains("line 3"), "the comment on line 2 is still stripped: {}", e.message);
+    assert!(
+      e.message.contains("line 3"),
+      "the comment on line 2 is still stripped: {}",
+      e.message
+    );
   }
 
   // ---- ST0020: a NAME defined more than once on the search path -----------
@@ -1387,7 +1647,9 @@ mod tests {
   // mechanism is always the flag's: no process variable is set, for the reason
   // `search_directories` gives. Each case asks for the policy it tests.
 
-  const STRICT: Duplicates = Duplicates::Refuse { var: "ARTIFACT_TEST_DUPLICATES" };
+  const STRICT: Duplicates = Duplicates::Refuse {
+    var: "ARTIFACT_TEST_DUPLICATES",
+  };
 
   /// `<root>/<sub>/<name>/theme.css`, returning the searched directory.
   fn dir_theme(root: &Path, sub: &str, name: &str, css: &str) -> PathBuf {
@@ -1425,14 +1687,35 @@ mod tests {
     let root = dir("dup-two-dirs");
     let a = dir_theme(&root, "a", "house", "body{color:#111}\n");
     let b = file_theme(&root, "b", "house", "body{color:#222}\n");
-    let e = FAKE.load(Some(Spec::Name("house")), &[a.clone(), b.clone()], STRICT).unwrap_err();
-    assert!(e.message.starts_with("theme 'house' is defined more than once"), "{}", e.message);
-    assert!(e.message.contains("ARTIFACT_TEST_DUPLICATES=refuse"), "names the policy: {}", e.message);
-    let first = format!("  {} (given by --fake-theme-path): house/theme.css", a.display());
+    let e = FAKE
+      .load(Some(Spec::Name("house")), &[a.clone(), b.clone()], STRICT)
+      .unwrap_err();
+    assert!(
+      e.message
+        .starts_with("theme 'house' is defined more than once"),
+      "{}",
+      e.message
+    );
+    assert!(
+      e.message.contains("ARTIFACT_TEST_DUPLICATES=refuse"),
+      "names the policy: {}",
+      e.message
+    );
+    let first = format!(
+      "  {} (given by --fake-theme-path): house/theme.css",
+      a.display()
+    );
     let second = format!("  {} (given by --fake-theme-path): house.css", b.display());
-    assert!(in_order(&e.message, &first, &second), "both, in search order: {}", e.message);
+    assert!(
+      in_order(&e.message, &first, &second),
+      "both, in search order: {}",
+      e.message
+    );
     let remedy = e.remedy.unwrap_or_default();
-    assert!(remedy.contains("unset ARTIFACT_TEST_DUPLICATES"), "{remedy}");
+    assert!(
+      remedy.contains("unset ARTIFACT_TEST_DUPLICATES"),
+      "{remedy}"
+    );
   }
 
   #[test]
@@ -1440,9 +1723,19 @@ mod tests {
     let root = dir("dup-first");
     let a = dir_theme(&root, "a", "house", "body{color:#111}\n");
     let b = file_theme(&root, "b", "house", "body{color:#222}\n");
-    let t = FAKE.load(Some(Spec::Name("house")), &[a.clone(), b], Duplicates::First).unwrap();
+    let t = FAKE
+      .load(
+        Some(Spec::Name("house")),
+        &[a.clone(), b],
+        Duplicates::First,
+      )
+      .unwrap();
     assert_eq!(t.css, "body{color:#111}\n", "the first in search order");
-    assert!(matches!(&t.origin, Origin::SearchPath { dir, .. } if dir == &a), "{:?}", t.origin);
+    assert!(
+      matches!(&t.origin, Origin::SearchPath { dir, .. } if dir == &a),
+      "{:?}",
+      t.origin
+    );
   }
 
   #[test]
@@ -1450,13 +1743,32 @@ mod tests {
     let root = dir("dup-both-forms");
     let both = dir_theme(&root, "both", "house", "body{color:#111}\n");
     file_theme(&root, "both", "house", "body{color:#222}\n");
-    let e = FAKE.load(Some(Spec::Name("house")), std::slice::from_ref(&both), STRICT).unwrap_err();
-    let dir_form = format!("{} (given by --fake-theme-path): house/theme.css", both.display());
+    let e = FAKE
+      .load(
+        Some(Spec::Name("house")),
+        std::slice::from_ref(&both),
+        STRICT,
+      )
+      .unwrap_err();
+    let dir_form = format!(
+      "{} (given by --fake-theme-path): house/theme.css",
+      both.display()
+    );
     let file_form = format!("{} (given by --fake-theme-path): house.css", both.display());
-    assert!(in_order(&e.message, &dir_form, &file_form), "the directory form first: {}", e.message);
+    assert!(
+      in_order(&e.message, &dir_form, &file_form),
+      "the directory form first: {}",
+      e.message
+    );
 
     // The control: under First the directory form still wins, as it always has.
-    let t = FAKE.load(Some(Spec::Name("house")), std::slice::from_ref(&both), Duplicates::First).unwrap();
+    let t = FAKE
+      .load(
+        Some(Spec::Name("house")),
+        std::slice::from_ref(&both),
+        Duplicates::First,
+      )
+      .unwrap();
     assert_eq!(t.css, "body{color:#111}\n");
   }
 
@@ -1467,8 +1779,15 @@ mod tests {
     let root = dir("dup-copies");
     let a = file_theme(&root, "a", "twin", "body{color:#111}\n");
     let b = file_theme(&root, "b", "twin", "body{color:#111}\n");
-    let e = FAKE.load(Some(Spec::Name("twin")), &[a, b], STRICT).unwrap_err();
-    assert!(e.message.starts_with("theme 'twin' is defined more than once"), "{}", e.message);
+    let e = FAKE
+      .load(Some(Spec::Name("twin")), &[a, b], STRICT)
+      .unwrap_err();
+    assert!(
+      e.message
+        .starts_with("theme 'twin' is defined more than once"),
+      "{}",
+      e.message
+    );
   }
 
   /// **EVERY ROUTE TO ONE FILE, EACH AGAINST THE SAME RULE.** A check keyed on
@@ -1482,21 +1801,35 @@ mod tests {
     let themes = dir_theme(&root, "themes", "house", "body{color:#111}\n");
 
     // A directory listed twice, and the earlier route is the one kept.
-    let t = FAKE.load(Some(Spec::Name("house")), &[themes.clone(), themes.clone()], STRICT).unwrap();
-    assert!(matches!(&t.origin, Origin::SearchPath { dir, .. } if dir == &themes), "{:?}", t.origin);
+    let t = FAKE
+      .load(
+        Some(Spec::Name("house")),
+        &[themes.clone(), themes.clone()],
+        STRICT,
+      )
+      .unwrap();
+    assert!(
+      matches!(&t.origin, Origin::SearchPath { dir, .. } if dir == &themes),
+      "{:?}",
+      t.origin
+    );
 
     // A symlink to a directory already on the path.
     let link = root.join("link");
     clear(&link);
     std::os::unix::fs::symlink(&themes, &link).unwrap();
-    FAKE.load(Some(Spec::Name("house")), &[themes.clone(), link], STRICT).unwrap();
+    FAKE
+      .load(Some(Spec::Name("house")), &[themes.clone(), link], STRICT)
+      .unwrap();
 
     // A theme root that is itself a symlink to another definition's root.
     let other = root.join("other");
     std::fs::create_dir_all(&other).unwrap();
     clear(&other.join("house"));
     std::os::unix::fs::symlink(themes.join("house"), other.join("house")).unwrap();
-    FAKE.load(Some(Spec::Name("house")), &[themes.clone(), other], STRICT).unwrap();
+    FAKE
+      .load(Some(Spec::Name("house")), &[themes.clone(), other], STRICT)
+      .unwrap();
 
     // A hard link to a `<name>.css` already on the path.
     let flat = file_theme(&root, "flat", "solo", "body{color:#222}\n");
@@ -1504,7 +1837,9 @@ mod tests {
     std::fs::create_dir_all(&hard).unwrap();
     clear(&hard.join("solo.css"));
     std::fs::hard_link(flat.join("solo.css"), hard.join("solo.css")).unwrap();
-    FAKE.load(Some(Spec::Name("solo")), &[flat, hard], STRICT).unwrap();
+    FAKE
+      .load(Some(Spec::Name("solo")), &[flat, hard], STRICT)
+      .unwrap();
   }
 
   #[test]
@@ -1512,8 +1847,16 @@ mod tests {
     let root = dir("dup-single");
     let a = dir_theme(&root, "a", "house", "body{color:#111}\n");
     let fields = |t: Theme| (t.css, t.js, t.layout, t.name, t.origin, t.dir);
-    let strict = FAKE.load(Some(Spec::Name("house")), std::slice::from_ref(&a), STRICT).unwrap();
-    let first = FAKE.load(Some(Spec::Name("house")), std::slice::from_ref(&a), Duplicates::First).unwrap();
+    let strict = FAKE
+      .load(Some(Spec::Name("house")), std::slice::from_ref(&a), STRICT)
+      .unwrap();
+    let first = FAKE
+      .load(
+        Some(Spec::Name("house")),
+        std::slice::from_ref(&a),
+        Duplicates::First,
+      )
+      .unwrap();
     assert_eq!(fields(strict), fields(first));
   }
 
@@ -1524,7 +1867,11 @@ mod tests {
     let named = |value: Option<&str>| duplicates_policy(var, value.map(OsStr::new));
 
     assert_eq!(named(None).unwrap(), Duplicates::First, "unset");
-    assert_eq!(named(Some("")).unwrap(), Duplicates::First, "empty is unset");
+    assert_eq!(
+      named(Some("")).unwrap(),
+      Duplicates::First,
+      "empty is unset"
+    );
     assert_eq!(named(Some("first")).unwrap(), Duplicates::First);
     assert_eq!(named(Some("refuse")).unwrap(), Duplicates::Refuse { var });
 
@@ -1533,8 +1880,14 @@ mod tests {
       e.message,
       "ARTIFACT_TEST_DUPLICATES='refuze' is not a policy; the policies are first and refuse"
     );
-    assert!(e.remedy.unwrap_or_default().contains("unset it"), "a remedy for the case");
-    assert!(named(Some("REFUSE")).is_err(), "a policy is one word, spelled one way");
+    assert!(
+      e.remedy.unwrap_or_default().contains("unset it"),
+      "a remedy for the case"
+    );
+    assert!(
+      named(Some("REFUSE")).is_err(),
+      "a policy is one word, spelled one way"
+    );
 
     // Not UTF-8: refused by name, and the value, which cannot be printed
     // faithfully, is not echoed.

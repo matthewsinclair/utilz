@@ -113,17 +113,26 @@ mod tests {
 
   #[test]
   fn a_fence_and_everything_in_it_is_not_depth_zero() {
-    assert_eq!(verdicts("a\n```\nb\n```\nc\n"), vec![true, false, false, false, true]);
+    assert_eq!(
+      verdicts("a\n```\nb\n```\nc\n"),
+      vec![true, false, false, false, true]
+    );
   }
 
   #[test]
   fn a_shorter_closer_does_not_close_a_longer_fence() {
-    assert_eq!(verdicts("````\n```\nstill in\n````\nout\n"), vec![false, false, false, false, true]);
+    assert_eq!(
+      verdicts("````\n```\nstill in\n````\nout\n"),
+      vec![false, false, false, false, true]
+    );
   }
 
   #[test]
   fn a_tilde_fence_is_not_closed_by_backticks() {
-    assert_eq!(verdicts("~~~\n```\nstill in\n~~~\nout\n"), vec![false, false, false, false, true]);
+    assert_eq!(
+      verdicts("~~~\n```\nstill in\n~~~\nout\n"),
+      vec![false, false, false, false, true]
+    );
   }
 
   #[test]

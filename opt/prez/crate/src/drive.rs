@@ -24,8 +24,14 @@ const APP_PATHS: &[&str] = &[
 ];
 
 /// And what it is called on a PATH.
-const PATH_NAMES: &[&str] =
-  &["google-chrome", "google-chrome-stable", "chromium", "chromium-browser", "microsoft-edge", "brave-browser"];
+const PATH_NAMES: &[&str] = &[
+  "google-chrome",
+  "google-chrome-stable",
+  "chromium",
+  "chromium-browser",
+  "microsoft-edge",
+  "brave-browser",
+];
 
 /// Find a browser to drive, or refuse with everything that was tried.
 pub fn find(explicit: Option<&str>) -> Result<PathBuf, Failure> {
@@ -59,7 +65,10 @@ pub fn find(explicit: Option<&str>) -> Result<PathBuf, Failure> {
   }
 
   Err(Failure::new(
-    format!("no Chromium-family browser found. Probed:\n    {}", probed.join("\n    ")),
+    format!(
+      "no Chromium-family browser found. Probed:\n    {}",
+      probed.join("\n    ")
+    ),
     "install Chrome, Chromium, Edge or Brave, or name one with --browser PATH",
   ))
 }
@@ -70,7 +79,9 @@ fn is_runnable(path: &Path) -> bool {
 
 fn on_path(name: &str) -> Option<PathBuf> {
   let paths = std::env::var_os("PATH")?;
-  std::env::split_paths(&paths).map(|dir| dir.join(name)).find(|p| p.is_file())
+  std::env::split_paths(&paths)
+    .map(|dir| dir.join(name))
+    .find(|p| p.is_file())
 }
 
 /// Print an artifact to PDF through headless Chrome.
@@ -128,7 +139,10 @@ pub fn print_to_pdf(
     // Chrome exits 0 having written nothing often enough that trusting the exit
     // code alone would report a success with no PDF behind it.
     return Err(Failure::new(
-      format!("the browser reported success but wrote no PDF at '{}'", out.display()),
+      format!(
+        "the browser reported success but wrote no PDF at '{}'",
+        out.display()
+      ),
       "check the -o path is writable, or try --browser with a different browser",
     ));
   }
@@ -154,7 +168,10 @@ pub fn print_to_pdf(
 /// arms race by construction cannot.
 fn verify_pagination(pdf: &Path, slides: usize) -> Vec<String> {
   let Ok(bytes) = std::fs::read(pdf) else {
-    return vec![format!("could not re-read '{}' to check its page count", pdf.display())];
+    return vec![format!(
+      "could not re-read '{}' to check its page count",
+      pdf.display()
+    )];
   };
   match page_count(&bytes) {
     Some(pages) if pages == slides => Vec::new(),
@@ -227,7 +244,10 @@ fn default_window() -> (u32, u32) {
     (Ok(w), Ok(h)) if w > 0.0 && h > 0.0 => h / w,
     _ => 9.0 / 16.0,
   };
-  (DEFAULT_WINDOW_WIDTH, (f64::from(DEFAULT_WINDOW_WIDTH) * ratio).round() as u32)
+  (
+    DEFAULT_WINDOW_WIDTH,
+    (f64::from(DEFAULT_WINDOW_WIDTH) * ratio).round() as u32,
+  )
 }
 
 /// Parse `--window WxH` into pixels.
@@ -247,7 +267,10 @@ pub fn window_size(spec: Option<&str>) -> Result<(u32, u32), Failure> {
     )
   };
   let (w, h) = spec.split_once(['x', 'X']).ok_or_else(refuse)?;
-  let (w, h) = (w.trim().parse::<u32>().map_err(|_| refuse())?, h.trim().parse::<u32>().map_err(|_| refuse())?);
+  let (w, h) = (
+    w.trim().parse::<u32>().map_err(|_| refuse())?,
+    h.trim().parse::<u32>().map_err(|_| refuse())?,
+  );
   if w == 0 || h == 0 {
     return Err(refuse());
   }
@@ -336,12 +359,17 @@ fn spawn(command: &mut Command, what: &str) -> Result<(), Failure> {
     .spawn()
     .map(|_| ())
     .map_err(|e| {
-      Failure::new(format!("could not launch '{what}': {e}"), "name a browser with --browser PATH")
+      Failure::new(
+        format!("could not launch '{what}': {e}"),
+        "name a browser with --browser PATH",
+      )
     })
 }
 
 fn code(status: &std::process::ExitStatus) -> String {
-  status.code().map_or_else(|| "signal".to_string(), |c| c.to_string())
+  status
+    .code()
+    .map_or_else(|| "signal".to_string(), |c| c.to_string())
 }
 
 /// A `file://` URL for an absolute path.
@@ -375,7 +403,10 @@ mod tests {
     // `present` cannot drift into disagreeing about what shape a deck is.
     let (w, h) = default_window();
     let ratio = f64::from(w) / f64::from(h);
-    assert!((ratio - 254.0 / 142.9).abs() < 0.01, "{w}x{h} is {ratio}, not the deck's aspect");
+    assert!(
+      (ratio - 254.0 / 142.9).abs() < 0.01,
+      "{w}x{h} is {ratio}, not the deck's aspect"
+    );
   }
 
   #[test]
@@ -388,8 +419,15 @@ mod tests {
     // The UNIT is the one thing that differs from --paper, so the remedy has to
     // say it: copying --paper's "millimetres" here would be a plausible,
     // wrong sentence.
-    assert!(e.remedy.as_deref().unwrap().contains("pixels"), "{:?}", e.remedy);
-    assert!(window_size(Some("0x600")).is_err(), "a zero dimension is not a window");
+    assert!(
+      e.remedy.as_deref().unwrap().contains("pixels"),
+      "{:?}",
+      e.remedy
+    );
+    assert!(
+      window_size(Some("0x600")).is_err(),
+      "a zero dimension is not a window"
+    );
   }
 
   #[test]
@@ -404,7 +442,10 @@ mod tests {
     let argv = presenting_argv(Path::new("/tmp/deck.html"), 1280, 720);
 
     // PRESENCE, which is the easy half.
-    assert!(argv.iter().any(|a| a == "--window-size=1280,720"), "{argv:?}");
+    assert!(
+      argv.iter().any(|a| a == "--window-size=1280,720"),
+      "{argv:?}"
+    );
     assert!(argv.iter().any(|a| a.starts_with("--app=")), "{argv:?}");
 
     // AND ABSENCE, which is the half that matters. A build that kept
@@ -443,7 +484,10 @@ mod tests {
     if let Some(message) = refusal {
       assert!(message.contains("Google Chrome"), "{message}");
       assert!(message.contains("chromium (on PATH)"), "{message}");
-      assert_eq!(message.matches("\n    ").count(), APP_PATHS.len() + PATH_NAMES.len());
+      assert_eq!(
+        message.matches("\n    ").count(),
+        APP_PATHS.len() + PATH_NAMES.len()
+      );
     }
   }
 
@@ -468,13 +512,19 @@ mod tests {
     let pdf = dir.join("short.pdf");
     std::fs::write(&pdf, b"<</Type /Pages>> <</Type /Page>> <</Type /Page>>").unwrap();
 
-    assert!(verify_pagination(&pdf, 2).is_empty(), "a matching count is silent");
+    assert!(
+      verify_pagination(&pdf, 2).is_empty(),
+      "a matching count is silent"
+    );
 
     let warnings = verify_pagination(&pdf, 6);
     assert_eq!(warnings.len(), 1);
     assert!(warnings[0].contains("6 slides"), "{warnings:?}");
     assert!(warnings[0].contains("2 pages"), "{warnings:?}");
-    assert!(warnings[0].contains("height: auto !important"), "names the usual cause: {warnings:?}");
+    assert!(
+      warnings[0].contains("height: auto !important"),
+      "names the usual cause: {warnings:?}"
+    );
   }
 
   #[test]

@@ -133,7 +133,11 @@ fn parse_block(block: &str) -> Option<FrontMatter> {
     }
     let (key, value) = line.split_once(':')?;
     let key = key.trim();
-    if key.is_empty() || !key.chars().all(|c| c.is_ascii_alphanumeric() || c == '_' || c == '-') {
+    if key.is_empty()
+      || !key
+        .chars()
+        .all(|c| c.is_ascii_alphanumeric() || c == '_' || c == '-')
+    {
       return None;
     }
     let key = key.to_ascii_lowercase();
@@ -198,7 +202,10 @@ mod tests {
     let src = "# One\n\n---\n\n# Two\n";
     let (fm, body) = parse(src);
     assert_eq!(fm, FrontMatter::default());
-    assert_eq!(body, src, "the whole file stays body so the splitter sees the break");
+    assert_eq!(
+      body, src,
+      "the whole file stays body so the splitter sees the break"
+    );
   }
 
   #[test]
@@ -206,7 +213,10 @@ mod tests {
     let src = "---\ntitle: A Deck\n\n# One\n";
     let (fm, body) = parse(src);
     assert_eq!(fm.title, None);
-    assert_eq!(body, src, "better a deck with no title than a silently empty one");
+    assert_eq!(
+      body, src,
+      "better a deck with no title than a silently empty one"
+    );
   }
 
   #[test]
@@ -246,7 +256,10 @@ mod tests {
     let src = "---\n# Slide One\n\nBody of one.\n\n---\n\n# Slide Two\n";
     let (fm, body) = parse(src);
     assert_eq!(fm, FrontMatter::default());
-    assert_eq!(body, src, "the whole deck stays body so the splitter sees both slides");
+    assert_eq!(
+      body, src,
+      "the whole deck stays body so the splitter sees both slides"
+    );
   }
 
   #[test]

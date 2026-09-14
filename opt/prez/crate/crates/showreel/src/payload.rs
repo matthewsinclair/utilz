@@ -50,7 +50,11 @@ pub struct Limits {
 
 impl Limits {
   pub fn current() -> Self {
-    Self { min_dwell: limits::MIN_DWELL_MS, min_ease: limits::MIN_EASE_MS, max_ease: limits::MAX_EASE_MS }
+    Self {
+      min_dwell: limits::MIN_DWELL_MS,
+      min_ease: limits::MIN_EASE_MS,
+      max_ease: limits::MAX_EASE_MS,
+    }
   }
 }
 
@@ -108,8 +112,12 @@ pub fn socials(reel: &Path, cfg: &config::Reel) -> (Vec<SocialRow>, Vec<String>)
   let mut warnings = Vec::new();
   for s in &cfg.socials {
     let url = s.url.trim().to_string();
-    let mut row =
-      SocialRow { label: s.label.clone(), handle: s.handle.clone(), url, qr: None };
+    let mut row = SocialRow {
+      label: s.label.clone(),
+      handle: s.handle.clone(),
+      url,
+      qr: None,
+    };
     let path = plan::qr_path(reel, s);
     if !row.url.is_empty() {
       if let Ok(svg) = std::fs::read_to_string(&path) {
@@ -154,14 +162,19 @@ fn stamped_for(svg: &str) -> Option<String> {
 /// **AC-3.2's evidence states SIX sites and this makes it seven**; vc owns that
 /// row and has been told.
 pub fn bug(reel: &Path, cfg: &config::Reel) -> Result<Option<BugRow>, Failure> {
-  let Some(spec) = &cfg.bug else { return Ok(None) };
+  let Some(spec) = &cfg.bug else {
+    return Ok(None);
+  };
   if spec.file.trim().is_empty() {
     return Err(Failure::new(
       "bug: needs a file:",
       "bug: {file: assets/brand/corner.png}, or remove the bug: block",
     ));
   }
-  let site = admit::Site { owner: "bug", field: "file:" };
+  let site = admit::Site {
+    owner: "bug",
+    field: "file:",
+  };
   let path = admit::named(reel, &spec.file, site, admit::Requires::Image)?;
   let art = normalise::embed(&path, cfg.embed_target(), normalise::Role::Bug)?;
   Ok(Some(BugRow {
@@ -230,14 +243,23 @@ fn variant(m: &mut Map<String, Value>, kind: &slide::Kind, target: u32) -> Resul
       put("sub", sub.clone().into());
       put("bg", bg.clone().into());
     }
-    slide::Kind::Statement { kicker, headline, body, bg } => {
+    slide::Kind::Statement {
+      kicker,
+      headline,
+      body,
+      bg,
+    } => {
       put("kind", "statement".into());
       put("kicker", kicker.clone().into());
       put("headline", headline.clone().into());
       put("body", body.clone().into());
       put("bg", bg.clone().into());
     }
-    slide::Kind::Faq { headline, items, bg } => {
+    slide::Kind::Faq {
+      headline,
+      items,
+      bg,
+    } => {
       put("kind", "faq".into());
       put("headline", headline.clone().into());
       let rows: Vec<Value> = items
@@ -252,7 +274,14 @@ fn variant(m: &mut Map<String, Value>, kind: &slide::Kind, target: u32) -> Resul
       put("items", Value::Array(rows));
       put("bg", bg.clone().into());
     }
-    slide::Kind::Atwork { kicker, name, strap, caption, qr, bg } => {
+    slide::Kind::Atwork {
+      kicker,
+      name,
+      strap,
+      caption,
+      qr,
+      bg,
+    } => {
       put("kind", "atwork".into());
       put("kicker", kicker.clone().into());
       put("name", name.clone().into());
@@ -263,27 +292,56 @@ fn variant(m: &mut Map<String, Value>, kind: &slide::Kind, target: u32) -> Resul
     }
     slide::Kind::Strapline { mark, lines, bg } => {
       put("kind", "strapline".into());
-      put("mark", inline(mark.as_deref(), target, normalise::Role::Mark)?.into());
-      put("lines", Value::Array(lines.iter().map(|l| l.clone().into()).collect()));
+      put(
+        "mark",
+        inline(mark.as_deref(), target, normalise::Role::Mark)?.into(),
+      );
+      put(
+        "lines",
+        Value::Array(lines.iter().map(|l| l.clone().into()).collect()),
+      );
       put("bg", bg.clone().into());
     }
-    slide::Kind::Points { headline, body, points, bg } => {
+    slide::Kind::Points {
+      headline,
+      body,
+      points,
+      bg,
+    } => {
       put("kind", "points".into());
       put("headline", headline.clone().into());
       put("body", body.clone().into());
-      put("points", Value::Array(points.iter().map(|p| p.clone().into()).collect()));
+      put(
+        "points",
+        Value::Array(points.iter().map(|p| p.clone().into()).collect()),
+      );
       put("bg", bg.clone().into());
     }
-    slide::Kind::Venue { image, kicker, headline, at, city, bg } => {
+    slide::Kind::Venue {
+      image,
+      kicker,
+      headline,
+      at,
+      city,
+      bg,
+    } => {
       put("kind", "venue".into());
-      put("src", inline(image.as_deref(), target, normalise::Role::Slide)?.into());
+      put(
+        "src",
+        inline(image.as_deref(), target, normalise::Role::Slide)?.into(),
+      );
       put("kicker", kicker.clone().into());
       put("headline", headline.clone().into());
       put("at", at.clone().into());
       put("city", city.clone().into());
       put("bg", bg.clone().into());
     }
-    slide::Kind::Wordmark { top, mid, bottom, bg } => {
+    slide::Kind::Wordmark {
+      top,
+      mid,
+      bottom,
+      bg,
+    } => {
       put("kind", "wordmark".into());
       put("top", top.clone().into());
       put("mid", mid.clone().into());
@@ -295,7 +353,11 @@ fn variant(m: &mut Map<String, Value>, kind: &slide::Kind, target: u32) -> Resul
       put("headline", headline.clone().into());
       put("bg", bg.clone().into());
     }
-    slide::Kind::Social { index, headline, bg } => {
+    slide::Kind::Social {
+      index,
+      headline,
+      bg,
+    } => {
       put("kind", "social".into());
       put("index", (*index).into());
       put("headline", headline.clone().into());
@@ -303,12 +365,15 @@ fn variant(m: &mut Map<String, Value>, kind: &slide::Kind, target: u32) -> Resul
     }
     slide::Kind::Image { path } => {
       let e = normalise::embed(path, target, normalise::Role::Slide)?;
-      let name = path.file_name().and_then(std::ffi::OsStr::to_str).ok_or_else(|| {
-        Failure::new(
-          format!("slide image: {} has no usable filename", path.display()),
-          "the payload carries the file's name; rename it to plain text",
-        )
-      })?;
+      let name = path
+        .file_name()
+        .and_then(std::ffi::OsStr::to_str)
+        .ok_or_else(|| {
+          Failure::new(
+            format!("slide image: {} has no usable filename", path.display()),
+            "the payload carries the file's name; rename it to plain text",
+          )
+        })?;
       put("kind", "image".into());
       put("src", e.uri.into());
       put("w", e.width.into());
@@ -411,7 +476,8 @@ mod tests {
   #[test]
   fn a_social_without_a_qr_on_disk_omits_the_key_rather_than_emitting_an_empty_one() {
     let r = reel("noqr", &[]);
-    let c = cfg("artist: {handle: x}\nsocials: [{label: Web, handle: a, url: 'https://a.example'}]\n");
+    let c =
+      cfg("artist: {handle: x}\nsocials: [{label: Web, handle: a, url: 'https://a.example'}]\n");
     let (rows, warns) = socials(&r, &c);
     assert_eq!(rows.len(), 1);
     assert!(rows[0].qr.is_none(), "absent is valid and says nothing");
@@ -423,13 +489,23 @@ mod tests {
   /// The reference's own case: a stamp that names a different address.
   #[test]
   fn a_qr_stamped_for_another_address_warns_and_is_still_embedded() {
-    let r = reel("stale", &[("assets/qr/web.svg", "<!--showreel-qr:https://old.example--><svg/>")]);
-    let c = cfg("artist: {handle: x}\nsocials: [{label: Web, handle: a, url: 'https://new.example'}]\n");
+    let r = reel(
+      "stale",
+      &[(
+        "assets/qr/web.svg",
+        "<!--showreel-qr:https://old.example--><svg/>",
+      )],
+    );
+    let c =
+      cfg("artist: {handle: x}\nsocials: [{label: Web, handle: a, url: 'https://new.example'}]\n");
     let (rows, warns) = socials(&r, &c);
     assert_eq!(warns.len(), 1, "{warns:?}");
     assert!(warns[0].contains("https://old.example"), "{}", warns[0]);
     assert!(warns[0].contains("https://new.example"), "{}", warns[0]);
-    assert!(rows[0].qr.is_some(), "the reference embeds it anyway and so does this");
+    assert!(
+      rows[0].qr.is_some(),
+      "the reference embeds it anyway and so does this"
+    );
   }
 
   /// **THE CASE THE REFERENCE IS BLIND TO, AND THE ONE MOST LIKELY TO BE
@@ -437,19 +513,33 @@ mod tests {
   /// it ships without a word.
   #[test]
   fn a_qr_with_no_stamp_at_all_warns_where_the_reference_says_nothing() {
-    let r = reel("unstamped", &[("assets/qr/web.svg", "<svg>hand drawn</svg>")]);
-    let c = cfg("artist: {handle: x}\nsocials: [{label: Web, handle: a, url: 'https://a.example'}]\n");
+    let r = reel(
+      "unstamped",
+      &[("assets/qr/web.svg", "<svg>hand drawn</svg>")],
+    );
+    let c =
+      cfg("artist: {handle: x}\nsocials: [{label: Web, handle: a, url: 'https://a.example'}]\n");
     let (rows, warns) = socials(&r, &c);
     assert_eq!(warns.len(), 1, "{warns:?}");
     assert!(warns[0].contains("no 'showreel-qr:' stamp"), "{}", warns[0]);
-    assert!(rows[0].qr.is_some(), "and it is STILL embedded -- the fix changes no pixels");
+    assert!(
+      rows[0].qr.is_some(),
+      "and it is STILL embedded -- the fix changes no pixels"
+    );
   }
 
   /// A stamp that matches is the normal case and must stay silent.
   #[test]
   fn a_qr_stamped_for_the_configured_address_says_nothing() {
-    let r = reel("fresh", &[("assets/qr/web.svg", "<!--showreel-qr:https://a.example--><svg/>")]);
-    let c = cfg("artist: {handle: x}\nsocials: [{label: Web, handle: a, url: 'https://a.example'}]\n");
+    let r = reel(
+      "fresh",
+      &[(
+        "assets/qr/web.svg",
+        "<!--showreel-qr:https://a.example--><svg/>",
+      )],
+    );
+    let c =
+      cfg("artist: {handle: x}\nsocials: [{label: Web, handle: a, url: 'https://a.example'}]\n");
     let (_, warns) = socials(&r, &c);
     assert!(warns.is_empty(), "{warns:?}");
   }
@@ -490,8 +580,16 @@ mod tests {
   #[test]
   fn a_bug_naming_a_file_that_is_not_there_refuses_with_a_remedy() {
     let r = reel("bugmissing", &[]);
-    let e = bug(&r, &cfg("artist: {handle: x}\nbug: {file: assets/brand/nope.png}\n")).unwrap_err();
-    assert!(e.message.contains("nope.png"), "names the file: {}", e.message);
+    let e = bug(
+      &r,
+      &cfg("artist: {handle: x}\nbug: {file: assets/brand/nope.png}\n"),
+    )
+    .unwrap_err();
+    assert!(
+      e.message.contains("nope.png"),
+      "names the file: {}",
+      e.message
+    );
     assert!(e.remedy.is_some(), "and carries a remedy");
   }
 
@@ -510,17 +608,34 @@ mod tests {
   #[test]
   fn a_bug_naming_something_that_is_not_an_image_is_refused_for_its_type() {
     let r = reel("bugtxt", &[("assets/brand/notes.txt", "not a picture")]);
-    let e = bug(&r, &cfg("artist: {handle: x}\nbug: {file: assets/brand/notes.txt}\n")).unwrap_err();
-    assert!(e.message.starts_with("bug: file:"), "the SITE is named: {}", e.message);
-    assert!(e.message.contains("notes.txt"), "and the file: {}", e.message);
-    assert!(e.remedy.is_some_and(|r| r.contains("jpg")), "and the remedy lists the types it takes");
+    let e = bug(
+      &r,
+      &cfg("artist: {handle: x}\nbug: {file: assets/brand/notes.txt}\n"),
+    )
+    .unwrap_err();
+    assert!(
+      e.message.starts_with("bug: file:"),
+      "the SITE is named: {}",
+      e.message
+    );
+    assert!(
+      e.message.contains("notes.txt"),
+      "and the file: {}",
+      e.message
+    );
+    assert!(
+      e.remedy.is_some_and(|r| r.contains("jpg")),
+      "and the remedy lists the types it takes"
+    );
   }
 
   /// A real picture, because the emitter DECODES where `slide::collect` only
   /// admits. 2000x1000 so the two targets below land on different sizes.
   fn png(dir: &Path, name: &str) {
     let img = image::RgbImage::from_fn(2000, 1000, |x, _| image::Rgb([(x % 256) as u8, 1, 2]));
-    image::DynamicImage::ImageRgb8(img).save(dir.join(name)).unwrap();
+    image::DynamicImage::ImageRgb8(img)
+      .save(dir.join(name))
+      .unwrap();
   }
 
   fn rows(dir: &Path, yaml: &str, socials: usize, target: &str) -> Vec<Value> {
@@ -559,36 +674,100 @@ mod tests {
     png(&r, "art/one.png");
     let cases: &[(&str, &str, usize, &[&str])] = &[
       ("{id: s, type: crawl}", "crawl", 1, &["crawl"]),
-      ("{id: s, type: card, headline: H}", "card", 1, &["headline", "sub", "bg"]),
-      ("{id: s, type: statement}", "statement", 1, &["kicker", "headline", "body", "bg"]),
-      ("{id: s, type: faq, items: [{q: Q, a: A}]}", "faq", 1, &["headline", "items", "bg"]),
+      (
+        "{id: s, type: card, headline: H}",
+        "card",
+        1,
+        &["headline", "sub", "bg"],
+      ),
+      (
+        "{id: s, type: statement}",
+        "statement",
+        1,
+        &["kicker", "headline", "body", "bg"],
+      ),
+      (
+        "{id: s, type: faq, items: [{q: Q, a: A}]}",
+        "faq",
+        1,
+        &["headline", "items", "bg"],
+      ),
       (
         "{id: s, type: atwork, qr: q.svg}",
         "atwork",
         1,
         &["kicker", "name", "strap", "caption", "qr", "bg"],
       ),
-      ("{id: s, type: atwork}", "atwork", 1, &["kicker", "name", "strap", "caption", "qr", "bg"]),
-      ("{id: s, type: strapline, mark: a.png, lines: [L]}", "strapline", 1, &["mark", "lines", "bg"]),
-      ("{id: s, type: strapline, lines: [L]}", "strapline", 1, &["mark", "lines", "bg"]),
-      ("{id: s, type: points, points: [P]}", "points", 1, &["headline", "body", "points", "bg"]),
+      (
+        "{id: s, type: atwork}",
+        "atwork",
+        1,
+        &["kicker", "name", "strap", "caption", "qr", "bg"],
+      ),
+      (
+        "{id: s, type: strapline, mark: a.png, lines: [L]}",
+        "strapline",
+        1,
+        &["mark", "lines", "bg"],
+      ),
+      (
+        "{id: s, type: strapline, lines: [L]}",
+        "strapline",
+        1,
+        &["mark", "lines", "bg"],
+      ),
+      (
+        "{id: s, type: points, points: [P]}",
+        "points",
+        1,
+        &["headline", "body", "points", "bg"],
+      ),
       (
         "{id: s, type: venue, image: a.png}",
         "venue",
         1,
         &["src", "kicker", "headline", "at", "city", "bg"],
       ),
-      ("{id: s, type: venue}", "venue", 1, &["src", "kicker", "headline", "at", "city", "bg"]),
-      ("{id: s, type: wordmark, top: T}", "wordmark", 1, &["top", "mid", "bottom", "bg"]),
-      ("{id: s, type: socials, layout: list}", "socials", 1, &["headline", "bg"]),
-      ("{id: s, type: socials, layout: each}", "social", 2, &["index", "headline", "bg"]),
-      ("{id: s, type: logo, file: a.png}", "image", 1, &["src", "w", "h", "name"]),
+      (
+        "{id: s, type: venue}",
+        "venue",
+        1,
+        &["src", "kicker", "headline", "at", "city", "bg"],
+      ),
+      (
+        "{id: s, type: wordmark, top: T}",
+        "wordmark",
+        1,
+        &["top", "mid", "bottom", "bg"],
+      ),
+      (
+        "{id: s, type: socials, layout: list}",
+        "socials",
+        1,
+        &["headline", "bg"],
+      ),
+      (
+        "{id: s, type: socials, layout: each}",
+        "social",
+        2,
+        &["index", "headline", "bg"],
+      ),
+      (
+        "{id: s, type: logo, file: a.png}",
+        "image",
+        1,
+        &["src", "w", "h", "name"],
+      ),
       ("{id: s, from: art}", "image", 1, &["src", "w", "h", "name"]),
     ];
     for (yaml, kind, socials, extra) in cases {
       for row in rows(&r, yaml, *socials, "") {
         assert_eq!(row["kind"], Value::from(*kind), "{yaml}");
-        assert_eq!(keys(&row), sorted(extra), "{yaml} -- id/clamped/path/asset leak here");
+        assert_eq!(
+          keys(&row),
+          sorted(extra),
+          "{yaml} -- id/clamped/path/asset leak here"
+        );
       }
     }
     assert_eq!(cases.len(), 16, "sixteen cases over twelve shapes");
@@ -620,7 +799,10 @@ mod tests {
     png(&r, "a.png");
     png(&r, "art/one.png");
     let v = &rows(&r, "{id: s, type: venue, image: a.png}", 1, "")[0];
-    assert!(v["src"].as_str().unwrap().starts_with("data:"), "the venue image IS embedded");
+    assert!(
+      v["src"].as_str().unwrap().starts_with("data:"),
+      "the venue image IS embedded"
+    );
     assert!(v.get("w").is_none() && v.get("h").is_none() && v.get("name").is_none());
     let i = &rows(&r, "{id: s, from: art}", 1, "")[0];
     assert_eq!(i["w"], Value::from(1920));
@@ -634,9 +816,18 @@ mod tests {
   #[test]
   fn a_segment_that_names_no_picture_still_carries_the_key_as_an_empty_string() {
     let r = reel("empty-src", &[]);
-    assert_eq!(rows(&r, "{id: s, type: venue}", 1, "")[0]["src"], Value::from(""));
-    assert_eq!(rows(&r, "{id: s, type: strapline, lines: [L]}", 1, "")[0]["mark"], Value::from(""));
-    assert_eq!(rows(&r, "{id: s, type: atwork}", 1, "")[0]["qr"], Value::from(""));
+    assert_eq!(
+      rows(&r, "{id: s, type: venue}", 1, "")[0]["src"],
+      Value::from("")
+    );
+    assert_eq!(
+      rows(&r, "{id: s, type: strapline, lines: [L]}", 1, "")[0]["mark"],
+      Value::from("")
+    );
+    assert_eq!(
+      rows(&r, "{id: s, type: atwork}", 1, "")[0]["qr"],
+      Value::from("")
+    );
   }
 
   /// **`qr` IS THE SVG's OWN TEXT, NOT A DATA URI** -- `load_qr` is a bare
@@ -657,9 +848,18 @@ mod tests {
   fn the_embed_size_follows_the_reels_target_and_not_the_compiled_default() {
     let r = reel("target", &[("art/.keep", "")]);
     png(&r, "art/one.png");
-    assert_eq!(rows(&r, "{id: s, from: art}", 1, "target: 640\n")[0]["w"], Value::from(640));
-    assert_eq!(rows(&r, "{id: s, from: art}", 1, "")[0]["w"], Value::from(1920));
-    assert_eq!(normalise::TARGET, 1920, "and the default is what the bare case fell back to");
+    assert_eq!(
+      rows(&r, "{id: s, from: art}", 1, "target: 640\n")[0]["w"],
+      Value::from(640)
+    );
+    assert_eq!(
+      rows(&r, "{id: s, from: art}", 1, "")[0]["w"],
+      Value::from(1920)
+    );
+    assert_eq!(
+      normalise::TARGET,
+      1920,
+      "and the default is what the bare case fell back to"
+    );
   }
-
 }

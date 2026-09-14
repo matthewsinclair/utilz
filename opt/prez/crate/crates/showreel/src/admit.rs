@@ -94,8 +94,16 @@ impl Scan {
       .dropped
       .iter()
       .map(|d| {
-        let name = d.path.file_name().map_or_else(String::new, |n| n.to_string_lossy().into_owned());
-        format!("{}: {} dropped '{name}' -- {}", site.owner, site.field, why(d.why))
+        let name = d
+          .path
+          .file_name()
+          .map_or_else(String::new, |n| n.to_string_lossy().into_owned());
+        format!(
+          "{}: {} dropped '{name}' -- {}",
+          site.owner,
+          site.field,
+          why(d.why)
+        )
       })
       .collect()
   }
@@ -110,7 +118,10 @@ fn why(declined: Declined) -> &'static str {
 
 /// The lowercased extension, or empty where there is none.
 fn extension(path: &Path) -> String {
-  path.extension().map(|e| e.to_string_lossy().to_ascii_lowercase()).unwrap_or_default()
+  path
+    .extension()
+    .map(|e| e.to_string_lossy().to_ascii_lowercase())
+    .unwrap_or_default()
 }
 
 /// **THE ONE CLASSIFIER.** All six sites reach their decision through here, so a
@@ -139,7 +150,15 @@ fn refuse(rel: &str, site: Site, declined: Declined) -> Failure {
     }
     Declined::Other => format!("one of: {}", RASTER.join(", ")),
   };
-  Failure::new(format!("{}: {} '{rel}' is {}", site.owner, site.field, why(declined)), remedy)
+  Failure::new(
+    format!(
+      "{}: {} '{rel}' is {}",
+      site.owner,
+      site.field,
+      why(declined)
+    ),
+    remedy,
+  )
 }
 
 /// What a named site requires of the file it points at.
@@ -168,7 +187,10 @@ pub fn named(reel: &Path, rel: &str, site: Site, requires: Requires) -> Result<P
   if !path.exists() {
     return Err(Failure::new(
       format!("{}: {} '{rel}' does not exist", site.owner, site.field),
-      format!("paths are relative to the reel directory: {}", reel.display()),
+      format!(
+        "paths are relative to the reel directory: {}",
+        reel.display()
+      ),
     ));
   }
   if !path.is_file() {
@@ -203,7 +225,12 @@ pub fn scanned(reel: &Path, rel: &str, site: Site) -> Result<Scan, Failure> {
   // directory as a segment that legitimately resolved to nothing.
   let entries = std::fs::read_dir(&dir).map_err(|e| {
     Failure::new(
-      format!("{}: {} cannot read {}: {e}", site.owner, site.field, dir.display()),
+      format!(
+        "{}: {} cannot read {}: {e}",
+        site.owner,
+        site.field,
+        dir.display()
+      ),
       "make the directory readable, or point from: elsewhere",
     )
   })?;
@@ -212,7 +239,12 @@ pub fn scanned(reel: &Path, rel: &str, site: Site) -> Result<Scan, Failure> {
   for entry in entries {
     let entry = entry.map_err(|e| {
       Failure::new(
-        format!("{}: {} cannot read an entry of {}: {e}", site.owner, site.field, dir.display()),
+        format!(
+          "{}: {} cannot read an entry of {}: {e}",
+          site.owner,
+          site.field,
+          dir.display()
+        ),
         "make the directory readable, or point from: elsewhere",
       )
     })?;
@@ -221,7 +253,10 @@ pub fn scanned(reel: &Path, rel: &str, site: Site) -> Result<Scan, Failure> {
     // hidden from the author by the same convention that hides it here, so a
     // line about `.DS_Store` on every build is noise -- and a report people
     // learn to skip past has cost exactly what it was built to buy.
-    if path.file_name().is_some_and(|n| n.to_string_lossy().starts_with('.')) {
+    if path
+      .file_name()
+      .is_some_and(|n| n.to_string_lossy().starts_with('.'))
+    {
       continue;
     }
     if path.is_file() {
@@ -257,8 +292,14 @@ mod tests {
     d
   }
 
-  const SEG: Site = Site { owner: "segment 'hero'", field: "files:" };
-  const FROM: Site = Site { owner: "segment 'hero'", field: "from:" };
+  const SEG: Site = Site {
+    owner: "segment 'hero'",
+    field: "files:",
+  };
+  const FROM: Site = Site {
+    owner: "segment 'hero'",
+    field: "from:",
+  };
 
   /// **THE WHOLE DESIGN IN ONE ASSERTION: THE SAME FILE, TWO ANSWERS, AND THE
   /// DIFFERENCE IS WHO ASSERTED IT.** A `notes.txt` the author wrote down is a
@@ -270,8 +311,16 @@ mod tests {
     let r = reel("both", &["assets/art/a.jpg", "assets/art/notes.txt"]);
 
     let e = named(&r, "assets/art/notes.txt", SEG, Requires::Image).unwrap_err();
-    assert!(e.message.contains("segment 'hero'"), "names the segment: {}", e.message);
-    assert!(e.message.contains("notes.txt"), "names the file: {}", e.message);
+    assert!(
+      e.message.contains("segment 'hero'"),
+      "names the segment: {}",
+      e.message
+    );
+    assert!(
+      e.message.contains("notes.txt"),
+      "names the file: {}",
+      e.message
+    );
 
     let scan = scanned(&r, "assets/art", FROM).unwrap();
     assert_eq!(scan.admitted.len(), 1, "the jpg is admitted");
@@ -279,8 +328,16 @@ mod tests {
 
     let lines = scan.report(FROM);
     assert_eq!(lines.len(), 1, "one line per drop");
-    assert!(lines[0].contains("segment 'hero'"), "AT THE SEGMENT: {}", lines[0]);
-    assert!(lines[0].contains("from:"), "and names the site: {}", lines[0]);
+    assert!(
+      lines[0].contains("segment 'hero'"),
+      "AT THE SEGMENT: {}",
+      lines[0]
+    );
+    assert!(
+      lines[0].contains("from:"),
+      "and names the site: {}",
+      lines[0]
+    );
     assert!(lines[0].contains("notes.txt"), "and the file: {}", lines[0]);
   }
 
@@ -318,7 +375,12 @@ mod tests {
         wrong.push(format!("{name}: wanted {want:?}, got {got:?}"));
       }
     }
-    assert!(wrong.is_empty(), "{} classified wrongly:\n  {}", wrong.len(), wrong.join("\n  "));
+    assert!(
+      wrong.is_empty(),
+      "{} classified wrongly:\n  {}",
+      wrong.len(),
+      wrong.join("\n  ")
+    );
   }
 
   /// A `.pdf` and a `.txt` are different sentences with different remedies. The
@@ -332,12 +394,18 @@ mod tests {
     assert!(pdf.message.contains("document"), "{}", pdf.message);
     let remedy = pdf.remedy.expect("a document says what to do");
     assert!(remedy.contains("rasterise"), "names the action: {remedy}");
-    assert!(remedy.contains("AC-3.9"), "and why it is not automatic: {remedy}");
+    assert!(
+      remedy.contains("AC-3.9"),
+      "and why it is not automatic: {remedy}"
+    );
 
     let txt = named(&r, "a.txt", SEG, Requires::Image).unwrap_err();
     let remedy = txt.remedy.expect("a stranger gets the roster");
     assert!(remedy.contains("png"), "lists what IS admitted: {remedy}");
-    assert!(!remedy.contains("rasterise"), "and not the document remedy: {remedy}");
+    assert!(
+      !remedy.contains("rasterise"),
+      "and not the document remedy: {remedy}"
+    );
   }
 
   /// A missing named path refuses and says where paths are resolved FROM --
@@ -348,7 +416,10 @@ mod tests {
     let e = named(&r, "assets/art/gone.jpg", SEG, Requires::Image).unwrap_err();
     assert!(e.message.contains("does not exist"), "{}", e.message);
     assert!(e.message.contains("gone.jpg"), "{}", e.message);
-    assert!(e.remedy.unwrap().contains(&r.display().to_string()), "names the reel dir");
+    assert!(
+      e.remedy.unwrap().contains(&r.display().to_string()),
+      "names the reel dir"
+    );
   }
 
   /// **THE TWO SHAPES REFUSE EACH OTHER'S INPUT AND EACH POINTS AT THE OTHER.**
@@ -360,11 +431,17 @@ mod tests {
 
     let e = named(&r, "assets/art", SEG, Requires::Image).unwrap_err();
     assert!(e.message.contains("is not a file"), "{}", e.message);
-    assert!(e.remedy.unwrap().contains("from:"), "sends a directory to from:");
+    assert!(
+      e.remedy.unwrap().contains("from:"),
+      "sends a directory to from:"
+    );
 
     let e = scanned(&r, "assets/art/a.jpg", FROM).unwrap_err();
     assert!(e.message.contains("is not a directory"), "{}", e.message);
-    assert!(e.remedy.unwrap().contains("files:"), "sends a file to files:");
+    assert!(
+      e.remedy.unwrap().contains("files:"),
+      "sends a file to files:"
+    );
   }
 
   /// **SORTED, AND THIS IS NOT TIDINESS.** A reel's slide order comes from this
@@ -381,7 +458,10 @@ mod tests {
   /// recording it is what stops a future green being read as proof.
   #[test]
   fn a_scan_returns_its_images_in_a_stable_order() {
-    let r = reel("order", &["assets/art/c.jpg", "assets/art/a.jpg", "assets/art/b.png"]);
+    let r = reel(
+      "order",
+      &["assets/art/c.jpg", "assets/art/a.jpg", "assets/art/b.png"],
+    );
     let names: Vec<String> = scanned(&r, "assets/art", FROM)
       .unwrap()
       .admitted
@@ -397,11 +477,21 @@ mod tests {
   /// buy. A directory of nothing but images reports NOTHING.
   #[test]
   fn hidden_files_leave_the_population_and_a_clean_directory_reports_nothing() {
-    let r = reel("hidden", &["assets/art/a.jpg", "assets/art/.DS_Store", "assets/art/.keep"]);
+    let r = reel(
+      "hidden",
+      &[
+        "assets/art/a.jpg",
+        "assets/art/.DS_Store",
+        "assets/art/.keep",
+      ],
+    );
     let scan = scanned(&r, "assets/art", FROM).unwrap();
     assert_eq!(scan.admitted.len(), 1, "one real image");
     assert_eq!(scan.dropped.len(), 0, "and the dotfiles are not drops");
-    assert!(scan.report(FROM).is_empty(), "so a clean directory says nothing at all");
+    assert!(
+      scan.report(FROM).is_empty(),
+      "so a clean directory says nothing at all"
+    );
   }
 
   /// A directory that resolves to no images is not this module's refusal -- the

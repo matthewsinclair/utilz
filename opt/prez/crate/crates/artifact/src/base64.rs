@@ -24,8 +24,16 @@ pub fn encode(bytes: &[u8]) -> String {
     out.push(ALPHABET[(triple >> 18 & 0x3f) as usize] as char);
     out.push(ALPHABET[(triple >> 12 & 0x3f) as usize] as char);
     // The padding is positional: two leftover bytes pad one `=`, one pads two.
-    out.push(if chunk.len() > 1 { ALPHABET[(triple >> 6 & 0x3f) as usize] as char } else { '=' });
-    out.push(if chunk.len() > 2 { ALPHABET[(triple & 0x3f) as usize] as char } else { '=' });
+    out.push(if chunk.len() > 1 {
+      ALPHABET[(triple >> 6 & 0x3f) as usize] as char
+    } else {
+      '='
+    });
+    out.push(if chunk.len() > 2 {
+      ALPHABET[(triple & 0x3f) as usize] as char
+    } else {
+      '='
+    });
   }
   out
 }
@@ -49,14 +57,21 @@ mod tests {
   #[test]
   fn handles_bytes_that_are_not_text() {
     // A PNG header: high bytes are where a sloppy shift-and-mask goes wrong.
-    assert_eq!(encode(&[0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]), "iVBORw0KGgo=");
+    assert_eq!(
+      encode(&[0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]),
+      "iVBORw0KGgo="
+    );
   }
 
   #[test]
   fn every_output_length_is_a_multiple_of_four() {
     for len in 0..40usize {
       let bytes = vec![0xa5u8; len];
-      assert_eq!(encode(&bytes).len() % 4, 0, "length {len} produced ragged output");
+      assert_eq!(
+        encode(&bytes).len() % 4,
+        0,
+        "length {len} produced ragged output"
+      );
     }
   }
 }

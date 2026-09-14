@@ -15,6 +15,10 @@ pub struct Failure {
 
 impl Failure {
   pub fn new(message: impl Into<String>, remedy: impl Into<String>) -> Self {
-    Self { message: message.into(), remedy: Some(remedy.into()), code: 2 }
+    Self {
+      message: message.into(),
+      remedy: Some(remedy.into()),
+      code: 2,
+    }
   }
 }

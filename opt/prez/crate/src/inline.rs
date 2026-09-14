@@ -56,7 +56,10 @@ fn rewrite_tag(tag: &str, base: &Path, warnings: &mut Vec<String>) -> String {
       // browser then shows a broken image where the author put one, which is
       // the visible half of the report. The io error travels so the warning can
       // tell "no such file" from "permission denied".
-      warnings.push(format!("image not read, left as a broken reference: {} ({why})", path.display()));
+      warnings.push(format!(
+        "image not read, left as a broken reference: {} ({why})",
+        path.display()
+      ));
       tag.to_string()
     }
   }
@@ -122,14 +125,20 @@ fn has_scheme(src: &str) -> bool {
     Some(at) => {
       at > 0
         && !src[..at].contains('/')
-        && src[..at].chars().all(|c| c.is_ascii_alphanumeric() || "+-.".contains(c))
+        && src[..at]
+          .chars()
+          .all(|c| c.is_ascii_alphanumeric() || "+-.".contains(c))
     }
     None => false,
   }
 }
 
 fn data_uri(path: &Path) -> Result<String, std::io::Error> {
-  Ok(format!("data:{};base64,{}", mime_for(path), base64::encode(&std::fs::read(path)?)))
+  Ok(format!(
+    "data:{};base64,{}",
+    mime_for(path),
+    base64::encode(&std::fs::read(path)?)
+  ))
 }
 
 /// Undo the percent-encoding comrak applies to link destinations.
@@ -163,7 +172,11 @@ fn hex_pair(hi: u8, lo: u8) -> Option<u8> {
 /// deck realistically carries. An unknown extension gets the generic octet
 /// stream: the bytes still travel, and the browser sniffs what it can.
 fn mime_for(path: &Path) -> &'static str {
-  let ext = path.extension().and_then(|e| e.to_str()).unwrap_or_default().to_ascii_lowercase();
+  let ext = path
+    .extension()
+    .and_then(|e| e.to_str())
+    .unwrap_or_default()
+    .to_ascii_lowercase();
   match ext.as_str() {
     "png" => "image/png",
     "jpg" | "jpeg" => "image/jpeg",
@@ -197,31 +210,54 @@ mod tests {
 
   #[test]
   fn a_local_image_becomes_a_data_uri() {
-    let (out, warnings) = images("<p><img src=\"dot.gif\" alt=\"d\" /></p>", &fixture("a_local_image_becomes_a_data_uri"));
-    assert!(out.contains("src=\"data:image/gif;base64,R0lGODlhAQA=\""), "{out}");
-    assert!(out.contains("alt=\"d\""), "the rest of the tag survives: {out}");
+    let (out, warnings) = images(
+      "<p><img src=\"dot.gif\" alt=\"d\" /></p>",
+      &fixture("a_local_image_becomes_a_data_uri"),
+    );
+    assert!(
+      out.contains("src=\"data:image/gif;base64,R0lGODlhAQA=\""),
+      "{out}"
+    );
+    assert!(
+      out.contains("alt=\"d\""),
+      "the rest of the tag survives: {out}"
+    );
     assert!(warnings.is_empty());
   }
 
   #[test]
   fn a_percent_encoded_name_is_resolved_before_the_read() {
-    let (out, warnings) = images("<img src=\"a%20space.png\">", &fixture("a_percent_encoded_name_is_resolved_before_the_read"));
+    let (out, warnings) = images(
+      "<img src=\"a%20space.png\">",
+      &fixture("a_percent_encoded_name_is_resolved_before_the_read"),
+    );
     assert!(out.contains("data:image/png;base64,"), "{out}");
     assert!(warnings.is_empty(), "{warnings:?}");
   }
 
   #[test]
   fn a_missing_image_warns_and_is_left_visibly_broken() {
-    let (out, warnings) = images("<img src=\"gone.png\">", &fixture("a_missing_image_warns_and_is_left_visibly_broken"));
+    let (out, warnings) = images(
+      "<img src=\"gone.png\">",
+      &fixture("a_missing_image_warns_and_is_left_visibly_broken"),
+    );
     assert_eq!(out, "<img src=\"gone.png\">", "never a silent drop");
     assert_eq!(warnings.len(), 1);
-    assert!(warnings[0].contains("gone.png"), "the warning names the path: {warnings:?}");
+    assert!(
+      warnings[0].contains("gone.png"),
+      "the warning names the path: {warnings:?}"
+    );
   }
 
   #[test]
   fn remote_and_data_sources_are_left_alone() {
     // The author's URL is the author's business (spec 3).
-    for src in ["https://example.com/a.png", "http://x/a.png", "//cdn/a.png", "data:image/gif;base64,AA"] {
+    for src in [
+      "https://example.com/a.png",
+      "http://x/a.png",
+      "//cdn/a.png",
+      "data:image/gif;base64,AA",
+    ] {
       let tag = format!("<img src=\"{src}\">");
       let (out, warnings) = images(&tag, &fixture("remote_and_data_sources_are_left_alone"));
       assert_eq!(out, tag, "{src} should not be touched");
@@ -238,7 +274,10 @@ mod tests {
   #[test]
   fn src_inside_another_attribute_value_is_not_the_src_attribute() {
     let tag = "<img alt=\"see src=x\" src=\"dot.gif\">";
-    let (out, _) = images(tag, &fixture("src_inside_another_attribute_value_is_not_the_src_attribute"));
+    let (out, _) = images(
+      tag,
+      &fixture("src_inside_another_attribute_value_is_not_the_src_attribute"),
+    );
     assert!(out.contains("alt=\"see src=x\""), "{out}");
     assert!(out.contains("data:image/gif"), "{out}");
   }
@@ -253,7 +292,10 @@ mod tests {
 
   #[test]
   fn several_images_in_one_document_are_all_rewritten() {
-    let (out, _) = images("<img src=\"dot.gif\"> text <img src=\"dot.gif\">", &fixture("several_images_in_one_document_are_all_rewritten"));
+    let (out, _) = images(
+      "<img src=\"dot.gif\"> text <img src=\"dot.gif\">",
+      &fixture("several_images_in_one_document_are_all_rewritten"),
+    );
     assert_eq!(out.matches("data:image/gif").count(), 2, "{out}");
     assert!(out.contains(" text "), "{out}");
   }

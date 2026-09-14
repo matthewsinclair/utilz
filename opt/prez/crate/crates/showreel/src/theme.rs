@@ -71,8 +71,13 @@ const SEARCH_PATH: &str = "SHOWREEL_THEME_PATH";
 /// The noun is `reel`: it lands mid-sentence in the provenance announcement,
 /// which is the one place the shared resolver has to describe the caller's
 /// artifact rather than its own concern.
-const REGISTRY: Registry =
-  Registry::new(BUILT_IN, SEARCH_PATH, "--theme-path", "--theme-file", "reel");
+const REGISTRY: Registry = Registry::new(
+  BUILT_IN,
+  SEARCH_PATH,
+  "--theme-path",
+  "--theme-file",
+  "reel",
+);
 
 /// Resolve the theme a reel's config names.
 ///
@@ -110,8 +115,11 @@ pub fn provenance(theme: &Theme) -> Option<String> {
 
 /// The tab-icon types a browser takes from a data URI, and the only ones a
 /// theme may declare.
-const ICON_TYPES: &[(&str, &str)] =
-  &[("svg", "image/svg+xml"), ("png", "image/png"), ("ico", "image/x-icon")];
+const ICON_TYPES: &[(&str, &str)] = &[
+  ("svg", "image/svg+xml"),
+  ("png", "image/png"),
+  ("ico", "image/x-icon"),
+];
 
 /// The one format a theme may ship a font in. **THE PORT CARRIES NO CONVERTER**
 /// -- the approved budget holds no woff2 or brotli crate, so adding one needs
@@ -150,9 +158,15 @@ pub fn inline(theme: &Theme) -> Result<Inlined, Failure> {
   let mut out = match &theme.dir {
     Some(dir) => match Meta::read(dir)? {
       Some(meta) => meta.inline(dir)?,
-      None => Inlined { css: String::new(), favicon: String::new() },
+      None => Inlined {
+        css: String::new(),
+        favicon: String::new(),
+      },
     },
-    None => Inlined { css: String::new(), favicon: String::new() },
+    None => Inlined {
+      css: String::new(),
+      favicon: String::new(),
+    },
   };
   out.css.push_str(&theme.css);
   Ok(out)
@@ -160,7 +174,10 @@ pub fn inline(theme: &Theme) -> Result<Inlined, Failure> {
 
 /// A declared asset's extension, lowercased. Empty where there is none.
 fn extension(path: &Path) -> String {
-  path.extension().map(|e| e.to_string_lossy().to_ascii_lowercase()).unwrap_or_default()
+  path
+    .extension()
+    .map(|e| e.to_string_lossy().to_ascii_lowercase())
+    .unwrap_or_default()
 }
 
 /// Read a declared theme asset, or refuse by name.
@@ -174,7 +191,10 @@ fn extension(path: &Path) -> String {
 fn read_asset(path: &Path, what: &str, named: &str) -> Result<Vec<u8>, Failure> {
   std::fs::read(path).map_err(|e| {
     Failure::new(
-      format!("theme {what} '{named}': cannot read {}: {e}", path.display()),
+      format!(
+        "theme {what} '{named}': cannot read {}: {e}",
+        path.display()
+      ),
       format!("theme.yaml declares this {what}; add the file, or drop the entry"),
     )
   })
@@ -263,7 +283,11 @@ impl Font {
     let ext = extension(&path);
     if ext != FONT_EXT {
       return Err(Failure::new(
-        format!("theme font '{}' is not WOFF2: {}", self.family, path.display()),
+        format!(
+          "theme font '{}' is not WOFF2: {}",
+          self.family,
+          path.display()
+        ),
         format!(
           "themes ship the format they want served, and this port carries no converter. \
            Convert it once:\n    python3 -c \"from fontTools.ttLib import TTFont; \
@@ -376,8 +400,14 @@ mod tests {
     // the case it would have missed.
     for (id, css) in BUILT_IN {
       for brand in ["popupart", "POP^UP^ART", "Snorkeltoast", "--pop-"] {
-        assert!(!id.contains(brand), "built-in '{id}' is named for a brand: {brand}");
-        assert!(!css.contains(brand), "built-in '{id}' carries a brand token: {brand}");
+        assert!(
+          !id.contains(brand),
+          "built-in '{id}' is named for a brand: {brand}"
+        );
+        assert!(
+          !css.contains(brand),
+          "built-in '{id}' carries a brand token: {brand}"
+        );
       }
     }
   }
@@ -388,9 +418,19 @@ mod tests {
   #[test]
   fn no_theme_named_takes_the_default_and_the_default_has_no_directory() {
     let t = for_reel(None, &[]).expect("the default must always resolve");
-    assert!(t.name.contains("default"), "took the first built-in: {}", t.name);
-    assert!(t.dir.is_none(), "a built-in has no directory, so it can hold no sidecar");
-    assert!(provenance(&t).is_none(), "silence is the report for a built-in");
+    assert!(
+      t.name.contains("default"),
+      "took the first built-in: {}",
+      t.name
+    );
+    assert!(
+      t.dir.is_none(),
+      "a built-in has no directory, so it can hold no sidecar"
+    );
+    assert!(
+      provenance(&t).is_none(),
+      "silence is the report for a built-in"
+    );
   }
 
   /// **THE WHOLE CHAIN THE BUILD PATH RESTS ON, IN ONE TEST**: a NAME in a
@@ -414,7 +454,11 @@ mod tests {
     .unwrap();
 
     let t = for_reel(Some("housestyle"), std::slice::from_ref(&root)).unwrap();
-    assert_eq!(t.dir.as_deref(), Some(theme_dir.as_path()), "the theme's own directory");
+    assert_eq!(
+      t.dir.as_deref(),
+      Some(theme_dir.as_path()),
+      "the theme's own directory"
+    );
 
     // Off the built-ins, so it announces. The reel estate depends on being told.
     //
@@ -426,15 +470,26 @@ mod tests {
     // the resolver was right; the env arm is deliberately not tested here,
     // because a process-wide variable races every other test in this binary.
     let said = provenance(&t).expect("a search-path theme is announced");
-    assert!(said.contains("--theme-path"), "names the mechanism that fired: {said}");
-    assert!(said.contains("reel"), "uses this tool's noun, not another's: {said}");
+    assert!(
+      said.contains("--theme-path"),
+      "names the mechanism that fired: {said}"
+    );
+    assert!(
+      said.contains("reel"),
+      "uses this tool's noun, not another's: {said}"
+    );
 
     // And the sidecar is read from the theme's directory, not the searched one.
-    let meta = Meta::read(t.dir.as_deref().unwrap()).unwrap().expect("theme.yaml is there");
+    let meta = Meta::read(t.dir.as_deref().unwrap())
+      .unwrap()
+      .expect("theme.yaml is there");
     assert_eq!(meta.fonts.len(), 1);
     assert_eq!(meta.fonts[0].weight, 700);
     assert_eq!(meta.favicon.as_deref(), Some("icon.svg"));
-    assert!(Meta::read(&root).unwrap().is_none(), "the SEARCHED directory has no theme.yaml");
+    assert!(
+      Meta::read(&root).unwrap().is_none(),
+      "the SEARCHED directory has no theme.yaml"
+    );
   }
 
   /// A config's `theme:` is a NAME. The reference joined whatever the key held
@@ -442,9 +497,20 @@ mod tests {
   #[test]
   fn a_config_theme_key_that_looks_like_a_path_is_refused_as_one() {
     let e = for_reel(Some("../../elsewhere"), &[]).unwrap_err();
-    assert!(e.message.contains("theme NAME"), "names the rule: {}", e.message);
-    assert!(e.message.contains("showreel.yaml"), "names where it was read: {}", e.message);
-    assert!(e.remedy.unwrap().contains("--theme-file"), "offers the path route");
+    assert!(
+      e.message.contains("theme NAME"),
+      "names the rule: {}",
+      e.message
+    );
+    assert!(
+      e.message.contains("showreel.yaml"),
+      "names where it was read: {}",
+      e.message
+    );
+    assert!(
+      e.remedy.unwrap().contains("--theme-file"),
+      "offers the path route"
+    );
   }
 
   /// An unknown name refuses with THIS tool's roster and THIS tool's variable.
@@ -454,9 +520,21 @@ mod tests {
   fn an_unknown_theme_names_this_tools_roster_and_not_another() {
     let e = for_reel(Some("popupart"), &[]).unwrap_err();
     assert!(e.message.contains("no theme 'popupart'"), "{}", e.message);
-    assert!(e.message.contains("default"), "lists this roster: {}", e.message);
-    assert!(e.message.contains("SHOWREEL_THEME_PATH"), "names this var: {}", e.message);
-    assert!(!e.message.contains("simple"), "leaked prez's roster: {}", e.message);
+    assert!(
+      e.message.contains("default"),
+      "lists this roster: {}",
+      e.message
+    );
+    assert!(
+      e.message.contains("SHOWREEL_THEME_PATH"),
+      "names this var: {}",
+      e.message
+    );
+    assert!(
+      !e.message.contains("simple"),
+      "leaked prez's roster: {}",
+      e.message
+    );
   }
 
   /// The estate's one real `theme.yaml`, pinned. **TEST AGAINST SOMETHING YOU
@@ -473,8 +551,15 @@ mod tests {
     // Both the defaulted and the explicit form of every optional field.
     assert_eq!(m.fonts[0].weight, 400, "an explicit 400");
     assert_eq!(m.fonts[3].weight, 900, "an explicit 900");
-    assert!(m.fonts[0].style.is_none(), "style is absent on four of five");
-    assert_eq!(m.fonts[4].style.as_deref(), Some("italic"), "and present on one");
+    assert!(
+      m.fonts[0].style.is_none(),
+      "style is absent on four of five"
+    );
+    assert_eq!(
+      m.fonts[4].style.as_deref(),
+      Some("italic"),
+      "and present on one"
+    );
     assert!(m.name.is_some() && m.description.is_some() && m.source.is_some());
   }
 
@@ -495,7 +580,11 @@ mod tests {
         "# tokens from https://snorkeltoast.com/brand\nfavicon: favicon.svg\n",
         false,
       ),
-      ("absolute favicon", "favicon: https://cdn.example.com/icon.svg\n", true),
+      (
+        "absolute favicon",
+        "favicon: https://cdn.example.com/icon.svg\n",
+        true,
+      ),
       (
         "absolute font file",
         "fonts:\n  - {family: X, file: 'http://cdn.example.com/x.woff2'}\n",
@@ -510,22 +599,37 @@ mod tests {
     let refusing = population.iter().filter(|(_, _, r)| *r).count();
     assert_eq!(population.len(), 6, "the population IS the claim");
     assert_eq!(refusing, 3, "three refuse");
-    assert_eq!(population.len() - refusing, 3, "and three BUILD, or refuse-all passes");
+    assert_eq!(
+      population.len() - refusing,
+      3,
+      "and three BUILD, or refuse-all passes"
+    );
 
     let mut wrong = Vec::new();
     for (id, yaml, must_refuse) in population {
       let refused = Meta::parse(yaml, "t").is_err();
       if refused != *must_refuse {
-        wrong.push(format!("{id}: expected refused={must_refuse}, got {refused}"));
+        wrong.push(format!(
+          "{id}: expected refused={must_refuse}, got {refused}"
+        ));
       }
     }
-    assert!(wrong.is_empty(), "{} decided wrongly:\n  {}", wrong.len(), wrong.join("\n  "));
+    assert!(
+      wrong.is_empty(),
+      "{} decided wrongly:\n  {}",
+      wrong.len(),
+      wrong.join("\n  ")
+    );
   }
 
   #[test]
   fn a_refusal_names_the_field_that_carried_the_reference() {
     let e = Meta::parse("favicon: https://cdn/x.svg\n", "popupart").unwrap_err();
-    assert!(e.message.contains("favicon"), "names the field: {}", e.message);
+    assert!(
+      e.message.contains("favicon"),
+      "names the field: {}",
+      e.message
+    );
 
     // The family, not just the index: a theme with five faces should not send
     // its author counting from zero to find which one.
@@ -534,14 +638,26 @@ mod tests {
       "popupart",
     )
     .unwrap_err();
-    assert!(e.message.contains("Barlow"), "names the family: {}", e.message);
-    assert!(e.message.contains("fonts[0].file"), "names the site: {}", e.message);
+    assert!(
+      e.message.contains("Barlow"),
+      "names the family: {}",
+      e.message
+    );
+    assert!(
+      e.message.contains("fonts[0].file"),
+      "names the site: {}",
+      e.message
+    );
   }
 
   #[test]
   fn an_unknown_key_is_refused_rather_than_ignored() {
     let e = Meta::parse("favicon: x.svg\nfavicn: y.svg\n", "t").unwrap_err();
-    assert!(e.message.contains("favicn"), "names the offending key: {}", e.message);
+    assert!(
+      e.message.contains("favicn"),
+      "names the offending key: {}",
+      e.message
+    );
   }
 
   #[test]
@@ -554,7 +670,12 @@ mod tests {
 
   /// One row of the refusal population: a label, the `theme.yaml`, the files
   /// sitting beside it, and whether it must refuse.
-  type Case = (&'static str, &'static str, &'static [(&'static str, &'static [u8])], bool);
+  type Case = (
+    &'static str,
+    &'static str,
+    &'static [(&'static str, &'static [u8])],
+    bool,
+  );
 
   /// Build a theme directory with the files named, and return it.
   fn theme_dir(tag: &str, files: &[(&str, &[u8])]) -> PathBuf {
@@ -581,18 +702,52 @@ mod tests {
     // (label, theme.yaml, files beside it, must refuse)
     let population: &[Case] = &[
       ("nothing declared", "name: t\n", &[], false),
-      ("a font that is there", "fonts:\n  - {family: X, file: x.woff2}\n", &[("x.woff2", b"wOF2fake")], false),
-      ("an svg favicon", "favicon: i.svg\n", &[("i.svg", b"<svg/>")], false),
-      ("a png favicon", "favicon: i.png\n", &[("i.png", b"\x89PNG")], false),
-      ("a MISSING font", "fonts:\n  - {family: X, file: gone.woff2}\n", &[], true),
+      (
+        "a font that is there",
+        "fonts:\n  - {family: X, file: x.woff2}\n",
+        &[("x.woff2", b"wOF2fake")],
+        false,
+      ),
+      (
+        "an svg favicon",
+        "favicon: i.svg\n",
+        &[("i.svg", b"<svg/>")],
+        false,
+      ),
+      (
+        "a png favicon",
+        "favicon: i.png\n",
+        &[("i.png", b"\x89PNG")],
+        false,
+      ),
+      (
+        "a MISSING font",
+        "fonts:\n  - {family: X, file: gone.woff2}\n",
+        &[],
+        true,
+      ),
       ("a MISSING favicon", "favicon: gone.svg\n", &[], true),
-      ("a font that is not WOFF2", "fonts:\n  - {family: X, file: x.ttf}\n", &[("x.ttf", b"\x00\x01\x00\x00")], true),
-      ("an icon type nothing serves", "favicon: i.bmp\n", &[("i.bmp", b"BM")], true),
+      (
+        "a font that is not WOFF2",
+        "fonts:\n  - {family: X, file: x.ttf}\n",
+        &[("x.ttf", b"\x00\x01\x00\x00")],
+        true,
+      ),
+      (
+        "an icon type nothing serves",
+        "favicon: i.bmp\n",
+        &[("i.bmp", b"BM")],
+        true,
+      ),
     ];
     let refusing = population.iter().filter(|(_, _, _, r)| *r).count();
     assert_eq!(population.len(), 8, "the population IS the claim");
     assert_eq!(refusing, 4, "four refuse -- one per section 5 row");
-    assert_eq!(population.len() - refusing, 4, "and four BUILD, or refuse-all passes");
+    assert_eq!(
+      population.len() - refusing,
+      4,
+      "and four BUILD, or refuse-all passes"
+    );
 
     let mut wrong = Vec::new();
     for (i, (label, yaml, files, must_refuse)) in population.iter().enumerate() {
@@ -601,10 +756,17 @@ mod tests {
       let meta = Meta::read(&d).unwrap().expect("theme.yaml is present");
       let refused = meta.inline(&d).is_err();
       if refused != *must_refuse {
-        wrong.push(format!("{label}: expected refused={must_refuse}, got {refused}"));
+        wrong.push(format!(
+          "{label}: expected refused={must_refuse}, got {refused}"
+        ));
       }
     }
-    assert!(wrong.is_empty(), "{} decided wrongly:\n  {}", wrong.len(), wrong.join("\n  "));
+    assert!(
+      wrong.is_empty(),
+      "{} decided wrongly:\n  {}",
+      wrong.len(),
+      wrong.join("\n  ")
+    );
   }
 
   /// A refusal has to name the thing the author has to go and fix. **THE FONT'S
@@ -620,16 +782,36 @@ mod tests {
     )
     .unwrap();
     let e = Meta::read(&d).unwrap().unwrap().inline(&d).unwrap_err();
-    assert!(e.message.contains("Barlow"), "names the family: {}", e.message);
-    assert!(e.message.contains("not WOFF2"), "names the defect: {}", e.message);
-    let remedy = e.remedy.expect("a font refusal carries the conversion command");
-    assert!(remedy.contains("fontTools"), "carries the command: {remedy}");
-    assert!(remedy.contains("Barlow-Black.woff2"), "names the OUTPUT path: {remedy}");
+    assert!(
+      e.message.contains("Barlow"),
+      "names the family: {}",
+      e.message
+    );
+    assert!(
+      e.message.contains("not WOFF2"),
+      "names the defect: {}",
+      e.message
+    );
+    let remedy = e
+      .remedy
+      .expect("a font refusal carries the conversion command");
+    assert!(
+      remedy.contains("fontTools"),
+      "carries the command: {remedy}"
+    );
+    assert!(
+      remedy.contains("Barlow-Black.woff2"),
+      "names the OUTPUT path: {remedy}"
+    );
 
     let d = theme_dir("icon", &[("mark.bmp", b"BM")]);
     std::fs::write(d.join("theme.yaml"), "favicon: mark.bmp\n").unwrap();
     let e = Meta::read(&d).unwrap().unwrap().inline(&d).unwrap_err();
-    assert!(e.message.contains("mark.bmp"), "names the file: {}", e.message);
+    assert!(
+      e.message.contains("mark.bmp"),
+      "names the file: {}",
+      e.message
+    );
     let remedy = e.remedy.expect("an icon refusal lists what is served");
     for want in [".svg", ".png", ".ico"] {
       assert!(remedy.contains(want), "lists {want}: {remedy}");
@@ -652,12 +834,28 @@ mod tests {
     assert!(out.css.contains("font-family:'Barlow'"), "{}", out.css);
     assert!(out.css.contains("font-weight:600"), "the declared weight");
     assert!(out.css.contains("font-weight:900"), "and the second face's");
-    assert!(out.css.contains("font-style:normal"), "style defaults rather than vanishing");
-    assert!(out.css.contains("font-style:italic"), "and an explicit one is carried");
-    assert!(out.css.contains("format('woff2')"), "the format the browser is told");
-    assert!(!out.css.contains("truetype"), "no path emits truetype any more");
+    assert!(
+      out.css.contains("font-style:normal"),
+      "style defaults rather than vanishing"
+    );
+    assert!(
+      out.css.contains("font-style:italic"),
+      "and an explicit one is carried"
+    );
+    assert!(
+      out.css.contains("format('woff2')"),
+      "the format the browser is told"
+    );
+    assert!(
+      !out.css.contains("truetype"),
+      "no path emits truetype any more"
+    );
     // Two faces, in `fonts:` order.
-    assert_eq!(out.css.matches("@font-face").count(), 2, "one rule per declared face");
+    assert_eq!(
+      out.css.matches("@font-face").count(),
+      2,
+      "one rule per declared face"
+    );
     assert!(
       out.css.find("font-weight:600") < out.css.find("font-weight:900"),
       "faces keep the manifest's order"

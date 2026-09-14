@@ -274,7 +274,10 @@ mod tests {
   fn the_reel_this_port_is_graded_against_parses_whole() {
     let reel = parse(LIVE, "45h").expect("the live config must parse");
     assert_eq!(reel.artist.handle, "45h");
-    assert_eq!(reel.session.action, "Come and say hello!", "player-only key survives");
+    assert_eq!(
+      reel.session.action, "Come and say hello!",
+      "player-only key survives"
+    );
     assert_eq!(reel.session.iso, "2026-09-19", "compiler-only key survives");
     assert_eq!(reel.socials.len(), 4);
     // 15 SEGMENTS, NOT 15 SLIDES. `socials` with `layout: each` expands to one
@@ -295,16 +298,36 @@ mod tests {
   fn an_unknown_key_is_refused_named_and_with_the_valid_set() {
     let cases: &[(&str, &str, &str)] = &[
       ("top level", "artist: {handle: x}\nlop: true\n", "lop"),
-      ("session", "artist: {handle: x}\nsession: {actoin: hi}\n", "actoin"),
+      (
+        "session",
+        "artist: {handle: x}\nsession: {actoin: hi}\n",
+        "actoin",
+      ),
       ("artist", "artist: {handle: x, nmae: y}\n", "nmae"),
-      ("social", "artist: {handle: x}\nsocials: [{label: a, ur: b}]\n", "ur"),
-      ("bug", "artist: {handle: x}\nbug: {file: a, opactiy: 1}\n", "opactiy"),
+      (
+        "social",
+        "artist: {handle: x}\nsocials: [{label: a, ur: b}]\n",
+        "ur",
+      ),
+      (
+        "bug",
+        "artist: {handle: x}\nbug: {file: a, opactiy: 1}\n",
+        "opactiy",
+      ),
     ];
     assert_eq!(cases.len(), 5, "the population is the claim");
     for (where_, yaml, typo) in cases {
       let e = parse(yaml, "reel").expect_err(&format!("{where_}: {typo} must refuse"));
-      assert!(e.message.contains(typo), "{where_}: names the key: {}", e.message);
-      assert!(e.message.contains("expected"), "{where_}: gives the valid set: {}", e.message);
+      assert!(
+        e.message.contains(typo),
+        "{where_}: names the key: {}",
+        e.message
+      );
+      assert!(
+        e.message.contains("expected"),
+        "{where_}: gives the valid set: {}",
+        e.message
+      );
       assert!(e.remedy.is_some(), "{where_}: carries a remedy");
     }
   }

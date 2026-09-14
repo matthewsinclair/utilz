@@ -100,19 +100,33 @@ struct Stripped<'a> {
 
 fn strip_line(line: &str) -> Stripped<'_> {
   if find_open(line).is_none() {
-    return Stripped { line: Cow::Borrowed(line), opened: false, found: false };
+    return Stripped {
+      line: Cow::Borrowed(line),
+      opened: false,
+      found: false,
+    };
   }
   let mut kept = String::new();
   let mut rest = line;
   loop {
     let Some(start) = find_open(rest) else {
       kept.push_str(rest);
-      return Stripped { line: Cow::Owned(kept), opened: false, found: true };
+      return Stripped {
+        line: Cow::Owned(kept),
+        opened: false,
+        found: true,
+      };
     };
     kept.push_str(&rest[..start]);
     match rest[start..].find("-->") {
       Some(end) => rest = &rest[start + end + "-->".len()..],
-      None => return Stripped { line: Cow::Owned(kept), opened: true, found: true },
+      None => {
+        return Stripped {
+          line: Cow::Owned(kept),
+          opened: true,
+          found: true,
+        }
+      }
     }
   }
 }
@@ -125,7 +139,10 @@ fn find_open(line: &str) -> Option<usize> {
     let body = line[at + "<!--".len()..].trim_start();
     // `get` rather than a slice: the body may open with a multi-byte character
     // and `..6` would not be a char boundary.
-    if body.get(.."notes:".len()).is_some_and(|key| key.eq_ignore_ascii_case("notes:")) {
+    if body
+      .get(.."notes:".len())
+      .is_some_and(|key| key.eq_ignore_ascii_case("notes:"))
+    {
       return Some(at);
     }
     from = at + "<!--".len();
@@ -165,10 +182,23 @@ mod tests {
     let src = "# Slide One\n\n<!-- notes: PRIVATE-HEAD\n---\nPRIVATE-TAIL -->\n\nVisible text\n";
     let out = stripped(src);
     assert!(!out.contains("PRIVATE-HEAD"), "AC04: {out}");
-    assert!(!out.contains("PRIVATE-TAIL"), "AC04: the tail must not survive: {out}");
-    assert!(!out.contains("---"), "the note's --- must not reach the splitter: {out}");
-    assert!(out.contains("# Slide One") && out.contains("Visible text"), "{out}");
-    assert_eq!(crate::split::slides(&out).len(), 1, "one slide, not two: {out}");
+    assert!(
+      !out.contains("PRIVATE-TAIL"),
+      "AC04: the tail must not survive: {out}"
+    );
+    assert!(
+      !out.contains("---"),
+      "the note's --- must not reach the splitter: {out}"
+    );
+    assert!(
+      out.contains("# Slide One") && out.contains("Visible text"),
+      "{out}"
+    );
+    assert_eq!(
+      crate::split::slides(&out).len(),
+      1,
+      "one slide, not two: {out}"
+    );
   }
 
   #[test]
@@ -176,7 +206,10 @@ mod tests {
     let (out, warnings) = strip("# T\n\n<!-- notes:\nprivate one\nprivate two\n-->\n\ntext\n");
     assert!(!out.contains("private"), "AC04: {out}");
     assert!(out.contains("text"), "{out}");
-    assert!(warnings.is_empty(), "a closed note is not a warning: {warnings:?}");
+    assert!(
+      warnings.is_empty(),
+      "a closed note is not a warning: {warnings:?}"
+    );
   }
 
   #[test]

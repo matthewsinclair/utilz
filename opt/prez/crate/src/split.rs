@@ -74,7 +74,12 @@ mod tests {
   fn a_longer_fence_wraps_a_shorter_one() {
     let src = "# One\n\n````\n```\n---\n```\n````\n\n---\n\n# Two\n";
     let s = slides(src);
-    assert_eq!(s.len(), 2, "the inner fence must not close the outer: {:?}", s);
+    assert_eq!(
+      s.len(),
+      2,
+      "the inner fence must not close the outer: {:?}",
+      s
+    );
   }
 
   #[test]

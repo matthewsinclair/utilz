@@ -193,14 +193,21 @@ mod tests {
     // A deck documenting prez shows its own syntax. Eating that would be the
     // same defect the splitter avoids with `---`.
     let s = slide("```html\n<!-- class: wide -->\n```\n");
-    assert!(s.classes.is_empty(), "a fenced directive is not a directive");
+    assert!(
+      s.classes.is_empty(),
+      "a fenced directive is not a directive"
+    );
     assert!(s.html.contains("class: wide"), "{}", s.html);
   }
 
   #[test]
   fn an_unknown_comment_passes_through_silently() {
     let s = slide("<!-- TODO: rewrite this slide -->\n\n# T\n");
-    assert!(s.html.contains("<!-- TODO: rewrite this slide -->"), "{}", s.html);
+    assert!(
+      s.html.contains("<!-- TODO: rewrite this slide -->"),
+      "{}",
+      s.html
+    );
   }
 
   #[test]

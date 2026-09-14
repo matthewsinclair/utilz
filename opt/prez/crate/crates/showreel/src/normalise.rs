@@ -120,7 +120,10 @@ pub struct Normalised {
 /// test can lose is the shape this thread keeps finding.
 pub fn normalise(path: &Path, max_edge: u32) -> Result<Normalised, Failure> {
   let raw = std::fs::read(path).map_err(|e| {
-    Failure::new(format!("cannot read {}: {e}", path.display()), "check the file is readable")
+    Failure::new(
+      format!("cannot read {}: {e}", path.display()),
+      "check the file is readable",
+    )
   })?;
   let decoded = image::load_from_memory(&raw).map_err(|e| {
     Failure::new(
@@ -163,7 +166,11 @@ pub struct Embedded {
 pub fn embed(path: &Path, target: u32, role: Role) -> Result<Embedded, Failure> {
   let n = normalise(path, role_edge(role, target))?;
   Ok(Embedded {
-    uri: format!("data:{};base64,{}", n.mime, artifact::base64::encode(&n.bytes)),
+    uri: format!(
+      "data:{};base64,{}",
+      n.mime,
+      artifact::base64::encode(&n.bytes)
+    ),
     width: n.width,
     height: n.height,
     encoded: n.bytes.len(),
@@ -181,7 +188,10 @@ fn collapse(img: image::DynamicImage) -> (image::DynamicImage, bool) {
   let rgba = img.to_rgba8();
   let opaque = rgba.pixels().all(|p| p.0[3] == 255);
   if opaque {
-    (image::DynamicImage::ImageRgb8(image::DynamicImage::ImageRgba8(rgba).to_rgb8()), false)
+    (
+      image::DynamicImage::ImageRgb8(image::DynamicImage::ImageRgba8(rgba).to_rgb8()),
+      false,
+    )
   } else {
     (image::DynamicImage::ImageRgba8(rgba), true)
   }
@@ -230,7 +240,13 @@ fn encode((img, has_alpha): (image::DynamicImage, bool), max_edge: u32) -> Norma
       .expect("a JPEG encode into memory cannot fail");
     "image/jpeg"
   };
-  Normalised { bytes, mime, width: img.width(), height: img.height(), has_alpha }
+  Normalised {
+    bytes,
+    mime,
+    width: img.width(),
+    height: img.height(),
+    has_alpha,
+  }
 }
 
 /// The EXIF orientation tag, or 1 where there is none.
@@ -313,7 +329,10 @@ mod tests {
     let p = write("opaque", &png(64, 64, 255));
     for edge in [MASTER, TARGET] {
       let out = normalise(&p, edge).unwrap();
-      assert_eq!(out.mime, "image/jpeg", "opaque alpha must not ship as PNG at edge {edge}");
+      assert_eq!(
+        out.mime, "image/jpeg",
+        "opaque alpha must not ship as PNG at edge {edge}"
+      );
       assert!(!out.has_alpha, "and the flag agrees with the encoder");
     }
   }
@@ -360,7 +379,10 @@ mod tests {
   fn a_large_opaque_rgba_is_still_demoted_after_being_downsized() {
     let p = write("bigopaque", &png(3000, 1200, 255));
     let out = normalise(&p, MASTER).unwrap();
-    assert_eq!(out.mime, "image/jpeg", "the collapse must precede the resize");
+    assert_eq!(
+      out.mime, "image/jpeg",
+      "the collapse must precede the resize"
+    );
     assert_eq!(out.width, MASTER, "long edge hits the cap");
     assert_eq!(out.height, 1024, "and the short edge scales with it");
   }
@@ -396,15 +418,26 @@ mod tests {
 
     for o in swaps {
       let out = orient(img.clone(), o);
-      assert_eq!((out.width(), out.height()), (10, 40), "orientation {o} must transpose");
+      assert_eq!(
+        (out.width(), out.height()),
+        (10, 40),
+        "orientation {o} must transpose"
+      );
     }
     for o in keeps {
       let out = orient(img.clone(), o);
-      assert_eq!((out.width(), out.height()), (40, 10), "orientation {o} must not transpose");
+      assert_eq!(
+        (out.width(), out.height()),
+        (40, 10),
+        "orientation {o} must not transpose"
+      );
     }
     // An out-of-range value is the identity rather than a refusal: a corrupt tag
     // is not a reason to reject a picture that decoded perfectly well.
-    assert_eq!((orient(img.clone(), 99).width(), orient(img, 99).height()), (40, 10));
+    assert_eq!(
+      (orient(img.clone(), 99).width(), orient(img, 99).height()),
+      (40, 10)
+    );
   }
 
   /// A file with no EXIF at all is orientation 1, which is the common case and
@@ -412,7 +445,11 @@ mod tests {
   #[test]
   fn an_image_with_no_exif_is_upright() {
     assert_eq!(orientation(&png(8, 8, 255)), 1);
-    assert_eq!(orientation(b"not an image at all"), 1, "and so is unreadable EXIF");
+    assert_eq!(
+      orientation(b"not an image at all"),
+      1,
+      "and so is unreadable EXIF"
+    );
   }
 
   /// The role factors, ported rather than derived, with the floor that stops a
@@ -451,7 +488,10 @@ mod tests {
     for chunk in raw.chunks(4) {
       let mut acc: u32 = 0;
       for (i, b) in chunk.iter().enumerate() {
-        let v = A.iter().position(|a| a == b).expect("inside the base64 alphabet") as u32;
+        let v = A
+          .iter()
+          .position(|a| a == b)
+          .expect("inside the base64 alphabet") as u32;
         acc |= v << (18 - 6 * i);
       }
       // 4 sextets carry 3 bytes, 3 carry 2, 2 carry 1 -- the padding is what
@@ -470,11 +510,23 @@ mod tests {
     let p = write("embed-opaque", &png(64, 64, 255));
     let e = embed(&p, TARGET, Role::Slide).unwrap();
     let head = "data:image/jpeg;base64,";
-    assert!(e.uri.starts_with(head), "opaque alpha embeds as jpeg: {}", &e.uri[..40]);
+    assert!(
+      e.uri.starts_with(head),
+      "opaque alpha embeds as jpeg: {}",
+      &e.uri[..40]
+    );
 
     let direct = normalise(&p, role_edge(Role::Slide, TARGET)).unwrap();
-    assert_eq!(unbase64(&e.uri[head.len()..]), direct.bytes, "the uri lost or changed bytes");
-    assert_eq!(e.encoded, direct.bytes.len(), "and reports the encoded count, not the string's");
+    assert_eq!(
+      unbase64(&e.uri[head.len()..]),
+      direct.bytes,
+      "the uri lost or changed bytes"
+    );
+    assert_eq!(
+      e.encoded,
+      direct.bytes.len(),
+      "and reports the encoded count, not the string's"
+    );
     assert_eq!((e.width, e.height), (direct.width, direct.height));
   }
 
@@ -485,7 +537,11 @@ mod tests {
   fn a_genuinely_transparent_picture_embeds_as_png() {
     let p = write("embed-clear", &png(64, 64, 128));
     let e = embed(&p, TARGET, Role::Slide).unwrap();
-    assert!(e.uri.starts_with("data:image/png;base64,"), "{}", &e.uri[..40]);
+    assert!(
+      e.uri.starts_with("data:image/png;base64,"),
+      "{}",
+      &e.uri[..40]
+    );
   }
 
   /// **THE ROLE HAS TO REACH THE EDGE, AND ONLY AN EMBED CAN SHOW THAT.**
@@ -499,7 +555,11 @@ mod tests {
       .map(|r| embed(&p, TARGET, *r).unwrap().width)
       .collect();
     // A square resizes to exactly the edge, so the widths ARE role_edge's answers.
-    assert_eq!(seen, vec![1920, 1382, 384], "the role must reach the resize");
+    assert_eq!(
+      seen,
+      vec![1920, 1382, 384],
+      "the role must reach the resize"
+    );
   }
 
   /// A refusal propagates through `embed` with the file still named -- the
@@ -508,7 +568,11 @@ mod tests {
   fn a_missing_file_refuses_through_embed_and_still_names_itself() {
     let e = embed(Path::new("/nonesuch/absent-mark.png"), TARGET, Role::Bug).unwrap_err();
     assert!(e.message.contains("cannot read"), "{}", e.message);
-    assert!(e.message.contains("absent-mark.png"), "names the file: {}", e.message);
+    assert!(
+      e.message.contains("absent-mark.png"),
+      "names the file: {}",
+      e.message
+    );
   }
   /// **PYTHON ROUNDS HALF TO EVEN AND RUST ROUNDS HALF AWAY FROM ZERO, AND THE
   /// PORT HAS TO ROUND PYTHON's WAY.** 8x5 at a 4px edge scales by exactly 0.5,
@@ -548,7 +612,9 @@ mod tests {
     let img = image::RgbImage::from_fn(10, 9, |x, _| image::Rgb([(x * 20) as u8, 1, 2]));
     image::DynamicImage::ImageRgb8(img).save(&q).unwrap();
     let n = normalise(&q, 3).unwrap();
-    assert_eq!(n.height, 3, "9 * 0.3 = 2.7 rounds to 3; truncation would give 2");
+    assert_eq!(
+      n.height, 3,
+      "9 * 0.3 = 2.7 rounds to 3; truncation would give 2"
+    );
   }
-
 }

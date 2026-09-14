@@ -94,10 +94,25 @@ pub struct FaqItem {
 /// produces `Socials` or N x `Social` depending on its layout.
 #[derive(Debug)]
 pub enum Kind {
-  Crawl { source: String },
-  Card { headline: String, sub: String, bg: String },
-  Statement { kicker: String, headline: String, body: String, bg: String },
-  Faq { headline: String, items: Vec<FaqItem>, bg: String },
+  Crawl {
+    source: String,
+  },
+  Card {
+    headline: String,
+    sub: String,
+    bg: String,
+  },
+  Statement {
+    kicker: String,
+    headline: String,
+    body: String,
+    bg: String,
+  },
+  Faq {
+    headline: String,
+    items: Vec<FaqItem>,
+    bg: String,
+  },
   Atwork {
     kicker: String,
     name: String,
@@ -106,8 +121,17 @@ pub enum Kind {
     qr: Option<Qr>,
     bg: String,
   },
-  Strapline { mark: Option<PathBuf>, lines: Vec<String>, bg: String },
-  Points { headline: String, body: String, points: Vec<String>, bg: String },
+  Strapline {
+    mark: Option<PathBuf>,
+    lines: Vec<String>,
+    bg: String,
+  },
+  Points {
+    headline: String,
+    body: String,
+    points: Vec<String>,
+    bg: String,
+  },
   Venue {
     image: Option<PathBuf>,
     kicker: String,
@@ -116,10 +140,24 @@ pub enum Kind {
     city: String,
     bg: String,
   },
-  Wordmark { top: String, mid: String, bottom: String, bg: String },
-  Socials { headline: String, bg: String },
-  Social { index: usize, headline: String, bg: String },
-  Image { path: PathBuf },
+  Wordmark {
+    top: String,
+    mid: String,
+    bottom: String,
+    bg: String,
+  },
+  Socials {
+    headline: String,
+    bg: String,
+  },
+  Social {
+    index: usize,
+    headline: String,
+    bg: String,
+  },
+  Image {
+    path: PathBuf,
+  },
 }
 
 impl Slide {
@@ -159,7 +197,10 @@ impl Fields<'_> {
       || default.to_string(),
       |v| {
         v.as_str().map_or_else(
-          || v.as_u64().map_or_else(|| default.to_string(), |n| n.to_string()),
+          || {
+            v.as_u64()
+              .map_or_else(|| default.to_string(), |n| n.to_string())
+          },
           str::to_string,
         )
       },
@@ -179,7 +220,11 @@ impl Fields<'_> {
       .and_then(|v| v.as_sequence())
       .map(|xs| {
         xs.iter()
-          .filter_map(|x| x.as_str().map(str::to_string).or_else(|| x.as_u64().map(|n| n.to_string())))
+          .filter_map(|x| {
+            x.as_str()
+              .map(str::to_string)
+              .or_else(|| x.as_u64().map(|n| n.to_string()))
+          })
           .filter(|x| !x.trim().is_empty())
           .collect()
       })
@@ -229,7 +274,10 @@ pub fn collect(
     .get(serde_yaml::Value::from("id"))
     .and_then(|v| v.as_str())
     .map_or_else(|| index.to_string(), str::to_string);
-  let f = Fields { map, owner: format!("segment '{id}'") };
+  let f = Fields {
+    map,
+    owner: format!("segment '{id}'"),
+  };
   let owner = f.owner.clone();
 
   let dwell = duration::parse(&f.text("dwell", &defaults.dwell), "dwell", &owner)?;
@@ -253,14 +301,26 @@ pub fn collect(
   // Most shapes are static text and are not animated; the reference sets
   // motion="none" on each of them rather than trusting the default.
   let still = |k: Kind| {
-    vec![Slide { id: id.clone(), common: Common { motion: "none".into(), ..common.clone() }, kind: k }]
+    vec![Slide {
+      id: id.clone(),
+      common: Common {
+        motion: "none".into(),
+        ..common.clone()
+      },
+      kind: k,
+    }]
   };
 
   let kind = f.text("type", segment::DEFAULT_SHAPE);
-  let site = |field: &'static str| admit::Site { owner: &owner, field };
+  let site = |field: &'static str| admit::Site {
+    owner: &owner,
+    field,
+  };
 
   let slides = match kind.as_str() {
-    "crawl" => still(Kind::Crawl { source: f.text("source", "session") }),
+    "crawl" => still(Kind::Crawl {
+      source: f.text("source", "session"),
+    }),
     "card" => still(Kind::Card {
       headline: f.text("headline", ""),
       sub: f.text("sub", ""),
@@ -274,14 +334,20 @@ pub fn collect(
     }),
     "faq" => {
       let items = faq_items(&f)?;
-      still(Kind::Faq { headline: f.text("headline", ""), items, bg: f.text("bg", "cream") })
+      still(Kind::Faq {
+        headline: f.text("headline", ""),
+        items,
+        bg: f.text("bg", "cream"),
+      })
     }
     "atwork" => {
       // **THE TWO HALVES OF AC-3.3, KEPT APART.** No `qr:` is `None` and valid;
       // a `qr:` naming a file that is not there refuses, because naming it is an
       // assertion -- section 5's fifth row, and C1's rule at a fifth site.
       let qr = match f.opt_text("qr") {
-        Some(rel) => Some(Qr { path: admit::named(reel, &rel, site("qr:"), admit::Requires::AnyFile)? }),
+        Some(rel) => Some(Qr {
+          path: admit::named(reel, &rel, site("qr:"), admit::Requires::AnyFile)?,
+        }),
         None => None,
       };
       still(Kind::Atwork {
@@ -295,14 +361,23 @@ pub fn collect(
     }
     "strapline" => {
       let mark = match f.opt_text("mark") {
-        Some(rel) => Some(admit::named(reel, &rel, site("mark:"), admit::Requires::Image)?),
+        Some(rel) => Some(admit::named(
+          reel,
+          &rel,
+          site("mark:"),
+          admit::Requires::Image,
+        )?),
         None => None,
       };
       let lines = f.list("lines");
       if lines.is_empty() {
         return Err(f.missing("type strapline needs lines:", "lines: [\"...\", \"...\"]"));
       }
-      still(Kind::Strapline { mark, lines, bg: f.text("bg", "yellow") })
+      still(Kind::Strapline {
+        mark,
+        lines,
+        bg: f.text("bg", "yellow"),
+      })
     }
     "points" => {
       let points = f.list("points");
@@ -318,14 +393,22 @@ pub fn collect(
     }
     "venue" => {
       let image = match f.opt_text("image") {
-        Some(rel) => Some(admit::named(reel, &rel, site("image:"), admit::Requires::Image)?),
+        Some(rel) => Some(admit::named(
+          reel,
+          &rel,
+          site("image:"),
+          admit::Requires::Image,
+        )?),
         None => None,
       };
       // The one shape whose motion is NOT forced to none: a venue card is
       // full-bleed art and the reference lets it drift.
       vec![Slide {
         id: id.clone(),
-        common: Common { motion: f.text("motion", "kenburns"), ..common.clone() },
+        common: Common {
+          motion: f.text("motion", "kenburns"),
+          ..common.clone()
+        },
         kind: Kind::Venue {
           image,
           kicker: f.text("kicker", "Launching"),
@@ -350,7 +433,11 @@ pub fn collect(
       let path = admit::named(reel, &rel, site("file:"), admit::Requires::Image)?;
       vec![Slide {
         id: id.clone(),
-        common: Common { fit: "logo".into(), motion: "none".into(), ..common },
+        common: Common {
+          fit: "logo".into(),
+          motion: "none".into(),
+          ..common
+        },
         kind: Kind::Image { path },
       }]
     }
@@ -361,7 +448,10 @@ pub fn collect(
     // other arm has to remember it has nothing to report.
     _ => return gallery(reel, &f, &id, &common, &owner),
   };
-  Ok(Collected { slides, dropped: Vec::new() })
+  Ok(Collected {
+    slides,
+    dropped: Vec::new(),
+  })
 }
 
 fn faq_items(f: &Fields) -> Result<Vec<FaqItem>, Failure> {
@@ -372,8 +462,16 @@ fn faq_items(f: &Fields) -> Result<Vec<FaqItem>, Failure> {
       xs.iter()
         .filter_map(|x| x.as_mapping())
         .map(|m| FaqItem {
-          q: m.get(serde_yaml::Value::from("q")).and_then(|v| v.as_str()).unwrap_or("").to_string(),
-          a: m.get(serde_yaml::Value::from("a")).and_then(|v| v.as_str()).unwrap_or("").to_string(),
+          q: m
+            .get(serde_yaml::Value::from("q"))
+            .and_then(|v| v.as_str())
+            .unwrap_or("")
+            .to_string(),
+          a: m
+            .get(serde_yaml::Value::from("a"))
+            .and_then(|v| v.as_str())
+            .unwrap_or("")
+            .to_string(),
         })
         .collect()
     })
@@ -392,7 +490,10 @@ fn socials_slides(
 ) -> Result<Vec<Slide>, Failure> {
   let layout = f.text("layout", "list");
   segment::value("socials layout", &layout, &["list", "each"], &f.owner)?;
-  let still = Common { motion: "none".into(), ..common.clone() };
+  let still = Common {
+    motion: "none".into(),
+    ..common.clone()
+  };
   if layout == "list" {
     return Ok(vec![Slide {
       id: id.to_string(),
@@ -446,7 +547,12 @@ fn gallery(
     files = scan.admitted;
   }
   for rel in f.list("files") {
-    files.push(admit::named(reel, &rel, site("files:"), admit::Requires::Image)?);
+    files.push(admit::named(
+      reel,
+      &rel,
+      site("files:"),
+      admit::Requires::Image,
+    )?);
   }
   for pat in f.list("exclude") {
     files.retain(|p| !matches_glob(p, &pat));
@@ -458,9 +564,16 @@ fn gallery(
     let why = if dropped.is_empty() {
       "no images matched".to_string()
     } else {
-      format!("{} file(s) were dropped:\n  {}", dropped.len(), dropped.join("\n  "))
+      format!(
+        "{} file(s) were dropped:\n  {}",
+        dropped.len(),
+        dropped.join("\n  ")
+      )
     };
-    return Err(f.missing(&format!("resolved to no images -- {why}"), "check from:, files: and exclude:"));
+    return Err(f.missing(
+      &format!("resolved to no images -- {why}"),
+      "check from:, files: and exclude:",
+    ));
   }
   // **THE DROPS TRAVEL OUT ON THE SUCCESS PATH, WHICH IS THE WHOLE OF AC-3.2's
   // REMAINING CLAUSE.** Until this line they were computed and read only inside
@@ -476,7 +589,11 @@ fn gallery(
   Ok(Collected {
     slides: files
       .into_iter()
-      .map(|path| Slide { id: id.to_string(), common: common.clone(), kind: Kind::Image { path } })
+      .map(|path| Slide {
+        id: id.to_string(),
+        common: common.clone(),
+        kind: Kind::Image { path },
+      })
       .collect(),
     dropped,
   })
@@ -485,7 +602,9 @@ fn gallery(
 /// The reference uses `Path.match`, which is a glob over the trailing components.
 /// Only `*` is honoured here, which is what every `exclude:` in the estate uses.
 fn matches_glob(path: &Path, pat: &str) -> bool {
-  let name = path.file_name().map_or_else(String::new, |n| n.to_string_lossy().into_owned());
+  let name = path
+    .file_name()
+    .map_or_else(String::new, |n| n.to_string_lossy().into_owned());
   let Some((head, tail)) = pat.split_once('*') else {
     return name == pat;
   };
@@ -535,7 +654,11 @@ mod tests {
       ("faq", "{id: s, type: faq, items: [{q: Q, a: A}]}", 1),
       ("atwork", "{id: s, type: atwork, qr: q.svg}", 1),
       ("atwork, no qr", "{id: s, type: atwork}", 1),
-      ("strapline", "{id: s, type: strapline, mark: m.png, lines: [L]}", 1),
+      (
+        "strapline",
+        "{id: s, type: strapline, mark: m.png, lines: [L]}",
+        1,
+      ),
       ("points", "{id: s, type: points, points: [P]}", 1),
       ("venue", "{id: s, type: venue, image: a.jpg}", 1),
       ("wordmark", "{id: s, type: wordmark, top: T}", 1),
@@ -547,17 +670,29 @@ mod tests {
     // Fourteen cases over twelve shapes: atwork and socials each appear twice,
     // because their two arms are different code paths.
     assert_eq!(cases.len(), 14);
-    assert_eq!(segment::SHAPES.len(), 12, "and the shape table has not moved");
+    assert_eq!(
+      segment::SHAPES.len(),
+      12,
+      "and the shape table has not moved"
+    );
 
     let mut wrong = Vec::new();
     for (label, yaml, want) in cases {
       match one(&r, yaml, 4) {
         Ok(slides) if slides.len() == *want => {}
-        Ok(slides) => wrong.push(format!("{label}: wanted {want} slide(s), got {}", slides.len())),
+        Ok(slides) => wrong.push(format!(
+          "{label}: wanted {want} slide(s), got {}",
+          slides.len()
+        )),
         Err(e) => wrong.push(format!("{label}: refused -- {}", e.message)),
       }
     }
-    assert!(wrong.is_empty(), "{} wrong:\n  {}", wrong.len(), wrong.join("\n  "));
+    assert!(
+      wrong.is_empty(),
+      "{} wrong:\n  {}",
+      wrong.len(),
+      wrong.join("\n  ")
+    );
   }
 
   /// **AC-3.3, BOTH HALVES, WHICH IS THE WHOLE ROW.** `qr:` absent is `None` and
@@ -580,14 +715,22 @@ mod tests {
     }
 
     let e = one(&r, "{id: s, type: atwork, qr: gone.svg}", 0).unwrap_err();
-    assert!(e.message.contains("gone.svg"), "names the file: {}", e.message);
+    assert!(
+      e.message.contains("gone.svg"),
+      "names the file: {}",
+      e.message
+    );
     assert!(e.message.contains("qr:"), "names the site: {}", e.message);
 
     // **AND AN SVG IS ADMITTED HERE THOUGH NO IMAGE SITE WOULD TAKE ONE.** The
     // qr is read as text and never decoded, which is why `Requires` is a
     // parameter rather than a second admission function.
     let e = one(&r, "{id: s, type: logo, file: q.svg}", 0).unwrap_err();
-    assert!(e.message.contains("not an image"), "an image site refuses it: {}", e.message);
+    assert!(
+      e.message.contains("not an image"),
+      "an image site refuses it: {}",
+      e.message
+    );
   }
 
   /// **AC-3.8: THE ASSET LIST IS A PROJECTION OF THE SLIDE LIST.** Not a second
@@ -595,7 +738,17 @@ mod tests {
   /// an asset is safe to delete depends on.
   #[test]
   fn the_assets_come_from_the_slides_and_only_the_slides() {
-    let r = reel("assets", &["a.jpg", "b.jpg", "m.png", "q.svg", "art/one.jpg", "art/two.png"]);
+    let r = reel(
+      "assets",
+      &[
+        "a.jpg",
+        "b.jpg",
+        "m.png",
+        "q.svg",
+        "art/one.jpg",
+        "art/two.png",
+      ],
+    );
     let mut all: Vec<String> = Vec::new();
     for yaml in [
       "{id: g, from: art}",
@@ -630,7 +783,11 @@ mod tests {
     ] {
       let e = one(&r, yaml, 0).unwrap_err();
       assert!(e.message.contains(want), "must name {want}: {}", e.message);
-      assert!(e.message.contains("segment 's'"), "and the segment: {}", e.message);
+      assert!(
+        e.message.contains("segment 's'"),
+        "and the segment: {}",
+        e.message
+      );
     }
     // Blank entries are dropped before the emptiness test -- the reference's
     // `if str(x).strip()` -- so a list of whitespace is an empty list.
@@ -648,10 +805,27 @@ mod tests {
     let r = reel("kept", &["art/a.jpg", "art/b.jpg", "art/notes.txt"]);
     let got = all(&r, "{id: g, from: art}", 0).unwrap();
     assert_eq!(got.slides.len(), 2, "the two images still resolve");
-    assert_eq!(got.dropped.len(), 1, "and the drop is reported: {:?}", got.dropped);
-    assert!(got.dropped[0].contains("notes.txt"), "names the file: {}", got.dropped[0]);
-    assert!(got.dropped[0].contains("segment 'g'"), "at the SEGMENT: {}", got.dropped[0]);
-    assert!(got.dropped[0].contains("from:"), "and the field: {}", got.dropped[0]);
+    assert_eq!(
+      got.dropped.len(),
+      1,
+      "and the drop is reported: {:?}",
+      got.dropped
+    );
+    assert!(
+      got.dropped[0].contains("notes.txt"),
+      "names the file: {}",
+      got.dropped[0]
+    );
+    assert!(
+      got.dropped[0].contains("segment 'g'"),
+      "at the SEGMENT: {}",
+      got.dropped[0]
+    );
+    assert!(
+      got.dropped[0].contains("from:"),
+      "and the field: {}",
+      got.dropped[0]
+    );
   }
 
   /// **vc's RULING, AND THE ROW'S WORDS WERE CHANGED TO CARRY IT.** An
@@ -664,7 +838,11 @@ mod tests {
     let r = reel("silent", &["art/keep.jpg", "art/skip-me.jpg"]);
     let got = all(&r, "{id: g, from: art, exclude: [skip-*]}", 0).unwrap();
     assert_eq!(got.slides.len(), 1, "the exclude took effect");
-    assert!(got.dropped.is_empty(), "and said nothing about it: {:?}", got.dropped);
+    assert!(
+      got.dropped.is_empty(),
+      "and said nothing about it: {:?}",
+      got.dropped
+    );
   }
 
   /// The normal case, and it must stay silent.
@@ -679,7 +857,10 @@ mod tests {
   /// sentence the reference ends with.
   #[test]
   fn exclude_filters_the_gathered_files_and_an_empty_result_says_why() {
-    let r = reel("excl", &["art/keep.jpg", "art/skip-me.jpg", "art/notes.txt"]);
+    let r = reel(
+      "excl",
+      &["art/keep.jpg", "art/skip-me.jpg", "art/notes.txt"],
+    );
     let s = one(&r, "{id: s, from: art, exclude: [skip-*]}", 0).unwrap();
     assert_eq!(s.len(), 1, "one survives the exclusion");
 
@@ -690,7 +871,11 @@ mod tests {
     // leaving the author to wonder where it went.
     let r = reel("onlytxt", &["art/notes.txt"]);
     let e = one(&r, "{id: s, from: art}", 0).unwrap_err();
-    assert!(e.message.contains("notes.txt"), "names what was dropped: {}", e.message);
+    assert!(
+      e.message.contains("notes.txt"),
+      "names what was dropped: {}",
+      e.message
+    );
   }
 
   /// `socials: layout: each` yields one slide per social and rotates the ground
@@ -707,7 +892,11 @@ mod tests {
         other => panic!("expected a social, got {other:?}"),
       })
       .collect();
-    assert_eq!(bgs, vec!["blue", "red", "ink", "blue", "red"], "three grounds, rotated");
+    assert_eq!(
+      bgs,
+      vec!["blue", "red", "ink", "blue", "red"],
+      "three grounds, rotated"
+    );
 
     let e = one(&r, "{id: s, type: socials, layout: each}", 0).unwrap_err();
     assert!(e.message.contains("socials: block"), "{}", e.message);
@@ -729,15 +918,24 @@ mod tests {
     let mut planned = 0;
     for (i, seg) in cfg.segments.iter().enumerate() {
       let map = seg.as_mapping().unwrap();
-      let ty = map.get(serde_yaml::Value::from("type")).and_then(|v| v.as_str()).unwrap_or("gallery");
+      let ty = map
+        .get(serde_yaml::Value::from("type"))
+        .and_then(|v| v.as_str())
+        .unwrap_or("gallery");
       let each = ty == "socials"
-        && map.get(serde_yaml::Value::from("layout")).and_then(|v| v.as_str()) == Some("each");
+        && map
+          .get(serde_yaml::Value::from("layout"))
+          .and_then(|v| v.as_str())
+          == Some("each");
       planned += if each { cfg.socials.len() } else { 1 };
       let _ = i;
     }
     assert_eq!(cfg.segments.len(), 15, "the config's segments");
     assert_eq!(cfg.socials.len(), 4, "and its socials");
-    assert_eq!(planned, 18, "non-gallery arithmetic; galleries add the rest at admission");
+    assert_eq!(
+      planned, 18,
+      "non-gallery arithmetic; galleries add the rest at admission"
+    );
     let _ = d;
   }
 }

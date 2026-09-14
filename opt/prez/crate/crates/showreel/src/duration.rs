@@ -80,7 +80,11 @@ mod tests {
     ];
     let bad: &[&str] = &["banana", "7 seconds", "7.5.3", "", "-1s", "1e400s"];
     assert_eq!(good.len(), 11, "the population is the claim");
-    assert_eq!(bad.len(), 6, "and a table with no refusing rows passes on a parser that never refuses");
+    assert_eq!(
+      bad.len(),
+      6,
+      "and a table with no refusing rows passes on a parser that never refuses"
+    );
 
     for (text, want) in good {
       match parse(text, "dwell", "segment 'x'") {
@@ -89,10 +93,17 @@ mod tests {
       }
     }
     for text in bad {
-      let e = parse(text, "dwell", "segment 'x'")
-        .expect_err(&format!("{text:?} should refuse"));
-      assert!(e.message.contains("segment 'x'"), "names whose it is: {}", e.message);
-      assert!(e.remedy.is_some(), "a refusal carries its remedy: {}", e.message);
+      let e = parse(text, "dwell", "segment 'x'").expect_err(&format!("{text:?} should refuse"));
+      assert!(
+        e.message.contains("segment 'x'"),
+        "names whose it is: {}",
+        e.message
+      );
+      assert!(
+        e.remedy.is_some(),
+        "a refusal carries its remedy: {}",
+        e.message
+      );
     }
   }
 

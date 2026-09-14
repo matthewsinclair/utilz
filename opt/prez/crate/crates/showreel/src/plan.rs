@@ -162,7 +162,12 @@ pub fn plan(reel: &Path, cfg: &config::Reel) -> Result<Plan, Failure> {
     reel_level.push(venue_qr_path(reel));
   }
 
-  Ok(Plan { slides, reel_level, pace, dropped })
+  Ok(Plan {
+    slides,
+    reel_level,
+    pace,
+    dropped,
+  })
 }
 
 /// Files under `assets/` that a build of this config would not read.
@@ -207,11 +212,21 @@ pub fn report(reel: &Path, used: &BTreeSet<PathBuf>, dropped: &[String]) -> Vec<
   if spare.is_empty() {
     return out;
   }
-  let bytes: u64 = spare.iter().filter_map(|p| std::fs::metadata(p).ok()).map(|m| m.len()).sum();
+  let bytes: u64 = spare
+    .iter()
+    .filter_map(|p| std::fs::metadata(p).ok())
+    .map(|m| m.len())
+    .sum();
   let mb = bytes as f64 / 1_048_576.0;
-  out.push(format!("{} unused asset(s) under assets/, {mb:.1} MB:", spare.len()));
+  out.push(format!(
+    "{} unused asset(s) under assets/, {mb:.1} MB:",
+    spare.len()
+  ));
   for p in &spare {
-    out.push(format!("    {}", p.strip_prefix(reel).unwrap_or(p).display()));
+    out.push(format!(
+      "    {}",
+      p.strip_prefix(reel).unwrap_or(p).display()
+    ));
   }
   out
 }
@@ -249,10 +264,20 @@ mod tests {
     );
     let p = plan(&r, &cfg).unwrap();
 
-    let per_slide: BTreeSet<PathBuf> =
-      p.slides.iter().flat_map(slide::Slide::assets).map(tidy).collect();
-    assert!(!per_slide.contains(&r.join("assets/brand/corner.png")), "no slide reads the bug");
-    assert!(p.used().contains(&r.join("assets/brand/corner.png")), "and the plan does");
+    let per_slide: BTreeSet<PathBuf> = p
+      .slides
+      .iter()
+      .flat_map(slide::Slide::assets)
+      .map(tidy)
+      .collect();
+    assert!(
+      !per_slide.contains(&r.join("assets/brand/corner.png")),
+      "no slide reads the bug"
+    );
+    assert!(
+      p.used().contains(&r.join("assets/brand/corner.png")),
+      "and the plan does"
+    );
     assert_eq!(per_slide.len(), 1, "one gallery file");
     assert_eq!(p.used().len(), 2, "plus the bug");
   }
@@ -262,21 +287,40 @@ mod tests {
   /// operator to delete it.
   #[test]
   fn the_exhaust_report_never_names_a_file_the_build_reads() {
-    let r = reel("exhaust", &["assets/art/a.jpg", "assets/brand/corner.png", "assets/old/gone.jpg"]);
+    let r = reel(
+      "exhaust",
+      &[
+        "assets/art/a.jpg",
+        "assets/brand/corner.png",
+        "assets/old/gone.jpg",
+      ],
+    );
     let cfg = parse(
       "artist: {handle: x}\nbug: {file: assets/brand/corner.png}\nsegments: [{id: g, type: gallery, from: assets/art}]\n",
     );
     let p = plan(&r, &cfg).unwrap();
 
     let lines = report(&r, &p.used(), &p.dropped);
-    assert!(lines.iter().any(|l| l.contains("gone.jpg")), "names the real exhaust: {lines:?}");
-    assert!(!lines.iter().any(|l| l.contains("corner.png")), "and NOT the bug: {lines:?}");
+    assert!(
+      lines.iter().any(|l| l.contains("gone.jpg")),
+      "names the real exhaust: {lines:?}"
+    );
+    assert!(
+      !lines.iter().any(|l| l.contains("corner.png")),
+      "and NOT the bug: {lines:?}"
+    );
 
     // The control: the narrower projection DOES name it, which is the defect.
-    let narrow: BTreeSet<PathBuf> =
-      p.slides.iter().flat_map(slide::Slide::assets).map(tidy).collect();
+    let narrow: BTreeSet<PathBuf> = p
+      .slides
+      .iter()
+      .flat_map(slide::Slide::assets)
+      .map(tidy)
+      .collect();
     assert!(
-      report(&r, &narrow, &p.dropped).iter().any(|l| l.contains("corner.png")),
+      report(&r, &narrow, &p.dropped)
+        .iter()
+        .any(|l| l.contains("corner.png")),
       "the slide-only set would tell the operator to delete the bug"
     );
   }
@@ -287,22 +331,31 @@ mod tests {
   #[test]
   fn a_social_contributes_its_qr_whether_or_not_the_file_exists() {
     let r = reel("qr", &["assets/qr/instagram.svg"]);
-    let cfg = parse(
-      "artist: {handle: x}\nsocials: [{label: Instagram}, {label: TikTok}]\nsegments: []\n",
-    );
+    let cfg =
+      parse("artist: {handle: x}\nsocials: [{label: Instagram}, {label: TikTok}]\nsegments: []\n");
     let used = plan(&r, &cfg).unwrap().used();
-    assert!(used.contains(&r.join("assets/qr/instagram.svg")), "the one that exists");
-    assert!(used.contains(&r.join("assets/qr/tiktok.svg")), "and the one that does not yet");
+    assert!(
+      used.contains(&r.join("assets/qr/instagram.svg")),
+      "the one that exists"
+    );
+    assert!(
+      used.contains(&r.join("assets/qr/tiktok.svg")),
+      "and the one that does not yet"
+    );
   }
 
   #[test]
   fn an_explicit_qr_wins_over_the_convention() {
     let r = reel("explicit", &[]);
-    let cfg =
-      parse("artist: {handle: x}\nsocials: [{label: Showreel, qr: assets/qr/named.svg}]\nsegments: []\n");
+    let cfg = parse(
+      "artist: {handle: x}\nsocials: [{label: Showreel, qr: assets/qr/named.svg}]\nsegments: []\n",
+    );
     let used = plan(&r, &cfg).unwrap().used();
     assert!(used.contains(&r.join("assets/qr/named.svg")), "{used:?}");
-    assert!(!used.contains(&r.join("assets/qr/showreel.svg")), "the convention must not also fire");
+    assert!(
+      !used.contains(&r.join("assets/qr/showreel.svg")),
+      "the convention must not also fire"
+    );
   }
 
   /// The venue QR is generated FROM `venue_url`, so the config says whether the
@@ -310,7 +363,9 @@ mod tests {
   #[test]
   fn the_venue_qr_is_read_only_when_the_config_carries_a_venue_url() {
     let r = reel("venue", &[]);
-    let without = plan(&r, &parse("artist: {handle: x}\nsegments: []\n")).unwrap().used();
+    let without = plan(&r, &parse("artist: {handle: x}\nsegments: []\n"))
+      .unwrap()
+      .used();
     assert!(!without.contains(&r.join("assets/qr/venue.svg")));
 
     let with = plan(
@@ -336,7 +391,11 @@ mod tests {
     // The form Rust handles unaided. Kept as a record, not as evidence.
     let free = parse("artist: {handle: x}\nbug: {file: ./assets/brand/corner.png}\nsegments: []\n");
     let p = plan(&r, &free).unwrap();
-    assert!(report(&r, &p.used(), &p.dropped).is_empty(), "{:?}", report(&r, &p.used(), &p.dropped));
+    assert!(
+      report(&r, &p.used(), &p.dropped).is_empty(),
+      "{:?}",
+      report(&r, &p.used(), &p.dropped)
+    );
 
     // The form `tidy` exists for.
     let hard =
@@ -359,7 +418,10 @@ mod tests {
     let r = reel("tidy", &["art/a.jpg", "art/notes.txt"]);
     let cfg = parse("artist: {handle: x}\nsegments: [{id: g, type: gallery, from: art}]\n");
     let p = plan(&r, &cfg).unwrap();
-    assert!(spare(&r, &p.used()).is_empty(), "no assets/ dir, so nothing is exhaust");
+    assert!(
+      spare(&r, &p.used()).is_empty(),
+      "no assets/ dir, so nothing is exhaust"
+    );
     let lines = report(&r, &p.used(), &p.dropped);
     assert_eq!(lines.len(), 1, "the drop is the whole report: {lines:?}");
     assert!(lines[0].contains("notes.txt"), "{}", lines[0]);
@@ -371,12 +433,25 @@ mod tests {
   /// reel-wide list it is easy to stop reading.
   #[test]
   fn the_segment_altitude_is_reported_before_the_reel_wide_sweep() {
-    let r = reel("both", &["assets/art/a.jpg", "assets/art/notes.txt", "assets/old/gone.jpg"]);
+    let r = reel(
+      "both",
+      &[
+        "assets/art/a.jpg",
+        "assets/art/notes.txt",
+        "assets/old/gone.jpg",
+      ],
+    );
     let cfg = parse("artist: {handle: x}\nsegments: [{id: g, type: gallery, from: assets/art}]\n");
     let p = plan(&r, &cfg).unwrap();
     let lines = report(&r, &p.used(), &p.dropped);
-    let seg = lines.iter().position(|l| l.contains("segment 'g'")).expect("a segment line");
-    let sweep = lines.iter().position(|l| l.contains("unused asset(s)")).expect("a sweep line");
+    let seg = lines
+      .iter()
+      .position(|l| l.contains("segment 'g'"))
+      .expect("a segment line");
+    let sweep = lines
+      .iter()
+      .position(|l| l.contains("unused asset(s)"))
+      .expect("a sweep line");
     assert!(seg < sweep, "the segment's altitude comes first: {lines:?}");
   }
 
@@ -399,6 +474,10 @@ mod tests {
     let r = reel("hidden", &["assets/.DS_Store", "assets/art/a.jpg"]);
     let cfg = parse("artist: {handle: x}\nsegments: [{id: g, type: gallery, from: assets/art}]\n");
     let p = plan(&r, &cfg).unwrap();
-    assert!(report(&r, &p.used(), &p.dropped).is_empty(), "{:?}", report(&r, &p.used(), &p.dropped));
+    assert!(
+      report(&r, &p.used(), &p.dropped).is_empty(),
+      "{:?}",
+      report(&r, &p.used(), &p.dropped)
+    );
   }
 }

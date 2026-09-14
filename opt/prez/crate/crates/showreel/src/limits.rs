@@ -135,7 +135,10 @@ mod tests {
   #[test]
   fn max_ease_is_applied_by_the_compiler_and_not_only_by_the_player() {
     let t = timing("slow", 20_000, 5_000).unwrap();
-    assert_eq!(t.ease_ms, MAX_EASE_MS, "the reference ships 5000 and lets the runtime cap it");
+    assert_eq!(
+      t.ease_ms, MAX_EASE_MS,
+      "the reference ships 5000 and lets the runtime cap it"
+    );
   }
 
   #[test]
@@ -150,8 +153,16 @@ mod tests {
     for (dwell, ease) in [(3_000, 3_000), (3_000, 5_000), (10_000, 10_001)] {
       let e = timing("outro", dwell, ease).unwrap_err();
       assert!(e.message.contains("segment 'outro'"), "{}", e.message);
-      assert!(e.message.contains(&format!("{ease}ms")), "names the ease: {}", e.message);
-      assert!(e.message.contains(&format!("{dwell}ms")), "and the dwell: {}", e.message);
+      assert!(
+        e.message.contains(&format!("{ease}ms")),
+        "names the ease: {}",
+        e.message
+      );
+      assert!(
+        e.message.contains(&format!("{dwell}ms")),
+        "and the dwell: {}",
+        e.message
+      );
       assert!(e.remedy.is_some());
     }
   }
@@ -184,7 +195,10 @@ mod tests {
       }
     }
     assert_eq!(checked, 81 * 81, "the grid is the claim");
-    assert!(sound > 3_000, "and it must contain real sound pairs, not just refusals: {sound}");
+    assert!(
+      sound > 3_000,
+      "and it must contain real sound pairs, not just refusals: {sound}"
+    );
   }
 
   /// **THE INVERSION THIS TEST ASKED FOR, KEEPING ITS FIXTURES.**
@@ -227,11 +241,16 @@ mod tests {
     };
 
     // The two cases that crossed under the reference's 3000, now closed.
-    for (dwell, ease, ambient, speed) in
-      [(10_000.0, 2_800.0, false, 10.0), (0.0, 1_800.0, true, 0.25), (20_000.0, 2_600.0, false, 16.0)]
-    {
+    for (dwell, ease, ambient, speed) in [
+      (10_000.0, 2_800.0, false, 10.0),
+      (0.0, 1_800.0, true, 0.25),
+      (20_000.0, 2_600.0, false, 16.0),
+    ] {
       let (d, e) = runtime(dwell, ease, ambient, speed);
-      assert!(e < d, "authored {dwell}/{ease} ambient={ambient} speed={speed} -> {d}/{e}");
+      assert!(
+        e < d,
+        "authored {dwell}/{ease} ambient={ambient} speed={speed} -> {d}/{e}"
+      );
     }
 
     // Control: the reel being ported is unmoved by the cap, at any speed.
@@ -262,7 +281,10 @@ mod tests {
     assert_eq!(cases.len(), 6);
     for (name, dwell, ease) in cases {
       let t = timing(name, *dwell, *ease).expect("the 45h reel must not refuse");
-      assert_eq!(t.dwell_ms, *dwell, "{name}: dwell must pass through untouched");
+      assert_eq!(
+        t.dwell_ms, *dwell,
+        "{name}: dwell must pass through untouched"
+      );
       assert_eq!(t.ease_ms, *ease, "{name}: ease must pass through untouched");
     }
   }

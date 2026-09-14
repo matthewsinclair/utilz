@@ -83,7 +83,14 @@ pub fn open(path: &Path) -> Result<Opened, Failure> {
   // never embeds, so this is the whole of the build's decision-making without
   // any of its cost -- which is exactly why `check` can run it.
   let plan = plan::plan(&dir, &cfg)?;
-  Ok(Opened { dir, cfg, theme, meta, inlined, plan })
+  Ok(Opened {
+    dir,
+    cfg,
+    theme,
+    meta,
+    inlined,
+    plan,
+  })
 }
 
 /// What `build` was asked for beyond the directory.
@@ -114,28 +121,49 @@ fn reel_payload(o: &Opened, socials: Vec<payload::SocialRow>) -> Result<Value, F
   let mut obj = |k: &str, v: Value| {
     m.insert(k.to_string(), v);
   };
-  obj("artist", json!({ "handle": c.artist.handle, "name": c.artist.name, "discipline": c.artist.discipline }));
+  obj(
+    "artist",
+    json!({ "handle": c.artist.handle, "name": c.artist.name, "discipline": c.artist.discipline }),
+  );
   // **ALL SEVEN SESSION KEYS, INCLUDING THE TWO NO LINE OF THE PLAYER READS.**
   // `iso` names the `_out/` file and `venue_url` generates the venue QR, and the
   // reference ships them regardless because its `session` is a pass-through.
   // Dropping two would be a deliberate divergence needing a section 5 row and
   // would buy nothing. design.md 4.7.
   let s = &c.session;
-  obj("session", json!({
-    "venue": s.venue, "city": s.city, "date": s.date, "iso": s.iso,
-    "venue_url": s.venue_url, "action": s.action, "artist": s.artist,
-  }));
+  obj(
+    "session",
+    json!({
+      "venue": s.venue, "city": s.city, "date": s.date, "iso": s.iso,
+      "venue_url": s.venue_url, "action": s.action, "artist": s.artist,
+    }),
+  );
   obj("producer", c.producer.clone().into());
   obj("wordmark", c.wordmark.clone().into());
-  obj("outro", Value::Array(
-    c.outro.iter().map(|r| json!({ "label": r.label, "value": r.value })).collect(),
-  ));
-  obj("socials", serde_json::to_value(socials).map_err(json_failed)?);
-  obj("bug", match payload::bug(&o.dir, c)? {
-    Some(b) => serde_json::to_value(b).map_err(json_failed)?,
-    None => Value::Null,
-  });
-  obj("limits", serde_json::to_value(payload::Limits::current()).map_err(json_failed)?);
+  obj(
+    "outro",
+    Value::Array(
+      c.outro
+        .iter()
+        .map(|r| json!({ "label": r.label, "value": r.value }))
+        .collect(),
+    ),
+  );
+  obj(
+    "socials",
+    serde_json::to_value(socials).map_err(json_failed)?,
+  );
+  obj(
+    "bug",
+    match payload::bug(&o.dir, c)? {
+      Some(b) => serde_json::to_value(b).map_err(json_failed)?,
+      None => Value::Null,
+    },
+  );
+  obj(
+    "limits",
+    serde_json::to_value(payload::Limits::current()).map_err(json_failed)?,
+  );
   obj("loop", c.loop_.into());
   obj("pace", o.plan.pace.name.into());
   obj("slides", Value::Array(payload::slides(c, &o.plan.slides)?));
@@ -147,7 +175,10 @@ fn reel_payload(o: &Opened, socials: Vec<payload::SocialRow>) -> Result<Value, F
 /// rescue-and-swallow `IN-AG-NO-SILENT-001` forbids. Surfaced with a remedy that
 /// says the truth: there is nothing the operator can do, and we want to hear it.
 fn json_failed(e: serde_json::Error) -> Failure {
-  Failure::new(format!("cannot serialise the payload: {e}"), "this is a bug in showreel; report it")
+  Failure::new(
+    format!("cannot serialise the payload: {e}"),
+    "this is a bug in showreel; report it",
+  )
 }
 
 /// What a build did, for a caller that owns the output stream.
@@ -181,22 +212,32 @@ pub fn run(path: &Path, f: &Options) -> Result<Built, Failure> {
 
   // `cfg.title`, then the artist's name, then the handle -- the reference's
   // three levels, and `Artist` already resolves the last two.
-  let fallback = if o.cfg.artist.name.is_empty() { &o.cfg.artist.handle } else { &o.cfg.artist.name };
-  let title =
-    if o.cfg.title.is_empty() { format!("{fallback} - showreel") } else { o.cfg.title.clone() };
+  let fallback = if o.cfg.artist.name.is_empty() {
+    &o.cfg.artist.handle
+  } else {
+    &o.cfg.artist.name
+  };
+  let title = if o.cfg.title.is_empty() {
+    format!("{fallback} - showreel")
+  } else {
+    o.cfg.title.clone()
+  };
 
   // **THE PRODUCER STAMP IS FILLED HERE AND NOWHERE ELSE.** This is the only
   // site holding both a `config::Reel` and a `Filling`, and an unstamped
   // artifact grades as `adjacency (UNVERIFIED)` -- which is what `render`'s
   // second refusal exists to make impossible. That refusal is reachable from
   // here alone.
-  let html = template::render(template::SHELL, &template::Filling {
-    theme_css: &o.inlined.css,
-    title: &title,
-    favicon: &o.inlined.favicon,
-    data: &data,
-    producer: &stamp::producer(&o.cfg),
-  })?;
+  let html = template::render(
+    template::SHELL,
+    &template::Filling {
+      theme_css: &o.inlined.css,
+      title: &title,
+      favicon: &o.inlined.favicon,
+      data: &data,
+      producer: &stamp::producer(&o.cfg),
+    },
+  )?;
 
   let out_dir = o.dir.join("_out");
   let stem = deliver::stem(&o.cfg, &o.cfg.session, &date)?;
@@ -212,8 +253,12 @@ pub fn run(path: &Path, f: &Options) -> Result<Built, Failure> {
       stem.next(&out_dir)
     }
   };
-  std::fs::write(&out, &html)
-    .map_err(|e| Failure::new(format!("cannot write {}: {e}", out.display()), "check the path"))?;
+  std::fs::write(&out, &html).map_err(|e| {
+    Failure::new(
+      format!("cannot write {}: {e}", out.display()),
+      "check the path",
+    )
+  })?;
 
   // **THE SIZE IS THE FINISHED FILE's, NOT THE SUM OF WHAT WAS EMBEDDED.**
   // `Embedded::encoded` is pre-base64 and per-picture, and the artifact also
@@ -276,7 +321,9 @@ mod tests {
     }
     for n in ["one", "two"] {
       let img = image::RgbImage::from_fn(800, 450, |x, _| image::Rgb([(x % 256) as u8, 9, 9]));
-      image::DynamicImage::ImageRgb8(img).save(d.join("art").join(format!("{n}.png"))).unwrap();
+      image::DynamicImage::ImageRgb8(img)
+        .save(d.join("art").join(format!("{n}.png")))
+        .unwrap();
     }
     d
   }
@@ -309,14 +356,29 @@ segments:
     let d = reel("stamped", BASE, &[]);
     let b = built(&d, &plain());
     let html = std::fs::read_to_string(&b.path).unwrap();
-    assert!(html.contains("content=\"impl=showreel/"), "no producer stamp");
-    assert!(html.contains(";embed=640;"), "the stamp took the constant, not the config");
-    for marker in ["/*__THEME__*/", "__TITLE__", "<!--__FAVICON__-->", "/*__DATA__*/", "__PRODUCER__"]
-    {
+    assert!(
+      html.contains("content=\"impl=showreel/"),
+      "no producer stamp"
+    );
+    assert!(
+      html.contains(";embed=640;"),
+      "the stamp took the constant, not the config"
+    );
+    for marker in [
+      "/*__THEME__*/",
+      "__TITLE__",
+      "<!--__FAVICON__-->",
+      "/*__DATA__*/",
+      "__PRODUCER__",
+    ] {
       assert!(!html.contains(marker), "{marker} was never filled");
     }
     assert_eq!(b.slides, 2);
-    assert!(b.path.starts_with(d.join("_out")), "wrote outside _out: {:?}", b.path);
+    assert!(
+      b.path.starts_with(d.join("_out")),
+      "wrote outside _out: {:?}",
+      b.path
+    );
   }
 
   /// **THE ELEVEN TOP-LEVEL KEYS, ON THE ARTIFACT.** The player reads every one
@@ -332,7 +394,10 @@ segments:
     ] {
       assert!(html.contains(&format!("\"{k}\":")), "missing top-level {k}");
     }
-    assert!(html.contains("\"max_ease\":2400"), "hv's cap did not reach the artifact");
+    assert!(
+      html.contains("\"max_ease\":2400"),
+      "hv's cap did not reach the artifact"
+    );
   }
 
   /// **EVERY WARNING SOURCE IS DRAINED, AND THIS IS THE ONE TEST THAT WOULD
@@ -355,7 +420,10 @@ segments:
 ",
       &[
         // A QR generated for a DIFFERENT address: payload::socials warns.
-        ("assets/qr/web.svg", "<!--showreel-qr:https://old.example--><svg/>"),
+        (
+          "assets/qr/web.svg",
+          "<!--showreel-qr:https://old.example--><svg/>",
+        ),
         // An input the gallery scan declined: slide::Collected.dropped warns.
         ("art/notes.txt", "not an image"),
         // A picture no segment reads: plan::report warns.
@@ -363,9 +431,18 @@ segments:
       ],
     );
     let said = built(&d, &plain()).said.join("\n");
-    assert!(said.contains("https://old.example"), "stale-QR warning was not drained:\n{said}");
-    assert!(said.contains("notes.txt"), "the dropped input was not drained:\n{said}");
-    assert!(said.contains("spare.png"), "the unused asset was not drained:\n{said}");
+    assert!(
+      said.contains("https://old.example"),
+      "stale-QR warning was not drained:\n{said}"
+    );
+    assert!(
+      said.contains("notes.txt"),
+      "the dropped input was not drained:\n{said}"
+    );
+    assert!(
+      said.contains("spare.png"),
+      "the unused asset was not drained:\n{said}"
+    );
   }
 
   /// **`--out` PUTS THE FILE OUTSIDE THE ROTATION, SO PRUNING MUST NOT RUN.**
@@ -378,7 +455,13 @@ segments:
     built(&d, &plain());
     built(&d, &plain());
     let out = d.join("elsewhere.html");
-    let b = built(&d, &Options { out: Some(out.clone()), keep: 1 });
+    let b = built(
+      &d,
+      &Options {
+        out: Some(out.clone()),
+        keep: 1,
+      },
+    );
     assert_eq!(b.path, out);
     let left = std::fs::read_dir(d.join("_out")).unwrap().count();
     assert_eq!(left, 3, "--keep 1 pruned alongside an explicit --out");
@@ -395,7 +478,15 @@ segments:
     }
     assert_eq!(std::fs::read_dir(d.join("_out")).unwrap().count(), 4);
     let b = built(&d, &Options { out: None, keep: 2 });
-    assert_eq!(std::fs::read_dir(d.join("_out")).unwrap().count(), 2, "the oldest were not removed");
-    assert!(b.said.iter().any(|s| s.contains("pruned")), "the prune said nothing: {:?}", b.said);
+    assert_eq!(
+      std::fs::read_dir(d.join("_out")).unwrap().count(),
+      2,
+      "the oldest were not removed"
+    );
+    assert!(
+      b.said.iter().any(|s| s.contains("pruned")),
+      "the prune said nothing: {:?}",
+      b.said
+    );
   }
 }

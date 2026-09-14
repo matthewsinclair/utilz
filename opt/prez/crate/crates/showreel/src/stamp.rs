@@ -82,13 +82,21 @@ mod tests {
   /// flag-wearing-a-stamp's-clothes failure, passing.
   #[test]
   fn the_quality_is_the_encoders_own_and_not_a_number_typed_beside_it() {
-    assert!(producer(&plain()).contains("q=86"), "{}", producer(&plain()));
+    assert!(
+      producer(&plain()).contains("q=86"),
+      "{}",
+      producer(&plain())
+    );
   }
 
   /// The same property one field along: the kernel the resize actually runs.
   #[test]
   fn the_filter_is_the_one_the_resize_actually_runs() {
-    assert!(producer(&plain()).contains("filter=lanczos3"), "{}", producer(&plain()));
+    assert!(
+      producer(&plain()).contains("filter=lanczos3"),
+      "{}",
+      producer(&plain())
+    );
   }
 
   /// **THE DISCRIMINATION NO REEL IN THIS ESTATE CAN MAKE.** 45h and the pinned
@@ -108,7 +116,11 @@ mod tests {
     // constant, so it agreed with itself by construction and proved nothing. It
     // was the one assertion in this module that could not fail, inside the test
     // written to stop exactly that.
-    assert!(producer(&plain()).contains("embed=1920"), "{}", producer(&plain()));
+    assert!(
+      producer(&plain()).contains("embed=1920"),
+      "{}",
+      producer(&plain())
+    );
   }
 
   /// **THE COLLISION, ASSERTED RATHER THAN LEFT TO THE DOC COMMENT.** A reel's
@@ -117,7 +129,10 @@ mod tests {
   #[test]
   fn the_builds_identity_is_not_the_reels_credit_line() {
     let c = cfg("artist: {handle: x}\nproducer: Snorkeltoast\n");
-    assert_eq!(c.producer, "Snorkeltoast", "the credit line parsed, so this is not a vacuous check");
+    assert_eq!(
+      c.producer, "Snorkeltoast",
+      "the credit line parsed, so this is not a vacuous check"
+    );
     assert!(!producer(&c).contains("Snorkeltoast"), "{}", producer(&c));
   }
 
@@ -127,6 +142,9 @@ mod tests {
   fn the_stamp_is_something_render_will_accept() {
     let s = producer(&plain());
     assert!(!s.is_empty(), "an empty stamp grades as an absent one");
-    assert!(!s.contains('"'), "a quote would close content=\"...\" early: {s}");
+    assert!(
+      !s.contains('"'),
+      "a quote would close content=\"...\" early: {s}"
+    );
   }
 }

@@ -20,8 +20,18 @@ use std::path::{Path, PathBuf};
 pub const OUTPUT_DEFAULT: &str = "{date}-{artist}-{venue}-{city}-{nnn}.showreel.html";
 
 const MONTHS: [&str; 12] = [
-  "january", "february", "march", "april", "may", "june", "july", "august", "september", "october",
-  "november", "december",
+  "january",
+  "february",
+  "march",
+  "april",
+  "may",
+  "june",
+  "july",
+  "august",
+  "september",
+  "october",
+  "november",
+  "december",
 ];
 
 /// Alphanumerics only, for a FILENAME FIELD.
@@ -31,7 +41,10 @@ const MONTHS: [&str; 12] = [
 /// field makes the name unparseable by splitting on it. This is deliberately not
 /// `plan::slug`, which keeps the hyphen because it names an asset.
 pub fn tight(s: &str) -> String {
-  s.to_lowercase().chars().filter(char::is_ascii_alphanumeric).collect()
+  s.to_lowercase()
+    .chars()
+    .filter(char::is_ascii_alphanumeric)
+    .collect()
 }
 
 /// Days since the Unix epoch to (year, month, day).
@@ -184,7 +197,9 @@ impl Stem {
       .filter_map(Result::ok)
       .filter_map(|e| {
         let name = e.file_name().to_string_lossy().into_owned();
-        let digits = name.strip_prefix(prefix.as_str())?.strip_suffix(suffix.as_str())?;
+        let digits = name
+          .strip_prefix(prefix.as_str())?
+          .strip_suffix(suffix.as_str())?;
         // The reference's `(\d+)`: all digits, at least one, nothing else.
         (!digits.is_empty() && digits.bytes().all(|b| b.is_ascii_digit()))
           .then(|| digits.parse::<u32>().ok().map(|n| (n, e.path())))?
@@ -214,20 +229,36 @@ impl Stem {
 /// Build the output stem from the configured pattern.
 pub fn stem(cfg: &config::Reel, session: &config::Session, date: &str) -> Result<Stem, Failure> {
   let pattern = cfg.output.as_deref().unwrap_or(OUTPUT_DEFAULT);
-  let artist = if cfg.artist.handle.is_empty() { &cfg.artist.name } else { &cfg.artist.handle };
+  let artist = if cfg.artist.handle.is_empty() {
+    &cfg.artist.name
+  } else {
+    &cfg.artist.handle
+  };
   let fields: [(&str, String); 4] = [
     ("date", date.to_string()),
     ("artist", {
       let t = tight(artist);
-      if t.is_empty() { "artist".to_string() } else { t }
+      if t.is_empty() {
+        "artist".to_string()
+      } else {
+        t
+      }
     }),
     ("venue", {
       let t = tight(&session.venue);
-      if t.is_empty() { "novenue".to_string() } else { t }
+      if t.is_empty() {
+        "novenue".to_string()
+      } else {
+        t
+      }
     }),
     ("city", {
       let t = tight(&session.city);
-      if t.is_empty() { "nocity".to_string() } else { t }
+      if t.is_empty() {
+        "nocity".to_string()
+      } else {
+        t
+      }
     }),
   ];
 
@@ -257,14 +288,16 @@ pub fn stem(cfg: &config::Reel, session: &config::Session, date: &str) -> Result
       }
       suffix = Some(String::new());
     } else {
-      let value = fields.iter().find(|(k, _)| *k == name).map(|(_, v)| v.as_str()).ok_or_else(
-        || {
+      let value = fields
+        .iter()
+        .find(|(k, _)| *k == name)
+        .map(|(_, v)| v.as_str())
+        .ok_or_else(|| {
           Failure::new(
             format!("output pattern uses unknown field {{{name}}}"),
             "fields: artist, city, date, venue, nnn",
           )
-        },
-      )?;
+        })?;
       suffix.as_mut().unwrap_or(&mut prefix).push_str(value);
     }
     rest = &rest[close + 1..];
@@ -272,7 +305,10 @@ pub fn stem(cfg: &config::Reel, session: &config::Session, date: &str) -> Result
   match suffix {
     Some(mut tail) => {
       tail.push_str(rest);
-      Ok(Stem::Counted { prefix, suffix: tail })
+      Ok(Stem::Counted {
+        prefix,
+        suffix: tail,
+      })
     }
     None => {
       prefix.push_str(rest);
@@ -287,15 +323,25 @@ pub fn stem(cfg: &config::Reel, session: &config::Session, date: &str) -> Result
 /// build somebody may already have copied to a stick is a worse default than a
 /// directory that needs tidying. Returns what it did and what it wants said.
 pub fn prune(out_dir: &Path, stem: &Stem, keep: usize) -> (Vec<PathBuf>, Vec<String>) {
-  let sibs: Vec<PathBuf> = stem.revisions(out_dir).into_iter().map(|(_, p)| p).collect();
+  let sibs: Vec<PathBuf> = stem
+    .revisions(out_dir)
+    .into_iter()
+    .map(|(_, p)| p)
+    .collect();
   if keep > 0 && sibs.len() > keep {
     let drop: Vec<PathBuf> = sibs[..sibs.len() - keep].to_vec();
-    let said = vec![format!("pruned {} older revision(s), kept {keep}", drop.len())];
+    let said = vec![format!(
+      "pruned {} older revision(s), kept {keep}",
+      drop.len()
+    )];
     return (drop, said);
   }
   if keep == 0 && sibs.len() > 5 {
-    let mb: f64 = sibs.iter().filter_map(|p| std::fs::metadata(p).ok()).map(|m| m.len()).sum::<u64>()
-      as f64
+    let mb: f64 = sibs
+      .iter()
+      .filter_map(|p| std::fs::metadata(p).ok())
+      .map(|m| m.len())
+      .sum::<u64>() as f64
       / 1_048_576.0;
     return (
       Vec::new(),
@@ -340,9 +386,21 @@ mod tests {
   fn the_calendar_agrees_with_dates_whose_answers_are_known() {
     assert_eq!(civil_from_days(0), (1970, 1, 1), "the epoch");
     assert_eq!(civil_from_days(-1), (1969, 12, 31), "the day before it");
-    assert_eq!(civil_from_days(11_016), (2000, 2, 29), "a leap day under the 400 rule");
-    assert_eq!(civil_from_days(20_715), (2026, 9, 19), "the 45h session date");
-    assert_eq!(civil_from_days(19_782), (2024, 2, 29), "and a leap day under the 4 rule");
+    assert_eq!(
+      civil_from_days(11_016),
+      (2000, 2, 29),
+      "a leap day under the 400 rule"
+    );
+    assert_eq!(
+      civil_from_days(20_715),
+      (2026, 9, 19),
+      "the 45h session date"
+    );
+    assert_eq!(
+      civil_from_days(19_782),
+      (2024, 2, 29),
+      "and a leap day under the 4 rule"
+    );
     assert!(leap(2000) && !leap(1900) && leap(2024) && !leap(2026));
     assert_eq!(days_in(2000, 2), 29);
     assert_eq!(days_in(1900, 2), 28);
@@ -355,12 +413,26 @@ mod tests {
     assert!(said.is_empty(), "and says nothing: {said:?}");
 
     let e = stamp(&session("19-09-2026", "", "", "")).unwrap_err();
-    assert!(e.message.contains("session.iso is not a date"), "{}", e.message);
-    assert!(e.message.contains("19-09-2026"), "names the value: {}", e.message);
+    assert!(
+      e.message.contains("session.iso is not a date"),
+      "{}",
+      e.message
+    );
+    assert!(
+      e.message.contains("19-09-2026"),
+      "names the value: {}",
+      e.message
+    );
 
     // A date-shaped string that is not a date. 2026 is not a leap year.
-    assert!(stamp(&session("2026-02-29", "", "", "")).is_err(), "29 Feb 2026 does not exist");
-    assert!(stamp(&session("2024-02-29", "", "", "")).is_ok(), "but 2024 does");
+    assert!(
+      stamp(&session("2026-02-29", "", "", "")).is_err(),
+      "29 Feb 2026 does not exist"
+    );
+    assert!(
+      stamp(&session("2024-02-29", "", "", "")).is_ok(),
+      "but 2024 does"
+    );
   }
 
   /// **A GUESSED YEAR WARNS RATHER THAN PASSING SILENTLY**, which is the whole
@@ -418,7 +490,9 @@ mod tests {
   fn an_empty_field_gets_the_reference_s_placeholder() {
     let cfg = config::parse("artist: {handle: ''}\nsegments: []\n", "t").unwrap();
     let stem = stem(&cfg, &session("", "", "", ""), "20260919").unwrap();
-    let Stem::Counted { prefix, .. } = &stem else { panic!("counted") };
+    let Stem::Counted { prefix, .. } = &stem else {
+      panic!("counted")
+    };
     assert_eq!(prefix, "20260919-artist-novenue-nocity-");
   }
 
@@ -428,14 +502,24 @@ mod tests {
   /// working reel, so the rule is AT MOST one rather than exactly one.
   #[test]
   fn a_pattern_without_the_counter_is_a_fixed_name_that_never_revisions() {
-    let cfg =
-      config::parse("artist: {handle: x}\noutput: reel.html\nsegments: []\n", "t").unwrap();
+    let cfg = config::parse(
+      "artist: {handle: x}\noutput: reel.html\nsegments: []\n",
+      "t",
+    )
+    .unwrap();
     let stem = stem(&cfg, &session("", "", "", ""), "20260919").unwrap();
     assert_eq!(stem, Stem::Fixed("reel.html".to_string()));
 
     let dir = out("fixed", &["reel.html"]);
-    assert_eq!(stem.next(&dir).file_name().unwrap(), "reel.html", "the same name every build");
-    assert!(stem.revisions(&dir).is_empty(), "and nothing to revision or prune");
+    assert_eq!(
+      stem.next(&dir).file_name().unwrap(),
+      "reel.html",
+      "the same name every build"
+    );
+    assert!(
+      stem.revisions(&dir).is_empty(),
+      "and nothing to revision or prune"
+    );
     assert_eq!(prune(&dir, &stem, 1), (Vec::new(), Vec::new()));
   }
 
@@ -448,19 +532,27 @@ mod tests {
   /// named is the honest price. vc's ruling, and the hazard is the port's own.
   #[test]
   fn a_pattern_with_two_counters_is_refused_with_the_pattern_named() {
-    let cfg =
-      config::parse("artist: {handle: x}\noutput: '{nnn}-r-{nnn}.html'\nsegments: []\n", "t")
-        .unwrap();
+    let cfg = config::parse(
+      "artist: {handle: x}\noutput: '{nnn}-r-{nnn}.html'\nsegments: []\n",
+      "t",
+    )
+    .unwrap();
     let e = stem(&cfg, &session("", "", "", ""), "20260919").unwrap_err();
     assert!(e.message.contains("more than once"), "{}", e.message);
-    assert!(e.message.contains("{nnn}-r-{nnn}.html"), "names the pattern: {}", e.message);
+    assert!(
+      e.message.contains("{nnn}-r-{nnn}.html"),
+      "names the pattern: {}",
+      e.message
+    );
   }
 
   #[test]
   fn an_unknown_field_refuses_and_lists_the_ones_that_exist() {
-    let cfg =
-      config::parse("artist: {handle: x}\noutput: '{date}-{gig}.html'\nsegments: []\n", "t")
-        .unwrap();
+    let cfg = config::parse(
+      "artist: {handle: x}\noutput: '{date}-{gig}.html'\nsegments: []\n",
+      "t",
+    )
+    .unwrap();
     let e = stem(&cfg, &session("", "", "", ""), "20260919").unwrap_err();
     assert!(e.message.contains("unknown field {gig}"), "{}", e.message);
     assert!(e.remedy.unwrap().contains("venue"), "lists the valid set");
@@ -470,10 +562,21 @@ mod tests {
   /// same directory do not advance it.
   #[test]
   fn the_counter_reads_only_its_own_stem_and_takes_the_highest() {
-    let stem = Stem::Counted { prefix: "r-".to_string(), suffix: ".html".to_string() };
+    let stem = Stem::Counted {
+      prefix: "r-".to_string(),
+      suffix: ".html".to_string(),
+    };
     let dir = out(
       "counter",
-      &["r-001.html", "r-002.html", "r-9.html", "r-010.html", "other-003.html", "r-x.html", "r-.html"],
+      &[
+        "r-001.html",
+        "r-002.html",
+        "r-9.html",
+        "r-010.html",
+        "other-003.html",
+        "r-x.html",
+        "r-.html",
+      ],
     );
     let seen: Vec<u32> = stem.revisions(&dir).iter().map(|(n, _)| *n).collect();
     // **`r-9.html` IS WHAT MAKES THIS TEST ABLE TO FAIL.** Every name here was
@@ -483,8 +586,16 @@ mod tests {
     // number, so the two orders disagree and only the numeric one is right.
     // `revisions` accepts any run of digits, as the reference's `(\d+)` does, so
     // such a file is a real thing to meet rather than a contrivance.
-    assert_eq!(seen, vec![1, 2, 9, 10], "only its own, sorted numerically not lexically");
-    assert_eq!(stem.next(&dir).file_name().unwrap(), "r-011.html", "one past the highest");
+    assert_eq!(
+      seen,
+      vec![1, 2, 9, 10],
+      "only its own, sorted numerically not lexically"
+    );
+    assert_eq!(
+      stem.next(&dir).file_name().unwrap(),
+      "r-011.html",
+      "one past the highest"
+    );
   }
 
   /// **DELETING A BUILD SOMEBODY MAY HAVE COPIED TO A STICK IS A WORSE DEFAULT
@@ -492,14 +603,19 @@ mod tests {
   /// complains once it gets silly.
   #[test]
   fn pruning_drops_the_oldest_only_when_asked_and_otherwise_just_says_so() {
-    let stem = Stem::Counted { prefix: "r-".to_string(), suffix: ".html".to_string() };
+    let stem = Stem::Counted {
+      prefix: "r-".to_string(),
+      suffix: ".html".to_string(),
+    };
     let names: Vec<String> = (1..=7).map(|n| format!("r-{n:03}.html")).collect();
     let refs: Vec<&str> = names.iter().map(String::as_str).collect();
 
     let dir = out("prune-keep", &refs);
     let (dropped, said) = prune(&dir, &stem, 2);
     assert_eq!(dropped.len(), 5, "seven minus the two kept");
-    assert!(dropped.iter().all(|p| !p.ends_with("r-006.html") && !p.ends_with("r-007.html")));
+    assert!(dropped
+      .iter()
+      .all(|p| !p.ends_with("r-006.html") && !p.ends_with("r-007.html")));
     assert!(said[0].contains("kept 2"), "{}", said[0]);
 
     let dir = out("prune-none", &refs);

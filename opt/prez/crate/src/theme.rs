@@ -133,8 +133,13 @@ pub fn duplicates_from_env() -> Result<Duplicates, Failure> {
 }
 
 /// prez's two tool-specific facts, handed to the shared resolver together.
-const REGISTRY: Registry =
-  Registry::new(BUILT_IN, SEARCH_PATH, "--theme-path", "--theme-file", "deck");
+const REGISTRY: Registry = Registry::new(
+  BUILT_IN,
+  SEARCH_PATH,
+  "--theme-path",
+  "--theme-file",
+  "deck",
+);
 
 /// The class names EVERY built-in theme declares, so a `<!-- class: -->`
 /// directive stays portable between them.
@@ -153,7 +158,11 @@ pub const STANDARD_CLASSES: &[&str] = &["title", "section", "quote", "full", "ce
 
 /// Resolve the theme for a build, against prez's roster and search path, under
 /// the duplicates policy `duplicates_from_env` read.
-pub fn load(spec: Option<Spec>, extra: &[PathBuf], duplicates: Duplicates) -> Result<Theme, Failure> {
+pub fn load(
+  spec: Option<Spec>,
+  extra: &[PathBuf],
+  duplicates: Duplicates,
+) -> Result<Theme, Failure> {
   REGISTRY.load(spec, extra, duplicates)
 }
 
@@ -191,7 +200,10 @@ mod tests {
   #[test]
   fn no_theme_given_uses_the_embedded_default() {
     let t = load(None, &[], Duplicates::First).unwrap();
-    assert!(t.css.contains("--gp-bg"), "the default carries its own tokens");
+    assert!(
+      t.css.contains("--gp-bg"),
+      "the default carries its own tokens"
+    );
     assert!(t.layout.is_none());
   }
 
@@ -238,18 +250,28 @@ mod tests {
     for line in css.lines() {
       if let Some(declaration) = line.trim().strip_prefix("--") {
         let name = declaration.split(':').next().unwrap_or_default();
-        assert!(name.starts_with("gp-"), "custom property outside the gp- namespace: {name}");
+        assert!(
+          name.starts_with("gp-"),
+          "custom property outside the gp- namespace: {name}"
+        );
       }
     }
     assert!(!css.contains("url("), "the default theme loads no asset");
-    assert!(!css.contains("@import"), "the default theme imports nothing");
-    assert!(!css.contains("@font-face"), "the default theme ships no typeface");
+    assert!(
+      !css.contains("@import"),
+      "the default theme imports nothing"
+    );
+    assert!(
+      !css.contains("@font-face"),
+      "the default theme ships no typeface"
+    );
   }
 
   #[test]
   fn every_built_in_passes_the_rule_it_enforces() {
     for (name, css) in BUILT_IN {
-      refuse_external(css, name, Grammar::Css).unwrap_or_else(|e| panic!("built-in '{name}': {}", e.message));
+      refuse_external(css, name, Grammar::Css)
+        .unwrap_or_else(|e| panic!("built-in '{name}': {}", e.message));
     }
   }
 
@@ -284,8 +306,16 @@ mod tests {
     // THE "not a path" ASSERTION IS DELETED WITH THE LINE IT ASSERTED. A name
     // is never tried as a path any more, so keeping it would have meant keeping
     // a false sentence in a refusal to keep a test green.
-    assert!(!e.message.contains("not a path"), "a name is not tried as a path: {}", e.message);
-    assert!(e.message.contains("simple"), "it lists the built-ins: {}", e.message);
+    assert!(
+      !e.message.contains("not a path"),
+      "a name is not tried as a path: {}",
+      e.message
+    );
+    assert!(
+      e.message.contains("simple"),
+      "it lists the built-ins: {}",
+      e.message
+    );
   }
 
   #[test]
@@ -319,16 +349,29 @@ mod tests {
   fn an_external_url_in_a_theme_is_a_build_error_naming_the_offender() {
     let d = dir("external");
     let css = d.join("cdn.css");
-    std::fs::write(&css, "body{color:red}\n@import url(https://fonts.example/x.css);\n").unwrap();
+    std::fs::write(
+      &css,
+      "body{color:red}\n@import url(https://fonts.example/x.css);\n",
+    )
+    .unwrap();
     let e = load(Some(Spec::File(css.clone())), &[], Duplicates::First).unwrap_err();
-    assert!(e.message.contains("line 2"), "names the line: {}", e.message);
-    assert!(e.message.contains("fonts.example"), "names the offender: {}", e.message);
+    assert!(
+      e.message.contains("line 2"),
+      "names the line: {}",
+      e.message
+    );
+    assert!(
+      e.message.contains("fonts.example"),
+      "names the offender: {}",
+      e.message
+    );
   }
 
   #[test]
   fn a_url_inside_a_comment_is_documentation_not_a_reference() {
     let source = "/* adapted from https://example.com/theme, MIT */\nbody{color:red}\n";
-    refuse_external(source, "t", Grammar::Css).expect("an attribution comment must not fail a build");
+    refuse_external(source, "t", Grammar::Css)
+      .expect("an attribution comment must not fail a build");
   }
 
   #[test]
@@ -358,7 +401,11 @@ mod tests {
       js: None,
       layout: None,
       name: format!("{dir}/{name}"),
-      origin: Origin::SearchPath { dir: PathBuf::from(dir), name: name.to_string(), source },
+      origin: Origin::SearchPath {
+        dir: PathBuf::from(dir),
+        name: name.to_string(),
+        source,
+      },
       dir: None,
     }
   }
@@ -367,7 +414,10 @@ mod tests {
   fn a_search_path_theme_names_the_directory_it_came_from() {
     let notice = provenance(&from_search_path("housestyle", "/opt/themes")).expect("announced");
     assert!(notice.contains("'housestyle'"), "{notice}");
-    assert!(notice.contains("/opt/themes"), "the directory is the point: {notice}");
+    assert!(
+      notice.contains("/opt/themes"),
+      "the directory is the point: {notice}"
+    );
     assert!(notice.contains(SEARCH_PATH), "{notice}");
   }
 
@@ -390,22 +440,46 @@ mod tests {
     // situation and what CURES it are different facts for the two sources.
     let flag = provenance(&from_source("house", "/opt/themes", SearchSource::Flag)).unwrap();
     assert!(flag.contains("given by --theme-path"), "{flag}");
-    assert!(!flag.contains(SEARCH_PATH), "it must not name an unset variable: {flag}");
-    assert!(flag.contains("Without that flag"), "the flag remedy: {flag}");
+    assert!(
+      !flag.contains(SEARCH_PATH),
+      "it must not name an unset variable: {flag}"
+    );
+    assert!(
+      flag.contains("Without that flag"),
+      "the flag remedy: {flag}"
+    );
 
     let flag_shadow = provenance(&from_source("mono", "/opt/themes", SearchSource::Flag)).unwrap();
     assert!(flag_shadow.contains("SHADOWING"), "{flag_shadow}");
-    assert!(flag_shadow.contains("drop --theme-path"), "the cure is to stop passing it: {flag_shadow}");
-    assert!(!flag_shadow.contains("rename the local theme"), "that cure is the env case's: {flag_shadow}");
+    assert!(
+      flag_shadow.contains("drop --theme-path"),
+      "the cure is to stop passing it: {flag_shadow}"
+    );
+    assert!(
+      !flag_shadow.contains("rename the local theme"),
+      "that cure is the env case's: {flag_shadow}"
+    );
 
     // THE CONTROL. Without it, a fix that simply stopped naming the variable
     // passes everything above and breaks the case AC14 was written for.
     let env = provenance(&from_source("house", "/opt/themes", SearchSource::Env)).unwrap();
-    assert!(env.contains(SEARCH_PATH), "the env case still names it: {env}");
-    assert!(!env.contains("--theme-path"), "and does not name the flag: {env}");
-    assert!(env.contains("on the path"), "the env remedy survives: {env}");
+    assert!(
+      env.contains(SEARCH_PATH),
+      "the env case still names it: {env}"
+    );
+    assert!(
+      !env.contains("--theme-path"),
+      "and does not name the flag: {env}"
+    );
+    assert!(
+      env.contains("on the path"),
+      "the env remedy survives: {env}"
+    );
     let env_shadow = provenance(&from_source("mono", "/opt/themes", SearchSource::Env)).unwrap();
-    assert!(env_shadow.contains("rename the local theme"), "{env_shadow}");
+    assert!(
+      env_shadow.contains("rename the local theme"),
+      "{env_shadow}"
+    );
   }
 
   #[test]
@@ -446,21 +520,48 @@ mod tests {
   fn a_name_carrying_a_separator_is_refused_naming_its_replacement() {
     let e = name_spec("./x.css", "--theme", "for a path, use --theme-file=./x.css").unwrap_err();
     assert!(e.message.contains("looks like a path"), "{}", e.message);
-    assert!(e.remedy.as_deref().unwrap_or_default().contains("--theme-file"), "clause (f): {:?}", e.remedy);
+    assert!(
+      e.remedy
+        .as_deref()
+        .unwrap_or_default()
+        .contains("--theme-file"),
+      "clause (f): {:?}",
+      e.remedy
+    );
     // EXISTENCE IS NOT THE TEST. A path that is not there refuses identically,
     // or a mistyped filename falls through to the name resolver and is handed
     // the built-in roster.
-    assert!(name_spec("nosuch/x.css", "--theme", "for a path, use --theme-file=nosuch/x.css").is_err());
+    assert!(name_spec(
+      "nosuch/x.css",
+      "--theme",
+      "for a path, use --theme-file=nosuch/x.css"
+    )
+    .is_err());
     // And the front-matter half names the front-matter remedy, not the flag.
-    let e = name_spec("./x.css", "the deck's 'theme:'", "for a path, use 'theme-file: ./x.css'").unwrap_err();
-    assert!(e.remedy.as_deref().unwrap_or_default().contains("theme-file:"), "{:?}", e.remedy);
+    let e = name_spec(
+      "./x.css",
+      "the deck's 'theme:'",
+      "for a path, use 'theme-file: ./x.css'",
+    )
+    .unwrap_err();
+    assert!(
+      e.remedy
+        .as_deref()
+        .unwrap_or_default()
+        .contains("theme-file:"),
+      "{:?}",
+      e.remedy
+    );
   }
 
   #[test]
   fn an_ordinary_name_is_not_refused() {
     // The control: without this the test above passes against a name_spec that
     // refuses everything.
-    assert!(matches!(name_spec("simple", "--theme", "unused"), Ok(Spec::Name("simple"))));
+    assert!(matches!(
+      name_spec("simple", "--theme", "unused"),
+      Ok(Spec::Name("simple"))
+    ));
   }
 
   #[test]
@@ -468,6 +569,9 @@ mod tests {
     // split_path_flag is the pure half and is what the flag hands to load().
     let dirs = split_path_flag("/a:/b");
     assert_eq!(dirs, vec![PathBuf::from("/a"), PathBuf::from("/b")]);
-    assert!(split_path_flag("").is_empty(), "an empty value adds no directories");
+    assert!(
+      split_path_flag("").is_empty(),
+      "an empty value adds no directories"
+    );
   }
 }

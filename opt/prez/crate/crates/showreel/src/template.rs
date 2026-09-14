@@ -152,8 +152,13 @@ pub struct Filling<'a> {
 /// Control 1 stays a refusal, because a shell disagreeing with this module about
 /// the markers is a genuine defect: they ship together in one binary.
 pub fn render(shell: &str, f: &Filling) -> Result<String, Failure> {
-  let subs =
-    [(THEME, f.theme_css), (TITLE, f.title), (FAVICON, f.favicon), (DATA, f.data), (PRODUCER, f.producer)];
+  let subs = [
+    (THEME, f.theme_css),
+    (TITLE, f.title),
+    (FAVICON, f.favicon),
+    (DATA, f.data),
+    (PRODUCER, f.producer),
+  ];
 
   // **CONTROL 2: A STAMP THE INSTRUMENT CANNOT READ IS WORSE THAN NO STAMP.**
   // `showreel-harness:1236` is `"stamp" if stamp else "adjacency (UNVERIFIED)"`
@@ -191,7 +196,9 @@ pub fn render(shell: &str, f: &Filling) -> Result<String, Failure> {
   let mut at: Vec<(usize, &str, &str)> = subs
     .iter()
     .map(|(marker, value)| {
-      let at = shell.find(marker).expect("the count above found exactly one");
+      let at = shell
+        .find(marker)
+        .expect("the count above found exactly one");
       (at, *marker, *value)
     })
     .collect();
@@ -236,7 +243,11 @@ mod tests {
       out.contains(r#"<meta name="showreel-producer" content="test-producer">"#),
       "the stamp must land in the shape STAMP_RE reads"
     );
-    assert_eq!(out.matches("showreel-producer").count(), 1, "and exactly once");
+    assert_eq!(
+      out.matches("showreel-producer").count(),
+      1,
+      "and exactly once"
+    );
   }
 
   /// **THE SILENT ZERO THIS REFUSAL EXISTS FOR.** `showreel-harness:1236` is
@@ -251,7 +262,11 @@ mod tests {
     f.producer = "";
     let e = render(SHELL, &f).unwrap_err();
     assert!(e.message.contains("empty"), "{}", e.message);
-    assert!(e.message.contains("adjacency (UNVERIFIED)"), "and says what it would grade as: {}", e.message);
+    assert!(
+      e.message.contains("adjacency (UNVERIFIED)"),
+      "and says what it would grade as: {}",
+      e.message
+    );
   }
 
   /// A quote closes `content="..."` early: the tag breaks AND `[^"]*` stops
@@ -270,10 +285,16 @@ mod tests {
   #[test]
   fn the_shell_carries_no_brand_of_anybody_s() {
     for brand in ["Snorkeltoast", "popupart", "POP^UP^ART"] {
-      assert!(!SHELL.contains(brand), "the shell must carry no brand, found {brand}");
+      assert!(
+        !SHELL.contains(brand),
+        "the shell must carry no brand, found {brand}"
+      );
     }
     // The control: a string that IS there, so an empty haystack cannot pass.
-    assert!(SHELL.contains("REEL.producer"), "and the check can see the shell at all");
+    assert!(
+      SHELL.contains("REEL.producer"),
+      "and the check can see the shell at all"
+    );
   }
 
   /// **AC-3.6's RUNTIME LEG, TEMPLATE HALF.** The cap the runtime enforces is
@@ -281,9 +302,18 @@ mod tests {
   /// fails, which is the whole point of writing it down as a test.
   #[test]
   fn the_runtime_reads_its_limits_from_the_payload_and_not_from_javascript() {
-    assert!(SHELL.contains("const LIM = REEL.limits;"), "the limits must come from the payload");
-    assert!(SHELL.contains("LIM.max_ease"), "and the cap must be the one it read");
-    assert!(SHELL.contains("LIM.min_dwell"), "and so must the dwell floor");
+    assert!(
+      SHELL.contains("const LIM = REEL.limits;"),
+      "the limits must come from the payload"
+    );
+    assert!(
+      SHELL.contains("LIM.max_ease"),
+      "and the cap must be the one it read"
+    );
+    assert!(
+      SHELL.contains("LIM.min_dwell"),
+      "and so must the dwell floor"
+    );
   }
 
   #[test]
@@ -292,8 +322,14 @@ mod tests {
     for marker in MARKERS {
       assert!(!out.contains(marker), "{marker} survived into the artifact");
     }
-    assert!(out.contains("<title>A Title</title>"), "the title landed where the shell wants it");
-    assert!(out.contains("const REEL = {\"ok\":1};"), "and the payload landed inside the statement");
+    assert!(
+      out.contains("<title>A Title</title>"),
+      "the title landed where the shell wants it"
+    );
+    assert!(
+      out.contains("const REEL = {\"ok\":1};"),
+      "and the payload landed inside the statement"
+    );
     assert!(out.contains("body{color:red}"), "and the theme");
     assert!(out.contains("<link rel=icon>"), "and the favicon");
   }
@@ -314,8 +350,15 @@ mod tests {
       out.contains("<title>look /*__DATA__*/ here</title>"),
       "the title must survive a marker inside it"
     );
-    assert!(out.contains("const REEL = {\"d\":7};"), "and the payload must still land");
-    assert_eq!(out.matches("/*__DATA__*/").count(), 1, "exactly the one the title carried");
+    assert!(
+      out.contains("const REEL = {\"d\":7};"),
+      "and the payload must still land"
+    );
+    assert_eq!(
+      out.matches("/*__DATA__*/").count(),
+      1,
+      "exactly the one the title carried"
+    );
   }
 
   #[test]
@@ -323,12 +366,19 @@ mod tests {
     let broken = SHELL.replace("<!--__FAVICON__-->", "");
     let e = render(&broken, &filling("t", "{}")).unwrap_err();
     assert!(e.message.contains("0 occurrence"), "{}", e.message);
-    assert!(e.message.contains("__FAVICON__"), "names which one: {}", e.message);
+    assert!(
+      e.message.contains("__FAVICON__"),
+      "names which one: {}",
+      e.message
+    );
   }
 
   #[test]
   fn a_shell_carrying_a_marker_twice_is_refused_rather_than_filled_once() {
-    let doubled = SHELL.replace("<title>__TITLE__</title>", "<title>__TITLE__</title><!--__TITLE__-->");
+    let doubled = SHELL.replace(
+      "<title>__TITLE__</title>",
+      "<title>__TITLE__</title><!--__TITLE__-->",
+    );
     let e = render(&doubled, &filling("t", "{}")).unwrap_err();
     assert!(e.message.contains("2 occurrence"), "{}", e.message);
   }

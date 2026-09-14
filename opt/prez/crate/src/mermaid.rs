@@ -134,7 +134,13 @@ mod tests {
   fn the_vendored_library_is_present_and_exposes_a_global() {
     // The bundle is an esbuild ESM wrapper; its last line is what makes
     // `window.mermaid` exist, and INIT_JS depends on exactly that.
-    assert!(LIBRARY.len() > 1_000_000, "the vendored asset looks truncated");
-    assert!(LIBRARY.contains("globalThis[\"mermaid\"]"), "the global the runtime expects is gone");
+    assert!(
+      LIBRARY.len() > 1_000_000,
+      "the vendored asset looks truncated"
+    );
+    assert!(
+      LIBRARY.contains("globalThis[\"mermaid\"]"),
+      "the global the runtime expects is gone"
+    );
   }
 }

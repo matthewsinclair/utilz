@@ -125,7 +125,11 @@ fn contrast_class(background: &str) -> Option<&'static str> {
   // Perceived luminance. Good enough to answer "is this dark?", which is the
   // only question being asked.
   let luminance = 0.299 * f64::from(r) + 0.587 * f64::from(g) + 0.114 * f64::from(b);
-  Some(if luminance < 140.0 { "gp-on-dark" } else { "gp-on-light" })
+  Some(if luminance < 140.0 {
+    "gp-on-dark"
+  } else {
+    "gp-on-light"
+  })
 }
 
 fn parse_colour(value: &str) -> Option<(u8, u8, u8)> {
@@ -133,7 +137,11 @@ fn parse_colour(value: &str) -> Option<(u8, u8, u8)> {
     let digits: Vec<u32> = hex.chars().map(|c| c.to_digit(16)).collect::<Option<_>>()?;
     return match digits.len() {
       // #rgb is shorthand for #rrggbb.
-      3 => Some((byte(digits[0] * 17), byte(digits[1] * 17), byte(digits[2] * 17))),
+      3 => Some((
+        byte(digits[0] * 17),
+        byte(digits[1] * 17),
+        byte(digits[2] * 17),
+      )),
       6 => Some((
         byte(digits[0] * 16 + digits[1]),
         byte(digits[2] * 16 + digits[3]),
@@ -142,13 +150,22 @@ fn parse_colour(value: &str) -> Option<(u8, u8, u8)> {
       _ => None,
     };
   }
-  let inner = value.strip_prefix("rgb(").or_else(|| value.strip_prefix("rgba("))?;
+  let inner = value
+    .strip_prefix("rgb(")
+    .or_else(|| value.strip_prefix("rgba("))?;
   let inner = inner.strip_suffix(')')?;
-  let parts: Vec<&str> = inner.split([',', ' ', '/']).filter(|p| !p.is_empty()).collect();
+  let parts: Vec<&str> = inner
+    .split([',', ' ', '/'])
+    .filter(|p| !p.is_empty())
+    .collect();
   if parts.len() < 3 {
     return None;
   }
-  Some((parts[0].trim().parse().ok()?, parts[1].trim().parse().ok()?, parts[2].trim().parse().ok()?))
+  Some((
+    parts[0].trim().parse().ok()?,
+    parts[1].trim().parse().ok()?,
+    parts[2].trim().parse().ok()?,
+  ))
 }
 
 fn byte(value: u32) -> u8 {
@@ -160,7 +177,11 @@ pub const DEFAULT_PAPER: &str = "254mm 142.9mm";
 
 fn script(doc: &Document) -> String {
   match doc.mermaid {
-    true => format!("{RUNTIME_JS}\n{}\n{}", crate::mermaid::LIBRARY, crate::mermaid::INIT_JS),
+    true => format!(
+      "{RUNTIME_JS}\n{}\n{}",
+      crate::mermaid::LIBRARY,
+      crate::mermaid::INIT_JS
+    ),
     false => RUNTIME_JS.to_string(),
   }
 }
@@ -186,7 +207,12 @@ fn script(doc: &Document) -> String {
 /// `{{author}}` means, and silently deleting a theme author's text would be
 /// worse than leaving it where they can see it.
 fn fill(layout: &str, title: &str, style: &str, slides: &str, script: &str) -> String {
-  let table = [("{{title}}", title), ("{{style}}", style), ("{{slides}}", slides), ("{{script}}", script)];
+  let table = [
+    ("{{title}}", title),
+    ("{{style}}", style),
+    ("{{slides}}", slides),
+    ("{{script}}", script),
+  ];
   let mut out = String::with_capacity(layout.len() + style.len() + slides.len() + script.len());
   let mut rest = layout;
   while let Some(at) = rest.find("{{") {
@@ -214,11 +240,18 @@ fn fill(layout: &str, title: &str, style: &str, slides: &str, script: &str) -> S
 /// produce broken markup, and silently broken markup is the thing this codebase
 /// keeps refusing to ship.
 fn escape_attr(value: &str) -> String {
-  value.replace('&', "&amp;").replace('"', "&quot;").replace('<', "&lt;").replace('>', "&gt;")
+  value
+    .replace('&', "&amp;")
+    .replace('"', "&quot;")
+    .replace('<', "&lt;")
+    .replace('>', "&gt;")
 }
 
 fn escape_text(value: &str) -> String {
-  value.replace('&', "&amp;").replace('<', "&lt;").replace('>', "&gt;")
+  value
+    .replace('&', "&amp;")
+    .replace('<', "&lt;")
+    .replace('>', "&gt;")
 }
 
 /// Structure, not style. See the module note for why this is not in the theme.
@@ -621,12 +654,22 @@ mod tests {
   use crate::theme;
 
   fn slide(html: &str) -> Slide {
-    Slide { classes: vec![], background: None, html: html.to_string() }
+    Slide {
+      classes: vec![],
+      background: None,
+      html: html.to_string(),
+    }
   }
 
   fn build(slides: &[Slide]) -> String {
     let theme = theme::load(None, &[], theme::Duplicates::First).unwrap();
-    assemble(&Document { title: Some("A Deck"), slides, theme: &theme, mermaid: false, paper: None })
+    assemble(&Document {
+      title: Some("A Deck"),
+      slides,
+      theme: &theme,
+      mermaid: false,
+      paper: None,
+    })
   }
 
   #[test]
@@ -636,7 +679,10 @@ mod tests {
     assert!(out.contains("<title>A Deck</title>"));
     assert!(out.contains("<style>"), "the CSS is inlined, never linked");
     assert!(out.contains("gp-slide"), "base structure is present");
-    assert!(out.contains("addEventListener('keydown'"), "the runtime is inlined");
+    assert!(
+      out.contains("addEventListener('keydown'"),
+      "the runtime is inlined"
+    );
   }
 
   #[test]
@@ -666,7 +712,10 @@ mod tests {
     let out = build(&[s]);
     // The contrast marker is derived, so it sits ahead of the author's own
     // classes and a theme rule on either still wins by ordinary specificity.
-    assert!(out.contains("class=\"gp-slide gp-on-dark wide dark\""), "{out}");
+    assert!(
+      out.contains("class=\"gp-slide gp-on-dark wide dark\""),
+      "{out}"
+    );
     assert!(out.contains("style=\"background:#012\""), "{out}");
   }
 
@@ -686,8 +735,14 @@ mod tests {
     // beat a plain `color:` and steampunk measured 1.1:1 on a dark slide.
     // Asserting the mechanism rather than its presence is what would catch a
     // revert to the version that looked right and did nothing.
-    let floor = out.find(".gp-slide.gp-on-dark").expect("the floor is defined");
-    assert!(out[floor..floor + 200].contains("--gp-fg:"), "{}", &out[floor..floor + 200]);
+    let floor = out
+      .find(".gp-slide.gp-on-dark")
+      .expect("the floor is defined");
+    assert!(
+      out[floor..floor + 200].contains("--gp-fg:"),
+      "{}",
+      &out[floor..floor + 200]
+    );
   }
 
   #[test]
@@ -697,7 +752,10 @@ mod tests {
     assert_eq!(contrast_class("#ffffff"), Some("gp-on-light"));
     assert_eq!(contrast_class("#fff"), Some("gp-on-light"));
     assert_eq!(contrast_class("rgb(16, 20, 24)"), Some("gp-on-dark"));
-    assert_eq!(contrast_class("rgba(250, 250, 250, 0.9)"), Some("gp-on-light"));
+    assert_eq!(
+      contrast_class("rgba(250, 250, 250, 0.9)"),
+      Some("gp-on-light")
+    );
   }
 
   #[test]
@@ -717,7 +775,10 @@ mod tests {
       html: String::new(),
     };
     let out = build(&[s]);
-    assert!(!out.contains("a\"onload"), "the quote must not close the attribute: {out}");
+    assert!(
+      !out.contains("a\"onload"),
+      "the quote must not close the attribute: {out}"
+    );
     assert!(out.contains("&quot;"), "{out}");
   }
 
@@ -725,10 +786,19 @@ mod tests {
   fn the_default_paper_is_sixteen_by_nine_and_paper_overrides_it() {
     let theme = theme::load(None, &[], theme::Duplicates::First).unwrap();
     let slides = [slide("<p>x</p>")];
-    let doc = Document { title: None, slides: &slides, theme: &theme, mermaid: false, paper: None };
+    let doc = Document {
+      title: None,
+      slides: &slides,
+      theme: &theme,
+      mermaid: false,
+      paper: None,
+    };
     assert!(assemble(&doc).contains("size: 254mm 142.9mm"));
 
-    let doc = Document { paper: Some("210mm 297mm".into()), ..doc };
+    let doc = Document {
+      paper: Some("210mm 297mm".into()),
+      ..doc
+    };
     assert!(assemble(&doc).contains("size: 210mm 297mm"));
   }
 
@@ -756,11 +826,23 @@ mod tests {
       mermaid: false,
       paper: None,
     });
-    let theme_at = out.find("100mm 100mm").expect("the theme is in the stylesheet");
-    let default_size_at = out.find("254mm 142.9mm").expect("the default size is present");
-    let break_at = out.rfind("break-after: page").expect("the page break is present");
-    assert!(default_size_at < theme_at, "a theme must be able to change page size");
-    assert!(break_at > theme_at, "a theme must NOT be able to remove the page break");
+    let theme_at = out
+      .find("100mm 100mm")
+      .expect("the theme is in the stylesheet");
+    let default_size_at = out
+      .find("254mm 142.9mm")
+      .expect("the default size is present");
+    let break_at = out
+      .rfind("break-after: page")
+      .expect("the page break is present");
+    assert!(
+      default_size_at < theme_at,
+      "a theme must be able to change page size"
+    );
+    assert!(
+      break_at > theme_at,
+      "a theme must NOT be able to remove the page break"
+    );
   }
 
   #[test]
@@ -792,7 +874,9 @@ mod tests {
   #[test]
   fn without_the_opt_in_the_artifact_carries_no_mermaid_bytes() {
     // AC08's negative half, cheap to assert here and again on the built demo.
-    let out = build(&[slide("<pre><code class=\"language-mermaid\">graph TD;</code></pre>")]);
+    let out = build(&[slide(
+      "<pre><code class=\"language-mermaid\">graph TD;</code></pre>",
+    )]);
     assert!(!out.contains("mermaid.min"), "{}", out.len());
     assert!(!out.to_lowercase().contains("mermaid.initialize"));
   }
@@ -828,7 +912,10 @@ mod tests {
       1,
       "the deck appears once, not once per placeholder mentioned in the theme: {out}"
     );
-    assert!(out.contains("the {{slides}} placeholder"), "the author's comment survives verbatim");
+    assert!(
+      out.contains("the {{slides}} placeholder"),
+      "the author's comment survives verbatim"
+    );
   }
 
   #[test]
@@ -846,7 +933,11 @@ mod tests {
     };
     let slides = [slide("<p>x</p>")];
     let out = assemble(&Document {
-      title: None, slides: &slides, theme: &theme, mermaid: false, paper: None,
+      title: None,
+      slides: &slides,
+      theme: &theme,
+      mermaid: false,
+      paper: None,
     });
     assert!(out.contains("{{author}}"), "{out}");
   }
@@ -858,9 +949,28 @@ mod tests {
     // BINDINGS, so a key can never be advertised and unhandled -- but only for
     // as long as both really read the one table. This fails the moment someone
     // adds a `case` to the handler or a literal to the bar.
-    assert!(!RUNTIME_JS.contains("switch (e.key)"), "the handler dispatches through BINDINGS, not a switch");
-    assert_eq!(RUNTIME_JS.matches("var BINDINGS").count(), 1, "exactly one binding table");
-    for key in ["ArrowRight", "ArrowLeft", "Home", "End", "'g'", "'i'", "'f'", "'r'", "'q'", "'?'", "'Enter'"] {
+    assert!(
+      !RUNTIME_JS.contains("switch (e.key)"),
+      "the handler dispatches through BINDINGS, not a switch"
+    );
+    assert_eq!(
+      RUNTIME_JS.matches("var BINDINGS").count(),
+      1,
+      "exactly one binding table"
+    );
+    for key in [
+      "ArrowRight",
+      "ArrowLeft",
+      "Home",
+      "End",
+      "'g'",
+      "'i'",
+      "'f'",
+      "'r'",
+      "'q'",
+      "'?'",
+      "'Enter'",
+    ] {
       assert!(RUNTIME_JS.contains(key), "no binding for {key}");
     }
   }
@@ -872,8 +982,14 @@ mod tests {
     // binding Escape to close while ALSO leaving it on the index would satisfy
     // a check that only looked for the new behaviour.
     assert!(RUNTIME_JS.contains("keys: ['q', 'Q', 'Escape'],"));
-    assert!(!RUNTIME_JS.contains("case 'Escape': overview"), "the old mode toggle is gone");
-    assert!(RUNTIME_JS.contains("keys: ['i', 'I'], label: 'index'"), "the index moved to i");
+    assert!(
+      !RUNTIME_JS.contains("case 'Escape': overview"),
+      "the old mode toggle is gone"
+    );
+    assert!(
+      RUNTIME_JS.contains("keys: ['i', 'I'], label: 'index'"),
+      "the index moved to i"
+    );
   }
 
   #[test]
@@ -883,8 +999,14 @@ mod tests {
     // `navigator` and the Rust side names no platform at all -- because the
     // failure mode is a build that hardcodes whatever the author was using and
     // is only ever wrong on someone else's machine.
-    assert!(RUNTIME_JS.contains("navigator.userAgent"), "the shortcut is resolved at view time");
-    assert!(RUNTIME_JS.contains("'cmd-W'") && RUNTIME_JS.contains("'ctrl-W'"), "both branches ship");
+    assert!(
+      RUNTIME_JS.contains("navigator.userAgent"),
+      "the shortcut is resolved at view time"
+    );
+    assert!(
+      RUNTIME_JS.contains("'cmd-W'") && RUNTIME_JS.contains("'ctrl-W'"),
+      "both branches ship"
+    );
     assert!(
       !RUNTIME_JS.contains("prez present` opens"),
       "the old message named prez present as the remedy from inside a prez present window"
@@ -899,15 +1021,25 @@ mod tests {
     // looking for. A check that cannot pass is not a strict check, it is a
     // broken one.
     let theme = Theme {
-      css: "body{}".into(), js: None, layout: None, name: "t".into(),
+      css: "body{}".into(),
+      js: None,
+      layout: None,
+      name: "t".into(),
       origin: crate::theme::Origin::BuiltIn,
       dir: None,
     };
     let slides = [slide("<p>x</p>")];
     let out = assemble(&Document {
-      title: None, slides: &slides, theme: &theme, mermaid: false, paper: None,
+      title: None,
+      slides: &slides,
+      theme: &theme,
+      mermaid: false,
+      paper: None,
     });
-    assert!(out.contains("cmd-W") && out.contains("ctrl-W"), "a built deck must carry both branches");
+    assert!(
+      out.contains("cmd-W") && out.contains("ctrl-W"),
+      "a built deck must carry both branches"
+    );
   }
 
   #[test]
@@ -918,10 +1050,20 @@ mod tests {
     // before the unconditional `next` or space would advance a slide instead.
     // Asserted as a position, because the two bindings are individually
     // correct and only their order makes them work.
-    let commit = RUNTIME_JS.find("label: 'open this slide'").expect("the commit binding exists");
-    let next = RUNTIME_JS.find("label: 'next'").expect("the next binding exists");
-    assert!(commit < next, "the index commit must be matched before next claims space");
-    assert!(RUNTIME_JS.contains("when: indexing"), "and it is conditional on the index being open");
+    let commit = RUNTIME_JS
+      .find("label: 'open this slide'")
+      .expect("the commit binding exists");
+    let next = RUNTIME_JS
+      .find("label: 'next'")
+      .expect("the next binding exists");
+    assert!(
+      commit < next,
+      "the index commit must be matched before next claims space"
+    );
+    assert!(
+      RUNTIME_JS.contains("when: indexing"),
+      "and it is conditional on the index being open"
+    );
   }
 
   #[test]
@@ -947,9 +1089,18 @@ mod tests {
       mermaid: false,
       paper: None,
     });
-    assert!(!out.contains("<div class=\"gp-bar\""), "no bar markup in the document itself");
-    assert!(out.contains("gp-bar"), "but the runtime that builds it is present");
-    assert!(out.contains("document.body.appendChild(bar)"), "and it appends it at run time");
+    assert!(
+      !out.contains("<div class=\"gp-bar\""),
+      "no bar markup in the document itself"
+    );
+    assert!(
+      out.contains("gp-bar"),
+      "but the runtime that builds it is present"
+    );
+    assert!(
+      out.contains("document.body.appendChild(bar)"),
+      "and it appends it at run time"
+    );
   }
 
   #[test]
@@ -970,7 +1121,10 @@ mod tests {
     // classes cannot be undone from somewhere else in the cascade.
     assert!(BASE_CSS.contains(".gp-bar { display: none; }"));
     assert!(BASE_CSS.contains(".gp-bar.gp-on { display: flex; }"));
-    assert!(!RUNTIME_JS.contains(".hidden = "), "visibility is a class, not the attribute");
+    assert!(
+      !RUNTIME_JS.contains(".hidden = "),
+      "visibility is a class, not the attribute"
+    );
   }
 
   #[test]

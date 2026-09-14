@@ -258,7 +258,10 @@ pub fn parse(argv: &[String]) -> Result<Invocation, Failure> {
 fn take_value(argv: &[String], i: &mut usize, flag: &str) -> Result<String, Failure> {
   *i += 1;
   argv.get(*i).cloned().ok_or_else(|| {
-    Failure::new(format!("{} needs a value", flag), format!("eg: {} <value>", flag))
+    Failure::new(
+      format!("{} needs a value", flag),
+      format!("eg: {} <value>", flag),
+    )
   })
 }
 
@@ -285,13 +288,33 @@ mod tests {
     // The whole defect was that nobody exercised one of the two forms, so the
     // test asserts they produce the IDENTICAL command rather than that each
     // parses. hv writes --theme=simple; we both happened to type the space form.
-    let spaced =
-      parse(&argv(&["pdf", "d.md", "-o", "x.pdf", "--theme", "simple", "--paper", "210x297", "--browser", "/b"])).unwrap();
-    let equals =
-      parse(&argv(&["pdf", "d.md", "-o=x.pdf", "--theme=simple", "--paper=210x297", "--browser=/b"])).unwrap();
+    let spaced = parse(&argv(&[
+      "pdf",
+      "d.md",
+      "-o",
+      "x.pdf",
+      "--theme",
+      "simple",
+      "--paper",
+      "210x297",
+      "--browser",
+      "/b",
+    ]))
+    .unwrap();
+    let equals = parse(&argv(&[
+      "pdf",
+      "d.md",
+      "-o=x.pdf",
+      "--theme=simple",
+      "--paper=210x297",
+      "--browser=/b",
+    ]))
+    .unwrap();
     assert_eq!(spaced, equals);
 
-    let Invocation::Command(c) = equals else { panic!("expected a command") };
+    let Invocation::Command(c) = equals else {
+      panic!("expected a command")
+    };
     assert_eq!(c.theme.as_deref(), Some("simple"));
     assert_eq!(c.out.as_deref(), Some("x.pdf"));
     assert_eq!(c.paper.as_deref(), Some("210x297"));
@@ -300,17 +323,26 @@ mod tests {
 
   #[test]
   fn an_equals_in_a_value_or_a_filename_is_not_a_flag_separator() {
-    let Invocation::Command(c) = parse(&argv(&["build", "a=b.md", "--theme=x=y.css"])).unwrap() else {
+    let Invocation::Command(c) = parse(&argv(&["build", "a=b.md", "--theme=x=y.css"])).unwrap()
+    else {
       panic!("expected a command")
     };
     assert_eq!(c.input, "a=b.md", "an input is not split on =");
-    assert_eq!(c.theme.as_deref(), Some("x=y.css"), "only the FIRST = separates");
+    assert_eq!(
+      c.theme.as_deref(),
+      Some("x=y.css"),
+      "only the FIRST = separates"
+    );
   }
 
   #[test]
   fn unknown_flag_is_refused_by_name() {
     let e = parse(&argv(&["build", "d.md", "--colour"])).unwrap_err();
-    assert!(e.message.contains("--colour"), "message should name the flag: {}", e.message);
+    assert!(
+      e.message.contains("--colour"),
+      "message should name the flag: {}",
+      e.message
+    );
   }
 
   #[test]
@@ -351,7 +383,10 @@ mod tests {
     // If `browser` ever fell through to verb dispatch it would refuse for a
     // missing input, which is the failure this test exists to catch early.
     let e = parse(&argv(&["build"])).unwrap_err();
-    assert!(e.message.contains("needs an input deck"), "control: build does refuse");
+    assert!(
+      e.message.contains("needs an input deck"),
+      "control: build does refuse"
+    );
     assert!(parse(&argv(&["browser"])).is_ok(), "browser must not");
   }
 
@@ -369,6 +404,9 @@ mod tests {
 
   #[test]
   fn usage_documents_the_browser_verb() {
-    assert!(USAGE.contains("prez browser"), "the verb exists and --help does not say so");
+    assert!(
+      USAGE.contains("prez browser"),
+      "the verb exists and --help does not say so"
+    );
   }
 }
