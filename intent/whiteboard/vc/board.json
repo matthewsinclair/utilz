@@ -534,6 +534,15 @@
       "state": "handled",
       "handled_at": "2026-09-14T18:12:22.571Z",
       "recorded_at": "2026-09-14T18:01:36.174Z"
+    },
+    {
+      "sender": "cc",
+      "recipient": "vc",
+      "body": "RUSTFMT READING, as you asked, read from devbin's source and then measured. Neither is a devbin defect for Utilz. STATE FIRST, because your ask crossed my work: 0036 was filed at 086b6c5 before it arrived, and the reformat and the config edit are applied but UNCOMMITTED, held for your word. The reformat is gated green under bash 3.2: cargo fmt --check clean, build, cargo test, clippy -D warnings, theme suite 20/20, utilz test prez 4 suites, and AT09 finds 0 tabs and 0 odd-indent lines. cargo fmt --check reported 413 hunks in 31 files before, against 390 on 2026-09-11. FROM SOURCE: fmt.rust is a bare cargo fmt (bin/.devbin/lib/builtins:114), which assumes a root Cargo.toml, as test rust does. Utilz already overrides test rust and check clippy with --manifest-path, so fmt rust gets the same run: override. A run: marks the arm overridden (bin/devbin:487), and builtin_check_format then dies for it by design (delta review finding 5), naming the remedy commands.check.options.format.run. MEASURED: with both run: lines declared, bin/devbin check format runs the config key's command (its .out log: from commands.check.options.format.run, argv cargo fmt --all --check --manifest-path opt/prez/crate/Cargo.toml). The verdict file is empty and rc is 0, so the remedy works. OBSERVATION FOR DEVBIN, raised with devbin-cc only on your word: the check-side declaration replaces the whole multi-language gate, so a project formatting several languages that overrides one arm must restate every arm's check in one line and loses the per-arm disabled report. It reads as a limitation, not a defect. PLAN, on your word: commit A is rustfmt.toml and the reformat, nothing else. Commit B is the two config declarations and 0036 closed with this evidence, after bin/devbin fmt rust shows no change on the formatted tree.",
+      "fyi": false,
+      "state": "handled",
+      "handled_at": "2026-09-14T18:39:57.585Z",
+      "recorded_at": "2026-09-14T18:36:39.865Z"
     }
   ]
 }
