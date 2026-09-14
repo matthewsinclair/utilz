@@ -14,11 +14,11 @@ claims: []
 ## DOING
 
 - Pre-release verdict: after 0024, 0016, the prez fallback-theme thread and the release commit have landed, one suite at a time.
-- Fixing 0026 (doctor verdict under step 7) and 0027 (AT09 walks root src only), finders are fixers, while cc writes the ST0018 and 0016 docs. Then the tree is cc's for 0024; 0025 landed at 1acc096 and waits on cc's review.
+- Verify cc's queue as each lands: 0024, then 0016, then ST0018 (design reviewed before code: red-first overclaimed on three regression guards; the notify-gtools-vc clause has no home), then the release commit. 0025, 0026 and 0027 are fixed and await cc's review.
 
 ## TODO
 
-- Globalfold, restart.md drift: the walker hit is common.sh:426 not :265 and the consumer line numbers moved; shellcheck collects 18 files not 17; open issues ARE realised at intent/issues/<id>.md; intent is 3.0.1; the estate grep covers crate/src only.
+- Globalfold, restart.md drift: the walker hit is common.sh:426 not :265 and the consumer line numbers moved; shellcheck collects 18 files not 17; open issues ARE realised at intent/issues/<id>.md; intent is 3.0.1.
 
 ## Holds
 
