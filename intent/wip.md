@@ -8,6 +8,10 @@ DOING and TODO only. Done work goes to `intent/done.md`; context to `intent/rest
 
 ## TODO
 
+**Release**
+
+- Cut the next Utilz release by hand (hv): ST0020 in it, with prez at 2.2.0.
+
 **Threads**
 
 - Follow-on to ST0017, if wanted: Rust `init` and `qr` for `prez showreel`.
@@ -16,7 +20,7 @@ DOING and TODO only. Done work goes to `intent/done.md`; context to `intent/rest
 
 **Fixes**
 
-- Close 0038 once the first CI run carrying its format step shows rustfmt ran on ubuntu-latest.
+- Push `3fd5f24` on hv's word, then close 0038 once its CI run shows rustfmt ran on ubuntu-latest.
 - `examples/demo.md` warns `class 'escape' has no effect`.
 - `stampz`: handle mixed page geometry within one PDF (per-page overlay ranges).
 - `hoist-rebase.sh`: the `AT13` postcondition uses minimum 0 against `-ge`, so it always passes. Needs ST0010 hydrated.

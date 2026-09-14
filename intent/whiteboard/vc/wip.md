@@ -3,8 +3,8 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 1a7ad8f5-667f-4649-8e7f-a75680ab8d13
-heartbeat_at: 2026-09-14 21:37Z
-status: active
+heartbeat_at: 2026-09-14 21:44Z
+status: paused
 focus: "Waiting on hv: the push carrying 0038 (3fd5f24), then one CI read. ST0019's design review when cc sends it."
 claims: []
 ---
@@ -18,7 +18,7 @@ _(none)_
 ## TODO
 
 - Review ST0019's design draft when cc sends it, before any code: Utilz's own parts only (its version files, the CI build of prez, the Homebrew formula), since hv ruled the shared release core is Devbin project work (hv's decision on hv's board, 14 Sep).
-- Verify the CI format step when cc lands it (hv's decision 3), then read CI on the next push, which is hv's to call.
+- Read CI on the push that carries 3fd5f24 (0038), which is hv's to call. A green run that shows the formatting step running on ubuntu-latest is what closes 0038, and cc closes it.
 
 ## Holds
 

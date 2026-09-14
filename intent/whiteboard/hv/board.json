@@ -123,7 +123,8 @@
       "kind": "decision",
       "seq": 4,
       "text": "hv, 2026-09-14, directly to vc, on cc's localfold HV items: (1) cc pushes main to both remotes now, carrying ST0020's close, 0036 and 0037 ahead of vc's verification of 0036 and 0037; the CI format step goes out in a later push. (2) utilz emacs doctor keeps 0037's redirect, as the same defect. (3) The CI format check is decision 3.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-09-14T21:43:00.921Z",
       "recorded_at": "2026-09-14T21:09:45.824Z"
     }
   ],

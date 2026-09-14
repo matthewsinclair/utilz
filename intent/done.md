@@ -1,8 +1,14 @@
 ---
-verblock: "14 Sep 2026:v0.7: matts - 2.9.0 released"
+verblock: "14 Sep 2026:v0.8: matts - after 2.9.0: ST0020 closed, rustfmt adopted, doctor on stdout"
 ---
 
 # Done
+
+## 14 Sep 2026 -- after 2.9.0: ST0020 closed, rustfmt adopted, doctor's report on stdout (no release yet)
+
+**ST0020 closed at `5611b32`.** `PREZ_THEME_DUPLICATES` says what prez does with a theme defined more than once on its search path: `first`, the default, or `refuse`, which exits 2. A file reached twice is one definition, by (device, inode), Unix-only by hv's ruling. Also fixed: 0035, AT09's estate tripwire now matches Gtools; 0036, the prez crate through rustfmt at `tab_spaces = 2`, with `143198d` being rustfmt's output and nothing else, and devbin's `fmt rust` and `check format` declared for the crate; and 0037, `utilz doctor` and `utilz emacs doctor` print their whole report on stdout. All of it is on both remotes at `be20938`, and CI run 34898312373 was green on all seven jobs. 0038, CI's formatting check, landed at `3fd5f24` and goes out with the next push. `cc` built, `vc` verified each (0036 and 0037 after they were pushed, on hv's call), and `hv` ruled scope.
+
+**Raised elsewhere on hv's word:** Devbin 0064, the shared release core, which hv ruled is Devbin's work with Utilz as its first user; and Intent 0395, `macos` dropping its arguments, which Intent fixed the same day at `b8e3c3db9`.
 
 ## 14 Sep 2026 -- 2.9.0 released: prez showreel, PREZ_DEFAULT_THEME, the install's CI verdict, todo 2.0.0
 
