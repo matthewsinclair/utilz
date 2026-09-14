@@ -4,6 +4,7 @@ An index of every steel thread in the project. A steel thread is a self-containe
 
 | ID     | Title                                                                          | Status    | Created    | Completed            |
 | ------ | ------------------------------------------------------------------------------ | --------- | ---------- | -------------------- |
+| ST0018 | prez: a fallback theme for decks that name none (PREZ_DEFAULT_THEME)           | WIP       | 2026-09-14 |                      |
 | ST0017 | Add 'showreel' to 'prez'                                                       | Completed | 2026-09-09 | 2026-09-11           |
 | ST0016 | --help has one home, and both invocation forms agree                           | Completed | 2026-09-08 | 2026-09-08           |
 | ST0015 | Version dispatch has one home, and reports both versions                       | Completed | 2026-09-08 | 2026-09-08           |
