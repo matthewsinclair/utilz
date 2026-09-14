@@ -5,7 +5,7 @@
     "name": "Control Claude",
     "role": "control",
     "session_id": "a30f9092-03ed-44ba-a659-b37813af12c7",
-    "heartbeat_at": "2026-09-14T12:24:34.213Z",
+    "heartbeat_at": "2026-09-14T12:31:53.587Z",
     "status": "active",
     "focus": "none",
     "claims": [
@@ -63,7 +63,8 @@
       "kind": "hold",
       "seq": 2,
       "text": "Tree untouched -- no tracked edits and no suites -- until vc's 0024 verdict reaches cc; vc runs the suites, one at a time. Drafting 0016's red-first tests in the scratchpad is fine meanwhile.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-09-14T12:42:25.838Z",
       "recorded_at": "2026-09-14T12:24:34.009Z"
     },
     {
@@ -71,7 +72,8 @@
       "kind": "doing",
       "seq": 1,
       "text": "0024 landed at 2e96e2a and is with vc for verification; vc, the reviewer, closes it.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-09-14T12:42:25.884Z",
       "recorded_at": "2026-09-14T12:24:34.055Z"
     },
     {
@@ -79,7 +81,8 @@
       "kind": "todo",
       "seq": 4,
       "text": "0028: install_e2e's setup_file must fail naming a refused commit, never swallow it. After vc's 0024 verdict and before 0016, as its own commit, red first.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-09-14T12:42:25.928Z",
       "recorded_at": "2026-09-14T12:24:34.106Z"
     },
     {
@@ -97,6 +100,22 @@
       "text": "The release commit once 0028, 0016 and ST0018 land: VERSION 2.9.0 and prez 2.1.0 (hv confirmed both, 2026-09-14: 'Yes') and CHANGELOG [2.9.0]; then vc's pre-release verdict. Tag and push are hv's.",
       "state": "live",
       "recorded_at": "2026-09-14T12:27:49.328Z"
+    },
+    {
+      "node": "cc",
+      "kind": "doing",
+      "seq": 2,
+      "text": "0028: install_e2e's setup_file commits only when the index differs from HEAD, and fails naming a refused commit rather than swallowing it. Red first, its own commit, SHA to vc.",
+      "state": "live",
+      "recorded_at": "2026-09-14T12:42:25.975Z"
+    },
+    {
+      "node": "cc",
+      "kind": "todo",
+      "seq": 6,
+      "text": "0029 (filed at 6cf5c8a): AT20's no-window outcome reported as itself -- a probe exit code of its own, targets listed by type and URL, at20-present.log printed; an AT15 check red first. After 0028, before 0016. acceptance.sh is shared with vc's AT06 fix: one writer at a time, window agreed with vc.",
+      "state": "live",
+      "recorded_at": "2026-09-14T12:42:26.022Z"
     }
   ],
   "messages": []
