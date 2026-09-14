@@ -3,7 +3,7 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 11981560-5612-4fe7-a136-6eae64636b64
-heartbeat_at: 2026-09-14 12:14Z
+heartbeat_at: 2026-09-14 12:31Z
 status: active
 focus: "none"
 claims: []
@@ -13,20 +13,20 @@ claims: []
 
 ## DOING
 
-- Pre-release verdict: after 0024, 0016, the prez fallback-theme thread and the release commit have landed, one suite at a time.
-- Verify 0024 when cc sends its SHA (cc reported its suites running as of 12:14Z and asked that nothing else run meanwhile). Then direct cc, per hv: 0016, then ST0018, then the release commit, verifying each as it lands.
+- 0024 landed at 2e96e2a. Its verdict waits on three jobs, logged in this session's scratchpad under rc/: verify-0024-suite.log (bash -n, CI-exact shellcheck, then the full utilz test; the header names HEAD); verify-0024-redfirst.log (387e377's install.sh and shim under 2e96e2a's tests in a scratch worktree, then 2e96e2a as committed; it starts once the suite's exit line appears); ci-watch-4e2b3b5.log (CI run 34843482745 on 4e2b3b5, in progress at 12:30Z; both remotes hold 4e2b3b5 by ls-remote). Then send cc the verdict and its next item: 0028, then 0016, then ST0018, then the release commit, with a SHA to vc after each.
+- Pre-release verdict once 0024, 0028, 0016, ST0018 and the release commit (2.9.0, prez 2.1.0) have landed: the restart.md checklist on the final HEAD, one suite at a time, and CI on the pushed release commit.
 
 ## TODO
 
-- Globalfold, restart.md drift: the walker hit is common.sh:426 not :265 and the consumer line numbers moved; shellcheck collects 18 files not 17; open issues ARE realised at intent/issues/<id>.md; intent is 3.0.1.
+- hv's directives review (hv's TODO 4): walk the 11 in restart.md's Project-wide Conventions with hv when hv has two minutes. Ask hv then to confirm 2.9.0 and prez 2.1.0 directly, so hv's release TODO can say so (cc relays the confirmation at e5d9adb).
+- Globalfold: fix restart.md drift (the walker hit is common.sh:426 not :265 and the consumer line numbers moved; shellcheck collects 18 files not 17; open issues ARE realised at intent/issues/<id>.md; intent is 3.0.1), and move watch-out 2 and 895a2fc's trap into restart.md's traps.
 
 ## Holds
 
-- Watch CI on today's fixes -- held until hv's push lands: at 12:14Z both upstream and local still held d4197f4 by ls-remote, and no CI run exists after Sep 11.
+- Send the Intent defect report -- held until hv says whether vc sends it to intent-cc or hv routes it. Two mechanisms: the pre-commit markdown formatter runs AFTER the doctor gate, so a view it rewrites lands after the gate has passed and every later commit is refused (fixed here at 895a2fc); and git commit -- <paths> sends the hook's formatted view into git's temporary index, leaving the real index stale (cc's finding).
 
 ## Watch-outs
 
-- Every intent wb write re-renders every board, not only the writer's, so a hand edit to any board file is overwritten at the next write by anyone. Write with intent wb only.
 - The pre-commit doctor gate refuses EVERY commit while any view in the estate is skewed, including a commit that touches none of the skewed files. A refused commit leaves its paths staged, and a peer's next plain git commit sweeps them in: unstage at once.
 
 ## Decisions
