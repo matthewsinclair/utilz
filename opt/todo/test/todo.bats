@@ -60,12 +60,18 @@ file_lacks() {
   TODO add "first task"
   TODO add "second task"
   TODO add --top "urgent task"
-  file_has todo.md '- [ ] `001` urgent task'
-  file_has todo.md '- [ ] `002` first task'
-  file_has todo.md '- [ ] `003` second task'
+  # Each item keeps the id it was given; --top moves the item, not the ids
+  # (issue 0033).
+  file_has todo.md '- [ ] `003` urgent task'
+  file_has todo.md '- [ ] `001` first task'
+  file_has todo.md '- [ ] `002` second task'
+  run grep -nF -- "urgent task" todo.md
+  local urgent="${output%%:*}"
+  run grep -nF -- "first task" todo.md
+  [ "$urgent" -lt "${output%%:*}" ]
 }
 
-@test "numbers are global, positional, zero-padded to three" {
+@test "ids pad to three digits, so the column holds its shape past nine" {
   local i
   for i in $(seq 1 10); do TODO add "item $i"; done
   # Three regardless of the count, so the column does not reflow at ten
@@ -75,15 +81,14 @@ file_lacks() {
 
 @test "a list past 999 widens rather than truncating" {
   # Cheaper than adding a thousand items one at a time: hand-write the bucket
-  # and let sync renumber it.
-  TODO add "seed"
+  # into a fresh file and let sync give each line the next id.
+  TODO list >/dev/null
   local i body=""
   for i in $(seq 1 1000); do body+="- [ ] item $i"$'\n'; done
   python3 - "$body" <<'PY_INNER'
-import sys, re
+import sys
 src = open("todo.md", encoding="utf-8").read()
-src = re.sub(r"(?m)^- \[ \].*$\n?", "", src, count=1)
-src = src.replace("## TODO\n", "## TODO\n" + sys.argv[1])
+src = src.replace("## TODO\n", "## TODO\n" + sys.argv[1], 1)
 open("todo.md", "w", encoding="utf-8").write(src)
 PY_INNER
   TODO sync
@@ -135,7 +140,9 @@ PY_INNER
   TODO add "old done"
   TODO add "new done"
   TODO done 1   # completes "old done"
-  TODO done 1   # completes "new done" (was renumbered to 1)
+  TODO done 2   # completes "new done", which keeps its id (issue 0033)
+  file_has todo.md '- [x] `001` old done'
+  file_has todo.md '- [x] `002` new done'
   # newest completion sits at the top of DONE
   run grep -nF -- "new done" todo.md
   local new_line="${output%%:*}"
@@ -167,10 +174,10 @@ PY_INNER
   for i in 1 2 3 4 5 6 7 8 9 10; do TODO add "task $i"; done
   file_has todo.md '- [ ] `008` task 8'
   TODO start 008
-  file_has todo.md '- [-] `001` task 8'
-  # DONE numbers last, so completing item 001 renumbers it to 010
-  TODO done 001
-  file_has todo.md '- [x] `010` task 8'
+  file_has todo.md '- [-] `008` task 8'
+  # The id moves with the item (issue 0033), so the same id completes it
+  TODO done 008
+  file_has todo.md '- [x] `008` task 8'
 }
 
 @test "unknown id errors non-zero" {
@@ -188,7 +195,7 @@ PY_INNER
   TODO add "todo one"
   TODO add "todo two"
   TODO add "todo three"
-  TODO start 2   # "todo two" -> DOING (becomes item 1)
+  TODO start 2   # "todo two" -> DOING, keeping its id
   # next 2 should show the DOING item first, then the top TODO item
   run "$UTILZ_BIN_DIR/todo" next 2
   assert_success
@@ -232,12 +239,13 @@ PY_INNER
   TODO add "first done"
   TODO add "second done"
   TODO done 1   # first done
-  TODO done 1   # second done (now at top of DONE)
+  TODO done 2   # second done (now at top of DONE)
   TODO done --prune
   local hist="_history/$(date -u +%Y%m%d)-done.md"
   assert_file_exists "$hist"
-  file_has "$hist" "[x] second done"
-  file_has "$hist" "[x] first done"
+  # The archive keeps each item's id, so a citation can still find it (0033)
+  file_has "$hist" '[x] `002` second done'
+  file_has "$hist" '[x] `001` first done'
   # newest-first: second done above first done
   run grep -nF -- "second done" "$hist"
   local top="${output%%:*}"
@@ -281,7 +289,7 @@ EOF
   TODO done --prune
   local hist="archive/done-$(date -u +%Y%m%d).md"
   assert_file_exists "$hist"
-  file_has "$hist" "[x] archived item"
+  file_has "$hist" '[x] `001` archived item'
 }
 
 # ----------------------------------------------------------------------------
@@ -345,9 +353,11 @@ _(none)_
 _(none)_
 EOF
   TODO sync
-  file_has todo.md '- [ ] `001` no number here'
-  file_has todo.md '- [ ] `002` pasted intent dash'
-  file_has todo.md '- [x] `003` nospace'
+  # 7:[x] keeps its id; the two lines that carried none take the next ids
+  # after it, in file order (issue 0033)
+  file_has todo.md '- [ ] `008` no number here'
+  file_has todo.md '- [ ] `009` pasted intent dash'
+  file_has todo.md '- [x] `007` nospace'
 }
 
 @test "sync warns and preserves an unrecognizable line" {
@@ -603,7 +613,7 @@ EOF
   file_has proj/todo.md "more"
 }
 
-@test "a pre-2026-09 file migrates to the GFM shape on sync, ids renumbered" {
+@test "a pre-2026-09 file migrates to the GFM shape on sync, ids kept" {
   cat > todo.md <<'OLD'
 ---
 generator: utilz todo
@@ -626,10 +636,10 @@ title: "# TODO"
 _(none)_
 OLD
   TODO sync
-  # written in the new shape, positionally renumbered, DOING first
-  file_has todo.md '- [-] `001` in flight'
-  file_has todo.md '- [ ] `002` first'
-  file_has todo.md '- [ ] `003` second'
+  # written in the new shape, each line keeping the id it carried (issue 0033)
+  file_has todo.md '- [-] `003` in flight'
+  file_has todo.md '- [ ] `001` first'
+  file_has todo.md '- [ ] `002` second'
   # and nothing is left in the old shape
   file_lacks todo.md ":[ ] first"
   file_lacks todo.md ":[-] in flight"
@@ -644,4 +654,149 @@ OLD
   file_lacks todo.md '`001` `001`'
   run "$UTILZ_BIN_DIR/todo" --json
   assert_output_contains '"text": "an item"'
+}
+
+# ----------------------------------------------------------------------------
+# Issue 0033 -- an id is the item's name, not its position
+# ----------------------------------------------------------------------------
+
+@test "a written id survives --json and every write, and a new item takes the next (issue 0033)" {
+  require_command jq
+  # The requester's repro: three items written 003, 007 and 009
+  cat > todo.md <<'EOF'
+---
+generator: utilz todo
+title: "# TODO"
+history: _history/YYYYMMDD-done.md
+---
+
+# TODO
+
+## DOING
+
+_(none)_
+
+## TODO
+
+- [ ] `003` three
+- [ ] `007` seven
+- [ ] `009` nine
+
+## DONE:2026-01-01T00:00:00Z
+
+_(none)_
+EOF
+  run bash -c "'$UTILZ_BIN_DIR/todo' --json 2>/dev/null"
+  assert_success
+  echo "$output" | jq -e '[.todo[].num] == [3, 7, 9]'
+  TODO sync
+  file_has todo.md '- [ ] `003` three'
+  file_has todo.md '- [ ] `007` seven'
+  file_has todo.md '- [ ] `009` nine'
+  TODO add "ten"
+  file_has todo.md '- [ ] `010` ten'
+}
+
+@test "start, done, notdone and toggle keep the moved item's id (issue 0033)" {
+  TODO add "a"
+  TODO add "b"
+  TODO add "c"
+  TODO start 3
+  file_has todo.md '- [-] `003` c'
+  TODO done 1
+  file_has todo.md '- [x] `001` a'
+  TODO notdone 1
+  file_has todo.md '- [ ] `001` a'
+  TODO toggle 2
+  file_has todo.md '- [x] `002` b'
+}
+
+@test "an id freed by prune or flush is never handed out again (issue 0033)" {
+  TODO add "a"
+  TODO add "b"
+  TODO add "c"
+  TODO done 3
+  TODO done --prune
+  TODO add "d"
+  file_has todo.md '- [ ] `004` d'
+  TODO done 4
+  TODO done --flush --force
+  TODO add "e"
+  file_has todo.md '- [ ] `005` e'
+}
+
+@test "a line with no id takes the next one, and a duplicated id is reassigned with a warning naming both (issue 0033)" {
+  cat > todo.md <<'EOF'
+---
+generator: utilz todo
+title: "# TODO"
+history: _history/YYYYMMDD-done.md
+---
+
+# TODO
+
+## DOING
+
+_(none)_
+
+## TODO
+
+- [ ] `005` five
+[ ] no id
+- [ ] `005` a copy of five
+
+## DONE:2026-01-01T00:00:00Z
+
+_(none)_
+EOF
+  run "$UTILZ_BIN_DIR/todo" sync
+  assert_success
+  assert_output_contains "005"
+  assert_output_contains "007"
+  file_has todo.md '- [ ] `005` five'
+  file_has todo.md '- [ ] `006` no id'
+  file_has todo.md '- [ ] `007` a copy of five'
+}
+
+@test "a 1.x file with no next-id gains one on its first write, every id unchanged (issue 0033)" {
+  cat > todo.md <<'EOF'
+---
+generator: utilz todo
+title: "# TODO"
+history: _history/YYYYMMDD-done.md
+---
+
+# TODO
+
+## DOING
+
+- [-] `002` doing
+
+## TODO
+
+- [ ] `001` todo
+
+## DONE:2026-01-01T00:00:00Z
+
+- [x] `004` done
+EOF
+  TODO sync
+  file_has todo.md 'next-id: 5'
+  file_has todo.md '- [-] `002` doing'
+  file_has todo.md '- [ ] `001` todo'
+  file_has todo.md '- [x] `004` done'
+}
+
+@test "--json's num is the item's id after start and done have moved it (issue 0033)" {
+  require_command jq
+  TODO add "a"
+  TODO add "b"
+  TODO add "c"
+  TODO start 3
+  TODO done 1
+  run bash -c "'$UTILZ_BIN_DIR/todo' --json 2>/dev/null"
+  assert_success
+  echo "$output" | jq -e '.doing[0] == {num: 3, text: "c"}'
+  echo "$output" | jq -e '.todo[0] == {num: 2, text: "b"}'
+  echo "$output" | jq -e '.done[0] == {num: 1, text: "a"}'
 }

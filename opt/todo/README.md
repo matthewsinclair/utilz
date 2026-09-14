@@ -10,10 +10,10 @@ Simple DOING/TODO/DONE manager for a plain-text `todo.md`.
 ## Quick start
 
 ```bash
-todo add "Write the design doc"     # -> TODO
-todo add --top "Fix the build"       # -> top of TODO
-todo start 1                         # -> DOING
-todo done 1                          # -> DONE (newest at top)
+todo add "Write the design doc"     # -> TODO, as id 001
+todo add --top "Fix the build"       # -> top of TODO, as id 002
+todo start 2                         # -> DOING; the id stays with the item
+todo done 2                          # -> DONE (newest at top)
 todo next                            # what to work on next
 todo done --prune                    # archive DONE to _history/YYYYMMDD-done.md
 ```
@@ -25,6 +25,7 @@ todo done --prune                    # archive DONE to _history/YYYYMMDD-done.md
 generator: utilz todo
 title: "# TODO"
 history: _history/YYYYMMDD-done.md
+next-id: 4
 ---
 
 # TODO
@@ -39,7 +40,7 @@ history: _history/YYYYMMDD-done.md
 
 ## DONE:2026-07-02T00:00:00Z
 
-- [x] `03` Something already finished
+- [x] `003` Something already finished
 ```
 
 Item lines are GFM task-list items, so a `todo.md` renders as a real checklist
@@ -51,31 +52,30 @@ against, and a DOING item under its own heading is clear enough without a box.
 
 Reading is tolerant of the pre-2026-09 shape (`01:[ ] text`, no dash), of a
 missing id, and of loose spacing, so an older file or a hand-pasted line parses.
-Writing is always the current shape, and ids are renumbered positionally on every
-write, so `utilz todo sync` migrates a file in place.
+Writing is always the current shape. Every id a line carries is kept; a line with no id, or with an id an earlier line already carries, takes the next id the file has never used, and a duplicate is warned about by both its ids. `utilz todo sync` migrates a file in place, every id unchanged.
 
-- Each item is a GFM task-list line: the checkbox, then the number in a code span, then the text (see the example above). Numbers are global, positional, and zero-padded to three, so the column keeps its shape as the list crosses ten and a hundred; a list past 999 widens rather than truncating. They are re-derived on every write, so an id is a handle for the next command, not a name for the item.
+- Each item is a GFM task-list line: the checkbox, then its id in a code span, then the text (see the example above). **An id is the item's name, not its position** (todo 2.0.0): it stays with the item through every write, and a new item takes the next id the file has never used. Ids are zero-padded to three, so the column keeps its shape as they cross ten and a hundred; past 999 they widen rather than truncating.
 - Glyphs: `[ ]` todo, `[-]` doing, `[x]` done.
 - In DOING/TODO top-to-bottom is priority; in DONE (and the history file) newest is on top.
-- Frontmatter: `generator` marks the file as utilz-owned (see [Interop](#interop-with-intent-todo)); `title` is the H1; `history` is the archive path pattern for `done --prune` (`YYYYMMDD` expands to the purge date, relative to the file's directory).
+- Frontmatter: `generator` marks the file as utilz-owned (see [Interop](#interop-with-intent-todo)); `title` is the H1; `history` is the archive path pattern for `done --prune`, which archives each item with its id (`YYYYMMDD` expands to the purge date, relative to the file's directory); `next-id` is the next id the file has never used. **`next-id` is load-bearing**: it is the only record of the ids above the highest one still present, so deleting it by hand lets a pruned id be handed out again.
 
 ## Commands
 
-| Command                   | Does                                                      |
-| ------------------------- | --------------------------------------------------------- |
-| `list` / (none)           | Show the file (create from template if absent)            |
-| `add [--top] <text>`      | Add to TODO (bottom, or top with `--top`)                 |
-| `start [--top] <id>`      | Move item to DOING                                        |
-| `done <id>`               | Move item to DONE (newest at top)                         |
-| `notdone <id>`            | Move item back to TODO                                    |
-| `toggle <id>`             | Flip done / not-done                                      |
-| `next [n]`                | Next `n` open items (DOING first, then TODO); default 1   |
-| `doing` / `todo` / `done` | Show one bucket                                           |
-| `count`                   | Counts per bucket                                         |
-| `sync` (alias `update`)   | Normalize: reconcile checkboxes, relocate, renumber       |
-| `edit`                    | Open in `$VISUAL`/`$EDITOR`/`vi`, then sync               |
-| `done --prune`            | Archive DONE to the history file, then clear it           |
-| `done --flush`            | Clear DONE without archiving (`--force` skips the prompt) |
+| Command                   | Does                                                                |
+| ------------------------- | ------------------------------------------------------------------- |
+| `list` / (none)           | Show the file (create from template if absent)                      |
+| `add [--top] <text>`      | Add to TODO (bottom, or top with `--top`)                           |
+| `start [--top] <id>`      | Move item to DOING                                                  |
+| `done <id>`               | Move item to DONE (newest at top)                                   |
+| `notdone <id>`            | Move item back to TODO                                              |
+| `toggle <id>`             | Flip done / not-done                                                |
+| `next [n]`                | Next `n` open items (DOING first, then TODO); default 1             |
+| `doing` / `todo` / `done` | Show one bucket                                                     |
+| `count`                   | Counts per bucket                                                   |
+| `sync` (alias `update`)   | Normalize: reconcile checkboxes, relocate, give id-less lines an id |
+| `edit`                    | Open in `$VISUAL`/`$EDITOR`/`vi`, then sync                         |
+| `done --prune`            | Archive DONE to the history file, then clear it                     |
+| `done --flush`            | Clear DONE without archiving (`--force` skips the prompt)           |
 
 ## Options
 
@@ -106,7 +106,7 @@ The same awareness gates **creation** on the default path: a bare `utilz todo` i
 todo --json | jq '.todo[].text'
 ```
 
-Emits `{title, doing[], todo[], done[], done_watermark}`, where each bucket is an array of `{num, text}`. Requires `jq`.
+Emits `{title, doing[], todo[], done[], done_watermark}`, where each bucket is an array of `{num, text}` and `num` is the item's id. Requires `jq`.
 
 ## Testing
 

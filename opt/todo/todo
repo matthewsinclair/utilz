@@ -5,7 +5,8 @@
 # A standalone fork of Intent's `intent todo`, factored out of Intent. Unlike
 # Intent (where todo.md is a read-only projection of steel-thread status), here
 # the todo.md file IS the source of truth: items are freeform one-line strings,
-# addressed by a positional number, in three buckets -- DOING / TODO / DONE.
+# each named by an id that stays with it (issue 0033), in three buckets --
+# DOING / TODO / DONE.
 #
 # The file format stays mutually compatible with Intent (same bucket headings,
 # `[ ]`/`[-]`/`[x]` glyphs, `## DONE:<watermark>`), with two additions: YAML
@@ -42,15 +43,27 @@ WATERMARK=""
 # the other. See guard_foreign_todo. (ST0008/WP-08.)
 TODO_GENERATOR="utilz todo"
 
-# One indexed array per bucket, holding item TEXT only (glyph is derived from
-# the bucket). Orphan arrays hold unrecognized non-blank lines, preserved
-# verbatim at the tail of their bucket (No Silent Errors: warned, never dropped).
+# One indexed array per bucket holding item TEXT (glyph is derived from the
+# bucket), and beside it one holding each item's ID at the same index: the id
+# is the item's name, not its position, and it moves with the item (issue
+# 0033). Orphan arrays hold unrecognized non-blank lines, preserved verbatim at
+# the tail of their bucket (No Silent Errors: warned, never dropped).
 DOING_ITEMS=(); TODO_ITEMS=(); DONE_ITEMS=()
+DOING_IDS=(); TODO_IDS=(); DONE_IDS=()
 DOING_ORPHANS=(); TODO_ORPHANS=(); DONE_ORPHANS=()
 
-# Set by _counts / _resolve_n
-A=0; B=0; C=0; TOTAL=0; WIDTH=1
-SRC_BUCKET=""; SRC_IDX=-1; SPLICED=""
+# THE NEXT ID NEVER USED IN THIS FILE, persisted as the frontmatter's next-id
+# (issue 0033). "Free" means never used, not currently unused: an id freed by
+# prune or flush and handed to a new item would re-point every old citation of
+# it at the new one. Parse takes the larger of the recorded mark and one past
+# the highest id present, so a hand-added item with a bigger id cannot collide.
+# The key is load-bearing: it is the only record of ids above the highest one
+# still present.
+NEXT_ID=1
+
+# Set by _counts / _resolve_n / move_item
+A=0; B=0; C=0; WIDTH=1
+SRC_BUCKET=""; SRC_IDX=-1; SPLICED=""; SPLICED_ID=""
 
 # ============================================================================
 # TIME HELPERS
@@ -77,12 +90,19 @@ _normalize_title() {
 # Read TODO_FILE into the bucket arrays. Missing file -> empty structure with
 # defaults (so the first write materializes a template). Glyph is authoritative:
 # an item is routed to a bucket by its checkbox, not by the section it sits under.
+#
+# IDS ARE KEPT (issue 0033): each item line's id is read and stored beside its
+# text. An item with no id, or with an id an earlier line already carries,
+# takes the next id never used in this file, in file order, once every line
+# has been read; a duplicate is warned about, naming both ids.
 parse_file() {
   DOING_ITEMS=(); TODO_ITEMS=(); DONE_ITEMS=()
+  DOING_IDS=(); TODO_IDS=(); DONE_IDS=()
   DOING_ORPHANS=(); TODO_ORPHANS=(); DONE_ORPHANS=()
   TITLE="# TODO"
   HISTORY="_history/YYYYMMDD-done.md"
   WATERMARK=""
+  NEXT_ID=1
 
   # A create-time title override applies only to a fresh file; an existing
   # file's `title:` wins (preserved) because it is read after this.
@@ -95,7 +115,9 @@ parse_file() {
   fi
 
   local item_re='^[[:space:]]*(- )?([0-9]+:)?\[([ xX-])\] ?(.*)$'
-  local in_fm=0 seen_fm=0 section="" line g txt
+  local in_fm=0 seen_fm=0 section="" line g txt id bucket idx entry
+  local recorded_next="" max_id=0
+  local -a seen=() pending=() dups=()
 
   while IFS= read -r line || [[ -n "$line" ]]; do
     # Frontmatter block (only the first `---`-delimited block at the top)
@@ -110,6 +132,7 @@ parse_file() {
         TITLE="${TITLE%\"}"; TITLE="${TITLE#\"}"
         ;;
       history:*) HISTORY="$(_fm_val "$line")" ;;
+      next-id:*) recorded_next="$(_fm_val "$line")" ;;
       esac
       continue
     fi
@@ -128,19 +151,34 @@ parse_file() {
     if [[ "$line" =~ $item_re ]]; then
       g="${BASH_REMATCH[3]}"
       txt="${BASH_REMATCH[4]}"
-      # The id sits before the checkbox in the pre-2026-09 form (`01:[ ] text`,
-      # captured and discarded by the regex) and after it in the current one
-      # (`- [ ] \`01\` text`). Strip the trailing form here so the stored text is
-      # the text either way, and both forms keep parsing. Renumbering on write
-      # means a stale id is never authoritative.
+      # The id sits before the checkbox in the pre-2026-09 form (`01:[ ] text`)
+      # and after it, in a code span, in the current one (`- [ ] \`01\` text`).
+      # Either is the item's id, and it is KEPT (issue 0033); the current form
+      # wins if a line somehow carries both.
+      id="${BASH_REMATCH[2]%:}"
       if [[ "$txt" =~ ^\`([0-9]+)\`[[:space:]]+(.*)$ ]]; then
+        id="${BASH_REMATCH[1]}"
         txt="${BASH_REMATCH[2]}"
       fi
       case "$g" in
-      "-") DOING_ITEMS+=("$txt") ;;
-      " ") TODO_ITEMS+=("$txt") ;;
-      x | X) DONE_ITEMS+=("$txt") ;;
+      "-") bucket="DOING" ;;
+      " ") bucket="TODO" ;;
+      *) bucket="DONE" ;;
       esac
+      eval "idx=\${#${bucket}_ITEMS[@]}"
+      eval "${bucket}_ITEMS+=(\"\$txt\")"
+      if [[ -n "$id" ]]; then id=$((10#$id)); fi
+      if [[ -n "$id" && -z "${seen[id]:-}" ]]; then
+        seen[id]=1
+        eval "${bucket}_IDS+=(\"\$id\")"
+        if ((id > max_id)); then max_id=$id; fi
+      else
+        # No id, or one an earlier line already carries: an id is assigned
+        # below, once the highest in the file is known.
+        if [[ -n "$id" ]]; then dups+=("$id:$bucket:$idx"); fi
+        eval "${bucket}_IDS+=(\"\")"
+        pending+=("$bucket:$idx")
+      fi
       continue
     fi
 
@@ -155,6 +193,31 @@ parse_file() {
 
   if [[ -z "$WATERMARK" ]]; then WATERMARK="$(_now_day)"; fi
   _normalize_title
+
+  # The next id: past the highest present, and past the recorded mark.
+  NEXT_ID=$((max_id + 1))
+  if [[ -n "$recorded_next" ]]; then
+    if [[ "$recorded_next" =~ ^[0-9]+$ ]]; then
+      if ((10#$recorded_next > NEXT_ID)); then NEXT_ID=$((10#$recorded_next)); fi
+    else
+      warn "todo: next-id '$recorded_next' is not a number, so it was ignored"
+    fi
+  fi
+  for entry in "${pending[@]+"${pending[@]}"}"; do
+    eval "${entry%%:*}_IDS[${entry#*:}]=$NEXT_ID"
+    NEXT_ID=$((NEXT_ID + 1))
+  done
+
+  # A duplicate is never silent: name the id both lines carried and the one
+  # the later line now takes.
+  _counts
+  local dup_old dup_at dup_new dup_text
+  for entry in "${dups[@]+"${dups[@]}"}"; do
+    dup_old="${entry%%:*}"
+    dup_at="${entry#*:}"
+    eval "dup_new=\${${dup_at%%:*}_IDS[${dup_at#*:}]}; dup_text=\${${dup_at%%:*}_ITEMS[${dup_at#*:}]}"
+    warn "$(printf 'todo: two items carry id %0*d; the later one, "%s", takes %0*d' "$WIDTH" "$dup_old" "$dup_text" "$WIDTH" "$dup_new")"
+  done
 }
 
 # ============================================================================
@@ -221,15 +284,16 @@ _counts() {
   A=${#DOING_ITEMS[@]}
   B=${#TODO_ITEMS[@]}
   C=${#DONE_ITEMS[@]}
-  TOTAL=$((A + B + C))
-  # Ids pad to three, so the column keeps its shape as the list crosses ten
-  # and a hundred instead of renumbering every item one character wider. A
-  # list past 999 grows rather than truncating.
-  WIDTH=${#TOTAL}
+  # Ids pad to three, so the column keeps its shape as ids cross ten and a
+  # hundred. The width follows the highest id this file has ever used, the
+  # one before NEXT_ID, so it never narrows when a high id is pruned; past 999
+  # it grows rather than truncating.
+  local highest=$((NEXT_ID - 1))
+  WIDTH=${#highest}
   if ((WIDTH < 3)); then WIDTH=3; fi
 }
 
-# Emit numbered item lines: <glyphchar> <width> <startnum> <text...>
+# Emit one bucket's item lines, each with its own id: <glyphchar> <BUCKET>
 #
 # GFM task-list shape: `- [ ] \`01\` text`. The leading dash makes each item a
 # real list item, which is what stops a run of them collapsing into one
@@ -245,19 +309,18 @@ _counts() {
 # deliberate: the glyph is what `toggle` and `sync` reconcile against, it is
 # what the legend documents, and a DOING item reading `[-]` under its own
 # heading is clear enough. Correctness of the round trip beats a checkbox.
-_emit_bucket_lines() {
-  local g="$1" w="$2" s="$3"
-  shift 3
-  local t
-  for t in "$@"; do
+_emit_bucket() {
+  local g="$1" b="$2" n i t id
+  eval "n=\${#${b}_ITEMS[@]}"
+  for ((i = 0; i < n; i++)); do
+    eval "t=\${${b}_ITEMS[$i]}; id=\${${b}_IDS[$i]}"
     # shellcheck disable=SC2016
     # The backticks are LITERAL -- markdown code fencing around the item
     # number, in a printf FORMAT string. Single quotes are the correct quoting
     # here and double quotes would be the bug: the format holds %s and %0*d,
     # which printf expands, and the shell must not. SC2016 reads the backticks
     # as an attempted command substitution and cannot tell the difference.
-    printf -- '- [%s] `%0*d` %s\n' "$g" "$w" "$s" "$t"
-    s=$((s + 1))
+    printf -- '- [%s] `%0*d` %s\n' "$g" "$WIDTH" "$id" "$t"
   done
 }
 
@@ -271,21 +334,22 @@ write_file() {
     printf 'generator: %s\n' "$TODO_GENERATOR"
     printf 'title: "%s"\n' "$TITLE"
     printf 'history: %s\n' "$HISTORY"
+    printf 'next-id: %s\n' "$NEXT_ID"
     printf -- '---\n\n'
     printf '%s\n\n' "$TITLE"
 
     printf '## DOING\n\n'
-    if [[ $A -gt 0 ]]; then _emit_bucket_lines '-' "$WIDTH" 1 "${DOING_ITEMS[@]}"; fi
+    if [[ $A -gt 0 ]]; then _emit_bucket '-' DOING; fi
     if [[ ${#DOING_ORPHANS[@]} -gt 0 ]]; then printf '%s\n' "${DOING_ORPHANS[@]}"; fi
     if [[ $A -eq 0 && ${#DOING_ORPHANS[@]} -eq 0 ]]; then printf '_(none)_\n'; fi
 
     printf '\n## TODO\n\n'
-    if [[ $B -gt 0 ]]; then _emit_bucket_lines ' ' "$WIDTH" $((A + 1)) "${TODO_ITEMS[@]}"; fi
+    if [[ $B -gt 0 ]]; then _emit_bucket ' ' TODO; fi
     if [[ ${#TODO_ORPHANS[@]} -gt 0 ]]; then printf '%s\n' "${TODO_ORPHANS[@]}"; fi
     if [[ $B -eq 0 && ${#TODO_ORPHANS[@]} -eq 0 ]]; then printf '_(none)_\n'; fi
 
     printf '\n## DONE:%s\n\n' "$WATERMARK"
-    if [[ $C -gt 0 ]]; then _emit_bucket_lines 'x' "$WIDTH" $((A + B + 1)) "${DONE_ITEMS[@]}"; fi
+    if [[ $C -gt 0 ]]; then _emit_bucket 'x' DONE; fi
     if [[ ${#DONE_ORPHANS[@]} -gt 0 ]]; then printf '%s\n' "${DONE_ORPHANS[@]}"; fi
     if [[ $C -eq 0 && ${#DONE_ORPHANS[@]} -eq 0 ]]; then printf '_(none)_\n'; fi
   } >"$tmp"
@@ -296,18 +360,25 @@ write_file() {
 # ITEM ADDRESSING + MOVES
 # ============================================================================
 
-# Resolve a global item number to SRC_BUCKET + SRC_IDX (0-based within bucket).
-# Numbering is DOING(1..A), TODO(A+1..A+B), DONE(A+B+1..A+B+C).
+# Resolve an item id to SRC_BUCKET + SRC_IDX (0-based within its bucket): the
+# item that CARRIES the id, wherever it sits (issue 0033).
 _resolve_n() {
-  local n="$1"
+  local n="$1" b count i id
   [[ "$n" =~ ^[0-9]+$ ]] || return 1
   # Ids are rendered zero-padded ("08"), so force base 10: bash arithmetic
   # would otherwise read a leading zero as octal and reject 08 and 09.
   n=$((10#$n))
-  _counts
-  if ((n >= 1 && n <= A)); then SRC_BUCKET="DOING"; SRC_IDX=$((n - 1)); return 0; fi
-  if ((n >= A + 1 && n <= A + B)); then SRC_BUCKET="TODO"; SRC_IDX=$((n - A - 1)); return 0; fi
-  if ((n >= A + B + 1 && n <= A + B + C)); then SRC_BUCKET="DONE"; SRC_IDX=$((n - A - B - 1)); return 0; fi
+  for b in DOING TODO DONE; do
+    eval "count=\${#${b}_IDS[@]}"
+    for ((i = 0; i < count; i++)); do
+      eval "id=\${${b}_IDS[$i]}"
+      if [[ "$id" == "$n" ]]; then
+        SRC_BUCKET="$b"
+        SRC_IDX=$i
+        return 0
+      fi
+    done
+  done
   return 1
 }
 
@@ -330,16 +401,34 @@ _splice_out() {
   fi
 }
 
-# Add text to a bucket at top or bottom.
+# Add an item -- its text and its id -- to a bucket at top or bottom.
 _add_to() {
-  local b="$1" pos="$2" t="$3"
+  local b="$1" pos="$2" t="$3" id="$4"
   case "$b:$pos" in
-  DOING:top) DOING_ITEMS=("$t" "${DOING_ITEMS[@]+"${DOING_ITEMS[@]}"}") ;;
-  DOING:bottom) DOING_ITEMS=("${DOING_ITEMS[@]+"${DOING_ITEMS[@]}"}" "$t") ;;
-  TODO:top) TODO_ITEMS=("$t" "${TODO_ITEMS[@]+"${TODO_ITEMS[@]}"}") ;;
-  TODO:bottom) TODO_ITEMS=("${TODO_ITEMS[@]+"${TODO_ITEMS[@]}"}" "$t") ;;
-  DONE:top) DONE_ITEMS=("$t" "${DONE_ITEMS[@]+"${DONE_ITEMS[@]}"}") ;;
-  DONE:bottom) DONE_ITEMS=("${DONE_ITEMS[@]+"${DONE_ITEMS[@]}"}" "$t") ;;
+  DOING:top)
+    DOING_ITEMS=("$t" "${DOING_ITEMS[@]+"${DOING_ITEMS[@]}"}")
+    DOING_IDS=("$id" "${DOING_IDS[@]+"${DOING_IDS[@]}"}")
+    ;;
+  DOING:bottom)
+    DOING_ITEMS=("${DOING_ITEMS[@]+"${DOING_ITEMS[@]}"}" "$t")
+    DOING_IDS=("${DOING_IDS[@]+"${DOING_IDS[@]}"}" "$id")
+    ;;
+  TODO:top)
+    TODO_ITEMS=("$t" "${TODO_ITEMS[@]+"${TODO_ITEMS[@]}"}")
+    TODO_IDS=("$id" "${TODO_IDS[@]+"${TODO_IDS[@]}"}")
+    ;;
+  TODO:bottom)
+    TODO_ITEMS=("${TODO_ITEMS[@]+"${TODO_ITEMS[@]}"}" "$t")
+    TODO_IDS=("${TODO_IDS[@]+"${TODO_IDS[@]}"}" "$id")
+    ;;
+  DONE:top)
+    DONE_ITEMS=("$t" "${DONE_ITEMS[@]+"${DONE_ITEMS[@]}"}")
+    DONE_IDS=("$id" "${DONE_IDS[@]+"${DONE_IDS[@]}"}")
+    ;;
+  DONE:bottom)
+    DONE_ITEMS=("${DONE_ITEMS[@]+"${DONE_ITEMS[@]}"}" "$t")
+    DONE_IDS=("${DONE_IDS[@]+"${DONE_IDS[@]}"}" "$id")
+    ;;
   esac
 }
 
@@ -350,8 +439,11 @@ move_item() {
     error "todo: no item numbered '$n'"
     exit 1
   fi
+  # The id leaves with the item and arrives with it (issue 0033).
+  _splice_out "${SRC_BUCKET}_IDS" "$SRC_IDX"
+  SPLICED_ID="$SPLICED"
   _splice_out "${SRC_BUCKET}_ITEMS" "$SRC_IDX"
-  _add_to "$dest" "$pos" "$SPLICED"
+  _add_to "$dest" "$pos" "$SPLICED" "$SPLICED_ID"
 }
 
 # ============================================================================
@@ -417,9 +509,12 @@ cmd_add() {
     exit 1
   fi
   parse_file
-  _add_to "TODO" "$pos" "$text"
+  # A new item takes the next id never used in this file (issue 0033).
+  local id="$NEXT_ID"
+  NEXT_ID=$((NEXT_ID + 1))
+  _add_to "TODO" "$pos" "$text" "$id"
   write_file
-  info "added: $text"
+  info "added $(printf '%0*d' "$WIDTH" "$id"): $text"
 }
 
 cmd_start() {
@@ -472,15 +567,15 @@ cmd_toggle() {
   write_file
 }
 
-# Print the items of one bucket, with their global numbers.
+# Print the items of one bucket, with their ids.
 cmd_print_bucket() {
   local bucket="$1"
   parse_file
   _counts
   case "$bucket" in
-  DOING) if [[ $A -gt 0 ]]; then _emit_bucket_lines '-' "$WIDTH" 1 "${DOING_ITEMS[@]}"; fi ;;
-  TODO) if [[ $B -gt 0 ]]; then _emit_bucket_lines ' ' "$WIDTH" $((A + 1)) "${TODO_ITEMS[@]}"; fi ;;
-  DONE) if [[ $C -gt 0 ]]; then _emit_bucket_lines 'x' "$WIDTH" $((A + B + 1)) "${DONE_ITEMS[@]}"; fi ;;
+  DOING) if [[ $A -gt 0 ]]; then _emit_bucket '-' DOING; fi ;;
+  TODO) if [[ $B -gt 0 ]]; then _emit_bucket ' ' TODO; fi ;;
+  DONE) if [[ $C -gt 0 ]]; then _emit_bucket 'x' DONE; fi ;;
   esac
 }
 
@@ -503,8 +598,8 @@ cmd_next() {
     count=$((count + 1))
     if [[ $count -ge $n ]]; then break; fi
   done < <(
-    if [[ $A -gt 0 ]]; then _emit_bucket_lines '-' "$WIDTH" 1 "${DOING_ITEMS[@]}"; fi
-    if [[ $B -gt 0 ]]; then _emit_bucket_lines ' ' "$WIDTH" $((A + 1)) "${TODO_ITEMS[@]}"; fi
+    if [[ $A -gt 0 ]]; then _emit_bucket '-' DOING; fi
+    if [[ $B -gt 0 ]]; then _emit_bucket ' ' TODO; fi
   )
 }
 
@@ -547,17 +642,21 @@ cmd_prune() {
     info "todo: nothing to prune"
     return 0
   fi
-  local hist block t
+  local hist block i line
   hist=$(_resolve_history)
   mkdir -p "$(dirname "$hist")"
   block=""
-  for t in "${DONE_ITEMS[@]}"; do
-    block+="[x] $t"$'\n'
+  # Each archived item keeps its id, so a citation of it can still be found
+  # (issue 0033).
+  for ((i = 0; i < C; i++)); do
+    # shellcheck disable=SC2016  # literal markdown backticks, as in _emit_bucket
+    printf -v line '[x] `%0*d` %s' "$WIDTH" "${DONE_IDS[$i]}" "${DONE_ITEMS[$i]}"
+    block+="$line"$'\n'
   done
   # Strip the trailing newline the loop appended (block is passed to printf %s\n)
   block="${block%$'\n'}"
   _prepend_file "$hist" "$block"
-  DONE_ITEMS=()
+  DONE_ITEMS=(); DONE_IDS=()
   WATERMARK="$(_now_iso)"
   write_file
   info "todo: pruned $C item(s) to $hist"
@@ -583,20 +682,19 @@ cmd_flush() {
       ;;
     esac
   fi
-  DONE_ITEMS=()
+  DONE_ITEMS=(); DONE_IDS=()
   WATERMARK="$(_now_iso)"
   write_file
   info "todo: flushed done items (not archived)"
 }
 
-# JSON array of {num, text} for a bucket: <startnum> <text...>
+# JSON array of {num, text} for a bucket, num being each item's id: <BUCKET>
 _bucket_json() {
-  local s="$1"
-  shift
-  local out="[]" t
-  for t in "$@"; do
-    out=$(printf '%s' "$out" | jq --argjson n "$s" --arg t "$t" '. + [{num: $n, text: $t}]')
-    s=$((s + 1))
+  local b="$1" out="[]" n i t id
+  eval "n=\${#${b}_ITEMS[@]}"
+  for ((i = 0; i < n; i++)); do
+    eval "t=\${${b}_ITEMS[$i]}; id=\${${b}_IDS[$i]}"
+    out=$(printf '%s' "$out" | jq --argjson n "$id" --arg t "$t" '. + [{num: $n, text: $t}]')
   done
   printf '%s' "$out"
 }
@@ -606,9 +704,9 @@ cmd_json() {
   parse_file
   _counts
   local dj tj cj
-  dj=$(_bucket_json 1 "${DOING_ITEMS[@]+"${DOING_ITEMS[@]}"}")
-  tj=$(_bucket_json $((A + 1)) "${TODO_ITEMS[@]+"${TODO_ITEMS[@]}"}")
-  cj=$(_bucket_json $((A + B + 1)) "${DONE_ITEMS[@]+"${DONE_ITEMS[@]}"}")
+  dj=$(_bucket_json DOING)
+  tj=$(_bucket_json TODO)
+  cj=$(_bucket_json DONE)
   jq -n \
     --arg title "$TITLE" \
     --argjson doing "$dj" \
@@ -638,7 +736,8 @@ COMMANDS:
   next [n]              Show the next n open items (DOING first, then TODO); n=1
   doing | todo | done   Show a single bucket
   count                 Show item counts per bucket
-  sync (alias update)   Normalize the file: reconcile checkboxes, renumber
+  sync (alias update)   Normalize the file: reconcile checkboxes, give an id to
+                        any line that has none
   edit                  Open the file in $VISUAL/$EDITOR/vi, then sync
   done --prune          Archive DONE to the history file, then clear it
   done --flush          Clear DONE WITHOUT archiving (use --force to skip prompt)
@@ -653,6 +752,8 @@ OPTIONS:
   --version             Show version
 
 CHECKBOX LEGEND:  [ ] todo   [-] doing   [x] done
+IDS:              an item keeps its id through every write, and a new one takes
+                  the next id this file has never used (its next-id key)
 
 For detailed help, run: utilz help todo
 EOF

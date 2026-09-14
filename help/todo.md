@@ -21,9 +21,9 @@ todo [OPTIONS] [COMMAND] [ARGS]
 
 ## Description
 
-`todo` manages a plain-text `todo.md` file with three buckets -- DOING, TODO, and DONE -- and a handful of subcommands for adding, moving, querying, and archiving items. Each item is a one-line statement carrying a positional number and a checkbox glyph.
+`todo` manages a plain-text `todo.md` file with three buckets -- DOING, TODO, and DONE -- and a handful of subcommands for adding, moving, querying, and archiving items. Each item is a one-line statement carrying an id and a checkbox glyph.
 
-The file is the single source of truth: you can drive it entirely from the CLI, or open it in an editor and hand-edit it, then run `todo sync` to normalize. Numbers are re-derived on every write and zero-padded to three, so the column keeps its shape as the list crosses ten and a hundred (a list past 999 widens rather than truncating). An id is a handle for the next command, not a name for the item.
+The file is the single source of truth: you can drive it entirely from the CLI, or open it in an editor and hand-edit it, then run `todo sync` to normalize. **An id is the item's name, not its position** (todo 2.0.0): an item keeps its id through every write, so an id cited in a note, a board or a handover still names the same item tomorrow, and a new item takes the next id the file has never used. Ids are zero-padded to three, so the column keeps its shape as they cross ten and a hundred (past 999 they widen rather than truncating).
 
 `todo` is a standalone fork of Intent's `intent todo`. The two file formats are mutually compatible (same bucket headings, same `[ ]`/`[-]`/`[x]` glyphs, same `## DONE:<watermark>` line), so a `todo.md` written by one is readable by the other. Because the formats are that close, each tool stamps a `generator:` frontmatter marker and refuses to overwrite a file the other owns -- see [Interop with intent todo](#interop-with-intent-todo).
 
@@ -34,6 +34,7 @@ The file is the single source of truth: you can drive it entirely from the CLI, 
 generator: utilz todo
 title: "# TODO"
 history: _history/YYYYMMDD-done.md
+next-id: 4
 ---
 
 # TODO
@@ -60,10 +61,9 @@ against, and a DOING item under its own heading is clear enough without a box.
 
 Reading is tolerant of the pre-2026-09 shape (`01:[ ] text`, no dash), of a
 missing id, and of loose spacing, so an older file or a hand-pasted line parses.
-Writing is always the current shape, and ids are renumbered positionally on every
-write, so `utilz todo sync` migrates a file in place.
+Writing is always the current shape. Every id a line carries is kept; a line with no id, or with an id an earlier line already carries, takes the next id the file has never used, and a duplicate is warned about by both its ids. `utilz todo sync` migrates a file in place, every id unchanged.
 
-The frontmatter carries the `generator` ownership marker (see [Interop with intent todo](#interop-with-intent-todo)), the H1 `title`, and a `history` pattern (where `todo done --prune` archives completed items; `YYYYMMDD` expands to the purge date, resolved relative to the `todo.md` directory).
+The frontmatter carries the `generator` ownership marker (see [Interop with intent todo](#interop-with-intent-todo)), the H1 `title`, a `history` pattern (where `todo done --prune` archives completed items, each with its id; `YYYYMMDD` expands to the purge date, resolved relative to the `todo.md` directory), and `next-id`, the next id the file has never used. **`next-id` is load-bearing**: it is the only record of the ids above the highest one still present, so deleting it by hand lets a pruned id be handed out again.
 
 ### Ordering
 
@@ -95,7 +95,7 @@ For the same reason, `todo` will not **create** a fresh default `./todo.md` insi
 - `next [n]` - Show the next `n` open items (DOING first, then TODO); default 1
 - `doing` | `todo` | `done` - Show a single bucket
 - `count` - Show item counts per bucket
-- `sync` (alias `update`) - Normalize the file: reconcile checkboxes, relocate, renumber
+- `sync` (alias `update`) - Normalize the file: reconcile checkboxes, relocate, give an id to any line that has none
 - `edit` - Open the file in `$VISUAL`/`$EDITOR`/`vi`, then `sync` on exit
 - `done --prune` - Archive DONE to the history file, then clear it
 - `done --flush` - Clear DONE WITHOUT archiving (add `--force`, or its alias `--just-do-it`, to skip the prompt)
@@ -132,7 +132,7 @@ For the same reason, `todo` will not **create** a fresh default `./todo.md` insi
 }
 ```
 
-Item numbers match the ids shown by `list`. Requires `jq`.
+`num` is the item's id, as `list` shows it, and it stays the same through every write. Requires `jq`.
 
 ---
 
@@ -144,10 +144,10 @@ todo add "Write the design doc"
 todo add "Review the PR"
 todo add --top "Fix the failing build"     # jumps to the top of TODO
 
-# Move things around
-todo start 1        # begin the top item (-> DOING)
-todo done 1         # complete it (-> DONE, newest at top)
-todo toggle 3       # flip item 3
+# Move things around -- by id, which stays with the item
+todo start 3        # begin "Fix the failing build", which add gave id 3
+todo done 3         # complete it (-> DONE, newest at top)
+todo toggle 1       # flip item 1
 
 # Query
 todo next           # the single next thing to work on
@@ -192,7 +192,7 @@ todo --json | jq '.todo[].text'
 ## Exit Status
 
 - `0` - Success
-- `1` - Error (bad item number, missing argument, `--file` with `-g`, etc.)
+- `1` - Error (an id no item carries, a missing argument, `--file` with `-g`, etc.)
 
 ---
 
