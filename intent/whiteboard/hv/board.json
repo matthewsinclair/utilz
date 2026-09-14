@@ -72,8 +72,17 @@
       "kind": "todo",
       "seq": 7,
       "text": "Cut the next release once cc's queue has landed and vc's pre-release verdict is in: VERSION 2.9.0 and prez 2.1.0, confirmed by hv directly to vc 2026-09-14. It carries ST0017 (prez showreel), ST0018 (PREZ_DEFAULT_THEME), 0016 (CI state in the install manifest), 0024 (install builds and ships showreel), 0028 (one home for the install-test fixtures), 0029 (AT20's forwarded-leg verdict), 0030 (acceptance.sh's process matchers), 0031 (.prettierignore covers the issue and whiteboard views), 0032 (the install watchdog holds no caller's pipe), 0033 (utilz todo keeps stable ids, as todo 2.0.0: in this release and the break accepted, hv directly to vc 2026-09-14), and the fixes for 0023, 0025, 0026 and 0027. Annotated tag on the release: commit itself, then push both remotes.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-09-14T15:25:02.710Z",
       "recorded_at": "2026-09-14T14:08:58.868Z"
+    },
+    {
+      "node": "hv",
+      "kind": "todo",
+      "seq": 8,
+      "text": "Tag and push 2.9.0. vc's pre-release verdict is GO (2026-09-14, run 15:18-15:23Z on ebd0243 plus cc's board commit). An annotated tag on the release: commit itself, ebd0243, named as 2.8.0's was (2.9.0, no v), then git push local main 2.9.0 && git push upstream main 2.9.0. It carries ST0017 (prez showreel), ST0018 (PREZ_DEFAULT_THEME), 0016 (CI state in the install manifest), 0024 (install ships showreel), 0033 (todo 2.0.0: an item's id is its name), and the fixes for 0010, 0011, 0014, 0015, 0018, 0022, 0023, 0025 to 0032 and 0034. VERSION 2.9.0 and prez 2.1.0, confirmed by hv directly to vc.",
+      "state": "live",
+      "recorded_at": "2026-09-14T15:25:02.760Z"
     }
   ],
   "messages": []

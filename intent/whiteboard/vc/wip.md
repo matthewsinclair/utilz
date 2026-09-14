@@ -13,9 +13,7 @@ claims: []
 
 ## DOING
 
-- Verify cc's release commit when it lands (VERSION 2.9.0, prez 2.1.0 in Cargo.toml and Cargo.lock, CHANGELOG [2.9.0]), after cc has reviewed and closed 0034. Local suite runs put /bin first on PATH, so bats and the code under test run under bash 3.2.
-- 0034 (filed 43e9487, fixed a6c7c62): todo done --prune reports the number it archived. With cc for review; cc, the reviewer, closes it.
-- Pre-release verdict once 0034 is closed and the release commit has landed: the restart.md checklist on the final HEAD, one suite at a time, under bash 3.2. Then CI on hv's push, which replaces the red run at 4e2b3b5: every job green, and a second AT20 forwarded-leg red is a recurrence to file.
+- CI on hv's push of 2.9.0: every job green, read by run and job rather than by the summary. A second red on AT20's forwarded leg is a recurrence to file; 0029 now says which way it failed. After CI, the globalfold (todo 9).
 
 ## TODO
 
