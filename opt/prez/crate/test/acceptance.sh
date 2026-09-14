@@ -916,6 +916,11 @@ if want AT09; then
   # comment creates no coupling, which is why AC09 once allowed it; it does
   # leak, which is why it is refused now.
   #
+  # **AND THE ESTATE HAS TWO NAMES** (issue 0035). Its tools moved out to a
+  # repository of their own, Gtools, and this pattern named Geodica alone
+  # until 2026-09-14, so a source comment naming the consumer passed the
+  # check that exists to refuse it. The imports check below named both.
+  #
   # **AND src MEANS EVERY src/ IN THE WORKSPACE, FOUND RATHER THAN NAMED**
   # (issue 0027). These four checks read "$CRATE/src" alone until 2026-09-14,
   # which the ST0017 workspace outgrew: crates/artifact and crates/showreel are
@@ -937,7 +942,7 @@ if want AT09; then
     bad "no .rs source under any src/ in $CRATE, so the checks below would measure nothing"
   else
     ok "walked ${#at09_srcs[@]} src/ directories, ${#at09_rs[@]} .rs files: ${at09_srcs[*]#"$CRATE"/}"
-    paths=$(grep -rlE '(/Users/|Dropbox|[Gg]eodica)' "${at09_srcs[@]}" 2>/dev/null | wc -l | tr -d ' ')
+    paths=$(grep -rlE '(/Users/|Dropbox|[Gg]eodica|[Gg]tools)' "${at09_srcs[@]}" 2>/dev/null | wc -l | tr -d ' ')
     check "estate paths or names anywhere in src" "$paths" "0"
     imports=$(grep -rhE '^\s*use .*(geodica|gtools)' "${at09_srcs[@]}" 2>/dev/null | wc -l | tr -d ' ')
     check "estate imports" "$imports" "0"
