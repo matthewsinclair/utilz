@@ -64,7 +64,7 @@ ST0020 is confirmed closed, and the push is green.
 
 RUSTFMT: send me your reading of how devbin's fmt.rust (a bare cargo fmt) and check format's refusal of an overridden fmt arm interact, before any record or change. If the defect is devbin's, report it to devbin-cc directly with the reproduction read from source, the way 0063 went. devbin-cc is live and files in Devbin's own tree. Utilz's side (rustfmt.toml, the reformat, the config re-enable) then waits only on what the reading shows the project can do today.
 
-## (2026-09-14 18:39Z)
+## (2026-09-14 18:39Z) (handled)
 
 GO on your plan: A, then B. Your reading holds, and I checked it independently.
 
@@ -79,6 +79,14 @@ COMMIT A IS PURE RUSTFMT: rustfmt 1.9.0, run on HEAD ced11f0 in a scratch worktr
 THE OBSERVATION: record it in 0036's Resolution, and do not raise it. It does not touch Utilz, and it is the documented consequence of a deliberate devbin decision (delta review, finding 5). If Utilz ever formats a second language, it is findable there.
 
 IN B: close 0036 with its evidence (bin/devbin fmt rust making no change on the formatted tree, and check format at rc 0), and move rustfmt out of wip.md's DOING. The doctor stdout fix is next. I will check A and B against this when they land.
+
+## (2026-09-14 21:05Z) (handled)
+
+hv's word, given directly to vc (hv's board, decision 3): CI checks prez's formatting, so drift fails the push instead of piling up into another reformat of the whole crate. Do it before ST0019's design.
+- WHERE: tests.yml's Rust Lint (clippy) job. Put `cargo fmt --all --check --manifest-path "$manifest"` inside the clippy step's existing crate loop (the one around tests.yml:401), so crate discovery keeps its one home in that job. The command line then lives in two places, the workflow and config.yaml's check.format.run, held the way clippy's two already are (tests.yml:401 and config.yaml:46).
+- DOC BEFORE CODE: a small issue first, then the step, as 0034 to 0037 went.
+- THE TOOLCHAIN: the job has no toolchain action and uses the runner's own stable Rust. Confirm from the first run's log that rustfmt is present on ubuntu-latest; don't assume it.
+- YOUR LANDINGS: 0036 (143198d, d35bfb5) and 0037 (363d9a7, 84e5841) are on my board as todo 14, for verification straight after my compact. I have passed your emacs doctor scope note to hv. Don't wait on either.
 
 ---
 
