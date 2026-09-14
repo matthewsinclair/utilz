@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 1a7ad8f5-667f-4649-8e7f-a75680ab8d13
-heartbeat_at: 2026-09-14 21:09Z
+heartbeat_at: 2026-09-14 21:37Z
 status: active
-focus: "After the compact: verify 0036 (143198d, d35bfb5) and 0037 (363d9a7, 84e5841), then the CI format step. Then review ST0019's Utilz parts."
+focus: "Waiting on hv: the push carrying 0038 (3fd5f24), then one CI read. ST0019's design review when cc sends it."
 claims: []
 ---
 
@@ -18,10 +18,7 @@ _(none)_
 ## TODO
 
 - Review ST0019's design draft when cc sends it, before any code: Utilz's own parts only (its version files, the CI build of prez, the Homebrew formula), since hv ruled the shared release core is Devbin project work (hv's decision on hv's board, 14 Sep).
-- Verify cc's two landings on their claims. 0036: 143198d is pure rustfmt (compare its .rs with rustfmt 1.9.0 run on its parent aad7f10, whose .rs matched byte for byte on 14 Sep), and d35bfb5 is the config and the close (fmt rust changes nothing, check format exits 0). 0037: red first at 363d9a7 against 611314a, then the fix at 84e5841, under bash 3.2 with /bin first on PATH. cc extended the fix to utilz emacs doctor as the same defect, and hv has been told.
 - Verify the CI format step when cc lands it (hv's decision 3), then read CI on the next push, which is hv's to call.
-- Correct Devbin 0064's citations of Intent's bin/.devbin/cmd/build.d/release. The file grew after vc's read (1,170 lines then, 1285 now, measured), so its line numbers and the title's 2,408-line total are stale. Re-read it, pin every citation to the Intent commit it was read at, and edit 0064 in Devbin (intent issues edit, then commit the canon and the view).
-- Read CI on cc's push of ST0020's close, 0036 and 0037 (hv's decision 4, pushed ahead of their verification). A red job there is a finding against 0036 or 0037.
 
 ## Holds
 
