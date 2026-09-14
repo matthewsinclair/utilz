@@ -170,7 +170,8 @@
       "kind": "hold",
       "seq": 3,
       "text": "Send the Intent defect report -- held until hv says whether vc sends it to intent-cc or hv routes it. Two mechanisms: the pre-commit markdown formatter runs AFTER the doctor gate, so a view it rewrites lands after the gate has passed and every later commit is refused (fixed here at 895a2fc); and git commit -- <paths> sends the hook's formatted view into git's temporary index, leaving the real index stale (cc's finding).",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-09-14T13:19:39.411Z",
       "recorded_at": "2026-09-14T12:31:10.271Z"
     },
     {
@@ -178,7 +179,8 @@
       "kind": "todo",
       "seq": 3,
       "text": "hv's directives review (hv's TODO 4): walk the 11 in restart.md's Project-wide Conventions with hv when hv has two minutes. Ask hv then to confirm 2.9.0 and prez 2.1.0 directly, so hv's release TODO can say so (cc relays the confirmation at e5d9adb).",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-09-14T13:19:39.365Z",
       "recorded_at": "2026-09-14T12:31:10.317Z"
     },
     {
@@ -229,7 +231,8 @@
       "kind": "todo",
       "seq": 7,
       "text": "CI is red on main at 4e2b3b5: Rust (macos-latest), AT20's forwarded leg. The release needs a green run; re-running the failed job is hv's call, asked by vc and by cc. CORRECTS archived todo 5: Test on macOS never runs acceptance.sh (tests.yml skips prez on that leg), so it did not pass AT20. The same runner image passed AT20 in run 34592977422, and 0029 (cc) fixes the leg's message blaming AC19(d) for a window that never opened.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-09-14T13:19:39.501Z",
       "recorded_at": "2026-09-14T13:00:18.789Z"
     },
     {
@@ -246,7 +249,8 @@
       "kind": "doing",
       "seq": 14,
       "text": "Pre-release verdict once 0028, 0029, 0030, 0016, ST0018 and the release commit (2.9.0, prez 2.1.0) have landed: the restart.md checklist on the final HEAD, one suite at a time, and CI green on the pushed release commit.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-09-14T13:19:39.545Z",
       "recorded_at": "2026-09-14T13:00:46.750Z"
     },
     {
@@ -256,6 +260,22 @@
       "text": "0030 fixed at ff7d440, with cc for review; cc, the reviewer, closes it. Demonstrations quoted in the commit; the suite window is released.",
       "state": "live",
       "recorded_at": "2026-09-14T13:04:12.886Z"
+    },
+    {
+      "node": "vc",
+      "kind": "doing",
+      "seq": 16,
+      "text": "Raise the Intent defect report in ../Intent's tracker with intent issues (hv, 2026-09-14): a consumer hook's prettier --write runs after Intent's doctor gate, and a path-scoped commit leaves the real index stale.",
+      "state": "live",
+      "recorded_at": "2026-09-14T13:19:39.455Z"
+    },
+    {
+      "node": "vc",
+      "kind": "doing",
+      "seq": 17,
+      "text": "Pre-release verdict once 0028, 0029, 0030, 0016, ST0018 and the release commit (2.9.0, prez 2.1.0) have land: the restart.md checklist on the final HEAD, one suite at a time. Then CI on hv's push, which replaces the red run at 4e2b3b5 (hv: no re-run, the push runs CI): every job green, and a second AT20 forwarded-leg red is a recurrence to file.",
+      "state": "live",
+      "recorded_at": "2026-09-14T13:19:39.591Z"
     }
   ],
   "messages": [

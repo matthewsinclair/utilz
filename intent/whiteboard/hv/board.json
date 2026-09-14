@@ -36,7 +36,8 @@
       "kind": "todo",
       "seq": 3,
       "text": "Cut the next release once cc's queue has landed and vc's pre-release verdict is in. The numbers are yours to confirm: cc proposes VERSION 2.9.0 and prez 2.1.0. It carries ST0017 (prez showreel), ST0018 (PREZ_DEFAULT_THEME), issue 0016 (CI state in the install manifest), issue 0024 (install builds and ships showreel), and the fixes for 0023, 0025, 0026 and 0027. Annotated tag on the release: commit itself, then push both remotes.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-09-14T13:19:39.680Z",
       "recorded_at": "2026-09-14T12:11:28.150Z"
     },
     {
@@ -44,8 +45,17 @@
       "kind": "todo",
       "seq": 4,
       "text": "Review the standing directives, which now live in intent/restart.md's Project-wide Conventions (moved off this board 2026-09-14, because the model has no item kind for them). They were transcribed, not authored; cut any you never set.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-09-14T13:19:39.635Z",
       "recorded_at": "2026-09-14T12:11:28.251Z"
+    },
+    {
+      "node": "hv",
+      "kind": "todo",
+      "seq": 5,
+      "text": "Cut the next release once cc's queue has landed and vc's pre-release verdict is in: VERSION 2.9.0 and prez 2.1.0, confirmed by hv directly to vc 2026-09-14. It carries ST0017 (prez showreel), ST0018 (PREZ_DEFAULT_THEME), issue 0016 (CI state in the install manifest), 0024 (install builds and ships showreel), 0028 (one home for the install-test fixtures), 0029 (AT20's forwarded-leg verdict), 0030 (acceptance.sh's process matchers), and the fixes for 0023, 0025, 0026 and 0027. Annotated tag on the release: commit itself, then push both remotes.",
+      "state": "live",
+      "recorded_at": "2026-09-14T13:19:39.725Z"
     }
   ],
   "messages": []
