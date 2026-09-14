@@ -11,10 +11,6 @@
 
 load "test_helper.bash"
 
-run_install_function() {
-  bash -c "source '$UTILZ_HOME/opt/utilz/lib/common.sh'; source '$UTILZ_HOME/opt/utilz/lib/install.sh'; $*"
-}
-
 # A bin directory carrying both link shapes plus one link that is nobody's.
 make_fake_bin() {
   local bindir="$1" tree="$2"
@@ -186,13 +182,6 @@ make_fake_bin() {
 # ============================================================================
 # AT17 (AC21) - `utilz use dev|opt`, a thin coordinator over relink
 # ============================================================================
-
-set_prefix_key() {
-  local tree="$1" value="$2"
-  printf 'name: utilz\ninstall:\n  prefix: %s\n' "$value" > "$tree/opt/utilz/utilz.yaml"
-  git -C "$tree" add -A >/dev/null 2>&1
-  git -C "$tree" -c user.email=t@example.com -c user.name=t commit -qm prefix >/dev/null 2>&1
-}
 
 # A source tree with install.prefix set, published to $2, and a fixture bin/
 # whose links currently serve the SOURCE.

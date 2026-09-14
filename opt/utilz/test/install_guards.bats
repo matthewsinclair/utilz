@@ -17,10 +17,6 @@ load "test_helper.bash"
 # bats warns BW02 on every run.
 bats_require_minimum_version 1.5.0
 
-run_install_function() {
-  bash -c "source '$UTILZ_HOME/opt/utilz/lib/common.sh'; source '$UTILZ_HOME/opt/utilz/lib/install.sh'; $*"
-}
-
 # THE SHARED INSTALL IS READ-ONLY. A test that needs to mutate one copies it
 # first. This is not fastidiousness: the AT15 legs used to write a marker
 # VERSION straight into it, and every test after them then inherited an install

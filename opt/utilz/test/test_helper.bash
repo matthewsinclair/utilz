@@ -440,6 +440,59 @@ debug() {
 # ============================================================================
 # ST0014 INSTALL FIXTURES
 # ============================================================================
+#
+# ONE HOME FOR THE FIXTURES THE INSTALL SUITES SHARE (issue 0028). Until
+# 2026-09-14 the suites defined their own copies -- run_install_function five
+# times -- and six files carried their own stage-and-commit pair, install_e2e's
+# with a `|| true` that turned a refused commit into the publish's "source
+# tree is dirty", a step later.
+
+# install.sh's functions, in a fresh bash with common.sh and install.sh sourced
+# from the tree under test.
+run_install_function() {
+  bash -c "source '$UTILZ_HOME/opt/utilz/lib/common.sh'; source '$UTILZ_HOME/opt/utilz/lib/install.sh'; $*"
+}
+
+# Publish from $1 to $2, with any extra args appended.
+run_publish() {
+  local src="$1" prefix="$2"
+  shift 2
+  run run_install_function "UTILZ_HOME='$src'; install_verb_install --prefix '$prefix' $*"
+}
+
+# Stage everything in a fixture tree and commit it, so HEAD matches the tree
+# afterwards. A tree that already matches is not an error: a copy of a clean
+# checkout has nothing to commit. Everything else that stops the commit fails
+# HERE, naming the tree, the commit and git's own words, instead of surfacing
+# a step later as some other command's refusal.
+fixture_commit() {
+  local tree="$1" message="$2" out rc=0
+  if ! out=$(git -C "$tree" add -A 2>&1); then
+    printf 'fixture_commit: git add -A in %s failed:\n%s\n' "$tree" "$out" >&2
+    return 1
+  fi
+  git -C "$tree" diff --cached --quiet || rc=$?
+  case "$rc" in
+    0) return 0 ;;
+    1) ;;
+    *)
+      printf 'fixture_commit: could not compare the index with HEAD in %s (git exit %s)\n' "$tree" "$rc" >&2
+      return 1
+      ;;
+  esac
+  if ! out=$(git -C "$tree" -c user.email=t@example.com -c user.name=t commit -qm "$message" 2>&1); then
+    printf 'fixture_commit: the commit "%s" in %s was refused:\n%s\n' "$message" "$tree" "$out" >&2
+    return 1
+  fi
+  if ! out=$(git -C "$tree" status --porcelain 2>&1); then
+    printf 'fixture_commit: could not read %s after the commit "%s":\n%s\n' "$tree" "$message" "$out" >&2
+    return 1
+  fi
+  if [[ -n "$out" ]]; then
+    printf 'fixture_commit: %s is still dirty after the commit "%s":\n%s\n' "$tree" "$message" "$out" >&2
+    return 1
+  fi
+}
 
 # A minimal source tree: a git repo carrying two bin symlinks with DIFFERENT
 # targets, which is the case a content-hash manifest cannot tell apart.
@@ -458,6 +511,13 @@ make_fake_src() {
   printf 'name: utilz\n' > "$home/opt/utilz/utilz.yaml"
   printf '# help\n' > "$home/help/alpha.md"
   git -C "$home" init -q >/dev/null 2>&1
-  git -C "$home" add -A >/dev/null 2>&1
-  git -C "$home" -c user.email=t@example.com -c user.name=t commit -qm init >/dev/null 2>&1
+  fixture_commit "$home" init
+}
+
+# install.prefix written into a fixture tree's utilz.yaml, then committed so
+# the publish's dirty gate is satisfied.
+set_prefix_key() {
+  local tree="$1" value="$2"
+  printf 'name: utilz\ninstall:\n  prefix: %s\n' "$value" > "$tree/opt/utilz/utilz.yaml"
+  fixture_commit "$tree" prefix
 }

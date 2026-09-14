@@ -37,9 +37,15 @@ setup_file() {
   # Commit inside the COPY so the publish's dirty gate is satisfied without
   # anything being done to the real checkout. A throwaway clone, so this is
   # free; doing it upstream would not be.
-  git -C "$src" add -A >/dev/null 2>&1
-  git -C "$src" -c user.email=e2e@example.com -c user.name=e2e \
-    commit -qm "e2e fixture" >/dev/null 2>&1 || true
+  #
+  # A COPY OF A CLEAN CHECKOUT HAS NOTHING TO COMMIT, AND THAT IS NOT THE ONLY
+  # WAY THIS COMMIT ENDS. The copy carries the checkout's hooks, and a commit
+  # one of them refused used to be swallowed by a `|| true` written for the
+  # clean case, then reported a step later as the publish's "source tree is
+  # dirty" (issue 0028). fixture_commit tells the two apart: it commits nothing
+  # when nothing differs, and anything else that stops the commit fails the
+  # setup here, by name.
+  fixture_commit "$src" "e2e fixture" || return 1
 
   # THE PUBLISH'S OUTPUT IS NOT SWALLOWED. A setup that hides why it failed
   # reports "setup_file failed" and nothing else, which is the exact shape

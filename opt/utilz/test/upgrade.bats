@@ -10,25 +10,10 @@
 
 load "test_helper.bash"
 
-run_install_function() {
-  bash -c "source '$UTILZ_HOME/opt/utilz/lib/common.sh'; source '$UTILZ_HOME/opt/utilz/lib/install.sh'; $*"
-}
-
-run_publish() {
-  local src="$1" prefix="$2"
-  shift 2
-  run run_install_function "UTILZ_HOME='$src'; install_verb_install --prefix '$prefix' $*"
-}
-
 run_upgrade() {
   local src="$1" prefix="$2"
   shift 2
   run run_install_function "UTILZ_HOME='$src'; install_verb_upgrade --prefix '$prefix' $*"
-}
-
-commit_src() {
-  git -C "$1" add -A >/dev/null 2>&1
-  git -C "$1" -c user.email=t@example.com -c user.name=t commit -qm "$2" >/dev/null 2>&1
 }
 
 manifest_row_for() {
@@ -87,7 +72,7 @@ manifest_row_for() {
   assert_success
 
   printf '#!/usr/bin/env bash\necho v2\n' > "$src/opt/alpha/alpha"
-  commit_src "$src" v2
+  fixture_commit "$src" v2
 
   run_upgrade "$src" "$dst"
   assert_success
@@ -105,7 +90,7 @@ manifest_row_for() {
   assert_success
 
   printf '# new\n' > "$src/help/beta.md"
-  commit_src "$src" newfile
+  fixture_commit "$src" newfile
 
   run_upgrade "$src" "$dst"
   assert_success
@@ -140,7 +125,7 @@ manifest_row_for() {
   # The source moves on too, so "left alone" is distinguishable from "the
   # source happened to match".
   printf '#!/usr/bin/env bash\necho upstream-v2\n' > "$src/opt/alpha/alpha"
-  commit_src "$src" upstream
+  fixture_commit "$src" upstream
 
   run_upgrade "$src" "$dst"
   assert_success
@@ -167,7 +152,7 @@ manifest_row_for() {
   edited_sum=$(shasum -a 256 "$dst/opt/alpha/alpha" | awk '{print $1}')
 
   printf '#!/usr/bin/env bash\necho upstream-v2\n' > "$src/opt/alpha/alpha"
-  commit_src "$src" upstream
+  fixture_commit "$src" upstream
   upstream_sum=$(shasum -a 256 "$src/opt/alpha/alpha" | awk '{print $1}')
 
   run_upgrade "$src" "$dst"
@@ -215,7 +200,7 @@ manifest_row_for() {
 
   printf '\n# hand edit\n' >> "$dst/opt/alpha/alpha"
   printf '#!/usr/bin/env bash\necho upstream-v2\n' > "$src/opt/alpha/alpha"
-  commit_src "$src" upstream
+  fixture_commit "$src" upstream
 
   run_upgrade "$src" "$dst" "--force"
   assert_success

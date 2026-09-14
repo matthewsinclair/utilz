@@ -9,24 +9,6 @@
 
 load "test_helper.bash"
 
-run_install_function() {
-  bash -c "source '$UTILZ_HOME/opt/utilz/lib/common.sh'; source '$UTILZ_HOME/opt/utilz/lib/install.sh'; $*"
-}
-
-# Publish from $1 to $2, with any extra args appended.
-run_publish() {
-  local src="$1" prefix="$2"
-  shift 2
-  run run_install_function "UTILZ_HOME='$src'; install_verb_install --prefix '$prefix' $*"
-}
-
-set_prefix_key() {
-  local src="$1" value="$2"
-  printf 'name: utilz\ninstall:\n  prefix: %s\n' "$value" > "$src/opt/utilz/utilz.yaml"
-  git -C "$src" add -A >/dev/null 2>&1
-  git -C "$src" -c user.email=t@example.com -c user.name=t commit -qm prefix >/dev/null 2>&1
-}
-
 # ============================================================================
 # THE HAPPY PATH
 # ============================================================================

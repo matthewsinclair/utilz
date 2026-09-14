@@ -8,10 +8,6 @@
 
 load "test_helper.bash"
 
-run_install_function() {
-  bash -c "source '$UTILZ_HOME/opt/utilz/lib/common.sh'; source '$UTILZ_HOME/opt/utilz/lib/install.sh'; $*"
-}
-
 # ============================================================================
 # THE OWNED SET (design.md D2)
 # ============================================================================
@@ -236,8 +232,7 @@ EOF
   make_fake_src "$src"
   cp "$src/bin/utilz" "$src/bin/twin"
   ln -s twin "$src/bin/gamma"
-  git -C "$src" add -A >/dev/null 2>&1
-  git -C "$src" -c user.email=t@example.com -c user.name=t commit -qm twin >/dev/null 2>&1
+  fixture_commit "$src" twin
 
   run run_install_function "install_manifest_rows '$src'"
   assert_success
