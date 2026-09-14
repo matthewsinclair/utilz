@@ -13,13 +13,15 @@ claims: []
 
 ## DOING
 
-- 0024 landed at 2e96e2a. Its verdict waits on three jobs, logged in this session's scratchpad under rc/: verify-0024-suite.log (bash -n, CI-exact shellcheck, then the full utilz test; the header names HEAD); verify-0024-redfirst.log (387e377's install.sh and shim under 2e96e2a's tests in a scratch worktree, then 2e96e2a as committed; it starts once the suite's exit line appears); ci-watch-4e2b3b5.log (CI run 34843482745 on 4e2b3b5, in progress at 12:30Z; both remotes hold 4e2b3b5 by ls-remote). Then send cc the verdict and its next item: 0028, then 0016, then ST0018, then the release commit, with a SHA to vc after each.
 - Pre-release verdict once 0024, 0028, 0016, ST0018 and the release commit (2.9.0, prez 2.1.0) have landed: the restart.md checklist on the final HEAD, one suite at a time, and CI on the pushed release commit.
+- 0024 VERIFIED at 12:35Z and sent to cc. Red-first replayed independently: 4 of 4 new tests failed on their own assertions at 387e377's code. Green: 24/24 and 22/22. CI's Test on macOS and Test on Ubuntu are green on 4e2b3b5. Next: verify 0028, then 0016, ST0018 and the release commit as cc lands each.
 
 ## TODO
 
 - hv's directives review (hv's TODO 4): walk the 11 in restart.md's Project-wide Conventions with hv when hv has two minutes. Ask hv then to confirm 2.9.0 and prez 2.1.0 directly, so hv's release TODO can say so (cc relays the confirmation at e5d9adb).
 - Globalfold: fix restart.md drift (the walker hit is common.sh:426 not :265 and the consumer line numbers moved; shellcheck collects 18 files not 17; open issues ARE realised at intent/issues/<id>.md; intent is 3.0.1), and move watch-out 2 and 895a2fc's trap into restart.md's traps.
+- CI on main is red at 4e2b3b5: Rust (macos-latest) failed AT20's forwarded-window leg ('no NEW page target on port 9372 after 10s'), while the same run's Test on macOS passed AT20. Flake suspected. Re-running the failed job is hv's call (outward-facing); file an issue if it recurs. The release needs a green run.
+- File and fix (finders are fixers): AT06's 'prez processes still alive' counts every process on the machine whose argv holds release/prez (pgrep -f 'release/prez'), after a fixed sleep 0.3, so any concurrent prez anywhere turns it red; it did in vc's 0024 suite run, 12:26-12:31Z. Match the PIDs the AT launched and poll for their exit. Agree a tree window with cc.
 
 ## Holds
 
