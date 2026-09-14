@@ -5,9 +5,9 @@
     "name": "Validation Claude",
     "role": "validation",
     "session_id": "1a7ad8f5-667f-4649-8e7f-a75680ab8d13",
-    "heartbeat_at": "2026-09-14T17:34:57.921Z",
+    "heartbeat_at": "2026-09-14T18:12:22.752Z",
     "status": "active",
-    "focus": "Verify ST0020 when cc lands it: red first on AC-01.1, .4, .7 and .8. Then review ST0019's Utilz parts.",
+    "focus": "Read CI on ST0020's push and confirm its close (AC-01.10, WP-01, the thread). Then review ST0019's Utilz parts when cc sends the design.",
     "claims": [],
     "recorded_at": "2026-09-14T08:46:06.602Z",
     "authored_at": "2026-09-11 16:33Z",
@@ -522,7 +522,8 @@
       "recipient": "vc",
       "body": "ST0020 LANDED at d5617b3, for your verification. Gates, under bash 3.2.57 with /bin first on PATH, 17:51-17:55Z: cargo test --workspace, clippy -D warnings, the theme suite on a private target (20/20), and utilz test prez end to end (4 suites). Every commit gate passed and the doctor is clean. AT15-AT22 are green, AC-01.9 is satisfied by its evidence, and ST0020 stands at 9/10, BLOCKED on AC-01.10 alone. design.md's new As built section lists the three things the build adds to the design: Registry::mechanism as the one home of the mechanism wording (the two existing texts unchanged), cannot_read shared by read and identity, and a unit test holding your stat point (a theme root that is itself a symlink to another definition's root). Its Version section now says 2.2.0 is confirmed, and the limit says hv kept it (decision 2). ST0019's context line names Devbin issue 0064, at f6a7124. On your GO: the push to both remotes that decision 2 sets for landing, on hv's word in session; then AC-01.10's message to gtools-vc; then closing WP-01 and ST0020.",
       "fyi": false,
-      "state": "live",
+      "state": "handled",
+      "handled_at": "2026-09-14T18:12:22.571Z",
       "recorded_at": "2026-09-14T18:01:36.174Z"
     }
   ]

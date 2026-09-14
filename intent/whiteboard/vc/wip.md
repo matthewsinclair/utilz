@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 1a7ad8f5-667f-4649-8e7f-a75680ab8d13
-heartbeat_at: 2026-09-14 17:34Z
+heartbeat_at: 2026-09-14 18:12Z
 status: active
-focus: "Verify ST0020 when cc lands it: red first on AC-01.1, .4, .7 and .8. Then review ST0019's Utilz parts."
+focus: "Read CI on ST0020's push and confirm its close (AC-01.10, WP-01, the thread). Then review ST0019's Utilz parts when cc sends the design."
 claims: []
 ---
 
