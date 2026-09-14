@@ -103,6 +103,16 @@ wait_for_cdp() {
 WORK="$(mktemp -d "${TMPDIR:-/tmp}/prez-at.XXXXXX")"
 trap 'rm -rf "$WORK"' EXIT
 
+# THIS RUN'S OWN NAME, AND THE ONLY SAFE KEY FOR A PROCESS MATCHER (issue 0030).
+# mktemp made it unique, so a process whose command line carries it was started
+# by this run and by no other. A matcher keyed on text every run shares reaches
+# processes that are not ours: AT06 counted any prez on the machine as its own
+# and failed a correct build, and AT20's cleanup matched every run's browser.
+# The directory's NAME rather than its path, because TMPDIR ends in a slash on
+# macOS and $WORK carries a doubled one; a process handed a tidied spelling of
+# the path still carries the name.
+RUN_NAME="${WORK##*/}"
+
 STRICT=0
 ARGS=()
 for arg in "$@"; do
@@ -565,7 +575,17 @@ echo "[12345:ERROR:gpu_init.cc(42)] libGL noise" >&2
 STUB
   chmod +x "$WORK/fake-browser"
 
-  "$BIN" present "$DEMO" --browser "$WORK/fake-browser" >"$WORK/present.log" 2>&1
+  # THIS RUN'S OWN COPY OF THE BINARY, so the process check at the end counts
+  # what this AT started and nothing else (issue 0030). The same bytes, and prez
+  # never reads its own path -- main.rs skips argv[0] and nothing calls
+  # current_exe -- so the copy behaves as $BIN does. A fork keeps its parent's
+  # command line, so anything prez leaves behind still carries this path.
+  at06bin="$WORK/at06/prez"
+  if ! { mkdir -p "$WORK/at06" && cp "$BIN" "$at06bin"; }; then
+    bad "could not copy $BIN to $at06bin"
+  fi
+
+  "$at06bin" present "$DEMO" --browser "$WORK/fake-browser" >"$WORK/present.log" 2>&1
   check "prez exit code" "$?" "0"
 
   # WAIT FOR THE STUB TO HAVE RUN before reading anything it might have
@@ -611,15 +631,20 @@ STUB
 
     # --window is honoured, measured rather than assumed.
     rm -f "$WORK/argv.txt"
-    "$BIN" present "$DEMO" --browser "$WORK/fake-browser" --window 1920x1080 >/dev/null 2>&1
+    "$at06bin" present "$DEMO" --browser "$WORK/fake-browser" --window 1920x1080 >/dev/null 2>&1
     for _ in 1 2 3 4 5 6 7 8 9 10; do [ -f "$WORK/argv.txt" ] && break; sleep 0.2; done
     present "--window overrides the default" "--window-size=1920,1080" "$WORK/argv.txt"
   else
     bad "the browser was never invoked"
   fi
   # The anti-requirement, checked rather than asserted: nothing of prez is
-  # left running once it has handed over.
-  check "prez processes still alive" "$(pgrep -f 'release/prez' | wc -l | tr -d ' ')" "0"
+  # left running once it has handed over. COUNTED BY THIS RUN'S COPY, NEVER BY
+  # `release/prez` (issue 0030): that matched every prez on the machine, so a
+  # deck another session was presenting failed this check with prez behaving
+  # correctly -- measured 2026-09-14, in vc's run on 4e2b3b5. No waiting is
+  # added: both launches ran in the foreground, so prez has already exited, and
+  # anything still counted is what it left behind.
+  check "prez processes still alive" "$(pgrep -f "$RUN_NAME/at06/prez" | wc -l | tr -d ' ')" "0"
   finish
 fi
 
@@ -1318,10 +1343,14 @@ WRAP
     at20dw="${at20def%x*}"; at20dh="${at20def#*x}"
 
     # Killed by profile path: each launch gets a unique --user-data-dir, so this
-    # cannot reach a browser window belonging to the human. Called explicitly at
-    # each step rather than from a trap, because `trap ... RETURN` outside a
-    # function never fires and would be cleanup that only looks like cleanup.
-    at20kill() { pkill -f "at20-profile" 2>/dev/null; sleep 1; }
+    # cannot reach a browser window belonging to the human. And the path is keyed
+    # on THIS RUN'S NAME (issue 0030), so it cannot reach another run's browser
+    # either: the bare `at20-profile` it used to match is in every run's profile
+    # paths, so it matched a concurrent acceptance run's browser too. Called
+    # explicitly at each step rather than from a trap, because `trap ... RETURN`
+    # outside a function never fires and would be cleanup that only looks like
+    # cleanup.
+    at20kill() { pkill -f "$RUN_NAME/at20-profile" 2>/dev/null; sleep 1; }
 
     # ---- (a) the default: the deck's own shape ----------------------------
     AT20_PORT=9370
