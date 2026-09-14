@@ -13,13 +13,12 @@ claims: []
 
 ## DOING
 
-- Verify cc's queue as each lands, one suite at a time: 0029 (8c47815: diff read and demonstration replayed; AT20 alone and one full acceptance --strict once cc's 0016 runs free the window), then 0016, ST0018 and the release commit. Proof by demonstration, not by a test of a test (hv, 2026-09-11).
-- 0031 (filed f74fa6b, fixed 53effc7): .prettierignore now covers the issue and whiteboard views, in converge_formatter_exclusion's own block. With cc for review; cc closes it. The upstream report is Intent 0378 (14c2b786b in ../Intent), raised on hv's instruction.
-- Pre-release verdict once 0029, 0016, ST0018 and the release commit (2.9.0, prez 2.1.0) have landed: the restart.md checklist on the final HEAD, one suite at a time. Then CI on hv's push, which replaces the red run at 4e2b3b5 (hv: no re-run, the push runs CI): every job green, and a second AT20 forwarded-leg red is a recurrence to file.
+- Verify cc's queue as each lands, one suite at a time: ST0018 (PREZ_DEFAULT_THEME), then the release commit (2.9.0, prez 2.1.0). Local suite runs put /bin first on PATH, so bats and the code under test run under bash 3.2: bats is #!/usr/bin/env bash, and Homebrew's 5.3 is first on PATH here.
+- Pre-release verdict once ST0018 and the release commit have landed: the restart.md checklist on the final HEAD, one suite at a time, under bash 3.2 as above. Then CI on hv's push, which replaces the red run at 4e2b3b5: every job green, and a second AT20 forwarded-leg red is a recurrence to file.
 
 ## TODO
 
-- Globalfold: fix restart.md drift (the walker hit is common.sh:426 not :265 and the consumer line numbers moved; shellcheck collects 18 files not 17; open issues ARE realised at intent/issues/<id>.md; intent is 3.0.1), and move watch-out 2 and 895a2fc's trap into restart.md's traps.
+- Globalfold at end of day, in restart.md. The drift: the walker hit is common.sh:426, not :265, and the consumer line numbers moved; shellcheck collects 18 files, not 17; issue views are realised only for the issues .intentfiles declares (0016 had none); intent is 3.0.2. Two traps: the doctor gate refuses every commit while any view is skewed (watch-out 2, 895a2fc; issue and whiteboard views are prettier-exempt since 0031), and /bin/bash bin/utilz test is bash 3.2 for the dispatcher only, so put /bin first on PATH for a 3.2 run. Check whether CI's macOS runner resolves bash to 3.2 before restating that CI runs it.
 
 ## Holds
 
