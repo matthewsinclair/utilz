@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 #
-# ST0013 and ST0018 acceptance tests -- theme addressing split across --theme,
-# --theme-file and --theme-path, and the default PREZ_DEFAULT_THEME gives a deck
-# that names no theme.
+# ST0013, ST0018 and ST0020 acceptance tests -- theme addressing split across
+# --theme, --theme-file and --theme-path; the default PREZ_DEFAULT_THEME gives a
+# deck that names no theme; and PREZ_THEME_DUPLICATES=refuse refuses a theme
+# name that the search path defines more than once.
 #
 # **WHY THIS IS A SEPARATE FILE FROM acceptance.sh.** ST0013's AT ids and
 # ST0010's occupy one namespace per file: `want()` matches an id exactly, and
@@ -30,8 +31,9 @@
 # THE RULE THIS FILE IS WRITTEN TO: a check must be able to go red, and only a
 # real defect may turn it red. ST0013's blocks are red against the binary at
 # 6e02020 EXCEPT AT06; ST0018's, AT10 to AT14, are red against 34eb61d EXCEPT
-# AT11, AT12 and AT14. Each exception says so in its own header and must never
-# be read as evidence that its thread landed.
+# AT11, AT12 and AT14; ST0020's, AT15 to AT22, are red against 9a99c31 EXCEPT
+# AT16, AT17, AT19 and AT20. Each exception says so in its own header and must
+# never be read as evidence that its thread landed.
 #
 # Usage:
 #   test/theme-addressing.sh              run every AT
@@ -111,6 +113,34 @@ refuses() {
   else
     ok "$d (refused)"
   fi
+}
+
+# exits <description> <code> <cmd...> -- the invocation must exit with EXACTLY
+# <code>, and like refuses it leaves stderr in $WORK/refuses.err. A check that
+# accepts any non-zero exit cannot tell a refusal from a crash, and every theme
+# refusal promises 2.
+exits() {
+  local d="$1" want="$2" rc; shift 2
+  "$@" >/dev/null 2>"$WORK/refuses.err"
+  rc=$?
+  if [ "$rc" -eq "$want" ]; then ok "$d (exit $rc)"; else bad "$d: exited $rc, not $want"; fi
+}
+
+# ordered <description> <first> <second> <file> -- both fixed strings are
+# present and <first> is on an earlier line. For a list whose ORDER is part of
+# the message: two present checks pass a list printed backwards.
+ordered() {
+  local a b
+  a=$(grep -n -F -- "$2" "$4" 2>/dev/null | head -1 | cut -d: -f1)
+  b=$(grep -n -F -- "$3" "$4" 2>/dev/null | head -1 | cut -d: -f1)
+  if [ -n "$a" ] && [ -n "$b" ] && [ "$a" -lt "$b" ]; then ok "$1 (in order)"
+  else bad "$1: '$2' (line ${a:-absent}) is not before '$3' (line ${b:-absent})"; fi
+}
+
+# unwritten <description> <file> -- a refusal wrote nothing. An artifact left
+# behind by a refused build is one a caller can mistake for the answer.
+unwritten() {
+  if [ -e "$2" ]; then bad "$1: $2 was written"; else ok "$1 (nothing written)"; fi
 }
 
 finish() {
@@ -625,6 +655,321 @@ if want AT14; then
     env -u PREZ_THEME_PATH -u PREZ_DEFAULT_THEME "$BIN" build "$D/deck.md" --theme=simple -o "$D/simple.html"
   same "(a) empty is unset" "$D/empty.html" "$D/unset.html"
   same "(b) no theme and no default is the built-in simple" "$D/unset.html" "$D/simple.html"
+  finish
+fi
+
+# ------------------------------------------------------ AT15 -- ST0020 AC-01.1
+#
+# A NAME TWO DIRECTORIES DEFINE IS REFUSED, WHEN THE CALLER ASKS. Red-first:
+# HEAD never reads PREZ_THEME_DUPLICATES and takes the first match, so every
+# leg builds there. Leg 1's two definitions differ in form and in the
+# mechanism that put their directory on the path, so one refusal shows both
+# labels. The order is asserted because it carries information: the first
+# line is the definition first match would take.
+#
+# LEG 2 IS AT19's CONTROL: byte-identical copies are two definitions. A check
+# that compared contents rather than identity would pass AT19 and fail here.
+
+if want AT15; then
+  start AT15 "with refuse, a name two directories define is refused, naming both in search order"
+  D="$WORK/at15"
+  deck_at "$D/deck.md"
+  theme_dir_at "$D/flagdir/house" "at15-flag-sentinel"
+  theme_file_at "$D/envdir/house.css" "at15-env-sentinel"
+
+  # leg 1 -- one definition given by the flag, one on the environment
+  exits "a name two directories define is refused" 2 \
+    env PREZ_THEME_PATH="$D/envdir" PREZ_THEME_DUPLICATES=refuse "$BIN" build "$D/deck.md" \
+      --theme-path="$D/flagdir" --theme=house -o "$D/never1.html"
+  shaped "the refusal has its own prefix" "^prez: theme 'house' is defined more than once" "$WORK/refuses.err"
+  present "it names the policy that refused" "PREZ_THEME_DUPLICATES=refuse" "$WORK/refuses.err"
+  present "the flag's definition, with its mechanism and file" \
+    "$D/flagdir (given by --theme-path): house/theme.css" "$WORK/refuses.err"
+  present "the environment's definition, with its mechanism and file" \
+    "$D/envdir (on PREZ_THEME_PATH): house.css" "$WORK/refuses.err"
+  ordered "listed in search order, the flag's directory first" \
+    "$D/flagdir (given by --theme-path): house/theme.css" \
+    "$D/envdir (on PREZ_THEME_PATH): house.css" "$WORK/refuses.err"
+  unwritten "and nothing was written" "$D/never1.html"
+
+  # leg 2 -- byte-identical copies are still two definitions
+  theme_file_at "$D/copy1/twin.css" "at15-twin-sentinel"
+  theme_file_at "$D/copy2/twin.css" "at15-twin-sentinel"
+  same "fixture: the two copies are byte-identical" "$D/copy1/twin.css" "$D/copy2/twin.css"
+  exits "byte-identical copies in two directories are refused" 2 \
+    env PREZ_THEME_PATH="$D/copy1:$D/copy2" PREZ_THEME_DUPLICATES=refuse "$BIN" build "$D/deck.md" \
+      --theme=twin -o "$D/never2.html"
+  present "naming the first copy" "$D/copy1 (on PREZ_THEME_PATH): twin.css" "$WORK/refuses.err"
+  present "and the second" "$D/copy2 (on PREZ_THEME_PATH): twin.css" "$WORK/refuses.err"
+  unwritten "and nothing was written" "$D/never2.html"
+  finish
+fi
+
+# ------------------------------------------------------ AT16 -- ST0020 AC-01.2
+#
+# **NOT RED-FIRST, AND ITS GREEN IS NOT EVIDENCE THE POLICY LANDED.** HEAD
+# never reads PREZ_THEME_DUPLICATES, so first match holds there under every
+# value by construction. This goes red only if the fix reaches past refuse: an
+# empty value read as a policy, first refused as unknown, or a new refusal or
+# notice nobody asked for. The three runs are compared byte for byte, artifact
+# AND stderr, because "exactly as today" is a claim about both.
+
+if want AT16; then
+  start AT16 "unset, empty and first keep first match, byte for byte (NOT red-first)"
+  D="$WORK/at16"
+  deck_at "$D/deck.md"
+  theme_dir_at "$D/flagdir/house" "at16-flag-sentinel"
+  theme_file_at "$D/envdir/house.css" "at16-env-sentinel"
+
+  # renders leaves stderr in $WORK/renders.err and the next call overwrites it,
+  # so each run's is kept: stderr is compared across the three.
+  renders "unset: a name two directories define builds" \
+    env -u PREZ_THEME_DUPLICATES PREZ_THEME_PATH="$D/envdir" "$BIN" build "$D/deck.md" \
+      --theme-path="$D/flagdir" --theme=house -o "$D/unset.html"
+  cp "$WORK/renders.err" "$D/unset.err"
+  renders "empty: it builds" \
+    env PREZ_THEME_DUPLICATES= PREZ_THEME_PATH="$D/envdir" "$BIN" build "$D/deck.md" \
+      --theme-path="$D/flagdir" --theme=house -o "$D/empty.html"
+  cp "$WORK/renders.err" "$D/empty.err"
+  renders "first: it builds" \
+    env PREZ_THEME_DUPLICATES=first PREZ_THEME_PATH="$D/envdir" "$BIN" build "$D/deck.md" \
+      --theme-path="$D/flagdir" --theme=house -o "$D/first.html"
+  cp "$WORK/renders.err" "$D/first.err"
+
+  present "the first match, in the flag's directory, dressed it" "at16-flag-sentinel" "$D/unset.html"
+  absent "not the environment's definition" "at16-env-sentinel" "$D/unset.html"
+  present "with today's provenance notice, naming where it came from" \
+    "theme 'house' came from $D/flagdir (given by --theme-path)" "$D/unset.err"
+  same "empty is unset: the artifact" "$D/empty.html" "$D/unset.html"
+  same "empty is unset: stderr" "$D/empty.err" "$D/unset.err"
+  same "first is unset: the artifact" "$D/first.html" "$D/unset.html"
+  same "first is unset: stderr" "$D/first.err" "$D/unset.err"
+  finish
+fi
+
+# ------------------------------------------------------ AT17 -- ST0020 AC-01.3
+#
+# **NOT RED-FIRST, AND ITS GREEN IS NOT EVIDENCE THE POLICY LANDED.** HEAD
+# builds any name by construction. This goes red only if the fix checks more
+# than the name being resolved, eg by scanning the whole path for duplicates.
+# It also passes against a check that refuses nothing, so AT15 is its control.
+
+if want AT17; then
+  start AT17 "with refuse, a name defined once builds while another is defined twice (NOT red-first)"
+  D="$WORK/at17"
+  deck_at "$D/deck.md"
+  theme_dir_at "$D/one/solo" "at17-solo-sentinel"
+  theme_dir_at "$D/one/dup" "at17-dup-one"
+  theme_file_at "$D/two/dup.css" "at17-dup-two"
+
+  renders "solo builds under refuse while dup is defined in two directories" \
+    env PREZ_THEME_PATH="$D/one:$D/two" PREZ_THEME_DUPLICATES=refuse "$BIN" build "$D/deck.md" \
+      --theme=solo -o "$D/solo.html"
+  present "and solo dressed it" "at17-solo-sentinel" "$D/solo.html"
+  absent "and nothing is said about dup, which was not resolved" "'dup'" "$WORK/renders.err"
+  finish
+fi
+
+# ------------------------------------------------------ AT18 -- ST0020 AC-01.4
+#
+# THE DEFAULT'S NAME IS CHECKED AS A FLAG'S IS. Red-first: HEAD builds it. The
+# refusal keeps its own prefix and gains ST0018's line saying where the name
+# came from, as every refusal of the default's theme does.
+
+if want AT18; then
+  start AT18 "with refuse, PREZ_DEFAULT_THEME naming a duplicated theme is refused, saying so"
+  D="$WORK/at18"
+  deck_at "$D/deck.md"
+  theme_dir_at "$D/a/house" "at18-a-sentinel"
+  theme_file_at "$D/b/house.css" "at18-b-sentinel"
+
+  exits "the default's name, defined in two directories, is refused" 2 \
+    env PREZ_THEME_PATH="$D/a:$D/b" PREZ_THEME_DUPLICATES=refuse PREZ_DEFAULT_THEME=house \
+      "$BIN" build "$D/deck.md" -o "$D/never.html"
+  shaped "with the duplicate refusal's prefix" "^prez: theme 'house' is defined more than once" "$WORK/refuses.err"
+  present "and the line saying where the name came from" \
+    "the name came from PREZ_DEFAULT_THEME" "$WORK/refuses.err"
+  unwritten "and nothing was written" "$D/never.html"
+  finish
+fi
+
+# ------------------------------------------------------ AT19 -- ST0020 AC-01.5
+#
+# **NOT RED-FIRST, AND ITS GREEN IS NOT EVIDENCE THE POLICY LANDED.** HEAD
+# builds all four by construction. This goes red only if the fix counts one
+# file reached by two routes as two definitions: a check keyed on the path as
+# spelled fails legs 3 and 4, and one keyed on the canonical path fails leg 4,
+# because a hard link is one file under two paths. It also passes against a
+# check that compares contents, so AT15's copies leg is its control.
+#
+# Each link is checked as a fixture first, with test's -ef, which compares
+# device and inode: a leg whose link did not come out as one file would pass
+# for the wrong reason.
+
+if want AT19; then
+  start AT19 "with refuse, one file reached twice is one definition (NOT red-first)"
+  D="$WORK/at19"
+  deck_at "$D/deck.md"
+  theme_dir_at "$D/themes/house" "at19-house-sentinel"
+  theme_file_at "$D/flat/solo.css" "at19-solo-sentinel"
+  ln -s "$D/themes" "$D/link"
+  mkdir -p "$D/hard"
+  ln "$D/flat/solo.css" "$D/hard/solo.css"
+
+  # leg 1 -- one directory listed twice on the path
+  renders "a directory listed twice on the path builds" \
+    env PREZ_THEME_PATH="$D/themes:$D/themes" PREZ_THEME_DUPLICATES=refuse "$BIN" build "$D/deck.md" \
+      --theme=house -o "$D/twice.html"
+  present "and house dressed it" "at19-house-sentinel" "$D/twice.html"
+
+  # leg 2 -- one directory given by the flag and on the environment
+  renders "a directory given by --theme-path and on PREZ_THEME_PATH builds" \
+    env PREZ_THEME_PATH="$D/themes" PREZ_THEME_DUPLICATES=refuse "$BIN" build "$D/deck.md" \
+      --theme-path="$D/themes" --theme=house -o "$D/both.html"
+  present "and house dressed it" "at19-house-sentinel" "$D/both.html"
+
+  # leg 3 -- a symlink to a directory already on the path
+  if [ -L "$D/link" ] && [ "$D/link/house" -ef "$D/themes/house" ]; then
+    ok "fixture: link/house is themes/house by device and inode"
+  else
+    bad "fixture: the symlink did not come out as one directory"
+  fi
+  renders "a symlink to a directory already on the path builds" \
+    env PREZ_THEME_PATH="$D/themes:$D/link" PREZ_THEME_DUPLICATES=refuse "$BIN" build "$D/deck.md" \
+      --theme=house -o "$D/symlink.html"
+  present "and house dressed it" "at19-house-sentinel" "$D/symlink.html"
+
+  # leg 4 -- a hard link to a <name>.css already on the path
+  if [ ! -L "$D/hard/solo.css" ] && [ "$D/hard/solo.css" -ef "$D/flat/solo.css" ]; then
+    ok "fixture: hard/solo.css is flat/solo.css by device and inode, and not a symlink"
+  else
+    bad "fixture: the hard link did not come out as one file"
+  fi
+  renders "a hard link to a <name>.css already on the path builds" \
+    env PREZ_THEME_PATH="$D/flat:$D/hard" PREZ_THEME_DUPLICATES=refuse "$BIN" build "$D/deck.md" \
+      --theme=solo -o "$D/hardlink.html"
+  present "and solo dressed it" "at19-solo-sentinel" "$D/hardlink.html"
+  finish
+fi
+
+# ------------------------------------------------------ AT20 -- ST0020 AC-01.6
+#
+# **NOT RED-FIRST, AND ITS GREEN IS NOT EVIDENCE THE POLICY LANDED.** A
+# built-in is the tier beneath the search path, not a second definition on
+# it, so one search-path theme that shadows a built-in builds under refuse as
+# it does today. HEAD builds it by construction; this goes red only if the fix
+# counts the built-in. The run is compared with an unset run byte for byte,
+# because "as today" is the claim.
+
+if want AT20; then
+  start AT20 "with refuse, a search-path theme shadowing a built-in builds, announced SHADOWING (NOT red-first)"
+  D="$WORK/at20"
+  deck_at "$D/deck.md"
+  theme_dir_at "$D/themes/mono" "at20-shadow-sentinel"
+
+  renders "a search-path mono builds under refuse" \
+    env PREZ_THEME_PATH="$D/themes" PREZ_THEME_DUPLICATES=refuse "$BIN" build "$D/deck.md" \
+      --theme=mono -o "$D/refuse.html"
+  cp "$WORK/renders.err" "$D/refuse.err"
+  renders "and with the variable unset" \
+    env -u PREZ_THEME_DUPLICATES PREZ_THEME_PATH="$D/themes" "$BIN" build "$D/deck.md" \
+      --theme=mono -o "$D/unset.html"
+  cp "$WORK/renders.err" "$D/unset.err"
+
+  present "the search path's mono dressed it, not the built-in" "at20-shadow-sentinel" "$D/refuse.html"
+  present "announced SHADOWING" "SHADOWING" "$D/refuse.err"
+  same "the artifact is today's" "$D/refuse.html" "$D/unset.html"
+  same "and so is the notice, word for word" "$D/refuse.err" "$D/unset.err"
+  finish
+fi
+
+# ------------------------------------------------------ AT21 -- ST0020 AC-01.7
+#
+# A VALUE PREZ DOES NOT KNOW IS REFUSED AT EVERY COMPILE. Red-first: HEAD
+# ignores the variable, so every leg builds there. A misspelt refuse must not
+# quietly mean first match, which is the silence this thread removes. This is
+# the value's check, not the duplicate check, so it refuses builds that
+# resolve no NAME at all: by --theme-file, and with no theme named. The last
+# leg's value is not UTF-8, cannot be echoed, and is refused by name anyway.
+
+if want AT21; then
+  start AT21 "a PREZ_THEME_DUPLICATES value it does not know is refused at every compile"
+  D="$WORK/at21"
+  deck_at "$D/deck.md"
+  theme_dir_at "$D/themes/house" "at21-house-sentinel"
+  theme_file_at "$D/file.css" "at21-file-sentinel"
+
+  # leg 1 -- with a --theme name
+  exits "refuze with a --theme name is refused" 2 \
+    env PREZ_THEME_PATH="$D/themes" PREZ_THEME_DUPLICATES=refuze "$BIN" build "$D/deck.md" \
+      --theme=house -o "$D/never1.html"
+  present "naming the variable and its value" "PREZ_THEME_DUPLICATES='refuze'" "$WORK/refuses.err"
+  present "and listing the policies" "the policies are first and refuse" "$WORK/refuses.err"
+  unwritten "and nothing was written" "$D/never1.html"
+
+  # leg 2 -- with a --theme-file path, which never consults the search path
+  exits "refuze with a --theme-file path is refused" 2 \
+    env -u PREZ_THEME_PATH PREZ_THEME_DUPLICATES=refuze "$BIN" build "$D/deck.md" \
+      --theme-file="$D/file.css" -o "$D/never2.html"
+  present "naming the variable and its value" "PREZ_THEME_DUPLICATES='refuze'" "$WORK/refuses.err"
+  present "and listing the policies" "the policies are first and refuse" "$WORK/refuses.err"
+  unwritten "and nothing was written" "$D/never2.html"
+
+  # leg 3 -- a deck that names no theme, and so takes the built-in
+  exits "refuze with no theme named is refused" 2 \
+    env -u PREZ_THEME_PATH -u PREZ_DEFAULT_THEME PREZ_THEME_DUPLICATES=refuze \
+      "$BIN" build "$D/deck.md" -o "$D/never3.html"
+  present "naming the variable and its value" "PREZ_THEME_DUPLICATES='refuze'" "$WORK/refuses.err"
+  present "and listing the policies" "the policies are first and refuse" "$WORK/refuses.err"
+  unwritten "and nothing was written" "$D/never3.html"
+
+  # leg 4 -- a value that is not UTF-8
+  exits "a value that is not UTF-8 is refused" 2 \
+    env -u PREZ_THEME_PATH -u PREZ_DEFAULT_THEME PREZ_THEME_DUPLICATES="$(printf '\377')" \
+      "$BIN" build "$D/deck.md" -o "$D/never4.html"
+  present "naming the variable" "PREZ_THEME_DUPLICATES is not valid UTF-8" "$WORK/refuses.err"
+  present "and listing the policies" "the policies are first and refuse" "$WORK/refuses.err"
+  unwritten "and nothing was written" "$D/never4.html"
+  finish
+fi
+
+# ------------------------------------------------------ AT22 -- ST0020 AC-01.8
+#
+# ONE DIRECTORY DEFINING A NAME IN BOTH FORMS IS TWO DEFINITIONS: the one
+# extension beyond the request, stated as one in design.md. Red-first: HEAD
+# takes the directory form silently. Inside one directory, search order is the
+# order the forms are checked in, so the directory form, the one first match
+# takes, is listed first.
+#
+# LEG 2 IS THE CONTROL, AND IT IS NOT RED-FIRST: with the variable unset, the
+# directory form still wins. A fix that refused both forms under every policy
+# would pass leg 1 and fail here, and AT16's two directories would not see it.
+
+if want AT22; then
+  start AT22 "with refuse, one directory defining a name in both forms is refused, naming both files"
+  D="$WORK/at22"
+  deck_at "$D/deck.md"
+  theme_dir_at "$D/both/house" "at22-dir-sentinel"
+  theme_file_at "$D/both/house.css" "at22-file-sentinel"
+
+  # leg 1 -- refused under refuse
+  exits "a name one directory defines in both forms is refused" 2 \
+    env PREZ_THEME_PATH="$D/both" PREZ_THEME_DUPLICATES=refuse "$BIN" build "$D/deck.md" \
+      --theme=house -o "$D/never.html"
+  shaped "with the duplicate refusal's prefix" "^prez: theme 'house' is defined more than once" "$WORK/refuses.err"
+  present "naming the directory form" "$D/both (on PREZ_THEME_PATH): house/theme.css" "$WORK/refuses.err"
+  present "and the file form" "$D/both (on PREZ_THEME_PATH): house.css" "$WORK/refuses.err"
+  ordered "the directory form first, as first match takes it" \
+    "$D/both (on PREZ_THEME_PATH): house/theme.css" \
+    "$D/both (on PREZ_THEME_PATH): house.css" "$WORK/refuses.err"
+  unwritten "and nothing was written" "$D/never.html"
+
+  # leg 2 -- THE CONTROL: unset, the directory form wins as it does today
+  renders "with the variable unset it builds" \
+    env -u PREZ_THEME_DUPLICATES PREZ_THEME_PATH="$D/both" "$BIN" build "$D/deck.md" \
+      --theme=house -o "$D/first.html"
+  present "and the directory form dressed it" "at22-dir-sentinel" "$D/first.html"
+  absent "not the file form" "at22-file-sentinel" "$D/first.html"
   finish
 fi
 

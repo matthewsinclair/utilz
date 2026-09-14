@@ -66,35 +66,35 @@ _(no tests in this group)_
 
 ### Group AT15
 
-- AT15 `opt/prez/crate/test/theme-addressing.sh` -- covers AC-01.1 -- status: to-write -- red-first: HEAD builds a name two directories define
+- AT15 `opt/prez/crate/test/theme-addressing.sh` -- covers AC-01.1 -- status: red -- red-first: HEAD builds a name two directories define; red at 9a99c31: 11 checks failed (red-st0020.log)
 
 ### Group AT16
 
-- AT16 `opt/prez/crate/test/theme-addressing.sh` -- covers AC-01.2 -- status: to-write -- NOT red-first: a regression guard, green at HEAD by construction
+- AT16 `opt/prez/crate/test/theme-addressing.sh` -- covers AC-01.2 -- status: to-write -- NOT red-first: a regression guard, green at 9a99c31 by construction (red-st0020.log)
 
 ### Group AT17
 
-- AT17 `opt/prez/crate/test/theme-addressing.sh` -- covers AC-01.3 -- status: to-write -- NOT red-first: a regression guard, green at HEAD by construction; AT15 is its control
+- AT17 `opt/prez/crate/test/theme-addressing.sh` -- covers AC-01.3 -- status: to-write -- NOT red-first: a regression guard, green at 9a99c31 by construction; AT15 is its control (red-st0020.log)
 
 ### Group AT18
 
-- AT18 `opt/prez/crate/test/theme-addressing.sh` -- covers AC-01.4 -- status: to-write -- red-first: HEAD builds the default's duplicated name
+- AT18 `opt/prez/crate/test/theme-addressing.sh` -- covers AC-01.4 -- status: red -- red-first: HEAD builds the default's duplicated name; red at 9a99c31: 4 checks failed (red-st0020.log)
 
 ### Group AT19
 
-- AT19 `opt/prez/crate/test/theme-addressing.sh` -- covers AC-01.5 -- status: to-write -- NOT red-first: a regression guard, green at HEAD by construction; AT15's byte-identical copies are its control
+- AT19 `opt/prez/crate/test/theme-addressing.sh` -- covers AC-01.5 -- status: to-write -- NOT red-first: a regression guard, green at 9a99c31 by construction; AT15's byte-identical copies are its control (red-st0020.log)
 
 ### Group AT20
 
-- AT20 `opt/prez/crate/test/theme-addressing.sh` -- covers AC-01.6 -- status: to-write -- NOT red-first: a regression guard, green at HEAD by construction
+- AT20 `opt/prez/crate/test/theme-addressing.sh` -- covers AC-01.6 -- status: to-write -- NOT red-first: a regression guard, green at 9a99c31 by construction (red-st0020.log)
 
 ### Group AT21
 
-- AT21 `opt/prez/crate/test/theme-addressing.sh` -- covers AC-01.7 -- status: to-write -- red-first: HEAD ignores the variable
+- AT21 `opt/prez/crate/test/theme-addressing.sh` -- covers AC-01.7 -- status: red -- red-first: HEAD ignores the variable; red at 9a99c31: 16 checks failed (red-st0020.log)
 
 ### Group AT22
 
-- AT22 `opt/prez/crate/test/theme-addressing.sh` -- covers AC-01.8 -- status: to-write -- red-first: HEAD takes the directory form silently
+- AT22 `opt/prez/crate/test/theme-addressing.sh` -- covers AC-01.8 -- status: red -- red-first: HEAD takes the directory form silently; red at 9a99c31: 6 checks failed in leg 1, and leg 2, the control, green (red-st0020.log)
 
 ---
 
