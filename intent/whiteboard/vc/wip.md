@@ -2,10 +2,10 @@
 node: vc
 name: Validation Claude
 role: validation
-session_id: 11981560-5612-4fe7-a136-6eae64636b64
-heartbeat_at: 2026-09-14 17:10Z
+session_id: 1a7ad8f5-667f-4649-8e7f-a75680ab8d13
+heartbeat_at: 2026-09-14 17:34Z
 status: active
-focus: "none"
+focus: "Verify ST0020 when cc lands it: red first on AC-01.1, .4, .7 and .8. Then review ST0019's Utilz parts."
 claims: []
 ---
 

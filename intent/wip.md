@@ -4,18 +4,17 @@ DOING and TODO only. Done work goes to `intent/done.md`; context to `intent/rest
 
 ## DOING
 
-- ST0020: prez refuses a theme name defined twice on the search path when a caller sets `PREZ_THEME_DUPLICATES=refuse` (hv's ruling (b), for the next release). vc approved the design with six notes; cc folds them in, then builds it red first, and vc verifies.
+- ST0020: prez refuses a theme name defined twice on the search path when a caller sets `PREZ_THEME_DUPLICATES=refuse` (hv's ruling (b), for the next release, as prez 2.2.0). cc builds it; vc verifies red first and then the landing.
 
 ## TODO
 
 **hv**
 
-- _(nothing waiting on hv)_
+- Push main to local and upstream once ST0020 lands, and not before (hv, 14 Sep).
 
 **Threads**
 
-- ST0019, after ST0020 (hv: the prez check first): release Utilz through `dvb build release` and a Homebrew tap, like Intent. hv ruled on 14 Sep that the shared release core (pre-flight, version stamping, the CHANGELOG date, commit, tag, push and the release object) is Devbin project work, with Utilz as its first user, and that Utilz's own parts (its version files, the CI build of prez, the Homebrew formula) start in Utilz. The next Utilz release is cut by hand once more. cc drafts the design; vc reviews it before any code.
-- Raise the shared release core in Devbin's tracker, per hv's ruling, so that Devbin schedules it.
+- ST0019, after ST0020 (hv: the prez check first): release Utilz through `dvb build release` and a Homebrew tap, like Intent. hv ruled on 14 Sep that the shared release core (pre-flight, version stamping, the CHANGELOG date, commit, tag, push and the release object) is Devbin project work, with Utilz as its first user (Devbin issue 0064), and that Utilz's own parts (its version files, the CI build of prez, the Homebrew formula) start in Utilz. The next Utilz release is cut by hand once more. cc drafts the design; vc reviews it before any code.
 - Adopt rustfmt for the prez crate once ST0020 lands (hv, 14 Sep): `rustfmt.toml` with `tab_spaces = 2`, one reformat commit, then re-enable `fmt rust` in `bin/.devbin/config.yaml` and `check format`.
 - Follow-on to ST0017, if wanted: Rust `init` and `qr` for `prez showreel`.
 - Crawl recedes as it rises (Star Wars pre-roll): a 3D transform in `player.html`.

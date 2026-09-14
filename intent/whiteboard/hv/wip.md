@@ -3,9 +3,9 @@ node: hv
 name: Hypervisor
 role: hypervisor
 session_id: none
-heartbeat_at: 2026-09-14 08:48Z
+heartbeat_at: 2026-09-14 17:34Z
 status: active
-focus: "Cut the release after 2.8.0."
+focus: "The next Utilz release, cut by hand once more (decision 1), with ST0020 in it."
 claims: []
 ---
 
@@ -30,6 +30,7 @@ _(none)_
 ## Decisions
 
 - hv, 2026-09-14, directly to vc: (1) ST0019's shared release core (pre-flight, version stamping, the CHANGELOG date, commit, tag, push, the release object) is Devbin project work with Utilz as its first user; Utilz's own parts (its version files, the CI build of prez, the Homebrew formula) start in Utilz, and the next Utilz release is cut by hand once more. (2) utilz doctor's report goes to stdout, by one redirect where the doctor verb runs; the shared message helpers stay on stderr. (3) Adopt rustfmt for the prez crate once ST0020 lands.
+- hv, 2026-09-14, directly to vc, on the HV items cc sent at its localfold: (1) main is pushed to both remotes when ST0020 lands, and not before. (2) ST0020 keeps its (device, inode) identity, Unix-only: the workspace builds for macOS and Linux only, and a port would choose its own identity. (3) prez 2.2.0 is confirmed for the next release. (4) vc files Intent's `macos prepare --help` defect in Intent's tracker, as 0378 was filed.
 
 ---
 
