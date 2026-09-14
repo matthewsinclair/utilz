@@ -187,6 +187,9 @@ fn compile(cmd: &Command, paper: Option<String>) -> Result<Compiled, Failure> {
   // ST0018: the environment is read here, once per compile, by the coordinator,
   // and handed to the pure ranking, so no test of the ranking touches it.
   let env_default = theme::default_from_env()?;
+  // ST0020: the duplicates policy is read beside it, on every compile, so a
+  // value prez does not know is refused whatever this build resolves.
+  let duplicates = theme::duplicates_from_env()?;
   let choice = theme_choice(
     cmd.theme.as_deref(),
     cmd.theme_file.as_deref(),
@@ -196,7 +199,7 @@ fn compile(cmd: &Command, paper: Option<String>) -> Result<Compiled, Failure> {
     base,
   )?;
   let from_env_default = matches!(choice, Some((_, ThemeSource::EnvDefault)));
-  let theme = theme::load(choice.map(|(spec, _)| spec), &extra)
+  let theme = theme::load(choice.map(|(spec, _)| spec), &extra, duplicates)
     .map_err(|failure| if from_env_default { name_the_default(failure) } else { failure })?;
   // AC14. Through the same single door as every other warning: theme.rs decides
   // WHAT is worth saying because it owns the resolution order, and this line

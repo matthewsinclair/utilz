@@ -46,6 +46,15 @@ Environment:
                       before the built-ins.
   PREZ_DEFAULT_THEME  A theme NAME for a deck that names none. Resolved and
                       refused exactly as --theme is. Empty means unset.
+  PREZ_THEME_DUPLICATES
+                      What a theme NAME defined more than once on the search
+                      path does. Unset, empty or first: the first in search
+                      order wins, as always. refuse: the name is refused,
+                      listing every definition in search order. Two
+                      directories, or one holding both NAME/theme.css and
+                      NAME.css, are two definitions; one file reached twice
+                      is one, and a built-in is not one. Any other value is
+                      refused every time a deck is built, whatever its theme.
 
 `prez browser` takes no deck: it prints the browser pdf and present would
 drive, or refuses naming every path it probed. It exists so a caller can ASK

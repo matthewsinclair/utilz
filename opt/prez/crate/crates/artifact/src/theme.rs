@@ -36,6 +36,7 @@
 // fix it.
 
 use crate::Failure;
+use std::ffi::OsStr;
 use std::path::{Path, PathBuf};
 
 /// WHICH BRANCH OF `load` PRODUCED THIS THEME.
@@ -130,6 +131,33 @@ pub enum Spec<'a> {
   File(PathBuf),
 }
 
+/// WHAT A NAME DEFINED MORE THAN ONCE ON THE SEARCH PATH DOES.
+///
+/// **FIRST MATCH IS THE DEFAULT, AND FOR A PATH SOMEONE CHOSE IT IS THE POINT:**
+/// the flag prepends to the environment variable precisely so that a directory
+/// given for one invocation overrides an exported one. For a path that is
+/// ASSEMBLED rather than chosen, the same silence is a defect: the build takes
+/// whichever definition sorted first and says nothing. `Refuse` is how such a
+/// caller asks for that choice to be refused instead.
+///
+/// **A PARAMETER, NOT A VARIABLE THIS RESOLVER READS.** A value the tool does
+/// not know must be refused on every build, including one that resolves no
+/// NAME and so never reaches the search path here; only the tool's own edge
+/// sees every build. And the tests pass each policy directly, where a process
+/// variable would race every other test in the binary.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum Duplicates {
+  /// The first definition in search order wins, and a later one is never
+  /// looked for.
+  First,
+  /// A NAME with more than one definition is refused, naming every one.
+  ///
+  /// **`var` IS THE VARIABLE THAT ASKED FOR THIS**, carried so the refusal can
+  /// say why search order was not allowed to choose: a refusal that cannot
+  /// name its cause cannot be constructed.
+  Refuse { var: &'static str },
+}
+
 /// The tool-specific half of theme resolution: which built-ins exist, and which
 /// environment variable names the search path.
 ///
@@ -185,8 +213,15 @@ impl Registry {
   ///
   /// `extra` is the flag's directories: PREPENDED to the environment variable
   /// for this invocation, so the flag and the environment compose rather than
-  /// the flag replacing it.
-  pub fn load(&self, spec: Option<Spec>, extra: &[PathBuf]) -> Result<Theme, Failure> {
+  /// the flag replacing it. `duplicates` decides what a NAME defined more than
+  /// once on the search path does; a PATH never consults the search path, so
+  /// the policy does not reach it.
+  pub fn load(
+    &self,
+    spec: Option<Spec>,
+    extra: &[PathBuf],
+    duplicates: Duplicates,
+  ) -> Result<Theme, Failure> {
     let Some(spec) = spec else {
       let default = self.built_ins.first().map(|(id, _)| *id).unwrap_or("");
       return self.built_in(default).ok_or_else(|| {
@@ -209,7 +244,7 @@ impl Registry {
         if path.is_dir() { from_directory(&path, &remedy)? } else { from_file(&path, &remedy)? }
       }
       Spec::Name(name) => {
-        if let Some(found) = self.on_search_path(name, extra)? {
+        if let Some(found) = self.on_search_path(name, extra, duplicates)? {
           found
         } else if let Some(found) = self.built_in(name) {
           found
@@ -267,22 +302,20 @@ impl Registry {
     let Origin::SearchPath { dir, name, source } = &theme.origin else {
       return None;
     };
-    let var = self.search_path_var;
     let flag = self.theme_path_flag;
     let noun = self.noun;
     let shadowed = self.built_ins.iter().any(|(id, _)| id == name);
-    // The mechanism, and the two remedies that follow FROM it. Four messages
-    // rather than one with a word swapped: what reproduces the situation and
-    // what cures it are different facts for the two sources, not different
-    // labels for one fact.
-    let (mechanism, elsewhere, cure) = match source {
+    let mechanism = self.mechanism(*source);
+    // The two remedies that follow FROM the mechanism. Four messages rather
+    // than one with a word swapped: what reproduces the situation and what
+    // cures it are different facts for the two sources, not different labels
+    // for one fact.
+    let (elsewhere, cure) = match source {
       SearchSource::Env => (
-        format!("on {var}"),
         format!("Elsewhere this {noun} refuses to build until that directory is on the path."),
         "rename the local theme if that is not what you want".to_string(),
       ),
       SearchSource::Flag => (
-        format!("given by {flag}"),
         format!("Without that flag this {noun} refuses to build."),
         format!("drop {flag} if that is not what you want"),
       ),
@@ -300,35 +333,73 @@ impl Registry {
     })
   }
 
-  /// Look for a named theme in each directory on the search path.
+  /// Look for a named theme in each directory on the search path, as
+  /// `duplicates` says.
   ///
   /// A name matches either `<dir>/<name>/theme.css` (a directory theme, which
   /// may also carry theme.js and layout.html) or `<dir>/<name>.css`.
-  fn on_search_path(&self, name: &str, extra: &[PathBuf]) -> Result<Option<Theme>, Failure> {
+  ///
+  /// **ONE WALK, TWO POLICIES.** A second walker for the strict case would be a
+  /// second answer to "where is this name defined", free to disagree with the
+  /// first. `First` takes the walk's first definition and stops, so it makes
+  /// the checks and reads the files it made and read before the policy existed,
+  /// and nothing the policy adds can fail it. `Refuse` walks to the end, counts
+  /// each file once, and takes the only definition or refuses with all of them.
+  /// Only `Refuse` asks a definition for its identity.
+  fn on_search_path(
+    &self,
+    name: &str,
+    extra: &[PathBuf],
+    duplicates: Duplicates,
+  ) -> Result<Option<Theme>, Failure> {
     // A separator can no longer reach here -- `name_spec` refuses it at the
     // door -- so this is an invariant rather than a guard, and it is cheap.
     if name.contains('/') || name.contains(std::path::MAIN_SEPARATOR) {
       return Ok(None);
     }
-    for (dir, source) in self.search_directories(extra) {
-      // from_directory and from_file both stamp Origin::Path, because on their
-      // own they cannot tell a path the user typed from a path this loop built.
-      // Only here is that known, so only here is it overwritten.
-      let found = |theme: Theme| Theme {
-        origin: Origin::SearchPath { dir: dir.clone(), name: name.to_string(), source },
-        ..theme
-      };
-      let remedy = self.read_remedy();
-      let as_dir = dir.join(name);
-      if as_dir.join("theme.css").is_file() {
-        return from_directory(&as_dir, &remedy).map(found).map(Some);
+    let remedy = self.read_remedy();
+    let mut found = self.definitions(name, extra);
+    let chosen = match duplicates {
+      Duplicates::First => found.next(),
+      Duplicates::Refuse { var } => {
+        let distinct = distinct(found, name, &remedy)?;
+        if distinct.len() > 1 {
+          return Err(self.duplicated(name, var, &distinct));
+        }
+        distinct.into_iter().next()
       }
-      let as_file = dir.join(format!("{name}.css"));
-      if as_file.is_file() {
-        return from_file(&as_file, &remedy).map(found).map(Some);
-      }
-    }
-    Ok(None)
+    };
+    let Some(Definition { dir, source, form }) = chosen else {
+      return Ok(None);
+    };
+    // from_directory and from_file both stamp Origin::Path, because on their
+    // own they cannot tell a path the user typed from a path this walk found.
+    // Only here is that known, so only here is it overwritten.
+    let root = form.root(&dir, name);
+    let theme = match form {
+      Form::Directory => from_directory(&root, &remedy)?,
+      Form::File => from_file(&root, &remedy)?,
+    };
+    Ok(Some(Theme { origin: Origin::SearchPath { dir, name: name.to_string(), source }, ..theme }))
+  }
+
+  /// Every definition of `name` on the search path, in search order, LAZILY.
+  ///
+  /// Each directory is asked for the two forms in the order the resolver has
+  /// always asked, the directory form first, and each question is asked only
+  /// when the walk is pulled that far. That is what lets `First` stop exactly
+  /// where the early return it replaced stopped.
+  fn definitions<'a>(
+    &self,
+    name: &'a str,
+    extra: &[PathBuf],
+  ) -> impl Iterator<Item = Definition> + 'a {
+    self
+      .search_directories(extra)
+      .into_iter()
+      .flat_map(|(dir, source)| [(dir.clone(), source, Form::Directory), (dir, source, Form::File)])
+      .filter(move |(dir, _, form)| dir.join(form.stylesheet(name)).is_file())
+      .map(|(dir, source, form)| Definition { dir, source, form })
   }
 
   /// The directories a NAME is looked for in: the flag first, then the
@@ -351,6 +422,49 @@ impl Registry {
       );
     }
     dirs
+  }
+
+  /// The mechanism that put a directory on the search path, in the words every
+  /// message uses for it: `on <variable>`, or `given by <flag>`.
+  ///
+  /// **ONE HOME, BECAUSE THREE MESSAGES NAME IT AND A READER MATCHES ONE
+  /// AGAINST ANOTHER**: the provenance notice, the unknown-theme refusal and the
+  /// duplicate refusal.
+  fn mechanism(&self, source: SearchSource) -> String {
+    match source {
+      SearchSource::Env => format!("on {}", self.search_path_var),
+      SearchSource::Flag => format!("given by {}", self.theme_path_flag),
+    }
+  }
+
+  /// Refuse a NAME with more than one definition on the search path, naming
+  /// every one.
+  ///
+  /// **THE LIST IS IN SEARCH ORDER, AND THE MESSAGE SAYS SO**, because the order
+  /// carries information: the first line is the definition first match would
+  /// take, which is what unsetting the variable gives. Each line names the
+  /// searched directory, the mechanism that put it on the path, and the
+  /// stylesheet found there, so two definitions in one directory read apart.
+  ///
+  /// **THE `theme '<name>' is defined more than once` PREFIX IS LOAD-BEARING, AS
+  /// `no theme '<name>'` IS, AND MUST NOT BE REWORDED WITHOUT NOTICE.** A caller
+  /// that sets the policy asserts on it, and it must never read as the
+  /// unknown-theme refusal.
+  fn duplicated(&self, name: &str, var: &str, definitions: &[Definition]) -> Failure {
+    let listed = definitions
+      .iter()
+      .map(|d| {
+        format!("  {} ({}): {}", d.dir.display(), self.mechanism(d.source), d.form.stylesheet(name))
+      })
+      .collect::<Vec<_>>()
+      .join("\n");
+    Failure::new(
+      format!(
+        "theme '{name}' is defined more than once on the search path, and {var}={REFUSE} does \
+         not let search order choose. In search order:\n{listed}"
+      ),
+      format!("remove or rename all but one of them, or unset {var} to take the first in search order"),
+    )
   }
 
   /// Refuse an unrecognised theme, saying everything that was tried.
@@ -378,10 +492,7 @@ impl Registry {
       ),
       false => searched
         .iter()
-        .map(|(d, src)| match src {
-          SearchSource::Flag => format!("  searched {} (given by {flag})", d.display()),
-          SearchSource::Env => format!("  searched {} (on {var})", d.display()),
-        })
+        .map(|(d, src)| format!("  searched {} ({})", d.display(), self.mechanism(*src)))
         .collect::<Vec<_>>()
         .join("\n"),
     };
@@ -425,6 +536,44 @@ pub fn name_spec<'a>(value: &'a str, source: &str, remedy: &str) -> Result<Spec<
   Ok(Spec::Name(value))
 }
 
+/// The duplicates policies' names, written once: for the parse, and for every
+/// message that names them.
+const FIRST: &str = "first";
+const REFUSE: &str = "refuse";
+
+/// The duplicates policy a variable's value names, or a refusal naming the
+/// variable.
+///
+/// **PURE**: it is handed the value rather than reading the environment, so its
+/// tests pass values and never set a process variable. `var` is the variable's
+/// name, for the refusal to name and for `Refuse` to carry.
+///
+/// Unset and EMPTY are first match: an empty value is how a shell clears a
+/// variable for one command. **ANY OTHER VALUE IS REFUSED**, because a misspelt
+/// `refuse` that quietly meant first match would be exactly the silence the
+/// policy exists to remove. A value that is not UTF-8 is refused by name too,
+/// without echoing it, since it cannot be printed faithfully.
+pub fn duplicates_policy(var: &'static str, value: Option<&OsStr>) -> Result<Duplicates, Failure> {
+  let remedy = || {
+    format!(
+      "set {var}={REFUSE} to refuse a duplicated theme name, or unset it to take the first in \
+       search order"
+    )
+  };
+  match value.map(OsStr::to_str) {
+    None | Some(Some("")) | Some(Some(FIRST)) => Ok(Duplicates::First),
+    Some(Some(REFUSE)) => Ok(Duplicates::Refuse { var }),
+    Some(Some(other)) => Err(Failure::new(
+      format!("{var}='{other}' is not a policy; the policies are {FIRST} and {REFUSE}"),
+      remedy(),
+    )),
+    Some(None) => Err(Failure::new(
+      format!("{var} is not valid UTF-8, so it cannot name a policy; the policies are {FIRST} and {REFUSE}"),
+      remedy(),
+    )),
+  }
+}
+
 /// Split a theme-path flag value into directories.
 ///
 /// Repeats of the flag are LAST-WINS, decided where the flag is parsed: PREPEND
@@ -436,9 +585,13 @@ pub fn split_path_flag(value: &str) -> Vec<PathBuf> {
 
 /// Read a theme source file, or refuse by name.
 pub fn read(path: &Path, remedy: &str) -> Result<String, Failure> {
-  std::fs::read_to_string(path).map_err(|e| {
-    Failure::new(format!("cannot read theme '{}': {e}", path.display()), remedy)
-  })
+  std::fs::read_to_string(path).map_err(|e| cannot_read(path, &e, remedy))
+}
+
+/// The refusal for a theme that cannot be read, in the one wording `read` and
+/// `identity` share.
+fn cannot_read(path: &Path, error: &std::io::Error, remedy: &str) -> Failure {
+  Failure::new(format!("cannot read theme '{}': {error}", path.display()), remedy)
 }
 
 fn optional(path: &Path, remedy: &str) -> Result<Option<String>, Failure> {
@@ -492,6 +645,92 @@ fn from_directory(dir: &Path, remedy: &str) -> Result<Theme, Failure> {
     origin: Origin::Path,
     dir: Some(dir.to_path_buf()),
   })
+}
+
+/// One place a NAME is defined on the search path.
+struct Definition {
+  /// The directory searched: an entry off the search path, not the theme's own.
+  dir: PathBuf,
+  /// The mechanism that put `dir` on the path.
+  source: SearchSource,
+  /// Which of the two shapes the name takes there.
+  form: Form,
+}
+
+/// The two shapes a NAME takes in a search directory.
+#[derive(Clone, Copy)]
+enum Form {
+  /// `<dir>/<name>/theme.css`, with theme.js and layout.html beside it.
+  Directory,
+  /// `<dir>/<name>.css`.
+  File,
+}
+
+impl Form {
+  /// The stylesheet that defines the name in this form, relative to its search
+  /// directory: what the walk looks for, and what the duplicate refusal names.
+  fn stylesheet(self, name: &str) -> String {
+    match self {
+      Form::Directory => format!("{name}/theme.css"),
+      Form::File => format!("{name}.css"),
+    }
+  }
+
+  /// The theme's own root: its directory for the directory form, its file for
+  /// the file form. The theme is read from it and its identity is taken of it,
+  /// because a directory theme is its theme.js, layout.html and assets as well
+  /// as its stylesheet.
+  fn root(self, dir: &Path, name: &str) -> PathBuf {
+    match self {
+      Form::Directory => dir.join(name),
+      Form::File => dir.join(self.stylesheet(name)),
+    }
+  }
+}
+
+/// The definitions left once each file is counted once, in search order.
+///
+/// **ONE FILE REACHED TWICE IS ONE DEFINITION**: a directory listed twice, one
+/// given by both mechanisms, a symlink to a directory already on the path, a
+/// hard link to a `<name>.css` already on it. Search order has nothing to choose
+/// between two routes to one file. The EARLIER route is kept, because it is the
+/// one `First` would take, with its directory and its mechanism.
+fn distinct(
+  found: impl Iterator<Item = Definition>,
+  name: &str,
+  remedy: &str,
+) -> Result<Vec<Definition>, Failure> {
+  let mut seen = Vec::new();
+  let mut kept = Vec::new();
+  for definition in found {
+    let id = identity(&definition.form.root(&definition.dir, name), remedy)?;
+    if !seen.contains(&id) {
+      seen.push(id);
+      kept.push(definition);
+    }
+  }
+  Ok(kept)
+}
+
+/// Which file a path names: its device and inode.
+///
+/// **THE ONE UNIX-ONLY CALL OUTSIDE THE TESTS, KEPT TO THIS FUNCTION SO A PORT
+/// CHANGES ONE PLACE.** (device, inode) is POSIX's answer to "are these one
+/// file", the answer `du`, `find -samefile` and `rsync -H` use. A canonical path
+/// answers a different question, whether two spellings name one path, and
+/// answers it wrongly for a hard link, which is one file under two paths.
+///
+/// **`metadata`, WHICH FOLLOWS A SYMLINK, AND NEVER `symlink_metadata`.** A theme
+/// root that is itself a symlink to another definition's root is one file
+/// reached twice, and only the followed answer says so: the link's own inode
+/// would count it twice and refuse it.
+///
+/// The walk has just found the path, so this fails only if the file vanished in
+/// between, and that is refused naming it, as an unreadable theme is.
+fn identity(path: &Path, remedy: &str) -> Result<(u64, u64), Failure> {
+  use std::os::unix::fs::MetadataExt;
+  let meta = std::fs::metadata(path).map_err(|e| cannot_read(path, &e, remedy))?;
+  Ok((meta.dev(), meta.ino()))
 }
 
 /// Refuse a theme that reaches outside the artifact.
@@ -787,7 +1026,7 @@ mod tests {
     // The default is POSITIONAL, not a hardcoded name. A name would be a second
     // place the default is written down, free to disagree with the roster the
     // diagnostics list.
-    let t = FAKE.load(None, &[]).unwrap();
+    let t = FAKE.load(None, &[], Duplicates::First).unwrap();
     assert_eq!(t.origin, Origin::BuiltIn);
     assert!(t.name.contains("plain"), "took the first built-in: {}", t.name);
   }
@@ -802,7 +1041,7 @@ mod tests {
 
   #[test]
   fn an_unknown_theme_names_this_registrys_roster_and_variable() {
-    let e = FAKE.load(Some(Spec::Name("nope")), &[]).unwrap_err();
+    let e = FAKE.load(Some(Spec::Name("nope")), &[], Duplicates::First).unwrap_err();
     assert!(e.message.contains("no theme 'nope'"), "{}", e.message);
     assert!(e.message.contains("plain, loud"), "lists this roster: {}", e.message);
     assert!(e.message.contains("ARTIFACT_TEST_THEME_PATH"), "names this var: {}", e.message);
@@ -816,7 +1055,7 @@ mod tests {
     std::fs::create_dir_all(&t_dir).unwrap();
     std::fs::write(t_dir.join("theme.css"), "body{color:#222}\n").unwrap();
 
-    let t = FAKE.load(Some(Spec::Name("housestyle")), std::slice::from_ref(&d)).unwrap();
+    let t = FAKE.load(Some(Spec::Name("housestyle")), std::slice::from_ref(&d), Duplicates::First).unwrap();
     match &t.origin {
       Origin::SearchPath { dir, name, source } => {
         assert_eq!(name, "housestyle");
@@ -832,7 +1071,7 @@ mod tests {
 
   #[test]
   fn a_built_in_announces_nothing() {
-    let t = FAKE.load(Some(Spec::Name("plain")), &[]).unwrap();
+    let t = FAKE.load(Some(Spec::Name("plain")), &[], Duplicates::First).unwrap();
     assert!(FAKE.provenance(&t).is_none(), "silence is the report for a built-in");
   }
 
@@ -854,32 +1093,32 @@ mod tests {
     let root = dir("assets");
 
     // A built-in has no file behind it. `None` is a decision, not an oversight.
-    let built_in = FAKE.load(Some(Spec::Name("plain")), &[]).unwrap();
+    let built_in = FAKE.load(Some(Spec::Name("plain")), &[], Duplicates::First).unwrap();
     assert!(built_in.dir.is_none(), "a built-in has nowhere to keep an asset");
 
     // A directory given by PATH: the directory itself.
     let as_dir = root.join("bydir");
     std::fs::create_dir_all(&as_dir).unwrap();
     std::fs::write(as_dir.join("theme.css"), "body{}\n").unwrap();
-    let t = FAKE.load(Some(Spec::File(as_dir.clone())), &[]).unwrap();
+    let t = FAKE.load(Some(Spec::File(as_dir.clone())), &[], Duplicates::First).unwrap();
     assert_eq!(t.dir.as_deref(), Some(as_dir.as_path()), "a directory theme keeps its own");
 
     // A lone `.css` given by PATH: its PARENT. The reference's answer, ported.
     let loose = root.join("loose.css");
     std::fs::write(&loose, "body{}\n").unwrap();
-    let t = FAKE.load(Some(Spec::File(loose)), &[]).unwrap();
+    let t = FAKE.load(Some(Spec::File(loose)), &[], Duplicates::First).unwrap();
     assert_eq!(t.dir.as_deref(), Some(root.as_path()), "a file's assets sit beside it");
 
     // A NAME resolving as `<searched>/<name>/theme.css`: one level DOWN.
     let named = root.join("housestyle");
     std::fs::create_dir_all(&named).unwrap();
     std::fs::write(named.join("theme.css"), "body{}\n").unwrap();
-    let down = FAKE.load(Some(Spec::Name("housestyle")), std::slice::from_ref(&root)).unwrap();
+    let down = FAKE.load(Some(Spec::Name("housestyle")), std::slice::from_ref(&root), Duplicates::First).unwrap();
     assert_eq!(down.dir.as_deref(), Some(named.as_path()), "the theme's own directory");
 
     // A NAME resolving as `<searched>/<name>.css`: the searched directory ITSELF.
     std::fs::write(root.join("solo.css"), "body{}\n").unwrap();
-    let flat = FAKE.load(Some(Spec::Name("solo")), std::slice::from_ref(&root)).unwrap();
+    let flat = FAKE.load(Some(Spec::Name("solo")), std::slice::from_ref(&root), Duplicates::First).unwrap();
     assert_eq!(flat.dir.as_deref(), Some(root.as_path()), "the `<name>.css` form has no subdir");
 
     // THE DISCRIMINATING PAIR, asserted as a pair. Same origin dir, different
@@ -1055,7 +1294,7 @@ mod tests {
     .unwrap();
 
     let e = FAKE
-      .load(Some(Spec::Name("bypass")), std::slice::from_ref(&d))
+      .load(Some(Spec::Name("bypass")), std::slice::from_ref(&d), Duplicates::First)
       .expect_err("a live href between two stray comment markers must not build");
     assert!(e.message.contains("layout.html"), "names the surface: {}", e.message);
     assert!(e.message.contains("evil.example.com"), "names the offender: {}", e.message);
@@ -1140,5 +1379,169 @@ mod tests {
     let css = "body{content:\"oops}\n/* a comment */\nbody{background:url(https://cdn/x.png)}\n";
     let e = refuse_external(css, "t", Grammar::Css).unwrap_err();
     assert!(e.message.contains("line 3"), "the comment on line 2 is still stripped: {}", e.message);
+  }
+
+  // ---- ST0020: a NAME defined more than once on the search path -----------
+  //
+  // Each case builds its own directories and passes them as `extra`, so the
+  // mechanism is always the flag's: no process variable is set, for the reason
+  // `search_directories` gives. Each case asks for the policy it tests.
+
+  const STRICT: Duplicates = Duplicates::Refuse { var: "ARTIFACT_TEST_DUPLICATES" };
+
+  /// `<root>/<sub>/<name>/theme.css`, returning the searched directory.
+  fn dir_theme(root: &Path, sub: &str, name: &str, css: &str) -> PathBuf {
+    let searched = root.join(sub);
+    std::fs::create_dir_all(searched.join(name)).unwrap();
+    std::fs::write(searched.join(name).join("theme.css"), css).unwrap();
+    searched
+  }
+
+  /// `<root>/<sub>/<name>.css`, returning the searched directory.
+  fn file_theme(root: &Path, sub: &str, name: &str, css: &str) -> PathBuf {
+    let searched = root.join(sub);
+    std::fs::create_dir_all(&searched).unwrap();
+    std::fs::write(searched.join(format!("{name}.css")), css).unwrap();
+    searched
+  }
+
+  /// Remove a link left by an earlier run that had this process id, since a
+  /// link cannot be made over one. Absent is the usual case, not an error.
+  fn clear(path: &Path) {
+    match std::fs::remove_file(path) {
+      Ok(()) => {}
+      Err(e) if e.kind() == std::io::ErrorKind::NotFound => {}
+      Err(e) => panic!("cannot clear {}: {e}", path.display()),
+    }
+  }
+
+  /// Both present, the first before the second.
+  fn in_order(message: &str, first: &str, second: &str) -> bool {
+    matches!((message.find(first), message.find(second)), (Some(a), Some(b)) if a < b)
+  }
+
+  #[test]
+  fn under_refuse_a_name_two_directories_define_is_refused_naming_both_in_search_order() {
+    let root = dir("dup-two-dirs");
+    let a = dir_theme(&root, "a", "house", "body{color:#111}\n");
+    let b = file_theme(&root, "b", "house", "body{color:#222}\n");
+    let e = FAKE.load(Some(Spec::Name("house")), &[a.clone(), b.clone()], STRICT).unwrap_err();
+    assert!(e.message.starts_with("theme 'house' is defined more than once"), "{}", e.message);
+    assert!(e.message.contains("ARTIFACT_TEST_DUPLICATES=refuse"), "names the policy: {}", e.message);
+    let first = format!("  {} (given by --fake-theme-path): house/theme.css", a.display());
+    let second = format!("  {} (given by --fake-theme-path): house.css", b.display());
+    assert!(in_order(&e.message, &first, &second), "both, in search order: {}", e.message);
+    let remedy = e.remedy.unwrap_or_default();
+    assert!(remedy.contains("unset ARTIFACT_TEST_DUPLICATES"), "{remedy}");
+  }
+
+  #[test]
+  fn under_first_the_first_definition_wins_and_nothing_is_refused() {
+    let root = dir("dup-first");
+    let a = dir_theme(&root, "a", "house", "body{color:#111}\n");
+    let b = file_theme(&root, "b", "house", "body{color:#222}\n");
+    let t = FAKE.load(Some(Spec::Name("house")), &[a.clone(), b], Duplicates::First).unwrap();
+    assert_eq!(t.css, "body{color:#111}\n", "the first in search order");
+    assert!(matches!(&t.origin, Origin::SearchPath { dir, .. } if dir == &a), "{:?}", t.origin);
+  }
+
+  #[test]
+  fn under_refuse_one_directory_defining_a_name_in_both_forms_is_refused_naming_both_files() {
+    let root = dir("dup-both-forms");
+    let both = dir_theme(&root, "both", "house", "body{color:#111}\n");
+    file_theme(&root, "both", "house", "body{color:#222}\n");
+    let e = FAKE.load(Some(Spec::Name("house")), std::slice::from_ref(&both), STRICT).unwrap_err();
+    let dir_form = format!("{} (given by --fake-theme-path): house/theme.css", both.display());
+    let file_form = format!("{} (given by --fake-theme-path): house.css", both.display());
+    assert!(in_order(&e.message, &dir_form, &file_form), "the directory form first: {}", e.message);
+
+    // The control: under First the directory form still wins, as it always has.
+    let t = FAKE.load(Some(Spec::Name("house")), std::slice::from_ref(&both), Duplicates::First).unwrap();
+    assert_eq!(t.css, "body{color:#111}\n");
+  }
+
+  #[test]
+  fn under_refuse_byte_identical_copies_are_two_definitions() {
+    // The policy is about WHERE a name is defined, not what the definitions
+    // contain, and a content comparison would let these through.
+    let root = dir("dup-copies");
+    let a = file_theme(&root, "a", "twin", "body{color:#111}\n");
+    let b = file_theme(&root, "b", "twin", "body{color:#111}\n");
+    let e = FAKE.load(Some(Spec::Name("twin")), &[a, b], STRICT).unwrap_err();
+    assert!(e.message.starts_with("theme 'twin' is defined more than once"), "{}", e.message);
+  }
+
+  /// **EVERY ROUTE TO ONE FILE, EACH AGAINST THE SAME RULE.** A check keyed on
+  /// the path as spelled refuses the symlinks and the hard link; one keyed on
+  /// the canonical path refuses the hard link; one that read `lstat` refuses the
+  /// symlinked theme root. The byte-identical copies above are the control: a
+  /// check that compared contents would pass all of these and fail there.
+  #[test]
+  fn under_refuse_one_file_reached_twice_is_one_definition() {
+    let root = dir("dup-one-file");
+    let themes = dir_theme(&root, "themes", "house", "body{color:#111}\n");
+
+    // A directory listed twice, and the earlier route is the one kept.
+    let t = FAKE.load(Some(Spec::Name("house")), &[themes.clone(), themes.clone()], STRICT).unwrap();
+    assert!(matches!(&t.origin, Origin::SearchPath { dir, .. } if dir == &themes), "{:?}", t.origin);
+
+    // A symlink to a directory already on the path.
+    let link = root.join("link");
+    clear(&link);
+    std::os::unix::fs::symlink(&themes, &link).unwrap();
+    FAKE.load(Some(Spec::Name("house")), &[themes.clone(), link], STRICT).unwrap();
+
+    // A theme root that is itself a symlink to another definition's root.
+    let other = root.join("other");
+    std::fs::create_dir_all(&other).unwrap();
+    clear(&other.join("house"));
+    std::os::unix::fs::symlink(themes.join("house"), other.join("house")).unwrap();
+    FAKE.load(Some(Spec::Name("house")), &[themes.clone(), other], STRICT).unwrap();
+
+    // A hard link to a `<name>.css` already on the path.
+    let flat = file_theme(&root, "flat", "solo", "body{color:#222}\n");
+    let hard = root.join("hard");
+    std::fs::create_dir_all(&hard).unwrap();
+    clear(&hard.join("solo.css"));
+    std::fs::hard_link(flat.join("solo.css"), hard.join("solo.css")).unwrap();
+    FAKE.load(Some(Spec::Name("solo")), &[flat, hard], STRICT).unwrap();
+  }
+
+  #[test]
+  fn under_refuse_a_single_definition_resolves_exactly_as_under_first() {
+    let root = dir("dup-single");
+    let a = dir_theme(&root, "a", "house", "body{color:#111}\n");
+    let fields = |t: Theme| (t.css, t.js, t.layout, t.name, t.origin, t.dir);
+    let strict = FAKE.load(Some(Spec::Name("house")), std::slice::from_ref(&a), STRICT).unwrap();
+    let first = FAKE.load(Some(Spec::Name("house")), std::slice::from_ref(&a), Duplicates::First).unwrap();
+    assert_eq!(fields(strict), fields(first));
+  }
+
+  #[test]
+  fn the_policy_is_read_from_the_value_it_is_handed_and_any_other_value_is_refused() {
+    use std::os::unix::ffi::OsStrExt;
+    let var = "ARTIFACT_TEST_DUPLICATES";
+    let named = |value: Option<&str>| duplicates_policy(var, value.map(OsStr::new));
+
+    assert_eq!(named(None).unwrap(), Duplicates::First, "unset");
+    assert_eq!(named(Some("")).unwrap(), Duplicates::First, "empty is unset");
+    assert_eq!(named(Some("first")).unwrap(), Duplicates::First);
+    assert_eq!(named(Some("refuse")).unwrap(), Duplicates::Refuse { var });
+
+    let e = named(Some("refuze")).unwrap_err();
+    assert_eq!(
+      e.message,
+      "ARTIFACT_TEST_DUPLICATES='refuze' is not a policy; the policies are first and refuse"
+    );
+    assert!(e.remedy.unwrap_or_default().contains("unset it"), "a remedy for the case");
+    assert!(named(Some("REFUSE")).is_err(), "a policy is one word, spelled one way");
+
+    // Not UTF-8: refused by name, and the value, which cannot be printed
+    // faithfully, is not echoed.
+    let e = duplicates_policy(var, Some(OsStr::from_bytes(b"\xff"))).unwrap_err();
+    assert_eq!(
+      e.message,
+      "ARTIFACT_TEST_DUPLICATES is not valid UTF-8, so it cannot name a policy; the policies are first and refuse"
+    );
   }
 }

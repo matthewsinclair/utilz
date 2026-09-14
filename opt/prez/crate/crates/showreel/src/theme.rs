@@ -30,7 +30,7 @@
 //! read the SITE, not the spelling.
 
 use artifact::base64;
-use artifact::theme::{name_spec, refuse_external_target, Registry, Theme};
+use artifact::theme::{name_spec, refuse_external_target, Duplicates, Registry, Theme};
 use artifact::Failure;
 use serde::Deserialize;
 use std::path::{Path, PathBuf};
@@ -95,7 +95,9 @@ pub fn for_reel(name: Option<&str>, extra: &[PathBuf]) -> Result<Theme, Failure>
       )
     })
     .transpose()?;
-  REGISTRY.load(spec, extra)
+  // First match, always: the duplicates policy is prez's variable, and a reel
+  // equivalent would be a request of its own (ST0020).
+  REGISTRY.load(spec, extra, Duplicates::First)
 }
 
 /// What to say on stderr when a theme did NOT come out of the binary.

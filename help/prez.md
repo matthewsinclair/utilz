@@ -191,7 +191,7 @@ A theme is a `.css` file, or a directory holding `theme.css` and optionally `the
 
 ### `PREZ_THEME_PATH`
 
-Colon-separated directories searched for named themes. A name matches `<dir>/<name>/theme.css` or `<dir>/<name>.css`, and the first directory on the path wins.
+Colon-separated directories searched for named themes. A name matches `<dir>/<name>/theme.css` or `<dir>/<name>.css`, and the first directory on the path wins. With `PREZ_THEME_DUPLICATES=refuse`, a name defined more than once is refused instead (below).
 
 ```bash
 export PREZ_THEME_PATH="$HOME/.config/prez/themes:/opt/house/themes"
@@ -225,6 +225,30 @@ prez build deck.md    # mono, unless deck.md names a theme of its own
 ```
 
 It resolves exactly as `--theme` does -- on `PREZ_THEME_PATH`, extended for one run by `--theme-path`, then among the built-ins, and never in the working directory -- and it is refused exactly as `--theme` is. An unknown name gets the unknown-theme refusal, listing the built-ins and every directory searched, with one more line saying the name came from `PREZ_DEFAULT_THEME`. A path is refused naming the variable: put the theme's directory on `PREZ_THEME_PATH` and set `PREZ_DEFAULT_THEME` to its name. **Empty means unset**, so `PREZ_DEFAULT_THEME= prez build deck.md` clears it for one command. `prez showreel` does not read it.
+
+### `PREZ_THEME_DUPLICATES`
+
+What prez does when the search path defines one theme NAME more than once. First match is the default, and for a path you chose it is the point: `--theme-path` is prepended precisely so that a directory given for one run overrides an exported one. For a path that is assembled rather than chosen, eg by a script that joins several theme directories, a silent choice between two definitions is a hazard, and this variable asks prez to refuse it instead.
+
+- **Unset, empty or `first`**: first match, exactly as without the variable. `first` states the default in a shell that inherited `refuse`.
+- **`refuse`**: a name with more than one definition is refused, exit 2, with every definition listed in search order. The first line is the one first match would have taken.
+- **Any other value is refused** every time a deck is built, whatever its theme, and so is a value that is not UTF-8. A misspelt `refuse` must not quietly mean first match.
+
+```
+prez: theme 'house' is defined more than once on the search path, and PREZ_THEME_DUPLICATES=refuse does not let search order choose. In search order:
+  /srv/themes (given by --theme-path): house/theme.css
+  /home/me/themes (on PREZ_THEME_PATH): house.css
+  remedy: remove or rename all but one of them, or unset PREZ_THEME_DUPLICATES to take the first in search order
+```
+
+What counts as a definition:
+
+- A name in two directories on the path is two definitions, even when the two files are byte-identical copies.
+- A name that one directory defines as both `<name>/theme.css` and `<name>.css` is two definitions.
+- One file reached by two routes is one definition: a directory listed twice, a directory given by both `--theme-path` and `PREZ_THEME_PATH`, a symlink to a directory already on the path, or a hard link to a `<name>.css` already on it. prez recognises one file by its device and inode.
+- A built-in is not a definition. One search-path theme that shadows a built-in builds under `refuse` as it always has, with its SHADOWING notice.
+
+Only the name being resolved is checked, so a duplicate elsewhere on the path that this build does not use is not refused. A name from `PREZ_DEFAULT_THEME` is checked as a flag's is, and its refusal adds that the name came from `PREZ_DEFAULT_THEME`. `prez showreel` does not read this variable.
 
 ### Refusals, not fallbacks
 

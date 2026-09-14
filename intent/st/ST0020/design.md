@@ -65,7 +65,7 @@ For most callers, first match is the intended and documented behaviour: `--theme
 
 - **The identity is taken of the theme's own root**: `<dir>/<name>` for the directory form, and `<dir>/<name>.css` for the file form. A directory theme is its `theme.css`, `theme.js`, `layout.html` and asset files together, so a directory whose `theme.css` alone links to another theme's is a different theme, and counts as a second definition. The two forms never share an identity, because a directory and a file cannot share an inode.
 - **Only `refuse` reads identity** ("Where it lives"). `first` never compares definitions, so it never needs one.
-- **The limit, stated.** `std` exposes (device, inode) only on Unix, through `std::os::unix::fs::MetadataExt`. The workspace is built and tested on macOS and Linux only (the Rust job's matrix in `.github/workflows/tests.yml`), and this is its first Unix-only `std` call. A build for another platform fails to compile at that one call, which is loud, and a port would choose its own identity then. A filesystem that reported two different files under one (device, inode) would break `du` and `rsync -H` too, and this check does not try to outguess one.
+- **The limit, stated.** `std` exposes (device, inode) only on Unix, through `std::os::unix::fs::MetadataExt`. The workspace is built and tested on macOS and Linux only (the Rust job's matrix in `.github/workflows/tests.yml`), and this is its first Unix-only `std` call. A build for another platform fails to compile at that one call, which is loud, and a port would choose its own identity then. A filesystem that reported two different files under one (device, inode) would break `du` and `rsync -H` too, and this check does not try to outguess one. hv kept this limit on 2026-09-14 (hv's board, decision 2).
 
 ### Only the name being resolved
 
@@ -156,7 +156,7 @@ The request's last clause, "send gtools-vc the commit and the variable's name", 
 
 ## Version
 
-prez goes from 2.1.0 to 2.2.0 in the next Utilz release: a new opt-in behaviour, with nothing changed for a caller that does not set the variable. The number is hv's to confirm at release time.
+prez goes from 2.1.0 to 2.2.0 in the next Utilz release: a new opt-in behaviour, with nothing changed for a caller that does not set the variable. hv confirmed 2.2.0 on 2026-09-14 (hv's board, decision 2), and the number is stamped when the release is cut.
 
 ## vc's review, and where each note landed
 
@@ -177,3 +177,13 @@ vc reviewed this design on 2026-09-14 and approved it with six notes, to be fold
 2. **`Refuse` carries the variable's name**, so a duplicate refusal can always say what asked for it. It follows from 1.
 3. **Identity is taken of the theme's own root**, not of `theme.css`, because a directory theme is more than its stylesheet.
 4. **Two AC legs for decisions the design already made.** AC-01.1 now includes byte-identical copies, since "two copies are two definitions" had no AC. AC-01.5 now includes a hard link, which is N3's reason and would otherwise be a claim no test makes.
+
+vc kept all four on 2026-09-14, with one build point on the third: take identity with `std::fs::metadata` (stat, which follows a symlink), never `symlink_metadata` (lstat).
+
+## As built
+
+The build follows the design above. It adds three small things, stated here so vc's verification can check them against the design rather than discover them:
+
+1. **The mechanism wording has one home, `Registry::mechanism`.** The provenance notice and the unknown-theme refusal each spelled `on <variable>` and `given by <flag>` for themselves, and the duplicate refusal would have been a third copy. All three now call one function, and the two existing texts are unchanged, byte for byte (AT09 and the unit tests that pin them pass).
+2. **`read` and `identity` share one refusal, `cannot_read`**, so a theme that vanishes between the walk and its `stat` is refused in the same words as a theme that cannot be read.
+3. **vc's build point is held by a unit test.** `identity` uses `std::fs::metadata`, and `under_refuse_one_file_reached_twice_is_one_definition` includes a theme root that is itself a symlink to another definition's root, which `lstat` would count twice. No AC leg tells `stat` from `lstat`, so this test is where that choice is held.

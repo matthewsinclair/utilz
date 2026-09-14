@@ -625,7 +625,7 @@ mod tests {
   }
 
   fn build(slides: &[Slide]) -> String {
-    let theme = theme::load(None, &[]).unwrap();
+    let theme = theme::load(None, &[], theme::Duplicates::First).unwrap();
     assemble(&Document { title: Some("A Deck"), slides, theme: &theme, mermaid: false, paper: None })
   }
 
@@ -723,7 +723,7 @@ mod tests {
 
   #[test]
   fn the_default_paper_is_sixteen_by_nine_and_paper_overrides_it() {
-    let theme = theme::load(None, &[]).unwrap();
+    let theme = theme::load(None, &[], theme::Duplicates::First).unwrap();
     let slides = [slide("<p>x</p>")];
     let doc = Document { title: None, slides: &slides, theme: &theme, mermaid: false, paper: None };
     assert!(assemble(&doc).contains("size: 254mm 142.9mm"));

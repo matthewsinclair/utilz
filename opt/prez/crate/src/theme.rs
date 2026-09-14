@@ -51,7 +51,7 @@ use std::path::PathBuf;
 // module's surface is exactly what it was before the extraction. `deck.rs` and
 // `html.rs` still say `theme::Theme` and `theme::Spec`; nothing outside this
 // file knows the resolver moved.
-pub use artifact::theme::{name_spec, split_path_flag, Spec, Theme};
+pub use artifact::theme::{name_spec, split_path_flag, Duplicates, Spec, Theme};
 
 // `Origin` and `SearchSource` are named only by tests -- this module's, and
 // `html.rs`'s, which build Themes by hand rather than resolving them. Gated so
@@ -114,6 +114,24 @@ pub fn default_from_env() -> Result<Option<String>, Failure> {
   }
 }
 
+/// The environment variable holding the policy for a theme NAME defined more
+/// than once on the search path (ST0020): unset, empty or `first` keep first
+/// match, and `refuse` refuses the name. prez's alone, as `DEFAULT_THEME` is:
+/// showreel passes first match and never reads it.
+const DUPLICATES: &str = "PREZ_THEME_DUPLICATES";
+
+/// The duplicates policy as the environment holds it, or a refusal naming the
+/// variable.
+///
+/// Only the READ is here, at prez's edge. The words and the parse are the
+/// shared resolver's, in `duplicates_policy`, written once for every tool that
+/// links it. `deck::compile` calls this on every compile, beside
+/// `default_from_env`, so a value prez does not know is refused whatever the
+/// build resolves.
+pub fn duplicates_from_env() -> Result<Duplicates, Failure> {
+  artifact::theme::duplicates_policy(DUPLICATES, std::env::var_os(DUPLICATES).as_deref())
+}
+
 /// prez's two tool-specific facts, handed to the shared resolver together.
 const REGISTRY: Registry =
   Registry::new(BUILT_IN, SEARCH_PATH, "--theme-path", "--theme-file", "deck");
@@ -133,9 +151,10 @@ const REGISTRY: Registry =
 /// there.
 pub const STANDARD_CLASSES: &[&str] = &["title", "section", "quote", "full", "center", "small"];
 
-/// Resolve the theme for a build, against prez's roster and search path.
-pub fn load(spec: Option<Spec>, extra: &[PathBuf]) -> Result<Theme, Failure> {
-  REGISTRY.load(spec, extra)
+/// Resolve the theme for a build, against prez's roster and search path, under
+/// the duplicates policy `duplicates_from_env` read.
+pub fn load(spec: Option<Spec>, extra: &[PathBuf], duplicates: Duplicates) -> Result<Theme, Failure> {
+  REGISTRY.load(spec, extra, duplicates)
 }
 
 /// What to say on stderr when a theme did NOT come out of the binary (AC14).
@@ -171,7 +190,7 @@ mod tests {
 
   #[test]
   fn no_theme_given_uses_the_embedded_default() {
-    let t = load(None, &[]).unwrap();
+    let t = load(None, &[], Duplicates::First).unwrap();
     assert!(t.css.contains("--gp-bg"), "the default carries its own tokens");
     assert!(t.layout.is_none());
   }
@@ -202,7 +221,7 @@ mod tests {
   /// support.
   #[test]
   fn the_default_is_simple_specifically() {
-    let t = load(None, &[]).unwrap();
+    let t = load(None, &[], Duplicates::First).unwrap();
     assert!(
       t.name.contains("simple"),
       "the default must be 'simple'; BUILT_IN's first entry decides it, so this fails if the roster is reordered: {}",
@@ -251,7 +270,7 @@ mod tests {
 
   #[test]
   fn a_built_in_is_selected_by_name() {
-    let t = load(Some(Spec::Name("simple")), &[]).unwrap();
+    let t = load(Some(Spec::Name("simple")), &[], Duplicates::First).unwrap();
     assert!(t.name.contains("built-in"), "{}", t.name);
     assert!(t.css.contains("--gp-bg"));
   }
@@ -260,7 +279,7 @@ mod tests {
   fn an_unknown_theme_is_refused_saying_everything_it_tried() {
     // Never a silent fall back to the default: `--theme=simpel` must not build
     // a plausible deck in the wrong clothes and say nothing.
-    let e = load(Some(Spec::Name("simpel")), &[]).unwrap_err();
+    let e = load(Some(Spec::Name("simpel")), &[], Duplicates::First).unwrap_err();
     assert!(e.message.contains("no theme 'simpel'"), "{}", e.message);
     // THE "not a path" ASSERTION IS DELETED WITH THE LINE IT ASSERTED. A name
     // is never tried as a path any more, so keeping it would have meant keeping
@@ -274,7 +293,7 @@ mod tests {
     let d = dir("file");
     let css = d.join("plain.css");
     std::fs::write(&css, "body{color:red}").unwrap();
-    let t = load(Some(Spec::File(css.clone())), &[]).unwrap();
+    let t = load(Some(Spec::File(css.clone())), &[], Duplicates::First).unwrap();
     assert_eq!(t.css, "body{color:red}");
   }
 
@@ -284,7 +303,7 @@ mod tests {
     std::fs::write(d.join("theme.css"), "body{color:blue}").unwrap();
     std::fs::write(d.join("theme.js"), "console.log(1)").unwrap();
     std::fs::write(d.join("layout.html"), "<html>{{slides}}</html>").unwrap();
-    let t = load(Some(Spec::File(d.clone())), &[]).unwrap();
+    let t = load(Some(Spec::File(d.clone())), &[], Duplicates::First).unwrap();
     assert_eq!(t.js.as_deref(), Some("console.log(1)"));
     assert!(t.layout.as_deref().unwrap().contains("{{slides}}"));
   }
@@ -292,7 +311,7 @@ mod tests {
   #[test]
   fn a_directory_without_theme_css_is_refused_by_name() {
     let d = dir("empty");
-    let e = load(Some(Spec::File(d.clone())), &[]).unwrap_err();
+    let e = load(Some(Spec::File(d.clone())), &[], Duplicates::First).unwrap_err();
     assert!(e.message.contains("no theme.css"), "{}", e.message);
   }
 
@@ -301,7 +320,7 @@ mod tests {
     let d = dir("external");
     let css = d.join("cdn.css");
     std::fs::write(&css, "body{color:red}\n@import url(https://fonts.example/x.css);\n").unwrap();
-    let e = load(Some(Spec::File(css.clone())), &[]).unwrap_err();
+    let e = load(Some(Spec::File(css.clone())), &[], Duplicates::First).unwrap_err();
     assert!(e.message.contains("line 2"), "names the line: {}", e.message);
     assert!(e.message.contains("fonts.example"), "names the offender: {}", e.message);
   }
@@ -404,7 +423,7 @@ mod tests {
     // origin is AC15's to remove, not this line's to narrate.
     let d = dir("provenance");
     std::fs::write(d.join("theme.css"), "body{}").unwrap();
-    let t = load(Some(Spec::File(d.clone())), &[]).unwrap();
+    let t = load(Some(Spec::File(d.clone())), &[], Duplicates::First).unwrap();
     assert_eq!(t.origin, Origin::Path);
     assert_eq!(provenance(&t), None);
   }
