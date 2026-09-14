@@ -13,7 +13,7 @@ claims: []
 
 ## DOING
 
-- Globalfold now, in restart.md, wip.md and done.md (todo 9): the drift, the two traps, 2.9.0 shipped, and ST0019 queued.
+_(none)_
 
 ## TODO
 
@@ -26,7 +26,7 @@ _(none)_
 
 ## Watch-outs
 
-- The pre-commit doctor gate refuses EVERY commit while any view in the estate is skewed, including a commit that touches none of the skewed files. A refused commit leaves its paths staged, and a peer's next plain git commit sweeps them in: unstage at once.
+_(none)_
 
 ## Decisions
 

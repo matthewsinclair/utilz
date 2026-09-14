@@ -144,7 +144,8 @@
       "kind": "watchout",
       "seq": 2,
       "text": "The pre-commit doctor gate refuses EVERY commit while any view in the estate is skewed, including a commit that touches none of the skewed files. A refused commit leaves its paths staged, and a peer's next plain git commit sweeps them in: unstage at once.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-09-14T16:16:43.081Z",
       "recorded_at": "2026-09-14T12:14:41.348Z"
     },
     {
@@ -457,7 +458,8 @@
       "kind": "doing",
       "seq": 35,
       "text": "Globalfold now, in restart.md, wip.md and done.md (todo 9): the drift, the two traps, 2.9.0 shipped, and ST0019 queued.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-09-14T16:16:43.021Z",
       "recorded_at": "2026-09-14T16:10:41.582Z"
     },
     {
