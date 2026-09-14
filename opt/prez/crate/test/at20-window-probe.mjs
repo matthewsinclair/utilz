@@ -20,6 +20,20 @@
 // that is the window manager's business, not prez's, whose contract is "ask for
 // a window of the deck's shape".
 
+// EXIT CODES, ONE PER OUTCOME (issue 0029). The harness reads the code, and a
+// code shared by two outcomes is a verdict it has to guess: the forwarded leg
+// guessed "the criterion is wrong" for a window that never opened.
+//
+//   0  measured, and every check passed
+//   2  measured, and a check failed -- the only code that is evidence about AC19
+//   3  no new page target appeared, so nothing was measured
+//
+// 1 is left to node, which exits 1 on an uncaught error. That also measured
+// nothing, and a probe that used 1 for a failed check would make it look as if
+// it had.
+const MEASURED_FAIL = 2;
+const NO_WINDOW = 3;
+
 const [, , portArg, wantWArg, wantHArg, label = 'window', excludeFile = ''] = process.argv;
 
 // SELECTING THE RIGHT WINDOW WHEN TWO ARE OPEN.
@@ -88,9 +102,11 @@ class CDP {
 // way, on a launch that was working.)
 let pages = [];
 let sawTypes = new Set();
+let lastTargets = [];
 for (let tries = 0; tries < 100; tries++) {
   try {
     const targets = await (await fetch(`http://127.0.0.1:${PORT}/json/list`)).json();
+    lastTargets = targets;
     for (const t of targets) sawTypes.add(t.type);
     pages = targets.filter(t => t.type === 'page' && !excluded.has(t.url));
     if (pages.length) break;
@@ -100,9 +116,12 @@ for (let tries = 0; tries < 100; tries++) {
 if (!pages.length) {
   // Name what WAS there. "No page target" on its own sends the reader to the
   // wrong question when the real answer is that the window is a different type.
+  // EVERY TARGET BY TYPE AND URL, not only the set of types (issue 0029): the
+  // types alone cannot say what the browser was showing instead.
   console.log(`  FAIL ${label}: no NEW page target on port ${PORT} after 10s (excluding ${excluded.size}); saw types [${[...sawTypes].join(', ') || 'none'}]`);
+  for (const t of lastTargets) console.log(`       saw ${t.type} ${t.url}`);
   console.log('AT20: FAIL (1/1)');
-  process.exit(1);
+  process.exit(NO_WINDOW);
 }
 
 // THE ARTIFACT IS THE ONE prez BUILT, not one this probe made. If the window
@@ -183,4 +202,4 @@ for (const r of results) {
   console.log(`  ${r.pass ? 'ok  ' : 'FAIL'} ${r.name}=${r.got}${r.pass ? '' : ` want=${r.want}`}`);
 }
 console.log(failed.length ? `AT20: FAIL (${failed.length}/${results.length})` : `AT20: PASS (${results.length} checks)`);
-process.exit(failed.length ? 1 : 0);
+process.exit(failed.length ? MEASURED_FAIL : 0);

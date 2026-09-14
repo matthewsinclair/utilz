@@ -1441,11 +1441,21 @@ WRAP
       node "$HERE/at20-window-probe.mjs" "$AT20_PORT" 1024 768 "forwarded" "$WORK/at20-before.urls" > "$WORK/at20-c2.out" 2>&1
       at20rc=$?
       sed -n 's/^/    /p' "$WORK/at20-c2.out"
-      if [ "$at20rc" -eq 0 ]; then
-        ok "the forwarded window inherits the running instance's geometry, as AC19(d) documents"
-      else
-        bad "the forwarded window did NOT inherit -- AC19(d) describes behaviour this build does not have, so the criterion is now wrong and needs re-measuring"
-      fi
+      # ONLY A MEASURED FAILURE IS A FINDING ABOUT AC19(d) (issue 0029). The
+      # probe gives each outcome its own exit code, and this verdict used to read
+      # every non-zero one as "the criterion is wrong" -- including CI run
+      # 34843482745, where the forwarded window never opened and nothing was
+      # measured at all. Every outcome stays a failure; only the cause it names
+      # changes.
+      case "$at20rc" in
+        0) ok "the forwarded window inherits the running instance's geometry, as AC19(d) documents" ;;
+        2) bad "the forwarded window did NOT inherit -- AC19(d) describes behaviour this build does not have, so the criterion is now wrong and needs re-measuring" ;;
+        3)
+          bad "the forwarding launch opened no new window inside the probe's 10s, so AC19(d) was NOT measured -- this is not a finding about the criterion; prez present's own output follows"
+          sed -n 's/^/      /p' "$WORK/at20-present.log"
+          ;;
+        *) bad "the probe could not measure the forwarded window (exit $at20rc), so AC19(d) was NOT measured -- see its output above" ;;
+      esac
 
       # THE DOCUMENTATION CLAUSE IS PART OF THE CRITERION, SO IT IS CHECKED.
       # AC19(d) requires the limit to be stated where a user meets it. A clause
