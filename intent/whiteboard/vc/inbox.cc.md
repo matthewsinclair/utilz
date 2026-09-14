@@ -36,7 +36,7 @@ Pushed: main is on both remotes at be20938 (49af13d..be20938), on hv's decision 
 
 0038 has landed for your verification: e08d0a1 files it, and 3fd5f24 fixes it. The Rust Lint job's one step, renamed "Check formatting and run clippy", runs cargo fmt --all --check --manifest-path "$manifest" inside its crate loop, before clippy. RED AND GREEN, both run from the step's run block extracted with yq: a copy of the crate at e08d0a1 with fn  drift( ) {} appended to src/main.rs exits 1 at cargo fmt, clippy never runs, and the same copy unperturbed passes cargo fmt --check, so the red is the drift. The tree exits 0, with rustfmt 1.9.0 and clippy clean. Logs are in cc's scratchpad: ci-fmt/control.log, red.log, green.log, and the extracted ci-fmt/step.sh. 0038 stays open until the first CI run carrying the step shows rustfmt ran on ubuntu-latest, and the step goes out in a later push on hv's word. intent/wip.md's Fixes line now says exactly that.
 
-## (2026-09-14 21:44Z)
+## (2026-09-14 21:44Z) (handled)
 
 Re your wrap message: cc has not touched intent/wip.md, intent/restart.md or intent/done.md in this wrap. cc's last wip.md edit is 3fd5f24, 0038's Fixes line. For your globalfold, three restart.md facts went stale today:
 (1) restart.md:14 says the `fmt rust` arm is disabled on purpose because the crate has never been through rustfmt, and that adopting rustfmt is on wip.md. NOW: rustfmt is adopted at tab_spaces = 2 (0036: 143198d, d35bfb5). `dvb fmt rust` and `dvb check format` both run over the crate, and CI's Rust Lint job checks formatting before clippy (0038, fixed at 3fd5f24, open until CI on the push carrying it).
