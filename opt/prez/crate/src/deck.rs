@@ -183,24 +183,21 @@ fn compile(cmd: &Command, paper: Option<String>) -> Result<Compiled, Failure> {
       "they are mutually exclusive: 'theme:' takes a NAME, 'theme-file:' a path beside the deck",
     ));
   }
-  // WHICH BASE A PATH RESOLVES AGAINST IS DECIDED HERE AND NOWHERE ELSE. A
-  // flag's path is the user's, typed at a shell, so it resolves against the
-  // cwd; a deck's belongs to the deck and resolves beside it. theme.rs used to
-  // ask this question in the middle of its lookup, which is what put an impure
-  // coordination decision inside a pure resolver.
   let extra = cmd.theme_path.as_deref().map(theme::split_path_flag).unwrap_or_default();
-  let spec = if let Some(name) = cmd.theme.as_deref() {
-    Some(theme::name_spec(name, "--theme", &format!("for a path, use --theme-file={name}"))?)
-  } else if let Some(path) = cmd.theme_file.as_deref() {
-    Some(theme::Spec::File(PathBuf::from(path)))
-  } else if let Some(name) = front.theme.as_deref() {
-    Some(theme::name_spec(name, "the deck's 'theme:'", &format!("for a path, use 'theme-file: {name}'"))?)
-  } else {
-    // The last arm as a map(), which is what clippy asks for and reads better
-    // here anyway: by this point exactly one Option can still be Some.
-    front.theme_file.as_deref().map(|path| theme::Spec::File(base.join(path)))
-  };
-  let theme = theme::load(spec, &extra)?;
+  // ST0018: the environment is read here, once per compile, by the coordinator,
+  // and handed to the pure ranking, so no test of the ranking touches it.
+  let env_default = theme::default_from_env()?;
+  let choice = theme_choice(
+    cmd.theme.as_deref(),
+    cmd.theme_file.as_deref(),
+    front.theme.as_deref(),
+    front.theme_file.as_deref(),
+    env_default.as_deref(),
+    base,
+  )?;
+  let from_env_default = matches!(choice, Some((_, ThemeSource::EnvDefault)));
+  let theme = theme::load(choice.map(|(spec, _)| spec), &extra)
+    .map_err(|failure| if from_env_default { name_the_default(failure) } else { failure })?;
   // AC14. Through the same single door as every other warning: theme.rs decides
   // WHAT is worth saying because it owns the resolution order, and this line
   // decides only that it gets said. A second eprintln! in theme.rs would be the
@@ -363,9 +360,151 @@ fn report(warnings: &[String]) {
   }
 }
 
+/// Which rank named the theme (ST0018).
+#[derive(Debug, PartialEq)]
+enum ThemeSource {
+  Flag,
+  Deck,
+  EnvDefault,
+}
+
+/// A theme spec and the rank that named it, or nothing when no rank did.
+type ThemeChoice<'a> = Option<(theme::Spec<'a>, ThemeSource)>;
+
+/// WHICH THEME DRESSES THE DECK, AND WHICH RANK NAMED IT (AC01, ST0018). The ONE
+/// place the sources are ranked: a flag beats the deck, the deck beats
+/// PREZ_DEFAULT_THEME, and with none of them `theme::load` takes the first
+/// built-in. PURE: every input is passed in, so the ranking is unit-tested with
+/// explicit values and no test touches the process environment.
+///
+/// WHICH BASE A PATH RESOLVES AGAINST IS DECIDED HERE AND NOWHERE ELSE. A
+/// flag's path is the user's, typed at a shell, so it resolves against the cwd;
+/// a deck's belongs to the deck and resolves beside it. theme.rs used to ask
+/// this question in the middle of its lookup, which is what put an impure
+/// coordination decision inside a pure resolver.
+///
+/// AN EMPTY DEFAULT IS UNSET: `PREZ_DEFAULT_THEME= prez build deck.md` is how a
+/// shell clears a variable for one command, and nobody means the empty name.
+fn theme_choice<'a>(
+  flag_name: Option<&'a str>,
+  flag_file: Option<&'a str>,
+  deck_name: Option<&'a str>,
+  deck_file: Option<&'a str>,
+  env_default: Option<&'a str>,
+  base: &Path,
+) -> Result<ThemeChoice<'a>, Failure> {
+  if let Some(name) = flag_name {
+    let spec = theme::name_spec(name, "--theme", &format!("for a path, use --theme-file={name}"))?;
+    return Ok(Some((spec, ThemeSource::Flag)));
+  }
+  if let Some(path) = flag_file {
+    return Ok(Some((theme::Spec::File(PathBuf::from(path)), ThemeSource::Flag)));
+  }
+  if let Some(name) = deck_name {
+    let remedy = format!("for a path, use 'theme-file: {name}'");
+    let spec = theme::name_spec(name, "the deck's 'theme:'", &remedy)?;
+    return Ok(Some((spec, ThemeSource::Deck)));
+  }
+  if let Some(path) = deck_file {
+    return Ok(Some((theme::Spec::File(base.join(path)), ThemeSource::Deck)));
+  }
+  match env_default.filter(|name| !name.is_empty()) {
+    // A NAME, AND ONLY A NAME: a path here is refused naming the variable, and
+    // the remedy is the one addressing mode this surface has.
+    Some(name) => {
+      let remedy = format!(
+        "put the theme's directory on PREZ_THEME_PATH and set {} to its name",
+        theme::DEFAULT_THEME
+      );
+      let spec = theme::name_spec(name, theme::DEFAULT_THEME, &remedy)?;
+      Ok(Some((spec, ThemeSource::EnvDefault)))
+    }
+    None => Ok(None),
+  }
+}
+
+/// ONE LINE MORE on a refusal of the theme PREZ_DEFAULT_THEME named: where the
+/// name was set. The unknown-theme refusal's `no theme '<name>'` prefix is left
+/// exactly as the shared resolver wrote it, because a consumer asserts on it;
+/// but a stale export otherwise reads "no theme 'x'" with nothing saying where
+/// 'x' came from.
+fn name_the_default(mut failure: Failure) -> Failure {
+  failure.message.push_str(&format!("\n  the name came from {}", theme::DEFAULT_THEME));
+  failure
+}
+
 #[cfg(test)]
 mod tests {
   use super::*;
+
+  // ---- ST0018: the ranking, over every distinction it draws ----
+
+  /// The ranking's answer as text, so each case reads as one line.
+  fn ranked(
+    flag_name: Option<&str>,
+    flag_file: Option<&str>,
+    deck_name: Option<&str>,
+    deck_file: Option<&str>,
+    env_default: Option<&str>,
+  ) -> Option<(String, ThemeSource)> {
+    theme_choice(flag_name, flag_file, deck_name, deck_file, env_default, Path::new("/decks"))
+      .unwrap()
+      .map(|(spec, source)| (format!("{spec:?}"), source))
+  }
+
+  #[test]
+  fn a_flag_beats_the_deck_and_the_default() {
+    assert_eq!(
+      ranked(Some("z"), None, Some("x"), None, Some("y")),
+      Some(("Name(\"z\")".to_string(), ThemeSource::Flag))
+    );
+    assert_eq!(
+      ranked(None, Some("z.css"), None, Some("x.css"), Some("y")),
+      Some(("File(\"z.css\")".to_string(), ThemeSource::Flag))
+    );
+  }
+
+  #[test]
+  fn the_deck_beats_the_default_by_either_key() {
+    assert_eq!(
+      ranked(None, None, Some("x"), None, Some("y")),
+      Some(("Name(\"x\")".to_string(), ThemeSource::Deck))
+    );
+    assert_eq!(
+      ranked(None, None, None, Some("x.css"), Some("y")),
+      Some(("File(\"/decks/x.css\")".to_string(), ThemeSource::Deck))
+    );
+  }
+
+  #[test]
+  fn the_default_dresses_a_deck_that_names_no_theme() {
+    assert_eq!(
+      ranked(None, None, None, None, Some("y")),
+      Some(("Name(\"y\")".to_string(), ThemeSource::EnvDefault))
+    );
+  }
+
+  #[test]
+  fn an_unset_or_empty_default_leaves_the_choice_to_the_built_in() {
+    assert_eq!(ranked(None, None, None, None, None), None);
+    assert_eq!(ranked(None, None, None, None, Some("")), None, "empty is unset");
+  }
+
+  #[test]
+  fn a_path_shaped_default_is_refused_naming_the_variable() {
+    let e = theme_choice(None, None, None, None, Some("themes/house"), Path::new("/decks"))
+      .unwrap_err();
+    assert!(e.message.starts_with("PREZ_DEFAULT_THEME takes a theme NAME"), "{}", e.message);
+    assert!(e.remedy.unwrap().contains("PREZ_THEME_PATH"));
+  }
+
+  #[test]
+  fn a_refusal_of_the_defaults_theme_names_it_and_keeps_its_prefix() {
+    let refusal = Failure::new("no theme 'house'.\n  built in: simple", "give a built-in name");
+    let e = name_the_default(refusal);
+    assert!(e.message.starts_with("no theme 'house'."), "the prefix is load-bearing: {}", e.message);
+    assert!(e.message.ends_with("\n  the name came from PREZ_DEFAULT_THEME"), "{}", e.message);
+  }
 
   #[test]
   fn an_absent_paper_flag_is_not_an_override_and_a_present_one_is() {

@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 #
-# ST0013 acceptance tests -- theme addressing split across --theme, --theme-file
-# and --theme-path.
+# ST0013 and ST0018 acceptance tests -- theme addressing split across --theme,
+# --theme-file and --theme-path, and the default PREZ_DEFAULT_THEME gives a deck
+# that names no theme.
 #
 # **WHY THIS IS A SEPARATE FILE FROM acceptance.sh.** ST0013's AT ids and
 # ST0010's occupy one namespace per file: `want()` matches an id exactly, and
@@ -27,9 +28,10 @@
 # mid-thread. Open with vc.
 #
 # THE RULE THIS FILE IS WRITTEN TO: a check must be able to go red, and only a
-# real defect may turn it red. Every block below is red against the binary at
-# 6e02020 EXCEPT AT06, which says so in its own header and must never be read as
-# evidence the split landed.
+# real defect may turn it red. ST0013's blocks are red against the binary at
+# 6e02020 EXCEPT AT06; ST0018's, AT10 to AT14, are red against 34eb61d EXCEPT
+# AT11, AT12 and AT14. Each exception says so in its own header and must never
+# be read as evidence that its thread landed.
 #
 # Usage:
 #   test/theme-addressing.sh              run every AT
@@ -468,6 +470,161 @@ if want AT09; then
     -o "$D/envshadow.html" 2>"$D/envshadow.err" >/dev/null
   present "CONTROL: the env shadowing cure is unchanged" \
     "rename the local theme" "$D/envshadow.err"
+  finish
+fi
+
+# ------------------------------------------------------ AT10 -- ST0018 AC-01.1
+#
+# PREZ_DEFAULT_THEME DRESSES A DECK THAT NAMES NO THEME. Red-first: HEAD never
+# reads the variable, so a deck with neither theme: nor theme-file: builds in
+# the built-in simple whatever it holds. Two legs, a name found on the search
+# path and a built-in name, because a default that served one and not the
+# other would be half of one.
+
+if want AT10; then
+  start AT10 "PREZ_DEFAULT_THEME dresses a deck that names no theme"
+  D="$WORK/at10"
+  deck_at "$D/deck.md"
+  theme_dir_at "$D/themes/house" "at10-default-sentinel"
+
+  renders "a deck naming no theme builds with PREZ_DEFAULT_THEME=house" \
+    env PREZ_THEME_PATH="$D/themes" PREZ_DEFAULT_THEME=house "$BIN" build "$D/deck.md" -o "$D/house.html"
+  present "and the default's theme dressed it" "at10-default-sentinel" "$D/house.html"
+
+  renders "a built-in named by the default builds" \
+    env -u PREZ_THEME_PATH PREZ_DEFAULT_THEME=mono "$BIN" build "$D/deck.md" -o "$D/mono-default.html"
+  renders "and the same built-in named by --theme builds" \
+    env -u PREZ_THEME_PATH -u PREZ_DEFAULT_THEME "$BIN" build "$D/deck.md" --theme=mono -o "$D/mono-flag.html"
+  same "the default's built-in is --theme's built-in" "$D/mono-default.html" "$D/mono-flag.html"
+  finish
+fi
+
+# ------------------------------------------------------ AT11 -- ST0018 AC-01.2
+#
+# **NOT RED-FIRST, AND ITS GREEN IS NOT EVIDENCE THE DEFAULT LANDED.** HEAD
+# never reads the variable, so the deck's own theme wins there by
+# construction. This goes red only if the default is ranked above the deck:
+# the defect this thread exists to remove, moved one rank up. The theme-file:
+# leg is an EXTENSION beyond the request, stated as one in design.md.
+
+if want AT11; then
+  start AT11 "a deck that names its own theme keeps it, by theme: or theme-file: (NOT red-first)"
+  D="$WORK/at11"
+  theme_dir_at "$D/themes/house" "at11-default-sentinel"
+  theme_dir_at "$D/themes/own" "at11-deckname-sentinel"
+  theme_file_at "$D/decks/own.css" "at11-deckfile-sentinel"
+  printf -- '---\ntitle: T\ntheme: own\n---\n\n# One\n\nContent.\n' >"$D/decks/named.md"
+  printf -- '---\ntitle: T\ntheme-file: ./own.css\n---\n\n# One\n\nContent.\n' >"$D/decks/filed.md"
+
+  renders "theme: own builds with PREZ_DEFAULT_THEME=house set" \
+    env PREZ_THEME_PATH="$D/themes" PREZ_DEFAULT_THEME=house "$BIN" build "$D/decks/named.md" -o "$D/named.html"
+  present "the deck's theme: dressed it" "at11-deckname-sentinel" "$D/named.html"
+  absent "and the default did not" "at11-default-sentinel" "$D/named.html"
+
+  renders "theme-file: builds with PREZ_DEFAULT_THEME=house set" \
+    env PREZ_THEME_PATH="$D/themes" PREZ_DEFAULT_THEME=house "$BIN" build "$D/decks/filed.md" -o "$D/filed.html"
+  present "the deck's theme-file: dressed it" "at11-deckfile-sentinel" "$D/filed.html"
+  absent "and the default did not" "at11-default-sentinel" "$D/filed.html"
+  finish
+fi
+
+# ------------------------------------------------------ AT12 -- ST0018 AC-01.3
+#
+# **NOT RED-FIRST, for AT11's reason.** A flag beats the deck and the default
+# at HEAD because nothing else is read. It goes red only if the fix lets the
+# default past a flag.
+
+if want AT12; then
+  start AT12 "--theme and --theme-file each beat the deck and the default (NOT red-first)"
+  D="$WORK/at12"
+  theme_dir_at "$D/themes/house" "at12-default-sentinel"
+  theme_dir_at "$D/themes/own" "at12-deck-sentinel"
+  theme_dir_at "$D/themes/flag" "at12-flagname-sentinel"
+  theme_file_at "$D/flag.css" "at12-flagfile-sentinel"
+  printf -- '---\ntitle: T\ntheme: own\n---\n\n# One\n\nContent.\n' >"$D/deck.md"
+
+  renders "--theme=flag builds over a deck theme: and a default" \
+    env PREZ_THEME_PATH="$D/themes" PREZ_DEFAULT_THEME=house "$BIN" build "$D/deck.md" --theme=flag -o "$D/name.html"
+  present "--theme dressed it" "at12-flagname-sentinel" "$D/name.html"
+  absent "not the deck's theme" "at12-deck-sentinel" "$D/name.html"
+  absent "nor the default" "at12-default-sentinel" "$D/name.html"
+
+  renders "--theme-file builds over a deck theme: and a default" \
+    env PREZ_THEME_PATH="$D/themes" PREZ_DEFAULT_THEME=house "$BIN" build "$D/deck.md" --theme-file="$D/flag.css" -o "$D/file.html"
+  present "--theme-file dressed it" "at12-flagfile-sentinel" "$D/file.html"
+  absent "not the deck's theme" "at12-deck-sentinel" "$D/file.html"
+  absent "nor the default" "at12-default-sentinel" "$D/file.html"
+  finish
+fi
+
+# ------------------------------------------------------ AT13 -- ST0018 AC-01.4
+#
+# THE DEFAULT RESOLVES EXACTLY AS --theme DOES, AND IS REFUSED AS --theme IS.
+# Red-first: HEAD resolves nothing from the variable, so it neither finds a
+# name on --theme-path nor refuses an unknown or a path-shaped one.
+
+if want AT13; then
+  start AT13 "PREZ_DEFAULT_THEME resolves as --theme does and is refused as --theme is"
+  D="$WORK/at13"
+  deck_at "$D/deck.md"
+  theme_dir_at "$D/flagdir/house" "at13-themepath-sentinel"
+  theme_dir_at "$D/cwd/house" "at13-cwd-sentinel"
+
+  # leg 1 -- found on the search path, as --theme-path extends it
+  renders "a default name resolves on --theme-path" \
+    env -u PREZ_THEME_PATH PREZ_DEFAULT_THEME=house "$BIN" build "$D/deck.md" --theme-path="$D/flagdir" -o "$D/found.html"
+  present "and that directory's theme dressed the deck" "at13-themepath-sentinel" "$D/found.html"
+
+  # leg 2 -- never the working directory: a name only ./house could answer
+  # is an unknown name, refused with --theme's refusal and one line more
+  refuses "a default name only the working directory could answer is refused" \
+    bash -c 'cd "$1" && env -u PREZ_THEME_PATH PREZ_DEFAULT_THEME=house "$2" build "$3" -o "$4"' \
+    _ "$D/cwd" "$BIN" "$D/deck.md" "$D/never.html"
+  present "the refusal keeps --theme's prefix" "no theme 'house'" "$WORK/refuses.err"
+  present "and lists the built-ins" "built in:" "$WORK/refuses.err"
+  present "and says where the name came from" "the name came from PREZ_DEFAULT_THEME" "$WORK/refuses.err"
+
+  # leg 3 -- an unknown name with a search path: it names every directory
+  # it searched, and exits 2 as --theme's refusal does
+  refuses "an unknown default name is refused" \
+    env PREZ_THEME_PATH="$D/flagdir" PREZ_DEFAULT_THEME=nosuch "$BIN" build "$D/deck.md" -o "$D/never.html"
+  present "naming the directory it searched" "$D/flagdir" "$WORK/refuses.err"
+  present "and where the name came from" "the name came from PREZ_DEFAULT_THEME" "$WORK/refuses.err"
+  env PREZ_THEME_PATH="$D/flagdir" PREZ_DEFAULT_THEME=nosuch "$BIN" build "$D/deck.md" -o "$D/never.html" >/dev/null 2>&1
+  at13rc=$?
+  if [ "$at13rc" -eq 2 ]; then ok "and it exits 2, as --theme's refusal does"
+  else bad "an unknown default name exited $at13rc, not 2"; fi
+
+  # leg 4 -- a path is refused, naming the variable
+  refuses "a path-shaped default is refused" \
+    env -u PREZ_THEME_PATH PREZ_DEFAULT_THEME=./themes/house "$BIN" build "$D/deck.md" -o "$D/never.html"
+  present "naming the variable" "PREZ_DEFAULT_THEME takes a theme NAME" "$WORK/refuses.err"
+  finish
+fi
+
+# ------------------------------------------------------ AT14 -- ST0018 AC-01.5
+#
+# UNSET AND EMPTY CHANGE NOTHING. Two claims, labelled:
+#   (a) **NOT RED-FIRST**: an empty value is unset. HEAD ignores the variable
+#       whatever it holds, so this is green there by construction, and goes
+#       red only if the fix reads an empty value as a name.
+#   (b) A CLAIM ABOUT TODAY, rank 4: a deck naming no theme, with no default,
+#       builds byte-identical to --theme=simple. It must pass at HEAD, and if
+#       it does not, that is a finding about today's behaviour, not about
+#       this thread.
+
+if want AT14; then
+  start AT14 "with PREZ_DEFAULT_THEME unset or empty, nothing changes (NOT red-first)"
+  D="$WORK/at14"
+  deck_at "$D/deck.md"
+  renders "unset" \
+    env -u PREZ_THEME_PATH -u PREZ_DEFAULT_THEME "$BIN" build "$D/deck.md" -o "$D/unset.html"
+  renders "empty" \
+    env -u PREZ_THEME_PATH PREZ_DEFAULT_THEME= "$BIN" build "$D/deck.md" -o "$D/empty.html"
+  renders "--theme=simple" \
+    env -u PREZ_THEME_PATH -u PREZ_DEFAULT_THEME "$BIN" build "$D/deck.md" --theme=simple -o "$D/simple.html"
+  same "(a) empty is unset" "$D/empty.html" "$D/unset.html"
+  same "(b) no theme and no default is the built-in simple" "$D/unset.html" "$D/simple.html"
   finish
 fi
 

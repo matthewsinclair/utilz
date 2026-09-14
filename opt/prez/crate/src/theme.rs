@@ -91,6 +91,29 @@ const BUILT_IN: &[(&str, &str)] = &[
 /// extractable.
 const SEARCH_PATH: &str = "PREZ_THEME_PATH";
 
+/// The environment variable holding a DEFAULT theme NAME (ST0018): consulted
+/// only when neither a flag nor the deck names a theme. Its one home -- read
+/// by `default_from_env` and named by every message about it -- and prez's
+/// alone: the shared resolver and showreel never read it.
+pub const DEFAULT_THEME: &str = "PREZ_DEFAULT_THEME";
+
+/// The default theme NAME as the environment holds it, if it holds one.
+///
+/// A value that is not UTF-8 is REFUSED BY NAME: `env::var(..).ok()` would drop
+/// it without a word, and a user who set it would get the built-in with no idea
+/// why. Emptiness is the ranking's business, not this reader's: see
+/// `deck::theme_choice`.
+pub fn default_from_env() -> Result<Option<String>, Failure> {
+  match std::env::var(DEFAULT_THEME) {
+    Ok(value) => Ok(Some(value)),
+    Err(std::env::VarError::NotPresent) => Ok(None),
+    Err(std::env::VarError::NotUnicode(_)) => Err(Failure::new(
+      format!("{DEFAULT_THEME} is not valid UTF-8, so it cannot name a theme"),
+      format!("set {DEFAULT_THEME} to a theme NAME, or unset it"),
+    )),
+  }
+}
+
 /// prez's two tool-specific facts, handed to the shared resolver together.
 const REGISTRY: Registry =
   Registry::new(BUILT_IN, SEARCH_PATH, "--theme-path", "--theme-file", "deck");

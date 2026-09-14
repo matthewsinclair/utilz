@@ -85,16 +85,16 @@ What showreel does, in one line: a directory of pictures and a `showreel.yaml` b
 
 `prez --help` is the **authoritative** flag reference: it is compiled into the binary beside the parser, so it cannot drift from what the tool actually accepts. This table is the guide.
 
-| Option           | Applies to   | Notes                                                                                         |
-| ---------------- | ------------ | --------------------------------------------------------------------------------------------- |
-| `-o, --out PATH` | build, pdf   | Default: beside the input with the extension swapped.                                         |
-| `--theme NAME`   | all          | A theme NAME: `PREZ_THEME_PATH` first, then the built-ins. Never the working directory.       |
-| `--theme-file P` | all          | A theme PATH: a `.css` file, or a directory holding `theme.css`. Excludes `--theme`.          |
-| `--theme-path P` | all          | Colon-separated directories PREPENDED to `PREZ_THEME_PATH` for this run.                      |
-| `--watch`        | build        | Rebuild on every save. A failed rebuild is reported and survived.                             |
-| `--paper WxH`    | pdf          | Page size in millimetres, eg `254x142.9` (the 16:9 default).                                  |
-| `--window WxH`   | present      | Window size in pixels. Default `1280x720`, the deck's own 16:9. Cold start only -- see below. |
-| `--browser P`    | pdf, present | Drive this browser instead of probing.                                                        |
+| Option           | Applies to   | Notes                                                                                                                            |
+| ---------------- | ------------ | -------------------------------------------------------------------------------------------------------------------------------- |
+| `-o, --out PATH` | build, pdf   | Default: beside the input with the extension swapped.                                                                            |
+| `--theme NAME`   | all          | A theme NAME: `PREZ_THEME_PATH` first, then the built-ins. Never the working directory. Beats the deck and `PREZ_DEFAULT_THEME`. |
+| `--theme-file P` | all          | A theme PATH: a `.css` file, or a directory holding `theme.css`. Excludes `--theme`.                                             |
+| `--theme-path P` | all          | Colon-separated directories PREPENDED to `PREZ_THEME_PATH` for this run.                                                         |
+| `--watch`        | build        | Rebuild on every save. A failed rebuild is reported and survived.                                                                |
+| `--paper WxH`    | pdf          | Page size in millimetres, eg `254x142.9` (the 16:9 default).                                                                     |
+| `--window WxH`   | present      | Window size in pixels. Default `1280x720`, the deck's own 16:9. Cold start only -- see below.                                    |
+| `--browser P`    | pdf, present | Drive this browser instead of probing.                                                                                           |
 
 ---
 
@@ -183,7 +183,7 @@ Every theme is expected to declare a standard class vocabulary -- `title`, `sect
 
 ## Themes
 
-A theme is a `.css` file, or a directory holding `theme.css` and optionally `theme.js` and `layout.html`. `--theme` beats the deck's `theme:` key, and with neither you get the built-in `simple`.
+A theme is a `.css` file, or a directory holding `theme.css` and optionally `theme.js` and `layout.html`. **The order, highest first**: a flag (`--theme` or `--theme-file`), then the deck's `theme:` or `theme-file:`, then `PREZ_DEFAULT_THEME`, then the built-in `simple`.
 
 **Built-ins**: `simple`, `mono`, `manuscript`, `contrast`, `blueprint`, `steampunk`, `8bit`. Ask the binary rather than trusting this list -- an unknown theme's refusal enumerates the current set.
 
@@ -214,6 +214,17 @@ says nothing -- rename the local theme if that is not what you want.
 ```
 
 The two read differently because they **fail** differently. An external name simply refuses elsewhere, loudly and with a remedy. A name shadowing a built-in silently produces a different deck elsewhere -- same command, same file, same commit -- and that is the one worth catching. A built-in resolving normally says nothing at all.
+
+### `PREZ_DEFAULT_THEME`
+
+A theme NAME for any deck that names none. It is consulted only when neither a flag nor the deck's front matter names a theme, so a deck that chose its own look keeps it, and a flag still beats everything.
+
+```bash
+export PREZ_DEFAULT_THEME=mono
+prez build deck.md    # mono, unless deck.md names a theme of its own
+```
+
+It resolves exactly as `--theme` does -- on `PREZ_THEME_PATH`, extended for one run by `--theme-path`, then among the built-ins, and never in the working directory -- and it is refused exactly as `--theme` is. An unknown name gets the unknown-theme refusal, listing the built-ins and every directory searched, with one more line saying the name came from `PREZ_DEFAULT_THEME`. A path is refused naming the variable: put the theme's directory on `PREZ_THEME_PATH` and set `PREZ_DEFAULT_THEME` to its name. **Empty means unset**, so `PREZ_DEFAULT_THEME= prez build deck.md` clears it for one command. `prez showreel` does not read it.
 
 ### Refusals, not fallbacks
 

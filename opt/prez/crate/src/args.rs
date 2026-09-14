@@ -23,7 +23,7 @@ Options:
   -o, --out PATH    Output path. Default: beside the input, extension swapped.
       --theme NAME  Theme NAME: looked up in PREZ_THEME_PATH, then among the
                     built-ins. NEVER resolved against the working directory.
-                    Beats the deck's front-matter 'theme:' key.
+                    Beats the deck's front matter and PREZ_DEFAULT_THEME.
       --theme-file PATH
                     Theme PATH: a .css file, or a directory holding theme.css.
                     Mutually exclusive with --theme.
@@ -37,6 +37,15 @@ Options:
                     deck's own 16:9. Press f for fullscreen.
       --browser P   Browser to drive for pdf/present. Default: probe the
                     Chromium family, then fall back to the system opener.
+
+Themes, highest first: a flag (--theme or --theme-file), then the deck's
+'theme:' or 'theme-file:', then PREZ_DEFAULT_THEME, then the built-in simple.
+
+Environment:
+  PREZ_THEME_PATH     Colon-separated directories searched for a theme NAME,
+                      before the built-ins.
+  PREZ_DEFAULT_THEME  A theme NAME for a deck that names none. Resolved and
+                      refused exactly as --theme is. Empty means unset.
 
 `prez browser` takes no deck: it prints the browser pdf and present would
 drive, or refuses naming every path it probed. It exists so a caller can ASK

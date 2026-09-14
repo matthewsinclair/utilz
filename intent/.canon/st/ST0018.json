@@ -14,7 +14,7 @@
       "seq": 1,
       "title": "PREZ_DEFAULT_THEME: red-first tests, the precedence function, the docs",
       "scope": "S",
-      "status": "not-started",
+      "status": "wip",
       "objective": "Build ST0018 red-first. Write the black-box blocks and the unit tests first and run them against HEAD. Record which go red (AC-01.1, AC-01.4) and which are regression guards that pass at HEAD by construction (AC-01.2, AC-01.3, AC-01.5); if AC-01.5's rank-4 control fails at HEAD, report it as a finding about today. Then build the precedence function, the variable read once in `compile`, the one refusal line naming the variable, and the docs. Run the gates and hand to vc. The closing step is AC-01.7: tell gtools-vc the commit, and how it reaches a wrapper from each tree.\n",
       "body": "",
       "preamble": ""
@@ -66,7 +66,8 @@
       "text": "prez --help and help/prez.md state the whole precedence -- the flags, then the deck, then PREZ_DEFAULT_THEME, then the built-in simple -- and how the variable resolves, what an empty value means and what it refuses. Nothing under opt/prez names the requester or any organisation.",
       "kind": "non-test",
       "state": {
-        "is": "unsatisfied"
+        "is": "satisfied",
+        "evidence": "prez --help (src/args.rs USAGE: the order, highest first, and an Environment section) and help/prez.md (the Themes order sentence, a PREZ_DEFAULT_THEME subsection, the Options row) state the precedence, resolution, empty and refusals; a grep of the added lines under opt/prez and help/prez.md finds no requester or organisation name"
       }
     },
     {
@@ -76,6 +77,58 @@
       "state": {
         "is": "unsatisfied"
       }
+    }
+  ],
+  "tests": [
+    {
+      "id": "AT10",
+      "kind": "test",
+      "file": "opt/prez/crate/test/theme-addressing.sh",
+      "covers": [
+        "AC-01.1"
+      ],
+      "status": "green",
+      "note": "red at 34eb61d: 2 checks failed (red-st0018.log); green in utilz test prez, 14:14-14:15Z, bash 3.2.57 end to end (gates-st0018.log)"
+    },
+    {
+      "id": "AT11",
+      "kind": "test",
+      "file": "opt/prez/crate/test/theme-addressing.sh",
+      "covers": [
+        "AC-01.2"
+      ],
+      "status": "green",
+      "note": "a regression guard, green at 34eb61d by construction; the theme-file: leg is an extension; green in utilz test prez, 14:14-14:15Z, bash 3.2.57 end to end (gates-st0018.log)"
+    },
+    {
+      "id": "AT12",
+      "kind": "test",
+      "file": "opt/prez/crate/test/theme-addressing.sh",
+      "covers": [
+        "AC-01.3"
+      ],
+      "status": "green",
+      "note": "a regression guard, green at 34eb61d by construction; green in utilz test prez, 14:14-14:15Z, bash 3.2.57 end to end (gates-st0018.log)"
+    },
+    {
+      "id": "AT13",
+      "kind": "test",
+      "file": "opt/prez/crate/test/theme-addressing.sh",
+      "covers": [
+        "AC-01.4"
+      ],
+      "status": "green",
+      "note": "red at 34eb61d: 11 checks failed (red-st0018.log); green in utilz test prez, 14:14-14:15Z, bash 3.2.57 end to end (gates-st0018.log)"
+    },
+    {
+      "id": "AT14",
+      "kind": "test",
+      "file": "opt/prez/crate/test/theme-addressing.sh",
+      "covers": [
+        "AC-01.5"
+      ],
+      "status": "green",
+      "note": "(a) a regression guard; (b) today's claim, green at 34eb61d; green in utilz test prez, 14:14-14:15Z, bash 3.2.57 end to end (gates-st0018.log)"
     }
   ],
   "attachments": [

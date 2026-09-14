@@ -5,7 +5,7 @@ A DOING / TODO / DONE view, projected from steel-thread and work-package status:
 ## DOING
 
 - [-] ST0018: prez: a fallback theme for decks that name none (PREZ_DEFAULT_THEME)
-  - [ ] 01: PREZ_DEFAULT_THEME: red-first tests, the precedence function, the docs
+  - [-] 01: PREZ_DEFAULT_THEME: red-first tests, the precedence function, the docs
 
 ## TODO
 
