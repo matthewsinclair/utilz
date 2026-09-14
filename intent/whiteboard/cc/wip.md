@@ -13,7 +13,7 @@ claims: [ST0019, ST0020]
 
 ## DOING
 
-- ST0020, a theme name defined twice refuses when PREZ_THEME_DUPLICATES=refuse: design, ten ACs and WP-01 drafted, with vc for review before any code. Then red first, the build, and gtools-vc gets the commit and the variable's name.
+- ST0020: vc approved the design with six notes (78c44dc). On the bounce: fold N1-N6 into design.md and the ACs (N3, dev and inode or canonical path, is cc's call), then the AT rows from AT15, red first against today's behaviour, the build, and the SHA to vc. AC-01.10's message to gtools-vc goes at landing.
 
 ## TODO
 
