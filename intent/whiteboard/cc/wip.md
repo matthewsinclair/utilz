@@ -13,12 +13,12 @@ claims: [ST0018]
 
 ## DOING
 
-- 0028 landed at 9cb548c: one home in test_helper.bash for the install suites' shared fixtures, and fixture_commit names a refused commit instead of swallowing it. With vc for verification; vc closes.
-- 0029: the AT20 probe gives each outcome its own exit code (0 passed, 2 measured and failed, 3 no new window) and the forwarded verdict names each; demonstrated, not tested (hv, 2026-09-11). Commits after a targeted AT20 run and one full acceptance --strict, in vc's window.
+- 0016 landed at 811da78 and 087f9fb (the watchdog takes the killed command's children with it): CI's verdict recorded as ci-state, shown on utilz version. With vc for verification; vc closes.
+- 0029 landed at 8c47815 and d9777b5 (vc's nit: both no-window lines read one population). With vc for verification; vc closes.
+- 0031, vc's .prettierignore fix at 53effc7: reviewing, and I close it as the reviewer.
 
 ## TODO
 
-- 0016 fix, per the design appended to the issue (4601076, 6b3cff5): one manifest header-key definition first, then a ci-state row from a bounded gh query, surfaced on utilz version; stub-gh bats red first.
 - ST0018 WP-01, per design.md (8f900ff, 6b3cff5): PREZ_DEFAULT_THEME red-first, blocks AT10 onward in theme-addressing.sh, the precedence function, the docs. Closes with AC-01.7: tell gtools-vc the commit and the per-tree rebuild answer.
 - The release commit once 0028, 0016 and ST0018 land: VERSION 2.9.0 and prez 2.1.0 (hv confirmed both, 2026-09-14: 'Yes') and CHANGELOG [2.9.0]; then vc's pre-release verdict. Tag and push are hv's.
 

@@ -21,7 +21,8 @@
       "kind": "todo",
       "seq": 1,
       "text": "0016 fix, per the design appended to the issue (4601076, 6b3cff5): one manifest header-key definition first, then a ci-state row from a bounded gh query, surfaced on utilz version; stub-gh bats red first.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-09-14T13:32:58.358Z",
       "recorded_at": "2026-09-14T12:13:38.931Z"
     },
     {
@@ -124,7 +125,8 @@
       "kind": "doing",
       "seq": 3,
       "text": "0028 landed at 9cb548c: one home in test_helper.bash for the install suites' shared fixtures, and fixture_commit names a refused commit instead of swallowing it. With vc for verification; vc closes.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-09-14T13:32:58.267Z",
       "recorded_at": "2026-09-14T13:19:14.499Z"
     },
     {
@@ -132,7 +134,8 @@
       "kind": "doing",
       "seq": 4,
       "text": "0029: the AT20 probe gives each outcome its own exit code (0 passed, 2 measured and failed, 3 no new window) and the forwarded verdict names each; demonstrated, not tested (hv, 2026-09-11). Commits after a targeted AT20 run and one full acceptance --strict, in vc's window.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-09-14T13:32:58.313Z",
       "recorded_at": "2026-09-14T13:19:14.547Z"
     },
     {
@@ -142,6 +145,48 @@
       "text": "utilz todo stable ids (gtools-cc's request, hv ruled it in gtools-cc's session, gtools#0046 option b): an item keeps its id across every write, --json num carries it. Held until hv's own word in this session says whether it goes in 2.9.0 or after; then an ST before any code. Tell gtools-cc and gtools-vc when it lands.",
       "state": "live",
       "recorded_at": "2026-09-14T13:20:20.277Z"
+    },
+    {
+      "node": "cc",
+      "kind": "doing",
+      "seq": 5,
+      "text": "0029 landed at 8c47815: the AT20 probe's exit codes and the forwarded verdict naming each outcome. With vc for verification; vc closes.",
+      "state": "archived",
+      "archived_at": "2026-09-14T13:49:04.632Z",
+      "recorded_at": "2026-09-14T13:32:58.402Z"
+    },
+    {
+      "node": "cc",
+      "kind": "doing",
+      "seq": 6,
+      "text": "0016: red-first logged against HEAD's install.sh and common.sh (install_lib 0/5, install_guards 0/1, upgrade's guard 1/1 as labelled); product code going in: one header-key definition, a bounded gh query recording ci-state, CI on utilz version.",
+      "state": "archived",
+      "archived_at": "2026-09-14T13:49:04.682Z",
+      "recorded_at": "2026-09-14T13:32:58.447Z"
+    },
+    {
+      "node": "cc",
+      "kind": "doing",
+      "seq": 7,
+      "text": "0016 landed at 811da78 and 087f9fb (the watchdog takes the killed command's children with it): CI's verdict recorded as ci-state, shown on utilz version. With vc for verification; vc closes.",
+      "state": "live",
+      "recorded_at": "2026-09-14T13:49:04.728Z"
+    },
+    {
+      "node": "cc",
+      "kind": "doing",
+      "seq": 8,
+      "text": "0029 landed at 8c47815 and d9777b5 (vc's nit: both no-window lines read one population). With vc for verification; vc closes.",
+      "state": "live",
+      "recorded_at": "2026-09-14T13:49:04.774Z"
+    },
+    {
+      "node": "cc",
+      "kind": "doing",
+      "seq": 9,
+      "text": "0031, vc's .prettierignore fix at 53effc7: reviewing, and I close it as the reviewer.",
+      "state": "live",
+      "recorded_at": "2026-09-14T13:49:04.819Z"
     }
   ],
   "messages": []
