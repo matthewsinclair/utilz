@@ -33,7 +33,26 @@
 # Renderer-owned paths only. intent/wip.md and intent/done.md are authored,
 # stay formatted, and are deliberately absent.
 #
+# THE PREFIX DID NOT REACH THE ISSUE AND WHITEBOARD VIEWS, AND THEY ARE THE
+# RENDERER'S TOO (issue 0031, 2026-09-14). The formatter collapsed a doubled
+# blank line in three issue views after the doctor gate had passed, and every
+# later commit was refused until 895a2fc. The block at the end of this file is
+# the one Intent's converge_formatter_exclusion writes, added by hand because
+# that function runs only at init and at the v2 migration (Intent issue 0378).
+# With every pattern already present, a later converge changes nothing here.
+#
 # `**` not `*`: .prettierignore is gitignore syntax, where a single `*` will
 # not cross a `/`.
 intent/st/**
 intent/todo.md
+
+# Generated views have ONE writer, and it is the renderer. A formatter
+# editing these rewrites markup the author wrote, and `intent doctor` then
+# reports the drift as a hand-edit on a file nobody touched.
+intent/st/steel_threads.md
+intent/st/*/info.md
+intent/st/*/acceptance.md
+intent/st/*/WP/*/info.md
+intent/issues/*.md
+intent/whiteboard/*/wip.md
+intent/whiteboard/*/inbox.*.md
