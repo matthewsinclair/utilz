@@ -705,6 +705,34 @@ run_doctor() {
     echo -e "    brew install rust  (they build on first use)"
   fi
 
+  # STEP 6'S VERDICT PRINTS HERE, UNDER STEP 6 (issue 0026). It sat after step
+  # 7 until 2026-09-14, so "All required dependencies installed" -- or "Missing
+  # dependencies: yq" -- read as the install-integrity step's result.
+  if [[ ${#missing_deps[@]} -gt 0 ]]; then
+    # Remove duplicates. Read into the array a line at a time rather than
+    # splitting a command substitution: a dependency name is not guaranteed
+    # whitespace-free, and `mapfile` is bash 4 (macOS ships 3.2).
+    local unique_deps=()
+    local dep
+    while IFS= read -r dep; do
+      unique_deps+=("$dep")
+    done < <(printf '%s\n' "${missing_deps[@]}" | sort -u)
+
+    warn "Missing dependencies: ${unique_deps[*]}"
+    echo -e ""
+
+    for dep_info in "${missing_dep_info[@]}"; do
+      IFS='|' read -r dep_name dep_install used_by <<< "$dep_info"
+      echo -e "  ${BOLD}$dep_name${RESET} (required by $used_by)"
+      if [[ -n "$dep_install" && "$dep_install" != "null" ]]; then
+        echo -e "    Install: $dep_install"
+      fi
+    done
+    issues=$((issues + 1))
+  else
+    success "All required dependencies installed"
+  fi
+
   # ------------------------------------------------------------------------
   echo -e ""
   echo -e "${BOLD}[7/7]${RESET} Checking install integrity..."
@@ -748,31 +776,6 @@ run_doctor() {
     fi
   else
     info "Not an install tree, so there is no manifest to check"
-  fi
-
-  if [[ ${#missing_deps[@]} -gt 0 ]]; then
-    # Remove duplicates. Read into the array a line at a time rather than
-    # splitting a command substitution: a dependency name is not guaranteed
-    # whitespace-free, and `mapfile` is bash 4 (macOS ships 3.2).
-    local unique_deps=()
-    local dep
-    while IFS= read -r dep; do
-      unique_deps+=("$dep")
-    done < <(printf '%s\n' "${missing_deps[@]}" | sort -u)
-
-    warn "Missing dependencies: ${unique_deps[*]}"
-    echo -e ""
-
-    for dep_info in "${missing_dep_info[@]}"; do
-      IFS='|' read -r dep_name dep_install used_by <<< "$dep_info"
-      echo -e "  ${BOLD}$dep_name${RESET} (required by $used_by)"
-      if [[ -n "$dep_install" && "$dep_install" != "null" ]]; then
-        echo -e "    Install: $dep_install"
-      fi
-    done
-    issues=$((issues + 1))
-  else
-    success "All required dependencies installed"
   fi
   echo -e ""
 

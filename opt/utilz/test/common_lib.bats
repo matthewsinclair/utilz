@@ -476,6 +476,21 @@ beta"
   assert_output_contains "issue"
 }
 
+# **THE DEPENDENCY VERDICT BELONGS TO STEP 6** (issue 0026). run_doctor printed
+# step 6's verdict only after [7/7] had printed its own result, so "All required
+# dependencies installed" -- or "Missing dependencies: yq" -- read as the
+# install-integrity step's. Whichever verdict this machine produces, it must
+# print before step 7 begins.
+@test "run_doctor() prints the dependency verdict before step 7 begins (issue 0026)" {
+  run run_common_function run_doctor
+  local verdict step7
+  verdict=$(printf '%s\n' "$output" | grep -n -E 'All required dependencies installed|Missing dependencies:' | head -1 | cut -d: -f1 || true)
+  step7=$(printf '%s\n' "$output" | grep -n -F '[7/7]' | head -1 | cut -d: -f1 || true)
+  [ -n "$verdict" ] || fail "no dependency verdict in the doctor output: $output"
+  [ -n "$step7" ] || fail "no [7/7] header in the doctor output: $output"
+  [ "$verdict" -lt "$step7" ] || fail "the dependency verdict prints at line $verdict, after [7/7] at line $step7"
+}
+
 @test "get_util_metadata() returns non-zero for a missing yaml file" {
   run run_common_function get_util_metadata no-such-utility-xyz '".description"'
   assert_failure
