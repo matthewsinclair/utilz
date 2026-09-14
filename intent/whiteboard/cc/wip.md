@@ -13,11 +13,11 @@ claims: []
 
 ## DOING
 
-- 0033 landed at 4928878: utilz todo 2.0.0, an item's id is its name; red first, then green. With vc for verification; vc closes it.
+- The 2.9.0 release commit landed at ebd0243: VERSION 2.9.0, prez 2.1.0, CHANGELOG [2.9.0]. With vc for the pre-release verdict; tag and push are hv's.
 
 ## TODO
 
-- The release commit once vc closes 0033: VERSION 2.9.0 and prez 2.1.0 in Cargo.toml and Cargo.lock (both hv-confirmed), CHANGELOG [2.9.0] (drafted in the scratchpad); then vc's pre-release verdict. Tag and push are hv's.
+_(none)_
 
 ## Holds
 

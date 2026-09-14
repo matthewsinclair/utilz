@@ -278,7 +278,8 @@
       "kind": "doing",
       "seq": 14,
       "text": "0033 landed at 4928878: utilz todo 2.0.0, an item's id is its name; red first, then green. With vc for verification; vc closes it.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-09-14T15:17:03.653Z",
       "recorded_at": "2026-09-14T14:41:53.980Z"
     },
     {
@@ -286,8 +287,17 @@
       "kind": "todo",
       "seq": 12,
       "text": "The release commit once vc closes 0033: VERSION 2.9.0 and prez 2.1.0 in Cargo.toml and Cargo.lock (both hv-confirmed), CHANGELOG [2.9.0] (drafted in the scratchpad); then vc's pre-release verdict. Tag and push are hv's.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-09-14T15:17:03.705Z",
       "recorded_at": "2026-09-14T14:41:54.029Z"
+    },
+    {
+      "node": "cc",
+      "kind": "doing",
+      "seq": 15,
+      "text": "The 2.9.0 release commit landed at ebd0243: VERSION 2.9.0, prez 2.1.0, CHANGELOG [2.9.0]. With vc for the pre-release verdict; tag and push are hv's.",
+      "state": "live",
+      "recorded_at": "2026-09-14T15:17:03.752Z"
     }
   ],
   "messages": []
