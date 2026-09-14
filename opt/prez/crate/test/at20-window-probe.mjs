@@ -101,13 +101,15 @@ class CDP {
 // the condition. (Measured 7 Sep: the first AT20 run failed all three legs this
 // way, on a launch that was working.)
 let pages = [];
-let sawTypes = new Set();
-let lastTargets = [];
+// Every target seen at ANY poll, keyed by id: the one population both lines of
+// the failure below are read from. A target that came and went is exactly the
+// evidence the list exists to show, and a list of the last poll alone could
+// disagree with a types line gathered over all of them (issue 0029).
+const sawTargets = new Map();
 for (let tries = 0; tries < 100; tries++) {
   try {
     const targets = await (await fetch(`http://127.0.0.1:${PORT}/json/list`)).json();
-    lastTargets = targets;
-    for (const t of targets) sawTypes.add(t.type);
+    for (const t of targets) sawTargets.set(t.id, t);
     pages = targets.filter(t => t.type === 'page' && !excluded.has(t.url));
     if (pages.length) break;
   } catch { /* not up yet; the loop is the retry */ }
@@ -118,8 +120,10 @@ if (!pages.length) {
   // wrong question when the real answer is that the window is a different type.
   // EVERY TARGET BY TYPE AND URL, not only the set of types (issue 0029): the
   // types alone cannot say what the browser was showing instead.
-  console.log(`  FAIL ${label}: no NEW page target on port ${PORT} after 10s (excluding ${excluded.size}); saw types [${[...sawTypes].join(', ') || 'none'}]`);
-  for (const t of lastTargets) console.log(`       saw ${t.type} ${t.url}`);
+  const saw = [...sawTargets.values()];
+  const types = [...new Set(saw.map(t => t.type))];
+  console.log(`  FAIL ${label}: no NEW page target on port ${PORT} after 10s (excluding ${excluded.size}); saw types [${types.join(', ') || 'none'}]`);
+  for (const t of saw) console.log(`       saw ${t.type} ${t.url}`);
   console.log('AT20: FAIL (1/1)');
   process.exit(NO_WINDOW);
 }
