@@ -3,7 +3,7 @@ node: cc
 name: Control Claude
 role: control
 session_id: a30f9092-03ed-44ba-a659-b37813af12c7
-heartbeat_at: 2026-09-14 08:54Z
+heartbeat_at: 2026-09-14 12:24Z
 status: active
 focus: "none"
 claims: [ST0018]
@@ -13,19 +13,23 @@ claims: [ST0018]
 
 ## DOING
 
-_(none)_
+- 0024 landed at 2e96e2a and is with vc for verification; vc, the reviewer, closes it.
 
 ## TODO
 
-_(none)_
+- 0016 fix, per the design appended to the issue (4601076, 6b3cff5): one manifest header-key definition first, then a ci-state row from a bounded gh query, surfaced on utilz version; stub-gh bats red first.
+- ST0018 WP-01, per design.md (8f900ff, 6b3cff5): PREZ_DEFAULT_THEME red-first, blocks AT10 onward in theme-addressing.sh, the precedence function, the docs. Closes with AC-01.7: tell gtools-vc the commit and the per-tree rebuild answer.
+- The release commit once 0016 and ST0018 land: VERSION 2.9.0 and prez 2.1.0 (both await hv's confirmation) and CHANGELOG [2.9.0]; then vc's pre-release verdict. Tag and push are hv's.
+- 0028: install_e2e's setup_file must fail naming a refused commit, never swallow it. After vc's 0024 verdict and before 0016, as its own commit, red first.
 
 ## Holds
 
-_(none)_
+- Tree untouched -- no tracked edits and no suites -- until vc's 0024 verdict reaches cc; vc runs the suites, one at a time. Drafting 0016's red-first tests in the scratchpad is fine meanwhile.
 
 ## Watch-outs
 
-_(none)_
+- One suite at a time with vc, and commits by explicit path only: vc's files have sat staged in the shared index while cc committed.
+- An explicit-path commit of a .md that the pre-commit prettier hook reformats leaves the real index holding the pre-format text (MM): check git status afterwards. An issue body must be prettier-stable too, or the committed view drifts from the store render and the doctor gate refuses every later commit (0025-0027, fixed by vc at 895a2fc).
 
 ## Decisions
 

@@ -5,7 +5,7 @@
     "name": "Control Claude",
     "role": "control",
     "session_id": "a30f9092-03ed-44ba-a659-b37813af12c7",
-    "heartbeat_at": "2026-09-14T08:54:02.800Z",
+    "heartbeat_at": "2026-09-14T12:24:34.213Z",
     "status": "active",
     "focus": "none",
     "claims": [
@@ -15,6 +15,80 @@
     "authored_at": "2026-09-11 16:17Z",
     "migrated_at": "2026-09-14T08:48:02.260Z"
   },
-  "items": [],
+  "items": [
+    {
+      "node": "cc",
+      "kind": "todo",
+      "seq": 1,
+      "text": "0016 fix, per the design appended to the issue (4601076, 6b3cff5): one manifest header-key definition first, then a ci-state row from a bounded gh query, surfaced on utilz version; stub-gh bats red first.",
+      "state": "live",
+      "recorded_at": "2026-09-14T12:13:38.931Z"
+    },
+    {
+      "node": "cc",
+      "kind": "todo",
+      "seq": 2,
+      "text": "ST0018 WP-01, per design.md (8f900ff, 6b3cff5): PREZ_DEFAULT_THEME red-first, blocks AT10 onward in theme-addressing.sh, the precedence function, the docs. Closes with AC-01.7: tell gtools-vc the commit and the per-tree rebuild answer.",
+      "state": "live",
+      "recorded_at": "2026-09-14T12:13:39.015Z"
+    },
+    {
+      "node": "cc",
+      "kind": "todo",
+      "seq": 3,
+      "text": "The release commit once 0016 and ST0018 land: VERSION 2.9.0 and prez 2.1.0 (both await hv's confirmation) and CHANGELOG [2.9.0]; then vc's pre-release verdict. Tag and push are hv's.",
+      "state": "live",
+      "recorded_at": "2026-09-14T12:13:39.086Z"
+    },
+    {
+      "node": "cc",
+      "kind": "hold",
+      "seq": 1,
+      "text": "The 0016 and ST0018 builds, until vc's post-compact instruction names which goes first. hv, 2026-09-14: 'continue under instruction from VC on the bounce'.",
+      "state": "archived",
+      "archived_at": "2026-09-14T12:24:33.961Z",
+      "recorded_at": "2026-09-14T12:13:39.176Z"
+    },
+    {
+      "node": "cc",
+      "kind": "watchout",
+      "seq": 1,
+      "text": "One suite at a time with vc, and commits by explicit path only: vc's files have sat staged in the shared index while cc committed.",
+      "state": "live",
+      "recorded_at": "2026-09-14T12:13:39.245Z"
+    },
+    {
+      "node": "cc",
+      "kind": "hold",
+      "seq": 2,
+      "text": "Tree untouched -- no tracked edits and no suites -- until vc's 0024 verdict reaches cc; vc runs the suites, one at a time. Drafting 0016's red-first tests in the scratchpad is fine meanwhile.",
+      "state": "live",
+      "recorded_at": "2026-09-14T12:24:34.009Z"
+    },
+    {
+      "node": "cc",
+      "kind": "doing",
+      "seq": 1,
+      "text": "0024 landed at 2e96e2a and is with vc for verification; vc, the reviewer, closes it.",
+      "state": "live",
+      "recorded_at": "2026-09-14T12:24:34.055Z"
+    },
+    {
+      "node": "cc",
+      "kind": "todo",
+      "seq": 4,
+      "text": "0028: install_e2e's setup_file must fail naming a refused commit, never swallow it. After vc's 0024 verdict and before 0016, as its own commit, red first.",
+      "state": "live",
+      "recorded_at": "2026-09-14T12:24:34.106Z"
+    },
+    {
+      "node": "cc",
+      "kind": "watchout",
+      "seq": 2,
+      "text": "An explicit-path commit of a .md that the pre-commit prettier hook reformats leaves the real index holding the pre-format text (MM): check git status afterwards. An issue body must be prettier-stable too, or the committed view drifts from the store render and the doctor gate refuses every later commit (0025-0027, fixed by vc at 895a2fc).",
+      "state": "live",
+      "recorded_at": "2026-09-14T12:24:34.168Z"
+    }
+  ],
   "messages": []
 }
