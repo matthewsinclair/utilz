@@ -593,6 +593,11 @@ install_run_bounded() {
   rm -f "$fired"
   "$@" > "$out" 2> "$err" &
   pid=$!
+  # THE WATCHDOG'S OUTPUT GOES NOWHERE: it writes none, and it must hold none
+  # of its caller's. install_ci_state is read through $(...), which waits for
+  # every holder of its pipe, and a TERM landing between `sleep &` and
+  # `sleeper=$!` would otherwise leave that sleep holding it until the
+  # deadline (issue 0032).
   (
     # Killed early when the command finishes first, and the trap takes the
     # sleep with it, so no stray sleep outlives the publish.
@@ -610,7 +615,7 @@ install_run_bounded() {
       pkill -TERM -P "$pid" 2>/dev/null || true
       kill -TERM "$pid" 2>/dev/null
     fi
-  ) &
+  ) > /dev/null 2>&1 &
   watchdog=$!
 
   # stderr is the shell's own "Terminated" notice for a command the deadline
