@@ -16,6 +16,7 @@ DOING and TODO only. Done work goes to `intent/done.md`; context to `intent/rest
 
 **Fixes**
 
+- CI checks prez's formatting (hv, 14 Sep): `cargo fmt --all --check` over the prez crate, in the clippy job's crate loop. File it, then fix it.
 - `examples/demo.md` warns `class 'escape' has no effect`.
 - `stampz`: handle mixed page geometry within one PDF (per-page overlay ranges).
 - `hoist-rebase.sh`: the `AT13` postcondition uses minimum 0 against `-ge`, so it always passes. Needs ST0010 hydrated.

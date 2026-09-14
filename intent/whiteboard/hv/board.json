@@ -109,6 +109,22 @@
       "text": "hv, 2026-09-14, directly to vc, on the HV items cc sent at its localfold: (1) main is pushed to both remotes when ST0020 lands, and not before. (2) ST0020 keeps its (device, inode) identity, Unix-only: the workspace builds for macOS and Linux only, and a port would choose its own identity. (3) prez 2.2.0 is confirmed for the next release. (4) vc files Intent's `macos prepare --help` defect in Intent's tracker, as 0378 was filed.",
       "state": "live",
       "recorded_at": "2026-09-14T17:57:26.519Z"
+    },
+    {
+      "node": "hv",
+      "kind": "decision",
+      "seq": 3,
+      "text": "hv, 2026-09-14, directly to vc: CI checks prez's formatting. `cargo fmt --all --check` over the prez crate runs as a step in tests.yml's Rust Lint (clippy) job, so drift fails the push, beside the local `fmt rust` and `check format` gate adopted under 0036.",
+      "state": "live",
+      "recorded_at": "2026-09-14T21:05:52.557Z"
+    },
+    {
+      "node": "hv",
+      "kind": "decision",
+      "seq": 4,
+      "text": "hv, 2026-09-14, directly to vc, on cc's localfold HV items: (1) cc pushes main to both remotes now, carrying ST0020's close, 0036 and 0037 ahead of vc's verification of 0036 and 0037; the CI format step goes out in a later push. (2) utilz emacs doctor keeps 0037's redirect, as the same defect. (3) The CI format check is decision 3.",
+      "state": "live",
+      "recorded_at": "2026-09-14T21:09:45.824Z"
     }
   ],
   "messages": []
