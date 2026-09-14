@@ -28,7 +28,6 @@ DOING and TODO only. Done work goes to `intent/done.md`; context to `intent/rest
 - `hoist-rebase.sh`: the `AT13` postcondition uses minimum 0 against `-ge`, so it always passes. Needs ST0010 hydrated.
 - Open an issue for `todo` verbs unreachable from Emacs: the bridge inserts `C-u` flags between the declared flags and the path.
 - Remove the v2 artefacts under `intent/issues/CLOSED/`; issues are read with `intent issues list`.
-- Verify that CI's macOS leg runs bats under bash 3.2. The workflow installs no other bash, but the runner image's own bash has not been read.
 
 **Blocked**
 
