@@ -45,6 +45,14 @@ Read from source, never by running a command. On 2026-09-14 vc found that a devb
 4. **Where does the shared release logic live?** A handler copied from Intent's or Conflab's gives the fleet another orchestrator for the same job. Moving the shared parts (pre-flight, version stamping, tag, push, release object) into devbin is Devbin project work, and it needs hv's scope ruling before it is designed.
 5. **Where do the release notes live?** Utilz's CHANGELOG is hand-authored, while Devbin generates its CHANGELOG from `RELEASES/<version>.md`.
 
+## Findings from cutting 2.9.0 by hand
+
+What the pipeline has to get right, learned on 2026-09-14:
+
+- **`git tag -F` strips every line that starts with `#`, by default.** The CHANGELOG entry's `### Added`, `### Changed` and `### Fixed` headings vanish from the tag message unless the tag is made with `--cleanup=whitespace`. It was demonstrated in a throwaway repo: the default kept 0 of 3 headings, and `--cleanup=whitespace` kept all 3 and the message byte for byte. 2.8.0's tag has no `### Fixed`, probably for this reason.
+- **The hand procedure is fragile.** The first tag command was one long pipeline. Pasted from a terminal, it split, and `git tag` opened an editor instead of reading the message. The 2.9.0 tag was made from a prepared message file, with short commands.
+- **The GitHub release object is back for 2.9.0**, the first since v2.2.0. It was made with `gh release create 2.9.0 --verify-tag --title 2.9.0 --notes-from-tag`, so the release notes are the annotated tag's message, which is itself the CHANGELOG entry.
+
 ## Roles
 
 cc drafts the design, and vc reviews it before any code (vc, 2026-09-14). hv runs the release.
