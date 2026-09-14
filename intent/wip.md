@@ -4,20 +4,19 @@ DOING and TODO only. Done work goes to `intent/done.md`; context to `intent/rest
 
 ## DOING
 
-- Adopt rustfmt for the prez crate: `rustfmt.toml` with `tab_spaces = 2`, one reformat commit, then re-enable `fmt rust` in `bin/.devbin/config.yaml` and `check format`.
+- `utilz doctor` prints its report to stdout: one redirect where the doctor verb runs, while the shared message helpers stay on stderr. File it, then fix it.
 
 ## TODO
 
 **Threads**
 
-- ST0019, after rustfmt and the doctor fix (hv's order): release Utilz through `dvb build release` and a Homebrew tap, like Intent. hv ruled on 14 Sep that the shared release core (pre-flight, version stamping, the CHANGELOG date, commit, tag, push and the release object) is Devbin project work, with Utilz as its first user (Devbin issue 0064), and that Utilz's own parts (its version files, the CI build of prez, the Homebrew formula) start in Utilz. The next Utilz release is cut by hand once more. cc drafts the design; vc reviews it before any code.
+- ST0019, after the doctor fix (hv's order): release Utilz through `dvb build release` and a Homebrew tap, like Intent. hv ruled on 14 Sep that the shared release core (pre-flight, version stamping, the CHANGELOG date, commit, tag, push and the release object) is Devbin project work, with Utilz as its first user (Devbin issue 0064), and that Utilz's own parts (its version files, the CI build of prez, the Homebrew formula) start in Utilz. The next Utilz release is cut by hand once more. cc drafts the design; vc reviews it before any code.
 - Follow-on to ST0017, if wanted: Rust `init` and `qr` for `prez showreel`.
 - Crawl recedes as it rises (Star Wars pre-roll): a 3D transform in `player.html`.
 - prez default look, "basic but cool enough out of the box". Needs a thread.
 
 **Fixes**
 
-- `utilz doctor` prints its report to stdout (hv, 14 Sep): one redirect where the doctor verb runs, while the shared message helpers stay on stderr. File it, then fix it.
 - `examples/demo.md` warns `class 'escape' has no effect`.
 - `stampz`: handle mixed page geometry within one PDF (per-page overlay ranges).
 - `hoist-rebase.sh`: the `AT13` postcondition uses minimum 0 against `-ge`, so it always passes. Needs ST0010 hydrated.

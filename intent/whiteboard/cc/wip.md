@@ -3,7 +3,7 @@ node: cc
 name: Control Claude
 role: control
 session_id: 14d6f67d-9238-483a-bd2e-80345ed85383
-heartbeat_at: 2026-09-14 18:14Z
+heartbeat_at: 2026-09-14 18:42Z
 status: active
 focus: "none"
 claims: [ST0019]
@@ -13,11 +13,10 @@ claims: [ST0019]
 
 ## DOING
 
-- rustfmt for the prez crate, straight after ST0020 (hv, 2026-09-14): rustfmt.toml with tab_spaces = 2, one reformat commit, then fmt rust and check format back on in bin/.devbin/config.yaml. Doc before code: its record first.
+- utilz doctor's report to stdout, next in hv's order (hv, 2026-09-14): an issue first, then one redirect where the doctor verb runs; the shared message helpers (common.sh:35-49) stay on stderr.
 
 ## TODO
 
-- utilz doctor's report to stdout, after rustfmt (hv, 2026-09-14): an issue first, then one redirect where the doctor verb runs; the shared message helpers (common.sh:35-49) stay on stderr.
 - ST0019, after the doctor fix: design only the Utilz parts (its version files, the CI build of prez, the Homebrew formula) for vc's review. The shared release core is Devbin project work with Utilz its first user, and the next release is cut by hand once more (hv, 2026-09-14, recorded in ST0019's context).
 
 ## Holds

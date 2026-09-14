@@ -46,12 +46,21 @@ commands:
         run: cargo clippy --workspace --all-targets --manifest-path opt/prez/crate/Cargo.toml -- -D warnings
         grammar: cargo
         log: CLIPPY
-  # The prez crate is hand-formatted at 2-space indent and has never been
-  # through rustfmt: measured 2026-09-11, `cargo fmt --check` with tab_spaces=2
-  # still reports 390 hunks. Left on, `fmt rust` would rewrite the whole crate
-  # and `check format` could never pass. Off until hv decides to adopt rustfmt;
-  # `check format` names the disabled arm rather than dropping it.
+      # The check side of `fmt rust` below: the same command line with --check.
+      # Utilz formats one language, so this declaration is the whole gate.
+      format:
+        run: cargo fmt --all --check --manifest-path opt/prez/crate/Cargo.toml
+        grammar: generic
+        log: FORMAT
+  # rustfmt, adopted for the prez crate on hv's ruling (issue 0036), with
+  # opt/prez/crate/rustfmt.toml holding tab_spaces = 2. The catalogue's bare
+  # `cargo fmt` cannot find a crate that is not at the root, so this arm runs
+  # with --manifest-path, as `test rust` and `check clippy` do. That override
+  # is why `check format` above declares its own command line: devbin will not
+  # derive a check for an overridden arm (builtin_check_format).
   fmt:
     options:
       rust:
-        enabled: false
+        run: cargo fmt --all --manifest-path opt/prez/crate/Cargo.toml
+        grammar: generic
+        log: FMTRS
