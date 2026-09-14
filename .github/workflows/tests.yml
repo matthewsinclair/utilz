@@ -376,7 +376,14 @@ jobs:
     # That is the recorded argument against phasing a gate in "once things
     # settle". Verified clean at the source before this landed, so there is no
     # backlog to grandfather and no reason to start soft.
-    - name: Run clippy
+    #
+    # The formatting check shares this step for its crate discovery (issue
+    # 0038, hv's ruling of 2026-09-14): a second step would repeat the find
+    # below. It runs before clippy because it compiles nothing, so drift fails
+    # the step before clippy builds. Its command line is config.yaml's
+    # check.options.format.run with the manifest as the loop variable, and the
+    # two are kept in step by hand, as clippy's pair is.
+    - name: Check formatting and run clippy
       run: |
         set -euo pipefail
         CRATES=()
@@ -397,10 +404,12 @@ jobs:
         # --workspace reported a real lint in artifact's test module. The test
         # command gained --workspace in WP-01; this line was missed.
         for manifest in "${CRATES[@]}"; do
+          echo "Checking formatting of $manifest"
+          cargo fmt --all --check --manifest-path "$manifest"
           echo "Linting $manifest"
           cargo clippy --all-targets --workspace --manifest-path "$manifest" -- -D warnings
         done
-        echo "clippy clean."
+        echo "Formatting and clippy clean."
 
   test-summary:
     name: Test Summary
