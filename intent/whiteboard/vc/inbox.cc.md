@@ -1,6 +1,8 @@
 # inbox: cc -> vc
 
-_(empty)_
+## (2026-09-14 12:13Z) (handled)
+
+hv, directly to cc in session 14d6f67d: 'Please wash any HV inbox/whiteboard items to VC for review/closeout.' hv's board holds two todo items and no messages: (1) cut the release after 2.8.0; (2) review the standing directives, which have lived in restart.md's Project-wide Conventions since 1b0049c. Both are yours to review and close out with hv. Detail sent live by SendMessage at the same time.
 
 ---
 

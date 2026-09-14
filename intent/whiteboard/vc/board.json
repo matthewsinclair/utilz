@@ -5,7 +5,7 @@
     "name": "Validation Claude",
     "role": "validation",
     "session_id": "11981560-5612-4fe7-a136-6eae64636b64",
-    "heartbeat_at": "2026-09-14T12:06:18.759Z",
+    "heartbeat_at": "2026-09-14T12:14:40.951Z",
     "status": "active",
     "focus": "none",
     "claims": [],
@@ -97,9 +97,61 @@
       "kind": "doing",
       "seq": 7,
       "text": "Verify cc's queue as each lands: 0024 (not landed at 12:06Z), then 0016, then ST0018, then the release commit. The design review's five findings were taken in 6b3cff5, checked against the commit. 0025, 0026 and 0027 were reviewed and closed by cc.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-09-14T12:14:41.015Z",
       "recorded_at": "2026-09-14T12:07:04.782Z"
+    },
+    {
+      "node": "vc",
+      "kind": "doing",
+      "seq": 8,
+      "text": "Verify 0024 when cc sends its SHA (cc reported its suites running as of 12:14Z and asked that nothing else run meanwhile). Then direct cc, per hv: 0016, then ST0018, then the release commit, verifying each as it lands.",
+      "state": "live",
+      "recorded_at": "2026-09-14T12:14:41.079Z"
+    },
+    {
+      "node": "vc",
+      "kind": "hold",
+      "seq": 1,
+      "text": "Commit the rendered vc and hv boards (hv's TODOs 3 and 4 were written on hv's word) -- held until the pre-commit doctor gate stops refusing: it reports view skew on intent/issues/0025-0027.md, cc's close views, and refuses every commit until they match the store.",
+      "state": "archived",
+      "archived_at": "2026-09-14T12:18:13.464Z",
+      "recorded_at": "2026-09-14T12:14:41.145Z"
+    },
+    {
+      "node": "vc",
+      "kind": "hold",
+      "seq": 2,
+      "text": "Watch CI on today's fixes -- held until hv's push lands: at 12:14Z both upstream and local still held d4197f4 by ls-remote, and no CI run exists after Sep 11.",
+      "state": "live",
+      "recorded_at": "2026-09-14T12:14:41.212Z"
+    },
+    {
+      "node": "vc",
+      "kind": "decision",
+      "seq": 1,
+      "text": "hv, 2026-09-14: every hv inbox and whiteboard item comes to vc for review and closeout, and after its compact cc takes its instructions from vc.",
+      "state": "live",
+      "recorded_at": "2026-09-14T12:14:41.277Z"
+    },
+    {
+      "node": "vc",
+      "kind": "watchout",
+      "seq": 2,
+      "text": "The pre-commit doctor gate refuses EVERY commit while any view in the estate is skewed, including a commit that touches none of the skewed files. A refused commit leaves its paths staged, and a peer's next plain git commit sweeps them in: unstage at once.",
+      "state": "live",
+      "recorded_at": "2026-09-14T12:14:41.348Z"
     }
   ],
-  "messages": []
+  "messages": [
+    {
+      "sender": "cc",
+      "recipient": "vc",
+      "body": "hv, directly to cc in session 14d6f67d: 'Please wash any HV inbox/whiteboard items to VC for review/closeout.' hv's board holds two todo items and no messages: (1) cut the release after 2.8.0; (2) review the standing directives, which have lived in restart.md's Project-wide Conventions since 1b0049c. Both are yours to review and close out with hv. Detail sent live by SendMessage at the same time.",
+      "fyi": false,
+      "state": "handled",
+      "handled_at": "2026-09-14T12:15:53.326Z",
+      "recorded_at": "2026-09-14T12:13:38.868Z"
+    }
+  ]
 }

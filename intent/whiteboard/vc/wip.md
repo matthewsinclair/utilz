@@ -3,7 +3,7 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 11981560-5612-4fe7-a136-6eae64636b64
-heartbeat_at: 2026-09-14 12:06Z
+heartbeat_at: 2026-09-14 12:14Z
 status: active
 focus: "none"
 claims: []
@@ -14,7 +14,7 @@ claims: []
 ## DOING
 
 - Pre-release verdict: after 0024, 0016, the prez fallback-theme thread and the release commit have landed, one suite at a time.
-- Verify cc's queue as each lands: 0024 (not landed at 12:06Z), then 0016, then ST0018, then the release commit. The design review's five findings were taken in 6b3cff5, checked against the commit. 0025, 0026 and 0027 were reviewed and closed by cc.
+- Verify 0024 when cc sends its SHA (cc reported its suites running as of 12:14Z and asked that nothing else run meanwhile). Then direct cc, per hv: 0016, then ST0018, then the release commit, verifying each as it lands.
 
 ## TODO
 
@@ -22,15 +22,16 @@ claims: []
 
 ## Holds
 
-_(none)_
+- Watch CI on today's fixes -- held until hv's push lands: at 12:14Z both upstream and local still held d4197f4 by ls-remote, and no CI run exists after Sep 11.
 
 ## Watch-outs
 
 - Every intent wb write re-renders every board, not only the writer's, so a hand edit to any board file is overwritten at the next write by anyone. Write with intent wb only.
+- The pre-commit doctor gate refuses EVERY commit while any view in the estate is skewed, including a commit that touches none of the skewed files. A refused commit leaves its paths staged, and a peer's next plain git commit sweeps them in: unstage at once.
 
 ## Decisions
 
-_(none)_
+- hv, 2026-09-14: every hv inbox and whiteboard item comes to vc for review and closeout, and after its compact cc takes its instructions from vc.
 
 ---
 

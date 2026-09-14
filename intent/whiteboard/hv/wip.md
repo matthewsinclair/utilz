@@ -17,8 +17,8 @@ _(none)_
 
 ## TODO
 
-- Cut the release after `2.8.0`; it carries ST0017 (`prez showreel`).
-- Review the standing directives; they were transcribed, not authored. Cut any you never set.
+- Cut the next release once cc's queue has landed and vc's pre-release verdict is in. The numbers are yours to confirm: cc proposes VERSION 2.9.0 and prez 2.1.0. It carries ST0017 (prez showreel), ST0018 (PREZ_DEFAULT_THEME), issue 0016 (CI state in the install manifest), issue 0024 (install builds and ships showreel), and the fixes for 0023, 0025, 0026 and 0027. Annotated tag on the release: commit itself, then push both remotes.
+- Review the standing directives, which now live in intent/restart.md's Project-wide Conventions (moved off this board 2026-09-14, because the model has no item kind for them). They were transcribed, not authored; cut any you never set.
 
 ## Holds
 
