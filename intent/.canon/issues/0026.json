@@ -1,0 +1,11 @@
+{
+  "schema": "intent/issue@3.0",
+  "number": 26,
+  "slug": "utilz-doctor-prints-step-6-s-dependency-verdict",
+  "title": "utilz doctor prints step 6's dependency verdict under step 7's heading",
+  "status": "open",
+  "severity": "low",
+  "created": "2026-09-14",
+  "reporter": "Matthew Sinclair",
+  "body": "## Summary\n\n`run_doctor` announces `[6/7] Checking external dependencies...` (`opt/utilz/lib/common.sh:630`) and collects what is missing into an array, but prints the verdict -- `All required dependencies installed`, or the `Missing dependencies:` warning and its install lines -- only at `:753-776`, after `[7/7] Checking install integrity...` (`:710`) has printed its own result. **So the dependency verdict reads as step 7's.** Found by vc on 2026-09-14 in the pre-release check.\n\n## Measured 2026-09-14\n\nWith yq off `PATH`, the output runs (leading status glyphs omitted):\n\n```\n[6/7] Checking external dependencies...\nyq is not installed; it is required to parse utility metadata\n\n[7/7] Checking install integrity...\nNot an install tree, so there is no manifest to check\nMissing dependencies: yq\n\n  yq (required by utilz)\n    Install: brew install yq\n```\n\nWith every dependency present, `[6/7]` prints nothing beneath it, and `All required dependencies installed` lands under `[7/7]`, after the install-integrity line.\n\n## Why\n\nStep 7 sits between step 6's collection loop and step 6's verdict block, which stayed at the end of the function.\n\n## Severity\n\nLow. The issue count and the exit status are right; what is wrong is where the verdict appears, which is the part an operator reads.\n\n## Fix direction\n\nMove the verdict block (`:753-776`) to the end of step 6, above `[7/7]`. The Done includes a test that the dependency verdict prints before the `[7/7]` header, red against HEAD.\n"
+}
