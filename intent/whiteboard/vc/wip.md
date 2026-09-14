@@ -13,11 +13,12 @@ claims: []
 
 ## DOING
 
-- ST0020 (prez refuses a theme name defined twice on the search path, when PREZ_THEME_DUPLICATES=refuse; hv's (b), read in cc's transcript): design approved with six notes. Next: verify when cc lands it -- red first on AC-01.1, .4, .7, .8, guards labelled, suites under bash 3.2.
+_(none)_
 
 ## TODO
 
 - Review ST0019's design draft when cc sends it, before any code: Utilz's own parts only (its version files, the CI build of prez, the Homebrew formula), since hv ruled the shared release core is Devbin project work (hv's decision on hv's board, 14 Sep).
+- Read CI on the push that carries ST0020 (cc pushes at vc's GO, on hv's word in cc's session). Then confirm ST0020 closes: AC-01.10's message to gtools-vc, then WP-01 and the thread done.
 
 ## Holds
 

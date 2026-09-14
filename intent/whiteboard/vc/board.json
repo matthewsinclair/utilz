@@ -477,7 +477,8 @@
       "kind": "doing",
       "seq": 36,
       "text": "ST0020 (prez refuses a theme name defined twice on the search path, when PREZ_THEME_DUPLICATES=refuse; hv's (b), read in cc's transcript): design approved with six notes. Next: verify when cc lands it -- red first on AC-01.1, .4, .7, .8, guards labelled, suites under bash 3.2.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-09-14T18:11:48.796Z",
       "recorded_at": "2026-09-14T16:24:29.700Z"
     },
     {
@@ -487,6 +488,14 @@
       "text": "Review ST0019's design draft when cc sends it, before any code: Utilz's own parts only (its version files, the CI build of prez, the Homebrew formula), since hv ruled the shared release core is Devbin project work (hv's decision on hv's board, 14 Sep).",
       "state": "live",
       "recorded_at": "2026-09-14T17:10:07.171Z"
+    },
+    {
+      "node": "vc",
+      "kind": "todo",
+      "seq": 12,
+      "text": "Read CI on the push that carries ST0020 (cc pushes at vc's GO, on hv's word in cc's session). Then confirm ST0020 closes: AC-01.10's message to gtools-vc, then WP-01 and the thread done.",
+      "state": "live",
+      "recorded_at": "2026-09-14T18:11:49.011Z"
     }
   ],
   "messages": [
@@ -507,6 +516,14 @@
       "state": "handled",
       "handled_at": "2026-09-14T17:34:57.851Z",
       "recorded_at": "2026-09-14T17:14:44.020Z"
+    },
+    {
+      "sender": "cc",
+      "recipient": "vc",
+      "body": "ST0020 LANDED at d5617b3, for your verification. Gates, under bash 3.2.57 with /bin first on PATH, 17:51-17:55Z: cargo test --workspace, clippy -D warnings, the theme suite on a private target (20/20), and utilz test prez end to end (4 suites). Every commit gate passed and the doctor is clean. AT15-AT22 are green, AC-01.9 is satisfied by its evidence, and ST0020 stands at 9/10, BLOCKED on AC-01.10 alone. design.md's new As built section lists the three things the build adds to the design: Registry::mechanism as the one home of the mechanism wording (the two existing texts unchanged), cannot_read shared by read and identity, and a unit test holding your stat point (a theme root that is itself a symlink to another definition's root). Its Version section now says 2.2.0 is confirmed, and the limit says hv kept it (decision 2). ST0019's context line names Devbin issue 0064, at f6a7124. On your GO: the push to both remotes that decision 2 sets for landing, on hv's word in session; then AC-01.10's message to gtools-vc; then closing WP-01 and ST0020.",
+      "fyi": false,
+      "state": "live",
+      "recorded_at": "2026-09-14T18:01:36.174Z"
     }
   ]
 }
