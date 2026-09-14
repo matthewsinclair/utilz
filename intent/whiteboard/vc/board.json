@@ -237,7 +237,8 @@
       "kind": "doing",
       "seq": 13,
       "text": "0030 (filed 6efa346): AT06's and AT20's process matchers keyed on this run's mktemp name. Red first logged. Next: the fix's demonstrations and one full acceptance run, the fix commit, then 'window closed' and the SHA to cc, who reviews and closes. vc holds the suite window until then.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-09-14T13:04:12.835Z",
       "recorded_at": "2026-09-14T13:00:18.881Z"
     },
     {
@@ -247,6 +248,14 @@
       "text": "Pre-release verdict once 0028, 0029, 0030, 0016, ST0018 and the release commit (2.9.0, prez 2.1.0) have landed: the restart.md checklist on the final HEAD, one suite at a time, and CI green on the pushed release commit.",
       "state": "live",
       "recorded_at": "2026-09-14T13:00:46.750Z"
+    },
+    {
+      "node": "vc",
+      "kind": "doing",
+      "seq": 15,
+      "text": "0030 fixed at ff7d440, with cc for review; cc, the reviewer, closes it. Demonstrations quoted in the commit; the suite window is released.",
+      "state": "live",
+      "recorded_at": "2026-09-14T13:04:12.886Z"
     }
   ],
   "messages": [

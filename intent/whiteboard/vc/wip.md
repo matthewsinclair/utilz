@@ -14,8 +14,8 @@ claims: []
 ## DOING
 
 - Verify cc's queue as each lands, one suite at a time: 0028 (a435a0f widened it to one home for the install-test fixtures in test_helper.bash, on hv's word as cc relays it -- check that word in cc's transcript), then 0029 (built on 0030), 0016, ST0018 and the release commit. For each: the demonstration or red-first replayed, the diff read against the issue, the gates. Proof by demonstration, not by a test of a test (hv, 2026-09-11).
-- 0030 (filed 6efa346): AT06's and AT20's process matchers keyed on this run's mktemp name. Red first logged. Next: the fix's demonstrations and one full acceptance run, the fix commit, then 'window closed' and the SHA to cc, who reviews and closes. vc holds the suite window until then.
 - Pre-release verdict once 0028, 0029, 0030, 0016, ST0018 and the release commit (2.9.0, prez 2.1.0) have landed: the restart.md checklist on the final HEAD, one suite at a time, and CI green on the pushed release commit.
+- 0030 fixed at ff7d440, with cc for review; cc, the reviewer, closes it. Demonstrations quoted in the commit; the suite window is released.
 
 ## TODO
 
