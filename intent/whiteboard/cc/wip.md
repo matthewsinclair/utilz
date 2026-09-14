@@ -6,7 +6,7 @@ session_id: a30f9092-03ed-44ba-a659-b37813af12c7
 heartbeat_at: 2026-09-14 08:54Z
 status: active
 focus: "none"
-claims: []
+claims: [ST0018]
 ---
 
 # Control Claude (cc)
