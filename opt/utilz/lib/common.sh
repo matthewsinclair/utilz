@@ -321,11 +321,15 @@ UTILZ_MANIFEST_NAME="manifest.sha256"
 # debugging behaviour cannot tell which copy produced it.
 utilz_tree_provenance() {
   local manifest="$UTILZ_HOME/$UTILZ_MANIFEST_NAME"
-  local commit
+  local commit ci
 
   if [[ -f "$manifest" ]]; then
     commit=$(awk -F'\t' '$1 == "source-commit" { print substr($2, 1, 7); exit }' "$manifest")
-    printf 'installed at %s (%s)\n' "$UTILZ_HOME" "${commit:-unknown}"
+    # CI's verdict on that commit, as the publish recorded it (issue 0016). A
+    # manifest cut before the row existed says so: absent is neither unknown
+    # nor success.
+    ci=$(awk -F'\t' '$1 == "ci-state" { found = 1; print ($2 != "" ? $2 : "unreadable"); exit } END { if (!found) print "not recorded" }' "$manifest")
+    printf 'installed at %s (%s, CI %s)\n' "$UTILZ_HOME" "${commit:-unknown}" "$ci"
   else
     printf 'source at %s\n' "$UTILZ_HOME"
   fi

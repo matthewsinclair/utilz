@@ -339,6 +339,26 @@ teardown_file() {
   [ "$recorded" = "$GUARD_SRC_HEAD_BEFORE" ]
 }
 
+@test "utilz version names CI's recorded verdict on the commit, and says when none was recorded (issue 0016)" {
+  # A copy, because the shared install is read-only.
+  local sandbox="$BATS_TEST_TMPDIR/ci-install"
+  cp -R "$GUARD_INSTALL" "$sandbox"
+  local m="$sandbox/manifest.sha256"
+
+  { printf 'ci-state\tsuccess\t101\n'; grep -v $'^ci-state\t' "$m"; } > "$m.tmp" && mv "$m.tmp" "$m"
+  run env -u UTILZ_HOME "$sandbox/bin/utilz" version
+  assert_success
+  assert_output_contains "installed at $sandbox ("
+  assert_output_contains ", CI success)"
+
+  # A manifest cut before the row existed. Absent is neither unknown nor
+  # success, and the line says which.
+  grep -v $'^ci-state\t' "$m" > "$m.tmp" && mv "$m.tmp" "$m"
+  run env -u UTILZ_HOME "$sandbox/bin/utilz" version
+  assert_success
+  assert_output_contains ", CI not recorded)"
+}
+
 # ============================================================================
 # doctor's install-integrity check (vc's finding, 2026-09-08)
 # ============================================================================

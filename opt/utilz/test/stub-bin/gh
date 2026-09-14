@@ -1,0 +1,5 @@
+#!/bin/sh
+# The gh every test finds first on PATH (test_helper.bash, issue 0016). The
+# tests never reach the network, so every call is refused, the same way.
+echo "gh stub: the tests never reach the network" >&2
+exit 1

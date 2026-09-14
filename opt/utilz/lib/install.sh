@@ -263,10 +263,52 @@ install_manifest_rows() {
   done <<< "$paths"
 }
 
-# Write the manifest for a SOURCE tree to <out>.
+# THE MANIFEST'S HEADER KEYS, DEFINED ONCE (issue 0016). A row whose first
+# field is one of these is a header, not a path. The writer, the verifier's
+# skip and both path counts read this list. Until 2026-09-14 each of them
+# restated the three keys it knew, so a fourth key would have missed one of
+# them and been verified as a path, or counted as one.
+INSTALL_MANIFEST_HEADER_KEYS=(utilz-version source-commit source-tree ci-state)
+
+# Succeed when <kind> names a manifest header row.
+install_manifest_is_header() {
+  local key
+  for key in "${INSTALL_MANIFEST_HEADER_KEYS[@]}"; do
+    if [[ "$1" == "$key" ]]; then
+      return 0
+    fi
+  done
+  return 1
+}
+
+# Echo how many rows of <manifest> name a path: every non-empty row that is
+# not a header.
+install_manifest_path_count() {
+  local manifest="$1" kind n=0
+
+  if [[ ! -r "$manifest" ]]; then
+    error "cannot read the manifest at $manifest"
+    return 1
+  fi
+
+  while IFS=$'\t' read -r kind _; do
+    [[ -n "$kind" ]] || continue
+    if install_manifest_is_header "$kind"; then
+      continue
+    fi
+    n=$((n + 1))
+  done < "$manifest"
+  echo "$n"
+}
+
+# Write the manifest for a SOURCE tree to <out>:
+#   install_manifest_write <tree> <out> [<ci_state> [<rows>]]
+# <ci_state> is CI's verdict on the commit as "<state><TAB><detail>", the
+# form install_ci_state gives.
 install_manifest_write() {
   local tree="$1"
   local out="$2"
+  local ci_state="${3-}"
   local version commit rows
 
   if [[ ! -f "$tree/VERSION" ]]; then
@@ -285,8 +327,8 @@ install_manifest_write() {
   # declined to overwrite keeps its install-time row (install_manifest_rows_
   # preserving). One writer either way -- the header is composed in exactly
   # one place.
-  if [[ $# -ge 3 ]]; then
-    rows="$3"
+  if [[ $# -ge 4 ]]; then
+    rows="$4"
   else
     rows=$(install_manifest_rows "$tree") || return 1
   fi
@@ -302,10 +344,28 @@ install_manifest_write() {
   local source_tree
   source_tree=$(cd "$tree" 2>/dev/null && pwd) || source_tree="$tree"
 
+  # CI's verdict is asked by the coordination and handed in (issue 0016): a
+  # network call is not a fact about a tree, and a writer that made one would
+  # stop being a function of its inputs. A manifest written without an answer
+  # -- by a fixture, never by a publish -- records unknown, and says why.
+  if [[ -z "$ci_state" ]]; then
+    ci_state=$'unknown\tnot asked: this manifest was not written by a publish'
+  fi
+
+  # One value per header key, IN THE KEYS' ORDER. The count is checked, so a
+  # key added to INSTALL_MANIFEST_HEADER_KEYS without a value here fails the
+  # write rather than recording a row with nothing in it.
+  local header_values=("$version" "$commit" "$source_tree" "$ci_state")
+  if [[ ${#header_values[@]} -ne ${#INSTALL_MANIFEST_HEADER_KEYS[@]} ]]; then
+    error "the manifest has ${#INSTALL_MANIFEST_HEADER_KEYS[@]} header keys but ${#header_values[@]} values for them"
+    return 1
+  fi
+
+  local i
   {
-    printf 'utilz-version\t%s\n' "$version"
-    printf 'source-commit\t%s\n' "$commit"
-    printf 'source-tree\t%s\n' "$source_tree"
+    for i in "${!INSTALL_MANIFEST_HEADER_KEYS[@]}"; do
+      printf '%s\t%s\n' "${INSTALL_MANIFEST_HEADER_KEYS[$i]}" "${header_values[$i]}"
+    done
     printf '%s\n' "$rows"
   } > "$out"
 }
@@ -359,8 +419,11 @@ install_manifest_check() {
   fi
 
   while IFS=$'\t' read -r kind value path; do
+    # A header row is not a path, and the header keys have one home (issue 0016).
+    if install_manifest_is_header "$kind"; then
+      continue
+    fi
     case "$kind" in
-      utilz-version | source-commit | source-tree) continue ;;
       file | link) ;;
       "") continue ;;
       *)
@@ -510,6 +573,127 @@ install_build_prez() {
   }
 }
 
+# THE CI QUERY (issue 0016): the command it runs, the workflow it asks about,
+# and how long a publish waits for the answer. Assigned here rather than read
+# from the environment, so only code that has sourced this file -- a test --
+# can point them anywhere else.
+INSTALL_GH="gh"
+INSTALL_CI_WORKFLOW="tests.yml"
+INSTALL_CI_DEADLINE=10
+
+# Run <cmd...> with stdout to <out> and stderr to <err>, and kill it if it is
+# still running after <seconds>. Returns the command's own status, or 124 --
+# timeout(1)'s code -- when the deadline killed it. macOS ships no timeout(1),
+# which is why this exists, and it has to run on bash 3.2.
+install_run_bounded() {
+  local seconds="$1" out="$2" err="$3"
+  shift 3
+  local fired="$err.deadline" pid watchdog rc=0
+
+  rm -f "$fired"
+  "$@" > "$out" 2> "$err" &
+  pid=$!
+  (
+    # Killed early when the command finishes first, and the trap takes the
+    # sleep with it, so no stray sleep outlives the publish.
+    sleeper=""
+    trap 'kill "$sleeper" 2>/dev/null; exit 0' TERM
+    sleep "$seconds" &
+    sleeper=$!
+    wait "$sleeper"
+    if kill -0 "$pid" 2>/dev/null; then
+      : > "$fired"
+      kill -TERM "$pid" 2>/dev/null
+    fi
+  ) &
+  watchdog=$!
+
+  # stderr is the shell's own "Terminated" notice for a command the deadline
+  # killed, which would reach the publisher naming a line of this file. The
+  # marker file below is the record of that, and the status still arrives.
+  wait "$pid" 2>/dev/null || rc=$?
+  # Tolerated: when the deadline fired, the watchdog has already exited, and
+  # the marker file -- not this kill or this wait -- is what records that.
+  kill -TERM "$watchdog" 2>/dev/null || true
+  wait "$watchdog" 2>/dev/null || true
+
+  if [[ -f "$fired" ]]; then
+    rm -f "$fired"
+    return 124
+  fi
+  return "$rc"
+}
+
+# Echo CI's verdict on <commit> as "<state><TAB><detail>" (issue 0016), asked
+# of the workflow's own record with gh, run in <tree> so gh finds the repo
+# from the tree's remotes. It never fails and never guesses: an answer it
+# cannot get, or cannot read, is `unknown` with the reason, because a failed
+# read recorded as success is a pass nobody measured.
+#
+#   <conclusion>  CI's verdict on a completed run, eg success     the run id
+#   pending       a run that has not concluded                    the run id
+#   none          no run for this commit, eg it was never pushed  no run
+#   unknown       gh absent, refusing, silent or unreadable       the reason
+install_ci_state() {
+  local tree="$1" commit="$2"
+  local scratch rc=0 answer reason status conclusion run_id
+
+  if ! command -v "$INSTALL_GH" > /dev/null 2>&1; then
+    printf 'unknown\t%s is not installed\n' "$INSTALL_GH"
+    return 0
+  fi
+  if ! scratch=$(mktemp -d "${TMPDIR:-/tmp}/utilz-ci.XXXXXX"); then
+    printf 'unknown\tcould not make a scratch directory for the query\n'
+    return 0
+  fi
+  : > "$scratch/out"
+  : > "$scratch/err"
+
+  (
+    cd "$tree" || exit 125
+    install_run_bounded "$INSTALL_CI_DEADLINE" "$scratch/out" "$scratch/err" \
+      "$INSTALL_GH" run list --commit "$commit" --workflow "$INSTALL_CI_WORKFLOW" \
+      --json status,conclusion,databaseId --limit 1 \
+      --jq '.[] | "\(.status)|\(.conclusion)|\(.databaseId)"'
+  ) || rc=$?
+
+  answer=$(head -n 1 "$scratch/out")
+  reason=$(head -n 1 "$scratch/err")
+  rm -rf "$scratch"
+
+  case "$rc" in
+    0) ;;
+    124)
+      printf 'unknown\t%s did not answer within %ss\n' "$INSTALL_GH" "$INSTALL_CI_DEADLINE"
+      return 0
+      ;;
+    125)
+      printf 'unknown\tcould not enter %s to ask\n' "$tree"
+      return 0
+      ;;
+    *)
+      printf 'unknown\t%s\n' "${reason:-$INSTALL_GH exited $rc and said nothing}"
+      return 0
+      ;;
+  esac
+
+  if [[ -z "$answer" ]]; then
+    printf 'none\tno run\n'
+    return 0
+  fi
+
+  IFS='|' read -r status conclusion run_id <<< "$answer"
+  if [[ -z "$status" || -z "$run_id" ]]; then
+    printf 'unknown\tcould not read the answer from %s: %s\n' "$INSTALL_GH" "$answer"
+  elif [[ "$status" != "completed" ]]; then
+    printf 'pending\t%s\n' "$run_id"
+  elif [[ -n "$conclusion" ]]; then
+    printf '%s\t%s\n' "$conclusion" "$run_id"
+  else
+    printf 'unknown\ta completed run with no conclusion: %s\n' "$run_id"
+  fi
+}
+
 # Announce what is about to happen, on stdout, BEFORE anything is written.
 #
 # A discriminator that is merely correct is not enough (AC10): a misdetection
@@ -630,10 +814,15 @@ install_verb_install() {
 
   install_build_prez "$src" || return 1
   install_copy_owned "$src" "$prefix" || return 1
-  install_manifest_write "$src" "$prefix/$UTILZ_MANIFEST_NAME" || return 1
+  # CI's verdict on the commit being published (issue 0016), asked here, at the
+  # coordination, and handed to the writer. Recorded, never enforced: no
+  # answer refuses the publish.
+  local ci_state
+  ci_state=$(install_ci_state "$src" "$(git -C "$src" rev-parse HEAD)")
+  install_manifest_write "$src" "$prefix/$UTILZ_MANIFEST_NAME" "$ci_state" || return 1
 
   local count
-  count=$(grep -c -v '^utilz-version	\|^source-commit	\|^source-tree	' "$prefix/$UTILZ_MANIFEST_NAME")
+  count=$(install_manifest_path_count "$prefix/$UTILZ_MANIFEST_NAME") || return 1
   success "installed $(cat "$src/VERSION") ($commit) at $prefix -- $count paths"
 }
 
@@ -667,7 +856,9 @@ install_manifest_rows_preserving() {
     path=${row##*$'\t'}
 
     if printf '%s\n' "$preserved" | grep -qxF "$path"; then
-      old=$(awk -F'\t' -v p="$path" '$3 == p { print; exit }' "$old_manifest")
+      # A path row only: ci-state is a header whose third field is free text
+      # (issue 0016), and a match on the field alone could take it for a path.
+      old=$(awk -F'\t' -v p="$path" '($1 == "file" || $1 == "link") && $3 == p { print; exit }' "$old_manifest")
       if [[ -n "$old" ]]; then
         printf '%s\n' "$old"
         continue
@@ -797,10 +988,14 @@ install_verb_upgrade() {
 
   local rows
   rows=$(install_manifest_rows_preserving "$src" "$prefix/$UTILZ_MANIFEST_NAME" "$preserved") || return 1
-  install_manifest_write "$src" "$prefix/$UTILZ_MANIFEST_NAME" "$rows" || return 1
+  # CI's verdict on the commit being published, asked and handed in exactly as
+  # install does (issue 0016).
+  local ci_state
+  ci_state=$(install_ci_state "$src" "$(git -C "$src" rev-parse HEAD)")
+  install_manifest_write "$src" "$prefix/$UTILZ_MANIFEST_NAME" "$ci_state" "$rows" || return 1
 
   local count
-  count=$(grep -c -v '^utilz-version	\|^source-commit	\|^source-tree	' "$prefix/$UTILZ_MANIFEST_NAME")
+  count=$(install_manifest_path_count "$prefix/$UTILZ_MANIFEST_NAME") || return 1
 
   if [[ $kept -gt 0 ]]; then
     success "upgraded to $(cat "$src/VERSION") ($commit) at $prefix -- $count paths, $kept left alone"

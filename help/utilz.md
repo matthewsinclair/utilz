@@ -125,7 +125,7 @@ Every answer carries **both** versions in play -- the framework's and the utilit
 $ utilz version          # --version is accepted as an alias
 utilz:2.7.0
 Universal utilities framework and dispatcher
-installed at /Users/you/Devel/opt/utilz (a1b2c3d)
+installed at /Users/you/Devel/opt/utilz (a1b2c3d, CI success)
 
 $ utilz mdagg --version  # either invocation form, byte-identical
 utilz:2.7.0/mdagg:1.0.0
@@ -138,7 +138,7 @@ Markdown aggregator
 
 **Both invocation forms give the same bytes**, and that is a guarantee rather than a coincidence: `bin/utilz` answers `--version` from one place for both. Until ST0015 it intercepted the symlink form only, thirteen utilities hand-copied an arm to cover the other, and the two that never copied it -- `todo` and `prez` -- were the two that disagreed with themselves.
 
-The framework's third line names **which tree replied** and the commit it was cut from, which is the fastest way to tell a source checkout from a published install when the two disagree.
+The framework's third line names **which tree replied** and the commit it was cut from, which is the fastest way to tell a source checkout from a published install when the two disagree. From an install it also names **CI's verdict on that commit, as the publish recorded it**: the run's conclusion, eg `success` or `failure`; `pending` when the run had not finished; `none` when CI had no run for the commit, eg it was never pushed; `unknown` when the question could not be asked or answered; and `not recorded` for an install published before the record existed. It is a record, not a gate: no verdict stops a publish.
 
 `-v` is deliberately unbound: it reads as a verbose flag, and no utility binds it.
 

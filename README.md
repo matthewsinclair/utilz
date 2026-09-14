@@ -89,7 +89,7 @@ utilz use                     # report which tree they serve, change nothing
 ambiguous at the prompt:
 
 ```
-installed at /Users/you/Devel/opt/utilz (a1b2c3d)
+installed at /Users/you/Devel/opt/utilz (a1b2c3d, CI success)
 source at /Users/you/Devel/prj/Utilz
 ```
 

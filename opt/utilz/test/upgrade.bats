@@ -211,3 +211,21 @@ manifest_row_for() {
   assert_success
   assert_output ""
 }
+
+@test "an upgrade asks CI too, and its path count leaves the ci-state row out (issue 0016)" {
+  local src="$BATS_TEST_TMPDIR/src-ci-count" dst="$BATS_TEST_TMPDIR/dst-ci-count" paths
+  make_fake_src "$src"
+  run_publish "$src" "$dst"
+  assert_success
+
+  run_upgrade "$src" "$dst"
+  assert_success
+  # The gh first on PATH is test_helper's stub, which refuses every call: so
+  # the upgrade asked, through PATH, and recorded the refusal as unknown.
+  grep -q $'^ci-state\tunknown\tgh stub: ' "$dst/manifest.sha256" \
+    || fail "the upgrade recorded no CI answer from the gh on PATH"
+  # A regression guard: this half goes red only if the count reads that row
+  # as a path.
+  paths=$(awk -F'\t' '$1 == "file" || $1 == "link"' "$dst/manifest.sha256" | wc -l | tr -d ' ')
+  assert_output_contains "at $dst -- $paths paths"
+}

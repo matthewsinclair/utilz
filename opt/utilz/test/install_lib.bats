@@ -297,6 +297,138 @@ EOF
 }
 
 # ============================================================================
+# ci-state (issue 0016): CI's verdict on the published commit, recorded
+# ============================================================================
+
+# A gh that waits <delay> seconds, answers <stdout>, says <stderr> and exits
+# <rc>, and records the directory it was asked from and the arguments.
+make_gh_stub() {
+  local stub="$1" answer="$2" rc="${3:-0}" message="${4:-}" delay="${5:-0}"
+  cat > "$stub" <<EOF
+#!/bin/sh
+{ pwd -P; printf '%s\n' "\$*"; } > "$stub.asked"
+sleep $delay
+[ -n "$answer" ] && printf '%s\n' "$answer"
+[ -n "$message" ] && printf '%s\n' "$message" >&2
+exit $rc
+EOF
+  chmod +x "$stub"
+}
+
+# Echo <manifest>'s ci-state row as "<state> <detail>", or nothing.
+ci_state_row() {
+  awk -F'\t' '$1 == "ci-state" { print $2 " " $3; exit }' "$1"
+}
+
+@test "AT08: a publish asks CI about the commit it publishes and records the answer (issue 0016)" {
+  local src="$BATS_TEST_TMPDIR/src-ci-publish" dst="$BATS_TEST_TMPDIR/dst-ci-publish" gh="$BATS_TEST_TMPDIR/gh"
+  make_fake_src "$src"
+  make_gh_stub "$gh" "completed|success|105"
+
+  run run_install_function "UTILZ_HOME='$src'; INSTALL_GH='$gh'; install_verb_install --prefix '$dst'"
+  assert_success
+  [ "$(ci_state_row "$dst/manifest.sha256")" = "success 105" ] \
+    || fail "recorded: $(ci_state_row "$dst/manifest.sha256")"
+
+  # It asked about the commit being published, of the workflow CI runs, from
+  # inside the tree, so gh finds the repository from the tree's own remotes.
+  run cat "$gh.asked"
+  assert_output_contains "$(cd "$src" && pwd -P)"
+  assert_output_contains "run list --commit $(git -C "$src" rev-parse HEAD) --workflow tests.yml"
+}
+
+@test "AT08: install_manifest_write records the CI state it is handed, and unknown when handed none (issue 0016)" {
+  local src="$BATS_TEST_TMPDIR/src-ci-write" out="$BATS_TEST_TMPDIR/m" state
+  make_fake_src "$src"
+  state=$(printf 'failure\t106')
+
+  run run_install_function "install_manifest_write '$src' '$out' '$state'"
+  assert_success
+  [ "$(ci_state_row "$out")" = "failure 106" ] || fail "recorded: $(ci_state_row "$out")"
+
+  # Written outside a publish, with no answer to record: unknown, and why.
+  run run_install_function "install_manifest_write '$src' '$out'"
+  assert_success
+  [ "$(ci_state_row "$out")" = "unknown not asked: this manifest was not written by a publish" ] \
+    || fail "recorded: $(ci_state_row "$out")"
+}
+
+@test "AT08: install_ci_state reads each answer CI gives as itself (issue 0016)" {
+  local src="$BATS_TEST_TMPDIR/src-ci-answers" gh="$BATS_TEST_TMPDIR/gh" sha
+  make_fake_src "$src"
+  sha=$(git -C "$src" rev-parse HEAD)
+
+  local answer want
+  while IFS=';' read -r answer want; do
+    make_gh_stub "$gh" "$answer"
+    run run_install_function "INSTALL_GH='$gh'; install_ci_state '$src' '$sha'"
+    assert_success
+    [ "$(printf '%s' "$output" | tr '\t' ' ')" = "$want" ] \
+      || fail "gh answering '$answer' gave '$output', not '$want'"
+  done <<'ROWS'
+completed|success|101;success 101
+completed|failure|102;failure 102
+in_progress||103;pending 103
+;none no run
+ROWS
+}
+
+@test "AT08: install_ci_state answers unknown when gh is not installed, and says so (issue 0016)" {
+  local src="$BATS_TEST_TMPDIR/src-ci-absent"
+  make_fake_src "$src"
+
+  run run_install_function "INSTALL_GH='$BATS_TEST_TMPDIR/no-such-gh'; install_ci_state '$src' deadbeef"
+  assert_success
+  [ "$(printf '%s' "$output" | tr '\t' ' ')" = "unknown $BATS_TEST_TMPDIR/no-such-gh is not installed" ] \
+    || fail "answered: $output"
+}
+
+@test "AT08: install_ci_state answers unknown with gh's own first line when gh refuses, never success (issue 0016)" {
+  # The refusal gh gives non-interactively when two remotes point at GitHub
+  # and no default is set: the failure the design names.
+  local src="$BATS_TEST_TMPDIR/src-ci-refused" gh="$BATS_TEST_TMPDIR/gh"
+  local refusal="multiple remotes detected [origin upstream]. please specify which repo to use with -R"
+  make_fake_src "$src"
+  make_gh_stub "$gh" "" 1 "$refusal"
+
+  run run_install_function "INSTALL_GH='$gh'; install_ci_state '$src' deadbeef"
+  assert_success
+  [ "$(printf '%s' "$output" | tr '\t' ' ')" = "unknown $refusal" ] || fail "answered: $output"
+}
+
+@test "AT08: install_ci_state kills a gh that outlives the deadline and answers unknown, without waiting on it (issue 0016)" {
+  local src="$BATS_TEST_TMPDIR/src-ci-slow" gh="$BATS_TEST_TMPDIR/gh"
+  make_fake_src "$src"
+  make_gh_stub "$gh" "completed|success|104" 0 "" 5
+
+  local t0=$SECONDS
+  run run_install_function "INSTALL_GH='$gh'; INSTALL_CI_DEADLINE=1; install_ci_state '$src' deadbeef"
+  assert_success
+  [ $((SECONDS - t0)) -lt 4 ] || fail "the query waited $((SECONDS - t0))s on a gh given 1s"
+  [ "$(printf '%s' "$output" | tr '\t' ' ')" = "unknown $gh did not answer within 1s" ] \
+    || fail "answered: $output"
+}
+
+@test "AT08: the verifier reads the ci-state row as a header, and the publish's path count leaves it out (issue 0016)" {
+  local src="$BATS_TEST_TMPDIR/src-ci-rows" dst="$BATS_TEST_TMPDIR/dst-ci-rows"
+  make_fake_src "$src"
+  local m="$dst/manifest.sha256" paths
+
+  run_publish "$src" "$dst"
+  assert_success
+  paths=$(awk -F'\t' '$1 == "file" || $1 == "link"' "$m" | wc -l | tr -d ' ')
+  assert_output_contains "at $dst -- $paths paths"
+
+  # The row written here rather than by the writer, so this half does not
+  # rest on the writer's. A kind the verifier does not know is refused as
+  # unrecognised, so this fails until ci-state is a key the verifier reads.
+  { printf 'ci-state\tsuccess\t101\n'; grep -v $'^ci-state\t' "$m"; } > "$m.tmp" && mv "$m.tmp" "$m"
+  run run_install_function "install_manifest_check '$dst'"
+  assert_success
+  assert_output ""
+}
+
+# ============================================================================
 # THE PREDICATES (design.md D7, AC03, AC04)
 # ============================================================================
 
