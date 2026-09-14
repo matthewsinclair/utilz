@@ -2,14 +2,14 @@
 wp_id: WP-01
 title: prez refuses a duplicated theme name when PREZ_THEME_DUPLICATES=refuse
 scope: S
-status: Not Started
+status: WIP
 ---
 
 # WP-01: prez refuses a duplicated theme name when PREZ_THEME_DUPLICATES=refuse
 
 ## Objective
 
-_(not yet written)_
+When PREZ_THEME_DUPLICATES=refuse, prez refuses a theme name defined more than once on its search path, naming every definition in search order, instead of letting search order choose silently. Unset, empty or first keep first match with no new way to fail, and any other value is refused at every compile. The shared resolver takes the policy as a parameter over one walk; prez reads the variable at its edge, and showreel passes first match.
 
 ## Acceptance
 

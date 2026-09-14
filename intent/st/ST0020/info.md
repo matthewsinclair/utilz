@@ -1,7 +1,7 @@
 ---
 st_id: ST0020
 title: prez: a theme name defined twice on the search path refuses, when a caller asks
-status: Triage
+status: WIP
 created: 2026-09-14
 completed:
 ---
@@ -39,9 +39,9 @@ Every AC is satisfied, vc has verified the thread, and gtools-vc has the commit 
 
 ## Work Packages
 
-| WP    | Title                                                                  | Size | Status      |
-| ----- | ---------------------------------------------------------------------- | ---- | ----------- |
-| WP-01 | prez refuses a duplicated theme name when PREZ_THEME_DUPLICATES=refuse | S    | Not Started |
+| WP    | Title                                                                  | Size | Status |
+| ----- | ---------------------------------------------------------------------- | ---- | ------ |
+| WP-01 | prez refuses a duplicated theme name when PREZ_THEME_DUPLICATES=refuse | S    | WIP    |
 
 ## Acceptance
 
