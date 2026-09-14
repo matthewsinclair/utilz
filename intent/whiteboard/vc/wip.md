@@ -17,7 +17,6 @@ _(none)_
 
 ## TODO
 
-- Globalfold at end of day, in restart.md and wip.md. The drift: the walker hit is common.sh:426, not :265, and the consumer line numbers moved; shellcheck collects 18 files, not 17; issue views are realised only for the issues .intentfiles declares (0016 had none); intent is 3.0.3; restart.md:11 and wip.md:13 restate 2.8.0, and restart.md itself says to read VERSION rather than copy it. Two traps: the doctor gate refuses every commit while any view is skewed (watch-out 2, 895a2fc; issue and whiteboard views are prettier-exempt since 0031), and /bin/bash bin/utilz test is bash 3.2 for the dispatcher only, so put /bin first on PATH for a 3.2 run. Check whether CI's macOS runner resolves bash to 3.2 before restating that CI runs it.
 - Review ST0019's design draft when cc sends it, before any code: the five open questions and vc's five framing notes, with Q4 held for hv's scope ruling.
 
 ## Holds
