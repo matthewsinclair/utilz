@@ -337,6 +337,98 @@ make_fixture() {
   assert_success
 }
 
+# **TWO OVERLAPPING BUILDS BOTH LAND, LEAVING ONE STAMP AND NO PENDING FILE**
+# (issue 0025). The stamp was first written through ONE pending path, so two
+# runs inside one stale window touched the same file: the first `mv` took it,
+# and the second refused "built, but could not record the build stamp" -- exit
+# 1 after a build that succeeded.
+#
+# The real shim runs twice in a sandbox, against a stub cargo that BLOCKS on a
+# go-file rather than sleeping (cc's design): the test waits until both runs
+# are inside cargo and only then releases them, so the overlap is a fact the
+# test waited for rather than a timing it hoped for. Every wait is bounded --
+# the test's own poll releases the gate before it fails, and the stub gives up
+# on its own -- and both runs have fd 3 closed, so no failure can strand a
+# blocked run or hang bats. test_helper owns teardown(), so none is added here.
+@test "two overlapping builds both land, leaving one stamp and no pending file" {
+  local sandbox="$BATS_TEST_TMPDIR/opt/prez"
+  mkdir -p "$sandbox/crate/src" "$sandbox/crate/themes" "$sandbox/crate/assets"
+  cp "$SHIM" "$sandbox/prez"
+  touch "$sandbox/crate/Cargo.toml" "$sandbox/crate/Cargo.lock"
+
+  local stub="$BATS_TEST_TMPDIR/stubbin"
+  local inside="$BATS_TEST_TMPDIR/inside"
+  local go="$BATS_TEST_TMPDIR/go"
+  mkdir -p "$stub" "$inside"
+
+  # Says it is inside, waits for the go-file, then creates each binary only if
+  # it is missing -- the build that relinks nothing, which is issue 0023's case.
+  cat > "$stub/cargo" <<'EOS'
+#!/bin/bash
+manifest=""
+while [ $# -gt 0 ]; do
+  if [ "$1" = "--manifest-path" ]; then manifest="$2"; fi
+  shift
+done
+: > "$STUB_INSIDE/$$"
+polls=0
+while [ ! -e "$STUB_GO" ]; do
+  polls=$((polls + 1))
+  if [ "$polls" -gt 400 ]; then
+    echo "stub cargo: the go-file never appeared" >&2
+    exit 97
+  fi
+  sleep 0.05
+done
+release="$(dirname "$manifest")/target/release"
+mkdir -p "$release"
+for bin in prez showreel; do
+  if [ ! -x "$release/$bin" ]; then
+    printf '#!/bin/sh\nexit 0\n' > "$release/$bin"
+    chmod +x "$release/$bin"
+  fi
+done
+EOS
+  chmod +x "$stub/cargo"
+
+  local run_a run_b
+  STUB_GO="$go" STUB_INSIDE="$inside" CARGO_TARGET_DIR="" PATH="$stub:/usr/bin:/bin" \
+    UTILZ_HOME="$UTILZ_HOME" "$sandbox/prez" build > "$BATS_TEST_TMPDIR/a.out" 2>&1 3>&- &
+  run_a=$!
+  STUB_GO="$go" STUB_INSIDE="$inside" CARGO_TARGET_DIR="" PATH="$stub:/usr/bin:/bin" \
+    UTILZ_HOME="$UTILZ_HOME" "$sandbox/prez" build > "$BATS_TEST_TMPDIR/b.out" 2>&1 3>&- &
+  run_b=$!
+
+  local polls=0 entered entry
+  while :; do
+    entered=0
+    for entry in "$inside"/*; do
+      if [ -e "$entry" ]; then entered=$((entered + 1)); fi
+    done
+    if [ "$entered" -ge 2 ]; then break; fi
+    polls=$((polls + 1))
+    if [ "$polls" -gt 200 ]; then
+      : > "$go"
+      fail "both runs never reached cargo: $(cat "$BATS_TEST_TMPDIR/a.out" "$BATS_TEST_TMPDIR/b.out")"
+    fi
+    sleep 0.05
+  done
+  : > "$go"
+
+  local rc_a=0 rc_b=0
+  wait "$run_a" || rc_a=$?
+  wait "$run_b" || rc_b=$?
+  [ "$rc_a" -eq 0 ] || fail "run A exited $rc_a: $(cat "$BATS_TEST_TMPDIR/a.out")"
+  [ "$rc_b" -eq 0 ] || fail "run B exited $rc_b: $(cat "$BATS_TEST_TMPDIR/b.out")"
+
+  [ -f "$sandbox/crate/target/prez-built.stamp" ] || fail "no stamp in the sandbox's target"
+  local left=0 pending
+  for pending in "$sandbox/crate/target"/prez-built.stamp.pending*; do
+    if [ -e "$pending" ]; then left=$((left + 1)); fi
+  done
+  [ "$left" -eq 0 ] || fail "$left pending stamp file(s) left in the sandbox's target"
+}
+
 # ============================================================================
 # AT10 -- build hygiene: the fence, not the absence
 # ============================================================================

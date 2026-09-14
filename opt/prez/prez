@@ -222,7 +222,14 @@ prez_ensure_built() {
   # than the stamp afterwards and the next run builds again. A failed build
   # leaves the previous stamp, or none, so the tree stays stale and the next run
   # retries. mkdir first: on first use the target directory does not exist yet.
-  local pending="$BUILD_STAMP.pending"
+  #
+  # **ONE PENDING FILE PER INVOCATION** (issue 0025). A shared path let two runs
+  # inside one stale window touch the same file: the first `mv` took it and the
+  # second refused after a build that succeeded -- or, interrupted between its
+  # touch and its build, left its LATER time on the stamp the first run moved,
+  # masking an edit made between the two touches. With `$$` each run moves only
+  # its own start time. A `*.pending.*` left by an interrupted run is never read.
+  local pending="$BUILD_STAMP.pending.$$"
   if ! mkdir -p "$TARGET_DIR" || ! touch "$pending"; then
     error "prez: cannot write the build stamp in $TARGET_DIR"
     return 1
