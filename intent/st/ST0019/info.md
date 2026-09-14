@@ -24,7 +24,7 @@ hv, 2026-09-14, raised directly to vc: bring Utilz's release process into line w
 
 ## Scope, as hv ruled it (2026-09-14)
 
-**This thread designs the Utilz parts only: its version files, the CI build of prez, and the Homebrew formula.** The shared release core (pre-flight, version stamping, dating the CHANGELOG, commit, tag, push and the release object) is Devbin project work, with Utilz as its first user. hv ruled it directly to vc, and it is recorded as hv's decision on hv's board. Who raises the core in Devbin's tracker is with hv (vc, 2026-09-14).
+**This thread designs the Utilz parts only: its version files, the CI build of prez, and the Homebrew formula.** The shared release core (pre-flight, version stamping, dating the CHANGELOG, commit, tag, push and the release object) is Devbin project work, with Utilz as its first user. hv ruled it directly to vc, and it is recorded as hv's decision on hv's board. It is raised as Devbin issue 0064 (vc, 2026-09-14).
 
 ## Precedents in the fleet
 
