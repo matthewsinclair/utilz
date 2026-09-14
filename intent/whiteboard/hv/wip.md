@@ -17,7 +17,7 @@ _(none)_
 
 ## TODO
 
-- Cut the next release once cc's queue has landed and vc's pre-release verdict is in: VERSION 2.9.0 and prez 2.1.0, confirmed by hv directly to vc 2026-09-14. It carries ST0017 (prez showreel), ST0018 (PREZ_DEFAULT_THEME), issue 0016 (CI state in the install manifest), 0024 (install builds and ships showreel), 0028 (one home for the install-test fixtures), 0029 (AT20's forwarded-leg verdict), 0030 (acceptance.sh's process matchers), and the fixes for 0023, 0025, 0026 and 0027. Annotated tag on the release: commit itself, then push both remotes.
+- Cut the next release once cc's queue has landed and vc's pre-release verdict is in: VERSION 2.9.0 and prez 2.1.0, confirmed by hv directly to vc 2026-09-14. It carries ST0017 (prez showreel), ST0018 (PREZ_DEFAULT_THEME), 0016 (CI state in the install manifest), 0024 (install builds and ships showreel), 0028 (one home for the install-test fixtures), 0029 (AT20's forwarded-leg verdict), 0030 (acceptance.sh's process matchers), 0031 (.prettierignore covers the issue and whiteboard views), 0032 (utilz todo keeps stable ids, as todo 2.0.0: in this release and the break accepted, hv directly to vc 2026-09-14), 0033 (the install watchdog holds no caller's pipe), and the fixes for 0023, 0025, 0026 and 0027. Annotated tag on the release: commit itself, then push both remotes.
 
 ## Holds
 
