@@ -448,8 +448,25 @@
       "kind": "doing",
       "seq": 34,
       "text": "CI on hv's push of 2.9.0: every job green, read by run and job rather than by the summary. A second red on AT20's forwarded leg is a recurrence to file; 0029 now says which way it failed. After CI, the globalfold (todo 9).",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-09-14T16:10:41.505Z",
       "recorded_at": "2026-09-14T15:25:02.948Z"
+    },
+    {
+      "node": "vc",
+      "kind": "doing",
+      "seq": 35,
+      "text": "Globalfold now, in restart.md, wip.md and done.md (todo 9): the drift, the two traps, 2.9.0 shipped, and ST0019 queued.",
+      "state": "live",
+      "recorded_at": "2026-09-14T16:10:41.582Z"
+    },
+    {
+      "node": "vc",
+      "kind": "todo",
+      "seq": 10,
+      "text": "Review ST0019's design draft when cc sends it, before any code: the five open questions and vc's five framing notes, with Q4 held for hv's scope ruling.",
+      "state": "live",
+      "recorded_at": "2026-09-14T16:10:41.633Z"
     }
   ],
   "messages": [
