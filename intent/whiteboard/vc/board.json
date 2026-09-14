@@ -5,7 +5,7 @@
     "name": "Validation Claude",
     "role": "validation",
     "session_id": "11981560-5612-4fe7-a136-6eae64636b64",
-    "heartbeat_at": "2026-09-14T08:51:09.521Z",
+    "heartbeat_at": "2026-09-14T12:06:18.759Z",
     "status": "active",
     "focus": "none",
     "claims": [],
@@ -80,7 +80,8 @@
       "kind": "doing",
       "seq": 6,
       "text": "Verify cc's queue as each lands: 0024, then 0016, then ST0018 (design reviewed before code: red-first overclaimed on three regression guards; the notify-gtools-vc clause has no home), then the release commit. 0025, 0026 and 0027 are fixed and await cc's review.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-09-14T12:07:04.738Z",
       "recorded_at": "2026-09-14T09:43:04.984Z"
     },
     {
@@ -90,6 +91,14 @@
       "text": "Globalfold, restart.md drift: the walker hit is common.sh:426 not :265 and the consumer line numbers moved; shellcheck collects 18 files not 17; open issues ARE realised at intent/issues/<id>.md; intent is 3.0.1.",
       "state": "live",
       "recorded_at": "2026-09-14T09:43:05.078Z"
+    },
+    {
+      "node": "vc",
+      "kind": "doing",
+      "seq": 7,
+      "text": "Verify cc's queue as each lands: 0024 (not landed at 12:06Z), then 0016, then ST0018, then the release commit. The design review's five findings were taken in 6b3cff5, checked against the commit. 0025, 0026 and 0027 were reviewed and closed by cc.",
+      "state": "live",
+      "recorded_at": "2026-09-14T12:07:04.782Z"
     }
   ],
   "messages": []

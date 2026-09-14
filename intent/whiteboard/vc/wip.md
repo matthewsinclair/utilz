@@ -3,7 +3,7 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 11981560-5612-4fe7-a136-6eae64636b64
-heartbeat_at: 2026-09-14 08:51Z
+heartbeat_at: 2026-09-14 12:06Z
 status: active
 focus: "none"
 claims: []
@@ -14,7 +14,7 @@ claims: []
 ## DOING
 
 - Pre-release verdict: after 0024, 0016, the prez fallback-theme thread and the release commit have landed, one suite at a time.
-- Verify cc's queue as each lands: 0024, then 0016, then ST0018 (design reviewed before code: red-first overclaimed on three regression guards; the notify-gtools-vc clause has no home), then the release commit. 0025, 0026 and 0027 are fixed and await cc's review.
+- Verify cc's queue as each lands: 0024 (not landed at 12:06Z), then 0016, then ST0018, then the release commit. The design review's five findings were taken in 6b3cff5, checked against the commit. 0025, 0026 and 0027 were reviewed and closed by cc.
 
 ## TODO
 
