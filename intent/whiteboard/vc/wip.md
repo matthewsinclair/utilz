@@ -13,10 +13,9 @@ claims: []
 
 ## DOING
 
-- Verify cc's queue as each lands, one suite at a time: 0028 (a435a0f widened it to one home for the install-test fixtures in test_helper.bash, on hv's word as cc relays it -- check that word in cc's transcript), then 0029 (built on 0030), 0016, ST0018 and the release commit. For each: the demonstration or red-first replayed, the diff read against the issue, the gates. Proof by demonstration, not by a test of a test (hv, 2026-09-11).
-- 0030 fixed at ff7d440, with cc for review; cc, the reviewer, closes it. Demonstrations quoted in the commit; the suite window is released.
-- Raise the Intent defect report in ../Intent's tracker with intent issues (hv, 2026-09-14): a consumer hook's prettier --write runs after Intent's doctor gate, and a path-scoped commit leaves the real index stale.
-- Pre-release verdict once 0028, 0029, 0030, 0016, ST0018 and the release commit (2.9.0, prez 2.1.0) have land: the restart.md checklist on the final HEAD, one suite at a time. Then CI on hv's push, which replaces the red run at 4e2b3b5 (hv: no re-run, the push runs CI): every job green, and a second AT20 forwarded-leg red is a recurrence to file.
+- Verify cc's queue as each lands, one suite at a time: 0029 (8c47815: diff read and demonstration replayed; AT20 alone and one full acceptance --strict once cc's 0016 runs free the window), then 0016, ST0018 and the release commit. Proof by demonstration, not by a test of a test (hv, 2026-09-11).
+- 0031 (filed f74fa6b, fixed 53effc7): .prettierignore now covers the issue and whiteboard views, in converge_formatter_exclusion's own block. With cc for review; cc closes it. The upstream report is Intent 0378 (14c2b786b in ../Intent), raised on hv's instruction.
+- Pre-release verdict once 0029, 0016, ST0018 and the release commit (2.9.0, prez 2.1.0) have landed: the restart.md checklist on the final HEAD, one suite at a time. Then CI on hv's push, which replaces the red run at 4e2b3b5 (hv: no re-run, the push runs CI): every job green, and a second AT20 forwarded-leg red is a recurrence to file.
 
 ## TODO
 
