@@ -603,6 +603,11 @@ install_run_bounded() {
     wait "$sleeper"
     if kill -0 "$pid" 2>/dev/null; then
       : > "$fired"
+      # Its children before it -- a wrapper's sleep, gh's git -- because once
+      # the command is gone they belong to init and nothing here can name
+      # them. One level: a grandchild is its own parent's to reap. Tolerated
+      # when it finds none, which is the usual case.
+      pkill -TERM -P "$pid" 2>/dev/null || true
       kill -TERM "$pid" 2>/dev/null
     fi
   ) &
