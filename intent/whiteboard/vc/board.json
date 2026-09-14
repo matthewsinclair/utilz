@@ -5,9 +5,9 @@
     "name": "Validation Claude",
     "role": "validation",
     "session_id": "1a7ad8f5-667f-4649-8e7f-a75680ab8d13",
-    "heartbeat_at": "2026-09-14T18:12:22.752Z",
+    "heartbeat_at": "2026-09-14T18:19:58.474Z",
     "status": "active",
-    "focus": "Read CI on ST0020's push and confirm its close (AC-01.10, WP-01, the thread). Then review ST0019's Utilz parts when cc sends the design.",
+    "focus": "Verify rustfmt and the doctor fix as cc lands each. Then review ST0019's Utilz parts when cc sends the design.",
     "claims": [],
     "recorded_at": "2026-09-14T08:46:06.602Z",
     "authored_at": "2026-09-11 16:33Z",
@@ -494,8 +494,17 @@
       "kind": "todo",
       "seq": 12,
       "text": "Read CI on the push that carries ST0020 (cc pushes at vc's GO, on hv's word in cc's session). Then confirm ST0020 closes: AC-01.10's message to gtools-vc, then WP-01 and the thread done.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-09-14T18:19:58.024Z",
       "recorded_at": "2026-09-14T18:11:49.011Z"
+    },
+    {
+      "node": "vc",
+      "kind": "todo",
+      "seq": 13,
+      "text": "Verify cc's rustfmt adoption, then the utilz doctor stdout fix, each on its landing claim: red first where HEAD can fail, and suites under bash 3.2.",
+      "state": "live",
+      "recorded_at": "2026-09-14T18:19:58.278Z"
     }
   ],
   "messages": [

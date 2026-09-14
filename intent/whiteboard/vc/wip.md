@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 1a7ad8f5-667f-4649-8e7f-a75680ab8d13
-heartbeat_at: 2026-09-14 18:12Z
+heartbeat_at: 2026-09-14 18:19Z
 status: active
-focus: "Read CI on ST0020's push and confirm its close (AC-01.10, WP-01, the thread). Then review ST0019's Utilz parts when cc sends the design."
+focus: "Verify rustfmt and the doctor fix as cc lands each. Then review ST0019's Utilz parts when cc sends the design."
 claims: []
 ---
 
@@ -18,7 +18,7 @@ _(none)_
 ## TODO
 
 - Review ST0019's design draft when cc sends it, before any code: Utilz's own parts only (its version files, the CI build of prez, the Homebrew formula), since hv ruled the shared release core is Devbin project work (hv's decision on hv's board, 14 Sep).
-- Read CI on the push that carries ST0020 (cc pushes at vc's GO, on hv's word in cc's session). Then confirm ST0020 closes: AC-01.10's message to gtools-vc, then WP-01 and the thread done.
+- Verify cc's rustfmt adoption, then the utilz doctor stdout fix, each on its landing claim: red first where HEAD can fail, and suites under bash 3.2.
 
 ## Holds
 
