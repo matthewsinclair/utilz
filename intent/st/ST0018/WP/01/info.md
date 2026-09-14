@@ -2,7 +2,7 @@
 wp_id: WP-01
 title: PREZ_DEFAULT_THEME: red-first tests, the precedence function, the docs
 scope: S
-status: WIP
+status: Done
 ---
 
 # WP-01: PREZ_DEFAULT_THEME: red-first tests, the precedence function, the docs

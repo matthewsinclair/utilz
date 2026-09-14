@@ -20,7 +20,7 @@ Requested on 2026-09-14 by the validation node of a project that wraps prez. Its
 
 | WP    | Title                                                                  | Size | Status |
 | ----- | ---------------------------------------------------------------------- | ---- | ------ |
-| WP-01 | PREZ_DEFAULT_THEME: red-first tests, the precedence function, the docs | S    | WIP    |
+| WP-01 | PREZ_DEFAULT_THEME: red-first tests, the precedence function, the docs | S    | Done   |
 
 ## Acceptance
 

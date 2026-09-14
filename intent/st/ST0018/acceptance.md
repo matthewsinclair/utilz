@@ -13,7 +13,7 @@ title: prez: a fallback theme for decks that name none (PREZ_DEFAULT_THEME)
 
 ## Acceptance Criteria
 
-### WP-01 -- PREZ_DEFAULT_THEME: red-first tests, the precedence function, the docs (status: WIP)
+### WP-01 -- PREZ_DEFAULT_THEME: red-first tests, the precedence function, the docs (status: Done)
 
 - AC-01.1 A deck that names no theme, neither theme: nor theme-file:, built with PREZ_DEFAULT_THEME naming a theme, is dressed by that theme. Answers the request's clause: a deck without theme: plus fallback Y gives Y. -- satisfied: yes (computed)
 - AC-01.2 A deck that names its own theme, by theme: or by theme-file:, is dressed by the deck's theme whatever PREZ_DEFAULT_THEME holds. Answers: a deck with theme: X plus fallback Y gives X. The theme-file: half is an EXTENSION beyond the request, stated and labelled as one in design.md. -- satisfied: yes (computed)
@@ -21,7 +21,7 @@ title: prez: a fallback theme for decks that name none (PREZ_DEFAULT_THEME)
 - AC-01.4 PREZ_DEFAULT_THEME resolves exactly as --theme does: on PREZ_THEME_PATH extended by --theme-path, then among the built-ins, never against the working directory. An unknown name gets the unknown-theme refusal, exit 2, its no theme '<name>' prefix unchanged and listing the built-ins and every directory searched, plus one line naming PREZ_DEFAULT_THEME as where the name came from. A path-shaped value is refused naming the variable. Answers: the fallback name resolves on the same search path, with the same refusals, as --theme; and a fallback naming an unknown theme gets the usual refusal listing the search path. -- satisfied: yes (computed)
 - AC-01.5 With PREZ_DEFAULT_THEME unset or empty, nothing changes. Two claims, labelled: (a) an empty value is treated as unset -- a regression guard, green at HEAD by construction, red only if the fix reads an empty value as a name; (b) rank 4, a claim about TODAY that must pass at HEAD: a deck that names no theme, with no fallback, builds byte-identical to --theme=simple. Answers: with the fallback unset, nothing changes. -- satisfied: yes (computed)
 - AC-01.6 (non-test) prez --help and help/prez.md state the whole precedence -- the flags, then the deck, then PREZ_DEFAULT_THEME, then the built-in simple -- and how the variable resolves, what an empty value means and what it refuses. Nothing under opt/prez names the requester or any organisation. -- evidence: prez --help (src/args.rs USAGE: the order, highest first, and an Environment section) and help/prez.md (the Themes order sentence, a PREZ_DEFAULT_THEME subsection, the Options row) state the precedence, resolution, empty and refusals; a grep of the added lines under opt/prez and help/prez.md finds no requester or organisation name -- satisfied: yes
-- AC-01.7 (non-test) When the thread lands, gtools-vc is told the commit and how the change reaches a wrapper: from a source checkout the prez shim rebuilds once on the first use after the commit and is quiet after; from an install, only once utilz upgrade publishes a release that carries it. Answers the request's last clause: tell gtools-vc when it lands, the commit, and whether the prez shim rebuilds on next use. -- satisfied: no
+- AC-01.7 (non-test) When the thread lands, gtools-vc is told the commit and how the change reaches a wrapper: from a source checkout the prez shim rebuilds once on the first use after the commit and is quiet after; from an install, only once utilz upgrade publishes a release that carries it. Answers the request's last clause: tell gtools-vc when it lands, the commit, and whether the prez shim rebuilds on next use. -- evidence: cross-session message to gtools-vc, 2026-09-14, after 6f46eac: the commit, the interface and its order, and the per-tree answer -- a source checkout's prez shim rebuilds once on first use and is quiet after (issues 0023, 0025); an install changes only after utilz upgrade publishes a release carrying it -- satisfied: yes
 
 ### Group AT10
 
@@ -45,7 +45,7 @@ _(no criteria in this group)_
 
 ## Acceptance Tests
 
-### WP-01 -- PREZ_DEFAULT_THEME: red-first tests, the precedence function, the docs (status: WIP)
+### WP-01 -- PREZ_DEFAULT_THEME: red-first tests, the precedence function, the docs (status: Done)
 
 _(no tests in this group)_
 
