@@ -189,17 +189,32 @@ prez_is_stale() {
 # subshell three frames down.
 prez_ensure_built() {
   # AC09: an install refuses rather than falling back to a build. It ships the
-  # binary, has no crate, and reaching for cargo here would be reaching for a
+  # binaries, has no crate, and reaching for cargo here would be reaching for a
   # toolchain to compile source that was deliberately not published.
+  #
+  # **BOTH BINARIES, BECAUSE THIS SHIM EXECS EITHER** (issue 0024). A missing
+  # sibling reads as a stale tree in a source checkout, and the shim rebuilds
+  # it. An install has nothing to build from, so the same absence is a broken
+  # publish: refused by name here, on every verb, rather than left to surface as
+  # a bare exec error the first time someone runs `prez showreel`.
   if [[ $PREZ_INSTALL_MODE -eq 1 ]]; then
-    if [[ -x "$BINARY" ]]; then
+    local shipped
+    local missing=()
+    for shipped in "$BINARY" "$SHOWREEL_BINARY"; do
+      if [[ ! -x "$shipped" ]]; then
+        missing+=("$shipped")
+      fi
+    done
+    if [[ ${#missing[@]} -eq 0 ]]; then
       return 0
     fi
-    error "prez: the installed binary is missing"
+    error "prez: an installed binary is missing"
     echo "" >&2
-    echo "  Expected: $BINARY" >&2
+    for shipped in "${missing[@]}"; do
+      echo "  Expected: $shipped" >&2
+    done
     echo "" >&2
-    echo "  This tree is an install, which SHIPS the built binary and never" >&2
+    echo "  This tree is an install, which SHIPS its built binaries and never" >&2
     echo "  builds one -- it carries no crate to build from. Re-publish from" >&2
     echo "  the Utilz source tree with 'utilz upgrade'." >&2
     return 1

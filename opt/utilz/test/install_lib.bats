@@ -97,6 +97,41 @@ run_install_function() {
   refute_output_contains "prez"
 }
 
+@test "install_owned_paths names the built showreel binary beside prez's (issue 0024)" {
+  # The shim execs either binary -- `prez showreel <...>` hands over to the
+  # second -- so an owned set naming only prez's shipped an install that handed
+  # over to a file it never published. Named rather than enumerated for the
+  # same reason as prez's: it is gitignored, and absent must fail the publish.
+  run run_install_function "install_owned_paths '$UTILZ_HOME'"
+  assert_success
+  printf '%s\n' "$output" | grep -qx "opt/prez/crate/target/release/showreel" || {
+    echo "owned set is missing showreel's binary" >&2
+    return 1
+  }
+}
+
+@test "install_build_prez asks cargo for the whole workspace, so showreel is built too (issue 0024)" {
+  # The crate root is prez's package and the workspace declares no
+  # default-members, so a build there makes prez and what prez links, and never
+  # showreel. The shim's own build carries --workspace for exactly this reason;
+  # the publish's did not. A stub cargo records what it was asked, so nothing
+  # here builds a crate.
+  local src="$BATS_TEST_TMPDIR/src-build" stub="$BATS_TEST_TMPDIR/stubbin"
+  mkdir -p "$src/opt/prez/crate" "$stub"
+  : > "$src/opt/prez/crate/Cargo.toml"
+  cat > "$stub/cargo" <<EOF
+#!/bin/sh
+printf '%s\n' "\$*" > "$BATS_TEST_TMPDIR/cargo.args"
+EOF
+  chmod +x "$stub/cargo"
+
+  run env PATH="$stub:$PATH" bash -c "source '$UTILZ_HOME/opt/utilz/lib/common.sh'; source '$UTILZ_HOME/opt/utilz/lib/install.sh'; install_build_prez '$src'"
+  assert_success
+  [ -f "$BATS_TEST_TMPDIR/cargo.args" ] || fail "the stub cargo was never called"
+  run cat "$BATS_TEST_TMPDIR/cargo.args"
+  assert_output_contains "--workspace"
+}
+
 @test "install_owned_paths is LC_ALL=C sorted and free of duplicates" {
   run run_install_function "install_owned_paths '$UTILZ_HOME'"
   assert_success

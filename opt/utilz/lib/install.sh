@@ -19,10 +19,17 @@
 # for AC09. An alias here would be a second NAME for the one thing this thread
 # cannot afford two answers about.
 
-# Built at publish time and gitignored, so it is named rather than enumerated.
-# It is part of the owned set whether or not it has been built: an owned path
-# that is absent is a publish that must fail, not a set that quietly shrinks.
+# Built at publish time and gitignored, so they are named rather than
+# enumerated. They are part of the owned set whether or not they have been
+# built: an owned path that is absent is a publish that must fail, not a set
+# that quietly shrinks.
 INSTALL_PREZ_BINARY="opt/prez/crate/target/release/prez"
+
+# **THE SECOND BINARY, SHIPPED BESIDE THE FIRST** (issue 0024). The prez shim
+# hands `prez showreel <...>` to it, so an install without it ran prez and then
+# exec'd a file it never published. One workspace build makes both, and
+# install_build_prez asks for the workspace so that it does.
+INSTALL_SHOWREEL_BINARY="opt/prez/crate/target/release/showreel"
 
 # prez.yaml carries no inline version and points `version_file` at the crate's
 # Cargo.toml, because cargo REQUIRES a version in [package] and that makes it
@@ -109,13 +116,14 @@ install_owned_paths() {
     return 1
   fi
 
-  # The built binary is owned whenever the tree carries the crate to build it
-  # from. That is the same predicate the publish uses to decide whether to run
-  # cargo at all, so the binary cannot leave the owned set while there is still
-  # something to build -- and a tree with no prez does not name prez output.
+  # The built binaries are owned whenever the tree carries the crate to build
+  # them from. That is the same predicate the publish uses to decide whether to
+  # run cargo at all, so neither binary can leave the owned set while there is
+  # still something to build -- and a tree with no prez names no prez output.
   if [[ -f "$tree/opt/prez/crate/Cargo.toml" ]]; then
     kept="$kept
 $INSTALL_PREZ_BINARY
+$INSTALL_SHOWREEL_BINARY
 $INSTALL_PREZ_VERSION_FILE"
   fi
 
@@ -468,7 +476,7 @@ install_copy_owned() {
   done <<< "$paths"
 }
 
-# Build the prez binary in <src>'s crate, if it has one. A no-op otherwise.
+# Build prez's binaries in <src>'s crate, if it has one. A no-op otherwise.
 install_build_prez() {
   local src="$1"
   local crate="$src/opt/prez/crate"
@@ -476,21 +484,26 @@ install_build_prez() {
   [[ -f "$crate/Cargo.toml" ]] || return 0
 
   if ! command -v cargo >/dev/null 2>&1; then
-    error "cargo is required to publish: the install SHIPS prez's built binary"
-    echo "  AC09 -- the install-tree shim refuses to build, so the binary has to" >&2
-    echo "  exist before anyone runs it. Install Rust from https://rustup.rs." >&2
+    error "cargo is required to publish: the install SHIPS prez's built binaries"
+    echo "  AC09 -- the install-tree shim refuses to build, so the binaries have to" >&2
+    echo "  exist before anyone runs them. Install Rust from https://rustup.rs." >&2
     return 1
   fi
 
-  echo "build:  cargo build --release (opt/prez/crate)"
+  echo "build:  cargo build --release --workspace (opt/prez/crate)"
 
-  # CARGO_TARGET_DIR is unset for this build so the binary lands where the
-  # owned set names it. The shim honours the variable deliberately, but a
+  # CARGO_TARGET_DIR is unset for this build so the binaries land where the
+  # owned set names them. The shim honours the variable deliberately, but a
   # publish run by someone with it exported would send the output somewhere
-  # the copy never looks, and then ship the previous binary or none at all.
+  # the copy never looks, and then ship the previous binaries or none at all.
+  #
+  # --workspace, because the crate root is prez's own package and the workspace
+  # declares no default-members: without it this builds prez and what prez
+  # links, and never showreel (issue 0024). The shim's build has carried it
+  # since ST0017's WP-05 for the same reason; this was the copy that did not.
   (
     unset CARGO_TARGET_DIR
-    cd "$crate" && cargo build --release --quiet
+    cd "$crate" && cargo build --release --workspace --quiet
   ) || {
     error "cargo build failed in $crate"
     return 1

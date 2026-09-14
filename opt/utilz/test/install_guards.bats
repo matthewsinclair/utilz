@@ -73,6 +73,16 @@ teardown_file() {
   assert_output_contains "prez"
 }
 
+@test "the install hands prez showreel to the showreel binary it shipped (issue 0024)" {
+  # The shim execs either binary, and until issue 0024 the install shipped only
+  # prez's -- so an installed `prez showreel` was an exec of a file that was
+  # never published.
+  assert_file_exists "$GUARD_INSTALL/opt/prez/crate/target/release/showreel"
+  run env -u UTILZ_HOME "$GUARD_INSTALL/opt/prez/prez" showreel --help
+  assert_success
+  assert_output_contains "showreel"
+}
+
 @test "the install shim REFUSES to build rather than falling back to one" {
   # AC09's "refuses rather than falls back". Today this is satisfied BY
   # ACCIDENT: with no crate shipped, prez_is_stale's find errors on every
@@ -87,6 +97,23 @@ teardown_file() {
   run env -u UTILZ_HOME "$sandbox/opt/prez/prez" --version
   assert_failure
   assert_output_contains "install"
+  refute_output_contains "building"
+  refute_output_contains "first use"
+}
+
+@test "the install shim refuses BY NAME when showreel is missing (issue 0024)" {
+  # A missing sibling reads as a stale tree in a checkout, and the shim builds
+  # it. An install has nothing to build from, so the same absence is a broken
+  # publish: refused by name on every verb, rather than left to surface as a
+  # bare exec error the first time someone runs `prez showreel`.
+  local sandbox="$BATS_TEST_TMPDIR/no-showreel"
+  cp -R "$GUARD_INSTALL" "$sandbox"
+  rm -f "$sandbox/opt/prez/crate/target/release/showreel"
+
+  run env -u UTILZ_HOME "$sandbox/opt/prez/prez" --version
+  assert_failure
+  assert_output_contains "install"
+  assert_output_contains "showreel"
   refute_output_contains "building"
   refute_output_contains "first use"
 }
