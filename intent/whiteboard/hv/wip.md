@@ -17,7 +17,7 @@ _(none)_
 
 ## TODO
 
-- Tag and push 2.9.0. vc's pre-release verdict is GO (2026-09-14, run 15:18-15:23Z on ebd0243 plus cc's board commit). An annotated tag on the release: commit itself, ebd0243, named as 2.8.0's was (2.9.0, no v), then git push local main 2.9.0 && git push upstream main 2.9.0. It carries ST0017 (prez showreel), ST0018 (PREZ_DEFAULT_THEME), 0016 (CI state in the install manifest), 0024 (install ships showreel), 0033 (todo 2.0.0: an item's id is its name), and the fixes for 0010, 0011, 0014, 0015, 0018, 0022, 0023, 0025 to 0032 and 0034. VERSION 2.9.0 and prez 2.1.0, confirmed by hv directly to vc.
+- ST0019, Utilz's release pipeline: rule its question 4 before cc designs that part -- whether the shared release steps (pre-flight, version stamping, tag, push, release object) move into devbin itself, which is Devbin project work, or stay a Utilz-owned command for now.
 
 ## Holds
 
