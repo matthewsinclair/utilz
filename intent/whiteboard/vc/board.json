@@ -470,6 +470,14 @@
       "text": "Review ST0019's design draft when cc sends it, before any code: the five open questions and vc's five framing notes, with Q4 held for hv's scope ruling.",
       "state": "live",
       "recorded_at": "2026-09-14T16:10:41.633Z"
+    },
+    {
+      "node": "vc",
+      "kind": "doing",
+      "seq": 36,
+      "text": "ST0020 (prez refuses a theme name defined twice on the search path, when PREZ_THEME_DUPLICATES=refuse; hv's (b), read in cc's transcript): design approved with six notes. Next: verify when cc lands it -- red first on AC-01.1, .4, .7, .8, guards labelled, suites under bash 3.2.",
+      "state": "live",
+      "recorded_at": "2026-09-14T16:24:29.700Z"
     }
   ],
   "messages": [

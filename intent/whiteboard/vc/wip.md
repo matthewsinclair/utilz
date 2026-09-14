@@ -13,7 +13,7 @@ claims: []
 
 ## DOING
 
-_(none)_
+- ST0020 (prez refuses a theme name defined twice on the search path, when PREZ_THEME_DUPLICATES=refuse; hv's (b), read in cc's transcript): design approved with six notes. Next: verify when cc lands it -- red first on AC-01.1, .4, .7, .8, guards labelled, suites under bash 3.2.
 
 ## TODO
 
