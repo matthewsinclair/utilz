@@ -4,7 +4,7 @@ DOING and TODO only. Done work goes to `intent/done.md`; context to `intent/rest
 
 ## DOING
 
-- ST0019: release Utilz through `dvb build release` and a Homebrew tap, like Intent. cc drafts the design; vc reviews it before any code.
+- ST0020: prez refuses a theme name defined twice on the search path when a caller sets `PREZ_THEME_DUPLICATES=refuse` (hv's ruling (b), for the next release). vc approved the design with six notes; cc folds them in, then builds it red first, and vc verifies.
 
 ## TODO
 
@@ -16,6 +16,7 @@ DOING and TODO only. Done work goes to `intent/done.md`; context to `intent/rest
 
 **Threads**
 
+- ST0019, after ST0020 (hv: the prez check first): release Utilz through `dvb build release` and a Homebrew tap, like Intent. cc drafts the design; vc reviews it before any code.
 - Follow-on to ST0017, if wanted: Rust `init` and `qr` for `prez showreel`.
 - Crawl recedes as it rises (Star Wars pre-roll): a 3D transform in `player.html`.
 - prez default look, "basic but cool enough out of the box". Needs a thread.
