@@ -13,18 +13,18 @@ claims: [ST0018]
 
 ## DOING
 
-- 0016 landed at 811da78 and 087f9fb (the watchdog takes the killed command's children with it): CI's verdict recorded as ci-state, shown on utilz version. With vc for verification; vc closes.
-- 0029 landed at 8c47815 and d9777b5 (vc's nit: both no-window lines read one population). With vc for verification; vc closes.
-- 0031, vc's .prettierignore fix at 53effc7: reviewing, and I close it as the reviewer.
+- ST0018 WP-01: PREZ_DEFAULT_THEME -- AT10 to AT14 in theme-addressing.sh red first, the pure ranking in deck.rs with its unit tests, the docs; then AC-01.7, the commit and the rebuild answer to gtools-vc.
 
 ## TODO
 
 - ST0018 WP-01, per design.md (8f900ff, 6b3cff5): PREZ_DEFAULT_THEME red-first, blocks AT10 onward in theme-addressing.sh, the precedence function, the docs. Closes with AC-01.7: tell gtools-vc the commit and the per-tree rebuild answer.
-- The release commit once 0028, 0016 and ST0018 land: VERSION 2.9.0 and prez 2.1.0 (hv confirmed both, 2026-09-14: 'Yes') and CHANGELOG [2.9.0]; then vc's pre-release verdict. Tag and push are hv's.
+- 0033: install_run_bounded's watchdog can hold the caller's $(...) pipe in a microsecond race (vc's nit on 0016); redirect the whole watchdog's output. Its own commit.
+- 0032: utilz todo stable ids. hv, 2026-09-14: 'Yeah, it should. It's bonkers that it doesn't already work like that.' An issue with its Design section, then the fix after ST0018 and 0033, before the release commit; tell gtools-cc and gtools-vc when it lands.
+- The release commit once ST0018, 0033 and 0032 land: VERSION 2.9.0, prez 2.1.0 (both hv-confirmed), todo's version as hv rules, CHANGELOG [2.9.0] (drafted in the scratchpad); then vc's pre-release verdict. Tag and push are hv's.
 
 ## Holds
 
-- utilz todo stable ids (gtools-cc's request, hv ruled it in gtools-cc's session, gtools#0046 option b): an item keeps its id across every write, --json num carries it. Held until hv's own word in this session says whether it goes in 2.9.0 or after; then an ST before any code. Tell gtools-cc and gtools-vc when it lands.
+_(none)_
 
 ## Watch-outs
 
