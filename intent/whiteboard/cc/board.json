@@ -37,7 +37,8 @@
       "kind": "todo",
       "seq": 3,
       "text": "The release commit once 0016 and ST0018 land: VERSION 2.9.0 and prez 2.1.0 (both await hv's confirmation) and CHANGELOG [2.9.0]; then vc's pre-release verdict. Tag and push are hv's.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-09-14T12:27:49.277Z",
       "recorded_at": "2026-09-14T12:13:39.086Z"
     },
     {
@@ -88,6 +89,14 @@
       "text": "An explicit-path commit of a .md that the pre-commit prettier hook reformats leaves the real index holding the pre-format text (MM): check git status afterwards. An issue body must be prettier-stable too, or the committed view drifts from the store render and the doctor gate refuses every later commit (0025-0027, fixed by vc at 895a2fc).",
       "state": "live",
       "recorded_at": "2026-09-14T12:24:34.168Z"
+    },
+    {
+      "node": "cc",
+      "kind": "todo",
+      "seq": 5,
+      "text": "The release commit once 0028, 0016 and ST0018 land: VERSION 2.9.0 and prez 2.1.0 (hv confirmed both, 2026-09-14: 'Yes') and CHANGELOG [2.9.0]; then vc's pre-release verdict. Tag and push are hv's.",
+      "state": "live",
+      "recorded_at": "2026-09-14T12:27:49.328Z"
     }
   ],
   "messages": []
