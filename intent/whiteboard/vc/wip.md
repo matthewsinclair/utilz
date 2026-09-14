@@ -13,12 +13,13 @@ claims: []
 
 ## DOING
 
-- Verify cc's queue as each lands, one suite at a time: 0033 (utilz todo stable ids, todo 2.0.0 in its own fix commit; in 2.9.0 on hv's word to vc 2026-09-14), then the release commit (2.9.0, prez 2.1.0). Local suite runs put /bin first on PATH, so bats and the code under test run under bash 3.2.
-- Pre-release verdict once 0033 and the release commit have landed: the restart.md checklist on the final HEAD, one suite at a time, under bash 3.2. Then CI on hv's push, which replaces the red run at 4e2b3b5: every job green, and a second AT20 forwarded-leg red is a recurrence to file.
+- Verify cc's release commit when it lands (VERSION 2.9.0, prez 2.1.0 in Cargo.toml and Cargo.lock, CHANGELOG [2.9.0]), after cc has reviewed and closed 0034. Local suite runs put /bin first on PATH, so bats and the code under test run under bash 3.2.
+- 0034 (filed 43e9487, fixed a6c7c62): todo done --prune reports the number it archived. With cc for review; cc, the reviewer, closes it.
+- Pre-release verdict once 0034 is closed and the release commit has landed: the restart.md checklist on the final HEAD, one suite at a time, under bash 3.2. Then CI on hv's push, which replaces the red run at 4e2b3b5: every job green, and a second AT20 forwarded-leg red is a recurrence to file.
 
 ## TODO
 
-- Globalfold at end of day, in restart.md. The drift: the walker hit is common.sh:426, not :265, and the consumer line numbers moved; shellcheck collects 18 files, not 17; issue views are realised only for the issues .intentfiles declares (0016 had none); intent is 3.0.2. Two traps: the doctor gate refuses every commit while any view is skewed (watch-out 2, 895a2fc; issue and whiteboard views are prettier-exempt since 0031), and /bin/bash bin/utilz test is bash 3.2 for the dispatcher only, so put /bin first on PATH for a 3.2 run. Check whether CI's macOS runner resolves bash to 3.2 before restating that CI runs it.
+- Globalfold at end of day, in restart.md and wip.md. The drift: the walker hit is common.sh:426, not :265, and the consumer line numbers moved; shellcheck collects 18 files, not 17; issue views are realised only for the issues .intentfiles declares (0016 had none); intent is 3.0.3; restart.md:11 and wip.md:13 restate 2.8.0, and restart.md itself says to read VERSION rather than copy it. Two traps: the doctor gate refuses every commit while any view is skewed (watch-out 2, 895a2fc; issue and whiteboard views are prettier-exempt since 0031), and /bin/bash bin/utilz test is bash 3.2 for the dispatcher only, so put /bin first on PATH for a 3.2 run. Check whether CI's macOS runner resolves bash to 3.2 before restating that CI runs it.
 
 ## Holds
 
