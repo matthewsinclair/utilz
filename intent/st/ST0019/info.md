@@ -10,7 +10,7 @@ completed:
 
 ## Objective
 
-A Utilz release is cut by one command, `dvb build release`, the way the other devbin projects that release something cut theirs, and Utilz installs and upgrades through a Homebrew tap, the way Intent does. Until this thread, every Utilz release has been a hand-made commit, tag and push, and the GitHub release object has been dropped since v2.2.0.
+A Utilz release is cut by one command, `dvb build release`, the way the other devbin projects that release something cut theirs, and Utilz can install and upgrade through a Homebrew tap, the way Intent can. Whether the tap replaces `utilz install` and `utilz upgrade` or sits beside them is open (question 2). Until this thread, every Utilz release was a hand-made commit, tag and push, and the GitHub release object was dropped after v2.2.0 until 2.9.0 restored it by hand.
 
 ## Context
 
@@ -18,9 +18,9 @@ A Utilz release is cut by one command, `dvb build release`, the way the other de
 
 hv, 2026-09-14, raised directly to vc: bring Utilz's release process into line with the other devbin projects that release something, and "brew-ify utilz so that it works just like intent". The question that surfaced it was why 2.9.0 was not cut with `dvb build release`.
 
-**Utilz has no `build release`.** devbin ships `build` as a name with no command line (tier 4 in `bin/.devbin/lib/builtins`): each project supplies its own arms. Utilz's `bin/.devbin/config.yaml` has no `build` section, and `bin/.devbin/cmd/` is empty. Releases 2.6.1 to 2.9.0 were hand-made `release:` commits, tagged and pushed by hand, although devbin was vendored on 2026-08-29, before 2.8.0. vc reports that Utilz's last GitHub release object is v2.2.0.
+**Utilz has no `build release`.** devbin ships `build` as a name with no command line (tier 4 in `bin/.devbin/lib/builtins`): each project supplies its own arms. Utilz's `bin/.devbin/config.yaml` has no `build` section, and `bin/.devbin/cmd/` is empty. Releases 2.6.1 to 2.9.0 were hand-made `release:` commits, tagged and pushed by hand, although devbin was vendored on 2026-08-29, before 2.8.0. vc reports that Utilz's last GitHub release object before 2.9.0 was v2.2.0.
 
-**2.9.0 ships the old way**, by hv's decision on 2026-09-14: it was committed at `ebd0243` and verified GO before this thread existed. This thread's first release is the next one.
+**2.9.0 shipped the old way**, by hv's decision on 2026-09-14. It was committed at `ebd0243` and verified GO before this thread existed, then tagged and pushed by hand, and CI passed all seven jobs on the pushed commit (run 34866136691). This thread's first release is the next one.
 
 ## Precedents in the fleet
 
@@ -33,17 +33,18 @@ Read from source, never by running a command. On 2026-09-14 vc found that a devb
   - The CHANGELOG heading is authored as `in progress` and dated at cut time.
   - It commits, tags, pushes to both remotes and creates the GitHub release object. It has `--dry-run`, and it confirms before the push.
   - It owns the tag and the release object only (its D43). `int macos prepare` builds the artefacts, `int macos publish` attaches them to the release, and the `matthewsinclair/intent` tap's formula installs the prebuilt binary from the GitHub release.
-- **Conflab**: `bin/.devbin/cmd/release`, 399 lines, and a tap, `geodica/conflab`. It may be closer to Utilz's scale than Intent.
+- **Conflab**: `bin/.devbin/cmd/release`, 399 lines, and a tap, `geodica/conflab`. It may be closer to Utilz's scale than Intent. Its default path cuts the release through CI: `conflab release --patch` goes through a workflow, and `--local` builds and notarises on the owner's machine only when the owner authorises it (vc, 2026-09-14).
 - **Devbin**: `bin/.devbin/cmd/release`, 296 lines. `RELEASES/<version>.md` is the one source for a release, and `CHANGELOG.md` and `RELEASES.md` are generated from it.
 - **Intentv2**: `bin/.devbin/cmd/build.d/release`, 839 lines.
 
 ## Open design questions
 
-1. **What does a Utilz formula install?** Utilz is a bash framework, fifteen utilities and a Rust workspace (prez, showreel). Is it prebuilt binaries per architecture, as Intent ships, or a formula that builds the workspace with cargo?
-2. **How does a Homebrew install relate to `utilz install`** (ST0014), its manifest, and the CI verdict the manifest records (issue 0016)?
+1. **What does a Utilz formula install, for which platforms, and where is it built?** Utilz is a bash framework, fifteen utilities and a Rust workspace (prez, showreel). Is it prebuilt binaries per architecture, as Intent ships, or a formula that builds the workspace with cargo? Intent ships aarch64-apple-darwin only, while Utilz's CI already runs macOS arm64 and Ubuntu: is it macOS arm64 only, Intel as well, or Linuxbrew too? And a tag-triggered workflow can build prez and showreel on the runners, as Conflab's default path does, which Intent's local-only prepare cannot (vc, 2026-09-14).
+2. **How does a Homebrew install relate to `utilz install` and `utilz upgrade`** (ST0014): does it replace them, or sit beside them? Beneath that (vc, 2026-09-14): `UTILZ_HOME` inside a versioned Cellar prefix; the dispatcher's install-tree detection; `utilz use dev|opt` relinking; and what the manifest's `source-tree` and `ci-state` rows (issue 0016) mean for a tree brew built.
 3. **Utilz's tags carry no `v`** (hv's ruling, from 2.7.0), and Intent's carry one. The pipeline and the formula's release URLs must honour Utilz's ruling.
-4. **Where does the shared release logic live?** A handler copied from Intent's or Conflab's gives the fleet another orchestrator for the same job. Moving the shared parts (pre-flight, version stamping, tag, push, release object) into devbin is Devbin project work, and it needs hv's scope ruling before it is designed.
-5. **Where do the release notes live?** Utilz's CHANGELOG is hand-authored, while Devbin generates its CHANGELOG from `RELEASES/<version>.md`.
+4. **Where does the shared release logic live?** A handler copied from Intent's or Conflab's gives the fleet another orchestrator for the same job. Moving the shared parts (pre-flight, version stamping, tag, push, release object) into devbin is Devbin project work, and it needs hv's scope ruling before it is designed. It is a TODO on hv's board (vc, 2026-09-14).
+5. **Where do the release notes live, and how is the CHANGELOG heading dated?** Utilz's CHANGELOG is hand-authored, while Devbin generates its CHANGELOG from `RELEASES/<version>.md`. Intent authors the heading as `in progress` and dates it at cut time.
+6. **The pre-flight gate Intent's lacks: CI green on the commit being tagged.** Utilz already asks CI about a commit, through `install_ci_state` (issue 0016), and the release pre-flight should ask through that one function rather than through a second `gh` query (vc, 2026-09-14).
 
 ## Findings from cutting 2.9.0 by hand
 
