@@ -17,7 +17,7 @@ _(none)_
 
 ## TODO
 
-- ST0019, Utilz's release pipeline: rule its question 4 before cc designs that part -- whether the shared release steps (pre-flight, version stamping, tag, push, release object) move into devbin itself, which is Devbin project work, or stay a Utilz-owned command for now.
+_(none)_
 
 ## Holds
 
@@ -29,7 +29,7 @@ _(none)_
 
 ## Decisions
 
-_(none)_
+- hv, 2026-09-14, directly to vc: (1) ST0019's shared release core (pre-flight, version stamping, the CHANGELOG date, commit, tag, push, the release object) is Devbin project work with Utilz as its first user; Utilz's own parts (its version files, the CI build of prez, the Homebrew formula) start in Utilz, and the next Utilz release is cut by hand once more. (2) utilz doctor's report goes to stdout, by one redirect where the doctor verb runs; the shared message helpers stay on stderr. (3) Adopt rustfmt for the prez crate once ST0020 lands.
 
 ---
 

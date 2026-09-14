@@ -3,7 +3,7 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 11981560-5612-4fe7-a136-6eae64636b64
-heartbeat_at: 2026-09-14 12:39Z
+heartbeat_at: 2026-09-14 17:10Z
 status: active
 focus: "none"
 claims: []
@@ -17,7 +17,7 @@ claims: []
 
 ## TODO
 
-- Review ST0019's design draft when cc sends it, before any code: the five open questions and vc's five framing notes, with Q4 held for hv's scope ruling.
+- Review ST0019's design draft when cc sends it, before any code: Utilz's own parts only (its version files, the CI build of prez, the Homebrew formula), since hv ruled the shared release core is Devbin project work (hv's decision on hv's board, 14 Sep).
 
 ## Holds
 

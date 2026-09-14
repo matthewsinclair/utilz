@@ -10,19 +10,20 @@ DOING and TODO only. Done work goes to `intent/done.md`; context to `intent/rest
 
 **hv**
 
-- Rule ST0019's question 4: whether the shared release steps (pre-flight, version stamping, tag, push, release object) move into devbin itself, which is Devbin project work, or stay a Utilz-owned command.
-- Decide whether `utilz doctor` should write its results to stdout rather than stderr.
-- Decide whether to adopt rustfmt for the prez crate: add `rustfmt.toml` (`tab_spaces = 2`), one reformat commit, then re-enable `fmt rust` in `bin/.devbin/config.yaml`.
+- _(nothing waiting on hv)_
 
 **Threads**
 
-- ST0019, after ST0020 (hv: the prez check first): release Utilz through `dvb build release` and a Homebrew tap, like Intent. cc drafts the design; vc reviews it before any code.
+- ST0019, after ST0020 (hv: the prez check first): release Utilz through `dvb build release` and a Homebrew tap, like Intent. hv ruled on 14 Sep that the shared release core (pre-flight, version stamping, the CHANGELOG date, commit, tag, push and the release object) is Devbin project work, with Utilz as its first user, and that Utilz's own parts (its version files, the CI build of prez, the Homebrew formula) start in Utilz. The next Utilz release is cut by hand once more. cc drafts the design; vc reviews it before any code.
+- Raise the shared release core in Devbin's tracker, per hv's ruling, so that Devbin schedules it.
+- Adopt rustfmt for the prez crate once ST0020 lands (hv, 14 Sep): `rustfmt.toml` with `tab_spaces = 2`, one reformat commit, then re-enable `fmt rust` in `bin/.devbin/config.yaml` and `check format`.
 - Follow-on to ST0017, if wanted: Rust `init` and `qr` for `prez showreel`.
 - Crawl recedes as it rises (Star Wars pre-roll): a 3D transform in `player.html`.
 - prez default look, "basic but cool enough out of the box". Needs a thread.
 
 **Fixes**
 
+- `utilz doctor` prints its report to stdout (hv, 14 Sep): one redirect where the doctor verb runs, while the shared message helpers stay on stderr. File it, then fix it.
 - `examples/demo.md` warns `class 'escape' has no effect`.
 - `stampz`: handle mixed page geometry within one PDF (per-page overlay ranges).
 - `hoist-rebase.sh`: the `AT13` postcondition uses minimum 0 against `-ge`, so it always passes. Needs ST0010 hydrated.
