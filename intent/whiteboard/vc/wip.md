@@ -13,12 +13,12 @@ claims: []
 
 ## DOING
 
-- Verify issue 0023, the prez stamp fix routed to utilz-cc on hv's ruling 2026-09-14, against its Done list when cc lands it. 0023 stays open until then.
-- Pre-release check of HEAD on hv's word 2026-09-14. The read-only half is done and green; the full utilz test, utilz test prez and shellcheck run after 0023 lands, one suite at a time.
+- Pre-release verdict: after 0024, 0016, the prez fallback-theme thread and the release commit have landed, one suite at a time.
+- Fixing 0026 (doctor verdict under step 7) and 0027 (AT09 walks root src only), finders are fixers, while cc writes the ST0018 and 0016 docs. Then the tree is cc's for 0024; 0025 landed at 1acc096 and waits on cc's review.
 
 ## TODO
 
-_(none)_
+- Globalfold, restart.md drift: the walker hit is common.sh:426 not :265 and the consumer line numbers moved; shellcheck collects 18 files not 17; open issues ARE realised at intent/issues/<id>.md; intent is 3.0.1; the estate grep covers crate/src only.
 
 ## Holds
 
