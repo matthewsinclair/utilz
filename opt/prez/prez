@@ -98,11 +98,34 @@ BINARY="$TARGET_DIR/release/prez"
 # not a second resolution policy that could disagree with the one above.
 SHOWREEL_BINARY="$TARGET_DIR/release/showreel"
 
+# **THE BUILD STAMP IS THE FRESHNESS REFERENCE, NOT EITHER BINARY** (issue
+# 0023). Its mtime is the START of the last build the shim ran that succeeded
+# -- prez_ensure_built writes it -- so a build that relinks nothing still moves
+# it. A binary cannot carry that: cargo relinks one only when its own inputs
+# change. The older of the two binaries was the reference until 2026-09-14, and
+# it looped in both directions -- after a showreel-only edit the older binary is
+# prez, which that edit never relinks -- so every run announced a rebuild that
+# relinked nothing.
+BUILD_STAMP="$TARGET_DIR/prez-built.stamp"
+
 # ============================================================================
 # BUILD MANAGEMENT
 # ============================================================================
 
-# Is the built binary older than anything it was built from?
+# Does this invocation belong to the sibling tool rather than to prez?
+#
+# **EXTRACTED FOR THE SAME REASON `prez_is_stale` IS**, and prez.bats says why in
+# its header: the shim's decisions are driven over fixtures rather than by
+# building a crate. A predicate can be tested; a bare `if` at the bottom of the
+# file cannot. The exactness is the part worth a test -- `showreelish` and
+# `showreel-x` are prez's problem, not showreel's, and a prefix match would
+# hand them over.
+prez_is_handover() {
+  [[ "${1:-}" == "showreel" ]]
+}
+
+# Has anything the binaries are built from changed since the shim's last
+# successful build?
 #
 # **THE POPULATION IS DERIVED FROM THE TREE, NOT TYPED OUT, AND THAT IS THE
 # WHOLE OF THE FIX.** This walk listed src/, themes/ and assets/ by hand until
@@ -119,16 +142,22 @@ SHOWREEL_BINARY="$TARGET_DIR/release/showreel"
 # binary at exit 0. A hand list is correct on the day it is written and silently
 # wrong afterwards, so the list is gone.
 #
-# **WALKING WIDE OVER-INCLUDES, DELIBERATELY.** An edit to test/ now triggers a
-# rebuild nobody needed. That is the trade and it is the right way round:
-# over-inclusion fails LOUDLY and costs one rebuild, under-inclusion fails
-# GREENLY and ships an old binary. Ruled by vc 2026-09-09.
+# **WALKING WIDE OVER-INCLUDES, DELIBERATELY, AND THE STAMP IS WHAT KEEPS THAT
+# CHEAP.** An edit to tests/ or to a showreel fixture triggers a build nobody
+# needed: cargo relinks nothing, the stamp moves, and the next run reads fresh.
+# That is the trade and it is the right way round: over-inclusion fails LOUDLY
+# and costs one no-op build, under-inclusion fails GREENLY and ships an old
+# binary. Ruled by vc 2026-09-09, on the premise that it "costs one rebuild" --
+# which was false until issue 0023 made the reference the stamp. Measured
+# against a binary, an over-included path stays newer than the reference for
+# good, because a build with nothing to do never moves a binary.
 #
-# target/ must be pruned for CORRECTNESS, not tidiness -- $BINARY lives in it and
-# its directories are newer than itself on every build, so an unpruned walk
-# reports stale forever. **That exclusion does NOT generalise to the shellcheck
-# collector**, which has a working type check behind it; two exclusions that look
-# like one rule is the near-agreement that suppresses the check.
+# target/ must be pruned for CORRECTNESS, not tidiness -- the stamp and both
+# binaries live in it, and its directories are newer than the stamp after every
+# build, so an unpruned walk reports stale forever. **That exclusion does NOT
+# generalise to the shellcheck collector**, which has a working type check
+# behind it; two exclusions that look like one rule is the near-agreement that
+# suppresses the check.
 #
 # NO `-type f`, and `-mindepth 1`, BOTH MEASURED RATHER THAN REASONED. `-type f`
 # was the first cut and it MISSES A PURE DELETION -- removing a source bumps its
@@ -140,35 +169,15 @@ SHOWREEL_BINARY="$TARGET_DIR/release/showreel"
 #
 # `find -newer` rather than comparing mtimes arithmetically: bash 3.2 has no
 # portable stat, and BSD and GNU stat disagree on flags.
-# Does this invocation belong to the sibling tool rather than to prez?
-#
-# **EXTRACTED FOR THE SAME REASON `prez_is_stale` IS**, and prez.bats says why in
-# its header: the shim's decisions are driven over fixtures rather than by
-# building a crate. A predicate can be tested; a bare `if` at the bottom of the
-# file cannot. The exactness is the part worth a test -- `showreelish` and
-# `showreel-x` are prez's problem, not showreel's, and a prefix match would
-# hand them over.
-prez_is_handover() {
-  [[ "${1:-}" == "showreel" ]]
-}
-
 prez_is_stale() {
   [[ ! -x "$BINARY" ]] && return 0
   [[ ! -x "$SHOWREEL_BINARY" ]] && return 0
+  [[ ! -f "$BUILD_STAMP" ]] && return 0
 
-  # **THE REFERENCE IS THE OLDER OF THE TWO BINARIES, AND THE ALTERNATIVE LOOPS.**
-  # One `cargo build --workspace` relinks only what changed, so editing showreel
-  # alone leaves its sources NEWER than prez's binary. Measuring against prez
-  # would then report stale on every later invocation, rebuild nothing, and
-  # announce a rebuild each time. The tree is fresh only when nothing is newer
-  # than the OLDEST thing built from it.
-  local ref newer
-  ref="$BINARY"
-  [[ "$SHOWREEL_BINARY" -ot "$ref" ]] && ref="$SHOWREEL_BINARY"
-
+  local newer
   newer=$(find "$CRATE_DIR" -mindepth 1 \
     -name target -prune -o \
-    -newer "$ref" -print -quit 2>/dev/null || true)
+    -newer "$BUILD_STAMP" -print -quit 2>/dev/null || true)
 
   [[ -n "$newer" ]]
 }
@@ -208,12 +217,29 @@ prez_ensure_built() {
     info "prez: first use, building (this happens once)..."
   fi
 
+  # **THE STAMP IS WRITTEN BEFORE THE BUILD AND LANDS ONLY AFTER IT SUCCEEDS.**
+  # Its mtime is the build's START, so an edit made while cargo runs is newer
+  # than the stamp afterwards and the next run builds again. A failed build
+  # leaves the previous stamp, or none, so the tree stays stale and the next run
+  # retries. mkdir first: on first use the target directory does not exist yet.
+  local pending="$BUILD_STAMP.pending"
+  if ! mkdir -p "$TARGET_DIR" || ! touch "$pending"; then
+    error "prez: cannot write the build stamp in $TARGET_DIR"
+    return 1
+  fi
+
   # --workspace, because the default builds only the ROOT package: without it
   # the shim's build-on-first-use can never produce a member crate's binary at
   # all. AC-1.16's sixth site; it stops being latent the moment WP-05 wires the
   # showreel dispatch.
   if ! cargo build --release --workspace --manifest-path "$MANIFEST"; then
+    rm -f "$pending"
     error "prez: build failed"
+    return 1
+  fi
+
+  if ! mv -f "$pending" "$BUILD_STAMP"; then
+    error "prez: built, but could not record the build stamp at $BUILD_STAMP"
     return 1
   fi
 

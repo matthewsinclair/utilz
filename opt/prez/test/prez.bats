@@ -42,16 +42,21 @@ load_staleness_fn() {
   eval "$fn"
 }
 
-# A crate-shaped fixture: the four things prez_is_stale looks at, and a binary.
+# A crate-shaped fixture: what prez_is_stale walks, both binaries, and the stamp
+# the shim writes when a build succeeds. crates/showreel is a source only one
+# binary is built from, and tests/ holds a path no binary is built from.
 make_fixture() {
   CRATE_DIR="$BATS_TEST_TMPDIR/crate"
   MANIFEST="$CRATE_DIR/Cargo.toml"
   BINARY="$CRATE_DIR/target/release/prez"
   SHOWREEL_BINARY="$CRATE_DIR/target/release/showreel"
+  BUILD_STAMP="$CRATE_DIR/target/prez-built.stamp"
   mkdir -p "$CRATE_DIR/src" "$CRATE_DIR/themes/simple" "$CRATE_DIR/assets" \
-           "$CRATE_DIR/crates/artifact/src" "$CRATE_DIR/target/release"
+           "$CRATE_DIR/crates/artifact/src" "$CRATE_DIR/crates/showreel/src" \
+           "$CRATE_DIR/tests" "$CRATE_DIR/target/release"
   touch "$CRATE_DIR/src/main.rs" "$CRATE_DIR/themes/simple/theme.css" \
         "$CRATE_DIR/assets/mermaid.min.js" "$CRATE_DIR/crates/artifact/src/lib.rs" \
+        "$CRATE_DIR/crates/showreel/src/main.rs" "$CRATE_DIR/tests/manifest.rs" \
         "$MANIFEST" "$CRATE_DIR/Cargo.lock"
   # STAMPED INTO THE PAST, in two steps, and the order matters. `find -newer`
   # compares whole seconds on some filesystems, so a fixture built inside one
@@ -69,11 +74,13 @@ make_fixture() {
   # that must fail.
   : > "$SHOWREEL_BINARY"
   chmod +x "$SHOWREEL_BINARY"
+  : > "$BUILD_STAMP"
   local past2 past1
   past2="$(date -v-2M +%Y%m%d%H%M 2>/dev/null || date -d '2 minutes ago' +%Y%m%d%H%M)"
   past1="$(date -v-1M +%Y%m%d%H%M 2>/dev/null || date -d '1 minute ago' +%Y%m%d%H%M)"
   touch -t "$past2" "$CRATE_DIR/src/main.rs" "$CRATE_DIR/themes/simple/theme.css" \
     "$CRATE_DIR/assets/mermaid.min.js" "$CRATE_DIR/crates/artifact/src/lib.rs" \
+    "$CRATE_DIR/crates/showreel/src/main.rs" "$CRATE_DIR/tests/manifest.rs" \
     "$MANIFEST" "$CRATE_DIR/Cargo.lock"
   # THE DIRECTORIES TOO, and stamped LAST because writing a file inside one
   # bumps it again. `find DIR -newer X` tests DIR itself, not only its
@@ -84,8 +91,11 @@ make_fixture() {
   # stamping here because the fixture creates the whole tree at once.
   touch -t "$past2" "$CRATE_DIR/src" "$CRATE_DIR/themes/simple" "$CRATE_DIR/themes" \
     "$CRATE_DIR/assets" "$CRATE_DIR/crates/artifact/src" "$CRATE_DIR/crates/artifact" \
+    "$CRATE_DIR/crates/showreel/src" "$CRATE_DIR/crates/showreel" "$CRATE_DIR/tests" \
     "$CRATE_DIR/crates"
-  touch -t "$past1" "$BINARY" "$SHOWREEL_BINARY"
+  # The stamp goes with the binaries: the shim built this tree after its sources
+  # last changed.
+  touch -t "$past1" "$BINARY" "$SHOWREEL_BINARY" "$BUILD_STAMP"
 }
 
 # ============================================================================
@@ -238,13 +248,18 @@ make_fixture() {
   assert_success
 }
 
-# **THE FRESHNESS REFERENCE IS THE OLDER OF THE TWO BINARIES.**
+# **A BINARY RELINKED OUTSIDE THE SHIM STILL READS STALE.** Touching prez here
+# stands for a `cargo build` the shim did not run -- by hand, or from the test
+# driver -- after an edit to a source both binaries are built from. Nothing moved
+# the stamp, so the edit postdates it: the shim runs one build, cargo relinks
+# whatever it still owes, showreel included, and the stamp lands. Measured
+# against prez's mtime instead, this tree reads fresh and the shim hands over to
+# a showreel built from the old source.
 #
-# The discriminating case is prez rebuilt while showreel was NOT: measuring
-# against prez's mtime alone reports a fresh tree while showreel is still the
-# binary built from the old source, and the shim then hands over to it. The
-# symmetric case -- showreel rebuilt, prez not -- passes either way and so
-# proves nothing; this test is the one that fails when the reference narrows.
+# This case once guarded the older-of-two-binaries reference, and called the
+# symmetric one -- showreel rebuilt, prez not -- a case that "passes either way".
+# It did not: that is the state that looped (issue 0023), and the fixed-point
+# cases below now cover it.
 @test "prez rebuilt while showreel was not still reads stale" {
   load_staleness_fn
   make_fixture
@@ -274,6 +289,50 @@ make_fixture() {
 
   make_fixture
   touch "$CRATE_DIR/Cargo.lock"
+  run prez_is_stale
+  assert_success
+}
+
+# **THE FIXED POINT: ONCE A BUILD SUCCEEDS, THE TREE READS FRESH** (issue 0023).
+#
+# Every case above asks whether an edit is SEEN, and none asked whether the
+# remedy CLEARS it. It did not: for four days every source-tree run announced
+# "sources changed, rebuilding...", ran a build that relinked nothing, and said
+# it again next time. cargo relinks a binary only when its own inputs change, so
+# measuring against a binary left an edit that fed only the other binary, or fed
+# neither, newer than the reference for good. The shim now measures against the
+# stamp it writes as each build starts, which a no-op build moves.
+#
+# Each `touch "$BUILD_STAMP"` below is a build that started after the edit and
+# succeeded.
+@test "a path only showreel is built from, edited before a successful build, leaves the tree fresh" {
+  load_staleness_fn
+  make_fixture
+  touch "$CRATE_DIR/crates/showreel/src/main.rs"
+  sleep 1                                         # whole-second filesystems
+  touch "$BUILD_STAMP" "$SHOWREEL_BINARY"         # showreel relinks; prez rightly does not
+  run prez_is_stale
+  assert_failure
+}
+
+@test "a path no binary is built from, edited before a successful build, leaves the tree fresh" {
+  load_staleness_fn
+  make_fixture
+  touch "$CRATE_DIR/tests/manifest.rs"
+  sleep 1
+  touch "$BUILD_STAMP"                            # cargo relinks nothing at all
+  run prez_is_stale
+  assert_failure
+}
+
+# A tree built before the stamp existed, a cleaned target directory, or a build
+# that never succeeded: nothing records a successful shim build, so the tree is
+# not known to be fresh. Every existing checkout meets this on its first run
+# after the fix -- one build, then quiet.
+@test "a missing build stamp reads stale" {
+  load_staleness_fn
+  make_fixture
+  rm -f "$BUILD_STAMP"
   run prez_is_stale
   assert_success
 }
