@@ -4,17 +4,19 @@ Live coordination channel between concurrent Claude Code sessions (and the human
 
 The full protocol lives in the `/in-whiteboard` skill (pickup / ask / announce / decide / claim / clear / archive / touch / release / status). This file is the protocol pointer plus the Utilz roster.
 
+**SINCE 2026-09-14 THE BOARDS ARE RENDERED FROM THE INTENT WHITEBOARD MODEL, AND `intent wb` IS THE ONLY WAY TO WRITE THEM.** hv ruled the move; vc ran `intent wb register` and `intent wb migrate` for `cc`, `vc` and `hv`. Every file under a node directory is now a generated view, and each node's `board.json` is its committed extract; the store itself (`intent/.cache/intent.db`) is per-machine and gitignored. **Every `intent wb` write re-renders every board, not only the writer's**, so a hand edit to any board file is overwritten at the next write by anyone. Two things did not carry, and each is recorded where it now lives: hv's standing directives moved to the Project-wide Conventions in `intent/restart.md`, and one external inbox stayed a plain file (see "External correspondents").
+
 ## Nodes (workstreams)
 
-`hv` is **Workstream Zero** -- the always-present human node, present in every Intent project. The working nodes are **made to order** per project (never assumed). Discovery is by listing the immediate subdirectories of `intent/whiteboard/`.
+`hv` is **Workstream Zero** -- the always-present human node, present in every Intent project. The working nodes are **made to order** per project (never assumed). Discovery is `intent wb status`, which lists the registered roster.
 
-Nodes are **made to order** when a concurrent stream actually exists, never in anticipation of one -- `intent claude ws new <wsid>`. Utilz ran single-stream (`hv` + `cc`) from 2026-07-29 until 2026-08-29, when `vc` was provisioned to take the validation role on ST0010.
+Nodes are **made to order** when a concurrent stream actually exists, never in anticipation of one -- `intent claude ws new <wsid>`. Utilz ran single-stream (`hv` + `cc`) from 2026-07-29 until 2026-08-29, when `vc` was provisioned to take the validation role on ST0010. A node joins the model with `intent wb register <moniker> --name <display> --role <role>`, and registering is hv's declaration, never an agent's tidy-up.
 
-| Node | Name                   | Scope (Utilz)                                                                                                               |
-| ---- | ---------------------- | --------------------------------------------------------------------------------------------------------------------------- |
-| `hv` | Hypervisor (the human) | Workstream Zero: adjudicates scope, sequences work, owns releases + tags + pushes; standing directives + escalation landing |
-| `cc` | Control Claude         | the whole framework: `bin/utilz` dispatcher, `opt/utilz/lib/common.sh`, every utility under `opt/`, help, docs, CI          |
-| `vc` | Validation Claude      | the independent check on `cc`'s landed and claimed work; **the named reader of `hv/inbox.*`** -- see "The hv inbox" below   |
+| Node | Name                   | Scope (Utilz)                                                                                                             |
+| ---- | ---------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| `hv` | Hypervisor (the human) | Workstream Zero: adjudicates scope, sequences work, owns releases + tags + pushes; escalation landing                     |
+| `cc` | Control Claude         | the whole framework: `bin/utilz` dispatcher, `opt/utilz/lib/common.sh`, every utility under `opt/`, help, docs, CI        |
+| `vc` | Validation Claude      | the independent check on `cc`'s landed and claimed work; **the named reader of `hv/inbox.*`** -- see "The hv inbox" below |
 
 ## The hv inbox has a named reader, and it is `vc`
 
@@ -31,14 +33,17 @@ Two corollaries that follow from the obligation rather than from the mechanism:
 
 ```
 intent/whiteboard/
-  README.md                 # this file -- protocol pointer + roster
+  README.md                 # this file -- protocol pointer + roster (hand-authored, not a view)
   <node>/
-    wip.md                  # the node's live board: frontmatter + DOING + TODO + Watch-outs + Decisions
-    inbox.<sender>.md       # one per OTHER node: messages FROM that sender (single-writer = the sender)
-    .history/YYYYMMDD/      # the node's archived DONE work + handled inbox entries (daily-or-more)
+    board.json              # the node's committed extract of the model
+    wip.md                  # rendered view: header + DOING + TODO + Holds + Watch-outs + Decisions
+    inbox.<sender>.md       # rendered view, one per OTHER node: messages FROM that sender
+    .history/YYYYMMDD/      # the hand-authored era's archive, carried into the model as snapshots
 ```
 
 ## Single-writer rule
+
+Unchanged by the move to the model, and now enforced by `intent wb` against the moniker a write passes with `--node`, rather than by convention.
 
 - `<node>/wip.md` -- written only by `<node>`.
 - `<node>/inbox.<sender>.md` -- appended only by `<sender>`; read, actioned, and cleansed only by `<node>` (the owner).
@@ -55,3 +60,5 @@ Cross-project correspondence has two rules, learned the hard way that day:
 2. **Do not invent a node directory in someone else's whiteboard.** There is no agreed cross-project inbox naming, so creating `inbox.<you>.md` inside their node dir decides their roster for them. Route it past `hv`, and deliver as a clearly-named temp file for that node to file or bin.
 
 An external correspondent gets an inbox here (so its messages have a single-writer home) but no node directory, because it has no workstream in this project.
+
+**The move to the model did not carry `cc/inbox.cdsync-cc.md`.** A message row names its sender, `cdsync-cc` is not registered, and `intent wb migrate cc` refused the file by name rather than addressing its messages from a node the roster does not have. It held 0 entries, so nothing was lost, and it stays as the hand-authored record. Under the model a correspondent needs registering before its messages have a home, and registering is hv's call.

@@ -1,0 +1,18 @@
+{
+  "schema": "intent/board@3.0",
+  "node": {
+    "moniker": "cc",
+    "name": "Control Claude",
+    "role": "control",
+    "session_id": "a30f9092-03ed-44ba-a659-b37813af12c7",
+    "heartbeat_at": "2026-09-14T08:54:02.800Z",
+    "status": "active",
+    "focus": "none",
+    "claims": [],
+    "recorded_at": "2026-09-14T08:46:06.602Z",
+    "authored_at": "2026-09-11 16:17Z",
+    "migrated_at": "2026-09-14T08:48:02.260Z"
+  },
+  "items": [],
+  "messages": []
+}

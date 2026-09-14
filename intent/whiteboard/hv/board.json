@@ -1,0 +1,34 @@
+{
+  "schema": "intent/board@3.0",
+  "node": {
+    "moniker": "hv",
+    "name": "Hypervisor",
+    "role": "hypervisor",
+    "heartbeat_at": "2026-09-14T08:48:02.366Z",
+    "status": "active",
+    "focus": "Cut the release after 2.8.0.",
+    "claims": [],
+    "recorded_at": "2026-09-14T08:46:06.602Z",
+    "authored_at": "2026-07-29T10:21Z",
+    "migrated_at": "2026-09-14T08:48:02.366Z"
+  },
+  "items": [
+    {
+      "node": "hv",
+      "kind": "todo",
+      "seq": 1,
+      "text": "Cut the release after `2.8.0`; it carries ST0017 (`prez showreel`).",
+      "state": "live",
+      "recorded_at": "2026-09-14T08:48:02.366Z"
+    },
+    {
+      "node": "hv",
+      "kind": "todo",
+      "seq": 2,
+      "text": "Review the standing directives; they were transcribed, not authored. Cut any you never set.",
+      "state": "live",
+      "recorded_at": "2026-09-14T08:48:02.366Z"
+    }
+  ],
+  "messages": []
+}

@@ -1,0 +1,43 @@
+{
+  "schema": "intent/board@3.0",
+  "node": {
+    "moniker": "vc",
+    "name": "Validation Claude",
+    "role": "validation",
+    "session_id": "11981560-5612-4fe7-a136-6eae64636b64",
+    "heartbeat_at": "2026-09-14T08:51:09.521Z",
+    "status": "active",
+    "focus": "none",
+    "claims": [],
+    "recorded_at": "2026-09-14T08:46:06.602Z",
+    "authored_at": "2026-09-11 16:33Z",
+    "migrated_at": "2026-09-14T08:48:02.306Z"
+  },
+  "items": [
+    {
+      "node": "vc",
+      "kind": "doing",
+      "seq": 1,
+      "text": "Verify issue 0023, the prez stamp fix routed to utilz-cc on hv's ruling 2026-09-14, against its Done list when cc lands it. 0023 stays open until then.",
+      "state": "live",
+      "recorded_at": "2026-09-14T09:01:13.387Z"
+    },
+    {
+      "node": "vc",
+      "kind": "doing",
+      "seq": 2,
+      "text": "Pre-release check of HEAD on hv's word 2026-09-14. The read-only half is done and green; the full utilz test, utilz test prez and shellcheck run after 0023 lands, one suite at a time.",
+      "state": "live",
+      "recorded_at": "2026-09-14T09:01:13.430Z"
+    },
+    {
+      "node": "vc",
+      "kind": "watchout",
+      "seq": 1,
+      "text": "Every intent wb write re-renders every board, not only the writer's, so a hand edit to any board file is overwritten at the next write by anyone. Write with intent wb only.",
+      "state": "live",
+      "recorded_at": "2026-09-14T09:01:13.471Z"
+    }
+  ],
+  "messages": []
+}
