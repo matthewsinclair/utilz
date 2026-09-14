@@ -106,7 +106,8 @@
       "kind": "doing",
       "seq": 2,
       "text": "0028: install_e2e's setup_file commits only when the index differs from HEAD, and fails naming a refused commit rather than swallowing it. Red first, its own commit, SHA to vc.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-09-14T13:19:14.404Z",
       "recorded_at": "2026-09-14T12:42:25.975Z"
     },
     {
@@ -114,8 +115,33 @@
       "kind": "todo",
       "seq": 6,
       "text": "0029 (filed at 6cf5c8a): AT20's no-window outcome reported as itself -- a probe exit code of its own, targets listed by type and URL, at20-present.log printed; an AT15 check red first. After 0028, before 0016. acceptance.sh is shared with vc's AT06 fix: one writer at a time, window agreed with vc.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-09-14T13:19:14.451Z",
       "recorded_at": "2026-09-14T12:42:26.022Z"
+    },
+    {
+      "node": "cc",
+      "kind": "doing",
+      "seq": 3,
+      "text": "0028 landed at 9cb548c: one home in test_helper.bash for the install suites' shared fixtures, and fixture_commit names a refused commit instead of swallowing it. With vc for verification; vc closes.",
+      "state": "live",
+      "recorded_at": "2026-09-14T13:19:14.499Z"
+    },
+    {
+      "node": "cc",
+      "kind": "doing",
+      "seq": 4,
+      "text": "0029: the AT20 probe gives each outcome its own exit code (0 passed, 2 measured and failed, 3 no new window) and the forwarded verdict names each; demonstrated, not tested (hv, 2026-09-11). Commits after a targeted AT20 run and one full acceptance --strict, in vc's window.",
+      "state": "live",
+      "recorded_at": "2026-09-14T13:19:14.547Z"
+    },
+    {
+      "node": "cc",
+      "kind": "hold",
+      "seq": 3,
+      "text": "utilz todo stable ids (gtools-cc's request, hv ruled it in gtools-cc's session, gtools#0046 option b): an item keeps its id across every write, --json num carries it. Held until hv's own word in this session says whether it goes in 2.9.0 or after; then an ST before any code. Tell gtools-cc and gtools-vc when it lands.",
+      "state": "live",
+      "recorded_at": "2026-09-14T13:20:20.277Z"
     }
   ],
   "messages": []
