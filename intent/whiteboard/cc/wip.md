@@ -6,7 +6,7 @@ session_id: a30f9092-03ed-44ba-a659-b37813af12c7
 heartbeat_at: 2026-09-14 15:25Z
 status: active
 focus: "none"
-claims: []
+claims: [ST0019]
 ---
 
 # Control Claude (cc)
@@ -17,7 +17,7 @@ _(none)_
 
 ## TODO
 
-_(none)_
+- ST0019: draft design.md and the work packages for vc's review, before any code. Q4, shared release logic in devbin, waits on hv's scope ruling.
 
 ## Holds
 

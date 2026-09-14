@@ -8,7 +8,9 @@
     "heartbeat_at": "2026-09-14T15:25:57.567Z",
     "status": "active",
     "focus": "none",
-    "claims": [],
+    "claims": [
+      "ST0019"
+    ],
     "recorded_at": "2026-09-14T08:46:06.602Z",
     "authored_at": "2026-09-11 16:17Z",
     "migrated_at": "2026-09-14T08:48:02.260Z"
@@ -299,6 +301,14 @@
       "state": "archived",
       "archived_at": "2026-09-14T15:25:57.503Z",
       "recorded_at": "2026-09-14T15:17:03.752Z"
+    },
+    {
+      "node": "cc",
+      "kind": "todo",
+      "seq": 13,
+      "text": "ST0019: draft design.md and the work packages for vc's review, before any code. Q4, shared release logic in devbin, waits on hv's scope ruling.",
+      "state": "live",
+      "recorded_at": "2026-09-14T15:55:49.580Z"
     }
   ],
   "messages": []

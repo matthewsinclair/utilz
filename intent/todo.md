@@ -8,7 +8,7 @@ _(none)_
 
 ## TODO
 
-_(none)_
+- [?] ST0019: Release Utilz through dvb build release and a Homebrew tap, like Intent
 
 ## DONE
 
