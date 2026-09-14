@@ -890,23 +890,46 @@ if want AT09; then
   # sat in a deck.rs comment, green, for as long as this check existed. A
   # comment creates no coupling, which is why AC09 once allowed it; it does
   # leak, which is why it is refused now.
-  paths=$(grep -rlE '(/Users/|Dropbox|[Gg]eodica)' "$CRATE/src" 2>/dev/null | wc -l | tr -d ' ')
-  check "estate paths or names anywhere in src" "$paths" "0"
-  imports=$(grep -rhE '^\s*use .*(geodica|gtools)' "$CRATE/src" 2>/dev/null | wc -l | tr -d ' ')
-  check "estate imports" "$imports" "0"
+  #
+  # **AND src MEANS EVERY src/ IN THE WORKSPACE, FOUND RATHER THAN NAMED**
+  # (issue 0027). These four checks read "$CRATE/src" alone until 2026-09-14,
+  # which the ST0017 workspace outgrew: crates/artifact and crates/showreel are
+  # shipped code, and no check here read either. A hand list is correct on the
+  # day it is written and silently wrong afterwards -- the shim's staleness walk
+  # learned the same lesson in issue 0023 -- so the population is found and
+  # printed, and an empty one fails rather than measuring nothing.
+  at09_srcs=()
+  while IFS= read -r at09_d; do
+    at09_srcs+=("$at09_d")
+  done < <(find "$CRATE" \( -path "$CRATE/target" -o -path "$TARGET" \) -prune -o -type d -name src -print | sort)
+  at09_rs=()
+  if [ ${#at09_srcs[@]} -gt 0 ]; then
+    while IFS= read -r at09_f; do
+      at09_rs+=("$at09_f")
+    done < <(find "${at09_srcs[@]}" -type f -name '*.rs' | sort)
+  fi
+  if [ ${#at09_rs[@]} -eq 0 ]; then
+    bad "no .rs source under any src/ in $CRATE, so the checks below would measure nothing"
+  else
+    ok "walked ${#at09_srcs[@]} src/ directories, ${#at09_rs[@]} .rs files: ${at09_srcs[*]#"$CRATE"/}"
+    paths=$(grep -rlE '(/Users/|Dropbox|[Gg]eodica)' "${at09_srcs[@]}" 2>/dev/null | wc -l | tr -d ' ')
+    check "estate paths or names anywhere in src" "$paths" "0"
+    imports=$(grep -rhE '^\s*use .*(geodica|gtools)' "${at09_srcs[@]}" 2>/dev/null | wc -l | tr -d ' ')
+    check "estate imports" "$imports" "0"
 
-  tabs=$(grep -rl "$(printf '\t')" "$CRATE/src" 2>/dev/null | wc -l | tr -d ' ')
-  check "files containing tabs" "$tabs" "0"
-  # A line whose predecessor ends in a backslash is string CONTENT, not code:
-  # Rust's line continuation strips its leading whitespace, so the alignment
-  # under an opening quote is not indentation. Without this the check flagged
-  # seven correct lines, which is a control going red for the wrong reason --
-  # the thing every other check here is written to avoid.
-  odd=$(awk 'prev ~ /\\$/ { prev = $0; next }
-             match($0, /^ +/) && RLENGTH % 2 == 1 { n++ }
-             { prev = $0 }
-             END { print n+0 }' "$CRATE"/src/*.rs)
-  check "lines at an odd indent" "$odd" "0"
+    tabs=$(grep -rl "$(printf '\t')" "${at09_srcs[@]}" 2>/dev/null | wc -l | tr -d ' ')
+    check "files containing tabs" "$tabs" "0"
+    # A line whose predecessor ends in a backslash is string CONTENT, not code:
+    # Rust's line continuation strips its leading whitespace, so the alignment
+    # under an opening quote is not indentation. Without this the check flagged
+    # seven correct lines, which is a control going red for the wrong reason --
+    # the thing every other check here is written to avoid.
+    odd=$(awk 'prev ~ /\\$/ { prev = $0; next }
+               match($0, /^ +/) && RLENGTH % 2 == 1 { n++ }
+               { prev = $0 }
+               END { print n+0 }' "${at09_rs[@]}")
+    check "lines at an odd indent" "$odd" "0"
+  fi
 
   # BOTH gates, named separately, because the per-file critic arms 1 of its 7
   # rust rules and declines the three clippy-backed ones out loud. A clean
