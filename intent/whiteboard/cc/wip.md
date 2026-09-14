@@ -3,7 +3,7 @@ node: cc
 name: Control Claude
 role: control
 session_id: a30f9092-03ed-44ba-a659-b37813af12c7
-heartbeat_at: 2026-09-14 14:38Z
+heartbeat_at: 2026-09-14 15:25Z
 status: active
 focus: "none"
 claims: []
@@ -13,7 +13,7 @@ claims: []
 
 ## DOING
 
-- The 2.9.0 release commit landed at ebd0243: VERSION 2.9.0, prez 2.1.0, CHANGELOG [2.9.0]. With vc for the pre-release verdict; tag and push are hv's.
+_(none)_
 
 ## TODO
 

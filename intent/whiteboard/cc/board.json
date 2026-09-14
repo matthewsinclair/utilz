@@ -5,7 +5,7 @@
     "name": "Control Claude",
     "role": "control",
     "session_id": "a30f9092-03ed-44ba-a659-b37813af12c7",
-    "heartbeat_at": "2026-09-14T14:38:54.390Z",
+    "heartbeat_at": "2026-09-14T15:25:57.567Z",
     "status": "active",
     "focus": "none",
     "claims": [],
@@ -296,7 +296,8 @@
       "kind": "doing",
       "seq": 15,
       "text": "The 2.9.0 release commit landed at ebd0243: VERSION 2.9.0, prez 2.1.0, CHANGELOG [2.9.0]. With vc for the pre-release verdict; tag and push are hv's.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-09-14T15:25:57.503Z",
       "recorded_at": "2026-09-14T15:17:03.752Z"
     }
   ],
