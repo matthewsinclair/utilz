@@ -9,7 +9,8 @@
     "status": "active",
     "focus": "none",
     "claims": [
-      "ST0019"
+      "ST0019",
+      "ST0020"
     ],
     "recorded_at": "2026-09-14T08:46:06.602Z",
     "authored_at": "2026-09-11 16:17Z",
@@ -309,6 +310,14 @@
       "text": "ST0019: draft design.md and the work packages for vc's review, before any code. Q4, shared release logic in devbin, waits on hv's scope ruling.",
       "state": "live",
       "recorded_at": "2026-09-14T15:55:49.580Z"
+    },
+    {
+      "node": "cc",
+      "kind": "doing",
+      "seq": 16,
+      "text": "ST0020, a theme name defined twice refuses when PREZ_THEME_DUPLICATES=refuse: design, ten ACs and WP-01 drafted, with vc for review before any code. Then red first, the build, and gtools-vc gets the commit and the variable's name.",
+      "state": "live",
+      "recorded_at": "2026-09-14T16:20:11.829Z"
     }
   ],
   "messages": []

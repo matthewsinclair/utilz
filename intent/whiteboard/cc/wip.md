@@ -6,14 +6,14 @@ session_id: a30f9092-03ed-44ba-a659-b37813af12c7
 heartbeat_at: 2026-09-14 15:25Z
 status: active
 focus: "none"
-claims: [ST0019]
+claims: [ST0019, ST0020]
 ---
 
 # Control Claude (cc)
 
 ## DOING
 
-_(none)_
+- ST0020, a theme name defined twice refuses when PREZ_THEME_DUPLICATES=refuse: design, ten ACs and WP-01 drafted, with vc for review before any code. Then red first, the build, and gtools-vc gets the commit and the variable's name.
 
 ## TODO
 

@@ -2,27 +2,28 @@
 
 An index of every steel thread in the project. A steel thread is a self-contained unit of work focused on implementing one piece of functionality.
 
-| ID     | Title                                                                          | Status    | Created    | Completed            |
-| ------ | ------------------------------------------------------------------------------ | --------- | ---------- | -------------------- |
-| ST0019 | Release Utilz through dvb build release and a Homebrew tap, like Intent        | Triage    | 2026-09-14 |                      |
-| ST0018 | prez: a fallback theme for decks that name none (PREZ_DEFAULT_THEME)           | Completed | 2026-09-14 | 2026-09-14           |
-| ST0017 | Add 'showreel' to 'prez'                                                       | Completed | 2026-09-09 | 2026-09-11           |
-| ST0016 | --help has one home, and both invocation forms agree                           | Completed | 2026-09-08 | 2026-09-08           |
-| ST0015 | Version dispatch has one home, and reports both versions                       | Completed | 2026-09-08 | 2026-09-08           |
-| ST0014 | Make utilz insallable in to opt/ just like devbin                              | Completed | 2026-09-07 | 2026-09-08           |
-| ST0013 | prez theme addressing: split --theme, --theme-file and --theme-path            | Completed | 2026-09-07 | 2026-09-08           |
-| ST0012 | Estate file policy: what must be proved before a realised file is removed      | Completed | 2026-09-07 | 2026-09-08           |
-| ST0011 | stampz -- recipient watermarking for PDF document packs                        | Completed | 2026-09-03 | 2026-09-03           |
-| ST0010 | Add prez to utilz to support markdown presentation pipeline                    | Completed | 2026-08-29 | 2026-09-07           |
-| ST0009 | Framework core: single bin walker, single YAML parser, correct generator floor | Completed | 2026-07-29 | 2026-07-29T09:56:19Z |
-| ST0008 | Add todo to utilz                                                              | Completed | 2026-07-03 | 2026-07-03T13:52:13Z |
-| ST0007 | Emacs bindings for Utilz utilities                                             | Completed | 2026-04-23 | 2026-04-23           |
-| ST0006 | Move syncz to use unison with rsync fallback                                   | Completed | 2026-03-02 | 2026-03-02           |
-| ST0005 | pdf2md - PDF to Markdown Converter                                             | Completed | 2026-02-12 | 2026-03-02           |
-| ST0004 | xtrct - Semantic Data Extraction                                               | Completed | 2026-02-12 | 2026-03-02           |
-| ST0003 | syncz --bidi mode and --confirm enhancement                                    | Completed | 2026-02-10 | 2026-02-10           |
-| ST0002 | Syncz - a simple directory-to-directory syncer                                 | Completed | 2026-02-08 | 2026-02-08           |
-| ST0001 | cleanz - LLM Text Cleaner Utility                                              | Completed | 2025-12-28 | 2025-12-28           |
+| ID     | Title                                                                           | Status    | Created    | Completed            |
+| ------ | ------------------------------------------------------------------------------- | --------- | ---------- | -------------------- |
+| ST0020 | prez: a theme name defined twice on the search path refuses, when a caller asks | Triage    | 2026-09-14 |                      |
+| ST0019 | Release Utilz through dvb build release and a Homebrew tap, like Intent         | Triage    | 2026-09-14 |                      |
+| ST0018 | prez: a fallback theme for decks that name none (PREZ_DEFAULT_THEME)            | Completed | 2026-09-14 | 2026-09-14           |
+| ST0017 | Add 'showreel' to 'prez'                                                        | Completed | 2026-09-09 | 2026-09-11           |
+| ST0016 | --help has one home, and both invocation forms agree                            | Completed | 2026-09-08 | 2026-09-08           |
+| ST0015 | Version dispatch has one home, and reports both versions                        | Completed | 2026-09-08 | 2026-09-08           |
+| ST0014 | Make utilz insallable in to opt/ just like devbin                               | Completed | 2026-09-07 | 2026-09-08           |
+| ST0013 | prez theme addressing: split --theme, --theme-file and --theme-path             | Completed | 2026-09-07 | 2026-09-08           |
+| ST0012 | Estate file policy: what must be proved before a realised file is removed       | Completed | 2026-09-07 | 2026-09-08           |
+| ST0011 | stampz -- recipient watermarking for PDF document packs                         | Completed | 2026-09-03 | 2026-09-03           |
+| ST0010 | Add prez to utilz to support markdown presentation pipeline                     | Completed | 2026-08-29 | 2026-09-07           |
+| ST0009 | Framework core: single bin walker, single YAML parser, correct generator floor  | Completed | 2026-07-29 | 2026-07-29T09:56:19Z |
+| ST0008 | Add todo to utilz                                                               | Completed | 2026-07-03 | 2026-07-03T13:52:13Z |
+| ST0007 | Emacs bindings for Utilz utilities                                              | Completed | 2026-04-23 | 2026-04-23           |
+| ST0006 | Move syncz to use unison with rsync fallback                                    | Completed | 2026-03-02 | 2026-03-02           |
+| ST0005 | pdf2md - PDF to Markdown Converter                                              | Completed | 2026-02-12 | 2026-03-02           |
+| ST0004 | xtrct - Semantic Data Extraction                                                | Completed | 2026-02-12 | 2026-03-02           |
+| ST0003 | syncz --bidi mode and --confirm enhancement                                     | Completed | 2026-02-10 | 2026-02-10           |
+| ST0002 | Syncz - a simple directory-to-directory syncer                                  | Completed | 2026-02-08 | 2026-02-08           |
+| ST0001 | cleanz - LLM Text Cleaner Utility                                               | Completed | 2025-12-28 | 2025-12-28           |
 
 ---
 

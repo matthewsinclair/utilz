@@ -9,6 +9,8 @@ _(none)_
 ## TODO
 
 - [?] ST0019: Release Utilz through dvb build release and a Homebrew tap, like Intent
+- [?] ST0020: prez: a theme name defined twice on the search path refuses, when a caller asks
+  - [ ] 01: prez refuses a duplicated theme name when PREZ_THEME_DUPLICATES=refuse
 
 ## DONE
 
