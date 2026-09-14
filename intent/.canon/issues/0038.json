@@ -1,0 +1,11 @@
+{
+  "schema": "intent/issue@3.0",
+  "number": 38,
+  "slug": "ci-does-not-check-the-prez-crate-s-formatting",
+  "title": "CI does not check the prez crate's formatting",
+  "status": "open",
+  "severity": "low",
+  "created": "2026-09-14",
+  "reporter": "Matthew Sinclair",
+  "body": "## Summary\n\nSince 0036 the prez crate (`opt/prez/crate`) is formatted by rustfmt at `tab_spaces = 2`, and `bin/devbin check format` checks it locally. CI does not check it. In `.github/workflows/tests.yml` the Rust Lint (clippy) job runs clippy alone (`:379-403`) and the rust job builds and tests. `.github/workflows/pr-checks.yml` checks documentation, tests, commit messages, PR size and utility metadata, and nothing else. So a push carrying formatting drift goes green. hv ruled on 2026-09-14 that CI checks it (hv's board, decision 3).\n\n## Fix\n\n- In the Rust Lint (clippy) job, the existing step's crate loop runs `cargo fmt --all --check --manifest-path \"$manifest\"` before clippy, for each crate the step's one `find` discovers (`tests.yml:382-385`). It goes inside that step rather than into a second one, so crate discovery is not repeated, and drift stops the step before clippy compiles anything.\n- The step's name says it checks formatting as well. The job's `name:` and its id stay as they are, because `test-summary` needs `clippy` by id (`tests.yml:413` and `:428`).\n- The command line is `check format`'s from `bin/.devbin/config.yaml:52`, with the manifest as the loop variable. The two are held in step by hand, as clippy's pair is (`tests.yml:401` and `config.yaml:46`).\n- The check: the step's `run:` block, extracted from the workflow with yq and run under bash, exits non-zero in a scratch worktree carrying one line of drift, and exits 0 on the tree.\n- The job installs no toolchain and uses the runner's own stable Rust, so rustfmt's presence on ubuntu-latest is confirmed from the first CI run's log. That run needs a push on hv's word, and decision 4 sends this step in a later push. The issue closes when that log shows the check ran.\n"
+}
