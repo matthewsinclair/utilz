@@ -1,0 +1,14 @@
+{
+  "id": "01M22TGQ8VFCVY0HHS0MZSTN64",
+  "ts": "2026-09-09T10:13:18.747Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.satisfy",
+  "subject": {
+    "type": "ac",
+    "id": "ST0017/AC-1.1"
+  },
+  "payload": {
+    "evidence": "Verified by vc 2026-09-09 at e0dd357: prez links the shared crate -- main.rs:49 'pub use artifact::Failure', main.rs:52 'pub(crate) use artifact::base64', theme.rs:3 records the resolver lives in artifact::theme. One implementation, both binaries."
+  }
+}

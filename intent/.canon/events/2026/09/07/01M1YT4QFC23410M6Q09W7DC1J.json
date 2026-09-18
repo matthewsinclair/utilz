@@ -1,0 +1,15 @@
+{
+  "id": "01M1YT4QFC23410M6Q09W7DC1J",
+  "ts": "2026-09-07T20:49:48.012Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wp.new",
+  "subject": {
+    "type": "wp",
+    "id": "ST0014/05"
+  },
+  "payload": {
+    "scope": "S",
+    "title": "AC01 end to end: the install runs with the source tree moved aside"
+  }
+}

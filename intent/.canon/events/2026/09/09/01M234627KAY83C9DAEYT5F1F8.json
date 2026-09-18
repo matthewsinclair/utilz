@@ -1,0 +1,14 @@
+{
+  "id": "01M234627KAY83C9DAEYT5F1F8",
+  "ts": "2026-09-09T13:02:15.283Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.satisfy",
+  "subject": {
+    "type": "ac",
+    "id": "ST0017/AC-2.3"
+  },
+  "payload": {
+    "evidence": "SATISFIED on the 2026-09-09 run against artifact daaa503ad7db. FLAT COUNT: 13 captures a slide, every slide, plus one late-budget frame and one content-stripped control, no adaptive escalation. STABILITY IS A SEPARATE COLUMN from the floor that decides gradeability. THE CEILING IS TESTED RATHER THAN ARGUED, and this row was itself the prediction that tested it: two endpoints rounding INDEPENDENTLY predicts FOUR combinations, not the two it was written from. The run saw a THIRD render of slide 14 where ctl9 saw two, at exactly the distance independence requires -- one endpoint is 15 squared-difference units over rmse()'s divisor of 3*W*H and two are 30, so C-A and C-B are both sqrt(15/6220800) = 0.001553 and A-B is sqrt(30/6220800) = 0.002196, additive to the unit. That reproduces this row's independently measured RMSE(A,B)/RMSE(A,C) = 1.41404 from absolute counts rather than from a ratio. THE PREDICTIVE ARM ON SLIDE 13 IS STRUCTURAL AND NOT ARITHMETIC, which is snorkeltoast's correction to vc and it stands: the model, derived from a 59-pixel edge, predicts the SHAPE of slide 13's difference -- exactly four pixels, two per endpoint, at the two ends of a single vertical edge -- and counting on its 74-pixel edge confirmed it. vc had also offered sqrt(14/6220800) = 0.001500 against slide 13's reported floor as a second and stronger arm. IT IS NOT AN ARM AT ALL: rmse() IS sqrt(sum(d^2)/N), so that recomputes the reported figure from the same measured pixels and confirms the pixel COUNT rather than the model, which was never consulted on either side. Worth having as a consistency check that would catch a miscount; not evidence for the mechanism, and it is a correct number carrying more authority than it earned. THE CEILING IS NOW FALSIFIABLE AND THE UNUSED PREDICTIONS ARE ON THE RECORD IN FLOORS.md BEFORE ANY RUN TESTS THEM: slide 14's fourth state must land at 0.001553 or 0.002196; slide 13 has shown only two of four renders and a third must land at sqrt(7/6220800) = 0.001061 or at 0.001500. Any other distance falsifies the account, on slide 13 falsifying it on the slide the model was not built from. THE CEILING DOES NOT GENERALISE: any other multi-render slide is a lower bound until someone counts its pixels, because the mechanism must be identified before the argument is available at all."
+  }
+}

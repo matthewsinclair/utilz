@@ -1,0 +1,15 @@
+{
+  "id": "01M2FKX31PZ1N30YVEZZ8B81EN",
+  "ts": "2026-09-14T09:27:51.607Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "issues.add",
+  "subject": {
+    "type": "issue",
+    "id": "0027"
+  },
+  "payload": {
+    "severity": "low",
+    "title": "prez AT09 checks only the root package's src/, so the workspace members' sources are unguarded"
+  }
+}

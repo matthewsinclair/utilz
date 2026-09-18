@@ -1,0 +1,15 @@
+{
+  "id": "01M1YVWS8Z8MNPV5J0AW138K03",
+  "ts": "2026-09-07T21:20:24.863Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wp.new",
+  "subject": {
+    "type": "wp",
+    "id": "ST0014/12"
+  },
+  "payload": {
+    "scope": "S",
+    "title": "utilz relink: the explicit PATH-symlink verb, and AC11's never-implicitly half"
+  }
+}

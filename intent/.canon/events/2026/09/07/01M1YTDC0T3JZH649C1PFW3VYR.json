@@ -1,0 +1,15 @@
+{
+  "id": "01M1YTDC0T3JZH649C1PFW3VYR",
+  "ts": "2026-09-07T20:54:31.195Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wp.new",
+  "subject": {
+    "type": "wp",
+    "id": "ST0014/07"
+  },
+  "payload": {
+    "scope": "S",
+    "title": "utilz install -- publish a runnable install, with the gates"
+  }
+}

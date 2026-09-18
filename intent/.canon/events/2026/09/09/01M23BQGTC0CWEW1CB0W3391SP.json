@@ -1,0 +1,14 @@
+{
+  "id": "01M23BQGTC0CWEW1CB0W3391SP",
+  "ts": "2026-09-09T15:14:07.309Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.satisfy",
+  "subject": {
+    "type": "ac",
+    "id": "ST0017/AC-3.9"
+  },
+  "payload": {
+    "evidence": "VERIFIED BY vc AT THE MANIFEST, read rather than relayed. crates/showreel/Cargo.toml's [dependencies] carries exactly eight entries and they are hv's approved set: artifact by path (first-party, the one addition AC02 is signed off for), image 0.25 with default-features = false and features jpeg, png, webp, gif, tiff, kamadak-exif 0.6, qrcode 0.14 with default-features = false and svg only, regex 1, serde 1 with derive, serde_yaml 0.9, walkdir 2. Seven third-party plus one first-party, and no others. fast_image_resize IS REFUSED AND STAYS REFUSED: it appears once in the manifest as prose recording the refusal and ZERO times in Cargo.lock, so it is named but not linked -- image carries FilterType::Lanczos3 and nothing has measured a need. This row is INDEPENDENT OF AC-3.10'S ARITHMETIC and that separation is the point: the budget is named correctly here even though the count of what the budget pulls was recorded under an unnamed population there. A dependency set can be exactly the approved one while every figure about its transitive cost is wrong, and conflating the two is what let the wrong figures sit unchallenged."
+  }
+}

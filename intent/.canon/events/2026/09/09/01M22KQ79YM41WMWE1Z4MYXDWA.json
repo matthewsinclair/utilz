@@ -1,0 +1,15 @@
+{
+  "id": "01M22KQ79YM41WMWE1Z4MYXDWA",
+  "ts": "2026-09-09T08:14:31.742Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wp.new",
+  "subject": {
+    "type": "wp",
+    "id": "ST0017/06"
+  },
+  "payload": {
+    "scope": "S",
+    "title": "Snorkeltoast side: point the prototype at the hoisted tool, move the house theme"
+  }
+}

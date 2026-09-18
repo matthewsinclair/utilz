@@ -1,0 +1,14 @@
+{
+  "id": "01M23B5N1B34BG85FJ7DA3Z08K",
+  "ts": "2026-09-09T15:04:21.804Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.withdraw",
+  "subject": {
+    "type": "ac",
+    "id": "ST0017/AC-1.13"
+  },
+  "payload": {
+    "reason": "WITHDRAWN 2026-09-09. The row's load-bearing claim is REFUTED BY MEASUREMENT and the refutation is cc's, against cc's own row. The row said the collector is correct in CI only because the shellcheck job never builds, so its correctness depended on another job's behaviour. It does not. Measured by cc against a fully built tree (target/ at 1.2 GB, 125 executables) and verified independently by vc at the source: the collector's find emits everything under target/, and the case default runs `file \"$s\" | grep -q \"shell script\"` and rejects every Mach-O binary, so FILES ends at 18 either way. The gate is correct locally after a build, which is precisely the premise this row asserted fails. THE ORIGINAL 69 WAS find'S RAW EMISSION READ AS THE GATE'S POPULATION -- stage one of a three-stage pipeline measured, and the claim made about stage three. Same shape as the 6.29 vc relayed to hv, and cc named it as such unprompted. WHAT SURVIVES DOES NOT JUSTIFY A ROW. The *.sh branch adds with no type check, so a .sh dropped under target/ by a build script would enter the array; measured population of .sh files under target/ today is ZERO, and nothing in this estate writes one. The remainder is cost -- 143 stats and 125 file shell-outs -- and this was never a performance row. The collector also already carries the count control this thread argues for: FILES empty exits 1 with \"the collector is broken, failing loudly\". So the row as written is a control for a risk nobody has, and satisfying it would mean fixing something measured to work -- hv's test applied to a row of vc's own, after hv cut two of vc's yesterday for exactly this. cc leans weakly to taking the one line anyway and says the find is one they are not otherwise touching; that makes it a special trip for an empty population, and it settles the call. TAKING THE LINE REMAINS FINE AND IS NOT REQUIRED: if cc is in that file for another reason, a -not -path plus a guard on the *.sh branch makes an emergent correctness a stated one, ungated. REINSTATE IF the population stops being empty -- a build script that writes a .sh under target/ makes this a live defect again, and `intent ac reinstate` is the verb."
+  }
+}

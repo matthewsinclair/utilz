@@ -1,0 +1,14 @@
+{
+  "id": "01M23E8Q2EDQW9Q5KDT3PMFPGR",
+  "ts": "2026-09-09T15:58:27.919Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.edit",
+  "subject": {
+    "type": "ac",
+    "id": "ST0017/AC-2.5"
+  },
+  "payload": {
+    "text": "The exemption list is NAMED and DERIVED, and the harness refuses when exemptions plus covered do not sum to the slide total, or when a slide outside the named list is exempted. THE DIRECTION REQUIREMENT IS REMOVED, deliberately and with its reasoning on the record, and this is a correction to the row's intent rather than a weakening to fit what was built -- the distinction vc holds itself to, so the argument is stated rather than asserted. The row originally also required each exempt slide's expected difference to be stated as a DIRECTION. THAT REQUIREMENT WAS WRITTEN AGAINST A MODEL IN WHICH EXEMPT SLIDES RECEIVE A WEAKER GRADE. The model actually built gives them NO grade: exempt slides are not graded at all, so a stated direction would be consumed by no instrument, checked by nothing, and read by nobody. Prose serving no instrument is the exact shape hv cut four items for on 2026-09-09. SNORKELTOAST'S TEST IS WHAT DECIDES IT AND IT IS THE SAME TEST THAT KEPT AC-2.6, WHICH IS WHY IT IS TRUSTWORTHY HERE: AC-2.6's naming was worth writing because A READER WAS OBSERVED MAKING THE ERROR -- vc, working carefully, and cc next, reading the same lines to port capture in WP-03. AC-2.5's direction has no such reader and no such consumer. A measured reader making a measured error is the scope test passing; an absent reader is it failing; and the two rows were decided by the same test in opposite directions on the same afternoon, which is what makes it a test rather than a preference. WHAT SURVIVES IS THE WHOLE OF IT AND IT IS WHAT THE ROW WAS MINTED TO PROTECT. The list is DERIVED from the compiler's own plan() rather than hand-written, which is the property that stops a slide being quietly exempted; the run printed \"covered: 19 exempt: 3 total: 22 of 22\" and named all three by bucket; and partition() carries all three refusals -- overlap, sum, and out-of-range. NONE OF THE THREE HAS BEEN OBSERVED TO FIRE, AND THAT IS A SOUND DETECTOR ZERO RATHER THAN A TAUTOLOGY: a wrongly decomposed partition reaches every one of them, so they could fire. Selftest prints that limit on every run, which is the caveat sitting where the number is produced rather than where it is reported."
+  }
+}

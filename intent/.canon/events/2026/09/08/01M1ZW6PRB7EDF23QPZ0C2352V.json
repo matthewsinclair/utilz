@@ -1,0 +1,14 @@
+{
+  "id": "01M1ZW6PRB7EDF23QPZ0C2352V",
+  "ts": "2026-09-08T06:45:04.395Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.edit",
+  "subject": {
+    "type": "ac",
+    "id": "ST0014/AC17"
+  },
+  "payload": {
+    "text": "`utilz use dev|opt` SWITCHES TREES IN ONE COMMAND, FROM EITHER TREE, WITH NO ARGUMENT BEYOND THE WORD AND NO NEW CONFIGURATION. RE-RULED by vc 8 Sep, simplifying its own first draft. The install already records utilz-version and source-commit in the manifest header; it also records source-tree, the absolute path it was published FROM. That one added line is what makes the verb turnkey: from the install, 'use dev' reads source-tree from the manifest; from the source, 'use opt' reads install.prefix from utilz.yaml. Each tree already holds the address of the other, so NEITHER DIRECTION NEEDS A PATH TYPED OR A SECOND CONFIG KEY INVENTED. THE FIRST DRAFT OF THIS ROW REQUIRED A dev KEY ALONGSIDE install.prefix AND BUILT THE WHOLE CRITERION AROUND REFUSING WHILE UTILZ_HOME IS EXPORTED. Both were over-specification: the second key duplicates an address the manifest can carry for free, and the export was deleted from Molt-matts on 8 Sep, so the refusal now guards a condition that normally does not exist. It stays as ONE CLAUSE rather than the centre of the row -- if UTILZ_HOME is set, use refuses, names it, and moves no link, because relinking under an override reports success while every link still serves the other tree (cc measured that on sixteen links). MECHANISM IS relink AND THERE IS EXACTLY ONE OF IT (IN-AG-HIGHLANDER-001): use parses a word to a tree, calls relink, renders (IN-AG-THIN-COORD-001). Bare `utilz use` reports which tree the links currently serve and changes nothing."
+  }
+}

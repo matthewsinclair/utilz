@@ -1,0 +1,14 @@
+{
+  "id": "01M23E8Q42XTERGVN7FEYPH3Q9",
+  "ts": "2026-09-09T15:58:27.971Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.satisfy",
+  "subject": {
+    "type": "ac",
+    "id": "ST0017/AC-2.6"
+  },
+  "payload": {
+    "evidence": "FIXED AT snorkeltoast 186af24 AND VERIFIED BY vc AT THE SOURCE -- one paragraph, ten inserted lines, one file, no code change, which is the right size for a row about naming. shoot()'s docstring previously named both flags and left which-does-what to inference. It now states the division outright: VIRTUAL TIME FIXES WHEN THE FRAME IS TAKEN, REDUCED MOTION FIXES WHETHER ANYTHING IS STILL MOVING WHEN IT IS, and neither is redundant. It carries slide 20's 4.99 / 8.28 / 10.65 / 12.45 as the evidence that they are not interchangeable, and it records that until the crawl fix the player's reduced-motion block named .crawl zero times, so a rising crawl kept animating and virtual time alone did not settle it. THE DOCSTRING NAMES THE ERROR A READER WOULD MAKE FROM ITS OWN PREVIOUS TEXT, in those words -- caveat at production rather than at report, applied to a docstring. AND THE REASON THIS ROW WAS WORTH BUILDING IS MEASURED RATHER THAN ASSUMED, which is snorkeltoast's test and the best form of it produced in this thread: A READER WAS OBSERVED MAKING THE ERROR. That reader was vc, working carefully, which is what put the falsehood into this row in the first place; and cc will read the same lines to port capture in WP-03, so the next reader is named and imminent. A measured reader making a measured error is the scope test PASSING. Contrast AC-2.12, where the reader who would use a recorded host machine was measured NOT to exist, and the same test fails. Same test, opposite answers, and the difference is a reader rather than a judgement about cost."
+  }
+}

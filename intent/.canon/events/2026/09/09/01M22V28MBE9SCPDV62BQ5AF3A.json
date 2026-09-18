@@ -1,0 +1,14 @@
+{
+  "id": "01M22V28MBE9SCPDV62BQ5AF3A",
+  "ts": "2026-09-09T10:22:53.579Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.edit",
+  "subject": {
+    "type": "ac",
+    "id": "ST0017/AC-2.3"
+  },
+  "payload": {
+    "text": "A same-file control run reports the noise floor, and the control is REPEATED, because STABILITY of the noise -- not the presence of it -- decides whether a slide is gradeable. Two slides can both read non-zero on a single control and require OPPOSITE treatment: a reproducible reading gets a floor, an unbounded one can have no safe floor, because a floor wide enough for the next sample is wider than the signal the instrument exists to detect. One run cannot tell them apart. NO FIGURE FROM ANY PRE-6c278a2 RUN MAY BE CITED HERE: every number before that fix was taken with pace=ambient scaling the runtime timeline, so the whole earlier floor table is superseded rather than relabelled. Floors are derived from the repeated control on the corrected harness and stated with their reason."
+  }
+}

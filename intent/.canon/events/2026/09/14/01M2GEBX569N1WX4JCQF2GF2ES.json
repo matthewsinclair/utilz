@@ -1,0 +1,14 @@
+{
+  "id": "01M2GEBX569N1WX4JCQF2GF2ES",
+  "ts": "2026-09-14T17:10:20.070Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.edit",
+  "subject": {
+    "type": "ac",
+    "id": "ST0020/AC-01.2"
+  },
+  "payload": {
+    "text": "With PREZ_THEME_DUPLICATES unset, empty or first, a name that two directories define resolves by first match exactly as today, with today's provenance notice and no new refusal of any kind: the artifact and stderr are byte-identical across the three. Answers: prez's other users keep first-match. A regression guard, green at HEAD by construction."
+  }
+}

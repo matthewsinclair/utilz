@@ -1,0 +1,16 @@
+{
+  "id": "01M1Y9TXMNT2K297PAVKYPJ9P3",
+  "ts": "2026-09-07T16:04:49.429Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wp.cancel",
+  "subject": {
+    "type": "wp",
+    "id": "ST0010/06"
+  },
+  "payload": {
+    "from": "not-started",
+    "reason": "Moved to ST0013 with AC15 at hv's 7 Sep re-scope. The theme addressing split is that thread's whole subject; leaving a stub here would be a second home for one piece of work.",
+    "to": "cancelled"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "id": "01M22Z0EWXP7WE0ZB0CV11MT30",
+  "ts": "2026-09-09T11:31:48.766Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.satisfy",
+  "subject": {
+    "type": "ac",
+    "id": "ST0017/AC-3.12"
+  },
+  "payload": {
+    "evidence": "cd0412d: artifact/theme.rs, two tests, both arms and both discriminating. an_unterminated_comment_is_refused_rather_than_ending_the_scan_in_silence asserts 'never closed' AND 'line 2'; an_unclosed_string_does_not_swallow_the_rest_of_the_theme puts an unclosed string on line 1, a real comment on line 2 and the reference on line 3, and asserts 'line 3', which holds only if the line-2 comment was still stripped. Verified by vc 2026-09-09: both pass under cargo test --release -p artifact (16 passed, 0 failed). Neither is trivially true -- against the replaced implementation the scan returned early with NO error, so unwrap_err panics in both, which is the same discrimination cc's red-proof measured by running it (E8 rc=0 to rc=2, injection application proved with grep -c protocol_relative_site = 0)."
+  }
+}

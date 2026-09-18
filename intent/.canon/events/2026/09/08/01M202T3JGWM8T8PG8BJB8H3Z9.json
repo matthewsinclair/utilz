@@ -1,0 +1,14 @@
+{
+  "id": "01M202T3JGWM8T8PG8BJB8H3Z9",
+  "ts": "2026-09-08T08:40:31.568Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.satisfy",
+  "subject": {
+    "type": "ac",
+    "id": "ST0014/AC15"
+  },
+  "payload": {
+    "evidence": "AT15 green in opt/utilz/test/install_guards.bats. Mis-kinded as AC14. Verified by vc 8 Sep against the live estate: env -u UTILZ_HOME and UTILZ_HOME=/nonexistent and UTILZ_HOME=<the real other tree> all return the tree the binary lives in, with EMPTY stderr, and a dispatched utility answers from the same tree, which proves the derived value was exported to children."
+  }
+}

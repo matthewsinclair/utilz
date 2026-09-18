@@ -1,0 +1,14 @@
+{
+  "id": "01M22VTSZ2A4C21Y918041NPZX",
+  "ts": "2026-09-09T10:36:17.763Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.edit",
+  "subject": {
+    "type": "ac",
+    "id": "ST0017/AC-2.3"
+  },
+  "payload": {
+    "text": "Stability of the noise, not presence of it, decides gradeability, and the repeat count is a FLAT count applied to every slide, derived from the measured distribution of renders. MEASURED 2026-09-09, thirty captures of slide 14 classified by hash: THREE distinct renders, not two -- A=21 (0.700), B=8 (0.267), C=1 (0.033). The gate misses when all n captures land in one cluster, so P(miss) = sum(p_i^n): 56.2 percent at n=2, 16.9 at n=5, first under 5 percent at n=9 and under 1 percent at n=13. Thirteen captures per slide, about twelve minutes for a 22-slide reel, which is a fact about the artefact rather than a cost anyone introduced. AN ADAPTIVE PER-SLIDE COUNT IS REFUSED, and this row said the opposite until it was measured: escalating only the slides that LOOK unstable under-detects exactly the slides that need escalating, because deciding a slide is stable requires the same evidence as proving it is. Slides 13 and 17 were clean across fifteen pairs and that is weak evidence -- at six captures the miss probability on slide 14's own distribution is 11.8 percent. NO FLOOR IS CITABLE from any run before 6c278a2, nor from the corrected control, nor from the 4-repeat run, which missed slide 14 again exactly as the three-mode arithmetic predicts. The C render has appeared once in thirty captures and has never been in any quoted floor, so the largest difference is not yet known."
+  }
+}

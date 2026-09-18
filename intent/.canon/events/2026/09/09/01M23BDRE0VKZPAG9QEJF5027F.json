@@ -1,0 +1,14 @@
+{
+  "id": "01M23BDRE0VKZPAG9QEJF5027F",
+  "ts": "2026-09-09T15:08:47.425Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.edit",
+  "subject": {
+    "type": "ac",
+    "id": "ST0017/AC-2.2"
+  },
+  "payload": {
+    "text": "A structural mismatch is asserted before any pixel comparison, and fails without reporting a pixel number at all. GRADED ON A SPLIT, snorkeltoast's own framing after they corrected themselves upward: the DETECTOR is red-proved on the real artifact in the run behind FLOORS.md -- cmd_redproof assertion 2 removes a slide from the payload and requires compare_structure to fail, observed at snorkeltoast 28b4127 as \"79 structural difference(s), first: slide COUNT differs: reference 22, new 21\". CITE THAT RUN AND NOT THE EARLIER redproof2.log, which reports the identical figure from a strictly weaker setup: it ran against a control carrying no min_defect, so slides 13 and 14 were excluded as UNDECIDED and only 18 slides were graded, where the 28b4127 run uses ctl10 -- the control FLOORS.md is generated from -- and grades 20 with one exclusion. THE CALLER'S ORDERING IS INSPECTION ONLY and redproof is candid about it in its own output, which asserts the ordering by pointing at cmd_compare's STRUCTURE block rather than observing cmd_compare refuse. So the mechanism that finds a mismatch has been made to fire against a real injury; the mechanism that guarantees no pixel number is printed first has been read, not run. THE ROW'S WORD \"ids\" IS CORRECTED RATHER THAN FAILED: slides carry no id -- collect_segment does not put a segment's `id:` into the payload -- and identity is position plus every rendering parameter except pixels, which is strictly STRONGER than an id would give. The absence is not a gap and must not be read as one. Discharged when cmd_compare's die-before-any-pixel-number is observed rather than inspected."
+  }
+}

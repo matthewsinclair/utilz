@@ -1,0 +1,14 @@
+{
+  "id": "01M22XX1D76YZ55ZF820F1VBQ8",
+  "ts": "2026-09-09T11:12:28.071Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.satisfy",
+  "subject": {
+    "type": "ac",
+    "id": "ST0017/AC-2.10"
+  },
+  "payload": {
+    "evidence": "Contingency DISCHARGED. hv ratified the reduced-motion crawl fix 2026-09-09; snorkeltoast applied it and rebuilt as reel 008. Measured before and after at 13 captures: slide 20, the outro crawl, went from repeat 10.831547 / spread 10.831547 / stability 6.831274 across FOUR render clusters to 0.000000 / 0.000000 / 0.000000 across ONE. Every other slide unchanged, which is the correct blast radius for a fix touching only .crawl .text under reduced motion. So crawl-slide numbers are now results rather than provisional, and the reel has no genuinely ungradeable slide left. Second, unasked-for confirmation: slide 1's presence figure rose 28.343 to 53.432 against an UNCHANGED stripped-render control, so the increase is the session crawl's text arriving on screen -- a check nobody designed that reads as one."
+  }
+}

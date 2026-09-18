@@ -1,0 +1,15 @@
+{
+  "id": "01M2GEBXY3JZDTREY500A9CCXF",
+  "ts": "2026-09-14T17:10:20.868Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wp.set",
+  "subject": {
+    "type": "wp",
+    "id": "ST0020/01"
+  },
+  "payload": {
+    "field": "objective",
+    "via": "address"
+  }
+}

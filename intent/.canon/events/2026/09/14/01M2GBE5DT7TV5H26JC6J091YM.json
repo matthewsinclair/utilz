@@ -1,0 +1,15 @@
+{
+  "id": "01M2GBE5DT7TV5H26JC6J091YM",
+  "ts": "2026-09-14T16:19:08.347Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wp.new",
+  "subject": {
+    "type": "wp",
+    "id": "ST0020/01"
+  },
+  "payload": {
+    "scope": "S",
+    "title": "prez refuses a duplicated theme name when PREZ_THEME_DUPLICATES=refuse"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "id": "01M22SYMKYFA0FSVYKA9ZAYTSK",
+  "ts": "2026-09-09T10:03:26.206Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.edit",
+  "subject": {
+    "type": "ac",
+    "id": "ST0017/AC-3.10"
+  },
+  "payload": {
+    "text": "The lockfile's third-party package count for the approved set is measured as a UNION and stated. MEASURED 2026-09-09 by cc: 59 packages, against prez's 26. The sum of individual deltas is 69 and is NOT quotable -- it overstates by 10 through shared transitive deps. This row previously claimed the approved union was unmeasured; that was vc's error, inferring that cc's 'minimal features' probe meant jpeg+png when it already used jpeg,png,webp,gif,tiff. Resolved as image default-features = false with those five, fast_image_resize absent."
+  }
+}

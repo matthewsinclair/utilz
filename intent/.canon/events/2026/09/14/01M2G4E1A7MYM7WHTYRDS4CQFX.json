@@ -1,0 +1,14 @@
+{
+  "id": "01M2G4E1A7MYM7WHTYRDS4CQFX",
+  "ts": "2026-09-14T14:16:44.104Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.satisfy",
+  "subject": {
+    "type": "ac",
+    "id": "ST0018/AC-01.6"
+  },
+  "payload": {
+    "evidence": "prez --help (src/args.rs USAGE: the order, highest first, and an Environment section) and help/prez.md (the Themes order sentence, a PREZ_DEFAULT_THEME subsection, the Options row) state the precedence, resolution, empty and refusals; a grep of the added lines under opt/prez and help/prez.md finds no requester or organisation name"
+  }
+}

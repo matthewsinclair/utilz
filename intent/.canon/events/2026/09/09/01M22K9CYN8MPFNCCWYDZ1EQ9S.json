@@ -1,0 +1,14 @@
+{
+  "id": "01M22K9CYN8MPFNCCWYDZ1EQ9S",
+  "ts": "2026-09-09T08:06:58.773Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.put",
+  "subject": {
+    "type": "ac",
+    "id": "ST0017/AC-HOIST-01"
+  },
+  "payload": {
+    "via": "address"
+  }
+}

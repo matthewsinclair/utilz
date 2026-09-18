@@ -1,0 +1,14 @@
+{
+  "id": "01M23E25FEZ7QC9KP0699P5M7F",
+  "ts": "2026-09-09T15:54:53.295Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.satisfy",
+  "subject": {
+    "type": "ac",
+    "id": "ST0017/AC-2.11"
+  },
+  "payload": {
+    "evidence": "THE LAST LEG IS READ, which was this row's whole discharge condition and was deliberately not taken on snorkeltoast's summary -- they had been wrong in this precise spot earlier the same day, having told vc that both bounds were computed \"in control and compare\" when compare computed nothing. VERIFIED BY vc AT THE SOURCE. load_manifest at showreel-harness:708 is five lines: it refuses a missing manifest.json and returns json.loads, validating nothing, exactly as reported -- so the budget agreement cannot live there and must live in the caller. It does. cmd_compare carries a CAPTURE block under the comment \"the captures agree about WHEN, or there is no comparison\", with two refusals: :1213 dies when a capture records no budgets, and :1222 dies with \"CAPTURE MISMATCH -- N slide(s) were photographed at different budgets\". BOTH SIT BEFORE THE PARTITION AND BEFORE THE PIXEL STAGE -- the only RMSE print in the function is :1309 -- and die() at :85 ends in sys.exit(1) with no try/except anywhere in cmd_compare, so the refusal is terminal rather than advisory. The derivation is one windows_for() at :381 with three consumers, and capture() at :648 now dies rather than defaulting to 4000. RE-MEASURED against 008 at the corrected budgets, 1100ms on all 22 slides against 4000ms before: slide 6 red at 0.999752 unchanged, 13 at 0.001500 and 14 at 0.002196 at their control floors exactly. THE CAVEAT SURVIVES SATISFACTION AND IS SNORKELTOAST'S OWN: both paths now derive from windows_for, so they agree BECAUSE TWO CODE PATHS COMPUTE THE SAME THING, which is not a guarantee and is what an assertion is for. A shared derivation is a much better position than two independent computations and it is not the same as a check."
+  }
+}

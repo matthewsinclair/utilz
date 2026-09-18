@@ -1,0 +1,14 @@
+{
+  "id": "01M22V5X12G7W1KNW3GGDG7RNB",
+  "ts": "2026-09-09T10:24:52.770Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.edit",
+  "subject": {
+    "type": "ac",
+    "id": "ST0017/AC-2.3"
+  },
+  "payload": {
+    "text": "A same-file control is REPEATED enough times to detect the slide's own instability rate at a STATED confidence, and the repeat count is derived from that rate rather than inherited as a constant. Stability of the noise, not presence of it, decides gradeability: a reproducible reading gets a floor, an unbounded one can have none, and one run cannot tell them apart. MEASURED 2026-09-09: slide 14 is bimodal, differing on 5 of 15 pairs at exactly 0.002196, and a 2-repeat control recorded it as 0.000000 -- a false floor that would go red the next time the artefact fired. THE COUNT IS A PROPERTY, NOT A NUMBER: 1/3 is one rate from one slide on one machine and may differ per template, per reel and per box. And the count must be derived from a model that does NOT treat the C(n,2) pairs as independent -- pairs sharing a capture are not. NO FLOOR MAY BE CITED from a run predating 6c278a2 (pace=ambient scaled the timeline) NOR from the corrected control (it ran at 2 repeats)."
+  }
+}

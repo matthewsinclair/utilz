@@ -1,0 +1,14 @@
+{
+  "id": "01M23MFB0RXANDRS47XBMTP91V",
+  "ts": "2026-09-09T17:46:56.409Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.edit",
+  "subject": {
+    "type": "ac",
+    "id": "ST0017/AC-5.3"
+  },
+  "payload": {
+    "text": "utilz doctor reports showreel's external dependencies as optional lines, present because the tool is present. THE POPULATION IS NAMED, BECAUSE AN UNNAMED ONE HERE CAN BE SATISFIED BY REPORTING NOTHING. Measured by vc 2026-09-09 17:59Z. The reference shells out TWICE -- `pdftoppm` at showreel:288 and `qrencode` at showreel:680 -- and THE PORT'S POPULATION IS ONE, NOT TWO, because `qrencode` was absorbed into the approved crate budget as `qrcode 0.14` with default-features off and the svg feature on. So the external dependency this row is about is `pdftoppm`, and design.md rules why it STAYS external: every Rust PDF renderer is bindings to PDFium or MuPDF, which breaks the self-contained claim motivating the port, and MuPDF drags AGPL in. It runs only in `init` and never in `build`, so the hot path is pure. WITHOUT THE NAME THIS ROW IS A CENSUS OVER A POPULATION NOBODY STATED: showreel is a self-contained Rust binary, so \"doctor reports its external dependencies\" is satisfied identically by doctor reporting `pdftoppm` and by doctor knowing nothing about showreel at all, and the two outputs are indistinguishable. Note also that prez's own manifest declares `dependencies: []` for exactly the reasons in its comment -- cargo is a BUILD-time need deliberately undeclared, and a browser is needed only by verbs that already refuse well -- so showreel's manifest must not copy prez's empty list by symmetry. Discharged when `utilz doctor` reports `pdftoppm` as an OPTIONAL line, present because showreel is present and absent when it is not, and the line is shown to appear and disappear rather than read from source."
+  }
+}

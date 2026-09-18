@@ -1,0 +1,14 @@
+{
+  "id": "01M27T3SCBA1Y2423SDJV2NXT3",
+  "ts": "2026-09-11T08:42:27.084Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.withdraw",
+  "subject": {
+    "type": "ac",
+    "id": "ST0017/AC-5.3"
+  },
+  "payload": {
+    "reason": "WITHDRAWN 2026-09-11 by hv: the population is empty. The port's one external dependency would be pdftoppm, which only init calls, and the port has no init. Reporting pdftoppm as showreel's dependency would be false today. If a follow-on thread lands init, the row returns with it."
+  }
+}

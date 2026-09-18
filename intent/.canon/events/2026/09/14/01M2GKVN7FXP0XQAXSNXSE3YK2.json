@@ -1,0 +1,15 @@
+{
+  "id": "01M2GKVN7FXP0XQAXSNXSE3YK2",
+  "ts": "2026-09-14T18:46:19.120Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "issues.add",
+  "subject": {
+    "type": "issue",
+    "id": "0037"
+  },
+  "payload": {
+    "severity": "low",
+    "title": "utilz doctor splits its report across stdout and stderr, so a saved or paged report loses every verdict"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "id": "01M2FJCQW0Y2ED5D15VA0A83TT",
+  "ts": "2026-09-14T09:01:27.297Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "issues.add",
+  "subject": {
+    "type": "issue",
+    "id": "0024"
+  },
+  "payload": {
+    "severity": "medium",
+    "title": "utilz install neither builds nor ships showreel, so an installed prez showreel execs a missing file"
+  }
+}

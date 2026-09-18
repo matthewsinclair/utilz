@@ -1,0 +1,15 @@
+{
+  "id": "01M1YTDC2TXY1AM4MEFE784NKY",
+  "ts": "2026-09-07T20:54:31.258Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wp.new",
+  "subject": {
+    "type": "wp",
+    "id": "ST0014/11"
+  },
+  "payload": {
+    "scope": "S",
+    "title": "The explicit relink verb for the PATH symlinks"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "id": "01M23B5N6MASZSTNYZYV5T2FXP",
+  "ts": "2026-09-09T15:04:21.972Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.satisfy",
+  "subject": {
+    "type": "ac",
+    "id": "ST0017/AC-2.8"
+  },
+  "payload": {
+    "evidence": "CODE AND RAN AND OBSERVED, answered from harness source by snorkeltoast at vc's request rather than inferred from FLOORS.md's output -- the distinction the row turns on, since a clean table cannot show whether a guard exists. control_blocked() folds absent, unprovable, undecided and ungradeable into one blocked set, and grade_per_slide never grades a blocked slide. In the run behind FLOORS.md, slide 1 printed \"b slide 1 RMSE 0.000000\" and was EXCLUDED, under a heading naming \"3 covered slide(s) are NOT gradeable\" and a closing note that a green here does not cover them and that the reasons are not all the same reason. So the exact artefact this row exists to refuse -- a per-slide zero over a frame that did not contain the slide's content -- was produced and refused as evidence in the same run, by name. Corroborated in redproof2.log: \"3 not-gradeable slide(s) were excluded by name rather than tolerated\", the three being 1, 13 and 14. Slide 1's clean zero is the measured instance: its captured frame holds the sunburst ground and wordmark chrome and none of the venue, city, date or action, because the crawl text has not entered frame at that capture phase."
+  }
+}

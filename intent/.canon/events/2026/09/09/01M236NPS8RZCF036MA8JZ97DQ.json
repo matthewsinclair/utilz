@@ -1,0 +1,14 @@
+{
+  "id": "01M236NPS8RZCF036MA8JZ97DQ",
+  "ts": "2026-09-09T13:45:45.000Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.edit",
+  "subject": {
+    "type": "ac",
+    "id": "ST0017/AC-3.6"
+  },
+  "payload": {
+    "text": "The safety floors hold in compiler and runtime, and ?speed= cannot cross them. hv RULED 2026-09-09: max_ease is capped at 2400. That is ONE constant and it closes the whole crossing space STRUCTURALLY rather than by refusal -- runtime ease <= 2400 < 2500 <= runtime dwell, for every config, every speed and both pace modes. vc verified the envelope in source before putting it up: cc was right that no compile-time enforcement closes it, because at ?speed=16 a config with dwell 20000 and ease 2600 crosses while authored ease sits eight times under authored dwell, so the compiler cannot see it. What the measurement added is that BOTH defects -- the constants crossing at speed=1, and the dwellOf/easeOf asymmetry crossing at any speed -- reduce to one condition, runtime ease exceeding the 2500 dwell floor. Capping below that floor makes it unreachable rather than refused, which is the difference between a guard and a rule. Cost: no reel may crossfade slower than 2.4s; 45h's worst authored ease is 900, so nothing real moves. Raising min_dwell instead would also work and was not taken, because it changes pacing for every existing slide."
+  }
+}

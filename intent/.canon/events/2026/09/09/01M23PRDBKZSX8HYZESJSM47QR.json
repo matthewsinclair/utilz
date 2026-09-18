@@ -1,0 +1,14 @@
+{
+  "id": "01M23PRDBKZSX8HYZESJSM47QR",
+  "ts": "2026-09-09T18:26:50.868Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.satisfy",
+  "subject": {
+    "type": "ac",
+    "id": "ST0017/AC-3.8"
+  },
+  "payload": {
+    "evidence": "Verified by vc 2026-09-09 18:30Z at source. THE PROPERTY IS STRUCTURAL RATHER THAN DISCIPLINARY, which is the strongest form this row could take.\n\nONE WALK, AND THE ASSET LIST IS A PROJECTION OF THE SLIDE LIST. crates/showreel/src/main.rs:123 reads `slides.iter().flat_map(showreel::slide::Slide::assets).collect()`. There is no second traversal of the config: `Slide::assets()` at slide.rs:132 matches on the slide's OWN kind and returns the paths that slide reads -- an image's path, a strapline's mark, a venue's image, an atwork's qr, and an empty vector for the shapes that read no file. SO THE TWO CANNOT DISAGREE BECAUSE THERE IS ONLY ONE OF THEM, and the recycler that decides an asset is safe to delete reads exactly what the build read.\n\nTHE REFERENCE'S `dry` FLAG HAS NO COUNTERPART HERE AND THAT IS THE REASON, which is cc's observation and is the part that makes this a design property rather than a coincidence: `dry` existed because the Python's `collect_segment` both PLANNED and EMBEDDED, so a caller wanting the plan without the bytes needed a flag. Separating the plan from the embedding removes the flag and removes the second walk with it.\n\ncc'S RED-PROOF: dropping a strapline's mark from the declared assets fires 1 of 61, with the injection recorded verbatim in cec1645's message so it can be re-applied. That is the discriminating direction -- it proves `assets()` actually reports what a slide reads, rather than proving only that the two lists have the same length."
+  }
+}

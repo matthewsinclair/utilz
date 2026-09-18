@@ -1,0 +1,14 @@
+{
+  "id": "01M22TGQASMR28JK2CEW631G7E",
+  "ts": "2026-09-09T10:13:18.810Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.satisfy",
+  "subject": {
+    "type": "ac",
+    "id": "ST0017/AC-1.7"
+  },
+  "payload": {
+    "evidence": "Verified by vc: crate/Cargo.toml carries [workspace] at :62 AND the [package], so every include_str! path, the shim and prez.bats's fixture are unchanged. [profile.release] proven IN EFFECT by DIFFERENCE, not read off the manifest -- cc built the same source with strip and lto disabled and measured 4,729,000 bytes / 2,534 nm entries against 4,384,832 / 108, so the profile is doing 344,168 bytes and 2,426 symbols of work."
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "id": "01M2FH3V36W43063V9MBT01PM7",
+  "ts": "2026-09-14T08:39:07.111Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "issues.add",
+  "subject": {
+    "type": "issue",
+    "id": "0023"
+  },
+  "payload": {
+    "severity": "medium",
+    "title": "prez shim announces a rebuild on every run, because the rebuild it triggers cannot clear the staleness it detects"
+  }
+}

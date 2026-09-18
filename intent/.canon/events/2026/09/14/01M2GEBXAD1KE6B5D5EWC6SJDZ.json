@@ -1,0 +1,14 @@
+{
+  "id": "01M2GEBXAD1KE6B5D5EWC6SJDZ",
+  "ts": "2026-09-14T17:10:20.237Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.edit",
+  "subject": {
+    "type": "ac",
+    "id": "ST0020/AC-01.7"
+  },
+  "payload": {
+    "text": "A PREZ_THEME_DUPLICATES value other than unset, empty, first or refuse is refused by name at every compile, whether or not the build resolves a theme name: exit 2, naming the variable and its value, listing the accepted values, and no output written, for a --theme name, a --theme-file path and a deck that names no theme alike. A value that is not UTF-8 is refused by name the same way. This is not the duplicate check, which AC-01.3 limits to the name being resolved. Red-first: HEAD ignores the variable."
+  }
+}

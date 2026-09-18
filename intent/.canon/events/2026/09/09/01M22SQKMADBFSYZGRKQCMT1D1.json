@@ -1,0 +1,14 @@
+{
+  "id": "01M22SQKMADBFSYZGRKQCMT1D1",
+  "ts": "2026-09-09T09:59:35.818Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.satisfy",
+  "subject": {
+    "type": "ac",
+    "id": "ST0017/AC-2.7"
+  },
+  "payload": {
+    "evidence": "Snorkeltoast e2380f5, verified by vc 2026-09-09. Full reverse-order capture against the forward control, compared per slide: slide 14 reads 0.002196 captured 14th forward AND 7th reverse; slide 20 reads 12.453773 captured 20th forward and 1st reverse; the twenty untouched slides are 0.000000 in both orders. The deviation follows the SLIDE, not the capture position, so cc's positional hypothesis is ruled out and no run-order floor sits under every slide. Discharged before any floor was set, which was the point."
+  }
+}

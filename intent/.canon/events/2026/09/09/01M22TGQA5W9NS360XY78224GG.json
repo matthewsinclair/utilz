@@ -1,0 +1,14 @@
+{
+  "id": "01M22TGQA5W9NS360XY78224GG",
+  "ts": "2026-09-09T10:13:18.789Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.satisfy",
+  "subject": {
+    "type": "ac",
+    "id": "ST0017/AC-1.4"
+  },
+  "payload": {
+    "evidence": "cc measured 4,384,864 bytes against the 8,388,608 budget, stated as a number with the budget beside it rather than as a distance."
+  }
+}

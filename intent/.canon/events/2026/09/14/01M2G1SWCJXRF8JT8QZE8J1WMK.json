@@ -1,0 +1,15 @@
+{
+  "id": "01M2G1SWCJXRF8JT8QZE8J1WMK",
+  "ts": "2026-09-14T13:30:46.546Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "issues.add",
+  "subject": {
+    "type": "issue",
+    "id": "0031"
+  },
+  "payload": {
+    "severity": "medium",
+    "title": ".prettierignore exempts only intent/st/** and intent/todo.md, so the pre-commit formatter can rewrite issue and whiteboard views after the doctor gate"
+  }
+}

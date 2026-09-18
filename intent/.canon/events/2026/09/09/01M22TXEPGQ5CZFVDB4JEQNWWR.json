@@ -1,0 +1,14 @@
+{
+  "id": "01M22TXEPGQ5CZFVDB4JEQNWWR",
+  "ts": "2026-09-09T10:20:15.952Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.edit",
+  "subject": {
+    "type": "ac",
+    "id": "ST0017/AC-3.7"
+  },
+  "payload": {
+    "text": "player.html carries no brand token, and the check covers STRING LITERALS in JS as well as CSS custom properties. Red-proved against the known live instance: player.html:613 is 'add(\"Producer\", REEL.producer || \"Snorkeltoast\")', a hardcoded brand name in the shell README section 28 says knows about no brand. HOIST.md section 4's proposed guard, grep for '--pop-', returns ZERO hits against it -- verified 2026-09-09 -- because it was written from the one instance that had been found, a CSS custom property, and so catches that instance rather than the class. The check applies to player.html and showreel and NOT to themes/, whose brand strings are legitimate."
+  }
+}

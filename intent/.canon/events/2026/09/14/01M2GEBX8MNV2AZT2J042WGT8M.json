@@ -1,0 +1,14 @@
+{
+  "id": "01M2GEBX8MNV2AZT2J042WGT8M",
+  "ts": "2026-09-14T17:10:20.181Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.edit",
+  "subject": {
+    "type": "ac",
+    "id": "ST0020/AC-01.5"
+  },
+  "payload": {
+    "text": "One file reached twice is one definition, identified by device and inode: with refuse set, a directory listed twice on the path, a directory given by both --theme-path and PREZ_THEME_PATH, a symlink to a directory already on the path, and a hard link to a <name>.css already on the path each build. A regression guard, green at HEAD by construction; AT15's byte-identical copies are its control."
+  }
+}

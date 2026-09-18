@@ -1,0 +1,14 @@
+{
+  "id": "01M27T3SBJ967F46JR8SQSHH16",
+  "ts": "2026-09-11T08:42:27.058Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.withdraw",
+  "subject": {
+    "type": "ac",
+    "id": "ST0017/AC-4.2"
+  },
+  "payload": {
+    "reason": "DEFERRED 2026-09-11 by hv: needs the qr verb and the master stamp (AC-4.1), neither of which the port has. The build already refuses a missing QR by name and embeds the one the config points at; detecting that a QR was generated for a superseded address is init/qr-side work. Reinstate under a follow-on thread with WP-04."
+  }
+}

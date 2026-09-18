@@ -1,20 +1,15 @@
 {
-  "intent_version": "3.0.0",
-  "project_name": "Utilz",
   "author": "matts",
-  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
-  "intent_dir": "intent",
-  "languages": [
-    "shell",
-    "rust"
-  ],
-  "todo": {
-    "window_hours": 24
-  },
   "backup": {
     "schedule": "daily"
   },
   "created": "2025-12-28",
+  "intent_dir": "intent",
+  "intent_version": "3.0.3",
+  "languages": [
+    "shell",
+    "rust"
+  ],
   "plugins": {
     "agents": {
       "config_path": "intent/plugins/agents"
@@ -23,5 +18,10 @@
       "subagents_path": "intent/plugins/claude/subagents"
     }
   },
-  "st_prefix": "ST"
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "project_name": "Utilz",
+  "st_prefix": "ST",
+  "todo": {
+    "window_hours": 24
+  }
 }

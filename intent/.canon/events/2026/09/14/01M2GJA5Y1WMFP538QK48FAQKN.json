@@ -1,0 +1,15 @@
+{
+  "id": "01M2GJA5Y1WMFP538QK48FAQKN",
+  "ts": "2026-09-14T18:19:17.826Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "issues.add",
+  "subject": {
+    "type": "issue",
+    "id": "0036"
+  },
+  "payload": {
+    "severity": "low",
+    "title": "The prez crate has never been through rustfmt, so devbin's fmt rust and check format are switched off"
+  }
+}

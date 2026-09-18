@@ -1,0 +1,14 @@
+{
+  "id": "01M254V9MRC6ATBMA4DQT79X68",
+  "ts": "2026-09-10T07:52:19.865Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.satisfy",
+  "subject": {
+    "type": "ac",
+    "id": "ST0017/AC-3.2"
+  },
+  "payload": {
+    "evidence": "RE-VERIFIED BY vc AT SOURCE 2026-09-10 07:52Z, AFTER `bug:` BECAME THE SEVENTH ADMISSION SITE. The previous evidence enumerated SIX and named `bug:` explicitly as NOT one -- true when written, false after `6cbb16b` -- so it was retired through `unsatisfy` rather than left describing a tree that had moved. **cc flagged the staleness themselves, against their own change**, which is why this cost one commit instead of a grading-time surprise.\nEVERY ADMISSION SITE ROUTES THROUGH ONE FUNCTION, COUNTED WITH THE MATCH RULE STATED: `admit::named(` or `admit::scanned(` on a non-comment line outside `#[cfg(test)]`. **SEVEN**: `slide.rs` :284 `qr:`, :298 `mark:`, :321 `image:`, :350 `file:`, :444 `from:`, :449 `files:`, and `payload.rs:154` `bug:`/`file:`. All seven reach ONE private `classify()` at `admit.rs:122` through exactly two public shapes, `named` :166 and `scanned` :193.\n**THE PAREN IS WHAT SEPARATES A CALL FROM PROSE AND vc GOT THIS WRONG FIRST.** An earlier count matching the bare identifier returned NINE, because two doc comments mention `admit::named`. The comment-exclusion vc then claimed as a control excluded ZERO -- an empty population -- so it proved nothing and the paren did all the work. Stated here because a count is only as good as the rule that produced it, which is this contract's own repeated lesson.\nA BAD INPUT REFUSES WITH A REMEDY, AND THE SEVENTH SITE CARRIES BOTH HALVES: `payload.rs:147` refuses a declared bug with an empty `file:` BY NAME with the remedy `bug: {file: assets/brand/corner.png}, or remove the bug: block`, and `:154` refuses a bad type through the classifier. That matches the reference, which dies at `showreel:806` on a declared bug with no file and `:809` on a missing one.\nTHE DROP CLAUSE IS UNCHANGED AND STILL DISCHARGED: `Collected { slides, dropped }`, the gallery returning early with the list, `plan::report` starting `out` as `dropped.to_vec()` so the segment lines EXTEND `report_unused`, and `main.rs:155` the production caller. Both tests re-checked for non-vacuity when this row was first satisfied.\n`plan.rs:153` STILL JOINS `bug.file` UNCLASSIFIED AND THAT IS CORRECT, NOT RESIDUE. That join computes the USED SET for `report_unused` -- a different job from admission, which takes paths without admitting them. A `.txt` bug lands in `used` there AND is refused at `payload.rs:154`, so the build fails rather than proceeding silently.\nTHE ROW'S TWO RECORDED LIMITS STAND: `files:` is exercised by no real config in this estate, and 45h exercises `exclude:` not at all -- though the tests now do both. 45h's silence remains the correct OUTPUT and not evidence for the reporting arms."
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "id": "01M1YTDC2AK2ZJHVPPJ3WX7CMN",
+  "ts": "2026-09-07T20:54:31.243Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wp.new",
+  "subject": {
+    "type": "wp",
+    "id": "ST0014/10"
+  },
+  "payload": {
+    "scope": "S",
+    "title": "utilz test refuses from an install tree"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "id": "01M20NR5ARTS92GT7QYGF95Q7S",
+  "ts": "2026-09-08T14:11:30.777Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "issues.add",
+  "subject": {
+    "type": "issue",
+    "id": "0013"
+  },
+  "payload": {
+    "severity": "medium",
+    "title": "acceptance.sh AT03 captured stderr that nothing ever read, so a noisy success looked silent"
+  }
+}

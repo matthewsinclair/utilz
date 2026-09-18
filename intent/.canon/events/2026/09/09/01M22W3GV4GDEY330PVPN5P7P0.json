@@ -1,0 +1,15 @@
+{
+  "id": "01M22W3GV4GDEY330PVPN5P7P0",
+  "ts": "2026-09-09T10:41:03.332Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "issues.add",
+  "subject": {
+    "type": "issue",
+    "id": "0016"
+  },
+  "payload": {
+    "severity": "medium",
+    "title": "utilz install publishes without consulting or recording the gates CI runs"
+  }
+}

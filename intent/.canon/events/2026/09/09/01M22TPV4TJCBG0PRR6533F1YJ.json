@@ -1,0 +1,14 @@
+{
+  "id": "01M22TPV4TJCBG0PRR6533F1YJ",
+  "ts": "2026-09-09T10:16:39.322Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.satisfy",
+  "subject": {
+    "type": "ac",
+    "id": "ST0017/AC-1.6"
+  },
+  "payload": {
+    "evidence": "R4 verified by vc in the shared crate: artifact/src/theme.rs:270 and :275 are two templates parameterised over {mechanism} and {elsewhere}, giving four distinct messages across the shadowing and env-vs-flag axes, with prez's vocabulary (deck, --theme-path, PREZ_THEME_PATH) injected by the Registry rather than hardcoded. cc drove all four through the shim and each matches the pre-extraction wording. R1 red-proved by cc: injecting the naive strip fails stripping_a_comment_does_not_move_the_lines_after_it with 'the offender is on line 4 of the FILE; a comment-deleting strip reports line 2'; restored, sha matches, 12 pass."
+  }
+}

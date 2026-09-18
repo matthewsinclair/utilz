@@ -1,0 +1,14 @@
+{
+  "id": "01M2GH7WCS8Q25W0C7Q72TVPGE",
+  "ts": "2026-09-14T18:00:33.945Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.satisfy",
+  "subject": {
+    "type": "ac",
+    "id": "ST0020/AC-01.9"
+  },
+  "payload": {
+    "evidence": "prez --help (src/args.rs USAGE, Environment: a PREZ_THEME_DUPLICATES entry with its values, what counts as a definition, the refusal, that any other value is refused every time a deck is built, and that unset keeps first match) and help/prez.md (a PREZ_THEME_DUPLICATES subsection after PREZ_DEFAULT_THEME with the same and the refusal's text, and a pointer from PREZ_THEME_PATH); neither names any organisation (the diff under opt/prez and help/prez.md searched: 0 hits)"
+  }
+}

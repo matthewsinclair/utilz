@@ -1,0 +1,14 @@
+{
+  "id": "01M22YWSC61P72G53K432AR1AP",
+  "ts": "2026-09-09T11:29:48.423Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.edit",
+  "subject": {
+    "type": "ac",
+    "id": "ST0017/AC-3.13"
+  },
+  "payload": {
+    "text": "The scan's grammar matches every surface it is applied to. refuse_external runs on THREE surfaces -- theme.css, theme.js and layout.html (artifact/theme.rs:201-206) -- and strip_comments implements CSS's comment and string grammar, which JS and HTML do not share. MEASURED 2026-09-09 by vc at the artifact, both arms: the mismatch runs in BOTH directions, and the row was minted believing it ran in only one. Over-refusal (loud): a theme.js attribution in a // comment and an HTML attribution in <!-- --> are both refused, which is the harm the comment exemption exists to prevent. UNDER-refusal (silent): a live href in layout.html between a stray /* and a later */ is stripped before the scan and SHIPS -- issue 0018, the same class as 0014, 0015 and 0017 on the surface none of them looked at. So the discharge is NOT a written statement that the CSS scanner is adequate, because it is not: either the grammar fits each surface, or the surfaces the scanner cannot hold are refused outright and prez stops advertising them at theme.rs:435. Population is zero -- nine theme.css files estate-wide, no theme.js and no layout.html -- so nothing in the wild is affected and the route is nonetheless documented. vc's ruling on cost and shape is on the record in cc's inbox."
+  }
+}

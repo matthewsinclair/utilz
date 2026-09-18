@@ -1,0 +1,14 @@
+{
+  "id": "01M22TGQBEHDDSX1ZRE80333PP",
+  "ts": "2026-09-09T10:13:18.830Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.satisfy",
+  "subject": {
+    "type": "ac",
+    "id": "ST0017/AC-1.9"
+  },
+  "payload": {
+    "evidence": "Verified by vc at e0dd357: common.sh:855 and tests.yml:284 both carry --workspace --no-fail-fast. Measured before the fix: the estate's own command built 1 executable where --workspace builds 2, so artifact's 12 tests would never have run."
+  }
+}

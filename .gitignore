@@ -17,7 +17,6 @@ intent/.treeindex/
 intent/.cache/
 
 # D53: the event log lives in the store; its file form is produced by `intent export`.
-intent/events.jsonl
 intent/.backup/
 
 # Rust build output. This rule lands BEFORE the first in-tree `cargo build`,

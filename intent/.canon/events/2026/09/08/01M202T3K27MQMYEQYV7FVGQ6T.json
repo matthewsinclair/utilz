@@ -1,0 +1,14 @@
+{
+  "id": "01M202T3K27MQMYEQYV7FVGQ6T",
+  "ts": "2026-09-08T08:40:31.587Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.satisfy",
+  "subject": {
+    "type": "ac",
+    "id": "ST0014/AC16"
+  },
+  "payload": {
+    "evidence": "AT16 green in opt/utilz/test/relink.bats. Mis-kinded as AC14. Verified by vc 8 Sep on hv's real ~/.local/bin: 16 changed / 15 left alone, idempotent on a second run (0 changed / 16 already correct), and my own ls -lT read shows exactly 16 links dated 8 Sep against 21 others dating back to March."
+  }
+}

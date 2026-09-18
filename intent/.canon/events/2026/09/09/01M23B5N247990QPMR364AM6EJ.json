@@ -1,0 +1,14 @@
+{
+  "id": "01M23B5N247990QPMR364AM6EJ",
+  "ts": "2026-09-09T15:04:21.828Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.edit",
+  "subject": {
+    "type": "ac",
+    "id": "ST0017/AC-2.6"
+  },
+  "payload": {
+    "text": "Every determinism mechanism is named singly, and the mechanisms are named CORRECTLY for the artifact being graded. THIS ROW ASSERTED A FALSEHOOD UNTIL 2026-09-09 and the correction is snorkeltoast's, verified at the artifact by vc: the row said crawl determinism comes from --virtual-time-budget alone and that --force-prefers-reduced-motion does nothing to the crawl. THAT IS BACKWARDS FOR BUILD 008. player.html's reduced-motion block carries the rule `.crawl .text{animation:none!important}` -- cited by token -- and that rule IS the crawl fix. Its own comment records the measurement: the outro crawl went from RMSE 4.99 / 8.28 / 10.65 between captures to 0.000000 three times, and the comment states that the block previously claimed to drop all motion while naming .crawl zero times. Virtual time alone did NOT make the crawl deterministic; that is where slide 20's 12.45 came from. THE ROW WAS TRUE OF BUILD 007 AND THE FIX FALSIFIED IT, which is the hazard being recorded: a criterion describing a mechanism goes stale when the mechanism is repaired, and it goes stale SILENTLY because a row is prose and prose does not fail. The single-point-of-failure concern the row was minted for survives unchanged and is now the whole of it -- one mechanism described as two reads as covered when it is not. Discharged when the harness names each mechanism singly AND the naming is checked against the artifact it grades rather than against the build the row was written from."
+  }
+}

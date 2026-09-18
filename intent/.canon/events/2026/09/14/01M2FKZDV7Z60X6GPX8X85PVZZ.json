@@ -1,0 +1,14 @@
+{
+  "id": "01M2FKZDV7Z60X6GPX8X85PVZZ",
+  "ts": "2026-09-14T09:29:08.200Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "st.new",
+  "subject": {
+    "type": "thread",
+    "id": "ST0018"
+  },
+  "payload": {
+    "title": "prez: a fallback theme for decks that name none (PREZ_DEFAULT_THEME)"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "id": "01M1Y5T48VGSJ3B6XP17YW5BJY",
+  "ts": "2026-09-07T14:54:29.147Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "st.new",
+  "subject": {
+    "type": "thread",
+    "id": "ST0012"
+  },
+  "payload": {
+    "title": "Estate file policy: what must be proved before a realised file is removed"
+  }
+}

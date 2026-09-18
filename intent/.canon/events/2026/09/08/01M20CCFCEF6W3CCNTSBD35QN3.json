@@ -1,0 +1,15 @@
+{
+  "id": "01M20CCFCEF6W3CCNTSBD35QN3",
+  "ts": "2026-09-08T11:27:50.671Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "issues.add",
+  "subject": {
+    "type": "issue",
+    "id": "0011"
+  },
+  "payload": {
+    "severity": "medium",
+    "title": "install_guards.bats compares a live HEAD against a fixture-time install, so a concurrent commit reddens it for the wrong reason"
+  }
+}

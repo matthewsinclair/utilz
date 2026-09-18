@@ -1,0 +1,15 @@
+{
+  "id": "01M2FYZBSYRPW56HPJVTXY44D4",
+  "ts": "2026-09-14T12:41:20.447Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "issues.add",
+  "subject": {
+    "type": "issue",
+    "id": "0029"
+  },
+  "payload": {
+    "severity": "low",
+    "title": "AT20's forwarded leg reports a window that never opened as a wrong criterion, so a CI flake reads as a finding against AC19(d)"
+  }
+}

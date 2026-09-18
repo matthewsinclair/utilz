@@ -1,0 +1,14 @@
+{
+  "id": "01M208BW6SCDYGPVK6B571M7PQ",
+  "ts": "2026-09-08T10:17:36.729Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.edit",
+  "subject": {
+    "type": "ac",
+    "id": "ST0013/AC02"
+  },
+  "payload": {
+    "text": "`--theme-file` TAKES A PATH IN EITHER SHAPE THE OLD `--theme` TOOK: a `.css` FILE, or a DIRECTORY holding `theme.css`. Both verified accepted by the pinned binary 8 Sep. THE FLAG'S NAME IS NOT THE SPECIFICATION -- AC01 SAYS IT 'resolves a path ONLY', AND A PATH IS BOTH SHAPES. THIS ROW WAS MINTED 8 Sep SAYING THE OPPOSITE AND IT WAS WRONG. Its first form ruled that a directory passed to `--theme` must be refused naming `--theme-path=<parent>` plus `--theme=<name>`, on the premise that a refusal naming `--theme-file` 'would send a real user to a flag that cannot take what they have'. That premise is FALSE: `--theme-file` can take exactly what they have. vc read the flag's name where hv's text said path, then built a ruling on top of it; cc caught it by asking what the flag accepts rather than assuming, before writing any of it. So AC01's clause (f) stands EXACTLY AS hv WROTE IT -- a path given to `--theme` is refused naming `--theme-file` -- and this row no longer contradicts it. WHAT THIS ROW STILL DECIDES, and why it is not withdrawn: AC01 leaves the accepted SHAPES to be inferred from the word FILE in the flag's name, which is precisely the inference that produced the wrong ruling above, so it is pinned here instead. A prez theme IS a directory containing `theme.css` -- true of every built-in -- and directory addressing must not be lost, which is a bigger breaking change than the one AC01 deliberately takes. MIGRATION IS ONE WORD: the geodica node's live invocation, `--theme=\\\"$ESTATE/Clients/<domain>/_themes/<name>\\\"`, used twice in an hour and rendering both E0024 client decks since 3 Sep, becomes `--theme-file=\\\"...\\\"` and nothing else changes. `--theme-path=<parent>` plus `--theme=<name>` remains available and composes as AC01 specifies, but it is an option rather than the required remedy."
+  }
+}

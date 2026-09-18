@@ -1,0 +1,14 @@
+{
+  "id": "01M23B5N4C2JMG3CV5EX6EGK54",
+  "ts": "2026-09-09T15:04:21.900Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.edit",
+  "subject": {
+    "type": "ac",
+    "id": "ST0017/AC-2.12"
+  },
+  "payload": {
+    "text": "Where the harness fixes a capture time, it states the machine and measurement it came from, because settling is a property of the ENVIRONMENT as much as the content and a value measured on one box is a lucky constant elsewhere. Converge-until-two-frames-agree is the preferred shape and is to be decided on that merit alone -- NOT as a fix for the crossfade misdiagnosis that prompted it, which AC-2.13 addresses instead. Its cost is named: convergence and the transition are the same phenomenon, so a converge loop settles correctly on a crossfade but on a CRAWL only after the animation ends, which is past the dwell. The bound therefore does real work and hitting it is common rather than exceptional. NOT SATISFIED, MEASURED 2026-09-09 by snorkeltoast against their own harness: capture times are DERIVED per slide in control and compare, so the row mostly does not bite -- but where a number is fixed, NO MACHINE IS NAMED ANYWHERE. SHOT_TIMEOUT_S 45 and SHOT_SETTLE_S 0.6 carry their measurement (\"the shot lands in ~2s and the process sat for the full 90s timeout\") and no host. The manifest records the Chrome version and the viewport and records no host. And the 4000ms fallback of AC-2.11's two unbounded commands is a fixed capture time with NO measurement behind it at all, which is the sharper half: a constant with neither a machine nor a reading is not a lucky constant, it is an unexamined one."
+  }
+}

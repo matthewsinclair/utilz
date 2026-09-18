@@ -1,0 +1,14 @@
+{
+  "id": "01M23BQGSNR49RASY05X5P3NCA",
+  "ts": "2026-09-09T15:14:07.285Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.satisfy",
+  "subject": {
+    "type": "ac",
+    "id": "ST0017/AC-3.1"
+  },
+  "payload": {
+    "evidence": "VERIFIED BY vc INDEPENDENTLY, AND THE CASE BUILT TO BREAK IT LOST. cc evidenced 8 deny_unknown_fields attributes against 8 structs. vc counted differently on purpose: 8 attribute LINES matching #[serde(...deny_unknown_fields...)], and 9 lines matching #[derive(...Deserialize...)] -- a nine-against-eight that would mean one deserialisable type accepts unknown keys. The ninth is segment.rs's `struct Just` inside #[cfg(test)] mod tests, a deliberate partial extractor pulling only `segments` out of the whole 45h fixture, where deny_unknown_fields would be WRONG because it would refuse the reel's other top-level keys and break the test. So coverage is complete over the PRODUCTION population -- Schema, Artist, Session, Bug, Social, OutroRow, Defaults, Reel, all eight carrying the attribute on the line after their derive. The row's exact property is tested by name in an_unknown_key_is_refused_named_and_with_the_valid_set, with a parse-whole control beside it, and the valid set is deliberately the union of compiler-read and player-read keys so the compiler does not refuse a key the player consumes. NOTED AND NOT CHARGED: cc's \"8 structs\" is the production population and vc's 9 is the file, and neither statement named its population -- which is a fourth instance of the class cc diagnosed in the same message, in cc's own evidence, and it is confirmation of their thesis rather than a fault. Nothing turns on it here because the two populations reconcile exactly and the difference is a test helper."
+  }
+}

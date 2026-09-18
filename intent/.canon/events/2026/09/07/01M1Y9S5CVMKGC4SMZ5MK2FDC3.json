@@ -1,0 +1,14 @@
+{
+  "id": "01M1Y9S5CVMKGC4SMZ5MK2FDC3",
+  "ts": "2026-09-07T16:03:51.835Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "st.new",
+  "subject": {
+    "type": "thread",
+    "id": "ST0013"
+  },
+  "payload": {
+    "title": "prez theme addressing: split --theme, --theme-file and --theme-path"
+  }
+}

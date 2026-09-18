@@ -1,0 +1,15 @@
+{
+  "id": "01M1YTDC07FE16KB5BJYR3EKDN",
+  "ts": "2026-09-07T20:54:31.175Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wp.new",
+  "subject": {
+    "type": "wp",
+    "id": "ST0014/06"
+  },
+  "payload": {
+    "scope": "S",
+    "title": "The install library: owned set, predicates, prefix, manifest"
+  }
+}

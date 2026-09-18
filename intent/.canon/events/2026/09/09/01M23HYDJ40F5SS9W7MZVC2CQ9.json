@@ -1,0 +1,14 @@
+{
+  "id": "01M23HYDJ40F5SS9W7MZVC2CQ9",
+  "ts": "2026-09-09T17:02:44.805Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.edit",
+  "subject": {
+    "type": "ac",
+    "id": "ST0017/AC-1.2"
+  },
+  "payload": {
+    "text": "WP-01 adds no third-party cost to prez. The comrak dependency line is byte-identical across WP-01, and prez's COMPILED closure -- `cargo tree -p prez --edges normal,build` -- carries the same 17 third-party packages before WP-01 and at HEAD. THE INSTRUMENT IS PREZ'S CLOSURE AND NOT THE WORKSPACE LOCKFILE, which is a correction rather than a preference: the lockfile answered for prez only while prez was the workspace's only package, and even then it counted 7 packages nothing compiles. The one addition is `artifact` -- first-party, path, std-only, taking no dependencies of its own -- signed off by hv 2026-09-09 as a one-off."
+  }
+}

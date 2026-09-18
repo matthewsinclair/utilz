@@ -1,0 +1,14 @@
+{
+  "id": "01M23B5N959A5FY93AA5QS5VH0",
+  "ts": "2026-09-09T15:04:22.053Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.satisfy",
+  "subject": {
+    "type": "ac",
+    "id": "ST0017/AC-2.14"
+  },
+  "payload": {
+    "evidence": "CODE AND RAN AND OBSERVED, and snorkeltoast calls it the strongest of the ten. The case is named by token -- player.html hardcodes add(\"Producer\", REEL.producer || \"Snorkeltoast\") -- UNSTRIPPABLE is the harness's own name for it, verdict_for returns \"presence UNPROVABLE\", the slide is counted into ungradeable rather than passed, control.json records presence_unprovable, and compare refuses to grade it. Slide 1 in the run behind FLOORS.md, and covered twice in selftest. Corroborated independently in redproof2.log, where the same exclusion is observed from the other side: \"3 not-gradeable slide(s) were excluded by name rather than tolerated\". So a gate the artifact makes unprovable is NAMED and the slide counted ungradeable rather than passed, which is exactly the row. AC-3.7 IS WITHDRAWN (hv, yak-shaving), SO THIS ROW'S INSTANCE IS PERMANENT AND THAT STRENGTHENS IT: nothing will ever gate on the producer literal, so slide 1 stays presence-unprovable unless cc happens to drop the fallback at the template pull, which is optional and ungated. The reel reads 21 of 22 and says why. Slide 1's earlier presence figure of 28.34 PASSED for the wrong reason -- both frames lack the session details and differ elsewhere -- and FLOORS.md now reports 53.432 for the same slide; both are real, from different runs, and a reader reconciling them needs this sentence to do it."
+  }
+}

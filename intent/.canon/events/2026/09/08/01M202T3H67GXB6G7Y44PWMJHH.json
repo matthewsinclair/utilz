@@ -1,0 +1,14 @@
+{
+  "id": "01M202T3H67GXB6G7Y44PWMJHH",
+  "ts": "2026-09-08T08:40:31.526Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.satisfy",
+  "subject": {
+    "type": "ac",
+    "id": "ST0014/AC12"
+  },
+  "payload": {
+    "evidence": "utilz version names the tree and the commit at the prompt. Verified by vc 8 Sep in a clean login shell: the install answers 'installed at /Users/matts/Devel/opt/utilz (1679024)' and the source answers 'source at /Users/matts/Devel/prj/Utilz'. Before ST0014 both printed 'utilz v2.5.0' and nothing else."
+  }
+}

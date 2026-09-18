@@ -1,0 +1,14 @@
+{
+  "id": "01M23B5N5VZ6ACC42V2YQ4NSMT",
+  "ts": "2026-09-09T15:04:21.948Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.satisfy",
+  "subject": {
+    "type": "ac",
+    "id": "ST0017/AC-1.14"
+  },
+  "payload": {
+    "evidence": "BOTH ARMS DRIVEN, and cross-checked by two instruments that do not share a mechanism. cc drove cargo test --workspace --no-fail-fast in release and in debug, exit 0 both, and attributed the split from the run's own Running headers rather than from per-crate memory. Release and debug are IDENTICAL: artifact lib 16, prez main.rs 133, showreel lib 17, showreel main.rs 0, doc-tests artifact 0, doc-tests showreel 0 -- total 166, 0 failed, 0 ignored, across six targets of which three carry tests. prez's 133 sit in main.rs because prez is bin-only with no lib target; showreel's bin at 0 is the deliberate lib+bin split. VC'S INDEPENDENT CHECK USED A DIFFERENT INSTRUMENT ON PURPOSE -- cc read cargo's output, vc counted `#[test]` attributes in the workspace source -- and it agrees at 166 with the same per-crate split: opt/prez/crate/src 133, crates/artifact/src 16, crates/showreel/src 17. Two nodes agreeing on one instrument wastes one of them; these are two instruments, and the source count also bounds the ignored figure, since 166 attributes producing 166 run tests leaves no room for a skip. The partition sums: 16+133+17+0+0+0 = 166. The distinction the row exists for holds -- CI runs release, and the arms were driven separately rather than one inferred from the other, which is what makes \"identical\" a finding instead of an assumption."
+  }
+}

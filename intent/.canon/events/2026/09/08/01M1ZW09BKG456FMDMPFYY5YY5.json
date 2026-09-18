@@ -1,0 +1,14 @@
+{
+  "id": "01M1ZW09BKG456FMDMPFYY5YY5",
+  "ts": "2026-09-08T06:41:34.068Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.edit",
+  "subject": {
+    "type": "ac",
+    "id": "ST0014/AC06"
+  },
+  "payload": {
+    "text": "The fifteen bin/ symlinks arrive as SYMLINKS, not as dereferenced copies, and the manifest records each link's TARGET STRING against its PATH. MEASURED 8 Sep against the real install: all fifteen target strings are the identical four characters 'utilz' -- the links are distinguished by their PATH, never by their target, because dispatch keys on basename $0. So the row is 'link<TAB>utilz<TAB>bin/cleanz' and it is the third field that identifies it. THIS AC PREVIOUSLY JUSTIFIED THE TARGET-STRING RULE AS CATCHING 'A LINK RETARGETED AT THE WRONG UTILITY', AND THAT SCENARIO CANNOT OCCUR -- vc's wording, corrected against the artefact rather than defended. There is no wrong utility to point at: every link legitimately names the same target. What the rule actually catches, verified by doing it: a link pointing OUTSIDE the set reports 'retargeted bin/syncz', and restoring it returns rc 0. The real argument for not dereferencing is simpler and survives: a dereferenced copy stores the dispatcher's bytes fifteen times, loses the link-ness that AC06's own dispatch predicate depends on, and grows the install by fifteen copies of bin/utilz. THE SYMLINKS ARE THE DISPATCH PREDICATE, NOT DECORATION: bin/utilz:183 dispatches only when -L \"$UTILZ_HOME/bin/$UTIL_NAME\" holds, so a utility whose symlink did not arrive does not dispatch at all AND the error path offers it as a typo, sending the reader after a misspelling rather than a missing file. THE SOURCE bin/ HOLDS FIFTEEN SYMLINKS AND TWO REAL FILES (utilz, and the vendored devbin); THE INSTALL'S HOLDS FIFTEEN AND ONE, measured on the real install 8 Sep, because D2 excludes devbin as not ours to publish. Dispatch-predicate point found by cc."
+  }
+}

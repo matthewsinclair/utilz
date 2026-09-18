@@ -1,0 +1,15 @@
+{
+  "id": "01M2G3VSCH6X4HNZ6EN22TT5TC",
+  "ts": "2026-09-14T14:06:46.161Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "issues.add",
+  "subject": {
+    "type": "issue",
+    "id": "0032"
+  },
+  "payload": {
+    "severity": "low",
+    "title": "install_run_bounded's watchdog can hold its caller's output pipe until the deadline, if a TERM lands before the sleep's pid is recorded"
+  }
+}

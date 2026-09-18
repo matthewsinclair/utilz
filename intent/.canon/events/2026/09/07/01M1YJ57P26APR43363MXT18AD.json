@@ -1,0 +1,14 @@
+{
+  "id": "01M1YJ57P26APR43363MXT18AD",
+  "ts": "2026-09-07T18:30:16.003Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.edit",
+  "subject": {
+    "type": "ac",
+    "id": "ST0014/AC06"
+  },
+  "payload": {
+    "text": "The fifteen bin/ symlinks arrive as SYMLINKS pointing at utilz, not as dereferenced copies, and the manifest checksums each link's TARGET STRING rather than the file it resolves to. Checksumming the resolved file gives all fifteen the same hash, so a link retargeted at the wrong utility reads as intact. Fifteen symlinks and two real files (utilz, and the vendored devbin) -- measured, and the manifest's roll-call IS the owned set, so a count one high carries a phantom entry and one low leaves a file nothing checks."
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "id": "01M23FJ1PZSMB600MXY830RB5Y",
+  "ts": "2026-09-09T16:21:02.303Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.satisfy",
+  "subject": {
+    "type": "ac",
+    "id": "ST0017/AC-3.13"
+  },
+  "payload": {
+    "evidence": "FIXED AT cc 538e7fe AND VERIFIED BY vc AT THE ARTIFACT, four arms, exit codes read directly rather than through a pipe. The grammar is now chosen per call site: Grammar::Css strips comments as before, Grammar::Verbatim scans every byte, and artifact/theme.rs passes Css for theme.css, Verbatim for theme.js and Verbatim for layout.html. No per-surface JS or HTML comment parsers were built, per hv -- the population is nine theme.css, zero theme.js, zero layout.html. FOUR FIXTURES, BUILT AND RUN AGAINST THE REAL BINARY, each fixture's content proved present before its result was read: (A) a clean layout.html BUILDS, exit 0, artifact written -- the control, without which a refusal for an unrelated reason is indistinguishable from the fix; (B) issue 0018's bypass fixture verbatim, the live href between a stray /* on line 1 and a */ on line 3, REFUSES at exit 2 with no artifact, naming layout.html, the http:// scheme, the offending line and LINE 2 -- and line 2 can only be reported if the line-1 marker stripped nothing, so the message itself carries the proof; (C) a /* */ attribution in theme.js REFUSES at exit 2, which is the COST and is loud, where it built yesterday; (D) the same attribution in theme.css BUILDS at exit 0, so the CSS exemption is preserved and the narrowing did not over-correct. THE 2x2 IS THE POINT: the silent bypass closed, the loud cost accepted, the CSS half unchanged, and a clean control proving the harness path works at all. cc also pinned the defect in their suite -- the bypass under Grammar::Css is asserted to STILL BUILD -- so a later per-surface parser must come and delete that assertion deliberately rather than meet it as a failure."
+  }
+}

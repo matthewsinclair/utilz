@@ -1,0 +1,14 @@
+{
+  "id": "01M1Y5V3JSQY75Q7R4JX85C3V9",
+  "ts": "2026-09-07T14:55:01.209Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.satisfy",
+  "subject": {
+    "type": "ac",
+    "id": "ST0012/AC-00.1"
+  },
+  "payload": {
+    "evidence": "The gate is declared and demonstrably bites. Measured 7 Sep in the scratch clone: with one precondition unsatisfied it refused, naming it -- '2 checked of 2 declared, 1 unmet: AC-00.7 (not satisfied)' -- and removed nothing; with the preconditions met the same command removed 9 files. A gate observed refusing AND passing, rather than one only ever seen to refuse."
+  }
+}

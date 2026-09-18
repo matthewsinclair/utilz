@@ -1,0 +1,14 @@
+{
+  "id": "01M239601GQTKJJZ1VHWKKA6VM",
+  "ts": "2026-09-09T14:29:35.921Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.withdraw",
+  "subject": {
+    "type": "ac",
+    "id": "ST0017/AC-3.7"
+  },
+  "payload": {
+    "reason": "hv 2026-09-09: brand-free testing is dropped as yak-shaving. 'Why are we testing for this? It's just yak-shaving' -- and on being asked directly, 'I have no idea what that is other than I told snorkeltoast to stop yak-shaving and move on.' Nothing gates on the producer literal and no row carries it. DROPPING THE FALLBACK REMAINS FINE AND IS NOT REQUIRED: cc may remove '|| \"Snorkeltoast\"' when WP-03 pulls the template, ungated, and if they do slide 1 becomes gradeable and the reel reads 22 of 22 instead of 21. THE ROW WAS SOUND AND THE SCOPE CALL IS STILL RIGHT. Its red-proof held -- HOIST section 4's proposed grep for '--pop-' returns zero hits against a live brand literal, so the guard as designed catches the instance it was written from rather than the class. That is a true finding about a check nobody needs. vc applied 'is it real' and never applied 'is it worth building', which is the same error snorkeltoast named in their own afternoon and it cost more here."
+  }
+}

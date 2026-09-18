@@ -1,0 +1,15 @@
+{
+  "id": "01M2GWWFHAXHBTVRY8VGY0MGAG",
+  "ts": "2026-09-14T21:24:03.242Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "issues.add",
+  "subject": {
+    "type": "issue",
+    "id": "0038"
+  },
+  "payload": {
+    "severity": "low",
+    "title": "CI does not check the prez crate's formatting"
+  }
+}

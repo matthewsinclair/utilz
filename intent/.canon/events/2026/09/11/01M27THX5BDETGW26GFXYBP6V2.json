@@ -1,0 +1,14 @@
+{
+  "id": "01M27THX5BDETGW26GFXYBP6V2",
+  "ts": "2026-09-11T08:50:09.707Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.satisfy",
+  "subject": {
+    "type": "ac",
+    "id": "ST0017/AC-6.3"
+  },
+  "payload": {
+    "evidence": "VERIFIED BY vc 2026-09-11 against cc's 58a0bb0, re-driven rather than taken from the report. Change set is exactly three files: the fixture (18 lines, 9 substituted line for line), plan.rs (1 line), deliver.rs (1 line deleted). Fixture parsed with yaml.safe_load: 15 segments, artist.name is a fixture identity, artist.handle is still the stage handle; 220 lines. plan.rs:391 reads slug(\"Bea's Art!\") == \"beas-art\", intra-word apostrophe kept. deliver.rs carries zero occurrences of the name. Census with the pattern AND the unit stated: git grep -IP \"Ash Sinclair|ashsinclair|Ash's Art|Ash_s_art|ash-sinclair|45h836782\" gives 11 occurrences on 10 lines in 7 files -- the contract twice (AC-6.1's evidence, exempt: the token is a strings control) and five .history/ archives (exempt: append-only). ZERO in source, ZERO in the fixture, ZERO on any live board. 289 tests, clippy 0 (cc's run). -P not -E, for the reason in the row."
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "id": "01M231K22YY3E3TVAGEW6B1E9B",
+  "ts": "2026-09-09T12:16:55.391Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.edit",
+  "subject": {
+    "type": "ac",
+    "id": "ST0017/AC-3.7"
+  },
+  "payload": {
+    "text": "player.html carries no brand token, and the check covers STRING LITERALS in JS as well as CSS custom properties. Red-proved against the known live instance, cited BY TOKEN rather than by line: add(\"Producer\", REEL.producer || \"Snorkeltoast\"), a hardcoded brand name in the shell README section 28 says knows about no brand. This row said player.html:613 until 2026-09-09; 3903937 moved it to 628, so the line belonged to the commit and the token belongs to the row. HOIST.md section 4's proposed guard, grep for '--pop-', returns ZERO hits against it -- verified 2026-09-09 -- because it was written from the one instance that had been found, a CSS custom property, and so catches that instance rather than the class. The check applies to player.html and showreel and NOT to themes/, whose brand strings are legitimate. THIS ROW IS NOT HYGIENE AND MUST NOT BE SCHEDULED AS HYGIENE -- cc measured 2026-09-09 and vc verified: add is (k, v) => { if (v) rows.push(...) }, so it already drops a falsy value and removing the fallback renders an IDENTICAL row for any config that sets producer, which 45h does. One line, parity-neutral on the artifact, and it takes the reel from 19 gradeable to 20 by removing the only permanent hole in the instrument WP-03 is graded by -- FLOORS.md has slide 1 as the sole presence-UNPROVABLE of 22 and names this literal as the reason. It is also the sole outlier in its own block: every neighbouring add falls back to CONFIG, not to a literal. Take it early."
+  }
+}

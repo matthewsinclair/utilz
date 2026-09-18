@@ -1,0 +1,15 @@
+{
+  "id": "01M20MMCNFZ8YH4H72MJD6SRZP",
+  "ts": "2026-09-08T13:51:58.639Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "issues.add",
+  "subject": {
+    "type": "issue",
+    "id": "0012"
+  },
+  "payload": {
+    "severity": "low",
+    "title": "prez's example deck trips prez's own class warning, on every theme, on every build"
+  }
+}

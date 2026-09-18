@@ -1,0 +1,14 @@
+{
+  "id": "01M233ZNT0XRG9G6APEQ81AQDG",
+  "ts": "2026-09-09T12:58:45.953Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.satisfy",
+  "subject": {
+    "type": "ac",
+    "id": "ST0017/AC-2.3"
+  },
+  "payload": {
+    "evidence": "SATISFIED on the 2026-09-09 run against artifact daaa503ad7db. FLAT COUNT: 13 captures a slide, every slide, plus one late-budget frame and one content-stripped control -- no adaptive escalation, as this row was corrected to require. STABILITY IS A SEPARATE COLUMN from the floor that decides gradeability, so presence of noise does not decide anything. THE CEILING IS NOW TESTED RATHER THAN ARGUED, and it was tested by a prediction this row made that nobody had read as a prediction. Two endpoints rounding independently means FOUR combinations, not two; this run saw a THIRD render of slide 14 where ctl9 saw two, and it arrived at exactly the distance independence requires. Counted in squared-difference units over rmse()'s divisor of 3*W*H: one endpoint is 15 units, two endpoints 30, so C-to-A and C-to-B are both sqrt(15/6220800) = 0.001553 and A-to-B is sqrt(30/6220800) = 0.002196, additive to the unit and fitted to nothing. That reproduces this row's independently measured RMSE(A,B)/RMSE(A,C) = 1.41404 to five decimals from absolute counts rather than from a ratio. VERIFIED INDEPENDENTLY BY vc ON THE SLIDE THE MODEL WAS NOT BUILT FROM: slide 13's counted deltas give 14 units, predicting a floor of 0.001500, which is exactly its reported floor -- a different edge (74 pixels against 59), different deltas, never used to derive the model. THE CEILING DOES NOT GENERALISE and snorkeltoast is explicit about it: any other multi-render slide is a lower bound until someone counts its pixels, because the mechanism must be identified before the ceiling argument is available."
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "id": "01M22TGQ9FJHBWT8TQDZP88CEP",
+  "ts": "2026-09-09T10:13:18.768Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.satisfy",
+  "subject": {
+    "type": "ac",
+    "id": "ST0017/AC-1.3"
+  },
+  "payload": {
+    "evidence": "Verified by vc 2026-09-09, and the check is the one the row asks for rather than a count. Diffed every prez test module 60153d8..HEAD: eleven of twelve BYTE-IDENTICAL (args, deck, drive, fence, frontmatter, html, inline, mermaid, notes, render, split). theme.rs differs by additions ONLY -- diff reports 13a14,15 / 18a21 / 19a23 / 21a26, no delete or change hunks -- taking it 20 to 21 tests. Counts also reconcile as a partition: 135 original + 1 new (AC-1.8) - 3 moved to artifact = 133 in prez; artifact's 12 = those 3 plus 9 new."
+  }
+}

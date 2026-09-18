@@ -1,0 +1,14 @@
+{
+  "id": "01M22THAWEK3NX9C0AFB1ZRZPT",
+  "ts": "2026-09-09T10:13:38.830Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.edit",
+  "subject": {
+    "type": "ac",
+    "id": "ST0017/AC-2.11"
+  },
+  "payload": {
+    "text": "The capture window has TWO real bounds and the contract states whether both can be met. Lower: a budget before the transition has completed photographs a crossfade blend, not the slide. Upper: a budget past the dwell photographs the NEXT slide. VERIFIED from player.html:547, and the ambient multipliers make it worse rather than better: runtime dwell is scaled 1.5 and runtime ease 1.4 capped at max_ease, so a legal slide at min_dwell 2500 under ambient has a runtime dwell of 3750 against a runtime ease of up to 3000 -- a 750ms window, before counting anything else. The window does not scale with the slide. If no window exists for a legal configuration then there are legal reels no screenshot harness can grade, which is hv's to rule because the remedy is either the tool's floors or a declared ungradeable class."
+  }
+}

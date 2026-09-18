@@ -1,0 +1,14 @@
+{
+  "id": "01M22TGQCQ8GV71C3VTA9XA646",
+  "ts": "2026-09-09T10:13:18.871Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.satisfy",
+  "subject": {
+    "type": "ac",
+    "id": "ST0017/AC-1.12"
+  },
+  "payload": {
+    "evidence": "cc enumerated every gate CI runs and drove all seven: cargo test debug 12+133, cargo test --release 12+133 (CI's actual arm), clippy --all-targets -D warnings 0, cargo build --release clean, shellcheck 18 files, utilz test prez all 4 suites, devbin check autotests 2 crates. The row caught its own author twice on the day it was minted -- cc called WP-01 green on cargo test alone, and vc called it verified on clippy plus cargo build, two gates of four."
+  }
+}

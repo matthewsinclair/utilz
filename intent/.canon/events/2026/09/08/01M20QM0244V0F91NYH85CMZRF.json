@@ -1,0 +1,14 @@
+{
+  "id": "01M20QM0244V0F91NYH85CMZRF",
+  "ts": "2026-09-08T14:44:11.460Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "st.new",
+  "subject": {
+    "type": "thread",
+    "id": "ST0015"
+  },
+  "payload": {
+    "title": "Version dispatch has one home, and reports both versions"
+  }
+}

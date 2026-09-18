@@ -1,0 +1,15 @@
+{
+  "id": "01M22ZB6AV5DB97TAJPNCNKYNS",
+  "ts": "2026-09-09T11:37:40.443Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "issues.add",
+  "subject": {
+    "type": "issue",
+    "id": "0019"
+  },
+  "payload": {
+    "severity": "medium",
+    "title": "the git index has no single-writer rule, so a broad pathspec commits another node's in-flight work"
+  }
+}

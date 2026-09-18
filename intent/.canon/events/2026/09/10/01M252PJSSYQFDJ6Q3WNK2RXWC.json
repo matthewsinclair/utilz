@@ -1,0 +1,14 @@
+{
+  "id": "01M252PJSSYQFDJ6Q3WNK2RXWC",
+  "ts": "2026-09-10T07:14:48.250Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.satisfy",
+  "subject": {
+    "type": "ac",
+    "id": "ST0017/AC-3.9"
+  },
+  "payload": {
+    "evidence": "RE-VERIFIED BY vc AT THE MANIFEST 2026-09-10 07:14Z, AFTER `serde_json` LANDED. The previous evidence described an eight-entry manifest that no longer exists, so it was retired through `unsatisfy` rather than left to describe a file that had moved -- a satisfied row whose evidence names a superseded artifact is the stale-evidence failure this contract has corrected twice.\nREAD, NOT RELAYED. `crates/showreel/Cargo.toml`'s `[dependencies]` carries exactly NINE entries: `artifact` by path (first-party, AC02's one signed-off addition), `image 0.25` with default-features off and jpeg/png/webp/gif/tiff, `kamadak-exif 0.6`, `qrcode 0.14` with default-features off and svg only, `regex 1`, `serde 1` with derive, `serde_json 1`, `serde_yaml 0.9`, `walkdir 2`. Eight third-party plus one first-party, and no others.\nhv IS NAMED IN THE COMMIT, WHICH IS THIS ROW'S ACTUAL REQUIREMENT AND WAS CHECKED RATHER THAN ASSUMED. `0745d32`'s message names hv three times, including \"the sign-off came from hv rather than a relay\". cc took it from hv directly; vc's relay was accurate and is NOT what discharged it.\n`fast_image_resize` IS REFUSED AND STAYS REFUSED, measured the same way as before: ONE occurrence in the manifest as prose recording the refusal, ZERO in `Cargo.lock`. Named but not linked. `image` carries `FilterType::Lanczos3` -- now hoisted to `normalise::FILTER` -- and nothing has measured a need.\nTHE COST, WITH EVERY POPULATION NAMED AND THE DEDUP KEYS SEPARATED RATHER THAN CONFLATED: lockfile entries 79 to 81, distinct names 77 to 79. **NET 2 UNDER BOTH KEYS**, which is the figure hv ruled on and it is sound. The absolute counts DIFFER because `miniz_oxide` sits at 0.8.9 and 0.9.1 and `syn` at 2.0.119 and 3.0.4 -- so vc's earlier claim that the two keys agree in absolute value was false, and is corrected on the row rather than quietly dropped.\nSTILL HELD BY DISCIPLINE AND NOT BY A GATE, WHICH IS WHY THE ROW CARRIES THAT LIMIT: no test reads `Cargo.toml`, no gate names a crate, and the only `manifest.sha256` in the tree is devbin's. The gate is ruled in and sequenced after the payload. Until it lands, this row is true because two people were careful, and that is a different thing from being enforced."
+  }
+}

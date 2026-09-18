@@ -1,0 +1,14 @@
+{
+  "id": "01M231KMCJW6QCNX7TJP3F0NT7",
+  "ts": "2026-09-09T12:17:14.131Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.edit",
+  "subject": {
+    "type": "ac",
+    "id": "ST0017/AC-2.13"
+  },
+  "payload": {
+    "text": "The harness never passes a venue-override query parameter. Measured 2026-09-09: passing pace=ambient made player.html's dwellOf/easeOf pair -- the AMBIENT ? 1.5 : 1 and AMBIENT ? 1.4 : 1 tokens, cited by token because 3903937 moved them off the line 547 this row named until 2026-09-09 -- scale runtime dwell by 1.5 and ease by 1.4, so a payload ease of 900ms became a runtime 1260ms and a budget computed as payload_ease+200 = 1100ms landed INSIDE the transition. Every first-budget capture was a crossfade blend read as slide motion. pace, speed, start and the rest exist so a venue can change a shipped reel without a rebuild; a fidelity harness that passes one is grading a configuration the reel was never built for, and then doing arithmetic against the payload's un-scaled numbers as though the override were absent."
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "id": "01M23B5N86GGV7H141MAF4HCR1",
+  "ts": "2026-09-09T15:04:22.023Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.satisfy",
+  "subject": {
+    "type": "ac",
+    "id": "ST0017/AC-2.13"
+  },
+  "payload": {
+    "evidence": "VERIFIED BY CENSUS OVER AN ENUMERABLE POPULATION, and the census is the right instrument here because the claim is about what the source contains. snorkeltoast measured it both ways at vc's request: `grep -n pace showreel-harness` returns only the comment block, and the capture URL is `?start=N&noloop&kiosk&nobug` and nothing else. The comment carries the measurement that made it a rule -- slide 3 at budgets 1100 and 4520: with pace=ambient RMSE 142.827361, without it 0.000000, and with it at 1400 (past the SCALED ease) 0.000000 again. That is the defect this row was minted from: pace=ambient scales runtime dwell by 1.5 and ease by 1.4, so a payload ease of 900ms became a runtime 1260ms and a budget computed as payload_ease+200 = 1100ms landed INSIDE the transition, and every first-budget capture was a crossfade blend read as slide motion. THE LIMIT IS STATED RATHER THAN HIDDEN: there is NO GUARD. Nothing fails if someone re-adds an override; a grep is the only instrument, and it is a census that must be re-run rather than a detector that fires. Satisfied on the census as it stands 2026-09-09 against the harness that produced daaa503ad7db, and honest that a later reader must re-run the grep rather than trust a green."
+  }
+}

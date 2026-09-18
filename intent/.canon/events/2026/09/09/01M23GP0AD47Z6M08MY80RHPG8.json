@@ -1,0 +1,14 @@
+{
+  "id": "01M23GP0AD47Z6M08MY80RHPG8",
+  "ts": "2026-09-09T16:40:40.525Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "issues.edit",
+  "subject": {
+    "type": "issue",
+    "id": "0021"
+  },
+  "payload": {
+    "title": "glow's notty stylesheet has no bold, so REDIRECTED help output keeps its ** markers -- not a Utilz defect, and invisible at a terminal"
+  }
+}

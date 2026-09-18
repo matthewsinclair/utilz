@@ -1,0 +1,15 @@
+{
+  "id": "01M234BR7WYA00FMYD1F3Z52BF",
+  "ts": "2026-09-09T13:05:21.660Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "issues.add",
+  "subject": {
+    "type": "issue",
+    "id": "0020"
+  },
+  "payload": {
+    "severity": "low",
+    "title": "source citations in contract text have no check, and four of eight were stale"
+  }
+}

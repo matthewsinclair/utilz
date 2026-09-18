@@ -1,0 +1,14 @@
+{
+  "id": "01M239603NN45BWGMMET4KXE7P",
+  "ts": "2026-09-09T14:29:35.989Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.edit",
+  "subject": {
+    "type": "ac",
+    "id": "ST0017/AC-2.14"
+  },
+  "payload": {
+    "text": "Where a defect in the artifact makes a gate unprovable, the harness NAMES it and counts the slide ungradeable rather than passing it. Measured 2026-09-09: the token add(\"Producer\", REEL.producer || \"Snorkeltoast\") in player.html means blanking producer swaps a configured value for a literal rather than removing the row, so the presence control can never reach an empty render for a session crawl. CITED BY TOKEN AND NOT BY LINE, which is the correction: this row carried a line number until 2026-09-09 and 3903937 moved it. The dead number is deliberately not restated: to any scanner it is indistinguishable from a live one, which is the property that made the error invisible. Slide 1's presence figure of 28.34 PASSED the gate for the wrong reason -- both frames lack the session details and differ elsewhere. That 28.34 predates the crawl fix and FLOORS.md now reports 53.432 for the same slide; both are real, from different runs, and neither changes this row's point, but a reader reconciling them without this sentence could not. Session crawls therefore report presence UNPROVABLE with the player token as the reason, and when the literal goes the gate becomes sound with no harness change. AC-3.7 IS WITHDRAWN (hv, yak-shaving) SO THIS ROW'S INSTANCE IS PERMANENT, WHICH STRENGTHENS IT RATHER THAN WEAKENING IT. The producer literal is not going to be gated on, so slide 1 stays presence UNPROVABLE unless cc happens to drop the fallback at the template pull -- optional and ungated. That is exactly the situation this row exists for: a gate the artifact makes unprovable is NAMED and the slide is counted ungradeable, permanently, rather than passed. The reel reads 21 of 22 and says why."
+  }
+}

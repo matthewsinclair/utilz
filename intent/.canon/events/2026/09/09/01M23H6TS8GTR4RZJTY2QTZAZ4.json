@@ -1,0 +1,14 @@
+{
+  "id": "01M23H6TS8GTR4RZJTY2QTZAZ4",
+  "ts": "2026-09-09T16:49:51.913Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.satisfy",
+  "subject": {
+    "type": "ac",
+    "id": "ST0017/AC-1.4"
+  },
+  "payload": {
+    "evidence": "prez's release binary is 4,384,912 bytes against the 8,388,608 budget -- stated as a number with the budget beside it rather than as a distance, which is the row's requirement and is met by the form regardless of the value. RESTATED 2026-09-09 BECAUSE THE NUMBER MOVED FOR THE FIRST TIME, and the direction is the part worth recording. Earlier evidence cited cc's 4,384,864 from a build whose 32-byte difference from the on-disk 4,384,896 could not be resolved -- two builds, and no measurement could separate a stale figure from a transcription slip, so it was noted and closed. This move is different: it is DELIBERATE and it has a cause. R3 added refuse_external_target to artifact, artifact is SHARED, and prez linked sixteen bytes it will never call -- 4,384,896 to 4,384,912. cc reported it unprompted rather than letting it surface elsewhere. THE PRICE IS RIGHT HERE AND THE DIRECTION IS THE THING TO WATCH: the alternative was the scheme list in two places, which is the violation this crate exists to remove, so paying sixteen bytes to keep one rule is the trade the consolidation was for. But artifact being shared means every showreel-only addition costs prez something, and if showreel keeps growing artifact then prez keeps paying. NO NEW CONTROL IS NEEDED AND THAT WAS CHECKED: AT01 already asserts the binary against the 8 MB ceiling on every acceptance run, and 4,384,912 is 52 percent of it. The guard exists, it is driven, and this row's job is to keep the number stated rather than to gate it."
+  }
+}

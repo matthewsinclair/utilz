@@ -1,0 +1,14 @@
+{
+  "id": "01M203ES1GDFGX4R6TRDYZJZE0",
+  "ts": "2026-09-08T08:51:48.913Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.withdraw",
+  "subject": {
+    "type": "ac",
+    "id": "ST0014/AC14"
+  },
+  "payload": {
+    "reason": "test"
+  }
+}

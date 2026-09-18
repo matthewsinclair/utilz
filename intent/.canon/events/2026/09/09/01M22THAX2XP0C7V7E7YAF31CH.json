@@ -1,0 +1,14 @@
+{
+  "id": "01M22THAX2XP0C7V7E7YAF31CH",
+  "ts": "2026-09-09T10:13:38.851Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.edit",
+  "subject": {
+    "type": "ac",
+    "id": "ST0017/AC-2.12"
+  },
+  "payload": {
+    "text": "Where the harness fixes a capture time, it states the machine and measurement it came from, because settling is a property of the ENVIRONMENT as much as the content and a value measured on one box is a lucky constant elsewhere. Converge-until-two-frames-agree is the preferred shape and is to be decided on that merit alone -- NOT as a fix for the crossfade misdiagnosis that prompted it, which AC-2.13 addresses instead. Its cost is named: convergence and the transition are the same phenomenon, so a converge loop settles correctly on a crossfade but on a CRAWL only after the animation ends, which is past the dwell. The bound therefore does real work and hitting it is common rather than exceptional."
+  }
+}

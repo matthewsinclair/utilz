@@ -1,0 +1,14 @@
+{
+  "id": "01M22V5X0B41RW19ZGCM2ZEVXY",
+  "ts": "2026-09-09T10:24:52.747Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.withdraw",
+  "subject": {
+    "type": "ac",
+    "id": "ST0017/AC-2.15"
+  },
+  "payload": {
+    "reason": "Minted on snorkeltoast's migration hypothesis, which their own test refuted. Six captures each of slides 13, 14 and 17, all fifteen pairs at a fixed 1100ms budget: slide 13 zero of 15 differ, slide 17 zero of 15, slide 14 FIVE of 15 and every one at exactly 0.002196. The artefact does not migrate -- slide 14 is BIMODAL, rendering one of two ways with no intermediate value, and slide 13's 0.001500 is a rarer instance of the same class rather than the same instance relocated. So per-slide floors stand as designed and the class-floor mechanism this row required is withdrawn with its proposer's agreement. The concern survives in AC-2.3 in a better form: a floor of 0.000000 recorded for a bimodal slide is a sampling artefact, not a measurement."
+  }
+}

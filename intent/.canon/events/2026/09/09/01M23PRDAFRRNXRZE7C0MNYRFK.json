@@ -1,0 +1,14 @@
+{
+  "id": "01M23PRDAFRRNXRZE7C0MNYRFK",
+  "ts": "2026-09-09T18:26:50.832Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.satisfy",
+  "subject": {
+    "type": "ac",
+    "id": "ST0017/AC-3.3"
+  },
+  "payload": {
+    "evidence": "Verified by vc 2026-09-09 18:30Z, and the row's COMPILE-ERROR half is DRIVEN rather than argued -- which mattered, because cc's own red-proof covers the other half and not this one.\n\nTHE TYPE: `qr: Option<Qr>` at crates/showreel/src/slide.rs:106, matched as `Kind::Atwork { qr: Some(q), .. }` at :138 and constructed at :270.\n\nDRIVEN BY vc: flattening `Option<Qr>` to `Qr` -- which is exactly what the row forbids -- makes the compiler REFUSE with TWO errors, `error[E0308]: mismatched types: expected Qr, found Option<_>` at slide.rs:138 and `expected Qr, found Option<Qr>` at :278, and `cargo check` exits 101. So \"flattening it is a compile error\" is a measured fact about this code rather than a property asserted of it. THE INJECTION WAS APPLIED THROUGH A REFUSING STEP per AC-1.15 -- the anchor count was required to be exactly 1 or the run aborted -- and REVERTED IMMEDIATELY, with the file's sha256 identical before and after and the working tree clean on both sides, because the tree belongs to cc.\n\nBOTH HALVES KEPT APART, WHICH IS THE WHOLE ROW. Absent is `None` and VALID, asserted at :536. A `qr:` NAMING a file that is not there REFUSES, via `admit::named(reel, &rel, site(\"qr:\"), admit::Requires::AnyFile)?` at :270. THE REFERENCE RETURNED `\"\"` FOR BOTH, which is precisely what made them look like one thing and is why the row says a type rather than a policy.\n\ncc'S RED-PROOF COVERS THE SECOND HALF: collapsing the qr refusal into `None` fires 1 of 61, with the injection recorded verbatim in cec1645's message so it can be re-applied. The two proofs are of different halves and neither substitutes for the other -- a compile error cannot be shown by a failing test, and a wrong runtime disposition cannot be shown by the compiler."
+  }
+}

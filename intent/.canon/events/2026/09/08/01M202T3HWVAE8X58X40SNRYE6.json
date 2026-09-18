@@ -1,0 +1,14 @@
+{
+  "id": "01M202T3HWVAE8X58X40SNRYE6",
+  "ts": "2026-09-08T08:40:31.549Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.satisfy",
+  "subject": {
+    "type": "ac",
+    "id": "ST0014/AC14"
+  },
+  "payload": {
+    "evidence": "AT14 green in opt/utilz/test/install_guards.bats. MIS-KINDED AT CREATION: this row is test-backed and should compute, but intent ac new defaults to --kind non-test and no verb changes an AC's kind, so it is satisfied by evidence instead. Verified by vc 8 Sep: install_manifest_check walks the manifest rows and never the tree, so a .venv built inside the install by pdf2md or xtrct is not read as drift; manifest_check returns rc 0 against the live install."
+  }
+}

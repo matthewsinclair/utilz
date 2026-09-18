@@ -1,0 +1,14 @@
+{
+  "id": "01M22W6RWP9HDR73A2T3CJEGZA",
+  "ts": "2026-09-09T10:42:49.878Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.edit",
+  "subject": {
+    "type": "ac",
+    "id": "ST0017/AC-2.11"
+  },
+  "payload": {
+    "text": "The capture window has two real bounds and the contract states whether both can be met. Lower: a budget before the transition completes photographs a crossfade blend. Upper: a budget past the dwell photographs the NEXT slide. VC'S EARLIER FRAMING WAS BACKWARDS AND IS CORRECTED HERE: ambient MITIGATES rather than compounds, because ease is capped at max_ease so the 1.4 multiplier never bites at the cap while dwell's 1.5 always does. Measured -- dwell 2500 ease 3000 gives a window of MINUS 500ms at default pace (the transition outlasts the slide) and PLUS 750ms under ambient. Default pace is the broken case, at any configured ease at or above 2500. vc computed only the ambient case and described it comparatively against a default case never computed: a population of one, reported as a comparison. Once AC-3.11's compile-time cap and refusal land, no config reaching the runtime can have ease >= dwell and this bound is closed at the source."
+  }
+}

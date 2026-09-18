@@ -1,0 +1,14 @@
+{
+  "id": "01M23B5N53SG6V88J4KK6FEDB3",
+  "ts": "2026-09-09T15:04:21.924Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.satisfy",
+  "subject": {
+    "type": "ac",
+    "id": "ST0017/AC-1.11"
+  },
+  "payload": {
+    "evidence": "CENSUS ZERO WITH ITS CENSUS PRINTED, verified live by vc 2026-09-09 over all three members rather than recorded once for the first crate, which is the failure the row names. Population: the workspace root package prez plus members = [\"crates/artifact\", \"crates/showreel\"], three crates. Members carrying a tests/ directory: ZERO -- `find opt/prez/crate -type d -name tests -not -path '*/target/*'` returns 0. Declarations of autotests or [[test]] in any of the three manifests: ZERO. The orphan guard's own answer, run rather than quoted: `bin/devbin check autotests` reports \"3 crate(s), none with a tests/ directory -- nothing to check\". So the row's universal quantifier is vacuously true AND its real requirement is met: every member was checked, the number checked is stated, and the guard covers the same three. This is a census zero and not a detector zero -- nothing was there to count, the count is printed, and the row does not depend on anything having fired. TN001 exposure is therefore zero and measured rather than assumed; the honest cost is that showreel being lib+bin gives two unittest targets with the bin holding none."
+  }
+}

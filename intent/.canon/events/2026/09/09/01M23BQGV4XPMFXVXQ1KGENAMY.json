@@ -1,0 +1,14 @@
+{
+  "id": "01M23BQGV4XPMFXVXQ1KGENAMY",
+  "ts": "2026-09-09T15:14:07.332Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.satisfy",
+  "subject": {
+    "type": "ac",
+    "id": "ST0017/AC-3.11"
+  },
+  "payload": {
+    "evidence": "VERIFIED BY vc AT THE SOURCE. The three constants read from limits.rs: MIN_DWELL_MS 2500, MIN_EASE_MS 600, MAX_EASE_MS 2400 -- hv's cap, against the reference's 3000 which exceeded min_dwell and was the second defect. timing() returns Timing { dwell_ms: dwell_ms.max(MIN_DWELL_MS), ease_ms: ease_ms.clamp(MIN_EASE_MS, MAX_EASE_MS) }, so THE COMPILER APPLIES max_ease WHERE THE REFERENCE NEVER DID -- the reference applied min_dwell and min_ease and left the cap to player.html's easeOf alone, which is the split enforcement this row was minted about. The ease >= dwell case returns a Failure naming the segment and BOTH durations, with a remedy explaining that ease is the crossfade inside the dwell rather than an addition to it. AND THE SUBTLE HALF IS BUILT AND PROVED: the refusal reads the AUTHORED values rather than the clamped ones, and clamping_can_never_manufacture_the_violation proves by cases that a pair which is sound before clamping cannot become unsound after it -- so the two mechanisms cannot disagree, which is the property that makes checking the authored values safe rather than merely convenient."
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "id": "01M22SMKG8D4SR1XJS9S1ADJR2",
+  "ts": "2026-09-09T09:57:57.384Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.satisfy",
+  "subject": {
+    "type": "ac",
+    "id": "ST0017/AC-6.2"
+  },
+  "payload": {
+    "evidence": "Snorkeltoast repo commit f593de8, verified by vc 2026-09-09: carries showreel, player.html, themes/default, themes/popupart (fonts + favicon), README.md, HOIST.md. player.html confirmed UNMODIFIED -- the reduced-motion block at :388 holds only .slide img and .wipe, .crawl appears zero times in it, so the defect is present and deliberately unfixed. The hoist now cites a real source commit at both ends."
+  }
+}

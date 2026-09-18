@@ -1,0 +1,14 @@
+{
+  "id": "01M231NFXQ8GX9WFH1DW0CTGWD",
+  "ts": "2026-09-09T12:18:15.096Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.satisfy",
+  "subject": {
+    "type": "ac",
+    "id": "ST0017/AC-2.10"
+  },
+  "payload": {
+    "evidence": "Contingency DISCHARGED, and RE-EVIDENCED 2026-09-09 after the instrument that produced the original figure was found to be anchored on the first capture. hv ratified the reduced-motion crawl fix; snorkeltoast applied it (3903937) and rebuilt as reel 008. The citable evidence is now snorkeltoast's FLOORS.md, generated from control.json rather than retyped, artifact sha256 daaa503ad7db, 13 captures, measured 2026-09-09T12:03:45Z: slide 20, the outro crawl, reads 1 render / floor 0.000000 / stability 0.000000, against 10.65 before the fix. WHY THE FIRST EVIDENCE WAS REPLACED RATHER THAN KEPT: it cited spread 10.831547 to 0.000000 across four render clusters to one, and snorkeltoast has since measured that spread was anchored on rep-0, so a slide whose odd capture happened to be first collapsed to a spread of zero -- two 13-capture runs over one artifact disagreed about slide 14 and that disagreement exposed it. The BEFORE figure is unaffected (the failure mode understates, it does not inflate) and the cluster count is hash-derived and independent of the anchor, but an AFTER figure of 0.000000 is precisely the failure mode's signature, so it is not the number to stand on. The corrected instrument agrees, which is why the conclusion is unchanged. CORRECTED CLAIM: the earlier evidence said the reel has no genuinely ungradeable slide left. FLOORS.md reads 19 gradeable, 2 UNDECIDED, 1 ungradeable of 22 -- slides 13 and 14 await a named magnitude (AC-2.17) and slide 1 awaits the brand literal (AC-3.7). Second confirmation, unasked-for and still standing: slide 1's presence figure rose 28.343 to 53.432 against an UNCHANGED stripped-render control."
+  }
+}

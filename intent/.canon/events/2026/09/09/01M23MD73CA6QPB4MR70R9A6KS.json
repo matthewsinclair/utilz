@@ -1,0 +1,14 @@
+{
+  "id": "01M23MD73CA6QPB4MR70R9A6KS",
+  "ts": "2026-09-09T17:45:46.860Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.satisfy",
+  "subject": {
+    "type": "ac",
+    "id": "ST0017/AC-2.4"
+  },
+  "payload": {
+    "evidence": "Verified by vc 2026-09-09 17:58Z, on a run snorkeltoast dated 2026-09-09 18:42 local against the harness at bc6c3fe -- AFTER the six commits that made the previous record a record about a different program.\n\nBOTH INJECTIONS RED. Pixel: slide 6 alone at RMSE 0.999752, the other twenty graded slides at their control floors, one not-gradeable slide EXCLUDED BY NAME (slide 1, the unprovable brand literal). The injection is DISCRIMINATING rather than a blanket failure, which is what makes it a proof of the instrument and not merely of its ability to fail. Structural: 79 differences, first \"slide COUNT differs: reference 22, new 21\", with compare exiting there BEFORE the pixel stage -- the ordering property this row wants as much as the redness, since a pixel number computed across a structural mismatch is meaningless.\n\n\"BEFORE THE HARNESS GRADES ANY RUST BUILD\" HOLDS BY CONSTRUCTION AND NOT BY LUCK: there is no `build` verb yet, so no Rust artifact has been graded by anything.\n\nTHE CAVEAT TRAVELS WITH THE EVIDENCE, AND snorkeltoast RAISED IT AGAINST THEMSELVES. The RMSE is unchanged from the 14:21 run, and that is NOT an invariance result across 28b4127's budget change from 4000ms to 1100ms. It is the same number because it is the same FRAME -- both reference PNGs of slide 6 hash to bac557ab0fc4, byte-identical across the two runs. VERIFIED BY vc AT THE MECHANISM: player.html:389 carries `.slide img{animation:none!important}` inside the reduced-motion block, and the harness shoots under --force-prefers-reduced-motion, so an image slide is static and every budget inside its window photographs the same pixels. Slide 6 is `motion: kenburns` with `fit: cover` in the live config, so it LOOKS like the slide where a budget change must show and is precisely the slide where it cannot. SO THIS RUN DOES NOT RE-PROVE 28b4127'S BUDGET FIX. That fix remains load-bearing -- it decides which frame of a crawl or a transition is taken -- and exercising it needs a crawl or transition target, which nobody has built and which this row does not require.\n\nWHAT ELSE MOVED WAS THE CONTROL, NOT THE HARNESS: the 13:06 run graded 18 with 3 excluded, this one grades 20 with 1, because ctl10 replaced an earlier control. Recorded so the improvement is not read as an effect of the harness changes.\n\nFLOORS.md NOW CARRIES ITS OWN SUBJECT (e7b532f): the run date, the harness commit and the full caveat, replacing the bare \"it currently passes\" that this row refused to be satisfied on. The general form snorkeltoast wrote into the file is the reusable half -- A PASS WITH NO DATE IS A PASS WITH NO SUBJECT."
+  }
+}

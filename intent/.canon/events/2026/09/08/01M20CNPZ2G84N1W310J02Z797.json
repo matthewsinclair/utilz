@@ -1,0 +1,15 @@
+{
+  "id": "01M20CNPZ2G84N1W310J02Z797",
+  "ts": "2026-09-08T11:32:53.346Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wp.new",
+  "subject": {
+    "type": "wp",
+    "id": "ST0013/09"
+  },
+  "payload": {
+    "scope": "S",
+    "title": "Provenance names the source that supplied the directory"
+  }
+}

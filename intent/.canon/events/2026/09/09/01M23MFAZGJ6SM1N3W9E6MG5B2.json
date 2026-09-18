@@ -1,0 +1,14 @@
+{
+  "id": "01M23MFAZGJ6SM1N3W9E6MG5B2",
+  "ts": "2026-09-09T17:46:56.369Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.edit",
+  "subject": {
+    "type": "ac",
+    "id": "ST0017/AC-5.1"
+  },
+  "payload": {
+    "text": "prez showreel build <dir> builds the 45h reel from its real config, from BOTH invocation forms. THE THEME PATH IS PART OF THE FIXTURE AND NOT PART OF THE DEFECT, RECORDED BEFORE THE ACCEPTANCE TEST IS WRITTEN RATHER THAN AFTER IT FIRES. Raised by cc 2026-09-09 and taken. 45h's config names `theme: popupart`, and popupart can NEVER be a built-in here because no built-in is ever a brand (H3, and AC-6.1 measures it), so a bare invocation with SHOWREEL_THEME_PATH unset REFUSES where the Python built. Driven by vc 2026-09-09 against the live reel, both invocation forms: unset gives exit 2 with \"no theme 'popupart'\", stating that the variable is unset and NO directories were searched, listing the one built-in and naming three remedies; set gives exit 0. THAT REFUSAL IS H3 WORKING AND MUST NOT BE GRADED AS A PORT REGRESSION. It is the same class as AC-2.16's predicted differences, and it is written down here for the same reason: a difference recorded before it fires is a prediction, and the identical sentence written afterwards is a rationalisation. Whatever shape this row's acceptance test takes, SHOWREEL_THEME_PATH belongs in the fixture setup."
+  }
+}

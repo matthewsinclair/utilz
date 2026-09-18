@@ -1,0 +1,15 @@
+{
+  "id": "01M1YY2VDQNTFMMATB6HM9AP46",
+  "ts": "2026-09-07T21:58:40.823Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "issues.add",
+  "subject": {
+    "type": "issue",
+    "id": "0010"
+  },
+  "payload": {
+    "severity": "low",
+    "title": "Eight utility READMEs ship hv's absolute home path into an install"
+  }
+}

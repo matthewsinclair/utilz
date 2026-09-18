@@ -1,0 +1,14 @@
+{
+  "id": "01M2GEBXC35KFTZ2K8221KB4CY",
+  "ts": "2026-09-14T17:10:20.292Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.edit",
+  "subject": {
+    "type": "ac",
+    "id": "ST0020/AC-01.8"
+  },
+  "payload": {
+    "text": "The one extension beyond the request, stated: with refuse set, one directory that defines a name both as <name>/theme.css and as <name>.css is refused, naming both files. Red-first: HEAD takes the directory form silently. vc's review of the design kept it, because without it the policy is half a policy."
+  }
+}

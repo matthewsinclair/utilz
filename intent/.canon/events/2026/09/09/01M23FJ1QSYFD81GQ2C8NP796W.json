@@ -1,0 +1,14 @@
+{
+  "id": "01M23FJ1QSYFD81GQ2C8NP796W",
+  "ts": "2026-09-09T16:21:02.329Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.satisfy",
+  "subject": {
+    "type": "ac",
+    "id": "ST0017/AC-3.5"
+  },
+  "payload": {
+    "evidence": "BOTH HALVES NOW LAND AND THE SURFACES ARE COVERED BY THE PROPERTY RATHER THAN BY ENUMERATION. The CSS half landed at cd0412d; the remaining half landed at cc 538e7fe under AC-3.13's ruling, and vc verified the whole at the artifact rather than at the source -- four fixtures, real binary, exit codes read directly. An absolute scheme in live text on ANY theme surface is now a build error: theme.css by the CSS grammar with its comment exemption intact, theme.js and layout.html byte-for-byte with no exemption at all. Measured: the issue 0018 bypass fixture -- a live href hidden between a stray /* and a later */ in layout.html -- refuses at exit 2 with no artifact written, naming the surface, the scheme and line 2; a clean layout.html builds at exit 0; a /* */ attribution refuses in theme.js and builds in theme.css. THE ROW'S EARLIER WORDING SAID \"in CSS and in theme.yaml\", WHICH WAS AN ENUMERATION, AND THE CODE WAS ALREADY BROADER THAN IT -- that gap is what issue 0018 was found inside, and it is why this row now states the property and lets AC-3.13 hold the grammar-matching. CLOSES ISSUES 0014, 0015 AND 0017, and 0018 with them. The residual limit is stated rather than hidden: protocol-relative targets are refused at reference sites and an absolute scheme is refused anywhere in live text, so the two rules have different reaches by design, and the theme.js and layout.html surfaces are held by a scanner with no comment concept at all -- correct today and the thing a real theme.js would immediately make loud."
+  }
+}

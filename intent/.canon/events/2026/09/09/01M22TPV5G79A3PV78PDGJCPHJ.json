@@ -1,0 +1,14 @@
+{
+  "id": "01M22TPV5G79A3PV78PDGJCPHJ",
+  "ts": "2026-09-09T10:16:39.344Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.satisfy",
+  "subject": {
+    "type": "ac",
+    "id": "ST0017/AC-1.8"
+  },
+  "payload": {
+    "evidence": "The deferred half discharged by cc, and it is the half that could not fire this morning. Reordering BUILT_IN to put mono first now FAILS the_default_is_simple_specifically while no_theme_given_uses_the_embedded_default stays ok -- which is exactly the blindness the row was minted for, since all seven built-ins carry --gp-bg. Restored, sha matches."
+  }
+}

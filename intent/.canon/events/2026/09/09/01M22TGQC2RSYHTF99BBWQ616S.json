@@ -1,0 +1,14 @@
+{
+  "id": "01M22TGQC2RSYHTF99BBWQ616S",
+  "ts": "2026-09-09T10:13:18.851Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.satisfy",
+  "subject": {
+    "type": "ac",
+    "id": "ST0017/AC-1.10"
+  },
+  "payload": {
+    "evidence": "Verified by vc: crate/Cargo.toml :72 resolver = 3 with lamplight-vc's reasoning at the key, and :79-80 [profile.dev] debug = line-tables-only."
+  }
+}

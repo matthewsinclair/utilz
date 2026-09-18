@@ -1,0 +1,14 @@
+{
+  "id": "01M22YJV0YAN1X6YT2QNQ4PG51",
+  "ts": "2026-09-09T11:24:22.430Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.edit",
+  "subject": {
+    "type": "ac",
+    "id": "ST0017/AC-3.5"
+  },
+  "payload": {
+    "text": "No theme surface puts an external reference into the artifact: an absolute scheme anywhere in live text, or a protocol-relative target at a reference site, is a build error wherever a theme can express one. THE SURFACES ARE THE INSTANCES AND NOT THE CRITERION -- the previous wording said 'in CSS and in theme.yaml', which is an enumeration, and the code was already broader than it (see AC-3.13). Implements R2 and R3; CLOSES issues 0014, 0015 and 0017. The CSS half landed 2026-09-09 (cd0412d), reading the sites as TOKENS rather than as spellings, after cc measured a needle list deciding 8 of 13 references wrongly with every one of the 8 shipping its reference into the artifact. The theme.yaml half is R3 and is NOT blocked on the manifest existing -- themes/popupart/theme.yaml exists today, is read at showreel:198, and carries favicon: and fonts[].file, which are exactly the reference-bearing fields -- it is blocked on WP-03's YAML loader. The row therefore stays unsatisfied with half of it built, and is NOT split by surface: one property, one row."
+  }
+}

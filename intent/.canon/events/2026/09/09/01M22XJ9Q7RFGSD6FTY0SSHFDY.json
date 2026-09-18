@@ -1,0 +1,15 @@
+{
+  "id": "01M22XJ9Q7RFGSD6FTY0SSHFDY",
+  "ts": "2026-09-09T11:06:36.135Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "issues.add",
+  "subject": {
+    "type": "issue",
+    "id": "0017"
+  },
+  "payload": {
+    "severity": "medium",
+    "title": "prez refuse_external is case-sensitive, whitespace-intolerant and line-bound, so three more external-reference shapes reach the artifact"
+  }
+}

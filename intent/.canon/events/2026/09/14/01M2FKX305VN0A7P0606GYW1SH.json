@@ -1,0 +1,15 @@
+{
+  "id": "01M2FKX305VN0A7P0606GYW1SH",
+  "ts": "2026-09-14T09:27:51.557Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "issues.add",
+  "subject": {
+    "type": "issue",
+    "id": "0026"
+  },
+  "payload": {
+    "severity": "low",
+    "title": "utilz doctor prints step 6's dependency verdict under step 7's heading"
+  }
+}

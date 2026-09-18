@@ -1,0 +1,14 @@
+{
+  "id": "01M1YVD2FQBNXKRQVRTTZ4G7HQ",
+  "ts": "2026-09-07T21:11:50.007Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.edit",
+  "subject": {
+    "type": "ac",
+    "id": "ST0014/AC06"
+  },
+  "payload": {
+    "text": "The fifteen bin/ symlinks arrive as SYMLINKS pointing at utilz, not as dereferenced copies, and the manifest checksums each link's TARGET STRING rather than the file it resolves to. Checksumming the resolved file gives all fifteen the same hash, so a link retargeted at the wrong utility reads as intact. THE SOURCE bin/ HOLDS FIFTEEN SYMLINKS AND TWO REAL FILES (utilz, and the vendored devbin); THE INSTALL'S bin/ HOLDS FIFTEEN AND ONE, because D2 excludes devbin as not ours to publish -- verified 7 Sep, the only devbin reference in the 109 owned paths is a comment at opt/prez/prez:54. Read the source count as the arrival count and a correct install looks one file short. THE SYMLINKS ARE THE DISPATCH PREDICATE, NOT DECORATION: bin/utilz:183 dispatches only when -L \"$UTILZ_HOME/bin/$UTIL_NAME\" holds, so a utility whose symlink did not arrive does not dispatch at all AND the error path offers it as a typo, which sends the reader after a misspelling rather than a missing file. The manifest's roll-call IS the owned set, so a count one high carries a phantom entry and one low leaves a file nothing checks. Dispatch-predicate point found by cc."
+  }
+}

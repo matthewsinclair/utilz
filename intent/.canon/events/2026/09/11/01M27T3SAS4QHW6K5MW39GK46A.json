@@ -1,0 +1,14 @@
+{
+  "id": "01M27T3SAS4QHW6K5MW39GK46A",
+  "ts": "2026-09-11T08:42:27.034Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.withdraw",
+  "subject": {
+    "type": "ac",
+    "id": "ST0017/AC-4.1"
+  },
+  "payload": {
+    "reason": "DEFERRED 2026-09-11 by hv: population 3 (Rust init + Rust build) cannot exist because the port has no init verb. The 45h reel's masters were rendered once by the Python init and are consumed by the Rust build unchanged, which is what the ST's Done requires. Reinstate under a follow-on thread with WP-04 if hv wants init in Rust."
+  }
+}

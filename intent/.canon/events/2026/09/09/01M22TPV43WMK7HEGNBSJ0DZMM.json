@@ -1,0 +1,14 @@
+{
+  "id": "01M22TPV43WMK7HEGNBSJ0DZMM",
+  "ts": "2026-09-09T10:16:39.299Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.satisfy",
+  "subject": {
+    "type": "ac",
+    "id": "ST0017/AC-1.5"
+  },
+  "payload": {
+    "evidence": "vc/inbox.cc.md entry 2026-09-09 08:16Z, committed 61206a5 (stamp repaired 20326b9). Two INDEPENDENT enumerations: snorkeltoast enumerated showreel from source before re-reading cc's table, cc enumerated prez before seeing theirs. Result: FOUR behaviours not five, one clean match, and the shipped defect that became issue 0014. The row existed because near-agreement suppresses the check, and the check disagreed."
+  }
+}

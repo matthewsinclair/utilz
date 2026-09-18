@@ -1,0 +1,14 @@
+{
+  "id": "01M23B5N7DZPVDWJMHCWWWSQW3",
+  "ts": "2026-09-09T15:04:21.998Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.satisfy",
+  "subject": {
+    "type": "ac",
+    "id": "ST0017/AC-2.9"
+  },
+  "payload": {
+    "evidence": "CODE AND RAN, answered from harness source by snorkeltoast at vc's request. Three separate assertions reported in three columns, not one conflated measure: REPEAT (reproducibility), STABILITY (two budgets spanning the dwell), PRESENCE (the slide graded against a render of itself with its content stripped). THE PRESENCE HALF IS DIFFERENTIAL RATHER THAN THRESHOLDED, which is the row's load-bearing requirement: an empty frame cannot pass a comparison against a stripped render of itself, whereas the blankness detector this replaces read 55.75 percent \"has content\" on the actual empty frame it was built to catch. Two identical empty frames still pass stability, so stability alone grades an invisible slide green -- which is why the two assertions are separate rather than combined. THE BUDGETS ARE STATED WITH THEIR JUSTIFICATION as the row requires, in capture_budgets' docstring: lower bound ease + 200 so the transition has completed, upper bound dwell - 200 so the reel has not advanced, and the second sample at 60 percent of the remainder rather than a fixed offset because two samples 200ms apart would call a slow crawl stable."
+  }
+}

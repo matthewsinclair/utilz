@@ -1,0 +1,14 @@
+{
+  "id": "01M1ZWCDHGQ4VQ9PJT1HTNN167",
+  "ts": "2026-09-08T06:48:11.569Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.edit",
+  "subject": {
+    "type": "ac",
+    "id": "ST0014/AC15"
+  },
+  "payload": {
+    "text": "UTILZ_HOME IS NOT A USER INTERFACE. THE DISPATCHER FINDS ITSELF AND WORKS EVERYTHING OUT FROM THERE. RE-RULED by hv 8 Sep, reversing vc's ruling of the previous evening; hv is right and the general form is hv's: if it can find the dispatcher on PATH it can derive the rest, so no environment variable is needed at all. determine_utilz_home (bin/utilz:17-53) already does exactly that -- walk the symlink chain from $0, take the parent of bin/ -- and bin/utilz:42 then threw the answer away whenever the variable happened to be set, which is how an exported value silently redirected an install at the checkout. NOBODY SETS IT NOW AND SETTING IT HAS NO EFFECT. The variable survives ONLY as an internal channel from the dispatcher to its children: derived once from $0 and exported, because fifteen utilities each re-deriving it would be fifteen copies of one answer (IN-AG-HIGHLANDER-001). The library keeps READING it and the dispatcher is its only producer in production. VC'S EARLIER RULING KEPT THE HONOURING AND ADDED AN STDERR ANNOUNCEMENT, ON A MEASUREMENT ABOUT THE LIBRARY APPLIED TO THE DISPATCHER -- that conflation is what hv caught. Re-measured 8 Sep by what each consumer actually invokes: test_helper.bash:20 is convergent, so derive gives the identical answer; common_lib.bats:71 and install.sh:124 source the LIBRARY and never run the dispatcher; opt/prez/prez:24 has its own fallback and receives the exported value anyway; cleanz.bats:575 and install_guards.bats:107,120,191,207 are convergent. THE ONLY DIVERGENT DISPATCHER INVOCATIONS IN THE TREE ARE install_guards.bats:166 AND :217, THE TESTS OF THE ANNOUNCEMENT ITSELF. A behaviour whose only consumer is its own test is circular; deleting it removes the test rather than breaking anything, and the whole class goes with it -- no divergence to announce, nothing for AC17 to refuse, and a user with a stale variable simply gets the tree they invoked."
+  }
+}

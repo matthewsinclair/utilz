@@ -1,0 +1,15 @@
+{
+  "id": "01M23FV5GYRGNWDFG8AP8W0JKY",
+  "ts": "2026-09-09T16:26:01.118Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "issues.add",
+  "subject": {
+    "type": "issue",
+    "id": "0021"
+  },
+  "payload": {
+    "severity": "low",
+    "title": "the help renderer strips code backticks but prints ** literally, so every bold span in every help file shows its asterisks"
+  }
+}

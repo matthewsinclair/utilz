@@ -1,0 +1,14 @@
+{
+  "id": "01M27T3S92FXR8PZRQE28AGKJ1",
+  "ts": "2026-09-11T08:42:26.978Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.withdraw",
+  "subject": {
+    "type": "ac",
+    "id": "ST0017/AC-2.19"
+  },
+  "payload": {
+    "reason": "CULLED 2026-09-11 by hv: instrument correctness on which no shipped outcome depends. The finding is true (floors measure the reference's self-stability, the compare asks cross-implementation agreement) and it changes nothing: all six divergent slides clear min_defect 0.223607 by 4x-13x, so AC-3.15's FAIL and hv's acceptance of the encoder divergence stand with or without it. The harness is snorkeltoast's instrument in snorkeltoast's repo; if they re-derive the floors that is their call and needs no Utilz row. Recorded in design.md section 0 as a known limit of the harness."
+  }
+}

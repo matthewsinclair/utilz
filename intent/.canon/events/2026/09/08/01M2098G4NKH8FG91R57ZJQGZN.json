@@ -1,0 +1,15 @@
+{
+  "id": "01M2098G4NKH8FG91R57ZJQGZN",
+  "ts": "2026-09-08T10:33:14.646Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wp.new",
+  "subject": {
+    "type": "wp",
+    "id": "ST0013/06"
+  },
+  "payload": {
+    "scope": "S",
+    "title": "Migration: acceptance.sh path invocations, unit tests, docs"
+  }
+}

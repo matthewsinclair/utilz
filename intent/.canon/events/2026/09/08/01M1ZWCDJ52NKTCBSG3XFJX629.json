@@ -1,0 +1,14 @@
+{
+  "id": "01M1ZWCDJ52NKTCBSG3XFJX629",
+  "ts": "2026-09-08T06:48:11.589Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.edit",
+  "subject": {
+    "type": "ac",
+    "id": "ST0014/AC17"
+  },
+  "payload": {
+    "text": "`utilz use dev|opt` SWITCHES TREES IN ONE COMMAND, FROM EITHER TREE, WITH NO ARGUMENT BEYOND THE WORD, NO NEW CONFIGURATION AND NO ENVIRONMENT VARIABLE. RULED by vc 8 Sep on hv's ask, then SIMPLIFIED TWICE against hv's corrections. The install records source-tree in its manifest header alongside utilz-version and source-commit -- the absolute path it was published FROM. That one line makes the verb turnkey: from the install, 'use dev' reads source-tree from the manifest; from the source, 'use opt' reads install.prefix from utilz.yaml. Each tree holds the address of the other, so NEITHER DIRECTION NEEDS A PATH TYPED OR A KEY INVENTED. THIS ROW'S FIRST DRAFT REQUIRED A SECOND CONFIG KEY AND BUILT ITSELF AROUND REFUSING WHILE UTILZ_HOME IS EXPORTED. Both are gone: the key duplicated an address the manifest carries for free, and AC15 now has the dispatcher ignore an inherited UTILZ_HOME entirely, so there is no override to refuse under. MECHANISM IS relink AND THERE IS EXACTLY ONE OF IT (IN-AG-HIGHLANDER-001): use parses a word to a tree, calls relink, renders (IN-AG-THIN-COORD-001). If it grows a link-walk, a skip policy or a report of its own it has gone wrong. Bare `utilz use` reports which tree the links currently serve and changes nothing, because a switch you cannot interrogate is one you run to find out where you are."
+  }
+}

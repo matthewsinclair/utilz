@@ -1,0 +1,15 @@
+{
+  "id": "01M2FXZA4M2PY8G7225XAY4VA9",
+  "ts": "2026-09-14T12:23:50.164Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "issues.add",
+  "subject": {
+    "type": "issue",
+    "id": "0028"
+  },
+  "payload": {
+    "severity": "low",
+    "title": "install_e2e's setup_file swallows a refused commit, so it surfaces later as a misleading dirty-tree refusal"
+  }
+}

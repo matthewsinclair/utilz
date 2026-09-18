@@ -1,0 +1,15 @@
+{
+  "id": "01M2FZX6DCTASYP719NVVG489N",
+  "ts": "2026-09-14T12:57:37.964Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "issues.add",
+  "subject": {
+    "type": "issue",
+    "id": "0030"
+  },
+  "payload": {
+    "severity": "low",
+    "title": "acceptance.sh's process matchers reach other runs' processes: AT06 counts any prez on the machine, and AT20's cleanup can kill another run's browser"
+  }
+}

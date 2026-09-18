@@ -1,0 +1,15 @@
+{
+  "id": "01M23CW4CEA2VQE5G9P4X9XXNG",
+  "ts": "2026-09-09T15:34:06.990Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "issues.close",
+  "subject": {
+    "type": "issue",
+    "id": "0019"
+  },
+  "payload": {
+    "from": "open",
+    "to": "closed"
+  }
+}

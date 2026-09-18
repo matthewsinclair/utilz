@@ -1,0 +1,14 @@
+{
+  "id": "01M2GBE3W6HTZHEMM6MZ2EPW8V",
+  "ts": "2026-09-14T16:19:06.759Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "st.new",
+  "subject": {
+    "type": "thread",
+    "id": "ST0020"
+  },
+  "payload": {
+    "title": "prez: a theme name defined twice on the search path refuses, when a caller asks"
+  }
+}

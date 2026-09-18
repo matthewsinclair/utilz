@@ -1,0 +1,15 @@
+{
+  "id": "01M22YWDM8QD68KNZ3Y3JZ4DW1",
+  "ts": "2026-09-09T11:29:36.392Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "issues.add",
+  "subject": {
+    "type": "issue",
+    "id": "0018"
+  },
+  "payload": {
+    "severity": "high",
+    "title": "prez applies CSS comment grammar to layout.html, so a stray /* ... */ hides a live external reference"
+  }
+}

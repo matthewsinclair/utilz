@@ -1,0 +1,15 @@
+{
+  "id": "01M2098G2G2ZCZBZTB26EE6NB4",
+  "ts": "2026-09-08T10:33:14.576Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wp.new",
+  "subject": {
+    "type": "wp",
+    "id": "ST0013/02"
+  },
+  "payload": {
+    "scope": "S",
+    "title": "Red-first: theme-addressing.sh, all six ATs"
+  }
+}

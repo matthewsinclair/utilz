@@ -1,0 +1,15 @@
+{
+  "id": "01M2FJW712QR3G2BX2PMAHE88P",
+  "ts": "2026-09-14T09:09:54.339Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "issues.add",
+  "subject": {
+    "type": "issue",
+    "id": "0025"
+  },
+  "payload": {
+    "severity": "low",
+    "title": "prez shim's one shared pending stamp fails the second of two overlapping stale runs after its build succeeds"
+  }
+}

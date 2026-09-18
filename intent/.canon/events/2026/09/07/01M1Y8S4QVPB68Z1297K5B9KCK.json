@@ -1,0 +1,14 @@
+{
+  "id": "01M1Y8S4QVPB68Z1297K5B9KCK",
+  "ts": "2026-09-07T15:46:22.587Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.satisfy",
+  "subject": {
+    "type": "ac",
+    "id": "ST0010/AC16"
+  },
+  "payload": {
+    "evidence": "ATTESTED BY hv, 2026-09-07: 'I have done all of the eyeballing with prez. It's good to go.' Every built-in rendered and viewed by the human -- the seven prez ships are 8bit, blueprint, contrast, manuscript, mono, simple and steampunk. RECORDED AS AN ATTESTATION, AND THE LIMIT IS PART OF THE RECORD: AC16 asks for the observation itself to be evidence, and what is held here is hv's statement that the observation happened, with no per-theme note of what was seen. That is weaker than the criterion's letter and it is hv's to give, since AC16 exists precisely because no instrument can stand in for the human eye -- but a later reader must not mistake this row for a catalogue of renders. hv's looking has found four defects on this thread that no green caught, including a diagram-font defect that passed a GREEN determinism probe, which is why the row exists and why the attestation is worth more than another suite run."
+  }
+}

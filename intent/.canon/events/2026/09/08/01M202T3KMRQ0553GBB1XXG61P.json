@@ -1,0 +1,14 @@
+{
+  "id": "01M202T3KMRQ0553GBB1XXG61P",
+  "ts": "2026-09-08T08:40:31.605Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.satisfy",
+  "subject": {
+    "type": "ac",
+    "id": "ST0014/AC17"
+  },
+  "payload": {
+    "evidence": "AT17 green in opt/utilz/test/relink.bats. Mis-kinded as AC14. Verified by vc 8 Sep in a clean login shell: 'utilz use dev' then 'utilz use opt' round-trips with one word each way, no path typed; use dev FROM the install reads source-tree out of its own manifest; bare 'utilz use' reports opt/dev/other counts and changes nothing."
+  }
+}

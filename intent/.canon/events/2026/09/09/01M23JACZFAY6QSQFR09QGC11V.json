@@ -1,0 +1,14 @@
+{
+  "id": "01M23JACZFAY6QSQFR09QGC11V",
+  "ts": "2026-09-09T17:09:17.424Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.edit",
+  "subject": {
+    "type": "ac",
+    "id": "ST0017/AC-2.16"
+  },
+  "payload": {
+    "text": "The harness CONSULTS a recorded table of the port's predicted differences BEFORE it compares anything, so a difference the contract decided reads as a pass and an undecided one still fails loudly. THE PREDICTION MUST PREDATE THE BEHAVIOUR: a prediction written after the refusal is a rationalisation with a good filing system, and once both are on disk nothing tells them apart. THIS ROW NAMED TWO BEHAVIOURS AS ONE AND THAT WAS WRONG, CORRECTED BY snorkeltoast AGAINST vc'S BRIEF: AC-3.11's max_ease cap CLAMPS where the ease >= dwell pair REFUSES, and those are different KINDS -- a table filing the cap under refusal would wait for a refusal that never comes while the actual divergence walked past it as an unexplained pixel diff. So the row pins the property and not the list. Each entry carries its KIND (refusal, divergence, or blind -- blind being predicted to differ AND predicted to be invisible to this instrument, recorded so silence is not read as parity), predicates on the reel's INPUTS rather than on the port's error text, and records whether it has been OBSERVED or is only DESIGNED. The predicted set itself lives in design.md section 5 and in the harness's PORT_EXPECTATIONS; this row does not restate it, because an enumeration in a row drifts from the table it copies."
+  }
+}

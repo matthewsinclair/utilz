@@ -1,0 +1,14 @@
+{
+  "id": "01M27T3SD8A1FYNF5CV8V784T6",
+  "ts": "2026-09-11T08:42:27.112Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.edit",
+  "subject": {
+    "type": "ac",
+    "id": "ST0017/AC-6.3"
+  },
+  "payload": {
+    "text": "The pinned reel fixture carries no artist personal name and no personal social handles. HONEST PARTIAL, ruled by hv 2026-09-10; the residue below is exempt by that ruling and a later sweep that removes it is reversing a decision. EDIT SET, nothing else: fixture lines 2, 15, 22 (name) and 63, 64, 66, 67, 69, 70 (socials, including the TikTok id, which falsifies no record) become a fixture identity, line for line; plan.rs:391 becomes slug(\"Bea's Art!\") == \"beas-art\", keeping the intra-word apostrophe it alone proves; deliver.rs:393 is deleted, the line above already covers a space between two words. EXEMPT: the stage handle (338 occurrences across contract, boards and folds -- cannot change without falsifying the record); AC-6.1's evidence, where the name is a strings control token and its presence IS the finding; the append-only whiteboard surfaces. DISCHARGED when the fixture and the two test lines read as above, 220 lines and fifteen segments intact, and git grep -P over the name tokens hits only the exempt files."
+  }
+}

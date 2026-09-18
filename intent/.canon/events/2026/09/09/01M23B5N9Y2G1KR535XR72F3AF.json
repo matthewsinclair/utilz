@@ -1,0 +1,14 @@
+{
+  "id": "01M23B5N9Y2G1KR535XR72F3AF",
+  "ts": "2026-09-09T15:04:22.078Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.satisfy",
+  "subject": {
+    "type": "ac",
+    "id": "ST0017/AC-2.18"
+  },
+  "payload": {
+    "evidence": "SATISFIED ON THE ROW'S SURVIVING REQUIREMENT, WHICH WAS ALWAYS THE HONEST STATEMENT AND NEVER THE REEL'S LOCATION -- snorkeltoast's words on hv's ruling landing, and they are right. hv RULED 2026-09-09 that the reel's inputs stay in Dropbox: the reel lives in a Dropbox worktree rather than a git one, its inputs can be arbitrarily large, and Utilz itself is fully tracked, which is what the hoist actually depends on. So the limit is PERMANENT and TRUE -- a later reader cannot resolve sha256 daaa503ad7db, and nobody intends to change that -- and the row requires the harness to say so where the number is produced, which FLOORS.md does. LEAVING THIS UNSATISFIED WAS ITSELF THE DEFECT: a row in state unsatisfied reads as an open action item to every later reader, and this row's own text says it must not read as one. The record is what gets fixed, not the reel. The three-legged reading stands and is now the whole of it: the sha IDENTIFIES the artifact precisely, the inputs are unobtainable so nothing makes the reel rebuildable by a third party, and the harness is what makes any rebuild gradeable for whoever does hold the inputs. Obtainable is not byte-reproducible in any case -- the encoder's bytes depend on its version, which is the same fact that makes WP-02 necessary for the port at all -- so a rebuild yielding a different sha is neither evidence of a defect nor of its absence, and only the harness separates those. The caveat sits where the number is produced rather than where it is reported, which is the only arrangement that survives the document being quoted without it."
+  }
+}

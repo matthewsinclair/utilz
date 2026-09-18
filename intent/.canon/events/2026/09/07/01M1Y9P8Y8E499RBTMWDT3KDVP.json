@@ -1,0 +1,14 @@
+{
+  "id": "01M1Y9P8Y8E499RBTMWDT3KDVP",
+  "ts": "2026-09-07T16:02:17.161Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.edit",
+  "subject": {
+    "type": "ac",
+    "id": "ST0010/AC19"
+  },
+  "payload": {
+    "text": "The presenting window opens at the deck's own shape ON A COLD START, the shape is overridable, and the case where it CANNOT is stated rather than hidden. prez pdf already renders 16:9 by default (--paper 254x142.9mm); prez present passed --app, --start-fullscreen and --new-window and set no geometry at all, so an app window inherited whatever Chrome last remembered and hv got a PORTRAIT window for a 16:9 deck. (a) present sizes the window to the deck's aspect by default, matching pdf's default rather than a second opinion about it. (b) a --window WxH flag overrides, mirroring --paper's grammar so the two verbs read the same way. (c) NO FLAG IS PASSED THAT HAS NO OBSERVABLE EFFECT ON A PLATFORM WE SHIP TO -- --start-fullscreen was passed and demonstrably did not take on macOS, which is AC18's class applied to the tool rather than the harness; it is gone. (d) REWORDED 7 Sep FROM A MEASUREMENT, and this clause is the reword. (a) and (b) hold on a COLD START ONLY. Measured by AT20: with an instance already running on the same profile, present --window 640x480 produced a 1024x768 window -- the geometry of the window already open -- because Chrome FORWARDS the launch into the running instance and ignores --window-size on that path. That is Chrome's behaviour and prez cannot override it; no flag combination tested changes it. It is almost certainly what produced hv's portrait window, which means the fix in (a) does not reach the case that minted this criterion, since a user with Chrome already open is the normal case rather than the edge one. THE REQUIREMENT IS THEREFORE HONESTY, NOT A FIX prez CANNOT MAKE: the limit is documented where a user meets it (help/prez.md), because someone who passes --window and gets a different size must be able to find out why without reading the source. This is AC20(a) pointing at a flag instead of a key -- either it does what its label says, or what will actually happen is stated. VERIFIED IN TWO LAYERS, the same split as AC04: a unit test asserts the ARGV open_presenting builds, which needs no browser and is where a silently-dropped flag is caught; the browser AT asserts the window that actually appears, which is the only thing that can prove a flag took effect -- and, since 7 Sep, the only thing that can prove the forwarding limit is real rather than assumed. (Minted 2026-08-29 from hv's screenshot -- the second defect this thread found by hv looking at output rather than by any green.)"
+  }
+}

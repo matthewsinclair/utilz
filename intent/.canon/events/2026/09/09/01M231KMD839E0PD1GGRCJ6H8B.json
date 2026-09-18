@@ -1,0 +1,14 @@
+{
+  "id": "01M231KMD839E0PD1GGRCJ6H8B",
+  "ts": "2026-09-09T12:17:14.152Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.edit",
+  "subject": {
+    "type": "ac",
+    "id": "ST0017/AC-3.11"
+  },
+  "payload": {
+    "text": "max_ease is applied by the COMPILER, not only by the runtime, and a config whose ease is greater than or equal to its dwell is refused by name. THE DEFECT IS SPLIT ENFORCEMENT, NOT AN UNLUCKY PAIR OF CONSTANTS -- cc's correction, verified from source f593de8: showreel:799-800 applies min_dwell and min_ease and NEVER applies max_ease, while the cap lives only in player.html's easeOf, at the Math.min(..., LIM.max_ease) token -- cited by token because 3903937 moved it off the line 549 this row named until 2026-09-09, whereas the two showreel citations here were swept the same day and are correct, and showreel:988 comments 'the runtime enforces the same floors' when it enforces one the compiler does not have. One limit, two homes, disagreeing, and a comment asserting a parity that does not hold -- this thread's own dominant class, in the code about to be ported. README section 7's claim that compiler and player both enforce the floors is false for max_ease."
+  }
+}

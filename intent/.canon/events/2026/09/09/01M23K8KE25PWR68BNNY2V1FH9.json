@@ -1,0 +1,15 @@
+{
+  "id": "01M23K8KE25PWR68BNNY2V1FH9",
+  "ts": "2026-09-09T17:25:47.074Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "issues.add",
+  "subject": {
+    "type": "issue",
+    "id": "0022"
+  },
+  "payload": {
+    "severity": "medium",
+    "title": "showreel check prints a build-time constant beside a config fact, and the subtraction is false"
+  }
+}

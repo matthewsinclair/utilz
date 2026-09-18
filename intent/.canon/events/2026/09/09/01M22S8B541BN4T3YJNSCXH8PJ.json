@@ -1,0 +1,14 @@
+{
+  "id": "01M22S8B541BN4T3YJNSCXH8PJ",
+  "ts": "2026-09-09T09:51:15.620Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.edit",
+  "subject": {
+    "type": "ac",
+    "id": "ST0017/AC-2.3"
+  },
+  "payload": {
+    "text": "A same-file control run reports the noise floor, and the control is REPEATED -- one run does not characterise noise. Measured 2026-09-09: slide 14 gave 0.000000 then 0.002196 on successive control runs, so a single control would have set a floor of zero on a slide that is not stable. The grading floor is derived from the repeated control and stated with its reason, and may differ per population where the reason is stated."
+  }
+}

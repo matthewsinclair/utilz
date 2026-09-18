@@ -1,0 +1,15 @@
+{
+  "id": "01M1YT4QEVB2N0BRH436T47N18",
+  "ts": "2026-09-07T20:49:47.995Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wp.new",
+  "subject": {
+    "type": "wp",
+    "id": "ST0014/04"
+  },
+  "payload": {
+    "scope": "S",
+    "title": "Runnable-install guards: utilz test refuses, the prez shim refuses to build, install reports its provenance"
+  }
+}

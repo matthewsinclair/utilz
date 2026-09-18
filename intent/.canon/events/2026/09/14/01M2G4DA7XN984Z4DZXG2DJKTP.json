@@ -1,0 +1,15 @@
+{
+  "id": "01M2G4DA7XN984Z4DZXG2DJKTP",
+  "ts": "2026-09-14T14:16:20.478Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "issues.add",
+  "subject": {
+    "type": "issue",
+    "id": "0033"
+  },
+  "payload": {
+    "severity": "medium",
+    "title": "utilz todo renumbers every item on every write, so an id cited anywhere goes stale at the next add, done or sync"
+  }
+}

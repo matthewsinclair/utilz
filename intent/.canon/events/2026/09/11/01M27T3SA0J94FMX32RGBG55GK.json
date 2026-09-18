@@ -1,0 +1,14 @@
+{
+  "id": "01M27T3SA0J94FMX32RGBG55GK",
+  "ts": "2026-09-11T08:42:27.008Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.withdraw",
+  "subject": {
+    "type": "ac",
+    "id": "ST0017/AC-3.4"
+  },
+  "payload": {
+    "reason": "DEFERRED 2026-09-11 by hv: needs the init verb, which the port does not have -- main.rs dispatches check and build only, and pdftoppm is called nowhere. The policy itself is built and graded on the build pass (AC-3.2, AC-3.3, AC-3.5 satisfied); this row's second application has no caller until a Rust init exists. The ST's Done (info.md) names build, fidelity, consolidation and prez's contract -- not init. Reinstate under a follow-on thread if hv wants init in Rust."
+  }
+}

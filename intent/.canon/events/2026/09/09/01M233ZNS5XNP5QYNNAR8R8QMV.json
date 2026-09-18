@@ -1,0 +1,14 @@
+{
+  "id": "01M233ZNS5XNP5QYNNAR8R8QMV",
+  "ts": "2026-09-09T12:58:45.926Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.satisfy",
+  "subject": {
+    "type": "ac",
+    "id": "ST0017/AC-2.17"
+  },
+  "payload": {
+    "evidence": "MEASURED, not predicted. snorkeltoast ran the harness with --min-defect 0.223607 against artifact daaa503ad7db at 13 captures a slide: POPULATION 21 gradeable, 0 undecided, 1 ungradeable, 0 windowless, of 22. Slide 13 gradeable at 149x under the magnitude, slide 14 at 102x, slide 1 presence UNPROVABLE and waiting on AC-3.7's brand literal rather than on any magnitude. hv named the defect by DESCRIPTION -- a one-level shift over 5 percent of the frame -- and the threshold 0.223607 is computed from it as sqrt(0.05), which snorkeltoast re-derived independently rather than accepting: n = f*W*H pixels moving one level over three channels gives sum(d^2) = 3*f*W*H against a divisor of 3*W*H, so W and H cancel and the magnitude is a property of the DEFECT rather than of 1920x1080. It transfers to any reel at any resolution. snorkeltoast could have re-derived this bucket line exactly before the run -- verdict_for is pure and control.json holds every input -- and declined to circulate it, on the grounds that an exact re-derivation carries the authority of arithmetic while describing a run that has not happened. The line above is the run's own."
+  }
+}

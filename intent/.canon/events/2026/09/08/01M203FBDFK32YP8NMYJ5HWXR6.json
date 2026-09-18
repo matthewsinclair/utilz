@@ -1,0 +1,14 @@
+{
+  "id": "01M203FBDFK32YP8NMYJ5HWXR6",
+  "ts": "2026-09-08T08:52:07.728Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.withdraw",
+  "subject": {
+    "type": "ac",
+    "id": "ST0014/AC17"
+  },
+  "payload": {
+    "reason": "Mis-kinded at creation and unfixable in place: minted non-test because `intent ac new` defaults to that, and no verb changes an AC's kind. Re-minted verbatim as AC21 with kind test. Measured before choosing: with its covering AT forced red, a computed row goes unsatisfied while an evidence-backed row stays satisfied, so this row could not detect its own test failing. Withdrawn rather than left satisfied-by-evidence, because a row that cannot go red is worse than no row."
+  }
+}

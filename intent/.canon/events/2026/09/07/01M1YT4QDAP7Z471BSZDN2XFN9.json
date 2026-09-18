@@ -1,0 +1,15 @@
+{
+  "id": "01M1YT4QDAP7Z471BSZDN2XFN9",
+  "ts": "2026-09-07T20:49:47.946Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wp.new",
+  "subject": {
+    "type": "wp",
+    "id": "ST0014/01"
+  },
+  "payload": {
+    "scope": "S",
+    "title": "Owned set and manifest: the file list, symlink target-string checksums, manifest write and check"
+  }
+}

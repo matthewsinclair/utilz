@@ -1,0 +1,14 @@
+{
+  "id": "01M23E25G7EXG51C1G8S2T7HH0",
+  "ts": "2026-09-09T15:54:53.319Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.edit",
+  "subject": {
+    "type": "ac",
+    "id": "ST0017/AC-2.1"
+  },
+  "payload": {
+    "text": "The harness derives its population label from what actually ran, never from a flag someone passed, and refuses a verdict without one. GRADED IN THREE LEGS OF DIFFERENT QUALITY, because the row read as one claim and is not -- snorkeltoast's split, verified by vc at the source, and the row stays UNSATISFIED on the middle one. LEG 1, ARTIFACT-LEVEL POPULATION: DERIVED AND RAN. capture() writes artifact_sha256 and population_source into manifest.json and compare prints the POPULATION block, so what is graded is identified by what was actually photographed rather than by an assertion. LEG 2, PRODUCER-LEVEL POPULATION: A FLAGGED GUESS, AND THIS IS WHAT HOLDS THE ROW OPEN. The run's label reads \"adjacency (UNVERIFIED)\" because no artifact stamps its own builder, so the producer is inferred to be the compiler that sat BESIDE the harness at capture time. compare says so loudly and marks the verdict PROVISIONAL, which is the honest form and not the required one: THE ROW ASKS FOR A LABEL DERIVED FROM WHAT RAN, AND ADJACENCY IS NOT THAT. It is not a flag someone passed either, so the row is half-met rather than violated. LEG 3, THE REFUSAL: PRESENT, TERMINAL, AND NEVER FIRED -- and it is a SOUND detector zero rather than a tautology, which is the distinction this thread keeps having to make. Read at showreel-harness:1150, the first die in cmd_compare: \"the {name} capture carries no artifact identity\", reached before STRUCTURE and before everything else, ending in sys.exit(1). It cannot fire on a manifest capture() wrote, because capture() always writes the identity -- but a hand-edited or partially-written manifest is a real input class and the branch is reachable from it. So it COULD fire, which is what makes the zero worth something; contrast AC-2.17's UNDECIDED branch, which no input could reach. DISCHARGED WHEN LEG 2 BECOMES A DERIVATION, WHICH IS WP-03'S TO GIVE: once the Rust build stamps its own identity into the artifact, the producer stops being the thing that was standing nearby and becomes the thing that is recorded. This is a real WP-02-on-WP-03 dependency and is stated here so it is not rediscovered as a surprise."
+  }
+}

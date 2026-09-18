@@ -1,0 +1,14 @@
+{
+  "id": "01M22V28N0XBQKFHZBSS40ETQ2",
+  "ts": "2026-09-09T10:22:53.600Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.edit",
+  "subject": {
+    "type": "ac",
+    "id": "ST0017/AC-2.7"
+  },
+  "payload": {
+    "text": "A deviation attributed to a slide is separated from a deviation attributable to its capture POSITION before any floor is set. Only reordering separates them; no number of repeats at one order can. SATISFIED on the reverse-order run, whose CONCLUSION stands: with the capture budget held constant, the deviation followed the slide across both orders and the untouched slides were identical in both. Its NUMBERS are superseded -- that run predates 6c278a2 and carried pace=ambient. And a THIRD variable was held constant and is now known to matter: the capture MOMENT. The artefact migrates between slides as the budget changes, so this row rules out position and does not rule out budget."
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "id": "01M2GHDNT2365JEDENCFQQ2XRQ",
+  "ts": "2026-09-14T18:03:43.811Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "issues.add",
+  "subject": {
+    "type": "issue",
+    "id": "0035"
+  },
+  "payload": {
+    "severity": "low",
+    "title": "prez AT09's estate tripwire does not match Gtools, so a prez source naming its consumer passes"
+  }
+}

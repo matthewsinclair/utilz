@@ -1,0 +1,15 @@
+{
+  "id": "01M22MXA56EP9HY5R9D659TYKD",
+  "ts": "2026-09-09T08:35:19.846Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "issues.add",
+  "subject": {
+    "type": "issue",
+    "id": "0015"
+  },
+  "payload": {
+    "severity": "medium",
+    "title": "prez strip_comments truncates at a '/*' inside a string, so refuse_external never sees the rest of the theme"
+  }
+}

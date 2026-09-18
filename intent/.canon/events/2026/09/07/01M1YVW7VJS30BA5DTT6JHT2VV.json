@@ -1,0 +1,14 @@
+{
+  "id": "01M1YVW7VJS30BA5DTT6JHT2VV",
+  "ts": "2026-09-07T21:20:07.026Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.edit",
+  "subject": {
+    "type": "ac",
+    "id": "ST0014/AC15"
+  },
+  "payload": {
+    "text": "AN INHERITED UTILZ_HOME MUST NOT SILENTLY REDIRECT AN INSTALL, AND THE REMEDY IS TO ANNOUNCE THE DIVERGENCE, NOT TO IGNORE THE VARIABLE. bin/utilz:42 derives UTILZ_HOME from $0 only when the variable is UNSET; set, determine_utilz_home never runs and common.sh, every utility, help/ and VERSION are built from whatever the caller exported. MEASURED 7 Sep: a prefix carrying a marker VERSION answers 'vPREFIX-MARKER-9.9.9' unset and 'v2.5.0', the SOURCE tree's, exported -- and ~/.zshrc:76-78 exports it unconditionally. RULED by vc 7 Sep with the pen: the dispatcher ALWAYS computes its own home from $0, and when an inherited UTILZ_HOME names a DIFFERENT tree it says so on stderr and HONOURS THE INHERITED VALUE. Behaviour is preserved and the silence is removed. IGNORING THE VARIABLE WAS THE OBVIOUS RULING AND IT IS WRONG, measured rather than argued: opt/utilz/test/test_helper.bash:20 exports UTILZ_HOME for the ENTIRE bats suite, opt/prez/test/prez.bats:132 invokes a sandboxed shim against the project root as a DELIBERATE foreign-tree run, common_lib.bats:71 binds a temp home, static/emacs/e2e-smoke.el:11 documents UTILZ_HOME=$PWD, and install.sh:124 binds it in a subshell to read a foreign tree's yaml. The variable is load-bearing; the silence is the defect. Two dispatchers, one honouring it and one not, was rejected as a Highlander violation on the one file that must have exactly one answer. AC01 CANNOT COVER THIS: AC01 moves the source ASIDE, where a stale UTILZ_HOME fails loudly rather than deferring quietly, so AC01 goes green in a clean env while the defect is live in the shell hv types into. The dangerous case is source-PRESENT."
+  }
+}

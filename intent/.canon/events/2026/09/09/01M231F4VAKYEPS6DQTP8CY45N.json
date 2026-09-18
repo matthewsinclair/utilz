@@ -1,0 +1,14 @@
+{
+  "id": "01M231F4VAKYEPS6DQTP8CY45N",
+  "ts": "2026-09-09T12:14:47.146Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.edit",
+  "subject": {
+    "type": "ac",
+    "id": "ST0017/AC-2.17"
+  },
+  "payload": {
+    "text": "Gradeability is decided against a NAMED minimum defect that is injected and red-proved, never against a multiplier. hv ruled 2026-09-09. A floor is acceptable iff it sits below that defect's measured value. THE ROW'S ORIGINAL CITATION WAS WRONG AND THE CORRECTION STRENGTHENS IT. This row cited the red-proof's injection at 6.29 until 2026-09-09; snorkeltoast re-measured the same injection at 0.999752 and could not source 6.29, recording pre-6c278a2 pace=ambient contamination as a HYPOTHESIS rather than a finding. vc closed it arithmetically, independent of that hypothesis: showreel-harness rmse() sums squared differences over RGB and divides by 3*W*H, so a one-level change on every pixel of a 1920x1080 frame is EXACTLY 1.000000, and 0.999752 is that identity less the pixels clipping at 0. 6.29 would require an average shift of 6.29 levels, so it was never a one-level injection's RMSE on a clean capture, whatever else it was. WHY NO SINGLE INJECTION CAN CALIBRATE A MULTIPLIER, MEASURED: the identical procedure reads 0.998249 to 2.280042 across this reel's eight image slides, a 2.3x range decided entirely by picture content -- readings above 1.0 are pixels moving more than one level where the darken clips. A constant taken from one injection is calibrated on a figure that varies 2.3x inside one artifact. THE SMALL-EXTENT EXAMPLE WAS ALSO WRONG, IN THE DIRECTION THAT STRENGTHENS THE ROW. This row and snorkeltoast's FLOORS.md both said a one-level change over four pixels measures 0.002196. It measures 0.001389. 0.002196 is slide 14's MEASURED floor and implies about 1.58 levels over four pixels, which is exactly what AC-2.3's two anti-aliased endpoints rounding independently produce. So a true one-level four-pixel defect sits BELOW slide 14's floor rather than equal to it, and slide 14 cannot grade it; 455x separates the smallest full-frame injection from that floor. TRIGGER FIRED: hv deferred on 2026-09-09 to name a magnitude only if the re-run left a slide ungradeable, and the re-run (FLOORS.md, artifact sha256 daaa503ad7db, 13 captures, 2026-09-09T12:03:45Z) reads 19 gradeable, 2 UNDECIDED, 1 ungradeable of 22. Slides 13 and 14 are UNDECIDED, which is a refusal pending --min-defect, so the magnitude is hv's to name."
+  }
+}

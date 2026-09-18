@@ -1,0 +1,14 @@
+{
+  "id": "01M22SQKN0CQCP6S5K49Y3XDSS",
+  "ts": "2026-09-09T09:59:35.841Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.edit",
+  "subject": {
+    "type": "ac",
+    "id": "ST0017/AC-2.3"
+  },
+  "payload": {
+    "text": "A same-file control run reports the noise floor, and the control is REPEATED, because STABILITY of the noise -- not the presence of it -- decides whether a slide is gradeable. Measured 2026-09-09: slide 14 read 0.002196 four times, reproducible, so it is graded against its own floor 2800x smaller than the injected defect the red-proof measures; slide 20 read 4.99, 8.28, 10.65 and 12.45, unbounded, so no floor is safe -- a floor wide enough for the next sample is wider than the signal the instrument exists to detect. Two slides, both non-zero on a single control reading, requiring OPPOSITE treatment, and one run cannot tell them apart. Floors are per-slide, derived from the repeated control, and stated with their reason."
+  }
+}

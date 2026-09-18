@@ -1,0 +1,14 @@
+{
+  "id": "01M2FMRWE6TPF307BZ9WS2YNX2",
+  "ts": "2026-09-14T09:43:02.342Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.edit",
+  "subject": {
+    "type": "ac",
+    "id": "ST0018/AC-01.5"
+  },
+  "payload": {
+    "text": "With PREZ_DEFAULT_THEME unset or empty, nothing changes. Two claims, labelled: (a) an empty value is treated as unset -- a regression guard, green at HEAD by construction, red only if the fix reads an empty value as a name; (b) rank 4, a claim about TODAY that must pass at HEAD: a deck that names no theme, with no fallback, builds byte-identical to --theme=simple. Answers: with the fallback unset, nothing changes."
+  }
+}

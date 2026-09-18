@@ -1,0 +1,14 @@
+{
+  "id": "01M22Z0ZD8GHA09Z5KPKWSA5N7",
+  "ts": "2026-09-09T11:32:05.672Z",
+  "principal": "local",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.edit",
+  "subject": {
+    "type": "ac",
+    "id": "ST0017/AC-3.13"
+  },
+  "payload": {
+    "text": "The scan's grammar matches every surface it is applied to. refuse_external runs on THREE surfaces -- theme.css, theme.js and layout.html (artifact/theme.rs:201-206) -- and strip_comments implements CSS's comment and string grammar, which JS and HTML do not share. MEASURED 2026-09-09 by vc at the artifact, both arms, and the mismatch runs in BOTH directions where the row was minted believing it ran in one. OVER-refusal, loud: a theme.js attribution in a // comment and an HTML attribution in <!-- --> are both refused, the harm the comment exemption exists to prevent. UNDER-refusal, silent: a live href in layout.html between a stray /* and a later */ is stripped before the scan and SHIPS -- issue 0018, the class of 0014, 0015 and 0017 on the surface none of them looked at. RULED BY VC IN TWO PARTS, SIZED TO WHICH HALF IS SILENT. NOW: the comment exemption becomes CSS-only, and a non-CSS surface is scanned with no comment stripping at all. That closes the silent half outright -- nothing can be hidden behind markers the language does not have -- and costs a flag on one call. LATER, and only once a real theme.js or layout.html exists in the estate: a comment and string grammar per surface, which is cc's shape and the right one at that point. What remains after the first part is over-refusal on every comment in JS and HTML, and it fails LOUDLY against a population of zero -- nine theme.css files estate-wide, no theme.js, no layout.html -- which is what makes it deferrable where the bypass was not. NOT dischargeable by writing down that the CSS scanner is adequate, because it is not."
+  }
+}
