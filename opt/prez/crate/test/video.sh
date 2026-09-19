@@ -43,7 +43,14 @@ TOL=6             # per channel, of 255
 FADE_RGB="192 32 32"  # the fade slide's picture, 0xC02020
 PHOTO_WH="1920x1280"  # the 6000x4000 photo, as build fits it to the 1920 target
 
-WORK="$(mktemp -d "${TMPDIR:-/tmp}/showreel-video-at.XXXXXX")"
+# UNDER /tmp, AND SHORT, BECAUSE CHROME BINDS A SOCKET INSIDE A RECORDING'S
+# SCRATCH DIRECTORY. showreel makes that directory in TMPDIR only when TMPDIR is
+# short enough for the socket's path, and in /tmp otherwise (record.rs,
+# SCRATCH_BASE_MAX). Each recording here runs with TMPDIR=$WORK/tmp-<name>/,
+# so that AT27 can see what it leaves behind, and under a long TMPDIR, such as
+# macOS's own, the scratch directory would move to /tmp and AT27 would be
+# watching an empty place.
+WORK="$(mktemp -d /tmp/svt.XXXXXX)"
 trap 'rm -rf "$WORK"' EXIT
 
 # THIS RUN'S OWN NAME, AND THE ONLY SAFE KEY FOR A PROCESS MATCHER (issue 0030):
@@ -172,6 +179,7 @@ started() {
   [ -f "$WORK/f-$name/f00005.png" ] && return 0
   kill -KILL "$PID" 2>/dev/null
   { wait "$PID"; } 2>/dev/null
+  shown "$name"
   return 1
 }
 
@@ -243,6 +251,11 @@ FAKE
         ;;
     esac
     echo $? >"$WORK/$name.rc"
+    # Shown once, where it first failed. `fail` is refused on purpose, and
+    # AT31 reads its refusal.
+    if [ "$name" != fail ] && [ "$(cat "$WORK/$name.rc")" -ne 0 ]; then
+      shown "$name"
+    fi
   fi
   return "$(cat "$WORK/$name.rc")"
 }
@@ -259,6 +272,12 @@ mid_recording() {
 
 # The first line a recording said on stderr, its refusal, for a failure message.
 said() { head -1 "$WORK/$1.err" 2>/dev/null; }
+
+# A failed recording's whole account, indented: the refusal, then what Chrome
+# and ffmpeg said after it, which is the part that says why. CI shows nothing
+# of a run but this suite's output, and its first Linux run failed every
+# recording with the why cut off after the first line.
+shown() { sed 's/^/        | /' "$WORK/$1.err" 2>/dev/null; }
 
 # Inside an AT: true when every tool is here. When one is missing the AT is
 # UNCHECKED, which --strict counts: never n/a, because a missing tool is not a
@@ -502,6 +521,12 @@ if want AT27; then
     # the refusal must name its step and leave nothing behind. The group is
     # found by this run's own TMPDIR, never by a name (issue 0030).
     if started stall -o "$WORK/stall.mp4"; then
+      # With Chrome alive: its process singleton, a socket a kill would
+      # otherwise strand in the system's temporary directory, must be inside
+      # the scratch directory the shutdown removes (design.md, Shutdown).
+      sockets=$(find "$WORK/tmp-stall" -name SingletonSocket 2>/dev/null | grep -c '')
+      if [ "$sockets" -ge 1 ]; then ok "Chrome's singleton socket is in the recording's scratch directory"
+      else bad "no SingletonSocket under the run's TMPDIR, so Chrome put its singleton where a kill strands it"; fi
       ps -eo pgid=,args= >"$WORK/ps.txt" 2>/dev/null
       group=$(grep -F -- "$WORK/tmp-stall" "$WORK/ps.txt" | awk '{ print $1 }' | sort -u)
       if [ "$(printf '%s\n' "$group" | grep -c '[0-9]')" -ne 1 ]; then

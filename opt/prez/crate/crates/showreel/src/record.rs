@@ -33,7 +33,7 @@ use std::os::unix::fs::DirBuilderExt;
 use std::os::unix::process::CommandExt;
 use std::path::{Path, PathBuf};
 use std::process::{Child, ChildStdin, Command, Stdio};
-use std::time::{Duration, SystemTime, UNIX_EPOCH};
+use std::time::Duration;
 
 /// The injected clock, embedded as the player is (`template::SHELL`).
 const CLOCK: &str = include_str!("../clock.js");
@@ -497,13 +497,6 @@ impl Chrome {
   /// here, and with it the directory, because nothing is running to need it.
   fn launch(browser: &Path, width: u32, height: u32, scratch: Scratch) -> Result<Self, Failure> {
     let dir = scratch.path();
-    let tmp = dir.join("tmp");
-    fs::create_dir(&tmp).map_err(|e| {
-      Failure::new(
-        format!("could not create {}: {e}", tmp.display()),
-        "check TMPDIR names a writable directory",
-      )
-    })?;
     let mut wrapper = Command::new("/bin/sh")
       .arg("-c")
       .arg(WRAPPER)
@@ -523,9 +516,14 @@ impl Chrome {
       .arg(format!("--window-size={width},{height}"))
       .args(DETERMINISTIC)
       .arg("about:blank")
-      // Chrome's own temporary files land inside the directory the trap and the
-      // shutdown remove, rather than beside it where a kill would strand them.
-      .env("TMPDIR", &tmp)
+      // CHROME'S OWN TEMPORARY FILES LAND IN THE DIRECTORY THE TRAP AND THE
+      // SHUTDOWN REMOVE, rather than beside it where a kill strands them. The
+      // one that mattered is the process singleton's socket directory: Linux
+      // Chrome reads TMPDIR for it, and macOS Chrome reads MAC_CHROMIUM_TMPDIR
+      // and ignores TMPDIR, which left one behind in the system's temporary
+      // directory on every recording that ended in a kill.
+      .env("TMPDIR", dir)
+      .env("MAC_CHROMIUM_TMPDIR", dir)
       .stdin(Stdio::piped())
       .stdout(Stdio::piped())
       .stderr(Stdio::piped())
@@ -610,16 +608,34 @@ fn kill_group(pgid: u32) -> std::io::Result<()> {
     .map(|_| ())
 }
 
-/// Creates a directory no other process can read, under TMPDIR, for one
-/// recording.
+/// The longest directory a recording's scratch directory is made in.
+///
+/// **CHROME BINDS A UNIX SOCKET INSIDE IT, AND A SOCKET'S PATH IS SHORT.** The
+/// process singleton makes `<dir>/.<prefix>.XXXXXX/SingletonSocket`: up to 46
+/// bytes past `<dir>`, for Chromium's `.org.chromium.Chromium` prefix, the
+/// longest of the four browsers the finder takes. The path must fit `sun_path`,
+/// 104 bytes on macOS and 108 on Linux with the terminating NUL, or Chrome
+/// aborts at its start. CI's Linux leg measured that as "Chrome closed the
+/// DevTools pipe during the start", under video.sh's nested TMPDIR. So a base
+/// longer than this is swapped for /tmp: 36, a slash, and `showreel-<pid>-<n>`
+/// at most 19, leave 57, and 57 + 46 is 103.
+const SCRATCH_BASE_MAX: usize = 36;
+
+/// Where a scratch directory is made: TMPDIR, unless it is too long for the
+/// socket Chrome puts inside it.
+fn scratch_base(temp: PathBuf) -> PathBuf {
+  if temp.as_os_str().len() <= SCRATCH_BASE_MAX {
+    temp
+  } else {
+    PathBuf::from("/tmp")
+  }
+}
+
+/// Creates a directory no other process can read, for one recording.
 fn scratch_dir() -> Result<PathBuf, Failure> {
-  let base = std::env::temp_dir();
-  let stamp = SystemTime::now()
-    .duration_since(UNIX_EPOCH)
-    .map(|d| d.subsec_nanos())
-    .unwrap_or(0);
+  let base = scratch_base(std::env::temp_dir());
   for n in 0..100 {
-    let dir = base.join(format!("showreel-video-{}-{stamp}-{n}", std::process::id()));
+    let dir = base.join(format!("showreel-{}-{n}", std::process::id()));
     match fs::DirBuilder::new().mode(0o700).create(&dir) {
       Ok(()) => return Ok(dir),
       Err(e) if e.kind() == ErrorKind::AlreadyExists => continue,
@@ -639,7 +655,7 @@ fn scratch_dir() -> Result<PathBuf, Failure> {
       "could not find a free temporary directory name in {}",
       base.display()
     ),
-    "clear old showreel-video-* directories out of it",
+    "clear old showreel-* directories out of it",
   ))
 }
 
@@ -747,6 +763,32 @@ mod tests {
       );
       assert!(CLOCK.contains(name), "clock.js no longer reads {name}");
     }
+  }
+
+  /// The scratch directory leaves room for the socket Chrome binds in it, on
+  /// the longest TMPDIR as on the shortest.
+  #[test]
+  fn a_scratch_directory_leaves_room_for_chrome_s_socket() {
+    let long = PathBuf::from("/var/folders/nn/p40vzghs67v8yq0p5y416yf80000gn/T/");
+    assert_eq!(
+      scratch_base(long),
+      PathBuf::from("/tmp"),
+      "too long, so /tmp"
+    );
+    assert_eq!(scratch_base(PathBuf::from("/tmp/")), PathBuf::from("/tmp/"));
+    let widest = format!(
+      "{}/showreel-{}-{}",
+      "x".repeat(SCRATCH_BASE_MAX),
+      u32::MAX / 1000,
+      99
+    );
+    assert!(widest.len() <= 57, "{} bytes: {widest}", widest.len());
+    let socket = format!("{widest}/.org.chromium.Chromium.XXXXXX/SingletonSocket");
+    assert!(
+      socket.len() < 104,
+      "{} bytes, over macOS's sun_path: {socket}",
+      socket.len()
+    );
   }
 
   /// The trap is what removes the profile after an interrupt, when no Rust
