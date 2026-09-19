@@ -31,7 +31,7 @@ dependencies: []
 # ffmpeg is needed by `prez showreel video` alone (ST0021), which records a
 # reel through Chrome and encodes it. Optional, so doctor reports a missing
 # ffmpeg as information and never as a failure (issue 0041). The verb refuses
-# by name, with the same install line, before it records anything.
+# by name, naming the same install commands, before it records anything.
 optional_dependencies:
   - name: ffmpeg
     install: brew install ffmpeg (macOS), or sudo apt install ffmpeg (Debian and Ubuntu)

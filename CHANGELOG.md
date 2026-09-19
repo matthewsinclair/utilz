@@ -7,17 +7,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-Minor: **`prez showreel video` is new**, and **`utilz doctor` reports every optional dependency a utility declares**.
+Minor: **`prez showreel video` is new**, **`PREZ_THEME_DUPLICATES=refuse` can refuse a theme name defined twice**, and **`utilz doctor` reports every optional dependency a utility declares**.
 
 ### Added
 
 - **`prez showreel video`: a showreel recorded to a video file** (ST0021). It builds the reel as `build` does, plays the built HTML's own player in headless Chrome on a clock it controls, and encodes every frame with ffmpeg. The result is an H.264 `.mp4` beside the HTML in the next `_out/` slot, or a `.mov` with `-o`. **The video is the reel**: the player that drew it is the one that ships, so nothing can drift from it, and two recordings at two real-time paces give byte-identical frames. `--fps` (1 to 60, default 30), `--keep`, `--frames` (every frame as a PNG, with a `frames.tsv`) and `--browser` complete it. It needs Chrome, which `pdf` and `present` already use, and ffmpeg, and it refuses a missing one by name before it records anything. A partial file never looks finished, and an interrupt leaves no Chrome and no profile behind. It records no faster than the machine renders, so a three-minute reel takes minutes.
+
+- **`PREZ_THEME_DUPLICATES=refuse`: a theme name defined more than once on prez's search path can be refused** (ST0020). A caller that assembles the search path can ask for it, instead of search order choosing in silence. `refuse` refuses the name with exit 2, listing every definition in search order: its directory, the mechanism that put it on the path, and the stylesheet found there. Unset, empty or `first` keep first match exactly as before, and any other value is refused. `prez showreel` does not read it.
 
 ### Changed
 
 - **`utilz doctor` reports every optional dependency a utility declares** (issue 0041). It read each utility's `dependencies` and never its `optional_dependencies`, and it reported an entry marked `required: false` as missing. Each missing optional dependency is now an information line with its own purpose and install line, never a failure. A user may see new lines for bat, bats and ffmpeg, and unison is reported as optional rather than missing. The hand-written glow and rsync lines went, because the utilities declare both.
 
 - **`showreel build --keep` prunes whole slots** (ST0021): a dropped revision's HTML and its video go together, and the warning past five revisions counts the videos' megabytes.
+
+### Fixed
+
+- **`utilz doctor` and `utilz emacs doctor` print their whole report on stdout** (issue 0037). Their verdict lines went to stderr and the rest to stdout, so a redirect or a pipe split the report. The exit status is unchanged.
+
+- **Harness and development only, no behaviour change**:
+  - `utilz install` refuses by name a source tree it cannot enter, where it would have recorded the tree's unresolved spelling. Earlier checks refuse such a tree first today, so no run behaves differently. Its comment now says, correctly, that the tree is resolved logically (0039).
+  - prez's source check, which refuses the estate's names, matches its second name too (0035).
+  - devbin's format commands cover the prez crate again (0036), and CI checks its formatting ahead of clippy (0038).
+  - prez's black-box suites share one test harness, which stops a suite when it is missing or does not load (0040).
 
 ## [2.9.0] - 2026-09-14
 
