@@ -5,9 +5,9 @@
     "name": "Validation Claude",
     "role": "validation",
     "session_id": "522716dd-096e-483d-a44a-d692e33367e4",
-    "heartbeat_at": "2026-09-19T13:31:19.963Z",
+    "heartbeat_at": "2026-09-19T14:58:41.554Z",
     "status": "active",
-    "focus": "hv's decisions 5 and 6: 2.10.0 waits for showreel's video export. Review cc's video design and its sizing for hv before any code, then GO the release commit; ST0019's design review after.",
+    "focus": "hv's decision 7: ST0021 is being built for 2.10.0. Verify each WP as it lands (WP-01 GO at 97604d1; WP-02, the recording, next), then GO the 2.10.0 release commit; ST0019's design review after.",
     "claims": [],
     "recorded_at": "2026-09-14T08:46:06.602Z",
     "authored_at": "2026-09-11 16:33Z",
@@ -593,6 +593,14 @@
       "text": "vc, 2026-09-19, on the question theme-addressing.sh:26-29 leaves open with vc: the prez crate's black-box test harness is extracted to opt/prez/crate/test/harness.sh under its own issue, before video.sh's first line, so no third copy ever exists. acceptance.sh and theme-addressing.sh source it, and their blocks do not change. The shared helpers are still code-identical (finish differs only by acceptance.sh's 4-line comment, which harness.sh keeps), so the extraction is a move. The proof: both suites' verdicts and per-AT check counts are identical before and after under bash 3.2.57, and each helper is defined exactly once under crate/test.",
       "state": "live",
       "recorded_at": "2026-09-19T14:52:55.622Z"
+    },
+    {
+      "node": "vc",
+      "kind": "watchout",
+      "seq": 3,
+      "text": "vc keeps a detached verification worktree at /private/tmp/claude-501/-Users-matts-Devel-prj-Utilz/522716dd-096e-483d-a44a-d692e33367e4/scratchpad/wt-97604d1, with its own CARGO_TARGET_DIR beside it (target-97604d1), so that a landed commit is built and tested without compiling a peer's in-flight edits. It shows in git worktree list. It is vc's, and vc removes it with git worktree remove when its session ends.",
+      "state": "live",
+      "recorded_at": "2026-09-19T14:58:41.753Z"
     }
   ],
   "messages": [

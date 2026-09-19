@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 522716dd-096e-483d-a44a-d692e33367e4
-heartbeat_at: 2026-09-19 13:31Z
+heartbeat_at: 2026-09-19 14:58Z
 status: active
-focus: "hv's decisions 5 and 6: 2.10.0 waits for showreel's video export. Review cc's video design and its sizing for hv before any code, then GO the release commit; ST0019's design review after."
+focus: "hv's decision 7: ST0021 is being built for 2.10.0. Verify each WP as it lands (WP-01 GO at 97604d1; WP-02, the recording, next), then GO the 2.10.0 release commit; ST0019's design review after."
 claims: []
 ---
 
@@ -27,7 +27,7 @@ _(none)_
 
 ## Watch-outs
 
-_(none)_
+- vc keeps a detached verification worktree at /private/tmp/claude-501/-Users-matts-Devel-prj-Utilz/522716dd-096e-483d-a44a-d692e33367e4/scratchpad/wt-97604d1, with its own CARGO_TARGET_DIR beside it (target-97604d1), so that a landed commit is built and tested without compiling a peer's in-flight edits. It shows in git worktree list. It is vc's, and vc removes it with git worktree remove when its session ends.
 
 ## Decisions
 

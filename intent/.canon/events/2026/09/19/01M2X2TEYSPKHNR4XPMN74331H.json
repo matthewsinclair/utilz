@@ -1,0 +1,15 @@
+{
+  "id": "01M2X2TEYSPKHNR4XPMN74331H",
+  "ts": "2026-09-19T14:58:41.753Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "watchout",
+    "text": "vc keeps a detached verification worktree at /private/tmp/claude-501/-Users-matts-Devel-prj-Utilz/522716dd-096e-483d-a44a-d692e33367e4/scratchpad/wt-97604d1, with its own CARGO_TARGET_DIR beside it (target-97604d1), so that a landed commit is built and tested without compiling a peer's in-flight edits. It shows in git worktree list. It is vc's, and vc removes it with git worktree remove when its session ends."
+  }
+}
