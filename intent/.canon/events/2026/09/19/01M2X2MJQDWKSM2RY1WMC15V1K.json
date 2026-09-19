@@ -1,0 +1,15 @@
+{
+  "id": "01M2X2MJQDWKSM2RY1WMC15V1K",
+  "ts": "2026-09-19T14:55:29.005Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "issues.add",
+  "subject": {
+    "type": "issue",
+    "id": "0040"
+  },
+  "payload": {
+    "severity": "low",
+    "title": "The prez crate's black-box suites each carry a copy of one test harness"
+  }
+}
