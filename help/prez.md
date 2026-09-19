@@ -38,7 +38,7 @@ That needs `cargo` **once**, on the machine where the build happens:
 brew install rust
 ```
 
-After that the binary is self-contained -- no runtime dependencies at all, themes and the mermaid library included -- and the shim only rebuilds when a crate source, theme, asset or manifest is newer than the binary. `utilz doctor` reports cargo as an optional line, present only because a crate is present; it is a build-time need, not a runtime one.
+After that the binary is self-contained -- no runtime dependencies at all, themes and the mermaid library included -- and the shim only rebuilds when a crate source, theme, asset or manifest is newer than the binary. `utilz doctor` reports cargo as an optional line, present only because a crate is present; it is a build-time need, not a runtime one. The one verb with runtime needs is `prez showreel video`, below: it drives Chrome, as `pdf` and `present` do, and ffmpeg.
 
 ---
 
@@ -76,6 +76,8 @@ Every flag takes its value either way: `--theme=simple` or `--theme simple`.
 **Everything after `showreel` belongs to the showreel tool and nothing here describes it.** `prez showreel <...>` execs a separate binary built from the same workspace; its verbs, its flags, its refusals and its help are its own. Run `prez showreel --help` for them -- deliberately not restated here, because a second copy of another tool's grammar is one that drifts.
 
 What showreel does, in one line: a directory of pictures and a `showreel.yaml` become one self-contained looping HTML reel that plays from a USB stick with nothing installed.
+
+**And it records that reel to a video.** `prez showreel video <dir>` builds the reel as `build` does, then plays the built HTML's own player in headless Chrome on a clock it controls, capturing every frame, and encodes them with ffmpeg to an H.264 `.mp4` beside the HTML, or to a `.mov` with `-o`. The video is the reel, because the player that drew it is the one that ships. It needs Chrome and ffmpeg, and `utilz doctor` reports ffmpeg as an optional dependency. It records no faster than the machine renders, so a three-minute reel takes minutes. Its flags are in `prez showreel --help`.
 
 **Why it lives under `prez` at all.** The two tools share a real implementation -- theme resolution, the offline guarantee, base64, failure reporting -- and they share a name so a user learns one entry point. They do not share a binary: `prez build` never links showreel's image decoders, and neither budget pays for the other.
 

@@ -260,6 +260,24 @@ jobs:
         sudo apt-get update -qq
         sudo apt-get install -y -qq xvfb
 
+    # FFMPEG ON BOTH LEGS, BECAUSE crate/test/video.sh RECORDS ON BOTH (ST0021).
+    # `prez showreel video` encodes with ffmpeg, and video.sh is discovered by
+    # the suite loop below like any other. A leg without ffmpeg would leave its
+    # video ATs UNCHECKED, which --strict fails by name -- never n/a, because a
+    # missing tool is not a platform that cannot record. Chrome is already on
+    # both runner images, as the acceptance suite's browser ATs rely on.
+    - name: ffmpeg, which showreel video encodes with (Linux)
+      if: runner.os == 'Linux'
+      run: |
+        sudo apt-get install -y -qq ffmpeg
+        ffmpeg -version | head -1
+
+    - name: ffmpeg, which showreel video encodes with (macOS)
+      if: runner.os == 'macOS'
+      run: |
+        brew install ffmpeg
+        ffmpeg -version | head -1
+
     - name: Build, test and accept every Rust crate
       run: |
         set -euo pipefail

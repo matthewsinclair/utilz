@@ -5,6 +5,20 @@ All notable changes to the Utilz framework will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+Minor: **`prez showreel video` is new**, and **`utilz doctor` reports every optional dependency a utility declares**.
+
+### Added
+
+- **`prez showreel video`: a showreel recorded to a video file** (ST0021). It builds the reel as `build` does, plays the built HTML's own player in headless Chrome on a clock it controls, and encodes every frame with ffmpeg. The result is an H.264 `.mp4` beside the HTML in the next `_out/` slot, or a `.mov` with `-o`. **The video is the reel**: the player that drew it is the one that ships, so nothing can drift from it, and two recordings at two real-time paces give byte-identical frames. `--fps` (1 to 60, default 30), `--keep`, `--frames` (every frame as a PNG, with a `frames.tsv`) and `--browser` complete it. It needs Chrome, which `pdf` and `present` already use, and ffmpeg, and it refuses a missing one by name before it records anything. A partial file never looks finished, and an interrupt leaves no Chrome and no profile behind. It records no faster than the machine renders, so a three-minute reel takes minutes.
+
+### Changed
+
+- **`utilz doctor` reports every optional dependency a utility declares** (issue 0041). It read each utility's `dependencies` and never its `optional_dependencies`, and it reported an entry marked `required: false` as missing. Each missing optional dependency is now an information line with its own purpose and install line, never a failure. A user may see new lines for bat, bats and ffmpeg, and unison is reported as optional rather than missing. The hand-written glow and rsync lines went, because the utilities declare both.
+
+- **`showreel build --keep` prunes whole slots** (ST0021): a dropped revision's HTML and its video go together, and the warning past five revisions counts the videos' megabytes.
+
 ## [2.9.0] - 2026-09-14
 
 Minor: **`prez showreel` is new**, **a published install records CI's verdict on the commit it was cut from**, and **`PREZ_DEFAULT_THEME` gives a deck that names no theme a default**. prez goes from 2.0.0 to 2.1.0. todo goes from 1.1.0 to 2.0.0: **a breaking change to that one utility**, carried by its own major (see Changed).

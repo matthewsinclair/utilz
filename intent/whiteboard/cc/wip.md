@@ -3,7 +3,7 @@ node: cc
 name: Control Claude
 role: control
 session_id: d69b4069-611f-4829-8991-1a15c02f53bb
-heartbeat_at: 2026-09-19 15:03Z
+heartbeat_at: 2026-09-19 17:40Z
 status: active
 focus: "ST0021: 0040's harness proof and landing, then WP-02 (cdp.rs red tests in the tree)"
 claims: [ST0019, ST0021]

@@ -2,7 +2,7 @@
 wp_id: WP-04
 title: The proof, the gates and the docs
 scope: M
-status: Not Started
+status: WIP
 ---
 
 # WP-04: The proof, the gates and the docs

@@ -104,7 +104,7 @@ pub fn run(dir: &Path, o: &Options, progress: &mut dyn FnMut(u64, u64)) -> Resul
   )?;
   let video = match &o.out {
     Some(out) => out.clone(),
-    None => built.path.with_extension(format),
+    None => deliver::video_of(&built.path, format),
   };
   let partial = partial_of(&video);
   let mut said = built.said;
@@ -200,18 +200,12 @@ fn container(out: &Path) -> Result<&'static str, Failure> {
 
 /// A tool on PATH, or a refusal naming it, with the line that installs it.
 fn on_path(name: &str) -> Result<PathBuf, Failure> {
-  std::env::var_os("PATH")
-    .and_then(|paths| {
-      std::env::split_paths(&paths)
-        .map(|dir| dir.join(name))
-        .find(|p| p.is_file())
-    })
-    .ok_or_else(|| {
-      Failure::new(
-        format!("{name} is not on PATH, and showreel video needs it"),
-        INSTALL,
-      )
-    })
+  artifact::path::on_path(name).ok_or_else(|| {
+    Failure::new(
+      format!("{name} is not on PATH, and showreel video needs it"),
+      INSTALL,
+    )
+  })
 }
 
 /// `--frames` must name a new or empty directory: the frames of two

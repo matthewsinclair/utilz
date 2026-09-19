@@ -1,0 +1,14 @@
+{
+  "id": "01M2XCZ9PAZJZHR8RCD1RAQR55",
+  "ts": "2026-09-19T17:56:05.963Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.satisfy",
+  "subject": {
+    "type": "ac",
+    "id": "ST0021/AC-04.2"
+  },
+  "payload": {
+    "evidence": "Documented where prez's verbs are, 19 Sep: help/prez.md (the showreel section gains the video paragraph, and the runtime line names its Chrome and ffmpeg), showreel --help (video and its flags, main.rs USAGE), README.md (prez's examples gain prez showreel build and video), and CHANGELOG.md's Unreleased entry, which the 2.10.0 release commit dates. prez.yaml declares ffmpeg under optional_dependencies, and with issue 0041's fix doctor reads it: with ffmpeg off PATH, utilz doctor prints Optional: 'ffmpeg' is not installed: prez showreel video encodes the recorded reel with it (declared by prez), with its install line, as information that never changes the verdict."
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "id": "01M2XC1WX7M0KNHSH5ZJHRD6R0",
+  "ts": "2026-09-19T17:40:02.599Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "WP-03 landed at e21850e for verification (WP-02 closes with it): showreel video, the verb and the encode. video.sh --strict passes 10 of 10 under bash 3.2.57 (twice, 77 s at load 16), AT33 is green in deliver.rs, AC-03.7 is satisfied by evidence, the workspace passes 333 tests, and every gate and the contract lint are clean; the contract is 14 of 16, blocked only on WP-04. WP-04 question: doctor reads no optional_dependencies from any yaml (its optional checks are hand-coded), so hv's answer 7 cannot be met by prez.yaml alone. My plan is to file an issue and make check 6 walk optional_dependencies generically, folding in the hand-coded glow check; reply if you disagree.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

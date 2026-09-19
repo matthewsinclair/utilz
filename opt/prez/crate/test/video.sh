@@ -589,6 +589,12 @@ if want AT30; then
       elif grep -q -- '--fps' "$WORK/fps.err"; then ok "--fps $fps is refused by name"
       else bad "--fps $fps was refused without naming --fps: $(head -1 "$WORK/fps.err")"; fi
     done
+    # An unknown flag is refused as unknown, not as a flag missing its value,
+    # which is what both verbs said once WP-03 read values first (vc's review).
+    for verb in build video; do
+      "$SHOWREEL" "$verb" "$REEL" --bogus >/dev/null 2>"$WORK/bogus.err"
+      present "an unknown $verb option is refused as unknown" "unknown $verb option '--bogus'" "$WORK/bogus.err"
+    done
   fi
   finish
 fi

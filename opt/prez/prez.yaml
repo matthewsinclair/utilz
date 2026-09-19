@@ -23,12 +23,19 @@ help_file: ../../help/prez.md
 # by name when cargo is absent, and doctor carries a separate conditional check
 # that fires only when a crate is present.
 #
-# A browser is needed only by the `pdf` and `present` verbs. The tool probes
-# for one and refuses with every path it tried, so doctor does not duplicate a
-# refusal the tool already makes well.
+# A browser is needed only by the `pdf` and `present` verbs, and by `prez
+# showreel video`. The tool probes for one and refuses with every path it
+# tried, so doctor does not duplicate a refusal the tool already makes well.
 dependencies: []
 
-optional_dependencies: []
+# ffmpeg is needed by `prez showreel video` alone (ST0021), which records a
+# reel through Chrome and encodes it. Optional, so doctor reports a missing
+# ffmpeg as information and never as a failure (issue 0041). The verb refuses
+# by name, with the same install line, before it records anything.
+optional_dependencies:
+  - name: ffmpeg
+    install: brew install ffmpeg (macOS), or sudo apt install ffmpeg (Debian and Ubuntu)
+    purpose: prez showreel video encodes the recorded reel with it
 
 # Supported input modes
 modes:
@@ -43,6 +50,7 @@ features:
   - Images inlined as data URIs -- the artifact opens offline
   - Optional mermaid diagrams, vendored rather than fetched
   - PDF export and a local present mode, both via a browser
+  - A showreel recorded to a video file, through a browser and ffmpeg
 
 # INTEGRATION BLOCK ADDED 2026-09-03, hv's ruling, issue 0009. This file used
 # to explain at length why there was none. Both of its reasons are retired:

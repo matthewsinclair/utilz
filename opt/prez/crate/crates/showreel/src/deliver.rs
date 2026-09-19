@@ -321,8 +321,14 @@ pub fn stem(cfg: &config::Reel, session: &config::Session, date: &str) -> Result
 /// slot's video always is, and `.mov`, which `-o` may name (ST0021).
 pub const VIDEO_EXTENSIONS: [&str; 2] = ["mp4", "mov"];
 
-/// Every file one revision holds: its HTML, and the video recorded from it,
-/// which is the HTML's name with `.html` swapped for the container's extension.
+/// The video a revision's HTML is recorded to: its name, with `.html` swapped
+/// for the container's extension. The one home of that rule, for `video`,
+/// which writes it, and `slot_files`, which prunes it.
+pub fn video_of(html: &Path, ext: &str) -> PathBuf {
+  html.with_extension(ext)
+}
+
+/// Every file one revision holds: its HTML, and the video recorded from it.
 ///
 /// **A SLOT IS ONE REVISION** (ST0021 AC-03.5). A video pruned apart from its
 /// HTML, or left behind by it, is a file nothing names any more.
@@ -331,7 +337,7 @@ pub fn slot_files(html: &Path) -> Vec<PathBuf> {
   files.extend(
     VIDEO_EXTENSIONS
       .iter()
-      .map(|ext| html.with_extension(ext))
+      .map(|ext| video_of(html, ext))
       .filter(|video| video.is_file()),
   );
   files

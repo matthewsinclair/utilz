@@ -61,7 +61,7 @@ pub fn find(explicit: Option<&str>) -> Result<PathBuf, Failure> {
   }
   for name in PATH_NAMES {
     probed.push(format!("{name} (on PATH)"));
-    if let Some(path) = on_path(name) {
+    if let Some(path) = crate::path::on_path(name) {
       return Ok(path);
     }
   }
@@ -77,13 +77,6 @@ pub fn find(explicit: Option<&str>) -> Result<PathBuf, Failure> {
 
 fn is_runnable(path: &Path) -> bool {
   path.is_file()
-}
-
-fn on_path(name: &str) -> Option<PathBuf> {
-  let paths = std::env::var_os("PATH")?;
-  std::env::split_paths(&paths)
-    .map(|dir| dir.join(name))
-    .find(|p| p.is_file())
 }
 
 /// A `file://` URL for an absolute path.

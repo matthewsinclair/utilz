@@ -342,6 +342,11 @@ prez present talk.md
 # Pick a built-in theme by NAME (simple, mono, manuscript, contrast,
 # blueprint, steampunk, 8bit); --theme-file takes a path instead
 prez build --theme mono talk.md
+
+# A directory of pictures and a showreel.yaml to a looping HTML reel,
+# then a video of that reel (needs Chrome and ffmpeg)
+prez showreel build reel/
+prez showreel video reel/
 ```
 
 See `utilz help prez` for details.

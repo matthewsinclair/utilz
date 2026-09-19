@@ -23,6 +23,7 @@
 
 pub mod base64;
 pub mod browser;
+pub mod path;
 pub mod theme;
 
 mod failure;

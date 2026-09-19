@@ -187,10 +187,11 @@ fn flags(rest: &[String]) -> Result<build::Options, Failure> {
   let mut f = build::Options { out: None, keep: 0 };
   let mut i = 0;
   while i < rest.len() {
-    let v = value(rest, i, "build")?;
+    // The flag is matched before its value is read, so an unknown flag is
+    // refused as unknown rather than as missing a value.
     match rest[i].as_str() {
-      "--out" => f.out = Some(PathBuf::from(v)),
-      "--keep" => f.keep = keep(v)?,
+      "--out" => f.out = Some(PathBuf::from(value(rest, i, "build")?)),
+      "--keep" => f.keep = keep(value(rest, i, "build")?)?,
       other => {
         return Err(Failure::new(
           format!("unknown build option '{other}'"),
@@ -215,13 +216,14 @@ fn video_flags(rest: &[String]) -> Result<video::Options, Failure> {
   };
   let mut i = 0;
   while i < rest.len() {
-    let v = value(rest, i, "video")?;
+    // The flag first, as for build.
+    let v = || value(rest, i, "video");
     match rest[i].as_str() {
-      "-o" | "--out" => f.out = Some(PathBuf::from(v)),
-      "--fps" => f.fps = video::fps(v)?,
-      "--keep" => f.keep = keep(v)?,
-      "--frames" => f.frames = Some(PathBuf::from(v)),
-      "--browser" => f.browser = Some(v.to_string()),
+      "-o" | "--out" => f.out = Some(PathBuf::from(v()?)),
+      "--fps" => f.fps = video::fps(v()?)?,
+      "--keep" => f.keep = keep(v()?)?,
+      "--frames" => f.frames = Some(PathBuf::from(v()?)),
+      "--browser" => f.browser = Some(v()?.to_string()),
       other => {
         return Err(Failure::new(
           format!("unknown video option '{other}'"),

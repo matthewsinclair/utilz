@@ -17,7 +17,7 @@ title: showreel exports a reel as a video file
 
 - AC-01.1 Browser discovery has one home, in the `artifact` crate, and prez's `pdf`, `present` and `browser` call it. It keeps prez's probe order (`--browser`, then the Chromium family by macOS app path, then by `PATH` name) and its refusal that lists every path tried, and prez's discovery tests pass from their new home. showreel's `video` calls the same finder, which AC-03.4 checks. -- satisfied: yes (computed)
 
-### WP-02 -- The recording: Chrome over the pipe, on a clock the harness controls (status: WIP)
+### WP-02 -- The recording: Chrome over the pipe, on a clock the harness controls (status: Done)
 
 - AC-02.1 Two recordings of one reel, the second slowed in real time, write byte-identical PNG frames. The bytes compared are the captured PNGs, before the encode, because H.264 output need not match across encoder builds. -- satisfied: yes (computed)
 - AC-02.2 Frames are anchored on the reel's own start. Every frame i >= 1 is taken at page time `t0 + i x 1000/fps` within 0.5 ms, where `t0` is the page time at which the player showed its first slide, and its slide index is the one the dwell schedule puts there. Frame 0 is taken when the load finishes, and the report says how late. -- satisfied: yes (computed)
@@ -26,7 +26,7 @@ title: showreel exports a reel as a video file
 - AC-02.5 Shutdown leaves nothing behind and matches nothing by name. Chrome runs in its own process group and is killed by group after a grace period, its temporary profile directory is removed on every exit path including an interrupt, and its stderr is shown only when a recording fails. -- satisfied: yes (computed)
 - AC-02.6 A stall is named. A CDP reply that does not arrive within the watchdog is refused with the step that stalled, eg `during frame 63: screenshot`, and nothing is left running. -- satisfied: yes (computed)
 
-### WP-03 -- The video verb and the encode (status: WIP)
+### WP-03 -- The video verb and the encode (status: Done)
 
 - AC-03.1 `showreel video <dir>` builds the reel into the next `_out/` slot exactly as `build` does, and writes the video beside it in the same slot, with `.html` swapped for `.mp4`. An explicit `-o` writes the video there, outside the rotation, and keeps no HTML. -- satisfied: yes (computed)
 - AC-03.2 The video holds floor(D x fps) frames by ffprobe, where D is the player's own schedule. Its codec is H.264, its size is the reel's target at 16:9, it has no audio stream, and `.mov` gives the same codec in QuickTime. `--fps` takes 1 to 60 and refuses anything else by name. -- satisfied: yes (computed)
@@ -36,10 +36,10 @@ title: showreel exports a reel as a video file
 - AC-03.6 `prez showreel video` reaches the showreel binary through the shim's hand-over, as `check` and `build` do. -- satisfied: yes (computed)
 - AC-03.7 (non-test) Progress goes to stderr as `frame N/M` when stderr is a terminal, and nothing is printed before the report when it is not. -- evidence: opt/prez/crate/crates/showreel/src/main.rs video_reel: progress goes to stderr only when std::io::stderr().is_terminal(). Measured 19 Sep at --fps 5 on video.sh's fixture: under a pseudo-terminal (script -q) the verb printed 75 progress updates, frame 1/75 to frame 75/75, then the report; with stderr to a file, stderr held 0 bytes and the report went to stdout. -- satisfied: yes
 
-### WP-04 -- The proof, the gates and the docs (status: Not Started)
+### WP-04 -- The proof, the gates and the docs (status: WIP)
 
 - AC-04.1 (non-test) CI records video on both legs. The workflow installs ffmpeg on ubuntu-latest and macos-latest, `video.sh` runs with `--strict`, and its output names the Chrome and the ffmpeg it used. A leg missing either is `unchecked`, never `not_applicable`. -- satisfied: no
-- AC-04.2 (non-test) The verb is documented where prez's verbs are: `help/prez.md`, `showreel --help`, the README, and the CHANGELOG entry for 2.10.0, and `prez.yaml` declares ffmpeg as an optional dependency so doctor reports it. -- satisfied: no
+- AC-04.2 (non-test) The verb is documented where prez's verbs are: `help/prez.md`, `showreel --help`, the README, and the CHANGELOG entry for 2.10.0, and `prez.yaml` declares ffmpeg as an optional dependency so doctor reports it. -- evidence: Documented where prez's verbs are, 19 Sep: help/prez.md (the showreel section gains the video paragraph, and the runtime line names its Chrome and ffmpeg), showreel --help (video and its flags, main.rs USAGE), README.md (prez's examples gain prez showreel build and video), and CHANGELOG.md's Unreleased entry, which the 2.10.0 release commit dates. prez.yaml declares ffmpeg under optional_dependencies, and with issue 0041's fix doctor reads it: with ffmpeg off PATH, utilz doctor prints Optional: 'ffmpeg' is not installed: prez showreel video encodes the recorded reel with it (declared by prez), with its install line, as information that never changes the verdict. -- satisfied: yes
 
 ### Group AT23
 
@@ -99,15 +99,15 @@ _(no criteria in this group)_
 
 _(no tests in this group)_
 
-### WP-02 -- The recording: Chrome over the pipe, on a clock the harness controls (status: WIP)
+### WP-02 -- The recording: Chrome over the pipe, on a clock the harness controls (status: Done)
 
 _(no tests in this group)_
 
-### WP-03 -- The video verb and the encode (status: WIP)
+### WP-03 -- The video verb and the encode (status: Done)
 
 _(no tests in this group)_
 
-### WP-04 -- The proof, the gates and the docs (status: Not Started)
+### WP-04 -- The proof, the gates and the docs (status: WIP)
 
 _(no tests in this group)_
 
