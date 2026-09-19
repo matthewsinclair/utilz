@@ -113,83 +113,15 @@ trap 'rm -rf "$WORK"' EXIT
 # the path still carries the name.
 RUN_NAME="${WORK##*/}"
 
-STRICT=0
-ARGS=()
-for arg in "$@"; do
-  case "$arg" in
-    --strict) STRICT=1 ;;
-    *) ARGS+=("$arg") ;;
-  esac
-done
-WANT=("${ARGS[@]+"${ARGS[@]}"}")
-PASSED=0; FAILED=0; SKIPPED=0; NOT_APPLICABLE=0
-AT=""; AT_FAILS=0; AT_SKIPS=0
-
-want() {
-  [ ${#WANT[@]} -eq 0 ] && return 0
-  local id
-  for id in "${WANT[@]}"; do [ "$id" = "$1" ] && return 0; done
-  return 1
-}
-
-start() { AT="$1"; AT_FAILS=0; AT_SKIPS=0; printf '\n%s -- %s\n' "$1" "$2"; }
-
-ok()   { printf '  ok    %s\n' "$1"; }
-bad()  { printf '  FAIL  %s\n' "$1"; AT_FAILS=$((AT_FAILS + 1)); }
-
-# check <description> <actual> <expected>
-check() { if [ "$2" = "$3" ]; then ok "$1 = $2"; else bad "$1 = $2, wanted $3"; fi; }
-
-# absent <description> <needle> <file>
-absent() {
-  local n; n=$(grep -c -- "$2" "$3" 2>/dev/null || true)
-  if [ "${n:-0}" -eq 0 ]; then ok "$1 (absent)"; else bad "$1: found $n occurrence(s) of '$2'"; fi
-}
-
-# present <description> <needle> <file>
-present() {
-  local n; n=$(grep -c -- "$2" "$3" 2>/dev/null || true)
-  if [ "${n:-0}" -gt 0 ]; then ok "$1 (present)"; else bad "$1: '$2' not found"; fi
-}
-
-finish() {
-  if [ "$AT_FAILS" -gt 0 ]; then
-    printf '%s: FAIL (%d)\n' "$AT" "$AT_FAILS"; FAILED=$((FAILED + 1)); return
-  fi
-  PASSED=$((PASSED + 1))
-  # A PARTLY-RUN AT MUST NOT READ AS A CLEAN PASS. Without this, "AT08 passed"
-  # meant "the themes are readable" OR "no browser was present" and nothing in
-  # the output separated them (vc, 29 Aug 2026) -- the exact adjacency this file
-  # is written against, inside the newest check in it.
-  if [ "$AT_SKIPS" -gt 0 ]; then printf '%s: PASS, but %d check(s) DID NOT RUN\n' "$AT" "$AT_SKIPS"
-  else printf '%s: PASS\n' "$AT"; fi
-}
-
-# A whole AT that could not run.
-skip() { printf '%s: SKIP -- %s\n' "$AT" "$1"; SKIPPED=$((SKIPPED + 1)); }
-
-# One limb of an AT that could not run. Counted, so the summary cannot call the
-# suite clean, and printed, so the reason is in front of whoever reads it.
-unchecked() { printf '  SKIP  %s\n' "$1"; AT_SKIPS=$((AT_SKIPS + 1)); SKIPPED=$((SKIPPED + 1)); }
-
-# THE THIRD OUTCOME, AND THE CONDITION IS THE PLATFORM RATHER THAN THE CHECK'S
-# DIFFICULTY. Ruled by hv 2026-09-08, the first exception to "a SKIP is not a
-# pass", and it is narrow on purpose.
-#
-# `unchecked` means DID NOT RUN and reddens --strict, which is right for a tool
-# that is missing but installable: the check exists and this machine failed to
-# perform it. `not_applicable` means the check CANNOT EXIST HERE -- it asks
-# something about a platform this run is not on -- so counting it as did-not-run
-# demands a run that can never happen.
-#
-# The discriminator must be the platform predicate, never `command -v <tool>`.
-# Gating on a missing tool makes any machine lacking it silently exempt,
-# including one that should have it; gating on `uname` cannot. And it is only
-# honest while the check runs SOMEWHERE: the keychain half runs on every macOS
-# leg, so the coverage exists and this leg is the one that cannot host it. A
-# not_applicable check with no leg that DOES run it is dead, and should be
-# deleted rather than excused.
-not_applicable() { printf '  N/A   %s\n' "$1"; NOT_APPLICABLE=$((NOT_APPLICABLE + 1)); }
+# THE HARNESS IS SHARED (issue 0040, vc's ruling 2026-09-19): every helper this
+# suite calls is defined once, in lib/harness.sh, and a missing harness stops
+# the suite rather than letting it run half-defined.
+if [ ! -f "$HERE/lib/harness.sh" ]; then
+  printf '%s: the shared harness is missing: %s\n' "${0##*/}" "$HERE/lib/harness.sh" >&2
+  exit 1
+fi
+# shellcheck source=lib/harness.sh
+. "$HERE/lib/harness.sh"
 
 pages_in() { python3 -c "
 import re,sys
