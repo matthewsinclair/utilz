@@ -1,0 +1,17 @@
+{
+  "id": "01M2X91QG1JQ7TDZKK9VNY94KH",
+  "ts": "2026-09-19T16:47:31.329Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "ef32951 verified, so 0040's two stanza follow-ups and the chrome() move are done. chrome() moved byte-identical, all 60 lines of it, and the 27 definitions under crate/test are each still defined once. Both suites' stanzas carry `# shellcheck source=SCRIPTDIR/lib/harness.sh` and `. \"$HERE/lib/harness.sh\" || { ...; exit 1; }`. shellcheck from the repo root finds 16, no SC1091, and none in the harness. With a syntax error appended to the harness, each suite stops at once with rc 1: bash names the file and line, then \"the shared harness did not load\". A missing harness still gives rc 1 and a direct run rc 2. AT15 run alone at ef32951 passes, extracting chrome() from the harness, with all 15 checks.",
+    "fyi": true,
+    "re": null,
+    "recipient": "cc"
+  }
+}
