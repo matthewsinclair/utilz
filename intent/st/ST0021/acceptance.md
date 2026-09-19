@@ -113,23 +113,23 @@ _(no tests in this group)_
 
 ### Group AT23
 
-- AT23 `opt/prez/crate/test/video.sh` -- covers AC-02.1 -- status: to-write
+- AT23 `opt/prez/crate/test/video.sh` -- covers AC-02.1 -- status: red -- Red first, 19 Sep: opt/prez/crate/test/video.sh, written before the verb and run at ef32951 under bash 3.2.57 with --strict, exits 1 (passed 0, failed 10) because showreel refuses unknown command 'video'. AT23 fails its two recordings, so no frames are compared.
 
 ### Group AT24
 
-- AT24 `opt/prez/crate/test/video.sh` -- covers AC-02.2 -- status: to-write
+- AT24 `opt/prez/crate/test/video.sh` -- covers AC-02.2 -- status: red -- Red first, 19 Sep: opt/prez/crate/test/video.sh, written before the verb and run at ef32951 under bash 3.2.57 with --strict, exits 1 (passed 0, failed 10) because showreel refuses unknown command 'video'. AT24 has no frames.tsv to hold to the grid.
 
 ### Group AT25
 
-- AT25 `opt/prez/crate/test/video.sh` -- covers AC-02.3 -- status: to-write
+- AT25 `opt/prez/crate/test/video.sh` -- covers AC-02.3 -- status: red -- Red first, 19 Sep: opt/prez/crate/test/video.sh, written before the verb and run at ef32951 under bash 3.2.57 with --strict, exits 1 (passed 0, failed 10) because showreel refuses unknown command 'video'. AT25 has no fade frames to hold to the ease-in curve.
 
 ### Group AT26
 
-- AT26 `opt/prez/crate/test/video.sh` -- covers AC-02.4 -- status: to-write
+- AT26 `opt/prez/crate/test/video.sh` -- covers AC-02.4 -- status: red -- Red first, 19 Sep: opt/prez/crate/test/video.sh, written before the verb and run at ef32951 under bash 3.2.57 with --strict, exits 1 (passed 0, failed 10) because showreel refuses unknown command 'video'. AT26 has no first frame of the photo's slide to measure.
 
 ### Group AT27
 
-- AT27 `opt/prez/crate/test/video.sh` -- covers AC-02.5 -- status: to-write
+- AT27 `opt/prez/crate/test/video.sh` -- covers AC-02.5 -- status: red -- Red first, 19 Sep: opt/prez/crate/test/video.sh, written before the verb and run at ef32951 under bash 3.2.57 with --strict, exits 1 (passed 0, failed 10) because showreel refuses unknown command 'video'. AT27 has no recording that worked, failed or was interrupted to inspect.
 
 ### Group AT28
 
@@ -137,19 +137,19 @@ _(no tests in this group)_
 
 ### Group AT29
 
-- AT29 `opt/prez/crate/test/video.sh` -- covers AC-03.1 -- status: to-write
+- AT29 `opt/prez/crate/test/video.sh` -- covers AC-03.1 -- status: red -- Red first, 19 Sep: opt/prez/crate/test/video.sh, written before the verb and run at ef32951 under bash 3.2.57 with --strict, exits 1 (passed 0, failed 10) because showreel refuses unknown command 'video'. AT29 finds no video in the _out/ slot and none at -o.
 
 ### Group AT30
 
-- AT30 `opt/prez/crate/test/video.sh` -- covers AC-03.2 -- status: to-write
+- AT30 `opt/prez/crate/test/video.sh` -- covers AC-03.2 -- status: red -- Red first, 19 Sep: opt/prez/crate/test/video.sh, written before the verb and run at ef32951 under bash 3.2.57 with --strict, exits 1 (passed 0, failed 10) because showreel refuses unknown command 'video'. AT30 probes no file, and --fps 0, 61 and x are refused as an unknown command rather than by name.
 
 ### Group AT31
 
-- AT31 `opt/prez/crate/test/video.sh` -- covers AC-03.3 -- status: to-write
+- AT31 `opt/prez/crate/test/video.sh` -- covers AC-03.3 -- status: red -- Red first, 19 Sep: opt/prez/crate/test/video.sh, written before the verb and run at ef32951 under bash 3.2.57 with --strict, exits 1 (passed 0, failed 10) because showreel refuses unknown command 'video'. AT31's failing ffmpeg is never reached, so the refusal does not name ffmpeg, and no run follows a stale partial.
 
 ### Group AT32
 
-- AT32 `opt/prez/crate/test/video.sh` -- covers AC-03.4 -- status: to-write
+- AT32 `opt/prez/crate/test/video.sh` -- covers AC-03.4 -- status: red -- Red first, 19 Sep: opt/prez/crate/test/video.sh, written before the verb and run at ef32951 under bash 3.2.57 with --strict, exits 1 (passed 0, failed 10) because showreel refuses unknown command 'video'. AT32: no ffmpeg on PATH and a missing --browser are both refused as an unknown command, not by name or by artifact::browser::find's refusal, and showreel's source never calls artifact::browser::find.
 
 ### Group AT33
 
@@ -157,7 +157,7 @@ _(no tests in this group)_
 
 ### Group AT34
 
-- AT34 `opt/prez/crate/test/video.sh` -- covers AC-03.6 -- status: to-write
+- AT34 `opt/prez/crate/test/video.sh` -- covers AC-03.6 -- status: red -- Red first, 19 Sep: opt/prez/crate/test/video.sh, written before the verb and run at ef32951 under bash 3.2.57 with --strict, exits 1 (passed 0, failed 10) because showreel refuses unknown command 'video'. AT34: prez showreel video reaches showreel, whose refusal is the unknown command, not 'video needs a directory', and --fps is not named.
 
 ### Group AT35
 

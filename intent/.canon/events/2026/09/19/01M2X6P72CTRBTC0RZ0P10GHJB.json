@@ -1,0 +1,17 @@
+{
+  "id": "01M2X6P72CTRBTC0RZ0P10GHJB",
+  "ts": "2026-09-19T16:06:16.908Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "WP-02 landed at b1e2864, AT28 green, for verification of cdp.rs, clock.js and record.rs. New finding, in design.md as built: the first CDP advance after a load lands 8 ms past the page's clock, so the harness settles with one 1 ms advance before reading t0; frame 0 is then 11 ms late and every frame from 1 on is within 0.1 ms of t0 + 100i. Against Chrome 153: 160 frames byte-identical at full speed and at a 0.02 s nap per frame; a refused frame and a real SIGINT each left no process and no directory. 324 workspace tests; clippy, rustfmt, critic and doctor clean. Next: video.sh red-first with your two stanza fixes.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

@@ -17,10 +17,10 @@
 //!
 //! **NOTHING IS MATCHED BY NAME, AND NOTHING IS LEFT BEHIND.** Chrome runs under
 //! a `/bin/sh` wrapper in a process group of its own, and every exit path ends
-//! with a kill of that group alone. The wrapper does not `exec`: it waits, and
-//! its `EXIT` trap removes the temporary directory holding the profile, which
-//! covers the one path that runs no Rust at all, an interrupt. There, Chrome
-//! exits when its end of the pipe closes, and the trap runs after it.
+//! with a kill of that group alone. The wrapper does not `exec`: it supervises,
+//! and its `EXIT` trap removes the temporary directory holding the profile.
+//! That covers the one path that runs no Rust at all, an interrupt: the wrapper
+//! sees its parent go, ends Chrome itself, and the trap runs after it.
 
 use crate::cdp::Session;
 use artifact::{base64, browser, Failure};
@@ -61,11 +61,57 @@ const DETERMINISTIC: [&str; 5] = [
   "--disable-new-content-rendering-timeout",
 ];
 
-/// Wires Chrome's fds 3 and 4 to this process's pipe, and removes the
-/// temporary directory, `$1`, when Chrome exits. It does not `exec`, because
-/// the trap has to outlive Chrome.
-const WRAPPER: &str =
-  r#"dir=$1; shift; trap 'rm -rf "$dir"' EXIT; "$@" 3<&0 4>&1 0</dev/null 1>/dev/null"#;
+/// The supervisor Chrome runs under. `$1` is the recording's temporary
+/// directory, and the rest is Chrome's command line. It wires Chrome's fds 3
+/// and 4 to this process's pipe, ends Chrome if this process dies, and removes
+/// the directory when Chrome is gone.
+///
+/// **CHROME IS ENDED BY THE WRAPPER, BECAUSE IT DOES NOT RELIABLY END ITSELF.**
+/// This wrapper used to run Chrome in the foreground and trust it to exit when
+/// its pipe closed. vc measured that trust on b1e2864: 10 of 10 interrupts left
+/// Chrome's main process idling in its own shutdown, with the whole profile
+/// behind, the first of them still there three minutes later. So:
+///
+/// - **fds 3 and 4 are taken before the launch**, because a background command
+///   gets `/dev/null` as its stdin before its own redirections run.
+/// - **The wrapper then gives up its copies** of the pipe, and sends its own
+///   stderr to /dev/null. Chrome keeps its copy for this process to read.
+///   Otherwise, once this process died, bash would report the kill on a
+///   broken pipe and die of SIGPIPE before its trap ran, which vc also caught.
+/// - **It watches its own parent**, which changes the moment this process dies,
+///   even while it is an unreaped zombie that `kill -0` would still find.
+/// - **Then it ends the group, as the shutdown does, from inside it.** Two
+///   seconds' grace, then TERM to the whole group, which the wrapper alone
+///   ignores, then KILL to Chrome's main process, which is the one that was
+///   seen to linger. The trap removes the directory and then KILLs whatever is
+///   left of the group, the wrapper with it. Killing only the main process left
+///   a helper alive past ten seconds at a load average of 580.
+///
+/// Every command is named by its path, so a caller's PATH cannot quietly turn
+/// the watch off, and an unreadable parent is never read as a departed one.
+/// Outside a group of its own, as in this module's tests, `-$$` names no group
+/// and the group kills are no-ops.
+const WRAPPER: &str = r#"dir=$1; shift
+trap 'rm -rf "$dir"; /bin/kill -KILL -- -$$ 2>/dev/null' EXIT
+exec 3<&0 4>&1
+"$@" 0</dev/null 1>/dev/null &
+chrome=$!
+exec 0</dev/null 1>/dev/null 2>/dev/null 3<&- 4>&-
+trap '' PIPE TERM
+parent=$PPID
+while kill -0 "$chrome" 2>/dev/null; do
+  set -- $(/bin/ps -o ppid= -p $$)
+  if [ $# -eq 1 ] && [ "$1" != "$parent" ]; then
+    /bin/sleep 2
+    /bin/kill -TERM -- -$$ 2>/dev/null
+    /bin/sleep 1
+    kill -KILL "$chrome" 2>/dev/null
+    break
+  fi
+  /bin/sleep 0.5
+done
+wait "$chrome"
+"#;
 
 /// One captured frame, in the order captured.
 pub struct Frame {
@@ -737,5 +783,36 @@ mod tests {
       .unwrap();
     assert!(status.success());
     assert!(!dir.exists(), "{} survived its wrapper", dir.display());
+  }
+
+  /// AC-02.5's interrupt, without Chrome: the wrapper's parent dies holding a
+  /// child that will not exit by itself, and the wrapper ends the child and
+  /// removes its directory. `sleep 60` stands in for Chrome that stays in its
+  /// own shutdown, which is what vc measured Chrome doing.
+  #[test]
+  fn the_wrapper_ends_what_it_runs_when_its_parent_dies_and_removes_its_directory() {
+    let dir = scratch_dir().unwrap();
+    fs::write(dir.join("profile-file"), b"x").unwrap();
+    let mut parent = Command::new("/bin/sh")
+      .arg("-c")
+      .arg(r#"/bin/sh -c "$0" showreel-chrome "$1" /bin/sleep 60 & wait"#)
+      .arg(WRAPPER)
+      .arg(&dir)
+      .stdin(Stdio::null())
+      .stdout(Stdio::null())
+      .spawn()
+      .unwrap();
+    std::thread::sleep(Duration::from_millis(500));
+    parent.kill().unwrap();
+    parent.wait().unwrap();
+    let began = std::time::Instant::now();
+    while dir.exists() && began.elapsed() < Duration::from_secs(15) {
+      std::thread::sleep(Duration::from_millis(100));
+    }
+    assert!(
+      !dir.exists(),
+      "{} outlived its wrapper's parent by 15 s",
+      dir.display()
+    );
   }
 }
