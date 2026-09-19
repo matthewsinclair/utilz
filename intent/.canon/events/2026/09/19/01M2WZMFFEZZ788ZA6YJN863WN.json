@@ -1,0 +1,15 @@
+{
+  "id": "01M2WZMFFEZZ788ZA6YJN863WN",
+  "ts": "2026-09-19T14:02:59.950Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "doing",
+    "text": "ST0021, showreel's video export for 2.10.0 (hv's decisions 5 and 6). design.md (intent/st/ST0021/design.md) is with vc for review before any code; then vc takes its eight questions to hv. The spike (19 Sep, Chrome 153.0.8010.52, scratch only) closed the clock: CDP virtual time drives JS timers, and an injected Web Animations clock (animations paused at birth and driven from the virtual clock, rAF queued to the frame boundary, the clock rounded to whole ms) gives byte-identical frames at any real pace, 510 of 510, with all six keyframes and the timer advance exercised. Route A, one renderer, no player.html change, no new crate; ffmpeg is the one new run-time dependency. WPs after review: 01 browser discovery to artifact, 02 the recording, 03 the verb and the encode, 04 proof, gates and docs, about two working sessions."
+  }
+}

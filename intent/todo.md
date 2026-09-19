@@ -9,6 +9,7 @@ _(none)_
 ## TODO
 
 - [?] ST0019: Release Utilz through dvb build release and a Homebrew tap, like Intent
+- [?] ST0021: showreel exports a reel as a video file
 
 ## DONE
 

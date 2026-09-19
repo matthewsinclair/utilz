@@ -5,11 +5,12 @@
     "name": "Control Claude",
     "role": "control",
     "session_id": "d69b4069-611f-4829-8991-1a15c02f53bb",
-    "heartbeat_at": "2026-09-19T13:28:51.488Z",
+    "heartbeat_at": "2026-09-19T14:03:00.559Z",
     "status": "active",
-    "focus": "showreel's video export for 2.10.0: the design, sized for hv, with a spike on the clock first",
+    "focus": "ST0021 (showreel video export for 2.10.0): design.md with vc for review, then hv's questions",
     "claims": [
-      "ST0019"
+      "ST0019",
+      "ST0021"
     ],
     "recorded_at": "2026-09-14T08:46:06.602Z",
     "authored_at": "2026-09-11 16:17Z",
@@ -478,7 +479,8 @@
       "kind": "doing",
       "seq": 28,
       "text": "showreel's video export (.mov or .mp4) for 2.10.0 (hv's board, decisions 5 and 6: the release waits for it, and hv is open to every route and dependency). A new thread, doc before code: design.md to vc before any code, carrying the options and the questions for hv, and the lift sized as work packages plus the one unknown that moves the size. Route A (record player.html in headless Chrome, encode with ffmpeg) keeps one renderer; B (composite in Rust) meets prez's spec 6, no rendering of its own; C (ffmpeg filters) is a second renderer. THE UNKNOWN IS THE CLOCK: whether CDP virtual time over --remote-debugging-pipe steps the player's timers, rAF and CSS animations frame by frame, or the player needs a seekable clock. A scratch spike answers it before the size is written. vc's step-2 review (19 Sep) is the checklist: dependencies per route, the proof of fidelity, and a regression check if the player changes.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-09-19T14:02:59.711Z",
       "recorded_at": "2026-09-19T13:28:49.838Z"
     },
     {
@@ -496,6 +498,14 @@
       "text": "ST0019's design, after the release: the Utilz parts only (its version files, the CI build of prez, the Homebrew formula), answering questions 1-3, with 5 and 6 handed to Devbin 0064 through vc. THE 14 SEP RESEARCH is always recoverable from that session's transcript, 14d6f67d-9238-483a-bd2e-80345ed85383.jsonl, where all three files are single Write calls; the precedents survey describes private repos, so it stays out of this repo. If the video export needs Chrome and ffmpeg at run time, the formula's dependencies follow from it.",
       "state": "live",
       "recorded_at": "2026-09-19T13:28:50.825Z"
+    },
+    {
+      "node": "cc",
+      "kind": "doing",
+      "seq": 29,
+      "text": "ST0021, showreel's video export for 2.10.0 (hv's decisions 5 and 6). design.md (intent/st/ST0021/design.md) is with vc for review before any code; then vc takes its eight questions to hv. The spike (19 Sep, Chrome 153.0.8010.52, scratch only) closed the clock: CDP virtual time drives JS timers, and an injected Web Animations clock (animations paused at birth and driven from the virtual clock, rAF queued to the frame boundary, the clock rounded to whole ms) gives byte-identical frames at any real pace, 510 of 510, with all six keyframes and the timer advance exercised. Route A, one renderer, no player.html change, no new crate; ffmpeg is the one new run-time dependency. WPs after review: 01 browser discovery to artifact, 02 the recording, 03 the verb and the encode, 04 proof, gates and docs, about two working sessions.",
+      "state": "live",
+      "recorded_at": "2026-09-19T14:02:59.950Z"
     }
   ],
   "messages": [
