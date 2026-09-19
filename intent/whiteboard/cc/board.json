@@ -5,9 +5,9 @@
     "name": "Control Claude",
     "role": "control",
     "session_id": "d69b4069-611f-4829-8991-1a15c02f53bb",
-    "heartbeat_at": "2026-09-19T17:40:02.724Z",
+    "heartbeat_at": "2026-09-19T17:57:44.920Z",
     "status": "active",
-    "focus": "ST0021: 0040's harness proof and landing, then WP-02 (cdp.rs red tests in the tree)",
+    "focus": "ST0021: WP-04 landed at 82c1452 for vc; AC-04.1 waits on a CI run of video.sh on both legs (hv's push), then close ST0021 and cut the 2.10.0 release commit",
     "claims": [
       "ST0019",
       "ST0021"
@@ -522,8 +522,17 @@
       "kind": "doing",
       "seq": 31,
       "text": "ST0021 (showreel video export for 2.10.0), building on hv's decision 7. WP-01 is DONE (97604d1, vc GO); WP-02 is started. TWO THINGS ARE IN FLIGHT AND UNCOMMITTED IN THE TREE, and this item is their resume state. (a) ISSUE 0040, the shared harness (filed at 28934d2; vc's decision 2 ruled EXTRACT before video.sh's first line). opt/prez/crate/test/lib/harness.sh is assembled from exact line ranges (acceptance.sh 116-192 plus theme-addressing.sh 85-144); both suites now source it through a fail-loud block; theme-addressing.sh:26-29 records the ruling. Checked: each of the 18 helpers is defined once; a direct run refuses (rc 2); a missing harness stops a suite naming the file (rc 1); local shellcheck findings are identical to HEAD's (16, none in harness.sh). The after-run of both suites under bash 3.2 was started just before the compact. RESUME: compare scratchpad harness/before-*.per-at with after-*.per-at, and the passed and rc lines; if identical, write 0040's Resolution, close it, commit fix(0040) by explicit path (git add the NEW lib/harness.sh), and send vc the SHA over the socket. (b) WP-02: crates/showreel/src/cdp.rs holds its RED tests only (NUL framing, AT28's stall naming its step, a closed pipe, an event kept for its waiter, a protocol error naming the method, the written message), and is not yet in lib.rs. RESUME: implement split_messages and Session (a reader thread, an mpsc recv_timeout watchdog; tests use std::io::pipe); move drive.rs's file_url into artifact::browser with its test; add artifact::base64::decode and correct its encode-only header; clock.js from the spike's shim.js; record.rs (an sh wrapper under process_group(0) whose EXIT trap removes the profile, the deterministic flags, 1 ms load slices, t0 anchoring, img.decode before every screenshot, the watchdog, Browser.close then kill -KILL -- -pgid). Then video.sh red first on lib/harness.sh, WP-03 (add --browser to the verb, so the finder's remedy stays true), and WP-04. The spike's harness and data are in the scratchpad's spike/ (capture.py, shim.js, FINDINGS.md).",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-09-19T17:57:44.682Z",
       "recorded_at": "2026-09-19T14:59:01.043Z"
+    },
+    {
+      "node": "cc",
+      "kind": "doing",
+      "seq": 32,
+      "text": "ST0021 (showreel video for 2.10.0): WP-01 to WP-03 Done on vc's GO; WP-04 landed at 82c1452 for vc's verification. The contract is 15 of 16, and AC-04.1 (CI records video on both legs) needs CI's first run of video.sh, which needs hv's push of main. Once both legs are green: satisfy AC-04.1 citing the runs, close WP-04 and ST0021, then the 2.10.0 release commit (todo 18), then ST0019's design (todo 19). Issues 0040 and 0041 are closed and verified.",
+      "state": "live",
+      "recorded_at": "2026-09-19T17:57:44.802Z"
     }
   ],
   "messages": [

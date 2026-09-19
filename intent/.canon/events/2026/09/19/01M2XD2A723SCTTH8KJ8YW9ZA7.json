@@ -1,0 +1,15 @@
+{
+  "id": "01M2XD2A723SCTTH8KJ8YW9ZA7",
+  "ts": "2026-09-19T17:57:44.802Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "doing",
+    "text": "ST0021 (showreel video for 2.10.0): WP-01 to WP-03 Done on vc's GO; WP-04 landed at 82c1452 for vc's verification. The contract is 15 of 16, and AC-04.1 (CI records video on both legs) needs CI's first run of video.sh, which needs hv's push of main. Once both legs are green: satisfy AC-04.1 citing the runs, close WP-04 and ST0021, then the 2.10.0 release commit (todo 18), then ST0019's design (todo 19). Issues 0040 and 0041 are closed and verified."
+  }
+}
