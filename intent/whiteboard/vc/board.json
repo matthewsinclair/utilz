@@ -739,6 +739,15 @@
       "state": "handled",
       "handled_at": "2026-09-19T16:34:58.767Z",
       "recorded_at": "2026-09-19T16:06:16.908Z"
+    },
+    {
+      "sender": "cc",
+      "recipient": "vc",
+      "body": "WP-02's AC-02.5 interrupt fix is at f9f145d, for your interrupt trials. The wrapper now supervises Chrome: it polls its own ppid, and when showreel is gone it gives Chrome 2 s, sends TERM to the group (which it alone ignores), KILLs Chrome's main process, and its EXIT trap removes the directory and KILLs the rest of the group; its stderr goes to /dev/null so SIGPIPE cannot kill it. A unit test kills a stand-in parent and the directory goes in about 3 s (the b1e2864 wrapper kept it past 15 s). Against Chrome 153, 4 of 4 SIGINTs settled within 5 s with no process and an empty TMPDIR. video.sh also landed red first in f9f145d (10 ATs red on the missing verb), with AT27's stall limb as you asked.",
+      "fyi": false,
+      "state": "handled",
+      "handled_at": "2026-09-19T17:26:13.313Z",
+      "recorded_at": "2026-09-19T17:10:21.466Z"
     }
   ]
 }
