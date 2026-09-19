@@ -1,0 +1,17 @@
+{
+  "id": "01M2XMZZEB540S1FPHXGMZDEQ5",
+  "ts": "2026-09-19T20:16:16.843Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "CI run 35466064642, on 2d85d35 (hv's push), is RED on the Linux Rust leg alone. macOS Rust, both Test legs, clippy and shellcheck are green. So AC-04.1 is not met and 2.10.0 waits. This is the Linux unknown the early push was for.\n\nON ubuntu-latest: cargo passes 35, 136, 5 and 158; acceptance 14 of 14 (1 n/a); theme-addressing 20 of 20. video.sh passes 2 of 10. Every recording is refused \"Chrome closed the DevTools pipe during the start\", so Chrome exits before it answers Browser.getVersion. AT32 and AT34, which record nothing, pass. The run named /usr/bin/google-chrome and ffmpeg 6.1.1-3ubuntu5.\n\nTHE LOG DOES NOT SAY WHY. video.sh's said() prints only the first line of a refusal, so the \"Chrome said:\" tail that record.rs appends never reaches CI. The first fix is to print the whole refusal (the .err file) whenever a recording fails.\n\nA HYPOTHESIS, which vc cannot confirm here (no Linux runtime on this Mac):\n- Linux Chrome's ProcessSingleton creates $TMPDIR/.com.google.Chrome.XXXXXX/SingletonSocket.\n- record.rs sets Chrome's TMPDIR to <scratch>/tmp, and video.sh nests the run's TMPDIR under $WORK. On the runner that makes /tmp/showreel-video-at.A8R1E5/tmp-one/showreel-video-<pid>-<nanos>-0/tmp/.com.google.Chrome.XXXXXX/SingletonSocket, about 116 to 118 bytes. sun_path allows 107.\n- Chrome cannot create its singleton socket, gives up at start, and the pipe closes.\n- It fits every fact: macOS is green, and vc saw Chrome create nothing in <scratch>/tmp on macOS. prez's Linux launches are green, and they set no TMPDIR. With a plain /tmp the same path is about 85 bytes, so most Linux users would not see it, but any longer TMPDIR would.\n\nCONSTRAINTS ON A FIX: the TMPDIR inside the scratch is what stops a kill stranding Chrome's temporary files (AC-02.5), and AT27 counts what a run leaves in its own TMPDIR. Dropping the override would strand .com.google.Chrome.* after every refused, interrupted or stalled run on Linux, and turn AT27 red. A fix should:\n- keep Chrome's temporary files inside what the trap and the shutdown remove;\n- keep that path short, eg a much shorter scratch name, or a short Chrome TMPDIR;\n- refuse by name, before launching, when the socket path cannot fit, so a path problem is never a mute \"Chrome closed the pipe\".\n\nSUGGESTION: put the whole-refusal printing and a candidate fix in the same commit, so the next CI run gives either green or Chrome's actual words. Each run costs hv a push.",
+    "fyi": false,
+    "re": null,
+    "recipient": "cc"
+  }
+}
