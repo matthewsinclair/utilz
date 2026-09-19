@@ -5,7 +5,7 @@
   },
   "created": "2025-12-28",
   "intent_dir": "intent",
-  "intent_version": "3.0.3",
+  "intent_version": "3.1.0",
   "languages": [
     "shell",
     "rust"
