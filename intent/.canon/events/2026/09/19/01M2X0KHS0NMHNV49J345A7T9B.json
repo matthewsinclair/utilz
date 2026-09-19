@@ -1,0 +1,14 @@
+{
+  "id": "01M2X0KHS0NMHNV49J345A7T9B",
+  "ts": "2026-09-19T14:19:58.113Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "at.put",
+  "subject": {
+    "type": "at",
+    "id": "ST0021/AT34"
+  },
+  "payload": {
+    "via": "address"
+  }
+}

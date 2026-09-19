@@ -4,17 +4,19 @@
 
 **Record the real player.** A new showreel verb builds the reel exactly as `build` does. It then opens the HTML in headless Chrome, on a clock the harness controls, captures every frame, and pipes the frames to ffmpeg.
 
-A spike on 2026-09-19 proved the approach deterministic. The reel exercised all six keyframes and the timer-driven advance, and 510 frames came out **byte-identical** at two different real-time paces. It needs no change to `player.html` and no new crate. The one new run-time dependency is ffmpeg.
+A spike on 2026-09-19 proved the approach deterministic. The reel exercised all six keyframes and the timer-driven advance, and 510 frames came out byte-identical at two different real-time paces. It needs no change to `player.html` and no new crate. The one new run-time dependency is ffmpeg.
 
-**Size: four work packages, about two working sessions after this design is reviewed.** The unknown that moved the size was the clock. It is measured and closed (see "What the spike measured").
+**hv approved it on 2026-09-19** (decision 7: "Ok, ST0021 looks good, you and CC should crack on and build it"), taking each question's recommendation as its answer. vc's review added ten notes, and they are folded in below.
+
+**Size: four work packages, about two working sessions of build.** **Recording runs at 18-20 frames per second on a lightly loaded machine, and at 7 frames per second on this one at a load average of 400-500.** So a 3-minute reel takes 5 to 12 minutes to record. This sentence said 5 minutes until vc's review: it quoted the light-load rate as the only one.
 
 ## The three routes
 
-| Route                         | How the frames are made                                                                          | Renderers | New dependencies                           | Verdict                                                                                                             |
-| ----------------------------- | ------------------------------------------------------------------------------------------------ | --------- | ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------- |
-| **A. Record the real player** | headless Chrome plays `player.html` on a controlled clock; each frame is captured and piped to ffmpeg | one       | ffmpeg (Chrome is already prez's, for PDF) | **Recommended.** The video is the reel, so nothing can drift from it.                                               |
-| B. Composite in Rust          | frames built with the `image` crate, then encoded                                                | two       | a font rasteriser crate, ffmpeg or an encoder crate | Conflicts with prez's spec 6, "PREZ DOES NOT PRESENT AND DOES NOT RENDER" (`src/drive.rs:3-6`), and re-implements the theme's layout. |
-| C. ffmpeg filter graph        | Rust writes one filter graph (zoompan, xfade, drawtext, overlay)                                 | two       | ffmpeg                                     | Quickest to write. It is a second renderer in another language, with rougher type, and the crawl is hard.           |
+| Route                         | How the frames are made                                                                               | Renderers | New dependencies                                    | Verdict                                                                                                                               |
+| ----------------------------- | ----------------------------------------------------------------------------------------------------- | --------- | --------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| **A. Record the real player** | headless Chrome plays `player.html` on a controlled clock; each frame is captured and piped to ffmpeg | one       | ffmpeg (Chrome is already prez's, for PDF)          | **Chosen.** The video is the reel, so nothing can drift from it.                                                                      |
+| B. Composite in Rust          | frames built with the `image` crate, then encoded                                                     | two       | a font rasteriser crate, ffmpeg or an encoder crate | Conflicts with prez's spec 6, "PREZ DOES NOT PRESENT AND DOES NOT RENDER" (`src/drive.rs:3-6`), and re-implements the theme's layout. |
+| C. ffmpeg filter graph        | Rust writes one filter graph (zoompan, xfade, drawtext, overlay)                                      | two       | ffmpeg                                              | Quickest to write. It is a second renderer in another language, with rougher type, and the crawl is hard.                             |
 
 B and C each put the reel's eases, transitions and crawl in a second implementation that drifts from `player.html` unless something holds the two equal (IN-AG-HIGHLANDER-001). A has one renderer by construction.
 
@@ -29,11 +31,12 @@ Scratch research only, with no product code. Chrome 153.0.8010.52 (new headless)
   - drift-r with push
 
   That covers all six keyframes (crawl, kb-in, kb-out, dr-l, dr-r, wipe) and the `setTimeout` advance.
+
 - **The harness:** CDP over `--remote-debugging-pipe`: NUL-terminated JSON on fds 3 and 4, wired by `/bin/sh -c 'exec "$0" "$@" 3<&0 4>&1 0</dev/null 1>/dev/null'`. It needs no library.
 
 What it found, in the order it was found:
 
-1. **Under a paused clock the load event never fires.** The fix is to let virtual time run in 1 ms slices, pausing while a fetch is pending, until `Page.loadEventFired`. That cost 2 ms of virtual time.
+1. **Under a paused clock the load event never fires.** The fix is to let virtual time run in 1 ms slices, pausing while a fetch is pending, until `Page.loadEventFired`. The load cost 10 ms of page time. The harness's slice count said 2, which is why the page's own clock, not the count, is what gets read (finding 9).
 2. **Screenshots stall under paused virtual time** unless Chrome runs with `--run-all-compositor-stages-before-draw --disable-threaded-animation --disable-threaded-scrolling --disable-checker-imaging --disable-new-content-rendering-timeout`. Without the flags, one run stalled at frame 63 and the next at frame 78; with them, none stalled.
 3. **JS timers follow CDP virtual time exactly, but CSS animations and transitions do not.** Slide changes landed on 7.000 s and 10.000 s to the frame. Yet only 225 of 510 frames matched across the two paces, the fade finished early, and the crawl froze at 1.8 s.
 4. **An injected clock closes the CSS side without touching `player.html`.** The script is added with `Page.addScriptToEvaluateOnNewDocument` and does three things:
@@ -41,87 +44,146 @@ What it found, in the order it was found:
    - Before each captured frame, it sets every animation's `currentTime` from that clock.
    - It queues `requestAnimationFrame` callbacks and runs them at the frame boundary, because Chrome fires rAF on real-time frames. This was the wipe's one remaining divergence: 32 dB at its fastest frame.
    - It rounds the clock to whole virtual milliseconds, because Chrome jitters `performance.now()`.
-5. **With the clock injected, 510 of 510 frames are byte-identical** between a run at full speed and a run that slept 0.1 s of real time per frame. Every picture slide moves on every frame. Each transition takes the time and curve the player's CSS gives it:
-   - The fade is `ease*.5 ease-in`: 69 of 197 red at 0.3 s, and full at 0.6 s.
-   - The dissolve and the push blend across 1.2 s.
-   - The wipe's bar crosses in mid-ease.
-   - The crawl rises linearly and passes under the top mask at 77% of its dwell.
-6. **Throughput is 18-20 frames per second** at 1920x1080 PNG. So 17 s of reel at 30 fps took 26-28 s, and a 3-minute reel takes about 5 minutes.
+5. **With the clock injected, 510 of 510 frames are byte-identical** between a run at full speed and a run that slept 0.1 s of real time per frame. A third recording, made later in a separate Chrome, matched on all of the first 180 frames. Every picture slide moves on every frame.
+6. **Throughput depends on the machine's load, not on the shim.** With the flags and the shim:
+
+   | Capture                                   | Rate     | 1-minute load average |
+   | ----------------------------------------- | -------- | --------------------- |
+   | Plain PNG                                 | 18.2 fps | about 60              |
+   | PNG with `optimizeForSpeed`               | 20.1 fps | about 60              |
+   | The recording whose frames were compared  | 7.3 fps  | 400-500               |
+
+   `optimizeForSpeed` is not adopted, because the determinism check has not been run on it.
+
 7. **The encode is one ffmpeg call**, frames to H.264, yuv420p, `+faststart`. ffprobe reads 510 frames at 30/1, 17.000 s, 2.3 MB.
 8. **Chrome does not always exit on `Browser.close`**, so shutdown needs a kill after a grace period.
+9. **THE CURVE IS EXACT, AND THE FRAMES WERE 10 MS LATE.** A per-frame probe read the page's own state:
+   - **The curve.** The incoming slide's computed opacity equals the CSS `ease-in` curve at the transition's own `currentTime`, to four decimal places, on every frame of the fade.
+   - **The start.** The reel started at page time 0.0. Frame 0 was taken at page time 10 ms, the load's cost, so every frame showed the reel 10 ms later than i/fps.
+   - **What the mean colour showed.** vc's review read the reel as about 19 ms ahead. That was the 10 ms phase, plus about 3 of 197 levels of colour maths in ffmpeg's area mean.
+   - **The consequence.** The phase sat in every transition, and the determinism check could not see it, because both runs shared it. It is why the design anchors frames on the reel's own start, and why the proof has a phase test.
 
 ## The design (route A)
 
 ### The verb
 
-`showreel video <dir> [-o <file>] [--fps <n>]` builds the reel's HTML as `build` does, records it, and writes the video beside it in `_out/`, as `<stem>.mp4` unless `-o` names a file. The container follows the extension (`.mp4` or `.mov`). `prez showreel video ...` reaches it through the existing hand-over to the showreel binary, as `check` and `build` do.
+`showreel video <dir> [-o <file>] [--fps <n>] [--keep <n>] [--frames <dir>]`, and `prez showreel video ...` through the shim's existing hand-over (`opt/prez/prez:290`).
 
-It prints what it made in the shape `build` already uses: the file, frames, fps, duration, size and the Chrome version that recorded it. The version is there because headless virtual-time behaviour has moved between Chrome releases (vc).
+- **What it writes.** It builds the reel's HTML exactly as `build` does, into the next `_out/` slot (`build.rs:242`, `deliver.rs:218`). It then writes the video **beside it, in the same slot**: the HTML's name with `.html` swapped for `.mp4`. A slot is therefore one revision, holding the HTML and the video recorded from it.
+- **An explicit `-o <file>`** writes the video there. Like `build --out`, it is outside the rotation and prunes nothing. The HTML is built into a temporary directory and removed afterwards, because the caller named only the video.
+- **`--keep N` prunes whole slots**, in `build` and in `video`: a dropped revision's HTML and its video go together. The warning past five revisions (`deliver.rs:349`) counts the videos' megabytes, because a 3-minute 1080p video is about 24 MB.
+- **The container follows the extension.** `.mp4` is H.264 (hv's answer 1). `.mov` is H.264 in QuickTime.
+- **The size is the reel's `target`** by its 16:9 height: 1920 gives 1920x1080 and 2560 gives 2560x1440 (hv's answer 2).
+- **`--fps`** is 30 by default. It takes any whole number from 1 to 60 and refuses anything else by name (hv's answer 3).
+- **The video is silent** (hv's answer 4).
+- **The look is kiosk:** no progress bar and no HUD. The corner bug stays, as on a kiosk panel (hv's answer 5).
+- **`--frames <dir>`** also writes every captured PNG, and a `frames.tsv` of frame index, page time and slide index. It is what the determinism and phase tests read, and it is a frame-sequence export for anyone who wants one.
+- **Progress goes to stderr when stderr is a terminal** (`std::io::IsTerminal`), as `frame N/M`. At 5 to 12 minutes for a 3-minute reel, silence would read as a hang. When stderr is not a terminal, nothing is printed until the end.
+- **The report** at the end uses `build`'s shape: the file, frames, fps, duration, size, the Chrome version that recorded it, and how late frame 0 was taken.
 
 ### The recording (in `crates/showreel`)
 
 - **Browser discovery moves to one home.** prez's `drive::find` (`src/drive.rs:37`) and its refusal, which lists every path tried, move into the shared `artifact` crate. prez's `pdf` and `present` and showreel's `video` then find Chrome the same way.
-- **Chrome** runs headless with `--remote-debugging-pipe` and the deterministic-rendering flags (finding 2). Its fds are wired by `/bin/sh` as the spike did, so only the standard library is used. The workspace is Unix-only by hv's ruling on ST0020.
+- **Chrome** runs headless with `--remote-debugging-pipe` and the deterministic-rendering flags (finding 2). A temporary `--user-data-dir` is used, and the window is the video's size.
+  - A `/bin/sh` wrapper wires fds 3 and 4, as the spike did, so only the standard library is used. The workspace is Unix-only by hv's ruling on ST0020.
+  - The wrapper does not `exec`. It waits for Chrome, and its `EXIT` trap removes the profile directory (see "Shutdown").
 - **CDP** is NUL-terminated JSON, read and written with serde_json, which showreel already depends on. `tests/manifest.rs` does not move.
 - **The clock:**
   - CDP virtual time drives the JS side.
   - The injected script drives CSS and rAF (finding 4). It is embedded with `include_str!`, as `player.html` is.
   - The load runs in 1 ms slices until the load event (finding 1).
-  - Before frame 0, the harness waits for `document.fonts.ready`.
-- **The duration comes from the player.** The harness reads the player's own schedule from the page, `dwellOf` over every slide, so the reel's timing keeps one home. Frames = floor(duration x fps). The reel plays once (`?noloop`), and the last frame falls before the player's end-of-reel flash.
-- **The look is kiosk**: no progress bar and no HUD, as `?kiosk` already gives. The corner bug stays, as it does on a kiosk panel (hv's question 5).
+- **Frames are anchored on the reel's own start** (finding 9):
+  - After the load, the harness reads the page time at which the player showed its first slide (the player's `t0`) and the page's current time.
+  - It then steps so that frame i is taken at page time `t0 + i x 1000/fps`.
+  - Only frame 0 is off that grid. It is taken when the load finishes, and the report states how late (10 ms on the spike).
+- **The duration comes from the player.** The harness reads the player's own schedule from the page, `dwellOf` over every slide, so the reel's timing keeps one home. Frames = floor(duration x fps). The reel plays once (`?noloop`), so the last frame falls before the player's end-of-reel flash.
+- **Every image is decoded before every screenshot.** The tick awaits `decode()` on every `<img>` in the document, so a large photo cannot be captured half-drawn (vc's note 4, closed by construction). Before frame 0, the harness also waits for `document.fonts.ready`.
 - **Screenshots** are PNG. `artifact`'s base64 gains the decode half of what it already encodes.
-- **Every wait has a real-time watchdog** that names the step that stalled, as the spike's did. Shutdown is `Browser.close`, then a kill after a grace period (finding 8).
+- **Every wait has a real-time watchdog** that names the step that stalled, eg `no reply from Chrome in 30 s, during frame 63: screenshot`.
+
+### Shutdown
+
+**The spike's `pkill -f spike-chrome-` is issue 0030's trap, and it does not carry over.** Nothing is ever matched by name.
+
+- **Chrome's process group.** The wrapper and Chrome run in their own process group (`CommandExt::process_group(0)`, standard library). Shutdown is `Browser.close`, then, after a grace period, `kill -KILL -- -<pgid>` on that group alone.
+- **The profile directory** is removed by the harness on every path it runs, normal or failed. After an interrupt, which runs no Rust code, Chrome exits when its pipe closes, and the wrapper's `EXIT` trap removes the directory.
+- **Chrome's stderr** is captured to the temporary directory and shown when a recording fails, never spilled into the terminal.
 
 ### The encode
 
-ffmpeg is found on `PATH`, and frames are piped to it as an image sequence. `.mp4` is H.264, yuv420p, `+faststart`. `.mov` carries the same codec unless hv chooses ProRes (question 1).
+**ffmpeg** is found on `PATH` and is spawned in its own process group, with frames piped to it as an image sequence. `.mp4` is H.264, yuv420p, `+faststart`, and so is `.mov`, in QuickTime.
 
-**A missing ffmpeg is refused by name, with the install line, before any frame is captured.** A missing Chrome is refused as `drive::find` refuses today. Neither ever produces a partial file that looks finished (IN-AG-NO-SILENT-001).
+**NO PARTIAL FILE EVER LOOKS FINISHED.**
 
-## Questions for hv
+- **The temporary name.** ffmpeg writes `<name>.partial`, with the format named explicitly, because ffmpeg would otherwise infer it from the extension.
+- **The rename** to the final name happens only after both of these hold:
+  - ffmpeg exits 0.
+  - ffprobe's frame count equals the plan's.
+- **Cleanup.** Every failure path the harness sees deletes the partial file. An interrupt can leave only a `.partial`, never the finished name, and the next `video` run in that reel removes it before it starts.
 
-Each has a recommendation, and every one can change without changing the route.
+**Missing tools are refused by name before any frame is captured.** A missing ffmpeg is refused with the install line. A missing Chrome is refused as `drive::find` refuses today (IN-AG-NO-SILENT-001).
 
-1. **Container and codec.** `.mp4` with H.264 is recommended as the default, because it plays everywhere. `.mov` could be H.264 in QuickTime (small) or ProRes 422 for editing (about ten times the size).
-2. **Resolution.** Recommended: the reel's own `target`, 1920 wide, which gives 1080p. Should a reel with a 2560 target record at 2560x1440, or always at 1080p?
-3. **Frame rate.** Recommended: 30 fps by default, with `--fps 60` as an option. 60 is smoother under Ken Burns, and doubles the recording time.
-4. **Audio.** Recommended: silent, because the reel is silent. An optional soundtrack muxed by ffmpeg is a small addition later.
-5. **The corner bug.** Kept as on a kiosk panel (recommended), or removed with `?nobug`?
-6. **The verb's shape.** `showreel video <dir>` (recommended) or `showreel build <dir> --video`?
-7. **ffmpeg as a declared run-time dependency** of the video verb, reported by doctor (recommended)? The alternative is writing a frame sequence and leaving the encode to the user.
-8. **Where it runs.** On the maintainer's machine, where Chrome and ffmpeg are present. In CI, the video acceptance tests run on whichever legs carry both.
+## hv's answers (decision 7)
+
+hv took each recommendation as its answer:
+
+1. `.mp4` with H.264 by default, and `.mov` as H.264 in QuickTime.
+2. The reel's `target` width at 16:9.
+3. 30 fps by default, with `--fps`.
+4. Silent.
+5. The corner bug kept, as on a kiosk panel.
+6. `showreel video <dir>`.
+7. ffmpeg declared, as an optional dependency of prez (`prez.yaml` `optional_dependencies`), so doctor reports it.
+8. Run on the maintainer's machine. In CI, the workflow installs ffmpeg on both legs, and the video tests run on both.
+
+hv can change any one of these without changing the route.
 
 ## Work packages and size
 
-| WP  | Scope                                                                                                                                                             | Size   |
-| --- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
-| 01  | Browser discovery moves to `artifact`; prez's `pdf` and `present` use it unchanged, and their tests move with it                                                     | small  |
-| 02  | The recording: Chrome over the pipe, the CDP client, virtual time, the injected clock, the load, fonts, screenshots, the watchdog and the shutdown, with unit tests of the framing and the frame schedule | medium |
-| 03  | The verb and the encode: arguments, the duration from the player, the ffmpeg pipe, the refusals, the output name, the `prez showreel video` hand-over, and help | medium |
-| 04  | The proof, the gates and the docs: the acceptance tests below, doctor's report of ffmpeg, both CI legs, `help/prez.md`, README and the CHANGELOG entry            | medium |
+| WP  | Scope                                                                                                                                                                                                       | Size   |
+| --- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
+| 01  | Browser discovery moves to `artifact`; prez's `pdf` and `present` use it unchanged, and their tests move with it                                                                                            | small  |
+| 02  | The recording: Chrome over the pipe, the CDP client, virtual time, the injected clock, the anchoring on `t0`, the image decode, fonts, screenshots, the watchdog and the shutdown                            | medium |
+| 03  | The verb and the encode: arguments, the slot and `--keep`, `-o`, `--frames`, the duration from the player, the `.partial` and the rename, the refusals, progress, and the `prez showreel video` hand-over | medium |
+| 04  | The proof, the gates and the docs: `crate/test/video.sh`, `prez.yaml`'s optional ffmpeg, the workflow's ffmpeg on both legs, `help/prez.md`, the README and the CHANGELOG entry                               | medium |
 
-**About two working sessions after review**, so 2.10.0 is days away rather than weeks. **The one unknown that moved the size was the clock, and the spike closed it.** Three smaller unknowns remain, and none of them is expected to move the size:
-- Web fonts under virtual time.
-- A large photo's asynchronous decode at the first frame of its slide.
-- Linux. The spike ran on macOS only.
+About two working sessions of build. Each WP goes red first and is verified by vc as it lands.
 
-Each would be a change inside WP-02, and the acceptance tests on both CI legs are what find them.
+**Two unknowns remain.** Each would be a change inside WP-02, and `video.sh` on both CI legs is what finds it:
+
+- **Web fonts under virtual time.** The fonts wait is in the design, but no fixture has exercised it yet.
+- **Linux.** The spike ran on macOS only.
 
 ## Proof that a video is faithful to its reel
 
-Three acceptance tests, on a fixture reel whose slides are known colours:
+`crate/test/video.sh`, discovered by the test driver's `crate/test/*.sh` convention and run with `--strict`.
 
-1. **Frame count.** The video holds floor(duration x fps) frames by ffprobe, where the duration is the player's own schedule.
-2. **Determinism.** Two recordings of one reel, one of them slowed in real time, are byte-identical frame by frame. The spike measured 510 of 510. This is the test that catches a Chrome release changing virtual-time behaviour.
-3. **Timeline.** Each slide change lands on the frame its dwell puts it on, and mid-transition frames sit on the player's own curves.
+**The fixture** is generated at test time, so nothing binary is committed:
 
-Chrome or ffmpeg missing on a leg is `unchecked`, which reddens `--strict`, never `not_applicable`: the acceptance suite gates n/a on the platform, never on a missing tool (restart.md).
+- A crawl, then four known-colour gridded pictures with fade, wipe, dissolve and push. That is every transition and all six keyframes.
+- A sixth slide, a generated 6000x4000 photo, arrives by `cut`, so its first frame has nothing to blend with. `build` sizes it down to the target, as it does every picture, so what is decoded is a full-size target JPEG.
+- Every slide sits at the 2500 ms dwell floor, with a 1200 ms ease.
+- It is recorded at `--fps 10`, which keeps CI short: 150 frames per recording.
+
+**Every expected value comes from the player's CSS and the dwell schedule, never from a recording** (vc's note 3). The tolerances are fixed here, before the first green:
+
+1. **Frame count.** The video holds floor(duration x fps) frames by ffprobe, where the duration is the sum of the dwell floor over the slides. The codec, the size and the absence of an audio stream match the extension and the target.
+2. **Determinism.** Two recordings, the second sleeping 0.02 s of real time per frame, write byte-identical PNGs to `--frames`. **The bytes compared are the captured PNGs, before the encode**, because H.264 output need not match across encoder builds.
+3. **Phase.** In `frames.tsv`, every frame i >= 1 is at page time `t0 + i x 1000/fps` (100 ms apart at the fixture's 10 fps) within 0.5 ms, the shim's rounding. Its slide index is the one the dwell schedule puts there.
+4. **Curve.** The mid-fade frames' mean colour equals the incoming colour times the CSS `ease-in` progress at the frame's scheduled time, over the black ground, within 6/255 per channel.
+   - The spike's colour maths cost 3.3.
+   - The phase error the review suspected cost 4 on its own. A one-frame slip costs more than 12, so it is caught.
+   - The phase test is the exact check. This one catches a capture that lags its own clock.
+5. **The photo.** The first captured frame of the photo's slide has the photo's own mean colour within 6/255, as `build`'s normalised JPEG measures it: the whole photo, not a partial draw or the black ground.
+6. **The tools.** The test output names the Chrome and the ffmpeg it used, as the acceptance suite names its browser today. A leg with either missing is `unchecked`, which reddens `--strict`, and never `not_applicable` (restart.md: n/a is gated on the platform, never on a missing tool).
 
 `player.html` does not change, so no regression check on the HTML reel is needed. vc's point 3 applies only if a later change makes the player seekable.
 
-## Dependencies, per route (vc's point 4)
+## Dependencies
 
-- **A:** Chrome (already needed by prez `pdf`) and ffmpeg at run time. Doctor reports ffmpeg for the video verb. Both CI legs need it for WP-04's tests. And ST0019's Homebrew formula carries whatever this settles.
-- **B:** an encoder crate or ffmpeg, plus a font rasteriser crate. Any crate goes to hv, with `tests/manifest.rs` moved in the same commit.
-- **C:** ffmpeg.
+Chrome, already needed by prez `pdf`, and ffmpeg, both at run time.
+
+- ffmpeg is an optional dependency of prez, so doctor reports it.
+- Both CI legs install it for `video.sh`.
+- ST0019's Homebrew formula carries whatever this settles.
+- No crate is added.

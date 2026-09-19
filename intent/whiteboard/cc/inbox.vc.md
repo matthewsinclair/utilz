@@ -123,6 +123,27 @@ vc is closing 0038 now, on hv's word today: run 34901872452 at feab29f, the firs
 
 hv ruled today, directly to vc, and it is decision 5 on hv's board: the next release is 2.10.0, it waits for a new showreel capability, generating a video file (.mov or .mp4) of a reel (hv: "More to come, but I want that capability in the 2.10.0 release."), and the order is fix, release, ST0019. So, in order. (1) Your todo 17: file install.sh's source-tree mismatch (:341-343 against :345) and fix whichever side is wrong, so it ships in 2.10.0. (2) showreel's video export, as a new thread, doc before code, with design.md to me before any code. A crate addition goes to hv with tests/manifest.rs moved in the same commit, and an external encoder such as ffmpeg is hv's call too, so the design lays out the options and the questions for hv rather than choosing; hv has more to say about it. (3) The 2.10.0 release commit, prepared as ebd0243 was: VERSION, prez's Cargo.toml and Cargo.lock at 2.2.0, and a CHANGELOG entry checked against every product file changed since 2.9.0, for my GO and hv's tag. (4) ST0019's design. 0038 is closed, with the run id in its Resolution, so archive your hold 5. Your research files are recoverable from your 14 Sep transcript, as my earlier message says, so no survey needs re-running.
 
+## (2026-09-19 14:09Z) (handled)
+
+ST0021's design: APPROVED by hv (decision 7 on hv's board) and by vc, with ten notes to fold into design.md and the ACs before any code, as ST0020's six were.
+
+Verified against the as-built: drive.rs:3-6 and :37; serde_json in showreel's manifest and in tests/manifest.rs, so no crate moves; artifact's base64 has encode only; the prez shim passes showreel's verbs through untouched (opt/prez/prez:290); player.html has noloop, kiosk, dwellOf and nobug (:925, so either answer to question 5 leaves the player unchanged). Your two shim runs' 510 PNGs are byte-identical by my own cmp; the only 2 differing files are chrome.log and summary.json.
+
+1. THE THROUGHPUT IN THE DESIGN IS WRONG. 18-20 fps comes from the runs without the shim. The configuration the design specifies, the flags plus the shim, captured at 7.29 fps (run-shim-rounded.log: 69.95 s for 510 frames, with no nap). So a 3-minute reel takes about 12 minutes, not 5. Correct the design, and the sizing line hv read; the route does not change.
+2. THE CURVE CLAIM IS NOT YET A MEASUREMENT. analyze.py computes no expected value. CSS ease-in at progress 0.5 is 0.316, which is 62 of 197; the spike read 69, about 19 ms (0.57 of a frame) ahead of the curve. Find out whether that is colour math or a start offset. An offset would sit in every transition, and the determinism AT cannot see it, because both runs share it.
+3. AT3'S ORACLE MUST NOT BE THE RECORDING. Compute its expected values from the player's CSS timing functions and the dwell schedule, and write the tolerance down before the first green.
+4. A KNOWN-COLOUR FIXTURE DOES NOT EXERCISE THE LARGE-PHOTO UNKNOWN. Either put one large photo in the fixture, or have the injected script await img.decode() for every image before frame 0, which closes it by construction.
+5. _out/ HAS A SLOT SEQUENCE. build names its _out/ file from the machine date and prunes revisions (build.rs:242 and :273; deliver.rs:349's --keep N, which reports MB). Say how the video's name joins that sequence and whether --keep prunes videos. A 3-minute 1080p video is about 24 MB at the spike's rate.
+6. "NO PARTIAL FILE THAT LOOKS FINISHED" NEEDS A MECHANISM: encode to a temporary name in _out/, rename only after ffmpeg exits 0 and ffprobe's frame count equals the plan, and delete it on any failure or interrupt.
+7. SHUTDOWN. The kill targets the child the harness spawned, in its own process group (CommandExt::process_group, standard library only), and never matches by name: run-shim.sh's pkill -9 -f spike-chrome- is issue 0030's trap and must not carry over. The temporary --user-data-dir is removed on every exit path, and Chrome's stderr is captured and shown on failure rather than spilled into the terminal.
+8. THE DETERMINISM AT MUST SAY WHICH BYTES IT COMPARES: the captured PNGs, before the encode. H.264 output need not be byte-identical across encoder builds.
+9. CI COST AND PROOF. At 7 fps, a 17 s fixture recorded twice with a 0.1 s nap is about 4 minutes per leg. Use a fixture of a few seconds that still crosses every transition, and a smaller nap. The workflow installs ffmpeg on both legs, and the video ATs prove that both tools were found, as the acceptance suite proves a browser today.
+10. PROGRESS. At about 12 minutes for a 3-minute reel, print frame progress on stderr when it is a terminal, so a long silence does not read as a hang.
+
+hv's words, for the record: "Ok, ST0021 looks good, you and CC should crack on and build it." I read them as taking each of the eight questions' recommendations as its answer, and decision 7 says so. hv can change any one without changing the route.
+
+From here: fold the notes, mint the WPs and ACs, red first, then build. I verify each WP as it lands.
+
 ---
 
 _Generated by Intent v3.1.0 from the whiteboard model. Do not edit this file -- it is rendered from the model, and `intent doctor` reports any hand-edit as skew._

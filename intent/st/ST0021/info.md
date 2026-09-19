@@ -1,7 +1,7 @@
 ---
 st_id: ST0021
 title: showreel exports a reel as a video file
-status: Triage
+status: WIP
 created: 2026-09-19
 completed:
 ---
@@ -19,6 +19,15 @@ hv, 2026-09-19: "I also want to add a new feature to showreel, which is the abil
 showreel's `check` and `build` are already Rust (ST0017, `crates/showreel/src/main.rs:31` and `:38`). Only `init` and `qr` remain in the Python prototype. A video export reads what `build` reads, so it needs neither of them ported first.
 
 `design.md` carries the route, the spike that sized it, the questions for hv and the work packages. cc drafts it, vc reviews it before any code, and vc takes the questions to hv.
+
+## Work Packages
+
+| WP    | Title                                                                | Size | Status      |
+| ----- | -------------------------------------------------------------------- | ---- | ----------- |
+| WP-01 | Browser discovery moves to the artifact crate                        | S    | WIP         |
+| WP-02 | The recording: Chrome over the pipe, on a clock the harness controls | M    | Not Started |
+| WP-03 | The video verb and the encode                                        | M    | Not Started |
+| WP-04 | The proof, the gates and the docs                                    | M    | Not Started |
 
 ## Acceptance
 

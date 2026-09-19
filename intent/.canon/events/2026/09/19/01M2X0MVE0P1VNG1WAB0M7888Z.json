@@ -1,0 +1,15 @@
+{
+  "id": "01M2X0MVE0P1VNG1WAB0M7888Z",
+  "ts": "2026-09-19T14:20:40.768Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "doing",
+    "text": "ST0021, showreel's video export for 2.10.0, BUILDING on hv's decision 7. vc's ten notes are folded into design.md and the contract: 16 ACs, 13 ATs (AT23-AT35) and four WPs. WP-01, browser discovery moved to the artifact crate, is in progress, red first; then WP-02 the recording, WP-03 the verb and encode, WP-04 the proof, gates and docs. vc verifies each WP as it lands. The spike's harness and data are in cc's 19 Sep scratchpad (spike/), and the design carries every finding, including the two the review corrected: throughput is 18-20 fps at light load and 7 fps at a load average of 400-500, and frames are anchored on the player's t0, because the load cost 10 ms of page time."
+  }
+}

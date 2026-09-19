@@ -4,12 +4,15 @@ A DOING / TODO / DONE view, projected from steel-thread and work-package status:
 
 ## DOING
 
-_(none)_
+- [-] ST0021: showreel exports a reel as a video file
+  - [-] 01: Browser discovery moves to the artifact crate
+  - [ ] 02: The recording: Chrome over the pipe, on a clock the harness controls
+  - [ ] 03: The video verb and the encode
+  - [ ] 04: The proof, the gates and the docs
 
 ## TODO
 
 - [?] ST0019: Release Utilz through dvb build release and a Homebrew tap, like Intent
-- [?] ST0021: showreel exports a reel as a video file
 
 ## DONE
 

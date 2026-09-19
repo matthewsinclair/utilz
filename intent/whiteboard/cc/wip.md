@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: d69b4069-611f-4829-8991-1a15c02f53bb
-heartbeat_at: 2026-09-19 14:03Z
+heartbeat_at: 2026-09-19 14:20Z
 status: active
-focus: "ST0021 (showreel video export for 2.10.0): design.md with vc for review, then hv's questions"
+focus: "ST0021 (showreel video export for 2.10.0): building, WP-01 red first"
 claims: [ST0019, ST0021]
 ---
 
@@ -13,7 +13,7 @@ claims: [ST0019, ST0021]
 
 ## DOING
 
-- ST0021, showreel's video export for 2.10.0 (hv's decisions 5 and 6). design.md (intent/st/ST0021/design.md) is with vc for review before any code; then vc takes its eight questions to hv. The spike (19 Sep, Chrome 153.0.8010.52, scratch only) closed the clock: CDP virtual time drives JS timers, and an injected Web Animations clock (animations paused at birth and driven from the virtual clock, rAF queued to the frame boundary, the clock rounded to whole ms) gives byte-identical frames at any real pace, 510 of 510, with all six keyframes and the timer advance exercised. Route A, one renderer, no player.html change, no new crate; ffmpeg is the one new run-time dependency. WPs after review: 01 browser discovery to artifact, 02 the recording, 03 the verb and the encode, 04 proof, gates and docs, about two working sessions.
+- ST0021, showreel's video export for 2.10.0, BUILDING on hv's decision 7. vc's ten notes are folded into design.md and the contract: 16 ACs, 13 ATs (AT23-AT35) and four WPs. WP-01, browser discovery moved to the artifact crate, is in progress, red first; then WP-02 the recording, WP-03 the verb and encode, WP-04 the proof, gates and docs. vc verifies each WP as it lands. The spike's harness and data are in cc's 19 Sep scratchpad (spike/), and the design carries every finding, including the two the review corrected: throughput is 18-20 fps at light load and 7 fps at a load average of 400-500, and frames are anchored on the player's t0, because the load cost 10 ms of page time.
 
 ## TODO
 
