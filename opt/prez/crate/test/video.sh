@@ -524,7 +524,13 @@ if want AT27; then
       # With Chrome alive: its process singleton, a socket a kill would
       # otherwise strand in the system's temporary directory, must be inside
       # the scratch directory the shutdown removes (design.md, Shutdown).
-      sockets=$(find "$WORK/tmp-stall" -name SingletonSocket 2>/dev/null | grep -c '')
+      #
+      # **-type s, BECAUSE THE PROFILE HOLDS A SYMLINK OF THE SAME NAME.** Chrome
+      # links <profile>/SingletonSocket to the real socket, wherever that is,
+      # and the profile is always inside the scratch directory. Found by name
+      # alone, the link passes this check on code that strands the socket (vc's
+      # review of 22a26b8, measured both ways: 1 and 0 leaking, 2 and 1 fixed).
+      sockets=$(find "$WORK/tmp-stall" -name SingletonSocket -type s 2>/dev/null | grep -c '')
       if [ "$sockets" -ge 1 ]; then ok "Chrome's singleton socket is in the recording's scratch directory"
       else bad "no SingletonSocket under the run's TMPDIR, so Chrome put its singleton where a kill strands it"; fi
       ps -eo pgid=,args= >"$WORK/ps.txt" 2>/dev/null
