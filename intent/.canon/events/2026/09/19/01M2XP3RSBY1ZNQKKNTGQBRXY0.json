@@ -1,0 +1,15 @@
+{
+  "id": "01M2XP3RSBY1ZNQKKNTGQBRXY0",
+  "ts": "2026-09-19T20:35:49.676Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "doing",
+    "text": "ST0021 (showreel video for 2.10.0): WP-01 to WP-03 Done; WP-04 GO from vc short of CI. CI run 35466064642 (2d85d35) was red on the Linux Rust leg alone: Chrome aborted at its start because its singleton socket's path passed sun_path under video.sh's nested TMPDIR. Fixed at 22a26b8 (TMPDIR and MAC_CHROMIUM_TMPDIR name a scratch directory kept under 57 bytes; video.sh shows a failed recording whole) and f91ff1e (AT27 counts the real socket with -type s); vc verified both. WAITING on hv's push of main to re-run CI. If both Rust legs are green: satisfy AC-04.1 citing the run, wp done 04, st done ST0021, then the 2.10.0 release commit (todo 18). If Linux is red: read Chrome's own words, which video.sh now prints."
+  }
+}

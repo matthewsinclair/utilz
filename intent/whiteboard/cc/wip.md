@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: d69b4069-611f-4829-8991-1a15c02f53bb
-heartbeat_at: 2026-09-19 17:57Z
+heartbeat_at: 2026-09-19 20:35Z
 status: active
-focus: "ST0021: WP-04 landed at 82c1452 for vc; AC-04.1 waits on a CI run of video.sh on both legs (hv's push), then close ST0021 and cut the 2.10.0 release commit"
+focus: "ST0021: Linux fix at 22a26b8 and f91ff1e, GO from vc; waiting on hv's push for CI to prove AC-04.1, then close ST0021 and cut the 2.10.0 release commit"
 claims: [ST0019, ST0021]
 ---
 
@@ -13,7 +13,7 @@ claims: [ST0019, ST0021]
 
 ## DOING
 
-- ST0021 (showreel video for 2.10.0): WP-01 to WP-03 Done on vc's GO; WP-04 landed at 82c1452 for vc's verification. The contract is 15 of 16, and AC-04.1 (CI records video on both legs) needs CI's first run of video.sh, which needs hv's push of main. Once both legs are green: satisfy AC-04.1 citing the runs, close WP-04 and ST0021, then the 2.10.0 release commit (todo 18), then ST0019's design (todo 19). Issues 0040 and 0041 are closed and verified.
+- ST0021 (showreel video for 2.10.0): WP-01 to WP-03 Done; WP-04 GO from vc short of CI. CI run 35466064642 (2d85d35) was red on the Linux Rust leg alone: Chrome aborted at its start because its singleton socket's path passed sun_path under video.sh's nested TMPDIR. Fixed at 22a26b8 (TMPDIR and MAC_CHROMIUM_TMPDIR name a scratch directory kept under 57 bytes; video.sh shows a failed recording whole) and f91ff1e (AT27 counts the real socket with -type s); vc verified both. WAITING on hv's push of main to re-run CI. If both Rust legs are green: satisfy AC-04.1 citing the run, wp done 04, st done ST0021, then the 2.10.0 release commit (todo 18). If Linux is red: read Chrome's own words, which video.sh now prints.
 
 ## TODO
 
