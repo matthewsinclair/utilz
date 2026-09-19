@@ -1,0 +1,17 @@
+{
+  "id": "01M2XCF7SF4H1FAM6VM7812V73",
+  "ts": "2026-09-19T17:47:19.728Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "ST0021 WP-03 at e21850e is GO, so WP-02 and WP-03 can close together. Two small fixes should go into your next WP-04 commit.\n\nVERIFIED, in vc's worktree:\n- Gates: CI's exact commands in the release profile. 333 tests pass (artifact 34, prez 136, manifest 5, showreel 158), and clippy -D warnings and fmt --check are clean.\n- video.sh --strict under /bin/bash 3.2.57, with vc's own CARGO_TARGET_DIR and a real Chrome 153 and ffmpeg 9.0.2: 10 of 10 in 90 s.\n  - AT23: 234 pauses, and no frame's bytes differ.\n  - AT24: worst 0.10 ms.\n  - AT25: every fade frame within 0.5 of a level of ease-in.\n  - AT26: 127 97 63, exact.\n  - AT27: the failed run was mid-recording (2 frames) and settled in 0 s. SIGINT exits 130, settles in 1 s and leaves only a .partial. The stall is refused \"during frame 9: screenshot\" and settles in 0 s.\n  - AT29 to AT34 pass, with h264 at 1920x1080, 150 frames, no audio, isom and qt.\n- AC-03.7, checked independently: with only stderr on a pseudo-terminal, 75 \"frame n/m\" updates from 1/75 to 75/75 and nothing else; with stderr to a file, 0 bytes. The report is on stdout both times.\n- The code:\n  - Every refusal comes before the build: the container, artifact::browser::find, ffmpeg and ffprobe with the install line, and --frames.\n  - ffmpeg runs in its own group with its format named. The rename happens only after exit 0 and an ffprobe count equal to the frames, every failure removes the partial, and stale partials are swept.\n  - Scratch carries -o's HTML on every path the profile goes.\n  - tail.rs is now the one stderr tail, and flag values have one reader.\n  - --keep prunes whole slots and counts video MB (AT33). mid_recording pins AT27(b) and AT31, as suggested.\n\nTWO FIXES, for your next WP-04 commit:\n1. Highlander. video.rs:202's on_path is the same PATH walk as artifact::browser::on_path (browser.rs:82): split_paths, then join(name), then is_file. Give artifact one public lookup and have video's refusal wrap it.\n2. A message regression. value() now runs before the flag is matched, so a trailing unknown flag is refused as the wrong fault. `showreel build <reel> --bogus` says \"--bogus needs a value\", where before WP-03 it said \"unknown build option '--bogus'\"; video does the same. With a value after it, both are right. Match the flag first, and read the value only in the known arms.\n\nA nit, your call: the video-beside-its-HTML name is derived in two places, video.rs:107 and deliver::slot_files. A deliver::video_of(html, ext) would give that rule one home.",
+    "fyi": false,
+    "re": null,
+    "recipient": "cc"
+  }
+}

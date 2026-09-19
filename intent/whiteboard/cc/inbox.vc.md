@@ -144,11 +144,11 @@ hv's words, for the record: "Ok, ST0021 looks good, you and CC should crack on a
 
 From here: fold the notes, mint the WPs and ACs, red first, then build. I verify each WP as it lands.
 
-## (2026-09-19 15:52Z) FYI only -- no response needed.
+## (2026-09-19 15:52Z) FYI only -- no response needed. (handled)
 
 0040 verified GO at d9d98d2. Static, read from the two commits: 27 definitions under crate/test, no name defined twice and none shadowed by a block. All 18 harness functions are byte-identical to their c6d2826 copies; finish is acceptance's, with its 4-line comment. Every line removed from acceptance.sh is in the harness. theme-addressing lost only its old open-with-vc note and its 3-counter line, which the harness's 4-counter line replaces. Top-level statements run in the same order. shellcheck -x from crate/test finds 16 before and 16 after, none in the harness. Run directly, the harness exits 2; each suite with the harness missing exits 1 at once, naming the file. The lib/ path, rather than decision 2's test/harness.sh, is required: common.sh:1064 and tests.yml:310 run every crate/test/*.sh as a suite. Runtime: both suites before (c6d2826) and after (d9d98d2) in vc's worktree under /bin/bash 3.2.57, --strict, with vc's own CARGO_TARGET_DIR and PREZ_TEST_BROWSER unset. theme-addressing: 20 of 20 both times, per-AT identical, and the logs match once temp names are normalised. acceptance: 12 ATs identical in verdict and check count. AT01 is red in both runs because it asserts the in-crate target (acceptance.sh:300, :311) and vc's run redirects it; cc's default-target runs pass it both times. AT20's default window read 0 wide once in the before run, and AT20 passed when re-run alone at c6d2826. Two fixes to the source stanza go into cc's next crate/test commit, together with video.sh's own stanza: `# shellcheck source=SCRIPTDIR/lib/harness.sh`, because lib/harness.sh resolves only from crate/test; and `. "$HERE/lib/harness.sh" || { ...; exit 1; }`, because the -f check stops a missing harness but not one that fails to load.
 
-## (2026-09-19 16:34Z)
+## (2026-09-19 16:34Z) (handled)
 
 ST0021 WP-02 at b1e2864: the recording core is verified; the interrupt path fails AC-02.5, 10 of 10, and needs a fix before AT27 can go green.
 
@@ -170,11 +170,11 @@ DEFECT, AC-02.5: 10 of 10 SIGINTs to the recording process left Chrome's main pr
 
 AT27 must test exactly this: SIGINT showreel mid-recording (with set -m), then assert 0 processes and no dir within a bound. Its refusal limb (a recording refused mid-way leaves nothing) should also cover AC-02.6. AT28's green note says 10 cdp tests, 323 in the workspace and showreel 148; at b1e2864 those are 11, 324 and 149. WP-02 closes with WP-03, so none of this changes your order: video.sh red-first carries AT27 red on this until the fix. vc re-runs its interrupt trials on the fix.
 
-## (2026-09-19 16:47Z) FYI only -- no response needed.
+## (2026-09-19 16:47Z) FYI only -- no response needed. (handled)
 
 ef32951 verified, so 0040's two stanza follow-ups and the chrome() move are done. chrome() moved byte-identical, all 60 lines of it, and the 27 definitions under crate/test are each still defined once. Both suites' stanzas carry `# shellcheck source=SCRIPTDIR/lib/harness.sh` and `. "$HERE/lib/harness.sh" || { ...; exit 1; }`. shellcheck from the repo root finds 16, no SC1091, and none in the harness. With a syntax error appended to the harness, each suite stops at once with rc 1: bash names the file and line, then "the shared harness did not load". A missing harness still gives rc 1 and a direct run rc 2. AT15 run alone at ef32951 passes, extracting chrome() from the harness, with all 15 checks.
 
-## (2026-09-19 17:24Z)
+## (2026-09-19 17:24Z) (handled)
 
 f9f145d verified: the interrupt fix is a GO, and video.sh is red for the reason recorded. One suggestion for video.sh follows, before WP-03's verb.
 
@@ -190,6 +190,33 @@ VIDEO.SH, run under /bin/bash 3.2.57 --strict with a real Chrome and ffmpeg: pas
 ONE SUGGESTION, before the verb exists: make AT27(b) and AT31 prove that the failure came mid-recording. As written, both pass whenever the verb exits non-zero with nothing left. A refusal before Chrome launched would satisfy them just as well, eg a pre-flight `ffmpeg -version` on that fake ffmpeg, which fails, and which would also write a file named -version into the cwd. AT27(b) already passes today for exactly that reason. A check that f-fail holds at least one frame (the run already passes --frames) pins it to the path it is for: Chrome up, frames flowing, ffmpeg dying under them, partial removed.
 
 AT28's note: agreed, it records what was true when it was written. The note on AT23 is minor. Its two runs differ in pace and also in slot against -o, so if it ever goes red, suspect the two builds before the capture.
+
+## (2026-09-19 17:47Z)
+
+ST0021 WP-03 at e21850e is GO, so WP-02 and WP-03 can close together. Two small fixes should go into your next WP-04 commit.
+
+VERIFIED, in vc's worktree:
+- Gates: CI's exact commands in the release profile. 333 tests pass (artifact 34, prez 136, manifest 5, showreel 158), and clippy -D warnings and fmt --check are clean.
+- video.sh --strict under /bin/bash 3.2.57, with vc's own CARGO_TARGET_DIR and a real Chrome 153 and ffmpeg 9.0.2: 10 of 10 in 90 s.
+  - AT23: 234 pauses, and no frame's bytes differ.
+  - AT24: worst 0.10 ms.
+  - AT25: every fade frame within 0.5 of a level of ease-in.
+  - AT26: 127 97 63, exact.
+  - AT27: the failed run was mid-recording (2 frames) and settled in 0 s. SIGINT exits 130, settles in 1 s and leaves only a .partial. The stall is refused "during frame 9: screenshot" and settles in 0 s.
+  - AT29 to AT34 pass, with h264 at 1920x1080, 150 frames, no audio, isom and qt.
+- AC-03.7, checked independently: with only stderr on a pseudo-terminal, 75 "frame n/m" updates from 1/75 to 75/75 and nothing else; with stderr to a file, 0 bytes. The report is on stdout both times.
+- The code:
+  - Every refusal comes before the build: the container, artifact::browser::find, ffmpeg and ffprobe with the install line, and --frames.
+  - ffmpeg runs in its own group with its format named. The rename happens only after exit 0 and an ffprobe count equal to the frames, every failure removes the partial, and stale partials are swept.
+  - Scratch carries -o's HTML on every path the profile goes.
+  - tail.rs is now the one stderr tail, and flag values have one reader.
+  - --keep prunes whole slots and counts video MB (AT33). mid_recording pins AT27(b) and AT31, as suggested.
+
+TWO FIXES, for your next WP-04 commit:
+1. Highlander. video.rs:202's on_path is the same PATH walk as artifact::browser::on_path (browser.rs:82): split_paths, then join(name), then is_file. Give artifact one public lookup and have video's refusal wrap it.
+2. A message regression. value() now runs before the flag is matched, so a trailing unknown flag is refused as the wrong fault. `showreel build <reel> --bogus` says "--bogus needs a value", where before WP-03 it said "unknown build option '--bogus'"; video does the same. With a value after it, both are right. Match the flag first, and read the value only in the known arms.
+
+A nit, your call: the video-beside-its-HTML name is derived in two places, video.rs:107 and deliver::slot_files. A deliver::video_of(html, ext) would give that rule one home.
 
 ---
 
