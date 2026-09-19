@@ -1,8 +1,14 @@
 ---
-verblock: "14 Sep 2026:v0.8: matts - after 2.9.0: ST0020 closed, rustfmt adopted, doctor on stdout"
+verblock: "19 Sep 2026:v0.9: matts - 0038 closed, and the 16-18 Sep fleet sweeps landed"
 ---
 
 # Done
+
+## 19 Sep 2026 -- 0038 closed, and the 16-18 Sep fleet sweeps landed (no release yet)
+
+**0038 closed: CI checks the prez crate's formatting.** Run 34901872452, on `feab29f`, the first push carrying `3fd5f24`, ran `cargo fmt --all --check` ahead of clippy on ubuntu-24.04 and passed, so the runner's stable Rust carries rustfmt with no toolchain step. `vc` closed it with the run id in its Resolution, and `cc` read the same run independently. hv's decision 3, which ruled the check in, is spent and archived.
+
+**Landed since 14 Sep, on both remotes at `77fd081`:** devbin, swept to `87a0d47` (16 Sep), and Intent's canon, upgraded to 3.0.3 (18 Sep), which removed closed issues' views and the v2 `intent/issues/OPEN/` and `CLOSED/` trees. CI run 35372227052 was green on all seven jobs.
 
 ## 14 Sep 2026 -- after 2.9.0: ST0020 closed, rustfmt adopted, doctor's report on stdout (no release yet)
 

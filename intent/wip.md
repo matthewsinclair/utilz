@@ -4,13 +4,15 @@ DOING and TODO only. Done work goes to `intent/done.md`; context to `intent/rest
 
 ## DOING
 
-- ST0019: design the Utilz parts of the release pipeline (its version files, the CI build of prez, the Homebrew formula) for vc's review before any code. The shared release core is Devbin project work (Devbin issue 0064), and the next Utilz release is cut by hand.
+- `opt/utilz/lib/install.sh`: the comment at :341-343 says the source-tree row is resolved physically, and :345 resolves it logically. File it and fix whichever side is wrong, so it ships in 2.10.0.
 
 ## TODO
 
-**Release**
+**Next, in hv's order**
 
-- Cut the next Utilz release by hand (hv): ST0020 in it, with prez at 2.2.0.
+- showreel: generate a video file (.mov or .mp4) of a reel. A new thread, with design.md to vc before any code and its dependency choices put to hv.
+- Cut 2.10.0 by hand (hv), with prez at 2.2.0: ST0020, the install.sh fix and showreel's video export in it. cc prepares the release commit, vc gives the GO, hv tags and pushes.
+- ST0019: design the Utilz parts of the release pipeline (its version files, the CI build of prez, the Homebrew formula) for vc's review before any code. The shared release core is Devbin project work (Devbin issue 0064).
 
 **Threads**
 
@@ -20,12 +22,10 @@ DOING and TODO only. Done work goes to `intent/done.md`; context to `intent/rest
 
 **Fixes**
 
-- Push `3fd5f24` on hv's word, then close 0038 once its CI run shows rustfmt ran on ubuntu-latest.
 - `examples/demo.md` warns `class 'escape' has no effect`.
 - `stampz`: handle mixed page geometry within one PDF (per-page overlay ranges).
 - `hoist-rebase.sh`: the `AT13` postcondition uses minimum 0 against `-ge`, so it always passes. Needs ST0010 hydrated.
 - Open an issue for `todo` verbs unreachable from Emacs: the bridge inserts `C-u` flags between the declared flags and the path.
-- Remove the v2 artefacts under `intent/issues/CLOSED/`; issues are read with `intent issues list`.
 
 **Blocked**
 

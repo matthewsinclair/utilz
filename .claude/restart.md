@@ -15,7 +15,7 @@
 | -------------------------------- | ---------------------------------------------------- |
 | What shipped, and when           | `intent/done.md`, `CHANGELOG.md`                     |
 | Steel threads and work packages  | `intent st list --status all`, `intent st show <ID>` |
-| Open defects                     | `intent issues list` (see note below)                |
+| Open defects                     | `intent issues list`                                 |
 | The tool-agnostic agent contract | `AGENTS.md` (generated -- never hand-edit)           |
 | Claude-specific overlay          | `CLAUDE.md`                                          |
 | Architecture and how to extend   | `docs/architecture.md`, `docs/developer-guide.md`    |
