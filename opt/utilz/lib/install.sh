@@ -338,11 +338,17 @@ install_manifest_write() {
   # into a thing that always reports drift.
   # source-tree is what makes `utilz use dev` turnkey (D13): each tree then
   # holds the address of the other, so neither direction needs a path typed or
-  # a second config key invented. Resolved physically, because a relative or
-  # symlinked spelling would name a tree that only resolves from where the
-  # publish happened to be run.
+  # a second config key invented. Made absolute, because a relative spelling
+  # names the tree only from where the publish ran. Resolved LOGICALLY, never
+  # with -P (issue 0039): the row is an address, compared as a string with link
+  # roots that _install_link_root resolves logically, as the dispatcher
+  # resolves its own home. _install_is_git_toplevel's -P is the one exception,
+  # because git reports its toplevel physically.
   local source_tree
-  source_tree=$(cd "$tree" 2>/dev/null && pwd) || source_tree="$tree"
+  source_tree=$(cd "$tree" 2>/dev/null && pwd) || {
+    error "could not resolve $tree to an absolute path"
+    return 1
+  }
 
   # CI's verdict is asked by the coordination and handed in (issue 0016): a
   # network call is not a fact about a tree, and a writer that made one would
