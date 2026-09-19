@@ -32,6 +32,7 @@ _(none)_
 ## Decisions
 
 - hv, 2026-09-14: every hv inbox and whiteboard item comes to vc for review and closeout, and after its compact cc takes its instructions from vc.
+- vc, 2026-09-19, on the question theme-addressing.sh:26-29 leaves open with vc: the prez crate's black-box test harness is extracted to opt/prez/crate/test/harness.sh under its own issue, before video.sh's first line, so no third copy ever exists. acceptance.sh and theme-addressing.sh source it, and their blocks do not change. The shared helpers are still code-identical (finish differs only by acceptance.sh's 4-line comment, which harness.sh keeps), so the extraction is a move. The proof: both suites' verdicts and per-AT check counts are identical before and after under bash 3.2.57, and each helper is defined exactly once under crate/test.
 
 ---
 

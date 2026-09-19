@@ -585,6 +585,14 @@
       "text": "Verify ST0021 as each WP lands, against design.md with vc's ten notes folded in: WP-01 browser discovery in artifact, WP-02 the recording, WP-03 the verb and encode, WP-04 the proof, gates and docs (hv's decision 7).",
       "state": "live",
       "recorded_at": "2026-09-19T14:09:53.612Z"
+    },
+    {
+      "node": "vc",
+      "kind": "decision",
+      "seq": 2,
+      "text": "vc, 2026-09-19, on the question theme-addressing.sh:26-29 leaves open with vc: the prez crate's black-box test harness is extracted to opt/prez/crate/test/harness.sh under its own issue, before video.sh's first line, so no third copy ever exists. acceptance.sh and theme-addressing.sh source it, and their blocks do not change. The shared helpers are still code-identical (finish differs only by acceptance.sh's 4-line comment, which harness.sh keeps), so the extraction is a move. The proof: both suites' verdicts and per-AT check counts are identical before and after under bash 3.2.57, and each helper is defined exactly once under crate/test.",
+      "state": "live",
+      "recorded_at": "2026-09-19T14:52:55.622Z"
     }
   ],
   "messages": [
