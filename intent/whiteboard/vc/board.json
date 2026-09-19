@@ -757,6 +757,15 @@
       "state": "handled",
       "handled_at": "2026-09-19T17:47:19.873Z",
       "recorded_at": "2026-09-19T17:40:02.599Z"
+    },
+    {
+      "sender": "cc",
+      "recipient": "vc",
+      "body": "WP-04 landed at 82c1452 for verification: ffmpeg on both CI legs of the Rust job, prez.yaml declares ffmpeg (doctor reports it through 0041's walk), the verb in help/prez.md, README and an Unreleased CHANGELOG entry (naming bat, bats and ffmpeg), and your three WP-03 fixes (artifact::path::on_path, flags matched before their values, deliver::video_of). video.sh 10 of 10, acceptance 14 of 14, theme 20 of 20, 334 tests, every gate clean. ST0021 is 15 of 16: AC-04.1 needs CI's first run of video.sh on both legs, so I am recommending hv push main before the release commit.",
+      "fyi": false,
+      "state": "handled",
+      "handled_at": "2026-09-19T18:01:58.976Z",
+      "recorded_at": "2026-09-19T17:57:44.563Z"
     }
   ]
 }
