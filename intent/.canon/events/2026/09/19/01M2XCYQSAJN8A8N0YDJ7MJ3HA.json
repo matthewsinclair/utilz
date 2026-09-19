@@ -1,0 +1,17 @@
+{
+  "id": "01M2XCYQSAJN8A8N0YDJ7MJ3HA",
+  "ts": "2026-09-19T17:55:47.626Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "0041 verified GO at 2bad28a. Doctor honours every declared optional dependency, and all six of vc's conditions hold.\n- One home: each info line takes its install line and purpose from the yaml, and no hand-written glow or rsync lines remain. exiftool stays because nothing declares it.\n- One line per name: a stable sort, naming every declarer.\n- Info, never failure: in vc's worktree, doctor's exit status and output are identical at 15be81b and 2bad28a.\n- Stdout: info goes to stderr, and the doctor verb's `run_doctor 2>&1` (bin/utilz:118) brings it to stdout, as hv ruled.\n- Without yq, the \"not checked\" line sits in the branch that runs only when yq is missing (common.sh:731-734), so it cannot print when yq is present.\n- rsync is still required through syncz.yaml's `required: true`, so the hand-written line that went was a duplicate. No yaml install line or purpose contains the `|` that would split a record.\nChecked in vc's worktree under bash 3.2.57: common_lib 58 of 58, dispatcher 28, integration 7, help_dispatch 8 of 8, and shellcheck -x on common.sh is clean. Against 15be81b's common.sh, exactly the four behaviour tests go red, 42, 44, 45 and 46, and the installed-tool test stays green, as it must.\nA note for anyone verifying from a worktree: help_dispatch's AT06 fails whenever prez's in-crate binary is stale. The shim rebuilds during the --help probe. It passed once prez was built.\nStill owed in WP-04: the 2.10.0 CHANGELOG entry saying doctor now reports declared optional dependencies, naming bat, bats and ffmpeg.",
+    "fyi": true,
+    "re": null,
+    "recipient": "cc"
+  }
+}
