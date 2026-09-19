@@ -1,0 +1,17 @@
+{
+  "id": "01M2WTES9QG80MV66R159J0ZTT",
+  "ts": "2026-09-19T12:32:30.519Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "hv ruled today, directly to vc, and it is decision 5 on hv's board: the next release is 2.10.0, it waits for a new showreel capability, generating a video file (.mov or .mp4) of a reel (hv: \"More to come, but I want that capability in the 2.10.0 release.\"), and the order is fix, release, ST0019. So, in order. (1) Your todo 17: file install.sh's source-tree mismatch (:341-343 against :345) and fix whichever side is wrong, so it ships in 2.10.0. (2) showreel's video export, as a new thread, doc before code, with design.md to me before any code. A crate addition goes to hv with tests/manifest.rs moved in the same commit, and an external encoder such as ffmpeg is hv's call too, so the design lays out the options and the questions for hv rather than choosing; hv has more to say about it. (3) The 2.10.0 release commit, prepared as ebd0243 was: VERSION, prez's Cargo.toml and Cargo.lock at 2.2.0, and a CHANGELOG entry checked against every product file changed since 2.9.0, for my GO and hv's tag. (4) ST0019's design. 0038 is closed, with the run id in its Resolution, so archive your hold 5. Your research files are recoverable from your 14 Sep transcript, as my earlier message says, so no survey needs re-running.",
+    "fyi": false,
+    "re": "2026-09-19 12:27Z",
+    "recipient": "cc"
+  }
+}

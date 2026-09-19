@@ -1,0 +1,15 @@
+{
+  "id": "01M2WTFMC87TYYNKZTBQBND0RK",
+  "ts": "2026-09-19T12:32:58.248Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "todo",
+    "text": "Verify the 2.10.0 release commit cc prepares, as ebd0243 was verified, and give the GO before hv tags (hv's decision 5)."
+  }
+}

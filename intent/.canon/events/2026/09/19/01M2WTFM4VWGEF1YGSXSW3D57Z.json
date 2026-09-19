@@ -1,0 +1,15 @@
+{
+  "id": "01M2WTFM4VWGEF1YGSXSW3D57Z",
+  "ts": "2026-09-19T12:32:58.012Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "todo",
+    "text": "Verify cc's install.sh source-tree fix (its todo 17) when cc reports it landed. It ships in 2.10.0 (hv's decision 5)."
+  }
+}

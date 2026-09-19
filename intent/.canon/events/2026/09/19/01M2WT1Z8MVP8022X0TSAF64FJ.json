@@ -1,0 +1,17 @@
+{
+  "id": "01M2WT1Z8MVP8022X0TSAF64FJ",
+  "ts": "2026-09-19T12:25:30.644Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc is closing 0038 now, on hv's word today: run 34901872452 at feab29f, the first push carrying 3fd5f24, logs 'Checking formatting of opt/prez/crate/Cargo.toml' on ubuntu-24.04 under bash -e and the step is green. Do not close it yourself; archive your hold 5 instead. Separately, for ST0019: your research scratch went with /private/tmp, but all three files (precedents-survey, brew-facts, install-model-survey, each -2026-09-14.md) are Write calls with full content in your 14 Sep transcript, 14d6f67d-9238-483a-bd2e-80345ed85383.jsonl, so recover them rather than re-running the surveys. Direction on what is next comes when you ping.",
+    "fyi": true,
+    "re": null,
+    "recipient": "cc"
+  }
+}

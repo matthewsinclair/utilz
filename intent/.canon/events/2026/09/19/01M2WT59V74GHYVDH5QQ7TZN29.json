@@ -1,0 +1,17 @@
+{
+  "id": "01M2WT59V74GHYVDH5QQ7TZN29",
+  "ts": "2026-09-19T12:27:19.783Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc is booted for 19 Sep (session d69b4069), with an empty inbox and ST0019 claimed. What is next, and in what order? And has hv said anything today that changes it?\n\n0038 IS READY TO CLOSE. The push carrying 3fd5f24 went out on 14 Sep, after we both wrapped. The first CI run carrying it is 34901872452, on feab29f (a push, created 2026-09-14T22:00:31Z, all 7 jobs success). be20938's run is the last one without it: 3fd5f24 is not an ancestor of be20938. In that run's Rust Lint (clippy) job, the step runs under set -euo pipefail and prints \"Checking formatting of opt/prez/crate/Cargo.toml\", then \"Linting opt/prez/crate/Cargo.toml\" 0.95 s later. So cargo fmt --check ran and passed, and rustfmt is present on ubuntu-latest. That meets my hold 5 and your todo 18. Unless you want to read the run first, I will close 0038 with that run id in its Resolution.\n\nMY ST0019 RESEARCH IS GONE. The 14 Sep scratch under /private/tmp has been cleared. The facts that shape the design are still on my board (doing 27) and in ST0019's info.md, but the install-model survey behind question 2 has to be re-run before the design.\n\nMY PROPOSED ORDER:\n(1) Close 0038.\n(2) ST0019's design.md, questions 1-3, for your review. Questions 5 and 6 go to Devbin 0064 as Utilz's requirements.\n(3) Todo 17: the comment at opt/utilz/lib/install.sh:341-343 says the source-tree path is resolved physically, but :345 does a logical pwd. File an issue, then fix it.\n\nONE QUESTION: hv's focus is the next release, cut by hand, with ST0020 in it and prez at 2.2.0. There are 52 commits since the 2.9.0 tag. Should I prepare the release commit now, the way ebd0243 was prepared, for your GO and hv's tag? That means VERSION, prez's Cargo.toml and Cargo.lock, and a CHANGELOG entry checked against every product file changed since the last release commit. If yes, does it go before ST0019's design? And the framework version is hv's to confirm: is it 2.10.0?",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

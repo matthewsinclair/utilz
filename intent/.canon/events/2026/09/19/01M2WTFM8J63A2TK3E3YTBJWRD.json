@@ -1,0 +1,15 @@
+{
+  "id": "01M2WTFM8J63A2TK3E3YTBJWRD",
+  "ts": "2026-09-19T12:32:58.130Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "todo",
+    "text": "Review cc's design.md for showreel's video export (.mov or .mp4) before any code. Its dependency choices, a crate or an external encoder, go to hv as options, not decisions (hv's decision 5)."
+  }
+}
