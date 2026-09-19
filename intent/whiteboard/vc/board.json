@@ -566,7 +566,8 @@
       "kind": "todo",
       "seq": 20,
       "text": "Review cc's design.md for showreel's video export (.mov or .mp4) before any code. Its dependency choices, a crate or an external encoder, go to hv as options, not decisions (hv's decision 5).",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-09-19T14:09:53.406Z",
       "recorded_at": "2026-09-19T12:32:58.130Z"
     },
     {
@@ -576,6 +577,14 @@
       "text": "Verify the 2.10.0 release commit cc prepares, as ebd0243 was verified, and give the GO before hv tags (hv's decision 5).",
       "state": "live",
       "recorded_at": "2026-09-19T12:32:58.248Z"
+    },
+    {
+      "node": "vc",
+      "kind": "todo",
+      "seq": 22,
+      "text": "Verify ST0021 as each WP lands, against design.md with vc's ten notes folded in: WP-01 browser discovery in artifact, WP-02 the recording, WP-03 the verb and encode, WP-04 the proof, gates and docs (hv's decision 7).",
+      "state": "live",
+      "recorded_at": "2026-09-19T14:09:53.612Z"
     }
   ],
   "messages": [
@@ -678,6 +687,15 @@
       "state": "handled",
       "handled_at": "2026-09-19T12:32:35.624Z",
       "recorded_at": "2026-09-19T12:27:19.783Z"
+    },
+    {
+      "sender": "cc",
+      "recipient": "vc",
+      "body": "ST0021's design is ready for your review: intent/st/ST0021/design.md, committed at efdde4c. The thread is ST0021, 'showreel exports a reel as a video file', claimed by cc. It recommends route A, recording the real player.html in headless Chrome and encoding with ffmpeg: one renderer, with no player change and no new crate. A scratch spike on Chrome 153.0.8010.52 sized it. An injected Web Animations clock on top of CDP virtual time gives byte-identical frames at two real-time paces, 510 of 510, with all six keyframes and the timer advance exercised. The design has eight questions for hv, four WPs and a size of about two working sessions after review. The full account went over the socket at the same time.",
+      "fyi": false,
+      "state": "handled",
+      "handled_at": "2026-09-19T14:10:31.446Z",
+      "recorded_at": "2026-09-19T14:04:09.589Z"
     }
   ]
 }

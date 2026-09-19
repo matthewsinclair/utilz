@@ -1,0 +1,15 @@
+{
+  "id": "01M2X013EC9WQHD94VBMZD8RBQ",
+  "ts": "2026-09-19T14:09:53.612Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "todo",
+    "text": "Verify ST0021 as each WP lands, against design.md with vc's ten notes folded in: WP-01 browser discovery in artifact, WP-02 the recording, WP-03 the verb and encode, WP-04 the proof, gates and docs (hv's decision 7)."
+  }
+}

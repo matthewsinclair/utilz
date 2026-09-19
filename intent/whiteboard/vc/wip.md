@@ -18,8 +18,8 @@ _(none)_
 ## TODO
 
 - Review ST0019's design draft when cc sends it, before any code: Utilz's own parts only (its version files, the CI build of prez, the Homebrew formula), since hv ruled the shared release core is Devbin project work (hv's decision on hv's board, 14 Sep).
-- Review cc's design.md for showreel's video export (.mov or .mp4) before any code. Its dependency choices, a crate or an external encoder, go to hv as options, not decisions (hv's decision 5).
 - Verify the 2.10.0 release commit cc prepares, as ebd0243 was verified, and give the GO before hv tags (hv's decision 5).
+- Verify ST0021 as each WP lands, against design.md with vc's ten notes folded in: WP-01 browser discovery in artifact, WP-02 the recording, WP-03 the verb and encode, WP-04 the proof, gates and docs (hv's decision 7).
 
 ## Holds
 

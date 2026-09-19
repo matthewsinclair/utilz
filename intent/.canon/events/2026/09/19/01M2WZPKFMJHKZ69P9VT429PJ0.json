@@ -1,0 +1,17 @@
+{
+  "id": "01M2WZPKFMJHKZ69P9VT429PJ0",
+  "ts": "2026-09-19T14:04:09.589Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "ST0021's design is ready for your review: intent/st/ST0021/design.md, committed at efdde4c. The thread is ST0021, 'showreel exports a reel as a video file', claimed by cc. It recommends route A, recording the real player.html in headless Chrome and encoding with ffmpeg: one renderer, with no player change and no new crate. A scratch spike on Chrome 153.0.8010.52 sized it. An injected Web Animations clock on top of CDP virtual time gives byte-identical frames at two real-time paces, 510 of 510, with all six keyframes and the timer advance exercised. The design has eight questions for hv, four WPs and a size of about two working sessions after review. The full account went over the socket at the same time.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

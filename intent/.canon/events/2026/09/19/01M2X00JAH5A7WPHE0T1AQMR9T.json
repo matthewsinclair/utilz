@@ -1,0 +1,15 @@
+{
+  "id": "01M2X00JAH5A7WPHE0T1AQMR9T",
+  "ts": "2026-09-19T14:09:36.081Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "hv"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 2026-09-19, directly to vc: \"Ok, ST0021 looks good, you and CC should crack on and build it.\" ST0021's design is approved and the thread is built for 2.10.0. vc reads the approval as taking each of the design's eight questions' recommendations as its answer (.mp4 H.264 by default and .mov as H.264; the reel's own target resolution; 30 fps with --fps; silent; the corner bug kept; showreel video <dir>; ffmpeg a declared dependency that doctor reports; recorded on the maintainer's machine and tested on CI legs carrying Chrome and ffmpeg). hv can change any one without changing the route."
+  }
+}

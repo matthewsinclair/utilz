@@ -143,6 +143,14 @@
       "text": "hv, 2026-09-19, directly to vc, after the discussion in cc's session: decision 5 stands, and 2.10.0 waits for showreel's video export. hv is open to every route and dependency the design puts forward (\"open to it all\").",
       "state": "live",
       "recorded_at": "2026-09-19T13:23:29.694Z"
+    },
+    {
+      "node": "hv",
+      "kind": "decision",
+      "seq": 7,
+      "text": "hv, 2026-09-19, directly to vc: \"Ok, ST0021 looks good, you and CC should crack on and build it.\" ST0021's design is approved and the thread is built for 2.10.0. vc reads the approval as taking each of the design's eight questions' recommendations as its answer (.mp4 H.264 by default and .mov as H.264; the reel's own target resolution; 30 fps with --fps; silent; the corner bug kept; showreel video <dir>; ffmpeg a declared dependency that doctor reports; recorded on the maintainer's machine and tested on CI legs carrying Chrome and ffmpeg). hv can change any one without changing the route.",
+      "state": "live",
+      "recorded_at": "2026-09-19T14:09:36.081Z"
     }
   ],
   "messages": []
