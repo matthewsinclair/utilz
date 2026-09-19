@@ -2,7 +2,7 @@
 wp_id: WP-02
 title: The recording: Chrome over the pipe, on a clock the harness controls
 scope: M
-status: Not Started
+status: WIP
 ---
 
 # WP-02: The recording: Chrome over the pipe, on a clock the harness controls

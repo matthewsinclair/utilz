@@ -1,0 +1,14 @@
+{
+  "id": "01M2X2HCNT0YK5ETBZKYW8VFJZ",
+  "ts": "2026-09-19T14:53:44.506Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.edit",
+  "subject": {
+    "type": "ac",
+    "id": "ST0021/AC-03.4"
+  },
+  "payload": {
+    "text": "A missing ffmpeg or Chrome is refused by name before any frame is captured: ffmpeg with its install line, and Chrome with `artifact::browser::find`'s own refusal, the one list of every path tried. showreel defines no browser finder of its own: no `APP_PATHS`, no `PATH_NAMES` and no `fn find`."
+  }
+}

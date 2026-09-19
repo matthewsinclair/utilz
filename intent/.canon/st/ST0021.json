@@ -14,7 +14,7 @@
       "seq": 1,
       "title": "Browser discovery moves to the artifact crate",
       "scope": "S",
-      "status": "wip",
+      "status": "done",
       "objective": "",
       "body": "",
       "preamble": ""
@@ -23,7 +23,7 @@
       "seq": 2,
       "title": "The recording: Chrome over the pipe, on a clock the harness controls",
       "scope": "M",
-      "status": "not-started",
+      "status": "wip",
       "objective": "",
       "body": "",
       "preamble": ""
@@ -130,7 +130,7 @@
     },
     {
       "id": "AC-03.4",
-      "text": "A missing ffmpeg or Chrome is refused by name before any frame is captured: with the install line for ffmpeg, and with drive's list of every path tried for Chrome.",
+      "text": "A missing ffmpeg or Chrome is refused by name before any frame is captured: ffmpeg with its install line, and Chrome with `artifact::browser::find`'s own refusal, the one list of every path tried. showreel defines no browser finder of its own: no `APP_PATHS`, no `PATH_NAMES` and no `fn find`.",
       "kind": "test",
       "state": {
         "is": "computed"

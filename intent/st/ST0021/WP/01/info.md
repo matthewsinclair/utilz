@@ -2,7 +2,7 @@
 wp_id: WP-01
 title: Browser discovery moves to the artifact crate
 scope: S
-status: WIP
+status: Done
 ---
 
 # WP-01: Browser discovery moves to the artifact crate

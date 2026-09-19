@@ -13,11 +13,11 @@ title: showreel exports a reel as a video file
 
 ## Acceptance Criteria
 
-### WP-01 -- Browser discovery moves to the artifact crate (status: WIP)
+### WP-01 -- Browser discovery moves to the artifact crate (status: Done)
 
 - AC-01.1 Browser discovery has one home, in the `artifact` crate, and prez's `pdf`, `present` and `browser` call it. It keeps prez's probe order (`--browser`, then the Chromium family by macOS app path, then by `PATH` name) and its refusal that lists every path tried, and prez's discovery tests pass from their new home. showreel's `video` calls the same finder, which AC-03.4 checks. -- satisfied: yes (computed)
 
-### WP-02 -- The recording: Chrome over the pipe, on a clock the harness controls (status: Not Started)
+### WP-02 -- The recording: Chrome over the pipe, on a clock the harness controls (status: WIP)
 
 - AC-02.1 Two recordings of one reel, the second slowed in real time, write byte-identical PNG frames. The bytes compared are the captured PNGs, before the encode, because H.264 output need not match across encoder builds. -- satisfied: no (computed)
 - AC-02.2 Frames are anchored on the reel's own start. Every frame i >= 1 is taken at page time `t0 + i x 1000/fps` within 0.5 ms, where `t0` is the page time at which the player showed its first slide, and its slide index is the one the dwell schedule puts there. Frame 0 is taken when the load finishes, and the report says how late. -- satisfied: no (computed)
@@ -31,7 +31,7 @@ title: showreel exports a reel as a video file
 - AC-03.1 `showreel video <dir>` builds the reel into the next `_out/` slot exactly as `build` does, and writes the video beside it in the same slot, with `.html` swapped for `.mp4`. An explicit `-o` writes the video there, outside the rotation, and keeps no HTML. -- satisfied: no (computed)
 - AC-03.2 The video holds floor(D x fps) frames by ffprobe, where D is the player's own schedule. Its codec is H.264, its size is the reel's target at 16:9, it has no audio stream, and `.mov` gives the same codec in QuickTime. `--fps` takes 1 to 60 and refuses anything else by name. -- satisfied: no (computed)
 - AC-03.3 No partial file ever looks finished. The encode writes `<name>.partial` and renames it only after ffmpeg exits 0 and ffprobe's frame count equals the plan. A failing ffmpeg leaves neither the video nor the partial, and a stale partial is removed by the next run. -- satisfied: no (computed)
-- AC-03.4 A missing ffmpeg or Chrome is refused by name before any frame is captured: with the install line for ffmpeg, and with drive's list of every path tried for Chrome. -- satisfied: no (computed)
+- AC-03.4 A missing ffmpeg or Chrome is refused by name before any frame is captured: ffmpeg with its install line, and Chrome with `artifact::browser::find`'s own refusal, the one list of every path tried. showreel defines no browser finder of its own: no `APP_PATHS`, no `PATH_NAMES` and no `fn find`. -- satisfied: no (computed)
 - AC-03.5 `--keep N` prunes whole slots, in `build` and in `video`: a dropped revision's HTML and its video go together, and the warning past five revisions counts the videos' megabytes. -- satisfied: no (computed)
 - AC-03.6 `prez showreel video` reaches the showreel binary through the shim's hand-over, as `check` and `build` do. -- satisfied: no (computed)
 - AC-03.7 (non-test) Progress goes to stderr as `frame N/M` when stderr is a terminal, and nothing is printed before the report when it is not. -- satisfied: no
@@ -95,11 +95,11 @@ _(no criteria in this group)_
 
 ## Acceptance Tests
 
-### WP-01 -- Browser discovery moves to the artifact crate (status: WIP)
+### WP-01 -- Browser discovery moves to the artifact crate (status: Done)
 
 _(no tests in this group)_
 
-### WP-02 -- The recording: Chrome over the pipe, on a clock the harness controls (status: Not Started)
+### WP-02 -- The recording: Chrome over the pipe, on a clock the harness controls (status: WIP)
 
 _(no tests in this group)_
 
