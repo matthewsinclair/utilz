@@ -1,0 +1,15 @@
+{
+  "id": "01M2WXC4RY8DZTVCZ2AA9NW3TM",
+  "ts": "2026-09-19T13:23:29.694Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "hv"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 2026-09-19, directly to vc, after the discussion in cc's session: decision 5 stands, and 2.10.0 waits for showreel's video export. hv is open to every route and dependency the design puts forward (\"open to it all\")."
+  }
+}

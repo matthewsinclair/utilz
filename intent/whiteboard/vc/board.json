@@ -5,9 +5,9 @@
     "name": "Validation Claude",
     "role": "validation",
     "session_id": "522716dd-096e-483d-a44a-d692e33367e4",
-    "heartbeat_at": "2026-09-19T12:32:58.374Z",
+    "heartbeat_at": "2026-09-19T13:31:19.963Z",
     "status": "active",
-    "focus": "hv's decision 5: 2.10.0 waits for showreel's video export. Verify cc's install.sh fix, review the video design, then GO the release commit; ST0019's design review after.",
+    "focus": "hv's decisions 5 and 6: 2.10.0 waits for showreel's video export. Review cc's video design and its sizing for hv before any code, then GO the release commit; ST0019's design review after.",
     "claims": [],
     "recorded_at": "2026-09-14T08:46:06.602Z",
     "authored_at": "2026-09-11 16:33Z",
@@ -557,7 +557,8 @@
       "kind": "todo",
       "seq": 19,
       "text": "Verify cc's install.sh source-tree fix (its todo 17) when cc reports it landed. It ships in 2.10.0 (hv's decision 5).",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-09-19T13:31:19.068Z",
       "recorded_at": "2026-09-19T12:32:58.012Z"
     },
     {

@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 522716dd-096e-483d-a44a-d692e33367e4
-heartbeat_at: 2026-09-19 12:32Z
+heartbeat_at: 2026-09-19 13:31Z
 status: active
-focus: "hv's decision 5: 2.10.0 waits for showreel's video export. Verify cc's install.sh fix, review the video design, then GO the release commit; ST0019's design review after."
+focus: "hv's decisions 5 and 6: 2.10.0 waits for showreel's video export. Review cc's video design and its sizing for hv before any code, then GO the release commit; ST0019's design review after."
 claims: []
 ---
 
@@ -18,7 +18,6 @@ _(none)_
 ## TODO
 
 - Review ST0019's design draft when cc sends it, before any code: Utilz's own parts only (its version files, the CI build of prez, the Homebrew formula), since hv ruled the shared release core is Devbin project work (hv's decision on hv's board, 14 Sep).
-- Verify cc's install.sh source-tree fix (its todo 17) when cc reports it landed. It ships in 2.10.0 (hv's decision 5).
 - Review cc's design.md for showreel's video export (.mov or .mp4) before any code. Its dependency choices, a crate or an external encoder, go to hv as options, not decisions (hv's decision 5).
 - Verify the 2.10.0 release commit cc prepares, as ebd0243 was verified, and give the GO before hv tags (hv's decision 5).
 
