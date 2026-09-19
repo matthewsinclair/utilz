@@ -30,5 +30,7 @@ pub mod record;
 pub mod segment;
 pub mod slide;
 pub mod stamp;
+pub mod tail;
 pub mod template;
 pub mod theme;
+pub mod video;

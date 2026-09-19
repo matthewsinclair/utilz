@@ -109,6 +109,9 @@ pub fn file_url(path: &Path) -> String {
 mod tests {
   use super::*;
 
+  // AT35 (ST0021 AC-01.1): the two discovery tests below moved here with the
+  // finder, and pass from their new home.
+
   #[test]
   fn an_explicit_browser_that_does_not_exist_is_refused_rather_than_replaced() {
     // AC06's negative half. Falling back here would drive a browser the user

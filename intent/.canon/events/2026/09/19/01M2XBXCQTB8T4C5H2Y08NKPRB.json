@@ -1,0 +1,14 @@
+{
+  "id": "01M2XBXCQTB8T4C5H2Y08NKPRB",
+  "ts": "2026-09-19T17:37:34.971Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.satisfy",
+  "subject": {
+    "type": "ac",
+    "id": "ST0021/AC-03.7"
+  },
+  "payload": {
+    "evidence": "opt/prez/crate/crates/showreel/src/main.rs video_reel: progress goes to stderr only when std::io::stderr().is_terminal(). Measured 19 Sep at --fps 5 on video.sh's fixture: under a pseudo-terminal (script -q) the verb printed 75 progress updates, frame 1/75 to frame 75/75, then the report; with stderr to a file, stderr held 0 bytes and the report went to stdout."
+  }
+}

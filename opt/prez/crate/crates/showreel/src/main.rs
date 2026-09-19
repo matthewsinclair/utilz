@@ -21,8 +21,9 @@
 //! Corrected 2026-09-10 after vc measured all four.
 
 use artifact::Failure;
-use showreel::{build, limits, plan};
-use std::path::Path;
+use showreel::{build, limits, plan, video};
+use std::io::IsTerminal;
+use std::path::{Path, PathBuf};
 
 fn main() {
   let args: Vec<String> = std::env::args().skip(1).collect();
@@ -42,13 +43,20 @@ fn main() {
         "showreel build <dir>",
       )),
     },
+    Some("video") => match args.get(1) {
+      Some(path) => video_flags(&args[2..]).and_then(|f| video_reel(Path::new(path), &f)),
+      None => Err(Failure::new(
+        "video needs a directory",
+        "showreel video <dir>",
+      )),
+    },
     Some("--help" | "-h") | None => {
       println!("{USAGE}");
       return;
     }
     Some(other) => Err(Failure::new(
       format!("unknown command '{other}'"),
-      "expected one of: check, build. Try 'showreel --help'",
+      "expected one of: check, build, video. Try 'showreel --help'",
     )),
   };
   if let Err(e) = result {
@@ -66,12 +74,27 @@ showreel -- a directory of pictures to a self-contained looping HTML reel.
 usage:
   showreel check <dir>    validate showreel.yaml and report what it declares
   showreel build <dir>    write the self-contained reel into <dir>/_out/
+  showreel video <dir>    build the reel, then record it to a video beside it in
+                          <dir>/_out/: the HTML's name with .html swapped for .mp4
 
 build options:
   --out <file>            write here instead of the next _out/ slot. Suppresses
                           pruning: an explicit destination is outside the rotation
   --keep <n>              keep the newest n revisions in _out/ and delete the rest
-                          (default 0: delete nothing, and say so past five)
+                          (default 0: delete nothing, and say so past five). A
+                          revision is its whole slot: the HTML and any video
+
+video options:
+  -o, --out <file>        write the video here, .mp4 or .mov, instead of the next
+                          _out/ slot. Keeps no HTML and prunes nothing
+  --fps <n>               frames per second, 1 to 60 (default 30)
+  --keep <n>              as for build
+  --frames <dir>          also write every frame as a PNG, with frames.tsv, into
+                          a new or empty <dir>
+  --browser <path>        the Chrome, Chromium, Edge or Brave to record with
+
+video needs Chrome and ffmpeg: brew install ffmpeg, or sudo apt install ffmpeg.
+It records in real time or slower, so a three-minute reel takes minutes.
 
 `prez showreel <verb>` and `utilz prez showreel <verb>` reach the same binary.
 WP-05 still owns the manifest, the doctor line and a `bin/` entry of its own.";
@@ -139,34 +162,70 @@ fn check(path: &Path) -> Result<(), Failure> {
   Ok(())
 }
 
+/// The value after flag `i`, or a refusal naming the flag.
+fn value<'a>(rest: &'a [String], i: usize, verb: &str) -> Result<&'a str, Failure> {
+  rest.get(i + 1).map(String::as_str).ok_or_else(|| {
+    Failure::new(
+      format!("{} needs a value", rest[i]),
+      format!("showreel {verb} <dir> {} <value>", rest[i]),
+    )
+  })
+}
+
+/// `--keep`, read the same way for every verb that takes it.
+fn keep(v: &str) -> Result<usize, Failure> {
+  v.parse().map_err(|_| {
+    Failure::new(
+      format!("--keep is not a number: {v}"),
+      "use a whole number, eg --keep 3",
+    )
+  })
+}
+
 /// What `build` was asked for beyond the directory.
 fn flags(rest: &[String]) -> Result<build::Options, Failure> {
   let mut f = build::Options { out: None, keep: 0 };
   let mut i = 0;
   while i < rest.len() {
-    let need = |what: &str| {
-      rest.get(i + 1).cloned().ok_or_else(|| {
-        Failure::new(
-          format!("{what} needs a value"),
-          format!("showreel build <dir> {what} <value>"),
-        )
-      })
-    };
+    let v = value(rest, i, "build")?;
     match rest[i].as_str() {
-      "--out" => f.out = Some(std::path::PathBuf::from(need("--out")?)),
-      "--keep" => {
-        let v = need("--keep")?;
-        f.keep = v.parse().map_err(|_| {
-          Failure::new(
-            format!("--keep is not a number: {v}"),
-            "use a whole number, eg --keep 3",
-          )
-        })?;
-      }
+      "--out" => f.out = Some(PathBuf::from(v)),
+      "--keep" => f.keep = keep(v)?,
       other => {
         return Err(Failure::new(
           format!("unknown build option '{other}'"),
           "expected --out <file> or --keep <n>",
+        ))
+      }
+    }
+    i += 2;
+  }
+  Ok(f)
+}
+
+/// What `video` was asked for beyond the directory. Read in full before
+/// anything is built, so a bad flag costs nothing.
+fn video_flags(rest: &[String]) -> Result<video::Options, Failure> {
+  let mut f = video::Options {
+    out: None,
+    fps: video::FPS_DEFAULT,
+    keep: 0,
+    frames: None,
+    browser: None,
+  };
+  let mut i = 0;
+  while i < rest.len() {
+    let v = value(rest, i, "video")?;
+    match rest[i].as_str() {
+      "-o" | "--out" => f.out = Some(PathBuf::from(v)),
+      "--fps" => f.fps = video::fps(v)?,
+      "--keep" => f.keep = keep(v)?,
+      "--frames" => f.frames = Some(PathBuf::from(v)),
+      "--browser" => f.browser = Some(v.to_string()),
+      other => {
+        return Err(Failure::new(
+          format!("unknown video option '{other}'"),
+          "expected -o <file>, --fps <n>, --keep <n>, --frames <dir> or --browser <path>",
         ))
       }
     }
@@ -189,6 +248,38 @@ fn build_reel(path: &Path, f: &build::Options) -> Result<(), Failure> {
     b.pace
   );
   for line in b.said {
+    eprintln!("showreel: {line}");
+  }
+  Ok(())
+}
+
+/// **PARSE, CALL, RENDER**, as `build_reel`. Progress goes to stderr only when
+/// stderr is a terminal: a recording takes minutes, and silence there reads as
+/// a hang, where anywhere else it would be noise in a log (AC-03.7).
+fn video_reel(path: &Path, f: &video::Options) -> Result<(), Failure> {
+  let live = std::io::stderr().is_terminal();
+  let mut progress = |n: u64, of: u64| {
+    if live {
+      eprint!("\r  frame {n}/{of}");
+      if n == of {
+        eprintln!();
+      }
+    }
+  };
+  let v = video::run(path, f, &mut progress)?;
+  println!("showreel: wrote {}", v.path.display());
+  println!(
+    "  {} frames at {} fps, {:.1} s, {}x{}, {:.1} MB, recorded by {}",
+    v.frames,
+    v.fps,
+    v.duration_ms / 1000.0,
+    v.size.0,
+    v.size.1,
+    v.bytes as f64 / 1_048_576.0,
+    v.chrome
+  );
+  println!("  frame 0 taken {} ms after the reel's start", v.late_ms);
+  for line in v.said {
     eprintln!("showreel: {line}");
   }
   Ok(())

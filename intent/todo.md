@@ -7,7 +7,7 @@ A DOING / TODO / DONE view, projected from steel-thread and work-package status:
 - [-] ST0021: showreel exports a reel as a video file
   - [x] 01: Browser discovery moves to the artifact crate
   - [-] 02: The recording: Chrome over the pipe, on a clock the harness controls
-  - [ ] 03: The video verb and the encode
+  - [-] 03: The video verb and the encode
   - [ ] 04: The proof, the gates and the docs
 
 ## TODO

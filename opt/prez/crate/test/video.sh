@@ -247,6 +247,16 @@ FAKE
   return "$(cat "$WORK/$name.rc")"
 }
 
+# Passes when a failed recording kept at least one frame under $1: the failure
+# came with Chrome up and frames flowing, which a refusal before the recording
+# would satisfy every other check of AT27(b) and AT31 without.
+mid_recording() {
+  local kept
+  kept=$(find "$1" -name '*.png' 2>/dev/null | grep -c '')
+  if [ "$kept" -ge 1 ]; then ok "the failure came mid-recording: $kept frame(s) were captured first"
+  else bad "no frame was captured, so the failure came before the recording, not under it"; fi
+}
+
 # The first line a recording said on stderr, its refusal, for a failure message.
 said() { head -1 "$WORK/$1.err" 2>/dev/null; }
 
@@ -460,8 +470,11 @@ if want AT27; then
       bad "the recording failed: $(said one)"
     fi
 
-    # (b) A recording that failed: the same, on the refusal path.
+    # (b) A recording that failed: the same, on the refusal path. The frames it
+    # kept show the failure came mid-recording, with Chrome up, and not from a
+    # refusal before anything started (vc's review of the red suite).
     ensure fail
+    mid_recording "$WORK/f-fail"
     if [ "$(cat "$WORK/fail.rc")" -ne 0 ]; then
       waited=$(settles "$WORK/tmp-fail" 20 "$WORK/tmp-fail")
       if [ "$waited" = never ]; then bad "a failed recording left processes or files after 20 s"
@@ -586,6 +599,7 @@ if want AT31; then
   start AT31 "no partial file ever looks finished"
   if tools_here; then
     ensure fail
+    mid_recording "$WORK/f-fail"
     if [ "$(cat "$WORK/fail.rc")" -ne 0 ]; then ok "a failing ffmpeg fails the verb (exit $(cat "$WORK/fail.rc"))"
     else bad "a failing ffmpeg left the verb exiting 0"; fi
     present "and the refusal names ffmpeg" "ffmpeg" "$WORK/fail.err"

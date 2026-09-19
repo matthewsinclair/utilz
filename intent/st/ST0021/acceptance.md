@@ -19,22 +19,22 @@ title: showreel exports a reel as a video file
 
 ### WP-02 -- The recording: Chrome over the pipe, on a clock the harness controls (status: WIP)
 
-- AC-02.1 Two recordings of one reel, the second slowed in real time, write byte-identical PNG frames. The bytes compared are the captured PNGs, before the encode, because H.264 output need not match across encoder builds. -- satisfied: no (computed)
-- AC-02.2 Frames are anchored on the reel's own start. Every frame i >= 1 is taken at page time `t0 + i x 1000/fps` within 0.5 ms, where `t0` is the page time at which the player showed its first slide, and its slide index is the one the dwell schedule puts there. Frame 0 is taken when the load finishes, and the report says how late. -- satisfied: no (computed)
-- AC-02.3 Mid-transition frames sit on the player's own curve. On the known-colour fixture, each mid-fade frame's mean colour equals the incoming colour times the CSS `ease-in` progress at the frame's scheduled time, over the black ground, within 6/255 per channel. Expected values come from the player's CSS and the dwell schedule, never from a recording. -- satisfied: no (computed)
-- AC-02.4 Every image is decoded before every screenshot. The first captured frame of a slide that arrives by `cut` has its photo's own mean colour within 6/255, never a partial draw or the ground. -- satisfied: no (computed)
-- AC-02.5 Shutdown leaves nothing behind and matches nothing by name. Chrome runs in its own process group and is killed by group after a grace period, its temporary profile directory is removed on every exit path including an interrupt, and its stderr is shown only when a recording fails. -- satisfied: no (computed)
+- AC-02.1 Two recordings of one reel, the second slowed in real time, write byte-identical PNG frames. The bytes compared are the captured PNGs, before the encode, because H.264 output need not match across encoder builds. -- satisfied: yes (computed)
+- AC-02.2 Frames are anchored on the reel's own start. Every frame i >= 1 is taken at page time `t0 + i x 1000/fps` within 0.5 ms, where `t0` is the page time at which the player showed its first slide, and its slide index is the one the dwell schedule puts there. Frame 0 is taken when the load finishes, and the report says how late. -- satisfied: yes (computed)
+- AC-02.3 Mid-transition frames sit on the player's own curve. On the known-colour fixture, each mid-fade frame's mean colour equals the incoming colour times the CSS `ease-in` progress at the frame's scheduled time, over the black ground, within 6/255 per channel. Expected values come from the player's CSS and the dwell schedule, never from a recording. -- satisfied: yes (computed)
+- AC-02.4 Every image is decoded before every screenshot. The first captured frame of a slide that arrives by `cut` has its photo's own mean colour within 6/255, never a partial draw or the ground. -- satisfied: yes (computed)
+- AC-02.5 Shutdown leaves nothing behind and matches nothing by name. Chrome runs in its own process group and is killed by group after a grace period, its temporary profile directory is removed on every exit path including an interrupt, and its stderr is shown only when a recording fails. -- satisfied: yes (computed)
 - AC-02.6 A stall is named. A CDP reply that does not arrive within the watchdog is refused with the step that stalled, eg `during frame 63: screenshot`, and nothing is left running. -- satisfied: yes (computed)
 
-### WP-03 -- The video verb and the encode (status: Not Started)
+### WP-03 -- The video verb and the encode (status: WIP)
 
-- AC-03.1 `showreel video <dir>` builds the reel into the next `_out/` slot exactly as `build` does, and writes the video beside it in the same slot, with `.html` swapped for `.mp4`. An explicit `-o` writes the video there, outside the rotation, and keeps no HTML. -- satisfied: no (computed)
-- AC-03.2 The video holds floor(D x fps) frames by ffprobe, where D is the player's own schedule. Its codec is H.264, its size is the reel's target at 16:9, it has no audio stream, and `.mov` gives the same codec in QuickTime. `--fps` takes 1 to 60 and refuses anything else by name. -- satisfied: no (computed)
-- AC-03.3 No partial file ever looks finished. The encode writes `<name>.partial` and renames it only after ffmpeg exits 0 and ffprobe's frame count equals the plan. A failing ffmpeg leaves neither the video nor the partial, and a stale partial is removed by the next run. -- satisfied: no (computed)
-- AC-03.4 A missing ffmpeg or Chrome is refused by name before any frame is captured: ffmpeg with its install line, and Chrome with `artifact::browser::find`'s own refusal, the one list of every path tried. showreel defines no browser finder of its own: no `APP_PATHS`, no `PATH_NAMES` and no `fn find`. -- satisfied: no (computed)
-- AC-03.5 `--keep N` prunes whole slots, in `build` and in `video`: a dropped revision's HTML and its video go together, and the warning past five revisions counts the videos' megabytes. -- satisfied: no (computed)
-- AC-03.6 `prez showreel video` reaches the showreel binary through the shim's hand-over, as `check` and `build` do. -- satisfied: no (computed)
-- AC-03.7 (non-test) Progress goes to stderr as `frame N/M` when stderr is a terminal, and nothing is printed before the report when it is not. -- satisfied: no
+- AC-03.1 `showreel video <dir>` builds the reel into the next `_out/` slot exactly as `build` does, and writes the video beside it in the same slot, with `.html` swapped for `.mp4`. An explicit `-o` writes the video there, outside the rotation, and keeps no HTML. -- satisfied: yes (computed)
+- AC-03.2 The video holds floor(D x fps) frames by ffprobe, where D is the player's own schedule. Its codec is H.264, its size is the reel's target at 16:9, it has no audio stream, and `.mov` gives the same codec in QuickTime. `--fps` takes 1 to 60 and refuses anything else by name. -- satisfied: yes (computed)
+- AC-03.3 No partial file ever looks finished. The encode writes `<name>.partial` and renames it only after ffmpeg exits 0 and ffprobe's frame count equals the plan. A failing ffmpeg leaves neither the video nor the partial, and a stale partial is removed by the next run. -- satisfied: yes (computed)
+- AC-03.4 A missing ffmpeg or Chrome is refused by name before any frame is captured: ffmpeg with its install line, and Chrome with `artifact::browser::find`'s own refusal, the one list of every path tried. showreel defines no browser finder of its own: no `APP_PATHS`, no `PATH_NAMES` and no `fn find`. -- satisfied: yes (computed)
+- AC-03.5 `--keep N` prunes whole slots, in `build` and in `video`: a dropped revision's HTML and its video go together, and the warning past five revisions counts the videos' megabytes. -- satisfied: yes (computed)
+- AC-03.6 `prez showreel video` reaches the showreel binary through the shim's hand-over, as `check` and `build` do. -- satisfied: yes (computed)
+- AC-03.7 (non-test) Progress goes to stderr as `frame N/M` when stderr is a terminal, and nothing is printed before the report when it is not. -- evidence: opt/prez/crate/crates/showreel/src/main.rs video_reel: progress goes to stderr only when std::io::stderr().is_terminal(). Measured 19 Sep at --fps 5 on video.sh's fixture: under a pseudo-terminal (script -q) the verb printed 75 progress updates, frame 1/75 to frame 75/75, then the report; with stderr to a file, stderr held 0 bytes and the report went to stdout. -- satisfied: yes
 
 ### WP-04 -- The proof, the gates and the docs (status: Not Started)
 
@@ -103,7 +103,7 @@ _(no tests in this group)_
 
 _(no tests in this group)_
 
-### WP-03 -- The video verb and the encode (status: Not Started)
+### WP-03 -- The video verb and the encode (status: WIP)
 
 _(no tests in this group)_
 
@@ -113,23 +113,23 @@ _(no tests in this group)_
 
 ### Group AT23
 
-- AT23 `opt/prez/crate/test/video.sh` -- covers AC-02.1 -- status: red -- Red first, 19 Sep: opt/prez/crate/test/video.sh, written before the verb and run at ef32951 under bash 3.2.57 with --strict, exits 1 (passed 0, failed 10) because showreel refuses unknown command 'video'. AT23 fails its two recordings, so no frames are compared.
+- AT23 `opt/prez/crate/test/video.sh` -- covers AC-02.1 -- status: green -- Red first, 19 Sep: opt/prez/crate/test/video.sh, written before the verb and run at ef32951 under bash 3.2.57 with --strict, exits 1 (passed 0, failed 10) because showreel refuses unknown command 'video'. AT23 fails its two recordings, so no frames are compared. Green, WP-03, 19 Sep: video.sh --strict under bash 3.2.57 passes 10 of 10 (failed 0, skipped 0) against Chrome 153 and ffmpeg 9.0.2, at a load average of 16, in 77 s. The paced run was paused 235 times, and all 150 PNGs are byte-identical to the unhindered run's.
 
 ### Group AT24
 
-- AT24 `opt/prez/crate/test/video.sh` -- covers AC-02.2 -- status: red -- Red first, 19 Sep: opt/prez/crate/test/video.sh, written before the verb and run at ef32951 under bash 3.2.57 with --strict, exits 1 (passed 0, failed 10) because showreel refuses unknown command 'video'. AT24 has no frames.tsv to hold to the grid.
+- AT24 `opt/prez/crate/test/video.sh` -- covers AC-02.2 -- status: green -- Red first, 19 Sep: opt/prez/crate/test/video.sh, written before the verb and run at ef32951 under bash 3.2.57 with --strict, exits 1 (passed 0, failed 10) because showreel refuses unknown command 'video'. AT24 has no frames.tsv to hold to the grid. Green, WP-03, 19 Sep: video.sh --strict under bash 3.2.57 passes 10 of 10 (failed 0, skipped 0) against Chrome 153 and ffmpeg 9.0.2, at a load average of 16, in 77 s. t0 is 0 ms by frames.tsv, 150 rows, every frame from 1 on within 0.10 ms of t0 + 100i, none on a slide other than the dwell schedule's, and the report says frame 0 was taken 11 ms after the reel's start.
 
 ### Group AT25
 
-- AT25 `opt/prez/crate/test/video.sh` -- covers AC-02.3 -- status: red -- Red first, 19 Sep: opt/prez/crate/test/video.sh, written before the verb and run at ef32951 under bash 3.2.57 with --strict, exits 1 (passed 0, failed 10) because showreel refuses unknown command 'video'. AT25 has no fade frames to hold to the ease-in curve.
+- AT25 `opt/prez/crate/test/video.sh` -- covers AC-02.3 -- status: green -- Red first, 19 Sep: opt/prez/crate/test/video.sh, written before the verb and run at ef32951 under bash 3.2.57 with --strict, exits 1 (passed 0, failed 10) because showreel refuses unknown command 'video'. AT25 has no fade frames to hold to the ease-in curve. Green, WP-03, 19 Sep: video.sh --strict under bash 3.2.57 passes 10 of 10 (failed 0, skipped 0) against Chrome 153 and ffmpeg 9.0.2, at a load average of 16, in 77 s. Frames 51 to 55, 100 to 500 ms into the 600 ms ease-in fade over the ground #0e0e10, sit within 0.5 of a level of the curve on every channel (tolerance 6).
 
 ### Group AT26
 
-- AT26 `opt/prez/crate/test/video.sh` -- covers AC-02.4 -- status: red -- Red first, 19 Sep: opt/prez/crate/test/video.sh, written before the verb and run at ef32951 under bash 3.2.57 with --strict, exits 1 (passed 0, failed 10) because showreel refuses unknown command 'video'. AT26 has no first frame of the photo's slide to measure.
+- AT26 `opt/prez/crate/test/video.sh` -- covers AC-02.4 -- status: green -- Red first, 19 Sep: opt/prez/crate/test/video.sh, written before the verb and run at ef32951 under bash 3.2.57 with --strict, exits 1 (passed 0, failed 10) because showreel refuses unknown command 'video'. AT26 has no first frame of the photo's slide to measure. Green, WP-03, 19 Sep: video.sh --strict under bash 3.2.57 passes 10 of 10 (failed 0, skipped 0) against Chrome 153 and ffmpeg 9.0.2, at a load average of 16, in 77 s. The photo's first frame, frame 25, has mean 127 97 63, exactly the mean of the 1920x1280 JPEG the build embedded.
 
 ### Group AT27
 
-- AT27 `opt/prez/crate/test/video.sh` -- covers AC-02.5 -- status: red -- Red first, 19 Sep: opt/prez/crate/test/video.sh, written before the verb and run at ef32951 under bash 3.2.57 with --strict, exits 1 (passed 0, failed 10) because showreel refuses unknown command 'video'. AT27 has no recording that worked, failed or was interrupted to inspect.
+- AT27 `opt/prez/crate/test/video.sh` -- covers AC-02.5 -- status: green -- Red first, 19 Sep: opt/prez/crate/test/video.sh, written before the verb and run at ef32951 under bash 3.2.57 with --strict, exits 1 (passed 0, failed 10) because showreel refuses unknown command 'video'. AT27 has no recording that worked, failed or was interrupted to inspect. Green, WP-03, 19 Sep: video.sh --strict under bash 3.2.57 passes 10 of 10 (failed 0, skipped 0) against Chrome 153 and ffmpeg 9.0.2, at a load average of 16, in 77 s. A clean run leaves no process, an empty TMPDIR and no Chrome output; a run failing at ffmpeg kept 2 frames first and left nothing; SIGINT exits 130 and settles within 1 s; a stall is refused "no reply from Chrome in 30 s, during frame 8: screenshot" and settles; nothing carries the run's name.
 
 ### Group AT28
 
@@ -137,27 +137,27 @@ _(no tests in this group)_
 
 ### Group AT29
 
-- AT29 `opt/prez/crate/test/video.sh` -- covers AC-03.1 -- status: red -- Red first, 19 Sep: opt/prez/crate/test/video.sh, written before the verb and run at ef32951 under bash 3.2.57 with --strict, exits 1 (passed 0, failed 10) because showreel refuses unknown command 'video'. AT29 finds no video in the _out/ slot and none at -o.
+- AT29 `opt/prez/crate/test/video.sh` -- covers AC-03.1 -- status: green -- Red first, 19 Sep: opt/prez/crate/test/video.sh, written before the verb and run at ef32951 under bash 3.2.57 with --strict, exits 1 (passed 0, failed 10) because showreel refuses unknown command 'video'. AT29 finds no video in the _out/ slot and none at -o. Green, WP-03, 19 Sep: video.sh --strict under bash 3.2.57 passes 10 of 10 (failed 0, skipped 0) against Chrome 153 and ffmpeg 9.0.2, at a load average of 16, in 77 s. The slot holds one HTML and its .mp4 beside it with .html swapped; -o writes only the video, and _out/ still holds 2 entries.
 
 ### Group AT30
 
-- AT30 `opt/prez/crate/test/video.sh` -- covers AC-03.2 -- status: red -- Red first, 19 Sep: opt/prez/crate/test/video.sh, written before the verb and run at ef32951 under bash 3.2.57 with --strict, exits 1 (passed 0, failed 10) because showreel refuses unknown command 'video'. AT30 probes no file, and --fps 0, 61 and x are refused as an unknown command rather than by name.
+- AT30 `opt/prez/crate/test/video.sh` -- covers AC-03.2 -- status: green -- Red first, 19 Sep: opt/prez/crate/test/video.sh, written before the verb and run at ef32951 under bash 3.2.57 with --strict, exits 1 (passed 0, failed 10) because showreel refuses unknown command 'video'. AT30 probes no file, and --fps 0, 61 and x are refused as an unknown command rather than by name. Green, WP-03, 19 Sep: video.sh --strict under bash 3.2.57 passes 10 of 10 (failed 0, skipped 0) against Chrome 153 and ffmpeg 9.0.2, at a load average of 16, in 77 s. ffprobe reads h264, 1920x1080, 150 frames, no audio, brand isom; the .mov is h264 with brand qt; --fps 0, 61 and x are refused naming --fps.
 
 ### Group AT31
 
-- AT31 `opt/prez/crate/test/video.sh` -- covers AC-03.3 -- status: red -- Red first, 19 Sep: opt/prez/crate/test/video.sh, written before the verb and run at ef32951 under bash 3.2.57 with --strict, exits 1 (passed 0, failed 10) because showreel refuses unknown command 'video'. AT31's failing ffmpeg is never reached, so the refusal does not name ffmpeg, and no run follows a stale partial.
+- AT31 `opt/prez/crate/test/video.sh` -- covers AC-03.3 -- status: green -- Red first, 19 Sep: opt/prez/crate/test/video.sh, written before the verb and run at ef32951 under bash 3.2.57 with --strict, exits 1 (passed 0, failed 10) because showreel refuses unknown command 'video'. AT31's failing ffmpeg is never reached, so the refusal does not name ffmpeg, and no run follows a stale partial. Green, WP-03, 19 Sep: video.sh --strict under bash 3.2.57 passes 10 of 10 (failed 0, skipped 0) against Chrome 153 and ffmpeg 9.0.2, at a load average of 16, in 77 s. A failing ffmpeg fails the verb with exit 2 naming ffmpeg, after 2 frames were captured, and leaves no video and no partial; the next run to the same name removes the stale partial and finishes.
 
 ### Group AT32
 
-- AT32 `opt/prez/crate/test/video.sh` -- covers AC-03.4 -- status: red -- Red first, 19 Sep: opt/prez/crate/test/video.sh, written before the verb and run at ef32951 under bash 3.2.57 with --strict, exits 1 (passed 0, failed 10) because showreel refuses unknown command 'video'. AT32: no ffmpeg on PATH and a missing --browser are both refused as an unknown command, not by name or by artifact::browser::find's refusal, and showreel's source never calls artifact::browser::find.
+- AT32 `opt/prez/crate/test/video.sh` -- covers AC-03.4 -- status: green -- Red first, 19 Sep: opt/prez/crate/test/video.sh, written before the verb and run at ef32951 under bash 3.2.57 with --strict, exits 1 (passed 0, failed 10) because showreel refuses unknown command 'video'. AT32: no ffmpeg on PATH and a missing --browser are both refused as an unknown command, not by name or by artifact::browser::find's refusal, and showreel's source never calls artifact::browser::find. Green, WP-03, 19 Sep: video.sh --strict under bash 3.2.57 passes 10 of 10 (failed 0, skipped 0) against Chrome 153 and ffmpeg 9.0.2, at a load average of 16, in 77 s. No ffmpeg on PATH is refused naming ffmpeg with its install line, and a missing --browser with artifact::browser::find's own refusal and remedy, each before any frame; showreel's source has no APP_PATHS, PATH_NAMES or fn find( and calls artifact::browser::find.
 
 ### Group AT33
 
-- AT33 `opt/prez/crate/crates/showreel/src/deliver.rs` -- covers AC-03.5 -- status: to-write
+- AT33 `opt/prez/crate/crates/showreel/src/deliver.rs` -- covers AC-03.5 -- status: green -- Red first, 19 Sep: a_pruned_slot_takes_its_video_with_it_and_the_warning_counts_video_megabytes, written in deliver.rs before prune knew of videos, fails: --keep 1 over three slots dropped only r-001.showreel.html and r-002.showreel.html, leaving both videos; cargo test exit 101. Green, WP-03, 19 Sep: prune takes each slot's files (deliver::slot_files, the HTML with any .mp4 or .mov beside it), so --keep 1 over three slots drops two whole slots, and six slots with 1 MB videos warn of 6 MB; the workspace passes 333 tests, and clippy -D warnings and rustfmt are clean.
 
 ### Group AT34
 
-- AT34 `opt/prez/crate/test/video.sh` -- covers AC-03.6 -- status: red -- Red first, 19 Sep: opt/prez/crate/test/video.sh, written before the verb and run at ef32951 under bash 3.2.57 with --strict, exits 1 (passed 0, failed 10) because showreel refuses unknown command 'video'. AT34: prez showreel video reaches showreel, whose refusal is the unknown command, not 'video needs a directory', and --fps is not named.
+- AT34 `opt/prez/crate/test/video.sh` -- covers AC-03.6 -- status: green -- Red first, 19 Sep: opt/prez/crate/test/video.sh, written before the verb and run at ef32951 under bash 3.2.57 with --strict, exits 1 (passed 0, failed 10) because showreel refuses unknown command 'video'. AT34: prez showreel video reaches showreel, whose refusal is the unknown command, not 'video needs a directory', and --fps is not named. Green, WP-03, 19 Sep: video.sh --strict under bash 3.2.57 passes 10 of 10 (failed 0, skipped 0) against Chrome 153 and ffmpeg 9.0.2, at a load average of 16, in 77 s. prez showreel video with no directory exits 2 with showreel's own "video needs a directory", and --fps reaches it.
 
 ### Group AT35
 

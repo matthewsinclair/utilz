@@ -26,7 +26,7 @@ showreel's `check` and `build` are already Rust (ST0017, `crates/showreel/src/ma
 | ----- | -------------------------------------------------------------------- | ---- | ----------- |
 | WP-01 | Browser discovery moves to the artifact crate                        | S    | Done        |
 | WP-02 | The recording: Chrome over the pipe, on a clock the harness controls | M    | WIP         |
-| WP-03 | The video verb and the encode                                        | M    | Not Started |
+| WP-03 | The video verb and the encode                                        | M    | WIP         |
 | WP-04 | The proof, the gates and the docs                                    | M    | Not Started |
 
 ## Acceptance

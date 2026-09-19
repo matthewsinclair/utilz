@@ -67,19 +67,26 @@ What it found, in the order it was found:
 
 ### The verb
 
-`showreel video <dir> [-o <file>] [--fps <n>] [--keep <n>] [--frames <dir>]`, and `prez showreel video ...` through the shim's existing hand-over (`opt/prez/prez:290`).
+`showreel video <dir> [-o <file>] [--fps <n>] [--keep <n>] [--frames <dir>] [--browser <path>]`, and `prez showreel video ...` through the shim's existing hand-over (`opt/prez/prez:290`). As built (WP-03), `-o` is also spelled `--out`, as `build` spells it.
 
 - **What it writes.** It builds the reel's HTML exactly as `build` does, into the next `_out/` slot (`build.rs:242`, `deliver.rs:218`). It then writes the video **beside it, in the same slot**: the HTML's name with `.html` swapped for `.mp4`. A slot is therefore one revision, holding the HTML and the video recorded from it.
-- **An explicit `-o <file>`** writes the video there. Like `build --out`, it is outside the rotation and prunes nothing. The HTML is built into a temporary directory and removed afterwards, because the caller named only the video.
+- **An explicit `-o <file>`** writes the video there. Like `build --out`, it is outside the rotation and prunes nothing. The HTML is built into the recording's own temporary directory (`record::Scratch`), because the caller named only the video, so it goes on every path the profile does, an interrupt included.
 - **`--keep N` prunes whole slots**, in `build` and in `video`: a dropped revision's HTML and its video go together. The warning past five revisions (`deliver.rs:349`) counts the videos' megabytes, because a 3-minute 1080p video is about 24 MB.
 - **The container follows the extension.** `.mp4` is H.264 (hv's answer 1). `.mov` is H.264 in QuickTime.
 - **The size is the reel's `target`** by its 16:9 height: 1920 gives 1920x1080 and 2560 gives 2560x1440 (hv's answer 2).
 - **`--fps`** is 30 by default. It takes any whole number from 1 to 60 and refuses anything else by name (hv's answer 3).
 - **The video is silent** (hv's answer 4).
 - **The look is kiosk:** no progress bar and no HUD. The corner bug stays, as on a kiosk panel (hv's answer 5).
-- **`--frames <dir>`** also writes every captured PNG, and a `frames.tsv` of frame index, page time and slide index. It is what the determinism and phase tests read, and it is a frame-sequence export for anyone who wants one.
+- **`--frames <dir>`** also writes every captured PNG, and a `frames.tsv` of frame index, page time and slide index. It is what the determinism and phase tests read, and it is a frame-sequence export for anyone who wants one. As built, the directory must be new or empty, and `frames.tsv` opens with a `# t0_ms=<t0> fps=<n>` line, then a header row, so the phase check has the player's own start. A frame is kept before ffmpeg takes it, so an encode that fails still leaves what was captured.
+- **`--browser <path>`** names the browser, through `artifact::browser::find`, so a missing one is refused with the finder's own refusal, word for word what prez's is.
 - **Progress goes to stderr when stderr is a terminal** (`std::io::IsTerminal`), as `frame N/M`. At 5 to 12 minutes for a 3-minute reel, silence would read as a hang. When stderr is not a terminal, nothing is printed until the end.
-- **The report** at the end uses `build`'s shape: the file, frames, fps, duration, size, the Chrome version that recorded it, and how late frame 0 was taken.
+- **The report** at the end uses `build`'s shape: the file, frames, fps, duration, size, the Chrome version that recorded it, and how late frame 0 was taken. As built, on `video.sh`'s fixture at `--fps 5`:
+
+  ```
+  showreel: wrote <file>
+    75 frames at 5 fps, 15.0 s, 1920x1080, 0.4 MB, recorded by Chrome/153.0.8010.52
+    frame 0 taken 11 ms after the reel's start
+  ```
 
 ### The recording (in `crates/showreel`)
 
@@ -118,7 +125,7 @@ What it found, in the order it was found:
 
 ### The encode
 
-**ffmpeg** is found on `PATH` and is spawned in its own process group, with frames piped to it as an image sequence. `.mp4` is H.264, yuv420p, `+faststart`, and so is `.mov`, in QuickTime.
+**ffmpeg** is found on `PATH` and is spawned in its own process group, with frames piped to it as an image sequence. `.mp4` is H.264, yuv420p, `+faststart`, and so is `.mov`, in QuickTime. As built, its stderr is kept as Chrome's is (`tail.rs`), and shown only with a refusal.
 
 **NO PARTIAL FILE EVER LOOKS FINISHED.**
 

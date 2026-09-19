@@ -317,11 +317,33 @@ pub fn stem(cfg: &config::Reel, session: &config::Session, date: &str) -> Result
   }
 }
 
+/// The containers `showreel video` writes, by extension: `.mp4` first, which a
+/// slot's video always is, and `.mov`, which `-o` may name (ST0021).
+pub const VIDEO_EXTENSIONS: [&str; 2] = ["mp4", "mov"];
+
+/// Every file one revision holds: its HTML, and the video recorded from it,
+/// which is the HTML's name with `.html` swapped for the container's extension.
+///
+/// **A SLOT IS ONE REVISION** (ST0021 AC-03.5). A video pruned apart from its
+/// HTML, or left behind by it, is a file nothing names any more.
+pub fn slot_files(html: &Path) -> Vec<PathBuf> {
+  let mut files = vec![html.to_path_buf()];
+  files.extend(
+    VIDEO_EXTENSIONS
+      .iter()
+      .map(|ext| html.with_extension(ext))
+      .filter(|video| video.is_file()),
+  );
+  files
+}
+
 /// Drop the oldest revisions, or say once that there are a lot of them.
 ///
 /// **THE DEFAULT KEEPS EVERYTHING AND COMPLAINS**, because silently deleting a
 /// build somebody may already have copied to a stick is a worse default than a
 /// directory that needs tidying. Returns what it did and what it wants said.
+/// Both count whole slots: a revision's video goes with its HTML, and its
+/// megabytes are in the total.
 pub fn prune(out_dir: &Path, stem: &Stem, keep: usize) -> (Vec<PathBuf>, Vec<String>) {
   let sibs: Vec<PathBuf> = stem
     .revisions(out_dir)
@@ -329,16 +351,18 @@ pub fn prune(out_dir: &Path, stem: &Stem, keep: usize) -> (Vec<PathBuf>, Vec<Str
     .map(|(_, p)| p)
     .collect();
   if keep > 0 && sibs.len() > keep {
-    let drop: Vec<PathBuf> = sibs[..sibs.len() - keep].to_vec();
+    let old = &sibs[..sibs.len() - keep];
+    let drop: Vec<PathBuf> = old.iter().flat_map(|p| slot_files(p)).collect();
     let said = vec![format!(
       "pruned {} older revision(s), kept {keep}",
-      drop.len()
+      old.len()
     )];
     return (drop, said);
   }
   if keep == 0 && sibs.len() > 5 {
     let mb: f64 = sibs
       .iter()
+      .flat_map(|p| slot_files(p))
       .filter_map(|p| std::fs::metadata(p).ok())
       .map(|m| m.len())
       .sum::<u64>() as f64
@@ -623,5 +647,69 @@ mod tests {
     assert!(dropped.is_empty(), "the default deletes nothing");
     assert_eq!(said.len(), 1);
     assert!(said[0].contains("7 revisions"), "{}", said[0]);
+  }
+
+  /// AT33 (AC-03.5): **A SLOT IS ONE REVISION, AND ITS VIDEO GOES WITH IT.**
+  /// `--keep` prunes whole slots, in `build` and in `video` alike, and the
+  /// warning past five revisions counts the videos' megabytes, which dwarf the
+  /// HTML's: a three-minute 1080p video is about 24 MB.
+  #[test]
+  fn a_pruned_slot_takes_its_video_with_it_and_the_warning_counts_video_megabytes() {
+    let stem = Stem::Counted {
+      prefix: "r-".to_string(),
+      suffix: ".showreel.html".to_string(),
+    };
+    let dir = out(
+      "prune-slots",
+      &[
+        "r-001.showreel.html",
+        "r-001.showreel.mp4",
+        "r-002.showreel.html",
+        "r-002.showreel.mov",
+        "r-003.showreel.html",
+        "r-003.showreel.mp4",
+      ],
+    );
+    let (dropped, said) = prune(&dir, &stem, 1);
+    let mut gone: Vec<String> = dropped
+      .iter()
+      .filter_map(|p| p.file_name())
+      .map(|n| n.to_string_lossy().into_owned())
+      .collect();
+    gone.sort();
+    assert_eq!(
+      gone,
+      vec![
+        "r-001.showreel.html",
+        "r-001.showreel.mp4",
+        "r-002.showreel.html",
+        "r-002.showreel.mov"
+      ],
+      "two whole slots, and not the one kept"
+    );
+    assert!(
+      said[0].contains("pruned 2 older revision(s)"),
+      "{}",
+      said[0]
+    );
+
+    let names: Vec<String> = (1..=6).map(|n| format!("r-{n:03}.showreel.html")).collect();
+    let refs: Vec<&str> = names.iter().map(String::as_str).collect();
+    let dir = out("prune-slot-megabytes", &refs);
+    for n in 1..=6 {
+      std::fs::write(
+        dir.join(format!("r-{n:03}.showreel.mp4")),
+        vec![0u8; 1_048_576],
+      )
+      .unwrap();
+    }
+    let (dropped, said) = prune(&dir, &stem, 0);
+    assert!(dropped.is_empty(), "the default still deletes nothing");
+    assert!(said[0].contains("6 revisions"), "{}", said[0]);
+    assert!(
+      said[0].contains("(6 MB)"),
+      "the videos are counted: {}",
+      said[0]
+    );
   }
 }

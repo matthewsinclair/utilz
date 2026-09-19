@@ -23,17 +23,16 @@
 //! sees its parent go, ends Chrome itself, and the trap runs after it.
 
 use crate::cdp::Session;
+use crate::tail::Tail;
 use artifact::{base64, browser, Failure};
 use serde::Deserialize;
 use serde_json::{json, Value};
 use std::fs;
-use std::io::{ErrorKind, Read};
+use std::io::ErrorKind;
 use std::os::unix::fs::DirBuilderExt;
 use std::os::unix::process::CommandExt;
 use std::path::{Path, PathBuf};
 use std::process::{Child, ChildStdin, Command, Stdio};
-use std::sync::mpsc::{self, Receiver};
-use std::sync::{Arc, Mutex, PoisonError};
 use std::time::{Duration, SystemTime, UNIX_EPOCH};
 
 /// The injected clock, embedded as the player is (`template::SHELL`).
@@ -47,9 +46,6 @@ const GRACE: Duration = Duration::from_secs(3);
 
 /// The most page time the load may take, in its 1 ms slices.
 const LOAD_SLICES: u32 = 5000;
-
-/// How much of Chrome's stderr is kept for a failure to show.
-const TAIL: usize = 4 * 1024;
 
 /// The flags without which a screenshot under paused virtual time stalls at a
 /// random frame (the spike's finding 2: frame 63 on one run, 78 on the next).
@@ -140,16 +136,59 @@ pub struct Recording {
   pub warnings: Vec<String>,
 }
 
-/// Records the reel at `reel` at `width` x `height` and `fps`, handing each
-/// frame to `sink` as it is captured.
+/// A private directory for one recording. It holds Chrome's profile and its
+/// TMPDIR, and the reel's HTML when the caller named only a video (`-o`).
+///
+/// **IT GOES WHEN THE RECORDING ENDS, ON EVERY PATH.** `record` takes it, and
+/// Chrome's shutdown removes it; after an interrupt the wrapper's trap does;
+/// and a recording that never started drops it, which removes it too. Created
+/// by the caller rather than inside `record`, so that whatever the caller puts
+/// in it is covered by the same three.
+pub struct Scratch {
+  dir: PathBuf,
+}
+
+impl Scratch {
+  pub fn new() -> Result<Self, Failure> {
+    scratch_dir().map(|dir| Self { dir })
+  }
+
+  pub fn path(&self) -> &Path {
+    &self.dir
+  }
+
+  /// Removes the directory, and says so when it cannot.
+  fn remove(&self) -> Option<String> {
+    match fs::remove_dir_all(&self.dir) {
+      Ok(()) => None,
+      Err(e) if e.kind() == ErrorKind::NotFound => None,
+      Err(e) => Some(format!(
+        "could not remove the recording's temporary directory {}: {e}",
+        self.dir.display()
+      )),
+    }
+  }
+}
+
+impl Drop for Scratch {
+  /// The backstop for a recording that never reached Chrome's shutdown, which
+  /// is where a directory that will not go is reported.
+  fn drop(&mut self) {
+    let _ = self.remove();
+  }
+}
+
+/// Records the reel at `reel` at `width` x `height` and `fps`, in `scratch`,
+/// handing each frame to `sink` as it is captured.
 pub fn record(
   browser: &Path,
   reel: &Path,
+  scratch: Scratch,
   (width, height): (u32, u32),
   fps: u32,
   mut sink: impl FnMut(Frame) -> Result<(), Failure>,
 ) -> Result<Recording, Failure> {
-  let mut chrome = Chrome::launch(browser, width, height)?;
+  let mut chrome = Chrome::launch(browser, width, height, scratch)?;
   let played = play(&mut chrome, reel, (width, height), fps, &mut sink);
   let warnings = chrome.stop(played.is_ok());
   match played {
@@ -160,14 +199,7 @@ pub fn record(
     // Chrome's own account goes with the refusal, and only with a refusal:
     // headless Chrome narrates, and a recording that worked has nothing to say.
     Err(mut failure) => {
-      let said = chrome.said();
-      if !said.trim().is_empty() {
-        failure.message.push_str("\n  Chrome said:");
-        for line in said.lines() {
-          failure.message.push_str("\n    ");
-          failure.message.push_str(line);
-        }
-      }
+      chrome.stderr.append_to(&mut failure, "Chrome");
       for warning in warnings {
         failure.message.push_str("\n  and ");
         failure.message.push_str(&warning);
@@ -455,24 +487,16 @@ fn budget_ms(us: i64) -> f64 {
 struct Chrome {
   wrapper: Child,
   cdp: Session<ChildStdin>,
-  dir: PathBuf,
-  said: Arc<Mutex<Vec<u8>>>,
-  said_done: Receiver<()>,
+  scratch: Scratch,
+  stderr: Tail,
   stopped: bool,
 }
 
 impl Chrome {
-  fn launch(browser: &Path, width: u32, height: u32) -> Result<Self, Failure> {
-    let dir = scratch_dir()?;
-    let launched = Self::spawn(browser, width, height, &dir);
-    if launched.is_err() {
-      // Nothing is running yet, so nothing else will remove it.
-      let _ = fs::remove_dir_all(&dir);
-    }
-    launched
-  }
-
-  fn spawn(browser: &Path, width: u32, height: u32, dir: &Path) -> Result<Self, Failure> {
+  /// Starts Chrome in `scratch`. When it cannot start, `scratch` is dropped
+  /// here, and with it the directory, because nothing is running to need it.
+  fn launch(browser: &Path, width: u32, height: u32, scratch: Scratch) -> Result<Self, Failure> {
+    let dir = scratch.path();
     let tmp = dir.join("tmp");
     fs::create_dir(&tmp).map_err(|e| {
       Failure::new(
@@ -525,19 +549,11 @@ impl Chrome {
         "report it with the platform",
       ));
     };
-    let said = Arc::new(Mutex::new(Vec::new()));
-    let (done, said_done) = mpsc::channel();
-    let into = Arc::clone(&said);
-    std::thread::spawn(move || {
-      keep_tail(stderr, &into);
-      let _ = done.send(());
-    });
     Ok(Self {
       wrapper,
       cdp: Session::new(stdin, stdout, WATCHDOG),
-      dir: dir.to_path_buf(),
-      said,
-      said_done,
+      scratch,
+      stderr: Tail::read(stderr),
       stopped: false,
     })
   }
@@ -569,23 +585,8 @@ impl Chrome {
     if let Err(e) = self.wrapper.wait() {
       warnings.push(format!("could not wait for Chrome's wrapper: {e}"));
     }
-    match fs::remove_dir_all(&self.dir) {
-      Ok(()) => {}
-      Err(e) if e.kind() == ErrorKind::NotFound => {}
-      Err(e) => warnings.push(format!(
-        "could not remove Chrome's temporary directory {}: {e}",
-        self.dir.display()
-      )),
-    }
+    warnings.extend(self.scratch.remove());
     warnings
-  }
-
-  /// What Chrome wrote to stderr, the last of it. It waits a moment for the
-  /// reader to reach the end, because the part worth reading is the last.
-  fn said(&self) -> String {
-    let _ = self.said_done.recv_timeout(Duration::from_secs(1));
-    let said = self.said.lock().unwrap_or_else(PoisonError::into_inner);
-    String::from_utf8_lossy(&said).into_owned()
   }
 }
 
@@ -609,7 +610,8 @@ fn kill_group(pgid: u32) -> std::io::Result<()> {
     .map(|_| ())
 }
 
-/// A private directory for one recording: the profile, and Chrome's TMPDIR.
+/// Creates a directory no other process can read, under TMPDIR, for one
+/// recording.
 fn scratch_dir() -> Result<PathBuf, Failure> {
   let base = std::env::temp_dir();
   let stamp = SystemTime::now()
@@ -639,24 +641,6 @@ fn scratch_dir() -> Result<PathBuf, Failure> {
     ),
     "clear old showreel-video-* directories out of it",
   ))
-}
-
-/// Reads until the end, keeping the last `TAIL` bytes.
-fn keep_tail(mut from: impl Read, into: &Mutex<Vec<u8>>) {
-  let mut chunk = [0u8; 4096];
-  loop {
-    match from.read(&mut chunk) {
-      Ok(0) => return,
-      Ok(n) => {
-        let mut said = into.lock().unwrap_or_else(PoisonError::into_inner);
-        said.extend_from_slice(&chunk[..n]);
-        let over = said.len().saturating_sub(TAIL);
-        said.drain(..over);
-      }
-      Err(e) if e.kind() == ErrorKind::Interrupted => continue,
-      Err(_) => return,
-    }
-  }
 }
 
 /// A string field of a reply that the recording cannot go on without.

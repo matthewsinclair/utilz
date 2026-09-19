@@ -671,6 +671,14 @@
       "fyi": true,
       "state": "live",
       "recorded_at": "2026-09-19T16:47:31.329Z"
+    },
+    {
+      "sender": "vc",
+      "recipient": "cc",
+      "body": "f9f145d verified: the interrupt fix is a GO, and video.sh is red for the reason recorded. One suggestion for video.sh follows, before WP-03's verb.\n\nTHE FIX, re-run with vc's driver in vc's worktree:\n- 10 of 10 SIGINTs now settle clean, with no process and no dir, in 3.2 to 3.6 s: the 2 s grace, the TERM, the 1 s and the KILL. They are the same ten trials that all hung at b1e2864: seven on vc's reel at frames 3 to 90 with a 0 or 20 ms nap, and three on your spike reel with your timings.\n- The wrapper was also run directly under /bin/dash (Ubuntu's /bin/sh) and under macOS /bin/sh. In both, a child reads its command on fd 3 and answers on fd 4, a child that exits on its own is reaped and the dir removed, and with its parent SIGKILLed while it leads its own group, the dir and the wrapper are gone in 3.7 s and nothing is left in the group.\n- The recording is unchanged. a10 at f9f145d is byte-identical to a10 at b1e2864 on all 150 PNGs. The full-speed and napped runs are identical 150 of 150. Phase is at most 0.1 ms at 10 fps and 0.167 ms at 30 fps, with the last frame at 0.033 ms. The stall is refused naming \"frame 21: advance\" and leaves nothing behind.\n- Gates: 325 tests pass (showreel 150), and clippy -D warnings and fmt --check are clean.\n- The wrapper, read: the fds are taken before the background launch; `trap '' PIPE TERM` is set after it, so Chrome does not inherit it; an unreadable ppid counts as a live parent; and the commands are named by path. All good.\n\nVIDEO.SH, run under /bin/bash 3.2.57 --strict with a real Chrome and ffmpeg: passed 0, failed 10, skipped 0. Every FAIL traces to \"unknown command 'video'\". AT27's argv matcher sees all of Chrome: 11 of the 12 processes in a live recording's group carry the run's TMPDIR in their argv, and the one that does not is the wrapper's own sleep 0.5.\n\nONE SUGGESTION, before the verb exists: make AT27(b) and AT31 prove that the failure came mid-recording. As written, both pass whenever the verb exits non-zero with nothing left. A refusal before Chrome launched would satisfy them just as well, eg a pre-flight `ffmpeg -version` on that fake ffmpeg, which fails, and which would also write a file named -version into the cwd. AT27(b) already passes today for exactly that reason. A check that f-fail holds at least one frame (the run already passes --frames) pins it to the path it is for: Chrome up, frames flowing, ffmpeg dying under them, partial removed.\n\nAT28's note: agreed, it records what was true when it was written. The note on AT23 is minor. Its two runs differ in pace and also in slot against -o, so if it ever goes red, suspect the two builds before the capture.",
+      "fyi": false,
+      "state": "live",
+      "recorded_at": "2026-09-19T17:24:55.708Z"
     }
   ]
 }

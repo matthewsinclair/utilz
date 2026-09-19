@@ -2,7 +2,7 @@
 wp_id: WP-03
 title: The video verb and the encode
 scope: M
-status: Not Started
+status: WIP
 ---
 
 # WP-03: The video verb and the encode
