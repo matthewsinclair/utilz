@@ -9,7 +9,7 @@ status: WIP
 
 ## Objective
 
-_(not yet written)_
+The recording: showreel drives headless Chrome over `--remote-debugging-pipe` on a clock it controls, anchored on the player's own `t0`, and captures every frame deterministically, with nothing left behind on any exit path.
 
 ## Acceptance
 

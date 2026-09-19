@@ -15,7 +15,7 @@
       "title": "Browser discovery moves to the artifact crate",
       "scope": "S",
       "status": "done",
-      "objective": "",
+      "objective": "Browser discovery has one home, in the `artifact` crate, shared by prez's `pdf`, `present` and `browser` verbs and by showreel's `video`.",
       "body": "",
       "preamble": ""
     },
@@ -24,7 +24,7 @@
       "title": "The recording: Chrome over the pipe, on a clock the harness controls",
       "scope": "M",
       "status": "wip",
-      "objective": "",
+      "objective": "The recording: showreel drives headless Chrome over `--remote-debugging-pipe` on a clock it controls, anchored on the player's own `t0`, and captures every frame deterministically, with nothing left behind on any exit path.",
       "body": "",
       "preamble": ""
     },
@@ -33,7 +33,7 @@
       "title": "The video verb and the encode",
       "scope": "M",
       "status": "not-started",
-      "objective": "",
+      "objective": "The video verb and the encode: `showreel video <dir>` builds the reel into the next `_out/` slot, records it, and encodes it with ffmpeg, keeping the finished name only after ffmpeg and ffprobe agree.",
       "body": "",
       "preamble": ""
     },
@@ -42,7 +42,7 @@
       "title": "The proof, the gates and the docs",
       "scope": "M",
       "status": "not-started",
-      "objective": "",
+      "objective": "The proof, the gates and the docs: `crate/test/video.sh` on the shared harness, ffmpeg as prez's optional dependency and on both CI legs, and the help, README and CHANGELOG entries.",
       "body": "",
       "preamble": ""
     }

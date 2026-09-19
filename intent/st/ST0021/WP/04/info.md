@@ -9,7 +9,7 @@ status: Not Started
 
 ## Objective
 
-_(not yet written)_
+The proof, the gates and the docs: `crate/test/video.sh` on the shared harness, ffmpeg as prez's optional dependency and on both CI legs, and the help, README and CHANGELOG entries.
 
 ## Acceptance
 

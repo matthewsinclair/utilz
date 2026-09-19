@@ -9,7 +9,7 @@ status: Done
 
 ## Objective
 
-_(not yet written)_
+Browser discovery has one home, in the `artifact` crate, shared by prez's `pdf`, `present` and `browser` verbs and by showreel's `video`.
 
 ## Acceptance
 

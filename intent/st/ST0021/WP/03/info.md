@@ -9,7 +9,7 @@ status: Not Started
 
 ## Objective
 
-_(not yet written)_
+The video verb and the encode: `showreel video <dir>` builds the reel into the next `_out/` slot, records it, and encodes it with ffmpeg, keeping the finished name only after ffmpeg and ffprobe agree.
 
 ## Acceptance
 
