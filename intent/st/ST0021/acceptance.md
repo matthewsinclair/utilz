@@ -24,7 +24,7 @@ title: showreel exports a reel as a video file
 - AC-02.3 Mid-transition frames sit on the player's own curve. On the known-colour fixture, each mid-fade frame's mean colour equals the incoming colour times the CSS `ease-in` progress at the frame's scheduled time, over the black ground, within 6/255 per channel. Expected values come from the player's CSS and the dwell schedule, never from a recording. -- satisfied: no (computed)
 - AC-02.4 Every image is decoded before every screenshot. The first captured frame of a slide that arrives by `cut` has its photo's own mean colour within 6/255, never a partial draw or the ground. -- satisfied: no (computed)
 - AC-02.5 Shutdown leaves nothing behind and matches nothing by name. Chrome runs in its own process group and is killed by group after a grace period, its temporary profile directory is removed on every exit path including an interrupt, and its stderr is shown only when a recording fails. -- satisfied: no (computed)
-- AC-02.6 A stall is named. A CDP reply that does not arrive within the watchdog is refused with the step that stalled, eg `during frame 63: screenshot`, and nothing is left running. -- satisfied: no (computed)
+- AC-02.6 A stall is named. A CDP reply that does not arrive within the watchdog is refused with the step that stalled, eg `during frame 63: screenshot`, and nothing is left running. -- satisfied: yes (computed)
 
 ### WP-03 -- The video verb and the encode (status: Not Started)
 
@@ -133,7 +133,7 @@ _(no tests in this group)_
 
 ### Group AT28
 
-- AT28 `opt/prez/crate/crates/showreel/src/cdp.rs` -- covers AC-02.6 -- status: to-write
+- AT28 `opt/prez/crate/crates/showreel/src/cdp.rs` -- covers AC-02.6 -- status: green -- Red first, 19 Sep: cdp.rs's six tests, including a_stalled_reply_is_refused_naming_the_step, were written before the client and wired into showreel's lib, and failed to compile with 8 errors (split_messages and Session not found); cargo test exit 101. Green, WP-02, 19 Sep, rustc 1.98.1: cdp.rs's 10 tests pass, the six red ones unchanged but for one import the finished module made redundant; with record.rs's 8, base64::decode's 3 and file_url's moved test, the workspace passes 323 (artifact 34, prez 136, manifest 5, showreel 148), and clippy -D warnings and rustfmt are clean. Against Chrome 153, a 16 s reel at 10 fps gave 160 frames byte-identical at full speed and at a 0.02 s nap per frame, every frame from 1 on within 0.1 ms of t0 + 100i; a refused frame and a SIGINT each left no process and no directory behind.
 
 ### Group AT29
 

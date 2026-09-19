@@ -7,7 +7,8 @@
 //
 // **WHICH browser is found is not decided here.** `artifact::browser::find` is
 // the one finder, shared with showreel's `video` (ST0021 AC-01.1), so the probe
-// order and the refusal that lists every path tried live there.
+// order and the refusal that lists every path tried live there. So does
+// `file_url`, the address both tools hand a browser a file by.
 
 use crate::html;
 use crate::Failure;
@@ -45,7 +46,7 @@ pub fn print_to_pdf(
     .arg("--no-pdf-header-footer")
     .arg("--virtual-time-budget=5000")
     .arg(format!("--print-to-pdf={}", out.display()))
-    .arg(file_url(artifact))
+    .arg(browser::file_url(artifact))
     .output()
     .map_err(|e| {
       Failure::new(
@@ -219,7 +220,7 @@ pub fn window_size(spec: Option<&str>) -> Result<(u32, u32), Failure> {
 /// only the argv can.
 pub fn presenting_argv(artifact: &Path, width: u32, height: u32) -> Vec<String> {
   vec![
-    format!("--app={}", file_url(artifact)),
+    format!("--app={}", browser::file_url(artifact)),
     format!("--window-size={width},{height}"),
     "--new-window".to_string(),
     // See the headless path above: the first-run panel is a modal, and it
@@ -303,25 +304,6 @@ fn code(status: &std::process::ExitStatus) -> String {
     .map_or_else(|| "signal".to_string(), |c| c.to_string())
 }
 
-/// A `file://` URL for an absolute path.
-///
-/// Percent-encoded conservatively: a deck living under a directory with a space
-/// in it is the normal case on a Mac, and an unencoded space truncates the URL
-/// at the space with no error from the browser.
-fn file_url(path: &Path) -> String {
-  let absolute = path.canonicalize().unwrap_or_else(|_| path.to_path_buf());
-  let mut url = String::from("file://");
-  for byte in absolute.to_string_lossy().bytes() {
-    match byte {
-      b'A'..=b'Z' | b'a'..=b'z' | b'0'..=b'9' | b'/' | b'-' | b'.' | b'_' | b'~' => {
-        url.push(byte as char)
-      }
-      _ => url.push_str(&format!("%{byte:02X}")),
-    }
-  }
-  url
-}
-
 #[cfg(test)]
 mod tests {
   use super::*;
@@ -390,7 +372,8 @@ mod tests {
   }
 
   // The browser-discovery tests (AC06's negative half, and the refusal that
-  // lists every path tried) moved with the finder to artifact::browser.
+  // lists every path tried) moved with the finder to artifact::browser, and the
+  // file-URL test moved there with file_url (ST0021 WP-02).
 
   #[test]
   fn page_count_reads_pages_and_ignores_the_pages_tree_node() {
@@ -437,13 +420,5 @@ mod tests {
     let warnings = verify_pagination(&pdf, 6);
     assert_eq!(warnings.len(), 1);
     assert!(warnings[0].contains("unverified"), "{warnings:?}");
-  }
-
-  #[test]
-  fn a_file_url_survives_a_path_with_spaces() {
-    let url = file_url(Path::new("/tmp/a deck/talk.html"));
-    assert!(url.starts_with("file:///"), "{url}");
-    assert!(url.contains("a%20deck"), "{url}");
-    assert!(!url.contains(' '), "{url}");
   }
 }

@@ -88,16 +88,20 @@ What it found, in the order it was found:
   - A `/bin/sh` wrapper wires fds 3 and 4, as the spike did, so only the standard library is used. The workspace is Unix-only by hv's ruling on ST0020.
   - The wrapper does not `exec`. It waits for Chrome, and its `EXIT` trap removes the profile directory (see "Shutdown").
 - **CDP** is NUL-terminated JSON, read and written with serde_json, which showreel already depends on. `tests/manifest.rs` does not move.
+- **Where it lives, as built (WP-02).** `crates/showreel/src/cdp.rs` is the pipe: a reader thread, the watchdog and the refusals. `record.rs` is Chrome, the clock and the shutdown. `clock.js` sits beside `player.html` and is embedded the same way.
 - **The clock:**
   - CDP virtual time drives the JS side.
   - The injected script drives CSS and rAF (finding 4). It is embedded with `include_str!`, as `player.html` is.
+  - **As built, the harness hands each tick its frame's scheduled time**, and the script sets every animation from that number rather than from a clock read. Chrome jitters `performance.now()`, so a rounded read could round two runs differently at some frame rates. The script still rounds the one read it makes, when a timer starts an animation, because timers fire on whole virtual milliseconds.
   - The load runs in 1 ms slices until the load event (finding 1).
 - **Frames are anchored on the reel's own start** (finding 9):
   - After the load, the harness reads the page time at which the player showed its first slide (the player's `t0`) and the page's current time.
   - It then steps so that frame i is taken at page time `t0 + i x 1000/fps`.
-  - Only frame 0 is off that grid. It is taken when the load finishes, and the report states how late (10 ms on the spike).
+  - Only frame 0 is off that grid. It is taken when the load has settled, and the report states how late: 11 ms on the spike's reel.
+  - **The load is settled by one 1 ms advance before the page's time is read** (measured in WP-02 on Chrome 153). Once loaded, the page read 2 ms, and a first advance of 1, 5, 20 or 98 ms landed at 11, 15, 30 or 108: 8 ms past the page's own clock. Every advance after the first landed exactly. 300 frames of 30 fps budgets ended on 10011 ms, 11 + 10000, and a 10 fps recording put every frame from 1 on within 0.1 ms of `t0 + 100i`.
+  - **Budgets are whole microseconds plus a quarter.** Chrome converts a budget to whole microseconds. Adding a quarter of one lands the conversion on the intended microsecond whether Chrome truncates or rounds, so a long reel cannot drift off its grid.
 - **The duration comes from the player.** The harness reads the player's own schedule from the page, `dwellOf` over every slide, so the reel's timing keeps one home. Frames = floor(duration x fps). The reel plays once (`?noloop`), so the last frame falls before the player's end-of-reel flash.
-- **Every image is decoded before every screenshot.** The tick awaits `decode()` on every `<img>` in the document, so a large photo cannot be captured half-drawn (vc's note 4, closed by construction). Before frame 0, the harness also waits for `document.fonts.ready`.
+- **Every image is decoded before every screenshot.** The tick awaits `decode()` on every `<img>` in the document, so a large photo cannot be captured half-drawn (vc's note 4, closed by construction). A picture that fails to decode is refused, naming the frame. Before frame 0, the harness also waits for `document.fonts.ready`.
 - **Screenshots** are PNG. `artifact`'s base64 gains the decode half of what it already encodes.
 - **Every wait has a real-time watchdog** that names the step that stalled, eg `no reply from Chrome in 30 s, during frame 63: screenshot`.
 
@@ -107,7 +111,9 @@ What it found, in the order it was found:
 
 - **Chrome's process group.** The wrapper and Chrome run in their own process group (`CommandExt::process_group(0)`, standard library). Shutdown is `Browser.close`, then, after a grace period, `kill -KILL -- -<pgid>` on that group alone.
 - **The profile directory** is removed by the harness on every path it runs, normal or failed. After an interrupt, which runs no Rust code, Chrome exits when its pipe closes, and the wrapper's `EXIT` trap removes the directory.
-- **Chrome's stderr** is captured to the temporary directory and shown when a recording fails, never spilled into the terminal.
+- **Chrome's stderr** is read into memory, its last 4 KB kept, and shown with a refusal, never on success and never spilled into the terminal. As built it is not a file in the temporary directory, as this line first said: an interrupt would have left that file behind, and the trap would have removed it before a failure could show it.
+- **Chrome's own `TMPDIR`** points inside the temporary directory, so its temporary files go with the profile.
+- **Measured in WP-02 on Chrome 153.** Every Chrome process, the main one and its ten helpers, ran in the wrapper's process group. A recording refused mid-way, and one interrupted with SIGINT, each left no process and no directory. After the interrupt, Chrome exited on its closed pipe and the trap ran within 2 s. After a clean close, the group's only member is the exited, unreaped wrapper, and `kill` of it reports EPERM on macOS, which is not reported. Checked directly: a live group is killed, a zombie-only group gives EPERM, and a reaped one gives ESRCH.
 
 ### The encode
 

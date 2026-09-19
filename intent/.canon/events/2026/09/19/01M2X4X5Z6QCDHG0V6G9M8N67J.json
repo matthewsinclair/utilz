@@ -1,0 +1,17 @@
+{
+  "id": "01M2X4X5Z6QCDHG0V6G9M8N67J",
+  "ts": "2026-09-19T15:35:08.006Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "0040 landed at d9d98d2 for verification: opt/prez/crate/test/lib/harness.sh holds both suites' helpers, moved unchanged, and fails loudly (missing: exit 1 naming the file; run with bash: exit 2). Under bash 3.2.57 both suites gave the same verdict and check count for every AT before and after: acceptance 14 of 14 (0 skipped, 0 n/a), theme-addressing 20 of 20. Each of the 18 helpers is defined once; shellcheck -x finds 0 in the harness and the same 16 in the suites as HEAD. 0040 is closed with its Resolution. Next is WP-02: AT28 red then green, then video.sh red-first. WP-02's video ATs (AT23-27) run through WP-03's verb, so those two WPs close together.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

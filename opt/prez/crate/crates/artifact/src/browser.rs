@@ -9,6 +9,10 @@
 // then the same family by PATH name. When none is found the refusal LISTS EVERY
 // PATH TRIED, because "no browser found" on a machine with four browsers
 // installed is a report the user cannot act on.
+//
+// `file_url` is here for the same reason: it is the address every one of those
+// tools hands the browser its file by, and it moved from prez's drive.rs,
+// unchanged, when showreel's `video` became its second caller.
 
 use crate::Failure;
 use std::path::{Path, PathBuf};
@@ -82,6 +86,25 @@ fn on_path(name: &str) -> Option<PathBuf> {
     .find(|p| p.is_file())
 }
 
+/// A `file://` URL for an absolute path.
+///
+/// Percent-encoded conservatively: a deck living under a directory with a space
+/// in it is the normal case on a Mac, and an unencoded space truncates the URL
+/// at the space with no error from the browser.
+pub fn file_url(path: &Path) -> String {
+  let absolute = path.canonicalize().unwrap_or_else(|_| path.to_path_buf());
+  let mut url = String::from("file://");
+  for byte in absolute.to_string_lossy().bytes() {
+    match byte {
+      b'A'..=b'Z' | b'a'..=b'z' | b'0'..=b'9' | b'/' | b'-' | b'.' | b'_' | b'~' => {
+        url.push(byte as char)
+      }
+      _ => url.push_str(&format!("%{byte:02X}")),
+    }
+  }
+  url
+}
+
 #[cfg(test)]
 mod tests {
   use super::*;
@@ -117,5 +140,13 @@ mod tests {
         APP_PATHS.len() + PATH_NAMES.len()
       );
     }
+  }
+
+  #[test]
+  fn a_file_url_survives_a_path_with_spaces() {
+    let url = file_url(Path::new("/tmp/a deck/talk.html"));
+    assert!(url.starts_with("file:///"), "{url}");
+    assert!(url.contains("a%20deck"), "{url}");
+    assert!(!url.contains(' '), "{url}");
   }
 }

@@ -18,6 +18,7 @@
 
 pub mod admit;
 pub mod build;
+pub mod cdp;
 pub mod config;
 pub mod deliver;
 pub mod duration;
@@ -25,6 +26,7 @@ pub mod limits;
 pub mod normalise;
 pub mod payload;
 pub mod plan;
+pub mod record;
 pub mod segment;
 pub mod slide;
 pub mod stamp;
