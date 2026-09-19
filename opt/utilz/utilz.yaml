@@ -23,7 +23,8 @@ optional_dependencies:
   - name: bat
     install: brew install bat
     purpose: Fallback markdown syntax highlighting for help
-  - name: bats-core
+  # `name` is the command doctor looks for, and bats-core's command is `bats`.
+  - name: bats
     install: brew install bats-core
     purpose: Run test suite with 'utilz test'
 

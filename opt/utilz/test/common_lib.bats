@@ -491,6 +491,84 @@ beta"
   [ "$verdict" -lt "$step7" ] || fail "the dependency verdict prints at line $verdict, after [7/7] at line $step7"
 }
 
+# **A DECLARED OPTIONAL DEPENDENCY IS REPORTED FROM ITS YAML** (issue 0041).
+# Until 2026-09-19 check 6 read `.dependencies` alone, so no utility's
+# `optional_dependencies` was ever read, and an entry marked `required: false`
+# was reported as a missing requirement. The fake home's yamls declare nothing
+# by default, so each test appends what it needs.
+declare_optional() {
+  local yaml="$1" name="$2"
+  cat >> "$yaml" <<YAML
+optional_dependencies:
+  - name: $name
+    install: brew install $name
+    purpose: A tool no machine has
+YAML
+}
+
+@test "doctor reports a missing optional dependency from its yaml, and its verdict does not move (issue 0041)" {
+  local home before_status before_found
+  home="$(make_fake_home)"
+  run_in_fake_home "$home" run_doctor
+  before_status=$status
+  before_found=$(printf '%s\n' "$output" | grep -o 'Found [0-9]* issue' || true)
+
+  declare_optional "$home/opt/alpha/alpha.yaml" zz-absent-0041
+  run_in_fake_home "$home" run_doctor
+  [ "$status" -eq "$before_status" ] || fail "doctor's status moved from $before_status to $status"
+  [ "$(printf '%s\n' "$output" | grep -o 'Found [0-9]* issue' || true)" = "$before_found" ] ||
+    fail "doctor's issue count moved: $output"
+  assert_output_contains "Optional: 'zz-absent-0041' is not installed: A tool no machine has (declared by alpha)"
+  assert_output_contains "brew install zz-absent-0041"
+  refute_output_contains "Missing dependencies: zz-absent-0041"
+}
+
+@test "doctor draws no line for an optional dependency that is installed (issue 0041)" {
+  local home
+  home="$(make_fake_home)"
+  declare_optional "$home/opt/alpha/alpha.yaml" sh
+  run_in_fake_home "$home" run_doctor
+  refute_output_contains "'sh' is not installed"
+}
+
+@test "an optional dependency two utilities declare is reported once, naming both (issue 0041)" {
+  local home lines
+  home="$(make_fake_home)"
+  declare_optional "$home/opt/alpha/alpha.yaml" zz-absent-0041
+  declare_optional "$home/opt/beta/beta.yaml" zz-absent-0041
+  run_in_fake_home "$home" run_doctor
+  lines=$(printf '%s\n' "$output" | grep -c "'zz-absent-0041' is not installed" || true)
+  [ "$lines" -eq 1 ] || fail "reported $lines times: $output"
+  assert_output_contains "(declared by alpha, beta)"
+}
+
+@test "a dependency marked required: false is optional, and an unmarked one is still required (issue 0041)" {
+  local home
+  home="$(make_fake_home)"
+  cat > "$home/opt/beta/beta.yaml" <<YAML
+name: beta
+version: 1.0.0
+utilz_version: "^2.0.0"
+description: Fake beta for tests
+dependencies:
+  - name: zz-optional-0041
+    required: false
+    install: brew install zz-optional-0041
+    purpose: A choice beta can live without
+  - name: zz-required-0041
+    install: brew install zz-required-0041
+YAML
+  run_in_fake_home "$home" run_doctor
+  assert_output_contains "Optional: 'zz-optional-0041' is not installed: A choice beta can live without (declared by beta)"
+  assert_output_contains "Missing dependencies: zz-required-0041"
+  refute_output_contains "zz-optional-0041 (required by"
+}
+
+@test "without yq, doctor says the optional declarations went unread (issue 0041)" {
+  run_without_yq run_doctor
+  assert_output_contains "Optional dependencies not checked"
+}
+
 @test "get_util_metadata() returns non-zero for a missing yaml file" {
   run run_common_function get_util_metadata no-such-utility-xyz '".description"'
   assert_failure

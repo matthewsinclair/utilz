@@ -1,0 +1,15 @@
+{
+  "id": "01M2XC8NAB12ANR2KS2ATKSH2G",
+  "ts": "2026-09-19T17:43:44.204Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "issues.add",
+  "subject": {
+    "type": "issue",
+    "id": "0041"
+  },
+  "payload": {
+    "severity": "low",
+    "title": "doctor honours no optional dependency that a utility declares"
+  }
+}

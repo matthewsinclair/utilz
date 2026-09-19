@@ -452,6 +452,20 @@ each_utility() {
 # DOCTOR COMMAND
 # ============================================================================
 
+# One missing optional dependency, as check 6 reports it: info, never a
+# failure, with the install line and purpose its declarers' yaml gives.
+_doctor_optional() {
+  local name="$1" install="$2" purpose="$3" declarers="$4"
+  local why=""
+  if [[ -n "$purpose" && "$purpose" != "null" ]]; then
+    why=": $purpose"
+  fi
+  info "Optional: '$name' is not installed$why (declared by $declarers)"
+  if [[ -n "$install" && "$install" != "null" ]]; then
+    echo -e "    $install"
+  fi
+}
+
 run_doctor() {
   echo -e "${BOLD}Utilz Doctor - System Diagnostics${RESET}"
   echo -e "=================================="
@@ -634,7 +648,8 @@ run_doctor() {
   echo -e "${BOLD}[6/7]${RESET} Checking external dependencies..."
   local missing_deps=()
   local missing_dep_info=()
-  local yaml_file dep_count dep_name dep_install i
+  local optional_missing=()
+  local yaml_file dep_count dep_name dep_install dep_purpose dep_required i
 
   # yq is reported by hand, and first: it is the framework's own hard
   # dependency and the only YAML parser, so nothing below can read a single
@@ -644,6 +659,12 @@ run_doctor() {
     # utilz is in this walk, unlike the checks above -- opt/utilz/utilz.yaml
     # declares its own dependencies, and one that no check ever reads is a
     # declaration in name only.
+    #
+    # AND THE OPTIONAL HALF IS READ AS WELL (issue 0041). Until 2026-09-19 this
+    # walk read `.dependencies` alone: no `optional_dependencies` declaration
+    # was ever read, and an entry marked `required: false` was reported as a
+    # missing requirement. A missing optional dependency is info, with the
+    # yaml's own install line and purpose, and it never moves the verdict.
     while IFS= read -r name; do
       yaml_file="$UTILZ_HOME/opt/$name/$name.yaml"
       if [[ ! -f "$yaml_file" ]]; then
@@ -651,47 +672,78 @@ run_doctor() {
       fi
 
       dep_count=$(yq eval '.dependencies | length' "$yaml_file" 2>/dev/null)
-      if [[ "$dep_count" == "null" || "$dep_count" == "0" ]]; then
-        continue
+      if [[ "$dep_count" =~ ^[0-9]+$ ]]; then
+        for ((i = 0; i < dep_count; i++)); do
+          dep_name=$(yq eval ".dependencies[$i].name" "$yaml_file" 2>/dev/null)
+          if check_command "$dep_name"; then
+            continue
+          fi
+          dep_install=$(yq eval ".dependencies[$i].install" "$yaml_file" 2>/dev/null)
+          dep_required=$(yq eval ".dependencies[$i].required" "$yaml_file" 2>/dev/null)
+          if [[ "$dep_required" == "false" ]]; then
+            dep_purpose=$(yq eval ".dependencies[$i].purpose" "$yaml_file" 2>/dev/null)
+            optional_missing+=("$dep_name|$dep_install|$dep_purpose|$name")
+          else
+            missing_deps+=("$dep_name")
+            missing_dep_info+=("$dep_name|$dep_install|$name")
+          fi
+        done
       fi
 
-      for ((i = 0; i < dep_count; i++)); do
-        dep_name=$(yq eval ".dependencies[$i].name" "$yaml_file" 2>/dev/null)
-        dep_install=$(yq eval ".dependencies[$i].install" "$yaml_file" 2>/dev/null)
-
-        if ! check_command "$dep_name"; then
-          missing_deps+=("$dep_name")
-          missing_dep_info+=("$dep_name|$dep_install|$name")
-        fi
-      done
+      dep_count=$(yq eval '.optional_dependencies | length' "$yaml_file" 2>/dev/null)
+      if [[ "$dep_count" =~ ^[0-9]+$ ]]; then
+        for ((i = 0; i < dep_count; i++)); do
+          dep_name=$(yq eval ".optional_dependencies[$i].name" "$yaml_file" 2>/dev/null)
+          if check_command "$dep_name"; then
+            continue
+          fi
+          dep_install=$(yq eval ".optional_dependencies[$i].install" "$yaml_file" 2>/dev/null)
+          dep_purpose=$(yq eval ".optional_dependencies[$i].purpose" "$yaml_file" 2>/dev/null)
+          optional_missing+=("$dep_name|$dep_install|$dep_purpose|$name")
+        done
+      fi
     done < <(printf '%s\n' "utilz"; each_utility)
+
+    # ONE LINE PER NAME, naming every utility that declares it: glow is
+    # declared by utilz and by mdagg, and saying so twice would read as two
+    # problems. The sort is stable, so the first declarer's install line and
+    # purpose are the ones shown.
+    if [[ ${#optional_missing[@]} -gt 0 ]]; then
+      local last="" shown_install="" shown_purpose="" declarers="" used_by
+      while IFS='|' read -r dep_name dep_install dep_purpose used_by; do
+        if [[ "$dep_name" == "$last" ]]; then
+          declarers="$declarers, $used_by"
+          continue
+        fi
+        if [[ -n "$last" ]]; then
+          _doctor_optional "$last" "$shown_install" "$shown_purpose" "$declarers"
+        fi
+        last="$dep_name"
+        shown_install="$dep_install"
+        shown_purpose="$dep_purpose"
+        declarers="$used_by"
+      done < <(printf '%s\n' "${optional_missing[@]}" | sort -s -t'|' -k1,1)
+      _doctor_optional "$last" "$shown_install" "$shown_purpose" "$declarers"
+    fi
   else
     error "yq is not installed; it is required to parse utility metadata"
     missing_deps+=("yq")
     missing_dep_info+=("yq|brew install yq|utilz")
+    # Said, not skipped: without yq no declaration can be read, and a silence
+    # here would read as "nothing optional is missing".
+    info "Optional dependencies not checked: their declarations cannot be read without yq"
   fi
 
-  # Check for glow (nice-to-have for help)
-  if ! check_command "glow"; then
-    info "Optional: Install 'glow' for beautiful markdown rendering"
-    echo -e "    brew install glow"
-  fi
-
-  # Check for exiftool (optional for cleanz --image mode)
+  # Check for exiftool (optional for cleanz --image mode). Hand-written, unlike
+  # glow and rsync, because no utility's yaml declares it (issue 0041).
   if ! check_command "exiftool"; then
     info "Optional: Install 'exiftool' for cleanz image metadata stripping"
     echo -e "    brew install exiftool"
   fi
 
-  # Check for rsync (required for syncz)
-  if ! check_command "rsync"; then
-    info "Required: Install 'rsync' for syncz directory syncing"
-    echo -e "    Pre-installed on most systems; brew install rsync (macOS)"
-  fi
-
   # Check for cargo, but ONLY when this checkout actually carries a Rust crate.
   #
-  # Unlike glow/exiftool/rsync above, this one is conditional: cargo is a
+  # Unlike exiftool above, this one is conditional: cargo is a
   # BUILD-time need of whichever utilities ship a crate, and reporting it on a
   # checkout with no Rust in it would be advice about nothing. The condition is
   # the same convention the test runner and CI use -- opt/<name>/crate/Cargo.toml
