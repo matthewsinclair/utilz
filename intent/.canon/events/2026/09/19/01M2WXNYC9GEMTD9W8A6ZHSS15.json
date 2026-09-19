@@ -1,0 +1,15 @@
+{
+  "id": "01M2WXNYC9GEMTD9W8A6ZHSS15",
+  "ts": "2026-09-19T13:28:50.825Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "todo",
+    "text": "ST0019's design, after the release: the Utilz parts only (its version files, the CI build of prez, the Homebrew formula), answering questions 1-3, with 5 and 6 handed to Devbin 0064 through vc. THE 14 SEP RESEARCH is always recoverable from that session's transcript, 14d6f67d-9238-483a-bd2e-80345ed85383.jsonl, where all three files are single Write calls; the precedents survey describes private repos, so it stays out of this repo. If the video export needs Chrome and ffmpeg at run time, the formula's dependencies follow from it."
+  }
+}

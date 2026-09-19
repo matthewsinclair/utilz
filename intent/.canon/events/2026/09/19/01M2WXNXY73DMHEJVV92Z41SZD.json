@@ -1,0 +1,15 @@
+{
+  "id": "01M2WXNXY73DMHEJVV92Z41SZD",
+  "ts": "2026-09-19T13:28:50.375Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "todo",
+    "text": "The 2.10.0 release commit, once the video export lands, prepared as ebd0243 was: VERSION 2.9.0 to 2.10.0, prez's Cargo.toml and Cargo.lock at 2.2.0, and a CHANGELOG entry checked against every product file changed since 2.9.0. vc gives the GO, and hv tags and pushes."
+  }
+}

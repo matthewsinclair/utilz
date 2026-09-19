@@ -1,0 +1,15 @@
+{
+  "id": "01M2WXNXDEDB5HSH813JA5JGHP",
+  "ts": "2026-09-19T13:28:49.838Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "doing",
+    "text": "showreel's video export (.mov or .mp4) for 2.10.0 (hv's board, decisions 5 and 6: the release waits for it, and hv is open to every route and dependency). A new thread, doc before code: design.md to vc before any code, carrying the options and the questions for hv, and the lift sized as work packages plus the one unknown that moves the size. Route A (record player.html in headless Chrome, encode with ffmpeg) keeps one renderer; B (composite in Rust) meets prez's spec 6, no rendering of its own; C (ffmpeg filters) is a second renderer. THE UNKNOWN IS THE CLOCK: whether CDP virtual time over --remote-debugging-pipe steps the player's timers, rAF and CSS animations frame by frame, or the player needs a seekable clock. A scratch spike answers it before the size is written. vc's step-2 review (19 Sep) is the checklist: dependencies per route, the proof of fidelity, and a regression check if the player changes."
+  }
+}
