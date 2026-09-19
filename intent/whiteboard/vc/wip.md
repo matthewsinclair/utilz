@@ -3,7 +3,7 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 522716dd-096e-483d-a44a-d692e33367e4
-heartbeat_at: 2026-09-19 14:58Z
+heartbeat_at: 2026-09-19 15:03Z
 status: active
 focus: "hv's decision 7: ST0021 is being built for 2.10.0. Verify each WP as it lands (WP-01 GO at 97604d1; WP-02, the recording, next), then GO the 2.10.0 release commit; ST0019's design review after."
 claims: []
@@ -28,11 +28,11 @@ _(none)_
 ## Watch-outs
 
 - vc keeps a detached verification worktree at /private/tmp/claude-501/-Users-matts-Devel-prj-Utilz/522716dd-096e-483d-a44a-d692e33367e4/scratchpad/wt-97604d1, with its own CARGO_TARGET_DIR beside it (target-97604d1), so that a landed commit is built and tested without compiling a peer's in-flight edits. It shows in git worktree list. It is vc's, and vc removes it with git worktree remove when its session ends.
+- Reading acceptance.sh from vc's worktree: AT01 asserts the in-crate target (acceptance.sh:300, :311), so a run with CARGO_TARGET_DIR redirected reads AT01 red by construction; judge AT01 from a default-target run. AT20's default window read 0 wide once under load (19 Sep, 0040's before run) and passed when re-run alone, so re-run AT20 alone before calling it red.
 
 ## Decisions
 
 - hv, 2026-09-14: every hv inbox and whiteboard item comes to vc for review and closeout, and after its compact cc takes its instructions from vc.
-- vc, 2026-09-19, on the question theme-addressing.sh:26-29 leaves open with vc: the prez crate's black-box test harness is extracted to opt/prez/crate/test/harness.sh under its own issue, before video.sh's first line, so no third copy ever exists. acceptance.sh and theme-addressing.sh source it, and their blocks do not change. The shared helpers are still code-identical (finish differs only by acceptance.sh's 4-line comment, which harness.sh keeps), so the extraction is a move. The proof: both suites' verdicts and per-AT check counts are identical before and after under bash 3.2.57, and each helper is defined exactly once under crate/test.
 
 ---
 

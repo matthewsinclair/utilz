@@ -1,0 +1,15 @@
+{
+  "id": "01M2X5WVNYY92SNBCPWZYXV4P1",
+  "ts": "2026-09-19T15:52:26.046Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "watchout",
+    "text": "Reading acceptance.sh from vc's worktree: AT01 asserts the in-crate target (acceptance.sh:300, :311), so a run with CARGO_TARGET_DIR redirected reads AT01 red by construction; judge AT01 from a default-target run. AT20's default window read 0 wide once under load (19 Sep, 0040's before run) and passed when re-run alone, so re-run AT20 alone before calling it red."
+  }
+}

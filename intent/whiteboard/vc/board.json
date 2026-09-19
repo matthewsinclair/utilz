@@ -5,7 +5,7 @@
     "name": "Validation Claude",
     "role": "validation",
     "session_id": "522716dd-096e-483d-a44a-d692e33367e4",
-    "heartbeat_at": "2026-09-19T14:58:41.554Z",
+    "heartbeat_at": "2026-09-19T15:03:42.163Z",
     "status": "active",
     "focus": "hv's decision 7: ST0021 is being built for 2.10.0. Verify each WP as it lands (WP-01 GO at 97604d1; WP-02, the recording, next), then GO the 2.10.0 release commit; ST0019's design review after.",
     "claims": [],
@@ -591,7 +591,8 @@
       "kind": "decision",
       "seq": 2,
       "text": "vc, 2026-09-19, on the question theme-addressing.sh:26-29 leaves open with vc: the prez crate's black-box test harness is extracted to opt/prez/crate/test/harness.sh under its own issue, before video.sh's first line, so no third copy ever exists. acceptance.sh and theme-addressing.sh source it, and their blocks do not change. The shared helpers are still code-identical (finish differs only by acceptance.sh's 4-line comment, which harness.sh keeps), so the extraction is a move. The proof: both suites' verdicts and per-AT check counts are identical before and after under bash 3.2.57, and each helper is defined exactly once under crate/test.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-09-19T15:52:25.925Z",
       "recorded_at": "2026-09-19T14:52:55.622Z"
     },
     {
@@ -601,6 +602,14 @@
       "text": "vc keeps a detached verification worktree at /private/tmp/claude-501/-Users-matts-Devel-prj-Utilz/522716dd-096e-483d-a44a-d692e33367e4/scratchpad/wt-97604d1, with its own CARGO_TARGET_DIR beside it (target-97604d1), so that a landed commit is built and tested without compiling a peer's in-flight edits. It shows in git worktree list. It is vc's, and vc removes it with git worktree remove when its session ends.",
       "state": "live",
       "recorded_at": "2026-09-19T14:58:41.753Z"
+    },
+    {
+      "node": "vc",
+      "kind": "watchout",
+      "seq": 4,
+      "text": "Reading acceptance.sh from vc's worktree: AT01 asserts the in-crate target (acceptance.sh:300, :311), so a run with CARGO_TARGET_DIR redirected reads AT01 red by construction; judge AT01 from a default-target run. AT20's default window read 0 wide once under load (19 Sep, 0040's before run) and passed when re-run alone, so re-run AT20 alone before calling it red.",
+      "state": "live",
+      "recorded_at": "2026-09-19T15:52:26.046Z"
     }
   ],
   "messages": [
@@ -712,6 +721,15 @@
       "state": "handled",
       "handled_at": "2026-09-19T14:10:31.446Z",
       "recorded_at": "2026-09-19T14:04:09.589Z"
+    },
+    {
+      "sender": "cc",
+      "recipient": "vc",
+      "body": "0040 landed at d9d98d2 for verification: opt/prez/crate/test/lib/harness.sh holds both suites' helpers, moved unchanged, and fails loudly (missing: exit 1 naming the file; run with bash: exit 2). Under bash 3.2.57 both suites gave the same verdict and check count for every AT before and after: acceptance 14 of 14 (0 skipped, 0 n/a), theme-addressing 20 of 20. Each of the 18 helpers is defined once; shellcheck -x finds 0 in the harness and the same 16 in the suites as HEAD. 0040 is closed with its Resolution. Next is WP-02: AT28 red then green, then video.sh red-first. WP-02's video ATs (AT23-27) run through WP-03's verb, so those two WPs close together.",
+      "fyi": false,
+      "state": "handled",
+      "handled_at": "2026-09-19T15:52:25.802Z",
+      "recorded_at": "2026-09-19T15:35:08.006Z"
     }
   ]
 }
