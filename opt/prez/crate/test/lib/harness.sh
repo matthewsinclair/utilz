@@ -160,3 +160,88 @@ ordered() {
 unwritten() {
   if [ -e "$2" ]; then bad "$1: $2 was written"; else ok "$1 (nothing written)"; fi
 }
+
+# chrome() CAME HERE FROM acceptance.sh WITH ST0021, UNCHANGED, because video.sh
+# needs the same answer to the same question: which browser does the one finder
+# resolve? It asks $BIN, so every suite that calls it sets BIN to the prez
+# binary. It stays the harness's last definition, so a clean load of this file
+# returns 0 to the stanza that sources it.
+# ASKS THE TOOL. Does not mirror it. (AC18a, WP-07's browser half, 7 Sep.)
+#
+# This function used to hand-copy src/drive.rs's APP_PATHS and PATH_NAMES, and
+# the copy was wrong: drive.rs gained the six PATH names and this did not, so
+# on Linux the TOOL found a browser and the HARNESS did not -- five ATs
+# degraded to skips and --strict turned a correct build RED while the message
+# said "no Chrome or Chromium installed" about a browser the tool under test
+# was happily driving. Invisible on macOS, where both were only ever run.
+#
+# `prez browser` is the door that lets this ask. It takes no deck, prints the
+# path pdf and present would drive, and refuses through drive::find's own
+# refusal -- the one that names every path probed. There is now ONE list, in
+# Rust, and the check that this stayed true is AT15(a): the harness must hold
+# no browser literal at all, which is greppable, unlike "the two lists agree".
+#
+# The other candidate -- have the refusal name its list unconditionally -- was
+# rejected in design section 12: a refusal only fires when nothing is found,
+# which cannot be provoked on a machine that HAS a browser, and that is every
+# machine this runs on bar CI's browserless leg.
+chrome() {
+  local found=""
+
+  # THE OVERRIDE (AC18b), checked BEFORE asking so it wins outright:
+  #   PREZ_TEST_BROWSER=/nonexistent      -> no browser; every browser AT skips
+  #   PREZ_TEST_BROWSER=/path/to/chromium -> drive exactly that one
+  #
+  # Without it the browserless path CANNOT BE EXERCISED on a machine that has
+  # Chrome, so the control proving --strict matters is a control that can never
+  # go red -- the exact class this file is written against, sitting in the file
+  # itself. It stays ahead of the tool because its job is to force an answer
+  # the tool would not give.
+  #
+  # A set-but-not-executable value returns 1 rather than falling through.
+  # Falling through would make "force the refusal path" mean "force it unless
+  # this machine happens to have Chrome", which is the thing being fixed.
+  if [ -n "${PREZ_TEST_BROWSER:-}" ]; then
+    if [ -x "$PREZ_TEST_BROWSER" ]; then
+      found="$PREZ_TEST_BROWSER"
+    else
+      # SAY WHY. The call sites all skip with "no Chrome or Chromium
+      # installed", which is FALSE when the override caused it -- and a skip
+      # carrying the wrong reason is the class AC18 is about, so producing one
+      # here to test for it would be its own joke.
+      printf 'note: PREZ_TEST_BROWSER=%s is not executable, so no browser is offered.\n' \
+        "$PREZ_TEST_BROWSER" >&2
+      return 1
+    fi
+  elif [ ! -x "$BIN" ]; then
+    # A MISSING BINARY IS NOT A MISSING BROWSER. Without this the call sites
+    # skip saying "no Chrome or Chromium installed" when the truth is that the
+    # build failed -- a skip with a false reason, which is precisely what AC18
+    # exists to forbid. The build at the top of this file swallows its output,
+    # so this is the first place that can tell.
+    printf 'note: %s is not executable, so the tool cannot be asked which browser it resolves.\n' \
+      "$BIN" >&2
+    return 1
+  else
+    # Relay the tool's OWN refusal rather than inventing one: it names every
+    # path it probed, which is a report the caller can act on.
+    if ! found="$("$BIN" browser 2>&1)"; then
+      printf '%s\n' "$found" >&2
+      return 1
+    fi
+  fi
+
+  [ -n "$found" ] || return 1
+
+  # ANNOUNCE ON RESOLVE (AC17), at ONE site.
+  #
+  # This function announced loudly when it REFUSED and said nothing when it
+  # resolved and handed a browser to four ATs to launch -- the louder half was
+  # the harmless half, so the same command gave 12/0/0 in one shell and
+  # 9-passed-11-skipped in another with nothing in the output naming the
+  # difference, and an acceptance figure carried no evidence of which mode
+  # produced it. One site rather than three, so the note cannot drift from the
+  # value actually returned.
+  printf 'note: browser resolved to %s\n' "$found" >&2
+  printf '%s' "$found"
+}

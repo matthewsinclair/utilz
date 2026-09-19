@@ -48,14 +48,22 @@ TARGET="${CARGO_TARGET_DIR:-$CRATE/target}"
 BIN="$TARGET/release/prez"
 
 # THE HARNESS IS SHARED (issue 0040, vc's ruling 2026-09-19): every helper this
-# suite calls is defined once, in lib/harness.sh, and a missing harness stops
-# the suite rather than letting it run half-defined.
+# suite calls is defined once, in lib/harness.sh, and a harness that is missing
+# or does not load stops the suite rather than letting it run half-defined.
+# Checking that the file exists is not enough: `.` on a file with a syntax
+# error keeps the definitions above the error and returns 1, and a helper lost
+# that way is "command not found" at its call, which runs neither ok nor bad,
+# so its AT passes (vc's review of 0040). SCRIPTDIR lets shellcheck follow the
+# source from any directory, not only this one.
 if [ ! -f "$HERE/lib/harness.sh" ]; then
   printf '%s: the shared harness is missing: %s\n' "${0##*/}" "$HERE/lib/harness.sh" >&2
   exit 1
 fi
-# shellcheck source=lib/harness.sh
-. "$HERE/lib/harness.sh"
+# shellcheck source=SCRIPTDIR/lib/harness.sh
+. "$HERE/lib/harness.sh" || {
+  printf '%s: the shared harness did not load: %s\n' "${0##*/}" "$HERE/lib/harness.sh" >&2
+  exit 1
+}
 
 # NOTHING IN THIS SUITE CAN SKIP. Every check is unconditional -- no browser, no
 # external tool, no platform predicate -- so SKIPPED stays 0 and --strict is a
