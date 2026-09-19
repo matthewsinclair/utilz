@@ -1,0 +1,15 @@
+{
+  "id": "01M2WX69KNQPQ9D0BDJJGC05W4",
+  "ts": "2026-09-19T13:20:18.037Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "issues.add",
+  "subject": {
+    "type": "issue",
+    "id": "0039"
+  },
+  "payload": {
+    "severity": "low",
+    "title": "install.sh's comment says the source-tree row is resolved physically, and the code resolves it logically"
+  }
+}
