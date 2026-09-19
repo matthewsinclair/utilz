@@ -15,7 +15,7 @@ title: showreel exports a reel as a video file
 
 ### WP-01 -- Browser discovery moves to the artifact crate (status: WIP)
 
-- AC-01.1 Browser discovery has one home, in the `artifact` crate. prez's `pdf` and `present` and showreel's `video` call the same finder, which keeps prez's probe order (`--browser`, then the Chromium family by macOS app path, then by `PATH` name) and its refusal that lists every path tried. prez's existing discovery tests pass from their new home. -- satisfied: no (computed)
+- AC-01.1 Browser discovery has one home, in the `artifact` crate, and prez's `pdf`, `present` and `browser` call it. It keeps prez's probe order (`--browser`, then the Chromium family by macOS app path, then by `PATH` name) and its refusal that lists every path tried, and prez's discovery tests pass from their new home. showreel's `video` calls the same finder, which AC-03.4 checks. -- satisfied: yes (computed)
 
 ### WP-02 -- The recording: Chrome over the pipe, on a clock the harness controls (status: Not Started)
 
@@ -161,7 +161,7 @@ _(no tests in this group)_
 
 ### Group AT35
 
-- AT35 `opt/prez/crate/crates/artifact/src/browser.rs` -- covers AC-01.1 -- status: to-write
+- AT35 `opt/prez/crate/crates/artifact/src/browser.rs` -- covers AC-01.1 -- status: green -- Red first, 19 Sep: the two discovery tests, written in artifact::browser before the code moved, failed to compile with 4 errors (find, APP_PATHS and PATH_NAMES not found); cargo test exit 101. Green, WP-01, 19 Sep, under bash 3.2.57: the two tests pass in artifact::browser (artifact 30 tests, prez 137, 302 in the workspace, as at ST0020's verdict), clippy -D warnings and rustfmt are clean, and utilz test prez passes all 4 suites, with acceptance.sh 14 of 14 on a real browser found by the moved finder.
 
 ---
 

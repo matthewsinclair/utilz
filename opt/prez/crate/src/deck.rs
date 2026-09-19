@@ -26,7 +26,7 @@ fn build(cmd: &Command) -> Result<PathBuf, Failure> {
 }
 
 fn pdf(cmd: &Command) -> Result<(), Failure> {
-  let browser = drive::find(cmd.browser.as_deref())?;
+  let browser = artifact::browser::find(cmd.browser.as_deref())?;
   let out = output_path(cmd, "pdf");
   // The intermediate HTML is a build product of THIS run and belongs in the
   // temp directory: writing it beside the deck would leave a file the user did

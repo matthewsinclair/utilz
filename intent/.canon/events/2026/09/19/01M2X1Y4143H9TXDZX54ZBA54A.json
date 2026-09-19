@@ -1,0 +1,14 @@
+{
+  "id": "01M2X1Y4143H9TXDZX54ZBA54A",
+  "ts": "2026-09-19T14:43:13.060Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.edit",
+  "subject": {
+    "type": "ac",
+    "id": "ST0021/AC-01.1"
+  },
+  "payload": {
+    "text": "Browser discovery has one home, in the `artifact` crate, and prez's `pdf`, `present` and `browser` call it. It keeps prez's probe order (`--browser`, then the Chromium family by macOS app path, then by `PATH` name) and its refusal that lists every path tried, and prez's discovery tests pass from their new home. showreel's `video` calls the same finder, which AC-03.4 checks."
+  }
+}

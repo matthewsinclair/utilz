@@ -5,84 +5,15 @@
 // is a file and the ability to hand that file to something that already knows
 // how to draw it. This module is that handoff and nothing more.
 //
-// The probe order is `--browser`, then the Chromium family by macOS app path,
-// then the same family by PATH name. When none is found the refusal LISTS EVERY
-// PATH TRIED, because "no browser found" on a machine with four browsers
-// installed is a report the user cannot act on.
+// **WHICH browser is found is not decided here.** `artifact::browser::find` is
+// the one finder, shared with showreel's `video` (ST0021 AC-01.1), so the probe
+// order and the refusal that lists every path tried live there.
 
 use crate::html;
 use crate::Failure;
-use std::path::{Path, PathBuf};
+use artifact::browser;
+use std::path::Path;
 use std::process::{Command, Stdio};
-
-/// Where a Chromium-family browser lives on macOS, in preference order.
-const APP_PATHS: &[&str] = &[
-  "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
-  "/Applications/Chromium.app/Contents/MacOS/Chromium",
-  "/Applications/Microsoft Edge.app/Contents/MacOS/Microsoft Edge",
-  "/Applications/Brave Browser.app/Contents/MacOS/Brave Browser",
-];
-
-/// And what it is called on a PATH.
-const PATH_NAMES: &[&str] = &[
-  "google-chrome",
-  "google-chrome-stable",
-  "chromium",
-  "chromium-browser",
-  "microsoft-edge",
-  "brave-browser",
-];
-
-/// Find a browser to drive, or refuse with everything that was tried.
-pub fn find(explicit: Option<&str>) -> Result<PathBuf, Failure> {
-  let mut probed: Vec<String> = Vec::new();
-
-  if let Some(given) = explicit {
-    let path = PathBuf::from(given);
-    if is_runnable(&path) {
-      return Ok(path);
-    }
-    // An explicit --browser that does not exist is a typo, not an invitation to
-    // fall back and silently drive something the user did not name.
-    return Err(Failure::new(
-      format!("--browser '{given}' is not an executable file"),
-      "give the full path to a Chrome, Chromium, Edge or Brave binary",
-    ));
-  }
-
-  for candidate in APP_PATHS {
-    probed.push((*candidate).to_string());
-    let path = PathBuf::from(candidate);
-    if is_runnable(&path) {
-      return Ok(path);
-    }
-  }
-  for name in PATH_NAMES {
-    probed.push(format!("{name} (on PATH)"));
-    if let Some(path) = on_path(name) {
-      return Ok(path);
-    }
-  }
-
-  Err(Failure::new(
-    format!(
-      "no Chromium-family browser found. Probed:\n    {}",
-      probed.join("\n    ")
-    ),
-    "install Chrome, Chromium, Edge or Brave, or name one with --browser PATH",
-  ))
-}
-
-fn is_runnable(path: &Path) -> bool {
-  path.is_file()
-}
-
-fn on_path(name: &str) -> Option<PathBuf> {
-  let paths = std::env::var_os("PATH")?;
-  std::env::split_paths(&paths)
-    .map(|dir| dir.join(name))
-    .find(|p| p.is_file())
-}
 
 /// Print an artifact to PDF through headless Chrome.
 ///
@@ -320,14 +251,14 @@ pub fn open_presenting(
   // plus `f` in the runtime for a fullscreen the browser actually performs and
   // the key bar actually advertises. A flag nobody can observe working is worse
   // than an honest key.
-  if let Ok(browser) = find(explicit) {
-    let mut command = Command::new(&browser);
+  if let Ok(found) = browser::find(explicit) {
+    let mut command = Command::new(&found);
     command.args(presenting_argv(artifact, w, h));
-    return spawn(&mut command, &browser.display().to_string());
+    return spawn(&mut command, &found.display().to_string());
   }
   if explicit.is_some() {
     // A named browser that could not be found is an error, never a fallback.
-    find(explicit)?;
+    browser::find(explicit)?;
   }
 
   // No Chromium anywhere: hand it to the system opener. The deck still
@@ -458,38 +389,8 @@ mod tests {
     );
   }
 
-  #[test]
-  fn an_explicit_browser_that_does_not_exist_is_refused_rather_than_replaced() {
-    // AC06's negative half. Falling back here would drive a browser the user
-    // did not choose while reporting success.
-    let e = find(Some("/nonexistent/browser")).unwrap_err();
-    assert!(e.message.contains("/nonexistent/browser"), "{}", e.message);
-    assert!(e.message.contains("not an executable"), "{}", e.message);
-  }
-
-  #[test]
-  fn a_failed_probe_lists_every_path_it_tried() {
-    // Driven with an empty PATH so the probe cannot succeed on this machine.
-    let original = std::env::var_os("PATH");
-    // SAFETY: single-threaded test process; restored immediately below.
-    unsafe { std::env::set_var("PATH", "") };
-    let refusal = find(None).err().map(|e| e.message);
-    match original {
-      Some(p) => unsafe { std::env::set_var("PATH", p) },
-      None => unsafe { std::env::remove_var("PATH") },
-    }
-
-    // On a machine that HAS Chrome installed the probe legitimately succeeds,
-    // so this asserts the refusal's shape only when there is a refusal.
-    if let Some(message) = refusal {
-      assert!(message.contains("Google Chrome"), "{message}");
-      assert!(message.contains("chromium (on PATH)"), "{message}");
-      assert_eq!(
-        message.matches("\n    ").count(),
-        APP_PATHS.len() + PATH_NAMES.len()
-      );
-    }
-  }
+  // The browser-discovery tests (AC06's negative half, and the refusal that
+  // lists every path tried) moved with the finder to artifact::browser.
 
   #[test]
   fn page_count_reads_pages_and_ignores_the_pages_tree_node() {
