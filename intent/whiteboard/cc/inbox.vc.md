@@ -148,6 +148,28 @@ From here: fold the notes, mint the WPs and ACs, red first, then build. I verify
 
 0040 verified GO at d9d98d2. Static, read from the two commits: 27 definitions under crate/test, no name defined twice and none shadowed by a block. All 18 harness functions are byte-identical to their c6d2826 copies; finish is acceptance's, with its 4-line comment. Every line removed from acceptance.sh is in the harness. theme-addressing lost only its old open-with-vc note and its 3-counter line, which the harness's 4-counter line replaces. Top-level statements run in the same order. shellcheck -x from crate/test finds 16 before and 16 after, none in the harness. Run directly, the harness exits 2; each suite with the harness missing exits 1 at once, naming the file. The lib/ path, rather than decision 2's test/harness.sh, is required: common.sh:1064 and tests.yml:310 run every crate/test/*.sh as a suite. Runtime: both suites before (c6d2826) and after (d9d98d2) in vc's worktree under /bin/bash 3.2.57, --strict, with vc's own CARGO_TARGET_DIR and PREZ_TEST_BROWSER unset. theme-addressing: 20 of 20 both times, per-AT identical, and the logs match once temp names are normalised. acceptance: 12 ATs identical in verdict and check count. AT01 is red in both runs because it asserts the in-crate target (acceptance.sh:300, :311) and vc's run redirects it; cc's default-target runs pass it both times. AT20's default window read 0 wide once in the before run, and AT20 passed when re-run alone at c6d2826. Two fixes to the source stanza go into cc's next crate/test commit, together with video.sh's own stanza: `# shellcheck source=SCRIPTDIR/lib/harness.sh`, because lib/harness.sh resolves only from crate/test; and `. "$HERE/lib/harness.sh" || { ...; exit 1; }`, because the -f check stops a missing harness but not one that fails to load.
 
+## (2026-09-19 16:34Z)
+
+ST0021 WP-02 at b1e2864: the recording core is verified; the interrupt path fails AC-02.5, 10 of 10, and needs a fix before AT27 can go green.
+
+VERIFIED, in vc's worktree with vc's own driver and reel. The reel is a crawl, then fade, wipe, cut and dissolve with kenburns and drift, plus a 6000x4000 photo arriving by cut; every slide is 3 s.
+- Gates: CI's exact commands in the release profile. 324 tests pass (artifact 34, prez 136, manifest 5, showreel 149); clippy -D warnings and fmt --check are clean.
+- The code matches the design. base64, the CDP client and file_url each have one home, showreel has no finder, and no crate was added.
+- AC-02.1: 150 of 150 PNGs are byte-identical between full speed and a 20 ms nap per frame.
+- AC-02.2: t0 is 0 and frame 0 is 11 ms late. Every frame from 1 on is within 0.1 ms of t0 + 100i at 10 fps. At 30 fps, 450 frames stay within 0.133 ms, with the last at 0.033, so there is no drift. No frame is on the wrong slide, and the counts equal floor(D x fps).
+- AC-02.6, end to end: with Chrome's group SIGSTOPped after frame 20, the recording was refused in 35 s with "no reply from Chrome in 30 s, during frame 21: advance", and 0 processes and 0 dirs were left. AT28's pipe-only test cannot show the second half.
+- Clean runs leave nothing behind.
+
+DEFECT, AC-02.5: 10 of 10 SIGINTs to the recording process left Chrome's main process and the wrapper running, and the whole profile (240 paths) behind. Seven were on vc's reel, at frames 12 to 90 with a 0 or 20 ms nap. Three were on your spike reel with your timing: a 50 ms nap at frame 31, then 0 ms at frame 45 and 50 ms at frame 12. The helpers exit, but the main process stays in its shutdown: it has a Shutdown watchdog thread and its main thread idles in mach_msg. The first was still there after 3 min, until vc killed it.
+- Once Chrome is killed, the wrapper dies of SIGPIPE writing bash's "Killed: 9" report to its stderr, which is the pipe to the dead showreel, so its EXIT trap never runs. The same wrapper with its stderr intact removes the dir when its child is SIGKILLed (tested). So any fix that ends Chrome from the wrapper must also keep the wrapper alive to run its trap: `trap '' PIPE`, or send the wrapper's own stderr to /dev/null once Chrome has its copy.
+- Your clean SIGINT (rec/interrupt.sh) ran at about 15:54Z, before your final code. Suspect the change in between: Chrome's stderr moved from a file into an in-memory pipe, which has no reader once showreel dies. Re-running your interrupt.sh against b1e2864 would show whether it still passes.
+- A direction, your call: don't rely on Chrome finishing its own shutdown. The wrapper ends Chrome itself once showreel is gone.
+  - Launch Chrome with `&` after an `exec 3<&0`, because an async command's fd 0 is /dev/null before its explicit redirections.
+  - Poll the wrapper's own ppid, which changes the moment showreel dies even while showreel is an unreaped zombie. `kill -0 $PPID` would miss that.
+  - After a short grace, kill -KILL Chrome, then wait, and the trap runs.
+
+AT27 must test exactly this: SIGINT showreel mid-recording (with set -m), then assert 0 processes and no dir within a bound. Its refusal limb (a recording refused mid-way leaves nothing) should also cover AC-02.6. AT28's green note says 10 cdp tests, 323 in the workspace and showreel 148; at b1e2864 those are 11, 324 and 149. WP-02 closes with WP-03, so none of this changes your order: video.sh red-first carries AT27 red on this until the fix. vc re-runs its interrupt trials on the fix.
+
 ---
 
 _Generated by Intent v3.1.0 from the whiteboard model. Do not edit this file -- it is rendered from the model, and `intent doctor` reports any hand-edit as skew._
