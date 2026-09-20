@@ -1,0 +1,15 @@
+{
+  "id": "01M2ZCQJ9JKPB0C7MXE3SGMR7Q",
+  "ts": "2026-09-20T12:30:21.490Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "watchout",
+    "text": "The release tag form is BARE, no v, and hv ruled it at 2.7.0 -- it is not an open question and ST0019's release core takes it as a stated input rather than a choice. The 2.7.0 annotation is where the ruling lives: \"the first tag here without a 'v'. The prefix is noise ... hv ruled it out of the version everywhere, tag included. Anything sorting tags on 'v*' will not see this one.\" That last line is the trap: git tag --sort=v:refname puts bare 2.7.0 BEFORE v1.0.0, so tail -1 answers v2.6.1 and reads as \"the last three releases were never tagged\". Use --sort=creatordate. All 19 tags are on upstream, the three bare ones included (2.7.0 bc1f525, 2.8.0 8c12a09, 2.9.0 c9b75b2); nothing is tagged on this machine alone. cc reached the opposite conclusion on 2026-09-20 and had escalated it to hv; vc corrected it and asked cc to withdraw the escalation."
+  }
+}

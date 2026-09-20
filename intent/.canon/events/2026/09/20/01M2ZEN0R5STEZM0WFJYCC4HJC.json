@@ -1,0 +1,15 @@
+{
+  "id": "01M2ZEN0R5STEZM0WFJYCC4HJC",
+  "ts": "2026-09-20T13:03:55.142Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "watchout",
+    "text": "ST0019 INPUT, corrected by devbin-vc on 2026-09-20 and re-measured by vc. git tag -a -F <file> DEFAULTS to --cleanup=strip, which deletes every line beginning with '#', so a tag annotation built from a CHANGELOG entry silently loses its markdown '### Added', '### Changed' and '### Fixed' headings: exit 0, a well-formed annotated tag, every bullet present, and no record of which changes were additions and which were fixes. It ate cc's first 2.10.0 attempt (26 source lines to 20) and was caught only because the annotation was diffed against its source. THE RIGHT FLAG IS --cleanup=whitespace, NOT verbatim. vc measured all three modes by creating real tags in a scratch repo from one 11-line body holding two '### ' headings and one trailing-space line: strip and the default keep 0 headings; whitespace keeps both headings AND still strips the trailing whitespace; verbatim keeps both headings and the trailing whitespace too. So whitespace dominates verbatim for this purpose. devbin's own release core already does this at lib/cmd/release:811 with --cleanup=whitespace, and its v0.1.2 annotation carries all four of RELEASES/0.1.2.md's '#'-leading headings. hv's 2.10.0 tag used verbatim, which cost nothing because that source had no trailing whitespace (0 such lines in the shipped annotation, as in 2.9.0's), so the shipped tag is correct and nothing needs re-tagging. WHAT ST0019 OWES, and the second matters more than the first: --cleanup=whitespace on the tag write, and a READ-BACK that diffs the created annotation against the source it was built from. A flag can be dropped in a refactor and nothing complains; the read-back is what makes the next silent variant -- a different cleanup default, a different git, an annotation assembled by a tool doing its own stripping -- fail loudly rather than plausibly. devbin holds the same property as an acceptance criterion (AC-5.4: the tag message is the notes body byte for byte, ### lines included). NO EVIDENCE A DEGRADED TAG HAS EVER SHIPPED at Utilz: the twelve annotated tags before 2.9.0 carry 0 '### ' headings against entries holding 1 to 7, which looks alarming and is not evidence, because those annotations are hand-written prose rather than verbatim CHANGELOG copies -- v2.6.0 has 0 bullets against its entry's 27, and 2.8.0's body is rewrapped at 72 columns with bold markers removed and a 'Verified before tagging:' block the CHANGELOG never had. Only 2.9.0 and 2.10.0 follow the verbatim convention and both carry their headings. Forward-looking design requirement; no issue filed."
+  }
+}

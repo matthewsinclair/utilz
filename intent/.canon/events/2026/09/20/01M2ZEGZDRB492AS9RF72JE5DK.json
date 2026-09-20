@@ -1,0 +1,15 @@
+{
+  "id": "01M2ZEGZDRB492AS9RF72JE5DK",
+  "ts": "2026-09-20T13:01:42.712Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "watchout",
+    "text": "ST0019 INPUT, from hv's 2.10.0 tagging on 2026-09-20: git tag -a -F <file> defaults to --cleanup=strip, which deletes every line beginning with '#' as commentary. A tag annotation built from a CHANGELOG entry therefore loses its markdown '### Added', '### Changed' and '### Fixed' headings SILENTLY -- exit 0, a well-formed annotated tag, every bullet present, and no record of which changes were additions and which were fixes. vc reproduced the mechanism independently: a synthetic 11-line body with two headings came out of 'git stripspace --strip-comments' at 7 lines with both headings gone. cc caught it on the first 2.10.0 attempt (26 lines of source became 20 of annotation) by diffing the created annotation against its source; hv re-made the tag with --cleanup=verbatim and the shipped 2.10.0 annotation now carries all 3 headings, matching 2.9.0's 3. TWO THINGS ST0019's release core owes: --cleanup=verbatim on the tag write, and a read-back that diffs the created annotation against the source it was built from, because the write reports success either way and that diff is the only thing that caught it. NO EVIDENCE IT HAS EVER SHIPPED A DEGRADED TAG, and vc checked rather than assumed: twelve annotated tags before 2.9.0 carry 0 '###' headings against CHANGELOG entries holding 1 to 7, which looks alarming and is not evidence -- those annotations are hand-written or hand-adapted prose, not verbatim CHANGELOG copies. v2.6.0 has 0 bullets against its entry's 27, and 2.8.0's body is rewrapped at 72 columns with its bold markers removed and a 'Verified before tagging:' section the CHANGELOG never had, so its missing heading cannot be attributed to the strip. Only 2.9.0 and 2.10.0 follow the verbatim-from-CHANGELOG convention and both carry their headings. So this is a forward-looking design requirement, not a defect in the record, and no issue is filed."
+  }
+}

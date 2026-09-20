@@ -1,0 +1,15 @@
+{
+  "id": "01M2ZFA28FDWT0DJ81BJTQPZ89",
+  "ts": "2026-09-20T13:15:24.815Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "todo",
+    "text": "ST0019's design, once the devbin 0.1.2 sweep lands (hv's decision 8). SCOPE: the Utilz parts only, being its version files, the CI build of prez and the Homebrew formula, answering questions 1-3, with 5 and 6 handed to Devbin 0064 through vc. The shared release core is Devbin work with Utilz as its first user (hv's decision 1), and ST0007 WP-08, where Utilz adopts that core, stays after the sweep. If the video export needs Chrome and ffmpeg at run time, the formula's dependencies follow from it. THREE INPUTS THE DESIGN TAKES AS GIVEN rather than chooses, all three learned from cutting 2.10.0: the tag form is BARE, hv's ruling, and 2.7.0's own annotation is where it lives; a tag written from a markdown file takes --cleanup=whitespace, never the default strip nor verbatim; and the release core reads the created annotation back and diffs it against its source, comparing with trailing whitespace normalised on both sides. The working behind all three -- four cleanup modes measured twice, independently, and why the read-back outlives the flag -- is in vc's watch-out 8 and in cc's memory note git-tag-F-strips-markdown-headings. THE 14 SEP RESEARCH is recoverable from transcript 14d6f67d-9238-483a-bd2e-80345ed85383.jsonl, where all three files are single Write calls; the precedents survey describes private repos, so it stays out of this repo."
+  }
+}

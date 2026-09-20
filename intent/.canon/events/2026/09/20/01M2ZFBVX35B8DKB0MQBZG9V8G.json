@@ -1,0 +1,15 @@
+{
+  "id": "01M2ZFBVX35B8DKB0MQBZG9V8G",
+  "ts": "2026-09-20T13:16:23.843Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 2026-09-20: yes to pushing the devbin 0.1.2 sweep to GitHub. Relayed via devbin-vc and then confirmed directly to vc (\"Yes, I did\"), so the ruling is hv's own and not a peer's report of one. Pushed: upstream/main 902a72d..633a1a1, verified by vc against ls-remote, 0 ahead 0 behind. This lifts the last gate on todo 24: Utilz counts as swept when CI run 35512936209 reads green on 633a1a1, which vc is watching. hv's earlier hold (no estate to GitHub, Actions budget, no workflow filters by path) still stands for the other estates; Laksa is the last one held, waiting on its deploy."
+  }
+}

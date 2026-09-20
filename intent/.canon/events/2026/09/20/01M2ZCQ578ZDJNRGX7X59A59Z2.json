@@ -1,0 +1,15 @@
+{
+  "id": "01M2ZCQ578ZDJNRGX7X59A59Z2",
+  "ts": "2026-09-20T12:30:08.104Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 2026-09-20, on vc's release plan: \"I'm good to go, if you are good to go, let CC know. Then we can cut the release.\" So 2.10.0 is GO'd to commit. vc told cc to cut it, with one change that must ride in the same commit (the CHANGELOG's Minor line does not say prez goes 2.1.0 to 2.2.0, where 2.9.0's entry named both bumps, and the tag freezes it). vc still runs the release check on the SHA before hv tags: the four-file shape, commit hygiene, the CHANGELOG walk against every product path since ebd0243, an independent sweep for hardcoded versions, and a build in vc's own worktree reading utilz --version and prez --version back."
+  }
+}

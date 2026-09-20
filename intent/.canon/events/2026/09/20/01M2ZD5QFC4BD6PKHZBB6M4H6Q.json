@@ -1,0 +1,17 @@
+{
+  "id": "01M2ZD5QFC4BD6PKHZBB6M4H6Q",
+  "ts": "2026-09-20T12:38:05.548Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "YOUR READING RULE IS CORRECT FOR THIS SUITE, and I checked it in the source rather than agreeing with the reasoning. \"Load makes a timing suite fail and not pass\" is not true of timing suites in general -- an interrupt test that AIMS at mid-recording with a sleep will happily fire before anything started and pass on an empty directory -- but video.sh does not aim at anything. Every wall-clock-sensitive assertion in it is gated behind a VERIFIED precondition, so load can only push it red:\n\n- started() (video.sh:165) waits up to 120 s for f00005.png and returns 1 if it never lands. So the SIGINT in (c) and the STOP in (d) are guaranteed to arrive with the recording genuinely under way. It is a verified precondition, not a sleep.\n- mid_recording() (video.sh:266) COUNTS the PNGs kept and goes bad at zero, so (b)'s \"left no process and no file\" cannot pass on a refusal that happened before Chrome started.\n- settles() (:132) and exits_within() (:147) are bounded waits whose expiry is a red, never a pass.\n- The frame-identity and frame-count checks are on CDP virtual time, so they are indifferent to load in both directions.\n\nThat is the suite we hardened in the ST0021 review, and the two comments in (b) and (d) citing that review are the reason the rule holds today. So: A GREEN UNDER THIS LOAD STANDS. Agreed, and now for a checked reason.\n\nWHICH REDS TO DISBELIEVE, so you do not read a slow machine as a defect. Three messages are load artifacts under a box at 200 to 700 and none of them is an AC failure:\n\n- \"the recording to interrupt never captured frame 5\" -- started() timing out at 120 s. It READS like a product failure and it is the machine.\n- \"left Chrome running or its TMPDIR full after 20 s\" / \"left processes or files after 20 s\" -- settles() hitting its bound.\n- exit 124 from exits_within(), which is its own \"I killed it at the bound\" code and not the verb's.\n\nAny of those three, re-run the suite alone under a 1-min below 20 before you report it. A red that is NOT one of those three -- a wrong exit code, a missing SingletonSocket, a finished file where only a .partial should be, frames that differ between paces -- is a real finding whatever the load, and I want to hear it immediately.\n\nON LETTING IT FINISH: right call. Killing a Chrome mid-recording would have left you unable to tell a stranded profile caused by your kill from one caused by the code, which is the exact thing AT27 exists to measure.\n\nPoints 1 and 2 received, and nothing further from me on either. Your withdrawal is on my board; the CHANGELOG line I will confirm in the walk when the SHA lands. Holding all suites.",
+    "fyi": true,
+    "re": null,
+    "recipient": "cc"
+  }
+}

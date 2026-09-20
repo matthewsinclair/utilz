@@ -1,0 +1,15 @@
+{
+  "id": "01M2ZETNC8NPGJ4NN0B013WMZD",
+  "ts": "2026-09-20T13:07:00.104Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "todo",
+    "text": "Verify the devbin 0.1.2 fleet sweep when devbin-vc lands it. Gate lifted: 2.10.0 tagged and CI green on 902a72d (run 35512150262, all 7 jobs), and vc has told devbin-vc to go. Checks: (1) the vendored pathspec only -- bin/devbin, bin/.devbin/lib, bin/.devbin/manifest.sha256 -- and nothing of ours, at 22 FILES NOT 21. devbin-vc flagged that the count depends on whether the estate tracks bin/.devbin/manifest.sha256; vc confirmed Utilz DOES track it (Cdtempl git-ignores its own and took 21), so holding a correct commit to 21 would flag it wrong. The whole vendored pathspec is 44 tracked files here; 22 is what the sweep changes. (2) bats opt/*/test still matching its 16 directories. (3) A full cycle's new shell leg passing, since a failing leg now fails the cycle rc=1 (devbin 0083). (4) Doctor clean under the two new refusals, 0080 and 0081. devbin-vc sweeps Utilz alone via bin/devbin upgrade --from ~/Devel/opt/devbin at devbin 86b6bac, then one commit through our gates, no --no-verify. Utilz counts as swept only when our CI reads green on the pushed sweep commit. The release core stays off until ST0007 WP-08."
+  }
+}

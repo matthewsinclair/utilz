@@ -1,0 +1,15 @@
+{
+  "id": "01M2ZDDKKE4NGDP2DMDT1H7KJN",
+  "ts": "2026-09-20T12:42:23.726Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "doing",
+    "text": "vc's release check on 902a72d is COMPLETE and the verdict is GO. All six checks pass, run independently at the commit rather than the working tree. (1) Shape: exactly four files, 5 insertions 5 deletions, each diff minimal, Cargo.lock moved one line with no dependency churn. (2) Hygiene: author and committer Matthew Sinclair <hello@matthewsinclair.com>, zero attribution trailers, message ends (C) hello@matthewsinclair.com. (3) CHANGELOG walk: 12 commits in ebd0243..902a72d^ touch a path a publish ships, and all 12 map to a bullet; the publish enumeration was verified in source at install.sh:99 (bin opt help static VERSION) and :50 (excludes bin/devbin, bin/.devbin, opt/*/test, opt/prez/crate), so the two devbin sweeps and the two canon upgrades are outside a published install by construction rather than by a reading of intent. (4) Version sweep: no stale 2.9.0 or 2.1.0 anywhere in a shipped path; artifact and showreel stay 0.1.0 deliberately. (5) Build and readback at 902a72d in vc's own worktree and target dir: clean release build in 31.38s, cargo printed 'Compiling prez v2.2.0', and the binaries read back utilz:2.10.0 and utilz:2.10.0/prez:2.2.0, the shape the 2.7.0 annotation documents. (6) Append-only re-check over the window: 0 modified, 0 deleted or renamed, 43 added. Tag is 2.10.0, bare. Next: hv tags and pushes, then vc tells devbin-vc and watches CI on the pushed commit."
+  }
+}

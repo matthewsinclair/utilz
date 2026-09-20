@@ -3,21 +3,21 @@ node: cc
 name: Control Claude
 role: control
 session_id: d69b4069-611f-4829-8991-1a15c02f53bb
-heartbeat_at: 2026-09-20 11:32Z
+heartbeat_at: 2026-09-20 13:15Z
 status: active
-focus: "The 2.10.0 release commit is next: four files in ebd0243's shape, then vc's GO and hv's tag; ST0021 is closed at 16 of 16"
-claims: [ST0019, ST0021]
+focus: "2.10.0 is out: 902a72d, tag 2.10.0 bare, CI 35512150262 green on 7 of 7; waiting on devbin-vc to land the 0.1.2 sweep, then ST0019 design (todo 20)"
+claims: [ST0019]
 ---
 
 # Control Claude (cc)
 
 ## DOING
 
-- THE 2.10.0 RELEASE COMMIT is the next act, and nothing of it is started: the tree is clean at 886d9c5. ST0021 closed 20 Sep with 16 of 16 ACs (AC-04.1 by CI run 35507688287, green on both legs), and issues 0040 and 0041 are closed and verified. The commit is ebd0243's shape, four files: VERSION 2.9.0 to 2.10.0; opt/prez/crate/Cargo.toml version 2.1.0 to 2.2.0 (line 3); opt/prez/crate/Cargo.lock's prez package 2.1.0 to 2.2.0 (line 343); CHANGELOG.md's [Unreleased] dated [2.10.0] - 2026-09-20, body unchanged, its six bullets already holding every change since ebd0243. Then build and read both versions back, hand vc the SHA for its release check (vc holds the entry against every product file since 2.9.0), and hv tags and pushes. After the tag: hv's decision 8 releases the Devbin sweep, then ST0019's design (todo 19).
+_(none)_
 
 ## TODO
 
-- ST0019's design, after the release: the Utilz parts only (its version files, the CI build of prez, the Homebrew formula), answering questions 1-3, with 5 and 6 handed to Devbin 0064 through vc. THE 14 SEP RESEARCH is always recoverable from that session's transcript, 14d6f67d-9238-483a-bd2e-80345ed85383.jsonl, where all three files are single Write calls; the precedents survey describes private repos, so it stays out of this repo. If the video export needs Chrome and ffmpeg at run time, the formula's dependencies follow from it.
+- ST0019's design, once the devbin 0.1.2 sweep lands (hv's decision 8). SCOPE: the Utilz parts only, being its version files, the CI build of prez and the Homebrew formula, answering questions 1-3, with 5 and 6 handed to Devbin 0064 through vc. The shared release core is Devbin work with Utilz as its first user (hv's decision 1), and ST0007 WP-08, where Utilz adopts that core, stays after the sweep. If the video export needs Chrome and ffmpeg at run time, the formula's dependencies follow from it. THREE INPUTS THE DESIGN TAKES AS GIVEN rather than chooses, all three learned from cutting 2.10.0: the tag form is BARE, hv's ruling, and 2.7.0's own annotation is where it lives; a tag written from a markdown file takes --cleanup=whitespace, never the default strip nor verbatim; and the release core reads the created annotation back and diffs it against its source, comparing with trailing whitespace normalised on both sides. The working behind all three -- four cleanup modes measured twice, independently, and why the read-back outlives the flag -- is in vc's watch-out 8 and in cc's memory note git-tag-F-strips-markdown-headings. THE 14 SEP RESEARCH is recoverable from transcript 14d6f67d-9238-483a-bd2e-80345ed85383.jsonl, where all three files are single Write calls; the precedents survey describes private repos, so it stays out of this repo.
 
 ## Holds
 
