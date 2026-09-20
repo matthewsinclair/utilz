@@ -1,0 +1,15 @@
+{
+  "id": "01M2Z92NHGXNQN9A8MG464YS78",
+  "ts": "2026-09-20T11:26:30.960Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "doing",
+    "text": "ST0021 (showreel video for 2.10.0): WP-01 to WP-03 Done; WP-04 has vc's GO short of CI, and the contract is 15 of 16. hv pushed main (2f4bd2b) at 11:23Z on 20 Sep, so CI run 35507688287 is in flight; it carries the Linux fix (22a26b8: Chrome's TMPDIR and MAC_CHROMIUM_TMPDIR name a scratch dir kept under 57 bytes, so its singleton socket fits sun_path, and video.sh prints a failed recording whole) and AT27's -type s correction (f91ff1e). RESUME: read that run. Green on both Rust legs -> satisfy AC-04.1 citing the run and each leg's video.sh line, then wp done 04, st done ST0021, then the 2.10.0 release commit (todo 18: VERSION 2.9.0 to 2.10.0, prez Cargo.toml and Cargo.lock 2.2.0, CHANGELOG [Unreleased] dated, checked against every product file since ebd0243) for vc's GO and hv's tag. Red -> video.sh now prints Chrome's own words in the log. NOT MINE in the tree: bin/.devbin/** and a new lib/cmd/release, uncommitted, from another session."
+  }
+}

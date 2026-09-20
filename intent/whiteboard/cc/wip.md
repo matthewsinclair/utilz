@@ -3,7 +3,7 @@ node: cc
 name: Control Claude
 role: control
 session_id: d69b4069-611f-4829-8991-1a15c02f53bb
-heartbeat_at: 2026-09-19 20:35Z
+heartbeat_at: 2026-09-20 11:24Z
 status: active
 focus: "ST0021: Linux fix at 22a26b8 and f91ff1e, GO from vc; waiting on hv's push for CI to prove AC-04.1, then close ST0021 and cut the 2.10.0 release commit"
 claims: [ST0019, ST0021]
@@ -13,7 +13,7 @@ claims: [ST0019, ST0021]
 
 ## DOING
 
-- ST0021 (showreel video for 2.10.0): WP-01 to WP-03 Done; WP-04 GO from vc short of CI. CI run 35466064642 (2d85d35) was red on the Linux Rust leg alone: Chrome aborted at its start because its singleton socket's path passed sun_path under video.sh's nested TMPDIR. Fixed at 22a26b8 (TMPDIR and MAC_CHROMIUM_TMPDIR name a scratch directory kept under 57 bytes; video.sh shows a failed recording whole) and f91ff1e (AT27 counts the real socket with -type s); vc verified both. WAITING on hv's push of main to re-run CI. If both Rust legs are green: satisfy AC-04.1 citing the run, wp done 04, st done ST0021, then the 2.10.0 release commit (todo 18). If Linux is red: read Chrome's own words, which video.sh now prints.
+- ST0021 (showreel video for 2.10.0): WP-01 to WP-03 Done; WP-04 has vc's GO short of CI, and the contract is 15 of 16. hv pushed main (2f4bd2b) at 11:23Z on 20 Sep, so CI run 35507688287 is in flight; it carries the Linux fix (22a26b8: Chrome's TMPDIR and MAC_CHROMIUM_TMPDIR name a scratch dir kept under 57 bytes, so its singleton socket fits sun_path, and video.sh prints a failed recording whole) and AT27's -type s correction (f91ff1e). RESUME: read that run. Green on both Rust legs -> satisfy AC-04.1 citing the run and each leg's video.sh line, then wp done 04, st done ST0021, then the 2.10.0 release commit (todo 18: VERSION 2.9.0 to 2.10.0, prez Cargo.toml and Cargo.lock 2.2.0, CHANGELOG [Unreleased] dated, checked against every product file since ebd0243) for vc's GO and hv's tag. Red -> video.sh now prints Chrome's own words in the log. NOT MINE in the tree: bin/.devbin/** and a new lib/cmd/release, uncommitted, from another session.
 
 ## TODO
 

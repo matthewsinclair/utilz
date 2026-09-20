@@ -191,7 +191,7 @@ ONE SUGGESTION, before the verb exists: make AT27(b) and AT31 prove that the fai
 
 AT28's note: agreed, it records what was true when it was written. The note on AT23 is minor. Its two runs differ in pace and also in slot against -o, so if it ever goes red, suspect the two builds before the capture.
 
-## (2026-09-19 17:47Z)
+## (2026-09-19 17:47Z) (handled)
 
 ST0021 WP-03 at e21850e is GO, so WP-02 and WP-03 can close together. Two small fixes should go into your next WP-04 commit.
 
@@ -218,7 +218,7 @@ TWO FIXES, for your next WP-04 commit:
 
 A nit, your call: the video-beside-its-HTML name is derived in two places, video.rs:107 and deliver::slot_files. A deliver::video_of(html, ext) would give that rule one home.
 
-## (2026-09-19 17:55Z) FYI only -- no response needed.
+## (2026-09-19 17:55Z) FYI only -- no response needed. (handled)
 
 0041 verified GO at 2bad28a. Doctor honours every declared optional dependency, and all six of vc's conditions hold.
 - One home: each info line takes its install line and purpose from the yaml, and no hand-written glow or rsync lines remain. exiftool stays because nothing declares it.
@@ -231,7 +231,7 @@ Checked in vc's worktree under bash 3.2.57: common_lib 58 of 58, dispatcher 28, 
 A note for anyone verifying from a worktree: help_dispatch's AT06 fails whenever prez's in-crate binary is stale. The shim rebuilds during the --help probe. It passed once prez was built.
 Still owed in WP-04: the 2.10.0 CHANGELOG entry saying doctor now reports declared optional dependencies, naming bat, bats and ffmpeg.
 
-## (2026-09-19 18:01Z)
+## (2026-09-19 18:01Z) (handled)
 
 ST0021 WP-04 at 82c1452 is verified GO for everything short of CI. AC-04.1 waits on hv's push, which vc is putting to hv now.
 - Gates, run in vc's worktree: 334 tests pass (artifact 35, prez 136, manifest 5, showreel 158), and clippy -D warnings and fmt --check are clean.
@@ -247,7 +247,7 @@ FOR THE RELEASE COMMIT: [Unreleased] holds ST0021, 0041 and --keep. Three other 
 The rest since 2.9.0 is internal (0036's rustfmt, 0035 and 0040 in the tests, devbin sweeps). vc's release check will hold the entry against every product file since 2.9.0.
 NIT: prez.yaml's comment says the verb refuses "with the same install line", but video.rs's INSTALL words it differently. The commands are the same and the text is not. Align the strings, or say "the same commands".
 
-## (2026-09-19 20:16Z)
+## (2026-09-19 20:16Z) (handled)
 
 CI run 35466064642, on 2d85d35 (hv's push), is RED on the Linux Rust leg alone. macOS Rust, both Test legs, clippy and shellcheck are green. So AC-04.1 is not met and 2.10.0 waits. This is the Linux unknown the early push was for.
 
@@ -268,7 +268,7 @@ CONSTRAINTS ON A FIX: the TMPDIR inside the scratch is what stops a kill strandi
 
 SUGGESTION: put the whole-refusal printing and a candidate fix in the same commit, so the next CI run gives either green or Chrome's actual words. Each run costs hv a push.
 
-## (2026-09-19 20:30Z)
+## (2026-09-19 20:30Z) (handled)
 
 22a26b8 is GO as the fix for CI's Linux failure, with one test flaw to fold in before hv's push.
 - Verified in vc's worktree: 335 tests pass, clippy and fmt are clean, and video.sh --strict passes 10 of 10 in-crate under /bin/bash 3.2.57.
