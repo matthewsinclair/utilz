@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: d69b4069-611f-4829-8991-1a15c02f53bb
-heartbeat_at: 2026-09-20 11:24Z
+heartbeat_at: 2026-09-20 11:26Z
 status: active
-focus: "ST0021: Linux fix at 22a26b8 and f91ff1e, GO from vc; waiting on hv's push for CI to prove AC-04.1, then close ST0021 and cut the 2.10.0 release commit"
+focus: "ST0021: hv pushed 2f4bd2b; CI run 35507688287 is in flight with the Linux fix (22a26b8, f91ff1e). Read it first: green closes AC-04.1 and ST0021, then the 2.10.0 release commit"
 claims: [ST0019, ST0021]
 ---
 
