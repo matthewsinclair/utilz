@@ -5,9 +5,9 @@ All notable changes to the Utilz framework will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [2.10.0] - 2026-09-20
 
-Minor: **`prez showreel video` is new**, **`PREZ_THEME_DUPLICATES=refuse` can refuse a theme name defined twice**, and **`utilz doctor` reports every optional dependency a utility declares**.
+Minor: **`prez showreel video` is new**, **`PREZ_THEME_DUPLICATES=refuse` can refuse a theme name defined twice**, and **`utilz doctor` reports every optional dependency a utility declares**. prez goes from 2.1.0 to 2.2.0.
 
 ### Added
 
