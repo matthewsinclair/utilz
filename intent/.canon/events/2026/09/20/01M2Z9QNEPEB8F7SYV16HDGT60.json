@@ -1,0 +1,15 @@
+{
+  "id": "01M2Z9QNEPEB8F7SYV16HDGT60",
+  "ts": "2026-09-20T11:37:58.998Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "watchout",
+    "text": "Since 2026-09-19 16:17:33Z this machine's Intent install pointer (~/.local/share/intent/home) has named a scratch worktree of Intent, at 35b902fd9 (Intent issue 0492; hv's restore is pending, and it is Intent's to land). Every Utilz commit since then loaded its pre-commit gate and guard bodies from there, which is before the fix that moved append-only-guard.sh's subject from intent/events.jsonl to intent/.canon/events/**. intent-vc sent the pre-notice; vc ran the check at Utilz on 2026-09-20 and it is clean: the log with --diff-filter=M is empty, so is --diff-filter=DR, and all 73 changes to intent/.canon/events across the 23 commits in that window are additions. Nothing was exposed, and everything else those gates enforce is unchanged between the two trees. Worth re-running if the pointer is still astray when the next stretch of commits lands."
+  }
+}
