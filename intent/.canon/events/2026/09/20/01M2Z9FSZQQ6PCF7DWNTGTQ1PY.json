@@ -1,0 +1,15 @@
+{
+  "id": "01M2Z9FSZQQ6PCF7DWNTGTQ1PY",
+  "ts": "2026-09-20T11:33:41.495Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "doing",
+    "text": "ST0021 is verified end to end, and CI run 35507688287 on 2f4bd2b is green on both legs, so all 16 ACs are met. What is left of 2.10.0 is cc's release commit, in 2.9.0's shape (VERSION 2.9.0 to 2.10.0, prez's Cargo.toml and Cargo.lock 2.1.0 to 2.2.0, [Unreleased] dated [2.10.0] - 2026-09-20, the body unchanged): vc checks those four files and nothing else, holds the CHANGELOG against every product file since 2.9.0, builds it and reads both versions back, then gives hv the GO to tag. vc tells devbin-vc when the tag is pushed."
+  }
+}

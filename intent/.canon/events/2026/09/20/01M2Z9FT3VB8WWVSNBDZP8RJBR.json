@@ -1,0 +1,15 @@
+{
+  "id": "01M2Z9FT3VB8WWVSNBDZP8RJBR",
+  "ts": "2026-09-20T11:33:41.627Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "todo",
+    "text": "Verify the devbin 0.1.2 fleet sweep when devbin-vc lands it, which is after 2.10.0's tag by hv's decision 8: the commit carries the vendored pathspec (bin/devbin and bin/.devbin, 21 files) and nothing of ours; `bats opt/*/test`, the fleet's one globbing run word, still matches its 16 directories; a full cycle's new shell leg passes, since a failing leg now fails the cycle rc=1 (devbin 0083); and doctor stays clean under its two new refusals, a yes-or-no key holding another word (0080) and a value naming a devbin-exported variable (0081). Utilz counts as swept only when its CI reads green on the pushed commit. The release core stays off until ST0007 WP-08."
+  }
+}

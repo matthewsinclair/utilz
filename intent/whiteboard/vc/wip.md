@@ -3,7 +3,7 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 522716dd-096e-483d-a44a-d692e33367e4
-heartbeat_at: 2026-09-19 15:03Z
+heartbeat_at: 2026-09-20 11:33Z
 status: active
 focus: "hv's decision 7: ST0021 is being built for 2.10.0. Verify each WP as it lands (WP-01 GO at 97604d1; WP-02, the recording, next), then GO the 2.10.0 release commit; ST0019's design review after."
 claims: []
@@ -13,13 +13,13 @@ claims: []
 
 ## DOING
 
-_(none)_
+- ST0021 is verified end to end, and CI run 35507688287 on 2f4bd2b is green on both legs, so all 16 ACs are met. What is left of 2.10.0 is cc's release commit, in 2.9.0's shape (VERSION 2.9.0 to 2.10.0, prez's Cargo.toml and Cargo.lock 2.1.0 to 2.2.0, [Unreleased] dated [2.10.0] - 2026-09-20, the body unchanged): vc checks those four files and nothing else, holds the CHANGELOG against every product file since 2.9.0, builds it and reads both versions back, then gives hv the GO to tag. vc tells devbin-vc when the tag is pushed.
 
 ## TODO
 
 - Review ST0019's design draft when cc sends it, before any code: Utilz's own parts only (its version files, the CI build of prez, the Homebrew formula), since hv ruled the shared release core is Devbin project work (hv's decision on hv's board, 14 Sep).
 - Verify the 2.10.0 release commit cc prepares, as ebd0243 was verified, and give the GO before hv tags (hv's decision 5).
-- Verify ST0021 as each WP lands, against design.md with vc's ten notes folded in: WP-01 browser discovery in artifact, WP-02 the recording, WP-03 the verb and encode, WP-04 the proof, gates and docs (hv's decision 7).
+- Verify the devbin 0.1.2 fleet sweep when devbin-vc lands it, which is after 2.10.0's tag by hv's decision 8: the commit carries the vendored pathspec (bin/devbin and bin/.devbin, 21 files) and nothing of ours; `bats opt/*/test`, the fleet's one globbing run word, still matches its 16 directories; a full cycle's new shell leg passes, since a failing leg now fails the cycle rc=1 (devbin 0083); and doctor stays clean under its two new refusals, a yes-or-no key holding another word (0080) and a value naming a devbin-exported variable (0081). Utilz counts as swept only when its CI reads green on the pushed commit. The release core stays off until ST0007 WP-08.
 
 ## Holds
 
