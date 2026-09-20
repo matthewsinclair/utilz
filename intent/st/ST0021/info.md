@@ -1,9 +1,9 @@
 ---
 st_id: ST0021
 title: showreel exports a reel as a video file
-status: WIP
+status: Completed
 created: 2026-09-19
-completed:
+completed: 2026-09-20
 ---
 
 # ST0021: showreel exports a reel as a video file
@@ -27,7 +27,7 @@ showreel's `check` and `build` are already Rust (ST0017, `crates/showreel/src/ma
 | WP-01 | Browser discovery moves to the artifact crate                        | S    | Done   |
 | WP-02 | The recording: Chrome over the pipe, on a clock the harness controls | M    | Done   |
 | WP-03 | The video verb and the encode                                        | M    | Done   |
-| WP-04 | The proof, the gates and the docs                                    | M    | WIP    |
+| WP-04 | The proof, the gates and the docs                                    | M    | Done   |
 
 ## Acceptance
 

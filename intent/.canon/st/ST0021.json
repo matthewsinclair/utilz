@@ -3,8 +3,9 @@
   "id": "ST0021",
   "title": "showreel exports a reel as a video file",
   "slug": "showreel-exports-a-reel-as-a-video-file",
-  "status": "wip",
+  "status": "completed",
   "created": "2026-09-19",
+  "completed": "2026-09-20",
   "objective": "`showreel video <dir>` writes a reel as a video file, `.mp4` or `.mov`, whose frames are exactly what the HTML reel shows at each moment. So a reel can play where a browser cannot. hv wants it in 2.10.0, and the release waits for it (hv's board, decisions 5 and 6).",
   "context": "hv, 2026-09-19: \"I also want to add a new feature to showreel, which is the ability to generate a .mov of .mp4 (ie video file) of the showreel. More to come, but I want that capability in the 2.10.0 release.\" Asked how far away it is, hv answered that they are open to every route and dependency the design puts forward (decision 6).\n\nshowreel's `check` and `build` are already Rust (ST0017, `crates/showreel/src/main.rs:31` and `:38`). Only `init` and `qr` remain in the Python prototype. A video export reads what `build` reads, so it needs neither of them ported first.\n\n`design.md` carries the route, the spike that sized it, the questions for hv and the work packages. cc drafts it, vc reviews it before any code, and vc takes the questions to hv.",
   "body": "",
@@ -41,7 +42,7 @@
       "seq": 4,
       "title": "The proof, the gates and the docs",
       "scope": "M",
-      "status": "wip",
+      "status": "done",
       "objective": "The proof, the gates and the docs: `crate/test/video.sh` on the shared harness, ffmpeg as prez's optional dependency and on both CI legs, and the help, README and CHANGELOG entries.",
       "body": "",
       "preamble": ""
@@ -166,7 +167,8 @@
       "text": "CI records video on both legs. The workflow installs ffmpeg on ubuntu-latest and macos-latest, `video.sh` runs with `--strict`, and its output names the Chrome and the ffmpeg it used. A leg missing either is `unchecked`, never `not_applicable`.",
       "kind": "non-test",
       "state": {
-        "is": "unsatisfied"
+        "is": "satisfied",
+        "evidence": "CI run 35507688287 on 2f4bd2b, completed success, 20 Sep: https://github.com/matthewsinclair/utilz/actions/runs/35507688287 . Rust (ubuntu-latest), job 106070152962: the workflow installed ffmpeg, and video.sh --strict passed 10 of 10 (failed 0, skipped 0), naming 'browser resolved to /usr/bin/google-chrome' and 'ffmpeg resolved to /usr/bin/ffmpeg (ffmpeg version 6.1.1-3ubuntu5)', with Chrome's singleton socket in the recording's scratch directory, a failure mid-recording after 2 frames, an interrupt settling in 1 s, and a stall refused 'no reply from Chrome in 30 s, during frame 6: screenshot'. Rust (macos-latest), job 106070152815: the same 10 of 10, naming /Applications/Google Chrome.app and ffmpeg 9.0.1, with acceptance 14 of 14 and theme-addressing 20 of 20. Nothing was unchecked on either leg, and no AT was not_applicable in video.sh."
       }
     },
     {

@@ -4,11 +4,7 @@ A DOING / TODO / DONE view, projected from steel-thread and work-package status:
 
 ## DOING
 
-- [-] ST0021: showreel exports a reel as a video file
-  - [x] 01: Browser discovery moves to the artifact crate
-  - [x] 02: The recording: Chrome over the pipe, on a clock the harness controls
-  - [x] 03: The video verb and the encode
-  - [-] 04: The proof, the gates and the docs
+_(none)_
 
 ## TODO
 
@@ -109,6 +105,11 @@ A DOING / TODO / DONE view, projected from steel-thread and work-package status:
   - [x] 01: PREZ_DEFAULT_THEME: red-first tests, the precedence function, the docs
 - [x] ST0020: prez: a theme name defined twice on the search path refuses, when a caller asks
   - [x] 01: prez refuses a duplicated theme name when PREZ_THEME_DUPLICATES=refuse
+- [x] ST0021: showreel exports a reel as a video file
+  - [x] 01: Browser discovery moves to the artifact crate
+  - [x] 02: The recording: Chrome over the pipe, on a clock the harness controls
+  - [x] 03: The video verb and the encode
+  - [x] 04: The proof, the gates and the docs
 
 ---
 

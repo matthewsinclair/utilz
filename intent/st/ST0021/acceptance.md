@@ -36,9 +36,9 @@ title: showreel exports a reel as a video file
 - AC-03.6 `prez showreel video` reaches the showreel binary through the shim's hand-over, as `check` and `build` do. -- satisfied: yes (computed)
 - AC-03.7 (non-test) Progress goes to stderr as `frame N/M` when stderr is a terminal, and nothing is printed before the report when it is not. -- evidence: opt/prez/crate/crates/showreel/src/main.rs video_reel: progress goes to stderr only when std::io::stderr().is_terminal(). Measured 19 Sep at --fps 5 on video.sh's fixture: under a pseudo-terminal (script -q) the verb printed 75 progress updates, frame 1/75 to frame 75/75, then the report; with stderr to a file, stderr held 0 bytes and the report went to stdout. -- satisfied: yes
 
-### WP-04 -- The proof, the gates and the docs (status: WIP)
+### WP-04 -- The proof, the gates and the docs (status: Done)
 
-- AC-04.1 (non-test) CI records video on both legs. The workflow installs ffmpeg on ubuntu-latest and macos-latest, `video.sh` runs with `--strict`, and its output names the Chrome and the ffmpeg it used. A leg missing either is `unchecked`, never `not_applicable`. -- satisfied: no
+- AC-04.1 (non-test) CI records video on both legs. The workflow installs ffmpeg on ubuntu-latest and macos-latest, `video.sh` runs with `--strict`, and its output names the Chrome and the ffmpeg it used. A leg missing either is `unchecked`, never `not_applicable`. -- evidence: CI run 35507688287 on 2f4bd2b, completed success, 20 Sep: https://github.com/matthewsinclair/utilz/actions/runs/35507688287 . Rust (ubuntu-latest), job 106070152962: the workflow installed ffmpeg, and video.sh --strict passed 10 of 10 (failed 0, skipped 0), naming 'browser resolved to /usr/bin/google-chrome' and 'ffmpeg resolved to /usr/bin/ffmpeg (ffmpeg version 6.1.1-3ubuntu5)', with Chrome's singleton socket in the recording's scratch directory, a failure mid-recording after 2 frames, an interrupt settling in 1 s, and a stall refused 'no reply from Chrome in 30 s, during frame 6: screenshot'. Rust (macos-latest), job 106070152815: the same 10 of 10, naming /Applications/Google Chrome.app and ffmpeg 9.0.1, with acceptance 14 of 14 and theme-addressing 20 of 20. Nothing was unchecked on either leg, and no AT was not_applicable in video.sh. -- satisfied: yes
 - AC-04.2 (non-test) The verb is documented where prez's verbs are: `help/prez.md`, `showreel --help`, the README, and the CHANGELOG entry for 2.10.0, and `prez.yaml` declares ffmpeg as an optional dependency so doctor reports it. -- evidence: Documented where prez's verbs are, 19 Sep: help/prez.md (the showreel section gains the video paragraph, and the runtime line names its Chrome and ffmpeg), showreel --help (video and its flags, main.rs USAGE), README.md (prez's examples gain prez showreel build and video), and CHANGELOG.md's Unreleased entry, which the 2.10.0 release commit dates. prez.yaml declares ffmpeg under optional_dependencies, and with issue 0041's fix doctor reads it: with ffmpeg off PATH, utilz doctor prints Optional: 'ffmpeg' is not installed: prez showreel video encodes the recorded reel with it (declared by prez), with its install line, as information that never changes the verdict. -- satisfied: yes
 
 ### Group AT23
@@ -107,7 +107,7 @@ _(no tests in this group)_
 
 _(no tests in this group)_
 
-### WP-04 -- The proof, the gates and the docs (status: WIP)
+### WP-04 -- The proof, the gates and the docs (status: Done)
 
 _(no tests in this group)_
 

@@ -1,0 +1,16 @@
+{
+  "id": "01M2Z9CA6643RZW9R4R6B5N46Q",
+  "ts": "2026-09-20T11:31:47.014Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "st.done",
+  "subject": {
+    "type": "thread",
+    "id": "ST0021"
+  },
+  "payload": {
+    "from": "wip",
+    "reason": null,
+    "to": "completed"
+  }
+}

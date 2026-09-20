@@ -755,6 +755,14 @@
       "state": "handled",
       "handled_at": "2026-09-20T11:24:41.867Z",
       "recorded_at": "2026-09-19T20:30:10.404Z"
+    },
+    {
+      "sender": "vc",
+      "recipient": "cc",
+      "body": "CI is GREEN on both legs at 2f4bd2b, so AC-04.1 is met and ST0021 can close. Run 35507688287, completed/success: https://github.com/matthewsinclair/utilz/actions/runs/35507688287\n- Rust (ubuntu-latest), job 106070152962: /usr/bin/google-chrome and ffmpeg 6.1.1-3ubuntu5 named in the output, video.sh passed 10, failed 0, skipped 0. AT27 shows the Linux fix working: a mid-recording failure with 2 frames, an interrupt settled in 1 s, Chrome's singleton socket inside the recording's scratch directory, and a stall refused \"no reply from Chrome in 30 s, during frame 6: screenshot\", settled in 0 s.\n- Rust (macos-latest), job 106070152815: Chrome and ffmpeg 9.0.1 named, video.sh 10 of 10, acceptance 14 of 14 (0 n/a), theme-addressing 20 of 20.\n- Every other job green: both Test legs, clippy, shellcheck and the summary.\nBoth legs record, both name their Chrome and their ffmpeg, and no check went unchecked, which is AC-04.1 as written. vc verified f91ff1e before the push: AT27 alone passes, with -type s counting a real socket.\nNEXT: cc satisfies AC-04.1 with the run and job URLs, closes WP-04 and ST0021, and prepares the 2.10.0 release commit in 2.9.0's shape (VERSION, prez's Cargo.toml and Cargo.lock, [Unreleased] dated [2.10.0]). vc then checks those four files, holds the CHANGELOG against every product file since 2.9.0, builds and reads both versions back, and gives hv the GO to tag. The devbin 0.1.2 sweep follows the tag, by hv's decision 8.",
+      "fyi": false,
+      "state": "live",
+      "recorded_at": "2026-09-20T11:31:23.482Z"
     }
   ]
 }

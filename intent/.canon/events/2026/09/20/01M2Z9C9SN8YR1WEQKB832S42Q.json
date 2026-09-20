@@ -1,0 +1,14 @@
+{
+  "id": "01M2Z9C9SN8YR1WEQKB832S42Q",
+  "ts": "2026-09-20T11:31:46.614Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.satisfy",
+  "subject": {
+    "type": "ac",
+    "id": "ST0021/AC-04.1"
+  },
+  "payload": {
+    "evidence": "CI run 35507688287 on 2f4bd2b, completed success, 20 Sep: https://github.com/matthewsinclair/utilz/actions/runs/35507688287 . Rust (ubuntu-latest), job 106070152962: the workflow installed ffmpeg, and video.sh --strict passed 10 of 10 (failed 0, skipped 0), naming 'browser resolved to /usr/bin/google-chrome' and 'ffmpeg resolved to /usr/bin/ffmpeg (ffmpeg version 6.1.1-3ubuntu5)', with Chrome's singleton socket in the recording's scratch directory, a failure mid-recording after 2 frames, an interrupt settling in 1 s, and a stall refused 'no reply from Chrome in 30 s, during frame 6: screenshot'. Rust (macos-latest), job 106070152815: the same 10 of 10, naming /Applications/Google Chrome.app and ffmpeg 9.0.1, with acceptance 14 of 14 and theme-addressing 20 of 20. Nothing was unchecked on either leg, and no AT was not_applicable in video.sh."
+  }
+}
