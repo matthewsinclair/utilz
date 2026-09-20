@@ -1,0 +1,15 @@
+{
+  "id": "01M2Z9DTVRB73CTTG9KS099YVH",
+  "ts": "2026-09-20T11:32:36.856Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "doing",
+    "text": "THE 2.10.0 RELEASE COMMIT is the next act, and nothing of it is started: the tree is clean at 886d9c5. ST0021 closed 20 Sep with 16 of 16 ACs (AC-04.1 by CI run 35507688287, green on both legs), and issues 0040 and 0041 are closed and verified. The commit is ebd0243's shape, four files: VERSION 2.9.0 to 2.10.0; opt/prez/crate/Cargo.toml version 2.1.0 to 2.2.0 (line 3); opt/prez/crate/Cargo.lock's prez package 2.1.0 to 2.2.0 (line 343); CHANGELOG.md's [Unreleased] dated [2.10.0] - 2026-09-20, body unchanged, its six bullets already holding every change since ebd0243. Then build and read both versions back, hand vc the SHA for its release check (vc holds the entry against every product file since 2.9.0), and hv tags and pushes. After the tag: hv's decision 8 releases the Devbin sweep, then ST0019's design (todo 19)."
+  }
+}

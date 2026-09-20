@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: d69b4069-611f-4829-8991-1a15c02f53bb
-heartbeat_at: 2026-09-20 11:26Z
+heartbeat_at: 2026-09-20 11:32Z
 status: active
-focus: "ST0021: hv pushed 2f4bd2b; CI run 35507688287 is in flight with the Linux fix (22a26b8, f91ff1e). Read it first: green closes AC-04.1 and ST0021, then the 2.10.0 release commit"
+focus: "The 2.10.0 release commit is next: four files in ebd0243's shape, then vc's GO and hv's tag; ST0021 is closed at 16 of 16"
 claims: [ST0019, ST0021]
 ---
 
@@ -13,11 +13,10 @@ claims: [ST0019, ST0021]
 
 ## DOING
 
-- ST0021 (showreel video for 2.10.0): WP-01 to WP-03 Done; WP-04 has vc's GO short of CI, and the contract is 15 of 16. hv pushed main (2f4bd2b) at 11:23Z on 20 Sep, so CI run 35507688287 is in flight; it carries the Linux fix (22a26b8: Chrome's TMPDIR and MAC_CHROMIUM_TMPDIR name a scratch dir kept under 57 bytes, so its singleton socket fits sun_path, and video.sh prints a failed recording whole) and AT27's -type s correction (f91ff1e). RESUME: read that run. Green on both Rust legs -> satisfy AC-04.1 citing the run and each leg's video.sh line, then wp done 04, st done ST0021, then the 2.10.0 release commit (todo 18: VERSION 2.9.0 to 2.10.0, prez Cargo.toml and Cargo.lock 2.2.0, CHANGELOG [Unreleased] dated, checked against every product file since ebd0243) for vc's GO and hv's tag. Red -> video.sh now prints Chrome's own words in the log. NOT MINE in the tree: bin/.devbin/** and a new lib/cmd/release, uncommitted, from another session.
+- THE 2.10.0 RELEASE COMMIT is the next act, and nothing of it is started: the tree is clean at 886d9c5. ST0021 closed 20 Sep with 16 of 16 ACs (AC-04.1 by CI run 35507688287, green on both legs), and issues 0040 and 0041 are closed and verified. The commit is ebd0243's shape, four files: VERSION 2.9.0 to 2.10.0; opt/prez/crate/Cargo.toml version 2.1.0 to 2.2.0 (line 3); opt/prez/crate/Cargo.lock's prez package 2.1.0 to 2.2.0 (line 343); CHANGELOG.md's [Unreleased] dated [2.10.0] - 2026-09-20, body unchanged, its six bullets already holding every change since ebd0243. Then build and read both versions back, hand vc the SHA for its release check (vc holds the entry against every product file since 2.9.0), and hv tags and pushes. After the tag: hv's decision 8 releases the Devbin sweep, then ST0019's design (todo 19).
 
 ## TODO
 
-- The 2.10.0 release commit, once the video export lands, prepared as ebd0243 was: VERSION 2.9.0 to 2.10.0, prez's Cargo.toml and Cargo.lock at 2.2.0, and a CHANGELOG entry checked against every product file changed since 2.9.0. vc gives the GO, and hv tags and pushes.
 - ST0019's design, after the release: the Utilz parts only (its version files, the CI build of prez, the Homebrew formula), answering questions 1-3, with 5 and 6 handed to Devbin 0064 through vc. THE 14 SEP RESEARCH is always recoverable from that session's transcript, 14d6f67d-9238-483a-bd2e-80345ed85383.jsonl, where all three files are single Write calls; the precedents survey describes private repos, so it stays out of this repo. If the video export needs Chrome and ffmpeg at run time, the formula's dependencies follow from it.
 
 ## Holds
