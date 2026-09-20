@@ -1,0 +1,15 @@
+{
+  "id": "01M2Z98SKV5SNSWEZSE8EDJ5ZV",
+  "ts": "2026-09-20T11:29:51.739Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "hv"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 2026-09-20, on devbin-vc's pre-notice of the devbin 0.1.2 fleet sweep, in hv's words: \"Yes, get 2.10 out first, then we can update Devbin post that.\" So Utilz ships 2.10.0 first, and the sweep of the vendored devbin follows the tag. vc has told devbin-vc, and will tell it the result of CI run 35507688287, which decides ST0021's last criterion. Nothing of devbin is taken by hand at Utilz in the meantime, and ST0007 WP-08, where Utilz adopts devbin's release core, stays after the sweep."
+  }
+}

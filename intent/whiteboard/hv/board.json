@@ -151,6 +151,14 @@
       "text": "hv, 2026-09-19, directly to vc: \"Ok, ST0021 looks good, you and CC should crack on and build it.\" ST0021's design is approved and the thread is built for 2.10.0. vc reads the approval as taking each of the design's eight questions' recommendations as its answer (.mp4 H.264 by default and .mov as H.264; the reel's own target resolution; 30 fps with --fps; silent; the corner bug kept; showreel video <dir>; ffmpeg a declared dependency that doctor reports; recorded on the maintainer's machine and tested on CI legs carrying Chrome and ffmpeg). hv can change any one without changing the route.",
       "state": "live",
       "recorded_at": "2026-09-19T14:09:36.081Z"
+    },
+    {
+      "node": "hv",
+      "kind": "decision",
+      "seq": 8,
+      "text": "hv, 2026-09-20, on devbin-vc's pre-notice of the devbin 0.1.2 fleet sweep, in hv's words: \"Yes, get 2.10 out first, then we can update Devbin post that.\" So Utilz ships 2.10.0 first, and the sweep of the vendored devbin follows the tag. vc has told devbin-vc, and will tell it the result of CI run 35507688287, which decides ST0021's last criterion. Nothing of devbin is taken by hand at Utilz in the meantime, and ST0007 WP-08, where Utilz adopts devbin's release core, stays after the sweep.",
+      "state": "live",
+      "recorded_at": "2026-09-20T11:29:51.739Z"
     }
   ],
   "messages": []
