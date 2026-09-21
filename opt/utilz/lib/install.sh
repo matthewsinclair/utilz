@@ -189,6 +189,25 @@ install_tree_kind() {
   printf 'other\n'
 }
 
+# Echo the short commit a tree is at, or `none` when the tree is not a git
+# repository of its own (issue 0044).
+#
+# THE SAME TEST install_tree_state MAKES, SO THE TWO HALVES OF THE ANNOUNCE
+# CANNOT DISAGREE. A bare `git -C <tree> rev-parse` walks up to the nearest
+# enclosing repository and answers with its HEAD: from a Homebrew keg, which
+# has no .git, that was Homebrew's own commit, printed beside `unknown`.
+install_tree_commit() {
+  local tree="$1"
+  local commit
+
+  if _install_is_git_toplevel "$tree" &&
+    commit=$(git -C "$tree" rev-parse --short HEAD 2>/dev/null); then
+    printf '%s\n' "$commit"
+  else
+    printf 'none\n'
+  fi
+}
+
 # Echo the git state of a source tree: clean, dirty, or unknown.
 #
 # Three values, not two. "no changes" and "cannot tell" must never render as
@@ -823,7 +842,7 @@ install_verb_install() {
   local state kind commit
   state=$(install_tree_state "$src")
   kind=$(install_tree_kind "$prefix")
-  commit=$(git -C "$src" rev-parse --short HEAD 2>/dev/null) || commit="none"
+  commit=$(install_tree_commit "$src")
 
   install_announce "install" "$src" "$state" "$commit" "$prefix" "$kind"
 
@@ -989,7 +1008,7 @@ install_verb_upgrade() {
   local state kind commit
   state=$(install_tree_state "$src")
   kind=$(install_tree_kind "$prefix")
-  commit=$(git -C "$src" rev-parse --short HEAD 2>/dev/null) || commit="none"
+  commit=$(install_tree_commit "$src")
 
   install_announce "upgrade" "$src" "$state" "$commit" "$prefix" "$kind"
 

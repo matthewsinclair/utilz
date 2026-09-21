@@ -650,3 +650,22 @@ ROWS
     fail "the publish would ship: $(printf '%s\n' "$output" | grep '^tools/')"
   fi
 }
+
+# ============================================================================
+# issue 0044: the announced commit is the tree's own, or none
+# ============================================================================
+
+@test "0044: a source tree that is not a repository announces no commit, never an enclosing repository's" {
+  local outer="$BATS_TEST_TMPDIR/outer" inner
+  make_fake_src "$outer"
+  inner="$outer/nested"
+  make_fake_src "$inner"
+  rm -rf "$inner/.git"
+  # The enclosing repository has a HEAD git would happily report for $inner.
+  [ -n "$(git -C "$inner" rev-parse --short HEAD 2>/dev/null)" ] \
+    || fail "git reads no enclosing HEAD from the nested tree, so this would pass vacuously"
+
+  run run_install_function "UTILZ_HOME='$inner'; INSTALL_GH='$BATS_TEST_TMPDIR/no-gh'; install_verb_install --prefix '$BATS_TEST_TMPDIR/dst'"
+  assert_failure
+  assert_output_contains "source: $inner (unknown, none)"
+}
