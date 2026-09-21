@@ -1,0 +1,17 @@
+{
+  "id": "01M32GZ4W8DAPW71RP1AGF71C2",
+  "ts": "2026-09-21T17:42:07.496Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "ST0022 design ready for review at b7ea44a (intent/st/ST0022/design.md): hv's names and size rule (decision 13); D5a tall frames record at deviceScaleFactor 2 so the handset layout applies (16:9 unchanged); D5b portrait gallery = contain on blurred ground, Ken Burns back as zoom-only; D5c socials sizes; D5d segments take stills only, no video clips. Need: your GO on the design, the absolute path of Snorkeltoast's 001 reel, and a go before any suite.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}
