@@ -1,0 +1,15 @@
+{
+  "id": "01M31MKD6EN4BQCNW6HWEC7KPP",
+  "ts": "2026-09-21T09:26:22.670Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "doing",
+    "text": "WP-02 verified at be34adb (keg.bats red 8/8 on parent, green 8/8; opt/utilz/test 248, 0 failed). Issue 0043 filed and fixed at 274e64f (install_e2e refuses from a linked worktree). hv's go on WP-03's spike and MIT given (decision 8); cc runs the spike, vc verifies its record."
+  }
+}

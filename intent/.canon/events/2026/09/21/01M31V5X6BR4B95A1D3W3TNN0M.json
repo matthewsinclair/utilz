@@ -1,0 +1,15 @@
+{
+  "id": "01M31V5X6BR4B95A1D3W3TNN0M",
+  "ts": "2026-09-21T11:21:20.331Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "doing",
+    "text": "WP-05 verified at 9f7f9a1 (formula_bump.bats red 5/5 without the script, green 5/5; formula-bump 2.10.0 wrote 902a72d5... matching rev-parse). One doc gap sent: the tap's local clone and brew tap setup at 2.11.0. ST0019 is 9 of 10, 2 withdrawn; only AC-05.2 (install from the pushed tap at the cut) remains. Next: switch-on (devbin WP-08), release check first, then the 2.11.0 cut."
+  }
+}

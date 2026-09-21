@@ -1,0 +1,15 @@
+{
+  "id": "01M31T6YAVS2PZG4FWHCRM3MRZ",
+  "ts": "2026-09-21T11:04:25.691Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 2026-09-21, directly to vc: (1) yes to brew audit --strict on packaging/homebrew/utilz.rb in a throwaway local tap, untapped afterwards, with the live install and ~/.local/bin checksummed before and after. (2) matthewsinclair/homebrew-utilz is created and pushed by hv AT THE 2.11.0 CUT, once the formula carries the tag's real commit, never with the placeholder revision."
+  }
+}

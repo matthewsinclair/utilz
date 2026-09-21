@@ -781,8 +781,77 @@
       "kind": "doing",
       "seq": 45,
       "text": "ST0019 WP-01 green: vc satisfied AC-01.1 (doctor clean at 45c3830 with the release: block inert; tag mutation refused by name). AC-01.3/.4/.5 satisfied, .2 withdrawn. cc closes WP-01 and starts WP-02 (keg refusals). Next for vc: verify WP-02; the switch-on (devbin WP-08, hv's go 21 Sep) opens with release check.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-09-21T09:26:22.525Z",
       "recorded_at": "2026-09-21T08:16:38.506Z"
+    },
+    {
+      "node": "vc",
+      "kind": "decision",
+      "seq": 8,
+      "text": "hv, 2026-09-21, directly to vc: (1) yes to WP-03's spike -- a keg_only brew install of Utilz from a scratch local tap on this machine, built from source at a named revision of this repository, removed afterwards with brew uninstall and brew untap. (2) Utilz is MIT-licensed; a LICENSE file lands with WP-04 and the formula declares license \"MIT\".",
+      "state": "live",
+      "recorded_at": "2026-09-21T09:26:22.347Z"
+    },
+    {
+      "node": "vc",
+      "kind": "doing",
+      "seq": 46,
+      "text": "WP-02 verified at be34adb (keg.bats red 8/8 on parent, green 8/8; opt/utilz/test 248, 0 failed). Issue 0043 filed and fixed at 274e64f (install_e2e refuses from a linked worktree). hv's go on WP-03's spike and MIT given (decision 8); cc runs the spike, vc verifies its record.",
+      "state": "archived",
+      "archived_at": "2026-09-21T09:41:19.345Z",
+      "recorded_at": "2026-09-21T09:26:22.670Z"
+    },
+    {
+      "node": "vc",
+      "kind": "doing",
+      "seq": 47,
+      "text": "WP-03 spike verified at 2097abf: no Cellar, opt, tap, bin or cache leftovers (vc's own check); hv's live install passes doctor 'Install matches its manifest'; ~/.local/bin/utilz still resolves to ~/Devel/opt/utilz, and no link changed today. Issue 0044's fix (5224183) is red at 07bc296 and green at 2097abf in vc's worktree. The spike ran before vc's scratch-targets note arrived; cc used scratch targets anyway, and the missing before-hash is on the record. cc closes WP-03; WP-04 next.",
+      "state": "archived",
+      "archived_at": "2026-09-21T11:16:45.994Z",
+      "recorded_at": "2026-09-21T09:41:19.482Z"
+    },
+    {
+      "node": "vc",
+      "kind": "decision",
+      "seq": 9,
+      "text": "hv, 2026-09-21, directly to vc: (1) yes to brew audit --strict on packaging/homebrew/utilz.rb in a throwaway local tap, untapped afterwards, with the live install and ~/.local/bin checksummed before and after. (2) matthewsinclair/homebrew-utilz is created and pushed by hv AT THE 2.11.0 CUT, once the formula carries the tag's real commit, never with the placeholder revision.",
+      "state": "live",
+      "recorded_at": "2026-09-21T11:04:25.691Z"
+    },
+    {
+      "node": "vc",
+      "kind": "decision",
+      "seq": 10,
+      "text": "hv, 2026-09-21, directly to vc, on ST0019 WP-05: the formula follows each release by a documented step in a release doc here PLUS a small tools/ script that writes the new tag and that tag's commit into packaging/homebrew/utilz.rb from git, so no SHA is typed by hand (the offline audit cannot catch a wrong one). hv audits, commits and pushes the tap himself; no release-core after: hook.",
+      "state": "archived",
+      "archived_at": "2026-09-21T11:16:56.079Z",
+      "recorded_at": "2026-09-21T11:16:45.848Z"
+    },
+    {
+      "node": "vc",
+      "kind": "doing",
+      "seq": 48,
+      "text": "WP-04 verified closed at a6f70af (audit clean with a failing control; no tap or cache left; live install and ~/.local/bin hashes unchanged). hv ruled WP-05 (decision 10): release doc + tools/ formula-bump script, hv pushes the tap. Then: switch-on (devbin WP-08) with release check first, cut 2.11.0, hv pushes the tap (AC-05.2).",
+      "state": "archived",
+      "archived_at": "2026-09-21T11:21:20.186Z",
+      "recorded_at": "2026-09-21T11:16:46.136Z"
+    },
+    {
+      "node": "vc",
+      "kind": "decision",
+      "seq": 11,
+      "text": "hv, 2026-09-21, directly to vc, on ST0019 WP-05: the formula follows each release by a documented step in a release doc here PLUS a small tools/ script that writes the new tag and that tag's commit into packaging/homebrew/utilz.rb from git, so no SHA is typed by hand (the offline audit cannot catch a wrong one). hv audits, commits and pushes the tap; no release-core after: hook.",
+      "state": "live",
+      "recorded_at": "2026-09-21T11:16:56.218Z"
+    },
+    {
+      "node": "vc",
+      "kind": "doing",
+      "seq": 49,
+      "text": "WP-05 verified at 9f7f9a1 (formula_bump.bats red 5/5 without the script, green 5/5; formula-bump 2.10.0 wrote 902a72d5... matching rev-parse). One doc gap sent: the tap's local clone and brew tap setup at 2.11.0. ST0019 is 9 of 10, 2 withdrawn; only AC-05.2 (install from the pushed tap at the cut) remains. Next: switch-on (devbin WP-08), release check first, then the 2.11.0 cut.",
+      "state": "live",
+      "recorded_at": "2026-09-21T11:21:20.331Z"
     }
   ],
   "messages": [

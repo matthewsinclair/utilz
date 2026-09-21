@@ -1,0 +1,15 @@
+{
+  "id": "01M31TXHDR3B1PX8PC1ES9NYVZ",
+  "ts": "2026-09-21T11:16:46.136Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "doing",
+    "text": "WP-04 verified closed at a6f70af (audit clean with a failing control; no tap or cache left; live install and ~/.local/bin hashes unchanged). hv ruled WP-05 (decision 10): release doc + tools/ formula-bump script, hv pushes the tap. Then: switch-on (devbin WP-08) with release check first, cut 2.11.0, hv pushes the tap (AC-05.2)."
+  }
+}

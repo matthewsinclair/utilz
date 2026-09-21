@@ -13,7 +13,7 @@ claims: []
 
 ## DOING
 
-- ST0019 WP-01 green: vc satisfied AC-01.1 (doctor clean at 45c3830 with the release: block inert; tag mutation refused by name). AC-01.3/.4/.5 satisfied, .2 withdrawn. cc closes WP-01 and starts WP-02 (keg refusals). Next for vc: verify WP-02; the switch-on (devbin WP-08, hv's go 21 Sep) opens with release check.
+- WP-05 verified at 9f7f9a1 (formula_bump.bats red 5/5 without the script, green 5/5; formula-bump 2.10.0 wrote 902a72d5... matching rev-parse). One doc gap sent: the tap's local clone and brew tap setup at 2.11.0. ST0019 is 9 of 10, 2 withdrawn; only AC-05.2 (install from the pushed tap at the cut) remains. Next: switch-on (devbin WP-08), release check first, then the 2.11.0 cut.
 
 ## TODO
 
@@ -39,6 +39,9 @@ _(none)_
 - hv, 2026-09-21, directly to vc: (1) 'Devbin: yes, do it.' Utilz adopts devbin's release core (devbin ST0007 WP-08), once ST0019 WP-01 has proved the declaration and the gates. (2) 'Rule: yes, agree.' Any gap in bin/.devbin/lib/release* goes to devbin-dc or devbin-2b through vc, fixed in devbin as a default with an override; never a patch to the vendored copy, never a Utilz-only branch.
 - hv, 2026-09-21, directly to vc, on ST0019's three questions, each taking the recommendation cc and vc gave: (Q1) the Homebrew formula builds from source off the git tag (git URL, rust as a build dependency, utilz install into the keg), macOS on both architectures, no prebuilt or signed artefacts; bottles may come later. (Q2) brew sits beside utilz install / upgrade, which stay the maintainer's loop; inside a keg upgrade, relink and use refuse and name brew upgrade utilz. (D2) prez keeps its own version number, bumped in its own commit before a cut; Cargo.toml is not a sidecar.
 - hv, 2026-09-21, directly to vc: the next release is 2.11.0, so CHANGELOG's open section is '## [2.11.0] - unreleased' (ST0019 AC-01.4). It carries ST0019's Homebrew install.
+- hv, 2026-09-21, directly to vc: (1) yes to WP-03's spike -- a keg_only brew install of Utilz from a scratch local tap on this machine, built from source at a named revision of this repository, removed afterwards with brew uninstall and brew untap. (2) Utilz is MIT-licensed; a LICENSE file lands with WP-04 and the formula declares license "MIT".
+- hv, 2026-09-21, directly to vc: (1) yes to brew audit --strict on packaging/homebrew/utilz.rb in a throwaway local tap, untapped afterwards, with the live install and ~/.local/bin checksummed before and after. (2) matthewsinclair/homebrew-utilz is created and pushed by hv AT THE 2.11.0 CUT, once the formula carries the tag's real commit, never with the placeholder revision.
+- hv, 2026-09-21, directly to vc, on ST0019 WP-05: the formula follows each release by a documented step in a release doc here PLUS a small tools/ script that writes the new tag and that tag's commit into packaging/homebrew/utilz.rb from git, so no SHA is typed by hand (the offline audit cannot catch a wrong one). hv audits, commits and pushes the tap; no release-core after: hook.
 
 ---
 

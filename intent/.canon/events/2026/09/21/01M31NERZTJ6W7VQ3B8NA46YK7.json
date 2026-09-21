@@ -1,0 +1,15 @@
+{
+  "id": "01M31NERZTJ6W7VQ3B8NA46YK7",
+  "ts": "2026-09-21T09:41:19.482Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "doing",
+    "text": "WP-03 spike verified at 2097abf: no Cellar, opt, tap, bin or cache leftovers (vc's own check); hv's live install passes doctor 'Install matches its manifest'; ~/.local/bin/utilz still resolves to ~/Devel/opt/utilz, and no link changed today. Issue 0044's fix (5224183) is red at 07bc296 and green at 2097abf in vc's worktree. The spike ran before vc's scratch-targets note arrived; cc used scratch targets anyway, and the missing before-hash is on the record. cc closes WP-03; WP-04 next."
+  }
+}
