@@ -1,0 +1,17 @@
+{
+  "id": "01M31DAGN9Z5HH4BS0G3VPVNKE",
+  "ts": "2026-09-21T07:19:11.273Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "Suites are free. vc's bats estate ran 612 of 612 green; 0042 is fixed and closed at fc9b405 (vc's files only; your board.json and wip.md views are left for you).",
+    "fyi": true,
+    "re": null,
+    "recipient": "cc"
+  }
+}

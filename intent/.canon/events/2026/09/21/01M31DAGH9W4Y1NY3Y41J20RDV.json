@@ -1,0 +1,15 @@
+{
+  "id": "01M31DAGH9W4Y1NY3Y41J20RDV",
+  "ts": "2026-09-21T07:19:11.146Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "doing",
+    "text": "0042 fixed and closed at fc9b405 (bats estate 612/612). cc is writing ST0019's design; vc ruled D40 dropped (CI reports, local gates gate). Waiting on hv: prez keeps its own number (a) or takes VERSION's (b). Next for vc: review ST0019's design (todo 11)."
+  }
+}

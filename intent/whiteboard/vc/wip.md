@@ -13,7 +13,7 @@ claims: []
 
 ## DOING
 
-- Synced with cc on 21 Sep (plan A-D, reply on cc's board). vc has 0042: .git-first copy in install_e2e.bats, install_e2e 11/11 alone, bats estate running; then commit 0042 with vc's views. cc is on ST0019's design (source-reading only; suites held for vc). Next for vc: review ST0019's design (todo 11).
+- 0042 fixed and closed at fc9b405 (bats estate 612/612). cc is writing ST0019's design; vc ruled D40 dropped (CI reports, local gates gate). Waiting on hv: prez keeps its own number (a) or takes VERSION's (b). Next for vc: review ST0019's design (todo 11).
 
 ## TODO
 
