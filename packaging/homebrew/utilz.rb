@@ -9,7 +9,7 @@ class Utilz < Formula
   # 2.11.0 is cut, the revision is a placeholder that the bump replaces.
   url "https://github.com/matthewsinclair/utilz.git",
       tag:      "2.11.0",
-      revision: "0000000000000000000000000000000000000000"
+      revision: "7fc9bb54e1e26a57601515240c08ded84711c07a"
   license "MIT"
 
   depends_on "rust" => :build
