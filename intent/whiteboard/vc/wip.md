@@ -13,7 +13,7 @@ claims: []
 
 ## DOING
 
-- Release core ON at cb45181 (commands.release.enabled: true, config.yaml only). vc ran bin/devbin release check at cb45181: rc 0, declaration reads tag {version}, gates check all + test estate, ci.query tools/ci-state, repo matthewsinclair/utilz (all declared), notes.kind changelog; tree byte-identical before and after. ST0019 waits only on the 2.11.0 cut (--minor), on hv's word, then formula-bump and the tap (AC-05.2).
+- ST0022 (showreel --aspect, geodica's same-day request) closed at 7c6e1c8; hv upgraded the install to 8d6c147, and geodica has the usage. PATH links in ~/.local/bin and ~/bin were repointed to the source checkout at 19:09:30 by something unidentified (not upgrade, not cc); hv told: 'utilz use opt' restores them. Next: 2.11.0 CHANGELOG entry (cc drafts, vc reviews) then the cut through the release core, on hv's word.
 
 ## TODO
 

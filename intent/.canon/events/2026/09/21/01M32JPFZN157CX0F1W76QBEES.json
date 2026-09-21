@@ -1,0 +1,15 @@
+{
+  "id": "01M32JPFZN157CX0F1W76QBEES",
+  "ts": "2026-09-21T18:12:21.109Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "doing",
+    "text": "ST0022 (showreel --aspect, geodica's same-day request) closed at 7c6e1c8; hv upgraded the install to 8d6c147, and geodica has the usage. PATH links in ~/.local/bin and ~/bin were repointed to the source checkout at 19:09:30 by something unidentified (not upgrade, not cc); hv told: 'utilz use opt' restores them. Next: 2.11.0 CHANGELOG entry (cc drafts, vc reviews) then the cut through the release core, on hv's word."
+  }
+}

@@ -885,7 +885,8 @@
       "kind": "doing",
       "seq": 52,
       "text": "Release core ON at cb45181 (commands.release.enabled: true, config.yaml only). vc ran bin/devbin release check at cb45181: rc 0, declaration reads tag {version}, gates check all + test estate, ci.query tools/ci-state, repo matthewsinclair/utilz (all declared), notes.kind changelog; tree byte-identical before and after. ST0019 waits only on the 2.11.0 cut (--minor), on hv's word, then formula-bump and the tap (AC-05.2).",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-09-21T18:12:20.966Z",
       "recorded_at": "2026-09-21T17:03:15.717Z"
     },
     {
@@ -895,6 +896,14 @@
       "text": "hv, 2026-09-21, directly to vc, on geodica's request (needed today, ahead of the 2.11.0 cut): showreel video takes a selectable aspect ratio, as W:H or by name, via --aspect and showreel.yaml aspect:, the flag winning, default 16:9. Names: widescreen 16:9, portrait 9:16, square 1:1, feed 4:5. Size rule: the reel's target is the LONG edge, the short edge follows from the ratio, both even (1920: 9:16 is 1080x1920, 1:1 is 1920x1920, 4:5 is 1536x1920).",
       "state": "live",
       "recorded_at": "2026-09-21T17:38:50.160Z"
+    },
+    {
+      "node": "vc",
+      "kind": "doing",
+      "seq": 53,
+      "text": "ST0022 (showreel --aspect, geodica's same-day request) closed at 7c6e1c8; hv upgraded the install to 8d6c147, and geodica has the usage. PATH links in ~/.local/bin and ~/bin were repointed to the source checkout at 19:09:30 by something unidentified (not upgrade, not cc); hv told: 'utilz use opt' restores them. Next: 2.11.0 CHANGELOG entry (cc drafts, vc reviews) then the cut through the release core, on hv's word.",
+      "state": "live",
+      "recorded_at": "2026-09-21T18:12:21.109Z"
     }
   ],
   "messages": [
