@@ -1,0 +1,15 @@
+{
+  "id": "01M31DMR2X4F3BT6TWB4YY9TEY",
+  "ts": "2026-09-21T07:24:46.558Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wp.new",
+  "subject": {
+    "type": "wp",
+    "id": "ST0019/02"
+  },
+  "payload": {
+    "scope": "S",
+    "title": "The keg as an install tree: the discriminator and the verbs that refuse"
+  }
+}

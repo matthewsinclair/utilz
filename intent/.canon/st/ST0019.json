@@ -9,6 +9,119 @@
   "context": "## Why\n\nhv, 2026-09-14, raised directly to vc: bring Utilz's release process into line with the other devbin projects that release something, and \"brew-ify utilz so that it works just like intent\". The question that surfaced it was why 2.9.0 was not cut with `dvb build release`.\n\n**Utilz has no `build release`.** devbin ships `build` as a name with no command line (tier 4 in `bin/.devbin/lib/builtins`): each project supplies its own arms. Utilz's `bin/.devbin/config.yaml` has no `build` section, and `bin/.devbin/cmd/` is empty. Releases 2.6.1 to 2.9.0 were hand-made `release:` commits, tagged and pushed by hand, although devbin was vendored on 2026-08-29, before 2.8.0. vc reports that Utilz's last GitHub release object before 2.9.0 was v2.2.0.\n\n**2.9.0 shipped the old way**, by hv's decision on 2026-09-14. It was committed at `ebd0243` and verified GO before this thread existed, then tagged and pushed by hand, and CI passed all seven jobs on the pushed commit (run 34866136691). **The next release is cut by hand once more** (hv's ruling on question 4), so this thread's first release is the one after it.\n\n## Scope, as hv ruled it (2026-09-14)\n\n**This thread designs the Utilz parts only: its version files, the CI build of prez, and the Homebrew formula.** The shared release core (pre-flight, version stamping, dating the CHANGELOG, commit, tag, push and the release object) is Devbin project work, with Utilz as its first user. hv ruled it directly to vc, and it is recorded as hv's decision on hv's board. It is raised as Devbin issue 0064 (vc, 2026-09-14).\n\n## Precedents in the fleet\n\nRead from source, never by running a command. On 2026-09-14 vc found that a devbin project command can ignore `--help` and run: Intent's `bin/devbin macos prepare --help` rebuilt and re-signed Intent.app.\n\n- **Intent**: `bin/.devbin/cmd/build.d/release`, 1,170 lines.\n  - Pre-flight: a clean tree on main, both remotes, `intent doctor`, bats, `cargo test --workspace`, gh authenticated.\n  - A version bump by `--patch`, `--minor` or `--major`, or an explicit target that must exceed VERSION.\n  - VERSION and `Cargo.toml` are written through `devbin version set`, and `Cargo.lock` through cargo.\n  - The CHANGELOG heading is authored as `in progress` and dated at cut time.\n  - It commits, tags, pushes to both remotes and creates the GitHub release object. It has `--dry-run`, and it confirms before the push.\n  - It owns the tag and the release object only (its D43). `int macos prepare` builds the artefacts, `int macos publish` attaches them to the release, and the `matthewsinclair/intent` tap's formula installs the prebuilt binary from the GitHub release.\n- **Conflab**: `bin/.devbin/cmd/release`, 399 lines, and a tap, `geodica/conflab`. It may be closer to Utilz's scale than Intent. Its default path cuts the release through CI: `conflab release --patch` goes through a workflow, and `--local` builds and notarises on the owner's machine only when the owner authorises it (vc, 2026-09-14).\n- **Devbin**: `bin/.devbin/cmd/release`, 296 lines. `RELEASES/<version>.md` is the one source for a release, and `CHANGELOG.md` and `RELEASES.md` are generated from it.\n- **Intentv2**: `bin/.devbin/cmd/build.d/release`, 839 lines.\n\n## Open design questions\n\n1. **What does a Utilz formula install, for which platforms, and where is it built?** Utilz is a bash framework, fifteen utilities and a Rust workspace (prez, showreel). Is it prebuilt binaries per architecture, as Intent ships, or a formula that builds the workspace with cargo? Intent ships aarch64-apple-darwin only, while Utilz's CI already runs macOS arm64 and Ubuntu: is it macOS arm64 only, Intel as well, or Linuxbrew too? And a tag-triggered workflow can build prez and showreel on the runners, as Conflab's default path does, which Intent's local-only prepare cannot (vc, 2026-09-14).\n2. **How does a Homebrew install relate to `utilz install` and `utilz upgrade`** (ST0014): does it replace them, or sit beside them? Beneath that (vc, 2026-09-14): `UTILZ_HOME` inside a versioned Cellar prefix; the dispatcher's install-tree detection; `utilz use dev|opt` relinking; and what the manifest's `source-tree` and `ci-state` rows (issue 0016) mean for a tree brew built.\n3. **Utilz's tags carry no `v`** (hv's ruling, from 2.7.0), and Intent's carry one. The pipeline and the formula's release URLs must honour Utilz's ruling.\n4. **Where does the shared release logic live? RULED by hv, 2026-09-14: in Devbin, as Devbin project work, with Utilz as its first user** (\"Scope, as hv ruled it\", above). The core is the pre-flight, version stamping, dating the CHANGELOG, commit, tag, push and the release object. Utilz's own parts start in Utilz, and the next Utilz release is cut by hand once more. A handler copied from Intent's or Conflab's would have given the fleet another orchestrator for the same job, which is what the ruling avoids.\n5. **Where do the release notes live, and how is the CHANGELOG heading dated?** Utilz's CHANGELOG is hand-authored, while Devbin generates its CHANGELOG from `RELEASES/<version>.md`. Intent authors the heading as `in progress` and dates it at cut time. Dating the CHANGELOG is now the Devbin core's (question 4), so what is left here is what Utilz hands the core.\n6. **The pre-flight gate Intent's lacks: CI green on the commit being tagged.** Utilz already asks CI about a commit, through `install_ci_state` (issue 0016), and the release pre-flight should ask through that one function rather than through a second `gh` query (vc, 2026-09-14). The pre-flight is now the Devbin core's (question 4), so this becomes a requirement Utilz brings to it.\n\n## Findings from cutting 2.9.0 by hand\n\nWhat the pipeline has to get right, learned on 2026-09-14:\n\n- **`git tag -F` strips every line that starts with `#`, by default.** The CHANGELOG entry's `### Added`, `### Changed` and `### Fixed` headings vanish from the tag message unless the tag is made with `--cleanup=whitespace`. It was demonstrated in a throwaway repo: the default kept 0 of 3 headings, and `--cleanup=whitespace` kept all 3 and the message byte for byte. 2.8.0's tag has no `### Fixed`, probably for this reason.\n- **The hand procedure is fragile.** The first tag command was one long pipeline. Pasted from a terminal, it split, and `git tag` opened an editor instead of reading the message. The 2.9.0 tag was made from a prepared message file, with short commands.\n- **The GitHub release object is back for 2.9.0**, the first since v2.2.0. It was made with `gh release create 2.9.0 --verify-tag --title 2.9.0 --notes-from-tag`, so the release notes are the annotated tag's message, which is itself the CHANGELOG entry.\n\n## Roles\n\ncc drafts the design, and vc reviews it before any code (vc, 2026-09-14). hv runs the release.",
   "body": "",
   "preamble": "",
+  "wps": [
+    {
+      "seq": 1,
+      "title": "Gates, bin/ci-state, the heading convention, and gates that leave no dirt",
+      "scope": "S",
+      "status": "not-started",
+      "objective": "Everything Utilz declares to devbin's release core is in place and proved before Devbin's ST0007 WP-08 switches it on (design D1, D2, D6). acceptance.sh, theme-addressing.sh and video.sh are declared as test options with in_all: false and listed as their own gates after test all. bin/ci-state wraps install_ci_state and maps its conclusion to the core's five verdicts. The CHANGELOG's open section is headed ## [X.Y.Z] - unreleased. Every gate is run with git status --porcelain --untracked-files=all diffed before and after, and any writer found is fixed or ignored. The release block is not enabled here.",
+      "body": "",
+      "preamble": ""
+    },
+    {
+      "seq": 2,
+      "title": "The keg as an install tree: the discriminator and the verbs that refuse",
+      "scope": "S",
+      "status": "not-started",
+      "objective": "A Homebrew keg is an install tree whose upgrade belongs to brew (design D4, pending hv's ruling on Q2). The keg carries a fact that identifies it as brew's, either a manifest header row or an install flag, and WP-02 chooses which. upgrade, relink and use refuse inside a keg and name brew upgrade utilz. Every other install-tree behaviour holds unchanged.",
+      "body": "",
+      "preamble": ""
+    },
+    {
+      "seq": 3,
+      "title": "Spike: a git-URL formula built in a scratch tap, the keg run end to end",
+      "scope": "S",
+      "status": "not-started",
+      "objective": "Prove design D3's two readings of Homebrew's source by driving them, before any tap exists (pending hv's ruling on Q1): a formula whose url is the git repository at a tag stages with .git present and a clean tree, so utilz install --prefix libexec publishes; and the finished keg passes utilz doctor after brew's post-install, manifest included, and runs every utility. Built in a scratch tap only.",
+      "body": "",
+      "preamble": ""
+    },
+    {
+      "seq": 4,
+      "title": "The tap matthewsinclair/homebrew-utilz and its formula",
+      "scope": "S",
+      "status": "not-started",
+      "objective": "The tap matthewsinclair/homebrew-utilz exists with a formula that builds Utilz from source off its bare git tag (design D3): top-level url, depends_on rust for the build, yq required and the other utilities' dependencies recommended, the tree in libexec with a bin symlink for each dispatcher link, and a caveat pointing at utilz doctor. It passes brew audit --strict.",
+      "body": "",
+      "preamble": ""
+    },
+    {
+      "seq": 5,
+      "title": "The formula bump after a release: after: or a documented step",
+      "scope": "S",
+      "status": "not-started",
+      "objective": "Decide and build how the formula's tag and revision follow a release (design, Work packages): a release after: command that rewrites the formula and pushes the tap, or a documented step hv runs. after: runs outside the core's guarantees, and a push to a second repository is hv's call, so this WP puts the choice to hv before building either.",
+      "body": "",
+      "preamble": ""
+    }
+  ],
+  "criteria": [
+    {
+      "id": "AC-01.1",
+      "text": "The release declaration, its three extra gates included, validates under the core's read-only release check, run by hv or vc.",
+      "kind": "non-test",
+      "state": {
+        "is": "unsatisfied"
+      }
+    },
+    {
+      "id": "AC-01.2",
+      "text": "Every declared gate leaves git status --porcelain --untracked-files=all byte-identical, measured before and after each one.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC-01.3",
+      "text": "bin/ci-state answers green, failed, pending, none and unknown for the corresponding install_ci_state answers under a stubbed gh, and asks through install_ci_state alone.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC-01.4",
+      "text": "CHANGELOG.md's open section is headed ## [X.Y.Z] - unreleased, and the core reads its state as open.",
+      "kind": "non-test",
+      "state": {
+        "is": "unsatisfied"
+      }
+    },
+    {
+      "id": "AC-02.1",
+      "text": "Inside a keg, utilz upgrade, relink and use refuse and name brew upgrade utilz, and in a non-brew install tree they behave as before.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC-03.1",
+      "text": "A keg built from a git-URL formula in a scratch tap passes utilz doctor after brew's post-install, manifest included, and every utility runs from it.",
+      "kind": "non-test",
+      "state": {
+        "is": "unsatisfied"
+      }
+    },
+    {
+      "id": "AC-04.1",
+      "text": "The formula in matthewsinclair/homebrew-utilz passes brew audit --strict and installs Utilz from its bare tag.",
+      "kind": "non-test",
+      "state": {
+        "is": "unsatisfied"
+      }
+    },
+    {
+      "id": "AC-05.1",
+      "text": "How the formula follows a release is decided by hv and either built or documented.",
+      "kind": "non-test",
+      "state": {
+        "is": "unsatisfied"
+      }
+    }
+  ],
   "attachments": [
     {
       "path": "design.md",

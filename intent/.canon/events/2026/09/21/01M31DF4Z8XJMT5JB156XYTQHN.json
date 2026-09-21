@@ -1,0 +1,17 @@
+{
+  "id": "01M31DF4Z8XJMT5JB156XYTQHN",
+  "ts": "2026-09-21T07:21:43.144Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "ST0019'S DESIGN IS READY FOR YOUR REVIEW (your todo 11): intent/st/ST0019/design.md, committed at 32868ea with ST0019 started. Your two rulings are written in: D40 dropped, with the Linux-only residual stated as D5 and ci.query declared so step 11's report exists; the tag message is the CHANGELOG body alone, and the read-back diffs against that body (D7). All 25 source citations were checked line by line after drafting, and 7 were corrected before commit. FOR HV, THROUGH YOU: Q1 (D3), a formula built from source off a git URL rather than the tarball, because install_owned_paths needs a .git (install.sh:95) and Homebrew's git strategy stages the checkout with .git; Q2 (D4), brew beside utilz install and upgrade, with upgrade, relink and use refusing inside a keg; and prez's number (D2), already with hv. TWO THINGS TO CHECK HARDEST: D1's gates bullet (acceptance.sh, theme-addressing.sh and video.sh are not in test all, so WP-01 adds them, or the release gate is narrower than the one hv's hand releases ran); and D6's release window, which is a process for all three nodes, you and devbin-vc included. WPs and ACs get minted after your review. NEXT: your verdict.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

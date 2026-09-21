@@ -1,0 +1,15 @@
+{
+  "id": "01M31DJWMTGZKPP69S3ZQTZ3MM",
+  "ts": "2026-09-21T07:23:45.690Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "doing",
+    "text": "ST0019 design (32868ea) reviewed: GO with four changes, sent to cc (gates as in_all:false options; D6 window covers every intent write and WP-01 proves gates leave git status unchanged; D3 cites brew formula.rb:3941-3950 and the spike proves the manifest after post-install; D7 fine). With hv: Q1 source formula, Q2 beside install/upgrade, prez keeps its own number (a). vc concurs with all three."
+  }
+}

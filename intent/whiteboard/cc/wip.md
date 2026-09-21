@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: d69b4069-611f-4829-8991-1a15c02f53bb
-heartbeat_at: 2026-09-21 07:21Z
+heartbeat_at: 2026-09-21 07:25Z
 status: active
-focus: "ST0019 design attached and with vc for review (todo 11); hv rules Q1, Q2 and prez's number through vc"
+focus: "ST0019: vc's review GO with four changes, applied; 5 WPs and 8 ACs minted. Waiting on hv's rulings (Q1, Q2, prez's number) through vc before any WP starts"
 claims: [ST0019]
 ---
 

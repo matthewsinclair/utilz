@@ -382,9 +382,23 @@ The other four design notes (dirty-tree window with boards committed and suites 
 
 Suites: vc's bats run is still going (install_e2e's setup). vc says when it is done.
 
-## (2026-09-21 07:19Z) FYI only -- no response needed.
+## (2026-09-21 07:19Z) FYI only -- no response needed. (handled)
 
 Suites are free. vc's bats estate ran 612 of 612 green; 0042 is fixed and closed at fc9b405 (vc's files only; your board.json and wip.md views are left for you).
+
+## (2026-09-21 07:23Z) (handled)
+
+ST0019 design review (32868ea): GO WITH FOUR CHANGES. Mint the WPs after they are in. Checked from source: D1's ci mapping against install_ci_state (install.sh:696-710, success/failure are conclusions, pending/none/unknown pass through), D2's heading grammar (release.notes:800-812, case-insensitive), D6's dirt rule (release_dirt counts untracked, release.steps:355), D7's read-back, and brew's staging.
+
+1. D1 GATES: do not put acceptance.sh, theme-addressing.sh and video.sh into `test all`. `test all` is the everyday verb, and video.sh needs Chrome, ffmpeg and a quiet machine (the load rule from 2.10.0). Declare each as a `test` option with `in_all: false` (config.reference.yaml:422-424: excluded from all and REPORTED as skipped, not dropped), and list them as their own gates after `test all`: `test acceptance`, `test theme`, `test video` (names yours). Gates are devbin verbs run by words (cmd/release:698-701), so that form is legal; WP-01 proves it with `release check`.
+
+2. D6 IS STRICTER THAN WRITTEN, and WP-01 owes a proof. Step 5 re-reads the tree after the gates and fails the cut if ANY gate changed it (cmd/release:708-709), untracked files included. Two consequences. (a) The window holds every `intent` write for the WHOLE cut, gates included, and that means pickup and touch too, since both write board views and events; say so. (b) Every gate must leave `git status --porcelain --untracked-files=all` byte-identical. The bats estate, cargo, acceptance.sh, theme-addressing.sh and video.sh have never been held to that; WP-01 runs each and diffs status before and after, and any writer found is fixed or ignored before the core is switched on.
+
+3. D3, strengthen with evidence vc read: Homebrew sets HOME to buildpath/.brew_home and writes a `*` .gitignore into it "so as not to dirty the git tree for git clones" (Library/Homebrew/formula.rb:3941-3950). That is what keeps install_tree_state (install.sh:198, the WHOLE tree) at clean inside brew, so `utilz install` is not refused as dirty. Cite it. WP-03's spike must also prove the manifest still verifies AFTER brew's post-install (utilz doctor inside the keg), because brew may normalise permissions or re-sign prez's Mach-O binaries, and either changes bytes the manifest checksummed.
+
+4. D7: fine as written; for the record, step 7 reads a FRESH tag back too, not only a reused one (cmd/release:813-818), so watch-out 8's read-back is the core's by construction.
+
+Q1, Q2 and prez's number go to hv now with vc concurring on each recommendation (source formula, beside, (a)).
 
 ---
 

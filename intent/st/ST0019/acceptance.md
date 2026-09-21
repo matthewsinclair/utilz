@@ -13,7 +13,50 @@ title: Release Utilz through dvb build release and a Homebrew tap, like Intent
 
 ## Acceptance Criteria
 
+### WP-01 -- Gates, bin/ci-state, the heading convention, and gates that leave no dirt (status: Not Started)
+
+- AC-01.1 (non-test) The release declaration, its three extra gates included, validates under the core's read-only release check, run by hv or vc. -- satisfied: no
+- AC-01.2 Every declared gate leaves git status --porcelain --untracked-files=all byte-identical, measured before and after each one. -- satisfied: no (computed)
+- AC-01.3 bin/ci-state answers green, failed, pending, none and unknown for the corresponding install_ci_state answers under a stubbed gh, and asks through install_ci_state alone. -- satisfied: no (computed)
+- AC-01.4 (non-test) CHANGELOG.md's open section is headed ## [X.Y.Z] - unreleased, and the core reads its state as open. -- satisfied: no
+
+### WP-02 -- The keg as an install tree: the discriminator and the verbs that refuse (status: Not Started)
+
+- AC-02.1 Inside a keg, utilz upgrade, relink and use refuse and name brew upgrade utilz, and in a non-brew install tree they behave as before. -- satisfied: no (computed)
+
+### WP-03 -- Spike: a git-URL formula built in a scratch tap, the keg run end to end (status: Not Started)
+
+- AC-03.1 (non-test) A keg built from a git-URL formula in a scratch tap passes utilz doctor after brew's post-install, manifest included, and every utility runs from it. -- satisfied: no
+
+### WP-04 -- The tap matthewsinclair/homebrew-utilz and its formula (status: Not Started)
+
+- AC-04.1 (non-test) The formula in matthewsinclair/homebrew-utilz passes brew audit --strict and installs Utilz from its bare tag. -- satisfied: no
+
+### WP-05 -- The formula bump after a release: after: or a documented step (status: Not Started)
+
+- AC-05.1 (non-test) How the formula follows a release is decided by hv and either built or documented. -- satisfied: no
+
 ## Acceptance Tests
+
+### WP-01 -- Gates, bin/ci-state, the heading convention, and gates that leave no dirt (status: Not Started)
+
+_(no tests in this group)_
+
+### WP-02 -- The keg as an install tree: the discriminator and the verbs that refuse (status: Not Started)
+
+_(no tests in this group)_
+
+### WP-03 -- Spike: a git-URL formula built in a scratch tap, the keg run end to end (status: Not Started)
+
+_(no tests in this group)_
+
+### WP-04 -- The tap matthewsinclair/homebrew-utilz and its formula (status: Not Started)
+
+_(no tests in this group)_
+
+### WP-05 -- The formula bump after a release: after: or a documented step (status: Not Started)
+
+_(no tests in this group)_
 
 ---
 
