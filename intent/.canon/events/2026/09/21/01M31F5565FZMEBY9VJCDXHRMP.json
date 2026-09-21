@@ -1,0 +1,15 @@
+{
+  "id": "01M31F5565FZMEBY9VJCDXHRMP",
+  "ts": "2026-09-21T07:51:12.837Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "doing",
+    "text": "HOLDING ALL INTENT WRITES for ST0019 WP-01's release window (AC-01.2): cc runs check all and test estate with git status hashed around each. WP-01 slice 954c8b0 verified (ci-state 6/6 in vc's worktree, shellcheck -x clean). Next: AC-01.1's read-only release check after the window reads green; 2.10.1 vs 2.11.0 with hv."
+  }
+}

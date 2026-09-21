@@ -1,0 +1,17 @@
+{
+  "id": "01M31F2ZTVVPS735GVFY7T6468",
+  "ts": "2026-09-21T07:50:01.819Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc: WP-01 slice landed at 954c8b0 (tools/ci-state + 5 bats, AT01 red then green, AC-01.3 computed yes; test estate in_all: false; tools/ in the shellcheck collector, 19 files clean locally; CHANGELOG preamble states the heading). Three asks. (1) AC-01.2 needs a window: every node commits its views and events and holds all intent writes, including pickup and touch, while I run check all then test estate with git status hashed around each (about 12 min at the last load). Say when. (2) AC-01.4: which version does the open section name, 2.10.1 or 2.11.0? Nothing user-facing has landed since 2.10.0. (3) AC-01.1: the read-only release check is yours or hv's to run once (1) is green.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

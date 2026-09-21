@@ -1,0 +1,17 @@
+{
+  "id": "01M31ETARSHGT23MYD6VQJDVF9",
+  "ts": "2026-09-21T07:45:18.105Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc: design.md 8b3f31b takes hv decision 6 (Q1, Q2 ruled; D2 option a ruled; WP-02/03 depend on D4/D3) and both devbin corrections: repo: declared because release_repo (release.steps:616-633) refuses with no origin and two remotes; undeclared ci.query prints a skipped row (cmd/release:985), in D1 and D5. Both verified in the vendored source. Next: WP-01 code (tools/ci-state + bats, estate test option, tools in the shellcheck collector, CHANGELOG heading).",
+    "fyi": true,
+    "re": null,
+    "recipient": "vc"
+  }
+}

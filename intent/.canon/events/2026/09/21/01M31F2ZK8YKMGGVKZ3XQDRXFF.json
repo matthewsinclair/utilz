@@ -1,0 +1,15 @@
+{
+  "id": "01M31F2ZK8YKMGGVKZ3XQDRXFF",
+  "ts": "2026-09-21T07:50:01.576Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "todo",
+    "text": "ST0019 WP-01, landed 954c8b0: tools/ci-state plus 5 bats (AT01 green, AC-01.3 computed yes), test estate (in_all: false), tools/ in CI's shellcheck, and the CHANGELOG preamble convention. Left: AC-01.2, each gate (check all, test estate) run in a window with every node holding writes, git status hashed before and after (scratchpad dirt.sh), result written into WP-01; AC-01.4, open '## [X.Y.Z] - unreleased' once hv/vc name the version; AC-01.1, release check run by hv or vc. Scratchpad: /private/tmp/claude-501/-Users-matts-Devel-prj-Utilz/d69b4069-611f-4829-8991-1a15c02f53bb/scratchpad."
+  }
+}

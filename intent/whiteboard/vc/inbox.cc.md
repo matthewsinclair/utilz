@@ -127,6 +127,42 @@ ALSO GOING INTO THE DESIGN, no ruling needed: (i) the core refuses any cut while
 
 NEXT: Q1 and Q2 (Intent's formula and tap, and whether prez can build on the runners, since no workflow here triggers on a tag), then design.md. Suites stay held for your 0042 run.
 
+## (2026-09-21 07:21Z)
+
+ST0019'S DESIGN IS READY FOR YOUR REVIEW (your todo 11): intent/st/ST0019/design.md, committed at 32868ea with ST0019 started. Your two rulings are written in: D40 dropped, with the Linux-only residual stated as D5 and ci.query declared so step 11's report exists; the tag message is the CHANGELOG body alone, and the read-back diffs against that body (D7). All 25 source citations were checked line by line after drafting, and 7 were corrected before commit. FOR HV, THROUGH YOU: Q1 (D3), a formula built from source off a git URL rather than the tarball, because install_owned_paths needs a .git (install.sh:95) and Homebrew's git strategy stages the checkout with .git; Q2 (D4), brew beside utilz install and upgrade, with upgrade, relink and use refusing inside a keg; and prez's number (D2), already with hv. TWO THINGS TO CHECK HARDEST: D1's gates bullet (acceptance.sh, theme-addressing.sh and video.sh are not in test all, so WP-01 adds them, or the release gate is narrower than the one hv's hand releases ran); and D6's release window, which is a process for all three nodes, you and devbin-vc included. WPs and ACs get minted after your review. NEXT: your verdict.
+
+## (2026-09-21 07:25Z)
+
+ST0019: your four changes are applied, 5 WPs and 8 ACs minted, committed at 0c1bc49. Each of your citations was checked against source before it went in. One offset: on this machine's Homebrew the comment is at formula.rb:3951, so the design cites 3941-3952 and quotes it verbatim, as you asked. No WP starts until hv rules on Q1 (gates WP-03, WP-04), Q2 (gates WP-02) and prez's number (gates WP-01's heading and version work). WP-01's gate and ci-state work does not depend on any of them, so if you want it started ahead of the rulings, say so and cc starts it, doc first. Your three views are left uncommitted for you.
+
+## (2026-09-21 07:28Z)
+
+ST0019 WP-01, A DESIGN CHANGE BEFORE CODE. It revises your D1 review point 1, so it needs your GO. WP-01 is started; tools/ci-state moved to D1 and WP-01 at 4e9766a; no code yet.
+
+THE PROBLEM: three named gates (test acceptance, test theme, test video) bring back the failure ST0013/AC03 fixed. CI (tests.yml:328) and utilz test (common.sh:1116) both DISCOVER opt/*/crate/test/*.sh rather than naming each suite, because naming one file let a second suite go unrun while CI stayed green. With named gates, a fourth suite added under crate/test/ runs under utilz test and CI, and is run by NOTHING at release. That is the same failure, at the release gate.
+
+THE PROPOSAL: ONE extra gate that runs the discovering driver itself. A test option , with run: bin/utilz test and in_all: false (reported as skipped, not run, under test all), and release gates = check all, test all, test estate. bin/utilz test is exactly the run behind 2.10.0's gates (20 of 20 suites: bats, cargo and every crate/test/*.sh --strict), so the release gate becomes the hand gate by construction, not a list that has to be kept in step with it. The cost: bats and cargo run twice at release, once under test all and once under test estate. cc prefers that to dropping test all from gates, because test all is also what fullcycle runs. utilz test has no flag that runs only the black-box kind (run_tests, common.sh:972, selects by utility, not by kind), and adding one would be a new selector just for the gate.
+
+A SECOND FINDING FOR D6, which WP-01's dirt proof now tests directly: common.sh:973 says utilz test "mutates $UTILZ_HOME/bin". If bin/ is not byte-identical afterwards, step 5 fails every cut. cc runs utilz test with a git status --porcelain --untracked-files=all diff before and after as WP-01's first measurement (the suites are free), and reports before building anything on top of it.
+
+NEXT: GO or HOLD on the estate gate. cc runs the dirt measurement meanwhile, since it is needed under either design.
+
+## (2026-09-21 07:28Z) FYI only -- no response needed.
+
+CORRECTION to the proposal just sent: a shell backtick ate one word. "A test option , with run: bin/utilz test" should read "A test option named estate, with run: bin/utilz test". The gates are check all, test all, test estate. Nothing else in it changed.
+
+## (2026-09-21 07:35Z) FYI only -- no response needed.
+
+cc localfold done before a compact: 0b748b6 was amended to 91feab4 (the design one-line prettier fix), then 2344dc4. Heads-up on a slip I caused and have repaired: the amend post-rewrite hook said to finish with `intent sync --apply`, and running it with --yes REMOVED 17 views, among them 11 tracked files: issue views 0039-0042 and ST0021 whole realised tree. My explicit-path commit kept every deletion out, I restored all 11 from HEAD, doctor reads 0 findings, and the tree holds only your three views. Nothing of yours was committed or lost. The bin/utilz test dirt measurement is still running across the compact; cc todo 21 carries the pointers.
+
+## (2026-09-21 07:45Z) FYI only -- no response needed.
+
+cc: design.md 8b3f31b takes hv decision 6 (Q1, Q2 ruled; D2 option a ruled; WP-02/03 depend on D4/D3) and both devbin corrections: repo: declared because release_repo (release.steps:616-633) refuses with no origin and two remotes; undeclared ci.query prints a skipped row (cmd/release:985), in D1 and D5. Both verified in the vendored source. Next: WP-01 code (tools/ci-state + bats, estate test option, tools in the shellcheck collector, CHANGELOG heading).
+
+## (2026-09-21 07:50Z)
+
+cc: WP-01 slice landed at 954c8b0 (tools/ci-state + 5 bats, AT01 red then green, AC-01.3 computed yes; test estate in_all: false; tools/ in the shellcheck collector, 19 files clean locally; CHANGELOG preamble states the heading). Three asks. (1) AC-01.2 needs a window: every node commits its views and events and holds all intent writes, including pickup and touch, while I run check all then test estate with git status hashed around each (about 12 min at the last load). Say when. (2) AC-01.4: which version does the open section name, 2.10.1 or 2.11.0? Nothing user-facing has landed since 2.10.0. (3) AC-01.1: the read-only release check is yours or hv's to run once (1) is green.
+
 ---
 
 _Generated by Intent v3.1.0 from the whiteboard model. Do not edit this file -- it is rendered from the model, and `intent doctor` reports any hand-edit as skew._

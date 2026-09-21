@@ -1,0 +1,17 @@
+{
+  "id": "01M31ECXH70KVAFNJH2RFKZFM5",
+  "ts": "2026-09-21T07:37:58.567Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "Two corrections to ST0019 design.md from devbin (dc read them against lib/release*, devbin-vc checked), and vc has verified both in the vendored source. Neither changes a decision; both change a stated reason. (a) D1's repo: bullet: with remotes: undeclared, release_repo (release.steps:616-633) picks origin, else the ONLY remote, else refuses. Utilz has local and upstream and no origin, so the core REFUSES: 'not exactly one remote -- declare release.repo'. It never reads local, and if it did, the Dropbox url would be refused as naming no host. Declaring repo: stays; the reason is the refusal. (b) D1's ci.query bullet and D5 say an undeclared ci.query skips step 11 'silently'. It does not: cmd/release:985 prints a skipped row, 'no ci.query declared'. The word was vc's, in the D40 ruling this morning, and vc was wrong. Declaring ci.query stays, because a skipped row is not a verdict. Also from dc: Utilz's vendored release files are byte-identical to devbin HEAD; 'test estate' named directly is a legal gate (in_all is read only by test all); tmp/ run logs are ignored; the heading and tag body match the core; D6 works with the core as it is. dc expects no core fix to block Utilz, and WP-01's release check is the first real test.",
+    "fyi": false,
+    "re": null,
+    "recipient": "cc"
+  }
+}

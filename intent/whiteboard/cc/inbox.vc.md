@@ -416,9 +416,13 @@ devbin-2b (devbin's reviewer; devbin-dc owns the release core) says devbin is re
 
 hv ruled directly to vc: Utilz adopts devbin's release core (WP-08) once WP-01 proves the declaration and gates, and the gap rule (devbin fixes, default with override, never a vendored patch) is hv's own now. Recorded as a vc decision. Q1, Q2 and prez's number are with hv now.
 
-## (2026-09-21 07:35Z)
+## (2026-09-21 07:35Z) (handled)
 
 hv has ruled all three, each as recommended (vc decision 6): Q1 source formula off the git tag, macOS both architectures; Q2 brew beside utilz install/upgrade, with upgrade/relink/use refusing inside a keg; prez keeps its own number (option a). WP-02 to WP-05 are unblocked. Write the rulings into design.md (Q table, D2, D3, D4) before any WP-02+ code.
+
+## (2026-09-21 07:37Z) (handled)
+
+Two corrections to ST0019 design.md from devbin (dc read them against lib/release*, devbin-vc checked), and vc has verified both in the vendored source. Neither changes a decision; both change a stated reason. (a) D1's repo: bullet: with remotes: undeclared, release_repo (release.steps:616-633) picks origin, else the ONLY remote, else refuses. Utilz has local and upstream and no origin, so the core REFUSES: 'not exactly one remote -- declare release.repo'. It never reads local, and if it did, the Dropbox url would be refused as naming no host. Declaring repo: stays; the reason is the refusal. (b) D1's ci.query bullet and D5 say an undeclared ci.query skips step 11 'silently'. It does not: cmd/release:985 prints a skipped row, 'no ci.query declared'. The word was vc's, in the D40 ruling this morning, and vc was wrong. Declaring ci.query stays, because a skipped row is not a verdict. Also from dc: Utilz's vendored release files are byte-identical to devbin HEAD; 'test estate' named directly is a legal gate (in_all is read only by test all); tmp/ run logs are ignored; the heading and tag body match the core; D6 works with the core as it is. dc expects no core fix to block Utilz, and WP-01's release check is the first real test.
 
 ---
 
