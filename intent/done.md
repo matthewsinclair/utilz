@@ -1,8 +1,24 @@
 ---
-verblock: "19 Sep 2026:v0.9: matts - 0038 closed, and the 16-18 Sep fleet sweeps landed"
+verblock: "21 Sep 2026:v0.10: matts - 2.10.0 and 2.11.0 released; the Homebrew tap live"
 ---
 
 # Done
+
+## 21 Sep 2026 -- 2.11.0 released: showreel --aspect, the Homebrew tap, MIT
+
+**2.11.0 is out**, cut by hand: tag `2.11.0` on `7fc9bb5`, on both remotes, annotated with the CHANGELOG section's body and read back against it. prez is 2.3.0. The CHANGELOG entry is the account of what it carries.
+
+**Threads closed.** ST0019 (Utilz's parts of the release pipeline): devbin's release core declared and switched on, `tools/ci-state`, the `estate` gate, `install --managed-by`, the keg refusals, the formula at `packaging/homebrew/utilz.rb`, `tools/formula-bump`, `docs/releasing.md`, and the tap `matthewsinclair/homebrew-utilz`, from which hv's `brew install` passed `utilz doctor` 7/7 with the manifest intact. ST0022 (`showreel video --aspect`), turned round the same day for geodica's Snorkeltoast reels and verified by reading a 9:16 recording of every segment type. ST0023 (issue 0045, a long socials handle fitted at portrait), which rides in 2.11.1.
+
+**Issues closed:** 0042 and 0043 (install_e2e's fixture: a mid-copy commit, and a linked worktree's `.git` pointer), 0044 (the announced commit from a tree that is not a repository), 0045.
+
+**Swept:** devbin 0.1.2 (20 Sep) and 0.1.3 (21 Sep), CI green on each pushed sweep.
+
+**Why 2.11.0 was cut by hand, the lesson worth re-reading.** The core's first dry run stopped at step 1 with an empty reason: `release_versions` ends its loop with `is_semver && printf`, so under `pipefail` the last tag alphabetically (`v2.6.1`, from before the bare-tag ruling) failed the function without a word. The 2.7.0 annotation predicted a trap for anything sorting on `v*`; this is the same mixed history biting a different reader. Fixed in devbin 0.1.5.
+
+## 20 Sep 2026 -- 2.10.0 released: prez showreel video
+
+**2.10.0 is out**: tag `2.10.0` on `902a72d`, prez 2.2.0, CI green on all seven jobs. It carries ST0021 (`prez showreel video`), ST0020 (`PREZ_THEME_DUPLICATES`), and doctor's optional dependencies (0041). The tag first lost its `###` headings to `git tag -F`'s default `--cleanup=strip`, caught only by diffing the annotation against its source.
 
 ## 19 Sep 2026 -- 0038 closed, and the 16-18 Sep fleet sweeps landed (no release yet)
 

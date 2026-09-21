@@ -4,14 +4,14 @@ DOING and TODO only. Done work goes to `intent/done.md`; context to `intent/rest
 
 ## DOING
 
-- showreel: generate a video file (.mov or .mp4) of a reel. A new thread, with design.md to vc before any code, its dependency choices put to hv, and the lift sized for hv (hv's board, decision 6). 2.10.0 waits for it.
+_(none)_
 
 ## TODO
 
 **Next, in hv's order**
 
-- Cut 2.10.0 by hand (hv), with prez at 2.2.0: ST0020, the install.sh fix and showreel's video export in it. cc prepares the release commit, vc gives the GO, hv tags and pushes.
-- ST0019: design the Utilz parts of the release pipeline (its version files, the CI build of prez, the Homebrew formula) for vc's review before any code. The shared release core is Devbin project work (Devbin issue 0064).
+- Cut 2.11.1 (issue 0045's portrait handle fit; CHANGELOG `## [2.11.1] - unreleased`) as the first cut through devbin's release core, once devbin 0.1.5 fixes its silent resolve failure beside the pre-2.7.0 `v` tags and is swept here. `bin/devbin release check`, then `bin/devbin release --patch --dry-run`, then the cut; after the tag, `tools/formula-bump` and the tap (`docs/releasing.md`).
+- hv to rule, no rush: headline fit-to-width at portrait in general; a platform safe-zone option for TikTok/IG's overlaid UI; whether a socials handle that overflows at 16:9 is fitted there too.
 
 **Threads**
 

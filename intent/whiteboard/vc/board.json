@@ -5,8 +5,8 @@
     "name": "Validation Claude",
     "role": "validation",
     "session_id": "522716dd-096e-483d-a44a-d692e33367e4",
-    "heartbeat_at": "2026-09-21T07:09:43.969Z",
-    "status": "active",
+    "heartbeat_at": "2026-09-21T21:13:19.675Z",
+    "status": "paused",
     "focus": "hv's decision 7: ST0021 is being built for 2.10.0. Verify each WP as it lands (WP-01 GO at 97604d1; WP-02, the recording, next), then GO the 2.10.0 release commit; ST0019's design review after.",
     "claims": [],
     "recorded_at": "2026-09-14T08:46:06.602Z",
@@ -603,7 +603,8 @@
       "kind": "watchout",
       "seq": 3,
       "text": "vc keeps a detached verification worktree at /private/tmp/claude-501/-Users-matts-Devel-prj-Utilz/522716dd-096e-483d-a44a-d692e33367e4/scratchpad/wt-97604d1, with its own CARGO_TARGET_DIR beside it (target-97604d1), so that a landed commit is built and tested without compiling a peer's in-flight edits. It shows in git worktree list. It is vc's, and vc removes it with git worktree remove when its session ends.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-09-21T21:11:53.781Z",
       "recorded_at": "2026-09-19T14:58:41.753Z"
     },
     {
@@ -637,7 +638,8 @@
       "kind": "watchout",
       "seq": 5,
       "text": "Since 2026-09-19 16:17:33Z this machine's Intent install pointer (~/.local/share/intent/home) has named a scratch worktree of Intent, at 35b902fd9 (Intent issue 0492; hv's restore is pending, and it is Intent's to land). Every Utilz commit since then loaded its pre-commit gate and guard bodies from there, which is before the fix that moved append-only-guard.sh's subject from intent/events.jsonl to intent/.canon/events/**. intent-vc sent the pre-notice; vc ran the check at Utilz on 2026-09-20 and it is clean: the log with --diff-filter=M is empty, so is --diff-filter=DR, and all 73 changes to intent/.canon/events across the 23 commits in that window are additions. Nothing was exposed, and everything else those gates enforce is unchanged between the two trees. Worth re-running if the pointer is still astray when the next stretch of commits lands.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-09-21T21:11:26.874Z",
       "recorded_at": "2026-09-20T11:37:58.998Z"
     },
     {
@@ -645,7 +647,8 @@
       "kind": "decision",
       "seq": 3,
       "text": "hv, 2026-09-20, on vc's release plan: \"I'm good to go, if you are good to go, let CC know. Then we can cut the release.\" So 2.10.0 is GO'd to commit. vc told cc to cut it, with one change that must ride in the same commit (the CHANGELOG's Minor line does not say prez goes 2.1.0 to 2.2.0, where 2.9.0's entry named both bumps, and the tag freezes it). vc still runs the release check on the SHA before hv tags: the four-file shape, commit hygiene, the CHANGELOG walk against every product path since ebd0243, an independent sweep for hardcoded versions, and a build in vc's own worktree reading utilz --version and prez --version back.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-09-21T21:11:28.336Z",
       "recorded_at": "2026-09-20T12:30:08.104Z"
     },
     {
@@ -679,7 +682,8 @@
       "kind": "watchout",
       "seq": 8,
       "text": "ST0019 INPUT, corrected by devbin-vc on 2026-09-20 and re-measured by vc. git tag -a -F <file> DEFAULTS to --cleanup=strip, which deletes every line beginning with '#', so a tag annotation built from a CHANGELOG entry silently loses its markdown '### Added', '### Changed' and '### Fixed' headings: exit 0, a well-formed annotated tag, every bullet present, and no record of which changes were additions and which were fixes. It ate cc's first 2.10.0 attempt (26 source lines to 20) and was caught only because the annotation was diffed against its source. THE RIGHT FLAG IS --cleanup=whitespace, NOT verbatim. vc measured all three modes by creating real tags in a scratch repo from one 11-line body holding two '### ' headings and one trailing-space line: strip and the default keep 0 headings; whitespace keeps both headings AND still strips the trailing whitespace; verbatim keeps both headings and the trailing whitespace too. So whitespace dominates verbatim for this purpose. devbin's own release core already does this at lib/cmd/release:811 with --cleanup=whitespace, and its v0.1.2 annotation carries all four of RELEASES/0.1.2.md's '#'-leading headings. hv's 2.10.0 tag used verbatim, which cost nothing because that source had no trailing whitespace (0 such lines in the shipped annotation, as in 2.9.0's), so the shipped tag is correct and nothing needs re-tagging. WHAT ST0019 OWES, and the second matters more than the first: --cleanup=whitespace on the tag write, and a READ-BACK that diffs the created annotation against the source it was built from. A flag can be dropped in a refactor and nothing complains; the read-back is what makes the next silent variant -- a different cleanup default, a different git, an annotation assembled by a tool doing its own stripping -- fail loudly rather than plausibly. devbin holds the same property as an acceptance criterion (AC-5.4: the tag message is the notes body byte for byte, ### lines included). NO EVIDENCE A DEGRADED TAG HAS EVER SHIPPED at Utilz: the twelve annotated tags before 2.9.0 carry 0 '### ' headings against entries holding 1 to 7, which looks alarming and is not evidence, because those annotations are hand-written prose rather than verbatim CHANGELOG copies -- v2.6.0 has 0 bullets against its entry's 27, and 2.8.0's body is rewrapped at 72 columns with bold markers removed and a 'Verified before tagging:' block the CHANGELOG never had. Only 2.9.0 and 2.10.0 follow the verbatim convention and both carry their headings. Forward-looking design requirement; no issue filed.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-09-21T21:11:27.503Z",
       "recorded_at": "2026-09-20T13:03:55.142Z"
     },
     {
@@ -687,7 +691,8 @@
       "kind": "todo",
       "seq": 24,
       "text": "Verify the devbin 0.1.2 fleet sweep when devbin-vc lands it. Gate lifted: 2.10.0 tagged and CI green on 902a72d (run 35512150262, all 7 jobs), and vc has told devbin-vc to go. Checks: (1) the vendored pathspec only -- bin/devbin, bin/.devbin/lib, bin/.devbin/manifest.sha256 -- and nothing of ours, at 22 FILES NOT 21. devbin-vc flagged that the count depends on whether the estate tracks bin/.devbin/manifest.sha256; vc confirmed Utilz DOES track it (Cdtempl git-ignores its own and took 21), so holding a correct commit to 21 would flag it wrong. The whole vendored pathspec is 44 tracked files here; 22 is what the sweep changes. (2) bats opt/*/test still matching its 16 directories. (3) A full cycle's new shell leg passing, since a failing leg now fails the cycle rc=1 (devbin 0083). (4) Doctor clean under the two new refusals, 0080 and 0081. devbin-vc sweeps Utilz alone via bin/devbin upgrade --from ~/Devel/opt/devbin at devbin 86b6bac, then one commit through our gates, no --no-verify. Utilz counts as swept only when our CI reads green on the pushed sweep commit. The release core stays off until ST0007 WP-08.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-09-21T21:11:28.000Z",
       "recorded_at": "2026-09-20T13:07:00.104Z"
     },
     {
@@ -695,7 +700,8 @@
       "kind": "decision",
       "seq": 4,
       "text": "hv, 2026-09-20: yes to pushing the devbin 0.1.2 sweep to GitHub. Relayed via devbin-vc and then confirmed directly to vc (\"Yes, I did\"), so the ruling is hv's own and not a peer's report of one. Pushed: upstream/main 902a72d..633a1a1, verified by vc against ls-remote, 0 ahead 0 behind. This lifts the last gate on todo 24: Utilz counts as swept when CI run 35512936209 reads green on 633a1a1, which vc is watching. hv's earlier hold (no estate to GitHub, Actions budget, no workflow filters by path) still stands for the other estates; Laksa is the last one held, waiting on its deploy.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-09-21T21:11:29.619Z",
       "recorded_at": "2026-09-20T13:16:23.843Z"
     },
     {
@@ -747,7 +753,8 @@
       "kind": "decision",
       "seq": 6,
       "text": "hv, 2026-09-21, directly to vc, on ST0019's three questions, each taking the recommendation cc and vc gave: (Q1) the Homebrew formula builds from source off the git tag (git URL, rust as a build dependency, utilz install into the keg), macOS on both architectures, no prebuilt or signed artefacts; bottles may come later. (Q2) brew sits beside utilz install / upgrade, which stay the maintainer's loop; inside a keg upgrade, relink and use refuse and name brew upgrade utilz. (D2) prez keeps its own version number, bumped in its own commit before a cut; Cargo.toml is not a sidecar.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-09-21T21:11:29.818Z",
       "recorded_at": "2026-09-21T07:35:27.208Z"
     },
     {
@@ -764,7 +771,8 @@
       "kind": "decision",
       "seq": 7,
       "text": "hv, 2026-09-21, directly to vc: the next release is 2.11.0, so CHANGELOG's open section is '## [2.11.0] - unreleased' (ST0019 AC-01.4). It carries ST0019's Homebrew install.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-09-21T21:11:30.550Z",
       "recorded_at": "2026-09-21T08:11:08.050Z"
     },
     {
@@ -790,7 +798,8 @@
       "kind": "decision",
       "seq": 8,
       "text": "hv, 2026-09-21, directly to vc: (1) yes to WP-03's spike -- a keg_only brew install of Utilz from a scratch local tap on this machine, built from source at a named revision of this repository, removed afterwards with brew uninstall and brew untap. (2) Utilz is MIT-licensed; a LICENSE file lands with WP-04 and the formula declares license \"MIT\".",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-09-21T21:11:31.413Z",
       "recorded_at": "2026-09-21T09:26:22.347Z"
     },
     {
@@ -816,7 +825,8 @@
       "kind": "decision",
       "seq": 9,
       "text": "hv, 2026-09-21, directly to vc: (1) yes to brew audit --strict on packaging/homebrew/utilz.rb in a throwaway local tap, untapped afterwards, with the live install and ~/.local/bin checksummed before and after. (2) matthewsinclair/homebrew-utilz is created and pushed by hv AT THE 2.11.0 CUT, once the formula carries the tag's real commit, never with the placeholder revision.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-09-21T21:11:31.859Z",
       "recorded_at": "2026-09-21T11:04:25.691Z"
     },
     {
@@ -842,7 +852,8 @@
       "kind": "decision",
       "seq": 11,
       "text": "hv, 2026-09-21, directly to vc, on ST0019 WP-05: the formula follows each release by a documented step in a release doc here PLUS a small tools/ script that writes the new tag and that tag's commit into packaging/homebrew/utilz.rb from git, so no SHA is typed by hand (the offline audit cannot catch a wrong one). hv audits, commits and pushes the tap; no release-core after: hook.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-09-21T21:11:32.588Z",
       "recorded_at": "2026-09-21T11:16:56.218Z"
     },
     {
@@ -868,7 +879,8 @@
       "kind": "decision",
       "seq": 12,
       "text": "hv, 2026-09-21, directly to vc: (1) pushed -- upstream/main at d703dd5, 0 ahead 0 behind, CI run 35628486286. (2) 'Ok' to switching devbin's release core on at Utilz (commands.release.enabled: true) once that CI run is green, the read-only release check being its first act, then the 2.11.0 cut through the core.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-09-21T21:11:33.209Z",
       "recorded_at": "2026-09-21T16:54:12.734Z"
     },
     {
@@ -894,7 +906,8 @@
       "kind": "decision",
       "seq": 13,
       "text": "hv, 2026-09-21, directly to vc, on geodica's request (needed today, ahead of the 2.11.0 cut): showreel video takes a selectable aspect ratio, as W:H or by name, via --aspect and showreel.yaml aspect:, the flag winning, default 16:9. Names: widescreen 16:9, portrait 9:16, square 1:1, feed 4:5. Size rule: the reel's target is the LONG edge, the short edge follows from the ratio, both even (1920: 9:16 is 1080x1920, 1:1 is 1920x1920, 4:5 is 1536x1920).",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-09-21T21:11:34.825Z",
       "recorded_at": "2026-09-21T17:38:50.160Z"
     },
     {
@@ -911,7 +924,8 @@
       "kind": "decision",
       "seq": 14,
       "text": "hv, 2026-09-21, directly to vc: the release is 2.11.0 (minor: it carries features), prez goes to 2.3.0, and it is cut BY HAND this once, because devbin 0.1.3's release core fails silently at resolve beside Utilz's older v-prefixed tags (reported to devbin, fix due in 0.1.5). Utilz's first cut through the core waits for that sweep.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-09-21T21:11:35.413Z",
       "recorded_at": "2026-09-21T18:51:06.402Z"
     },
     {
@@ -937,8 +951,34 @@
       "kind": "doing",
       "seq": 56,
       "text": "2.11.0 SHIPPED: tag 7fc9bb5 on both remotes; the Homebrew tap matthewsinclair/homebrew-utilz is live, and brew install passes doctor 7/7 (managed-by brew). ST0019 AC-05.2 satisfied by vc, 10 of 10 plus 2 withdrawn; cc closes it. Next: 2.11.1 carrying 0045's fix (e079c08), ideally the first cut through devbin's core once 0.1.5 is swept at Utilz.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-09-21T21:11:35.956Z",
       "recorded_at": "2026-09-21T21:10:06.769Z"
+    },
+    {
+      "node": "vc",
+      "kind": "todo",
+      "seq": 25,
+      "text": "Cut 2.11.1 (issue 0045's portrait handle fit, e079c08; CHANGELOG '## [2.11.1] - unreleased') as Utilz's FIRST cut through devbin's release core, once devbin 0.1.5 fixes release_versions' silent resolve failure beside the old v-tags and is swept here. Start with bin/devbin release check, then bin/devbin release --patch --dry-run. After the tag: tools/formula-bump 2.11.1, then hv copies the formula to the tap and pushes it (docs/releasing.md).",
+      "state": "live",
+      "recorded_at": "2026-09-21T21:11:15.824Z"
+    },
+    {
+      "node": "vc",
+      "kind": "todo",
+      "seq": 26,
+      "text": "For hv, no rush: geodica suggests fitting headlines to width at portrait generally, beyond 0045's socials handle. It's scope, so hv's call.",
+      "state": "archived",
+      "archived_at": "2026-09-21T21:11:37.310Z",
+      "recorded_at": "2026-09-21T21:11:16.282Z"
+    },
+    {
+      "node": "vc",
+      "kind": "todo",
+      "seq": 27,
+      "text": "For hv, no rush, three portrait calls: (1) headline fit-to-width at portrait in general (geodica's ask, scoped out of ST0023); (2) a platform safe-zone option for TikTok/IG, whose own UI covers the bottom ~20% and the right edge, where the corner bug, venue labels and atwork QR can sit; (3) whether a socials handle that overflows at 16:9 is fitted there too (ST0023 D3 leaves 16:9 as it was).",
+      "state": "live",
+      "recorded_at": "2026-09-21T21:11:36.174Z"
     }
   ],
   "messages": [

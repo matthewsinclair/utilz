@@ -1,0 +1,15 @@
+{
+  "id": "01M32WYPZEFZJ0NN3A096BPDFH",
+  "ts": "2026-09-21T21:11:36.174Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "todo",
+    "text": "For hv, no rush, three portrait calls: (1) headline fit-to-width at portrait in general (geodica's ask, scoped out of ST0023); (2) a platform safe-zone option for TikTok/IG, whose own UI covers the bottom ~20% and the right edge, where the corner bug, venue labels and atwork QR can sit; (3) whether a socials handle that overflows at 16:9 is fitted there too (ST0023 D3 leaves 16:9 as it was)."
+  }
+}

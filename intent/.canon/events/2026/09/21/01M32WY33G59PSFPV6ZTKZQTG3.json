@@ -1,0 +1,15 @@
+{
+  "id": "01M32WY33G59PSFPV6ZTKZQTG3",
+  "ts": "2026-09-21T21:11:15.824Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "todo",
+    "text": "Cut 2.11.1 (issue 0045's portrait handle fit, e079c08; CHANGELOG '## [2.11.1] - unreleased') as Utilz's FIRST cut through devbin's release core, once devbin 0.1.5 fixes release_versions' silent resolve failure beside the old v-tags and is swept here. Start with bin/devbin release check, then bin/devbin release --patch --dry-run. After the tag: tools/formula-bump 2.11.1, then hv copies the formula to the tap and pushes it (docs/releasing.md)."
+  }
+}
