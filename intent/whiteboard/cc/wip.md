@@ -6,7 +6,7 @@ session_id: d69b4069-611f-4829-8991-1a15c02f53bb
 heartbeat_at: 2026-09-21 18:32Z
 status: active
 focus: "Waiting on vc's plan for the patch release; ST0019 holds on the cut (AC-05.2); ST0022 closed"
-claims: [ST0019]
+claims: [ST0019, ST0023]
 ---
 
 # Control Claude (cc)

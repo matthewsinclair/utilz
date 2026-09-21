@@ -116,6 +116,18 @@ fade_at() {
       printf "%.1f %.1f %.1f\n", c[1] * y + g[1] * (1 - y), c[2] * y + g[2] * (1 - y), c[3] * y + g[3] * (1 - y) }'
 }
 
+# How many pixels of an image, inside a crop=w:h:x:y region, differ from the
+# colour "R G B" by more than 48 on some channel: ink, on a flat ground.
+ink_in() {
+  "$FFMPEG" -loglevel error -i "$1" -vf "crop=$2" -f rawvideo -pix_fmt rgb24 - 2>/dev/null |
+    od -An -v -tu1 |
+    awk -v g="$3" 'BEGIN { split(g, c, " ") }
+      { for (i = 1; i <= NF; i++) { v[k++] = $i; if (k == 3) { w = 0
+          for (j = 0; j < 3; j++) { d = v[j] - c[j + 1]; if (d < 0) d = -d; if (d > w) w = d }
+          if (w > 48) n++; k = 0 } } }
+      END { print n + 0 }'
+}
+
 # How many processes carry TEXT in their command line. ps is read from a file,
 # so the grep reading it is not among them, and TEXT is always a path under
 # $WORK, which mktemp made this run's alone (issue 0030).
@@ -233,6 +245,26 @@ ensure() {
         printf 'an interrupted encode\n' >"$WORK/three.mov.partial"
         run_argv three -o "$WORK/three.mov"
         "${RUN[@]}" >"$WORK/three.out" 2>"$WORK/three.err"
+        ;;
+      handle)
+        # ST0023: one socials page whose handle is 25 capitals, portrait. The
+        # default theme's system face is narrow, so the capitals are what make
+        # it wider than a 540 px page, as the display face did in issue 0045.
+        mkdir -p "$WORK/handle" "$WORK/tmp-handle"
+        cat >"$WORK/handle/showreel.yaml" <<'YAML'
+showreel: {version: 1}
+artist: {handle: videotest, name: Video Test}
+theme: default
+target: 1920
+loop: false
+socials:
+  - {label: Instagram, handle: FORBIDDENPLANETNOTTINGHAM}
+segments:
+  - {id: socials, type: socials, layout: each, headline: Follow, dwell: 2500ms, ease: 1200ms, transition: cut}
+YAML
+        RUN=(/usr/bin/env "TMPDIR=$WORK/tmp-handle/" "$SHOWREEL" video "$WORK/handle" --browser "$CHROME" --fps "$FPS"
+          --aspect portrait -o "$WORK/handle.mp4" --frames "$WORK/f-handle")
+        "${RUN[@]}" >"$WORK/handle.out" 2>"$WORK/handle.err"
         ;;
       tall)
         # ST0022: the same reel, portrait. The target is the long edge.
@@ -728,6 +760,28 @@ if want AT01; then
       else bad "--aspect $ratio was refused without naming it: $(head -1 "$WORK/aspect.err")"; fi
       check "frames captured before the --aspect $ratio refusal" "$(find "$WORK/f-bad" -name '*.png' 2>/dev/null | grep -c '')" "0"
     done
+  fi
+  finish
+fi
+
+# ------------------------------------------------------- ST0023 AT01 -- AC-01.1
+
+if want ST0023-AT01; then
+  start ST0023-AT01 "a 25-character socials handle at --aspect portrait stays inside the frame's safe margin"
+  if tools_here; then
+    if ensure handle; then
+      # Mid-dwell, the page settled; the ground is read from the top corner.
+      frame="$WORK/f-handle/f00012.png"
+      ground=$(mean_of "$frame" "40:40:0:0")
+      check "glyph pixels in the frame's left 20 px" "$(ink_in "$frame" "20:1920:0:0" "$ground")" "0"
+      check "glyph pixels in the frame's right 20 px" "$(ink_in "$frame" "20:1920:1060:0" "$ground")" "0"
+      # And the handle is still there, so an empty page cannot pass.
+      body=$(ink_in "$frame" "1040:1920:20:0" "$ground")
+      if [ "$body" -gt 2000 ]; then ok "the handle is drawn ($body glyph pixels inside the margin)"
+      else bad "only $body glyph pixels inside the margin: the handle is missing"; fi
+    else
+      bad "the handle recording failed: $(said handle)"
+    fi
   fi
   finish
 fi

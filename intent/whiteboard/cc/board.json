@@ -9,7 +9,8 @@
     "status": "active",
     "focus": "Waiting on vc's plan for the patch release; ST0019 holds on the cut (AC-05.2); ST0022 closed",
     "claims": [
-      "ST0019"
+      "ST0019",
+      "ST0023"
     ],
     "recorded_at": "2026-09-14T08:46:06.602Z",
     "authored_at": "2026-09-11 16:17Z",

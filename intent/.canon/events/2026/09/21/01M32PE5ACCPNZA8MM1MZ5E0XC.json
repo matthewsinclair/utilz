@@ -1,0 +1,15 @@
+{
+  "id": "01M32PE5ACCPNZA8MM1MZ5E0XC",
+  "ts": "2026-09-21T19:17:42.349Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wp.new",
+  "subject": {
+    "type": "wp",
+    "id": "ST0023/01"
+  },
+  "payload": {
+    "scope": "S",
+    "title": "Fit the socials handle to its pane, red test first"
+  }
+}

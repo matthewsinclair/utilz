@@ -10,6 +10,8 @@ A DOING / TODO / DONE view, projected from steel-thread and work-package status:
   - [x] 03: Spike: a git-URL formula built in a scratch tap, the keg run end to end
   - [x] 04: The tap matthewsinclair/homebrew-utilz and its formula
   - [-] 05: The formula bump after a release: after: or a documented step
+- [-] ST0023: showreel: a long socials handle fits a portrait frame (issue 0045)
+  - [ ] 01: Fit the socials handle to its pane, red test first
 
 ## TODO
 

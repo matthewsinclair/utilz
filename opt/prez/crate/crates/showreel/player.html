@@ -648,6 +648,34 @@ addEventListener("resize", () => {
   });
 });
 
+/* A socials handle is one word, so it cannot wrap, and its size is set, so it
+   cannot shrink: at 9:16 a long one ran off both edges (issue 0045). So once
+   its slide is in the page, a handle wider than its pane's room inside the
+   safe padding is scaled down to fit, never below HANDLE_FLOOR, its clamp's own
+   minimum; one still too wide there wraps anywhere rather than leave the
+   frame. PORTRAIT ONLY: at 16:9 a handle whose glyphs sat inside the margin
+   still had a box a few pixels over its room, and was shrunk -- a handle that
+   visibly fits must not move, so a landscape window only clears (ST0023 D3). */
+const HANDLE_FLOOR = 20;
+const PORTRAIT = matchMedia("(orientation:portrait)");
+function fitHandles(el){
+  for (const at of el.querySelectorAll(".social .at, .socials .at")) {
+    at.style.fontSize = ""; at.style.overflowWrap = "";
+    if (!PORTRAIT.matches) continue;
+    const pane = at.closest(".pane"), cs = getComputedStyle(pane);
+    const room = pane.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
+    const width = at.scrollWidth;
+    if (width <= room) continue;
+    const fitted = Math.floor(parseFloat(getComputedStyle(at).fontSize) * room / width);
+    at.style.fontSize = Math.max(fitted, HANDLE_FLOOR) + "px";
+    if (fitted < HANDLE_FLOOR) at.style.overflowWrap = "anywhere";
+  }
+}
+// The width depends on the face, so the slide on screen is fitted again once
+// the fonts have settled, and again whenever the window changes shape.
+document.fonts.ready.then(() => { if (current) fitHandles(current); });
+addEventListener("resize", () => { if (current) fitHandles(current); });
+
 function buildCrawl(s){
   const rows = [];
   const add = (k, v) => { if (v) rows.push(`<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`); };
@@ -793,6 +821,7 @@ function show(n){
   el.style.setProperty("--dwell", dwell + "ms");
   el.style.setProperty("--ease",  ease  + "ms");
   stage.appendChild(el);
+  fitHandles(el);
 
   if (s.transition === "wipe" && !AMBIENT) {
     const w = document.createElement("div");

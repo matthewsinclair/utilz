@@ -1,0 +1,15 @@
+{
+  "id": "01M32P9EZN6JJH9TXJM1E1ATWY",
+  "ts": "2026-09-21T19:15:08.406Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "issues.add",
+  "subject": {
+    "type": "issue",
+    "id": "0045"
+  },
+  "payload": {
+    "severity": "medium",
+    "title": "showreel: at 9:16 a long socials handle overflows the frame instead of fitting its width"
+  }
+}
