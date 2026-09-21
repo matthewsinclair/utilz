@@ -9,9 +9,29 @@ The section still open names its version: `## [X.Y.Z] - unreleased`, never `## [
 
 ## [2.11.0] - unreleased
 
+Minor: **`prez showreel video --aspect` records portrait, square and 4:5 reels**, **Utilz installs with Homebrew**, and **Utilz is MIT-licensed**. prez goes from 2.2.0 to 2.3.0.
+
 ### Added
 
 - **`prez showreel video --aspect`: a reel recorded portrait, square or 4:5, as well as widescreen** (ST0022), for TikTok and Instagram. The ratio is `W:H` or a name: `widescreen` (16:9, the default), `portrait` (9:16), `square` (1:1) or `feed` (4:5). It comes from `--aspect`, or from `aspect:` in `showreel.yaml`, and the flag wins. The reel's `target` is the long edge and the short edge follows, so at 1920 portrait is 1080x1920. A malformed ratio, a zero side, or one past 4:1 either way is refused by name, and `check` and `build` refuse a bad `aspect:` too. A frame no wider than it is tall is laid out at half size and drawn at twice the scale, so the player's phone layout applies while the frame keeps its pixels. In a portrait frame a gallery picture and the venue's shopfront are shown whole on a blurred copy of themselves, Ken Burns becomes a slow zoom with no drift, and the at-work card sits inside the safe area. **Widescreen records exactly as before.**
+
+- **Utilz installs with Homebrew** (ST0019): `brew install matthewsinclair/utilz/utilz`, from the tap `matthewsinclair/homebrew-utilz`. The formula builds from source at the release tag, on macOS on Apple Silicon and Intel, and publishes through Utilz's own `utilz install`, so a brew install carries the same manifest and passes the same `utilz doctor`. It depends on `yq` alone; `utilz doctor` names what each utility needs beyond that.
+
+- **`utilz install --managed-by brew|utilz`** records who owns an install in its manifest (ST0019). Only the formula passes `brew`; every other publish records `utilz`, and an install from before the row reads as `utilz`.
+
+- **A LICENSE file: Utilz is MIT-licensed.**
+
+### Changed
+
+- **Inside a Homebrew install, `utilz upgrade`, `relink`, `use` and `install --force` refuse** and name `brew upgrade utilz`, whether run from the brew install or pointed at one with `--prefix` (ST0019). `utilz test` there names a clone of the repository rather than brew's deleted build directory.
+
+### Fixed
+
+- **`utilz install` and `upgrade` announce the source tree's own commit, or `none`** (issue 0044). From a tree that is not a git repository, such as a brew build, they announced the commit of whatever repository enclosed it.
+
+- **Harness and development only, no behaviour change**:
+  - `install_e2e`'s fixture no longer fails when a commit lands while it copies the checkout (0042), and it refuses by name to run from a linked worktree, where its fixture commit would have landed in the real repository (0043).
+  - Releases are cut through devbin's release core (`bin/devbin release`), with `tools/ci-state` as its CI query; `tools/formula-bump` writes a release's tag and commit into the Homebrew formula; `docs/releasing.md` is the procedure. The vendored devbin is at 0.1.3.
 
 ## [2.10.0] - 2026-09-20
 
