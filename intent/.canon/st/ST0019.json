@@ -12,10 +12,10 @@
   "wps": [
     {
       "seq": 1,
-      "title": "Gates, bin/ci-state, the heading convention, and gates that leave no dirt",
+      "title": "Gates, tools/ci-state, the heading convention, and gates that leave no dirt",
       "scope": "S",
       "status": "not-started",
-      "objective": "Everything Utilz declares to devbin's release core is in place and proved before Devbin's ST0007 WP-08 switches it on (design D1, D2, D6). acceptance.sh, theme-addressing.sh and video.sh are declared as test options with in_all: false and listed as their own gates after test all. bin/ci-state wraps install_ci_state and maps its conclusion to the core's five verdicts. The CHANGELOG's open section is headed ## [X.Y.Z] - unreleased. Every gate is run with git status --porcelain --untracked-files=all diffed before and after, and any writer found is fixed or ignored. The release block is not enabled here.",
+      "objective": "Everything Utilz declares to devbin's release core is in place and proved before Devbin's ST0007 WP-08 switches it on (design D1, D2, D6). acceptance.sh, theme-addressing.sh and video.sh are declared as test options with in_all: false and listed as their own gates after test all. tools/ci-state, outside the published set, wraps install_ci_state and maps its conclusion to the core's five verdicts, and CI's shellcheck collector is widened from bin opt to bin opt tools so it is linted. The CHANGELOG's open section is headed ## [X.Y.Z] - unreleased. Every gate is run with git status --porcelain --untracked-files=all diffed before and after, and any writer found is fixed or ignored. The release block is not enabled here.",
       "body": "",
       "preamble": ""
     },
@@ -75,7 +75,7 @@
     },
     {
       "id": "AC-01.3",
-      "text": "bin/ci-state answers green, failed, pending, none and unknown for the corresponding install_ci_state answers under a stubbed gh, and asks through install_ci_state alone.",
+      "text": "tools/ci-state answers green, failed, pending, none and unknown for the corresponding install_ci_state answers under a stubbed gh, asks through install_ci_state alone, ships to no install or keg, and is linted by CI's shellcheck step.",
       "kind": "test",
       "state": {
         "is": "computed"

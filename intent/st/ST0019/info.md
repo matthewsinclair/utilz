@@ -64,13 +64,13 @@ cc drafts the design, and vc reviews it before any code (vc, 2026-09-14). hv run
 
 ## Work Packages
 
-| WP    | Title                                                                     | Size | Status      |
-| ----- | ------------------------------------------------------------------------- | ---- | ----------- |
-| WP-01 | Gates, bin/ci-state, the heading convention, and gates that leave no dirt | S    | Not Started |
-| WP-02 | The keg as an install tree: the discriminator and the verbs that refuse   | S    | Not Started |
-| WP-03 | Spike: a git-URL formula built in a scratch tap, the keg run end to end   | S    | Not Started |
-| WP-04 | The tap matthewsinclair/homebrew-utilz and its formula                    | S    | Not Started |
-| WP-05 | The formula bump after a release: after: or a documented step             | S    | Not Started |
+| WP    | Title                                                                       | Size | Status      |
+| ----- | --------------------------------------------------------------------------- | ---- | ----------- |
+| WP-01 | Gates, tools/ci-state, the heading convention, and gates that leave no dirt | S    | Not Started |
+| WP-02 | The keg as an install tree: the discriminator and the verbs that refuse     | S    | Not Started |
+| WP-03 | Spike: a git-URL formula built in a scratch tap, the keg run end to end     | S    | Not Started |
+| WP-04 | The tap matthewsinclair/homebrew-utilz and its formula                      | S    | Not Started |
+| WP-05 | The formula bump after a release: after: or a documented step               | S    | Not Started |
 
 ## Acceptance
 

@@ -1,0 +1,14 @@
+{
+  "id": "01M31DS81A5H74GN00SMZ722Z5",
+  "ts": "2026-09-21T07:27:13.963Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.edit",
+  "subject": {
+    "type": "ac",
+    "id": "ST0019/AC-01.3"
+  },
+  "payload": {
+    "text": "tools/ci-state answers green, failed, pending, none and unknown for the corresponding install_ci_state answers under a stubbed gh, asks through install_ci_state alone, ships to no install or keg, and is linted by CI's shellcheck step."
+  }
+}

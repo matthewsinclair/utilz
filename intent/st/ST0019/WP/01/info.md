@@ -1,15 +1,15 @@
 ---
 wp_id: WP-01
-title: Gates, bin/ci-state, the heading convention, and gates that leave no dirt
+title: Gates, tools/ci-state, the heading convention, and gates that leave no dirt
 scope: S
 status: Not Started
 ---
 
-# WP-01: Gates, bin/ci-state, the heading convention, and gates that leave no dirt
+# WP-01: Gates, tools/ci-state, the heading convention, and gates that leave no dirt
 
 ## Objective
 
-Everything Utilz declares to devbin's release core is in place and proved before Devbin's ST0007 WP-08 switches it on (design D1, D2, D6). acceptance.sh, theme-addressing.sh and video.sh are declared as test options with in_all: false and listed as their own gates after test all. bin/ci-state wraps install_ci_state and maps its conclusion to the core's five verdicts. The CHANGELOG's open section is headed ## [X.Y.Z] - unreleased. Every gate is run with git status --porcelain --untracked-files=all diffed before and after, and any writer found is fixed or ignored. The release block is not enabled here.
+Everything Utilz declares to devbin's release core is in place and proved before Devbin's ST0007 WP-08 switches it on (design D1, D2, D6). acceptance.sh, theme-addressing.sh and video.sh are declared as test options with in_all: false and listed as their own gates after test all. tools/ci-state, outside the published set, wraps install_ci_state and maps its conclusion to the core's five verdicts, and CI's shellcheck collector is widened from bin opt to bin opt tools so it is linted. The CHANGELOG's open section is headed ## [X.Y.Z] - unreleased. Every gate is run with git status --porcelain --untracked-files=all diffed before and after, and any writer found is fixed or ignored. The release block is not enabled here.
 
 ## Acceptance
 

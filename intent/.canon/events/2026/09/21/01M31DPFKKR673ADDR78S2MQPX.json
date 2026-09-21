@@ -1,0 +1,17 @@
+{
+  "id": "01M31DPFKKR673ADDR78S2MQPX",
+  "ts": "2026-09-21T07:25:43.411Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "ST0019: your four changes are applied, 5 WPs and 8 ACs minted, committed at 0c1bc49. Each of your citations was checked against source before it went in. One offset: on this machine's Homebrew the comment is at formula.rb:3951, so the design cites 3941-3952 and quotes it verbatim, as you asked. No WP starts until hv rules on Q1 (gates WP-03, WP-04), Q2 (gates WP-02) and prez's number (gates WP-01's heading and version work). WP-01's gate and ci-state work does not depend on any of them, so if you want it started ahead of the rulings, say so and cc starts it, doc first. Your three views are left uncommitted for you.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

@@ -32,14 +32,14 @@ release:
     - test theme
     - test video
   ci:
-    query: bin/ci-state
+    query: tools/ci-state
 ```
 
 - **`tag: "{version}"`** is hv's ruling at 2.7.0, which lives in 2.7.0's annotation. The reference already names Utilz as the case (`config.reference.yaml:498`).
 - **`repo:` has to be declared.** Left undeclared, the core reads it off the first push remote (`config.reference.yaml:515`), which here is `local`, a Dropbox path. `gh release create` would then point at no GitHub repository.
 - **`remotes:` stays undeclared**, so both remotes are pushed in `git remote` order, as hv pushes by hand today.
 - **`gates:` extends the default with three gates of its own.** `test all` runs the bats estate and the workspace's cargo tests through `bin/.devbin/config.yaml`'s `test` options. acceptance.sh, theme-addressing.sh and video.sh are not in it, and without them the release gate would be narrower than the one hv's hand releases ran. **They are not added to `test all`**, on vc's review: `test all` is the everyday verb, and video.sh needs Chrome, ffmpeg and a quiet machine (the load rule from 2.10.0). So each is declared as a `test` option with `in_all: false`, which excludes it from `test all` and **reports it as skipped rather than dropping it** (`config.reference.yaml:422-424`), and each is listed as its own gate after `test all`. The names `acceptance`, `theme` and `video` are WP-01's to settle. A gate is a devbin verb run by its words (`cmd/release:698-702`), so the form is legal, and WP-01 proves it through the core's read-only `release check`.
-- **`ci.query: bin/ci-state`** is declared so that step 11's report exists: an undeclared `ci.query` skips step 11 silently (`cmd/release:985`). `bin/ci-state` is a thin wrapper that sources `install.sh` and calls **`install_ci_state`**, the one function that asks CI about a commit (issue 0016). Its only logic is mapping: `install_ci_state` prints the run's conclusion (`success`, `failure`, `cancelled` and so on), and `ci.query` expects `green`, `failed`, `pending`, `none` or `unknown`. `success` becomes `green`, any other conclusion becomes `failed`, and `pending`, `none` and `unknown` pass through. There is no second `gh` query.
+- **`ci.query: tools/ci-state`** is declared so that step 11's report exists: an undeclared `ci.query` skips step 11 silently (`cmd/release:985`). `tools/ci-state` is a thin wrapper that sources `install.sh` and calls **`install_ci_state`**, the one function that asks CI about a commit (issue 0016). Its only logic is mapping: `install_ci_state` prints the run's conclusion (`success`, `failure`, `cancelled` and so on), and `ci.query` expects `green`, `failed`, `pending`, `none` or `unknown`. `success` becomes `green`, any other conclusion becomes `failed`, and `pending`, `none` and `unknown` pass through. There is no second `gh` query. **It lives in `tools/`, outside the published set, on vc's review.** The publish ships every tracked file under `bin` except `bin/devbin` and `bin/.devbin/` (`install.sh:99`, `INSTALL_EXCLUDE_RE` at `install.sh:50`). So a release tool in `bin/` would ship to every install and every keg as if it were a utility, and `install_e2e`'s link census and `utilz list` would find a real file where only dispatcher links live. `INSTALL_EXCLUDE_RE` is not widened for it. The reference's `bin/ci-state` is only an example. A new top-level `tools/` also sits outside CI's shellcheck collector, which runs `find bin opt` (`.github/workflows/tests.yml:190`), so WP-01 adds `tools` to that collector, or the script ships unlinted.
 - **`object: local`** is the default and stays. No workflow here triggers on a tag (`.github/workflows/tests.yml`, `pr-checks.yml`), so `check_release_writers` (`cmd/release:170`) finds no second writer. D3 needs no release assets, so `object: ci` would buy nothing.
 
 ## D2. Version files and notes
@@ -108,19 +108,19 @@ depends_on "rust" => :build
 
 vc reviewed on 2026-09-21: GO with four changes, all written in above (D1's gates, D3's evidence and post-install check, D6's step-5 consequences, D7's fresh-tag read-back).
 
-| WP  | Title                                                               | Depends on          |
-| --- | ------------------------------------------------------------------- | ------------------- |
-| 01  | Gates, `bin/ci-state`, the heading convention, gates leave no dirt  | D1, D2, D6          |
-| 02  | The keg as an install tree: the discriminator and refusing verbs    | hv on Q2            |
-| 03  | Spike: a git-URL formula built in a scratch tap, keg run end to end | hv on Q1            |
-| 04  | The tap `matthewsinclair/homebrew-utilz` and its formula            | WP-03               |
-| 05  | The formula bump after a release: `after:` or a documented step     | WP-04, Devbin WP-08 |
+| WP  | Title                                                                | Depends on          |
+| --- | -------------------------------------------------------------------- | ------------------- |
+| 01  | Gates, `tools/ci-state`, the heading convention, gates leave no dirt | D1, D2, D6          |
+| 02  | The keg as an install tree: the discriminator and refusing verbs     | hv on Q2            |
+| 03  | Spike: a git-URL formula built in a scratch tap, keg run end to end  | hv on Q1            |
+| 04  | The tap `matthewsinclair/homebrew-utilz` and its formula             | WP-03               |
+| 05  | The formula bump after a release: `after:` or a documented step      | WP-04, Devbin WP-08 |
 
 WP-05 is open on purpose: a release's `after:` could rewrite the formula's `tag` and `revision` and push the tap, but `after:` runs outside the core's guarantees (`cmd/release:940`), and a push to a second repository is hv's call.
 
 ## Acceptance
 
-The ACs are minted with `intent ac new` with the work packages. The shape: the declaration, gates included, validates under the core's own `release check` (read-only, run by hv or vc); every gate leaves `git status --porcelain --untracked-files=all` byte-identical; `bin/ci-state` answers each of the five verdicts under a stubbed `gh`; the CHANGELOG's open section reads `open` to the core; a keg installed from the tap passes `utilz doctor` after brew's post-install, manifest included, and runs every utility; `upgrade`, `relink` and `use` refuse inside a keg and name `brew upgrade`.
+The ACs are minted with `intent ac new` with the work packages. The shape: the declaration, gates included, validates under the core's own `release check` (read-only, run by hv or vc); every gate leaves `git status --porcelain --untracked-files=all` byte-identical; `tools/ci-state` answers each of the five verdicts under a stubbed `gh`; the CHANGELOG's open section reads `open` to the core; a keg installed from the tap passes `utilz doctor` after brew's post-install, manifest included, and runs every utility; `upgrade`, `relink` and `use` refuse inside a keg and name `brew upgrade`.
 
 ## Open, and not this thread's
 
