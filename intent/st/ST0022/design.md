@@ -62,6 +62,10 @@ A 1080x1920 frame, with vc's two cases:
 
 **Ken Burns comes back in portrait as a zoom only**, 1.00 to 1.06 about the centre, with no drift. A zoom about the centre keeps the picture on its ground, where the drift did not, and a gallery that does not move at all is dead on a phone. This is the one player change. It applies to any tall window, a phone's browser included, where the same reasoning holds.
 
+**The venue slide follows the same rule** (vc's ruling after the 9:16 pass of 001). Its shop photograph was `cover`, and in portrait the crop cut the shop's own sign to "ernation". So in portrait it is contained on a blurred copy of itself too, with the same zoom-only Ken Burns. Landscape is unchanged: the venue's ground exists there, but it is not displayed.
+
+**And the at-work card sits inside the safe area in portrait.** The portrait rule `.tpl{padding:0 6%}` overrode the card's safe padding, so its head touched the top edge, and the card filled the whole height, leaving an empty band above the QR. In portrait the card gets its safe padding back, takes its content's height, and is centred. Two declarations in the portrait block.
+
 ### D5c. Socials at phone size
 
 At the handset layout (D5a) on a 1080-wide frame: the handle (`.at`, `7.4vw`) is 80 px, about 7% of the width. The network name is about 48 px. The QR is `min(62vw,52vh)`, 670 px, 62% of the width. The QR's job in a video is to be screenshotted, or scanned off a second screen. The handle's job is to be read and typed, so the handle is what the check measures.

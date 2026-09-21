@@ -277,6 +277,9 @@ body{
    is mostly bright sky. */
 .venue{position:absolute;inset:0;overflow:hidden;background:var(--bg)}
 .venue img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+/* The same photograph, blurred, behind a portrait window's contained copy (see
+   the portrait block). A landscape window never shows it. */
+.venue .ground{display:none}
 .venue .scrim{position:absolute;inset:0;
   background:linear-gradient(to bottom,rgb(0 0 0/.34) 0 26%,rgb(0 0 0/.12) 46%,
     rgb(0 0 0/.52) 78%,rgb(0 0 0/.68) 100%)}
@@ -490,6 +493,24 @@ body.kiosk #bar,body.kiosk #hud{display:none}
   .fit-cover.m-kenburns-out img{animation:kb-zoom-out var(--dwell) linear both}
   .fit-cover.m-drift img,.fit-cover.m-drift-l img,
   .fit-cover.m-drift-r img{animation:none}
+
+  /* The venue's shopfront, by the same rule: a crop to its centre cut the
+     shop's own sign, which is the slide's point (ST0022, vc's ruling). */
+  .venue img{object-fit:contain}
+  .venue .ground{display:block;position:absolute;inset:0;
+    background-size:cover;background-position:center;
+    filter:blur(var(--backdrop-blur)) saturate(var(--backdrop-sat))
+           brightness(var(--backdrop-dim));
+    transform:scale(1.14)}
+  .m-kenburns .venue img{animation:kb-zoom-in var(--dwell) linear both}
+  .m-kenburns-out .venue img{animation:kb-zoom-out var(--dwell) linear both}
+  .m-drift .venue img,.m-drift-l .venue img,.m-drift-r .venue img{animation:none}
+
+  /* The at-work card inside the safe area, at its content's height, centred:
+     `.tpl{padding:0 6%}` above took its safe padding away, and its 100%
+     height left an empty band over the QR. */
+  .atwork{padding:var(--safe);align-content:center}
+  .atwork .frame{height:auto}
 }
 
 /* THE THEME GOES LAST. It has to be able to override a shell rule of equal
@@ -718,7 +739,8 @@ function buildVenue(s){
   const at   = s.at   || session.venue || "";
   const city = s.city || session.city  || "";
   return slideEl(s, `<div class="venue bg-${esc(s.bg)}">
-       ${s.src ? `<img src="${s.src}" alt="">` : ""}
+       ${s.src ? `<div class="ground" style="background-image:url('${s.src}')"></div>
+       <img src="${s.src}" alt="">` : ""}
        <div class="scrim"></div>
        <div class="lay">
          <div class="banner">
