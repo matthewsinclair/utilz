@@ -1,0 +1,14 @@
+{
+  "id": "01M31GFF8YCHDYP8NZ8PB5XFZ6",
+  "ts": "2026-09-21T08:14:19.422Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.withdraw",
+  "subject": {
+    "type": "ac",
+    "id": "ST0019/AC-01.2"
+  },
+  "payload": {
+    "reason": "Minted test-backed, but its proof is a one-off measurement in a release window, not a repeatable test, and the contract refuses a non-test AT on a test-backed AC. Replaced by AC-01.5, the same criterion as non-test, satisfied by the window's evidence."
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "id": "01M31GAFK4Y8W3HE4PH2V7P537",
+  "ts": "2026-09-21T08:11:35.909Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.edit",
+  "subject": {
+    "type": "ac",
+    "id": "ST0019/AC-01.1"
+  },
+  "payload": {
+    "text": "The release: block from design D1, its estate gate included, is declared in bin/.devbin/config.yaml with the command still off, and bin/devbin doctor, whose cfg_validate reads the block, reports the config clean. The core's read-only release check is run by hv or vc as the first act of the switch-on (Devbin ST0007 WP-08), before any cut."
+  }
+}

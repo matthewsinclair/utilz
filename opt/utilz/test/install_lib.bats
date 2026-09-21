@@ -600,7 +600,7 @@ run_ci_state() {
   run env PATH="$dir:$PATH" "$UTILZ_HOME/tools/ci-state" "$sha"
 }
 
-@test "AC-01.3: tools/ci-state answers each of the core's five verdicts, one per CI answer" {
+@test "AT01 (ST0019 AC-01.3): tools/ci-state answers each of the core's five verdicts, one per CI answer" {
   local answer want
   while IFS=';' read -r answer want; do
     run_ci_state deadbeef "$answer"
@@ -616,14 +616,14 @@ in_progress||104;pending 104
 ROWS
 }
 
-@test "AC-01.3: tools/ci-state answers unknown with gh's own reason when gh refuses, never green" {
+@test "AT01 (ST0019 AC-01.3): tools/ci-state answers unknown with gh's own reason when gh refuses, never green" {
   local refusal="multiple remotes detected [origin upstream]. please specify which repo to use with -R"
   run_ci_state deadbeef "" 1 "$refusal"
   assert_success
   [ "$(printf '%s' "$output" | tr '\t' ' ')" = "unknown $refusal" ] || fail "answered: $output"
 }
 
-@test "AC-01.3: tools/ci-state asks through install_ci_state, about the sha it is given, from the tree" {
+@test "AT01 (ST0019 AC-01.3): tools/ci-state asks through install_ci_state, about the sha it is given, from the tree" {
   local sha
   sha=$(git -C "$UTILZ_HOME" rev-parse HEAD)
   run_ci_state "$sha" "completed|success|105"
@@ -635,14 +635,14 @@ ROWS
   assert_output_contains "run list --commit $sha --workflow tests.yml"
 }
 
-@test "AC-01.3: tools/ci-state refuses anything but one sha, exiting non-zero so the core reads unknown" {
+@test "AT01 (ST0019 AC-01.3): tools/ci-state refuses anything but one sha, exiting non-zero so the core reads unknown" {
   run "$UTILZ_HOME/tools/ci-state"
   [ "$status" -eq 2 ] || fail "no argument exited $status"
   run "$UTILZ_HOME/tools/ci-state" a b
   [ "$status" -eq 2 ] || fail "two arguments exited $status"
 }
 
-@test "AC-01.3: tools/ci-state is in no install: the owned set names nothing under tools/" {
+@test "AT01 (ST0019 AC-01.3): tools/ci-state is in no install: the owned set names nothing under tools/" {
   [ -x "$UTILZ_HOME/tools/ci-state" ] || fail "tools/ci-state is missing, so this would pass vacuously"
   run run_install_function "install_owned_paths '$UTILZ_HOME'"
   assert_success

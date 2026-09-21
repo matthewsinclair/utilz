@@ -11,6 +11,25 @@ status: WIP
 
 Everything Utilz declares to devbin's release core is in place and proved before Devbin's ST0007 WP-08 switches it on (design D1, D2, D6). The release: block from D1 is declared in bin/.devbin/config.yaml (tag "{version}", repo matthewsinclair/utilz, gates check all and test estate, ci.query tools/ci-state), and commands.release.enabled stays off. The release gates are check all and test estate: estate is a test option running bin/utilz test, the driver that discovers every suite kind (cargo, bats, crate/test/*.sh --strict), declared with in_all: false so test all stays the everyday verb. tools/ci-state, outside the published set, wraps install_ci_state and maps its conclusion to the core's five verdicts, and CI's shellcheck collector is widened from bin opt to bin opt tools so it is linted. The CHANGELOG's open section is headed ## [2.11.0] - unreleased, the version hv ruled on 2026-09-21. Every gate is run with git status --porcelain --untracked-files=all hashed before and after, and any writer found is fixed or ignored before the gate is declared. With the command off, bin/devbin refuses release before its handler runs (bin/devbin:616-628), so WP-01 proves the declaration through bin/devbin doctor, whose cfg_validate reads the release: block; the core's own release check is the first act of the switch-on, before any cut.
 
+## Gates and the tree (AC-01.5, which replaces AC-01.2)
+
+Measured in a release window on 2026-09-21 at HEAD `ba1b4bd`. vc held every intent write from `61adcc9`, and cc held its own. Each gate was run as the core runs it, `bin/devbin <words>`, with `git status --porcelain --untracked-files=all` hashed before and after, and every dirty path hashed with `git hash-object`.
+
+| Gate          | Window (UTC)          | rc  | Status before | Status after | HEAD    |
+| ------------- | --------------------- | --- | ------------- | ------------ | ------- |
+| `check all`   | 07:52:08Z - 07:52:11Z | 0   | 0 lines       | 0 lines      | unmoved |
+| `test estate` | 07:52:12Z - 08:03:13Z | 0   | 0 lines       | 0 lines      | unmoved |
+
+`check all` ran 6 of 8 check options and all passed. `test estate` passed 20 of 20 suites, and its sealed `tmp/test/20260921-0752.ESTATE.errors` is 0 bytes (`tmp/` is ignored). Load averaged 449.54/253.96/181.33 at the start and 547.69/423.75/313.96 at the end. No gate wrote anything, so nothing was fixed or ignored.
+
+## The declaration (AC-01.1)
+
+The D1 block is declared in `bin/.devbin/config.yaml` at `0a63d4b`, and `commands.release.enabled` stays off. `bin/devbin doctor` reports 12 checks with 0 failed: the config parses and validates, and the release block is "declared and inert". With `tag: "release"` swapped in, doctor fails and names `release.tag`, which shows its ok comes from reading the block, not from skipping it. The core's `release check` is WP-08's first act.
+
+## The heading (AC-01.4)
+
+`CHANGELOG.md` opens `## [2.11.0] - unreleased`. The core's reader, `_notes_changelog_state` (`release.notes`), answers 2.11.0 `open`, 2.10.0 `dated 2026-09-20` and 2.12.0 `absent`.
+
 ## Acceptance
 
 Acceptance Criteria for this work package are RENDERED into `ST0019/acceptance.md`, under the `WP-01` heading. THAT FILE IS A GENERATED VIEW -- a row authored there is discarded by the next sync. The contract is canon in the thread's model, and the verbs write it: `intent ac new` and `intent at new` mint a row, `intent ac edit` and `intent at edit` reword or re-cite one, and `intent ac satisfy|unsatisfy|descope|rescope|withdraw|reinstate` and `intent at green|red|na` move its state. This cover never restates them.

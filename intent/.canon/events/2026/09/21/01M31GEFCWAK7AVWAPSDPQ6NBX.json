@@ -1,0 +1,14 @@
+{
+  "id": "01M31GEFCWAK7AVWAPSDPQ6NBX",
+  "ts": "2026-09-21T08:13:46.781Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.satisfy",
+  "subject": {
+    "type": "ac",
+    "id": "ST0019/AC-01.4"
+  },
+  "payload": {
+    "evidence": "0a63d4b: CHANGELOG.md line 10 reads '## [2.11.0] - unreleased'; release.notes _notes_changelog_state answers 2.11.0 open, 2.10.0 dated 2026-09-20, 2.12.0 absent"
+  }
+}
