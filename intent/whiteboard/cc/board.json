@@ -5,9 +5,9 @@
     "name": "Control Claude",
     "role": "control",
     "session_id": "d69b4069-611f-4829-8991-1a15c02f53bb",
-    "heartbeat_at": "2026-09-21T17:56:31.856Z",
+    "heartbeat_at": "2026-09-21T18:00:50.056Z",
     "status": "active",
-    "focus": "ST0022: showreel video --aspect landed at af6ba30; awaiting vc's reading of the 9:16 frames and rulings on venue, atwork and zoom margin",
+    "focus": "ST0022: rulings done at 0feb622; awaiting vc's AC-01.3 on the re-recorded venue and atwork frames",
     "claims": [
       "ST0019",
       "ST0022"

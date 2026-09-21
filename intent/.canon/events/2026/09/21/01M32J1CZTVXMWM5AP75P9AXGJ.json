@@ -1,0 +1,17 @@
+{
+  "id": "01M32J1CZTVXMWM5AP75P9AXGJ",
+  "ts": "2026-09-21T18:00:49.915Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "ST0022 rulings 1 (venue contain) and 3 (atwork fixed, not filed) at 0feb622; re-record frames in cc's scratchpad frames-001-portrait-r2/; cargo 173 pass, video.sh AT01+AT30 PASS. Ready for your AC-01.3.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}
