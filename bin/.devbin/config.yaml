@@ -78,12 +78,15 @@ commands:
         run: cargo fmt --all --manifest-path opt/prez/crate/Cargo.toml
         grammar: generic
         log: FMTRS
+  # Devbin's release core, switched on by hv's OK of 2026-09-21 (ST0019 D1,
+  # Devbin ST0007 WP-08). Its first act, before any cut, is the read-only
+  # `bin/devbin release check`. Its declaration is the release: block below.
+  release:
+    enabled: true
 
 # The release core's declaration (ST0019 design D1): only what differs from the
-# defaults in lib/config.reference.yaml. Declared here, INERT: the core stays off
-# until commands.release.enabled: true (Devbin ST0007 WP-08), whose first act,
-# before any cut, is `release check` against this block. Until then
-# `bin/devbin doctor` validates it and reports it declared and inert.
+# defaults in lib/config.reference.yaml. commands.release.enabled above is what
+# switches the core on; this block alone would be inert.
 #
 # tag: bare, hv's ruling at 2.7.0. repo: declared because the core refuses
 # without it -- no origin and two remotes (local, upstream). gates: check all,
