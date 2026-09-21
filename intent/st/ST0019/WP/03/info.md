@@ -69,13 +69,19 @@ rm -rf ~/Library/Caches/Homebrew/utilz--git
 - **The WP-02 refusals hold in the real keg.** `upgrade --prefix`, `install --force --prefix`, `relink`, `use opt` and `use dev` each exited 1 with "`<keg>/libexec` is a Homebrew keg: brew owns it" and named `brew upgrade utilz`, and the scratch bin directory stayed empty. `utilz test` named `git clone https://github.com/matthewsinclair/utilz.git`.
 - **Not rechecked:** one run through `/opt/homebrew/opt/utilz/bin/prez` failed on `yq is required`, because that check's PATH left out `/opt/homebrew/bin`. The keg was uninstalled before it could be rerun. The same tree, through the Cellar path with brew's `bin` on PATH, passed above.
 
+### hv's live install and PATH links
+
+vc asked for scratch targets on every refusal check, and for a before-and-after hash of the live install and `~/.local/bin`. The request arrived after the spike had run, so there is no before-hash. What the spike actually did: `upgrade` and `install --force` ran with a scratch `--prefix`, and `relink`, `use opt` and `use dev` with a scratch `--bin-dir`. `use` read `install.prefix` from the keg's `utilz.yaml`, which names the live `~/Devel/opt/utilz`, but only as an address: `relink` never writes into its prefix, and every refusal fired before a link was touched. An earlier attempt passed each command as one word, because zsh does not split a variable, so the dispatcher answered with its help and ran nothing.
+
+Checked after the spike: the live `~/Devel/opt/utilz/manifest.sha256` was last modified on 14 Sep at 23:11, and `install_manifest_check` on the live install exits 0, so no owned path differs from its row. No link in `~/.local/bin` changed today, none resolves into a Cellar, and `~/.local/bin/utilz` still resolves to `~/Devel/opt/utilz/bin/utilz`. The spike in WP-04, and any later one, hashes both before it starts.
+
 ### Leftovers after uninstall and untap
 
 Checked at 09:30:22Z: no `/opt/homebrew/Cellar/utilz`, no `/opt/homebrew/opt/utilz`, no `Library/Taps/matthewsinclair/homebrew-utilz-spike`, and nothing in `/opt/homebrew/bin` linking to utilz. `command -v utilz` is `~/.local/bin/utilz`, as before. One leftover remained: brew's clone cache for the `file://` url, `~/Library/Caches/Homebrew/utilz--git` (92M). It was created at 09:27:10Z, has origin `file:///Users/matts/Devel/prj/Utilz`, and was at `274e64f`, so it was the spike's, and it was removed. Afterwards, no cache entry names utilz.
 
 ### Found
 
-- **The announce names Homebrew's commit for a keg.** Run from the keg, `upgrade` announced `source: <keg>/libexec (unknown, 2f1c682db0)`, and `2f1c682` is Homebrew's own HEAD. The keg has no `.git`, so `git -C <tree> rev-parse` walked up into `/opt/homebrew`'s repository. The refusal still followed, and nothing was written, but the line names a commit that is not the tree's. Filed and fixed apart from this WP.
+- **The announce names Homebrew's commit for a keg.** Run from the keg, `upgrade` announced `source: <keg>/libexec (unknown, 2f1c682db0)`, and `2f1c682` is Homebrew's own HEAD. The keg has no `.git`, so `git -C <tree> rev-parse` walked up into `/opt/homebrew`'s repository. The refusal still followed, and nothing was written, but the line names a commit that is not the tree's. Filed as issue 0044 and fixed at `5224183`: `install_tree_commit` answers the tree's own commit, or `none`.
 - **For WP-04:** the formula declares `license "MIT"` (hv, 2026-09-21), and a LICENSE file lands with it.
 
 ## Acceptance
