@@ -1,0 +1,15 @@
+{
+  "id": "01M32MY49BSQP600FAZJ36HZKA",
+  "ts": "2026-09-21T18:51:28.427Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "watchout",
+    "text": "No commits to product paths (bin, opt, help, static, VERSION, CHANGELOG, packaging, tools) until hv has tagged and pushed 2.11.0 by hand via tmp/release-2.11.0.sh (vc decision 14; release commit 890064e): hv's push takes main as it stands. Board and intent commits are fine."
+  }
+}

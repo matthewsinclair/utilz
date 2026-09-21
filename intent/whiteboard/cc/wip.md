@@ -28,6 +28,7 @@ _(none)_
 - One suite at a time with vc, and commits by explicit path only: vc's files have sat staged in the shared index while cc committed.
 - A .md the pre-commit prettier hook reformats can leave the index holding the pre-format text after an explicit-path commit: check git status after. Store bodies (issues, WP bodies) must be prettier-stable before intent set, or the view drifts and the doctor gate refuses every later commit.
 - hv's rule: a gap in devbin's vendored release core (bin/.devbin/lib/release*) is fixed in devbin, as a default with an override, through vc to devbin-dc or devbin-2b. Never patch the vendored copy or add a Utilz-only branch. Vendored line numbers move with each devbin sweep: re-read a citation before trusting it.
+- No commits to product paths (bin, opt, help, static, VERSION, CHANGELOG, packaging, tools) until hv has tagged and pushed 2.11.0 by hand via tmp/release-2.11.0.sh (vc decision 14; release commit 890064e): hv's push takes main as it stands. Board and intent commits are fine.
 
 ## Decisions
 

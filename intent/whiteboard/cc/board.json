@@ -668,6 +668,14 @@
       "text": "ST0019 WP-05 AC-05.2 (brew install from matthewsinclair/homebrew-utilz at the bare tag, utilz doctor clean in the keg). Released when: the next release is cut and pushed (2.11.0 in hv's ruling; vc's release plan names the number), and hv has created and pushed the tap with tools/formula-bump's commit (docs/releasing.md, one-time setup). Then WP-05 and ST0019 close.",
       "state": "live",
       "recorded_at": "2026-09-21T18:32:43.451Z"
+    },
+    {
+      "node": "cc",
+      "kind": "watchout",
+      "seq": 7,
+      "text": "No commits to product paths (bin, opt, help, static, VERSION, CHANGELOG, packaging, tools) until hv has tagged and pushed 2.11.0 by hand via tmp/release-2.11.0.sh (vc decision 14; release commit 890064e): hv's push takes main as it stands. Board and intent commits are fine.",
+      "state": "live",
+      "recorded_at": "2026-09-21T18:51:28.427Z"
     }
   ],
   "messages": [
