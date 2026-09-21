@@ -1,0 +1,14 @@
+{
+  "id": "01M31TA32VBEVP688WTRJ7M7SP",
+  "ts": "2026-09-21T11:06:08.860Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.withdraw",
+  "subject": {
+    "type": "ac",
+    "id": "ST0019/AC-04.2"
+  },
+  "payload": {
+    "reason": "It can only be satisfied after the 2.11.0 cut, when hv creates and pushes the tap with the tag's real commit (vc decision 9), and vc ruled that WP-04 closes on AC-04.1. Moved to WP-05, which is how the formula follows a release, as AC-05.2."
+  }
+}

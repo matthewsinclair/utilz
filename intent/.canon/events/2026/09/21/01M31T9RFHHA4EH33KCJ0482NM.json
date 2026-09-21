@@ -1,0 +1,14 @@
+{
+  "id": "01M31T9RFHHA4EH33KCJ0482NM",
+  "ts": "2026-09-21T11:05:58.001Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.satisfy",
+  "subject": {
+    "type": "ac",
+    "id": "ST0019/AC-04.1"
+  },
+  "payload": {
+    "evidence": "1ecdd3a: packaging/homebrew/utilz.rb, MIT LICENSE, README license section MIT. WP-04 body: brew audit --strict in a throwaway tap exits 0 with no findings on the committed formula and on a real-commit copy; a bad-desc control exits 1 naming both faults, so the pass is a reading; tap untapped, live install manifest and ~/.local/bin listing hash identical before and after."
+  }
+}

@@ -2,7 +2,7 @@
 wp_id: WP-04
 title: The tap matthewsinclair/homebrew-utilz and its formula
 scope: S
-status: WIP
+status: Done
 ---
 
 # WP-04: The tap matthewsinclair/homebrew-utilz and its formula
@@ -10,6 +10,28 @@ status: WIP
 ## Objective
 
 The formula and the LICENSE are written in this repository, ready for hv to create and push the tap matthewsinclair/homebrew-utilz (design D3). packaging/homebrew/utilz.rb, outside the published set, builds Utilz from source off the GitHub git URL at the bare tag: top-level url with tag and revision, license "MIT", depends_on rust for the build, yq the one runtime dependency, depends_on :macos, the tree published into libexec by utilz install --managed-by brew with a bin symlink for each dispatcher link, a caveat pointing at utilz doctor for the utilities' own dependencies, and a test that runs utilz --version. The revision is a marked placeholder until 2.11.0 is cut. LICENSE is MIT (hv, 2026-09-21), and the README's license section matches it. brew audit --strict runs against the formula in a scratch tap, on hv's go. Creating and pushing the tap are hv's; the install from it at the bare tag follows the release.
+
+## What landed
+
+- `packaging/homebrew/utilz.rb` at `1ecdd3a`: the GitHub git URL at the bare tag 2.11.0, with a 40-zero placeholder revision marked as such until the cut, `license "MIT"`, rust for the build, `depends_on :macos`, `yq` as the one runtime dependency, `utilz install --prefix libexec --managed-by brew` with a `bin` link per dispatcher link, a caveat naming `utilz doctor` and `brew upgrade utilz`, and a test asserting `utilz:#{version}` from `utilz --version`. `ruby -c` reports Syntax OK.
+- `LICENSE`, standard MIT, Copyright (c) 2025-2026 Matthew Sinclair, on hv's choice of 2026-09-21. The README's license section says MIT, where it said "Personal use".
+- The tap repository is created and pushed by hv at the 2.11.0 cut, with the tag's real commit in the formula and never the placeholder (vc decision 9). That is AC-04.2's.
+
+## brew audit --strict, 2026-09-21, on hv's go (vc decision 9)
+
+Run from 11:04:54Z at load 14.16, in a throwaway tap made with `brew tap-new --no-git matthewsinclair/utilz-audit` and removed with `brew untap` after each run.
+
+| Formula audited                                           | rc  | Findings                                                                                         |
+| --------------------------------------------------------- | --- | ------------------------------------------------------------------------------------------------ |
+| `packaging/homebrew/utilz.rb` as committed, zero revision | 0   | none                                                                                             |
+| A scratch copy at tag 2.10.0, revision `902a72d`          | 0   | none                                                                                             |
+| Control: the `license` line removed                       | 0   | none                                                                                             |
+| Control: `desc "A set of utilities."`                     | 1   | "Description shouldn't start with an article." and "Description shouldn't end with a full stop." |
+
+- **The placeholder revision draws no finding.** A strict audit without `--online` does not check a revision against the repository, so it neither refuses the zero revision nor needs a real one to pass. A real commit in a scratch copy passes the same way.
+- **The pass is a reading, not a silence.** The `desc` control makes the same audit exit 1 and name both faults, so it does examine a formula in a scratch tap. The `license` control shows what it does not check there: a formula outside Homebrew's own taps is not required to declare a license. The formula declares one anyway.
+- **Side effect on Homebrew itself:** the first audit fetched Homebrew's own development gems into `/opt/homebrew/Library/Homebrew/vendor/bundle`, updating rubocop 1.90.0 to 1.91.0 and sorbet, sorbet-runtime, sorbet-static, patchelf and ruby-macho with it. That is Homebrew's toolchain, not Utilz, and it stays.
+- **hv's live install and PATH links, hashed before the first run and after the last:** the live `~/Devel/opt/utilz/manifest.sha256` hashed `2464fffa145e4540` and the `ls -l ~/.local/bin` listing hashed `26d43a39cbc652a4` at every reading. No tap named `utilz-audit` remains, and no brew cache entry names utilz.
 
 ## Acceptance
 
