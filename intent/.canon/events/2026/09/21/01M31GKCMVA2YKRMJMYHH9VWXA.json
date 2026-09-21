@@ -1,0 +1,14 @@
+{
+  "id": "01M31GKCMVA2YKRMJMYHH9VWXA",
+  "ts": "2026-09-21T08:16:27.804Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.satisfy",
+  "subject": {
+    "type": "ac",
+    "id": "ST0019/AC-01.1"
+  },
+  "payload": {
+    "evidence": "vc, 21 Sep, in vc's detached worktree at 45c3830: bin/.devbin/config.yaml carries design D1's release: block (tag \"{version}\", repo matthewsinclair/utilz, gates check all + test estate, ci.query tools/ci-state) with commands.release off; bin/devbin doctor reads '11 checks, 0 failed, 4 notes' and notes the block 'declared and inert'. Mutation: tag swapped to \"release\" makes doctor refuse, naming release.tag ('must contain {version}'), so the pass comes from reading the block. The read-only release check is the switch-on's first act."
+  }
+}

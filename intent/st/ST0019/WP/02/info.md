@@ -2,14 +2,14 @@
 wp_id: WP-02
 title: The keg as an install tree: the discriminator and the verbs that refuse
 scope: S
-status: Not Started
+status: WIP
 ---
 
 # WP-02: The keg as an install tree: the discriminator and the verbs that refuse
 
 ## Objective
 
-A Homebrew keg is an install tree whose upgrade belongs to brew (design D4, pending hv's ruling on Q2). The keg carries a fact that identifies it as brew's, either a manifest header row or an install flag, and WP-02 chooses which. upgrade, relink and use refuse inside a keg and name brew upgrade utilz. Every other install-tree behaviour holds unchanged.
+A Homebrew keg is an install tree whose upgrade belongs to brew (design D4, Q2 ruled by hv 2026-09-21). The keg carries the fact in its manifest: utilz install --managed-by brew writes a managed-by header row whose value is brew, every other publish writes utilz, and a manifest from before the row reads as utilz. One pure reader, install_tree_manager, answers from the manifest alone. upgrade, relink, use and install --force refuse when the tree they run from, or the tree they would write or link to, is a keg, and they name brew upgrade utilz. Every other install-tree behaviour holds unchanged.
 
 ## Acceptance
 

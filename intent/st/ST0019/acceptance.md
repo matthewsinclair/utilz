@@ -13,17 +13,17 @@ title: Release Utilz through dvb build release and a Homebrew tap, like Intent
 
 ## Acceptance Criteria
 
-### WP-01 -- Gates, tools/ci-state, the heading convention, and gates that leave no dirt (status: WIP)
+### WP-01 -- Gates, tools/ci-state, the heading convention, and gates that leave no dirt (status: Done)
 
-- AC-01.1 (non-test) The release: block from design D1, its estate gate included, is declared in bin/.devbin/config.yaml with the command still off, and bin/devbin doctor, whose cfg_validate reads the block, reports the config clean. The core's read-only release check is run by hv or vc as the first act of the switch-on (Devbin ST0007 WP-08), before any cut. -- satisfied: no
+- AC-01.1 (non-test) The release: block from design D1, its estate gate included, is declared in bin/.devbin/config.yaml with the command still off, and bin/devbin doctor, whose cfg_validate reads the block, reports the config clean. The core's read-only release check is run by hv or vc as the first act of the switch-on (Devbin ST0007 WP-08), before any cut. -- evidence: vc, 21 Sep, in vc's detached worktree at 45c3830: bin/.devbin/config.yaml carries design D1's release: block (tag "{version}", repo matthewsinclair/utilz, gates check all + test estate, ci.query tools/ci-state) with commands.release off; bin/devbin doctor reads '11 checks, 0 failed, 4 notes' and notes the block 'declared and inert'. Mutation: tag swapped to "release" makes doctor refuse, naming release.tag ('must contain {version}'), so the pass comes from reading the block. The read-only release check is the switch-on's first act. -- satisfied: yes
 - AC-01.2 Every declared gate, bin/utilz test first, leaves git status --porcelain --untracked-files=all byte-identical, measured by hashing every dirty path before and after it. -- WITHDRAWN: Minted test-backed, but its proof is a one-off measurement in a release window, not a repeatable test, and the contract refuses a non-test AT on a test-backed AC. Replaced by AC-01.5, the same criterion as non-test, satisfied by the window's evidence.
 - AC-01.3 tools/ci-state answers green, failed, pending, none and unknown for the corresponding install_ci_state answers under a stubbed gh, asks through install_ci_state alone, ships to no install or keg, and is linted by CI's shellcheck step. -- satisfied: yes (computed)
 - AC-01.4 (non-test) CHANGELOG.md's open section is headed ## [2.11.0] - unreleased, the version hv ruled on 2026-09-21, and the core's heading reader (release.notes) reads its state as open. -- evidence: 0a63d4b: CHANGELOG.md line 10 reads '## [2.11.0] - unreleased'; release.notes _notes_changelog_state answers 2.11.0 open, 2.10.0 dated 2026-09-20, 2.12.0 absent -- satisfied: yes
 - AC-01.5 (non-test) Every declared gate, bin/utilz test first, leaves git status --porcelain --untracked-files=all byte-identical, measured by hashing every dirty path before and after it, in a release window with every node holding its intent writes. -- evidence: Window 21 Sep, HEAD ba1b4bd, vc holding from 61adcc9, accepted by vc at close. bin/devbin check all 07:52:08-07:52:11Z rc 0; bin/devbin test estate 07:52:12-08:03:13Z rc 0, 20 of 20 suites, sealed ESTATE.errors 0 bytes; load 449.54 to 547.69. Porcelain 0 lines before and after each gate (hash da39a3ee5e6b), HEAD unmoved, no per-path hash changed; no writer found. -- satisfied: yes
 
-### WP-02 -- The keg as an install tree: the discriminator and the verbs that refuse (status: Not Started)
+### WP-02 -- The keg as an install tree: the discriminator and the verbs that refuse (status: WIP)
 
-- AC-02.1 Inside a keg, utilz upgrade, relink and use refuse and name brew upgrade utilz, and in a non-brew install tree they behave as before. -- satisfied: no (computed)
+- AC-02.1 A publish with --managed-by brew records managed-by brew in its manifest, and every other publish records utilz. When the tree they run from or the tree they target is a keg, utilz upgrade, relink, use and install --force refuse and name brew upgrade utilz. In a non-brew install tree, and with a manifest from before the row existed, they behave as before. -- satisfied: no (computed)
 
 ### WP-03 -- Spike: a git-URL formula built in a scratch tap, the keg run end to end (status: Not Started)
 
@@ -43,11 +43,11 @@ _(no criteria in this group)_
 
 ## Acceptance Tests
 
-### WP-01 -- Gates, tools/ci-state, the heading convention, and gates that leave no dirt (status: WIP)
+### WP-01 -- Gates, tools/ci-state, the heading convention, and gates that leave no dirt (status: Done)
 
 _(no tests in this group)_
 
-### WP-02 -- The keg as an install tree: the discriminator and the verbs that refuse (status: Not Started)
+### WP-02 -- The keg as an install tree: the discriminator and the verbs that refuse (status: WIP)
 
 _(no tests in this group)_
 

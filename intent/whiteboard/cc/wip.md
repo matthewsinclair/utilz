@@ -17,7 +17,7 @@ _(none)_
 
 ## TODO
 
-- ST0019 WP-01, landed 954c8b0: tools/ci-state plus 5 bats (AT01 green, AC-01.3 computed yes), test estate (in_all: false), tools/ in CI's shellcheck, and the CHANGELOG preamble convention. Left: AC-01.2, each gate (check all, test estate) run in a window with every node holding writes, git status hashed before and after (scratchpad dirt.sh), result written into WP-01; AC-01.4, open '## [X.Y.Z] - unreleased' once hv/vc name the version; AC-01.1, release check run by hv or vc. Scratchpad: /private/tmp/claude-501/-Users-matts-Devel-prj-Utilz/d69b4069-611f-4829-8991-1a15c02f53bb/scratchpad.
+- ST0019 WP-01 at 45c3830: release: block declared inert (0a63d4b, doctor clean, a broken tag makes it FAIL); ## [2.11.0] - unreleased open (AC-01.4 satisfied); window proof recorded in WP-01 (AC-01.2 withdrawn to non-test AC-01.5, satisfied); AC-01.3 green via AT01. Left: AC-01.1 on vc's word, then wp done. Then WP-02 (keg discriminator, D4) and WP-03 (formula spike, D3).
 
 ## Holds
 

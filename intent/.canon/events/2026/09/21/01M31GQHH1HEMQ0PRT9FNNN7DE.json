@@ -1,0 +1,14 @@
+{
+  "id": "01M31GQHH1HEMQ0PRT9FNNN7DE",
+  "ts": "2026-09-21T08:18:43.874Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.edit",
+  "subject": {
+    "type": "ac",
+    "id": "ST0019/AC-02.1"
+  },
+  "payload": {
+    "text": "A publish with --managed-by brew records managed-by brew in its manifest, and every other publish records utilz. When the tree they run from or the tree they target is a keg, utilz upgrade, relink, use and install --force refuse and name brew upgrade utilz. In a non-brew install tree, and with a manifest from before the row existed, they behave as before."
+  }
+}

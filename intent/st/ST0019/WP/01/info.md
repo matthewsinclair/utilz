@@ -2,7 +2,7 @@
 wp_id: WP-01
 title: Gates, tools/ci-state, the heading convention, and gates that leave no dirt
 scope: S
-status: WIP
+status: Done
 ---
 
 # WP-01: Gates, tools/ci-state, the heading convention, and gates that leave no dirt

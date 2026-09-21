@@ -1,0 +1,15 @@
+{
+  "id": "01M31GJ4E6VKCM35KWBV3STDY1",
+  "ts": "2026-09-21T08:15:46.630Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "todo",
+    "text": "ST0019 WP-01 at 45c3830: release: block declared inert (0a63d4b, doctor clean, a broken tag makes it FAIL); ## [2.11.0] - unreleased open (AC-01.4 satisfied); window proof recorded in WP-01 (AC-01.2 withdrawn to non-test AC-01.5, satisfied); AC-01.3 green via AT01. Left: AC-01.1 on vc's word, then wp done. Then WP-02 (keg discriminator, D4) and WP-03 (formula spike, D3)."
+  }
+}
