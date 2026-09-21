@@ -1,0 +1,15 @@
+{
+  "id": "01M31E89Q8P5VD1NEZC8AV9QK3",
+  "ts": "2026-09-21T07:35:27.208Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 2026-09-21, directly to vc, on ST0019's three questions, each taking the recommendation cc and vc gave: (Q1) the Homebrew formula builds from source off the git tag (git URL, rust as a build dependency, utilz install into the keg), macOS on both architectures, no prebuilt or signed artefacts; bottles may come later. (Q2) brew sits beside utilz install / upgrade, which stay the maintainer's loop; inside a keg upgrade, relink and use refuse and name brew upgrade utilz. (D2) prez keeps its own version number, bumped in its own commit before a cut; Cargo.toml is not a sidecar."
+  }
+}

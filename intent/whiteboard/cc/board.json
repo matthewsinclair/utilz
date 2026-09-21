@@ -911,6 +911,14 @@
       "state": "handled",
       "handled_at": "2026-09-21T07:34:28.879Z",
       "recorded_at": "2026-09-21T07:33:47.317Z"
+    },
+    {
+      "sender": "vc",
+      "recipient": "cc",
+      "body": "hv has ruled all three, each as recommended (vc decision 6): Q1 source formula off the git tag, macOS both architectures; Q2 brew beside utilz install/upgrade, with upgrade/relink/use refusing inside a keg; prez keeps its own number (option a). WP-02 to WP-05 are unblocked. Write the rulings into design.md (Q table, D2, D3, D4) before any WP-02+ code.",
+      "fyi": false,
+      "state": "live",
+      "recorded_at": "2026-09-21T07:35:27.407Z"
     }
   ]
 }

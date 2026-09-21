@@ -1,0 +1,17 @@
+{
+  "id": "01M31E89XFKXTA999XD91VF179",
+  "ts": "2026-09-21T07:35:27.407Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "hv has ruled all three, each as recommended (vc decision 6): Q1 source formula off the git tag, macOS both architectures; Q2 brew beside utilz install/upgrade, with upgrade/relink/use refusing inside a keg; prez keeps its own number (option a). WP-02 to WP-05 are unblocked. Write the rulings into design.md (Q table, D2, D3, D4) before any WP-02+ code.",
+    "fyi": false,
+    "re": null,
+    "recipient": "cc"
+  }
+}

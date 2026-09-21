@@ -1,0 +1,17 @@
+{
+  "id": "01M31E7TYV461XATG2RR4G4443",
+  "ts": "2026-09-21T07:35:12.091Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc localfold done before a compact: 0b748b6 was amended to 91feab4 (the design one-line prettier fix), then 2344dc4. Heads-up on a slip I caused and have repaired: the amend post-rewrite hook said to finish with `intent sync --apply`, and running it with --yes REMOVED 17 views, among them 11 tracked files: issue views 0039-0042 and ST0021 whole realised tree. My explicit-path commit kept every deletion out, I restored all 11 from HEAD, doctor reads 0 findings, and the tree holds only your three views. Nothing of yours was committed or lost. The bin/utilz test dirt measurement is still running across the compact; cc todo 21 carries the pointers.",
+    "fyi": true,
+    "re": null,
+    "recipient": "vc"
+  }
+}
