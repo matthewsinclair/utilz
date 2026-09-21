@@ -268,7 +268,7 @@ install_manifest_rows() {
 # skip and both path counts read this list. Until 2026-09-14 each of them
 # restated the three keys it knew, so a fourth key would have missed one of
 # them and been verified as a path, or counted as one.
-INSTALL_MANIFEST_HEADER_KEYS=(utilz-version source-commit source-tree ci-state)
+INSTALL_MANIFEST_HEADER_KEYS=(utilz-version source-commit source-tree ci-state managed-by)
 
 # Succeed when <kind> names a manifest header row.
 install_manifest_is_header() {
@@ -302,13 +302,15 @@ install_manifest_path_count() {
 }
 
 # Write the manifest for a SOURCE tree to <out>:
-#   install_manifest_write <tree> <out> [<ci_state> [<rows>]]
+#   install_manifest_write <tree> <out> [<ci_state> [<rows> [<manager>]]]
 # <ci_state> is CI's verdict on the commit as "<state><TAB><detail>", the
-# form install_ci_state gives.
+# form install_ci_state gives. <manager> is who owns the published tree,
+# `utilz` unless the formula's publish says `brew` (ST0019 D4).
 install_manifest_write() {
   local tree="$1"
   local out="$2"
   local ci_state="${3-}"
+  local manager="${5:-utilz}"
   local version commit rows
 
   if [[ ! -f "$tree/VERSION" ]]; then
@@ -361,7 +363,7 @@ install_manifest_write() {
   # One value per header key, IN THE KEYS' ORDER. The count is checked, so a
   # key added to INSTALL_MANIFEST_HEADER_KEYS without a value here fails the
   # write rather than recording a row with nothing in it.
-  local header_values=("$version" "$commit" "$source_tree" "$ci_state")
+  local header_values=("$version" "$commit" "$source_tree" "$ci_state" "$manager")
   if [[ ${#header_values[@]} -ne ${#INSTALL_MANIFEST_HEADER_KEYS[@]} ]]; then
     error "the manifest has ${#INSTALL_MANIFEST_HEADER_KEYS[@]} header keys but ${#header_values[@]} values for them"
     return 1
@@ -710,6 +712,27 @@ install_ci_state() {
   fi
 }
 
+# Refuse, by name, when <dir> is a Homebrew keg (ST0019 D4). Returns 0 for any
+# other tree, 1 after saying why for a keg or a manifest it cannot read.
+#
+# ONE REFUSAL FOR EVERY VERB THAT WRITES OR LINKS A TREE. brew checksums what
+# it installed and removes a versioned keg at the next `brew upgrade`, so a
+# rewrite breaks brew's record and a PATH link into the keg breaks later. The
+# verb is not named: `use` reaches this through relink, and one message that
+# is true for both is better than two that each name one.
+install_refuse_keg() {
+  local dir="$1"
+  local manager
+
+  manager=$(install_tree_manager "$dir") || return 1
+  [[ "$manager" == "brew" ]] || return 0
+
+  error "$dir is a Homebrew keg: brew owns it"
+  echo "  Utilz will not write to a keg or point PATH into one. Upgrade it" >&2
+  echo "  with 'brew upgrade utilz'; brew links its own commands onto PATH." >&2
+  return 1
+}
+
 # Announce what is about to happen, on stdout, BEFORE anything is written.
 #
 # A discriminator that is merely correct is not enough (AC10): a misdetection
@@ -731,12 +754,13 @@ install_announce() {
 
 install_usage_install() {
   cat <<'USAGE'
-Usage: utilz install [--prefix DIR] [--force]
+Usage: utilz install [--prefix DIR] [--force] [--managed-by brew]
 
 Publish a runnable install of this Utilz checkout.
 
-  --prefix DIR  Publish here instead of install.prefix from opt/utilz/utilz.yaml
-  --force       Publish over an existing install
+  --prefix DIR        Publish here instead of install.prefix from opt/utilz/utilz.yaml
+  --force             Publish over an existing install
+  --managed-by brew   Record that Homebrew owns the tree (the formula's publish)
 
 The source tree must be CLEAN. The manifest records the commit the bytes came
 from, and that claim holds only when nothing is uncommitted. No flag overrides
@@ -752,6 +776,7 @@ USAGE
 install_verb_install() {
   local prefix=""
   local force=0
+  local manager="utilz"
   local src="$UTILZ_HOME"
 
   while [[ $# -gt 0 ]]; do
@@ -767,6 +792,17 @@ install_verb_install() {
       --force)
         force=1
         shift
+        ;;
+      --managed-by)
+        # brew is the one manager besides utilz itself, and only the formula
+        # passes it (ST0019 D4). Any other word is refused rather than
+        # recorded, or the manifest would carry an owner nothing checks for.
+        if [[ $# -lt 2 || ("$2" != "brew" && "$2" != "utilz") ]]; then
+          error "--managed-by takes brew or utilz"
+          return 2
+        fi
+        manager="$2"
+        shift 2
         ;;
       -h | --help)
         install_usage_install
@@ -790,6 +826,12 @@ install_verb_install() {
   commit=$(git -C "$src" rev-parse --short HEAD 2>/dev/null) || commit="none"
 
   install_announce "install" "$src" "$state" "$commit" "$prefix" "$kind"
+
+  # A keg at either end, before the rest: from a keg every later refusal would
+  # give advice brew's tree cannot take, and onto one --force would overwrite
+  # what brew checksums (ST0019 D4).
+  install_refuse_keg "$src" || return 1
+  install_refuse_keg "$prefix" || return 1
 
   case "$state" in
     dirty)
@@ -835,7 +877,9 @@ install_verb_install() {
   # answer refuses the publish.
   local ci_state
   ci_state=$(install_ci_state "$src" "$(git -C "$src" rev-parse HEAD)")
-  install_manifest_write "$src" "$prefix/$UTILZ_MANIFEST_NAME" "$ci_state" || return 1
+  local rows
+  rows=$(install_manifest_rows "$src") || return 1
+  install_manifest_write "$src" "$prefix/$UTILZ_MANIFEST_NAME" "$ci_state" "$rows" "$manager" || return 1
 
   local count
   count=$(install_manifest_path_count "$prefix/$UTILZ_MANIFEST_NAME") || return 1
@@ -948,6 +992,10 @@ install_verb_upgrade() {
   commit=$(git -C "$src" rev-parse --short HEAD 2>/dev/null) || commit="none"
 
   install_announce "upgrade" "$src" "$state" "$commit" "$prefix" "$kind"
+
+  # A keg's upgrade is brew's, from either end (ST0019 D4).
+  install_refuse_keg "$src" || return 1
+  install_refuse_keg "$prefix" || return 1
 
   case "$state" in
     dirty)
@@ -1132,6 +1180,11 @@ install_verb_relink() {
     bindir="$HOME/.local/bin"
   fi
 
+  # From a keg or into one, PATH is brew's to link (ST0019 D4). `use` reaches
+  # this too: it is a coordinator over relink and carries no refusal of its own.
+  install_refuse_keg "$src" || return 1
+  install_refuse_keg "$prefix" || return 1
+
   case "$(install_tree_kind "$prefix")" in
     install | source) ;;
     *)
@@ -1217,6 +1270,11 @@ _install_use_tree() {
     printf '%s\n' "$prefix"
     return 0
   fi
+
+  # A keg's source-tree is brew's build directory, deleted once the formula's
+  # install returned, so it is refused here, before the address is read and
+  # handed to relink as if it named a tree (ST0019 D4).
+  install_refuse_keg "$prefix" || return 1
 
   manifest="$prefix/$UTILZ_MANIFEST_NAME"
 

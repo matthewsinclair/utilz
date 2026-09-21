@@ -313,6 +313,37 @@ expand_tilde() {
 # one name. install.sh reads it from here rather than carrying a second copy.
 UTILZ_MANIFEST_NAME="manifest.sha256"
 
+# Echo who manages the tree at <dir>: `brew` for a Homebrew keg, else what its
+# manifest's managed-by row says, `utilz` for every other publish (ST0019 D4).
+#
+# A FACT THE KEG CARRIES, NEVER A PATH PATTERN. A Cellar path is where brew
+# happens to put a keg today, and a test on it would call a keg moved by
+# HOMEBREW_CELLAR someone else's. The formula's publish writes the row, so the
+# answer is the one the tree was published with.
+#
+# A tree with no manifest, or a manifest from before the row existed, is
+# `utilz`: brew's publish is the only writer of `brew`, and it has always
+# written the row. rc 1, by name, when the manifest is there and unreadable.
+#
+# Here, not in install.sh, because run_tests asks it where install.sh is not
+# loaded, and the install verbs read it from here as they read the name.
+install_tree_manager() {
+  local manifest="$1/$UTILZ_MANIFEST_NAME"
+  local manager
+
+  if [[ ! -f "$manifest" ]]; then
+    printf 'utilz\n'
+    return 0
+  fi
+
+  manager=$(awk -F'\t' '$1 == "managed-by" { print $2; exit }' "$manifest") || {
+    error "could not read $manifest"
+    return 1
+  }
+
+  printf '%s\n' "${manager:-utilz}"
+}
+
 # Echo one line describing the tree utilz is running from, and what it was cut
 # from if it is an install.
 #
@@ -996,11 +1027,21 @@ run_tests() {
     # step. The manifest records source-tree exactly so this can be answered.
     # An install published before that key existed carries no such row, so the
     # description survives as the fallback rather than printing an empty path.
-    local src_tree
+    #
+    # A KEG'S source-tree NAMES NOTHING (ST0019 D4): it is brew's build
+    # directory, deleted once the formula's install returned. So a keg names a
+    # clone of the repository, the one source a brew user can have.
+    local src_tree manager
     src_tree=$(awk -F'\t' '$1 == "source-tree" { print $2; exit }' \
       "$UTILZ_HOME/$UTILZ_MANIFEST_NAME" 2>/dev/null || true)
+    manager=$(install_tree_manager "$UTILZ_HOME") || manager="unknown"
 
-    if [[ -n "$src_tree" ]]; then
+    if [[ "$manager" == "brew" ]]; then
+      echo "  This install is Homebrew's. Run the suites from a clone instead:" >&2
+      echo "" >&2
+      echo "      git clone https://github.com/matthewsinclair/utilz.git" >&2
+      echo "      cd utilz && bin/utilz test" >&2
+    elif [[ -n "$src_tree" ]]; then
       echo "  Run it from the SOURCE tree instead:" >&2
       echo "" >&2
       echo "      cd $src_tree && utilz test" >&2

@@ -170,6 +170,8 @@ names `install`. `upgrade` reports files edited in place and leaves them alone
 without `--force`, keeping their install-time checksum so the next check still
 reports them.
 
+**A Homebrew keg is brew's.** The formula publishes with `utilz install --managed-by brew`, which records that in the manifest. From a keg or onto one, `install --force`, `upgrade`, `relink` and `use` refuse and name `brew upgrade utilz`, and `utilz test` names a clone of the repository to run the suites from.
+
 ### `utilz use [dev|opt]`
 
 Switch which tree your PATH symlinks serve. No path is typed either way -- each

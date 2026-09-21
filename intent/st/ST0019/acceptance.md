@@ -23,7 +23,7 @@ title: Release Utilz through dvb build release and a Homebrew tap, like Intent
 
 ### WP-02 -- The keg as an install tree: the discriminator and the verbs that refuse (status: WIP)
 
-- AC-02.1 A publish with --managed-by brew records managed-by brew in its manifest, and every other publish records utilz. When the tree they run from or the tree they target is a keg, utilz upgrade, relink, use and install --force refuse and name brew upgrade utilz. In a keg, utilz test's refusal names a clone of the repository, not the keg's source-tree, which is brew's deleted build directory. In a non-brew install tree, and with a manifest from before the row existed, all of them behave as before. -- satisfied: no (computed)
+- AC-02.1 A publish with --managed-by brew records managed-by brew in its manifest, and every other publish records utilz. When the tree they run from or the tree they target is a keg, utilz upgrade, relink, use and install --force refuse and name brew upgrade utilz. In a keg, utilz test's refusal names a clone of the repository, not the keg's source-tree, which is brew's deleted build directory. In a non-brew install tree, and with a manifest from before the row existed, all of them behave as before. -- satisfied: yes (computed)
 
 ### WP-03 -- Spike: a git-URL formula built in a scratch tap, the keg run end to end (status: Not Started)
 
@@ -38,6 +38,10 @@ title: Release Utilz through dvb build release and a Homebrew tap, like Intent
 - AC-05.1 (non-test) How the formula follows a release is decided by hv and either built or documented. -- satisfied: no
 
 ### Group AT01
+
+_(no criteria in this group)_
+
+### Group AT03
 
 _(no criteria in this group)_
 
@@ -66,6 +70,10 @@ _(no tests in this group)_
 ### Group AT01
 
 - AT01 `opt/utilz/test/install_lib.bats` -- covers AC-01.3 -- status: green -- Red first, 21 Sep: with tools/ci-state moved aside, bats --filter 'tools/ci-state' opt/utilz/test/install_lib.bats at 8b3f31b fails 5 of 5. Green, WP-01, 21 Sep: with it in place, 5 of 5 pass (bash 5.3.20, load 127.72): the five verdicts, gh's refusal as unknown, the query install_ci_state makes word for word, usage exit 2, and nothing under tools/ in install_owned_paths. Under /bin/bash 3.2.57 with no gh on PATH it answers 'unknown<TAB>gh is not installed'. CI's shellcheck collector, widened to bin opt tools, sees 19 files including tools/ci-state, and all are clean.
+
+### Group AT03
+
+- AT03 `opt/utilz/test/keg.bats` -- covers AC-02.1 -- status: green -- Red first, 21 Sep: with opt/utilz/lib/install.sh and common.sh at 499ccc9, bats opt/utilz/test/keg.bats fails 8 of 8, because install refuses --managed-by and nothing reads the row. Green, WP-02, 21 Sep: 8 of 8 pass at load 24.95: brew and utilz rows as published, a manifest without the row reads utilz and upgrade then writes it, an unknown manager word refused with exit 2, upgrade and install --force refused onto a keg with its manifest byte-identical, upgrade from a keg naming brew rather than the missing git, relink refused into and from a keg with no link moved, use opt and use dev refused when install.prefix is a keg, and utilz test in a keg naming a git clone and not the source-tree. bats opt/utilz/test: 248 tests, 0 failed, 2 skipped (yq and bats installed, as before).
 
 ---
 
