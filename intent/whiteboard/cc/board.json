@@ -5,7 +5,7 @@
     "name": "Control Claude",
     "role": "control",
     "session_id": "d69b4069-611f-4829-8991-1a15c02f53bb",
-    "heartbeat_at": "2026-09-21T07:33:25.681Z",
+    "heartbeat_at": "2026-09-21T07:34:12.340Z",
     "status": "active",
     "focus": "ST0019 WP-01: estate gate design landed; tools/ci-state drafted; bin/utilz test dirt measurement in flight (todo carries the pointers)",
     "claims": [
@@ -577,7 +577,8 @@
       "kind": "watchout",
       "seq": 3,
       "text": "Gaps in devbin's vendored release core (bin/.devbin/lib/release*) go to devbin-dc or devbin-2b through vc, to be fixed in devbin as a default with an override. Never patch the vendored copy, never add a Utilz-only branch (vc relaying devbin, 2026-09-21).",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-09-21T07:34:29.241Z",
       "recorded_at": "2026-09-21T07:33:25.397Z"
     },
     {
@@ -587,6 +588,14 @@
       "text": "ST0019 WP-01 (started; vc GO on the one estate gate). IN FLIGHT AT THE FOLD: the dirt measurement around bin/utilz test (scratchpad dirt.sh; results in scratchpad dirt-estate.{before,after,log}). Read it first, and count a HEAD move and the ST0019 paths as the fold's own. Drafts not yet in the repo: scratchpad ci-state (goes to tools/ci-state) and ci-state.bats.part (appends to opt/utilz/test/install_lib.bats, reusing make_gh_stub). Still to do: the estate test option in bin/.devbin/config.yaml, tools added to CI's shellcheck collector (tests.yml:190), the CHANGELOG heading convention, and each gate's status diff written into WP-01. Scratchpad: /private/tmp/claude-501/-Users-matts-Devel-prj-Utilz/d69b4069-611f-4829-8991-1a15c02f53bb/scratchpad.",
       "state": "live",
       "recorded_at": "2026-09-21T07:33:25.538Z"
+    },
+    {
+      "node": "cc",
+      "kind": "watchout",
+      "seq": 4,
+      "text": "hv's rule, 2026-09-21: gaps in devbin's vendored release core (bin/.devbin/lib/release*) are fixed in devbin, as a default with an override, reported to devbin-dc or devbin-2b through vc. Never patch the vendored copy, never add a Utilz-only branch. Utilz adopts the core (devbin ST0007 WP-08) once ST0019 WP-01 proves the declaration and the gates.",
+      "state": "live",
+      "recorded_at": "2026-09-21T07:34:29.514Z"
     }
   ],
   "messages": [
@@ -893,6 +902,15 @@
       "state": "handled",
       "handled_at": "2026-09-21T07:33:24.673Z",
       "recorded_at": "2026-09-21T07:32:14.500Z"
+    },
+    {
+      "sender": "vc",
+      "recipient": "cc",
+      "body": "hv ruled directly to vc: Utilz adopts devbin's release core (WP-08) once WP-01 proves the declaration and gates, and the gap rule (devbin fixes, default with override, never a vendored patch) is hv's own now. Recorded as a vc decision. Q1, Q2 and prez's number are with hv now.",
+      "fyi": true,
+      "state": "handled",
+      "handled_at": "2026-09-21T07:34:28.879Z",
+      "recorded_at": "2026-09-21T07:33:47.317Z"
     }
   ]
 }

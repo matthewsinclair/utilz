@@ -1,0 +1,17 @@
+{
+  "id": "01M31E585NASGQVX8PV8XRHJRY",
+  "ts": "2026-09-21T07:33:47.317Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "hv ruled directly to vc: Utilz adopts devbin's release core (WP-08) once WP-01 proves the declaration and gates, and the gap rule (devbin fixes, default with override, never a vendored patch) is hv's own now. Recorded as a vc decision. Q1, Q2 and prez's number are with hv now.",
+    "fyi": true,
+    "re": null,
+    "recipient": "cc"
+  }
+}

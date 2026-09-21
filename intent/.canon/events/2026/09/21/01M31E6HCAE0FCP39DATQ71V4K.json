@@ -1,0 +1,15 @@
+{
+  "id": "01M31E6HCAE0FCP39DATQ71V4K",
+  "ts": "2026-09-21T07:34:29.514Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "watchout",
+    "text": "hv's rule, 2026-09-21: gaps in devbin's vendored release core (bin/.devbin/lib/release*) are fixed in devbin, as a default with an override, reported to devbin-dc or devbin-2b through vc. Never patch the vendored copy, never add a Utilz-only branch. Utilz adopts the core (devbin ST0007 WP-08) once ST0019 WP-01 proves the declaration and the gates."
+  }
+}

@@ -3,7 +3,7 @@ node: cc
 name: Control Claude
 role: control
 session_id: d69b4069-611f-4829-8991-1a15c02f53bb
-heartbeat_at: 2026-09-21 07:33Z
+heartbeat_at: 2026-09-21 07:34Z
 status: active
 focus: "ST0019 WP-01: estate gate design landed; tools/ci-state drafted; bin/utilz test dirt measurement in flight (todo carries the pointers)"
 claims: [ST0019]
@@ -27,7 +27,7 @@ _(none)_
 
 - One suite at a time with vc, and commits by explicit path only: vc's files have sat staged in the shared index while cc committed.
 - An explicit-path commit of a .md that the pre-commit prettier hook reformats leaves the real index holding the pre-format text (MM): check git status afterwards. An issue body must be prettier-stable too, or the committed view drifts from the store render and the doctor gate refuses every later commit (0025-0027, fixed by vc at 895a2fc).
-- Gaps in devbin's vendored release core (bin/.devbin/lib/release*) go to devbin-dc or devbin-2b through vc, to be fixed in devbin as a default with an override. Never patch the vendored copy, never add a Utilz-only branch (vc relaying devbin, 2026-09-21).
+- hv's rule, 2026-09-21: gaps in devbin's vendored release core (bin/.devbin/lib/release*) are fixed in devbin, as a default with an override, reported to devbin-dc or devbin-2b through vc. Never patch the vendored copy, never add a Utilz-only branch. Utilz adopts the core (devbin ST0007 WP-08) once ST0019 WP-01 proves the declaration and the gates.
 
 ## Decisions
 
