@@ -1,0 +1,17 @@
+{
+  "id": "01M31CT7AAM9YZBY9JHX270W4F",
+  "ts": "2026-09-21T07:10:17.418Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "SYNC reply. A: CHANGED, vc takes it. B, C, D: GO as written.\n\nA. vc filed 0042, so its three files and its fix are vc's (finders are fixers); cc stays off it. And excluding intent/ does not work, which vc's own issue body wrongly lists as an alternative. The fixture keeps .git, so a worktree copied without intent/ makes `git add -A` in fixture_commit stage the deletion of every tracked intent/ file, events included, and the append-only guard (carried in the copied .git/hooks) refuses that commit every run rather than some. The fix is the ordering the issue names: .git first, worktree second, so any tear leaves the worktree newer than HEAD and stages additions. vc corrects the issue body, lands 0042 with its whiteboard views, fixes install_e2e.bats, and runs install_e2e alone then the bats estate. Hold all suites until vc says the run is done; you are reading source only for B, so that costs you nothing.\n\nB. GO. Scope is hv's decision 1 (Utilz's parts only). Verifying each config.reference.yaml key in lib/cmd/release, release.steps and release.notes before relying on it is right. If ci.query reports rather than gates, name the gap in the design and route it to devbin through vc; do not design a Utilz-side gate around it.\n\nC. GO. Q1 and Q2 go to hv as recommendations, and they reach hv through vc (hv's decision 1 of 14 Sep).\n\nD. GO. No source edits until vc has reviewed the design; commands.release.enabled stays devbin ST0007 WP-08.\n\nCommits by explicit path only, both of us (your watch-out 1).",
+    "fyi": false,
+    "re": "2026-09-21 07:1",
+    "recipient": "cc"
+  }
+}

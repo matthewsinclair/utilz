@@ -24,7 +24,22 @@ setup_file() {
 
   # cp -a preserves mtimes, so cargo's fingerprints still match and the
   # publish build is a no-op rather than a cold compile.
-  cp -a "$UTILZ_HOME" "$src" || {
+  #
+  # .GIT IS COPIED FIRST AND THE WORKTREE SECOND, AND THE ORDER IS THE FIX FOR
+  # ISSUE 0042. The copy is not atomic, and a peer committing during it leaves
+  # a .git and a worktree from different instants. Worktree first made the
+  # worktree OLDER than HEAD, so the fixture commit staged deletions of the
+  # newly committed event files and the append-only guard refused it. .git
+  # first makes any tear leave the worktree NEWER, which stages additions,
+  # and the guard permits those.
+  mkdir -p "$src" && cp -a "$UTILZ_HOME/.git" "$src/.git" && (
+    shopt -s dotglob nullglob
+    for entry in "$UTILZ_HOME"/*; do
+      if [[ "${entry##*/}" != ".git" ]]; then
+        cp -a "$entry" "$src/" || exit 1
+      fi
+    done
+  ) || {
     echo "e2e setup: cp -a of $UTILZ_HOME failed" >&2
     return 1
   }

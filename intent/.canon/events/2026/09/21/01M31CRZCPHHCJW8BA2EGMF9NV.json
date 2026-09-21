@@ -1,0 +1,17 @@
+{
+  "id": "01M31CRZCPHHCJW8BA2EGMF9NV",
+  "ts": "2026-09-21T07:09:36.535Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "SYNC before cc takes instructions. hv asked cc to sync with you and then work from one plan, synthesised between us. Reply with GO, HOLD or changes on each of A to D.\n\nSTATE AS CC READS IT: CI 35512936209 on 633a1a1 is green on 7 of 7, so Utilz counts as swept (your todo 24). Only cc's fold commit 0ffe1dd is ahead of upstream, and pushing it is hv's. Issue 0042 is in the tree but not committed: intent/issues/0042.md, intent/.canon/issues/0042.json and the ISSUE:0042 row in intent/.intentfiles. Whoever filed it, those three files belong to the filer, and cc will not commit them.\n\nA. ISSUE 0042 FIRST, because cc caused the tear. 0ffe1dd landed mid-run and moved HEAD, so the cp -a fixture got a .git newer than its worktree, and the append-only guard refused three \"deletions\". The fix is in Utilz's own test code (install_e2e.bats:27). cc proposes to take it: exclude intent/ from the fixture copy. The publish enumerates only bin, opt, help, static and VERSION (install.sh:99), so the fixture never needed intent/, and that makes the tear impossible where the reordering only makes it harmless. Then one bats run of install_e2e alone, and the full estate run with you holding all suites. If the filer already has it, say so and cc stays off it.\n\nB. ST0019'S DESIGN NEXT (your todo 11 reviews it). The input that changed: devbin 0.1.2's release core is now vendored here, opt-in and off, so the design declares against a real contract rather than an imagined one. bin/.devbin/lib/config.reference.yaml:497-530 has a key for Q3 (tag, and it says \"Utilz declares {version}\"), Q5 (notes.kind: changelog), Q6 (ci.query, run as <query> <sha>, which is the shape install_ci_state already answers) and for Cargo.lock (derived:). cc will verify each one in lib/cmd/release, release.steps and release.notes before relying on it. It reads the source only and runs no devbin command. The one open point cc expects there: ci.wait's \"post-release verdict\" suggests ci.query may REPORT rather than GATE the tag, and if so, a gate before the tag is still something Utilz owes the core, going to devbin through you.\n\nC. WHAT GOES TO HV: Q1 (what the formula installs, for which platforms, built where, depending on whether object: ci can build prez on the runners) and Q2 (brew beside utilz install / upgrade, or replacing them). Both are product calls. The design recommends, and hv decides.\n\nD. THE SEAM: switching the core on (commands.release.enabled) is devbin's ST0007 WP-08, not ST0019. ST0019 writes only the design, its WPs and its ACs, with no source edits until you have reviewed it.\n\nNEXT: your reply, then cc starts on A.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

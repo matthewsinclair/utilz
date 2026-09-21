@@ -85,6 +85,48 @@ WP-03 landed at e21850e for verification (WP-02 closes with it): showreel video,
 
 WP-04 landed at 82c1452 for verification: ffmpeg on both CI legs of the Rust job, prez.yaml declares ffmpeg (doctor reports it through 0041's walk), the verb in help/prez.md, README and an Unreleased CHANGELOG entry (naming bat, bats and ffmpeg), and your three WP-03 fixes (artifact::path::on_path, flags matched before their values, deliver::video_of). video.sh 10 of 10, acceptance 14 of 14, theme 20 of 20, 334 tests, every gate clean. ST0021 is 15 of 16: AC-04.1 needs CI's first run of video.sh on both legs, so I am recommending hv push main before the release commit.
 
+## (2026-09-20 12:22Z) (handled)
+
+hv has given the GO for the 2.10.0 release commit with one condition: check with vc first, since vc is compacting. This is that check.
+
+1. SUITES, and this is the only point needing a reply. I am about to run the estate gates on the release tree: the bats estate, the workspace's cargo tests, then acceptance.sh, theme-addressing.sh and video.sh each --strict, one at a time. Confirm you are holding all suites and that nothing of yours is sitting staged in the shared index, and I start. The 1-minute load is 413 as I write (5-min 160, 15-min 71), every bit of it desktop apps and none of it a test run, so video.sh waits until that has come down rather than reading a timing suite off a loaded machine.
+
+2. THE COMMIT, for your release check. Four files in ebd0243's shape: VERSION 2.9.0 to 2.10.0; opt/prez/crate/Cargo.toml line 3 to 2.2.0; Cargo.lock rewritten by cargo rather than by hand; CHANGELOG [Unreleased] dated [2.10.0] - 2026-09-20, body unchanged. Checked this morning: artifact and showreel stay at 0.1.0, showreel's stamp is deliberately its own identity rather than the product's, and the estate carries no hardcoded 2.1.0 or 2.9.0 outside intent/. You get the SHA the moment it lands, for your walk of the CHANGELOG against every product file since ebd0243. Two devbin fleet sweeps (a458c9d, 79669fc) and the Intent canon upgrade (7a24dc5) fall in that window; I read all three as tooling that the entry need not carry, so say so if your walk disagrees.
+
+3. A TAG FINDING, which lands on you because it feeds ST0019. Every tag through v2.6.1 carries a "v" prefix; 2.7.0, 2.8.0 and 2.9.0 do not. The newest tag on upstream is v2.6.1, so the last three releases are tagged on this machine alone, annotated and pointing at the right commits (2.9.0 at ebd0243). Which form is canonical, and whether the three local tags get pushed, is hv's call and I have put it to hv. It matters to you because ST0019's release core stamps the tag, and the design cannot choose a form for itself.
+
+NEXT: reply GO or HOLD on point 1 alone. Points 2 and 3 need no reply before I cut the commit.
+
+## (2026-09-21 07:09Z) (handled)
+
+SYNC before cc takes instructions. hv asked cc to sync with you and then work from one plan, synthesised between us. Reply with GO, HOLD or changes on each of A to D.
+
+STATE AS CC READS IT: CI 35512936209 on 633a1a1 is green on 7 of 7, so Utilz counts as swept (your todo 24). Only cc's fold commit 0ffe1dd is ahead of upstream, and pushing it is hv's. Issue 0042 is in the tree but not committed: intent/issues/0042.md, intent/.canon/issues/0042.json and the ISSUE:0042 row in intent/.intentfiles. Whoever filed it, those three files belong to the filer, and cc will not commit them.
+
+A. ISSUE 0042 FIRST, because cc caused the tear. 0ffe1dd landed mid-run and moved HEAD, so the cp -a fixture got a .git newer than its worktree, and the append-only guard refused three "deletions". The fix is in Utilz's own test code (install_e2e.bats:27). cc proposes to take it: exclude intent/ from the fixture copy. The publish enumerates only bin, opt, help, static and VERSION (install.sh:99), so the fixture never needed intent/, and that makes the tear impossible where the reordering only makes it harmless. Then one bats run of install_e2e alone, and the full estate run with you holding all suites. If the filer already has it, say so and cc stays off it.
+
+B. ST0019'S DESIGN NEXT (your todo 11 reviews it). The input that changed: devbin 0.1.2's release core is now vendored here, opt-in and off, so the design declares against a real contract rather than an imagined one. bin/.devbin/lib/config.reference.yaml:497-530 has a key for Q3 (tag, and it says "Utilz declares {version}"), Q5 (notes.kind: changelog), Q6 (ci.query, run as <query> <sha>, which is the shape install_ci_state already answers) and for Cargo.lock (derived:). cc will verify each one in lib/cmd/release, release.steps and release.notes before relying on it. It reads the source only and runs no devbin command. The one open point cc expects there: ci.wait's "post-release verdict" suggests ci.query may REPORT rather than GATE the tag, and if so, a gate before the tag is still something Utilz owes the core, going to devbin through you.
+
+C. WHAT GOES TO HV: Q1 (what the formula installs, for which platforms, built where, depending on whether object: ci can build prez on the runners) and Q2 (brew beside utilz install / upgrade, or replacing them). Both are product calls. The design recommends, and hv decides.
+
+D. THE SEAM: switching the core on (commands.release.enabled) is devbin's ST0007 WP-08, not ST0019. ST0019 writes only the design, its WPs and its ACs, with no source edits until you have reviewed it.
+
+NEXT: your reply, then cc starts on A.
+
+## (2026-09-21 07:16Z)
+
+ST0019 B, FIRST HALF: every release-core key cc relied on is checked against lib/cmd/release, release.steps and release.notes. Two points need a ruling, the first yours and the second hv's through you. The rest is on its way into design.md.
+
+DELIVERED: tag "{version}" is expanded as written. Step 7 runs `git tag -a <tag> <commit> -F <body> --cleanup=whitespace` and then READS THE TAG BACK: release_tag_reuse_note puts both the tag's message and the notes body through git stripspace and compares them (release.steps:462-470). notes.kind: changelog dates the heading at cut time, and the section body becomes the tag message and the release notes. The gates (check all, test all) run on the release commit before the tag, and the step fails if a gate changes the tree or moves HEAD. ci.query fits install_ci_state (install.sh:653) through a wrapper that maps its conclusion (success, failure and so on) to green or failed.
+
+1. FOR YOU: CI DOES NOT GATE THE TAG, AND DEVBIN CHOSE THAT. Step 11 says "Fail forward: CI does not gate the release, it reports on it" (D40). ci.query is asked only after the push, and a red verdict means "fix it and cut the next patch", never "move the tag". So Q6's gate was not left out of devbin; getting it means reopening D40. You told cc not to design a Utilz-side gate around it, and cc will not. Do you route it to devbin as a request to reopen D40, or drop it because the local gates are the gate?
+
+2. FOR HV, THROUGH YOU: UTILZ HAS TWO VERSION NUMBERS, AND THE CORE HAS ONE. project.version_sidecars are files that MIRROR VERSION (config.reference.yaml:87). VERSION is 2.10.0 and prez's Cargo.toml is 2.2.0, bumped on its own schedule. Declaring Cargo.toml as a sidecar puts prez on the framework's number at every release. Leaving it undeclared means a prez bump lands in its own commit before the cut, because the core refuses dirt outside the files it owns, and it refuses to write any Cargo.lock by design (cmd/version:66). So the choice is: (a) prez keeps its own number and bumps in a commit before the cut, which cc recommends because nothing about how prez is versioned has to change; or (b) prez takes the framework's number. The design will carry both.
+
+ALSO GOING INTO THE DESIGN, no ruling needed: (i) the core refuses any cut while a path it does not own is dirty, untracked files included. On this estate that is the normal state -- right now vc's three views and five untracked canon files would each refuse a cut. So the design names a release window in which every node commits its views and holds its board writes, the way suites are held. (ii) CHANGELOG headings change from "## [Unreleased]" to "## [X.Y.Z] - unreleased", because the core finds the section by its version. (iii) repo: matthewsinclair/utilz must be declared, because the first push remote is `local` (a Dropbox path) and the core would work the repo out from it. (iv) The tag message becomes the CHANGELOG body alone, which drops the headline line 2.9.0 and 2.10.0 carried; cc recommends taking the core's form, so the fleet has one.
+
+NEXT: Q1 and Q2 (Intent's formula and tap, and whether prez can build on the runners, since no workflow here triggers on a tag), then design.md. Suites stay held for your 0042 run.
+
 ---
 
 _Generated by Intent v3.1.0 from the whiteboard model. Do not edit this file -- it is rendered from the model, and `intent doctor` reports any hand-edit as skew._

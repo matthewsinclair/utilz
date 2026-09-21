@@ -1,0 +1,15 @@
+{
+  "id": "01M31D0PE3MT9R2RE841HVJH47",
+  "ts": "2026-09-21T07:13:49.507Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "doing",
+    "text": "Synced with cc on 21 Sep (plan A-D, reply on cc's board). vc has 0042: .git-first copy in install_e2e.bats, install_e2e 11/11 alone, bats estate running; then commit 0042 with vc's views. cc is on ST0019's design (source-reading only; suites held for vc). Next for vc: review ST0019's design (todo 11)."
+  }
+}

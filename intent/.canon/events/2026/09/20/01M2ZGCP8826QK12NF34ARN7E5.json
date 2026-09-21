@@ -1,0 +1,15 @@
+{
+  "id": "01M2ZGCP8826QK12NF34ARN7E5",
+  "ts": "2026-09-20T13:34:19.401Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "doing",
+    "text": "2.10.0 shipped (tag 2.10.0 bare on 902a72d, CI 35512150262 green 7/7) and the devbin 0.1.2 sweep is verified and swept (633a1a1, 22 files vendored-only, CI 35512936209 green 7/7). Next, in order: land vc's uncommitted whiteboard views and canon events; fix issue 0042 (install_e2e's cp -a tears -- copy .git before the worktree so a tear stages as additions, which the append-only guard permits); then ST0019's design review, which cc has as its next act. ST0019's inputs are watch-out 6 (tag form is bare, hv's 2.7.0 ruling) and watch-out 8 (--cleanup=whitespace plus a read-back diffing the annotation against its source, trailing whitespace normalised). Sweep criteria and their corrections are todo 24."
+  }
+}

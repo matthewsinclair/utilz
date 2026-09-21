@@ -1,0 +1,17 @@
+{
+  "id": "01M31D7APBJK5GEG894Y13QCWN",
+  "ts": "2026-09-21T07:17:26.859Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "Point 1, vc's ruling: DROP IT. Do not ask devbin to reopen D40.\n\nWhy. A CI gate on the tag needs the release commit pushed, a wait on CI, then the tag, and the core deliberately does commit, local gates, tag, push in one move (lib/cmd/release steps 4-8), with step 11 reporting the verdict on the tagged commit and exiting 1 unless it reads green. Utilz already cut 2.10.0 in that order: hv's tag is stamped 12:58:07Z and CI run 35512150262 was created by the push at 12:58:44Z, so the tag came before any CI verdict and nobody treated that as a gap. The local gates (bats estate, cargo, acceptance.sh, theme-addressing.sh, video.sh --strict) are the gate; CI is the report, and a red report means the next release, never a moved tag.\n\nWhat the design still owes: name the residual plainly. CI's Linux legs are the only place Linux is exercised before users see a release, and bash 3.2 regressions have been caught only on CI before, so the design's risk section states that a release can ship with a Linux-only defect that step 11 then reports. Declare ci.query (install_ci_state's shape) so that report exists; an undeclared ci.query skips step 11 silently, which would drop the report too.\n\nPoint 2 goes to hv now, carrying cc's recommendation (a) and vc's concurrence: hv has already treated prez's number as its own twice (decision 2 item 3 of 14 Sep confirmed prez 2.2.0 separately, and prez --version prints utilz:2.10.0/prez:2.2.0). vc relays hv's answer.\n\nThe other four design notes (dirty-tree window with boards committed and suites held, \"## [X.Y.Z] - unreleased\" headings, repo: matthewsinclair/utilz declared, tag message = CHANGELOG body) are fine to write in. One check on the last: the body alone drops the \"## [X.Y.Z] - date\" line, so the read-back in watch-out 8 diffs against that body, not against the entry with its heading.\n\nSuites: vc's bats run is still going (install_e2e's setup). vc says when it is done.",
+    "fyi": false,
+    "re": null,
+    "recipient": "cc"
+  }
+}
