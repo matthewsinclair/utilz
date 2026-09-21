@@ -306,6 +306,9 @@ body{
 @keyframes kb-out{from{transform:scale(1.10) translate3d(0,-1.2%,0)}  to{transform:scale(1.00) translate3d(0,0,0)}}
 @keyframes dr-l  {from{transform:scale(1.09) translate3d(2.4%,0,0)}   to{transform:scale(1.09) translate3d(-2.4%,0,0)}}
 @keyframes dr-r  {from{transform:scale(1.09) translate3d(-2.4%,0,0)}  to{transform:scale(1.09) translate3d(2.4%,0,0)}}
+/* A portrait window's Ken Burns: the zoom alone (see the portrait block). */
+@keyframes kb-zoom-in {from{transform:scale(1.00)} to{transform:scale(1.06)}}
+@keyframes kb-zoom-out{from{transform:scale(1.06)} to{transform:scale(1.00)}}
 .m-kenburns img{animation:kb-in var(--dwell) linear both}
 .m-kenburns-out img{animation:kb-out var(--dwell) linear both}
 .m-drift img,.m-drift-l img{animation:dr-l var(--dwell) linear both}
@@ -480,8 +483,13 @@ body.kiosk #bar,body.kiosk #hud{display:none}
     filter:blur(var(--backdrop-blur)) saturate(var(--backdrop-sat))
            brightness(var(--backdrop-dim));
     transform:scale(1.14)}
-  .fit-cover img{animation:none}   /* Ken Burns on a contained image drifts it
-                                      away from its own backdrop */
+  /* Ken Burns on a contained image is a zoom about the centre and no more:
+     the drift in kb-in and kb-out pulled the picture off its own backdrop,
+     and a gallery that does not move at all is dead on a phone (ST0022 D5b). */
+  .fit-cover.m-kenburns img{animation:kb-zoom-in var(--dwell) linear both}
+  .fit-cover.m-kenburns-out img{animation:kb-zoom-out var(--dwell) linear both}
+  .fit-cover.m-drift img,.fit-cover.m-drift-l img,
+  .fit-cover.m-drift-r img{animation:none}
 }
 
 /* THE THEME GOES LAST. It has to be able to override a shell rule of equal

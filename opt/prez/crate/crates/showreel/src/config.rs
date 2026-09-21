@@ -171,6 +171,11 @@ pub struct Reel {
   pub loop_: bool,
   #[serde(default)]
   pub target: Option<u32>,
+  /// The aspect `video` records at, when `--aspect` is not given (ST0022).
+  /// Parsed by `Aspect::parse`, so a bad value is refused here, by `check`
+  /// and `build` too, before any recording could start.
+  #[serde(default)]
+  pub aspect: Option<crate::aspect::Aspect>,
   #[serde(default)]
   pub output: Option<String>,
   #[serde(default)]
@@ -288,6 +293,25 @@ mod tests {
     assert_eq!(reel.segments.len(), 15);
     assert!(reel.loop_, "loop: true");
     assert_eq!(reel.target, Some(1920));
+  }
+
+  #[test]
+  fn aspect_is_read_by_name_or_ratio_and_a_bad_one_refuses_at_parse() {
+    use crate::aspect::Aspect;
+    let read = |v: &str| parse(&format!("artist: {{handle: x}}\naspect: \"{v}\"\n"), "reel");
+    assert_eq!(
+      read("portrait").unwrap().aspect,
+      Some(Aspect { w: 9, h: 16 })
+    );
+    assert_eq!(read("4:5").unwrap().aspect, Some(Aspect { w: 4, h: 5 }));
+    // Unquoted, as a person would write it: YAML 1.2 reads 9:16 as a string.
+    let bare = parse("artist: {handle: x}\naspect: 9:16\n", "reel").unwrap();
+    assert_eq!(bare.aspect, Some(Aspect { w: 9, h: 16 }));
+    assert_eq!(parse("artist: {handle: x}\n", "reel").unwrap().aspect, None);
+    for bad in ["0:9", "cinema", "9:40"] {
+      let e = read(bad).expect_err(bad);
+      assert!(e.message.contains(bad), "names '{bad}': {}", e.message);
+    }
   }
 
   /// **BOTH DIRECTIONS.** Five keys that must refuse, and the two silent-failure

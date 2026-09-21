@@ -21,6 +21,7 @@
 //! Corrected 2026-09-10 after vc measured all four.
 
 use artifact::Failure;
+use showreel::aspect::Aspect;
 use showreel::{build, limits, plan, video};
 use std::io::IsTerminal;
 use std::path::{Path, PathBuf};
@@ -88,6 +89,9 @@ video options:
   -o, --out <file>        write the video here, .mp4 or .mov, instead of the next
                           _out/ slot. Keeps no HTML and prunes nothing
   --fps <n>               frames per second, 1 to 60 (default 30)
+  --aspect <ratio>        W:H, or widescreen (16:9, the default), portrait
+                          (9:16), square (1:1) or feed (4:5). The reel's target
+                          is the long edge. Wins over aspect: in showreel.yaml
   --keep <n>              as for build
   --frames <dir>          also write every frame as a PNG, with frames.tsv, into
                           a new or empty <dir>
@@ -213,6 +217,7 @@ fn video_flags(rest: &[String]) -> Result<video::Options, Failure> {
     keep: 0,
     frames: None,
     browser: None,
+    aspect: None,
   };
   let mut i = 0;
   while i < rest.len() {
@@ -224,10 +229,11 @@ fn video_flags(rest: &[String]) -> Result<video::Options, Failure> {
       "--keep" => f.keep = keep(v()?)?,
       "--frames" => f.frames = Some(PathBuf::from(v()?)),
       "--browser" => f.browser = Some(v()?.to_string()),
+      "--aspect" => f.aspect = Some(Aspect::parse(v()?)?),
       other => {
         return Err(Failure::new(
           format!("unknown video option '{other}'"),
-          "expected -o <file>, --fps <n>, --keep <n>, --frames <dir> or --browser <path>",
+          "expected -o <file>, --fps <n>, --aspect <ratio>, --keep <n>, --frames <dir> or --browser <path>",
         ))
       }
     }

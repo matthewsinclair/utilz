@@ -189,8 +189,11 @@ pub struct Built {
   pub theme: String,
   pub pace: &'static str,
   /// The long edge the reel's pictures were fitted to (`embed_target`), which
-  /// `video` records at, at 16:9.
+  /// is the long edge `video` records at.
   pub target: u32,
+  /// The reel's own `aspect:`, which `video` records at unless `--aspect`
+  /// names another.
+  pub aspect: Option<crate::aspect::Aspect>,
   /// Everything the build wants said, in the order it was produced. **The
   /// caller MUST drain this**: three of its six sources have no other consumer.
   pub said: Vec<String>,
@@ -304,6 +307,7 @@ pub fn run(path: &Path, f: &Options) -> Result<Built, Failure> {
     pace: o.plan.pace.name,
     said,
     target: o.cfg.embed_target(),
+    aspect: o.cfg.aspect,
   })
 }
 

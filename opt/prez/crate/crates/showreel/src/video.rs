@@ -15,6 +15,7 @@
 //! the partial; an interrupt can leave one, never the finished name, and the
 //! next run removes it before it starts.
 
+use crate::aspect::Aspect;
 use crate::record::{self, Frame, Scratch};
 use crate::tail::Tail;
 use crate::{build, deliver};
@@ -47,6 +48,8 @@ pub struct Options {
   pub frames: Option<PathBuf>,
   /// `--browser`: the browser to record with, rather than the one found.
   pub browser: Option<String>,
+  /// `--aspect`, which wins over the reel's `aspect:`.
+  pub aspect: Option<Aspect>,
 }
 
 /// What a recording made, for a caller that owns the output stream.
@@ -109,23 +112,32 @@ pub fn run(dir: &Path, o: &Options, progress: &mut dyn FnMut(u64, u64)) -> Resul
   let partial = partial_of(&video);
   let mut said = built.said;
   said.extend(sweep_partials(&video, o.out.is_none())?);
-  let size = sixteen_nine(built.target);
+  let aspect = chosen(o.aspect, built.aspect);
+  let size = aspect.size(built.target);
 
   let mut encoder = Encoder::start(&ffmpeg, &partial, format, o.fps)?;
   let mut table = String::new();
   // A frame is kept before ffmpeg takes it, so a recording that fails at the
   // encoder still leaves what was captured under `--frames`, and shows the
   // failure came mid-recording rather than before it.
-  let recorded = record::record(&browser, &built.path, scratch, size, o.fps, |frame| {
-    if let Some(frames) = &o.frames {
-      keep_frame(frames, &frame)?;
-      // Infallible: writing to a String cannot fail.
-      let _ = writeln!(table, "{}\t{}\t{}", frame.index, frame.page_ms, frame.slide);
-    }
-    encoder.take(&frame)?;
-    progress(frame.index + 1, frame.of);
-    Ok(())
-  });
+  let recorded = record::record(
+    &browser,
+    &built.path,
+    scratch,
+    size,
+    aspect.scale(),
+    o.fps,
+    |frame| {
+      if let Some(frames) = &o.frames {
+        keep_frame(frames, &frame)?;
+        // Infallible: writing to a String cannot fail.
+        let _ = writeln!(table, "{}\t{}\t{}", frame.index, frame.page_ms, frame.slide);
+      }
+      encoder.take(&frame)?;
+      progress(frame.index + 1, frame.of);
+      Ok(())
+    },
+  );
   let recording = match recorded {
     Ok(recording) => recording,
     Err(failure) => {
@@ -278,11 +290,10 @@ fn sweep_partials(video: &Path, in_slot: bool) -> Result<Vec<String>, Failure> {
   Ok(said)
 }
 
-/// The video's size: the reel's target at 16:9, both even, as H.264's 4:2:0
-/// chroma needs. 1920 is 1920x1080 and 2560 is 2560x1440 (hv's answer 2).
-fn sixteen_nine(target: u32) -> (u32, u32) {
-  let width = target & !1;
-  (width, (width * 9 / 16) & !1)
+/// The aspect a recording is made at: `--aspect`, else the reel's `aspect:`,
+/// else widescreen.
+fn chosen(flag: Option<Aspect>, reel: Option<Aspect>) -> Aspect {
+  flag.or(reel).unwrap_or_default()
 }
 
 /// One frame, kept as a PNG under `--frames`.
@@ -446,6 +457,16 @@ mod tests {
   use super::*;
 
   #[test]
+  fn the_flag_beats_the_reel_and_the_reel_beats_widescreen() {
+    let portrait = Aspect { w: 9, h: 16 };
+    let square = Aspect { w: 1, h: 1 };
+    assert_eq!(chosen(Some(portrait), Some(square)), portrait);
+    assert_eq!(chosen(None, Some(square)), square);
+    assert_eq!(chosen(Some(portrait), None), portrait);
+    assert_eq!(chosen(None, None), Aspect::WIDESCREEN);
+  }
+
+  #[test]
   fn fps_takes_1_to_60_and_refuses_the_rest_by_name() {
     assert_eq!(fps("1").unwrap(), 1);
     assert_eq!(fps("60").unwrap(), 60);
@@ -465,11 +486,13 @@ mod tests {
   }
 
   #[test]
-  fn the_size_is_the_target_at_sixteen_nine_and_even() {
-    assert_eq!(sixteen_nine(1920), (1920, 1080));
-    assert_eq!(sixteen_nine(2560), (2560, 1440));
-    assert_eq!(sixteen_nine(1000), (1000, 562));
-    assert_eq!(sixteen_nine(641), (640, 360));
+  fn with_no_aspect_the_size_is_the_target_at_sixteen_nine_as_before() {
+    // The values pinned before ST0022, through the path a recording takes.
+    let size = |t| chosen(None, None).size(t);
+    assert_eq!(size(1920), (1920, 1080));
+    assert_eq!(size(2560), (2560, 1440));
+    assert_eq!(size(1000), (1000, 562));
+    assert_eq!(size(641), (640, 360));
   }
 
   #[test]

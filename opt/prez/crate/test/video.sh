@@ -234,6 +234,11 @@ ensure() {
         run_argv three -o "$WORK/three.mov"
         "${RUN[@]}" >"$WORK/three.out" 2>"$WORK/three.err"
         ;;
+      tall)
+        # ST0022: the same reel, portrait. The target is the long edge.
+        run_argv tall -o "$WORK/tall.mp4" --aspect portrait --frames "$WORK/f-tall"
+        "${RUN[@]}" >"$WORK/tall.out" 2>"$WORK/tall.err"
+        ;;
       fail)
         # An ffmpeg that writes the start of its output, reads a little of the
         # frames, and fails, as a full disk or a bad build does.
@@ -696,6 +701,34 @@ if want AT34; then
   present "with showreel's own refusal" "video needs a directory" "$WORK/shim.err"
   "$SHIM" showreel video "$WORK" --fps 0 >/dev/null 2>"$WORK/shim-fps.err"
   present "and showreel's own flags reach it" "--fps" "$WORK/shim-fps.err"
+  finish
+fi
+
+# ------------------------------------------------------- ST0022 AT01 -- AC-01.1
+
+if want AT01; then
+  start AT01 "ST0022: --aspect portrait records the target as the long edge, at 1080x1920, and a bad ratio is refused before any frame"
+  if tools_here; then
+    if ensure tall; then
+      dim() { "$FFPROBE" -v error -select_streams v:0 -show_entries stream=width,height -of csv=s=x:p=0 "$1" 2>/dev/null; }
+      check "the portrait video's size" "$(dim "$WORK/tall.mp4")" "1080x1920"
+      check "a kept frame's size, the device pixels of a half-size page at scale 2" "$(dim "$WORK/f-tall/f00000.png")" "1080x1920"
+      check "frames by ffprobe, the same schedule as 16:9" \
+        "$("$FFPROBE" -v error -count_frames -select_streams v:0 -show_entries stream=nb_read_frames -of default=nw=1:nk=1 "$WORK/tall.mp4" 2>/dev/null)" "$FRAMES"
+      if grep -q "1080x1920" "$WORK/tall.out"; then ok "the summary names 1080x1920"
+      else bad "the summary does not name 1080x1920: $(sed -n 2p "$WORK/tall.out")"; fi
+    else
+      bad "the portrait recording failed: $(said tall)"
+    fi
+    for ratio in 0:9 16x9 1:5; do
+      rm -rf "$WORK/f-bad"
+      if "$SHOWREEL" video "$REEL" --aspect "$ratio" --frames "$WORK/f-bad" >/dev/null 2>"$WORK/aspect.err"; then
+        bad "--aspect $ratio was accepted"
+      elif grep -q -- "'$ratio'" "$WORK/aspect.err"; then ok "--aspect $ratio is refused naming it"
+      else bad "--aspect $ratio was refused without naming it: $(head -1 "$WORK/aspect.err")"; fi
+      check "frames captured before the --aspect $ratio refusal" "$(find "$WORK/f-bad" -name '*.png' 2>/dev/null | grep -c '')" "0"
+    done
+  fi
   finish
 fi
 

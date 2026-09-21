@@ -178,18 +178,22 @@ impl Drop for Scratch {
   }
 }
 
-/// Records the reel at `reel` at `width` x `height` and `fps`, in `scratch`,
-/// handing each frame to `sink` as it is captured.
+/// Records the reel at `reel` into frames of `size` pixels at `fps`, in
+/// `scratch`, handing each frame to `sink` as it is captured. The page is laid
+/// out `scale` times smaller than the frame and drawn at that device scale
+/// (`Aspect::scale`, design D5a), so the frame keeps its pixels.
 pub fn record(
   browser: &Path,
   reel: &Path,
   scratch: Scratch,
-  (width, height): (u32, u32),
+  size: (u32, u32),
+  scale: u32,
   fps: u32,
   mut sink: impl FnMut(Frame) -> Result<(), Failure>,
 ) -> Result<Recording, Failure> {
+  let (width, height) = viewport(size, scale);
   let mut chrome = Chrome::launch(browser, width, height, scratch)?;
-  let played = play(&mut chrome, reel, (width, height), fps, &mut sink);
+  let played = play(&mut chrome, reel, (width, height), scale, fps, &mut sink);
   let warnings = chrome.stop(played.is_ok());
   match played {
     Ok(mut recording) => {
@@ -213,12 +217,13 @@ pub fn record(
 fn play(
   chrome: &mut Chrome,
   reel: &Path,
-  size: (u32, u32),
+  viewport: (u32, u32),
+  scale: u32,
   fps: u32,
   sink: &mut impl FnMut(Frame) -> Result<(), Failure>,
 ) -> Result<Recording, Failure> {
   let cdp = &mut chrome.cdp;
-  let (name, page) = attach(cdp, size)?;
+  let (name, page) = attach(cdp, viewport, scale)?;
   let s = Some(page.as_str());
   load(cdp, s, reel)?;
 
@@ -249,11 +254,23 @@ fn play(
   })
 }
 
+/// The page's CSS size: the frame's, `scale` times smaller. Every frame size
+/// is even, so at scale 2 this is exact.
+fn viewport((width, height): (u32, u32), scale: u32) -> (u32, u32) {
+  (width / scale, height / scale)
+}
+
+/// The metrics a page is laid out and drawn at.
+fn metrics((width, height): (u32, u32), scale: u32) -> Value {
+  json!({ "width": width, "height": height, "deviceScaleFactor": scale, "mobile": false })
+}
+
 /// A page of its own, at the video's size, with the clock injected before any
 /// script of the reel's can run. Returns Chrome's name and the page's session.
 fn attach(
   cdp: &mut Session<ChildStdin>,
-  (width, height): (u32, u32),
+  viewport: (u32, u32),
+  scale: u32,
 ) -> Result<(String, String), Failure> {
   cdp.step("the start");
   let version = cdp.call("Browser.getVersion", json!({}), None)?;
@@ -271,9 +288,11 @@ fn attach(
   let page = field(&attached, "sessionId", "Target.attachToTarget")?;
   let s = Some(page.as_str());
   cdp.call("Page.enable", json!({}), s)?;
-  let metrics =
-    json!({ "width": width, "height": height, "deviceScaleFactor": 1, "mobile": false });
-  cdp.call("Emulation.setDeviceMetricsOverride", metrics, s)?;
+  cdp.call(
+    "Emulation.setDeviceMetricsOverride",
+    metrics(viewport, scale),
+    s,
+  )?;
   cdp.call(
     "Page.addScriptToEvaluateOnNewDocument",
     json!({ "source": CLOCK }),
@@ -686,6 +705,32 @@ fn read<T: serde::de::DeserializeOwned>(value: Value, what: &str) -> Result<T, F
 #[cfg(test)]
 mod tests {
   use super::*;
+
+  /// **WIDESCREEN'S METRICS ARE PINNED BYTE FOR BYTE**, because they are what
+  /// every recording made before ST0022 was laid out at: a 16:9 frame at scale
+  /// 1 must stay exactly this, or existing reels record differently.
+  #[test]
+  fn widescreen_is_laid_out_at_the_frame_size_and_scale_one_as_before() {
+    let aspect = crate::aspect::Aspect::WIDESCREEN;
+    let size = aspect.size(1920);
+    let view = viewport(size, aspect.scale());
+    assert_eq!(view, (1920, 1080));
+    assert_eq!(
+      metrics(view, aspect.scale()).to_string(),
+      r#"{"deviceScaleFactor":1,"height":1080,"mobile":false,"width":1920}"#
+    );
+  }
+
+  #[test]
+  fn a_portrait_frame_is_laid_out_at_half_size_and_drawn_at_scale_two() {
+    let aspect = crate::aspect::Aspect { w: 9, h: 16 };
+    let view = viewport(aspect.size(1920), aspect.scale());
+    assert_eq!(view, (540, 960));
+    assert_eq!(
+      metrics(view, aspect.scale()).to_string(),
+      r#"{"deviceScaleFactor":2,"height":960,"mobile":false,"width":540}"#
+    );
+  }
 
   fn schedule(t0: f64, now: f64, dwells: &[f64]) -> Schedule {
     Schedule {

@@ -13,7 +13,41 @@ title: showreel video: a selectable aspect ratio for portrait and square reels
 
 ## Acceptance Criteria
 
+### WP-01 -- The aspect flag and key, the size rule, and a 9:16 reel that reads (status: Not Started)
+
+- AC-01.1 showreel video --aspect portrait records a 1080x1920 H.264 video at target 1920, with the same frame count as 16:9, and a malformed, zero or past-4:1 ratio is refused by name before any frame; widescreen stays 1920x1080 -- satisfied: yes (computed)
+- AC-01.2 Aspect::parse takes the four names in any case and W:H, refuses the rest by name, and one size rule gives target as the long edge, both even, 16:9 unchanged; the flag beats aspect: in showreel.yaml, which beats widescreen; a bad aspect: refuses at config parse; widescreen is laid out at scale 1 with metrics unchanged and a tall frame at half size, scale 2 -- satisfied: yes (computed)
+- AC-01.3 (non-test) A 9:16 recording of Snokeltoast 001 reads in every segment type, inside the safe area at phone size, judged by vc from one frame per segment type -- satisfied: no
+
+### Group AT01
+
+_(no criteria in this group)_
+
+### Group AT02
+
+_(no criteria in this group)_
+
+### Group AT03
+
+_(no criteria in this group)_
+
 ## Acceptance Tests
+
+### WP-01 -- The aspect flag and key, the size rule, and a 9:16 reel that reads (status: Not Started)
+
+_(no tests in this group)_
+
+### Group AT01
+
+- AT01 `opt/prez/crate/test/video.sh` -- covers AC-01.1 -- status: green -- passed 2026-09-21: cargo test -p showreel 173 passed; video.sh AT01 AT30 PASS
+
+### Group AT02
+
+- AT02 `opt/prez/crate/crates/showreel/src/aspect.rs` -- covers AC-01.2 -- status: green -- passed 2026-09-21: cargo test -p showreel 173 passed; video.sh AT01 AT30 PASS
+
+### Group AT03
+
+- AT03 (non-test) vc reads one frame per segment type from the 9:16 recording of 001 and judges each legible and inside the safe area -- covers AC-01.3 -- status: n/a
 
 ---
 

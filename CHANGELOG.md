@@ -9,6 +9,10 @@ The section still open names its version: `## [X.Y.Z] - unreleased`, never `## [
 
 ## [2.11.0] - unreleased
 
+### Added
+
+- **`prez showreel video --aspect`: a reel recorded portrait, square or 4:5, as well as widescreen** (ST0022), for TikTok and Instagram. The ratio is `W:H` or a name: `widescreen` (16:9, the default), `portrait` (9:16), `square` (1:1) or `feed` (4:5). It comes from `--aspect`, or from `aspect:` in `showreel.yaml`, and the flag wins. The reel's `target` is the long edge and the short edge follows, so at 1920 portrait is 1080x1920. A malformed ratio, a zero side, or one past 4:1 either way is refused by name, and `check` and `build` refuse a bad `aspect:` too. A frame no wider than it is tall is laid out at half size and drawn at twice the scale, so the player's phone layout applies while the frame keeps its pixels. In a portrait frame a gallery picture is shown whole on a blurred copy of itself, and Ken Burns becomes a slow zoom with no drift. **Widescreen records exactly as before.**
+
 ## [2.10.0] - 2026-09-20
 
 Minor: **`prez showreel video` is new**, **`PREZ_THEME_DUPLICATES=refuse` can refuse a theme name defined twice**, and **`utilz doctor` reports every optional dependency a utility declares**. prez goes from 2.1.0 to 2.2.0.
