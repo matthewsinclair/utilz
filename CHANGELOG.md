@@ -31,7 +31,7 @@ Minor: **`prez showreel video --aspect` records portrait, square and 4:5 reels**
 
 - **Harness and development only, no behaviour change**:
   - `install_e2e`'s fixture no longer fails when a commit lands while it copies the checkout (0042), and it refuses by name to run from a linked worktree, where its fixture commit would have landed in the real repository (0043).
-  - Releases are cut through devbin's release core (`bin/devbin release`), with `tools/ci-state` as its CI query; `tools/formula-bump` writes a release's tag and commit into the Homebrew formula; `docs/releasing.md` is the procedure. The vendored devbin is at 0.1.3.
+  - devbin's release core (`bin/devbin release`) is declared and switched on, with `tools/ci-state` as its CI query; this release was still cut by hand, because the core cannot yet resolve a version beside the older `v`-prefixed tags (reported to devbin). `tools/formula-bump` writes a release's tag and commit into the Homebrew formula, and `docs/releasing.md` is the procedure. The vendored devbin is at 0.1.3.
 
 ## [2.10.0] - 2026-09-20
 
