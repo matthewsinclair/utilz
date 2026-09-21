@@ -3,8 +3,8 @@ node: cc
 name: Control Claude
 role: control
 session_id: d69b4069-611f-4829-8991-1a15c02f53bb
-heartbeat_at: 2026-09-21 18:12Z
-status: active
+heartbeat_at: 2026-09-21 18:25Z
+status: paused
 focus: "ST0019: done bar AC-05.2, which holds on the 2.11.0 cut (hv's timing); ST0022 closed"
 claims: [ST0019]
 ---
