@@ -1,0 +1,14 @@
+{
+  "id": "01M31V3SX84V1PMP8XFN6X0NYX",
+  "ts": "2026-09-21T11:20:11.433Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.satisfy",
+  "subject": {
+    "type": "ac",
+    "id": "ST0019/AC-05.1"
+  },
+  "payload": {
+    "evidence": "docs/releasing.md: after each cut hv runs tools/formula-bump <tag>, commits the bump by path, copies the formula into matthewsinclair/homebrew-utilz, runs brew audit --strict from the tap, and commits and pushes the tap; no after: hook. Linked from docs/index.md."
+  }
+}

@@ -1,0 +1,88 @@
+#!/usr/bin/env bash
+#
+# formula-bump <tag> -- write <tag> and its commit into the Homebrew formula,
+# packaging/homebrew/utilz.rb, for hv to audit, commit and push to the tap
+# (ST0019 design, WP-05; docs/releasing.md).
+#
+# NO COMMIT IS TYPED BY HAND, WHICH IS WHY THIS EXISTS. The offline
+# `brew audit --strict` accepted a revision of 40 zeros (WP-04), so it accepts
+# a wrong commit just as quietly, and a wrong commit is a formula that fails at
+# every user's install. The commit comes from git and nowhere else:
+# `git rev-parse <tag>^{commit}`.
+#
+# It refuses, changing nothing:
+#   - a tag that does not exist, and a lightweight one: every release tag is
+#     annotated, so a lightweight tag is not a release;
+#   - a formula without exactly one tag: line and one revision: line, because
+#     with two, which one is the pin is not knowable, and with none there is
+#     nothing to rewrite.
+# It rewrites only those two lines, prints the diff, and commits nothing.
+#
+# It lives in tools/, not bin/, because bin/ is published.
+#
+set -euo pipefail
+
+if [ $# -ne 1 ]; then
+  echo "usage: tools/formula-bump <tag>" >&2
+  exit 2
+fi
+
+tag="$1"
+root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+formula="$root/packaging/homebrew/utilz.rb"
+
+if [ ! -f "$formula" ]; then
+  echo "formula-bump: no formula at $formula" >&2
+  exit 1
+fi
+
+if ! git -C "$root" rev-parse -q --verify "refs/tags/$tag" > /dev/null; then
+  echo "formula-bump: no tag '$tag' in $root" >&2
+  exit 1
+fi
+
+if [ "$(git -C "$root" cat-file -t "refs/tags/$tag")" != "tag" ]; then
+  echo "formula-bump: '$tag' is a lightweight tag; every release tag is annotated" >&2
+  exit 1
+fi
+
+commit="$(git -C "$root" rev-parse "$tag^{commit}")"
+
+tag_re='^[[:space:]]+tag:[[:space:]]+"[^"]*",?[[:space:]]*$'
+rev_re='^[[:space:]]+revision:[[:space:]]+"[^"]*",?[[:space:]]*$'
+tags="$(grep -cE "$tag_re" "$formula" || true)"
+revs="$(grep -cE "$rev_re" "$formula" || true)"
+
+if [ "$tags" -ne 1 ] || [ "$revs" -ne 1 ]; then
+  echo "formula-bump: $formula has $tags tag: and $revs revision: lines; it rewrites exactly one of each" >&2
+  exit 1
+fi
+
+# Splice the new value between the line's own quotes, keeping everything else
+# on it -- the indentation, the alignment, the trailing comma. Spliced by
+# position rather than by sub(), whose replacement text treats & as special.
+scratch="$(mktemp "$formula.XXXXXX")"
+trap 'rm -f "$scratch"' EXIT
+
+awk -v tag="$tag" -v commit="$commit" -v tag_re="$tag_re" -v rev_re="$rev_re" '
+  function splice(line, value,    first, rest, second) {
+    first = index(line, "\"")
+    rest = substr(line, first + 1)
+    second = index(rest, "\"")
+    return substr(line, 1, first) value substr(rest, second)
+  }
+  $0 ~ tag_re { print splice($0, tag); next }
+  $0 ~ rev_re { print splice($0, commit); next }
+  { print }
+' "$formula" > "$scratch"
+
+if cmp -s "$formula" "$scratch"; then
+  echo "formula-bump: $formula already names $tag at $commit"
+  exit 0
+fi
+
+diff -u "$formula" "$scratch" || true
+# Written back into the formula rather than moved over it: mktemp makes its
+# file 0600, and a mv would carry that mode onto the formula without a word.
+cat "$scratch" > "$formula"
+echo "formula-bump: $formula now names $tag at $commit -- audit it, then commit and push the tap"

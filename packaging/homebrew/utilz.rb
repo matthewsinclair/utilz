@@ -4,8 +4,9 @@
 class Utilz < Formula
   desc "Small command-line utilities behind one dispatcher"
   homepage "https://github.com/matthewsinclair/utilz"
-  # The bare tag (hv's ruling at 2.7.0). REVISION IS A PLACEHOLDER until 2.11.0
-  # is cut: the release's formula bump (WP-05) writes the tag's commit here.
+  # The bare tag (hv's ruling at 2.7.0) and its commit, both written by
+  # tools/formula-bump <tag> from git, never typed (docs/releasing.md). Until
+  # 2.11.0 is cut, the revision is a placeholder that the bump replaces.
   url "https://github.com/matthewsinclair/utilz.git",
       tag:      "2.11.0",
       revision: "0000000000000000000000000000000000000000"

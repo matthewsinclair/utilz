@@ -36,15 +36,19 @@ title: Release Utilz through dvb build release and a Homebrew tap, like Intent
 
 ### WP-05 -- The formula bump after a release: after: or a documented step (status: WIP)
 
-- AC-05.1 (non-test) docs/releasing.md documents the step hv runs after each cut: tools/formula-bump <tag>, the formula copied into matthewsinclair/homebrew-utilz, brew audit --strict, and the tap committed and pushed by hv, with no after: hook (hv, 2026-09-21, vc decision 10). -- satisfied: no
+- AC-05.1 (non-test) docs/releasing.md documents the step hv runs after each cut: tools/formula-bump <tag>, the formula copied into matthewsinclair/homebrew-utilz, brew audit --strict, and the tap committed and pushed by hv, with no after: hook (hv, 2026-09-21, vc decision 10). -- evidence: docs/releasing.md: after each cut hv runs tools/formula-bump <tag>, commits the bump by path, copies the formula into matthewsinclair/homebrew-utilz, runs brew audit --strict from the tap, and commits and pushes the tap; no after: hook. Linked from docs/index.md. -- satisfied: yes
 - AC-05.2 (non-test) Once hv has created and pushed matthewsinclair/homebrew-utilz at the 2.11.0 cut, with the tag's real commit in the formula, brew install matthewsinclair/utilz/utilz installs Utilz from the bare tag, and utilz doctor passes in the keg, manifest included. -- satisfied: no
-- AC-05.3 tools/formula-bump <tag> refuses a missing tag, a lightweight tag, a wrong argument count, and a formula without exactly one tag: and one revision: line, changing nothing in each case. For an annotated tag it rewrites exactly those two lines, to the tag and git rev-parse <tag>^{commit}, and prints the diff. -- satisfied: no (computed)
+- AC-05.3 tools/formula-bump <tag> refuses a missing tag, a lightweight tag, a wrong argument count, and a formula without exactly one tag: and one revision: line, changing nothing in each case. For an annotated tag it rewrites exactly those two lines, to the tag and git rev-parse <tag>^{commit}, and prints the diff. -- satisfied: yes (computed)
 
 ### Group AT01
 
 _(no criteria in this group)_
 
 ### Group AT03
+
+_(no criteria in this group)_
+
+### Group AT04
 
 _(no criteria in this group)_
 
@@ -77,6 +81,10 @@ _(no tests in this group)_
 ### Group AT03
 
 - AT03 `opt/utilz/test/keg.bats` -- covers AC-02.1 -- status: green -- Red first, 21 Sep: with opt/utilz/lib/install.sh and common.sh at 499ccc9, bats opt/utilz/test/keg.bats fails 8 of 8, because install refuses --managed-by and nothing reads the row. Green, WP-02, 21 Sep: 8 of 8 pass at load 24.95: brew and utilz rows as published, a manifest without the row reads utilz and upgrade then writes it, an unknown manager word refused with exit 2, upgrade and install --force refused onto a keg with its manifest byte-identical, upgrade from a keg naming brew rather than the missing git, relink refused into and from a keg with no link moved, use opt and use dev refused when install.prefix is a keg, and utilz test in a keg naming a git clone and not the source-tree. bats opt/utilz/test: 248 tests, 0 failed, 2 skipped (yq and bats installed, as before).
+
+### Group AT04
+
+- AT04 `opt/utilz/test/formula_bump.bats` -- covers AC-05.3 -- status: green -- Red first, 21 Sep: at c36a773, with no tools/formula-bump, bats opt/utilz/test/formula_bump.bats fails 5 of 5. Green, WP-05, 21 Sep: 5 of 5 pass. An annotated tag rewrites exactly the tag: and revision: lines to 9.9.9 and git rev-parse 9.9.9^{commit}, keeps the formula's mode, and prints the diff. A missing tag, a lightweight tag, a formula with two revision: lines, and one with no tag: line are each refused with the formula byte-identical. Zero or two arguments exit 2. CI's shellcheck collector sees 20 files, tools/formula-bump among them, and all are clean.
 
 ---
 
