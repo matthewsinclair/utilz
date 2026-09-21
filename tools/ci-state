@@ -1,0 +1,51 @@
+#!/usr/bin/env bash
+#
+# ci-state <sha> -- CI's verdict on <sha>, in the words devbin's release core
+# reads (ST0019 design D1).
+#
+# THIS IS THE ci.query THE RELEASE CORE RUNS AT STEP 11, AND IT ASKS NOTHING
+# ITSELF. The one function that asks CI about a commit is install_ci_state
+# (issue 0016); a second `gh` query here would be a second answer to the same
+# question, and the two would drift. So this sources it, calls it, and does the
+# one thing it does not: translate. install_ci_state answers with CI's own
+# conclusion word (success, failure, cancelled, ...); the core wants green,
+# failed, pending, none or unknown (release.steps, release_ci_verdict).
+#
+#   install_ci_state        ci-state
+#   success <run>           green <run>
+#   <other> <run>           failed <other>: <run>   -- cancelled, timed_out, ...
+#   pending | none | unknown  passed through unchanged
+#
+# Every conclusion that is not success is FAILED, never unknown: CI finished
+# and did not pass, which is a verdict. unknown stays for an answer nobody
+# could read.
+#
+# IT LIVES IN tools/, NOT bin/, BECAUSE bin/ IS PUBLISHED. The publish ships
+# every tracked file under bin except devbin's own (install.sh:99 with
+# INSTALL_EXCLUDE_RE), so a release tool there would ship to every install and
+# every keg as if it were a utility.
+#
+set -euo pipefail
+
+if [ $# -ne 1 ]; then
+  echo "usage: tools/ci-state <sha>" >&2
+  exit 2
+fi
+
+UTILZ_HOME="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+export UTILZ_HOME
+# shellcheck source=opt/utilz/lib/common.sh
+. "$UTILZ_HOME/opt/utilz/lib/common.sh"
+# shellcheck source=opt/utilz/lib/install.sh
+. "$UTILZ_HOME/opt/utilz/lib/install.sh"
+
+answer="$(install_ci_state "$UTILZ_HOME" "$1")"
+state="${answer%%$'\t'*}"
+detail="${answer#*$'\t'}"
+[ "$detail" != "$answer" ] || detail=""
+
+case "$state" in
+  success) printf 'green\t%s\n' "$detail" ;;
+  pending | none | unknown) printf '%s\t%s\n' "$state" "$detail" ;;
+  *) printf 'failed\t%s: %s\n' "$state" "$detail" ;;
+esac

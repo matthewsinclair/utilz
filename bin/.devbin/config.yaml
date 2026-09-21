@@ -37,6 +37,20 @@ commands:
         run: bats opt/*/test
         grammar: shell
         log: SHELL
+      # The estate: every suite a hand release runs, through the one driver
+      # that discovers them -- the bats suites, the workspace's cargo tests and
+      # each crate/test/*.sh black-box suite (ST0019 D1). It is the release
+      # core's gate, `test estate`, so the release gate is the hand gate by
+      # construction. Out of `test all`, reported there as skipped, so the
+      # everyday verb never needs video.sh's Chrome, ffmpeg and quiet machine.
+      # `generic` because utilz test prints its own summary, which no devbin
+      # counter reads; its exit status is the verdict.
+      estate:
+        summary: Every suite, as a release runs them
+        run: bin/utilz test
+        grammar: generic
+        log: ESTATE
+        in_all: false
   # Same layout, same fix, for clippy. --workspace for the reason `utilz test`
   # gives: without it cargo lints the root package alone and every other crate
   # is silently skipped.

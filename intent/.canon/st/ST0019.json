@@ -122,6 +122,18 @@
       }
     }
   ],
+  "tests": [
+    {
+      "id": "AT01",
+      "kind": "test",
+      "file": "opt/utilz/test/install_lib.bats",
+      "covers": [
+        "AC-01.3"
+      ],
+      "status": "green",
+      "note": "Red first, 21 Sep: with tools/ci-state moved aside, bats --filter 'tools/ci-state' opt/utilz/test/install_lib.bats at 8b3f31b fails 5 of 5. Green, WP-01, 21 Sep: with it in place, 5 of 5 pass (bash 5.3.20, load 127.72): the five verdicts, gh's refusal as unknown, the query install_ci_state makes word for word, usage exit 2, and nothing under tools/ in install_owned_paths. Under /bin/bash 3.2.57 with no gh on PATH it answers 'unknown<TAB>gh is not installed'. CI's shellcheck collector, widened to bin opt tools, sees 19 files including tools/ci-state, and all are clean."
+    }
+  ],
   "attachments": [
     {
       "path": "design.md",

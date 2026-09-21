@@ -17,7 +17,7 @@ title: Release Utilz through dvb build release and a Homebrew tap, like Intent
 
 - AC-01.1 (non-test) The release declaration, its estate gate included, validates under the core's read-only release check, run by hv or vc. -- satisfied: no
 - AC-01.2 Every declared gate, bin/utilz test first, leaves git status --porcelain --untracked-files=all byte-identical, measured by hashing every dirty path before and after it. -- satisfied: no (computed)
-- AC-01.3 tools/ci-state answers green, failed, pending, none and unknown for the corresponding install_ci_state answers under a stubbed gh, asks through install_ci_state alone, ships to no install or keg, and is linted by CI's shellcheck step. -- satisfied: no (computed)
+- AC-01.3 tools/ci-state answers green, failed, pending, none and unknown for the corresponding install_ci_state answers under a stubbed gh, asks through install_ci_state alone, ships to no install or keg, and is linted by CI's shellcheck step. -- satisfied: yes (computed)
 - AC-01.4 (non-test) CHANGELOG.md's open section is headed ## [X.Y.Z] - unreleased, and the core reads its state as open. -- satisfied: no
 
 ### WP-02 -- The keg as an install tree: the discriminator and the verbs that refuse (status: Not Started)
@@ -35,6 +35,10 @@ title: Release Utilz through dvb build release and a Homebrew tap, like Intent
 ### WP-05 -- The formula bump after a release: after: or a documented step (status: Not Started)
 
 - AC-05.1 (non-test) How the formula follows a release is decided by hv and either built or documented. -- satisfied: no
+
+### Group AT01
+
+_(no criteria in this group)_
 
 ## Acceptance Tests
 
@@ -57,6 +61,10 @@ _(no tests in this group)_
 ### WP-05 -- The formula bump after a release: after: or a documented step (status: Not Started)
 
 _(no tests in this group)_
+
+### Group AT01
+
+- AT01 `opt/utilz/test/install_lib.bats` -- covers AC-01.3 -- status: green -- Red first, 21 Sep: with tools/ci-state moved aside, bats --filter 'tools/ci-state' opt/utilz/test/install_lib.bats at 8b3f31b fails 5 of 5. Green, WP-01, 21 Sep: with it in place, 5 of 5 pass (bash 5.3.20, load 127.72): the five verdicts, gh's refusal as unknown, the query install_ci_state makes word for word, usage exit 2, and nothing under tools/ in install_owned_paths. Under /bin/bash 3.2.57 with no gh on PATH it answers 'unknown<TAB>gh is not installed'. CI's shellcheck collector, widened to bin opt tools, sees 19 files including tools/ci-state, and all are clean.
 
 ---
 

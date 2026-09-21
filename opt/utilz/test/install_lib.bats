@@ -580,3 +580,73 @@ make_fake_install() {
   assert_exit_code 2
   assert_output_contains "no manifest"
 }
+
+# ============================================================================
+# tools/ci-state: install_ci_state in the release core's words (ST0019 WP-01)
+# ============================================================================
+#
+# The stub is found on PATH under the name `gh`, because the script is run as
+# the release core runs it, as a command, and INSTALL_GH can only be moved by
+# code that has sourced install.sh. Put first on PATH, it is the gh the real
+# install_ci_state asks, so these drive the whole path the core will drive.
+
+# Run tools/ci-state on <sha> with a gh stub on PATH that answers <answer>,
+# exiting <rc> with <message> on stderr.
+run_ci_state() {
+  local sha="$1" answer="$2" rc="${3:-0}" message="${4:-}"
+  local dir="$BATS_TEST_TMPDIR/gh-on-path"
+  mkdir -p "$dir"
+  make_gh_stub "$dir/gh" "$answer" "$rc" "$message"
+  run env PATH="$dir:$PATH" "$UTILZ_HOME/tools/ci-state" "$sha"
+}
+
+@test "AC-01.3: tools/ci-state answers each of the core's five verdicts, one per CI answer" {
+  local answer want
+  while IFS=';' read -r answer want; do
+    run_ci_state deadbeef "$answer"
+    assert_success
+    [ "$(printf '%s' "$output" | tr '\t' ' ')" = "$want" ] \
+      || fail "gh answering '$answer' gave '$output', not '$want'"
+  done <<'ROWS'
+completed|success|101;green 101
+completed|failure|102;failed failure: 102
+completed|cancelled|103;failed cancelled: 103
+in_progress||104;pending 104
+;none no run
+ROWS
+}
+
+@test "AC-01.3: tools/ci-state answers unknown with gh's own reason when gh refuses, never green" {
+  local refusal="multiple remotes detected [origin upstream]. please specify which repo to use with -R"
+  run_ci_state deadbeef "" 1 "$refusal"
+  assert_success
+  [ "$(printf '%s' "$output" | tr '\t' ' ')" = "unknown $refusal" ] || fail "answered: $output"
+}
+
+@test "AC-01.3: tools/ci-state asks through install_ci_state, about the sha it is given, from the tree" {
+  local sha
+  sha=$(git -C "$UTILZ_HOME" rev-parse HEAD)
+  run_ci_state "$sha" "completed|success|105"
+  assert_success
+
+  # The query install_ci_state makes, word for word: no second gh query exists.
+  run cat "$BATS_TEST_TMPDIR/gh-on-path/gh.asked"
+  assert_output_contains "$(cd "$UTILZ_HOME" && pwd -P)"
+  assert_output_contains "run list --commit $sha --workflow tests.yml"
+}
+
+@test "AC-01.3: tools/ci-state refuses anything but one sha, exiting non-zero so the core reads unknown" {
+  run "$UTILZ_HOME/tools/ci-state"
+  [ "$status" -eq 2 ] || fail "no argument exited $status"
+  run "$UTILZ_HOME/tools/ci-state" a b
+  [ "$status" -eq 2 ] || fail "two arguments exited $status"
+}
+
+@test "AC-01.3: tools/ci-state is in no install: the owned set names nothing under tools/" {
+  [ -x "$UTILZ_HOME/tools/ci-state" ] || fail "tools/ci-state is missing, so this would pass vacuously"
+  run run_install_function "install_owned_paths '$UTILZ_HOME'"
+  assert_success
+  if printf '%s\n' "$output" | grep -q '^tools/'; then
+    fail "the publish would ship: $(printf '%s\n' "$output" | grep '^tools/')"
+  fi
+}
