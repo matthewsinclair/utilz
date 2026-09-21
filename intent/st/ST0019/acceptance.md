@@ -34,10 +34,11 @@ title: Release Utilz through dvb build release and a Homebrew tap, like Intent
 - AC-04.1 (non-test) packaging/homebrew/utilz.rb and an MIT LICENSE are in this repository, the README's license section says MIT, and the formula passes brew audit --strict in a scratch tap, removed afterwards. -- evidence: 1ecdd3a: packaging/homebrew/utilz.rb, MIT LICENSE, README license section MIT. WP-04 body: brew audit --strict in a throwaway tap exits 0 with no findings on the committed formula and on a real-commit copy; a bad-desc control exits 1 naming both faults, so the pass is a reading; tap untapped, live install manifest and ~/.local/bin listing hash identical before and after. -- satisfied: yes
 - AC-04.2 (non-test) Once hv has created and pushed matthewsinclair/homebrew-utilz and 2.11.0 is tagged, brew install matthewsinclair/utilz/utilz installs Utilz from the bare tag, and utilz doctor passes in the keg, manifest included. -- WITHDRAWN: It can only be satisfied after the 2.11.0 cut, when hv creates and pushes the tap with the tag's real commit (vc decision 9), and vc ruled that WP-04 closes on AC-04.1. Moved to WP-05, which is how the formula follows a release, as AC-05.2.
 
-### WP-05 -- The formula bump after a release: after: or a documented step (status: Not Started)
+### WP-05 -- The formula bump after a release: after: or a documented step (status: WIP)
 
-- AC-05.1 (non-test) How the formula follows a release is decided by hv and either built or documented. -- satisfied: no
+- AC-05.1 (non-test) docs/releasing.md documents the step hv runs after each cut: tools/formula-bump <tag>, the formula copied into matthewsinclair/homebrew-utilz, brew audit --strict, and the tap committed and pushed by hv, with no after: hook (hv, 2026-09-21, vc decision 10). -- satisfied: no
 - AC-05.2 (non-test) Once hv has created and pushed matthewsinclair/homebrew-utilz at the 2.11.0 cut, with the tag's real commit in the formula, brew install matthewsinclair/utilz/utilz installs Utilz from the bare tag, and utilz doctor passes in the keg, manifest included. -- satisfied: no
+- AC-05.3 tools/formula-bump <tag> refuses a missing tag, a lightweight tag, a wrong argument count, and a formula without exactly one tag: and one revision: line, changing nothing in each case. For an annotated tag it rewrites exactly those two lines, to the tag and git rev-parse <tag>^{commit}, and prints the diff. -- satisfied: no (computed)
 
 ### Group AT01
 
@@ -65,7 +66,7 @@ _(no tests in this group)_
 
 _(no tests in this group)_
 
-### WP-05 -- The formula bump after a release: after: or a documented step (status: Not Started)
+### WP-05 -- The formula bump after a release: after: or a documented step (status: WIP)
 
 _(no tests in this group)_
 

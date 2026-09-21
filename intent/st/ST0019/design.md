@@ -133,7 +133,16 @@ vc reviewed on 2026-09-21: GO with four changes, all written in above (D1's gate
 | 04  | The tap `matthewsinclair/homebrew-utilz` and its formula             | WP-03               |
 | 05  | The formula bump after a release: `after:` or a documented step      | WP-04, Devbin WP-08 |
 
-WP-05 is open on purpose: a release's `after:` could rewrite the formula's `tag` and `revision` and push the tap, but `after:` runs outside the core's guarantees (`cmd/release:940`), and a push to a second repository is hv's call.
+**WP-05, ruled by hv on 2026-09-21 (vc's decision 10): a documented step plus a script, no `after:` hook.** A release's `after:` could rewrite the formula and push the tap, but `after:` runs outside the core's guarantees (`cmd/release:940`), and pushing the tap is hv's. So after each cut hv runs **`tools/formula-bump <tag>`**, then audits, commits and pushes the tap himself, as `docs/releasing.md` says.
+
+**The script exists because no commit may be typed by hand.** WP-04 measured it: the offline `brew audit --strict` accepts a revision of 40 zeros, so it would accept a wrong commit just as quietly, and a wrong commit is a formula that fails at every user's install. `tools/formula-bump <tag>`:
+
+- refuses a tag that does not exist, and a lightweight tag, because every release tag is annotated (step 7, `cmd/release:811`);
+- reads the commit with `git rev-parse <tag>^{commit}`, from git and nowhere else;
+- rewrites only the formula's `tag:` and `revision:` lines, refusing when it finds anything other than exactly one of each, so a reshaped formula is refused rather than half-rewritten;
+- prints the diff it made, and leaves committing to whoever runs it.
+
+It lives in `tools/`, beside `ci-state`, outside the published set, and CI's shellcheck step reads it there.
 
 ## Acceptance
 

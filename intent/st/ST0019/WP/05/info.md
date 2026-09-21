@@ -2,14 +2,14 @@
 wp_id: WP-05
 title: The formula bump after a release: after: or a documented step
 scope: S
-status: Not Started
+status: WIP
 ---
 
 # WP-05: The formula bump after a release: after: or a documented step
 
 ## Objective
 
-Decide and build how the formula's tag and revision follow a release (design, Work packages): a release after: command that rewrites the formula and pushes the tap, or a documented step hv runs. after: runs outside the core's guarantees, and a push to a second repository is hv's call, so this WP puts the choice to hv before building either.
+The formula follows every release by a documented step and a script, never an after: hook (hv, 2026-09-21, vc decision 10; design, Work packages). tools/formula-bump <tag> writes the tag and that tag's commit into packaging/homebrew/utilz.rb from git: it refuses a tag that does not exist or is not annotated, reads the commit with git rev-parse <tag>^{commit}, rewrites only the tag: and revision: lines, refuses a formula without exactly one of each, and prints the diff. No commit is typed by hand, because the offline audit accepts any 40 hex digits. docs/releasing.md documents the step hv runs after each cut: formula-bump, copy into the tap, brew audit --strict, commit and push the tap. At the 2.11.0 cut hv creates and pushes the tap, and the install from it is AC-05.2.
 
 ## Acceptance
 

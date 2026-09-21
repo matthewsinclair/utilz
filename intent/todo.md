@@ -9,7 +9,7 @@ A DOING / TODO / DONE view, projected from steel-thread and work-package status:
   - [x] 02: The keg as an install tree: the discriminator and the verbs that refuse
   - [x] 03: Spike: a git-URL formula built in a scratch tap, the keg run end to end
   - [x] 04: The tap matthewsinclair/homebrew-utilz and its formula
-  - [ ] 05: The formula bump after a release: after: or a documented step
+  - [-] 05: The formula bump after a release: after: or a documented step
 
 ## TODO
 
