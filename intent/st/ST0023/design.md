@@ -1,6 +1,6 @@
 # ST0023 design: a long socials handle fits a portrait frame
 
-Issue 0045, from geodica through vc on 2026-09-21, for the release after 2.11.0. At 9:16 the handle `forbiddenplanetnottingham` (25 characters) runs off both edges of a 1080x1920 frame, and at 16:9 it fits. Reproduced on a scratch copy of Snokeltoast's 001.
+Issue 0045, from geodica through vc on 2026-09-21, for the release after 2.11.0. At 9:16 the handle `forbiddenplanetnottingham` (25 characters) runs off both edges of a 1080x1920 frame, and at 16:9 it fits. Reproduced on a scratch copy of Snorkeltoast's 001.
 
 ## D1. Why it overflows
 

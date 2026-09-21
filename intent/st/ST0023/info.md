@@ -14,7 +14,7 @@ At 9:16 a long socials handle fits the frame, inside the safe margin and never b
 
 ## Context
 
-geodica, through vc, 2026-09-21: recording Snokeltoast's reels with `--aspect portrait` (ST0022, released in 2.11.0), the handle "forbiddenplanetnottingham" ran off both edges of the frame. It is fixed for the next release. Fitting headlines in general is scope, and with hv.
+geodica, through vc, 2026-09-21: recording Snorkeltoast's reels with `--aspect portrait` (ST0022, released in 2.11.0), the handle "forbiddenplanetnottingham" ran off both edges of the frame. It is fixed for the next release. Fitting headlines in general is scope, and with hv.
 
 Roles: cc builds, vc reviews and verifies, hv rules.
 

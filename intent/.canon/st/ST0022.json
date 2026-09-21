@@ -40,7 +40,7 @@
     },
     {
       "id": "AC-01.3",
-      "text": "A 9:16 recording of Snokeltoast 001 reads in every segment type, inside the safe area at phone size, judged by vc from one frame per segment type",
+      "text": "A 9:16 recording of Snorkeltoast 001 reads in every segment type, inside the safe area at phone size, judged by vc from one frame per segment type",
       "kind": "non-test",
       "state": {
         "is": "satisfied",

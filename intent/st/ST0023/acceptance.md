@@ -16,7 +16,7 @@ title: showreel: a long socials handle fits a portrait frame (issue 0045)
 ### WP-01 -- Fit the socials handle to its pane, red test first (status: Done)
 
 - AC-01.1 A socials page whose handle is 25 capitals, recorded at --aspect portrait, has no glyph in the frame's outer 20 px on either side and still draws the handle; 16:9 frames are byte-identical to the pre-fix build -- satisfied: yes (computed)
-- AC-01.2 (non-test) vc reads the portrait socials frame of Snokeltoast 001 with the handle forbiddenplanetnottingham and finds it whole, inside the safe margin, and legible -- evidence: vc, 21 Sep: read look-0045.png. Before, 001's socials page at 9:16 with handle forbiddenplanetnottingham runs off both edges; after, the handle is on one line about 3% clear of each side, inside the 2.4% safe margin, and legible at phone size. In vc's own worktree: video.sh --strict ST0023-AT01 FAILS with e079c08~1's player.html and PASSES at e079c08. -- satisfied: yes
+- AC-01.2 (non-test) vc reads the portrait socials frame of Snorkeltoast 001 with the handle forbiddenplanetnottingham and finds it whole, inside the safe margin, and legible -- evidence: vc, 21 Sep: read look-0045.png. Before, 001's socials page at 9:16 with handle forbiddenplanetnottingham runs off both edges; after, the handle is on one line about 3% clear of each side, inside the 2.4% safe margin, and legible at phone size. In vc's own worktree: video.sh --strict ST0023-AT01 FAILS with e079c08~1's player.html and PASSES at e079c08. -- satisfied: yes
 
 ### Group AT01
 
