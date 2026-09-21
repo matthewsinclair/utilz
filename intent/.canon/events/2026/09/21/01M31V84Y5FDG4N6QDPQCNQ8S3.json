@@ -1,0 +1,15 @@
+{
+  "id": "01M31V84Y5FDG4N6QDPQCNQ8S3",
+  "ts": "2026-09-21T11:22:33.797Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "hold",
+    "text": "ST0019 WP-05 AC-05.2 (brew install from matthewsinclair/homebrew-utilz at the bare tag, utilz doctor clean in the keg). Released when: 2.11.0 is cut and pushed, and hv has created and pushed the tap with tools/formula-bump's commit (docs/releasing.md, one-time setup). Then WP-05 and ST0019 close."
+  }
+}

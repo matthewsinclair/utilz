@@ -17,11 +17,11 @@ _(none)_
 
 ## TODO
 
-- ST0019 WP-02 landed be34adb (AT03 green, AC-02.1 computed yes), awaiting vc's verify in its worktree; then wp done. Next WP-03: the formula spike in a scratch tap (D3), keg run end to end, utilz doctor after brew's post-install.
+_(none)_
 
 ## Holds
 
-_(none)_
+- ST0019 WP-05 AC-05.2 (brew install from matthewsinclair/homebrew-utilz at the bare tag, utilz doctor clean in the keg). Released when: 2.11.0 is cut and pushed, and hv has created and pushed the tap with tools/formula-bump's commit (docs/releasing.md, one-time setup). Then WP-05 and ST0019 close.
 
 ## Watch-outs
 
