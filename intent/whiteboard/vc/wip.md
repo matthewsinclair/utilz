@@ -13,7 +13,7 @@ claims: []
 
 ## DOING
 
-- ST0022 (showreel --aspect, geodica's same-day request) closed at 7c6e1c8; hv upgraded the install to 8d6c147, and geodica has the usage. PATH links in ~/.local/bin and ~/bin were repointed to the source checkout at 19:09:30 by something unidentified (not upgrade, not cc); hv told: 'utilz use opt' restores them. Next: 2.11.0 CHANGELOG entry (cc drafts, vc reviews) then the cut through the release core, on hv's word.
+- 2.11.0 READY FOR hv TO TAG: release commit 890064e (VERSION 2.11.0, CHANGELOG dated 2026-09-21; prez 2.3.0 at 8c0b018); gate bin/utilz test 20/20 on 81cae67, and the amend to 890064e changed only one CHANGELOG line; versions read back utilz:2.11.0 and prez 2.3.0. hv runs tmp/release-2.11.0.sh (tag bare, --cleanup=whitespace, read-back, push local+upstream). After: CI on the push; tools/formula-bump 2.11.0; hv creates and pushes the tap; brew install (ST0019 AC-05.2).
 
 ## TODO
 
@@ -44,6 +44,7 @@ _(none)_
 - hv, 2026-09-21, directly to vc, on ST0019 WP-05: the formula follows each release by a documented step in a release doc here PLUS a small tools/ script that writes the new tag and that tag's commit into packaging/homebrew/utilz.rb from git, so no SHA is typed by hand (the offline audit cannot catch a wrong one). hv audits, commits and pushes the tap; no release-core after: hook.
 - hv, 2026-09-21, directly to vc: (1) pushed -- upstream/main at d703dd5, 0 ahead 0 behind, CI run 35628486286. (2) 'Ok' to switching devbin's release core on at Utilz (commands.release.enabled: true) once that CI run is green, the read-only release check being its first act, then the 2.11.0 cut through the core.
 - hv, 2026-09-21, directly to vc, on geodica's request (needed today, ahead of the 2.11.0 cut): showreel video takes a selectable aspect ratio, as W:H or by name, via --aspect and showreel.yaml aspect:, the flag winning, default 16:9. Names: widescreen 16:9, portrait 9:16, square 1:1, feed 4:5. Size rule: the reel's target is the LONG edge, the short edge follows from the ratio, both even (1920: 9:16 is 1080x1920, 1:1 is 1920x1920, 4:5 is 1536x1920).
+- hv, 2026-09-21, directly to vc: the release is 2.11.0 (minor: it carries features), prez goes to 2.3.0, and it is cut BY HAND this once, because devbin 0.1.3's release core fails silently at resolve beside Utilz's older v-prefixed tags (reported to devbin, fix due in 0.1.5). Utilz's first cut through the core waits for that sweep.
 
 ---
 

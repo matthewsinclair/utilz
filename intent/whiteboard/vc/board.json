@@ -902,8 +902,25 @@
       "kind": "doing",
       "seq": 53,
       "text": "ST0022 (showreel --aspect, geodica's same-day request) closed at 7c6e1c8; hv upgraded the install to 8d6c147, and geodica has the usage. PATH links in ~/.local/bin and ~/bin were repointed to the source checkout at 19:09:30 by something unidentified (not upgrade, not cc); hv told: 'utilz use opt' restores them. Next: 2.11.0 CHANGELOG entry (cc drafts, vc reviews) then the cut through the release core, on hv's word.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-09-21T18:51:06.546Z",
       "recorded_at": "2026-09-21T18:12:21.109Z"
+    },
+    {
+      "node": "vc",
+      "kind": "decision",
+      "seq": 14,
+      "text": "hv, 2026-09-21, directly to vc: the release is 2.11.0 (minor: it carries features), prez goes to 2.3.0, and it is cut BY HAND this once, because devbin 0.1.3's release core fails silently at resolve beside Utilz's older v-prefixed tags (reported to devbin, fix due in 0.1.5). Utilz's first cut through the core waits for that sweep.",
+      "state": "live",
+      "recorded_at": "2026-09-21T18:51:06.402Z"
+    },
+    {
+      "node": "vc",
+      "kind": "doing",
+      "seq": 54,
+      "text": "2.11.0 READY FOR hv TO TAG: release commit 890064e (VERSION 2.11.0, CHANGELOG dated 2026-09-21; prez 2.3.0 at 8c0b018); gate bin/utilz test 20/20 on 81cae67, and the amend to 890064e changed only one CHANGELOG line; versions read back utilz:2.11.0 and prez 2.3.0. hv runs tmp/release-2.11.0.sh (tag bare, --cleanup=whitespace, read-back, push local+upstream). After: CI on the push; tools/formula-bump 2.11.0; hv creates and pushes the tap; brew install (ST0019 AC-05.2).",
+      "state": "live",
+      "recorded_at": "2026-09-21T18:51:06.689Z"
     }
   ],
   "messages": [

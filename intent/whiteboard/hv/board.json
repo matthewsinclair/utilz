@@ -161,5 +161,14 @@
       "recorded_at": "2026-09-20T11:29:51.739Z"
     }
   ],
-  "messages": []
+  "messages": [
+    {
+      "sender": "vc",
+      "recipient": "hv",
+      "body": "2.11.0 is ready for you to tag and push. Release commit 890064e: the gate passed 20/20, and versions read back utilz:2.11.0 and prez 2.3.0. Run: ! /Users/matts/Devel/prj/Utilz/tmp/release-2.11.0.sh -- it tags 2.11.0 bare at 890064e with --cleanup=whitespace, checks the annotation against tmp/tag-2.11.0.md (deleting the tag if it differs), and pushes main and the tag to local and upstream. After that, vc watches CI, runs tools/formula-bump 2.11.0, and hands you the tap step. Cut by hand because devbin's release core has a silent resolve bug with our older v-tags; fix due in devbin 0.1.5.",
+      "fyi": false,
+      "state": "live",
+      "recorded_at": "2026-09-21T18:51:21.419Z"
+    }
+  ]
 }

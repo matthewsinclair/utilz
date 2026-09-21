@@ -1,0 +1,15 @@
+{
+  "id": "01M32MXF215SC6P9PHV543YTKZ",
+  "ts": "2026-09-21T18:51:06.689Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "doing",
+    "text": "2.11.0 READY FOR hv TO TAG: release commit 890064e (VERSION 2.11.0, CHANGELOG dated 2026-09-21; prez 2.3.0 at 8c0b018); gate bin/utilz test 20/20 on 81cae67, and the amend to 890064e changed only one CHANGELOG line; versions read back utilz:2.11.0 and prez 2.3.0. hv runs tmp/release-2.11.0.sh (tag bare, --cleanup=whitespace, read-back, push local+upstream). After: CI on the push; tools/formula-bump 2.11.0; hv creates and pushes the tap; brew install (ST0019 AC-05.2)."
+  }
+}
