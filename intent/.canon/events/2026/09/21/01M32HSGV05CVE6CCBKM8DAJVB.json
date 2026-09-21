@@ -1,0 +1,17 @@
+{
+  "id": "01M32HSGV05CVE6CCBKM8DAJVB",
+  "ts": "2026-09-21T17:56:31.712Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "ST0022 WP-01 landed at af6ba30: cargo 173 pass, video.sh AT01+AT30 PASS. 9:16 frames of 001 (one per segment type) in cc's scratchpad frames-001-portrait/ for your AC-01.3 reading. Rulings wanted: venue cover-crop in portrait (finding 1), atwork card past the top safe margin (finding 2), gallery zoom 3% overshoot. Details in the socket message.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: d69b4069-611f-4829-8991-1a15c02f53bb
-heartbeat_at: 2026-09-21 17:37Z
+heartbeat_at: 2026-09-21 17:56Z
 status: active
-focus: "ST0019: done bar AC-05.2, which holds on the 2.11.0 cut (hv's timing); release core on at cb45181, release check rc 0 (vc)"
+focus: "ST0022: showreel video --aspect landed at af6ba30; awaiting vc's reading of the 9:16 frames and rulings on venue, atwork and zoom margin"
 claims: [ST0019, ST0022]
 ---
 
