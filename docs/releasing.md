@@ -11,19 +11,30 @@ A Utilz release is still cut by hand (hv's decision 1 of 14 Sep). Devbin's relea
 
 ## After the cut: the Homebrew formula
 
-Utilz installs with Homebrew from the tap `matthewsinclair/homebrew-utilz`. Its formula builds from source at the bare tag, so it names the tag and the tag's commit. The formula is kept in this repository at `packaging/homebrew/utilz.rb` and copied into the tap. After each cut, hv:
+Utilz installs with Homebrew from the tap `matthewsinclair/homebrew-utilz`. Its formula builds from source at the bare tag, so it names the tag and the tag's commit. The formula is kept in this repository at `packaging/homebrew/utilz.rb` and copied into the tap.
+
+### Where the tap lives, and the one-time setup at 2.11.0
+
+The tap lives where brew keeps every tap, `$(brew --repository)/Library/Taps/matthewsinclair/homebrew-utilz`: a git clone whose `origin` is the GitHub repository, as hv's Intent tap is. hv edits, commits and pushes the formula there. It is set up once, at the 2.11.0 cut, after this repository's tag is pushed:
+
+1. Run `tools/formula-bump 2.11.0` here and commit the bump (steps 1 and 2 below).
+2. Create the GitHub repository `matthewsinclair/homebrew-utilz`, with that formula committed as `Formula/utilz.rb`.
+3. `brew tap matthewsinclair/utilz`, which clones it into the path above.
+4. `brew audit --strict matthewsinclair/utilz/utilz`, then `brew install matthewsinclair/utilz/utilz`, then `utilz doctor` (ST0019 AC-05.2).
+
+### After every later cut, hv:
 
 1. **Writes the new tag and its commit into the formula, from git:**
 
    ```bash
-   tools/formula-bump 2.11.0
+   tools/formula-bump 2.12.0
    ```
 
-   It refuses a tag that does not exist or is not annotated, reads the commit with `git rev-parse 2.11.0^{commit}`, rewrites only the formula's `tag:` and `revision:` lines, and prints the diff. **Never type the commit by hand**: the offline `brew audit --strict` accepts any 40 hex digits, so a wrong commit passes the audit and fails at every user's install.
+   It refuses a tag that does not exist or is not annotated, reads the commit with `git rev-parse 2.12.0^{commit}`, rewrites only the formula's `tag:` and `revision:` lines, and prints the diff. **Never type the commit by hand**: the offline `brew audit --strict` accepts any 40 hex digits, so a wrong commit passes the audit and fails at every user's install.
 
 2. **Commits the bump here**, by path: `packaging/homebrew/utilz.rb`.
 
-3. **Copies the formula into the tap** as `Formula/utilz.rb`.
+3. **Copies the formula into the tap** as `Formula/utilz.rb`, in the tap's clone above.
 
 4. **Audits it from the tap:**
 
@@ -34,3 +45,5 @@ Utilz installs with Homebrew from the tap `matthewsinclair/homebrew-utilz`. Its 
 5. **Commits and pushes the tap.** Pushing the tap is hv's, as pushing this repository is. No release `after:` hook does it (ST0019 WP-05, hv's ruling of 2026-09-21).
 
 A formula that names a commit brew cannot fetch fails every install, so the tap is pushed only after this repository's tag is.
+
+**A wrong commit fails loudly at install, never silently.** When brew fetches a git URL with both `tag:` and `revision:`, it checks out the tag and compares the commit it got with the formula's revision. On a mismatch it stops: "`<tag>` tag should be `<revision>` but is actually `<commit>`" (`download_strategy/vcs_download_strategy.rb:46-51` in this machine's Homebrew). The offline audit makes no such check, which is why the commit comes from `tools/formula-bump` and the first install after a push is the real proof.
