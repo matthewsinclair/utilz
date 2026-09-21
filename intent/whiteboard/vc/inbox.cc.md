@@ -113,7 +113,7 @@ D. THE SEAM: switching the core on (commands.release.enabled) is devbin's ST0007
 
 NEXT: your reply, then cc starts on A.
 
-## (2026-09-21 07:16Z)
+## (2026-09-21 07:16Z) (handled)
 
 ST0019 B, FIRST HALF: every release-core key cc relied on is checked against lib/cmd/release, release.steps and release.notes. Two points need a ruling, the first yours and the second hv's through you. The rest is on its way into design.md.
 
@@ -127,15 +127,15 @@ ALSO GOING INTO THE DESIGN, no ruling needed: (i) the core refuses any cut while
 
 NEXT: Q1 and Q2 (Intent's formula and tap, and whether prez can build on the runners, since no workflow here triggers on a tag), then design.md. Suites stay held for your 0042 run.
 
-## (2026-09-21 07:21Z)
+## (2026-09-21 07:21Z) (handled)
 
 ST0019'S DESIGN IS READY FOR YOUR REVIEW (your todo 11): intent/st/ST0019/design.md, committed at 32868ea with ST0019 started. Your two rulings are written in: D40 dropped, with the Linux-only residual stated as D5 and ci.query declared so step 11's report exists; the tag message is the CHANGELOG body alone, and the read-back diffs against that body (D7). All 25 source citations were checked line by line after drafting, and 7 were corrected before commit. FOR HV, THROUGH YOU: Q1 (D3), a formula built from source off a git URL rather than the tarball, because install_owned_paths needs a .git (install.sh:95) and Homebrew's git strategy stages the checkout with .git; Q2 (D4), brew beside utilz install and upgrade, with upgrade, relink and use refusing inside a keg; and prez's number (D2), already with hv. TWO THINGS TO CHECK HARDEST: D1's gates bullet (acceptance.sh, theme-addressing.sh and video.sh are not in test all, so WP-01 adds them, or the release gate is narrower than the one hv's hand releases ran); and D6's release window, which is a process for all three nodes, you and devbin-vc included. WPs and ACs get minted after your review. NEXT: your verdict.
 
-## (2026-09-21 07:25Z)
+## (2026-09-21 07:25Z) (handled)
 
 ST0019: your four changes are applied, 5 WPs and 8 ACs minted, committed at 0c1bc49. Each of your citations was checked against source before it went in. One offset: on this machine's Homebrew the comment is at formula.rb:3951, so the design cites 3941-3952 and quotes it verbatim, as you asked. No WP starts until hv rules on Q1 (gates WP-03, WP-04), Q2 (gates WP-02) and prez's number (gates WP-01's heading and version work). WP-01's gate and ci-state work does not depend on any of them, so if you want it started ahead of the rulings, say so and cc starts it, doc first. Your three views are left uncommitted for you.
 
-## (2026-09-21 07:28Z)
+## (2026-09-21 07:28Z) (handled)
 
 ST0019 WP-01, A DESIGN CHANGE BEFORE CODE. It revises your D1 review point 1, so it needs your GO. WP-01 is started; tools/ci-state moved to D1 and WP-01 at 4e9766a; no code yet.
 
@@ -147,35 +147,35 @@ A SECOND FINDING FOR D6, which WP-01's dirt proof now tests directly: common.sh:
 
 NEXT: GO or HOLD on the estate gate. cc runs the dirt measurement meanwhile, since it is needed under either design.
 
-## (2026-09-21 07:28Z) FYI only -- no response needed.
+## (2026-09-21 07:28Z) FYI only -- no response needed. (handled)
 
 CORRECTION to the proposal just sent: a shell backtick ate one word. "A test option , with run: bin/utilz test" should read "A test option named estate, with run: bin/utilz test". The gates are check all, test all, test estate. Nothing else in it changed.
 
-## (2026-09-21 07:35Z) FYI only -- no response needed.
+## (2026-09-21 07:35Z) FYI only -- no response needed. (handled)
 
 cc localfold done before a compact: 0b748b6 was amended to 91feab4 (the design one-line prettier fix), then 2344dc4. Heads-up on a slip I caused and have repaired: the amend post-rewrite hook said to finish with `intent sync --apply`, and running it with --yes REMOVED 17 views, among them 11 tracked files: issue views 0039-0042 and ST0021 whole realised tree. My explicit-path commit kept every deletion out, I restored all 11 from HEAD, doctor reads 0 findings, and the tree holds only your three views. Nothing of yours was committed or lost. The bin/utilz test dirt measurement is still running across the compact; cc todo 21 carries the pointers.
 
-## (2026-09-21 07:45Z) FYI only -- no response needed.
+## (2026-09-21 07:45Z) FYI only -- no response needed. (handled)
 
 cc: design.md 8b3f31b takes hv decision 6 (Q1, Q2 ruled; D2 option a ruled; WP-02/03 depend on D4/D3) and both devbin corrections: repo: declared because release_repo (release.steps:616-633) refuses with no origin and two remotes; undeclared ci.query prints a skipped row (cmd/release:985), in D1 and D5. Both verified in the vendored source. Next: WP-01 code (tools/ci-state + bats, estate test option, tools in the shellcheck collector, CHANGELOG heading).
 
-## (2026-09-21 07:50Z)
+## (2026-09-21 07:50Z) (handled)
 
 cc: WP-01 slice landed at 954c8b0 (tools/ci-state + 5 bats, AT01 red then green, AC-01.3 computed yes; test estate in_all: false; tools/ in the shellcheck collector, 19 files clean locally; CHANGELOG preamble states the heading). Three asks. (1) AC-01.2 needs a window: every node commits its views and events and holds all intent writes, including pickup and touch, while I run check all then test estate with git status hashed around each (about 12 min at the last load). Say when. (2) AC-01.4: which version does the open section name, 2.10.1 or 2.11.0? Nothing user-facing has landed since 2.10.0. (3) AC-01.1: the read-only release check is yours or hv's to run once (1) is green.
 
-## (2026-09-21 08:15Z)
+## (2026-09-21 08:15Z) (handled)
 
 cc: block and heading landed. 0a63d4b: D1 release: block in bin/.devbin/config.yaml, commands.release off; bin/devbin doctor 12 checks 0 failed, "declared and inert"; with tag: "release" swapped in, doctor FAILs naming release.tag, so its ok is a reading. CHANGELOG opens ## [2.11.0] - unreleased; the core reader _notes_changelog_state answers 2.11.0 open, 2.10.0 dated, 2.12.0 absent. 13a7779 rewords AC-01.1/AC-01.4, WP-01 and design D1/D2 as you ruled, docs before code. 45c3830: the window proof is in WP-01 body; AC-01.2 was test-backed and the contract refuses a non-test AT on it, so it is withdrawn with that reason and AC-01.5 carries it non-test, satisfied; AC-01.4 satisfied; the five bats are named AT01 (ST0019 AC-01.3) for the AT contract. AC-01.1 is yours to confirm; then WP-01 closes and I start WP-02.
 
-## (2026-09-21 17:42Z)
+## (2026-09-21 17:42Z) (handled)
 
 ST0022 design ready for review at b7ea44a (intent/st/ST0022/design.md): hv's names and size rule (decision 13); D5a tall frames record at deviceScaleFactor 2 so the handset layout applies (16:9 unchanged); D5b portrait gallery = contain on blurred ground, Ken Burns back as zoom-only; D5c socials sizes; D5d segments take stills only, no video clips. Need: your GO on the design, the absolute path of Snorkeltoast's 001 reel, and a go before any suite.
 
-## (2026-09-21 17:56Z)
+## (2026-09-21 17:56Z) (handled)
 
 ST0022 WP-01 landed at af6ba30: cargo 173 pass, video.sh AT01+AT30 PASS. 9:16 frames of 001 (one per segment type) in cc's scratchpad frames-001-portrait/ for your AC-01.3 reading. Rulings wanted: venue cover-crop in portrait (finding 1), atwork card past the top safe margin (finding 2), gallery zoom 3% overshoot. Details in the socket message.
 
-## (2026-09-21 18:00Z)
+## (2026-09-21 18:00Z) (handled)
 
 ST0022 rulings 1 (venue contain) and 3 (atwork fixed, not filed) at 0feb622; re-record frames in cc's scratchpad frames-001-portrait-r2/; cargo 173 pass, video.sh AT01+AT30 PASS. Ready for your AC-01.3.
 
