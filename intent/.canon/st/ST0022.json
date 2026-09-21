@@ -42,7 +42,8 @@
       "text": "A 9:16 recording of Snokeltoast 001 reads in every segment type, inside the safe area at phone size, judged by vc from one frame per segment type",
       "kind": "non-test",
       "state": {
-        "is": "unsatisfied"
+        "is": "satisfied",
+        "evidence": "vc, 21 Sep: read the 9:16 recording of Snorkeltoast reel 001 (contact-001-portrait.png; frames 03, 04, 05, 06b, 15, 17 at full size) and the re-record at 0feb622 (look-r2.png: venue early and late, atwork). Every segment type is legible at phone size; socials handle and QR clear; gallery and venue contained on their blurred ground with the zoom-only Ken Burns; atwork card inside the 2.4% safe margin and centred. cargo test -p showreel 173 passed at 0feb622 in vc's own worktree. Advisory, not in scope: TikTok and IG overlay UI on the bottom ~20% and the right edge."
       }
     }
   ],

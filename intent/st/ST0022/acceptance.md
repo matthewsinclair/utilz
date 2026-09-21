@@ -17,7 +17,7 @@ title: showreel video: a selectable aspect ratio for portrait and square reels
 
 - AC-01.1 showreel video --aspect portrait records a 1080x1920 H.264 video at target 1920, with the same frame count as 16:9, and a malformed, zero or past-4:1 ratio is refused by name before any frame; widescreen stays 1920x1080 -- satisfied: yes (computed)
 - AC-01.2 Aspect::parse takes the four names in any case and W:H, refuses the rest by name, and one size rule gives target as the long edge, both even, 16:9 unchanged; the flag beats aspect: in showreel.yaml, which beats widescreen; a bad aspect: refuses at config parse; widescreen is laid out at scale 1 with metrics unchanged and a tall frame at half size, scale 2 -- satisfied: yes (computed)
-- AC-01.3 (non-test) A 9:16 recording of Snokeltoast 001 reads in every segment type, inside the safe area at phone size, judged by vc from one frame per segment type -- satisfied: no
+- AC-01.3 (non-test) A 9:16 recording of Snokeltoast 001 reads in every segment type, inside the safe area at phone size, judged by vc from one frame per segment type -- evidence: vc, 21 Sep: read the 9:16 recording of Snorkeltoast reel 001 (contact-001-portrait.png; frames 03, 04, 05, 06b, 15, 17 at full size) and the re-record at 0feb622 (look-r2.png: venue early and late, atwork). Every segment type is legible at phone size; socials handle and QR clear; gallery and venue contained on their blurred ground with the zoom-only Ken Burns; atwork card inside the 2.4% safe margin and centred. cargo test -p showreel 173 passed at 0feb622 in vc's own worktree. Advisory, not in scope: TikTok and IG overlay UI on the bottom ~20% and the right edge. -- satisfied: yes
 
 ### Group AT01
 

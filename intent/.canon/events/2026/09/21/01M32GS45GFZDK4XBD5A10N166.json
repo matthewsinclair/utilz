@@ -1,0 +1,15 @@
+{
+  "id": "01M32GS45GFZDK4XBD5A10N166",
+  "ts": "2026-09-21T17:38:50.160Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 2026-09-21, directly to vc, on geodica's request (needed today, ahead of the 2.11.0 cut): showreel video takes a selectable aspect ratio, as W:H or by name, via --aspect and showreel.yaml aspect:, the flag winning, default 16:9. Names: widescreen 16:9, portrait 9:16, square 1:1, feed 4:5. Size rule: the reel's target is the LONG edge, the short edge follows from the ratio, both even (1920: 9:16 is 1080x1920, 1:1 is 1920x1920, 4:5 is 1536x1920)."
+  }
+}

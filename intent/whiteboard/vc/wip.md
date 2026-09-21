@@ -43,6 +43,7 @@ _(none)_
 - hv, 2026-09-21, directly to vc: (1) yes to brew audit --strict on packaging/homebrew/utilz.rb in a throwaway local tap, untapped afterwards, with the live install and ~/.local/bin checksummed before and after. (2) matthewsinclair/homebrew-utilz is created and pushed by hv AT THE 2.11.0 CUT, once the formula carries the tag's real commit, never with the placeholder revision.
 - hv, 2026-09-21, directly to vc, on ST0019 WP-05: the formula follows each release by a documented step in a release doc here PLUS a small tools/ script that writes the new tag and that tag's commit into packaging/homebrew/utilz.rb from git, so no SHA is typed by hand (the offline audit cannot catch a wrong one). hv audits, commits and pushes the tap; no release-core after: hook.
 - hv, 2026-09-21, directly to vc: (1) pushed -- upstream/main at d703dd5, 0 ahead 0 behind, CI run 35628486286. (2) 'Ok' to switching devbin's release core on at Utilz (commands.release.enabled: true) once that CI run is green, the read-only release check being its first act, then the 2.11.0 cut through the core.
+- hv, 2026-09-21, directly to vc, on geodica's request (needed today, ahead of the 2.11.0 cut): showreel video takes a selectable aspect ratio, as W:H or by name, via --aspect and showreel.yaml aspect:, the flag winning, default 16:9. Names: widescreen 16:9, portrait 9:16, square 1:1, feed 4:5. Size rule: the reel's target is the LONG edge, the short edge follows from the ratio, both even (1920: 9:16 is 1080x1920, 1:1 is 1920x1920, 4:5 is 1536x1920).
 
 ---
 
