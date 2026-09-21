@@ -5,7 +5,7 @@
     "name": "Control Claude",
     "role": "control",
     "session_id": "d69b4069-611f-4829-8991-1a15c02f53bb",
-    "heartbeat_at": "2026-09-21T07:34:12.340Z",
+    "heartbeat_at": "2026-09-21T07:44:11.865Z",
     "status": "active",
     "focus": "ST0019 WP-01: estate gate design landed; tools/ci-state drafted; bin/utilz test dirt measurement in flight (todo carries the pointers)",
     "claims": [
@@ -586,7 +586,8 @@
       "kind": "todo",
       "seq": 21,
       "text": "ST0019 WP-01 (started; vc GO on the one estate gate). IN FLIGHT AT THE FOLD: the dirt measurement around bin/utilz test (scratchpad dirt.sh; results in scratchpad dirt-estate.{before,after,log}). Read it first, and count a HEAD move and the ST0019 paths as the fold's own. Drafts not yet in the repo: scratchpad ci-state (goes to tools/ci-state) and ci-state.bats.part (appends to opt/utilz/test/install_lib.bats, reusing make_gh_stub). Still to do: the estate test option in bin/.devbin/config.yaml, tools added to CI's shellcheck collector (tests.yml:190), the CHANGELOG heading convention, and each gate's status diff written into WP-01. Scratchpad: /private/tmp/claude-501/-Users-matts-Devel-prj-Utilz/d69b4069-611f-4829-8991-1a15c02f53bb/scratchpad.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-09-21T07:50:01.282Z",
       "recorded_at": "2026-09-21T07:33:25.538Z"
     },
     {
@@ -596,6 +597,14 @@
       "text": "hv's rule, 2026-09-21: gaps in devbin's vendored release core (bin/.devbin/lib/release*) are fixed in devbin, as a default with an override, reported to devbin-dc or devbin-2b through vc. Never patch the vendored copy, never add a Utilz-only branch. Utilz adopts the core (devbin ST0007 WP-08) once ST0019 WP-01 proves the declaration and the gates.",
       "state": "live",
       "recorded_at": "2026-09-21T07:34:29.514Z"
+    },
+    {
+      "node": "cc",
+      "kind": "todo",
+      "seq": 22,
+      "text": "ST0019 WP-01, landed 954c8b0: tools/ci-state plus 5 bats (AT01 green, AC-01.3 computed yes), test estate (in_all: false), tools/ in CI's shellcheck, and the CHANGELOG preamble convention. Left: AC-01.2, each gate (check all, test estate) run in a window with every node holding writes, git status hashed before and after (scratchpad dirt.sh), result written into WP-01; AC-01.4, open '## [X.Y.Z] - unreleased' once hv/vc name the version; AC-01.1, release check run by hv or vc. Scratchpad: /private/tmp/claude-501/-Users-matts-Devel-prj-Utilz/d69b4069-611f-4829-8991-1a15c02f53bb/scratchpad.",
+      "state": "live",
+      "recorded_at": "2026-09-21T07:50:01.576Z"
     }
   ],
   "messages": [
@@ -917,8 +926,18 @@
       "recipient": "cc",
       "body": "hv has ruled all three, each as recommended (vc decision 6): Q1 source formula off the git tag, macOS both architectures; Q2 brew beside utilz install/upgrade, with upgrade/relink/use refusing inside a keg; prez keeps its own number (option a). WP-02 to WP-05 are unblocked. Write the rulings into design.md (Q table, D2, D3, D4) before any WP-02+ code.",
       "fyi": false,
-      "state": "live",
+      "state": "handled",
+      "handled_at": "2026-09-21T07:45:17.956Z",
       "recorded_at": "2026-09-21T07:35:27.407Z"
+    },
+    {
+      "sender": "vc",
+      "recipient": "cc",
+      "body": "Two corrections to ST0019 design.md from devbin (dc read them against lib/release*, devbin-vc checked), and vc has verified both in the vendored source. Neither changes a decision; both change a stated reason. (a) D1's repo: bullet: with remotes: undeclared, release_repo (release.steps:616-633) picks origin, else the ONLY remote, else refuses. Utilz has local and upstream and no origin, so the core REFUSES: 'not exactly one remote -- declare release.repo'. It never reads local, and if it did, the Dropbox url would be refused as naming no host. Declaring repo: stays; the reason is the refusal. (b) D1's ci.query bullet and D5 say an undeclared ci.query skips step 11 'silently'. It does not: cmd/release:985 prints a skipped row, 'no ci.query declared'. The word was vc's, in the D40 ruling this morning, and vc was wrong. Declaring ci.query stays, because a skipped row is not a verdict. Also from dc: Utilz's vendored release files are byte-identical to devbin HEAD; 'test estate' named directly is a legal gate (in_all is read only by test all); tmp/ run logs are ignored; the heading and tag body match the core; D6 works with the core as it is. dc expects no core fix to block Utilz, and WP-01's release check is the first real test.",
+      "fyi": false,
+      "state": "handled",
+      "handled_at": "2026-09-21T07:45:17.956Z",
+      "recorded_at": "2026-09-21T07:37:58.567Z"
     }
   ]
 }

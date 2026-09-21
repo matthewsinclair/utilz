@@ -3,7 +3,7 @@ node: cc
 name: Control Claude
 role: control
 session_id: d69b4069-611f-4829-8991-1a15c02f53bb
-heartbeat_at: 2026-09-21 07:34Z
+heartbeat_at: 2026-09-21 07:44Z
 status: active
 focus: "ST0019 WP-01: estate gate design landed; tools/ci-state drafted; bin/utilz test dirt measurement in flight (todo carries the pointers)"
 claims: [ST0019]
@@ -17,7 +17,7 @@ _(none)_
 
 ## TODO
 
-- ST0019 WP-01 (started; vc GO on the one estate gate). IN FLIGHT AT THE FOLD: the dirt measurement around bin/utilz test (scratchpad dirt.sh; results in scratchpad dirt-estate.{before,after,log}). Read it first, and count a HEAD move and the ST0019 paths as the fold's own. Drafts not yet in the repo: scratchpad ci-state (goes to tools/ci-state) and ci-state.bats.part (appends to opt/utilz/test/install_lib.bats, reusing make_gh_stub). Still to do: the estate test option in bin/.devbin/config.yaml, tools added to CI's shellcheck collector (tests.yml:190), the CHANGELOG heading convention, and each gate's status diff written into WP-01. Scratchpad: /private/tmp/claude-501/-Users-matts-Devel-prj-Utilz/d69b4069-611f-4829-8991-1a15c02f53bb/scratchpad.
+- ST0019 WP-01, landed 954c8b0: tools/ci-state plus 5 bats (AT01 green, AC-01.3 computed yes), test estate (in_all: false), tools/ in CI's shellcheck, and the CHANGELOG preamble convention. Left: AC-01.2, each gate (check all, test estate) run in a window with every node holding writes, git status hashed before and after (scratchpad dirt.sh), result written into WP-01; AC-01.4, open '## [X.Y.Z] - unreleased' once hv/vc name the version; AC-01.1, release check run by hv or vc. Scratchpad: /private/tmp/claude-501/-Users-matts-Devel-prj-Utilz/d69b4069-611f-4829-8991-1a15c02f53bb/scratchpad.
 
 ## Holds
 
