@@ -645,8 +645,8 @@ utilz_version: "^2.0.0" # Compatible framework versions
 
 ## License
 
-Personal use.
-Copyright (c) 2025 Matthew Sinclair
+MIT. See [LICENSE](LICENSE).
+Copyright (c) 2025-2026 Matthew Sinclair
 
 ## Author
 
