@@ -1,0 +1,15 @@
+{
+  "id": "01M31G9MCJWNT0W71D0NHD0ZBE",
+  "ts": "2026-09-21T08:11:08.050Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 2026-09-21, directly to vc: the next release is 2.11.0, so CHANGELOG's open section is '## [2.11.0] - unreleased' (ST0019 AC-01.4). It carries ST0019's Homebrew install."
+  }
+}

@@ -22,6 +22,18 @@ setup_file() {
   export E2E_SRC_PATH="$src"
   rm -rf "$src" "$E2E_PREFIX"
 
+  # A LINKED WORKTREE'S .git IS A POINTER, NOT A REPOSITORY (issue 0043). A
+  # copy of it still points into the real repository, so the fixture commit
+  # below would land there, on that worktree's HEAD. Refused before anything
+  # is copied, and loudly: a skip would read as clean.
+  if [[ ! -d "$UTILZ_HOME/.git" ]]; then
+    echo "e2e setup: $UTILZ_HOME/.git is not a directory (a linked worktree?)." >&2
+    echo "  The fixture copies .git and commits inside the copy; a worktree's" >&2
+    echo "  .git points into the real repository, so that commit would land" >&2
+    echo "  there. Run this file from a primary checkout." >&2
+    return 1
+  fi
+
   # cp -a preserves mtimes, so cargo's fingerprints still match and the
   # publish build is a no-op rather than a cold compile.
   #

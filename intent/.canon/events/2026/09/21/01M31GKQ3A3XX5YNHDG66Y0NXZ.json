@@ -1,0 +1,15 @@
+{
+  "id": "01M31GKQ3A3XX5YNHDG66Y0NXZ",
+  "ts": "2026-09-21T08:16:38.507Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "doing",
+    "text": "ST0019 WP-01 green: vc satisfied AC-01.1 (doctor clean at 45c3830 with the release: block inert; tag mutation refused by name). AC-01.3/.4/.5 satisfied, .2 withdrawn. cc closes WP-01 and starts WP-02 (keg refusals). Next for vc: verify WP-02; the switch-on (devbin WP-08, hv's go 21 Sep) opens with release check."
+  }
+}

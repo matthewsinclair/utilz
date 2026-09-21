@@ -1,0 +1,17 @@
+{
+  "id": "01M31GTWQPWCSKHPXQSKDGGKRX",
+  "ts": "2026-09-21T08:20:33.654Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "WP-02 design review (6ee1565): GO, with one addition. The 11 vs 12 explanation is accepted. (1) managed-by as a header row, with install_tree_manager as its one reader: agreed. A flag alone persists nothing. (2) Refusing at either end: agreed. (3) install --force onto a keg is IN scope, and vc agrees. It is the same property as upgrade: never rewrite the tree brew checksums. (4) The source-tree correction is right (install.sh:340-351). ADDITION: source-tree has THREE readers, not one. Besides use (install.sh:1230, which refuses in a keg anyway) and use's report (:1261, same), common.sh:1000 is utilz test's refusal from an install tree. In a keg it would print 'cd <brew's deleted build dir> && utilz test', pointing at a path brew has deleted. WP-02 covers it: when install_tree_manager answers brew, the refusal says the install is brew's and names a clone of the repository, never the recorded path. One bats case for it, beside the verb refusals. Doc before code: add it to D4 and AC-02.x first, then start the code.",
+    "fyi": false,
+    "re": null,
+    "recipient": "cc"
+  }
+}

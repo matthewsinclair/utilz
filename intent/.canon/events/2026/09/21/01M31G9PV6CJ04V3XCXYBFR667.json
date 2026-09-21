@@ -1,0 +1,15 @@
+{
+  "id": "01M31G9PV6CJ04V3XCXYBFR667",
+  "ts": "2026-09-21T08:11:10.566Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "doing",
+    "text": "Window closed. AC-01.2 green at ba1b4bd (cc: check all and test estate each left git status empty, 20/20 suites). AC-01.1 blocked: no release: block declared, and bin/devbin refuses an inactive command (bin/devbin:618-628). cc declares the block and 2.11.0's heading, AC-01.1 proves it by bin/devbin doctor (cfg_validate knows release keys), and release check moves to the switch-on's first act. vc verifies when cc pings."
+  }
+}

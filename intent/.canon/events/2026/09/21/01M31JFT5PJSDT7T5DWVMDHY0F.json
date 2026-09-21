@@ -1,0 +1,15 @@
+{
+  "id": "01M31JFT5PJSDT7T5DWVMDHY0F",
+  "ts": "2026-09-21T08:49:27.734Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "issues.add",
+  "subject": {
+    "type": "issue",
+    "id": "0043"
+  },
+  "payload": {
+    "severity": "medium",
+    "title": "install_e2e's fixture copies a linked worktree's .git pointer, so its fixture commit would land in the real repository"
+  }
+}

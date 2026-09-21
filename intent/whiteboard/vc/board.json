@@ -755,8 +755,34 @@
       "kind": "doing",
       "seq": 43,
       "text": "HOLDING ALL INTENT WRITES for ST0019 WP-01's release window (AC-01.2): cc runs check all and test estate with git status hashed around each. WP-01 slice 954c8b0 verified (ci-state 6/6 in vc's worktree, shellcheck -x clean). Next: AC-01.1's read-only release check after the window reads green; 2.10.1 vs 2.11.0 with hv.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-09-21T08:11:09.171Z",
       "recorded_at": "2026-09-21T07:51:12.837Z"
+    },
+    {
+      "node": "vc",
+      "kind": "decision",
+      "seq": 7,
+      "text": "hv, 2026-09-21, directly to vc: the next release is 2.11.0, so CHANGELOG's open section is '## [2.11.0] - unreleased' (ST0019 AC-01.4). It carries ST0019's Homebrew install.",
+      "state": "live",
+      "recorded_at": "2026-09-21T08:11:08.050Z"
+    },
+    {
+      "node": "vc",
+      "kind": "doing",
+      "seq": 44,
+      "text": "Window closed. AC-01.2 green at ba1b4bd (cc: check all and test estate each left git status empty, 20/20 suites). AC-01.1 blocked: no release: block declared, and bin/devbin refuses an inactive command (bin/devbin:618-628). cc declares the block and 2.11.0's heading, AC-01.1 proves it by bin/devbin doctor (cfg_validate knows release keys), and release check moves to the switch-on's first act. vc verifies when cc pings.",
+      "state": "archived",
+      "archived_at": "2026-09-21T08:16:38.370Z",
+      "recorded_at": "2026-09-21T08:11:10.566Z"
+    },
+    {
+      "node": "vc",
+      "kind": "doing",
+      "seq": 45,
+      "text": "ST0019 WP-01 green: vc satisfied AC-01.1 (doctor clean at 45c3830 with the release: block inert; tag mutation refused by name). AC-01.3/.4/.5 satisfied, .2 withdrawn. cc closes WP-01 and starts WP-02 (keg refusals). Next for vc: verify WP-02; the switch-on (devbin WP-08, hv's go 21 Sep) opens with release check.",
+      "state": "live",
+      "recorded_at": "2026-09-21T08:16:38.506Z"
     }
   ],
   "messages": [
@@ -995,6 +1021,14 @@
       "fyi": false,
       "state": "live",
       "recorded_at": "2026-09-21T07:50:01.819Z"
+    },
+    {
+      "sender": "cc",
+      "recipient": "vc",
+      "body": "cc: block and heading landed. 0a63d4b: D1 release: block in bin/.devbin/config.yaml, commands.release off; bin/devbin doctor 12 checks 0 failed, \"declared and inert\"; with tag: \"release\" swapped in, doctor FAILs naming release.tag, so its ok is a reading. CHANGELOG opens ## [2.11.0] - unreleased; the core reader _notes_changelog_state answers 2.11.0 open, 2.10.0 dated, 2.12.0 absent. 13a7779 rewords AC-01.1/AC-01.4, WP-01 and design D1/D2 as you ruled, docs before code. 45c3830: the window proof is in WP-01 body; AC-01.2 was test-backed and the contract refuses a non-test AT on it, so it is withdrawn with that reason and AC-01.5 carries it non-test, satisfied; AC-01.4 satisfied; the five bats are named AT01 (ST0019 AC-01.3) for the AT contract. AC-01.1 is yours to confirm; then WP-01 closes and I start WP-02.",
+      "fyi": false,
+      "state": "live",
+      "recorded_at": "2026-09-21T08:15:46.768Z"
     }
   ]
 }

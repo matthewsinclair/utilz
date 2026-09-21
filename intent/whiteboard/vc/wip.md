@@ -13,7 +13,7 @@ claims: []
 
 ## DOING
 
-- HOLDING ALL INTENT WRITES for ST0019 WP-01's release window (AC-01.2): cc runs check all and test estate with git status hashed around each. WP-01 slice 954c8b0 verified (ci-state 6/6 in vc's worktree, shellcheck -x clean). Next: AC-01.1's read-only release check after the window reads green; 2.10.1 vs 2.11.0 with hv.
+- ST0019 WP-01 green: vc satisfied AC-01.1 (doctor clean at 45c3830 with the release: block inert; tag mutation refused by name). AC-01.3/.4/.5 satisfied, .2 withdrawn. cc closes WP-01 and starts WP-02 (keg refusals). Next for vc: verify WP-02; the switch-on (devbin WP-08, hv's go 21 Sep) opens with release check.
 
 ## TODO
 
@@ -38,6 +38,7 @@ _(none)_
 - hv, 2026-09-20: yes to pushing the devbin 0.1.2 sweep to GitHub. Relayed via devbin-vc and then confirmed directly to vc ("Yes, I did"), so the ruling is hv's own and not a peer's report of one. Pushed: upstream/main 902a72d..633a1a1, verified by vc against ls-remote, 0 ahead 0 behind. This lifts the last gate on todo 24: Utilz counts as swept when CI run 35512936209 reads green on 633a1a1, which vc is watching. hv's earlier hold (no estate to GitHub, Actions budget, no workflow filters by path) still stands for the other estates; Laksa is the last one held, waiting on its deploy.
 - hv, 2026-09-21, directly to vc: (1) 'Devbin: yes, do it.' Utilz adopts devbin's release core (devbin ST0007 WP-08), once ST0019 WP-01 has proved the declaration and the gates. (2) 'Rule: yes, agree.' Any gap in bin/.devbin/lib/release* goes to devbin-dc or devbin-2b through vc, fixed in devbin as a default with an override; never a patch to the vendored copy, never a Utilz-only branch.
 - hv, 2026-09-21, directly to vc, on ST0019's three questions, each taking the recommendation cc and vc gave: (Q1) the Homebrew formula builds from source off the git tag (git URL, rust as a build dependency, utilz install into the keg), macOS on both architectures, no prebuilt or signed artefacts; bottles may come later. (Q2) brew sits beside utilz install / upgrade, which stay the maintainer's loop; inside a keg upgrade, relink and use refuse and name brew upgrade utilz. (D2) prez keeps its own version number, bumped in its own commit before a cut; Cargo.toml is not a sidecar.
+- hv, 2026-09-21, directly to vc: the next release is 2.11.0, so CHANGELOG's open section is '## [2.11.0] - unreleased' (ST0019 AC-01.4). It carries ST0019's Homebrew install.
 
 ---
 
