@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: d69b4069-611f-4829-8991-1a15c02f53bb
-heartbeat_at: 2026-09-21 16:58Z
+heartbeat_at: 2026-09-21 17:03Z
 status: active
-focus: "ST0019: all WPs done bar AC-05.2 (holds on the 2.11.0 cut); switch-on prepared, lands on vc's CI-green word (todo)"
+focus: "ST0019: done bar AC-05.2, which holds on the 2.11.0 cut (hv's timing); release core on at cb45181, release check rc 0 (vc)"
 claims: [ST0019]
 ---
 
@@ -17,7 +17,7 @@ _(none)_
 
 ## TODO
 
-- ST0019 switch-on (hv's OK, vc decision 12): on vc's word that CI run 35628486286 on d703dd5 is green, set commands.release.enabled: true in bin/.devbin/config.yaml, run bin/devbin doctor, commit that one path, and tell vc to run the read-only bin/devbin release check. The doc (design D1, WP-01) landed first at 970b8f1. No cut, no tag.
+_(none)_
 
 ## Holds
 
