@@ -1,0 +1,14 @@
+{
+  "id": "01M32WVJ3NDFMJ6Y5NCG1FJGQK",
+  "ts": "2026-09-21T21:09:52.886Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.satisfy",
+  "subject": {
+    "type": "ac",
+    "id": "ST0019/AC-05.2"
+  },
+  "payload": {
+    "evidence": "hv, 2026-09-21, after the 2.11.0 tag (7fc9bb5) and the tap's creation (github.com/matthewsinclair/homebrew-utilz, formula written by tools/formula-bump at d5899ee): brew tap matthewsinclair/utilz; brew audit --strict clean; brew install built 2.11.0 from source in 44 s (150 files); utilz doctor inside the keg 7/7 including 'Install matches its manifest'. vc then read: utilz --version utilz:2.11.0 at 7fc9bb5, prez 2.3.0; manifest managed-by brew, source-commit 7fc9bb54e1e2; utilz upgrade from the keg exits 1 naming 'brew upgrade utilz'; the announce shows 'none' rather than an enclosing repository's commit (0044)."
+  }
+}

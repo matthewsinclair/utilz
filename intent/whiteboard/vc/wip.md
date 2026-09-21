@@ -13,7 +13,7 @@ claims: []
 
 ## DOING
 
-- 2.11.0 awaits hv's tag: tmp/release-2.11.0.sh tags 7fc9bb5 (tree = vc-verified 890064e) and pushes the tag only; CI green on 7b8a928 and 81cae67. Then vc: tools/formula-bump 2.11.0 + commit; hv: tap + brew install (ST0019 AC-05.2). 0045 fixed (e079c08), verified red/green by vc, ST0023 closed at fe7ed99; it rides in 2.11.1, ideally the first cut through the core once devbin 0.1.5 is swept.
+- 2.11.0 SHIPPED: tag 7fc9bb5 on both remotes; the Homebrew tap matthewsinclair/homebrew-utilz is live, and brew install passes doctor 7/7 (managed-by brew). ST0019 AC-05.2 satisfied by vc, 10 of 10 plus 2 withdrawn; cc closes it. Next: 2.11.1 carrying 0045's fix (e079c08), ideally the first cut through devbin's core once 0.1.5 is swept at Utilz.
 
 ## TODO
 

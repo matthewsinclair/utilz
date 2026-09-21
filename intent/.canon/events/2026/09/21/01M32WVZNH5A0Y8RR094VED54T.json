@@ -1,0 +1,15 @@
+{
+  "id": "01M32WVZNH5A0Y8RR094VED54T",
+  "ts": "2026-09-21T21:10:06.769Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "doing",
+    "text": "2.11.0 SHIPPED: tag 7fc9bb5 on both remotes; the Homebrew tap matthewsinclair/homebrew-utilz is live, and brew install passes doctor 7/7 (managed-by brew). ST0019 AC-05.2 satisfied by vc, 10 of 10 plus 2 withdrawn; cc closes it. Next: 2.11.1 carrying 0045's fix (e079c08), ideally the first cut through devbin's core once 0.1.5 is swept at Utilz."
+  }
+}

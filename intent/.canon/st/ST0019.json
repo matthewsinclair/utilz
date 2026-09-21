@@ -150,7 +150,8 @@
       "text": "Once hv has created and pushed matthewsinclair/homebrew-utilz at the 2.11.0 cut, with the tag's real commit in the formula, brew install matthewsinclair/utilz/utilz installs Utilz from the bare tag, and utilz doctor passes in the keg, manifest included.",
       "kind": "non-test",
       "state": {
-        "is": "unsatisfied"
+        "is": "satisfied",
+        "evidence": "hv, 2026-09-21, after the 2.11.0 tag (7fc9bb5) and the tap's creation (github.com/matthewsinclair/homebrew-utilz, formula written by tools/formula-bump at d5899ee): brew tap matthewsinclair/utilz; brew audit --strict clean; brew install built 2.11.0 from source in 44 s (150 files); utilz doctor inside the keg 7/7 including 'Install matches its manifest'. vc then read: utilz --version utilz:2.11.0 at 7fc9bb5, prez 2.3.0; manifest managed-by brew, source-commit 7fc9bb54e1e2; utilz upgrade from the keg exits 1 naming 'brew upgrade utilz'; the announce shows 'none' rather than an enclosing repository's commit (0044)."
       }
     },
     {
