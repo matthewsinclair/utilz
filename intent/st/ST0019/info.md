@@ -1,7 +1,7 @@
 ---
 st_id: ST0019
 title: Release Utilz through dvb build release and a Homebrew tap, like Intent
-status: Triage
+status: WIP
 created: 2026-09-14
 completed:
 ---

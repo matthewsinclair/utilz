@@ -4,7 +4,7 @@ An index of every steel thread in the project. A steel thread is a self-containe
 
 | ID     | Title                                                                           | Status    | Created    | Completed            |
 | ------ | ------------------------------------------------------------------------------- | --------- | ---------- | -------------------- |
-| ST0019 | Release Utilz through dvb build release and a Homebrew tap, like Intent         | Triage    | 2026-09-14 |                      |
+| ST0019 | Release Utilz through dvb build release and a Homebrew tap, like Intent         | WIP       | 2026-09-14 |                      |
 | ST0021 | showreel exports a reel as a video file                                         | Completed | 2026-09-19 | 2026-09-20           |
 | ST0020 | prez: a theme name defined twice on the search path refuses, when a caller asks | Completed | 2026-09-14 | 2026-09-14           |
 | ST0018 | prez: a fallback theme for decks that name none (PREZ_DEFAULT_THEME)            | Completed | 2026-09-14 | 2026-09-14           |

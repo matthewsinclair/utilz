@@ -4,11 +4,11 @@ A DOING / TODO / DONE view, projected from steel-thread and work-package status:
 
 ## DOING
 
-_(none)_
+- [-] ST0019: Release Utilz through dvb build release and a Homebrew tap, like Intent
 
 ## TODO
 
-- [?] ST0019: Release Utilz through dvb build release and a Homebrew tap, like Intent
+_(none)_
 
 ## DONE
 

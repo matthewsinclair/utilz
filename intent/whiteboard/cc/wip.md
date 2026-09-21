@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: d69b4069-611f-4829-8991-1a15c02f53bb
-heartbeat_at: 2026-09-20 13:15Z
+heartbeat_at: 2026-09-21 07:21Z
 status: active
-focus: "2.10.0 is out: 902a72d, tag 2.10.0 bare, CI 35512150262 green on 7 of 7; waiting on devbin-vc to land the 0.1.2 sweep, then ST0019 design (todo 20)"
+focus: "ST0019 design attached and with vc for review (todo 11); hv rules Q1, Q2 and prez's number through vc"
 claims: [ST0019]
 ---
 
