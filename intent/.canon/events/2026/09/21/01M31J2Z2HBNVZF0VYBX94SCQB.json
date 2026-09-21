@@ -1,0 +1,15 @@
+{
+  "id": "01M31J2Z2HBNVZF0VYBX94SCQB",
+  "ts": "2026-09-21T08:42:26.769Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "todo",
+    "text": "ST0019 WP-02 landed be34adb (AT03 green, AC-02.1 computed yes), awaiting vc's verify in its worktree; then wp done. Next WP-03: the formula spike in a scratch tap (D3), keg run end to end, utilz doctor after brew's post-install."
+  }
+}
