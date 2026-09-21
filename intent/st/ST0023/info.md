@@ -1,9 +1,9 @@
 ---
 st_id: ST0023
 title: showreel: a long socials handle fits a portrait frame (issue 0045)
-status: WIP
+status: Completed
 created: 2026-09-21
-completed:
+completed: 2026-09-21
 ---
 
 # ST0023: showreel: a long socials handle fits a portrait frame (issue 0045)
@@ -20,9 +20,9 @@ Roles: cc builds, vc reviews and verifies, hv rules.
 
 ## Work Packages
 
-| WP    | Title                                              | Size | Status      |
-| ----- | -------------------------------------------------- | ---- | ----------- |
-| WP-01 | Fit the socials handle to its pane, red test first | S    | Not Started |
+| WP    | Title                                              | Size | Status |
+| ----- | -------------------------------------------------- | ---- | ------ |
+| WP-01 | Fit the socials handle to its pane, red test first | S    | Done   |
 
 ## Acceptance
 

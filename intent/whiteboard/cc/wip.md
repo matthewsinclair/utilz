@@ -3,10 +3,10 @@ node: cc
 name: Control Claude
 role: control
 session_id: d69b4069-611f-4829-8991-1a15c02f53bb
-heartbeat_at: 2026-09-21 18:32Z
+heartbeat_at: 2026-09-21 19:28Z
 status: active
-focus: "Waiting on vc's plan for the patch release; ST0019 holds on the cut (AC-05.2); ST0022 closed"
-claims: [ST0019, ST0023]
+focus: "Waiting on hv's 2.11.0 tag, then 2.11.1 (vc); ST0019 holds on the tap; ST0022 and ST0023 closed"
+claims: [ST0019]
 ---
 
 # Control Claude (cc)

@@ -3,8 +3,9 @@
   "id": "ST0023",
   "title": "showreel: a long socials handle fits a portrait frame (issue 0045)",
   "slug": "showreel-a-long-socials-handle-fits-a-portrait-f",
-  "status": "wip",
+  "status": "completed",
   "created": "2026-09-21",
+  "completed": "2026-09-21",
   "objective": "At 9:16 a long socials handle fits the frame, inside the safe margin and never below a legible floor, and widescreen records as before (issue 0045, design.md).",
   "context": "geodica, through vc, 2026-09-21: recording Snokeltoast's reels with `--aspect portrait` (ST0022, released in 2.11.0), the handle \"forbiddenplanetnottingham\" ran off both edges of the frame. It is fixed for the next release. Fitting headlines in general is scope, and with hv.\n\nRoles: cc builds, vc reviews and verifies, hv rules.",
   "body": "",
@@ -14,7 +15,7 @@
       "seq": 1,
       "title": "Fit the socials handle to its pane, red test first",
       "scope": "S",
-      "status": "not-started",
+      "status": "done",
       "objective": "The player fits a socials handle to its pane when it is too wide, down to its clamp floor, and a video.sh test written red first proves it at portrait.",
       "body": "",
       "preamble": ""
@@ -34,7 +35,8 @@
       "text": "vc reads the portrait socials frame of Snokeltoast 001 with the handle forbiddenplanetnottingham and finds it whole, inside the safe margin, and legible",
       "kind": "non-test",
       "state": {
-        "is": "unsatisfied"
+        "is": "satisfied",
+        "evidence": "vc, 21 Sep: read look-0045.png. Before, 001's socials page at 9:16 with handle forbiddenplanetnottingham runs off both edges; after, the handle is on one line about 3% clear of each side, inside the 2.4% safe margin, and legible at phone size. In vc's own worktree: video.sh --strict ST0023-AT01 FAILS with e079c08~1's player.html and PASSES at e079c08."
       }
     }
   ],

@@ -5,12 +5,11 @@
     "name": "Control Claude",
     "role": "control",
     "session_id": "d69b4069-611f-4829-8991-1a15c02f53bb",
-    "heartbeat_at": "2026-09-21T18:32:31.998Z",
+    "heartbeat_at": "2026-09-21T19:28:38.831Z",
     "status": "active",
-    "focus": "Waiting on vc's plan for the patch release; ST0019 holds on the cut (AC-05.2); ST0022 closed",
+    "focus": "Waiting on hv's 2.11.0 tag, then 2.11.1 (vc); ST0019 holds on the tap; ST0022 and ST0023 closed",
     "claims": [
-      "ST0019",
-      "ST0023"
+      "ST0019"
     ],
     "recorded_at": "2026-09-14T08:46:06.602Z",
     "authored_at": "2026-09-11 16:17Z",

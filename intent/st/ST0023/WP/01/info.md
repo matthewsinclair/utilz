@@ -2,7 +2,7 @@
 wp_id: WP-01
 title: Fit the socials handle to its pane, red test first
 scope: S
-status: Not Started
+status: Done
 ---
 
 # WP-01: Fit the socials handle to its pane, red test first
