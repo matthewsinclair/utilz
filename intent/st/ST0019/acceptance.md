@@ -27,7 +27,7 @@ title: Release Utilz through dvb build release and a Homebrew tap, like Intent
 
 ### WP-03 -- Spike: a git-URL formula built in a scratch tap, the keg run end to end (status: WIP)
 
-- AC-03.1 (non-test) A keg built from a git-URL formula in a scratch tap, keg_only and from this repository at a named revision, passes utilz doctor after brew's post-install, manifest included and still recording managed-by brew. Every dispatcher link in it answers --version, and upgrade, relink and use refuse from it, naming brew upgrade utilz. The keg and the tap are removed afterwards. -- satisfied: no
+- AC-03.1 (non-test) A keg built from a git-URL formula in a scratch tap, keg_only and from this repository at a named revision, passes utilz doctor after brew's post-install, manifest included and still recording managed-by brew. Every dispatcher link in it answers --version, and upgrade, relink and use refuse from it, naming brew upgrade utilz. The keg and the tap are removed afterwards. -- evidence: WP-03 body, spike of 2026-09-21 at 274e64f: keg /opt/homebrew/Cellar/utilz/2.11.0-spike built keg_only from a scratch tap; doctor inside it passed every check including 'Install matches its manifest', with managed-by brew in the header; all 16 links answered --version rc 0; upgrade, install --force, relink, use opt and use dev each refused rc 1 naming brew upgrade utilz; uninstall and untap left no Cellar, opt link, tap or bin link, and the spike's utilz--git cache was removed. -- satisfied: yes
 
 ### WP-04 -- The tap matthewsinclair/homebrew-utilz and its formula (status: Not Started)
 

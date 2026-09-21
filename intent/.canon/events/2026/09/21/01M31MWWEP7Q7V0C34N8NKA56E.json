@@ -1,0 +1,14 @@
+{
+  "id": "01M31MWWEP7Q7V0C34N8NKA56E",
+  "ts": "2026-09-21T09:31:33.207Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.satisfy",
+  "subject": {
+    "type": "ac",
+    "id": "ST0019/AC-03.1"
+  },
+  "payload": {
+    "evidence": "WP-03 body, spike of 2026-09-21 at 274e64f: keg /opt/homebrew/Cellar/utilz/2.11.0-spike built keg_only from a scratch tap; doctor inside it passed every check including 'Install matches its manifest', with managed-by brew in the header; all 16 links answered --version rc 0; upgrade, install --force, relink, use opt and use dev each refused rc 1 naming brew upgrade utilz; uninstall and untap left no Cellar, opt link, tap or bin link, and the spike's utilz--git cache was removed."
+  }
+}
