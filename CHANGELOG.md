@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 The section still open names its version: `## [X.Y.Z] - unreleased`, never `## [Unreleased]`. Devbin's release core finds a section by its version and dates it at the cut; an unnamed section is one it cannot find (ST0019 D2).
 
+## [2.11.0] - unreleased
+
 ## [2.10.0] - 2026-09-20
 
 Minor: **`prez showreel video` is new**, **`PREZ_THEME_DUPLICATES=refuse` can refuse a theme name defined twice**, and **`utilz doctor` reports every optional dependency a utility declares**. prez goes from 2.1.0 to 2.2.0.
