@@ -7,8 +7,8 @@ A DOING / TODO / DONE view, projected from steel-thread and work-package status:
 - [-] ST0019: Release Utilz through dvb build release and a Homebrew tap, like Intent
   - [x] 01: Gates, tools/ci-state, the heading convention, and gates that leave no dirt
   - [x] 02: The keg as an install tree: the discriminator and the verbs that refuse
-  - [-] 03: Spike: a git-URL formula built in a scratch tap, the keg run end to end
-  - [ ] 04: The tap matthewsinclair/homebrew-utilz and its formula
+  - [x] 03: Spike: a git-URL formula built in a scratch tap, the keg run end to end
+  - [-] 04: The tap matthewsinclair/homebrew-utilz and its formula
   - [ ] 05: The formula bump after a release: after: or a documented step
 
 ## TODO

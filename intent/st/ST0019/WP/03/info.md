@@ -2,7 +2,7 @@
 wp_id: WP-03
 title: Spike: a git-URL formula built in a scratch tap, the keg run end to end
 scope: S
-status: WIP
+status: Done
 ---
 
 # WP-03: Spike: a git-URL formula built in a scratch tap, the keg run end to end

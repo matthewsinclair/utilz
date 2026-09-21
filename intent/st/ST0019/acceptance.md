@@ -25,13 +25,14 @@ title: Release Utilz through dvb build release and a Homebrew tap, like Intent
 
 - AC-02.1 A publish with --managed-by brew records managed-by brew in its manifest, and every other publish records utilz. When the tree they run from or the tree they target is a keg, utilz upgrade, relink, use and install --force refuse and name brew upgrade utilz. In a keg, utilz test's refusal names a clone of the repository, not the keg's source-tree, which is brew's deleted build directory. In a non-brew install tree, and with a manifest from before the row existed, all of them behave as before. -- satisfied: yes (computed)
 
-### WP-03 -- Spike: a git-URL formula built in a scratch tap, the keg run end to end (status: WIP)
+### WP-03 -- Spike: a git-URL formula built in a scratch tap, the keg run end to end (status: Done)
 
 - AC-03.1 (non-test) A keg built from a git-URL formula in a scratch tap, keg_only and from this repository at a named revision, passes utilz doctor after brew's post-install, manifest included and still recording managed-by brew. Every dispatcher link in it answers --version, and upgrade, relink and use refuse from it, naming brew upgrade utilz. The keg and the tap are removed afterwards. -- evidence: WP-03 body, spike of 2026-09-21 at 274e64f: keg /opt/homebrew/Cellar/utilz/2.11.0-spike built keg_only from a scratch tap; doctor inside it passed every check including 'Install matches its manifest', with managed-by brew in the header; all 16 links answered --version rc 0; upgrade, install --force, relink, use opt and use dev each refused rc 1 naming brew upgrade utilz; uninstall and untap left no Cellar, opt link, tap or bin link, and the spike's utilz--git cache was removed. -- satisfied: yes
 
-### WP-04 -- The tap matthewsinclair/homebrew-utilz and its formula (status: Not Started)
+### WP-04 -- The tap matthewsinclair/homebrew-utilz and its formula (status: WIP)
 
-- AC-04.1 (non-test) The formula in matthewsinclair/homebrew-utilz passes brew audit --strict and installs Utilz from its bare tag. -- satisfied: no
+- AC-04.1 (non-test) packaging/homebrew/utilz.rb and an MIT LICENSE are in this repository, the README's license section says MIT, and the formula passes brew audit --strict in a scratch tap, removed afterwards. -- satisfied: no
+- AC-04.2 (non-test) Once hv has created and pushed matthewsinclair/homebrew-utilz and 2.11.0 is tagged, brew install matthewsinclair/utilz/utilz installs Utilz from the bare tag, and utilz doctor passes in the keg, manifest included. -- satisfied: no
 
 ### WP-05 -- The formula bump after a release: after: or a documented step (status: Not Started)
 
@@ -55,11 +56,11 @@ _(no tests in this group)_
 
 _(no tests in this group)_
 
-### WP-03 -- Spike: a git-URL formula built in a scratch tap, the keg run end to end (status: WIP)
+### WP-03 -- Spike: a git-URL formula built in a scratch tap, the keg run end to end (status: Done)
 
 _(no tests in this group)_
 
-### WP-04 -- The tap matthewsinclair/homebrew-utilz and its formula (status: Not Started)
+### WP-04 -- The tap matthewsinclair/homebrew-utilz and its formula (status: WIP)
 
 _(no tests in this group)_
 

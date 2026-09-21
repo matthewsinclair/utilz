@@ -1,0 +1,14 @@
+{
+  "id": "01M31NGSSR58DNYQTQQ9D9VFWM",
+  "ts": "2026-09-21T09:42:25.849Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.edit",
+  "subject": {
+    "type": "ac",
+    "id": "ST0019/AC-04.1"
+  },
+  "payload": {
+    "text": "packaging/homebrew/utilz.rb and an MIT LICENSE are in this repository, the README's license section says MIT, and the formula passes brew audit --strict in a scratch tap, removed afterwards."
+  }
+}

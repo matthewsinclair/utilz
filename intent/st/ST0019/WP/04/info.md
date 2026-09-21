@@ -2,14 +2,14 @@
 wp_id: WP-04
 title: The tap matthewsinclair/homebrew-utilz and its formula
 scope: S
-status: Not Started
+status: WIP
 ---
 
 # WP-04: The tap matthewsinclair/homebrew-utilz and its formula
 
 ## Objective
 
-The tap matthewsinclair/homebrew-utilz exists with a formula that builds Utilz from source off its bare git tag (design D3): top-level url, depends_on rust for the build, yq required and the other utilities' dependencies recommended, the tree in libexec with a bin symlink for each dispatcher link, and a caveat pointing at utilz doctor. It passes brew audit --strict.
+The formula and the LICENSE are written in this repository, ready for hv to create and push the tap matthewsinclair/homebrew-utilz (design D3). packaging/homebrew/utilz.rb, outside the published set, builds Utilz from source off the GitHub git URL at the bare tag: top-level url with tag and revision, license "MIT", depends_on rust for the build, yq the one runtime dependency, depends_on :macos, the tree published into libexec by utilz install --managed-by brew with a bin symlink for each dispatcher link, a caveat pointing at utilz doctor for the utilities' own dependencies, and a test that runs utilz --version. The revision is a marked placeholder until 2.11.0 is cut. LICENSE is MIT (hv, 2026-09-21), and the README's license section matches it. brew audit --strict runs against the formula in a scratch tap, on hv's go. Creating and pushing the tap are hv's; the install from it at the bare tag follows the release.
 
 ## Acceptance
 
