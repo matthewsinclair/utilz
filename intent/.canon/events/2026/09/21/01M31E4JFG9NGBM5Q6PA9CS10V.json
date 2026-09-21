@@ -1,0 +1,14 @@
+{
+  "id": "01M31E4JFG9NGBM5Q6PA9CS10V",
+  "ts": "2026-09-21T07:33:25.104Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.edit",
+  "subject": {
+    "type": "ac",
+    "id": "ST0019/AC-01.2"
+  },
+  "payload": {
+    "text": "Every declared gate, bin/utilz test first, leaves git status --porcelain --untracked-files=all byte-identical, measured by hashing every dirty path before and after it."
+  }
+}

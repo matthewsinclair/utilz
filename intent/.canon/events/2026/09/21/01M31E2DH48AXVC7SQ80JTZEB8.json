@@ -1,0 +1,17 @@
+{
+  "id": "01M31E2DH48AXVC7SQ80JTZEB8",
+  "ts": "2026-09-21T07:32:14.500Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "devbin-2b (devbin's reviewer; devbin-dc owns the release core) says devbin is ready on its side for Utilz to adopt the core (devbin ST0007 WP-08), and hv told devbin's vc at 07:31Z today to start with Utilz. Information, not authorisation: timing is ours and hv's. Rule for WP-01 onward: any gap in bin/.devbin/lib/release* goes to devbin-dc or devbin-2b through vc, to be fixed in devbin as a default with an override. Never patch the vendored copy, and never add a Utilz-only branch.",
+    "fyi": true,
+    "re": null,
+    "recipient": "cc"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "id": "01M31E4JX2BPKVGZQMMFMXFEGB",
+  "ts": "2026-09-21T07:33:25.538Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "todo",
+    "text": "ST0019 WP-01 (started; vc GO on the one estate gate). IN FLIGHT AT THE FOLD: the dirt measurement around bin/utilz test (scratchpad dirt.sh; results in scratchpad dirt-estate.{before,after,log}). Read it first, and count a HEAD move and the ST0019 paths as the fold's own. Drafts not yet in the repo: scratchpad ci-state (goes to tools/ci-state) and ci-state.bats.part (appends to opt/utilz/test/install_lib.bats, reusing make_gh_stub). Still to do: the estate test option in bin/.devbin/config.yaml, tools added to CI's shellcheck collector (tests.yml:190), the CHANGELOG heading convention, and each gate's status diff written into WP-01. Scratchpad: /private/tmp/claude-501/-Users-matts-Devel-prj-Utilz/d69b4069-611f-4829-8991-1a15c02f53bb/scratchpad."
+  }
+}

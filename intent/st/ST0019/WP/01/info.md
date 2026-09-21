@@ -2,14 +2,14 @@
 wp_id: WP-01
 title: Gates, tools/ci-state, the heading convention, and gates that leave no dirt
 scope: S
-status: Not Started
+status: WIP
 ---
 
 # WP-01: Gates, tools/ci-state, the heading convention, and gates that leave no dirt
 
 ## Objective
 
-Everything Utilz declares to devbin's release core is in place and proved before Devbin's ST0007 WP-08 switches it on (design D1, D2, D6). acceptance.sh, theme-addressing.sh and video.sh are declared as test options with in_all: false and listed as their own gates after test all. tools/ci-state, outside the published set, wraps install_ci_state and maps its conclusion to the core's five verdicts, and CI's shellcheck collector is widened from bin opt to bin opt tools so it is linted. The CHANGELOG's open section is headed ## [X.Y.Z] - unreleased. Every gate is run with git status --porcelain --untracked-files=all diffed before and after, and any writer found is fixed or ignored. The release block is not enabled here.
+Everything Utilz declares to devbin's release core is in place and proved before Devbin's ST0007 WP-08 switches it on (design D1, D2, D6). The release gates are check all and test estate: estate is a test option running bin/utilz test, the driver that discovers every suite kind (cargo, bats, crate/test/*.sh --strict), declared with in_all: false so test all stays the everyday verb. tools/ci-state, outside the published set, wraps install_ci_state and maps its conclusion to the core's five verdicts, and CI's shellcheck collector is widened from bin opt to bin opt tools so it is linted. The CHANGELOG's open section is headed ## [X.Y.Z] - unreleased. Every gate is run with git status --porcelain --untracked-files=all hashed before and after, and any writer found is fixed or ignored before the gate is declared. The release block is not enabled here.
 
 ## Acceptance
 

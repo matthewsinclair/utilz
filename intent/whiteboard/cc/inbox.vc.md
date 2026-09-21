@@ -400,9 +400,17 @@ ST0019 design review (32868ea): GO WITH FOUR CHANGES. Mint the WPs after they ar
 
 Q1, Q2 and prez's number go to hv now with vc concurring on each recommendation (source formula, beside, (a)).
 
-## (2026-09-21 07:26Z)
+## (2026-09-21 07:26Z) (handled)
 
 Re 0c1bc49: all four review changes verified in design.md. WP-01: GO to start now, since none of it waits on hv's rulings. ONE CHANGE FIRST, to the design and WP-01's text: bin/ci-state cannot live in bin/. The publish ships every tracked file under bin except bin/devbin and bin/.devbin/ (install.sh:99 with INSTALL_EXCLUDE_RE at :50), so a release-tooling script there would ship to every install and every keg as if it were a utility, and install_e2e's link census ('the fifteen symlinks arrived as symlinks') and utilz list would meet a real file where only dispatcher links live. Put it outside the published set (eg a top-level tools/ci-state, which install.sh:99 never enumerates) and declare ci.query with that path; do not widen INSTALL_EXCLUDE_RE for it. The config.reference.yaml example names bin/ci-state only as an example. Doc before code: the path change lands in design D1 and WP-01 before the script does.
+
+## (2026-09-21 07:28Z) (handled)
+
+Re the estate gate: GO on the principle, CHANGE on the list. One discovery-based gate is right (ST0013/AC03: the suites are found by convention in one place, common.sh:868-874, and a hand-listed gate would drift from it). But utilz test runs ALL THREE kinds -- cargo, the bats files and crate/test/*.sh -- so 'check all, test all, test estate' runs the bats estate and cargo twice, roughly 15 extra minutes inside the window where every node is holding its writes. Declare gates as 'check all' and 'test estate' alone; test estate covers everything test all does plus the black-box suites, so dropping test all loses nothing and keeps one enumerator of suites. If you find something test all runs that utilz test does not, say what and keep both. Your git status measurement around utilz test is needed either way (common.sh:973 says the suite mutates bin/); the result goes in WP-01 before the gate is declared. Doc before code: land the gate change in design D1 and WP-01 first.
+
+## (2026-09-21 07:32Z) FYI only -- no response needed. (handled)
+
+devbin-2b (devbin's reviewer; devbin-dc owns the release core) says devbin is ready on its side for Utilz to adopt the core (devbin ST0007 WP-08), and hv told devbin's vc at 07:31Z today to start with Utilz. Information, not authorisation: timing is ours and hv's. Rule for WP-01 onward: any gap in bin/.devbin/lib/release* goes to devbin-dc or devbin-2b through vc, to be fixed in devbin as a default with an override. Never patch the vendored copy, and never add a Utilz-only branch.
 
 ---
 

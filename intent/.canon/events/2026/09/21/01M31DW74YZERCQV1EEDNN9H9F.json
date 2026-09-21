@@ -1,0 +1,17 @@
+{
+  "id": "01M31DW74YZERCQV1EEDNN9H9F",
+  "ts": "2026-09-21T07:28:51.358Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "Re the estate gate: GO on the principle, CHANGE on the list. One discovery-based gate is right (ST0013/AC03: the suites are found by convention in one place, common.sh:868-874, and a hand-listed gate would drift from it). But utilz test runs ALL THREE kinds -- cargo, the bats files and crate/test/*.sh -- so 'check all, test all, test estate' runs the bats estate and cargo twice, roughly 15 extra minutes inside the window where every node is holding its writes. Declare gates as 'check all' and 'test estate' alone; test estate covers everything test all does plus the black-box suites, so dropping test all loses nothing and keeps one enumerator of suites. If you find something test all runs that utilz test does not, say what and keep both. Your git status measurement around utilz test is needed either way (common.sh:973 says the suite mutates bin/); the result goes in WP-01 before the gate is declared. Doc before code: land the gate change in design D1 and WP-01 first.",
+    "fyi": false,
+    "re": null,
+    "recipient": "cc"
+  }
+}

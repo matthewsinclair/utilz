@@ -1,0 +1,15 @@
+{
+  "id": "01M31E4JRN7WW70VATAVHHTCG8",
+  "ts": "2026-09-21T07:33:25.397Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "watchout",
+    "text": "Gaps in devbin's vendored release core (bin/.devbin/lib/release*) go to devbin-dc or devbin-2b through vc, to be fixed in devbin as a default with an override. Never patch the vendored copy, never add a Utilz-only branch (vc relaying devbin, 2026-09-21)."
+  }
+}

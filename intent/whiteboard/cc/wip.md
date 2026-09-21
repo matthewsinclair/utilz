@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: d69b4069-611f-4829-8991-1a15c02f53bb
-heartbeat_at: 2026-09-21 07:26Z
+heartbeat_at: 2026-09-21 07:33Z
 status: active
-focus: "ST0019: vc's review GO with four changes, applied; 5 WPs and 8 ACs minted. Waiting on hv's rulings (Q1, Q2, prez's number) through vc before any WP starts"
+focus: "ST0019 WP-01: estate gate design landed; tools/ci-state drafted; bin/utilz test dirt measurement in flight (todo carries the pointers)"
 claims: [ST0019]
 ---
 
@@ -17,7 +17,7 @@ _(none)_
 
 ## TODO
 
-- ST0019's design, once the devbin 0.1.2 sweep lands (hv's decision 8). SCOPE: the Utilz parts only, being its version files, the CI build of prez and the Homebrew formula, answering questions 1-3, with 5 and 6 handed to Devbin 0064 through vc. The shared release core is Devbin work with Utilz as its first user (hv's decision 1), and ST0007 WP-08, where Utilz adopts that core, stays after the sweep. If the video export needs Chrome and ffmpeg at run time, the formula's dependencies follow from it. THREE INPUTS THE DESIGN TAKES AS GIVEN rather than chooses, all three learned from cutting 2.10.0: the tag form is BARE, hv's ruling, and 2.7.0's own annotation is where it lives; a tag written from a markdown file takes --cleanup=whitespace, never the default strip nor verbatim; and the release core reads the created annotation back and diffs it against its source, comparing with trailing whitespace normalised on both sides. The working behind all three -- four cleanup modes measured twice, independently, and why the read-back outlives the flag -- is in vc's watch-out 8 and in cc's memory note git-tag-F-strips-markdown-headings. THE 14 SEP RESEARCH is recoverable from transcript 14d6f67d-9238-483a-bd2e-80345ed85383.jsonl, where all three files are single Write calls; the precedents survey describes private repos, so it stays out of this repo.
+- ST0019 WP-01 (started; vc GO on the one estate gate). IN FLIGHT AT THE FOLD: the dirt measurement around bin/utilz test (scratchpad dirt.sh; results in scratchpad dirt-estate.{before,after,log}). Read it first, and count a HEAD move and the ST0019 paths as the fold's own. Drafts not yet in the repo: scratchpad ci-state (goes to tools/ci-state) and ci-state.bats.part (appends to opt/utilz/test/install_lib.bats, reusing make_gh_stub). Still to do: the estate test option in bin/.devbin/config.yaml, tools added to CI's shellcheck collector (tests.yml:190), the CHANGELOG heading convention, and each gate's status diff written into WP-01. Scratchpad: /private/tmp/claude-501/-Users-matts-Devel-prj-Utilz/d69b4069-611f-4829-8991-1a15c02f53bb/scratchpad.
 
 ## Holds
 
@@ -27,6 +27,7 @@ _(none)_
 
 - One suite at a time with vc, and commits by explicit path only: vc's files have sat staged in the shared index while cc committed.
 - An explicit-path commit of a .md that the pre-commit prettier hook reformats leaves the real index holding the pre-format text (MM): check git status afterwards. An issue body must be prettier-stable too, or the committed view drifts from the store render and the doctor gate refuses every later commit (0025-0027, fixed by vc at 895a2fc).
+- Gaps in devbin's vendored release core (bin/.devbin/lib/release*) go to devbin-dc or devbin-2b through vc, to be fixed in devbin as a default with an override. Never patch the vendored copy, never add a Utilz-only branch (vc relaying devbin, 2026-09-21).
 
 ## Decisions
 

@@ -1,0 +1,17 @@
+{
+  "id": "01M31DW22B69HTZ1KV5A5D15C1",
+  "ts": "2026-09-21T07:28:46.155Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "CORRECTION to the proposal just sent: a shell backtick ate one word. \"A test option , with run: bin/utilz test\" should read \"A test option named estate, with run: bin/utilz test\". The gates are check all, test all, test estate. Nothing else in it changed.",
+    "fyi": true,
+    "re": null,
+    "recipient": "vc"
+  }
+}

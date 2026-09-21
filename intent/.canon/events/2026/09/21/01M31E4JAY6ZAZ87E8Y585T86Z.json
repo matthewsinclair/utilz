@@ -1,0 +1,14 @@
+{
+  "id": "01M31E4JAY6ZAZ87E8Y585T86Z",
+  "ts": "2026-09-21T07:33:24.958Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.edit",
+  "subject": {
+    "type": "ac",
+    "id": "ST0019/AC-01.1"
+  },
+  "payload": {
+    "text": "The release declaration, its estate gate included, validates under the core's read-only release check, run by hv or vc."
+  }
+}

@@ -27,10 +27,7 @@ release:
   repo: matthewsinclair/utilz
   gates:
     - check all
-    - test all
-    - test acceptance
-    - test theme
-    - test video
+    - test estate
   ci:
     query: tools/ci-state
 ```
@@ -38,7 +35,13 @@ release:
 - **`tag: "{version}"`** is hv's ruling at 2.7.0, which lives in 2.7.0's annotation. The reference already names Utilz as the case (`config.reference.yaml:498`).
 - **`repo:` has to be declared.** Left undeclared, the core reads it off the first push remote (`config.reference.yaml:515`), which here is `local`, a Dropbox path. `gh release create` would then point at no GitHub repository.
 - **`remotes:` stays undeclared**, so both remotes are pushed in `git remote` order, as hv pushes by hand today.
-- **`gates:` extends the default with three gates of its own.** `test all` runs the bats estate and the workspace's cargo tests through `bin/.devbin/config.yaml`'s `test` options. acceptance.sh, theme-addressing.sh and video.sh are not in it, and without them the release gate would be narrower than the one hv's hand releases ran. **They are not added to `test all`**, on vc's review: `test all` is the everyday verb, and video.sh needs Chrome, ffmpeg and a quiet machine (the load rule from 2.10.0). So each is declared as a `test` option with `in_all: false`, which excludes it from `test all` and **reports it as skipped rather than dropping it** (`config.reference.yaml:422-424`), and each is listed as its own gate after `test all`. The names `acceptance`, `theme` and `video` are WP-01's to settle. A gate is a devbin verb run by its words (`cmd/release:698-702`), so the form is legal, and WP-01 proves it through the core's read-only `release check`.
+- **`gates:` is `check all` and one estate gate, `test estate`, which runs `bin/utilz test`.** That is the driver behind every hand release, 2.10.0's 20 of 20 suites included, so the release gate is the hand gate by construction rather than a list kept in step with it. Three alternatives were weighed and rejected:
+  - **The default `test all`** runs the bats estate and the workspace's cargo tests through `bin/.devbin/config.yaml`'s `test` options, but not the black-box suites under `opt/*/crate/test/*.sh` (acceptance.sh, theme-addressing.sh, video.sh). On its own it is narrower than the hand gate.
+  - **Three named gates, one per black-box suite** (the first revision of this design), bring back the failure ST0013/AC03 fixed. CI (`.github/workflows/tests.yml:328`) and `utilz test` (`common.sh:1116`) both DISCOVER `crate/test/*.sh` rather than naming each file, because naming one let a second suite go unrun while CI stayed green. A fourth suite added later would run under both and be run by nothing at release.
+  - **`test all` plus `test estate`** runs bats and cargo twice inside the release window, and vc ruled it out. `test all` runs nothing `utilz test` does not: measured 2026-09-21, the 16 `opt/*/test` directories `bats opt/*/test` reads are exactly the 16 utilities `utilz test` walks, `utilz` included, and prez's crate, the only crate, is the one `utilz test` runs with `--workspace`.
+
+  `estate` is declared as a `test` option with `in_all: false`, so `test all` stays the quick everyday verb, and video.sh's needs (Chrome, ffmpeg and a quiet machine, the load rule from 2.10.0) never land on it. The option is **reported as skipped, not dropped** (`config.reference.yaml:422-424`). A gate is a devbin verb run by its words (`cmd/release:698-702`), so the form is legal, and WP-01 proves it through the core's read-only `release check`. `utilz test` notes that it "mutates `$UTILZ_HOME/bin`" (`common.sh:973`), so WP-01's dirt proof (D6) runs on this exact command first.
+
 - **`ci.query: tools/ci-state`** is declared so that step 11's report exists: an undeclared `ci.query` skips step 11 silently (`cmd/release:985`). `tools/ci-state` is a thin wrapper that sources `install.sh` and calls **`install_ci_state`**, the one function that asks CI about a commit (issue 0016). Its only logic is mapping: `install_ci_state` prints the run's conclusion (`success`, `failure`, `cancelled` and so on), and `ci.query` expects `green`, `failed`, `pending`, `none` or `unknown`. `success` becomes `green`, any other conclusion becomes `failed`, and `pending`, `none` and `unknown` pass through. There is no second `gh` query. **It lives in `tools/`, outside the published set, on vc's review.** The publish ships every tracked file under `bin` except `bin/devbin` and `bin/.devbin/` (`install.sh:99`, `INSTALL_EXCLUDE_RE` at `install.sh:50`). So a release tool in `bin/` would ship to every install and every keg as if it were a utility, and `install_e2e`'s link census and `utilz list` would find a real file where only dispatcher links live. `INSTALL_EXCLUDE_RE` is not widened for it. The reference's `bin/ci-state` is only an example. A new top-level `tools/` also sits outside CI's shellcheck collector, which runs `find bin opt` (`.github/workflows/tests.yml:190`), so WP-01 adds `tools` to that collector, or the script ships unlinted.
 - **`object: local`** is the default and stays. No workflow here triggers on a tag (`.github/workflows/tests.yml`, `pr-checks.yml`), so `check_release_writers` (`cmd/release:170`) finds no second writer. D3 needs no release assets, so `object: ci` would buy nothing.
 

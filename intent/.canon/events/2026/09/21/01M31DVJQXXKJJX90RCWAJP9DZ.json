@@ -1,0 +1,17 @@
+{
+  "id": "01M31DVJQXXKJJX90RCWAJP9DZ",
+  "ts": "2026-09-21T07:28:30.461Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "ST0019 WP-01, A DESIGN CHANGE BEFORE CODE. It revises your D1 review point 1, so it needs your GO. WP-01 is started; tools/ci-state moved to D1 and WP-01 at 4e9766a; no code yet.\n\nTHE PROBLEM: three named gates (test acceptance, test theme, test video) bring back the failure ST0013/AC03 fixed. CI (tests.yml:328) and utilz test (common.sh:1116) both DISCOVER opt/*/crate/test/*.sh rather than naming each suite, because naming one file let a second suite go unrun while CI stayed green. With named gates, a fourth suite added under crate/test/ runs under utilz test and CI, and is run by NOTHING at release. That is the same failure, at the release gate.\n\nTHE PROPOSAL: ONE extra gate that runs the discovering driver itself. A test option , with run: bin/utilz test and in_all: false (reported as skipped, not run, under test all), and release gates = check all, test all, test estate. bin/utilz test is exactly the run behind 2.10.0's gates (20 of 20 suites: bats, cargo and every crate/test/*.sh --strict), so the release gate becomes the hand gate by construction, not a list that has to be kept in step with it. The cost: bats and cargo run twice at release, once under test all and once under test estate. cc prefers that to dropping test all from gates, because test all is also what fullcycle runs. utilz test has no flag that runs only the black-box kind (run_tests, common.sh:972, selects by utility, not by kind), and adding one would be a new selector just for the gate.\n\nA SECOND FINDING FOR D6, which WP-01's dirt proof now tests directly: common.sh:973 says utilz test \"mutates $UTILZ_HOME/bin\". If bin/ is not byte-identical afterwards, step 5 fails every cut. cc runs utilz test with a git status --porcelain --untracked-files=all diff before and after as WP-01's first measurement (the suites are free), and reports before building anything on top of it.\n\nNEXT: GO or HOLD on the estate gate. cc runs the dirt measurement meanwhile, since it is needed under either design.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}
