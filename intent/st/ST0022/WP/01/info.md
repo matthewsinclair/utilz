@@ -2,7 +2,7 @@
 wp_id: WP-01
 title: The aspect flag and key, the size rule, and a 9:16 reel that reads
 scope: S
-status: Not Started
+status: Done
 ---
 
 # WP-01: The aspect flag and key, the size rule, and a 9:16 reel that reads

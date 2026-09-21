@@ -1,9 +1,9 @@
 ---
 st_id: ST0022
 title: showreel video: a selectable aspect ratio for portrait and square reels
-status: WIP
+status: Completed
 created: 2026-09-21
-completed:
+completed: 2026-09-21
 ---
 
 # ST0022: showreel video: a selectable aspect ratio for portrait and square reels
@@ -20,9 +20,9 @@ Roles: cc builds, vc reviews and verifies, hv rules.
 
 ## Work Packages
 
-| WP    | Title                                                              | Size | Status      |
-| ----- | ------------------------------------------------------------------ | ---- | ----------- |
-| WP-01 | The aspect flag and key, the size rule, and a 9:16 reel that reads | S    | Not Started |
+| WP    | Title                                                              | Size | Status |
+| ----- | ------------------------------------------------------------------ | ---- | ------ |
+| WP-01 | The aspect flag and key, the size rule, and a 9:16 reel that reads | S    | Done   |
 
 ## Acceptance
 

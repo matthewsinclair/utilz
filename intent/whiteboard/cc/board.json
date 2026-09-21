@@ -5,12 +5,11 @@
     "name": "Control Claude",
     "role": "control",
     "session_id": "d69b4069-611f-4829-8991-1a15c02f53bb",
-    "heartbeat_at": "2026-09-21T18:00:50.056Z",
+    "heartbeat_at": "2026-09-21T18:12:04.100Z",
     "status": "active",
-    "focus": "ST0022: rulings done at 0feb622; awaiting vc's AC-01.3 on the re-recorded venue and atwork frames",
+    "focus": "ST0019: done bar AC-05.2, which holds on the 2.11.0 cut (hv's timing); ST0022 closed",
     "claims": [
-      "ST0019",
-      "ST0022"
+      "ST0019"
     ],
     "recorded_at": "2026-09-14T08:46:06.602Z",
     "authored_at": "2026-09-11 16:17Z",
