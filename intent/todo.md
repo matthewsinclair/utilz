@@ -4,12 +4,7 @@ A DOING / TODO / DONE view, projected from steel-thread and work-package status:
 
 ## DOING
 
-- [-] ST0019: Release Utilz through dvb build release and a Homebrew tap, like Intent
-  - [x] 01: Gates, tools/ci-state, the heading convention, and gates that leave no dirt
-  - [x] 02: The keg as an install tree: the discriminator and the verbs that refuse
-  - [x] 03: Spike: a git-URL formula built in a scratch tap, the keg run end to end
-  - [x] 04: The tap matthewsinclair/homebrew-utilz and its formula
-  - [-] 05: The formula bump after a release: after: or a documented step
+_(none)_
 
 ## TODO
 
@@ -108,6 +103,12 @@ _(none)_
   - [x] 06: Snorkeltoast side: point the prototype at the hoisted tool, move the house theme
 - [x] ST0018: prez: a fallback theme for decks that name none (PREZ_DEFAULT_THEME)
   - [x] 01: PREZ_DEFAULT_THEME: red-first tests, the precedence function, the docs
+- [x] ST0019: Release Utilz through dvb build release and a Homebrew tap, like Intent
+  - [x] 01: Gates, tools/ci-state, the heading convention, and gates that leave no dirt
+  - [x] 02: The keg as an install tree: the discriminator and the verbs that refuse
+  - [x] 03: Spike: a git-URL formula built in a scratch tap, the keg run end to end
+  - [x] 04: The tap matthewsinclair/homebrew-utilz and its formula
+  - [x] 05: The formula bump after a release: after: or a documented step
 - [x] ST0020: prez: a theme name defined twice on the search path refuses, when a caller asks
   - [x] 01: prez refuses a duplicated theme name when PREZ_THEME_DUPLICATES=refuse
 - [x] ST0021: showreel exports a reel as a video file

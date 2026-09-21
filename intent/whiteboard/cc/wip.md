@@ -3,10 +3,10 @@ node: cc
 name: Control Claude
 role: control
 session_id: d69b4069-611f-4829-8991-1a15c02f53bb
-heartbeat_at: 2026-09-21 19:28Z
+heartbeat_at: 2026-09-21 21:10Z
 status: active
-focus: "Waiting on hv's 2.11.0 tag, then 2.11.1 (vc); ST0019 holds on the tap; ST0022 and ST0023 closed"
-claims: [ST0019]
+focus: "Idle for the night. Next: 2.11.1 (the 0045 fix), vc's to plan, ideally cut through devbin's core once 0.1.5 is swept"
+claims: []
 ---
 
 # Control Claude (cc)
@@ -21,14 +21,13 @@ _(none)_
 
 ## Holds
 
-- ST0019 WP-05 AC-05.2 (brew install from matthewsinclair/homebrew-utilz at the bare tag, utilz doctor clean in the keg). Released when: the next release is cut and pushed (2.11.0 in hv's ruling; vc's release plan names the number), and hv has created and pushed the tap with tools/formula-bump's commit (docs/releasing.md, one-time setup). Then WP-05 and ST0019 close.
+_(none)_
 
 ## Watch-outs
 
 - One suite at a time with vc, and commits by explicit path only: vc's files have sat staged in the shared index while cc committed.
 - A .md the pre-commit prettier hook reformats can leave the index holding the pre-format text after an explicit-path commit: check git status after. Store bodies (issues, WP bodies) must be prettier-stable before intent set, or the view drifts and the doctor gate refuses every later commit.
 - hv's rule: a gap in devbin's vendored release core (bin/.devbin/lib/release*) is fixed in devbin, as a default with an override, through vc to devbin-dc or devbin-2b. Never patch the vendored copy or add a Utilz-only branch. Vendored line numbers move with each devbin sweep: re-read a citation before trusting it.
-- No commits to product paths (bin, opt, help, static, VERSION, CHANGELOG, packaging, tools) until hv has tagged and pushed 2.11.0 by hand via tmp/release-2.11.0.sh (vc decision 14; release commit 890064e): hv's push takes main as it stands. Board and intent commits are fine.
 
 ## Decisions
 

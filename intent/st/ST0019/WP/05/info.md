@@ -2,7 +2,7 @@
 wp_id: WP-05
 title: The formula bump after a release: after: or a documented step
 scope: S
-status: WIP
+status: Done
 ---
 
 # WP-05: The formula bump after a release: after: or a documented step

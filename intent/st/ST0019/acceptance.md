@@ -34,7 +34,7 @@ title: Release Utilz through dvb build release and a Homebrew tap, like Intent
 - AC-04.1 (non-test) packaging/homebrew/utilz.rb and an MIT LICENSE are in this repository, the README's license section says MIT, and the formula passes brew audit --strict in a scratch tap, removed afterwards. -- evidence: 1ecdd3a: packaging/homebrew/utilz.rb, MIT LICENSE, README license section MIT. WP-04 body: brew audit --strict in a throwaway tap exits 0 with no findings on the committed formula and on a real-commit copy; a bad-desc control exits 1 naming both faults, so the pass is a reading; tap untapped, live install manifest and ~/.local/bin listing hash identical before and after. -- satisfied: yes
 - AC-04.2 (non-test) Once hv has created and pushed matthewsinclair/homebrew-utilz and 2.11.0 is tagged, brew install matthewsinclair/utilz/utilz installs Utilz from the bare tag, and utilz doctor passes in the keg, manifest included. -- WITHDRAWN: It can only be satisfied after the 2.11.0 cut, when hv creates and pushes the tap with the tag's real commit (vc decision 9), and vc ruled that WP-04 closes on AC-04.1. Moved to WP-05, which is how the formula follows a release, as AC-05.2.
 
-### WP-05 -- The formula bump after a release: after: or a documented step (status: WIP)
+### WP-05 -- The formula bump after a release: after: or a documented step (status: Done)
 
 - AC-05.1 (non-test) docs/releasing.md documents the step hv runs after each cut: tools/formula-bump <tag>, the formula copied into matthewsinclair/homebrew-utilz, brew audit --strict, and the tap committed and pushed by hv, with no after: hook (hv, 2026-09-21, vc decision 10). -- evidence: docs/releasing.md: after each cut hv runs tools/formula-bump <tag>, commits the bump by path, copies the formula into matthewsinclair/homebrew-utilz, runs brew audit --strict from the tap, and commits and pushes the tap; no after: hook. Linked from docs/index.md. -- satisfied: yes
 - AC-05.2 (non-test) Once hv has created and pushed matthewsinclair/homebrew-utilz at the 2.11.0 cut, with the tag's real commit in the formula, brew install matthewsinclair/utilz/utilz installs Utilz from the bare tag, and utilz doctor passes in the keg, manifest included. -- evidence: hv, 2026-09-21, after the 2.11.0 tag (7fc9bb5) and the tap's creation (github.com/matthewsinclair/homebrew-utilz, formula written by tools/formula-bump at d5899ee): brew tap matthewsinclair/utilz; brew audit --strict clean; brew install built 2.11.0 from source in 44 s (150 files); utilz doctor inside the keg 7/7 including 'Install matches its manifest'. vc then read: utilz --version utilz:2.11.0 at 7fc9bb5, prez 2.3.0; manifest managed-by brew, source-commit 7fc9bb54e1e2; utilz upgrade from the keg exits 1 naming 'brew upgrade utilz'; the announce shows 'none' rather than an enclosing repository's commit (0044). -- satisfied: yes
@@ -70,7 +70,7 @@ _(no tests in this group)_
 
 _(no tests in this group)_
 
-### WP-05 -- The formula bump after a release: after: or a documented step (status: WIP)
+### WP-05 -- The formula bump after a release: after: or a documented step (status: Done)
 
 _(no tests in this group)_
 

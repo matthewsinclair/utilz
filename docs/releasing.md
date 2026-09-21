@@ -13,14 +13,16 @@ A Utilz release is still cut by hand (hv's decision 1 of 14 Sep). Devbin's relea
 
 Utilz installs with Homebrew from the tap `matthewsinclair/homebrew-utilz`. Its formula builds from source at the bare tag, so it names the tag and the tag's commit. The formula is kept in this repository at `packaging/homebrew/utilz.rb` and copied into the tap.
 
-### Where the tap lives, and the one-time setup at 2.11.0
+### Where the tap lives, and how it was set up
 
-The tap lives where brew keeps every tap, `$(brew --repository)/Library/Taps/matthewsinclair/homebrew-utilz`: a git clone whose `origin` is the GitHub repository, as hv's Intent tap is. hv edits, commits and pushes the formula there. It is set up once, at the 2.11.0 cut, after this repository's tag is pushed:
+The tap lives where brew keeps every tap, `$(brew --repository)/Library/Taps/matthewsinclair/homebrew-utilz`: a git clone whose `origin` is the GitHub repository, as hv's Intent tap is. hv edits, commits and pushes the formula there.
 
-1. Run `tools/formula-bump 2.11.0` here and commit the bump (steps 1 and 2 below).
-2. Create the GitHub repository `matthewsinclair/homebrew-utilz`, with that formula committed as `Formula/utilz.rb`.
-3. `brew tap matthewsinclair/utilz`, which clones it into the path above.
-4. `brew audit --strict matthewsinclair/utilz/utilz`, then `brew install matthewsinclair/utilz/utilz`, then `utilz doctor` (ST0019 AC-05.2).
+It was set up once, at the 2.11.0 cut on 2026-09-21, after this repository's tag was pushed:
+
+1. `tools/formula-bump 2.11.0` here, and the bump committed (d5899ee).
+2. A local repository staged with that formula as `Formula/utilz.rb`, then `gh repo create matthewsinclair/homebrew-utilz --source . --push`.
+3. `brew tap matthewsinclair/utilz`, which cloned it into the path above.
+4. `brew audit --strict matthewsinclair/utilz/utilz` (clean), `brew install matthewsinclair/utilz/utilz` (built in 44 s) and `utilz doctor` (7/7, manifest intact, `managed-by` brew). ST0019 AC-05.2.
 
 ### After every later cut, hv:
 

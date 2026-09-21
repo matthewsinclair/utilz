@@ -1,9 +1,9 @@
 ---
 st_id: ST0019
 title: Release Utilz through dvb build release and a Homebrew tap, like Intent
-status: WIP
+status: Completed
 created: 2026-09-14
-completed:
+completed: 2026-09-21
 ---
 
 # ST0019: Release Utilz through dvb build release and a Homebrew tap, like Intent
@@ -28,7 +28,7 @@ Roles: cc builds, vc reviews and verifies, and hv rules, pushes and cuts the rel
 | WP-02 | The keg as an install tree: the discriminator and the verbs that refuse     | S    | Done   |
 | WP-03 | Spike: a git-URL formula built in a scratch tap, the keg run end to end     | S    | Done   |
 | WP-04 | The tap matthewsinclair/homebrew-utilz and its formula                      | S    | Done   |
-| WP-05 | The formula bump after a release: after: or a documented step               | S    | WIP    |
+| WP-05 | The formula bump after a release: after: or a documented step               | S    | Done   |
 
 ## Acceptance
 

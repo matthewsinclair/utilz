@@ -74,6 +74,6 @@ The gates run on the maintainer's macOS machine, and CI's Ubuntu legs report aft
 | 02  | The keg as an install tree: the discriminator and the verbs that refuse     | Done            |
 | 03  | Spike: a git-URL formula built in a scratch tap, the keg run end to end     | Done            |
 | 04  | The tap matthewsinclair/homebrew-utilz and its formula                      | Done            |
-| 05  | The formula bump after a release: after: or a documented step               | Open on AC-05.2 |
+| 05  | The formula bump after a release: after: or a documented step               | Done            |
 
-AC-05.2, the install from the pushed tap at the bare tag, waits for the 2.11.0 cut.
+AC-05.2 closed at the 2.11.0 cut (2026-09-21): hv created the tap and installed from it, doctor 7/7 in the keg. The cut itself was made by hand, because devbin's core failed at its first step on the tag `v2.6.1` (vc decision 14); devbin fixes it in 0.1.5.
