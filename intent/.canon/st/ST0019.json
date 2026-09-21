@@ -103,7 +103,7 @@
     },
     {
       "id": "AC-02.1",
-      "text": "A publish with --managed-by brew records managed-by brew in its manifest, and every other publish records utilz. When the tree they run from or the tree they target is a keg, utilz upgrade, relink, use and install --force refuse and name brew upgrade utilz. In a non-brew install tree, and with a manifest from before the row existed, they behave as before.",
+      "text": "A publish with --managed-by brew records managed-by brew in its manifest, and every other publish records utilz. When the tree they run from or the tree they target is a keg, utilz upgrade, relink, use and install --force refuse and name brew upgrade utilz. In a keg, utilz test's refusal names a clone of the repository, not the keg's source-tree, which is brew's deleted build directory. In a non-brew install tree, and with a manifest from before the row existed, all of them behave as before.",
       "kind": "test",
       "state": {
         "is": "computed"

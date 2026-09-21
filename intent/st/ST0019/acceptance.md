@@ -23,7 +23,7 @@ title: Release Utilz through dvb build release and a Homebrew tap, like Intent
 
 ### WP-02 -- The keg as an install tree: the discriminator and the verbs that refuse (status: WIP)
 
-- AC-02.1 A publish with --managed-by brew records managed-by brew in its manifest, and every other publish records utilz. When the tree they run from or the tree they target is a keg, utilz upgrade, relink, use and install --force refuse and name brew upgrade utilz. In a non-brew install tree, and with a manifest from before the row existed, they behave as before. -- satisfied: no (computed)
+- AC-02.1 A publish with --managed-by brew records managed-by brew in its manifest, and every other publish records utilz. When the tree they run from or the tree they target is a keg, utilz upgrade, relink, use and install --force refuse and name brew upgrade utilz. In a keg, utilz test's refusal names a clone of the repository, not the keg's source-tree, which is brew's deleted build directory. In a non-brew install tree, and with a manifest from before the row existed, all of them behave as before. -- satisfied: no (computed)
 
 ### WP-03 -- Spike: a git-URL formula built in a scratch tap, the keg run end to end (status: Not Started)
 
