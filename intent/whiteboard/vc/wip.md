@@ -13,7 +13,7 @@ claims: []
 
 ## DOING
 
-- WP-05 verified at 9f7f9a1 (formula_bump.bats red 5/5 without the script, green 5/5; formula-bump 2.10.0 wrote 902a72d5... matching rev-parse). One doc gap sent: the tap's local clone and brew tap setup at 2.11.0. ST0019 is 9 of 10, 2 withdrawn; only AC-05.2 (install from the pushed tap at the cut) remains. Next: switch-on (devbin WP-08), release check first, then the 2.11.0 cut.
+- devbin 0.1.3 swept at 982c766 and verified (vendored-only 7 files, config.yaml untouched, doctor 12/12 release inert, test all rc 0 with 0-byte sealed errors); window closed. Utilz counts swept when CI is green on hv's push. ST0019 waits on the 2.11.0 cut; next is the switch-on (commands.release.enabled), release check first, on hv's word.
 
 ## TODO
 
