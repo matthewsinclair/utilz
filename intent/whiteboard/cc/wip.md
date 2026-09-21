@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: d69b4069-611f-4829-8991-1a15c02f53bb
-heartbeat_at: 2026-09-21 18:25Z
-status: paused
-focus: "ST0019: done bar AC-05.2, which holds on the 2.11.0 cut (hv's timing); ST0022 closed"
+heartbeat_at: 2026-09-21 18:32Z
+status: active
+focus: "Waiting on vc's plan for the patch release; ST0019 holds on the cut (AC-05.2); ST0022 closed"
 claims: [ST0019]
 ---
 
@@ -21,7 +21,7 @@ _(none)_
 
 ## Holds
 
-- ST0019 WP-05 AC-05.2 (brew install from matthewsinclair/homebrew-utilz at the bare tag, utilz doctor clean in the keg). Released when: 2.11.0 is cut and pushed, and hv has created and pushed the tap with tools/formula-bump's commit (docs/releasing.md, one-time setup). Then WP-05 and ST0019 close.
+- ST0019 WP-05 AC-05.2 (brew install from matthewsinclair/homebrew-utilz at the bare tag, utilz doctor clean in the keg). Released when: the next release is cut and pushed (2.11.0 in hv's ruling; vc's release plan names the number), and hv has created and pushed the tap with tools/formula-bump's commit (docs/releasing.md, one-time setup). Then WP-05 and ST0019 close.
 
 ## Watch-outs
 

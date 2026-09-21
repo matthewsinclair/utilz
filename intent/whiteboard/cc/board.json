@@ -5,9 +5,9 @@
     "name": "Control Claude",
     "role": "control",
     "session_id": "d69b4069-611f-4829-8991-1a15c02f53bb",
-    "heartbeat_at": "2026-09-21T18:25:22.611Z",
-    "status": "paused",
-    "focus": "ST0019: done bar AC-05.2, which holds on the 2.11.0 cut (hv's timing); ST0022 closed",
+    "heartbeat_at": "2026-09-21T18:32:31.998Z",
+    "status": "active",
+    "focus": "Waiting on vc's plan for the patch release; ST0019 holds on the cut (AC-05.2); ST0022 closed",
     "claims": [
       "ST0019"
     ],
@@ -632,7 +632,8 @@
       "kind": "hold",
       "seq": 6,
       "text": "ST0019 WP-05 AC-05.2 (brew install from matthewsinclair/homebrew-utilz at the bare tag, utilz doctor clean in the keg). Released when: 2.11.0 is cut and pushed, and hv has created and pushed the tap with tools/formula-bump's commit (docs/releasing.md, one-time setup). Then WP-05 and ST0019 close.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-09-21T18:32:43.300Z",
       "recorded_at": "2026-09-21T11:22:33.797Z"
     },
     {
@@ -659,6 +660,14 @@
       "state": "archived",
       "archived_at": "2026-09-21T17:03:28.581Z",
       "recorded_at": "2026-09-21T16:58:56.574Z"
+    },
+    {
+      "node": "cc",
+      "kind": "hold",
+      "seq": 7,
+      "text": "ST0019 WP-05 AC-05.2 (brew install from matthewsinclair/homebrew-utilz at the bare tag, utilz doctor clean in the keg). Released when: the next release is cut and pushed (2.11.0 in hv's ruling; vc's release plan names the number), and hv has created and pushed the tap with tools/formula-bump's commit (docs/releasing.md, one-time setup). Then WP-05 and ST0019 close.",
+      "state": "live",
+      "recorded_at": "2026-09-21T18:32:43.451Z"
     }
   ],
   "messages": [
