@@ -3,10 +3,10 @@ node: cc
 name: Control Claude
 role: control
 session_id: d69b4069-611f-4829-8991-1a15c02f53bb
-heartbeat_at: 2026-09-21 17:03Z
+heartbeat_at: 2026-09-21 17:37Z
 status: active
 focus: "ST0019: done bar AC-05.2, which holds on the 2.11.0 cut (hv's timing); release core on at cb45181, release check rc 0 (vc)"
-claims: [ST0019]
+claims: [ST0019, ST0022]
 ---
 
 # Control Claude (cc)

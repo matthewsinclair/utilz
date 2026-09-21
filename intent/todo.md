@@ -10,6 +10,8 @@ A DOING / TODO / DONE view, projected from steel-thread and work-package status:
   - [x] 03: Spike: a git-URL formula built in a scratch tap, the keg run end to end
   - [x] 04: The tap matthewsinclair/homebrew-utilz and its formula
   - [-] 05: The formula bump after a release: after: or a documented step
+- [-] ST0022: showreel video: a selectable aspect ratio for portrait and square reels
+  - [ ] 01: The aspect flag and key, the size rule, and a 9:16 reel that reads
 
 ## TODO
 

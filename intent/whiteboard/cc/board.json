@@ -5,11 +5,12 @@
     "name": "Control Claude",
     "role": "control",
     "session_id": "d69b4069-611f-4829-8991-1a15c02f53bb",
-    "heartbeat_at": "2026-09-21T17:03:28.719Z",
+    "heartbeat_at": "2026-09-21T17:37:42.021Z",
     "status": "active",
     "focus": "ST0019: done bar AC-05.2, which holds on the 2.11.0 cut (hv's timing); release core on at cb45181, release check rc 0 (vc)",
     "claims": [
-      "ST0019"
+      "ST0019",
+      "ST0022"
     ],
     "recorded_at": "2026-09-14T08:46:06.602Z",
     "authored_at": "2026-09-11 16:17Z",
