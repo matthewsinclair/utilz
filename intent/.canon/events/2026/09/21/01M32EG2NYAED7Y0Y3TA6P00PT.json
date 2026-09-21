@@ -1,0 +1,15 @@
+{
+  "id": "01M32EG2NYAED7Y0Y3TA6P00PT",
+  "ts": "2026-09-21T16:58:56.574Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "todo",
+    "text": "ST0019 switch-on (hv's OK, vc decision 12): on vc's word that CI run 35628486286 on d703dd5 is green, set commands.release.enabled: true in bin/.devbin/config.yaml, run bin/devbin doctor, commit that one path, and tell vc to run the read-only bin/devbin release check. The doc (design D1, WP-01) landed first at 970b8f1. No cut, no tag."
+  }
+}

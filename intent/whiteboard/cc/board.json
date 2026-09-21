@@ -5,9 +5,9 @@
     "name": "Control Claude",
     "role": "control",
     "session_id": "d69b4069-611f-4829-8991-1a15c02f53bb",
-    "heartbeat_at": "2026-09-21T07:44:11.865Z",
+    "heartbeat_at": "2026-09-21T16:58:56.742Z",
     "status": "active",
-    "focus": "ST0019 WP-01: estate gate design landed; tools/ci-state drafted; bin/utilz test dirt measurement in flight (todo carries the pointers)",
+    "focus": "ST0019: all WPs done bar AC-05.2 (holds on the 2.11.0 cut); switch-on prepared, lands on vc's CI-green word (todo)",
     "claims": [
       "ST0019"
     ],
@@ -92,7 +92,8 @@
       "kind": "watchout",
       "seq": 2,
       "text": "An explicit-path commit of a .md that the pre-commit prettier hook reformats leaves the real index holding the pre-format text (MM): check git status afterwards. An issue body must be prettier-stable too, or the committed view drifts from the store render and the doctor gate refuses every later commit (0025-0027, fixed by vc at 895a2fc).",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-09-21T16:58:55.827Z",
       "recorded_at": "2026-09-14T12:24:34.168Z"
     },
     {
@@ -595,7 +596,8 @@
       "kind": "watchout",
       "seq": 4,
       "text": "hv's rule, 2026-09-21: gaps in devbin's vendored release core (bin/.devbin/lib/release*) are fixed in devbin, as a default with an override, reported to devbin-dc or devbin-2b through vc. Never patch the vendored copy, never add a Utilz-only branch. Utilz adopts the core (devbin ST0007 WP-08) once ST0019 WP-01 proves the declaration and the gates.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-09-21T16:58:56.040Z",
       "recorded_at": "2026-09-21T07:34:29.514Z"
     },
     {
@@ -632,6 +634,30 @@
       "text": "ST0019 WP-05 AC-05.2 (brew install from matthewsinclair/homebrew-utilz at the bare tag, utilz doctor clean in the keg). Released when: 2.11.0 is cut and pushed, and hv has created and pushed the tap with tools/formula-bump's commit (docs/releasing.md, one-time setup). Then WP-05 and ST0019 close.",
       "state": "live",
       "recorded_at": "2026-09-21T11:22:33.797Z"
+    },
+    {
+      "node": "cc",
+      "kind": "watchout",
+      "seq": 5,
+      "text": "A .md the pre-commit prettier hook reformats can leave the index holding the pre-format text after an explicit-path commit: check git status after. Store bodies (issues, WP bodies) must be prettier-stable before intent set, or the view drifts and the doctor gate refuses every later commit.",
+      "state": "live",
+      "recorded_at": "2026-09-21T16:58:56.217Z"
+    },
+    {
+      "node": "cc",
+      "kind": "watchout",
+      "seq": 6,
+      "text": "hv's rule: a gap in devbin's vendored release core (bin/.devbin/lib/release*) is fixed in devbin, as a default with an override, through vc to devbin-dc or devbin-2b. Never patch the vendored copy or add a Utilz-only branch. Vendored line numbers move with each devbin sweep: re-read a citation before trusting it.",
+      "state": "live",
+      "recorded_at": "2026-09-21T16:58:56.396Z"
+    },
+    {
+      "node": "cc",
+      "kind": "todo",
+      "seq": 25,
+      "text": "ST0019 switch-on (hv's OK, vc decision 12): on vc's word that CI run 35628486286 on d703dd5 is green, set commands.release.enabled: true in bin/.devbin/config.yaml, run bin/devbin doctor, commit that one path, and tell vc to run the read-only bin/devbin release check. The doc (design D1, WP-01) landed first at 970b8f1. No cut, no tag.",
+      "state": "live",
+      "recorded_at": "2026-09-21T16:58:56.574Z"
     }
   ],
   "messages": [

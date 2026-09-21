@@ -1,0 +1,15 @@
+{
+  "id": "01M32EG2ASEAHR3TQGZ3RDMT5R",
+  "ts": "2026-09-21T16:58:56.217Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "watchout",
+    "text": "A .md the pre-commit prettier hook reformats can leave the index holding the pre-format text after an explicit-path commit: check git status after. Store bodies (issues, WP bodies) must be prettier-stable before intent set, or the view drifts and the doctor gate refuses every later commit."
+  }
+}
