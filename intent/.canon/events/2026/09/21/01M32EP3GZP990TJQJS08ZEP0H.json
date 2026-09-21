@@ -1,0 +1,15 @@
+{
+  "id": "01M32EP3GZP990TJQJS08ZEP0H",
+  "ts": "2026-09-21T17:02:14.047Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "doing",
+    "text": "CI 35628486286 green 7/7 on d703dd5 (hv's push): Utilz counts swept to devbin 0.1.3, and all of today's work has passed Linux CI. cc lands the switch-on (commands.release.enabled: true, doc at 970b8f1); vc then runs bin/devbin release check, read-only, as its first act. Then 2.11.0's cut on hv's word."
+  }
+}

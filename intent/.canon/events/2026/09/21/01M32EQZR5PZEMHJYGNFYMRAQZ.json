@@ -1,0 +1,15 @@
+{
+  "id": "01M32EQZR5PZEMHJYGNFYMRAQZ",
+  "ts": "2026-09-21T17:03:15.717Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "doing",
+    "text": "Release core ON at cb45181 (commands.release.enabled: true, config.yaml only). vc ran bin/devbin release check at cb45181: rc 0, declaration reads tag {version}, gates check all + test estate, ci.query tools/ci-state, repo matthewsinclair/utilz (all declared), notes.kind changelog; tree byte-identical before and after. ST0019 waits only on the 2.11.0 cut (--minor), on hv's word, then formula-bump and the tap (AC-05.2)."
+  }
+}

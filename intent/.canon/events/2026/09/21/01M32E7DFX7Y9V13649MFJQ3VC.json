@@ -1,0 +1,15 @@
+{
+  "id": "01M32E7DFX7Y9V13649MFJQ3VC",
+  "ts": "2026-09-21T16:54:12.735Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 2026-09-21, directly to vc: (1) pushed -- upstream/main at d703dd5, 0 ahead 0 behind, CI run 35628486286. (2) 'Ok' to switching devbin's release core on at Utilz (commands.release.enabled: true) once that CI run is green, the read-only release check being its first act, then the 2.11.0 cut through the core."
+  }
+}
