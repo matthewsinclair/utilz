@@ -15,10 +15,10 @@ title: Release Utilz through dvb build release and a Homebrew tap, like Intent
 
 ### WP-01 -- Gates, tools/ci-state, the heading convention, and gates that leave no dirt (status: WIP)
 
-- AC-01.1 (non-test) The release declaration, its estate gate included, validates under the core's read-only release check, run by hv or vc. -- satisfied: no
+- AC-01.1 (non-test) The release: block from design D1, its estate gate included, is declared in bin/.devbin/config.yaml with the command still off, and bin/devbin doctor, whose cfg_validate reads the block, reports the config clean. The core's read-only release check is run by hv or vc as the first act of the switch-on (Devbin ST0007 WP-08), before any cut. -- satisfied: no
 - AC-01.2 Every declared gate, bin/utilz test first, leaves git status --porcelain --untracked-files=all byte-identical, measured by hashing every dirty path before and after it. -- satisfied: no (computed)
 - AC-01.3 tools/ci-state answers green, failed, pending, none and unknown for the corresponding install_ci_state answers under a stubbed gh, asks through install_ci_state alone, ships to no install or keg, and is linted by CI's shellcheck step. -- satisfied: yes (computed)
-- AC-01.4 (non-test) CHANGELOG.md's open section is headed ## [X.Y.Z] - unreleased, and the core reads its state as open. -- satisfied: no
+- AC-01.4 (non-test) CHANGELOG.md's open section is headed ## [2.11.0] - unreleased, the version hv ruled on 2026-09-21, and the core's heading reader (release.notes) reads its state as open. -- satisfied: no
 
 ### WP-02 -- The keg as an install tree: the discriminator and the verbs that refuse (status: Not Started)
 
