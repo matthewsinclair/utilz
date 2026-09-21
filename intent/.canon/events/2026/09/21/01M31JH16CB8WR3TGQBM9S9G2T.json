@@ -1,0 +1,14 @@
+{
+  "id": "01M31JH16CB8WR3TGQBM9S9G2T",
+  "ts": "2026-09-21T08:50:07.692Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.edit",
+  "subject": {
+    "type": "ac",
+    "id": "ST0019/AC-03.1"
+  },
+  "payload": {
+    "text": "A keg built from a git-URL formula in a scratch tap, keg_only and from this repository at a named revision, passes utilz doctor after brew's post-install, manifest included and still recording managed-by brew. Every dispatcher link in it answers --version, and upgrade, relink and use refuse from it, naming brew upgrade utilz. The keg and the tap are removed afterwards."
+  }
+}

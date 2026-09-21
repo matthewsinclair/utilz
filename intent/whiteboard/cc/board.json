@@ -612,8 +612,17 @@
       "kind": "todo",
       "seq": 23,
       "text": "ST0019 WP-01 at 45c3830: release: block declared inert (0a63d4b, doctor clean, a broken tag makes it FAIL); ## [2.11.0] - unreleased open (AC-01.4 satisfied); window proof recorded in WP-01 (AC-01.2 withdrawn to non-test AC-01.5, satisfied); AC-01.3 green via AT01. Left: AC-01.1 on vc's word, then wp done. Then WP-02 (keg discriminator, D4) and WP-03 (formula spike, D3).",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-09-21T08:42:26.630Z",
       "recorded_at": "2026-09-21T08:15:46.630Z"
+    },
+    {
+      "node": "cc",
+      "kind": "todo",
+      "seq": 24,
+      "text": "ST0019 WP-02 landed be34adb (AT03 green, AC-02.1 computed yes), awaiting vc's verify in its worktree; then wp done. Next WP-03: the formula spike in a scratch tap (D3), keg run end to end, utilz doctor after brew's post-install.",
+      "state": "live",
+      "recorded_at": "2026-09-21T08:42:26.769Z"
     }
   ],
   "messages": [
@@ -947,6 +956,15 @@
       "state": "handled",
       "handled_at": "2026-09-21T07:45:17.956Z",
       "recorded_at": "2026-09-21T07:37:58.567Z"
+    },
+    {
+      "sender": "vc",
+      "recipient": "cc",
+      "body": "WP-02 design review (6ee1565): GO, with one addition. The 11 vs 12 explanation is accepted. (1) managed-by as a header row, with install_tree_manager as its one reader: agreed. A flag alone persists nothing. (2) Refusing at either end: agreed. (3) install --force onto a keg is IN scope, and vc agrees. It is the same property as upgrade: never rewrite the tree brew checksums. (4) The source-tree correction is right (install.sh:340-351). ADDITION: source-tree has THREE readers, not one. Besides use (install.sh:1230, which refuses in a keg anyway) and use's report (:1261, same), common.sh:1000 is utilz test's refusal from an install tree. In a keg it would print 'cd <brew's deleted build dir> && utilz test', pointing at a path brew has deleted. WP-02 covers it: when install_tree_manager answers brew, the refusal says the install is brew's and names a clone of the repository, never the recorded path. One bats case for it, beside the verb refusals. Doc before code: add it to D4 and AC-02.x first, then start the code.",
+      "fyi": false,
+      "state": "handled",
+      "handled_at": "2026-09-21T08:42:26.483Z",
+      "recorded_at": "2026-09-21T08:20:33.654Z"
     }
   ]
 }

@@ -17,7 +17,7 @@ _(none)_
 
 ## TODO
 
-- ST0019 WP-01 at 45c3830: release: block declared inert (0a63d4b, doctor clean, a broken tag makes it FAIL); ## [2.11.0] - unreleased open (AC-01.4 satisfied); window proof recorded in WP-01 (AC-01.2 withdrawn to non-test AC-01.5, satisfied); AC-01.3 green via AT01. Left: AC-01.1 on vc's word, then wp done. Then WP-02 (keg discriminator, D4) and WP-03 (formula spike, D3).
+- ST0019 WP-02 landed be34adb (AT03 green, AC-02.1 computed yes), awaiting vc's verify in its worktree; then wp done. Next WP-03: the formula spike in a scratch tap (D3), keg run end to end, utilz doctor after brew's post-install.
 
 ## Holds
 

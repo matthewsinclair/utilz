@@ -74,6 +74,16 @@ depends_on "rust" => :build
 
 **Lessons carried over from Intent's formula, each measured there:** `url` at top level, never nested, because `brew tap` validates under every simulated OS. No `version` line if brew reads the version from the tag. The exec bit is irrelevant here, because nothing is a downloaded release asset.
 
+**How WP-03's spike runs, and why not off a tag.** No tag carries `--managed-by` yet (WP-02 landed after 2.10.0), and nothing after 2.10.0 is pushed, so a GitHub URL at a tag cannot exercise the formula this design describes. The spike's formula lives in a scratch tap made with `brew tap-new`, and its `url` is this repository on disk (`file://`, `using: :git`) at a named `revision:`. That drives the same git download strategy a GitHub URL does. It is **`keg_only`**, so nothing is linked into `/opt/homebrew/bin` to shadow the maintainer's own `utilz` on PATH, and every check runs by the keg's own paths. It installs with `--build-from-source`, is uninstalled and untapped afterwards, and runs only on hv's go, because it writes to this machine's Homebrew. What it proves:
+
+- the staged checkout keeps `.git`, and `utilz install --prefix #{libexec} --managed-by brew` publishes from it, clean, inside brew's build;
+- `cargo build --release --workspace` fetches and builds inside brew's build environment;
+- after brew's post-install, `libexec/bin/utilz doctor` passes, manifest included, and the manifest still reads `managed-by brew`;
+- every dispatcher link in the keg's `bin/` resolves `UTILZ_HOME` to `libexec` through brew's symlinks and answers `--version`;
+- `upgrade`, `relink` and `use` run from the keg refuse, naming `brew upgrade utilz` (WP-02, now against a real keg).
+
+**Found while planning, for WP-04:** the repository has no LICENSE file, and `brew audit --strict` wants a `license` line. Which license is hv's call.
+
 **Runtime dependencies, read from each utility's yaml on 2026-09-21.** Required: `yq` (the framework itself), `jq`, `git`, `gpg`, `python3`, `qpdf` and poppler (`pdfinfo`, `pdftoppm`), `unison`, `rsync`. Optional: `ffmpeg` (prez's video export), `glow`, `bat`. Recommendation: `depends_on` only what the framework needs to start (`yq`), plus the rest as `=> :recommended` where brew has them, so installing one utility does not cost fifteen utilities' dependencies. `utilz doctor` already reports every missing dependency, optional ones included (2.10.0), and a caveat points at it.
 
 ## D4. brew beside `utilz install` and `upgrade` (Q2), ruled

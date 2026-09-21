@@ -2,7 +2,7 @@
 wp_id: WP-02
 title: The keg as an install tree: the discriminator and the verbs that refuse
 scope: S
-status: WIP
+status: Done
 ---
 
 # WP-02: The keg as an install tree: the discriminator and the verbs that refuse

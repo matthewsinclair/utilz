@@ -21,13 +21,13 @@ title: Release Utilz through dvb build release and a Homebrew tap, like Intent
 - AC-01.4 (non-test) CHANGELOG.md's open section is headed ## [2.11.0] - unreleased, the version hv ruled on 2026-09-21, and the core's heading reader (release.notes) reads its state as open. -- evidence: 0a63d4b: CHANGELOG.md line 10 reads '## [2.11.0] - unreleased'; release.notes _notes_changelog_state answers 2.11.0 open, 2.10.0 dated 2026-09-20, 2.12.0 absent -- satisfied: yes
 - AC-01.5 (non-test) Every declared gate, bin/utilz test first, leaves git status --porcelain --untracked-files=all byte-identical, measured by hashing every dirty path before and after it, in a release window with every node holding its intent writes. -- evidence: Window 21 Sep, HEAD ba1b4bd, vc holding from 61adcc9, accepted by vc at close. bin/devbin check all 07:52:08-07:52:11Z rc 0; bin/devbin test estate 07:52:12-08:03:13Z rc 0, 20 of 20 suites, sealed ESTATE.errors 0 bytes; load 449.54 to 547.69. Porcelain 0 lines before and after each gate (hash da39a3ee5e6b), HEAD unmoved, no per-path hash changed; no writer found. -- satisfied: yes
 
-### WP-02 -- The keg as an install tree: the discriminator and the verbs that refuse (status: WIP)
+### WP-02 -- The keg as an install tree: the discriminator and the verbs that refuse (status: Done)
 
 - AC-02.1 A publish with --managed-by brew records managed-by brew in its manifest, and every other publish records utilz. When the tree they run from or the tree they target is a keg, utilz upgrade, relink, use and install --force refuse and name brew upgrade utilz. In a keg, utilz test's refusal names a clone of the repository, not the keg's source-tree, which is brew's deleted build directory. In a non-brew install tree, and with a manifest from before the row existed, all of them behave as before. -- satisfied: yes (computed)
 
-### WP-03 -- Spike: a git-URL formula built in a scratch tap, the keg run end to end (status: Not Started)
+### WP-03 -- Spike: a git-URL formula built in a scratch tap, the keg run end to end (status: WIP)
 
-- AC-03.1 (non-test) A keg built from a git-URL formula in a scratch tap passes utilz doctor after brew's post-install, manifest included, and every utility runs from it. -- satisfied: no
+- AC-03.1 (non-test) A keg built from a git-URL formula in a scratch tap, keg_only and from this repository at a named revision, passes utilz doctor after brew's post-install, manifest included and still recording managed-by brew. Every dispatcher link in it answers --version, and upgrade, relink and use refuse from it, naming brew upgrade utilz. The keg and the tap are removed afterwards. -- satisfied: no
 
 ### WP-04 -- The tap matthewsinclair/homebrew-utilz and its formula (status: Not Started)
 
@@ -51,11 +51,11 @@ _(no criteria in this group)_
 
 _(no tests in this group)_
 
-### WP-02 -- The keg as an install tree: the discriminator and the verbs that refuse (status: WIP)
+### WP-02 -- The keg as an install tree: the discriminator and the verbs that refuse (status: Done)
 
 _(no tests in this group)_
 
-### WP-03 -- Spike: a git-URL formula built in a scratch tap, the keg run end to end (status: Not Started)
+### WP-03 -- Spike: a git-URL formula built in a scratch tap, the keg run end to end (status: WIP)
 
 _(no tests in this group)_
 

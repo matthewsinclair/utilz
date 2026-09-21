@@ -2,14 +2,14 @@
 wp_id: WP-03
 title: Spike: a git-URL formula built in a scratch tap, the keg run end to end
 scope: S
-status: Not Started
+status: WIP
 ---
 
 # WP-03: Spike: a git-URL formula built in a scratch tap, the keg run end to end
 
 ## Objective
 
-Prove design D3's two readings of Homebrew's source by driving them, before any tap exists (pending hv's ruling on Q1): a formula whose url is the git repository at a tag stages with .git present and a clean tree, so utilz install --prefix libexec publishes; and the finished keg passes utilz doctor after brew's post-install, manifest included, and runs every utility. Built in a scratch tap only.
+Prove design D3 by driving it, before any tap exists (Q1 ruled by hv 2026-09-21: source formula off the git tag, macOS both architectures). A formula in a scratch tap (brew tap-new), whose url is this repository on disk with using: :git at a named revision, because no tag yet carries --managed-by and nothing after 2.10.0 is pushed. It is keg_only, so nothing reaches PATH, and it is built with --build-from-source. The spike shows: the staged checkout keeps .git and stays clean, so utilz install --prefix libexec --managed-by brew publishes; prez and showreel build under brew; after brew's post-install the keg passes utilz doctor, manifest included, and still records managed-by brew; every dispatcher link in the keg's bin/ answers --version; and upgrade, relink and use refuse from the real keg. It runs only on hv's go, because it writes to this machine's Homebrew, and the keg and tap are removed afterwards. The formula draft and each result are recorded in this WP.
 
 ## Acceptance
 
