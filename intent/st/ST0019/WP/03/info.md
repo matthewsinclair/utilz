@@ -11,78 +11,16 @@ status: Done
 
 Prove design D3 by driving it, before any tap exists (Q1 ruled by hv 2026-09-21: source formula off the git tag, macOS both architectures). A formula in a scratch tap (brew tap-new), whose url is this repository on disk with using: :git at a named revision, because no tag yet carries --managed-by and nothing after 2.10.0 is pushed. It is keg_only, so nothing reaches PATH, and it is built with --build-from-source. The spike shows: the staged checkout keeps .git and stays clean, so utilz install --prefix libexec --managed-by brew publishes; prez and showreel build under brew; after brew's post-install the keg passes utilz doctor, manifest included, and still records managed-by brew; every dispatcher link in the keg's bin/ answers --version; and upgrade, relink and use refuse from the real keg. It runs only on hv's go, because it writes to this machine's Homebrew, and the keg and tap are removed afterwards. The formula draft and each result are recorded in this WP.
 
-## The spike, run 2026-09-21 on hv's go (vc decision 8)
+## The spike, 2026-09-21 on hv's go (vc decision 8)
 
-Revision `274e64f`, built on this machine (Homebrew 7.0.4-17-g2f1c682, macOS arm64), from 09:27:04Z to 09:29:00Z, at load 216.41 at the start and 536.96 at the end.
+A `keg_only` formula in a scratch tap (`brew tap-new --no-git matthewsinclair/utilz-spike`), `url` this repository on disk at `274e64f` with `using: :git`, installed with `brew install --build-from-source`.
 
-### The formula as it ran
-
-```ruby
-# ST0019 WP-03 spike -- NOT the tap's formula. Scratch tap only, keg_only,
-# built from this repository on disk at a named revision (design D3).
-class Utilz < Formula
-  desc "Small command-line utilities behind one dispatcher"
-  homepage "https://github.com/matthewsinclair/utilz"
-  url "file:///Users/matts/Devel/prj/Utilz", using: :git, revision: "274e64feeed6f55d6b0445e0f3d9a110dc974367"
-  version "2.11.0-spike"
-
-  keg_only "it is a spike: nothing is linked onto PATH"
-
-  depends_on "rust" => :build
-  depends_on :macos
-  depends_on "yq"
-
-  def install
-    # Utilz's own publish: builds prez and showreel, copies the owned set named
-    # by git ls-files, and writes the manifest with managed-by brew (D3, D4).
-    system "bin/utilz", "install", "--prefix", libexec, "--managed-by", "brew"
-    # One link per dispatcher link; the dispatcher finds libexec from $0.
-    bin.install_symlink Dir[libexec/"bin/*"]
-  end
-
-  test do
-    system libexec/"bin/utilz", "doctor"
-  end
-end
-```
-
-### The commands
-
-With `HOMEBREW_NO_AUTO_UPDATE=1 HOMEBREW_NO_INSTALL_CLEANUP=1 HOMEBREW_NO_ANALYTICS=1`:
-
-```bash
-brew tap-new --no-git matthewsinclair/utilz-spike
-cp utilz.rb "$(brew --repository)/Library/Taps/matthewsinclair/homebrew-utilz-spike/Formula/utilz.rb"
-brew install --build-from-source --verbose matthewsinclair/utilz-spike/utilz
-brew uninstall --formula matthewsinclair/utilz-spike/utilz
-brew untap matthewsinclair/utilz-spike
-rm -rf ~/Library/Caches/Homebrew/utilz--git
-```
-
-### What it showed
-
-- **The checkout kept `.git` and stayed clean inside brew.** Brew moved the staged `.git` into the build directory, and the publish announced `source: /private/tmp/s-qqs2IEw8/utilz-20260921-80898-wfxpu1 (clean, 274e64f)`, then `installed 2.10.0 (274e64f) at /opt/homebrew/Cellar/utilz/2.11.0-spike/libexec -- 127 paths`. `cargo build --release --workspace` ran inside brew's build. The whole install took 1 minute 47 seconds: 149 files, 51.6MB.
-- **The keg is `/opt/homebrew/Cellar/utilz/2.11.0-spike`**, with the tree in `libexec` and 16 links in `bin/`, each `../libexec/bin/<name>`. Being `keg_only`, nothing was linked into `/opt/homebrew/bin`.
-- **The manifest header after brew's post-install:** `managed-by brew`, `source-commit 274e64f...`, `source-tree` naming brew's build directory (deleted), and `ci-state unknown` (`gh is not installed` in brew's environment).
-- **`utilz doctor` inside the keg**, run as `<keg>/bin/utilz doctor` with the keg's `bin` and `/opt/homebrew/bin` on PATH, passed every check: UTILZ_HOME `/opt/homebrew/Cellar/utilz/2.11.0-spike/libexec`, directory structure, `bin/utilz`, PATH via the keg's `bin/utilz`, 15 utilities, required dependencies, and **"Install matches its manifest"**, ending "All checks passed!". Without the keg's `bin` on PATH it reported two PATH-only warnings: `$UTILZ_HOME/bin` not on PATH, and `xtrct` (required by expz) not found on PATH. Both are what `keg_only` means, and a linked keg would not show them.
-- **Every dispatcher link answered `--version`** with exit 0, run through the keg's `bin/`: cleanz, clipz, cryptz, expz, gitz, lnrel, macoz, mdagg, pdf2md, prez (`utilz:2.10.0/prez:2.2.0`), retry, stampz, syncz, todo, utilz and xtrct. `utilz version` read `installed at /opt/homebrew/Cellar/utilz/2.11.0-spike/libexec (274e64f, CI unknown)`.
-- **The WP-02 refusals hold in the real keg.** `upgrade --prefix`, `install --force --prefix`, `relink`, `use opt` and `use dev` each exited 1 with "`<keg>/libexec` is a Homebrew keg: brew owns it" and named `brew upgrade utilz`, and the scratch bin directory stayed empty. `utilz test` named `git clone https://github.com/matthewsinclair/utilz.git`.
-- **Not rechecked:** one run through `/opt/homebrew/opt/utilz/bin/prez` failed on `yq is required`, because that check's PATH left out `/opt/homebrew/bin`. The keg was uninstalled before it could be rerun. The same tree, through the Cellar path with brew's `bin` on PATH, passed above.
-
-### hv's live install and PATH links
-
-vc asked for scratch targets on every refusal check, and for a before-and-after hash of the live install and `~/.local/bin`. The request arrived after the spike had run, so there is no before-hash. What the spike actually did: `upgrade` and `install --force` ran with a scratch `--prefix`, and `relink`, `use opt` and `use dev` with a scratch `--bin-dir`. `use` read `install.prefix` from the keg's `utilz.yaml`, which names the live `~/Devel/opt/utilz`, but only as an address: `relink` never writes into its prefix, and every refusal fired before a link was touched. An earlier attempt passed each command as one word, because zsh does not split a variable, so the dispatcher answered with its help and ran nothing.
-
-Checked after the spike: the live `~/Devel/opt/utilz/manifest.sha256` was last modified on 14 Sep at 23:11, and `install_manifest_check` on the live install exits 0, so no owned path differs from its row. No link in `~/.local/bin` changed today, none resolves into a Cellar, and `~/.local/bin/utilz` still resolves to `~/Devel/opt/utilz/bin/utilz`. The spike in WP-04, and any later one, hashes both before it starts.
-
-### Leftovers after uninstall and untap
-
-Checked at 09:30:22Z: no `/opt/homebrew/Cellar/utilz`, no `/opt/homebrew/opt/utilz`, no `Library/Taps/matthewsinclair/homebrew-utilz-spike`, and nothing in `/opt/homebrew/bin` linking to utilz. `command -v utilz` is `~/.local/bin/utilz`, as before. One leftover remained: brew's clone cache for the `file://` url, `~/Library/Caches/Homebrew/utilz--git` (92M). It was created at 09:27:10Z, has origin `file:///Users/matts/Devel/prj/Utilz`, and was at `274e64f`, so it was the spike's, and it was removed. Afterwards, no cache entry names utilz.
-
-### Found
-
-- **The announce names Homebrew's commit for a keg.** Run from the keg, `upgrade` announced `source: <keg>/libexec (unknown, 2f1c682db0)`, and `2f1c682` is Homebrew's own HEAD. The keg has no `.git`, so `git -C <tree> rev-parse` walked up into `/opt/homebrew`'s repository. The refusal still followed, and nothing was written, but the line names a commit that is not the tree's. Filed as issue 0044 and fixed at `5224183`: `install_tree_commit` answers the tree's own commit, or `none`.
-- **For WP-04:** the formula declares `license "MIT"` (hv, 2026-09-21), and a LICENSE file lands with it.
+- **Build:** brew staged `.git`, the publish read the tree `clean`, and `utilz install --prefix libexec --managed-by brew` published 127 paths, cargo included, in 1m47s. Keg: `/opt/homebrew/Cellar/utilz/2.11.0-spike`.
+- **In the keg:** the manifest records `managed-by brew`. `utilz doctor`, with the keg's `bin` on PATH, passed 7 of 7, "Install matches its manifest" included; without it, only `keg_only`'s two PATH warnings appeared. All 16 dispatcher links answered `--version`. `upgrade`, `install --force`, `relink`, `use opt` and `use dev` each refused, naming `brew upgrade utilz`. `utilz test` named a git clone.
+- **Not rechecked:** one run through `/opt/homebrew/opt/utilz` failed on `yq`, because that check's PATH left out `/opt/homebrew/bin`, and the keg was gone before a rerun.
+- **Afterwards:** `brew uninstall` and `brew untap` left no Cellar, opt link, tap or PATH link. The one leftover, brew's clone cache `~/Library/Caches/Homebrew/utilz--git`, the spike's by its origin and time, was removed.
+- **hv's live install:** vc's request for a before-hash arrived after the run, so there is none. Afterwards, the live manifest (14 Sep) verified with exit 0, and no `~/.local/bin` link had changed or pointed into a Cellar. The audit in WP-04 hashed both before and after.
+- **Found:** from a keg, the announce printed Homebrew's own HEAD. That was issue 0044, fixed at `5224183`.
 
 ## Acceptance
 
@@ -90,4 +28,4 @@ Acceptance Criteria for this work package are RENDERED into `ST0019/acceptance.m
 
 ---
 
-_Generated by Intent v3.1.0 from the thread canon. Do not edit this file -- it is rendered from the model, and `intent doctor` reports any hand-edit as skew._
+_Generated by Intent v3.2.0 from the thread canon. Do not edit this file -- it is rendered from the model, and `intent doctor` reports any hand-edit as skew._

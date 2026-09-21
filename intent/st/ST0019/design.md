@@ -1,25 +1,19 @@
 # ST0019 design: Utilz's parts of the release pipeline
 
-cc drafted this on 2026-09-21, for vc's review before any code (vc's todo 11). The scope is hv's decision 1 of 14 Sep: **Utilz's own parts only**, meaning its version files, the CI build of prez and the Homebrew formula. The shared release core is Devbin's, and switching it on at Utilz is **Devbin's ST0007 WP-08, not this thread**.
+Scope, hv's decision 1 of 14 Sep: **Utilz's own parts only**, meaning its declaration to devbin's release core, its version files and its Homebrew formula. The core is Devbin's, vendored at 0.1.3. Every claim about it cites the vendored line it was read from (`bin/.devbin/lib/cmd/release`, `release.steps`, `release.notes`).
 
-## What changed since the brief
-
-The brief in `info.md` was written on 14 Sep against a release core that did not exist yet. Devbin 0.1.2 was vendored here at `633a1a1` on 2026-09-20, with the core present, opt-in and off (`bin/.devbin/lib/cmd/release`, `release.steps`, `release.notes`). So this design **declares against a contract read from source** instead of describing one. Every claim about the core below cites the line it was read from. No devbin command was run to learn any of it.
-
-## Question by question
-
-| Q   | Question                                   | Answer                                                                               | Owner            |
-| --- | ------------------------------------------ | ------------------------------------------------------------------------------------ | ---------------- |
-| 1   | What the formula installs, where it builds | A formula built from source off the git tag, on the user's machine (D3)              | ruled 2026-09-21 |
-| 2   | brew versus `utilz install` / `upgrade`    | Beside them. A keg is an install tree whose upgrade is brew's (D4)                   | ruled 2026-09-21 |
-| 3   | Bare tags                                  | Declared: `tag: "{version}"` (D1)                                                    | settled at 2.7.0 |
-| 4   | Where the shared core lives                | Devbin, ruled 14 Sep, delivered in 0.1.2                                             | closed           |
-| 5   | Notes and the CHANGELOG date               | `notes.kind: changelog`, with the heading convention changed (D2)                    | this design      |
-| 6   | CI green before the tag                    | Dropped, on vc's ruling of 2026-09-21: the local gates are the gate, CI reports (D5) | closed           |
+| Q   | Question                                   | Answer                                                                   |
+| --- | ------------------------------------------ | ------------------------------------------------------------------------ |
+| 1   | What the formula installs, where it builds | From source off the bare git tag, macOS both architectures (D3, hv)      |
+| 2   | brew versus `utilz install` / `upgrade`    | Beside them; a keg is an install tree whose upgrade is brew's (D4, hv)   |
+| 3   | Bare tags                                  | `tag: "{version}"` (D1), hv's ruling at 2.7.0                            |
+| 4   | Where the shared core lives                | Devbin, ruled 14 Sep                                                     |
+| 5   | Notes and the CHANGELOG date               | `notes.kind: changelog`, the open section named by version (D2)          |
+| 6   | CI green before the tag                    | No: the local gates are the gate, and CI reports after (D5, vc's ruling) |
 
 ## D1. The release declaration
 
-This is the block Utilz declares in `bin/.devbin/config.yaml`. **WP-01 declares it with the command still off**, and WP-08 only switches it on. It names only what differs from the defaults (`config.reference.yaml:482`: every uncommented value is the default).
+Declared in `bin/.devbin/config.yaml`, naming only what differs from the defaults (`config.reference.yaml:482`), and **switched on with `commands.release.enabled: true` on hv's OK of 2026-09-21 (vc's decision 12)**. The switch-on's first act, before any cut, is vc's read-only `bin/devbin release check`.
 
 ```yaml
 release:
@@ -32,122 +26,54 @@ release:
     query: tools/ci-state
 ```
 
-- **`tag: "{version}"`** is hv's ruling at 2.7.0, which lives in 2.7.0's annotation. The reference already names Utilz as the case (`config.reference.yaml:498`).
-- **`repo:` has to be declared, because otherwise the core refuses.** With `repo:` and `remotes:` both undeclared, `release_repo` (`release.steps:616-633`) reads the repository from `origin`, else from the only remote, else refuses: _"not exactly one remote -- declare release.repo"_. Utilz has `local` and `upstream` and no `origin`, so the cut stops there. The core never reads `local`, and if it did, its Dropbox url would be refused as naming no host. (This bullet first said the core read `local`; devbin's dc caught it against the source, and vc verified it in the vendored copy.)
-- **`remotes:` stays undeclared**, so both remotes are pushed in `git remote` order, as hv pushes by hand today.
-- **`gates:` is `check all` and one estate gate, `test estate`, which runs `bin/utilz test`.** That is the driver behind every hand release, 2.10.0's 20 of 20 suites included, so the release gate is the hand gate by construction rather than a list kept in step with it. Three alternatives were weighed and rejected:
-  - **The default `test all`** runs the bats estate and the workspace's cargo tests through `bin/.devbin/config.yaml`'s `test` options, but not the black-box suites under `opt/*/crate/test/*.sh` (acceptance.sh, theme-addressing.sh, video.sh). On its own it is narrower than the hand gate.
-  - **Three named gates, one per black-box suite** (the first revision of this design), bring back the failure ST0013/AC03 fixed. CI (`.github/workflows/tests.yml:328`) and `utilz test` (`common.sh:1116`) both DISCOVER `crate/test/*.sh` rather than naming each file, because naming one let a second suite go unrun while CI stayed green. A fourth suite added later would run under both and be run by nothing at release.
-  - **`test all` plus `test estate`** runs bats and cargo twice inside the release window, and vc ruled it out. `test all` runs nothing `utilz test` does not: measured 2026-09-21, the 16 `opt/*/test` directories `bats opt/*/test` reads are exactly the 16 utilities `utilz test` walks, `utilz` included, and prez's crate, the only crate, is the one `utilz test` runs with `--workspace`.
-
-  `estate` is declared as a `test` option with `in_all: false`, so `test all` stays the quick everyday verb, and video.sh's needs (Chrome, ffmpeg and a quiet machine, the load rule from 2.10.0) never land on it. The option is **reported as skipped, not dropped** (`config.reference.yaml:422-424`). A gate is a devbin verb run by its words (`cmd/release:698-702`), so the form is legal. **With the command off, `release check` cannot run**: `bin/devbin` refuses an inactive command with exit 2 before its handler runs (`bin/devbin:616-628`). So WP-01 proves the declaration through `bin/devbin doctor`, whose `cfg_validate` checks every `release:` key and value (`config:755`, `config:765`; `cmd/doctor:111`), and the core's read-only `release check` is **the first act of the switch-on, before any cut** (vc, 2026-09-21). `utilz test` notes that it "mutates `$UTILZ_HOME/bin`" (`common.sh:973`), so WP-01's dirt proof (D6) runs on this exact command first.
-
-- **`ci.query: tools/ci-state`** is declared so that step 11 gives a verdict: an undeclared `ci.query` prints a skipped row, _"no ci.query declared"_ (`cmd/release:985`), and a skipped row is not a verdict. (This bullet and D5 first said step 11 was skipped silently; dc caught it, and vc verified it.) `tools/ci-state` is a thin wrapper that sources `install.sh` and calls **`install_ci_state`**, the one function that asks CI about a commit (issue 0016). Its only logic is mapping: `install_ci_state` prints the run's conclusion (`success`, `failure`, `cancelled` and so on), and `ci.query` expects `green`, `failed`, `pending`, `none` or `unknown`. `success` becomes `green`, any other conclusion becomes `failed`, and `pending`, `none` and `unknown` pass through. There is no second `gh` query. **It lives in `tools/`, outside the published set, on vc's review.** The publish ships every tracked file under `bin` except `bin/devbin` and `bin/.devbin/` (`install.sh:99`, `INSTALL_EXCLUDE_RE` at `install.sh:50`). So a release tool in `bin/` would ship to every install and every keg as if it were a utility, and `install_e2e`'s link census and `utilz list` would find a real file where only dispatcher links live. `INSTALL_EXCLUDE_RE` is not widened for it. The reference's `bin/ci-state` is only an example. A new top-level `tools/` also sits outside CI's shellcheck collector, which runs `find bin opt` (`.github/workflows/tests.yml:190`), so WP-01 adds `tools` to that collector, or the script ships unlinted.
-- **`object: local`** is the default and stays. No workflow here triggers on a tag (`.github/workflows/tests.yml`, `pr-checks.yml`), so `check_release_writers` (`cmd/release:170`) finds no second writer. D3 needs no release assets, so `object: ci` would buy nothing.
+- **`repo:`** is declared because otherwise the core refuses: with no `origin` and two remotes (`local`, `upstream`), `release_repo` cannot choose (`release.steps:622-639`). `remotes:` stays undeclared, so both are pushed in `git remote` order.
+- **`gates:`** is `check all` and `test estate`, a `test` option running `bin/utilz test`, the one driver that discovers every suite kind (bats, cargo, `crate/test/*.sh`), so the release gate is the hand gate by construction. It is `in_all: false`, so `test all` stays quick and never needs video.sh's Chrome and ffmpeg. Naming the black-box suites one by one was rejected, because it brings back ST0013/AC03's unrun suite; `test all` beside it would only repeat bats and cargo.
+- **`ci.query: tools/ci-state`** makes step 11 a verdict rather than a skipped row (`cmd/release:985`). The script sources `install.sh`, asks through `install_ci_state` alone (issue 0016), and maps its answer: `success` to `green`, any other conclusion to `failed`, and `pending`, `none` and `unknown` passed through. It lives in `tools/` because `bin/` is published (`install.sh:99`, `INSTALL_EXCLUDE_RE` at `install.sh:50`), and CI's shellcheck collector reads `bin opt tools`.
+- **`object: local`** stays the default, because no workflow triggers on a tag.
+- **Proof before the switch-on:** `bin/devbin` refuses an inactive command before its handler runs (`bin/devbin:624`), so WP-01 proved the block through `bin/devbin doctor`, whose `cfg_validate` checks every `release:` key and value.
 
 ## D2. Version files and notes
 
-**The core has one version number, and Utilz has two.** `VERSION` (the framework, 2.10.0) and `opt/prez/crate/Cargo.toml` (prez, 2.2.0) move independently: 2.10.0 took prez from 2.1.0 to 2.2.0. The core's `project.version_sidecars` are files that **mirror** `VERSION` (`config.reference.yaml:87`), and it deliberately has no `Cargo.lock` recipe (`cmd/version:66`).
+- **prez keeps its own number** (hv, 2026-09-21). `Cargo.toml` is not a sidecar, since sidecars mirror `VERSION` (`config.reference.yaml:106`). A release that bumps prez carries the bump (`Cargo.toml` and `Cargo.lock`) in its own commit before the cut, because the core refuses any dirty path it does not own (`cmd/release:550`).
+- **The open CHANGELOG section names its version**, `## [2.11.0] - unreleased`, because the core finds a section by version (`release.notes:805`) and dates it at the cut (`release.notes:839`). `## [Unreleased]` would read as absent.
 
-**Ruled (a), hv on 2026-09-21 (vc's decision 6), as cc recommended and vc concurred:** prez keeps its own number. `Cargo.toml` is **not** declared as a sidecar. A release that bumps prez carries that bump in its own commit before the cut (`Cargo.toml` plus the `Cargo.lock` cargo rewrites), because the core refuses any dirty path outside the files it owns (`cmd/release:550`). The release commit then owns `VERSION` and `CHANGELOG.md` alone, and `derived:` stays undeclared. hv has already treated prez's number as its own twice: decision 2, item 3 of 14 Sep, and `prez --version` printing `utilz:2.10.0/prez:2.2.0`. Alternative (b): prez takes the framework's number at every release, which means declaring the sidecar and a `derived:` command that rewrites the lock and prints its path.
+## D3. The formula
 
-**The CHANGELOG heading convention changes.** The core finds a section by its version: `## [X.Y.Z] - <YYYY-MM-DD | unreleased | in progress>` (`release.notes:805`). Utilz writes `## [Unreleased]`, which the core would read as `absent` and refuse at pre-flight. From the next release on, the open section is headed by its version. **hv ruled 2026-09-21 that the next is 2.11.0**, so it is `## [2.11.0] - unreleased`, and the core dates it at cut time (`_notes_changelog_write_date`, `release.notes:839`). Naming the version while the section is open is the price, and it is a small one: the Minor or Patch line already has to decide it.
+Built from source in the tap `matthewsinclair/homebrew-utilz`, kept at `packaging/homebrew/utilz.rb` here and copied into the tap. macOS, both architectures, with no prebuilt or signed artefacts (hv, 2026-09-21; bottles may come later).
 
-## D3. The formula (Q1), ruled
+- **Source, not binaries:** `install_build_prez` already builds prez and showreel with cargo (`install.sh:570`), so there is no signing, notarising or upload pipeline, and both architectures come by construction.
+- **A git URL, not a tarball:** `install_owned_paths` lists the install with `git ls-files` and refuses a tree that is not a git toplevel (`install.sh:95-99`). brew stages a git URL with `.git` and keeps the tree clean (`formula.rb:3941-3952` ignores its own `HOME`). WP-03 proved both.
+- **`def install` calls Utilz's own publish**, `utilz install --prefix libexec --managed-by brew`, and links `bin/` to each dispatcher link. So the keg is the same kind of tree as `~/Devel/opt/utilz`, and the dispatcher finds `libexec` from its own resolved path (`bin/utilz:39-40`).
+- **One runtime dependency, `yq`.** Each utility's own dependencies are reported by `utilz doctor`, and the caveat points at it. `:recommended` was rejected, because brew installs those by default; `:optional` was rejected, because no user passes `--with`.
+- **`license "MIT"`** (hv, 2026-09-21), with a LICENSE file here.
+- **The tag and its commit are written by `tools/formula-bump <tag>`, never typed** (D6). Until 2.11.0 is cut, the revision is a marked placeholder.
 
-**Ruled by hv on 2026-09-21 (vc's decision 6), as recommended: the formula builds from source off the git tag**, macOS on both architectures, with no prebuilt or signed artefacts (bottles may come later), in a tap `matthewsinclair/homebrew-utilz`:
+## D4. A keg is brew's
 
-```ruby
-url "https://github.com/matthewsinclair/utilz.git", tag: "2.11.0", revision: "<sha>"
-depends_on "rust" => :build
-```
+A keg carries the manifest, so it is an install tree (`install.sh:172`), and every install-tree behaviour holds. Beside that, brew owns it (hv, 2026-09-21):
 
-**Why source and not prebuilt binaries as Intent ships:**
-
-- **No artefact pipeline.** Intent's formula installs signed, notarised binaries that `int macos prepare` builds and `int macos publish` attaches to the release. Utilz ships a bash framework whose only compiled parts are prez and showreel, and `install_build_prez` (`install.sh:549`) already builds both with `cargo build --release --workspace`. A source formula reuses that build and needs no signing, no notarisation, no upload and no `object: ci` workflow.
-- **Platforms come by construction.** Building on the user's machine serves macOS arm64 and Intel alike, where Intent is arm64-only by ruling (hv, 2026-08-15). Ruled platform statement: **macOS, both architectures**, with `depends_on :macos`. Linuxbrew would work in principle, since CI exercises the source on Ubuntu, but nobody has installed a keg on Linux, so it is left out rather than claimed.
-- **A git URL, not the tag tarball, and this is load-bearing.** `install_owned_paths` enumerates what an install contains with `git ls-files` (`install.sh:99`) and refuses a tree that is not a git top level (`install.sh:95`). A tarball has no `.git`. Homebrew's git strategy stages by copying the cached checkout recursively, `.git` included (`download_strategy/git_download_strategy.rb:265` describes exactly that copy), so the manifest keeps one authority for its file list. **The tree also stays clean inside brew, and that matters just as much**, because `install_tree_state` reads the WHOLE tree (`install.sh:198`) and `utilz install` refuses a dirty source. Homebrew sets the build's `HOME` to `buildpath/.brew_home` and writes a `*` `.gitignore` into it, under the comment _"Don't dirty the git tree for git clones."_ (`Library/Homebrew/formula.rb:3941-3952` in this machine's Homebrew; vc found it). **Both are read from Homebrew's source, not driven**, and WP-03's spike is where they are proved.
-
-**What `def install` does: it calls Utilz's own publish instead of copying files.** `utilz install --prefix #{libexec}` already builds prez, copies the owned set and writes the manifest (`install.sh:752`). One publish path means the keg and `~/Devel/opt/utilz` are the same kind of tree, and the dispatcher, the prez shim's install branch (`opt/prez/prez`, which runs the shipped binary and never builds) and `utilz doctor` need no brew-specific path. The layout follows Intent's formula for the same reason Intent gives: the tree lives in `libexec`, because the dispatcher derives `UTILZ_HOME` from its own resolved path (`bin/utilz:43`), and `bin/` gets one symlink per dispatcher link (fifteen utilities plus `utilz`).
-
-**The manifest has to survive brew's post-install.** Brew may normalise permissions or re-sign the prez and showreel Mach-O binaries after `def install` returns, and either one changes bytes the manifest checksummed. So WP-03's spike runs `utilz doctor` inside the finished keg and proves the manifest still verifies, instead of assuming it does because the publish verified at write time.
-
-**Lessons carried over from Intent's formula, each measured there:** `url` at top level, never nested, because `brew tap` validates under every simulated OS. No `version` line if brew reads the version from the tag. The exec bit is irrelevant here, because nothing is a downloaded release asset.
-
-**How WP-03's spike runs, and why not off a tag.** No tag carries `--managed-by` yet (WP-02 landed after 2.10.0), and nothing after 2.10.0 is pushed, so a GitHub URL at a tag cannot exercise the formula this design describes. The spike's formula lives in a scratch tap made with `brew tap-new`, and its `url` is this repository on disk (`file://`, `using: :git`) at a named `revision:`. That drives the same git download strategy a GitHub URL does. It is **`keg_only`**, so nothing is linked into `/opt/homebrew/bin` to shadow the maintainer's own `utilz` on PATH, and every check runs by the keg's own paths. It installs with `--build-from-source`, is uninstalled and untapped afterwards, and runs only on hv's go, because it writes to this machine's Homebrew. What it proves:
-
-- the staged checkout keeps `.git`, and `utilz install --prefix #{libexec} --managed-by brew` publishes from it, clean, inside brew's build;
-- `cargo build --release --workspace` fetches and builds inside brew's build environment;
-- after brew's post-install, `libexec/bin/utilz doctor` passes, manifest included, and the manifest still reads `managed-by brew`;
-- every dispatcher link in the keg's `bin/` resolves `UTILZ_HOME` to `libexec` through brew's symlinks and answers `--version`;
-- `upgrade`, `relink` and `use` run from the keg refuse, naming `brew upgrade utilz` (WP-02, now against a real keg).
-
-**Found while planning, for WP-04:** the repository has no LICENSE file, and `brew audit --strict` wants a `license` line. Which license is hv's call.
-
-**Runtime dependencies, read from each utility's yaml on 2026-09-21.** Required: `yq` (the framework itself), `jq`, `git`, `gpg`, `python3`, `qpdf` and poppler (`pdfinfo`, `pdftoppm`), `unison`, `rsync`. Optional: `ffmpeg` (prez's video export), `glow`, `bat`. **Decided in WP-04: `depends_on` only what the framework needs to start, `yq`, and no other dependency, required or not.** This section first recommended the rest as `=> :recommended`, meant to spare a user fifteen utilities' dependencies. But brew **installs** a `:recommended` dependency unless it is refused with `--without`, so that would have installed all of them. `:optional` goes the other way, installing one only with `--with`, which no user passes and which a strict audit is likely to question. `utilz doctor` already reports every missing dependency, optional ones included (2.10.0), each with its own install line, so the caveat points at doctor, and a user installs what the utilities they use need.
-
-**What WP-04 writes here, and what is hv's.** The tap is a second GitHub repository, `matthewsinclair/homebrew-utilz`, and creating it and pushing to it are hv's. WP-04 writes the formula in this repository, at `packaging/homebrew/utilz.rb`, outside the published set (`install.sh:99` publishes `bin opt help static VERSION`), and the LICENSE, MIT on hv's choice of 2026-09-21, with the README's license section to match. The formula is the spike's minus the spike: not `keg_only`, the GitHub git URL at the bare tag, `license "MIT"`, and a `test do` that runs `utilz --version`. Its `tag` and `revision` name 2.11.0, whose revision exists only once 2.11.0 is cut, so until then the revision line is a marked placeholder that WP-05's bump replaces. `brew audit --strict` is run against it in a scratch tap on hv's go, as the spike was. The install from the pushed tap at the bare tag follows the release, since the tag does not exist until then.
-
-## D4. brew beside `utilz install` and `upgrade` (Q2), ruled
-
-**Ruled by hv on 2026-09-21 (vc's decision 6), as recommended: beside, not replacing.** `utilz install` and `upgrade` publish from a source checkout to `~/Devel/opt/utilz`, which is the maintainer's loop (ST0014), and brew is how everyone else installs. The two never share a tree.
-
-- **A keg is an install tree.** It carries the manifest, so `install_tree_kind` answers `install` (`install.sh:172`), and every install-tree behaviour holds unchanged.
-- **The verbs that write a tree refuse inside a keg.** `upgrade`, `relink` and `use` would rewrite files brew owns and checksums, or point PATH into a versioned Cellar path that the next `brew upgrade` removes, so in a keg they refuse and name `brew upgrade utilz`. The discriminator must be a fact the keg carries, not a path pattern such as `Cellar`.
-- **The discriminator, decided in WP-02: a manifest header row, `managed-by`, written from a flag to `install`.** The two options D4 left open are not rivals. A flag on its own leaves nothing behind for a later verb to read, and a header row has to be written by something. So `utilz install --managed-by brew` records a `managed-by` row whose value is `brew`, and every other publish records `utilz` there. The key joins `INSTALL_MANIFEST_HEADER_KEYS` (`install.sh:271`), whose count check at `install.sh:365` makes a key with no value fail the write. A manifest published before the row existed reads as `utilz`, since only brew's publish ever wrote `brew`. One pure reader, `install_tree_manager <dir>`, answers `brew` or `utilz` from the manifest alone, and each verb asks it once. It lives in `common.sh` beside `UTILZ_MANIFEST_NAME` (`common.sh:314`), not in `install.sh`, because its third caller, `utilz test`, runs where `install.sh` is not loaded.
-- **"Inside a keg" means either end.** A verb refuses when the tree it runs from is a keg, and when the tree it would write or link to is one: `upgrade --prefix`, `relink --prefix`, and `use`, whose trees are derived from where it runs. **`install --force` onto a keg refuses too.** D4 first named three verbs, but `install --force` overwrites an existing tree exactly as `upgrade` does, so leaving it out would leave the same harm one flag away. The formula's own publish into an empty `libexec` needs no `--force` and is not refused.
-- **The manifest's header rows mean what they say.** `source-commit` is the tag's commit. `source-tree` is the absolute path of the tree the publish ran from, which inside brew is the build directory under brew's temporary area. brew deletes it after `def install` returns, so `use dev` from a keg would point PATH at nothing, one more reason `use` refuses there. **`source-tree` has a third reader, `utilz test`'s refusal inside an install** (`common.sh:1000`, vc's catch), which prints `cd <source-tree> && utilz test`. In a keg that names the deleted build directory, so when `install_tree_manager` answers `brew`, the refusal names a clone of the repository instead. (D4 first said `source-tree` records `clean`, but the row is an address, `install.sh:347-351`.) `ci-state` is whatever `install_ci_state` answers at build time, which may be `unknown` inside brew's sandbox. That is the row's defined answer for "could not ask", not a failure.
+- **The marker is a manifest header row, `managed-by`**, written by `utilz install --managed-by brew`, and `utilz` by every other publish; a manifest from before the row reads as `utilz`. A flag alone leaves nothing for a later verb to read, and a `Cellar` path pattern is not a fact the keg carries. `install_tree_manager` reads it, in `common.sh` so that `utilz test` can ask it without `install.sh`.
+- **`install --force`, `upgrade`, `relink` and `use` refuse when the tree they run from or target is a keg**, naming `brew upgrade utilz`. `install_refuse_keg` is the one refusal, and `use` inherits it through `relink`. They would rewrite files brew checksums, or point PATH into a versioned keg that the next `brew upgrade` removes.
+- **`source-tree` in a keg names brew's deleted build directory.** So `use dev` refuses before reading it, and `utilz test`'s refusal names a git clone instead (`common.sh:1035`). `ci-state` may be `unknown` inside brew's build, which is that row's defined answer.
 
 ## D5. The risk that remains: Linux-only defects
 
-**A release can ship with a defect that only Linux shows, and step 11 then reports it after the fact.** The local gates run on the maintainer's macOS machine. CI's Ubuntu legs are the only place Linux is exercised before users see a release, and bash 3.2 and Linux-only regressions have been caught only on CI before. vc ruled on 2026-09-21 not to ask devbin to reopen D40 (_"CI does not gate the release, it reports on it"_, `cmd/release:979`): 2.10.0 was tagged at 12:58:07Z, before CI run 35512150262 existed at 12:58:44Z, and that order was already accepted. A red step 11 means fixing forward and cutting the next patch, never moving the tag. Declaring `ci.query` (D1) is what turns that report from a skipped row into a verdict.
+The gates run on the maintainer's macOS machine, and CI's Ubuntu legs report after the tag (D40, _"CI does not gate the release, it reports on it"_, `cmd/release:979`). A red step 11 means fixing forward in the next patch, never moving the tag.
 
-## D6. The release window
+## D6. The release window, the tag, and the formula after the cut
 
-**The core refuses to cut while any path it does not own is dirty, untracked files included** (`release_dirt`, `release.steps:355`; the tree rule at `cmd/release:550`). On this estate that is the normal state: three nodes write board views and canon event files continuously, and at the time of writing vc's three views and five untracked event files would each refuse a cut. So a Utilz release has a **window**: every node commits its own views and events by explicit path, then holds board writes until the cut reports, the same way suites are held today. The node that runs the cut says when the window opens and closes, on the board and over the socket.
-
-**The window is stricter than a clean start, because step 5 checks the tree after the gates.** The core reads the tree before the gates and again after them, and fails the cut if any gate changed it, untracked files included (`cmd/release:705-707`). Two consequences follow:
-
-- **The window holds every `intent` write for the whole cut, gates included.** That means `intent wb pickup` and `intent wb touch` too, not just deliberate board edits: both write board views and canon events, so a heartbeat during the gates fails the cut at step 5.
-- **Every gate must leave `git status --porcelain --untracked-files=all` byte-identical.** The bats estate, cargo, acceptance.sh, theme-addressing.sh and video.sh have never been held to that. WP-01 runs each one, diffs that status before and after, and any writer it finds is fixed or ignored before Devbin's WP-08 switches the core on. The alternatives were rejected: a cut from a separate clone loses the maintainer's gates-on-this-machine property, and ignoring `intent/whiteboard/` would stop the views being committed at all.
-
-## D7. The inputs taken as given, and what the core already does with them
-
-| Input from 2.10.0                                | Where the core honours it                                                                                |
-| ------------------------------------------------ | -------------------------------------------------------------------------------------------------------- |
-| Bare tag, hv's ruling at 2.7.0                   | `tag: "{version}"`, expanded as written (`release_tag_name`, `release.steps:86`)                         |
-| `--cleanup=whitespace`, never strip or verbatim  | Step 7: `git tag -a "$tag" "$commit" -F "$body_file" --cleanup=whitespace` (`cmd/release:811`)           |
-| Read the annotation back, trailing ws normalised | `release_tag_reuse_note` runs both sides through `git stripspace` and compares (`release.steps:444-452`) |
-
-**One change to the tag message.** The core's message is the CHANGELOG section's body alone (`_notes_changelog_body`, `release.notes:852`). It drops both the `<version> -- <headline>` first line that 2.9.0 and 2.10.0 carried and the `## [X.Y.Z] - date` heading. The recommendation is to take the core's form, so the fleet has one. It also means the read-back compares against that body and not against the entry with its heading, which is what the core does. **Step 7 reads back a fresh tag as well as a reused one** (`cmd/release:814-818`), so watch-out 8's read-back is the core's by construction and Utilz owes nothing further for it.
+- **The window:** the core refuses a cut while any path it does not own is dirty, untracked included (`release.steps:361`, `cmd/release:550`), and fails it if a gate changes the tree (`cmd/release:707`). So every node commits its views and events, then holds every `intent` write, `pickup` and `touch` included, for the whole cut. Both gates leave the tree byte-identical (measured in WP-01).
+- **The tag** is bare and annotated, made with `--cleanup=whitespace` (`cmd/release:811`), and read back after it is made (`cmd/release:814-818`). Its message is the CHANGELOG section's body alone (`release.notes:852`), without 2.10.0's headline line, so the fleet has one form.
+- **The formula after each cut** (hv, 2026-09-21): no `after:` hook, because `after:` runs outside the core's guarantees (`cmd/release:1023`) and the tap is hv's to push. hv runs `tools/formula-bump <tag>`, which refuses a missing or lightweight tag, reads `git rev-parse <tag>^{commit}`, and rewrites only the `tag:` and `revision:` lines. It exists because the offline audit accepts any 40 hex digits. brew itself checks the tag against the revision at fetch (`vcs_download_strategy.rb:46-51`). `docs/releasing.md` is the procedure, including the tap's one-time setup at 2.11.0.
 
 ## Work packages
 
-vc reviewed on 2026-09-21: GO with four changes, all written in above (D1's gates, D3's evidence and post-install check, D6's step-5 consequences, D7's fresh-tag read-back).
+| WP  | Title                                                                       | Status          |
+| --- | --------------------------------------------------------------------------- | --------------- |
+| 01  | Gates, tools/ci-state, the heading convention, and gates that leave no dirt | Done            |
+| 02  | The keg as an install tree: the discriminator and the verbs that refuse     | Done            |
+| 03  | Spike: a git-URL formula built in a scratch tap, the keg run end to end     | Done            |
+| 04  | The tap matthewsinclair/homebrew-utilz and its formula                      | Done            |
+| 05  | The formula bump after a release: after: or a documented step               | Open on AC-05.2 |
 
-| WP  | Title                                                                | Depends on          |
-| --- | -------------------------------------------------------------------- | ------------------- |
-| 01  | Gates, `tools/ci-state`, the heading convention, gates leave no dirt | D1, D2, D6          |
-| 02  | The keg as an install tree: the discriminator and refusing verbs     | D4                  |
-| 03  | Spike: a git-URL formula built in a scratch tap, keg run end to end  | D3                  |
-| 04  | The tap `matthewsinclair/homebrew-utilz` and its formula             | WP-03               |
-| 05  | The formula bump after a release: `after:` or a documented step      | WP-04, Devbin WP-08 |
-
-**WP-05, ruled by hv on 2026-09-21 (vc's decision 10): a documented step plus a script, no `after:` hook.** A release's `after:` could rewrite the formula and push the tap, but `after:` runs outside the core's guarantees (`cmd/release:940`), and pushing the tap is hv's. So after each cut hv runs **`tools/formula-bump <tag>`**, then audits, commits and pushes the tap himself, as `docs/releasing.md` says.
-
-**The script exists because no commit may be typed by hand.** WP-04 measured it: the offline `brew audit --strict` accepts a revision of 40 zeros, so it would accept a wrong commit just as quietly, and a wrong commit is a formula that fails at every user's install. `tools/formula-bump <tag>`:
-
-- refuses a tag that does not exist, and a lightweight tag, because every release tag is annotated (step 7, `cmd/release:811`);
-- reads the commit with `git rev-parse <tag>^{commit}`, from git and nowhere else;
-- rewrites only the formula's `tag:` and `revision:` lines, refusing when it finds anything other than exactly one of each, so a reshaped formula is refused rather than half-rewritten;
-- prints the diff it made, and leaves committing to whoever runs it.
-
-It lives in `tools/`, beside `ci-state`, outside the published set, and CI's shellcheck step reads it there.
-
-## Acceptance
-
-The ACs are minted with `intent ac new` with the work packages. The shape: the declaration, gates included, is declared with the command off and `bin/devbin doctor` reads it clean, and the core's own `release check` (read-only, run by hv or vc) is the switch-on's first act; every gate leaves `git status --porcelain --untracked-files=all` byte-identical; `tools/ci-state` answers each of the five verdicts under a stubbed `gh`; the CHANGELOG's open section reads `open` to the core; a keg installed from the tap passes `utilz doctor` after brew's post-install, manifest included, and runs every utility; `upgrade`, `relink` and `use` refuse inside a keg and name `brew upgrade`.
-
-## Open, and not this thread's
-
-- Enabling the core (`commands.release.enabled: true`) is Devbin's ST0007 WP-08. Its first act, before any cut, is the core's read-only `release check` against the block WP-01 declared.
+AC-05.2, the install from the pushed tap at the bare tag, waits for the 2.11.0 cut.
