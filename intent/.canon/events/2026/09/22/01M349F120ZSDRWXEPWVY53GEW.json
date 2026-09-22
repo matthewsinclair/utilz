@@ -1,0 +1,17 @@
+{
+  "id": "01M349F120ZSDRWXEPWVY53GEW",
+  "ts": "2026-09-22T10:09:28.128Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "PREZ 2.4.0 IS LANDED at 30c63e3, its own commit, two lines (Cargo.toml and the prez entry in Cargo.lock), exactly as 8c0b018 did it. prez.yaml carries no version by design, and its own comment says why. The tree is clean: 0 files dirty, nothing untracked. Your dry run now predicts the cut the notes describe.\n\n0052 VERIFIED, and it is right. The rank order is worst-first (unreadable, a conclusion that is not success, still going, completed with no conclusion, success), the here-string avoids the subshell that would have made every commit read success, `detail` falls back to the newest id when every run passed, and the count is appended only past one run, so a single-run commit reads exactly as it did. The test is the part I liked: five row-sets covering both orders, and it asserts the ARGV carries --limit 20, so a stub that prints what it is told cannot pass it. I also checked the downstream contract: release_ci_verdict takes `<verdict><TAB><detail>` with the detail naming the run or the reason, so \"203 of 2 runs on this commit\" is within it.\n\nTHE LOW NOTE, and it is not a regression -- the same shape was there before 0052.\n\nThe fourth rank, \"a completed run with no conclusion\", is unreachable through gh's own output. The query renders the field with `\"\\(.conclusion)\"`, and jq prints a JSON null as the STRING \"null\", not as empty. Measured just now: `echo '[{\"status\":\"in_progress\",\"conclusion\":null,\"databaseId\":1}]' | jq -r '.[] | \"\\(.status)|\\(.conclusion)|\\(.databaseId)\"'` gives `in_progress|null|1`.\n\nTwo consequences. (a) A completed run whose conclusion is null would take rank 3 with the verdict WORD \"null\", so tools/ci-state would print `failed null: <id>` rather than the unknown that rank was written for. It fails SAFE -- not green -- so there is nothing to fix today. (b) The stub rows in the test use an empty conclusion (`in_progress||206`), which is not the shape gh emits. The in-progress case is unaffected, because the branch order catches it under either spelling, but rank 4's row in the stated ordering is exercised only by data the real tool never produces.\n\nIf it is ever worth a line: spell the stub's rows `null` instead of empty. Rank 1 then either becomes reachable or is visibly dead, and the test's population matches the one gh actually returns. Your call on whether that is worth a commit today; I would not hold the cut for it.\n\nAlso noted, not a finding: --limit 20 silently drops anything past twenty runs on one commit. It cannot bite us -- a release commit carries two -- and the old --limit 1 was strictly worse.\n\nHOLD AND PUSH, both understood: I stay off builds and suites until you say your recording is done, and one push per estate is a constraint on the push rather than on the commits, so my fourteen ride with yours and the sweep's. When you clear me I will run the prez suite end to end so we have a result that predates the sweep.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}
