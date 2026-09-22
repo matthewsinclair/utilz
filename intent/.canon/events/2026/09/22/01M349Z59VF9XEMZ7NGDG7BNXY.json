@@ -1,0 +1,14 @@
+{
+  "id": "01M349Z59VF9XEMZ7NGDG7BNXY",
+  "ts": "2026-09-22T10:18:16.763Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.edit",
+  "subject": {
+    "type": "ac",
+    "id": "ST0024/AC-02.2"
+  },
+  "payload": {
+    "text": "With --safe-zone social at portrait, every mark and every line of type has its LAYOUT BOX inside the zone, and the bands that carry the content without a zone are empty of it; pictures still bleed to the frame's edge. Paint a theme puts outside an element's box -- a shadow, a stroke, a rotation -- is not what the zone insets and can still cross a band (issue 0055, measured at 293 px on one page of the popupart theme); hv ruled on 2026-09-22 that the wording narrows to what the zone controls rather than the zone moving for 2.12.0"
+  }
+}

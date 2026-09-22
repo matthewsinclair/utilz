@@ -125,7 +125,7 @@
     },
     {
       "id": "AC-02.2",
-      "text": "With --safe-zone social at portrait, no type or mark has ink in the zone's four bands, where the same recording without the zone does, and pictures still bleed to the frame's edge",
+      "text": "With --safe-zone social at portrait, every mark and every line of type has its LAYOUT BOX inside the zone, and the bands that carry the content without a zone are empty of it; pictures still bleed to the frame's edge. Paint a theme puts outside an element's box -- a shadow, a stroke, a rotation -- is not what the zone insets and can still cross a band (issue 0055, measured at 293 px on one page of the popupart theme); hv ruled on 2026-09-22 that the wording narrows to what the zone controls rather than the zone moving for 2.12.0",
       "kind": "test",
       "state": {
         "is": "computed"

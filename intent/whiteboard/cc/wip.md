@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: c6b24810-9d3c-45a5-ab7a-110a0611be6e
-heartbeat_at: 2026-09-22 10:07Z
+heartbeat_at: 2026-09-22 10:21Z
 status: active
-focus: "ST0024 built and landed under hv's rule (b): WP-01 closed 8/8, WP-02 waits only on vc's frame read of 001. Next: the verification pass, then releasing.md against the swept 0.1.6, then hv's cut of 2.12.0"
+focus: "FOLDED, holding for hv. Everything of cc's is landed and green: ST0024 13/13 PASS, prez 2.4.0, 0054 and 0055 closed with their narrowings, the prez suite green under bash 3.2.57. Waiting on hv's keystroke at devbin's prompt, then the sweep, then one push; then releasing.md's core-cut steps against the swept copy."
 claims: [ST0024]
 ---
 
@@ -13,14 +13,13 @@ claims: [ST0024]
 
 ## DOING
 
-- (1) Utilz's half of the fleet CI pass: an issue, then a concurrency block in .github/workflows/tests.yml (group on workflow and ref, cancel-in-progress). macOS stays on every push, per hv's (1) today. vc verifies and hv pushes. Committed only when vc says the tree is free.
-- The portrait thread (hv's yes to 6.1-6.3, vc's order today): 6.1 headline fit-to-width at portrait; 6.2 a TikTok/IG safe-zone option, with the corner bug, venue labels and at-work QR moved inside it; 6.3 the socials handle fitted at 16:9 too. ST, WPs and design.md first, and the design to vc before code. The day's critical path.
-- The batched verification pass vc asked for: 0047 and 0048 (9fe089c), 0049 and 0050 (88e027f), 0051 (194fcc4), 0052 (486d410) and ST0025 with 0053 (63661de, a534310). 0052 is verified by cc directly; the other four are being read now. Each issue closes on the pass, and 0046 closes on CI green on the pushed commit.
+_(none)_
 
 ## TODO
 
-- docs/releasing.md: the steps for a cut through the core, from the swept 0.1.5, plus the fix for the line saying the core is switched off. vc's answer on release.remotes (config.reference.yaml:495-499: undeclared means every remote git lists, so local and upstream) is confirmed against the swept core and the dry-run before the page says so.
 - docs/releasing.md: the core-cut steps are DRAFTED (the eleven steps, the remotes rule, the gates, the CI half). Finalise against the SWEPT vendored copy after devbin 0.1.6 lands here, then commit for vc's review.
+- AFTER THE CUT, not before: issue 0056's fix. utilz test prez reads the compiled binary in its BATS stage and builds it in a later stage, so a hand version bump (ST0019 D2 requires one) reddens a test that is right about the tree and wrong about the moment. The fix is the driver building once before the three sources; it touches the shared test driver, which is not a release-day edit.
+- If devbin-vc does not take it with the sweep: add intent/.canon/** beside intent/whiteboard/** in tests.yml's paths-ignore, and correct my sentence 'a push that only moves the whiteboard runs nothing', which is false as written -- paths-ignore suppresses only when EVERY changed file matches, and intent wb writes a canon event outside the ignored path (vc measured 2 of 61 runs suppressed as committed, 18 of 61 with the canon line).
 
 ## Holds
 
@@ -31,10 +30,13 @@ _(none)_
 - One suite at a time with vc, and commits by explicit path only: vc's files have sat staged in the shared index while cc committed.
 - A .md the pre-commit prettier hook reformats can leave the index holding the pre-format text after an explicit-path commit: check git status after. Store bodies (issues, WP bodies) must be prettier-stable before intent set, or the view drifts and the doctor gate refuses every later commit.
 - hv's rule: a gap in devbin's vendored release core (bin/.devbin/lib/release*) is fixed in devbin, as a default with an override, through vc to devbin-dc or devbin-2b. Never patch the vendored copy or add a Utilz-only branch. Vendored line numbers move with each devbin sweep: re-read a citation before trusting it.
+- A version bumped by hand needs a BUILD before the suite: utilz test prez reads target/release/prez in its BATS stage and only acceptance.sh and video.sh build it, later in the same run. A second run of an untouched tree then goes green, which is the tell (issue 0056).
+- Two claims narrowed on 2026-09-22 by the same mechanism, and it is worth suspecting a third: the INSTRUMENT measured layout extent (or one fixture) and the CLAIM was written about painted extent (or every reel). They agree on every case anybody looks at, so nothing reports the gap until something else goes looking. 0054 and 0055 are both closed that way, and the caveat lives beside the check rather than in the issue alone.
 
 ## Decisions
 
 - hv, 2026-09-22, directly to cc, answering cc's day plan: (1) 'Yes': at Utilz, take only the cancel-superseded half of the fleet CI ruling, and macOS stays on every push (Utilz is public, and the macOS legs are its only bash 3.2 run). (2) 'Yes, vc has instructions from me now, follow their lead': go on vc's order, sequenced by vc. (3) 'I'm less worried about the release number and more worried about having all of this done and dusted today so that all of the outstanding work is shipped on a release.'
+- hv, 2026-09-22, directly to cc and to vc on the same day, three rulings this node acted on: (1) the fleet CI ruling is UNIFORM whatever a repository's visibility, so Utilz took both halves and the earlier public-repo exception is superseded (0046); (2) on ST0024's Q5, '(b)': one rule at every orientation -- a line whose INK would leave its room is fitted wherever it is drawn, and at portrait a headline is held to its whole word against its room; (3) on 0055, 'Narrow', and on 0054, 'Ok': where an instrument measures one thing and the claim was written about another, the claim narrows to what is measured and the product does not move.
 
 ---
 

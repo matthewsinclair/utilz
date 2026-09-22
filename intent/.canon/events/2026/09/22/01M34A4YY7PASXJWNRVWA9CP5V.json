@@ -1,0 +1,15 @@
+{
+  "id": "01M34A4YY7PASXJWNRVWA9CP5V",
+  "ts": "2026-09-22T10:21:26.855Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 2026-09-22, directly to cc and to vc on the same day, three rulings this node acted on: (1) the fleet CI ruling is UNIFORM whatever a repository's visibility, so Utilz took both halves and the earlier public-repo exception is superseded (0046); (2) on ST0024's Q5, '(b)': one rule at every orientation -- a line whose INK would leave its room is fitted wherever it is drawn, and at portrait a headline is held to its whole word against its room; (3) on 0055, 'Narrow', and on 0054, 'Ok': where an instrument measures one thing and the claim was written about another, the claim narrows to what is measured and the product does not move."
+  }
+}

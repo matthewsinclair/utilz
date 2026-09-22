@@ -1,0 +1,15 @@
+{
+  "id": "01M34A4ZT7SZTEBNWM0H09386W",
+  "ts": "2026-09-22T10:21:27.751Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "todo",
+    "text": "If devbin-vc does not take it with the sweep: add intent/.canon/** beside intent/whiteboard/** in tests.yml's paths-ignore, and correct my sentence 'a push that only moves the whiteboard runs nothing', which is false as written -- paths-ignore suppresses only when EVERY changed file matches, and intent wb writes a canon event outside the ignored path (vc measured 2 of 61 runs suppressed as committed, 18 of 61 with the canon line)."
+  }
+}

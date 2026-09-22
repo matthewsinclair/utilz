@@ -988,7 +988,15 @@ fi
 # ------------------------------------------ ST0024 AT06 -- AC-02.2, AC-02.3
 
 if want ST0024-AT06; then
-  start ST0024-AT06 "with --safe-zone social nothing of type or mark is drawn in the platform's four bands"
+  # WHAT THIS GREEN COVERS, AND WHAT IT DOES NOT (issue 0055, hv's "Narrow" of
+  # 2026-09-22). The zone insets LAYOUT, so this proves the bands hold no
+  # element -- on this fixture, under the built-in theme. It cannot speak for
+  # paint a theme puts outside an element's box: vc measured popupart's
+  # text-shadow, strokes and rotation putting 293 px hard against the zone's
+  # left edge on a socials page, with every layout box correctly inside. The
+  # instrument reads layout extent; the sentence a reader takes from it is
+  # about painted extent, and the two agree on every case anybody looks at.
+  start ST0024-AT06 "with --safe-zone social nothing of type or mark is LAID OUT in the platform's four bands"
   if tools_here; then
     if ensure zoned && ensure oneword; then
       # 1080x1920, and the zone is 10% top, 15% right, 25% bottom, 6% left

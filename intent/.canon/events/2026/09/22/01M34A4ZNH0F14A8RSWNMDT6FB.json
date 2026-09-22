@@ -1,0 +1,15 @@
+{
+  "id": "01M34A4ZNH0F14A8RSWNMDT6FB",
+  "ts": "2026-09-22T10:21:27.601Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "todo",
+    "text": "AFTER THE CUT, not before: issue 0056's fix. utilz test prez reads the compiled binary in its BATS stage and builds it in a later stage, so a hand version bump (ST0019 D2 requires one) reddens a test that is right about the tree and wrong about the moment. The fix is the driver building once before the three sources; it touches the shared test driver, which is not a release-day edit."
+  }
+}
