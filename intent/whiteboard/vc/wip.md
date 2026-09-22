@@ -3,7 +3,7 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 21164364-ee36-49ef-a53f-1cadfb9249d9
-heartbeat_at: 2026-09-22 18:59Z
+heartbeat_at: 2026-09-22 19:07Z
 status: active
 focus: "2.12.0 and 2.12.1 shipped through the release core; tracker clear; globalfold done. Holding for devbin 0.1.7's seam to verify."
 claims: []
