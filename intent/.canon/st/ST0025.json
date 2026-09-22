@@ -3,8 +3,9 @@
   "id": "ST0025",
   "title": "stampz: a PDF whose pages differ in size is stamped page by page",
   "slug": "stampz-a-pdf-whose-pages-differ-in-size-is-stamp",
-  "status": "triage",
+  "status": "completed",
   "created": "2026-09-22",
+  "completed": "2026-09-22",
   "objective": "A PDF whose pages differ in size is stamped page by page: one stamp rendered for each distinct page size, laid over the pages of that size in a single qpdf run, so every page carries a mark made for it. Today such a file is refused by name (ST0011 AC06), because one stamp over a page of another size is drawn at the wrong size and a page that looks stamped but is not properly marked is the failure a deterrent must not have. The refusal stays for a file whose per-page geometry cannot be read.",
   "context": "",
   "body": "",
@@ -14,8 +15,8 @@
       "seq": 1,
       "title": "Per-size stamps and per-range overlays",
       "scope": "S",
-      "status": "wip",
-      "objective": "",
+      "status": "done",
+      "objective": "One stamp per distinct page size, laid over that size pages in a single qpdf run with the ranges partitioning the pages, so a file whose pages differ in size is stamped rather than refused, and a file whose pages cannot all be measured still is.",
       "body": "",
       "preamble": ""
     }

@@ -10,8 +10,7 @@ A DOING / TODO / DONE view, projected from steel-thread and work-package status:
 
 ## TODO
 
-- [?] ST0025: stampz: a PDF whose pages differ in size is stamped page by page
-  - [-] 01: Per-size stamps and per-range overlays
+_(none)_
 
 ## DONE
 
@@ -123,6 +122,8 @@ A DOING / TODO / DONE view, projected from steel-thread and work-package status:
   - [x] 01: The aspect flag and key, the size rule, and a 9:16 reel that reads
 - [x] ST0023: showreel: a long socials handle fits a portrait frame (issue 0045)
   - [x] 01: Fit the socials handle to its pane, red test first
+- [x] ST0025: stampz: a PDF whose pages differ in size is stamped page by page
+  - [x] 01: Per-size stamps and per-range overlays
 
 ---
 
