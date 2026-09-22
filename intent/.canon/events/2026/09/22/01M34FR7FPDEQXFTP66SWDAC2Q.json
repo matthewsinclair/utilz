@@ -1,0 +1,15 @@
+{
+  "id": "01M34FR7FPDEQXFTP66SWDAC2Q",
+  "ts": "2026-09-22T11:59:21.078Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "issues.add",
+  "subject": {
+    "type": "issue",
+    "id": "0062"
+  },
+  "payload": {
+    "severity": "low",
+    "title": "tools/ci-state reads the run conclusion and never the jobs, so an infrastructure refusal and a red suite are the same answer at step 11"
+  }
+}

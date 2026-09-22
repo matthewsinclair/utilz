@@ -1,0 +1,15 @@
+{
+  "id": "01M34FVWNPGVWXBWJHC2VWR1MK",
+  "ts": "2026-09-22T12:01:21.078Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "watchout",
+    "text": "DO NOT WRITE TO THE TREE WHILE A DRY RUN OR A CUT IS RUNNING, AND KNOW THAT STEP 5 WILL BLAME A GATE WHEN YOU DO. I filed issue 0062 while a dry run's gates were in flight and spoiled the run. Step 5 reads release_tree_state BEFORE and AFTER the gates, release_dirt underneath it runs `git status --porcelain=v1 -z --untracked-files=all`, and release_tree_changed reports any path the two reads disagree on. Four new paths appeared between them -- an issue json, its rendered view, a canon event and a modified .intentfiles -- none of them written by a gate.\n\nTHE REFUSAL IT PRODUCES IS MISLEADING BY CONSTRUCTION: \"a gate changed the tree: <paths> -- the gates examine the release commit and must not write to it\" (cmd/release:711). The core cannot tell a gate's write from anyone else's, so it names the only writer it knows about. A reader who did not know what else was happening in the checkout would go looking for a gate that writes, and there is none. Step 5 also reads HEAD before and after for the same reason, so COMMITTING during a run is caught too and reported as \"a gate moved HEAD\" -- which means the fix for having dirtied the tree is NOT to commit it mid-run.\n\nTHE RULE: between starting a dry run and reading its last row, the checkout is read-only for every node. That includes `intent issues add`, `intent wb` (which writes a board view AND a canon event), and anything that renders a view. A whiteboard write is not a harmless write here. cc reached the same conclusion independently from ST0019 D6 and is holding all board writes until the tag.\n\nCOST, MEASURED: one full gate cycle. The gates are `check all` plus `test estate`, and estate was 131 tests into the first of several suites when I stopped it. Stopping is cheaper than letting it reach step 5, because the re-run costs the same either way and a stopped run stops burning time. Killing the run leaves a bats child alive -- the SIGTERM reaches the wrapper, not the grandchild -- so kill it by pid and confirm both the process and /var/folders/**/T/bats-run-* are gone before starting again."
+  }
+}
