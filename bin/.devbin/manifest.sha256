@@ -1,9 +1,9 @@
 # devbin manifest -- written by: devbin install. Read by: devbin upgrade, devbin doctor.
 # Every line below is a file devbin owns. An edit to one is DETECTED, not overwritten.
 # Files not listed here -- config.yaml, cmd/, help/ -- belong to the project.
-# devbin_version: 0.1.6
+# devbin_version: 0.1.7
 # source: ~/Devel/opt/devbin
-# source_commit: bc28860863c7f7e6e7e21116e3466bdcad16419d
+# source_commit: 142763dba160d89214ad0daa350bafad5105f888
 866c77d63b6432123af24f1d468c9ab90afa44941e4ff11fc8fa1cbe2f1ffee8  bin/devbin
 07387950f8d7a0671d564dbcee609e47785452b93cb263cc89a3a726e7f4764b  bin/.devbin/lib/builtins
 e53f6c9c173941203496854d369ff9c7c52cdb3c4b8f7529c3e1566d279c7c45  bin/.devbin/lib/cmd/check
