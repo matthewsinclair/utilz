@@ -137,6 +137,7 @@ The Utilz **framework** version is `VERSION` (single source of truth; read it, d
 
 ## Verification checklist on fresh checkout
 
+- `git config --get core.hooksPath` must print `.githooks`. If it prints nothing, set it with `git config core.hooksPath .githooks`. The commit gate (Intent's chained guards, then prettier and rustfmt checks that refuse and never rewrite) is tracked in `.githooks/` since issue 0064. A clone doesn't carry the setting, and without it no hook runs, silently. Intent's `*.intent` bodies next to the wrappers are gitignored and written by the Intent install. `.git/hooks/` on hv's machine still holds the pre-0064 copies, which git no longer reads.
 - `utilz version` and `utilz --version` -- both print `utilz:` followed by the contents of `VERSION`. `utilz --help` / `-h` work too; `utilz -v` must still fail (deliberately unbound).
 - `utilz doctor` + `utilz emacs doctor` -- both green.
 - `tools/test-estate` -- full suite green under bash 3.2 (637 tests in 21 suites on 22 Sep). It is `bin/utilz test` with `/bin` first on PATH, and it refuses unless `/bin/bash` reports 3.2. Takes about 13 minutes; do not assume a timeout means a failure, and never run two at once. Use `bin/utilz`, never the `utilz` on PATH, which on hv's machine is now the brew keg (see Key Context).
