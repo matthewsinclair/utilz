@@ -15,6 +15,8 @@ The section still open names its version: `## [X.Y.Z] - unreleased`, never `## [
 
 - **The Emacs bridge reaches `todo`'s verbs** (issue 0047). With a prefix argument (`C-u`) the bridge asks for extra flags, and it put them between a declared flag and the file, so `done 2` on a `todo.md` built `utilz todo --file done 2 <file>`, which todo refuses. The file now follows the declared flags and the extra flags come last, so it builds `utilz todo --file <file> done 2`. Without extra flags every command is exactly as before.
 
+- **`utilz install` and `upgrade` read every CI run on the commit they publish** (issue 0052). Since the macOS legs moved to release tags, a commit can carry two runs of the workflow, the branch's and the tag's, and GitHub promises no order between them; the manifest recorded whichever was newest. It now records the worst of them, so a `success` row means every run on that commit passed. The release core's CI verdict comes through the same reader.
+
 - **Harness and development only, no behaviour change**:
   - CI cancels a run that a newer push has superseded, and the macOS legs run on a release tag or a manual run rather than on every push (0046, hv's fleet ruling of 2026-09-22, uniform whatever a repository's visibility). The Test Summary requires macOS only where macOS runs, so a push that skips it stays green. A push that only moves the whiteboard runs nothing.
   - The Emacs smoke test (`static/emacs/e2e-smoke.el`) expects one menu entry per row of the manifest rather than twelve; it had failed its first check on every run since the menu became six (0048).

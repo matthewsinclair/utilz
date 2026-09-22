@@ -373,6 +373,37 @@ in_progress||103;pending 103
 ROWS
 }
 
+@test "AT08: install_ci_state reads every run on the commit and answers with the worst (issue 0052)" {
+  # A release commit carries TWO runs since the macOS legs moved to release
+  # tags (0046): the branch push, and the tag push that runs them. GitHub
+  # documents no order between the two push events of one `git push`, so the
+  # verdict is the worst of every run on the commit and never the newest one.
+  local src="$BATS_TEST_TMPDIR/src-ci-many" gh="$BATS_TEST_TMPDIR/gh" sha
+  make_fake_src "$src"
+  sha=$(git -C "$src" rev-parse HEAD)
+
+  local rows want
+  while IFS=';' read -r rows want; do
+    make_gh_stub "$gh" "$(printf '%b' "$rows")"
+    run run_install_function "INSTALL_GH='$gh'; install_ci_state '$src' '$sha'"
+    assert_success
+    [ "$(printf '%s' "$output" | tr '\t' ' ')" = "$want" ] \
+      || fail "runs '$rows' gave '$output', not '$want'"
+  done <<'ROWS'
+completed|success|201\ncompleted|failure|202;failure 202 of 2 runs on this commit
+completed|failure|203\ncompleted|success|204;failure 203 of 2 runs on this commit
+completed|success|205\nin_progress||206;pending 206 of 2 runs on this commit
+completed|success|207\ncompleted|success|208;success 207 of 2 runs on this commit
+completed|success|209;success 209
+ROWS
+
+  # AND THE REQUEST ITSELF, because no answer can prove it: the stub prints
+  # what it is told whatever it was asked, so a `--limit 1` that reads one run
+  # of two passes every case above. The number here is the guard.
+  run cat "$gh.asked"
+  assert_output_contains "--limit 20"
+}
+
 @test "AT08: install_ci_state answers unknown when gh is not installed, and says so (issue 0016)" {
   local src="$BATS_TEST_TMPDIR/src-ci-absent"
   make_fake_src "$src"

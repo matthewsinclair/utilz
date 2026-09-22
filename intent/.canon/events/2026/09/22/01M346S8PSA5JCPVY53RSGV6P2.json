@@ -1,0 +1,15 @@
+{
+  "id": "01M346S8PSA5JCPVY53RSGV6P2",
+  "ts": "2026-09-22T09:22:37.913Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "issues.add",
+  "subject": {
+    "type": "issue",
+    "id": "0052"
+  },
+  "payload": {
+    "severity": "high",
+    "title": "A release sha now carries two CI runs and install_ci_state reads only one of them"
+  }
+}

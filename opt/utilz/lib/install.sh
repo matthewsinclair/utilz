@@ -671,9 +671,19 @@ install_run_bounded() {
 #   pending       a run that has not concluded                    the run id
 #   none          no run for this commit, eg it was never pushed  no run
 #   unknown       gh absent, refusing, silent or unreadable       the reason
+#
+# EVERY RUN ON THE COMMIT IS READ, AND THE WORST OF THEM IS THE ANSWER (issue
+# 0052). A release commit carries two runs since the macOS legs moved to
+# release tags (0046) -- the branch push, and the tag push that runs them --
+# and GitHub documents no order between the two push events of one `git push`,
+# so asking for one run is asking for a coin toss. Worst first: a row that
+# cannot be read, a conclusion that is not success, a run still going, a
+# completed run with no conclusion, success. That is the same rule tools/ci-state
+# states downstream, applied to the population instead of to one row.
 install_ci_state() {
   local tree="$1" commit="$2"
-  local scratch rc=0 answer reason status conclusion run_id
+  local scratch rc=0 answers reason line status conclusion run_id
+  local rank=0 verdict=success detail="" total=0 newest=""
 
   if ! command -v "$INSTALL_GH" > /dev/null 2>&1; then
     printf 'unknown\t%s is not installed\n' "$INSTALL_GH"
@@ -690,11 +700,11 @@ install_ci_state() {
     cd "$tree" || exit 125
     install_run_bounded "$INSTALL_CI_DEADLINE" "$scratch/out" "$scratch/err" \
       "$INSTALL_GH" run list --commit "$commit" --workflow "$INSTALL_CI_WORKFLOW" \
-      --json status,conclusion,databaseId --limit 1 \
+      --json status,conclusion,databaseId --limit 20 \
       --jq '.[] | "\(.status)|\(.conclusion)|\(.databaseId)"'
   ) || rc=$?
 
-  answer=$(head -n 1 "$scratch/out")
+  answers=$(cat "$scratch/out")
   reason=$(head -n 1 "$scratch/err")
   rm -rf "$scratch"
 
@@ -714,21 +724,54 @@ install_ci_state() {
       ;;
   esac
 
-  if [[ -z "$answer" ]]; then
+  if [[ -z "$answers" ]]; then
     printf 'none\tno run\n'
     return 0
   fi
 
-  IFS='|' read -r status conclusion run_id <<< "$answer"
-  if [[ -z "$status" || -z "$run_id" ]]; then
-    printf 'unknown\tcould not read the answer from %s: %s\n' "$INSTALL_GH" "$answer"
-  elif [[ "$status" != "completed" ]]; then
-    printf 'pending\t%s\n' "$run_id"
-  elif [[ -n "$conclusion" ]]; then
-    printf '%s\t%s\n' "$conclusion" "$run_id"
-  else
-    printf 'unknown\ta completed run with no conclusion: %s\n' "$run_id"
+  # A here-string, never a pipe: a piped loop runs in a subshell and its
+  # verdict dies with it, which would leave every commit reading success.
+  while IFS= read -r line; do
+    [[ -n "$line" ]] || continue
+    total=$((total + 1))
+    IFS='|' read -r status conclusion run_id <<< "$line"
+    # gh lists newest first, so the first id read is the newest, which is what
+    # an all-green answer names.
+    [[ -n "$newest" ]] || newest="$run_id"
+
+    local row_rank=0 row_verdict="success" row_detail="$run_id"
+    if [[ -z "$status" || -z "$run_id" ]]; then
+      row_rank=4
+      row_verdict="unknown"
+      row_detail="could not read the answer from $INSTALL_GH: $line"
+    elif [[ "$conclusion" != "success" && "$status" == "completed" && -n "$conclusion" ]]; then
+      row_rank=3
+      row_verdict="$conclusion"
+    elif [[ "$status" != "completed" ]]; then
+      row_rank=2
+      row_verdict="pending"
+    elif [[ -z "$conclusion" ]]; then
+      row_rank=1
+      row_verdict="unknown"
+      row_detail="a completed run with no conclusion: $run_id"
+    fi
+
+    if [[ "$row_rank" -gt "$rank" ]]; then
+      rank="$row_rank"
+      verdict="$row_verdict"
+      detail="$row_detail"
+    fi
+  done <<< "$answers"
+
+  if [[ "$total" -eq 0 ]]; then
+    printf 'none\tno run\n'
+    return 0
   fi
+  [[ -n "$detail" ]] || detail="$newest"
+  # The count is part of the answer only when there was more than one run to
+  # read, so a single-run commit reads exactly as it always has.
+  [[ "$total" -eq 1 ]] || detail="$detail of $total runs on this commit"
+  printf '%s\t%s\n' "$verdict" "$detail"
 }
 
 # Refuse, by name, when <dir> is a Homebrew keg (ST0019 D4). Returns 0 for any
