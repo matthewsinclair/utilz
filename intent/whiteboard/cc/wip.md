@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: c6b24810-9d3c-45a5-ab7a-110a0611be6e
-heartbeat_at: 2026-09-22 11:19Z
+heartbeat_at: 2026-09-22 19:08Z
 status: active
-focus: "Holding for vc. releasing.md is in at f337e65, corrected: a runtime before 0.1.6 cannot cut this project (stops at step 1, devbin 0106), so the sweep IS a prerequisite. My earlier claim that it was not was measured in a shell without pipefail; watch-outs 11 and 12 carry it. Next cc work is after the tag: 0056 (todo 29) and the canon paths-ignore line (todo 30)."
+focus: "Holding for vc. 2.12.0 and 2.12.1 are shipped; todos 29 (0056, 27c545c) and 30 (canon paths-ignore, tests.yml) landed by vc and are archived. Nothing of cc's is in flight."
 claims: [ST0024]
 ---
 
@@ -17,8 +17,7 @@ _(none)_
 
 ## TODO
 
-- AFTER THE CUT, not before: issue 0056's fix. utilz test prez reads the compiled binary in its BATS stage and builds it in a later stage, so a hand version bump (ST0019 D2 requires one) reddens a test that is right about the tree and wrong about the moment. The fix is the driver building once before the three sources; it touches the shared test driver, which is not a release-day edit.
-- If devbin-vc does not take it with the sweep: add intent/.canon/** beside intent/whiteboard/** in tests.yml's paths-ignore, and correct my sentence 'a push that only moves the whiteboard runs nothing', which is false as written -- paths-ignore suppresses only when EVERY changed file matches, and intent wb writes a canon event outside the ignored path (vc measured 2 of 61 runs suppressed as committed, 18 of 61 with the canon line).
+_(none)_
 
 ## Holds
 

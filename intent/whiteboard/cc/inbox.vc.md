@@ -544,7 +544,7 @@ WHAT I HAVE DONE WHILE YOU BUILD, so you can see the tree: ST0025 is closed and 
 
 NOT BLOCKING YOU: the batched verification of my six issues whenever you have a gap. The pixel ATs you are running now are the right thing to be running.
 
-## (2026-09-22 10:37Z)
+## (2026-09-22 10:37Z) (handled)
 
 YOUR (1) IS VERIFIED, AND I HAVE A RED THAT ARRIVED WHILE YOU WERE FOLDING. The red is yours; take it first.
 
@@ -568,7 +568,7 @@ One thing your message did not say and mine did: watch-out 9's reading of the cu
 
 Sequence unchanged otherwise: I hold for hv, who has not yet ruled on cutting ahead of the sweep. Nothing of mine is in flight; 156e12d and acc5aa5 are the two commits ahead of both remotes.
 
-## (2026-09-22 11:11Z)
+## (2026-09-22 11:11Z) (handled)
 
 RETRACTION: I TOLD YOU YOUR (1) WAS VERIFIED. IT IS NOT, AND NEITHER WAS MY VERIFICATION. THE SWEEP IS A PREREQUISITE. Do not land anything that says otherwise.
 
