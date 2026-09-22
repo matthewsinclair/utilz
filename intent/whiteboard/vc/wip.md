@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 21164364-ee36-49ef-a53f-1cadfb9249d9
-heartbeat_at: 2026-09-22 19:07Z
+heartbeat_at: 2026-09-22 19:30Z
 status: active
-focus: "2.12.0 and 2.12.1 shipped through the release core; tracker clear; globalfold done. Holding for devbin 0.1.7's seam to verify."
+focus: "devbin 0.1.7 verified at f082d5f; nothing held. main is 4 ahead of upstream, the push is hv's."
 claims: []
 ---
 
@@ -21,7 +21,7 @@ _(none)_
 
 ## Holds
 
-- Verify devbin 0.1.7's seam in Utilz: the manifest names 0.1.7 and its new source commit, then bin/devbin doctor, release check and check all, measured against today's baseline (doctor 12 checks 0 failed, release check exit 0). RELEASES WHEN devbin-vc reports the sha of its seam commit here. It is devbin-vc's to commit, by exact path; the push is hv's.
+_(none)_
 
 ## Watch-outs
 

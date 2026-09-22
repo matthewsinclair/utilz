@@ -5,9 +5,9 @@
     "name": "Validation Claude",
     "role": "validation",
     "session_id": "21164364-ee36-49ef-a53f-1cadfb9249d9",
-    "heartbeat_at": "2026-09-22T19:07:35.857Z",
+    "heartbeat_at": "2026-09-22T19:30:37.409Z",
     "status": "active",
-    "focus": "2.12.0 and 2.12.1 shipped through the release core; tracker clear; globalfold done. Holding for devbin 0.1.7's seam to verify.",
+    "focus": "devbin 0.1.7 verified at f082d5f; nothing held. main is 4 ahead of upstream, the push is hv's.",
     "claims": [],
     "recorded_at": "2026-09-14T08:46:06.602Z",
     "authored_at": "2026-09-11 16:33Z",
@@ -1186,7 +1186,8 @@
       "kind": "hold",
       "seq": 4,
       "text": "Verify devbin 0.1.7's seam in Utilz: the manifest names 0.1.7 and its new source commit, then bin/devbin doctor, release check and check all, measured against today's baseline (doctor 12 checks 0 failed, release check exit 0). RELEASES WHEN devbin-vc reports the sha of its seam commit here. It is devbin-vc's to commit, by exact path; the push is hv's.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-09-22T19:30:36.995Z",
       "recorded_at": "2026-09-22T18:59:48.573Z"
     }
   ],

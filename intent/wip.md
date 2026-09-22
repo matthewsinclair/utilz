@@ -10,7 +10,6 @@ _(none)_
 
 **Next**
 
-- Verify devbin 0.1.7's seam once `devbin-vc` commits it here: the manifest names 0.1.7 and its new source commit, `bin/devbin doctor`, `bin/devbin release check`, `bin/devbin check all`. Then hv pushes, which runs CI.
 - hv to rule, no rush: a tracked home for `.git/hooks/pre-commit`. It is untracked, so issue 0060's Rust stanza protects this one checkout and ships to nobody. The choice is a source in this repository, or the formatter gate served by the Intent install the way its Claude Code hook bodies are.
 - hv to decide, no rush: re-run the flaked `Rust (ubuntu-latest)` job on 2.12.0's tag run (35745443734) so its recorded CI verdict is green, or leave the red as the record of issue 0063.
 
