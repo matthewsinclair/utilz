@@ -1,0 +1,15 @@
+{
+  "id": "01M348Z89KJ4SG4FWK78WH6JDH",
+  "ts": "2026-09-22T10:00:51.251Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "issues.add",
+  "subject": {
+    "type": "issue",
+    "id": "0054"
+  },
+  "payload": {
+    "severity": "low",
+    "title": "Two recordings of one reel by one build can differ by a single anti-aliased pixel"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "id": "01M348XPX00YRRFY9HJZT9089C",
+  "ts": "2026-09-22T10:00:00.672Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.withdraw",
+  "subject": {
+    "type": "ac",
+    "id": "ST0024/AC-01.2"
+  },
+  "payload": {
+    "reason": "Q5 WAS REVERSED, which is what this row existed to catch. It asserted hv's first answer, that a headline is untouched at 16:9; hv ruled (b) on 2026-09-22 after the probe measured that answer's premise as false (a headline in a pane does not break mid-word at 16:9, it runs off both edges). Re-minted as AC-01.10 with the rule that replaced it, rather than edited in place, so the record carries the reversal"
+  }
+}

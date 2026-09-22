@@ -1,0 +1,14 @@
+{
+  "id": "01M348X53614EZC3K3QJ07B97V",
+  "ts": "2026-09-22T09:59:42.439Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.edit",
+  "subject": {
+    "type": "ac",
+    "id": "ST0024/AC-02.6"
+  },
+  "payload": {
+    "text": "THE CONTROL: with no zone, this thread does not move a portrait recording of a reel whose lines all fit, measured against the pre-thread binary"
+  }
+}

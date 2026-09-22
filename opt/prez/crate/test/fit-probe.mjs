@@ -26,10 +26,16 @@
 const MEASURED_FAIL = 2;
 const NOT_MEASURED = 3;
 
-const [, , portArg, modeArg = 'portrait', slidesArg = '6'] = process.argv;
+const [, , portArg, modeArg = 'portrait', slidesArg = '6', expectArg = 'fits-after'] = process.argv;
 const PORT = Number(portArg);
 const MODE = modeArg;
 const SLIDES = Number(slidesArg);
+// `nothing-written` is the stronger criterion (vc): over a reel whose lines
+// all fit, the fit must write NOTHING -- no inline size, no inline wrap, no
+// inline custom property. It is a statement about every reel rather than about
+// one recording of one fixture, and it is what makes "a line that visibly fits
+// never moves" checkable without comparing pictures.
+const NOTHING_WRITTEN = expectArg === 'nothing-written';
 const TOL = 1; // px: a layout read is rounded, and a whole pixel is the grain
 
 const sleep = ms => new Promise(r => setTimeout(r, ms));
@@ -116,6 +122,13 @@ for (let i = 0; i < SLIDES; i++) {
       const box = el.getBoundingClientRect();
       r.left = box.left; r.right = box.right;
       r.scrollW = el.scrollWidth; r.clientW = el.clientWidth;
+      // What the fit WROTE, read off the element's own inline style.
+      r.wroteSize = el.style.fontSize !== '';
+      r.wroteWrap = el.style.overflowWrap !== '';
+      r.wroteVars = false;
+      for (let k = 0; k < el.style.length; k++) {
+        if (el.style[k].indexOf('--fit-') === 0) r.wroteVars = true;
+      }
       r.siblings = [...el.parentElement.children]
         .filter(s => s !== el && s.matches(r.sel))
         .map(s => parseFloat(getComputedStyle(s).fontSize));
@@ -195,28 +208,25 @@ for (let i = 0; i < SLIDES; i++) {
       check(`${where}_row_widths_equal`, spread <= TOL + 1, `spread=${spread.toFixed(1)}`);
     }
 
-    if (r.kind === 'headline') {
-      if (isPortrait) {
-        // The word is on one line inside the room, or the line is at its floor
-        // and wraps rather than leaving the frame.
-        check(`${where}_word_fits_or_wraps_at_the_floor`,
-          r.word <= r.room + TOL || (Math.abs(r.size - r.floor) < 0.5 && r.wrapped),
-          `word=${Math.round(r.word)} room=${Math.round(r.room)} size=${r.size} floor=${r.floor} wrapped=${r.wrapped}`);
-        check(`${where}_never_below_the_floor`, r.size >= r.floor - 0.5, `size=${r.size} floor=${r.floor}`);
-      } else {
-        // hv's Q5: at 16:9 a headline does not move. This is the row that
-        // fails first if that answer is ever reversed.
-        check(`${where}_untouched_in_landscape`, r.fitted === false, `fitted=${r.fitted}`);
-      }
-    }
+    // ONE RULE, TWO STRENGTHS (hv, 2026-09-22, ruling (b), which SUPERSEDES the
+    // earlier "leave headlines at 16:9"): a line whose INK would leave its room
+    // is fitted wherever it is drawn, and in a portrait window a headline is
+    // held to the stronger test, its whole word against its room, because there
+    // a word too wide is broken mid-word instead.
+    const strong = r.kind === 'headline' && isPortrait;
+    const measure = strong ? r.word : r.ink;
+    check(`${where}_${strong ? 'word' : 'ink'}_fits_or_wraps_at_the_floor`,
+      measure <= r.room + TOL || (Math.abs(r.size - r.floor) < 0.5 && r.wrapped),
+      `${strong ? 'word' : 'ink'}=${Math.round(measure)} room=${Math.round(r.room)} size=${r.size} floor=${r.floor} wrapped=${r.wrapped}`);
+    check(`${where}_never_below_the_floor`, r.size >= r.floor - 0.5, `size=${r.size} floor=${r.floor}`);
 
-    if (r.kind === 'handle') {
-      // The INK, not the box: a handle whose glyphs sit inside the room must
-      // not move, at either orientation (ST0023 D3, design D4).
-      check(`${where}_ink_fits_or_wraps_at_the_floor`,
-        r.ink <= r.room + TOL || (Math.abs(r.size - r.floor) < 0.5 && r.wrapped),
-        `ink=${Math.round(r.ink)} room=${Math.round(r.room)} size=${r.size} floor=${r.floor} wrapped=${r.wrapped}`);
-      check(`${where}_never_below_the_floor`, r.size >= r.floor - 0.5, `size=${r.size} floor=${r.floor}`);
+    // THE CRITERION BEHIND "a line that visibly fits never moves", asserted as
+    // a MECHANISM rather than by comparing two recordings: a line that fits has
+    // nothing written to it, so there is nothing that could render differently.
+    if (NOTHING_WRITTEN) {
+      check(`${where}_nothing_was_written`,
+        !r.wroteSize && !r.wroteWrap && !r.wroteVars,
+        `size=${r.wroteSize} wrap=${r.wroteWrap} vars=${r.wroteVars} (word=${Math.round(r.word)} ink=${Math.round(r.ink)} room=${Math.round(r.room)})`);
     }
   }
 

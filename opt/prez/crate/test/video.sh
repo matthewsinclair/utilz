@@ -424,6 +424,11 @@ FRAMES=$((SLIDES * DWELL * FPS / 1000))
 # ---------------------------------------------------------------- AT23 -- AC-02.1
 
 if want AT23; then
+  # WHAT THIS GREEN COVERS, AND WHAT IT DOES NOT (issue 0054). It is THIS
+  # fixture -- a crawl and five pictures -- recorded twice. It is not a general
+  # claim that any reel records to the same bytes twice: measured 2026-09-22, a
+  # slide of large type on a flat ground differed between two runs of ONE build
+  # by a single channel sample of 1 at one glyph's edge, on 25 of its 75 frames.
   start AT23 "determinism: two recordings at two real-time paces write the same PNG bytes"
   if tools_here; then
     if ensure one && ensure two; then
@@ -852,14 +857,43 @@ YAML
   "$SHOWREEL" build "$FITREEL" --out "$FITHTML" >"$WORK/fit-build.out" 2>&1
 }
 
-# Opens the fit fixture in headless Chrome at <w>x<h> and runs the probe. The
-# window size is the whole experiment: 540x960 is the CSS viewport a portrait
-# recording lays out in (ST0022 D5a) and 960x540 is widescreen's.
+# A reel whose lines ALL fit, which is the other half of the contract: over
+# this one the fit must write NOTHING -- no inline size, no inline wrap, no
+# inline custom property -- because a line that has nothing written to it
+# cannot render differently. That is a statement about every reel, where a
+# recording compared by hand is a statement about one reel on one day (vc).
+FITSREEL="$WORK/fitsreel"
+FITSHTML="$WORK/fits.html"
+FITS_SLIDES=3
+
+fits_built() {
+  [ -f "$FITSHTML" ] && return 0
+  mkdir -p "$FITSREEL"
+  cat >"$FITSREEL/showreel.yaml" <<'YAML'
+showreel: {version: 1}
+artist: {handle: ash, name: Ash}
+session: {venue: The Hall, city: Derby, date: 19th September, action: Say hello}
+theme: default
+target: 1920
+loop: false
+socials:
+  - {label: Instagram, handle: ashdraws}
+segments:
+  - {id: meet, type: card, bg: blue, headline: "Meet Ash", sub: "Final year Animation at NTU.", dwell: 2500ms, ease: 1200ms, transition: cut}
+  - {id: each, type: socials, layout: each, headline: "Follow", dwell: 2500ms, ease: 1200ms, transition: cut}
+  - {id: signoff, type: wordmark, bg: ink, top: "Snorkel", mid: "presents", bottom: "Toast", dwell: 2500ms, ease: 1200ms, transition: cut}
+YAML
+  "$SHOWREEL" build "$FITSREEL" --out "$FITSHTML" >"$WORK/fits-build.out" 2>&1
+}
+
+# Opens a built reel in headless Chrome at <w>x<h> and runs the probe over it.
+# The window size is the whole experiment: 540x960 is the CSS viewport a
+# portrait recording lays out in (ST0022 D5a) and 960x540 is widescreen's.
 fit_probe() {
-  local w="$1" h="$2" mode="$3" port="$4" pid rc
+  local html="$1" w="$2" h="$3" mode="$4" port="$5" slides="$6" expect="$7" pid rc
   "$CHROME" --headless=new "${CHROME_SAFE[@]}" --remote-debugging-port="$port" \
-    --window-size="$w,$h" --user-data-dir="$WORK/chrome-fit-$mode" "file://$FITHTML" \
-    >"$WORK/chrome-fit-$mode.log" 2>&1 &
+    --window-size="$w,$h" --user-data-dir="$WORK/chrome-fit-$mode-$expect" "file://$html" \
+    >"$WORK/chrome-fit-$mode-$expect.log" 2>&1 &
   pid=$!
   if ! wait_for_cdp "$port"; then
     kill "$pid" 2>/dev/null
@@ -867,12 +901,12 @@ fit_probe() {
     bad "chrome never opened its debugging port on $port"
     return 1
   fi
-  node "$HERE/fit-probe.mjs" "$port" "$mode" "$FIT_SLIDES" >"$WORK/fit-$mode.out" 2>&1
+  node "$HERE/fit-probe.mjs" "$port" "$mode" "$slides" "$expect" >"$WORK/fit-$mode-$expect.out" 2>&1
   rc=$?
   kill "$pid" 2>/dev/null
   { wait "$pid"; } 2>/dev/null
-  sed -n 's/^  FAIL /        | /p' "$WORK/fit-$mode.out" | head -8
-  tail -1 "$WORK/fit-$mode.out"
+  sed -n 's/^  FAIL /        | /p' "$WORK/fit-$mode-$expect.out" | head -8
+  tail -1 "$WORK/fit-$mode-$expect.out"
   return "$rc"
 }
 
@@ -883,11 +917,22 @@ if want ST0024-AT01; then
   if [ -z "$CHROME" ]; then unchecked "Chrome not found, so nothing was measured"
   elif ! command -v node > /dev/null 2>&1; then unchecked "node is not installed (the CDP probe needs it)"
   elif ! fit_built; then bad "the fit fixture did not build: $(head -1 "$WORK/fit-build.out")"
+  elif ! fits_built; then bad "the fitting fixture did not build: $(head -1 "$WORK/fits-build.out")"
   else
-    if fit_probe 540 960 portrait 9360; then ok "portrait: every check passed"
+    if fit_probe "$FITHTML" 540 960 portrait 9360 "$FIT_SLIDES" fits-after
+    then ok "portrait: every check passed"
     else bad "portrait: the probe reported failures (above)"; fi
-    if fit_probe 960 540 landscape 9361; then ok "landscape: every check passed"
+    if fit_probe "$FITHTML" 960 540 landscape 9361 "$FIT_SLIDES" fits-after
+    then ok "landscape: every check passed"
     else bad "landscape: the probe reported failures (above)"; fi
+    # The criterion behind "a line that visibly fits never moves", asserted as
+    # a mechanism rather than by comparing recordings.
+    if fit_probe "$FITSHTML" 540 960 portrait 9362 "$FITS_SLIDES" nothing-written
+    then ok "portrait, a reel whose lines all fit: the fit wrote nothing"
+    else bad "portrait: the fit wrote something to a line that fits (above)"; fi
+    if fit_probe "$FITSHTML" 960 540 landscape 9363 "$FITS_SLIDES" nothing-written
+    then ok "landscape, a reel whose lines all fit: the fit wrote nothing"
+    else bad "landscape: the fit wrote something to a line that fits (above)"; fi
   fi
   finish
 fi

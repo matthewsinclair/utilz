@@ -1,0 +1,14 @@
+{
+  "id": "01M348X4YY69ZFMR7H7ARVTSFZ",
+  "ts": "2026-09-22T09:59:42.303Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.edit",
+  "subject": {
+    "type": "ac",
+    "id": "ST0024/AC-01.9"
+  },
+  "payload": {
+    "text": "THE CONTROL: this thread does not move a 16:9 recording of a reel whose lines all fit. Measured against the pre-thread binary, and against Chrome's OWN run-to-run variation, since a claim of byte-identity that no change could satisfy is not a criterion"
+  }
+}
