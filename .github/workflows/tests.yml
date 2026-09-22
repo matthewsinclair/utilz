@@ -6,6 +6,14 @@ on:
   pull_request:
     branches: [ main ]
 
+# A newer push cancels the run it supersedes (issue 0046, hv's fleet CI ruling
+# of 2026-09-21). Keyed on the ref, so a pull request is a group of its own.
+# macOS stays on every push here: Utilz is public, so its macOS minutes cost
+# nothing, and the macOS legs are its only bash 3.2 run (hv, 2026-09-22).
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   test-linux:
     name: Test on Ubuntu
@@ -444,7 +452,10 @@ jobs:
     # reasoning adds rust and clippy: they arrive gated rather than gated later.
     # `needs.rust.result` aggregates the whole os matrix, so one red leg is red.
     needs: [test-linux, test-macos, shellcheck, rust, clippy]
-    if: always()
+    # Runs whatever the jobs above concluded, but not in a run the concurrency
+    # group cancelled: always() is true there too, and would report the
+    # cancelled jobs as failed tests (issue 0046).
+    if: ${{ !cancelled() }}
 
     steps:
     - name: Summary

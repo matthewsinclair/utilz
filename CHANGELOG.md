@@ -13,6 +13,9 @@ The section still open names its version: `## [X.Y.Z] - unreleased`, never `## [
 
 - **At 9:16 a long socials handle fits the frame** (issue 0045, ST0023). On a portrait reel a handle such as `forbiddenplanetnottingham` ran off both edges, because its size was fixed and a single word cannot wrap. In a portrait frame the player now shrinks a handle that is too wide until it fits inside the safe margin, never below its own minimum size, and wraps one that is still too wide there. Widescreen is unchanged: the fit runs only in a portrait frame, and 16:9 recordings are byte-identical to before.
 
+- **Harness and development only, no behaviour change**:
+  - CI cancels a run that a newer push has superseded, and macOS still runs on every push (0046).
+
 ## [2.11.0] - 2026-09-21
 
 Minor: **`prez showreel video --aspect` records portrait, square and 4:5 reels**, **Utilz installs with Homebrew**, and **Utilz is MIT-licensed**. prez goes from 2.2.0 to 2.3.0.

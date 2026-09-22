@@ -1,0 +1,15 @@
+{
+  "id": "01M34113PEF13ES2YMDXEY58GM",
+  "ts": "2026-09-22T07:42:03.471Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "issues.add",
+  "subject": {
+    "type": "issue",
+    "id": "0046"
+  },
+  "payload": {
+    "severity": "low",
+    "title": "CI never cancels a run that a newer push has superseded"
+  }
+}
