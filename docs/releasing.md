@@ -4,7 +4,7 @@ A Utilz release is cut by **devbin's release core**, `bin/devbin release`, decla
 
 **hv runs the cut.** It tags and pushes, and tags and pushes are hv's. Every read-only step below is anyone's.
 
-Everything here was read from the copy vendored at `bin/.devbin/`, which is the copy that runs. A sweep of the vendored runtime is not a prerequisite for a cut; where a sweep would change what is written here, it is this page that is re-read against the swept copy, not the cut that waits.
+Everything here was read from the copy vendored at `bin/.devbin/`, which is the copy that runs, and the version rule below was checked by running it rather than by reading it. **A runtime before 0.1.6 cannot cut this project at all**: it stops at step 1 on this repository's own tag set, for the reason under "Which version it resolves" below. So 2.12.0 is cut after the vendored runtime is swept to 0.1.6.
 
 ## Before the cut
 
@@ -37,7 +37,18 @@ Everything here was read from the copy vendored at `bin/.devbin/`, which is the 
 | 10   | after      | the declared follow-on commands                                     |
 | 11   | ci         | the CI verdict, through `tools/ci-state`                            |
 
-**Which version it resolves.** `--minor` bumps the newest tag matching the declared template, and the template here is `{version}`, so a tag counts only when it is a bare `X.Y.Z`. This repository's sixteen older `v`-prefixed tags (`v1.0.0` through `v2.6.1`) are therefore not candidates and cannot be bumped: the newest match is `2.11.0` and `--minor` resolves `2.12.0`.
+**Which version it resolves.** `--minor` bumps the newest tag matching the declared template, and the template here is `{version}`, so a tag counts only when it is a bare `X.Y.Z`. This repository's sixteen older `v`-prefixed tags (`v1.0.0` through `v2.6.1`) are therefore not candidates and cannot be bumped: the newest match is `2.11.0`, and `--minor` resolves `2.12.0`.
+
+**On a runtime before 0.1.6 those same tags stop the cut dead** (devbin issue 0106, found here and fixed in 0.1.6). `release_versions` ends its loop body with `is_semver "$v" && printf ...` (release.steps:107). `git tag --list` emits byte order, so `v2.6.1` is the last tag it reads; `is_semver` is false on it; the `&&` leaves 1 as the loop's status; and because the handler runs under `set -euo pipefail` (cmd/release:24), `pipefail` makes that the status of the whole pipeline even though `sort` succeeded. `release_resolve` returns it on a bare `||` with no `warn`, so the cut stops at step 1 with an empty reason, having written nothing:
+
+```
+release: --minor (DRY RUN: nothing is written)
+  1  resolve     FAILED
+
+release: stopped at step 1 (resolve). This run tagged nothing and pushed nothing.
+```
+
+**Ask this question with `bin/devbin release --minor --dry-run`, never by sourcing `release_versions` into a shell of your own.** The refusal is created by the handler's shell options rather than by the function, so the same call under a plain `bash -c` returns `2.12.0` and reports success: a true answer about a shell the cut never runs in. Two nodes measured it that way on 2026-09-22 and agreed with each other, which is one measurement taken twice rather than a confirmation. The dry run is read-only, needs no argument beyond the bump, and answers it directly.
 
 **Where it pushes.** `release.remotes` is undeclared here, and undeclared means every remote `git remote` lists, in that order: **`local` and `upstream`, both**, which is this project's rule anyway. `release.repo` names `matthewsinclair/utilz` because with no `origin` and two remotes the core cannot read the repository off a remote and refuses rather than guessing.
 
