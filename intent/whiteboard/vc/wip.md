@@ -13,13 +13,17 @@ claims: []
 
 ## DOING
 
-- THE 0.1.6 SWEEP IS A PREREQUISITE FOR THE CUT AFTER ALL. Doing 59 said it was not; that was wrong, it was mine, and doing 58 before it was right. MEASURED, not argued: bin/devbin release --minor --dry-run stops at step 1 (resolve) with an EMPTY reason and exit 1, having written nothing (tree, HEAD, tags and both remote refs byte-identical across the run). The cause is release.steps:107, is_semver "$v" && printf '%s\n' "$v", the last statement in the while-loop body. git tag --list emits byte order, so Utilz's sixteen legacy v-prefixed tags come AFTER every bare 2.x.y and v2.6.1 is last; is_semver is false on it, the && compound returns 1, that becomes the loop's status, and the handler's set -euo pipefail (bin/.devbin/lib/cmd/release:24) makes it the whole pipeline's although sort succeeded. release_resolve line 126 then does `|| return 1` with no warn, which is why step 1 says nothing.
+- THE SWEEP IS IN AND STEP 1 PASSES: VERIFIED BY RUNNING THE REAL COMMANDS, NOT BY READING devbin-vc'S NUMBERS. f22846a vendored devbin 0.1.6. Read here: manifest.sha256 says devbin_version 0.1.6; release.steps:114 carries `if is_semver "$v"; then printf '%s\n' "$v"; fi` with a comment naming this project's v2.6.1 as 0106's instance; `bin/devbin doctor` is 12 checks, 0 failed, 2 notes, exit 0; `bin/devbin release check` exits 0 and the declaration reads as expected (gates check all + test estate, ci.query tools/ci-state, object local, remotes every remote, repo matthewsinclair/utilz, tag {version}).
 
-THE DISCRIMINATOR, RUN BOTH WAYS ON ONE TREE: without pipefail release_versions is rc=0 and release_resolve prints 2.12.0 2.12.0 new; with pipefail release_versions is rc=1 and release_resolve prints NOTHING. Same function, same tags, same repo.
+`bin/devbin release --minor --dry-run` now prints `1  resolve  done  2.12.0 from --minor, tag 2.12.0, new`. That is the first time step 1 has ever passed on this project, and it is the whole reason the sweep was a prerequisite.
 
-devbin 0.1.6 FIXES IT as issue 0106, and its code comment and CHANGELOG both name Utilz's v2.6.1 as the instance ("Found by Utilz, the first project to cut with the core after devbin"). Sourcing 0.1.6's release.steps against this tree WITH pipefail gives rc=0 and 2.12.0 2.12.0 new. So the sweep is what makes the cut possible, and this is the same bug that forced 2.11.0 to be cut by hand.
+IT NOW STOPS AT STEP 2 (pre-flight), and correctly: "dirty outside what this release owns", naming six paths, all cc's -- intent/whiteboard/cc/board.json, intent/whiteboard/cc/wip.md and four canon events (01M34CM0M1E2PGNYF0Q4365ZDY, 01M34CM0SHPNKFB07YH8WBZCYG, 01M34DFKRXG18T9GW1BTG9E6DD, 01M34DFKXTX89HP4ZAB3YPXC47). cc has twice said nothing of its is in the tree; it is, and has been across several of my commits. I have not staged any of it -- a peer's board is the peer's to land. cc has been asked.
 
-SEQUENCE, corrected: devbin-vc sweeps 0.1.6 (now on the critical path, not optional); vc verifies manifest 0.1.6, bin/devbin doctor, release check, then release --minor --dry-run PAST step 1; cc lands releasing.md (approved, two conditions) and vc reviews it; hv cuts with --yes; vc verifies tag, both remotes, release object and CI; tools/formula-bump 2.12.0 and hv pushes the tap. Three commits sit ahead of both remotes: acc5aa5, 156e12d, 3bef36d.
+WRITE CONTROL on both runs together: tree, HEAD, tags and both remote refs byte-identical across them. The dry run writes nothing, as documented.
+
+STILL UNPROVEN, and nobody should say otherwise: steps 3 to 11. No run on this project has passed step 2, so the gates have never been reached from inside a cut. Once cc lands its board the dry run goes again, and THAT is the first behavioural proof of the rest. Note for reading it: under --dry-run the gates run on HEAD in place, and the core's own row says that predicts the gates rather than gating the release (cmd/release:714).
+
+NOT PUSHED, AND NOT PUSHABLE BY ME. devbin-vc relayed hv's instruction to push both remotes and said in the same breath not to act on it until hv confirms in person, estate by estate. Correct, and it is the standing rule besides: releases, tags and pushes are hv's. Nine commits sit ahead of both remotes.
 
 ## TODO
 
