@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+#
+# test-estate [<utility>...] -- every suite, run under the bash macOS ships
+# (issue 0051). It is the release core's `test estate` gate:
+# commands.test.options.estate.run in bin/.devbin/config.yaml names it.
+#
+# WHY IT EXISTS. Utilz targets bash 3.2 because that is what macOS ships, and
+# CI's macOS legs were the only thing that ran the suite under it. hv's fleet
+# CI ruling of 2026-09-21, confirmed here on 2026-09-22, moves those legs to
+# release tags and manual runs, so without this the last gate before a tag runs
+# every test under Homebrew's bash 5, and a 3.2 regression is first seen by the
+# tag's own CI -- after the core has pushed the tag the Homebrew formula names.
+#
+# WHY A WRAPPER RATHER THAN A PREFIX IN THE CONFIG. devbin splits a declared
+# `run:` into words and execs it without a shell (its lib/helpers, run_words),
+# so `PATH=... bin/utilz test` there would be read as a command named `PATH=...`.
+# And the prefix cannot go on the cut as a whole: devbin's own floor is bash 5
+# and it refuses 3.2, so the narrowest place that works is this one command.
+#
+# WHY PATH RATHER THAN /bin/bash. `bin/utilz` is not the only thing that must
+# be 3.2: bats is `#!/usr/bin/env bash` and so is every suite it runs, so
+# `/bin/bash bin/utilz test` is 3.2 for the dispatcher ALONE (intent/restart.md,
+# the traps). Putting /bin first makes every `env bash` in the tree resolve to
+# 3.2.57, and Homebrew stays behind it on the path, so git, yq and gh still
+# resolve.
+#
+# IT LIVES IN tools/, NOT bin/, BECAUSE bin/ IS PUBLISHED, the same reason
+# ci-state does: a release tool under bin/ would ship to every install.
+#
+set -euo pipefail
+
+UTILZ_HOME="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+
+exec env PATH="/bin:$PATH" "$UTILZ_HOME/bin/utilz" test "$@"

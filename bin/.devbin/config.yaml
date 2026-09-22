@@ -47,7 +47,12 @@ commands:
       # counter reads; its exit status is the verdict.
       estate:
         summary: Every suite, as a release runs them
-        run: bin/utilz test
+        # tools/test-estate, not bin/utilz test directly: it re-execs the
+        # dispatcher with /bin first on PATH, so bats and every suite run under
+        # the bash 3.2.57 macOS ships. hv's uniform CI ruling moved the macOS
+        # legs to tags and manual runs, and this is the 3.2 run that stood
+        # between a green tree and a tag (issue 0051).
+        run: tools/test-estate
         grammar: generic
         log: ESTATE
         in_all: false

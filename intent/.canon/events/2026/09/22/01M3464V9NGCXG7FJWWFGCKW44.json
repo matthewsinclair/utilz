@@ -1,0 +1,15 @@
+{
+  "id": "01M3464V9NGCXG7FJWWFGCKW44",
+  "ts": "2026-09-22T09:11:28.822Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "issues.add",
+  "subject": {
+    "type": "issue",
+    "id": "0051"
+  },
+  "payload": {
+    "severity": "medium",
+    "title": "After the uniform CI ruling, nothing runs the suite under bash 3.2 before a tag is pushed"
+  }
+}
