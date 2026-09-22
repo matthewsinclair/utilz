@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 The section still open names its version: `## [X.Y.Z] - unreleased`, never `## [Unreleased]`. Devbin's release core finds a section by its version and dates it at the cut; an unnamed section is one it cannot find (ST0019 D2).
 
-## [2.12.0] - unreleased
+## [2.12.0] - 2026-09-22
 
 Minor: **`prez showreel video --safe-zone` records inside TikTok's and Instagram's own UI**, and **a line of type too wide for its frame is fitted to it** rather than running off the edge or breaking mid-word. prez goes from 2.3.0 to 2.4.0.
 
