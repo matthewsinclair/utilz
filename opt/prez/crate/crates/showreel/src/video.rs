@@ -16,6 +16,7 @@
 //! next run removes it before it starts.
 
 use crate::aspect::Aspect;
+use crate::zone::Zone;
 use crate::record::{self, Frame, Scratch};
 use crate::tail::Tail;
 use crate::{build, deliver};
@@ -50,6 +51,8 @@ pub struct Options {
   pub browser: Option<String>,
   /// `--aspect`, which wins over the reel's `aspect:`.
   pub aspect: Option<Aspect>,
+  /// `--safe-zone`, which wins over the reel's `safe_zone:`.
+  pub safe_zone: Option<Zone>,
 }
 
 /// What a recording made, for a caller that owns the output stream.
@@ -113,6 +116,8 @@ pub fn run(dir: &Path, o: &Options, progress: &mut dyn FnMut(u64, u64)) -> Resul
   let mut said = built.said;
   said.extend(sweep_partials(&video, o.out.is_none())?);
   let aspect = chosen(o.aspect, built.aspect);
+  let zone = zone_chosen(o.safe_zone, built.safe_zone);
+  refuse_a_zone_on_a_wide_frame(zone, aspect)?;
   let size = aspect.size(built.target);
 
   let mut encoder = Encoder::start(&ffmpeg, &partial, format, o.fps)?;
@@ -127,6 +132,7 @@ pub fn run(dir: &Path, o: &Options, progress: &mut dyn FnMut(u64, u64)) -> Resul
     size,
     aspect.scale(),
     o.fps,
+    zone.word(),
     |frame| {
       if let Some(frames) = &o.frames {
         keep_frame(frames, &frame)?;
@@ -294,6 +300,31 @@ fn sweep_partials(video: &Path, in_slot: bool) -> Result<Vec<String>, Failure> {
 /// else widescreen.
 fn chosen(flag: Option<Aspect>, reel: Option<Aspect>) -> Aspect {
   flag.or(reel).unwrap_or_default()
+}
+
+/// The zone a recording is made inside: `--safe-zone`, else the reel's
+/// `safe_zone:`, else none.
+fn zone_chosen(flag: Option<Zone>, reel: Option<Zone>) -> Zone {
+  flag.or(reel).unwrap_or_default()
+}
+
+/// **A PLATFORM ZONE ON A WIDE FRAME IS REFUSED, NAMING BOTH.** Its insets are
+/// measured on a 9:16 phone, where the app's own UI sits; on a frame wider
+/// than it is tall they would move every mark and line of type for a reason
+/// nobody could see on the result (ST0024 D5a).
+fn refuse_a_zone_on_a_wide_frame(zone: Zone, aspect: Aspect) -> Result<(), Failure> {
+  if zone == Zone::None || aspect.w <= aspect.h {
+    return Ok(());
+  }
+  Err(Failure::new(
+    format!(
+      "--safe-zone {} needs a frame no wider than it is tall, and this one is {}:{}",
+      zone.word().unwrap_or("none"),
+      aspect.w,
+      aspect.h
+    ),
+    "record it at --aspect portrait, square or feed, or drop --safe-zone",
+  ))
 }
 
 /// One frame, kept as a PNG under `--frames`.
@@ -464,6 +495,27 @@ mod tests {
     assert_eq!(chosen(None, Some(square)), square);
     assert_eq!(chosen(Some(portrait), None), portrait);
     assert_eq!(chosen(None, None), Aspect::WIDESCREEN);
+  }
+
+  #[test]
+  fn the_zone_flag_beats_the_reel_and_the_reel_beats_no_zone() {
+    assert_eq!(zone_chosen(Some(Zone::Social), Some(Zone::None)), Zone::Social);
+    assert_eq!(zone_chosen(None, Some(Zone::Social)), Zone::Social);
+    assert_eq!(zone_chosen(Some(Zone::None), Some(Zone::Social)), Zone::None);
+    assert_eq!(zone_chosen(None, None), Zone::None);
+  }
+
+  #[test]
+  fn a_zone_is_refused_on_a_frame_wider_than_it_is_tall_naming_both() {
+    let tall = Aspect { w: 9, h: 16 };
+    let square = Aspect { w: 1, h: 1 };
+    assert!(refuse_a_zone_on_a_wide_frame(Zone::Social, tall).is_ok());
+    assert!(refuse_a_zone_on_a_wide_frame(Zone::Social, square).is_ok());
+    // No zone is never refused, whatever the frame.
+    assert!(refuse_a_zone_on_a_wide_frame(Zone::None, Aspect::WIDESCREEN).is_ok());
+    let e = refuse_a_zone_on_a_wide_frame(Zone::Social, Aspect::WIDESCREEN).unwrap_err();
+    assert!(e.message.contains("social"), "names the zone: {}", e.message);
+    assert!(e.message.contains("16:9"), "names the frame: {}", e.message);
   }
 
   #[test]

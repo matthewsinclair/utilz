@@ -13,7 +13,7 @@ title: showreel: headlines fit a portrait frame, a platform safe zone, and a han
 
 ## Acceptance Criteria
 
-### WP-01 -- The fit reads the longest word: headlines at portrait, handles by ink (status: Not Started)
+### WP-01 -- The fit reads the longest word: headlines at portrait, handles by ink (status: WIP)
 
 - AC-01.1 At portrait, a headline whose longest word is wider than its room is drawn on ONE line inside that room, never below the floor its own rule declares, and wraps at the floor rather than leaving the frame -- satisfied: no (computed)
 - AC-01.2 At 16:9 a headline is untouched: its size is the size it has with the fit off. This is hv's Q5 answer, and it is the row that fails first if Q5 is ever reversed -- satisfied: no (computed)
@@ -25,11 +25,11 @@ title: showreel: headlines fit a portrait frame, a platform safe zone, and a han
 - AC-01.8 THE CONTROL: a 16:9 recording of a reel whose lines all fit is byte-identical, frame for frame, to the same recording made before this thread -- WITHDRAWN: Re-minted as AC-01.9, a non-test row: the control compares a recording against one made by a PRE-THREAD binary, which no suite can rebuild, so it is satisfied by evidence as ST0023's byte check was. The requirement is unchanged (by cc)
 - AC-01.9 (non-test) THE CONTROL: a 16:9 recording of a reel whose lines all fit is byte-identical, frame for frame, to the same recording made by the pre-thread binary -- satisfied: no
 
-### WP-02 -- The platform safe zone, and everything type inside it (status: Not Started)
+### WP-02 -- The platform safe zone, and everything type inside it (status: WIP)
 
-- AC-02.1 The flag --safe-zone and the key safe_zone: parse through one function, the flag wins, a bad value is refused by name at config parse so check and build refuse it too, and a frame wider than it is tall is refused naming both -- satisfied: no (computed)
-- AC-02.2 With --safe-zone social at portrait, no type or mark has ink in the zone's four bands, where the same recording without the zone does, and pictures still bleed to the frame's edge -- satisfied: no (computed)
-- AC-02.3 A cap measured against the frame's height reads the zone box instead, so the at-work card and the social QR sit inside the shortened zone rather than overflowing it -- satisfied: no (computed)
+- AC-02.1 The flag --safe-zone and the key safe_zone: parse through one function, the flag wins, a bad value is refused by name at config parse so check and build refuse it too, and a frame wider than it is tall is refused naming both -- satisfied: yes (computed)
+- AC-02.2 With --safe-zone social at portrait, no type or mark has ink in the zone's four bands, where the same recording without the zone does, and pictures still bleed to the frame's edge -- satisfied: yes (computed)
+- AC-02.3 A cap measured against the frame's height reads the zone box instead, so the at-work card and the social QR sit inside the shortened zone rather than overflowing it -- satisfied: yes (computed)
 - AC-02.4 THE CONTROL: with no zone, a portrait recording is byte-identical, frame for frame, to the same recording made before this thread -- WITHDRAWN: Re-minted as AC-02.6, a non-test row, for the same reason as AC-01.8 (by cc)
 - AC-02.5 (non-test) vc reads a 9:16 recording of Snorkeltoast 001 with the zone and without it, one frame per segment type, and finds no type or mark cut by the zone's bands and nothing illegible at phone size -- satisfied: no
 - AC-02.6 (non-test) THE CONTROL: with no zone, a portrait recording is byte-identical, frame for frame, to the same recording made by the pre-thread binary -- satisfied: no
@@ -68,25 +68,25 @@ _(no criteria in this group)_
 
 ## Acceptance Tests
 
-### WP-01 -- The fit reads the longest word: headlines at portrait, handles by ink (status: Not Started)
+### WP-01 -- The fit reads the longest word: headlines at portrait, handles by ink (status: WIP)
 
 _(no tests in this group)_
 
-### WP-02 -- The platform safe zone, and everything type inside it (status: Not Started)
+### WP-02 -- The platform safe zone, and everything type inside it (status: WIP)
 
 _(no tests in this group)_
 
 ### Group AT01
 
-- AT01 `opt/prez/crate/test/acceptance.sh` -- covers AC-01.1, AC-01.2, AC-01.4, AC-01.5, AC-01.6, AC-01.7, AC-01.3 -- status: to-write -- The player probe over CDP, driven by acceptance.sh: measures the fit in the DOM at 540x960 and at 960x540
+- AT01 `opt/prez/crate/test/video.sh` -- covers AC-01.1, AC-01.2, AC-01.4, AC-01.5, AC-01.6, AC-01.7, AC-01.3 -- status: red -- The player probe over CDP (test/fit-probe.mjs), driven by video.sh: measures the fit in the DOM at 540x960 and at 960x540. RED FIRST, genuinely: the first run reported that the player exposes no window.__showreelFit, so the fit could not be measured at either orientation
 
 ### Group AT02
 
-- AT02 `opt/prez/crate/test/video.sh` -- covers AC-01.3 -- status: to-write -- The 16:9 recording: a 40-capital handle has no glyph in the frame's outer 86 px and is still drawn
+- AT02 `opt/prez/crate/test/video.sh` -- covers AC-01.3 -- status: green -- The 16:9 recording: a 40-capital handle has no glyph in the frame's outer 86 px and is still drawn. RED PROVEN RETROSPECTIVELY (restart.md's remedy for a block written after the code), by running it against HEAD's player in this tree and restoring it: 2743 and 2807 glyph pixels in the outer 86 px. GREEN at the fit: 0 and 0, the handle drawn at 41950 px inside the margin
 
 ### Group AT03
 
-- AT03 `opt/prez/crate/test/video.sh` -- covers AC-01.1 -- status: to-write -- The portrait recording: the headline is drawn on one line with no glyph in the outer 20 px
+- AT03 `opt/prez/crate/test/video.sh` -- covers AC-01.1 -- status: green -- The portrait recording: the headline is drawn on one line with no glyph in the outer 20 px. RED PROVEN RETROSPECTIVELY, same run against HEAD's player: 880 and 642 glyph pixels in the outer 20 px. GREEN at the fit: 0 and 0, the headline drawn at 43415 px inside the margin
 
 ### Group AT04
 
@@ -94,11 +94,11 @@ _(no tests in this group)_
 
 ### Group AT05
 
-- AT05 `opt/prez/crate/crates/showreel/src/zone.rs` -- covers AC-02.1 -- status: to-write -- The names in any case, every refusal, the landscape refusal, and safe_zone: read and refused at config parse
+- AT05 `opt/prez/crate/crates/showreel/src/zone.rs` -- covers AC-02.1 -- status: green -- The names in any case, every refusal, the landscape refusal, and safe_zone: read and refused at config parse. RED by construction: zone.rs did not exist, and every test in it named a type the crate had no path to. GREEN: cargo test -p showreel 179 passed, 0 failed, up from 176
 
 ### Group AT06
 
-- AT06 `opt/prez/crate/test/video.sh` -- covers AC-02.2, AC-02.3 -- status: to-write -- The portrait recording with --safe-zone social, against the same reel without it
+- AT06 `opt/prez/crate/test/video.sh` -- covers AC-02.2, AC-02.3 -- status: green -- The portrait recording with --safe-zone social, against the same reel without it. RED before the zone existed: --safe-zone was refused as an unknown video option, so the recording this block reads could not be made at all. GREEN: 0 glyph pixels in each of the zone's four bands, 16080 inside the zone, and the control without the zone carries 410 left and 1646 right
 
 ### Group AT07
 

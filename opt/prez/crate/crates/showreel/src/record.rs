@@ -181,7 +181,10 @@ impl Drop for Scratch {
 /// Records the reel at `reel` into frames of `size` pixels at `fps`, in
 /// `scratch`, handing each frame to `sink` as it is captured. The page is laid
 /// out `scale` times smaller than the frame and drawn at that device scale
-/// (`Aspect::scale`, design D5a), so the frame keeps its pixels.
+/// (`Aspect::scale`, design D5a), so the frame keeps its pixels. `zone` is the
+/// platform safe zone's word, which the player reads off the URL (ST0024 D5c);
+/// `None` asks for none and changes the URL not at all.
+#[allow(clippy::too_many_arguments)]
 pub fn record(
   browser: &Path,
   reel: &Path,
@@ -189,11 +192,12 @@ pub fn record(
   size: (u32, u32),
   scale: u32,
   fps: u32,
+  zone: Option<&str>,
   mut sink: impl FnMut(Frame) -> Result<(), Failure>,
 ) -> Result<Recording, Failure> {
   let (width, height) = viewport(size, scale);
   let mut chrome = Chrome::launch(browser, width, height, scratch)?;
-  let played = play(&mut chrome, reel, (width, height), scale, fps, &mut sink);
+  let played = play(&mut chrome, reel, (width, height), scale, fps, zone, &mut sink);
   let warnings = chrome.stop(played.is_ok());
   match played {
     Ok(mut recording) => {
@@ -214,18 +218,20 @@ pub fn record(
 }
 
 /// Everything between the launch and the shutdown.
+#[allow(clippy::too_many_arguments)]
 fn play(
   chrome: &mut Chrome,
   reel: &Path,
   viewport: (u32, u32),
   scale: u32,
   fps: u32,
+  zone: Option<&str>,
   sink: &mut impl FnMut(Frame) -> Result<(), Failure>,
 ) -> Result<Recording, Failure> {
   let cdp = &mut chrome.cdp;
   let (name, page) = attach(cdp, viewport, scale)?;
   let s = Some(page.as_str());
-  load(cdp, s, reel)?;
+  load(cdp, s, reel, zone)?;
 
   cdp.step("the schedule");
   let schedule: Schedule = read(
@@ -306,14 +312,25 @@ fn attach(
 /// Paused BEFORE the navigation, so the reel's first moment is virtual. Under a
 /// paused clock the load event never fires, so the load runs in 1 ms slices,
 /// pausing while a fetch is pending, until it does (finding 1). Then the fonts.
-fn load(cdp: &mut Session<ChildStdin>, s: Option<&str>, reel: &Path) -> Result<(), Failure> {
+fn load(
+  cdp: &mut Session<ChildStdin>,
+  s: Option<&str>,
+  reel: &Path,
+  zone: Option<&str>,
+) -> Result<(), Failure> {
   cdp.step("the load");
   cdp.call(
     "Emulation.setVirtualTimePolicy",
     json!({ "policy": "pause" }),
     s,
   )?;
-  let url = format!("{}?noloop&kiosk", browser::file_url(reel));
+  // The zone is asked for on the URL rather than built into the HTML, so one
+  // built reel serves a recording with a zone and one without, and a person
+  // can see either in a browser (ST0024 D5c).
+  let url = match zone {
+    Some(word) => format!("{}?noloop&kiosk&zone={word}", browser::file_url(reel)),
+    None => format!("{}?noloop&kiosk", browser::file_url(reel)),
+  };
   let navigated = cdp.call("Page.navigate", json!({ "url": url }), s)?;
   if let Some(error) = navigated.get("errorText").and_then(Value::as_str) {
     return Err(Failure::new(

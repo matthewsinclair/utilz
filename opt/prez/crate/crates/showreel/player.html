@@ -54,6 +54,34 @@
   /* Overscan. Older panels crop up to 5% of every edge and say nothing about
      it. Pictures may bleed past this; type and marks never do. */
   --safe:4.5%;
+
+  /* THE PLATFORM SAFE ZONE (ST0024 D5). A reel posted to TikTok or Instagram
+     is drawn under their own UI: a caption and sound row across the bottom, an
+     action column down the right, their chrome at the top. `video
+     --safe-zone social` asks for it on the URL and the block below sets these
+     four; unasked they are ZERO, so every inset built from them computes to
+     exactly what it did before this existed, and a recording without a zone is
+     byte-identical.
+
+     The safe area is therefore per-edge, each the larger of the overscan area
+     and the zone's edge, and --zone-w/h carry the box itself for the caps that
+     would otherwise keep their full height inside a box a quarter shorter. */
+  --zone-t:0px; --zone-r:0px; --zone-b:0px; --zone-l:0px;
+  --safe-t:max(var(--safe),var(--zone-t));
+  --safe-r:max(var(--safe),var(--zone-r));
+  --safe-b:max(var(--safe),var(--zone-b));
+  --safe-l:max(var(--safe),var(--zone-l));
+  --zone-w:calc(100vw - var(--zone-l) - var(--zone-r));
+  --zone-h:calc(100vh - var(--zone-t) - var(--zone-b));
+}
+
+/* TikTok's and Instagram Reels' UI together, as a share of the frame. The
+   numbers and the guides they were read from, on 2026-09-22, are in ST0024's
+   design D5b: they are third-party readings of the apps rather than published
+   specifications, and the platforms move them several times a year, which is
+   why they are ONE line to edit. At 1080x1920 they are 192, 162, 480 and 65 px. */
+:root.zone-social{
+  --zone-t:10vh; --zone-r:15vw; --zone-b:25vh; --zone-l:6vw;
 }
 
 *{box-sizing:border-box;margin:0;padding:0}
@@ -119,7 +147,8 @@ body{
    the two rules applies is decided per image at mount, from the picture's own
    aspect against the plate's. */
 .fit-matte .ground{background:var(--ground-matte)}
-.fit-matte .plate{position:absolute;inset:var(--safe);display:grid;place-items:center}
+.fit-matte .plate{position:absolute;inset:var(--safe-t) var(--safe-r) var(--safe-b) var(--safe-l);
+  display:grid;place-items:center}
 .fit-matte img{
   position:relative;inset:auto;width:auto;height:auto;display:block;
   border:var(--keyline-w) solid var(--keyline-color);
@@ -131,7 +160,8 @@ body{
 /* --- fit: logo -- a mark on a ground. No keyline: a logo already carries its
    own edge, and framing one is the mark of a deck that does not trust it. --- */
 .fit-logo .ground{background:var(--ground-matte)}
-.fit-logo .plate{position:absolute;inset:var(--safe);display:grid;place-items:center}
+.fit-logo .plate{position:absolute;inset:var(--safe-t) var(--safe-r) var(--safe-b) var(--safe-l);
+  display:grid;place-items:center}
 .fit-logo img{position:relative;inset:auto;display:block;border:0;box-shadow:none;
   width:auto;height:auto;max-width:74%;max-height:74%}
 .fit-logo img.wide{width:74%;height:auto}
@@ -141,15 +171,16 @@ body{
    .social, .socials, .strapline and .card each carried its own copy, and they
    had already begun to drift. */
 .pane{position:absolute;inset:0;display:grid;place-items:center;
-  padding:var(--safe);background:var(--bg);text-align:center}
+  padding:var(--safe-t) var(--safe-r) var(--safe-b) var(--safe-l);
+  background:var(--bg);text-align:center}
 
 /* --- the wordmark lockup ------------------------------------------------- */
 .wordmark .top{font-family:var(--font-display);line-height:.92;
-  font-size:clamp(56px,13.5vw,300px);color:var(--accent)}
+  --fit-floor:56px;font-size:clamp(var(--fit-floor),13.5vw,300px);color:var(--accent)}
 .wordmark .mid{font-family:var(--font-body);line-height:1;
   font-size:clamp(18px,3vw,64px);color:var(--muted);margin:.22em 0 .1em}
 .wordmark .bottom{font-family:var(--font-display);line-height:1;
-  font-size:clamp(30px,7vw,150px);color:var(--fg)}
+  --fit-floor:30px;font-size:clamp(var(--fit-floor),7vw,150px);color:var(--fg)}
 
 /* --- one network per page, with its QR ------------------------------------
    A QR is only worth the screen when it gets most of the screen: a code
@@ -166,26 +197,26 @@ body{
 .social .net{font-family:var(--font-display);color:var(--fg);
   font-size:clamp(20px,3vw,62px);letter-spacing:.02em;line-height:1}
 .social .at{font-family:var(--font-display);color:var(--accent);line-height:1;
-  font-size:clamp(30px,6vw,124px);margin:.06em 0 .3em}
+  --fit-floor:30px;font-size:clamp(var(--fit-floor),6vw,124px);margin:.06em 0 .3em}
 /* The quiet zone is part of the symbol -- segno emits the mandatory four
    modules inside the SVG -- so the plate adds NO padding of its own. It did,
    and the doubled white margin left the keyline floating off the code. */
 .social .qr{background:var(--panel);padding:0;display:inline-block;
   border:var(--keyline-w) solid var(--keyline-color);box-shadow:var(--shadow)}
-.social .qr svg{display:block;width:min(46vh,46vw);height:auto;
-  shape-rendering:crispEdges}
+.social .qr svg{display:block;width:min(calc(var(--zone-h) * .46),calc(var(--zone-w) * .46));
+  height:auto;shape-rendering:crispEdges}
 
 /* --- the socials summary page --------------------------------------------
    Every handle at once, no QR: see above. */
 .socials h2{font-family:var(--font-display);color:var(--accent);
-  font-size:clamp(38px,7vw,132px);line-height:.96;margin-bottom:.45em}
+  --fit-floor:38px;font-size:clamp(var(--fit-floor),7vw,132px);line-height:.96;margin-bottom:.45em}
 .socials .rows{display:grid;gap:.3em;justify-items:center}
 .socials .row{display:flex;gap:.6em;align-items:baseline;flex-wrap:wrap;
   justify-content:center}
 .socials .net{font-family:var(--font-body);color:var(--muted);
   font-size:clamp(18px,2.4vw,50px);text-transform:uppercase;letter-spacing:.06em}
 .socials .at{font-family:var(--font-display);color:var(--fg);
-  font-size:clamp(26px,4.6vw,96px);line-height:1}
+  --fit-floor:26px;font-size:clamp(var(--fit-floor),4.6vw,96px);line-height:1}
 
 /* --- native 16:9 templates ------------------------------------------------
    These replace photographs of print collateral. A card laid out for A6 is
@@ -197,13 +228,16 @@ body{
 
    All three share one measure: text is left-aligned in a column of at most
    ~20 words a line, vertically centred, inside the overscan safe area. */
+/* The measure is 8% of the frame, and a zone may ask for more than that on an
+   edge; whichever is larger wins, so a zone never widens the measure. */
 .tpl{position:absolute;inset:0;display:grid;align-content:center;
-  padding:0 8% ;background:var(--bg)}
+  padding:var(--zone-t) max(8%,var(--zone-r)) var(--zone-b) max(8%,var(--zone-l));
+  background:var(--bg)}
 .tpl .kicker{font-family:var(--font-body);font-size:clamp(14px,1.8vw,38px);
   text-transform:uppercase;letter-spacing:.16em;color:var(--accent);
   margin-bottom:.5em}
 .tpl h2{font-family:var(--font-display);line-height:.94;
-  font-size:clamp(38px,7.6vw,150px);color:var(--accent)}
+  --fit-floor:38px;font-size:clamp(var(--fit-floor),7.6vw,150px);color:var(--accent)}
 .tpl .body{font-family:var(--font-body);color:var(--fg);margin-top:.7em;
   font-size:clamp(18px,2.5vw,52px);line-height:1.22;max-width:24ch}
 
@@ -224,7 +258,7 @@ body{
    does not keep is the portrait format: the card is A5 on a table and this is
    16:9 on a wall, so the body runs as two columns and the whole card fills the
    panel instead of leaving a column of background down each side. */
-.atwork{padding:var(--safe);align-content:stretch}
+.atwork{padding:var(--safe-t) var(--safe-r) var(--safe-b) var(--safe-l);align-content:stretch}
 .atwork .frame{
   display:grid;grid-template-rows:auto auto 1fr;height:100%;
   border:var(--keyline-w) solid var(--keyline-color);
@@ -233,7 +267,7 @@ body{
 .atwork .head{padding:3vh 3.2vw 3.4vh;text-align:center}
 .atwork .kicker{margin:0 0 .18em}
 .atwork .name{font-family:var(--font-display);line-height:.88;
-  font-size:clamp(52px,10vw,220px)}
+  --fit-floor:52px;font-size:clamp(var(--fit-floor),10vw,220px)}
 .atwork .rule{height:1.6vh}
 /* max-width and the top margin come from `.tpl .body`, which is right for a
    paragraph and wrong for a two-column band -- the measure was capping this
@@ -248,8 +282,8 @@ body{
   letter-spacing:.14em;margin-top:1.1em}
 .atwork .qr{background:var(--panel);padding:0;display:block;
   border:var(--keyline-w) solid var(--keyline-color);box-shadow:var(--shadow)}
-.atwork .qr svg{display:block;width:min(42vh,30vw);height:auto;
-  shape-rendering:crispEdges}
+.atwork .qr svg{display:block;width:min(calc(var(--zone-h) * .42),calc(var(--zone-w) * .30));
+  height:auto;shape-rendering:crispEdges}
 
 /* strapline: the identity card. Mark over a strapline in a drawn panel. */
 .strapline .mark{display:block;margin:0 auto 3.4vh;
@@ -258,7 +292,7 @@ body{
   border:var(--keyline-w) solid var(--keyline-color);box-shadow:var(--shadow);
   transform:rotate(-1.6deg)}
 .strapline .panel div{font-family:var(--font-display);line-height:1.02;
-  font-size:clamp(28px,5.4vw,110px)}
+  --fit-floor:28px;font-size:clamp(var(--fit-floor),5.4vw,110px)}
 
 /* points: a claim, then the three things it rests on. The print card carried
    drawn icons above these; they are not in the asset set as separate files and
@@ -269,7 +303,7 @@ body{
 .points .pt{border:var(--keyline-w) solid var(--keyline-color);
   box-shadow:var(--shadow);padding:2.6vh 1.4vw;text-align:center;
   font-family:var(--font-display);line-height:1.02;
-  font-size:clamp(18px,2.9vw,62px)}
+  --fit-floor:18px;font-size:clamp(var(--fit-floor),2.9vw,62px)}
 
 /* venue: the launch card. A photograph of the actual shopfront, full bleed,
    with the type on drawn panels over a scrim -- the scrim is doing real work,
@@ -283,22 +317,22 @@ body{
 .venue .scrim{position:absolute;inset:0;
   background:linear-gradient(to bottom,rgb(0 0 0/.34) 0 26%,rgb(0 0 0/.12) 46%,
     rgb(0 0 0/.52) 78%,rgb(0 0 0/.68) 100%)}
-.venue .lay{position:absolute;inset:var(--safe);display:grid;
+.venue .lay{position:absolute;inset:var(--safe-t) var(--safe-r) var(--safe-b) var(--safe-l);display:grid;
   grid-template-rows:auto 1fr auto;justify-items:center;text-align:center}
 .venue .banner{padding:1.8vh 2.6vw;transform:rotate(-1.8deg);
   border:var(--keyline-w) solid var(--keyline-color);box-shadow:var(--shadow)}
 .venue .banner .kicker{font-family:var(--font-display);line-height:1;
   font-size:clamp(20px,3.4vw,72px);opacity:.9}
 .venue .banner .date{font-family:var(--font-display);line-height:.98;
-  font-size:clamp(30px,6.4vw,132px)}
+  --fit-floor:30px;font-size:clamp(var(--fit-floor),6.4vw,132px)}
 .venue .foot{display:grid;justify-items:center;gap:1.4vh}
 .venue .at{padding:1.4vh 2.4vw;transform:rotate(1.1deg);
   font-family:var(--font-display);line-height:1;
-  font-size:clamp(24px,4.8vw,100px);
+  --fit-floor:24px;font-size:clamp(var(--fit-floor),4.8vw,100px);
   border:var(--keyline-w) solid var(--keyline-color);box-shadow:var(--shadow)}
 .venue .city{padding:.9vh 2vw;transform:rotate(-1deg);
   font-family:var(--font-display);line-height:1;
-  font-size:clamp(18px,3.2vw,66px);
+  --fit-floor:18px;font-size:clamp(var(--fit-floor),3.2vw,66px);
   border:var(--keyline-w) solid var(--keyline-color);box-shadow:var(--shadow)}
 
 /* ---------------------------------------------------------------------------
@@ -335,7 +369,7 @@ body{
 
 /* --- the crawl ----------------------------------------------------------- */
 .crawl{position:absolute;inset:0;background:var(--ground-crawl);overflow:hidden}
-.crawl .mark{position:absolute;top:var(--safe);left:0;right:0;text-align:center;z-index:3}
+.crawl .mark{position:absolute;top:var(--safe-t);left:0;right:0;text-align:center;z-index:3}
 .crawl .mark b{font-family:var(--font-display);font-size:clamp(28px,4.2vw,64px);color:var(--accent)}
 .crawl .mask{position:absolute;inset:0;z-index:2;pointer-events:none;
   background:linear-gradient(to bottom,var(--bg) 0,rgb(0 0 0/.85) 9%,transparent 26%)}
@@ -346,7 +380,8 @@ body{
 .crawl dl{display:grid;gap:.28em}
 .crawl dt{font-family:var(--font-label);font-size:clamp(20px,2.5vw,42px);
   color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
-.crawl dd{font-family:var(--font-display);font-size:clamp(34px,6vw,104px);
+.crawl dd{font-family:var(--font-display);
+  --fit-floor:34px;font-size:clamp(var(--fit-floor),6vw,104px);
   line-height:.98;color:var(--accent);margin-bottom:.36em}
 @keyframes crawl{
   from{transform:translate3d(0,100%,0) rotateX(0deg) scale(1)}
@@ -357,7 +392,7 @@ body{
 
 .card .box{max-width:min(84%,1400px);text-align:center}
 .card h2{font-family:var(--font-display);line-height:.94;
-  font-size:clamp(46px,9vw,168px);color:var(--accent)}
+  --fit-floor:46px;font-size:clamp(var(--fit-floor),9vw,168px);color:var(--accent)}
 .card p{font-family:var(--font-body);margin-top:.7em;
   font-size:clamp(20px,2.6vw,46px);line-height:1.15;color:var(--fg)}
 
@@ -366,7 +401,12 @@ body{
    and never collides with the chrome. Screened back rather than solid: on a
    reel that loops for eight hours the mark that announces itself on every
    slide is the one that stops being read at all. */
-#bug{position:fixed;left:var(--bug-x,2.2%);bottom:var(--bug-y,1.8%);z-index:45;
+/* The mark's x and y are measured from the ZONE's corner rather than the
+   frame's, so a reel recorded for TikTok keeps it clear of the caption block
+   that would otherwise sit on top of it. With no zone the two corners are the
+   same place (ST0024 D5c). */
+#bug{position:fixed;left:calc(var(--zone-l) + var(--bug-x,2.2%));
+  bottom:calc(var(--zone-b) + var(--bug-y,1.8%));z-index:45;
   display:grid;justify-items:center;gap:0;pointer-events:none;
   opacity:var(--bug-opacity,.55);
   filter:drop-shadow(0 2px 6px rgb(0 0 0/.45));}
@@ -384,7 +424,7 @@ body.kiosk #bug{opacity:calc(var(--bug-opacity,.55) * .8)}
    staff can see it is nearly over. Everything else is on a keypress.
    ------------------------------------------------------------------------- */
 #bar{position:fixed;left:0;bottom:0;height:5px;width:0;z-index:50;background:var(--accent)}
-#hud{position:fixed;left:var(--safe);bottom:calc(var(--safe) + 10px);z-index:60;
+#hud{position:fixed;left:var(--safe-l);bottom:calc(var(--safe-b) + 10px);z-index:60;
   font-family:var(--font-label);font-size:22px;letter-spacing:.04em;
   background:var(--bg);color:var(--accent);
   border:var(--keyline-w) solid var(--accent);padding:6px 14px;
@@ -439,32 +479,35 @@ body.kiosk #bar,body.kiosk #hud{display:none}
 @media (max-width:820px){
   /* (5) */
   :root{--safe:2.4%}
-  /* (2) The floor drops; the vw term and the ceiling are unchanged, so
-     nothing about the television rendering moves. */
-  .tpl h2{font-size:clamp(22px,7.6vw,150px)}
-  .card h2{font-size:clamp(26px,9vw,168px)}
+  /* (2) The floor drops. It is declared ONCE per rule, as --fit-floor, and
+     the clamp above reads it, so the script that fits a line to its room reads
+     the same number the layout does rather than a copy of it (ST0024 D6).
+     Where the vw term drops too the whole clamp is restated; the ceiling never
+     moves, so the television rendering does not. */
+  .tpl h2{--fit-floor:22px}
+  .card h2{--fit-floor:26px}
   .card p{font-size:clamp(15px,3.6vw,46px)}
   .tpl .body{font-size:clamp(14px,3.6vw,52px);max-width:none}
-  .socials h2{font-size:clamp(22px,7vw,132px)}
+  .socials h2{--fit-floor:22px}
   .social .net{font-size:clamp(14px,4.4vw,62px)}
-  .social .at{font-size:clamp(20px,7.4vw,124px)}
-  .social .qr svg{width:min(62vw,52vh)}
-  .wordmark .top{font-size:clamp(34px,13.5vw,300px)}
-  .wordmark .bottom{font-size:clamp(20px,8vw,150px)}
+  .social .at{--fit-floor:20px;font-size:clamp(var(--fit-floor),7.4vw,124px)}
+  .social .qr svg{width:min(calc(var(--zone-w) * .62),calc(var(--zone-h) * .52))}
+  .wordmark .top{--fit-floor:34px}
+  .wordmark .bottom{--fit-floor:20px;font-size:clamp(var(--fit-floor),8vw,150px)}
   .wordmark .mid{font-size:clamp(13px,4vw,64px)}
-  .strapline .panel div{font-size:clamp(17px,6.4vw,110px)}
+  .strapline .panel div{--fit-floor:17px;font-size:clamp(var(--fit-floor),6.4vw,110px)}
   .strapline .panel{padding:2vh 5vw}
-  .points .pt{font-size:clamp(14px,4.6vw,62px)}
+  .points .pt{--fit-floor:14px;font-size:clamp(var(--fit-floor),4.6vw,62px)}
   .faq .row{font-size:clamp(13px,3.4vw,48px);padding:1.6vh 3.6vw}
-  .atwork .name{font-size:clamp(34px,14vw,220px)}
+  .atwork .name{--fit-floor:34px;font-size:clamp(var(--fit-floor),14vw,220px)}
   .atwork .strap{font-size:clamp(15px,4.6vw,58px)}
   .atwork .caption{font-size:clamp(11px,3vw,30px)}
-  .crawl dd{font-size:clamp(22px,8.6vw,104px)}
+  .crawl dd{--fit-floor:22px;font-size:clamp(var(--fit-floor),8.6vw,104px)}
   .crawl dt{font-size:clamp(13px,3.8vw,42px)}
   .crawl .text{width:88%}
-  .venue .banner .date{font-size:clamp(20px,8.4vw,132px)}
-  .venue .at{font-size:clamp(16px,6.2vw,100px)}
-  .venue .city{font-size:clamp(13px,4.4vw,66px)}
+  .venue .banner .date{--fit-floor:20px;font-size:clamp(var(--fit-floor),8.4vw,132px)}
+  .venue .at{--fit-floor:16px;font-size:clamp(var(--fit-floor),6.2vw,100px)}
+  .venue .city{--fit-floor:13px;font-size:clamp(var(--fit-floor),4.4vw,66px)}
   #bug img{height:6.5vh}
   #bug span{font-size:11px}
 }
@@ -474,9 +517,9 @@ body.kiosk #bar,body.kiosk #hud{display:none}
   .points .row{grid-auto-flow:row;gap:1.6vh;margin-top:3vh}
   .atwork .body{grid-template-columns:1fr;justify-items:center;gap:3vh;
     text-align:center}
-  .atwork .qr svg{width:min(56vw,30vh)}
+  .atwork .qr svg{width:min(calc(var(--zone-w) * .56),calc(var(--zone-h) * .30))}
   .atwork .head{padding:2.4vh 4vw 2.6vh}
-  .tpl{padding:0 6%}
+  .tpl{padding:var(--zone-t) max(6%,var(--zone-r)) var(--zone-b) max(6%,var(--zone-l))}
 
   /* (4) The painting is shown whole, against a blurred, darkened copy of
      itself rather than a flat bar -- the same treatment `fit: blur` gives a
@@ -509,7 +552,7 @@ body.kiosk #bar,body.kiosk #hud{display:none}
   /* The at-work card inside the safe area, at its content's height, centred:
      `.tpl{padding:0 6%}` above took its safe padding away, and its 100%
      height left an empty band over the QR. */
-  .atwork{padding:var(--safe);align-content:center}
+  .atwork{padding:var(--safe-t) var(--safe-r) var(--safe-b) var(--safe-l);align-content:center}
   .atwork .frame{height:auto}
 }
 
@@ -626,55 +669,265 @@ function buildImage(s){
   if (s.fit === "matte" || s.fit === "logo") {
     const plate = document.createElement("div");
     plate.className = "plate"; plate.appendChild(img); el.appendChild(plate);
-    // Fill the safe box on the constraining axis. The picture's own aspect is
-    // known at build time, so this needs no decode and no layout read.
-    fitPlate(img, s.w / s.h);
+    // The picture's own aspect is known at build time, so the fit below needs
+    // no decode; it is carried on the element because the fit happens once the
+    // slide is in the page.
+    img.dataset.ar = s.w / s.h;
   } else {
     el.appendChild(img);
   }
   return el;
 }
 
-function fitPlate(img, ar){
-  const safe = parseFloat(getComputedStyle(document.documentElement)
-                 .getPropertyValue("--safe")) / 100 || 0.045;
-  const box = (innerWidth * (1 - 2 * safe)) / (innerHeight * (1 - 2 * safe));
+// Fill the safe box on the constraining axis. THE BOX IS MEASURED, not
+// recomputed from --safe: with a platform zone the safe box is no longer
+// symmetric, and the custom properties that describe it carry units (vw, vh, %)
+// only the layout can resolve, so a formula here would size a drawn picture to
+// the wrong axis inside a zone (ST0024 D5c). It reads the plate, which is why
+// it runs once the slide is in the page.
+function fitPlate(img){
+  const plate = img.parentElement;
+  const ar = parseFloat(img.dataset.ar)
+    || (img.naturalWidth ? img.naturalWidth / img.naturalHeight : 1);
+  const box = plate.clientWidth / plate.clientHeight;
   img.classList.toggle("wide", ar >= box);
   img.classList.toggle("tall", ar < box);
 }
-addEventListener("resize", () => {
-  document.querySelectorAll(".fit-matte img").forEach(i => {
-    if (i.naturalWidth) fitPlate(i, i.naturalWidth / i.naturalHeight);
-  });
-});
+function fitPlates(root){
+  for (const img of root.querySelectorAll(".fit-matte img,.fit-logo img")) fitPlate(img);
+}
+addEventListener("resize", () => fitPlates(document));
 
-/* A socials handle is one word, so it cannot wrap, and its size is set, so it
-   cannot shrink: at 9:16 a long one ran off both edges (issue 0045). So once
-   its slide is in the page, a handle wider than its pane's room inside the
-   safe padding is scaled down to fit, never below HANDLE_FLOOR, its clamp's own
-   minimum; one still too wide there wraps anywhere rather than leave the
-   frame. PORTRAIT ONLY: at 16:9 a handle whose glyphs sat inside the margin
-   still had a box a few pixels over its room, and was shrunk -- a handle that
-   visibly fits must not move, so a landscape window only clears (ST0023 D3). */
-const HANDLE_FLOOR = 20;
+/* --- fitting a line to the room it has -------------------------------------
+   A word that cannot wrap and does not fit shows up in TWO ways, and a fit
+   that reads one of them is blind to the other (ST0024 D1, issue 0045 before
+   it). In a pane, whose centred child is sized fit-content, the word widens
+   the child and the line spills past the frame. In a container of definite
+   width, `overflow-wrap:break-word` BREAKS the word mid-word instead: nothing
+   overflows, the box never grows, and the line is ruined in a way no overflow
+   check can see.
+
+   Both have one cause, so both are read from one pair of numbers: the longest
+   run the line cannot break, against the room its text may use. Over the room,
+   the size is scaled by room/word so it fits in one step, never below the
+   floor the line's own rule declares, and at the floor the line wraps anywhere
+   rather than leave the frame.
+
+   WHICH LINES, AND WHEN. A headline is fitted in a PORTRAIT window only (6.1);
+   at 16:9 a long word breaks mid-word as it always has, which is a look rather
+   than a defect, and leaving it there is what keeps a widescreen recording
+   byte-identical. A socials handle is fitted at any orientation (6.3), by its
+   INK rather than its box: a box is wider than its glyphs by two side
+   bearings, and at 16:9 that difference is the whole of ST0023 D3 -- a handle
+   whose glyphs sit inside the room must not move. */
+const FIT_LINES = [
+  ["headline", ".tpl h2"],
+  ["headline", ".card h2"],
+  ["headline", ".socials h2"],
+  ["headline", ".wordmark .top"],
+  ["headline", ".wordmark .bottom"],
+  ["headline", ".atwork .name"],
+  ["headline", ".strapline .panel div"],
+  ["headline", ".points .pt"],
+  ["headline", ".crawl dd"],
+  ["headline", ".venue .banner .date"],
+  ["headline", ".venue .at"],
+  ["headline", ".venue .city"],
+  ["handle", ".social .at"],
+  ["handle", ".socials .at"],
+];
 const PORTRAIT = matchMedia("(orientation:portrait)");
-function fitHandles(el){
-  for (const at of el.querySelectorAll(".social .at, .socials .at")) {
-    at.style.fontSize = ""; at.style.overflowWrap = "";
-    if (!PORTRAIT.matches) continue;
-    const pane = at.closest(".pane"), cs = getComputedStyle(pane);
-    const room = pane.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
-    const width = at.scrollWidth;
-    if (width <= room) continue;
-    const fitted = Math.floor(parseFloat(getComputedStyle(at).fontSize) * room / width);
-    at.style.fontSize = Math.max(fitted, HANDLE_FLOOR) + "px";
-    if (fitted < HANDLE_FLOOR) at.style.overflowWrap = "anywhere";
+const inkPen = document.createElement("canvas").getContext("2d");
+
+// The widest run the line cannot break, read from the browser rather than
+// computed: laying the element out at min-content asks the same question the
+// layout asks when it decides to break a word, and break-word is deliberately
+// not part of min-content -- which is exactly why a broken word is invisible
+// to a check on overflow.
+// offsetWidth, NOT a bounding rect: a rect carries the transforms above the
+// element, so under the crawl's rising animation the same line measured twice
+// gives two widths, and the fit stops being idempotent -- which is a recording
+// whose frames move between runs. offsetWidth is the layout box and ignores
+// them (measured, ST0024 AT01).
+function longestWord(el){
+  const w = el.style.width, o = el.style.overflowWrap;
+  el.style.width = "min-content"; el.style.overflowWrap = "normal";
+  const cs = getComputedStyle(el);
+  const width = el.offsetWidth
+    - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight)
+    - parseFloat(cs.borderLeftWidth) - parseFloat(cs.borderRightWidth);
+  el.style.width = w; el.style.overflowWrap = o;
+  return width;
+}
+
+// The width this line's text may use: walking to the stage, the tightest
+// content box, less the padding and border between it and the line. The MIN
+// over the walk is what makes one rule serve both container kinds -- a box
+// that grew with its content is wide, so it never wins, and the real
+// constraint above it does; a line in a definite container wins with its own
+// box. It picks up `.card .box`'s max-width, `.crawl .text`'s width and
+// `.venue .lay`'s inset without naming any of them.
+// OUTERMOST FIRST, because a room only ever narrows on the way in. Reading
+// each ancestor on its own and taking the smallest looks equivalent and is
+// not: a box that has GROWN with its content is measured at its grown width,
+// so a line beside a sibling inside it is given a share of a row that is
+// already too wide, and the constraint above is lost. Measured on the socials
+// summary (ST0024 AT01): the handle was fitted to 868 px inside a row of 968
+// where the pane allowed 873, and still crossed the frame.
+//
+// `min(room, node.offsetWidth)` is what reads both cases with one line: a box
+// narrower than its room is a real constraint (`.card .box`'s max-width,
+// `.crawl .text`'s width), and a box wider than its room has grown, which
+// never widens what its parent left it.
+function roomOf(el){
+  const chain = [];
+  for (let n = el; n && n !== stage; n = n.parentElement) chain.push(n);
+  let room = stage.clientWidth;
+  for (let i = chain.length - 1; i >= 0; i--) {
+    const node = chain[i], cs = getComputedStyle(node);
+    room = Math.min(room, node.offsetWidth)
+      - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight)
+      - parseFloat(cs.borderLeftWidth) - parseFloat(cs.borderRightWidth);
+    if (i > 0) room = Math.min(room, rowRoom(node, cs, chain[i - 1], room));
+  }
+  return room;
+}
+
+// What a line drawn BESIDE something else may use. The walk above reads whole
+// containers, and a line that shares its line with siblings never has one: a
+// `1fr` grid track is `minmax(auto,1fr)`, whose auto floor is the item's own
+// min-content, so a long word grows its own track and squeezes its siblings
+// (ST0024 D2b, vc's finding); and a flex line, such as a socials row's label
+// beside its handle, leaves the handle only what the label did not take
+// (measured, ST0024 AT01: a handle sized against the whole pane still crossed
+// the frame because its label sat next to it).
+//
+// Row-mates are found by their TOPS rather than from `grid-template-columns`,
+// which says nothing about tracks made by `grid-auto-flow`, and which would
+// also miss a flex item that has wrapped onto a line of its own. A grid's
+// tracks are divided EQUALLY, which is right for tracks equal by declaration
+// and wrong for a grid whose tracks differ by declaration; no fitted line sits
+// in one, and the probe is what would catch one that did.
+function rowRoom(parent, cs, item, content){
+  const grid = cs.display.endsWith("grid"), flex = cs.display.endsWith("flex");
+  if (!grid && !flex) return Infinity;
+  const gap = parseFloat(cs.columnGap) || 0;
+  const top = item.getBoundingClientRect().top;
+  const mates = [];
+  for (const sib of parent.children) {
+    if (Math.abs(sib.getBoundingClientRect().top - top) < 1) mates.push(sib);
+  }
+  if (mates.length < 2) return content;
+  if (grid) return (content - gap * (mates.length - 1)) / mates.length;
+  let taken = 0;
+  for (const sib of mates) if (sib !== item) taken += sib.offsetWidth;
+  return content - taken - gap * (mates.length - 1);
+}
+
+// The box's width less its ink: the side bearings of the line's first and last
+// letter, measured on a canvas in the line's OWN computed font, so a theme's
+// face is what gets measured. actualBoundingBoxLeft is positive to the LEFT of
+// the origin, so the ink is the two bounds added.
+function inkSlack(el){
+  const cs = getComputedStyle(el);
+  inkPen.font = `${cs.fontStyle} ${cs.fontWeight} ${cs.fontSize} ${cs.fontFamily}`;
+  let widest = 0, slack = 0;
+  for (let word of (el.textContent || "").trim().split(/\s+/)) {
+    if (cs.textTransform === "uppercase") word = word.toUpperCase();
+    else if (cs.textTransform === "lowercase") word = word.toLowerCase();
+    const m = inkPen.measureText(word);
+    if (m.width > widest) {
+      widest = m.width;
+      slack = Math.max(0, m.width - (m.actualBoundingBoxRight + m.actualBoundingBoxLeft));
+    }
+  }
+  return slack;
+}
+
+// One line's measurement, applying nothing: what the fit decides from, and
+// what the probe reads back through __showreelFit.
+function measureLine(el, kind){
+  const cs = getComputedStyle(el);
+  const word = longestWord(el);
+  return {
+    size: parseFloat(cs.fontSize),
+    floor: parseFloat(cs.getPropertyValue("--fit-floor")),
+    word,
+    room: roomOf(el),
+    ink: word - inkSlack(el),
+    fitted: !!el.style.fontSize,
+    wrapped: el.style.overflowWrap === "anywhere",
+  };
+}
+
+function fitLines(root){
+  const rows = [];
+  for (const [kind, sel] of FIT_LINES) {
+    for (const el of root.querySelectorAll(sel)) {
+      // Cleared BEFORE anything is measured, so a line is measured as it would
+      // be drawn unfitted and a second call re-derives the same size rather
+      // than compounding on the first. That is what makes the fit idempotent,
+      // and two recordings of one reel identical.
+      el.style.fontSize = "";
+      el.style.overflowWrap = "";
+      rows.push({ el, kind, sel });
+    }
+  }
+  for (const r of rows) {
+    const m = measureLine(r.el, r.kind);
+    r.want = m.size;
+    // A fitted rule that declares no floor is not one this can shrink safely.
+    // Left alone and reported, rather than shrunk towards nothing in silence.
+    if (!Number.isFinite(m.floor) || m.floor <= 0) continue;
+    // ONE RULE, TWO STRENGTHS. A line whose INK would leave its room is fitted
+    // wherever it is drawn, which is what stops any line leaving the frame and
+    // still leaves a line that visibly fits exactly where it was (ST0023 D3).
+    // In a PORTRAIT window a headline is held to the stronger test, its whole
+    // word against the room, because there a word too wide is broken mid-word
+    // instead, and a broken headline is the thing 6.1 was asked for.
+    const over = r.kind === "headline" && PORTRAIT.matches ? m.word : m.ink;
+    if (over <= m.room) continue;
+    const fitted = Math.floor(m.size * m.room / m.word);
+    r.want = Math.max(fitted, m.floor);
+    r.wrap = fitted < m.floor;
+  }
+  // Lines under one rule are drawn at ONE size, the smallest any of them
+  // needs: three point boxes at three sizes read as a bug even where each line
+  // is right on its own, and so do a strapline's lines and a column of handles.
+  for (const r of rows) {
+    const group = rows.filter(o => o.sel === r.sel);
+    const smallest = Math.min(...group.map(o => o.want));
+    if (smallest < parseFloat(getComputedStyle(r.el).fontSize)) {
+      r.el.style.fontSize = smallest + "px";
+    }
+    if (group.some(o => o.wrap)) r.el.style.overflowWrap = "anywhere";
   }
 }
-// The width depends on the face, so the slide on screen is fitted again once
+
+// The widths depend on the face, so the slide on screen is fitted again once
 // the fonts have settled, and again whenever the window changes shape.
-document.fonts.ready.then(() => { if (current) fitHandles(current); });
-addEventListener("resize", () => { if (current) fitHandles(current); });
+document.fonts.ready.then(() => { if (current) fitLines(current); });
+addEventListener("resize", () => { if (current) fitLines(current); });
+
+// What the fit did, for the suite that measures it (ST0024 AT01). It exposes
+// the ROSTER and the measurements and no verdict: the probe asserts the
+// relations itself and reads the geometry from the live DOM, so a player that
+// reported flattering numbers would still fail there. Same shape as the
+// recorder's own __showreelClock hook.
+window.__showreelFit = {
+  lines: FIT_LINES,
+  fit: () => { if (current) fitLines(current); },
+  report: () => {
+    const rows = [];
+    for (const [kind, sel] of FIT_LINES) {
+      for (const el of (current || document).querySelectorAll(sel)) {
+        rows.push(Object.assign({ sel, kind, node: el,
+          text: (el.textContent || "").trim().slice(0, 40) }, measureLine(el, kind)));
+      }
+    }
+    return rows;
+  },
+};
 
 function buildCrawl(s){
   const rows = [];
@@ -821,7 +1074,8 @@ function show(n){
   el.style.setProperty("--dwell", dwell + "ms");
   el.style.setProperty("--ease",  ease  + "ms");
   stage.appendChild(el);
-  fitHandles(el);
+  fitLines(el);
+  fitPlates(el);
 
   if (s.transition === "wipe" && !AMBIENT) {
     const w = document.createElement("div");
@@ -980,6 +1234,17 @@ document.addEventListener("visibilitychange", () => {
   current = null; idx = -1;
   show(n);
 });
+
+/* --- the platform safe zone ----------------------------------------------
+   Asked for on the URL (`?zone=social`), which is how `video --safe-zone`
+   reaches the player and how a person previews one in a browser. The reel's
+   HTML is the same either way. An unrecognised word asks for NO zone and says
+   so rather than half-applying one: the recorder can never send one, because
+   Rust refuses it long before, so the only reader of this line is a person who
+   typed it (ST0024 D5c). */
+const ZONE = Q.get("zone");
+if (ZONE === "social") document.documentElement.classList.add("zone-social");
+else if (ZONE) flash(`no zone called "${ZONE}"`);
 
 /* --- the persistent corner mark ------------------------------------------ */
 if (REEL.bug && !Q.has("nobug")) {

@@ -176,6 +176,11 @@ pub struct Reel {
   /// and `build` too, before any recording could start.
   #[serde(default)]
   pub aspect: Option<crate::aspect::Aspect>,
+  /// The platform safe zone `video` records inside, when `--safe-zone` is not
+  /// given (ST0024). Parsed by `Zone::parse`, so a bad value is refused here,
+  /// by `check` and `build` too, before any recording could start.
+  #[serde(default)]
+  pub safe_zone: Option<crate::zone::Zone>,
   #[serde(default)]
   pub output: Option<String>,
   #[serde(default)]
@@ -311,6 +316,25 @@ mod tests {
     for bad in ["0:9", "cinema", "9:40"] {
       let e = read(bad).expect_err(bad);
       assert!(e.message.contains(bad), "names '{bad}': {}", e.message);
+    }
+  }
+
+  #[test]
+  fn safe_zone_is_read_by_name_and_a_bad_one_refuses_at_parse() {
+    use crate::zone::Zone;
+    let read = |v: &str| parse(&format!("artist: {{handle: x}}\nsafe_zone: \"{v}\"\n"), "reel");
+    assert_eq!(read("social").unwrap().safe_zone, Some(Zone::Social));
+    assert_eq!(read("SOCIAL").unwrap().safe_zone, Some(Zone::Social));
+    assert_eq!(read("none").unwrap().safe_zone, Some(Zone::None));
+    assert_eq!(
+      parse("artist: {handle: x}\n", "reel").unwrap().safe_zone,
+      None
+    );
+    // Refused HERE, so `check` and `build` refuse it too and a recording never
+    // starts on a value that was always going to fail (ST0024 D5a).
+    for bad in ["tiktok", "reels", ""] {
+      let e = read(bad).expect_err(bad);
+      assert!(e.message.contains("safe zone"), "{}", e.message);
     }
   }
 

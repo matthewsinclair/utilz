@@ -85,20 +85,6 @@ file_size() {
 # `TypeError: fetch failed / ECONNREFUSED 127.0.0.1:9333` on BOTH matrix legs,
 # with 128 unit tests green and every other block passing. Nothing was wrong
 # with the runtime or the probe; the browser had simply not finished starting.
-#
-# The suite already had the right idiom -- the argv checks below poll for a
-# file rather than sleeping at it. This applies the same shape to the port.
-# /dev/tcp is a bash builtin, so it needs neither curl nor node, and the
-# subshell closes the descriptor for us.
-wait_for_cdp() {
-  local port="$1" tries=200          # 200 x 0.05s = a 10s ceiling
-  while [ "$tries" -gt 0 ]; do
-    if (exec 3<>"/dev/tcp/127.0.0.1/$port") 2>/dev/null; then return 0; fi
-    tries=$((tries - 1))
-    sleep 0.05
-  done
-  return 1
-}
 
 WORK="$(mktemp -d "${TMPDIR:-/tmp}/prez-at.XXXXXX")"
 trap 'rm -rf "$WORK"' EXIT
@@ -197,11 +183,6 @@ builtins_list() {
 # picked them up.
 # AN ARRAY, NOT A STRING. It held one flag until hv added --no-first-run and
 # --no-default-browser-check on 7 Sep, and a multi-flag string only reaches the
-# browser as separate arguments by way of an UNQUOTED expansion -- which is
-# IN-SH-CODE-001 at critical severity, and the pre-commit critic refuses it.
-# An array is the rule's own sanctioned form and needs no exemption comment.
-# Never empty, so bash 3.2's "${arr[@]}"-under-set-u trap does not arise here.
-CHROME_SAFE=(--use-mock-keychain --no-first-run --no-default-browser-check)
 
 # ---------------------------------------------------------------- AT01 -- AC11
 

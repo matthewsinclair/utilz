@@ -194,6 +194,9 @@ pub struct Built {
   /// The reel's own `aspect:`, which `video` records at unless `--aspect`
   /// names another.
   pub aspect: Option<crate::aspect::Aspect>,
+  /// The reel's own `safe_zone:`, which `video` records inside unless
+  /// `--safe-zone` names another.
+  pub safe_zone: Option<crate::zone::Zone>,
   /// Everything the build wants said, in the order it was produced. **The
   /// caller MUST drain this**: three of its six sources have no other consumer.
   pub said: Vec<String>,
@@ -308,6 +311,7 @@ pub fn run(path: &Path, f: &Options) -> Result<Built, Failure> {
     said,
     target: o.cfg.embed_target(),
     aspect: o.cfg.aspect,
+    safe_zone: o.cfg.safe_zone,
   })
 }
 

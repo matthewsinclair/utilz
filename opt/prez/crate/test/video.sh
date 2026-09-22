@@ -266,6 +266,33 @@ YAML
           --aspect portrait -o "$WORK/handle.mp4" --frames "$WORK/f-handle")
         "${RUN[@]}" >"$WORK/handle.out" 2>"$WORK/handle.err"
         ;;
+      widehandle | oneword | zoned)
+        # ST0024, one reel recorded twice. Its first slide carries a 40-capital
+        # handle, which leaves a 1920-wide frame before 6.3's fit; its second
+        # carries a headline of the same word in a pane whose centred child
+        # grows with its content, which leaves a 1080-wide frame before 6.1's.
+        # Both are type only, so neither needs a picture.
+        mkdir -p "$WORK/$name" "$WORK/tmp-$name"
+        cat >"$WORK/$name/showreel.yaml" <<'YAML'
+showreel: {version: 1}
+artist: {handle: videotest, name: Video Test}
+theme: default
+target: 1920
+loop: false
+socials:
+  - {label: Instagram, handle: FORBIDDENPLANETNOTTINGHAMSHIREANDBEYOND}
+segments:
+  - {id: each, type: socials, layout: each, headline: Follow, dwell: 2500ms, ease: 1200ms, transition: cut}
+  - {id: list, type: socials, layout: list, headline: FORBIDDENPLANETNOTTINGHAMSHIREANDBEYOND, dwell: 2500ms, ease: 1200ms, transition: cut}
+YAML
+        RUN=(/usr/bin/env "TMPDIR=$WORK/tmp-$name/" "$SHOWREEL" video "$WORK/$name"
+          --browser "$CHROME" --fps "$FPS" -o "$WORK/$name.mp4" --frames "$WORK/f-$name")
+        [ "$name" = oneword ] && RUN+=(--aspect portrait)
+        # ST0024 6.2: the same reel again, inside the platform zone. Its
+        # control is `oneword`, the same frames without one.
+        [ "$name" = zoned ] && RUN+=(--aspect portrait --safe-zone social)
+        "${RUN[@]}" >"$WORK/$name.out" 2>"$WORK/$name.err"
+        ;;
       tall)
         # ST0022: the same reel, portrait. The target is the long edge.
         run_argv tall -o "$WORK/tall.mp4" --aspect portrait --frames "$WORK/f-tall"
@@ -781,6 +808,167 @@ if want ST0023-AT01; then
       else bad "only $body glyph pixels inside the margin: the handle is missing"; fi
     else
       bad "the handle recording failed: $(said handle)"
+    fi
+  fi
+  finish
+fi
+
+# ================================================================== ST0024
+#
+# The fit: headlines at portrait (6.1), handles by their ink at either
+# orientation (6.3). The DOM half is fit-probe.mjs, which is the only place
+# "the word is on one line" and "the ink is inside the room" can be seen at
+# all; a broken word is inside the frame too, so a margin check alone passes
+# on the very defect. The pixel halves below prove the other thing: that what
+# the DOM says survives being recorded.
+
+# The fit fixture: type only, so it needs no ffmpeg and no pictures. Every line
+# in it is longer than its room somewhere, which is the point -- a fixture
+# whose words all fit would pass every check with the fit switched off.
+FITREEL="$WORK/fitreel"
+FITHTML="$WORK/fit.html"
+FIT_SLIDES=6
+
+fit_built() {
+  [ -f "$FITHTML" ] && return 0
+  mkdir -p "$FITREEL"
+  cat >"$FITREEL/showreel.yaml" <<'YAML'
+showreel: {version: 1}
+artist: {handle: forbiddenplanetnottingham, name: Fit Test}
+session: {venue: FORBIDDENPLANETNOTTINGHAM, city: Nottinghamshire, date: 19th September, action: Come and say hello}
+theme: default
+target: 1920
+loop: false
+socials:
+  - {label: Instagram, handle: FORBIDDENPLANETNOTTINGHAMSHIREANDBEYOND}
+segments:
+  - {id: ask, type: statement, bg: blue, kicker: "Yes, really", headline: "FORBIDDENPLANETNOTTINGHAM", body: "A body line that wraps at its spaces, as running text does.", dwell: 2500ms, ease: 1200ms, transition: cut}
+  - {id: what, type: points, bg: cream, headline: "Three points", points: ["FORBIDDENPLANETNOTTINGHAM", "Live art", "Stronger community"], dwell: 2500ms, ease: 1200ms, transition: cut}
+  - {id: opening, type: crawl, source: session, dwell: 2500ms, ease: 1200ms, transition: cut}
+  - {id: each, type: socials, layout: each, headline: "Follow", dwell: 2500ms, ease: 1200ms, transition: cut}
+  - {id: list, type: socials, layout: list, headline: "FORBIDDENPLANETNOTTINGHAMSHIREANDBEYOND", dwell: 2500ms, ease: 1200ms, transition: cut}
+  - {id: signoff, type: wordmark, bg: ink, top: "FORBIDDENPLANETNOTTINGHAM", mid: "presents", bottom: "SNORKELTOASTNOTTINGHAM", dwell: 2500ms, ease: 1200ms, transition: cut}
+YAML
+  "$SHOWREEL" build "$FITREEL" --out "$FITHTML" >"$WORK/fit-build.out" 2>&1
+}
+
+# Opens the fit fixture in headless Chrome at <w>x<h> and runs the probe. The
+# window size is the whole experiment: 540x960 is the CSS viewport a portrait
+# recording lays out in (ST0022 D5a) and 960x540 is widescreen's.
+fit_probe() {
+  local w="$1" h="$2" mode="$3" port="$4" pid rc
+  "$CHROME" --headless=new "${CHROME_SAFE[@]}" --remote-debugging-port="$port" \
+    --window-size="$w,$h" --user-data-dir="$WORK/chrome-fit-$mode" "file://$FITHTML" \
+    >"$WORK/chrome-fit-$mode.log" 2>&1 &
+  pid=$!
+  if ! wait_for_cdp "$port"; then
+    kill "$pid" 2>/dev/null
+    { wait "$pid"; } 2>/dev/null
+    bad "chrome never opened its debugging port on $port"
+    return 1
+  fi
+  node "$HERE/fit-probe.mjs" "$port" "$mode" "$FIT_SLIDES" >"$WORK/fit-$mode.out" 2>&1
+  rc=$?
+  kill "$pid" 2>/dev/null
+  { wait "$pid"; } 2>/dev/null
+  sed -n 's/^  FAIL /        | /p' "$WORK/fit-$mode.out" | head -8
+  tail -1 "$WORK/fit-$mode.out"
+  return "$rc"
+}
+
+# ------------------------------------------- ST0024 AT01 -- AC-01.1 .. AC-01.7
+
+if want ST0024-AT01; then
+  start ST0024-AT01 "the fit, in the DOM: the word on one line, the ink inside the room, the floor held"
+  if [ -z "$CHROME" ]; then unchecked "Chrome not found, so nothing was measured"
+  elif ! command -v node > /dev/null 2>&1; then unchecked "node is not installed (the CDP probe needs it)"
+  elif ! fit_built; then bad "the fit fixture did not build: $(head -1 "$WORK/fit-build.out")"
+  else
+    if fit_probe 540 960 portrait 9360; then ok "portrait: every check passed"
+    else bad "portrait: the probe reported failures (above)"; fi
+    if fit_probe 960 540 landscape 9361; then ok "landscape: every check passed"
+    else bad "landscape: the probe reported failures (above)"; fi
+  fi
+  finish
+fi
+
+# ------------------------------------------------------ ST0024 AT02 -- AC-01.3
+
+if want ST0024-AT02; then
+  start ST0024-AT02 "a 40-capital handle at 16:9 stays inside the frame's safe margin, and is still drawn"
+  if tools_here; then
+    if ensure widehandle; then
+      # Mid-dwell of the first slide, the page settled; the ground is read from
+      # the top corner. 86 px is 4.5% of 1920, the safe margin the shell
+      # declares and no type may cross (player.html, --safe).
+      frame="$WORK/f-widehandle/f00012.png"
+      ground=$(mean_of "$frame" "40:40:0:0")
+      check "glyph pixels in the frame's left 86 px" "$(ink_in "$frame" "86:1080:0:0" "$ground")" "0"
+      check "glyph pixels in the frame's right 86 px" "$(ink_in "$frame" "86:1080:1834:0" "$ground")" "0"
+      body=$(ink_in "$frame" "1748:1080:86:0" "$ground")
+      if [ "$body" -gt 2000 ]; then ok "the handle is drawn ($body glyph pixels inside the margin)"
+      else bad "only $body glyph pixels inside the margin: the handle is missing"; fi
+    else
+      bad "the 16:9 handle recording failed: $(said widehandle)"
+    fi
+  fi
+  finish
+fi
+
+# ------------------------------------------------------ ST0024 AT03 -- AC-01.1
+
+if want ST0024-AT03; then
+  start ST0024-AT03 "a headline of one long word at --aspect portrait stays inside the frame, and is still drawn"
+  if tools_here; then
+    if ensure oneword; then
+      # The SECOND slide of that recording, mid-dwell: 25 frames a slide at the
+      # dwell floor and --fps 10. Its headline sits in a pane whose centred
+      # child grows with its content, so before the fit it leaves the frame on
+      # both sides -- which is what makes this check able to go red at all.
+      frame="$WORK/f-oneword/f00037.png"
+      ground=$(mean_of "$frame" "40:40:0:0")
+      check "glyph pixels in the frame's left 20 px" "$(ink_in "$frame" "20:1920:0:0" "$ground")" "0"
+      check "glyph pixels in the frame's right 20 px" "$(ink_in "$frame" "20:1920:1060:0" "$ground")" "0"
+      body=$(ink_in "$frame" "1040:1920:20:0" "$ground")
+      if [ "$body" -gt 2000 ]; then ok "the headline is drawn ($body glyph pixels inside the margin)"
+      else bad "only $body glyph pixels inside the margin: the headline is missing"; fi
+    else
+      bad "the portrait headline recording failed: $(said oneword)"
+    fi
+  fi
+  finish
+fi
+
+
+# ------------------------------------------ ST0024 AT06 -- AC-02.2, AC-02.3
+
+if want ST0024-AT06; then
+  start ST0024-AT06 "with --safe-zone social nothing of type or mark is drawn in the platform's four bands"
+  if tools_here; then
+    if ensure zoned && ensure oneword; then
+      # 1080x1920, and the zone is 10% top, 15% right, 25% bottom, 6% left
+      # (ST0024 D5b): 192, 162, 480 and 65 px. Mid-dwell of the socials page.
+      frame="$WORK/f-zoned/f00012.png"
+      ground=$(mean_of "$frame" "40:40:0:0")
+      check "ink in the zone's top band" "$(ink_in "$frame" "1080:192:0:0" "$ground")" "0"
+      check "ink in the zone's right band" "$(ink_in "$frame" "162:1920:918:0" "$ground")" "0"
+      check "ink in the zone's bottom band" "$(ink_in "$frame" "1080:480:0:1440" "$ground")" "0"
+      check "ink in the zone's left band" "$(ink_in "$frame" "65:1920:0:0" "$ground")" "0"
+      inside=$(ink_in "$frame" "853:1248:65:192" "$ground")
+      if [ "$inside" -gt 2000 ]; then ok "the page is drawn inside the zone ($inside glyph pixels)"
+      else bad "only $inside glyph pixels inside the zone: the page is missing, and four empty bands prove nothing"; fi
+
+      # THE CONTROL, and without it every check above is satisfied by a blank
+      # frame: the same reel with no zone puts ink in the side bands, which is
+      # what the zone moves.
+      plain="$WORK/f-oneword/f00012.png"
+      pground=$(mean_of "$plain" "40:40:0:0")
+      left=$(ink_in "$plain" "65:1920:0:0" "$pground")
+      right=$(ink_in "$plain" "162:1920:918:0" "$pground")
+      if [ "$((left + right))" -gt 0 ]; then ok "without the zone the side bands carry ink ($left left, $right right)"
+      else bad "without the zone the side bands are empty too, so this fixture cannot show the zone doing anything"; fi
+    else
+      bad "a recording failed: $(said zoned) / $(said oneword)"
     fi
   fi
   finish

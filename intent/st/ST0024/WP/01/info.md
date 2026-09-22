@@ -2,7 +2,7 @@
 wp_id: WP-01
 title: The fit reads the longest word: headlines at portrait, handles by ink
 scope: S
-status: Not Started
+status: WIP
 ---
 
 # WP-01: The fit reads the longest word: headlines at portrait, handles by ink

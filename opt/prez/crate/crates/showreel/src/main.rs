@@ -22,6 +22,7 @@
 
 use artifact::Failure;
 use showreel::aspect::Aspect;
+use showreel::zone::Zone;
 use showreel::{build, limits, plan, video};
 use std::io::IsTerminal;
 use std::path::{Path, PathBuf};
@@ -92,6 +93,11 @@ video options:
   --aspect <ratio>        W:H, or widescreen (16:9, the default), portrait
                           (9:16), square (1:1) or feed (4:5). The reel's target
                           is the long edge. Wins over aspect: in showreel.yaml
+  --safe-zone <name>      keep every mark and line of type inside a platform's
+                          own UI: none (the default) or social, which is
+                          TikTok's and Instagram Reels' chrome together. Wins
+                          over safe_zone: in showreel.yaml, and is refused on a
+                          frame wider than it is tall
   --keep <n>              as for build
   --frames <dir>          also write every frame as a PNG, with frames.tsv, into
                           a new or empty <dir>
@@ -218,6 +224,7 @@ fn video_flags(rest: &[String]) -> Result<video::Options, Failure> {
     frames: None,
     browser: None,
     aspect: None,
+    safe_zone: None,
   };
   let mut i = 0;
   while i < rest.len() {
@@ -230,10 +237,11 @@ fn video_flags(rest: &[String]) -> Result<video::Options, Failure> {
       "--frames" => f.frames = Some(PathBuf::from(v()?)),
       "--browser" => f.browser = Some(v()?.to_string()),
       "--aspect" => f.aspect = Some(Aspect::parse(v()?)?),
+      "--safe-zone" => f.safe_zone = Some(Zone::parse(v()?)?),
       other => {
         return Err(Failure::new(
           format!("unknown video option '{other}'"),
-          "expected -o <file>, --fps <n>, --aspect <ratio>, --keep <n>, --frames <dir> or --browser <path>",
+          "expected -o <file>, --fps <n>, --aspect <ratio>, --safe-zone <name>, --keep <n>, --frames <dir> or --browser <path>",
         ))
       }
     }

@@ -35,3 +35,4 @@ pub mod tail;
 pub mod template;
 pub mod theme;
 pub mod video;
+pub mod zone;

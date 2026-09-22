@@ -245,3 +245,27 @@ chrome() {
   printf 'note: browser resolved to %s\n' "$found" >&2
   printf '%s' "$found"
 }
+
+#
+# The suite already had the right idiom -- the argv checks below poll for a
+# file rather than sleeping at it. This applies the same shape to the port.
+# /dev/tcp is a bash builtin, so it needs neither curl nor node, and the
+# subshell closes the descriptor for us.
+wait_for_cdp() {
+  local port="$1" tries=200          # 200 x 0.05s = a 10s ceiling
+  while [ "$tries" -gt 0 ]; do
+    if (exec 3<>"/dev/tcp/127.0.0.1/$port") 2>/dev/null; then return 0; fi
+    tries=$((tries - 1))
+    sleep 0.05
+  done
+  return 1
+}
+
+# The flags every headless launch here carries. --use-mock-keychain is the one
+# that matters: without it a launch raises a keychain modal on hv's screen
+# (2026-08-29). An ARRAY rather than a string, because a string reaches the
+# browser as separate arguments by way of an UNQUOTED expansion -- which is
+# IN-SH-CODE-001 at critical severity, and the pre-commit critic refuses it.
+# An array is the rule's own sanctioned form and needs no exemption comment.
+# Never empty, so bash 3.2's "${arr[@]}"-under-set-u trap does not arise here.
+CHROME_SAFE=(--use-mock-keychain --no-first-run --no-default-browser-check)

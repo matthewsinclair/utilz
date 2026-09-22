@@ -7,11 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 The section still open names its version: `## [X.Y.Z] - unreleased`, never `## [Unreleased]`. Devbin's release core finds a section by its version and dates it at the cut; an unnamed section is one it cannot find (ST0019 D2).
 
-## [2.11.1] - unreleased
+## [2.12.0] - unreleased
+
+Minor: **`prez showreel video --safe-zone` records inside TikTok's and Instagram's own UI**, and **a line of type too wide for its frame is fitted to it** rather than running off the edge or breaking mid-word. prez goes from 2.3.0 to 2.4.0.
+
+### Added
+
+- **`prez showreel video --safe-zone social`: a reel recorded inside the platform's own UI** (ST0024). TikTok and Instagram Reels draw their caption and sound rows across the bottom of a video, their action column down the right, and their own chrome at the top; anything a reel puts there is covered. With the zone every mark and every line of type moves inside it, the corner mark's position is measured from the zone's corner rather than the frame's, and the QR codes are sized against the zone's box rather than the frame's height. Pictures still bleed to the frame's edge, as they always have. It comes from `--safe-zone`, or from `safe_zone:` in `showreel.yaml`, and the flag wins; `none` is the default, so an existing reel records exactly as it did. A frame wider than it is tall is refused, naming both, because the zone's insets are measured on a phone. The built HTML is unchanged either way: the recording asks for the zone on the URL, so the same reel can be seen with it or without it in a browser by adding `?zone=social`.
 
 ### Fixed
 
-- **At 9:16 a long socials handle fits the frame** (issue 0045, ST0023). On a portrait reel a handle such as `forbiddenplanetnottingham` ran off both edges, because its size was fixed and a single word cannot wrap. In a portrait frame the player now shrinks a handle that is too wide until it fits inside the safe margin, never below its own minimum size, and wraps one that is still too wide there. Widescreen is unchanged: the fit runs only in a portrait frame, and 16:9 recordings are byte-identical to before.
+- **A line of type too wide for the room it has is fitted to that room** (ST0024, and issue 0045 before it). A word that cannot wrap and does not fit shows up two ways: in a centred pane it widens its box and runs off both edges of the frame, and in a column of fixed width it is broken mid-word instead. Both are now read from one pair of numbers, the longest run the line cannot break against the room its text may use, and the size is scaled down until it fits, never below the smallest size that line's own rule accepts; at that floor the line wraps rather than leave the frame. It covers headlines, the wordmark, a strapline's lines, the points, the crawl's values, the venue's labels and the socials handles. **A line that visibly fits never moves**, so a recording whose lines all fit is unchanged, frame for frame.
 
 - **The Emacs bridge reaches `todo`'s verbs** (issue 0047). With a prefix argument (`C-u`) the bridge asks for extra flags, and it put them between a declared flag and the file, so `done 2` on a `todo.md` built `utilz todo --file done 2 <file>`, which todo refuses. The file now follows the declared flags and the extra flags come last, so it builds `utilz todo --file <file> done 2`. Without extra flags every command is exactly as before.
 
