@@ -735,6 +735,14 @@ install_ci_state() {
     [[ -n "$line" ]] || continue
     total=$((total + 1))
     IFS='|' read -r status conclusion run_id <<< "$line"
+    # gh renders a JSON null through jq as the STRING "null", not as an empty
+    # field (measured: `"\(.conclusion)"` on a null gives `completed|null|9`),
+    # so a completed run with no conclusion arrives SPELLED. Without this the
+    # rank below reads "null" as a conclusion that is not success and answers
+    # with it as a verdict word, and the branch written for that case cannot be
+    # reached at all (cc's read of issue 0052). It fails safe either way; it
+    # just says something untrue on the way.
+    [[ "$conclusion" != "null" ]] || conclusion=""
     # gh lists newest first, so the first id read is the newest, which is what
     # an all-green answer names.
     [[ -n "$newest" ]] || newest="$run_id"

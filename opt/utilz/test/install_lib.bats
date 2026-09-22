@@ -369,6 +369,7 @@ ci_state_row() {
 completed|success|101;success 101
 completed|failure|102;failure 102
 in_progress||103;pending 103
+completed|null|104;unknown a completed run with no conclusion: 104
 ;none no run
 ROWS
 }
