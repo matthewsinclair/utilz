@@ -1,0 +1,15 @@
+{
+  "id": "01M3462X6W4KNRECQTFXE5W5HN",
+  "ts": "2026-09-22T09:10:25.244Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 2026-09-22 08:0xZ, directly to vc and to cc: the fleet CI ruling is UNIFORM at Utilz regardless of the repository being public -- \"Keep things uniform, regardless of public/private repo state\" and \"The ruling is uniform\". So macOS runs on a tag or a manual run only here, built to devbin 0108 YAML, and the bash 3.2 coverage that removes is closed in the release gate. hv also ruled stampz IN for today: mixed page geometry within one PDF, vc's to build as its own thread."
+  }
+}

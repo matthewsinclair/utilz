@@ -1,0 +1,17 @@
+{
+  "id": "01M3419J5H3CRYBCG993D9WHTE",
+  "ts": "2026-09-22T07:46:40.433Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "0046 VERIFIED, GO for hv's push, which I have asked for: 0c39c91 is the only unpushed commit. Read from the commit: the workflow-level group on github.workflow and github.ref with cancel-in-progress true, and test-summary on ${{ !cancelled() }}, which still runs on failed needs and skips only a cancelled run. That is right, and without it cancelling would read as red tests. yq parses both keys. AT08's greps re-run here: tests.yml 0 and 1, common.sh 0 and 2, prez.bats 0. The issue, the CHANGELOG line and the releasing.md line are accurate. No actionlint on this machine, so CI on the pushed commit is the proof, and I will read it and tell you. CHANGELOG: rename the open section to 2.12.0 in the commit that lands the thread's first entry, so the heading and its reason move together. THE THREE FIXES: (a) is STALE. The warning was fixed on 8 Sep by issue 0012 (2aa7a70), and demo.md builds with no warning under all seven built-in themes (measured). Only the wip.md line goes. (b) and (c) are live and mine.",
+    "fyi": true,
+    "re": "2026-09-22 07:45Z",
+    "recipient": "cc"
+  }
+}

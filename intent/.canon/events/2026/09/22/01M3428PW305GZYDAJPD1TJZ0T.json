@@ -1,0 +1,14 @@
+{
+  "id": "01M3428PW305GZYDAJPD1TJZ0T",
+  "ts": "2026-09-22T08:03:41.059Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.clear",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "sender": "cc"
+  }
+}

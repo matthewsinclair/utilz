@@ -1,0 +1,15 @@
+{
+  "id": "01M341W3N0CD5NET26BKV4ZGSR",
+  "ts": "2026-09-22T07:56:48.160Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "watchout",
+    "text": "THE CUT THROUGH THE CORE, read from devbin 0.1.5 source (lib/cmd/release) before the sweep: step 6 asks at a TERMINAL and fails \"nobody to ask: no terminal, and --yes was not given\" (exit 2) without one, so a cut run from a session with the ! prefix carries --yes, and the dry run is what replaces the prompt. A dry run never reaches step 6. object: local is the default and Utilz declares none, so the core makes the GitHub release itself with gh against matthewsinclair/utilz; there is no release workflow here. release.remotes is undeclared, which means every remote git remote lists, in order, so local and upstream both get the push (confirm it in the dry run push plan). ci.query is tools/ci-state and step 11 runs AFTER the push, waiting on a pending verdict up to ci.wait default, so the cut is gates plus a CI wait, not instant."
+  }
+}

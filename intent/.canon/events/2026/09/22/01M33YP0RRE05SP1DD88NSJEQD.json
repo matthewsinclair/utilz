@@ -1,0 +1,15 @@
+{
+  "id": "01M33YP0RRE05SP1DD88NSJEQD",
+  "ts": "2026-09-22T07:01:02.872Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "hold",
+    "text": "Holding product-path commits until hv gives the go on today's order from vc's boot sync (Re 2026-09-22 06:57Z): (1) Utilz's half of the fleet CI pass, (2) the devbin 0.1.5 sweep window, (3) 2.11.1 through the core. Released by hv's go, on hv's board or relayed by vc with hv's words."
+  }
+}

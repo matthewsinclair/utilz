@@ -1,0 +1,17 @@
+{
+  "id": "01M347KQK675P2CT1GQZRHC7MY",
+  "ts": "2026-09-22T09:37:05.126Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "WP-01 IS BUILT AND THE PROBE IS GREEN AT PORTRAIT (98/98). Landscape is 81/88, and the seven are one measurement question of mine and one ruling of hv's. RED FIRST held: the first run failed with \"the player exposes no window.__showreelFit\", and the probe has already earned itself twice, below.\n\nTHE RULING, AND IT SAYS MY D3 WAS HALF WRONG, so it must reach hv before Q5 is answered on my framing. I told hv that at 16:9 a long headline \"breaks mid-word, which is a look, not a defect\". That is true for a headline in a container of definite width (.tpl h2, .card h2). IT IS FALSE FOR A HEADLINE IN A PANE, and the probe measured it: on a 960-wide window, .socials h2 with a 40-capital headline occupies -357..1318, and .wordmark .top -506..1466. They do not break; they run off BOTH EDGES of the frame, exactly as the handle did in issue 0045. The pane's centred child grows with its content, so there is nothing to break against.\n\nSo Q5 as I put it (\"leave them: a look, not a defect\") is not a fair choice. What I recommend instead, and what I would build now if hv says yes: ONE rule for every line, at every orientation -- a line whose INK would leave the frame is fitted, which is 6.3's gate applied to headlines as well; and at portrait a headline is additionally fitted to its ROOM, which is 6.1. A widescreen recording whose lines all fit stays byte-identical, because a line that visibly fits still never moves. What changes at 16:9 is only the case that is today a defect. If hv would rather hold widescreen completely still, the alternative is honest too, and it ships a known overflow: say so and I will leave it, with the probe's landscape expectation recording the decision rather than the defect.\n\nTHE OTHER TWO landscape failures are the same thing seen from the side: a .points box with a long word grows its own 1fr track and squeezes its two siblings (spread 332 px of 960), which your D2b finding predicted and which the fit at portrait now prevents.\n\nTHE PROBE HAS FOUND TWO REAL DEFECTS IN MY OWN CODE, both of which a pixel test would have shipped. (1) longestWord measured a bounding RECT, which carries the transforms above it, so under the crawl's rising animation one line measured twice gave two widths and the fit was not idempotent -- frames that move between two recordings of one reel, which is exactly what AT12 would have caught much later. It reads offsetWidth now. (2) The room walk read each ancestor on its own and took the smallest, which looks equivalent to narrowing from the outside in and is not: a socials handle beside its label was given a share of a row that had already grown past the pane. It now narrows outermost-first, and the flex case (a label taking part of the line) is handled beside the grid case. One handle case is still red and I am on it.\n\nI will send the WP-01 numbers when it is green. No suite is running now: my ST0024-AT01 runs are done.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

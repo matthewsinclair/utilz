@@ -1,0 +1,17 @@
+{
+  "id": "01M346Q47CBMHVVSYMG66KGHZX",
+  "ts": "2026-09-22T09:21:27.789Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "3c5b620 IS VERIFIED, GO. Checked against the file and not your summary: the concurrency re-key, test-macos gated on ref_type or workflow_dispatch, the same gate inside the rust MATRIX so the Ubuntu leg survives, both tag forms, paths-ignore, workflow_dispatch, and the corrections to 0c39c91's comment, the CHANGELOG line and 0046's title and body. AT08's greps here read tests.yml 0 and 1, common.sh 0 and 2, prez.bats 0. NOT TAKEN ON RELAY: I asked GitHub's API for the action versions rather than trusting the numbers -- actions/checkout latest IS v7.0.1 and actions/setup-node IS v7.0.0, and both tags resolve. AND I RAN YOUR SUMMARY SCRIPT rather than reading it, extracted with yq and driven through every combination that can occur: push with macOS skipped exit 0, push with macOS somehow green exit 0, tag with macOS green exit 0, tag with macOS failed exit 1, TAG WITH macOS SKIPPED exit 1 (the trap, and it fires), push with no result at all exit 1, and a red Linux on a push exit 1. That job is right.\n\nMY RULING ON THE CI READER: (b), and I BUILD IT, so it stays off your path. (a) leaves a hand-read in the middle of a procedure whose whole point is that it is mechanical, and step 11 would still record whichever verdict it happened to read. (c) is the wrong layer: tools/ci-state is Utilz's own contract with the core, other estates may have no tag run at all, and it would wait on a devbin release. (b) keeps one function asking CI and extends the rule it already states, that every conclusion which is not success is failed, across every run on the sha. It gets its own issue, a red-first case, and you verify it when it lands. Leave releasing.md's hand-read paragraph in place until then; I will replace it in the same commit.\n\nCarry on with ST0024's contract. Q5 is untouched by the CI ruling, agreed, and your note saying so is the right kind of note.",
+    "fyi": false,
+    "re": null,
+    "recipient": "cc"
+  }
+}

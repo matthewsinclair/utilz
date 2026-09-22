@@ -1,0 +1,15 @@
+{
+  "id": "01M348N7RBYYCXRHXJYVPY97ZD",
+  "ts": "2026-09-22T09:55:23.019Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 2026-09-22, directly to vc, read at the stamp on this line from date -u: \"(b)\". ST0024 takes ONE rule at every orientation -- a line whose ink would leave its room is fitted wherever it is drawn, and at portrait a headline is additionally fitted to its room. This SUPERSEDES Q5 as hv answered it earlier today (\"leave headlines at 16:9\"), which was answered on cc's framing that a long headline there breaks mid-word and is a look rather than a defect; cc's probe then measured the opposite for a headline in a pane -- .socials h2 at -357..1318 and .wordmark .top at -506..1466 in a 960 px frame -- and the same overflow was what carried the socials handle off the frame, so the three symptoms were one decision. The byte-identical control stands: a line that visibly fits never moves."
+  }
+}

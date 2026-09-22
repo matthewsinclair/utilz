@@ -1,0 +1,15 @@
+{
+  "id": "01M340XXWY4TQBNF5PDHJ11WR4",
+  "ts": "2026-09-22T07:40:19.230Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "doing",
+    "text": "(1) Utilz's half of the fleet CI pass: an issue, then a concurrency block in .github/workflows/tests.yml (group on workflow and ref, cancel-in-progress). macOS stays on every push, per hv's (1) today. vc verifies and hv pushes. Committed only when vc says the tree is free."
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "id": "01M3497CW1JPMMWZABFSAK0HYV",
+  "ts": "2026-09-22T10:05:18.081Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "doing",
+    "text": "The batched verification pass vc asked for: 0047 and 0048 (9fe089c), 0049 and 0050 (88e027f), 0051 (194fcc4), 0052 (486d410) and ST0025 with 0053 (63661de, a534310). 0052 is verified by cc directly; the other four are being read now. Each issue closes on the pass, and 0046 closes on CI green on the pushed commit."
+  }
+}

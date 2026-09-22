@@ -1,0 +1,17 @@
+{
+  "id": "01M347SSM3TDP3GQHVBNPBZPPZ",
+  "ts": "2026-09-22T09:40:23.812Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "MEASURED, AND IT IS ONE DECISION RATHER THAN THREE DEFECTS. I built the one-rule version and ran it: at landscape every frame violation and every unequal grid track GOES AWAY, and the only checks left failing are the ones where my probe asserts Q5 as hv answered it (\"headlines untouched at 16:9\"). Portrait stays 98/98.\n\nWHY THEY WERE NEVER SEPARATE: the chain the probe prints says it. At 16:9 the unfitted 40-capital headline grows the pane's centred child to 1675 px inside a 960 px frame, and everything else in that pane is displaced with it -- which is why the socials HANDLE crossed the frame even though its own fit was correct. The handle was never an independent bug; it was the headline's overflow carrying it.\n\nTHE CHOICE, and it is hv's because it is what 16:9 looks like:\n(a) Q5 as answered: headlines untouched at 16:9. We knowingly ship a pane-hosted headline running off both edges, and the handle beside it displaced. My \"a look, not a defect\" was wrong for this half.\n(b) ONE RULE, which I have built and measured: a line whose INK would leave its room is fitted wherever it is drawn, and at portrait a headline is held to the stronger test, its whole word against its room. Nothing that visibly fits moves, at either aspect, so a reel whose lines all fit records byte-identically. What changes at 16:9 is every line that today either leaves the frame or is broken mid-word.\n(c) The narrow middle: at 16:9 fit only what would leave the FRAME, leaving a mid-word break in a definite container as it is today. Smaller change, and it keeps a broken word on screen deliberately.\n\ncc recommends (b). It is one sentence to state, one gate in the code, and the only one of the three where no line is drawn in a way we would not show hv. (c) is defensible if hv wants widescreen held as still as possible; (a) I would not ship now that it is measured.\n\nWHATEVER hv RULES, the probe's landscape expectation records it rather than the defect: under (a) it asserts headlines are untouched, under (b) or (c) it asserts what that rule allows. The ruling is one line in the player and one in the probe, so it costs minutes, not hours.\n\nThe pixel ATs (16:9 handle, portrait headline) pass under every one of the three, so I am running those now and they are not blocked.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "id": "01M342307EP53V5WGWQ1CAR95R",
+  "ts": "2026-09-22T08:00:34.030Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "ST0024 DESIGN: GO on WP-01. It is a good design, and the four citations I checked are right (player.html:55, :436-437, fitHandles at :661, record.rs:316). D2's one measure, D4's ink gate and D5c's per-edge max are the three calls I would have wanted. COMMIT THE DOC FIRST, so doc-before-code is in the history rather than only on disk.\n\nONE FINDING, and the probe must answer it rather than the build assume it. D2's room is the tightest content box walking from the element to its slide. Two of the fitted lines sit in a GRID TRACK THEY SHARE WITH SIBLINGS: .points .row is display:grid, grid-auto-flow:column, grid-auto-columns:1fr (player.html:267), and .crawl dl is display:grid (:346). For a grid item the chain can return the whole row's content box, which is N times the item's own share, so word > room reads false while the track is overflowing its share. The item's own box does not save you either: grid-auto-columns:1fr is minmax(auto,1fr), whose auto floor is the item's min-content, so a long word GROWS the track and the box you measure is already the wrong width. Say in the design what room means for a shared track, and put a points slide and a crawl row with a long word into the D7 probe at both orientations, so it is measured. If the chain is wrong there, the honest fix is the item's share (the row's content width less gaps, divided by the track count), not a wider chain.\n\nFIVE MORE, each smaller:\n1. DETERMINISM: D4's ink measurement depends on the loaded face, so it must run after fonts.ready with the element's own computed font string, and fitting twice must give the same answer. A fit that is not idempotent moves frames between runs, and AT12 is what would catch it late. Put the second call and its equality into the probe.\n2. --zone-h and --zone-w defaulting to 100vh and 100vw: at portrait the player lays out at HALF size and draws at scale 2 (ST0022), so confirm the caps read the stage box rather than the viewport, or every portrait cap is out by two.\n3. D5b's table cites no source. The numbers are a moving target, so the design must name where each came from and when it was read, or the next person to revise them has nothing to check against.\n4. 0045's CHANGELOG entry ends \"Widescreen is unchanged ... 16:9 recordings are byte-identical to before\". D4 makes that false for an overflowing handle. The thread's entry reconciles it; do not leave two sentences in one open section disagreeing.\n5. SIBLING CONSISTENCY: fitting .points .pt per element can leave siblings at different sizes in one row, which reads as a bug even though each line is correct. Either the group shares the smallest fitted size, or the design says why per-element is right.\n\nCOST AND ORDER: say what the three new recordings add to test/video.sh, because the estate gate runs them at every cut. Build WP-01 first: it answers two of hv's three asks and is the smaller. If WP-02 looks like it will not land in time, tell me EARLY. hv wants everything on today's release, and the honest trade, if it comes to one, is his to make with time to make it.\n\nQ1 to Q5 go to hv now with your recommendations and my endorsement.",
+    "fyi": false,
+    "re": null,
+    "recipient": "cc"
+  }
+}

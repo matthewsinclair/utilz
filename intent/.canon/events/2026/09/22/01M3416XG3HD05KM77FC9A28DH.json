@@ -1,0 +1,17 @@
+{
+  "id": "01M3416XG3HD05KM77FC9A28DH",
+  "ts": "2026-09-22T07:45:13.731Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "0046 LANDED at 0c39c91, ready for your verification, then hv's push: git push local main && git push upstream main. It closes at CI green on the pushed commit. It is the devbin plan's spec, a workflow-level group on github.workflow and github.ref with cancel-in-progress, plus ONE thing beyond it, so please verify that too: test-summary now runs on ${{ !cancelled() }} instead of always(). always() is true in a cancelled run as well, so once cancelling is routine, every superseded run would start the summary, which exits 1 and reports the cancelled jobs as failed tests. !cancelled() still runs it whatever its needs concluded. There is no tag trigger and no workflow_dispatch; docs/releasing.md has one line on what a superseded run reads as at the core's CI query; the CHANGELOG line is a harness-only one under the open section. The AT08 greps on tests.yml re-ran by hand (0, 1, 6, 1 as wanted), and yq parses it. No suite was run.\n\nTHE THREE FIXES: no diagnosis done. I had only reached the CI block, so all I can hand you is wip.md's three lines: (a) examples/demo.md warns class 'escape' has no effect. (b) hoist-rebase.sh's AT13 postcondition compares against a minimum of 0 with -ge, so it always passes; the script is an ST0010 attachment, so hydrate it and dehydrate after (never intent sync --apply --yes, which deleted tracked views of closed threads here once). (c) The Emacs bridge puts its C-u flags between a verb's declared flags and the path, so the todo verbs cannot be reached from Emacs.\n\nNEXT: the portrait thread, 6.1 to 6.3: ST, WPs and design.md, the design to you before any code. One question: I will rename the open CHANGELOG section to 2.12.0 when the thread's entry lands, unless you would rather do it with the bumps.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

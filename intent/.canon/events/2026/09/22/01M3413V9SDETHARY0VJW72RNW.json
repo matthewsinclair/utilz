@@ -1,0 +1,15 @@
+{
+  "id": "01M3413V9SDETHARY0VJW72RNW",
+  "ts": "2026-09-22T07:43:33.177Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "doing",
+    "text": "Today's release, 2.12.0 (prez 2.4.0), through devbin's 0.1.5 core, carrying all outstanding work: the CI concurrency block (cc, 0046); the 0.1.5 sweep (devbin-vc sweeps; vc holds the tree and verifies); the portrait thread for 6.1-6.3 (cc; design to vc first); the three fixes, demo.md escape, hoist-rebase AT13 and the Emacs todo verbs (vc, red first; cc verifies); releasing.md from the swept core (cc); the bumps; hv's cut; tools/formula-bump and the tap."
+  }
+}

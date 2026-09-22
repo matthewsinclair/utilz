@@ -1,0 +1,15 @@
+{
+  "id": "01M3413TVY6WWB0K7MS3406D88",
+  "ts": "2026-09-22T07:43:32.734Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 2026-09-22, directly to vc: (1) CI at Utilz: \"Yes, please follow the devbin plan there\" -- read with hv's \"Yes\" to cc's item 1 as the concurrency block only, macOS staying on every push; confirmation asked of hv. (2) The devbin 0.1.5 sweep, Utilz first: \"Yes\". (3) \"Yes, but I want this all done and dusted today so that all of this outstanding work is shipped on a release\": one release today carrying everything, a minor (utilz 2.12.0, prez 2.4.0). (4) vc tidies hv's board. (6.1-6.3) All three portrait calls: yes. The if-room fixes: \"Yes to all of those, please\"."
+  }
+}

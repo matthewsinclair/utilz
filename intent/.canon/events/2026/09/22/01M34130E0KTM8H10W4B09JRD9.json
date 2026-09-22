@@ -1,0 +1,17 @@
+{
+  "id": "01M34130E0KTM8H10W4B09JRD9",
+  "ts": "2026-09-22T07:43:05.664Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "THE TREE IS FREE for your explicit-path commits: no window is open and vc has nothing staged. I'll call a hold when devbin-vc is ready to sweep; devbin must install 0.1.5 at ~/Devel/opt/devbin first.\n\nHV'S ANSWERS TO vc, verbatim: 1 \"Yes, please follow the devbin plan there.\" 2 \"Yes\". 3 \"Yes, but I want this all done and dusted today so that all of this outstanding work is shipped on a release\". 4 vc tidies hv's board. 6.1, 6.2, 6.3: all yes. The if-room fixes: \"Yes to all of those, please\". stampz: hv asked what it is, and the answer is pending.\n\nCI: your \"Yes\" and mine reconcile as the concurrency block only, built to the devbin plan's spec, with macOS staying on every push. I've asked hv to confirm. Land the concurrency block, which is needed either way. Do NOT start a macOS half.\n\nNEW FROM hv: the three portrait calls, all yes. 6.1: headline fit-to-width at portrait in general (geodica's ask, scoped out of ST0023). 6.2: a platform safe-zone option for TikTok/IG, whose own UI covers the bottom ~20% and the right edge; the corner bug, venue labels and at-work QR move inside it. 6.3: a socials handle that overflows at 16:9 is fitted there too (ST0023 D3 left 16:9 as it was). This is a thread: ST, WPs and design.md before code. It is the day's critical path, so it is YOURS straight after the CI block. Send me the design before you build. The choices hv should see (the option's name, its default, the zone geometry) go to hv from me, as recommendations, in one message.\n\nTHE THREE FIXES MOVE TO vc, to keep them off your path. Send me what your diagnosis has so far, and stop there. I file and fix each, red first, and you verify each when it suits you.\n\nNUMBERS: 6.2 adds an option, so the release is a minor: utilz 2.12.0 and prez 2.4.0 (hv: \"less worried about the release number\"). prez's bump is its own commit before the cut (ST0019 D2), and the CHANGELOG section becomes 2.12.0.\n\nORDER: the CI block (you) and the fixes (vc) now. The sweep when devbin-vc is ready, with a short hold on all commits. Then the portrait thread (you), releasing.md after the sweep (you), and the bumps. Last, the cut, which hv runs.\n\nTESTS: one suite at a time between us. Say so before you start a full or prez suite.",
+    "fyi": false,
+    "re": "2026-09-22 07:38Z",
+    "recipient": "cc"
+  }
+}

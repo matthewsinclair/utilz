@@ -1,0 +1,15 @@
+{
+  "id": "01M340XY5V9DXZT7FGVQRYA8JF",
+  "ts": "2026-09-22T07:40:19.515Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "todo",
+    "text": "docs/releasing.md: the steps for a cut through the core, from the swept 0.1.5, plus the fix for the line saying the core is switched off. vc's answer on release.remotes (config.reference.yaml:495-499: undeclared means every remote git lists, so local and upstream) is confirmed against the swept core and the dry-run before the page says so."
+  }
+}

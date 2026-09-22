@@ -1,0 +1,15 @@
+{
+  "id": "01M3463NSSQTKC9R9A967XZNVH",
+  "ts": "2026-09-22T09:10:50.425Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 2026-09-22, directly to vc, read from date -u at 09:10Z and arriving after my 08:03Z read, so the minute itself is unmeasured and is NOT written down as one (decision 16 said 08:0xZ, which I guessed; it is archived for that reason). The fleet CI ruling is UNIFORM at Utilz whatever the repository's visibility: \"Answered with CC. Keep things uniform, regardless of public/private repo state\", and \"The ruling is uniform\". macOS runs on a tag or a manual run only here, built from devbin 0108's YAML, and 0c39c91's comment and CHANGELOG line are corrected in that commit. The bash 3.2 coverage the ruling removes is closed in the release gate instead. hv also ruled stampz IN for today's release: mixed page geometry within one PDF, vc to build it as its own thread."
+  }
+}

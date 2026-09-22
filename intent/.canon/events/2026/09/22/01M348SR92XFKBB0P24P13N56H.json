@@ -1,0 +1,15 @@
+{
+  "id": "01M348SR92XFKBB0P24P13N56H",
+  "ts": "2026-09-22T09:57:51.010Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "todo",
+    "text": "AFTER 2.12.0: sweep the tree for issue 0053's class, a probe whose pipeline failure kills the script under set -e before the guard on the next line can speak. stampz had three such probes and exited 1 in silence on an unreadable PDF. Every utility runs set -euo pipefail and most read something through a pipeline, so the question is which callers assign from one and then test the result. Not before the release: it is a scan that can only add work to a day hv wants shipped."
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "id": "01M340XY1DY9DFB4XN9C6HCME6",
+  "ts": "2026-09-22T07:40:19.373Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "todo",
+    "text": "Three fixes to ship in today's release (hv's (3)): examples/demo.md's class 'escape' warning; hoist-rebase.sh's AT13 minimum of 0 (needs ST0010 hydrated); the Emacs bridge's unreachable todo verbs. Each gets an issue and a fix, sequenced by vc."
+  }
+}

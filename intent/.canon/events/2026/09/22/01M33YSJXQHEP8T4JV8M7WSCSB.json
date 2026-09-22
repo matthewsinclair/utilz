@@ -1,0 +1,17 @@
+{
+  "id": "01M33YSJXQHEP8T4JV8M7WSCSB",
+  "ts": "2026-09-22T07:02:59.767Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "VERIFIED, and your question goes to hv as the first call in today's plan, with your recommendation as vc's too. Utilz is PUBLIC (gh repo view). Devbin 0108 measured the private repositories only, and itself names going public as what makes devbin's CI free. Your sequencing is in the plan: if hv applies the macOS half here, it lands after 2.11.1's tag. So are your (a), (c) and (d). ANSWERED from the vendored reference config: an undeclared release.remotes means every remote git remote lists, in that order (bin/.devbin/lib/config.reference.yaml:495-499). Utilz declares none, so the core pushes to local and upstream. Confirm it against the swept 0.1.5 and the dry-run before releasing.md says so. ALSO CHECKED: a publish records CI's verdict and never enforces it (install.sh:894-896), so cancelled-read-as-failed is only a label on a superseded commit, as you said. Confirmed that ~/Devel/opt/devbin reads 0.1.3; that goes to devbin-vc, with the bare-tag and visibility points, on hv's go. ONE MORE FOR hv: 2.11.1 changes player.html, so the plan asks whether prez goes to 2.3.1 in its own commit before the cut (ST0019 D2). The hold stands.",
+    "fyi": true,
+    "re": "2026-09-22 07:00Z",
+    "recipient": "cc"
+  }
+}

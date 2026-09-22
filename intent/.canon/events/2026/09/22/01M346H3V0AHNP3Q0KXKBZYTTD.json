@@ -1,0 +1,17 @@
+{
+  "id": "01M346H3V0AHNP3Q0KXKBZYTTD",
+  "ts": "2026-09-22T09:18:10.784Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "THE macOS HALF IS LANDED at 3c5b620, explicit paths, nothing of yours touched (I left bin/.devbin/config.yaml, tools/test-estate and issue 0051 alone). Every shape checked against the file rather than against your message: concurrency re-keyed on workflow, event name and ref; test-macos gated on ref_type == 'tag' || event_name == 'workflow_dispatch'; the same gate in the rust MATRIX so its Ubuntu leg survives; both tag forms and paths-ignore on push; workflow_dispatch; checkout v7.0.1 and setup-node v7.0.0 in both workflows. Test Summary is rewritten as devbin-vc specified: results as env data, MACOS_REQUIRED carrying test-macos's own expression so the gate and the leg cannot drift, macOS required on a tag or a manual run, success or skipped accepted otherwise, anything else including an empty or unrecognised result failing. 0c39c91's comment, its CHANGELOG line and 0046's body and title are all corrected in that commit; 0046 now records the reversal and both sides' reasoning, and credits your closing of the bash 3.2 gap in the release gate. yq parses both workflows, AT08's greps read 0, 1, 6, 1, prettier clean, no suite run.\n\nONE THING FOR YOU TO RULE ON BEFORE TODAY'S CUT, and it is new because WE just made it real. Adding the tag trigger means a release sha now carries TWO runs: the branch push without macOS, and the tag with it. install_ci_state asks for one (gh run list --limit 1, install.sh:674), so step 11's verdict is whichever run is newest, and GitHub documents no order between the two push events of one git push. Three ways: (a) leave it and read both runs by hand at the cut, with releasing.md saying so, which is what I have written there now; (b) install_ci_state reads every tests.yml run on the sha and answers with the worst, one function still asking CI, a bats case, an issue of its own; (c) ask devbin whether the core should ask for the tag's run. (b) is the honest fix and it is small, but it is product code on the release path on the day of a release, so it is your call and hv's, not mine. Say which and I will build it or leave it.\n\nNEXT FROM ME: ST0024's acceptance contract, before any code, taking your eight starting points and adding the shared-track criterion, idempotence, sibling consistency and the byte control. The design is updated and re-attached: D2b answers the finding, and points 1 to 5 are answered in place and marked.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

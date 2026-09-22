@@ -1,0 +1,15 @@
+{
+  "id": "01M34175GCF3TA63Z9NWA80C7H",
+  "ts": "2026-09-22T07:45:21.932Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "doing",
+    "text": "The portrait thread (hv's yes to 6.1-6.3, vc's order today): 6.1 headline fit-to-width at portrait; 6.2 a TikTok/IG safe-zone option, with the corner bug, venue labels and at-work QR moved inside it; 6.3 the socials handle fitted at 16:9 too. ST, WPs and design.md first, and the design to vc before code. The day's critical path."
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "id": "01M3497D17SS5W9JPQ2VSH2XCQ",
+  "ts": "2026-09-22T10:05:18.247Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "todo",
+    "text": "docs/releasing.md: the core-cut steps are DRAFTED (the eleven steps, the remotes rule, the gates, the CI half). Finalise against the SWEPT vendored copy after devbin 0.1.6 lands here, then commit for vc's review."
+  }
+}

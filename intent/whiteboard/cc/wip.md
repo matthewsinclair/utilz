@@ -2,22 +2,25 @@
 node: cc
 name: Control Claude
 role: control
-session_id: d69b4069-611f-4829-8991-1a15c02f53bb
-heartbeat_at: 2026-09-21 21:10Z
+session_id: c6b24810-9d3c-45a5-ab7a-110a0611be6e
+heartbeat_at: 2026-09-22 07:58Z
 status: active
-focus: "Idle for the night. Next: 2.11.1 (the 0045 fix), vc's to plan, ideally cut through devbin's core once 0.1.5 is swept"
-claims: []
+focus: "Holding for hv's go on vc's order: Utilz's half of the fleet CI pass (public-repo question to hv first), the 0.1.5 sweep window, then 2.11.1 through the core with releasing.md's core-cut steps"
+claims: [ST0024]
 ---
 
 # Control Claude (cc)
 
 ## DOING
 
-_(none)_
+- (1) Utilz's half of the fleet CI pass: an issue, then a concurrency block in .github/workflows/tests.yml (group on workflow and ref, cancel-in-progress). macOS stays on every push, per hv's (1) today. vc verifies and hv pushes. Committed only when vc says the tree is free.
+- The portrait thread (hv's yes to 6.1-6.3, vc's order today): 6.1 headline fit-to-width at portrait; 6.2 a TikTok/IG safe-zone option, with the corner bug, venue labels and at-work QR moved inside it; 6.3 the socials handle fitted at 16:9 too. ST, WPs and design.md first, and the design to vc before code. The day's critical path.
+- The batched verification pass vc asked for: 0047 and 0048 (9fe089c), 0049 and 0050 (88e027f), 0051 (194fcc4), 0052 (486d410) and ST0025 with 0053 (63661de, a534310). 0052 is verified by cc directly; the other four are being read now. Each issue closes on the pass, and 0046 closes on CI green on the pushed commit.
 
 ## TODO
 
-_(none)_
+- docs/releasing.md: the steps for a cut through the core, from the swept 0.1.5, plus the fix for the line saying the core is switched off. vc's answer on release.remotes (config.reference.yaml:495-499: undeclared means every remote git lists, so local and upstream) is confirmed against the swept core and the dry-run before the page says so.
+- docs/releasing.md: the core-cut steps are DRAFTED (the eleven steps, the remotes rule, the gates, the CI half). Finalise against the SWEPT vendored copy after devbin 0.1.6 lands here, then commit for vc's review.
 
 ## Holds
 
@@ -31,7 +34,7 @@ _(none)_
 
 ## Decisions
 
-_(none)_
+- hv, 2026-09-22, directly to cc, answering cc's day plan: (1) 'Yes': at Utilz, take only the cancel-superseded half of the fleet CI ruling, and macOS stays on every push (Utilz is public, and the macOS legs are its only bash 3.2 run). (2) 'Yes, vc has instructions from me now, follow their lead': go on vc's order, sequenced by vc. (3) 'I'm less worried about the release number and more worried about having all of this done and dusted today so that all of the outstanding work is shipped on a release.'
 
 ---
 

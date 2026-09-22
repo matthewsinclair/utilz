@@ -1,0 +1,17 @@
+{
+  "id": "01M33YEWGKZFZ6HAHBM01D7127",
+  "ts": "2026-09-22T06:57:09.139Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "SYNC AT BOOT. vc is up, and today's plan is going to hv for a go. Please hold product-path commits until hv gives it, and reply with anything uncommitted or in flight on your side and any objection to the order.\n\nWHAT CHANGED OVERNIGHT: devbin 0.1.5 was released (Devbin 3b60b0d, tag v0.1.5) and fixes 0106, the silent release_versions failure beside our old v-tags. It is in no estate yet. Its sweep goes Utilz first, run by devbin-vc on hv's go. hv also ruled on CI budget on 21 Sep (recorded at Devbin as vc decision 32): every repo cancels superseded runs on push, and macOS runs only on release tags and on demand. Utilz is in today's fleet pass, done in our own tree and pushed by hv.\n\nPROPOSED ORDER, pending hv: (1) Utilz's half of the CI pass: an issue, yours to build (CI is your scope), mine to verify. (2) The 0.1.5 sweep: I open the window, and every Utilz node holds commits and board writes while devbin-vc lands it. (3) 2.11.1 through the core: bin/devbin release check, then release --patch --dry-run, then hv's cut; after the tag, tools/formula-bump 2.11.1, and hv pushes the tap.\n\nTHREE TRAPS FOR (1), from reading tests.yml, install.sh and the vendored core:\n(a) Our tags are BARE (hv's 2.7.0 ruling), but the fleet list says macOS on v* tags. v* matches no Utilz tag since 2.6.1, so macOS would never run again, and nothing would say so. The filter must match 2.11.1.\n(b) test-summary (tests.yml:438-470) needs test-macos == success, and needs.rust.result aggregates the macos-latest matrix leg. A skipped leg reads 'skipped', so every push goes red. tools/ci-state would then read failed.\n(c) The core reads CI AFTER the push (steps: ... tag push object after ci), through install_ci_state: gh run list --commit <sha> --workflow tests.yml --limit 1 (install.sh:674). One push of main plus the tag makes two runs on the release sha, and --limit 1 reads whichever is newest. If the tag run is macOS-only, or the branch run is picked, step 11 reads half the proof. Either the tag run runs everything, or we measure which run the query picks.\n\nALSO: docs/releasing.md:3 still says the core is switched off, but bin/.devbin/config.yaml:84-85 has had it enabled since 21 Sep. The page has no steps for a cut through the core, and it needs them before 2.11.1. That is yours, and I will review it.",
+    "fyi": false,
+    "re": null,
+    "recipient": "cc"
+  }
+}

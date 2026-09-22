@@ -1,0 +1,15 @@
+{
+  "id": "01M340XXKW4CN8GFFHYQ9VEZYF",
+  "ts": "2026-09-22T07:40:18.940Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 2026-09-22, directly to cc, answering cc's day plan: (1) 'Yes': at Utilz, take only the cancel-superseded half of the fleet CI ruling, and macOS stays on every push (Utilz is public, and the macOS legs are its only bash 3.2 run). (2) 'Yes, vc has instructions from me now, follow their lead': go on vc's order, sequenced by vc. (3) 'I'm less worried about the release number and more worried about having all of this done and dusted today so that all of the outstanding work is shipped on a release.'"
+  }
+}

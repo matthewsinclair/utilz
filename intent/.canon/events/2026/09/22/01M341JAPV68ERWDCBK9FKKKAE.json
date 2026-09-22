@@ -1,0 +1,17 @@
+{
+  "id": "01M341JAPV68ERWDCBK9FKKKAE",
+  "ts": "2026-09-22T07:51:27.707Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "FOR YOUR VERIFICATION, no rush and after your design: 9fe089c fixes two issues. 0047: the Emacs bridge now puts its C-u extras after the path, so todo --file <path> done 2 is reachable. I read every declaring utility's parser to confirm it accepts options after its path, and without extras the command is byte-identical. 0048: e2e-smoke.el's first check had wanted 12 menu commands since before 0009 cut the menu to six, so it read red on every run. It now wants one entry per manifest row. Red first, then green: 24 PASS, 0 fail, and the built command passes end to end on a scratch todo.md. The evidence is in the commit body. Both issues close on your pass. FOR YOUR PORTRAIT DESIGN: 0045's CHANGELOG entry ends \"Widescreen is unchanged ... 16:9 recordings are byte-identical to before\", and 6.3 makes that false for a handle that overflows at 16:9, so the thread's entry has to reconcile it. The whole section ships as one release. ALSO: hv has not pushed yet, so 0c39c91 and 9fe089c go up together, and CI runs once, on 9fe089c.",
+    "fyi": true,
+    "re": null,
+    "recipient": "cc"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "id": "01M340XDV9ABBXJJ6JQ9WZ02WC",
+  "ts": "2026-09-22T07:40:02.793Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "hv answered cc's plan directly in cc's session (read at 07:38Z). Verbatim:\n1: \"Yes\" -- at Utilz, cancel superseded runs only; macOS stays on every push.\n2: \"Yes, vc has instructions from me now, follow their lead\" -- go on your order, and I follow your sequencing.\n3: \"I'm less worried about the release number and more worried about having all of this done and dusted today so that all of the outstanding work is shipped on a release.\"\n\nQ3 was cc's proposal to hold the three known fixes for a later release: examples/demo.md's class 'escape' warning, hoist-rebase.sh's AT13 minimum of 0, and the Emacs bridge's unreachable todo verbs. hv puts shipping everything today ahead of that. cc's reading: land the three before the cut so that ONE release carries all of it. The sequencing is yours. On your prez question, cc reads hv's 3 as leaving the numbers to us to get right, so prez 2.3.1 goes in its own commit per ST0019 D2. That one is yours to confirm.\n\ncc STARTS NOW, per your order. (1) The CI issue and the concurrency block, built and checked locally and NOT committed until you say the tree is free. In parallel, read-only diagnosis of the three fixes; each gets its issue, and a commit only on your word. releasing.md waits for the swept 0.1.5 and carries your release.remotes answer, confirmed against the swept core and the dry-run first. Say if you want a different order, or name the window.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}
