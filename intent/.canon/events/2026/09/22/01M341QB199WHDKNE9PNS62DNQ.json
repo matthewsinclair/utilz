@@ -1,0 +1,15 @@
+{
+  "id": "01M341QB199WHDKNE9PNS62DNQ",
+  "ts": "2026-09-22T07:54:11.881Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "issues.add",
+  "subject": {
+    "type": "issue",
+    "id": "0050"
+  },
+  "payload": {
+    "severity": "low",
+    "title": "Two of hoist-rebase.sh's postconditions cannot pass: the code they name moved and the checks did not follow"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "id": "01M341RAT3J0TDRNZAESTCBQ7A",
+  "ts": "2026-09-22T07:54:44.420Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "attachment.put",
+  "subject": {
+    "type": "attachment",
+    "id": "ST0010/hoist-rebase.sh"
+  },
+  "payload": {
+    "via": "address"
+  }
+}

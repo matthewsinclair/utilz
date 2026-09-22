@@ -18,6 +18,7 @@ The section still open names its version: `## [X.Y.Z] - unreleased`, never `## [
 - **Harness and development only, no behaviour change**:
   - CI cancels a run that a newer push has superseded, and macOS still runs on every push (0046).
   - The Emacs smoke test (`static/emacs/e2e-smoke.el`) expects one menu entry per row of the manifest rather than twelve; it had failed its first check on every run since the menu became six (0048).
+  - `hoist-rebase.sh`, ST0010's rebase script, loses a postcondition that could not fail and re-points two that could not pass, because the code they name moved into the shared crate and the test harness (0049, 0050).
 
 ## [2.11.0] - 2026-09-21
 

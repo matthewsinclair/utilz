@@ -1,0 +1,15 @@
+{
+  "id": "01M341M5AXFM7WKJZDESATNCYX",
+  "ts": "2026-09-22T07:52:27.742Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "issues.add",
+  "subject": {
+    "type": "issue",
+    "id": "0049"
+  },
+  "payload": {
+    "severity": "low",
+    "title": "hoist-rebase.sh carries a postcondition that cannot fail: AT13: PASS against a minimum of 0"
+  }
+}
