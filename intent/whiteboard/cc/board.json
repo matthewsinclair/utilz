@@ -5,9 +5,9 @@
     "name": "Control Claude",
     "role": "control",
     "session_id": "c6b24810-9d3c-45a5-ab7a-110a0611be6e",
-    "heartbeat_at": "2026-09-22T10:06:47.475Z",
+    "heartbeat_at": "2026-09-22T10:07:33.767Z",
     "status": "active",
-    "focus": "Holding for hv's go on vc's order: Utilz's half of the fleet CI pass (public-repo question to hv first), the 0.1.5 sweep window, then 2.11.1 through the core with releasing.md's core-cut steps",
+    "focus": "ST0024 built and landed under hv's rule (b): WP-01 closed 8/8, WP-02 waits only on vc's frame read of 001. Next: the verification pass, then releasing.md against the swept 0.1.6, then hv's cut of 2.12.0",
     "claims": [
       "ST0024"
     ],
