@@ -3,8 +3,9 @@
   "number": 49,
   "slug": "hoist-rebase-sh-carries-a-postcondition-that-can",
   "title": "hoist-rebase.sh carries a postcondition that cannot fail: AT13: PASS against a minimum of 0",
-  "status": "open",
+  "status": "closed",
   "severity": "low",
   "created": "2026-09-22",
+  "closed": "2026-09-22",
   "body": "`hoist-rebase.sh`, ST0010's rebase script for the prez crate, kept as that thread's attachment, checks after a merge that Utilz's own crate-side work survived it. One of its checks is `post \"test/acceptance.sh\" \"AT13: PASS\" 0 \"AT13 (presence only)\"`, and `post()` passes when the count is `-ge` the minimum, so a minimum of 0 prints `ok` at every count, including 0, the case it exists to catch. cc named it on 2026-08-29 (`36f7d86`) and proposed raising the minimum to 1.\n\nMEASURED 2026-09-22, THAT FIX WOULD TURN A CHECK THAT CANNOT FAIL INTO ONE THAT CANNOT PASS. The needle is text the suite prints at run time, not text in its source: `grep -c 'AT13: PASS' opt/prez/crate/test/acceptance.sh` is 0 on the live tree. With a minimum of 1 every rebase would report AT13 lost.\n\nTHE FIX IS TO DELETE THE LINE. Two checks already cover AT13, and both go red when the block is lost: `post \"test/acceptance.sh\" \"if want AT13\" 1 \"AT13 block\"` checks that it is there, and the counted-checks block below the list wants at least 8 of its `present`, `absent` and `check` lines (8 on the live tree). The deleted line adds nothing either can miss.\n\nPROOF: the script's postcondition section is run alone, against a copy of the files it reads. On the intact copy every check passes. With AT13's block removed from the copy, the two remaining AT13 checks report LOST and the section exits 1. On that same doctored copy the old line still printed `ok ... (0)`."
 }

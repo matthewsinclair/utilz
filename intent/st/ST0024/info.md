@@ -1,9 +1,9 @@
 ---
 st_id: ST0024
 title: showreel: headlines fit a portrait frame, a platform safe zone, and a handle that fits at 16:9
-status: WIP
+status: Completed
 created: 2026-09-22
-completed:
+completed: 2026-09-22
 ---
 
 # ST0024: showreel: headlines fit a portrait frame, a platform safe zone, and a handle that fits at 16:9
@@ -25,7 +25,7 @@ Roles: cc builds, vc reviews and verifies, hv rules.
 | WP    | Title                                                                 | Size | Status |
 | ----- | --------------------------------------------------------------------- | ---- | ------ |
 | WP-01 | The fit reads the longest word: headlines at portrait, handles by ink | S    | Done   |
-| WP-02 | The platform safe zone, and everything type inside it                 | S    | WIP    |
+| WP-02 | The platform safe zone, and everything type inside it                 | S    | Done   |
 
 ## Acceptance
 

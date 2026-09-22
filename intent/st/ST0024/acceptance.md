@@ -26,7 +26,7 @@ title: showreel: headlines fit a portrait frame, a platform safe zone, and a han
 - AC-01.8 THE CONTROL: a 16:9 recording of a reel whose lines all fit is byte-identical, frame for frame, to the same recording made before this thread -- WITHDRAWN: Re-minted as AC-01.9, a non-test row: the control compares a recording against one made by a PRE-THREAD binary, which no suite can rebuild, so it is satisfied by evidence as ST0023's byte check was. The requirement is unchanged (by cc)
 - AC-01.9 (non-test) THE CONTROL: this thread does not move a 16:9 recording of a reel whose lines all fit. Measured against the pre-thread binary, and against Chrome's OWN run-to-run variation, since a claim of byte-identity that no change could satisfy is not a criterion -- evidence: cc, 22 Sep: 25 of 75 widescreen frames differ by one channel sample of 1 at one pixel, and the same build recorded twice differs identically, so this thread moved nothing; AT01's nothing-written pass asserts the mechanism over every reel rather than this one -- satisfied: yes
 
-### WP-02 -- The platform safe zone, and everything type inside it (status: WIP)
+### WP-02 -- The platform safe zone, and everything type inside it (status: Done)
 
 - AC-02.1 The flag --safe-zone and the key safe_zone: parse through one function, the flag wins, a bad value is refused by name at config parse so check and build refuse it too, and a frame wider than it is tall is refused naming both -- satisfied: yes (computed)
 - AC-02.2 With --safe-zone social at portrait, every mark and every line of type has its LAYOUT BOX inside the zone, and the bands that carry the content without a zone are empty of it; pictures still bleed to the frame's edge. Paint a theme puts outside an element's box -- a shadow, a stroke, a rotation -- is not what the zone insets and can still cross a band (issue 0055, measured at 293 px on one page of the popupart theme); hv ruled on 2026-09-22 that the wording narrows to what the zone controls rather than the zone moving for 2.12.0 -- satisfied: yes (computed)
@@ -73,7 +73,7 @@ _(no criteria in this group)_
 
 _(no tests in this group)_
 
-### WP-02 -- The platform safe zone, and everything type inside it (status: WIP)
+### WP-02 -- The platform safe zone, and everything type inside it (status: Done)
 
 _(no tests in this group)_
 

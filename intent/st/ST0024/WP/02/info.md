@@ -2,7 +2,7 @@
 wp_id: WP-02
 title: The platform safe zone, and everything type inside it
 scope: S
-status: WIP
+status: Done
 ---
 
 # WP-02: The platform safe zone, and everything type inside it

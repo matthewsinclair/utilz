@@ -4,8 +4,8 @@ An index of every steel thread in the project. A steel thread is a self-containe
 
 | ID     | Title                                                                                          | Status    | Created    | Completed            |
 | ------ | ---------------------------------------------------------------------------------------------- | --------- | ---------- | -------------------- |
-| ST0024 | showreel: headlines fit a portrait frame, a platform safe zone, and a handle that fits at 16:9 | WIP       | 2026-09-22 |                      |
 | ST0025 | stampz: a PDF whose pages differ in size is stamped page by page                               | Completed | 2026-09-22 | 2026-09-22           |
+| ST0024 | showreel: headlines fit a portrait frame, a platform safe zone, and a handle that fits at 16:9 | Completed | 2026-09-22 | 2026-09-22           |
 | ST0023 | showreel: a long socials handle fits a portrait frame (issue 0045)                             | Completed | 2026-09-21 | 2026-09-21           |
 | ST0022 | showreel video: a selectable aspect ratio for portrait and square reels                        | Completed | 2026-09-21 | 2026-09-21           |
 | ST0021 | showreel exports a reel as a video file                                                        | Completed | 2026-09-19 | 2026-09-20           |

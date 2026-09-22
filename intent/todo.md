@@ -4,9 +4,7 @@ A DOING / TODO / DONE view, projected from steel-thread and work-package status:
 
 ## DOING
 
-- [-] ST0024: showreel: headlines fit a portrait frame, a platform safe zone, and a handle that fits at 16:9
-  - [x] 01: The fit reads the longest word: headlines at portrait, handles by ink
-  - [-] 02: The platform safe zone, and everything type inside it
+_(none)_
 
 ## TODO
 
@@ -122,6 +120,9 @@ _(none)_
   - [x] 01: The aspect flag and key, the size rule, and a 9:16 reel that reads
 - [x] ST0023: showreel: a long socials handle fits a portrait frame (issue 0045)
   - [x] 01: Fit the socials handle to its pane, red test first
+- [x] ST0024: showreel: headlines fit a portrait frame, a platform safe zone, and a handle that fits at 16:9
+  - [x] 01: The fit reads the longest word: headlines at portrait, handles by ink
+  - [x] 02: The platform safe zone, and everything type inside it
 - [x] ST0025: stampz: a PDF whose pages differ in size is stamped page by page
   - [x] 01: Per-size stamps and per-range overlays
 

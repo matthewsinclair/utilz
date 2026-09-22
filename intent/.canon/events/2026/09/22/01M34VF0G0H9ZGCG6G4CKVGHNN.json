@@ -1,0 +1,15 @@
+{
+  "id": "01M34VF0G0H9ZGCG6G4CKVGHNN",
+  "ts": "2026-09-22T15:24:01.921Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "issues.add",
+  "subject": {
+    "type": "issue",
+    "id": "0063"
+  },
+  "payload": {
+    "severity": "medium",
+    "title": "prez AT04 flakes on the Linux leg: Chrome's debugging port 9333 is fixed and unwaited, so one of the two runs on a release sha goes red"
+  }
+}
