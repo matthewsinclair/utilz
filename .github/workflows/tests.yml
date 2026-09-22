@@ -13,6 +13,12 @@ on:
     # suppress a release run.
     paths-ignore:
       - 'intent/whiteboard/**'
+      # BOTH PATHS OR NEITHER (devbin#0110): GitHub skips a push only when EVERY
+      # changed path matches, and `intent wb` writes a canon event beside the
+      # board view it renders -- so the whiteboard line ALONE suppresses nothing
+      # a node actually does. Justified by what no job READS, not by a hit rate:
+      # no job here opens either tree, and that stays true as habits change.
+      - 'intent/.canon/**'
   pull_request:
     branches: [ main ]
   workflow_dispatch:
@@ -42,7 +48,7 @@ jobs:
         tar -xzf v1.12.0.tar.gz
         cd bats-core-1.12.0
         sudo ./install.sh /usr/local
-        echo "PATH=/usr/local/bin:$PATH" >> $GITHUB_ENV
+        echo "PATH=/usr/local/bin:$PATH" >> "$GITHUB_ENV"
         which bats
         bats --version
 
@@ -62,8 +68,8 @@ jobs:
       run: |
         export UTILZ_HOME="${{ github.workspace }}"
         export PATH="$UTILZ_HOME/bin:$PATH"
-        echo "UTILZ_HOME=$UTILZ_HOME" >> $GITHUB_ENV
-        echo "$UTILZ_HOME/bin" >> $GITHUB_PATH
+        echo "UTILZ_HOME=$UTILZ_HOME" >> "$GITHUB_ENV"
+        echo "$UTILZ_HOME/bin" >> "$GITHUB_PATH"
         chmod +x bin/utilz
         chmod +x opt/*/[!test]* 2>/dev/null || true
 
@@ -105,7 +111,7 @@ jobs:
       run: |
         # Install bats with Homebrew
         brew install bats-core
-        echo "PATH=$PATH:/usr/local/bin:/opt/homebrew/bin" >> $GITHUB_ENV
+        echo "PATH=$PATH:/usr/local/bin:/opt/homebrew/bin" >> "$GITHUB_ENV"
         which bats
         bats --version
 
@@ -121,8 +127,8 @@ jobs:
       run: |
         export UTILZ_HOME="${{ github.workspace }}"
         export PATH="$UTILZ_HOME/bin:$PATH"
-        echo "UTILZ_HOME=$UTILZ_HOME" >> $GITHUB_ENV
-        echo "$UTILZ_HOME/bin" >> $GITHUB_PATH
+        echo "UTILZ_HOME=$UTILZ_HOME" >> "$GITHUB_ENV"
+        echo "$UTILZ_HOME/bin" >> "$GITHUB_PATH"
         chmod +x bin/utilz
         chmod +x opt/*/[!test]* 2>/dev/null || true
 
