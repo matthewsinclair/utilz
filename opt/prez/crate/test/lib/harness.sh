@@ -251,12 +251,57 @@ chrome() {
 # file rather than sleeping at it. This applies the same shape to the port.
 # /dev/tcp is a bash builtin, so it needs neither curl nor node, and the
 # subshell closes the descriptor for us.
+# HOW LONG IT WAITED IS PART OF THE ANSWER (issue 0063). The ceiling used to
+# be silent: a caller could only say "chrome never opened its debugging port",
+# which reads as "chrome is broken" when it usually means "this runner was
+# slower than the ceiling". CDP_WAITED carries the measured wait so a refusal
+# can say it, and CDP_CEILING makes the ceiling a number rather than a magic
+# 200 in a loop. Raised from 10s to 30s: the 10s ceiling was set on a warm
+# laptop and a cold GitHub runner starting Chrome for the first time has been
+# measured past it.
+CDP_CEILING="${CDP_CEILING:-30}"
+CDP_WAITED=""
 wait_for_cdp() {
-  local port="$1" tries=200          # 200 x 0.05s = a 10s ceiling
+  local port="$1" waited=0 step=0.05
+  local tries=$(( ${CDP_CEILING%%.*} * 20 ))
+  CDP_WAITED="0s"
   while [ "$tries" -gt 0 ]; do
-    if (exec 3<>"/dev/tcp/127.0.0.1/$port") 2>/dev/null; then return 0; fi
+    if (exec 3<>"/dev/tcp/127.0.0.1/$port") 2>/dev/null; then
+      CDP_WAITED="$(awk -v w="$waited" 'BEGIN { printf "%.2fs", w * 0.05 }')"
+      return 0
+    fi
     tries=$((tries - 1))
-    sleep 0.05
+    waited=$((waited + 1))
+    sleep "$step"
+  done
+  CDP_WAITED="${CDP_CEILING}s (the ceiling)"
+  return 1
+}
+
+# A debugging port nothing is holding, asked for at the moment it is needed
+# (issue 0063).
+#
+# WHY THIS EXISTS. Every CDP launch in these suites used a HARD-CODED port --
+# 9333, 9350, 9360..9363, 9370..9372 -- so anything already holding one made
+# Chrome fail to bind, and the only symptom was `wait_for_cdp` timing out and
+# the caller blaming Chrome's startup. That is a false diagnosis pointing at
+# the wrong subsystem, and a leftover Chrome from an earlier block in the same
+# run is enough to cause it. Measured on the 2.12.0 tag run: AT04 failed this
+# way on the Linux leg while the same commit passed on its other run, and
+# AT05, AT06 and AT07 each launched Chrome successfully seconds later.
+#
+# A connect that FAILS is the answer we want: nothing is listening there.
+# Refusing rather than falling back to a constant is the point -- a fallback
+# to a fixed port is the very bug this replaces.
+cdp_port() {
+  local p tries=50
+  while [ "$tries" -gt 0 ]; do
+    p=$(( 9000 + RANDOM % 40000 ))
+    if ! (exec 3<>"/dev/tcp/127.0.0.1/$p") 2>/dev/null; then
+      printf '%s\n' "$p"
+      return 0
+    fi
+    tries=$((tries - 1))
   done
   return 1
 }

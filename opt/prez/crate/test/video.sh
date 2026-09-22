@@ -895,7 +895,7 @@ fit_probe() {
     --window-size="$w,$h" --user-data-dir="$WORK/chrome-fit-$mode-$expect" "file://$html" \
     >"$WORK/chrome-fit-$mode-$expect.log" 2>&1 &
   pid=$!
-  if ! wait_for_cdp "$port"; then
+  if ! wait_for_cdp "$port"; then  # $CDP_WAITED carries the measured wait
     kill "$pid" 2>/dev/null
     { wait "$pid"; } 2>/dev/null
     bad "chrome never opened its debugging port on $port"
@@ -919,18 +919,18 @@ if want ST0024-AT01; then
   elif ! fit_built; then bad "the fit fixture did not build: $(head -1 "$WORK/fit-build.out")"
   elif ! fits_built; then bad "the fitting fixture did not build: $(head -1 "$WORK/fits-build.out")"
   else
-    if fit_probe "$FITHTML" 540 960 portrait 9360 "$FIT_SLIDES" fits-after
+    if fit_probe "$FITHTML" 540 960 portrait "$(cdp_port)" "$FIT_SLIDES" fits-after
     then ok "portrait: every check passed"
     else bad "portrait: the probe reported failures (above)"; fi
-    if fit_probe "$FITHTML" 960 540 landscape 9361 "$FIT_SLIDES" fits-after
+    if fit_probe "$FITHTML" 960 540 landscape "$(cdp_port)" "$FIT_SLIDES" fits-after
     then ok "landscape: every check passed"
     else bad "landscape: the probe reported failures (above)"; fi
     # The criterion behind "a line that visibly fits never moves", asserted as
     # a mechanism rather than by comparing recordings.
-    if fit_probe "$FITSHTML" 540 960 portrait 9362 "$FITS_SLIDES" nothing-written
+    if fit_probe "$FITSHTML" 540 960 portrait "$(cdp_port)" "$FITS_SLIDES" nothing-written
     then ok "portrait, a reel whose lines all fit: the fit wrote nothing"
     else bad "portrait: the fit wrote something to a line that fits (above)"; fi
-    if fit_probe "$FITSHTML" 960 540 landscape 9363 "$FITS_SLIDES" nothing-written
+    if fit_probe "$FITSHTML" 960 540 landscape "$(cdp_port)" "$FITS_SLIDES" nothing-written
     then ok "landscape, a reel whose lines all fit: the fit wrote nothing"
     else bad "landscape: the fit wrote something to a line that fits (above)"; fi
   fi

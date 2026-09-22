@@ -348,11 +348,13 @@ if want AT04; then
   else
     art="$WORK/runtime.html"
     "$BIN" build "$DEMO" -o "$art" >/dev/null 2>&1
-    "$BROWSER" --headless=new "${CHROME_SAFE[@]}" --remote-debugging-port=9333 --window-size=1280,800 \
+    at04port="$(cdp_port)" || bad "no free debugging port to give chrome"
+    "$BROWSER" --headless=new "${CHROME_SAFE[@]}" --remote-debugging-port="$at04port" --window-size=1280,800 \
       --user-data-dir="$WORK/chrome" "file://$art" >"$WORK/chrome.log" 2>&1 &
     CHROME_PID=$!
-    wait_for_cdp 9333 || bad "chrome never opened its debugging port on 9333"
-    if node "$HERE/at04-runtime-probe.mjs" 9333; then ok "every runtime check passed"; else bad "the runtime probe reported failures"; fi
+    wait_for_cdp "$at04port" \
+      || bad "chrome never opened its debugging port on $at04port after $CDP_WAITED"
+    if node "$HERE/at04-runtime-probe.mjs" "$at04port"; then ok "every runtime check passed"; else bad "the runtime probe reported failures"; fi
     kill "$CHROME_PID" 2>/dev/null; wait "$CHROME_PID" 2>/dev/null
     finish
   fi
@@ -711,7 +713,7 @@ if want AT12; then
     at12_run() {
       local deck="$1" theme="$2" label="$3" art port
       art="$WORK/at12-$theme-$label.html"
-      port=9350
+      port="$(cdp_port)" || bad "no free debugging port to give chrome"
       "$BIN" build "$deck" --theme="$theme" -o "$art" >/dev/null 2>&1 || {
         bad "$label/$theme: build failed"; at12_fail=1; return; }
       # ONE profile for the whole sweep, not one per theme. This loop runs eight
@@ -721,11 +723,11 @@ if want AT12; then
       # profile is what is expensive and what triggers the modal, not the
       # launch, so reusing it removes the amplifier. Each instance is still
       # killed before the next starts, so the profile is never contended.
-      "$BROWSER" --headless=new "${CHROME_SAFE[@]}" --remote-debugging-port=$port \
+      "$BROWSER" --headless=new "${CHROME_SAFE[@]}" --remote-debugging-port="$port" \
         --window-size=1280,800 --user-data-dir="$WORK/chrome-at12" "file://$art" \
         >"$WORK/chrome-at12.log" 2>&1 &
       local pid=$!
-      wait_for_cdp "$port" || bad "chrome never opened its debugging port on $port"
+      wait_for_cdp "$port" || bad "chrome never opened its debugging port on $port after $CDP_WAITED"
       if node "$HERE/at12-determinism-probe.mjs" "$port" "$theme/$label" >"$WORK/at12-$theme-$label.out" 2>&1; then
         ok "$theme ($label): deterministic"
       else
@@ -1116,8 +1118,8 @@ if want AT15; then
     # 7 Sep. A fresh profile is not optional for this check -- it is the thing
     # that provokes the keychain prompt -- so the launch shape has to give way
     # instead.
-    at15port=9360
-    "$BROWSER" --headless=new "${CHROME_SAFE[@]}" --remote-debugging-port=$at15port \
+    at15port="$(cdp_port)" || bad "no free debugging port to give chrome"
+    "$BROWSER" --headless=new "${CHROME_SAFE[@]}" --remote-debugging-port="$at15port" \
       --user-data-dir="$WORK/chrome-at15" "file://$WORK/at15.html" \
       >"$WORK/at15-chrome.log" 2>&1 &
     at15pid=$!
@@ -1177,7 +1179,7 @@ if want AT20; then
     at20wrap="$WORK/at20-browser"
     cat > "$at20wrap" <<WRAP
 #!/bin/sh
-exec "$BROWSER" ${CHROME_SAFE[*]} --remote-debugging-port=\$AT20_PORT --user-data-dir="\$AT20_PROFILE" "\$@"
+exec "$BROWSER" ${CHROME_SAFE[*]} --remote-debugging-port="\$AT20_PORT" --user-data-dir="\$AT20_PROFILE" "\$@"
 WRAP
     chmod +x "$at20wrap"
 
@@ -1201,7 +1203,7 @@ WRAP
     at20kill() { pkill -f "$RUN_NAME/at20-profile" 2>/dev/null; sleep 1; }
 
     # ---- (a) the default: the deck's own shape ----------------------------
-    AT20_PORT=9370
+    AT20_PORT="$(cdp_port)" || bad "no free debugging port to give chrome"
     AT20_PROFILE="$WORK/at20-profile-cold"
     export AT20_PORT AT20_PROFILE
     "$BIN" present "$DEMO" --browser "$at20wrap" >"$WORK/at20-present.log" 2>&1
@@ -1220,7 +1222,7 @@ WRAP
     # against the default's 16:9, so a window that ignored --window and kept the
     # default would fail the aspect check rather than sliding under a tolerance.
     at20kill
-    AT20_PORT=9371
+    AT20_PORT="$(cdp_port)" || bad "no free debugging port to give chrome"
     AT20_PROFILE="$WORK/at20-profile-override"
     export AT20_PORT AT20_PROFILE
     "$BIN" present "$DEMO" --browser "$at20wrap" --window 900x600 >>"$WORK/at20-present.log" 2>&1
@@ -1255,7 +1257,7 @@ WRAP
     at20kill
     at20second="$WORK/at20-second.md"
     printf '# Second\n\ntext\n' > "$at20second"
-    AT20_PORT=9372
+    AT20_PORT="$(cdp_port)" || bad "no free debugging port to give chrome"
     AT20_PROFILE="$WORK/at20-profile-shared"
     export AT20_PORT AT20_PROFILE
     "$BIN" present "$DEMO" --browser "$at20wrap" --window 1024x768 >>"$WORK/at20-present.log" 2>&1

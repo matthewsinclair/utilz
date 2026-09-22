@@ -31,4 +31,31 @@ set -euo pipefail
 
 UTILZ_HOME="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
+# THE PATH IS A MEANS; THE VERSION IS THE POINT (issue 0058). Putting /bin
+# first only runs the suite under 3.2 on a machine where /bin/bash IS 3.2.
+# Everywhere else -- a Linux box, or a Mac where someone has replaced it --
+# this wrapper forced a PATH and proved nothing, and the gate reported green
+# having tested the same bash the plain run tests. A gate that cannot fail
+# for the reason it exists is the silent-pass shape the estate suite is full
+# of refusals about; so the version is READ, and a bash that is not 3.2 is
+# refused BY NAME rather than run anyway.
+#
+# Refuse rather than warn: the caller is the release core's `test estate`
+# gate, whose whole job is to be the last thing that can stop a tag.
+_estate_bash="/bin/bash"
+if [ ! -x "$_estate_bash" ]; then
+  printf 'test-estate: %s is not executable, so the suite cannot be run under the bash macOS ships\n' "$_estate_bash" >&2
+  exit 2
+fi
+_estate_version="$("$_estate_bash" -c 'printf %s "${BASH_VERSINFO[0]}.${BASH_VERSINFO[1]}"' 2>/dev/null)" || _estate_version=""
+if [ -z "$_estate_version" ]; then
+  printf 'test-estate: could not read a version from %s, so this gate cannot say what it tested\n' "$_estate_bash" >&2
+  exit 2
+fi
+if [ "$_estate_version" != "3.2" ]; then
+  printf 'test-estate: %s is bash %s, not 3.2 -- this gate exists to run the suite under the bash macOS ships,\n' "$_estate_bash" "$_estate_version" >&2
+  printf '             and on this machine it would prove nothing. Run the suite on a macOS host, or fix %s.\n' "$_estate_bash" >&2
+  exit 2
+fi
+
 exec env PATH="/bin:$PATH" "$UTILZ_HOME/bin/utilz" test "$@"

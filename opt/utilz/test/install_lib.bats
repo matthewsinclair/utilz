@@ -303,9 +303,25 @@ EOF
 # A gh that waits <delay> seconds, answers <stdout>, says <stderr> and exits
 # <rc>, and records the directory it was asked from and the arguments.
 make_gh_stub() {
-  local stub="$1" answer="$2" rc="${3:-0}" message="${4:-}" delay="${5:-0}"
+  local stub="$1" answer="$2" rc="${3:-0}" message="${4:-}" delay="${5:-0}" jobs="${6:-}"
   cat > "$stub" <<EOF
 #!/bin/sh
+# TWO QUESTIONS, TWO ANSWERS (issue 0062). install_ci_state asks \`run list\`
+# for the runs on a commit; install_ci_jobs asks \`run view\` for one run's
+# jobs, and only when the verdict is a conclusion that is not success. A stub
+# that answered the run list to both would feed the jobs reader rows it was
+# never given, so the arms are told apart here rather than by luck.
+case "\$*" in
+  *"run view"*)
+    { pwd -P; printf '%s\n' "\$*"; } > "$stub.asked-jobs"
+    # No jobs answer configured means "this read did not work", which is the
+    # case that must add NOTHING to the detail. It keeps every expectation
+    # written before 0062 exactly as it was.
+    [ -n "$jobs" ] || exit 1
+    printf '%s\n' "$jobs"
+    exit 0
+    ;;
+esac
 { pwd -P; printf '%s\n' "\$*"; } > "$stub.asked"
 sleep $delay
 [ -n "$answer" ] && printf '%s\n' "$answer"
@@ -403,6 +419,72 @@ ROWS
   # of two passes every case above. The number here is the guard.
   run cat "$gh.asked"
   assert_output_contains "--limit 20"
+}
+
+@test "AT08: a run that concluded without success is asked WHICH jobs failed (issue 0062)" {
+  # RED-FIRST SHAPE: before 0062 every row below answered `failure 301` and
+  # nothing else, so "the suite went red" and "no job ran at all" -- opposite
+  # actions for whoever is reading mid-cut -- were the same string.
+  #
+  # The last two rows are the ones a run-level read can never give. A run that
+  # concluded `failure` with no FAILING job in it was refused rather than
+  # tested, and nothing about the code was measured.
+  local src="$BATS_TEST_TMPDIR/src-ci-jobs" gh="$BATS_TEST_TMPDIR/gh" sha
+  make_fake_src "$src"
+  sha=$(git -C "$src" rev-parse HEAD)
+
+  local jobs want
+  while IFS=';' read -r jobs want; do
+    make_gh_stub "$gh" "completed|failure|301" 0 "" 0 "$(printf '%b' "$jobs")"
+    run run_install_function "INSTALL_GH='$gh'; install_ci_state '$src' '$sha'"
+    assert_success
+    [ "$(printf '%s' "$output" | tr '\t' ' ')" = "$want" ] \
+      || fail "jobs '$jobs' gave '$output', not '$want'"
+  done <<'ROWS'
+failure|Rust (ubuntu-latest);failure 301 (failed: Rust (ubuntu-latest))
+success|Test on Ubuntu\nfailure|Rust (ubuntu-latest);failure 301 (failed: Rust (ubuntu-latest))
+failure|a\nfailure|b\nfailure|c\nfailure|d;failure 301 (failed: a, b, c and 1 more)
+success|Test on Ubuntu\nskipped|Test on macOS;failure 301 (no job failed, so the run was refused rather than tested)
+ROWS
+}
+
+@test "AT08: a run whose jobs cannot be read still answers, and adds nothing (issue 0062)" {
+  # THE CONTROL FOR THE TEST ABOVE. install_ci_state's contract is that it
+  # never fails and never guesses, so a second question it could not get an
+  # answer to must leave the first answer exactly as it was -- the run id is
+  # still there for a human to follow. Without this, a gh that answers the run
+  # list and refuses the job list would turn a usable verdict into a worse one.
+  local src="$BATS_TEST_TMPDIR/src-ci-nojobs" gh="$BATS_TEST_TMPDIR/gh" sha
+  make_fake_src "$src"
+  sha=$(git -C "$src" rev-parse HEAD)
+
+  # No sixth argument: the stub refuses `run view`.
+  make_gh_stub "$gh" "completed|failure|302"
+  run run_install_function "INSTALL_GH='$gh'; install_ci_state '$src' '$sha'"
+  assert_success
+  [ "$(printf '%s' "$output" | tr '\t' ' ')" = "failure 302" ] \
+    || fail "an unreadable job list gave '$output', not 'failure 302'"
+
+  # AND IT ASKED: the enrichment is attempted rather than quietly skipped.
+  [ -f "$gh.asked-jobs" ] || fail "install_ci_state never asked for the jobs"
+  run cat "$gh.asked-jobs"
+  assert_output_contains "run view 302"
+}
+
+@test "AT08: a SUCCESS verdict asks no second question (issue 0062)" {
+  # The enrichment is on the not-success path alone, so the common case costs
+  # exactly the one call it always did. Without this the green path would grow
+  # a per-release gh call nobody asked for and nobody would notice.
+  local src="$BATS_TEST_TMPDIR/src-ci-green" gh="$BATS_TEST_TMPDIR/gh" sha
+  make_fake_src "$src"
+  sha=$(git -C "$src" rev-parse HEAD)
+
+  make_gh_stub "$gh" "completed|success|303" 0 "" 0 "failure|Should Not Be Read"
+  run run_install_function "INSTALL_GH='$gh'; install_ci_state '$src' '$sha'"
+  assert_success
+  [ "$(printf '%s' "$output" | tr '\t' ' ')" = "success 303" ] \
+    || fail "green gave '$output', not 'success 303'"
+  [ ! -f "$gh.asked-jobs" ] || fail "a green verdict asked for jobs: $(cat "$gh.asked-jobs")"
 }
 
 @test "AT08: install_ci_state answers unknown when gh is not installed, and says so (issue 0016)" {

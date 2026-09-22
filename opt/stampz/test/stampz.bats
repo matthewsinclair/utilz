@@ -325,13 +325,51 @@ page_band_args() {
     ink=$(page_ink "$out/mixed.pdf" "$p/mixed.pdf" "$page" $(page_band_args "$p/mixed.pdf" "$page" 40))
     [ "$ink" -gt 0 ] || fail "page $page ($after) carries no mark in its centre band"
   done
+
+  # AND THE DISCRIMINATOR, because everything above passes on the regression it
+  # names (issue 0057). Geometry is preserved by qpdf whatever overlay it is
+  # given, and a single A4 stamp repeated over all three pages still puts ink
+  # in every centre band and none in any margin -- cc measured 1237/1289/1237
+  # and 0/0/0 doing exactly that. So the checks above prove a mark EXISTS and
+  # say nothing about which page it was made for.
+  #
+  # WHAT ONLY A PER-PAGE STAMP CAN DO: _stamp_geometry sizes the text against
+  # the page it is rendered for, so a page 2.4x wider carries a materially
+  # bigger mark. One stamp reused everywhere carries the SAME mark on every
+  # page, whatever its size. Whole-page ink, measured on this fixture:
+  #
+  #            page 1 (A4)   page 2 (wide)   ratio
+  #   correct      1175           3962        3.37
+  #   one stamp    1707           1468        0.86
+  #
+  # The ratio is the assertion. 1.5 sits clear of both by a wide margin, and
+  # the direction is what matters: under the regression the WIDE page carries
+  # no more ink than the A4 pages, and in fact slightly less.
+  #
+  # Whole-page rather than a band: page_ink with no crop flags reads the whole
+  # page, so there is no crop arithmetic to get wrong on a page shape the band
+  # helper was not written for.
+  local a4ink wideink
+  a4ink=$(page_ink "$out/mixed.pdf" "$p/mixed.pdf" 1)
+  wideink=$(page_ink "$out/mixed.pdf" "$p/mixed.pdf" 2)
+  [ "$a4ink" -gt 0 ] || fail "page 1 carries no mark at all, so the ratio below means nothing"
+  awk -v a="$a4ink" -v w="$wideink" 'BEGIN { exit !(w > 1.5 * a) }' || fail \
+    "the wide page carries $wideink ink against the A4 page's $a4ink: a mark sized for ITS OWN page would carry materially more, so every page was stamped with one geometry"
 }
 
 @test "ST0025-AT02: no page of a mixed-geometry output carries ink in its margins" {
-  # The band check says a mark is THERE; this says it was made for the page it
-  # is on. A stamp sized for another page lands wherever its own geometry puts
-  # it, and on a page of a different shape that is outside the margins the
-  # mark is supposed to respect.
+  # WHAT THIS TEST DOES AND DOES NOT PROVE (issue 0057). It used to claim it
+  # said "the mark was made for the page it is on". It does not, and cannot:
+  # driven against the single-geometry regression this thread exists to
+  # prevent, it stays GREEN, because qpdf CENTRES an overlay on its target
+  # page -- so a stamp made for another page still lands inside the margins.
+  # Measured: 0/0/0 margin ink under the regression, exactly as under correct
+  # output.
+  #
+  # It is kept because the property it really guards is worth guarding -- no
+  # mark may encroach on any page's margins, at any geometry -- and it is
+  # AT01 that carries the discriminator. A test whose comment overstates it is
+  # how a suite comes to look like it covers something it never measured.
   require_tools
   local p="$BATS_TEST_TMPDIR/pack" out="$BATS_TEST_TMPDIR/out"
   mkdir -p "$p"

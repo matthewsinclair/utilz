@@ -70,8 +70,15 @@ jobs:
         export PATH="$UTILZ_HOME/bin:$PATH"
         echo "UTILZ_HOME=$UTILZ_HOME" >> "$GITHUB_ENV"
         echo "$UTILZ_HOME/bin" >> "$GITHUB_PATH"
-        chmod +x bin/utilz
-        chmod +x opt/*/[!test]* 2>/dev/null || true
+        # NO chmod HERE, AND THAT IS MEASURED RATHER THAN ASSUMED (issue 0061).
+        # Two `chmod +x` lines stood here. Both were dead: `git ls-files -s`
+        # reports bin/utilz and every opt/<name>/<name> as 100755, so checkout
+        # restores the bit before anything runs. The second was worse than
+        # dead -- `opt/*/[!test]*` reads [!test] as a CHARACTER CLASS, "not t,
+        # e or s", so it silently skipped expz, stampz, syncz and todo while
+        # making README.md and VERSION executable. Every correct rewrite of
+        # that glob is still wrong, because the right number of files to
+        # touch is zero. If a file here ever needs the bit, set it in git.
 
     - name: Run diagnostics
       run: |
@@ -129,8 +136,15 @@ jobs:
         export PATH="$UTILZ_HOME/bin:$PATH"
         echo "UTILZ_HOME=$UTILZ_HOME" >> "$GITHUB_ENV"
         echo "$UTILZ_HOME/bin" >> "$GITHUB_PATH"
-        chmod +x bin/utilz
-        chmod +x opt/*/[!test]* 2>/dev/null || true
+        # NO chmod HERE, AND THAT IS MEASURED RATHER THAN ASSUMED (issue 0061).
+        # Two `chmod +x` lines stood here. Both were dead: `git ls-files -s`
+        # reports bin/utilz and every opt/<name>/<name> as 100755, so checkout
+        # restores the bit before anything runs. The second was worse than
+        # dead -- `opt/*/[!test]*` reads [!test] as a CHARACTER CLASS, "not t,
+        # e or s", so it silently skipped expz, stampz, syncz and todo while
+        # making README.md and VERSION executable. Every correct rewrite of
+        # that glob is still wrong, because the right number of files to
+        # touch is zero. If a file here ever needs the bit, set it in git.
 
     - name: Run diagnostics
       run: |

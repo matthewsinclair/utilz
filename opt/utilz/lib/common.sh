@@ -945,6 +945,44 @@ _run_crate_tests() {
   cargo test --workspace --no-fail-fast --manifest-path "$manifest"
 }
 
+# Build a crate's release artifacts ONCE, before any source runs (issue 0056).
+#
+# WHY THIS IS A STAGE OF ITS OWN AND WHY IT IS FIRST. Two of the three sources
+# below read `crate/target/release/<bin>`: the BATS source asserts the compiled
+# binary's `--version` against the version declared in Cargo.toml, and the
+# black-box suites exec the binary directly. Only the third built it. So the
+# order was: read the binary, then build it. After a hand version bump -- which
+# ST0019 D2 requires, because the release core stamps VERSION and this project
+# declares no version sidecars -- the BATS arm read the binary from BEFORE the
+# bump and failed:
+#
+#   not ok 32 prez's version has ONE home, and both channels read that one
+#   Expected: prez 2.4.0   Actual: prez 2.3.0
+#
+# The test was RIGHT about the tree and wrong about the moment. Building here
+# fixes the moment rather than weakening the test, which is the whole point:
+# the assertion that the two channels agree is worth keeping.
+#
+# --workspace, for the reason _run_crate_tests gives at length: prez is the
+# ROOT package, so a bare `cargo build --release` leaves target/release/showreel
+# stale and every suite that execs it tests the previous build.
+#
+# This adds no work to a full run. The black-box suites already build release;
+# this moves that build in front of the readers instead of behind them, and
+# cargo serves the later calls from its cache.
+_build_crate() {
+  local util="$1"
+  local manifest="$2"
+
+  require_command "cargo" "brew install rust" || return 1
+
+  echo -e "${BOLD}Building: $util${RESET} (cargo build --release --workspace)"
+  echo -e "Manifest: $manifest"
+  echo -e ""
+
+  cargo build --release --workspace --manifest-path "$manifest"
+}
+
 # The existing BATS path, unchanged in behaviour and moved here so the
 # coordinator reads as three symmetrical calls rather than one inline block
 # and two additions.
@@ -1108,6 +1146,21 @@ run_tests() {
     local crate_dir="$UTILZ_HOME/opt/$util/crate"
     local manifest="$crate_dir/Cargo.toml"
     local suite_exit=0
+
+    # Source 0 -- the release build, before anything READS the binary it makes
+    # (issue 0056). A crate that cannot build makes every source below
+    # meaningless, so this refuses the utility rather than running suites
+    # against a stale or absent binary and reporting on the wrong moment.
+    if [[ -f "$manifest" ]]; then
+      total_tested=$((total_tested + 1))
+      suite_exit=0
+      _build_crate "$util" "$manifest" || suite_exit=$?
+      if ! _report_suite "$util" "release build" "$suite_exit"; then
+        total_failed=$((total_failed + 1))
+        # Nothing below can say anything true without a binary.
+        continue
+      fi
+    fi
 
     # Source 1 -- Rust unit tests, first because they are the fastest signal
     # and a broken crate makes the suites below meaningless.

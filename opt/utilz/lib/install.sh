@@ -680,6 +680,75 @@ install_run_bounded() {
 # cannot be read, a conclusion that is not success, a run still going, a
 # completed run with no conclusion, success. That is the same rule tools/ci-state
 # states downstream, applied to the population instead of to one row.
+# Name what failed INSIDE a run, as "<note>" or nothing (issue 0062).
+#
+# WHY A SECOND CALL EXISTS AT ALL. install_ci_state reads the RUN's conclusion,
+# and a run concludes `failure` for two reasons a release cares about very
+# differently: a job ran and went red, or no job ran at all -- a billing
+# refusal, an unavailable runner, an expired or cancelled queue. At the run
+# level those are the same word. Measured at devbin: four runs concluded
+# `failure` with every test job green and only the summary refused. The reader
+# was correct and unactionable, and it is read by a human mid-cut deciding
+# between "fix the code" and "re-run CI", which are opposite moves.
+#
+# ONLY ON THE NOT-SUCCESS PATH, so a green release costs exactly one gh call
+# as before. And this ENRICHES rather than decides: a note it cannot get is no
+# note, never a changed verdict, because install_ci_state's contract is that it
+# never guesses and the run id is already in the detail for a human to follow.
+install_ci_jobs() {
+  local tree="$1" run_id="$2"
+  local scratch rc=0 rows line conclusion name total=0 failed="" count=0
+
+  command -v "$INSTALL_GH" > /dev/null 2>&1 || return 0
+  [[ -n "$run_id" ]] || return 0
+  scratch=$(mktemp -d "${TMPDIR:-/tmp}/utilz-cijobs.XXXXXX") || return 0
+  : > "$scratch/out"
+  : > "$scratch/err"
+
+  (
+    cd "$tree" || exit 125
+    install_run_bounded "$INSTALL_CI_DEADLINE" "$scratch/out" "$scratch/err" \
+      "$INSTALL_GH" run view "$run_id" --json jobs \
+      --jq '.jobs[] | "\(.conclusion)|\(.name)"'
+  ) || rc=$?
+
+  rows=$(cat "$scratch/out")
+  rm -rf "$scratch"
+
+  # A read that did not work adds nothing. The verdict and the run id stand.
+  [[ "$rc" -eq 0 ]] || return 0
+
+  # A here-string, never a pipe, for the reason install_ci_state gives: a
+  # piped loop's counters die in its subshell.
+  while IFS= read -r line; do
+    [[ -n "$line" ]] || continue
+    total=$((total + 1))
+    IFS='|' read -r conclusion name <<< "$line"
+    [[ "$conclusion" != "null" ]] || conclusion=""
+    case "$conclusion" in
+      success | skipped | neutral) continue ;;
+    esac
+    count=$((count + 1))
+    # Three names is enough to act on; more is a wall of text in a manifest.
+    if [[ "$count" -le 3 ]]; then
+      [[ -z "$failed" ]] && failed="$name" || failed="$failed, $name"
+    fi
+  done <<< "$rows"
+
+  if [[ "$total" -eq 0 ]]; then
+    # THE SIGNATURE OF AN INFRASTRUCTURE REFUSAL: the run concluded, and
+    # nothing in it ran. Nothing was tested, so nothing about the code is known.
+    printf 'no job ran, so nothing was tested'
+    return 0
+  fi
+  if [[ "$count" -eq 0 ]]; then
+    printf 'no job failed, so the run was refused rather than tested'
+    return 0
+  fi
+  [[ "$count" -le 3 ]] || failed="$failed and $((count - 3)) more"
+  printf 'failed: %s' "$failed"
+}
+
 install_ci_state() {
   local tree="$1" commit="$2"
   local scratch rc=0 answers reason line status conclusion run_id
@@ -776,6 +845,14 @@ install_ci_state() {
     return 0
   fi
   [[ -n "$detail" ]] || detail="$newest"
+  # A CONCLUSION THAT IS NOT SUCCESS IS THE ONE ANSWER A HUMAN MUST ACT ON,
+  # so it is the one that gets a second question asked of it (issue 0062).
+  # rank 3 is that case, and at rank 3 the detail is the run id alone.
+  if [[ "$rank" -eq 3 ]]; then
+    local jobs_note
+    jobs_note=$(install_ci_jobs "$tree" "$detail")
+    [[ -z "$jobs_note" ]] || detail="$detail ($jobs_note)"
+  fi
   # The count is part of the answer only when there was more than one run to
   # read, so a single-run commit reads exactly as it always has.
   [[ "$total" -eq 1 ]] || detail="$detail of $total runs on this commit"
