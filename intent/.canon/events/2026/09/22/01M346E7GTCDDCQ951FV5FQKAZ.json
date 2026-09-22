@@ -1,0 +1,15 @@
+{
+  "id": "01M346E7GTCDDCQ951FV5FQKAZ",
+  "ts": "2026-09-22T09:16:36.250Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "issues.edit",
+  "subject": {
+    "type": "issue",
+    "id": "0046"
+  },
+  "payload": {
+    "bytes": 4999,
+    "title": "CI runs the macOS legs on every push and never cancels a run that a newer push has superseded"
+  }
+}

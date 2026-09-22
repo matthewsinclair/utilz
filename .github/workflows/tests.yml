@@ -3,15 +3,26 @@ name: Utilz Tests
 on:
   push:
     branches: [ main ]
+    # Both tag forms: this project's tags are BARE from 2.7.0 on (hv's ruling
+    # at that tag), and the older ones carry a v. Nothing downstream reads the
+    # tag's text -- the macOS gates below test `github.ref_type` -- so the form
+    # cannot silently exclude a release.
+    tags: ['v[0-9]*', '[0-9]*']
+    # A push that only moves the whiteboard is not a code change. Path filters
+    # are NOT evaluated for a tag push (GitHub's own rule), so this can never
+    # suppress a release run.
+    paths-ignore:
+      - 'intent/whiteboard/**'
   pull_request:
     branches: [ main ]
+  workflow_dispatch:
 
 # A newer push cancels the run it supersedes (issue 0046, hv's fleet CI ruling
-# of 2026-09-21). Keyed on the ref, so a pull request is a group of its own.
-# macOS stays on every push here: Utilz is public, so its macOS minutes cost
-# nothing, and the macOS legs are its only bash 3.2 run (hv, 2026-09-22).
+# of 2026-09-21, half 2). Keyed on the event name as well as the ref, so a
+# manual run and a push on the same ref do not cancel each other, and a pull
+# request is a group of its own.
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+  group: ${{ github.workflow }}-${{ github.event_name }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -20,7 +31,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v7.0.1
       with:
         fetch-depth: 0
 
@@ -79,9 +90,14 @@ jobs:
   test-macos:
     name: Test on macOS
     runs-on: macos-latest
+    # macOS on a release tag or a manual run, never on every push (hv's fleet
+    # ruling of 2026-09-22, uniform across the fleet whatever a repository's
+    # visibility: issue 0046). `ref_type` never reads the tag's text, so a bare
+    # tag runs it exactly as a v-prefixed one does.
+    if: ${{ github.ref_type == 'tag' || github.event_name == 'workflow_dispatch' }}
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v7.0.1
       with:
         fetch-depth: 0
 
@@ -154,7 +170,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v7.0.1
 
     - name: Run ShellCheck
       run: |
@@ -226,15 +242,18 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macos-latest]
+        # The same gate as test-macos, in the matrix rather than in a job-level
+        # `if`, because an `if` drops the WHOLE job and this one must keep its
+        # Ubuntu leg on every push (issue 0046).
+        os: ${{ fromJSON((github.ref_type == 'tag' || github.event_name == 'workflow_dispatch') && '["ubuntu-latest","macos-latest"]' || '["ubuntu-latest"]') }}
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v7.0.1
 
     # AT12 (determinism) drives Chrome over CDP from a plain .mjs with no
     # dependencies -- it relies on Node's GLOBAL WebSocket, which is why the
     # version floor is real and not a default.
-    - uses: actions/setup-node@v4
+    - uses: actions/setup-node@v7.0.0
       with:
         node-version: '26'
 
@@ -398,7 +417,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v7.0.1
 
     # BLOCKING FROM DAY ONE, deliberately, with -D warnings.
     #
@@ -457,6 +476,17 @@ jobs:
     # cancelled jobs as failed tests (issue 0046).
     if: ${{ !cancelled() }}
 
+    # The results arrive as DATA rather than as script text, and MACOS_REQUIRED
+    # carries the same condition as test-macos's own `if`, so the gate and the
+    # leg cannot drift into disagreeing about when macOS runs (issue 0046).
+    env:
+      LINUX: ${{ needs.test-linux.result }}
+      MACOS: ${{ needs.test-macos.result }}
+      SHELLCHECK: ${{ needs.shellcheck.result }}
+      RUST: ${{ needs.rust.result }}
+      CLIPPY: ${{ needs.clippy.result }}
+      MACOS_REQUIRED: ${{ github.ref_type == 'tag' || github.event_name == 'workflow_dispatch' }}
+
     steps:
     - name: Summary
       run: |
@@ -464,12 +494,33 @@ jobs:
         echo "All test jobs have completed."
         echo "Check individual job results above for details."
 
-        # Check job results
-        if [ "${{ needs.test-linux.result }}" == "success" ] \
-          && [ "${{ needs.test-macos.result }}" == "success" ] \
-          && [ "${{ needs.shellcheck.result }}" == "success" ] \
-          && [ "${{ needs.rust.result }}" == "success" ] \
-          && [ "${{ needs.clippy.result }}" == "success" ]; then
+        fail=0
+        # An empty or unrecognised result is a FAILURE, never a shrug: a job
+        # that did not report is a job that did not pass, and reading it as
+        # anything else is how a gate goes quiet.
+        required() {
+          case "$2" in
+            success) echo "  $1: success" ;;
+            "")      echo "  $1: NO RESULT"; fail=1 ;;
+            *)       echo "  $1: $2"; fail=1 ;;
+          esac
+        }
+        required "test-linux" "$LINUX"
+        required "shellcheck" "$SHELLCHECK"
+        required "rust"       "$RUST"
+        required "clippy"     "$CLIPPY"
+
+        # macOS runs on a release tag or a manual run only, so a SKIP is the
+        # expected outcome on a push and a failure on a tag. Without this the
+        # whole run goes red on every push, and it does so on the NEXT push
+        # rather than on the commit that gated the legs.
+        case "$MACOS_REQUIRED:$MACOS" in
+          true:success)                 echo "  test-macos: success" ;;
+          false:success | false:skipped) echo "  test-macos: $MACOS (not required on this run)" ;;
+          *)                            echo "  test-macos: ${MACOS:-NO RESULT} (required: $MACOS_REQUIRED)"; fail=1 ;;
+        esac
+
+        if [ "$fail" -eq 0 ]; then
           echo "All tests passed!"
         else
           echo "Some tests failed. Please review the logs."
