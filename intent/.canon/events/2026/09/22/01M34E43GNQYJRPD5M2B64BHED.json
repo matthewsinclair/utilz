@@ -1,0 +1,15 @@
+{
+  "id": "01M34E43GNQYJRPD5M2B64BHED",
+  "ts": "2026-09-22T11:30:53.077Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "todo",
+    "text": "AFTER THE CUT, issue 0061: tests.yml's `chmod +x opt/*/[!test]*` at :74 and :133 is a character class, not a word. It means \"not t, e or s\", so it silently skips opt/expz/expz, opt/stampz/stampz, opt/syncz/syncz and opt/todo/todo along with the test directories it meant to exclude. Measured by expanding the glob here: 59 of the 84 entries under opt/*/ match, and the 25 skipped are every name starting with t, e or s. THE FIX IS A DELETION, not a better glob: git ls-files -s opt/ reports every utility implementation as 100755, so actions/checkout restores the bit before the line runs, and the line's only live effect is +x on README.md, VERSION, *.yaml and directories. It cannot reach the fifteen 100644-with-shebang files either, because they are all one level deeper than the pattern and none of them needs the bit (bats runs the .bats files, the lib shell files are sourced, the generator chmods the templates). Measure `chmod +x bin/utilz` on the line above the same way before keeping it. Found by devbin-vc during the 0.1.6 sweep; it correctly declined to fix another estate's CI mid-sweep. Not before the tag: it is latent, it fails nothing, and today's run is the release gate."
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "id": "01M34E3J2Z74RWPQPDC6R2858N",
+  "ts": "2026-09-22T11:30:35.232Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "issues.add",
+  "subject": {
+    "type": "issue",
+    "id": "0061"
+  },
+  "payload": {
+    "severity": "low",
+    "title": "CI's chmod glob opt/*/[!test]* is a character class, not a word: it silently skips expz, stampz, syncz and todo, and is dead code besides"
+  }
+}
