@@ -1,0 +1,15 @@
+{
+  "id": "01M35EM5N19BB1FRWGV5NJAZBM",
+  "ts": "2026-09-22T20:58:53.986Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "issues.add",
+  "subject": {
+    "type": "issue",
+    "id": "0064"
+  },
+  "payload": {
+    "severity": "medium",
+    "title": "The commit gate is untracked: .git/hooks/pre-commit protects one checkout and ships to nobody"
+  }
+}

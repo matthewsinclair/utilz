@@ -1,0 +1,11 @@
+{
+  "schema": "intent/issue@3.0",
+  "number": 64,
+  "slug": "the-commit-gate-is-untracked-git-hooks-pre-commi",
+  "title": "The commit gate is untracked: .git/hooks/pre-commit protects one checkout and ships to nobody",
+  "status": "open",
+  "severity": "medium",
+  "created": "2026-09-22",
+  "reporter": "Matthew Sinclair",
+  "body": "## Defect\n\nThis checkout's commit gate lives in `.git/hooks/pre-commit`, which git never tracks. Issue 0060's Rust stanza, the markdown stanza and the refuse-never-rewrite contract therefore protect one checkout on one machine. A fresh clone, or any other machine, commits unformatted Rust and markdown without a word, and CI is the first thing to notice (issue 0059's cost). The hook even says so: \"This hook is not tracked in git\".\n\n## Ruling\n\nhv, 2026-09-22: give the hook a tracked home.\n\n## Fix\n\nUse the shape Intent uses for its own repository, so the fleet has one convention, not two:\n\n- The hook wrappers (`pre-commit`, `post-checkout`, `post-merge`, `post-rewrite`) are tracked under `.githooks/`, each with Intent's chain block.\n- `core.hooksPath` is set to `.githooks`. `git rev-parse --git-path hooks` follows it, so the chain block finds the `*.intent` bodies next to the wrappers.\n- The generated `*.intent` bodies are gitignored under `.githooks/`, as Intent's `.gitignore` does. They belong to the Intent install, not to this repository.\n- `core.hooksPath` is local git config, and a clone does not carry it. Enabling it is documented where a contributor would read it, and doctor-style drift is out of scope.\n\n## Done when\n\n- A commit in this checkout runs the tracked `.githooks/pre-commit`, and staging an unformatted `.rs` file is refused by it.\n- `.git/hooks/` no longer holds the only copy.\n"
+}

@@ -41,3 +41,11 @@ opt/*/crate/target/
 # who forgets, puts another tool's run logs in the history permanently. An
 # unignored scratch directory in the root is one keystroke from that.
 tmp/
+
+# Intent's hook bodies, which `intent claude upgrade` writes into the hooks
+# directory once core.hooksPath is set (issue 0064). The wrappers in .githooks/
+# are tracked and chain to these; the Intent install owns the bodies, not git.
+.githooks/pre-commit.intent
+.githooks/post-checkout.intent
+.githooks/post-merge.intent
+.githooks/post-rewrite.intent

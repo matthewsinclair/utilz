@@ -17,6 +17,14 @@ This guide covers everything you need to know to create utilities with the Utilz
 
 ## Quick Start
 
+Once per clone, turn on the tracked commit hooks:
+
+```bash
+git config core.hooksPath .githooks
+```
+
+`.githooks/pre-commit` checks staged markdown with prettier and staged Rust with rustfmt, and refuses a commit that isn't formatted without rewriting anything. It chains to Intent's gate when `intent claude upgrade` has written `.githooks/pre-commit.intent`. git doesn't carry `core.hooksPath` in a clone, so without this line nothing runs at commit time and CI is the first check (issue 0064).
+
 Create a new utility in 30 seconds:
 
 ```bash
