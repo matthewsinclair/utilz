@@ -35,13 +35,13 @@ It marks a copy. It does not secure one. If you need a document nobody can pass 
 
 ### How it works
 
-Page geometry is read per document with `pdfinfo`, a one-page stamp is built to match, and `qpdf --overlay` applies it to every page. Stamps are cached per geometry, so a pack of ten same-sized files builds one stamp.
+Page geometry is read per PAGE with `pdfinfo`, a one-page stamp is built for each distinct size, and one `qpdf` run lays each stamp over the pages of its own size. Stamps are cached per geometry, so a pack of ten same-sized files builds one stamp, and a file of one size takes the same path with a single overlay rather than a special case of its own.
 
 The stamp is assembled directly as a PDF using base-14 Courier-Bold. There is no browser, no HTML, no network request and no embedded font. That is deliberate: it means `stampz` runs anywhere `qpdf` and `poppler` do, and it means the type metrics used to size the mark are exact rather than dependent on which font happened to arrive.
 
-### Two guards, both of which refuse rather than approximate
+### Two guards, each of which refuses rather than approximates
 
-- **Mixed page geometry is refused.** A PDF whose pages are not all the same size would have to be stamped at one size and clipped at the others, and a clipped page still looks stamped. Split the file instead.
+- **A PDF whose pages differ in size is stamped page by page.** One stamp is rendered for each distinct page size and laid over the pages of that size, so every page carries a mark made for it, and the run says `3 pages, 2 sizes`. This used to be refused, because one stamp drawn at another page's size is clipped or drawn small, and a page that looks stamped but is not properly marked is the failure a deterrent must not have. What is still refused is a file whose pages cannot all be measured: a probe that reads nothing is a refusal, never a pass.
 - **A change in page count aborts the run.** Cheap, and it catches a class of corruption that still leaves a file which opens.
 
 ---
@@ -115,10 +115,10 @@ Every row carries the file, its page count, and its sha256 before and after. A r
 
 ## Exit Status
 
-| Code | Meaning                                                                                     |
-| ---- | ------------------------------------------------------------------------------------------- |
-| `0`  | Every PDF in the pack was stamped                                                           |
-| `1`  | Refused: bad arguments, no PDFs found, unreadable or mixed geometry, or a page-count change |
+| Code | Meaning                                                                                |
+| ---- | -------------------------------------------------------------------------------------- |
+| `0`  | Every PDF in the pack was stamped                                                      |
+| `1`  | Refused: bad arguments, no PDFs found, geometry it cannot read, or a page-count change |
 
 There is no partial success. A refusal names the file and the reason.
 

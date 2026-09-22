@@ -261,14 +261,36 @@ _emit_fixture() {
 # PROBE AND GUARDS
 # ============================================================================
 
+# A PROBE PRINTS WHAT IT READ, OR NOTHING, AND DECIDES NOTHING -- hence the
+# `|| true` each one ends with (issue 0053). Every probe here ends in a
+# pipeline, this script runs under `set -euo pipefail`, and pdfinfo fails on a
+# file it cannot parse: without this the caller's `pages=$(_page_count "$f")`
+# carries that failure, `set -e` kills the run at the assignment, and the
+# refusal on the NEXT line -- "could not read its page geometry" -- never
+# prints. Measured: a text file named .pdf made stampz exit 1 in silence,
+# leaving a manifest naming a recipient and no files. The emptiness IS the
+# answer, and every caller below refuses on it by name.
+
 # _page_count <pdf>
 _page_count() {
-  pdfinfo "$1" 2>/dev/null | awk '/^Pages:/ { print $2 }'
+  { pdfinfo "$1" 2>/dev/null | awk '/^Pages:/ { print $2 }'; } || true
 }
 
 # _page_size <pdf> -- "<width> <height>" in points, from page 1.
 _page_size() {
-  pdfinfo "$1" 2>/dev/null | awk '/^Page size:/ { print $3, $5 }'
+  { pdfinfo "$1" 2>/dev/null | awk '/^Page size:/ { print $3, $5 }'; } || true
+}
+
+# _page_sizes <pdf> <pages> -- one line per page: "<page> <width>x<height>".
+#
+# The same read `_distinct_geometries` counts, kept whole instead of counted,
+# so the stamper knows WHICH pages carry which size (ST0025). A page pdfinfo
+# cannot size prints no line, so the caller sees fewer lines than pages and
+# refuses -- a page silently left out of every range would be a page that
+# leaves the run unstamped and looks stamped in the count.
+_page_sizes() {
+  { pdfinfo -f 1 -l "$2" "$1" 2>/dev/null |
+    awk '/^Page +[0-9]+ size:/ { print $2, $4 "x" $6 }'; } || true
 }
 
 # _distinct_geometries <pdf> <pages>
@@ -286,8 +308,46 @@ _page_size() {
 # could not fire. Not a latent bug in that codebase, because its packs are
 # one geometry per file; a guard that cannot go red nonetheless.
 _distinct_geometries() {
-  pdfinfo -f 1 -l "$2" "$1" 2>/dev/null |
-    awk '/^Page +[0-9]+ size:/ { print $4 "x" $6 }' | sort -u | wc -l | tr -d ' '
+  { _page_sizes "$1" "$2" | awk '{ print $2 }' | sort -u | wc -l | tr -d ' '; } || true
+}
+
+# _overlay_args <pdf> <pages> <work> <text> <grey> <opacity> -- the qpdf
+# overlay blocks for one file, one per distinct page size, each naming that
+# size's pages. Echoes nothing and fails when a size cannot be read or a stamp
+# cannot be rendered.
+#
+# ONE STAMP PER SIZE, LAID OVER THE PAGES OF THAT SIZE (ST0025). qpdf takes
+# several `--overlay` blocks in one run, each closed by `--`, and each with its
+# own `--to`; a file of one geometry therefore takes this same path with one
+# block, rather than a special case that could drift from the general one.
+# The ranges PARTITION the pages: every page is in exactly one block, so no
+# page is stamped twice and none is missed.
+_overlay_args() {
+  local pdf="$1" pages="$2" work="$3" text="$4" grey="$5" opacity="$6"
+  local sizes size w h stamp range
+  sizes=$(_page_sizes "$pdf" "$pages")
+  [[ "$(printf '%s\n' "$sizes" | grep -c .)" -eq "$pages" ]] || return 1
+
+  for size in $(printf '%s\n' "$sizes" | awk '{ print $2 }' | sort -u); do
+    w=${size%x*}
+    h=${size#*x}
+    stamp="$work/stamp-${w}x${h}.pdf"
+    [[ -f "$stamp" ]] || _render_stamp "$w" "$h" "$text" "$grey" "$opacity" "$stamp" || return 1
+    range=$(printf '%s\n' "$sizes" | awk -v s="$size" '$2 == s { print $1 }' | _as_ranges)
+    printf '%s\n' "--overlay" "$stamp" "--to=$range" "--repeat=1" "--"
+  done
+}
+
+# _as_ranges -- page numbers on stdin, ascending, as qpdf's own page range:
+# consecutive runs collapsed, so 1 2 3 7 reads 1-3,7 rather than 1,2,3,7.
+# A 400-page pack of alternating sizes otherwise builds a command line made
+# almost entirely of commas.
+_as_ranges() {
+  awk 'NR == 1 { first = last = $1; next }
+       $1 == last + 1 { last = $1; next }
+       { printf "%s%s", (out++ ? "," : ""), (first == last ? first : first "-" last)
+         first = last = $1 }
+       END { if (NR) printf "%s%s\n", (out++ ? "," : ""), (first == last ? first : first "-" last) }'
 }
 
 # ============================================================================
@@ -400,7 +460,8 @@ main() {
     printf '%-42s %-7s %-18s %s\n' "FILE" "PAGES" "SHA256-BEFORE" "SHA256-AFTER"
   } > "$manifest"
 
-  local count=0 f base pages size w h stamp before after got varied
+  local count=0 f base pages size before after got varied overlay_args arg
+  local -a overlay
   for f in "$src"/*.pdf; do
     [[ -f "$f" ]] || continue
     base=$(basename "$f")
@@ -417,22 +478,33 @@ main() {
       error "$base: could not read its per-page geometry"
       exit 1
     fi
-    if [[ "$varied" -gt 1 ]]; then
-      error "$base: mixed page geometry ($varied distinct sizes) -- not handled"
-      echo "  Stamping every page at the first size would clip the rest," >&2
-      echo "  and a clipped page still looks stamped. Split the file." >&2
+
+    # ONE STAMP PER SIZE, OVER THE PAGES OF THAT SIZE (ST0025). A file whose
+    # pages differ in size used to be refused here, because one stamp over a
+    # page of another size is drawn at the wrong size and a page that looks
+    # stamped but carries another page's mark is the failure a deterrent must
+    # not have. The refusal stood in for this; it is not weakened, it is
+    # answered. What stays refused is a file whose pages cannot all be sized,
+    # because a page missing from every range leaves the run unstamped and
+    # counted.
+    overlay_args=$(_overlay_args "$f" "$pages" "$work" "$text" "$grey" "$opacity") || {
+      error "$base: could not size every one of its $pages pages, so it is not stamped"
+      exit 1
+    }
+    overlay=()
+    while IFS= read -r arg; do
+      if [[ -n "$arg" ]]; then
+        overlay+=("$arg")
+      fi
+    done <<< "$overlay_args"
+    if [[ ${#overlay[@]} -eq 0 ]]; then
+      error "$base: no stamp could be built for it"
       exit 1
     fi
 
-    w=${size% *}
-    h=${size#* }
-
-    stamp="$work/stamp-${w}x${h}.pdf"
-    [[ -f "$stamp" ]] || _render_stamp "$w" "$h" "$text" "$grey" "$opacity" "$stamp"
-
     before=$(shasum -a 256 "$f" | cut -c1-16)
 
-    qpdf "$f" --overlay "$stamp" --repeat=1 -- "$work/out-$base" ||
+    qpdf "$f" "${overlay[@]}" "$work/out-$base" ||
       { error "$base: qpdf overlay failed"; exit 1; }
 
     got=$(_page_count "$work/out-$base")
@@ -445,7 +517,14 @@ main() {
     after=$(shasum -a 256 "$out/$base" | cut -c1-16)
 
     printf '%-42s %-7s %-18s %s\n' "$base" "$pages" "$before" "$after" >> "$manifest"
-    printf '  %-42s %s pages\n' "$base" "$pages"
+    # A file of several sizes says so. This used to be a refusal, and a change
+    # from "refused" to "done" that the person running it cannot see is how a
+    # tool quietly starts doing something they did not ask for (ST0025 D3).
+    if [[ "$varied" -gt 1 ]]; then
+      printf '  %-42s %s pages, %s sizes\n' "$base" "$pages" "$varied"
+    else
+      printf '  %-42s %s pages\n' "$base" "$pages"
+    fi
     count=$((count + 1))
   done
 

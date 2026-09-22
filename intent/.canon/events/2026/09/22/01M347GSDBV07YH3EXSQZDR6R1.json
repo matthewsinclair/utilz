@@ -1,0 +1,15 @@
+{
+  "id": "01M347GSDBV07YH3EXSQZDR6R1",
+  "ts": "2026-09-22T09:35:28.683Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "issues.add",
+  "subject": {
+    "type": "issue",
+    "id": "0053"
+  },
+  "payload": {
+    "severity": "medium",
+    "title": "stampz exits 1 in silence on a PDF it cannot read: the refusal is unreachable under set -e and pipefail"
+  }
+}

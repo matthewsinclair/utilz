@@ -1,0 +1,15 @@
+{
+  "id": "01M347CPR4GKBHXWKCP95KAMSD",
+  "ts": "2026-09-22T09:33:14.885Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wp.new",
+  "subject": {
+    "type": "wp",
+    "id": "ST0025/01"
+  },
+  "payload": {
+    "scope": "S",
+    "title": "Per-size stamps and per-range overlays"
+  }
+}

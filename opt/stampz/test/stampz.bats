@@ -232,30 +232,136 @@ make_pack() {
 # AT05 -- AC06: mixed page geometry is refused
 # ============================================================================
 
-@test "AT05: a mixed-geometry PDF is refused, naming the size count" {
-  require_tools
+# make_mixed_fixture <dest> -- a three-page file of two genuinely different
+# MEDIA BOXES, A4, wide, A4, and the guard that it really carries two.
+#
+# An earlier version of this fixture made the second page by ROTATING the
+# first, which does not change what pdfinfo reports per page -- so the file was
+# uniform, and the test reading it proved nothing while looking like it did.
+# The guard is part of the fixture rather than of one test, because every test
+# below is worthless if the file is uniform.
+#
+# The middle page is the one that matters: 1440x810 is wider than A4 and
+# shorter, so a stamp made for page 1 is drawn small on it, in a corner, and
+# would leave the page looking stamped while carrying a mark made for another
+# page (ST0025 design D1).
+make_mixed_fixture() {
   load_stampz_lib
-  local p="$BATS_TEST_TMPDIR/pack"
-  mkdir -p "$p"
-  # Two genuinely different MEDIA BOXES in one file. An earlier version made
-  # this file by rotating one page, which does not change what pdfinfo
-  # reports per page -- so the fixture was uniform and the guard was never
-  # exercised. The test passed nothing and looked like it tested something.
-  _emit_fixture light "$BATS_TEST_TMPDIR/a.pdf" 595 842
-  _emit_fixture light "$BATS_TEST_TMPDIR/b.pdf" 1440 810
-  qpdf --empty --pages "$BATS_TEST_TMPDIR/a.pdf" "$BATS_TEST_TMPDIR/b.pdf" -- "$p/mixed.pdf"
+  local dest="$1" d
+  d=$(dirname "$dest")
+  _emit_fixture light "$d/.mix-a.pdf" 595 842
+  _emit_fixture dark  "$d/.mix-b.pdf" 1440 810
+  _emit_fixture light "$d/.mix-c.pdf" 595 842
+  qpdf --empty --pages "$d/.mix-a.pdf" "$d/.mix-b.pdf" "$d/.mix-c.pdf" -- "$dest"
+  rm -f "$d/.mix-a.pdf" "$d/.mix-b.pdf" "$d/.mix-c.pdf"
 
-  # The fixture must really carry two sizes, or this test proves nothing.
   local sizes
-  sizes=$(pdfinfo -f 1 -l 2 "$p/mixed.pdf" | awk '/^Page +[0-9]+ size:/ { print $4 "x" $6 }' | sort -u | wc -l | tr -d ' ')
+  sizes=$(page_geometries "$dest")
   [ "$sizes" -eq 2 ] || {
-    echo "fixture carries $sizes geometries, not 2; the guard is untested" >&2
+    echo "fixture carries $sizes geometries, not 2; every mixed-geometry test is untested" >&2
     return 1
   }
+}
 
-  run_stampz "$p" "Matthew Sinclair" --out "$BATS_TEST_TMPDIR/out"
+# page_geometries <pdf> -- how many distinct page sizes the file carries.
+page_geometries() {
+  local pages
+  pages=$(pdfinfo "$1" | awk '/^Pages:/ { print $2 }')
+  pdfinfo -f 1 -l "$pages" "$1" |
+    awk '/^Page +[0-9]+ size:/ { print $4 "x" $6 }' | sort -u | wc -l | tr -d ' '
+}
+
+# page_geom <pdf> <page> -- that one page's size as WxH.
+page_geom() {
+  pdfinfo -f "$2" -l "$2" "$1" | awk '/^Page +[0-9]+ size:/ { print $4 "x" $6; exit }'
+}
+
+# page_ink <pdf-a> <pdf-b> <page> <crop-flags...> -- differing bytes on ONE
+# page. crop_diff renders the whole file and reads the first page it finds,
+# which cannot answer a question about page 2 of 3.
+page_ink() {
+  local a="$1" b="$2" page="$3"
+  shift 3
+  local d fa fb n
+  d=$(mktemp -d)
+  pdftoppm -gray -r 40 -f "$page" -l "$page" "$@" "$a" "$d/a"
+  pdftoppm -gray -r 40 -f "$page" -l "$page" "$@" "$b" "$d/b"
+  fa=$(find "$d" -name 'a-*.pgm' | head -1)
+  fb=$(find "$d" -name 'b-*.pgm' | head -1)
+  n=$({ cmp -l "$fa" "$fb" || true; } | wc -l | tr -d ' ')
+  rm -rf "$d"
+  printf '%s' "$n"
+}
+
+# page_band_args <pdf> <page> <dpi> -- band_args for one page's own size.
+page_band_args() {
+  awk -v g="$(page_geom "$1" "$2")" -v r="$3" 'BEGIN {
+    split(g, s, "x")
+    px = s[1] * r / 72; py = s[2] * r / 72
+    printf "-x %d -y %d -W %d -H %d", 0.20 * px, 0.35 * py, 0.60 * px, 0.30 * py
+  }'
+}
+
+@test "ST0025-AT01: a mixed-geometry PDF is stamped page by page, each page keeping its own size" {
+  require_tools
+  local p="$BATS_TEST_TMPDIR/pack" out="$BATS_TEST_TMPDIR/out"
+  mkdir -p "$p"
+  make_mixed_fixture "$p/mixed.pdf"
+
+  run_stampz "$p" "Matthew Sinclair" --out "$out"
+  assert_success
+
+  [ "$(pdfinfo "$out/mixed.pdf" | awk '/^Pages:/ { print $2 }')" = "3" ] \
+    || fail "page count changed: $(pdfinfo "$out/mixed.pdf" | awk '/^Pages:/ { print $2 }')"
+
+  local page before after ink
+  for page in 1 2 3; do
+    before=$(page_geom "$p/mixed.pdf" "$page")
+    after=$(page_geom "$out/mixed.pdf" "$page")
+    [ "$before" = "$after" ] || fail "page $page was $before and is now $after"
+
+    # word-splitting the crop flags is intended
+    # shellcheck disable=SC2046
+    ink=$(page_ink "$out/mixed.pdf" "$p/mixed.pdf" "$page" $(page_band_args "$p/mixed.pdf" "$page" 40))
+    [ "$ink" -gt 0 ] || fail "page $page ($after) carries no mark in its centre band"
+  done
+}
+
+@test "ST0025-AT02: no page of a mixed-geometry output carries ink in its margins" {
+  # The band check says a mark is THERE; this says it was made for the page it
+  # is on. A stamp sized for another page lands wherever its own geometry puts
+  # it, and on a page of a different shape that is outside the margins the
+  # mark is supposed to respect.
+  require_tools
+  local p="$BATS_TEST_TMPDIR/pack" out="$BATS_TEST_TMPDIR/out"
+  mkdir -p "$p"
+  make_mixed_fixture "$p/mixed.pdf"
+
+  run_stampz "$p" "Matthew Sinclair" --out "$out"
+  assert_success
+
+  local page px strip ink
+  for page in 1 2 3; do
+    px=$(awk -v g="$(page_geom "$p/mixed.pdf" "$page")" 'BEGIN { split(g, s, "x"); printf "%d", s[1] * 40 / 72 }')
+    strip=$((px / 20))
+    ink=$(page_ink "$out/mixed.pdf" "$p/mixed.pdf" "$page" -x 0 -y 0 -W "$strip" -H 99999)
+    ink=$((ink + $(page_ink "$out/mixed.pdf" "$p/mixed.pdf" "$page" -x "$((px - strip))" -y 0 -W "$strip" -H 99999)))
+    [ "$ink" -eq 0 ] || fail "page $page has $ink bytes of mark in its margin strips"
+  done
+}
+
+@test "ST0025-AT03: a file whose geometry cannot be read at all is still refused" {
+  # The refusal did not go with the mixed-geometry one: a probe that reads
+  # nothing is a refusal and never a pass, which is the rule a defaulted
+  # ${varied:-1} once broke in the tool this was promoted from.
+  require_tools
+  local p="$BATS_TEST_TMPDIR/pack-unreadable"
+  mkdir -p "$p"
+  printf 'this is not a PDF at all\n' > "$p/broken.pdf"
+
+  run_stampz "$p" "Matthew Sinclair" --out "$BATS_TEST_TMPDIR/out-unreadable"
   assert_failure
-  assert_output_contains "mixed page geometry"
+  assert_output_contains "could not read its page geometry"
 }
 
 # ============================================================================

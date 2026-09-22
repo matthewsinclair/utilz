@@ -1,0 +1,107 @@
+{
+  "schema": "intent/thread@3.0",
+  "id": "ST0025",
+  "title": "stampz: a PDF whose pages differ in size is stamped page by page",
+  "slug": "stampz-a-pdf-whose-pages-differ-in-size-is-stamp",
+  "status": "triage",
+  "created": "2026-09-22",
+  "objective": "A PDF whose pages differ in size is stamped page by page: one stamp rendered for each distinct page size, laid over the pages of that size in a single qpdf run, so every page carries a mark made for it. Today such a file is refused by name (ST0011 AC06), because one stamp over a page of another size is drawn at the wrong size and a page that looks stamped but is not properly marked is the failure a deterrent must not have. The refusal stays for a file whose per-page geometry cannot be read.",
+  "context": "",
+  "body": "",
+  "preamble": "",
+  "wps": [
+    {
+      "seq": 1,
+      "title": "Per-size stamps and per-range overlays",
+      "scope": "S",
+      "status": "wip",
+      "objective": "",
+      "body": "",
+      "preamble": ""
+    }
+  ],
+  "criteria": [
+    {
+      "id": "AC01",
+      "text": "A PDF whose pages differ in size is stamped rather than refused: every page carries the stamp rendered for its own size, every page keeps its own MediaBox, and the page count is unchanged.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC02",
+      "text": "No page of a mixed-geometry output carries ink in its margin strips, which is what tells a stamp made for the page from one made for another page and drawn wherever it lands.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC03",
+      "text": "A file whose per-page geometry cannot be read is still refused by name, and a probe that reads nothing is a refusal rather than a pass.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC04",
+      "text": "A file of one geometry takes the same path it takes today, through the same code rather than a special case, and the single-geometry suite stays green.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    }
+  ],
+  "tests": [
+    {
+      "id": "AT01",
+      "kind": "test",
+      "file": "opt/stampz/test/stampz.bats",
+      "covers": [
+        "AC01"
+      ],
+      "status": "green",
+      "note": "red against the code before ST0025: AT01 and AT02 on the mixed-geometry refusal, AT03 on a silent exit 1 with no message at all, AT04 the suite as it stood. GREEN after: the whole stampz suite is 24 ok, 0 not ok under bash 3.2.57, shellcheck -x clean, and a three-page mixed pack stamps to 3 pages, 2 sizes with every page size unchanged"
+    },
+    {
+      "id": "AT02",
+      "kind": "test",
+      "file": "opt/stampz/test/stampz.bats",
+      "covers": [
+        "AC02"
+      ],
+      "status": "green",
+      "note": "red against the code before ST0025: AT01 and AT02 on the mixed-geometry refusal, AT03 on a silent exit 1 with no message at all, AT04 the suite as it stood. GREEN after: the whole stampz suite is 24 ok, 0 not ok under bash 3.2.57, shellcheck -x clean, and a three-page mixed pack stamps to 3 pages, 2 sizes with every page size unchanged"
+    },
+    {
+      "id": "AT03",
+      "kind": "test",
+      "file": "opt/stampz/test/stampz.bats",
+      "covers": [
+        "AC03"
+      ],
+      "status": "green",
+      "note": "red against the code before ST0025: AT01 and AT02 on the mixed-geometry refusal, AT03 on a silent exit 1 with no message at all, AT04 the suite as it stood. GREEN after: the whole stampz suite is 24 ok, 0 not ok under bash 3.2.57, shellcheck -x clean, and a three-page mixed pack stamps to 3 pages, 2 sizes with every page size unchanged"
+    },
+    {
+      "id": "AT04",
+      "kind": "test",
+      "file": "opt/stampz/test/stampz.bats",
+      "covers": [
+        "AC04"
+      ],
+      "status": "green",
+      "note": "red against the code before ST0025: AT01 and AT02 on the mixed-geometry refusal, AT03 on a silent exit 1 with no message at all, AT04 the suite as it stood. GREEN after: the whole stampz suite is 24 ok, 0 not ok under bash 3.2.57, shellcheck -x clean, and a three-page mixed pack stamps to 3 pages, 2 sizes with every page size unchanged"
+    }
+  ],
+  "attachments": [
+    {
+      "path": "design.md",
+      "text": "# ST0025 design: a PDF whose pages differ in size is stamped page by page\n\nhv ruled it in for today's release on 2026-09-22, answering vc's question about the item `intent/wip.md` carried as \"stampz: handle mixed page geometry within one PDF (per-page overlay ranges)\".\n\n## D1. What happens today, and why the refusal was right\n\n`stampz` renders ONE stamp page at the size of page 1 and lays it over every page of the file with `qpdf --overlay <stamp> --repeat=1`. A file whose pages differ in size is refused by name, with the count of distinct sizes and the advice to split the file. ST0011's AC06 ruled that refusal and the reasoning holds: one stamp over a page of another size is drawn at the wrong size, and **a page that looks stamped but is not properly marked is the failure this tool must not have**, because it deters by being visible.\n\nMEASURED HERE 2026-09-22, on a three-page fixture of 595x842, 1440x810 and 595x842, rendered at 40 dpi and compared byte for byte against the unstamped page:\n\n| page | size     | ink with a stamp made for that page | ink with page 1's stamp on every page |\n| ---- | -------- | ----------------------------------- | ------------------------------------- |\n| 1    | 595x842  | 1314                                | 1314                                  |\n| 2    | 1440x810 | 4638                                | 1157                                  |\n| 3    | 595x842  | 1314                                | 1314                                  |\n\nThe wide page takes a quarter of the ink from the A4-sized stamp: the mark is drawn small, in one corner, on a page it was never sized for. That is the thing the guard stands in front of.\n\n**So this thread does not weaken the guard. It removes the reason for it**, and the refusal stays for the case stampz still cannot honestly stamp: a file whose per-page geometry cannot be READ. An unreadable probe stays a refusal, never a pass.\n\n**ST0011's AC06 is SUPERSEDED, not broken.** ST0011 is closed and its record stands as what was true then. This thread's criterion replaces the behaviour, `stampz.bats`'s AT05 stops asserting the refusal, and the CHANGELOG says the refusal is gone, so nobody meets the old sentence without the new one.\n\n## D2. One stamp per size, one overlay per range, one qpdf run\n\n`qpdf` takes several overlay blocks in one invocation, each with its own page range, and MEASURED on the qpdf this project depends on (12.4.1):\n\n```\nqpdf mixed.pdf \\\n  --overlay stamp-595x842.pdf  --to=1,3 --repeat=1 -- \\\n  --overlay stamp-1440x810.pdf --to=2   --repeat=1 -- \\\n  out.pdf\n```\n\nEvery page keeps its own MediaBox, the page count is unchanged, and each page carries the stamp made for its size (the table above is that run).\n\nSo the shape of the change is:\n\n- **Read every page's size**, not just page 1's. `pdfinfo -f 1 -l <pages>` already prints one line per page, and `_distinct_geometries` already parses exactly those lines to count them; the same read now also GROUPS them.\n- **Render one stamp per distinct size.** The renderer is already keyed by size on disk (`stamp-<w>x<h>.pdf`), so a file with one geometry renders one stamp exactly as it does today.\n- **Build one overlay block per size**, its `--to` naming that size's pages, with consecutive pages collapsed into ranges so a long file gives a short command.\n- **The ranges partition the pages**, so no page is stamped twice and none is missed. That is a property worth stating because qpdf would happily apply two overlays to one page.\n\n**A file of one geometry takes exactly the path it takes today**: one stamp, one overlay block, `--to` naming every page. The single-geometry case is not a special case in the code, and that is deliberate -- a separate path for the common case is a second implementation that can drift.\n\n## D3. What the run says\n\nThe per-file line becomes `<file>  <n> pages` as now, and `<file>  <n> pages, <k> sizes` when a file carried more than one. Silence about a thing that used to be a refusal is how a change like this becomes invisible to the person running it. The manifest is unchanged: it records the recipient, the date, the page count and the hashes, and a size count is not evidence of anything it is asked to prove.\n\n## D4. What stays refused\n\n- A file whose page count or page size cannot be read at all.\n- A file where the per-page read returns nothing while the file has pages: an unreadable probe is a refusal, not a pass. This is the rule that `${varied:-1}` once broke here, and it does not move.\n- A stamp that cannot be rendered for one of the sizes.\n\n## D5. Tests\n\n`opt/stampz/test/stampz.bats`, whose fixture assembler already emits a page at any size and whose helpers already measure ink in a band and in the margins.\n\n- **ST0025-AT01, red first**: the three-page mixed fixture is stamped rather than refused; the page count survives; every page keeps its own size; and every page carries ink in its centre band. Against today's code the run refuses, so the test fails on its first assertion.\n- **ST0025-AT02**: no page of that output carries ink in its margin strips, which is what distinguishes a stamp made for the page from one made for another page and drawn wherever it lands.\n- **AT05 stops asserting the refusal** and becomes the fixture guard it always carried: the mixed fixture really does hold more than one geometry, or neither test above proves anything.\n- The single-geometry suite is untouched and must stay green, because the common path is not supposed to move.\n",
+      "bytes": 5509,
+      "sha256": "2b5dcd9d1fc6da7f41e88a21be0af79b157f8e75b2eef6119a1810482dcb90d7"
+    }
+  ]
+}
