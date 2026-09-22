@@ -3,7 +3,7 @@ node: cc
 name: Control Claude
 role: control
 session_id: c6b24810-9d3c-45a5-ab7a-110a0611be6e
-heartbeat_at: 2026-09-22 07:58Z
+heartbeat_at: 2026-09-22 10:06Z
 status: active
 focus: "Holding for hv's go on vc's order: Utilz's half of the fleet CI pass (public-repo question to hv first), the 0.1.5 sweep window, then 2.11.1 through the core with releasing.md's core-cut steps"
 claims: [ST0024]
