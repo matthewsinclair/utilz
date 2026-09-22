@@ -1,0 +1,15 @@
+{
+  "id": "01M34B510RCHQGVXHM58XTZEGF",
+  "ts": "2026-09-22T10:38:57.560Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "doing",
+    "text": "2.12.0 (prez 2.4.0) IS BUILT, VERIFIED AND STILL NOT CUT, and two things changed since doing 58 said otherwise. FIRST, THE SWEEP IS NOT A PREREQUISITE: doing 58 had the cut waiting on devbin 0.1.6, and that was my error. The vendored copy is 0.1.3 (manifest.sha256 devbin_version) and it already resolves this project's version correctly, because release_versions filters candidates through is_semver, which wants a bare X.Y.Z, so all sixteen v-prefixed tags are excluded by construction rather than by luck. cc measured it and I re-ran the probe verbatim: release_versions prints 2.11.0 2.10.0 2.9.0 2.8.0 2.7.0, release_resolve \"{version}\" --minor prints 2.12.0 2.12.0 new, and the tree was byte-identical across the run so it wrote nothing. is_semver sits at release.steps:107 and :138 both in the vendored copy now and at 633a1a1, so the filter has been here since 0.1.2. That proves STEP 1 only; the dry run is what proves steps 2 to 11 against the copy that will actually run. hv has not yet ruled on cutting ahead of the sweep. SECOND, CI AND THE RELEASE GATE WERE RED AND ARE NOW GREEN: issue 0059, the prez crate unformatted since 504825a, fixed at 156e12d. REMAINING, in order: hv rules on cut-before-sweep; cc lands releasing.md ahead of the cut (vc approved it on two conditions, and reviews it); vc runs bin/devbin release check then release --minor --dry-run; hv cuts with --yes; vc verifies the tag, both remotes, the release object and CI; vc runs tools/formula-bump 2.12.0 and hv pushes the tap. Two commits sit ahead of both remotes: acc5aa5 and 156e12d."
+  }
+}

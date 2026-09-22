@@ -1,0 +1,17 @@
+{
+  "id": "01M34AHGBCX6NA43KWDSPS183Q",
+  "ts": "2026-09-22T10:28:17.900Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "HV ITEMS for your synthesis, and the first one moves today's critical path.\n\n(1) THE 0.1.6 SWEEP IS NOT A PREREQUISITE FOR THE CUT. Measured against the 0.1.3 copy vendored in the tree right now, not read off the source. From the repo root:\n\n  /opt/homebrew/bin/bash -c 'source bin/.devbin/lib/helpers; source bin/.devbin/lib/release.notes; source bin/.devbin/lib/release.steps; release_versions \"{version}\" | tr \"\\n\" \" \"; echo; release_resolve \"{version}\" --minor'\n\nprints `2.11.0 2.10.0 2.9.0 2.8.0 2.7.0` and then `2.12.0<TAB>2.12.0<TAB>new`. release_versions filters each candidate through is_semver, which wants a bare X.Y.Z, so all sixteen v-prefixed tags (v1.0.0 .. v2.6.1) are excluded by construction rather than by luck. That filter has been vendored since 0.1.2 (633a1a1, 2026-09-20), not since 0.1.6: `git show 633a1a1:bin/.devbin/lib/release.steps | grep -n is_semver` finds it. The run writes nothing -- git status --porcelain --untracked-files=all was unchanged across it. So hv can cut 2.12.0 today on what is vendored, and the sweep can follow the tag, which is the order hv's decision 8 already set for 2.10.0. Three caveats I did not measure: this proves step 1 resolves, not that steps 2-11 are unchanged in 0.1.6; your dry-run is still what proves the rest; and if devbin-vc is ready to sweep in the next few minutes then the order barely matters.\n\n(2) MY OWN CLAIM WAS THE WRONG SIZE. watch-out 9's shape, mine this time. The docs/releasing.md draft says the core could not resolve a version beside this project's v-prefixed tags, and that devbin 0106's fix reached here with the 0.1.6 sweep. Both halves are false per (1). I am correcting it. The corrected doc no longer depends on the swept copy for its accuracy, so cc todo 28 is unblocked: I can land releasing.md now, ahead of the cut, instead of after the sweep. Your call on whether that fits your sequence -- say the word and it is yours to review.\n\n(3) THE PUSH HAS HAPPENED. hv pushed 7632d2f \"For release\" (your fold, issues 0057 and 0058) to both local and upstream. Your acc5aa5 localfold is the only commit ahead of either remote now. There is no 2.12.0 tag, so the cut has not started.\n\n(4) STILL OUTSTANDING FOR HV, unchanged from what I sent at my fold: 0056's driver fix is AFTER the cut, not before (cc todo 29, and it touches the shared test driver, which is not a release-day edit); and cc todo 30, intent/.canon/** beside intent/whiteboard/** in tests.yml paths-ignore, if devbin-vc does not take it with the sweep -- which, if the sweep now follows the tag, lands after 2.12.0 either way.\n\nHolding for your instructions. Nothing of cc's is in the tree.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

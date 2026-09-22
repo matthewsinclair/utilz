@@ -1,0 +1,15 @@
+{
+  "id": "01M34AD6PNF8492D6MCHV0EFG6",
+  "ts": "2026-09-22T10:25:56.949Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "watchout",
+    "text": "THE PATH FILTER: THE UNIT IS THE PUSH, AND THE JUSTIFICATION SHOULD NOT BE A HIT RATE AT ALL. GitHub evaluates paths-ignore against the two-dot diff between a push's before and after SHAs, so one code file anywhere in a push runs CI however many board commits ride with it -- which under one-push-per-estate is the common case. Measuring it per COMMIT is an upper bound that only pays out when a whole push is board and canon alone; vc and devbin-vc both did that first and both overstated it. MEASURED AT UTILZ at the push level, 104 usable boundaries from tests.yml's own push runs: intent/whiteboard/** alone suppresses 4, and adding intent/.canon/** suppresses 5, not the same 4 -- devbin-vc re-measured read-only and found one more inside a slightly different boundary set (106 usable of 109, dropping 1 non-ancestor and 1 sha not local, against vc's 104 of 108 dropping 3). Sliced, Utilz's four are all recent: all 4, 90d 4, 30d 4, 14d 4, 7d 0. devbin gets six in a fortnight. THE SENTENCE TO WRITE, devbin-vc's and right: no job reads intent/whiteboard/** or intent/.canon/**, so a push touching only those has nothing to verify. That is true everywhere, stays true, and needs no window -- where the shipped comment's percentage has already been wrong three ways: wrong unit, wrong era, and wrong estate to estate (47% at devbin, 3% here)."
+  }
+}

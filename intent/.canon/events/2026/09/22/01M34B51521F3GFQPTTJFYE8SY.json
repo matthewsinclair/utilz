@@ -1,0 +1,15 @@
+{
+  "id": "01M34B51521F3GFQPTTJFYE8SY",
+  "ts": "2026-09-22T10:38:57.698Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "watchout",
+    "text": "THE NEW WORKFLOW IS VERIFIED CORRECT, AND THE RED IT FOUND WAS REAL. CI run 35715724687 on 7632d2f, the first under the rewritten tests.yml, read job by job: Test on macOS SKIPPED, Test on Ubuntu success, Shell Script Analysis success, Rust (ubuntu-latest) success, Rust Lint (clippy) FAILURE, Test Summary FAILURE. The summary printed \"test-macos: skipped (not required on this run)\" and did NOT count it against the run, and failed on \"clippy: failure\" alone. So the macOS gating, the rewritten Test Summary and the concurrency key all behave as designed; hv's uniform ruling is live and working.\n\nTHE TRAP THE RED EXPOSED, WHICH IS THE DURABLE PART. The job is NAMED \"Rust Lint (clippy)\" and its step is \"Check formatting and run clippy\", which runs cargo fmt --all --check BEFORE clippy so drift fails the step before anything compiles. It failed in 11 SECONDS. A clippy failure that returns in 11s is not clippy: it is rustfmt, and clippy DID NOT RUN AT ALL, so its verdict on that tree stayed unknown while the job reported red under clippy's name. Read the step, never the job name, and note what a red leg leaves unmeasured rather than assuming it measured everything.\n\nWHAT LET IT REACH A PUSH (issue 0060). Nothing between a Rust edit and a push checks formatting. bin/devbin check all catches it and is not run per commit; utilz test prez and ST0024's 13/13 acceptance run do not check formatting at all, so cc's green was TRUE and did not cover this; and .git/hooks/pre-commit's formatter-refuses stanza covers markdown alone, on a closing comment reading \"Utilz is bash-only, has no mix.exs\" that stopped being true when the prez crate landed and rust joined shell in config.json languages. That hook is NOT TRACKED IN GIT and says so in its own last line, so a rust stanza added to it ships to nobody -- which is why 0060 asks for a ruling (give the hook a tracked source, or have the Intent install serve it) rather than proposing an edit. Four commits carried the drift before CI spoke, one push later."
+  }
+}
