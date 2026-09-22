@@ -1,0 +1,15 @@
+{
+  "id": "01M34CM0M1E2PGNYF0Q4365ZDY",
+  "ts": "2026-09-22T11:04:37.249Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "watchout",
+    "text": "A green test suite says nothing about Rust formatting or clippy: run bin/devbin check all before handing a Rust change to vc, to CI or into a cut. Six cargo fmt diffs from cc 504825a rode five commits into main on 2026-09-22 under a green 13/13 thread and a green estate, reddened CI and would have refused the cut at step 5. cargo fmt --check fails the CI step AHEAD of clippy, so drift HIDES the clippy verdict rather than adding to it (0059, 0060). check all fixes with bin/devbin fmt rust; note its critic arm reads STAGED files only."
+  }
+}

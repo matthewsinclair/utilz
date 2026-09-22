@@ -1,0 +1,15 @@
+{
+  "id": "01M34DFKXTX89HP4ZAB3YPXC47",
+  "ts": "2026-09-22T11:19:41.754Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "watchout",
+    "text": "THE SWEEP IS A PREREQUISITE for the 2.12.0 cut: a devbin runtime before 0.1.6 stops at step 1 on this repository tag set (devbin issue 0106, found here). cc decision 3 below recorded the opposite for about twenty minutes on 2026-09-22 and is retracted in the record rather than deleted."
+  }
+}

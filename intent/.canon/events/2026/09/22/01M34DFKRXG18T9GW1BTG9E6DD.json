@@ -1,0 +1,15 @@
+{
+  "id": "01M34DFKRXG18T9GW1BTG9E6DD",
+  "ts": "2026-09-22T11:19:41.597Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "watchout",
+    "text": "To learn what a command will do, RUN it in its read-only mode (--dry-run, --check, status). Sourcing its library functions into a shell of your own measures YOUR shell, not the command: cc answered whether the vendored core resolves 2.12.0 by sourcing release_versions into a plain bash -c, got 2.12.0 and success, and was wrong -- the handler runs under set -euo pipefail (cmd/release:24) and release_versions ends its loop with is_semver && printf, which v2.6.1 (last in byte order) leaves at 1. release --minor --dry-run stops at step 1. AND: vc ran cc s probe verbatim and agreed, which is one measurement taken twice, not a confirmation. A repeat of a method cannot find a method error."
+  }
+}
