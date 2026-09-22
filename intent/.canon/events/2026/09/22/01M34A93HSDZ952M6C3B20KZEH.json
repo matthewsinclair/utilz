@@ -1,0 +1,15 @@
+{
+  "id": "01M34A93HSDZ952M6C3B20KZEH",
+  "ts": "2026-09-22T10:23:42.649Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "todo",
+    "text": "BEFORE OR WITH THE CUT: the CHANGELOG's harness bullet says 'A push that only moves the whiteboard runs nothing', which is true only for a push carrying nothing else -- 4 of 104 here. cc has said it will correct the sentence wherever the line lands. Whether Utilz keeps a paths-ignore line at all is hv's, reopened by vc's own correction: hv ruled yes on numbers vc has since measured in the wrong unit."
+  }
+}

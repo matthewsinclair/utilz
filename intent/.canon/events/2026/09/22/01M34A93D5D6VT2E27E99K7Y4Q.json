@@ -1,0 +1,15 @@
+{
+  "id": "01M34A93D5D6VT2E27E99K7Y4Q",
+  "ts": "2026-09-22T10:23:42.502Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "watchout",
+    "text": "THE PATH FILTER'S UNIT IS THE PUSH, NOT THE COMMIT, and measuring it wrongly is how both vc and devbin-vc overstated it today. GitHub evaluates paths-ignore against the two-dot diff between a push's before and after SHAs, so one code file anywhere in a push runs CI however many board commits ride with it -- which under hv's one-push-per-estate rule is the common case. MEASURED AT UTILZ at the right unit, 104 real push boundaries from 2025-11-12 to 2026-09-21, using tests.yml's push-run head SHAs as the boundaries because no filter was ever live: intent/whiteboard/** alone suppresses 4, and adding intent/.canon/** suppresses THE SAME 4. So the canon line buys nothing here, whatever it buys at devbin, and any sentence in the CHANGELOG or an issue justifying it by commit counts is measured in the wrong unit. vc told hv this unprompted after hv had already ruled on the wrong numbers."
+  }
+}

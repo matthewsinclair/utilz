@@ -1,0 +1,15 @@
+{
+  "id": "01M34AA3GMVAGY6E32YF8N249S",
+  "ts": "2026-09-22T10:24:15.381Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "watchout",
+    "text": "hv PUSHED at 10:23Z BEFORE the sweep, so the one-push-per-estate rule is already spent for this round: 7632d2f is on local and upstream, main is 0 ahead, and the sweep will need a push of its own. CI run on 7632d2f is the FIRST under the new workflow, so it is the live test of the macOS gating, the rewritten Test Summary (skipped macOS accepted off a tag) and the concurrency key -- if the summary is wrong, every push goes red and this run is where it shows."
+  }
+}
