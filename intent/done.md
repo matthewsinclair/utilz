@@ -1,8 +1,20 @@
 ---
-verblock: "21 Sep 2026:v0.10: matts - 2.10.0 and 2.11.0 released; the Homebrew tap live"
+verblock: "22 Sep 2026:v0.11: matts - 2.12.0 and 2.12.1 released, the first two cuts through devbin's release core"
 ---
 
 # Done
+
+## 22 Sep 2026 -- 2.12.0 and 2.12.1 released, the first two cuts through devbin's release core
+
+**2.12.0 is out**: tag `2.12.0` on `1b8dab1`, prez 2.4.0, cut by `bin/devbin release --minor`. It carries ST0024 (`prez showreel video --safe-zone`, and type fitted to the room it has), ST0025 (`stampz` stamps a mixed-geometry PDF page by page), and issues 0046 to 0055: CI's macOS legs on tags only with cancelled superseded runs (hv's uniform fleet ruling), the Emacs bridge reaching `todo`'s verbs, the release gate under bash 3.2, and CI's verdict read as the worst of every run on a commit. **2.12.1 followed the same day**: tag `2.12.1` on `d898d91`, cut by `release --patch` with all eleven steps done, carrying 0056 (`utilz test` builds before it reads) and 0062 (a red CI verdict names its failing jobs). The CHANGELOG entries are the account of what each carries.
+
+**Homebrew:** the tap was still on 2.11.0 and went straight to 2.12.1 (`8c24d04`, revision from `tools/formula-bump`, audit clean). hv's `brew upgrade` built it in 45 seconds and `utilz doctor` passed 7/7 with the manifest intact.
+
+**Threads closed:** ST0024, ST0025. **Issues closed:** 0046 to 0063, every one open at the start of the day and every one filed during it. The tracker ended at 0 threads, 0 work packages, 0 issues open.
+
+**Swept:** devbin 0.1.6 (`f22846a`), then hv's re-vendor (`6c0b171`).
+
+**Three things worth re-reading.** First, the vendored devbin 0.1.3 could not cut at all: step 1 failed silently on the pipefail loop-status bug, which devbin fixed as 0106 and credits to Utilz. Two nodes first concluded the opposite by sourcing the library into a shell without `pipefail`. Second, 2.12.0's recorded CI verdict is red while its code is green: the release commit's two runs disagreed on identical bytes, because AT04 waited on a fixed debugging port (0063, fixed in 2.12.1). Third, hv asked on release day why fourteen issues were outstanding. Eight of them had shipped and nobody had closed them.
 
 ## 21 Sep 2026 -- 2.11.0 released: showreel --aspect, the Homebrew tap, MIT
 

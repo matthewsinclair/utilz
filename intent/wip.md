@@ -8,10 +8,11 @@ _(none)_
 
 ## TODO
 
-**Next, in hv's order**
+**Next**
 
-- Cut 2.11.1 (issue 0045's portrait handle fit; CHANGELOG `## [2.11.1] - unreleased`) as the first cut through devbin's release core, once devbin 0.1.5 fixes its silent resolve failure beside the pre-2.7.0 `v` tags and is swept here. `bin/devbin release check`, then `bin/devbin release --patch --dry-run`, then the cut; after the tag, `tools/formula-bump` and the tap (`docs/releasing.md`).
-- hv to rule, no rush: headline fit-to-width at portrait in general; a platform safe-zone option for TikTok/IG's overlaid UI; whether a socials handle that overflows at 16:9 is fitted there too.
+- Verify devbin 0.1.7's seam once `devbin-vc` commits it here: the manifest names 0.1.7 and its new source commit, `bin/devbin doctor`, `bin/devbin release check`, `bin/devbin check all`. Then hv pushes, which runs CI.
+- hv to rule, no rush: a tracked home for `.git/hooks/pre-commit`. It is untracked, so issue 0060's Rust stanza protects this one checkout and ships to nobody. The choice is a source in this repository, or the formatter gate served by the Intent install the way its Claude Code hook bodies are.
+- hv to decide, no rush: re-run the flaked `Rust (ubuntu-latest)` job on 2.12.0's tag run (35745443734) so its recorded CI verdict is green, or leave the red as the record of issue 0063.
 
 **Threads**
 
@@ -21,10 +22,7 @@ _(none)_
 
 **Fixes**
 
-- `examples/demo.md` warns `class 'escape' has no effect`.
-- `stampz`: handle mixed page geometry within one PDF (per-page overlay ranges).
-- `hoist-rebase.sh`: the `AT13` postcondition uses minimum 0 against `-ge`, so it always passes. Needs ST0010 hydrated.
-- Open an issue for `todo` verbs unreachable from Emacs: the bridge inserts `C-u` flags between the declared flags and the path.
+- Sweep the tree for issue 0053's class: a probe whose pipeline failure kills the script under `set -e` before the guard on the next line can speak. `stampz` had three and exited 1 in silence on an unreadable PDF; every utility runs `set -euo pipefail` and most read something through a pipeline.
 
 **Blocked**
 

@@ -1,0 +1,15 @@
+{
+  "id": "01M357T3PX9EERXXT99FNHZHAQ",
+  "ts": "2026-09-22T18:59:48.573Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "hold",
+    "text": "Verify devbin 0.1.7's seam in Utilz: the manifest names 0.1.7 and its new source commit, then bin/devbin doctor, release check and check all, measured against today's baseline (doctor 12 checks 0 failed, release check exit 0). RELEASES WHEN devbin-vc reports the sha of its seam commit here. It is devbin-vc's to commit, by exact path; the push is hv's."
+  }
+}

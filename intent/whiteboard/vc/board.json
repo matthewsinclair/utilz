@@ -5,9 +5,9 @@
     "name": "Validation Claude",
     "role": "validation",
     "session_id": "21164364-ee36-49ef-a53f-1cadfb9249d9",
-    "heartbeat_at": "2026-09-22T11:20:04.996Z",
+    "heartbeat_at": "2026-09-22T18:59:50.176Z",
     "status": "active",
-    "focus": "2.12.0 built and verified, NOT cut. 13 commits local, tree clean. Next: devbin-vc sweeps 0.1.6 on hv go, vc verifies, cc writes releasing.md, vc dry-runs, hv cuts with --yes, vc verifies the tag and CI, then formula-bump and the tap. Folded for a compact; doing 58 and watchout 10 carry the state.",
+    "focus": "2.12.0 and 2.12.1 shipped through the release core; tracker clear; globalfold done. Holding for devbin 0.1.7's seam to verify.",
     "claims": [],
     "recorded_at": "2026-09-14T08:46:06.602Z",
     "authored_at": "2026-09-11 16:33Z",
@@ -745,7 +745,8 @@
       "kind": "decision",
       "seq": 5,
       "text": "hv, 2026-09-21, directly to vc: (1) 'Devbin: yes, do it.' Utilz adopts devbin's release core (devbin ST0007 WP-08), once ST0019 WP-01 has proved the declaration and the gates. (2) 'Rule: yes, agree.' Any gap in bin/.devbin/lib/release* goes to devbin-dc or devbin-2b through vc, fixed in devbin as a default with an override; never a patch to the vendored copy, never a Utilz-only branch.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-09-22T18:59:57.059Z",
       "recorded_at": "2026-09-21T07:33:47.133Z"
     },
     {
@@ -1005,7 +1006,8 @@
       "kind": "watchout",
       "seq": 9,
       "text": "THE CUT THROUGH THE CORE, read from devbin 0.1.5 source (lib/cmd/release) before the sweep: step 6 asks at a TERMINAL and fails \"nobody to ask: no terminal, and --yes was not given\" (exit 2) without one, so a cut run from a session with the ! prefix carries --yes, and the dry run is what replaces the prompt. A dry run never reaches step 6. object: local is the default and Utilz declares none, so the core makes the GitHub release itself with gh against matthewsinclair/utilz; there is no release workflow here. release.remotes is undeclared, which means every remote git remote lists, in order, so local and upstream both get the push (confirm it in the dry run push plan). ci.query is tools/ci-state and step 11 runs AFTER the push, waiting on a pending verdict up to ci.wait default, so the cut is gates plus a CI wait, not instant.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-09-22T19:00:04.960Z",
       "recorded_at": "2026-09-22T07:56:48.160Z"
     },
     {
@@ -1022,7 +1024,8 @@
       "kind": "decision",
       "seq": 17,
       "text": "hv, 2026-09-22, directly to vc, read from date -u at 09:10Z and arriving after my 08:03Z read, so the minute itself is unmeasured and is NOT written down as one (decision 16 said 08:0xZ, which I guessed; it is archived for that reason). The fleet CI ruling is UNIFORM at Utilz whatever the repository's visibility: \"Answered with CC. Keep things uniform, regardless of public/private repo state\", and \"The ruling is uniform\". macOS runs on a tag or a manual run only here, built from devbin 0108's YAML, and 0c39c91's comment and CHANGELOG line are corrected in that commit. The bash 3.2 coverage the ruling removes is closed in the release gate instead. hv also ruled stampz IN for today's release: mixed page geometry within one PDF, vc to build it as its own thread.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-09-22T18:59:57.975Z",
       "recorded_at": "2026-09-22T09:10:50.425Z"
     },
     {
@@ -1030,7 +1033,8 @@
       "kind": "decision",
       "seq": 18,
       "text": "hv, 2026-09-22, directly to vc, read at the stamp on this line from date -u: \"(b)\". ST0024 takes ONE rule at every orientation -- a line whose ink would leave its room is fitted wherever it is drawn, and at portrait a headline is additionally fitted to its room. This SUPERSEDES Q5 as hv answered it earlier today (\"leave headlines at 16:9\"), which was answered on cc's framing that a long headline there breaks mid-word and is a look rather than a defect; cc's probe then measured the opposite for a headline in a pane -- .socials h2 at -357..1318 and .wordmark .top at -506..1466 in a 960 px frame -- and the same overflow was what carried the socials handle off the frame, so the three symptoms were one decision. The byte-identical control stands: a line that visibly fits never moves.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-09-22T18:59:58.907Z",
       "recorded_at": "2026-09-22T09:55:23.019Z"
     },
     {
@@ -1038,7 +1042,8 @@
       "kind": "todo",
       "seq": 28,
       "text": "AFTER 2.12.0: sweep the tree for issue 0053's class, a probe whose pipeline failure kills the script under set -e before the guard on the next line can speak. stampz had three such probes and exited 1 in silence on an unreadable PDF. Every utility runs set -euo pipefail and most read something through a pipeline, so the question is which callers assign from one and then test the result. Not before the release: it is a scan that can only add work to a day hv wants shipped.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-09-22T18:59:59.969Z",
       "recorded_at": "2026-09-22T09:57:51.010Z"
     },
     {
@@ -1055,7 +1060,8 @@
       "kind": "watchout",
       "seq": 10,
       "text": "WHERE THE DAY'S WORKING ARTEFACTS ARE, because a compact takes them out of context and not off disk. The session scratchpad holds cut-runbook.md (the whole cut, read from devbin 0.1.5's lib/cmd/release), restart-additions.md (the three new traps and two conventions the globalfold owes intent/restart.md), and wip-draft.md (what wip.md becomes once 2.12.0 ships). Path: /private/tmp/claude-501/-Users-matts-Devel-prj-Utilz/21164364-ee36-49ef-a53f-1cadfb9249d9/scratchpad. THE SWEEP PROCEDURE, agreed with devbin-vc and not to be improvised: devbin-vc says ready, vc re-confirms the tree is clean AT THAT MOMENT, devbin-vc commits the sweep pathspec under its directive 10, vc verifies the manifest reads 0.1.6, bin/devbin doctor, bin/devbin release check past step 1 and bin/devbin check all, and only then hv pushes -- once, carrying every commit.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-09-22T19:00:05.778Z",
       "recorded_at": "2026-09-22T10:21:04.614Z"
     },
     {
@@ -1063,7 +1069,8 @@
       "kind": "todo",
       "seq": 29,
       "text": "AFTER THE CUT, guard strength in vc's own work, both found by cc's verification pass and both filed with measurements: 0057, ST0025's AT01 and AT02 pass on the single-stamp regression they name (cc measured 1237/1289/1237 in the centre bands and 0/0/0 in the margins with one A4 stamp over three pages), so the discriminator must key on the mark's SIZE scaling with the page -- the wide page's ink exceeding the A4 pages', or the ink's bounding box spanning most of each page's own width. 0058, tools/test-estate forces a PATH and not a VERSION, so on a machine where /bin/bash is not 3.2 the gate reports green having proved nothing; three lines reading /bin/bash --version and refusing by name.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-09-22T19:00:01.067Z",
       "recorded_at": "2026-09-22T10:22:30.489Z"
     },
     {
@@ -1071,7 +1078,8 @@
       "kind": "todo",
       "seq": 30,
       "text": "AFTER THE CUT, cc's 0056: utilz test prez reads the compiled binary in its BATS stage and builds it in a later stage, so a hand-made version bump (which ST0019 D2 requires) fails a test that is right about the tree and wrong about the moment. The fix belongs to the shared test driver, build once before the three sources. cc recommends after the cut because it touches the shared driver on release day; vc agrees. Measured by cc as not reachable from a cut: the core stamps version_from and this project declares no version sidecars, so a cut never writes crate/Cargo.toml.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-09-22T19:00:02.130Z",
       "recorded_at": "2026-09-22T10:22:30.635Z"
     },
     {
@@ -1088,7 +1096,8 @@
       "kind": "todo",
       "seq": 31,
       "text": "BEFORE OR WITH THE CUT: the CHANGELOG's harness bullet says 'A push that only moves the whiteboard runs nothing', which is true only for a push carrying nothing else -- 4 of 104 here. cc has said it will correct the sentence wherever the line lands. Whether Utilz keeps a paths-ignore line at all is hv's, reopened by vc's own correction: hv ruled yes on numbers vc has since measured in the wrong unit.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-09-22T19:00:03.243Z",
       "recorded_at": "2026-09-22T10:23:42.649Z"
     },
     {
@@ -1105,7 +1114,8 @@
       "kind": "watchout",
       "seq": 13,
       "text": "THE PATH FILTER: THE UNIT IS THE PUSH, AND THE JUSTIFICATION SHOULD NOT BE A HIT RATE AT ALL. GitHub evaluates paths-ignore against the two-dot diff between a push's before and after SHAs, so one code file anywhere in a push runs CI however many board commits ride with it -- which under one-push-per-estate is the common case. Measuring it per COMMIT is an upper bound that only pays out when a whole push is board and canon alone; vc and devbin-vc both did that first and both overstated it. MEASURED AT UTILZ at the push level, 104 usable boundaries from tests.yml's own push runs: intent/whiteboard/** alone suppresses 4, and adding intent/.canon/** suppresses 5, not the same 4 -- devbin-vc re-measured read-only and found one more inside a slightly different boundary set (106 usable of 109, dropping 1 non-ancestor and 1 sha not local, against vc's 104 of 108 dropping 3). Sliced, Utilz's four are all recent: all 4, 90d 4, 30d 4, 14d 4, 7d 0. devbin gets six in a fortnight. THE SENTENCE TO WRITE, devbin-vc's and right: no job reads intent/whiteboard/** or intent/.canon/**, so a push touching only those has nothing to verify. That is true everywhere, stays true, and needs no window -- where the shipped comment's percentage has already been wrong three ways: wrong unit, wrong era, and wrong estate to estate (47% at devbin, 3% here).",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-09-22T19:00:06.557Z",
       "recorded_at": "2026-09-22T10:25:56.949Z"
     },
     {
@@ -1122,7 +1132,8 @@
       "kind": "watchout",
       "seq": 14,
       "text": "THE NEW WORKFLOW IS VERIFIED CORRECT, AND THE RED IT FOUND WAS REAL. CI run 35715724687 on 7632d2f, the first under the rewritten tests.yml, read job by job: Test on macOS SKIPPED, Test on Ubuntu success, Shell Script Analysis success, Rust (ubuntu-latest) success, Rust Lint (clippy) FAILURE, Test Summary FAILURE. The summary printed \"test-macos: skipped (not required on this run)\" and did NOT count it against the run, and failed on \"clippy: failure\" alone. So the macOS gating, the rewritten Test Summary and the concurrency key all behave as designed; hv's uniform ruling is live and working.\n\nTHE TRAP THE RED EXPOSED, WHICH IS THE DURABLE PART. The job is NAMED \"Rust Lint (clippy)\" and its step is \"Check formatting and run clippy\", which runs cargo fmt --all --check BEFORE clippy so drift fails the step before anything compiles. It failed in 11 SECONDS. A clippy failure that returns in 11s is not clippy: it is rustfmt, and clippy DID NOT RUN AT ALL, so its verdict on that tree stayed unknown while the job reported red under clippy's name. Read the step, never the job name, and note what a red leg leaves unmeasured rather than assuming it measured everything.\n\nWHAT LET IT REACH A PUSH (issue 0060). Nothing between a Rust edit and a push checks formatting. bin/devbin check all catches it and is not run per commit; utilz test prez and ST0024's 13/13 acceptance run do not check formatting at all, so cc's green was TRUE and did not cover this; and .git/hooks/pre-commit's formatter-refuses stanza covers markdown alone, on a closing comment reading \"Utilz is bash-only, has no mix.exs\" that stopped being true when the prez crate landed and rust joined shell in config.json languages. That hook is NOT TRACKED IN GIT and says so in its own last line, so a rust stanza added to it ships to nobody -- which is why 0060 asks for a ruling (give the hook a tracked source, or have the Intent install serve it) rather than proposing an edit. Four commits carried the drift before CI spoke, one push later.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-09-22T19:00:07.298Z",
       "recorded_at": "2026-09-22T10:38:57.698Z"
     },
     {
@@ -1139,7 +1150,8 @@
       "kind": "watchout",
       "seq": 15,
       "text": "REPRODUCING A PEER'S METHOD IS NOT INDEPENDENT VERIFICATION, AND I DID IT TODAY. cc measured release_resolve by sourcing bin/.devbin/lib/* into a bare bash -c and calling the function; it returned 2.12.0 and cc concluded the cut could go ahead on the vendored 0.1.3. I \"verified independently\" by running cc's probe VERBATIM, got the same answer, and told cc and my own board it was confirmed. It was not confirmed. It was the same measurement made twice, and it was wrong both times, because the probe's shell had no `set -o pipefail` and the shell that actually runs the cut does (bin/.devbin/lib/cmd/release:24). The function returns 0 in the probe and 1 in the cut, on the same tree, for the same input.\n\nWHAT WOULD HAVE CAUGHT IT, AND IS THE RULE: run the thing itself, not a re-enactment of its parts. `bin/devbin release --minor --dry-run` is read-only, writes nothing, needs no terminal, and answers the question directly -- it failed at step 1 the first time it was run. A probe that sources a library and calls one function is a DIFFERENT PROGRAM from the command under test: it differs in shell options, in the environment the launcher exports, and in what runs before the call. Any of those can flip the answer, and here one did, silently.\n\nAND NOTE WHAT MADE IT STICK. I already held the correct fact -- the scratchpad's restart-additions.md says in plain words that 0.1.6 carries 0106's fix for release_versions failing silently beside the pre-2.7.0 v tags, \"the bug that forced 2.11.0 to be cut by hand\". A peer's fresh measurement, agreeing with itself, was enough to make me archive my own correct note as an error. When a new measurement contradicts a recorded one, the contradiction is the finding: run the direct test before retiring either.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-09-22T19:00:07.928Z",
       "recorded_at": "2026-09-22T11:10:03.014Z"
     },
     {
@@ -1147,7 +1159,8 @@
       "kind": "todo",
       "seq": 32,
       "text": "AFTER THE CUT, issue 0061: tests.yml's `chmod +x opt/*/[!test]*` at :74 and :133 is a character class, not a word. It means \"not t, e or s\", so it silently skips opt/expz/expz, opt/stampz/stampz, opt/syncz/syncz and opt/todo/todo along with the test directories it meant to exclude. Measured by expanding the glob here: 59 of the 84 entries under opt/*/ match, and the 25 skipped are every name starting with t, e or s. THE FIX IS A DELETION, not a better glob: git ls-files -s opt/ reports every utility implementation as 100755, so actions/checkout restores the bit before the line runs, and the line's only live effect is +x on README.md, VERSION, *.yaml and directories. It cannot reach the fifteen 100644-with-shebang files either, because they are all one level deeper than the pattern and none of them needs the bit (bats runs the .bats files, the lib shell files are sourced, the generator chmods the templates). Measure `chmod +x bin/utilz` on the line above the same way before keeping it. Found by devbin-vc during the 0.1.6 sweep; it correctly declined to fix another estate's CI mid-sweep. Not before the tag: it is latent, it fails nothing, and today's run is the release gate.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-09-22T19:00:04.185Z",
       "recorded_at": "2026-09-22T11:30:53.077Z"
     },
     {
@@ -1155,7 +1168,8 @@
       "kind": "doing",
       "seq": 61,
       "text": "THE SWEEP IS IN AND STEP 1 PASSES: VERIFIED BY RUNNING THE REAL COMMANDS, NOT BY READING devbin-vc'S NUMBERS. f22846a vendored devbin 0.1.6. Read here: manifest.sha256 says devbin_version 0.1.6; release.steps:114 carries `if is_semver \"$v\"; then printf '%s\\n' \"$v\"; fi` with a comment naming this project's v2.6.1 as 0106's instance; `bin/devbin doctor` is 12 checks, 0 failed, 2 notes, exit 0; `bin/devbin release check` exits 0 and the declaration reads as expected (gates check all + test estate, ci.query tools/ci-state, object local, remotes every remote, repo matthewsinclair/utilz, tag {version}).\n\n`bin/devbin release --minor --dry-run` now prints `1  resolve  done  2.12.0 from --minor, tag 2.12.0, new`. That is the first time step 1 has ever passed on this project, and it is the whole reason the sweep was a prerequisite.\n\nIT NOW STOPS AT STEP 2 (pre-flight), and correctly: \"dirty outside what this release owns\", naming six paths, all cc's -- intent/whiteboard/cc/board.json, intent/whiteboard/cc/wip.md and four canon events (01M34CM0M1E2PGNYF0Q4365ZDY, 01M34CM0SHPNKFB07YH8WBZCYG, 01M34DFKRXG18T9GW1BTG9E6DD, 01M34DFKXTX89HP4ZAB3YPXC47). cc has twice said nothing of its is in the tree; it is, and has been across several of my commits. I have not staged any of it -- a peer's board is the peer's to land. cc has been asked.\n\nWRITE CONTROL on both runs together: tree, HEAD, tags and both remote refs byte-identical across them. The dry run writes nothing, as documented.\n\nSTILL UNPROVEN, and nobody should say otherwise: steps 3 to 11. No run on this project has passed step 2, so the gates have never been reached from inside a cut. Once cc lands its board the dry run goes again, and THAT is the first behavioural proof of the rest. Note for reading it: under --dry-run the gates run on HEAD in place, and the core's own row says that predicts the gates rather than gating the release (cmd/release:714).\n\nNOT PUSHED, AND NOT PUSHABLE BY ME. devbin-vc relayed hv's instruction to push both remotes and said in the same breath not to act on it until hv confirms in person, estate by estate. Correct, and it is the standing rule besides: releases, tags and pushes are hv's. Nine commits sit ahead of both remotes.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-09-22T19:00:08.981Z",
       "recorded_at": "2026-09-22T11:55:51.921Z"
     },
     {
@@ -1163,8 +1177,17 @@
       "kind": "watchout",
       "seq": 16,
       "text": "DO NOT WRITE TO THE TREE WHILE A DRY RUN OR A CUT IS RUNNING, AND KNOW THAT STEP 5 WILL BLAME A GATE WHEN YOU DO. I filed issue 0062 while a dry run's gates were in flight and spoiled the run. Step 5 reads release_tree_state BEFORE and AFTER the gates, release_dirt underneath it runs `git status --porcelain=v1 -z --untracked-files=all`, and release_tree_changed reports any path the two reads disagree on. Four new paths appeared between them -- an issue json, its rendered view, a canon event and a modified .intentfiles -- none of them written by a gate.\n\nTHE REFUSAL IT PRODUCES IS MISLEADING BY CONSTRUCTION: \"a gate changed the tree: <paths> -- the gates examine the release commit and must not write to it\" (cmd/release:711). The core cannot tell a gate's write from anyone else's, so it names the only writer it knows about. A reader who did not know what else was happening in the checkout would go looking for a gate that writes, and there is none. Step 5 also reads HEAD before and after for the same reason, so COMMITTING during a run is caught too and reported as \"a gate moved HEAD\" -- which means the fix for having dirtied the tree is NOT to commit it mid-run.\n\nTHE RULE: between starting a dry run and reading its last row, the checkout is read-only for every node. That includes `intent issues add`, `intent wb` (which writes a board view AND a canon event), and anything that renders a view. A whiteboard write is not a harmless write here. cc reached the same conclusion independently from ST0019 D6 and is holding all board writes until the tag.\n\nCOST, MEASURED: one full gate cycle. The gates are `check all` plus `test estate`, and estate was 131 tests into the first of several suites when I stopped it. Stopping is cheaper than letting it reach step 5, because the re-run costs the same either way and a stopped run stops burning time. Killing the run leaves a bats child alive -- the SIGTERM reaches the wrapper, not the grandchild -- so kill it by pid and confirm both the process and /var/folders/**/T/bats-run-* are gone before starting again.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-09-22T19:00:08.427Z",
       "recorded_at": "2026-09-22T12:01:21.078Z"
+    },
+    {
+      "node": "vc",
+      "kind": "hold",
+      "seq": 4,
+      "text": "Verify devbin 0.1.7's seam in Utilz: the manifest names 0.1.7 and its new source commit, then bin/devbin doctor, release check and check all, measured against today's baseline (doctor 12 checks 0 failed, release check exit 0). RELEASES WHEN devbin-vc reports the sha of its seam commit here. It is devbin-vc's to commit, by exact path; the push is hv's.",
+      "state": "live",
+      "recorded_at": "2026-09-22T18:59:48.573Z"
     }
   ],
   "messages": [
