@@ -5,7 +5,7 @@ A DOING / TODO / DONE view, projected from steel-thread and work-package status:
 ## DOING
 
 - [-] ST0024: showreel: headlines fit a portrait frame, a platform safe zone, and a handle that fits at 16:9
-  - [-] 01: The fit reads the longest word: headlines at portrait, handles by ink
+  - [x] 01: The fit reads the longest word: headlines at portrait, handles by ink
   - [-] 02: The platform safe zone, and everything type inside it
 
 ## TODO

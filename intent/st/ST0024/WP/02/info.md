@@ -9,7 +9,7 @@ status: WIP
 
 ## Objective
 
-_(not yet written)_
+A recording can be made inside TikTok and Instagram Reels own UI: --safe-zone and safe_zone: with one parse, the shell safe area per edge, and every mark, line of type and QR cap inside the zone while pictures still bleed to the frame edge.
 
 ## Acceptance
 

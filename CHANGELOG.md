@@ -30,6 +30,8 @@ Minor: **`prez showreel video --safe-zone` records inside TikTok's and Instagram
   - The Emacs smoke test (`static/emacs/e2e-smoke.el`) expects one menu entry per row of the manifest rather than twelve; it had failed its first check on every run since the menu became six (0048).
   - `hoist-rebase.sh`, ST0010's rebase script, loses a postcondition that could not fail and re-points two that could not pass, because the code they name moved into the shared crate and the test harness (0049, 0050).
   - The release core's `test estate` gate runs every suite under the bash 3.2.57 that macOS ships, through `tools/test-estate` (0051). With the macOS legs now on tags and manual runs, that gate is what stands between a green tree and a tag.
+  - **A recording is not bit-identical between runs in every case** (0054), and 2.10.0's entry here says it is. Measured: two recordings of one reel by ONE build, on one machine, differed on 25 of 75 frames, each by a single channel sample of 1 at one pixel inside a headline's edge; the same reel at 9:16 was identical. The suite's determinism check compares its own fixture, a crawl and five pictures, and that green is sound; the sentence a reader takes from it is wider than what it measures, and `video.sh` now says so where the check is. Nothing in the product changes: one sample of 1 is invisible and the encoded video is the same either way.
+  - The two Chrome helpers both black-box suites need, `wait_for_cdp` and `CHROME_SAFE`, are defined once in `test/lib/harness.sh` rather than in `acceptance.sh` alone, which is the direction issue 0040 set for that harness. A consolidation, not a deletion: every call site is unchanged.
 
 ## [2.11.0] - 2026-09-21
 

@@ -2,14 +2,14 @@
 wp_id: WP-01
 title: The fit reads the longest word: headlines at portrait, handles by ink
 scope: S
-status: WIP
+status: Done
 ---
 
 # WP-01: The fit reads the longest word: headlines at portrait, handles by ink
 
 ## Objective
 
-_(not yet written)_
+A line of type too wide for the room it has is fitted to that room, at either orientation: the longest run it cannot break against the room its text may use, never below the floor its own rule declares, and wrapping at that floor rather than leaving the frame.
 
 ## Acceptance
 

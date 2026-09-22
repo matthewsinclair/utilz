@@ -24,7 +24,7 @@ Roles: cc builds, vc reviews and verifies, hv rules.
 
 | WP    | Title                                                                 | Size | Status |
 | ----- | --------------------------------------------------------------------- | ---- | ------ |
-| WP-01 | The fit reads the longest word: headlines at portrait, handles by ink | S    | WIP    |
+| WP-01 | The fit reads the longest word: headlines at portrait, handles by ink | S    | Done   |
 | WP-02 | The platform safe zone, and everything type inside it                 | S    | WIP    |
 
 ## Acceptance

@@ -13,7 +13,7 @@ title: showreel: headlines fit a portrait frame, a platform safe zone, and a han
 
 ## Acceptance Criteria
 
-### WP-01 -- The fit reads the longest word: headlines at portrait, handles by ink (status: WIP)
+### WP-01 -- The fit reads the longest word: headlines at portrait, handles by ink (status: Done)
 
 - AC-01.1 At portrait, a headline whose longest word is wider than its room is drawn on ONE line inside that room, never below the floor its own rule declares, and wraps at the floor rather than leaving the frame -- satisfied: yes (computed)
 - AC-01.10 At 16:9 a headline whose INK would leave its room is fitted to it, and one that visibly fits is untouched: hv's ruling (b) of 2026-09-22, which superseded the answer AC-01.2 carried -- satisfied: yes (computed)
@@ -69,7 +69,7 @@ _(no criteria in this group)_
 
 ## Acceptance Tests
 
-### WP-01 -- The fit reads the longest word: headlines at portrait, handles by ink (status: WIP)
+### WP-01 -- The fit reads the longest word: headlines at portrait, handles by ink (status: Done)
 
 _(no tests in this group)_
 
