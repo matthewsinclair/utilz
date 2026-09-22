@@ -13,8 +13,11 @@ The section still open names its version: `## [X.Y.Z] - unreleased`, never `## [
 
 - **At 9:16 a long socials handle fits the frame** (issue 0045, ST0023). On a portrait reel a handle such as `forbiddenplanetnottingham` ran off both edges, because its size was fixed and a single word cannot wrap. In a portrait frame the player now shrinks a handle that is too wide until it fits inside the safe margin, never below its own minimum size, and wraps one that is still too wide there. Widescreen is unchanged: the fit runs only in a portrait frame, and 16:9 recordings are byte-identical to before.
 
+- **The Emacs bridge reaches `todo`'s verbs** (issue 0047). With a prefix argument (`C-u`) the bridge asks for extra flags, and it put them between a declared flag and the file, so `done 2` on a `todo.md` built `utilz todo --file done 2 <file>`, which todo refuses. The file now follows the declared flags and the extra flags come last, so it builds `utilz todo --file <file> done 2`. Without extra flags every command is exactly as before.
+
 - **Harness and development only, no behaviour change**:
   - CI cancels a run that a newer push has superseded, and macOS still runs on every push (0046).
+  - The Emacs smoke test (`static/emacs/e2e-smoke.el`) expects one menu entry per row of the manifest rather than twelve; it had failed its first check on every run since the menu became six (0048).
 
 ## [2.11.0] - 2026-09-21
 

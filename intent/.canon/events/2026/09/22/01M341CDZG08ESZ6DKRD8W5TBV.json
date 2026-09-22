@@ -1,0 +1,15 @@
+{
+  "id": "01M341CDZG08ESZ6DKRD8W5TBV",
+  "ts": "2026-09-22T07:48:14.449Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "issues.add",
+  "subject": {
+    "type": "issue",
+    "id": "0047"
+  },
+  "payload": {
+    "severity": "low",
+    "title": "The Emacs bridge puts its C-u extra flags between a declared flag and the path, so todo's verbs cannot be reached"
+  }
+}

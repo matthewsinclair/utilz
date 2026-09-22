@@ -1,0 +1,10 @@
+{
+  "schema": "intent/issue@3.0",
+  "number": 48,
+  "slug": "the-emacs-smoke-test-fails-its-first-check-it-wa",
+  "title": "The Emacs smoke test fails its first check: it wants 12 menu commands, and the menu is six since issue 0009",
+  "status": "open",
+  "severity": "low",
+  "created": "2026-09-22",
+  "body": "`static/emacs/e2e-smoke.el` opens with `(>= (length utilz--commands-alist) 12)`, written when the menu carried every utility (ST0007, 2026-04-23). Issue 0009 cut the menu to five on 2026-09-03 and restored todo the same day, so `utilz integration commands` has emitted six rows since, and the smoke's first check has failed on every run: measured 2026-09-22, `FAIL: utilz-refresh populates alist -- 6 commands loaded`. The smoke is run by hand and by nothing else, which is why a red that has stood for nineteen days went unseen, and why its end line `--- N failure(s) ---` had stopped meaning anything.\n\nTHE FIX: the check reads its expectation rather than writing one. `utilz-refresh` must yield exactly one alist entry per row that `utilz integration commands` emits, and at least one. The menu is whatever the YAML declares, so a number or a list of names here would be a second copy of the roster that drifts the next time a block is added or removed, which is how this check went red.\n\nFound by vc while running the smoke red-first for issue 0047."
+}

@@ -1,0 +1,15 @@
+{
+  "id": "01M341DY8Z7N2N642D8A8KG7BV",
+  "ts": "2026-09-22T07:49:03.903Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "issues.add",
+  "subject": {
+    "type": "issue",
+    "id": "0048"
+  },
+  "payload": {
+    "severity": "low",
+    "title": "The Emacs smoke test fails its first check: it wants 12 menu commands, and the menu is six since issue 0009"
+  }
+}

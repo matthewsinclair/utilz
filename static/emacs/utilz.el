@@ -95,20 +95,22 @@ PLIST keys: :description :input :output :flags.")
 
 (defun utilz--build-cmdline (name flags extra-flags input-spec)
   "Build the shell command line for NAME with FLAGS and EXTRA-FLAGS.
-Append a path argument when INPUT-SPEC is a file or path kind."
+Append a path argument when INPUT-SPEC is a file or path kind.
+The path follows the declared FLAGS and EXTRA-FLAGS come last, so a
+declared flag that takes the path (todo's --file) keeps it (issue 0047)."
   (let ((parts (list (shell-quote-argument utilz-executable)
                      (shell-quote-argument name))))
     (when (and flags (not (string-empty-p flags)))
       (setq parts (append parts
                           (mapcar #'shell-quote-argument
                                   (split-string flags "," t)))))
-    (when (and extra-flags (not (string-empty-p extra-flags)))
-      (setq parts (append parts (list extra-flags))))
     (pcase (plist-get input-spec :kind)
       ((or 'file 'path)
        (setq parts (append parts
                            (list (shell-quote-argument
                                   (plist-get input-spec :path)))))))
+    (when (and extra-flags (not (string-empty-p extra-flags)))
+      (setq parts (append parts (list extra-flags))))
     (mapconcat #'identity parts " ")))
 
 (defun utilz--pop-stderr (name stderr)

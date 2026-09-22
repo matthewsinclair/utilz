@@ -27,11 +27,16 @@
     (setq e2e-failures (1+ e2e-failures))
     (message "FAIL: %s%s" label (if detail (format " — %s" detail) ""))))
 
-;; 1. Manifest refresh
+;; 1. Manifest refresh: one alist entry per row the manifest emits. The
+;;    expectation is READ, never written here: the menu is whatever the YAML
+;;    declares, and a hardcoded count went stale when issue 0009 cut the menu
+;;    to six (issue 0048).
 (utilz-refresh)
-(e2e-check "utilz-refresh populates alist"
-           (>= (length utilz--commands-alist) 12)
-           (format "%d commands loaded" (length utilz--commands-alist)))
+(let ((rows (length (process-lines utilz-executable "integration" "commands"))))
+  (e2e-check "utilz-refresh populates alist, one entry per manifest row"
+             (and (> rows 0) (= (length utilz--commands-alist) rows))
+             (format "%d commands loaded, %d manifest rows"
+                     (length utilz--commands-alist) rows)))
 
 ;; 2. cleanz entry has expected shape
 (let ((entry (cdr (assoc "cleanz" utilz--commands-alist))))
@@ -100,6 +105,19 @@
   (e2e-check "build-cmdline appends path arg (shell-quoted)"
              (string-match-p "'/tmp/example dir'\\|/tmp/example\\\\ dir" cmdline)
              cmdline))
+
+;; 7. Extra flags (C-u) come after the path, so a declared flag keeps the
+;;    path it takes (issue 0047): todo declares --file, and `done 2' landing
+;;    between --file and the file is a command todo refuses.
+(let ((input-spec (list :kind 'file :path "/tmp/todo.md")))
+  (let ((cmdline (utilz--build-cmdline "todo" "--file" "done 2" input-spec)))
+    (e2e-check "build-cmdline keeps a declared flag next to the path, extras last"
+               (string-match-p "todo --file /tmp/todo\\.md done 2\\'" cmdline)
+               cmdline))
+  (let ((cmdline (utilz--build-cmdline "todo" "--file" nil input-spec)))
+    (e2e-check "build-cmdline without extras is the declared flags then the path"
+               (string-match-p "todo --file /tmp/todo\\.md\\'" cmdline)
+               cmdline)))
 
 (message "--- %d failure(s) ---" e2e-failures)
 (kill-emacs (if (zerop e2e-failures) 0 1))
