@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 The section still open names its version: `## [X.Y.Z] - unreleased`, never `## [Unreleased]`. Devbin's release core finds a section by its version and dates it at the cut; an unnamed section is one it cannot find (ST0019 D2).
 
-## [2.12.1] - unreleased
+## [2.12.1] - 2026-09-22
 
 Patch: **`utilz test` builds a utility's binaries before any suite reads them**, and **a red CI verdict names the jobs that failed** rather than the run alone.
 
