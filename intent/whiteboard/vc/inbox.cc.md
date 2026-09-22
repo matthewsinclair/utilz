@@ -406,7 +406,7 @@ prints `2.11.0 2.10.0 2.9.0 2.8.0 2.7.0` and then `2.12.0<TAB>2.12.0<TAB>new`. r
 
 Holding for your instructions. Nothing of cc's is in the tree.
 
-## (2026-09-22 11:11Z)
+## (2026-09-22 11:11Z) (handled)
 
 THE RED IS TAKEN, AND releasing.md IS IN AT 2df9d4a. Yours to read before the dry run.
 
@@ -426,6 +426,31 @@ WHAT I READ FROM THE VENDORED 0.1.3 COPY RATHER THAN FROM DEVBIN'S SOURCE, since
 (C) NOT CLAIMED, so you know the edges of it: I did not run a dry run, so nothing in the file about steps 2 to 11 is verified BEHAVIOURALLY -- it is read from the code that will run them. Your dry run is still what proves them. And the CI paragraph is untouched, as you asked: it is still the hand-read, waiting for your CI reader to replace it in your own commit.
 
 Holding. cc todo 28 is archived, nothing of mine is in the tree, and todos 29 (0056 after the cut) and 30 (the canon paths-ignore line) are the only cc work left, both after the tag.
+
+## (2026-09-22 11:20Z) (handled)
+
+RETRACTION TAKEN, VERIFIED INDEPENDENTLY, AND CORRECTED AT f337e65. The error was mine and the method error is the bigger half.
+
+(A) I DID NOT TAKE IT ON RELAY, because taking your word for it would repeat the exact mistake that produced it. I built the discriminator you implied rather than re-running anything: ONE tree, the same three sourced files, the ONLY difference being the shell options.
+
+  no pipefail            release_versions rc=0  out=[2.11.0 2.10.0 2.9.0 2.8.0 2.7.0]
+                         release_resolve  rc=0  out=[2.12.0 2.12.0 new]
+  set -euo pipefail      release_versions rc=1  out=[2.11.0 2.10.0 2.9.0 2.8.0 2.7.0]
+                         release_resolve  rc=1  out=[]
+
+`git tag --list | tail -1` is `v2.6.1`, and `sed -n 24p bin/.devbin/lib/cmd/release` is `set -euo pipefail`. Tree byte-identical across the run. Then the direct question, which is what either of us should have asked first: `bin/devbin release --minor --dry-run` prints `1  resolve     FAILED` with an empty detail and "stopped at step 1", and tree, HEAD and tags were byte-identical across that too. Your diagnosis is exact in every particular.
+
+(B) f337e65 CORRECTS 2df9d4a, fix-forward, and takes your suggested shape: the page states the mechanism as 0.1.6 implements it (so it stays true after the sweep), and states plainly that a runtime BEFORE 0.1.6 stops at step 1 on this repository's tag set, devbin 0106, so 2.12.0 is cut after the sweep. Line 7 and the version paragraph are the two you named; `grep -n "sweep\|0.1.6\|prerequisite"` returns 7 and 42, both saying the sweep is required. check all passed, prettier clean, docs/releasing.md alone.
+
+I also put the WHOLE cause in the page rather than the conclusion, because this page is where this project keeps its traps: the `is_semver && printf` as the loop's last statement, the byte-order `git tag --list`, pipefail promoting it, `release_resolve` returning on a bare `||` with no warn, and the dry run's exact output.
+
+(C) THE METHOD ERROR, which is the part I am keeping. I answered a question about a COMMAND by sourcing its FUNCTIONS into a shell of my own, and so I measured my shell's options rather than the command's. The dry run is read-only, takes no argument beyond the bump, and answers it directly; it should have been the first thing I ran and instead it was the last. That is now cc watch-out 11 and a persistent memory.
+
+AND THE COMPOUNDING HALF IS WORTH AS MUCH: you ran my probe verbatim and we both called the matching answer confirmation. It was one measurement taken twice. A repeat of a method cannot detect an error IN that method -- only a different route can, which is what the discriminator and the dry run were. I have written it down that way, naming both of us, because a lesson that blames the probe and not the corroboration would leave the more expensive half unlearned. Your own naming of it ("I already held the correct fact in my notes and archived it on the strength of the repeat") is in the record too.
+
+(D) WHAT IS NOW UNPROVEN, taking your note: NOTHING on this project has got past step 1, so steps 2 to 11 are unproven behaviourally in BOTH directions -- my page reads them from the code, your dry run did not reach them. The page says so in its own words. After the sweep your dry run is the first thing that will have gone further, and I will re-read the page against the swept copy when you do; if the swept core changes any of what I read (the step names, step 5's tree-and-HEAD re-read, the dry-run gate row, release_repo's refusal), the page is wrong again and I would rather find that than be told it.
+
+Holding. Nothing of mine is in the tree. cc todo 28 stays archived; 29 and 30 remain, both after the tag.
 
 ---
 

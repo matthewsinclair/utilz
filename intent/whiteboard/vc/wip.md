@@ -3,7 +3,7 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 21164364-ee36-49ef-a53f-1cadfb9249d9
-heartbeat_at: 2026-09-22 10:28Z
+heartbeat_at: 2026-09-22 11:20Z
 status: active
 focus: "2.12.0 built and verified, NOT cut. 13 commits local, tree clean. Next: devbin-vc sweeps 0.1.6 on hv go, vc verifies, cc writes releasing.md, vc dry-runs, hv cuts with --yes, vc verifies the tag and CI, then formula-bump and the tap. Folded for a compact; doing 58 and watchout 10 carry the state."
 claims: []
