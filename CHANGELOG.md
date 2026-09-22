@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 The section still open names its version: `## [X.Y.Z] - unreleased`, never `## [Unreleased]`. Devbin's release core finds a section by its version and dates it at the cut; an unnamed section is one it cannot find (ST0019 D2).
 
+## [2.12.1] - unreleased
+
+Patch: **`utilz test` builds a utility's binaries before any suite reads them**, and **a red CI verdict names the jobs that failed** rather than the run alone.
+
+### Fixed
+
+- **`utilz test <name>` builds a crate's release binaries first** (issue 0056). For a utility with a crate, two of the three test sources read `crate/target/release/<bin>` and only the last one built it, so after a version bump the shell tests read the binary from before the bump and failed: `Expected: prez 2.4.0   Actual: prez 2.3.0`. The build now runs before anything reads its output, with `--workspace` so `showreel` is rebuilt alongside `prez`. A crate that does not build stops that utility's run rather than testing a stale binary. A full run does no extra work: the later suites already built release, and they now find it built.
+
+- **When CI is red, `utilz install` and `upgrade` record which jobs failed** (issue 0062). A run concludes `failure` both when a job went red and when no job ran at all, a billing refusal or a runner that never started, and those need opposite responses: fix the code, or re-run. The manifest's `ci-state` row, and the release core's CI verdict through `tools/ci-state`, now read the failing run's jobs and say `failed: <names>`, or that the run was refused rather than tested. Only a red verdict asks the second question, so a green one costs what it always did; a job list that cannot be read adds nothing and leaves the verdict as it was.
+
+- **Harness and development only, no behaviour change**:
+  - Every Chrome the black-box suites launch for the DevTools protocol takes a free port asked for at the moment it is needed, rather than one of nine fixed ports (0063). A port already held made Chrome fail to bind, and the only symptom was the wait timing out and blaming Chrome's startup: that is how `AT04` failed on the Linux leg of the 2.12.0 tag run while the same commit passed on its other run. The wait's ceiling is now a named 30 seconds, and a refusal says how long it waited.
+  - `stampz`'s `ST0025-AT01` now fails when every page is stamped with one geometry, which is the regression it names (0057). It proved a mark existed on each page and not which page it was made for; it now requires the wide page to carry materially more ink than the A4 pages, since only a stamp sized for its own page does. `AT02`'s comment no longer claims to prove that, because it cannot.
+  - `tools/test-estate` reads `/bin/bash`'s version and refuses by name when it is not 3.2 (0058). It forced a `PATH` and never checked what that path led to, so on a machine whose `/bin/bash` is not the one macOS ships the release gate reported green having proved nothing.
+  - CI's setup steps lose two `chmod +x` lines (0061). One read `[!test]` as a character class, "not t, e or s", and so silently skipped `expz`, `stampz`, `syncz` and `todo`; both were dead anyway, because git already records every file they touched as executable.
+
 ## [2.12.0] - 2026-09-22
 
 Minor: **`prez showreel video --safe-zone` records inside TikTok's and Instagram's own UI**, and **a line of type too wide for its frame is fitted to it** rather than running off the edge or breaking mid-word. prez goes from 2.3.0 to 2.4.0.
