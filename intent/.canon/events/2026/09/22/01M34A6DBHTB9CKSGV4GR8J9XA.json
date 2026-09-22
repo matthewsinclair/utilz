@@ -1,0 +1,15 @@
+{
+  "id": "01M34A6DBHTB9CKSGV4GR8J9XA",
+  "ts": "2026-09-22T10:22:14.386Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "issues.add",
+  "subject": {
+    "type": "issue",
+    "id": "0058"
+  },
+  "payload": {
+    "severity": "medium",
+    "title": "tools/test-estate forces a PATH, not a bash version, so on a machine where /bin/bash is not 3.2 the gate reports green having proved nothing"
+  }
+}

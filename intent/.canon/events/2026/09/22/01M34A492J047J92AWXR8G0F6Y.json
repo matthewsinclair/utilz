@@ -1,0 +1,15 @@
+{
+  "id": "01M34A492J047J92AWXR8G0F6Y",
+  "ts": "2026-09-22T10:21:04.466Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "doing",
+    "text": "2.12.0 (prez 2.4.0) is BUILT AND VERIFIED and not yet cut. Thirteen commits local, tree clean, nothing in flight. Landed by vc: 0047 and 0048 (Emacs bridge C-u ordering, smoke test), 0049 and 0050 (hoist-rebase postconditions), 0051 (tools/test-estate, the gate under bash 3.2), 0052 plus its null follow-up (CI verdict is the worst of every run on a sha), ST0025 and 0053 (stampz page-by-page, and its silent exit), 0055 (a theme paints outside the zone; hv ruled Narrow). By cc: 0046's CI pair to devbin's 0108 shape, ST0024 at 13/13 PASS, 0054's caveat, prez 2.4.0 at 30c63e3. REMAINING, in order: devbin-vc sweeps 0.1.6 here on hv's go (the canon paths-ignore line rides it, hv ruled yes); vc verifies manifest 0.1.6, doctor, release check past step 1, check all; cc writes releasing.md's core-cut steps; vc runs release check then release --minor --dry-run; hv cuts with --yes; vc verifies the tag, both remotes, the release object and CI; vc runs tools/formula-bump 2.12.0 and hv pushes the tap."
+  }
+}

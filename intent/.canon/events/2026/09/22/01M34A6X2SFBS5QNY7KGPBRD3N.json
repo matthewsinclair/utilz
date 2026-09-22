@@ -1,0 +1,15 @@
+{
+  "id": "01M34A6X2SFBS5QNY7KGPBRD3N",
+  "ts": "2026-09-22T10:22:30.489Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "todo",
+    "text": "AFTER THE CUT, guard strength in vc's own work, both found by cc's verification pass and both filed with measurements: 0057, ST0025's AT01 and AT02 pass on the single-stamp regression they name (cc measured 1237/1289/1237 in the centre bands and 0/0/0 in the margins with one A4 stamp over three pages), so the discriminator must key on the mark's SIZE scaling with the page -- the wide page's ink exceeding the A4 pages', or the ink's bounding box spanning most of each page's own width. 0058, tools/test-estate forces a PATH and not a VERSION, so on a machine where /bin/bash is not 3.2 the gate reports green having proved nothing; three lines reading /bin/bash --version and refusing by name."
+  }
+}

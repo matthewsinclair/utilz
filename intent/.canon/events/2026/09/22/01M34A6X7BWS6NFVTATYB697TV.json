@@ -1,0 +1,15 @@
+{
+  "id": "01M34A6X7BWS6NFVTATYB697TV",
+  "ts": "2026-09-22T10:22:30.635Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "todo",
+    "text": "AFTER THE CUT, cc's 0056: utilz test prez reads the compiled binary in its BATS stage and builds it in a later stage, so a hand-made version bump (which ST0019 D2 requires) fails a test that is right about the tree and wrong about the moment. The fix belongs to the shared test driver, build once before the three sources. cc recommends after the cut because it touches the shared driver on release day; vc agrees. Measured by cc as not reachable from a cut: the core stamps version_from and this project declares no version sidecars, so a cut never writes crate/Cargo.toml."
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "id": "01M34A4976BBP5PNM9KGX6C964",
+  "ts": "2026-09-22T10:21:04.614Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "watchout",
+    "text": "WHERE THE DAY'S WORKING ARTEFACTS ARE, because a compact takes them out of context and not off disk. The session scratchpad holds cut-runbook.md (the whole cut, read from devbin 0.1.5's lib/cmd/release), restart-additions.md (the three new traps and two conventions the globalfold owes intent/restart.md), and wip-draft.md (what wip.md becomes once 2.12.0 ships). Path: /private/tmp/claude-501/-Users-matts-Devel-prj-Utilz/21164364-ee36-49ef-a53f-1cadfb9249d9/scratchpad. THE SWEEP PROCEDURE, agreed with devbin-vc and not to be improvised: devbin-vc says ready, vc re-confirms the tree is clean AT THAT MOMENT, devbin-vc commits the sweep pathspec under its directive 10, vc verifies the manifest reads 0.1.6, bin/devbin doctor, bin/devbin release check past step 1 and bin/devbin check all, and only then hv pushes -- once, carrying every commit."
+  }
+}

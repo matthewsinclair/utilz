@@ -1,0 +1,15 @@
+{
+  "id": "01M34A619GE5BJS135WYK3CP46",
+  "ts": "2026-09-22T10:22:02.033Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "issues.add",
+  "subject": {
+    "type": "issue",
+    "id": "0057"
+  },
+  "payload": {
+    "severity": "medium",
+    "title": "ST0025's AT01 and AT02 go green on the regression they name: they prove ink exists, not that the stamp was made for the page"
+  }
+}
