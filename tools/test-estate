@@ -47,6 +47,13 @@ if [ ! -x "$_estate_bash" ]; then
   printf 'test-estate: %s is not executable, so the suite cannot be run under the bash macOS ships\n' "$_estate_bash" >&2
   exit 2
 fi
+# THE SINGLE QUOTES ARE THE POINT, so the disable is scoped to this line and
+# carries its reason. BASH_VERSINFO must be expanded by the CHILD -- the
+# /bin/bash being interrogated -- and not by the shell running this script.
+# Double quotes would expand it HERE, so the check would report the version of
+# whatever bash ran test-estate and pass on every machine: the exact defect
+# this guard was added to close (issue 0058), rebuilt one line lower down.
+# shellcheck disable=SC2016
 _estate_version="$("$_estate_bash" -c 'printf %s "${BASH_VERSINFO[0]}.${BASH_VERSINFO[1]}"' 2>/dev/null)" || _estate_version=""
 if [ -z "$_estate_version" ]; then
   printf 'test-estate: could not read a version from %s, so this gate cannot say what it tested\n' "$_estate_bash" >&2
