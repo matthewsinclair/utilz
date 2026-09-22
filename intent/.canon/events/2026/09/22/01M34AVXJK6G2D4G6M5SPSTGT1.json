@@ -1,0 +1,15 @@
+{
+  "id": "01M34AVXJK6G2D4G6M5SPSTGT1",
+  "ts": "2026-09-22T10:33:59.124Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "issues.add",
+  "subject": {
+    "type": "issue",
+    "id": "0060"
+  },
+  "payload": {
+    "severity": "medium",
+    "title": "The pre-commit formatter gate checks markdown only: Rust is declared and rustfmt-enforced everywhere except at commit time, on a stale bash-only premise"
+  }
+}

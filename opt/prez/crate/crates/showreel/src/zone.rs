@@ -57,7 +57,10 @@ impl Zone {
       v if v.eq_ignore_ascii_case("social") => Ok(Self::Social),
       other => Err(Failure::new(
         format!("safe zone '{other}' is not a zone this knows"),
-        format!("expected one of {}, eg --safe-zone social", NAMES.join(", ")),
+        format!(
+          "expected one of {}, eg --safe-zone social",
+          NAMES.join(", ")
+        ),
       )),
     }
   }

@@ -16,9 +16,9 @@
 //! next run removes it before it starts.
 
 use crate::aspect::Aspect;
-use crate::zone::Zone;
 use crate::record::{self, Frame, Scratch};
 use crate::tail::Tail;
+use crate::zone::Zone;
 use crate::{build, deliver};
 use artifact::Failure;
 use std::fmt::Write as _;
@@ -499,9 +499,15 @@ mod tests {
 
   #[test]
   fn the_zone_flag_beats_the_reel_and_the_reel_beats_no_zone() {
-    assert_eq!(zone_chosen(Some(Zone::Social), Some(Zone::None)), Zone::Social);
+    assert_eq!(
+      zone_chosen(Some(Zone::Social), Some(Zone::None)),
+      Zone::Social
+    );
     assert_eq!(zone_chosen(None, Some(Zone::Social)), Zone::Social);
-    assert_eq!(zone_chosen(Some(Zone::None), Some(Zone::Social)), Zone::None);
+    assert_eq!(
+      zone_chosen(Some(Zone::None), Some(Zone::Social)),
+      Zone::None
+    );
     assert_eq!(zone_chosen(None, None), Zone::None);
   }
 
@@ -514,7 +520,11 @@ mod tests {
     // No zone is never refused, whatever the frame.
     assert!(refuse_a_zone_on_a_wide_frame(Zone::None, Aspect::WIDESCREEN).is_ok());
     let e = refuse_a_zone_on_a_wide_frame(Zone::Social, Aspect::WIDESCREEN).unwrap_err();
-    assert!(e.message.contains("social"), "names the zone: {}", e.message);
+    assert!(
+      e.message.contains("social"),
+      "names the zone: {}",
+      e.message
+    );
     assert!(e.message.contains("16:9"), "names the frame: {}", e.message);
   }
 

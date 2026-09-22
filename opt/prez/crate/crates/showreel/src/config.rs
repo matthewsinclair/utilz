@@ -322,7 +322,12 @@ mod tests {
   #[test]
   fn safe_zone_is_read_by_name_and_a_bad_one_refuses_at_parse() {
     use crate::zone::Zone;
-    let read = |v: &str| parse(&format!("artist: {{handle: x}}\nsafe_zone: \"{v}\"\n"), "reel");
+    let read = |v: &str| {
+      parse(
+        &format!("artist: {{handle: x}}\nsafe_zone: \"{v}\"\n"),
+        "reel",
+      )
+    };
     assert_eq!(read("social").unwrap().safe_zone, Some(Zone::Social));
     assert_eq!(read("SOCIAL").unwrap().safe_zone, Some(Zone::Social));
     assert_eq!(read("none").unwrap().safe_zone, Some(Zone::None));

@@ -197,7 +197,15 @@ pub fn record(
 ) -> Result<Recording, Failure> {
   let (width, height) = viewport(size, scale);
   let mut chrome = Chrome::launch(browser, width, height, scratch)?;
-  let played = play(&mut chrome, reel, (width, height), scale, fps, zone, &mut sink);
+  let played = play(
+    &mut chrome,
+    reel,
+    (width, height),
+    scale,
+    fps,
+    zone,
+    &mut sink,
+  );
   let warnings = chrome.stop(played.is_ok());
   match played {
     Ok(mut recording) => {
