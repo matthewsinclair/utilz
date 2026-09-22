@@ -1,0 +1,15 @@
+{
+  "id": "01M34CXYR6M6J9DZ2MZXA906VN",
+  "ts": "2026-09-22T11:10:03.014Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "watchout",
+    "text": "REPRODUCING A PEER'S METHOD IS NOT INDEPENDENT VERIFICATION, AND I DID IT TODAY. cc measured release_resolve by sourcing bin/.devbin/lib/* into a bare bash -c and calling the function; it returned 2.12.0 and cc concluded the cut could go ahead on the vendored 0.1.3. I \"verified independently\" by running cc's probe VERBATIM, got the same answer, and told cc and my own board it was confirmed. It was not confirmed. It was the same measurement made twice, and it was wrong both times, because the probe's shell had no `set -o pipefail` and the shell that actually runs the cut does (bin/.devbin/lib/cmd/release:24). The function returns 0 in the probe and 1 in the cut, on the same tree, for the same input.\n\nWHAT WOULD HAVE CAUGHT IT, AND IS THE RULE: run the thing itself, not a re-enactment of its parts. `bin/devbin release --minor --dry-run` is read-only, writes nothing, needs no terminal, and answers the question directly -- it failed at step 1 the first time it was run. A probe that sources a library and calls one function is a DIFFERENT PROGRAM from the command under test: it differs in shell options, in the environment the launcher exports, and in what runs before the call. Any of those can flip the answer, and here one did, silently.\n\nAND NOTE WHAT MADE IT STICK. I already held the correct fact -- the scratchpad's restart-additions.md says in plain words that 0.1.6 carries 0106's fix for release_versions failing silently beside the pre-2.7.0 v tags, \"the bug that forced 2.11.0 to be cut by hand\". A peer's fresh measurement, agreeing with itself, was enough to make me archive my own correct note as an error. When a new measurement contradicts a recorded one, the contradiction is the finding: run the direct test before retiring either."
+  }
+}

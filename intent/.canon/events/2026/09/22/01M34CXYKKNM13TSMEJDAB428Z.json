@@ -1,0 +1,15 @@
+{
+  "id": "01M34CXYKKNM13TSMEJDAB428Z",
+  "ts": "2026-09-22T11:10:02.867Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "doing",
+    "text": "THE 0.1.6 SWEEP IS A PREREQUISITE FOR THE CUT AFTER ALL. Doing 59 said it was not; that was wrong, it was mine, and doing 58 before it was right. MEASURED, not argued: bin/devbin release --minor --dry-run stops at step 1 (resolve) with an EMPTY reason and exit 1, having written nothing (tree, HEAD, tags and both remote refs byte-identical across the run). The cause is release.steps:107, is_semver \"$v\" && printf '%s\\n' \"$v\", the last statement in the while-loop body. git tag --list emits byte order, so Utilz's sixteen legacy v-prefixed tags come AFTER every bare 2.x.y and v2.6.1 is last; is_semver is false on it, the && compound returns 1, that becomes the loop's status, and the handler's set -euo pipefail (bin/.devbin/lib/cmd/release:24) makes it the whole pipeline's although sort succeeded. release_resolve line 126 then does `|| return 1` with no warn, which is why step 1 says nothing.\n\nTHE DISCRIMINATOR, RUN BOTH WAYS ON ONE TREE: without pipefail release_versions is rc=0 and release_resolve prints 2.12.0 2.12.0 new; with pipefail release_versions is rc=1 and release_resolve prints NOTHING. Same function, same tags, same repo.\n\ndevbin 0.1.6 FIXES IT as issue 0106, and its code comment and CHANGELOG both name Utilz's v2.6.1 as the instance (\"Found by Utilz, the first project to cut with the core after devbin\"). Sourcing 0.1.6's release.steps against this tree WITH pipefail gives rc=0 and 2.12.0 2.12.0 new. So the sweep is what makes the cut possible, and this is the same bug that forced 2.11.0 to be cut by hand.\n\nSEQUENCE, corrected: devbin-vc sweeps 0.1.6 (now on the critical path, not optional); vc verifies manifest 0.1.6, bin/devbin doctor, release check, then release --minor --dry-run PAST step 1; cc lands releasing.md (approved, two conditions) and vc reviews it; hv cuts with --yes; vc verifies tag, both remotes, release object and CI; tools/formula-bump 2.12.0 and hv pushes the tap. Three commits sit ahead of both remotes: acc5aa5, 156e12d, 3bef36d."
+  }
+}
