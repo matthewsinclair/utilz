@@ -5,12 +5,10 @@
     "name": "Control Claude",
     "role": "control",
     "session_id": "c6b24810-9d3c-45a5-ab7a-110a0611be6e",
-    "heartbeat_at": "2026-09-22T19:08:18.210Z",
+    "heartbeat_at": "2026-09-22T21:13:46.416Z",
     "status": "active",
-    "focus": "Holding for vc. 2.12.0 and 2.12.1 are shipped; todos 29 (0056, 27c545c) and 30 (canon paths-ignore, tests.yml) landed by vc and are archived. Nothing of cc's is in flight.",
-    "claims": [
-      "ST0024"
-    ],
+    "focus": "Day closed 2026-09-22 and cc holds for vc. 2.12.0 and 2.12.1 shipped, devbin 0.1.7 verified by vc at f082d5f; ST0024 done and unclaimed; no cc work is queued. Tomorrow: take instructions from vc. Pushing main is hv's.",
+    "claims": [],
     "recorded_at": "2026-09-14T08:46:06.602Z",
     "authored_at": "2026-09-11 16:17Z",
     "migrated_at": "2026-09-14T08:48:02.260Z"
@@ -641,7 +639,8 @@
       "kind": "watchout",
       "seq": 5,
       "text": "A .md the pre-commit prettier hook reformats can leave the index holding the pre-format text after an explicit-path commit: check git status after. Store bodies (issues, WP bodies) must be prettier-stable before intent set, or the view drifts and the doctor gate refuses every later commit.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-09-22T21:13:40.264Z",
       "recorded_at": "2026-09-21T16:58:56.217Z"
     },
     {
@@ -693,7 +692,8 @@
       "kind": "decision",
       "seq": 1,
       "text": "hv, 2026-09-22, directly to cc, answering cc's day plan: (1) 'Yes': at Utilz, take only the cancel-superseded half of the fleet CI ruling, and macOS stays on every push (Utilz is public, and the macOS legs are its only bash 3.2 run). (2) 'Yes, vc has instructions from me now, follow their lead': go on vc's order, sequenced by vc. (3) 'I'm less worried about the release number and more worried about having all of this done and dusted today so that all of the outstanding work is shipped on a release.'",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-09-22T21:13:39.632Z",
       "recorded_at": "2026-09-22T07:40:18.940Z"
     },
     {
@@ -755,7 +755,8 @@
       "kind": "decision",
       "seq": 2,
       "text": "hv, 2026-09-22, directly to cc and to vc on the same day, three rulings this node acted on: (1) the fleet CI ruling is UNIFORM whatever a repository's visibility, so Utilz took both halves and the earlier public-repo exception is superseded (0046); (2) on ST0024's Q5, '(b)': one rule at every orientation -- a line whose INK would leave its room is fitted wherever it is drawn, and at portrait a headline is held to its whole word against its room; (3) on 0055, 'Narrow', and on 0054, 'Ok': where an instrument measures one thing and the claim was written about another, the claim narrows to what is measured and the product does not move.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-09-22T21:13:39.790Z",
       "recorded_at": "2026-09-22T10:21:26.855Z"
     },
     {
@@ -781,7 +782,8 @@
       "kind": "watchout",
       "seq": 8,
       "text": "A version bumped by hand needs a BUILD before the suite: utilz test prez reads target/release/prez in its BATS stage and only acceptance.sh and video.sh build it, later in the same run. A second run of an untouched tree then goes green, which is the tell (issue 0056).",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-09-22T21:13:39.944Z",
       "recorded_at": "2026-09-22T10:21:37.748Z"
     },
     {
@@ -813,8 +815,25 @@
       "kind": "watchout",
       "seq": 12,
       "text": "THE SWEEP IS A PREREQUISITE for the 2.12.0 cut: a devbin runtime before 0.1.6 stops at step 1 on this repository tag set (devbin issue 0106, found here). cc decision 3 below recorded the opposite for about twenty minutes on 2026-09-22 and is retracted in the record rather than deleted.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-09-22T21:13:40.102Z",
       "recorded_at": "2026-09-22T11:19:41.754Z"
+    },
+    {
+      "node": "cc",
+      "kind": "watchout",
+      "seq": 13,
+      "text": "The pre-commit gate is tracked in .githooks/ now, read through core.hooksPath (issue 0064, 39b0af4). It REFUSES a staged .md or .rs that is not formatted and never rewrites it, so fix with prettier --write <file> or bin/devbin fmt rust, git add, and commit again. Edits to .git/hooks/ are no longer read. What still holds from the old watch-out 5: a store body (an issue, a WP body) must be prettier-stable before intent set, or its view drifts and the doctor gate refuses every later commit.",
+      "state": "live",
+      "recorded_at": "2026-09-22T21:13:40.432Z"
+    },
+    {
+      "node": "cc",
+      "kind": "watchout",
+      "seq": 14,
+      "text": "Before saying the tree is clean, run git status --porcelain --untracked-files=all with NO pathspec and quote the count. On 2026-09-22 cc checked -- docs/ only and twice told vc and hv nothing of its was in the tree, while its board, wip view and four canon events sat uncommitted, and those events alone would have refused the cut at step 2. The narrow answer was true; the claim was wider than what was measured.",
+      "state": "live",
+      "recorded_at": "2026-09-22T21:13:40.585Z"
     }
   ],
   "messages": [
