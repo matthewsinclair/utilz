@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 21164364-ee36-49ef-a53f-1cadfb9249d9
-heartbeat_at: 2026-09-22 19:30Z
-status: active
-focus: "devbin 0.1.7 verified at f082d5f; nothing held. main is 4 ahead of upstream, the push is hv's."
+heartbeat_at: 2026-09-22 21:17Z
+status: paused
+focus: "Day closed 22 Sep: devbin 0.1.7 verified, hooks tracked (0064), 2.12.0 kept red as the record. Tracker at 0. Tomorrow: whatever hv brings; wip.md TODO holds the rest."
 claims: []
 ---
 

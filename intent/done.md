@@ -1,5 +1,5 @@
 ---
-verblock: "22 Sep 2026:v0.11: matts - 2.12.0 and 2.12.1 released, the first two cuts through devbin's release core"
+verblock: "22 Sep 2026:v0.12: matts - 2.12.0 and 2.12.1 released, the first two cuts through devbin's release core"
 ---
 
 # Done
@@ -12,7 +12,9 @@ verblock: "22 Sep 2026:v0.11: matts - 2.12.0 and 2.12.1 released, the first two 
 
 **Threads closed:** ST0024, ST0025. **Issues closed:** 0046 to 0063, every one open at the start of the day and every one filed during it. The tracker ended at 0 threads, 0 work packages, 0 issues open.
 
-**Swept:** devbin 0.1.6 (`f22846a`), then hv's re-vendor (`6c0b171`).
+**Swept:** devbin 0.1.6 (`f22846a`), then hv's re-vendor (`6c0b171`), then devbin-vc's manifest naming it 0.1.7 (`f082d5f`), verified by vc at `6db62a9`.
+
+**Commit hooks tracked (issue 0064, `39b0af4`):** the formatter gate moved from untracked `.git/hooks/` into `.githooks/`, run through `core.hooksPath`, Intent's own shape. A probe proved the tracked hook refuses unformatted Rust with Intent's chain still running. Each clone sets `git config core.hooksPath .githooks` once (`docs/developer-guide.md`).
 
 **Three things worth re-reading.** First, the vendored devbin 0.1.3 could not cut at all: step 1 failed silently on the pipefail loop-status bug, which devbin fixed as 0106 and credits to Utilz. Two nodes first concluded the opposite by sourcing the library into a shell without `pipefail`. Second, 2.12.0's recorded CI verdict is red while its code is green: the release commit's two runs disagreed on identical bytes, because AT04 waited on a fixed debugging port (0063, fixed in 2.12.1). Third, hv asked on release day why fourteen issues were outstanding. Eight of them had shipped and nobody had closed them.
 
