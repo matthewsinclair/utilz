@@ -5,11 +5,12 @@ class Utilz < Formula
   desc "Small command-line utilities behind one dispatcher"
   homepage "https://github.com/matthewsinclair/utilz"
   # The bare tag (hv's ruling at 2.7.0) and its commit, both written by
-  # tools/formula-bump <tag> from git, never typed (docs/releasing.md). Until
-  # 2.11.0 is cut, the revision is a placeholder that the bump replaces.
+  # tools/formula-bump <tag> from git, never typed (docs/releasing.md). brew
+  # checks the tag's commit against the revision at install and stops on a
+  # mismatch, so a wrong revision fails loudly rather than silently.
   url "https://github.com/matthewsinclair/utilz.git",
-      tag:      "2.11.0",
-      revision: "7fc9bb54e1e26a57601515240c08ded84711c07a"
+      tag:      "2.12.1",
+      revision: "d898d9176c3242f44fad9d1de61ac23e9ae9487d"
   license "MIT"
 
   depends_on "rust" => :build
