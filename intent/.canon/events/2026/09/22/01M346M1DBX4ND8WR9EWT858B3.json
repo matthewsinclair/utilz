@@ -1,0 +1,14 @@
+{
+  "id": "01M346M1DBX4ND8WR9EWT858B3",
+  "ts": "2026-09-22T09:19:46.604Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.withdraw",
+  "subject": {
+    "type": "ac",
+    "id": "ST0024/AC-02.4"
+  },
+  "payload": {
+    "reason": "Re-minted as AC-02.6, a non-test row, for the same reason as AC-01.8"
+  }
+}

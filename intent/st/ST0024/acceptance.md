@@ -1,0 +1,113 @@
+---
+st_id: ST0024
+title: showreel: headlines fit a portrait frame, a platform safe zone, and a handle that fits at 16:9
+---
+
+# ST0024: showreel: headlines fit a portrait frame, a platform safe zone, and a handle that fits at 16:9 -- Acceptance
+
+> **THIS FILE IS A GENERATED VIEW, AND A ROW AUTHORED HERE IS DISCARDED BY THE NEXT SYNC.** The acceptance contract is canon in the thread model; this file renders it. Acceptance Criteria (AC) are the ratified completeness boundary; Acceptance Tests (AT) are the small red-to-green tests that prove them.
+>
+> Done = every AC is covered by a GREEN AT, or (for a non-test AC) its named evidence is satisfied, AND the AC set is the ratified full boundary. Done is read from this map, never from a hand-ticked box.
+>
+> Test-backed satisfaction is COMPUTED from covering green ATs and never stored -- storing it would be double truth. An AC has four states, not two: beyond satisfied and unsatisfied, a requirement can be **descoped** to a named thread or **withdrawn** with its reason on the record. Both are non-blocking and both are reported separately, so a thread that descoped half its contract looks like one.
+
+## Acceptance Criteria
+
+### WP-01 -- The fit reads the longest word: headlines at portrait, handles by ink (status: Not Started)
+
+- AC-01.1 At portrait, a headline whose longest word is wider than its room is drawn on ONE line inside that room, never below the floor its own rule declares, and wraps at the floor rather than leaving the frame -- satisfied: no (computed)
+- AC-01.2 At 16:9 a headline is untouched: its size is the size it has with the fit off. This is hv's Q5 answer, and it is the row that fails first if Q5 is ever reversed -- satisfied: no (computed)
+- AC-01.3 A socials handle whose INK is wider than its room is fitted in any orientation, and one whose ink fits its room is untouched: a 40-capital handle at 16:9 has no glyph in the frame's outer 86 px and is still drawn, while ST0023 D3's handle, which visibly fits, does not move -- satisfied: no (computed)
+- AC-01.4 A fitted line in a grid track it shares with siblings is measured against its own SHARE of that track, not against the row's width nor against its own grown box, proven on a points slide and a crawl row with a long word at both orientations (design D2b) -- satisfied: no (computed)
+- AC-01.5 Every fitted rule declares its floor once: every fitted selector carries a --fit-floor its clamp reads, and no floor is written in both the stylesheet and the script -- satisfied: no (computed)
+- AC-01.6 The fit is idempotent and is re-run once the face has settled: a second fit gives the same size as the first, so frames cannot move between runs -- satisfied: no (computed)
+- AC-01.7 Fitted lines matching one rule under one parent share the smallest size any of them needs, so a row of points or a strapline's lines are never drawn at two sizes -- satisfied: no (computed)
+- AC-01.8 THE CONTROL: a 16:9 recording of a reel whose lines all fit is byte-identical, frame for frame, to the same recording made before this thread -- WITHDRAWN: Re-minted as AC-01.9, a non-test row: the control compares a recording against one made by a PRE-THREAD binary, which no suite can rebuild, so it is satisfied by evidence as ST0023's byte check was. The requirement is unchanged (by cc)
+- AC-01.9 (non-test) THE CONTROL: a 16:9 recording of a reel whose lines all fit is byte-identical, frame for frame, to the same recording made by the pre-thread binary -- satisfied: no
+
+### WP-02 -- The platform safe zone, and everything type inside it (status: Not Started)
+
+- AC-02.1 The flag --safe-zone and the key safe_zone: parse through one function, the flag wins, a bad value is refused by name at config parse so check and build refuse it too, and a frame wider than it is tall is refused naming both -- satisfied: no (computed)
+- AC-02.2 With --safe-zone social at portrait, no type or mark has ink in the zone's four bands, where the same recording without the zone does, and pictures still bleed to the frame's edge -- satisfied: no (computed)
+- AC-02.3 A cap measured against the frame's height reads the zone box instead, so the at-work card and the social QR sit inside the shortened zone rather than overflowing it -- satisfied: no (computed)
+- AC-02.4 THE CONTROL: with no zone, a portrait recording is byte-identical, frame for frame, to the same recording made before this thread -- WITHDRAWN: Re-minted as AC-02.6, a non-test row, for the same reason as AC-01.8 (by cc)
+- AC-02.5 (non-test) vc reads a 9:16 recording of Snorkeltoast 001 with the zone and without it, one frame per segment type, and finds no type or mark cut by the zone's bands and nothing illegible at phone size -- satisfied: no
+- AC-02.6 (non-test) THE CONTROL: with no zone, a portrait recording is byte-identical, frame for frame, to the same recording made by the pre-thread binary -- satisfied: no
+
+### Group AT01
+
+_(no criteria in this group)_
+
+### Group AT02
+
+_(no criteria in this group)_
+
+### Group AT03
+
+_(no criteria in this group)_
+
+### Group AT04
+
+_(no criteria in this group)_
+
+### Group AT05
+
+_(no criteria in this group)_
+
+### Group AT06
+
+_(no criteria in this group)_
+
+### Group AT07
+
+_(no criteria in this group)_
+
+### Group AT08
+
+_(no criteria in this group)_
+
+## Acceptance Tests
+
+### WP-01 -- The fit reads the longest word: headlines at portrait, handles by ink (status: Not Started)
+
+_(no tests in this group)_
+
+### WP-02 -- The platform safe zone, and everything type inside it (status: Not Started)
+
+_(no tests in this group)_
+
+### Group AT01
+
+- AT01 `opt/prez/crate/test/acceptance.sh` -- covers AC-01.1, AC-01.2, AC-01.4, AC-01.5, AC-01.6, AC-01.7, AC-01.3 -- status: to-write -- The player probe over CDP, driven by acceptance.sh: measures the fit in the DOM at 540x960 and at 960x540
+
+### Group AT02
+
+- AT02 `opt/prez/crate/test/video.sh` -- covers AC-01.3 -- status: to-write -- The 16:9 recording: a 40-capital handle has no glyph in the frame's outer 86 px and is still drawn
+
+### Group AT03
+
+- AT03 `opt/prez/crate/test/video.sh` -- covers AC-01.1 -- status: to-write -- The portrait recording: the headline is drawn on one line with no glyph in the outer 20 px
+
+### Group AT04
+
+- AT04 (non-test) By hand, as ST0023 did: the 16:9 fixture recorded by the pre-thread binary and by the built one, compared frame for frame -- covers AC-01.9 -- status: n/a
+
+### Group AT05
+
+- AT05 `opt/prez/crate/crates/showreel/src/zone.rs` -- covers AC-02.1 -- status: to-write -- The names in any case, every refusal, the landscape refusal, and safe_zone: read and refused at config parse
+
+### Group AT06
+
+- AT06 `opt/prez/crate/test/video.sh` -- covers AC-02.2, AC-02.3 -- status: to-write -- The portrait recording with --safe-zone social, against the same reel without it
+
+### Group AT07
+
+- AT07 (non-test) By hand: the portrait fixture with no zone, recorded by the pre-thread binary and by the built one, compared frame for frame -- covers AC-02.6 -- status: n/a
+
+### Group AT08
+
+- AT08 (non-test) vc reads one frame per segment type from a 9:16 recording of Snorkeltoast 001, with the zone and without it -- covers AC-02.5 -- status: n/a
+
+---
+
+_Generated by Intent v3.2.0 from the thread canon. Do not edit this file -- it is rendered from the model, and `intent doctor` reports any hand-edit as skew._

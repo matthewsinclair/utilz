@@ -1,0 +1,14 @@
+{
+  "id": "01M346M18HDR18WJHZ15YXJAKH",
+  "ts": "2026-09-22T09:19:46.450Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.withdraw",
+  "subject": {
+    "type": "ac",
+    "id": "ST0024/AC-01.8"
+  },
+  "payload": {
+    "reason": "Re-minted as AC-01.9, a non-test row: the control compares a recording against one made by a PRE-THREAD binary, which no suite can rebuild, so it is satisfied by evidence as ST0023's byte check was. The requirement is unchanged"
+  }
+}
