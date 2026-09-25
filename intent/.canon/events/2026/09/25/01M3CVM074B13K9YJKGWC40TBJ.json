@@ -1,0 +1,15 @@
+{
+  "id": "01M3CVM074B13K9YJKGWC40TBJ",
+  "ts": "2026-09-25T18:00:40.933Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "issues.add",
+  "subject": {
+    "type": "issue",
+    "id": "0065"
+  },
+  "payload": {
+    "severity": "medium",
+    "title": "prez: page numbers in PDF output, as a front-matter setting (default off)"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "schema": "intent/issue@3.0",
+  "number": 65,
+  "slug": "prez-page-numbers-in-pdf-output-as-a-front-matte",
+  "title": "prez: page numbers in PDF output, as a front-matter setting (default off)",
+  "status": "open",
+  "severity": "medium",
+  "created": "2026-09-25",
+  "reporter": "Matthew Sinclair",
+  "body": "## What\n\nPage numbers in prez's PDF output, switched on per deck by a front-matter setting.\n\n## Why\n\nFiled from Gtools on hv's instruction, 25 Sep 2026 (hv: \"Page numbers should be a front-matter setting\"; default ruled \"off unless set\"). In HTML, prez shows its live \"4 / 12\" counter. In print, prez hides it (`crate/src/html.rs`, the print CSS: `.gp-counter { display: none; }`) and nothing replaces it, so no PDF carries page numbers, whatever the theme.\n\nA theme cannot fix this per deck: `FrontMatter` (`crate/src/frontmatter.rs`) knows `title`, `author`, `date`, `theme`, `theme_file`, `include` and `mermaid`, and anything else lands in `unknown`, which no theme can see. One client theme already hand-adds a CSS page counter in its own print block, which turns numbers on for every deck using that theme; copying that into each theme would fork the same concern across themes.\n\n## Proposed\n\n- A front-matter key, eg `page_numbers: true`. **Default off** (hv), so no existing PDF changes.\n- When set, prez marks the deck (eg a class on `.gp-deck`) and its own print CSS adds a CSS counter: `counter-reset` on the deck, `counter-increment` per slide, the number on `.gp-slide::after`, placed bottom right, and none on the title slide.\n- Colour and font come from the theme's existing variables (`--gp-muted`, `--gp-display`), so every theme gets numbers with no theme change.\n- Once it lands, the hand-added counter in that client theme can come out.\n\n## Known working CSS (from the client theme, verified in a real PDF)\n\n```css\n@media print {\n  .gp-deck { counter-reset: gp-page; }\n  .gp-slide { position: relative !important; counter-increment: gp-page; }\n  .gp-slide::after {\n    content: counter(gp-page);\n    position: absolute; right: 4vmin; bottom: 3vmin;\n    font: 400 0.55em/1 var(--gp-display);\n    color: var(--gp-muted);\n  }\n  .gp-slide.title::after { content: none; }\n}\n```\n"
+}
