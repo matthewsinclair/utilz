@@ -15,10 +15,13 @@ A DOING / TODO / DONE view, projected from steel-thread and work-package status:
   - [x] 04: discover and diff
   - [-] 05: apply
   - [-] 06: doctor, init, docs and the close
+- [-] ST0027: menuz: a macOS menu bar app whose menu is a YAML file of commands to run
+  - [ ] 01: Design settled with hv
+  - [ ] 02: The shim, the config directory and the catalogue verbs
 
 ## TODO
 
-- [?] ST0027: menuz: a macOS menu bar app whose menu is a YAML file of commands to run
+_(none)_
 
 ## DONE
 

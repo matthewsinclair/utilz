@@ -1,0 +1,15 @@
+{
+  "id": "01M523Z9E3JQVYMSBTVV60X9FZ",
+  "ts": "2026-10-16T10:26:24.325Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wp.new",
+  "subject": {
+    "type": "wp",
+    "id": "ST0027/02"
+  },
+  "payload": {
+    "scope": "S",
+    "title": "The shim, the config directory and the catalogue verbs"
+  }
+}

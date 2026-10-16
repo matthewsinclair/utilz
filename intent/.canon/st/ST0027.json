@@ -1,0 +1,32 @@
+{
+  "schema": "intent/thread@3.0",
+  "id": "ST0027",
+  "title": "menuz: a macOS menu bar app whose menu is a YAML file of commands to run",
+  "slug": "menuz-a-macos-menu-bar-app-whose-menu-is-a-yaml",
+  "status": "wip",
+  "created": "2026-10-16",
+  "objective": "",
+  "context": "",
+  "body": "",
+  "preamble": "",
+  "wps": [
+    {
+      "seq": 1,
+      "title": "Design settled with hv",
+      "scope": "S",
+      "status": "not-started",
+      "objective": "",
+      "body": "",
+      "preamble": ""
+    },
+    {
+      "seq": 2,
+      "title": "The shim, the config directory and the catalogue verbs",
+      "scope": "S",
+      "status": "not-started",
+      "objective": "",
+      "body": "",
+      "preamble": ""
+    }
+  ]
+}
