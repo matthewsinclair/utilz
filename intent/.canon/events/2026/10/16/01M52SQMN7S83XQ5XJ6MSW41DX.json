@@ -1,0 +1,16 @@
+{
+  "id": "01M52SQMN7S83XQ5XJ6MSW41DX",
+  "ts": "2026-10-16T16:46:42.343Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 63,
+    "text": "ST0027 menuz: hv ruled on Q1 to Q11 on 16 Oct (D1 to D11 at tmp/vc-st0026/st0027/decisions.md and in WP-01's body): Q4 one typed form, Q6 the source and dev build at native/macos/Menuz like the siblings, the dev products under XDG state, the installed copy at ~/Applications/Menuz.app (hv's correction in cc's session, confirmed to vc: \"we should be consistent\" with Intent, Conflab and Gtools) and a use dev|installed switch after devbin's, Q7 Intent's Developer ID signing and notarisation, Q9 runs left running (detached, on the log file directly), Q10 and Q11 yes, the rest as recommended. The criteria are reworded in the store where a ruling overturned a recommendation (AC-01.2, 02.1, 02.3, 03.1, 04.1, 04.2, 05.1, 05.3), AC-01.1 satisfied, swift declared. HELD until Intent 0605's install: design.md's Decisions section and the sections the rulings change (the shape, params, running, build layout, signing, the shim table), then intent sync --to-store ST0027 and AC-01.2 (the final yaml, params typed), WP-01 done. WP-02 (the shim, config directory and catalogue verbs) is cc's, started on vc's instruction; dc drafts the docs."
+  }
+}

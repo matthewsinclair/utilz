@@ -1261,10 +1261,10 @@
       "node": "vc",
       "kind": "hold",
       "seq": 9,
-      "text": "Carried: (1) the hand runs' scripts, transcripts and probes are banked under tmp/vc-st0026/ (git-ignored; the scratchpad under /private/tmp may not survive a reboot): verify-sha.sh, st0026/rerun-handrun.sh, st0026/dict-probe.sh, st0026/read-mid-apply.sh, st0026/restore-space.lua, st0026/launch-probe.lua, st0026/grab-probe*.lua and .txt, st0026/dbg-lib/, observe-until.log, handrun-*.txt, verify-*.txt, st0027/mint-acs.sh; (2) git worktree prune when the scratchpad goes (wt-c21f319, wt-13552bc, wt-3e11cb4, wt-88c57ad, wt-32fe3f0, wt-9907e17, wt-ff154a7, wt-4bfd783, wt-45acc46); (3) the spike's files in /tmp/arngz-spike2/ and dc's scratchpad go at reboot; (4) intent sync --to-disk once, if the file index still misses the two AC writes of 09:5xZ; (5) install_e2e.bats has not run since the store blew up (it copies the primary checkout, intent/.cache included): run it from the primary checkout once the store is back to size and before 2.13.0; (6) four desks of vc's sit in hv's catalogue ~/.config/arngz/desks/ (handrun, scramble, launchprobe, dictprobe) until the hand runs are done, then delete them.",
+      "text": "Carried: (1) the hand runs' scripts, transcripts and probes are banked under tmp/vc-st0026/ (git-ignored; the scratchpad under /private/tmp may not survive a reboot): verify-sha.sh, verify-*.txt, handrun-rerun-*.txt, dictprobe-f8c2827.txt, check-all-da23005.txt, test-estate-da23005.txt, st0026/{rerun-handrun.sh,dict-probe.sh,read-mid-apply.sh,restore-space.lua,launch-probe.lua,grab-probe*,dbg-lib/,desks/}, st0027/{mint-acs.sh,decisions.md,design.md,objective.md,context.md}; (2) git worktree prune when the scratchpad goes (wt-c21f319, wt-13552bc, wt-3e11cb4, wt-88c57ad, wt-32fe3f0, wt-9907e17, wt-ff154a7, wt-4bfd783, wt-45acc46, wt-f8c2827, wt-51fe5d9); (3) the spike's files in /tmp/arngz-spike2/ and dc's scratchpad go at reboot; (4) intent sync --to-disk once, if the file index still misses the two AC writes of 09:5xZ; (5) install_e2e.bats ran in the estate at da23005 on 16 Oct (its copy carried the 4.9 GB store and passed), so that hold is closed; a VACUUM of intent/.cache/intent.db stays hv's call; (6) the four hand-run desks are deleted from hv's catalogue, copies at tmp/vc-st0026/st0026/desks/.",
       "state": "live",
       "recorded_at": "2026-10-16T09:56:09.768Z",
-      "edited_at": "2026-10-16T16:14:53.613Z"
+      "edited_at": "2026-10-16T16:44:30.090Z"
     },
     {
       "node": "vc",
@@ -1279,10 +1279,10 @@
       "node": "vc",
       "kind": "doing",
       "seq": 63,
-      "text": "ST0027 menuz: hv ruled on Q1 to Q11 on 16 Oct (D1 to D11 at tmp/vc-st0026/st0027/decisions.md and in WP-01's body): Q4 one typed form, Q6 the app built for dev at native/macos/Menuz like the siblings and installed into opt with a use dev|opt switch after devbin's, Q7 Intent's Developer ID signing and notarisation, Q9 runs left running (detached, on the log file directly), Q10 and Q11 yes, the rest as recommended. The criteria are reworded in the store where a ruling overturned a recommendation (AC-01.2, 02.1, 02.3, 03.1, 04.1, 04.2, 05.1, 05.3), AC-01.1 satisfied, swift declared. HELD until Intent 0605's install: design.md's Decisions section and the sections the rulings change (the shape, params, running, build layout, signing), then intent sync --to-store ST0027 and AC-01.2 (the final yaml, params typed), WP-01 done. WP-02 (the shim, config directory and catalogue verbs) is cc's next, on vc's instruction.",
+      "text": "ST0027 menuz: hv ruled on Q1 to Q11 on 16 Oct (D1 to D11 at tmp/vc-st0026/st0027/decisions.md and in WP-01's body): Q4 one typed form, Q6 the source and dev build at native/macos/Menuz like the siblings, the dev products under XDG state, the installed copy at ~/Applications/Menuz.app (hv's correction in cc's session, confirmed to vc: \"we should be consistent\" with Intent, Conflab and Gtools) and a use dev|installed switch after devbin's, Q7 Intent's Developer ID signing and notarisation, Q9 runs left running (detached, on the log file directly), Q10 and Q11 yes, the rest as recommended. The criteria are reworded in the store where a ruling overturned a recommendation (AC-01.2, 02.1, 02.3, 03.1, 04.1, 04.2, 05.1, 05.3), AC-01.1 satisfied, swift declared. HELD until Intent 0605's install: design.md's Decisions section and the sections the rulings change (the shape, params, running, build layout, signing, the shim table), then intent sync --to-store ST0027 and AC-01.2 (the final yaml, params typed), WP-01 done. WP-02 (the shim, config directory and catalogue verbs) is cc's, started on vc's instruction; dc drafts the docs.",
       "state": "live",
       "recorded_at": "2026-10-16T11:14:56.955Z",
-      "edited_at": "2026-10-16T16:43:03.776Z"
+      "edited_at": "2026-10-16T16:46:42.343Z"
     },
     {
       "node": "vc",

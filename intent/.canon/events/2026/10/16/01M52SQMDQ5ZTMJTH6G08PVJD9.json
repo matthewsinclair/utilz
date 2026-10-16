@@ -1,0 +1,14 @@
+{
+  "id": "01M52SQMDQ5ZTMJTH6G08PVJD9",
+  "ts": "2026-10-16T16:46:42.104Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.satisfy",
+  "subject": {
+    "type": "ac",
+    "id": "ST0027/AC-01.1"
+  },
+  "payload": {
+    "evidence": "hv's rulings of 16 Oct 2026 on Q1 to Q11, recorded as D1 to D11 in WP-01's body (and in design.md's Decisions section at the 0605 sync): Q4 one typed form, Q6 the source and dev build at native/macos/Menuz with the installed copy at ~/Applications/Menuz.app like the siblings and a use dev|installed switch (hv's correction in cc's session, confirmed to vc), Q7 Intent's signing, Q9 runs left running, Q10 and Q11 yes, the rest as recommended; no recommendation left standing in a ruling's place"
+  }
+}

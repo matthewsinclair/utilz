@@ -1,0 +1,14 @@
+{
+  "id": "01M52SQM7GA3SAPYRX44WYE09Z",
+  "ts": "2026-10-16T16:46:41.905Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.edit",
+  "subject": {
+    "type": "ac",
+    "id": "ST0027/AC-05.1"
+  },
+  "payload": {
+    "text": "build runs xcodegen only when project.yml or the set of sources changed and xcodebuild Debug or --release with products under ${XDG_STATE_HOME:-$HOME/.local/state}/menuz/build/macos as Intent's and Gtools' do; test runs the MenuzTests target; install builds Release, quits every running copy, replaces ~/Applications/Menuz.app (the siblings' target, D6), unclaims the build products, registers the bundle and launches it with an empty environment; use dev|installed records which build the shim's launch and status use, after devbin's own switch; uninstall, start, stop, restart and stamps as designed; each refuses by name, exit 2, without xcodegen or xcodebuild, and install refuses when native/macos/Menuz is absent."
+  }
+}

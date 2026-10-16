@@ -1,0 +1,14 @@
+{
+  "id": "01M52SQM4R8T744EXSEHQZSYQ3",
+  "ts": "2026-10-16T16:46:41.816Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.edit",
+  "subject": {
+    "type": "ac",
+    "id": "ST0027/AC-02.3"
+  },
+  "payload": {
+    "text": "validate and render run the app's --validate and --render arms on menuz.yaml or a given file and pass their output and exit code through, proven with a fake Menuz binary on PATH; with no app built or installed they refuse by name, exit 2; status reports installed (~/Applications/Menuz.app), running, login item, source-current and which build use selects (dev or installed), without Xcode present."
+  }
+}
