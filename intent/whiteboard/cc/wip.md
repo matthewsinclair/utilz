@@ -3,10 +3,10 @@ node: cc
 name: Control Claude
 role: control
 session_id: 67bcef6b-d20d-4bb9-ac53-ff7fbaf2e422
-heartbeat_at: 2026-10-16 15:51Z
+heartbeat_at: 2026-10-16 17:39Z
 status: active
-focus: "16 Oct: banked for the compact on hv's word. WP-05 phases fix at 45acc46 (verified by vc in a worktree); its hands-off re-run is next session's first item (hold 14); design notes wait on Intent 0605 (hold 12, the phases note at tmp/cc/). Taking instructions from vc."
-claims: [ST0026/05]
+focus: "16 Oct: ST0027 WP-02 (the menuz shim) on branch st0027-wp02 at 26924e9, rebased onto c3a75fc, with 2.14.0's CHANGELOG line; vc verifies in a worktree and fast-forwards main. ST0026 closed and 2.13.0 cut. Taking instructions from vc."
+claims: [ST0027/02]
 ---
 
 # Control Claude (cc)
@@ -21,8 +21,7 @@ _(none)_
 
 ## Holds
 
-- WP-05 design notes, held until Intent's 0605 fix (3.2.4) and intent-vc's step 2 lift the hold on sync --to-store and edits under intent/st: (1) vc's init exit-column line, on disk in ST0026/design.md, unsynced and uncommitted; (2) --dry-run computes what diff does, with no preference verdict; (3) D25: engine_ask exits 2 on a bad ARNGZ_HS_TIMEOUT or ARNGZ_APPLY_TIMEOUT before sending, and ENGINE_PENDING/ENGINE_KIND; (4) the op table gains no_space, gone, unmovable and pending; (5) the phases note for 45acc46 (fresh running query, apply in phases, raise before hold, step 4's refusal and its edge, reads mid-change), drafted at tmp/cc/st0026-design-note-phases.md (git-ignored). Then intent sync --to-store ST0026 and commit design.md with ST0026.json by path. (edited)
-- AT-05.4, AT-05.5 and AC-05.6: vc's to mark. Condition: vc's hands-off re-run of acceptance.sh apply/launch on the handrun desk at 45acc46 (verified clean by vc in a worktree), with hv's hands off, plus the second-apply probe (expected refused, exit 2); next session's first item. vc sends the transcript. cc runs nothing that takes the pointer. (edited)
+_(none)_
 
 ## Watch-outs
 
@@ -33,6 +32,7 @@ _(none)_
 - To learn what a command will do, RUN it in its read-only mode (--dry-run, --check, status). Sourcing its library functions into a shell of your own measures YOUR shell, not the command: cc answered whether the vendored core resolves 2.12.0 by sourcing release_versions into a plain bash -c, got 2.12.0 and success, and was wrong -- the handler runs under set -euo pipefail (cmd/release:24) and release_versions ends its loop with is_semver && printf, which v2.6.1 (last in byte order) leaves at 1. release --minor --dry-run stops at step 1. AND: vc ran cc s probe verbatim and agreed, which is one measurement taken twice, not a confirmation. A repeat of a method cannot find a method error.
 - The pre-commit gate is tracked in .githooks/ now, read through core.hooksPath (issue 0064, 39b0af4). It REFUSES a staged .md or .rs that is not formatted and never rewrites it, so fix with prettier --write <file> or bin/devbin fmt rust, git add, and commit again. Edits to .git/hooks/ are no longer read. What still holds from the old watch-out 5: a store body (an issue, a WP body) must be prettier-stable before intent set, or its view drifts and the doctor gate refuses every later commit.
 - Before saying the tree is clean, run git status --porcelain --untracked-files=all with NO pathspec and quote the count. On 2026-09-22 cc checked -- docs/ only and twice told vc and hv nothing of its was in the tree, while its board, wip view and four canon events sat uncommitted, and those events alone would have refused the cut at step 2. The narrow answer was true; the claim was wider than what was measured.
+- A linked worktree has no Intent gate: .githooks/pre-commit.intent (and the post-* carriers) are git-ignored, so a commit there is refused with GATE ABSENT. Copy the primary's .githooks/*.intent into the worktree before committing, so the commit runs through the real gate; never route around it.
 
 ## Decisions
 

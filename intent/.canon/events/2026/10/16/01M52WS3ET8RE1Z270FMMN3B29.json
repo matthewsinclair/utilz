@@ -1,0 +1,15 @@
+{
+  "id": "01M52WS3ET8RE1Z270FMMN3B29",
+  "ts": "2026-10-16T17:39:55.994Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "watchout",
+    "text": "A linked worktree has no Intent gate: .githooks/pre-commit.intent (and the post-* carriers) are git-ignored, so a commit there is refused with GATE ABSENT. Copy the primary's .githooks/*.intent into the worktree before committing, so the commit runs through the real gate; never route around it."
+  }
+}
