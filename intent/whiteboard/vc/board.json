@@ -1263,6 +1263,14 @@
       "text": "After the compact: (1) read dc's 3777de3 shim diff (589 lines in opt/arngz/arngz, 39 in common.sh: app_path beside check_app) and run the real arngz doctor on hv's machine, hands-free; (2) cc's WP-05 hand runs AC-05.4 and AC-05.5 need hv's hands off when cc hands over; (3) git worktree prune when the scratchpad goes (wt-c21f319, wt-13552bc, wt-3e11cb4, wt-88c57ad); (4) the spike's files in /tmp/arngz-spike2/ and dc's scratchpad go at reboot; (5) intent sync --to-disk once, the file index missed two AC writes under a lock at 09:5xZ.",
       "state": "live",
       "recorded_at": "2026-10-16T09:56:09.768Z"
+    },
+    {
+      "node": "vc",
+      "kind": "todo",
+      "seq": 34,
+      "text": "FIRST ON THE BOUNCE (hv, 16 Oct, directly to vc): write up a new steel thread for utilz menuz, then a rubber-duck session with hv to refine it before any code. hv's ask, essentials verbatim: a very simple macOS (Swift) menu bar app, entirely customisable from a yaml file that points to a .menuz config directory (in the appropriate location for that kind of dir). The yaml defines what goes into the menu; each item does something, eg runs a script. If the script takes params, the menu bar pops up a window and acquires them before running the script and passing them in. If there is output, it is given back to the user after the script runs; open question on output, hv's simplest option: a known menuz.log in an obvious location so it can be tailed. The app reads its entire menu config from the menuz config files and watches them for changes so the menu updates. The menu file supports variable interpolation, realised each time the menu is displayed (what that means is to be talked through). Main use case: hv runs a list of common utilities from the menubar; the first is arngz. Questions to resolve in the write-up: output handling, interpolation semantics, config dir location, how params are declared and the window built, how the app is installed and launched (Swift CLI/app in the Utilz shim format, as ST0026 chose bash).",
+      "state": "live",
+      "recorded_at": "2026-10-16T10:03:26.233Z"
     }
   ],
   "messages": [
