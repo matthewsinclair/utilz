@@ -78,7 +78,7 @@ displays:
 ```
 
 - **`grid`** is `WxH`, and every layout is in its cells.
-- **A display** is matched to a screen by `uuid`, then by `name` and `size`, then by `position`. Its `match` names a `uuid`, a `name`, or both.
+- **A display** is matched to a screen by `uuid`, then by `name` and `size`, then by `position`. Its `match` names a `uuid`, a `name`, or both. A `position` is where the screen sits relative to the primary one: `main` for the primary, and otherwise up to two words joined by a hyphen, one from `above`/`below` and one from `left`/`right`, eg `above-left` or `right`.
 - **A space** is its order on its display. Its `name` is a label for people; macOS names no desktop space.
 - **An app** is its bundle id. `window` is a Lua pattern on the window title; without one, every window of the app takes the layout. The same app twice on one display needs a `window` on every entry.
 - **`layout`** is `x,y wxh` in grid cells, inside the grid, or `fullscreen`.

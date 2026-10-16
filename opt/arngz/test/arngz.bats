@@ -381,3 +381,154 @@ EOF
   assert_exit_code 2
   assert_output_contains "--colour"
 }
+
+# ============================================================================
+# AT-03.1 -- the engine contract, through a fake hs on PATH (AC-03.1)
+# ============================================================================
+
+# A bin dir holding the fake hs and the tools the CLI needs, so the real hs on
+# this machine can never answer for it.
+fake_hs() {
+  export FAKE_HS_MODE="$1"
+  export FAKE_HS_LOG="$BATS_TEST_TMPDIR/hslog"
+  export FAKE_HS_RESPONSE="${2:-$FIXTURES/responses/observe.json}"
+  mkdir -p "$FAKE_HS_LOG" "$BATS_TEST_TMPDIR/fakebin"
+  cp "$FIXTURES/fake-hs" "$BATS_TEST_TMPDIR/fakebin/hs"
+  export PATH="$BATS_TEST_TMPDIR/fakebin:$PATH"
+  export XDG_CONFIG_HOME="$BATS_TEST_TMPDIR/config"
+  export TMPDIR="$BATS_TEST_TMPDIR/tmp"
+  mkdir -p "$TMPDIR"
+}
+
+@test "AT-03.1: the request holds exactly verb, desk and options, and hs runs the module's run on it" {
+  fake_hs ok
+  run_arngz discover
+  run yq -o json -I0 'keys' "$FAKE_HS_LOG/request.json"
+  assert_output '["verb","desk","options"]'
+  run yq -r '.verb' "$FAKE_HS_LOG/request.json"
+  assert_output "observe"
+  grep -qxF -- "-c" "$FAKE_HS_LOG/argv"
+  grep -qF -- "return dofile(\"$UTILZ_HOME/opt/arngz/lib/arngz.lua\").run(\"" "$FAKE_HS_LOG/argv"
+}
+
+@test "AT-03.1: the CLI renders exactly the response's report, then says what is not built" {
+  fake_hs ok
+  run_arngz discover
+  assert_exit_code 2
+  assert_output_contains "FIXTURE-LINE-1 main Test Display (SCREEN-A): 2 spaces, 2 desktop; 3 windows, 3 named"
+  assert_output_contains "FIXTURE-LINE-2 separate spaces true"
+  assert_output_contains "not yet: WP-04"
+  # The temp dir of a call that succeeded is removed.
+  [ -z "$(ls -A "$TMPDIR")" ]
+}
+
+@test "AT-03.1: an absent hs is refused by name, exit 2" {
+  export XDG_CONFIG_HOME="$BATS_TEST_TMPDIR/config"
+  # The system dirs plus links to yq and bash alone: hs lives beside yq in a
+  # package manager's bin, so that dir is left off rather than linked whole.
+  local bin="$BATS_TEST_TMPDIR/nohs" tool
+  mkdir -p "$bin"
+  for tool in yq bash; do
+    ln -s "$(command -v "$tool")" "$bin/$tool"
+  done
+  run env PATH="$bin:/usr/bin:/bin" "$UTILZ_BIN_DIR/arngz" discover
+  assert_exit_code 2
+  assert_output_contains "the hs tool is not on PATH"
+}
+
+@test "AT-03.1: an hs that never answers is refused by name, exit 2, within the timeout" {
+  fake_hs hang
+  export ARNGZ_HS_TIMEOUT=1
+  local start=$SECONDS
+  run_arngz discover
+  assert_exit_code 2
+  assert_output_contains "did not answer within 1s"
+  [ $((SECONDS - start)) -lt 10 ]
+}
+
+@test "AT-03.1: an hs that writes its response and then hangs is not waited for" {
+  fake_hs hang-after-reply
+  export ARNGZ_HS_TIMEOUT=30
+  local start=$SECONDS
+  run_arngz discover
+  assert_output_contains "FIXTURE-LINE-1"
+  [ $((SECONDS - start)) -lt 10 ]
+}
+
+@test "AT-03.1: an hs that exits without a response is refused by name, exit 2" {
+  fake_hs none
+  run_arngz discover
+  assert_exit_code 2
+  assert_output_contains "hs exited 0 and wrote no response"
+}
+
+@test "AT-03.1: hs's own failures are named: Hammerspoon unreachable, and a Lua error" {
+  fake_hs exit-69
+  run_arngz discover
+  assert_exit_code 2
+  assert_output_contains "could not reach Hammerspoon (exit 69)"
+
+  fake_hs lua-error
+  run_arngz discover
+  assert_exit_code 2
+  assert_output_contains "Lua error (hs exit 65)"
+  assert_output_contains "attempt to index a nil value"
+}
+
+@test "AT-03.1: an engine that answers with an error is refused with its error, exit 2" {
+  fake_hs ok "$FIXTURES/responses/engine-error.json"
+  run_arngz discover
+  assert_exit_code 2
+  assert_output_contains "FIXTURE-ENGINE-ERROR"
+}
+
+# ============================================================================
+# AT-03.2 -- the pure planner, under plain Lua (AC-03.2)
+# ============================================================================
+
+# lua5.4 on the CI legs, luajit on hv's machine. NO INTERPRETER IS A FAILURE,
+# never a skip: every leg that runs this suite installs one.
+lua_bin() {
+  local b
+  for b in lua5.4 lua luajit; do
+    if command -v "$b" >/dev/null 2>&1; then
+      command -v "$b"
+      return 0
+    fi
+  done
+  return 1
+}
+
+@test "AT-03.2: plan is pure: plan.lua makes no Hammerspoon, io, os or require call" {
+  local plan="$UTILZ_HOME/opt/arngz/lib/plan.lua" impure='(^|[^A-Za-z0-9_])(hs|io|os)\.|require[ (]'
+  [ -f "$plan" ]
+  # The control: the same pattern finds the impure module's calls, so a
+  # pattern that matches nothing cannot pass for a pure planner.
+  grep -Eq "$impure" "$UTILZ_HOME/opt/arngz/lib/arngz.lua"
+  run grep -En "$impure" "$plan"
+  assert_exit_code 1
+}
+
+@test "AT-03.2: the planner's fixtures pass under plain Lua" {
+  local lua
+  lua="$(lua_bin)" || fail "no Lua interpreter (lua5.4, lua or luajit) on PATH; CI installs lua5.4"
+  run "$lua" "$UTILZ_HOME/opt/arngz/test/plan_test.lua" "$UTILZ_HOME/opt/arngz/lib/plan.lua"
+  echo "$output"
+  assert_success
+  assert_output_contains "0 failed"
+}
+
+# ============================================================================
+# AT-03.4 -- Lua is a declared language, and CI can run the planner (AC-03.4)
+# ============================================================================
+
+@test "AT-03.4: lua is a declared language of the project" {
+  run jq -r '.languages[]' "$UTILZ_HOME/intent/.config/config.json"
+  assert_output_contains "lua"
+}
+
+@test "AT-03.4: CI installs lua5.4 on Linux and lua on macOS" {
+  local wf="$UTILZ_HOME/.github/workflows/tests.yml"
+  grep -q 'apt-get install.*lua5\.4' "$wf"
+  grep -q 'brew install.* lua' "$wf"
+}

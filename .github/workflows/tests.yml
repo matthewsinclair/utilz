@@ -58,8 +58,10 @@ jobs:
         # bidi, qpdf + poppler-utils for stampz (pdfinfo, pdftoppm, pdftotext).
         # stampz's suite SKIPS with a named reason when those are absent, so
         # installing them here is what keeps the skip path off CI's path.
+        # lua5.4 runs arngz's pure planner (ST0026 AT-03.2), which FAILS, never
+        # skips, without an interpreter.
         sudo apt-get update
-        sudo apt-get install -y jq python3-venv unison qpdf poppler-utils
+        sudo apt-get install -y jq python3-venv unison qpdf poppler-utils lua5.4
         sudo wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O /usr/bin/yq
         sudo chmod +x /usr/bin/yq
         yq --version
@@ -126,8 +128,8 @@ jobs:
     - name: Install dependencies
       run: |
         # Install yq for YAML parsing, fileicon for macOS folder icons, unison for
-        # syncz bidi, qpdf + poppler for stampz
-        brew install yq fileicon coreutils unison qpdf poppler
+        # syncz bidi, qpdf + poppler for stampz, lua for arngz's planner (AT-03.2)
+        brew install yq fileicon coreutils unison qpdf poppler lua
         yq --version
         fileicon --version || echo "fileicon installed"
 

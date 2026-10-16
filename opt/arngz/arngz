@@ -269,6 +269,103 @@ desk_counts() {
 }
 
 # ============================================================================
+# THE ENGINE CONTRACT (design.md "The engine", D17)
+# ============================================================================
+
+# The Lua module Hammerspoon loads, beside this script.
+engine_module() {
+  printf '%s/opt/arngz/lib/arngz.lua\n' "$UTILZ_HOME"
+}
+
+# How long one engine call may take, in seconds. ARNGZ_HS_TIMEOUT overrides it,
+# which is how the suite makes a call that never answers fail in one second
+# rather than sixty.
+engine_timeout() {
+  local t="${ARNGZ_HS_TIMEOUT:-60}"
+  if [[ ! "$t" =~ ^[1-9][0-9]*$ ]]; then
+    refuse "ARNGZ_HS_TIMEOUT = '$t': a whole number of seconds"
+  fi
+  printf '%s\n' "$t"
+}
+
+# Ask the engine one thing. Writes {verb, desk, options} to a request file in
+# a fresh temp dir, runs `hs -c 'return dofile(<module>).run(<request>)'`, and
+# leaves the response's path in ENGINE_RESPONSE. Everything the CLI then shows
+# comes out of that file; nothing is recomputed here.
+#
+# THE RESPONSE FILE IS THE ANSWER, NOT hs's EXIT. Measured 16 Oct 2026 on this
+# machine: hs -c sometimes never returns after the module has finished and
+# written its response, -t notwithstanding. So the wait ends at whichever comes
+# first -- the response appearing (the module renames it into place whole), hs
+# exiting, or the deadline -- and an hs still running once the response is
+# there is stopped. Refuses, exit 2, when hs is absent, when it exits without a
+# response, when it does not answer in time, or when the engine reports an
+# error.
+#
+# Usage: engine_call <verb> [<desk file>]
+ENGINE_RESPONSE=""
+engine_call() {
+  local verb="$1" desk_file="${2:-}" hs module timeout dir request response out rc deadline
+  hs="$(command -v hs)" || refuse "the hs tool is not on PATH: arngz reaches Hammerspoon through it (utilz doctor reports it; arngz init --yes installs it)"
+  module="$(engine_module)"
+  timeout="$(engine_timeout)"
+  dir="$(mktemp -d "${TMPDIR:-/tmp}/arngz.XXXXXX")"
+  request="$dir/request.json"
+  response="$dir/response.json"
+  out="$dir/hs.out"
+  # The paths go into a Lua string literal, so a quote or backslash in one
+  # would end the literal early. Refuse rather than escape.
+  case "$module$request" in
+    *'"'* | *\\*) refuse "a path holds a quote or backslash, which cannot go into the hs call: $module, $request" ;;
+  esac
+
+  if [[ -n "$desk_file" ]]; then
+    V="$verb" D="$desk_file" yq -n -o json '.verb = strenv(V) | .desk = load(strenv(D)) | .options = {}' >"$request"
+  else
+    V="$verb" yq -n -o json '.verb = strenv(V) | .desk = null | .options = {}' >"$request"
+  fi
+
+  "$hs" -a -t "$timeout" -c "return dofile(\"$module\").run(\"$request\")" >"$out" 2>&1 &
+  local pid=$!
+  deadline=$((SECONDS + timeout))
+  while [[ ! -f "$response" ]] && kill -0 "$pid" 2>/dev/null && [[ $SECONDS -lt $deadline ]]; do
+    sleep 0.1
+  done
+
+  if [[ -f "$response" ]]; then
+    if kill -0 "$pid" 2>/dev/null; then
+      kill "$pid" 2>/dev/null || true
+    fi
+    wait "$pid" 2>/dev/null || true
+  elif kill -0 "$pid" 2>/dev/null; then
+    kill "$pid" 2>/dev/null || true
+    wait "$pid" 2>/dev/null || true
+    refuse "hs did not answer within ${timeout}s and wrote no response (request kept at $request)"
+  else
+    rc=0
+    wait "$pid" || rc=$?
+    case "$rc" in
+      69) refuse "hs could not reach Hammerspoon (exit 69): it is not running, or hs.ipc is not loaded in ~/.hammerspoon/init.lua" ;;
+      75) refuse "Hammerspoon is not running (hs exit 75)" ;;
+      65) refuse "the engine raised a Lua error (hs exit 65): $(tr '\n' ' ' <"$out")" ;;
+      *) refuse "hs exited $rc and wrote no response: $(tr '\n' ' ' <"$out") (request kept at $request)" ;;
+    esac
+  fi
+
+  local status
+  status="$(yq -r '.status' "$response" 2>/dev/null)" || refuse "the engine's response is not JSON: $response"
+  if [[ "$status" != "ok" ]]; then
+    refuse "the engine refused $verb: $(yq -r '.error' "$response")"
+  fi
+  ENGINE_RESPONSE="$response"
+}
+
+# The engine's report, line for line, as the engine wrote it.
+render_report() {
+  yq -r '.report[]' "$1"
+}
+
+# ============================================================================
 # VERBS
 # ============================================================================
 
@@ -387,8 +484,23 @@ cmd_diff() {
   refuse "diff: not yet: WP-04"
 }
 
+# WP-03 wires discover as far as the engine's observe, through the contract;
+# printing the world as a desk is WP-04.
 cmd_discover() {
-  refuse "discover: not yet: WP-04"
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      --force) shift ;;
+      --save)
+        if [[ $# -lt 2 ]]; then refuse "--save takes a desk name"; fi
+        shift 2
+        ;;
+      *) refuse "unknown option for discover: '$1'" ;;
+    esac
+  done
+  engine_call observe
+  render_report "$ENGINE_RESPONSE"
+  rm -rf "$(dirname "$ENGINE_RESPONSE")"
+  refuse "discover: printing the world as a desk: not yet: WP-04"
 }
 
 cmd_doctor() {

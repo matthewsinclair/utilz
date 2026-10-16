@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+#
+# A stand-in for Hammerspoon's hs tool, for arngz.bats (ST0026 AT-03.1). It
+# behaves as FAKE_HS_MODE says, and records what it was asked in
+# FAKE_HS_LOG/argv and FAKE_HS_LOG/request.json, so a test reads exactly what
+# the CLI sent.
+#
+#   ok                 write FAKE_HS_RESPONSE beside the request, print a line
+#   none               exit 0 having written nothing
+#   hang               write nothing and never return
+#   hang-after-reply   write the response, then never return (measured on a
+#                      real hs, 16 Oct 2026)
+#   exit-69            exit 69, as hs does when Hammerspoon is unreachable
+#   lua-error          exit 65 with an error, as hs does for a Lua error
+
+set -euo pipefail
+printf '%s\n' "$@" >"$FAKE_HS_LOG/argv"
+code=""
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    -c) code="$2"; shift 2 ;;
+    *) shift ;;
+  esac
+done
+request="$(printf '%s\n' "$code" | sed -n 's/.*\.run("\(.*\)").*/\1/p')"
+[[ -n "$request" ]] || { echo "fake-hs: no run(\"...\") in: $code" >&2; exit 64; }
+cp "$request" "$FAKE_HS_LOG/request.json"
+response="$(dirname "$request")/response.json"
+
+case "${FAKE_HS_MODE:-ok}" in
+  ok) cp "$FAKE_HS_RESPONSE" "$response"; echo "arngz: ok observe" ;;
+  none) exit 0 ;;
+  hang) exec sleep 300 ;;
+  hang-after-reply) cp "$FAKE_HS_RESPONSE" "$response"; exec sleep 300 ;;
+  exit-69) echo "error: can't access Hammerspoon message port" >&2; exit 69 ;;
+  lua-error) echo "attempt to index a nil value" >&2; exit 65 ;;
+esac

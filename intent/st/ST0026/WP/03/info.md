@@ -2,7 +2,7 @@
 wp_id: WP-03
 title: Engine: observe, the pure planner, execute, and the IPC contract
 scope: S
-status: Not Started
+status: Done
 ---
 
 # WP-03: Engine: observe, the pure planner, execute, and the IPC contract

@@ -1,0 +1,9 @@
+{
+  "status": "ok",
+  "verb": "observe",
+  "world": { "screens": [], "apps_running": [], "app_bindings": [] },
+  "report": [
+    "FIXTURE-LINE-1 main Test Display (SCREEN-A): 2 spaces, 2 desktop; 3 windows, 3 named",
+    "FIXTURE-LINE-2 separate spaces true, accessibility true, stage manager false, 0 Dock bindings"
+  ]
+}

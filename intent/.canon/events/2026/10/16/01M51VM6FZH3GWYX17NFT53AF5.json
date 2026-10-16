@@ -1,0 +1,14 @@
+{
+  "id": "01M51VM6FZH3GWYX17NFT53AF5",
+  "ts": "2026-10-16T08:00:32.256Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.satisfy",
+  "subject": {
+    "type": "ac",
+    "id": "ST0026/AC-03.4"
+  },
+  "payload": {
+    "evidence": "intent/.config/config.json declares lua (intent lang init lua, 16 Oct 2026); .github/workflows/tests.yml installs lua5.4 (apt, Linux) and lua (brew, macOS), asserted by arngz.bats AT-03.4; critic-lua agent review of opt/arngz/lib/plan.lua, opt/arngz/lib/arngz.lua and opt/arngz/test/plan_test.lua clean at its fourth pass (0 critical, 0 warning, 12 rules active). NOTE: check all's headless Lua critic armed 0 of 7 rules, so the agent review is the review."
+  }
+}
