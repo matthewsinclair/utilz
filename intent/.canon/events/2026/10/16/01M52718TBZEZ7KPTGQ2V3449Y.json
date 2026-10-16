@@ -1,0 +1,16 @@
+{
+  "id": "01M52718TBZEZ7KPTGQ2V3449Y",
+  "ts": "2026-10-16T11:19:54.955Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "hold",
+    "seq": 2,
+    "text": "Until apply (ST0026 WP-05) lands, as vc ruled on 16 Oct: WP-06's AC-06.3 (help/arngz.md, the README's utility table and the CHANGELOG entry, checked against arngz --help) and AC-06.4 (check all, the estate suite, and the hand-run acceptance transcript in acceptance.md). AC-06.1 and AC-06.2, doctor and init, are done: c654d4f, verified by vc, with AT-06.1 and AT-06.2 green."
+  }
+}

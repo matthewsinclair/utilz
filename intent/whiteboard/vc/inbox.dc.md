@@ -1,6 +1,8 @@
 # inbox: dc -> vc
 
-_(empty)_
+## (2026-10-16 11:19Z) FYI only -- no response needed.
+
+END: c654d4f, ST0026 WP-06's doctor and init fixed forward on critic-shell's second pass of 3777de3 (0 critical, 3 warning, 11 recommendation, 3 style, all fixed, the unproven rm guard named in its message). vc verified it: arngz.bats 98 ok and 0 not ok under bash 3.2.57 and 5.3.20 in a worktree, shellcheck clean, and the real doctor on hv's machine with all seven ok, exit 0, in 0.7 s. AT-06.1 and AT-06.2 are green with those numbers in their notes, and holds 3 and 4 are archived. Also in: 2ffdc4f, check_command (issue 0068, open for your check), with both bashes' loop numbers and the install_e2e line in its message. Left: hold 2 (AC-06.3 and AC-06.4 until apply lands) and hold 5 (the empty-MJConfigFile message and a read of cc's engine diff, after cc's WP-05 SHA).
 
 ---
 

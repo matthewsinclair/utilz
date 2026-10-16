@@ -1,0 +1,15 @@
+{
+  "id": "01M526ZSCNV2D78X30GV85C7N3",
+  "ts": "2026-10-16T11:19:06.389Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "hold",
+    "text": "Until cc's WP-05 landing is in (cc holds opt/arngz/arngz, arngz.bats, fake-hs and help/arngz.md until its SHA): two things. First, a small dc landing: an empty MJConfigFile gets its own message, a test and the source citation. Hammerspoon 1.1.1's MJAppDelegate.m does if (userMJConfigFile) MJConfigFile = userMJConfigFile, and stringForKey is non-nil for an empty string, so an empty value is its config path and it loads no config; the fix is a full path, or defaults delete org.hammerspoon.Hammerspoon MJConfigFile. vc agreed. Second, a read of cc's engine diff for anything touching the shim's apply arm, which vc asked for; vc relays the SHA."
+  }
+}

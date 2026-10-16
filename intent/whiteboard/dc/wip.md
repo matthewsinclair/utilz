@@ -3,9 +3,9 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: b6f789ca-4627-4a74-b4cd-bb7c07de9f46
-heartbeat_at: 2026-10-16 09:53Z
+heartbeat_at: 2026-10-16 11:19Z
 status: active
-focus: "ST0026 WP-06: doctor and init at 3777de3, suite verified by vc; held for vc's read of the common.sh diff and the real doctor run after the compact; AC-06.3 and AC-06.4 held until apply lands"
+focus: "ST0026 WP-06: doctor and init done to AC-06.1 and AC-06.2 (c654d4f; AT-06.1 and AT-06.2 green); AC-06.3 and AC-06.4 held until apply lands; the empty-MJConfigFile message waits on cc's WP-05 SHA; check_command (issue 0068) landed at 2ffdc4f"
 claims: [ST0026/06]
 ---
 
@@ -21,9 +21,8 @@ _(none)_
 
 ## Holds
 
-- Until apply (ST0026 WP-05) lands, as vc ruled on 16 Oct: WP-06's AC-06.3 (help/arngz.md, the README's utility table and the CHANGELOG entry, checked against arngz --help) and AC-06.4 (check all, the estate suite, and the hand-run acceptance transcript in acceptance.md). AC-06.1 and AC-06.2, doctor and init, are built at 3777de3 with AT-06.1 and AT-06.2 minted; vc verifies them.
-- Until the second critic-shell pass on 3777de3 reports, which was pending at the 16 Oct fold (if no result has arrived after the compact, run the pass again): send vc its counts, and fix forward anything it finds. The first pass found 0 critical, 4 warning and 10 recommendation, and 3777de3 fixes all of them, each with a test.
-- Until vc reads the common.sh (shim) diff and runs the real arngz doctor on hv's machine, both after the 16 Oct compact: WP-06's AC-06.1 and AC-06.2 stay at 3777de3. vc verified it as far as the suite goes (arngz.bats 79/79 under bash 3.2 and 5 in a detached worktree; shellcheck clean on CI's 22 files). AT-06.1 and AT-06.2 stay at to-write until then. vc recorded dc's choices as D23 to D25 at eeeab48.
+- Until apply (ST0026 WP-05) lands, as vc ruled on 16 Oct: WP-06's AC-06.3 (help/arngz.md, the README's utility table and the CHANGELOG entry, checked against arngz --help) and AC-06.4 (check all, the estate suite, and the hand-run acceptance transcript in acceptance.md). AC-06.1 and AC-06.2, doctor and init, are done: c654d4f, verified by vc, with AT-06.1 and AT-06.2 green. (edited)
+- Until cc's WP-05 landing is in (cc holds opt/arngz/arngz, arngz.bats, fake-hs and help/arngz.md until its SHA): two things. First, a small dc landing: an empty MJConfigFile gets its own message, a test and the source citation. Hammerspoon 1.1.1's MJAppDelegate.m does if (userMJConfigFile) MJConfigFile = userMJConfigFile, and stringForKey is non-nil for an empty string, so an empty value is its config path and it loads no config; the fix is a full path, or defaults delete org.hammerspoon.Hammerspoon MJConfigFile. vc agreed. Second, a read of cc's engine diff for anything touching the shim's apply arm, which vc asked for; vc relays the SHA.
 
 ## Watch-outs
 
