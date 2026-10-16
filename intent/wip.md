@@ -4,10 +4,9 @@ DOING and TODO only. Done work goes to `intent/done.md`; context to `intent/rest
 
 ## DOING
 
-- ST0026 `arngz`: cc fixes forward on 45acc46 the two defects the hands-off re-run measured (a hold that did not take the window pressed Move-space anyway; phases chained on zero-delay timers starve the IPC port, so reads and a second apply queue); vc verifies the SHA in a worktree and re-runs `tmp/vc-st0026/st0026/rerun-handrun.sh` hands off with the desks launching Console; then AT-05.4/05.5 green, AC-05.6, WP-05 done; then dc lands WP-06's docs from its draft (help, README, CHANGELOG, opt/arngz/README) with the markers worded from that transcript, and the close estate run on a booked slot.
-- ST0027 `menuz`: the rubber-duck with hv on design.md's eleven questions, record D1 to D11, close WP-01; then WP-02, the shim.
-- After Intent 0605 ships: `intent sync --to-store ST0027` (design.md into the store, its drafted-criteria section out) and cc's ST0026 design notes.
-- Run `opt/utilz/test/install_e2e.bats` from the primary checkout before 2.13.0 is cut.
+- ST0027 `menuz`: WP-02 (the shim) on cc's branch `st0027-wp02`, verified by vc in a worktree and fast-forwarded to main; dc lands `help/menuz.md`'s WP-02 cut at that SHA; AC-02.1 to AC-02.3 on the read, AC-01.2 then WP-01 done; cc's `--login-item` arm and the plutil note into WP-03's design; then WP-03, the app at `native/macos/Menuz`.
+- 2.13.0's recorded CI verdict: the main-branch run on 01cf76d was cancelled by a later push during the core's CI wait and re-run; read `tools/ci-state 01cf76d` once both runs finish, and cut 2.13.1 only if the bytes are red.
+- hv's part of 2.13.0: copy `packaging/homebrew/utilz.rb` into the tap as `Formula/utilz.rb`, `brew audit --strict matthewsinclair/utilz/utilz`, commit and push the tap.
 
 ## TODO
 

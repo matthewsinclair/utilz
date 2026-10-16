@@ -1,0 +1,15 @@
+{
+  "id": "01M52WPXW05CNGM63QYC2NZM3X",
+  "ts": "2026-10-16T17:38:44.736Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "todo",
+    "text": "Day fold, 16 Oct evening: restart.md to carry 2.13.0 cut by the release core on hv's machine (stopped once before the tag for AT-06.1's 126/127 fix at b89d41e; the cut resumed from a reset to 7f40628), ST0026 closed and dehydrated, 17 utilities with menuz in flight (ST0027, rulings D1 to D11, WP-02 on cc's branch), Intent 23c8b038e installed and the store VACUUMed to 23 MB, the arngz desks deleted; then wip.md DOING/TODO, commit by path."
+  }
+}
