@@ -5,9 +5,7 @@
 # ST0026. This file is the CLI half: it parses, reads and validates desks,
 # asks the engine through the hs tool, and renders. The engine half is a Lua
 # module Hammerspoon loads (lib/arngz.lua). doctor and init also read the
-# machine itself, so they work with no Hammerspoon at all. A verb not built yet
-# exists anyway and says which work package builds it, so the CLI's surface is
-# complete and a caller learns what is missing by name.
+# machine itself, so they work with no Hammerspoon at all.
 #
 
 set -euo pipefail
