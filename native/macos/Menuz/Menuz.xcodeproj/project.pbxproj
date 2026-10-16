@@ -11,12 +11,16 @@
 		3EC6549C623D9165FE8920F6 /* Realiser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A012D3FACA5B5E47D174B0E /* Realiser.swift */; };
 		5E613632DB47D5AC9BB87171 /* MenuzKit in Frameworks */ = {isa = PBXBuildFile; productRef = 179FB1D9697FE3912ACB93C8 /* MenuzKit */; };
 		647A99098E46609054F1591F /* MenuBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A82B2DADFCB97CEDA1B96BA /* MenuBuilder.swift */; };
+		66CA1635FB54568EC7D32863 /* RunnerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1D82D84E6BED41563E3D23 /* RunnerTests.swift */; };
 		698D5FF25A59BB86422C638D /* AppLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1434161DD51B33FFBEA2FB62 /* AppLog.swift */; };
 		6EAD658E87554EF44E6805B2 /* Shell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11104D7740E2D95237590C37 /* Shell.swift */; };
 		737167339BCD0368AFD43609 /* LoginShell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D78B2E5395802C4995350D1 /* LoginShell.swift */; };
 		7A18260D751703EDDADAAE43 /* Arms.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86DE1B4857DABEF4761E634D /* Arms.swift */; };
+		85D7375C47259446D9582937 /* Notifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9CAAC271F6A8DE3D9BA5660 /* Notifier.swift */; };
 		8A0ACEFEB1B35D3594B1FAFE /* TestHostTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FB3DC0386DDBB630BCAECDE /* TestHostTests.swift */; };
+		8FEBE6637B94EFB85C109330 /* Runner.swift in Sources */ = {isa = PBXBuildFile; fileRef = F54C8007BA2E6C044E578B5A /* Runner.swift */; };
 		9BA03B276434DB812F3EE7EE /* Watcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AA7FC095B000E5E6F52EC5B /* Watcher.swift */; };
+		CFE42505FB7695CD09D90680 /* ParamForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 775285512609F81F861F1415 /* ParamForm.swift */; };
 		DE9C0C3FA1666B973E9DB06C /* LoginItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E028E7200976AF9A22C8E64 /* LoginItem.swift */; };
 		EAE4191C024DFE1B4BBE78F5 /* MenuzApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA910089979C343042FD394C /* MenuzApp.swift */; };
 		FB37AB1536AE3C8EEDC49F8F /* MenuzKit in Frameworks */ = {isa = PBXBuildFile; productRef = E176BB28E1D45EFD0D08551C /* MenuzKit */; };
@@ -44,11 +48,15 @@
 		69D7BB98761B18EBC1D62714 /* Menuz.Debug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Menuz.Debug.entitlements; sourceTree = "<group>"; };
 		6FB3DC0386DDBB630BCAECDE /* TestHostTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestHostTests.swift; sourceTree = "<group>"; };
 		746C4473977A35828A0457CF /* MenuSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuSource.swift; sourceTree = "<group>"; };
+		775285512609F81F861F1415 /* ParamForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParamForm.swift; sourceTree = "<group>"; };
 		7A012D3FACA5B5E47D174B0E /* Realiser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Realiser.swift; sourceTree = "<group>"; };
 		7F4B5B698304EA469BFF20D9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		86DE1B4857DABEF4761E634D /* Arms.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Arms.swift; sourceTree = "<group>"; };
 		8A82B2DADFCB97CEDA1B96BA /* MenuBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBuilder.swift; sourceTree = "<group>"; };
 		AA910089979C343042FD394C /* MenuzApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuzApp.swift; sourceTree = "<group>"; };
+		C9CAAC271F6A8DE3D9BA5660 /* Notifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notifier.swift; sourceTree = "<group>"; };
+		DB1D82D84E6BED41563E3D23 /* RunnerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunnerTests.swift; sourceTree = "<group>"; };
+		F54C8007BA2E6C044E578B5A /* Runner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Runner.swift; sourceTree = "<group>"; };
 		F79BAB43EFFF54B070289BA6 /* MenuzTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MenuzTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -81,7 +89,10 @@
 				0D78B2E5395802C4995350D1 /* LoginShell.swift */,
 				8A82B2DADFCB97CEDA1B96BA /* MenuBuilder.swift */,
 				746C4473977A35828A0457CF /* MenuSource.swift */,
+				C9CAAC271F6A8DE3D9BA5660 /* Notifier.swift */,
+				775285512609F81F861F1415 /* ParamForm.swift */,
 				7A012D3FACA5B5E47D174B0E /* Realiser.swift */,
+				F54C8007BA2E6C044E578B5A /* Runner.swift */,
 				11104D7740E2D95237590C37 /* Shell.swift */,
 				5AA7FC095B000E5E6F52EC5B /* Watcher.swift */,
 			);
@@ -121,6 +132,7 @@
 		904B4CE84C0C56752D6CE37B /* MenuzTests */ = {
 			isa = PBXGroup;
 			children = (
+				DB1D82D84E6BED41563E3D23 /* RunnerTests.swift */,
 				6FB3DC0386DDBB630BCAECDE /* TestHostTests.swift */,
 			);
 			path = MenuzTests;
@@ -224,6 +236,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				66CA1635FB54568EC7D32863 /* RunnerTests.swift in Sources */,
 				8A0ACEFEB1B35D3594B1FAFE /* TestHostTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -239,7 +252,10 @@
 				647A99098E46609054F1591F /* MenuBuilder.swift in Sources */,
 				184F74B5C1A84C179E4FFD0A /* MenuSource.swift in Sources */,
 				EAE4191C024DFE1B4BBE78F5 /* MenuzApp.swift in Sources */,
+				85D7375C47259446D9582937 /* Notifier.swift in Sources */,
+				CFE42505FB7695CD09D90680 /* ParamForm.swift in Sources */,
 				3EC6549C623D9165FE8920F6 /* Realiser.swift in Sources */,
+				8FEBE6637B94EFB85C109330 /* Runner.swift in Sources */,
 				6EAD658E87554EF44E6805B2 /* Shell.swift in Sources */,
 				9BA03B276434DB812F3EE7EE /* Watcher.swift in Sources */,
 			);

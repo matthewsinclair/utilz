@@ -4,11 +4,19 @@ public struct Item: Equatable, Sendable {
   public let path: String
   public let label: String
   public let run: String?
+  /// What a run of it needs beyond the line: its params, its `cwd` and its
+  /// `notify`, each as the file gives them.
+  public let params: [Param]
+  public let cwd: String?
+  public let notify: Notify?
 
-  public init(path: String, label: String, run: String?) {
+  public init(path: String, label: String, run: String?, params: [Param] = [], cwd: String? = nil, notify: Notify? = nil) {
     self.path = path
     self.label = label
     self.run = run
+    self.params = params
+    self.cwd = cwd
+    self.notify = notify
   }
 }
 
@@ -19,12 +27,21 @@ public struct Each: Equatable, Sendable {
   public let line: String
   public let label: String
   public let run: String?
+  public let params: [Param]
+  public let cwd: String?
+  public let notify: Notify?
 
-  public init(path: String, line: String, label: String, run: String?) {
+  public init(
+    path: String, line: String, label: String, run: String?, params: [Param] = [], cwd: String? = nil,
+    notify: Notify? = nil
+  ) {
     self.path = path
     self.line = line
     self.label = label
     self.run = run
+    self.params = params
+    self.cwd = cwd
+    self.notify = notify
   }
 }
 
@@ -64,11 +81,16 @@ public struct MenuSpec: Equatable, Sendable {
   public let nodes: [Node]
   public let icon: String
   public let realiseSeconds: Double
+  /// The file's `cwd` and `notify`, which an item's own override.
+  public let cwd: String?
+  public let notify: Notify?
 
   public init(_ file: MenuFile) {
     nodes = Self.nodes(file.menu, list: MenuPath.root)
     icon = file.icon ?? Self.defaultIcon
     realiseSeconds = file.realise ?? Self.defaultRealiseSeconds
+    cwd = file.cwd
+    notify = file.notify
   }
 
   private static func nodes(_ entries: [Entry], list: String) -> [Node] {
@@ -76,9 +98,14 @@ public struct MenuSpec: Equatable, Sendable {
       let path = MenuPath.entry(in: list, at: index)
       switch entry.kind {
       case .item(let label):
-        return .item(Item(path: path, label: label, run: entry.run))
+        return .item(
+          Item(
+            path: path, label: label, run: entry.run, params: entry.params ?? [], cwd: entry.cwd, notify: entry.notify))
       case .each(let line, let label):
-        return .each(Each(path: path, line: line, label: label, run: entry.run))
+        return .each(
+          Each(
+            path: path, line: line, label: label, run: entry.run, params: entry.params ?? [], cwd: entry.cwd,
+            notify: entry.notify))
       case .header(let title):
         return .header(title)
       case .separator:

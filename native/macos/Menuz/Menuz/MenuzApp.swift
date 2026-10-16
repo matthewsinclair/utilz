@@ -18,6 +18,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, MenuAc
   private var shell: LoginShell?
   private var paths = Paths(environment: ProcessInfo.processInfo.environment, home: NSHomeDirectory())
   private lazy var log = AppLog(file: paths.logFile)
+  private lazy var runner = Runner(log: log)
+  /// The forms open now, each held until it answers.
+  private var forms: [ObjectIdentifier: ParamFormController] = [:]
   /// The last menu that loaded, kept on screen while the file is refused.
   private var spec: MenuSpec?
   private var refusals: [Refusal] = []
@@ -186,9 +189,34 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, MenuAc
 
   // MARK: - MenuActions
 
+  /// Runs the item: through the form when it has params, else at once.
   func chooseItem(_ sender: NSMenuItem) {
-    guard let chosen = sender.representedObject as? Chosen else { return }
-    log.write("not run: \"\(chosen.label)\": running items is not built yet (ST0027 WP-04)")
+    guard let chosen = sender.representedObject as? Chosen, let shell else { return }
+    let label = sender.title
+    guard !chosen.params.isEmpty else {
+      run(chosen, label: label, params: [:], shell: shell)
+      return
+    }
+    // The id is taken when the form opens, so a cancel is logged by it.
+    guard let id = takeId(label: label) else { return }
+    let paths = self.paths
+    let seconds = spec?.realiseSeconds ?? MenuSpec.defaultRealiseSeconds
+    let form = RunForm(chosen.params)
+    var controller: ParamFormController?
+    controller = ParamFormController(
+      title: label, form: form,
+      realise: { name in await Self.choices(form.choiceLines[name] ?? "", shell: shell, paths: paths, seconds: seconds) },
+      onRun: { [weak self] exports in
+        self?.forget(controller)
+        self?.run(chosen, label: label, params: exports, shell: shell, id: id)
+      },
+      onCancel: { [weak self] in
+        self?.forget(controller)
+        self?.log.write(Run.cancelledLine(id: id, label: label))
+      })
+    guard let controller else { return }
+    forms[ObjectIdentifier(controller)] = controller
+    controller.show()
   }
 
   func editMenu(_ sender: NSMenuItem) {
@@ -204,8 +232,59 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, MenuAc
   }
 
   func quit(_ sender: NSMenuItem) {
-    log.write("quit")
     NSApp.terminate(nil)
+  }
+
+  /// Every way out (Quit menuz, Cmd-Q) logs the runs still going and kills
+  /// none (D9).
+  func applicationWillTerminate(_ notification: Notification) {
+    guard !Self.isTestHost(ProcessInfo.processInfo.environment) else { return }
+    runner.quit()
+  }
+
+  // MARK: - Running
+
+  private func run(_ chosen: Chosen, label: String, params: [String: String], shell: LoginShell, id: Int? = nil) {
+    guard let id = id ?? takeId(label: label) else { return }
+    let request = RunRequest(
+      id: id, label: label, run: chosen.run, cwd: chosen.cwd, fileCwd: spec?.cwd, item: chosen.line, params: params,
+      notify: Run.notify(item: chosen.notify, file: spec?.notify))
+    let home = shell.environment["HOME"] ?? NSHomeDirectory()
+    runner.start(
+      request, environment: Run.environment(request, login: shell.environment, paths: paths, log: paths.logFile),
+      home: home)
+  }
+
+  /// The next run id, or nil, logged and notified, when the store cannot
+  /// give one.
+  private func takeId(label: String) -> Int? {
+    switch Runner.takeId(stateDir: paths.stateDir) {
+    case .success(let id):
+      return id
+    case .failure(let unreadable):
+      log.write("\"\(label)\" not run: \(paths.stateDir)/next-run holds no id: \(unreadable.text)")
+      Notifier.post("\"\(label)\" not run: the run id store could not be read")
+      return nil
+    }
+  }
+
+  private func forget(_ controller: ParamFormController?) {
+    guard let controller else { return }
+    forms.removeValue(forKey: ObjectIdentifier(controller))
+  }
+
+  /// A choice param's shell line, realised as an each is: one choice per
+  /// line it prints.
+  private nonisolated static func choices(
+    _ line: String, shell: LoginShell, paths: Paths, seconds: Double
+  ) async -> Answer<[String]> {
+    let request = RealiseRequest(labels: [], eaches: [RealiseEach(id: "choices", line: line, label: "$MENUZ_ITEM")])
+    let outcome = await Realiser.realise(request, shell: shell, paths: paths, seconds: seconds)
+    switch outcome.realised.eaches["choices"] {
+    case .ok(let items)?: return .ok(items.map(\.line))
+    case .failed(let why)?: return .failed(why)
+    case nil: return .failed("no answer within \(seconds) s")
+    }
   }
 
   /// `open` with these arguments; a failure is logged, never dropped.

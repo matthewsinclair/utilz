@@ -327,3 +327,19 @@ struct ValidatorTests {
     #expect(Self.only("menu: hello\n") == Self.top("menu", "hello", "menu is a list of entries"))
   }
 }
+
+@Suite("Validation: defaults the form would ignore")
+struct DefaultRefusalTests {
+  @Test("a secret has no default, and a choice starts on its first choice")
+  func defaults() {
+    let file = ValidatorTests.file
+    #expect(
+      ValidatorTests.only("menu:\n  - label: a\n    run: x\n    params:\n      - name: t\n        type: secret\n        default: pw\n")
+        == Refusal(file: file, place: .entry("menu[0].params[0]"), key: "default", value: "pw", why: "a secret has no default"))
+    #expect(
+      ValidatorTests.only(
+        "menu:\n  - label: a\n    run: x\n    params:\n      - name: c\n        type: choice\n        choices: [a, b]\n        default: b\n")
+        == Refusal(
+          file: file, place: .entry("menu[0].params[0]"), key: "default", value: "b", why: "a choice starts on its first choice"))
+  }
+}

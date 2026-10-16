@@ -1,16 +1,21 @@
 import AppKit
 import MenuzKit
 
-/// What a chosen item carries to the delegate: its label as shown, its run,
-/// and, under an each, the line it was made from.
+/// What a chosen item carries to the delegate: the run line and what goes
+/// with it, and, under an each, the line it was made from. Its label is the
+/// menu item's title when chosen, the label as realised.
 final class Chosen: NSObject {
-  let label: String
   let run: String
+  let params: [Param]
+  let cwd: String?
+  let notify: Notify?
   let line: String?
 
-  init(label: String, run: String, line: String?) {
-    self.label = label
+  init(run: String, params: [Param], cwd: String?, notify: Notify?, line: String?) {
     self.run = run
+    self.params = params
+    self.cwd = cwd
+    self.notify = notify
     self.line = line
   }
 }
@@ -96,7 +101,8 @@ final class MenuBuilder {
       case .header(let title):
         menu.addItem(.sectionHeader(title: title))
       case .item(let item):
-        let made = self.item(label: item.label, run: item.run, line: nil)
+        let made = self.item(
+          label: item.label, chosen: item.run.map { Chosen(run: $0, params: item.params, cwd: item.cwd, notify: item.notify, line: nil) })
         menu.addItem(made)
         if Realise.isDynamic(item.label) { labels[item.path] = made }
       case .separator:
@@ -123,7 +129,12 @@ final class MenuBuilder {
     let made: [NSMenuItem]
     switch answer {
     case .ok(let items):
-      made = items.map { item(label: $0.label, run: entry.each.run, line: $0.line) }
+      let each = entry.each
+      made = items.map { found in
+        item(
+          label: found.label,
+          chosen: each.run.map { Chosen(run: $0, params: each.params, cwd: each.cwd, notify: each.notify, line: found.line) })
+      }
     case .failed(let why):
       let failed = NSMenuItem(title: "\(entry.each.line) failed: \(why)", action: nil, keyEquivalent: "")
       failed.isEnabled = false
@@ -137,13 +148,13 @@ final class MenuBuilder {
     eaches[path] = (entry.anchor, entry.each, made)
   }
 
-  /// An item that runs, or a caption (disabled) when it has no run.
-  private func item(label: String, run: String?, line: String?) -> NSMenuItem {
+  /// An item that runs, or a caption (disabled) when it has nothing to run.
+  private func item(label: String, chosen: Chosen?) -> NSMenuItem {
     let item = NSMenuItem(title: label, action: nil, keyEquivalent: "")
-    if let run {
+    if let chosen {
       item.action = #selector(MenuActions.chooseItem(_:))
       item.target = target
-      item.representedObject = Chosen(label: label, run: run, line: line)
+      item.representedObject = chosen
     } else {
       item.isEnabled = false
     }

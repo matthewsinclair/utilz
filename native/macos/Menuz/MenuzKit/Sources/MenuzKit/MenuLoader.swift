@@ -234,6 +234,14 @@ private struct Validator {
     if let node = keys[.choices], let kind, kind != .choice {
       refuse(place, ParamKey.choices.rawValue, describe(node), "choices go with type choice")
     }
+    // The form starts a secret empty and a choice on its first choice, so a
+    // default on either would be silently ignored.
+    if let node = keys[.default], kind == .secret {
+      refuse(place, ParamKey.default.rawValue, describe(node), "a secret has no default")
+    }
+    if let node = keys[.default], kind == .choice {
+      refuse(place, ParamKey.default.rawValue, describe(node), "a choice starts on its first choice")
+    }
     let required = keys[.required].flatMap { flag($0, at: place, key: ParamKey.required.rawValue) } ?? false
     let prompt = keys[.prompt].flatMap { scalar($0, at: place, key: ParamKey.prompt.rawValue) }
     let defaultValue = keys[.default].flatMap { scalar($0, at: place, key: ParamKey.default.rawValue) }
