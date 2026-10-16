@@ -2,7 +2,7 @@
 wp_id: WP-01
 title: Spike: space moves and Dock bindings on macOS 27
 scope: S
-status: Not Started
+status: WIP
 ---
 
 # WP-01: Spike: space moves and Dock bindings on macOS 27
