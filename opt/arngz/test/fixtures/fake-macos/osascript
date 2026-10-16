@@ -3,14 +3,16 @@
 # A stand-in for osascript, for arngz.bats (ST0026 AT-06). It answers only
 # common.sh's app_path, the LaunchServices lookup of one bundle id, from the
 # file FAKE_APPS/<bundle id>, which holds the app's path. With no file it
-# answers as osascript does for no such app (measured 16 Oct 2026); with
-# FAKE_APPS/<bundle id>.error it fails some other way, printing what that
-# file holds.
+# fails as osascript does when the script throws (measured 16 Oct 2026),
+# with the script's own thrown text, so app_path's wording is tested as
+# written; with FAKE_APPS/<bundle id>.error it fails some other way, printing
+# what that file holds.
 
 set -euo pipefail
 script="${*: -1}"
 bundle="$(printf '%s\n' "$script" | sed -n "s/.*URLForApplicationWithBundleIdentifier('\([^']*\)').*/\1/p" | head -1)"
-if [[ -z "$bundle" ]]; then
+thrown="$(printf '%s\n' "$script" | sed -n "s/.*throw new Error('\([^']*\)').*/\1/p" | head -1)"
+if [[ -z "$bundle" || -z "$thrown" ]]; then
   echo "fake osascript: only app_path's lookup is faked, not: $*" >&2
   exit 64
 fi
@@ -23,5 +25,5 @@ if [[ -f "$apps/$bundle" ]]; then
   cat "$apps/$bundle"
   exit 0
 fi
-echo "execution error: Error: Error: no app with bundle id $bundle (-2700)" >&2
+echo "execution error: Error: Error: $thrown (-2700)" >&2
 exit 1

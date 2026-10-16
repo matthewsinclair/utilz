@@ -316,36 +316,46 @@ engine_timeout() {
 # It NEVER EXITS, so doctor can say what failed and go on; engine_call is the
 # form that refuses. It returns
 #   0  the engine answered ok, and its response is ENGINE_RESPONSE
-#   1  nothing answered: hs could not reach Hammerspoon, exited without a
-#      response, or did not answer in time
-#   2  nothing was asked: there is no hs, or the request could not be made
+#   1  nothing answered: hs could not reach Hammerspoon, failed some other
+#      way, or did not answer in time
+#   2  nothing was asked: the hs tool is not there or would not run, or the
+#      request could not be made
 #   3  the engine answered with an error: an error response, a response that
-#      is not JSON, or a Lua error raised inside it (hs exit 65)
-# with why in ENGINE_ERROR for each but 0. ENGINE_DIR is the request's temp
-# dir whenever one was made, for the caller to keep or remove. A bad
-# ARNGZ_HS_TIMEOUT is still refused outright, because that is the caller's
-# mistake, not the engine's.
+#      is not JSON, a Lua error raised inside it (hs exit 65), or no response
+#      from a run hs says finished (exit 0), which is how the engine says it
+#      could not write one (lib/arngz.lua)
+# with why in ENGINE_ERROR and what fixes it in ENGINE_FIX for each but 0.
+# ENGINE_DIR is the request's temp dir whenever a request was written, for the
+# caller to keep or remove; when nothing was asked, the dir is already gone.
+# A bad ARNGZ_HS_TIMEOUT is still refused outright, because that is the
+# caller's mistake, not the engine's.
 #
 # Usage: engine_ask <verb> [<desk file>] [<options JSON file>]
 ENGINE_RESPONSE=""
 ENGINE_ERROR=""
+ENGINE_FIX=""
 ENGINE_DIR=""
 engine_ask() {
-  local verb="$1" desk_file="${2:-}" options_file="${3:-}" hs module timeout request response out rc deadline
+  local verb="$1" desk_file="${2:-}" options_file="${3:-}" tool state hs fix module timeout dir request response out why rc deadline
+  local tmp_fix="make ${TMPDIR:-/tmp} a writable directory, or set TMPDIR to one"
   ENGINE_RESPONSE=""
   ENGINE_ERROR=""
+  ENGINE_FIX=""
   ENGINE_DIR=""
-  if ! hs="$(command -v hs)"; then
-    ENGINE_ERROR="the hs tool is not on PATH: arngz reaches Hammerspoon through it (arngz doctor reports it; arngz init --yes installs it)"
+  # The hs tool as doctor and init tell it, so the three cannot disagree.
+  tool="$(hs_tool_state "$(hs_prefix)")"
+  IFS=$'\037' read -r state hs fix <<<"$tool"
+  if [[ "$state" != ok ]]; then
+    engine_unasked "the hs tool, which arngz reaches Hammerspoon through, is missing: $hs" "$fix"
     return 2
   fi
   module="$(engine_module)"
   timeout="$(engine_timeout)" || exit 2
-  if ! ENGINE_DIR="$(mktemp -d "${TMPDIR:-/tmp}/arngz.XXXXXX")"; then
-    ENGINE_DIR=""
-    ENGINE_ERROR="could not make a temp dir under ${TMPDIR:-/tmp} for the request"
+  if ! dir="$(mktemp -d "${TMPDIR:-/tmp}/arngz.XXXXXX" 2>&1)"; then
+    engine_unasked "could not make a temp dir under ${TMPDIR:-/tmp} for the request: $dir" "$tmp_fix"
     return 2
   fi
+  ENGINE_DIR="$dir"
   request="$ENGINE_DIR/request.json"
   response="$ENGINE_DIR/response.json"
   out="$ENGINE_DIR/hs.out"
@@ -353,27 +363,29 @@ engine_ask() {
   # would end the literal early. Refuse rather than escape.
   case "$module$request" in
     *'"'* | *\\*)
-      ENGINE_ERROR="a path holds a quote or backslash, which cannot go into the hs call: $module, $request"
+      engine_unasked "a path holds a quote or backslash, which cannot go into the hs call: $module, $request" \
+        "keep arngz and TMPDIR on paths with no quote or backslash"
       return 2
       ;;
   esac
 
   if [[ -z "$options_file" ]]; then
     options_file="$ENGINE_DIR/options.json"
-    if ! printf '{}\n' >"$options_file"; then
-      ENGINE_ERROR="could not write the request's options to $options_file"
+    if ! why="$({ printf '{}\n' >"$options_file"; } 2>&1)"; then
+      engine_unasked "could not write the request's options to $options_file: $why" "$tmp_fix"
       return 2
     fi
   fi
   rc=0
   if [[ -n "$desk_file" ]]; then
-    V="$verb" D="$desk_file" O="$options_file" yq -n -o json \
-      '.verb = strenv(V) | .desk = load(strenv(D)) | .options = load(strenv(O))' >"$request" || rc=$?
+    why="$(V="$verb" D="$desk_file" O="$options_file" yq -n -o json \
+      '.verb = strenv(V) | .desk = load(strenv(D)) | .options = load(strenv(O))' 2>&1 >"$request")" || rc=$?
   else
-    V="$verb" O="$options_file" yq -n -o json '.verb = strenv(V) | .desk = null | .options = load(strenv(O))' >"$request" || rc=$?
+    why="$(V="$verb" O="$options_file" yq -n -o json \
+      '.verb = strenv(V) | .desk = null | .options = load(strenv(O))' 2>&1 >"$request")" || rc=$?
   fi
   if [[ $rc -ne 0 ]]; then
-    ENGINE_ERROR="could not write the request for $verb (yq exited $rc): $request"
+    engine_unasked "could not write the request for $verb to $request (yq exited $rc): $why" "fix what yq names, then run arngz again"
     return 2
   fi
 
@@ -398,19 +410,44 @@ engine_ask() {
     kill "$pid" 2>/dev/null || true
     wait "$pid" 2>/dev/null || true
     ENGINE_ERROR="hs did not answer within ${timeout}s and wrote no response"
+    ENGINE_FIX="Hammerspoon is busy or hung: see its console (its menu bar icon: Console), or quit and reopen it"
     return 1
   else
     rc=0
     wait "$pid" || rc=$?
     case "$rc" in
+      # The module ran and returned, having written nothing: the engine's own
+      # way of saying it could not write its response, on hs's stdout.
+      0)
+        ENGINE_ERROR="hs exited 0 and wrote no response, so the engine ran and could not write its answer: $(tr '\n' ' ' <"$out")"
+        ENGINE_FIX="$(engine_failing)"
+        return 3
+        ;;
       # The module ran and failed, so Hammerspoon did answer.
       65)
         ENGINE_ERROR="the engine raised a Lua error (hs exit 65): $(tr '\n' ' ' <"$out")"
+        ENGINE_FIX="$(engine_failing)"
         return 3
         ;;
-      69) ENGINE_ERROR="hs could not reach Hammerspoon (exit 69): it is not running, or its config does not load hs.ipc (arngz init --yes adds it)" ;;
-      75) ENGINE_ERROR="Hammerspoon is not running (hs exit 75)" ;;
-      *) ENGINE_ERROR="hs exited $rc and wrote no response: $(tr '\n' ' ' <"$out")" ;;
+      # The shell's own codes for a tool it could not run, so nothing was
+      # asked.
+      126 | 127)
+        engine_unasked "the hs tool at $hs could not be run (exit $rc): $(tr '\n' ' ' <"$out")" \
+          "replace it with Hammerspoon's own: remove it, then arngz init --yes links it"
+        return 2
+        ;;
+      69)
+        ENGINE_ERROR="hs could not reach Hammerspoon (exit 69): it is not running, or its config does not load hs.ipc"
+        ENGINE_FIX="arngz init --yes makes Hammerspoon's config load hs.ipc; then reload that config"
+        ;;
+      75)
+        ENGINE_ERROR="Hammerspoon is not running (hs exit 75)"
+        ENGINE_FIX="open -b $HAMMERSPOON_BUNDLE"
+        ;;
+      *)
+        ENGINE_ERROR="hs exited $rc and wrote no response: $(tr '\n' ' ' <"$out")"
+        ENGINE_FIX="run hs -c 'return 1' </dev/null by hand, which says why"
+        ;;
     esac
     return 1
   fi
@@ -419,23 +456,53 @@ engine_ask() {
   local status
   if ! status="$(yq -r '.status' "$response" 2>"$ENGINE_DIR/yq.err")"; then
     ENGINE_ERROR="the engine's response is not JSON: $(tr '\n' ' ' <"$ENGINE_DIR/yq.err")"
+    ENGINE_FIX="$(engine_failing)"
     return 3
   fi
   if [[ "$status" != "ok" ]]; then
-    ENGINE_ERROR="the engine refused $verb: $(yq -r '.error' "$response")"
+    ENGINE_ERROR="the engine refused $verb: $(yq -r '.error' "$response" | tr '\n' ' ')"
+    ENGINE_FIX="$(engine_failing)"
     return 3
   fi
 }
 
-# engine_ask, refused by name, exit 2, unless the engine answered ok, with the
-# request kept for a look. The form every verb that needs the engine's answer
-# calls.
+# Nothing was asked: say why and what fixes it, and remove the request's temp
+# dir, which holds nothing worth a look.
+engine_unasked() {
+  ENGINE_ERROR="$1"
+  ENGINE_FIX="$2"
+  if [[ -n "$ENGINE_DIR" ]]; then
+    if ! rm -rf -- "$ENGINE_DIR"; then
+      ENGINE_ERROR="$ENGINE_ERROR (and its temp dir $ENGINE_DIR could not be removed)"
+    fi
+    ENGINE_DIR=""
+  fi
+}
+
+# What fixes the engine answering with an error: nothing on this machine.
+engine_failing() {
+  printf "that is arngz's engine failing (%s), not Hammerspoon's setup\n" "$(engine_module)"
+}
+
+# engine_ask, refused by name, exit 2, unless the engine answered ok. The form
+# every verb that needs the engine's answer calls.
 engine_call() {
   local rc=0
   engine_ask "$@" || rc=$?
   if [[ $rc -ne 0 ]]; then
-    refuse "$ENGINE_ERROR${ENGINE_DIR:+ (request kept at $ENGINE_DIR/request.json)}"
+    engine_refuse
   fi
+}
+
+# The refusal for an engine call that did not answer ok: why, the request kept
+# for a look whenever one was written, and what fixes it. For a verb with temp
+# files of its own to remove first.
+engine_refuse() {
+  local kept=""
+  if [[ -n "$ENGINE_DIR" && -f "$ENGINE_DIR/request.json" ]]; then
+    kept=" (request kept at $ENGINE_DIR/request.json)"
+  fi
+  refuse "$ENGINE_ERROR$kept; fix: $ENGINE_FIX"
 }
 
 # The engine's report, line for line, as the engine wrote it.
@@ -468,11 +535,33 @@ render_desk() {
 # THE MACHINE: what doctor reads and init provides (D16, D18)
 # ============================================================================
 
-# Hammerspoon's bundle id, as arngz.yaml declares it for utilz doctor, its
-# process name, as pgrep finds it, and how it is installed.
-HAMMERSPOON_BUNDLE="org.hammerspoon.Hammerspoon"
+# Hammerspoon's bundle id and install line, as arngz.yaml declares them for
+# utilz doctor: the one place they are written, read once by main. Its process
+# name, as pgrep finds it, is not declared there.
+HAMMERSPOON_BUNDLE=""
+HAMMERSPOON_INSTALL=""
 HAMMERSPOON_PROCESS="Hammerspoon"
-HAMMERSPOON_INSTALL="brew install --cask hammerspoon"
+load_hammerspoon() {
+  local yaml="$UTILZ_HOME/opt/arngz/arngz.yaml" entry
+  if ! entry="$(yq -r '.dependencies[] | select(.name == "Hammerspoon") | (.app // "") + "|" + (.install // "")' "$yaml" 2>&1)"; then
+    refuse "could not read Hammerspoon's entry in $yaml: $entry"
+  fi
+  HAMMERSPOON_BUNDLE="${entry%%|*}"
+  HAMMERSPOON_INSTALL="${entry#*|}"
+  if [[ "$entry" == *$'\n'* || -z "$HAMMERSPOON_BUNDLE" || -z "$HAMMERSPOON_INSTALL" ]]; then
+    refuse "$yaml declares no one Hammerspoon entry with an app and an install line: '$(printf '%s' "$entry" | tr '\n' ' ')'"
+  fi
+}
+
+# One record of fields, joined by the ASCII unit separator (0x1f), and read
+# back with IFS=$'\037': every plan and verdict below prints one. Not '|',
+# because a path, a message or an engine's error can carry a '|', and a
+# newline inside a field is flattened, because the reader reads one line.
+record() {
+  local IFS=$'\037' line
+  line="$*"
+  printf '%s\n' "${line//$'\n'/ }"
+}
 
 # The one line init appends to Hammerspoon's config, marked as arngz's.
 IPC_LINE='require("hs.ipc") -- arngz (Utilz ST0026): IPC for the hs command-line tool'
@@ -489,17 +578,25 @@ hs_prefix() {
 # MJConfigFile preference names. Hammerspoon honours that preference, so init
 # must too, or its line would go where Hammerspoon never reads it. Read like
 # every other preference (read_pref), so a preference that could not be read
-# is said, and fails, rather than guessed to be unset. With no defaults tool
-# there are no Hammerspoon preferences, and the default stands.
+# is said, and fails, rather than guessed to be unset. Only a full path or one
+# under ~/ is followed: Hammerspoon reads any other against its own working
+# directory, which arngz cannot know. With no defaults tool there are no
+# Hammerspoon preferences, and the default stands.
 hammerspoon_config() {
   local custom rc=0
   if command -v defaults >/dev/null 2>&1; then
     custom="$(read_pref "$HAMMERSPOON_BUNDLE" MJConfigFile)" || rc=$?
-    if [[ $rc -eq 0 && -n "$custom" ]]; then
+    if [[ $rc -eq 0 ]]; then
+      # shellcheck disable=SC2088 # a literal ~/ at the start, as the preference holds it
+      if [[ "$custom" == *$'\n'* || ("$custom" != /* && "$custom" != "~/"*) ]]; then
+        printf "Hammerspoon's MJConfigFile preference is '%s', not a full path or one under ~/, so which file Hammerspoon reads is unknown\n" \
+          "$(printf '%s' "$custom" | tr '\n' ' ')"
+        return 1
+      fi
       expand_tilde "$custom"
       return 0
     fi
-    if [[ $rc -ne 0 && $rc -ne 3 ]]; then
+    if [[ $rc -ne 3 ]]; then
       printf "Hammerspoon's MJConfigFile preference, which says where its config is, could not be read: %s\n" "$custom"
       return 1
     fi
@@ -507,22 +604,27 @@ hammerspoon_config() {
   printf '%s/.hammerspoon/init.lua\n' "$HOME"
 }
 
-# The hs tool, as doctor reports it and init acts on it, so the two cannot
-# tell it differently. Prints "state|detail|fix", the state one of
-#   ok        on PATH, where arngz looks; the detail is its path
+# The hs tool, as doctor reports it, init acts on it and the engine call
+# looks for it, so none can tell it differently. Prints a record of state,
+# detail and fix, the state one of
+#   ok        on PATH, where arngz looks, and runs; the detail is its path
 #   unlisted  PREFIX/bin/hs runs, but PREFIX/bin is not on PATH
-#   broken    PREFIX/bin/hs is there and does not run
+#   broken    the hs on PATH, or PREFIX/bin/hs, is there and does not run
 #   absent    nowhere; init --yes links it
+# `command -v` names a file on PATH that cannot run, when no other can
+# (measured 16 Oct 2026 under bash 3.2.57 and 5.3.20), so it is checked too.
 hs_tool_state() {
   local prefix="$1" hs
-  if hs="$(command -v hs)"; then
-    printf 'ok|%s|\n' "$hs"
+  if hs="$(command -v hs)" && [[ -x "$hs" ]]; then
+    record ok "$hs" ""
+  elif [[ -n "$hs" ]]; then
+    record broken "$hs is on PATH and is not executable" "remove it, or make it executable"
   elif [[ -x "$prefix/bin/hs" ]]; then
-    printf 'unlisted|%s/bin/hs is there, but %s/bin is not on PATH, where arngz looks for it|add %s/bin to PATH\n' "$prefix" "$prefix" "$prefix"
+    record unlisted "$prefix/bin/hs is there, but $prefix/bin is not on PATH, where arngz looks for it" "add $prefix/bin to PATH"
   elif [[ -e "$prefix/bin/hs" || -L "$prefix/bin/hs" ]]; then
-    printf 'broken|%s/bin/hs is there and does not run (a link to a Hammerspoon that moved?)|remove it, and arngz init --yes links it again\n' "$prefix"
+    record broken "$prefix/bin/hs is there and does not run (a link to a Hammerspoon that moved?)" "remove it, and arngz init --yes links it again"
   else
-    printf 'absent|not on PATH|arngz init --yes links it under %s\n' "$prefix"
+    record absent "not on PATH" "arngz init --yes links it under $prefix"
   fi
 }
 
@@ -549,38 +651,39 @@ writable_dir() {
   fi
 }
 
-# What init does about the hs tool, as one line, "kind|...":
-#   have|PATH                  on PATH already
-#   unlisted|DETAIL|FIX        under the prefix but not on PATH: for a person
-#   block|WHY                  init --yes cannot provide it
-#   link|TOOL|MAN|MAN_NOTE     init --yes links TOOL, and MAN when there is one
+# What init does about the hs tool, as a record of a kind and its fields:
+#   have PATH                 on PATH already
+#   unlisted DETAIL FIX       under the prefix but not on PATH: for a person
+#   block WHY                 init --yes cannot provide it
+#   link TOOL MAN MAN_NOTE    init --yes links TOOL, and MAN when there is one
 # It reads the machine and decides, and changes nothing. APP and APP_RC are
 # what app_path said of Hammerspoon.
 init_hs_plan() {
-  local prefix="$1" app="$2" app_rc="$3" state detail fix why man="" man_note=""
-  IFS='|' read -r state detail fix <<<"$(hs_tool_state "$prefix")"
+  local prefix="$1" app="$2" app_rc="$3" tool state detail fix why man="" man_note=""
+  tool="$(hs_tool_state "$prefix")"
+  IFS=$'\037' read -r state detail fix <<<"$tool"
   case "$state" in
     ok)
-      printf 'have|%s\n' "$detail"
+      record have "$detail"
       return 0
       ;;
     unlisted)
-      printf 'unlisted|%s|%s\n' "$detail" "$fix"
+      record unlisted "$detail" "$fix"
       return 0
       ;;
     broken)
-      printf 'block|%s: %s\n' "$detail" "$fix"
+      record block "$detail: $fix"
       return 0
       ;;
   esac
   if [[ $app_rc -eq 1 ]]; then
-    printf 'block|the hs tool comes with Hammerspoon, which is not installed: %s\n' "$HAMMERSPOON_INSTALL"
+    record block "the hs tool comes with Hammerspoon, which is not installed: $HAMMERSPOON_INSTALL"
   elif [[ $app_rc -ne 0 ]]; then
-    printf 'block|the hs tool comes with Hammerspoon, and where it is installed is unknown: %s\n' "$app"
+    record block "the hs tool comes with Hammerspoon, and where it is installed is unknown: $app"
   elif [[ ! -x "$app/Contents/Frameworks/hs/hs" ]]; then
-    printf 'block|Hammerspoon at %s carries no hs tool at %s/Contents/Frameworks/hs/hs\n' "$app" "$app"
+    record block "Hammerspoon at $app carries no hs tool at $app/Contents/Frameworks/hs/hs"
   elif ! why="$(writable_dir "$prefix/bin")"; then
-    printf 'block|%s/bin/hs cannot be made: %s\n' "$prefix" "$why"
+    record block "$prefix/bin/hs cannot be made: $why"
   else
     if [[ -f "$app/Contents/Resources/man/hs.man" && ! -e "$prefix/share/man/man1/hs.1" && ! -L "$prefix/share/man/man1/hs.1" ]]; then
       if why="$(writable_dir "$prefix/share/man/man1")"; then
@@ -589,33 +692,38 @@ init_hs_plan() {
         man_note="; not its man page, because $why"
       fi
     fi
-    printf 'link|%s|%s|%s\n' "$app/Contents/Frameworks/hs/hs" "$man" "$man_note"
+    record link "$app/Contents/Frameworks/hs/hs" "$man" "$man_note"
   fi
 }
 
-# What init does about Hammerspoon's config, as one line, "kind|CONFIG|...":
-#   have|CONFIG|LINE     it loads hs.ipc already, at LINE
-#   append|CONFIG        init --yes appends the one line
-#   block|CONFIG|WHY     init --yes cannot
-# It reads the machine and decides, and changes nothing.
+# What init does about Hammerspoon's config, as a record of a kind, the
+# config and a field:
+#   have CONFIG LINE     it loads hs.ipc already, at LINE
+#   append CONFIG        init --yes appends the one line
+#   block CONFIG WHY     init --yes cannot
+# It reads the machine and decides, and changes nothing. A config that cannot
+# be searched for its require is said, never read as one without it, which
+# would append a second.
 init_config_plan() {
   local config line why
   if ! config="$(hammerspoon_config)"; then
-    printf "block|Hammerspoon's config|%s\n" "$config"
+    record block "Hammerspoon's config" "$config"
   elif [[ -L "$config" && ! -e "$config" ]]; then
-    printf 'block|%s|%s is a link that leads nowhere\n' "$config" "$config"
+    record block "$config" "$config is a link that leads nowhere"
   elif [[ -e "$config" && ! -f "$config" ]]; then
-    printf 'block|%s|%s is not a file\n' "$config" "$config"
+    record block "$config" "$config is not a file"
   elif [[ -e "$config" && ! -r "$config" ]]; then
-    printf 'block|%s|%s cannot be read\n' "$config" "$config"
-  elif [[ -f "$config" ]] && line="$(ipc_require_line "$config")" && [[ -n "$line" ]]; then
-    printf 'have|%s|%s\n' "$config" "$line"
+    record block "$config" "$config cannot be read"
+  elif [[ -f "$config" ]] && ! line="$(ipc_require_line "$config" 2>&1)"; then
+    record block "$config" "$config could not be searched for a require of hs.ipc: $line"
+  elif [[ -n "${line:-}" ]]; then
+    record have "$config" "$line"
   elif [[ -e "$config" && ! -w "$config" ]]; then
-    printf 'block|%s|%s is not writable\n' "$config" "$config"
+    record block "$config" "$config is not writable"
   elif [[ ! -e "$config" ]] && ! why="$(writable_dir "$(dirname "$config")")"; then
-    printf 'block|%s|%s cannot be made, because %s\n' "$config" "$config" "$why"
+    record block "$config" "$config cannot be made, because $why"
   else
-    printf 'append|%s\n' "$config"
+    record append "$config"
   fi
 }
 
@@ -630,6 +738,31 @@ ipc_require_line() {
     '{ code = $0; sub(/--.*/, "", code) } code ~ re { print NR; exit }' "$1"
 }
 
+# Every change init makes is one step: WHAT, said as a step ("link P to T"),
+# and the command that makes it. Each was checked before the first was made
+# (D23), so a step that fails is the machine changing under init. Before any
+# step has been made that is a refusal, exit 2, because nothing has changed;
+# after one, init stops with exit 1 and names the steps it had made, because
+# then something has.
+INIT_MADE=""
+init_step() {
+  local what="$1" why
+  shift
+  if ! why="$("$@" 2>&1)"; then
+    if [[ -z "$INIT_MADE" ]]; then
+      refuse "init changed nothing: could not $what: $why"
+    fi
+    error "arngz: init --yes stopped at '$what': $why. Made before it: $INIT_MADE"
+    exit 1
+  fi
+  INIT_MADE="${INIT_MADE:+$INIT_MADE; }$what"
+}
+
+# Append LINE, and a newline, to FILE: one step of init.
+append_line() {
+  printf '%s\n' "$2" >>"$1"
+}
+
 # Link the hs tool, and its man page when there is one to link, under PREFIX,
 # as hs.ipc.cliInstall links them (Hammerspoon 1.1.1, extensions/hs/ipc.lua):
 # PREFIX/bin/hs to the app's Contents/Frameworks/hs/hs, and
@@ -638,11 +771,15 @@ ipc_require_line() {
 # sets up.
 link_hs_tool() {
   local prefix="$1" tool="$2" man="$3"
-  mkdir -p "$prefix/bin" || refuse "could not make $prefix/bin"
-  ln -s "$tool" "$prefix/bin/hs" || refuse "could not link $prefix/bin/hs to $tool"
+  if [[ ! -d "$prefix/bin" ]]; then
+    init_step "make $prefix/bin" mkdir -p "$prefix/bin"
+  fi
+  init_step "link $prefix/bin/hs to $tool" ln -s "$tool" "$prefix/bin/hs"
   if [[ -n "$man" ]]; then
-    mkdir -p "$prefix/share/man/man1" || refuse "could not make $prefix/share/man/man1"
-    ln -s "$man" "$prefix/share/man/man1/hs.1" || refuse "could not link $prefix/share/man/man1/hs.1 to $man"
+    if [[ ! -d "$prefix/share/man/man1" ]]; then
+      init_step "make $prefix/share/man/man1" mkdir -p "$prefix/share/man/man1"
+    fi
+    init_step "link $prefix/share/man/man1/hs.1 to $man" ln -s "$man" "$prefix/share/man/man1/hs.1"
   fi
 }
 
@@ -652,11 +789,13 @@ link_hs_tool() {
 append_ipc_line() {
   local config="$1" parent
   parent="$(dirname "$config")"
-  mkdir -p "$parent" || refuse "could not make $parent"
-  if [[ -s "$config" && -n "$(tail -c 1 "$config")" ]]; then
-    printf '\n' >>"$config" || refuse "could not append to $config"
+  if [[ ! -d "$parent" ]]; then
+    init_step "make $parent" mkdir -p "$parent"
   fi
-  printf '%s\n' "$IPC_LINE" >>"$config" || refuse "could not append to $config"
+  if [[ -s "$config" && -n "$(tail -c 1 "$config")" ]]; then
+    init_step "end the last line of $config" append_line "$config" ""
+  fi
+  init_step "append the hs.ipc line to $config" append_line "$config" "$IPC_LINE"
 }
 
 # One macOS preference. Prints the value and returns 0; returns 3, printing
@@ -665,22 +804,30 @@ append_ipc_line() {
 # not exist" up to macOS 26; on 27 it says "Could not find key '<key>' in
 # domain '<domain>'", or "Domain '<domain>' not found" for a domain with no
 # preferences at all (all three measured 16 Oct 2026). Only those wordings,
-# naming this key and domain, are unset; any other failure is said.
+# naming this key and domain, are unset; any other failure is said. The value
+# is defaults' stdout alone: a warning it prints beside a value it read is not
+# part of the value, so its stderr goes to a file of its own.
 read_pref() {
-  local domain="$1" key="$2" out rc=0
+  local domain="$1" key="$2" errfile out err rc=0
   if ! command -v defaults >/dev/null 2>&1; then
     printf 'there is no defaults tool to read it with (macOS only)\n'
     return 1
   fi
-  out="$(defaults read "$domain" "$key" 2>&1 </dev/null)" || rc=$?
+  if ! errfile="$(mktemp "${TMPDIR:-/tmp}/arngz-defaults.XXXXXX" 2>&1)"; then
+    printf 'could not make a temp file under %s to read %s %s with: %s\n' "${TMPDIR:-/tmp}" "$domain" "$key" "$errfile"
+    return 1
+  fi
+  out="$(defaults read "$domain" "$key" 2>"$errfile" </dev/null)" || rc=$?
+  err="$(cat "$errfile")"
+  rm -f -- "$errfile" || warn "arngz: could not remove $errfile"
   if [[ $rc -eq 0 ]]; then
     printf '%s\n' "$out"
     return 0
   fi
-  case "$out" in
+  case "$err" in
     *"($domain, $key) does not exist"* | *"Could not find key '$key' in domain '$domain'"* | *"Domain '$domain' not found"*) return 3 ;;
   esac
-  printf 'defaults read %s %s failed (exit %s): %s\n' "$domain" "$key" "$rc" "$(printf '%s' "$out" | tr '\n' ' ')"
+  printf 'defaults read %s %s failed (exit %s): %s\n' "$domain" "$key" "$rc" "$(printf '%s' "$err${out:+ $out}" | tr '\n' ' ')"
   return 1
 }
 
@@ -691,8 +838,10 @@ DOCTOR_PREFS="separate spaces|com.apple.spaces|spans-displays|0|0|on|off|System 
 auto-rearrange|com.apple.dock|mru-spaces|1|0|off|on|System Settings > Desktop & Dock > Mission Control: turn off Automatically rearrange Spaces based on most recent use
 Stage Manager|com.apple.WindowManager|GloballyEnabled|0|0|off|on|System Settings > Desktop & Dock: turn off Stage Manager"
 
-# PURE: one preference's verdict, from what read_pref returned and printed,
-# as "status|state|fix". An unset key takes macOS's default, and says so.
+# PURE: one preference's verdict, from what read_pref returned and printed, as
+# a record of status, state and fix. An unset key takes macOS's default, and
+# says so. The one owner of this verdict: apply asks it too, before it asks
+# the engine (D26).
 pref_verdict() {
   local rc="$1" value="$2" unset_value="$3" want="$4" at0="$5" at1="$6" fix="$7" note="" state
   case "$rc" in
@@ -702,7 +851,7 @@ pref_verdict() {
       note=" (unset: macOS's default)"
       ;;
     *)
-      printf 'FAIL|unknown: %s|%s\n' "$value" "$fix"
+      record FAIL "unknown: $value" "$fix"
       return 0
       ;;
   esac
@@ -710,25 +859,94 @@ pref_verdict() {
     1 | true | YES) value=1 ;;
     0 | false | NO) value=0 ;;
     *)
-      printf "FAIL|unknown: the value is '%s', not a boolean|%s\n" "$value" "$fix"
+      record FAIL "unknown: the value is '$value', not a boolean" "$fix"
       return 0
       ;;
   esac
   if [[ "$value" == "1" ]]; then state="$at1"; else state="$at0"; fi
   if [[ "$value" == "$want" ]]; then
-    printf 'ok|%s%s|\n' "$state" "$note"
+    record ok "$state$note" ""
   else
-    printf 'FAIL|%s%s|%s\n' "$state" "$note" "$fix"
+    record FAIL "$state$note" "$fix"
   fi
 }
 
-# One line of doctor's report: ok, FAIL or skip, the precondition, its state,
-# and for one that does not hold what fixes it. Counts the lines and the ones
-# that do not hold, a skipped check among them.
+# PURE: Hammerspoon's verdict, from what app_path said of it (APP, APP_RC) and
+# what pgrep said of this user's processes (PS_RC, PS) when asked with
+# PGREP. pgrep exits 1 when no such process runs; anything else is pgrep
+# failing, which is said, never read as not running.
+hammerspoon_verdict() {
+  local app="$1" app_rc="$2" ps_rc="$3" ps="$4" pgrep="$5" where=""
+  if [[ $app_rc -eq 0 ]]; then
+    where=" ($app)"
+  fi
+  case "$ps_rc:$app_rc" in
+    0:*) record ok "running$where" "" ;;
+    1:0) record FAIL "installed at $app, not running" "open -b $HAMMERSPOON_BUNDLE" ;;
+    1:1) record FAIL "missing: not installed" "$HAMMERSPOON_INSTALL" ;;
+    1:*) record FAIL "not running, and where it is installed is unknown: $app" "open -b $HAMMERSPOON_BUNDLE, or $HAMMERSPOON_INSTALL" ;;
+    *) record FAIL "unknown: pgrep exited $ps_rc: $ps" "run $pgrep to see why" ;;
+  esac
+}
+
+# PURE: the hs tool's verdict, from hs_tool_state's state, detail and fix.
+hs_tool_verdict() {
+  if [[ "$1" == ok ]]; then
+    record ok "$2" ""
+  else
+    record FAIL "missing: $2" "$3"
+  fi
+}
+
+# PURE: the IPC verdict, from OUTCOME -- nohs (no hs tool to ask with),
+# stopped (Hammerspoon not running), or what engine_ask returned -- with HS
+# the tool it asked through, and ERROR and FIX as engine_ask gave them.
+ipc_verdict() {
+  local outcome="$1" hs="$2" error="$3" fix="$4"
+  case "$outcome" in
+    nohs) record skip "not checked: there is no hs tool to ask it with" "" ;;
+    stopped) record skip "not checked: Hammerspoon is not running" "" ;;
+    # An error from the engine is still Hammerspoon answering.
+    0 | 3) record ok "Hammerspoon answered through $hs" "" ;;
+    2) record FAIL "not asked: $error" "$fix" ;;
+    *) record FAIL "$error" "$fix" ;;
+  esac
+}
+
+# PURE: the Accessibility verdict, from the same OUTCOME, what the engine's
+# observe gave for accessibility (GRANTED), ERROR and FIX, and KEPT, where the
+# request and answer of an engine error were kept. Only Hammerspoon can say,
+# so it is skipped whenever Hammerspoon was not heard from.
+accessibility_verdict() {
+  local outcome="$1" granted="$2" error="$3" fix="$4" kept="$5" unheard="not checked: only Hammerspoon can say, and"
+  case "$outcome" in
+    nohs) record skip "$unheard there is no hs tool to ask it with" "" ;;
+    stopped) record skip "$unheard Hammerspoon is not running" "" ;;
+    2) record skip "$unheard Hammerspoon was not asked" "" ;;
+    1) record skip "$unheard Hammerspoon did not answer" "" ;;
+    3) record FAIL "unknown: the engine could not say: $error (its request and answer are kept at $kept)" "$fix" ;;
+    *)
+      case "$granted" in
+        true) record ok "granted to Hammerspoon" "" ;;
+        false) record FAIL "not granted to Hammerspoon" "System Settings > Privacy & Security > Accessibility: turn on Hammerspoon" ;;
+        *) record FAIL "unknown: the engine's observe gave accessibility = '$granted'" "$(engine_failing)" ;;
+      esac
+      ;;
+  esac
+}
+
+# One line of doctor's report, from the verdict VERDICT ARGS... gives for the
+# precondition WHAT: ok, FAIL or skip, the precondition, its state, and for one
+# that does not hold what fixes it. The verdict is taken whole before it is
+# split, so a verdict that fails stops doctor rather than printing an empty
+# line. Counts the lines, and the ones that do not hold, a skip among them.
 DOCTOR_LINES=0
 DOCTOR_FAILED=0
-doctor_line() {
-  local status="$1" what="$2" state="$3" fix="${4:-}"
+doctor_check() {
+  local what="$1" verdict status state fix
+  shift
+  verdict="$("$@")"
+  IFS=$'\037' read -r status state fix <<<"$verdict"
   DOCTOR_LINES=$((DOCTOR_LINES + 1))
   if [[ "$status" != "ok" ]]; then
     DOCTOR_FAILED=$((DOCTOR_FAILED + 1))
@@ -811,33 +1029,11 @@ cmd_delete() {
   printf 'deleted %s\n' "$file"
 }
 
-# init: the catalogue, and what Hammerspoon needs for arngz (D16). Without
-# --yes it creates the catalogue, says what --yes would do, and changes nothing
-# else. With --yes it links the hs tool under the prefix, as Hammerspoon's own
-# hs.ipc.cliInstall would, and appends the one marked line that loads hs.ipc
-# to Hammerspoon's config. A step already done is said and skipped, so a
-# second run changes nothing. Everything --yes would change is checked first,
-# and what it cannot do is refused, exit 2, before anything changes; what only
-# a person can do, it says.
-cmd_init() {
-  local yes=0
-  while [[ $# -gt 0 ]]; do
-    case "$1" in
-      --yes)
-        yes=1
-        shift
-        ;;
-      *) refuse "unknown option for init: '$1'" ;;
-    esac
-  done
-
-  local dir prefix app app_rc=0 hs_kind hs_a hs_b hs_c config_kind config config_c blocked="" for_you=""
-  dir="$(catalogue_dir)"
-  prefix="$(hs_prefix)"
-  app="$(app_path "$HAMMERSPOON_BUNDLE")" || app_rc=$?
-  IFS='|' read -r hs_kind hs_a hs_b hs_c <<<"$(init_hs_plan "$prefix" "$app" "$app_rc")"
-  IFS='|' read -r config_kind config config_c <<<"$(init_config_plan)"
-
+# PURE: what stops init --yes, and what only a person can do, from the two
+# plans' kinds and fields and what app_path returned for Hammerspoon, as a
+# record of the two.
+init_gate() {
+  local hs_kind="$1" hs_a="$2" hs_b="$3" config_kind="$4" config_c="$5" app_rc="$6" blocked="" for_you=""
   if [[ "$hs_kind" == block ]]; then
     blocked="$hs_a"
   fi
@@ -850,14 +1046,76 @@ cmd_init() {
   if [[ ("$hs_kind" == have || "$hs_kind" == unlisted) && $app_rc -eq 1 ]]; then
     for_you="${for_you:+$for_you; }install Hammerspoon itself: $HAMMERSPOON_INSTALL"
   fi
+  record "$blocked" "$for_you"
+}
+
+# PURE: init's closing lines, from whether --yes was given, the two plans'
+# kinds, and init_gate's two answers.
+init_closing() {
+  local yes="$1" hs_kind="$2" config_kind="$3" blocked="$4" for_you="$5"
+  if [[ -n "$blocked" ]]; then
+    printf 'init --yes cannot finish until this is fixed: %s\n' "$blocked"
+  elif [[ "$hs_kind" == link || "$config_kind" == append ]]; then
+    if [[ $yes -eq 0 ]]; then
+      printf 'nothing else changed: arngz init --yes does what is marked would\n'
+    elif [[ "$config_kind" == append ]]; then
+      printf "reload Hammerspoon's config (its menu bar icon: Reload Config) so it loads hs.ipc, then run arngz doctor\n"
+    else
+      printf 'run arngz doctor to check every precondition\n'
+    fi
+  fi
+  if [[ -n "$for_you" ]]; then
+    printf 'still for you to do: %s\n' "$for_you"
+  fi
+  if [[ -z "$blocked" && -z "$for_you" && "$hs_kind" == have && "$config_kind" == have ]]; then
+    printf 'Hammerspoon setup: nothing to do\n'
+  fi
+}
+
+# init: the catalogue, and what Hammerspoon needs for arngz (D16). Without
+# --yes it creates the catalogue, says what --yes would do, and changes nothing
+# else. With --yes it links the hs tool under the prefix, as Hammerspoon's own
+# hs.ipc.cliInstall would, and appends the one marked line that loads hs.ipc
+# to Hammerspoon's config. A step already done is said and skipped, so a
+# second run changes nothing. Everything --yes would change is checked first,
+# and what it cannot do is refused, exit 2, before anything changes; what only
+# a person can do, it says. A step that fails anyway stops it (init_step).
+cmd_init() {
+  local yes=0
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      --yes)
+        yes=1
+        shift
+        ;;
+      *) refuse "unknown option for init: '$1'" ;;
+    esac
+  done
+
+  local dir prefix app app_rc=0 hs_plan config_plan gate hs_kind hs_a hs_b hs_c config_kind config config_c blocked for_you
+  dir="$(catalogue_dir)"
+  prefix="$(hs_prefix)"
+  app="$(app_path "$HAMMERSPOON_BUNDLE")" || app_rc=$?
+  # Each plan is taken whole before it is split, so a plan that fails is said
+  # rather than read as one with nothing in it.
+  hs_plan="$(init_hs_plan "$prefix" "$app" "$app_rc")" || refuse "init could not plan the hs tool: $hs_plan"
+  config_plan="$(init_config_plan)" || refuse "init could not plan Hammerspoon's config: $config_plan"
+  IFS=$'\037' read -r hs_kind hs_a hs_b hs_c <<<"$hs_plan"
+  IFS=$'\037' read -r config_kind config config_c <<<"$config_plan"
+  if [[ ! "$hs_kind" =~ ^(have|unlisted|block|link)$ || ! "$config_kind" =~ ^(have|append|block)$ ]]; then
+    refuse "init could not plan: the hs tool's plan is '$hs_plan', the config's '$config_plan'"
+  fi
+  gate="$(init_gate "$hs_kind" "$hs_a" "$hs_b" "$config_kind" "$config_c" "$app_rc")"
+  IFS=$'\037' read -r blocked for_you <<<"$gate"
   if [[ $yes -eq 1 && -n "$blocked" ]]; then
     refuse "init --yes changed nothing: $blocked"
   fi
 
+  INIT_MADE=""
   if [[ -d "$dir" ]]; then
     printf 'catalogue: %s (exists)\n' "$dir"
   else
-    mkdir -p "$dir"
+    init_step "make the catalogue $dir" mkdir -p "$dir"
     printf 'catalogue: %s (created)\n' "$dir"
   fi
   case "$app_rc" in
@@ -882,7 +1140,7 @@ cmd_init() {
   case "$config_kind" in
     have) printf 'init.lua: %s loads hs.ipc (line %s)\n' "$config" "$config_c" ;;
     block) printf 'init.lua: cannot be changed: %s\n' "$config_c" ;;
-    append)
+    *)
       if [[ $yes -eq 1 ]]; then
         append_ipc_line "$config"
         printf 'init.lua: appended to %s: %s\n' "$config" "$IPC_LINE"
@@ -892,23 +1150,7 @@ cmd_init() {
       ;;
   esac
 
-  if [[ -n "$blocked" ]]; then
-    printf 'init --yes cannot finish until this is fixed: %s\n' "$blocked"
-  elif [[ "$hs_kind" == link || "$config_kind" == append ]]; then
-    if [[ $yes -eq 0 ]]; then
-      printf 'nothing else changed: arngz init --yes does what is marked would\n'
-    elif [[ "$config_kind" == append ]]; then
-      printf "reload Hammerspoon's config (its menu bar icon: Reload Config) so it loads hs.ipc, then run arngz doctor\n"
-    else
-      printf 'run arngz doctor to check every precondition\n'
-    fi
-  fi
-  if [[ -n "$for_you" ]]; then
-    printf 'still for you to do: %s\n' "$for_you"
-  fi
-  if [[ -z "$blocked" && -z "$for_you" && "$hs_kind" == have && "$config_kind" == have ]]; then
-    printf 'Hammerspoon setup: nothing to do\n'
-  fi
+  init_closing "$yes" "$hs_kind" "$config_kind" "$blocked" "$for_you"
 }
 
 cmd_apply() {
@@ -944,7 +1186,7 @@ cmd_diff() {
   engine_call plan "$(desk_file "$desk")"
   render_report "$ENGINE_RESPONSE"
   ops="$(yq '.ops | length' "$ENGINE_RESPONSE")"
-  rm -rf "$(dirname "$ENGINE_RESPONSE")"
+  rm -rf -- "$ENGINE_DIR"
   if [[ "$ops" -gt 0 ]]; then
     exit 1
   fi
@@ -955,7 +1197,7 @@ cmd_diff() {
 # validator has accepted it. Everything the engine did not record is said on
 # stderr, so stdout is the desk alone.
 cmd_discover() {
-  local save="" force=0 grid="8x4" dir options yaml target reason
+  local save="" force=0 grid="8x4" dir options yaml target reason rc
   while [[ $# -gt 0 ]]; do
     case "$1" in
       --force) force=1; shift ;;
@@ -993,14 +1235,21 @@ cmd_discover() {
   dir="$(mktemp -d "${TMPDIR:-/tmp}/arngz-discover.XXXXXX")"
   options="$dir/options.json"
   G="$grid" N="${save:-discovered}" yq -n -o json '.grid = strenv(G) | .name = strenv(N)' >"$options"
-  engine_call discover "" "$options"
+  # Refused as engine_call refuses, once this verb's own temp dir is gone: the
+  # request the engine kept carries the options in it.
+  rc=0
+  engine_ask discover "" "$options" || rc=$?
+  if [[ $rc -ne 0 ]]; then
+    rm -rf -- "$dir"
+    engine_refuse
+  fi
   yaml="$dir/desk.yaml"
   render_desk "$ENGINE_RESPONSE" >"$yaml"
   render_report "$ENGINE_RESPONSE" >&2
   # What discover writes, the validator must accept: a refusal here is a bug in
   # discover, and it is said rather than saved.
   validate_desk_file "${save:-discovered}" "$yaml" || refuse "discover built a desk the validator refuses (kept at $yaml)"
-  rm -rf "$(dirname "$ENGINE_RESPONSE")"
+  rm -rf -- "$ENGINE_DIR"
 
   if [[ -z "$save" ]]; then
     cat "$yaml"
@@ -1022,92 +1271,51 @@ cmd_doctor() {
   if [[ $# -gt 0 ]]; then
     refuse "doctor takes no arguments: '$1'"
   fi
-  local prefix app app_rc=0 ps ps_rc=0 running where="" state detail fix hs="" rc unasked="" failed="" granted=""
-  prefix="$(hs_prefix)"
+  local app app_rc=0 uid ps ps_rc=0 tool state detail fix hs="" outcome granted="" kept=""
 
-  # Hammerspoon. pgrep exits 1 when no such process runs; anything else is
-  # pgrep failing, which is said, never read as not running.
+  # Hammerspoon: this user's, because with fast user switching another
+  # session's Hammerspoon runs too, and this user's hs cannot reach it.
   app="$(app_path "$HAMMERSPOON_BUNDLE")" || app_rc=$?
-  ps="$(pgrep -x "$HAMMERSPOON_PROCESS" 2>&1)" || ps_rc=$?
-  case "$ps_rc" in
-    0) running=yes ;;
-    1) running=no ;;
-    *) running=unknown ;;
-  esac
-  if [[ $app_rc -eq 0 ]]; then
-    where=" ($app)"
-  fi
-  case "$running:$app_rc" in
-    yes:*) doctor_line ok Hammerspoon "running$where" ;;
-    no:0) doctor_line FAIL Hammerspoon "installed at $app, not running" "open -b $HAMMERSPOON_BUNDLE" ;;
-    no:1) doctor_line FAIL Hammerspoon "missing: not installed" "$HAMMERSPOON_INSTALL" ;;
-    no:*) doctor_line FAIL Hammerspoon "not running, and where it is installed is unknown: $app" "open -b $HAMMERSPOON_BUNDLE, or $HAMMERSPOON_INSTALL" ;;
-    *) doctor_line FAIL Hammerspoon "unknown: pgrep exited $ps_rc: $(printf '%s' "$ps" | tr '\n' ' ')" "run pgrep -x $HAMMERSPOON_PROCESS to see why" ;;
-  esac
+  uid="$(id -u)"
+  ps="$(pgrep -x -U "$uid" "$HAMMERSPOON_PROCESS" 2>&1)" || ps_rc=$?
+  doctor_check Hammerspoon hammerspoon_verdict "$app" "$app_rc" "$ps_rc" "$ps" "pgrep -x -U $uid $HAMMERSPOON_PROCESS"
 
-  IFS='|' read -r state detail fix <<<"$(hs_tool_state "$prefix")"
+  tool="$(hs_tool_state "$(hs_prefix)")"
+  IFS=$'\037' read -r state detail fix <<<"$tool"
+  doctor_check "hs tool" hs_tool_verdict "$state" "$detail" "$fix"
   if [[ "$state" == ok ]]; then
     hs="$detail"
-    doctor_line ok "hs tool" "$hs"
-  else
-    doctor_line FAIL "hs tool" "missing: $detail" "$fix"
   fi
 
   # Asked of the engine, through the one engine call, as observe: its world
   # carries Hammerspoon's own Accessibility state. Never asked when nothing
-  # could answer, so a missing Hammerspoon or hs is said, never waited on.
+  # could answer, so a missing Hammerspoon or hs is said, never waited on. Its
+  # request is kept only when the engine answered with an error, which may be
+  # worth a look; the Accessibility line says where.
   if [[ -z "$hs" ]]; then
-    unasked="there is no hs tool to ask it with"
-    doctor_line skip IPC "not checked: $unasked"
-  elif [[ "$running" == no ]]; then
-    unasked="Hammerspoon is not running"
-    doctor_line skip IPC "not checked: $unasked"
+    outcome=nohs
+  elif [[ $ps_rc -eq 1 ]]; then
+    outcome=stopped
   else
-    rc=0
-    engine_ask observe || rc=$?
-    case "$rc" in
-      0)
-        doctor_line ok IPC "Hammerspoon answered through $hs"
-        granted="$(yq -r '.world.accessibility' "$ENGINE_RESPONSE")"
-        ;;
-      3)
-        doctor_line ok IPC "Hammerspoon answered through $hs"
-        failed="$ENGINE_ERROR (its request and answer are kept at $ENGINE_DIR)"
-        ;;
-      2)
-        unasked="Hammerspoon was not asked"
-        doctor_line FAIL IPC "not asked: $ENGINE_ERROR" "fix what that names, then run arngz doctor again"
-        ;;
-      *)
-        unasked="Hammerspoon did not answer"
-        doctor_line FAIL IPC "$ENGINE_ERROR" "arngz init --yes makes Hammerspoon's config load hs.ipc; then reload that config"
-        ;;
-    esac
-    # Kept only when the engine answered with an error, which may be worth a
-    # look; the line above says where.
-    if [[ -n "$ENGINE_DIR" && $rc -ne 3 ]]; then
+    outcome=0
+    engine_ask observe || outcome=$?
+    if [[ $outcome -eq 0 ]]; then
+      granted="$(yq -r '.world.accessibility' "$ENGINE_RESPONSE" 2>&1)" || granted="(unreadable: $granted)"
+    fi
+    if [[ $outcome -eq 3 ]]; then
+      kept="$ENGINE_DIR"
+    elif [[ -n "$ENGINE_DIR" ]]; then
       rm -rf -- "$ENGINE_DIR"
     fi
   fi
+  doctor_check IPC ipc_verdict "$outcome" "$hs" "$ENGINE_ERROR" "$ENGINE_FIX"
+  doctor_check Accessibility accessibility_verdict "$outcome" "$granted" "$ENGINE_ERROR" "$ENGINE_FIX" "$kept"
 
-  if [[ -n "$unasked" ]]; then
-    doctor_line skip Accessibility "not checked: only Hammerspoon can say, and $unasked"
-  elif [[ -n "$failed" ]]; then
-    doctor_line FAIL Accessibility "unknown: the engine could not say: $failed" "that is arngz's engine failing ($(engine_module)), not Hammerspoon's setup"
-  elif [[ "$granted" == "true" ]]; then
-    doctor_line ok Accessibility "granted to Hammerspoon"
-  elif [[ "$granted" == "false" ]]; then
-    doctor_line FAIL Accessibility "not granted to Hammerspoon" "System Settings > Privacy & Security > Accessibility: turn on Hammerspoon"
-  else
-    doctor_line FAIL Accessibility "unknown: the engine's observe gave accessibility = '$granted'" "that is arngz's engine failing ($(engine_module)), not Hammerspoon's setup"
-  fi
-
-  local what domain key unset_value want at0 at1 value status
+  local what domain key unset_value want at0 at1 value rc
   while IFS='|' read -r what domain key unset_value want at0 at1 fix; do
     rc=0
     value="$(read_pref "$domain" "$key")" || rc=$?
-    IFS='|' read -r status state fix <<<"$(pref_verdict "$rc" "$value" "$unset_value" "$want" "$at0" "$at1" "$fix")"
-    doctor_line "$status" "$what" "$state" "$fix"
+    doctor_check "$what" pref_verdict "$rc" "$value" "$unset_value" "$want" "$at0" "$at1" "$fix"
   done <<<"$DOCTOR_PREFS"
 
   if [[ $DOCTOR_FAILED -gt 0 ]]; then
@@ -1128,6 +1336,9 @@ main() {
   fi
   local verb="$1"
   shift
+  if [[ "$verb" != -h && "$verb" != --help ]]; then
+    load_hammerspoon
+  fi
   case "$verb" in
     -h | --help)
       usage

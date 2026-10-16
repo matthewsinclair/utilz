@@ -309,13 +309,16 @@ check_command() {
 # The guard is osascript itself: off macOS there is none, so there is no app
 # to find, and a test can put a stand-in first on PATH on any OS.
 app_path() {
-  local bundle="$1" out rc=0
+  # The words that mean absent, thrown below and matched after: one string,
+  # so rewording the throw cannot quietly turn every absent app into a
+  # failed lookup.
+  local bundle="$1" absent="no app with bundle id $1" out rc=0
   if ! command -v osascript >/dev/null 2>&1; then
     return 1
   fi
   out="$(osascript -l JavaScript -e "ObjC.import('AppKit');
     var u = \$.NSWorkspace.sharedWorkspace.URLForApplicationWithBundleIdentifier('$bundle');
-    if (u.isNil()) { throw new Error('no app with bundle id $bundle'); }
+    if (u.isNil()) { throw new Error('$absent'); }
     u.path.js" 2>&1)" || rc=$?
   # A path is one line starting with /; anything else on success is a warning
   # mixed in, and is said rather than taken for a path.
@@ -323,7 +326,7 @@ app_path() {
     printf '%s\n' "$out"
     return 0
   fi
-  if [[ $rc -ne 0 && "$out" == *"no app with bundle id $bundle"* ]]; then
+  if [[ $rc -ne 0 && "$out" == *"$absent"* ]]; then
     return 1
   fi
   printf 'looking %s up through LaunchServices failed (osascript exited %s): %s\n' "$bundle" "$rc" "$(printf '%s' "$out" | tr '\n' ' ')"
@@ -331,12 +334,19 @@ app_path() {
 }
 
 # Check if a macOS app is installed, by bundle id, without launching it (see
-# app_path). Off macOS the answer is always missing.
+# app_path). Off macOS the answer is always missing. A lookup that failed is
+# said, as a warning naming why, and returns 2: utilz doctor has no third
+# answer, so it then lists the app with the missing ones, but never silently.
 check_app() {
+  local out rc=0
   if [[ "$(uname -s)" != "Darwin" ]]; then
     return 1
   fi
-  app_path "$1" >/dev/null
+  out="$(app_path "$1")" || rc=$?
+  if [[ $rc -eq 2 ]]; then
+    warn "$out"
+  fi
+  return "$rc"
 }
 
 # Whether one declared dependency is present: an entry carrying `app: <bundle

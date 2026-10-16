@@ -11,6 +11,7 @@
 #   hang-after-reply   write the response, then never return (measured on a
 #                      real hs, 16 Oct 2026)
 #   exit-69            exit 69, as hs does when Hammerspoon is unreachable
+#   exit-75            exit 75, which the CLI reads as Hammerspoon not running
 #   lua-error          exit 65 with an error, as hs does for a Lua error
 
 set -euo pipefail
@@ -39,5 +40,6 @@ case "${FAKE_HS_MODE:-ok}" in
   hang) exec sleep 300 ;;
   hang-after-reply) cp "$FAKE_HS_RESPONSE" "$response"; exec sleep 300 ;;
   exit-69) echo "error: can't access Hammerspoon message port" >&2; exit 69 ;;
+  exit-75) echo "error: Hammerspoon is not running" >&2; exit 75 ;;
   lua-error) echo "attempt to index a nil value" >&2; exit 65 ;;
 esac

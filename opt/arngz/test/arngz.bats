@@ -124,6 +124,13 @@ doctor_with_app() {
   refute_output_contains "'Hammerspoon'"
 }
 
+# check_app runs for real here, over a stubbed app_path and uname, so a lookup
+# that failed is seen through the framework's own reading of it.
+@test "AT-02.1: a LaunchServices lookup that fails is said by utilz doctor, never quietly read as missing" {
+  run /bin/bash -c "source '$UTILZ_HOME/opt/utilz/lib/common.sh'; uname() { if [[ \"\$1\" == -s ]]; then echo Darwin; else command uname \"\$@\"; fi; }; app_path() { echo 'looking org.hammerspoon.Hammerspoon up through LaunchServices failed (osascript exited 1): not authorized'; return 2; }; run_doctor"
+  assert_output_contains "looking org.hammerspoon.Hammerspoon up through LaunchServices failed (osascript exited 1): not authorized"
+}
+
 @test "AT-02.1: doctor names the hs tool when it is not on PATH, as optional" {
   local bin="$BATS_TEST_TMPDIR/bin" tool
   mkdir -p "$bin"
@@ -427,6 +434,9 @@ fake_hs() {
 
 @test "AT-03.1: an absent hs is refused by name, exit 2" {
   export XDG_CONFIG_HOME="$BATS_TEST_TMPDIR/config"
+  # The hs tool is told as doctor tells it (hs_tool_state), which looks under
+  # the prefix too, so the prefix is the test's own, never /opt/homebrew.
+  export ARNGZ_HS_PREFIX="$BATS_TEST_TMPDIR/prefix"
   # The system dirs plus links to yq and bash alone: hs lives beside yq in a
   # package manager's bin, so that dir is left off rather than linked whole.
   local bin="$BATS_TEST_TMPDIR/nohs" tool
@@ -436,7 +446,7 @@ fake_hs() {
   done
   run env PATH="$bin:/usr/bin:/bin" "$UTILZ_BIN_DIR/arngz" discover
   assert_exit_code 2
-  assert_output_contains "the hs tool is not on PATH"
+  assert_output_contains "the hs tool, which arngz reaches Hammerspoon through, is missing: not on PATH; fix: arngz init --yes links it under $ARNGZ_HS_PREFIX"
 }
 
 @test "AT-03.1: an hs that never answers is refused by name, exit 2, within the timeout" {
@@ -483,6 +493,32 @@ fake_hs() {
   run_arngz discover
   assert_exit_code 2
   assert_output_contains "FIXTURE-ENGINE-ERROR"
+}
+
+@test "AT-03.1: a refusal after hs was asked names the request it kept, and what fixes it, and that request is there" {
+  fake_hs exit-69
+  run_arngz discover
+  assert_exit_code 2
+  local kept
+  kept="$(printf '%s\n' "$output" | sed -n 's/.*(request kept at \([^)]*\)).*/\1/p')"
+  [[ "$kept" == "$TMPDIR"/arngz.*/request.json ]]
+  [ -f "$kept" ]
+  assert_output_contains "; fix: arngz init --yes makes Hammerspoon's config load hs.ipc; then reload that config"
+}
+
+@test "AT-03.1: a request that was never written is not named as kept, and its temp dir is gone" {
+  fake_hs ok
+  # A quote in TMPDIR: the dir is made, and then the call is refused, because
+  # its path would end the Lua string the request goes into.
+  export TMPDIR="$BATS_TEST_TMPDIR/a\"b"
+  mkdir -p "$TMPDIR"
+  run_arngz discover
+  assert_exit_code 2
+  assert_output_contains "a path holds a quote or backslash"
+  refute_output_contains "request kept at"
+  [ -d "$TMPDIR" ]
+  [ -z "$(ls -A "$TMPDIR")" ]
+  [ ! -e "$FAKE_HS_LOG/argv" ]
 }
 
 # ============================================================================
@@ -845,6 +881,27 @@ doctor_says() {
   }
 }
 
+# stub_failing TOOL PATTERN: on the fixture machine's PATH, TOOL fails, saying
+# so, whenever its arguments match the glob PATTERN, and is the real TOOL
+# otherwise. For a step that fails after every check before it has passed.
+stub_failing() {
+  local tool="$1" pattern="$2" real
+  real="$(command -v "$tool")"
+  cat >"$STUBS/$tool" <<EOF
+#!/bin/bash
+case "\$*" in
+  $pattern) echo "$tool: failed on purpose (arngz.bats)" >&2; exit 1 ;;
+esac
+exec "$real" "\$@"
+EOF
+  chmod 755 "$STUBS/$tool"
+}
+
+# The path a doctor line names as kept, from the run's output.
+kept_dir() {
+  printf '%s\n' "$output" | sed -n 's/.*(its request and answer are kept at \([^)]*\)).*/\1/p'
+}
+
 # The line init appends, exactly.
 IPC_LINE='require("hs.ipc") -- arngz (Utilz ST0026): IPC for the hs command-line tool'
 
@@ -1044,6 +1101,184 @@ IPC_LINE='require("hs.ipc") -- arngz (Utilz ST0026): IPC for the hs command-line
   assert_exit_code 1
   doctor_says FAIL Hammerspoon "not running, and where it is installed is unknown: looking org.hammerspoon.Hammerspoon up through LaunchServices failed \(osascript exited 1\): execution error: Error: Not authorized"
   refute_output_contains "missing: not installed"
+}
+
+@test "AT-06.1: an engine that ran and wrote no response is an IPC that answered, and the engine is named, not init" {
+  machine
+  hammerspoon_installed
+  hammerspoon_running
+  hs_on_path none
+  run_arngz doctor
+  assert_exit_code 1
+  doctor_says ok IPC "Hammerspoon answered"
+  doctor_says FAIL Accessibility "unknown: the engine could not say: hs exited 0 and wrote no response, so the engine ran and could not write its answer"
+  assert_output_contains "that is arngz's engine failing"
+  refute_output_contains "init --yes"
+}
+
+@test "AT-06.1: an engine error keeps its request and answer, at the path its line names" {
+  machine
+  hammerspoon_installed
+  hammerspoon_running
+  printf 'this is not json\n' >"$BATS_TEST_TMPDIR/notjson.json"
+  hs_on_path ok "$BATS_TEST_TMPDIR/notjson.json"
+  run_arngz doctor
+  assert_exit_code 1
+  doctor_says ok IPC "Hammerspoon answered"
+  doctor_says FAIL Accessibility "unknown: the engine could not say: the engine's response is not JSON: "
+  [[ "$(kept_dir)" == "$TMPDIR"/arngz.* ]]
+  [ -f "$(kept_dir)/request.json" ]
+  [ -f "$(kept_dir)/response.json" ]
+
+  hs_on_path lua-error
+  run_arngz doctor
+  [[ "$(kept_dir)" == "$TMPDIR"/arngz.* ]]
+  [ -f "$(kept_dir)/request.json" ]
+}
+
+@test "AT-06.1: a request that could not be made is IPC not asked, with what fixes it, and doctor finishes" {
+  machine
+  hammerspoon_installed
+  hammerspoon_running
+  hs_on_path ok
+  # TMPDIR a plain file: no temp dir, so no request, and nothing to remove.
+  export TMPDIR="$BATS_TEST_TMPDIR/tmp-is-a-file"
+  echo "not a directory" >"$TMPDIR"
+  mkdir -p "$BATS_TEST_TMPDIR/cwd"
+  : >"$BATS_TEST_TMPDIR/cwd/sentinel"
+  cd "$BATS_TEST_TMPDIR/cwd"
+  run_arngz doctor
+  assert_exit_code 1
+  doctor_says FAIL IPC "not asked: could not make a temp dir under $TMPDIR for the request: .*; fix: make $TMPDIR a writable directory, or set TMPDIR to one$"
+  doctor_says skip Accessibility "not checked: only Hammerspoon can say, and Hammerspoon was not asked$"
+  # Every preference read needs a temp file too, so each says it could not.
+  doctor_says FAIL auto-rearrange "unknown: could not make a temp file under $TMPDIR to read com.apple.dock mru-spaces with: "
+  assert_output_contains "arngz doctor: 5 of 7 preconditions do not hold"
+  [ -f "$BATS_TEST_TMPDIR/cwd/sentinel" ]
+}
+
+@test "AT-06.1: a request whose options could not be written is IPC not asked, and its temp dir is removed" {
+  machine
+  hammerspoon_installed
+  hammerspoon_running
+  hs_on_path ok
+  # mktemp makes the request's dir read-only, as a full disk would leave the
+  # write: every check before it has passed.
+  local real
+  real="$(command -v mktemp)"
+  cat >"$STUBS/mktemp" <<EOF
+#!/bin/bash
+if [[ "\$1" == -d && "\$2" == */arngz.XXXXXX ]]; then
+  dir="\$("$real" -d "\$2")" || exit 1
+  chmod 500 "\$dir"
+  printf '%s\n' "\$dir"
+  exit 0
+fi
+exec "$real" "\$@"
+EOF
+  chmod 755 "$STUBS/mktemp"
+  run_arngz doctor
+  assert_exit_code 1
+  doctor_says FAIL IPC "not asked: could not write the request's options to $TMPDIR/arngz\.[^/]+/options\.json: .*; fix: make $TMPDIR a writable directory"
+  doctor_says skip Accessibility "not checked: only Hammerspoon can say, and Hammerspoon was not asked$"
+  [ ! -e "$FAKE_HS_LOG/argv" ]
+  [ -z "$(ls -A "$TMPDIR")" ]
+}
+
+@test "AT-06.1: an hs on PATH that cannot run is said, never called ok, and nothing is asked through it" {
+  machine
+  hammerspoon_installed
+  hammerspoon_running
+  hs_on_path ok
+  chmod 644 "$STUBS/hs"
+  run_arngz doctor
+  assert_exit_code 1
+  doctor_says FAIL "hs tool" "missing: $STUBS/hs is on PATH and is not executable; fix: remove it, or make it executable$"
+  doctor_says skip IPC "not checked: there is no hs tool to ask it with$"
+  [ ! -e "$FAKE_HS_LOG/argv" ]
+
+  # Executable, and still it will not run: its interpreter is gone.
+  printf '#!%s/no-such-interpreter\n' "$BATS_TEST_TMPDIR" >"$STUBS/hs"
+  chmod 755 "$STUBS/hs"
+  run_arngz doctor
+  assert_exit_code 1
+  doctor_says ok "hs tool" ""
+  doctor_says FAIL IPC "not asked: the hs tool at $STUBS/hs could not be run \(exit 126\): "
+  doctor_says skip Accessibility "not checked: only Hammerspoon can say, and Hammerspoon was not asked$"
+  refute_output_contains "init --yes makes"
+}
+
+@test "AT-06.1: another user's Hammerspoon is not this user's: not running, and never asked" {
+  machine
+  hammerspoon_installed
+  hs_on_path ok
+  export FAKE_RUNNING="Hammerspoon@other"
+  run_arngz doctor
+  assert_exit_code 1
+  doctor_says FAIL Hammerspoon "installed at .*, not running; fix: open -b org.hammerspoon.Hammerspoon$"
+  doctor_says skip IPC "not checked: Hammerspoon is not running$"
+  [ ! -e "$FAKE_HS_LOG/argv" ]
+}
+
+@test "AT-06.1: an observe whose answer cannot be read is said, and doctor still finishes its report" {
+  machine
+  hammerspoon_installed
+  hammerspoon_running
+  yq -o json '.world = [1, 2]' "$FIXTURES/responses/observe.json" >"$BATS_TEST_TMPDIR/array.json"
+  hs_on_path ok "$BATS_TEST_TMPDIR/array.json"
+  run_arngz doctor
+  assert_exit_code 1
+  doctor_says ok IPC "Hammerspoon answered"
+  doctor_says FAIL Accessibility "unknown: the engine's observe gave accessibility = '\(unreadable: .*cannot index array"
+  assert_output_contains "arngz doctor: 1 of 7 preconditions do not hold"
+  [ -z "$(ls -A "$TMPDIR")" ]
+}
+
+@test "AT-06.1: each way IPC fails gets its own fix, and init only when the config is what is missing" {
+  machine
+  hammerspoon_installed
+  hammerspoon_running
+  hs_on_path exit-75
+  run_arngz doctor
+  assert_exit_code 1
+  doctor_says FAIL IPC "Hammerspoon is not running \(hs exit 75\); fix: open -b org.hammerspoon.Hammerspoon$"
+  refute_output_contains "init --yes"
+
+  hs_on_path hang
+  export ARNGZ_HS_TIMEOUT=1
+  run_arngz doctor
+  assert_exit_code 1
+  doctor_says FAIL IPC "hs did not answer within 1s and wrote no response; fix: Hammerspoon is busy or hung"
+  refute_output_contains "init --yes"
+}
+
+@test "AT-06.1: only an unset wording that names this key and this domain is unset; any other is unknown" {
+  machine
+  hammerspoon_installed
+  hammerspoon_running
+  hs_on_path ok
+  local wording
+  for wording in "Error: Domain 'com.apple.other' not found." \
+    "Error: Could not find key 'other-key' in domain 'com.apple.dock'." \
+    "The domain/default pair of (com.apple.other, mru-spaces) does not exist"; do
+    printf '%s\n' "$wording" >"$FAKE_PREFS/com.apple.dock/mru-spaces.error"
+    run_arngz doctor
+    assert_exit_code 1
+    doctor_says FAIL auto-rearrange "unknown: defaults read com.apple.dock mru-spaces failed \(exit 1\): "
+  done
+}
+
+@test "AT-06.1: the engine call tells the hs tool as doctor does, with the same fix" {
+  machine
+  hammerspoon_installed
+  run_arngz init --yes
+  assert_success
+  # Linked under the prefix, which is then taken off PATH.
+  export PATH="${PATH/$ARNGZ_HS_PREFIX\/bin:/}"
+  run_arngz discover
+  assert_exit_code 2
+  assert_output_contains "the hs tool, which arngz reaches Hammerspoon through, is missing: $ARNGZ_HS_PREFIX/bin/hs is there, but $ARNGZ_HS_PREFIX/bin is not on PATH, where arngz looks for it; fix: add $ARNGZ_HS_PREFIX/bin to PATH"
+  refute_output_contains "installs it"
 }
 
 @test "AT-06.1 and AT-06.2: an hs left under the prefix that does not run is one state, told the same by doctor and init" {
@@ -1255,4 +1490,81 @@ EOF
   assert_output_contains "MJConfigFile preference, which says where its config is, could not be read"
   [ ! -e "$HOME/.hammerspoon/init.lua" ]
   [ ! -e "$ARNGZ_HS_PREFIX/bin/hs" ]
+}
+
+@test "AT-06.2: a warning defaults prints beside MJConfigFile's value is not taken for part of the path" {
+  machine
+  hammerspoon_installed
+  hs_on_path ok
+  pref org.hammerspoon.Hammerspoon MJConfigFile '~/.config/hammerspoon/init.lua'
+  echo "2026-10-16 defaults[4242:1] a warning, not the value" >"$FAKE_PREFS/org.hammerspoon.Hammerspoon/MJConfigFile.warning"
+  mkdir -p "$BATS_TEST_TMPDIR/cwd"
+  cd "$BATS_TEST_TMPDIR/cwd"
+  run_arngz init --yes
+  assert_success
+  assert_output_contains "appended to $HOME/.config/hammerspoon/init.lua"
+  grep -qxF "$IPC_LINE" "$HOME/.config/hammerspoon/init.lua"
+  [ -z "$(ls -A "$BATS_TEST_TMPDIR/cwd")" ]
+}
+
+@test "AT-06.2: an MJConfigFile that is not a full path or one under ~/ is refused, never guessed at" {
+  machine
+  hammerspoon_installed
+  hs_on_path ok
+  pref org.hammerspoon.Hammerspoon MJConfigFile 'hammerspoon/init.lua'
+  run_arngz init --yes
+  assert_exit_code 2
+  assert_output_contains "Hammerspoon's MJConfigFile preference is 'hammerspoon/init.lua', not a full path or one under ~/"
+}
+
+@test "AT-06.2: a LaunchServices lookup that fails is said by init, which links nothing on a guess" {
+  machine
+  echo "execution error: Error: Not authorized to send Apple events (-1743)" >"$FAKE_APPS/org.hammerspoon.Hammerspoon.error"
+  run_arngz init
+  assert_success
+  assert_output_contains "Hammerspoon: unknown: looking org.hammerspoon.Hammerspoon up through LaunchServices failed (osascript exited 1): execution error: Error: Not authorized"
+  assert_output_contains "hs tool: cannot be linked: the hs tool comes with Hammerspoon, and where it is installed is unknown: looking org.hammerspoon.Hammerspoon up"
+  refute_output_contains "not installed"
+  local before
+  before="$(machine_snapshot)"
+  run_arngz init --yes
+  assert_exit_code 2
+  assert_output_contains "init --yes changed nothing: the hs tool comes with Hammerspoon, and where it is installed is unknown"
+  [ "$before" = "$(machine_snapshot)" ]
+}
+
+@test "AT-06.2: a config that cannot be searched for its require is refused, never given a second one" {
+  machine
+  hammerspoon_installed
+  hs_on_path ok
+  mkdir -p "$HOME/.hammerspoon"
+  printf 'require("hs.ipc")\n' >"$HOME/.hammerspoon/init.lua"
+  cp "$HOME/.hammerspoon/init.lua" "$BATS_TEST_TMPDIR/init.before"
+  stub_failing awk '*re=require*'
+  run_arngz init --yes
+  assert_exit_code 2
+  assert_output_contains "init --yes changed nothing: $HOME/.hammerspoon/init.lua could not be searched for a require of hs.ipc: awk: failed on purpose"
+  cmp "$BATS_TEST_TMPDIR/init.before" "$HOME/.hammerspoon/init.lua"
+}
+
+@test "AT-06.2: a step that fails after init --yes changed something stops it, exit 1, naming what it made" {
+  machine
+  hammerspoon_installed
+  stub_failing ln '*hs.1*'
+  run_arngz init --yes
+  assert_exit_code 1
+  assert_output_contains "init --yes stopped at 'link $ARNGZ_HS_PREFIX/share/man/man1/hs.1 to $APP/Contents/Resources/man/hs.man': ln: failed on purpose (arngz.bats). Made before it: make the catalogue $XDG_CONFIG_HOME/arngz/desks; make $ARNGZ_HS_PREFIX/bin; link $ARNGZ_HS_PREFIX/bin/hs to $APP/Contents/Frameworks/hs/hs; make $ARNGZ_HS_PREFIX/share/man/man1"
+  refute_output_contains "changed nothing"
+  [ -L "$ARNGZ_HS_PREFIX/bin/hs" ]
+}
+
+@test "AT-06.2: a catalogue that cannot be made is refused, exit 2, because nothing has changed" {
+  machine
+  mkdir -p "$BATS_TEST_TMPDIR/locked"
+  chmod 555 "$BATS_TEST_TMPDIR/locked"
+  export XDG_CONFIG_HOME="$BATS_TEST_TMPDIR/locked/config"
+  run_arngz init
+  chmod 755 "$BATS_TEST_TMPDIR/locked"
+  assert_exit_code 2
+  assert_output_contains "init changed nothing: could not make the catalogue $XDG_CONFIG_HOME/arngz/desks: "
 }

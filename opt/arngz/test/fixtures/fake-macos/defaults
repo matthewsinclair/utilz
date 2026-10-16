@@ -14,6 +14,8 @@
 #                            "The domain/default pair ... does not exist"
 #   <key>.error is there     defaults failing another way: what that file
 #                            holds, on stderr, exit 1
+#   <key>.warning is there   a warning beside the answer: what that file
+#                            holds, on stderr, before whatever else happens
 
 set -euo pipefail
 if [[ $# -ne 3 || "$1" != "read" ]]; then
@@ -23,6 +25,9 @@ fi
 domain="$2"
 key="$3"
 dir="${FAKE_PREFS:?fake defaults needs FAKE_PREFS}/$domain"
+if [[ -f "$dir/$key.warning" ]]; then
+  cat "$dir/$key.warning" >&2
+fi
 if [[ -f "$dir/$key.error" ]]; then
   cat "$dir/$key.error" >&2
   exit 1

@@ -134,7 +134,7 @@ Every verb that reads a desk validates it first, and refuses with exit 2 on any 
 | `list`          | each desk with its display and app counts; an invalid desk is named on its own line     | 0, or 1 if any invalid |
 | `show <desk>`   | the desk, validated, exactly as stored                                                  | 0, or 2                |
 | `delete <desk>` | remove the desk's file, naming it; a desk that no longer validates can still be deleted | 0, or 2                |
-| `init`          | create the catalogue and report what Hammerspoon needs; with `--yes`, provide it        | 0, or 2                |
+| `init`          | create the catalogue and report what Hammerspoon needs; with `--yes`, provide it        | 0, 1, or 2             |
 | `doctor`        | every precondition, each with its state, and what fixes each one that does not hold     | 0, or 1 if any fails   |
 
 ### Options
@@ -183,7 +183,7 @@ arngz delete old    # remove one
 ## Exit Status
 
 - `0` -- done.
-- `1` -- `list` found a desk that does not validate, `diff` found that apply would change something, or `doctor` found a precondition that does not hold; each is named.
+- `1` -- `list` found a desk that does not validate, `diff` found that apply would change something, `doctor` found a precondition that does not hold, or `init --yes` stopped at a step that failed after it had changed something; each is named, and for `init` so is every step it had made.
 - `2` -- refused before anything changed: a desk that does not exist or does not validate, a bad name or option, or a verb not built yet.
 
 ---

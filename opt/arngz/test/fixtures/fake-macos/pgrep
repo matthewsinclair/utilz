@@ -1,13 +1,21 @@
 #!/usr/bin/env bash
 #
-# A stand-in for pgrep, for arngz.bats (ST0026 AT-06): `pgrep -x <name>`
-# finds <name> when it is one of the words in FAKE_RUNNING, and nothing else
-# is faked. FAKE_PGREP_EXIT makes it fail as pgrep itself can (2 or 3), with
-# that exit and a message on stderr.
+# A stand-in for pgrep, for arngz.bats (ST0026 AT-06). `pgrep -x <name>`
+# finds <name> when it is one of the words in FAKE_RUNNING; a word
+# `<name>@other` is another user's process of that name. `pgrep -x -U <uid>
+# <name>` finds only this user's, so `<name>@other` never matches it. Nothing
+# else is faked. FAKE_PGREP_EXIT makes it fail as pgrep itself can (2 or 3),
+# with that exit and a message on stderr.
 
 set -euo pipefail
-if [[ $# -ne 2 || "$1" != "-x" ]]; then
-  echo "fake pgrep: only 'pgrep -x <name>' is faked, not: $*" >&2
+if [[ $# -eq 2 && "$1" == "-x" ]]; then
+  uid=""
+  name="$2"
+elif [[ $# -eq 4 && "$1" == "-x" && "$2" == "-U" ]]; then
+  uid="$3"
+  name="$4"
+else
+  echo "fake pgrep: only 'pgrep -x [-U <uid>] <name>' is faked, not: $*" >&2
   exit 64
 fi
 if [[ -n "${FAKE_PGREP_EXIT:-}" ]]; then
@@ -15,9 +23,13 @@ if [[ -n "${FAKE_PGREP_EXIT:-}" ]]; then
   exit "$FAKE_PGREP_EXIT"
 fi
 # shellcheck disable=SC2086 # FAKE_RUNNING is a list of words, split on purpose
-for name in ${FAKE_RUNNING:-}; do
-  if [[ "$name" == "$2" ]]; then
+for word in ${FAKE_RUNNING:-}; do
+  if [[ "$word" == "$name" && ( -z "$uid" || "$uid" == "$(id -u)" ) ]]; then
     echo 4242
+    exit 0
+  fi
+  if [[ "$word" == "$name@other" && -z "$uid" ]]; then
+    echo 4343
     exit 0
   fi
 done
