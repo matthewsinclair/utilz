@@ -1,0 +1,16 @@
+{
+  "id": "01M52F122TJFG5Y08MB11RS2XG",
+  "ts": "2026-10-16T13:39:36.667Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "hold",
+    "seq": 12,
+    "text": "WP-05 design notes, held until Intent's 0605 fix (3.2.4) and intent-vc's step 2 lift the hold on sync --to-store and edits under intent/st: (1) vc's init exit-column line, on disk in ST0026/design.md, unsynced and uncommitted; (2) --dry-run computes what diff does, with no preference verdict; (3) D25: engine_ask exits 2 on a bad ARNGZ_HS_TIMEOUT or ARNGZ_APPLY_TIMEOUT before sending, and ENGINE_PENDING/ENGINE_KIND; (4) the op table gains no_space, gone, unmovable and pending; (5) the phases note for 45acc46 (fresh running query, apply in phases, raise before hold, step 4's refusal and its edge, reads mid-change), drafted at tmp/cc/st0026-design-note-phases.md (git-ignored). Then intent sync --to-store ST0026 and commit design.md with ST0026.json by path."
+  }
+}

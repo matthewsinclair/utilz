@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: 67bcef6b-d20d-4bb9-ac53-ff7fbaf2e422
-heartbeat_at: 2026-10-16 12:21Z
+heartbeat_at: 2026-10-16 13:39Z
 status: active
-focus: "16 Oct: banked for the compact on hv's word. WP-05 landed 32fe3f0 (verified by vc); post-launch fix WIP at 03b7f85, critic confirm pending; hand runs wait on vc; design notes wait on Intent 0605. Taking instructions from vc."
+focus: "16 Oct: banked for the compact on hv's word. WP-05 phases fix at 45acc46 (verified by vc in a worktree); its hands-off re-run is next session's first item (hold 14); design notes wait on Intent 0605 (hold 12, the phases note at tmp/cc/). Taking instructions from vc."
 claims: [ST0026/05]
 ---
 
@@ -21,9 +21,8 @@ _(none)_
 
 ## Holds
 
-- WP-05 design notes, held until Intent's 0605 fix (3.2.4) lifts vc's hold on edits under intent/st: (1) vc's init exit-column line, on disk in ST0026/design.md, unsynced and uncommitted; (2) --dry-run computes what diff does, with no preference verdict; (3) D25: engine_ask exits 2 on a bad ARNGZ_HS_TIMEOUT or ARNGZ_APPLY_TIMEOUT before sending, and ENGINE_PENDING/ENGINE_KIND; (4) the op table gains no_space, gone, unmovable and pending. Then intent sync --to-store ST0026 and commit design.md with ST0026.json by path.
-- WP-05 post-launch fix banked as WIP at 03b7f85 (from vc's hand runs: launched window listed before Accessibility backs it; observe's axuielement nil element; unshown-desktop naming flaky). Suite green on it (plan_test 167/167, arngz.bats 119/119 bash 3.2 and 5, shellcheck clean, observe live ok). Its critic-lua confirm reported after the bank: 0 critical, 1 WARNING to fix: plan_settled's pcall wraps the done predicate, so a P.plan crash on a retry is swallowed and the first plan returned (arngz.lua ~926; pcall the observe only). Recs: a retry's refusal replaces the plan in hand (decide: keep polling or say so); id-read and filter.default failures leave no trace in unseen reasons (arngz.lua ~92/98/95); attempts sits under nameable's doc comment; the apps_running comment contradicts the code. Condition: after the compact, fix these, critic-lua to 0/0, then the SHA to vc for the hands-off re-run. (edited)
-- AT-05.4, AT-05.5 and AC-05.6: vc's to mark. Condition: vc's re-run of acceptance.sh apply/launch on the handrun desk at the post-launch fix's SHA, with hv's hands off; vc sends the transcript. cc runs nothing that takes the pointer.
+- WP-05 design notes, held until Intent's 0605 fix (3.2.4) and intent-vc's step 2 lift the hold on sync --to-store and edits under intent/st: (1) vc's init exit-column line, on disk in ST0026/design.md, unsynced and uncommitted; (2) --dry-run computes what diff does, with no preference verdict; (3) D25: engine_ask exits 2 on a bad ARNGZ_HS_TIMEOUT or ARNGZ_APPLY_TIMEOUT before sending, and ENGINE_PENDING/ENGINE_KIND; (4) the op table gains no_space, gone, unmovable and pending; (5) the phases note for 45acc46 (fresh running query, apply in phases, raise before hold, step 4's refusal and its edge, reads mid-change), drafted at tmp/cc/st0026-design-note-phases.md (git-ignored). Then intent sync --to-store ST0026 and commit design.md with ST0026.json by path. (edited)
+- AT-05.4, AT-05.5 and AC-05.6: vc's to mark. Condition: vc's hands-off re-run of acceptance.sh apply/launch on the handrun desk at 45acc46 (verified clean by vc in a worktree), with hv's hands off, plus the second-apply probe (expected refused, exit 2); next session's first item. vc sends the transcript. cc runs nothing that takes the pointer. (edited)
 
 ## Watch-outs
 

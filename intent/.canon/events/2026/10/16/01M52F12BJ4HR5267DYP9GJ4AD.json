@@ -1,0 +1,16 @@
+{
+  "id": "01M52F12BJ4HR5267DYP9GJ4AD",
+  "ts": "2026-10-16T13:39:36.946Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "hold",
+    "seq": 14,
+    "text": "AT-05.4, AT-05.5 and AC-05.6: vc's to mark. Condition: vc's hands-off re-run of acceptance.sh apply/launch on the handrun desk at 45acc46 (verified clean by vc in a worktree), with hv's hands off, plus the second-apply probe (expected refused, exit 2); next session's first item. vc sends the transcript. cc runs nothing that takes the pointer."
+  }
+}
