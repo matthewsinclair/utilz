@@ -8,13 +8,6 @@ A DOING / TODO / DONE view, projected from steel-thread and work-package status:
 
 ## DOING
 
-- [-] ST0026: arngz: named window arrangements (desks) discovered and applied across displays and spaces
-  - [x] 01: Spike: space moves and Dock bindings on macOS 27
-  - [x] 02: Desk config, validator and the catalogue verbs
-  - [x] 03: Engine: observe, the pure planner, execute, and the IPC contract
-  - [x] 04: discover and diff
-  - [x] 05: apply
-  - [x] 06: doctor, init, docs and the close
 - [-] ST0027: menuz: a macOS menu bar app whose menu is a YAML file of commands to run
   - [-] 01: Design settled with hv
   - [-] 02: The shim, the config directory and the catalogue verbs
@@ -141,6 +134,13 @@ _(none)_
   - [x] 02: The platform safe zone, and everything type inside it
 - [x] ST0025: stampz: a PDF whose pages differ in size is stamped page by page
   - [x] 01: Per-size stamps and per-range overlays
+- [x] ST0026: arngz: named window arrangements (desks) discovered and applied across displays and spaces
+  - [x] 01: Spike: space moves and Dock bindings on macOS 27
+  - [x] 02: Desk config, validator and the catalogue verbs
+  - [x] 03: Engine: observe, the pure planner, execute, and the IPC contract
+  - [x] 04: discover and diff
+  - [x] 05: apply
+  - [x] 06: doctor, init, docs and the close
 
 ---
 
