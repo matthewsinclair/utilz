@@ -1,0 +1,15 @@
+{
+  "id": "01M533YFATBNPAXMKEFRWE53BB",
+  "ts": "2026-10-16T19:45:12.027Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wp.new",
+  "subject": {
+    "type": "wp",
+    "id": "ST0027/06"
+  },
+  "payload": {
+    "scope": "S",
+    "title": "First-use fixes: notice, place, icon and glyph"
+  }
+}

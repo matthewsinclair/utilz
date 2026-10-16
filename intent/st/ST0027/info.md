@@ -31,6 +31,7 @@ The thread is created and started ahead of the rubber-duck: design.md carries th
 | WP-03 | The app: the menu from the file, watched, realised at open | S    | Done   |
 | WP-04 | Running items: params, the runner, the log and the notice  | S    | Done   |
 | WP-05 | Build, install, launch and the close                       | S    | WIP    |
+| WP-06 | First-use fixes: notice, place, icon and glyph             | S    | WIP    |
 
 ## Acceptance
 

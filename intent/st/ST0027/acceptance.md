@@ -46,6 +46,14 @@ title: menuz: a macOS menu bar app whose menu is a YAML file of commands to run
 - AC-05.3 (non-test) CI: a macOS job on a tag or on dispatch builds the app unsigned, runs MenuzKitTests and MenuzTests through the scheme, and reads no secrets; the Linux legs run menuz.bats with the fake app in the explicit utility loop; both green on the closing SHA. Signing with Developer ID, notarising and stapling run on the maintainer's machine from the login keychain through the project's own devbin command, and the stapled Menuz.app.zip is the release asset the keg's install fetches (D12). -- satisfied: no
 - AC-05.4 (non-test) help/menuz.md, the README's menuz section and the CHANGELOG entry exist and name every verb and flag the CLI accepts, checked against menuz --help; bin/devbin check all and the estate suite are green; the hand-run transcript in acceptance.md names the machine, the macOS build and the Xcode version. -- satisfied: no
 
+### WP-06 -- First-use fixes: notice, place, icon and glyph (status: WIP)
+
+- AC-06.1 The notice has one route: the wrapper keeps its decision and its text and runs the app's own executable, "$MENUZ_EXEC" --notify "$MENUZ_NOTICE", in place of osascript, the Runner exporting MENUZ_EXEC; the --notify arm posts through UNUserNotificationCenter under the app's bundle id, waits for the centre's answer, prints 'notice posted' and exits 0, or prints why (authorisation denied, naming System Settings > Notifications > menuz; the add error; no answer in 10 s) and exits 1, which the wrapper logs under the run id; the app requests authorisation at its first launch and logs the answer, and Notifier posts the app's own notices through the same centre; no osascript, no file under state, no summary at the next launch. -- satisfied: no (computed)
+- AC-06.2 menuz seeds no menu bar position; at a launch whose defaults hold no 'NSStatusItem Preferred Position Item-0' the app logs one line saying to hold Command and drag the icon where it is wanted, and posts it as a notice; with the key set it says nothing. -- satisfied: no (computed)
+- AC-06.3 The app carries an icon drawn as native/macos/Menuz/design/menuz.svg, rasterised with its silhouette menuz-mark.svg by bin/devbin macos app-icons (rsvg-convert, refusing by name without it) into the tracked Assets.xcassets (AppIcon at the seven macOS sizes, MenuBarIcon as a template at three scales), named by project.yml, so the built bundle has its icon and NSImage(named: MenuBarIcon) loads; MenuSpec.icon is nil without icon: and the status item then shows the mark, an SF Symbol when icon: names one (D8 stands); the example's icon: line is a comment and opt/menuz/lib/example.yaml follows design.md's block byte for byte. -- satisfied: no (computed)
+- AC-06.4 Hand run on hv's machine, recorded as such, from the dev build at the landed SHA under ~/.local/state (a bundle under /private/tmp is refused by the notification centre, D13): the launch logs 'notifications: granted'; a run that exits non-zero while the app runs and one that ends after the app quit each land 'notice posted' in the log under their ids; the first-launch line is logged and posted when the position key is absent; the status item shows the mark with no icon: line. -- satisfied: no (computed)
+- AC-06.5 (non-test) help/menuz.md says the default glyph is menuz's mark and icon: names an SF Symbol over it, that a full menu bar can hide a new item behind the overflow (hold Command and drag it), and that notices come through macOS's notification centre under menuz's name with a refusal logged naming System Settings > Notifications > menuz; checked against the landed app. -- satisfied: no
+
 ## Acceptance Tests
 
 ### WP-01 -- Design settled with hv (status: Done)
@@ -74,6 +82,10 @@ _(no tests in this group)_
 - AT-04.5 `opt/menuz/test/run-handrun.sh` -- covers AC-04.5 -- status: green -- Hand run 16 Oct 2026 19:00Z on hv's machine (Mac16,6, macOS 27.0.1 build 26A434, Xcode 27.1 build 27A9275), hands off, the Debug product at 9dde810 under fixture XDG dirs with arngz linked into MENUZ_HOME/bin, driven through the accessibility tree by run-handrun.lua, transcript tmp/vc-st0026/st0027/ac045-handrun-9dde810.txt: discover through the form saved vc-ac045 (run 1, exit 0 in 1.5s); the each-generated item vc-ac045 applied it (run 2: 15 windows placed, 2 apps kept their own size, exit 1 in 19.7s, the failure notice posted); a text param through the form (run 3, '[3] hello hv', exit 0 in 0.2s); a slow run quit mid-way (run 4: 'quit; runs still going: 4' at 19:01:03Z, then '[4] done' and 'exit 0 in 20.3s' at 19:01:21Z, after the quit line); every start line with cwd and run as written, every output line prefixed by its id; the app quit clean and registered no login item
 
 ### WP-05 -- Build, install, launch and the close (status: WIP)
+
+_(no tests in this group)_
+
+### WP-06 -- First-use fixes: notice, place, icon and glyph (status: WIP)
 
 _(no tests in this group)_
 

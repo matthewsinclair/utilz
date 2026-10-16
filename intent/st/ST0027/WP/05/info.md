@@ -18,38 +18,17 @@ Build, install, launch and the close: the shim's remaining verbs (`build`, `test
 
 **Layout.**
 
-| Where                         | What                                                                                                                                                                                       |
-| ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `opt/menuz/menuz`             | The verbs below, bash 3.2 under `set -euo pipefail`, shellcheck-clean. Exit codes as arngz: 0 done, 1 failed after changing something (naming the step), 2 refused before anything changed |
-| `bin/.devbin/cmd/macos`       | Project-local, Utilz's own (not the vendored core): `doctor`, `store-creds`, `app-icons`, `app-sign`, `app-notarize`, `app-verify`, `publish`, ported from Intent's app half               |
-| `.github/workflows/tests.yml` | The `menuz-app` job                                                                                                                                                                        |
-| `opt/menuz/test/menuz.bats`   | The verbs' tests, with fakes on PATH                                                                                                                                                       |
-| `opt/menuz/test/macos.bats`   | `bin/devbin macos`'s refusals and sequence, with fakes on PATH                                                                                                                             |
+| Where                         | What                                                                                                                                                                                        |
+| ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `opt/menuz/menuz`             | The verbs below, bash 3.2 under `set -euo pipefail`, shellcheck-clean. Exit codes as arngz: 0 done, 1 failed after changing something (naming the step), 2 refused before anything changed  |
+| `bin/.devbin/cmd/macos`       | Project-local, Utilz's own (not the vendored core): `doctor`, `store-creds`, `app-sign`, `app-notarize`, `app-verify`, `publish`, ported from Intent's app half, beside WP-06's `app-icons` |
+| `.github/workflows/tests.yml` | The `menuz-app` job                                                                                                                                                                         |
+| `opt/menuz/test/menuz.bats`   | The verbs' tests, with fakes on PATH                                                                                                                                                        |
+| `opt/menuz/test/macos.bats`   | `bin/devbin macos`'s refusals and sequence, with fakes on PATH                                                                                                                              |
 
 **Source clone or install.** As prez's shim does (ST0014 D5): a tree with `manifest.sha256` at the shim's own tree root is an install, a brew keg or a `utilz install` publish. Neither carries `native/macos/Menuz`, which the published set leaves out. In an install, `build` and `test` refuse by name, exit 2, naming the source clone (`git clone https://github.com/matthewsinclair/utilz`), and `install` takes the release asset (below). In a source clone, `install` builds.
 
-**hv's first runs: D13.** dc launched the Debug build for hv after the fold, and vc's todo 37 records what hv met. hv then ruled "Fix everything that needs fixing", recorded as D13 in design.md with the Output section amended. WP-05 carries all four fixes, and they land first, ahead of the shim, because hv is running the app now.
-
-1. **The notice (a WP-04 defect: AC-04.4 was green on a fake `osascript`, and the real one posts nothing on hv's machine).**
-   - The wrapper still decides whether to post, and still builds the text. It then writes the text to `$MENUZ_NOTICES/<id>`, through `<id>.tmp` renamed into place, before its end line. `MENUZ_NOTICES` is `<state>/notices`, made by the app.
-   - When `kill -0 "$MENUZ_APP_PID"` finds the app gone, the wrapper also runs `osascript` as before, and the file stays.
-   - The app's process source, on the wrapper's exit, reads `<notices>/<id>`, posts it through `UNUserNotificationCenter` and removes it. No file means no notice was due.
-   - At launch, the app posts one notice for any files left, "<n> run(s) ended while menuz was not running: see the log", and removes them. That also covers a run that saw the app alive just before it quit.
-   - `Notifier` posts through `UNUserNotificationCenter` too, for the app's own notices. Authorisation is requested at launch, for `.alert` and `.sound`.
-   - When the centre's settings say menuz may not post, the notice becomes a log line naming System Settings > Notifications > menuz, and so does a failed `add`. A notice about a log write that failed goes to OSLog instead, as now.
-   - A delegate gives `.banner` and `.list` so a notice shows even while menuz is active.
-   - `Run.noticeScript` stays as the wrapper's fallback only.
-2. **Place.** A first launch on a full menu bar lands leftmost, behind macOS 27's overflow, where hv could not find it. menuz seeds no position. When the app's defaults hold no `NSStatusItem Preferred Position Item-0`, the launch logs, and posts as a notice, one line: "menuz is in the menu bar; if the bar is full it may be hidden: hold Command and drag its icon where you want it". The help's line on this is dc's.
-3. **App icon.**
-   - A drawn mark at `native/macos/Menuz/design/menuz.svg`, with its silhouette at `design/menuz-mark.svg`, made in this WP. Apple's SF Symbols licence does not allow a symbol as an app icon, so vc's "rendered from the SF Symbol" is not taken.
-   - `bin/devbin macos app-icons` rasterises them with `rsvg-convert` into the tracked `Menuz/Assets.xcassets`: `AppIcon` at seven sizes, and `MenuBarIcon` as a template at 1x, 2x and 3x. This is Intent's `cmd_app_icons`, ported.
-   - `project.yml` sets `ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon`. A build needs no `rsvg-convert`, and `doctor` reports `rsvg-convert` only as `app-icons`' need.
-4. **Default glyph.**
-   - `MenuSpec.icon` becomes optional: nil when the file has no `icon:`. The app then shows `MenuBarIcon`, the mark as a template image, which hv can pick out in the overflow. `icon:` still names an SF Symbol and is validated as now (D8 otherwise stands).
-   - The example's `icon:` line is commented out, saying the mark is the default.
-   - hv's own `~/.config/menuz/menuz.yaml` (from `menuz init`) sets `icon: terminal` and keeps it until hv removes that line. cc tells hv rather than edit hv's file.
-
-The arngz "command not found" in hv's first runs is not menuz's: hv's login shell has no `arngz` while the tap lacks 2.13.0, and dc linked it into `~/.config/menuz/bin`.
+**The first-use fixes are WP-06's (D13), landed ahead of this WP's remainder on hv's "Hold off"; the `--unregister` arm is this WP's.**
 
 **The verbs.**
 
@@ -140,18 +119,6 @@ The arngz "command not found" in hv's first runs is not menuz's: hv's login shel
 - with no credentials: `doctor` reports MISSING, and `app-notarize` refuses;
 - `publish` refuses a version mismatch, a missing release object and an asset already uploaded, each with a fake `gh`;
 - the sign sequence against fake `codesign`, `security` and `xcrun`.
-
-MenuzKitTests and MenuzTests gain, red first:
-
-- the wrapper with a live `MENUZ_APP_PID`, which writes the notice file, through the temporary name, with the text for each notify setting, and calls no `osascript`;
-- the wrapper with a dead pid, which writes the file and calls the fake `osascript`;
-- `never`, and a `failure` that exits 0, which write no file;
-- the leftover summary's text for one run and for several;
-- the first-run line, given and withheld by whether a position is recorded;
-- `MenuSpec.icon` nil without `icon:`, and the example's validation still ok;
-- in MenuzTests, a spawned run whose notice file the app's exit handler reads and removes, with the poster faked, so no real notification is posted.
-
-AT-04.4's claim is rewritten to what it measures: the wrapper's decision and text, and the hand-off to the app. That AT edit is vc's.
 
 AC-05.4's `bin/devbin check all` and the estate suite on the closing SHA are vc's. The docs (`help/menuz.md`, the README section, the CHANGELOG entry, and `docs/releasing.md`'s new step for the app asset) are dc's, at the close.
 
