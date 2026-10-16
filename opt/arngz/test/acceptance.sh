@@ -18,13 +18,13 @@
 #             module, it runs the spike's observe straight after and says where
 #             the two agree.
 #
-#   apply     AC-05.4, after the desk's windows were scrambled by hand: diff
+#   apply     AT-05.4 (AC-05.4), after the desk's windows were scrambled by hand: diff
 #             first finds something to do (the scramble is real), apply exits
 #             0 with every entry placed, diff then finds nothing to do (a fresh
 #             observe and plan), and a second apply moves and launches nothing
 #             and reports every entry plainly placed. It TAKES THE POINTER:
 #             hands off the mouse and the keyboard while it runs.
-#   launch    AC-05.5, with <bundle id> named in <desk> and NOT running: apply
+#   launch    AT-05.5 (AC-05.5), with <bundle id> named in <desk> and NOT running: apply
 #             --no-launch reports it skipped and exits 1, leaving it unlaunched;
 #             then apply launches and places it within the timeout, exit 0.
 #             It takes the pointer too.
@@ -190,7 +190,7 @@ count_lines() {
 apply_check() {
   local desk="${1:-}"
   [[ -n "$desk" ]] || die "usage: $0 apply <desk>"
-  echo "AC-05.4 -- apply $desk after a scramble by hand (hands off: this takes the pointer)"
+  echo "AT-05.4 (AC-05.4) -- apply $desk after a scramble by hand (hands off: this takes the pointer)"
   arngz diff "$desk"
   if [[ $RC -eq 1 ]]; then ok "before apply, diff finds something to do (the scramble is real)"; else bad "before apply, diff finds something to do (exit $RC)"; fi
   local entries placed
@@ -238,7 +238,7 @@ launch_check() {
   if [[ "$running" == true ]]; then
     die "$bundle is running; quit it first, then run this again"
   fi
-  echo "AC-05.5 -- $bundle in $desk, not running (hands off: this takes the pointer)"
+  echo "AT-05.5 (AC-05.5) -- $bundle in $desk, not running (hands off: this takes the pointer)"
   arngz apply --no-launch "$desk"
   if [[ $RC -eq 1 ]] && grep -iF "$bundle" <<<"$OUT" | grep -q ': skipped'; then
     ok "--no-launch reports $bundle skipped, exit 1"

@@ -1,4 +1,5 @@
--- plan_test.lua: AT-03.2, the pure planner, under plain Lua (ST0026 D12).
+-- plan_test.lua: AT-03.2, the pure planner, under plain Lua (ST0026 D12);
+-- and AT-05.2, display matching, below.
 --
 -- Run by arngz.bats under whichever of lua5.4, lua or luajit is present:
 --   <lua> opt/arngz/test/plan_test.lua <path to opt/arngz/lib/plan.lua>
@@ -464,7 +465,7 @@ do
   check("and plan_report describes every kind in words, never by its bare name", raw == 0, table.concat(described, " | "))
 end
 
--- Display matching refuses rather than guesses.
+-- AT-05.2: display matching refuses rather than guesses.
 do
   local d = base_desk()
   d.displays[1].match = { uuid = "NO-SUCH", name = "Other" }
