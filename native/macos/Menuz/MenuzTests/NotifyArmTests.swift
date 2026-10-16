@@ -2,6 +2,7 @@ import AppKit
 import Foundation
 import MenuzKit
 import Testing
+import UserNotifications
 
 @testable import Menuz
 
@@ -13,22 +14,35 @@ actor Posted {
 
 /// A centre that answers as it is told and posts nothing real.
 struct FakeCenter: NoticeCenter {
-  enum Mode: Sendable { case grant, refuse, offInSettings, addFails, hang, authorizeThrows }
+  /// `refuse` and `offInSettings` answer false, the first with the status
+  /// not determined (the alert up or withdrawn), the second denied;
+  /// `notAllowed` and `notAllowedDenied` raise the centre's one error for
+  /// both, told apart by the status; `authorizeThrows` is any other error.
+  enum Mode: Sendable {
+    case grant, refuse, offInSettings, notAllowed, notAllowedDenied, addFails, hang, authorizeThrows
+  }
   let mode: Mode
   let posted = Posted()
 
   func authorize() async throws -> Bool {
     switch mode {
-    case .refuse: return false
+    case .refuse, .offInSettings: return false
+    case .notAllowed, .notAllowedDenied: throw UNError(.notificationsNotAllowed)
     case .hang:
       try await Task.sleep(for: .seconds(2))
       return true
-    case .authorizeThrows: throw Failure(text: "Notifications are not allowed for this application")
+    case .authorizeThrows: throw Failure(text: "the centre is away")
     default: return true
     }
   }
 
-  func isDenied() async -> Bool { mode == .offInSettings }
+  func status() async -> Notice.Status {
+    switch mode {
+    case .offInSettings, .notAllowedDenied: .denied
+    case .refuse, .notAllowed: .notDetermined
+    default: .allowed
+    }
+  }
 
   func add(title: String, body: String) async throws {
     if mode == .addFails { throw Failure(text: "the centre would not take it") }
@@ -58,13 +72,27 @@ struct NotifyArmTests {
     #expect(await center.posted.notices == ["menuz: \"Say it\" exited 2"])
   }
 
-  @Test("refused, or off in System Settings: nothing posted, the setting named, exit 1")
+  @Test("off in System Settings, refused or by the centre's error with the status denied: the setting named, exit 1")
   func denied() async {
-    for mode in [FakeCenter.Mode.refuse, .offInSettings] {
+    for mode in [FakeCenter.Mode.offInSettings, .notAllowedDenied] {
       let center = FakeCenter(mode: mode)
       let answer = Arms.notify(Self.text, center: center, seconds: 5)
       #expect(
         answer.line == "notice not posted: notifications are off for menuz under System Settings > Notifications",
+        "\(mode)")
+      #expect(answer.code == 1)
+      #expect(await center.posted.notices == [])
+    }
+  }
+
+  @Test("not answered yet, refused or by the centre's error with the status not determined: the alert and the setting named, exit 1")
+  func notYetAllowed() async {
+    for mode in [FakeCenter.Mode.refuse, .notAllowed] {
+      let center = FakeCenter(mode: mode)
+      let answer = Arms.notify(Self.text, center: center, seconds: 5)
+      #expect(
+        answer.line
+          == "notice not posted: menuz is not yet allowed to post notifications: answer macOS's alert, or allow them under System Settings > Notifications > menuz",
         "\(mode)")
       #expect(answer.code == 1)
       #expect(await center.posted.notices == [])
@@ -77,7 +105,7 @@ struct NotifyArmTests {
     #expect(add.line == "notice not posted: the centre would not take it")
     #expect(add.code == 1)
     let authorize = Arms.notify(Self.text, center: FakeCenter(mode: .authorizeThrows), seconds: 5)
-    #expect(authorize.line == "notice not posted: Notifications are not allowed for this application")
+    #expect(authorize.line == "notice not posted: the centre is away")
     #expect(authorize.code == 1)
   }
 
@@ -90,6 +118,46 @@ struct NotifyArmTests {
     #expect(answer.code == 1)
     #expect(waited >= 0.3, "the arm gave up before its deadline: \(waited) s")
     #expect(waited < 1.5, "the arm waited past its deadline: \(waited) s")
+  }
+}
+
+/// What the launch logs of its authorisation request (D13): the answer
+/// when it comes, and, past the deadline with none, that the alert is up.
+/// AT-06.1 (ST0027 acceptance.md) cites this file.
+@MainActor
+@Suite("Launch authorisation", .serialized)
+struct LaunchAuthorisationTests {
+  /// The lines `Notices.authorise` has the app log, in order.
+  static func lines(_ mode: FakeCenter.Mode, seconds: Double = 5) async -> [String] {
+    let said = Posted()
+    let answer = await Notices.authorise(center: FakeCenter(mode: mode), seconds: seconds) {
+      Task { await said.add(Notice.asking) }
+    }
+    await said.add(Notice.launchLine(answer))
+    return await said.notices
+  }
+
+  @Test("granted, denied, not yet allowed and the centre's error are each one line")
+  func answers() async {
+    #expect(await Self.lines(.grant) == ["notifications: granted"])
+    #expect(await Self.lines(.offInSettings) == ["notifications: denied under System Settings > Notifications > menuz"])
+    #expect(await Self.lines(.notAllowedDenied) == ["notifications: denied under System Settings > Notifications > menuz"])
+    for mode in [FakeCenter.Mode.refuse, .notAllowed] {
+      #expect(
+        await Self.lines(mode)
+          == ["notifications: not yet allowed: answer macOS's alert, or allow them under System Settings > Notifications > menuz"],
+        "\(mode)")
+    }
+    #expect(await Self.lines(.authorizeThrows) == ["notifications: the centre is away"])
+  }
+
+  @Test("no answer by the deadline says the alert is up, then the answer when it comes")
+  func asking() async {
+    let started = Date()
+    let lines = await Self.lines(.hang, seconds: 0.3)
+    let waited = Date().timeIntervalSince(started)
+    #expect(lines == [Notice.asking, "notifications: granted"])
+    #expect(waited >= 2, "the launch gave up on the centre's answer: \(waited) s")
   }
 }
 

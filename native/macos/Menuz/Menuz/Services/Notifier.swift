@@ -1,13 +1,14 @@
 import Foundation
 import MenuzKit
 import UserNotifications
+import os
 
-/// The notification centre as menuz uses it: authorise, read whether the
-/// user turned menuz off, post. Behind a protocol so a test sees what is
-/// posted and posts nothing.
+/// The notification centre as menuz uses it: authorise, read what it says
+/// of menuz, post. Behind a protocol so a test sees what is posted and
+/// posts nothing.
 protocol NoticeCenter: Sendable {
   func authorize() async throws -> Bool
-  func isDenied() async -> Bool
+  func status() async -> Notice.Status
   func add(title: String, body: String) async throws
 }
 
@@ -17,8 +18,13 @@ struct SystemNoticeCenter: NoticeCenter {
     try await UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound])
   }
 
-  func isDenied() async -> Bool {
-    await UNUserNotificationCenter.current().notificationSettings().authorizationStatus == .denied
+  func status() async -> Notice.Status {
+    switch await UNUserNotificationCenter.current().notificationSettings().authorizationStatus {
+    case .denied: .denied
+    case .authorized, .provisional, .ephemeral: .allowed
+    case .notDetermined: .notDetermined
+    @unknown default: .notDetermined
+    }
   }
 
   func add(title: String, body: String) async throws {
@@ -37,12 +43,47 @@ enum Notices {
   /// Authorises (cheap once granted), then posts `text`.
   static func post(_ text: String, center: some NoticeCenter) async -> Notice.Outcome {
     do {
-      guard try await center.authorize() else { return .denied }
-      guard await !center.isDenied() else { return .denied }
+      guard try await center.authorize() else { return await refusal(center) }
       try await center.add(title: Notice.title, body: text)
       return .posted
+    } catch let error as UNError where error.code == .notificationsNotAllowed {
+      return await refusal(center)
     } catch {
       return .failed(error.localizedDescription)
+    }
+  }
+
+  /// Why the centre refused: the user turned menuz off, or the first
+  /// launch's alert was never answered (macOS 27 raises the one error for
+  /// both, and withdraws the alert when the app quits under it, D13).
+  static func refusal(_ center: some NoticeCenter) async -> Notice.Outcome {
+    await center.status() == .denied ? .denied : .notYetAllowed
+  }
+
+  /// The launch's request: the answer, with no deadline of its own, since
+  /// the alert waits for the user; `asked` is called once when `seconds`
+  /// pass with no answer, so the log says the alert is up.
+  static func authorise(
+    center: some NoticeCenter, seconds: Double, asked: @escaping @MainActor @Sendable () -> Void
+  ) async -> Notice.Authorisation {
+    let answered = OSAllocatedUnfairLock(initialState: false)
+    let request = Task<Result<Bool, any Error>, Never> {
+      let result: Result<Bool, any Error>
+      do { result = .success(try await center.authorize()) } catch { result = .failure(error) }
+      answered.withLock { $0 = true }
+      return result
+    }
+    let deadline = Date().addingTimeInterval(seconds)
+    while !answered.withLock({ $0 }), Date() < deadline {
+      try? await Task.sleep(for: .milliseconds(50))
+    }
+    if !answered.withLock({ $0 }) { await asked() }
+    switch await request.value {
+    case .success(true): return .granted
+    case .success(false): return await refusal(center) == .denied ? .denied : .notYetAllowed
+    case .failure(let error as UNError) where error.code == .notificationsNotAllowed:
+      return await refusal(center) == .denied ? .denied : .notYetAllowed
+    case .failure(let error): return .failed(error.localizedDescription)
     }
   }
 }
@@ -56,17 +97,18 @@ enum Notifier {
   private static let presenter = Presenter()
   private static var log: AppLog?
 
-  /// At launch, before the status item: the delegate, and authorisation
-  /// asked for, its answer logged.
-  static func start(log: AppLog) async {
+  /// At launch: the delegate, and authorisation asked for, its answer
+  /// logged when it comes; after `seconds` with no answer the log says the
+  /// alert is up and the wait goes on. True when granted.
+  @discardableResult
+  static func start(
+    log: AppLog, center: some NoticeCenter = SystemNoticeCenter(), seconds: Double = Notice.deadline
+  ) async -> Bool {
     self.log = log
     UNUserNotificationCenter.current().delegate = presenter
-    do {
-      let granted = try await SystemNoticeCenter().authorize()
-      log.write("notifications: \(granted ? "granted" : "denied")")
-    } catch {
-      log.write("notifications: \(error.localizedDescription)")
-    }
+    let answer = await Notices.authorise(center: center, seconds: seconds) { log.write(Notice.asking) }
+    log.write(Notice.launchLine(answer))
+    return answer == .granted
   }
 
   static func post(_ text: String, toLog: Bool = true) {

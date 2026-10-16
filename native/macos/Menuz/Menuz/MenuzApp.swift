@@ -66,14 +66,14 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, MenuAc
     }
     setupMainMenu()
     // Read before the status item is made, in case making it records a
-    // place; said once the centre has answered, so the line can post (D13).
+    // place; logged at once, posted once the centre has granted (D13: the
+    // first launch's alert can wait minutes for the user, or for ever).
     let placement = Placement.line(UserDefaults.standard)
     let log = self.log
+    if let placement { log.write(placement) }
     Task {
-      await Notifier.start(log: log)
-      guard let placement else { return }
-      log.write(placement)
-      Notifier.post(placement)
+      let granted = await Notifier.start(log: log)
+      if granted, let placement { Notifier.post(placement) }
     }
     let builder = MenuBuilder(target: self)
     builder.menu.delegate = self

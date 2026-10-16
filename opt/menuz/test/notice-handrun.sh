@@ -42,6 +42,17 @@ echo "== machine =="; sysctl -n hw.model; sw_vers -productVersion | sed 's/^/mac
 echo "== the position key, as found =="
 if defaults read "$BID" "$KEY" >/dev/null 2>&1; then POS="$(defaults read "$BID" "$KEY")"; echo "present: $POS; removed for this launch"; defaults delete "$BID" "$KEY"; else POS=""; echo "absent"; fi
 echo "== launch at $(date -u +%H:%M:%SZ) =="; "$BIN" </dev/null >"$S/app.txt" 2>&1 & sleep 4; echo "running: $(running)"
+# macOS asks with an alert at the bundle id's first request and holds the
+# answer for the user (D13): the launch line is waited for, up to 90 s, and
+# an unanswered alert is named, since the notices below then read "not yet
+# allowed" until it is answered or the id is allowed under System Settings.
+for _ in $(seq 1 90); do grep -q '^[^ ]* notifications:' "$LOG" 2>/dev/null && break; sleep 1; done
+case "$(grep -h 'notifications:' "$LOG" 2>/dev/null | tail -1)" in
+  *"notifications: granted"*) echo "authorised: granted" ;;
+  *"is asking"*) echo "authorised: NOT YET: macOS's alert is up; answer it with Allow (hv), or the notices below read not yet allowed" ;;
+  "") echo "authorised: no notifications: line in 90 s" ;;
+  *) echo "authorised: $(grep -h 'notifications:' "$LOG" | tail -1 | cut -c22-)" ;;
+esac
 echo "== 1: Fail now (notify: failure, exit 3) =="; echo "menu: $(drive menu 'Fail now')"; sleep 4
 echo "== 2: Always (notify: always, exit 0, the last line) =="; echo "menu: $(drive menu 'Always')"; sleep 4
 echo "== 3: Quietly (notify: failure, exit 0: no notice) =="; echo "menu: $(drive menu 'Quietly')"; sleep 3
@@ -52,6 +63,7 @@ echo "== the log =="; sed 's/^/        /' "$LOG" | cut -c1-200
 echo "== checks =="
 grep -n 'notifications:' "$LOG" | sed 's/^/authorisation: /'
 grep -n -i 'hold Command' "$LOG" | sed 's/^/placement line: /'
+grep -c 'not yet allowed' "$LOG" | sed 's/^/not yet allowed lines (0 wanted): /'
 grep -c 'notice posted' "$LOG" | sed 's/^/notice posted lines (3 wanted): /'
 grep -n 'notice not posted' "$LOG" | sed 's/^/not posted: /'
 grep -n ' exit 0 in ' "$LOG" | sed 's/^/exit 0 lines: /'

@@ -1,0 +1,14 @@
+{
+  "id": "01M5383ZG4DSRYTSKHXV8R0QT8",
+  "ts": "2026-10-16T20:58:06.724Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.edit",
+  "subject": {
+    "type": "ac",
+    "id": "ST0027/AC-06.4"
+  },
+  "payload": {
+    "text": "Hand run on hv's machine, recorded as such, from the dev build at the landed SHA under ~/.local/state (a bundle under /private/tmp is refused by the notification centre, D13): the launch logs 'notifications: granted', the first request under the bundle id being macOS 27's alert, answered Allow by hv, or the id allowed under System Settings > Notifications > menuz (until then the launch logs that macOS is asking and the runs' notices read not yet allowed, and that first attempt's transcript is kept beside the passing one); a run that exits non-zero while the app runs and one that ends after the app quit each land 'notice posted' in the log under their ids; the first-launch line is logged at launch when the position key is absent and posted once granted; the status item shows the mark with no icon: line."
+  }
+}
