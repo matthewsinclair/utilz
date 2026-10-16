@@ -3,9 +3,9 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: b6f789ca-4627-4a74-b4cd-bb7c07de9f46
-heartbeat_at: 2026-10-16 16:42Z
+heartbeat_at: 2026-10-16 16:48Z
 status: active
-focus: "16 Oct: AC-06.3 landed at da23005 and WP-06 is done (vc). Hold 6 waits on Intent 0605's install. Next is menuz (ST0027) docs from WP-02 on, when vc says. Taking instructions from vc."
+focus: "16 Oct: ST0027 menuz docs drafted in tmp/dc-st0027 on vc's word, nothing landed; 4 markers wait on cc's code. Hold 6 waits on Intent 0605's install. Taking instructions from vc."
 claims: []
 ---
 
@@ -22,6 +22,7 @@ _(none)_
 ## Holds
 
 - Until Intent 0605's fixed pair is installed (0605 is on Intent's main; hv's build all has not run) and intent-vc's step 2 lifts the hold on edits under intent/st: two notes in ST0026's design.md, carried into the store with cc's hold 12 notes by one intent sync --to-store ST0026, since both edit that file. (1) D23: an MJConfigFile that is set and empty is refused by name, because Hammerspoon 1.1.1 then takes the empty string as its config path and loads no config (its MJAppDelegate.m and MJConfigUtils.m, read, not measured); landed at 7451678. (2) D20: on a verb that is not scheduled, hs's exit 69 with receive timeout is said as Hammerspoon running and not answering in time, never as unreachable, with the exit unchanged; landed at ff154a7. (edited)
+- Until vc says cc's ST0027 shim SHA is verified and the docs may land (dc recommends WP-05's SHA, since WP-02 builds 7 of the 16 verbs): land help/menuz.md, README's ### menuz section (after mdagg) and the CHANGELOG entry from tmp/dc-st0027/ (git-ignored; NOTES.md is the procedure). Markers @EXAMPLE, @PARAMS, @USE and @SIGNING are answered from cc's code. D6 as hv corrected it: ~/Applications/Menuz.app, use dev|installed.
 
 ## Watch-outs
 

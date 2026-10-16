@@ -1,0 +1,15 @@
+{
+  "id": "01M52ST5S8HYRZNWA6V1CBRDEY",
+  "ts": "2026-10-16T16:48:05.416Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "hold",
+    "text": "Until vc says cc's ST0027 shim SHA is verified and the docs may land (dc recommends WP-05's SHA, since WP-02 builds 7 of the 16 verbs): land help/menuz.md, README's ### menuz section (after mdagg) and the CHANGELOG entry from tmp/dc-st0027/ (git-ignored; NOTES.md is the procedure). Markers @EXAMPLE, @PARAMS, @USE and @SIGNING are answered from cc's code. D6 as hv corrected it: ~/Applications/Menuz.app, use dev|installed."
+  }
+}
