@@ -49,3 +49,16 @@ tmp/
 .githooks/post-checkout.intent
 .githooks/post-merge.intent
 .githooks/post-rewrite.intent
+
+# SwiftPM's working state for menuz's pure package (ST0027 WP-03). `swift test`
+# is run with --scratch-path under ${XDG_STATE_HOME:-~/.local/state}/menuz, so
+# .build/ should never appear; this is the fence for a bare `swift build`.
+native/macos/Menuz/MenuzKit/.build/
+native/macos/Menuz/MenuzKit/.swiftpm/
+
+# Menuz.app's build products. Builds pass SYMROOT and OBJROOT under
+# ${XDG_STATE_HOME:-~/.local/state}/menuz/build/macos, as Gtools and Intent do,
+# because an Xcode preference this machine has (Locations: Custom, relative to
+# workspace) otherwise puts them in the project's build/ even with
+# -derivedDataPath. This line is the fence for a build that forgets.
+native/macos/Menuz/build/

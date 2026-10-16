@@ -1,0 +1,78 @@
+name: Menuz
+options:
+  bundleIdPrefix: com.matthewsinclair.utilz
+  deploymentTarget:
+    macOS: "14.0"
+  xcodeVersion: "16.0"
+  generateEmptyDirectories: true
+# Gtools' project.yml cut to what Menuz.app needs (ST0027 WP-03): an
+# LSUIElement app over the MenuzKit package, Automatic signing with the
+# team on this machine for Debug and Release, hardened runtime. Signing with
+# Developer ID and notarising are WP-05's, Intent's pipeline (D7).
+configs:
+  Debug: debug
+  Release: release
+packages:
+  MenuzKit:
+    path: MenuzKit
+settings:
+  base:
+    SWIFT_VERSION: "6.0"
+    # Xcode 16 "recommended" defaults, baked in so `xcodegen generate` never
+    # re-raises the "Update to Recommended Settings" dialog.
+    DEAD_CODE_STRIPPING: YES
+    ENABLE_USER_SCRIPT_SANDBOXING: YES
+    LOCALIZATION_PREFERS_STRING_CATALOGS: YES
+    STRING_CATALOG_GENERATE_SYMBOLS: YES
+    ASSETCATALOG_COMPILER_GENERATE_ASSET_SYMBOLS: YES
+    ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS: YES
+    # The stamps. Info.plist substitutes them into the bundle, where `utilz
+    # menuz status` reads them; `utilz menuz build` passes all four on the
+    # xcodebuild command line from opt/menuz/VERSION and git. A build from
+    # inside Xcode gets these, so it says "dev" rather than a version it is
+    # not.
+    MENUZ_VERSION: dev
+    MENUZ_BUILD: "0"
+    MENUZ_COMMIT: dev
+    MENUZ_SOURCE_TREE: dev
+  configs:
+    Debug:
+      CODE_SIGN_STYLE: Automatic
+      DEVELOPMENT_TEAM: 76BQL8L47U
+    Release:
+      CODE_SIGN_STYLE: Automatic
+      DEVELOPMENT_TEAM: 76BQL8L47U
+targets:
+  Menuz:
+    type: application
+    platform: macOS
+    sources:
+      - Menuz
+    dependencies:
+      - package: MenuzKit
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.matthewsinclair.utilz.menuz
+        INFOPLIST_FILE: Menuz/Info.plist
+        ENABLE_HARDENED_RUNTIME: YES
+      configs:
+        # Debug carries get-task-allow so xctest can attach; Release does not.
+        Debug:
+          CODE_SIGN_ENTITLEMENTS: Menuz/Menuz.Debug.entitlements
+        Release:
+          CODE_SIGN_ENTITLEMENTS: Menuz/Menuz.entitlements
+    scheme:
+      testTargets:
+        - MenuzTests
+        - package: MenuzKit/MenuzKitTests
+  MenuzTests:
+    type: bundle.unit-test
+    platform: macOS
+    sources:
+      - MenuzTests
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: YES
+    dependencies:
+      - target: Menuz
+      - package: MenuzKit

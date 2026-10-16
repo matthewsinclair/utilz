@@ -1,0 +1,517 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		184F74B5C1A84C179E4FFD0A /* MenuSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 746C4473977A35828A0457CF /* MenuSource.swift */; };
+		3EC6549C623D9165FE8920F6 /* Realiser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A012D3FACA5B5E47D174B0E /* Realiser.swift */; };
+		5E613632DB47D5AC9BB87171 /* MenuzKit in Frameworks */ = {isa = PBXBuildFile; productRef = 179FB1D9697FE3912ACB93C8 /* MenuzKit */; };
+		647A99098E46609054F1591F /* MenuBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A82B2DADFCB97CEDA1B96BA /* MenuBuilder.swift */; };
+		698D5FF25A59BB86422C638D /* AppLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1434161DD51B33FFBEA2FB62 /* AppLog.swift */; };
+		6EAD658E87554EF44E6805B2 /* Shell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11104D7740E2D95237590C37 /* Shell.swift */; };
+		737167339BCD0368AFD43609 /* LoginShell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D78B2E5395802C4995350D1 /* LoginShell.swift */; };
+		7A18260D751703EDDADAAE43 /* Arms.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86DE1B4857DABEF4761E634D /* Arms.swift */; };
+		8A0ACEFEB1B35D3594B1FAFE /* TestHostTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FB3DC0386DDBB630BCAECDE /* TestHostTests.swift */; };
+		9BA03B276434DB812F3EE7EE /* Watcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AA7FC095B000E5E6F52EC5B /* Watcher.swift */; };
+		EAE4191C024DFE1B4BBE78F5 /* MenuzApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA910089979C343042FD394C /* MenuzApp.swift */; };
+		FB37AB1536AE3C8EEDC49F8F /* MenuzKit in Frameworks */ = {isa = PBXBuildFile; productRef = E176BB28E1D45EFD0D08551C /* MenuzKit */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		5D0FB53ED8C67DC97F5FCB03 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E810C966BCD6BB1535630C8F /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 09C0BB04C25A1366A492DD92;
+			remoteInfo = Menuz;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		0D78B2E5395802C4995350D1 /* LoginShell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginShell.swift; sourceTree = "<group>"; };
+		11104D7740E2D95237590C37 /* Shell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shell.swift; sourceTree = "<group>"; };
+		119B745E5FA30468AC4D6A81 /* MenuzKit */ = {isa = PBXFileReference; lastKnownFileType = folder; name = MenuzKit; path = MenuzKit; sourceTree = SOURCE_ROOT; };
+		1434161DD51B33FFBEA2FB62 /* AppLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLog.swift; sourceTree = "<group>"; };
+		408DCC006CB1D86D48104017 /* Menuz.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Menuz.entitlements; sourceTree = "<group>"; };
+		5AA7FC095B000E5E6F52EC5B /* Watcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Watcher.swift; sourceTree = "<group>"; };
+		6847D972D776B11DB1D40E76 /* Menuz.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Menuz.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		69D7BB98761B18EBC1D62714 /* Menuz.Debug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Menuz.Debug.entitlements; sourceTree = "<group>"; };
+		6FB3DC0386DDBB630BCAECDE /* TestHostTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestHostTests.swift; sourceTree = "<group>"; };
+		746C4473977A35828A0457CF /* MenuSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuSource.swift; sourceTree = "<group>"; };
+		7A012D3FACA5B5E47D174B0E /* Realiser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Realiser.swift; sourceTree = "<group>"; };
+		7F4B5B698304EA469BFF20D9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		86DE1B4857DABEF4761E634D /* Arms.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Arms.swift; sourceTree = "<group>"; };
+		8A82B2DADFCB97CEDA1B96BA /* MenuBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBuilder.swift; sourceTree = "<group>"; };
+		AA910089979C343042FD394C /* MenuzApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuzApp.swift; sourceTree = "<group>"; };
+		F79BAB43EFFF54B070289BA6 /* MenuzTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MenuzTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		91CE2011AC56A1E3CFE6FE22 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5E613632DB47D5AC9BB87171 /* MenuzKit in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DE8030B21260C5DB6982A2BB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FB37AB1536AE3C8EEDC49F8F /* MenuzKit in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		16ADA0BE19B786BCD5825EB3 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				1434161DD51B33FFBEA2FB62 /* AppLog.swift */,
+				86DE1B4857DABEF4761E634D /* Arms.swift */,
+				0D78B2E5395802C4995350D1 /* LoginShell.swift */,
+				8A82B2DADFCB97CEDA1B96BA /* MenuBuilder.swift */,
+				746C4473977A35828A0457CF /* MenuSource.swift */,
+				7A012D3FACA5B5E47D174B0E /* Realiser.swift */,
+				11104D7740E2D95237590C37 /* Shell.swift */,
+				5AA7FC095B000E5E6F52EC5B /* Watcher.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		35A90E4E42930C484E1203B1 /* Packages */ = {
+			isa = PBXGroup;
+			children = (
+				119B745E5FA30468AC4D6A81 /* MenuzKit */,
+			);
+			name = Packages;
+			sourceTree = "<group>";
+		};
+		70904584922641BBDE082669 = {
+			isa = PBXGroup;
+			children = (
+				8E55552CD0E1374154978F6A /* Menuz */,
+				904B4CE84C0C56752D6CE37B /* MenuzTests */,
+				35A90E4E42930C484E1203B1 /* Packages */,
+				C22258F6AC1722274E4185EF /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		8E55552CD0E1374154978F6A /* Menuz */ = {
+			isa = PBXGroup;
+			children = (
+				7F4B5B698304EA469BFF20D9 /* Info.plist */,
+				69D7BB98761B18EBC1D62714 /* Menuz.Debug.entitlements */,
+				408DCC006CB1D86D48104017 /* Menuz.entitlements */,
+				AA910089979C343042FD394C /* MenuzApp.swift */,
+				16ADA0BE19B786BCD5825EB3 /* Services */,
+			);
+			path = Menuz;
+			sourceTree = "<group>";
+		};
+		904B4CE84C0C56752D6CE37B /* MenuzTests */ = {
+			isa = PBXGroup;
+			children = (
+				6FB3DC0386DDBB630BCAECDE /* TestHostTests.swift */,
+			);
+			path = MenuzTests;
+			sourceTree = "<group>";
+		};
+		C22258F6AC1722274E4185EF /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				6847D972D776B11DB1D40E76 /* Menuz.app */,
+				F79BAB43EFFF54B070289BA6 /* MenuzTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		09C0BB04C25A1366A492DD92 /* Menuz */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7CE34671F9F836018814A9C1 /* Build configuration list for PBXNativeTarget "Menuz" */;
+			buildPhases = (
+				5BF7F661DFBD5950183BD9D2 /* Sources */,
+				DE8030B21260C5DB6982A2BB /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Menuz;
+			packageProductDependencies = (
+				E176BB28E1D45EFD0D08551C /* MenuzKit */,
+			);
+			productName = Menuz;
+			productReference = 6847D972D776B11DB1D40E76 /* Menuz.app */;
+			productType = "com.apple.product-type.application";
+		};
+		A584467DB7F4C361753D936C /* MenuzTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F7074AE093362200FEAA67F8 /* Build configuration list for PBXNativeTarget "MenuzTests" */;
+			buildPhases = (
+				1C81B31315D0B9CE6AF5F447 /* Sources */,
+				91CE2011AC56A1E3CFE6FE22 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				42D5BE7BC6D5A8A5742C2262 /* PBXTargetDependency */,
+			);
+			name = MenuzTests;
+			packageProductDependencies = (
+				179FB1D9697FE3912ACB93C8 /* MenuzKit */,
+			);
+			productName = MenuzTests;
+			productReference = F79BAB43EFFF54B070289BA6 /* MenuzTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		E810C966BCD6BB1535630C8F /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1600;
+				TargetAttributes = {
+					09C0BB04C25A1366A492DD92 = {
+						DevelopmentTeam = 76BQL8L47U;
+						ProvisioningStyle = Automatic;
+					};
+					A584467DB7F4C361753D936C = {
+						DevelopmentTeam = 76BQL8L47U;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 0FA895EB6375553240C2993E /* Build configuration list for PBXProject "Menuz" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 70904584922641BBDE082669;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				49AF3B870C8104DB5888EB44 /* XCLocalSwiftPackageReference "MenuzKit" */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = C22258F6AC1722274E4185EF /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				09C0BB04C25A1366A492DD92 /* Menuz */,
+				A584467DB7F4C361753D936C /* MenuzTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		1C81B31315D0B9CE6AF5F447 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8A0ACEFEB1B35D3594B1FAFE /* TestHostTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5BF7F661DFBD5950183BD9D2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				698D5FF25A59BB86422C638D /* AppLog.swift in Sources */,
+				7A18260D751703EDDADAAE43 /* Arms.swift in Sources */,
+				737167339BCD0368AFD43609 /* LoginShell.swift in Sources */,
+				647A99098E46609054F1591F /* MenuBuilder.swift in Sources */,
+				184F74B5C1A84C179E4FFD0A /* MenuSource.swift in Sources */,
+				EAE4191C024DFE1B4BBE78F5 /* MenuzApp.swift in Sources */,
+				3EC6549C623D9165FE8920F6 /* Realiser.swift in Sources */,
+				6EAD658E87554EF44E6805B2 /* Shell.swift in Sources */,
+				9BA03B276434DB812F3EE7EE /* Watcher.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		42D5BE7BC6D5A8A5742C2262 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 09C0BB04C25A1366A492DD92 /* Menuz */;
+			targetProxy = 5D0FB53ED8C67DC97F5FCB03 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		1932C660B1F3AB8820C1E71D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.matthewsinclair.utilz.MenuzTests;
+				SDKROOT = macosx;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Menuz.app/Contents/MacOS/Menuz";
+			};
+			name = Release;
+		};
+		934100FAA16B892A98249D4E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.matthewsinclair.utilz.MenuzTests;
+				SDKROOT = macosx;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Menuz.app/Contents/MacOS/Menuz";
+			};
+			name = Debug;
+		};
+		CC387A62623C54FEEC23B5E1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_ASSET_SYMBOLS = YES;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 76BQL8L47U;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MENUZ_BUILD = 0;
+				MENUZ_COMMIT = dev;
+				MENUZ_SOURCE_TREE = dev;
+				MENUZ_VERSION = dev;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 6.0;
+			};
+			name = Release;
+		};
+		CC485015F4EDAA6B4552078D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Menuz/Menuz.Debug.entitlements;
+				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				INFOPLIST_FILE = Menuz/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.matthewsinclair.utilz.menuz;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		D5718B2AB3296D3B54C51E09 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Menuz/Menuz.entitlements;
+				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				INFOPLIST_FILE = Menuz/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.matthewsinclair.utilz.menuz;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		F92E40848EC6F4DA4F8B1CEA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_ASSET_SYMBOLS = YES;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 76BQL8L47U;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MENUZ_BUILD = 0;
+				MENUZ_COMMIT = dev;
+				MENUZ_SOURCE_TREE = dev;
+				MENUZ_VERSION = dev;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 6.0;
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		0FA895EB6375553240C2993E /* Build configuration list for PBXProject "Menuz" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F92E40848EC6F4DA4F8B1CEA /* Debug */,
+				CC387A62623C54FEEC23B5E1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		7CE34671F9F836018814A9C1 /* Build configuration list for PBXNativeTarget "Menuz" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CC485015F4EDAA6B4552078D /* Debug */,
+				D5718B2AB3296D3B54C51E09 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		F7074AE093362200FEAA67F8 /* Build configuration list for PBXNativeTarget "MenuzTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				934100FAA16B892A98249D4E /* Debug */,
+				1932C660B1F3AB8820C1E71D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		49AF3B870C8104DB5888EB44 /* XCLocalSwiftPackageReference "MenuzKit" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = MenuzKit;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		179FB1D9697FE3912ACB93C8 /* MenuzKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = MenuzKit;
+		};
+		E176BB28E1D45EFD0D08551C /* MenuzKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = MenuzKit;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = E810C966BCD6BB1535630C8F /* Project object */;
+}
