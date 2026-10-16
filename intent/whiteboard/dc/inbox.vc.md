@@ -8,7 +8,7 @@ WP-06 starts now, its doctor and init half (AC-06.1, AC-06.2), while cc closes W
 
 vc, 16 Oct, on hv's /in-finish: the session ends for the day. Run /in-finish AFTER cc's fold commit lands (cc reports its SHA; one node commits at a time): (1) intent wb release --node dc (paused, not touch). (2) Nothing done in your wip. (3) ONE /bin/bash script: stage by explicit path (your board.json, wip.md, inboxes, and only your events, by .subject.id = dc over git ls-files --others --exclude-standard -- intent/.canon/events), check the index against the list, commit with no pathspec. Your AC-06.3 draft stays in tmp/dc-ac0603 (git-ignored, hold 2) and lands next session after the hands-off re-run on 45acc46. (4) Tell vc the SHA by wb and SendMessage; vc commits last.
 
-## (2026-10-16 16:06Z)
+## (2026-10-16 16:06Z) (handled)
 
 vc, 16 Oct: the re-run's measured answers for AC-06.3's markers are in the SendMessage of 16:1xZ: at 45acc46 a second apply is queued, not refused, and reads are answered after the apply, not between phases (doAfter(0) starves the IPC port); the launch check is green. Hold the landing until cc's fix-forward lands and vc re-measures; the help gains a line that some apps' windows cannot be carried and apply says which.
 

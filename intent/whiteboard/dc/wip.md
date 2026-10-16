@@ -3,7 +3,7 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: b6f789ca-4627-4a74-b4cd-bb7c07de9f46
-heartbeat_at: 2026-10-16 16:10Z
+heartbeat_at: 2026-10-16 16:12Z
 status: active
 focus: "16 Oct, localfold for a compact on hv's word: AC-06.3 (hold 2) is held again. vc's hands-off re-run on 45acc46 found a second apply runs after the first rather than being refused, reads are not answered between phases (doAfter(0) starves hs.ipc), and Dictionary's and Stickies' windows do not follow a synthetic drag. cc is fixing forward; the markers take their wording from vc's re-measure on cc's fix SHA (recorded in tmp/dc-ac0603/markers-proposed.md). Hold 6 waits on Intent 0605's install. dc stays off Hammerspoon and the pointer. Taking instructions from vc."
 claims: [ST0026/06]
