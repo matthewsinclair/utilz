@@ -1,27 +1,94 @@
 import Foundation
 import MenuzKit
+import UserNotifications
 
-/// The app's own notices: a log line it could not write, a run it could
-/// not start. A run's notice is posted by its wrapper (WP-04's objective,
-/// D9), through the same `display notification`, the text read from the
-/// environment and never spliced into the script.
-enum Notifier {
-  static func post(_ text: String) {
-    let process = Process()
-    process.executableURL = URL(fileURLWithPath: "/usr/bin/osascript")
-    process.arguments = ["-e", Run.noticeScript]
-    process.environment = ["MENUZ_NOTICE": text]
-    process.standardInput = FileHandle.nullDevice
-    process.standardOutput = FileHandle.nullDevice
-    process.standardError = FileHandle.nullDevice
-    process.terminationHandler = { finished in
-      guard finished.terminationStatus != 0 else { return }
-      AppLog.logger.error("a notice was not posted: osascript exited \(finished.terminationStatus): \(text, privacy: .public)")
-    }
+/// The notification centre as menuz uses it: authorise, read whether the
+/// user turned menuz off, post. Behind a protocol so a test sees what is
+/// posted and posts nothing.
+protocol NoticeCenter: Sendable {
+  func authorize() async throws -> Bool
+  func isDenied() async -> Bool
+  func add(title: String, body: String) async throws
+}
+
+/// macOS's centre, under the app's bundle id.
+struct SystemNoticeCenter: NoticeCenter {
+  func authorize() async throws -> Bool {
+    try await UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound])
+  }
+
+  func isDenied() async -> Bool {
+    await UNUserNotificationCenter.current().notificationSettings().authorizationStatus == .denied
+  }
+
+  func add(title: String, body: String) async throws {
+    let content = UNMutableNotificationContent()
+    content.title = title
+    content.body = body
+    try await UNUserNotificationCenter.current().add(
+      UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: nil))
+  }
+}
+
+/// Every notice menuz posts (design.md "Output", D13): a run's, through
+/// the `--notify` arm its wrapper runs, and the app's own, through
+/// `Notifier`. One route, the centre.
+enum Notices {
+  /// Authorises (cheap once granted), then posts `text`.
+  static func post(_ text: String, center: some NoticeCenter) async -> Notice.Outcome {
     do {
-      try process.run()
+      guard try await center.authorize() else { return .denied }
+      guard await !center.isDenied() else { return .denied }
+      try await center.add(title: Notice.title, body: text)
+      return .posted
     } catch {
-      AppLog.logger.error("a notice could not be posted: \(error.localizedDescription, privacy: .public): \(text, privacy: .public)")
+      return .failed(error.localizedDescription)
     }
+  }
+}
+
+/// The app's own notices: a run that could not start, a run id it could
+/// not take, the first-launch placement line, a log it could not write.
+/// One that does not post is a line in the log naming why, never dropped;
+/// one about the log itself goes to OSLog alone.
+@MainActor
+enum Notifier {
+  private static let presenter = Presenter()
+  private static var log: AppLog?
+
+  /// At launch, before the status item: the delegate, and authorisation
+  /// asked for, its answer logged.
+  static func start(log: AppLog) async {
+    self.log = log
+    UNUserNotificationCenter.current().delegate = presenter
+    do {
+      let granted = try await SystemNoticeCenter().authorize()
+      log.write("notifications: \(granted ? "granted" : "denied")")
+    } catch {
+      log.write("notifications: \(error.localizedDescription)")
+    }
+  }
+
+  static func post(_ text: String, toLog: Bool = true) {
+    Task {
+      let outcome = await Notices.post(text, center: SystemNoticeCenter())
+      guard outcome != .posted else { return }
+      let line = "\(Notice.answer(outcome).line): \(text)"
+      guard toLog, let log else {
+        AppLog.logger.error("\(line, privacy: .public)")
+        return
+      }
+      log.write(line)
+    }
+  }
+}
+
+/// Shows a notice as a banner and in the list even while menuz is
+/// frontmost (a form open), when macOS would otherwise hold it back.
+private final class Presenter: NSObject, UNUserNotificationCenterDelegate, Sendable {
+  func userNotificationCenter(
+    _ center: UNUserNotificationCenter, willPresent notification: UNNotification
+  ) async -> UNNotificationPresentationOptions {
+    [.banner, .list]
   }
 }

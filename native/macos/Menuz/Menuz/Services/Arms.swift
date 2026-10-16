@@ -2,11 +2,13 @@ import AppKit
 import Foundation
 import MenuzKit
 import ServiceManagement
+import os
 
 /// The command-line arms (design.md "The app's command-line arms"): each
 /// prints, touches no menu bar, and returns the exit code. They read and
 /// realise through the same MenuSource and Realiser the running app uses.
 enum Arms {
+  @MainActor
   static func run(_ arm: Arm) -> Int32 {
     switch arm {
     case .refused(let why):
@@ -18,6 +20,12 @@ enum Arms {
     case .loginItem:
       print(loginItemStatus(SMAppService.mainApp.status))
       return 0
+    case .notify(let text):
+      // No Dock icon and no activation for a process that only posts.
+      NSApplication.shared.setActivationPolicy(.prohibited)
+      let answer = notify(text, center: SystemNoticeCenter(), seconds: Notice.deadline)
+      print(answer.line)
+      return answer.code
     case .validate(let file):
       let (shell, path) = locate(file)
       switch MenuSource.load(path, context: MenuSource.context(shell)) {
@@ -61,6 +69,31 @@ enum Arms {
     case .notFound: "not found"
     @unknown default: "unknown (\(status.rawValue))"
     }
+  }
+
+  /// Posts `text`, waiting `seconds` for the centre's answer with the main
+  /// run loop turning, as the centre's callbacks may need it (vc's probe,
+  /// D13). The line to print and the exit.
+  static func notify(_ text: String, center: some NoticeCenter, seconds: Double) -> (line: String, code: Int32) {
+    let outcome = waiting(seconds: seconds) { await Notices.post(text, center: center) } ?? .noAnswer(seconds: seconds)
+    return Notice.answer(outcome)
+  }
+
+  /// Runs `work` and turns the main run loop until it answers or `seconds`
+  /// pass; nil when it did not answer in time. The answer comes back under a
+  /// lock, not through the main queue, which a nested run loop inside a
+  /// main-queue callout (a hosted test) does not drain.
+  private static func waiting<T: Sendable>(seconds: Double, _ work: @escaping @Sendable () async -> T) -> T? {
+    let answer = OSAllocatedUnfairLock<T?>(initialState: nil)
+    Task.detached {
+      let value = await work()
+      answer.withLock { $0 = value }
+    }
+    let deadline = Date().addingTimeInterval(seconds)
+    while answer.withLock({ $0 }) == nil, Date() < deadline {
+      RunLoop.main.run(mode: .default, before: min(deadline, Date().addingTimeInterval(0.05)))
+    }
+    return answer.withLock { $0 }
   }
 
   /// The login shell's environment, and the file to read: the one named, or

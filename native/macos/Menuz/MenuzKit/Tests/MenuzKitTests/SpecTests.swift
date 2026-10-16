@@ -5,6 +5,7 @@ import Testing
 
 /// The menu spec: the validated file as a tree of nodes in the file's order,
 /// and its text render (`--render`).
+/// AT-06.3 (ST0027 acceptance.md) cites this file.
 @Suite("Menu spec")
 struct SpecTests {
   static func spec(_ yaml: String) throws -> MenuSpec {
@@ -40,10 +41,10 @@ struct SpecTests {
       ])
   }
 
-  @Test("the icon is the file's, terminal when absent; realise is 5 when absent")
+  @Test("the icon is the file's, nil (menuz's own mark, D13) when absent; realise is 5 when absent")
   func defaults() throws {
     let plain = try Self.spec("menu:\n  - label: a\n")
-    #expect(plain.icon == "terminal")
+    #expect(plain.icon == nil)
     #expect(plain.realiseSeconds == 5)
     let set = try Self.spec("icon: bolt\nrealise: 2\nmenu:\n  - label: a\n")
     #expect(set.icon == "bolt")
@@ -118,6 +119,7 @@ struct SpecTests {
   @Test("the example menu renders, unrealised, entry by entry")
   func example() throws {
     let s = try Self.spec(Fixtures.example)
+    #expect(s.icon == nil, "the example names no icon: menuz's own mark (D13)")
     #expect(
       s.render(realised: Realised())
         == #"""

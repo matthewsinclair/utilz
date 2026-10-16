@@ -28,7 +28,7 @@ final class AppLog {
       return
     }
     Self.logger.error("menuz.log at \(self.file, privacy: .public) could not be written: \(failure, privacy: .public)")
-    if !failing { Notifier.post("menuz.log could not be written: \(failure)") }
+    if !failing { Notifier.post("menuz.log could not be written: \(failure)", toLog: false) }
     failing = true
   }
 

@@ -25,7 +25,8 @@ struct RunTests {
 
   @Test("the environment: the login shell's, PATH with bin first, the run's variables and the params by name")
   func environment() {
-    let env = Run.environment(Self.request(), login: Self.login, paths: Self.paths, log: "/s/menuz.log")
+    let env = Run.environment(
+      Self.request(), login: Self.login, paths: Self.paths, log: "/s/menuz.log", exec: "/A/Menuz.app/Contents/MacOS/Menuz")
     #expect(env["LANG"] == "en_GB.UTF-8")
     #expect(env["PATH"] == "/h/.config/menuz/bin:/usr/bin:/bin")
     #expect(env["MENUZ_HOME"] == "/h/.config/menuz")
@@ -35,13 +36,15 @@ struct RunTests {
     #expect(env["MENUZ_CWD"] == "$HOME")
     #expect(env["MENUZ_NOTIFY"] == "failure")
     #expect(env["MENUZ_LOG"] == "/s/menuz.log")
+    #expect(env["MENUZ_EXEC"] == "/A/Menuz.app/Contents/MacOS/Menuz")
     #expect(env["desk"] == "home office")
     #expect(env["MENUZ_ITEM"] == nil)
   }
 
   @Test("under an each, MENUZ_ITEM is the line")
   func each() {
-    let env = Run.environment(Self.request(item: "office"), login: Self.login, paths: Self.paths, log: "/s/menuz.log")
+    let env = Run.environment(
+      Self.request(item: "office"), login: Self.login, paths: Self.paths, log: "/s/menuz.log", exec: "/A/Menuz")
     #expect(env["MENUZ_ITEM"] == "office")
   }
 
@@ -83,10 +86,11 @@ struct RunTests {
     #expect(RunId.stored(after: 12) == "13\n")
   }
 
-  @Test("the notice script reads its text from the environment, and the wrapper posts with it")
-  func noticeScript() {
-    #expect(Run.noticeScript == #"display notification (system attribute "MENUZ_NOTICE") with title "menuz""#)
-    #expect(Run.wrapper.contains("osascript -e '\(Run.noticeScript)'"))
+  @Test("the wrapper posts through the app's own --notify arm, the text in the environment, never osascript (D13)")
+  func noticeRoute() {
+    #expect(Run.wrapper.contains(#""$MENUZ_EXEC" --notify </dev/null"#))
+    #expect(Run.wrapper.contains("export MENUZ_NOTICE="))
+    #expect(!Run.wrapper.contains("osascript"))
   }
 
   @Test("a choice line is asked as an each, and its answer is the lines, a failure, or no answer in time")

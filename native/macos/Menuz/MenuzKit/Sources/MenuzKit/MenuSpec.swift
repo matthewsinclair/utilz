@@ -75,11 +75,11 @@ public struct MenuSpec: Equatable, Sendable {
     TailItem(title: "Quit menuz", action: .quit, key: "q"),
   ]
 
-  public static let defaultIcon = "terminal"
   public static let defaultRealiseSeconds = 5.0
 
   public let nodes: [Node]
-  public let icon: String
+  /// The SF Symbol `icon:` names, or nil for menuz's own mark (D13).
+  public let icon: String?
   public let realiseSeconds: Double
   /// The file's `cwd` and `notify`, which an item's own override.
   public let cwd: String?
@@ -87,7 +87,7 @@ public struct MenuSpec: Equatable, Sendable {
 
   public init(_ file: MenuFile) {
     nodes = Self.nodes(file.menu, list: MenuPath.root)
-    icon = file.icon ?? Self.defaultIcon
+    icon = file.icon
     realiseSeconds = file.realise ?? Self.defaultRealiseSeconds
     cwd = file.cwd
     notify = file.notify

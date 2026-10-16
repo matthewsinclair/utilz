@@ -5,8 +5,9 @@ import Testing
 
 /// The wrapper run through zsh as a run is (design.md "Running an item",
 /// "Output"), against a fixture log, a fixture home whose .zshrc is empty,
-/// and a fake osascript on PATH that records the notice it was asked for.
-/// AT-04.3 and AT-04.4 (ST0027 acceptance.md) cite this file.
+/// and a fake app executable as MENUZ_EXEC that records the notice its
+/// `--notify` arm was asked for and answers as the arm does (D13).
+/// AT-04.3, AT-04.4 and AT-06.1 (ST0027 acceptance.md) cite this file.
 @Suite("Wrapper", .serialized)
 struct WrapperTests {
   struct Ran {
@@ -17,7 +18,8 @@ struct WrapperTests {
   }
 
   static func run(
-    _ line: String, cwd: String? = nil, item: String? = nil, params: [String: String] = [:], notify: Notify = .failure
+    _ line: String, cwd: String? = nil, item: String? = nil, params: [String: String] = [:], notify: Notify = .failure,
+    armExit: Int = 0, exec: String? = nil, unsetExec: Bool = false
   ) throws -> Ran {
     let dir = FileManager.default.temporaryDirectory.appendingPathComponent("menuz-wrapper-\(UUID().uuidString)")
     let home = dir.appendingPathComponent("home")
@@ -29,9 +31,18 @@ struct WrapperTests {
     defer { try? FileManager.default.removeItem(at: dir) }
     try Data().write(to: home.appendingPathComponent(".zshrc"))
     let notices = dir.appendingPathComponent("notices")
-    let osascript = fakes.appendingPathComponent("osascript")
-    try Data("#!/bin/sh\nprintf '%s\\n' \"$MENUZ_NOTICE\" >>'\(notices.path)'\n".utf8).write(to: osascript)
-    try FileManager.default.setAttributes([.posixPermissions: 0o755], ofItemAtPath: osascript.path)
+    // The arm's two answers: `notice posted`, exit 0, or why not, exit 1.
+    let app = fakes.appendingPathComponent("Menuz")
+    let fake = """
+      #!/bin/sh
+      [ "$1" = --notify ] && [ $# -eq 1 ] && [ -n "$MENUZ_NOTICE" ] || exit 2
+      printf '%s\\n' "$MENUZ_NOTICE" >>'\(notices.path)'
+      if [ \(armExit) -eq 0 ]; then echo 'notice posted'; else echo 'notice not posted: the fake refused'; fi
+      exit \(armExit)
+
+      """
+    try Data(fake.utf8).write(to: app)
+    try FileManager.default.setAttributes([.posixPermissions: 0o755], ofItemAtPath: app.path)
     let log = dir.appendingPathComponent("menuz.log")
     let paths = Paths(environment: ["HOME": home.path], home: home.path)
     let request = RunRequest(
@@ -39,8 +50,9 @@ struct WrapperTests {
     // A zone that is not UTC, so a stamp written in local time shows.
     var env = Run.environment(
       request, login: ["HOME": home.path, "ZDOTDIR": home.path, "PATH": "\(fakes.path):/usr/bin:/bin"], paths: paths,
-      log: log.path)
+      log: log.path, exec: exec ?? app.path)
     env["WORK"] = home.appendingPathComponent("work dir").path
+    if unsetExec { env["MENUZ_EXEC"] = nil }
     env["TZ"] = "Asia/Kathmandu"
     let p = Process()
     p.executableURL = URL(fileURLWithPath: "/bin/zsh")
@@ -134,10 +146,44 @@ struct WrapperTests {
 
   @Test("the notice: failure posts on a non-zero exit only, always on every end with the last line, never none")
   func notices() throws {
-    #expect(try Self.run("exit 0").notices == [])
+    let clean = try Self.run("exit 0")
+    #expect(clean.notices == [])
+    #expect(!clean.log.contains("notice"))
     #expect(try Self.run("print last; exit 2").notices == ["\"Say it\" exited 2"])
     #expect(try Self.run("print one; print last; exit 0", notify: .always).notices == ["\"Say it\" exited 0: last"])
-    #expect(try Self.run("exit 2", notify: .never).notices == [])
+    let never = try Self.run("exit 2", notify: .never)
+    #expect(never.notices == [])
+    #expect(!never.log.contains("notice"))
+  }
+
+  @Test("the arm's answer lands in the log under the run id, before the end line")
+  func armAnswer() throws {
+    let posted = try Self.run("exit 2")
+    let lines = posted.log.split(separator: "\n").map(String.init)
+    #expect(lines.dropLast().last == "[7] notice posted", "\(posted.log)")
+    #expect(posted.status == 2)
+    #expect(Self.endLine(posted.log, code: 2), "\(posted.log)")
+    let refused = try Self.run("exit 2", armExit: 1)
+    #expect(refused.log.contains("[7] notice not posted: the fake refused\n"), "\(refused.log)")
+    #expect(!refused.log.contains("--notify exited"), "exit 1 says why on its own line: \(refused.log)")
+    #expect(refused.status == 2, "the arm's answer never changes the run's code")
+    #expect(Self.endLine(refused.log, code: 2))
+    #expect(refused.err.isEmpty, "\(refused.err)")
+  }
+
+  @Test("an arm that never answered is logged under the run id with its exit, and the run keeps its code")
+  func armMissing() throws {
+    let missing = try Self.run("exit 3", exec: "/no/such/Menuz")
+    #expect(missing.log.contains("[7] menuz: notice not posted: /no/such/Menuz --notify exited 127\n"), "\(missing.log)")
+    #expect(missing.status == 3)
+    #expect(Self.endLine(missing.log, code: 3))
+    #expect(missing.err.isEmpty, "\(missing.err)")
+    let unset = try Self.run("exit 4", unsetExec: true)
+    #expect(unset.log.contains("[7] menuz: notice not posted: MENUZ_EXEC is not set\n"), "\(unset.log)")
+    #expect(unset.notices == [])
+    #expect(unset.status == 4)
+    #expect(Self.endLine(unset.log, code: 4))
+    #expect(unset.err.isEmpty, "\(unset.err)")
   }
 
   @Test("output with no trailing newline still reaches the log")

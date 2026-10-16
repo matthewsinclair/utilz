@@ -8,7 +8,9 @@ options:
 # Gtools' project.yml cut to what Menuz.app needs (ST0027 WP-03): an
 # LSUIElement app over the MenuzKit package, Automatic signing with the
 # team on this machine for Debug and Release, hardened runtime. Signing with
-# Developer ID and notarising are WP-05's, Intent's pipeline (D7).
+# Developer ID and notarising are WP-05's, Intent's pipeline (D7). The icon and
+# the menu bar mark are Menuz/Assets.xcassets, tracked, made from design/*.svg
+# by `bin/devbin macos app-icons` (D13), so a build needs no rasteriser.
 configs:
   Debug: debug
   Release: release
@@ -54,6 +56,7 @@ targets:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.matthewsinclair.utilz.menuz
         INFOPLIST_FILE: Menuz/Info.plist
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         ENABLE_HARDENED_RUNTIME: YES
       configs:
         # Debug carries get-task-allow so xctest can attach; Release does not.

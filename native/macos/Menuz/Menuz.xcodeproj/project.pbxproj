@@ -20,6 +20,8 @@
 		8A0ACEFEB1B35D3594B1FAFE /* TestHostTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FB3DC0386DDBB630BCAECDE /* TestHostTests.swift */; };
 		8FEBE6637B94EFB85C109330 /* Runner.swift in Sources */ = {isa = PBXBuildFile; fileRef = F54C8007BA2E6C044E578B5A /* Runner.swift */; };
 		9BA03B276434DB812F3EE7EE /* Watcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AA7FC095B000E5E6F52EC5B /* Watcher.swift */; };
+		AD12842F54990380D974DDDB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 026662803F71C64000AFD10D /* Assets.xcassets */; };
+		C1E380F3B804FBD7849FBB13 /* NotifyArmTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0DA05166681483F5F74E57C /* NotifyArmTests.swift */; };
 		CFE42505FB7695CD09D90680 /* ParamForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 775285512609F81F861F1415 /* ParamForm.swift */; };
 		DE9C0C3FA1666B973E9DB06C /* LoginItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E028E7200976AF9A22C8E64 /* LoginItem.swift */; };
 		EAE4191C024DFE1B4BBE78F5 /* MenuzApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA910089979C343042FD394C /* MenuzApp.swift */; };
@@ -37,6 +39,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		026662803F71C64000AFD10D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		0D78B2E5395802C4995350D1 /* LoginShell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginShell.swift; sourceTree = "<group>"; };
 		11104D7740E2D95237590C37 /* Shell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shell.swift; sourceTree = "<group>"; };
 		119B745E5FA30468AC4D6A81 /* MenuzKit */ = {isa = PBXFileReference; lastKnownFileType = folder; name = MenuzKit; path = MenuzKit; sourceTree = SOURCE_ROOT; };
@@ -55,6 +58,7 @@
 		8A82B2DADFCB97CEDA1B96BA /* MenuBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBuilder.swift; sourceTree = "<group>"; };
 		AA910089979C343042FD394C /* MenuzApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuzApp.swift; sourceTree = "<group>"; };
 		C9CAAC271F6A8DE3D9BA5660 /* Notifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notifier.swift; sourceTree = "<group>"; };
+		D0DA05166681483F5F74E57C /* NotifyArmTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotifyArmTests.swift; sourceTree = "<group>"; };
 		DB1D82D84E6BED41563E3D23 /* RunnerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunnerTests.swift; sourceTree = "<group>"; };
 		F54C8007BA2E6C044E578B5A /* Runner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Runner.swift; sourceTree = "<group>"; };
 		F79BAB43EFFF54B070289BA6 /* MenuzTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MenuzTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -120,6 +124,7 @@
 		8E55552CD0E1374154978F6A /* Menuz */ = {
 			isa = PBXGroup;
 			children = (
+				026662803F71C64000AFD10D /* Assets.xcassets */,
 				7F4B5B698304EA469BFF20D9 /* Info.plist */,
 				69D7BB98761B18EBC1D62714 /* Menuz.Debug.entitlements */,
 				408DCC006CB1D86D48104017 /* Menuz.entitlements */,
@@ -132,6 +137,7 @@
 		904B4CE84C0C56752D6CE37B /* MenuzTests */ = {
 			isa = PBXGroup;
 			children = (
+				D0DA05166681483F5F74E57C /* NotifyArmTests.swift */,
 				DB1D82D84E6BED41563E3D23 /* RunnerTests.swift */,
 				6FB3DC0386DDBB630BCAECDE /* TestHostTests.swift */,
 			);
@@ -155,6 +161,7 @@
 			buildConfigurationList = 7CE34671F9F836018814A9C1 /* Build configuration list for PBXNativeTarget "Menuz" */;
 			buildPhases = (
 				5BF7F661DFBD5950183BD9D2 /* Sources */,
+				5662743BB820278A177D6CDF /* Resources */,
 				DE8030B21260C5DB6982A2BB /* Frameworks */,
 			);
 			buildRules = (
@@ -231,11 +238,23 @@
 		};
 /* End PBXProject section */
 
+/* Begin PBXResourcesBuildPhase section */
+		5662743BB820278A177D6CDF /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AD12842F54990380D974DDDB /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		1C81B31315D0B9CE6AF5F447 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C1E380F3B804FBD7849FBB13 /* NotifyArmTests.swift in Sources */,
 				66CA1635FB54568EC7D32863 /* RunnerTests.swift in Sources */,
 				8A0ACEFEB1B35D3594B1FAFE /* TestHostTests.swift in Sources */,
 			);

@@ -1,5 +1,5 @@
 # ~/.config/menuz/menuz.yaml
-icon: terminal        # an SF Symbol name for the menu bar glyph; "terminal" when absent
+# icon: terminal      # an SF Symbol name for the menu bar glyph; menuz's own mark when absent (D13)
 cwd: ~                # where runs start unless an item says otherwise; $HOME when absent
 notify: failure       # never | failure | always; what a run's end posts as a notification
 realise: 5            # seconds a menu open waits for its labels at most; 5 when absent

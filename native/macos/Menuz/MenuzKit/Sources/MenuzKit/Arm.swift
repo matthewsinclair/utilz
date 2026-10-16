@@ -7,23 +7,33 @@ public enum Arm: Equatable, Sendable {
   case render(file: String?)
   case version
   case loginItem
+  /// Post `text` as a notice under the app's bundle id (D13): the run's
+  /// wrapper calls it at a run's end, the text in `MENUZ_NOTICE`, never in
+  /// argv, where `ps` would show a run's output to anyone.
+  case notify(text: String)
   /// Usage refused, exit 2, with why.
   case refused(String)
 
   /// The arm `arguments` (argv without the program) name, or nil to launch
-  /// the app.
-  public static func parse(_ arguments: [String]) -> Arm? {
+  /// the app. `environment` is read by `--notify` alone.
+  public static func parse(_ arguments: [String], environment: [String: String] = [:]) -> Arm? {
     guard let first = arguments.first, first.hasPrefix("--") else { return nil }
     let rest = Array(arguments.dropFirst())
     switch first {
     case "--validate", "--render":
       guard rest.count <= 1 else { return .refused("\(first) takes one file at most, and was given \(rest.count)") }
       return first == "--validate" ? .validate(file: rest.first) : .render(file: rest.first)
+    case "--notify":
+      guard rest.isEmpty else { return .refused("--notify takes no arguments") }
+      guard let text = environment["MENUZ_NOTICE"], !text.isEmpty else {
+        return .refused("--notify wants MENUZ_NOTICE in the environment")
+      }
+      return .notify(text: text)
     case "--version", "--login-item":
       guard rest.isEmpty else { return .refused("\(first) takes no arguments") }
       return first == "--version" ? .version : .loginItem
     default:
-      return .refused("unknown arm \(first): the arms are --validate [file], --render [file], --version, --login-item")
+      return .refused("unknown arm \(first): the arms are --validate [file], --render [file], --version, --login-item, --notify")
     }
   }
 }

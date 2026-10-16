@@ -49,9 +49,10 @@ public enum Run {
 
   /// The login shell's environment with `bin/` first on PATH, the run's
   /// variables, and every param by its name. Every string the wrapper
-  /// needs reaches it here, never in its text.
+  /// needs reaches it here, never in its text. `exec` is the app's own
+  /// executable, whose `--notify` arm posts the run's notice (D13).
   public static func environment(
-    _ request: RunRequest, login: [String: String], paths: Paths, log: String
+    _ request: RunRequest, login: [String: String], paths: Paths, log: String, exec: String
   ) -> [String: String] {
     var env = login
     env["PATH"] = paths.runPath(loginPath: login["PATH"] ?? "")
@@ -62,6 +63,7 @@ public enum Run {
     env["MENUZ_CWD"] = cwd(request)
     env["MENUZ_NOTIFY"] = request.notify.rawValue
     env["MENUZ_LOG"] = log
+    env["MENUZ_EXEC"] = exec
     env["MENUZ_ITEM"] = request.item
     env.merge(request.params) { _, param in param }
     return env
@@ -82,16 +84,13 @@ public enum Run {
     "quit; runs still going: \(ids.isEmpty ? "none" : ids.map(String.init).joined(separator: ", "))"
   }
 
-  /// The AppleScript that posts a notice, its text read from the
-  /// environment's `MENUZ_NOTICE` and never spliced in. The wrapper posts a
-  /// run's notice with it; the app posts its own.
-  public static let noticeScript = #"display notification (system attribute "MENUZ_NOTICE") with title "menuz""#
-
   /// The wrapper, run as `/bin/zsh -f -c <wrapper>` in its own session with
   /// its stdout and stderr on the log. It enters the working directory,
   /// runs the line in the login shell with `bin/` first even after .zshrc,
-  /// prefixes every output line with the run id, posts the notice, and
-  /// writes the end line in LogLine's format. It holds no menu text.
+  /// prefixes every output line with the run id, posts the notice through
+  /// the app's own `--notify` arm with its text in `MENUZ_NOTICE` (the
+  /// arm's answer lands in the log under the run id, D13), and writes the
+  /// end line in LogLine's format. It holds no menu text.
   public static let wrapper = #"""
     zmodload zsh/datetime
     _menuz_id=$MENUZ_RUN_ID
@@ -114,6 +113,8 @@ public enum Run {
         done
       _menuz_rc=${pipestatus[1]}
     fi
+    # The run's own time: the notice's wait on the centre is not the run's.
+    _menuz_end=$EPOCHREALTIME
     _menuz_post=0
     case $MENUZ_NOTIFY in
       always) _menuz_post=1 ;;
@@ -122,11 +123,23 @@ public enum Run {
     if (( _menuz_post )); then
       export MENUZ_NOTICE="\"$MENUZ_LABEL\" exited $_menuz_rc"
       [[ $MENUZ_NOTIFY == always && -n $_menuz_last ]] && MENUZ_NOTICE+=": $_menuz_last"
-      osascript -e '\#(noticeScript)' >/dev/null 2>&1 ||
-        print -r -- "[$_menuz_id] menuz: the notice could not be posted (osascript exit $?)"
+      if [[ -z ${MENUZ_EXEC:-} ]]; then
+        # A wrapper run by hand, or by an app older than the arm.
+        print -r -- "[$_menuz_id] menuz: notice not posted: MENUZ_EXEC is not set"
+      else
+        "$MENUZ_EXEC" --notify </dev/null 2>&1 |
+          while IFS= read -r _menuz_line || [[ -n $_menuz_line ]]; do
+            print -r -- "[$_menuz_id] $_menuz_line"
+          done
+        # 0 posted and 1 not, each saying so on its own line; anything else
+        # is an arm that never answered (not there, not runnable, usage).
+        _menuz_nrc=${pipestatus[1]}
+        (( _menuz_nrc > 1 )) &&
+          print -r -- "[$_menuz_id] menuz: notice not posted: $MENUZ_EXEC --notify exited $_menuz_nrc"
+      fi
     fi
     LC_NUMERIC=C printf '%s run %s exit %s in %.1fs\n' \
-      "$(TZ=UTC strftime '%Y-%m-%dT%H:%M:%SZ' $EPOCHSECONDS)" "$_menuz_id" "$_menuz_rc" $(( EPOCHREALTIME - _menuz_start ))
+      "$(TZ=UTC strftime '%Y-%m-%dT%H:%M:%SZ' $EPOCHSECONDS)" "$_menuz_id" "$_menuz_rc" $(( _menuz_end - _menuz_start ))
     exit $_menuz_rc
     """#
 }

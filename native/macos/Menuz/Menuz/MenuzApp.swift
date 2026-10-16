@@ -26,12 +26,21 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, MenuAc
   private var refusals: [Refusal] = []
   private var realised = Realised()
   private var realising = false
+  private var markMissingLogged = false
 
   /// Whether the menu bar item was made. XCTest's host never makes one, and
   /// TestHostTests reads this.
   var hasStatusItem: Bool { statusItem != nil }
 
   static var current: AppDelegate? { NSApp.delegate as? AppDelegate }
+
+  /// menuz's mark from the asset catalogue, as a template the bar tints.
+  static var mark: NSImage? {
+    guard let image = NSImage(named: "MenuBarIcon") else { return nil }
+    image.isTemplate = true
+    image.accessibilityDescription = "menuz"
+    return image
+  }
 
   /// Whether this process is XCTest's host rather than the app a person
   /// runs (Gtools' gtools#0050): xcodebuild sets XCTestConfigurationFilePath
@@ -41,7 +50,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, MenuAc
   }
 
   static func main() {
-    if let arm = Arm.parse(Array(CommandLine.arguments.dropFirst())) {
+    if let arm = Arm.parse(Array(CommandLine.arguments.dropFirst()), environment: ProcessInfo.processInfo.environment) {
       exit(Arms.run(arm))
     }
     let app = NSApplication.shared
@@ -56,6 +65,16 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, MenuAc
       return
     }
     setupMainMenu()
+    // Read before the status item is made, in case making it records a
+    // place; said once the centre has answered, so the line can post (D13).
+    let placement = Placement.line(UserDefaults.standard)
+    let log = self.log
+    Task {
+      await Notifier.start(log: log)
+      guard let placement else { return }
+      log.write(placement)
+      Notifier.post(placement)
+    }
     let builder = MenuBuilder(target: self)
     builder.menu.delegate = self
     self.builder = builder
@@ -64,7 +83,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, MenuAc
     let statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
     statusItem.menu = builder.menu
     self.statusItem = statusItem
-    setIcon(MenuSpec.defaultIcon)
+    setIcon(nil)
     rebuild()
     Task { await reload(recapture: true) }
   }
@@ -127,19 +146,25 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, MenuAc
     builder?.build(
       spec: spec, refusals: refusals, realised: realised,
       logExists: FileManager.default.fileExists(atPath: paths.logFile))
-    setIcon(spec?.icon ?? MenuSpec.defaultIcon)
+    setIcon(spec?.icon)
   }
 
-  /// The glyph, never a zero-width item.
-  private func setIcon(_ name: String) {
+  /// The glyph: the SF Symbol `icon:` names, else menuz's own mark (D13);
+  /// never a zero-width item.
+  private func setIcon(_ name: String?) {
     guard let button = statusItem?.button else { return }
-    if let image = NSImage(systemSymbolName: name, accessibilityDescription: "menuz") {
+    let image = name.flatMap { NSImage(systemSymbolName: $0, accessibilityDescription: "menuz") } ?? Self.mark
+    if let image {
       image.isTemplate = true
       button.image = image
       button.title = ""
     } else {
       button.image = nil
       button.title = "M"
+      if !markMissingLogged {
+        markMissingLogged = true
+        log.write("the menu bar mark is missing from the bundle (MenuBarIcon in Assets.xcassets): showing M")
+      }
     }
   }
 
@@ -252,7 +277,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, MenuAc
       notify: Run.notify(item: chosen.notify, file: spec?.notify))
     let home = shell.environment["HOME"] ?? NSHomeDirectory()
     runner.start(
-      request, environment: Run.environment(request, login: shell.environment, paths: paths, log: paths.logFile),
+      request,
+      environment: Run.environment(
+        request, login: shell.environment, paths: paths, log: paths.logFile,
+        exec: Bundle.main.executableURL?.path ?? URL(fileURLWithPath: CommandLine.arguments[0]).standardizedFileURL.path),
       home: home)
   }
 

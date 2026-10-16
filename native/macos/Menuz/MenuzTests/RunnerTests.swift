@@ -34,7 +34,8 @@ final class RunnerTests {
       id: id, label: "Runner test", run: line, cwd: nil, fileCwd: nil, item: nil, params: [:], notify: .never)
     let paths = Paths(environment: ["HOME": home.path], home: home.path)
     return Run.environment(
-      request, login: ["HOME": home.path, "ZDOTDIR": home.path, "PATH": "/usr/bin:/bin"], paths: paths, log: log)
+      request, login: ["HOME": home.path, "ZDOTDIR": home.path, "PATH": "/usr/bin:/bin"], paths: paths, log: log,
+      exec: "/usr/bin/false")
   }
 
   func logText() -> String {
