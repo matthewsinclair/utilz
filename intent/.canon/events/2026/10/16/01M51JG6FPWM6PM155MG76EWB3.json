@@ -1,0 +1,15 @@
+{
+  "id": "01M51JG6FPWM6PM155MG76EWB3",
+  "ts": "2026-10-16T05:21:03.990Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "issues.add",
+  "subject": {
+    "type": "issue",
+    "id": "0067"
+  },
+  "payload": {
+    "severity": "medium",
+    "title": "prez: AT04's fullscreen checks fail under Chrome 155 on macOS, on HEAD as well as after 0065"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "schema": "intent/issue@3.0",
+  "number": 67,
+  "slug": "prez-at04-s-fullscreen-checks-fail-under-chrome",
+  "title": "prez: AT04's fullscreen checks fail under Chrome 155 on macOS, on HEAD as well as after 0065",
+  "status": "open",
+  "severity": "medium",
+  "created": "2026-10-16",
+  "reporter": "Matthew Sinclair",
+  "body": "## What\n\n`AT04` in `opt/prez/crate/test/acceptance.sh` fails on hv's machine under Chrome 155.0.8059.85, on two of its 52 runtime-probe checks:\n\n```\nFAIL fullscreen_entered=null want=HTML\nFAIL fullscreen_fills=false want=true\n```\n\nSo `utilz test prez` is red locally (1 of 6 suites), whatever the change under test.\n\n## Evidence\n\n- Found by cc on 16 Oct 2026 while running `utilz test prez` for issue 0065.\n- Fails on three consecutive runs of `test/acceptance.sh AT04` alone, so it is not the port-race flake that 0063 fixed.\n- Fails identically on HEAD `13552bc`, built in a detached worktree with its own `CARGO_TARGET_DIR`, before 0065's change. `demo.md`, which AT04 builds, compiles byte-identical before and after 0065, so 0065 cannot reach it.\n- CI run 38851732238 on `faa886d` passed, with the Chrome on the Linux runner image. That points at this machine's Chrome version rather than prez's runtime, but nothing here has measured the cause yet.\n\n## Not yet known\n\nWhether headless Chrome 155 on macOS stopped granting `requestFullscreen` from a synthesised key event, changed `document.fullscreenElement` reporting, or something else. Until that is measured, do not change the probe's expectations to fit.\n"
+}
