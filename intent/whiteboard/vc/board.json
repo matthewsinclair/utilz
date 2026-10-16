@@ -1238,9 +1238,10 @@
       "node": "vc",
       "kind": "todo",
       "seq": 33,
-      "text": "Fold notes for restart.md and the record: it says 15 utilities (16 with arngz) and devbin 0.1.7 (vendored is 0.1.10 at 7c39d91c); README utility table needs an arngz row (WP-06); the commit gate and check all review no Lua (Intent 0603, closed by hv as an incomplete pack: the critic-lua agent is the review); vc's scratchpad holds git worktrees wt-c21f319, wt-13552bc, wt-3e11cb4, wt-88c57ad, so run git worktree prune when the scratchpad goes; hv's ~/.hammerspoon/init.lua gained three IPC lines on 16 Oct and the hs tool is an unbrewed link at /opt/homebrew/bin/hs.",
+      "text": "Fold notes still open: the README utility table needs an arngz row, with help/arngz.md and the CHANGELOG entry (WP-06 AC-06.3, after apply); vc's scratchpad holds git worktrees wt-c21f319, wt-13552bc, wt-3e11cb4, wt-88c57ad, so run git worktree prune when the scratchpad goes. Done 16 Oct: restart.md says 16 utilities and devbin 0.1.10, and carries the arngz state, the Lua review fact (headless critic arms 0 of 7 lua rules) and hv's init.lua lines.",
       "state": "live",
-      "recorded_at": "2026-10-16T08:16:06.809Z"
+      "recorded_at": "2026-10-16T08:16:06.809Z",
+      "edited_at": "2026-10-16T08:25:45.229Z"
     },
     {
       "node": "vc",

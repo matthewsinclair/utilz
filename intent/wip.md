@@ -4,7 +4,7 @@ DOING and TODO only. Done work goes to `intent/done.md`; context to `intent/rest
 
 ## DOING
 
-_(none)_
+- ST0026 `arngz`: close WP-04 (discover, diff) on the estate run and a clean critic-lua pass; build WP-06's doctor and init; resolve WP-01's spike (the drag test and the Dock This-Desktop clicks wait on hv) and then build WP-05 apply on the outcome it gives.
 
 ## TODO
 
@@ -16,6 +16,7 @@ _(none)_
 
 **Fixes**
 
+- Issue 0066: `mermaid: ture` in a prez deck reads as off with no warning; hv says whether `mermaid:` takes the words `numbering:` takes.
 - Sweep the tree for issue 0053's class: a probe whose pipeline failure kills the script under `set -e` before the guard on the next line can speak. `stampz` had three and exited 1 in silence on an unreadable PDF; every utility runs `set -euo pipefail` and most read something through a pipeline.
 
 **Blocked**
