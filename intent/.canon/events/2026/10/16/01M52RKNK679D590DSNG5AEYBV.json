@@ -1,0 +1,14 @@
+{
+  "id": "01M52RKNK679D590DSNG5AEYBV",
+  "ts": "2026-10-16T16:27:03.655Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.satisfy",
+  "subject": {
+    "type": "ac",
+    "id": "ST0026/AC-05.6"
+  },
+  "payload": {
+    "evidence": "AT-05.6 green, and on f8c2827 'arngz apply handrun --bind' answers 'unknown option for apply: --bind', exit 2 (vc, 16 Oct 2026): the binding measurement failed (a written Dock binding is ignored on macOS 27.0.1, design.md's Measured section), so the flag does not exist and is refused as unknown rather than accepted and ignored"
+  }
+}

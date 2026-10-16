@@ -1,0 +1,14 @@
+{
+  "id": "01M52S0V7YQF0G5K5ND3WXGN6S",
+  "ts": "2026-10-16T16:34:15.423Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.satisfy",
+  "subject": {
+    "type": "ac",
+    "id": "ST0026/AC-06.3"
+  },
+  "payload": {
+    "evidence": "dc's da23005 (help/arngz.md, README.md's arngz section, CHANGELOG.md's 2.13.0 entry, opt/arngz/README.md), read by vc 16 Oct 2026: every verb (apply discover diff list show delete init doctor) and every flag (--dry-run --force --grid --map --no-create --no-launch --save --yes) the shim's own parsers accept is named in each of the three docs, 0 missing by dc's check-names.sh and by vc's own grep (48 name-doc pairs); arngz --help renders 403 lines with the carry-limit sentence; prettier clean on the four files"
+  }
+}

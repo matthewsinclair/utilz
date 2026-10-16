@@ -9,7 +9,8 @@
   "languages": [
     "shell",
     "rust",
-    "lua"
+    "lua",
+    "swift"
   ],
   "plugins": {
     "agents": {

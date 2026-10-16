@@ -1,0 +1,14 @@
+{
+  "id": "01M52SFXTBQD1542HYPKRCAJTX",
+  "ts": "2026-10-16T16:42:29.580Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.edit",
+  "subject": {
+    "type": "ac",
+    "id": "ST0027/AC-04.2"
+  },
+  "payload": {
+    "text": "Each run is /bin/zsh -ilc of the run line, with the login shell's PATH and MENUZ_HOME/bin first on it, cwd the item's, else the file's, else HOME, stdin /dev/null, and MENUZ_HOME, MENUZ_LABEL, MENUZ_RUN_ID and (under each) MENUZ_ITEM exported; runs are concurrent, each with its own id, detached from the app (their own session, stdout and stderr on the log file directly, not through the app); Quit leaves runs in flight running and logs each as left running with its id (D9)."
+  }
+}

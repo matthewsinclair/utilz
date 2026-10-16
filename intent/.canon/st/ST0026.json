@@ -50,7 +50,7 @@
       "seq": 5,
       "title": "apply",
       "scope": "S",
-      "status": "wip",
+      "status": "done",
       "objective": "`apply`, in the order the design gives: preconditions, validate, observe, match displays (UUID, then name and size, then position, `--map` to override), plan, `--dry-run` stops with the ops printed, create missing spaces, launch and wait, re-observe, move then place with a readback after each op, `--bind` only if WP-01 allowed it, final observe, and the per-app report with exit 0, 1 or 2. Matching, planning and the report are tested from fixtures through the fake `hs`; the execute half is the hand-run acceptance on hv's machine, recorded as such. The shorthand `utilz arngz <desk>` lands here.",
       "body": "",
       "preamble": ""
@@ -59,7 +59,7 @@
       "seq": 6,
       "title": "doctor, init, docs and the close",
       "scope": "S",
-      "status": "wip",
+      "status": "done",
       "objective": "`doctor` and the Hammerspoon half of `init`, the documents, and the close. `doctor` names every precondition with its state: Hammerspoon running, the `hs` tool present and IPC loaded, Accessibility, separate spaces, auto-rearrange, Stage Manager. `init --yes` installs the `hs` tool under `/opt/homebrew` and appends the one `require(\"hs.ipc\")` line; without `--yes` it says what it would do. `help/arngz.md`, the README's utility table, the CHANGELOG entry, and the hand-run acceptance transcript in `acceptance.md`. `bin/devbin check all` and `utilz test` green before the package closes.",
       "body": "",
       "preamble": ""
@@ -218,7 +218,8 @@
       "text": "The --bind flag exists only under WP-01's outcome A or B with the binding measurement passed. Where it exists it writes the bindings, restarts the Dock once and re-observes; where it does not, the flag is refused as unknown rather than accepted and ignored.",
       "kind": "non-test",
       "state": {
-        "is": "unsatisfied"
+        "is": "satisfied",
+        "evidence": "AT-05.6 green, and on f8c2827 'arngz apply handrun --bind' answers 'unknown option for apply: --bind', exit 2 (vc, 16 Oct 2026): the binding measurement failed (a written Dock binding is ignored on macOS 27.0.1, design.md's Measured section), so the flag does not exist and is refused as unknown rather than accepted and ignored"
       }
     },
     {
@@ -250,7 +251,8 @@
       "text": "help/arngz.md, the README's utility table and the CHANGELOG entry exist and name every verb and flag the CLI accepts, checked against arngz --help.",
       "kind": "non-test",
       "state": {
-        "is": "unsatisfied"
+        "is": "satisfied",
+        "evidence": "dc's da23005 (help/arngz.md, README.md's arngz section, CHANGELOG.md's 2.13.0 entry, opt/arngz/README.md), read by vc 16 Oct 2026: every verb (apply discover diff list show delete init doctor) and every flag (--dry-run --force --grid --map --no-create --no-launch --save --yes) the shim's own parsers accept is named in each of the three docs, 0 missing by dc's check-names.sh and by vc's own grep (48 name-doc pairs); arngz --help renders 403 lines with the carry-limit sentence; prettier clean on the four files"
       }
     },
     {
@@ -258,7 +260,8 @@
       "text": "bin/devbin check all and the estate suite are green; the hand-run acceptance transcript is in acceptance.md and names the machine, the macOS build and the Hammerspoon version that ran it.",
       "kind": "non-test",
       "state": {
-        "is": "unsatisfied"
+        "is": "satisfied",
+        "evidence": "At da23005 on hv's machine, 16 Oct 2026: bin/devbin check all passed (clippy, format, autotests, targetdir, toolchain, critic; 16:33Z, tmp/vc-st0026/check-all-da23005.txt) and tools/test-estate passed every suite under the bash macOS ships (22 suites, 759 ok, exit 0, 16:34Z to 16:41Z, tmp/vc-st0026/test-estate-da23005.txt). The hand-run transcript is in acceptance.md as AT-05.4's and AT-05.5's notes, naming the machine (Mac16,6), macOS 27.0.1 build 26A434 and Hammerspoon 1.1.1"
       }
     }
   ],
@@ -400,8 +403,8 @@
       "covers": [
         "AC-05.4"
       ],
-      "status": "to-write",
-      "note": "A HAND RUN on hv's machine with hands off, vc's to run: acceptance.sh apply <desk> after a scramble. It takes the pointer."
+      "status": "green",
+      "note": "A HAND RUN on hv's machine with hands off, vc's to run: acceptance.sh apply <desk> after a scramble. It takes the pointer. RUN on hv's machine (Mac16,6, macOS 27.0.1 build 26A434, Hammerspoon 1.1.1), hands off, 16 Oct 2026 16:19Z on f8c2827 from a detached worktree; transcript tmp/vc-st0026/handrun-rerun-f8c2827.txt, script tmp/vc-st0026/st0026/rerun-handrun.sh. Scramble: TextEdit's document opened on the shown desktop and was carried to desktop 4 by apply scramble (the engine's own carry, hands off). apply handrun: diff before found a move and a launch; apply carried TextEdit from desktop 4 to 5 and launched and placed Console, exit 0, every entry placed (2 of 2); diff after found nothing to do; a second apply reported both entries placed, nothing moved or launched, exit 0. Every acceptance.sh check passed (4 of 4). Carry limitation measured the same day: Dictionary's and Stickies' windows follow no synthetic drag, so apply dictprobe (Dictionary launched on the shown desktop, then carried) failed the entry by name without pressing a key: 'the hold did not take window 276222 of Dictionary: its frame did not follow the pointer (x 1125 to 1125 after a nudge of 30)', exit 1 after 4 s, the shown desktop unchanged (tmp/vc-st0026/dictprobe-f8c2827.txt). On 45acc46 earlier that day the same desk with Dictionary failed the other way: Move-space was pressed with nothing held and the display switched (tmp/vc-st0026/handrun-rerun-45acc46.txt)."
     },
     {
       "id": "AT-05.5",
@@ -410,8 +413,8 @@
       "covers": [
         "AC-05.5"
       ],
-      "status": "to-write",
-      "note": "A HAND RUN on hv's machine with hands off, vc's to run: acceptance.sh launch <desk> <bundle id>, the app not running. It takes the pointer."
+      "status": "green",
+      "note": "A HAND RUN on hv's machine with hands off, vc's to run: acceptance.sh launch <desk> <bundle id>, the app not running. It takes the pointer. RUN on hv's machine (Mac16,6, macOS 27.0.1 build 26A434, Hammerspoon 1.1.1), hands off, 16 Oct 2026 16:20Z on f8c2827 from a detached worktree; transcript tmp/vc-st0026/handrun-rerun-f8c2827.txt. Console quit, then acceptance.sh launch handrun com.apple.Console: with --no-launch apply reported 'skipped: com.apple.Console is not running, and --no-launch leaves it so', exit 1, and left Console unlaunched; without it apply launched and placed Console, exit 0; every check passed (3 of 3). A diff handrun fired 1 s into that apply was answered after 1 s, exit 1, naming the launch still to do: reads are served between apply's phases (f8c2827's 0.05 s phase gap; on 45acc46 the same read waited until the apply ended, 9.5 s into 13 s). A second apply fired 1.5 s into a 17 s apply scramble was refused at 2 s, exit 2: 'the engine refused apply: an apply is already running (asked for at 2026-10-16T16:19:58Z)'; on 45acc46 it queued and ran after the first."
     },
     {
       "id": "AT-05.6",

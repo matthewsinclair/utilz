@@ -1,0 +1,14 @@
+{
+  "id": "01M52SFXN16TAE05MFD50XSM0H",
+  "ts": "2026-10-16T16:42:29.409Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.edit",
+  "subject": {
+    "type": "ac",
+    "id": "ST0027/AC-03.1"
+  },
+  "payload": {
+    "text": "The app is an xcodegen project at native/macos/Menuz in the siblings' shape (Swift 6, macOS 14, LSUIElement, the test-host guard; signed and notarised with Developer ID on release as Intent's is, D7) with Yams as its one package; --validate and --render run without a menu bar and exit 0 or 2 with every finding named, and --version prints the stamped version."
+  }
+}

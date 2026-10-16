@@ -35,8 +35,8 @@ Asked by hv on 16 Oct 2026 in a rubber-duck session with vc. The thread is creat
 | WP-02 | Desk config, validator and the catalogue verbs                   | S    | Done   |
 | WP-03 | Engine: observe, the pure planner, execute, and the IPC contract | S    | Done   |
 | WP-04 | discover and diff                                                | S    | Done   |
-| WP-05 | apply                                                            | S    | WIP    |
-| WP-06 | doctor, init, docs and the close                                 | S    | WIP    |
+| WP-05 | apply                                                            | S    | Done   |
+| WP-06 | doctor, init, docs and the close                                 | S    | Done   |
 
 ## Acceptance
 

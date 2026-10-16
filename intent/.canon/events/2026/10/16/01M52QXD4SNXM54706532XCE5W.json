@@ -1,0 +1,16 @@
+{
+  "id": "01M52QXD4SNXM54706532XCE5W",
+  "ts": "2026-10-16T16:14:54.105Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "hold",
+    "seq": 10,
+    "text": "Next, in order: (1) AC-06.4: devbin check all passed at da23005 (16:33Z, tmp/vc-st0026/check-all-da23005.txt); tools/test-estate runs from the primary checkout (its install_e2e copies the checkout, intent/.cache included, once), result at tmp/vc-st0026/test-estate-da23005.txt; on green, AC-06.4 satisfied with the hand-run facts already in AT-05.4 and AT-05.5's notes, WP-06 done, ST0026 done; END to cc and dc; then vc's views, canon and events committed by path. (2) intent-vc's step 2 all-clear (after hv's build all installs Intent's fixed pair; 0605 is landed on Intent's main): run the sync half of tmp/vc-st0026/st0027/mint-acs.sh (intent sync --to-store ST0027), take the drafted-criteria section out of ST0027/design.md, commit; cc syncs its ST0026 notes (hold 12, worded at tmp/cc/ with the carry limit and step 4 as measured on f8c2827). Until then: no sync --to-store, no hand edit under intent/st (if unavoidable, intent index rebuild straight after and tell intent-vc). (3) The menuz rubber-duck with hv on ST0027 design.md's Q1 to Q11; D1 to D11 recorded; WP-01 done; then intent lang init swift and WP-02. (4) hold 9's list stands; the four desks go once ST0026 is closed. (5) The box is shared with Intent and devbin through intent-vc's START/END: ask before anything heavy; intent-vc was not running at 16:2xZ on 16 Oct, so AC-06.4's run went without a slot."
+  }
+}

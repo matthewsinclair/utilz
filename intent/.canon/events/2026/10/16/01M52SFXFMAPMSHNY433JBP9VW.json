@@ -1,0 +1,14 @@
+{
+  "id": "01M52SFXFMAPMSHNY433JBP9VW",
+  "ts": "2026-10-16T16:42:29.236Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.edit",
+  "subject": {
+    "type": "ac",
+    "id": "ST0027/AC-02.1"
+  },
+  "payload": {
+    "text": "utilz menuz is dispatched by bin/utilz; opt/menuz/menuz.yaml declares the utility with opt/menuz/VERSION as the one home of its version; utilz list shows menuz; utilz doctor reports xcodegen and xcodebuild only when native/macos/Menuz is present, as it reports cargo only when a crate is."
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "id": "01M52SFX6KTXRSCGT9QM8X8SNJ",
+  "ts": "2026-10-16T16:42:28.948Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.satisfy",
+  "subject": {
+    "type": "ac",
+    "id": "ST0026/AC-06.4"
+  },
+  "payload": {
+    "evidence": "At da23005 on hv's machine, 16 Oct 2026: bin/devbin check all passed (clippy, format, autotests, targetdir, toolchain, critic; 16:33Z, tmp/vc-st0026/check-all-da23005.txt) and tools/test-estate passed every suite under the bash macOS ships (22 suites, 759 ok, exit 0, 16:34Z to 16:41Z, tmp/vc-st0026/test-estate-da23005.txt). The hand-run transcript is in acceptance.md as AT-05.4's and AT-05.5's notes, naming the machine (Mac16,6), macOS 27.0.1 build 26A434 and Hammerspoon 1.1.1"
+  }
+}

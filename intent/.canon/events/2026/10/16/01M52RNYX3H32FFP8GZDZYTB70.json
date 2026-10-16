@@ -1,0 +1,16 @@
+{
+  "id": "01M52RNYX3H32FFP8GZDZYTB70",
+  "ts": "2026-10-16T16:28:18.723Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 62,
+    "text": "ST0026 arngz: every work package Done on 16 Oct. WP-05 re-measured hands off on cc's f8c2827 (tmp/vc-st0026/handrun-rerun-f8c2827.txt, dictprobe-f8c2827.txt): AC-05.4 and AC-05.5 every check passed, a read 1 s into an apply answered at 1 s, a second apply refused at 2 s exit 2, Dictionary failed by name on the hold with no key pressed; AT-05.4 and AT-05.5 green with the facts, AC-05.6 on the --bind refusal; cc's 51fe5d9 put the literal AT ids in the test files. WP-06: dc's da23005 docs (AC-06.3, 0 names missing), check all and the estate green at da23005 (22 suites, 759 ok; AC-06.4). The thread's own close (intent st done ST0026) waits on cc's hold 12 design notes after Intent 0605's install, because a closed thread dehydrates its views. The four hand-run desks are deleted from hv's catalogue (copies at tmp/vc-st0026/st0026/desks/). 2.13.0 is hv's to cut."
+  }
+}

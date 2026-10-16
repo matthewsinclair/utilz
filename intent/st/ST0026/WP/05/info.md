@@ -2,7 +2,7 @@
 wp_id: WP-05
 title: apply
 scope: S
-status: WIP
+status: Done
 ---
 
 # WP-05: apply
