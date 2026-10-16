@@ -30,7 +30,7 @@ The thread is created and started ahead of the rubber-duck: design.md carries th
 | WP-02 | The shim, the config directory and the catalogue verbs     | S    | Done   |
 | WP-03 | The app: the menu from the file, watched, realised at open | S    | Done   |
 | WP-04 | Running items: params, the runner, the log and the notice  | S    | Done   |
-| WP-05 | Build, install, launch and the close                       | S    | WIP    |
+| WP-05 | Build, install, launch and the close                       | S    | Done   |
 | WP-06 | First-use fixes: notice, place, icon and glyph             | S    | WIP    |
 
 ## Acceptance

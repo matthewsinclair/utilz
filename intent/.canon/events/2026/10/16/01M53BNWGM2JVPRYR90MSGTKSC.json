@@ -1,0 +1,14 @@
+{
+  "id": "01M53BNWGM2JVPRYR90MSGTKSC",
+  "ts": "2026-10-16T22:00:19.221Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.satisfy",
+  "subject": {
+    "type": "ac",
+    "id": "ST0027/AC-05.3"
+  },
+  "payload": {
+    "evidence": "The menuz-app job (tests.yml, macos-15, Xcode 16.4, Swift 6.1; on a tag or a workflow_dispatch; unsigned; reads no secrets; prints the xcodebuild log on a failure) is green on workflow_dispatch run 38972250508 on 9c6270a: 'Build Menuz.app, unsigned' and 'Test Menuz.app, unsigned' (MenuzTests and MenuzKitTests through the scheme) both passed, after two dispatches that found Swift 6.1 refusing shapes the local Xcode 27.1 accepts (554fe03, 9c6270a). The Linux legs ran menuz.bats with the fake app in the explicit utility loop green on push run 38972204381 on 9c6270a (Test on Ubuntu, Test Summary success) and on the dispatch run. Signing, notarising and the stapled Menuz.app.zip are the maintainer's through bin/devbin macos (D12), after hv's store-creds."
+  }
+}
