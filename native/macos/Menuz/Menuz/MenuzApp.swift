@@ -191,8 +191,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, MenuAc
 
   /// Runs the item: through the form when it has params, else at once.
   func chooseItem(_ sender: NSMenuItem) {
-    guard let chosen = sender.representedObject as? Chosen, let shell else { return }
     let label = sender.title
+    guard let chosen = sender.representedObject as? Chosen, let shell else {
+      log.write("\"\(label)\" not run: the menu has no run for it, or the login shell is not read yet")
+      return
+    }
     guard !chosen.params.isEmpty else {
       run(chosen, label: label, params: [:], shell: shell)
       return
@@ -202,19 +205,17 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, MenuAc
     let paths = self.paths
     let seconds = spec?.realiseSeconds ?? MenuSpec.defaultRealiseSeconds
     let form = RunForm(chosen.params)
-    var controller: ParamFormController?
-    controller = ParamFormController(
-      title: label, form: form,
+    let controller = ParamFormController(
+      title: label, form: form, home: shell.environment["HOME"] ?? NSHomeDirectory(),
       realise: { name in await Self.choices(form.choiceLines[name] ?? "", shell: shell, paths: paths, seconds: seconds) },
-      onRun: { [weak self] exports in
-        self?.forget(controller)
+      onRun: { [weak self] controller, exports in
+        self?.forms.removeValue(forKey: ObjectIdentifier(controller))
         self?.run(chosen, label: label, params: exports, shell: shell, id: id)
       },
-      onCancel: { [weak self] in
-        self?.forget(controller)
+      onCancel: { [weak self] controller in
+        self?.forms.removeValue(forKey: ObjectIdentifier(controller))
         self?.log.write(Run.cancelledLine(id: id, label: label))
       })
-    guard let controller else { return }
     forms[ObjectIdentifier(controller)] = controller
     controller.show()
   }
@@ -268,23 +269,13 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, MenuAc
     }
   }
 
-  private func forget(_ controller: ParamFormController?) {
-    guard let controller else { return }
-    forms.removeValue(forKey: ObjectIdentifier(controller))
-  }
-
   /// A choice param's shell line, realised as an each is: one choice per
   /// line it prints.
   private nonisolated static func choices(
     _ line: String, shell: LoginShell, paths: Paths, seconds: Double
   ) async -> Answer<[String]> {
-    let request = RealiseRequest(labels: [], eaches: [RealiseEach(id: "choices", line: line, label: "$MENUZ_ITEM")])
-    let outcome = await Realiser.realise(request, shell: shell, paths: paths, seconds: seconds)
-    switch outcome.realised.eaches["choices"] {
-    case .ok(let items)?: return .ok(items.map(\.line))
-    case .failed(let why)?: return .failed(why)
-    case nil: return .failed("no answer within \(seconds) s")
-    }
+    let outcome = await Realiser.realise(Realise.choicesRequest(line), shell: shell, paths: paths, seconds: seconds)
+    return Realise.choices(from: outcome.realised, seconds: seconds)
   }
 
   /// `open` with these arguments; a failure is logged, never dropped.

@@ -8,17 +8,25 @@ import SwiftUI
 /// fact the check needs.
 @MainActor
 @Observable
-final class ParamFormModel {
+fileprivate final class ParamFormModel {
   var form: RunForm
   var answers: [String: String]
+  let home: String
 
-  init(_ form: RunForm) {
+  init(_ form: RunForm, home: String) {
     self.form = form
+    self.home = home
     answers = form.initialAnswers
   }
 
-  var refusals: [FormRefusal] { form.refusals(answers, pathKind: Self.pathKind) }
+  var refusals: [FormRefusal] { form.refusals(answers, home: home, pathKind: Self.pathKind) }
   var canRun: Bool { refusals.isEmpty }
+  var exports: [String: String] { form.exports(answers, home: home) }
+
+  /// The refusal standing against one field, if any.
+  func refusal(_ name: String) -> String? {
+    refusals.first { $0.name == name }?.why
+  }
 
   func realised(_ name: String, _ answer: Answer<[String]>) {
     form.realised(name, answer, answers: &answers)
@@ -32,10 +40,11 @@ final class ParamFormModel {
 }
 
 /// The one typed form (design.md "Parameters", D4): a field per param in
-/// the file's order, the refusals under them, Cancel and Run at the foot.
+/// the file's order, each with its refusal under it, Cancel and Run at the
+/// foot.
 /// Every field's accessibility identifier is its param's name, and the
 /// buttons' are Run and Cancel, for the AC-04.5 hand run.
-struct ParamFormView: View {
+fileprivate struct ParamFormView: View {
   @Bindable var model: ParamFormModel
   let onRun: () -> Void
   let onCancel: () -> Void
@@ -44,11 +53,13 @@ struct ParamFormView: View {
     VStack(alignment: .leading, spacing: 12) {
       Form {
         ForEach(model.form.fields, id: \.name) { field in
-          fieldView(field).accessibilityIdentifier(field.name)
+          VStack(alignment: .leading, spacing: 4) {
+            fieldView(field).accessibilityIdentifier(field.name)
+            if let why = model.refusal(field.name) {
+              Text(why).foregroundStyle(.red).font(.callout)
+            }
+          }
         }
-      }
-      ForEach(model.refusals, id: \.name) { refusal in
-        Text(refusal.description).foregroundStyle(.red).font(.callout)
       }
       HStack {
         Spacer()
@@ -110,19 +121,24 @@ struct ParamFormView: View {
 /// One form's panel. It activates the app so the panel takes key, realises
 /// any shell-line choices as it opens, and answers once: Run with the
 /// form's exports, or Cancel (Escape, the Cancel button, or closing it).
+/// The panel stays up when the app loses focus (an LSUIElement app has no
+/// Dock icon to bring a hidden one back), and floats above other windows.
+/// It hands itself to its callbacks, so the delegate holds it without a
+/// cycle.
 @MainActor
 final class ParamFormController: NSObject, NSWindowDelegate {
   private let panel: NSPanel
   private let model: ParamFormModel
-  private let onRun: ([String: String]) -> Void
-  private let onCancel: () -> Void
+  private let onRun: (ParamFormController, [String: String]) -> Void
+  private let onCancel: (ParamFormController) -> Void
   private var answered = false
 
   init(
-    title: String, form: RunForm, realise: @escaping (String) async -> Answer<[String]>,
-    onRun: @escaping ([String: String]) -> Void, onCancel: @escaping () -> Void
+    title: String, form: RunForm, home: String, realise: @escaping (String) async -> Answer<[String]>,
+    onRun: @escaping (ParamFormController, [String: String]) -> Void,
+    onCancel: @escaping (ParamFormController) -> Void
   ) {
-    model = ParamFormModel(form)
+    model = ParamFormModel(form, home: home)
     self.onRun = onRun
     self.onCancel = onCancel
     panel = NSPanel(
@@ -131,6 +147,8 @@ final class ParamFormController: NSObject, NSWindowDelegate {
     super.init()
     panel.title = title
     panel.isReleasedWhenClosed = false
+    panel.hidesOnDeactivate = false
+    panel.level = .floating
     panel.delegate = self
     let view = ParamFormView(model: model, onRun: { [weak self] in self?.run() }, onCancel: { [weak self] in self?.cancel() })
     panel.contentView = NSHostingView(rootView: view)
@@ -151,16 +169,16 @@ final class ParamFormController: NSObject, NSWindowDelegate {
   private func run() {
     guard !answered, model.canRun else { return }
     answered = true
-    let exports = model.form.exports(model.answers)
+    let exports = model.exports
     panel.close()
-    onRun(exports)
+    onRun(self, exports)
   }
 
   private func cancel() {
     guard !answered else { return }
     answered = true
     panel.close()
-    onCancel()
+    onCancel(self)
   }
 
   func windowWillClose(_ notification: Notification) {

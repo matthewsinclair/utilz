@@ -21,7 +21,9 @@ struct WrapperTests {
     let dir = FileManager.default.temporaryDirectory.appendingPathComponent("menuz-wrapper-\(UUID().uuidString)")
     let home = dir.appendingPathComponent("home")
     let fakes = dir.appendingPathComponent("fakes")
-    try FileManager.default.createDirectory(at: home.appendingPathComponent("work dir"), withIntermediateDirectories: true)
+    // work dir/sub is what a * in the cwd would match, if it were a pattern.
+    try FileManager.default.createDirectory(
+      at: home.appendingPathComponent("work dir/sub"), withIntermediateDirectories: true)
     try FileManager.default.createDirectory(at: fakes, withIntermediateDirectories: true)
     defer { try? FileManager.default.removeItem(at: dir) }
     try Data().write(to: home.appendingPathComponent(".zshrc"))
@@ -33,10 +35,12 @@ struct WrapperTests {
     let paths = Paths(environment: ["HOME": home.path], home: home.path)
     let request = RunRequest(
       id: 7, label: "Say it", run: line, cwd: cwd, fileCwd: nil, item: item, params: params, notify: notify)
+    // A zone that is not UTC, so a stamp written in local time shows.
     var env = Run.environment(
       request, login: ["HOME": home.path, "ZDOTDIR": home.path, "PATH": "\(fakes.path):/usr/bin:/bin"], paths: paths,
       log: log.path)
     env["WORK"] = home.appendingPathComponent("work dir").path
+    env["TZ"] = "Asia/Kathmandu"
     let p = Process()
     p.executableURL = URL(fileURLWithPath: "/bin/zsh")
     p.arguments = ["-f", "-c", Run.wrapper]
@@ -59,22 +63,35 @@ struct WrapperTests {
       err: String(decoding: errData, as: UTF8.self))
   }
 
-  /// `<ts> run 7 exit <code> in <d>s`, the timestamp in LogLine's format.
+  /// `<ts> run 7 exit <code> in <d>s`: the stamp is UTC and now (it parses
+  /// as LogLine writes one and is within a minute of this clock, run under a
+  /// zone that is not UTC), and the duration has one decimal.
   static func endLine(_ log: String, code: Int) -> Bool {
     guard let last = log.split(separator: "\n").last else { return false }
     let parts = last.split(separator: " ", maxSplits: 1).map(String.init)
-    guard parts.count == 2 else { return false }
-    let stamp = LogLine.format("", at: Date(timeIntervalSince1970: 0)).split(separator: " ")[0]
-    let sameShape = parts[0].count == stamp.count && parts[0].hasSuffix("Z") && parts[0].contains("T")
+    guard parts.count == 2, let stamp = try? Date(parts[0], strategy: .iso8601) else { return false }
+    let sameFormat = LogLine.format("", at: stamp) == parts[0] + " \n"
+    let now = abs(stamp.timeIntervalSinceNow) < 60
+    let prefix = "run 7 exit \(code) in "
     let rest = parts[1]
-    return sameShape && rest.hasPrefix("run 7 exit \(code) in ") && rest.hasSuffix("s")
-      && Double(rest.dropFirst("run 7 exit \(code) in ".count).dropLast()) != nil
+    let duration = rest.hasPrefix(prefix) ? String(rest.dropFirst(prefix.count)) : ""
+    return sameFormat && now && duration.wholeMatch(of: /[0-9]+\.[0-9]s/) != nil
+  }
+
+  @Test("the end-line check itself refuses a local time, a missing decimal and a stale stamp")
+  func endLineCheck() {
+    #expect(Self.endLine(LogLine.format("run 7 exit 0 in 0.3s", at: Date()), code: 0))
+    #expect(!Self.endLine(LogLine.format("run 7 exit 0 in 0s", at: Date()), code: 0))
+    #expect(!Self.endLine(LogLine.format("run 7 exit 0 in 0.30s", at: Date()), code: 0))
+    #expect(!Self.endLine(LogLine.format("run 7 exit 0 in 0.3s", at: Date(timeIntervalSinceNow: -3600 * 5.75)), code: 0))
+    #expect(!Self.endLine("2026-10-16T18:46:16+0545 run 7 exit 0 in 0.3s\n", code: 0))
   }
 
   @Test("stdout and stderr lines are prefixed with the run id, and the end line carries the code")
   func prefixes() throws {
     let ran = try Self.run("print out; print err >&2; exit 3")
     #expect(ran.status == 3, "\(ran.err)")
+    #expect(ran.err.isEmpty, "the wrapper wrote to its own stderr, which is the log: \(ran.err)")
     let lines = ran.log.split(separator: "\n").map(String.init)
     #expect(Array(lines.prefix(2)) == ["[7] out", "[7] err"])
     #expect(Self.endLine(ran.log, code: 3), "end line: \(lines.last ?? "")")
@@ -91,6 +108,14 @@ struct WrapperTests {
     #expect(!none.log.contains("[7] ran"))
     #expect(none.log.contains("[7] menuz: cannot enter /no/such/dir"))
     #expect(Self.endLine(none.log, code: 126))
+    #expect(none.err.isEmpty)
+    let bad = try Self.run("print ran", cwd: "bad ${")
+    #expect(bad.status == 126)
+    #expect(bad.log.hasPrefix("[7] menuz: cannot enter bad ${: it does not expand\n"), "\(bad.log)")
+    #expect(bad.err.isEmpty, "\(bad.err)")
+    let star = try Self.run("pwd", cwd: "$WORK/*")
+    #expect(star.status == 126, "a * in a cwd is a *, not a pattern: \(star.log)")
+    #expect(star.err.isEmpty, "\(star.err)")
   }
 
   @Test("bin/ is first on PATH for the run, MENUZ_ITEM and the params are there")

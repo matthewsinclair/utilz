@@ -13,6 +13,9 @@ final class AppLog {
   nonisolated static let logger = Logger(subsystem: "com.matthewsinclair.utilz.menuz", category: "App")
 
   var file: String
+  /// True from a failed write until the next one that works: the notice is
+  /// posted once per failure, not once per line.
+  private var failing = false
 
   init(file: String) {
     self.file = file
@@ -20,10 +23,13 @@ final class AppLog {
 
   func write(_ text: String) {
     Self.logger.notice("\(text, privacy: .public)")
-    if let failure = Self.append(LogLine.format(text, at: Date()), to: file) {
-      Self.logger.error("menuz.log at \(self.file, privacy: .public) could not be written: \(failure, privacy: .public)")
-      Notifier.post("menuz.log could not be written: \(failure)")
+    guard let failure = Self.append(LogLine.format(text, at: Date()), to: file) else {
+      failing = false
+      return
     }
+    Self.logger.error("menuz.log at \(self.file, privacy: .public) could not be written: \(failure, privacy: .public)")
+    if !failing { Notifier.post("menuz.log could not be written: \(failure)") }
+    failing = true
   }
 
   /// Appends `text` in one write; why not, when it could not.

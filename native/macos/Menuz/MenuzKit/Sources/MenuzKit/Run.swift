@@ -82,6 +82,11 @@ public enum Run {
     "quit; runs still going: \(ids.isEmpty ? "none" : ids.map(String.init).joined(separator: ", "))"
   }
 
+  /// The AppleScript that posts a notice, its text read from the
+  /// environment's `MENUZ_NOTICE` and never spliced in. The wrapper posts a
+  /// run's notice with it; the app posts its own.
+  public static let noticeScript = #"display notification (system attribute "MENUZ_NOTICE") with title "menuz""#
+
   /// The wrapper, run as `/bin/zsh -f -c <wrapper>` in its own session with
   /// its stdout and stderr on the log. It enters the working directory,
   /// runs the line in the login shell with `bin/` first even after .zshrc,
@@ -92,8 +97,13 @@ public enum Run {
     _menuz_id=$MENUZ_RUN_ID
     _menuz_start=$EPOCHREALTIME
     _menuz_last=
-    _menuz_dir=$(print -rn -- ${~${(e)MENUZ_CWD}}) && cd -- "$_menuz_dir" 2>/dev/null
+    # The cwd as written, expanded with no globbing (a * in it is a *) and its
+    # errors kept off stderr, which is the log: a failure is one prefixed line.
+    _menuz_dir=$( { setopt no_glob; print -rn -- ${~${(e)MENUZ_CWD}} } 2>/dev/null )
     if (( $? != 0 )); then
+      print -r -- "[$_menuz_id] menuz: cannot enter $MENUZ_CWD: it does not expand"
+      _menuz_rc=126
+    elif ! cd -- "$_menuz_dir" 2>/dev/null; then
       print -r -- "[$_menuz_id] menuz: cannot enter $MENUZ_CWD"
       _menuz_rc=126
     else
@@ -112,36 +122,11 @@ public enum Run {
     if (( _menuz_post )); then
       export MENUZ_NOTICE="\"$MENUZ_LABEL\" exited $_menuz_rc"
       [[ $MENUZ_NOTIFY == always && -n $_menuz_last ]] && MENUZ_NOTICE+=": $_menuz_last"
-      osascript -e 'display notification (system attribute "MENUZ_NOTICE") with title "menuz"' >/dev/null 2>&1 ||
+      osascript -e '\#(noticeScript)' >/dev/null 2>&1 ||
         print -r -- "[$_menuz_id] menuz: the notice could not be posted (osascript exit $?)"
     fi
     LC_NUMERIC=C printf '%s run %s exit %s in %.1fs\n' \
       "$(TZ=UTC strftime '%Y-%m-%dT%H:%M:%SZ' $EPOCHSECONDS)" "$_menuz_id" "$_menuz_rc" $(( EPOCHREALTIME - _menuz_start ))
     exit $_menuz_rc
     """#
-}
-
-/// The next-id store's arithmetic (`menuz/next-run`): the app reads it,
-/// takes the id, and writes the next under a lock.
-public enum RunId {
-  public struct Unreadable: Error, Equatable {
-    public let text: String
-
-    public init(text: String) {
-      self.text = text
-    }
-  }
-
-  /// The id the store holds: 1 when it is missing or empty.
-  public static func parse(_ text: String?) -> Result<Int, Unreadable> {
-    let trimmed = (text ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
-    guard !trimmed.isEmpty else { return .success(1) }
-    guard let id = Int(trimmed), id > 0 else { return .failure(Unreadable(text: trimmed)) }
-    return .success(id)
-  }
-
-  /// What the store holds after `id` is taken.
-  public static func stored(after id: Int) -> String {
-    "\(id + 1)\n"
-  }
 }

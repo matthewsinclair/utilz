@@ -19,27 +19,39 @@ final class Runner {
   var stillGoing: [Int] { going.keys.sorted() }
 
   /// The next id from `<state>/next-run`, taken under an exclusive lock so
-  /// two copies of the app never share one.
-  static func takeId(stateDir: String) -> Result<Int, RunId.Unreadable> {
+  /// two copies of the app, or two runs at once, never share one. Only a
+  /// store that does not exist yet starts at 1 (RunId.parse); one that
+  /// exists and holds no id is refused. The next id is written before the
+  /// file is cut to its length, and it never gets shorter, so a crash
+  /// between the two leaves a store that still parses.
+  nonisolated static func takeId(stateDir: String) -> Result<Int, RunId.Unreadable> {
+    func failure(_ why: String) -> Result<Int, RunId.Unreadable> { .failure(RunId.Unreadable(text: why)) }
     do {
       try FileManager.default.createDirectory(atPath: stateDir, withIntermediateDirectories: true)
     } catch {
-      return .failure(RunId.Unreadable(text: error.localizedDescription))
+      return failure(error.localizedDescription)
     }
     let path = "\(stateDir)/next-run"
-    let descriptor = open(path, O_RDWR | O_CREAT | O_EXLOCK | O_CLOEXEC, 0o644)
-    guard descriptor >= 0 else { return .failure(RunId.Unreadable(text: String(cString: strerror(errno)))) }
+    var created = false
+    var descriptor = open(path, O_RDWR | O_EXLOCK | O_CLOEXEC)
+    if descriptor < 0, errno == ENOENT {
+      descriptor = open(path, O_RDWR | O_CREAT | O_EXCL | O_EXLOCK | O_CLOEXEC, 0o644)
+      created = descriptor >= 0
+      if descriptor < 0, errno == EEXIST { descriptor = open(path, O_RDWR | O_EXLOCK | O_CLOEXEC) }
+    }
+    guard descriptor >= 0 else { return failure(String(cString: strerror(errno))) }
     defer { close(descriptor) }
     var buffer = [UInt8](repeating: 0, count: 64)
     let count = read(descriptor, &buffer, buffer.count)
-    guard count >= 0 else { return .failure(RunId.Unreadable(text: String(cString: strerror(errno)))) }
-    let text = String(decoding: buffer.prefix(count), as: UTF8.self)
-    let parsed = RunId.parse(text)
+    guard count >= 0 else { return failure(String(cString: strerror(errno))) }
+    let parsed = RunId.parse(created ? nil : String(decoding: buffer.prefix(count), as: UTF8.self))
     guard case .success(let id) = parsed else { return parsed }
     let next = Array(RunId.stored(after: id).utf8)
-    guard ftruncate(descriptor, 0) == 0, pwrite(descriptor, next, next.count, 0) == next.count else {
-      return .failure(RunId.Unreadable(text: String(cString: strerror(errno))))
+    let written = pwrite(descriptor, next, next.count, 0)
+    guard written == next.count else {
+      return failure(written < 0 ? String(cString: strerror(errno)) : "wrote \(written) of \(next.count) bytes")
     }
+    guard ftruncate(descriptor, off_t(next.count)) == 0 else { return failure(String(cString: strerror(errno))) }
     return .success(id)
   }
 
@@ -48,7 +60,7 @@ final class Runner {
   @discardableResult
   func start(_ request: RunRequest, environment: [String: String], home: String) -> Bool {
     log.write(Run.startLine(request, home: home))
-    switch Self.spawn(environment: environment, log: log.file) {
+    switch Self.spawn(environment: environment, log: log.file, home: home) {
     case .failure(let why):
       log.write("run \(request.id) could not start: \(why)")
       Notifier.post("\"\(request.label)\" could not start: \(why)")
@@ -87,19 +99,32 @@ final class Runner {
   }
 
   /// `/bin/zsh -f -c <wrapper>` in its own session (POSIX_SPAWN_SETSID),
-  /// holding nothing of the app's (POSIX_SPAWN_CLOEXEC_DEFAULT), stdin
-  /// /dev/null, stdout and stderr the log opened for append.
-  nonisolated static func spawn(environment: [String: String], log: String) -> Result<pid_t, SpawnError> {
+  /// holding nothing of the app's (POSIX_SPAWN_CLOEXEC_DEFAULT), started in
+  /// `home` so a relative `cwd` resolves there, stdin /dev/null, stdout and
+  /// stderr the log opened for append. Every step of the setup is checked:
+  /// a run that cannot be put in its own session does not start.
+  nonisolated static func spawn(environment: [String: String], log: String, home: String) -> Result<pid_t, SpawnError> {
+    func check(_ code: Int32, _ step: String) -> SpawnError? {
+      code == 0 ? nil : SpawnError(why: "\(step): \(String(cString: strerror(code)))")
+    }
     var attributes: posix_spawnattr_t?
-    posix_spawnattr_init(&attributes)
+    if let error = check(posix_spawnattr_init(&attributes), "posix_spawnattr_init") { return .failure(error) }
     defer { posix_spawnattr_destroy(&attributes) }
-    posix_spawnattr_setflags(&attributes, Int16(POSIX_SPAWN_SETSID | POSIX_SPAWN_CLOEXEC_DEFAULT))
     var actions: posix_spawn_file_actions_t?
-    posix_spawn_file_actions_init(&actions)
+    if let error = check(posix_spawn_file_actions_init(&actions), "posix_spawn_file_actions_init") {
+      return .failure(error)
+    }
     defer { posix_spawn_file_actions_destroy(&actions) }
-    posix_spawn_file_actions_addopen(&actions, 0, "/dev/null", O_RDONLY, 0)
-    posix_spawn_file_actions_addopen(&actions, 1, log, O_WRONLY | O_APPEND | O_CREAT, 0o644)
-    posix_spawn_file_actions_adddup2(&actions, 1, 2)
+    let steps: [(Int32, String)] = [
+      (posix_spawnattr_setflags(&attributes, Int16(POSIX_SPAWN_SETSID | POSIX_SPAWN_CLOEXEC_DEFAULT)), "setflags"),
+      (posix_spawn_file_actions_addopen(&actions, 0, "/dev/null", O_RDONLY, 0), "stdin"),
+      (posix_spawn_file_actions_addopen(&actions, 1, log, O_WRONLY | O_APPEND | O_CREAT, 0o644), "stdout"),
+      (posix_spawn_file_actions_adddup2(&actions, 1, 2), "stderr"),
+      (posix_spawn_file_actions_addchdir_np(&actions, home), "chdir"),
+    ]
+    for (code, step) in steps {
+      if let error = check(code, step) { return .failure(error) }
+    }
     let argv = ["/bin/zsh", "-f", "-c", Run.wrapper].map { strdup($0) } + [nil]
     let envp = environment.map { strdup("\($0.key)=\($0.value)") } + [nil]
     defer {

@@ -52,6 +52,8 @@ struct RunTests {
     #expect(Run.cwd(Self.request()) == "$HOME")
   }
 
+  /// The wrapper is a constant, which is what guarantees it; this pins that
+  /// nobody has written a request's words into it.
   @Test("the wrapper carries no run line, label, cwd or value")
   func wrapperCarriesNothing() {
     let text = Run.wrapper
@@ -71,15 +73,33 @@ struct RunTests {
     #expect(Run.quitLine(going: []) == "quit; runs still going: none")
   }
 
-  @Test("the next-id store: a missing file starts at 1, a number is the id, anything else is refused")
+  @Test("the next-id store: only a store not yet made starts at 1; one holding no id is refused")
   func nextId() {
     #expect(RunId.parse(nil) == .success(1))
     #expect(RunId.parse("12\n") == .success(12))
-    #expect(RunId.parse("") == .success(1))
-    guard case .failure = RunId.parse("twelve") else {
-      Issue.record("a store holding text was taken as an id")
-      return
-    }
+    #expect(RunId.parse("") == .failure(RunId.Unreadable(text: "")))
+    #expect(RunId.parse("twelve") == .failure(RunId.Unreadable(text: "twelve")))
+    #expect(RunId.parse("0") == .failure(RunId.Unreadable(text: "0")))
     #expect(RunId.stored(after: 12) == "13\n")
+  }
+
+  @Test("the notice script reads its text from the environment, and the wrapper posts with it")
+  func noticeScript() {
+    #expect(Run.noticeScript == #"display notification (system attribute "MENUZ_NOTICE") with title "menuz""#)
+    #expect(Run.wrapper.contains("osascript -e '\(Run.noticeScript)'"))
+  }
+
+  @Test("a choice line is asked as an each, and its answer is the lines, a failure, or no answer in time")
+  func choices() {
+    let request = Realise.choicesRequest("ls ~/Desks")
+    #expect(request.labels == [])
+    #expect(request.eaches.map(\.line) == ["ls ~/Desks"])
+    let id = request.eaches[0].id
+    var answer = Realised()
+    #expect(Realise.choices(from: answer, seconds: 5) == .failed("no answer within 5.0 s"))
+    answer.eaches[id] = .ok([EachItem(line: "home", label: "home"), EachItem(line: "work", label: "work")])
+    #expect(Realise.choices(from: answer, seconds: 5) == .ok(["home", "work"]))
+    answer.eaches[id] = .failed("exit 1")
+    #expect(Realise.choices(from: answer, seconds: 5) == .failed("exit 1"))
   }
 }

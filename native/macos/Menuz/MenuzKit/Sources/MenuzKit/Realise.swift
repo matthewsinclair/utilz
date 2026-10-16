@@ -241,3 +241,22 @@ extension Realise {
       + request.eaches.filter { answer.eaches[$0.id] == nil }.map(\.id)
   }
 }
+
+extension Realise {
+  /// A choice param's shell line, asked as an each is: one choice per line
+  /// it prints.
+  public static func choicesRequest(_ line: String) -> RealiseRequest {
+    RealiseRequest(labels: [], eaches: [RealiseEach(id: choicesId, line: line, label: "$MENUZ_ITEM")])
+  }
+
+  /// The choices that request's answer gives, or why there are none.
+  public static func choices(from answer: Realised, seconds: Double) -> Answer<[String]> {
+    switch answer.eaches[choicesId] {
+    case .ok(let items)?: .ok(items.map(\.line))
+    case .failed(let why)?: .failed(why)
+    case nil: .failed("no answer within \(seconds) s")
+    }
+  }
+
+  private static let choicesId = "choices"
+}
