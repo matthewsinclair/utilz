@@ -1,0 +1,15 @@
+{
+  "id": "01M52Z5FK76P8R99YWA3TQ44PK",
+  "ts": "2026-10-16T18:21:38.791Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "doing",
+    "text": "ST0027 WP-03 at 6811ad7 on st0027-wp03 (370fa77, 805ed42 with vc's two verify fixes, 6811ad7 menuz.bats shellcheck-clean), fast-forwards from c7f6ef1, green in vc's window, back with vc for its verify and AC-03.3's hand run. Next on vc's word."
+  }
+}

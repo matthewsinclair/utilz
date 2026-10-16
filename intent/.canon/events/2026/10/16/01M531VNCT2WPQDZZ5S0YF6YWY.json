@@ -1,0 +1,15 @@
+{
+  "id": "01M531VNCT2WPQDZZ5S0YF6YWY",
+  "ts": "2026-10-16T19:08:42.778Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "hold",
+    "text": "ST0027 WP-05 (build, install, launch, the close), started in the store, resume state for hv's compact on 16 Oct. Main's head when folded: 0bc51f0 (D12: signing local as Intent's). Branch st0027-wp05 in the scratchpad worktree wt-wp05 at 022b278, nothing written on it: rebase it onto main's head before writing. Banked, git-ignored: tmp/cc/st0027-wp05/objective.md (the objective draft, prettier-stable, NOT in the store; vc reads it in full after the compact before any source) and release-survey.md (how the release core attaches assets: it attaches none; keg detection by manifest.sha256; Intent's app-sign/notarize citations). vc's rulings on the three calls: own keychain prefix utilz.apple.* with store-creds hv's; macos.bats a second test file; uninstall calls a new --unregister arm on the app (SMAppService.mainApp.unregister, status printed) before removing the bundle. Condition: hv's compact passes and vc has read the objective. Then: objective into the store, red tests, the shim verbs and bin/.devbin/cmd/macos, critic-shell and critic-swift; compiles only in vc's booked window (intent-vc's START)."
+  }
+}

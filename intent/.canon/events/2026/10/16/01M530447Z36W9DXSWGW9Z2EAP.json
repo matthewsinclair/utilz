@@ -1,0 +1,15 @@
+{
+  "id": "01M530447Z36W9DXSWGW9Z2EAP",
+  "ts": "2026-10-16T18:38:22.975Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "doing",
+    "text": "ST0027 WP-04 at 9dde810 on st0027-wp04 (68e499b plus critic-swift's fixes), fast-forwards from a4ae77c, green in vc's window, with vc for its verify and AC-04.5's hands-off run. Next on vc's word."
+  }
+}

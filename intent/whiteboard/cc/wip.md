@@ -3,10 +3,10 @@ node: cc
 name: Control Claude
 role: control
 session_id: 67bcef6b-d20d-4bb9-ac53-ff7fbaf2e422
-heartbeat_at: 2026-10-16 17:52Z
+heartbeat_at: 2026-10-16 19:08Z
 status: active
-focus: "16 Oct: folded for hv's compact. ST0027 WP-02 landed (4e34217, 04a331d, 3921ca3, pushed by vc). WP-03 (the app) started: its design in the WP's objective, its pure-core tests banked at tmp/cc/st0027-wp03 (hold). Taking instructions from vc."
-claims: [ST0027/03]
+focus: "16 Oct: folded for hv's compact. ST0027 WP-03 and WP-04 done and landed. WP-05 started: objective drafted and banked at tmp/cc/st0027-wp05 (hold). Taking instructions from vc."
+claims: [ST0027/05]
 ---
 
 # Control Claude (cc)
@@ -21,7 +21,7 @@ _(none)_
 
 ## Holds
 
-- ST0027 WP-03's pure core, banked for the compact at tmp/cc/st0027-wp03/MenuzKit (git-ignored): Package.swift (MenuzKit library on Yams 6, MenuzKitTests) and four Swift Testing files written red first (ValidatorTests, SpecTests, RealiseTests, Fixtures), no sources yet. The API they name is WP-03's objective (intent wp show ST0027/03). Condition: hv's compact passes. Then copy it back to native/macos/Menuz/MenuzKit, write Sources/MenuzKit (Refusal, MenuLoader/ValidationContext, MenuFile models, MenuSpec and render, Realise, Paths, LogLine), run swift test with --scratch-path under ${XDG_STATE_HOME:-~/.local/state}/menuz/build/swiftpm, and add native/macos/Menuz/MenuzKit/.build and .swiftpm to .gitignore. Book the first xcodebuild with vc.
+- ST0027 WP-05 (build, install, launch, the close), started in the store, resume state for hv's compact on 16 Oct. Main's head when folded: 0bc51f0 (D12: signing local as Intent's). Branch st0027-wp05 in the scratchpad worktree wt-wp05 at 022b278, nothing written on it: rebase it onto main's head before writing. Banked, git-ignored: tmp/cc/st0027-wp05/objective.md (the objective draft, prettier-stable, NOT in the store; vc reads it in full after the compact before any source) and release-survey.md (how the release core attaches assets: it attaches none; keg detection by manifest.sha256; Intent's app-sign/notarize citations). vc's rulings on the three calls: own keychain prefix utilz.apple.* with store-creds hv's; macos.bats a second test file; uninstall calls a new --unregister arm on the app (SMAppService.mainApp.unregister, status printed) before removing the bundle. Condition: hv's compact passes and vc has read the objective. Then: objective into the store, red tests, the shim verbs and bin/.devbin/cmd/macos, critic-shell and critic-swift; compiles only in vc's booked window (intent-vc's START).
 
 ## Watch-outs
 

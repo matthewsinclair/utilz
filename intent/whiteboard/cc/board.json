@@ -5,11 +5,11 @@
     "name": "Control Claude",
     "role": "control",
     "session_id": "67bcef6b-d20d-4bb9-ac53-ff7fbaf2e422",
-    "heartbeat_at": "2026-10-16T17:52:46.568Z",
+    "heartbeat_at": "2026-10-16T19:08:42.874Z",
     "status": "active",
-    "focus": "16 Oct: folded for hv's compact. ST0027 WP-02 landed (4e34217, 04a331d, 3921ca3, pushed by vc). WP-03 (the app) started: its design in the WP's objective, its pure-core tests banked at tmp/cc/st0027-wp03 (hold). Taking instructions from vc.",
+    "focus": "16 Oct: folded for hv's compact. ST0027 WP-03 and WP-04 done and landed. WP-05 started: objective drafted and banked at tmp/cc/st0027-wp05 (hold). Taking instructions from vc.",
     "claims": [
-      "ST0027/03"
+      "ST0027/05"
     ],
     "recorded_at": "2026-09-14T08:46:06.602Z",
     "authored_at": "2026-09-11 16:17Z",
@@ -938,8 +938,46 @@
       "kind": "hold",
       "seq": 15,
       "text": "ST0027 WP-03's pure core, banked for the compact at tmp/cc/st0027-wp03/MenuzKit (git-ignored): Package.swift (MenuzKit library on Yams 6, MenuzKitTests) and four Swift Testing files written red first (ValidatorTests, SpecTests, RealiseTests, Fixtures), no sources yet. The API they name is WP-03's objective (intent wp show ST0027/03). Condition: hv's compact passes. Then copy it back to native/macos/Menuz/MenuzKit, write Sources/MenuzKit (Refusal, MenuLoader/ValidationContext, MenuFile models, MenuSpec and render, Realise, Paths, LogLine), run swift test with --scratch-path under ${XDG_STATE_HOME:-~/.local/state}/menuz/build/swiftpm, and add native/macos/Menuz/MenuzKit/.build and .swiftpm to .gitignore. Book the first xcodebuild with vc.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-10-16T18:21:38.691Z",
       "recorded_at": "2026-10-16T17:52:46.482Z"
+    },
+    {
+      "node": "cc",
+      "kind": "doing",
+      "seq": 40,
+      "text": "ST0027 WP-03 at 6811ad7 on st0027-wp03 (370fa77, 805ed42 with vc's two verify fixes, 6811ad7 menuz.bats shellcheck-clean), fast-forwards from c7f6ef1, green in vc's window, back with vc for its verify and AC-03.3's hand run. Next on vc's word.",
+      "state": "archived",
+      "archived_at": "2026-10-16T18:36:37.533Z",
+      "recorded_at": "2026-10-16T18:21:38.791Z",
+      "edited_at": "2026-10-16T18:30:42.742Z"
+    },
+    {
+      "node": "cc",
+      "kind": "hold",
+      "seq": 16,
+      "text": "Touch nothing under native/macos or opt/menuz: vc is running AC-03.3's hand run on 805ed42's product, then lands 6811ad7 on main by fast-forward, mints the ATs and closes ST0027 WP-03; dc's CI fix lands after it. Condition: vc says main is open again. WP-04's instruction follows the close.",
+      "state": "archived",
+      "archived_at": "2026-10-16T18:36:37.442Z",
+      "recorded_at": "2026-10-16T18:31:58.354Z"
+    },
+    {
+      "node": "cc",
+      "kind": "doing",
+      "seq": 41,
+      "text": "ST0027 WP-04 at 9dde810 on st0027-wp04 (68e499b plus critic-swift's fixes), fast-forwards from a4ae77c, green in vc's window, with vc for its verify and AC-04.5's hands-off run. Next on vc's word.",
+      "state": "archived",
+      "archived_at": "2026-10-16T19:08:42.683Z",
+      "recorded_at": "2026-10-16T18:38:22.975Z",
+      "edited_at": "2026-10-16T18:58:58.484Z"
+    },
+    {
+      "node": "cc",
+      "kind": "hold",
+      "seq": 17,
+      "text": "ST0027 WP-05 (build, install, launch, the close), started in the store, resume state for hv's compact on 16 Oct. Main's head when folded: 0bc51f0 (D12: signing local as Intent's). Branch st0027-wp05 in the scratchpad worktree wt-wp05 at 022b278, nothing written on it: rebase it onto main's head before writing. Banked, git-ignored: tmp/cc/st0027-wp05/objective.md (the objective draft, prettier-stable, NOT in the store; vc reads it in full after the compact before any source) and release-survey.md (how the release core attaches assets: it attaches none; keg detection by manifest.sha256; Intent's app-sign/notarize citations). vc's rulings on the three calls: own keychain prefix utilz.apple.* with store-creds hv's; macos.bats a second test file; uninstall calls a new --unregister arm on the app (SMAppService.mainApp.unregister, status printed) before removing the bundle. Condition: hv's compact passes and vc has read the objective. Then: objective into the store, red tests, the shim verbs and bin/.devbin/cmd/macos, critic-shell and critic-swift; compiles only in vc's booked window (intent-vc's START).",
+      "state": "live",
+      "recorded_at": "2026-10-16T19:08:42.778Z"
     }
   ],
   "messages": [
@@ -1429,6 +1467,31 @@
       "state": "handled",
       "handled_at": "2026-10-16T17:39:55.561Z",
       "recorded_at": "2026-10-16T16:06:52.600Z"
+    },
+    {
+      "sender": "vc",
+      "recipient": "cc",
+      "body": "vc, 17:5xZ: hv's compact passed; hold 15's condition is met, carry on with ST0027 WP-03: MenuzKit back to native/macos/Menuz/MenuzKit, Sources/MenuzKit against the WP objective, .build and .swiftpm git-ignored, products under ${XDG_STATE_HOME:-~/.local/state}/menuz/build/. Tell vc BEFORE the first swift test as well as before the first xcodebuild (a SwiftPM build of Yams is heavier than a bats suite; vc books each with intent-vc, asked at 17:5xZ). Commit on st0027-wp03 by explicit path and send vc the SHA for a worktree verify; dc recuts help/menuz.md at that SHA on vc's word. No pushes, one suite at a time. (Sent by SendMessage too.)",
+      "fyi": false,
+      "state": "handled",
+      "handled_at": "2026-10-16T18:12:53.239Z",
+      "recorded_at": "2026-10-16T17:56:42.617Z"
+    },
+    {
+      "sender": "vc",
+      "recipient": "cc",
+      "body": "vc, 18:4xZ: WP-03 is Done (6811ad7 landed, AT-03.1 to AT-03.4 green, main 33b309d). WP-04 is yours: the brief is in your inbox by SendMessage (the form with accessibility identifiers, the detached wrapper spawned with POSIX_SPAWN_SETSID and the login shell inside it, the log lines as the design's block, the notice posted by the wrapper through osascript, the tests). Objective first for vc's read, then red tests, sources, and tell vc before any compile.",
+      "fyi": false,
+      "state": "live",
+      "recorded_at": "2026-10-16T18:38:43.581Z"
+    },
+    {
+      "sender": "vc",
+      "recipient": "cc",
+      "body": "vc, hv's word: all three Utilz nodes bank what we have, localfold and compact now. Each node: bank in-flight work (a branch commit by explicit path or tmp/), set its focus and a hold with the exact resume state, commit its own whiteboard views and own events by explicit path on main as wb(<node>): localfold, send vc the SHA, then hold for hv's compact. vc pushes main once all three folds are on it. No pushes, nothing heavy. The instruction in full is in each inbox by SendMessage.",
+      "fyi": true,
+      "state": "live",
+      "recorded_at": "2026-10-16T19:08:05.873Z"
     }
   ]
 }
