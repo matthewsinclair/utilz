@@ -235,15 +235,20 @@ jobs:
         # ci.query, and lives outside bin/ because bin/ is published. A new
         # top-level directory is invisible to a collector that names its
         # roots, so it is named here or its scripts ship unlinted.
+        #
+        # bin/.devbin/cmd/ is the exception inside .devbin: devbin's manifest
+        # leaves cmd/ to the project, so its handlers are ours (bin/devbin
+        # macos, ST0027 WP-06) and are collected by a second find.
         FILES=()
         while IFS= read -r s; do
           case "$s" in
             *.sh) FILES+=("$s") ;;
             *) if file "$s" | grep -q "shell script"; then FILES+=("$s"); fi ;;
           esac
-        done < <(find bin opt tools -type f \( -perm -u+x -o -name '*.sh' \) \
+        done < <( (find bin opt tools -type f \( -perm -u+x -o -name '*.sh' \) \
                    -not -path "*/test/*" -not -path "*/.venv/*" \
-                   -not -path "*/.devbin/*" -not -name "devbin" | sort -u)
+                   -not -path "*/.devbin/*" -not -name "devbin"; \
+                 find bin/.devbin/cmd -type f -perm -u+x 2>/dev/null) | sort -u)
 
         if [ ${#FILES[@]} -eq 0 ]; then
           echo "No shell scripts found -- the collector is broken, failing loudly."
