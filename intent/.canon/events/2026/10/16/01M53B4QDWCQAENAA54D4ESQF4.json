@@ -1,0 +1,16 @@
+{
+  "id": "01M53B4QDWCQAENAA54D4ESQF4",
+  "ts": "2026-10-16T21:50:56.956Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 63,
+    "text": "ST0027 menuz at 16 Oct 21:50Z: WP-01 to WP-04 Done; WP-05 and WP-06 landed and verified with every AC satisfied bar AC-05.3 (the menuz-app dispatch on 7ac829a, dc dispatching) and AC-06.4 (the notice hand run after hv's Allow). The installed copy at ~/Applications/Menuz.app is 0.1.0 build 1168 (3e731d3), running, the login item enabled, its notifications denied until hv allows them under System Settings > Notifications > menuz. Transcripts under tmp/vc-st0026/: st0027/ac064-handrun-c77cc76.txt, st0027/ac064-handrun-2b66d3f-fix-attempt1.txt, st0027/ac052-handrun-3e731d3.txt, st0027/verify-2b66d3f.txt, estate-rerun-full.txt; usernoted's log of the hand run in the scratchpad's notify-probe/. ST0028 closed at e9fc524."
+  }
+}
