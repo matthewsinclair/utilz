@@ -658,13 +658,27 @@ hs_prefix() {
 # every other preference (read_pref), so a preference that could not be read
 # is said, and fails, rather than guessed to be unset. Only a full path or one
 # under ~/ is followed: Hammerspoon reads any other against its own working
-# directory, which arngz cannot know. With no defaults tool there are no
-# Hammerspoon preferences, and the default stands.
+# directory, which arngz cannot know. One that is set and empty is not unset,
+# and is refused by name. With no defaults tool there are no Hammerspoon
+# preferences, and the default stands.
 hammerspoon_config() {
   local custom rc=0
   if command -v defaults >/dev/null 2>&1; then
     custom="$(read_pref "$HAMMERSPOON_BUNDLE" MJConfigFile)" || rc=$?
     if [[ $rc -eq 0 ]]; then
+      # Set and empty. Hammerspoon 1.1.1 takes any string the preference holds
+      # (MJAppDelegate.m: `if (userMJConfigFile) MJConfigFile =
+      # userMJConfigFile`, and stringForKey: gives "", not nil), and its config
+      # path is that string standardized (MJConfigUtils.m,
+      # MJConfigFileFullPath), so an empty one is an empty path and no config
+      # loads, ~/.hammerspoon/init.lua included. Read in Hammerspoon's source,
+      # not measured. defaults prints an empty value as one newline, which
+      # read_pref gives back as nothing (measured on macOS 27.0.1).
+      if [[ -z "$custom" ]]; then
+        printf "Hammerspoon's MJConfigFile preference is set and empty, which Hammerspoon 1.1.1 takes as its config path rather than falling back to ~/.hammerspoon/init.lua, so it loads no config; set it to a full path, or remove it: defaults delete %s MJConfigFile\n" \
+          "$HAMMERSPOON_BUNDLE"
+        return 1
+      fi
       # shellcheck disable=SC2088 # a literal ~/ at the start, as the preference holds it
       if [[ "$custom" == *$'\n'* || ("$custom" != /* && "$custom" != "~/"*) ]]; then
         printf "Hammerspoon's MJConfigFile preference is '%s', not a full path or one under ~/, so which file Hammerspoon reads is unknown\n" \

@@ -1746,6 +1746,24 @@ EOF
   assert_output_contains "Hammerspoon's MJConfigFile preference is 'hammerspoon/init.lua', not a full path or one under ~/"
 }
 
+@test "AT-06.2: an MJConfigFile that is set and empty is refused by name, because Hammerspoon then loads no config" {
+  machine
+  hammerspoon_installed
+  hs_on_path ok
+  pref org.hammerspoon.Hammerspoon MJConfigFile ''
+  local before
+  before="$(machine_snapshot)"
+  run_arngz init --yes
+  assert_exit_code 2
+  assert_output_contains "init --yes changed nothing: Hammerspoon's MJConfigFile preference is set and empty, which Hammerspoon 1.1.1 takes as its config path rather than falling back to ~/.hammerspoon/init.lua, so it loads no config"
+  assert_output_contains "; set it to a full path, or remove it: defaults delete org.hammerspoon.Hammerspoon MJConfigFile"
+  [ "$before" = "$(machine_snapshot)" ]
+
+  run_arngz init
+  assert_success
+  assert_output_contains "init.lua: cannot be changed: Hammerspoon's MJConfigFile preference is set and empty"
+}
+
 @test "AT-06.2: a LaunchServices lookup that fails is said by init, which links nothing on a guess" {
   machine
   echo "execution error: Error: Not authorized to send Apple events (-1743)" >"$FAKE_APPS/org.hammerspoon.Hammerspoon.error"
