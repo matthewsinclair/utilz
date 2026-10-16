@@ -18,7 +18,7 @@ title: arngz: a desk saved from live terminal windows fails to apply minutes lat
 - AC-01.1 Where discover pins a window, the pattern is the title's core (its leading run of characters other than ASCII letters and digits removed), escaped for Lua and anchored at neither end, so it still matches the window's title with another leading decoration or none (run 8's '◑ utilz-dc' and '-zsh'). -- satisfied: yes (computed)
 - AC-01.2 A pinned pattern matches exactly one of its app's claimable windows: where the unanchored core would match another, discover takes the core anchored at the end, then the exact title; where none tells the window apart it is not recorded and said; a discovered desk plans against its own world with nothing but snapping places. -- satisfied: yes (computed)
 - AC-01.3 Discover's report names every window it pinned, with its title and the pattern written. -- satisfied: yes (computed)
-- AC-01.4 The estate is green on the closing SHA, the Ubuntu loop run on kovacs before handing on; arngz is 1.0.1, help/arngz.md says what a pinned pattern is made from, and the CHANGELOG carries the fix under 2.14.0. -- satisfied: no (computed)
+- AC-01.4 The estate is green on the closing SHA, the Ubuntu loop run on kovacs before handing on; arngz is 1.0.1, help/arngz.md says what a pinned pattern is made from, and the CHANGELOG carries the fix under 2.14.0. -- satisfied: yes (computed)
 
 ## Acceptance Tests
 
@@ -27,7 +27,7 @@ title: arngz: a desk saved from live terminal windows fails to apply minutes lat
 - AT-01.1 `opt/arngz/test/plan_test.lua` -- covers AC-01.1 -- status: green -- to write, red first
 - AT-01.2 `opt/arngz/test/plan_test.lua` -- covers AC-01.2 -- status: green -- to write, red first
 - AT-01.3 `opt/arngz/test/plan_test.lua` -- covers AC-01.3 -- status: green -- to write, red first
-- AT-01.4 `opt/arngz/test/arngz.bats` -- covers AC-01.4 -- status: to-write -- the discover test expects the new pattern; the estate on the closing SHA
+- AT-01.4 `opt/arngz/test/arngz.bats` -- covers AC-01.4 -- status: green -- vc, 17 Oct: tools/test-estate on the closing code 6fe0a94 (as e07f462, which adds tests.yml only): the first run at 21:23Z to 21:32Z read 22 of 23 suites green with the red one unnamed in the lines vc kept, the re-run at 21:37Z to 21:45Z 23 of 23 green (arngz among them; tmp/vc-st0026/estate-rerun-full.txt); bin/devbin check all passed at 21:23Z. dc's Ubuntu loop on kovacs at 6fe0a94: arngz 121/0, menuz 119/0, every other utility 0 failed bar the known kovacs-environment ones (utilz 118/133/144/222, pdf2md 11, xtrct 6/7, stampz AT08), CI's shellcheck step under 0.9.0 over 24 files rc 0. opt/arngz/VERSION 1.0.1; help/arngz.md says a pinned pattern is the title's core, leading non-alphanumerics stripped and Lua-escaped; CHANGELOG 2.14.0 Fixed carries the discover fix (ad2da79).
 
 ---
 

@@ -10,6 +10,7 @@
 # THE CATALOGUE IS ALWAYS A FIXTURE. Every test points XDG_CONFIG_HOME at its
 # own temp directory, which is the one override the design allows, so no test
 # can read or write the real ~/.config/arngz.
+# AT-01.4 (ST0028 acceptance.md) cites this file: the suite the estate and the Ubuntu loop run on the closing SHA.
 
 load "../../utilz/test/test_helper.bash"
 

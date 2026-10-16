@@ -209,7 +209,8 @@
       "text": "help/menuz.md, the README's menuz section and the CHANGELOG entry exist and name every verb and flag the CLI accepts, checked against menuz --help; bin/devbin check all and the estate suite are green; the hand-run transcript in acceptance.md names the machine, the macOS build and the Xcode version.",
       "kind": "non-test",
       "state": {
-        "is": "unsatisfied"
+        "is": "satisfied",
+        "evidence": "help/menuz.md (dc, 4534225 and after) names every verb and flag the shim's usage prints at 2b66d3f (init --force; edit --editor; log -n; validate and render with a file; status; build --release --unsigned; test --unsigned; stamps; install; use dev|installed; uninstall; start; stop; restart; doctor), checked by dc's check-names (0 missing) and by vc against cc's list; README's menuz section and the CHANGELOG 2.14.0 Added entry landed at 4534225. bin/devbin check all passed on 6fe0a94 at 21:23Z; tools/test-estate 23 of 23 green at 21:45Z on e07f462 (code 6fe0a94). The hand-run transcripts in acceptance.md name Mac16,6, macOS 27.0.1 (26A434) and Xcode 27.1 (27A9275) (AT-05.2, AT-06.4)."
       }
     },
     {

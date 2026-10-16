@@ -1,0 +1,14 @@
+{
+  "id": "01M53AWGWAK5Y4QSCDDHYDYZEE",
+  "ts": "2026-10-16T21:46:28.107Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.satisfy",
+  "subject": {
+    "type": "ac",
+    "id": "ST0027/AC-05.4"
+  },
+  "payload": {
+    "evidence": "help/menuz.md (dc, 4534225 and after) names every verb and flag the shim's usage prints at 2b66d3f (init --force; edit --editor; log -n; validate and render with a file; status; build --release --unsigned; test --unsigned; stamps; install; use dev|installed; uninstall; start; stop; restart; doctor), checked by dc's check-names (0 missing) and by vc against cc's list; README's menuz section and the CHANGELOG 2.14.0 Added entry landed at 4534225. bin/devbin check all passed on 6fe0a94 at 21:23Z; tools/test-estate 23 of 23 green at 21:45Z on e07f462 (code 6fe0a94). The hand-run transcripts in acceptance.md name Mac16,6, macOS 27.0.1 (26A434) and Xcode 27.1 (27A9275) (AT-05.2, AT-06.4)."
+  }
+}
