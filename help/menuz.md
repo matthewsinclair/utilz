@@ -28,7 +28,7 @@ menuz --version
 
 ## Description
 
-menuz puts a menu of your own commands in the macOS menu bar. The menu is one YAML file, `menuz.yaml`, in menuz's config directory. Each item runs a shell line: a script, a `utilz` verb, anything the login shell can run. An item can declare parameters, which reach its run as variables. Everything a run prints goes to one log, `menuz.log`, which `menuz log` tails.
+menuz puts a menu of your own commands in the macOS menu bar. The menu is one YAML file, `menuz.yaml`, in menuz's config directory. Each item runs a shell line: a script, a `utilz` verb, anything the login shell can run. An item that takes parameters asks for them in one form before it runs. Everything a run prints goes to one log, `menuz.log`, which `menuz log` tails.
 
 There are two halves. `Menuz.app` shows the menu and runs the items. The `menuz` command creates and checks the config directory, reads the log, and reports the app's state. The YAML is parsed in one place, the app: `menuz validate` and `menuz render` ask the app's own command-line arms and parse nothing themselves.
 
@@ -106,25 +106,34 @@ An item's `params` is a list of the parameters it asks for, in order. A paramete
 | ---------- | ----------------------------------------------------------------------------------------------------------------------------- |
 | `name`     | the variable its value is exported as: lower case, `[a-z][a-z0-9_]*`, not one the login shell already exports, and not shared |
 | `prompt`   | the question asked                                                                                                            |
-| `default`  | the answer filled in                                                                                                          |
+| `default`  | the answer filled in; not allowed on a `secret` or a `choice`                                                                 |
 | `required` | `true` refuses an empty answer; otherwise an empty answer is an empty variable                                                |
 | `type`     | the kind of answer, one of the five below; `text` when absent                                                                 |
 
-| `type`   | Answer                                                             | Exported as     |
-| -------- | ------------------------------------------------------------------ | --------------- |
-| `text`   | a line of text                                                     | the text        |
-| `secret` | a line of text, hidden as it is typed and never written to the log | the text        |
-| `choice` | one of `choices`, a list or a shell line realised when it is asked | the chosen line |
-| `file`   | a file                                                             | its POSIX path  |
-| `folder` | a folder                                                           | its POSIX path  |
+| `type`   | Answer                                                                                    | Exported as     |
+| -------- | ----------------------------------------------------------------------------------------- | --------------- |
+| `text`   | a line of text                                                                            | the text        |
+| `secret` | a line of text, hidden as it is typed and never written to the log                        | the text        |
+| `choice` | one of `choices`, a list or a shell line realised when it is asked; the first is selected | the chosen line |
+| `file`   | a file                                                                                    | its POSIX path  |
+| `folder` | a folder                                                                                  | its POSIX path  |
 
 A yes-or-no is a `choice` of two lines.
+
+The parameters are asked for in one form, titled with the item's label, which holds every parameter as a field in the file's order, with **Run** and **Cancel** at its foot. Return is **Run**; Escape, or closing the form, is **Cancel**. An item with no parameters runs at once, with no form.
+
+- A `text` field shows its `prompt`, or the parameter's name when there is none, with its `default` filled in.
+- A `secret` field starts empty and hides what is typed.
+- A `choice` is a pop-up of its `choices`, the first selected. A `choices` shell line runs when the form opens, through the login shell, one choice per line it prints; a line that fails or prints nothing shows its failure in the field.
+- A `file` or `folder` field takes a path, with its `default` filled in, and a **Choose** button for the usual Open panel.
+
+The form checks the answers as they are typed, and each refusal names its parameter: a `required` parameter left empty, a `file` that does not exist or is a folder, a `folder` that does not exist or is not a folder, a `choice` that is not one of the choices. **Run** stays disabled while any refusal stands. A parameter that is not `required` and is left empty is exported empty. **Cancel** runs nothing, and the log records the run as cancelled.
 
 The values reach the run as exported variables under the parameters' names, so `run: arngz discover --save "$desk"` is ordinary shell, and quoting is the shell's. menuz never splices a value into a command line, which is what keeps a value with a space, a quote or a `;` in it safe.
 
 ### Running an item
 
-A run is `/bin/zsh -ilc` of the item's `run` line, so aliases and `PATH` additions from `.zshrc` count, as in a terminal. Its `PATH` is the login shell's with `$MENUZ_HOME/bin` first. It starts in the item's `cwd`, else the file's, else `$HOME`, with stdin from `/dev/null`: a run never has a terminal. It has `MENUZ_HOME`, `MENUZ_LABEL`, `MENUZ_RUN_ID`, under `each` `MENUZ_ITEM`, and its parameters.
+A run is `/bin/zsh -ilc` of the item's `run` line, so aliases and `PATH` additions from `.zshrc` count, as in a terminal. Its `PATH` is the login shell's with `$MENUZ_HOME/bin` first. It starts in the item's `cwd`, else the file's, else `$HOME`, expanded by zsh as written, so `~`, `$HOME` and, under `each`, `$MENUZ_ITEM` work; a directory it cannot enter ends the run with exit 126 and a line in the log saying so. Its stdin is `/dev/null`: a run never has a terminal. It has `MENUZ_HOME`, `MENUZ_LABEL`, `MENUZ_RUN_ID`, under `each` `MENUZ_ITEM`, and its parameters.
 
 Runs are concurrent and independent, each with its own id. Nothing is queued and nothing is refused for being busy. A run is detached from the app, in its own session and writing to the log itself, so **Quit menuz** leaves runs in flight running, and the log records the quit and names each run still going.
 
@@ -133,14 +142,14 @@ Runs are concurrent and independent, each with its own id. Nothing is queued and
 Every run appends to `${XDG_STATE_HOME:-$HOME/.local/state}/menuz/menuz.log`, which is created on first use:
 
 ```
-2026-10-16T10:42:03Z run 17 start "Hammerspoon doctor" cwd=/Users/you/notes: arngz doctor
+2026-10-16T10:42:03Z run 17 start "Hammerspoon doctor" cwd=~: arngz doctor
 [17] hammerspoon  running (pid 4123)
 2026-10-16T10:42:04Z run 17 exit 0 in 1.3s
 ```
 
-The start line prints the `run` line as written, before the shell expands it, which is what keeps a secret's value out of the log. Each output line carries its run's id, so concurrent runs interleave legibly.
+The start line prints the `cwd` and the `run` line as written, before the shell expands them, so `cwd=~` stays `~`; with no `cwd` in the item or the file it prints `$HOME`'s value. A parameter's value reaches the run only through its environment, which is what keeps a secret's value out of the log. Each output line carries its run's id, so concurrent runs interleave legibly. Two more lines are the app's: `<time> run <id> cancelled "<label>"` when a form is cancelled, and `<time> quit; runs still going: <ids>`, the ids separated by commas, or `none`, when the app quits.
 
-A run that exits non-zero posts a macOS notification naming the item and its exit code. `notify: always` posts one at every finish, with the run's last line of output, and `notify: never` posts none. A line the app cannot write to the log is reported in the app's own log and as a notification, never dropped.
+A run that exits non-zero posts a macOS notification, `"<label>" exited <code>`. `notify: always` posts one at every finish, with the run's last line of output after a colon, and `notify: never` posts none. The run posts its own notice, so one that outlives the app still sends it. A line the app cannot write to the log is reported in the app's own log and as a notification, never dropped.
 
 ### The validator
 
@@ -150,7 +159,7 @@ A run that exits non-zero posts a macOS notification naming the item and its exi
 2. an entry that is none of the kinds, or more than one (`label` with `header`, `each` with `submenu`);
 3. `run` without `label` or `each`, or `params` without `run`;
 4. a parameter name that is not `[a-z][a-z0-9_]*`, that the login shell already exports, or that two parameters share;
-5. a parameter `type` that is not `text`, `secret`, `choice`, `file` or `folder`, or a `choice` without `choices`;
+5. a parameter `type` that is not `text`, `secret`, `choice`, `file` or `folder`, a `choice` without `choices`, or a `default` on a `secret` or a `choice`;
 6. a `notify` that is not `never`, `failure` or `always`, a `realise` that is not a positive number, or an `icon` this macOS has no SF Symbol for;
 7. an empty `menu`.
 
