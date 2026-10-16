@@ -104,7 +104,7 @@ A discovered desk must plan clean against the world it came from, so discovery d
 | `list`                                                   | the desks in the catalogue, one per line, with display and app counts; a desk that does not validate is named as invalid | nothing | 0, or 1 when any desk is invalid |
 | `show <desk>`                                            | the desk, validated, as YAML                                                          | nothing                       | 0, or 2           |
 | `delete <desk>`                                          | removes the file, naming it                                                           | one desk file                 | 0, or 2           |
-| `init [--yes]`                                           | creates the catalogue; reports what Hammerspoon needs; with `--yes`, provides it      | see D16                       | 0, or 2           |
+| `init [--yes]`                                           | creates the catalogue; reports what Hammerspoon needs; with `--yes`, provides it      | see D16                       | 0; 1 if it stopped after changing something, which it names; or 2 |
 | `doctor`                                                 | every precondition, each named with its state                                         | nothing                       | 0, or 1           |
 
 `--dry-run` on apply is observe plus plan, printed as the ops with their reasons, and nothing executed. `diff` is the same computation under a name that says what it is for.

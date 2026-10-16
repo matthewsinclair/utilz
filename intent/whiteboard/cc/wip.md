@@ -3,8 +3,8 @@ node: cc
 name: Control Claude
 role: control
 session_id: 67bcef6b-d20d-4bb9-ac53-ff7fbaf2e422
-heartbeat_at: 2026-10-16 13:39Z
-status: active
+heartbeat_at: 2026-10-16 13:46Z
+status: paused
 focus: "16 Oct: banked for the compact on hv's word. WP-05 phases fix at 45acc46 (verified by vc in a worktree); its hands-off re-run is next session's first item (hold 14); design notes wait on Intent 0605 (hold 12, the phases note at tmp/cc/). Taking instructions from vc."
 claims: [ST0026/05]
 ---
