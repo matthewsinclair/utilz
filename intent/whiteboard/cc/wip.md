@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: 67bcef6b-d20d-4bb9-ac53-ff7fbaf2e422
-heartbeat_at: 2026-10-16 19:08Z
+heartbeat_at: 2026-10-16 20:20Z
 status: active
-focus: "16 Oct: folded for hv's compact. ST0027 WP-03 and WP-04 done and landed. WP-05 started: objective drafted and banked at tmp/cc/st0027-wp05 (hold). Taking instructions from vc."
+focus: "16 Oct 20:2xZ: folded for hv's compact. WP-06 landed at 8bea7ba; WP-05 next on vc's word, resume state in hold 17. Taking instructions from vc."
 claims: [ST0027/05]
 ---
 
@@ -21,7 +21,7 @@ _(none)_
 
 ## Holds
 
-- ST0027 WP-05 (build, install, launch, the close), started in the store, resume state for hv's compact on 16 Oct. Main's head when folded: 0bc51f0 (D12: signing local as Intent's). Branch st0027-wp05 in the scratchpad worktree wt-wp05 at 022b278, nothing written on it: rebase it onto main's head before writing. Banked, git-ignored: tmp/cc/st0027-wp05/objective.md (the objective draft, prettier-stable, NOT in the store; vc reads it in full after the compact before any source) and release-survey.md (how the release core attaches assets: it attaches none; keg detection by manifest.sha256; Intent's app-sign/notarize citations). vc's rulings on the three calls: own keychain prefix utilz.apple.* with store-creds hv's; macos.bats a second test file; uninstall calls a new --unregister arm on the app (SMAppService.mainApp.unregister, status printed) before removing the bundle. Condition: hv's compact passes and vc has read the objective. Then: objective into the store, red tests, the shim verbs and bin/.devbin/cmd/macos, critic-shell and critic-swift; compiles only in vc's booked window (intent-vc's START).
+- ST0027 WP-05 (build, install, launch, the close), resume state for hv's compact on 16 Oct 20:2xZ. WP-06 (first-use fixes) landed at 8bea7ba and is pushed; vc runs its notice hand run. WP-05 is go on vc's word: branch st0027-wp05 in the scratchpad worktree wt-wp05, rebased onto 8bea7ba, nothing written on it yet. The contract is the store's WP-05 objective (reworded at 0fc3f54). Notes banked, git-ignored, at tmp/cc/st0027-wp05/resume.md: dc's app-sign runs bin/utilz menuz build --release and reads Build/Products/<Config>/Menuz.app under XDG state; the shim's helpers and the bats fakes to build on. Next: red bats for build, test, stamps, install (and the keg install), use, uninstall, start, stop, restart and doctor; then the verbs; then the app's --unregister arm. Rules in force: compiles only in a window vc books (separate derived data, so hv's running product stays whole); suite-sized bats only outside announced Intent windows; commits by path; dc owns bin/.devbin/cmd/macos, the menuz-app CI job and the docs; CI's shellcheck reads A && B || C as SC2015, so guards are if/then. Condition: hv's compact passes and vc gives the word. (edited)
 
 ## Watch-outs
 

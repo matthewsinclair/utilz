@@ -1,0 +1,16 @@
+{
+  "id": "01M532WTTAX6TVEA2E7S1KW978",
+  "ts": "2026-10-16T19:26:49.674Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "hold",
+    "seq": 17,
+    "text": "ST0027 WP-05 (build, install, launch, the close), resume state for hv's compact on 16 Oct 20:2xZ. WP-06 (first-use fixes) landed at 8bea7ba and is pushed; vc runs its notice hand run. WP-05 is go on vc's word: branch st0027-wp05 in the scratchpad worktree wt-wp05, rebased onto 8bea7ba, nothing written on it yet. The contract is the store's WP-05 objective (reworded at 0fc3f54). Notes banked, git-ignored, at tmp/cc/st0027-wp05/resume.md: dc's app-sign runs bin/utilz menuz build --release and reads Build/Products/<Config>/Menuz.app under XDG state; the shim's helpers and the bats fakes to build on. Next: red bats for build, test, stamps, install (and the keg install), use, uninstall, start, stop, restart and doctor; then the verbs; then the app's --unregister arm. Rules in force: compiles only in a window vc books (separate derived data, so hv's running product stays whole); suite-sized bats only outside announced Intent windows; commits by path; dc owns bin/.devbin/cmd/macos, the menuz-app CI job and the docs; CI's shellcheck reads A && B || C as SC2015, so guards are if/then. Condition: hv's compact passes and vc gives the word."
+  }
+}

@@ -606,11 +606,11 @@ vc, 16 Oct, after the hands-off re-run on 45acc46 (tmp/vc-st0026/handrun-rerun-4
 
 vc, 17:5xZ: hv's compact passed; hold 15's condition is met, carry on with ST0027 WP-03: MenuzKit back to native/macos/Menuz/MenuzKit, Sources/MenuzKit against the WP objective, .build and .swiftpm git-ignored, products under ${XDG_STATE_HOME:-~/.local/state}/menuz/build/. Tell vc BEFORE the first swift test as well as before the first xcodebuild (a SwiftPM build of Yams is heavier than a bats suite; vc books each with intent-vc, asked at 17:5xZ). Commit on st0027-wp03 by explicit path and send vc the SHA for a worktree verify; dc recuts help/menuz.md at that SHA on vc's word. No pushes, one suite at a time. (Sent by SendMessage too.)
 
-## (2026-10-16 18:38Z)
+## (2026-10-16 18:38Z) (handled)
 
 vc, 18:4xZ: WP-03 is Done (6811ad7 landed, AT-03.1 to AT-03.4 green, main 33b309d). WP-04 is yours: the brief is in your inbox by SendMessage (the form with accessibility identifiers, the detached wrapper spawned with POSIX_SPAWN_SETSID and the login shell inside it, the log lines as the design's block, the notice posted by the wrapper through osascript, the tests). Objective first for vc's read, then red tests, sources, and tell vc before any compile.
 
-## (2026-10-16 19:08Z) FYI only -- no response needed.
+## (2026-10-16 19:08Z) FYI only -- no response needed. (handled)
 
 vc, hv's word: all three Utilz nodes bank what we have, localfold and compact now. Each node: bank in-flight work (a branch commit by explicit path or tmp/), set its focus and a hold with the exact resume state, commit its own whiteboard views and own events by explicit path on main as wb(<node>): localfold, send vc the SHA, then hold for hv's compact. vc pushes main once all three folds are on it. No pushes, nothing heavy. The instruction in full is in each inbox by SendMessage.
 
