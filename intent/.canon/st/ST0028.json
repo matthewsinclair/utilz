@@ -1,0 +1,107 @@
+{
+  "schema": "intent/thread@3.0",
+  "id": "ST0028",
+  "title": "arngz: a desk saved from live terminal windows fails to apply minutes later",
+  "slug": "arngz-a-desk-saved-from-live-terminal-windows-fa",
+  "status": "wip",
+  "created": "2026-10-16",
+  "objective": "A desk that `arngz discover` saves from windows whose titles move, terminal windows above all, applies minutes later with those windows `unseen`. Discover writes each title it pins as an exact pattern, anchored at both ends, and a terminal's title carries whatever the terminal shows at that moment. This thread changes the patterns discover writes so that a desk saved from live windows still finds them, and makes discover say every title it pinned.",
+  "context": "Found by dc on 16 Oct 2026, reading the log of hv's first menuz runs (ST0027). Run 8 applied `today.yaml`, which discover had saved through menuz minutes before. Two iTerm windows were reported `unseen`, so apply exited 1:\n\n```\n[8] com.googlecode.iterm2 \"^%-zsh$\" (displays[0].spaces[0].apps[5]): unseen: ...\n[8] com.googlecode.iterm2 \"^◑ utilz%-dc$\" (displays[0].spaces[2].apps[0]): unseen: ...\n```\n\n`◑` is Claude Code's working glyph, which it puts at the front of the terminal's title while a turn runs. It changes on every turn, and is replaced by another glyph when the turn ends. hv told dc \"Fix everything\" and then \"ok do all of that\". vc ruled on the fix's shape and filed it as this thread. arngz is ST0026, released in 2.13.0 at 1.0.0.",
+  "body": "",
+  "preamble": "",
+  "wps": [
+    {
+      "seq": 1,
+      "title": "Discover's title patterns survive a moving title, and the report names each",
+      "scope": "S",
+      "status": "wip",
+      "objective": "The whole of design.md's change, in one package: discover's pinned pattern made from the title's core and anchored at neither end, the ladder to the end anchor and then the exact title where the unanchored core would claim another window, and the report line naming every pinned window. Tests red first in plan_test.lua, then arngz.bats's discover test, help/arngz.md, opt/arngz/VERSION 1.0.1 and the CHANGELOG line under 2.14.0's Fixed. The Ubuntu loop on kovacs before vc verifies.",
+      "body": "",
+      "preamble": ""
+    }
+  ],
+  "criteria": [
+    {
+      "id": "AC-01.1",
+      "text": "Where discover pins a window, the pattern is the title's core (its leading run of characters other than ASCII letters and digits removed), escaped for Lua and anchored at neither end, so it still matches the window's title with another leading decoration or none (run 8's '◑ utilz-dc' and '-zsh').",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC-01.2",
+      "text": "A pinned pattern matches exactly one of its app's claimable windows: where the unanchored core would match another, discover takes the core anchored at the end, then the exact title; where none tells the window apart it is not recorded and said; a discovered desk plans against its own world with nothing but snapping places.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC-01.3",
+      "text": "Discover's report names every window it pinned, with its title and the pattern written.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC-01.4",
+      "text": "The estate is green on the closing SHA, the Ubuntu loop run on kovacs before handing on; arngz is 1.0.1, help/arngz.md says what a pinned pattern is made from, and the CHANGELOG carries the fix under 2.14.0.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    }
+  ],
+  "tests": [
+    {
+      "id": "AT-01.1",
+      "kind": "test",
+      "file": "opt/arngz/test/plan_test.lua",
+      "covers": [
+        "AC-01.1"
+      ],
+      "status": "green",
+      "note": "to write, red first"
+    },
+    {
+      "id": "AT-01.2",
+      "kind": "test",
+      "file": "opt/arngz/test/plan_test.lua",
+      "covers": [
+        "AC-01.2"
+      ],
+      "status": "green",
+      "note": "to write, red first"
+    },
+    {
+      "id": "AT-01.3",
+      "kind": "test",
+      "file": "opt/arngz/test/plan_test.lua",
+      "covers": [
+        "AC-01.3"
+      ],
+      "status": "green",
+      "note": "to write, red first"
+    },
+    {
+      "id": "AT-01.4",
+      "kind": "test",
+      "file": "opt/arngz/test/arngz.bats",
+      "covers": [
+        "AC-01.4"
+      ],
+      "status": "to-write",
+      "note": "the discover test expects the new pattern; the estate on the closing SHA"
+    }
+  ],
+  "attachments": [
+    {
+      "path": "design.md",
+      "text": "# ST0028 design: the title patterns discover writes\n\n## Measured\n\nhv's run 8 on 16 Oct 2026 (menuz run log, `~/.local/state/menuz/menuz.log`) applied `today.yaml`, saved by `arngz discover --save today` through menuz minutes before. 15 entries were placed; one failed (appgate fixes its own window size, reported as such and not a defect); two iTerm windows were `unseen`:\n\n| Entry                           | Pattern discover wrote | What it was made from                                                                   |\n| ------------------------------- | ---------------------- | --------------------------------------------------------------------------------------- |\n| `displays[0].spaces[0].apps[5]` | `^%-zsh$`              | iTerm's title for a shell at its prompt                                                 |\n| `displays[0].spaces[2].apps[0]` | `^◑ utilz%-dc$`        | Claude Code's session title, with `◑`, its working glyph, put in front while a turn ran |\n\nClaude Code changes that leading glyph through a turn and replaces it when the turn ends, and a terminal's title follows the job in it. A pattern anchored at both ends holds the title as it was for one moment, so it misses the same window soon after. The second title would match with its glyph gone; the first is recorded as found, with what it had become at apply not measured (apply's report gives the pattern, not the titles it saw).\n\n## The rule today\n\nDiscover gives an entry a `window` pattern when its app has more than one claimable window in the world (named, standard, not minimized, each counted once, a window on every space included), because plan gives a bare entry every claimable window of its app on every display: a bare entry where the app has two windows would claim one the desk never put there. The pattern is the title escaped and anchored at both ends (`exact_pattern`). A title the app's windows share, or an empty one, cannot tell them apart, so that window is not recorded and the report says so.\n\nvc ruled that discover pins only where the design's rule needs a pattern. That rule is the one above and it stays: narrowing it to \"two windows of one app on one display\" would let a bare entry on one display claim the app's window on another, and the tests that hold a discovered desk to its own world (\"the discovered desk plans against its own world with nothing but snapping places\", the two-display and every-space cases in `plan_test.lua`) would go red. So what changes is the pattern discover writes, and the report.\n\n## The change\n\n**The pattern.** Where discover pins a window, it takes the title's core: the title with its leading run of characters other than ASCII letters and digits removed. Spaces, punctuation and every non-ASCII character count as decoration, so `◑ utilz-dc` gives `utilz-dc` and `-zsh` gives `zsh`. The class is spelled `[^A-Za-z0-9]`, not `%w`, because `%w` follows the C library's locale and a byte of a UTF-8 glyph may read as a letter under one. The core is escaped for Lua and the pattern is anchored at neither end (vc's ruling: a pattern tells one window of an app from the app's others; the user tightens it in the yaml).\n\n**The pattern must still claim only its own window.** Plan matches a pattern against every claimable window of the app with `string.find`, so an unanchored `Inbox` would also take `Inbox - 2 messages`. Discover therefore takes the first of these that matches exactly one of the app's claimable windows, counted as the rule above counts them:\n\n1. the core, unanchored: `utilz%-dc`;\n2. the core anchored at the end: `Inbox$`;\n3. the whole title, exact: `^Inbox$`, today's pattern.\n\nThe first two are skipped when the core is empty (a title that is all decoration). Where none tells the window apart, it is not recorded and the report says so, as today. So a desk discover writes still plans against its own world with nothing but snapping places.\n\n**The report.** Discover's report (stderr) names every window it pinned, one line each: `<display> desktop <n>: <bundle> \"<title>\" pinned as \"<pattern>\"`. A user who sees a title that will move (a terminal's) knows which entry to loosen or tighten.\n\n**Unchanged.** Plan, apply, diff and the desk format. A desk saved before this change applies as it did. `help/arngz.md`'s discover section says what a pinned pattern is made from and that the report names each one. arngz goes from 1.0.0 to 1.0.1, a fix; the CHANGELOG line goes under 2.14.0's Fixed.\n\n## Tests\n\nIn `opt/arngz/test/plan_test.lua`, red first, over fixture worlds:\n\n- run 8's two titles: a world with two iTerm windows titled `◑ utilz-dc` and `-zsh` gives `utilz%-dc` and `zsh`, and each matches its window's title with another leading glyph (`✳ utilz-dc`) and with none;\n- a title inside another: `Inbox` and `Inbox - 2 messages` give `Inbox$` and `Inbox %- 2 messages`;\n- two windows whose cores collide but whose titles differ (`◑ notes`, `✳ notes`) fall to the exact pattern; two with one title stay unrecorded and said;\n- a title that is all decoration takes the exact pattern;\n- every pinned window is named in the report with its pattern;\n- every discovered desk still plans against its own world with nothing but snapping places.\n\n`arngz.bats`'s discover test expects the new pattern in the saved yaml.\n",
+      "bytes": 5304,
+      "sha256": "2976dac6040c7140b7e875132d89f8369c9f31d8e99d5d392e26e209852adf99"
+    }
+  ]
+}

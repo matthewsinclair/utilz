@@ -1026,8 +1026,30 @@ end
 -- characters escaped, and anchored at both ends, because plan matches with
 -- string.find, which finds a substring, and "Inbox" must not take
 -- "Inbox - 2 messages".
+local function escape_pattern(text)
+  return (string.gsub(text, "([%^%$%(%)%%%.%[%]%*%+%-%?])", "%%%1"))
+end
+
 local function exact_pattern(text)
-  return "^" .. string.gsub(text, "([%^%$%(%)%%%.%[%]%*%+%-%?])", "%%%1") .. "$"
+  return "^" .. escape_pattern(text) .. "$"
+end
+
+-- The patterns discover tries for a window it pins, loosest first (ST0028):
+-- the title's core, unanchored, then anchored at its end, then the title
+-- exact. The core is the title without its leading run of characters other
+-- than ASCII letters and digits, so a glyph a terminal puts in front of a
+-- title (Claude Code's working glyph, a shell's -) does not hold the pattern
+-- to one moment. The class is spelled out rather than %w, which follows the
+-- C library's locale, where a byte of a UTF-8 glyph may read as a letter.
+local function pin_candidates(title)
+  local core = string.gsub(title, "^[^A-Za-z0-9]+", "")
+  local candidates = {}
+  if core ~= "" then
+    candidates[#candidates + 1] = escape_pattern(core)
+    candidates[#candidates + 1] = escape_pattern(core) .. "$"
+  end
+  candidates[#candidates + 1] = exact_pattern(title)
+  return candidates
 end
 
 -- One axis of a window snapped to the grid: the nearest cell edges for its
@@ -1116,18 +1138,33 @@ function P.desk_from_world(world, options)
   -- of its app on every display, and a title pattern every one carrying that
   -- title, so anything counted narrower here would make the discovered desk
   -- claim windows it never recorded.
-  local per_app, per_title, counted = {}, {}, {}
+  local per_app, titles, counted = {}, {}, {}
   for _, s in ipairs(world.screens or {}) do
     for _, sp in ipairs(s.spaces or {}) do
       for _, w in ipairs(sp.windows or {}) do
         if claimable(w) and w.bundle and not counted[w.id] then
           counted[w.id] = true
-          local app, key = app_key(w.bundle), app_key(w.bundle) .. "\0" .. (w.title or "")
+          local app = app_key(w.bundle)
           per_app[app] = (per_app[app] or 0) + 1
-          per_title[key] = (per_title[key] or 0) + 1
+          titles[app] = titles[app] or {}
+          titles[app][#titles[app] + 1] = w.title or ""
         end
       end
     end
+  end
+
+  -- The loosest pattern that takes exactly one of the app's claimable
+  -- windows, as plan matches it, or nil when none tells this one apart.
+  local function pin(app, title)
+    if title == "" then return nil end
+    for _, pattern in ipairs(pin_candidates(title)) do
+      local hits = 0
+      for _, t in ipairs(titles[app]) do
+        if string.find(t, pattern) then hits = hits + 1 end
+      end
+      if hits == 1 then return pattern end
+    end
+    return nil
   end
 
   local desk = { desk = options.name or "discovered", grid = grid_text, displays = {} }
@@ -1197,12 +1234,14 @@ function P.desk_from_world(world, options)
         local app = { app = w.bundle }
         if per_app[app_key(w.bundle)] > 1 then
           local title = w.title or ""
-          if title == "" or per_title[app_key(w.bundle) .. "\0" .. title] > 1 then
+          local pattern = pin(app_key(w.bundle), title)
+          if not pattern then
             note("%s desktop %d: a window of %s is not recorded: its title %q does not tell it from the app's others",
               label, si, w.bundle, title)
             app = nil
           else
-            app.window = exact_pattern(title)
+            app.window = pattern
+            note("%s desktop %d: %s %q pinned as %q", label, si, w.bundle, title, pattern)
           end
         end
         if app then

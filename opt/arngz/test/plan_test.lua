@@ -870,13 +870,13 @@ do
   for _, a in ipairs(s1) do if a.window and string.find(a.window, "Docs", 1, true) then docs = a end end
   check("a window 3 px off is recorded at its cell with misfit 3px",
     docs and docs.layout == "4,0 4x4" and docs.misfit == "3px", docs and (docs.layout .. " " .. tostring(docs.misfit)))
-  check("the same app twice on a display carries a window pattern on each, its magic escaped",
-    docs and docs.window == "^Docs %(draft%) 100%%$", docs and docs.window)
+  check("the same app twice on a display carries a window pattern on each, its magic escaped, anchored at neither end",
+    docs and docs.window == "Docs %(draft%) 100%%", docs and docs.window)
   local members = {}
   for _, a in ipairs(s1) do members[#members + 1] = a.app .. "|" .. tostring(a.window) .. "|" .. a.layout end
   table.sort(members)
   check("the first desktop holds mail bare, both Safari windows by pattern, and the full-screen TV filed after it",
-    table.concat(members, " ") == "com.apple.Safari|^Docs %(draft%) 100%%$|4,0 4x4 com.apple.Safari|^News$|4,0 4x4"
+    table.concat(members, " ") == "com.apple.Safari|Docs %(draft%) 100%%|4,0 4x4 com.apple.Safari|News|4,0 4x4"
       .. " com.apple.TV|nil|fullscreen com.apple.mail|nil|0,0 4x4", table.concat(members, " "))
   check("and that escaped pattern matches its own title",
     docs and string.find("Docs (draft) 100%", docs.window) ~= nil)
@@ -914,9 +914,9 @@ do
     end
   end
   table.sort(patterns)
-  check("an app with a window on each of two displays gets an anchored pattern on both",
-    table.concat(patterns, " ") == "^Inbox %- 2 messages$ ^Inbox$", table.concat(patterns, " "))
-  check("and the anchored pattern discover wrote for one title misses the title that contains it",
+  check("an app with a window on each of two displays gets a pattern on both, the contained title anchored at its end",
+    table.concat(patterns, " ") == "Inbox %- 2 messages Inbox$", table.concat(patterns, " "))
+  check("and the pattern discover wrote for the contained title misses the title that contains it",
     patterns[2] ~= nil and string.find("Inbox - 2 messages", patterns[2]) == nil, tostring(patterns[2]))
   check("so that desk plans against its own world with nothing but snapping places",
     only_places(desk, world))
@@ -930,7 +930,7 @@ do
   for _, d in ipairs(desk.displays) do
     for _, sp in ipairs(d.spaces) do
       for _, a in ipairs(sp.apps) do
-        if a.window == "^News$" then news = news + 1 end
+        if a.window and string.find("News", a.window) then news = news + 1 end
       end
     end
   end
@@ -947,7 +947,7 @@ do
   local desk = P.desk_from_world(world, {})
   local slack = desk.displays[2].spaces[1].apps[1]
   check("an app whose other window is on every space gets a pattern on its recorded one",
-    slack ~= nil and slack.app == "com.tinyspeck.slackmacgap" and slack.window == "^Slack$",
+    slack ~= nil and slack.app == "com.tinyspeck.slackmacgap" and slack.window == "Slack",
     slack and tostring(slack.window))
   local ok, why = only_places(desk, world)
   check("so that desk leaves the every-space window alone when planned against its own world", ok, why)
@@ -1005,6 +1005,59 @@ do
   u.screens[3].spaces_error = "spacesForScreen failed"
   desk, err = P.desk_from_world(u, {})
   check("discover refuses a screen whose spaces could not be read", desk == nil and string.find(tostring(err), "spacesForScreen failed", 1, true) ~= nil, err)
+end
+
+-- ST0028: a pinned title survives a moving prefix. Run 8's two iTerm titles
+-- (16 Oct 2026, hv's machine): Claude Code's working glyph in front of the
+-- session name, and a shell at its prompt. AT-01.1.
+do
+  local world = F.moving_titles_world()
+  local desk, notes = P.desk_from_world(world, {})
+  local by_title = {}
+  for _, d in ipairs(desk.displays) do
+    for _, sp in ipairs(d.spaces) do
+      for _, a in ipairs(sp.apps) do
+        if a.app == "com.googlecode.iterm2" then by_title[#by_title + 1] = tostring(a.window) end
+      end
+    end
+  end
+  table.sort(by_title)
+  check("AT-01.1: discover pins each title's core, escaped, anchored at neither end",
+    table.concat(by_title, " ") == "utilz%-dc zsh", table.concat(by_title, " "))
+  local dc, sh = by_title[1], by_title[2]
+  check("AT-01.1: the session's pattern matches its title with another glyph in front, and with none",
+    dc ~= nil and string.find("\u{2733} utilz-dc", dc) ~= nil and string.find("utilz-dc", dc) ~= nil
+      and string.find("\u{25D1} utilz-dc", dc) ~= nil, tostring(dc))
+  check("AT-01.1: the shell's pattern matches its title as it was",
+    sh ~= nil and string.find("-zsh", sh) ~= nil, tostring(sh))
+  local ok, why = only_places(desk, world)
+  check("AT-01.2: that desk plans against its own world with nothing but snapping places", ok, why)
+  check("AT-01.3: the report names every window it pinned, with its title and its pattern",
+    has_note(notes, 'com.googlecode.iterm2 "\u{25D1} utilz-dc" pinned as "utilz%-dc"')
+      and has_note(notes, 'com.googlecode.iterm2 "-zsh" pinned as "zsh"'), notes_text(notes))
+  check("AT-01.3: and names the Safari windows the discover world pins",
+    has_note(notes, 'com.apple.Safari "News" pinned as "News"'), notes_text(notes))
+end
+
+-- ST0028: the core that would claim another window tightens. AT-01.2.
+do
+  local world = F.colliding_cores_world()
+  local desk, notes = P.desk_from_world(world, {})
+  local got = {}
+  for _, d in ipairs(desk.displays) do
+    for _, sp in ipairs(d.spaces) do
+      for _, a in ipairs(sp.apps) do
+        if a.app == "com.googlecode.iterm2" then got[#got + 1] = tostring(a.window) end
+      end
+    end
+  end
+  table.sort(got)
+  check("AT-01.2: cores that collide fall to the exact title; a title all decoration takes the exact title",
+    table.concat(got, " ") == "^%-%-%-$ ^\u{25D1} notes$ ^\u{2733} notes$", table.concat(got, " "))
+  local ok, why = only_places(desk, world)
+  check("AT-01.2: that desk plans against its own world with nothing but snapping places", ok, why)
+  check("AT-01.2: two windows with one title stay unrecorded, and are said",
+    select(2, string.gsub(notes_text(notes), 'its title "build" does not tell it', "")) == 2, notes_text(notes))
 end
 
 do

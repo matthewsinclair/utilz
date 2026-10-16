@@ -114,7 +114,7 @@ The report names every app entry in the desk with its outcome: `placed`, `launch
 
 - **Snapping** puts each window edge on the nearest cell edge. When a window was not exactly on its cells, the desk says how far, beside the layout: `misfit: 3px`. A window that spanned part of a cell is snapped and named in the report.
 - **A full-screen window** is recorded as `layout: fullscreen`, under the desktop before its space.
-- **An app with more than one window on a display** gets a `window` pattern on each, made from the window's title.
+- **An app with more than one window** gets a `window` pattern on each, made from the window's title, because an entry with no pattern takes every window of its app. The pattern is the title without what leads it up to the first letter or digit (a glyph a terminal puts in front, a shell's `-`), escaped and anchored at neither end, so `◑ utilz-dc` gives `utilz%-dc` and still matches when the glyph changes. Where that would also match another window of the app, discover anchors it at its end, then uses the exact title. The report names every window it pinned and the pattern it wrote; tighten or loosen one in the desk if its title will move.
 - **Not recorded, and said**: minimized windows, windows on every space, Hammerspoon's own windows, windows Accessibility could not name (counted per space), and the Dock's app bindings, which a desk does not hold.
 
 The desk goes to stdout and the report to stderr, so `arngz discover > desk.yaml` keeps the desk alone. `--save <desk>` writes it into the catalogue instead, refusing an existing desk unless `--force` is given. Either way, the desk is checked by the validator first.

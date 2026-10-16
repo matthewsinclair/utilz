@@ -13,6 +13,10 @@ The section still open names its version: `## [X.Y.Z] - unreleased`, never `## [
 
 - **`menuz`, a new utility: a macOS menu bar app whose menu is a YAML file of commands to run** (ST0027, in progress). This release so far carries its command, `utilz menuz`. `init` creates the menu's folder, `${MENUZ_HOME:-${XDG_CONFIG_HOME:-~/.config}/menuz}`, with an example `menuz.yaml` and an empty `bin/`, and refuses to overwrite a menu of your own without `--force`. `edit` opens the menu with `open -t`, or `$VISUAL`/`$EDITOR` under `--editor`. `log` prints the run log's path and follows it, or prints its last lines with `-n N`. `validate` and `render` ask the app to check the menu and show it as the menu bar would. `status` reports where the app is installed, which build is in use, whether it is running and a login item, and whether the installed copy is current with its source. The app, `Menuz.app`, follows in later changes. `utilz doctor` checks for xcodegen and Xcode on macOS once the app's source is in the tree. menuz starts at 0.1.0.
 
+### Fixed
+
+- **A desk `arngz discover` saved from terminal windows now finds them again when it is applied** (ST0028). discover gave each window it had to tell from its app's others a pattern of its exact title, anchored at both ends, and a terminal's title moves: Claude Code puts a working glyph in front of its session's name, and a shell's title follows the job in it. So a desk saved from live terminals applied minutes later with those windows `unseen`. A pinned pattern is now the title from its first letter or digit on, escaped and anchored at neither end (`◑ utilz-dc` gives `utilz%-dc`), tightened to the end anchor and then the exact title only where the looser one would also take another window of the app. discover's report names every window it pinned, with the pattern. Desks saved before apply as they did. arngz goes from 1.0.0 to 1.0.1.
+
 ## [2.13.0] - 2026-10-16
 
 Minor: **a new utility, `arngz`, arranges windows across displays and spaces from named desks**, and **prez prints page numbers in a PDF when a deck asks for them**, with a per-slide override. prez goes from 2.4.0 to 2.5.0.

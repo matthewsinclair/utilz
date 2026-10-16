@@ -1,0 +1,14 @@
+{
+  "id": "01M533B7XN72DPHTXNPM20BGFJ",
+  "ts": "2026-10-16T19:34:41.845Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "st.new",
+  "subject": {
+    "type": "thread",
+    "id": "ST0028"
+  },
+  "payload": {
+    "title": "arngz: a desk saved from live terminal windows fails to apply minutes later"
+  }
+}

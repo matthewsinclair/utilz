@@ -148,6 +148,31 @@ function F.sticky_sibling_world()
   return w
 end
 
+-- ST0028: run 8's two iTerm titles (hv's machine, 16 Oct 2026), one on each
+-- of the laptop's desktops: Claude Code's session with its working glyph in
+-- front, and a shell at its prompt.
+function F.moving_titles_world()
+  local w = F.discover_world()
+  table.insert(w.screens[1].spaces[1].windows, F.win(270, "com.googlecode.iterm2", "\u{25D1} utilz-dc", 0, 25, 600, 400))
+  table.insert(w.screens[1].spaces[3].windows, F.win(271, "com.googlecode.iterm2", "-zsh", 600, 25, 600, 400))
+  table.insert(w.apps_running, "com.googlecode.iterm2")
+  return w
+end
+
+-- ST0028: iTerm titles whose cores collide (two sessions named notes with
+-- different glyphs), one that is all decoration, and two that share a title.
+function F.colliding_cores_world()
+  local w = F.discover_world()
+  local laptop = w.screens[1].spaces
+  table.insert(laptop[1].windows, F.win(280, "com.googlecode.iterm2", "\u{25D1} notes", 0, 25, 600, 400))
+  table.insert(laptop[1].windows, F.win(281, "com.googlecode.iterm2", "\u{2733} notes", 600, 25, 600, 400))
+  table.insert(laptop[3].windows, F.win(282, "com.googlecode.iterm2", "---", 0, 25, 600, 400))
+  table.insert(laptop[3].windows, F.win(283, "com.googlecode.iterm2", "build", 600, 25, 600, 400))
+  table.insert(laptop[3].windows, F.win(284, "com.googlecode.iterm2", "build", 600, 425, 600, 400))
+  table.insert(w.apps_running, "com.googlecode.iterm2")
+  return w
+end
+
 -- The discover world with one space whose windows could not be read: the
 -- engine refuses it, and the CLI must say so rather than print a desk.
 function F.unread_world()

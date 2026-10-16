@@ -656,8 +656,8 @@ engine_response() {
   response="$(engine_response discover discover_world "" "")"
   fake_hs ok "$response"
   run discover_stdout
-  printf '%s\n' "$output" | grep -F -A3 'window: ^Docs %(draft%) 100%%$' | grep -qx '            layout: 4,0 4x4'
-  printf '%s\n' "$output" | grep -F -A3 'window: ^Docs %(draft%) 100%%$' | grep -qx '            misfit: 3px'
+  printf '%s\n' "$output" | grep -F -A3 'window: Docs %(draft%) 100%%' | grep -qx '            layout: 4,0 4x4'
+  printf '%s\n' "$output" | grep -F -A3 'window: Docs %(draft%) 100%%' | grep -qx '            misfit: 3px'
 }
 
 @test "AT-04.2: a window spanning part of a cell is snapped and reported, never silently rounded" {
