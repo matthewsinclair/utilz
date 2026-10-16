@@ -214,8 +214,10 @@ require_identity() {
 }
 
 require_creds() {
-  [ -n "$APPLE_ID" ] && [ -n "$APPLE_APP_PASSWORD" ] && [ -n "$APPLE_TEAM_ID" ] ||
+  # if/then, not `A && B || C`: CI's shellcheck reads that as SC2015.
+  if [ -z "$APPLE_ID" ] || [ -z "$APPLE_APP_PASSWORD" ] || [ -z "$APPLE_TEAM_ID" ]; then
     die "notary credentials missing -- run: $DEVBIN_INVOKE macos store-creds (see: $DEVBIN_INVOKE macos doctor)"
+  fi
 }
 
 app_product() { printf '%s' "$APP_STATE_DIR/Build/Products/$1/Menuz.app"; }
