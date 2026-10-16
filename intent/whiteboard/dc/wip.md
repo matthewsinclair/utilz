@@ -3,9 +3,9 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: b6f789ca-4627-4a74-b4cd-bb7c07de9f46
-heartbeat_at: 2026-10-16 08:31Z
+heartbeat_at: 2026-10-16 09:44Z
 status: active
-focus: "ST0026 WP-06: doctor and init (AC-06.1, AC-06.2), on vc's brief; spike 2 is vc's to run with hv"
+focus: "ST0026 WP-06: doctor and init at 3777de3, with vc to verify; AC-06.3 and AC-06.4 held until apply lands"
 claims: [ST0026/06]
 ---
 
@@ -21,7 +21,7 @@ _(none)_
 
 ## Holds
 
-- Until hv says go (vc relays it): spike 2 for ST0026 outcome D, which moves a window the way a person does, is written and tested here but not run on the machine. Files in /private/tmp/claude-501/-Users-matts-Devel-prj-Utilz/b6f789ca-4627-4a74-b4cd-bb7c07de9f46/scratchpad/arngz-spike/: arngz-spike2.lua (the verbs), run-hs.sh (runs one verb through hs, polls for its result file, kills hs), RUNBOOK-2.md (commands, what each step costs hv, what success looks like, every refusal by name), test/spike2_test.lua (290 checks pass against a simulated hs) and test/run-hs_test.sh (22 pass). Spike 1's arngz-spike.lua and RUNBOOK.md sit beside them. They are under /tmp, so a reboot loses them.
+- Until apply (ST0026 WP-05) lands, as vc ruled on 16 Oct: WP-06's AC-06.3 (help/arngz.md, the README's utility table and the CHANGELOG entry, checked against arngz --help) and AC-06.4 (check all, the estate suite, and the hand-run acceptance transcript in acceptance.md). AC-06.1 and AC-06.2, doctor and init, are built at 3777de3 with AT-06.1 and AT-06.2 minted; vc verifies them.
 
 ## Watch-outs
 
