@@ -182,9 +182,13 @@ run_src_menuz() {
   [[ -z "$(ls -A "$CONFIG/bin")" ]]
 }
 
-@test "AT-02.2: the example menu types its params, as D4 rules" {
-  run yq -r '[.. | select(tag == "!!map" and has("params")) | .params[] | select(has("type") | not)] | length' "$EXAMPLE"
-  assert_output "0"
+@test "AT-02.2: the example menu init writes is design.md's, byte for byte (AC-01.2)" {
+  local design="$UTILZ_HOME/intent/st/ST0027/design.md"
+  awk '/^```yaml$/ { inblock = 1; buf = ""; next }
+    inblock && /^```$/ { if (buf ~ /^# ~\/\.config\/menuz\/menuz\.yaml\n/) { printf "%s", buf; exit } inblock = 0; next }
+    inblock { buf = buf $0 "\n" }' "$design" >"$BATS_TEST_TMPDIR/design-example.yaml"
+  [[ -s "$BATS_TEST_TMPDIR/design-example.yaml" ]]
+  cmp "$BATS_TEST_TMPDIR/design-example.yaml" "$EXAMPLE"
 }
 
 @test "AT-02.2: init honours MENUZ_HOME over the XDG default" {

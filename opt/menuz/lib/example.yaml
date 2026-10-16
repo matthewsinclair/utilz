@@ -12,7 +12,6 @@ menu:
   - label: Discover this arrangement
     params:
       - name: desk
-        type: string
         prompt: Save the arrangement on screen now as
         default: today
     run: arngz discover --save "$desk" --force
