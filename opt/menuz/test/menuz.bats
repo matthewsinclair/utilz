@@ -515,7 +515,8 @@ BUILD_ROOT_REL="menuz/build/macos"
 
 # Xcode and xcodegen present. xcodebuild -version answers; any other call
 # makes the product under SYMROOT/<configuration> from a template bundle of
-# version 0.1.0, prints 100 numbered lines and exits
+# version 0.1.0, prints FAKE_XCODEBUILD_ERRORS compiler error lines (default
+# none) and a fatal one when there are any, then 100 numbered lines, and exits
 # FAKE_XCODEBUILD_RC (default 0). xcodegen makes Menuz.xcodeproj where it runs.
 xcode_fakes() {
   make_app "$FAKES/template.app" 0.1.0
@@ -531,6 +532,12 @@ for a in "$@"; do
   if [[ "$prev" == -configuration ]]; then cfg="$a"; fi
   prev="$a"
 done
+for ((i = 1; i <= ${FAKE_XCODEBUILD_ERRORS:-0}; i++)); do
+  echo "/src/MenuLoader.swift:$i:5: error: cannot call value of non-function type (e$i)"
+done
+if [[ "${FAKE_XCODEBUILD_ERRORS:-0}" -gt 0 ]]; then
+  echo "<unknown>:0: fatal error: the compiler gave up"
+fi
 mkdir -p "${sym:?}/${cfg:?}"
 rm -rf "${sym:?}/${cfg:?}/Menuz.app"
 cp -R "'"$FAKES"'/template.app" "$sym/$cfg/Menuz.app"
@@ -739,6 +746,34 @@ app_count() {
   printf '%s\n' "$output" | grep -qx 'line 61'
   run grep -cx 'line 60' <<<"$output"
   assert_output "0"
+}
+
+@test "AT-05.1: a failed xcodebuild prints the log's error lines above its last 40, the first 20 and a count of the rest" {
+  source_home
+  xcode_fakes
+  FAKE_XCODEBUILD_ERRORS=23 FAKE_XCODEBUILD_RC=65 run_src_menuz build
+  assert_exit_code 1
+  assert_output_contains "menuz: the log's error lines:"
+  printf '%s\n' "$output" | grep -qx '/src/MenuLoader.swift:1:5: error: cannot call value of non-function type (e1)'
+  printf '%s\n' "$output" | grep -qx '/src/MenuLoader.swift:20:5: error: cannot call value of non-function type (e20)'
+  [[ "$(grep -c 'non-function type (e21)' <<<"$output")" -eq 0 ]] || false
+  # 23 errors and the fatal one: 20 shown, 4 counted.
+  assert_output_contains "and 4 more error lines in $XDG_STATE_HOME/menuz/build/xcodebuild-build.log"
+  # The error lines come before the tail, which is still the last 40.
+  local first_error tail_start
+  first_error="$(printf '%s\n' "$output" | grep -n '(e1)$' | head -1 | cut -d: -f1)"
+  tail_start="$(printf '%s\n' "$output" | grep -nx 'line 61' | cut -d: -f1)"
+  [[ "$first_error" -lt "$tail_start" ]] || false
+  printf '%s\n' "$output" | grep -qx 'line 100'
+}
+
+@test "AT-05.1: a failed xcodebuild with no error lines prints only its last 40" {
+  source_home
+  xcode_fakes
+  FAKE_XCODEBUILD_RC=65 run_src_menuz build
+  assert_exit_code 1
+  refute_output_contains "error lines:"
+  refute_output_contains "more error lines"
 }
 
 @test "AT-05.1: a failed xcodegen is exit 1 naming it, and no xcodebuild runs" {

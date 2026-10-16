@@ -583,10 +583,31 @@ ensure_project() {
   printf '%s\n' "$want" >"$hash_file"
 }
 
+# A failed build's `error:` and `fatal error:` lines from LOG, the first 20
+# and a count of the rest. The cause sits above the last 40 lines when the
+# compiler's errors cancel the tasks queued after them, as CI's first
+# menuz-app dispatches measured (e07f462).
+print_build_errors() {
+  local log="$1" errors count rc=0
+  errors="$(grep -E '(^| )error: ' "$log")" || rc=$?
+  if [[ $rc -eq 1 ]]; then return 0; fi
+  if [[ $rc -gt 1 ]]; then
+    echo "menuz: grep exited $rc reading the error lines of $log"
+    return 0
+  fi
+  count="$(printf '%s\n' "$errors" | wc -l | tr -d ' ')"
+  echo "menuz: the log's error lines:"
+  printf '%s\n' "$errors" | sed -n '1,20p'
+  if [[ "$count" -gt 20 ]]; then
+    echo "menuz: and $((count - 20)) more error lines in $log"
+  fi
+  echo "menuz: the log's last 40 lines:"
+}
+
 # xcodebuild ACTION (build or test) of the scheme in CONFIG, every product
 # and intermediate under build_root, the stamps as build settings, and with
 # UNSIGNED (1) no signing. Its output goes to a log; a failure prints the
-# log's last 40 lines and is exit 1.
+# log's error lines and its last 40 lines, and is exit 1.
 xcode_run() {
   local config="$1" unsigned="$2" action="$3" root stamps line log
   root="$(build_root)"
@@ -610,8 +631,9 @@ xcode_run() {
   mkdir -p "$(dirname "$log")"
   printf 'menuz: xcodebuild %s, %s (log: %s)\n' "$action" "$config" "$log"
   if ! xcodebuild "${args[@]}" >"$log" 2>&1; then
+    print_build_errors "$log"
     tail -n 40 "$log"
-    fail_step "xcodebuild $action ($config)" "its last 40 lines are above; the whole log is $log"
+    fail_step "xcodebuild $action ($config)" "its error lines and last 40 lines are above; the whole log is $log"
   fi
 }
 
