@@ -13,18 +13,19 @@ The app, `Menuz.app`: its menu read from the file, validated, watched, and reali
 
 **Layout: a pure package and an app over it.** `swift test` must run the pure parts without an Xcode build, so they live in a local Swift package that the app links.
 
-| Path                                         | What                                                                                                                                                                                       |
-| -------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `native/macos/Menuz/project.yml`             | xcodegen, Gtools' cut: Swift 6, macOS 14, `LSUIElement`, Automatic signing with team 76BQL8L47U for Debug and Release, hardened runtime, the stamps as build settings                      |
-| `native/macos/Menuz/MenuzKit/`               | A Swift package: the `MenuzKit` library (depends on Yams 6) and its `MenuzKitTests` test target. Everything pure lives here, with no AppKit                                                 |
-| `native/macos/Menuz/Menuz/`                  | The app: `MenuzApp.swift` (the delegate and the arms), `Services/` (`LoginShell`, `Watcher`, `Realiser`, `MenuBuilder`, `AppLog`), `Info.plist`, entitlements                             |
-| `native/macos/Menuz/MenuzTests/`             | A unit-test bundle hosted by the app: the test-host guard, and anything that needs AppKit. The scheme runs it and `MenuzKitTests`, so `xcodebuild test` and `utilz menuz test` cover both |
+| Path                             | What                                                                                                                                                                                      |
+| -------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `native/macos/Menuz/project.yml` | xcodegen, Gtools' cut: Swift 6, macOS 14, `LSUIElement`, Automatic signing with team 76BQL8L47U for Debug and Release, hardened runtime, the stamps as build settings                     |
+| `native/macos/Menuz/MenuzKit/`   | A Swift package: the `MenuzKit` library (depends on Yams 6) and its `MenuzKitTests` test target. Everything pure lives here, with no AppKit                                               |
+| `native/macos/Menuz/Menuz/`      | The app: `MenuzApp.swift` (the delegate and the arms), `Services/` (`LoginShell`, `Watcher`, `Realiser`, `MenuBuilder`, `AppLog`), `Info.plist`, entitlements                             |
+| `native/macos/Menuz/MenuzTests/` | A unit-test bundle hosted by the app: the test-host guard, and anything that needs AppKit. The scheme runs it and `MenuzKitTests`, so `xcodebuild test` and `utilz menuz test` cover both |
 
 Yams is the one package, a dependency of MenuzKit (D2). The bundle id is `com.matthewsinclair.utilz.menuz` (D11). Info.plist substitutes `MENUZ_VERSION`, `MENUZ_BUILD`, `MENUZ_COMMIT` and `MENUZ_SOURCE_TREE` into `CFBundleShortVersionString`, `CFBundleVersion`, `MenuzCommit` and `MenuzSourceTree`, the keys WP-02's `status` reads. A build from Xcode gets `dev`.
 
 **MenuzKit, the pure parts.**
 
-- **One parse.** `MenuFile.load(text:)` composes the YAML into a Yams `Node`. The validator walks that node, and a file it passes is decoded from the same node into the Codable models (`MenuFile`, `Entry`, `Param`). The node is needed because the rules name unknown keys, entry paths and values, which a Codable decode alone cannot.
+- **One parse.** `MenuLoader.load(text:file:context:)` composes the YAML into a Yams `Node` once. The validator walks that node and builds the models (`MenuFile`, `Entry`, `Param`) in the same walk, so a file it passes is never parsed twice. Amended 16 Oct at the build: a Codable decode was the first plan and is not used. It cannot name the entry path a refusal needs, and YAML's core schema would type `run: true` as a Bool and `cwd: ~` as null where the file means the text; the walk reads every value as the scalar's text as written.
+- **Refusals beyond the seven rules**, each so that nothing in a file is silently dropped: a key given twice; a key that is not a single word; a value that must be one string and is a list or a mapping; `separator` other than `true`; a submenu's `items` empty; `choices` empty, or given with a type other than `choice`; `required` other than `true` or `false`; an entry or a param that is not a mapping. An `each` without a `label`, a `submenu` without `items` and `items` without a `submenu` are refused by the key that is wrong.
 - **The validator** is a function of the node and two facts it is given: the names the login shell exports (rule 4) and a predicate for whether an SF Symbol exists (rule 6). It returns every refusal, not the first. A refusal carries the file, the entry path (`menu[4].items[1]`), the key, the value and why, and prints as one line: `<file>: <path>.<key> = '<value>': <why>`. A param with no `type` is `text`.
 - **The menu spec** is the validated file as a tree of nodes (item, caption, header, separator, submenu, each), plus the fixed tail. The app builds an `NSMenu` from it. `--render` prints the same spec as indented text, one entry per line, with the realised labels.
 - **The realiser's pure half.**
@@ -48,12 +49,12 @@ Yams is the one package, a dependency of MenuzKit (D2). The bundle id is `com.ma
 
 **The arms**, read in `main()` before `NSApplication` starts. They touch no menu bar and exit:
 
-| Arm                 | Prints                                                                                                                      | Exit                         |
-| ------------------- | --------------------------------------------------------------------------------------------------------------------------- | ---------------------------- |
-| `--validate [file]` | `ok`, or every refusal, one per line                                                                                        | 0, or 2                      |
-| `--render [file]`   | The menu as indented text, labels realised through the login shell, the tail included                                       | 0, or 2 with the refusals    |
-| `--version`         | `<version> (build <build>, <commit>)` from Info.plist                                                                       | 0                            |
-| `--login-item`      | `SMAppService.mainApp.status`: `enabled`, `requires approval`, `not registered` or `not found`                              | 0                            |
+| Arm                 | Prints                                                                                         | Exit                      |
+| ------------------- | ---------------------------------------------------------------------------------------------- | ------------------------- |
+| `--validate [file]` | `ok`, or every refusal, one per line                                                           | 0, or 2                   |
+| `--render [file]`   | The menu as indented text, labels realised through the login shell, the tail included          | 0, or 2 with the refusals |
+| `--version`         | `<version> (build <build>, <commit>)` from Info.plist                                          | 0                         |
+| `--login-item`      | `SMAppService.mainApp.status`: `enabled`, `requires approval`, `not registered` or `not found` | 0                         |
 
 `[file]` defaults to the config file found from the login shell's environment. An unknown arm is refused, exit 2.
 
