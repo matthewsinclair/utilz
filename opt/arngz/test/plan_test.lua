@@ -248,6 +248,53 @@ do
   check("and an option named bind plans no bind and no Dock restart", ops ~= nil and #ops == 0, ops_text(ops))
 end
 
+-- Windows that could not be listed at all are refused; one window that went
+-- away between being listed and being read is only not seen.
+do
+  local w = base_world()
+  w.windows_list_error = "hs.window.allWindows failed four times: axuielement"
+  local ops, err = P.plan(base_desk(), w, {})
+  check("plan refuses a world whose windows could not be listed", ops == nil
+    and string.find(tostring(err), "could not be listed", 1, true) ~= nil, err or ops_text(ops))
+  local v = base_world()
+  space(v, 1).windows[2] = { id = 102, named = false, read_error = "incorrect type 'nil'" }
+  local vops, verr = P.plan(base_desk(), v, {})
+  check("plan does not refuse on a window record carrying read_error, and its unseen reason says so",
+    kinds(vops) == "unseen" and vops[1].bundle == "com.apple.Safari"
+      and string.find(vops[1].reason, "1 window(s) could not be read just now (incorrect type 'nil')", 1, true) ~= nil,
+    verr or ops_text(vops))
+end
+
+-- After launching, apply waits until each launched app has a claimable
+-- window named on a space.
+do
+  local w = base_world()
+  local none = P.unsettled_launches(w, { ["com.apple.safari"] = true, ["com.example.never"] = false })
+  check("an app whose launch was done and whose window is named is not waited on; one not done is not either",
+    #none == 0, table.concat(none, ","))
+  local unnamed = base_world()
+  space(unnamed, 1).windows[2].named = false
+  local wait = P.unsettled_launches(unnamed, { ["com.apple.safari"] = true })
+  check("an app whose launch was done with no named window is waited on", wait[1] == "com.apple.safari",
+    table.concat(wait, ","))
+  local unlisted = base_world()
+  unlisted.apps_running = { "com.apple.mail", "com.microsoft.VSCode" }
+  local wait2 = P.unsettled_launches(unlisted, { ["com.apple.safari"] = true })
+  check("and so is one with a named window that is not yet listed as running", wait2[1] == "com.apple.safari",
+    table.concat(wait2, ","))
+  local fs = base_world()
+  local safari = table.remove(space(fs, 1).windows, 2)
+  table.insert(fs.screens[1].spaces, { id = 98, ordinal = 3, type = "fullscreen", windows = { safari } })
+  local wait3 = P.unsettled_launches(fs, { ["com.apple.safari"] = true })
+  check("a launched app whose only window is on a full-screen space is still waited on, as plan cannot claim it",
+    wait3[1] == "com.apple.safari", table.concat(wait3, ","))
+  local noapps = base_world()
+  noapps.apps_running_error = "hs.application.runningApplications: axuielement"
+  local nops, nerr = P.plan(base_desk(), noapps, {})
+  check("plan refuses a world whose running apps could not be listed, never launching what runs",
+    nops == nil and string.find(tostring(nerr), "running apps could not be listed", 1, true) ~= nil, nerr or ops_text(nops))
+end
+
 -- A screen whose space order could not be read (D22) is refused, never
 -- ordered by guess.
 do

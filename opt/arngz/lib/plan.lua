@@ -208,14 +208,23 @@ function P.user_spaces(screen)
   return out
 end
 
--- What observe could not read, refused rather than planned as empty: a screen
--- whose spaces, or their order (D22), could not be read, a space whose type
--- could not be read, or a space whose windows could not be read. Counting an unread space as "not a
--- desktop", or its windows as none, would plan a create_space for a space that
--- exists, shift every ordinal after it, and miss windows that are there. Over
--- every screen, because the window pool is the whole world's. Plan and
--- discover both refuse through this one check.
+-- What observe could not read, refused rather than planned as empty: the
+-- windows that could not be listed at all, a screen whose spaces, or their
+-- order (D22), could not be read, a space whose type could not be read, or a
+-- space whose windows could not be read. Counting an unread space as "not a
+-- desktop", or its windows as none, would plan a create_space for a space
+-- that exists, shift every ordinal after it, and miss windows that are there.
+-- Over every screen, because the window pool is the whole world's. Plan and
+-- discover both refuse through this one check. One window that went away
+-- between being listed and being read is not this: it is unnamed, with its
+-- read_error, and not seen.
 local function unread(world)
+  if world.windows_list_error then
+    return "the windows could not be listed: " .. tostring(world.windows_list_error)
+  end
+  if world.apps_running_error then
+    return "the running apps could not be listed: " .. tostring(world.apps_running_error)
+  end
   for _, s in ipairs(world.screens or {}) do
     if s.spaces_error then
       return string.format("the spaces of screen %s could not be read: %s", tostring(s.uuid), tostring(s.spaces_error))
@@ -400,6 +409,21 @@ function P.plan(desk, world, options)
   local running = running_set(world)
   local launched, claimed = {}, {}
   local pool = all_windows(world)
+  -- Windows that went away, or were not backed yet, between being listed and
+  -- being read: said in every unseen reason, because one may be the entry's.
+  local unreadable, first_error = 0, nil
+  for _, s in ipairs(world.screens or {}) do
+    for _, sp in ipairs(s.spaces or {}) do
+      for _, w in ipairs(sp.windows or {}) do
+        if w.read_error then
+          unreadable = unreadable + 1
+          first_error = first_error or w.read_error
+        end
+      end
+    end
+  end
+  local unread_note = (unreadable > 0)
+    and string.format("; %d window(s) could not be read just now (%s)", unreadable, tostring(first_error)) or ""
   local listed = P.listings(world)
   for _, e in ipairs(entries(desk)) do
     local a, s = e.app, screens[e.display]
@@ -522,8 +546,8 @@ function P.plan(desk, world, options)
         windows[#windows + 1] = {
           op = "unseen", bundle = bundle, path = e.path,
           reason = string.format("%s is running and no standard window of it on a desktop space%s could be named"
-            .. " (a full-screen window is left alone, and one Accessibility cannot name is not seen)", bundle,
-            a.window and (" matching " .. string.format("%q", a.window)) or ""),
+            .. " (a full-screen window is left alone, and one Accessibility cannot name is not seen)%s", bundle,
+            a.window and (" matching " .. string.format("%q", a.window)) or "", unread_note),
         }
       end
     end
@@ -534,6 +558,27 @@ function P.plan(desk, world, options)
     for _, op in ipairs(list) do ops[#ops + 1] = op end
   end
   return ops
+end
+
+-- The apps of `launched` ({app key = true when its launch was done}) that
+-- are not running yet, or have no window plan could claim named on any space
+-- yet: what apply waits on after launching, before it plans again. A
+-- launched app can be listed in neither for a moment after its launch saw
+-- its window (vc's hand runs, 16 Oct 2026).
+function P.unsettled_launches(world, launched)
+  local running = running_set(world)
+  -- Plan's own pool, so "named" here means exactly what an entry can claim:
+  -- a window on a full-screen space does not end the wait (D11).
+  local named = {}
+  for _, cand in ipairs(all_windows(world)) do
+    if cand.win.bundle then named[app_key(cand.win.bundle)] = true end
+  end
+  local out = {}
+  for key, done in pairs(launched or {}) do
+    if done and not (named[key] and running[key]) then out[#out + 1] = key end
+  end
+  table.sort(out)
+  return out
 end
 
 -- ------------------------------------------------------------- space order

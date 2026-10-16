@@ -64,25 +64,57 @@ end
 -- Every window Hammerspoon can NAME, by id. hs.window.allWindows sees only the
 -- visible spaces; the default window filter is the documented route to
 -- windows on the others (dc's spike). Which route named a window is kept.
+--
+-- f() tried up to `times` times, a fifth of a second apart (never after the
+-- last): true and its value, or false and the last error.
+local function attempts(times, f)
+  local ok, value
+  for i = 1, times do
+    ok, value = pcall(f)
+    if ok then return true, value end
+    if i < times then hs.timer.usleep(200000) end
+  end
+  return false, value
+end
+
+-- A window can close, or not be backed yet, between Hammerspoon listing it and
+-- reading it, and allWindows then raises from inside hs.axuielement (measured
+-- by vc's hand run, 16 Oct 2026). So the listing is retried a few times, and
+-- only a failure that persists is recorded, as could-not-read, never as no
+-- windows.
 local function nameable()
   local index = {}
-  for _, w in ipairs(hs.window.allWindows()) do
-    local id = w:id()
-    if id then index[id] = { win = w, via = "allWindows" } end
+  local listed, all = attempts(4, hs.window.allWindows)
+  if not listed then
+    return index, nil, "hs.window.allWindows failed four times: " .. tostring(all)
+  end
+  for _, w in ipairs(all) do
+    local got, id = pcall(function() return w:id() end)
+    if got and id then index[id] = { win = w, via = "allWindows" } end
   end
   local ok, windows = pcall(function() return hs.window.filter.default:getWindows() end)
   if ok then
     for _, w in ipairs(windows) do
-      local id = w:id()
-      if id and not index[id] then index[id] = { win = w, via = "filter.default" } end
+      local got, id = pcall(function() return w:id() end)
+      if got and id and not index[id] then index[id] = { win = w, via = "filter.default" } end
     end
   end
   local note = "ran"
   if not ok then note = "failed: " .. tostring(windows) end
-  return index, note
+  return index, note, nil
 end
 
+-- One window read, or, when it went away or is not backed yet between being
+-- listed and being read, unnamed with why: it is not seen, and says so,
+-- rather than failing the whole observe.
+local describe_one
 local function describe(id, index)
+  local ok, d = pcall(describe_one, id, index)
+  if ok then return d end
+  return { id = id, named = false, read_error = tostring(d) }
+end
+
+describe_one = function(id, index)
   local hit = index[id]
   if not hit then return { id = id, named = false } end
   local w = hit.win
@@ -120,7 +152,7 @@ function M.observe()
     end
   end
 
-  local index, filter_note = nameable()
+  local index, filter_note, list_err = nameable()
   local primary = hs.screen.primaryScreen()
   local primary_frame = rect(primary:fullFrame())
   local world = {
@@ -130,6 +162,7 @@ function M.observe()
     accessibility = hs.accessibilityState(false),
     separate_spaces = hs.spaces.screensHaveSeparateSpaces(),
     window_filter = filter_note,
+    windows_list_error = list_err,
     managed_spaces_error = derr,
     screens = {},
     apps_running = {},
@@ -196,9 +229,23 @@ function M.observe()
     world.screens[#world.screens + 1] = entry
   end
 
-  for _, app in ipairs(hs.application.runningApplications()) do
-    local b = app:bundleID()
-    if b then world.apps_running[#world.apps_running + 1] = b end
+  -- Read as the windows are: a just-launched app can be listed before it can
+  -- be read, so one that raises is skipped, and a list that cannot be had at
+  -- all is recorded, never left looking like nothing running.
+  -- An app that cannot be read is retried with the whole list; one that
+  -- still cannot be is counted, never quietly taken for not running.
+  local got, read = attempts(4, function()
+    local bundles = {}
+    for _, app in ipairs(hs.application.runningApplications()) do
+      local b = app:bundleID()
+      if b then bundles[#bundles + 1] = b end
+    end
+    return bundles
+  end)
+  if got then
+    world.apps_running = read
+  else
+    world.apps_running_error = "the running apps could not be read four times: " .. tostring(read)
   end
 
   local dock_prefs, dock_err = read_defaults("com.apple.dock")
@@ -299,7 +346,11 @@ local function exec_place(op, ctx)
   if P.frames_agree(got, op.frame) then
     return { status = "done", readback = { frame = got } }
   end
-  return { status = "failed", reason = "setFrame returned, and the window reads back elsewhere", readback = { frame = got } }
+  return { status = "failed", readback = { frame = got }, reason = string.format(
+    "setFrame returned, and the window took %s, not %s,%s %sx%s (an app may fix its size or snap it)",
+    got and string.format("%s,%s %sx%s", P.round(got.x), P.round(got.y), P.round(got.w), P.round(got.h))
+      or "a frame that could not be read",
+    P.round(op.frame.x), P.round(op.frame.y), P.round(op.frame.w), P.round(op.frame.h)) }
 end
 
 -- ---------------------------------------------------------------- the hand (D21)
@@ -818,20 +869,67 @@ local function append(into, from)
   for _, x in ipairs(from) do into[#into + 1] = x end
 end
 
--- An observe after create_space, retried for up to 3 s while
--- com.apple.spaces has not caught up with the live list (design.md, apply 7).
-local function observe_settled()
-  local world
-  for _ = 1, 12 do
-    world = M.observe()
-    local behind = false
-    for _, s in ipairs(world.screens or {}) do
-      if s.order_error then behind = true end
+-- Observe until done(world) holds, for up to `seconds` on the monotonic
+-- clock, a quarter of a second between reads. An observe that raises while a
+-- window is half there is tried again. Returns the last world read (done or
+-- not), or raises the last error when no observe succeeded. The one polling
+-- loop the settles below share.
+local function observe_until(done, seconds)
+  local deadline = now() + seconds * 1e9
+  local world, err
+  while true do
+    local ok, got = pcall(M.observe)
+    if ok then
+      world = got
+      if done(world) then return world end
+    else
+      err = got
     end
-    if not behind then return world end
+    if now() >= deadline then break end
     hs.timer.usleep(250000)
   end
-  return world
+  if world then return world end
+  error(err, 0)
+end
+
+-- After create_space: until com.apple.spaces has caught up with the live
+-- list, for up to 3 s (design.md, apply 7).
+local function observe_settled()
+  return observe_until(function(world)
+    for _, s in ipairs(world.screens or {}) do
+      if s.order_error then return false end
+    end
+    return true
+  end, 3)
+end
+
+-- After launches: until every app whose launch was done runs and has a
+-- window plan could claim named on a desktop, for up to the launch timeout.
+-- A launched window becomes nameable a beat after the launch sees it (vc's
+-- hand runs, 16 Oct 2026). Plan reports what is still not named as unseen.
+local function observe_launched(launched)
+  return observe_until(function(world) return #P.unsettled_launches(world, launched) == 0 end, M.LAUNCH_TIMEOUT)
+end
+
+-- A plan that finds an entry unseen is planned again from fresh observes for
+-- up to this long: a window on a desktop its display is not showing is named
+-- in one read and not the next (vc's hand run, 16 Oct 2026), so one read is
+-- not taken as the answer.
+local UNSEEN_SECONDS = 1.5
+
+-- plan from WORLD, planned again from fresh observes while an entry is
+-- unseen, up to UNSEEN_SECONDS. A retry that cannot observe keeps the plan
+-- in hand. Returns the world planned from, its ops, and plan's refusal.
+local function plan_settled(desk, world, options)
+  local ops, err = P.plan(desk, world, options)
+  if not (ops and #only(ops, { unseen = true }) > 0) then return world, ops, err end
+  local ok, later = pcall(observe_until, function(w)
+    local o, e = P.plan(desk, w, options)
+    ops, err, world = o, e, w
+    return not (o and #only(o, { unseen = true }) > 0)
+  end, UNSEEN_SECONDS)
+  if not ok then return world, ops, err end
+  return later, ops, err
 end
 
 -- apply, steps 5 to 11 of design.md "apply, in order": everything after the
@@ -847,7 +945,9 @@ function M.apply(desk, options)
     refuse("Hammerspoon has no Accessibility grant, so it can neither name a window nor move one: System Settings >"
       .. " Privacy & Security > Accessibility")
   end
-  local ops, err = P.plan(desk, world, { no_create = options.no_create, no_launch = options.no_launch, map = options.map })
+  local ops, err
+  world, ops, err = plan_settled(desk, world, { no_create = options.no_create, no_launch = options.no_launch,
+    map = options.map })
   if not ops then refuse(err) end
 
   local ctx = { hand = new_hand(), unmoved = {}, world = world }
@@ -879,7 +979,8 @@ function M.apply(desk, options)
     local rest = ops
     if changed then
       local running_before = P.running_set(ctx.world_before)
-      local again, aerr = P.plan(desk, ctx.world, { no_create = true, after_create = #creates > 0,
+      local again, aerr
+      ctx.world, again, aerr = plan_settled(desk, ctx.world, { no_create = true, after_create = #creates > 0,
         user_no_create = options.no_create,
         no_launch = options.no_launch, map = options.map,
         launched = ctx.launched, running_before = running_before })
@@ -908,7 +1009,7 @@ function M.apply(desk, options)
     local done = step("execute", M.execute, launches, ctx) or {}
     append(results, done)
     for _, r in ipairs(done) do ctx.launched[P.app_key(r.bundle)] = r.status == "done" end
-    ctx.world = step("observe", M.observe)
+    ctx.world = step("observe", observe_launched, ctx.launched)
     going = ctx.world ~= nil
   end
   -- Run as a step even when nothing changed before it, because it moves
@@ -950,8 +1051,7 @@ local VERBS = {
   -- execute is never called on this path.
   plan = function(desk, options)
     if type(desk) ~= "table" then refuse("plan needs the desk") end
-    local world = M.observe()
-    local ops, err = P.plan(desk, world, options)
+    local _, ops, err = plan_settled(desk, M.observe(), options)
     if not ops then refuse(err) end
     return { ops = ops, report = P.plan_report(ops) }
   end,
