@@ -1,0 +1,15 @@
+{
+  "id": "01M5282N7PQMJ8Z93EXN0TSWSF",
+  "ts": "2026-10-16T11:38:09.014Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "hold",
+    "text": "WP-05 design notes, held until Intent's 0605 fix (3.2.4) lifts vc's hold on edits under intent/st: (1) vc's init exit-column line, on disk in ST0026/design.md, unsynced and uncommitted; (2) --dry-run computes what diff does, with no preference verdict; (3) D25: engine_ask exits 2 on a bad ARNGZ_HS_TIMEOUT or ARNGZ_APPLY_TIMEOUT before sending, and ENGINE_PENDING/ENGINE_KIND; (4) the op table gains no_space, gone, unmovable and pending. Then intent sync --to-store ST0026 and commit design.md with ST0026.json by path."
+  }
+}

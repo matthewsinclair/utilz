@@ -3,10 +3,10 @@ node: cc
 name: Control Claude
 role: control
 session_id: 67bcef6b-d20d-4bb9-ac53-ff7fbaf2e422
-heartbeat_at: 2026-10-16 09:56Z
+heartbeat_at: 2026-10-16 11:38Z
 status: active
-focus: "16 Oct: WP-04 done and verified by vc at 00a93b3. WP-05 (apply on outcome D) briefed and held for after the compact (hold 11). Taking instructions from vc."
-claims: []
+focus: "16 Oct: WP-05 landed at 32fe3f0 (apply on outcome D), with vc for worktree verification; AT-05.4/.5 are vc's hands-off hand runs. Design notes held for Intent 0605."
+claims: [ST0026/05]
 ---
 
 # Control Claude (cc)
@@ -21,7 +21,7 @@ _(none)_
 
 ## Holds
 
-- WP-05 apply on outcome D: brief from vc (sent 16 Oct as a session message, not a wb ask, so restated here), START AFTER THE COMPACT on hv's word. Then: read design.md at eeeab48 (apply in order, Display matching, Failures and the report, Measured 16 Oct 2026, D20 amended, D21, D22, D25) and intent ac show ST0026 AC-05.1..7; intent wp start ST0026/05 and claim it. Route D21: move within a display = hold the title bar (hs.eventtap) and press Move-space (symbolic hotkeys 79/81, read, refused if unset) once per step in Mission Control order, let go; across displays = drag over the shared edge onto the target's active space, let go, continue within. Read back each step at 0.5 s (window spaces, display active space, listed at dest not origin); disagreement = failed, exit 1. Port from dc's spike /private/tmp/claude-501/-Users-matts-Devel-prj-Utilz/b6f789ca-4627-4a74-b4cd-bb7c07de9f46/scratchpad/arngz-spike/arngz-spike2.lua (refusals: button or modifier down, pointer moved >40 px, no grab point, no route; cleanup) into arngz.lua, plan.lua pure, credit the spike. No moveWindowToSpace, gotoSpace, Mission Control or bindings; --bind refused as unknown (AC-05.6), so plan's bind step, bind_unread and restart_dock go. Ordinals (D22) from com.apple.spaces SpacesDisplayConfiguration, not allSpaces. Shape (D20): apply scheduled via hs.timer.doAfter held in a global, IPC returns at once, CLI waits on the response file under its own deadline. Launch, wait for a claimable window, place; --no-launch reports. Tests: planner for matching and report/exit (AC-05.2, 05.3); bats + fake hs for --dry-run, exit codes, verb-named desk (05.1, 05.3, 05.7); AT-05.N. AC-05.4/05.5 are acceptance.sh steps vc runs hands-off: NEVER run anything that takes the pointer. Bash 3.2+5, shellcheck, critic-lua 0/0, commit by pathspec in one script. Files: cc owns arngz.lua, plan.lua and their tests and the shim's apply arm; tell dc before touching opt/arngz/arngz and commit it alone. (edited)
+- WP-05 design notes, held until Intent's 0605 fix (3.2.4) lifts vc's hold on edits under intent/st: (1) vc's init exit-column line, on disk in ST0026/design.md, unsynced and uncommitted; (2) --dry-run computes what diff does, with no preference verdict; (3) D25: engine_ask exits 2 on a bad ARNGZ_HS_TIMEOUT or ARNGZ_APPLY_TIMEOUT before sending, and ENGINE_PENDING/ENGINE_KIND; (4) the op table gains no_space, gone, unmovable and pending. Then intent sync --to-store ST0026 and commit design.md with ST0026.json by path.
 
 ## Watch-outs
 
