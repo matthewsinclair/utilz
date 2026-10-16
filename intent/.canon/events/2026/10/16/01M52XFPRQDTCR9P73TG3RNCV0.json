@@ -1,0 +1,16 @@
+{
+  "id": "01M52XFPRQDTCR9P73TG3RNCV0",
+  "ts": "2026-10-16T17:52:16.663Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "hold",
+    "seq": 7,
+    "text": "Until vc verifies cc's ST0027 WP-03 SHA and says so: recut help/menuz.md from tmp/dc-st0027/help-menuz.md (git-ignored; NOTES.md is the procedure, the WP-02 cut landed at 98411b2) for WP-03: validate and render gain the app's real arms, status's login item; spec read from the shim's case arm and cmd_* parsers, the example from opt/menuz/lib/example.yaml byte for byte. WP-04 adds the one-form paragraph. At WP-05 the full help lands with @USE and @SIGNING answered, plus README's ### menuz section (after mdagg) and the CHANGELOG entry merged with cc's 2.14.0 line. Prettier on tmp/ drafts only with --ignore-path /dev/null."
+  }
+}

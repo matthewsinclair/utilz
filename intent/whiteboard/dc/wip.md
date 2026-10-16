@@ -3,9 +3,9 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: b6f789ca-4627-4a74-b4cd-bb7c07de9f46
-heartbeat_at: 2026-10-16 17:49Z
+heartbeat_at: 2026-10-16 17:52Z
 status: active
-focus: "16 Oct: ST0027 menuz help's WP-02 cut landed at 98411b2 on cc's WP-02 (07dc120). Hold 7: recut at WP-03/04, the full help with README and CHANGELOG at WP-05. Taking instructions from vc."
+focus: "16 Oct, localfold for a compact on hv's word: menuz help's WP-02 cut landed at 98411b2 (pushed, vc). Hold 7 waits on vc's word on cc's WP-03 SHA. Taking instructions from vc."
 claims: []
 ---
 
@@ -21,7 +21,7 @@ _(none)_
 
 ## Holds
 
-- Until vc says cc's ST0027 WP-02 SHA is verified (cc rebases onto main first): land help/menuz.md's WP-02 cut from tmp/dc-st0027/ (cut-wp02.py, --no-doctor if that shim has no doctor; markers @EXAMPLE and @WP02APP answered from cc's code) with that SHA, opening the CHANGELOG's 2.14.0 section if the shim lands first. The help grows at each later WP's SHA, naming only verbs the shim accepts; README's ### menuz section and the CHANGELOG entry land at WP-05 (AC-05.4), with @USE and @SIGNING answered. NOTES.md is the procedure. (edited)
+- Until vc verifies cc's ST0027 WP-03 SHA and says so: recut help/menuz.md from tmp/dc-st0027/help-menuz.md (git-ignored; NOTES.md is the procedure, the WP-02 cut landed at 98411b2) for WP-03: validate and render gain the app's real arms, status's login item; spec read from the shim's case arm and cmd_* parsers, the example from opt/menuz/lib/example.yaml byte for byte. WP-04 adds the one-form paragraph. At WP-05 the full help lands with @USE and @SIGNING answered, plus README's ### menuz section (after mdagg) and the CHANGELOG entry merged with cc's 2.14.0 line. Prettier on tmp/ drafts only with --ignore-path /dev/null. (edited)
 
 ## Watch-outs
 
