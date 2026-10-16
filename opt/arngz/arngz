@@ -551,7 +551,9 @@ engine_ask() {
     ENGINE_KIND="$(yq -r '.kind // "failed"' "$response")"
     if [[ "$ENGINE_KIND" == refused ]]; then
       ENGINE_ERROR="the engine refused $verb: $(yq -r '.error' "$response" | tr '\n' ' ')"
-      ENGINE_FIX="fix what the engine names, then run arngz again"
+      # The engine may name the fix itself, as it does for an apply that is
+      # already running.
+      ENGINE_FIX="$(yq -r '.fix // "fix what the engine names, then run arngz again"' "$response")"
     else
       ENGINE_ERROR="the engine failed on $verb: $(yq -r '.error' "$response" | tr '\n' ' ')"
       ENGINE_FIX="$(engine_failing)"

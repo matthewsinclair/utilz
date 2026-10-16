@@ -882,6 +882,16 @@ apply_response() {
   refute_output_contains "engine failing"
 }
 
+@test "AT-05.3: an apply while one runs is refused, exit 2, with the engine's fix naming hs.reload" {
+  local response="$BATS_TEST_TMPDIR/running.json"
+  printf '%s\n' '{"status":"error","kind":"refused","verb":"apply","error":"an apply is already running (asked for at 2026-10-16T13:00:00Z)","fix":"wait for it to finish; if none is running, reload Hammerspoon'"'"'s config (hs.reload() in its console)"}' >"$response"
+  apply_machine scheduled "$response"
+  run_arngz apply zeop1
+  assert_exit_code 2
+  assert_output_contains "the engine refused apply: an apply is already running (asked for at 2026-10-16T13:00:00Z)"
+  assert_output_contains "hs.reload() in its console"
+}
+
 @test "AT-05.3: the engine's own error during apply exits 1, its response kept, never as nothing changed" {
   local response="$BATS_TEST_TMPDIR/failed.json"
   printf '%s\n' '{"status":"error","kind":"lua_error","verb":"apply","error":"FIXTURE attempt to index a nil value"}' >"$response"

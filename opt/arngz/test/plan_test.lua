@@ -275,6 +275,15 @@ do
     uerr or ops_text(uops))
 end
 
+-- What observe asks about, fresh: each of the desk's apps once, in desk order.
+do
+  local d = base_desk()
+  table.insert(d.displays[1].spaces[2].apps, { app = "COM.APPLE.MAIL", window = "Drafts", layout = "0,0 6x8" })
+  check("desk_bundles lists each desk app once, in desk order, whatever its case",
+    table.concat(P.desk_bundles(d), ",") == "com.apple.mail,com.apple.Safari,com.microsoft.VSCode",
+    table.concat(P.desk_bundles(d), ","))
+end
+
 -- After launching, apply waits until each launched app has a claimable
 -- window named on a space.
 do
@@ -753,17 +762,19 @@ do
     code == 1 and string.find(lines[3], "failed: the readback shows it on space 11", 1, true) ~= nil, lines[3])
   lines, code = P.apply_report(d, { r("not_launched", "displays[0].spaces[0].apps[1]", "skipped", "--no-launch") })
   check("an app left unlaunched by --no-launch is skipped, exit 1", code == 1 and string.find(lines[2], "skipped", 1, true) ~= nil, lines[2])
-  lines, code = P.apply_report(d, { r("plan", nil, "failed", "the plan after creating and launching refused: x") })
+  lines, code = P.apply_report(d, { r("phase", nil, "failed", "replan: the plan after creating and launching refused: x") })
   local any_placed = false
   for _, l in ipairs(lines) do
     if string.find(l, ": placed", 1, true) or string.find(l, "and placed", 1, true) then any_placed = true end
   end
   check("when the engine could not go on, no entry reads as placed, and the exit is 1",
-    code == 1 and not any_placed and string.find(lines[1], "not finished: the plan after", 1, true) ~= nil, lines[1])
-  for _, what in ipairs({ "observe", "execute" }) do
-    lines, code = P.apply_report(d, { r(what, nil, "failed", "boom") })
-    check("a failed " .. what .. " after things changed leaves no entry placed",
-      code == 1 and string.find(lines[1], "failed: not finished: boom", 1, true) ~= nil, lines[1])
+    code == 1 and not any_placed and string.find(lines[1], "not finished: replan: the plan after", 1, true) ~= nil, lines[1])
+  -- What run_phase emits for a phase that failed after things changed, from
+  -- a phase whose name is also an op kind: still blanket, never by_app.
+  for _, phase in ipairs({ "launch", "unseen", "launched", "organise" }) do
+    lines, code = P.apply_report(d, { { op = "phase", phase = phase, status = "failed", reason = phase .. ": boom" } })
+    check("a failed " .. phase .. " phase after things changed leaves no entry placed, exit 1",
+      code == 1 and string.find(lines[1], "failed: not finished: " .. phase .. ": boom", 1, true) ~= nil, lines[1])
   end
   lines, code = P.apply_report(d, { r("gone", "displays[0].spaces[0].apps[1]", "failed", "quit"),
     r("launch", "displays[0].spaces[0].apps[1]", "done", nil, "com.apple.Safari") })

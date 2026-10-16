@@ -33,7 +33,7 @@ A **desk** is a named arrangement of windows: for each display, for each space o
 
 `apply`, `discover`, `diff` and `doctor`'s IPC check reach Hammerspoon through its `hs` tool, so they need Hammerspoon running with `hs.ipc` loaded, which `arngz init --yes` sets up.
 
-**`apply` takes the pointer.** macOS gives no working call to move a window to another space, so apply moves a window the way a person does: it holds the window by its title bar and presses Mission Control's Move left/right a space shortcut, once per step, or drags it over the edge two displays share. Keep your hands off the mouse and keyboard while it runs. Moving the pointer stops it, and every move left is reported as stopped. It puts the pointer back and gives focus back when it is done. The two shortcuts must be set in System Settings > Keyboard > Keyboard Shortcuts > Mission Control, or apply refuses. Every step is read back, and a move macOS did not make is reported as failed.
+**`apply` takes the pointer.** macOS gives no working call to move a window to another space, so apply moves a window the way a person does: it holds the window by its title bar and presses Mission Control's Move left/right a space shortcut, once per step, or drags it over the edge two displays share. Keep your hands off the mouse and keyboard while it runs. Moving the pointer stops it, and every move left is reported as stopped. It puts the pointer back and gives focus back when it is done. The two shortcuts must be set in System Settings > Keyboard > Keyboard Shortcuts > Mission Control, or apply refuses. Every step is read back, and a move macOS did not make is reported as failed. One apply runs at a time: a second, asked for while one runs, is refused.
 
 ### The catalogue
 
@@ -186,7 +186,7 @@ arngz delete old    # remove one
 
 - `0` -- done.
 - `1` -- `apply` skipped an app (not installed, or not running under `--no-launch`), saw no window for an entry, or a move or place did not take, each named in its report; `list` found a desk that does not validate, `diff` found that apply would change something, `doctor` found a precondition that does not hold, or `init --yes` stopped at a step that failed after it had changed something; each is named, and for `init` so is every step it had made.
-- `2` -- refused before anything changed: a desk that does not exist or does not validate, a bad name or option, a precondition `apply` checks first (a preference, Accessibility, the Move-space shortcuts, a mouse button or modifier held), or Hammerspoon not answering.
+- `2` -- refused before anything changed: a desk that does not exist or does not validate, a bad name or option, a precondition `apply` checks first (a preference, Accessibility, the Move-space shortcuts, a mouse button or modifier held), another apply still running, or Hammerspoon not answering.
 
 ---
 

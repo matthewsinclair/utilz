@@ -588,6 +588,24 @@ function P.unsettled_launches(world, launched)
   return out
 end
 
+-- The desk's apps, each bundle id once, in desk order: what observe asks
+-- about one by one, fresh, for whether it runs.
+function P.desk_bundles(desk)
+  local out, seen = {}, {}
+  for _, d in ipairs(desk.displays or {}) do
+    for _, sp in ipairs(d.spaces or {}) do
+      for _, a in ipairs(sp.apps or {}) do
+        local key = app_key(a.app)
+        if not seen[key] then
+          seen[key] = true
+          out[#out + 1] = a.app
+        end
+      end
+    end
+  end
+  return out
+end
+
 -- ------------------------------------------------------------- space order
 
 -- A screen's spaces in Mission Control's order (D22): its list in
@@ -918,10 +936,11 @@ end
 
 -- ------------------------------------------------------------- the report
 
--- Results that stop every entry after them: the engine could not observe,
--- plan or execute once things had begun to change, so no entry can be
--- reported placed.
-local BLANKET = { plan = true, observe = true, execute = true }
+-- Results that stop every entry after them: a phase of apply failed once
+-- things had begun to change, so no entry without a result of its own can
+-- be reported placed. The engine records every such failure as op "phase",
+-- never under an op's own kind.
+local BLANKET = { phase = true }
 
 -- What apply says per desk entry (design.md, apply step 11), from the ops it
 -- planned and the results execute returned, each result carrying its op's

@@ -27,6 +27,10 @@ local P = dofile(here .. "/plan.lua")
 
 local M = {}
 
+-- A wait reads this often: a launch's, between phases, or inside the plan
+-- verb's call.
+local POLL_SECONDS = 0.25
+
 -- How long launch waits for an app's first window (design.md, apply step 8).
 M.LAUNCH_TIMEOUT = 20
 
@@ -59,6 +63,20 @@ local function read_defaults(domain)
     return nil, "could not parse what defaults export " .. domain .. " printed"
   end
   return t
+end
+
+-- The app's own bundle id for a desk's spelling of it. A desk names an app
+-- whatever the case (design.md, "An app"), and applicationsForBundleID, which
+-- hs.application.get uses, matches only the app's own case (measured 16 Oct
+-- 2026: com.apple.Finder finds nothing, com.apple.finder finds Finder).
+-- LaunchServices answers in any case. An app it does not know keeps the
+-- desk's spelling, and launching it says it is not installed. A lookup that
+-- raises is nil and why: could not see, never taken for not there.
+local function own_id(bundle)
+  local ok, info = pcall(hs.application.infoForBundleID, bundle)
+  if not ok then return nil, "infoForBundleID(" .. tostring(bundle) .. "): " .. tostring(info) end
+  if type(info) == "table" and type(info.CFBundleIdentifier) == "string" then return info.CFBundleIdentifier end
+  return bundle
 end
 
 -- f() tried up to `times` times, a fifth of a second apart (never after the
@@ -144,8 +162,9 @@ end
 
 -- The world as it is now. Read-only. Every lookup that can fail records its
 -- error beside the value rather than dropping it, because "could not see" and
--- "is not there" need different answers.
-function M.observe()
+-- "is not there" need different answers. `bundles`, the desk's app bundle
+-- ids, is what is asked about one by one, fresh, for whether it runs.
+function M.observe(bundles)
   -- com.apple.spaces first: it holds each display's space order (D22) as
   -- well as the Dock bindings.
   local spaces_prefs, spaces_err = read_defaults("com.apple.spaces")
@@ -239,22 +258,45 @@ function M.observe()
     world.screens[#world.screens + 1] = entry
   end
 
-  -- Read as the windows are: a just-launched app can be listed before it can
-  -- be read, and one that raises fails the whole read. So the whole list is
-  -- read again, up to four times, and a list that still cannot be had is
-  -- recorded as unread, never left looking like nothing running.
-  local got, read = attempts(4, function()
-    local bundles = {}
-    for _, app in ipairs(hs.application.runningApplications()) do
-      local b = app:bundleID()
-      if b then bundles[#bundles + 1] = b end
+  -- Whether the desk's apps run is asked one bundle at a time, fresh:
+  -- runningApplications is NSWorkspace's KVO-backed list, refreshed only when
+  -- Hammerspoon's run loop turns, so inside one callback it stays the list
+  -- from when the callback began (vc's hand runs at 9907e17, 16 Oct 2026).
+  -- applicationsForBundleID asks afresh, as hs.application.get does for a
+  -- bundle id (hs/application.lua:146). With no desk (discover, observe) the
+  -- sweep is kept, and apps_running_source says which was read. Each read is
+  -- tried four times, because a just-launched app can be listed before it
+  -- can be read; one that still fails is recorded as unread, naming what,
+  -- never left looking like not running.
+  if bundles then
+    world.apps_running_source = "applicationsForBundleID"
+    for _, b in ipairs(bundles) do
+      local got, apps = attempts(4, function()
+        local id, why = own_id(b)
+        if not id then error(why, 0) end
+        return hs.application.applicationsForBundleID(id)
+      end)
+      if not got then
+        world.apps_running_error = b .. " could not be read four times: " .. tostring(apps)
+        break
+      end
+      if #apps > 0 then world.apps_running[#world.apps_running + 1] = b end
     end
-    return bundles
-  end)
-  if got then
-    world.apps_running = read
   else
-    world.apps_running_error = "the running apps could not be read four times: " .. tostring(read)
+    world.apps_running_source = "runningApplications"
+    local got, read = attempts(4, function()
+      local running = {}
+      for _, app in ipairs(hs.application.runningApplications()) do
+        local b = app:bundleID()
+        if b then running[#running + 1] = b end
+      end
+      return running
+    end)
+    if got then
+      world.apps_running = read
+    else
+      world.apps_running_error = "the running apps could not be read four times: " .. tostring(read)
+    end
   end
 
   local dock_prefs, dock_err = read_defaults("com.apple.dock")
@@ -315,7 +357,9 @@ end
 -- A window plan could claim (named, standard, not minimized): what a launch
 -- waits for, because a splash or a palette is not what the desk places.
 local function claimable_window(bundle)
-  local app = hs.application.get(bundle)
+  local id, why = own_id(bundle)
+  if not id then error(why, 0) end
+  local app = hs.application.get(id)
   if not app then return nil end
   for _, w in ipairs(app:allWindows() or {}) do
     if P.claimable({ named = true, standard = w:isStandard(), minimized = w:isMinimized() }) then return w end
@@ -331,13 +375,14 @@ local function exec_launch(op)
   while waited < M.LAUNCH_TIMEOUT do
     local w = claimable_window(op.bundle)
     if w then return { status = "done", readback = { window = w:id(), waited = waited } } end
-    hs.timer.usleep(250000)
-    waited = waited + 0.25
+    hs.timer.usleep(math.floor(POLL_SECONDS * 1e6))
+    waited = waited + POLL_SECONDS
   end
   return { status = "failed", reason = string.format("launched, but no standard window within %d s", M.LAUNCH_TIMEOUT) }
 end
 
 local show_desktop -- below, with the hand
+local shown_space -- below, with the readers it is built on
 
 local function exec_place(op, ctx)
   if ctx.unmoved[op.window] then
@@ -489,12 +534,30 @@ local function hit_test(p, id, pid)
   local el = hs.axuielement.systemElementAtPosition(p)
   if not el then return "nothing there" end
   local role = el:attributeValue("AXRole")
-  if el:pid() ~= pid then return "another app" end
+  local other = el:pid()
+  if pid == nil then return "the window's own app could not be read" end
+  if other ~= pid then
+    local app = hs.application.applicationForPID(other)
+    return "another app's window is on top (" .. tostring(app and app:name() or ("pid " .. tostring(other))) .. ")"
+  end
   local win_el = role == "AXWindow" and el or el:attributeValue("AXWindow")
   local hw = win_el and win_el:asHSWindow()
   if not (hw and hw:id() == id) then return "another window" end
   if GRAB_ROLES[role] then return "grab" end
   return "a control (" .. tostring(role) .. ")"
+end
+
+-- Raising a window activates its app, which can switch its display to
+-- another desktop: true while the window's desktop is still shown, else nil
+-- and that, said as that, never as a window on top.
+local function still_shown(id)
+  local shown, home = shown_space(id)
+  if shown == nil then return nil, "after raising it: " .. tostring(home) end
+  if not shown then
+    return nil, string.format("raising window %s left its display showing space %s, not its space %s",
+      tostring(id), tostring(home.at), tostring(home.space))
+  end
+  return true
 end
 
 -- A point on the window's title bar that lands on the bar itself, with the
@@ -509,15 +572,28 @@ local function grab_point(id)
     hs.timer.usleep(POLL_US)
   end
   if not win then return nil, "window " .. tostring(id) .. " is not visible to Accessibility on its desktop" end
+  -- Raised first: a window behind another cannot be held, and a press there
+  -- takes the other app's window (vc's hand run at 9907e17, 16 Oct 2026).
+  -- The readback is the hit test, read fresh from Accessibility at each
+  -- point, for up to a second while the window comes to the front;
+  -- frontmostWindow goes through NSWorkspace, which a callback sees stale.
+  win:focus()
   local app = win:application()
   local pid = app and app:pid()
   local frame, zoom = rect(win:frame()), rect(win:zoomButtonRect())
-  local tried = {}
-  for _, p in ipairs(P.grab_candidates(frame, zoom)) do
-    local verdict = hit_test(p, id, pid)
-    if verdict == "grab" then return { point = p, frame = frame } end
-    tried[#tried + 1] = string.format("(%d,%d) %s", p.x, p.y, verdict)
-  end
+  local tried
+  local deadline = now() + 1e9
+  repeat
+    local still, why = still_shown(id)
+    if not still then return nil, why end
+    tried = {}
+    for _, p in ipairs(P.grab_candidates(frame, zoom)) do
+      local verdict = hit_test(p, id, pid)
+      if verdict == "grab" then return { point = p, frame = frame } end
+      tried[#tried + 1] = string.format("(%d,%d) %s", p.x, p.y, verdict)
+    end
+    hs.timer.usleep(POLL_US)
+  until now() >= deadline
   return nil, "no point on window " .. tostring(id) .. "'s title bar lands on the bar itself: " .. table.concat(tried, "; ")
 end
 
@@ -595,8 +671,18 @@ function LEG.switch(ctx, leg)
 end
 
 -- Held: the window carried one step per key press, each step watched.
-function LEG.carry(ctx, leg, id)
+-- The window held, raised first, and its desktop still shown: raising
+-- activates the app, which can switch a display to another desktop.
+local function held_point(id)
   local g, why = grab_point(id)
+  if not g then return nil, why end
+  local still, swhy = still_shown(id)
+  if not still then return nil, swhy end
+  return g
+end
+
+function LEG.carry(ctx, leg, id)
+  local g, why = held_point(id)
   if not g then return why end
   local hand = ctx.hand
   hand:press(g.point)
@@ -612,11 +698,10 @@ function LEG.carry(ctx, leg, id)
       hand:release()
       local spaces, serr = hs.spaces.windowSpaces(id)
       local at, aerr = hs.spaces.activeSpaceOnScreen(leg.screen)
-      return string.format("held and pressed Move-space %s, and after %d s the window is on %s and screen %s shows %s,"
-        .. " not space %s", leg.side, STEP_WAIT,
+      return string.format("held and pressed Move-space %s, and after %d s the window is on %s, not space %s alone,"
+        .. " and screen %s shows %s", leg.side, STEP_WAIT,
         spaces and ("{" .. table.concat(list(spaces), ",") .. "}") or ("what could not be read: " .. tostring(serr)),
-        tostring(leg.screen), at and ("space " .. tostring(at)) or ("what could not be read: " .. tostring(aerr)),
-        tostring(step))
+        tostring(step), tostring(leg.screen), at and ("space " .. tostring(at)) or ("what could not be read: " .. tostring(aerr)))
     end
   end
   hand:hold(0.15, "before letting go")
@@ -630,7 +715,7 @@ function LEG.drag(ctx, leg, id)
   if not chain then
     return "no chain of shared edges joins screen " .. tostring(leg.from_screen) .. " to " .. tostring(leg.screen)
   end
-  local g, why = grab_point(id)
+  local g, why = held_point(id)
   if not g then return why end
   local dest = P.drop_point(g.point, g.frame, chain[#chain])
   local hand = ctx.hand
@@ -724,7 +809,7 @@ end
 -- false and the first of its spaces with that display and what it shows, or
 -- nil and what could not be read. A window on several spaces is shown when
 -- any of them is.
-local function shown_space(id)
+shown_space = function(id)
   local where, why = window_where(id)
   if not where then return nil, why end
   if #where == 0 then return nil, "window " .. tostring(id) .. " is on no space" end
@@ -878,53 +963,16 @@ local function append(into, from)
   for _, x in ipairs(from) do into[#into + 1] = x end
 end
 
--- Observe until done(world) holds, for up to `seconds` on the monotonic
--- clock, a quarter of a second between reads. An observe that raises while a
--- window is half there is tried again; done() is not guarded, so a crash in
--- it is raised. Returns the last world read (done or not), or nil and the
--- last error when no observe succeeded. The one polling loop the settles
--- below share.
-local function observe_until(done, seconds)
-  local deadline = now() + seconds * 1e9
-  local world, err
-  while true do
-    local ok, got = pcall(M.observe)
-    if ok then
-      world = got
-      if done(world) then return world end
-    else
-      err = got
-    end
-    if now() >= deadline then break end
-    hs.timer.usleep(250000)
+-- What the settles wait for, shared by the plan verb's blocking wait and
+-- apply's phases. Each takes the world just observed.
+
+-- After create_space: com.apple.spaces has caught up with the live list
+-- (design.md, apply 7).
+local function spaces_agree(world)
+  for _, s in ipairs(world.screens or {}) do
+    if s.order_error then return false end
   end
-  return world, err
-end
-
--- A settle's world, or its error raised, for step() to report.
-local function settled(world, err)
-  if world then return world end
-  error(err, 0)
-end
-
--- After create_space: until com.apple.spaces has caught up with the live
--- list, for up to 3 s (design.md, apply 7).
-local function observe_settled()
-  return settled(observe_until(function(world)
-    for _, s in ipairs(world.screens or {}) do
-      if s.order_error then return false end
-    end
-    return true
-  end, 3))
-end
-
--- After launches: until every app whose launch was done runs and has a
--- window plan could claim named on a desktop, for up to the launch timeout.
--- A launched window becomes nameable a beat after the launch sees it (vc's
--- hand runs, 16 Oct 2026). Plan reports what is still not named as unseen.
-local function observe_launched(launched)
-  return settled(observe_until(function(world) return #P.unsettled_launches(world, launched) == 0 end,
-    M.LAUNCH_TIMEOUT))
+  return true
 end
 
 -- A plan that finds an entry unseen is planned again from fresh observes for
@@ -933,118 +981,291 @@ end
 -- not taken as the answer.
 local UNSEEN_SECONDS = 1.5
 
--- plan from WORLD, planned again from fresh observes while an entry is
--- unseen, up to UNSEEN_SECONDS. The plan in hand is the last one plan made
--- from a world it could read: a retry plan refuses (a listing that failed for
--- a moment, which unread() refuses) does not replace it, and the wait goes
--- on, as it does when a retry cannot observe at all. A crash in plan is
--- raised, never taken for an unseen entry. Returns the world planned from,
--- its ops, and plan's refusal.
-local function plan_settled(desk, world, options)
-  local ops, err = P.plan(desk, world, options)
-  if not (ops and #only(ops, { unseen = true }) > 0) then return world, ops, err end
-  observe_until(function(w)
-    local o = P.plan(desk, w, options)
-    if not o then return false end
-    ops, world = o, w
-    return #only(o, { unseen = true }) == 0
-  end, UNSEEN_SECONDS)
-  return world, ops, nil
+local function has_unseen(ops) return #only(ops, { unseen = true }) > 0 end
+
+-- One retry of a plan that found an entry unseen, from WORLD. held carries
+-- desk, options, and the ops and world in hand. The plan in hand is the last
+-- one plan made from a world it could read: a retry plan refuses (a listing
+-- that failed for a moment, which unread() refuses) does not replace it. A
+-- crash in plan is raised, never taken for an unseen entry. True once
+-- nothing is unseen.
+local function retry_unseen(held, world)
+  local o = P.plan(held.desk, world, held.options)
+  if not o then return false end
+  held.ops, held.world = o, world
+  return not has_unseen(o)
 end
 
--- apply, steps 5 to 11 of design.md "apply, in order": everything after the
--- CLI's preconditions and validation. A refusal before anything changed is
--- refused, which the CLI reports as exit 2. Once the first op has run, every
--- failure is a result instead, so the report always says what was done.
-function M.apply(desk, options)
-  options = options or {}
-  local world = M.observe()
+-- Observe until done(world) holds, for up to `seconds` on the monotonic
+-- clock, a quarter of a second between reads, all inside one call. Only the
+-- plan verb waits this way, because it answers within the IPC call; apply
+-- waits in phases instead, since nothing NSWorkspace, Accessibility or
+-- Spaces learns reaches Hammerspoon while one callback runs. An observe that
+-- raises while a window is half there is tried again; done() is not guarded,
+-- so a crash in it is raised. Returns the last world read, or nil and the
+-- last error when no observe succeeded.
+local function observe_until(done, seconds, bundles)
+  local deadline = now() + seconds * 1e9
+  local world, err
+  while true do
+    local ok, got = pcall(M.observe, bundles)
+    if ok then
+      world = got
+      if done(world) then return world end
+    else
+      err = got
+    end
+    if now() >= deadline then break end
+    pause(POLL_SECONDS)
+  end
+  return world, err
+end
+
+-- The plan verb: plan from WORLD, planned again from fresh observes while an
+-- entry is unseen, up to UNSEEN_SECONDS. Returns the ops and plan's refusal.
+local function plan_settled(desk, world, options)
+  local ops, err = P.plan(desk, world, options)
+  if not (ops and has_unseen(ops)) then return ops, err end
+  local held = { desk = desk, options = options, ops = ops, world = world }
+  observe_until(function(w) return retry_unseen(held, w) end, UNSEEN_SECONDS, P.desk_bundles(desk))
+  return held.ops, nil
+end
+
+-- ---------------------------------------------------------------- apply, in phases
+
+-- apply, steps 5 to 11 of design.md "apply, in order", everything after the
+-- CLI's preconditions and validation, as phases, one timer callback each, so
+-- Hammerspoon's run loop turns between them and NSWorkspace, Accessibility
+-- and Spaces catch up (vc's hand runs at 9907e17, 16 Oct 2026: inside one
+-- callback the running apps stayed as they were for 20 s). A wait is a
+-- phase that schedules itself again; nothing sleeps between phases.
+--
+-- Each phase takes the job and returns the next phase's name and the delay
+-- before it, or nothing when it has answered. A refusal before anything
+-- changed is refused, which the CLI reports as exit 2. Once job.changed, a
+-- phase that fails is a result instead and apply goes to finish, so the
+-- report always says what was done.
+local PHASE = {}
+
+local ACCESSIBILITY = "Hammerspoon has no Accessibility grant, so it can neither name a window nor move one:"
+  .. " System Settings > Privacy & Security > Accessibility"
+
+-- One read of a wait: observe, then done(world), unguarded so a crash in it
+-- is raised. The phase itself again, until done holds or `seconds` from its
+-- first read have passed; then `next_phase`. When `must_observe`, a wait in
+-- which no observe succeeded raises the last error; otherwise what is in
+-- hand stands.
+local function waiting(job, name, seconds, done, next_phase, must_observe)
+  job.deadlines[name] = job.deadlines[name] or (now() + seconds * 1e9)
+  local ok, world = pcall(M.observe, job.bundles)
+  if ok then
+    job.observed[name] = true
+    if done(world) then return next_phase end
+  else
+    job.observe_errors[name] = world
+  end
+  if now() < job.deadlines[name] then return name, POLL_SECONDS end
+  if must_observe and not job.observed[name] then error("observe: " .. tostring(job.observe_errors[name]), 0) end
+  return next_phase
+end
+
+-- Plan from job.world with job.options: the held plan, then a wait while an
+-- entry is unseen, then `after`. A refusal is plan's err, for the caller.
+local function plan_then(job, after)
+  local ops, err = P.plan(job.desk, job.world, job.options)
+  if not ops then return nil, err end
+  job.ops, job.after_unseen = ops, after
+  job.deadlines.unseen, job.observed.unseen, job.observe_errors.unseen = nil, nil, nil
+  if has_unseen(ops) then return "unseen", POLL_SECONDS end
+  return after
+end
+
+-- Step 5: observe, match, plan.
+function PHASE.inventory(job)
+  job.bundles = P.desk_bundles(job.desk)
+  job.world = M.observe(job.bundles)
   -- Only Hammerspoon can say whether it holds the grant; the preferences are
   -- the CLI's to judge, before it asks (D26).
-  if world.accessibility ~= true then
-    refuse("Hammerspoon has no Accessibility grant, so it can neither name a window nor move one: System Settings >"
-      .. " Privacy & Security > Accessibility")
-  end
-  local ops, err
-  world, ops, err = plan_settled(desk, world, { no_create = options.no_create, no_launch = options.no_launch,
-    map = options.map })
-  if not ops then refuse(err) end
+  if job.world.accessibility ~= true then refuse(ACCESSIBILITY) end
+  local nxt, err = plan_then(job, "prepare")
+  if not nxt then refuse(err) end
+  return nxt
+end
 
-  local ctx = { hand = new_hand(), unmoved = {}, world = world }
+function PHASE.unseen(job)
+  return waiting(job, "unseen", UNSEEN_SECONDS, function(w) return retry_unseen(job, w) end, job.after_unseen)
+end
+
+-- Step 6's refusals, then the creates (step 7).
+function PHASE.prepare(job)
+  local ctx = { hand = new_hand(), unmoved = {}, world = job.world, world_before = job.world, launched = {} }
   ctx.keys, ctx.keys_error = move_keys()
-  if P.needs_hand(ops, world) then
+  if P.needs_hand(job.ops, job.world) then
     if not ctx.keys then refuse(ctx.keys_error) end
     local free, why = hands_free()
     if not free then refuse(why) end
   end
-
-  local results = {}
-  -- One step after things began to change: its failure is a result, and the
-  -- report says the entries after it were not finished.
-  local function step(what, f, ...)
-    local ok, a = pcall(f, ...)
-    if ok then return a end
-    results[#results + 1] = { op = what, status = "failed", reason = tostring(a) }
-    return nil
+  job.ctx = ctx
+  job.first_ops = job.ops
+  job.changed = true
+  job.creates = only(job.ops, { create_space = true })
+  job.launches = only(job.ops, { launch = true })
+  if #job.creates > 0 then
+    append(job.results, M.execute(job.creates, ctx))
+    return "created", POLL_SECONDS
   end
+  if #job.launches > 0 then return "launch" end
+  return "organise_start"
+end
 
-  local creates = only(ops, { create_space = true })
-  local launches = only(ops, { launch = true })
-  local changed = #creates > 0 or #launches > 0
+function PHASE.created(job)
+  return waiting(job, "created", 3, function(w)
+    job.world = w
+    return spaces_agree(w)
+  end, #job.launches > 0 and "launch" or "replan", true)
+end
 
-  -- Steps 7 to 10, from the second plan to the last place. Once anything
-  -- has changed it runs as one step, so nothing in it can escape as a
-  -- refusal.
-  local function the_rest()
-    local rest = ops
-    if changed then
-      local running_before = P.running_set(ctx.world_before)
-      local again, aerr
-      ctx.world, again, aerr = plan_settled(desk, ctx.world, { no_create = true, after_create = #creates > 0,
-        user_no_create = options.no_create,
-        no_launch = options.no_launch, map = options.map,
-        launched = ctx.launched, running_before = running_before })
-      if not again then error("the plan after creating and launching refused: " .. tostring(aerr), 0) end
-      rest = again
-    end
-    -- Everything but what ran already: a kind this does not know reaches
-    -- execute, which fails it out loud, never dropped here unreported.
-    rest = except(rest, { create_space = true, launch = true })
-    if P.needs_hand(rest, ctx.world) then
-      local took, why = take_hand(ctx)
-      if not took then ctx.stopped = why end
-    end
-    append(results, M.execute(rest, ctx))
+-- Step 8: each launch waits for a claimable window through the fresh query.
+function PHASE.launch(job)
+  local done = M.execute(job.launches, job.ctx)
+  append(job.results, done)
+  for _, r in ipairs(done) do job.ctx.launched[P.app_key(r.bundle)] = r.status == "done" end
+  return "launched", POLL_SECONDS
+end
+
+-- Until every app whose launch was done runs and has a window plan could
+-- claim named on a desktop, for up to the launch timeout. A launched window
+-- becomes nameable a beat after the launch sees it (vc's hand runs, 16 Oct
+-- 2026). Plan reports what is still not named as unseen.
+function PHASE.launched(job)
+  return waiting(job, "launched", M.LAUNCH_TIMEOUT, function(w)
+    job.world = w
+    return #P.unsettled_launches(w, job.ctx.launched) == 0
+  end, "replan", true)
+end
+
+-- Step 9: plan again against the fresh world, for move and place.
+function PHASE.replan(job)
+  job.options = {
+    no_create = true, after_create = #job.creates > 0, user_no_create = job.request_options.no_create,
+    no_launch = job.request_options.no_launch, map = job.request_options.map,
+    launched = job.ctx.launched, running_before = P.running_set(job.ctx.world_before),
+  }
+  local nxt, err = plan_then(job, "organise_start")
+  if not nxt then error("the plan after creating and launching refused: " .. tostring(err), 0) end
+  return nxt
+end
+
+-- Step 10: everything but what ran already, one op per callback. A kind this
+-- does not know reaches execute, which fails it out loud.
+function PHASE.organise_start(job)
+  local ctx = job.ctx
+  ctx.world = job.world
+  job.rest = except(job.ops, { create_space = true, launch = true })
+  job.next_op = 1
+  if P.needs_hand(job.rest, ctx.world) then
+    local took, why = take_hand(ctx)
+    if not took then ctx.stopped = why end
   end
+  if #job.rest == 0 then return "finish" end
+  return "organise"
+end
 
-  ctx.world_before = world
-  ctx.launched = {}
-  local going = true
-  if #creates > 0 then
-    append(results, step("execute", M.execute, creates, ctx) or {})
-    ctx.world = step("observe", observe_settled)
-    going = ctx.world ~= nil
-  end
-  if going and #launches > 0 then
-    local done = step("execute", M.execute, launches, ctx) or {}
-    append(results, done)
-    for _, r in ipairs(done) do ctx.launched[P.app_key(r.bundle)] = r.status == "done" end
-    ctx.world = step("observe", observe_launched, ctx.launched)
-    going = ctx.world ~= nil
-  end
-  -- Run as a step even when nothing changed before it, because it moves
-  -- windows itself: a failure inside it is a result, never a refusal.
-  if going then step("plan", the_rest) end
+function PHASE.organise(job)
+  local op = job.rest[job.next_op]
+  job.next_op = job.next_op + 1
+  append(job.results, M.execute({ op }, job.ctx))
+  if job.next_op > #job.rest then return "finish" end
+  return "organise"
+end
 
-  give_back(ctx, results)
-
-  local final_ok, final = pcall(M.observe)
+-- Step 11: the pointer and focus given back, a last observe, the report.
+function PHASE.finish(job)
+  if job.ctx then give_back(job.ctx, job.results) end
+  local final_ok, final = pcall(M.observe, job.bundles)
   if not final_ok then
-    results[#results + 1] = { op = "final_observe", status = "failed", reason = tostring(final) }
+    job.results[#job.results + 1] = { op = "final_observe", status = "failed", reason = tostring(final) }
     final = nil
   end
-  local lines, code = P.apply_report(desk, results)
-  return { ops = ops, results = results, report = lines, exit = code, world = final }
+  local lines, code = P.apply_report(job.desk, job.results)
+  job.answer({ ops = job.first_ops, results = job.results, report = lines, exit = code, world = final })
+end
+
+-- The error response for a verb that raised: refused (nothing changed) or a
+-- Lua error, for the CLI (D25).
+local function error_response(verb, err)
+  if type(err) == "table" and err.refused then
+    return { status = "error", kind = "refused", verb = verb, error = tostring(err.refused) }
+  end
+  return { status = "error", kind = "lua_error", verb = verb, error = tostring(err) }
+end
+
+-- An error after things changed, answered with what was done so far, so the
+-- kept response still says it.
+local function failed_after_change(job, err)
+  local out = error_response("apply", err)
+  out.results = job.results
+  return out
+end
+
+-- Run one phase, then schedule the next, holding the timer in a global so it
+-- is not collected before it fires (dc, D20).
+local run_phase
+
+-- A phase's callback: whatever raises here still answers, because an apply
+-- that never answers leaves arngz_running set and refuses every apply after
+-- it until Hammerspoon's config is reloaded.
+local function guarded(job, name)
+  local ok, err = pcall(run_phase, job, name)
+  if not ok then job.respond(job.changed and failed_after_change(job, err) or error_response("apply", err)) end
+end
+
+run_phase = function(job, name)
+  local ok, nxt, delay = pcall(PHASE[name], job)
+  if not ok then
+    if not job.changed then return job.respond(error_response("apply", nxt)) end
+    if name == "finish" then return job.respond(failed_after_change(job, nxt)) end
+    job.results[#job.results + 1] = { op = "phase", phase = name, status = "failed", reason = name .. ": " .. tostring(nxt) }
+    nxt, delay = "finish", 0
+  end
+  if not nxt then return end
+  local scheduled, timer = pcall(hs.timer.doAfter, delay or 0, function() guarded(job, nxt) end)
+  if scheduled then
+    rawset(_G, "arngz_timer", timer)
+    return
+  end
+  local why = "could not schedule the " .. nxt .. " phase: " .. tostring(timer)
+  if not job.changed then return job.respond(error_response("apply", { refused = why })) end
+  job.results[#job.results + 1] = { op = "phase", phase = nxt, status = "failed", reason = why }
+  -- finish runs here instead, and answers: it schedules nothing.
+  return run_phase(job, "finish")
+end
+
+-- Start apply: its first phase is scheduled, and respond(response) is called
+-- once, by the phase that answers. True, or nil and why nothing was
+-- scheduled.
+function M.start_apply(desk, options, respond)
+  if type(desk) ~= "table" then return nil, "apply needs the desk" end
+  options = options or {}
+  local job = {
+    desk = desk, request_options = options, results = {},
+    options = { no_create = options.no_create, no_launch = options.no_launch, map = options.map },
+    deadlines = {}, observed = {}, observe_errors = {}, changed = false,
+  }
+  -- Answered once: a second answer would write over the first.
+  job.respond = function(response)
+    if job.responded then return end
+    job.responded = true
+    respond(response)
+  end
+  job.answer = function(out)
+    out.status, out.verb = "ok", "apply"
+    job.respond(out)
+  end
+  local scheduled, timer = pcall(hs.timer.doAfter, 0, function() guarded(job, "inventory") end)
+  if not scheduled then return nil, "could not schedule apply: " .. tostring(timer) end
+  rawset(_G, "arngz_timer", timer)
+  return true
 end
 
 -- ---------------------------------------------------------------- the contract
@@ -1071,21 +1292,18 @@ local VERBS = {
   -- execute is never called on this path.
   plan = function(desk, options)
     if type(desk) ~= "table" then refuse("plan needs the desk") end
-    local _, ops, err = plan_settled(desk, M.observe(), options)
+    local ops, err = plan_settled(desk, M.observe(P.desk_bundles(desk)), options)
     if not ops then refuse(err) end
     return { ops = ops, report = P.plan_report(ops) }
-  end,
-  apply = function(desk, options)
-    if type(desk) ~= "table" then refuse("apply needs the desk") end
-    return M.apply(desk, options)
   end,
 }
 
 -- Verbs that run longer than the hs client waits (4 s, D20 as amended):
 -- scheduled on a timer, the IPC call returning at once, the response file the
 -- only answer. THE SAME LIST AS SCHEDULED_VERBS in opt/arngz/arngz, which
--- arngz.bats holds the two to.
+-- arngz.bats holds the two to. Each starts with START[verb].
 local SCHEDULED = { apply = true }
+local START = { apply = M.start_apply }
 
 -- The response, written aside and renamed, so it appears whole or not at all.
 -- The CLI treats the file's appearance as the answer, and does not wait for
@@ -1113,15 +1331,10 @@ end
 -- refused (nothing changed) or failed (a Lua error), for the CLI (D25).
 local function answer(request)
   local ok, out = pcall(VERBS[request.verb], request.desk, request.options or {})
-  if ok then
-    out.status = "ok"
-    out.verb = request.verb
-    return out
-  end
-  if type(out) == "table" and out.refused then
-    return { status = "error", kind = "refused", verb = request.verb, error = tostring(out.refused) }
-  end
-  return { status = "error", kind = "lua_error", verb = request.verb, error = tostring(out) }
+  if not ok then return error_response(request.verb, out) end
+  out.status = "ok"
+  out.verb = request.verb
+  return out
 end
 
 -- The IPC entry. Reads {verb, desk, options} from request_path, writes the
@@ -1143,35 +1356,38 @@ function M.run(request_path)
   elseif type(request) ~= "table" then
     return respond(response_path, { status = "error", kind = "refused", error = "cannot read the request at " .. tostring(request_path)
       .. ": hs.json.read returned nothing, so it is missing or not JSON" })
-  elseif not VERBS[request.verb] then
+  elseif not (VERBS[request.verb] or SCHEDULED[request.verb]) then
     return respond(response_path, { status = "error", kind = "refused", verb = request.verb,
       error = "the engine has no verb " .. tostring(request.verb) })
   end
   if not SCHEDULED[request.verb] then return respond(response_path, answer(request)) end
 
   -- One at a time: two applies would take the one pointer from each other.
-  -- The state lives in globals because dofile makes this module anew at
-  -- every call, and the timer is held there so it is not collected before
-  -- it fires (dc, D20).
+  -- apply spans timer callbacks, so a second request reaches the engine
+  -- between the first's phases and is refused here; one that arrives as the
+  -- last phase ends runs after it (dc). The state lives in globals because
+  -- dofile makes this module anew at every call (dc, D20).
   local running = rawget(_G, "arngz_running")
   if running then
     return respond(response_path, { status = "error", kind = "refused", verb = request.verb,
-      error = string.format("an %s is already running (asked for at %s); wait for it to finish", running.verb, running.at) })
+      error = string.format("an %s is already running (asked for at %s)", running.verb, running.at),
+      fix = "wait for it to finish; if none is running, reload Hammerspoon's config (hs.reload() in its console),"
+        .. " which clears what a crashed apply left set" })
   end
   rawset(_G, "arngz_running", { verb = request.verb, at = utc_now() })
-  local scheduled, timer = pcall(hs.timer.doAfter, 0, function()
-    local ok, line = pcall(function() return respond(response_path, answer(request)) end)
+  local function done(response)
+    local ok, line = pcall(respond, response_path, response)
     if not ok then print("arngz: error: " .. tostring(line)) end
     rawset(_G, "arngz_running", nil)
     rawset(_G, "arngz_timer", nil)
-  end)
-  if not scheduled then
+  end
+  local called, started, why = pcall(START[request.verb], request.desk, request.options or {}, done)
+  if not called then started, why = nil, tostring(started) end
+  if not started then
     -- Never left marked as running when nothing was scheduled.
     rawset(_G, "arngz_running", nil)
-    return respond(response_path, { status = "error", kind = "refused", verb = request.verb,
-      error = "could not schedule " .. request.verb .. ": " .. tostring(timer) })
+    return respond(response_path, { status = "error", kind = "refused", verb = request.verb, error = why })
   end
-  rawset(_G, "arngz_timer", timer)
   return "arngz: scheduled " .. request.verb
 end
 
