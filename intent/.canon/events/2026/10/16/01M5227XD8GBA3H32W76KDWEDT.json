@@ -1,0 +1,15 @@
+{
+  "id": "01M5227XD8GBA3H32W76KDWEDT",
+  "ts": "2026-10-16T09:56:09.768Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "hold",
+    "text": "After the compact: (1) read dc's 3777de3 shim diff (589 lines in opt/arngz/arngz, 39 in common.sh: app_path beside check_app) and run the real arngz doctor on hv's machine, hands-free; (2) cc's WP-05 hand runs AC-05.4 and AC-05.5 need hv's hands off when cc hands over; (3) git worktree prune when the scratchpad goes (wt-c21f319, wt-13552bc, wt-3e11cb4, wt-88c57ad); (4) the spike's files in /tmp/arngz-spike2/ and dc's scratchpad go at reboot; (5) intent sync --to-disk once, the file index missed two AC writes under a lock at 09:5xZ."
+  }
+}

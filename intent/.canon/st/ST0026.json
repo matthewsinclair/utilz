@@ -14,7 +14,7 @@
       "seq": 1,
       "title": "Spike: space moves and Dock bindings on macOS 27",
       "scope": "S",
-      "status": "wip",
+      "status": "done",
       "objective": "Measure, on hv's machine, the two things the design cannot assume: whether Hammerspoon can move a window to another space on macOS 27 (same display and across displays, with a readback after each move), and whether a Dock app-binding written to `com.apple.spaces` takes after a Dock restart. The spike script and runbook exist (dc, 16 Oct); this package runs them with hv, records the JSON results and hv's notes in the design under \"The open input\", and resolves that section to one outcome. Nothing is built here.",
       "body": "",
       "preamble": ""
@@ -71,15 +71,17 @@
       "text": "The spike's three measurements (observe; a window moved to the next space on its display and to a space on another display, each read back; a Dock binding written and tested after a Dock restart) were run on hv's machine, and their JSON files and hv's notes are recorded in design.md under \"The open input\".",
       "kind": "non-test",
       "state": {
-        "is": "unsatisfied"
+        "is": "satisfied",
+        "evidence": "intent/st/ST0026/design.md, Measured 16 Oct 2026 (eeeab48): the three measurements and their readbacks; the JSON files stay out of the repository"
       }
     },
     {
       "id": "AC-01.2",
-      "text": "That section is resolved to one outcome, A, B or C, and names which apply flags exist as a result, --bind in particular.",
+      "text": "That section is resolved to one outcome, A, B, C or D, and names which apply flags exist as a result, --bind in particular.",
       "kind": "non-test",
       "state": {
-        "is": "unsatisfied"
+        "is": "satisfied",
+        "evidence": "intent/st/ST0026/design.md, Standing after these (eeeab48): outcome D taken, D21; --bind does not exist in v1"
       }
     },
     {

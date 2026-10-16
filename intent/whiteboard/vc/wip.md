@@ -13,7 +13,7 @@ claims: [ST0026]
 
 ## DOING
 
-- ST0026 arngz: vc holds the thread for the design. WP-01 spike: outcome A closed (moveWindowToSpace lies). B still open: the 08:54Z result (Calculator landed on the bound space 2634 after hv's Dock click) is CONFOUNDED, a control with no binding landed there too, so Calculator opens where it last was; the Dock writes nothing beyond app-bindings (plist diff); the deciding test binds Calculator to a built-in desktop other than its last and watches the launch, hands-free but it switches hv's desktop. D (the drag) waits on hv's hands off; the first run died with the hs client's 4 s timeout, a timer-scheduled call is the fix. WP-02 (3e11cb4), WP-03 (88c57ad), WP-04 (00a93b3: planner 90/90, bats 55/55, shellcheck 22 clean) verified in worktrees. WP-06 doctor/init with dc. Design on disk at intent/st/ST0026/design.md and in the store; edit the file, then intent sync --to-store. (edited)
+- ST0026 arngz: vc holds the thread for the design. WP-01 spike DONE 16 Oct: A and B closed (moveWindowToSpace lies; a binding switches the display, not the window), D taken (D21: hold the window and press the Move-space shortcut, 5 of 5; drag over a shared edge across displays), ordinals from the plist (D22), hs client 4 s timeout (D20 amended). WP-02 (3e11cb4), WP-03 (88c57ad), WP-04 (00a93b3) verified. WP-06 doctor/init at 3777de3 (dc): suite and shellcheck verified, diff read and real doctor run pending. WP-05 apply briefed to cc, starts after the compact. Design on disk at intent/st/ST0026/design.md and in the store; edit the file, then intent sync --to-store. (edited)
 
 ## TODO
 
@@ -21,8 +21,7 @@ claims: [ST0026]
 
 ## Holds
 
-- Drag spike, outcome D: dc's arngz-spike2.lua, run-hs.sh and RUNBOOK-2.md under /private/tmp/claude-501/-Users-matts-Devel-prj-Utilz/b6f789ca-4627-4a74-b4cd-bb7c07de9f46/scratchpad/arngz-spike/. Held until hv gives the go for the pointer to be taken (asked three times on 16 Oct); then vc runs it with a low-stakes window and records the result in the design.
-- Dock This-Desktop test: held until hv does the two clicks (Calculator on VY229HF (2), Dock icon > Options > Assign To > This Desktop, then quit it and say so); then vc reads what the Dock wrote to com.apple.spaces, launches Calculator, observes where it lands, and records the outcome for B.
+- After the compact: (1) read dc's 3777de3 shim diff (589 lines in opt/arngz/arngz, 39 in common.sh: app_path beside check_app) and run the real arngz doctor on hv's machine, hands-free; (2) cc's WP-05 hand runs AC-05.4 and AC-05.5 need hv's hands off when cc hands over; (3) git worktree prune when the scratchpad goes (wt-c21f319, wt-13552bc, wt-3e11cb4, wt-88c57ad); (4) the spike's files in /tmp/arngz-spike2/ and dc's scratchpad go at reboot; (5) intent sync --to-disk once, the file index missed two AC writes under a lock at 09:5xZ.
 
 ## Watch-outs
 

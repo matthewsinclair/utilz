@@ -13,10 +13,10 @@ title: arngz: named window arrangements (desks) discovered and applied across di
 
 ## Acceptance Criteria
 
-### WP-01 -- Spike: space moves and Dock bindings on macOS 27 (status: WIP)
+### WP-01 -- Spike: space moves and Dock bindings on macOS 27 (status: Done)
 
-- AC-01.1 (non-test) The spike's three measurements (observe; a window moved to the next space on its display and to a space on another display, each read back; a Dock binding written and tested after a Dock restart) were run on hv's machine, and their JSON files and hv's notes are recorded in design.md under "The open input". -- satisfied: no
-- AC-01.2 (non-test) That section is resolved to one outcome, A, B or C, and names which apply flags exist as a result, --bind in particular. -- satisfied: no
+- AC-01.1 (non-test) The spike's three measurements (observe; a window moved to the next space on its display and to a space on another display, each read back; a Dock binding written and tested after a Dock restart) were run on hv's machine, and their JSON files and hv's notes are recorded in design.md under "The open input". -- evidence: intent/st/ST0026/design.md, Measured 16 Oct 2026 (eeeab48): the three measurements and their readbacks; the JSON files stay out of the repository -- satisfied: yes
+- AC-01.2 (non-test) That section is resolved to one outcome, A, B, C or D, and names which apply flags exist as a result, --bind in particular. -- evidence: intent/st/ST0026/design.md, Standing after these (eeeab48): outcome D taken, D21; --bind does not exist in v1 -- satisfied: yes
 
 ### WP-02 -- Desk config, validator and the catalogue verbs (status: Done)
 
@@ -57,7 +57,7 @@ title: arngz: named window arrangements (desks) discovered and applied across di
 
 ## Acceptance Tests
 
-### WP-01 -- Spike: space moves and Dock bindings on macOS 27 (status: WIP)
+### WP-01 -- Spike: space moves and Dock bindings on macOS 27 (status: Done)
 
 _(no tests in this group)_
 

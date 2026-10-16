@@ -1,0 +1,16 @@
+{
+  "id": "01M5227E5P927XW6RW1KVBQW9F",
+  "ts": "2026-10-16T09:55:54.166Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 62,
+    "text": "ST0026 arngz: vc holds the thread for the design. WP-01 spike DONE 16 Oct: A and B closed (moveWindowToSpace lies; a binding switches the display, not the window), D taken (D21: hold the window and press the Move-space shortcut, 5 of 5; drag over a shared edge across displays), ordinals from the plist (D22), hs client 4 s timeout (D20 amended). WP-02 (3e11cb4), WP-03 (88c57ad), WP-04 (00a93b3) verified. WP-06 doctor/init at 3777de3 (dc): suite and shellcheck verified, diff read and real doctor run pending. WP-05 apply briefed to cc, starts after the compact. Design on disk at intent/st/ST0026/design.md and in the store; edit the file, then intent sync --to-store."
+  }
+}
