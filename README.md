@@ -336,6 +336,55 @@ find docs -name "*.md" | sort | mdagg --stdin -o docs.md
 
 See `utilz help mdagg` for details.
 
+### menuz
+
+A menu of your own commands in the macOS menu bar, read from one YAML file. Each item runs a shell line: a script, a `utilz` verb, anything the login shell can run. An item that takes parameters asks for them in one form first, and every run's output goes to one log that `menuz log` tails. Labels are expanded by the login shell each time the menu opens, and the menu follows the file as it changes, with no restart. On a full menu bar a new item can sit behind the overflow: hold Command and drag menuz's mark where you want it. At its first launch, answer macOS's alert with Allow, so its notices can post.
+
+```bash
+# Create the config directory and the example menu (--force replaces the yaml)
+menuz init
+menuz init --force
+
+# Edit the menu, in the default text editor or in $VISUAL/$EDITOR, then check it
+menuz edit
+menuz edit --editor
+menuz validate
+menuz render
+
+# Build and test the app (--release, --unsigned where there is no signing identity)
+menuz build
+menuz build --release --unsigned
+menuz test --unsigned
+
+# Install it into ~/Applications and launch it (from a Homebrew install, the
+# release's signed app); see where it stands, and check what it needs
+menuz install
+menuz status
+menuz doctor
+menuz stamps
+
+# Drive it
+menuz stop
+menuz start
+menuz restart
+menuz uninstall
+
+# Follow what the runs print, or read the last 50 lines
+menuz log
+menuz log -n 50
+
+# Run the development build, then go back to the installed one
+menuz use dev
+menuz use installed
+
+# The help (-h is the same) and the version
+menuz --help
+menuz -h
+menuz --version
+```
+
+See `utilz help menuz` for details.
+
 ### pdf2md
 
 PDF to Markdown converter using pdfplumber. Detects headings, list items, and paragraph structure from font metadata. Composes with `xtrct` for semantic data extraction.

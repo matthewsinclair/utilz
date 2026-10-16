@@ -20,6 +20,14 @@ menuz log [-n N]
 menuz validate [<file>]
 menuz render [<file>]
 menuz status
+menuz doctor
+menuz build [--release] [--unsigned]
+menuz test [--unsigned]
+menuz stamps
+menuz install
+menuz use [dev|installed]
+menuz uninstall
+menuz start | stop | restart
 menuz --help | -h
 menuz --version
 ```
@@ -30,7 +38,7 @@ menuz --version
 
 menuz puts a menu of your own commands in the macOS menu bar. The menu is one YAML file, `menuz.yaml`, in menuz's config directory. Each item runs a shell line: a script, a `utilz` verb, anything the login shell can run. An item that takes parameters asks for them in one form before it runs. Everything a run prints goes to one log, `menuz.log`, which `menuz log` tails.
 
-There are two halves. `Menuz.app` shows the menu and runs the items. The `menuz` command creates and checks the config directory, reads the log, and reports the app's state. The YAML is parsed in one place, the app: `menuz validate` and `menuz render` ask the app's own command-line arms and parse nothing themselves.
+There are two halves. `Menuz.app` shows the menu and runs the items. The `menuz` command creates and checks the config directory, reads the log, and builds, installs and drives the app. The YAML is parsed in one place, the app: `menuz validate` and `menuz render` ask the app's own command-line arms and parse nothing themselves.
 
 menuz adds no syntax of its own. A label or a shell line is expanded by the login shell, the way it expands a double-quoted string, so `$VAR`, `${VAR:-default}` and `$(command)` mean what they mean in zsh.
 
@@ -49,7 +57,9 @@ The app watches the directory and the file. A save, an editor's atomic rename, o
 
 menuz shows its own mark in the menu bar. `icon:` in the file names an SF Symbol to show instead, any name the SF Symbols app lists; pick one you can find at a glance, since a full menu bar is where you will be looking for it.
 
-macOS puts a new menu bar item at the left of the others, and a full menu bar hides what does not fit behind its overflow. If you cannot see menuz, show the hidden items, then hold Command and drag menuz's icon to where you want it; macOS keeps that place from then on. Until it has one, menuz says so when it starts, in the log and as a notification: `menuz is in the menu bar; on a full bar it may be hidden behind the overflow: hold Command and drag its icon where you want it`.
+macOS puts a new menu bar item at the left of the others, and a full menu bar hides what does not fit behind its overflow. If you cannot see menuz, show the hidden items, then hold Command and drag menuz's icon to where you want it; macOS keeps that place from then on. Until it has one, menuz says so when it starts, in the log, and as a notification once macOS lets it post: `menuz is in the menu bar; on a full bar it may be hidden behind the overflow: hold Command and drag its icon where you want it`.
+
+At its first launch menuz asks macOS whether it may post notifications, and macOS shows an alert: answer it with **Allow**. Quitting menuz while the alert is up withdraws the question, and macOS then refuses every notice from menuz until System Settings > Notifications > menuz allows them.
 
 ### The menu file
 
@@ -155,7 +165,9 @@ Every run appends to `${XDG_STATE_HOME:-$HOME/.local/state}/menuz/menuz.log`, wh
 
 The start line prints the `cwd` and the `run` line as written, before the shell expands them, so `cwd=~` stays `~`; with no `cwd` in the item or the file it prints `$HOME`'s value. A parameter's value reaches the run only through its environment, which is what keeps a secret's value out of the log. Each output line carries its run's id, so concurrent runs interleave legibly. Two more lines are the app's: `<time> run <id> cancelled "<label>"` when a form is cancelled, and `<time> quit; runs still going: <ids>`, the ids separated by commas, or `none`, when the app quits.
 
-A run that exits non-zero posts a macOS notification, `"<label>" exited <code>`. `notify: always` posts one at every finish, with the run's last line of output after a colon, and `notify: never` posts none. Notices come through macOS's notification centre under menuz's name, posted by the app's own executable at the run's end, so a run that outlives the app still sends one. The log says which: `[<id>] notice posted`, or `[<id>] notice not posted: notifications are off for menuz under System Settings > Notifications` when they are turned off there, or the centre's own reason. System Settings > Notifications > menuz is also where you choose how they show. A line the app cannot write to the log is reported in the app's own log and as a notification, never dropped.
+A run that exits non-zero posts a macOS notification, `"<label>" exited <code>`. `notify: always` posts one at every finish, with the run's last line of output after a colon, and `notify: never` posts none. Notices come through macOS's notification centre under menuz's name, posted by the app's own executable at the run's end, so a run that outlives the app still sends one. The log says which: `[<id>] notice posted`; `[<id>] notice not posted: notifications are off for menuz under System Settings > Notifications` when they are turned off there; `[<id>] notice not posted: menuz is not yet allowed to post notifications: answer macOS's alert, or allow them under System Settings > Notifications > menuz` while macOS's alert is unanswered; or the centre's own reason. System Settings > Notifications > menuz is also where you choose how they show.
+
+Each launch logs what macOS answered: `notifications: granted`, `notifications: denied under System Settings > Notifications > menuz`, `notifications: not yet allowed: answer macOS's alert, or allow them under System Settings > Notifications > menuz`, or the centre's own error. When the alert is still unanswered after 10 seconds the launch logs `notifications: macOS is asking whether menuz may post; the answer is logged when it comes`, and the answer follows when it comes. A line the app cannot write to the log is reported in the app's own log and as a notification, never dropped.
 
 ### The validator
 
@@ -196,34 +208,62 @@ Quit menuz
 
 A file that fails in the running app keeps the last good menu on screen and shows the refusal as a disabled first item, and in the log. Nothing is dropped silently.
 
-### The app
+### Which build
 
-`validate` and `render` ask the app's own validator, in the selected build: the one named, `dev` or `installed`, in `${XDG_STATE_HOME:-$HOME/.local/state}/menuz/use`, and the installed `~/Applications/Menuz.app` when that file names none. When none is named and none is installed, they ask the development build, `${XDG_STATE_HOME:-$HOME/.local/state}/menuz/build/macos/Build/Products/Debug/Menuz.app`, instead. With neither app there they refuse, exit 2, naming both places; with a named build that is not there, they refuse naming it.
+`validate`, `render`, `start`, `restart`, `doctor` and `status`'s login item act on the selected build: the one named, `dev` or `installed`, in `${XDG_STATE_HOME:-$HOME/.local/state}/menuz/use`, and the installed `~/Applications/Menuz.app` when that file names none. When none is named and none is installed, they take the development build, `${XDG_STATE_HOME:-$HOME/.local/state}/menuz/build/macos/Build/Products/Debug/Menuz.app`, instead. With neither app there they refuse, exit 2, naming both places; with a named build that is not there, they refuse naming it.
+
+`menuz use dev` names the development build, and `menuz use installed` the one in `~/Applications`. `menuz use` alone prints the choice and why: `installed (default)` when nothing is named, or `dev (by <the use file>)`.
 
 `status` prints one line each: whether the app is installed, with its path, version, build and commit; which build is selected, and why; whether it is running, with its pid; its login item; and whether the installed app is current with `native/macos/Menuz`.
+
+### Building and installing
+
+The app's source and its xcodegen project live at `native/macos/Menuz/`. `menuz build` runs xcodegen only when there is no `Menuz.xcodeproj`, `project.yml` changed, or a source file was added or removed, then builds Debug, or Release with `--release`, with every product and intermediate under `${XDG_STATE_HOME:-$HOME/.local/state}/menuz/build/macos/`, off the tree. It prints where xcodebuild's log is, and a failed build prints the log's last 40 lines. `--unsigned` builds with no signing identity, as CI does. `menuz test` runs the app's tests, `MenuzTests` and `MenuzKitTests`, the same way, in Debug.
+
+Each build stamps the app with four values, which `menuz stamps` prints one `NAME=value` a line before a build: `MENUZ_VERSION`, from `opt/menuz/VERSION`; `MENUZ_BUILD`, the commit count; `MENUZ_COMMIT`, the short commit; and `MENUZ_SOURCE_TREE`, the stamp of the app's sources, ending `-dirty` when the working tree differs from the commit there. `status` compares the installed app's `MENUZ_SOURCE_TREE` with the tree's to say whether it is current.
+
+`menuz install` builds Release, quits every running copy, puts the new one at `~/Applications/Menuz.app`, where the other menu bar apps install, registers it with Launch Services, so the build product is never the one opened for menuz, and launches it with an empty environment but `HOME`, so the app reads your login shell's environment for itself rather than the caller's. The old copy is replaced only once the new one is whole beside it, and put back if the move fails. The installed copy, and only that copy, registers itself as a login item when it launches; `menuz status` reports it.
+
+`menuz start` launches the selected build the same way; `menuz stop` quits every copy and waits up to 5 seconds for each to go; `menuz restart` finds the selected build first, so a missing one is refused with nothing quit, then stops and starts. `menuz uninstall` quits every copy, has the installed app unregister its login item, unregisters it with Launch Services and removes it; with nothing installed it changes nothing.
+
+### In a Homebrew install
+
+A Homebrew install of Utilz carries no app source. There, `build` and `test` refuse, naming the source clone (`git clone https://github.com/matthewsinclair/utilz`), `stamps` prints what the installed app carries, and `install` takes the app from the release instead: it fetches `Menuz.app.zip` from the GitHub release for the installed Utilz version, then checks its signature, that macOS accepts it as notarised Developer ID, its bundle id and its version against `opt/menuz/VERSION`, before it replaces anything. A check that fails stops the install, naming the check; a release that carries no `Menuz.app.zip` stops it naming the URL it tried. Each release's `Menuz.app` is signed with a Developer ID and notarised, as Intent's app is.
 
 ---
 
 ## Verbs
 
-| Verb       | Does                                                                                                       | Exit                     |
-| ---------- | ---------------------------------------------------------------------------------------------------------- | ------------------------ |
-| `init`     | create the config directory with the example `menuz.yaml` and an empty `bin/`                              | 0, or 2                  |
-| `edit`     | open `menuz.yaml` in the default text editor, or in `$VISUAL` or `$EDITOR` with `--editor`                 | 0, or 2                  |
-| `log`      | print the log's path, then follow it                                                                       | 0, or 2                  |
-| `validate` | check `menuz.yaml`, or `<file>`, with the app's validator: `ok`, or every refusal                          | 0, or 2                  |
-| `render`   | print the menu as the app would show it, labels realised, one entry per line                               | 0, or 2                  |
-| `status`   | installed (version, build, commit), running (pid), login item, source-current, and which build is selected | 0, or 1 if not installed |
+| Verb        | Does                                                                                                                                                                                                       | Exit                     |
+| ----------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `init`      | create the config directory with the example `menuz.yaml` and an empty `bin/`                                                                                                                              | 0, or 2                  |
+| `edit`      | open `menuz.yaml` in the default text editor, or in `$VISUAL` or `$EDITOR` with `--editor`                                                                                                                 | 0, or 2                  |
+| `log`       | print the log's path, then follow it                                                                                                                                                                       | 0, or 2                  |
+| `validate`  | check `menuz.yaml`, or `<file>`, with the app's validator: `ok`, or every refusal                                                                                                                          | 0, or 2                  |
+| `render`    | print the menu as the app would show it, labels realised, one entry per line                                                                                                                               | 0, or 2                  |
+| `status`    | installed (version, build, commit), running (pid), login item, source-current, and which build is selected                                                                                                 | 0, or 1 if not installed |
+| `doctor`    | one line per precondition, each `ok` or `FAIL`: `xcode`, `xcodegen` and `identity` (one `build skip` line in a Homebrew install), `config`, `menu` (it validates), `installed`, `running` and `login item` | 0, or 1 if any fails     |
+| `build`     | build the app, Debug unless `--release`                                                                                                                                                                    | 0, 1, or 2               |
+| `test`      | run the app's `MenuzTests` and `MenuzKitTests`                                                                                                                                                             | 0, 1, or 2               |
+| `stamps`    | print what the next build stamps into the app; in a Homebrew install, what the installed app carries                                                                                                       | 0, 1, or 2               |
+| `install`   | build Release (in a Homebrew install, fetch the release's app), replace `~/Applications/Menuz.app`, register and launch it                                                                                 | 0, 1, or 2               |
+| `use`       | name the development build (`dev`) or the installed one (`installed`), or print which is selected and why                                                                                                  | 0, or 2                  |
+| `uninstall` | quit every copy, unregister its login item and the bundle, and remove the installed app                                                                                                                    | 0, 1, or 2               |
+| `start`     | launch the selected build with an empty environment                                                                                                                                                        | 0, 1, or 2               |
+| `stop`      | quit every copy                                                                                                                                                                                            | 0, 1, or 2               |
+| `restart`   | stop, then start the selected build                                                                                                                                                                        | 0, 1, or 2               |
 
 ### Options
 
-| Option         | Verb   | Effect                                     |
-| -------------- | ------ | ------------------------------------------ |
-| `--force`      | `init` | overwrite an existing `menuz.yaml`         |
-| `--editor`     | `edit` | open the file in `$VISUAL`, else `$EDITOR` |
-| `-n N`         | `log`  | print the last N lines and do not follow   |
-| `--help`, `-h` |        | print this help                            |
-| `--version`    |        | print menuz's version                      |
+| Option         | Verb            | Effect                                     |
+| -------------- | --------------- | ------------------------------------------ |
+| `--force`      | `init`          | overwrite an existing `menuz.yaml`         |
+| `--editor`     | `edit`          | open the file in `$VISUAL`, else `$EDITOR` |
+| `-n N`         | `log`           | print the last N lines and do not follow   |
+| `--release`    | `build`         | build Release rather than Debug            |
+| `--unsigned`   | `build`, `test` | build with no signing identity, as CI does |
+| `--help`, `-h` |                 | print this help                            |
+| `--version`    |                 | print menuz's version                      |
 
 ---
 
@@ -234,9 +274,13 @@ menuz init                    # create the config directory and the example menu
 menuz edit                    # open menuz.yaml
 menuz validate                # check it
 menuz render                  # see the menu it makes, labels realised
+menuz install                 # build the app, install it in ~/Applications and launch it
+menuz doctor                  # every precondition, ok or FAIL
 menuz status                  # installed, running, login item, which build
 menuz log                     # follow every run's output
 menuz log -n 50               # the last 50 lines
+menuz use dev                 # act on the development build
+menuz use installed           # back to the installed one
 ```
 
 ---
@@ -266,20 +310,21 @@ Every run also has `MENUZ_HOME`, `MENUZ_LABEL`, `MENUZ_RUN_ID` and, under `each`
 ## Exit Status
 
 - `0` -- done.
-- `1` -- `status` found no app installed.
-- `2` -- refused before anything changed: `init` over a `menuz.yaml` that is not the example, without `--force`; `edit`, `validate` or `render` with no `menuz.yaml`, or `validate` or `render` given a file that does not exist; `edit --editor` with neither `VISUAL` nor `EDITOR` set; `log` with no log yet, or `-n` without a count; `validate` or `render` with no app built or installed, or a file the validator refuses; a bad verb or option.
+- `1` -- failed after something changed, naming the step: xcodegen or xcodebuild (a build failed or a test was red), or `install`'s quit, replace, unclaim, register, launch, fetch, unzip, codesign, spctl, bundle id or version; `stop` or `restart` found a copy still running 5 seconds after asking it to quit; `start` could not launch the app; `uninstall` removed the app but could not unregister it; `stamps` could not read the stamps; `status` found no app installed; or `doctor` found a precondition that does not hold.
+- `2` -- refused before anything changed: `init` over a `menuz.yaml` that is not the example, without `--force`; `edit`, `validate` or `render` with no `menuz.yaml`, or `validate` or `render` given a file that does not exist; `edit --editor` with neither `VISUAL` nor `EDITOR` set; `log` with no log yet, or `-n` without a count; `validate` or `render` with no app built or installed, or a file the validator refuses; `build`, `test` or `install` without Xcode or xcodegen or the app's source, and `build` or `test` in a Homebrew install; `start` or `restart` with no build to launch; `use` with a word that is neither `dev` nor `installed`; `stamps` in a Homebrew install with no app installed; a bad verb or option.
 
 ---
 
 ## Dependencies
 
-- Xcode and `xcodegen` (optional) -- build the app; `utilz doctor` reports them only where the app's source, `native/macos/Menuz/`, is present.
+- Xcode and `xcodegen` (optional) -- needed by `build`, `test` and `install` in a source clone; `utilz doctor` reports them only where the app's source, `native/macos/Menuz/`, is present.
 
 ---
 
 ## See Also
 
 - `utilz doctor` -- reports menuz's dependencies.
+- `menuz doctor` -- every precondition menuz needs.
 - `arngz` -- the first thing on the example menu.
 - `intent/st/ST0027/design.md` -- the design.
 
