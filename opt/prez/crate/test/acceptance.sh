@@ -354,7 +354,19 @@ if want AT04; then
     CHROME_PID=$!
     wait_for_cdp "$at04port" \
       || bad "chrome never opened its debugging port on $at04port after $CDP_WAITED"
-    if node "$HERE/at04-runtime-probe.mjs" "$at04port"; then ok "every runtime check passed"; else bad "the runtime probe reported failures"; fi
+    printf '  browser: %s\n' "$("$BROWSER" --version 2>/dev/null || echo unknown)"
+    # ISSUE 0067: headless Chrome on macOS refuses fullscreen requested from a
+    # key ("TypeError: not granted", measured on Chrome 155) while the same
+    # Chrome in a window honours it. So on macOS the probe checks prez's half,
+    # that `f` requests fullscreen on the root with activation live, and the
+    # browser's half is n/a here; the Linux leg runs it. Gated on uname, never
+    # on the refusal itself (hv, 8 Sep and 16 Oct 2026).
+    at04flags=()
+    if [ "$(uname -s)" = "Darwin" ]; then
+      at04flags=(--no-browser-fullscreen)
+      not_applicable "fullscreen entered, fills and toggles out: headless Chrome on macOS refuses key-initiated fullscreen (0067); the Linux leg checks it"
+    fi
+    if node "$HERE/at04-runtime-probe.mjs" "$at04port" ${at04flags[@]+"${at04flags[@]}"}; then ok "every runtime check passed"; else bad "the runtime probe reported failures"; fi
     kill "$CHROME_PID" 2>/dev/null; wait "$CHROME_PID" 2>/dev/null
     finish
   fi

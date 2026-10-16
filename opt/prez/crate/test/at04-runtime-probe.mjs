@@ -16,7 +16,14 @@
 // Usage (the acceptance runner does this for you):
 //   chrome --headless=new --remote-debugging-port=9333 --window-size=1280,800 \
 //     --user-data-dir=<tmp> "file://<artifact>.html" &
-//   node at04-runtime-probe.mjs [port]
+//   node at04-runtime-probe.mjs [port] [--no-browser-fullscreen]
+//
+// `--no-browser-fullscreen` drops the BROWSER's half of the fullscreen claim
+// and keeps prez's (issue 0067). acceptance.sh passes it on macOS, where
+// headless Chrome 155 refuses fullscreen requested from a key ("TypeError: not
+// granted") although the same Chrome in a window honours it, and although
+// headless honours one requested from a click. The browser half still runs on
+// Linux, so it is covered; the flag is the shell's to set, by uname.
 //
 // RESIDUAL, stated rather than glossed (vc's wording, still true): headless
 // proves the API contract and the toggle. It does not prove physical pixels on a
@@ -24,6 +31,7 @@
 // contract is "press f, the browser goes fullscreen".
 
 const PORT = Number(process.argv[2] || 9333);
+const BROWSER_FULLSCREEN = !process.argv.includes('--no-browser-fullscreen');
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 
 class CDP {
@@ -203,12 +211,30 @@ await sleep(150);
 
 // Fullscreen: three separate claims, and the toggle is the one a synthetic
 // event could never reach.
+//
+// PREZ'S HALF IS CHECKED ON EVERY PLATFORM (issue 0067): `f` must call
+// requestFullscreen on the page's root element while the keypress's activation
+// is still live. That is everything prez controls. A wrapper records the call
+// and passes it through untouched, so the browser half below still sees the
+// real request.
 check('fullscreen_before', await cdp.eval('String(document.fullscreenElement)'), 'null');
+await cdp.eval(`(function () {
+  var real = Element.prototype.requestFullscreen;
+  Element.prototype.requestFullscreen = function () {
+    window.__at04fs = { tag: this.tagName, active: navigator.userActivation.isActive };
+    return real.apply(this, arguments);
+  };
+  return true;
+})()`);
 await press(cdp, 'f'); await sleep(500);
-check('fullscreen_entered', await cdp.eval('String(document.fullscreenElement && document.fullscreenElement.tagName)'), 'HTML');
-check('fullscreen_fills', await cdp.eval('window.innerHeight === screen.height'), true);
-await press(cdp, 'f'); await sleep(500);
-check('fullscreen_toggles_out', await cdp.eval('String(document.fullscreenElement)'), 'null');
+check('fullscreen_requested', await cdp.eval('String(window.__at04fs && window.__at04fs.tag)'), 'HTML');
+check('fullscreen_request_had_activation', await cdp.eval('Boolean(window.__at04fs && window.__at04fs.active)'), true);
+if (BROWSER_FULLSCREEN) {
+  check('fullscreen_entered', await cdp.eval('String(document.fullscreenElement && document.fullscreenElement.tagName)'), 'HTML');
+  check('fullscreen_fills', await cdp.eval('window.innerHeight === screen.height'), true);
+  await press(cdp, 'f'); await sleep(500);
+  check('fullscreen_toggles_out', await cdp.eval('String(document.fullscreenElement)'), 'null');
+}
 
 // Deep-link survival, proven by a real reload rather than by an in-page claim.
 await cdp.eval('location.hash = "#4"');

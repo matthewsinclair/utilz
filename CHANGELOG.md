@@ -19,6 +19,7 @@ Minor: **prez prints page numbers in a PDF when a deck asks for them**, with a p
 
 - **`help/prez.md`** lists `theme-file` and `numbering` among the front-matter keys, and no longer calls the front matter YAML: it is flat `key: value` lines, which is what prez reads.
 - **CI installs poppler on both Rust legs**, so the new acceptance check that reads every page of a printed deck with `pdftotext` runs rather than being skipped.
+- **Harness only, no behaviour change: prez's `AT04` splits its fullscreen claim** (issue 0067). Headless Chrome on macOS (measured on 155) refuses fullscreen requested from a key, though the same Chrome in a window honours prez's `f`. AT04 now checks prez's half on every platform: `f` requests fullscreen on the page's root with the keypress's activation live. The browser's half (entered, fills, toggles out) is `n/a` on macOS by `uname` and still runs on the Linux leg. AT04 prints the browser's version.
 
 ## [2.12.1] - 2026-09-22
 
