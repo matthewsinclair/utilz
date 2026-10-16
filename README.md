@@ -159,6 +159,37 @@ Both methods work identically.
 
 ## Included Utilities
 
+### arngz
+
+Named window arrangements across displays and spaces, on macOS. A desk is a YAML file in arngz's catalogue that says, for each display and each space on it, which apps live there and where on a grid their windows sit. `arngz discover` records the arrangement on screen now as a desk, and `arngz <desk>` puts the windows back. Hammerspoon is the engine: `arngz init --yes` connects it, and `arngz doctor` checks every precondition.
+
+**`apply` takes the pointer.** macOS has no working call to move a window to another space, so apply moves each window the way a person does, by its title bar. Keep your hands off the mouse and keyboard while it runs; moving the pointer stops it.
+
+```bash
+# Connect Hammerspoon, then check every precondition
+arngz init --yes
+arngz doctor
+
+# Record the arrangement on screen now as a desk, on a 12x8 grid; replace it later
+arngz discover --grid 12x8 --save work
+arngz discover --save work --force
+
+# The catalogue
+arngz list
+arngz show work
+arngz delete old
+
+# What apply would change, then do it
+arngz diff work
+arngz apply work --dry-run
+arngz work
+
+# Only apps already running, on spaces that exist, one desk display bound to a screen
+arngz apply work --no-launch --no-create --map left=<uuid>
+```
+
+See `utilz help arngz` for details.
+
 ### cleanz
 
 LLM text cleaner that removes hidden characters and formatting artifacts from text copied from ChatGPT, Claude, Gemini, and other LLM interfaces. Also supports stripping C2PA metadata from AI-generated images.

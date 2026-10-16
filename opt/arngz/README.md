@@ -7,7 +7,7 @@
 
 ## Overview
 
-Named window arrangements (desks) across displays and spaces. A desk says, for each display and each space on it, which apps live there and where on a grid their windows sit; `arngz <desk>` restores it. ST0026 builds it in work packages: the desk catalogue and its validator (WP-02), the engine (WP-03), `discover` and `diff` (WP-04), and `doctor` and `init` (WP-06) are in; `apply` says which work package builds it.
+Named window arrangements (desks) across displays and spaces. A desk says, for each display and each space on it, which apps live there and where on a grid their windows sit; `arngz <desk>` restores it. Hammerspoon is the engine, through its `hs` tool, and `apply` moves windows the way a person does, so it takes the pointer while it runs. ST0026 built it: the desk catalogue and its validator (WP-02), the engine (WP-03), `discover` and `diff` (WP-04), `apply` (WP-05), and `doctor` and `init` (WP-06).
 
 ---
 
@@ -37,10 +37,12 @@ For detailed help: `utilz help arngz`
 
 ```bash
 arngz init          # create the catalogue
+arngz doctor        # every precondition, each with its state
 arngz list          # each desk, with display and app counts
 arngz show zeop1    # one desk, validated
 arngz discover --save zeop1   # record what is on screen now
 arngz diff zeop1    # what apply would change
+arngz zeop1         # arrange the windows; hands off the mouse
 ```
 
 ---

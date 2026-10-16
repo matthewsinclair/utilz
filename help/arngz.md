@@ -23,6 +23,8 @@ arngz show <desk>
 arngz delete <desk>
 arngz init [--yes]
 arngz doctor
+arngz --help | -h
+arngz --version
 ```
 
 ---
@@ -86,6 +88,26 @@ displays:
 - **`layout`** is `x,y wxh` in grid cells, inside the grid, or `fullscreen`.
 - **`misfit`** is how far `discover` found the window from its cells, eg `3px`. It is information; `apply` ignores it.
 
+### apply
+
+`apply <desk>`, or `arngz <desk>`, puts this machine's windows where the desk says, in this order:
+
+1. The desk is read and validated. A desk that does not validate is refused, exit 2.
+2. The three settings `doctor` checks are read: separate spaces on, auto-rearrange off and Stage Manager off. The first that does not hold is refused, exit 2, with its fix. `--dry-run` skips this step.
+3. Hammerspoon observes the screens, spaces and windows, and plans. Before anything changes it refuses, exit 2, when it has no Accessibility grant, when the desk cannot be planned on this machine, eg a display that matches no screen, or, when a window has to move, when the Move left/right a space shortcuts are not set or a mouse button or modifier key is held down.
+4. Missing spaces are created, unless `--no-create` is given. Apps that are not running are launched, unless `--no-launch` is given, and apply waits up to 20 s for each one's first window, then up to 20 s more for every launched app's window to be named. Then it plans again against what is on screen.
+5. Windows are moved to their spaces and placed on their cells, and every step is read back. Before apply takes a window by its title bar, it raises the window and checks, for up to 1 s, that a press there lands on that window's own bar. A window still covered by another app's window fails, naming that app. So does a window whose raise switched its display to another desktop, and a window whose frame does not follow the held pointer, which fails before any key is pressed.
+6. The mouse button, the pointer and the focus are given back. Focus goes back only to a window on a desktop that is still shown.
+
+The report names every app entry in the desk with its outcome: `placed`, `launched and placed`, `moved and placed`, `skipped` (not installed, or not running under `--no-launch`), `unseen` (running, with no window of it that matches and can be named), or `failed`, with why. `apply` exits 0 when every entry is placed, 1 when any is not, and 2 when it refused before changing anything.
+
+- **Displays.** A desk display that matches no screen, or more than one, is refused, with every candidate screen named. `--map <name>=<uuid>` binds the desk display called `<name>` to the screen with that UUID, for this run only.
+- **Full-screen windows** are left alone. A full-screen window is a space of its own, and takes no ordinal on its display.
+- **`--dry-run`** prints the plan, one line per change with its reason, exactly as `diff` does, changes nothing, and exits 0; `diff` is the one whose exit says whether anything would change.
+- **The CLI waits** up to `ARNGZ_APPLY_TIMEOUT` seconds, 600 unless set, for apply's report. If it gives up, apply may still be running, so it says so and exits 1, naming the request it kept.
+- **One apply at a time.** A second `apply` asked for while one is running is refused, exit 2, with the time the first was asked for. If arngz says an apply is running when none is, a crashed apply left that mark: reload Hammerspoon's config (`hs.reload()` in its console) to clear it.
+- **Reads during an apply.** `doctor`, `diff`, `discover` and `apply --dry-run` are answered between apply's phases, so what they report is a machine whose windows are still being moved: a `diff` asked for during an apply names the moves it has still to make.
+
 ### discover
 
 `discover` asks Hammerspoon what is on screen and prints it as a desk: every display with its `uuid`, `name`, `size` and `position` (the name without the " (2)" Hammerspoon adds to a second panel of the same name), every desktop space in order, and every standard window on it, snapped to the grid.
@@ -115,9 +137,9 @@ The desk goes to stdout and the report to stderr, so `arngz discover > desk.yaml
 | auto-rearrange  | spaces are not rearranged by most recent use | `com.apple.dock mru-spaces`               |
 | Stage Manager   | it is off                                    | `com.apple.WindowManager GloballyEnabled` |
 
-A setting that was never changed takes macOS's default, and the line says so. `doctor` needs no Hammerspoon to run: without one it names it as missing and skips the two checks only Hammerspoon can answer.
+A setting that was never changed takes macOS's default, and the line says so. `doctor` needs no Hammerspoon to run: without one it names it as missing and skips the two checks only Hammerspoon can answer. When Hammerspoon is running and does not answer in time, the IPC line says it is busy or hung, not unreachable.
 
-`init` creates the catalogue and reports what Hammerspoon needs. `init --yes` provides it. It links the `hs` tool under `/opt/homebrew` as Hammerspoon's own `hs.ipc.cliInstall` would, from the copy inside Hammerspoon.app. It appends one marked line, `require("hs.ipc")`, to Hammerspoon's config, which is `~/.hammerspoon/init.lua` or the file Hammerspoon's `MJConfigFile` preference names, and then asks you to reload that config. A config that already requires `hs.ipc`, marked or not, is left alone, so a second run changes nothing. Whatever `--yes` cannot do, it refuses before changing anything.
+`init` creates the catalogue and reports what Hammerspoon needs. `init --yes` provides it. It links the `hs` tool under `/opt/homebrew` as Hammerspoon's own `hs.ipc.cliInstall` would, from the copy inside Hammerspoon.app. It appends one marked line, `require("hs.ipc")`, to Hammerspoon's config, which is `~/.hammerspoon/init.lua` or the file Hammerspoon's `MJConfigFile` preference names, and then asks you to reload that config. A config that already requires `hs.ipc`, marked or not, is left alone, so a second run changes nothing. An `MJConfigFile` that is not a full path or one under `~/` is refused by name, and so is one that is set and empty, which Hammerspoon takes as a config path that loads nothing. Whatever `--yes` cannot do, it refuses before changing anything.
 
 ### The validator
 
@@ -151,18 +173,30 @@ Every verb that reads a desk validates it first, and refuses with exit 2 on any 
 | `--save <desk>`       | `discover` | write the discovered desk into the catalogue                 |
 | `--force`             | `discover` | with `--save`, overwrite an existing desk                    |
 | `--yes`               | `init`     | do what init reports Hammerspoon needs, rather than print it |
+| `--help`, `-h`        |            | print this help                                              |
+| `--version`           |            | print arngz's version                                        |
+
+An option that takes a value also takes it after `=`: `--map=left=<uuid>`, `--grid=12x8`, `--save=zeop1`. `--map` may be given once per desk display.
 
 ---
 
 ## Examples
 
 ```bash
-arngz init          # create the catalogue, and say what Hammerspoon needs
-arngz init --yes    # and provide it
-arngz doctor        # every precondition, each with its state
-arngz list          # what desks there are
-arngz show zeop1    # one desk, validated
-arngz delete old    # remove one
+arngz init                    # create the catalogue, and say what Hammerspoon needs
+arngz init --yes              # and provide it
+arngz doctor                  # every precondition, each with its state
+arngz discover > desk.yaml    # the arrangement on screen now, as a desk
+arngz discover --grid 12x8 --save zeop1   # record it in the catalogue
+arngz discover --save zeop1 --force       # and replace it later
+arngz list                    # what desks there are
+arngz show zeop1              # one desk, validated
+arngz diff zeop1              # what apply would change, changing nothing
+arngz apply zeop1 --dry-run   # the same plan, from apply
+arngz zeop1                   # arrange the windows; hands off the mouse
+arngz apply zeop1 --no-launch --no-create   # only what is running, on spaces that exist
+arngz apply zeop1 --map left=37D8832A-2D66-02CA-B9F7-8F30A301B230   # bind a display
+arngz delete old              # remove a desk
 ```
 
 ---
@@ -170,6 +204,7 @@ arngz delete old    # remove one
 ## Files
 
 - `${XDG_CONFIG_HOME:-$HOME/.config}/arngz/desks/<desk>.yaml` -- one desk.
+- `${TMPDIR:-/tmp}/arngz.XXXXXX/` -- one call to Hammerspoon: its `request.json` and `response.json`. It is removed after a call that went well, and kept and named after one that did not.
 
 ---
 
@@ -179,13 +214,14 @@ arngz delete old    # remove one
 - `ARNGZ_HS_PREFIX` -- where `init --yes` links the `hs` tool; `/opt/homebrew` when unset.
 - `ARNGZ_HS_TIMEOUT` -- how many seconds one call to Hammerspoon may take; 60 when unset.
 - `ARNGZ_APPLY_TIMEOUT` -- how many seconds the CLI waits for apply's answer; 600 when unset. Hammerspoon may still be working when it gives up, and it says so.
+- `TMPDIR` -- where each call's request and response are written; `/tmp` when unset.
 
 ---
 
 ## Exit Status
 
 - `0` -- done.
-- `1` -- `apply` skipped an app (not installed, or not running under `--no-launch`), saw no window for an entry, or a move or place did not take, each named in its report; `list` found a desk that does not validate, `diff` found that apply would change something, `doctor` found a precondition that does not hold, or `init --yes` stopped at a step that failed after it had changed something; each is named, and for `init` so is every step it had made.
+- `1` -- `apply` skipped an app (not installed, or not running under `--no-launch`), saw no window for an entry, or a move or place did not take, each named in its report; `apply` was sent and did not answer within `ARNGZ_APPLY_TIMEOUT`, so it may still be running; `apply`'s engine failed rather than refused, which can come after windows moved, so its response is kept and named; `list` found a desk that does not validate, `diff` found that apply would change something, `doctor` found a precondition that does not hold, or `init --yes` stopped at a step that failed after it had changed something; each is named, and for `init` so is every step it had made.
 - `2` -- refused before anything changed: a desk that does not exist or does not validate, a bad name or option, a precondition `apply` checks first (a preference, Accessibility, the Move-space shortcuts, a mouse button or modifier held), another apply still running, or Hammerspoon not answering.
 
 ---
