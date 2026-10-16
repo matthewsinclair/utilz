@@ -6,23 +6,22 @@ session_id: 67bcef6b-d20d-4bb9-ac53-ff7fbaf2e422
 heartbeat_at: 2026-10-16 08:20Z
 status: active
 focus: "16 Oct: ST0026 WP-04 banked, not closed: two holds stand (estate after intent-vc's END; a clean critic-lua re-pass). Then green AT-04.1..4, wp done, SHA to vc. Taking instructions from vc."
-claims: [ST0026/04]
+claims: []
 ---
 
 # Control Claude (cc)
 
 ## DOING
 
-- ST0026 WP-04 (discover and diff), claimed: built, and every critic-lua finding fixed at the commit that carries this item (vc's ruling, 16 Oct, fixed the five recommendations too). plan_test 90/90 under luajit, arngz.bats 55/55; fifth critic-lua pass 0 critical, 0 warning. One recommendation goes to vc for WP-05: two entries for one app on different spaces plan two conflicting bind ops (bind is unrouted today). Next: the estate in a detached worktree at this SHA when vc gives the slot, then AT-04.1..4 red->green, wp done ST0026/04, unclaim, SHA to vc. (edited)
+_(none)_
 
 ## TODO
 
-_(none)_
+- WP-05 (--bind): two desk entries for one app on different spaces plan two conflicting bind ops, since plan's bind step is not keyed on app_key (critic-lua fifth pass, plan.lua bind step). Key binds on app_key and refuse one app bound to two spaces, naming both paths. Harmless until bind has a measured route.
 
 ## Holds
 
-- tools/test-estate for WP-04: intent-vc's END came at 08:18Z (relayed by vc, 16 Oct). Still held until vc says the next heavy slot is Utilz's, because devbin-vc has first call on it for 0195. Then run it, telling vc first, and require 22/22 suites. (edited)
-- Marking AT-04.1..4 green and wp done ST0026/04: held until the estate run in hold 9 passes 22/22 in a detached worktree at the WP-04 commit. The critic-lua condition is met: the fourth pass read 0 critical, 0 warning. (edited)
+_(none)_
 
 ## Watch-outs
 
