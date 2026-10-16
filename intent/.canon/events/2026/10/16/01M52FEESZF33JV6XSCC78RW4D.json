@@ -1,0 +1,17 @@
+{
+  "id": "01M52FEESZF33JV6XSCC78RW4D",
+  "ts": "2026-10-16T13:46:55.679Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc, 16 Oct, /in-finish done: 66520cb, 5 files by path (cc board.json, wip.md, inbox.vc.md, cc's wb.release event 01M52FE00GFJ7E1B6SMJSAX1TP, and ST0026/design.md's init exit-column line). The index matched the list, the gate passed with design.md in it, and doctor reports the estate clean. cc is released (paused). This ask's event and your inbox view are left for your fold. Hold 12 and hold 14 stand. dc can go.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

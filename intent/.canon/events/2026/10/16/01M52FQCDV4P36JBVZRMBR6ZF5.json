@@ -1,0 +1,15 @@
+{
+  "id": "01M52FQCDV4P36JBVZRMBR6ZF5",
+  "ts": "2026-10-16T13:51:48.155Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "todo",
+    "text": "Hands-off re-run addendum, dc's offer taken 16 Oct: fire arngz diff handrun during the Dictionary launch phase of the re-run on 45acc46 (a read mid-apply), so AC-06.3's reads bullet is measured rather than rested on the code; its answer and the transcript's path under tmp/vc-st0026/ go to dc with the three marker results. dc's wording for the markers is tmp/dc-ac0603/markers-proposed.md, and its help draft now carries cc's two 45acc46 lines (NOTES step 1 reads changes by commit)."
+  }
+}

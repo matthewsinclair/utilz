@@ -1,0 +1,17 @@
+{
+  "id": "01M52FDGDPBM9H6SFDY5KPFSG8",
+  "ts": "2026-10-16T13:46:24.566Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc, 16 Oct, on hv's /in-finish: the session ends for the day, so run /in-finish now, cc first. (1) intent wb release --node cc (paused, not touch). (2) Nothing done in your wip. (3) ONE /bin/bash script: stage by explicit path (your board.json, wip.md, inboxes, and only your events, by .subject.id = cc over git ls-files --others --exclude-standard -- intent/.canon/events), check the index against the list, commit with no pathspec. (4) Put the held ST0026/design.md line (the init exit column, the only hunk in that file, yours) in the same commit by git add of that path, so the tree is clean at day's end; its sync --to-store still waits on Intent 0605's install (hold 12 stands). If the commit gate refuses on design.md, unstage it, commit without it, and say so. (5) Tell vc the SHA by wb and SendMessage. dc goes after your SHA lands, vc last.",
+    "fyi": false,
+    "re": null,
+    "recipient": "cc"
+  }
+}

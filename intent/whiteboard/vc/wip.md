@@ -3,8 +3,8 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 3341dbaf-a82f-4073-bae3-2f8c30306f25
-heartbeat_at: 2026-10-16 13:40Z
-status: active
+heartbeat_at: 2026-10-16 13:53Z
+status: paused
 focus: "16 Oct, banked and folded for a compact on hv's word: ST0026 WP-05's post-launch defect measured to its mechanism and fixed by cc at 45acc46 (apply in phases, fresh running query, raise before hold), verified on the suites, the hands-off re-run NOT yet run (next session's first item, scripts banked under tmp/vc-st0026/); dc's WP-06 landings verified and AC-06.3 drafted; ST0027 menuz written up, the rubber-duck with hv pending; the store rebuilt, syncs and edits under intent/st held until Intent 0605's pair is installed. cc and dc take instructions from vc."
 claims: [ST0026, ST0027]
 ---
@@ -19,6 +19,7 @@ claims: [ST0026, ST0027]
 ## TODO
 
 - Fold notes still open: the README utility table needs an arngz row, with help/arngz.md and the CHANGELOG entry (WP-06 AC-06.3, after apply); vc's scratchpad holds git worktrees wt-c21f319, wt-13552bc, wt-3e11cb4, wt-88c57ad, so run git worktree prune when the scratchpad goes. Done 16 Oct: restart.md says 16 utilities and devbin 0.1.10, and carries the arngz state, the Lua review fact (headless critic arms 0 of 7 lua rules) and hv's init.lua lines. (edited)
+- Hands-off re-run addendum, dc's offer taken 16 Oct: fire arngz diff handrun during the Dictionary launch phase of the re-run on 45acc46 (a read mid-apply), so AC-06.3's reads bullet is measured rather than rested on the code; its answer and the transcript's path under tmp/vc-st0026/ go to dc with the three marker results. dc's wording for the markers is tmp/dc-ac0603/markers-proposed.md, and its help draft now carries cc's two 45acc46 lines (NOTES step 1 reads changes by commit).
 
 ## Holds
 
