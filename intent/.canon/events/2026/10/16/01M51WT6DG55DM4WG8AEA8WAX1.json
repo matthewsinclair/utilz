@@ -1,0 +1,16 @@
+{
+  "id": "01M51WT6DG55DM4WG8AEA8WAX1",
+  "ts": "2026-10-16T08:21:17.360Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "hold",
+    "seq": 9,
+    "text": "tools/test-estate for WP-04: intent-vc's END came at 08:18Z (relayed by vc, 16 Oct). Still held until vc says the next heavy slot is Utilz's, because devbin-vc has first call on it for 0195. Then run it, telling vc first, and require 22/22 suites."
+  }
+}

@@ -127,6 +127,27 @@ function F.two_display_world()
   return w
 end
 
+-- One app with the same title on two displays: Safari's "News" on the laptop
+-- and again on the left panel. A pattern of that title would claim both, so
+-- neither may be recorded.
+function F.same_title_world()
+  local w = F.discover_world()
+  table.insert(w.screens[2].spaces[1].windows, F.win(250, "com.apple.Safari", "News", -61, -1080, 960, 1055))
+  return w
+end
+
+-- One app with a recorded window and a standard window on every space: Slack
+-- on the left panel, and a Slack huddle listed on every space of the laptop.
+-- Discover leaves the huddle out, and plan can still claim it, so Slack's
+-- recorded window needs a pattern.
+function F.sticky_sibling_world()
+  local w = F.discover_world()
+  local huddle = F.win(260, "com.tinyspeck.slackmacgap", "Huddle", 0, 25, 300, 200)
+  table.insert(w.screens[1].spaces[1].windows, huddle)
+  table.insert(w.screens[1].spaces[3].windows, huddle)
+  return w
+end
+
 -- The base world with Safari off its cells: the plan against the base desk is
 -- one place, which is what diff has to report.
 function F.off_cell_world()

@@ -3,7 +3,7 @@ node: cc
 name: Control Claude
 role: control
 session_id: 67bcef6b-d20d-4bb9-ac53-ff7fbaf2e422
-heartbeat_at: 2026-10-16 08:16Z
+heartbeat_at: 2026-10-16 08:20Z
 status: active
 focus: "16 Oct: ST0026 WP-04 banked, not closed: two holds stand (estate after intent-vc's END; a clean critic-lua re-pass). Then green AT-04.1..4, wp done, SHA to vc. Taking instructions from vc."
 claims: [ST0026/04]
@@ -13,7 +13,7 @@ claims: [ST0026/04]
 
 ## DOING
 
-- ST0026 WP-04 (discover and diff), claimed and started: built and banked at the commit that carries this item, not closed. discover (pure desk_from_world beside plan; --grid default 8x4; misfit sibling key; anchored window patterns, counted world-wide; display names by position; panel name without (n); unread spaces refused) and diff (plan verb, never execute; exit 1 on ops) are in, with hs stdin from /dev/null. plan_test 77/77 under luajit, arngz.bats 54/54. AT-04.1..4 minted, red proven retrospectively against 88c57ad (13 of 14 failed); not yet marked green. Next session: release the holds below, then at red->green AT-04.1..4, wp done ST0026/04, unclaim, SHA to vc.
+- ST0026 WP-04 (discover and diff), claimed: built, and the critic-lua passes' findings fixed at the commit that carries this item. Fixed: one unread(world) check over every screen for plan and discover; one claimable(w) and app_key for plan's pool and discover's pattern and title counts; Dock bindings that could not be read are said, and --bind refuses them. plan_test 89/89 under luajit (11 new checks, red against 6383a7d), arngz.bats 54/54; fourth critic-lua pass 0 critical, 0 warning, 5 recommendations sent to vc. Next: the estate in a detached worktree at this SHA when vc gives the slot, then AT-04.1..4 red->green, wp done ST0026/04, unclaim, SHA to vc. (edited)
 
 ## TODO
 
@@ -21,8 +21,8 @@ _(none)_
 
 ## Holds
 
-- tools/test-estate for WP-04: held until vc relays intent-vc's END of its heavy Intent bats run (hv, via vc, 16 Oct). Then run it, telling vc first, and require 22/22 suites.
-- Marking AT-04.1..4 green and wp done ST0026/04: held until (a) the estate run above passes and (b) a critic-lua agent pass over plan.lua, arngz.lua, plan_test.lua, discover_response.lua and fixtures/worlds.lua reports 0 critical, 0 warning. The last pass had 5 warnings; all five are fixed in the banked commit (size_of reuse, world-wide pattern count, anchored patterns, untyped and unread spaces refused) but not yet re-reviewed.
+- tools/test-estate for WP-04: intent-vc's END came at 08:18Z (relayed by vc, 16 Oct). Still held until vc says the next heavy slot is Utilz's, because devbin-vc has first call on it for 0195. Then run it, telling vc first, and require 22/22 suites. (edited)
+- Marking AT-04.1..4 green and wp done ST0026/04: held until the estate run in hold 9 passes 22/22 in a detached worktree at the WP-04 commit. The critic-lua condition is met: the fourth pass read 0 critical, 0 warning. (edited)
 
 ## Watch-outs
 

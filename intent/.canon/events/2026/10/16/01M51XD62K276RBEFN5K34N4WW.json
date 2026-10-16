@@ -1,0 +1,16 @@
+{
+  "id": "01M51XD62K276RBEFN5K34N4WW",
+  "ts": "2026-10-16T08:31:39.603Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 39,
+    "text": "ST0026 WP-04 (discover and diff), claimed: built, and the critic-lua passes' findings fixed at the commit that carries this item. Fixed: one unread(world) check over every screen for plan and discover; one claimable(w) and app_key for plan's pool and discover's pattern and title counts; Dock bindings that could not be read are said, and --bind refuses them. plan_test 89/89 under luajit (11 new checks, red against 6383a7d), arngz.bats 54/54; fourth critic-lua pass 0 critical, 0 warning, 5 recommendations sent to vc. Next: the estate in a detached worktree at this SHA when vc gives the slot, then AT-04.1..4 red->green, wp done ST0026/04, unclaim, SHA to vc."
+  }
+}

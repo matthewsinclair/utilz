@@ -207,17 +207,37 @@ function P.user_spaces(screen)
   return out
 end
 
--- A space whose type could not be read cannot be counted, and counting it as
--- "not a desktop" would plan a create_space for one that exists and shift
--- every ordinal after it. Refuse instead.
-local function untyped_space(screen)
-  for _, sp in ipairs(screen.spaces or {}) do
-    if sp.type == nil then
-      return string.format("space %s on screen %s has no type%s", tostring(sp.id), tostring(screen.uuid),
-        sp.type_error and (": " .. tostring(sp.type_error)) or "")
+-- What observe could not read, refused rather than planned as empty: a screen
+-- whose spaces could not be read, a space whose type could not be read, or a
+-- space whose windows could not be read. Counting an unread space as "not a
+-- desktop", or its windows as none, would plan a create_space for a space that
+-- exists, shift every ordinal after it, and miss windows that are there. Over
+-- every screen, because the window pool is the whole world's. Plan and
+-- discover both refuse through this one check.
+local function unread(world)
+  for _, s in ipairs(world.screens or {}) do
+    if s.spaces_error then
+      return string.format("the spaces of screen %s could not be read: %s", tostring(s.uuid), tostring(s.spaces_error))
+    end
+    for _, sp in ipairs(s.spaces or {}) do
+      if sp.type == nil then
+        return string.format("space %s on screen %s has no type%s", tostring(sp.id), tostring(s.uuid),
+          sp.type_error and (": " .. tostring(sp.type_error)) or "")
+      end
+      if sp.windows_error then
+        return string.format("the windows of space %s on screen %s could not be read: %s", tostring(sp.id),
+          tostring(s.uuid), tostring(sp.windows_error))
+      end
     end
   end
   return nil
+end
+
+-- A window a desk entry can claim: named, standard and not minimized. Plan's
+-- pool and discover's pattern counts both read this, so a discovered desk
+-- plans clean against the world it came from.
+local function claimable(w)
+  return w.named and w.standard and not w.minimized
 end
 
 -- Every window observe() could name on a desktop space, with where it is. A
@@ -228,7 +248,7 @@ local function all_windows(world)
   for _, s in ipairs(world.screens or {}) do
     for _, sp in ipairs(P.user_spaces(s)) do
       for _, w in ipairs(sp.windows or {}) do
-        if w.named and w.standard and not w.minimized then
+        if claimable(w) then
           out[#out + 1] = { win = w, screen = s, space = sp }
         end
       end
@@ -237,15 +257,30 @@ local function all_windows(world)
   return out
 end
 
+-- An app's identity: its bundle id without regard to case, as macOS treats
+-- it. Plan's claims, its running and binding lookups, and discover's counts
+-- all key on this, so one app is never two.
+local function app_key(bundle)
+  return string.lower(bundle or "")
+end
+
 local function running_set(world)
   local set = {}
-  for _, b in ipairs(world.apps_running or {}) do set[string.lower(b)] = true end
+  for _, b in ipairs(world.apps_running or {}) do set[app_key(b)] = true end
   return set
+end
+
+-- Why the Dock bindings could not be read, or nil. An empty list beside this
+-- is "could not see", never "none".
+local function bindings_unread(world)
+  local why = (world.prefs_errors or {}).spaces
+  if why then return "the Dock bindings could not be read: " .. tostring(why) end
+  return nil
 end
 
 local function binding_of(world, bundle)
   for _, b in ipairs(world.app_bindings or {}) do
-    if string.lower(b.bundle or "") == string.lower(bundle) then return b.target end
+    if app_key(b.bundle) == app_key(bundle) then return b.target end
   end
   return nil
 end
@@ -307,12 +342,10 @@ function P.plan(desk, world, options)
   if not grid then return nil, "the desk's grid is not WxH: " .. tostring(desk.grid) end
   local pattern_refusal = bad_pattern(desk)
   if pattern_refusal then return nil, pattern_refusal end
+  local unread_refusal = unread(world) or (options.bind and bindings_unread(world))
+  if unread_refusal then return nil, unread_refusal end
   local screens, refusal = P.match_displays(desk, world, options)
   if not screens then return nil, refusal end
-  for _, s in ipairs(screens) do
-    local why = untyped_space(s)
-    if why then return nil, why end
-  end
 
   local creates, launches, windows, binds = {}, {}, {}, {}
 
@@ -336,7 +369,7 @@ function P.plan(desk, world, options)
   for _, e in ipairs(entries(desk)) do
     local a, s = e.app, screens[e.display]
     local bundle = a.app
-    if not running[string.lower(bundle)] then
+    if not running[app_key(bundle)] then
       if not options.no_launch and not launched[bundle] then
         launched[bundle] = true
         launches[#launches + 1] = {
@@ -352,7 +385,7 @@ function P.plan(desk, world, options)
       local took = 0
       for _, cand in ipairs(pool) do
         local w = cand.win
-        local fits = not claimed[w.id] and string.lower(w.bundle or "") == string.lower(bundle)
+        local fits = not claimed[w.id] and app_key(w.bundle) == app_key(bundle)
         if fits and a.window then
           -- The match itself is protected: a malformed pattern can pass
           -- bad_pattern's probes and still fail on a real title.
@@ -505,20 +538,9 @@ function P.desk_from_world(world, options)
 
   -- What observe could not read is refused, never written down as empty: a
   -- desk that says "nothing here" where the engine could not look would be
-  -- applied as if it were true. The same refusal plan makes.
-  for _, s in ipairs(world.screens or {}) do
-    if s.spaces_error then
-      return nil, string.format("the spaces of screen %s could not be read: %s", tostring(s.uuid), tostring(s.spaces_error))
-    end
-    local why = untyped_space(s)
-    if why then return nil, why end
-    for _, sp in ipairs(s.spaces or {}) do
-      if sp.windows_error then
-        return nil, string.format("the windows of space %s on screen %s could not be read: %s", tostring(sp.id),
-          tostring(s.uuid), tostring(sp.windows_error))
-      end
-    end
-  end
+  -- applied as if it were true.
+  local unread_refusal = unread(world)
+  if unread_refusal then return nil, unread_refusal end
 
   -- A window listed on more than one space is on every space; it is no
   -- space's, so it is said and left out.
@@ -542,17 +564,22 @@ function P.desk_from_world(world, options)
   end)
 
   -- How many windows each app has across the whole world decides whether its
-  -- entries need a window pattern. Per display would satisfy the validator,
-  -- but plan gives a bare entry every window of its app on every display, so
-  -- an app with a window on each of two displays needs a pattern on both, or
-  -- the discovered desk would not match its own world.
-  local per_app = {}
+  -- entries need a window pattern, and how many of them share each title
+  -- decides whether a pattern can tell them apart. Both count what plan can
+  -- claim, by the same test, once per window wherever it is listed, a window
+  -- on every space included: plan gives a bare entry every claimable window
+  -- of its app on every display, and a title pattern every one carrying that
+  -- title, so anything counted narrower here would make the discovered desk
+  -- claim windows it never recorded.
+  local per_app, per_title, counted = {}, {}, {}
   for _, s in ipairs(world.screens or {}) do
     for _, sp in ipairs(s.spaces or {}) do
       for _, w in ipairs(sp.windows or {}) do
-        if w.named and w.standard and not w.minimized and w.bundle and seen_on[w.id] == 1
-          and not P.NOT_RECORDED[w.bundle] then
-          per_app[w.bundle] = (per_app[w.bundle] or 0) + 1
+        if claimable(w) and w.bundle and not counted[w.id] then
+          counted[w.id] = true
+          local app, key = app_key(w.bundle), app_key(w.bundle) .. "\0" .. (w.title or "")
+          per_app[app] = (per_app[app] or 0) + 1
+          per_title[key] = (per_title[key] or 0) + 1
         end
       end
     end
@@ -593,7 +620,7 @@ function P.desk_from_world(world, options)
             own = own + 1
           elseif w.minimized then
             minimized = minimized + 1
-          elseif w.standard and w.bundle then
+          elseif claimable(w) and w.bundle then
             recorded = recorded + 1
             local entry = { win = w, fullscreen = not P.is_user_space(sp.type) }
             if current then current.windows[#current.windows + 1] = entry
@@ -619,19 +646,17 @@ function P.desk_from_world(world, options)
     end
 
     for si, d in ipairs(desktops) do
-      local apps, titles = {}, {}
+      local apps = {}
       for _, e in ipairs(d.windows) do
         local w = e.win
         local app = { app = w.bundle }
-        if per_app[w.bundle] > 1 then
+        if per_app[app_key(w.bundle)] > 1 then
           local title = w.title or ""
-          local key = w.bundle .. "\0" .. title
-          if title == "" or titles[key] then
+          if title == "" or per_title[app_key(w.bundle) .. "\0" .. title] > 1 then
             note("%s desktop %d: a window of %s is not recorded: its title %q does not tell it from the app's others",
               label, si, w.bundle, title)
             app = nil
           else
-            titles[key] = true
             app.window = exact_pattern(title)
           end
         end
@@ -658,14 +683,19 @@ function P.desk_from_world(world, options)
     desk.displays[#desk.displays + 1] = display
   end
 
-  local all, one, other = 0, 0, 0
-  for _, b in ipairs(world.app_bindings or {}) do
-    if b.target == "AllSpaces" then all = all + 1
-    elseif type(b.target) == "string" then one = one + 1
-    else other = other + 1 end
+  local bindings_why = bindings_unread(world)
+  if bindings_why then
+    note("%s; a v1 desk records none of them", bindings_why)
+  else
+    local all, one, other = 0, 0, 0
+    for _, b in ipairs(world.app_bindings or {}) do
+      if b.target == "AllSpaces" then all = all + 1
+      elseif type(b.target) == "string" then one = one + 1
+      else other = other + 1 end
+    end
+    note("%d Dock bindings: %d to all spaces, %d to one space%s; a v1 desk records none of them",
+      #(world.app_bindings or {}), all, one, other > 0 and string.format(", %d unreadable", other) or "")
   end
-  note("%d Dock bindings: %d to all spaces, %d to one space%s; a v1 desk records none of them",
-    #(world.app_bindings or {}), all, one, other > 0 and string.format(", %d unreadable", other) or "")
   return desk, notes
 end
 

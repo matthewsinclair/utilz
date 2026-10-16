@@ -50,7 +50,11 @@ local response
 if verb == "discover" then
   local function given(v) if v == nil or v == "" then return nil end return v end
   local desk, notes = P.desk_from_world(F[arg[4]](), { grid = given(arg[5]), name = given(arg[6]) })
-  response = { status = "ok", verb = "discover", desk = desk, report = notes }
+  if desk then
+    response = { status = "ok", verb = "discover", desk = desk, report = notes }
+  else
+    response = { status = "error", verb = "discover", error = notes }
+  end
 elseif verb == "plan" then
   local ops, err = P.plan(F[arg[5]](), F[arg[4]](), {})
   if ops then

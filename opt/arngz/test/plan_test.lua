@@ -188,6 +188,47 @@ do
     ops == nil and err ~= nil and string.find(err, "spaceType failed", 1, true) ~= nil, err)
 end
 
+-- A screen whose spaces, or a space whose windows, could not be read is
+-- refused too: read as empty, it would plan create_space for spaces that
+-- exist, and unseen or moves for windows that are there.
+do
+  local w = base_world()
+  w.screens[1].spaces_error = "spacesForScreen failed"
+  w.screens[1].spaces = {}
+  local ops, err = P.plan(base_desk(), w, {})
+  check("plan refuses a screen whose spaces could not be read, and plans no create_space",
+    ops == nil and string.find(tostring(err), "spacesForScreen failed", 1, true) ~= nil, err or ops_text(ops))
+  local v = base_world()
+  space(v, 2).windows_error = "windowsForSpace failed"
+  space(v, 2).windows = {}
+  ops, err = P.plan(base_desk(), v, {})
+  check("plan refuses a space whose windows could not be read, and plans no unseen",
+    ops == nil and string.find(tostring(err), "windowsForSpace failed", 1, true) ~= nil, err or ops_text(ops))
+  -- On a screen the desk does not match too: plan's window pool is the world's.
+  local u = base_world()
+  table.insert(u.screens, {
+    uuid = "SCREEN-B", name = "Other", primary = false, position = "above",
+    frame = { x = 0, y = -800, w = 1200, h = 800 }, full_frame = { x = 0, y = -825, w = 1200, h = 825 },
+    spaces = { { id = 21, ordinal = 1, type = "user", uuid = "SPACE-21", windows = {},
+      windows_error = "windowsForSpace failed" } },
+  })
+  ops, err = P.plan(base_desk(), u, {})
+  check("plan refuses an unread space on a screen the desk does not match",
+    ops == nil and string.find(tostring(err), "windowsForSpace failed", 1, true) ~= nil, err or ops_text(ops))
+end
+
+-- Dock bindings that could not be read are not "none": --bind refuses, and a
+-- plan without it does not care.
+do
+  local w = base_world()
+  w.prefs_errors = { spaces = "defaults export failed" }
+  local ops, err = P.plan(base_desk(), w, { bind = true })
+  check("plan --bind refuses when the Dock bindings could not be read",
+    ops == nil and string.find(tostring(err), "defaults export failed", 1, true) ~= nil, err or ops_text(ops))
+  ops, err = P.plan(base_desk(), w, {})
+  check("and a plan without --bind goes ahead", ops ~= nil and #ops == 0, err or ops_text(ops))
+end
+
 -- A layout the validator should have refused is refused here too.
 do
   local d = base_desk()
@@ -378,6 +419,17 @@ local function render(v, indent)
   return "{\n" .. table.concat(parts, "\n") .. "}"
 end
 
+-- Only placing ops: the discovered desk claims exactly the windows it recorded.
+local function only_places(desk, world)
+  local ops, err = P.plan(desk, world, {})
+  if not ops then return false, err end
+  local stray = {}
+  for _, op in ipairs(ops) do
+    if op.op ~= "place" then stray[#stray + 1] = op.op .. "(" .. tostring(op.window or op.bundle) .. ")" end
+  end
+  return #stray == 0, table.concat(stray, ",")
+end
+
 local function notes_text(notes) return table.concat(notes or {}, " | ") end
 local function has_note(notes, text)
   for _, n in ipairs(notes or {}) do
@@ -423,7 +475,7 @@ do
       .. " com.apple.TV|nil|fullscreen com.apple.mail|nil|0,0 4x4", table.concat(members, " "))
   check("and that escaped pattern matches its own title",
     docs and string.find("Docs (draft) 100%", docs.window) ~= nil)
-  check("an app with one window on its display carries no pattern", by_app["com.apple.mail"] ~= nil)
+  check("an app with one window in the world carries no pattern", by_app["com.apple.mail"] ~= nil)
   check("minimized, unnamed, every-space and Hammerspoon's windows are not recorded but said",
     has_note(notes, "1 minimized") and has_note(notes, "1 Accessibility could not name")
       and has_note(notes, "on every space") and has_note(notes, "Hammerspoon's own"), notes_text(notes))
@@ -440,13 +492,8 @@ do
     has_note(notes, "2 Dock bindings: 1 to all spaces, 1 to one space"), notes_text(notes))
   check("a panel with no windows is still recorded with its one desktop",
     #d3.spaces == 1 and #d3.spaces[1].apps == 0)
-  local ops, err = P.plan(desk, world, {})
-  local ok_round = ops ~= nil
-  for _, op in ipairs(ops or {}) do
-    if op.op ~= "place" then ok_round = false end
-  end
   check("the discovered desk plans against its own world with nothing but snapping places",
-    ok_round, err or ops_text(ops))
+    only_places(desk, world))
 end
 
 -- One app on two displays, and one title inside another.
@@ -464,15 +511,68 @@ do
   table.sort(patterns)
   check("an app with a window on each of two displays gets an anchored pattern on both",
     table.concat(patterns, " ") == "^Inbox %- 2 messages$ ^Inbox$", table.concat(patterns, " "))
-  check("and the anchored pattern for one title misses the title that contains it",
-    string.find("Inbox - 2 messages", "^Inbox$") == nil)
-  local ops, err = P.plan(desk, world, {})
-  local stray = {}
-  for _, op in ipairs(ops or {}) do
-    if op.op ~= "place" then stray[#stray + 1] = op.op end
-  end
+  check("and the anchored pattern discover wrote for one title misses the title that contains it",
+    patterns[2] ~= nil and string.find("Inbox - 2 messages", patterns[2]) == nil, tostring(patterns[2]))
   check("so that desk plans against its own world with nothing but snapping places",
-    ops ~= nil and #stray == 0, err or table.concat(stray, ","))
+    only_places(desk, world))
+end
+
+-- One app with one title on two displays: a pattern of it would claim both.
+do
+  local world = F.same_title_world()
+  local desk, notes = P.desk_from_world(world, {})
+  local news = 0
+  for _, d in ipairs(desk.displays) do
+    for _, sp in ipairs(d.spaces) do
+      for _, a in ipairs(sp.apps) do
+        if a.window == "^News$" then news = news + 1 end
+      end
+    end
+  end
+  check("a title one app's windows share on two displays is recorded on neither, and said for both",
+    news == 0 and select(2, string.gsub(notes_text(notes), 'its title "News" does not tell it', "")) == 2,
+    news .. " " .. notes_text(notes))
+  local ok, why = only_places(desk, world)
+  check("so that desk plans against its own world with nothing but snapping places", ok, why)
+end
+
+-- One app with a recorded window and a window on every space.
+do
+  local world = F.sticky_sibling_world()
+  local desk = P.desk_from_world(world, {})
+  local slack = desk.displays[2].spaces[1].apps[1]
+  check("an app whose other window is on every space gets a pattern on its recorded one",
+    slack ~= nil and slack.app == "com.tinyspeck.slackmacgap" and slack.window == "^Slack$",
+    slack and tostring(slack.window))
+  local ok, why = only_places(desk, world)
+  check("so that desk leaves the every-space window alone when planned against its own world", ok, why)
+end
+
+-- Dock bindings that could not be read are said, never counted as none.
+do
+  local w = F.discover_world()
+  w.app_bindings = {}
+  w.prefs_errors = { spaces = "defaults export failed" }
+  local desk, notes = P.desk_from_world(w, {})
+  check("discover says the Dock bindings could not be read, and why, rather than 0 bindings",
+    desk ~= nil and has_note(notes, "the Dock bindings could not be read: defaults export failed")
+      and not has_note(notes, "0 Dock bindings"), notes_text(notes))
+end
+
+-- One app whose bundle id is written in two cases is one app, to discover as
+-- to plan: its two windows need patterns, or each bare entry claims both.
+do
+  local world = F.discover_world()
+  table.insert(world.screens[2].spaces[1].windows,
+    F.win(270, "com.TinySpeck.SlackMacGap", "Slack Calls", -61, -1080, 960, 1055))
+  local desk = P.desk_from_world(world, {})
+  local bare = 0
+  for _, a in ipairs(desk.displays[2].spaces[1].apps) do
+    if a.window == nil then bare = bare + 1 end
+  end
+  check("an app whose bundle id comes in two cases is one app: both its windows carry a pattern", bare == 0,
+    tostring(bare) .. " bare")
+  check("so that desk plans against its own world with nothing but snapping places", only_places(desk, world))
 end
 
 -- The screen order in the world does not change the desk.

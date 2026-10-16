@@ -1,0 +1,16 @@
+{
+  "id": "01M51XD9DKQYYCFRN0MFR5SPGR",
+  "ts": "2026-10-16T08:31:43.027Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "hold",
+    "seq": 10,
+    "text": "Marking AT-04.1..4 green and wp done ST0026/04: held until the estate run in hold 9 passes 22/22 in a detached worktree at the WP-04 commit. The critic-lua condition is met: the fourth pass read 0 critical, 0 warning."
+  }
+}
