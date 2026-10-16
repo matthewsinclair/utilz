@@ -48,6 +48,9 @@ public enum MenuLoader {
 
 /// The walk over the composed node. Every method records its refusals and
 /// returns nil for what it refused, so one pass reports every refusal.
+/// A local named like the method its initializer calls says `self.` in
+/// that closure: Swift 6.1 (Xcode 16, which project.yml promises) resolves
+/// the bare name to the local being declared, where 6.4 takes the method.
 private struct Validator {
   typealias Place = Refusal.Place
 
@@ -83,8 +86,8 @@ private struct Validator {
       refuse(.top, TopKey.icon.rawValue, icon, "this macOS has no SF Symbol of that name")
     }
     let cwd = keys[.cwd].flatMap { scalar($0, at: .top, key: TopKey.cwd.rawValue) }
-    let notify = keys[.notify].flatMap { notify($0, at: .top) }
-    let realise = keys[.realise].flatMap { realise($0) }
+    let notify = keys[.notify].flatMap { self.notify($0, at: .top) }
+    let realise = keys[.realise].flatMap { self.realise($0) }
     guard let menuNode = keys[.menu] else {
       refuse(.top, TopKey.menu.rawValue, nil, "the file has no menu")
       return nil
@@ -144,7 +147,7 @@ private struct Validator {
     if let node = keys[.run], kind != .label, kind != .each {
       refuse(place, EntryKey.run.rawValue, describe(node), "run goes with label or each, not \(kind.rawValue)")
     }
-    let params = keys[.params].flatMap { params($0, at: path) }
+    let params = keys[.params].flatMap { self.params($0, at: path) }
     if let node = keys[.params], keys[.run] == nil {
       refuse(place, EntryKey.params.rawValue, describe(node), "params go with run, and this entry has none")
     }
@@ -152,7 +155,7 @@ private struct Validator {
       refuse(place, EntryKey.items.rawValue, describe(node), "items go with submenu")
     }
     let cwd = keys[.cwd].flatMap { scalar($0, at: place, key: EntryKey.cwd.rawValue) }
-    let notify = keys[.notify].flatMap { notify($0, at: place) }
+    let notify = keys[.notify].flatMap { self.notify($0, at: place) }
     let made = entryKind(kind, keys, at: path)
     guard let made, refusals.count == before else { return nil }
     return Entry(kind: made, run: run, params: params, cwd: cwd, notify: notify)
@@ -227,7 +230,7 @@ private struct Validator {
       }
     }
     let kind = keys[.type].map { paramKind($0, at: place) } ?? .text
-    let choices = keys[.choices].flatMap { choices($0, at: place) }
+    let choices = keys[.choices].flatMap { self.choices($0, at: place) }
     if kind == .choice, keys[.choices] == nil {
       refuse(place, ParamKey.type.rawValue, ParamKind.choice.rawValue, "a choice needs choices")
     }
