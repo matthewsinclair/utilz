@@ -153,6 +153,9 @@ run_src_menuz() {
   # runs and fails without Xcode; xcodegen is installed here, so check_command
   # answers no for it alone.
   fake xcodebuild 'echo "xcode-select: error: tool requires Xcode" >&2; exit 1'
+  # The single quotes are the point: $1 is check_command's argument in the
+  # inner bash, and must reach it unexpanded.
+  # shellcheck disable=SC2016
   local missing='check_command() { [[ "$1" == xcodegen ]] && return 1; command -v "$1" >/dev/null 2>&1; }'
   run /bin/bash -c "export UTILZ_HOME='$SRC'; source '$SRC/opt/utilz/lib/common.sh'; $missing; run_doctor"
   if [[ "$(uname -s)" == Darwin ]]; then
@@ -245,11 +248,11 @@ run_src_menuz() {
   run_menuz init
   fake vis 'exit 0'
   fake ed 'exit 0'
-  VISUAL=vis EDITOR=ed run_menuz edit --editor
+  VISUAL='vis' EDITOR='ed' run_menuz edit --editor
   assert_success
   [[ "$(cat "$FAKES/vis.args")" == "$CONFIG/menuz.yaml" ]]
   [[ ! -e "$FAKES/ed.args" ]]
-  EDITOR=ed run_menuz edit --editor
+  EDITOR='ed' run_menuz edit --editor
   assert_success
   [[ "$(cat "$FAKES/ed.args")" == "$CONFIG/menuz.yaml" ]]
 }
