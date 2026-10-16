@@ -1446,13 +1446,14 @@ EOF
   doctor_says skip IPC "not checked: there is no hs tool to ask it with$"
   [ ! -e "$FAKE_HS_LOG/argv" ]
 
-  # Executable, and still it will not run: its interpreter is gone.
+  # Executable, and still it will not run: its interpreter is gone. bash says
+  # so as exit 126 on macOS and 127 on Linux ("required file not found").
   printf '#!%s/no-such-interpreter\n' "$BATS_TEST_TMPDIR" >"$STUBS/hs"
   chmod 755 "$STUBS/hs"
   run_arngz doctor
   assert_exit_code 1
   doctor_says ok "hs tool" ""
-  doctor_says FAIL IPC "not asked: the hs tool at $STUBS/hs could not be run \(exit 126\): "
+  doctor_says FAIL IPC "not asked: the hs tool at $STUBS/hs could not be run \(exit 12[67]\): "
   doctor_says skip Accessibility "not checked: only Hammerspoon can say, and Hammerspoon was not asked$"
   refute_output_contains "init --yes makes"
 }
