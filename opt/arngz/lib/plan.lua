@@ -258,8 +258,8 @@ local function all_windows(world)
 end
 
 -- An app's identity: its bundle id without regard to case, as macOS treats
--- it. Plan's claims, its running and binding lookups, and discover's counts
--- all key on this, so one app is never two.
+-- it. Plan's claims, launches, running and binding lookups, and discover's
+-- counts and NOT_RECORDED all key on this, so one app is never two.
 local function app_key(bundle)
   return string.lower(bundle or "")
 end
@@ -273,8 +273,20 @@ end
 -- Why the Dock bindings could not be read, or nil. An empty list beside this
 -- is "could not see", never "none".
 local function bindings_unread(world)
-  local why = (world.prefs_errors or {}).spaces
+  local why = (world.prefs_errors or {}).spaces or world.bindings_error
   if why then return "the Dock bindings could not be read: " .. tostring(why) end
+  return nil
+end
+
+-- Why --bind cannot be planned, or nil: it compares against the bindings and
+-- names each space by its uuid, so neither may be unread.
+local function bind_unread(world)
+  local why = bindings_unread(world)
+  if why then return why end
+  if world.managed_spaces_error then
+    return "the spaces' uuids could not be read, so no binding can name its space: "
+      .. tostring(world.managed_spaces_error)
+  end
   return nil
 end
 
@@ -342,7 +354,7 @@ function P.plan(desk, world, options)
   if not grid then return nil, "the desk's grid is not WxH: " .. tostring(desk.grid) end
   local pattern_refusal = bad_pattern(desk)
   if pattern_refusal then return nil, pattern_refusal end
-  local unread_refusal = unread(world) or (options.bind and bindings_unread(world))
+  local unread_refusal = unread(world) or (options.bind and bind_unread(world))
   if unread_refusal then return nil, unread_refusal end
   local screens, refusal = P.match_displays(desk, world, options)
   if not screens then return nil, refusal end
@@ -370,8 +382,8 @@ function P.plan(desk, world, options)
     local a, s = e.app, screens[e.display]
     local bundle = a.app
     if not running[app_key(bundle)] then
-      if not options.no_launch and not launched[bundle] then
-        launched[bundle] = true
+      if not options.no_launch and not launched[app_key(bundle)] then
+        launched[app_key(bundle)] = true
         launches[#launches + 1] = {
           op = "launch", bundle = bundle, path = e.path,
           reason = bundle .. " is not running",
@@ -505,7 +517,8 @@ end
 
 -- The bundle ids discover never records: Hammerspoon's own windows are the
 -- engine, not the arrangement.
-P.NOT_RECORDED = { ["org.hammerspoon.Hammerspoon"] = true }
+-- Keyed by app_key.
+P.NOT_RECORDED = { ["org.hammerspoon.hammerspoon"] = true }
 
 local function sort_apps(apps)
   table.sort(apps, function(p, q)
@@ -616,7 +629,7 @@ function P.desk_from_world(world, options)
           named = named + 1
           if seen_on[w.id] > 1 then
             everywhere = everywhere + 1
-          elseif P.NOT_RECORDED[w.bundle or ""] then
+          elseif P.NOT_RECORDED[app_key(w.bundle)] then
             own = own + 1
           elseif w.minimized then
             minimized = minimized + 1
@@ -724,28 +737,6 @@ function P.plan_report(ops)
     lines[#lines + 1] = string.format("%s%s: %s", what, op.path and (" (" .. op.path .. ")") or "", tostring(op.reason))
   end
   if #lines == 0 then lines[1] = "no change: this machine already matches the desk" end
-  return lines
-end
-
--- ------------------------------------------------------------- the report
-
--- The lines the CLI prints for an observe. Pure, and here rather than in the
--- engine module, so it counts desktops with the planner's one predicate and is
--- tested where the planner is.
-function P.observe_report(world)
-  local lines = {}
-  for _, s in ipairs(world.screens or {}) do
-    local windows, named = 0, 0
-    for _, sp in ipairs(s.spaces or {}) do
-      windows = windows + (sp.window_ids or 0)
-      named = named + (sp.named or 0)
-    end
-    lines[#lines + 1] = string.format("%s %s (%s): %d spaces, %d desktop; %d windows, %d named",
-      tostring(s.position), tostring(s.name), tostring(s.uuid), #(s.spaces or {}), #P.user_spaces(s), windows, named)
-  end
-  lines[#lines + 1] = string.format("separate spaces %s, accessibility %s, stage manager %s, %d Dock bindings",
-    tostring(world.separate_spaces), tostring(world.accessibility), tostring(world.stage_manager),
-    #(world.app_bindings or {}))
   return lines
 end
 

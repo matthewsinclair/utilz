@@ -609,6 +609,16 @@ engine_response() {
   assert_output_contains "2 Dock bindings: 1 to all spaces, 1 to one space"
 }
 
+@test "AT-04.1: discover refuses a world observe could not read, naming why, and prints no desk" {
+  local response
+  response="$(engine_response discover unread_world "" "")"
+  fake_hs ok "$response"
+  run_arngz discover
+  assert_exit_code 2
+  assert_output_contains "windowsForSpace failed"
+  refute_output_contains "desk: discovered"
+}
+
 @test "AT-04.1: the same world prints byte-identically, whatever order the engine's JSON keys arrive in" {
   local response reversed
   response="$(engine_response discover discover_world "" "")"

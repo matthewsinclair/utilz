@@ -1,0 +1,16 @@
+{
+  "id": "01M51XRC9RX4PB0Q7QZ6G34V56",
+  "ts": "2026-10-16T08:37:46.424Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 39,
+    "text": "ST0026 WP-04 (discover and diff), claimed: built, and every critic-lua finding fixed at the commit that carries this item (vc's ruling, 16 Oct, fixed the five recommendations too). plan_test 90/90 under luajit, arngz.bats 55/55; fifth critic-lua pass 0 critical, 0 warning. One recommendation goes to vc for WP-05: two entries for one app on different spaces plan two conflicting bind ops (bind is unrouted today). Next: the estate in a detached worktree at this SHA when vc gives the slot, then AT-04.1..4 red->green, wp done ST0026/04, unclaim, SHA to vc."
+  }
+}

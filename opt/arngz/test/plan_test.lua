@@ -227,6 +227,32 @@ do
     ops == nil and string.find(tostring(err), "defaults export failed", 1, true) ~= nil, err or ops_text(ops))
   ops, err = P.plan(base_desk(), w, {})
   check("and a plan without --bind goes ahead", ops ~= nil and #ops == 0, err or ops_text(ops))
+  local typed = base_world()
+  typed.bindings_error = "app-bindings is a string, not a table of bindings"
+  ops, err = P.plan(base_desk(), typed, { bind = true })
+  check("plan --bind refuses a bindings entry that is not a table of bindings",
+    ops == nil and string.find(tostring(err), "not a table of bindings", 1, true) ~= nil, err or ops_text(ops))
+  local nouuid = base_world()
+  nouuid.managed_spaces_error = "managedDisplaySpaces failed"
+  ops, err = P.plan(base_desk(), nouuid, { bind = true })
+  check("plan --bind refuses when the spaces' uuids could not be read, and says why",
+    ops == nil and string.find(tostring(err), "managedDisplaySpaces failed", 1, true) ~= nil, err or ops_text(ops))
+end
+
+-- One app named in two cases in a desk is launched once.
+do
+  local w = base_world()
+  w.apps_running = {}
+  local d = base_desk()
+  d.displays[1].spaces[2].apps[1].app = "com.Apple.Mail"
+  d.displays[1].spaces[2].apps[1].window = "^nothing$"
+  table.insert(d.displays[1].spaces[1].apps, { app = "com.apple.mail", window = "^nothing either$", layout = "0,0 1x1" })
+  local ops = P.plan(d, w, {})
+  local mail = 0
+  for _, op in ipairs(ops or {}) do
+    if op.op == "launch" and string.lower(op.bundle) == "com.apple.mail" then mail = mail + 1 end
+  end
+  check("an app a desk names in two cases is launched once", mail == 1, ops_text(ops))
 end
 
 -- A layout the validator should have refused is refused here too.
@@ -388,19 +414,6 @@ do
   local dup, dwhy = P.plan(two, base_world(), {})
   check("two desk displays matching one screen are refused",
     dup == nil and dwhy ~= nil and string.find(dwhy, "both match screen SCREEN-A", 1, true) ~= nil, dwhy)
-end
-
--- The observe report counts desktops with the planner's own predicate.
-do
-  local w = base_world()
-  w.separate_spaces, w.accessibility, w.stage_manager = true, true, false
-  table.insert(w.screens[1].spaces, { id = 99, ordinal = 3, type = "fullscreen", window_ids = 1, named = 1, windows = {} })
-  space(w, 1).window_ids, space(w, 1).named = 4, 2
-  local lines = P.observe_report(w)
-  check("the observe report counts every space and only the desktops as desktops",
-    lines[1] == "main VY229HF (SCREEN-A): 3 spaces, 2 desktop; 5 windows, 3 named", lines[1])
-  check("and ends with the settings and the binding count",
-    lines[2] == "separate spaces true, accessibility true, stage manager false, 0 Dock bindings", lines[2])
 end
 
 -- ------------------------------------------------------------- discover

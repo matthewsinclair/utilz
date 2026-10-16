@@ -13,7 +13,7 @@ claims: [ST0026/04]
 
 ## DOING
 
-- ST0026 WP-04 (discover and diff), claimed: built, and the critic-lua passes' findings fixed at the commit that carries this item. Fixed: one unread(world) check over every screen for plan and discover; one claimable(w) and app_key for plan's pool and discover's pattern and title counts; Dock bindings that could not be read are said, and --bind refuses them. plan_test 89/89 under luajit (11 new checks, red against 6383a7d), arngz.bats 54/54; fourth critic-lua pass 0 critical, 0 warning, 5 recommendations sent to vc. Next: the estate in a detached worktree at this SHA when vc gives the slot, then AT-04.1..4 red->green, wp done ST0026/04, unclaim, SHA to vc. (edited)
+- ST0026 WP-04 (discover and diff), claimed: built, and every critic-lua finding fixed at the commit that carries this item (vc's ruling, 16 Oct, fixed the five recommendations too). plan_test 90/90 under luajit, arngz.bats 55/55; fifth critic-lua pass 0 critical, 0 warning. One recommendation goes to vc for WP-05: two entries for one app on different spaces plan two conflicting bind ops (bind is unrouted today). Next: the estate in a detached worktree at this SHA when vc gives the slot, then AT-04.1..4 red->green, wp done ST0026/04, unclaim, SHA to vc. (edited)
 
 ## TODO
 

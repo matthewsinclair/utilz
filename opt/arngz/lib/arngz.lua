@@ -183,10 +183,15 @@ function M.observe()
   -- (mru-spaces is one) into an absent key (dc's spike). Absent means unset.
   if dock_prefs then world.mru_spaces = dock_prefs["mru-spaces"] end
   world.stage_manager = stage_manager(wm_prefs)
-  if spaces_prefs and type(spaces_prefs["app-bindings"]) == "table" then
-    for bundle, target in pairs(spaces_prefs["app-bindings"]) do
+  -- Absent means no bindings; present and not a table means they could not be
+  -- read, and is recorded, never left looking like none.
+  local bindings = spaces_prefs and spaces_prefs["app-bindings"]
+  if type(bindings) == "table" then
+    for bundle, target in pairs(bindings) do
       world.app_bindings[#world.app_bindings + 1] = { bundle = bundle, target = target }
     end
+  elseif bindings ~= nil then
+    world.bindings_error = "app-bindings is a " .. type(bindings) .. ", not a table of bindings"
   end
   return world
 end
@@ -301,15 +306,16 @@ end
 
 -- ---------------------------------------------------------------- the contract
 
--- The engine's verbs. Each answers with what the CLI renders -- for observe,
--- the world and the report lines P.observe_report computes -- so the CLI
--- renders and never recomputes (design.md, "The engine").
+-- The engine's verbs. Each answers with what its caller renders -- for
+-- observe, the world as it is, which the hand-run acceptance reads; the CLI
+-- has no observe verb -- so nothing downstream recomputes (design.md, "The
+-- engine").
 -- A refusal from a pure function travels back as an error raised here, which
 -- run() turns into an error response the CLI names.
 local VERBS = {
   observe = function()
     local world = M.observe()
-    return { world = world, report = P.observe_report(world) }
+    return { world = world }
   end,
   -- discover: the world as a desk (WP-04). options.grid, options.name.
   discover = function(_, options)

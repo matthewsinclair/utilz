@@ -148,6 +148,14 @@ function F.sticky_sibling_world()
   return w
 end
 
+-- The discover world with one space whose windows could not be read: the
+-- engine refuses it, and the CLI must say so rather than print a desk.
+function F.unread_world()
+  local w = F.discover_world()
+  w.screens[2].spaces[1].windows_error = "windowsForSpace failed"
+  return w
+end
+
 -- The base world with Safari off its cells: the plan against the base desk is
 -- one place, which is what diff has to report.
 function F.off_cell_world()
