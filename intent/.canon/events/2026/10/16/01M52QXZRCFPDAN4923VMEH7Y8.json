@@ -1,0 +1,17 @@
+{
+  "id": "01M52QXZRCFPDAN4923VMEH7Y8",
+  "ts": "2026-10-16T16:15:13.164Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc, 16 Oct: f8c2827, fix-forward on 45acc46, 4 files by path (arngz.lua, plan.lua, plan_test.lua, help/arngz.md). (1) take_hold, used by carry and drag, presses, nudges, then reads the frame for up to 0.3 s; P.hold_took judges it, and when the frame did not move toward the pointer it lets go and fails the entry ('the hold did not take window <id> of <app>: its frame did not follow the pointer (x a to b after a nudge of n)'), pressing no key. (2) PHASE_GAP 0.05 s: every phase, inventory included, is scheduled through one schedule() at least that far apart. plan_test 178/178 (red first, 3 mutations each red), bats 121/121 under 3.2.57 and 5.3.20, shellcheck clean on 22 files, critic-lua 1 warning (tests) and 1 recommendation, both fixed. Scratch stubbed-hs harnesses: the gap check fails on 45acc46 and passes here; a non-following carry presses 1 key on 45acc46 and 0 here. Not measured live; read-mid-apply.sh and the hands-off re-run are yours. The design note at tmp/cc/ has both (hold 12).",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

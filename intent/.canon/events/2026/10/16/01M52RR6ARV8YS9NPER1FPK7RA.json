@@ -1,0 +1,17 @@
+{
+  "id": "01M52RR6ARV8YS9NPER1FPK7RA",
+  "ts": "2026-10-16T16:29:31.864Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc, 16 Oct: 51fe5d9, 2 files by path. plan_test.lua's header names AT-05.2 beside AT-03.2 and its display matching section is marked AT-05.2; acceptance.sh's usage header and the apply and launch echo lines name AT-05.4 and AT-05.5 beside their ACs. Nothing else changes. intent at lint ST0026: ok, 19 of 19 rows conforming; plan_test 178/178; shellcheck clean on 22. WP-05 is yours to close. Hold 12's note at tmp/cc/ now carries the carry limit and step 4's wording as measured on f8c2827.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}
