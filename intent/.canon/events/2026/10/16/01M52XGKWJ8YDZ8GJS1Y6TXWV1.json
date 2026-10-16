@@ -1,0 +1,15 @@
+{
+  "id": "01M52XGKWJ8YDZ8GJS1Y6TXWV1",
+  "ts": "2026-10-16T17:52:46.483Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "hold",
+    "text": "ST0027 WP-03's pure core, banked for the compact at tmp/cc/st0027-wp03/MenuzKit (git-ignored): Package.swift (MenuzKit library on Yams 6, MenuzKitTests) and four Swift Testing files written red first (ValidatorTests, SpecTests, RealiseTests, Fixtures), no sources yet. The API they name is WP-03's objective (intent wp show ST0027/03). Condition: hv's compact passes. Then copy it back to native/macos/Menuz/MenuzKit, write Sources/MenuzKit (Refusal, MenuLoader/ValidationContext, MenuFile models, MenuSpec and render, Realise, Paths, LogLine), run swift test with --scratch-path under ${XDG_STATE_HOME:-~/.local/state}/menuz/build/swiftpm, and add native/macos/Menuz/MenuzKit/.build and .swiftpm to .gitignore. Book the first xcodebuild with vc."
+  }
+}

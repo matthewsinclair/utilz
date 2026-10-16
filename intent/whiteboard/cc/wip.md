@@ -3,10 +3,10 @@ node: cc
 name: Control Claude
 role: control
 session_id: 67bcef6b-d20d-4bb9-ac53-ff7fbaf2e422
-heartbeat_at: 2026-10-16 17:39Z
+heartbeat_at: 2026-10-16 17:52Z
 status: active
-focus: "16 Oct: ST0027 WP-02 (the menuz shim) on branch st0027-wp02 at 26924e9, rebased onto c3a75fc, with 2.14.0's CHANGELOG line; vc verifies in a worktree and fast-forwards main. ST0026 closed and 2.13.0 cut. Taking instructions from vc."
-claims: [ST0027/02]
+focus: "16 Oct: folded for hv's compact. ST0027 WP-02 landed (4e34217, 04a331d, 3921ca3, pushed by vc). WP-03 (the app) started: its design in the WP's objective, its pure-core tests banked at tmp/cc/st0027-wp03 (hold). Taking instructions from vc."
+claims: [ST0027/03]
 ---
 
 # Control Claude (cc)
@@ -21,7 +21,7 @@ _(none)_
 
 ## Holds
 
-_(none)_
+- ST0027 WP-03's pure core, banked for the compact at tmp/cc/st0027-wp03/MenuzKit (git-ignored): Package.swift (MenuzKit library on Yams 6, MenuzKitTests) and four Swift Testing files written red first (ValidatorTests, SpecTests, RealiseTests, Fixtures), no sources yet. The API they name is WP-03's objective (intent wp show ST0027/03). Condition: hv's compact passes. Then copy it back to native/macos/Menuz/MenuzKit, write Sources/MenuzKit (Refusal, MenuLoader/ValidationContext, MenuFile models, MenuSpec and render, Realise, Paths, LogLine), run swift test with --scratch-path under ${XDG_STATE_HOME:-~/.local/state}/menuz/build/swiftpm, and add native/macos/Menuz/MenuzKit/.build and .swiftpm to .gitignore. Book the first xcodebuild with vc.
 
 ## Watch-outs
 

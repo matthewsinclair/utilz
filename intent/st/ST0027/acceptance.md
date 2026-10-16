@@ -24,7 +24,7 @@ title: menuz: a macOS menu bar app whose menu is a YAML file of commands to run
 - AC-02.2 init creates MENUZ_HOME (default ${XDG_CONFIG_HOME:-$HOME/.config}/menuz) with the example menuz.yaml and an empty bin/, refuses to overwrite an existing menuz.yaml without --force (exit 2, naming the file), and a second run changes nothing; edit opens the yaml with open -t, or $VISUAL/$EDITOR under --editor; log prints the log's path then tails it, -n N prints the last N lines; each refuses by name, exit 2, when its file is missing. -- satisfied: yes (computed)
 - AC-02.3 validate and render run the app's --validate and --render arms on menuz.yaml or a given file and pass their output and exit code through, proven with a fake Menuz binary on PATH; with no app built or installed they refuse by name, exit 2; status reports installed (~/Applications/Menuz.app), running, login item, source-current and which build use selects (dev or installed), without Xcode present. -- satisfied: yes (computed)
 
-### WP-03 -- The app: the menu from the file, watched, realised at open (status: Not Started)
+### WP-03 -- The app: the menu from the file, watched, realised at open (status: WIP)
 
 - AC-03.1 The app is an xcodegen project at native/macos/Menuz in the siblings' shape (Swift 6, macOS 14, LSUIElement, the test-host guard; signed and notarised with Developer ID on release as Intent's is, D7) with Yams as its one package; --validate and --render run without a menu bar and exit 0 or 2 with every finding named, and --version prints the stamped version. -- satisfied: no (computed)
 - AC-03.2 The menu is exactly the file, in order: items, captions, headers, separators, submenus, then the fixed tail (Edit Menu, Open Log, Reload, Quit menuz); every validation rule in the design refuses its fixture naming file, entry path, key and value, and the example passes; a file that fails keeps the last good menu and shows the refusal as a disabled first item and in the log. -- satisfied: no (computed)
@@ -58,7 +58,7 @@ _(no tests in this group)_
 - AT-02.2 `opt/menuz/test/menuz.bats` -- covers AC-02.2 -- status: green -- opt/menuz/test/menuz.bats, 14 tests marked AT-02.2: verified by vc on 4e34217 in a detached worktree, 16 Oct 2026, under a fixture HOME: init wrote menuz.yaml and bin/ (exit 0), a second init changed nothing (exit 0), init over a menu of the user's own refused naming the file and --force (exit 2), log with no log refused by name (exit 2); 38/38 under both bashes.
 - AT-02.3 `opt/menuz/test/menuz.bats` -- covers AC-02.3 -- status: green -- opt/menuz/test/menuz.bats, 17 tests marked AT-02.3: verified by vc on 4e34217 in a detached worktree, 16 Oct 2026: validate with no app built or installed refused by name, exit 2, naming both paths looked at (~/Applications/Menuz.app and the XDG dev build); status without Xcode printed use installed (default), running no, login item unknown with the reason, source unknown with the reason, exit 1; 38/38 under both bashes.
 
-### WP-03 -- The app: the menu from the file, watched, realised at open (status: Not Started)
+### WP-03 -- The app: the menu from the file, watched, realised at open (status: WIP)
 
 _(no tests in this group)_
 
