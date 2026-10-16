@@ -1,0 +1,16 @@
+{
+  "id": "01M52WP87G0TNG0463T4NRPGT1",
+  "ts": "2026-10-16T17:38:22.576Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "hold",
+    "seq": 7,
+    "text": "Until vc says cc's ST0027 WP-02 SHA is verified (cc rebases onto main first): land help/menuz.md's WP-02 cut from tmp/dc-st0027/ (cut-wp02.py, --no-doctor if that shim has no doctor; markers @EXAMPLE and @WP02APP answered from cc's code) with that SHA, opening the CHANGELOG's 2.14.0 section if the shim lands first. The help grows at each later WP's SHA, naming only verbs the shim accepts; README's ### menuz section and the CHANGELOG entry land at WP-05 (AC-05.4), with @USE and @SIGNING answered. NOTES.md is the procedure."
+  }
+}

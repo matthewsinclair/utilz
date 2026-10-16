@@ -3,9 +3,9 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: b6f789ca-4627-4a74-b4cd-bb7c07de9f46
-heartbeat_at: 2026-10-16 16:48Z
+heartbeat_at: 2026-10-16 17:39Z
 status: active
-focus: "16 Oct: ST0027 menuz docs drafted in tmp/dc-st0027 on vc's word, nothing landed; 4 markers wait on cc's code. Hold 6 waits on Intent 0605's install. Taking instructions from vc."
+focus: "16 Oct: 2.13.0 tagged at 01cf76d (vc). AT-06.1's Linux fix landed at b89d41e, CI green. ST0027 menuz help waits on cc's WP-02 SHA (hold 7). Hold 6's two notes are not in ST0026's design (closed and dehydrated since 1243fac): asked vc how to carry them. Taking instructions from vc."
 claims: []
 ---
 
@@ -22,7 +22,7 @@ _(none)_
 ## Holds
 
 - Until Intent 0605's fixed pair is installed (0605 is on Intent's main; hv's build all has not run) and intent-vc's step 2 lifts the hold on edits under intent/st: two notes in ST0026's design.md, carried into the store with cc's hold 12 notes by one intent sync --to-store ST0026, since both edit that file. (1) D23: an MJConfigFile that is set and empty is refused by name, because Hammerspoon 1.1.1 then takes the empty string as its config path and loads no config (its MJAppDelegate.m and MJConfigUtils.m, read, not measured); landed at 7451678. (2) D20: on a verb that is not scheduled, hs's exit 69 with receive timeout is said as Hammerspoon running and not answering in time, never as unreachable, with the exit unchanged; landed at ff154a7. (edited)
-- Until vc says cc's ST0027 shim SHA is verified and the docs may land (dc recommends WP-05's SHA, since WP-02 builds 7 of the 16 verbs): land help/menuz.md, README's ### menuz section (after mdagg) and the CHANGELOG entry from tmp/dc-st0027/ (git-ignored; NOTES.md is the procedure). Markers @EXAMPLE, @PARAMS, @USE and @SIGNING are answered from cc's code. D6 as hv corrected it: ~/Applications/Menuz.app, use dev|installed.
+- Until vc says cc's ST0027 WP-02 SHA is verified (cc rebases onto main first): land help/menuz.md's WP-02 cut from tmp/dc-st0027/ (cut-wp02.py, --no-doctor if that shim has no doctor; markers @EXAMPLE and @WP02APP answered from cc's code) with that SHA, opening the CHANGELOG's 2.14.0 section if the shim lands first. The help grows at each later WP's SHA, naming only verbs the shim accepts; README's ### menuz section and the CHANGELOG entry land at WP-05 (AC-05.4), with @USE and @SIGNING answered. NOTES.md is the procedure. (edited)
 
 ## Watch-outs
 
