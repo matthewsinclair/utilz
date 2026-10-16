@@ -38,7 +38,7 @@ title: arngz: named window arrangements (desks) discovered and applied across di
 - AC-04.3 discover --save <desk> writes into the catalogue, refuses to overwrite an existing desk without --force (exit 2, naming the file), and overwrites with it. -- satisfied: yes (computed)
 - AC-04.4 diff <desk> prints the ops apply would run, exits 1 when any exist and 0 when none, and sends no execute request. -- satisfied: yes (computed)
 
-### WP-05 -- apply (status: Not Started)
+### WP-05 -- apply (status: WIP)
 
 - AC-05.1 apply --dry-run sends no execute request, prints every op with its reason, and exits 0. -- satisfied: no (computed)
 - AC-05.2 Display matching from fixtures: a UUID match wins; name and size resolve a single candidate; two identical panels resolve by position; a desk display with no candidate, or two desk displays on one screen, refuse naming every candidate, exit 2; --map <name>=<uuid> overrides one display and is reported. -- satisfied: no (computed)
@@ -80,7 +80,7 @@ _(no tests in this group)_
 - AT-04.3 `opt/arngz/test/arngz.bats` -- covers AC-04.3 -- status: green -- discover --save writes a validated desk into the catalogue; an existing desk is refused without --force, exit 2, naming the file, before the engine is asked, and left untouched; --force overwrites; a verb name, a path name, a bad grid and a lone --force are refused. RED PROVEN RETROSPECTIVELY at 16 Oct (the code came before these tests): against 88c57ad in a detached worktree, 13 of the 14 AT-04 tests fail; the 14th, diff refusing an invalid desk, passes there because 88c57ad already validated first. GREEN at 00a93b3 (16 Oct): arngz.bats 55/55 and plan_test.lua 90/90 under luajit, in the estate run in a detached worktree at that SHA, where the arngz suite is green; the run's 2 red suites (utilz, prez acceptance) fail only because the worktree has no in-crate prez binary and install_e2e refuses linked worktrees, reported to vc. Estate verdict, accepted by vc: 20 of 22 suites in a detached worktree at 00a93b3; the 4 failures named are the worktree's, not the change's (log: /private/tmp/claude-501/-Users-matts-Devel-prj-Utilz/67bcef6b-d20d-4bb9-ac53-ff7fbaf2e422/scratchpad/estate-00a93b3.log).
 - AT-04.4 `opt/arngz/test/arngz.bats` -- covers AC-04.4 -- status: green -- diff prints each op with its path and reason and exits 1, exits 0 with 'no change' when there are none, sends verb plan (the engine's plan verb never calls execute) carrying the desk, and refuses an invalid desk before asking the engine. RED PROVEN RETROSPECTIVELY at 16 Oct (the code came before these tests): against 88c57ad in a detached worktree, 13 of the 14 AT-04 tests fail; the 14th, diff refusing an invalid desk, passes there because 88c57ad already validated first. GREEN at 00a93b3 (16 Oct): arngz.bats 55/55 and plan_test.lua 90/90 under luajit, in the estate run in a detached worktree at that SHA, where the arngz suite is green; the run's 2 red suites (utilz, prez acceptance) fail only because the worktree has no in-crate prez binary and install_e2e refuses linked worktrees, reported to vc. Estate verdict, accepted by vc: 20 of 22 suites in a detached worktree at 00a93b3; the 4 failures named are the worktree's, not the change's (log: /private/tmp/claude-501/-Users-matts-Devel-prj-Utilz/67bcef6b-d20d-4bb9-ac53-ff7fbaf2e422/scratchpad/estate-00a93b3.log).
 
-### WP-05 -- apply (status: Not Started)
+### WP-05 -- apply (status: WIP)
 
 _(no tests in this group)_
 
