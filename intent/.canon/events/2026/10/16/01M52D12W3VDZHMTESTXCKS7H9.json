@@ -1,0 +1,16 @@
+{
+  "id": "01M52D12W3VDZHMTESTXCKS7H9",
+  "ts": "2026-10-16T13:04:40.324Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 62,
+    "text": "ST0026 arngz: WP-05 apply at 32fe3f0 (cc), verified; cc's post-launch fix 9907e17 verified (plan_test 168/168, arngz.bats 119/119 both bashes, shellcheck clean) but the hands-off re-run on hv's machine (scratchpad/handrun-rerun-9907e17.txt) still fails AC-05.4 and AC-05.5 on 'launched by this apply and is not running now'. Mechanism measured with an instrumented engine (st0026/observe-until.log): observe's running-apps read is hs.application.runningApplications(), NSWorkspace's KVO array, which refreshes only when Hammerspoon's run loop turns, and apply blocks that thread for its whole run; hs.application.get (applicationsForBundleID) sees the app at 0.5 s. Second defect: a launched window can open on a desktop not shown (Dictionary on hv's desktop 3) and the carry's press landed on hv's iTerm2 window covering it. Measured for dc: a second apply waits behind the first, both exit 0 (design step 4 says refused, exit 2: wrong as written). cc fixing: apply in phases on separate timer callbacks (launch, inventory, organise, hv's shape), a fresh per-bundle running query, raise before hold. WP-06 doctor/init done at c654d4f (dc); dc's hold 5 done at 7451678 and ff154a7, verified (120/120 both bashes, red on exactly tests 32, 98, 116 against the parent); AC-06.3 drafting, lands after WP-05. Design on disk; edits under intent/st and syncs held until Intent 0605."
+  }
+}

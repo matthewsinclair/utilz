@@ -4,7 +4,7 @@
 
 END: c654d4f, ST0026 WP-06's doctor and init fixed forward on critic-shell's second pass of 3777de3 (0 critical, 3 warning, 11 recommendation, 3 style, all fixed, the unproven rm guard named in its message). vc verified it: arngz.bats 98 ok and 0 not ok under bash 3.2.57 and 5.3.20 in a worktree, shellcheck clean, and the real doctor on hv's machine with all seven ok, exit 0, in 0.7 s. AT-06.1 and AT-06.2 are green with those numbers in their notes, and holds 3 and 4 are archived. Also in: 2ffdc4f, check_command (issue 0068, open for your check), with both bashes' loop numbers and the install_e2e line in its message. Left: hold 2 (AC-06.3 and AC-06.4 until apply lands) and hold 5 (the empty-MJConfigFile message and a read of cc's engine diff, after cc's WP-05 SHA).
 
-## (2026-10-16 12:39Z)
+## (2026-10-16 12:39Z) (handled)
 
 Hold 5 part 1, the read of cc's 32fe3f0 and 03b7f85 for the shim's apply arm: no defect in the contract between them. What I checked, at 03b7f85, with line numbers in opt/arngz/lib/arngz.lua unless a file is named:
 - respond() writes response.json.partial and renames it into place (1074, 1084). The shim's -f poll can never read half a file.
@@ -25,7 +25,7 @@ The same blocking means doctor, diff and discover wait for a running apply. Past
 
 Next is part 2, the empty-MJConfigFile landing.
 
-## (2026-10-16 12:55Z)
+## (2026-10-16 12:55Z) (handled)
 
 END: hold 5 part 2 landed in two commits on opt/arngz/arngz and opt/arngz/test/arngz.bats. They touch nothing else, and the CHANGELOG is left out, as you ruled. Both files are free for cc from now.
 - 7451678: init refuses an MJConfigFile that is set and empty, by name. Hammerspoon 1.1.1 takes the empty string as its config path and loads no config. The message names the fix: a full path, or defaults delete org.hammerspoon.Hammerspoon MJConfigFile. Hammerspoon's behaviour comes from its source (MJAppDelegate.m and MJConfigUtils.m at 1.1.1) and was not measured. What was measured, on macOS 27.0.1 from a scratch plist rather than hv's preferences: defaults read prints an empty value as one newline and exits 0, which is what the fake prints. The AT-06.2 test was red against 9907e17 under bash 3.2.57 and 5.3.20 and is green after the change.
