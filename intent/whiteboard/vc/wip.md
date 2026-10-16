@@ -13,7 +13,7 @@ claims: [ST0026]
 
 ## DOING
 
-- ST0026 arngz: vc holds the thread for the design. WP-01 spike: outcome A closed (moveWindowToSpace lies); B half open (the Dock's own This Desktop binding IS honoured, measured 09:54Z; the defaults-written one being re-measured); D (the drag) waits on hv's hands off; the first run died with the hs client's 4 s timeout, a timer-scheduled call is the fix. WP-02 (3e11cb4), WP-03 (88c57ad), WP-04 (00a93b3: planner 90/90, bats 55/55, shellcheck 22 clean) verified in worktrees. WP-06 doctor/init with dc. Design on disk at intent/st/ST0026/design.md and in the store; edit the file, then intent sync --to-store. (edited)
+- ST0026 arngz: vc holds the thread for the design. WP-01 spike: outcome A closed (moveWindowToSpace lies). B still open: the 08:54Z result (Calculator landed on the bound space 2634 after hv's Dock click) is CONFOUNDED, a control with no binding landed there too, so Calculator opens where it last was; the Dock writes nothing beyond app-bindings (plist diff); the deciding test binds Calculator to a built-in desktop other than its last and watches the launch, hands-free but it switches hv's desktop. D (the drag) waits on hv's hands off; the first run died with the hs client's 4 s timeout, a timer-scheduled call is the fix. WP-02 (3e11cb4), WP-03 (88c57ad), WP-04 (00a93b3: planner 90/90, bats 55/55, shellcheck 22 clean) verified in worktrees. WP-06 doctor/init with dc. Design on disk at intent/st/ST0026/design.md and in the store; edit the file, then intent sync --to-store. (edited)
 
 ## TODO
 

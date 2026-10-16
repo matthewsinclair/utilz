@@ -872,6 +872,22 @@
       "text": "WP-05 (--bind): two desk entries for one app on different spaces plan two conflicting bind ops, since plan's bind step is not keyed on app_key (critic-lua fifth pass, plan.lua bind step). Key binds on app_key and refuse one app bound to two spaces, naming both paths. Harmless until bind has a measured route.",
       "state": "live",
       "recorded_at": "2026-10-16T08:38:39.361Z"
+    },
+    {
+      "node": "cc",
+      "kind": "watchout",
+      "seq": 15,
+      "text": "hs IPC limits, measured by vc 16 Oct: the hs client gives up after 4 s by default (receive timeout, exit 69); a long verb that pumps the run loop after that dies silently with hs.ipc 'already recursing' refusals; a 12 s sleep scheduled through hs.timer.doAfter, with the IPC call returning at once, completes cleanly. arngz's CLI already passes -t ARNGZ_HS_TIMEOUT (default 60) to hs, so discover and diff are inside it. WP-05's long operations (apply's launch waits, the re-observes) must not pump the run loop inside the IPC call: schedule them with hs.timer and let the response file be the answer. This becomes a D20 amendment once vc records the spike.",
+      "state": "live",
+      "recorded_at": "2026-10-16T09:02:26.895Z"
+    },
+    {
+      "node": "cc",
+      "kind": "hold",
+      "seq": 11,
+      "text": "ST0026 WP-05 (apply): held until vc sends the WP-05 brief, which waits on two measurements, the Dock binding by defaults write and the drag (hv's hands off). vc verified WP-04 at 00a93b3 (16 Oct), and measured at 08:54Z that the Dock's own This Desktop binding is honoured on macOS 27.",
+      "state": "live",
+      "recorded_at": "2026-10-16T09:24:33.641Z"
     }
   ],
   "messages": [

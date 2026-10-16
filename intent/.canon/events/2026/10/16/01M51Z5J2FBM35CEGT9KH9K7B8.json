@@ -1,0 +1,15 @@
+{
+  "id": "01M51Z5J2FBM35CEGT9KH9K7B8",
+  "ts": "2026-10-16T09:02:26.895Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "watchout",
+    "text": "hs IPC limits, measured by vc 16 Oct: the hs client gives up after 4 s by default (receive timeout, exit 69); a long verb that pumps the run loop after that dies silently with hs.ipc 'already recursing' refusals; a 12 s sleep scheduled through hs.timer.doAfter, with the IPC call returning at once, completes cleanly. arngz's CLI already passes -t ARNGZ_HS_TIMEOUT (default 60) to hs, so discover and diff are inside it. WP-05's long operations (apply's launch waits, the re-observes) must not pump the run loop inside the IPC call: schedule them with hs.timer and let the response file be the answer. This becomes a D20 amendment once vc records the spike."
+  }
+}

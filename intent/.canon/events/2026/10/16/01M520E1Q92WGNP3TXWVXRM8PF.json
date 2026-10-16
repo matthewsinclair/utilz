@@ -1,0 +1,15 @@
+{
+  "id": "01M520E1Q92WGNP3TXWVXRM8PF",
+  "ts": "2026-10-16T09:24:33.641Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "hold",
+    "text": "ST0026 WP-05 (apply): held until vc sends the WP-05 brief, which waits on two measurements, the Dock binding by defaults write and the drag (hv's hands off). vc verified WP-04 at 00a93b3 (16 Oct), and measured at 08:54Z that the Dock's own This Desktop binding is honoured on macOS 27."
+  }
+}
