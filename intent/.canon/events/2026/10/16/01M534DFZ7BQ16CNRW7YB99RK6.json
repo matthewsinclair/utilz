@@ -1,0 +1,15 @@
+{
+  "id": "01M534DFZ7BQ16CNRW7YB99RK6",
+  "ts": "2026-10-16T19:53:24.199Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "hold",
+    "text": "Until cc's WP-06 app lands (vc's word): land help/menuz.md's AC-06.5 lines with tmp/dc-st0027/apply-d13.py (3 edits: the example's icon line as a comment, a 'Finding menuz in the menu bar' subsection with the icon: advice and the Command-drag line, the notice paragraph with notice posted / not posted). Before applying, check every quoted string against the landed app (the first-launch line, --notify's outputs, example.yaml's icon line); prettier, no /Users/, kovacs, commit by path, SHA to vc. Landed so far: ST0028 ad2da79, app-icons add45d4."
+  }
+}

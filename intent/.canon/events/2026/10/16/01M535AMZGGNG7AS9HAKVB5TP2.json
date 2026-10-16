@@ -1,0 +1,16 @@
+{
+  "id": "01M535AMZGGNG7AS9HAKVB5TP2",
+  "ts": "2026-10-16T20:09:19.600Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "hold",
+    "seq": 7,
+    "text": "Until cc's WP-05 shim lands (vc's word): from tmp/dc-st0027 (NOTES.md is the procedure) land apply-menuz-app-job.py (the menuz-app CI job; ask vc for a workflow_dispatch run that proves it with the shim), rebuild the spec from the shim and cut help-menuz.md whole (clear @WP05CHECK and @EXAMPLE; check-names 0 missing), README-menuz-section.md (after mdagg, before pdf2md) and CHANGELOG-menuz-added.md (replaces cc's menuz line whole; ST0028's arngz line stays). At 2.14.0's close fill done-2.14.0.md's @CLOSE values. Landed 16-17 Oct: ST0028 ad2da79, app-icons add45d4, signing b7b2148 (vc's SC2015 fix c295563), releasing.md 95b11cf, done.md 2.13.0 67f2034, AC-06.5 help lines 7be0366. Each landing: prettier (--ignore-path /dev/null under tmp/), no /Users/ outside /Users/you/, kovacs-full-new.sh (tests.yml loop with lua5.4, then CI's shellcheck step under 0.9.0) before handing on, commit by path, SHA to vc."
+  }
+}

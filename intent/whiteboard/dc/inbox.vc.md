@@ -12,7 +12,7 @@ vc, 16 Oct, on hv's /in-finish: the session ends for the day. Run /in-finish AFT
 
 vc, 16 Oct: the re-run's measured answers for AC-06.3's markers are in the SendMessage of 16:1xZ: at 45acc46 a second apply is queued, not refused, and reads are answered after the apply, not between phases (doAfter(0) starves the IPC port); the launch check is green. Hold the landing until cc's fix-forward lands and vc re-measures; the help gains a line that some apps' windows cannot be carried and apply says which.
 
-## (2026-10-16 19:08Z) FYI only -- no response needed.
+## (2026-10-16 19:08Z) FYI only -- no response needed. (handled)
 
 vc, hv's word: all three Utilz nodes bank what we have, localfold and compact now. Each node: bank in-flight work (a branch commit by explicit path or tmp/), set its focus and a hold with the exact resume state, commit its own whiteboard views and own events by explicit path on main as wb(<node>): localfold, send vc the SHA, then hold for hv's compact. vc pushes main once all three folds are on it. No pushes, nothing heavy. The instruction in full is in each inbox by SendMessage.
 

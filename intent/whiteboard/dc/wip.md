@@ -3,10 +3,10 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: b6f789ca-4627-4a74-b4cd-bb7c07de9f46
-heartbeat_at: 2026-10-16 19:09Z
+heartbeat_at: 2026-10-16 20:22Z
 status: active
-focus: "16 Oct, localfold for hv's compact: menuz help landed through WP-04 at 7be09a1 (WP-02 98411b2, validate/render 46046ee); CI fix for the install suites' utility count at 46046ee, green on CI at a4ae77c. Hold 7 lands the full help, README section and CHANGELOG entry at WP-05's close. Taking instructions from vc."
-claims: []
+focus: "17 Oct, hv AFK, instruction from vc towards 2.14.0: folded for hv's compact. AC-06.5 help lines landed at 7be0366; hold 7 waits for cc's WP-05 shim (CI job, help whole, README, CHANGELOG), then done.md 2.14.0 at the close."
+claims: [ST0028]
 ---
 
 # DevX Claude (dc)
@@ -21,12 +21,12 @@ _(none)_
 
 ## Holds
 
-- Until WP-05's close (vc's word): land the full help/menuz.md, README's ### menuz section (after mdagg, before pdf2md) and the CHANGELOG entry (it replaces cc's 2.14.0 menuz line whole). Landed: the WP-02 cut 98411b2, validate/render 46046ee (measured on the Debug product), WP-04's form, run, log and notice 7be09a1 (cwd= as written, from Run.startLine at 9dde810). Drafted in tmp/dc-st0027 (mirror: dc's scratchpad st0027/), with NOTES.md as the procedure: help-menuz.md, the full source with @USE and @SIGNING still to answer from WP-05's shim and D12 (signing is local as Intent's is, 0bc51f0); README-menuz-section.md and CHANGELOG-menuz-added.md, each behind an @WP05 marker; spec-wp05-draft.txt (spec-design.txt without doctor). At landing: rebuild the verbs and flags from WP-05's shim (its case arm and cmd_* parsers) and cut from the source (drop --no-doctor only if the shim has doctor). Clear every marker, run check-names (0 missing) and prettier (--ignore-path /dev/null under tmp/), confirm no /Users/ outside /Users/you/, run the tests.yml Ubuntu loop on kovacs before handing on, commit by explicit path, send vc the SHA. (edited)
+- Until cc's WP-05 shim lands (vc's word): from tmp/dc-st0027 (NOTES.md is the procedure) land apply-menuz-app-job.py (the menuz-app CI job; ask vc for a workflow_dispatch run that proves it with the shim), rebuild the spec from the shim and cut help-menuz.md whole (clear @WP05CHECK and @EXAMPLE; check-names 0 missing), README-menuz-section.md (after mdagg, before pdf2md) and CHANGELOG-menuz-added.md (replaces cc's menuz line whole; ST0028's arngz line stays). At 2.14.0's close fill done-2.14.0.md's @CLOSE values. Landed 16-17 Oct: ST0028 ad2da79, app-icons add45d4, signing b7b2148 (vc's SC2015 fix c295563), releasing.md 95b11cf, done.md 2.13.0 67f2034, AC-06.5 help lines 7be0366. Each landing: prettier (--ignore-path /dev/null under tmp/), no /Users/ outside /Users/you/, kovacs-full-new.sh (tests.yml loop with lua5.4, then CI's shellcheck step under 0.9.0) before handing on, commit by path, SHA to vc. (edited)
 
 ## Watch-outs
 
-- Spike 1's results are recorded in intent/st/ST0026/design.md, under Measured 16 Oct 2026: moveWindowToSpace returned true three times and moved nothing, and a Dock binding written with defaults read back, survived killall Dock, and did not take. Its observation files are not in the repository, because they carry the titles of hv's windows.
 - menuz's run log prints the start line's cwd= as written (cwd=~ stays ~), and HOME's value when neither the item nor the file gives one (Run.startLine, 9dde810). A help or README example with an absolute path writes it under /Users/you/ with the slash, the one form the install's home-path test lets through (46046ee). (edited)
+- Rules in force: no suite-sized bats (menuz.bats, macos.bats, arngz.bats, the tests.yml loop) on this Mac during an announced Intent window, single-file bats and shell work stay unasked; kovacs is unaffected. CI's shellcheck is ubuntu-latest's apt 0.9.0, which flags A && B || C as SC2015 where 0.11.0 passes: run the step under 0.9.0 on kovacs before handing on. No Hammerspoon, pointer, xcodebuild or hv's real keychain from dc; nothing pushed by dc.
 
 ## Decisions
 

@@ -1,0 +1,15 @@
+{
+  "id": "01M5362MCC35DK80G660YR2PJG",
+  "ts": "2026-10-16T20:22:25.420Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "watchout",
+    "text": "Rules in force: no suite-sized bats (menuz.bats, macos.bats, arngz.bats, the tests.yml loop) on this Mac during an announced Intent window, single-file bats and shell work stay unasked; kovacs is unaffected. CI's shellcheck is ubuntu-latest's apt 0.9.0, which flags A && B || C as SC2015 where 0.11.0 passes: run the step under 0.9.0 on kovacs before handing on. No Hammerspoon, pointer, xcodebuild or hv's real keychain from dc; nothing pushed by dc."
+  }
+}
