@@ -1,0 +1,14 @@
+{
+  "id": "01M538JNBQNHREWNAXQQ00QAAK",
+  "ts": "2026-10-16T21:06:07.864Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.satisfy",
+  "subject": {
+    "type": "ac",
+    "id": "ST0027/AC-06.5"
+  },
+  "payload": {
+    "evidence": "help/menuz.md as landed by dc at 7be0366 and 4534225/c41a7ae, checked by vc at b7e07a3 against the app: 'Finding menuz in the menu bar' says the default glyph is menuz's own mark and icon: names an SF Symbol over it, that a full bar hides a new item behind the overflow (hold Command and drag it) and quotes the placement line; it says the first launch asks macOS with an alert, answer it with Allow, and that a quit under the alert counts as no, System Settings > Notifications > menuz then being where to allow them; 'The log and the notice' says notices come through macOS's notification centre under menuz's name, posted by the app's own executable, and quotes the log's lines: notice posted, notifications are off for menuz under System Settings > Notifications, the not-yet-allowed line while the alert is up, no answer from the notification centre in <n> s, and the launch's granted, denied and asking lines; each of the six lines found once in the help by grep against Notice.swift at b7e07a3; help_dispatch 8/8, prettier clean (dc)."
+  }
+}

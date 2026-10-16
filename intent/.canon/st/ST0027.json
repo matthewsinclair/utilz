@@ -190,7 +190,7 @@
     },
     {
       "id": "AC-05.2",
-      "text": "Hand run on hv's machine, recorded as such: the app registers itself as a login item on its first run, status reports it, and the menu is back after a logout and login.",
+      "text": "Hand run on hv's machine, recorded as such: utilz menuz install builds Release, replaces ~/Applications/Menuz.app, registers the app as a login item through SMAppService on its first run and launches it; status reports installed, running and the login item enabled; the menu is back after a logout and login, which is hv's keypress, confirmed by hv when back (hv AFK, decision 20: the registration and status are the part measured by vc).",
       "kind": "test",
       "state": {
         "is": "computed"
@@ -249,7 +249,8 @@
       "text": "help/menuz.md says the default glyph is menuz's mark and icon: names an SF Symbol over it, that a full menu bar can hide a new item behind the overflow (hold Command and drag it), and that notices come through macOS's notification centre under menuz's name with a refusal logged naming System Settings > Notifications > menuz; checked against the landed app.",
       "kind": "non-test",
       "state": {
-        "is": "unsatisfied"
+        "is": "satisfied",
+        "evidence": "help/menuz.md as landed by dc at 7be0366 and 4534225/c41a7ae, checked by vc at b7e07a3 against the app: 'Finding menuz in the menu bar' says the default glyph is menuz's own mark and icon: names an SF Symbol over it, that a full bar hides a new item behind the overflow (hold Command and drag it) and quotes the placement line; it says the first launch asks macOS with an alert, answer it with Allow, and that a quit under the alert counts as no, System Settings > Notifications > menuz then being where to allow them; 'The log and the notice' says notices come through macOS's notification centre under menuz's name, posted by the app's own executable, and quotes the log's lines: notice posted, notifications are off for menuz under System Settings > Notifications, the not-yet-allowed line while the alert is up, no answer from the notification centre in <n> s, and the launch's granted, denied and asking lines; each of the six lines found once in the help by grep against Notice.swift at b7e07a3; help_dispatch 8/8, prettier clean (dc)."
       }
     }
   ],
@@ -362,7 +363,7 @@
         "AC-04.4"
       ],
       "status": "green",
-      "note": "The notice through a fake osascript on PATH: failure on a non-zero exit with the label and the code, always on every end with the last output line, never none; the item's notify over the file's is RunTests.swift"
+      "note": "The notice through a fake MENUZ_EXEC on a fixture path, the app's own --notify arm since WP-06 (D13; WP-04's fake osascript measured nothing real: the real one posted nothing on hv's macOS 27): failure on a non-zero exit with the label and the code, always on every end with the last output line, never none; the item's notify over the file's is RunTests.swift; the arm's posting and its lines are AT-06.1."
     },
     {
       "id": "AT-04.5",
@@ -373,6 +374,46 @@
       ],
       "status": "green",
       "note": "Hand run 16 Oct 2026 19:00Z on hv's machine (Mac16,6, macOS 27.0.1 build 26A434, Xcode 27.1 build 27A9275), hands off, the Debug product at 9dde810 under fixture XDG dirs with arngz linked into MENUZ_HOME/bin, driven through the accessibility tree by run-handrun.lua, transcript tmp/vc-st0026/st0027/ac045-handrun-9dde810.txt: discover through the form saved vc-ac045 (run 1, exit 0 in 1.5s); the each-generated item vc-ac045 applied it (run 2: 15 windows placed, 2 apps kept their own size, exit 1 in 19.7s, the failure notice posted); a text param through the form (run 3, '[3] hello hv', exit 0 in 0.2s); a slow run quit mid-way (run 4: 'quit; runs still going: 4' at 19:01:03Z, then '[4] done' and 'exit 0 in 20.3s' at 19:01:21Z, after the quit line); every start line with cwd and run as written, every output line prefixed by its id; the app quit clean and registered no login item"
+    },
+    {
+      "id": "AT-06.1",
+      "kind": "test",
+      "file": "native/macos/Menuz/MenuzTests/NotifyArmTests.swift",
+      "covers": [
+        "AC-06.1"
+      ],
+      "status": "green",
+      "note": "Hosted, with a fake centre: the --notify arm granted (notice posted, exit 0); off in System Settings, refused or by the centre's error with the status denied (the setting named, exit 1); not yet allowed, refused or by the centre's error with the status not determined (the alert and the setting named, exit 1); a failed add and any other error (the centre's words, exit 1); the deadline; and the launch's lines from Notices.authorise: granted, denied, not yet allowed, the error, and the asking line past a 0.3 s deadline before the answer. The wrapper's call of \"$MENUZ_EXEC\" --notify in place of osascript, its line logged under the run id, a refusal at exit 1 and a missing executable at 127 with the run's code untouched, is native/macos/Menuz/MenuzKit/Tests/MenuzKitTests/WrapperTests.swift; the lines themselves are native/macos/Menuz/MenuzKit/Tests/MenuzKitTests/NoticeTests.swift. At b7e07a3: 22 hosted tests in 7 suites, 113 in 15 (xcodebuild test, 17 Oct 21:01Z)."
+    },
+    {
+      "id": "AT-06.2",
+      "kind": "test",
+      "file": "native/macos/Menuz/MenuzKit/Tests/MenuzKitTests/NoticeTests.swift",
+      "covers": [
+        "AC-06.2"
+      ],
+      "status": "green",
+      "note": "Placement.line under a UserDefaults suite the test owns: the line given with no 'NSStatusItem Preferred Position Item-0' and withheld with one; no position is seeded anywhere in the app. The line logged at launch with the key removed, and the post once granted, is the app, measured in vc's AC-06.4 hand run at b7e07a3 (the line at 21:02:28Z, logged before the centre answered)."
+    },
+    {
+      "id": "AT-06.3",
+      "kind": "test",
+      "file": "native/macos/Menuz/MenuzKit/Tests/MenuzKitTests/SpecTests.swift",
+      "covers": [
+        "AC-06.3"
+      ],
+      "status": "green",
+      "note": "MenuSpec.icon nil without icon: and the example still ok; the bundle's CFBundleIconName, its AppIcon.icns and NSImage(named: MenuBarIcon) loading as a template are hosted in native/macos/Menuz/MenuzTests/NotifyArmTests.swift (the Icon suite); the catalogue is written by bin/devbin macos app-icons (opt/menuz/test/macos.bats, dc, add45d4) from design/menuz.svg and menuz-mark.svg; the mark on hv's bar from the dev build relaunched at 21:04Z on 17 Oct."
+    },
+    {
+      "id": "AT-06.4",
+      "kind": "test",
+      "file": "opt/menuz/test/notice-handrun.sh",
+      "covers": [
+        "AC-06.4"
+      ],
+      "status": "red",
+      "note": "vc, 17 Oct, Mac16,6, macOS 27.0.1 (26A434), Xcode 27.1 (27A9275), the dev build under ~/.local/state. First attempt at c77cc76 (20:34Z, tmp/vc-st0026/st0027/ac064-handrun-c77cc76.txt): no launch line, no placement line, every notice 'Notifications are not allowed for this application'; usernoted's log showed the alert presented at 20:34:32Z and withdrawn at 20:34:58Z when the run quit the app, the id's status denied from then on (D13 corrected). Second attempt at b7e07a3 with the fix built (21:02Z, ac064-handrun-2b66d3f-fix-attempt1.txt): the placement line logged at launch, the launch line 'notifications: denied under System Settings > Notifications > menuz', each run's arm 'notice not posted: notifications are off for menuz under System Settings > Notifications' including run 4 after the quit line. The passing run, with 'notifications: granted' and three 'notice posted' lines, follows hv allowing menuz under System Settings > Notifications (the screen has been locked since 20:35Z)."
     }
   ],
   "attachments": [

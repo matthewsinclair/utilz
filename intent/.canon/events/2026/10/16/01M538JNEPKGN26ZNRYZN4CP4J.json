@@ -1,0 +1,14 @@
+{
+  "id": "01M538JNEPKGN26ZNRYZN4CP4J",
+  "ts": "2026-10-16T21:06:07.958Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.edit",
+  "subject": {
+    "type": "ac",
+    "id": "ST0027/AC-05.2"
+  },
+  "payload": {
+    "text": "Hand run on hv's machine, recorded as such: utilz menuz install builds Release, replaces ~/Applications/Menuz.app, registers the app as a login item through SMAppService on its first run and launches it; status reports installed, running and the login item enabled; the menu is back after a logout and login, which is hv's keypress, confirmed by hv when back (hv AFK, decision 20: the registration and status are the part measured by vc)."
+  }
+}
