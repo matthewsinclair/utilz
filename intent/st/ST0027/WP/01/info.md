@@ -2,7 +2,7 @@
 wp_id: WP-01
 title: Design settled with hv
 scope: S
-status: Not Started
+status: WIP
 ---
 
 # WP-01: Design settled with hv

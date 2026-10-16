@@ -10,18 +10,27 @@ completed:
 
 ## Objective
 
-_(not yet written)_
+A new utility, `menuz`, that puts a menu of hv's own commands in the macOS menu bar. The menu is entirely a YAML file in a menuz config directory: the file says what the menu holds, each item runs something (a script, a `utilz` verb, any shell line), an item that needs parameters acquires them from the user before it runs, and whatever a run prints goes to one known `menuz.log` that can be tailed. The app reads its whole menu from the config files, notices when they change and updates the menu, and realises the variables in the menu each time the menu is displayed. The first thing on the menu is `arngz`: apply a desk from the menu bar.
+
+Three working menu bar apps already exist in sibling projects (Intent.app, Conflab.app, Gtools.app), all one shape: an xcodegen project, an `AppDelegate` with an `NSStatusItem`, the login shell's `PATH` handed to every child, `SMAppService` for launch at login, Apple Development signing, build products off the tree, and an `install` verb that builds Release, replaces the bundle under `~/Applications` and launches it with launchd's environment. menuz is that shape cut to a menu read from a file, and it invents nothing the shell or macOS already does: variable interpolation is the login shell's own expansion, parameters are acquired through macOS's standard dialogs, the log is a file `tail -f` reads.
+
+v1 is: the app (the menu from the file, watched, realised at open; parameters; the runner; the log and the notice), and the `utilz menuz` shim with `init`, `edit`, `log`, `validate`, `render`, `build`, `test`, `install`, `uninstall`, `start`, `stop`, `restart`, `status`, `stamps` and `doctor`.
 
 ## Context
 
-_(not yet written)_
+Asked by hv on 16 Oct 2026, directly to vc, just before a compact: "a very simple macOS (Swift) menu bar app that is entirely customisable from a yaml file that points to a .menuz config directory (in the appropriate location for that kind of dir) ... The main use case for menuz is for me to be able to run a list of common utilities easily by just selecting them from the menubar. The obvious one that I want to try is arngz." hv asked for the write-up first and a rubber-duck session to refine it before any code, and added two standing instructions on the bounce: the three sibling menu bar apps (`../Intent`, `../Conflab`, `../Gtools`) are the pattern, "we DO NOT need to reinvent the wheel here"; and nothing is rebuilt that macOS or the standard unix utilities already do, interpolation included.
+
+The thread is created and started ahead of the rubber-duck: design.md carries the shape, the questions hv left open with vc's recommendation on each, and the work packages. The design's open questions are settled with hv before WP-02 starts; WP-01 is that settlement. Doc before code holds: no source under opt/menuz until the design stands.
 
 ## Work Packages
 
-| WP    | Title                                                  | Size | Status      |
-| ----- | ------------------------------------------------------ | ---- | ----------- |
-| WP-01 | Design settled with hv                                 | S    | Not Started |
-| WP-02 | The shim, the config directory and the catalogue verbs | S    | Not Started |
+| WP    | Title                                                      | Size | Status      |
+| ----- | ---------------------------------------------------------- | ---- | ----------- |
+| WP-01 | Design settled with hv                                     | S    | WIP         |
+| WP-02 | The shim, the config directory and the catalogue verbs     | S    | Not Started |
+| WP-03 | The app: the menu from the file, watched, realised at open | S    | Not Started |
+| WP-04 | Running items: params, the runner, the log and the notice  | S    | Not Started |
+| WP-05 | Build, install, launch and the close                       | S    | Not Started |
 
 ## Acceptance
 

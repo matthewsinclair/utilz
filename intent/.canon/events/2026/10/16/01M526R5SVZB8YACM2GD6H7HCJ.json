@@ -1,0 +1,15 @@
+{
+  "id": "01M526R5SVZB8YACM2GD6H7HCJ",
+  "ts": "2026-10-16T11:14:56.955Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "doing",
+    "text": "ST0027 menuz: written up on hv's ask and the three sibling apps (Intent, Conflab, Gtools), nothing reinvented: design.md at 59efdaf carries the shape, the menu file, the login shell's own interpolation, the standard dialogs for params, the log, 18 criteria and 11 questions with a recommendation each. WP-01 (the rubber-duck with hv) is started; WP-02..05 and the criteria are in the store. HELD until Intent's fixed pair (0605, 3.2.4): the sync --to-store that carries design.md into the store, and any edit under intent/st/. Code starts after hv's rulings."
+  }
+}

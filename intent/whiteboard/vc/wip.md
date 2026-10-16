@@ -3,10 +3,10 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 3341dbaf-a82f-4073-bae3-2f8c30306f25
-heartbeat_at: 2026-10-16 10:06Z
+heartbeat_at: 2026-10-16 11:14Z
 status: active
 focus: "16 Oct: 0065 and 0067 verified and landed; ST0026 arngz designed and started, WP-02 and WP-03 verified, WP-04 with cc; the spike closed outcome A and doubts B; D (the drag) and the Dock clicks wait on hv. Folding for a compact on hv's word after cc and dc fold."
-claims: [ST0026]
+claims: [ST0026, ST0027]
 ---
 
 # Validation Claude (vc)
@@ -14,15 +14,15 @@ claims: [ST0026]
 ## DOING
 
 - ST0026 arngz: vc holds the thread for the design. WP-01 spike DONE 16 Oct: A and B closed (moveWindowToSpace lies; a binding switches the display, not the window), D taken (D21: hold the window and press the Move-space shortcut, 5 of 5; drag over a shared edge across displays), ordinals from the plist (D22), hs client 4 s timeout (D20 amended). WP-02 (3e11cb4), WP-03 (88c57ad), WP-04 (00a93b3) verified. WP-06 doctor/init at 3777de3 (dc): suite and shellcheck verified, diff read and real doctor run pending. WP-05 apply briefed to cc, starts after the compact. Design on disk at intent/st/ST0026/design.md and in the store; edit the file, then intent sync --to-store. (edited)
+- ST0027 menuz: written up on hv's ask and the three sibling apps (Intent, Conflab, Gtools), nothing reinvented: design.md at 59efdaf carries the shape, the menu file, the login shell's own interpolation, the standard dialogs for params, the log, 18 criteria and 11 questions with a recommendation each. WP-01 (the rubber-duck with hv) is started; WP-02..05 and the criteria are in the store. HELD until Intent's fixed pair (0605, 3.2.4): the sync --to-store that carries design.md into the store, and any edit under intent/st/. Code starts after hv's rulings.
 
 ## TODO
 
 - Fold notes still open: the README utility table needs an arngz row, with help/arngz.md and the CHANGELOG entry (WP-06 AC-06.3, after apply); vc's scratchpad holds git worktrees wt-c21f319, wt-13552bc, wt-3e11cb4, wt-88c57ad, so run git worktree prune when the scratchpad goes. Done 16 Oct: restart.md says 16 utilities and devbin 0.1.10, and carries the arngz state, the Lua review fact (headless critic arms 0 of 7 lua rules) and hv's init.lua lines. (edited)
-- FIRST ON THE BOUNCE (hv, 16 Oct, directly to vc): write up a new steel thread for utilz menuz, then a rubber-duck session with hv to refine it before any code. hv's ask, essentials verbatim: a very simple macOS (Swift) menu bar app, entirely customisable from a yaml file that points to a .menuz config directory (in the appropriate location for that kind of dir). The yaml defines what goes into the menu; each item does something, eg runs a script. If the script takes params, the menu bar pops up a window and acquires them before running the script and passing them in. If there is output, it is given back to the user after the script runs; open question on output, hv's simplest option: a known menuz.log in an obvious location so it can be tailed. The app reads its entire menu config from the menuz config files and watches them for changes so the menu updates. The menu file supports variable interpolation, realised each time the menu is displayed (what that means is to be talked through). Main use case: hv runs a list of common utilities from the menubar; the first is arngz. Questions to resolve in the write-up: output handling, interpolation semantics, config dir location, how params are declared and the window built, how the app is installed and launched (Swift CLI/app in the Utilz shim format, as ST0026 chose bash).
 
 ## Holds
 
-- After the compact: (1) read dc's 3777de3 shim diff (589 lines in opt/arngz/arngz, 39 in common.sh: app_path beside check_app) and run the real arngz doctor on hv's machine, hands-free; (2) cc's WP-05 hand runs AC-05.4 and AC-05.5 need hv's hands off when cc hands over; (3) git worktree prune when the scratchpad goes (wt-c21f319, wt-13552bc, wt-3e11cb4, wt-88c57ad); (4) the spike's files in /tmp/arngz-spike2/ and dc's scratchpad go at reboot; (5) intent sync --to-disk once, the file index missed two AC writes under a lock at 09:5xZ.
+- After the compact, what is left: (1) cc's WP-05 hand runs AC-05.4 and AC-05.5 need hv's hands off when cc hands over; (2) git worktree prune when the scratchpad goes (wt-c21f319, wt-13552bc, wt-3e11cb4, wt-88c57ad); (3) the spike's files in /tmp/arngz-spike2/ and dc's scratchpad go at reboot; (4) intent sync --to-disk once, if the file index still misses the two AC writes of 09:5xZ after hv's index rebuild; (5) install_e2e.bats has not run since the store blew up (it copies the primary checkout, intent/.cache included): run it from the primary checkout once the store is back to size and before 2.13.0. Done 16 Oct: dc's c654d4f read and verified (98/98 both bashes, shellcheck 22 clean, real doctor 7 of 7 on hv's machine); dc marks AT-06.1/06.2 green on those numbers. (edited)
 
 ## Watch-outs
 

@@ -1,0 +1,16 @@
+{
+  "id": "01M526R63TNM0ZRQGXH126VJD8",
+  "ts": "2026-10-16T11:14:57.274Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "hold",
+    "seq": 9,
+    "text": "After the compact, what is left: (1) cc's WP-05 hand runs AC-05.4 and AC-05.5 need hv's hands off when cc hands over; (2) git worktree prune when the scratchpad goes (wt-c21f319, wt-13552bc, wt-3e11cb4, wt-88c57ad); (3) the spike's files in /tmp/arngz-spike2/ and dc's scratchpad go at reboot; (4) intent sync --to-disk once, if the file index still misses the two AC writes of 09:5xZ after hv's index rebuild; (5) install_e2e.bats has not run since the store blew up (it copies the primary checkout, intent/.cache included): run it from the primary checkout once the store is back to size and before 2.13.0. Done 16 Oct: dc's c654d4f read and verified (98/98 both bashes, shellcheck 22 clean, real doctor 7 of 7 on hv's machine); dc marks AT-06.1/06.2 green on those numbers."
+  }
+}
