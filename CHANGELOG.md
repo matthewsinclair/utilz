@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 The section still open names its version: `## [X.Y.Z] - unreleased`, never `## [Unreleased]`. Devbin's release core finds a section by its version and dates it at the cut; an unnamed section is one it cannot find (ST0019 D2).
 
+## [2.14.0] - unreleased
+
+### Added
+
+- **`menuz`, a new utility: a macOS menu bar app whose menu is a YAML file of commands to run** (ST0027, in progress). This release so far carries its command, `utilz menuz`. `init` creates the menu's folder, `${MENUZ_HOME:-${XDG_CONFIG_HOME:-~/.config}/menuz}`, with an example `menuz.yaml` and an empty `bin/`, and refuses to overwrite a menu of your own without `--force`. `edit` opens the menu with `open -t`, or `$VISUAL`/`$EDITOR` under `--editor`. `log` prints the run log's path and follows it, or prints its last lines with `-n N`. `validate` and `render` ask the app to check the menu and show it as the menu bar would. `status` reports where the app is installed, which build is in use, whether it is running and a login item, and whether the installed copy is current with its source. The app, `Menuz.app`, follows in later changes. `utilz doctor` checks for xcodegen and Xcode on macOS once the app's source is in the tree. menuz starts at 0.1.0.
+
 ## [2.13.0] - 2026-10-16
 
 Minor: **a new utility, `arngz`, arranges windows across displays and spaces from named desks**, and **prez prints page numbers in a PDF when a deck asks for them**, with a per-slide override. prez goes from 2.4.0 to 2.5.0.
