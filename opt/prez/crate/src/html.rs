@@ -20,6 +20,10 @@ pub struct Document<'a> {
   pub slides: &'a [Slide],
   pub theme: &'a Theme,
   pub mermaid: bool,
+  /// Which slides show their page number in print, one per slide, decided once
+  /// by `numbering::resolve` (issue 0065). The same answer gates the class and
+  /// the CSS, so the two cannot disagree; all false emits neither.
+  pub numbered: &'a [bool],
   /// A CSS `@page size` value, set by `prez pdf --paper`. `None` leaves the
   /// 16:9 default in the base print rules.
   pub paper: Option<String>,
@@ -29,7 +33,7 @@ pub struct Document<'a> {
 pub fn assemble(doc: &Document) -> String {
   let title = doc.title.unwrap_or("presentation");
   let style = stylesheet(doc);
-  let slides = sections(doc.slides);
+  let slides = sections(doc.slides, doc.numbered);
   let script = script(doc);
 
   match &doc.theme.layout {
@@ -46,12 +50,18 @@ pub fn assemble(doc: &Document) -> String {
   }
 }
 
-fn sections(slides: &[Slide]) -> String {
+fn sections(slides: &[Slide], numbered: &[bool]) -> String {
   let mut out = String::new();
   for (index, slide) in slides.iter().enumerate() {
     let mut classes = vec!["gp-slide".to_string()];
     if let Some(contrast) = slide.background.as_deref().and_then(contrast_class) {
       classes.push(contrast.to_string());
+    }
+    // Derived here like the contrast class, and NEVER pushed into
+    // `slide.classes`: those are the author's, and `warn_undeclared_classes`
+    // would report this one against every theme.
+    if numbered.get(index) == Some(&true) {
+      classes.push(NUMBERED_CLASS.to_string());
     }
     classes.extend(slide.classes.iter().cloned());
     out.push_str(&format!(
@@ -99,6 +109,12 @@ fn stylesheet(doc: &Document) -> String {
   style.push_str(&doc.theme.css);
   style.push('\n');
   style.push_str(PRINT_BREAK_CSS);
+  // After the base print rules, whose `position: static` the page numbers must
+  // override. Only when some slide shows a number, so a deck without numbering
+  // compiles to exactly the bytes it did before issue 0065.
+  if doc.numbered.contains(&true) {
+    style.push_str(PAGE_NUMBER_CSS);
+  }
   if let Some(paper) = &doc.paper {
     style.push_str(&page_rule(paper));
   }
@@ -253,6 +269,38 @@ fn escape_text(value: &str) -> String {
     .replace('<', "&lt;")
     .replace('>', "&gt;")
 }
+
+/// The class `sections` gives a slide that shows its page number in print.
+const NUMBERED_CLASS: &str = "gp-numbered";
+
+/// Page numbers in print (issue 0065), emitted only when some slide shows one.
+///
+/// **EVERY SLIDE INCREMENTS AND ONLY NUMBERED SLIDES DRAW**, which is what lets
+/// an unnumbered slide still use up its number, so a printed number is always
+/// its page's index in the PDF. The counter resets on `body` because a theme
+/// layout decides whether a `.gp-deck` exists at all.
+///
+/// - `position: relative` is LOAD-BEARING. Without it every `::after` anchors to
+///   the first page and all the numbers print there, in a PDF whose page count
+///   is still right, so `drive::verify_pagination` cannot see it (dc measured
+///   page 1 reading "4521"). It wins over PRINT_BREAK_CSS's `position: static`
+///   by coming after it.
+/// - The font is LONGHANDS. No built-in theme defines `--gp-display`, and in the
+///   `font:` shorthand the fallback makes the whole declaration invalid at
+///   computed-value time, so the size is lost and the number prints at body size.
+/// - Colour and face come from the theme's variables, so no theme changes.
+const PAGE_NUMBER_CSS: &str = r#"
+@media print {
+  body { counter-reset: gp-page; }
+  .gp-slide { position: relative; counter-increment: gp-page; }
+  .gp-slide.gp-numbered::after {
+    content: counter(gp-page);
+    position: absolute; right: 4vmin; bottom: 3vmin;
+    font-family: var(--gp-display, inherit); font-size: 0.55em; font-weight: 400; line-height: 1;
+    color: var(--gp-muted);
+  }
+}
+"#;
 
 /// Structure, not style. See the module note for why this is not in the theme.
 const BASE_CSS: &str = r#"
@@ -657,6 +705,7 @@ mod tests {
     Slide {
       classes: vec![],
       background: None,
+      numbering: None,
       html: html.to_string(),
     }
   }
@@ -668,6 +717,7 @@ mod tests {
       slides,
       theme: &theme,
       mermaid: false,
+      numbered: &[],
       paper: None,
     })
   }
@@ -707,6 +757,7 @@ mod tests {
     let s = Slide {
       classes: vec!["wide".into(), "dark".into()],
       background: Some("#012".into()),
+      numbering: None,
       html: "<p>x</p>".into(),
     };
     let out = build(&[s]);
@@ -726,6 +777,7 @@ mod tests {
     let dark = Slide {
       classes: vec![],
       background: Some("#101418".into()),
+      numbering: None,
       html: "<h2>The escape hatch</h2>".into(),
     };
     let out = build(&[dark]);
@@ -772,6 +824,7 @@ mod tests {
     let s = Slide {
       classes: vec!["a\"onload=\"x".into()],
       background: None,
+      numbering: None,
       html: String::new(),
     };
     let out = build(&[s]);
@@ -791,6 +844,7 @@ mod tests {
       slides: &slides,
       theme: &theme,
       mermaid: false,
+      numbered: &[],
       paper: None,
     };
     assert!(assemble(&doc).contains("size: 254mm 142.9mm"));
@@ -824,6 +878,7 @@ mod tests {
       slides: &slides,
       theme: &theme,
       mermaid: false,
+      numbered: &[],
       paper: None,
     });
     let theme_at = out
@@ -863,6 +918,7 @@ mod tests {
       slides: &slides,
       theme: &theme,
       mermaid: false,
+      numbered: &[],
       paper: Some("210mm 297mm".into()),
     });
     assert!(
@@ -905,6 +961,7 @@ mod tests {
       slides: &slides,
       theme: &theme,
       mermaid: false,
+      numbered: &[],
       paper: None,
     });
     assert_eq!(
@@ -937,6 +994,7 @@ mod tests {
       slides: &slides,
       theme: &theme,
       mermaid: false,
+      numbered: &[],
       paper: None,
     });
     assert!(out.contains("{{author}}"), "{out}");
@@ -1034,6 +1092,7 @@ mod tests {
       slides: &slides,
       theme: &theme,
       mermaid: false,
+      numbered: &[],
       paper: None,
     });
     assert!(
@@ -1087,6 +1146,7 @@ mod tests {
       slides: &slides,
       theme: &theme,
       mermaid: false,
+      numbered: &[],
       paper: None,
     });
     assert!(
@@ -1127,6 +1187,93 @@ mod tests {
     );
   }
 
+  fn numbered(flags: &[bool]) -> String {
+    let theme = Theme {
+      css: "body{}".into(),
+      js: None,
+      layout: None,
+      name: "t".into(),
+      origin: crate::theme::Origin::BuiltIn,
+      dir: None,
+    };
+    let slides: Vec<Slide> = flags.iter().map(|_| slide("<p>x</p>")).collect();
+    assemble(&Document {
+      title: None,
+      slides: &slides,
+      theme: &theme,
+      mermaid: false,
+      numbered: flags,
+      paper: None,
+    })
+  }
+
+  #[test]
+  fn with_no_slide_numbered_the_artifact_carries_no_page_numbers() {
+    // Issue 0065, off by default: not one byte of it reaches such a deck.
+    let out = numbered(&[false, false]);
+    assert!(
+      !out.contains("gp-page") && !out.contains(NUMBERED_CLASS),
+      "{out}"
+    );
+  }
+
+  #[test]
+  fn only_a_numbered_slide_carries_the_class() {
+    let out = numbered(&[true, false, true]);
+    assert!(
+      out.contains("<section class=\"gp-slide gp-numbered\" id=\"gp-1\""),
+      "{out}"
+    );
+    assert!(
+      out.contains("<section class=\"gp-slide\" id=\"gp-2\""),
+      "{out}"
+    );
+    assert!(
+      out.contains("<section class=\"gp-slide gp-numbered\" id=\"gp-3\""),
+      "{out}"
+    );
+  }
+
+  #[test]
+  fn page_numbers_follow_the_base_print_rules_and_count_every_slide() {
+    let out = numbered(&[false, true]);
+    let base = out.find(PRINT_BREAK_CSS).expect("base print rules");
+    let numbers = out.find(PAGE_NUMBER_CSS).expect("page numbers");
+    assert!(
+      numbers > base,
+      "position: relative must come after position: static"
+    );
+    assert!(
+      PAGE_NUMBER_CSS.contains(".gp-slide { position: relative; counter-increment: gp-page; }")
+    );
+    assert!(PAGE_NUMBER_CSS.contains(".gp-slide.gp-numbered::after {"));
+    assert!(
+      !PAGE_NUMBER_CSS.contains("title"),
+      "the title class has no say"
+    );
+  }
+
+  #[test]
+  fn the_number_takes_the_themes_variables_in_longhands() {
+    assert!(PAGE_NUMBER_CSS.contains("font-family: var(--gp-display, inherit);"));
+    assert!(PAGE_NUMBER_CSS.contains("font-size: 0.55em;"));
+    assert!(
+      !PAGE_NUMBER_CSS.contains("font:"),
+      "the shorthand loses the size"
+    );
+    assert!(PAGE_NUMBER_CSS.contains("color: var(--gp-muted);"));
+  }
+
+  #[test]
+  fn page_numbers_leave_the_live_counter_alone() {
+    let (off, on) = (numbered(&[false]), numbered(&[true]));
+    assert_eq!(
+      off.matches("gp-counter").count(),
+      on.matches("gp-counter").count()
+    );
+    assert!(!PAGE_NUMBER_CSS.contains("gp-counter"));
+  }
+
   #[test]
   fn a_theme_layout_replaces_the_default_skeleton() {
     let theme = Theme {
@@ -1145,6 +1292,7 @@ mod tests {
       slides: &slides,
       theme: &theme,
       mermaid: false,
+      numbered: &[],
       paper: None,
     });
     assert!(out.starts_with("<html><head>"), "{out}");

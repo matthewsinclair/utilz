@@ -10,19 +10,23 @@
 // the only caller and holds that order.
 //
 // What is left here is the per-slide half, which genuinely is per-slide:
-// `class:` and `background:` are lifted out of the source, and only what remains
+// `class:`, `background:` and `numbering:` are lifted out of the source, and only what remains
 // is handed to comrak. Lifting before rendering matters for the same reason it
 // matters for notes -- raw HTML passes through comrak untouched (that is the
 // escape hatch, spec 2), so a directive still present at render time would land
 // in the artifact as a visible comment.
 
 use crate::fence;
+use crate::numbering::Numbering;
 
 /// One rendered slide. Wrapping these in `<section>` is html.rs's job.
 #[derive(Debug, Default, PartialEq)]
 pub struct Slide {
   pub classes: Vec<String>,
   pub background: Option<String>,
+  /// `<!-- numbering: on|off -->`, overriding the deck's default for this slide
+  /// (issue 0065). `None` follows the deck.
+  pub numbering: Option<Numbering>,
   pub html: String,
 }
 
@@ -32,6 +36,7 @@ pub fn slide(source: &str) -> Slide {
   Slide {
     classes: lifted.classes,
     background: lifted.background,
+    numbering: lifted.numbering,
     html: comrak::markdown_to_html(&lifted.body, &options()),
   }
 }
@@ -65,6 +70,7 @@ struct Lifted {
   body: String,
   classes: Vec<String>,
   background: Option<String>,
+  numbering: Option<Numbering>,
 }
 
 impl Lifted {
@@ -99,6 +105,13 @@ fn lift_directives(source: &str) -> Lifted {
       // Last `background:` wins. An author editing top-down expects the later
       // line to be the correction, not the one that gets ignored.
       Some(Directive::Background(value)) => lifted.background = Some(value.to_string()),
+      // Last one wins, like `background:`, EXCEPT that an unreadable value is
+      // never hidden by a later readable one: it is refused, by name.
+      Some(Directive::Numbering(value)) => {
+        if !matches!(lifted.numbering, Some(Numbering::Unreadable(_))) {
+          lifted.numbering = Some(Numbering::read(value));
+        }
+      }
       None => lifted.keep(line),
     }
   }
@@ -108,13 +121,15 @@ fn lift_directives(source: &str) -> Lifted {
 enum Directive<'a> {
   Class(&'a str),
   Background(&'a str),
+  Numbering(&'a str),
 }
 
 /// Read a full-line HTML comment as a presentation directive.
 ///
 /// The whole line must be the comment: one sharing a line with prose is the
-/// author's own markup and passes through. A malformed `class:` is inert, which
-/// is why these two can afford the strict reading that `notes:` cannot.
+/// author's own markup and passes through. A malformed `class:` is inert and an
+/// unreadable `numbering:` is refused by `numbering::resolve`, which is why these
+/// can afford the strict reading that `notes:` cannot.
 ///
 /// An unknown key is deliberately neither a directive nor a warning. A plain
 /// `<!-- TODO: rewrite this slide -->` is ordinary markdown, and complaining
@@ -128,6 +143,7 @@ fn directive(line: &str) -> Option<Directive<'_>> {
   match key.trim().to_ascii_lowercase().as_str() {
     "class" => Some(Directive::Class(value.trim())),
     "background" => Some(Directive::Background(value.trim())),
+    "numbering" => Some(Directive::Numbering(value.trim())),
     _ => None,
   }
 }
@@ -227,5 +243,60 @@ mod tests {
     let s = slide("text <!-- class: wide --> more\n");
     assert!(s.classes.is_empty(), "not a full-line directive");
     assert!(s.html.contains("<!-- class: wide -->"), "{}", s.html);
+  }
+  // Issue 0065, hv's model of 16 Oct 2026: `<!-- numbering: on|off -->` on a
+  // slide overrides the deck's default for that slide alone.
+
+  #[test]
+  fn a_slide_with_no_numbering_directive_follows_the_deck() {
+    assert_eq!(slide("# One\n").numbering, None);
+  }
+
+  #[test]
+  fn a_numbering_directive_is_lifted_and_read() {
+    for (value, want) in [
+      ("on", Numbering::On),
+      ("true", Numbering::On),
+      ("OFF", Numbering::Off),
+      ("false", Numbering::Off),
+    ] {
+      let s = slide(&format!("<!-- numbering: {value} -->\n# One\n"));
+      assert_eq!(s.numbering, Some(want), "{value}");
+      assert!(
+        !s.html.contains("numbering"),
+        "the directive never reaches the artifact: {}",
+        s.html
+      );
+    }
+  }
+
+  #[test]
+  fn an_unreadable_numbering_directive_is_kept_for_the_caller_to_refuse() {
+    let s = slide("<!-- numbering: maybe -->\n# One\n");
+    assert_eq!(s.numbering, Some(Numbering::Unreadable("maybe".into())));
+    assert!(!s.html.contains("maybe"), "{}", s.html);
+  }
+
+  #[test]
+  fn a_later_readable_directive_does_not_hide_an_unreadable_one() {
+    let s = slide("<!-- numbering: maybe -->\n<!-- numbering: on -->\n# One\n");
+    assert_eq!(s.numbering, Some(Numbering::Unreadable("maybe".into())));
+    let s = slide("<!-- numbering: on -->\n<!-- numbering: off -->\n# One\n");
+    assert_eq!(
+      s.numbering,
+      Some(Numbering::Off),
+      "otherwise the last one wins"
+    );
+  }
+
+  #[test]
+  fn a_fenced_numbering_directive_is_content() {
+    let s = slide("```\n<!-- numbering: off -->\n```\n");
+    assert_eq!(s.numbering, None);
+  }
+
+  #[test]
+  fn the_title_class_says_nothing_about_numbering() {
+    assert_eq!(slide("<!-- class: title -->\n# One\n").numbering, None);
   }
 }

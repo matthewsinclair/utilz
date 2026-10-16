@@ -1321,6 +1321,73 @@ WRAP
   fi
 fi
 
+# ---------------------------------------------------------- AT21 -- issue 0065
+
+if want AT21; then
+  start AT21 "numbering: a deck default, a per-slide override, read off a real PDF"
+  # READ OFF THE PAGES, NOT OFF THE CSS. A rule can be present and still print
+  # nothing, so every limb is what pdftotext finds on each page of a PDF made by
+  # prez's own pdf path. The decks' prose carries no digit, so any number on a
+  # page is ours. hv's model, 16 Oct 2026: `numbering: on|off` in front matter
+  # is the deck default (off when absent), `<!-- numbering: on|off -->` on a
+  # slide overrides it, the title class has no say, and every slide uses up a
+  # page number whether or not it shows one.
+  if ! chrome >/dev/null; then skip "no Chrome or Chromium installed"
+  elif ! command -v pdftotext >/dev/null 2>&1; then skip "pdftotext is not installed (poppler)"
+  else
+    # at21deck <file> <front-matter line or empty> <slide-two directive or empty>
+    at21deck() {
+      {
+        [ -n "$2" ] && printf -- '---\n%s\n---\n' "$2"
+        printf '# Opening\n\n---\n\n'
+        [ -n "$3" ] && printf '%s\n' "$3"
+        printf '# Middle\n\n---\n\n# Closing\n'
+      } > "$1"
+    }
+
+    # The digits standing alone on one page, joined, or "none".
+    at21num() {
+      local n
+      n=$(pdftotext -layout -f "$2" -l "$2" "$1" - 2>/dev/null | tr -s ' \t' '\n' | grep -E '^[0-9]+$' | tr '\n' ' ' || true)
+      n="${n% }"
+      printf '%s' "${n:-none}"
+    }
+
+    # at21pages <description> <deck> <page1> <page2> <page3>
+    at21pages() {
+      local pdf="${2%.md}.pdf"
+      renders "$1" "$BIN" pdf "$2" -o "$pdf"
+      check "$1: pages" "$(pages_in "$pdf")" "3"
+      check "$1: page 1" "$(at21num "$pdf" 1)" "$3"
+      check "$1: page 2" "$(at21num "$pdf" 2)" "$4"
+      check "$1: page 3" "$(at21num "$pdf" 3)" "$5"
+    }
+
+    at21deck "$WORK/at21-on-off.md" "numbering: on" "<!-- numbering: off -->"
+    at21pages "deck on, slide 2 off" "$WORK/at21-on-off.md" 1 none 3
+
+    at21deck "$WORK/at21-off-on.md" "numbering: off" "<!-- numbering: on -->"
+    at21pages "deck off, slide 2 on" "$WORK/at21-off-on.md" none 2 none
+
+    at21deck "$WORK/at21-title.md" "numbering: true" "<!-- class: title -->"
+    at21pages "deck on, slide 2 a title slide" "$WORK/at21-title.md" 1 2 3
+
+    at21deck "$WORK/at21-absent.md" "" ""
+    at21pages "no numbering key anywhere" "$WORK/at21-absent.md" none none none
+
+    at21deck "$WORK/at21-bad-deck.md" "numbering: ture" ""
+    exits "a deck numbering value prez cannot read" 2 "$BIN" build "$WORK/at21-bad-deck.md" -o "$WORK/at21-bad-deck.html"
+    # One line naming both, so an "unknown key ignored" warning, which names
+    # the key alone, cannot pass for the refusal.
+    shaped "the refusal names the key and the value" "numbering.*ture" "$WORK/refuses.err"
+
+    at21deck "$WORK/at21-bad-slide.md" "numbering: on" "<!-- numbering: maybe -->"
+    exits "a slide numbering value prez cannot read" 2 "$BIN" build "$WORK/at21-bad-slide.md" -o "$WORK/at21-bad-slide.html"
+    shaped "the refusal names the slide, the key and the value" "slide 2.*numbering.*maybe" "$WORK/refuses.err"
+  fi
+  finish
+fi
+
 # ---------------------------------------------------------------------- report
 
 printf '\n=======================================\n'

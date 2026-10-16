@@ -331,6 +331,21 @@ jobs:
         brew install ffmpeg
         ffmpeg -version | head -1
 
+    # POPPLER ON BOTH LEGS, BECAUSE AT21 READS EVERY PAGE OF A PRINTED DECK WITH
+    # pdftotext (issue 0065). Without it AT21 is UNCHECKED and --strict fails the
+    # leg by name, the same reasoning as ffmpeg above.
+    - name: poppler, whose pdftotext reads prez's page numbers (Linux)
+      if: runner.os == 'Linux'
+      run: |
+        sudo apt-get install -y -qq poppler-utils
+        pdftotext -v 2>&1 | head -1
+
+    - name: poppler, whose pdftotext reads prez's page numbers (macOS)
+      if: runner.os == 'macOS'
+      run: |
+        brew install poppler
+        pdftotext -v 2>&1 | head -1
+
     - name: Build, test and accept every Rust crate
       run: |
         set -euo pipefail

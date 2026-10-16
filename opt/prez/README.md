@@ -77,6 +77,10 @@ prez build deck.md --theme-path=~/themes --theme=house
 
 # A theme by PATH -- a .css file, or a directory holding theme.css
 prez build deck.md --theme-file=./client/theme
+
+# Page numbers in the PDF: `numbering: on` in the deck's front matter, and
+# `<!-- numbering: off -->` on any slide that should carry none
+prez pdf deck.md -o deck.pdf
 ```
 
 ---

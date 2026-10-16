@@ -17,6 +17,7 @@ mod html;
 mod inline;
 mod mermaid;
 mod notes;
+mod numbering;
 mod render;
 mod split;
 mod theme;

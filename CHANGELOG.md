@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 The section still open names its version: `## [X.Y.Z] - unreleased`, never `## [Unreleased]`. Devbin's release core finds a section by its version and dates it at the cut; an unnamed section is one it cannot find (ST0019 D2).
 
+## [2.13.0] - unreleased
+
+Minor: **prez prints page numbers in a PDF when a deck asks for them**, with a per-slide override. prez goes from 2.4.0 to 2.5.0.
+
+### Added
+
+- **`numbering: on|off` in a deck's front matter, and `<!-- numbering: on|off -->` on any slide** (issue 0065). The front-matter key sets the deck's default, off when absent, and a slide's directive overrides it for that slide alone. Every slide uses up a page number whether or not it shows one, so the number printed on a page is that page's number in the PDF, and a cover that should carry none says `<!-- numbering: off -->`; the `title` class has no say. Numbers appear in print only, bottom right, in the theme's `--gp-muted` colour and its `--gp-display` face where it defines one, so no theme changes and the on-screen `4 / 12` counter is untouched. `on`, `off`, `true` and `false` are accepted in any case; anything else is refused with exit 2, naming the key and the value and, for a directive, the slide. A deck with no `numbering` anywhere compiles to exactly the bytes it did before.
+
+### Changed
+
+- **`help/prez.md`** lists `theme-file` and `numbering` among the front-matter keys, and no longer calls the front matter YAML: it is flat `key: value` lines, which is what prez reads.
+- **CI installs poppler on both Rust legs**, so the new acceptance check that reads every page of a printed deck with `pdftotext` runs rather than being skipped.
+
 ## [2.12.1] - 2026-09-22
 
 Patch: **`utilz test` builds a utility's binaries before any suite reads them**, and **a red CI verdict names the jobs that failed** rather than the run alone.

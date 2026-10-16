@@ -30,6 +30,8 @@
 
 use std::collections::BTreeMap;
 
+use crate::numbering::Numbering;
+
 #[derive(Debug, Default, PartialEq)]
 pub struct FrontMatter {
   pub title: Option<String>,
@@ -42,6 +44,11 @@ pub struct FrontMatter {
   pub theme_file: Option<String>,
   pub include: Vec<String>,
   pub mermaid: bool,
+  /// `numbering:` -- the deck's default for page numbers in print (issue 0065).
+  /// An Option, not a bool, so a fragment's `numbering: off` is still a key it
+  /// declared, and an unreadable value is kept for `numbering::resolve` to
+  /// refuse rather than read as off.
+  pub numbering: Option<Numbering>,
   /// Keys we do not know. Kept rather than dropped so the caller can warn about
   /// each by name -- a typo'd `titel:` that vanished silently would present as
   /// "the title stopped working" with nothing to go on.
@@ -64,6 +71,7 @@ impl FrontMatter {
       ("theme-file", self.theme_file.is_some()),
       ("include", !self.include.is_empty()),
       ("mermaid", self.mermaid),
+      ("numbering", self.numbering.is_some()),
     ];
     named
       .into_iter()
@@ -160,6 +168,7 @@ fn parse_block(block: &str) -> Option<FrontMatter> {
       // Present-and-true rather than present-at-all: `mermaid: false` reads as
       // an author turning it off, and honouring the word costs one comparison.
       "mermaid" => fm.mermaid = matches!(value.to_ascii_lowercase().as_str(), "true" | "yes" | "1"),
+      "numbering" => fm.numbering = Some(Numbering::read(value)),
       _ => {
         fm.unknown.insert(key, value.to_string());
       }
@@ -292,5 +301,40 @@ mod tests {
   fn mermaid_false_means_off() {
     let (fm, _) = parse("---\nmermaid: false\n---\n");
     assert!(!fm.mermaid);
+  }
+
+  // Issue 0065: the vocabulary itself is tested once, in numbering.rs. These
+  // prove the key reaches it and is kept, readable or not.
+
+  #[test]
+  fn numbering_is_absent_unless_the_deck_sets_it() {
+    let (fm, _) = parse("---\ntitle: A Deck\n---\n");
+    assert_eq!(fm.numbering, None);
+  }
+
+  #[test]
+  fn numbering_is_read_through_the_one_reader() {
+    let (fm, _) = parse("---\nnumbering: \"on\"\n---\n");
+    assert_eq!(fm.numbering, Some(Numbering::On));
+    let (fm, _) = parse("---\nnumbering: False\n---\n");
+    assert_eq!(fm.numbering, Some(Numbering::Off));
+    assert!(fm.unknown.is_empty(), "a known key is not unknown");
+  }
+
+  #[test]
+  fn an_unreadable_numbering_value_is_kept_for_the_caller_to_refuse() {
+    let (fm, _) = parse("---\nnumbering: ture\n---\n");
+    assert_eq!(fm.numbering, Some(Numbering::Unreadable("ture".into())));
+    assert!(fm.unknown.is_empty());
+  }
+
+  #[test]
+  fn numbering_is_declared_whenever_present_even_off() {
+    // A fragment's `numbering: off` must reach the "ignored" warning: the
+    // author meant to turn their slides off, and silence would hide that.
+    for value in ["on", "off", "ture"] {
+      let (fm, _) = parse(&format!("---\nnumbering: {value}\n---\n"));
+      assert_eq!(fm.declared(), vec!["numbering".to_string()], "{value}");
+    }
   }
 }

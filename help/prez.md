@@ -136,7 +136,7 @@ Which one it says is decided **when you open the deck, not when it was built**. 
 
 ## Deck format
 
-A deck is markdown with optional YAML front matter.
+A deck is markdown with optional front matter: flat `key: value` lines between two `---` lines at the very top. **It is not YAML**: one line per key, no nesting, and a single pair of surrounding double quotes is stripped.
 
 ```markdown
 ---
@@ -145,6 +145,7 @@ author: A Person
 date: 29 Aug 2026
 theme: mono
 mermaid: true
+numbering: on
 ---
 
 <!-- class: title -->
@@ -163,15 +164,16 @@ mermaid: true
 
 **Slides are separated by a line of exactly `---`**, and only at fence depth zero -- a `---` inside a fenced code block is content, not a break, so a deck about YAML or diffs splits correctly.
 
-**Front matter keys**: `title`, `author`, `date`, `theme`, `include`, `mermaid`.
+**Front matter keys**: `title`, `author`, `date`, `theme`, `theme-file`, `include`, `mermaid`, `numbering`.
 
 **Slide directives** are full-line HTML comments:
 
-| Directive                    | Effect                                                                       |
-| ---------------------------- | ---------------------------------------------------------------------------- |
-| `<!-- class: NAME -->`       | Adds a class to the slide. Repeats accumulate.                               |
-| `<!-- background: VALUE -->` | Sets the slide background. The last one wins.                                |
-| `<!-- notes: ... -->`        | Speaker notes. Stripped from the whole deck before splitting; never shipped. |
+| Directive                     | Effect                                                                       |
+| ----------------------------- | ---------------------------------------------------------------------------- |
+| `<!-- class: NAME -->`        | Adds a class to the slide. Repeats accumulate.                               |
+| `<!-- background: VALUE -->`  | Sets the slide background. The last one wins.                                |
+| `<!-- notes: ... -->`         | Speaker notes. Stripped from the whole deck before splitting; never shipped. |
+| `<!-- numbering: on\|off -->` | Shows or hides this slide's page number in print, whatever the deck says.    |
 
 Notes are removed **deck-wide before slides are cut**, so a note containing a bare `---` cannot leave its tail rendering as prose on the next slide.
 
@@ -181,6 +183,8 @@ Every theme is expected to declare a standard class vocabulary -- `title`, `sect
 
 **Mermaid diagrams are opt-in** with `mermaid: true` in front matter. The library is vendored into the binary, not fetched, so a diagram deck still opens on a plane. Without the opt-in, the artifact carries none of those bytes.
 
+**Page numbers in print are opt-in** with `numbering: on` in front matter, and `<!-- numbering: on|off -->` on a slide overrides the deck for that slide. A cover or section slide that should carry no number says `<!-- numbering: off -->`; the `title` class has no say. **Every slide uses up a number whether or not it shows one**, so the number on a page is that page's number in the PDF. The values are `on`, `off`, `true` and `false`, in any case; anything else is refused by name, and for a slide prez says which. Numbers appear in print only, in the theme's muted colour; the on-screen `4 / 12` counter is unchanged. In an included fragment, `numbering:` in front matter is ignored with a warning, like every fragment key, but its slides' `numbering:` directives apply.
+
 ---
 
 ## Themes
@@ -188,6 +192,8 @@ Every theme is expected to declare a standard class vocabulary -- `title`, `sect
 A theme is a `.css` file, or a directory holding `theme.css` and optionally `theme.js` and `layout.html`. **The order, highest first**: a flag (`--theme` or `--theme-file`), then the deck's `theme:` or `theme-file:`, then `PREZ_DEFAULT_THEME`, then the built-in `simple`.
 
 **Built-ins**: `simple`, `mono`, `manuscript`, `contrast`, `blueprint`, `steampunk`, `8bit`. Ask the binary rather than trusting this list -- an unknown theme's refusal enumerates the current set.
+
+**prez draws a numbered slide's page number on `.gp-slide::after` in print**, coloured `var(--gp-muted)` and set in `var(--gp-display)` when the theme defines it. A theme that puts its own content on a slide's `::after` loses it on numbered slides.
 
 **No built-in is ever a brand.** prez is designed to be extracted and reused, and a binary carrying one organisation's palette cannot be. House themes live outside the binary and arrive over the search path.
 
