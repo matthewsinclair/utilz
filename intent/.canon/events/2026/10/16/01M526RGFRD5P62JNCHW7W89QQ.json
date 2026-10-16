@@ -1,0 +1,15 @@
+{
+  "id": "01M526RGFRD5P62JNCHW7W89QQ",
+  "ts": "2026-10-16T11:15:07.897Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "issues.add",
+  "subject": {
+    "type": "issue",
+    "id": "0068"
+  },
+  "payload": {
+    "severity": "medium",
+    "title": "check_command calls a non-executable file on PATH present"
+  }
+}

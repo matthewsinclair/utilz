@@ -239,6 +239,22 @@ run_without_yq() {
   assert_failure
 }
 
+# bash's `command -v` names a file on PATH that cannot run when nothing
+# executable matches (measured under bash 3.2.57 and 5.3.20), so the exec bit
+# is the only difference between the two halves below.
+@test "check_command() returns false for a file on PATH that is not executable" {
+  local bin="$BATS_TEST_TMPDIR/bin"
+  mkdir -p "$bin"
+  printf '#!/bin/sh\n' >"$bin/utilz_noexec_xyz"
+  chmod 644 "$bin/utilz_noexec_xyz"
+  run env PATH="$bin:$PATH" bash -c "source '$UTILZ_HOME/opt/utilz/lib/common.sh'; check_command utilz_noexec_xyz"
+  assert_failure
+
+  chmod 755 "$bin/utilz_noexec_xyz"
+  run env PATH="$bin:$PATH" bash -c "source '$UTILZ_HOME/opt/utilz/lib/common.sh'; check_command utilz_noexec_xyz"
+  assert_success
+}
+
 @test "require_command() succeeds for installed commands" {
   run run_common_function require_command bash
   assert_success

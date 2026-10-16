@@ -284,9 +284,13 @@ list_utilities() {
   echo "Run 'utilz help <utility>' for detailed information."
 }
 
-# Check if a command exists
+# Check if a command exists and can run. bash's `command -v` also names a
+# file on PATH that is not executable when nothing executable matches
+# (measured under bash 3.2.57 and 5.3.20), so a path it gives must be
+# executable; a builtin or a function, named without a path, counts.
 check_command() {
-  command -v "$1" >/dev/null 2>&1
+  local p
+  p="$(command -v "$1" 2>/dev/null)" && [[ "$p" != /* || -x "$p" ]]
 }
 
 # Where a macOS app is installed, by bundle id, WITHOUT LAUNCHING IT. Prints

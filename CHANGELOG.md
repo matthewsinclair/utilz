@@ -21,6 +21,10 @@ Minor: **prez prints page numbers in a PDF when a deck asks for them**, with a p
 - **CI installs poppler on both Rust legs**, so the new acceptance check that reads every page of a printed deck with `pdftotext` runs rather than being skipped.
 - **Harness only, no behaviour change: prez's `AT04` splits its fullscreen claim** (issue 0067). Headless Chrome on macOS (measured on 155) refuses fullscreen requested from a key, though the same Chrome in a window honours prez's `f`. AT04 now checks prez's half on every platform: `f` requests fullscreen on the page's root with the keypress's activation live. The browser's half (entered, fills, toggles out) is `n/a` on macOS by `uname` and still runs on the Linux leg. AT04 prints the browser's version.
 
+### Fixed
+
+- **`utilz doctor` no longer calls a command present when the only file of that name on PATH cannot run** (issue 0068). `check_command`, which `utilz doctor` and every utility's dependency check go through, asked `command -v` alone, and bash's `command -v` names a file on PATH that is not executable when nothing executable matches (measured under bash 3.2.57 and 5.3.20). A dependency shadowed that way read as installed, and the utility then failed when it ran it. `check_command` now requires the path it is given to be executable; a builtin or a function, which `command -v` names without a path, still counts.
+
 ## [2.12.1] - 2026-09-22
 
 Patch: **`utilz test` builds a utility's binaries before any suite reads them**, and **a red CI verdict names the jobs that failed** rather than the run alone.
