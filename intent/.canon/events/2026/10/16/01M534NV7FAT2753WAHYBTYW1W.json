@@ -1,0 +1,14 @@
+{
+  "id": "01M534NV7FAT2753WAHYBTYW1W",
+  "ts": "2026-10-16T19:57:57.872Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.edit",
+  "subject": {
+    "type": "ac",
+    "id": "ST0027/AC-06.1"
+  },
+  "payload": {
+    "text": "The notice has one route: the wrapper keeps its decision and its text and runs the app's own executable, \"$MENUZ_EXEC\" --notify, with the text exported as MENUZ_NOTICE and never passed as an argument, in place of osascript, the Runner exporting MENUZ_EXEC; the --notify arm (refused as usage, exit 2, with MENUZ_NOTICE unset or empty) posts through UNUserNotificationCenter under the app's bundle id, waits for the centre's answer, prints 'notice posted' and exits 0, or prints why (authorisation denied, naming System Settings > Notifications > menuz; the add error; no answer in 10 s) and exits 1, which the wrapper logs under the run id; the app requests authorisation at its first launch and logs the answer, and Notifier posts the app's own notices through the same centre; no osascript, no file under state, no summary at the next launch."
+  }
+}
