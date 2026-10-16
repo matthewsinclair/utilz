@@ -22,35 +22,7 @@ claims: [ST0027]
 ## Holds
 
 - Carried: (1) the hand runs' scripts, transcripts and probes are banked under tmp/vc-st0026/ (git-ignored; the scratchpad under /private/tmp may not survive a reboot): verify-sha.sh, verify-*.txt, handrun-rerun-*.txt, dictprobe-f8c2827.txt, check-all-da23005.txt, test-estate-da23005.txt, st0026/{rerun-handrun.sh,dict-probe.sh,read-mid-apply.sh,restore-space.lua,launch-probe.lua,grab-probe*,dbg-lib/,desks/}, st0027/{mint-acs.sh,mint-at03.sh,mint-at04.sh,decisions.md,design.md,objective.md,context.md,verify-wp03.sh,ac033-watcher.sh,ac033-805ed42.txt,ac033-handrun-805ed42.txt,ac045-drive.lua,ac045-run.sh,ac045-handrun-68e499b.txt,ac045-handrun-9dde810.txt,verify-370fa77.txt,verify-805ed42.txt}; the tracked hand runs are opt/menuz/test/watcher-handrun.sh (AT-03.3) and opt/menuz/test/run-handrun.sh with run-handrun.lua (AT-04.5); verify-wp03.sh <sha> [--build] verifies any menuz SHA in a worktree (compiles only with --build, after intent-vc's START). (2) git worktree prune when the scratchpad goes (wt-c21f319, wt-13552bc, wt-3e11cb4, wt-88c57ad, wt-32fe3f0, wt-9907e17, wt-ff154a7, wt-4bfd783, wt-45acc46, wt-f8c2827, wt-51fe5d9, wt-26924e9, wt-d2be9e4, wt-4e34217, wt-370fa77, wt-805ed42, wt-6811ad7, wt-46046ee, wt-68e499b, wt-9dde810). (3) the spike's files in /tmp/arngz-spike2/ and dc's scratchpad go at reboot. (4) intent sync --to-disk once, if the file index still misses the two AC writes of 09:5xZ. (5) install_e2e.bats ran in the estate at da23005 on 16 Oct; the VACUUM was run on hv's word (5.3 GB to 23 MB). (6) the four hand-run desks are deleted from hv's catalogue, copies at tmp/vc-st0026/st0026/desks/. (edited)
-- 2.14.0 is CUT-READY at 16 Oct 22:27Z bar one click of hv's (decisions 20, 21). main is e854413 on both remotes, CI green on it (run 38975178981) and on the code 4952112 (38974500505); the menuz-app dispatch 38972250508 on 9c6270a green on all eight jobs; the release dry run on 2c2953f passed both gates and predicts tag 2.14.0 dated 2026-10-17, stopping only at step 6's question (a session's cut carries --yes). ST0028 closed (e9fc524). ST0027: WP-05 done (aa3aca5); WP-06 has AC-06.1/2/3/5 satisfied and AC-06.4 waits on hv: System Settings > Notifications > Menuz > Allow, then vc quits the installed copy, reruns opt/menuz/test/notice-handrun.sh on the dev build (three 'notice posted' lines wanted), relaunches with  (edited)
-  Available commands:
-    utilz help [utility]    - Show help
-    utilz doctor            - Run diagnostics
-    utilz list              - List available utilities
-    utilz test [utility]    - Run tests
-    utilz version           - Show version
-    utilz generate <name>   - Generate new utility
-    utilz install           - Publish a runnable install
-    utilz upgrade           - Replace an existing install
-    utilz relink            - Repoint PATH symlinks at a tree
-    utilz use [dev|opt]     - Switch which tree those links serve
-
-  Installed utilities:
-    utilz cleanz [args] - Run cleanz utility
-    utilz clipz [args]  - Run clipz utility
-    utilz cryptz [args] - Run cryptz utility
-    utilz expz [args]   - Run expz utility
-    utilz gitz [args]   - Run gitz utility
-    utilz lnrel [args]  - Run lnrel utility
-    utilz macoz [args]  - Run macoz utility
-    utilz mdagg [args]  - Run mdagg utility
-    utilz pdf2md [args] - Run pdf2md utility
-    utilz prez [args]   - Run prez utility
-    utilz retry [args]  - Run retry utility
-    utilz stampz [args] - Run stampz utility
-    utilz syncz [args]  - Run syncz utility
-    utilz todo [args]   - Run todo utility
-    utilz xtrct [args]  - Run xtrct utility, greens AT-06.4, wp done 06, st done ST0027, dehydrate, commit, push, then asks intent-vc for the cut's window: bin/devbin release --minor --yes (nothing pushed while step 11 waits on CI), tools/formula-bump 2.14.0 committed by path, the formula copied into the tap clone and audited (the tap push is hv's, after publish), dc fills done.md's @CLOSE values; Menuz.app.zip signed and published after hv's store-creds. Since the compact: three first-use defects fixed (the notification alert b7e07a3/d117591, the login item 3e731d3, Swift 6.1 554fe03/9c6270a), cc's shim error lines 4952112, dc's docs 4534225/c41a7ae/25b79ef/e07f462/e854413. Rules in force unchanged; /usr/bin/log, never the builtin.
+- 2.14.0 is CUT-READY at 16 Oct 22:27Z bar one click of hv's (decisions 20, 21). main is e854413 on both remotes, CI green on it (run 38975178981) and on the code 4952112 (38974500505); the menuz-app dispatch 38972250508 on 9c6270a green on all eight jobs; the release dry run on 2c2953f passed both gates and predicts tag 2.14.0 dated 2026-10-17, stopping only at step 6's question (a session's cut carries --yes). ST0028 closed (e9fc524). ST0027: WP-05 done (aa3aca5); WP-06 has AC-06.1/2/3/5 satisfied and AC-06.4 waits on hv: System Settings > Notifications > Menuz > Allow, then vc quits the installed copy, reruns opt/menuz/test/notice-handrun.sh on the dev build (three notice posted lines wanted), relaunches with utilz menuz start, greens AT-06.4, wp done 06, st done ST0027, dehydrate, commit, push, then asks intent-vc for the cut's window: bin/devbin release --minor --yes (nothing pushed while step 11 waits on CI), tools/formula-bump 2.14.0 committed by path, the formula copied into the tap clone and audited (the tap push is hv's, after publish), dc fills done.md's @CLOSE values; Menuz.app.zip signed and published after hv's store-creds. Since the compact: three first-use defects fixed (the notification alert b7e07a3/d117591, the login item 3e731d3, Swift 6.1 554fe03/9c6270a), cc's shim error lines 4952112, dc's docs 4534225/c41a7ae/25b79ef/e07f462/e854413. Rules in force unchanged; /usr/bin/log, never the builtin; no backticks inside a double-quoted wb text. (edited)
 - hv's keypresses at return, in order: (1) System Settings > Notifications > Menuz: Allow (the first launch's alert was withdrawn when the hand run quit the app; macOS counts that as no; the running copy then posts); tell vc, who reruns the notice hand run for AT-06.4. (2) Log out and in: the menu is back (the login item is enabled); tell vc for AT-05.2's note. (3) bin/devbin macos store-creds, then vc runs app-sign, app-notarize, app-verify and publish for the Menuz.app.zip asset. (4) The tap: git -C $(brew --repository matthewsinclair/utilz) commit -am 'utilz 2.13.0' && git -C ... push, then the same for 2.14.0 after the cut (vc copies and audits the formula). (5) .claude/settings.json's advisory: ! intent claude upgrade --apply.
 
 ## Watch-outs
