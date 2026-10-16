@@ -1,0 +1,15 @@
+{
+  "id": "01M51WGK7H6HENDHT71KBY0KGS",
+  "ts": "2026-10-16T08:16:02.801Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "doing",
+    "text": "ST0026 arngz: vc holds the thread for the design. WP-01 half measured (outcome A closed: moveWindowToSpace lies; B doubtful: a written binding is ignored). WP-02 (3e11cb4) and WP-03 (88c57ad) verified in worktrees. WP-04 discover/diff with cc; verify on its SHA. Design is on disk at intent/st/ST0026/design.md and in the store; edit the file, then intent sync --to-store."
+  }
+}

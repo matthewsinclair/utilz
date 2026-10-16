@@ -1,0 +1,15 @@
+{
+  "id": "01M51WGP75AH6HBDH2BQ6SX9DB",
+  "ts": "2026-10-16T08:16:05.861Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "hold",
+    "text": "Heavy suites (tools/test-estate, anything cargo-heavy): held until intent-vc's END for its whole-tree bats run; light single-utility bats runs are allowed."
+  }
+}

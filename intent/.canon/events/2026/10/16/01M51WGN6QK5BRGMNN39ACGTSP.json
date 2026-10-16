@@ -1,0 +1,15 @@
+{
+  "id": "01M51WGN6QK5BRGMNN39ACGTSP",
+  "ts": "2026-10-16T08:16:04.823Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "hold",
+    "text": "Dock This-Desktop test: held until hv does the two clicks (Calculator on VY229HF (2), Dock icon > Options > Assign To > This Desktop, then quit it and say so); then vc reads what the Dock wrote to com.apple.spaces, launches Calculator, observes where it lands, and records the outcome for B."
+  }
+}

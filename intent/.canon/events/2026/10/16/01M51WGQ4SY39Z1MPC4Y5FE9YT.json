@@ -1,0 +1,15 @@
+{
+  "id": "01M51WGQ4SY39Z1MPC4Y5FE9YT",
+  "ts": "2026-10-16T08:16:06.809Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "todo",
+    "text": "Fold notes for restart.md and the record: it says 15 utilities (16 with arngz) and devbin 0.1.7 (vendored is 0.1.10 at 7c39d91c); README utility table needs an arngz row (WP-06); the commit gate and check all review no Lua (Intent 0603, closed by hv as an incomplete pack: the critic-lua agent is the review); vc's scratchpad holds git worktrees wt-c21f319, wt-13552bc, wt-3e11cb4, wt-88c57ad, so run git worktree prune when the scratchpad goes; hv's ~/.hammerspoon/init.lua gained three IPC lines on 16 Oct and the hs tool is an unbrewed link at /opt/homebrew/bin/hs."
+  }
+}

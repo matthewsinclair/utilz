@@ -1,0 +1,15 @@
+{
+  "id": "01M51WGM6WWZCE1RVWVW3SE61D",
+  "ts": "2026-10-16T08:16:03.804Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "hold",
+    "text": "Drag spike, outcome D: dc's arngz-spike2.lua, run-hs.sh and RUNBOOK-2.md under /private/tmp/claude-501/-Users-matts-Devel-prj-Utilz/b6f789ca-4627-4a74-b4cd-bb7c07de9f46/scratchpad/arngz-spike/. Held until hv gives the go for the pointer to be taken (asked three times on 16 Oct); then vc runs it with a low-stakes window and records the result in the design."
+  }
+}

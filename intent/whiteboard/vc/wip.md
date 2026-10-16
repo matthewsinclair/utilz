@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 3341dbaf-a82f-4073-bae3-2f8c30306f25
-heartbeat_at: 2026-10-16 06:06Z
+heartbeat_at: 2026-10-16 08:16Z
 status: active
-focus: "ST0026 arngz: design, 6 WPs and 24 criteria written on hv's rulings; the spike (WP-01) is the open input and waits on hv's go. Verifying 0065 (71389ad) and 0067 (aa1a033) in a detached worktree at c21f319."
+focus: "16 Oct: 0065 and 0067 verified and landed; ST0026 arngz designed and started, WP-02 and WP-03 verified, WP-04 with cc; the spike closed outcome A and doubts B; D (the drag) and the Dock clicks wait on hv. Folding for a compact on hv's word after cc and dc fold."
 claims: [ST0026]
 ---
 
@@ -13,15 +13,17 @@ claims: [ST0026]
 
 ## DOING
 
-_(none)_
+- ST0026 arngz: vc holds the thread for the design. WP-01 half measured (outcome A closed: moveWindowToSpace lies; B doubtful: a written binding is ignored). WP-02 (3e11cb4) and WP-03 (88c57ad) verified in worktrees. WP-04 discover/diff with cc; verify on its SHA. Design is on disk at intent/st/ST0026/design.md and in the store; edit the file, then intent sync --to-store.
 
 ## TODO
 
-_(none)_
+- Fold notes for restart.md and the record: it says 15 utilities (16 with arngz) and devbin 0.1.7 (vendored is 0.1.10 at 7c39d91c); README utility table needs an arngz row (WP-06); the commit gate and check all review no Lua (Intent 0603, closed by hv as an incomplete pack: the critic-lua agent is the review); vc's scratchpad holds git worktrees wt-c21f319, wt-13552bc, wt-3e11cb4, wt-88c57ad, so run git worktree prune when the scratchpad goes; hv's ~/.hammerspoon/init.lua gained three IPC lines on 16 Oct and the hs tool is an unbrewed link at /opt/homebrew/bin/hs.
 
 ## Holds
 
-_(none)_
+- Drag spike, outcome D: dc's arngz-spike2.lua, run-hs.sh and RUNBOOK-2.md under /private/tmp/claude-501/-Users-matts-Devel-prj-Utilz/b6f789ca-4627-4a74-b4cd-bb7c07de9f46/scratchpad/arngz-spike/. Held until hv gives the go for the pointer to be taken (asked three times on 16 Oct); then vc runs it with a low-stakes window and records the result in the design.
+- Dock This-Desktop test: held until hv does the two clicks (Calculator on VY229HF (2), Dock icon > Options > Assign To > This Desktop, then quit it and say so); then vc reads what the Dock wrote to com.apple.spaces, launches Calculator, observes where it lands, and records the outcome for B.
+- Heavy suites (tools/test-estate, anything cargo-heavy): held until intent-vc's END for its whole-tree bats run; light single-utility bats runs are allowed.
 
 ## Watch-outs
 
