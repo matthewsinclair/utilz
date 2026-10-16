@@ -6,6 +6,7 @@ import Testing
 /// The wrapper run through zsh as a run is (design.md "Running an item",
 /// "Output"), against a fixture log, a fixture home whose .zshrc is empty,
 /// and a fake osascript on PATH that records the notice it was asked for.
+/// AT-04.3 and AT-04.4 (ST0027 acceptance.md) cite this file.
 @Suite("Wrapper", .serialized)
 struct WrapperTests {
   struct Ran {

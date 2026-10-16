@@ -10,6 +10,7 @@ import Testing
 /// contention, the exit seen, and the app's log writes never overwriting a
 /// wrapper's while both write at once.
 @MainActor
+/// AT-04.2 (ST0027 acceptance.md) cite this file.
 @Suite("Runner", .serialized)
 final class RunnerTests {
   let dir: URL

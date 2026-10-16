@@ -2,7 +2,7 @@
 wp_id: WP-04
 title: Running items: params, the runner, the log and the notice
 scope: S
-status: WIP
+status: Done
 ---
 
 # WP-04: Running items: params, the runner, the log and the notice

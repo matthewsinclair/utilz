@@ -162,16 +162,16 @@ The runner is Gtools' `GtoolsCLI` shape, one shell-out path:
 Recommended (Q5): hv's simplest option, taken whole. Every run appends to `${XDG_STATE_HOME:-$HOME/.local/state}/menuz/menuz.log`, created on first use:
 
 ```
-2026-10-16T10:42:03Z run 17 start "Hammerspoon doctor" cwd=/Users/matts: arngz doctor
+2026-10-16T10:42:03Z run 17 start "Hammerspoon doctor" cwd=~: arngz doctor
 [17] hammerspoon  running (pid 4123)
 [17] hs tool      /opt/homebrew/bin/hs
 [17] ...
 2026-10-16T10:42:04Z run 17 exit 0 in 1.3s
 ```
 
-stdout and stderr lines carry the run id so concurrent runs interleave legibly; the start line prints `run` as written, which is what keeps a `secret` out of the log (the shell expands `$token`, the log never sees the value). `utilz menuz log` is `tail -f` on that file and prints its path first; **Open Log** in the menu opens it in the default app for `.log`. A log line the app cannot write (the directory unwritable, the disk full) is an error in the app's OSLog and a notification, never a swallowed write.
+stdout and stderr lines carry the run id so concurrent runs interleave legibly; the start line prints `cwd` and `run` as written (the run's wrapper expands the cwd, WP-04), which is what keeps a `secret` out of the log (the shell expands `$token`, the log never sees the value). `utilz menuz log` is `tail -f` on that file and prints its path first; **Open Log** in the menu opens it in the default app for `.log`. A log line the app cannot write (the directory unwritable, the disk full) is an error in the app's OSLog and a notification, never a swallowed write.
 
-The notice: a run that exits non-zero posts a macOS notification naming the item and the exit code, through `display notification` by the same `NSAppleScript` route, so the failure is not silent for a user who is not tailing; `notify: always` posts one on every finish with the last line of output; `notify: never` posts none. (`UNUserNotificationCenter` is the other standard route; it needs the bundle to request permission on first run and gives nothing `display notification` does not for one line of text.)
+The notice: a run that exits non-zero posts a macOS notification naming the item and the exit code, through `display notification`, posted by the run's own wrapper with `osascript` at its end line (settled in WP-04: under D9 a run may outlive the app, so the app's `NSAppleScript` could not be the route), so the failure is not silent for a user who is not tailing; `notify: always` posts one on every finish with the last line of output; `notify: never` posts none. (`UNUserNotificationCenter` is the other standard route; it needs the bundle to request permission on first run and gives nothing `display notification` does not for one line of text.)
 
 Not in v1, for the rubber-duck to confirm: a console window tailing the log (Gtools' `ConsoleWindowController`, which exists and could be lifted), and output shown in a window per run. hv: "I have a few questions to resolve about what we do with the output." The log is the base either way.
 

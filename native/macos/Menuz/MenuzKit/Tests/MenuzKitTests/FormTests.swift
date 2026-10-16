@@ -5,6 +5,7 @@ import Testing
 /// The one typed form (design.md "Parameters", D4): its fields from the
 /// params in the file's order, the check of the answers, and what a
 /// submitted form exports. Pure: whether a path exists is given.
+/// AT-04.1 (ST0027 acceptance.md) cite this file.
 @Suite("Form")
 struct FormTests {
   static func params(_ yaml: String) throws -> [Param] {
