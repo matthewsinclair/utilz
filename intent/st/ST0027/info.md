@@ -27,7 +27,7 @@ The thread is created and started ahead of the rubber-duck: design.md carries th
 | WP    | Title                                                      | Size | Status      |
 | ----- | ---------------------------------------------------------- | ---- | ----------- |
 | WP-01 | Design settled with hv                                     | S    | WIP         |
-| WP-02 | The shim, the config directory and the catalogue verbs     | S    | WIP         |
+| WP-02 | The shim, the config directory and the catalogue verbs     | S    | Done        |
 | WP-03 | The app: the menu from the file, watched, realised at open | S    | Not Started |
 | WP-04 | Running items: params, the runner, the log and the notice  | S    | Not Started |
 | WP-05 | Build, install, launch and the close                       | S    | Not Started |

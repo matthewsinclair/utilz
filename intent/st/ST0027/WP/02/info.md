@@ -2,7 +2,7 @@
 wp_id: WP-02
 title: The shim, the config directory and the catalogue verbs
 scope: S
-status: WIP
+status: Done
 ---
 
 # WP-02: The shim, the config directory and the catalogue verbs

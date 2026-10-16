@@ -18,11 +18,11 @@ title: menuz: a macOS menu bar app whose menu is a YAML file of commands to run
 - AC-01.1 (non-test) design.md records hv's ruling on each of its questions Q1 to Q11 as a numbered decision or a descoping, in hv's words where hv gave them, and no recommendation is left standing in its place. -- evidence: hv's rulings of 16 Oct 2026 on Q1 to Q11, recorded as D1 to D11 in WP-01's body (and in design.md's Decisions section at the 0605 sync): Q4 one typed form, Q6 the source and dev build at native/macos/Menuz with the installed copy at ~/Applications/Menuz.app like the siblings and a use dev|installed switch (hv's correction in cc's session, confirmed to vc), Q7 Intent's signing, Q9 runs left running, Q10 and Q11 yes, the rest as recommended; no recommendation left standing in a ruling's place -- satisfied: yes
 - AC-01.2 (non-test) The example menuz.yaml in design.md is final, its params typed as D4 rules, and is the one menuz init writes; swift is a declared language of the project (intent lang init swift) and critic-swift is the review for native/macos/Menuz. -- satisfied: no
 
-### WP-02 -- The shim, the config directory and the catalogue verbs (status: WIP)
+### WP-02 -- The shim, the config directory and the catalogue verbs (status: Done)
 
-- AC-02.1 utilz menuz is dispatched by bin/utilz; opt/menuz/menuz.yaml declares the utility with opt/menuz/VERSION as the one home of its version; utilz list shows menuz; utilz doctor reports xcodegen and xcodebuild only when native/macos/Menuz is present, as it reports cargo only when a crate is. -- satisfied: no (computed)
-- AC-02.2 init creates MENUZ_HOME (default ${XDG_CONFIG_HOME:-$HOME/.config}/menuz) with the example menuz.yaml and an empty bin/, refuses to overwrite an existing menuz.yaml without --force (exit 2, naming the file), and a second run changes nothing; edit opens the yaml with open -t, or $VISUAL/$EDITOR under --editor; log prints the log's path then tails it, -n N prints the last N lines; each refuses by name, exit 2, when its file is missing. -- satisfied: no (computed)
-- AC-02.3 validate and render run the app's --validate and --render arms on menuz.yaml or a given file and pass their output and exit code through, proven with a fake Menuz binary on PATH; with no app built or installed they refuse by name, exit 2; status reports installed (~/Applications/Menuz.app), running, login item, source-current and which build use selects (dev or installed), without Xcode present. -- satisfied: no (computed)
+- AC-02.1 utilz menuz is dispatched by bin/utilz; opt/menuz/menuz.yaml declares the utility with opt/menuz/VERSION as the one home of its version; utilz list shows menuz; utilz doctor reports xcodegen and xcodebuild only when native/macos/Menuz is present, as it reports cargo only when a crate is. -- satisfied: yes (computed)
+- AC-02.2 init creates MENUZ_HOME (default ${XDG_CONFIG_HOME:-$HOME/.config}/menuz) with the example menuz.yaml and an empty bin/, refuses to overwrite an existing menuz.yaml without --force (exit 2, naming the file), and a second run changes nothing; edit opens the yaml with open -t, or $VISUAL/$EDITOR under --editor; log prints the log's path then tails it, -n N prints the last N lines; each refuses by name, exit 2, when its file is missing. -- satisfied: yes (computed)
+- AC-02.3 validate and render run the app's --validate and --render arms on menuz.yaml or a given file and pass their output and exit code through, proven with a fake Menuz binary on PATH; with no app built or installed they refuse by name, exit 2; status reports installed (~/Applications/Menuz.app), running, login item, source-current and which build use selects (dev or installed), without Xcode present. -- satisfied: yes (computed)
 
 ### WP-03 -- The app: the menu from the file, watched, realised at open (status: Not Started)
 
@@ -52,9 +52,11 @@ title: menuz: a macOS menu bar app whose menu is a YAML file of commands to run
 
 _(no tests in this group)_
 
-### WP-02 -- The shim, the config directory and the catalogue verbs (status: WIP)
+### WP-02 -- The shim, the config directory and the catalogue verbs (status: Done)
 
-_(no tests in this group)_
+- AT-02.1 `opt/menuz/test/menuz.bats` -- covers AC-02.1 -- status: green -- opt/menuz/test/menuz.bats, 7 tests marked AT-02.1: verified by vc on 4e34217 in a detached worktree, 16 Oct 2026: menuz.bats 38/38 under bash 5.3.20 and 3.2.57, the dispatch suites (help_dispatch 8/8 on the primary checkout where prez is built, version_dispatch 11/11, dispatcher 28/28), utilz list shows menuz, menuz --help renders 84 lines, VERSION 0.1.0 is the one home (utilz menuz --version prints utilz:2.13.0/menuz:0.1.0), shellcheck clean.
+- AT-02.2 `opt/menuz/test/menuz.bats` -- covers AC-02.2 -- status: green -- opt/menuz/test/menuz.bats, 14 tests marked AT-02.2: verified by vc on 4e34217 in a detached worktree, 16 Oct 2026, under a fixture HOME: init wrote menuz.yaml and bin/ (exit 0), a second init changed nothing (exit 0), init over a menu of the user's own refused naming the file and --force (exit 2), log with no log refused by name (exit 2); 38/38 under both bashes.
+- AT-02.3 `opt/menuz/test/menuz.bats` -- covers AC-02.3 -- status: green -- opt/menuz/test/menuz.bats, 17 tests marked AT-02.3: verified by vc on 4e34217 in a detached worktree, 16 Oct 2026: validate with no app built or installed refused by name, exit 2, naming both paths looked at (~/Applications/Menuz.app and the XDG dev build); status without Xcode printed use installed (default), running no, login item unknown with the reason, source unknown with the reason, exit 1; 38/38 under both bashes.
 
 ### WP-03 -- The app: the menu from the file, watched, realised at open (status: Not Started)
 

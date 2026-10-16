@@ -23,7 +23,7 @@
       "seq": 2,
       "title": "The shim, the config directory and the catalogue verbs",
       "scope": "S",
-      "status": "wip",
+      "status": "done",
       "objective": "The `utilz menuz` shim: a bash script in the Utilz format, the menuz config directory, and the verbs that need no Xcode. It follows D1 to D11 as recorded in WP-01, D6 as hv corrected it on 16 Oct 2026. Where design.md's shim and build-layout sections disagree with those rulings, the rulings win, and design.md is rewritten at the 0605 sync.\n\n**Files.**\n\n- `opt/menuz/menuz` is the shim. It is bash 3.2-clean under `set -euo pipefail` and shellcheck-clean.\n- `opt/menuz/menuz.yaml` declares the utility, with `version_file: VERSION` and `dependencies: []`. xcodegen and xcodebuild are build-time needs, so the shim refuses by name without them, as it does for cargo.\n- `opt/menuz/VERSION` is the one home of the version.\n- `opt/menuz/lib/example.yaml` is the design's example menu, which `init` writes. Its one param is typed (`type: string`), per D4.\n- `bin/menuz` is a symlink to `utilz`, and CI's explicit Linux utility loop gains `menuz`.\n\n**Paths, each in one function.**\n\n| What               | Path                                                                                                                       |\n| ------------------ | -------------------------------------------------------------------------------------------------------------------------- |\n| Config directory   | `${MENUZ_HOME:-${XDG_CONFIG_HOME:-$HOME/.config}/menuz}`                                                                    |\n| The menu           | `<config>/menuz.yaml`                                                                                                      |\n| Log                | `${XDG_STATE_HOME:-$HOME/.local/state}/menuz/menuz.log`                                                                    |\n| Dev build          | `${XDG_STATE_HOME:-$HOME/.local/state}/menuz/build/macos/Build/Products/Debug/Menuz.app`                                   |\n| Installed copy     | `$HOME/Applications/Menuz.app`                                                                                             |\n| The `use` record   | `${XDG_STATE_HOME:-$HOME/.local/state}/menuz/use`, holding `dev` or `installed`, written by WP-05's `use` verb             |\n\nThe build `use` selects is the one the record names. With no record, it is the installed copy when there is one, else the dev build. The app binary is `<bundle>/Contents/MacOS/Menuz` of that build.\n\n**Verbs.** Exit codes follow arngz: 0 done, 1 failed, 2 refused before anything changed. `menuz` with no verb prints usage and exits 2.\n\n| Verb                        | Does                                                                                                                                                                     | Exit                                                      |\n| --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------- |\n| `init [--force]`            | Creates the config directory with the example `menuz.yaml` and an empty `bin/`. A second run changes nothing                                                             | 0; 2 when `menuz.yaml` exists without `--force`, naming it |\n| `edit [--editor]`           | `open -t menuz.yaml`; with `--editor`, `$VISUAL`, else `$EDITOR`                                                                                                         | 0; 2 with no `menuz.yaml`, or `--editor` with neither set  |\n| `log [-n N]`                | Prints the log's path, then `tail -f`; with `-n N`, the last N lines and no follow                                                                                       | 0; 2 with no log yet                                      |\n| `validate [file]`           | The selected app binary's `--validate` on the file or `menuz.yaml`, its output and exit passed through                                                                  | the app's; 2 with no app, naming both build paths         |\n| `render [file]`             | The same with `--render`                                                                                                                                                 | the same                                                  |\n| `status`                    | One line each for installed (path, version, build, commit), use (dev or installed, and whether by the record or by default), running, login item and source           | 0; 1 when not installed                                   |\n\n**Status details.**\n\n- **Running** is `pgrep -x Menuz`, the pids or `no`.\n- **Login item** is the selected app's answer to a new arm, `--login-item`, which prints the `SMAppService.mainApp` status. WP-03 adds the arm to the app's command-line arms. With no app, the line says so.\n- **Source** compares the installed bundle's `MenuzSourceTree` (Info.plist) with the stamp of the tree, as Gtools does. The stamp is a SHA-1 of `git ls-tree -r HEAD native/macos/Menuz` without `MenuzTests/`. A dirty tree folds in each changed path and a digest of its content, and the stamp ends `-dirty`. With no `native/macos/Menuz`, the source is unknown and said so. WP-05's `stamps` and `build` use the same function.\n\n`status` reads Info.plist with `/usr/libexec/PlistBuddy` and needs no Xcode.\n\n**utilz doctor** checks xcodegen and xcodebuild only when `native/macos/Menuz` is present, beside the crate rule in common.sh, advisory as cargo is.\n\n**Tests.** `opt/menuz/test/menuz.bats`, red first, with these fixtures:\n\n- `HOME`, `XDG_CONFIG_HOME`, `XDG_STATE_HOME` and `MENUZ_HOME` all point under `BATS_TEST_TMPDIR`.\n- A fake `Menuz.app` sits at the installed or dev path: an executable that records its arguments and prints a scripted answer, with an Info.plist.\n- `open`, `pgrep` and `tail` are fakes on PATH where a verb would otherwise reach the machine.",
       "body": "",
       "preamble": ""
@@ -201,6 +201,38 @@
       "state": {
         "is": "unsatisfied"
       }
+    }
+  ],
+  "tests": [
+    {
+      "id": "AT-02.1",
+      "kind": "test",
+      "file": "opt/menuz/test/menuz.bats",
+      "covers": [
+        "AC-02.1"
+      ],
+      "status": "green",
+      "note": "opt/menuz/test/menuz.bats, 7 tests marked AT-02.1: verified by vc on 4e34217 in a detached worktree, 16 Oct 2026: menuz.bats 38/38 under bash 5.3.20 and 3.2.57, the dispatch suites (help_dispatch 8/8 on the primary checkout where prez is built, version_dispatch 11/11, dispatcher 28/28), utilz list shows menuz, menuz --help renders 84 lines, VERSION 0.1.0 is the one home (utilz menuz --version prints utilz:2.13.0/menuz:0.1.0), shellcheck clean."
+    },
+    {
+      "id": "AT-02.2",
+      "kind": "test",
+      "file": "opt/menuz/test/menuz.bats",
+      "covers": [
+        "AC-02.2"
+      ],
+      "status": "green",
+      "note": "opt/menuz/test/menuz.bats, 14 tests marked AT-02.2: verified by vc on 4e34217 in a detached worktree, 16 Oct 2026, under a fixture HOME: init wrote menuz.yaml and bin/ (exit 0), a second init changed nothing (exit 0), init over a menu of the user's own refused naming the file and --force (exit 2), log with no log refused by name (exit 2); 38/38 under both bashes."
+    },
+    {
+      "id": "AT-02.3",
+      "kind": "test",
+      "file": "opt/menuz/test/menuz.bats",
+      "covers": [
+        "AC-02.3"
+      ],
+      "status": "green",
+      "note": "opt/menuz/test/menuz.bats, 17 tests marked AT-02.3: verified by vc on 4e34217 in a detached worktree, 16 Oct 2026: validate with no app built or installed refused by name, exit 2, naming both paths looked at (~/Applications/Menuz.app and the XDG dev build); status without Xcode printed use installed (default), running no, login item unknown with the reason, source unknown with the reason, exit 1; 38/38 under both bashes."
     }
   ],
   "attachments": [
