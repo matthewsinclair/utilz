@@ -1,0 +1,16 @@
+{
+  "id": "01M536026SN2EMRAA72KW2VJYQ",
+  "ts": "2026-10-16T20:21:01.273Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 63,
+    "text": "ST0027 menuz: WP-01 to WP-04 Done on 16 Oct (the app at 6811ad7, running items at 9dde810, both verified in worktrees with the compiles; hand runs tracked at opt/menuz/test/watcher-handrun.sh and run-handrun.sh). D12 signing local as Intent's. D13 (hv: 'Fix everything that needs fixing'): WP-06, the four first-use fixes, LANDED at 8bea7ba on 16 Oct 20:19Z: the notice through the app's own --notify arm (one route, the text in MENUZ_NOTICE, measured by vc's probe: a process exec'd from the bundle posts under the bundle id on macOS 27 with no modal prompt; a bundle under /private/tmp is refused outright), the first-launch placement line, the drawn mark (design/menuz.svg, rasterised by dc's bin/devbin macos app-icons into the tracked Assets.xcassets) as app icon and default glyph; its ATs, hand run and dc's help lines are open (hold 10). WP-05 (build, install, use, uninstall, start/stop/restart, stamps, doctor, the keg install, CI) is cc's, go since 20:19Z; dc's signing half of bin/devbin macos (store-creds, doctor, app-sign, app-notarize, app-verify, publish) landed at b7b2148 with macos.bats 27/27, docs/releasing.md at 95b11cf. ST0028 (dc): arngz discover's title patterns, landed ad2da79, verified. 2.13.0's tap step: the formula is copied into the tap clone and audits clean; the commit and push are hv's (refused to vc by the permission layer). CI on main green at cb9da34; later runs cancelled by pushes; 38961416498 on 8bea7ba pending at the fold."
+  }
+}

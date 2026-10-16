@@ -1,0 +1,16 @@
+{
+  "id": "01M53601XN84RMNQ27C3V7R7XQ",
+  "ts": "2026-10-16T20:21:00.981Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "hold",
+    "seq": 10,
+    "text": "The drive to 2.14.0 under hv's AFK word (decision 20), in order, state at the 20:2xZ fold: (1) WP-06 LANDED at 8bea7ba (cc; verified by vc in a worktree: menuz.bats 65/65 both bashes, swift test 108/108 in 14 suites, Debug build, xcodebuild test 19 hosted + 108; transcript tmp/vc-st0026/st0027/verify-8bea7ba.txt) and pushed; CI run 38961416498 on it was pending at the fold. NEXT: book a window with intent-vc (START/END), quit hv's old Menuz instance (pid 96193, the pre-WP-06 Debug build), run tmp/vc-st0026/st0027/devbuild.sh Debug (one xcodebuild into ~/.local/state/menuz/build/macos), then opt/menuz/test/notice-handrun.sh <that Menuz.app> (AC-06.4; it removes and restores hv's 'NSStatusItem Preferred Position Item-0' = 700), then relaunch hv's instance from the new build with an empty environment (env -i HOME=$HOME open -a <app>), then tmp/vc-st0026/st0027/mint-at06.sh <sha> '<ac-06.4 note>' '<ac-06.5 evidence>' (mints AT-06.1 to AT-06.4, satisfies AC-06.5 on dc's landed help lines, rewrites AT-04.4's note, lints), wp done ST0027/06, commit the views, canon and events by set difference. (2) WP-05 (cc, go since 20:19Z on st0027-wp05 from 8bea7ba): the shim verbs, the keg install, menuz.bats with fakes, the --unregister arm; dc holds the CI job (tmp/dc-st0027/apply-menuz-app-job.py, lands with the shim, one workflow_dispatch proves both), the help verb table, README section, CHANGELOG entry, done.md 2.14.0 draft; dc's signing half landed (b7b2148, c295563); docs/releasing.md landed (95b11cf); vc verifies and pushes; the install hand run; AC-05.2's logout is hv's (edit the AC to what is measurable if hv is away); AC-05.3 CI green on the closing SHA (menuz-app on dispatch); AC-05.4 check all and tools/test-estate on the closing SHA in a window. (3) ST0028 (dc, ad2da79, verified, pushed): wp done and st done at the close, AC-01.4 folded into the estate run. (4) st done ST0027, dehydrate both, restart.md, then the cut: bin/devbin release --minor on hv's word (or vc's under decision 20), nothing pushed while step 11 waits on CI; the tap bump for 2.14.0; Menuz.app.zip published after hv's store-creds. Rules in force: compiles only in windows booked with intent-vc; suite-sized bats outside announced Intent windows; CI's shellcheck is 0.9.0 (if/then guards; dc runs it on kovacs before handing on); commits by path; vc pushes. (5) hold 9's banked files stand; worktrees pruned at 19:5xZ except wt-8bea7ba (prune it)."
+  }
+}
