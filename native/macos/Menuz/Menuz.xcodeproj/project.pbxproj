@@ -17,6 +17,7 @@
 		7A18260D751703EDDADAAE43 /* Arms.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86DE1B4857DABEF4761E634D /* Arms.swift */; };
 		8A0ACEFEB1B35D3594B1FAFE /* TestHostTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FB3DC0386DDBB630BCAECDE /* TestHostTests.swift */; };
 		9BA03B276434DB812F3EE7EE /* Watcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AA7FC095B000E5E6F52EC5B /* Watcher.swift */; };
+		DE9C0C3FA1666B973E9DB06C /* LoginItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E028E7200976AF9A22C8E64 /* LoginItem.swift */; };
 		EAE4191C024DFE1B4BBE78F5 /* MenuzApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA910089979C343042FD394C /* MenuzApp.swift */; };
 		FB37AB1536AE3C8EEDC49F8F /* MenuzKit in Frameworks */ = {isa = PBXBuildFile; productRef = E176BB28E1D45EFD0D08551C /* MenuzKit */; };
 /* End PBXBuildFile section */
@@ -36,6 +37,7 @@
 		11104D7740E2D95237590C37 /* Shell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shell.swift; sourceTree = "<group>"; };
 		119B745E5FA30468AC4D6A81 /* MenuzKit */ = {isa = PBXFileReference; lastKnownFileType = folder; name = MenuzKit; path = MenuzKit; sourceTree = SOURCE_ROOT; };
 		1434161DD51B33FFBEA2FB62 /* AppLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLog.swift; sourceTree = "<group>"; };
+		2E028E7200976AF9A22C8E64 /* LoginItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginItem.swift; sourceTree = "<group>"; };
 		408DCC006CB1D86D48104017 /* Menuz.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Menuz.entitlements; sourceTree = "<group>"; };
 		5AA7FC095B000E5E6F52EC5B /* Watcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Watcher.swift; sourceTree = "<group>"; };
 		6847D972D776B11DB1D40E76 /* Menuz.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Menuz.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -75,6 +77,7 @@
 			children = (
 				1434161DD51B33FFBEA2FB62 /* AppLog.swift */,
 				86DE1B4857DABEF4761E634D /* Arms.swift */,
+				2E028E7200976AF9A22C8E64 /* LoginItem.swift */,
 				0D78B2E5395802C4995350D1 /* LoginShell.swift */,
 				8A82B2DADFCB97CEDA1B96BA /* MenuBuilder.swift */,
 				746C4473977A35828A0457CF /* MenuSource.swift */,
@@ -231,6 +234,7 @@
 			files = (
 				698D5FF25A59BB86422C638D /* AppLog.swift in Sources */,
 				7A18260D751703EDDADAAE43 /* Arms.swift in Sources */,
+				DE9C0C3FA1666B973E9DB06C /* LoginItem.swift in Sources */,
 				737167339BCD0368AFD43609 /* LoginShell.swift in Sources */,
 				647A99098E46609054F1591F /* MenuBuilder.swift in Sources */,
 				184F74B5C1A84C179E4FFD0A /* MenuSource.swift in Sources */,

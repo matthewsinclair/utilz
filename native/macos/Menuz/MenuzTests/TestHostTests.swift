@@ -41,3 +41,32 @@ struct LoginItemTests {
     #expect(Arms.loginItemStatus(.notFound) == "not found")
   }
 }
+
+/// Only the installed copy, unregistered, registers itself (D6): a Debug
+/// product run by hand or by a hand run must never become the login item.
+@Suite("Login item registration")
+struct LoginItemDecisionTests {
+  static let installed = LoginItem.installedPath(home: "/Users/someone")
+
+  @Test("the installed path is ~/Applications/Menuz.app")
+  func installedPath() {
+    #expect(Self.installed == "/Users/someone/Applications/Menuz.app")
+  }
+
+  @Test("the installed copy registers when it is not registered, and leaves any other status alone")
+  func installedCopy() {
+    #expect(LoginItem.decide(bundle: Self.installed, installed: Self.installed, status: .notRegistered) == .register)
+    #expect(LoginItem.decide(bundle: Self.installed + "/", installed: Self.installed, status: .notRegistered) == .register)
+    #expect(LoginItem.decide(bundle: Self.installed, installed: Self.installed, status: .enabled) == .leave(.enabled))
+    #expect(
+      LoginItem.decide(bundle: Self.installed, installed: Self.installed, status: .requiresApproval)
+        == .leave(.requiresApproval))
+  }
+
+  @Test("any other copy registers nothing, whatever the status")
+  func otherCopies() {
+    let debug = "/Users/someone/.local/state/menuz/build/macos/Build/Products/Debug/Menuz.app"
+    #expect(LoginItem.decide(bundle: debug, installed: Self.installed, status: .notRegistered) == .notInstalledCopy)
+    #expect(LoginItem.decide(bundle: "/Applications/Menuz.app", installed: Self.installed, status: .notRegistered) == .notInstalledCopy)
+  }
+}

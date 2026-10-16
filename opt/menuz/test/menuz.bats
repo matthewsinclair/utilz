@@ -82,15 +82,21 @@ EOF
 app_args() { tr '\n' ' ' <"$FAKES/app.args"; }
 
 # A fixture UTILZ_HOME that is a git repository: the real common.sh and shim,
-# and native/macos/Menuz with one source and one test, committed.
+# and native/macos/Menuz with one source and one test, committed. With
+# --no-source it has no native/macos/Menuz. Status reads the source through
+# git on UTILZ_HOME, so a test of it never reads the real tree, whose
+# native/macos/Menuz exists from WP-03 on.
 source_home() {
   SRC="$BATS_TEST_TMPDIR/src"
-  mkdir -p "$SRC/opt/utilz/lib" "$SRC/opt/menuz/lib" "$SRC/native/macos/Menuz/Menuz" "$SRC/native/macos/Menuz/MenuzTests"
+  mkdir -p "$SRC/opt/utilz/lib" "$SRC/opt/menuz/lib"
   cp "$UTILZ_HOME/opt/utilz/lib/common.sh" "$SRC/opt/utilz/lib/"
   cp "$UTILZ_HOME/opt/menuz/menuz" "$UTILZ_HOME/opt/menuz/VERSION" "$SRC/opt/menuz/"
   cp "$EXAMPLE" "$SRC/opt/menuz/lib/"
-  echo 'print("menuz")' >"$SRC/native/macos/Menuz/Menuz/App.swift"
-  echo 'test' >"$SRC/native/macos/Menuz/MenuzTests/AppTests.swift"
+  if [[ "${1:-}" != --no-source ]]; then
+    mkdir -p "$SRC/native/macos/Menuz/Menuz" "$SRC/native/macos/Menuz/MenuzTests"
+    echo 'print("menuz")' >"$SRC/native/macos/Menuz/Menuz/App.swift"
+    echo 'test' >"$SRC/native/macos/Menuz/MenuzTests/AppTests.swift"
+  fi
   git -C "$SRC" init -q
   git -C "$SRC" add -A
   git -C "$SRC" -c user.name=t -c user.email=t@t commit -qm fixture
@@ -387,10 +393,11 @@ run_src_menuz() {
 }
 
 @test "AT-02.3: status reports installed, use, running, login item and source, with no Xcode" {
+  source_home
   make_app "$INSTALLED" 0.3.1
   fake pgrep 'echo 4242'
   fake xcodebuild 'echo "xcodebuild must not run" >&2; exit 99'
-  FAKE_LOGIN="requires approval" run_menuz status
+  FAKE_LOGIN="requires approval" run_src_menuz status
   assert_success
   assert_output_contains "$INSTALLED"
   assert_output_contains "0.3.1"
@@ -399,7 +406,7 @@ run_src_menuz() {
   assert_output_contains "installed (default)"
   assert_output_contains "4242"
   assert_output_contains "requires approval"
-  assert_output_contains "native/macos/Menuz"
+  printf '%s\n' "$output" | grep -Eq '^source      stale: installed [^,]+, tree [0-9a-f]{7,}$'
   [[ ! -e "$FAKES/xcodebuild.args" ]]
 }
 
@@ -437,10 +444,11 @@ run_src_menuz() {
 }
 
 @test "AT-02.3: status says the source is unknown where there is no native/macos/Menuz" {
+  source_home --no-source
   make_app "$INSTALLED"
-  run_menuz status
+  run_src_menuz status
   assert_success
-  assert_output_contains "unknown"
+  assert_output_contains "source      unknown: no $SRC/native/macos/Menuz under git here"
 }
 
 @test "AT-02.3: status reads the login item through the selected app, and says when it cannot" {

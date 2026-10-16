@@ -11,7 +11,6 @@ import ServiceManagement
 @main
 @MainActor
 final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, MenuActions {
-  private static let firstRunKey = "FirstRunDone"
 
   private var statusItem: NSStatusItem?
   private var builder: MenuBuilder?
@@ -91,7 +90,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, MenuAc
       watcher.start()
       self.watcher = watcher
     }
-    registerAtFirstRun()
+    registerLoginItem()
     fileChanged()
   }
 
@@ -141,16 +140,24 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, MenuAc
     }
   }
 
-  /// Registers the app as a login item on its first run, and says so either
-  /// way.
-  private func registerAtFirstRun() {
-    guard !UserDefaults.standard.bool(forKey: Self.firstRunKey) else { return }
-    UserDefaults.standard.set(true, forKey: Self.firstRunKey)
-    do {
-      try SMAppService.mainApp.register()
-      log.write("registered as a login item")
-    } catch {
-      log.write("could not register as a login item: \(error.localizedDescription)")
+  /// Registers the installed copy as a login item when it is not one
+  /// (LoginItem.decide), and says why whenever it does not.
+  private func registerLoginItem() {
+    let installed = LoginItem.installedPath(home: NSHomeDirectory())
+    switch LoginItem.decide(bundle: Bundle.main.bundleURL.path, installed: installed, status: SMAppService.mainApp.status) {
+    case .register:
+      do {
+        try SMAppService.mainApp.register()
+        log.write("registered as a login item")
+      } catch {
+        log.write("could not register as a login item: \(error.localizedDescription)")
+      }
+    case .notInstalledCopy:
+      log.write("not the installed copy at \(installed): no login item registered")
+    case .leave(let status):
+      if status != .enabled {
+        log.write("login item \(Arms.loginItemStatus(status)): left as it is")
+      }
     }
   }
 
