@@ -8,6 +8,13 @@
 # writes a PNG's first bytes; the one test that runs the real tool skips
 # where it is not installed.
 #
+# The signing half (WP-05) runs against fakes for every tool it would reach:
+# security (the keychain: NO TEST READS OR WRITES THE REAL ONE), codesign,
+# xcrun, spctl, ditto, xattr, plutil and gh, each recording its calls, and a
+# fake bin/utilz in the fixture project standing in for `utilz menuz build`.
+# They are set in setup for every test, so a test that forgets one still
+# reaches no real tool.
+#
 # devbin itself needs bash 5 (it refuses 3.2 by name), so these tests run
 # under the first bash 5 on PATH, linked into the fakes. PATH is otherwise a
 # copy of /usr/bin and /bin without rsvg-convert, so "not installed" is real
@@ -51,6 +58,109 @@ setup() {
   mkdir -p "$FAKES"
   ln -s "$BASH5" "$FAKES/bash"
   export PATH="$FAKES:$SYSBIN"
+  export HOME="$BATS_TEST_TMPDIR/home" XDG_STATE_HOME="$BATS_TEST_TMPDIR/state" USER=tester
+  mkdir -p "$HOME"
+  KC="$FAKES/keychain"
+  mkdir -p "$KC"
+  printf '0.1.0\n' >"$PROJ/opt-menuz-VERSION"
+  mkdir -p "$PROJ/opt/menuz"
+  mv "$PROJ/opt-menuz-VERSION" "$PROJ/opt/menuz/VERSION"
+  printf '2.14.0\n' >"$PROJ/VERSION"
+  printf '<plist/>\n' >"$PROJ/native/macos/Menuz/Menuz/Menuz.entitlements"
+  PRODUCT="$XDG_STATE_HOME/menuz/build/macos/Build/Products/Release/Menuz.app"
+  DIST="$XDG_STATE_HOME/menuz/build/macos/dist/Menuz.app"
+  fake_tools
+  fake_shim
+}
+
+IDENTITY_NAME="Developer ID Application: Fixture Co (TEAM123)"
+
+# The signing half's fakes. Their bodies are written literally into each fake
+# and expand when the fake runs, so the single quotes are deliberate.
+# shellcheck disable=SC2016
+# Each records its calls, one per line, in
+# $FAKES/<name>.calls. State they share lives in files under $FAKES.
+fake_tools() {
+  # security: generic passwords are files under $KC named by service;
+  # identities are $FAKES/identities, verbatim, when it exists.
+  write_fake security '
+case "$1" in
+  find-generic-password)
+    while [ $# -gt 0 ]; do [ "$1" = -s ] && svc="$2"; shift; done
+    [ -f "'"$KC"'/$svc" ] && cat "'"$KC"'/$svc" && exit 0
+    exit 44 ;;
+  find-identity)
+    [ -f "'"$FAKES"'/identities" ] && cat "'"$FAKES"'/identities"
+    exit 0 ;;
+  add-generic-password)
+    while [ $# -gt 0 ]; do case "$1" in -s) svc="$2" ;; -w) val="$2" ;; esac; shift; done
+    printf "%s" "$val" >"'"$KC"'/$svc" ;;
+esac'
+  # codesign: -d prints $FAKES/codesign.desc; --verify exits $FAKES/verify.rc.
+  printf 'Identifier=com.matthewsinclair.utilz.menuz\nTeamIdentifier=TEAM123\nCodeDirectory v=20500 size=1 flags=0x10000(runtime) hashes=1\n' >"$FAKES/codesign.desc"
+  write_fake codesign '
+case " $* " in
+  *" -d "*) cat "'"$FAKES"'/codesign.desc" >&2 ;;
+  *" --verify "*) exit "$(cat "'"$FAKES"'/verify.rc" 2>/dev/null || echo 0)" ;;
+esac'
+  # xcrun: notarytool submit prints $FAKES/notary.out; stapler staple marks
+  # the bundle stapled, and validate reads the mark.
+  printf 'Conducting pre-submission checks\n  id: 0b9c7f4e-1111-2222-3333-444455556666\n  status: Accepted\n' >"$FAKES/notary.out"
+  write_fake xcrun '
+case "$1 $2" in
+  "notarytool submit") cat "'"$FAKES"'/notary.out" ;;
+  "notarytool log") echo "the notary log" ;;
+  "stapler staple") touch "'"$FAKES"'/stapled" ;;
+  "stapler validate") [ -f "'"$FAKES"'/stapled" ] ;;
+esac'
+  write_fake spctl '
+if [ -f "'"$FAKES"'/stapled" ]; then echo "source=Notarized Developer ID"; else echo "source=Unnotarized Developer ID"; exit 3; fi'
+  # ditto: a copy, or a "zip" that is a tar of the parent-kept bundle.
+  write_fake ditto '
+case "$1" in
+  -c) shift; while [ "${1#-}" != "$1" ]; do shift; done
+      tar -C "$(dirname "$1")" -cf "$2" "$(basename "$1")" ;;
+  -x) shift; while [ "${1#-}" != "$1" ]; do shift; done
+      mkdir -p "$2" && tar -C "$2" -xf "$1" ;;
+  *) mkdir -p "$(dirname "$2")" && cp -R "$1" "$2" ;;
+esac'
+  write_fake xattr ':'
+  # plutil -extract KEY raw -o - PLIST, over a fixture Info.plist of KEY=value lines.
+  write_fake plutil 'sed -n "s/^$2=//p" "$6" | grep . || exit 1'
+  # gh: a release exists when $FAKES/release.<tag> does; it lists its assets.
+  write_fake gh '
+case "$1 $2" in
+  "release view") [ -f "'"$FAKES"'/release.$3" ] && cat "'"$FAKES"'/release.$3" ;;
+  "release upload") cp "$4" "'"$FAKES"'/uploaded.zip" ;;
+esac'
+}
+
+write_fake() { # $1 name, $2 body
+  printf '#!/usr/bin/env bash\nprintf "%%s\\n" "$*" >>"%s/%s.calls"\n%s\n' "$FAKES" "$1" "$2" >"$FAKES/$1"
+  chmod +x "$FAKES/$1"
+}
+
+# The fixture project's bin/utilz: `menuz build --release` makes a Release
+# bundle at VERSION (or $FAKES/build.version), unless $FAKES/no-build-verb is
+# set, when it refuses as a shim without the verb does.
+fake_shim() {
+  cat >"$PROJ/bin/utilz" <<EOF
+#!/usr/bin/env bash
+printf '%s\n' "\$*" >>"$FAKES/utilz.calls"
+if [ -f "$FAKES/no-build-verb" ]; then echo "menuz: unknown verb: 'build' (menuz --help names the verbs)" >&2; exit 2; fi
+mkdir -p "$PRODUCT/Contents/MacOS"
+printf 'CFBundleIdentifier=com.matthewsinclair.utilz.menuz\nCFBundleShortVersionString=%s\nCFBundleVersion=42\nCFBundleExecutable=Menuz\nLSUIElement=true\n' "\$(cat "$FAKES/build.version" 2>/dev/null || echo 0.1.0)" >"$PRODUCT/Contents/Info.plist"
+printf '#!/bin/sh\n' >"$PRODUCT/Contents/MacOS/Menuz"
+chmod +x "$PRODUCT/Contents/MacOS/Menuz"
+EOF
+  chmod +x "$PROJ/bin/utilz"
+}
+
+store_creds_fixture() {
+  printf 'dev@example.com' >"$KC/utilz.apple.APPLE_ID"
+  printf 'hunter2-secret' >"$KC/utilz.apple.APPLE_APP_PASSWORD"
+  printf 'TEAM123' >"$KC/utilz.apple.APPLE_TEAM_ID"
+  printf '  1) ABCDEF "%s"\n     1 valid identities found\n' "$IDENTITY_NAME" >"$FAKES/identities"
 }
 
 # rsvg-convert that records each call on one line and writes the PNG
@@ -164,6 +274,7 @@ run_macos() {
 
 @test "AC-06.3: doctor reports rsvg-convert, both SVGs and the catalogue, exit 0 when nothing is missing" {
   fake_rsvg
+  store_creds_fixture
   run_macos doctor
   [ "$status" -eq 0 ] || fail "exit $status: $output"
   [[ "$output" == *"rsvg-convert   $FAKES/rsvg-convert"* ]]
@@ -194,8 +305,186 @@ run_macos() {
   [[ "$output" == *"app-icons"* && "$output" == *"doctor"* ]]
   run_macos sign
   [ "$status" -eq 1 ]
-  [[ "$output" == *"unknown macos subcommand: sign (try: app-icons doctor)"* ]]
+  [[ "$output" == *"unknown macos subcommand: sign (try: app-icons doctor store-creds app-sign app-notarize app-verify publish)"* ]]
   run_macos app-icons now
   [ "$status" -eq 1 ]
   [[ "$output" == *"macos app-icons takes no arguments, got: now"* ]]
+}
+
+# --- the signing half (WP-05) -------------------------------------------------
+
+@test "AC-05.3: with no credentials doctor says MISSING for each and for the identity, exit 1" {
+  fake_rsvg
+  run_macos doctor
+  [ "$status" -eq 1 ]
+  [[ "$output" == *"Developer ID          MISSING (no \"Developer ID Application\" identity in the login keychain)"* ]] || fail "$output"
+  local k
+  for k in APPLE_ID APPLE_APP_PASSWORD APPLE_TEAM_ID; do
+    [[ "$output" == *"$k"*"MISSING (run: bin/devbin macos store-creds)"* ]] || fail "$k: $output"
+  done
+}
+
+@test "AC-05.3: doctor says PRESENT and counts the identity, never printing a value or the identity whole" {
+  fake_rsvg
+  store_creds_fixture
+  run_macos doctor
+  [[ "$output" == *"Developer ID          1 found, team TEAM123"* ]] || fail "$output"
+  [[ "$output" == *"test-sign             signs and verifies"* ]] || fail "$output"
+  [ "$(printf '%s\n' "$output" | grep -c 'PRESENT$')" -eq 3 ]
+  [[ "$output" != *"hunter2-secret"* && "$output" != *"dev@example.com"* ]]
+  [[ "$output" != *"$IDENTITY_NAME"* ]]
+  grep -q -- "--sign $IDENTITY_NAME " "$FAKES/codesign.calls"
+}
+
+@test "AC-05.3: doctor says FAILED when the listed identity cannot sign" {
+  fake_rsvg
+  store_creds_fixture
+  printf '1' >"$FAKES/verify.rc"
+  run_macos doctor
+  [ "$status" -eq 1 ]
+  [[ "$output" == *"test-sign             FAILED"* ]] || fail "$output"
+}
+
+@test "AC-05.3: app-notarize refuses without the notary credentials, before any submission" {
+  printf '  1) ABCDEF "%s"\n' "$IDENTITY_NAME" >"$FAKES/identities"
+  run_macos app-notarize
+  [ "$status" -eq 1 ]
+  [[ "$output" == *"notary credentials missing -- run: bin/devbin macos store-creds"* ]] || fail "$output"
+  [ ! -e "$FAKES/xcrun.calls" ]
+}
+
+@test "AC-05.3: app-sign refuses without a Developer ID identity, before any build" {
+  run_macos app-sign
+  [ "$status" -eq 1 ]
+  [[ "$output" == *"no Developer ID Application identity in the login keychain"* ]] || fail "$output"
+  [ ! -e "$FAKES/utilz.calls" ]
+}
+
+@test "AC-05.3: app-sign refuses by name while utilz menuz has no build verb" {
+  store_creds_fixture
+  touch "$FAKES/no-build-verb"
+  run_macos app-sign
+  [ "$status" -eq 1 ]
+  [[ "$output" == *"utilz menuz has no build verb yet (WP-05's shim), and app-sign builds only through it"* ]] || fail "$output"
+  [ ! -e "$FAKES/codesign.calls" ]
+}
+
+@test "AC-05.3: app-sign builds through utilz menuz build --release, stages a copy, signs it with the runtime, reads it back" {
+  store_creds_fixture
+  run_macos app-sign
+  [ "$status" -eq 0 ] || fail "exit $status: $output"
+  [ "$(cat "$FAKES/utilz.calls")" = "menuz build --release" ]
+  grep -qx -- "$PRODUCT $DIST" "$FAKES/ditto.calls"
+  [ -x "$DIST/Contents/MacOS/Menuz" ]
+  grep -qx -- "--force --options runtime --timestamp --entitlements $PROJ/native/macos/Menuz/Menuz/Menuz.entitlements --sign $IDENTITY_NAME $DIST" "$FAKES/codesign.calls" ||
+    fail "$(cat "$FAKES/codesign.calls")"
+  # Signed, then verified, then described: in that order.
+  local order
+  order="$(grep -n -- "--sign $IDENTITY_NAME $DIST\|--verify --strict --deep $DIST\|-d --verbose=2 $DIST" "$FAKES/codesign.calls" | cut -d: -f1 | tr '\n' ' ')"
+  [ "$order" = "1 2 3 " ] || fail "codesign order: $order: $(cat "$FAKES/codesign.calls")"
+  [[ "$output" == *"identifier            com.matthewsinclair.utilz.menuz"* ]]
+  [[ "$output" == *"nested code signed    0"* ]]
+  [[ "$output" != *"$IDENTITY_NAME"* ]]
+}
+
+@test "AC-05.3: app-sign refuses a bundle that still carries the build's signature" {
+  store_creds_fixture
+  printf 'Identifier=Menuz\nTeamIdentifier=not set\nCodeDirectory flags=0x2(adhoc)\n' >"$FAKES/codesign.desc"
+  run_macos app-sign
+  [ "$status" -eq 1 ]
+  [[ "$output" == *"the bundle is signed as 'Menuz', not com.matthewsinclair.utilz.menuz"* ]] || fail "$output"
+}
+
+@test "AC-05.3: app-notarize staples only an Accepted submission and checks a quarantined copy" {
+  store_creds_fixture
+  run_macos app-sign
+  run_macos app-notarize
+  [ "$status" -eq 0 ] || fail "exit $status: $output"
+  grep -q "^notarytool submit .*Menuz.zip --apple-id dev@example.com --password hunter2-secret --team-id TEAM123 --wait$" "$FAKES/xcrun.calls"
+  grep -qx "stapler staple $DIST" "$FAKES/xcrun.calls"
+  [[ "$output" == *"Gatekeeper            quarantined copy accepted, source=Notarized Developer ID"* ]] || fail "$output"
+  [[ "$output" != *"hunter2-secret"* ]]
+}
+
+@test "AC-05.3: app-notarize prints Apple's log and staples nothing when the submission is not Accepted" {
+  store_creds_fixture
+  run_macos app-sign
+  printf '  id: 0b9c7f4e-1111-2222-3333-444455556666\n  status: Invalid\n' >"$FAKES/notary.out"
+  run_macos app-notarize
+  [ "$status" -eq 1 ]
+  [[ "$output" == *"the notary log"* ]]
+  [[ "$output" == *"notarisation was not Accepted (status: Invalid) -- nothing stapled"* ]] || fail "$output"
+  if grep -q "stapler staple" "$FAKES/xcrun.calls"; then fail "stapled after an Invalid submission"; fi
+}
+
+# A signed, notarised dist bundle at VERSION (or the version given).
+notarised_dist() {
+  store_creds_fixture
+  [ -z "${1:-}" ] || printf '%s' "$1" >"$FAKES/build.version"
+  (cd "$PROJ" && bin/devbin macos app-sign >/dev/null 2>&1) || fail "app-sign failed in the fixture"
+  (cd "$PROJ" && bin/devbin macos app-notarize >/dev/null 2>&1) || fail "app-notarize failed in the fixture"
+}
+
+@test "AC-05.3: publish refuses a bundle whose version is not opt/menuz/VERSION, uploading nothing" {
+  notarised_dist 0.0.9
+  touch "$FAKES/release.2.14.0"
+  run_macos publish
+  [ "$status" -eq 1 ]
+  [[ "$output" == *"the bundle is version 0.0.9 and opt/menuz/VERSION is 0.1.0"* ]] || fail "$output"
+  [ ! -e "$FAKES/uploaded.zip" ]
+}
+
+@test "AC-05.3: publish refuses when the release object for VERSION's tag does not exist" {
+  notarised_dist
+  run_macos publish
+  [ "$status" -eq 1 ]
+  [[ "$output" == *"there is no release object for 2.14.0"* ]] || fail "$output"
+  [ ! -e "$FAKES/uploaded.zip" ]
+}
+
+@test "AC-05.3: publish refuses a release that already holds Menuz.app.zip" {
+  notarised_dist
+  printf 'utilz-2.14.0.tar.gz\nMenuz.app.zip\n' >"$FAKES/release.2.14.0"
+  run_macos publish
+  [ "$status" -eq 1 ]
+  [[ "$output" == *"release 2.14.0 already holds Menuz.app.zip -- nothing uploaded"* ]] || fail "$output"
+  [ ! -e "$FAKES/uploaded.zip" ]
+}
+
+@test "AC-05.3: publish proves the zip and uploads Menuz.app.zip to VERSION's release" {
+  notarised_dist
+  printf 'utilz-2.14.0.tar.gz\n' >"$FAKES/release.2.14.0"
+  run_macos publish
+  [ "$status" -eq 0 ] || fail "exit $status: $output"
+  grep -q "^release upload 2.14.0 .*/Menuz.app.zip$" "$FAKES/gh.calls"
+  tar -tf "$FAKES/uploaded.zip" | grep -qx "Menuz.app/Contents/Info.plist"
+  [[ "$output" == *"published: Menuz.app.zip on release 2.14.0"* ]]
+}
+
+@test "AC-05.3: store-creds refuses a stdin that is not a terminal, storing nothing" {
+  run bash -c "cd '$PROJ' && printf 'a\nb\nc\n' | bin/devbin macos store-creds"
+  [ "$status" -eq 1 ]
+  [[ "$output" == *"store-creds is interactive and reads the terminal; stdin is not one"* ]] || fail "$output"
+  [ -z "$(ls "$KC")" ]
+}
+
+@test "AC-05.3: app-verify refuses an unknown config and a missing bundle by name" {
+  run_macos app-verify bogus
+  [ "$status" -eq 1 ]
+  [[ "$output" == *"app-verify: unknown config 'bogus' (debug|release|dist)"* ]]
+  run_macos app-verify release
+  [ "$status" -eq 1 ]
+  [[ "$output" == *"no Release bundle at $PRODUCT -- run: utilz menuz build --release"* ]] || fail "$output"
+  run_macos app-verify
+  [ "$status" -eq 1 ]
+  [[ "$output" == *"no signed bundle at $DIST"* ]] || fail "$output"
+}
+
+@test "AC-05.3: app-verify passes a signed, notarised bundle" {
+  notarised_dist
+  run_macos app-verify
+  [ "$status" -eq 0 ] || fail "exit $status: $output"
+  [[ "$output" == *"LSUIElement           true"* ]]
+  [[ "$output" == *"version               0.1.0 (build 42)"* ]] || fail "$output"
+  [[ "$output" == *"stapled ticket        present, validates"* ]]
 }
