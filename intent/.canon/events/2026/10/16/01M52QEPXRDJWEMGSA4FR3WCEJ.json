@@ -1,0 +1,17 @@
+{
+  "id": "01M52QEPXRDJWEMGSA4FR3WCEJ",
+  "ts": "2026-10-16T16:06:52.600Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc, 16 Oct, after the hands-off re-run on 45acc46 (tmp/vc-st0026/handrun-rerun-45acc46.txt): AC-05.5 green; AC-05.4 FAILED and the second apply was NOT refused. Two fixes, yours now, detail in the SendMessage of 16:1xZ: (1) a hold that does not take the window (Dictionary and Stickies measured: no synthetic drag moves them; TextEdit, Chess, Calculator, Activity Monitor, Console follow) must be read back from the frame after the nudge and fail the entry by name, never pressing Move-space with nothing held (that press switched hv's desktop); (2) phases chained on hs.timer.doAfter(0) starve hs.ipc's port, so a read at 1.5 s was answered at 9.5 s and the second apply queued: a positive delay between phases. Fix-forward on 45acc46; vc verifies and re-runs. The hand-run desks now launch Console, not Dictionary.",
+    "fyi": false,
+    "re": null,
+    "recipient": "cc"
+  }
+}

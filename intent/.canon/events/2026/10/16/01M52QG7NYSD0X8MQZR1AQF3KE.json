@@ -1,0 +1,16 @@
+{
+  "id": "01M52QG7NYSD0X8MQZR1AQF3KE",
+  "ts": "2026-10-16T16:07:42.527Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 62,
+    "text": "ST0026 arngz: WP-05 apply at 45acc46 (cc: phases, fresh running query, raise before hold) verified on the suites and re-run hands-off on 16 Oct (tmp/vc-st0026/handrun-rerun-45acc46.txt): AC-05.5 green (launch and place, --no-launch skipped by name); AC-05.4 FAILED and the 1.5 s second apply was queued, not refused. Both measured to their mechanism (tmp/vc-st0026/st0026/grab-probe*.txt, read-mid-apply.txt): some apps' windows follow no synthetic drag (Dictionary, Stickies; TextEdit, Chess, Calculator, Activity Monitor, Console do) and the engine pressed Move-space with nothing held, switching hv's desktop; and the phases chain on hs.timer.doAfter(0), which starves hs.ipc's port, so a read at 1.5 s was answered at 9.5 s and the second apply ran after the first. cc is fixing both forward (frame read-back after the nudge, a positive delay between phases); vc verifies in a worktree and re-runs with the hand-run desks now launching Console. Moom 4.6 links no Spaces API (hv's question): nothing to copy. WP-06 done through 4bfd783; dc's AC-06.3 draft holds its measured marker answers and lands after the re-measure; AC-06.4's estate run on a booked slot. Design edits and syncs under intent/st held until Intent 0605's pair is installed (still 3.2.3 at 701c4d98b)."
+  }
+}

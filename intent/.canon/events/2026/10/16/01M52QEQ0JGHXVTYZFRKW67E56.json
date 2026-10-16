@@ -1,0 +1,17 @@
+{
+  "id": "01M52QEQ0JGHXVTYZFRKW67E56",
+  "ts": "2026-10-16T16:06:52.690Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc, 16 Oct: the re-run's measured answers for AC-06.3's markers are in the SendMessage of 16:1xZ: at 45acc46 a second apply is queued, not refused, and reads are answered after the apply, not between phases (doAfter(0) starves the IPC port); the launch check is green. Hold the landing until cc's fix-forward lands and vc re-measures; the help gains a line that some apps' windows cannot be carried and apply says which.",
+    "fyi": false,
+    "re": null,
+    "recipient": "dc"
+  }
+}

@@ -3,8 +3,8 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 3341dbaf-a82f-4073-bae3-2f8c30306f25
-heartbeat_at: 2026-10-16 13:53Z
-status: paused
+heartbeat_at: 2026-10-16 16:10Z
+status: active
 focus: "16 Oct, banked and folded for a compact on hv's word: ST0026 WP-05's post-launch defect measured to its mechanism and fixed by cc at 45acc46 (apply in phases, fresh running query, raise before hold), verified on the suites, the hands-off re-run NOT yet run (next session's first item, scripts banked under tmp/vc-st0026/); dc's WP-06 landings verified and AC-06.3 drafted; ST0027 menuz written up, the rubber-duck with hv pending; the store rebuilt, syncs and edits under intent/st held until Intent 0605's pair is installed. cc and dc take instructions from vc."
 claims: [ST0026, ST0027]
 ---
@@ -13,7 +13,7 @@ claims: [ST0026, ST0027]
 
 ## DOING
 
-- ST0026 arngz: WP-05 apply landed at 32fe3f0 (cc) and verified; the post-launch defect measured to its mechanism (observe's running-apps read is NSWorkspace's KVO array, frozen while apply blocked Hammerspoon's run loop; a launched window can open on a desktop not shown, where the carry's press landed on hv's iTerm2 window covering it; a second apply queued behind the first) and fixed by cc at 45acc46: apply in phases on separate timer callbacks (launch, inventory, organise, hv's shape), the running judgement read fresh per bundle, the window raised and hit-tested before it is held, a second apply refused while one runs. 45acc46 verified by vc on the suites (plan_test 171/171, arngz.bats 121/121 both bashes, shellcheck 22 clean, plan.lua pure); the hands-off re-run on it (AC-05.4, AC-05.5, the 1.5 s second-apply probe) is NOT yet run: next session's first item. WP-06 doctor/init done at c654d4f (dc), hold 5 done at 7451678 and ff154a7, the shim's header at 4bfd783, all verified; AC-06.3's docs drafted by dc, landing after WP-05; AC-06.4's estate run on a booked slot. Design on disk; edits under intent/st and syncs held until Intent 0605's pair is installed (landed on Intent's main, hv's build all not yet run). (edited)
+- ST0026 arngz: WP-05 apply at 45acc46 (cc: phases, fresh running query, raise before hold) verified on the suites and re-run hands-off on 16 Oct (tmp/vc-st0026/handrun-rerun-45acc46.txt): AC-05.5 green (launch and place, --no-launch skipped by name); AC-05.4 FAILED and the 1.5 s second apply was queued, not refused. Both measured to their mechanism (tmp/vc-st0026/st0026/grab-probe*.txt, read-mid-apply.txt): some apps' windows follow no synthetic drag (Dictionary, Stickies; TextEdit, Chess, Calculator, Activity Monitor, Console do) and the engine pressed Move-space with nothing held, switching hv's desktop; and the phases chain on hs.timer.doAfter(0), which starves hs.ipc's port, so a read at 1.5 s was answered at 9.5 s and the second apply ran after the first. cc is fixing both forward (frame read-back after the nudge, a positive delay between phases); vc verifies in a worktree and re-runs with the hand-run desks now launching Console. Moom 4.6 links no Spaces API (hv's question): nothing to copy. WP-06 done through 4bfd783; dc's AC-06.3 draft holds its measured marker answers and lands after the re-measure; AC-06.4's estate run on a booked slot. Design edits and syncs under intent/st held until Intent 0605's pair is installed (still 3.2.3 at 701c4d98b). (edited)
 - ST0027 menuz: written up on hv's ask and the three sibling apps (Intent, Conflab, Gtools), nothing reinvented: design.md at 59efdaf carries the shape, the menu file, the login shell's own interpolation, the standard dialogs for params, the log, 18 criteria and 11 questions with a recommendation each. WP-01 (the rubber-duck with hv) is started; WP-02..05 and the criteria are in the store. HELD until Intent's fixed pair (0605, 3.2.4): the sync --to-store that carries design.md into the store, and any edit under intent/st/. Code starts after hv's rulings.
 
 ## TODO
