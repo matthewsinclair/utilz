@@ -31,7 +31,7 @@ title: menuz: a macOS menu bar app whose menu is a YAML file of commands to run
 - AC-03.3 Hand run on hv's machine, recorded as such: a save of menuz.yaml, an atomic rename by an editor, and a deletion and recreation of MENUZ_HOME each reach the menu within one second with no restart. -- satisfied: yes (computed)
 - AC-03.4 Labels and each lines with a $ or a backtick are realised by the login shell at every menu open in one zsh -ilc invocation, asynchronously, the last values shown first and titles updated in place, under the realise cap with the previous value kept and the overrun logged; a label with neither is never sent to the shell; each expands to one item per stdout line with MENUZ_ITEM set. -- satisfied: yes (computed)
 
-### WP-04 -- Running items: params, the runner, the log and the notice (status: Not Started)
+### WP-04 -- Running items: params, the runner, the log and the notice (status: WIP)
 
 - AC-04.1 An item's params are acquired through one form window holding every param in order (D4), each field typed from the param's type (text, secret, choice, file, folder; text when none is given; secret hidden) with its prompt and default; Cancel runs nothing and logs cancelled; required refuses an empty answer and a typed field refuses a value of the wrong kind, each named in the form; the values reach the run as exported variables under the declared names. -- satisfied: no (computed)
 - AC-04.2 Each run is /bin/zsh -ilc of the run line, with the login shell's PATH and MENUZ_HOME/bin first on it, cwd the item's, else the file's, else HOME, stdin /dev/null, and MENUZ_HOME, MENUZ_LABEL, MENUZ_RUN_ID and (under each) MENUZ_ITEM exported; runs are concurrent, each with its own id, detached from the app (their own session, stdout and stderr on the log file directly, not through the app); Quit leaves runs in flight running and logs each as left running with its id (D9). -- satisfied: no (computed)
@@ -65,7 +65,7 @@ _(no tests in this group)_
 - AT-03.3 `opt/menuz/test/watcher-handrun.sh` -- covers AC-03.3 -- status: green -- Hand run 16 Oct 2026 18:34Z on hv's machine (Mac16,6, macOS 27.0.1 build 26A434, Xcode 27.1 build 27A9275, Swift 6.4), hands off, the Debug product at 805ed42 under fixture XDG dirs, transcript tmp/vc-st0026/st0027/ac033-handrun-805ed42.txt: save in place 0.261 s, atomic rename 0.265 s, delete MENUZ_HOME 0.269 s, recreate MENUZ_HOME 0.263 s, each timed from the change to the watcher's OSLog reload line (a 250 ms coalesce and the re-read); the delete was reported as a refusal naming the missing file and the recreation as 'directory back'; the app quit clean and registered no login item, being not the installed copy. A first run of the same script from vc's scratchpad at 18:31Z measured 0.264, 0.272, 0.265 and 0.262 s
 - AT-03.4 `native/macos/Menuz/MenuzKit/Tests/MenuzKitTests/RealiseTests.swift` -- covers AC-03.4 -- status: green -- Dynamic vs literal, one script for every label and each, the framed parse, the script run through zsh, the merge keeping last values; the asynchronous open and the cap are the app's Realiser and Shell (the cap's kill of the whole tree measured by cc, 0 strays in five trials); vc's --render at 805ed42 realised the example through the login shell
 
-### WP-04 -- Running items: params, the runner, the log and the notice (status: Not Started)
+### WP-04 -- Running items: params, the runner, the log and the notice (status: WIP)
 
 _(no tests in this group)_
 
