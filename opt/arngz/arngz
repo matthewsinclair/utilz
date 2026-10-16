@@ -313,6 +313,16 @@ engine_scheduled_timeout() {
   seconds_setting ARNGZ_APPLY_TIMEOUT 600
 }
 
+# Whether hs, exiting RC with OUT as what it printed, gave up waiting for
+# Hammerspoon's answer after delivering the request: exit 69 with "receive
+# timeout" (measured, design.md "Measured 16 Oct 2026"). hs exits 69 too when
+# it cannot reach Hammerspoon at all, and says so differently, so this is the
+# one place the two are told apart.
+hs_gave_up_waiting() {
+  local rc="$1" out="$2"
+  [[ $rc -eq 69 ]] && grep -qF "receive timeout" "$out"
+}
+
 # Ask the engine one thing. Writes {verb, desk, options} to a request file in
 # a fresh temp dir, runs `hs -c 'return dofile(<module>).run(<request>)'`, and
 # leaves the response's path in ENGINE_RESPONSE. Everything the CLI then shows
@@ -467,7 +477,7 @@ engine_ask() {
   local taken=0
   if [[ ! -f "$response" && -n "$waited" ]]; then
     if [[ $hung -eq 1 ]] || { [[ $rc -eq 0 ]] && grep -qxF "arngz: scheduled $verb" "$out"; } ||
-      { [[ $rc -eq 69 ]] && grep -qF "receive timeout" "$out"; }; then
+      hs_gave_up_waiting "$rc" "$out"; then
       taken=1
     fi
   fi
@@ -505,8 +515,17 @@ engine_ask() {
         return 2
         ;;
       69)
-        ENGINE_ERROR="hs could not reach Hammerspoon (exit 69): it is not running, or its config does not load hs.ipc"
-        ENGINE_FIX="arngz init --yes makes Hammerspoon's config load hs.ipc; then reload that config"
+        if hs_gave_up_waiting "$rc" "$out"; then
+          # The request reached Hammerspoon's port and no answer came within
+          # -t, so Hammerspoon is running and loads hs.ipc, and is busy or
+          # hung: busy, eg, while an apply holds its main thread (D20). A
+          # scheduled verb that hs gave up on is waited for above instead.
+          ENGINE_ERROR="hs gave up on $verb after ${timeout}s with receive timeout: the request reached Hammerspoon, which is running, and no answer came in time"
+          ENGINE_FIX="Hammerspoon is busy or hung: let an arngz apply that is running finish, or see its console (its menu bar icon: Console), or quit and reopen it"
+        else
+          ENGINE_ERROR="hs could not reach Hammerspoon (exit 69): it is not running, or its config does not load hs.ipc"
+          ENGINE_FIX="arngz init --yes makes Hammerspoon's config load hs.ipc; then reload that config"
+        fi
         ;;
       75)
         ENGINE_ERROR="Hammerspoon is not running (hs exit 75)"

@@ -449,11 +449,21 @@ fake_hs() {
   assert_output_contains "hs exited 0 and wrote no response"
 }
 
-@test "AT-03.1: hs's own failures are named: Hammerspoon unreachable, and a Lua error" {
+@test "AT-03.1: hs's own failures are named: Hammerspoon unreachable, a reply too late, and a Lua error" {
   fake_hs exit-69
   run_arngz discover
   assert_exit_code 2
   assert_output_contains "could not reach Hammerspoon (exit 69)"
+
+  # Delivered and not answered in time: Hammerspoon is running, so this is
+  # never "could not reach" it, and never init's fix.
+  fake_hs receive-timeout
+  run_arngz discover
+  assert_exit_code 2
+  assert_output_contains "hs gave up on discover after 60s with receive timeout: the request reached Hammerspoon, which is running, and no answer came in time"
+  assert_output_contains "; fix: Hammerspoon is busy or hung: let an arngz apply that is running finish"
+  refute_output_contains "could not reach Hammerspoon"
+  refute_output_contains "init --yes"
 
   fake_hs lua-error
   run_arngz discover
@@ -1471,6 +1481,13 @@ EOF
   run_arngz doctor
   assert_exit_code 1
   doctor_says FAIL IPC "Hammerspoon is not running \(hs exit 75\); fix: open -b org.hammerspoon.Hammerspoon$"
+  refute_output_contains "init --yes"
+
+  hs_on_path receive-timeout
+  run_arngz doctor
+  assert_exit_code 1
+  doctor_says FAIL IPC "hs gave up on observe after 60s with receive timeout: the request reached Hammerspoon, which is running, and no answer came in time; fix: Hammerspoon is busy or hung"
+  refute_output_contains "could not reach Hammerspoon"
   refute_output_contains "init --yes"
 
   hs_on_path hang
