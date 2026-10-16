@@ -376,6 +376,26 @@
       "note": "Hand run 16 Oct 2026 19:00Z on hv's machine (Mac16,6, macOS 27.0.1 build 26A434, Xcode 27.1 build 27A9275), hands off, the Debug product at 9dde810 under fixture XDG dirs with arngz linked into MENUZ_HOME/bin, driven through the accessibility tree by run-handrun.lua, transcript tmp/vc-st0026/st0027/ac045-handrun-9dde810.txt: discover through the form saved vc-ac045 (run 1, exit 0 in 1.5s); the each-generated item vc-ac045 applied it (run 2: 15 windows placed, 2 apps kept their own size, exit 1 in 19.7s, the failure notice posted); a text param through the form (run 3, '[3] hello hv', exit 0 in 0.2s); a slow run quit mid-way (run 4: 'quit; runs still going: 4' at 19:01:03Z, then '[4] done' and 'exit 0 in 20.3s' at 19:01:21Z, after the quit line); every start line with cwd and run as written, every output line prefixed by its id; the app quit clean and registered no login item"
     },
     {
+      "id": "AT-05.1",
+      "kind": "test",
+      "file": "opt/menuz/test/menuz.bats",
+      "covers": [
+        "AC-05.1"
+      ],
+      "status": "green",
+      "note": "cc's 54 AT-05.1 tests with fakes for xcodegen, xcodebuild, lsregister, codesign, spctl, curl, ditto and the app: build's staleness hash, the location settings, the four stamps, --release and --unsigned, the refusals by name at exit 2; test; stamps; install's sequence and its exit 1 naming the step (quit, replace, unclaim, register, launch, build); the keg install's fetch, unzip, codesign, spctl, bundle id and version checks and a 404; use dev|installed; start, stop (5 s wait), restart; uninstall with --unregister-login-item and its exit 1 when the app went but the login item did not; doctor's eight labels and exit 1 on a FAIL. At 2b66d3f, verified by vc in a worktree: menuz.bats 119/119 (with dc's macos.bats 27) under bash 5.3.20 and 3.2.57, shellcheck clean; kovacs (Ubuntu) 119/0 at 2b66d3f plus dc's docs; the --unregister-login-item arm's decision is MenuzKit's Unregister, UnregisterTests."
+    },
+    {
+      "id": "AT-05.2",
+      "kind": "test",
+      "file": "opt/menuz/test/install-handrun.sh",
+      "covers": [
+        "AC-05.2"
+      ],
+      "status": "green",
+      "note": "vc, 17 Oct, Mac16,6, macOS 27.0.1 (26A434), Xcode 27.1 (27A9275). First install at d117591 (21:08:48Z to 21:09:10Z): xcodegen, Release xcodebuild, the dev copy (pid 7432) quit, ~/Applications/Menuz.app installed and launched; the copy logged 'login item not found: left as it is', status and doctor read the login item not found (the defect fixed at 3e731d3: a bundle just put in place answers notFound, which now registers). Second install at 3e731d3 (21:14:45Z to 21:14:51Z): the copy logged 'registered as a login item' one second after launch; the read half at 21:2xZ (tmp/vc-st0026/st0027/ac052-handrun-3e731d3.txt): version 0.1.0 (build 1168, 3e731d3), signed Apple Development under team 76BQL8L47U, status installed/use installed/running pid 32328/login item enabled/source current, exit 0; doctor eight ok, exit 0; --login-item enabled. The menu after a logout and login is hv's keypress, to be confirmed by hv (AC-05.2 as reworded under decision 20)."
+    },
+    {
       "id": "AT-06.1",
       "kind": "test",
       "file": "native/macos/Menuz/MenuzTests/NotifyArmTests.swift",
