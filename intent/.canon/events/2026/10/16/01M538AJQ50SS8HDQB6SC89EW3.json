@@ -1,0 +1,15 @@
+{
+  "id": "01M538AJQ50SS8HDQB6SC89EW3",
+  "ts": "2026-10-16T21:01:43.013Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "hold",
+    "text": "Review of vc's WP-06 notice fix on main (Notifier.swift, Notice.swift, MenuzApp.swift, NotifyArmTests.swift, NoticeTests.swift, notice-handrun.sh) against vc's measured macOS 27 facts: findings to vc, no edits on main. Condition: vc messages that the fix is committed."
+  }
+}

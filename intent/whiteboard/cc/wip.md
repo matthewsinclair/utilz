@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: 67bcef6b-d20d-4bb9-ac53-ff7fbaf2e422
-heartbeat_at: 2026-10-16 20:20Z
+heartbeat_at: 2026-10-16 20:54Z
 status: active
-focus: "16 Oct 20:2xZ: folded for hv's compact. WP-06 landed at 8bea7ba; WP-05 next on vc's word, resume state in hold 17. Taking instructions from vc."
+focus: "17 Oct: WP-05 at 2b66d3f on st0027-wp05, with vc for verify and landing. Taking instructions from vc toward 2.14.0."
 claims: [ST0027/05]
 ---
 
@@ -21,7 +21,7 @@ _(none)_
 
 ## Holds
 
-- ST0027 WP-05 (build, install, launch, the close), resume state for hv's compact on 16 Oct 20:2xZ. WP-06 (first-use fixes) landed at 8bea7ba and is pushed; vc runs its notice hand run. WP-05 is go on vc's word: branch st0027-wp05 in the scratchpad worktree wt-wp05, rebased onto 8bea7ba, nothing written on it yet. The contract is the store's WP-05 objective (reworded at 0fc3f54). Notes banked, git-ignored, at tmp/cc/st0027-wp05/resume.md: dc's app-sign runs bin/utilz menuz build --release and reads Build/Products/<Config>/Menuz.app under XDG state; the shim's helpers and the bats fakes to build on. Next: red bats for build, test, stamps, install (and the keg install), use, uninstall, start, stop, restart and doctor; then the verbs; then the app's --unregister arm. Rules in force: compiles only in a window vc books (separate derived data, so hv's running product stays whole); suite-sized bats only outside announced Intent windows; commits by path; dc owns bin/.devbin/cmd/macos, the menuz-app CI job and the docs; CI's shellcheck reads A && B || C as SC2015, so guards are if/then. Condition: hv's compact passes and vc gives the word. (edited)
+- Next instruction from vc toward 2.14.0. Review of b7e07a3 sent to vc; vc's to act on: authorise's polling (a hot spin if the launch task is ever cancelled; a cleaner timer race), comments that still say a withdrawn alert reads not determined, the denied line's hard-coded settings path, the hand run's wait stopping at the 10 s asking line, and the unmeasured case of a second post in the same process while the alert is up. Condition: vc messages.
 
 ## Watch-outs
 

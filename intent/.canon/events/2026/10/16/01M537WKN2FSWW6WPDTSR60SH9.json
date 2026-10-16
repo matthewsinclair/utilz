@@ -1,0 +1,15 @@
+{
+  "id": "01M537WKN2FSWW6WPDTSR60SH9",
+  "ts": "2026-10-16T20:54:05.218Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "doing",
+    "text": "ST0027 WP-05 committed at 2b66d3f on st0027-wp05 (wt-wp05), sent to vc with counts: menuz.bats 92/92 both bashes, macos.bats 27/27, MenuzKit 112, xcodebuild test green, shellcheck 0.9.0 clean, both critics' findings fixed. Waiting on vc's verify and fast-forward; then whatever vc sends next toward 2.14.0."
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "id": "01M538M08KQB3SBAMNS326K0QX",
+  "ts": "2026-10-16T21:06:51.795Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "hold",
+    "text": "Next instruction from vc toward 2.14.0. Review of b7e07a3 sent to vc; vc's to act on: authorise's polling (a hot spin if the launch task is ever cancelled; a cleaner timer race), comments that still say a withdrawn alert reads not determined, the denied line's hard-coded settings path, the hand run's wait stopping at the 10 s asking line, and the unmeasured case of a second post in the same process while the alert is up. Condition: vc messages."
+  }
+}
