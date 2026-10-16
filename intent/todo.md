@@ -13,7 +13,7 @@ A DOING / TODO / DONE view, projected from steel-thread and work-package status:
   - [x] 02: The shim, the config directory and the catalogue verbs
   - [x] 03: The app: the menu from the file, watched, realised at open
   - [x] 04: Running items: params, the runner, the log and the notice
-  - [ ] 05: Build, install, launch and the close
+  - [-] 05: Build, install, launch and the close
 
 ## TODO
 

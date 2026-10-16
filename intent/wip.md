@@ -4,9 +4,9 @@ DOING and TODO only. Done work goes to `intent/done.md`; context to `intent/rest
 
 ## DOING
 
-- ST0027 `menuz`: WP-02 (the shim) on cc's branch `st0027-wp02`, verified by vc in a worktree and fast-forwarded to main; dc lands `help/menuz.md`'s WP-02 cut at that SHA; AC-02.1 to AC-02.3 on the read, AC-01.2 then WP-01 done; cc's `--login-item` arm and the plutil note into WP-03's design; then WP-03, the app at `native/macos/Menuz`.
-- 2.13.0's recorded CI verdict: the main-branch run on 01cf76d was cancelled by a later push during the core's CI wait and re-run; read `tools/ci-state 01cf76d` once both runs finish, and cut 2.13.1 only if the bytes are red.
+- ST0027 `menuz` WP-05: cc's objective (in cc's scratchpad with the Explore findings on the release core: it attaches no assets, `gh release create --verify-tag` only) for vc's read, then the red tests and the shim on `st0027-wp05`, compiles booked with intent-vc; vc verifies each SHA in a worktree; dc's help cut (WP-04's now, the verb table from WP-05's shim at the close), the README section and the CHANGELOG entry land at the close; AC-05.2's login-item hand run after `install` (hv's logout keypress); check all and the estate on the closing SHA; then `intent st done ST0027`, dehydrate, the 2.14.0 cut.
 - hv's part of 2.13.0: copy `packaging/homebrew/utilz.rb` into the tap as `Formula/utilz.rb`, `brew audit --strict matthewsinclair/utilz/utilz`, commit and push the tap.
+- `.claude/settings.json`'s doctor advisory: `intent claude upgrade --apply` is hv's keypress (dc's `--skip-settings` run left it).
 
 ## TODO
 

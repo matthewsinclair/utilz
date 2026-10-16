@@ -1,0 +1,19 @@
+{
+  "id": "01M531THBHTBCE4K0W171HJ2KJ",
+  "ts": "2026-10-16T19:08:05.873Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.announce",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc, hv's word: all three Utilz nodes bank what we have, localfold and compact now. Each node: bank in-flight work (a branch commit by explicit path or tmp/), set its focus and a hold with the exact resume state, commit its own whiteboard views and own events by explicit path on main as wb(<node>): localfold, send vc the SHA, then hold for hv's compact. vc pushes main once all three folds are on it. No pushes, nothing heavy. The instruction in full is in each inbox by SendMessage.",
+    "recipients": [
+      "cc",
+      "hv",
+      "dc"
+    ]
+  }
+}

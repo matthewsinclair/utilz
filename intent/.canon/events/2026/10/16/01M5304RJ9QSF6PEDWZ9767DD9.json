@@ -1,0 +1,16 @@
+{
+  "id": "01M5304RJ9QSF6PEDWZ9767DD9",
+  "ts": "2026-10-16T18:38:43.786Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 63,
+    "text": "ST0027 menuz: WP-01 to WP-04 Done on 16 Oct. hv ruled Q1 to Q11 (D1 to D11 in design.md's Decisions). WP-03 (the app) landed at 6811ad7 and closed at 1ff6937/33b309d; WP-04 (the one typed form, the detached runner and its wrapper, the log lines, the notice from the wrapper through osascript) landed at 9dde810 and closed at 022b278, both verified by vc in worktrees with the compiles (at 9dde810: menuz.bats 38/38 both bashes, swift test 104/104, Debug xcodebuild and xcodebuild test 104 + 13) and by hands-off runs now tracked in the tree: opt/menuz/test/watcher-handrun.sh (AT-03.3, every change in the menu within 0.27 s) and opt/menuz/test/run-handrun.sh with run-handrun.lua (AT-04.5, driven through the accessibility tree: discover through the form, the each-generated desk applied, a text param, a run quit mid-way with its end line after the quit line). WP-05 (build, test, install, use, uninstall, start/stop/restart, stamps, doctor, the keg install from the release asset, CI with Developer ID signing and notarisation, the docs, the login-item hand run) is cc's on vc's brief of 19:0xZ; dc lands the WP-04 help cut now and holds the README section and CHANGELOG entry for WP-05's close. Compiles are booked with intent-vc per window (END sent 19:0xZ). CI on main green at a4ae77c."
+  }
+}

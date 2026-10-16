@@ -5,9 +5,9 @@
     "name": "Validation Claude",
     "role": "validation",
     "session_id": "3341dbaf-a82f-4073-bae3-2f8c30306f25",
-    "heartbeat_at": "2026-10-16T18:27:44.095Z",
+    "heartbeat_at": "2026-10-16T19:09:50.756Z",
     "status": "active",
-    "focus": "16 Oct evening, after hv's project-wide compact: 2.13.0 complete (tag 01cf76d on both remotes, CI record green, formula bump c3a75fc on main; the tap's copy, brew audit and the tap push are hv's). ST0027 menuz: WP-01 and WP-02 done, WP-03 (the app) is cc's, now unblocked (hold 15's condition met); cc tells vc before its first swift test and first xcodebuild and vc books them with intent-vc; vc verifies each SHA in a worktree; dc recuts help/menuz.md at WP-03's SHA on vc's word; AC-03.3 is vc's hand run on hv's machine. cc and dc take instructions from vc.",
+    "focus": "16 Oct late evening, folded for hv's compact: ST0027 menuz WP-01 to WP-04 Done (the app at 6811ad7, running items at 9dde810, both verified in worktrees with the compiles; the hand runs tracked at opt/menuz/test/watcher-handrun.sh and run-handrun.sh), D12 recorded (signing local as Intent's, CI unsigned, no secrets), CI on main green at a4ae77c after dc's roster fix; WP-05 is cc's with its objective drafted for vc's read after the compact; dc holds the WP-04 help cut and the WP-05 docs. 2.13.0's tap steps are hv's. cc and dc take instructions from vc.",
     "claims": [
       "ST0027"
     ],
@@ -1261,10 +1261,10 @@
       "node": "vc",
       "kind": "hold",
       "seq": 9,
-      "text": "Carried: (1) the hand runs' scripts, transcripts and probes are banked under tmp/vc-st0026/ (git-ignored; the scratchpad under /private/tmp may not survive a reboot): verify-sha.sh, verify-*.txt, handrun-rerun-*.txt, dictprobe-f8c2827.txt, check-all-da23005.txt, test-estate-da23005.txt, st0026/{rerun-handrun.sh,dict-probe.sh,read-mid-apply.sh,restore-space.lua,launch-probe.lua,grab-probe*,dbg-lib/,desks/}, st0027/{mint-acs.sh,decisions.md,design.md,objective.md,context.md,verify-wp03.sh,ac033-watcher.sh}; verify-wp03.sh <sha> [--build] verifies a WP-03 SHA in a worktree (the compiles only with --build, after intent-vc's START) and ac033-watcher.sh <Menuz.app> is AC-03.3's hands-off run (OSLog-timed reloads after a save, an atomic rename, and a delete and recreate of MENUZ_HOME). (2) git worktree prune when the scratchpad goes (wt-c21f319, wt-13552bc, wt-3e11cb4, wt-88c57ad, wt-32fe3f0, wt-9907e17, wt-ff154a7, wt-4bfd783, wt-45acc46, wt-f8c2827, wt-51fe5d9, wt-26924e9, wt-d2be9e4, wt-4e34217). (3) the spike's files in /tmp/arngz-spike2/ and dc's scratchpad go at reboot. (4) intent sync --to-disk once, if the file index still misses the two AC writes of 09:5xZ. (5) install_e2e.bats ran in the estate at da23005 on 16 Oct (its copy carried the 4.9 GB store and passed), so that hold is closed; the VACUUM was run on hv's word (5.3 GB to 23 MB). (6) the four hand-run desks are deleted from hv's catalogue, copies at tmp/vc-st0026/st0026/desks/.",
+      "text": "Carried: (1) the hand runs' scripts, transcripts and probes are banked under tmp/vc-st0026/ (git-ignored; the scratchpad under /private/tmp may not survive a reboot): verify-sha.sh, verify-*.txt, handrun-rerun-*.txt, dictprobe-f8c2827.txt, check-all-da23005.txt, test-estate-da23005.txt, st0026/{rerun-handrun.sh,dict-probe.sh,read-mid-apply.sh,restore-space.lua,launch-probe.lua,grab-probe*,dbg-lib/,desks/}, st0027/{mint-acs.sh,mint-at03.sh,mint-at04.sh,decisions.md,design.md,objective.md,context.md,verify-wp03.sh,ac033-watcher.sh,ac033-805ed42.txt,ac033-handrun-805ed42.txt,ac045-drive.lua,ac045-run.sh,ac045-handrun-68e499b.txt,ac045-handrun-9dde810.txt,verify-370fa77.txt,verify-805ed42.txt}; the tracked hand runs are opt/menuz/test/watcher-handrun.sh (AT-03.3) and opt/menuz/test/run-handrun.sh with run-handrun.lua (AT-04.5); verify-wp03.sh <sha> [--build] verifies any menuz SHA in a worktree (compiles only with --build, after intent-vc's START). (2) git worktree prune when the scratchpad goes (wt-c21f319, wt-13552bc, wt-3e11cb4, wt-88c57ad, wt-32fe3f0, wt-9907e17, wt-ff154a7, wt-4bfd783, wt-45acc46, wt-f8c2827, wt-51fe5d9, wt-26924e9, wt-d2be9e4, wt-4e34217, wt-370fa77, wt-805ed42, wt-6811ad7, wt-46046ee, wt-68e499b, wt-9dde810). (3) the spike's files in /tmp/arngz-spike2/ and dc's scratchpad go at reboot. (4) intent sync --to-disk once, if the file index still misses the two AC writes of 09:5xZ. (5) install_e2e.bats ran in the estate at da23005 on 16 Oct; the VACUUM was run on hv's word (5.3 GB to 23 MB). (6) the four hand-run desks are deleted from hv's catalogue, copies at tmp/vc-st0026/st0026/desks/.",
       "state": "live",
       "recorded_at": "2026-10-16T09:56:09.768Z",
-      "edited_at": "2026-10-16T18:03:13.654Z"
+      "edited_at": "2026-10-16T19:07:25.058Z"
     },
     {
       "node": "vc",
@@ -1279,19 +1279,19 @@
       "node": "vc",
       "kind": "doing",
       "seq": 63,
-      "text": "ST0027 menuz: WP-01, WP-02 and WP-03 Done on 16 Oct. hv ruled Q1 to Q11 (D1 to D11 in design.md's Decisions): one typed form for params (text, secret, choice, file, folder; text when absent), the app at native/macos/Menuz with the installed copy at ~/Applications/Menuz.app and use dev|installed, Intent's signing, runs left running. WP-03 landed by fast-forward at 6811ad7 (370fa77, 805ed42, 6811ad7), verified by vc in worktrees with the compiles (menuz.bats 38/38 both bashes, swift test 76/76, Debug xcodebuild and xcodebuild test 76 + 7, every arm, stamps, signing); AT-03.1 to AT-03.4 green, AT-03.3 the hand run opt/menuz/test/watcher-handrun.sh (every change in the menu within 0.27 s); closed at 1ff6937 and 33b309d. WP-04 (the form, the runner, the log, the notice) is cc's on vc's brief of 18:4xZ; AC-04.5 is vc's hands-off run through the accessibility tree. dc lands the Ubuntu CI fix (rosters for the sixteen-utility pins, the help's log example) on main next, then recuts help at WP-04. Compiles are booked with intent-vc per window (END sent 18:36Z).",
+      "text": "ST0027 menuz: WP-01 to WP-04 Done on 16 Oct. hv ruled Q1 to Q11 (D1 to D11 in design.md's Decisions). WP-03 (the app) landed at 6811ad7 and closed at 1ff6937/33b309d; WP-04 (the one typed form, the detached runner and its wrapper, the log lines, the notice from the wrapper through osascript) landed at 9dde810 and closed at 022b278, both verified by vc in worktrees with the compiles (at 9dde810: menuz.bats 38/38 both bashes, swift test 104/104, Debug xcodebuild and xcodebuild test 104 + 13) and by hands-off runs now tracked in the tree: opt/menuz/test/watcher-handrun.sh (AT-03.3, every change in the menu within 0.27 s) and opt/menuz/test/run-handrun.sh with run-handrun.lua (AT-04.5, driven through the accessibility tree: discover through the form, the each-generated desk applied, a text param, a run quit mid-way with its end line after the quit line). WP-05 (build, test, install, use, uninstall, start/stop/restart, stamps, doctor, the keg install from the release asset, CI with Developer ID signing and notarisation, the docs, the login-item hand run) is cc's on vc's brief of 19:0xZ; dc lands the WP-04 help cut now and holds the README section and CHANGELOG entry for WP-05's close. Compiles are booked with intent-vc per window (END sent 19:0xZ). CI on main green at a4ae77c.",
       "state": "live",
       "recorded_at": "2026-10-16T11:14:56.955Z",
-      "edited_at": "2026-10-16T18:38:43.786Z"
+      "edited_at": "2026-10-16T19:04:27.061Z"
     },
     {
       "node": "vc",
       "kind": "hold",
       "seq": 10,
-      "text": "Next, in order: (1) 2.13.0 is complete: tag 01cf76d on both remotes, the release object, both CI runs on the commit green (the branch run was cancelled by vc's formula push during the core's CI wait and re-run; tools/ci-state reads green), formula bump c3a75fc on main. hv's part remains and is still open at 17:5xZ (the tap clone is at utilz 2.12.1, 8c24d04): copy packaging/homebrew/utilz.rb into the tap clone as Formula/utilz.rb, brew audit --strict matthewsinclair/utilz/utilz, the tap's commit and push. Lesson recorded: nothing is pushed to main while the core waits on CI. (2) ST0027 WP-03 (cc, unblocked after the compact): cc writes Sources/MenuzKit against the banked tests, tells vc before its first swift test and first xcodebuild, vc books each with intent-vc (asked at 17:5xZ, waiting on START), vc verifies each SHA in a worktree; dc's help recut at WP-03's SHA on vc's word; AC-03.3 hand run on hv's machine; then WP-04, WP-05 per the design. (3) hold 9's list stands (worktrees now also wt-f8c2827, wt-51fe5d9, wt-26924e9, wt-d2be9e4, wt-4e34217). (4) The box is shared with Intent through intent-vc's START/END: ask before anything heavy.",
+      "text": "Next, in order, after the compact: (1) /in-session, pickup; read cc's WP-05 objective (tmp/cc/st0027-wp05/objective.md and release-survey.md) and answer; cc writes red tests and the shim on st0027-wp05 from main's head; compiles booked with intent-vc (START/END), one at a time between cc and vc; vc verifies each SHA in a worktree (tmp/vc-st0026/st0027/verify-wp03.sh <sha> --build) and pushes. (2) dc's WP-04 help cut lands when its cwd measurement is done (cwd as written); the README section and the CHANGELOG entry at WP-05's close with the verb table rebuilt from WP-05's shim. (3) AC-05.2's login-item hand run after install, hv's logout keypress; AC-05.4: check all and tools/test-estate green on the closing SHA; then st done ST0027, dehydrate, the 2.14.0 cut by the release core (hv runs it; nothing pushed while its step 11 waits on CI). (4) hv's part of 2.13.0 remains: the tap's formula (tap at 2.12.1), brew audit, the tap push; and .claude/settings.json's advisory is hv's keypress. (5) hold 9's banked list and worktrees stand.",
       "state": "live",
       "recorded_at": "2026-10-16T12:21:33.315Z",
-      "edited_at": "2026-10-16T17:56:34.779Z"
+      "edited_at": "2026-10-16T19:09:50.966Z"
     },
     {
       "node": "vc",
@@ -1307,7 +1307,8 @@
       "kind": "todo",
       "seq": 36,
       "text": "Day fold, 16 Oct evening: restart.md to carry 2.13.0 cut by the release core on hv's machine (stopped once before the tag for AT-06.1's 126/127 fix at b89d41e; the cut resumed from a reset to 7f40628), ST0026 closed and dehydrated, 17 utilities with menuz in flight (ST0027, rulings D1 to D11, WP-02 on cc's branch), Intent 23c8b038e installed and the store VACUUMed to 23 MB, the arngz desks deleted; then wip.md DOING/TODO, commit by path.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-10-16T19:09:51.116Z",
       "recorded_at": "2026-10-16T17:38:44.736Z"
     }
   ],

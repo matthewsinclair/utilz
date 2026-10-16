@@ -170,6 +170,14 @@
       "state": "handled",
       "handled_at": "2026-10-16T11:37:12.018Z",
       "recorded_at": "2026-09-21T18:51:21.419Z"
+    },
+    {
+      "sender": "vc",
+      "recipient": "hv",
+      "body": "vc, hv's word: all three Utilz nodes bank what we have, localfold and compact now. Each node: bank in-flight work (a branch commit by explicit path or tmp/), set its focus and a hold with the exact resume state, commit its own whiteboard views and own events by explicit path on main as wb(<node>): localfold, send vc the SHA, then hold for hv's compact. vc pushes main once all three folds are on it. No pushes, nothing heavy. The instruction in full is in each inbox by SendMessage.",
+      "fyi": true,
+      "state": "live",
+      "recorded_at": "2026-10-16T19:08:05.873Z"
     }
   ]
 }

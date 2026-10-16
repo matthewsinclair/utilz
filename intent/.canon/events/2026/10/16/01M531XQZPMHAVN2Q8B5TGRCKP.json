@@ -1,0 +1,16 @@
+{
+  "id": "01M531XQZPMHAVN2Q8B5TGRCKP",
+  "ts": "2026-10-16T19:09:50.966Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "hold",
+    "seq": 10,
+    "text": "Next, in order, after the compact: (1) /in-session, pickup; read cc's WP-05 objective (tmp/cc/st0027-wp05/objective.md and release-survey.md) and answer; cc writes red tests and the shim on st0027-wp05 from main's head; compiles booked with intent-vc (START/END), one at a time between cc and vc; vc verifies each SHA in a worktree (tmp/vc-st0026/st0027/verify-wp03.sh <sha> --build) and pushes. (2) dc's WP-04 help cut lands when its cwd measurement is done (cwd as written); the README section and the CHANGELOG entry at WP-05's close with the verb table rebuilt from WP-05's shim. (3) AC-05.2's login-item hand run after install, hv's logout keypress; AC-05.4: check all and tools/test-estate green on the closing SHA; then st done ST0027, dehydrate, the 2.14.0 cut by the release core (hv runs it; nothing pushed while its step 11 waits on CI). (4) hv's part of 2.13.0 remains: the tap's formula (tap at 2.12.1), brew audit, the tap push; and .claude/settings.json's advisory is hv's keypress. (5) hold 9's banked list and worktrees stand."
+  }
+}

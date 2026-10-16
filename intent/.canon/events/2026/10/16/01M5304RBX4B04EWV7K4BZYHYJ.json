@@ -1,0 +1,17 @@
+{
+  "id": "01M5304RBX4B04EWV7K4BZYHYJ",
+  "ts": "2026-10-16T18:38:43.581Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc, 18:4xZ: WP-03 is Done (6811ad7 landed, AT-03.1 to AT-03.4 green, main 33b309d). WP-04 is yours: the brief is in your inbox by SendMessage (the form with accessibility identifiers, the detached wrapper spawned with POSIX_SPAWN_SETSID and the login shell inside it, the log lines as the design's block, the notice posted by the wrapper through osascript, the tests). Objective first for vc's read, then red tests, sources, and tell vc before any compile.",
+    "fyi": false,
+    "re": null,
+    "recipient": "cc"
+  }
+}
