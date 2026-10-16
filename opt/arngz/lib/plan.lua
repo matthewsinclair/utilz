@@ -764,6 +764,18 @@ function P.grab_candidates(frame, zoom)
   return points
 end
 
+-- Whether a press and a nudge of dx points took the window: its frame, read
+-- after, moved toward the pointer. Some apps' windows follow no synthetic
+-- drag wherever it lands (Dictionary, Stickies: vc's grab probes at 45acc46),
+-- so a hit test on the bar is not the proof. True, or nil and why.
+function P.hold_took(before, after, dx)
+  if not after then return nil, "its frame could not be read after the nudge" end
+  local moved = after.x - before.x
+  if (dx > 0 and moved >= 1) or (dx < 0 and moved <= -1) then return true end
+  return nil, string.format("its frame did not follow the pointer (x %d to %d after a nudge of %d)",
+    P.round(before.x), P.round(after.x), dx)
+end
+
 -- The symbolic hotkeys for Mission Control's "Move left a space" and "Move
 -- right a space": the Move-space shortcut D21 presses.
 P.MOVE_LEFT, P.MOVE_RIGHT = 79, 81

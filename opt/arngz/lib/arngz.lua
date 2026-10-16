@@ -416,6 +416,7 @@ local STEP_US = 8000  -- ...this far apart: about 2500 points a second
 local POLL_US = 50000 -- a wait reads the spaces this often
 local STEP_WAIT = 3   -- seconds a key's step may take before it has failed
 local NUDGE_PX = 30   -- a window drag begins after a few points; then the keys
+local HOLD_WAIT = 0.3 -- seconds the frame has to follow the nudge (vc's grab probes, 45acc46)
 
 local function now() return hs.timer.absoluteTime() end
 local function pause(seconds) hs.timer.usleep(math.floor(seconds * 1e6)) end
@@ -527,7 +528,10 @@ end
 
 -- The window itself, its toolbar, or a plain group in the bar: where a press
 -- and drag moves the window. A button, a field, a tab or the title is not
--- taken: a click on a document window's title opens a rename popover.
+-- taken: a click on a document window's title opens a rename popover. This
+-- is only a first filter: a group can hold a control (Dictionary's Back and
+-- Forward), and some windows follow no synthetic drag at all, so take_hold's
+-- frame read-back is the test.
 local GRAB_ROLES = { AXWindow = true, AXToolbar = true, AXGroup = true }
 
 local function hit_test(p, id, pid)
@@ -681,12 +685,35 @@ local function held_point(id)
   return g
 end
 
+-- Press at the grab point and nudge dx points, then read the window's frame
+-- through Accessibility until it follows, for up to HOLD_WAIT. nil when the
+-- hold took; else the button is let go and why, and nothing more is done
+-- with it held: Dictionary's and Stickies' windows follow no synthetic drag,
+-- and a Move-space pressed holding nothing switches the display and leaves
+-- the window behind (vc's hands-off re-run at 45acc46, 16 Oct 2026).
+local function take_hold(hand, id, g, dx)
+  local win = hs.window.get(id)
+  local app = win and win:application()
+  hand:press(g.point)
+  hand:drag({ { x = g.point.x + dx, y = g.point.y } })
+  local why
+  local took = wait_for(hand, HOLD_WAIT, "while taking hold of the window", function()
+    local ok
+    ok, why = P.hold_took(g.frame, win and rect(win:frame()), dx)
+    return ok == true
+  end)
+  if took then return nil end
+  hand:release()
+  return string.format("the hold did not take window %s of %s: %s", tostring(id),
+    tostring(app and app:name() or "an app that could not be read"), tostring(why))
+end
+
 function LEG.carry(ctx, leg, id)
   local g, why = held_point(id)
   if not g then return why end
   local hand = ctx.hand
-  hand:press(g.point)
-  hand:drag({ { x = g.point.x + (leg.side == "right" and NUDGE_PX or -NUDGE_PX), y = g.point.y } })
+  local missed = take_hold(hand, id, g, leg.side == "right" and NUDGE_PX or -NUDGE_PX)
+  if missed then return missed end
   hand:hold(0.1, "before the keys")
   for _, step in ipairs(leg.steps) do
     press_key(ctx.keys[leg.side])
@@ -719,7 +746,8 @@ function LEG.drag(ctx, leg, id)
   if not g then return why end
   local dest = P.drop_point(g.point, g.frame, chain[#chain])
   local hand = ctx.hand
-  hand:press(g.point)
+  local missed = take_hold(hand, id, g, dest.x >= g.point.x and NUDGE_PX or -NUDGE_PX)
+  if missed then return missed end
   hand:drag(P.path(chain, g.point, dest))
   hand:hold(0.2, "before letting go")
   hand:release()
@@ -1208,8 +1236,13 @@ local function failed_after_change(job, err)
   return out
 end
 
--- Run one phase, then schedule the next, holding the timer in a global so it
--- is not collected before it fires (dc, D20).
+-- The least time between phases. Chained at 0, the timer port is always
+-- ready, the run loop never waits long enough to take hs.ipc's message, and a
+-- read or a second apply queued until apply ended (vc's hands-off re-run at
+-- 45acc46: a diff sent 1.5 s into a 13 s apply was answered at 9.5 s).
+local PHASE_GAP = 0.05
+
+-- Run one phase, then schedule the next.
 local run_phase
 
 -- A phase's callback: whatever raises here still answers, because an apply
@@ -1218,6 +1251,15 @@ local run_phase
 local function guarded(job, name)
   local ok, err = pcall(run_phase, job, name)
   if not ok then job.respond(job.changed and failed_after_change(job, err) or error_response("apply", err)) end
+end
+
+-- Schedule a phase at least PHASE_GAP away, holding the timer in a global so
+-- it is not collected before it fires (dc, D20). True, or nil and why.
+local function schedule(job, name, delay)
+  local scheduled, timer = pcall(hs.timer.doAfter, math.max(delay or 0, PHASE_GAP), function() guarded(job, name) end)
+  if not scheduled then return nil, timer end
+  rawset(_G, "arngz_timer", timer)
+  return true
 end
 
 run_phase = function(job, name)
@@ -1229,12 +1271,9 @@ run_phase = function(job, name)
     nxt, delay = "finish", 0
   end
   if not nxt then return end
-  local scheduled, timer = pcall(hs.timer.doAfter, delay or 0, function() guarded(job, nxt) end)
-  if scheduled then
-    rawset(_G, "arngz_timer", timer)
-    return
-  end
-  local why = "could not schedule the " .. nxt .. " phase: " .. tostring(timer)
+  local scheduled, serr = schedule(job, nxt, delay)
+  if scheduled then return end
+  local why = "could not schedule the " .. nxt .. " phase: " .. tostring(serr)
   if not job.changed then return job.respond(error_response("apply", { refused = why })) end
   job.results[#job.results + 1] = { op = "phase", phase = nxt, status = "failed", reason = why }
   -- finish runs here instead, and answers: it schedules nothing.
@@ -1262,9 +1301,8 @@ function M.start_apply(desk, options, respond)
     out.status, out.verb = "ok", "apply"
     job.respond(out)
   end
-  local scheduled, timer = pcall(hs.timer.doAfter, 0, function() guarded(job, "inventory") end)
-  if not scheduled then return nil, "could not schedule apply: " .. tostring(timer) end
-  rawset(_G, "arngz_timer", timer)
+  local scheduled, serr = schedule(job, "inventory", 0)
+  if not scheduled then return nil, "could not schedule apply: " .. tostring(serr) end
   return true
 end
 

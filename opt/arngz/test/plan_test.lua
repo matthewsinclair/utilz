@@ -580,6 +580,25 @@ do
   check("points off the bar are dropped, and with no zoom button the line is 12 points down",
     #narrow == 4 and narrow[1].y == 12, #narrow)
 
+  -- vc's grab probes at 45acc46: TextEdit follows the full 30, Console 25,
+  -- Calculator 1; Dictionary and Stickies 0.
+  local before = { x = 128, y = 40, w = 600, h = 400 }
+  check("a hold took when the frame followed the nudge",
+    P.hold_took(before, { x = 153, y = 40, w = 600, h = 400 }, 30) == true)
+  check("a hold took when the frame moved a point toward a nudge left",
+    P.hold_took(before, { x = 127, y = 40, w = 600, h = 400 }, -30) == true)
+  check("a hold took when the frame moved one point toward a nudge right, as Calculator's did",
+    P.hold_took(before, { x = 129, y = 40, w = 600, h = 400 }, 30) == true)
+  local held, why_held = P.hold_took(before, { x = 128, y = 40, w = 600, h = 400 }, 30)
+  check("a hold did not take when the frame stayed put",
+    held == nil and string.find(why_held, "did not follow the pointer", 1, true) ~= nil, tostring(why_held))
+  local _, why_away = P.hold_took(before, { x = 120, y = 40, w = 600, h = 400 }, 30)
+  check("a frame that moved away from a nudge right is not a hold, and says where it went and the nudge",
+    why_away == "its frame did not follow the pointer (x 128 to 120 after a nudge of 30)", tostring(why_away))
+  check("a frame that moved away from a nudge left is not a hold",
+    P.hold_took(before, { x = 130, y = 40, w = 600, h = 400 }, -30) == nil)
+  check("an unread frame is not a hold", P.hold_took(before, nil, 30) == nil)
+
   local mods = P.decode_mods(0x40000 + 0x800000)
   check("a symbolic hotkey's mask decodes to its modifiers, fn kept",
     table.concat(mods, ",") == "ctrl,fn", table.concat(mods, ","))
