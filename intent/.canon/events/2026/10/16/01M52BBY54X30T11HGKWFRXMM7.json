@@ -1,0 +1,16 @@
+{
+  "id": "01M52BBY54X30T11HGKWFRXMM7",
+  "ts": "2026-10-16T12:35:38.788Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "hold",
+    "seq": 10,
+    "text": "After the compact (16 Oct, afternoon): (1) cc's SHA for the post-launch settle and observe's nil guard (hold 13's critic-lua point fixed forward on 03b7f85): verify with scratchpad/verify-sha.sh <sha> in a detached worktree, then run scratchpad/st0026/rerun-handrun.sh <worktree> on hv's machine with hv's hands off (it snapshots the active spaces, opens TextEdit's document on desktop 5, carries it to desktop 4 with the scramble desk so the scramble is real, runs acceptance.sh apply handrun and launch handrun com.apple.Dictionary, quits both apps and compares the snapshot); then AT-05.4/05.5 green, AC-05.6 satisfied on the read, WP-05 done; then dc's hold 2 (AC-06.3 docs, AC-06.4 close with the heavy slot). Desks handrun and scramble in hv's catalogue ~/.config/arngz/desks/ go when the hand runs are done. (2) intent-vc's step 2 (Intent 0605 in 3.2.4, daemon restarted): run the sync half of scratchpad/st0027/mint-acs.sh (intent sync --to-store ST0027), take the drafted-criteria section out of ST0027/design.md, commit; cc syncs its ST0026 notes. Until then: no sync --to-store, no hand edit under intent/st (a hand edit doubles the store's index; if unavoidable, intent index rebuild straight after and tell intent-vc). (3) The menuz rubber-duck with hv on design.md's Q1 to Q11; D1 to D11 recorded; WP-01 done. (4) hold 9's list stands. (5) intent-vc holds the heavy slot for Intent's 3.2.4 judging run: nothing heavy at Utilz until its END."
+  }
+}
