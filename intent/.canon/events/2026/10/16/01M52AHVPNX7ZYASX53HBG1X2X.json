@@ -1,0 +1,15 @@
+{
+  "id": "01M52AHVPNX7ZYASX53HBG1X2X",
+  "ts": "2026-10-16T12:21:24.309Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "hold",
+    "text": "WP-05 post-launch fix banked as WIP at 03b7f85 (from vc's hand runs: launched window listed before Accessibility backs it; observe's axuielement nil element; unshown-desktop naming flaky). Suite green on it (plan_test 167/167, arngz.bats 119/119 bash 3.2 and 5, shellcheck clean, observe live ok). Its critic-lua confirm reported after the bank: 0 critical, 1 WARNING to fix: plan_settled's pcall wraps the done predicate, so a P.plan crash on a retry is swallowed and the first plan returned (arngz.lua ~926; pcall the observe only). Recs: a retry's refusal replaces the plan in hand (decide: keep polling or say so); id-read and filter.default failures leave no trace in unseen reasons (arngz.lua ~92/98/95); attempts sits under nameable's doc comment; the apps_running comment contradicts the code. Condition: after the compact, fix these, critic-lua to 0/0, then the SHA to vc for the hands-off re-run."
+  }
+}

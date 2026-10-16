@@ -1,0 +1,15 @@
+{
+  "id": "01M52AHVSM1KA694E6DMNP523M",
+  "ts": "2026-10-16T12:21:24.404Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "hold",
+    "text": "AT-05.4, AT-05.5 and AC-05.6: vc's to mark. Condition: vc's re-run of acceptance.sh apply/launch on the handrun desk at the post-launch fix's SHA, with hv's hands off; vc sends the transcript. cc runs nothing that takes the pointer."
+  }
+}
