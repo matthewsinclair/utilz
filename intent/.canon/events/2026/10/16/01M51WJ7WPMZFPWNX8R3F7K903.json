@@ -1,0 +1,15 @@
+{
+  "id": "01M51WJ7WPMZFPWNX8R3F7K903",
+  "ts": "2026-10-16T08:16:56.726Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "hold",
+    "text": "Until hv says go (vc relays it): spike 2 for ST0026 outcome D, which moves a window the way a person does, is written and tested here but not run on the machine. Files in /private/tmp/claude-501/-Users-matts-Devel-prj-Utilz/b6f789ca-4627-4a74-b4cd-bb7c07de9f46/scratchpad/arngz-spike/: arngz-spike2.lua (the verbs), run-hs.sh (runs one verb through hs, polls for its result file, kills hs), RUNBOOK-2.md (commands, what each step costs hv, what success looks like, every refusal by name), test/spike2_test.lua (290 checks pass against a simulated hs) and test/run-hs_test.sh (22 pass). Spike 1's arngz-spike.lua and RUNBOOK.md sit beside them. They are under /tmp, so a reboot loses them."
+  }
+}

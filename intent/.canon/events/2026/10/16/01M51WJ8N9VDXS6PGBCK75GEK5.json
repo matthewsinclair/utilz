@@ -1,0 +1,15 @@
+{
+  "id": "01M51WJ8N9VDXS6PGBCK75GEK5",
+  "ts": "2026-10-16T08:16:57.513Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "watchout",
+    "text": "Spike 1's results are recorded in intent/st/ST0026/design.md, under Measured 16 Oct 2026: moveWindowToSpace returned true three times and moved nothing, and a Dock binding written with defaults read back, survived killall Dock, and did not take. Its observation files are not in the repository, because they carry the titles of hv's windows."
+  }
+}

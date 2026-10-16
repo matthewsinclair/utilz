@@ -3,9 +3,9 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: b6f789ca-4627-4a74-b4cd-bb7c07de9f46
-heartbeat_at: 2026-10-16 04:58Z
+heartbeat_at: 2026-10-16 08:16Z
 status: active
-focus: ""
+focus: "spike 2 for ST0026 outcome D is ready and held until hv says go"
 claims: []
 ---
 
@@ -21,11 +21,11 @@ _(none)_
 
 ## Holds
 
-_(none)_
+- Until hv says go (vc relays it): spike 2 for ST0026 outcome D, which moves a window the way a person does, is written and tested here but not run on the machine. Files in /private/tmp/claude-501/-Users-matts-Devel-prj-Utilz/b6f789ca-4627-4a74-b4cd-bb7c07de9f46/scratchpad/arngz-spike/: arngz-spike2.lua (the verbs), run-hs.sh (runs one verb through hs, polls for its result file, kills hs), RUNBOOK-2.md (commands, what each step costs hv, what success looks like, every refusal by name), test/spike2_test.lua (290 checks pass against a simulated hs) and test/run-hs_test.sh (22 pass). Spike 1's arngz-spike.lua and RUNBOOK.md sit beside them. They are under /tmp, so a reboot loses them.
 
 ## Watch-outs
 
-_(none)_
+- Spike 1's results are recorded in intent/st/ST0026/design.md, under Measured 16 Oct 2026: moveWindowToSpace returned true three times and moved nothing, and a Dock binding written with defaults read back, survived killall Dock, and did not take. Its observation files are not in the repository, because they carry the titles of hv's windows.
 
 ## Decisions
 
