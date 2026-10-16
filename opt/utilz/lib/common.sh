@@ -289,7 +289,11 @@ check_command() {
   command -v "$1" >/dev/null 2>&1
 }
 
-# Check if a macOS app is installed, by bundle id, WITHOUT LAUNCHING IT.
+# Where a macOS app is installed, by bundle id, WITHOUT LAUNCHING IT. Prints
+# its path (eg /Applications/Hammerspoon.app) and returns 0; returns 1 when
+# there is no such app; prints why and returns 2 when the lookup itself
+# failed, which is never taken for an absent app. Only LaunchServices' own
+# answer, "no app with bundle id <id>" (measured 16 Oct 2026), means absent.
 #
 # A dependency that is an app has no command on PATH (Hammerspoon is
 # /Applications/Hammerspoon.app), so check_command would call it missing on
@@ -302,16 +306,37 @@ check_command() {
 # made-up id. mdfind also leaves apps alone but answers from Spotlight's index,
 # which can be off, so it is not used.
 #
-# Off macOS there are no apps to find, so the answer is always missing.
+# The guard is osascript itself: off macOS there is none, so there is no app
+# to find, and a test can put a stand-in first on PATH on any OS.
+app_path() {
+  local bundle="$1" out rc=0
+  if ! command -v osascript >/dev/null 2>&1; then
+    return 1
+  fi
+  out="$(osascript -l JavaScript -e "ObjC.import('AppKit');
+    var u = \$.NSWorkspace.sharedWorkspace.URLForApplicationWithBundleIdentifier('$bundle');
+    if (u.isNil()) { throw new Error('no app with bundle id $bundle'); }
+    u.path.js" 2>&1)" || rc=$?
+  # A path is one line starting with /; anything else on success is a warning
+  # mixed in, and is said rather than taken for a path.
+  if [[ $rc -eq 0 && "$out" == /* && "$out" != *$'\n'* ]]; then
+    printf '%s\n' "$out"
+    return 0
+  fi
+  if [[ $rc -ne 0 && "$out" == *"no app with bundle id $bundle"* ]]; then
+    return 1
+  fi
+  printf 'looking %s up through LaunchServices failed (osascript exited %s): %s\n' "$bundle" "$rc" "$(printf '%s' "$out" | tr '\n' ' ')"
+  return 2
+}
+
+# Check if a macOS app is installed, by bundle id, without launching it (see
+# app_path). Off macOS the answer is always missing.
 check_app() {
-  local bundle="$1"
   if [[ "$(uname -s)" != "Darwin" ]]; then
     return 1
   fi
-  osascript -l JavaScript -e "ObjC.import('AppKit');
-    var u = \$.NSWorkspace.sharedWorkspace.URLForApplicationWithBundleIdentifier('$bundle');
-    if (u.isNil()) { throw new Error('no app with bundle id $bundle'); }
-    u.path.js" >/dev/null 2>&1
+  app_path "$1" >/dev/null
 }
 
 # Whether one declared dependency is present: an entry carrying `app: <bundle

@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+#
+# A stand-in for macOS's defaults, for arngz.bats (ST0026 AT-06). It answers
+# `defaults read <domain> <key>` from the file FAKE_PREFS/<domain>/<key>, and
+# nothing else, so a test sets exactly the preferences it is about. Each
+# message is the one macOS 27 prints, measured 16 Oct 2026.
+#
+#   the file is there        prints what it holds, exit 0
+#   no such domain dir       the domain has no preferences: "Domain ... not
+#                            found" on stderr, exit 1
+#   no such file             the key is unset: "Could not find key" on
+#                            stderr, exit 1
+#   FAKE_PREFS_WORDING=old   either unset case in the wording before 27,
+#                            "The domain/default pair ... does not exist"
+#   <key>.error is there     defaults failing another way: what that file
+#                            holds, on stderr, exit 1
+
+set -euo pipefail
+if [[ $# -ne 3 || "$1" != "read" ]]; then
+  echo "fake defaults: only 'defaults read <domain> <key>' is faked, not: $*" >&2
+  exit 64
+fi
+domain="$2"
+key="$3"
+dir="${FAKE_PREFS:?fake defaults needs FAKE_PREFS}/$domain"
+if [[ -f "$dir/$key.error" ]]; then
+  cat "$dir/$key.error" >&2
+  exit 1
+fi
+if [[ -f "$dir/$key" ]]; then
+  cat "$dir/$key"
+  exit 0
+fi
+if [[ "${FAKE_PREFS_WORDING:-}" == "old" ]]; then
+  echo "The domain/default pair of ($domain, $key) does not exist" >&2
+elif [[ ! -d "$dir" ]]; then
+  echo "Error: Domain '$domain' not found." >&2
+else
+  echo "Error: Could not find key '$key' in domain '$domain'." >&2
+fi
+exit 1

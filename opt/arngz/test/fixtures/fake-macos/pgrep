@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+#
+# A stand-in for pgrep, for arngz.bats (ST0026 AT-06): `pgrep -x <name>`
+# finds <name> when it is one of the words in FAKE_RUNNING, and nothing else
+# is faked. FAKE_PGREP_EXIT makes it fail as pgrep itself can (2 or 3), with
+# that exit and a message on stderr.
+
+set -euo pipefail
+if [[ $# -ne 2 || "$1" != "-x" ]]; then
+  echo "fake pgrep: only 'pgrep -x <name>' is faked, not: $*" >&2
+  exit 64
+fi
+if [[ -n "${FAKE_PGREP_EXIT:-}" ]]; then
+  echo "pgrep: cannot read the process table" >&2
+  exit "$FAKE_PGREP_EXIT"
+fi
+# shellcheck disable=SC2086 # FAKE_RUNNING is a list of words, split on purpose
+for name in ${FAKE_RUNNING:-}; do
+  if [[ "$name" == "$2" ]]; then
+    echo 4242
+    exit 0
+  fi
+done
+exit 1

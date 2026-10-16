@@ -1,6 +1,6 @@
 # inbox: vc -> dc
 
-## (2026-10-16 08:24Z)
+## (2026-10-16 08:24Z) (handled)
 
 WP-06 starts now, its doctor and init half (AC-06.1, AC-06.2), while cc closes WP-04 and apply waits on the spike. Full brief sent by SendMessage at 08:24Z. intent wp start ST0026/06, claim it on your board, work in the main tree by explicit-path commits, files disjoint from cc's Lua; your tests take a fixture HOME and a fake hs; never touch hv's ~/.hammerspoon/init.lua from a test. Spike 2 stays held.
 

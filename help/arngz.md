@@ -31,7 +31,7 @@ arngz doctor
 
 A **desk** is a named arrangement of windows: for each display, for each space on it, which apps live there and where on a grid their windows sit. `arngz <desk>` puts this machine's windows where the desk says; `arngz discover --save <desk>` records the arrangement on screen now as a desk.
 
-**Built so far: the catalogue, its validator, `discover` and `diff`.** `list`, `show`, `delete`, `discover`, `diff` and `init`'s catalogue half work. `apply`, `doctor` and `init`'s Hammerspoon half are part of the CLI already, and each says which work package of ST0026 builds it (`not yet: WP-0N`) and exits 2 rather than pretending. `discover` and `diff` reach Hammerspoon through its `hs` tool, so they need Hammerspoon running with `hs.ipc` loaded.
+**Built so far: the catalogue, its validator, `discover`, `diff`, `doctor` and `init`.** `apply` is part of the CLI already, and it says which work package of ST0026 builds it (`not yet: WP-05`) and exits 2 rather than pretending. `discover`, `diff` and `doctor`'s IPC check reach Hammerspoon through its `hs` tool, so they need Hammerspoon running with `hs.ipc` loaded, which `arngz init --yes` sets up.
 
 ### The catalogue
 
@@ -99,6 +99,24 @@ The desk goes to stdout and the report to stderr, so `arngz discover > desk.yaml
 
 `diff <desk>` prints what `apply` would do, one line per change with its reason, and changes nothing: it asks Hammerspoon for a plan, never for an action. It exits 0 when this machine already matches the desk, and 1 when it does not. A window discover found on a hidden space may read as `unseen` when Accessibility cannot name it at that moment.
 
+### doctor and init
+
+`doctor` checks every precondition the engine's verbs need, and prints one line for each: `ok`; `FAIL`, with what fixes it; or `skip`, when an earlier failure means it cannot be checked, which counts as not holding. It exits 1 when any does not hold.
+
+| Precondition    | Holds when                                   | Read from                                 |
+| --------------- | -------------------------------------------- | ----------------------------------------- |
+| Hammerspoon     | it is running                                | `pgrep`, and LaunchServices for where     |
+| hs tool         | `hs` is on `PATH`                            | `PATH`                                    |
+| IPC             | Hammerspoon answers through `hs`             | the engine, asked to observe              |
+| Accessibility   | Hammerspoon holds the grant                  | the engine's observation                  |
+| separate spaces | each display has its own spaces              | `com.apple.spaces spans-displays`         |
+| auto-rearrange  | spaces are not rearranged by most recent use | `com.apple.dock mru-spaces`               |
+| Stage Manager   | it is off                                    | `com.apple.WindowManager GloballyEnabled` |
+
+A setting that was never changed takes macOS's default, and the line says so. `doctor` needs no Hammerspoon to run: without one it names it as missing and skips the two checks only Hammerspoon can answer.
+
+`init` creates the catalogue and reports what Hammerspoon needs. `init --yes` provides it. It links the `hs` tool under `/opt/homebrew` as Hammerspoon's own `hs.ipc.cliInstall` would, from the copy inside Hammerspoon.app. It appends one marked line, `require("hs.ipc")`, to Hammerspoon's config, which is `~/.hammerspoon/init.lua` or the file Hammerspoon's `MJConfigFile` preference names, and then asks you to reload that config. A config that already requires `hs.ipc`, marked or not, is left alone, so a second run changes nothing. Whatever `--yes` cannot do, it refuses before changing anything.
+
 ### The validator
 
 Every verb that reads a desk validates it first, and refuses with exit 2 on any of: an unknown key; a `grid` that is not `WxH`; a `layout` that is neither `x,y wxh` inside the grid nor `fullscreen`; two displays with one `name`; a display whose `match` carries neither `uuid` nor `name`; the same `app` twice on one display without a `window` on each; a desk named like a verb. Each refusal names the desk, its file, the path in it, and the value, and every refusal in a desk is reported, not just the first.
@@ -116,8 +134,8 @@ Every verb that reads a desk validates it first, and refuses with exit 2 on any 
 | `list`          | each desk with its display and app counts; an invalid desk is named on its own line     | 0, or 1 if any invalid |
 | `show <desk>`   | the desk, validated, exactly as stored                                                  | 0, or 2                |
 | `delete <desk>` | remove the desk's file, naming it; a desk that no longer validates can still be deleted | 0, or 2                |
-| `init`          | create the catalogue; the Hammerspoon half is not yet built (WP-06)                     | 0                      |
-| `doctor`        | every precondition, each with its state (not yet: WP-06)                                | 2                      |
+| `init`          | create the catalogue and report what Hammerspoon needs; with `--yes`, provide it        | 0, or 2                |
+| `doctor`        | every precondition, each with its state, and what fixes each one that does not hold     | 0, or 1 if any fails   |
 
 ### Options
 
@@ -138,7 +156,9 @@ Every verb that reads a desk validates it first, and refuses with exit 2 on any 
 ## Examples
 
 ```bash
-arngz init          # create the catalogue
+arngz init          # create the catalogue, and say what Hammerspoon needs
+arngz init --yes    # and provide it
+arngz doctor        # every precondition, each with its state
 arngz list          # what desks there are
 arngz show zeop1    # one desk, validated
 arngz delete old    # remove one
@@ -154,14 +174,16 @@ arngz delete old    # remove one
 
 ## Environment
 
-- `XDG_CONFIG_HOME` -- where the catalogue lives; `$HOME/.config` when unset. It is the only override.
+- `XDG_CONFIG_HOME` -- where the catalogue lives; `$HOME/.config` when unset.
+- `ARNGZ_HS_PREFIX` -- where `init --yes` links the `hs` tool; `/opt/homebrew` when unset.
+- `ARNGZ_HS_TIMEOUT` -- how many seconds one call to Hammerspoon may take; 60 when unset.
 
 ---
 
 ## Exit Status
 
 - `0` -- done.
-- `1` -- `list` found a desk that does not validate, and named it.
+- `1` -- `list` found a desk that does not validate, `diff` found that apply would change something, or `doctor` found a precondition that does not hold; each is named.
 - `2` -- refused before anything changed: a desk that does not exist or does not validate, a bad name or option, or a verb not built yet.
 
 ---
@@ -169,14 +191,15 @@ arngz delete old    # remove one
 ## Dependencies
 
 - `yq` (required) -- reads and validates desks.
-- `hs` (optional) -- Hammerspoon's command-line tool; needed by `apply` and `discover`.
-- Hammerspoon (optional, a macOS app) -- the engine; needed by `apply` and `discover`. `utilz doctor` looks it up by bundle id.
+- `hs` (optional) -- Hammerspoon's command-line tool; needed by `apply`, `discover`, `diff` and `doctor`'s IPC check. `arngz init --yes` links it.
+- Hammerspoon (optional, a macOS app) -- the engine; needed by the same verbs. `utilz doctor` and `arngz doctor` look it up by bundle id.
 
 ---
 
 ## See Also
 
 - `utilz doctor` -- reports arngz's dependencies.
+- `arngz doctor` -- every precondition arngz's engine verbs need.
 - `intent/st/ST0026/design.md` -- the design.
 
 ---

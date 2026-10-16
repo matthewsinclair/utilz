@@ -1,0 +1,17 @@
+{
+  "status": "ok",
+  "verb": "observe",
+  "world": {
+    "taken_at": "2026-10-16T00:00:00Z",
+    "macos": "FIXTURE macOS",
+    "hammerspoon": "FIXTURE",
+    "accessibility": true,
+    "separate_spaces": true,
+    "mru_spaces": false,
+    "stage_manager": false,
+    "screens": [],
+    "apps_running": [],
+    "app_bindings": []
+  },
+  "report": ["FIXTURE-OBSERVE-LINE"]
+}

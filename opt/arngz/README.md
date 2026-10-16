@@ -7,7 +7,7 @@
 
 ## Overview
 
-Named window arrangements (desks) across displays and spaces. A desk says, for each display and each space on it, which apps live there and where on a grid their windows sit; `arngz <desk>` restores it. ST0026 builds it in work packages: the desk catalogue and its validator (WP-02), the engine (WP-03), and `discover` and `diff` (WP-04) are in; `apply` and `doctor` say which work package builds them.
+Named window arrangements (desks) across displays and spaces. A desk says, for each display and each space on it, which apps live there and where on a grid their windows sit; `arngz <desk>` restores it. ST0026 builds it in work packages: the desk catalogue and its validator (WP-02), the engine (WP-03), `discover` and `diff` (WP-04), and `doctor` and `init` (WP-06) are in; `apply` says which work package builds it.
 
 ---
 
@@ -63,10 +63,10 @@ arngz
 
 - `yq`, which reads and validates desks
 
-**Optional** (needed by `apply` and `discover`, which later work packages build):
+**Optional** (needed by `apply`, `discover`, `diff` and `doctor`'s IPC check):
 
 - Hammerspoon, the engine, a macOS app that `utilz doctor` looks up by bundle id
-- `hs`, Hammerspoon's command-line tool
+- `hs`, Hammerspoon's command-line tool, which `arngz init --yes` links under `/opt/homebrew`
 
 The CLI runs under bash 3.2.
 

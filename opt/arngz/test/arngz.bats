@@ -1,10 +1,11 @@
 #!/usr/bin/env bats
 # arngz.bats - Tests for arngz (ST0026)
 #
-# WP-02: the CLI's surface, the desk catalogue and the validator. Each test
-# names the AT it carries. Nothing here calls Hammerspoon or the hs tool: the
-# catalogue verbs are file operations, and the verbs that need the engine print
-# which work package builds them.
+# The CLI's surface, the desk catalogue and the validator (WP-02), the engine
+# contract (WP-03), discover and diff (WP-04), doctor and init (WP-06). Each
+# test names the AT it carries. NOTHING HERE REACHES THE REAL MACHINE: the hs
+# tool is a fake that answers from fixture files, and doctor and init run on a
+# fixture machine whose defaults, pgrep and osascript are stand-ins too.
 #
 # THE CATALOGUE IS ALWAYS A FIXTURE. Every test points XDG_CONFIG_HOME at its
 # own temp directory, which is the one override the design allows, so no test
@@ -138,7 +139,10 @@ doctor_with_app() {
 # AT-02.2 -- the catalogue verbs (AC-02.2)
 # ============================================================================
 
+# init reads the machine as well as making the catalogue (WP-06), so these run
+# on the fixture machine (machine, in the AT-06 section) and never the real one.
 @test "AT-02.2: init creates the catalogue under XDG_CONFIG_HOME, and a second run says it exists" {
+  machine
   export XDG_CONFIG_HOME="$BATS_TEST_TMPDIR/config"
   run_arngz init
   assert_success
@@ -152,19 +156,11 @@ doctor_with_app() {
 }
 
 @test "AT-02.2: without XDG_CONFIG_HOME the catalogue is under HOME/.config" {
+  machine
   unset XDG_CONFIG_HOME
-  export HOME="$BATS_TEST_TMPDIR/home"
-  mkdir -p "$HOME"
   run_arngz init
   assert_success
   [ -d "$HOME/.config/arngz/desks" ]
-}
-
-@test "AT-02.2: init says the Hammerspoon half is not built yet" {
-  export XDG_CONFIG_HOME="$BATS_TEST_TMPDIR/config"
-  run_arngz init
-  assert_success
-  assert_output_contains "not yet: WP-06"
 }
 
 @test "AT-02.2: list prints each desk with its display and app counts" {
@@ -349,7 +345,7 @@ EOF
 # The verbs the engine builds: present, and saying which work package
 # ============================================================================
 
-@test "apply and doctor say which work package builds them, exit 2" {
+@test "apply says which work package builds it, exit 2" {
   catalogue
   run_arngz apply zeop1
   assert_exit_code 2
@@ -357,9 +353,6 @@ EOF
   run_arngz zeop1
   assert_exit_code 2
   assert_output_contains "not yet: WP-05"
-  run_arngz doctor
-  assert_exit_code 2
-  assert_output_contains "not yet: WP-06"
 }
 
 @test "apply validates the desk before saying it is not built" {
@@ -425,7 +418,10 @@ fake_hs() {
   assert_success
   assert_output_contains "FIXTURE-LINE-1 main space 1 (user): 3 windows, 3 named, 1 recorded"
   assert_output_contains "FIXTURE-LINE-2 0 Dock bindings"
-  # The temp dir of a call that succeeded is removed.
+  # The temp dir of a call that succeeded is removed: the request was made
+  # under TMPDIR, which is still there, and holds nothing now.
+  grep -qF "$TMPDIR/arngz." "$FAKE_HS_LOG/argv"
+  [ -d "$TMPDIR" ]
   [ -z "$(ls -A "$TMPDIR")" ]
 }
 
@@ -743,4 +739,520 @@ engine_response() {
   run_arngz diff g
   assert_refusal g "grid" "12 by 8"
   [ ! -e "$FAKE_HS_LOG/request.json" ]
+}
+
+# ============================================================================
+# AT-06 -- doctor and init (AC-06.1, AC-06.2)
+# ============================================================================
+
+# A FIXTURE MACHINE, so no test reads or writes the real one. HOME, the
+# catalogue and the hs prefix live under the test's temp dir, and stand-ins for
+# every macOS tool doctor and init ask (fixtures/fake-macos: defaults, pgrep,
+# osascript) come first on PATH, answering from files the test writes. The
+# rest of PATH is the system dirs and links to yq and bash alone, so the real
+# hs, which lives beside yq in a package manager's bin, can never answer. The
+# settings start as hv's machine had them on 16 Oct 2026: separate spaces
+# unset (macOS's default, on), auto-rearrange off, Stage Manager off.
+# Hammerspoon is neither installed nor running until a test says so.
+machine() {
+  export HOME="$BATS_TEST_TMPDIR/home"
+  export XDG_CONFIG_HOME="$HOME/.config"
+  export ARNGZ_HS_PREFIX="$BATS_TEST_TMPDIR/prefix"
+  export TMPDIR="$BATS_TEST_TMPDIR/tmp"
+  export FAKE_PREFS="$BATS_TEST_TMPDIR/prefs"
+  export FAKE_APPS="$BATS_TEST_TMPDIR/apps"
+  export FAKE_RUNNING=""
+  export FAKE_HS_LOG="$BATS_TEST_TMPDIR/hslog"
+  APP="$BATS_TEST_TMPDIR/Applications/Hammerspoon.app"
+  STUBS="$BATS_TEST_TMPDIR/stubs"
+  local tools="$BATS_TEST_TMPDIR/tools" tool
+  mkdir -p "$HOME" "$TMPDIR" "$FAKE_APPS" "$FAKE_HS_LOG" "$ARNGZ_HS_PREFIX" "$STUBS" "$tools"
+  cp "$FIXTURES"/fake-macos/* "$STUBS/"
+  for tool in yq bash; do
+    ln -s "$(command -v "$tool")" "$tools/$tool"
+  done
+  export PATH="$STUBS:$ARNGZ_HS_PREFIX/bin:$tools:/usr/bin:/bin"
+  pref com.apple.dock mru-spaces 0
+  pref com.apple.WindowManager GloballyEnabled 0
+}
+
+# pref DOMAIN KEY VALUE: one preference, as defaults reads it.
+pref() {
+  mkdir -p "$FAKE_PREFS/$1"
+  printf '%s\n' "$3" >"$FAKE_PREFS/$1/$2"
+}
+
+# unpref DOMAIN KEY: the preference unset.
+unpref() {
+  rm -f "$FAKE_PREFS/$1/$2"
+}
+
+# Hammerspoon installed: an app carrying the hs tool, which is the fake hs, and
+# its man page, found by its bundle id.
+hammerspoon_installed() {
+  mkdir -p "$APP/Contents/Frameworks/hs" "$APP/Contents/Resources/man"
+  cp "$FIXTURES/fake-hs" "$APP/Contents/Frameworks/hs/hs"
+  echo "the hs man page" >"$APP/Contents/Resources/man/hs.man"
+  printf '%s\n' "$APP" >"$FAKE_APPS/org.hammerspoon.Hammerspoon"
+}
+
+hammerspoon_running() {
+  export FAKE_RUNNING="Hammerspoon"
+}
+
+# The hs tool on PATH: the fake hs, answering as MODE says, with RESPONSE.
+hs_on_path() {
+  export FAKE_HS_MODE="$1"
+  export FAKE_HS_RESPONSE="${2:-$FIXTURES/responses/observe.json}"
+  cp "$FIXTURES/fake-hs" "$STUBS/hs"
+}
+
+# Every file, link and dir under DIR, a file by its checksum and a link by its
+# target, so two snapshots differ exactly when something under DIR changed.
+snapshot() {
+  local dir="$1" f
+  if [[ ! -d "$dir" ]]; then
+    printf '(no %s)\n' "$dir"
+    return 0
+  fi
+  (cd "$dir" && find . | LC_ALL=C sort | while IFS= read -r f; do
+    if [[ -L "$f" ]]; then
+      printf '%s -> %s\n' "$f" "$(readlink "$f")"
+    elif [[ -f "$f" ]]; then
+      printf '%s %s\n' "$f" "$(cksum <"$f")"
+    else
+      printf '%s/\n' "$f"
+    fi
+  done)
+}
+
+# The fixture machine outside the catalogue: HOME less the catalogue and the
+# config dir that holds it, the hs prefix, and the app.
+machine_snapshot() {
+  snapshot "$HOME" | grep -Ev '^\./\.config/$|^\./\.config/arngz'
+  snapshot "$ARNGZ_HS_PREFIX"
+  snapshot "$BATS_TEST_TMPDIR/Applications"
+}
+
+# The doctor line for WHAT says STATUS, and the rest of it matches PATTERN, an
+# extended regex.
+doctor_says() {
+  local status="$1" what="$2" pattern="$3"
+  printf '%s\n' "$output" | grep -Eq "^$status +$what +$pattern" || {
+    echo "no line '$status $what $pattern' in:" >&2
+    echo "$output" >&2
+    return 1
+  }
+}
+
+# The line init appends, exactly.
+IPC_LINE='require("hs.ipc") -- arngz (Utilz ST0026): IPC for the hs command-line tool'
+
+@test "AT-06.1: doctor names all seven preconditions, each with its state, and exits 0 when every one holds" {
+  machine
+  hammerspoon_installed
+  hammerspoon_running
+  hs_on_path ok
+  run_arngz doctor
+  assert_success
+  doctor_says ok Hammerspoon "running "
+  assert_output_contains "running ($APP)"
+  doctor_says ok "hs tool" ""
+  assert_output_contains "$STUBS/hs"
+  doctor_says ok IPC "Hammerspoon answered through "
+  doctor_says ok Accessibility "granted to Hammerspoon$"
+  doctor_says ok "separate spaces" "on \(unset: macOS's default\)$"
+  doctor_says ok auto-rearrange "off$"
+  doctor_says ok "Stage Manager" "off$"
+  [ "$(printf '%s\n' "$output" | grep -cE '^(ok|FAIL|skip) ')" -eq 7 ]
+  assert_output_contains "arngz doctor: all 7 preconditions hold"
+}
+
+@test "AT-06.1: doctor completes with no Hammerspoon at all, naming it as missing, and asks nothing" {
+  machine
+  local start=$SECONDS
+  run_arngz doctor
+  assert_exit_code 1
+  doctor_says FAIL Hammerspoon "missing: not installed; fix: brew install --cask hammerspoon$"
+  doctor_says FAIL "hs tool" "missing: not on PATH; fix: arngz init --yes links it under "
+  doctor_says skip IPC "not checked: there is no hs tool to ask it with$"
+  doctor_says skip Accessibility "not checked: only Hammerspoon can say"
+  doctor_says ok "separate spaces" "on"
+  doctor_says ok auto-rearrange "off$"
+  doctor_says ok "Stage Manager" "off$"
+  assert_output_contains "arngz doctor: 4 of 7 preconditions do not hold"
+  [ $((SECONDS - start)) -lt 10 ]
+}
+
+@test "AT-06.1: Hammerspoon installed but not running is named with its fix, and hs is never asked" {
+  machine
+  hammerspoon_installed
+  hs_on_path hang
+  export ARNGZ_HS_TIMEOUT=30
+  local start=$SECONDS
+  run_arngz doctor
+  assert_exit_code 1
+  doctor_says FAIL Hammerspoon "installed at .*, not running; fix: open -b org.hammerspoon.Hammerspoon$"
+  doctor_says ok "hs tool" ""
+  doctor_says skip IPC "not checked: Hammerspoon is not running$"
+  doctor_says skip Accessibility "not checked"
+  [ ! -e "$FAKE_HS_LOG/argv" ]
+  [ $((SECONDS - start)) -lt 10 ]
+}
+
+@test "AT-06.1: an IPC that does not answer is named with its fix, and Accessibility is not checked" {
+  machine
+  hammerspoon_installed
+  hammerspoon_running
+  hs_on_path exit-69
+  run_arngz doctor
+  assert_exit_code 1
+  doctor_says FAIL IPC "hs could not reach Hammerspoon \(exit 69\)"
+  assert_output_contains "fix: arngz init --yes makes Hammerspoon's config load hs.ipc"
+  doctor_says skip Accessibility "not checked: only Hammerspoon can say, and Hammerspoon did not answer$"
+
+  hs_on_path hang
+  export ARNGZ_HS_TIMEOUT=1
+  local start=$SECONDS
+  run_arngz doctor
+  assert_exit_code 1
+  doctor_says FAIL IPC "hs did not answer within 1s"
+  [ $((SECONDS - start)) -lt 10 ]
+}
+
+@test "AT-06.1: Accessibility not granted to Hammerspoon is named, with where to grant it" {
+  machine
+  hammerspoon_installed
+  hammerspoon_running
+  yq -o json '.world.accessibility = false' "$FIXTURES/responses/observe.json" >"$BATS_TEST_TMPDIR/denied.json"
+  hs_on_path ok "$BATS_TEST_TMPDIR/denied.json"
+  run_arngz doctor
+  assert_exit_code 1
+  doctor_says ok IPC "Hammerspoon answered"
+  doctor_says FAIL Accessibility "not granted to Hammerspoon; fix: System Settings > Privacy & Security > Accessibility: turn on Hammerspoon$"
+  assert_output_contains "arngz doctor: 1 of 7 preconditions do not hold"
+}
+
+@test "AT-06.1: doctor asks the engine to observe, with hs's stdin from /dev/null, and leaves no temp dir" {
+  machine
+  hammerspoon_installed
+  hammerspoon_running
+  hs_on_path ok
+  echo "return os.exit()" >"$BATS_TEST_TMPDIR/stdin.txt"
+  "$UTILZ_BIN_DIR/arngz" doctor <"$BATS_TEST_TMPDIR/stdin.txt" >/dev/null 2>&1
+  run cat "$FAKE_HS_LOG/stdin"
+  assert_output "devnull"
+  run yq -r '.verb' "$FAKE_HS_LOG/request.json"
+  assert_output "observe"
+  # The request was made under TMPDIR, and TMPDIR is still there, so the empty
+  # listing below is the request's dir removed, not a dir that never was.
+  grep -qF "$TMPDIR/arngz." "$FAKE_HS_LOG/argv"
+  [ -d "$TMPDIR" ]
+  [ -z "$(ls -A "$TMPDIR")" ]
+}
+
+@test "AT-06.1: each setting that does not hold is named with its fix, and an unset one takes macOS's default" {
+  machine
+  hammerspoon_installed
+  hammerspoon_running
+  hs_on_path ok
+
+  pref com.apple.spaces spans-displays 1
+  run_arngz doctor
+  assert_exit_code 1
+  doctor_says FAIL "separate spaces" "off; fix: System Settings > Desktop & Dock > Mission Control: turn on Displays have separate Spaces"
+  unpref com.apple.spaces spans-displays
+
+  pref com.apple.dock mru-spaces 1
+  run_arngz doctor
+  assert_exit_code 1
+  doctor_says FAIL auto-rearrange "on; fix: System Settings > Desktop & Dock > Mission Control: turn off Automatically rearrange Spaces"
+
+  unpref com.apple.dock mru-spaces
+  run_arngz doctor
+  assert_exit_code 1
+  doctor_says FAIL auto-rearrange "on \(unset: macOS's default\); fix: "
+  pref com.apple.dock mru-spaces 0
+
+  pref com.apple.WindowManager GloballyEnabled 1
+  run_arngz doctor
+  assert_exit_code 1
+  doctor_says FAIL "Stage Manager" "on; fix: System Settings > Desktop & Dock: turn off Stage Manager$"
+  assert_output_contains "arngz doctor: 1 of 7 preconditions do not hold"
+
+  # A domain with no preferences at all is unset too ("Domain ... not found").
+  rm -rf "$FAKE_PREFS/com.apple.WindowManager"
+  run_arngz doctor
+  assert_success
+  doctor_says ok "Stage Manager" "off \(unset: macOS's default\)$"
+}
+
+@test "AT-06.1: a preference defaults cannot read is unknown, never unset, and the wording before macOS 27 reads as unset" {
+  machine
+  hammerspoon_installed
+  hammerspoon_running
+  hs_on_path ok
+  echo "defaults[4242] Could not connect to cfprefsd" >"$FAKE_PREFS/com.apple.dock/mru-spaces.error"
+  run_arngz doctor
+  assert_exit_code 1
+  doctor_says FAIL auto-rearrange "unknown: defaults read com.apple.dock mru-spaces failed \(exit 1\): defaults\[4242\] Could not connect to cfprefsd"
+  rm "$FAKE_PREFS/com.apple.dock/mru-spaces.error"
+
+  export FAKE_PREFS_WORDING=old
+  run_arngz doctor
+  assert_success
+  doctor_says ok "separate spaces" "on \(unset: macOS's default\)$"
+}
+
+@test "AT-06.1: doctor takes no arguments" {
+  machine
+  run_arngz doctor --verbose
+  assert_exit_code 2
+  assert_output_contains "doctor takes no arguments: '--verbose'"
+}
+
+@test "AT-06.1: a Lua error in the engine is an IPC that answered, and the error is named, not sent to init" {
+  machine
+  hammerspoon_installed
+  hammerspoon_running
+  hs_on_path lua-error
+  run_arngz doctor
+  assert_exit_code 1
+  doctor_says ok IPC "Hammerspoon answered"
+  doctor_says FAIL Accessibility "unknown: the engine could not say: the engine raised a Lua error \(hs exit 65\): attempt to index a nil value"
+  assert_output_contains "that is arngz's engine failing"
+  refute_output_contains "init --yes"
+}
+
+@test "AT-06.1: pgrep failing is said, never read as not running, and Hammerspoon is still asked" {
+  machine
+  hammerspoon_installed
+  hs_on_path ok
+  export FAKE_PGREP_EXIT=3
+  run_arngz doctor
+  assert_exit_code 1
+  doctor_says FAIL Hammerspoon "unknown: pgrep exited 3: pgrep: cannot read the process table"
+  doctor_says ok IPC "Hammerspoon answered"
+  doctor_says ok Accessibility "granted to Hammerspoon$"
+}
+
+@test "AT-06.1: a LaunchServices lookup that fails is said, never taken for no Hammerspoon" {
+  machine
+  hs_on_path ok
+  echo "execution error: Error: Not authorized to send Apple events (-1743)" >"$FAKE_APPS/org.hammerspoon.Hammerspoon.error"
+  run_arngz doctor
+  assert_exit_code 1
+  doctor_says FAIL Hammerspoon "not running, and where it is installed is unknown: looking org.hammerspoon.Hammerspoon up through LaunchServices failed \(osascript exited 1\): execution error: Error: Not authorized"
+  refute_output_contains "missing: not installed"
+}
+
+@test "AT-06.1 and AT-06.2: an hs left under the prefix that does not run is one state, told the same by doctor and init" {
+  machine
+  hammerspoon_installed
+  mkdir -p "$ARNGZ_HS_PREFIX/bin"
+  ln -s "$BATS_TEST_TMPDIR/Applications/Moved.app/Contents/Frameworks/hs/hs" "$ARNGZ_HS_PREFIX/bin/hs"
+  run_arngz doctor
+  assert_exit_code 1
+  doctor_says FAIL "hs tool" "missing: .*/bin/hs is there and does not run \(a link to a Hammerspoon that moved\?\); fix: remove it, and arngz init --yes links it again$"
+  run_arngz init --yes
+  assert_exit_code 2
+  assert_output_contains "init --yes changed nothing"
+  assert_output_contains "bin/hs is there and does not run (a link to a Hammerspoon that moved?): remove it, and arngz init --yes links it again"
+}
+
+@test "AT-06.2: init without --yes says what it would do and changes nothing outside the catalogue" {
+  machine
+  hammerspoon_installed
+  mkdir -p "$HOME/.hammerspoon"
+  printf 'hs.grid.setGrid("8x4")\n' >"$HOME/.hammerspoon/init.lua"
+  local before
+  before="$(machine_snapshot)"
+  run_arngz init
+  assert_success
+  assert_output_contains "catalogue: $XDG_CONFIG_HOME/arngz/desks (created)"
+  assert_output_contains "Hammerspoon: installed at $APP"
+  assert_output_contains "hs tool: would link $ARNGZ_HS_PREFIX/bin/hs to $APP/Contents/Frameworks/hs/hs, and its man page"
+  assert_output_contains "init.lua: would append to $HOME/.hammerspoon/init.lua: $IPC_LINE"
+  assert_output_contains "nothing else changed: arngz init --yes does what is marked would"
+  [ "$before" = "$(machine_snapshot)" ]
+  [ -d "$XDG_CONFIG_HOME/arngz/desks" ]
+}
+
+@test "AT-06.2: init --yes links the hs tool as hs.ipc.cliInstall does, and appends exactly one marked line" {
+  machine
+  hammerspoon_installed
+  mkdir -p "$HOME/.hammerspoon"
+  printf 'hs.grid.setGrid("8x4")\n' >"$HOME/.hammerspoon/init.lua"
+  cp "$HOME/.hammerspoon/init.lua" "$BATS_TEST_TMPDIR/init.before"
+  local before
+  before="$(machine_snapshot)"
+  run_arngz init --yes
+  assert_success
+  # The snapshot the "changes nothing" tests trust does see a change.
+  [ "$before" != "$(machine_snapshot)" ]
+  assert_output_contains "hs tool: linked $ARNGZ_HS_PREFIX/bin/hs to $APP/Contents/Frameworks/hs/hs, and its man page"
+  assert_output_contains "init.lua: appended to $HOME/.hammerspoon/init.lua: $IPC_LINE"
+  assert_output_contains "reload Hammerspoon's config"
+  [ -L "$ARNGZ_HS_PREFIX/bin/hs" ]
+  [ "$ARNGZ_HS_PREFIX/bin/hs" -ef "$APP/Contents/Frameworks/hs/hs" ]
+  [ -L "$ARNGZ_HS_PREFIX/share/man/man1/hs.1" ]
+  [ "$ARNGZ_HS_PREFIX/share/man/man1/hs.1" -ef "$APP/Contents/Resources/man/hs.man" ]
+  # The config is what it was, and then the one marked line.
+  {
+    cat "$BATS_TEST_TMPDIR/init.before"
+    printf '%s\n' "$IPC_LINE"
+  } >"$BATS_TEST_TMPDIR/init.expected"
+  cmp "$BATS_TEST_TMPDIR/init.expected" "$HOME/.hammerspoon/init.lua"
+}
+
+@test "AT-06.2: a second init --yes changes nothing, and says there is nothing to do" {
+  machine
+  hammerspoon_installed
+  run_arngz init --yes
+  assert_success
+  # With no config at all, the first run made one holding the one line.
+  printf '%s\n' "$IPC_LINE" >"$BATS_TEST_TMPDIR/init.expected"
+  cmp "$BATS_TEST_TMPDIR/init.expected" "$HOME/.hammerspoon/init.lua"
+  local before
+  before="$(machine_snapshot)"
+  run_arngz init --yes
+  assert_success
+  assert_output_contains "catalogue: $XDG_CONFIG_HOME/arngz/desks (exists)"
+  assert_output_contains "hs tool: $ARNGZ_HS_PREFIX/bin/hs"
+  assert_output_contains "init.lua: $HOME/.hammerspoon/init.lua loads hs.ipc (line 1)"
+  assert_output_contains "Hammerspoon setup: nothing to do"
+  [ "$before" = "$(machine_snapshot)" ]
+}
+
+@test "AT-06.2: init --yes adds nothing to a config that loads hs.ipc already, marked or not, as hv's does" {
+  machine
+  hammerspoon_installed
+  hs_on_path ok
+  mkdir -p "$HOME/.hammerspoon"
+  local config="$HOME/.hammerspoon/init.lua" form
+  # The three lines vc appended to hv's own config on 16 Oct 2026, verbatim.
+  cat >"$config" <<'EOF'
+hs.grid.setGrid("8x4")
+-- arngz (Utilz ST0026): IPC for the `hs` command-line tool. Appended by vc on hv's word, 16 Oct 2026.
+require("hs.ipc")
+if not hs.ipc.cliStatus("/opt/homebrew", true) then hs.ipc.cliInstall("/opt/homebrew", true) end
+EOF
+  cp "$config" "$BATS_TEST_TMPDIR/init.before"
+  run_arngz init --yes
+  assert_success
+  assert_output_contains "hs tool: $STUBS/hs"
+  assert_output_contains "init.lua: $config loads hs.ipc (line 3)"
+  assert_output_contains "Hammerspoon setup: nothing to do"
+  cmp "$BATS_TEST_TMPDIR/init.before" "$config"
+  [ ! -e "$ARNGZ_HS_PREFIX/bin/hs" ]
+
+  for form in 'require "hs.ipc"' "require('hs.ipc')" 'local ipc = require ( "hs.ipc" )'; do
+    printf '%s\n' "$form" >"$config"
+    run_arngz init --yes
+    assert_success
+    assert_output_contains "loads hs.ipc (line 1)"
+    [ "$(cat "$config")" = "$form" ]
+  done
+}
+
+@test "AT-06.2: a require behind a -- comment does not count, so the line is appended" {
+  machine
+  hammerspoon_installed
+  hs_on_path ok
+  mkdir -p "$HOME/.hammerspoon"
+  printf -- '-- require("hs.ipc")\n' >"$HOME/.hammerspoon/init.lua"
+  run_arngz init --yes
+  assert_success
+  [ "$(grep -cxF "$IPC_LINE" "$HOME/.hammerspoon/init.lua")" -eq 1 ]
+}
+
+@test "AT-06.2: init --yes ends a last line that has no newline before it appends" {
+  machine
+  hammerspoon_installed
+  hs_on_path ok
+  mkdir -p "$HOME/.hammerspoon"
+  printf 'hs.grid.setGrid("8x4")' >"$HOME/.hammerspoon/init.lua"
+  run_arngz init --yes
+  assert_success
+  printf 'hs.grid.setGrid("8x4")\n%s\n' "$IPC_LINE" >"$BATS_TEST_TMPDIR/init.expected"
+  cmp "$BATS_TEST_TMPDIR/init.expected" "$HOME/.hammerspoon/init.lua"
+}
+
+@test "AT-06.2: init --yes refuses, changing nothing, when the hs tool needs Hammerspoon and it is not installed" {
+  machine
+  local before
+  before="$(machine_snapshot)"
+  run_arngz init --yes
+  assert_exit_code 2
+  assert_output_contains "init --yes changed nothing"
+  assert_output_contains "brew install --cask hammerspoon"
+  [ ! -e "$XDG_CONFIG_HOME/arngz/desks" ]
+  [ "$before" = "$(machine_snapshot)" ]
+
+  # Without --yes it says the same, and still makes the catalogue, its own job.
+  run_arngz init
+  assert_success
+  assert_output_contains "hs tool: cannot be linked: the hs tool comes with Hammerspoon, which is not installed"
+  assert_output_contains "init --yes cannot finish until this is fixed"
+  [ -d "$XDG_CONFIG_HOME/arngz/desks" ]
+}
+
+@test "AT-06.2: init follows Hammerspoon's MJConfigFile preference to the config it really reads" {
+  machine
+  hammerspoon_installed
+  hs_on_path ok
+  pref org.hammerspoon.Hammerspoon MJConfigFile '~/.config/hammerspoon/init.lua'
+  run_arngz init --yes
+  assert_success
+  assert_output_contains "appended to $HOME/.config/hammerspoon/init.lua"
+  grep -qxF "$IPC_LINE" "$HOME/.config/hammerspoon/init.lua"
+  [ ! -e "$HOME/.hammerspoon/init.lua" ]
+}
+
+@test "AT-06.2: init refuses an option it does not take" {
+  machine
+  run_arngz init --force
+  assert_exit_code 2
+  assert_output_contains "unknown option for init: '--force'"
+}
+
+@test "AT-06.2: an hs under the prefix but not on PATH is said as still to do, never as nothing to do" {
+  machine
+  hammerspoon_installed
+  run_arngz init --yes
+  assert_success
+  export PATH="${PATH/$ARNGZ_HS_PREFIX\/bin:/}"
+  run_arngz init --yes
+  assert_success
+  assert_output_contains "still for you to do: add $ARNGZ_HS_PREFIX/bin to PATH"
+  refute_output_contains "nothing to do"
+  run_arngz doctor
+  doctor_says FAIL "hs tool" "missing: .*/bin/hs is there, but .*/bin is not on PATH, where arngz looks for it; fix: add .*/bin to PATH$"
+}
+
+@test "AT-06.2: init --yes refuses before changing anything when the config cannot be made, so no link is left behind" {
+  machine
+  hammerspoon_installed
+  # A dotfiles link whose repository moved.
+  ln -s "$BATS_TEST_TMPDIR/dotfiles-that-moved/hammerspoon" "$HOME/.hammerspoon"
+  local before
+  before="$(machine_snapshot)"
+  run_arngz init --yes
+  assert_exit_code 2
+  assert_output_contains "init --yes changed nothing"
+  assert_output_contains "$HOME/.hammerspoon is a link that leads nowhere"
+  [ ! -e "$ARNGZ_HS_PREFIX/bin/hs" ]
+  [ "$before" = "$(machine_snapshot)" ]
+}
+
+@test "AT-06.2: an MJConfigFile preference that cannot be read is said and refused, never guessed to be unset" {
+  machine
+  hammerspoon_installed
+  mkdir -p "$FAKE_PREFS/org.hammerspoon.Hammerspoon"
+  echo "defaults[4242] Could not connect to cfprefsd" >"$FAKE_PREFS/org.hammerspoon.Hammerspoon/MJConfigFile.error"
+  run_arngz init --yes
+  assert_exit_code 2
+  assert_output_contains "MJConfigFile preference, which says where its config is, could not be read"
+  [ ! -e "$HOME/.hammerspoon/init.lua" ]
+  [ ! -e "$ARNGZ_HS_PREFIX/bin/hs" ]
 }

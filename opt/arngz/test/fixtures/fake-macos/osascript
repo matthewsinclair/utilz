@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+#
+# A stand-in for osascript, for arngz.bats (ST0026 AT-06). It answers only
+# common.sh's app_path, the LaunchServices lookup of one bundle id, from the
+# file FAKE_APPS/<bundle id>, which holds the app's path. With no file it
+# answers as osascript does for no such app (measured 16 Oct 2026); with
+# FAKE_APPS/<bundle id>.error it fails some other way, printing what that
+# file holds.
+
+set -euo pipefail
+script="${*: -1}"
+bundle="$(printf '%s\n' "$script" | sed -n "s/.*URLForApplicationWithBundleIdentifier('\([^']*\)').*/\1/p" | head -1)"
+if [[ -z "$bundle" ]]; then
+  echo "fake osascript: only app_path's lookup is faked, not: $*" >&2
+  exit 64
+fi
+apps="${FAKE_APPS:?fake osascript needs FAKE_APPS}"
+if [[ -f "$apps/$bundle.error" ]]; then
+  cat "$apps/$bundle.error" >&2
+  exit 1
+fi
+if [[ -f "$apps/$bundle" ]]; then
+  cat "$apps/$bundle"
+  exit 0
+fi
+echo "execution error: Error: Error: no app with bundle id $bundle (-2700)" >&2
+exit 1

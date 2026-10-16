@@ -360,6 +360,26 @@
       ],
       "status": "green",
       "note": "diff prints each op with its path and reason and exits 1, exits 0 with 'no change' when there are none, sends verb plan (the engine's plan verb never calls execute) carrying the desk, and refuses an invalid desk before asking the engine. RED PROVEN RETROSPECTIVELY at 16 Oct (the code came before these tests): against 88c57ad in a detached worktree, 13 of the 14 AT-04 tests fail; the 14th, diff refusing an invalid desk, passes there because 88c57ad already validated first. GREEN at 00a93b3 (16 Oct): arngz.bats 55/55 and plan_test.lua 90/90 under luajit, in the estate run in a detached worktree at that SHA, where the arngz suite is green; the run's 2 red suites (utilz, prez acceptance) fail only because the worktree has no in-crate prez binary and install_e2e refuses linked worktrees, reported to vc. Estate verdict, accepted by vc: 20 of 22 suites in a detached worktree at 00a93b3; the 4 failures named are the worktree's, not the change's (log: /private/tmp/claude-501/-Users-matts-Devel-prj-Utilz/67bcef6b-d20d-4bb9-ac53-ff7fbaf2e422/scratchpad/estate-00a93b3.log)."
+    },
+    {
+      "id": "AT-06.1",
+      "kind": "test",
+      "file": "opt/arngz/test/arngz.bats",
+      "covers": [
+        "AC-06.1"
+      ],
+      "status": "to-write",
+      "note": "doctor on a fixture machine (machine in arngz.bats: a fixture HOME, the fake hs, and stand-ins for defaults, pgrep and osascript from test/fixtures/fake-macos first on PATH): all seven preconditions named with their state, exit 0 when all hold; no Hammerspoon at all named as missing with the hs tool, IPC and Accessibility not checked, exit 1 inside 10 s; Hammerspoon not running never asks a hanging hs; an IPC that exits 69 or hangs named with the init --yes fix; a Lua error (hs exit 65) an IPC that answered, the engine's error named and not sent to init; Accessibility not granted named with where to grant it; observe asked with hs's stdin from /dev/null and its temp dir removed; each setting that does not hold named with its fix, an unset key or domain taking macOS's default; a defaults failure unknown, never unset, and the wording before macOS 27 read as unset; a pgrep failure and a LaunchServices failure said, never read as not running or not installed; a dangling hs under the prefix told the same by doctor and init. RED PROVEN RETROSPECTIVELY at 16 Oct (the code came before these tests): against be11088's CLI in a detached worktree all 13 AT-06.1 tests fail, and six copies of this change with one property broken (the probe while not running, an unreadable preference, a Lua error, a domain with no preferences, a dangling hs, a pre-flight blind to a dead link) each redden the test that guards it."
+    },
+    {
+      "id": "AT-06.2",
+      "kind": "test",
+      "file": "opt/arngz/test/arngz.bats",
+      "covers": [
+        "AC-06.2"
+      ],
+      "status": "to-write",
+      "note": "init on a fixture machine: without --yes it says what it would link and append and changes nothing outside the catalogue (a snapshot of HOME, the prefix and the app, which a --yes run is shown to change); --yes links the prefix's bin/hs and its man page to the app's own copies, as hs.ipc.cliInstall does, and appends exactly the one marked require line; a second --yes changes nothing and says so; a config already requiring hs.ipc, marked or not, is left alone, hv's own three lines among them; a require behind a -- comment does not count; an unterminated last line is ended first; Hammerspoon's MJConfigFile is followed, and one that cannot be read is refused; with Hammerspoon not installed, or a config that cannot be made (a dotfiles link that leads nowhere), --yes refuses, exit 2, changing nothing; an hs off PATH is said as still to do; an unknown option is refused. RED PROVEN RETROSPECTIVELY at 16 Oct: against be11088's CLI in a detached worktree 12 of the 13 AT-06.2 tests fail; the 13th, an unknown option refused, passes there because init already refused one. Copies of this change that never see an existing require, or whose pre-flight misses a link that leads nowhere, redden the tests that guard them."
     }
   ],
   "attachments": [
