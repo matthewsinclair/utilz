@@ -5,9 +5,9 @@
     "name": "Validation Claude",
     "role": "validation",
     "session_id": "3341dbaf-a82f-4073-bae3-2f8c30306f25",
-    "heartbeat_at": "2026-10-16T11:14:57.444Z",
+    "heartbeat_at": "2026-10-16T12:22:37.254Z",
     "status": "active",
-    "focus": "16 Oct: 0065 and 0067 verified and landed; ST0026 arngz designed and started, WP-02 and WP-03 verified, WP-04 with cc; the spike closed outcome A and doubts B; D (the drag) and the Dock clicks wait on hv. Folding for a compact on hv's word after cc and dc fold.",
+    "focus": "16 Oct, folded for a compact on hv's word: ST0027 menuz written up (59efdaf, 6bf29f0), the rubber-duck with hv next; ST0026 WP-05 apply landed at 32fe3f0 and verified, hand runs show the carry and the drag work and one post-launch defect, cc's WIP fix at 03b7f85 to verify and re-run with hv's hands off; WP-06 doctor/init done (c654d4f, 0068 closed); the store blew up and was rebuilt, syncs and edits under intent/st held until Intent 0605. Taking hv's and intent-vc's word; cc and dc take instructions from vc.",
     "claims": [
       "ST0026",
       "ST0027"
@@ -1206,10 +1206,10 @@
       "node": "vc",
       "kind": "doing",
       "seq": 62,
-      "text": "ST0026 arngz: vc holds the thread for the design. WP-01 spike DONE 16 Oct: A and B closed (moveWindowToSpace lies; a binding switches the display, not the window), D taken (D21: hold the window and press the Move-space shortcut, 5 of 5; drag over a shared edge across displays), ordinals from the plist (D22), hs client 4 s timeout (D20 amended). WP-02 (3e11cb4), WP-03 (88c57ad), WP-04 (00a93b3) verified. WP-06 doctor/init at 3777de3 (dc): suite and shellcheck verified, diff read and real doctor run pending. WP-05 apply briefed to cc, starts after the compact. Design on disk at intent/st/ST0026/design.md and in the store; edit the file, then intent sync --to-store.",
+      "text": "ST0026 arngz: WP-05 apply landed at 32fe3f0 (cc), verified by vc (plan_test 160/160, arngz.bats 119/119 both bashes, shellcheck 22 clean). Hand runs 16 Oct on hv's machine: the carry within a display 2 of 2, the drag across displays 1 of 1, place and the idempotent second apply hold; AC-05.4/05.5 FAIL on one cause, a launched app's window listed by Spaces before Accessibility backs it (re-plan says unseen or not running; observe dies on a nil axuielement); cc fixing. WP-06 doctor/init done at c654d4f (dc), AT-06.1/06.2 green; AC-06.3 docs and AC-06.4 close wait on apply. Design on disk; edits under intent/st and syncs held until Intent 0605.",
       "state": "live",
       "recorded_at": "2026-10-16T08:16:02.801Z",
-      "edited_at": "2026-10-16T09:55:54.166Z"
+      "edited_at": "2026-10-16T12:21:33.145Z"
     },
     {
       "node": "vc",
@@ -1282,6 +1282,14 @@
       "text": "ST0027 menuz: written up on hv's ask and the three sibling apps (Intent, Conflab, Gtools), nothing reinvented: design.md at 59efdaf carries the shape, the menu file, the login shell's own interpolation, the standard dialogs for params, the log, 18 criteria and 11 questions with a recommendation each. WP-01 (the rubber-duck with hv) is started; WP-02..05 and the criteria are in the store. HELD until Intent's fixed pair (0605, 3.2.4): the sync --to-store that carries design.md into the store, and any edit under intent/st/. Code starts after hv's rulings.",
       "state": "live",
       "recorded_at": "2026-10-16T11:14:56.955Z"
+    },
+    {
+      "node": "vc",
+      "kind": "hold",
+      "seq": 10,
+      "text": "After the compact (16 Oct, afternoon): (1) cc's SHA for the post-launch settle and observe's nil guard: verify in a worktree, then re-run acceptance.sh apply handrun and launch handrun com.apple.Dictionary with hv's hands off (10 s each; the handrun desk is in hv's catalogue; TextEdit's document must sit on a desktop other than 5 first); then AT-05.4/05.5 green, AC-05.6 satisfied on the read, WP-05 done. (2) intent-vc's step 2 (Intent 0605 in 3.2.4): run the sync half of scratchpad/st0027/mint-acs.sh (intent sync --to-store ST0027), take the drafted-criteria section out of ST0027/design.md, commit; cc syncs its ST0026 notes. Until then: no sync --to-store, no hand edit under intent/st (a hand edit doubles the store's index; if unavoidable, intent index rebuild straight after and tell intent-vc). (3) The menuz rubber-duck with hv on design.md's Q1 to Q11; D1 to D11 recorded; WP-01 done. (4) hold 9's list stands.",
+      "state": "live",
+      "recorded_at": "2026-10-16T12:21:33.315Z"
     }
   ],
   "messages": [

@@ -1,0 +1,16 @@
+{
+  "id": "01M52AJ4ASH0WMXKJKGXVZ9389",
+  "ts": "2026-10-16T12:21:33.145Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 62,
+    "text": "ST0026 arngz: WP-05 apply landed at 32fe3f0 (cc), verified by vc (plan_test 160/160, arngz.bats 119/119 both bashes, shellcheck 22 clean). Hand runs 16 Oct on hv's machine: the carry within a display 2 of 2, the drag across displays 1 of 1, place and the idempotent second apply hold; AC-05.4/05.5 FAIL on one cause, a launched app's window listed by Spaces before Accessibility backs it (re-plan says unseen or not running; observe dies on a nil axuielement); cc fixing. WP-06 doctor/init done at c654d4f (dc), AT-06.1/06.2 green; AC-06.3 docs and AC-06.4 close wait on apply. Design on disk; edits under intent/st and syncs held until Intent 0605."
+  }
+}

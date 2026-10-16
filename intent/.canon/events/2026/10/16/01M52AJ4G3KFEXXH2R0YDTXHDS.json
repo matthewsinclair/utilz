@@ -1,0 +1,15 @@
+{
+  "id": "01M52AJ4G3KFEXXH2R0YDTXHDS",
+  "ts": "2026-10-16T12:21:33.315Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "hold",
+    "text": "After the compact (16 Oct, afternoon): (1) cc's SHA for the post-launch settle and observe's nil guard: verify in a worktree, then re-run acceptance.sh apply handrun and launch handrun com.apple.Dictionary with hv's hands off (10 s each; the handrun desk is in hv's catalogue; TextEdit's document must sit on a desktop other than 5 first); then AT-05.4/05.5 green, AC-05.6 satisfied on the read, WP-05 done. (2) intent-vc's step 2 (Intent 0605 in 3.2.4): run the sync half of scratchpad/st0027/mint-acs.sh (intent sync --to-store ST0027), take the drafted-criteria section out of ST0027/design.md, commit; cc syncs its ST0026 notes. Until then: no sync --to-store, no hand edit under intent/st (a hand edit doubles the store's index; if unavoidable, intent index rebuild straight after and tell intent-vc). (3) The menuz rubber-duck with hv on design.md's Q1 to Q11; D1 to D11 recorded; WP-01 done. (4) hold 9's list stands."
+  }
+}

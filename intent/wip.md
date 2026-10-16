@@ -4,7 +4,10 @@ DOING and TODO only. Done work goes to `intent/done.md`; context to `intent/rest
 
 ## DOING
 
-- ST0026 `arngz`: close WP-04 (discover, diff) on the estate run and a clean critic-lua pass; build WP-06's doctor and init; resolve WP-01's spike (the drag test and the Dock This-Desktop clicks wait on hv) and then build WP-05 apply on the outcome it gives.
+- ST0026 `arngz`: land the engine's post-launch settle and observe's nil-element guard (cc), re-run the AC-05.4 and AC-05.5 hand checks with hv's hands off, then WP-06's docs (help, README, CHANGELOG) and the close estate run.
+- ST0027 `menuz`: the rubber-duck with hv on design.md's eleven questions, record D1 to D11, close WP-01; then WP-02, the shim.
+- After Intent 0605 ships: `intent sync --to-store ST0027` (design.md into the store, its drafted-criteria section out) and cc's ST0026 design notes.
+- Run `opt/utilz/test/install_e2e.bats` from the primary checkout before 2.13.0 is cut.
 
 ## TODO
 
