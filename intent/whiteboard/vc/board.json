@@ -5,7 +5,7 @@
     "name": "Validation Claude",
     "role": "validation",
     "session_id": "3341dbaf-a82f-4073-bae3-2f8c30306f25",
-    "heartbeat_at": "2026-10-16T08:16:07.922Z",
+    "heartbeat_at": "2026-10-16T08:20:24.271Z",
     "status": "active",
     "focus": "16 Oct: 0065 and 0067 verified and landed; ST0026 arngz designed and started, WP-02 and WP-03 verified, WP-04 with cc; the spike closed outcome A and doubts B; D (the drag) and the Dock clicks wait on hv. Folding for a compact on hv's word after cc and dc fold.",
     "claims": [
@@ -1230,7 +1230,8 @@
       "kind": "hold",
       "seq": 7,
       "text": "Heavy suites (tools/test-estate, anything cargo-heavy): held until intent-vc's END for its whole-tree bats run; light single-utility bats runs are allowed.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-10-16T08:21:50.290Z",
       "recorded_at": "2026-10-16T08:16:05.861Z"
     },
     {
@@ -1240,6 +1241,14 @@
       "text": "Fold notes for restart.md and the record: it says 15 utilities (16 with arngz) and devbin 0.1.7 (vendored is 0.1.10 at 7c39d91c); README utility table needs an arngz row (WP-06); the commit gate and check all review no Lua (Intent 0603, closed by hv as an incomplete pack: the critic-lua agent is the review); vc's scratchpad holds git worktrees wt-c21f319, wt-13552bc, wt-3e11cb4, wt-88c57ad, so run git worktree prune when the scratchpad goes; hv's ~/.hammerspoon/init.lua gained three IPC lines on 16 Oct and the hs tool is an unbrewed link at /opt/homebrew/bin/hs.",
       "state": "live",
       "recorded_at": "2026-10-16T08:16:06.809Z"
+    },
+    {
+      "node": "vc",
+      "kind": "hold",
+      "seq": 8,
+      "text": "Heavy slot: intent-vc sent END at 08:18Z (relayed to cc, hold 9 lifted with a condition). devbin-vc has first call for 0195 targeted run; vc asked devbin-vc at 08:2xZ whether it is taking the slot. Utilz estate run (cc, closes WP-04) starts only on devbin-vc END or its pass, and vc tells cc.",
+      "state": "live",
+      "recorded_at": "2026-10-16T08:21:51.152Z"
     }
   ],
   "messages": [

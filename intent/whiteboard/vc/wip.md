@@ -3,7 +3,7 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 3341dbaf-a82f-4073-bae3-2f8c30306f25
-heartbeat_at: 2026-10-16 08:16Z
+heartbeat_at: 2026-10-16 08:20Z
 status: active
 focus: "16 Oct: 0065 and 0067 verified and landed; ST0026 arngz designed and started, WP-02 and WP-03 verified, WP-04 with cc; the spike closed outcome A and doubts B; D (the drag) and the Dock clicks wait on hv. Folding for a compact on hv's word after cc and dc fold."
 claims: [ST0026]
@@ -23,7 +23,7 @@ claims: [ST0026]
 
 - Drag spike, outcome D: dc's arngz-spike2.lua, run-hs.sh and RUNBOOK-2.md under /private/tmp/claude-501/-Users-matts-Devel-prj-Utilz/b6f789ca-4627-4a74-b4cd-bb7c07de9f46/scratchpad/arngz-spike/. Held until hv gives the go for the pointer to be taken (asked three times on 16 Oct); then vc runs it with a low-stakes window and records the result in the design.
 - Dock This-Desktop test: held until hv does the two clicks (Calculator on VY229HF (2), Dock icon > Options > Assign To > This Desktop, then quit it and say so); then vc reads what the Dock wrote to com.apple.spaces, launches Calculator, observes where it lands, and records the outcome for B.
-- Heavy suites (tools/test-estate, anything cargo-heavy): held until intent-vc's END for its whole-tree bats run; light single-utility bats runs are allowed.
+- Heavy slot: intent-vc sent END at 08:18Z (relayed to cc, hold 9 lifted with a condition). devbin-vc has first call for 0195 targeted run; vc asked devbin-vc at 08:2xZ whether it is taking the slot. Utilz estate run (cc, closes WP-04) starts only on devbin-vc END or its pass, and vc tells cc.
 
 ## Watch-outs
 
