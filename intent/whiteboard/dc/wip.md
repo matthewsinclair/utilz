@@ -3,9 +3,9 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: b6f789ca-4627-4a74-b4cd-bb7c07de9f46
-heartbeat_at: 2026-10-16 17:41Z
+heartbeat_at: 2026-10-16 17:49Z
 status: active
-focus: "16 Oct: 2.13.0 tagged at 01cf76d (vc). AT-06.1's Linux fix at b89d41e; hold 6's D23 and D20 notes in ST0026's design at 83e5f4a. ST0027 menuz help waits on cc's WP-02 SHA (hold 7). Taking instructions from vc."
+focus: "16 Oct: ST0027 menuz help's WP-02 cut landed at 98411b2 on cc's WP-02 (07dc120). Hold 7: recut at WP-03/04, the full help with README and CHANGELOG at WP-05. Taking instructions from vc."
 claims: []
 ---
 
