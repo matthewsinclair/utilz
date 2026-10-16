@@ -1,0 +1,16 @@
+{
+  "id": "01M539HC7A4VBGHSZ34VBXGSF5",
+  "ts": "2026-10-16T21:22:54.314Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "hold",
+    "seq": 10,
+    "text": "The drive to 2.14.0 under hv's AFK word (decisions 20, 21), state at 16 Oct 21:22Z. DONE since the compact: WP-06's dev build and notice hand run, which found two first-use defects, both fixed on main: (a) macOS 27 asks with an alert at the bundle id's first request and holds the answer for the user; a quit under the alert withdraws it and leaves the id denied until System Settings allows it (b7e07a3, d117591 with cc's review; D13 corrected; AC-06.1/06.4 reworded); (b) a freshly installed copy reads its login item notFound and registered nothing (3e731d3). WP-05 verified at 2b66d3f and on main; dc's CI job, help, README and CHANGELOG landed (4534225, c41a7ae, 25b79ef); two installs by hand, the second registering the login item (AT-05.2 green, install-handrun.sh at 6fe0a94); AT-05.1, AT-06.1 to AT-06.3 green; AC-06.5 satisfied. OPEN, in order: (1) CI on the push run of 3e731d3 and the menuz-app dispatch 38968763850 on it (AC-05.3), then push 6fe0a94 and the AT commits; (2) item (7) estate + check all on 6fe0a94 in intent-vc's window, dc's kovacs loop at it (AC-05.4, ST0028 AC-01.4); (3) hv's hand: System Settings > Notifications > Menuz > Allow, then vc reruns opt/menuz/test/notice-handrun.sh on the dev build (AT-06.4 green, wp done 06), hv confirms the menu after a logout (AT-05.2's note); (4) wp done 05, st done ST0027; ST0028 wp done and st done; dehydrate; restart.md, wip.md; (5) the cut, bin/devbin release --minor, nothing pushed while step 11 waits on CI; the tap formula copy and audit (the tap push is hv's); publish of Menuz.app.zip after hv's store-creds. Rules in force: compiles in windows booked with intent-vc; suite-sized bats outside Intent windows; vc pushes; the hs log builtin: use /usr/bin/log."
+  }
+}

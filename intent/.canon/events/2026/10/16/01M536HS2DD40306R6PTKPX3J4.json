@@ -1,0 +1,15 @@
+{
+  "id": "01M536HS2DD40306R6PTKPX3J4",
+  "ts": "2026-10-16T20:30:41.741Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 17 Oct 00:3xZ (+04), directly to vc, going AFK again after the compact: 'Ok, continue. Push to get the release done. I'm afk for now.' vc reads this with decision 20 as the word for the cut itself: once ST0027 and ST0028 are closed, the estate and check all are green on the closing SHA and CI is green on main, vc runs bin/devbin release --minor for 2.14.0 without waiting for a further word, then the tap formula copy and audit (the tap commit and push stay hv's, refused to vc), and the signed Menuz.app.zip asset waits for hv's store-creds."
+  }
+}

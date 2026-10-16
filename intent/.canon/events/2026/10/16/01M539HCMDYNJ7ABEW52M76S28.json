@@ -1,0 +1,15 @@
+{
+  "id": "01M539HCMDYNJ7ABEW52M76S28",
+  "ts": "2026-10-16T21:22:54.733Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "hold",
+    "text": "hv's keypresses at return, in order: (1) System Settings > Notifications > Menuz: Allow (the first launch's alert was withdrawn when the hand run quit the app; macOS counts that as no; the running copy then posts); tell vc, who reruns the notice hand run for AT-06.4. (2) Log out and in: the menu is back (the login item is enabled); tell vc for AT-05.2's note. (3) bin/devbin macos store-creds, then vc runs app-sign, app-notarize, app-verify and publish for the Menuz.app.zip asset. (4) The tap: git -C $(brew --repository matthewsinclair/utilz) commit -am 'utilz 2.13.0' && git -C ... push, then the same for 2.14.0 after the cut (vc copies and audits the formula). (5) .claude/settings.json's advisory: ! intent claude upgrade --apply."
+  }
+}
