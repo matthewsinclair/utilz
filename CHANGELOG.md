@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 The section still open names its version: `## [X.Y.Z] - unreleased`, never `## [Unreleased]`. Devbin's release core finds a section by its version and dates it at the cut; an unnamed section is one it cannot find (ST0019 D2).
 
-## [2.13.0] - unreleased
+## [2.13.0] - 2026-10-16
 
 Minor: **a new utility, `arngz`, arranges windows across displays and spaces from named desks**, and **prez prints page numbers in a PDF when a deck asks for them**, with a per-slide override. prez goes from 2.4.0 to 2.5.0.
 
