@@ -1310,6 +1310,14 @@
       "state": "archived",
       "archived_at": "2026-10-16T19:09:51.116Z",
       "recorded_at": "2026-10-16T17:38:44.736Z"
+    },
+    {
+      "node": "vc",
+      "kind": "todo",
+      "seq": 37,
+      "text": "For WP-05, from dc's launch of menuz for hv on hv's word (16 Oct 19:2xZ, after the fold): hv's menuz now exists for real: ~/.config/menuz holds the example (dc ran menuz init; validate ok) and cc's Debug Menuz.app from ~/.local/state/menuz/build runs as pid 96193 with 'NSStatusItem Preferred Position Item-0' = 700 written by dc into com.matthewsinclair.utilz.menuz's defaults (hv wants the item between Hammerspoon and Intent, whose slot is 672). Two findings for cc's WP-05 objective and the design, hv's call on each: (1) a fresh install lands leftmost and invisible on a full menu bar behind macOS 27's overflow (hv confirmed it allowed in System Settings > Menu Bar): vc recommends no seeded position (the bar is the user's) but a help line saying command-drag, and a first-run log line saying the item is at the left; (2) Menuz has no app icon, so the Menu Bar settings list shows a blank placeholder: vc recommends one AppIcon rendered at build from the SF Symbol by a script (no checked-in binary assets, D8's spirit) unless hv wants a drawn icon. Nothing committed by dc; vc carries both into the WP-05 read after the compact.",
+      "state": "live",
+      "recorded_at": "2026-10-16T19:16:27.379Z"
     }
   ],
   "messages": [
