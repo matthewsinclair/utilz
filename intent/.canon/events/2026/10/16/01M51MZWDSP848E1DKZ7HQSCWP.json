@@ -1,0 +1,15 @@
+{
+  "id": "01M51MZWDSP848E1DKZ7HQSCWP",
+  "ts": "2026-10-16T06:04:35.130Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wp.new",
+  "subject": {
+    "type": "wp",
+    "id": "ST0026/01"
+  },
+  "payload": {
+    "scope": "S",
+    "title": "Spike: space moves and Dock bindings on macOS 27"
+  }
+}

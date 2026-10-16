@@ -1,0 +1,15 @@
+{
+  "id": "01M51MZWQTYWK81X8D586T8R7B",
+  "ts": "2026-10-16T06:04:35.451Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wp.new",
+  "subject": {
+    "type": "wp",
+    "id": "ST0026/03"
+  },
+  "payload": {
+    "scope": "S",
+    "title": "Engine: observe, the pure planner, execute, and the IPC contract"
+  }
+}

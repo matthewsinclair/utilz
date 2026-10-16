@@ -3,10 +3,10 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 3341dbaf-a82f-4073-bae3-2f8c30306f25
-heartbeat_at: 2026-10-16 04:29Z
+heartbeat_at: 2026-10-16 06:06Z
 status: active
-focus: "Booted 16 Oct. Since 22 Sep: nine commits landed unverified (devbin 0.1.8-0.1.10, Intent 3.2.2 sweep, hooks), two unpushed, CI red once on 26 Sep, 0065 open. Plan is with hv; holding for hv's instructions."
-claims: []
+focus: "ST0026 arngz: design, 6 WPs and 24 criteria written on hv's rulings; the spike (WP-01) is the open input and waits on hv's go. Verifying 0065 (71389ad) and 0067 (aa1a033) in a detached worktree at c21f319."
+claims: [ST0026]
 ---
 
 # Validation Claude (vc)
@@ -31,6 +31,7 @@ _(none)_
 ## Decisions
 
 - hv, 2026-09-14: every hv inbox and whiteboard item comes to vc for review and closeout, and after its compact cc takes its instructions from vc.
+- hv, 2026-10-16, directly to vc, on arngz (ST0026): (1) Hammerspoon is the engine. (2) The CLI is bash in the Utilz shim format, for now. (3) Config is YAML: hv asked whether TOML would be better, and vc measured that yq 4.54.1 reads and writes both, so the deciding point is shape, and a four-level desk tree reads as indentation in YAML and as order-dependent [[displays.spaces.apps]] headers in TOML. (4) For the rest hv takes vc's recommendations from the review: a space is its ordinal on its display with an optional name, and apply creates missing spaces unless --no-create; an app is a bundle id plus an optional window title pattern, no pattern meaning every window of that app, and the same app on two spaces of one display without patterns is refused; displays match by UUID, then name and size, then position, mismatches refused by name with --map to override; apps not running are launched and waited for unless --no-launch, apps not installed are reported and apply exits non-zero; discovery reads the Dock app-bindings and apply rewrites them only with --bind, once the spike shows it works; full-screen windows are recorded as fullscreen and left alone in v1; v1 is apply, discover, diff, list, show, delete, init, doctor and dry run. (edited)
 
 ---
 

@@ -1,0 +1,15 @@
+{
+  "id": "01M51MQSFRNZ8Y5J3P8T6QC3AT",
+  "ts": "2026-10-16T06:00:09.976Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 2026-10-16, directly to vc, on arngz (ST0026): (1) Hammerspoon is the engine. (2) The CLI is bash in the Utilz shim format, for now. (3) Config is YAML: hv asked whether TOML would be better, and vc measured that yq 4.54.1 reads and writes both, so the deciding point is shape, and a four-level desk tree reads as indentation in YAML and as order-dependent [[displays.spaces.apps]] headers in TOML. (4) For the rest hv takes vc's recommendations from the review: a space is its ordinal on its display with an optional name, and apply creates missing spaces unless --no-create; an app is a bundle id plus an optional window title pattern, no pattern meaning every window of that app, and the same app on two spaces of one display without patterns is refused; displays match by UUID, then name and size, then position, mismatches refused by name with --map to override; apps not running are launched and waited for unless --no-launch, apps not installed are reported and apply exits non-zero; discovery reads the Dock app-bindings and apply rewrites them only with --bind, once the spike shows it works; full-screen windows are recorded as fullscreen and left alone in v1; v1 is apply, discover, diff, list, show, delete, init, doctor and dry run."
+  }
+}

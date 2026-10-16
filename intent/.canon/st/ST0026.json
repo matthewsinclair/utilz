@@ -1,0 +1,270 @@
+{
+  "schema": "intent/thread@3.0",
+  "id": "ST0026",
+  "title": "arngz: named window arrangements (desks) discovered and applied across displays and spaces",
+  "slug": "arngz-named-window-arrangements-desks-discovered",
+  "status": "wip",
+  "created": "2026-10-16",
+  "objective": "A new utility, `arngz` (\"arranges\"), that records and restores named window arrangements on macOS. An arrangement is a **desk**: one or more uniquely identified **displays**, each holding one or more **spaces** (named by text or ordinal), each knowing a set of **apps**, each app carrying one preferred **layout** on the screen in Hammerspoon-style logical grid coordinates.\n\n```\n[desk] -1-n- [display] -1-n- [space] -1-n- [app] -1-1- [layout]\n```\n\nA desk is declared in a simple config file (format to be decided). The two main uses:\n\n- **apply**: `utilz arngz zeop1` puts every app in the desk on its preferred space at its preferred grid position, on this machine's displays.\n- **discover**: read the apps, spaces and positions laid out right now on the displays attached right now, and save or update them as a named desk in arngz's local config.\n\nWith the usual command-line verbs around them (list, show, delete, init, doctor, dry run). The tool is for hv's own machines: it must fix macOS's habit of putting windows on arbitrary spaces, and it works with Hammerspoon or an equivalent engine. Implementation language (Rust, Swift, or shell over Hammerspoon's Lua) is a design decision, and \"super simple to use\" is the criterion.",
+  "context": "Asked by hv on 16 Oct 2026 in a rubber-duck session with vc. The thread is created and started ahead of the design: hv wants a review of the ask and of what macOS makes possible first, and the design is elaborated once the ask is ironed out. macOS has no public API for Spaces, so the design's first job is to settle which engine carries the private-API risk (Hammerspoon's `hs.spaces` is the candidate) and to measure, on this machine's macOS (Darwin 27), whether moving a window to another space still works before anything is built on it.",
+  "body": "",
+  "preamble": "",
+  "wps": [
+    {
+      "seq": 1,
+      "title": "Spike: space moves and Dock bindings on macOS 27",
+      "scope": "S",
+      "status": "not-started",
+      "objective": "Measure, on hv's machine, the two things the design cannot assume: whether Hammerspoon can move a window to another space on macOS 27 (same display and across displays, with a readback after each move), and whether a Dock app-binding written to `com.apple.spaces` takes after a Dock restart. The spike script and runbook exist (dc, 16 Oct); this package runs them with hv, records the JSON results and hv's notes in the design under \"The open input\", and resolves that section to one outcome. Nothing is built here.",
+      "body": "",
+      "preamble": ""
+    },
+    {
+      "seq": 2,
+      "title": "Desk config, validator and the catalogue verbs",
+      "scope": "S",
+      "status": "not-started",
+      "objective": "The utility's skeleton and the desk catalogue. `utilz generate arngz` scaffolds `opt/arngz/`, `bin/arngz` and `help/arngz.md`; `arngz.yaml` declares the dependencies doctor reports. The desk schema from the design, its validator (one function, every refusal naming desk, path and value), and the file-backed verbs: `list`, `show`, `delete`, and the catalogue half of `init`. The bats suite runs on every CI leg with `XDG_CONFIG_HOME` pointed at fixtures. No Hammerspoon call yet.",
+      "body": "",
+      "preamble": ""
+    },
+    {
+      "seq": 3,
+      "title": "Engine: observe, the pure planner, execute, and the IPC contract",
+      "scope": "S",
+      "status": "not-started",
+      "objective": "The engine. `opt/arngz/lib/arngz.lua` with `observe`, the pure `plan`, and `execute`, and the IPC contract between the CLI and Hammerspoon: request and response as JSON files, `hs -c 'return dofile(...).run(<request>)'`. Lua becomes a declared language (`intent lang init lua`), the planner is tested under `lua5.4` on the Linux leg from fixture desks and worlds, and the CLI's bats suite drives the contract through a fake `hs` on `PATH`. `observe` is measured by hand on hv's machine against the world the spike recorded.",
+      "body": "",
+      "preamble": ""
+    },
+    {
+      "seq": 4,
+      "title": "discover and diff",
+      "scope": "S",
+      "status": "not-started",
+      "objective": "`discover` and `diff`. Discovery turns an observed world into a desk: standard windows only, full-screen ones as `fullscreen`, frames snapped to the desk's grid with the misfit recorded, every display with its four match fields, the Dock bindings read. `--save <desk>` writes into the catalogue and refuses to overwrite without `--force`. `diff <desk>` is the planner's output rendered as what apply would do, exit 1 when anything differs. Both are tested from fixture worlds through the fake `hs`, and a discovered desk round-trips through the validator unchanged.",
+      "body": "",
+      "preamble": ""
+    },
+    {
+      "seq": 5,
+      "title": "apply",
+      "scope": "S",
+      "status": "not-started",
+      "objective": "`apply`, in the order the design gives: preconditions, validate, observe, match displays (UUID, then name and size, then position, `--map` to override), plan, `--dry-run` stops with the ops printed, create missing spaces, launch and wait, re-observe, move then place with a readback after each op, `--bind` only if WP-01 allowed it, final observe, and the per-app report with exit 0, 1 or 2. Matching, planning and the report are tested from fixtures through the fake `hs`; the execute half is the hand-run acceptance on hv's machine, recorded as such. The shorthand `utilz arngz <desk>` lands here.",
+      "body": "",
+      "preamble": ""
+    },
+    {
+      "seq": 6,
+      "title": "doctor, init, docs and the close",
+      "scope": "S",
+      "status": "not-started",
+      "objective": "`doctor` and the Hammerspoon half of `init`, the documents, and the close. `doctor` names every precondition with its state: Hammerspoon running, the `hs` tool present and IPC loaded, Accessibility, separate spaces, auto-rearrange, Stage Manager. `init --yes` installs the `hs` tool under `/opt/homebrew` and appends the one `require(\"hs.ipc\")` line; without `--yes` it says what it would do. `help/arngz.md`, the README's utility table, the CHANGELOG entry, and the hand-run acceptance transcript in `acceptance.md`. `bin/devbin check all` and `utilz test` green before the package closes.",
+      "body": "",
+      "preamble": ""
+    }
+  ],
+  "criteria": [
+    {
+      "id": "AC-01.1",
+      "text": "The spike's three measurements (observe; a window moved to the next space on its display and to a space on another display, each read back; a Dock binding written and tested after a Dock restart) were run on hv's machine, and their JSON files and hv's notes are recorded in design.md under \"The open input\".",
+      "kind": "non-test",
+      "state": {
+        "is": "unsatisfied"
+      }
+    },
+    {
+      "id": "AC-01.2",
+      "text": "That section is resolved to one outcome, A, B or C, and names which apply flags exist as a result, --bind in particular.",
+      "kind": "non-test",
+      "state": {
+        "is": "unsatisfied"
+      }
+    },
+    {
+      "id": "AC-02.1",
+      "text": "utilz arngz is dispatched by bin/utilz; opt/arngz/arngz.yaml declares yq, Hammerspoon and the hs tool as dependencies; utilz doctor reports each of them; utilz list shows arngz.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC-02.2",
+      "text": "The catalogue is ${XDG_CONFIG_HOME:-$HOME/.config}/arngz/desks/. list prints each desk with its display and app counts; show prints a validated desk; delete removes one by name; init creates the directory. A desk that does not exist is refused by name, exit 2.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC-02.3",
+      "text": "The validator refuses each of the design's seven conditions (an unknown key; a grid not WxH; a layout neither x,y wxh inside the grid nor fullscreen; two displays with one name; a match with neither uuid nor name; the same app twice on one display without a window pattern on each; a verb as a desk name), naming the desk, the path and the value, and accepts the design's example desk unchanged.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC-03.1",
+      "text": "The IPC contract: the CLI writes a request file holding exactly {verb, desk, options}, runs hs -c with a dofile of the module and the request path, and renders exactly the response file's report, proven through a fake hs on PATH. An hs that is absent, that times out, or that writes no response is refused by name, exit 2.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC-03.2",
+      "text": "plan(desk, world) is pure (its source holds no hs. reference, which the suite checks) and is tested under lua5.4 on the Linux leg from fixtures: a world already matching the desk yields no ops; a window on the wrong space yields move then place; a display short of spaces yields create_space; an app not running yields launch; --no-create and --no-launch remove theirs.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC-03.3",
+      "text": "Hand run on hv's machine, recorded as such: observe reports every screen with UUID, name, frame and position, every space with ordinal and type, every window with bundle id, title and frame, the two settings, and every Dock binding, and agrees with the spike's observation.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC-03.4",
+      "text": "Lua is a declared language of the project, critic-lua is clean on the module, and CI's Linux legs install lua5.4.",
+      "kind": "non-test",
+      "state": {
+        "is": "unsatisfied"
+      }
+    },
+    {
+      "id": "AC-04.1",
+      "text": "discover from a fixture world prints a desk the validator accepts, and prints it again byte-identically from the same world: standard windows only, full-screen windows as fullscreen, every display with uuid, name, size and position, the Dock bindings read.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC-04.2",
+      "text": "Snapping: a window 3 px off a cell edge is recorded at that cell with the misfit noted beside the layout; a window spanning half a cell is reported rather than silently rounded.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC-04.3",
+      "text": "discover --save <desk> writes into the catalogue, refuses to overwrite an existing desk without --force (exit 2, naming the file), and overwrites with it.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC-04.4",
+      "text": "diff <desk> prints the ops apply would run, exits 1 when any exist and 0 when none, and sends no execute request.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC-05.1",
+      "text": "apply --dry-run sends no execute request, prints every op with its reason, and exits 0.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC-05.2",
+      "text": "Display matching from fixtures: a UUID match wins; name and size resolve a single candidate; two identical panels resolve by position; a desk display with no candidate, or two desk displays on one screen, refuse naming every candidate, exit 2; --map <name>=<uuid> overrides one display and is reported.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC-05.3",
+      "text": "The report and exit codes: every app placed exits 0; an app not installed is reported as skipped, exit 1; a window matching no pattern is reported as unseen, exit 1; a move whose readback disagreed with its return value is reported as failed, exit 1; a refusal before anything changed exits 2.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC-05.4",
+      "text": "Hand run on hv's machine, recorded as such: applying a discovered desk after its windows were scrambled by hand puts every app's windows back on their space and cell, verified by the final observe, and applying it again produces no ops.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC-05.5",
+      "text": "Hand run on hv's machine, recorded as such: an app in the desk that is not running is launched and placed within the timeout, and with --no-launch it is reported instead.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC-05.6",
+      "text": "The --bind flag exists only under WP-01's outcome A or B with the binding measurement passed. Where it exists it writes the bindings, restarts the Dock once and re-observes; where it does not, the flag is refused as unknown rather than accepted and ignored.",
+      "kind": "non-test",
+      "state": {
+        "is": "unsatisfied"
+      }
+    },
+    {
+      "id": "AC-05.7",
+      "text": "utilz arngz <desk> is apply <desk>, and a desk named like a verb can be neither saved nor applied.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC-06.1",
+      "text": "doctor names every precondition with its state (Hammerspoon running, the hs tool and IPC, Accessibility, separate spaces, auto-rearrange, Stage Manager), exits 1 when any fails, and completes without Hammerspoon present, naming it as missing.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC-06.2",
+      "text": "init without --yes prints what it would do and changes nothing outside the catalogue; with --yes it installs the hs tool under /opt/homebrew and appends exactly one marked require(\"hs.ipc\") line to init.lua, and a second run changes nothing (fixture HOME).",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC-06.3",
+      "text": "help/arngz.md, the README's utility table and the CHANGELOG entry exist and name every verb and flag the CLI accepts, checked against arngz --help.",
+      "kind": "non-test",
+      "state": {
+        "is": "unsatisfied"
+      }
+    },
+    {
+      "id": "AC-06.4",
+      "text": "bin/devbin check all and the estate suite are green; the hand-run acceptance transcript is in acceptance.md and names the machine, the macOS build and the Hammerspoon version that ran it.",
+      "kind": "non-test",
+      "state": {
+        "is": "unsatisfied"
+      }
+    }
+  ],
+  "attachments": [
+    {
+      "path": "design.md",
+      "text": "# arngz: design\n\n## The problem\n\nmacOS puts an app's windows on whichever space it decides, and after every reboot, display change or relaunch the arrangement is rebuilt by hand. Hammerspoon gives keyboard control of a window's geometry on a grid, but it has no notion of a saved arrangement across displays and spaces. arngz adds that: a named **desk** that says, for each display, for each space, which apps live there and where on the grid each app's windows sit. `utilz arngz zeop1` restores a known desk on this machine's displays; `utilz arngz discover --save zeop1` records the one on screen now.\n\n## What macOS offers, and the shape it forces\n\n| Fact                                                                                              | Consequence for arngz                                                                                                               |\n| ------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |\n| Spaces have no public API. Every tool reaches them through private SkyLight calls.               | Hammerspoon's `hs.spaces` carries that risk (D1). arngz makes only public `hs.*` calls and no private call of its own (D15).         |\n| Desktop spaces have no names; Mission Control shows \"Desktop 1..n\" per display.                   | A space is its ordinal on its display. A name in the desk is a label arngz keeps, not something macOS knows (D4).                   |\n| Space ids are integers macOS regenerates; a space's UUID lasts only while the space exists.       | The desk never stores a space id. Ordinals are resolved against a fresh observation at every apply.                                 |\n| Each display has its own spaces when \"Displays have separate Spaces\" is on (the default).        | A precondition, checked by `doctor` and by `apply` before anything changes.                                                          |\n| Moving a window to another space works on some macOS versions and not others.                    | WP-01's spike measures it on macOS 27 before apply is built. Its outcome selects between two apply strategies (see \"The open input\"). |\n| A window's position and size are set through the Accessibility API, which is public.            | Placement is the safe half. It needs one Accessibility grant, which Hammerspoon already holds.                                        |\n| A display's name is not unique (this machine has two VY229HF panels); its panel UUID is.          | Displays match by UUID first, name and size second, position third (D6).                                                             |\n| An app is a bundle id; it has 0..n windows.                                                       | An app entry is a bundle id plus an optional window title pattern; no pattern means every window of that app (D5).                  |\n| Some apps do not expose windows on non-visible spaces to Accessibility.                           | `observe` records, per space, how many window ids it saw and how many it could name; discovery visits a space only when it must.    |\n| A full-screen window is its own space and cannot sit on a grid.                                   | Recorded as `layout: fullscreen` and left alone (D11).                                                                               |\n| Accessibility cannot be granted on a CI runner, and the macOS legs run on tags only.             | The planner is pure and tested on Linux; the engine's execute half is hand-run on hv's machine and recorded as such (D12).          |\n| The Dock's \"Assign To\" bindings are macOS's own app-to-space rule, kept in a private plist.      | Discovery reads them. Apply rewrites them only with `--bind`, and only once WP-01 shows a written binding takes (D10).               |\n\n## The model\n\n```\n[desk] -1-n- [display] -1-n- [space] -1-n- [app] -1-1- [layout]\n```\n\n| Thing   | Identity                                       | Human label                    | Why that identity                                                     |\n| ------- | ---------------------------------------------- | ------------------------------ | --------------------------------------------------------------------- |\n| desk    | its file name                                  | the same                       | one file per desk makes list, show and delete file operations         |\n| display | the panel's UUID (`hs.screen:getUUID()`)       | `name`, `size`, `position`     | two identical panels share a name and a size; only the UUID differs   |\n| space   | its ordinal on its display                     | an optional `name`             | macOS names no desktop space, and regenerates ids                     |\n| app     | its bundle id                                  | an optional `window` pattern   | app names localise and change; windows are the thing that gets placed |\n| layout  | `x,y wxh` in the desk's grid, or `fullscreen`  |                                | a cell means nothing without the grid, so the desk declares it (D7)   |\n\n## The config\n\nA desk is one YAML file at `${XDG_CONFIG_HOME:-$HOME/.config}/arngz/desks/<desk>.yaml`. The directory is the catalogue: `list` reads it, `delete` removes a file from it, `discover --save` writes into it. There is no index file to drift. Tests point `XDG_CONFIG_HOME` at a fixture directory; no other override exists.\n\n```yaml\ndesk: zeop1\ngrid: 12x8\ndisplays:\n  - name: left\n    match: { uuid: 37D8832A-2D66-02CA-B9F7-8F30A301B230, name: VY229HF, size: 1920x1080, position: left }\n    spaces:\n      - name: comms            # ordinal 1 on this display\n        apps:\n          - app: com.tinyspeck.slackmacgap\n            layout: 0,0 6x8\n          - app: com.apple.mail\n            layout: 6,0 6x8\n      - name: code             # ordinal 2\n        apps:\n          - app: com.microsoft.VSCode\n            window: \"Utilz\"    # a Lua pattern on the window title; optional\n            layout: 0,0 12x8\n  - name: laptop\n    match: { uuid: 37D8832A-2D66-02CA-B9F7-8F30A301B231, name: Color LCD, size: 3024x1964, position: main }\n    spaces:\n      - apps:\n          - app: com.apple.Safari\n            layout: fullscreen\n```\n\nThe format is YAML and not TOML, measured rather than preferred: yq 4.54.1 reads and writes both, so the toolchain is indifferent, and the deciding point is that a four-level tree reads as indentation in YAML and as order-dependent `[[displays.spaces.apps]]` headers in TOML. This yq reads `on` and `off` as strings, so nothing in a desk turns into a boolean by surprise.\n\nThe validator refuses, naming the desk, the path and the value, on each of: an unknown key; a `grid` that is not `WxH`; a `layout` that is neither `x,y wxh` inside the grid nor `fullscreen`; two displays with one `name`; a display whose `match` carries neither `uuid` nor `name`; the same `app` twice on one display unless every one of them carries a `window` pattern; a desk name that is one of arngz's verbs. The validator is one function in the CLI, and every verb that reads a desk calls it before doing anything else.\n\n## The engine\n\nHammerspoon is the engine (D1). arngz is two halves with one contract between them.\n\n- **The CLI**, `opt/arngz/arngz`, a bash utility in the Utilz pattern: `bin/arngz` dispatches to it, `opt/arngz/arngz.yaml` declares it and its dependencies (`yq`, Hammerspoon, the `hs` tool), `help/arngz.md` documents it, `opt/arngz/test/` holds its bats suite. It parses arguments, reads and validates desks, converts YAML to JSON with yq, hands Hammerspoon a request, and renders the response. No arrangement logic lives in it.\n- **The module**, `opt/arngz/lib/arngz.lua`, loaded by Hammerspoon with `dofile` at every call, so a change to the file is live without reloading Hammerspoon's config. It has three parts: `observe() -> world` reads screens, spaces, windows, settings and bindings; `plan(desk, world) -> ops` is pure, with no `hs.*` call in it; `execute(ops) -> results` performs the ops and reads back after each one.\n\nThe contract: the CLI writes a request as JSON to a file under its own temp dir (`{verb, desk, options}`), runs `hs -c 'return dofile(\"<module>\").run(\"<request path>\")'`, and the module writes the response JSON beside the request and returns one status line. Files rather than arguments, because a desk does not fit safely in a shell-quoted `-c` string. The response carries the world as observed, the plan, the results of each op, and the report; the CLI renders those and never recomputes them.\n\nThe planner is pure so that it is testable where Hammerspoon is not (D12). Its inputs are two JSON documents, a desk and a world, and its output is a list of ops, each carrying the desk path that asked for it:\n\n| Op             | Arguments                   | Produced when                                                              |\n| -------------- | --------------------------- | -------------------------------------------------------------------------- |\n| `create_space` | screen uuid                 | a display has fewer spaces than the desk needs, and `--no-create` is absent |\n| `launch`       | bundle id                   | the desk names an app with no running process, and `--no-launch` is absent |\n| `move`         | window id, space ordinal    | a matched window is on the wrong space                                     |\n| `place`        | window id, frame            | a matched window's frame is not its layout's frame on its display          |\n| `bind`         | bundle id, space uuid       | `--bind` is given and the binding differs                                  |\n| `restart_dock` |                             | any `bind` op exists                                                       |\n\nA layout's frame is computed by the planner from the display's frame and the desk's grid, not by `hs.grid`, whose grid is global state inside Hammerspoon (D7). Discovery does the reverse: it snaps a window's frame to the nearest cells and records, beside the layout, how far the window was from the cell edge, so a desk made from a loosely placed window says so.\n\n## The verbs\n\n| Verb                                                     | Does                                                                                  | Changes                       | Exit              |\n| -------------------------------------------------------- | ------------------------------------------------------------------------------------- | ----------------------------- | ----------------- |\n| `utilz arngz <desk>`                                     | the same as `apply <desk>`                                                            |                               |                   |\n| `apply <desk> [--dry-run] [--no-launch] [--no-create] [--bind] [--map <name>=<uuid>]` | observe, match, plan, execute, observe, report                        | windows, spaces, bindings     | 0, 1 or 2 (below) |\n| `discover [--save <desk>] [--force]`                     | observe, print the live state as a desk; `--save` writes it                           | one desk file, with `--save`  | 0, or 2 on refusal|\n| `diff <desk>`                                            | observe, plan, print what apply would do                                              | nothing                       | 0 same, 1 differs |\n| `list`                                                   | the desks in the catalogue, one per line, with display and app counts                 | nothing                       | 0                 |\n| `show <desk>`                                            | the desk, validated, as YAML                                                          | nothing                       | 0, or 2           |\n| `delete <desk>`                                          | removes the file, naming it                                                           | one desk file                 | 0, or 2           |\n| `init [--yes]`                                           | creates the catalogue; reports what Hammerspoon needs; with `--yes`, provides it      | see D16                       | 0, or 2           |\n| `doctor`                                                 | every precondition, each named with its state                                         | nothing                       | 0, or 1           |\n\n`--dry-run` on apply is observe plus plan, printed as the ops with their reasons, and nothing executed. `diff` is the same computation under a name that says what it is for.\n\n## apply, in order\n\n1. Preconditions, the same checks `doctor` runs: Hammerspoon running and reachable over IPC, Accessibility granted, separate spaces on, Stage Manager off. Any failure refuses with the check named, exit 2.\n2. Read and validate the desk. Exit 2 on refusal.\n3. `observe`.\n4. Match the desk's displays to the observed screens (below). A mismatch refuses, naming the desk display and every candidate, exit 2; `--map` overrides one display at a time.\n5. `plan`. With `--dry-run`, print the ops and stop, exit 0.\n6. Execute `create_space` ops, then `observe` again, because ordinals now resolve to new ids.\n7. Execute `launch` ops, waiting for each app's first window with a timeout of 20 seconds, then `observe` again, because the windows to place now exist. An app that is not installed is reported and skipped.\n8. `plan` again against the fresh world, for `move` and `place` only.\n9. Execute `move` then `place` for each window, in that order, because a cross-display move changes what the frame means. After each op, read back: a `move` that returned success while the readback shows the window still at home is recorded as failed, never as done.\n10. With `--bind`, execute `bind` ops, then one `restart_dock`, then `observe` again, so that any change the Dock restart made is in the report.\n11. Report, per desk app: placed, launched and placed, moved and placed, skipped (not installed), unseen (no window matched the pattern), or failed (an op whose readback disagreed). Exit 0 when every app is placed; 1 when any app is skipped, unseen or failed; 2 when nothing was attempted.\n\n## Display matching\n\nFor each desk display, in order: a screen with the same UUID; else the one screen whose name and size both match; else, when name and size match more than one screen, the one whose position relative to the others matches `position` (`main`, `left`, `right`, `above`, `below`, read from the screens' frames); else no match. A desk display that matches no screen, or two desk displays that match one screen, refuse with every candidate listed. `--map left=37D8832A-...` binds one desk display to one screen UUID for this run and is reported in the output. Discovery records all four fields so that the next machine has the most to go on.\n\n## Failures and the report\n\nNothing is silent. Every skipped app, every unmatched window, every op whose readback disagreed with its return value is a named line in the report and lifts the exit code to 1. A refusal before anything changed is exit 2 and names what refused. The one failure the design plans for specifically is the private API lying: `moveWindowToSpace` returning true with the window unmoved, which WP-01 measures; the readback after every op is there because of it.\n\n## Testing: what runs where\n\n| Layer                         | Where it runs                   | How                                                                                                              |\n| ----------------------------- | ------------------------------- | ---------------------------------------------------------------------------------------------------------------- |\n| CLI: verbs, catalogue, validator, rendering | bats, on every CI leg | a fake `hs` first on `PATH` that answers from fixture response files; `XDG_CONFIG_HOME` at a fixture catalogue      |\n| Planner: `plan(desk, world)`  | `lua5.4` on the Linux leg, `lua` or `luajit` here | fixture desks and worlds, expected ops; the planner is written in the Lua 5.1 and 5.4 intersection               |\n| Engine: `observe`, `execute`  | hv's machine, by hand           | the acceptance script in `opt/arngz/test/acceptance.sh`, run through Hammerspoon, its transcript recorded in `acceptance.md` as a hand run |\n\nLua becomes a declared language of the project (`intent lang init lua`), so `critic-lua` reads the module and `check all` covers it. CI's Linux legs install `lua5.4` beside the other apt packages.\n\n## Decisions\n\n- **D1** Hammerspoon is the engine. It holds the Accessibility grant, it is installed and running on hv's machine, and the private Spaces API becomes a Hammerspoon upgrade rather than our maintenance. A standalone Rust or Swift binary would reimplement `hs.spaces` and `hs.grid` and own their breakage, to save installing one cask.\n- **D2** The CLI is bash in the Utilz shim format; the engine is a Lua module Hammerspoon loads. The CLI parses, calls and renders; the module observes, plans and executes.\n- **D3** YAML, one file per desk, under the XDG config directory. Measured against TOML, above.\n- **D4** A space is its ordinal on its display, with an optional name for people. Apply creates missing spaces unless `--no-create`, and never removes one.\n- **D5** An app is a bundle id plus an optional window title pattern. No pattern means every window of that app takes the layout, which is Hammerspoon's own `hs.layout` convention. The same app on two spaces of one display needs a pattern on each entry.\n- **D6** Displays match by UUID, then name and size, then position; a mismatch refuses by name; `--map` overrides one display per run.\n- **D7** The desk declares its grid, and the planner computes frames from the screen frame and the grid. `hs.grid` is not used, because its grid is global state inside Hammerspoon and a pure planner cannot depend on it.\n- **D8** Apps not running are launched and waited for, unless `--no-launch`. An app that is not installed is reported, skipped, and lifts the exit code.\n- **D9** Missing spaces are created by default (hv's new-machine case), never removed.\n- **D10** Dock bindings: discovery reads them; apply writes them only with `--bind`, and the flag exists only if WP-01 measures that a written binding takes. A flag that silently did nothing would be worse than no flag.\n- **D11** Full-screen windows are recorded as `fullscreen` and left alone in v1.\n- **D12** The planner is pure and tested on Linux; dry run and diff are the planner without execute; the execute half is hand-run on hv's machine and recorded as such, the showreel precedent.\n- **D13** Exit codes: 0 every app placed; 1 something named was skipped, unseen or failed; 2 refused before anything changed.\n- **D14** Move, then place, with a readback after each; WP-01 measures whether a frame survives a move.\n- **D15** Only public `hs.*` calls. No private call of arngz's own.\n- **D16** `init` installs the `hs` tool under `/opt/homebrew` (the default `/usr/local` is root-owned on hv's machine), and appends `require(\"hs.ipc\")` to `~/.hammerspoon/init.lua` only with `--yes`, as one marked, idempotent line. Without `--yes` it prints what it would do.\n- **D17** The request and response cross the IPC boundary as files, never as a shell-quoted string.\n\n## The open input: WP-01's spike\n\nEverything above is written; one branch waits on a measurement. WP-01 runs dc's spike (`observe`, `move`, `bind`) on hv's machine and records the result here, under this heading, with the JSON files it produced.\n\n- **Outcome A, moves work**: apply is as written. `--bind` exists if the binding measurement also passed.\n- **Outcome B, moves fail or lie, bindings take**: the `move` op is replaced by bind and relaunch: apply writes the app's binding, restarts the Dock once, and relaunches the app's windows on their bound space. Slower and visible, and macOS keeps doing it afterwards.\n- **Outcome C, neither works**: apply places windows on the grid within each display's current space, the desk's space dimension is recorded by discovery but not enforced, and hv decides whether that is worth shipping.\n\n## Out of scope for v1\n\nStage Manager and macOS's own window tiling (detected and refused); removing spaces; choosing among an app's windows by anything other than a title pattern; syncing desks between machines (they are plain files; copy them); a Hammerspoon hotkey that applies a desk (one line in `init.lua` once the module exists, and a later thread if wanted).\n",
+      "bytes": 20601,
+      "sha256": "4b6ae3c8cc47930ec3227fd023a6970ddf349cbaf2906adfcea6ea59960937fa"
+    }
+  ]
+}
