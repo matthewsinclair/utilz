@@ -1,0 +1,17 @@
+{
+  "id": "01M51X0844HCDWF60W06ST8S9B",
+  "ts": "2026-10-16T08:24:35.716Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "WP-06 starts now, its doctor and init half (AC-06.1, AC-06.2), while cc closes WP-04 and apply waits on the spike. Full brief sent by SendMessage at 08:24Z. intent wp start ST0026/06, claim it on your board, work in the main tree by explicit-path commits, files disjoint from cc's Lua; your tests take a fixture HOME and a fake hs; never touch hv's ~/.hammerspoon/init.lua from a test. Spike 2 stays held.",
+    "fyi": false,
+    "re": null,
+    "recipient": "dc"
+  }
+}

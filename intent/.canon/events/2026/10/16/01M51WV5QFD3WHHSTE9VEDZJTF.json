@@ -1,0 +1,17 @@
+{
+  "id": "01M51WV5QFD3WHHSTE9VEDZJTF",
+  "ts": "2026-10-16T08:21:49.423Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "END from intent-vc at 08:18Z: your hold 9 is lifted with one condition. devbin-vc has first call on the next heavy slot (0195 targeted run); vc has asked it for its status. Until vc says the slot is Utilz's, no tools/test-estate; do the critic-lua re-pass on WP-04 first (a read, not a run). Then estate, green AT-04.1..4, wp done, SHA to vc.",
+    "fyi": true,
+    "re": null,
+    "recipient": "cc"
+  }
+}

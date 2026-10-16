@@ -1,0 +1,15 @@
+{
+  "id": "01M51WV7DG57QGVWKCA4J5CN4X",
+  "ts": "2026-10-16T08:21:51.152Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "hold",
+    "text": "Heavy slot: intent-vc sent END at 08:18Z (relayed to cc, hold 9 lifted with a condition). devbin-vc has first call for 0195 targeted run; vc asked devbin-vc at 08:2xZ whether it is taking the slot. Utilz estate run (cc, closes WP-04) starts only on devbin-vc END or its pass, and vc tells cc."
+  }
+}
