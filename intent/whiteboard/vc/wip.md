@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 3341dbaf-a82f-4073-bae3-2f8c30306f25
-heartbeat_at: 2026-10-16 19:51Z
+heartbeat_at: 2026-10-16 20:22Z
 status: active
-focus: "16 Oct, hv AFK, vc has the pen (decision 20): driving ST0027 menuz and ST0028 arngz to the 2.14.0 cut. WP-06 (the first-use fixes: the one-route --notify notice measured by vc's probe, the place line, the drawn icon, the default glyph) is cc's, objective at 3bbcf57, with dc porting app-icons and the help lines; WP-05 follows; ST0028 verified and pushed at ad2da79. Compiles only in windows booked with intent-vc; the Ubuntu leg on kovacs; vc pushes main. cc and dc take instructions from vc."
+focus: "16 Oct 20:3xZ, localfold for hv's compact; hv AFK, vc has the pen (decision 20): driving ST0027 menuz and ST0028 to the 2.14.0 cut. WP-06 (the first-use fixes, D13) landed at 8bea7ba and pushed; next in hold 10: a booked window for the dev build, the notice hand run, hv's copy relaunched, AT-06.x minted, dc's help lines; WP-05 is cc's, go on st0027-wp05 from 8bea7ba; dc's signing half and releasing.md landed; ST0028 landed. Compiles only in windows booked with intent-vc; suite-sized bats outside Intent windows; CI's shellcheck is 0.9.0; vc pushes main. cc and dc take instructions from vc."
 claims: [ST0027]
 ---
 
