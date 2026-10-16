@@ -6,7 +6,10 @@ import ServiceManagement
 /// registered: a Debug product, a build under a scratch path or a copy run
 /// from anywhere else never becomes the user's login item. The service's
 /// status is the record, so there is no first-run flag for another copy
-/// with the same bundle id to set.
+/// with the same bundle id to set. A bundle just put in place reads `notFound`
+/// at its first launch, before the system has a record of it (measured by
+/// `utilz menuz install` on 17 Oct), so that status registers too, and the
+/// register's own answer is what the log then says.
 enum LoginItem {
   enum Decision: Equatable {
     case register
@@ -21,7 +24,7 @@ enum LoginItem {
 
   static func decide(bundle: String, installed: String, status: SMAppService.Status) -> Decision {
     guard canonical(bundle) == canonical(installed) else { return .notInstalledCopy }
-    return status == .notRegistered ? .register : .leave(status)
+    return status == .notRegistered || status == .notFound ? .register : .leave(status)
   }
 
   /// A path with symlinks resolved and no trailing slash, so one bundle

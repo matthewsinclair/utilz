@@ -57,6 +57,7 @@ struct LoginItemDecisionTests {
   func installedCopy() {
     #expect(LoginItem.decide(bundle: Self.installed, installed: Self.installed, status: .notRegistered) == .register)
     #expect(LoginItem.decide(bundle: Self.installed + "/", installed: Self.installed, status: .notRegistered) == .register)
+    #expect(LoginItem.decide(bundle: Self.installed, installed: Self.installed, status: .notFound) == .register)
     #expect(LoginItem.decide(bundle: Self.installed, installed: Self.installed, status: .enabled) == .leave(.enabled))
     #expect(
       LoginItem.decide(bundle: Self.installed, installed: Self.installed, status: .requiresApproval)
