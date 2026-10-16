@@ -154,6 +154,8 @@ A run that exits non-zero posts a macOS notification naming the item and its exi
 6. a `notify` that is not `never`, `failure` or `always`, a `realise` that is not a positive number, or an `icon` this macOS has no SF Symbol for;
 7. an empty `menu`.
 
+It reports every refusal, not only the first, one to a line: `<file>: <path>.<key> = '<value>': <why>`. A file that passes prints `ok`. `menuz render` prints the menu as an indented outline, one entry per line, its labels realised, ending with the app's own entries.
+
 A file that fails in the running app keeps the last good menu on screen and shows the refusal as a disabled first item, and in the log. Nothing is dropped silently.
 
 ### The app
