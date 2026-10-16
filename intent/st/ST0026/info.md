@@ -36,7 +36,7 @@ Asked by hv on 16 Oct 2026 in a rubber-duck session with vc. The thread is creat
 | WP-03 | Engine: observe, the pure planner, execute, and the IPC contract | S    | Done        |
 | WP-04 | discover and diff                                                | S    | WIP         |
 | WP-05 | apply                                                            | S    | Not Started |
-| WP-06 | doctor, init, docs and the close                                 | S    | Not Started |
+| WP-06 | doctor, init, docs and the close                                 | S    | WIP         |
 
 ## Acceptance
 

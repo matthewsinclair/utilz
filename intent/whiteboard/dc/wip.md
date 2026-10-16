@@ -3,10 +3,10 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: b6f789ca-4627-4a74-b4cd-bb7c07de9f46
-heartbeat_at: 2026-10-16 08:16Z
+heartbeat_at: 2026-10-16 08:31Z
 status: active
-focus: "spike 2 for ST0026 outcome D is ready and held until hv says go"
-claims: []
+focus: "ST0026 WP-06: doctor and init (AC-06.1, AC-06.2), on vc's brief; spike 2 is vc's to run with hv"
+claims: [ST0026/06]
 ---
 
 # DevX Claude (dc)

@@ -48,7 +48,7 @@ title: arngz: named window arrangements (desks) discovered and applied across di
 - AC-05.6 (non-test) The --bind flag exists only under WP-01's outcome A or B with the binding measurement passed. Where it exists it writes the bindings, restarts the Dock once and re-observes; where it does not, the flag is refused as unknown rather than accepted and ignored. -- satisfied: no
 - AC-05.7 utilz arngz <desk> is apply <desk>, and a desk named like a verb can be neither saved nor applied. -- satisfied: no (computed)
 
-### WP-06 -- doctor, init, docs and the close (status: Not Started)
+### WP-06 -- doctor, init, docs and the close (status: WIP)
 
 - AC-06.1 doctor names every precondition with its state (Hammerspoon running, the hs tool and IPC, Accessibility, separate spaces, auto-rearrange, Stage Manager), exits 1 when any fails, and completes without Hammerspoon present, naming it as missing. -- satisfied: no (computed)
 - AC-06.2 init without --yes prints what it would do and changes nothing outside the catalogue; with --yes it installs the hs tool under /opt/homebrew and appends exactly one marked require("hs.ipc") line to init.lua, and a second run changes nothing (fixture HOME). -- satisfied: no (computed)
@@ -84,7 +84,7 @@ _(no tests in this group)_
 
 _(no tests in this group)_
 
-### WP-06 -- doctor, init, docs and the close (status: Not Started)
+### WP-06 -- doctor, init, docs and the close (status: WIP)
 
 _(no tests in this group)_
 

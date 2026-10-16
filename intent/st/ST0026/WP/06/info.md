@@ -2,7 +2,7 @@
 wp_id: WP-06
 title: doctor, init, docs and the close
 scope: S
-status: Not Started
+status: WIP
 ---
 
 # WP-06: doctor, init, docs and the close
