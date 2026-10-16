@@ -133,7 +133,7 @@ Runs are concurrent and independent, each with its own id. Nothing is queued and
 Every run appends to `${XDG_STATE_HOME:-$HOME/.local/state}/menuz/menuz.log`, which is created on first use:
 
 ```
-2026-10-16T10:42:03Z run 17 start "Hammerspoon doctor" cwd=/Users/you: arngz doctor
+2026-10-16T10:42:03Z run 17 start "Hammerspoon doctor" cwd=/Users/you/notes: arngz doctor
 [17] hammerspoon  running (pid 4123)
 2026-10-16T10:42:04Z run 17 exit 0 in 1.3s
 ```
@@ -154,7 +154,30 @@ A run that exits non-zero posts a macOS notification naming the item and its exi
 6. a `notify` that is not `never`, `failure` or `always`, a `realise` that is not a positive number, or an `icon` this macOS has no SF Symbol for;
 7. an empty `menu`.
 
-It reports every refusal, not only the first, one to a line: `<file>: <path>.<key> = '<value>': <why>`. A file that passes prints `ok`. `menuz render` prints the menu as an indented outline, one entry per line, its labels realised, ending with the app's own entries.
+It reports every refusal, not only the first, one to a line, as `<file>: <path>.<key> = '<value>': <why>`: a key at the top of the file has no path, and a file that is not YAML at all is `<file>: <why>`. A file that passes prints `ok`.
+
+```
+menuz.yaml: notify = 'sometimes': notify is never, failure or always
+menuz.yaml: menu[0].colour = 'red': unknown key
+```
+
+`menuz render` prints the menu as an outline, one entry per line, its labels realised: `# ` before a header, an item by its label, a caption in parentheses, `---` for a separator, and a submenu as `Name >` with its entries indented two spaces under it. The app's own entries come last.
+
+```
+# Desks
+Discover this arrangement
+Hammerspoon doctor
+---
+Machine >
+  (Up 16 days)
+  Sleep the display
+  Empty the Trash
+---
+Edit Menu…
+Open Log
+Reload
+Quit menuz
+```
 
 A file that fails in the running app keeps the last good menu on screen and shows the refusal as a disabled first item, and in the log. Nothing is dropped silently.
 

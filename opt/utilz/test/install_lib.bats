@@ -12,22 +12,25 @@ load "test_helper.bash"
 # THE OWNED SET (design.md D2)
 # ============================================================================
 
-@test "AT07: install_owned_paths names exactly the sixteen bin symlinks" {
+@test "AT07: install_owned_paths names exactly the utilities' bin symlinks" {
   run run_install_function "install_owned_paths '$UTILZ_HOME'"
   assert_success
 
+  # The one roster here; the count is read from it, so a new utility is one
+  # word, not a word and a number. menuz (ST0027) joined on 2026-10-16.
+  local names=(arngz cleanz clipz cryptz expz gitz lnrel macoz mdagg menuz pdf2md prez retry stampz syncz todo xtrct)
   local listed
   listed=$(printf '%s\n' "$output" | grep -c '^bin/')
-  # 16 symlinks + bin/utilz itself. bin/devbin and bin/.devbin/ are vendored.
-  # arngz (ST0026) is the sixteenth, from 2026-10-16.
-  [[ "$listed" -eq 17 ]] || {
-    echo "expected 17 bin/ entries, got $listed" >&2
+  # Each utility's symlink + bin/utilz itself. bin/devbin and bin/.devbin/
+  # are vendored.
+  [[ "$listed" -eq $((${#names[@]} + 1)) ]] || {
+    echo "expected $((${#names[@]} + 1)) bin/ entries, got $listed" >&2
     printf '%s\n' "$output" | grep '^bin/' >&2
     return 1
   }
 
   local name
-  for name in arngz cleanz clipz cryptz expz gitz lnrel macoz mdagg pdf2md prez retry stampz syncz todo xtrct; do
+  for name in "${names[@]}"; do
     printf '%s\n' "$output" | grep -qx "bin/$name" || {
       echo "owned set is missing bin/$name" >&2
       return 1
