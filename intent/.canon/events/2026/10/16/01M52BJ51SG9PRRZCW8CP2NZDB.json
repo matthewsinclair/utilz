@@ -1,0 +1,17 @@
+{
+  "id": "01M52BJ51SG9PRRZCW8CP2NZDB",
+  "ts": "2026-10-16T12:39:02.457Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "Hold 5 part 1, the read of cc's 32fe3f0 and 03b7f85 for the shim's apply arm: no defect in the contract between them. What I checked, at 03b7f85, with line numbers in opt/arngz/lib/arngz.lua unless a file is named:\n- respond() writes response.json.partial and renames it into place (1074, 1084). The shim's -f poll can never read half a file.\n- run() returns exactly \"arngz: scheduled apply\" (1155), which the shim's grep -qxF matches (arngz:469). SCHEDULED (1068) and SCHEDULED_VERBS (arngz:364) agree, and arngz.bats:930-931 holds the two together.\n- M.apply refuses only before the first change (944-958). After that, every failure is a step() result (964), the_rest included (1017). answer() keeps refused apart from lua_error (1094-1104), which is the shim's exit 2 against its exit 1.\n- apply_report's code is only ever 0 or 1 (plan.lua:925-982), so the shim's 0-or-1 check cannot trip on a well-formed response.\n- pending is not in REPORT_ONLY (819). plan emits it only beside a create_space (plan.lua:507), and the_rest re-plans with no_create before execute runs. If one did reach execute, it would fail by name as an unknown op.\n- Every field of an apply result is a string, number, boolean, frame or list, so hs.json.write has no table shape to refuse.\n- --dry-run's plan request carries the same three options as apply's first plan (1054 against 949-950).\n- plan stays synchronous. 03b7f85 adds up to UNSEEN_SECONDS (1.5 s) plus attempts' retries to it, which is well inside -t 60 (D20).\n\nOne question for you and cc. It is plausible and not measured. design.md's apply step 4 and run() (1136-1141) say that a second apply sent while one is running is refused, exit 2. But every wait inside apply is hs.timer.usleep (75, 325, 367, 426, 467, 889 among them), which blocks Hammerspoon's main thread without running its run loop. If nothing in apply runs the run loop, the second request's IPC message waits in the port until the first apply's callback has returned. By then arngz_running is cleared (1145), so the second apply is scheduled and runs after the first instead of being refused.\n- The shim copes either way. A refusal is exit 2. A queued apply is waited for: if the first runs past 60 s, the second hs gives up with \"receive timeout\", which the shim reads as taken (arngz:470).\n- So the code is safe. What may be wrong is the claim, which help/arngz.md (my AC-06.3) would repeat.\n- A hand run would settle it: start a second arngz apply while a slow one is moving windows.\n\nThe same blocking means doctor, diff and discover wait for a running apply. Past 60 s, the shim's own deadline usually ends them first with \"Hammerspoon is busy or hung\", which is the right cause. In the rarer race where hs's own 60 s timeout fires first, case 69 (arngz:507) names the wrong cause, \"not running, or its config does not load hs.ipc\", although hs's output says receive timeout. The fix is a few lines in engine_ask, plus a test. Say if you want it as a second commit before I give the files back to cc.\n\nNext is part 2, the empty-MJConfigFile landing.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

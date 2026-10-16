@@ -1,0 +1,15 @@
+{
+  "id": "01M52CHCJ0REWDPTEAKPEQJSXN",
+  "ts": "2026-10-16T12:56:05.953Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "hold",
+    "text": "Until intent-vc's step 2 (Intent 0605 shipped in 3.2.4, daemon restarted) lifts the hold on edits under intent/st: two notes in ST0026's design.md, carried into the store with cc's hold 12 notes by one intent sync --to-store ST0026, since both edit that file. (1) D23: an MJConfigFile that is set and empty is refused by name, because Hammerspoon 1.1.1 then takes the empty string as its config path and loads no config (its MJAppDelegate.m and MJConfigUtils.m, read, not measured); landed at 7451678. (2) D20: on a verb that is not scheduled, hs's exit 69 with receive timeout is said as Hammerspoon running and not answering in time, never as unreachable, with the exit unchanged; landed at ff154a7."
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "id": "01M52CHCDPHMHM6KZ1548P857Z",
+  "ts": "2026-10-16T12:56:05.814Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "hold",
+    "seq": 2,
+    "text": "Until WP-05 (apply) is done and vc has verified it, as vc ruled on 16 Oct: WP-06's AC-06.3 (help/arngz.md, the README's utility table, and arngz's one Added entry under 2.13.0 in the CHANGELOG, checked against arngz --help) and AC-06.4 (check all, the estate suite, and the hand-run acceptance transcript in acceptance.md). help/arngz.md says what vc's hand-run probe measures for a second apply fired 1.5 s into a slow one, in the transcript's words: refused with exit 2, or queued behind the first. WP-05 is WIP at 9907e17. AC-06.1 and AC-06.2 are done (c654d4f, verified by vc; AT-06.1 and AT-06.2 green), and 7451678 and ff154a7 followed from dc's read of cc's engine."
+  }
+}

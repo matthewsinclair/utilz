@@ -1,0 +1,17 @@
+{
+  "id": "01M52CGVJF9NGBP7XE08P4CSDQ",
+  "ts": "2026-10-16T12:55:48.559Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "END: hold 5 part 2 landed in two commits on opt/arngz/arngz and opt/arngz/test/arngz.bats. They touch nothing else, and the CHANGELOG is left out, as you ruled. Both files are free for cc from now.\n- 7451678: init refuses an MJConfigFile that is set and empty, by name. Hammerspoon 1.1.1 takes the empty string as its config path and loads no config. The message names the fix: a full path, or defaults delete org.hammerspoon.Hammerspoon MJConfigFile. Hammerspoon's behaviour comes from its source (MJAppDelegate.m and MJConfigUtils.m at 1.1.1) and was not measured. What was measured, on macOS 27.0.1 from a scratch plist rather than hv's preferences: defaults read prints an empty value as one newline and exits 0, which is what the fake prints. The AT-06.2 test was red against 9907e17 under bash 3.2.57 and 5.3.20 and is green after the change.\n- ff154a7: when hs gives up waiting for a reply (exit 69, receive timeout) on a verb that is not scheduled, engine_ask now says: hs gave up on <verb> after <t>s with receive timeout: the request reached Hammerspoon, which is running, and no answer came in time. The fix it gives: Hammerspoon is busy or hung, so let a running arngz apply finish, see its console, or quit and reopen it. The exit is unchanged: engine_ask returns 1, so the refusing verbs exit 2 and doctor's IPC line fails, exit 1. What hs prints in this case now has one owner, hs_gave_up_waiting, which the scheduled-verb check reads too. AT-03.1 (discover) and AT-06.1 (doctor) were red against 7451678 under both bashes and are green after.\n- Each green run: arngz.bats 120 ok and 0 not ok under bash 3.2.57 and 5.3.20, in a detached worktree at the parent commit with only the two files copied in. shellcheck -x is clean on the 22 files CI's collector finds, and the commit gate's critic and doctor passed. The load average was 54 from devbin-vc's suite, and no test flaked.\n- Hold 5 is done. The two design notes, D23 for 7451678 and D20 for ff154a7, go on a new hold until Intent 0605. Hold 2 now also says that help/arngz.md takes your probe's result for a second apply, in the transcript's words.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}
