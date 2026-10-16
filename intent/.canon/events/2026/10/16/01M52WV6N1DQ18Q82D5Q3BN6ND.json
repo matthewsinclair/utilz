@@ -1,0 +1,37 @@
+{
+  "id": "01M52WV6N1DQ18Q82D5Q3BN6ND",
+  "ts": "2026-10-16T17:41:04.801Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "disk.dehydrate",
+  "subject": {
+    "type": "paths",
+    "id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0"
+  },
+  "payload": {
+    "id": "ST0026",
+    "pruned": [
+      "intent/st/ST0026/WP/01",
+      "intent/st/ST0026/WP/02",
+      "intent/st/ST0026/WP/03",
+      "intent/st/ST0026/WP/04",
+      "intent/st/ST0026/WP/05",
+      "intent/st/ST0026/WP/06",
+      "intent/st/ST0026/WP",
+      "intent/st/ST0026"
+    ],
+    "removed": [
+      "intent/st/ST0026/WP/01/info.md",
+      "intent/st/ST0026/WP/02/info.md",
+      "intent/st/ST0026/WP/03/info.md",
+      "intent/st/ST0026/WP/04/info.md",
+      "intent/st/ST0026/WP/05/info.md",
+      "intent/st/ST0026/WP/06/info.md",
+      "intent/st/ST0026/acceptance.md",
+      "intent/st/ST0026/design.md",
+      "intent/st/ST0026/info.md"
+    ],
+    "sigil": "STEELTHREAD",
+    "unlisted": true
+  }
+}
