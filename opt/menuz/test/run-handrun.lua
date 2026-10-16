@@ -1,4 +1,4 @@
--- ST0027 AC-04.5 (AT-04.5): drive Menuz.app through the accessibility tree from
+-- ST0027 AC-04.5 (AT-04.5) and AC-06.4 (AT-06.4): drive Menuz.app through the accessibility tree from
 -- Hammerspoon, hands off. Called as hs -c "STEP='...'; ARG='...'; return
 -- dofile('.../ac045-drive.lua')" (</dev/null). Steps:
 --   menu <title>          open the status item's menu and press the item
