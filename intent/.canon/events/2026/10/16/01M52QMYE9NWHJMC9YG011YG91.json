@@ -1,0 +1,16 @@
+{
+  "id": "01M52QMYE9NWHJMC9YG011YG91",
+  "ts": "2026-10-16T16:10:16.905Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "hold",
+    "seq": 2,
+    "text": "Until cc's fix-forward of 45acc46 lands (a positive delay between apply's phases; a frame read-back after the nudge, so a window that does not follow a synthetic drag, like Dictionary's or Stickies', fails by name) and vc's hands-off re-measure on that SHA says WP-05 is done: land WP-06's AC-06.3 from /Users/matts/Devel/prj/Utilz/tmp/dc-ac0603/ (git-ignored; NOTES.md is the procedure, markers-proposed.md holds the measured answers from the 45acc46 re-run, transcript tmp/vc-st0026/handrun-rerun-45acc46.txt). Content: help/arngz.md whole (cc's two 45acc46 lines merged), README's ### arngz section, the 2.13.0 Added entry and headline naming arngz first, and opt/arngz/README.md's Overview. The @CONCURRENCY lines are reworded from the re-measure (at 45acc46 a second apply ran after the first, both exiting 0, and a diff was answered only after organise). @LAUNCH is green as drafted. The help gains a line saying some apps' windows cannot be carried and apply names them. Then AC-06.4: check all and the estate suite on a slot vc books with intent-vc."
+  }
+}

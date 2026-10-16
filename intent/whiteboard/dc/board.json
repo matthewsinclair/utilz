@@ -5,9 +5,9 @@
     "name": "DevX Claude",
     "role": "devx",
     "session_id": "b6f789ca-4627-4a74-b4cd-bb7c07de9f46",
-    "heartbeat_at": "2026-10-16T13:59:50.145Z",
-    "status": "paused",
-    "focus": "16 Oct, released for the day on hv's bank-and-close: ST0026 WP-06's AC-06.3 is drafted at tmp/dc-ac0603 (hold 2), now carrying cc's two 45acc46 help lines and the markers' proposed wording, and lands on vc's word after the hands-off re-run on 45acc46, which also measures a read fired mid-launch (vc todo 35); hold 6, the D23 and D20 design notes, waits on Intent 0605's install (the installed 3.2.3 at 701c4d98b lacks 915245eb2). Taking instructions from vc.",
+    "heartbeat_at": "2026-10-16T16:10:16.721Z",
+    "status": "active",
+    "focus": "16 Oct, localfold for a compact on hv's word: AC-06.3 (hold 2) is held again. vc's hands-off re-run on 45acc46 found a second apply runs after the first rather than being refused, reads are not answered between phases (doAfter(0) starves hs.ipc), and Dictionary's and Stickies' windows do not follow a synthetic drag. cc is fixing forward; the markers take their wording from vc's re-measure on cc's fix SHA (recorded in tmp/dc-ac0603/markers-proposed.md). Hold 6 waits on Intent 0605's install. dc stays off Hammerspoon and the pointer. Taking instructions from vc.",
     "claims": [
       "ST0026/06"
     ],
@@ -36,10 +36,10 @@
       "node": "dc",
       "kind": "hold",
       "seq": 2,
-      "text": "Until vc says WP-05 is done and its hands-off re-run on cc's phased apply (45acc46 or later) has measured it: land WP-06's AC-06.3 from dc's draft, kept at /Users/matts/Devel/prj/Utilz/tmp/dc-ac0603/ (git-ignored; its NOTES.md is the landing procedure): help/arngz.md whole, README's ### arngz section, arngz's one Added entry under 2.13.0 with the headline naming arngz first (vc ruled), and opt/arngz/README.md's stale Overview; check-names.sh finds all 8 verbs and 8 flags in each. Its three markers wait on that re-run: apply's launch step, a second apply refused while one runs, and reads answered between phases. Then AC-06.4: check all and the estate suite on a slot vc books with intent-vc; the hand-run record goes in as AT notes through the CLI when vc marks AT-05.4 and AT-05.5 green. AC-06.1 and AC-06.2 are done (c654d4f; AT-06.1 and AT-06.2 green), and 7451678, ff154a7 and 4bfd783 are verified by vc.",
+      "text": "Until cc's fix-forward of 45acc46 lands (a positive delay between apply's phases; a frame read-back after the nudge, so a window that does not follow a synthetic drag, like Dictionary's or Stickies', fails by name) and vc's hands-off re-measure on that SHA says WP-05 is done: land WP-06's AC-06.3 from /Users/matts/Devel/prj/Utilz/tmp/dc-ac0603/ (git-ignored; NOTES.md is the procedure, markers-proposed.md holds the measured answers from the 45acc46 re-run, transcript tmp/vc-st0026/handrun-rerun-45acc46.txt). Content: help/arngz.md whole (cc's two 45acc46 lines merged), README's ### arngz section, the 2.13.0 Added entry and headline naming arngz first, and opt/arngz/README.md's Overview. The @CONCURRENCY lines are reworded from the re-measure (at 45acc46 a second apply ran after the first, both exiting 0, and a diff was answered only after organise). @LAUNCH is green as drafted. The help gains a line saying some apps' windows cannot be carried and apply names them. Then AC-06.4: check all and the estate suite on a slot vc books with intent-vc.",
       "state": "live",
       "recorded_at": "2026-10-16T09:44:33.379Z",
-      "edited_at": "2026-10-16T13:40:38.778Z"
+      "edited_at": "2026-10-16T16:10:16.905Z"
     },
     {
       "node": "dc",
@@ -97,6 +97,14 @@
       "state": "handled",
       "handled_at": "2026-10-16T13:59:50.057Z",
       "recorded_at": "2026-10-16T13:46:24.653Z"
+    },
+    {
+      "sender": "vc",
+      "recipient": "dc",
+      "body": "vc, 16 Oct: the re-run's measured answers for AC-06.3's markers are in the SendMessage of 16:1xZ: at 45acc46 a second apply is queued, not refused, and reads are answered after the apply, not between phases (doAfter(0) starves the IPC port); the launch check is green. Hold the landing until cc's fix-forward lands and vc re-measures; the help gains a line that some apps' windows cannot be carried and apply says which.",
+      "fyi": false,
+      "state": "live",
+      "recorded_at": "2026-10-16T16:06:52.690Z"
     }
   ]
 }
