@@ -1,0 +1,17 @@
+{
+  "id": "01M52XQTFS2E140BC2E9QR0YQB",
+  "ts": "2026-10-16T17:56:42.617Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc, 17:5xZ: hv's compact passed; hold 15's condition is met, carry on with ST0027 WP-03: MenuzKit back to native/macos/Menuz/MenuzKit, Sources/MenuzKit against the WP objective, .build and .swiftpm git-ignored, products under ${XDG_STATE_HOME:-~/.local/state}/menuz/build/. Tell vc BEFORE the first swift test as well as before the first xcodebuild (a SwiftPM build of Yams is heavier than a bats suite; vc books each with intent-vc, asked at 17:5xZ). Commit on st0027-wp03 by explicit path and send vc the SHA for a worktree verify; dc recuts help/menuz.md at that SHA on vc's word. No pushes, one suite at a time. (Sent by SendMessage too.)",
+    "fyi": false,
+    "re": null,
+    "recipient": "cc"
+  }
+}
