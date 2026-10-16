@@ -1,0 +1,14 @@
+{
+  "id": "01M522226M5KVM27K5PAX60GEE",
+  "ts": "2026-10-16T09:52:58.069Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.satisfy",
+  "subject": {
+    "type": "ac",
+    "id": "ST0026/AC-01.1"
+  },
+  "payload": {
+    "evidence": "intent/st/ST0026/design.md, Measured 16 Oct 2026 (eeeab48): the three measurements and their readbacks; the JSON files stay out of the repository"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "id": "01M5222HBEHMBMQHSMQ2YCNV8X",
+  "ts": "2026-10-16T09:53:13.583Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.satisfy",
+  "subject": {
+    "type": "ac",
+    "id": "ST0026/AC-01.2"
+  },
+  "payload": {
+    "evidence": "intent/st/ST0026/design.md, Standing after these (eeeab48): outcome D taken, D21; --bind does not exist in v1"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "id": "01M521Y086NG5RCKK3HEGVS33X",
+  "ts": "2026-10-16T09:50:44.999Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.edit",
+  "subject": {
+    "type": "ac",
+    "id": "ST0026/AC-01.2"
+  },
+  "payload": {
+    "text": "That section is resolved to one outcome, A, B, C or D, and names which apply flags exist as a result, --bind in particular."
+  }
+}
