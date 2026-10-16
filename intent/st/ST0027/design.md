@@ -233,7 +233,7 @@ The app's sources are reviewed by `critic-swift` (`intent lang init swift`, run 
 
 ## CI
 
-A `menuz-app` job on `macos-15`, `if: github.ref_type == 'tag' || github.event_name == 'workflow_dispatch'` (Gtools' gate, so every push is not an Xcode build), `brew install xcodegen`, `bin/utilz menuz build --unsigned`, `bin/utilz menuz test --unsigned`; on a tag it also signs `Menuz.app` with Developer ID, notarises it and attaches it to the release, Intent's pipeline (D7). The Linux legs run `menuz.bats` in the explicit utility loop.
+A `menuz-app` job on `macos-15`, `if: github.ref_type == 'tag' || github.event_name == 'workflow_dispatch'` (Gtools' gate, so every push is not an Xcode build), `brew install xcodegen`, `bin/utilz menuz build --unsigned`, `bin/utilz menuz test --unsigned`; it reads no secrets and signs nothing. Signing with Developer ID, notarising and stapling happen on the maintainer's machine with the login keychain's credentials, as Intent's do (D12), through a project-local devbin command, and the stapled bundle is attached to the release as `Menuz.app.zip` (`ditto -c -k --keepParent`; no version in the name, the tag carries it). The Linux legs run `menuz.bats` in the explicit utility loop.
 
 ## Questions for the rubber-duck, each with vc's recommendation
 
@@ -268,6 +268,7 @@ hv ruled on 16 Oct 2026 in vc's session, the rubber-duck of WP-01. In hv's words
 | D9  | hv: "Left running, surely?" Runs in flight at Quit are left running, detached from the app (their own session, stdin from /dev/null, stdout and stderr on the log file directly rather than through the app), so the app's exit closes nothing they write to. The log records the quit and names the runs still going.                                                                                                             |
 | D10 | hv: "Yep": `each` is in v1.                                                                                                                                                                                                                                                                                                                                                                                                       |
 | D11 | hv: "Yep, agree": `Menuz.app`, `com.matthewsinclair.utilz.menuz`.                                                                                                                                                                                                                                                                                                                                                                 |
+| D12 | hv, 16 Oct, in cc's session ("same as intent", then "Correct."), on how Intent signs: not in CI. `Menuz.app` is signed with Developer ID, notarised and stapled on the maintainer's machine with the login keychain's credentials, through a project-local devbin command, and attached to the release as `Menuz.app.zip`, as Intent's is; CI builds it unsigned, runs the tests and reads no secrets. D7's "Same as Intent" read to the letter. |
 
 
 ## Work packages

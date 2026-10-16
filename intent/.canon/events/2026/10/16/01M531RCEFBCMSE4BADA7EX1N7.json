@@ -1,0 +1,14 @@
+{
+  "id": "01M531RCEFBCMSE4BADA7EX1N7",
+  "ts": "2026-10-16T19:06:55.312Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.edit",
+  "subject": {
+    "type": "ac",
+    "id": "ST0027/AC-05.3"
+  },
+  "payload": {
+    "text": "CI: a macOS job on a tag or on dispatch builds the app unsigned, runs MenuzKitTests and MenuzTests through the scheme, and reads no secrets; the Linux legs run menuz.bats with the fake app in the explicit utility loop; both green on the closing SHA. Signing with Developer ID, notarising and stapling run on the maintainer's machine from the login keychain through the project's own devbin command, and the stapled Menuz.app.zip is the release asset the keg's install fetches (D12)."
+  }
+}

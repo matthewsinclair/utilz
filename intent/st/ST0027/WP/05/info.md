@@ -2,7 +2,7 @@
 wp_id: WP-05
 title: Build, install, launch and the close
 scope: S
-status: Not Started
+status: WIP
 ---
 
 # WP-05: Build, install, launch and the close

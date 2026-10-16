@@ -39,11 +39,11 @@ title: menuz: a macOS menu bar app whose menu is a YAML file of commands to run
 - AC-04.4 A run that exits non-zero posts a notification naming the item and the exit code; notify: always posts one on every finish carrying the last output line; notify: never posts none; the item's notify overrides the file's. -- satisfied: yes (computed)
 - AC-04.5 Hand run on hv's machine, recorded as such: the example menu applies an arngz desk chosen from the each-generated items, and discover saves one through a text dialog, with both runs in the log. -- satisfied: yes (computed)
 
-### WP-05 -- Build, install, launch and the close (status: Not Started)
+### WP-05 -- Build, install, launch and the close (status: WIP)
 
 - AC-05.1 build runs xcodegen only when project.yml or the set of sources changed and xcodebuild Debug or --release with products under ${XDG_STATE_HOME:-$HOME/.local/state}/menuz/build/macos as Intent's and Gtools' do; test runs the MenuzTests target; install builds Release, quits every running copy, replaces ~/Applications/Menuz.app (the siblings' target, D6), unclaims the build products, registers the bundle and launches it with an empty environment; use dev|installed records which build the shim's launch and status use, after devbin's own switch; uninstall, start, stop, restart and stamps as designed; each refuses by name, exit 2, without xcodegen or xcodebuild, and install refuses when native/macos/Menuz is absent. -- satisfied: no (computed)
 - AC-05.2 Hand run on hv's machine, recorded as such: the app registers itself as a login item on its first run, status reports it, and the menu is back after a logout and login. -- satisfied: no (computed)
-- AC-05.3 (non-test) CI: a macOS job on a tag builds the app, signs it with Developer ID, notarises it and attaches it as the release asset, as Intent's does (D7); on dispatch it builds unsigned and runs MenuzTests; the Linux legs run menuz.bats with the fake app in the explicit utility loop; both green on the closing SHA. -- satisfied: no
+- AC-05.3 (non-test) CI: a macOS job on a tag or on dispatch builds the app unsigned, runs MenuzKitTests and MenuzTests through the scheme, and reads no secrets; the Linux legs run menuz.bats with the fake app in the explicit utility loop; both green on the closing SHA. Signing with Developer ID, notarising and stapling run on the maintainer's machine from the login keychain through the project's own devbin command, and the stapled Menuz.app.zip is the release asset the keg's install fetches (D12). -- satisfied: no
 - AC-05.4 (non-test) help/menuz.md, the README's menuz section and the CHANGELOG entry exist and name every verb and flag the CLI accepts, checked against menuz --help; bin/devbin check all and the estate suite are green; the hand-run transcript in acceptance.md names the machine, the macOS build and the Xcode version. -- satisfied: no
 
 ## Acceptance Tests
@@ -73,7 +73,7 @@ _(no tests in this group)_
 - AT-04.4 `native/macos/Menuz/MenuzKit/Tests/MenuzKitTests/WrapperTests.swift` -- covers AC-04.4 -- status: green -- The notice through a fake osascript on PATH: failure on a non-zero exit with the label and the code, always on every end with the last output line, never none; the item's notify over the file's is RunTests.swift
 - AT-04.5 `opt/menuz/test/run-handrun.sh` -- covers AC-04.5 -- status: green -- Hand run 16 Oct 2026 19:00Z on hv's machine (Mac16,6, macOS 27.0.1 build 26A434, Xcode 27.1 build 27A9275), hands off, the Debug product at 9dde810 under fixture XDG dirs with arngz linked into MENUZ_HOME/bin, driven through the accessibility tree by run-handrun.lua, transcript tmp/vc-st0026/st0027/ac045-handrun-9dde810.txt: discover through the form saved vc-ac045 (run 1, exit 0 in 1.5s); the each-generated item vc-ac045 applied it (run 2: 15 windows placed, 2 apps kept their own size, exit 1 in 19.7s, the failure notice posted); a text param through the form (run 3, '[3] hello hv', exit 0 in 0.2s); a slow run quit mid-way (run 4: 'quit; runs still going: 4' at 19:01:03Z, then '[4] done' and 'exit 0 in 20.3s' at 19:01:21Z, after the quit line); every start line with cwd and run as written, every output line prefixed by its id; the app quit clean and registered no login item
 
-### WP-05 -- Build, install, launch and the close (status: Not Started)
+### WP-05 -- Build, install, launch and the close (status: WIP)
 
 _(no tests in this group)_
 
