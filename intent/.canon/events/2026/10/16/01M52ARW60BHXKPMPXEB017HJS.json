@@ -1,0 +1,16 @@
+{
+  "id": "01M52ARW60BHXKPMPXEB017HJS",
+  "ts": "2026-10-16T12:25:14.176Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "hold",
+    "seq": 5,
+    "text": "Until vc's word after the 16 Oct compact, with cc not editing opt/arngz/arngz or arngz.bats (WP-05 is WIP at 03b7f85): two things. First, read cc's engine diff at 32fe3f0 and 03b7f85 for anything touching the shim's apply arm, which vc asked for. Second, a small dc landing, not written yet: an empty MJConfigFile gets its own message, a test and the source citation. Hammerspoon 1.1.1's MJAppDelegate.m does if (userMJConfigFile) MJConfigFile = userMJConfigFile, and stringForKey is non-nil for an empty string, so an empty value is its config path and it loads no config; the fix is a full path, or defaults delete org.hammerspoon.Hammerspoon MJConfigFile. vc agreed."
+  }
+}

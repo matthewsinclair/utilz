@@ -3,9 +3,9 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: b6f789ca-4627-4a74-b4cd-bb7c07de9f46
-heartbeat_at: 2026-10-16 11:19Z
+heartbeat_at: 2026-10-16 12:25Z
 status: active
-focus: "ST0026 WP-06: doctor and init done to AC-06.1 and AC-06.2 (c654d4f; AT-06.1 and AT-06.2 green); AC-06.3 and AC-06.4 held until apply lands; the empty-MJConfigFile message waits on cc's WP-05 SHA; check_command (issue 0068) landed at 2ffdc4f"
+focus: "ST0026 WP-06: AC-06.1 and AC-06.2 done at c654d4f (AT-06.1 and AT-06.2 green, board at bed375b); check_command landed at 2ffdc4f and 0068 is closed (e8b3cd6); hold 5 (cc's engine diff, the empty-MJConfigFile message) and hold 2 (AC-06.3 docs and the AC-06.4 close, after WP-05 is done) wait for vc's word after the compact"
 claims: [ST0026/06]
 ---
 
@@ -21,8 +21,8 @@ _(none)_
 
 ## Holds
 
-- Until apply (ST0026 WP-05) lands, as vc ruled on 16 Oct: WP-06's AC-06.3 (help/arngz.md, the README's utility table and the CHANGELOG entry, checked against arngz --help) and AC-06.4 (check all, the estate suite, and the hand-run acceptance transcript in acceptance.md). AC-06.1 and AC-06.2, doctor and init, are done: c654d4f, verified by vc, with AT-06.1 and AT-06.2 green. (edited)
-- Until cc's WP-05 landing is in (cc holds opt/arngz/arngz, arngz.bats, fake-hs and help/arngz.md until its SHA): two things. First, a small dc landing: an empty MJConfigFile gets its own message, a test and the source citation. Hammerspoon 1.1.1's MJAppDelegate.m does if (userMJConfigFile) MJConfigFile = userMJConfigFile, and stringForKey is non-nil for an empty string, so an empty value is its config path and it loads no config; the fix is a full path, or defaults delete org.hammerspoon.Hammerspoon MJConfigFile. vc agreed. Second, a read of cc's engine diff for anything touching the shim's apply arm, which vc asked for; vc relays the SHA.
+- Until WP-05 (apply) is done and vc has verified it, as vc ruled on 16 Oct: WP-06's AC-06.3 (help/arngz.md, the README's utility table and the CHANGELOG entry, checked against arngz --help) and AC-06.4 (check all, the estate suite, and the hand-run acceptance transcript in acceptance.md). Apply first landed at 32fe3f0, and WP-05 is still WIP at 03b7f85. AC-06.1 and AC-06.2 are done: c654d4f, verified by vc, with AT-06.1 and AT-06.2 green. (edited)
+- Until vc's word after the 16 Oct compact, with cc not editing opt/arngz/arngz or arngz.bats (WP-05 is WIP at 03b7f85): two things. First, read cc's engine diff at 32fe3f0 and 03b7f85 for anything touching the shim's apply arm, which vc asked for. Second, a small dc landing, not written yet: an empty MJConfigFile gets its own message, a test and the source citation. Hammerspoon 1.1.1's MJAppDelegate.m does if (userMJConfigFile) MJConfigFile = userMJConfigFile, and stringForKey is non-nil for an empty string, so an empty value is its config path and it loads no config; the fix is a full path, or defaults delete org.hammerspoon.Hammerspoon MJConfigFile. vc agreed. (edited)
 
 ## Watch-outs
 
