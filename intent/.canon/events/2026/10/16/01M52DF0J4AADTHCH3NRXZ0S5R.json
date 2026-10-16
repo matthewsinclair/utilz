@@ -1,0 +1,16 @@
+{
+  "id": "01M52DF0J4AADTHCH3NRXZ0S5R",
+  "ts": "2026-10-16T13:12:16.708Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "hold",
+    "seq": 2,
+    "text": "Until vc says WP-05 is done: land WP-06's AC-06.3 from dc's draft in its scratchpad (ac0603/: help/arngz.md whole, a README ### arngz section, arngz's one Added entry under 2.13.0, and opt/arngz/README.md's stale Overview; check-names.sh finds all 8 verbs and 8 flags in each), after resolving its three markers against cc's phased SHA and vc's re-run: apply's launch step, a second apply refused while one runs, and reads answered between phases. Then AC-06.4 (check all, the estate suite, and the hand-run transcript in acceptance.md). AC-06.1 and AC-06.2 are done (c654d4f, verified by vc; AT-06.1 and AT-06.2 green), and 7451678 and ff154a7, verified by vc, followed from dc's read of cc's engine."
+  }
+}

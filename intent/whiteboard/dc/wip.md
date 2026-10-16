@@ -3,9 +3,9 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: b6f789ca-4627-4a74-b4cd-bb7c07de9f46
-heartbeat_at: 2026-10-16 12:56Z
+heartbeat_at: 2026-10-16 13:12Z
 status: active
-focus: "ST0026 WP-06: hold 5 done (cc's engine read found no contract defect; 7451678 the empty-MJConfigFile refusal; ff154a7 the receive-timeout message; both files back to cc); hold 2 (AC-06.3 docs and the AC-06.4 close) waits on WP-05 done and verified; hold 6 (the D23 and D20 design notes) waits on Intent 0605"
+focus: "ST0026 WP-06: AC-06.3 drafted in scratch (help, README section, CHANGELOG Added entry, opt/arngz/README.md; every verb and flag named), three markers wait on cc's phased apply and vc's re-run, and it lands on vc's word that WP-05 is done (hold 2); hold 6 (the D23 and D20 design notes) waits on Intent 0605"
 claims: [ST0026/06]
 ---
 
@@ -21,7 +21,7 @@ _(none)_
 
 ## Holds
 
-- Until WP-05 (apply) is done and vc has verified it, as vc ruled on 16 Oct: WP-06's AC-06.3 (help/arngz.md, the README's utility table, and arngz's one Added entry under 2.13.0 in the CHANGELOG, checked against arngz --help) and AC-06.4 (check all, the estate suite, and the hand-run acceptance transcript in acceptance.md). help/arngz.md says what vc's hand-run probe measures for a second apply fired 1.5 s into a slow one, in the transcript's words: refused with exit 2, or queued behind the first. WP-05 is WIP at 9907e17. AC-06.1 and AC-06.2 are done (c654d4f, verified by vc; AT-06.1 and AT-06.2 green), and 7451678 and ff154a7 followed from dc's read of cc's engine. (edited)
+- Until vc says WP-05 is done: land WP-06's AC-06.3 from dc's draft in its scratchpad (ac0603/: help/arngz.md whole, a README ### arngz section, arngz's one Added entry under 2.13.0, and opt/arngz/README.md's stale Overview; check-names.sh finds all 8 verbs and 8 flags in each), after resolving its three markers against cc's phased SHA and vc's re-run: apply's launch step, a second apply refused while one runs, and reads answered between phases. Then AC-06.4 (check all, the estate suite, and the hand-run transcript in acceptance.md). AC-06.1 and AC-06.2 are done (c654d4f, verified by vc; AT-06.1 and AT-06.2 green), and 7451678 and ff154a7, verified by vc, followed from dc's read of cc's engine. (edited)
 - Until intent-vc's step 2 (Intent 0605 shipped in 3.2.4, daemon restarted) lifts the hold on edits under intent/st: two notes in ST0026's design.md, carried into the store with cc's hold 12 notes by one intent sync --to-store ST0026, since both edit that file. (1) D23: an MJConfigFile that is set and empty is refused by name, because Hammerspoon 1.1.1 then takes the empty string as its config path and loads no config (its MJAppDelegate.m and MJConfigUtils.m, read, not measured); landed at 7451678. (2) D20: on a verb that is not scheduled, hs's exit 69 with receive timeout is said as Hammerspoon running and not answering in time, never as unreachable, with the exit unchanged; landed at ff154a7.
 
 ## Watch-outs
