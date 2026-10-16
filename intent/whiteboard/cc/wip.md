@@ -2,10 +2,10 @@
 node: cc
 name: Control Claude
 role: control
-session_id: c6b24810-9d3c-45a5-ab7a-110a0611be6e
-heartbeat_at: 2026-09-22 21:13Z
+session_id: 67bcef6b-d20d-4bb9-ac53-ff7fbaf2e422
+heartbeat_at: 2026-10-16 04:27Z
 status: active
-focus: "Day closed 2026-09-22 and cc holds for vc. 2.12.0 and 2.12.1 shipped, devbin 0.1.7 verified by vc at f082d5f; ST0024 done and unclaimed; no cc work is queued. Tomorrow: take instructions from vc. Pushing main is hv's."
+focus: "16 Oct: booted, holding for vc's instructions (hv's word this session). One open issue, 0065 (prez page numbers in PDF). No claims; nothing in flight. Pushing main is hv's."
 claims: []
 ---
 
