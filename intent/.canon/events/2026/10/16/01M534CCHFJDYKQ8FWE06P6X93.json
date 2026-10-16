@@ -1,0 +1,15 @@
+{
+  "id": "01M534CCHFJDYKQ8FWE06P6X93",
+  "ts": "2026-10-16T19:52:47.919Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 16 Oct 19:4xZ, directly to vc, going AFK: 'I want you to continue to drive this to a release. If a fix needs fixing, then fix it. Use kovacs to test Ubuntu runs, and push on for a release. I'll tell the other Claudes that you have the pen for intent and they take instruction from you. You will need to work with intent-vc to coordinate builds etc so you don't clash with each other.' Before that, to all three: 'Hold off. Fix everything that needs fixing.' then 'Then close out anything that can be closed out.' vc reads: WP-05 paused behind WP-06 (the four first-use fixes, D13); every defect found is fixed; vc pushes main; compiles only in windows booked with intent-vc (START/END); the Ubuntu leg on kovacs; ST0027 and ST0028 closed and 2.14.0 taken to cut-ready, the cut itself (bin/devbin release --minor) on hv's word, or by vc if hv's 'push on for a release' is re-read as that word once everything else is done; the signed Menuz.app.zip asset waits for hv's store-creds (the keychain holds no utilz.apple.* items). hv on the probe's banner: 'this is working'."
+  }
+}

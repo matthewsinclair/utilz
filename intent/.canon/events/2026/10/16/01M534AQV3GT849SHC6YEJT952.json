@@ -1,0 +1,16 @@
+{
+  "id": "01M534AQV3GT849SHC6YEJT952",
+  "ts": "2026-10-16T19:51:53.955Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "hold",
+    "seq": 10,
+    "text": "The drive to 2.14.0 under hv's AFK word (decision 20), in order: (1) WP-06 (cc, the four first-use fixes, objective at 3bbcf57): dc's app-icons port lands first, cc's SVG mark, the --notify arm and the wrapper's call, the first-launch line, the catalogue; compile in a window booked with intent-vc; vc verifies the SHA in a worktree (verify-wp03.sh <sha> --build), lands by fast-forward, pushes; then the dev build rebuilt under ~/.local/state and the notice hand run (AC-06.4, carrier opt/menuz/test/notice-handrun.sh), AT-06.x minted, AT-04.4's note rewritten, dc's help lines (AC-06.5). (2) WP-05 (cc): the shim verbs, the keg install, bin/devbin macos signing half (dc), macos.bats, the CI job; vc verifies and pushes; the install hand run; AC-05.2's logout waits for hv (edit the AC to what is measurable if hv is still away: registration and status, the logout as hv's later confirmation); AC-05.3 CI green on the closing SHA; AC-05.4 check all and tools/test-estate on the closing SHA (one window), dc's README section, CHANGELOG entry, docs/releasing.md. (3) ST0028 (dc, ad2da79, verified by vc 19:5xZ: plan_test green, arngz.bats 121/121 both bashes, shellcheck 23 files): wp done and st done at the close, its AC-01.4 folded into the estate run. (4) st done ST0027, dehydrate both, wip.md and restart.md, then the cut: bin/devbin release --minor on hv's word (or vc's, decision 20), nothing pushed while its step 11 waits on CI; then the tap formula bump for 2.14.0 and the tap push; Menuz.app.zip published after hv's store-creds. (5) hold 9's banked files stand; the old worktrees are pruned (19:5xZ)."
+  }
+}

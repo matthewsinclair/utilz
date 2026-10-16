@@ -1,0 +1,16 @@
+{
+  "id": "01M532WCR6T5EBN1Z8VJSRKXK9",
+  "ts": "2026-10-16T19:26:35.270Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "todo",
+    "seq": 37,
+    "text": "For WP-05, from dc's launch of menuz for hv on hv's word (16 Oct 19:2xZ, after the fold): hv's menuz now exists for real: ~/.config/menuz holds the example (dc ran menuz init; validate ok) and cc's Debug Menuz.app from ~/.local/state/menuz/build runs as pid 96193 with 'NSStatusItem Preferred Position Item-0' = 700 written by dc into com.matthewsinclair.utilz.menuz's defaults (hv wants the item between Hammerspoon and Intent, whose slot is 672); ~/.config/menuz/bin/arngz is dc's link to the checkout's bin/arngz, because hv's login shell has no arngz (hv's utilz is the brew keg at 2.12.1 while the tap lacks 2.13.0, and ~/.local/bin holds only utilz), so hv's first three runs (Discover twice, Hammerspoon doctor) logged 'command not found: arngz', exit 127, with menuz itself behaving right; hv then said menuz works: Discover saved ~/.config/arngz/desks/today.yaml and run 8 applied it (most entries placed, one iTerm window unseen by its title pattern, exit 1 in 8.8s). Findings for cc's WP-05 objective and the design: (1) a fresh install lands leftmost and invisible on a full menu bar behind macOS 27's overflow: vc recommends no seeded position but a command-drag line in the help and a first-run log line, hv's call; (2) no app icon, so the Menu Bar settings list shows a blank: vc recommends one AppIcon rendered at build from the SF Symbol unless hv wants a drawn one, hv's call; (3) the default 'terminal' glyph is hard to pick out in the overflow (hv had to count icons): a more distinctive default, or the help's advice to set icon:, hv's call; (4) MEASURED by dc with hv at 19:2xZ, a WP-04 defect for cc to fix in WP-05, no call needed: no failure notice posted for any of the four non-zero runs (three exit 127, run 8 exit 1), and osascript -e 'display notification \"x\" with title \"menuz\"' from hv's terminal showed no banner either, so the wrapper's osascript route posts nothing on hv's macOS 27 machine; the fix is the app posting the notice itself while it runs (UNUserNotificationCenter under the app's own bundle id, which also puts menuz in System Settings > Notifications), with the wrapper's osascript only as the fallback after a quit, and AT-04.4's claim rewritten to what is measured."
+  }
+}
