@@ -1,0 +1,16 @@
+{
+  "id": "01M53BQ9862PAT5ZA400B6R7MF",
+  "ts": "2026-10-16T22:01:05.030Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "hold",
+    "seq": 10,
+    "text": "The drive to 2.14.0 under hv's AFK word (decisions 20, 21), state at 16 Oct 22:01Z. DONE: ST0028 closed (e9fc524); ST0027 WP-05 DONE at aa3aca5 (AC-05.3 on the menuz-app dispatch 38972250508, green under Xcode 16.4 at 9c6270a after two Swift 6.1 fixes, 554fe03 and 9c6270a; the Linux legs green on push run 38972204381); WP-06 has AC-06.1/2/3/5 satisfied; the estate 23 of 23 and check all on the closing code; kovacs clean (dc); wip.md and restart.md v1.21 current. CI green on main at 9c6270a; main is aa3aca5 on both remotes. OPEN, in order: (1) hv's hand (hold 11): System Settings > Notifications > Menuz > Allow, then vc reruns opt/menuz/test/notice-handrun.sh on the dev build (AT-06.4 green), wp done ST0027/06, st done ST0027, dehydrate; (2) the cut under decision 21 in a window with intent-vc: bin/devbin release --minor (the dry run first, asked now), nothing pushed while step 11 waits on CI; dc's done.md 2.14.0 @CLOSE values; the formula copied into the tap clone and audited (the tap push is hv's); publish of Menuz.app.zip after hv's store-creds. Rules in force: compiles in windows booked with intent-vc (a standing START covers the 30 s xcodebuild tests of this class until kovacs's build starts); suite-sized bats outside Intent windows; vc pushes; /usr/bin/log, never the builtin."
+  }
+}
