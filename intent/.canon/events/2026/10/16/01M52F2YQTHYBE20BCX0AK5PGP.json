@@ -1,0 +1,16 @@
+{
+  "id": "01M52F2YQTHYBE20BCX0AK5PGP",
+  "ts": "2026-10-16T13:40:38.778Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "hold",
+    "seq": 2,
+    "text": "Until vc says WP-05 is done and its hands-off re-run on cc's phased apply (45acc46 or later) has measured it: land WP-06's AC-06.3 from dc's draft, kept at /Users/matts/Devel/prj/Utilz/tmp/dc-ac0603/ (git-ignored; its NOTES.md is the landing procedure): help/arngz.md whole, README's ### arngz section, arngz's one Added entry under 2.13.0 with the headline naming arngz first (vc ruled), and opt/arngz/README.md's stale Overview; check-names.sh finds all 8 verbs and 8 flags in each. Its three markers wait on that re-run: apply's launch step, a second apply refused while one runs, and reads answered between phases. Then AC-06.4: check all and the estate suite on a slot vc books with intent-vc; the hand-run record goes in as AT notes through the CLI when vc marks AT-05.4 and AT-05.5 green. AC-06.1 and AC-06.2 are done (c654d4f; AT-06.1 and AT-06.2 green), and 7451678, ff154a7 and 4bfd783 are verified by vc."
+  }
+}
