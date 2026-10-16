@@ -4,8 +4,8 @@ An index of every steel thread in the project. A steel thread is a self-containe
 
 | ID     | Title                                                                                          | Status    | Created    | Completed            |
 | ------ | ---------------------------------------------------------------------------------------------- | --------- | ---------- | -------------------- |
-| ST0028 | arngz: a desk saved from live terminal windows fails to apply minutes later                    | WIP       | 2026-10-16 |                      |
 | ST0027 | menuz: a macOS menu bar app whose menu is a YAML file of commands to run                       | WIP       | 2026-10-16 |                      |
+| ST0028 | arngz: a desk saved from live terminal windows fails to apply minutes later                    | Completed | 2026-10-16 | 2026-10-16           |
 | ST0026 | arngz: named window arrangements (desks) discovered and applied across displays and spaces     | Completed | 2026-10-16 | 2026-10-16           |
 | ST0025 | stampz: a PDF whose pages differ in size is stamped page by page                               | Completed | 2026-09-22 | 2026-09-22           |
 | ST0024 | showreel: headlines fit a portrait frame, a platform safe zone, and a handle that fits at 16:9 | Completed | 2026-09-22 | 2026-09-22           |

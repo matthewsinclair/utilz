@@ -15,8 +15,6 @@ A DOING / TODO / DONE view, projected from steel-thread and work-package status:
   - [x] 04: Running items: params, the runner, the log and the notice
   - [-] 05: Build, install, launch and the close
   - [-] 06: First-use fixes: notice, place, icon and glyph
-- [-] ST0028: arngz: a desk saved from live terminal windows fails to apply minutes later
-  - [-] 01: Discover's title patterns survive a moving title, and the report names each
 
 ## TODO
 
@@ -144,6 +142,8 @@ _(none)_
   - [x] 04: discover and diff
   - [x] 05: apply
   - [x] 06: doctor, init, docs and the close
+- [x] ST0028: arngz: a desk saved from live terminal windows fails to apply minutes later
+  - [x] 01: Discover's title patterns survive a moving title, and the report names each
 
 ---
 
