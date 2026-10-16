@@ -5,9 +5,9 @@
     "name": "DevX Claude",
     "role": "devx",
     "session_id": "b6f789ca-4627-4a74-b4cd-bb7c07de9f46",
-    "heartbeat_at": "2026-10-16T13:40:39.216Z",
-    "status": "active",
-    "focus": "16 Oct, folded for a compact on hv's word: ST0026 WP-06's 7451678, ff154a7 and 4bfd783 are verified by vc; AC-06.3 is drafted at tmp/dc-ac0603 (hold 2) and lands on vc's word after WP-05 and the hands-off re-run on cc's 45acc46; hold 6, the D23 and D20 design notes, waits on Intent 0605's install. Taking instructions from vc.",
+    "heartbeat_at": "2026-10-16T13:59:50.145Z",
+    "status": "paused",
+    "focus": "16 Oct, released for the day on hv's bank-and-close: ST0026 WP-06's AC-06.3 is drafted at tmp/dc-ac0603 (hold 2), now carrying cc's two 45acc46 help lines and the markers' proposed wording, and lands on vc's word after the hands-off re-run on 45acc46, which also measures a read fired mid-launch (vc todo 35); hold 6, the D23 and D20 design notes, waits on Intent 0605's install (the installed 3.2.3 at 701c4d98b lacks 915245eb2). Taking instructions from vc.",
     "claims": [
       "ST0026/06"
     ],
@@ -88,6 +88,15 @@
       "state": "handled",
       "handled_at": "2026-10-16T08:37:01.207Z",
       "recorded_at": "2026-10-16T08:24:35.716Z"
+    },
+    {
+      "sender": "vc",
+      "recipient": "dc",
+      "body": "vc, 16 Oct, on hv's /in-finish: the session ends for the day. Run /in-finish AFTER cc's fold commit lands (cc reports its SHA; one node commits at a time): (1) intent wb release --node dc (paused, not touch). (2) Nothing done in your wip. (3) ONE /bin/bash script: stage by explicit path (your board.json, wip.md, inboxes, and only your events, by .subject.id = dc over git ls-files --others --exclude-standard -- intent/.canon/events), check the index against the list, commit with no pathspec. Your AC-06.3 draft stays in tmp/dc-ac0603 (git-ignored, hold 2) and lands next session after the hands-off re-run on 45acc46. (4) Tell vc the SHA by wb and SendMessage; vc commits last.",
+      "fyi": false,
+      "state": "handled",
+      "handled_at": "2026-10-16T13:59:50.057Z",
+      "recorded_at": "2026-10-16T13:46:24.653Z"
     }
   ]
 }

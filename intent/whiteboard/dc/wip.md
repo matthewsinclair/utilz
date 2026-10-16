@@ -3,9 +3,9 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: b6f789ca-4627-4a74-b4cd-bb7c07de9f46
-heartbeat_at: 2026-10-16 13:40Z
-status: active
-focus: "16 Oct, folded for a compact on hv's word: ST0026 WP-06's 7451678, ff154a7 and 4bfd783 are verified by vc; AC-06.3 is drafted at tmp/dc-ac0603 (hold 2) and lands on vc's word after WP-05 and the hands-off re-run on cc's 45acc46; hold 6, the D23 and D20 design notes, waits on Intent 0605's install. Taking instructions from vc."
+heartbeat_at: 2026-10-16 13:59Z
+status: paused
+focus: "16 Oct, released for the day on hv's bank-and-close: ST0026 WP-06's AC-06.3 is drafted at tmp/dc-ac0603 (hold 2), now carrying cc's two 45acc46 help lines and the markers' proposed wording, and lands on vc's word after the hands-off re-run on 45acc46, which also measures a read fired mid-launch (vc todo 35); hold 6, the D23 and D20 design notes, waits on Intent 0605's install (the installed 3.2.3 at 701c4d98b lacks 915245eb2). Taking instructions from vc."
 claims: [ST0026/06]
 ---
 
