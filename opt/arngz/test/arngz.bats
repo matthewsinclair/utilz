@@ -79,9 +79,11 @@ assert_refusal() {
   assert_success
   local word
   for word in apply discover diff list show delete init doctor \
-    --dry-run --no-launch --no-create --bind --map --save --force --yes; do
+    --dry-run --no-launch --no-create --map --save --force --yes; do
     assert_output_contains "$word"
   done
+  # No --bind in v1 (D10, AC-05.6): help does not offer what apply refuses.
+  refute_output_contains "--bind"
 }
 
 @test "AT-02.1: utilz list shows arngz" {
@@ -346,34 +348,6 @@ EOF
     assert_exit_code 2
     assert_output_contains "desk '$verb'"
   done
-}
-
-# ============================================================================
-# The verbs the engine builds: present, and saying which work package
-# ============================================================================
-
-@test "apply says which work package builds it, exit 2" {
-  catalogue
-  run_arngz apply zeop1
-  assert_exit_code 2
-  assert_output_contains "not yet: WP-05"
-  run_arngz zeop1
-  assert_exit_code 2
-  assert_output_contains "not yet: WP-05"
-}
-
-@test "apply validates the desk before saying it is not built" {
-  catalogue
-  minimal_desk g
-  edit_desk g "grid: 12x8" "grid: 12 by 8"
-  run_arngz apply g
-  assert_refusal g "grid" "12 by 8"
-}
-
-@test "an unknown option is refused, exit 2" {
-  run_arngz list --colour
-  assert_exit_code 2
-  assert_output_contains "--colour"
 }
 
 # ============================================================================
@@ -775,6 +749,261 @@ engine_response() {
   run_arngz diff g
   assert_refusal g "grid" "12 by 8"
   [ ! -e "$FAKE_HS_LOG/request.json" ]
+}
+
+# ============================================================================
+# AT-05 -- apply (AC-05.1, AC-05.3, AC-05.6, AC-05.7)
+# ============================================================================
+
+# apply on the fixture machine (below): its preferences as hv's, the fake hs
+# on PATH answering in MODE with RESPONSE, and the design's example desk in
+# the catalogue. RESPONSE is made before the machine narrows PATH, because
+# making it needs Lua.
+apply_machine() {
+  machine
+  hs_on_path "$1" "$2"
+  catalogue
+}
+
+# The response the engine sends for an apply whose results are RESULTS, a
+# function in worlds.lua, with the report and exit code apply_report gives.
+apply_response() {
+  engine_response apply "$1" base_desk
+}
+
+@test "AT-05.1: apply --dry-run asks only for a plan, prints every op with its reason, and exits 0" {
+  local response
+  response="$(engine_response plan off_cell_world base_desk)"
+  apply_machine ok "$response"
+  run_arngz apply --dry-run zeop1
+  assert_success
+  assert_output_contains "place window 102 at 600,25 600x800 (displays[0].spaces[0].apps[1]):"
+  run yq -r '.verb' "$FAKE_HS_LOG/request.json"
+  assert_output "plan"
+}
+
+@test "AT-05.1: apply --dry-run judges no preference, because it changes nothing" {
+  local response
+  response="$(engine_response plan base_world base_desk)"
+  apply_machine ok "$response"
+  pref com.apple.dock mru-spaces 1
+  run_arngz apply --dry-run zeop1
+  assert_success
+  assert_output_contains "no change"
+}
+
+@test "AT-05.3: every entry placed exits 0, the engine's report printed as it wrote it" {
+  local response
+  response="$(apply_response placed_results)"
+  apply_machine scheduled "$response"
+  run_arngz apply zeop1
+  assert_success
+  assert_output_contains "com.apple.mail (displays[0].spaces[0].apps[0]): placed"
+  run yq -r '.verb + " " + .desk.desk' "$FAKE_HS_LOG/request.json"
+  assert_output "apply zeop1"
+}
+
+@test "AT-05.3: an app not installed is reported skipped, exit 1" {
+  local response
+  response="$(apply_response launch_skipped_results)"
+  apply_machine scheduled "$response"
+  run_arngz apply zeop1
+  assert_exit_code 1
+  assert_output_contains "com.apple.Safari (displays[0].spaces[0].apps[1]): skipped: not installed"
+}
+
+@test "AT-05.3: apply waits for a scheduled answer past the hs call, on its own deadline" {
+  local response
+  response="$(apply_response placed_results)"
+  apply_machine scheduled "$response"
+  export FAKE_HS_DELAY=2 ARNGZ_HS_TIMEOUT=1
+  run_arngz apply zeop1
+  assert_success
+  assert_output_contains ": placed"
+}
+
+@test "AT-05.3: a scheduled apply that never answers is said, exit 1, never as nothing changed" {
+  local response
+  response="$(apply_response placed_results)"
+  apply_machine scheduled-never "$response"
+  export ARNGZ_APPLY_TIMEOUT=1
+  run_arngz apply zeop1
+  assert_exit_code 1
+  assert_output_contains "has not answered within 1s; it may still be running"
+  assert_output_contains "ARNGZ_APPLY_TIMEOUT"
+  assert_output_contains "request kept at"
+}
+
+@test "AT-05.3: a bad ARNGZ_APPLY_TIMEOUT is refused before anything is sent, exit 2" {
+  apply_machine scheduled "$FIXTURES/responses/observe.json"
+  export ARNGZ_APPLY_TIMEOUT=soon
+  run_arngz apply zeop1
+  assert_exit_code 2
+  assert_output_contains "ARNGZ_APPLY_TIMEOUT = 'soon'"
+  [ ! -e "$FAKE_HS_LOG/request.json" ]
+}
+
+@test "AT-05.3: a diff is not a scheduled verb, so a bad ARNGZ_APPLY_TIMEOUT does not touch it" {
+  local response
+  response="$(engine_response plan base_world base_desk)"
+  apply_machine ok "$response"
+  export ARNGZ_APPLY_TIMEOUT=soon
+  run_arngz diff zeop1
+  assert_success
+}
+
+@test "AT-05.3: an apply whose answer carries no 0 or 1 exit is exit 1, its response kept, never nothing changed" {
+  local response="$BATS_TEST_TMPDIR/noexit.json"
+  printf '%s\n' '{"status":"ok","verb":"apply","report":["a line"]}' >"$response"
+  apply_machine scheduled "$response"
+  run_arngz apply zeop1
+  assert_exit_code 1
+  assert_output_contains "apply ran, and its exit code reads 'null'"
+  assert_output_contains "response is kept at"
+}
+
+@test "AT-05.3: a refusal before anything changed exits 2 with the engine's reason, not as the engine failing" {
+  local response="$BATS_TEST_TMPDIR/refused.json"
+  printf '%s\n' '{"status":"error","kind":"refused","verb":"apply","error":"FIXTURE-REFUSAL displays[0] (left) matches no screen"}' >"$response"
+  apply_machine scheduled "$response"
+  run_arngz apply zeop1
+  assert_exit_code 2
+  assert_output_contains "the engine refused apply: FIXTURE-REFUSAL displays[0] (left) matches no screen"
+  refute_output_contains "engine failing"
+}
+
+@test "AT-05.3: the engine's own error during apply exits 1, its response kept, never as nothing changed" {
+  local response="$BATS_TEST_TMPDIR/failed.json"
+  printf '%s\n' '{"status":"error","kind":"lua_error","verb":"apply","error":"FIXTURE attempt to index a nil value"}' >"$response"
+  apply_machine scheduled "$response"
+  run_arngz apply zeop1
+  assert_exit_code 1
+  assert_output_contains "the engine failed on apply: FIXTURE attempt to index a nil value"
+  assert_output_contains "its response is kept at"
+  assert_output_contains "engine failing"
+}
+
+@test "AT-05.3: the same error under --dry-run, which changes nothing, is a refusal, exit 2" {
+  local response="$BATS_TEST_TMPDIR/failed.json"
+  printf '%s\n' '{"status":"error","kind":"lua_error","verb":"plan","error":"FIXTURE attempt to index a nil value"}' >"$response"
+  apply_machine ok "$response"
+  run_arngz apply --dry-run zeop1
+  assert_exit_code 2
+  assert_output_contains "the engine failed on plan"
+}
+
+@test "AT-05.3: an hs that hangs after apply was sent is waited out, then said as maybe running, exit 1" {
+  apply_machine hang "$FIXTURES/responses/observe.json"
+  export ARNGZ_HS_TIMEOUT=1 ARNGZ_APPLY_TIMEOUT=1
+  run_arngz apply zeop1
+  assert_exit_code 1
+  assert_output_contains "has not answered within 1s; it may still be running"
+}
+
+@test "AT-05.3: an hs that ran and scheduled nothing is not waited on: the engine failing, exit 2, at once" {
+  apply_machine none "$FIXTURES/responses/observe.json"
+  export ARNGZ_APPLY_TIMEOUT=30
+  local t0=$SECONDS
+  run_arngz apply zeop1
+  assert_exit_code 2
+  assert_output_contains "wrote no response"
+  [ $((SECONDS - t0)) -lt 10 ]
+}
+
+@test "AT-05.3: an hs that gave up with receive timeout may have delivered apply: waited out, exit 1" {
+  apply_machine receive-timeout "$FIXTURES/responses/observe.json"
+  export ARNGZ_APPLY_TIMEOUT=1
+  run_arngz apply zeop1
+  assert_exit_code 1
+  assert_output_contains "may still be running"
+}
+
+@test "AT-05.3: an apply Hammerspoon never received is a refusal, exit 2" {
+  apply_machine exit-69 "$FIXTURES/responses/observe.json"
+  run_arngz apply zeop1
+  assert_exit_code 2
+  assert_output_contains "exit 69"
+}
+
+@test "AT-05.3: the CLI and the engine schedule the same verbs" {
+  local cli lua
+  cli="$(sed -n 's/^SCHEDULED_VERBS="\(.*\)"$/\1/p' "$UTILZ_HOME/opt/arngz/arngz")"
+  lua="$(sed -n 's/^local SCHEDULED = { \(.*\) }$/\1/p' "$UTILZ_HOME/opt/arngz/lib/arngz.lua" | sed 's/ = true//g; s/,//g')"
+  [ -n "$cli" ]
+  [ "$cli" = "$lua" ]
+}
+
+@test "AT-05.3: a preference that does not hold refuses before the engine is asked, exit 2" {
+  apply_machine ok "$FIXTURES/responses/observe.json"
+  pref com.apple.dock mru-spaces 1
+  run_arngz apply zeop1
+  assert_exit_code 2
+  assert_output_contains "auto-rearrange is on"
+  assert_output_contains "fix:"
+  [ ! -e "$FAKE_HS_LOG/request.json" ]
+}
+
+@test "AT-05.3: --no-launch, --no-create and --map reach the engine as options" {
+  local response
+  response="$(apply_response placed_results)"
+  apply_machine scheduled "$response"
+  run_arngz apply --no-launch --no-create --map left=AAAA-1 --map=right=BBBB-2 zeop1
+  assert_success
+  run yq -o json -I0 '.options' "$FAKE_HS_LOG/request.json"
+  assert_output '{"no_launch":true,"no_create":true,"map":{"left":"AAAA-1","right":"BBBB-2"}}'
+}
+
+@test "AT-05.3: apply with no options sends both off and an empty map" {
+  local response
+  response="$(apply_response placed_results)"
+  apply_machine scheduled "$response"
+  run_arngz apply zeop1
+  run yq -o json -I0 '.options' "$FAKE_HS_LOG/request.json"
+  assert_output '{"no_launch":false,"no_create":false,"map":{}}'
+}
+
+@test "AT-05.3: a --map not of the form name=uuid, or given twice for one name, is refused before asking" {
+  apply_machine ok "$FIXTURES/responses/observe.json"
+  run_arngz apply --map left zeop1
+  assert_exit_code 2
+  assert_output_contains "it takes <name>=<uuid>"
+  run_arngz apply --map left=A --map left=B zeop1
+  assert_exit_code 2
+  assert_output_contains "--map left is given twice"
+  [ ! -e "$FAKE_HS_LOG/request.json" ]
+}
+
+@test "AT-05.6: --bind is refused as the unknown option it is, exit 2, and nothing is asked" {
+  apply_machine ok "$FIXTURES/responses/observe.json"
+  run_arngz apply --bind zeop1
+  assert_exit_code 2
+  assert_output_contains "unknown option for apply: '--bind'"
+  [ ! -e "$FAKE_HS_LOG/request.json" ]
+}
+
+@test "AT-05.7: arngz <desk> is apply <desk>" {
+  local response
+  response="$(apply_response placed_results)"
+  apply_machine scheduled "$response"
+  run_arngz zeop1
+  assert_success
+  run yq -r '.verb + " " + .desk.desk' "$FAKE_HS_LOG/request.json"
+  assert_output "apply zeop1"
+}
+
+@test "AT-05.7: a desk named like a verb can be neither saved nor applied" {
+  local response
+  response="$(engine_response discover discover_world "" "")"
+  fake_hs ok "$response"
+  catalogue
+  minimal_desk diff
+  run_arngz apply diff
+  assert_exit_code 2
+  assert_output_contains "desk 'diff'"
+  run_arngz discover --save apply
+  assert_exit_code 2
+  assert_output_contains "desk 'apply'"
+  [ ! -e "$CAT/apply.yaml" ]
 }
 
 # ============================================================================

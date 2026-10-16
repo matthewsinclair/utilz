@@ -124,6 +124,8 @@ do
   check("a window on the wrong space yields move then place", kinds(ops) == "move,place", ops_text(ops))
   check("the move names the window and the space ordinal on its display",
     ops and ops[1].window == 103 and ops[1].ordinal == 2 and ops[1].screen == "SCREEN-A")
+  check("and the target space's id, and where the window is now",
+    ops and ops[1].space == 12 and ops[1].from_space == 11 and ops[1].from_screen == "SCREEN-A")
   check("the move and the place each carry a reason", ops and ops[1].reason ~= nil and ops[2].reason ~= nil)
 end
 
@@ -137,8 +139,12 @@ do
     ops and ops[1] and ops[1].op == "create_space" and ops[1].screen == "SCREEN-A", ops_text(ops))
   check("and the window bound for the missing space is still moved and placed",
     kinds(ops) == "create_space,move,place", ops_text(ops))
+  check("and its move carries no space id, because that space does not exist yet",
+    ops and ops[2] and ops[2].space == nil and ops[2].ordinal == 2, ops_text(ops))
   local without = P.plan(base_desk(), w, { no_create = true })
-  check("--no-create removes create_space", kinds(without) == "move,place", ops_text(without))
+  check("--no-create removes create_space, and says the window has no space to go to, neither moved nor placed",
+    kinds(without) == "no_space" and without[1].window == 103 and string.find(without[1].reason, "does not exist", 1, true) ~= nil,
+    ops_text(without))
 end
 
 -- A full-screen space takes no ordinal.
@@ -158,7 +164,20 @@ do
   check("an app not running yields launch", kinds(ops) == "launch" and ops[1].bundle == "com.apple.Safari",
     ops_text(ops))
   local without = P.plan(base_desk(), w, { no_launch = true })
-  check("--no-launch removes launch", without and #without == 0, ops_text(without))
+  check("--no-launch launches nothing and says so, as not_launched with a reason and the entry's path",
+    kinds(without) == "not_launched" and without[1].bundle == "com.apple.Safari" and without[1].reason ~= nil
+      and without[1].path == "displays[0].spaces[0].apps[1]", ops_text(without))
+  local again = P.plan(base_desk(), w, { launched = { ["com.apple.safari"] = false } })
+  check("an app whose launch this apply tried and did not finish is not launched again, and left to that result",
+    again and #again == 0, ops_text(again))
+  local quit = P.plan(base_desk(), w, { launched = { ["com.apple.safari"] = true } })
+  check("an app this apply launched that is not running now is gone, never placed, and not launched again",
+    kinds(quit) == "gone" and quit[1].path == "displays[0].spaces[0].apps[1]" and quit[1].reason ~= nil, ops_text(quit))
+  local before = P.plan(base_desk(), w, { running_before = { ["com.apple.safari"] = true } })
+  check("a second plan reports an app that quit since apply began as gone, and launches nothing",
+    kinds(before) == "gone" and string.find(before[1].reason, "was running when apply began", 1, true) ~= nil, ops_text(before))
+  local never = P.plan(base_desk(), w, { running_before = {} })
+  check("and one that was not running then is left to its launch's result", never and #never == 0, ops_text(never))
 end
 
 -- A window pattern chooses among an app's windows.
@@ -217,26 +236,26 @@ do
     ops == nil and string.find(tostring(err), "windowsForSpace failed", 1, true) ~= nil, err or ops_text(ops))
 end
 
--- Dock bindings that could not be read are not "none": --bind refuses, and a
--- plan without it does not care.
+-- Dock bindings that could not be read do not stop a plan: there is no --bind
+-- in v1 (D10, AC-05.6), so plan never reads them.
 do
   local w = base_world()
   w.prefs_errors = { spaces = "defaults export failed" }
-  local ops, err = P.plan(base_desk(), w, { bind = true })
-  check("plan --bind refuses when the Dock bindings could not be read",
-    ops == nil and string.find(tostring(err), "defaults export failed", 1, true) ~= nil, err or ops_text(ops))
-  ops, err = P.plan(base_desk(), w, {})
-  check("and a plan without --bind goes ahead", ops ~= nil and #ops == 0, err or ops_text(ops))
-  local typed = base_world()
-  typed.bindings_error = "app-bindings is a string, not a table of bindings"
-  ops, err = P.plan(base_desk(), typed, { bind = true })
-  check("plan --bind refuses a bindings entry that is not a table of bindings",
-    ops == nil and string.find(tostring(err), "not a table of bindings", 1, true) ~= nil, err or ops_text(ops))
-  local nouuid = base_world()
-  nouuid.managed_spaces_error = "managedDisplaySpaces failed"
-  ops, err = P.plan(base_desk(), nouuid, { bind = true })
-  check("plan --bind refuses when the spaces' uuids could not be read, and says why",
-    ops == nil and string.find(tostring(err), "managedDisplaySpaces failed", 1, true) ~= nil, err or ops_text(ops))
+  w.bindings_error = "app-bindings is a string, not a table of bindings"
+  local ops, err = P.plan(base_desk(), w, {})
+  check("a plan goes ahead when the Dock bindings could not be read", ops ~= nil and #ops == 0, err or ops_text(ops))
+  ops = P.plan(base_desk(), base_world(), { bind = true })
+  check("and an option named bind plans no bind and no Dock restart", ops ~= nil and #ops == 0, ops_text(ops))
+end
+
+-- A screen whose space order could not be read (D22) is refused, never
+-- ordered by guess.
+do
+  local w = base_world()
+  w.screens[1].order_error = "no list in com.apple.spaces holds exactly this screen's spaces"
+  local ops, err = P.plan(base_desk(), w, {})
+  check("plan refuses a screen whose space order could not be read",
+    ops == nil and string.find(tostring(err), "order of screen SCREEN-A", 1, true) ~= nil, err or ops_text(ops))
 end
 
 -- One app named in two cases in a desk is launched once.
@@ -272,32 +291,6 @@ do
   space(w, 1).windows[1].frame = { x = 1, y = 2, w = 3, h = 4 }
   local ops = P.plan(d, w, {})
   check("a fullscreen layout is left alone", ops and #ops == 0, ops_text(ops))
-end
-
--- --bind: one bind per differing app, then one restart_dock.
-do
-  local w = base_world()
-  w.app_bindings = { { bundle = "com.apple.mail", target = "SPACE-11" } }
-  local ops = P.plan(base_desk(), w, { bind = true })
-  local bound = {}
-  for _, op in ipairs(ops or {}) do
-    if op.op == "bind" then bound[op.bundle] = op.space end
-  end
-  check("--bind binds only the apps whose binding differs, then restarts the Dock once",
-    kinds(ops) == "bind,bind,restart_dock" and bound["com.apple.Safari"] == "SPACE-11"
-      and bound["com.microsoft.VSCode"] == "SPACE-12" and bound["com.apple.mail"] == nil, ops_text(ops))
-  local none = P.plan(base_desk(), w, {})
-  check("without --bind there is no bind", none and #none == 0, ops_text(none))
-  local short = base_world()
-  local vscode = table.remove(short.screens[1].spaces, 2).windows[1]
-  table.insert(space(short, 1).windows, vscode)
-  local planned = P.plan(base_desk(), short, { bind = true, no_create = true })
-  local spaceless
-  for _, op in ipairs(planned or {}) do
-    if op.op == "bind" and op.bundle == "com.microsoft.VSCode" then spaceless = op end
-  end
-  check("--bind for a space that does not exist yet is kept, with no space and a reason",
-    spaceless ~= nil and spaceless.space == nil and spaceless.reason ~= nil, ops_text(planned))
 end
 
 -- A malformed window pattern is refused naming its path, not raised.
@@ -354,15 +347,55 @@ do
   local vscode = table.remove(space(w, 2).windows, 1)
   table.insert(space(w, 1).windows, vscode)
   space(w, 1).windows[1].frame = { x = 5, y = 30, w = 500, h = 500 }
-  local ops = P.plan(d, w, { bind = true })
+  local ops = P.plan(d, w, {})
   local seen, missing = {}, {}
   for _, op in ipairs(ops or {}) do
     seen[op.op] = true
     if not op.reason then missing[#missing + 1] = op.op end
   end
-  local all = seen.create_space and seen.launch and seen.move and seen.place and seen.unseen and seen.bind and seen.restart_dock
-  check("one world yields every op kind", all, ops_text(ops))
+  local all = seen.create_space and seen.launch and seen.move and seen.place and seen.unseen
+  check("one world yields every op kind it can", all, ops_text(ops))
+  -- The kinds one world cannot yield beside those: each from its own world.
+  local more = {}
+  local nl = base_world()
+  nl.apps_running = { "com.apple.mail", "com.microsoft.VSCode" }
+  table.remove(space(nl, 1).windows, 2)
+  for _, op in ipairs(P.plan(base_desk(), nl, { no_launch = true }) or {}) do more[#more + 1] = op end
+  for _, op in ipairs(P.plan(base_desk(), nl, { launched = { ["com.apple.safari"] = true } }) or {}) do more[#more + 1] = op end
+  local short = base_world()
+  table.insert(space(short, 1).windows, table.remove(short.screens[1].spaces, 2).windows[1])
+  for _, op in ipairs(P.plan(base_desk(), short, { no_create = true }) or {}) do more[#more + 1] = op end
+  local sticky3 = base_world()
+  table.insert(space(sticky3, 1).windows, space(sticky3, 2).windows[1])
+  table.insert(sticky3.screens[1].spaces, { id = 13, ordinal = 3, type = "user", uuid = "SPACE-13", windows = {} })
+  local d3 = base_desk()
+  table.insert(d3.displays[1].spaces, { apps = { { app = "com.microsoft.VSCode", window = "Utilz", layout = "0,0 12x8" } } })
+  table.remove(d3.displays[1].spaces[2].apps, 1)
+  for _, op in ipairs(P.plan(d3, sticky3, {}) or {}) do more[#more + 1] = op end
+  local sticky2 = base_world()
+  table.insert(space(sticky2, 1).windows, space(sticky2, 2).windows[1])
+  for _, op in ipairs(P.plan(d3, sticky2, {}) or {}) do more[#more + 1] = op end
+  for _, op in ipairs(more) do
+    seen[op.op] = true
+    if not op.reason then missing[#missing + 1] = op.op end
+  end
+  local every = { "create_space", "launch", "move", "place", "unseen", "not_launched", "gone", "unmovable", "no_space",
+    "pending" }
+  local absent = {}
+  for _, k in ipairs(every) do
+    if not seen[k] then absent[#absent + 1] = k end
+  end
+  check("between them, the worlds yield all ten op kinds", #absent == 0, table.concat(absent, ","))
   check("and every op of every kind carries a reason", #missing == 0, table.concat(missing, ","))
+  local all_ops = {}
+  for _, op in ipairs(ops or {}) do all_ops[#all_ops + 1] = op end
+  for _, op in ipairs(more) do all_ops[#all_ops + 1] = op end
+  local described = P.plan_report(all_ops)
+  local raw = 0
+  for _, line in ipairs(described) do
+    if string.find(line, "^[a-z_]+ %(") then raw = raw + 1 end
+  end
+  check("and plan_report describes every kind in words, never by its bare name", raw == 0, table.concat(described, " | "))
 end
 
 -- Display matching refuses rather than guesses.
@@ -414,6 +447,277 @@ do
   local dup, dwhy = P.plan(two, base_world(), {})
   check("two desk displays matching one screen are refused",
     dup == nil and dwhy ~= nil and string.find(dwhy, "both match screen SCREEN-A", 1, true) ~= nil, dwhy)
+end
+
+-- ------------------------------------------------------------- space order (D22)
+
+print("space order")
+do
+  -- hv's plist, measured 16 Oct 2026: the built-in is "Main", detached
+  -- displays keep empty lists, and Mission Control's order is the plist's.
+  local monitors = {
+    { ["Display Identifier"] = "Main", Spaces = {
+      { ManagedSpaceID = 1 }, { ManagedSpaceID = 3 }, { ManagedSpaceID = 2588 }, { ManagedSpaceID = 1733 },
+      { ManagedSpaceID = 305 } } },
+    { ["Display Identifier"] = "34791BF3", Spaces = { { ManagedSpaceID = 2634 } } },
+    { ["Display Identifier"] = "6F89E131" },
+  }
+  local order = P.order_spaces({ 1, 3, 2588, 305, 1733 }, monitors)
+  check("a screen's spaces take the plist's order, not the live list's",
+    order and table.concat(order, ",") == "1,3,2588,1733,305", order and table.concat(order, ","))
+  local one = P.order_spaces({ 2634 }, monitors)
+  check("a screen's list is the one holding exactly its spaces, wherever it sits", one and one[1] == 2634)
+  local missing, why = P.order_spaces({ 1, 3, 2588, 305, 1733, 4000 }, monitors)
+  check("a screen with a space the plist does not list yet has no order, and says why",
+    missing == nil and string.find(tostring(why), "4000", 1, true) ~= nil, why)
+  local fewer = P.order_spaces({ 1, 3 }, monitors)
+  check("a list holding more than the screen's spaces is not its list", fewer == nil)
+  local twice, why2 = P.order_spaces({ 2634 }, { monitors[2], monitors[2] })
+  check("two lists that both fit refuse rather than choose", twice == nil and why2 ~= nil, why2)
+end
+
+-- ------------------------------------------------------------- moving (D21)
+
+print("moving")
+do
+  -- hv's machine: two panels above a laptop, sharing parts of its top edge.
+  local laptop = { uuid = "L", full = { x = 0, y = 0, w = 1800, h = 1169 }, frame = { x = 0, y = 25, w = 1800, h = 1144 } }
+  local left = { uuid = "B", full = { x = -1021, y = -1080, w = 1920, h = 1080 }, frame = { x = -1021, y = -1080, w = 1920, h = 1055 } }
+  local right = { uuid = "A", full = { x = 899, y = -1080, w = 1920, h = 1080 }, frame = { x = 899, y = -1080, w = 1920, h = 1055 } }
+  local far = { uuid = "F", full = { x = 5000, y = 0, w = 1000, h = 800 }, frame = { x = 5000, y = 0, w = 1000, h = 800 } }
+  local screens = { laptop, left, right, far }
+
+  local e = P.touching(laptop.full, left.full)
+  check("two displays sharing part of an edge touch along the shared part",
+    e and e.axis == "y" and e.at == 0 and e.dir == -1 and e.lo == 0 and e.hi == 899, e and (e.lo .. ".." .. e.hi))
+  check("displays meeting only at a corner do not touch",
+    P.touching({ x = 0, y = 0, w = 100, h = 100 }, { x = 100, y = 100, w = 100, h = 100 }) == nil)
+  local a, b = P.crossing(e, { x = 1500, y = 300 })
+  check("a crossing keeps the margin from the ends of the shared edge, 3 px either side",
+    a.x == 899 - P.MARGIN_PX and a.y == 3 and b.y == -3, a.x .. "," .. a.y .. " " .. b.x .. "," .. b.y)
+  local chain = P.route(screens, "B", "A")
+  check("a route takes the fewest crossings: left panel to right panel through the laptop is not needed",
+    chain and #chain == 2 and chain[2].uuid == "A", chain and #chain)
+  check("no chain of shared edges is no route", P.route(screens, "L", "F") == nil)
+  local up = P.route(screens, "L", "B")
+  local pts = P.path(up, { x = 500, y = 40 }, { x = -500, y = -900 })
+  check("a path crosses each shared edge and ends at the drop point",
+    #pts == 3 and pts[1].y == 3 and pts[2].y == -3 and pts[3].x == -500, #pts)
+  local drop = P.drop_point({ x = 120, y = 40 }, { x = 100, y = 25, w = 600, h = 400 }, left)
+  check("the drop point puts the window's top left 80 points into the target's visible frame",
+    drop.x == -1021 + 80 + 20 and drop.y == -1080 + 80 + 15, drop.x .. "," .. drop.y)
+
+  local g = P.grab_candidates({ x = 100, y = 25, w = 600, h = 400 }, { x = 150, y = 31, w = 14, h = 16 })
+  check("the first grab point is just right of the zoom button on the bar's centre line",
+    g[1].x == 180 and g[1].y == 39 and #g == 6, g[1].x .. "," .. g[1].y .. " of " .. #g)
+  local narrow = P.grab_candidates({ x = 0, y = 0, w = 40, h = 300 }, nil)
+  check("points off the bar are dropped, and with no zoom button the line is 12 points down",
+    #narrow == 4 and narrow[1].y == 12, #narrow)
+
+  local mods = P.decode_mods(0x40000 + 0x800000)
+  check("a symbolic hotkey's mask decodes to its modifiers, fn kept",
+    table.concat(mods, ",") == "ctrl,fn", table.concat(mods, ","))
+  local prefs = { AppleSymbolicHotKeys = {
+    ["79"] = { enabled = true, value = { parameters = { 65535, 123, 8650752 } } },
+    ["81"] = { enabled = 0, value = { parameters = { 65535, 124, 8650752 } } },
+  } }
+  local k = P.hotkey(prefs, 79)
+  check("Move left a space reads as its keycode and modifiers",
+    k and k.keycode == 123 and table.concat(k.mods, ",") == "ctrl,fn")
+  local off, why_off = P.hotkey(prefs, 81)
+  check("a shortcut turned off is refused, named", off == nil and string.find(why_off, "turned off", 1, true) ~= nil)
+  local unset, why_unset = P.hotkey({ AppleSymbolicHotKeys = {} }, 79)
+  check("an unset shortcut is refused, because macOS's default cannot be read",
+    unset == nil and string.find(why_unset, "not set", 1, true) ~= nil)
+  check("unreadable preferences are refused", P.hotkey(nil, 79) == nil)
+
+  local steps, side = P.walk({ 1, 3, 2588, 1733 }, 3, 1733)
+  check("a walk lists the spaces passed, first step first, and its side",
+    table.concat(steps, ",") == "2588,1733" and side == "right")
+  local back, bside = P.walk({ 1, 3, 2588, 1733 }, 1733, 1)
+  check("and walks left", table.concat(back, ",") == "2588,3,1" and bside == "left")
+  check("a walk to where it is has no steps", #P.walk({ 1, 3 }, 3, 3) == 0)
+  check("a walk from a space not in the order is nil", P.walk({ 1, 3 }, 9, 3) == nil)
+
+  local now = {
+    order = { L = { 1, 3, 50, 2588 }, A = { 7, 8 } },
+    types = { [1] = "user", [3] = "user", [50] = "fullscreen", [2588] = "user", [7] = "user", [8] = "user" },
+    active = { L = 1, A = 7 },
+  }
+  local legs = P.move_legs(now, { screen = "L", space = 3, from_screen = "L", from_space = 1 })
+  check("within a display, on the space shown: one carry of one step",
+    legs and #legs == 1 and legs[1].kind == "carry" and table.concat(legs[1].steps, ",") == "3" and legs[1].side == "right")
+  legs = P.move_legs(now, { screen = "L", space = 1, from_screen = "L", from_space = 3 })
+  check("within a display, off the space shown: switch to the window's space, then carry",
+    legs and #legs == 2 and legs[1].kind == "switch" and legs[1].steps[1] == 3 and legs[2].kind == "carry"
+      and legs[2].side == "left")
+  local none, why = P.move_legs(now, { screen = "L", space = 2588, from_screen = "L", from_space = 3 })
+  check("a held carry across a full-screen space is refused, named", none == nil and string.find(why, "fullscreen", 1, true) ~= nil, why)
+  legs = P.move_legs(now, { screen = "A", space = 8, from_screen = "L", from_space = 3 })
+  check("across displays: the target shows the target space, the origin shows the window, then the drag",
+    legs and #legs == 3 and legs[1].kind == "switch" and legs[1].screen == "A" and legs[1].steps[1] == 8
+      and legs[2].kind == "switch" and legs[2].screen == "L" and legs[3].kind == "drag" and legs[3].space == 8)
+  legs = P.move_legs(now, { screen = "A", space = 7, from_screen = "L", from_space = 1 })
+  check("across displays, both already showing: the drag alone", legs and #legs == 1 and legs[1].kind == "drag")
+  local gone, gwhy = P.move_legs(now, { screen = "L", space = nil, ordinal = 5, from_screen = "L", from_space = 1 })
+  check("a move to a space that does not exist is refused, naming the ordinal",
+    gone == nil and string.find(gwhy, "space 5", 1, true) ~= nil, gwhy)
+  legs = P.move_legs(now, { screen = "L", space = 1, from_screen = "L", from_space = 1 })
+  check("a window already there has no legs", legs and #legs == 0)
+  local blind = { order = now.order, types = now.types, active = { A = 7 }, active_error = { L = "activeSpaceOnScreen failed" } }
+  local nolegs, bwhy = P.move_legs(blind, { screen = "L", space = 3, from_screen = "L", from_space = 1 })
+  check("a display whose shown space could not be read refuses the move with the read's error",
+    nolegs == nil and string.find(bwhy, "activeSpaceOnScreen failed", 1, true) ~= nil, bwhy)
+
+  local op = { screen = "L", space = 3 }
+  local good = { window_spaces = { 3 }, shown = 3, listed_at_destination = true, listed_at_origin = false, origin = 1 }
+  check("a readback that agrees is done", P.move_verdict(good, op, true) == "done")
+  local function with(k, v)
+    local t = {}
+    for key, val in pairs(good) do t[key] = val end
+    t[k] = v
+    return t
+  end
+  check("still on its origin too is failed", P.move_verdict(with("listed_at_origin", true), op, true) == "failed")
+  check("on two spaces is failed", P.move_verdict(with("window_spaces", { 1, 3 }), op, true) == "failed")
+  check("the display not showing the target is failed", P.move_verdict(with("shown", 1), op, true) == "failed")
+  check("not listed at the destination is failed", P.move_verdict(with("listed_at_destination", false), op, true) == "failed")
+  local st, rwhy = P.move_verdict(with("errors", { "windowsForSpace(3): failed" }), op, true)
+  check("a readback that could not be read is failed with what could not be read, never read as not listed",
+    st == "failed" and string.find(rwhy, "windowsForSpace(3): failed", 1, true) ~= nil, rwhy)
+  check("a window with no legs, already on its space, is done whatever the display shows",
+    P.move_verdict(with("shown", 1), op, false) == "done")
+  check("and one with no legs that is elsewhere is failed", P.move_verdict(with("window_spaces", { 1 }), op, false) == "failed")
+
+  local w = base_world()
+  local in_place, perr = P.plan(base_desk(), w, {})
+  check("a world in place needs no hand", in_place and #in_place == 0 and P.needs_hand(in_place, w) == false, perr)
+  local hiddenw = base_world()
+  space(hiddenw, 2).windows[1].frame = { x = 5, y = 30, w = 500, h = 500 }
+  local hidden_ops, herr = P.plan(base_desk(), hiddenw, {})
+  check("a place for a window on a desktop not shown needs the hand",
+    kinds(hidden_ops) == "place" and P.needs_hand(hidden_ops, hiddenw) == true, herr or ops_text(hidden_ops))
+  local shownw = base_world()
+  space(shownw, 1).windows[1].frame = { x = 5, y = 30, w = 500, h = 500 }
+  local shown_ops, serr = P.plan(base_desk(), shownw, {})
+  check("a place for a window on the shown desktop does not",
+    kinds(shown_ops) == "place" and P.needs_hand(shown_ops, shownw) == false, serr or ops_text(shown_ops))
+  local sticky = base_world()
+  local vs = space(sticky, 2).windows[1]
+  vs.frame = { x = 5, y = 30, w = 500, h = 500 }
+  table.insert(space(sticky, 1).windows, vs)
+  check("a window on every space, the shown one included, is not hidden",
+    P.needs_hand({ { op = "place", window = 103 } }, sticky) == false)
+  -- The mirror: the shown listing second, so "any listing shown" is what passes.
+  local mirror = base_world()
+  local mv = space(mirror, 2).windows[1]
+  table.insert(space(mirror, 1).windows, mv)
+  space(mirror, 1).active = false
+  space(mirror, 2).active = true
+  check("and so is one whose shown listing is the second",
+    P.needs_hand({ { op = "place", window = 103 } }, mirror) == false)
+end
+
+-- A window on every space is in place on any of them: plan moves it nowhere,
+-- whichever listing claims it first.
+do
+  local w = base_world()
+  local vs = space(w, 2).windows[1]
+  table.insert(space(w, 1).windows, 1, vs)
+  local ops, err = P.plan(base_desk(), w, {})
+  check("a window on every space, its target the second listing, is not moved", ops and #ops == 0, err or ops_text(ops))
+  local l = P.listings(w)
+  check("listings: one window on two spaces, one of them shown",
+    l[103].count == 2 and l[103].spaces[11] and l[103].spaces[12] and l[103].shown == true)
+  -- On two spaces, and wanted on a third that exists: no gesture carries it,
+  -- so plan says so and plans nothing for it.
+  local far = base_world()
+  local fv = space(far, 2).windows[1]
+  table.insert(space(far, 1).windows, fv)
+  table.insert(far.screens[1].spaces, { id = 13, ordinal = 3, type = "user", uuid = "SPACE-13", windows = {} })
+  local d = base_desk()
+  table.insert(d.displays[1].spaces, { apps = { { app = "com.microsoft.VSCode", window = "Utilz", layout = "0,0 12x8" } } })
+  table.remove(d.displays[1].spaces[2].apps, 1)
+  local uops, uerr = P.plan(d, far, {})
+  check("a window on every space wanted on a space it is not on is unmovable, said, and neither moved nor placed",
+    kinds(uops) == "unmovable" and uops[1].window == 103 and string.find(uops[1].reason, "on 2 spaces", 1, true) ~= nil,
+    uerr or ops_text(uops))
+  -- Wanted on a space still to be created: the plan after creating it
+  -- decides, so nothing is predicted for the window now.
+  local soon = base_world()
+  table.insert(space(soon, 1).windows, space(soon, 2).windows[1])
+  local cops, cerr = P.plan(d, soon, {})
+  check("a window on every space wanted on a space to be created waits for the plan after it, said, with no failure predicted",
+    kinds(cops) == "create_space,pending" and cops[2].window == 103, cerr or ops_text(cops))
+  -- The second plan after that creation failed: never a silent "placed".
+  local after, aerr = P.plan(d, soon, { no_create = true, after_create = true })
+  check("after a creation that failed, that window has no space, and the reason names the failed creation",
+    kinds(after) == "no_space" and after[1].window == 103 and string.find(after[1].reason, "creating it failed", 1, true) ~= nil,
+    aerr or ops_text(after))
+  local gone_space = P.plan(d, soon, { no_create = true, user_no_create = false })
+  check("in a second plan that created nothing, a missing space is one gone since apply began, never --no-create",
+    kinds(gone_space) == "no_space" and string.find(gone_space[1].reason, "gone since apply began", 1, true) ~= nil,
+    ops_text(gone_space))
+end
+
+print("launch")
+do
+  check("open -b that ran is no verdict", P.launch_verdict(true, "", 0) == nil)
+  local st, why = P.launch_verdict(false, "Unable to find application named\nLSCopy: determine the application with bundle identifier com.x\n", 1)
+  check("a bundle id nothing carries is skipped, as not installed", st == "skipped" and string.find(why, "^not installed") ~= nil, why)
+  local fst, fwhy = P.launch_verdict(false, "The application cannot be opened\n", 1)
+  check("any other failure is failed, with open's words and exit", fst == "failed" and string.find(fwhy, "exited 1", 1, true) ~= nil, fwhy)
+end
+
+-- ------------------------------------------------------------- the report
+
+print("report")
+do
+  local d = base_desk()
+  local function r(op, path, status, reason, bundle) return { op = op, path = path, status = status, reason = reason, bundle = bundle } end
+  local lines, code = P.apply_report(d, {})
+  check("every entry placed exits 0, one line per entry", code == 0 and #lines == 3 and string.find(lines[1], ": placed$") ~= nil,
+    table.concat(lines, " | "))
+  lines, code = P.apply_report(d, {
+    r("move", "displays[0].spaces[1].apps[0]", "done"), r("place", "displays[0].spaces[1].apps[0]", "done"),
+  })
+  check("a done move reads as moved and placed", code == 0 and string.find(lines[3], "moved and placed", 1, true) ~= nil, lines[3])
+  lines, code = P.apply_report(d, { r("launch", "displays[0].spaces[0].apps[1]", "done", nil, "com.apple.Safari") })
+  check("a done launch reads as launched and placed", code == 0 and string.find(lines[2], "launched and placed", 1, true) ~= nil, lines[2])
+  lines, code = P.apply_report(d, { r("launch", "displays[0].spaces[0].apps[1]", "skipped", "not installed", "com.apple.Safari") })
+  check("an app not installed is skipped, exit 1", code == 1 and string.find(lines[2], "skipped: not installed", 1, true) ~= nil, lines[2])
+  lines, code = P.apply_report(d, { r("unseen", "displays[0].spaces[0].apps[0]", "unseen", "no window") })
+  check("an entry no window matched is unseen, exit 1", code == 1 and string.find(lines[1], "unseen: no window", 1, true) ~= nil, lines[1])
+  lines, code = P.apply_report(d, {
+    r("move", "displays[0].spaces[1].apps[0]", "failed", "the readback shows it on space 11"),
+    r("place", "displays[0].spaces[1].apps[0]", "failed", "its move failed"),
+  })
+  check("a move whose readback disagreed is failed, with why, exit 1",
+    code == 1 and string.find(lines[3], "failed: the readback shows it on space 11", 1, true) ~= nil, lines[3])
+  lines, code = P.apply_report(d, { r("not_launched", "displays[0].spaces[0].apps[1]", "skipped", "--no-launch") })
+  check("an app left unlaunched by --no-launch is skipped, exit 1", code == 1 and string.find(lines[2], "skipped", 1, true) ~= nil, lines[2])
+  lines, code = P.apply_report(d, { r("plan", nil, "failed", "the plan after creating and launching refused: x") })
+  local any_placed = false
+  for _, l in ipairs(lines) do
+    if string.find(l, ": placed", 1, true) or string.find(l, "and placed", 1, true) then any_placed = true end
+  end
+  check("when the engine could not go on, no entry reads as placed, and the exit is 1",
+    code == 1 and not any_placed and string.find(lines[1], "not finished: the plan after", 1, true) ~= nil, lines[1])
+  for _, what in ipairs({ "observe", "execute" }) do
+    lines, code = P.apply_report(d, { r(what, nil, "failed", "boom") })
+    check("a failed " .. what .. " after things changed leaves no entry placed",
+      code == 1 and string.find(lines[1], "failed: not finished: boom", 1, true) ~= nil, lines[1])
+  end
+  lines, code = P.apply_report(d, { r("gone", "displays[0].spaces[0].apps[1]", "failed", "quit"),
+    r("launch", "displays[0].spaces[0].apps[1]", "done", nil, "com.apple.Safari") })
+  check("a launched app that quit reads as failed, not launched and placed",
+    code == 1 and string.find(lines[2], "failed: quit", 1, true) ~= nil, lines[2])
+  lines, code = P.apply_report(d, { r("restore", nil, "note", "focus left where it is") })
+  check("a note is said and leaves the exit at 0, with no path printed for it",
+    code == 0 and #lines == 4 and lines[4] == "restore: note: focus left where it is", lines[4])
+  lines, code = P.apply_report(d, { r("create_space", "displays[0].spaces[2]", "failed", "addSpaceToScreen returned false") })
+  check("a failed op that serves no one entry is its own line, and lifts the exit",
+    code == 1 and #lines == 4 and string.find(lines[4], "create_space", 1, true) ~= nil, lines[4])
 end
 
 -- ------------------------------------------------------------- discover

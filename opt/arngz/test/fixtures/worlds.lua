@@ -164,4 +164,18 @@ function F.off_cell_world()
   return w
 end
 
+-- What execute returned, for an apply against the base desk: every entry
+-- already in place, so nothing was done.
+function F.placed_results()
+  return {}
+end
+
+-- Safari's launch found it not installed: one entry skipped, exit 1.
+function F.launch_skipped_results()
+  return {
+    { op = "launch", bundle = "com.apple.Safari", path = "displays[0].spaces[0].apps[1]", status = "skipped",
+      reason = "not installed: Unable to find application" },
+  }
+end
+
 return F

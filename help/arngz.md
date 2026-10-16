@@ -15,7 +15,7 @@
 
 ```bash
 arngz <desk>
-arngz apply <desk> [--dry-run] [--no-launch] [--no-create] [--bind] [--map <name>=<uuid>]
+arngz apply <desk> [--dry-run] [--no-launch] [--no-create] [--map <name>=<uuid>]
 arngz discover [--grid WxH] [--save <desk>] [--force]
 arngz diff <desk>
 arngz list
@@ -31,7 +31,9 @@ arngz doctor
 
 A **desk** is a named arrangement of windows: for each display, for each space on it, which apps live there and where on a grid their windows sit. `arngz <desk>` puts this machine's windows where the desk says; `arngz discover --save <desk>` records the arrangement on screen now as a desk.
 
-**Built so far: the catalogue, its validator, `discover`, `diff`, `doctor` and `init`.** `apply` is part of the CLI already, and it says which work package of ST0026 builds it (`not yet: WP-05`) and exits 2 rather than pretending. `discover`, `diff` and `doctor`'s IPC check reach Hammerspoon through its `hs` tool, so they need Hammerspoon running with `hs.ipc` loaded, which `arngz init --yes` sets up.
+`apply`, `discover`, `diff` and `doctor`'s IPC check reach Hammerspoon through its `hs` tool, so they need Hammerspoon running with `hs.ipc` loaded, which `arngz init --yes` sets up.
+
+**`apply` takes the pointer.** macOS gives no working call to move a window to another space, so apply moves a window the way a person does: it holds the window by its title bar and presses Mission Control's Move left/right a space shortcut, once per step, or drags it over the edge two displays share. Keep your hands off the mouse and keyboard while it runs. Moving the pointer stops it, and every move left is reported as stopped. It puts the pointer back and gives focus back when it is done. The two shortcuts must be set in System Settings > Keyboard > Keyboard Shortcuts > Mission Control, or apply refuses. Every step is read back, and a move macOS did not make is reported as failed.
 
 ### The catalogue
 
@@ -128,7 +130,7 @@ Every verb that reads a desk validates it first, and refuses with exit 2 on any 
 | Verb            | Does                                                                                    | Exit                   |
 | --------------- | --------------------------------------------------------------------------------------- | ---------------------- |
 | `<desk>`        | the same as `apply <desk>`                                                              | as apply               |
-| `apply <desk>`  | arrange this machine's windows as the desk says (not yet: WP-05)                        | 2                      |
+| `apply <desk>`  | arrange this machine's windows as the desk says, and report each app's outcome          | 0, 1, or 2             |
 | `discover`      | print the arrangement on screen now as a desk, or save it with `--save`                 | 0, or 2                |
 | `diff <desk>`   | print what apply would do, one line per change with its reason, and change nothing      | 0 same, 1 differs, 2   |
 | `list`          | each desk with its display and app counts; an invalid desk is named on its own line     | 0, or 1 if any invalid |
@@ -144,7 +146,6 @@ Every verb that reads a desk validates it first, and refuses with exit 2 on any 
 | `--dry-run`           | `apply`    | print the plan and change nothing                            |
 | `--no-launch`         | `apply`    | report apps that are not running instead of launching them   |
 | `--no-create`         | `apply`    | do not create missing spaces                                 |
-| `--bind`              | `apply`    | also write the Dock's app-to-space bindings                  |
 | `--map <name>=<uuid>` | `apply`    | bind one desk display to one screen for this run             |
 | `--grid WxH`          | `discover` | the grid windows are snapped to; 8x4 when absent             |
 | `--save <desk>`       | `discover` | write the discovered desk into the catalogue                 |
@@ -177,14 +178,15 @@ arngz delete old    # remove one
 - `XDG_CONFIG_HOME` -- where the catalogue lives; `$HOME/.config` when unset.
 - `ARNGZ_HS_PREFIX` -- where `init --yes` links the `hs` tool; `/opt/homebrew` when unset.
 - `ARNGZ_HS_TIMEOUT` -- how many seconds one call to Hammerspoon may take; 60 when unset.
+- `ARNGZ_APPLY_TIMEOUT` -- how many seconds the CLI waits for apply's answer; 600 when unset. Hammerspoon may still be working when it gives up, and it says so.
 
 ---
 
 ## Exit Status
 
 - `0` -- done.
-- `1` -- `list` found a desk that does not validate, `diff` found that apply would change something, `doctor` found a precondition that does not hold, or `init --yes` stopped at a step that failed after it had changed something; each is named, and for `init` so is every step it had made.
-- `2` -- refused before anything changed: a desk that does not exist or does not validate, a bad name or option, or a verb not built yet.
+- `1` -- `apply` skipped an app (not installed, or not running under `--no-launch`), saw no window for an entry, or a move or place did not take, each named in its report; `list` found a desk that does not validate, `diff` found that apply would change something, `doctor` found a precondition that does not hold, or `init --yes` stopped at a step that failed after it had changed something; each is named, and for `init` so is every step it had made.
+- `2` -- refused before anything changed: a desk that does not exist or does not validate, a bad name or option, a precondition `apply` checks first (a preference, Accessibility, the Move-space shortcuts, a mouse button or modifier held), or Hammerspoon not answering.
 
 ---
 

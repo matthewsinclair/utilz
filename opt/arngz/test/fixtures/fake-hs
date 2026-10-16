@@ -11,8 +11,14 @@
 #   hang-after-reply   write the response, then never return (measured on a
 #                      real hs, 16 Oct 2026)
 #   exit-69            exit 69, as hs does when Hammerspoon is unreachable
+#   receive-timeout    exit 69 with "receive timeout", as hs does when the
+#                      message was delivered and the reply came too late
 #   exit-75            exit 75, which the CLI reads as Hammerspoon not running
 #   lua-error          exit 65 with an error, as hs does for a Lua error
+#   scheduled          say the verb was scheduled and exit 0, then write the
+#                      response FAKE_HS_DELAY seconds later (default 1), as
+#                      the engine does for apply (D20 as amended)
+#   scheduled-never    say the verb was scheduled, exit 0, and never answer
 
 set -euo pipefail
 printf '%s\n' "$@" >"$FAKE_HS_LOG/argv"
@@ -40,6 +46,20 @@ case "${FAKE_HS_MODE:-ok}" in
   hang) exec sleep 300 ;;
   hang-after-reply) cp "$FAKE_HS_RESPONSE" "$response"; exec sleep 300 ;;
   exit-69) echo "error: can't access Hammerspoon message port" >&2; exit 69 ;;
+  receive-timeout) echo "error: receive timeout" >&2; exit 69 ;;
   exit-75) echo "error: Hammerspoon is not running" >&2; exit 75 ;;
   lua-error) echo "attempt to index a nil value" >&2; exit 65 ;;
+  scheduled | scheduled-never)
+    if [[ "$FAKE_HS_MODE" == scheduled ]]; then
+      # Written aside and renamed, as the engine does, by a child that holds
+      # none of the caller's pipes open.
+      # Its errors go to the log, so a test that waits in vain can show why,
+      # and it holds no descriptor of the caller's, bats' fd 3 included.
+      (sleep "${FAKE_HS_DELAY:-1}" && cp "$FAKE_HS_RESPONSE" "$response.partial" && mv "$response.partial" "$response") \
+        </dev/null >/dev/null 2>"$FAKE_HS_LOG/scheduled.err" 3>&- &
+    fi
+    verb="$(yq -r '.verb' "$request")"
+    echo "arngz: scheduled $verb"
+    ;;
+  *) echo "fake-hs: unknown FAKE_HS_MODE '$FAKE_HS_MODE'" >&2; exit 64 ;;
 esac

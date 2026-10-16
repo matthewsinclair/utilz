@@ -28,6 +28,7 @@ P.FRAME_SLACK = 2
 local function round(v)
   return math.floor(v + 0.5)
 end
+P.round = round
 
 -- "x,y wxh" -> {x, y, w, h} in cells, or nil for "fullscreen" and anything
 -- else. The validator has already refused a malformed layout.
@@ -208,8 +209,8 @@ function P.user_spaces(screen)
 end
 
 -- What observe could not read, refused rather than planned as empty: a screen
--- whose spaces could not be read, a space whose type could not be read, or a
--- space whose windows could not be read. Counting an unread space as "not a
+-- whose spaces, or their order (D22), could not be read, a space whose type
+-- could not be read, or a space whose windows could not be read. Counting an unread space as "not a
 -- desktop", or its windows as none, would plan a create_space for a space that
 -- exists, shift every ordinal after it, and miss windows that are there. Over
 -- every screen, because the window pool is the whole world's. Plan and
@@ -218,6 +219,9 @@ local function unread(world)
   for _, s in ipairs(world.screens or {}) do
     if s.spaces_error then
       return string.format("the spaces of screen %s could not be read: %s", tostring(s.uuid), tostring(s.spaces_error))
+    end
+    if s.order_error then
+      return string.format("the order of screen %s's spaces could not be read: %s", tostring(s.uuid), tostring(s.order_error))
     end
     for _, sp in ipairs(s.spaces or {}) do
       if sp.type == nil then
@@ -239,6 +243,29 @@ end
 local function claimable(w)
   return w.named and w.standard and not w.minimized
 end
+P.claimable = claimable
+
+-- Every space each window is listed on, and whether one of them is being
+-- shown: { [id] = { spaces = {[space id] = true}, count, shown } }. The one
+-- reading of a window on several spaces that plan, discover and needs_hand
+-- share.
+function P.listings(world)
+  local out = {}
+  for _, s in ipairs(world.screens or {}) do
+    for _, sp in ipairs(s.spaces or {}) do
+      for _, w in ipairs(sp.windows or {}) do
+        local l = out[w.id] or { spaces = {}, count = 0, shown = false }
+        if not l.spaces[sp.id] then
+          l.spaces[sp.id] = true
+          l.count = l.count + 1
+        end
+        if sp.active then l.shown = true end
+        out[w.id] = l
+      end
+    end
+  end
+  return out
+end
 
 -- Every window observe() could name on a desktop space, with where it is. A
 -- window on a full-screen space is left alone (D11), so it never enters the
@@ -258,42 +285,25 @@ local function all_windows(world)
 end
 
 -- An app's identity: its bundle id without regard to case, as macOS treats
--- it. Plan's claims, launches, running and binding lookups, and discover's
+-- it. Plan's claims, launches and running lookups, apply's launched set, and discover's
 -- counts and NOT_RECORDED all key on this, so one app is never two.
 local function app_key(bundle)
   return string.lower(bundle or "")
 end
+P.app_key = app_key
 
 local function running_set(world)
   local set = {}
   for _, b in ipairs(world.apps_running or {}) do set[app_key(b)] = true end
   return set
 end
+P.running_set = running_set
 
 -- Why the Dock bindings could not be read, or nil. An empty list beside this
 -- is "could not see", never "none".
 local function bindings_unread(world)
   local why = (world.prefs_errors or {}).spaces or world.bindings_error
   if why then return "the Dock bindings could not be read: " .. tostring(why) end
-  return nil
-end
-
--- Why --bind cannot be planned, or nil: it compares against the bindings and
--- names each space by its uuid, so neither may be unread.
-local function bind_unread(world)
-  local why = bindings_unread(world)
-  if why then return why end
-  if world.managed_spaces_error then
-    return "the spaces' uuids could not be read, so no binding can name its space: "
-      .. tostring(world.managed_spaces_error)
-  end
-  return nil
-end
-
-local function binding_of(world, bundle)
-  for _, b in ipairs(world.app_bindings or {}) do
-    if app_key(b.bundle) == app_key(bundle) then return b.target end
-  end
   return nil
 end
 
@@ -343,23 +353,35 @@ end
 
 -- plan(desk, world, options) -> ops, or nil and a refusal.
 --
--- options: no_create, no_launch, bind (booleans) and map ({name = uuid}).
+-- options: no_create and no_launch (booleans), after_create (a second plan,
+-- so a space that does not exist is one whose creation failed),
+-- user_no_create (a second plan: false when the person did not pass
+-- --no-create, so a missing space is one that went away meanwhile), map
+-- ({name = uuid}), and
+-- launched ({app key = true when its launch was done, false when not}): the
+-- apps apply has already launched, which a second plan never launches again
+-- (design.md, apply 9). One whose launch was not done is the launch result's
+-- to report; one whose launch was done and is not running now is reported
+-- here, as gone. running_before ({app key = true}), given to a second plan,
+-- launches nothing, and reports an app that was running then and is not now
+-- as gone.
 -- Each op carries `op`, its arguments, `reason`, and `path`, the desk path
 -- that asked for it. Order is the order apply executes in: create_space, then
--- launch, then for each window move before place (D14), then bind and one
--- restart_dock.
+-- launch, then for each window move before place (D14). There is no --bind
+-- in v1 (D10, AC-05.6).
 function P.plan(desk, world, options)
   options = options or {}
   local grid = P.parse_grid(desk.grid)
   if not grid then return nil, "the desk's grid is not WxH: " .. tostring(desk.grid) end
   local pattern_refusal = bad_pattern(desk)
   if pattern_refusal then return nil, pattern_refusal end
-  local unread_refusal = unread(world) or (options.bind and bind_unread(world))
+  local unread_refusal = unread(world)
   if unread_refusal then return nil, unread_refusal end
   local screens, refusal = P.match_displays(desk, world, options)
   if not screens then return nil, refusal end
 
-  local creates, launches, windows, binds = {}, {}, {}, {}
+  local creates, launches, windows = {}, {}, {}
+  local already = options.launched or {}
 
   for di, d in ipairs(desk.displays or {}) do
     local s = screens[di]
@@ -378,11 +400,39 @@ function P.plan(desk, world, options)
   local running = running_set(world)
   local launched, claimed = {}, {}
   local pool = all_windows(world)
+  local listed = P.listings(world)
   for _, e in ipairs(entries(desk)) do
     local a, s = e.app, screens[e.display]
     local bundle = a.app
     if not running[app_key(bundle)] then
-      if not options.no_launch and not launched[app_key(bundle)] then
+      if already[app_key(bundle)] ~= nil then
+        -- Launched by this apply, and not running now: when its launch failed
+        -- or was skipped, that result is the report's line; when it showed a
+        -- window and has quit since, this says so, never "placed".
+        if already[app_key(bundle)] == true then
+          windows[#windows + 1] = {
+            op = "gone", bundle = bundle, path = e.path,
+            reason = bundle .. " was launched by this apply and is not running now",
+          }
+        end
+        launched[app_key(bundle)] = true
+      elseif options.running_before then
+        -- A second plan launches nothing. An app running when apply began
+        -- and not now quit in between: said, never launched mid-run. One
+        -- that was not running then had its launch tried, or the run
+        -- stopped before it, and that result is the report's.
+        if options.running_before[app_key(bundle)] then
+          windows[#windows + 1] = {
+            op = "gone", bundle = bundle, path = e.path,
+            reason = bundle .. " was running when apply began and is not now; apply does not launch it mid-run",
+          }
+        end
+      elseif options.no_launch then
+        windows[#windows + 1] = {
+          op = "not_launched", bundle = bundle, path = e.path,
+          reason = bundle .. " is not running, and --no-launch leaves it so",
+        }
+      elseif not launched[app_key(bundle)] then
         launched[app_key(bundle)] = true
         launches[#launches + 1] = {
           op = "launch", bundle = bundle, path = e.path,
@@ -411,21 +461,57 @@ function P.plan(desk, world, options)
         if fits then
           claimed[w.id] = true
           took = took + 1
-          local moving = (target == nil) or (cand.space.id ~= target.id)
-          if moving then
-            windows[#windows + 1] = {
-              op = "move", window = w.id, screen = s.uuid, ordinal = e.space, path = e.path,
-              reason = string.format("%s %q is on %s space %d, not space %d of display %s",
-                bundle, w.title or "", cand.screen.name or cand.screen.uuid, cand.space.ordinal or 0,
-                e.space, tostring(desk.displays[e.display].name)),
-            }
+          -- A window on several spaces is in place when one of them is the
+          -- target, whichever listing claimed it.
+          local moving = (target == nil) or not listed[w.id].spaces[target.id]
+          local several = listed[w.id].count > 1
+          -- What happens to it: nothing, a move and a place, a place alone,
+          -- or a report that says why neither can be done.
+          local said
+          if moving and target == nil and options.no_create then
+            local why = "and --no-create leaves it so"
+            if options.after_create then
+              why = "and creating it failed (its create_space result says why)"
+            elseif options.user_no_create == false then
+              why = "and it has gone since apply began"
+            end
+            said = { op = "no_space", reason = string.format("space %d of display %s does not exist, %s", e.space,
+              tostring(desk.displays[e.display].name), why) }
+          elseif moving and target == nil and several then
+            -- A window on every space is on the space about to be created
+            -- too; the plan after creating it decides, and diff says so.
+            said = { op = "pending", reason = string.format("%s %q is on every space, so it will be on space %d of"
+              .. " display %s once that is created; the plan after creating it decides", bundle, w.title or "",
+              e.space, tostring(desk.displays[e.display].name)) }
+          elseif moving and several then
+            -- On every space but the target's: no gesture carries it, so it
+            -- is said here rather than failed at execute.
+            said = { op = "unmovable", reason = string.format("%s %q is on %d spaces and not on space %d of display %s;"
+              .. " arngz does not move a window on every space", bundle, w.title or "", listed[w.id].count, e.space,
+              tostring(desk.displays[e.display].name)) }
           end
-          if moving or not P.frames_agree(w.frame, frame) then
-            windows[#windows + 1] = {
-              op = "place", window = w.id, frame = frame, path = e.path,
-              reason = string.format("%s %q to %s on display %s", bundle, w.title or "", a.layout,
-                tostring(desk.displays[e.display].name)),
-            }
+          if said then
+            said.window, said.bundle, said.path = w.id, bundle, e.path
+            windows[#windows + 1] = said
+          else
+            if moving then
+              -- The target space's id when it exists; a space still to be
+              -- created has none, and the plan after creating it has one.
+              windows[#windows + 1] = {
+                op = "move", window = w.id, screen = s.uuid, ordinal = e.space, path = e.path, bundle = bundle,
+                space = target and target.id or nil, from_screen = cand.screen.uuid, from_space = cand.space.id,
+                reason = string.format("%s %q is on %s space %d, not space %d of display %s",
+                  bundle, w.title or "", cand.screen.name or cand.screen.uuid, cand.space.ordinal or 0,
+                  e.space, tostring(desk.displays[e.display].name)),
+              }
+            end
+            if moving or not P.frames_agree(w.frame, frame) then
+              windows[#windows + 1] = {
+                op = "place", window = w.id, frame = frame, path = e.path, bundle = bundle,
+                reason = string.format("%s %q to %s on display %s", bundle, w.title or "", a.layout,
+                  tostring(desk.displays[e.display].name)),
+              }
+            end
           end
         end
       end
@@ -441,38 +527,414 @@ function P.plan(desk, world, options)
         }
       end
     end
-    if options.bind then
-      local target = P.user_spaces(s)[e.space]
-      if not (target and target.uuid) then
-        -- Asked for and not plannable: kept as a bind with no space, and the
-        -- reason, rather than dropped.
-        binds[#binds + 1] = {
-          op = "bind", bundle = bundle, path = e.path,
-          reason = (target == nil) and "its space does not exist yet, so there is no space to bind it to"
-            or "its space's uuid could not be read, so it cannot be named in a binding",
-        }
-      elseif binding_of(world, bundle) ~= target.uuid then
-        binds[#binds + 1] = {
-          op = "bind", bundle = bundle, space = target.uuid, path = e.path,
-          reason = string.format("%s is bound to %s, not this space", bundle, tostring(binding_of(world, bundle))),
-        }
+  end
+
+  local ops = {}
+  for _, list in ipairs({ creates, launches, windows }) do
+    for _, op in ipairs(list) do ops[#ops + 1] = op end
+  end
+  return ops
+end
+
+-- ------------------------------------------------------------- space order
+
+-- A screen's spaces in Mission Control's order (D22): its list in
+-- com.apple.spaces' SpacesDisplayConfiguration, found as the one list whose
+-- spaces are exactly the screen's live spaces. The plist names the built-in
+-- display "Main" and keeps lists for displays no longer attached, so a list
+-- is never chosen by its name. `monitors` is the plist's Monitors array, each
+-- { Spaces = { { ManagedSpaceID = id }, ... } }. Returns the ids in order, or
+-- nil and why.
+function P.order_spaces(live_ids, monitors)
+  local live, n = {}, 0
+  for _, id in ipairs(live_ids or {}) do
+    live[id] = true
+    n = n + 1
+  end
+  local found
+  for _, m in ipairs(monitors or {}) do
+    local ids, same = {}, true
+    for _, sp in ipairs(m.Spaces or {}) do
+      local id = sp.ManagedSpaceID
+      ids[#ids + 1] = id
+      if not live[id] then same = false end
+    end
+    if same and #ids == n and n > 0 then
+      if found then
+        return nil, "two lists in com.apple.spaces hold exactly this screen's spaces"
+      end
+      found = ids
+    end
+  end
+  if not found then
+    return nil, "no list in com.apple.spaces holds exactly this screen's spaces ("
+      .. table.concat(live_ids or {}, ", ") .. "), so their order is not known"
+  end
+  return found
+end
+
+-- ------------------------------------------------------------- moving (D21)
+
+-- Ported from dc's spike 2 (arngz-spike2.lua, ST0026 WP-01), which measured
+-- the gestures these plan. Pure: the engine performs them.
+
+-- A drag keeps this far from the ends of the edge two displays share.
+P.MARGIN_PX = 40
+
+local function clamp(v, lo, hi)
+  if hi < lo then return (lo + hi) / 2 end
+  if v < lo then return lo end
+  if v > hi then return hi end
+  return v
+end
+
+local function point(x, y) return { x = round(x), y = round(y) } end
+
+-- Where two displays touch: the line they share and which way b lies from a,
+-- or nil. Touching at a corner is not a shared edge. Frames are full frames
+-- in Hammerspoon's coordinates, the primary's top left at 0,0, y down.
+function P.touching(a, b)
+  local function overlap(a1, a2, b1, b2)
+    local lo, hi = math.max(a1, b1), math.min(a2, b2)
+    if hi - lo > 2 then return lo, hi end
+    return nil
+  end
+  local lo, hi
+  if math.abs(a.x + a.w - b.x) <= 1 then
+    lo, hi = overlap(a.y, a.y + a.h, b.y, b.y + b.h)
+    if lo then return { axis = "x", at = b.x, lo = lo, hi = hi, dir = 1 } end
+  end
+  if math.abs(b.x + b.w - a.x) <= 1 then
+    lo, hi = overlap(a.y, a.y + a.h, b.y, b.y + b.h)
+    if lo then return { axis = "x", at = a.x, lo = lo, hi = hi, dir = -1 } end
+  end
+  if math.abs(a.y + a.h - b.y) <= 1 then
+    lo, hi = overlap(a.x, a.x + a.w, b.x, b.x + b.w)
+    if lo then return { axis = "y", at = b.y, lo = lo, hi = hi, dir = 1 } end
+  end
+  if math.abs(b.y + b.h - a.y) <= 1 then
+    lo, hi = overlap(a.x, a.x + a.w, b.x, b.x + b.w)
+    if lo then return { axis = "y", at = a.y, lo = lo, hi = hi, dir = -1 } end
+  end
+  return nil
+end
+
+-- The two points either side of a shared edge, 3 px in, as near to p along
+-- the edge as the margin allows.
+function P.crossing(edge, p)
+  if edge.axis == "x" then
+    local y = clamp(p.y, edge.lo + P.MARGIN_PX, edge.hi - P.MARGIN_PX)
+    return point(edge.at - 3 * edge.dir, y), point(edge.at + 3 * edge.dir, y)
+  end
+  local x = clamp(p.x, edge.lo + P.MARGIN_PX, edge.hi - P.MARGIN_PX)
+  return point(x, edge.at - 3 * edge.dir), point(x, edge.at + 3 * edge.dir)
+end
+
+-- The displays a drag passes through from one display to another, each
+-- touching the next: breadth first, so the fewest crossings; nil when no
+-- chain of shared edges joins them. Screens are { uuid, full }.
+function P.route(screens, from, to)
+  local by_uuid = {}
+  for _, s in ipairs(screens or {}) do by_uuid[s.uuid] = s end
+  if not (by_uuid[from] and by_uuid[to]) then return nil end
+  local prev, seen, queue = {}, { [from] = true }, { from }
+  while #queue > 0 do
+    local u = table.remove(queue, 1)
+    for _, s in ipairs(screens) do
+      if not seen[s.uuid] and P.touching(by_uuid[u].full, s.full) then
+        seen[s.uuid], prev[s.uuid] = true, u
+        queue[#queue + 1] = s.uuid
       end
     end
   end
+  if not seen[to] then return nil end
+  local chain = { by_uuid[to] }
+  while chain[1].uuid ~= from do table.insert(chain, 1, by_uuid[prev[chain[1].uuid]]) end
+  return chain
+end
 
-  local ops, restartable = {}, 0
-  for _, list in ipairs({ creates, launches, windows, binds }) do
-    for _, op in ipairs(list) do ops[#ops + 1] = op end
+-- A polyline from start to dest along a route, each segment inside one
+-- display, so the pointer is never asked to cross a gap between displays.
+function P.path(chain, start, dest)
+  local points, p = {}, start
+  for i = 1, #chain - 1 do
+    local a, b = P.crossing(P.touching(chain[i].full, chain[i + 1].full), p)
+    points[#points + 1] = a
+    points[#points + 1] = b
+    p = b
   end
-  for _, b in ipairs(binds) do
-    if b.space then restartable = restartable + 1 end
+  points[#points + 1] = dest
+  return points
+end
+
+-- Where a dragged window is let go on the target display: its grab point
+-- offset as the window's top left would land 80 points into the target's
+-- visible frame, kept 10 points inside the target.
+function P.drop_point(grab, window_frame, target)
+  return point(
+    clamp(target.frame.x + 80 + (grab.x - window_frame.x), target.full.x + 10, target.full.x + target.full.w - 10),
+    clamp(target.frame.y + 80 + (grab.y - window_frame.y), target.full.y + 10, target.full.y + target.full.h - 10))
+end
+
+-- Points on the title bar's centre line, best first: just right of the zoom
+-- button, then across the bar. The traffic lights sit on the bar's centre
+-- line whatever the bar's height, so the zoom button gives the line.
+function P.grab_candidates(frame, zoom)
+  local y = zoom and (zoom.y + zoom.h / 2) or (frame.y + 12)
+  local xs = {}
+  if zoom then
+    xs[#xs + 1] = zoom.x + zoom.w + 16
+    xs[#xs + 1] = zoom.x + zoom.w + 48
   end
-  -- Only a bind that names a space can take effect, so only that is worth a
-  -- Dock restart.
-  if restartable > 0 then
-    ops[#ops + 1] = { op = "restart_dock", reason = "the Dock reads app bindings only when it starts" }
+  for _, f in ipairs({ 0.5, 0.65, 0.35, 0.8 }) do xs[#xs + 1] = frame.x + frame.w * f end
+  local points = {}
+  for _, x in ipairs(xs) do
+    if x > frame.x + 4 and x < frame.x + frame.w - 4 then points[#points + 1] = point(x, y) end
   end
-  return ops
+  return points
+end
+
+-- The symbolic hotkeys for Mission Control's "Move left a space" and "Move
+-- right a space": the Move-space shortcut D21 presses.
+P.MOVE_LEFT, P.MOVE_RIGHT = 79, 81
+
+local MASKS = {
+  { name = "shift", bit = 0x20000 },
+  { name = "ctrl", bit = 0x40000 },
+  { name = "alt", bit = 0x80000 },
+  { name = "cmd", bit = 0x100000 },
+  { name = "fn", bit = 0x800000 },
+}
+
+-- A symbolic hotkey's modifier mask as modifier names. Arithmetic rather than
+-- bit operators, which Lua 5.1 lacks. An arrow key's mask carries fn, as a
+-- real arrow key does, and it is kept.
+function P.decode_mods(mask)
+  local mods = {}
+  for _, m in ipairs(MASKS) do
+    if math.floor(mask / m.bit) % 2 == 1 then mods[#mods + 1] = m.name end
+  end
+  return mods
+end
+
+-- One shortcut from com.apple.symbolichotkeys as { id, keycode, mods }, or
+-- nil and why. An absent entry is macOS's default, which cannot be read, so
+-- it is refused rather than guessed.
+function P.hotkey(prefs, id)
+  if type(prefs) ~= "table" then return nil, "com.apple.symbolichotkeys could not be read" end
+  local entry = (prefs.AppleSymbolicHotKeys or {})[tostring(id)]
+  if type(entry) ~= "table" then
+    return nil, string.format("symbolic hotkey %d is not set in com.apple.symbolichotkeys, so its key is macOS's"
+      .. " default, which cannot be read; set it in Keyboard Shortcuts > Mission Control", id)
+  end
+  if not (entry.enabled == true or entry.enabled == 1) then
+    return nil, string.format("symbolic hotkey %d is turned off in Keyboard Shortcuts > Mission Control", id)
+  end
+  local p = type(entry.value) == "table" and entry.value.parameters
+  if type(p) ~= "table" or type(p[2]) ~= "number" or type(p[3]) ~= "number" then
+    return nil, string.format("symbolic hotkey %d carries no keycode and modifier mask", id)
+  end
+  return { id = id, keycode = p[2], mods = P.decode_mods(p[3]) }
+end
+
+-- The spaces a display passes through from one space to another along its
+-- order, the first step first, and the side they lie on; {} when they are the
+-- same space; nil when either is not in the order.
+function P.walk(order, from, to)
+  local i, j
+  for k, id in ipairs(order or {}) do
+    if id == from then i = k end
+    if id == to then j = k end
+  end
+  if not (i and j) then return nil end
+  local steps, side = {}, (j > i) and "right" or "left"
+  local d = (j > i) and 1 or -1
+  local k = i
+  while k ~= j do
+    k = k + d
+    steps[#steps + 1] = order[k]
+  end
+  return steps, side
+end
+
+-- The legs of one move (design.md, "Moving a window"), from where things are
+-- now. now = { order = {[screen] = {ids}}, types = {[id] = type},
+-- active = {[screen] = id} }; move = { screen, space, from_screen,
+-- from_space }. Each leg is one of
+--   { kind = "switch", screen, steps, side }  nothing held: show a desktop
+--   { kind = "carry", screen, steps, side, from }  held: carry the window
+--   { kind = "drag", from_screen, screen, space }  held: across displays
+-- Returns the legs, {} when the window is already there, or nil and why.
+function P.move_legs(now, move)
+  local legs = {}
+  local function switch(screen, to)
+    local at = now.active[screen]
+    if at == nil then
+      return false, string.format("the space screen %s shows could not be read: %s", tostring(screen),
+        tostring((now.active_error or {})[screen]))
+    end
+    if at == to then return true end
+    local steps, side = P.walk(now.order[screen], at, to)
+    if not steps then
+      return false, string.format("screen %s shows space %s, which is not in its order", tostring(screen), tostring(at))
+    end
+    legs[#legs + 1] = { kind = "switch", screen = screen, steps = steps, side = side }
+    return true
+  end
+  if not move.space then
+    return nil, string.format("space %s of screen %s does not exist", tostring(move.ordinal), tostring(move.screen))
+  end
+  if move.from_screen == move.screen and move.from_space == move.space then return legs end
+  local ok, why
+  if move.from_screen ~= move.screen then
+    ok, why = switch(move.screen, move.space)
+    if not ok then return nil, why end
+    ok, why = switch(move.from_screen, move.from_space)
+    if not ok then return nil, why end
+    legs[#legs + 1] = { kind = "drag", from_screen = move.from_screen, screen = move.screen, space = move.space }
+    return legs
+  end
+  ok, why = switch(move.screen, move.from_space)
+  if not ok then return nil, why end
+  local steps, side = P.walk(now.order[move.screen], move.from_space, move.space)
+  if not steps then
+    return nil, string.format("space %s or %s is not in screen %s's order", tostring(move.from_space),
+      tostring(move.space), tostring(move.screen))
+  end
+  for _, id in ipairs(steps) do
+    if not P.is_user_space(now.types[id]) then
+      return nil, string.format("a %s space (%s) lies between space %s and space %s, and a held window cannot be"
+        .. " carried into one", tostring(now.types[id]), tostring(id), tostring(move.from_space), tostring(move.space))
+    end
+  end
+  legs[#legs + 1] = { kind = "carry", screen = move.screen, steps = steps, side = side, from = move.from_space }
+  return legs
+end
+
+-- Whether a moved window is where it was sent (design.md, "Moving a
+-- window"), from the readback taken 0.5 s after letting go: { window_spaces,
+-- shown, listed_at_destination, listed_at_origin, origin } and an `errors`
+-- list of what could not be read. A gesture has no return value, so this is
+-- the only evidence. `moved` is false when the window had no legs to go
+-- (it was there already), and then only its space is asked of it. Returns
+-- "done" or "failed", and why.
+function P.move_verdict(rb, op, moved)
+  if rb.errors and #rb.errors > 0 then
+    return "failed", "the readback could not be read: " .. table.concat(rb.errors, "; ")
+  end
+  local spaces = rb.window_spaces or {}
+  local alone = #spaces == 1 and spaces[1] == op.space
+  if not moved then
+    if alone then return "done", nil end
+    return "failed", string.format("planned onto space %s, where it already was, and it is on {%s}",
+      tostring(op.space), table.concat(spaces, ","))
+  end
+  if alone and rb.shown == op.space and rb.listed_at_destination and not rb.listed_at_origin then
+    return "done", nil
+  end
+  return "failed", string.format(
+    "the readback disagrees: the window is on {%s}, screen %s shows %s, listed at space %s: %s, at its origin %s: %s",
+    table.concat(spaces, ","), tostring(op.screen), tostring(rb.shown), tostring(op.space),
+    tostring(rb.listed_at_destination), tostring(rb.origin), tostring(rb.listed_at_origin))
+end
+
+-- Whether apply must take the pointer: any move, or a place for a window on
+-- a desktop its display is not showing, since a window there cannot be
+-- placed until its desktop is shown (D21's switch, with nothing held).
+function P.needs_hand(ops, world)
+  -- Hidden means listed on no space being shown: a window on every space is
+  -- on the shown one too.
+  local listed = P.listings(world)
+  for _, op in ipairs(ops or {}) do
+    if op.op == "move" then return true end
+    if op.op == "place" and listed[op.window] and not listed[op.window].shown then return true end
+  end
+  return false
+end
+
+-- What `open -b` said, as a launch's status: nil when it ran, "skipped"
+-- when the bundle id names nothing on this Mac (its words, measured on macOS
+-- 27.0.1), and "failed" for anything else, never quietly a skip.
+function P.launch_verdict(ran, said, rc)
+  if ran then return nil end
+  said = string.gsub(said or "", "%s+$", "")
+  if string.find(said, "determine the application with bundle identifier", 1, true) then
+    return "skipped", "not installed: " .. said
+  end
+  return "failed", string.format("open -b exited %s: %s", tostring(rc), said)
+end
+
+-- ------------------------------------------------------------- the report
+
+-- Results that stop every entry after them: the engine could not observe,
+-- plan or execute once things had begun to change, so no entry can be
+-- reported placed.
+local BLANKET = { plan = true, observe = true, execute = true }
+
+-- What apply says per desk entry (design.md, apply step 11), from the ops it
+-- planned and the results execute returned, each result carrying its op's
+-- `op`, `path`, `bundle`, `status` and `reason`. A launch speaks for every
+-- entry of its app. Returns the report lines and the exit code: 0 when every
+-- entry is placed, 1 when any is skipped, unseen or failed, or when any op
+-- failed whatever entry it served.
+function P.apply_report(desk, results)
+  local by_path, by_app, loose, blanket = {}, {}, {}, {}
+  for _, r in ipairs(results or {}) do
+    if BLANKET[r.op] and r.status ~= "done" then blanket[#blanket + 1] = tostring(r.reason) end
+    if r.op == "launch" then
+      by_app[app_key(r.bundle)] = r
+    elseif r.path and string.find(r.path, "%.apps%[") then
+      local list = by_path[r.path] or {}
+      list[#list + 1] = r
+      by_path[r.path] = list
+    elseif r.status ~= "done" then
+      loose[#loose + 1] = r
+    end
+  end
+  local lines, code = {}, 0
+  -- In the desk's own order, which is how a person reads it.
+  local ordered = {}
+  for di, d in ipairs(desk.displays or {}) do
+    for si, sp in ipairs(d.spaces or {}) do
+      for ai, a in ipairs(sp.apps or {}) do ordered[#ordered + 1] = { app = a, path = path_of(di, si, ai) } end
+    end
+  end
+  for _, e in ipairs(ordered) do
+    local launch = by_app[app_key(e.app.app)]
+    local outcome, why, moved = "placed", {}, false
+    if launch and launch.status ~= "done" then
+      outcome = launch.status
+      why[#why + 1] = tostring(launch.reason)
+    end
+    for _, r in ipairs(by_path[e.path] or {}) do
+      if r.status == "done" then
+        if r.op == "move" then moved = true end
+      elseif outcome == "placed" or r.status == "failed" then
+        outcome = r.status
+        why[#why + 1] = tostring(r.reason)
+      end
+    end
+    if outcome == "placed" and #blanket > 0 then
+      outcome = "failed"
+      why[#why + 1] = "not finished: " .. table.concat(blanket, "; ")
+    end
+    if outcome == "placed" then
+      if launch then outcome = "launched and placed" elseif moved then outcome = "moved and placed" end
+    else
+      code = 1
+    end
+    local name = e.app.window and string.format("%s %q", e.app.app, e.app.window) or e.app.app
+    lines[#lines + 1] = string.format("%s (%s): %s%s", name, e.path, outcome,
+      (#why > 0) and (": " .. table.concat(why, "; ")) or "")
+  end
+  -- A note is said and counts against nothing: something apply left as it
+  -- found it on purpose, such as focus on a desktop no longer shown.
+  for _, r in ipairs(loose) do
+    if r.status ~= "note" then code = 1 end
+    lines[#lines + 1] = string.format("%s%s: %s: %s", tostring(r.op), r.path and (" (" .. r.path .. ")") or "",
+      tostring(r.status), tostring(r.reason))
+  end
+  return lines, code
 end
 
 -- ------------------------------------------------------------- discover
@@ -483,12 +945,6 @@ end
 -- "Inbox - 2 messages".
 local function exact_pattern(text)
   return "^" .. string.gsub(text, "([%^%$%(%)%%%.%[%]%*%+%-%?])", "%%%1") .. "$"
-end
-
-local function clamp(v, lo, hi)
-  if v < lo then return lo end
-  if v > hi then return hi end
-  return v
 end
 
 -- One axis of a window snapped to the grid: the nearest cell edges for its
@@ -557,14 +1013,7 @@ function P.desk_from_world(world, options)
 
   -- A window listed on more than one space is on every space; it is no
   -- space's, so it is said and left out.
-  local seen_on = {}
-  for _, s in ipairs(world.screens or {}) do
-    for _, sp in ipairs(s.spaces or {}) do
-      for _, w in ipairs(sp.windows or {}) do
-        seen_on[w.id] = (seen_on[w.id] or 0) + 1
-      end
-    end
-  end
+  local listed = P.listings(world)
 
   -- The primary first, then the rest by position and uuid, so the same world
   -- always gives the same desk.
@@ -627,7 +1076,7 @@ function P.desk_from_world(world, options)
           unnamed = unnamed + 1
         else
           named = named + 1
-          if seen_on[w.id] > 1 then
+          if listed[w.id].count > 1 then
             everywhere = everywhere + 1
           elseif P.NOT_RECORDED[app_key(w.bundle)] then
             own = own + 1
@@ -725,8 +1174,11 @@ local DESCRIBE = {
     return string.format("place window %s at %d,%d %dx%d", tostring(op.window), op.frame.x, op.frame.y, op.frame.w, op.frame.h)
   end,
   unseen = function(op) return "unseen " .. tostring(op.bundle) end,
-  bind = function(op) return string.format("bind %s to space %s", tostring(op.bundle), tostring(op.space or "(none)")) end,
-  restart_dock = function() return "restart the Dock" end,
+  not_launched = function(op) return "not launching " .. tostring(op.bundle) end,
+  gone = function(op) return "gone " .. tostring(op.bundle) end,
+  unmovable = function(op) return "not moving window " .. tostring(op.window) end,
+  no_space = function(op) return "no space for window " .. tostring(op.window) end,
+  pending = function(op) return "after the new space, window " .. tostring(op.window) end,
 }
 
 function P.plan_report(ops)

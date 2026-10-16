@@ -43,7 +43,7 @@ Named window arrangements (desks) across displays and spaces.
 
 VERBS:
   <desk>                     the same as apply <desk>
-  apply <desk> [--dry-run] [--no-launch] [--no-create] [--bind] [--map <name>=<uuid>]
+  apply <desk> [--dry-run] [--no-launch] [--no-create] [--map <name>=<uuid>]
                              arrange this machine's windows as the desk says
   discover [--grid WxH] [--save <desk>] [--force]
                              print the arrangement on screen now as a desk
@@ -289,15 +289,28 @@ engine_module() {
   printf '%s/opt/arngz/lib/arngz.lua\n' "$UTILZ_HOME"
 }
 
+# A number of seconds from the environment variable NAME, DEFAULT when it is
+# unset; anything but a whole number of seconds is refused.
+seconds_setting() {
+  local name="$1" default="$2" t
+  t="${!name:-$default}"
+  if [[ ! "$t" =~ ^[1-9][0-9]*$ ]]; then
+    refuse "$name = '$t': a whole number of seconds"
+  fi
+  printf '%s\n' "$t"
+}
+
 # How long one engine call may take, in seconds. ARNGZ_HS_TIMEOUT overrides it,
 # which is how the suite makes a call that never answers fail in one second
 # rather than sixty.
 engine_timeout() {
-  local t="${ARNGZ_HS_TIMEOUT:-60}"
-  if [[ ! "$t" =~ ^[1-9][0-9]*$ ]]; then
-    refuse "ARNGZ_HS_TIMEOUT = '$t': a whole number of seconds"
-  fi
-  printf '%s\n' "$t"
+  seconds_setting ARNGZ_HS_TIMEOUT 60
+}
+
+# How long the CLI waits for a scheduled verb's answer, apply's, in seconds
+# (design.md "apply, in order", step 4). ARNGZ_APPLY_TIMEOUT overrides it.
+engine_scheduled_timeout() {
+  seconds_setting ARNGZ_APPLY_TIMEOUT 600
 }
 
 # Ask the engine one thing. Writes {verb, desk, options} to a request file in
@@ -317,7 +330,9 @@ engine_timeout() {
 # form that refuses. It returns
 #   0  the engine answered ok, and its response is ENGINE_RESPONSE
 #   1  nothing answered: hs could not reach Hammerspoon, failed some other
-#      way, or did not answer in time
+#      way, or did not answer in time; or a scheduled verb was taken and not
+#      answered by its deadline, when ENGINE_PENDING is 1, because the engine
+#      may still be running it
 #   2  nothing was asked: the hs tool is not there or would not run, or the
 #      request could not be made
 #   3  the engine answered with an error: an error response, a response that
@@ -325,23 +340,37 @@ engine_timeout() {
 #      from a run hs says finished (exit 0), which is how the engine says it
 #      could not write one (lib/arngz.lua)
 # with why in ENGINE_ERROR and what fixes it in ENGINE_FIX for each but 0.
+# Whenever the engine wrote a response, ENGINE_KIND says what it was: ok,
+# refused (nothing changed), lua_error, or failed when it named no kind (both
+# its own error, which for apply may come after windows moved), or
+# unreadable; it is empty when there was none.
 # ENGINE_DIR is the request's temp dir whenever a request was written, for the
 # caller to keep or remove; when nothing was asked, the dir is already gone.
-# A bad ARNGZ_HS_TIMEOUT is still refused outright, because that is the
-# caller's mistake, not the engine's.
+# A bad ARNGZ_HS_TIMEOUT, or for a scheduled verb a bad ARNGZ_APPLY_TIMEOUT,
+# is refused outright before anything is sent, because that is the caller's
+# mistake, not the engine's.
 #
 # Usage: engine_ask <verb> [<desk file>] [<options JSON file>]
 ENGINE_RESPONSE=""
 ENGINE_ERROR=""
 ENGINE_FIX=""
 ENGINE_DIR=""
+ENGINE_PENDING=0
+ENGINE_KIND=""
+
+# The verbs the engine runs on a timer and answers later (D20 as amended).
+# THE SAME LIST AS `SCHEDULED` in lib/arngz.lua, which arngz.bats holds the
+# two to: the CLI needs its own copy to check the deadline before it sends.
+SCHEDULED_VERBS="apply"
 engine_ask() {
-  local verb="$1" desk_file="${2:-}" options_file="${3:-}" tool state hs fix module timeout dir request response out why rc deadline
+  local verb="$1" desk_file="${2:-}" options_file="${3:-}" tool state hs fix module timeout dir request response out why rc deadline hung=0
   local tmp_fix="make ${TMPDIR:-/tmp} a writable directory, or set TMPDIR to one"
   ENGINE_RESPONSE=""
   ENGINE_ERROR=""
   ENGINE_FIX=""
   ENGINE_DIR=""
+  ENGINE_PENDING=0
+  ENGINE_KIND=""
   # The hs tool as doctor and init tell it, so the three cannot disagree.
   tool="$(hs_tool_state "$(hs_prefix)")"
   IFS=$'\037' read -r state hs fix <<<"$tool"
@@ -351,6 +380,10 @@ engine_ask() {
   fi
   module="$(engine_module)"
   timeout="$(engine_timeout)" || exit 2
+  local waited=""
+  case " $SCHEDULED_VERBS " in
+    *" $verb "*) waited="$(engine_scheduled_timeout)" || exit 2 ;;
+  esac
   if ! dir="$(mktemp -d "${TMPDIR:-/tmp}/arngz.XXXXXX" 2>&1)"; then
     engine_unasked "could not make a temp dir under ${TMPDIR:-/tmp} for the request: $dir" "$tmp_fix"
     return 2
@@ -409,12 +442,47 @@ engine_ask() {
   elif kill -0 "$pid" 2>/dev/null; then
     kill "$pid" 2>/dev/null || true
     wait "$pid" 2>/dev/null || true
-    ENGINE_ERROR="hs did not answer within ${timeout}s and wrote no response"
-    ENGINE_FIX="Hammerspoon is busy or hung: see its console (its menu bar icon: Console), or quit and reopen it"
-    return 1
+    if [[ -z "$waited" ]]; then
+      ENGINE_ERROR="hs did not answer within ${timeout}s and wrote no response"
+      ENGINE_FIX="Hammerspoon is busy or hung: see its console (its menu bar icon: Console), or quit and reopen it"
+      return 1
+    fi
+    # A scheduled verb may have been taken by an hs that then hung (D20): it
+    # is waited for below, never read as nothing having happened.
+    rc=0
+    hung=1
   else
     rc=0
     wait "$pid" || rc=$?
+  fi
+  # A SCHEDULED VERB (D20 as amended): the hs client gives up 4 s after
+  # sending, so apply's work runs on a timer inside Hammerspoon, the IPC call
+  # returns at once saying so, and the response file is the only answer,
+  # waited for on the CLI's own deadline.
+  # Taken when run() said it scheduled the verb, when hs hung after sending,
+  # or when hs gave up with "receive timeout": the message was delivered and
+  # its reply came late (measured, design.md "Measured 16 Oct 2026"), so
+  # Hammerspoon may still take it. Every other outcome is read as it is for
+  # any verb, below.
+  local taken=0
+  if [[ ! -f "$response" && -n "$waited" ]]; then
+    if [[ $hung -eq 1 ]] || { [[ $rc -eq 0 ]] && grep -qxF "arngz: scheduled $verb" "$out"; } ||
+      { [[ $rc -eq 69 ]] && grep -qF "receive timeout" "$out"; }; then
+      taken=1
+    fi
+  fi
+  if [[ $taken -eq 1 ]]; then
+    deadline=$((SECONDS + waited))
+    while [[ ! -f "$response" && $SECONDS -lt $deadline ]]; do
+      sleep 0.2
+    done
+    if [[ ! -f "$response" ]]; then
+      ENGINE_PENDING=1
+      ENGINE_ERROR="the engine was sent $verb and has not answered within ${waited}s; it may still be running"
+      ENGINE_FIX="see Hammerspoon's console (its menu bar icon: Console); a slower $verb takes ARNGZ_APPLY_TIMEOUT=<seconds>"
+      return 1
+    fi
+  elif [[ ! -f "$response" ]]; then
     case "$rc" in
       # The module ran and returned, having written nothing: the engine's own
       # way of saying it could not write its response, on hs's stdout.
@@ -453,6 +521,7 @@ engine_ask() {
   fi
 
   ENGINE_RESPONSE="$response"
+  ENGINE_KIND=unreadable
   local status
   if ! status="$(yq -r '.status' "$response" 2>"$ENGINE_DIR/yq.err")"; then
     ENGINE_ERROR="the engine's response is not JSON: $(tr '\n' ' ' <"$ENGINE_DIR/yq.err")"
@@ -460,10 +529,19 @@ engine_ask() {
     return 3
   fi
   if [[ "$status" != "ok" ]]; then
-    ENGINE_ERROR="the engine refused $verb: $(yq -r '.error' "$response" | tr '\n' ' ')"
-    ENGINE_FIX="$(engine_failing)"
+    # The engine says which: a refusal before anything changed, with its
+    # reason, or its own Lua error (D25).
+    ENGINE_KIND="$(yq -r '.kind // "failed"' "$response")"
+    if [[ "$ENGINE_KIND" == refused ]]; then
+      ENGINE_ERROR="the engine refused $verb: $(yq -r '.error' "$response" | tr '\n' ' ')"
+      ENGINE_FIX="fix what the engine names, then run arngz again"
+    else
+      ENGINE_ERROR="the engine failed on $verb: $(yq -r '.error' "$response" | tr '\n' ' ')"
+      ENGINE_FIX="$(engine_failing)"
+    fi
     return 3
   fi
+  ENGINE_KIND=ok
 }
 
 # Nothing was asked: say why and what fixes it, and remove the request's temp
@@ -834,7 +912,7 @@ read_pref() {
 # The three settings doctor reads from macOS's preferences, one per line:
 #   precondition|domain|key|value when unset|value arngz needs|state at 0|state at 1|fix
 # spans-displays is 0 when each display has its own spaces, macOS's default.
-DOCTOR_PREFS="separate spaces|com.apple.spaces|spans-displays|0|0|on|off|System Settings > Desktop & Dock > Mission Control: turn on Displays have separate Spaces, then log out and in
+MACOS_PREFS="separate spaces|com.apple.spaces|spans-displays|0|0|on|off|System Settings > Desktop & Dock > Mission Control: turn on Displays have separate Spaces, then log out and in
 auto-rearrange|com.apple.dock|mru-spaces|1|0|off|on|System Settings > Desktop & Dock > Mission Control: turn off Automatically rearrange Spaces based on most recent use
 Stage Manager|com.apple.WindowManager|GloballyEnabled|0|0|off|on|System Settings > Desktop & Dock: turn off Stage Manager"
 
@@ -1153,16 +1231,87 @@ cmd_init() {
   init_closing "$yes" "$hs_kind" "$config_kind" "$blocked" "$for_you"
 }
 
+# Every preference in MACOS_PREFS with pref_verdict's record for it, one per
+# line: what, then the verdict's status, state and fix, joined by the unit
+# separator. The one reading of the rows doctor and apply both take.
+each_pref_verdict() {
+  local what domain key unset_value want at0 at1 fix value rc verdict
+  while IFS='|' read -r what domain key unset_value want at0 at1 fix; do
+    rc=0
+    value="$(read_pref "$domain" "$key")" || rc=$?
+    # bash 3.2 runs a command substitution without -e, so a verdict that
+    # fails is stopped here, by name, never printed as an empty record.
+    verdict="$(pref_verdict "$rc" "$value" "$unset_value" "$want" "$at0" "$at1" "$fix")" || return 1
+    printf '%s\037%s\n' "$what" "$verdict"
+  done <<<"$MACOS_PREFS"
+}
+
+# apply's preferences, judged by the one owner of that verdict (D26) before
+# the engine is asked: the first that does not hold refuses, exit 2.
+apply_prefs() {
+  local verdicts what status state fix
+  verdicts="$(each_pref_verdict)" || refuse "apply: the macOS preferences could not be judged"
+  while IFS=$'\037' read -r what status state fix; do
+    if [[ "$status" != ok ]]; then
+      refuse "apply: $what is $state; fix: $fix (arngz doctor checks every precondition)"
+    fi
+  done <<<"$verdicts"
+}
+
+# apply's options as the engine reads them, in a fresh temp dir whose path
+# it prints: no_launch and no_create from 1 or 0, and map from MAPS, one
+# name=uuid per line. Refuses by name when the dir or the file cannot be made.
+apply_options() {
+  local no_launch="$1" no_create="$2" maps="$3" dir options why map
+  if ! dir="$(mktemp -d "${TMPDIR:-/tmp}/arngz-apply.XXXXXX" 2>&1)"; then
+    refuse "apply: could not make a temp dir under ${TMPDIR:-/tmp} for its options: $dir"
+  fi
+  options="$dir/options.json"
+  if ! why="$(NL="$no_launch" NC="$no_create" yq -n -o json \
+    '.no_launch = (env(NL) == 1) | .no_create = (env(NC) == 1) | .map = {}' 2>&1 >"$options")"; then
+    rm -rf -- "$dir"
+    refuse "apply: could not write its options to $options: $why"
+  fi
+  while IFS= read -r map; do
+    if [[ -n "$map" ]]; then
+      if ! why="$(K="${map%%=*}" V="${map#*=}" yq -i -o json '.map[strenv(K)] = strenv(V)' "$options" 2>&1)"; then
+        rm -rf -- "$dir"
+        refuse "apply: could not write --map $map to $options: $why"
+      fi
+    fi
+  done <<<"$maps"
+  printf '%s\n' "$dir"
+}
+
+# apply (design.md "apply, in order"): validate, then either the engine's
+# plan printed (--dry-run, no apply request sent) or the preferences judged
+# and one apply request, whose report is printed and whose exit code is the
+# engine's: 0 every entry placed, 1 any skipped, unseen or failed. A refusal
+# before anything changed is 2. There is no --bind (D10, AC-05.6): it is
+# refused as the unknown option it is.
 cmd_apply() {
-  local desk=""
+  local desk="" dry=0 no_launch=0 no_create=0 map name maps="" dir options rc code
   while [[ $# -gt 0 ]]; do
     case "$1" in
-      --dry-run | --no-launch | --no-create | --bind) shift ;;
-      --map)
-        if [[ $# -lt 2 ]]; then refuse "--map takes <name>=<uuid>"; fi
-        shift 2
+      --dry-run) dry=1; shift ;;
+      --no-launch) no_launch=1; shift ;;
+      --no-create) no_create=1; shift ;;
+      --map | --map=*)
+        if [[ "$1" == --map ]]; then
+          if [[ $# -lt 2 ]]; then refuse "--map takes <name>=<uuid>"; fi
+          map="$2"
+          shift 2
+        else
+          map="${1#--map=}"
+          shift
+        fi
+        if [[ "$map" == *$'\n'* || ! "$map" =~ ^[^=]+=.+$ ]]; then refuse "--map = '$map': it takes <name>=<uuid>"; fi
+        name="${map%%=*}"
+        case $'\n'"$maps" in
+          *$'\n'"$name="*) refuse "--map $name is given twice" ;;
+        esac
+        maps="$maps$map"$'\n'
         ;;
-      --map=*) shift ;;
       -*) refuse "unknown option for apply: '$1'" ;;
       *)
         if [[ -n "$desk" ]]; then refuse "apply takes one desk, not '$desk' and '$1'"; fi
@@ -1173,7 +1322,54 @@ cmd_apply() {
   done
   if [[ -z "$desk" ]]; then refuse "apply takes a desk: arngz apply <desk>"; fi
   validate_desk "$desk" || exit 2
-  refuse "apply: not yet: WP-05"
+  if [[ $dry -eq 0 ]]; then
+    apply_prefs
+  fi
+
+  dir="$(apply_options "$no_launch" "$no_create" "$maps")" || exit 2
+  options="$dir/options.json"
+
+  rc=0
+  if [[ $dry -eq 1 ]]; then
+    engine_ask plan "$(desk_file "$desk")" "$options" || rc=$?
+  else
+    engine_ask apply "$(desk_file "$desk")" "$options" || rc=$?
+  fi
+  rm -rf -- "$dir"
+  if [[ $rc -ne 0 && $ENGINE_PENDING -eq 1 ]]; then
+    # Taken and not answered: windows may be moving, so this is not "nothing
+    # changed" (design.md "apply, in order", step 4).
+    error "arngz: $ENGINE_ERROR (request kept at $ENGINE_DIR/request.json); fix: $ENGINE_FIX"
+    exit 1
+  fi
+  if [[ $rc -eq 3 && $dry -eq 0 && "$ENGINE_KIND" != refused && -n "$ENGINE_RESPONSE" ]]; then
+    # The engine answered, and not with a refusal: its own failure may come
+    # after windows moved, so this is never "nothing changed".
+    error "arngz: $ENGINE_ERROR; its response is kept at $ENGINE_RESPONSE; fix: $ENGINE_FIX"
+    exit 1
+  fi
+  if [[ $rc -ne 0 ]]; then
+    engine_refuse
+  fi
+  if [[ $dry -eq 1 ]]; then
+    if ! render_report "$ENGINE_RESPONSE"; then
+      refuse "the engine's plan could not be printed (kept at $ENGINE_RESPONSE)"
+    fi
+    rm -rf -- "$ENGINE_DIR"
+    return 0
+  fi
+  # From here apply has run: a failure to say how it went is exit 1, with the
+  # response kept, never "nothing changed".
+  if ! render_report "$ENGINE_RESPONSE"; then
+    error "arngz: apply ran, and its report could not be printed; its response is kept at $ENGINE_RESPONSE"
+    exit 1
+  fi
+  if ! code="$(yq -r '.exit' "$ENGINE_RESPONSE" 2>&1)" || [[ "$code" != 0 && "$code" != 1 ]]; then
+    error "arngz: apply ran, and its exit code reads '$code', not 0 or 1; its response is kept at $ENGINE_RESPONSE"
+    exit 1
+  fi
+  rm -rf -- "$ENGINE_DIR"
+  exit "$code"
 }
 
 # diff: what apply would do, one line per op with its reason, and nothing done.
@@ -1311,12 +1507,13 @@ cmd_doctor() {
   doctor_check IPC ipc_verdict "$outcome" "$hs" "$ENGINE_ERROR" "$ENGINE_FIX"
   doctor_check Accessibility accessibility_verdict "$outcome" "$granted" "$ENGINE_ERROR" "$ENGINE_FIX" "$kept"
 
-  local what domain key unset_value want at0 at1 value rc
-  while IFS='|' read -r what domain key unset_value want at0 at1 fix; do
-    rc=0
-    value="$(read_pref "$domain" "$key")" || rc=$?
-    doctor_check "$what" pref_verdict "$rc" "$value" "$unset_value" "$want" "$at0" "$at1" "$fix"
-  done <<<"$DOCTOR_PREFS"
+  local verdicts what status
+  # Taken whole first, so a reading that fails stops doctor rather than
+  # printing nothing for it.
+  verdicts="$(each_pref_verdict)" || refuse "doctor: the macOS preferences could not be judged"
+  while IFS=$'\037' read -r what status state fix; do
+    doctor_check "$what" record "$status" "$state" "$fix"
+  done <<<"$verdicts"
 
   if [[ $DOCTOR_FAILED -gt 0 ]]; then
     printf 'arngz doctor: %d of %d preconditions do not hold\n' "$DOCTOR_FAILED" "$DOCTOR_LINES"

@@ -4,9 +4,11 @@
 --
 -- Usage: <lua> discover_response.lua <plan.lua> <worlds.lua> discover <world> [<grid>] [<name>]
 --        <lua> discover_response.lua <plan.lua> <worlds.lua> plan <world> <desk>
+--        <lua> discover_response.lua <plan.lua> <worlds.lua> apply <results> <desk>
 --
--- <world> and <desk> name functions in worlds.lua (eg discover_world,
--- base_world, base_desk). A test-only JSON encoder, because plain Lua has none;
+-- <world>, <desk> and <results> name functions in worlds.lua (eg
+-- discover_world, base_world, base_desk, launch_skipped_results). An apply
+-- response's report and exit code come from the real apply_report. A test-only JSON encoder, because plain Lua has none;
 -- keys are written in sorted order, and the CLI reorders them anyway.
 
 -- dofile(nil) would read Lua from stdin and wait there, so the paths are
@@ -62,7 +64,11 @@ elseif verb == "plan" then
   else
     response = { status = "error", verb = "plan", error = err }
   end
+elseif verb == "apply" then
+  local results = F[arg[4]]()
+  local report, code = P.apply_report(F[arg[5]](), results)
+  response = { status = "ok", verb = "apply", results = results, report = report, exit = code }
 else
-  error("verb is discover or plan, not " .. tostring(verb))
+  error("verb is discover, plan or apply, not " .. tostring(verb))
 end
 print(encode(response))
