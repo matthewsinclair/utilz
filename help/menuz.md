@@ -45,12 +45,18 @@ menuz adds no syntax of its own. A label or a shell line is expanded by the logi
 
 The app watches the directory and the file. A save, an editor's atomic rename, or a `git checkout` of the directory reaches the menu within a second, with no restart. **Reload** in the menu is for the one case the watcher misses.
 
+### Finding menuz in the menu bar
+
+menuz shows its own mark in the menu bar. `icon:` in the file names an SF Symbol to show instead, any name the SF Symbols app lists; pick one you can find at a glance, since a full menu bar is where you will be looking for it.
+
+macOS puts a new menu bar item at the left of the others, and a full menu bar hides what does not fit behind its overflow. If you cannot see menuz, show the hidden items, then hold Command and drag menuz's icon to where you want it; macOS keeps that place from then on. Until it has one, menuz says so when it starts, in the log and as a notification: `menuz is in the menu bar; on a full bar it may be hidden behind the overflow: hold Command and drag its icon where you want it`.
+
 ### The menu file
 
 <!-- prettier-ignore -->
 ```yaml
 # ~/.config/menuz/menuz.yaml
-icon: terminal        # an SF Symbol name for the menu bar glyph; "terminal" when absent
+# icon: terminal      # an SF Symbol name for the menu bar glyph; menuz's own mark when absent
 cwd: ~                # where runs start unless an item says otherwise; $HOME when absent
 notify: failure       # never | failure | always; what a run's end posts as a notification
 realise: 5            # seconds a menu open waits for its labels at most; 5 when absent
@@ -149,7 +155,7 @@ Every run appends to `${XDG_STATE_HOME:-$HOME/.local/state}/menuz/menuz.log`, wh
 
 The start line prints the `cwd` and the `run` line as written, before the shell expands them, so `cwd=~` stays `~`; with no `cwd` in the item or the file it prints `$HOME`'s value. A parameter's value reaches the run only through its environment, which is what keeps a secret's value out of the log. Each output line carries its run's id, so concurrent runs interleave legibly. Two more lines are the app's: `<time> run <id> cancelled "<label>"` when a form is cancelled, and `<time> quit; runs still going: <ids>`, the ids separated by commas, or `none`, when the app quits.
 
-A run that exits non-zero posts a macOS notification, `"<label>" exited <code>`. `notify: always` posts one at every finish, with the run's last line of output after a colon, and `notify: never` posts none. The run posts its own notice, so one that outlives the app still sends it. A line the app cannot write to the log is reported in the app's own log and as a notification, never dropped.
+A run that exits non-zero posts a macOS notification, `"<label>" exited <code>`. `notify: always` posts one at every finish, with the run's last line of output after a colon, and `notify: never` posts none. Notices come through macOS's notification centre under menuz's name, posted by the app's own executable at the run's end, so a run that outlives the app still sends one. The log says which: `[<id>] notice posted`, or `[<id>] notice not posted: notifications are off for menuz under System Settings > Notifications` when they are turned off there, or the centre's own reason. System Settings > Notifications > menuz is also where you choose how they show. A line the app cannot write to the log is reported in the app's own log and as a notification, never dropped.
 
 ### The validator
 
