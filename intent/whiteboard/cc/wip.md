@@ -21,7 +21,7 @@ _(none)_
 
 ## Holds
 
-- ST0026 WP-05 (apply): held until vc sends the WP-05 brief, which waits on two measurements, the Dock binding by defaults write and the drag (hv's hands off). vc verified WP-04 at 00a93b3 (16 Oct), and measured at 08:54Z that the Dock's own This Desktop binding is honoured on macOS 27.
+- ST0026 WP-05 (apply): held until vc sends the WP-05 brief, which waits on two measurements: whether a Dock binding takes at all (the deciding test binds Calculator to a built-in desktop other than its last and needs hv's window), and the drag (hv's hands off). vc verified WP-04 at 00a93b3 (16 Oct). Not yet shown: that any binding, the Dock's own or a defaults write, does anything; vc's 08:54Z result was confounded by Calculator's last window position, and vc retracted it. Measured: the Dock writes nothing beyond app-bindings, so if bindings work, defaults write is enough. (edited)
 
 ## Watch-outs
 
