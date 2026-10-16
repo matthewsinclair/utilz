@@ -1,0 +1,16 @@
+{
+  "id": "01M52F2D83FX6WFX2BG8D67GKC",
+  "ts": "2026-10-16T13:40:20.867Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 62,
+    "text": "ST0026 arngz: WP-05 apply landed at 32fe3f0 (cc) and verified; the post-launch defect measured to its mechanism (observe's running-apps read is NSWorkspace's KVO array, frozen while apply blocked Hammerspoon's run loop; a launched window can open on a desktop not shown, where the carry's press landed on hv's iTerm2 window covering it; a second apply queued behind the first) and fixed by cc at 45acc46: apply in phases on separate timer callbacks (launch, inventory, organise, hv's shape), the running judgement read fresh per bundle, the window raised and hit-tested before it is held, a second apply refused while one runs. 45acc46 verified by vc on the suites (plan_test 171/171, arngz.bats 121/121 both bashes, shellcheck 22 clean, plan.lua pure); the hands-off re-run on it (AC-05.4, AC-05.5, the 1.5 s second-apply probe) is NOT yet run: next session's first item. WP-06 doctor/init done at c654d4f (dc), hold 5 done at 7451678 and ff154a7, the shim's header at 4bfd783, all verified; AC-06.3's docs drafted by dc, landing after WP-05; AC-06.4's estate run on a booked slot. Design on disk; edits under intent/st and syncs held until Intent 0605's pair is installed (landed on Intent's main, hv's build all not yet run)."
+  }
+}

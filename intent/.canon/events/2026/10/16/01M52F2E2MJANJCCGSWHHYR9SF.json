@@ -1,0 +1,16 @@
+{
+  "id": "01M52F2E2MJANJCCGSWHHYR9SF",
+  "ts": "2026-10-16T13:40:21.716Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "hold",
+    "seq": 10,
+    "text": "Next session, in order: (1) The hands-off re-run on cc's 45acc46: tmp/vc-st0026/verify-sha.sh 45acc46 makes the detached worktree (and re-verifies), then tmp/vc-st0026/st0026/rerun-handrun.sh <that worktree> on hv's machine with hv's hands off, about three minutes with the pointer taken: it snapshots the active spaces, opens TextEdit's document on the shown desktop, carries it to desktop 4 with the scramble desk so the scramble is real, runs acceptance.sh apply handrun and launch handrun com.apple.Dictionary, fires a second apply 1.5 s into a slow one (expected: refused, exit 2), quits both apps, steps the built-in display back to the desktop it showed, and compares the snapshot. Dictionary opens on hv's desktop 3 behind the iTerm2 window, so the raise-and-hit-test path is exercised. Then AT-05.4 and AT-05.5 green with the hand-run facts in their notes (machine, macOS 27.0.1 build 26A434, Hammerspoon 1.1.1, the numbers), AC-05.6 satisfied on the read, WP-05 done; then dc lands AC-06.3 from its draft (its NOTES.md is the procedure; three markers resolve from the re-run's transcript) and AC-06.4's estate run on a slot booked with intent-vc. (2) intent-vc's step 2 all-clear (after hv's build all installs Intent's fixed pair; 0605 is landed on Intent's main): run the sync half of tmp/vc-st0026/st0027/mint-acs.sh (intent sync --to-store ST0027), take the drafted-criteria section out of ST0027/design.md, commit; cc syncs its ST0026 notes (hold 12: the init exit column, --dry-run, D25, the op table, and the phases note from its scratchpad, with step 4 reworded: a second apply while one runs is refused, exit 2, and one arriving as the first ends runs after it; reads answered between phases). Until then: no sync --to-store, no hand edit under intent/st (if unavoidable, intent index rebuild straight after and tell intent-vc). (3) The menuz rubber-duck with hv on ST0027 design.md's Q1 to Q11; D1 to D11 recorded; WP-01 done; then intent lang init swift and WP-02. (4) hold 9's list stands. (5) The box is shared with Intent and devbin through intent-vc's START/END: ask before anything heavy."
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "id": "01M52F2DP6EW3MJBX3RXXF1N56",
+  "ts": "2026-10-16T13:40:21.318Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "hold",
+    "seq": 9,
+    "text": "Carried: (1) the hand runs' scripts, transcripts and probes are banked under tmp/vc-st0026/ (git-ignored; the scratchpad under /private/tmp may not survive a reboot): verify-sha.sh, st0026/rerun-handrun.sh, st0026/restore-space.lua, st0026/launch-probe.lua, st0026/dbg-lib/, observe-until.log, handrun-*.txt, verify-*.txt, st0027/mint-acs.sh; (2) git worktree prune when the scratchpad goes (wt-c21f319, wt-13552bc, wt-3e11cb4, wt-88c57ad, wt-32fe3f0, wt-9907e17, wt-ff154a7, wt-4bfd783, wt-45acc46); (3) the spike's files in /tmp/arngz-spike2/ and dc's scratchpad go at reboot; (4) intent sync --to-disk once, if the file index still misses the two AC writes of 09:5xZ; (5) install_e2e.bats has not run since the store blew up (it copies the primary checkout, intent/.cache included): run it from the primary checkout once the store is back to size and before 2.13.0; (6) three desks of vc's sit in hv's catalogue ~/.config/arngz/desks/ (handrun, scramble, launchprobe) until the hand runs are done, then delete them."
+  }
+}
