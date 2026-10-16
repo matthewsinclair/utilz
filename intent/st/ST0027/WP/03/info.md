@@ -2,7 +2,7 @@
 wp_id: WP-03
 title: The app: the menu from the file, watched, realised at open
 scope: S
-status: WIP
+status: Done
 ---
 
 # WP-03: The app: the menu from the file, watched, realised at open

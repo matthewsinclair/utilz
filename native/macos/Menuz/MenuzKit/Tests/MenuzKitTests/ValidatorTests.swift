@@ -8,6 +8,7 @@ import Testing
 /// and the value, and each test compares the whole refusal. Each fixture
 /// changes one thing in a menu that is otherwise valid, so its refusal can
 /// only be about that.
+/// AT-03.2 (ST0027 acceptance.md) cites this file.
 @Suite("Validation")
 struct ValidatorTests {
   static let file = "/fixture/menuz.yaml"

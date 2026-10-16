@@ -5,7 +5,7 @@
     "name": "Validation Claude",
     "role": "validation",
     "session_id": "3341dbaf-a82f-4073-bae3-2f8c30306f25",
-    "heartbeat_at": "2026-10-16T17:56:33.591Z",
+    "heartbeat_at": "2026-10-16T18:27:44.095Z",
     "status": "active",
     "focus": "16 Oct evening, after hv's project-wide compact: 2.13.0 complete (tag 01cf76d on both remotes, CI record green, formula bump c3a75fc on main; the tap's copy, brew audit and the tap push are hv's). ST0027 menuz: WP-01 and WP-02 done, WP-03 (the app) is cc's, now unblocked (hold 15's condition met); cc tells vc before its first swift test and first xcodebuild and vc books them with intent-vc; vc verifies each SHA in a worktree; dc recuts help/menuz.md at WP-03's SHA on vc's word; AC-03.3 is vc's hand run on hv's machine. cc and dc take instructions from vc.",
     "claims": [
@@ -1261,10 +1261,10 @@
       "node": "vc",
       "kind": "hold",
       "seq": 9,
-      "text": "Carried: (1) the hand runs' scripts, transcripts and probes are banked under tmp/vc-st0026/ (git-ignored; the scratchpad under /private/tmp may not survive a reboot): verify-sha.sh, verify-*.txt, handrun-rerun-*.txt, dictprobe-f8c2827.txt, check-all-da23005.txt, test-estate-da23005.txt, st0026/{rerun-handrun.sh,dict-probe.sh,read-mid-apply.sh,restore-space.lua,launch-probe.lua,grab-probe*,dbg-lib/,desks/}, st0027/{mint-acs.sh,decisions.md,design.md,objective.md,context.md}; (2) git worktree prune when the scratchpad goes (wt-c21f319, wt-13552bc, wt-3e11cb4, wt-88c57ad, wt-32fe3f0, wt-9907e17, wt-ff154a7, wt-4bfd783, wt-45acc46, wt-f8c2827, wt-51fe5d9); (3) the spike's files in /tmp/arngz-spike2/ and dc's scratchpad go at reboot; (4) intent sync --to-disk once, if the file index still misses the two AC writes of 09:5xZ; (5) install_e2e.bats ran in the estate at da23005 on 16 Oct (its copy carried the 4.9 GB store and passed), so that hold is closed; a VACUUM of intent/.cache/intent.db stays hv's call; (6) the four hand-run desks are deleted from hv's catalogue, copies at tmp/vc-st0026/st0026/desks/.",
+      "text": "Carried: (1) the hand runs' scripts, transcripts and probes are banked under tmp/vc-st0026/ (git-ignored; the scratchpad under /private/tmp may not survive a reboot): verify-sha.sh, verify-*.txt, handrun-rerun-*.txt, dictprobe-f8c2827.txt, check-all-da23005.txt, test-estate-da23005.txt, st0026/{rerun-handrun.sh,dict-probe.sh,read-mid-apply.sh,restore-space.lua,launch-probe.lua,grab-probe*,dbg-lib/,desks/}, st0027/{mint-acs.sh,decisions.md,design.md,objective.md,context.md,verify-wp03.sh,ac033-watcher.sh}; verify-wp03.sh <sha> [--build] verifies a WP-03 SHA in a worktree (the compiles only with --build, after intent-vc's START) and ac033-watcher.sh <Menuz.app> is AC-03.3's hands-off run (OSLog-timed reloads after a save, an atomic rename, and a delete and recreate of MENUZ_HOME). (2) git worktree prune when the scratchpad goes (wt-c21f319, wt-13552bc, wt-3e11cb4, wt-88c57ad, wt-32fe3f0, wt-9907e17, wt-ff154a7, wt-4bfd783, wt-45acc46, wt-f8c2827, wt-51fe5d9, wt-26924e9, wt-d2be9e4, wt-4e34217). (3) the spike's files in /tmp/arngz-spike2/ and dc's scratchpad go at reboot. (4) intent sync --to-disk once, if the file index still misses the two AC writes of 09:5xZ. (5) install_e2e.bats ran in the estate at da23005 on 16 Oct (its copy carried the 4.9 GB store and passed), so that hold is closed; the VACUUM was run on hv's word (5.3 GB to 23 MB). (6) the four hand-run desks are deleted from hv's catalogue, copies at tmp/vc-st0026/st0026/desks/.",
       "state": "live",
       "recorded_at": "2026-10-16T09:56:09.768Z",
-      "edited_at": "2026-10-16T16:44:30.090Z"
+      "edited_at": "2026-10-16T18:03:13.654Z"
     },
     {
       "node": "vc",
@@ -1279,10 +1279,10 @@
       "node": "vc",
       "kind": "doing",
       "seq": 63,
-      "text": "ST0027 menuz: WP-01 and WP-02 Done on 16 Oct. hv ruled Q1 to Q11 (D1 to D11 in design.md's Decisions, in the store): one typed form for params (types text, secret, choice, file, folder; text when absent), the app at native/macos/Menuz with the installed copy at ~/Applications/Menuz.app and use dev|installed (installed when absent), Intent's signing, runs left running. The shim (init, edit, log, validate, render, status) is on main at 4e34217, verified by vc (38/38 both bashes), AT-02.1 to AT-02.3 green, the example fixed at 04a331d; cc is replacing one test's read of design.md (a dehydrated view after the close) with init's own contract. WP-03 (the app) is cc's on vc's instruction: an Xcode build is heavier than a suite, so cc tells vc before the first xcodebuild and vc books it with intent-vc. dc's help/menuz.md WP-02 cut lands over cc's file at 4e34217; README and CHANGELOG at WP-05. AC-03.3 (the watcher's latency) is vc's hand run on hv's machine.",
+      "text": "ST0027 menuz: WP-01 and WP-02 Done on 16 Oct. hv ruled Q1 to Q11 (D1 to D11 in design.md's Decisions, in the store): one typed form for params (types text, secret, choice, file, folder; text when absent), the app at native/macos/Menuz with the installed copy at ~/Applications/Menuz.app and use dev|installed (installed when absent), Intent's signing, runs left running. WP-03 (the app) is cc's: 370fa77 on st0027-wp03 verified by vc in a worktree on 16 Oct evening (swift test 76/76, Debug xcodebuild and xcodebuild test green, every arm as the objective says, signed with the team) with two findings back to cc before it lands: menuz.bats tests 31 and 34 read the real tree's native/macos/Menuz (red 2 of 38 both bashes), and the login-item registration must be the installed copy's only (a Debug product would register itself at hv's login). The design carries cc's two settled points (MenuzKit as a local package the app links, a29f3b0; the models built in the validator's one walk, c7f6ef1). dc's help/menuz.md validate/render paragraph (4c56e81) is being checked against the dev product's arms, landed on vc's word. AC-03.3 is vc's hands-off run (tmp/vc-st0026/st0027/ac033-watcher.sh) after cc's login-item fix. The box is booked with intent-vc (START 18:12Z) until vc's END after the re-verify.",
       "state": "live",
       "recorded_at": "2026-10-16T11:14:56.955Z",
-      "edited_at": "2026-10-16T17:49:31.924Z"
+      "edited_at": "2026-10-16T18:25:34.466Z"
     },
     {
       "node": "vc",

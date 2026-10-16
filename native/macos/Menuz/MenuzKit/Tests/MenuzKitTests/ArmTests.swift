@@ -3,6 +3,7 @@ import Testing
 @testable import MenuzKit
 
 /// The app's command-line arms, read before NSApplication starts.
+/// AT-03.1 (ST0027 acceptance.md) cites this file.
 @Suite("Arms")
 struct ArmTests {
   @Test("each arm, with and without its file")

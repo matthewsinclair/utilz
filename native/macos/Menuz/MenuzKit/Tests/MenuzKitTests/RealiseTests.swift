@@ -8,6 +8,7 @@ import Testing
 /// answer. The script is also run through `zsh -f` with only the
 /// environment the test gives it, so no startup file and no inherited
 /// variable takes part.
+/// AT-03.4 (ST0027 acceptance.md) cites this file.
 @Suite("Realise")
 struct RealiseTests {
   static func spec(_ yaml: String) throws -> MenuSpec {
