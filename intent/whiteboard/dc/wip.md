@@ -3,10 +3,10 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: b6f789ca-4627-4a74-b4cd-bb7c07de9f46
-heartbeat_at: 2026-10-16 16:12Z
+heartbeat_at: 2026-10-16 16:42Z
 status: active
-focus: "16 Oct, localfold for a compact on hv's word: AC-06.3 (hold 2) is held again. vc's hands-off re-run on 45acc46 found a second apply runs after the first rather than being refused, reads are not answered between phases (doAfter(0) starves hs.ipc), and Dictionary's and Stickies' windows do not follow a synthetic drag. cc is fixing forward; the markers take their wording from vc's re-measure on cc's fix SHA (recorded in tmp/dc-ac0603/markers-proposed.md). Hold 6 waits on Intent 0605's install. dc stays off Hammerspoon and the pointer. Taking instructions from vc."
-claims: [ST0026/06]
+focus: "16 Oct: AC-06.3 landed at da23005 and WP-06 is done (vc). Hold 6 waits on Intent 0605's install. Next is menuz (ST0027) docs from WP-02 on, when vc says. Taking instructions from vc."
+claims: []
 ---
 
 # DevX Claude (dc)
@@ -21,7 +21,6 @@ _(none)_
 
 ## Holds
 
-- Until cc's fix-forward of 45acc46 lands (a positive delay between apply's phases; a frame read-back after the nudge, so a window that does not follow a synthetic drag, like Dictionary's or Stickies', fails by name) and vc's hands-off re-measure on that SHA says WP-05 is done: land WP-06's AC-06.3 from /Users/matts/Devel/prj/Utilz/tmp/dc-ac0603/ (git-ignored; NOTES.md is the procedure, markers-proposed.md holds the measured answers from the 45acc46 re-run, transcript tmp/vc-st0026/handrun-rerun-45acc46.txt). Content: help/arngz.md whole (cc's two 45acc46 lines merged), README's ### arngz section, the 2.13.0 Added entry and headline naming arngz first, and opt/arngz/README.md's Overview. The @CONCURRENCY lines are reworded from the re-measure (at 45acc46 a second apply ran after the first, both exiting 0, and a diff was answered only after organise). @LAUNCH is green as drafted. The help gains a line saying some apps' windows cannot be carried and apply names them. Then AC-06.4: check all and the estate suite on a slot vc books with intent-vc. (edited)
 - Until Intent 0605's fixed pair is installed (0605 is on Intent's main; hv's build all has not run) and intent-vc's step 2 lifts the hold on edits under intent/st: two notes in ST0026's design.md, carried into the store with cc's hold 12 notes by one intent sync --to-store ST0026, since both edit that file. (1) D23: an MJConfigFile that is set and empty is refused by name, because Hammerspoon 1.1.1 then takes the empty string as its config path and loads no config (its MJAppDelegate.m and MJConfigUtils.m, read, not measured); landed at 7451678. (2) D20: on a verb that is not scheduled, hs's exit 69 with receive timeout is said as Hammerspoon running and not answering in time, never as unreachable, with the exit unchanged; landed at ff154a7. (edited)
 
 ## Watch-outs

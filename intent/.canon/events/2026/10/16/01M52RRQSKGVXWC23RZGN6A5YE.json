@@ -1,0 +1,16 @@
+{
+  "id": "01M52RRQSKGVXWC23RZGN6A5YE",
+  "ts": "2026-10-16T16:29:49.747Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "hold",
+    "seq": 2,
+    "text": "Until vc books a slot for AC-06.4: check all and the estate suite (AC-06.3 landed at da23005, worded from vc's re-run on f8c2827). Stay off Hammerspoon and the pointer meanwhile."
+  }
+}
