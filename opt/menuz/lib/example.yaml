@@ -1,0 +1,30 @@
+# ~/.config/menuz/menuz.yaml
+icon: terminal        # an SF Symbol name for the menu bar glyph; "terminal" when absent
+cwd: ~                # where runs start unless an item says otherwise; $HOME when absent
+notify: failure       # never | failure | always; what a run's end posts as a notification
+realise: 5            # seconds a menu open waits for its labels at most; 5 when absent
+
+menu:
+  - header: Desks
+  - each: ls "${XDG_CONFIG_HOME:-$HOME/.config}/arngz/desks" 2>/dev/null | sed 's/\.yaml$//'
+    label: "$MENUZ_ITEM"
+    run: arngz apply "$MENUZ_ITEM"
+  - label: Discover this arrangement
+    params:
+      - name: desk
+        type: string
+        prompt: Save the arrangement on screen now as
+        default: today
+    run: arngz discover --save "$desk" --force
+  - label: Hammerspoon doctor
+    run: arngz doctor
+    notify: always
+  - separator: true
+  - submenu: Machine
+    items:
+      - label: "Up $(uptime | sed 's/.*up //; s/,.*//')"
+      - label: Sleep the display
+        run: pmset displaysleepnow
+      - label: Empty the Trash
+        run: osascript -e 'tell application "Finder" to empty trash'
+        cwd: ~/.Trash

@@ -24,7 +24,7 @@ _utilities() {
   done
 }
 
-_expected_count=16
+_expected_count=17
 
 @test "AT01 / AC03: the population is the whole set, and a narrowed sweep fails loudly" {
   local n

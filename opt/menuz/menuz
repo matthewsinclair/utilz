@@ -1,0 +1,395 @@
+#!/usr/bin/env bash
+#
+# menuz - A menu bar app whose menu is a YAML file of commands to run
+#
+# ST0027. This file is the shim: it manages the config directory and the log,
+# and asks the app (Menuz.app, built from native/macos/Menuz) everything about
+# the menu itself, so the yaml is parsed in one place. WP-02 is the verbs that
+# need no Xcode; build, test, install, use and the rest of the app verbs are
+# WP-05.
+#
+
+set -euo pipefail
+
+# Source common functions if not already loaded (from dispatcher)
+if [[ "$(type -t info 2>/dev/null)" != "function" ]]; then
+  SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+  UTILZ_HOME="${UTILZ_HOME:-$(cd "$SCRIPT_DIR/../.." && pwd)}"
+
+  if [[ -f "$UTILZ_HOME/opt/utilz/lib/common.sh" ]]; then
+    source "$UTILZ_HOME/opt/utilz/lib/common.sh"
+  else
+    echo "ERROR: Cannot find common.sh library" >&2
+    exit 1
+  fi
+fi
+
+# ============================================================================
+# USAGE
+# ============================================================================
+
+usage() {
+  cat <<EOF
+Usage: menuz <verb> [ARGS]
+
+A menu bar app whose menu is a YAML file of commands to run.
+
+VERBS:
+  init [--force]             create the config directory with the example menu
+                             and an empty bin/; --force overwrites the menu
+  edit [--editor]            open the menu with open -t; --editor uses \$VISUAL,
+                             else \$EDITOR
+  log [-n N]                 print the log's path, then follow it; -n N prints
+                             the last N lines instead
+  validate [file]            the app's validation of the menu, or of a file
+  render [file]              the menu as the app would show it
+  status                     installed, which build use selects, running,
+                             login item, and whether the source is current
+
+The config directory is \${MENUZ_HOME:-\${XDG_CONFIG_HOME:-\$HOME/.config}/menuz}.
+The log is \${XDG_STATE_HOME:-\$HOME/.local/state}/menuz/menuz.log.
+
+For detailed help, run: utilz help menuz
+EOF
+}
+
+# A refusal: what refused, and exit 2 because nothing has changed.
+refuse() {
+  error "menuz: $*"
+  exit 2
+}
+
+# ============================================================================
+# PATHS (one function each)
+# ============================================================================
+
+config_dir() {
+  printf '%s\n' "${MENUZ_HOME:-${XDG_CONFIG_HOME:-$HOME/.config}/menuz}"
+}
+
+menu_file() {
+  printf '%s/menuz.yaml\n' "$(config_dir)"
+}
+
+state_dir() {
+  printf '%s/menuz\n' "${XDG_STATE_HOME:-$HOME/.local/state}"
+}
+
+log_file() {
+  printf '%s/menuz.log\n' "$(state_dir)"
+}
+
+example_file() {
+  printf '%s/opt/menuz/lib/example.yaml\n' "$UTILZ_HOME"
+}
+
+source_dir() {
+  printf '%s/native/macos/Menuz\n' "$UTILZ_HOME"
+}
+
+installed_bundle() {
+  printf '%s/Applications/Menuz.app\n' "$HOME"
+}
+
+dev_bundle() {
+  printf '%s/build/macos/Build/Products/Debug/Menuz.app\n' "$(state_dir)"
+}
+
+# Where use's choice is recorded. WP-05's use verb writes it.
+use_record() {
+  printf '%s/use\n' "$(state_dir)"
+}
+
+app_binary() {
+  printf '%s/Contents/MacOS/Menuz\n' "$1"
+}
+
+# ============================================================================
+# WHICH BUILD
+# ============================================================================
+
+# The build use selects, as "<dev|installed><US><why>": the one its record
+# names, else the installed copy when there is one, else the dev build.
+selected_build() {
+  local record choice
+  record="$(use_record)"
+  if [[ -f "$record" ]]; then
+    choice="$(tr -d '[:space:]' <"$record")"
+    case "$choice" in
+      dev | installed) printf '%s\037by %s\n' "$choice" "$record" ;;
+      *) refuse "$record holds '$choice', not dev or installed" ;;
+    esac
+  elif [[ -d "$(installed_bundle)" ]]; then
+    printf 'installed\037default\n'
+  else
+    printf 'dev\037default\n'
+  fi
+}
+
+bundle_for() {
+  if [[ "$1" == dev ]]; then dev_bundle; else installed_bundle; fi
+}
+
+# The selected app's binary, or a refusal naming where it looked. When use
+# has no record, the other build is tried too, so the refusal names both.
+require_app() {
+  local sel choice why bin
+  # Explicit: this runs inside a command substitution, where errexit is off,
+  # so a refusal in selected_build would otherwise end only its own subshell.
+  sel="$(selected_build)" || exit $?
+  choice="${sel%%$'\037'*}"
+  why="${sel#*$'\037'}"
+  bin="$(app_binary "$(bundle_for "$choice")")"
+  if [[ -x "$bin" ]]; then
+    printf '%s\n' "$bin"
+    return 0
+  fi
+  if [[ "$why" == default ]]; then
+    bin="$(app_binary "$(dev_bundle)")"
+    if [[ -x "$bin" ]]; then
+      printf '%s\n' "$bin"
+      return 0
+    fi
+    refuse "no Menuz app is built or installed: looked for $(app_binary "$(installed_bundle)") and $(app_binary "$(dev_bundle)")"
+  fi
+  refuse "use selects the $choice build ($why), and $bin is not there"
+}
+
+# ============================================================================
+# THE SOURCE STAMP
+# ============================================================================
+
+# The stamp of the app's sources, as Gtools stamps its own: HEAD's listing of
+# native/macos/Menuz without the test target, and when the working tree
+# differs there, each changed path with a digest of its content, ending
+# -dirty. Empty when there is no source here or it is not under git; a git
+# that fails after that is an error, returned as 1 with why on stderr.
+source_stamp() {
+  local dir listing porcelain changes rec path digest
+  dir="$(source_dir)"
+  [[ -d "$dir" ]] || return 0
+  listing="$(git -C "$UTILZ_HOME" ls-tree -r HEAD -- native/macos/Menuz 2>/dev/null)" || return 0
+  [[ -n "$listing" ]] || return 0
+  # grep -v exits 1 when it kept no line (every file a test): that is an
+  # empty listing, not an error; 2 is an error.
+  listing="$(printf '%s\n' "$listing" | grep -v $'\tnative/macos/Menuz/MenuzTests/')" || [[ $? -eq 1 ]]
+  # NUL-separated, renames off, so every record is "XY path" whatever the
+  # path holds, and taken whole first so a git that fails is seen.
+  porcelain="$(git -C "$UTILZ_HOME" status --porcelain -z --no-renames --untracked-files=all -- native/macos/Menuz | tr '\0' '\n')" || {
+    echo "menuz: git status failed in $UTILZ_HOME" >&2
+    return 1
+  }
+  changes=""
+  while IFS= read -r rec; do
+    [[ -n "$rec" ]] || continue
+    path="${rec:3}"
+    case "$path" in native/macos/Menuz/MenuzTests/*) continue ;; esac
+    if [[ -f "$UTILZ_HOME/$path" ]]; then
+      digest="$(git -C "$UTILZ_HOME" hash-object --no-filters -- "$path")" || return 1
+    else
+      digest="deleted"
+    fi
+    changes="$changes"$'\n'"$path"$'\t'"$digest"
+  done <<<"$porcelain"
+  if [[ -z "$changes" ]]; then
+    printf '%s' "$listing" | git hash-object --stdin
+  else
+    printf '%s-dirty\n' "$(printf '%s%s' "$listing" "$changes" | git hash-object --stdin)"
+  fi
+}
+
+# One string value of an Info.plist key, or nothing when the key is absent;
+# returns 1 when the plist cannot be read. A binary plist is converted with
+# plutil; an XML one is read as text, so this works with no plutil (Linux CI)
+# and needs no PlistBuddy.
+plist_value() {
+  local plist="$1" key="$2" xml
+  [[ -f "$plist" ]] || return 1
+  if [[ "$(head -c 6 "$plist")" == bplist ]]; then
+    command -v plutil >/dev/null 2>&1 || return 1
+    xml="$(plutil -convert xml1 -o - "$plist" 2>/dev/null)" || return 1
+  else
+    xml="$(cat "$plist")"
+  fi
+  printf '%s\n' "$xml" | awk -v key="$key" '
+    found && /<string>/ { sub(/.*<string>/, ""); sub(/<\/string>.*/, ""); print; exit }
+    { if (index($0, "<key>" key "</key>")) found = 1; else if (found && /<key>/) exit }
+  '
+}
+
+# ============================================================================
+# VERBS
+# ============================================================================
+
+cmd_init() {
+  local force=0 arg
+  for arg in "$@"; do
+    case "$arg" in
+      --force) force=1 ;;
+      *) refuse "init: unknown argument '$arg'" ;;
+    esac
+  done
+  local dir menu example
+  dir="$(config_dir)"
+  menu="$(menu_file)"
+  example="$(example_file)"
+  [[ -f "$example" ]] || refuse "init: the example menu is missing from this install: $example"
+  if [[ -f "$menu" && $force -eq 0 ]]; then
+    if cmp -s "$example" "$menu" && [[ -d "$dir/bin" ]]; then
+      printf 'menuz: %s already holds the example menu; nothing changed\n' "$dir"
+      return 0
+    fi
+    refuse "init: $menu exists; menuz init --force overwrites it"
+  fi
+  mkdir -p "$dir/bin"
+  cp "$example" "$menu"
+  printf 'menuz: wrote %s and %s/bin/\n' "$menu" "$dir"
+}
+
+cmd_edit() {
+  local use_editor=0 arg
+  for arg in "$@"; do
+    case "$arg" in
+      --editor) use_editor=1 ;;
+      *) refuse "edit: unknown argument '$arg'" ;;
+    esac
+  done
+  local menu
+  menu="$(menu_file)"
+  [[ -f "$menu" ]] || refuse "edit: $menu does not exist; menuz init creates it"
+  if [[ $use_editor -eq 1 ]]; then
+    local editor="${VISUAL:-${EDITOR:-}}"
+    [[ -n "$editor" ]] || refuse "edit --editor: neither VISUAL nor EDITOR is set"
+    # Word-split on purpose: an editor is often set with its flags ("code -w").
+    # shellcheck disable=SC2086
+    exec $editor "$menu"
+  fi
+  exec open -t "$menu"
+}
+
+cmd_log() {
+  local lines=""
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      -n)
+        [[ $# -ge 2 ]] || refuse "log: -n needs a count"
+        lines="$2"
+        shift 2
+        ;;
+      *) refuse "log: unknown argument '$1'" ;;
+    esac
+  done
+  if [[ -n "$lines" && ! "$lines" =~ ^[1-9][0-9]*$ ]]; then
+    refuse "log: -n '$lines' is not a count of lines"
+  fi
+  local log
+  log="$(log_file)"
+  [[ -f "$log" ]] || refuse "log: $log does not exist yet; the app writes it at its first run"
+  printf '%s\n' "$log"
+  if [[ -n "$lines" ]]; then
+    tail -n "$lines" "$log"
+  else
+    exec tail -f "$log"
+  fi
+}
+
+# validate and render: the app's arm on the menu or a given file, its output
+# and exit code passed through.
+cmd_app_arm() {
+  local arm="$1" verb="$2"
+  shift 2
+  [[ $# -le 1 ]] || refuse "$verb: takes at most one file"
+  local file="${1:-$(menu_file)}"
+  [[ -f "$file" ]] || refuse "$verb: $file does not exist"
+  local bin
+  bin="$(require_app)" || exit $?
+  exec "$bin" "$arm" "$file"
+}
+
+cmd_status() {
+  [[ $# -eq 0 ]] || refuse "status: takes no arguments"
+  local sel choice why bundle plist bin
+  sel="$(selected_build)" || exit $?
+  choice="${sel%%$'\037'*}"
+  why="${sel#*$'\037'}"
+
+  local installed rc=0
+  installed="$(installed_bundle)"
+  if [[ -d "$installed" ]]; then
+    plist="$installed/Contents/Info.plist"
+    local version build commit
+    if version="$(plist_value "$plist" CFBundleShortVersionString)" &&
+      build="$(plist_value "$plist" CFBundleVersion)" &&
+      commit="$(plist_value "$plist" MenuzCommit)"; then
+      printf 'installed   %s  %s build %s (%s)\n' "$installed" "$version" "$build" "$commit"
+    else
+      printf 'installed   %s  (its Info.plist could not be read: %s)\n' "$installed" "$plist"
+    fi
+  else
+    printf 'installed   no: not installed at %s\n' "$installed"
+    rc=1
+  fi
+  printf 'use         %s (%s)\n' "$choice" "$why"
+
+  # pgrep exits 1 when nothing matched; anything else is an error, said.
+  local pids prc=0
+  pids="$(pgrep -x Menuz 2>&1)" || prc=$?
+  case $prc in
+    0) printf 'running     pid %s\n' "$(printf '%s' "$pids" | tr '\n' ' ' | sed 's/ $//')" ;;
+    1) printf 'running     no\n' ;;
+    *) printf 'running     unknown: pgrep exited %s: %s\n' "$prc" "$pids" ;;
+  esac
+
+  bundle="$(bundle_for "$choice")"
+  bin="$(app_binary "$bundle")"
+  local login
+  if [[ -x "$bin" ]] && login="$("$bin" --login-item 2>&1)"; then
+    printf 'login item  %s\n' "$login"
+  elif [[ -x "$bin" ]]; then
+    printf 'login item  unknown: %s --login-item failed: %s\n' "$bin" "$login"
+  else
+    printf 'login item  unknown: no app at %s to ask\n' "$bin"
+  fi
+
+  local tree stamp
+  if ! tree="$(source_stamp)"; then
+    printf 'source      unknown: the tree under %s could not be read\n' "$(source_dir)"
+  elif [[ -z "$tree" ]]; then
+    printf 'source      unknown: no %s under git here\n' "$(source_dir)"
+  elif [[ ! -d "$installed" ]]; then
+    printf 'source      tree %s, nothing installed to compare\n' "$tree"
+  else
+    stamp="$(plist_value "$installed/Contents/Info.plist" MenuzSourceTree)" || stamp=""
+    if [[ "$stamp" == "$tree" ]]; then
+      printf 'source      current (tree %s)\n' "$tree"
+    else
+      printf 'source      stale: installed %s, tree %s\n' "${stamp:-(none)}" "$tree"
+    fi
+  fi
+  return $rc
+}
+
+# ============================================================================
+# MAIN
+# ============================================================================
+
+main() {
+  if [[ $# -eq 0 ]]; then
+    usage >&2
+    exit 2
+  fi
+  local verb="$1"
+  shift
+  case "$verb" in
+    -h | --help) usage ;;
+    init) cmd_init "$@" ;;
+    edit) cmd_edit "$@" ;;
+    log) cmd_log "$@" ;;
+    validate) cmd_app_arm --validate validate "$@" ;;
+    render) cmd_app_arm --render render "$@" ;;
+    status) cmd_status "$@" ;;
+    *) refuse "unknown verb: '$verb' (menuz --help names the verbs)" ;;
+  esac
+}
+
+main "$@"

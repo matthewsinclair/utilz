@@ -882,6 +882,24 @@ run_doctor() {
     echo -e "    brew install rust  (they build on first use)"
   fi
 
+  # Check for xcodegen and Xcode, but ONLY on macOS and only when this checkout
+  # carries menuz's app source (ST0027): a BUILD-time need, advisory as cargo
+  # is above, because menuz's shim refuses by name without them. Xcode is
+  # judged by running `xcodebuild -version`, not by finding it: every macOS has
+  # an executable /usr/bin/xcodebuild, and without Xcode it only says it
+  # requires Xcode. The Command Line Tools' xcodebuild refuses the same way, so
+  # the one fix named is Xcode itself.
+  if [[ "$(uname -s)" == Darwin && -d "$UTILZ_HOME/native/macos/Menuz" ]]; then
+    if ! check_command "xcodegen"; then
+      info "Required: Install 'xcodegen' to build menuz's app (native/macos/Menuz)"
+      echo -e "    brew install xcodegen"
+    fi
+    if ! xcodebuild -version >/dev/null 2>&1; then
+      info "Required: Install Xcode to build menuz's app (native/macos/Menuz): xcodebuild -version does not run"
+      echo -e "    Xcode from the App Store, then: sudo xcode-select --switch /Applications/Xcode.app"
+    fi
+  fi
+
   # STEP 6'S VERDICT PRINTS HERE, UNDER STEP 6 (issue 0026). It sat after step
   # 7 until 2026-09-14, so "All required dependencies installed" -- or "Missing
   # dependencies: yq" -- read as the install-integrity step's result.

@@ -1,0 +1,11 @@
+name: menuz
+version_file: VERSION
+utilz_version: "^2.0.0"
+description: A menu bar app whose menu is a YAML file of commands to run
+author: Matthew Sinclair
+
+# NO RUNTIME DEPENDENCIES of the shim's own. xcodegen and xcodebuild are
+# BUILD-time needs of the app under native/macos/Menuz, so they are not
+# declared here, as cargo is not for prez: the shim refuses by name without
+# them, and doctor reports them only when native/macos/Menuz is present.
+dependencies: []
