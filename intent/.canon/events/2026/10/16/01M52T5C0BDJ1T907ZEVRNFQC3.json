@@ -1,0 +1,16 @@
+{
+  "id": "01M52T5C0BDJ1T907ZEVRNFQC3",
+  "ts": "2026-10-16T16:54:12.235Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "hold",
+    "seq": 10,
+    "text": "Next, in order: (1) cc's hold 12 SHA (ST0026 design notes synced under the fixed Intent), then intent st done ST0026, then the push (git push local main && git push upstream main), then the 2.13.0 cut on a clean, quiet tree with every node holding writes: bin/devbin release check; bin/devbin release --minor --dry-run; bin/devbin release --minor (gates check all and test estate, about 10 min; tag, push, release object, CI through tools/ci-state); then tools/formula-bump 2.13.0, the bump committed by path (packaging/homebrew/utilz.rb), the formula copied into the tap clone as Formula/utilz.rb, brew audit --strict matthewsinclair/utilz/utilz, the tap's commit and push (hv's); then END to cc and dc, and cc's branch st0027-wp02 fast-forwards to main. (2) ST0027: verify cc's WP-02 SHA in a worktree; AC-01.2 (init writes the example) then WP-01 done; dc's help/menuz.md lands per WP naming only that shim's verbs, README and CHANGELOG at WP-05. (3) hold 9's list stands. (4) intent-vc was not running on 16 Oct evening: tell it, when it is back, that Utilz installed Intent 23c8b038e (0605's fix) from Intent's main with build all, VACUUMed the store to 23 MB, and that intentd (machine-level) was restarted at 16:5xZ. (5) The box is shared with Intent and devbin through intent-vc's START/END: ask before anything heavy."
+  }
+}

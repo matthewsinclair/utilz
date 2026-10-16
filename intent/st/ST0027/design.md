@@ -17,7 +17,7 @@ Read on 16 Oct 2026: `Intent/native/macos/Intent`, `Conflab/native/macos/Conflab
 
 | Concern                   | The siblings                                                                                                                                                                                                    | menuz                                                                                                    |
 | ------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
-| Project                   | `project.yml` for xcodegen, the `.xcodeproj` tracked; Swift 6, macOS 14 deployment target, Xcode 16 defaults baked in; `<Name>/` sources, `<Name>Tests/` a unit-test bundle hosted by the app                   | The same, at `opt/menuz/app/` (Q6)                                                                       |
+| Project                   | `project.yml` for xcodegen, the `.xcodeproj` tracked; Swift 6, macOS 14 deployment target, Xcode 16 defaults baked in; `<Name>/` sources, `<Name>Tests/` a unit-test bundle hosted by the app                   | The same, at `native/macos/Menuz/` (D6)                                                                       |
 | Entry point               | `@main @MainActor final class AppDelegate: NSObject, NSApplicationDelegate`, `NSApplication.shared.run()`, `LSUIElement` true in Info.plist, an `NSStatusItem` with a template image, never a zero-width item   | The same; the glyph is an SF Symbol named in the yaml (Q8)                                               |
 | Standard menus            | An Edit menu so Cmd-C/V/X/A work in text fields of an `LSUIElement` app                                                                                                                                         | The same                                                                                                 |
 | Login shell               | Gtools `LoginShell.swift`: `/bin/zsh -ilc` once per launch captures `PATH` and where the CLI is; every child gets that `PATH`; stderr to nowhere                                                                 | The same code, cut to `PATH` and `menuz`'s own needs                                                     |
@@ -37,14 +37,14 @@ What menuz has that none of them has: a menu that is a file, and parameters acqu
 
 ## The shape
 
-Two halves, as arngz: a bash shim in the Utilz format (`opt/menuz/menuz`, dispatched by `bin/menuz -> utilz`) and the app (`opt/menuz/app/`, `Menuz.app` once installed). The shim builds, installs and drives the app and manages the config directory; the app shows the menu and runs the items. Nothing is computed twice: the yaml is parsed in one place (the app), and the shim's `validate` and `render` ask the app's command-line arms rather than parsing anything themselves.
+Two halves, as arngz: a bash shim in the Utilz format (`opt/menuz/menuz`, dispatched by `bin/menuz -> utilz`) and the app (`native/macos/Menuz/`, the siblings' path; `~/Applications/Menuz.app` once installed, D6). The shim builds, installs and drives the app and manages the config directory; the app shows the menu and runs the items. Nothing is computed twice: the yaml is parsed in one place (the app), and the shim's `validate` and `render` ask the app's command-line arms rather than parsing anything themselves.
 
 ```
 ~/.config/menuz/menuz.yaml  --read, watched-->  Menuz.app  --zsh -ilc-->  the item's command
           ^                                        |                         |
           | utilz menuz init|edit|validate|render   | menuWillOpen: realise   | stdout+stderr
           |                                        v                         v
-      utilz menuz  <--build|install|start|stop-- xcodebuild           ~/.local/state/menuz/menuz.log  <-- utilz menuz log (tail -f)
+      utilz menuz  <--build|install|use|start|stop-- xcodebuild           ~/.local/state/menuz/menuz.log  <-- utilz menuz log (tail -f)
 ```
 
 ## The config directory
@@ -131,21 +131,21 @@ Recommended (Q3): menuz has no interpolation syntax. A string goes to the login 
 
 `run` lines are never realised by menuz at all: the shell executes them, with the item's parameters exported as variables (below), so `run: arngz apply "$desk"` is ordinary shell and quoting is the shell's. This is what keeps a parameter with a space, a quote or a `;` in it safe: menuz never splices a value into a command line.
 
-## Parameters: the standard dialogs
+## Parameters: one typed form
 
-Recommended (Q4): each parameter is acquired, in order, through macOS's own dialogs, from the app via `NSAppleScript` (Conflab's `ScriptExecutor` route, with its timeout and its Automation error mapping), which gives menuz the dialogs without building a form engine:
+Ruled (D4, hv: "One form with all params, typed (where possible)"): every parameter of an item is acquired through one form window (a SwiftUI form in an `NSPanel`, Gtools' settings hosting), its fields in the yaml's order, each field typed from the param's `type`; Run and Cancel at the foot:
 
-| `type`   | Dialog                                                       | Value exported                       |
-| -------- | ------------------------------------------------------------ | ------------------------------------ |
-| `text`   | `display dialog <prompt> default answer <default>`           | The text                             |
-| `secret` | `display dialog ... default answer "" with hidden answer`    | The text; never written to the log   |
-| `choice` | `choose from list <choices> with prompt <prompt>`            | The chosen line                      |
-| `file`   | `choose file with prompt <prompt>`                           | The POSIX path                       |
-| `folder` | `choose folder with prompt <prompt>`                         | The POSIX path                       |
+| `type`   | Field                                                              | Value exported                       |
+| -------- | ------------------------------------------------------------------ | ------------------------------------ |
+| `text`   | A text field with `<prompt>` as its label and `<default>` filled in | The text                             |
+| `secret` | A secure text field, empty                                         | The text; never written to the log   |
+| `choice` | A popup of `choices`, the first selected                           | The chosen line                      |
+| `file`   | A path field with a Choose button opening `NSOpenPanel` for a file | The POSIX path                       |
+| `folder` | The same, for a folder                                             | The POSIX path                       |
 
-`choices` is a list, or a shell line (`choices: $(ls ~/Desks)`) realised when the dialog opens. Cancel on any dialog runs nothing and logs `cancelled`. A `required: true` param refuses an empty answer and asks again; otherwise an empty answer is an empty variable. The values reach the run as exported variables under the declared names (`$desk`), which is why names are lower-case and refused when the login shell already exports them (validation rule 4).
+`choices` is a list, or a shell line (`choices: $(ls ~/Desks)`) realised when the dialog opens. Cancel runs nothing and logs `cancelled`. A `required: true` param is refused empty in the form, by name, and Run stays disabled until every refusal is cleared; otherwise an empty answer is an empty variable. The values reach the run as exported variables under the declared names (`$desk`), which is why names are lower-case and refused when the login shell already exports them (validation rule 4).
 
-The alternative, one `NSAlert` with an accessory form holding every parameter at once (a SwiftUI form in an `NSPanel`, Gtools' settings hosting), is more to build and more to test, and it is what hv's words "pops up a window" could also mean. One dialog per parameter is the standard thing that exists; most items will have one parameter.
+hv ruled for the form over one dialog per parameter: the dialogs were the standard thing that exists, and the form is what "pops up a window" means once an item has more than one parameter. A `bool` is not a type in v1: a yes-or-no parameter is a `choice` of two lines.
 
 ## Running an item
 
@@ -155,7 +155,7 @@ The runner is Gtools' `GtoolsCLI` shape, one shell-out path:
 2. Environment: launchd's, as the app has it, with `PATH` set to the login shell's capture plus `$MENUZ_HOME/bin` first; `MENUZ_HOME`, `MENUZ_LABEL`, `MENUZ_RUN_ID` and, under `each`, `MENUZ_ITEM`; the item's params by name.
 3. Working directory: the item's `cwd`, else the file's, else `$HOME`.
 4. stdin is `/dev/null`. A run never has a terminal and never waits for one.
-5. Runs are concurrent and independent, each with a run id; nothing is queued and nothing is refused for being busy. Quit terminates runs still in flight and logs each as `terminated` (Q9).
+5. Runs are concurrent and independent, each with a run id; nothing is queued and nothing is refused for being busy. A run is detached from the app (D9, hv: "Left running, surely?"): its own session, stdin `/dev/null`, and its stdout and stderr prefixed with the run id and appended to the log by the run's own wrapper shell, not by the app, which also writes the end line with the exit code and the duration. Quit therefore closes nothing a run writes to: runs still in flight are left running, and the log records the quit with the ids still going.
 
 ## Output: the log and the notice
 
@@ -195,42 +195,44 @@ Conflab's watcher, on two descriptors: the config directory (so an editor's atom
 | `build`     | xcodegen when stale, then `xcodebuild` Debug, `--release` for Release, `--unsigned` for a machine with no identity                       | 0; 1 on a failed build; 2 without Xcode   |
 | `test`      | `xcodebuild test`, the `MenuzTests` target                                                                                               | 0; 1 on a red test; 2 without Xcode       |
 | `install`   | Build Release, quit every running copy, replace `~/Applications/Menuz.app`, unclaim the build products, `lsregister`, launch              | 0; 1 if it stopped after changing something, which it names; 2 without Xcode or without the source tree |
+| `use`       | `dev` or `installed`: which build `start`, `restart`, `status`, `validate` and `render` act on, recorded in XDG state; no argument prints the current choice (D6, after devbin's own switch) | 0; 2 on any other word                    |
 | `uninstall` | Quit every copy, remove the bundle                                                                                                       | 0                                         |
 | `start` `stop` `restart` | `open -a` with an empty environment; quit by `osascript` (JXA) by bundle id                                                   | 0; 2 if not installed                     |
-| `status`    | installed (version, build, commit), running (pid), login item (on/off), source-current (the tree hash against the installed bundle's)     | 0, 1 if not installed                     |
+| `status`    | installed (version, build, commit), running (pid), login item (on/off), source-current (the tree hash against the installed bundle's), and which build `use` selects     | 0, 1 if not installed                     |
 | `stamps`    | What the next build would stamp into Info.plist                                                                                          | 0                                         |
 | `doctor`    | Every precondition with its state: Xcode selected, xcodegen, the identity, `MENUZ_HOME`, the yaml valid, the app installed and running   | 0; 1 when any fails                       |
 
 Exit codes follow arngz: 0 done, 1 failed, 2 refused before anything changed. `menuz` with no verb prints usage. The shim is bash 3.2-clean under `set -euo pipefail` and shellcheck-clean, as every Utilz shim.
 
-The brew keg (an install of Utilz that ships built binaries and no source) has no `opt/menuz/app` to build: `build`, `test` and `install` refuse there by name, as prez's shim refuses to `cargo build` in an install (ST0014 D5), and name the source clone. Shipping a built `Menuz.app` with the keg needs Intent's Developer ID and notarisation pipeline and is not v1 (Q7).
+The brew keg (an install of Utilz that ships built binaries and no source) has no `native/macos/Menuz` to build: `build`, `test` and the source half of `install` refuse there by name, as prez's shim refuses to `cargo build` in an install (ST0014 D5), and name the source clone. The app a keg installs is the `Menuz.app` signed with Developer ID, notarised and attached to the release, Intent's pipeline (D7, hv: "Same as Intent. This is opensource just like Intent and it needs to be signed properly"): `install` from a keg fetches the asset of the keg's own version, verifies its signature and places it at `~/Applications/Menuz.app`.
 
 ## Build layout
 
 | Path                                                   | What                                                                                                |
 | ------------------------------------------------------ | --------------------------------------------------------------------------------------------------- |
 | `opt/menuz/menuz`                                      | The shim                                                                                            |
-| `opt/menuz/menuz.yaml`                                 | The utility's declaration: `version_file: VERSION`, `dependencies: []` (xcodegen and xcodebuild are build-time, refused by name as cargo is; doctor reports them only when `opt/menuz/app` is present, the crate rule in common.sh extended by one path) |
+| `opt/menuz/menuz.yaml`                                 | The utility's declaration: `version_file: VERSION`, `dependencies: []` (xcodegen and xcodebuild are build-time, refused by name as cargo is; doctor reports them only when `native/macos/Menuz` is present, the crate rule in common.sh extended by one path) |
 | `opt/menuz/VERSION`                                    | The one home of the version; the shim passes it to xcodebuild as `MENUZ_VERSION`, Info.plist substitutes it |
-| `opt/menuz/app/project.yml`                            | The xcodegen spec: Gtools' cut, `bundleIdPrefix: com.matthewsinclair.utilz`, product `Menuz`, package Yams |
-| `opt/menuz/app/Menuz/`                                 | `MenuzApp.swift` (the delegate), `Models/` (the menu file, Codable; the validator; the log line), `Services/` (`LoginShell`, `Runner`, `Realiser`, `Dialogs`, `Watcher`, `Log`), `Views/` (none in v1) |
-| `opt/menuz/app/MenuzTests/`                            | Swift Testing over the pure parts                                                                   |
+| `native/macos/Menuz/project.yml`                       | The xcodegen spec: Gtools' cut, `bundleIdPrefix: com.matthewsinclair.utilz`, product `Menuz`, package Yams |
+| `native/macos/Menuz/Menuz/`                            | `MenuzApp.swift` (the delegate), `Models/` (the menu file, Codable; the validator; the log line), `Services/` (`LoginShell`, `Runner`, `Realiser`, `ParamForm`, `Watcher`, `Log`), `Views/` (none in v1) |
+| `native/macos/Menuz/MenuzTests/`                       | Swift Testing over the pure parts                                                                   |
 | `opt/menuz/test/menuz.bats`                            | The shim under bats with a fake `Menuz` binary and a fake `xcodebuild` on PATH                      |
 | `opt/menuz/README.md`, `help/menuz.md`                 | The utility's docs                                                                                  |
-| `${XDG_STATE_HOME:-$HOME/.local/state}/utilz/menuz/build/` | Derived data, products, intermediates: off the tree, as the siblings keep theirs                 |
-| `~/Applications/Menuz.app`                             | The installed app                                                                                   |
+| `${XDG_STATE_HOME:-$HOME/.local/state}/menuz/build/macos/` | Derived data, products (`Build/Products/<Config>/Menuz.app`), intermediates: off the tree, as Intent and Gtools keep theirs (D6) |
+| `${XDG_STATE_HOME:-$HOME/.local/state}/menuz/use`     | The `use` choice, `dev` or `installed`; absent means `installed`                                  |
+| `~/Applications/Menuz.app`                             | The installed app, Gtools' and Conflab's target (D6)                                                                                   |
 
-The app's sources are reviewed by `critic-swift` (`intent lang init swift` in WP-03, the six Swift rules in the library: guard over nested if, optionals over sentinels, structured concurrency over GCD, Codable over manual JSON, narrowest access first, specific XCTAssertEqual values).
+The app's sources are reviewed by `critic-swift` (`intent lang init swift`, run 16 Oct 2026 in WP-01, the six Swift rules in the library: guard over nested if, optionals over sentinels, structured concurrency over GCD, Codable over manual JSON, narrowest access first, specific XCTAssertEqual values).
 
 ## Tests
 
 - **Shim (Linux and macOS legs):** `opt/menuz/test/menuz.bats` with a fixture `HOME`, a fake `Menuz` binary on PATH that records its arguments and prints a scripted answer, and a fake `xcodebuild`/`xcodegen`; every verb's refusal by name; `init` idempotent; `log -n`; the install refusal with no source tree. This is where AC-02.x and the shim half of AC-05.1 live.
 - **App (macOS leg, on a tag or on dispatch, as Gtools runs its):** `MenuzTests`, Swift Testing, over the pure parts: the file decoded into the model, every validation rule red on its fixture and the example green, the realiser's split of literal from dynamic labels and its reassembly of the shell's answer, the `each` expansion, the runner's environment and argv assembly, the log line format, the test-host guard. No test opens a menu or a dialog.
-- **Hand runs on hv's machine, recorded in acceptance.md:** the watcher's latency, a change arriving with no restart; the arngz entries applying a desk; a parameter acquired through each dialog type; launch at login after a logout. vc runs these with hv's hands off, as ST0026's.
+- **Hand runs on hv's machine, recorded in acceptance.md:** the watcher's latency, a change arriving with no restart; the arngz entries applying a desk; a parameter of each type acquired through the form; launch at login after a logout. vc runs these with hv's hands off, as ST0026's.
 
 ## CI
 
-A `menuz-app` job on `macos-15`, `if: github.ref_type == 'tag' || github.event_name == 'workflow_dispatch'` (Gtools' gate, so every push is not an Xcode build), `brew install xcodegen`, `bin/utilz menuz build --unsigned`, `bin/utilz menuz test --unsigned`. The Linux legs run `menuz.bats` in the explicit utility loop.
+A `menuz-app` job on `macos-15`, `if: github.ref_type == 'tag' || github.event_name == 'workflow_dispatch'` (Gtools' gate, so every push is not an Xcode build), `brew install xcodegen`, `bin/utilz menuz build --unsigned`, `bin/utilz menuz test --unsigned`; on a tag it also signs `Menuz.app` with Developer ID, notarises it and attaches it to the release, Intent's pipeline (D7). The Linux legs run `menuz.bats` in the explicit utility loop.
 
 ## Questions for the rubber-duck, each with vc's recommendation
 
@@ -250,7 +252,22 @@ A `menuz-app` job on `macos-15`, `if: github.ref_type == 'tag' || github.event_n
 
 ## Decisions
 
-None yet. The rubber-duck session writes D1 onwards here, one per question above, in hv's words where hv gave them.
+hv ruled on 16 Oct 2026 in vc's session, the rubber-duck of WP-01. In hv's words where hv gave them.
+
+| D   | Decision                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| --- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| D1  | As recommended: the config directory is `${XDG_CONFIG_HOME:-$HOME/.config}/menuz/`, `MENUZ_HOME` overriding.                                                                                                                                                                                                                                                                                                                      |
+| D2  | As recommended: Yams parses the yaml in the app, Codable models, one parser.                                                                                                                                                                                                                                                                                                                                                       |
+| D3  | As recommended: interpolation is the login shell's own expansion of labels and `each` lines, one `zsh -ilc` per menu open, asynchronous, the last values shown first, capped. No menuz syntax.                                                                                                                                                                                                                                    |
+| D4  | hv: "One form with all params, typed (where possible)." One window per run holding every param, each field typed from the param's declaration where the yaml gives a type (string, number, path, choice, bool), free text otherwise. Not the standard dialogs.                                                                                                                                                                   |
+| D5  | As recommended: `menuz.log` under XDG state, `utilz menuz log` tails it, a notification on a non-zero exit, `notify:` per item.                                                                                                                                                                                                                                                                                                   |
+| D6  | hv, first to vc: "It's built here locally for dev in native/macos like the other menbar apps, and the installed into opt. There should be a 'use dev\|opt' option like the way devbin has that feature." Then, in cc's session, hv asked where Intent.app, Conflab.app and Gtools.app live, "we should be consistent", and picked the siblings' target (confirmed to vc: "See the utilz-cc correction on install location"). So: the source and the xcodegen project at `native/macos/Menuz/`; the dev build under `${XDG_STATE_HOME:-~/.local/state}/menuz/build/macos/Build/Products/<Config>/`, as Intent's and Gtools' do; the installed copy at `~/Applications/Menuz.app`, Gtools' and Conflab's target (Intent's signed release goes to /Applications); a `use dev\|installed` switch, after devbin's own, says which the shim's launch and status use. |
+| D7  | hv: "Same as Intent. This is opensource just like Intent and it needs to be signed properly." Developer ID, notarised, shipped as a release asset the keg installs; not the Apple Development model.                                                                                                                                                                                                                             |
+| D8  | As recommended: the menu bar glyph is an SF Symbol named in the yaml, `terminal` by default; no asset pipeline. (hv's "8: Left running" is read as Q9, since "left running" is Q9's alternative; hv is told so.)                                                                                                                                                                                                                   |
+| D9  | hv: "Left running, surely?" Runs in flight at Quit are left running, detached from the app (their own session, stdin from /dev/null, stdout and stderr on the log file directly rather than through the app), so the app's exit closes nothing they write to. The log records the quit and names the runs still going.                                                                                                             |
+| D10 | hv: "Yep": `each` is in v1.                                                                                                                                                                                                                                                                                                                                                                                                       |
+| D11 | hv: "Yep, agree": `Menuz.app`, `com.matthewsinclair.utilz.menuz`.                                                                                                                                                                                                                                                                                                                                                                 |
+
 
 ## Work packages
 
@@ -263,36 +280,3 @@ None yet. The rubber-duck session writes D1 onwards here, one per question above
 | WP-05 | Build, install, launch and the close                         | `build`, `test`, `install`, `uninstall`, `start`, `stop`, `restart`, `stamps`; login item; CI; help, README, CHANGELOG; the estate green      |
 
 Each WP is sized S, as ST0026's, and WP-02 can start before WP-03 because the shim's verbs that need the app are tested against a fake.
-
-## Acceptance criteria, to be minted
-
-**Held here only until the store takes them.** On 16 Oct 2026 Utilz's runtime store was doubling its full-text index on every write (intent-vc has the measurements), so `intent ac new` could not run; the criteria below are the contract as drafted, one row per `intent ac new` call in vc's scratch script, and this section is removed once `acceptance.md` renders them.
-
-### WP-01
-
-- AC-01.1 (non-test) design.md records hv's ruling on each of its questions Q1 to Q11 as a numbered decision or a descoping, in hv's words where hv gave them, and no recommendation is left standing in its place.
-- AC-01.2 (non-test) The example menuz.yaml in design.md is final and is the one menuz init writes; swift is a declared language of the project (intent lang init swift) and critic-swift is the review for opt/menuz/app.
-### WP-02
-
-- AC-02.1 utilz menuz is dispatched by bin/utilz; opt/menuz/menuz.yaml declares the utility with opt/menuz/VERSION as the one home of its version; utilz list shows menuz; utilz doctor reports xcodegen and xcodebuild only when opt/menuz/app is present, as it reports cargo only when a crate is.
-- AC-02.2 init creates MENUZ_HOME (default \${XDG_CONFIG_HOME:-\$HOME/.config}/menuz) with the example menuz.yaml and an empty bin/, refuses to overwrite an existing menuz.yaml without --force (exit 2, naming the file), and a second run changes nothing; edit opens the yaml with open -t, or \$VISUAL/\$EDITOR under --editor; log prints the log's path then tails it, -n N prints the last N lines; each refuses by name, exit 2, when its file is missing.
-- AC-02.3 validate and render run the app's --validate and --render arms on menuz.yaml or a given file and pass their output and exit code through, proven with a fake Menuz binary on PATH; with no app built or installed they refuse by name, exit 2; status reports installed, running, login item and source-current without Xcode present.
-### WP-03
-
-- AC-03.1 The app is an xcodegen project at opt/menuz/app in the siblings' shape (Swift 6, macOS 14, LSUIElement, Apple Development automatic signing, the test-host guard) with Yams as its one package; --validate and --render run without a menu bar and exit 0 or 2 with every finding named, and --version prints the stamped version.
-- AC-03.2 The menu is exactly the file, in order: items, captions, headers, separators, submenus, then the fixed tail (Edit Menu, Open Log, Reload, Quit menuz); every validation rule in the design refuses its fixture naming file, entry path, key and value, and the example passes; a file that fails keeps the last good menu and shows the refusal as a disabled first item and in the log.
-- AC-03.3 Hand run on hv's machine, recorded as such: a save of menuz.yaml, an atomic rename by an editor, and a deletion and recreation of MENUZ_HOME each reach the menu within one second with no restart.
-- AC-03.4 Labels and each lines with a \$ or a backtick are realised by the login shell at every menu open in one zsh -ilc invocation, asynchronously, the last values shown first and titles updated in place, under the realise cap with the previous value kept and the overrun logged; a label with neither is never sent to the shell; each expands to one item per stdout line with MENUZ_ITEM set.
-### WP-04
-
-- AC-04.1 An item's params are acquired in order through the standard dialogs (display dialog with default answer, hidden answer for secret, choose from list, choose file, choose folder), each with its prompt and default; Cancel on any dialog runs nothing and logs cancelled; required refuses an empty answer; the values reach the run as exported variables under the declared names.
-- AC-04.2 Each run is /bin/zsh -ilc of the run line, with the login shell's PATH and MENUZ_HOME/bin first on it, cwd the item's, else the file's, else HOME, stdin /dev/null, and MENUZ_HOME, MENUZ_LABEL, MENUZ_RUN_ID and (under each) MENUZ_ITEM exported; runs are concurrent, each with its own id, and Quit terminates those in flight and logs each as terminated.
-- AC-04.3 Every run appends to \${XDG_STATE_HOME:-\$HOME/.local/state}/menuz/menuz.log, created on first use: a start line (timestamp, run id, item, cwd, the run line as written), stdout and stderr lines as they come prefixed with the run id, and an end line with exit code and duration; a secret's value never appears; a line the app cannot write is an error in OSLog and a notification.
-- AC-04.4 A run that exits non-zero posts a notification naming the item and the exit code; notify: always posts one on every finish carrying the last output line; notify: never posts none; the item's notify overrides the file's.
-- AC-04.5 Hand run on hv's machine, recorded as such: the example menu applies an arngz desk chosen from the each-generated items, and discover saves one through a text dialog, with both runs in the log.
-### WP-05
-
-- AC-05.1 build runs xcodegen only when project.yml or the set of sources changed and xcodebuild Debug or --release with products under \${XDG_STATE_HOME:-\$HOME/.local/state}/utilz/menuz/build; test runs the MenuzTests target; install builds Release, quits every running copy, replaces ~/Applications/Menuz.app, unclaims the build products, registers the bundle and launches it with an empty environment; uninstall, start, stop, restart and stamps as designed; each refuses by name, exit 2, without xcodegen or xcodebuild, and install refuses when opt/menuz/app is absent.
-- AC-05.2 Hand run on hv's machine, recorded as such: the app registers itself as a login item on its first run, status reports it, and the menu is back after a logout and login.
-- AC-05.3 (non-test) CI: a macOS job on a tag or on dispatch builds the app unsigned and runs MenuzTests; the Linux legs run menuz.bats with the fake app in the explicit utility loop; both green on the closing SHA.
-- AC-05.4 (non-test) help/menuz.md, the README's menuz section and the CHANGELOG entry exist and name every verb and flag the CLI accepts, checked against menuz --help; bin/devbin check all and the estate suite are green; the hand-run transcript in acceptance.md names the machine, the macOS build and the Xcode version.
