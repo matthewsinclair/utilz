@@ -379,6 +379,12 @@ run_src_menuz() {
   assert_output_contains "$INSTALLED"
 }
 
+@test "AT-02.3: with no use record, use selects the installed build, even with only a dev build" {
+  make_app "$DEV"
+  run_menuz status
+  assert_output_contains "use         installed (default)"
+}
+
 @test "AT-02.3: status reports installed, use, running, login item and source, with no Xcode" {
   make_app "$INSTALLED" 0.3.1
   fake pgrep 'echo 4242'

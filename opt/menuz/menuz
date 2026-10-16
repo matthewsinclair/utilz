@@ -109,7 +109,8 @@ app_binary() {
 # ============================================================================
 
 # The build use selects, as "<dev|installed><US><why>": the one its record
-# names, else the installed copy when there is one, else the dev build.
+# names, else the installed copy. Installed is the default, as devbin's
+# vendored copy is: the dev build is opted into, and a keg has none.
 selected_build() {
   local record choice
   record="$(use_record)"
@@ -119,10 +120,8 @@ selected_build() {
       dev | installed) printf '%s\037by %s\n' "$choice" "$record" ;;
       *) refuse "$record holds '$choice', not dev or installed" ;;
     esac
-  elif [[ -d "$(installed_bundle)" ]]; then
-    printf 'installed\037default\n'
   else
-    printf 'dev\037default\n'
+    printf 'installed\037default\n'
   fi
 }
 

@@ -43,7 +43,7 @@ This command is the shim. The app itself is `Menuz.app`, built from `native/maco
 | `render [file]`   | The menu as the app would show it, labels realised through the shell                                                                                                    | the same                                                      |
 | `status`          | Where the app is installed and its version, which build `use` selects, whether it is running, its login item, and whether the installed copy is current with the source | 0; 1 when not installed                                       |
 
-`validate`, `render` and `status` use the build `use` selects: the one recorded in `${XDG_STATE_HOME:-$HOME/.local/state}/menuz/use`, else the installed copy, else the dev build under `${XDG_STATE_HOME:-$HOME/.local/state}/menuz/build/macos/Build/Products/Debug/`.
+The build `use` selects is the one recorded in `${XDG_STATE_HOME:-$HOME/.local/state}/menuz/use`, else the installed copy: the dev build, under `${XDG_STATE_HOME:-$HOME/.local/state}/menuz/build/macos/Build/Products/Debug/`, is opted into. `status` reports that build. `validate` and `render` run it, and when no choice is recorded and nothing is installed, they run the dev build instead.
 
 ---
 
