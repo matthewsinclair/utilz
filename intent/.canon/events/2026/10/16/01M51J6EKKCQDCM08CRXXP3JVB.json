@@ -1,0 +1,15 @@
+{
+  "id": "01M51J6EKKCQDCM08CRXXP3JVB",
+  "ts": "2026-10-16T05:15:44.628Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "issues.add",
+  "subject": {
+    "type": "issue",
+    "id": "0066"
+  },
+  "payload": {
+    "severity": "low",
+    "title": "prez: an unreadable `mermaid:` value, eg `ture`, reads as off with no warning"
+  }
+}
