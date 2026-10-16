@@ -7,7 +7,7 @@
 
 ## Name
 
-`menuz` - A menu bar app whose menu is a YAML file of commands to run
+`menuz` - A macOS menu bar menu of your own commands, read from a YAML file
 
 ---
 
@@ -17,38 +17,241 @@
 menuz init [--force]
 menuz edit [--editor]
 menuz log [-n N]
-menuz validate [file]
-menuz render [file]
+menuz validate [<file>]
+menuz render [<file>]
 menuz status
+menuz --help | -h
+menuz --version
 ```
 
 ---
 
 ## Description
 
-menuz puts a menu of your own commands in the macOS menu bar. The menu is a YAML file in the menuz config directory, `${MENUZ_HOME:-${XDG_CONFIG_HOME:-$HOME/.config}/menuz}`. Choosing an item runs its command in your login shell, and what it prints goes to `${XDG_STATE_HOME:-$HOME/.local/state}/menuz/menuz.log`.
+menuz puts a menu of your own commands in the macOS menu bar. The menu is one YAML file, `menuz.yaml`, in menuz's config directory. Each item runs a shell line: a script, a `utilz` verb, anything the login shell can run. An item can declare parameters, which reach its run as variables. Everything a run prints goes to one log, `menuz.log`, which `menuz log` tails.
 
-This command is the shim. The app itself is `Menuz.app`, built from `native/macos/Menuz` and installed at `~/Applications/Menuz.app`. The yaml is read in one place, the app: `validate` and `render` ask it.
+There are two halves. `Menuz.app` shows the menu and runs the items. The `menuz` command creates and checks the config directory, reads the log, and reports the app's state. The YAML is parsed in one place, the app: `menuz validate` and `menuz render` ask the app's own command-line arms and parse nothing themselves.
+
+menuz adds no syntax of its own. A label or a shell line is expanded by the login shell, the way it expands a double-quoted string, so `$VAR`, `${VAR:-default}` and `$(command)` mean what they mean in zsh.
+
+### The config directory
+
+`${MENUZ_HOME:-${XDG_CONFIG_HOME:-$HOME/.config}/menuz}` holds:
+
+- `menuz.yaml` -- the menu, the one file the app reads.
+- `bin/` -- scripts of your own. It is first on `PATH` for every run and every realised label, so `run: backup-notes` finds `bin/backup-notes` with no path.
+
+`menuz init` creates the directory with an example `menuz.yaml` and an empty `bin/`. It refuses to overwrite a `menuz.yaml` of your own unless `--force` is given, and run again over its own example it changes nothing. The log is not here, because it is state rather than configuration, and a config directory is the kind of thing kept in a dotfiles repository.
+
+The app watches the directory and the file. A save, an editor's atomic rename, or a `git checkout` of the directory reaches the menu within a second, with no restart. **Reload** in the menu is for the one case the watcher misses.
+
+### The menu file
+
+<!-- prettier-ignore -->
+```yaml
+# ~/.config/menuz/menuz.yaml
+icon: terminal        # an SF Symbol name for the menu bar glyph; "terminal" when absent
+cwd: ~                # where runs start unless an item says otherwise; $HOME when absent
+notify: failure       # never | failure | always; what a run's end posts as a notification
+realise: 5            # seconds a menu open waits for its labels at most; 5 when absent
+
+menu:
+  - header: Desks
+  - each: ls "${XDG_CONFIG_HOME:-$HOME/.config}/arngz/desks" 2>/dev/null | sed 's/\.yaml$//'
+    label: "$MENUZ_ITEM"
+    run: arngz apply "$MENUZ_ITEM"
+  - label: Discover this arrangement
+    params:
+      - name: desk
+        prompt: Save the arrangement on screen now as
+        default: today
+    run: arngz discover --save "$desk" --force
+  - label: Hammerspoon doctor
+    run: arngz doctor
+    notify: always
+  - separator: true
+  - submenu: Machine
+    items:
+      - label: "Up $(uptime | sed 's/.*up //; s/,.*//')"
+      - label: Sleep the display
+        run: pmset displaysleepnow
+      - label: Empty the Trash
+        run: osascript -e 'tell application "Finder" to empty trash'
+        cwd: ~/.Trash
+```
+
+| Key         | Meaning                                                                                                                          |
+| ----------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| `label`     | an item; with `run`, choosing it runs the line, and without `run` it is a caption, shown disabled                                |
+| `run`       | the shell line the login shell runs; menuz never parses it                                                                       |
+| `params`    | the parameters asked for before the run (below)                                                                                  |
+| `cwd`       | the run's working directory; the item's wins over the file's                                                                     |
+| `notify`    | `never`, `failure` or `always`; the item's wins over the file's                                                                  |
+| `each`      | a shell line whose output lines become one item each, at every menu open; `$MENUZ_ITEM` is the line, in `label`, `run` and `cwd` |
+| `header`    | a section header                                                                                                                 |
+| `separator` | a separator                                                                                                                      |
+| `submenu`   | a submenu, with its entries under `items`, nested as deep as wanted                                                              |
+
+Below the file's entries the app adds its own: **Edit Menu…**, which opens `menuz.yaml` in the default text editor, **Open Log**, **Reload**, and **Quit menuz**.
+
+### Labels at every open
+
+A label or an `each` line with a `$` or a backtick is realised by the login shell each time the menu opens. All of a menu's such strings go to one `zsh -ilc`, so ten dynamic labels cost one shell start. The menu opens at once with the last values, the file's text on the first open, and the titles update in place when the shell answers. A string still unanswered after `realise` seconds keeps its last value, and the log says so. A label with neither a `$` nor a backtick is never sent to the shell.
+
+### Parameters
+
+An item's `params` is a list of the parameters it asks for, in order. A parameter has:
+
+| Key        | Meaning                                                                                                                       |
+| ---------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| `name`     | the variable its value is exported as: lower case, `[a-z][a-z0-9_]*`, not one the login shell already exports, and not shared |
+| `prompt`   | the question asked                                                                                                            |
+| `default`  | the answer filled in                                                                                                          |
+| `required` | `true` refuses an empty answer; otherwise an empty answer is an empty variable                                                |
+| `type`     | the kind of answer, one of the five below; `text` when absent                                                                 |
+
+| `type`   | Answer                                                             | Exported as     |
+| -------- | ------------------------------------------------------------------ | --------------- |
+| `text`   | a line of text                                                     | the text        |
+| `secret` | a line of text, hidden as it is typed and never written to the log | the text        |
+| `choice` | one of `choices`, a list or a shell line realised when it is asked | the chosen line |
+| `file`   | a file                                                             | its POSIX path  |
+| `folder` | a folder                                                           | its POSIX path  |
+
+A yes-or-no is a `choice` of two lines.
+
+The values reach the run as exported variables under the parameters' names, so `run: arngz discover --save "$desk"` is ordinary shell, and quoting is the shell's. menuz never splices a value into a command line, which is what keeps a value with a space, a quote or a `;` in it safe.
+
+### Running an item
+
+A run is `/bin/zsh -ilc` of the item's `run` line, so aliases and `PATH` additions from `.zshrc` count, as in a terminal. Its `PATH` is the login shell's with `$MENUZ_HOME/bin` first. It starts in the item's `cwd`, else the file's, else `$HOME`, with stdin from `/dev/null`: a run never has a terminal. It has `MENUZ_HOME`, `MENUZ_LABEL`, `MENUZ_RUN_ID`, under `each` `MENUZ_ITEM`, and its parameters.
+
+Runs are concurrent and independent, each with its own id. Nothing is queued and nothing is refused for being busy. A run is detached from the app, in its own session and writing to the log itself, so **Quit menuz** leaves runs in flight running, and the log records the quit and names each run still going.
+
+### The log and the notice
+
+Every run appends to `${XDG_STATE_HOME:-$HOME/.local/state}/menuz/menuz.log`, which is created on first use:
+
+```
+2026-10-16T10:42:03Z run 17 start "Hammerspoon doctor" cwd=/Users/you: arngz doctor
+[17] hammerspoon  running (pid 4123)
+2026-10-16T10:42:04Z run 17 exit 0 in 1.3s
+```
+
+The start line prints the `run` line as written, before the shell expands it, which is what keeps a secret's value out of the log. Each output line carries its run's id, so concurrent runs interleave legibly.
+
+A run that exits non-zero posts a macOS notification naming the item and its exit code. `notify: always` posts one at every finish, with the run's last line of output, and `notify: never` posts none. A line the app cannot write to the log is reported in the app's own log and as a notification, never dropped.
+
+### The validator
+
+`menuz validate` refuses, naming the file, the entry by its path (eg `menu[4].items[1]`), the key and the value:
+
+1. an unknown key anywhere;
+2. an entry that is none of the kinds, or more than one (`label` with `header`, `each` with `submenu`);
+3. `run` without `label` or `each`, or `params` without `run`;
+4. a parameter name that is not `[a-z][a-z0-9_]*`, that the login shell already exports, or that two parameters share;
+5. a parameter `type` that is not `text`, `secret`, `choice`, `file` or `folder`, or a `choice` without `choices`;
+6. a `notify` that is not `never`, `failure` or `always`, a `realise` that is not a positive number, or an `icon` this macOS has no SF Symbol for;
+7. an empty `menu`.
+
+A file that fails in the running app keeps the last good menu on screen and shows the refusal as a disabled first item, and in the log. Nothing is dropped silently.
+
+### The app
+
+`validate` and `render` ask the app's own validator, in the selected build: the one named, `dev` or `installed`, in `${XDG_STATE_HOME:-$HOME/.local/state}/menuz/use`, and the installed `~/Applications/Menuz.app` when that file names none. When none is named and none is installed, they ask the development build, `${XDG_STATE_HOME:-$HOME/.local/state}/menuz/build/macos/Build/Products/Debug/Menuz.app`, instead. With neither app there they refuse, exit 2, naming both places; with a named build that is not there, they refuse naming it.
+
+`status` prints one line each: whether the app is installed, with its path, version, build and commit; which build is selected, and why; whether it is running, with its pid; its login item; and whether the installed app is current with `native/macos/Menuz`.
 
 ---
 
 ## Verbs
 
-| Verb              | Does                                                                                                                                                                    | Exit                                                          |
-| ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------- |
-| `init [--force]`  | Creates the config directory with the example `menuz.yaml` and an empty `bin/`. Run again, it changes nothing. `--force` overwrites the menu                            | 0; 2 when `menuz.yaml` is your own and `--force` is not given |
-| `edit [--editor]` | Opens `menuz.yaml` with `open -t`, your default text editor. `--editor` uses `$VISUAL`, else `$EDITOR`                                                                  | 0; 2 with no `menuz.yaml`, or `--editor` with neither set     |
-| `log [-n N]`      | Prints the log's path, then follows it with `tail -f`. `-n N` prints the last N lines and does not follow                                                               | 0; 2 with no log yet                                          |
-| `validate [file]` | The app's validation of `menuz.yaml`, or of a file: `ok`, or every refusal                                                                                              | the app's, 0 or 2; 2 with no app built or installed           |
-| `render [file]`   | The menu as the app would show it, labels realised through the shell                                                                                                    | the same                                                      |
-| `status`          | Where the app is installed and its version, which build `use` selects, whether it is running, its login item, and whether the installed copy is current with the source | 0; 1 when not installed                                       |
+| Verb       | Does                                                                                                       | Exit                     |
+| ---------- | ---------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `init`     | create the config directory with the example `menuz.yaml` and an empty `bin/`                              | 0, or 2                  |
+| `edit`     | open `menuz.yaml` in the default text editor, or in `$VISUAL` or `$EDITOR` with `--editor`                 | 0, or 2                  |
+| `log`      | print the log's path, then follow it                                                                       | 0, or 2                  |
+| `validate` | check `menuz.yaml`, or `<file>`, with the app's validator: `ok`, or every refusal                          | 0, or 2                  |
+| `render`   | print the menu as the app would show it, labels realised, one entry per line                               | 0, or 2                  |
+| `status`   | installed (version, build, commit), running (pid), login item, source-current, and which build is selected | 0, or 1 if not installed |
 
-The build `use` selects is the one recorded in `${XDG_STATE_HOME:-$HOME/.local/state}/menuz/use`, else the installed copy: the dev build, under `${XDG_STATE_HOME:-$HOME/.local/state}/menuz/build/macos/Build/Products/Debug/`, is opted into. `status` reports that build. `validate` and `render` run it, and when no choice is recorded and nothing is installed, they run the dev build instead.
+### Options
+
+| Option         | Verb   | Effect                                     |
+| -------------- | ------ | ------------------------------------------ |
+| `--force`      | `init` | overwrite an existing `menuz.yaml`         |
+| `--editor`     | `edit` | open the file in `$VISUAL`, else `$EDITOR` |
+| `-n N`         | `log`  | print the last N lines and do not follow   |
+| `--help`, `-h` |        | print this help                            |
+| `--version`    |        | print menuz's version                      |
 
 ---
 
-## Exit codes
+## Examples
+
+```bash
+menuz init                    # create the config directory and the example menu
+menuz edit                    # open menuz.yaml
+menuz validate                # check it
+menuz render                  # see the menu it makes, labels realised
+menuz status                  # installed, running, login item, which build
+menuz log                     # follow every run's output
+menuz log -n 50               # the last 50 lines
+```
+
+---
+
+## Files
+
+- `${MENUZ_HOME:-${XDG_CONFIG_HOME:-$HOME/.config}/menuz}/menuz.yaml` -- the menu.
+- `${MENUZ_HOME:-${XDG_CONFIG_HOME:-$HOME/.config}/menuz}/bin/` -- your scripts, first on every run's `PATH`.
+- `${XDG_STATE_HOME:-$HOME/.local/state}/menuz/menuz.log` -- every run's output.
+- `native/macos/Menuz/` -- the app's source and its xcodegen project.
+- `${XDG_STATE_HOME:-$HOME/.local/state}/menuz/build/macos/` -- the development build.
+- `~/Applications/Menuz.app` -- the installed app.
+
+---
+
+## Environment
+
+- `MENUZ_HOME` -- the config directory; `${XDG_CONFIG_HOME:-$HOME/.config}/menuz` when unset.
+- `XDG_CONFIG_HOME` -- where the config directory lives when `MENUZ_HOME` is unset; `$HOME/.config` when unset.
+- `XDG_STATE_HOME` -- where the log and the development build live; `$HOME/.local/state` when unset.
+- `VISUAL`, `EDITOR` -- the editor `edit --editor` opens.
+
+Every run also has `MENUZ_HOME`, `MENUZ_LABEL`, `MENUZ_RUN_ID` and, under `each`, `MENUZ_ITEM`.
+
+---
+
+## Exit Status
 
 - `0` -- done.
-- `1` -- `status` found no installed app.
-- `2` -- refused before anything changed, with the reason named.
+- `1` -- `status` found no app installed.
+- `2` -- refused before anything changed: `init` over a `menuz.yaml` that is not the example, without `--force`; `edit`, `validate` or `render` with no `menuz.yaml`, or `validate` or `render` given a file that does not exist; `edit --editor` with neither `VISUAL` nor `EDITOR` set; `log` with no log yet, or `-n` without a count; `validate` or `render` with no app built or installed, or a file the validator refuses; a bad verb or option.
+
+---
+
+## Dependencies
+
+- Xcode and `xcodegen` (optional) -- build the app; `utilz doctor` reports them only where the app's source, `native/macos/Menuz/`, is present.
+
+---
+
+## See Also
+
+- `utilz doctor` -- reports menuz's dependencies.
+- `arngz` -- the first thing on the example menu.
+- `intent/st/ST0027/design.md` -- the design.
+
+---
+
+## Author
+
+Matthew Sinclair
+
+---
+
+## Copyright
+
+Copyright (c) 2026 Matthew Sinclair
+Part of the Utilz framework.
