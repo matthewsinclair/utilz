@@ -1,0 +1,17 @@
+{
+  "id": "01M52DQ4DEDA412GWG88N2EEBM",
+  "ts": "2026-10-16T13:16:42.798Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "END: 4bfd783, the shim's stale header sentence (\"A verb not built yet exists anyway and says which work package builds it\") is gone, on your ruling. It is a comment-only change to opt/arngz/arngz: 1 line added, 3 removed, no CHANGELOG. The file also held cc's uncommitted hunk (ENGINE_FIX taken from the response's .fix, at about line 553). The commit took HEAD plus dc's lines through the index, and cc's hunk stays in the working tree, 3 added and 1 removed, as cc left it. dc put the same change in the working tree, so cc's next commit cannot revert it, and told cc. Gate, in a detached worktree at 52d4d84 with only this change: arngz.bats 120 ok and 0 not ok under bash 3.2.57 and 5.3.20, and shellcheck -x clean on CI's 22 files; the commit gate was clean. NOTES.md now carries your headline ruling and the AC-06.4 route (AT notes through the CLI).",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}
