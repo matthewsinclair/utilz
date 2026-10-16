@@ -538,11 +538,12 @@ jobs:
     - name: Test Menuz.app, unsigned
       run: bin/utilz menuz test --unsigned
 
-    # The shim prints only the last 40 lines of a failed xcodebuild, which
-    # are the cancelled tasks rather than the compiler's error, and the log
-    # stays on the runner: the first dispatch (run 38968763850, Xcode 16.4)
-    # failed in MenuzKit with its cause unseen. So on a failure, print the
-    # error lines of each log first, then the whole log, folded.
+    # A failed xcodebuild's log stays on the runner. The shim prints its
+    # error lines, the first 20 with a count of the rest, then its last 40
+    # lines (4952112); before that it printed the tail alone, which on the
+    # first dispatch (run 38968763850, Xcode 16.4) was cancelled tasks with
+    # the compiler's error above them. So on a failure, print the error
+    # lines of each log first, then the whole log, folded.
     - name: The build's log, on a failure
       if: failure()
       run: |
