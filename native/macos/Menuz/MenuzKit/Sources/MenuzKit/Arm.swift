@@ -7,6 +7,9 @@ public enum Arm: Equatable, Sendable {
   case render(file: String?)
   case version
   case loginItem
+  /// Unregister the login item: `utilz menuz uninstall` asks the installed
+  /// copy, so the service forgets it before the bundle goes.
+  case unregisterLoginItem
   /// Post `text` as a notice under the app's bundle id (D13): the run's
   /// wrapper calls it at a run's end, the text in `MENUZ_NOTICE`, never in
   /// argv, where `ps` would show a run's output to anyone.
@@ -29,11 +32,18 @@ public enum Arm: Equatable, Sendable {
         return .refused("--notify wants MENUZ_NOTICE in the environment")
       }
       return .notify(text: text)
-    case "--version", "--login-item":
-      guard rest.isEmpty else { return .refused("\(first) takes no arguments") }
-      return first == "--version" ? .version : .loginItem
+    case "--version":
+      return rest.isEmpty ? .version : noArguments(first)
+    case "--login-item":
+      return rest.isEmpty ? .loginItem : noArguments(first)
+    case "--unregister-login-item":
+      return rest.isEmpty ? .unregisterLoginItem : noArguments(first)
     default:
-      return .refused("unknown arm \(first): the arms are --validate [file], --render [file], --version, --login-item, --notify")
+      return .refused("unknown arm \(first): the arms are --validate [file], --render [file], --version, --login-item, --unregister-login-item, --notify")
     }
+  }
+
+  private static func noArguments(_ arm: String) -> Arm {
+    .refused("\(arm) takes no arguments")
   }
 }

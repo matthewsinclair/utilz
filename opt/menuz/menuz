@@ -5,8 +5,11 @@
 # ST0027. This file is the shim: it manages the config directory and the log,
 # and asks the app (Menuz.app, built from native/macos/Menuz) everything about
 # the menu itself, so the yaml is parsed in one place. WP-02 is the verbs that
-# need no Xcode; build, test, install, use and the rest of the app verbs are
-# WP-05.
+# need no Xcode; WP-05 is build, test, stamps, install, use, uninstall, start,
+# stop, restart and doctor.
+#
+# Exit codes, as arngz's: 0 done; 1 failed after something changed, naming
+# the step; 2 refused before anything changed.
 #
 
 set -euo pipefail
@@ -45,6 +48,22 @@ VERBS:
   render [file]              the menu as the app would show it
   status                     installed, which build use selects, running,
                              login item, and whether the source is current
+  build [--release] [--unsigned]
+                             xcodegen when the project is stale, then
+                             xcodebuild Debug, or Release with --release;
+                             --unsigned builds with no signing identity
+  test [--unsigned]          xcodebuild test of the scheme: MenuzTests and
+                             MenuzKitTests
+  stamps                     what the next build stamps, NAME=value a line
+  install                    build Release (a source clone) or fetch the
+                             release's Menuz.app.zip (an install), then quit,
+                             replace ~/Applications/Menuz.app, register, launch
+  use [dev|installed]        which build start, restart, status, validate and
+                             render act on; with no word, the choice and why
+  uninstall                  quit, unregister the login item and the bundle,
+                             remove ~/Applications/Menuz.app
+  start | stop | restart     open the chosen build; quit every copy; both
+  doctor                     one line per precondition, exit 1 if any fails
 
 The config directory is \${MENUZ_HOME:-\${XDG_CONFIG_HOME:-\$HOME/.config}/menuz}.
 The log is \${XDG_STATE_HOME:-\$HOME/.local/state}/menuz/menuz.log.
@@ -75,6 +94,21 @@ state_dir() {
   printf '%s/menuz\n' "${XDG_STATE_HOME:-$HOME/.local/state}"
 }
 
+# Every product and intermediate of a build goes under here, never into the
+# tree (this machine's Xcode location preference otherwise writes there).
+build_root() {
+  printf '%s/build/macos\n' "$(state_dir)"
+}
+
+# $1 is Debug or Release. bin/devbin macos app-sign reads Release here.
+product_bundle() {
+  printf '%s/Build/Products/%s/Menuz.app\n' "$(build_root)" "$1"
+}
+
+xcodegen_hash_file() {
+  printf '%s/build/xcodegen.hash\n' "$(state_dir)"
+}
+
 log_file() {
   printf '%s/menuz.log\n' "$(state_dir)"
 }
@@ -92,16 +126,75 @@ installed_bundle() {
 }
 
 dev_bundle() {
-  printf '%s/build/macos/Build/Products/Debug/Menuz.app\n' "$(state_dir)"
+  product_bundle Debug
 }
 
-# Where use's choice is recorded. WP-05's use verb writes it.
+# Where use's choice is recorded. The use verb writes it.
 use_record() {
   printf '%s/use\n' "$(state_dir)"
 }
 
 app_binary() {
   printf '%s/Contents/MacOS/Menuz\n' "$1"
+}
+
+project_file() {
+  printf '%s/Menuz.xcodeproj\n' "$(source_dir)"
+}
+
+BUNDLE_ID="com.matthewsinclair.utilz.menuz"
+RELEASE_DOWNLOADS="https://github.com/matthewsinclair/utilz/releases/download"
+LSREGISTER="/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister"
+
+# The path of an executable NAME on PATH (common.sh's check_command, which
+# refuses a non-executable match), or 1 when there is none.
+command_path() {
+  check_command "$1" || return 1
+  command -v "$1"
+}
+
+# lsregister is not on PATH on macOS; one on PATH (a test's fake) is taken
+# first.
+lsregister_cmd() {
+  command_path lsregister || printf '%s\n' "$LSREGISTER"
+}
+
+# ============================================================================
+# SOURCE CLONE OR INSTALL
+# ============================================================================
+
+# An install (a brew keg or a utilz install publish) carries manifest.sha256
+# at its root and leaves native/macos out, as prez's shim reads it (ST0014 D5).
+is_install() {
+  [[ -f "$UTILZ_HOME/manifest.sha256" ]]
+}
+
+# A failure after something changed: exit 1, naming the step.
+fail_step() {
+  error "menuz: $1 failed: $2"
+  exit 1
+}
+
+no_args() {
+  local verb="$1"
+  shift
+  if [[ $# -gt 0 ]]; then
+    refuse "$verb: takes no arguments, and was given '$*'"
+  fi
+}
+
+# What a build needs, refused by name before anything changes: a source
+# clone, the app's source, Xcode and xcodegen.
+require_build_tools() {
+  local verb="$1" out
+  if is_install; then
+    refuse "$verb: this is an install of Utilz, which carries no app source; build from a source clone: git clone https://github.com/matthewsinclair/utilz"
+  fi
+  [[ -f "$(source_dir)/project.yml" ]] || refuse "$verb: no app source at $(source_dir)"
+  if ! out="$(xcodebuild -version 2>&1)"; then
+    refuse "$verb: Xcode is not available (xcodebuild -version: ${out##*$'\n'})"
+  fi
+  check_command xcodegen || refuse "$verb: xcodegen is not installed (brew install xcodegen)"
 }
 
 # ============================================================================
@@ -129,29 +222,53 @@ bundle_for() {
   if [[ "$1" == dev ]]; then dev_bundle; else installed_bundle; fi
 }
 
-# The selected app's binary, or a refusal naming where it looked. When use
-# has no record, the other build is tried too, so the refusal names both.
-require_app() {
-  local sel choice why bin
+# use's choice and why, as "<choice> (<why>)": what use and status print.
+describe_use() {
+  local sel
+  sel="$(selected_build)" || exit $?
+  printf '%s (%s)\n' "${sel%%$'\037'*}" "${sel#*$'\037'}"
+}
+
+# The one answer to which bundle every verb acts on: the one use selects,
+# or, when use has no record, the dev build if nothing is installed. Prints
+# the bundle; when there is none, prints where it looked and returns 1.
+find_bundle() {
+  local sel choice why bundle
   # Explicit: this runs inside a command substitution, where errexit is off,
   # so a refusal in selected_build would otherwise end only its own subshell.
   sel="$(selected_build)" || exit $?
   choice="${sel%%$'\037'*}"
   why="${sel#*$'\037'}"
-  bin="$(app_binary "$(bundle_for "$choice")")"
-  if [[ -x "$bin" ]]; then
-    printf '%s\n' "$bin"
+  bundle="$(bundle_for "$choice")"
+  if [[ -x "$(app_binary "$bundle")" ]]; then
+    printf '%s\n' "$bundle"
     return 0
   fi
   if [[ "$why" == default ]]; then
-    bin="$(app_binary "$(dev_bundle)")"
-    if [[ -x "$bin" ]]; then
-      printf '%s\n' "$bin"
+    if [[ -x "$(app_binary "$(dev_bundle)")" ]]; then
+      dev_bundle
       return 0
     fi
-    refuse "no Menuz app is built or installed: looked for $(app_binary "$(installed_bundle)") and $(app_binary "$(dev_bundle)")"
+    printf 'no Menuz app is built or installed: looked for %s and %s\n' \
+      "$(app_binary "$(installed_bundle)")" "$(app_binary "$(dev_bundle)")"
+    return 1
   fi
-  refuse "use selects the $choice build ($why), and $bin is not there"
+  printf 'use selects the %s build (%s), and %s is not there\n' "$choice" "$why" "$(app_binary "$bundle")"
+  return 1
+}
+
+# find_bundle's bundle, or a refusal saying where it looked.
+selected_bundle() {
+  local bundle
+  bundle="$(find_bundle)" || refuse "$bundle"
+  printf '%s\n' "$bundle"
+}
+
+# The selected app's binary, or a refusal naming where it looked.
+require_app() {
+  local bundle
+  bundle="$(selected_bundle)" || exit $?
+  app_binary "$bundle"
 }
 
 # ============================================================================
@@ -164,14 +281,18 @@ require_app() {
 # -dirty. Empty when there is no source here or it is not under git; a git
 # that fails after that is an error, returned as 1 with why on stderr.
 source_stamp() {
-  local dir listing porcelain changes rec path digest
+  local dir listing porcelain changes rec path digest rc=0
   dir="$(source_dir)"
   [[ -d "$dir" ]] || return 0
   listing="$(git -C "$UTILZ_HOME" ls-tree -r HEAD -- native/macos/Menuz 2>/dev/null)" || return 0
   [[ -n "$listing" ]] || return 0
   # grep -v exits 1 when it kept no line (every file a test): that is an
   # empty listing, not an error; 2 is an error.
-  listing="$(printf '%s\n' "$listing" | grep -v $'\tnative/macos/Menuz/MenuzTests/')" || [[ $? -eq 1 ]]
+  listing="$(printf '%s\n' "$listing" | grep -v $'\tnative/macos/Menuz/MenuzTests/')" || rc=$?
+  if [[ $rc -gt 1 ]]; then
+    echo "menuz: grep exited $rc reading the listing of native/macos/Menuz" >&2
+    return 1
+  fi
   # NUL-separated, renames off, so every record is "XY path" whatever the
   # path holds, and taken whole first so a git that fails is seen.
   porcelain="$(git -C "$UTILZ_HOME" status --porcelain -z --no-renames --untracked-files=all -- native/macos/Menuz | tr '\0' '\n')" || {
@@ -193,8 +314,46 @@ source_stamp() {
   if [[ -z "$changes" ]]; then
     printf '%s' "$listing" | git hash-object --stdin
   else
-    printf '%s-dirty\n' "$(printf '%s%s' "$listing" "$changes" | git hash-object --stdin)"
+    digest="$(printf '%s%s' "$listing" "$changes" | git hash-object --stdin)" || return 1
+    printf '%s-dirty\n' "$digest"
   fi
+}
+
+# The pids of every running Menuz, space-separated, empty when none runs.
+# pgrep exits 1 when nothing matched; anything else is returned as 1 with
+# why on stdout, for the caller to say.
+running_pids() {
+  local out rc=0
+  out="$(pgrep -x Menuz 2>&1)" || rc=$?
+  case $rc in
+    0) printf '%s\n' "$out" | tr '\n' ' ' | sed 's/ $//' ;;
+    1) ;;
+    *)
+      printf 'pgrep exited %s: %s\n' "$rc" "$out"
+      return 1
+      ;;
+  esac
+}
+
+# The four stamps, one NAME=value a line, in the order build passes them.
+print_stamps() {
+  printf 'MENUZ_VERSION=%s\nMENUZ_BUILD=%s\nMENUZ_COMMIT=%s\nMENUZ_SOURCE_TREE=%s\n' "$@"
+}
+
+# The four stamps BUNDLE carries, as print_stamps prints them; 1 when its
+# Info.plist cannot be read. A stamp absent from it prints empty.
+bundle_stamps() {
+  local plist="$1/Contents/Info.plist" version build commit tree
+  version="$(plist_value "$plist" CFBundleShortVersionString)" || return 1
+  build="$(plist_value "$plist" CFBundleVersion)" || return 1
+  commit="$(plist_value "$plist" MenuzCommit)" || return 1
+  tree="$(plist_value "$plist" MenuzSourceTree)" || return 1
+  print_stamps "$version" "$build" "$commit" "$tree"
+}
+
+# One stamp's value out of print_stamps' lines.
+stamp_value() {
+  printf '%s\n' "$1" | sed -n "s/^$2=//p"
 }
 
 # One string value of an Info.plist key, or nothing when the key is absent;
@@ -205,7 +364,7 @@ plist_value() {
   local plist="$1" key="$2" xml
   [[ -f "$plist" ]] || return 1
   if [[ "$(head -c 6 "$plist")" == bplist ]]; then
-    command -v plutil >/dev/null 2>&1 || return 1
+    check_command plutil || return 1
     xml="$(plutil -convert xml1 -o - "$plist" 2>/dev/null)" || return 1
   else
     xml="$(cat "$plist")"
@@ -306,48 +465,43 @@ cmd_app_arm() {
 }
 
 cmd_status() {
-  [[ $# -eq 0 ]] || refuse "status: takes no arguments"
-  local sel choice why bundle plist bin
-  sel="$(selected_build)" || exit $?
-  choice="${sel%%$'\037'*}"
-  why="${sel#*$'\037'}"
+  no_args status "$@"
+  local use bundle bin
+  use="$(describe_use)" || exit $?
 
-  local installed rc=0
+  local installed stamps="" rc=0
   installed="$(installed_bundle)"
-  if [[ -d "$installed" ]]; then
-    plist="$installed/Contents/Info.plist"
-    local version build commit
-    if version="$(plist_value "$plist" CFBundleShortVersionString)" &&
-      build="$(plist_value "$plist" CFBundleVersion)" &&
-      commit="$(plist_value "$plist" MenuzCommit)"; then
-      printf 'installed   %s  %s build %s (%s)\n' "$installed" "$version" "$build" "$commit"
-    else
-      printf 'installed   %s  (its Info.plist could not be read: %s)\n' "$installed" "$plist"
-    fi
-  else
+  if [[ ! -d "$installed" ]]; then
     printf 'installed   no: not installed at %s\n' "$installed"
     rc=1
-  fi
-  printf 'use         %s (%s)\n' "$choice" "$why"
-
-  # pgrep exits 1 when nothing matched; anything else is an error, said.
-  local pids prc=0
-  pids="$(pgrep -x Menuz 2>&1)" || prc=$?
-  case $prc in
-    0) printf 'running     pid %s\n' "$(printf '%s' "$pids" | tr '\n' ' ' | sed 's/ $//')" ;;
-    1) printf 'running     no\n' ;;
-    *) printf 'running     unknown: pgrep exited %s: %s\n' "$prc" "$pids" ;;
-  esac
-
-  bundle="$(bundle_for "$choice")"
-  bin="$(app_binary "$bundle")"
-  local login
-  if [[ -x "$bin" ]] && login="$("$bin" --login-item 2>&1)"; then
-    printf 'login item  %s\n' "$login"
-  elif [[ -x "$bin" ]]; then
-    printf 'login item  unknown: %s --login-item failed: %s\n' "$bin" "$login"
+  elif stamps="$(bundle_stamps "$installed")"; then
+    printf 'installed   %s  %s build %s (%s)\n' "$installed" "$(stamp_value "$stamps" MENUZ_VERSION)" \
+      "$(stamp_value "$stamps" MENUZ_BUILD)" "$(stamp_value "$stamps" MENUZ_COMMIT)"
   else
-    printf 'login item  unknown: no app at %s to ask\n' "$bin"
+    stamps=""
+    printf 'installed   %s  (its Info.plist could not be read: %s)\n' "$installed" "$installed/Contents/Info.plist"
+  fi
+  printf 'use         %s\n' "$use"
+
+  local pids
+  if ! pids="$(running_pids)"; then
+    printf 'running     unknown: %s\n' "$pids"
+  elif [[ -z "$pids" ]]; then
+    printf 'running     no\n'
+  else
+    printf 'running     pid %s\n' "$pids"
+  fi
+
+  local login
+  if ! bundle="$(find_bundle)"; then
+    printf 'login item  unknown: no app to ask: %s\n' "$bundle"
+  else
+    bin="$(app_binary "$bundle")"
+    if login="$("$bin" --login-item 2>&1)"; then
+      printf 'login item  %s\n' "$login"
+    else
+      printf 'login item  unknown: %s --login-item failed: %s\n' "$bin" "$login"
+    fi
   fi
 
   local tree stamp
@@ -358,7 +512,7 @@ cmd_status() {
   elif [[ ! -d "$installed" ]]; then
     printf 'source      tree %s, nothing installed to compare\n' "$tree"
   else
-    stamp="$(plist_value "$installed/Contents/Info.plist" MenuzSourceTree)" || stamp=""
+    stamp="$(stamp_value "$stamps" MENUZ_SOURCE_TREE)"
     if [[ "$stamp" == "$tree" ]]; then
       printf 'source      current (tree %s)\n' "$tree"
     else
@@ -366,6 +520,459 @@ cmd_status() {
     fi
   fi
   return $rc
+}
+
+# ============================================================================
+# BUILD AND TEST
+# ============================================================================
+
+# The four stamps of this source clone, one NAME=value a line: the version
+# from opt/menuz/VERSION, the commit count, the short commit, and the source
+# tree's stamp (source_stamp, the one status compares). 1 with why on stderr
+# when one cannot be read.
+build_stamps() {
+  local version count commit tree
+  version="$(tr -d '[:space:]' <"$UTILZ_HOME/opt/menuz/VERSION")" || return 1
+  count="$(git -C "$UTILZ_HOME" rev-list --count HEAD)" || return 1
+  commit="$(git -C "$UTILZ_HOME" rev-parse --short HEAD)" || return 1
+  tree="$(source_stamp)" || return 1
+  if [[ -z "$tree" ]]; then
+    echo "menuz: no app source under git at $(source_dir)" >&2
+    return 1
+  fi
+  print_stamps "$version" "$count" "$commit" "$tree"
+}
+
+# What xcodegen reads: project.yml's content and the set of file paths under
+# the targets' directories. Paths, not contents: a changed source is Xcode's
+# business, and a new or removed one is xcodegen's.
+project_inputs_hash() {
+  local dir d
+  local -a dirs=()
+  dir="$(source_dir)"
+  for d in Menuz MenuzTests MenuzKit; do
+    if [[ -d "$dir/$d" ]]; then dirs+=("$d"); fi
+  done
+  {
+    cat "$dir/project.yml" || return 1
+    if [[ ${#dirs[@]} -gt 0 ]]; then
+      (cd "$dir" && find "${dirs[@]}" \( -name .build -o -name .swiftpm \) -prune -o -type f ! -name .DS_Store -print) | LC_ALL=C sort
+    fi
+  } | git hash-object --stdin
+}
+
+# xcodegen generate, only when Menuz.xcodeproj is absent or its inputs hash
+# differently from the hash the last generate kept.
+ensure_project() {
+  local hash_file want have="" why out
+  hash_file="$(xcodegen_hash_file)"
+  want="$(project_inputs_hash)" || fail_step xcodegen "the project's inputs under $(source_dir) could not be hashed"
+  if [[ -f "$hash_file" ]]; then have="$(cat "$hash_file")"; fi
+  if [[ ! -d "$(project_file)" ]]; then
+    why="no Menuz.xcodeproj"
+  elif [[ "$have" != "$want" ]]; then
+    why="project.yml or the set of sources changed"
+  else
+    return 0
+  fi
+  printf 'menuz: xcodegen generate (%s)\n' "$why"
+  if ! out="$(cd "$(source_dir)" && xcodegen generate --quiet 2>&1)"; then
+    fail_step xcodegen "$out"
+  fi
+  mkdir -p "$(dirname "$hash_file")"
+  printf '%s\n' "$want" >"$hash_file"
+}
+
+# xcodebuild ACTION (build or test) of the scheme in CONFIG, every product
+# and intermediate under build_root, the stamps as build settings, and with
+# UNSIGNED (1) no signing. Its output goes to a log; a failure prints the
+# log's last 40 lines and is exit 1.
+xcode_run() {
+  local config="$1" unsigned="$2" action="$3" root stamps line log
+  root="$(build_root)"
+  if ! stamps="$(build_stamps)"; then
+    refuse "$action: the stamps could not be read (menuz stamps says why)"
+  fi
+  ensure_project
+  local -a args=(
+    -project "$(project_file)" -scheme Menuz -configuration "$config"
+    -derivedDataPath "$root"
+    "SYMROOT=$root/Build/Products"
+    "OBJROOT=$root/Build/Intermediates.noindex"
+    "SHARED_PRECOMPS_DIR=$root/Build/Intermediates.noindex/PrecompiledHeaders"
+  )
+  while IFS= read -r line; do
+    args+=("$line")
+  done <<<"$stamps"
+  if [[ "$unsigned" -eq 1 ]]; then args+=(CODE_SIGNING_ALLOWED=NO); fi
+  args+=("$action")
+  log="$(state_dir)/build/xcodebuild-$action.log"
+  mkdir -p "$(dirname "$log")"
+  printf 'menuz: xcodebuild %s, %s (log: %s)\n' "$action" "$config" "$log"
+  if ! xcodebuild "${args[@]}" >"$log" 2>&1; then
+    tail -n 40 "$log"
+    fail_step "xcodebuild $action ($config)" "its last 40 lines are above; the whole log is $log"
+  fi
+}
+
+cmd_build() {
+  local config=Debug unsigned=0 arg
+  for arg in "$@"; do
+    case "$arg" in
+      --release) config=Release ;;
+      --unsigned) unsigned=1 ;;
+      *) refuse "build: unknown argument '$arg'" ;;
+    esac
+  done
+  require_build_tools build
+  xcode_run "$config" "$unsigned" build
+  printf 'menuz: built %s\n' "$(product_bundle "$config")"
+}
+
+cmd_test() {
+  local unsigned=0 arg
+  for arg in "$@"; do
+    case "$arg" in
+      --unsigned) unsigned=1 ;;
+      *) refuse "test: unknown argument '$arg'" ;;
+    esac
+  done
+  require_build_tools test
+  xcode_run Debug "$unsigned" test
+  printf 'menuz: MenuzTests and MenuzKitTests passed\n'
+}
+
+# In a source clone, what the next build stamps; in an install, what the
+# installed bundle carries, said on stderr.
+cmd_stamps() {
+  no_args stamps "$@"
+  if ! is_install; then
+    build_stamps || exit 1
+    return 0
+  fi
+  local bundle stamps
+  bundle="$(installed_bundle)"
+  [[ -d "$bundle" ]] || refuse "stamps: this is an install, which builds nothing, and no app is installed at $bundle to read"
+  if ! stamps="$(bundle_stamps "$bundle")"; then
+    error "menuz: stamps: $bundle/Contents/Info.plist could not be read"
+    exit 1
+  fi
+  echo "menuz: an install builds nothing; these are what $bundle carries" >&2
+  printf '%s\n' "$stamps"
+}
+
+# ============================================================================
+# INSTALL, LAUNCH AND QUIT
+# ============================================================================
+
+# Quits every running copy by bundle id, asking again each second, and waits
+# up to 5 s for every pid to go. Application(id).running() is asked first,
+# because quit() on an app that is not running launches it. Exit 1 naming the
+# quit when a copy outlives the wait.
+quit_all() {
+  local pids tick=0 said=""
+  pids="$(running_pids)" || fail_step quit "$pids"
+  if [[ -z "$pids" ]]; then
+    printf 'menuz: Menuz is not running\n'
+    return 0
+  fi
+  printf 'menuz: quitting %s (pid %s)\n' "$BUNDLE_ID" "$pids"
+  while [[ -n "$pids" ]]; do
+    if [[ $tick -ge 25 ]]; then
+      fail_step quit "pid $pids still running 5 s after asking $BUNDLE_ID to quit${said:+ ($said)}"
+    fi
+    if [[ $((tick % 5)) -eq 0 ]]; then
+      # A failed ask is asked again; its words are reported if the wait ends.
+      said="$(osascript -l JavaScript -e "var app = Application('$BUNDLE_ID'); if (app.running()) { app.quit(); }" 2>&1)" || true
+    fi
+    sleep 0.2
+    tick=$((tick + 1))
+    pids="$(running_pids)" || fail_step quit "$pids"
+  done
+}
+
+# Replaces the installed copy with SRC: a ditto to a sibling, then the old
+# copy moved aside and the new one moved in, so a failed copy leaves the old
+# one whole and a failed move puts it back.
+replace_installed() {
+  local src="$1" dest parent new old out
+  dest="$(installed_bundle)"
+  parent="$(dirname "$dest")"
+  new="$parent/.Menuz.app.new.$$"
+  old="$parent/.Menuz.app.old.$$"
+  mkdir -p "$parent" || fail_step replace "$parent could not be created"
+  if ! out="$(ditto "$src" "$new" 2>&1)"; then
+    rm -rf "${new:?}"
+    fail_step replace "ditto $src $new: $out"
+  fi
+  if [[ -e "$dest" ]] && ! out="$(mv "$dest" "$old" 2>&1)"; then
+    rm -rf "${new:?}"
+    fail_step replace "$dest could not be moved aside: $out"
+  fi
+  if ! out="$(mv "$new" "$dest" 2>&1)"; then
+    rm -rf "${new:?}"
+    if [[ -e "$old" ]] && ! mv "$old" "$dest" 2>/dev/null; then
+      fail_step replace "the new copy could not be moved to $dest ($out), and the old copy could not be put back: it is at $old"
+    fi
+    fail_step replace "the new copy could not be moved to $dest, and the old copy is back: $out"
+  fi
+  rm -rf "${old:?}"
+  printf 'menuz: installed %s\n' "$dest"
+}
+
+# Opens BUNDLE with an empty environment but HOME, so the app captures its
+# own login shell rather than inheriting this one's. open is found first,
+# since env -i leaves no PATH to find it by.
+launch_bundle() {
+  local bundle="$1" open_cmd out
+  open_cmd="$(command_path open)" || fail_step launch "no open command on PATH"
+  if ! out="$(env -i HOME="$HOME" "$open_cmd" -a "$bundle" 2>&1)"; then
+    fail_step launch "open -a $bundle: $out"
+  fi
+  printf 'menuz: launched %s\n' "$bundle"
+}
+
+# The keg's install: the release's Menuz.app.zip for this tree's VERSION,
+# unzipped into ASSET_TMP and verified before anything is replaced. Sets
+# ASSET_BUNDLE; exit 1 naming the check that failed.
+ASSET_TMP=""
+ASSET_BUNDLE=""
+fetch_asset() {
+  local version want url zip out rc=0 id got
+  version="$(tr -d '[:space:]' <"$UTILZ_HOME/VERSION" 2>/dev/null)" || version=""
+  want="$(tr -d '[:space:]' <"$UTILZ_HOME/opt/menuz/VERSION" 2>/dev/null)" || want=""
+  [[ -n "$version" ]] || refuse "install: this install has no release version in $UTILZ_HOME/VERSION to fetch the app of"
+  [[ -n "$want" ]] || refuse "install: this install has no menuz version in $UTILZ_HOME/opt/menuz/VERSION to check the app against"
+  url="$RELEASE_DOWNLOADS/$version/Menuz.app.zip"
+  ASSET_TMP="$(mktemp -d)"
+  zip="$ASSET_TMP/Menuz.app.zip"
+  printf 'menuz: fetching %s\n' "$url"
+  out="$(curl -fsSL -o "$zip" "$url" 2>&1)" || rc=$?
+  if [[ $rc -eq 22 ]]; then
+    fail_step fetch "$url: the release $version carries no Menuz.app ($out)"
+  elif [[ $rc -ne 0 ]]; then
+    fail_step fetch "curl $url exited $rc: $out"
+  fi
+  mkdir -p "$ASSET_TMP/app"
+  if ! out="$(ditto -x -k "$zip" "$ASSET_TMP/app" 2>&1)"; then
+    fail_step unzip "ditto -x -k $zip: $out"
+  fi
+  ASSET_BUNDLE="$ASSET_TMP/app/Menuz.app"
+  [[ -d "$ASSET_BUNDLE" ]] || fail_step unzip "$url holds no Menuz.app"
+  if ! out="$(codesign --verify --deep --strict "$ASSET_BUNDLE" 2>&1)"; then
+    fail_step codesign "the asset's signature does not verify: $out"
+  fi
+  rc=0
+  out="$(spctl -a -t exec -vv "$ASSET_BUNDLE" 2>&1)" || rc=$?
+  if [[ $rc -ne 0 || "$out" != *"source=Notarized Developer ID"* ]]; then
+    fail_step spctl "the asset is not accepted as Notarized Developer ID: $out"
+  fi
+  id="$(plist_value "$ASSET_BUNDLE/Contents/Info.plist" CFBundleIdentifier)" || id=""
+  if [[ "$id" != "$BUNDLE_ID" ]]; then
+    fail_step "bundle id" "the asset's bundle id is '${id:-unreadable}', not $BUNDLE_ID"
+  fi
+  got="$(plist_value "$ASSET_BUNDLE/Contents/Info.plist" CFBundleShortVersionString)" || got=""
+  if [[ "$got" != "$want" ]]; then
+    fail_step version "the asset is menuz ${got:-of no readable version} and this install's opt/menuz/VERSION is $want"
+  fi
+}
+
+remove_asset_tmp() {
+  if [[ -n "$ASSET_TMP" ]]; then rm -rf "${ASSET_TMP:?}"; fi
+}
+
+cmd_install() {
+  no_args install "$@"
+  local bundle unclaim="" out
+  if is_install; then
+    trap remove_asset_tmp EXIT
+    fetch_asset
+    bundle="$ASSET_BUNDLE"
+  else
+    require_build_tools install
+    xcode_run Release 0 build
+    bundle="$(product_bundle Release)"
+    [[ -d "$bundle" ]] || fail_step build "xcodebuild succeeded and left no $bundle"
+    unclaim="$bundle"
+  fi
+  quit_all
+  replace_installed "$bundle"
+  # So Launch Services never opens the build product for the bundle id.
+  if [[ -n "$unclaim" ]] && ! out="$("$(lsregister_cmd)" -u "$unclaim" 2>&1)"; then
+    fail_step unclaim "lsregister -u $unclaim: $out"
+  fi
+  if ! out="$("$(lsregister_cmd)" -f "$(installed_bundle)" 2>&1)"; then
+    fail_step register "lsregister -f $(installed_bundle): $out"
+  fi
+  launch_bundle "$(installed_bundle)"
+}
+
+# Quits every copy, asks the installed copy to unregister its login item,
+# unregisters the bundle and removes it. An unregistration that fails is
+# said and the removal goes on, and the exit is then 1.
+cmd_uninstall() {
+  no_args uninstall "$@"
+  local bundle bin out failed=""
+  bundle="$(installed_bundle)"
+  if [[ ! -e "$bundle" ]]; then
+    printf 'menuz: nothing installed at %s; nothing changed\n' "$bundle"
+    return 0
+  fi
+  quit_all
+  bin="$(app_binary "$bundle")"
+  if [[ ! -x "$bin" ]]; then
+    failed="the login item: no app at $bin to unregister it"
+  elif out="$("$bin" --unregister-login-item 2>&1)"; then
+    printf 'menuz: login item %s\n' "$out"
+  else
+    failed="the login item: $out"
+  fi
+  if ! out="$("$(lsregister_cmd)" -u "$bundle" 2>&1)"; then
+    failed="${failed:+$failed; }lsregister -u $bundle: $out"
+  fi
+  rm -rf "${bundle:?}" || fail_step remove "$bundle could not be removed${failed:+; and $failed}"
+  printf 'menuz: removed %s\n' "$bundle"
+  if [[ -n "$failed" ]]; then
+    error "menuz: uninstall removed the app, but $failed"
+    exit 1
+  fi
+}
+
+cmd_use() {
+  local record
+  case $# in
+    0) describe_use ;;
+    1)
+      case "$1" in
+        dev | installed) ;;
+        *) refuse "use: '$1' is neither dev nor installed" ;;
+      esac
+      record="$(use_record)"
+      mkdir -p "$(dirname "$record")"
+      printf '%s\n' "$1" >"$record"
+      printf 'menuz: use %s, recorded in %s\n' "$1" "$record"
+      ;;
+    *) refuse "use: takes one word, dev or installed, and was given '$*'" ;;
+  esac
+}
+
+cmd_start() {
+  no_args start "$@"
+  local bundle
+  bundle="$(selected_bundle)" || exit $?
+  launch_bundle "$bundle"
+}
+
+cmd_stop() {
+  no_args stop "$@"
+  quit_all
+}
+
+# The build to start is found before anything is quit, so a missing one is
+# refused with nothing changed.
+cmd_restart() {
+  no_args restart "$@"
+  local bundle
+  bundle="$(selected_bundle)" || exit $?
+  quit_all
+  launch_bundle "$bundle"
+}
+
+# ============================================================================
+# DOCTOR
+# ============================================================================
+
+DOCTOR_FAILED=0
+
+doctor_line() {
+  printf '%-11s %-4s %s\n' "$1" "$2" "$3"
+  if [[ "$2" == FAIL ]]; then DOCTOR_FAILED=1; fi
+}
+
+# The build's preconditions: Xcode selected, xcodegen, and a codesigning
+# identity, counted and never printed.
+doctor_build_lines() {
+  local dev ver found ids n rc=0
+  if dev="$(xcode-select -p 2>&1)" && ver="$(xcodebuild -version 2>&1)"; then
+    doctor_line xcode ok "$dev, ${ver%%$'\n'*}"
+  else
+    doctor_line xcode FAIL "no Xcode selected: ${ver:-$dev}"
+  fi
+  if found="$(command_path xcodegen)"; then
+    doctor_line xcodegen ok "$found"
+  else
+    doctor_line xcodegen FAIL "not installed (brew install xcodegen)"
+  fi
+  if ! ids="$(security find-identity -v -p codesigning 2>&1)"; then
+    doctor_line identity FAIL "security find-identity failed: ${ids%%$'\n'*}"
+    return 0
+  fi
+  # grep -c exits 1 on a count of none; 2 is an error, said.
+  n="$(printf '%s\n' "$ids" | grep -cE '"(Developer ID Application|Apple Development): ')" || rc=$?
+  if [[ $rc -gt 1 ]]; then
+    doctor_line identity FAIL "grep exited $rc counting the identities"
+    return 0
+  fi
+  if [[ "$n" -gt 0 ]]; then
+    doctor_line identity ok "$n codesigning identities (Developer ID Application or Apple Development)"
+  else
+    doctor_line identity FAIL "no Developer ID Application or Apple Development identity in the keychain"
+  fi
+}
+
+cmd_doctor() {
+  no_args doctor "$@"
+  if is_install; then
+    doctor_line build skip "an install of Utilz carries no app source, so Xcode, xcodegen and an identity are not needed; install fetches the release's app"
+  else
+    doctor_build_lines
+  fi
+
+  local menu bin out installed pids
+  menu="$(menu_file)"
+  if [[ -f "$menu" ]]; then
+    doctor_line config ok "$menu"
+  else
+    doctor_line config FAIL "no $menu (menuz init creates it)"
+  fi
+
+  if ! bin="$(require_app 2>&1)"; then
+    doctor_line menu FAIL "no app to validate it with: $bin"
+    bin=""
+  elif [[ ! -f "$menu" ]]; then
+    doctor_line menu FAIL "no menu to validate"
+  elif out="$("$bin" --validate "$menu" 2>&1)"; then
+    doctor_line menu ok "valid, by $bin"
+  else
+    doctor_line menu FAIL "$(printf '%s' "$out" | tr '\n' ';' | sed 's/;/; /g')"
+  fi
+
+  installed="$(installed_bundle)"
+  if [[ -d "$installed" ]]; then
+    doctor_line installed ok "$installed"
+  else
+    doctor_line installed FAIL "not installed at $installed (menuz install)"
+  fi
+
+  if ! pids="$(running_pids)"; then
+    doctor_line running FAIL "unknown: $pids"
+  elif [[ -n "$pids" ]]; then
+    doctor_line running ok "pid $pids"
+  else
+    doctor_line running FAIL "not running (menuz start)"
+  fi
+
+  if [[ -z "$bin" ]]; then
+    doctor_line "login item" FAIL "no app to ask"
+  elif ! out="$("$bin" --login-item 2>&1)"; then
+    doctor_line "login item" FAIL "$bin --login-item failed: $out"
+  elif [[ "$out" == enabled ]]; then
+    doctor_line "login item" ok "enabled"
+  else
+    doctor_line "login item" FAIL "$out"
+  fi
+
+  return "$DOCTOR_FAILED"
 }
 
 # ============================================================================
@@ -387,6 +994,16 @@ main() {
     validate) cmd_app_arm --validate validate "$@" ;;
     render) cmd_app_arm --render render "$@" ;;
     status) cmd_status "$@" ;;
+    build) cmd_build "$@" ;;
+    test) cmd_test "$@" ;;
+    stamps) cmd_stamps "$@" ;;
+    install) cmd_install "$@" ;;
+    use) cmd_use "$@" ;;
+    uninstall) cmd_uninstall "$@" ;;
+    start) cmd_start "$@" ;;
+    stop) cmd_stop "$@" ;;
+    restart) cmd_restart "$@" ;;
+    doctor) cmd_doctor "$@" ;;
     *) refuse "unknown verb: '$verb' (menuz --help names the verbs)" ;;
   esac
 }

@@ -7,6 +7,9 @@
 # directory, the app is a fake bundle that records its arguments, and open,
 # pgrep and tail are fakes on PATH where a verb would otherwise reach out.
 
+# The fakes' bodies are written literally into each fake and expand when the
+# fake runs, so their single quotes are deliberate.
+# shellcheck disable=SC2016
 load "../../utilz/test/test_helper.bash"
 
 EXAMPLE="$UTILZ_HOME/opt/menuz/lib/example.yaml"
@@ -23,6 +26,9 @@ setup() {
   DEV="$XDG_STATE_HOME/menuz/build/macos/Build/Products/Debug/Menuz.app"
   FAKES="$BATS_TEST_TMPDIR/fakes"
   mkdir -p "$FAKES"
+  # Every fake appends here, so a count of none is read from a file that
+  # exists, never from a missing one.
+  : >"$FAKES/calls"
   export PATH="$FAKES:$PATH"
   # pgrep finds no Menuz unless a test says otherwise.
   fake pgrep 'exit 1'
@@ -33,29 +39,38 @@ run_menuz() {
 }
 
 # A command on PATH that records its arguments, one per line, in
-# $FAKES/<name>.args, then runs BODY.
+# $FAKES/<name>.args, appends "<name> <args>" to $FAKES/calls so a sequence
+# can be read in order, then runs BODY.
 fake() {
   local name="$1" body="$2"
   cat >"$FAKES/$name" <<EOF
 #!/usr/bin/env bash
 printf '%s\n' "\$@" >"$FAKES/$name.args"
+printf '%s %s\n' "$name" "\$*" >>"$FAKES/calls"
 $body
 EOF
   chmod +x "$FAKES/$name"
 }
 
 # A fake Menuz.app at BUNDLE: its binary records its arguments in
-# $FAKES/app.args and answers from FAKE_APP_OUT and FAKE_APP_RC, or for
-# --login-item from FAKE_LOGIN; its Info.plist carries the stamps.
+# $FAKES/app.args and as "app <args>" in $FAKES/calls, and answers from
+# FAKE_APP_OUT and FAKE_APP_RC, for --login-item from FAKE_LOGIN, and for
+# --unregister-login-item from FAKE_UNREGISTER_OUT and FAKE_UNREGISTER_RC;
+# its Info.plist carries the bundle id and the stamps.
 make_app() {
-  local bundle="$1" version="${2:-0.1.0}" tree="${3:-abc123}"
+  local bundle="$1" version="${2:-0.1.0}" tree="${3:-abc123}" id="${4:-com.matthewsinclair.utilz.menuz}"
   mkdir -p "$bundle/Contents/MacOS"
   cat >"$bundle/Contents/MacOS/Menuz" <<EOF
 #!/usr/bin/env bash
 printf '%s\n' "\$@" >"$FAKES/app.args"
+printf 'app %s\n' "\$*" >>"$FAKES/calls"
 if [[ "\$1" == --login-item ]]; then
   printf '%s\n' "\${FAKE_LOGIN:-enabled}"
   exit 0
+fi
+if [[ "\$1" == --unregister-login-item ]]; then
+  printf '%s\n' "\${FAKE_UNREGISTER_OUT:-unregistered (now not registered)}"
+  exit "\${FAKE_UNREGISTER_RC:-0}"
 fi
 printf '%s\n' "\${FAKE_APP_OUT:-ok}"
 exit "\${FAKE_APP_RC:-0}"
@@ -66,6 +81,8 @@ EOF
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>CFBundleIdentifier</key>
+	<string>$id</string>
 	<key>CFBundleShortVersionString</key>
 	<string>$version</string>
 	<key>CFBundleVersion</key>
@@ -94,6 +111,7 @@ source_home() {
   cp "$EXAMPLE" "$SRC/opt/menuz/lib/"
   if [[ "${1:-}" != --no-source ]]; then
     mkdir -p "$SRC/native/macos/Menuz/Menuz" "$SRC/native/macos/Menuz/MenuzTests"
+    echo 'name: Menuz' >"$SRC/native/macos/Menuz/project.yml"
     echo 'print("menuz")' >"$SRC/native/macos/Menuz/Menuz/App.swift"
     echo 'test' >"$SRC/native/macos/Menuz/MenuzTests/AppTests.swift"
   fi
@@ -187,8 +205,8 @@ run_src_menuz() {
   assert_success
   assert_output_contains "$CONFIG"
   cmp "$EXAMPLE" "$CONFIG/menuz.yaml"
-  [[ -d "$CONFIG/bin" ]]
-  [[ -z "$(ls -A "$CONFIG/bin")" ]]
+  [[ -d "$CONFIG/bin" ]] || false
+  [[ -z "$(ls -A "$CONFIG/bin")" ]] || false
 }
 
 @test "AT-02.2: the example menu declares no param type outside D4's five" {
@@ -202,7 +220,7 @@ run_src_menuz() {
   run_menuz init
   assert_success
   cmp "$EXAMPLE" "$MENUZ_HOME/menuz.yaml"
-  [[ ! -e "$CONFIG" ]]
+  [[ ! -e "$CONFIG" ]] || false
 }
 
 @test "AT-02.2: a second init changes nothing" {
@@ -212,8 +230,8 @@ run_src_menuz() {
   run_menuz init
   assert_success
   assert_output_contains "nothing changed"
-  [[ ! "$CONFIG/menuz.yaml" -nt "$BATS_TEST_TMPDIR/mark" ]]
-  [[ ! "$CONFIG/bin" -nt "$BATS_TEST_TMPDIR/mark" ]]
+  [[ ! "$CONFIG/menuz.yaml" -nt "$BATS_TEST_TMPDIR/mark" ]] || false
+  [[ ! "$CONFIG/bin" -nt "$BATS_TEST_TMPDIR/mark" ]] || false
 }
 
 @test "AT-02.2: init refuses to overwrite a menu of the user's own without --force, exit 2, naming the file" {
@@ -233,7 +251,7 @@ run_src_menuz() {
   run_menuz init --force
   assert_success
   cmp "$EXAMPLE" "$CONFIG/menuz.yaml"
-  [[ -f "$CONFIG/bin/mine" ]]
+  [[ -f "$CONFIG/bin/mine" ]] || false
 }
 
 @test "AT-02.2: edit opens the menu with open -t" {
@@ -241,7 +259,7 @@ run_src_menuz() {
   fake open 'exit 0'
   run_menuz edit
   assert_success
-  [[ "$(tr '\n' ' ' <"$FAKES/open.args")" == "-t $CONFIG/menuz.yaml " ]]
+  [[ "$(tr '\n' ' ' <"$FAKES/open.args")" == "-t $CONFIG/menuz.yaml " ]] || false
 }
 
 @test "AT-02.2: edit --editor runs \$VISUAL, else \$EDITOR" {
@@ -250,11 +268,11 @@ run_src_menuz() {
   fake ed 'exit 0'
   VISUAL='vis' EDITOR='ed' run_menuz edit --editor
   assert_success
-  [[ "$(cat "$FAKES/vis.args")" == "$CONFIG/menuz.yaml" ]]
-  [[ ! -e "$FAKES/ed.args" ]]
+  [[ "$(cat "$FAKES/vis.args")" == "$CONFIG/menuz.yaml" ]] || false
+  [[ ! -e "$FAKES/ed.args" ]] || false
   EDITOR='ed' run_menuz edit --editor
   assert_success
-  [[ "$(cat "$FAKES/ed.args")" == "$CONFIG/menuz.yaml" ]]
+  [[ "$(cat "$FAKES/ed.args")" == "$CONFIG/menuz.yaml" ]] || false
 }
 
 @test "AT-02.2: edit --editor with neither \$VISUAL nor \$EDITOR is refused, exit 2" {
@@ -269,7 +287,7 @@ run_src_menuz() {
   run_menuz edit
   assert_exit_code 2
   assert_output_contains "$CONFIG/menuz.yaml"
-  [[ ! -e "$FAKES/open.args" ]]
+  [[ ! -e "$FAKES/open.args" ]] || false
 }
 
 @test "AT-02.2: log with no log yet is refused by name, exit 2" {
@@ -285,7 +303,7 @@ run_src_menuz() {
   run_menuz log
   assert_success
   assert_output_contains "$LOG"
-  [[ "$(tr '\n' ' ' <"$FAKES/tail.args")" == "-f $LOG " ]]
+  [[ "$(tr '\n' ' ' <"$FAKES/tail.args")" == "-f $LOG " ]] || false
 }
 
 @test "AT-02.2: log -n N prints the last N lines and does not follow" {
@@ -317,7 +335,7 @@ run_src_menuz() {
   FAKE_APP_OUT="menu[2].label: refused" FAKE_APP_RC=2 run_menuz validate
   assert_exit_code 2
   assert_output_contains "menu[2].label: refused"
-  [[ "$(app_args)" == "--validate $CONFIG/menuz.yaml " ]]
+  [[ "$(app_args)" == "--validate $CONFIG/menuz.yaml " ]] || false
 }
 
 @test "AT-02.3: validate on a given file passes that file" {
@@ -326,7 +344,7 @@ run_src_menuz() {
   run_menuz validate "$BATS_TEST_TMPDIR/other.yaml"
   assert_success
   assert_output_contains "ok"
-  [[ "$(app_args)" == "--validate $BATS_TEST_TMPDIR/other.yaml " ]]
+  [[ "$(app_args)" == "--validate $BATS_TEST_TMPDIR/other.yaml " ]] || false
 }
 
 @test "AT-02.3: validate on a file that does not exist is refused by name, exit 2" {
@@ -334,7 +352,7 @@ run_src_menuz() {
   run_menuz validate "$BATS_TEST_TMPDIR/nope.yaml"
   assert_exit_code 2
   assert_output_contains "$BATS_TEST_TMPDIR/nope.yaml"
-  [[ ! -e "$FAKES/app.args" ]]
+  [[ ! -e "$FAKES/app.args" ]] || false
 }
 
 @test "AT-02.3: render runs the dev build when nothing is installed" {
@@ -343,7 +361,7 @@ run_src_menuz() {
   FAKE_APP_OUT="  Desks" run_menuz render
   assert_success
   assert_output_contains "  Desks"
-  [[ "$(app_args)" == "--render $CONFIG/menuz.yaml " ]]
+  [[ "$(app_args)" == "--render $CONFIG/menuz.yaml " ]] || false
 }
 
 @test "AT-02.3: use's record selects the dev build over an installed one" {
@@ -354,7 +372,7 @@ run_src_menuz() {
   echo dev >"$XDG_STATE_HOME/menuz/use"
   run_menuz validate
   assert_success
-  [[ "$(app_args)" == "--validate $CONFIG/menuz.yaml " ]]
+  [[ "$(app_args)" == "--validate $CONFIG/menuz.yaml " ]] || false
 }
 
 @test "AT-02.3: a use record that names neither build is refused, exit 2, and no app runs" {
@@ -368,7 +386,7 @@ run_src_menuz() {
     assert_exit_code 2
     assert_output_contains "bogus"
   done
-  [[ ! -e "$FAKES/app.args" ]]
+  [[ ! -e "$FAKES/app.args" ]] || false
 }
 
 @test "AT-02.3: with no app built or installed, validate and render are refused, exit 2, naming both builds" {
@@ -410,7 +428,7 @@ run_src_menuz() {
   assert_output_contains "4242"
   assert_output_contains "requires approval"
   printf '%s\n' "$output" | grep -Eq '^source      stale: installed [^,]+, tree [0-9a-f]{7,}$'
-  [[ ! -e "$FAKES/xcodebuild.args" ]]
+  [[ ! -e "$FAKES/xcodebuild.args" ]] || false
 }
 
 @test "AT-02.3: status says not running, and names use's record when there is one" {
@@ -432,7 +450,7 @@ run_src_menuz() {
   assert_output_contains "stale"
   local tree
   tree="$(printf '%s\n' "$output" | sed -n 's/.*tree \([0-9a-f-]*\).*/\1/p')"
-  [[ -n "$tree" ]]
+  [[ -n "$tree" ]] || false
   make_app "$INSTALLED" 0.1.0 "$tree"
   run_src_menuz status
   assert_output_contains "current"
@@ -484,4 +502,827 @@ run_src_menuz() {
   run_menuz status
   assert_success
   assert_output_contains "could not be read"
+}
+
+# ============================================================================
+# AT-05.1 -- build, test, stamps, install, use, uninstall, start, stop,
+# restart and doctor (AC-05.1, WP-05). Xcode, xcodegen, Launch Services,
+# open, osascript, curl, ditto, codesign and spctl are fakes on PATH: nothing
+# here builds, signs, registers or launches anything.
+# ============================================================================
+
+BUILD_ROOT_REL="menuz/build/macos"
+
+# Xcode and xcodegen present. xcodebuild -version answers; any other call
+# makes the product under SYMROOT/<configuration> from a template bundle of
+# version 0.1.0, prints 100 numbered lines and exits
+# FAKE_XCODEBUILD_RC (default 0). xcodegen makes Menuz.xcodeproj where it runs.
+xcode_fakes() {
+  make_app "$FAKES/template.app" 0.1.0
+  fake xcodegen 'mkdir -p Menuz.xcodeproj'
+  fake xcodebuild '
+if [[ "$1" == -version ]]; then
+  printf "Xcode 26.0\nBuild version 17A100\n"
+  exit 0
+fi
+sym="" cfg="" prev=""
+for a in "$@"; do
+  case "$a" in SYMROOT=*) sym="${a#SYMROOT=}" ;; esac
+  if [[ "$prev" == -configuration ]]; then cfg="$a"; fi
+  prev="$a"
+done
+mkdir -p "${sym:?}/${cfg:?}"
+rm -rf "${sym:?}/${cfg:?}/Menuz.app"
+cp -R "'"$FAKES"'/template.app" "$sym/$cfg/Menuz.app"
+seq 1 100 | sed "s/^/line /"
+exit "${FAKE_XCODEBUILD_RC:-0}"'
+  fake xcode-select 'echo /Applications/Xcode.app/Contents/Developer'
+}
+
+# Only the system's own directories after the fakes, so a real xcodegen
+# (Homebrew's) cannot answer for a missing one.
+system_path_only() {
+  export PATH="$FAKES:/usr/bin:/bin:/usr/sbin:/sbin"
+}
+
+# Menuz running as pid 4242 until the fake osascript is asked to quit it.
+running_app() {
+  echo 4242 >"$FAKES/running"
+  fake pgrep "if [[ -f '$FAKES/running' ]]; then cat '$FAKES/running'; else exit 1; fi"
+  fake osascript "rm -f '$FAKES/running'"
+}
+
+# Launch Services, open and ditto, recording; ditto copies as ditto does.
+launch_fakes() {
+  fake lsregister 'exit 0'
+  fake open 'env >"'"$FAKES"'/open.env"'
+  fake ditto 'cp -R "$1" "$2"'
+}
+
+# A fixture install tree: what a keg or a publish holds, with
+# manifest.sha256 at its root, the release VERSION, and no native/macos.
+keg_home() {
+  source_home --no-source
+  touch "$SRC/manifest.sha256"
+  echo 2.14.0 >"$SRC/VERSION"
+}
+
+# The release asset's fakes: curl writes a zip (or exits FAKE_CURL_RC), ditto
+# -x unpacks ASSET (a Menuz.app made here at the menuz VERSION unless the test
+# makes its own), codesign exits FAKE_CODESIGN_RC, spctl names
+# FAKE_SPCTL_SOURCE.
+asset_fakes() {
+  ASSET="$BATS_TEST_TMPDIR/asset"
+  make_app "$ASSET/Menuz.app" "$(cat "$SRC/opt/menuz/VERSION")"
+  fake curl '
+out="" prev=""
+for a in "$@"; do
+  if [[ "$prev" == -o ]]; then out="$a"; fi
+  prev="$a"
+done
+if [[ -n "${FAKE_CURL_RC:-}" ]]; then
+  echo "curl: (22) The requested URL returned error: 404" >&2
+  exit "$FAKE_CURL_RC"
+fi
+echo zip >"$out"'
+  fake ditto '
+if [[ "$1" == -x ]]; then
+  cp -R "'"$ASSET"'/Menuz.app" "$4/"
+else
+  cp -R "$1" "$2"
+fi'
+  fake codesign 'exit "${FAKE_CODESIGN_RC:-0}"'
+  fake spctl 'echo "${*: -1}: accepted"; echo "source=${FAKE_SPCTL_SOURCE:-Notarized Developer ID}"'
+  fake lsregister 'exit 0'
+  fake open 'exit 0'
+}
+
+# A Menuz.app of another VERSION or bundle id in place of the asset.
+replace_asset() {
+  rm -rf "${ASSET:?}/Menuz.app"
+  make_app "$ASSET/Menuz.app" "$@"
+}
+
+# The calls whose first word is one of the given names, in order, each line
+# cut to its first two words: "<name> <first arg>".
+calls_of() {
+  local pattern
+  pattern="^($(printf '%s|' "$@" | sed 's/|$//')) "
+  grep -E "$pattern" "$FAKES/calls" | awk '{ print $1, $2 }'
+}
+
+# How many calls start with NAME; grep's exit 1 is a count of none, and any
+# other failure prints a word no -eq can compare, so the test fails.
+count_calls() {
+  local n rc=0
+  n="$(grep -c "^$1 " "$FAKES/calls")" || rc=$?
+  if [[ $rc -gt 1 ]]; then
+    echo "count_calls: grep exited $rc"
+    return 1
+  fi
+  printf '%s\n' "$n"
+}
+
+xcodebuild_call() {
+  grep -E '^xcodebuild -project' "$FAKES/calls" | tail -1
+}
+
+app_count() {
+  find "$HOME/Applications" -mindepth 1 -maxdepth 1 | wc -l | tr -d ' '
+}
+
+@test "AT-05.1: the shim's usage names every verb and flag WP-05 adds" {
+  # menuz with no verb prints the shim's own usage; --help is the
+  # dispatcher's, which shows help/menuz.md.
+  run_menuz
+  assert_exit_code 2
+  local word
+  for word in build test stamps install use uninstall start stop restart doctor --release --unsigned dev installed; do
+    assert_output_contains "$word"
+  done
+}
+
+# --- build -------------------------------------------------------------------
+
+@test "AT-05.1: build runs xcodegen, then xcodebuild Debug with every location setting under XDG state" {
+  source_home
+  xcode_fakes
+  run_src_menuz build
+  assert_success
+  local root="$XDG_STATE_HOME/$BUILD_ROOT_REL" call
+  call="$(xcodebuild_call)"
+  [[ "$call" == *"-project $SRC/native/macos/Menuz/Menuz.xcodeproj -scheme Menuz -configuration Debug "* ]] || false
+  [[ "$call" == *" -derivedDataPath $root "* ]] || false
+  [[ "$call" == *" SYMROOT=$root/Build/Products "* ]] || false
+  [[ "$call" == *" OBJROOT=$root/Build/Intermediates.noindex "* ]] || false
+  [[ "$call" == *" SHARED_PRECOMPS_DIR=$root/Build/Intermediates.noindex/PrecompiledHeaders "* ]] || false
+  [[ "$call" == *" build" ]] || false
+  [[ "$call" != *CODE_SIGNING_ALLOWED* ]] || false
+  [[ "$(count_calls xcodegen)" -eq 1 ]] || false
+  [[ -x "$DEV/Contents/MacOS/Menuz" ]] || false
+  assert_output_contains "$DEV"
+}
+
+@test "AT-05.1: build passes the four stamps as build settings" {
+  source_home
+  xcode_fakes
+  run_src_menuz build
+  assert_success
+  local call commit
+  call="$(xcodebuild_call)"
+  commit="$(git -C "$SRC" rev-parse --short HEAD)"
+  [[ "$call" == *" MENUZ_VERSION=$(cat "$SRC/opt/menuz/VERSION") "* ]] || false
+  [[ "$call" == *" MENUZ_BUILD=1 "* ]] || false
+  [[ "$call" == *" MENUZ_COMMIT=$commit "* ]] || false
+  printf '%s\n' "$call" | grep -Eq ' MENUZ_SOURCE_TREE=[0-9a-f]{40}(-dirty)? '
+}
+
+@test "AT-05.1: build --release builds Release, where app-sign reads it" {
+  source_home
+  xcode_fakes
+  run_src_menuz build --release
+  assert_success
+  [[ "$(xcodebuild_call)" == *" -configuration Release "* ]] || false
+  [[ -x "$XDG_STATE_HOME/$BUILD_ROOT_REL/Build/Products/Release/Menuz.app/Contents/MacOS/Menuz" ]] || false
+}
+
+@test "AT-05.1: build --unsigned adds CODE_SIGNING_ALLOWED=NO" {
+  source_home
+  xcode_fakes
+  run_src_menuz build --unsigned
+  assert_success
+  [[ "$(xcodebuild_call)" == *" CODE_SIGNING_ALLOWED=NO "* ]] || false
+}
+
+@test "AT-05.1: build refuses an unknown argument, exit 2, running nothing" {
+  source_home
+  xcode_fakes
+  run_src_menuz build --fast
+  assert_exit_code 2
+  assert_output_contains "--fast"
+  [[ "$(count_calls xcodegen)" -eq 0 ]] || false
+}
+
+@test "AT-05.1: a second build runs no xcodegen; a changed project.yml, an added source or a missing project does" {
+  source_home
+  xcode_fakes
+  run_src_menuz build
+  assert_success
+  [[ -f "$XDG_STATE_HOME/menuz/build/xcodegen.hash" ]] || false
+  run_src_menuz build
+  assert_success
+  [[ "$(count_calls xcodegen)" -eq 1 ]] || false
+  # A changed source is Xcode's business, not xcodegen's.
+  echo 'print("more")' >>"$SRC/native/macos/Menuz/Menuz/App.swift"
+  run_src_menuz build
+  [[ "$(count_calls xcodegen)" -eq 1 ]] || false
+  echo 'targets: {}' >>"$SRC/native/macos/Menuz/project.yml"
+  run_src_menuz build
+  [[ "$(count_calls xcodegen)" -eq 2 ]] || false
+  echo 'struct New {}' >"$SRC/native/macos/Menuz/Menuz/New.swift"
+  run_src_menuz build
+  [[ "$(count_calls xcodegen)" -eq 3 ]] || false
+  run_src_menuz build
+  [[ "$(count_calls xcodegen)" -eq 3 ]] || false
+  rm -rf "${SRC:?}/native/macos/Menuz/Menuz.xcodeproj"
+  run_src_menuz build
+  assert_success
+  [[ "$(count_calls xcodegen)" -eq 4 ]] || false
+}
+
+@test "AT-05.1: a failed xcodebuild is exit 1 with its last 40 lines" {
+  source_home
+  xcode_fakes
+  FAKE_XCODEBUILD_RC=65 run_src_menuz build
+  assert_exit_code 1
+  printf '%s\n' "$output" | grep -qx 'line 100'
+  printf '%s\n' "$output" | grep -qx 'line 61'
+  run grep -cx 'line 60' <<<"$output"
+  assert_output "0"
+}
+
+@test "AT-05.1: a failed xcodegen is exit 1 naming it, and no xcodebuild runs" {
+  source_home
+  xcode_fakes
+  fake xcodegen 'echo "spec is invalid" >&2; exit 1'
+  run_src_menuz build
+  assert_exit_code 1
+  assert_output_contains "xcodegen"
+  assert_output_contains "spec is invalid"
+  [[ -z "$(xcodebuild_call)" ]] || false
+  [[ ! -f "$XDG_STATE_HOME/menuz/build/xcodegen.hash" ]] || false
+}
+
+@test "AT-05.1: build, test and install refuse without Xcode, exit 2, naming it" {
+  source_home
+  xcode_fakes
+  fake xcodebuild 'echo "xcode-select: error: tool xcodebuild requires Xcode" >&2; exit 1'
+  local verb
+  for verb in build test install; do
+    run_src_menuz "$verb"
+    assert_exit_code 2
+    assert_output_contains "Xcode"
+  done
+  [[ "$(count_calls xcodegen)" -eq 0 ]] || false
+  [[ "$(count_calls osascript)" -eq 0 ]] || false
+}
+
+@test "AT-05.1: build, test and install refuse without xcodegen, exit 2, naming it" {
+  source_home
+  xcode_fakes
+  rm "$FAKES/xcodegen"
+  system_path_only
+  local verb
+  for verb in build test install; do
+    run_src_menuz "$verb"
+    assert_exit_code 2
+    assert_output_contains "xcodegen"
+  done
+  [[ -z "$(xcodebuild_call)" ]] || false
+}
+
+@test "AT-05.1: build, test and install refuse without the source tree, exit 2, naming it" {
+  source_home --no-source
+  xcode_fakes
+  local verb
+  for verb in build test install; do
+    run_src_menuz "$verb"
+    assert_exit_code 2
+    assert_output_contains "$SRC/native/macos/Menuz"
+  done
+}
+
+@test "AT-05.1: in an install, build and test refuse by name, exit 2, naming the source clone" {
+  keg_home
+  xcode_fakes
+  local verb
+  for verb in build test; do
+    run_src_menuz "$verb"
+    assert_exit_code 2
+    assert_output_contains "git clone https://github.com/matthewsinclair/utilz"
+  done
+  [[ -z "$(xcodebuild_call)" ]] || false
+}
+
+# --- test --------------------------------------------------------------------
+
+@test "AT-05.1: test runs xcodebuild test of the scheme with the same locations" {
+  source_home
+  xcode_fakes
+  run_src_menuz test --unsigned
+  assert_success
+  local call root="$XDG_STATE_HOME/$BUILD_ROOT_REL"
+  call="$(xcodebuild_call)"
+  [[ "$call" == *"-scheme Menuz "* ]] || false
+  [[ "$call" == *" SYMROOT=$root/Build/Products "* ]] || false
+  [[ "$call" == *" CODE_SIGNING_ALLOWED=NO "* ]] || false
+  [[ "$call" == *" test" ]] || false
+}
+
+@test "AT-05.1: a red test is exit 1" {
+  source_home
+  xcode_fakes
+  FAKE_XCODEBUILD_RC=65 run_src_menuz test
+  assert_exit_code 1
+  printf '%s\n' "$output" | grep -qx 'line 100'
+}
+
+# --- stamps ------------------------------------------------------------------
+
+@test "AT-05.1: stamps prints what the next build stamps, one NAME=value a line" {
+  source_home
+  run_src_menuz stamps
+  assert_success
+  local tree
+  tree="$(printf '%s\n' "$output" | sed -n 's/^MENUZ_SOURCE_TREE=//p')"
+  [[ "$tree" =~ ^[0-9a-f]{40}$ ]] || false
+  assert_output_contains "MENUZ_VERSION=$(cat "$SRC/opt/menuz/VERSION")"
+  assert_output_contains "MENUZ_BUILD=1"
+  assert_output_contains "MENUZ_COMMIT=$(git -C "$SRC" rev-parse --short HEAD)"
+  # The tree's stamp is the one status compares (WP-02's source_stamp).
+  make_app "$INSTALLED" 0.1.0 "$tree"
+  run_src_menuz status
+  assert_output_contains "source      current (tree $tree)"
+  echo 'print("changed")' >>"$SRC/native/macos/Menuz/Menuz/App.swift"
+  run_src_menuz stamps
+  printf '%s\n' "$output" | grep -Eq '^MENUZ_SOURCE_TREE=[0-9a-f]{40}-dirty$'
+}
+
+@test "AT-05.1: in an install, stamps prints what the installed bundle carries, and says so" {
+  keg_home
+  make_app "$INSTALLED" 2.0.1 feed42
+  run_src_menuz stamps
+  assert_success
+  assert_output_contains "MENUZ_VERSION=2.0.1"
+  assert_output_contains "MENUZ_BUILD=42"
+  assert_output_contains "MENUZ_COMMIT=deadbee"
+  assert_output_contains "MENUZ_SOURCE_TREE=feed42"
+  assert_output_contains "$INSTALLED"
+}
+
+@test "AT-05.1: in an install with nothing installed, stamps is refused by name, exit 2" {
+  keg_home
+  run_src_menuz stamps
+  assert_exit_code 2
+  assert_output_contains "$INSTALLED"
+}
+
+# --- install, from a source clone ---------------------------------------------
+
+@test "AT-05.1: install builds Release, quits, replaces, unclaims, registers and launches, in that order" {
+  source_home
+  xcode_fakes
+  launch_fakes
+  running_app
+  make_app "$INSTALLED" 0.0.9
+  run_src_menuz install
+  assert_success
+  local release="$XDG_STATE_HOME/$BUILD_ROOT_REL/Build/Products/Release/Menuz.app"
+  [[ "$(xcodebuild_call)" == *" -configuration Release "* ]] || false
+  [[ "$(calls_of osascript ditto lsregister open | tr '\n' '|')" == "osascript -l|ditto $release|lsregister -u|lsregister -f|open -a|" ]] || false
+  grep -qx "lsregister -u $release" "$FAKES/calls"
+  grep -qx "lsregister -f $INSTALLED" "$FAKES/calls"
+  grep -qx "open -a $INSTALLED" "$FAKES/calls"
+  grep -q "com.matthewsinclair.utilz.menuz" "$FAKES/osascript.args"
+  # Replaced: the new bundle, and no sibling left behind.
+  grep -q '<string>0.1.0</string>' "$INSTALLED/Contents/Info.plist"
+  [[ "$(app_count)" -eq 1 ]] || false
+}
+
+@test "AT-05.1: install launches with an empty environment, so the app captures its own login shell" {
+  source_home
+  xcode_fakes
+  launch_fakes
+  run_src_menuz install
+  assert_success
+  grep -q "^HOME=$HOME$" "$FAKES/open.env"
+  run grep -c '^XDG_STATE_HOME=\|^UTILZ_HOME=' "$FAKES/open.env"
+  assert_output "0"
+}
+
+@test "AT-05.1: install quits nothing when nothing runs" {
+  source_home
+  xcode_fakes
+  launch_fakes
+  fake osascript 'exit 0'
+  run_src_menuz install
+  assert_success
+  [[ "$(count_calls osascript)" -eq 0 ]] || false
+}
+
+@test "AT-05.1: a copy that will not quit is exit 1 naming the quit, and nothing is replaced" {
+  source_home
+  xcode_fakes
+  launch_fakes
+  running_app
+  fake osascript 'exit 0'
+  make_app "$INSTALLED" 0.0.9
+  run_src_menuz install
+  assert_exit_code 1
+  assert_output_contains "quit"
+  assert_output_contains "4242"
+  grep -q '<string>0.0.9</string>' "$INSTALLED/Contents/Info.plist"
+  [[ "$(count_calls open)" -eq 0 ]] || false
+}
+
+@test "AT-05.1: a failed copy is exit 1 naming the replace, and the old copy stays whole" {
+  source_home
+  xcode_fakes
+  launch_fakes
+  fake ditto 'echo "ditto: No space left on device" >&2; exit 1'
+  make_app "$INSTALLED" 0.0.9
+  run_src_menuz install
+  assert_exit_code 1
+  assert_output_contains "replace"
+  assert_output_contains "No space left on device"
+  grep -q '<string>0.0.9</string>' "$INSTALLED/Contents/Info.plist"
+  [[ -x "$INSTALLED/Contents/MacOS/Menuz" ]] || false
+  [[ "$(app_count)" -eq 1 ]] || false
+  [[ "$(count_calls open)" -eq 0 ]] || false
+}
+
+@test "AT-05.1: a failed launch is exit 1 naming the launch" {
+  source_home
+  xcode_fakes
+  launch_fakes
+  fake open 'echo "LSOpenURLsWithRole() failed" >&2; exit 1'
+  run_src_menuz install
+  assert_exit_code 1
+  assert_output_contains "launch"
+  assert_output_contains "LSOpenURLsWithRole"
+  [[ -x "$INSTALLED/Contents/MacOS/Menuz" ]] || false
+}
+
+@test "AT-05.1: a failed build is exit 1 and nothing is quit or replaced" {
+  source_home
+  xcode_fakes
+  launch_fakes
+  running_app
+  make_app "$INSTALLED" 0.0.9
+  FAKE_XCODEBUILD_RC=65 run_src_menuz install
+  assert_exit_code 1
+  [[ "$(count_calls osascript)" -eq 0 ]] || false
+  grep -q '<string>0.0.9</string>' "$INSTALLED/Contents/Info.plist"
+}
+
+# --- install, in a keg: the release asset --------------------------------------
+
+@test "AT-05.1: in an install, install fetches the release asset, verifies it, then quits, replaces, registers and launches" {
+  keg_home
+  asset_fakes
+  running_app
+  run_src_menuz install
+  assert_success
+  grep -qx 'https://github.com/matthewsinclair/utilz/releases/download/2.14.0/Menuz.app.zip' "$FAKES/curl.args"
+  grep -qx -- '-fsSL' "$FAKES/curl.args"
+  [[ "$(calls_of curl ditto codesign spctl osascript lsregister open | awk '{ print $1 }' | tr '\n' ' ')" == "curl ditto codesign spctl osascript ditto lsregister open " ]] || false
+  grep -q '^codesign --verify --deep --strict ' "$FAKES/calls"
+  grep -q '^spctl -a -t exec -vv ' "$FAKES/calls"
+  grep -qx "lsregister -f $INSTALLED" "$FAKES/calls"
+  [[ "$(count_calls 'lsregister -u')" -eq 0 ]] || false
+  [[ -x "$INSTALLED/Contents/MacOS/Menuz" ]] || false
+  [[ -z "$(xcodebuild_call)" ]] || false
+}
+
+@test "AT-05.1: a keg install whose release carries no asset is exit 1 naming the URL, nothing replaced" {
+  keg_home
+  asset_fakes
+  make_app "$INSTALLED" 0.0.9
+  FAKE_CURL_RC=22 run_src_menuz install
+  assert_exit_code 1
+  assert_output_contains "https://github.com/matthewsinclair/utilz/releases/download/2.14.0/Menuz.app.zip"
+  assert_output_contains "no Menuz.app"
+  grep -q '<string>0.0.9</string>' "$INSTALLED/Contents/Info.plist"
+  [[ "$(count_calls open)" -eq 0 ]] || false
+}
+
+@test "AT-05.1: a keg install refuses a failed signature, exit 1 naming codesign, nothing replaced" {
+  keg_home
+  asset_fakes
+  make_app "$INSTALLED" 0.0.9
+  FAKE_CODESIGN_RC=1 run_src_menuz install
+  assert_exit_code 1
+  assert_output_contains "codesign"
+  grep -q '<string>0.0.9</string>' "$INSTALLED/Contents/Info.plist"
+  [[ "$(count_calls osascript)" -eq 0 ]] || false
+  [[ "$(count_calls open)" -eq 0 ]] || false
+}
+
+@test "AT-05.1: a keg install refuses a bundle that is not notarised, exit 1 naming spctl" {
+  keg_home
+  asset_fakes
+  FAKE_SPCTL_SOURCE="Apple Development" run_src_menuz install
+  assert_exit_code 1
+  assert_output_contains "spctl"
+  assert_output_contains "Notarized Developer ID"
+  [[ ! -e "$INSTALLED" ]] || false
+}
+
+@test "AT-05.1: a keg install refuses the wrong version, exit 1 naming both, nothing replaced" {
+  keg_home
+  asset_fakes
+  replace_asset 9.9.9
+  run_src_menuz install
+  assert_exit_code 1
+  assert_output_contains "9.9.9"
+  assert_output_contains "$(cat "$SRC/opt/menuz/VERSION")"
+  [[ ! -e "$INSTALLED" ]] || false
+}
+
+@test "AT-05.1: a keg install refuses another bundle id, exit 1 naming it" {
+  keg_home
+  asset_fakes
+  replace_asset "$(cat "$SRC/opt/menuz/VERSION")" abc123 com.example.other
+  run_src_menuz install
+  assert_exit_code 1
+  assert_output_contains "com.example.other"
+  [[ ! -e "$INSTALLED" ]] || false
+}
+
+# --- use, start, stop, restart -------------------------------------------------
+
+@test "AT-05.1: use with no record prints installed (default)" {
+  run_menuz use
+  assert_success
+  assert_output "installed (default)"
+}
+
+@test "AT-05.1: use dev records the choice; use prints it and why; status and start follow it" {
+  run_menuz use dev
+  assert_success
+  [[ "$(cat "$XDG_STATE_HOME/menuz/use")" == dev ]] || false
+  run_menuz use
+  assert_success
+  assert_output "dev (by $XDG_STATE_HOME/menuz/use)"
+  make_app "$DEV"
+  run_menuz status
+  assert_output_contains "use         dev (by $XDG_STATE_HOME/menuz/use)"
+  fake open 'exit 0'
+  run_menuz start
+  assert_success
+  grep -qx "open -a $DEV" "$FAKES/calls"
+  run_menuz use installed
+  assert_success
+  [[ "$(cat "$XDG_STATE_HOME/menuz/use")" == installed ]] || false
+}
+
+@test "AT-05.1: use refuses any other word, exit 2, recording nothing" {
+  run_menuz use staging
+  assert_exit_code 2
+  assert_output_contains "staging"
+  [[ ! -e "$XDG_STATE_HOME/menuz/use" ]] || false
+  run_menuz use dev installed
+  assert_exit_code 2
+}
+
+@test "AT-05.1: start opens the chosen build with an empty environment" {
+  make_app "$INSTALLED"
+  fake open 'env >"'"$FAKES"'/open.env"'
+  run_menuz start
+  assert_success
+  grep -qx "open -a $INSTALLED" "$FAKES/calls"
+  run grep -c '^XDG_STATE_HOME=' "$FAKES/open.env"
+  assert_output "0"
+}
+
+@test "AT-05.1: start refuses when the chosen build is not there, exit 2, naming it" {
+  fake open 'exit 0'
+  run_menuz start
+  assert_exit_code 2
+  assert_output_contains "$INSTALLED"
+  mkdir -p "$XDG_STATE_HOME/menuz"
+  echo dev >"$XDG_STATE_HOME/menuz/use"
+  run_menuz start
+  assert_exit_code 2
+  assert_output_contains "$DEV"
+  [[ "$(count_calls open)" -eq 0 ]] || false
+}
+
+@test "AT-05.1: stop quits every copy by bundle id, and says when none runs" {
+  running_app
+  run_menuz stop
+  assert_success
+  grep -q "com.matthewsinclair.utilz.menuz" "$FAKES/osascript.args"
+  [[ ! -e "$FAKES/running" ]] || false
+  run_menuz stop
+  assert_success
+  assert_output_contains "not running"
+  [[ "$(count_calls osascript)" -eq 1 ]] || false
+}
+
+@test "AT-05.1: restart is stop, then start" {
+  running_app
+  make_app "$INSTALLED"
+  fake open 'exit 0'
+  run_menuz restart
+  assert_success
+  [[ "$(calls_of osascript open | awk '{ print $1 }' | tr '\n' ' ')" == "osascript open " ]] || false
+}
+
+@test "AT-05.1: the verbs that take no arguments refuse one by name, exit 2" {
+  local verb
+  for verb in start stop restart uninstall doctor stamps; do
+    run_menuz "$verb" --now
+    assert_exit_code 2
+    assert_output_contains "--now"
+  done
+}
+
+# --- uninstall -----------------------------------------------------------------
+
+@test "AT-05.1: uninstall with nothing installed is exit 0 and says so" {
+  fake lsregister 'exit 0'
+  run_menuz uninstall
+  assert_success
+  assert_output_contains "nothing installed"
+  [[ "$(count_calls lsregister)" -eq 0 ]] || false
+}
+
+@test "AT-05.1: uninstall quits, unregisters the login item, unregisters the bundle and removes it" {
+  running_app
+  fake lsregister 'exit 0'
+  make_app "$INSTALLED"
+  run_menuz uninstall
+  assert_success
+  [[ "$(calls_of osascript app lsregister | tr '\n' '|')" == "osascript -l|app --unregister-login-item|lsregister -u|" ]] || false
+  grep -qx "lsregister -u $INSTALLED" "$FAKES/calls"
+  assert_output_contains "unregistered (now not registered)"
+  [[ ! -e "$INSTALLED" ]] || false
+}
+
+@test "AT-05.1: a login item that will not unregister is reported, the removal goes on, exit 1" {
+  fake lsregister 'exit 0'
+  make_app "$INSTALLED"
+  FAKE_UNREGISTER_RC=1 FAKE_UNREGISTER_OUT="still enabled" run_menuz uninstall
+  assert_exit_code 1
+  assert_output_contains "still enabled"
+  assert_output_contains "login item"
+  [[ ! -e "$INSTALLED" ]] || false
+}
+
+# --- doctor --------------------------------------------------------------------
+
+doctor_fixture() {
+  source_home
+  xcode_fakes
+  fake security 'printf "  1) 0123ABCD \"Apple Development: M S (TEAM1)\"\n  2) 4567EF01 \"Developer ID Application: M S (TEAM1)\"\n     2 valid identities found\n"'
+  run_src_menuz init
+  make_app "$INSTALLED"
+  running_app
+}
+
+@test "AT-05.1: doctor prints one line per precondition, exit 0 when all hold" {
+  doctor_fixture
+  run_src_menuz doctor
+  assert_success
+  local label
+  for label in xcode xcodegen identity config menu installed running "login item"; do
+    printf '%s\n' "$output" | grep -Eq "^$label +ok "
+  done
+  assert_output_contains "/Applications/Xcode.app/Contents/Developer"
+  assert_output_contains "Xcode 26.0"
+  assert_output_contains "2 codesigning"
+  refute_output_contains "0123ABCD"
+  refute_output_contains "4567EF01"
+  grep -q '^app --validate' "$FAKES/calls"
+}
+
+@test "AT-05.1: doctor is exit 1 naming each precondition that fails" {
+  doctor_fixture
+  rm -rf "${INSTALLED:?}"
+  rm "$FAKES/running"
+  fake security 'printf "     0 valid identities found\n"'
+  rm "$CONFIG/menuz.yaml"
+  run_src_menuz doctor
+  assert_exit_code 1
+  local label
+  for label in identity config installed running; do
+    printf '%s\n' "$output" | grep -Eq "^$label +FAIL "
+  done
+  printf '%s\n' "$output" | grep -Eq "^xcode +ok "
+}
+
+@test "AT-05.1: doctor fails a menu the chosen app refuses, and a login item that is not enabled" {
+  doctor_fixture
+  FAKE_APP_RC=2 FAKE_APP_OUT="line 3: unknown key" FAKE_LOGIN="requires approval" run_src_menuz doctor
+  assert_exit_code 1
+  printf '%s\n' "$output" | grep -Eq "^menu +FAIL .*unknown key"
+  printf '%s\n' "$output" | grep -Eq "^login item +FAIL .*requires approval"
+}
+
+@test "AT-05.1: in an install, doctor skips the build lines and says why" {
+  keg_home
+  run_src_menuz init
+  make_app "$INSTALLED"
+  running_app
+  fake security 'exit 0'
+  run_src_menuz doctor
+  assert_success
+  printf '%s\n' "$output" | grep -Eq "^build +skip .*install"
+  run grep -Ec '^(xcode|xcodegen|identity) ' <<<"$output"
+  assert_output "0"
+}
+
+@test "AT-05.1: in an install, doctor still checks the installed app" {
+  keg_home
+  run_src_menuz init
+  make_app "$INSTALLED"
+  running_app
+  run_src_menuz doctor
+  printf '%s\n' "$output" | grep -Eq "^installed +ok "
+}
+
+# --- the failure paths the critic found untested ---------------------------------
+
+# mv that fails on the calls FAKE_MV_FAIL names (by their order, from 1),
+# and is the system's mv on every other.
+mv_fake() {
+  fake mv '
+n=$(($(cat "'"$FAKES"'/mv.n" 2>/dev/null || echo 0) + 1))
+echo "$n" >"'"$FAKES"'/mv.n"
+case " ${FAKE_MV_FAIL:-} " in
+  *" $n "*)
+    echo "mv: rename failed (call $n)" >&2
+    exit 1
+    ;;
+esac
+exec /bin/mv "$@"'
+}
+
+@test "AT-05.1: an old copy that cannot be moved aside is exit 1 naming the replace, and it stays whole" {
+  source_home
+  xcode_fakes
+  launch_fakes
+  mv_fake
+  make_app "$INSTALLED" 0.0.9
+  FAKE_MV_FAIL=1 run_src_menuz install
+  assert_exit_code 1
+  assert_output_contains "replace"
+  assert_output_contains "moved aside"
+  grep -q '<string>0.0.9</string>' "$INSTALLED/Contents/Info.plist"
+  [[ "$(app_count)" -eq 1 ]] || false
+  [[ "$(count_calls open)" -eq 0 ]] || false
+}
+
+@test "AT-05.1: a new copy that cannot be moved in puts the old one back, exit 1" {
+  source_home
+  xcode_fakes
+  launch_fakes
+  mv_fake
+  make_app "$INSTALLED" 0.0.9
+  FAKE_MV_FAIL=2 run_src_menuz install
+  assert_exit_code 1
+  assert_output_contains "the old copy is back"
+  grep -q '<string>0.0.9</string>' "$INSTALLED/Contents/Info.plist"
+  [[ "$(app_count)" -eq 1 ]] || false
+}
+
+@test "AT-05.1: when the old copy cannot be put back either, the failure says where it is" {
+  source_home
+  xcode_fakes
+  launch_fakes
+  mv_fake
+  make_app "$INSTALLED" 0.0.9
+  FAKE_MV_FAIL="2 3" run_src_menuz install
+  assert_exit_code 1
+  assert_output_contains "could not be put back"
+  assert_output_contains "$HOME/Applications/.Menuz.app.old."
+  [[ "$(count_calls open)" -eq 0 ]] || false
+}
+
+@test "AT-05.1: restart with the chosen build missing is refused, exit 2, and nothing is quit" {
+  running_app
+  run_menuz restart
+  assert_exit_code 2
+  assert_output_contains "$INSTALLED"
+  [[ "$(count_calls osascript)" -eq 0 ]] || false
+  [[ -f "$FAKES/running" ]] || false
+}
+
+@test "AT-05.1: with no use record and only a dev build, start opens it, as validate uses it" {
+  make_app "$DEV"
+  fake open 'exit 0'
+  run_menuz start
+  assert_success
+  grep -qx "open -a $DEV" "$FAKES/calls"
+}
+
+@test "AT-05.1: an uninstall whose lsregister -u fails removes the app and is exit 1 naming it" {
+  fake lsregister 'echo "lsregister: no such bundle" >&2; exit 1'
+  make_app "$INSTALLED"
+  run_menuz uninstall
+  assert_exit_code 1
+  assert_output_contains "lsregister -u"
+  assert_output_contains "no such bundle"
+  [[ ! -e "$INSTALLED" ]] || false
+}
+
+@test "AT-05.1: a keg install with no release VERSION is refused, exit 2, fetching nothing" {
+  keg_home
+  asset_fakes
+  : >"$SRC/VERSION"
+  run_src_menuz install
+  assert_exit_code 2
+  assert_output_contains "$SRC/VERSION"
+  [[ "$(count_calls curl)" -eq 0 ]] || false
 }

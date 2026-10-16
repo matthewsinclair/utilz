@@ -20,6 +20,8 @@ enum Arms {
     case .loginItem:
       print(loginItemStatus(SMAppService.mainApp.status))
       return 0
+    case .unregisterLoginItem:
+      return unregisterLoginItem(SMAppService.mainApp)
     case .notify(let text):
       // No Dock icon and no activation for a process that only posts.
       NSApplication.shared.setActivationPolicy(.prohibited)
@@ -69,6 +71,32 @@ enum Arms {
     case .notFound: "not found"
     @unknown default: "unknown (\(status.rawValue))"
     }
+  }
+
+  /// Unregisters the login item, asking the service only when it has one,
+  /// and prints what came of it (Unregister.answer decides the words and
+  /// the exit).
+  private static func unregisterLoginItem(_ service: SMAppService) -> Int32 {
+    let registered = isLoginItem(service.status)
+    var failure: String?
+    if registered {
+      do {
+        try service.unregister()
+      } catch {
+        failure = error.localizedDescription
+      }
+    }
+    let after = service.status
+    let answer = Unregister.answer(
+      registered: registered, error: failure, after: loginItemStatus(after), stillRegistered: isLoginItem(after))
+    print(answer.line)
+    return answer.code
+  }
+
+  /// Whether a status is a login item the service holds: `.notFound` and
+  /// `.notRegistered` are not, so there is nothing to unregister.
+  private static func isLoginItem(_ status: SMAppService.Status) -> Bool {
+    status == .enabled || status == .requiresApproval
   }
 
   /// Posts `text`, waiting `seconds` for the centre's answer with the main
