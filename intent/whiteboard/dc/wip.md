@@ -3,9 +3,9 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: b6f789ca-4627-4a74-b4cd-bb7c07de9f46
-heartbeat_at: 2026-10-16 17:52Z
+heartbeat_at: 2026-10-16 19:09Z
 status: active
-focus: "16 Oct, localfold for a compact on hv's word: menuz help's WP-02 cut landed at 98411b2 (pushed, vc). Hold 7 waits on vc's word on cc's WP-03 SHA. Taking instructions from vc."
+focus: "16 Oct, localfold for hv's compact: menuz help landed through WP-04 at 7be09a1 (WP-02 98411b2, validate/render 46046ee); CI fix for the install suites' utility count at 46046ee, green on CI at a4ae77c. Hold 7 lands the full help, README section and CHANGELOG entry at WP-05's close. Taking instructions from vc."
 claims: []
 ---
 
@@ -21,11 +21,12 @@ _(none)_
 
 ## Holds
 
-- Until vc verifies cc's ST0027 WP-03 SHA and says so: recut help/menuz.md from tmp/dc-st0027/help-menuz.md (git-ignored; NOTES.md is the procedure, the WP-02 cut landed at 98411b2) for WP-03: validate and render gain the app's real arms, status's login item; spec read from the shim's case arm and cmd_* parsers, the example from opt/menuz/lib/example.yaml byte for byte. WP-04 adds the one-form paragraph. At WP-05 the full help lands with @USE and @SIGNING answered, plus README's ### menuz section (after mdagg) and the CHANGELOG entry merged with cc's 2.14.0 line. Prettier on tmp/ drafts only with --ignore-path /dev/null. (edited)
+- Until WP-05's close (vc's word): land the full help/menuz.md, README's ### menuz section (after mdagg, before pdf2md) and the CHANGELOG entry (it replaces cc's 2.14.0 menuz line whole). Landed: the WP-02 cut 98411b2, validate/render 46046ee (measured on the Debug product), WP-04's form, run, log and notice 7be09a1 (cwd= as written, from Run.startLine at 9dde810). Drafted in tmp/dc-st0027 (mirror: dc's scratchpad st0027/), with NOTES.md as the procedure: help-menuz.md, the full source with @USE and @SIGNING still to answer from WP-05's shim and D12 (signing is local as Intent's is, 0bc51f0); README-menuz-section.md and CHANGELOG-menuz-added.md, each behind an @WP05 marker; spec-wp05-draft.txt (spec-design.txt without doctor). At landing: rebuild the verbs and flags from WP-05's shim (its case arm and cmd_* parsers) and cut from the source (drop --no-doctor only if the shim has doctor). Clear every marker, run check-names (0 missing) and prettier (--ignore-path /dev/null under tmp/), confirm no /Users/ outside /Users/you/, run the tests.yml Ubuntu loop on kovacs before handing on, commit by explicit path, send vc the SHA. (edited)
 
 ## Watch-outs
 
 - Spike 1's results are recorded in intent/st/ST0026/design.md, under Measured 16 Oct 2026: moveWindowToSpace returned true three times and moved nothing, and a Dock binding written with defaults read back, survived killall Dock, and did not take. Its observation files are not in the repository, because they carry the titles of hv's windows.
+- menuz's run log prints the start line's cwd= as written (cwd=~ stays ~), and HOME's value when neither the item nor the file gives one (Run.startLine, 9dde810). A help or README example with an absolute path writes it under /Users/you/ with the slash, the one form the install's home-path test lets through (46046ee). (edited)
 
 ## Decisions
 

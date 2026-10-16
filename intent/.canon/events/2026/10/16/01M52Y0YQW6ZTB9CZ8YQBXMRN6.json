@@ -1,0 +1,16 @@
+{
+  "id": "01M52Y0YQW6ZTB9CZ8YQBXMRN6",
+  "ts": "2026-10-16T18:01:41.884Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "hold",
+    "seq": 7,
+    "text": "Until WP-05's close (vc's word): land the full help/menuz.md, README's ### menuz section (after mdagg, before pdf2md) and the CHANGELOG entry (it replaces cc's 2.14.0 menuz line whole). Landed: the WP-02 cut 98411b2, validate/render 46046ee (measured on the Debug product), WP-04's form, run, log and notice 7be09a1 (cwd= as written, from Run.startLine at 9dde810). Drafted in tmp/dc-st0027 (mirror: dc's scratchpad st0027/), with NOTES.md as the procedure: help-menuz.md, the full source with @USE and @SIGNING still to answer from WP-05's shim and D12 (signing is local as Intent's is, 0bc51f0); README-menuz-section.md and CHANGELOG-menuz-added.md, each behind an @WP05 marker; spec-wp05-draft.txt (spec-design.txt without doctor). At landing: rebuild the verbs and flags from WP-05's shim (its case arm and cmd_* parsers) and cut from the source (drop --no-doctor only if the shim has doctor). Clear every marker, run check-names (0 missing) and prettier (--ignore-path /dev/null under tmp/), confirm no /Users/ outside /Users/you/, run the tests.yml Ubuntu loop on kovacs before handing on, commit by explicit path, send vc the SHA."
+  }
+}

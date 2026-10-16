@@ -1,0 +1,15 @@
+{
+  "id": "01M530DDXKBV24NFE9R8ZYCRM3",
+  "ts": "2026-10-16T18:43:27.795Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "watchout",
+    "text": "menuz's run log prints the start line's cwd= as written (cwd=~ stays ~), and HOME's value when neither the item nor the file gives one (Run.startLine, 9dde810). A help or README example with an absolute path writes it under /Users/you/ with the slash, the one form the install's home-path test lets through (46046ee)."
+  }
+}
