@@ -15,7 +15,8 @@ actor Posted {
 /// A centre that answers as it is told and posts nothing real.
 struct FakeCenter: NoticeCenter {
   /// `refuse` and `offInSettings` answer false, the first with the status
-  /// not determined (the alert up or withdrawn), the second denied;
+  /// not determined (the alert up now), the second denied (off, or the
+  /// alert withdrawn by a quit under it);
   /// `notAllowed` and `notAllowedDenied` raise the centre's one error for
   /// both, told apart by the status; `authorizeThrows` is any other error.
   enum Mode: Sendable {
@@ -78,7 +79,8 @@ struct NotifyArmTests {
       let center = FakeCenter(mode: mode)
       let answer = Arms.notify(Self.text, center: center, seconds: 5)
       #expect(
-        answer.line == "notice not posted: notifications are off for menuz under System Settings > Notifications",
+        answer.line
+          == "notice not posted: notifications are off for menuz under System Settings > Notifications > menuz",
         "\(mode)")
       #expect(answer.code == 1)
       #expect(await center.posted.notices == [])
@@ -131,7 +133,7 @@ struct LaunchAuthorisationTests {
   static func lines(_ mode: FakeCenter.Mode, seconds: Double = 5) async -> [String] {
     let said = Posted()
     let answer = await Notices.authorise(center: FakeCenter(mode: mode), seconds: seconds) {
-      Task { await said.add(Notice.asking) }
+      await said.add(Notice.asking)
     }
     await said.add(Notice.launchLine(answer))
     return await said.notices
@@ -153,11 +155,11 @@ struct LaunchAuthorisationTests {
 
   @Test("no answer by the deadline says the alert is up, then the answer when it comes")
   func asking() async {
-    let started = Date()
+    let started = ContinuousClock.now
     let lines = await Self.lines(.hang, seconds: 0.3)
-    let waited = Date().timeIntervalSince(started)
+    let waited = ContinuousClock.now - started
     #expect(lines == [Notice.asking, "notifications: granted"])
-    #expect(waited >= 2, "the launch gave up on the centre's answer: \(waited) s")
+    #expect(waited >= .seconds(2), "the launch gave up on the centre's answer: \(waited)")
   }
 }
 

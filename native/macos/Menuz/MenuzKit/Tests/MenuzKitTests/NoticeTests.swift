@@ -18,7 +18,8 @@ struct NoticeTests {
   func answers() {
     #expect(Self.said(.posted) == "0 notice posted")
     #expect(
-      Self.said(.denied) == "1 notice not posted: notifications are off for menuz under System Settings > Notifications")
+      Self.said(.denied)
+        == "1 notice not posted: notifications are off for menuz under System Settings > Notifications > menuz")
     #expect(
       Self.said(.notYetAllowed)
         == "1 notice not posted: menuz is not yet allowed to post notifications: answer macOS's alert, or allow them under System Settings > Notifications > menuz"

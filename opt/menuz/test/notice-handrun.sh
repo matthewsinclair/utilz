@@ -46,7 +46,7 @@ echo "== launch at $(date -u +%H:%M:%SZ) =="; "$BIN" </dev/null >"$S/app.txt" 2>
 # answer for the user (D13): the launch line is waited for, up to 90 s, and
 # an unanswered alert is named, since the notices below then read "not yet
 # allowed" until it is answered or the id is allowed under System Settings.
-for _ in $(seq 1 90); do grep -q '^[^ ]* notifications:' "$LOG" 2>/dev/null && break; sleep 1; done
+for _ in $(seq 1 90); do grep -v 'is asking' "$LOG" 2>/dev/null | grep -q '^[^ ]* notifications:' && break; sleep 1; done
 case "$(grep -h 'notifications:' "$LOG" 2>/dev/null | tail -1)" in
   *"notifications: granted"*) echo "authorised: granted" ;;
   *"is asking"*) echo "authorised: NOT YET: macOS's alert is up; answer it with Allow (hv), or the notices below read not yet allowed" ;;

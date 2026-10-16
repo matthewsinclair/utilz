@@ -16,10 +16,11 @@ public enum Notice {
   /// How one post went.
   public enum Outcome: Equatable, Sendable {
     case posted
-    /// The user turned menuz's notifications off (status denied).
+    /// Status denied: the user turned menuz's notifications off, or a
+    /// launch's alert was withdrawn by a quit under it (D13).
     case denied
-    /// The first launch's alert is up or was withdrawn: not answered yet
-    /// (status not determined), which the centre refuses like a denial.
+    /// Status not determined: a launch's alert is up now, and every other
+    /// request under the id is refused until it is answered (D13).
     case notYetAllowed
     case failed(String)
     /// The centre did not answer within the seconds waited.
@@ -32,7 +33,7 @@ public enum Notice {
     case .posted:
       ("notice posted", 0)
     case .denied:
-      ("notice not posted: notifications are off for menuz under System Settings > Notifications", 1)
+      ("notice not posted: notifications are off for menuz under \(setting)", 1)
     case .notYetAllowed:
       ("notice not posted: menuz is not yet allowed to post notifications: \(allowHint)", 1)
     case .failed(let why):
@@ -42,9 +43,11 @@ public enum Notice {
     }
   }
 
-  /// What the centre says of the app, read when a request is refused.
+  /// What the centre says of the app, read when a request is refused;
+  /// `unknown` carries a status this build has no case for.
   public enum Status: Equatable, Sendable {
     case notDetermined, denied, allowed
+    case unknown(Int)
   }
 
   /// The launch's answer, as the app logs it.
