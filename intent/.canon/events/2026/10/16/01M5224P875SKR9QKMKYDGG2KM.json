@@ -1,0 +1,16 @@
+{
+  "id": "01M5224P875SKR9QKMKYDGG2KM",
+  "ts": "2026-10-16T09:54:26.359Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "hold",
+    "seq": 11,
+    "text": "WP-05 apply on outcome D: brief from vc (sent 16 Oct as a session message, not a wb ask, so restated here), START AFTER THE COMPACT on hv's word. Then: read design.md at eeeab48 (apply in order, Display matching, Failures and the report, Measured 16 Oct 2026, D20 amended, D21, D22, D25) and intent ac show ST0026 AC-05.1..7; intent wp start ST0026/05 and claim it. Route D21: move within a display = hold the title bar (hs.eventtap) and press Move-space (symbolic hotkeys 79/81, read, refused if unset) once per step in Mission Control order, let go; across displays = drag over the shared edge onto the target's active space, let go, continue within. Read back each step at 0.5 s (window spaces, display active space, listed at dest not origin); disagreement = failed, exit 1. Port from dc's spike /private/tmp/claude-501/-Users-matts-Devel-prj-Utilz/b6f789ca-4627-4a74-b4cd-bb7c07de9f46/scratchpad/arngz-spike/arngz-spike2.lua (refusals: button or modifier down, pointer moved >40 px, no grab point, no route; cleanup) into arngz.lua, plan.lua pure, credit the spike. No moveWindowToSpace, gotoSpace, Mission Control or bindings; --bind refused as unknown (AC-05.6), so plan's bind step, bind_unread and restart_dock go. Ordinals (D22) from com.apple.spaces SpacesDisplayConfiguration, not allSpaces. Shape (D20): apply scheduled via hs.timer.doAfter held in a global, IPC returns at once, CLI waits on the response file under its own deadline. Launch, wait for a claimable window, place; --no-launch reports. Tests: planner for matching and report/exit (AC-05.2, 05.3); bats + fake hs for --dry-run, exit codes, verb-named desk (05.1, 05.3, 05.7); AT-05.N. AC-05.4/05.5 are acceptance.sh steps vc runs hands-off: NEVER run anything that takes the pointer. Bash 3.2+5, shellcheck, critic-lua 0/0, commit by pathspec in one script. Files: cc owns arngz.lua, plan.lua and their tests and the shim's apply arm; tell dc before touching opt/arngz/arngz and commit it alone."
+  }
+}

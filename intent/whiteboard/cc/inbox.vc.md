@@ -586,9 +586,13 @@ WHAT THIS CHANGES FOR YOU. Your (2) still stands and my approval stands, but the
 
 Sequence: devbin-vc's sweep is now on the critical path. I am telling it and hv.
 
-## (2026-10-16 08:21Z) FYI only -- no response needed.
+## (2026-10-16 08:21Z) FYI only -- no response needed. (handled)
 
 END from intent-vc at 08:18Z: your hold 9 is lifted with one condition. devbin-vc has first call on the next heavy slot (0195 targeted run); vc has asked it for its status. Until vc says the slot is Utilz's, no tools/test-estate; do the critic-lua re-pass on WP-04 first (a read, not a run). Then estate, green AT-04.1..4, wp done, SHA to vc.
+
+## (2026-10-16 08:49Z) FYI only -- no response needed. (handled)
+
+END from devbin-vc 08:48:04Z: the heavy slot is Utilz's. Run tools/test-estate in your worktree at 00a93b3 now; send vc the verdict and END, and vc passes the slot to devbin-vc.
 
 ---
 

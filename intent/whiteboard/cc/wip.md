@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: 67bcef6b-d20d-4bb9-ac53-ff7fbaf2e422
-heartbeat_at: 2026-10-16 08:20Z
+heartbeat_at: 2026-10-16 09:56Z
 status: active
-focus: "16 Oct: ST0026 WP-04 banked, not closed: two holds stand (estate after intent-vc's END; a clean critic-lua re-pass). Then green AT-04.1..4, wp done, SHA to vc. Taking instructions from vc."
+focus: "16 Oct: WP-04 done and verified by vc at 00a93b3. WP-05 (apply on outcome D) briefed and held for after the compact (hold 11). Taking instructions from vc."
 claims: []
 ---
 
@@ -17,11 +17,11 @@ _(none)_
 
 ## TODO
 
-- WP-05 (--bind): two desk entries for one app on different spaces plan two conflicting bind ops, since plan's bind step is not keyed on app_key (critic-lua fifth pass, plan.lua bind step). Key binds on app_key and refuse one app bound to two spaces, naming both paths. Harmless until bind has a measured route.
+_(none)_
 
 ## Holds
 
-- ST0026 WP-05 (apply): held until vc sends the WP-05 brief, which waits on two measurements: whether a Dock binding takes at all (the deciding test binds Calculator to a built-in desktop other than its last and needs hv's window), and the drag (hv's hands off). vc verified WP-04 at 00a93b3 (16 Oct). Not yet shown: that any binding, the Dock's own or a defaults write, does anything; vc's 08:54Z result was confounded by Calculator's last window position, and vc retracted it. Measured: the Dock writes nothing beyond app-bindings, so if bindings work, defaults write is enough. (edited)
+- WP-05 apply on outcome D: brief from vc (sent 16 Oct as a session message, not a wb ask, so restated here), START AFTER THE COMPACT on hv's word. Then: read design.md at eeeab48 (apply in order, Display matching, Failures and the report, Measured 16 Oct 2026, D20 amended, D21, D22, D25) and intent ac show ST0026 AC-05.1..7; intent wp start ST0026/05 and claim it. Route D21: move within a display = hold the title bar (hs.eventtap) and press Move-space (symbolic hotkeys 79/81, read, refused if unset) once per step in Mission Control order, let go; across displays = drag over the shared edge onto the target's active space, let go, continue within. Read back each step at 0.5 s (window spaces, display active space, listed at dest not origin); disagreement = failed, exit 1. Port from dc's spike /private/tmp/claude-501/-Users-matts-Devel-prj-Utilz/b6f789ca-4627-4a74-b4cd-bb7c07de9f46/scratchpad/arngz-spike/arngz-spike2.lua (refusals: button or modifier down, pointer moved >40 px, no grab point, no route; cleanup) into arngz.lua, plan.lua pure, credit the spike. No moveWindowToSpace, gotoSpace, Mission Control or bindings; --bind refused as unknown (AC-05.6), so plan's bind step, bind_unread and restart_dock go. Ordinals (D22) from com.apple.spaces SpacesDisplayConfiguration, not allSpaces. Shape (D20): apply scheduled via hs.timer.doAfter held in a global, IPC returns at once, CLI waits on the response file under its own deadline. Launch, wait for a claimable window, place; --no-launch reports. Tests: planner for matching and report/exit (AC-05.2, 05.3); bats + fake hs for --dry-run, exit codes, verb-named desk (05.1, 05.3, 05.7); AT-05.N. AC-05.4/05.5 are acceptance.sh steps vc runs hands-off: NEVER run anything that takes the pointer. Bash 3.2+5, shellcheck, critic-lua 0/0, commit by pathspec in one script. Files: cc owns arngz.lua, plan.lua and their tests and the shim's apply arm; tell dc before touching opt/arngz/arngz and commit it alone. (edited)
 
 ## Watch-outs
 
@@ -32,7 +32,6 @@ _(none)_
 - To learn what a command will do, RUN it in its read-only mode (--dry-run, --check, status). Sourcing its library functions into a shell of your own measures YOUR shell, not the command: cc answered whether the vendored core resolves 2.12.0 by sourcing release_versions into a plain bash -c, got 2.12.0 and success, and was wrong -- the handler runs under set -euo pipefail (cmd/release:24) and release_versions ends its loop with is_semver && printf, which v2.6.1 (last in byte order) leaves at 1. release --minor --dry-run stops at step 1. AND: vc ran cc s probe verbatim and agreed, which is one measurement taken twice, not a confirmation. A repeat of a method cannot find a method error.
 - The pre-commit gate is tracked in .githooks/ now, read through core.hooksPath (issue 0064, 39b0af4). It REFUSES a staged .md or .rs that is not formatted and never rewrites it, so fix with prettier --write <file> or bin/devbin fmt rust, git add, and commit again. Edits to .git/hooks/ are no longer read. What still holds from the old watch-out 5: a store body (an issue, a WP body) must be prettier-stable before intent set, or its view drifts and the doctor gate refuses every later commit.
 - Before saying the tree is clean, run git status --porcelain --untracked-files=all with NO pathspec and quote the count. On 2026-09-22 cc checked -- docs/ only and twice told vc and hv nothing of its was in the tree, while its board, wip view and four canon events sat uncommitted, and those events alone would have refused the cut at step 2. The narrow answer was true; the claim was wider than what was measured.
-- hs IPC limits, measured by vc 16 Oct: the hs client gives up after 4 s by default (receive timeout, exit 69); a long verb that pumps the run loop after that dies silently with hs.ipc 'already recursing' refusals; a 12 s sleep scheduled through hs.timer.doAfter, with the IPC call returning at once, completes cleanly. arngz's CLI already passes -t ARNGZ_HS_TIMEOUT (default 60) to hs, so discover and diff are inside it. WP-05's long operations (apply's launch waits, the re-observes) must not pump the run loop inside the IPC call: schedule them with hs.timer and let the response file be the answer. This becomes a D20 amendment once vc records the spike.
 
 ## Decisions
 
