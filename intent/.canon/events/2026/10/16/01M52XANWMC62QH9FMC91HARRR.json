@@ -1,0 +1,16 @@
+{
+  "id": "01M52XANWMC62QH9FMC91HARRR",
+  "ts": "2026-10-16T17:49:31.924Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 63,
+    "text": "ST0027 menuz: WP-01 and WP-02 Done on 16 Oct. hv ruled Q1 to Q11 (D1 to D11 in design.md's Decisions, in the store): one typed form for params (types text, secret, choice, file, folder; text when absent), the app at native/macos/Menuz with the installed copy at ~/Applications/Menuz.app and use dev|installed (installed when absent), Intent's signing, runs left running. The shim (init, edit, log, validate, render, status) is on main at 4e34217, verified by vc (38/38 both bashes), AT-02.1 to AT-02.3 green, the example fixed at 04a331d; cc is replacing one test's read of design.md (a dehydrated view after the close) with init's own contract. WP-03 (the app) is cc's on vc's instruction: an Xcode build is heavier than a suite, so cc tells vc before the first xcodebuild and vc books it with intent-vc. dc's help/menuz.md WP-02 cut lands over cc's file at 4e34217; README and CHANGELOG at WP-05. AC-03.3 (the watcher's latency) is vc's hand run on hv's machine."
+  }
+}

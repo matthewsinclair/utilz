@@ -13,10 +13,10 @@ title: menuz: a macOS menu bar app whose menu is a YAML file of commands to run
 
 ## Acceptance Criteria
 
-### WP-01 -- Design settled with hv (status: WIP)
+### WP-01 -- Design settled with hv (status: Done)
 
 - AC-01.1 (non-test) design.md records hv's ruling on each of its questions Q1 to Q11 as a numbered decision or a descoping, in hv's words where hv gave them, and no recommendation is left standing in its place. -- evidence: hv's rulings of 16 Oct 2026 on Q1 to Q11, recorded as D1 to D11 in WP-01's body (and in design.md's Decisions section at the 0605 sync): Q4 one typed form, Q6 the source and dev build at native/macos/Menuz with the installed copy at ~/Applications/Menuz.app like the siblings and a use dev|installed switch (hv's correction in cc's session, confirmed to vc), Q7 Intent's signing, Q9 runs left running, Q10 and Q11 yes, the rest as recommended; no recommendation left standing in a ruling's place -- satisfied: yes
-- AC-01.2 (non-test) The example menuz.yaml in design.md is final, its params typed as D4 rules, and is the one menuz init writes; swift is a declared language of the project (intent lang init swift) and critic-swift is the review for native/macos/Menuz. -- satisfied: no
+- AC-01.2 (non-test) The example menuz.yaml in design.md is final, its params typed as D4 rules, and is the one menuz init writes; swift is a declared language of the project (intent lang init swift) and critic-swift is the review for native/macos/Menuz. -- evidence: vc, 16 Oct 2026 at 04a331d: opt/menuz/lib/example.yaml is design.md's yaml block byte for byte (diff empty; cc's 4e34217 carried a 'type: string' line the five types do not allow, removed at 04a331d), menuz init writes it (AT-02.2 green), swift is a declared language (intent lang init swift, 16 Oct) and critic-swift reviews native/macos/Menuz -- satisfied: yes
 
 ### WP-02 -- The shim, the config directory and the catalogue verbs (status: Done)
 
@@ -48,7 +48,7 @@ title: menuz: a macOS menu bar app whose menu is a YAML file of commands to run
 
 ## Acceptance Tests
 
-### WP-01 -- Design settled with hv (status: WIP)
+### WP-01 -- Design settled with hv (status: Done)
 
 _(no tests in this group)_
 

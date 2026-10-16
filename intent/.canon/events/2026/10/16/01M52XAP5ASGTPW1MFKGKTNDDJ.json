@@ -1,0 +1,16 @@
+{
+  "id": "01M52XAP5ASGTPW1MFKGKTNDDJ",
+  "ts": "2026-10-16T17:49:32.202Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "hold",
+    "seq": 10,
+    "text": "Next, in order: (1) 2.13.0 is complete: tag 01cf76d on both remotes, the release object, both CI runs on the commit green (the branch run was cancelled by vc's formula push during the core's CI wait and re-run; tools/ci-state reads green), formula bump c3a75fc on main. hv's part remains: copy packaging/homebrew/utilz.rb into the tap clone as Formula/utilz.rb, brew audit --strict matthewsinclair/utilz/utilz, the tap's commit and push. Lesson recorded: nothing is pushed to main while the core waits on CI. (2) ST0027: cc's test fix (no design.md read) and WP-03; dc's help cut; vc verifies each SHA in a worktree; AC-03.3 hand run. (3) hold 9's list stands (worktrees now also wt-f8c2827, wt-51fe5d9, wt-26924e9, wt-d2be9e4, wt-4e34217). (4) The box is shared with Intent through intent-vc's START/END (Intent's dc is on two cargo runs from 17:47Z): ask before anything heavy."
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "id": "01M52XANJJFX6VV0EPKGYEVJHY",
+  "ts": "2026-10-16T17:49:31.603Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.satisfy",
+  "subject": {
+    "type": "ac",
+    "id": "ST0027/AC-01.2"
+  },
+  "payload": {
+    "evidence": "vc, 16 Oct 2026 at 04a331d: opt/menuz/lib/example.yaml is design.md's yaml block byte for byte (diff empty; cc's 4e34217 carried a 'type: string' line the five types do not allow, removed at 04a331d), menuz init writes it (AT-02.2 green), swift is a declared language (intent lang init swift, 16 Oct) and critic-swift reviews native/macos/Menuz"
+  }
+}
