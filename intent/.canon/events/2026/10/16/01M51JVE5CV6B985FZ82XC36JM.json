@@ -1,0 +1,17 @@
+{
+  "id": "01M51JVE5CV6B985FZ82XC36JM",
+  "ts": "2026-10-16T05:27:12.300Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.correct",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "held_name": "utilz-dc",
+    "held_role": "dc",
+    "name": "DevX Claude",
+    "role": "devx"
+  }
+}

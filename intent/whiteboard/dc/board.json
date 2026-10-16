@@ -1,0 +1,17 @@
+{
+  "schema": "intent/board@3.0",
+  "node": {
+    "moniker": "dc",
+    "name": "DevX Claude",
+    "role": "devx",
+    "session_id": "b6f789ca-4627-4a74-b4cd-bb7c07de9f46",
+    "heartbeat_at": "2026-10-16T04:58:05.515Z",
+    "status": "active",
+    "focus": "",
+    "claims": [],
+    "recorded_at": "2026-10-16T04:57:46.520Z",
+    "migrated_at": "2026-10-16T04:57:46.520Z"
+  },
+  "items": [],
+  "messages": []
+}
