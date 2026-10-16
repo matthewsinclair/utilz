@@ -125,7 +125,10 @@ final class Runner {
     for (code, step) in steps {
       if let error = check(code, step) { return .failure(error) }
     }
-    let argv = ["/bin/zsh", "-f", "-c", Run.wrapper].map { strdup($0) } + [nil]
+    // The literal is typed first: Swift 6.1 (Xcode 16, project.yml's promise)
+    // types it from strdup's parameter and the `+ [nil]`, as C pointers.
+    let args: [String] = ["/bin/zsh", "-f", "-c", Run.wrapper]
+    let argv = args.map { strdup($0) } + [nil]
     let envp = environment.map { strdup("\($0.key)=\($0.value)") } + [nil]
     defer {
       argv.forEach { free($0) }
