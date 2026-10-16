@@ -13,7 +13,7 @@ claims: [ST0026]
 
 ## DOING
 
-- ST0026 arngz: vc holds the thread for the design. WP-01 half measured (outcome A closed: moveWindowToSpace lies; B doubtful: a written binding is ignored). WP-02 (3e11cb4) and WP-03 (88c57ad) verified in worktrees. WP-04 discover/diff with cc; verify on its SHA. Design is on disk at intent/st/ST0026/design.md and in the store; edit the file, then intent sync --to-store.
+- ST0026 arngz: vc holds the thread for the design. WP-01 spike: outcome A closed (moveWindowToSpace lies); B half open (the Dock's own This Desktop binding IS honoured, measured 09:54Z; the defaults-written one being re-measured); D (the drag) waits on hv's hands off; the first run died with the hs client's 4 s timeout, a timer-scheduled call is the fix. WP-02 (3e11cb4), WP-03 (88c57ad), WP-04 (00a93b3: planner 90/90, bats 55/55, shellcheck 22 clean) verified in worktrees. WP-06 doctor/init with dc. Design on disk at intent/st/ST0026/design.md and in the store; edit the file, then intent sync --to-store. (edited)
 
 ## TODO
 
@@ -23,7 +23,6 @@ claims: [ST0026]
 
 - Drag spike, outcome D: dc's arngz-spike2.lua, run-hs.sh and RUNBOOK-2.md under /private/tmp/claude-501/-Users-matts-Devel-prj-Utilz/b6f789ca-4627-4a74-b4cd-bb7c07de9f46/scratchpad/arngz-spike/. Held until hv gives the go for the pointer to be taken (asked three times on 16 Oct); then vc runs it with a low-stakes window and records the result in the design.
 - Dock This-Desktop test: held until hv does the two clicks (Calculator on VY229HF (2), Dock icon > Options > Assign To > This Desktop, then quit it and say so); then vc reads what the Dock wrote to com.apple.spaces, launches Calculator, observes where it lands, and records the outcome for B.
-- Heavy slot: intent-vc sent END at 08:18Z (relayed to cc, hold 9 lifted with a condition). devbin-vc has first call for 0195 targeted run; vc asked devbin-vc at 08:2xZ whether it is taking the slot. Utilz estate run (cc, closes WP-04) starts only on devbin-vc END or its pass, and vc tells cc.
 
 ## Watch-outs
 

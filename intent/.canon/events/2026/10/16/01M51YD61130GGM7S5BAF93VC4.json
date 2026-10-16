@@ -1,0 +1,16 @@
+{
+  "id": "01M51YD61130GGM7S5BAF93VC4",
+  "ts": "2026-10-16T08:49:08.129Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "hold",
+    "seq": 8,
+    "text": "Heavy slot: devbin-vc sent END at 08:48:04Z and the slot is Utilz's; cc runs tools/test-estate in a detached worktree at 00a93b3. When cc reports END, vc sends END to devbin-vc, whose landing suite is next."
+  }
+}

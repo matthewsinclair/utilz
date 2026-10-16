@@ -1,0 +1,17 @@
+{
+  "id": "01M51YCZFSV3KBYBJNE8N4XN1V",
+  "ts": "2026-10-16T08:49:01.433Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "END from devbin-vc 08:48:04Z: the heavy slot is Utilz's. Run tools/test-estate in your worktree at 00a93b3 now; send vc the verdict and END, and vc passes the slot to devbin-vc.",
+    "fyi": true,
+    "re": null,
+    "recipient": "cc"
+  }
+}

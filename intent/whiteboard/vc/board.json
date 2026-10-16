@@ -1205,9 +1205,10 @@
       "node": "vc",
       "kind": "doing",
       "seq": 62,
-      "text": "ST0026 arngz: vc holds the thread for the design. WP-01 half measured (outcome A closed: moveWindowToSpace lies; B doubtful: a written binding is ignored). WP-02 (3e11cb4) and WP-03 (88c57ad) verified in worktrees. WP-04 discover/diff with cc; verify on its SHA. Design is on disk at intent/st/ST0026/design.md and in the store; edit the file, then intent sync --to-store.",
+      "text": "ST0026 arngz: vc holds the thread for the design. WP-01 spike: outcome A closed (moveWindowToSpace lies); B half open (the Dock's own This Desktop binding IS honoured, measured 09:54Z; the defaults-written one being re-measured); D (the drag) waits on hv's hands off; the first run died with the hs client's 4 s timeout, a timer-scheduled call is the fix. WP-02 (3e11cb4), WP-03 (88c57ad), WP-04 (00a93b3: planner 90/90, bats 55/55, shellcheck 22 clean) verified in worktrees. WP-06 doctor/init with dc. Design on disk at intent/st/ST0026/design.md and in the store; edit the file, then intent sync --to-store.",
       "state": "live",
-      "recorded_at": "2026-10-16T08:16:02.801Z"
+      "recorded_at": "2026-10-16T08:16:02.801Z",
+      "edited_at": "2026-10-16T09:22:03.272Z"
     },
     {
       "node": "vc",
@@ -1247,9 +1248,11 @@
       "node": "vc",
       "kind": "hold",
       "seq": 8,
-      "text": "Heavy slot: intent-vc sent END at 08:18Z (relayed to cc, hold 9 lifted with a condition). devbin-vc has first call for 0195 targeted run; vc asked devbin-vc at 08:2xZ whether it is taking the slot. Utilz estate run (cc, closes WP-04) starts only on devbin-vc END or its pass, and vc tells cc.",
-      "state": "live",
-      "recorded_at": "2026-10-16T08:21:51.152Z"
+      "text": "Heavy slot: devbin-vc sent END at 08:48:04Z and the slot is Utilz's; cc runs tools/test-estate in a detached worktree at 00a93b3. When cc reports END, vc sends END to devbin-vc, whose landing suite is next.",
+      "state": "archived",
+      "archived_at": "2026-10-16T09:17:34.436Z",
+      "recorded_at": "2026-10-16T08:21:51.152Z",
+      "edited_at": "2026-10-16T08:49:08.129Z"
     }
   ],
   "messages": [
