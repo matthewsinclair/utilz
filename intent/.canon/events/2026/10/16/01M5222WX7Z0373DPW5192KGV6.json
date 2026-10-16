@@ -1,0 +1,15 @@
+{
+  "id": "01M5222WX7Z0373DPW5192KGV6",
+  "ts": "2026-10-16T09:53:25.879Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "hold",
+    "text": "Until the second critic-shell pass on 3777de3 reports, which was pending at the 16 Oct fold (if no result has arrived after the compact, run the pass again): send vc its counts, and fix forward anything it finds. The first pass found 0 critical, 4 warning and 10 recommendation, and 3777de3 fixes all of them, each with a test."
+  }
+}

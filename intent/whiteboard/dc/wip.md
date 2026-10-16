@@ -3,9 +3,9 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: b6f789ca-4627-4a74-b4cd-bb7c07de9f46
-heartbeat_at: 2026-10-16 09:44Z
+heartbeat_at: 2026-10-16 09:53Z
 status: active
-focus: "ST0026 WP-06: doctor and init at 3777de3, with vc to verify; AC-06.3 and AC-06.4 held until apply lands"
+focus: "ST0026 WP-06: doctor and init at 3777de3, suite verified by vc; held for vc's read of the common.sh diff and the real doctor run after the compact; AC-06.3 and AC-06.4 held until apply lands"
 claims: [ST0026/06]
 ---
 
@@ -22,6 +22,8 @@ _(none)_
 ## Holds
 
 - Until apply (ST0026 WP-05) lands, as vc ruled on 16 Oct: WP-06's AC-06.3 (help/arngz.md, the README's utility table and the CHANGELOG entry, checked against arngz --help) and AC-06.4 (check all, the estate suite, and the hand-run acceptance transcript in acceptance.md). AC-06.1 and AC-06.2, doctor and init, are built at 3777de3 with AT-06.1 and AT-06.2 minted; vc verifies them.
+- Until the second critic-shell pass on 3777de3 reports, which was pending at the 16 Oct fold (if no result has arrived after the compact, run the pass again): send vc its counts, and fix forward anything it finds. The first pass found 0 critical, 4 warning and 10 recommendation, and 3777de3 fixes all of them, each with a test.
+- Until vc reads the common.sh (shim) diff and runs the real arngz doctor on hv's machine, both after the 16 Oct compact: WP-06's AC-06.1 and AC-06.2 stay at 3777de3. vc verified it as far as the suite goes (arngz.bats 79/79 under bash 3.2 and 5 in a detached worktree; shellcheck clean on CI's 22 files). AT-06.1 and AT-06.2 stay at to-write until then. vc recorded dc's choices as D23 to D25 at eeeab48.
 
 ## Watch-outs
 

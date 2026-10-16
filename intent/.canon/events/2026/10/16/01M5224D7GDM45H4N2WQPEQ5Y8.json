@@ -1,0 +1,15 @@
+{
+  "id": "01M5224D7GDM45H4N2WQPEQ5Y8",
+  "ts": "2026-10-16T09:54:14.896Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "hold",
+    "text": "Until vc reads the common.sh (shim) diff and runs the real arngz doctor on hv's machine, both after the 16 Oct compact: WP-06's AC-06.1 and AC-06.2 stay at 3777de3. vc verified it as far as the suite goes (arngz.bats 79/79 under bash 3.2 and 5 in a detached worktree; shellcheck clean on CI's 22 files). AT-06.1 and AT-06.2 stay at to-write until then. vc recorded dc's choices as D23 to D25 at eeeab48."
+  }
+}
