@@ -1,0 +1,15 @@
+{
+  "id": "01M53D7ZF10T8BJCMMV0G14BZX",
+  "ts": "2026-10-16T22:27:40.641Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "hold",
+    "text": "2.14.0 is cut-ready at e854413 (vc). cc holds with nothing in the tree; every board edit goes with its own commit by path until the cut. Condition: vc's word, which comes only if the notice hand run after hv allows menuz's notifications turns up a defect."
+  }
+}

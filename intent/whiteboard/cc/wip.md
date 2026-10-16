@@ -21,7 +21,7 @@ _(none)_
 
 ## Holds
 
-- Next instruction from vc toward 2.14.0. Review of b7e07a3 sent to vc; vc's to act on: authorise's polling (a hot spin if the launch task is ever cancelled; a cleaner timer race), comments that still say a withdrawn alert reads not determined, the denied line's hard-coded settings path, the hand run's wait stopping at the 10 s asking line, and the unmeasured case of a second post in the same process while the alert is up. Condition: vc messages.
+- 2.14.0 is cut-ready at e854413 (vc). cc holds with nothing in the tree; every board edit goes with its own commit by path until the cut. Condition: vc's word, which comes only if the notice hand run after hv allows menuz's notifications turns up a defect.
 
 ## Watch-outs
 
