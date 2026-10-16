@@ -44,7 +44,7 @@ VERBS:
   <desk>                     the same as apply <desk>
   apply <desk> [--dry-run] [--no-launch] [--no-create] [--bind] [--map <name>=<uuid>]
                              arrange this machine's windows as the desk says
-  discover [--save <desk>] [--force]
+  discover [--grid WxH] [--save <desk>] [--force]
                              print the arrangement on screen now as a desk
   diff <desk>                print what apply would do, and change nothing
   list                       the desks in the catalogue, with display and app counts
@@ -142,6 +142,9 @@ BEGIN {
   allowed["displays[].spaces[]|name"] = allowed["displays[].spaces[]|apps"] = 1
   allowed["displays[].spaces[].apps[]|app"] = allowed["displays[].spaces[].apps[]|window"] = 1
   allowed["displays[].spaces[].apps[]|layout"] = 1
+  # How far discover found a window from its cells (ST0026 WP-04); the
+  # planner ignores it.
+  allowed["displays[].spaces[].apps[]|misfit"] = 1
   want[""] = "!!map"; want["displays"] = "!!seq"; want["displays[]"] = "!!map"
   want["displays[].match"] = "!!map"; want["displays[].spaces"] = "!!seq"
   want["displays[].spaces[]"] = "!!map"; want["displays[].spaces[].apps"] = "!!seq"
@@ -192,6 +195,8 @@ END {
         refuse(m, (keys == "" ? "(absent)" : keys), "a display must match by uuid or name")
       }
     }
+    if (shape(p) == "displays[].spaces[].apps[]" && tags[p] == "!!map" && ((p ".misfit") in val) && val[p ".misfit"] !~ /^[0-9]+px$/)
+      refuse(p ".misfit", val[p ".misfit"], "a misfit is a whole number of points, eg 3px")
     if (shape(p) == "displays[].spaces[].apps[]" && tags[p] == "!!map") {
       split(p, parts, ".")
       disp = parts[1] "." parts[2]
@@ -229,7 +234,7 @@ END {
 # (design.md, "The config"). Prints every refusal, each naming the desk, its
 # file, the path and the value, and returns 2; returns 0 for a valid desk.
 validate_desk() {
-  local desk="$1" file reason facts refusals path value why
+  local desk="$1" file reason
   file="$(desk_file "$desk")"
 
   if reason="$(desk_name_refusal "$desk")"; then
@@ -240,7 +245,13 @@ validate_desk() {
     error "arngz: desk '$desk' does not exist: no $file (arngz list names the desks there are)"
     return 2
   fi
+  validate_desk_file "$desk" "$file"
+}
 
+# The schema half of the validator, for a desk file anywhere: discover checks
+# what it is about to save before the file reaches the catalogue.
+validate_desk_file() {
+  local desk="$1" file="$2" facts refusals path value why
   if ! facts="$(desk_facts "$file" 2>&1)"; then
     error "arngz: desk '$desk' ($file) is not YAML yq can read: $facts"
     return 2
@@ -294,18 +305,19 @@ engine_timeout() {
 # comes out of that file; nothing is recomputed here.
 #
 # THE RESPONSE FILE IS THE ANSWER, NOT hs's EXIT. Measured 16 Oct 2026 on this
-# machine: hs -c sometimes never returns after the module has finished and
-# written its response, -t notwithstanding. So the wait ends at whichever comes
+# machine: hs -c sometimes never returned after the module had finished and
+# written its response, -t notwithstanding. The cause was stdin (below); the
+# file is still the answer, because the next hang will have another cause. So the wait ends at whichever comes
 # first -- the response appearing (the module renames it into place whole), hs
 # exiting, or the deadline -- and an hs still running once the response is
 # there is stopped. Refuses, exit 2, when hs is absent, when it exits without a
 # response, when it does not answer in time, or when the engine reports an
 # error.
 #
-# Usage: engine_call <verb> [<desk file>]
+# Usage: engine_call <verb> [<desk file>] [<options JSON file>]
 ENGINE_RESPONSE=""
 engine_call() {
-  local verb="$1" desk_file="${2:-}" hs module timeout dir request response out rc deadline
+  local verb="$1" desk_file="${2:-}" options_file="${3:-}" hs module timeout dir request response out rc deadline
   hs="$(command -v hs)" || refuse "the hs tool is not on PATH: arngz reaches Hammerspoon through it (utilz doctor reports it; arngz init --yes installs it)"
   module="$(engine_module)"
   timeout="$(engine_timeout)"
@@ -319,13 +331,23 @@ engine_call() {
     *'"'* | *\\*) refuse "a path holds a quote or backslash, which cannot go into the hs call: $module, $request" ;;
   esac
 
+  if [[ -z "$options_file" ]]; then
+    options_file="$dir/options.json"
+    printf '{}\n' >"$options_file"
+  fi
   if [[ -n "$desk_file" ]]; then
-    V="$verb" D="$desk_file" yq -n -o json '.verb = strenv(V) | .desk = load(strenv(D)) | .options = {}' >"$request"
+    V="$verb" D="$desk_file" O="$options_file" yq -n -o json \
+      '.verb = strenv(V) | .desk = load(strenv(D)) | .options = load(strenv(O))' >"$request"
   else
-    V="$verb" yq -n -o json '.verb = strenv(V) | .desk = null | .options = {}' >"$request"
+    V="$verb" O="$options_file" yq -n -o json '.verb = strenv(V) | .desk = null | .options = load(strenv(O))' >"$request"
   fi
 
-  "$hs" -a -t "$timeout" -c "return dofile(\"$module\").run(\"$request\")" >"$out" 2>&1 &
+  # STDIN FROM /dev/null, ALWAYS: hs reads Lua from stdin when stdin is not a
+  # terminal, so under any caller whose stdin stays open it waits for input
+  # that never comes. Measured 16 Oct 2026: 3 of 3 hung with stdin an open
+  # pipe, 3 of 3 returned at once from /dev/null (the cause vc and dc found).
+  # The response-file wait below stays as the defence against the next hang.
+  "$hs" -a -t "$timeout" -c "return dofile(\"$module\").run(\"$request\")" </dev/null >"$out" 2>&1 &
   local pid=$!
   deadline=$((SECONDS + timeout))
   while [[ ! -f "$response" ]] && kill -0 "$pid" 2>/dev/null && [[ $SECONDS -lt $deadline ]]; do
@@ -363,6 +385,27 @@ engine_call() {
 # The engine's report, line for line, as the engine wrote it.
 render_report() {
   yq -r '.report[]' "$1"
+}
+
+# The engine's desk as YAML, in the desk's own key order. The order is set
+# here, by naming every key, because the engine's JSON comes from Lua tables,
+# which have none: the same world must print the same bytes (AC-04.1). Keys a
+# desk does not carry are left out rather than printed as null. No -P: it
+# would override the flow style `match` takes, as in the design's example.
+render_desk() {
+  yq -o yaml '.desk | {
+    "desk": .desk,
+    "grid": .grid,
+    "displays": [(.displays // [])[] | {
+      "name": .name,
+      "match": ({"uuid": .match.uuid, "name": .match.name, "size": .match.size, "position": .match.position}
+        | with_entries(select(.value != null))),
+      "spaces": [(.spaces // [])[] | {
+        "apps": [(.apps // [])[] | ({"app": .app, "window": .window, "layout": .layout, "misfit": .misfit}
+          | with_entries(select(.value != null)))]
+      }]
+    }]
+  } | .displays[].match style="flow"' "$1"
 }
 
 # ============================================================================
@@ -477,30 +520,82 @@ cmd_apply() {
   refuse "apply: not yet: WP-05"
 }
 
+# diff: what apply would do, one line per op with its reason, and nothing done.
+# The engine plans and never executes on this path. Exit 1 when apply would
+# change anything, 0 when it would not.
 cmd_diff() {
-  local desk
+  local desk ops
   desk="$(one_desk diff "$@")"
   validate_desk "$desk" || exit 2
-  refuse "diff: not yet: WP-04"
+  engine_call plan "$(desk_file "$desk")"
+  render_report "$ENGINE_RESPONSE"
+  ops="$(yq '.ops | length' "$ENGINE_RESPONSE")"
+  rm -rf "$(dirname "$ENGINE_RESPONSE")"
+  if [[ "$ops" -gt 0 ]]; then
+    exit 1
+  fi
 }
 
-# WP-03 wires discover as far as the engine's observe, through the contract;
-# printing the world as a desk is WP-04.
+# discover: the arrangement on screen now, as a desk (WP-04). The engine
+# observes and builds the desk; this prints it as YAML, or saves it after the
+# validator has accepted it. Everything the engine did not record is said on
+# stderr, so stdout is the desk alone.
 cmd_discover() {
+  local save="" force=0 grid="8x4" dir options yaml target reason
   while [[ $# -gt 0 ]]; do
     case "$1" in
-      --force) shift ;;
+      --force) force=1; shift ;;
       --save)
         if [[ $# -lt 2 ]]; then refuse "--save takes a desk name"; fi
+        save="$2"
         shift 2
         ;;
+      --save=*) save="${1#--save=}"; shift ;;
+      --grid)
+        if [[ $# -lt 2 ]]; then refuse "--grid takes WxH, eg 8x4"; fi
+        grid="$2"
+        shift 2
+        ;;
+      --grid=*) grid="${1#--grid=}"; shift ;;
       *) refuse "unknown option for discover: '$1'" ;;
     esac
   done
-  engine_call observe
-  render_report "$ENGINE_RESPONSE"
+  if [[ ! "$grid" =~ ^[1-9][0-9]*x[1-9][0-9]*$ ]]; then
+    refuse "--grid = '$grid': a grid is WxH, eg 8x4"
+  fi
+  if [[ $force -eq 1 && -z "$save" ]]; then
+    refuse "--force only means something with --save <desk>"
+  fi
+  if [[ -n "$save" ]]; then
+    target="$(desk_file "$save")"
+    if reason="$(desk_name_refusal "$save")"; then
+      refuse "desk '$save' ($target): $reason"
+    fi
+    if [[ -e "$target" && $force -eq 0 ]]; then
+      refuse "desk '$save' exists: $target (--force overwrites it)"
+    fi
+  fi
+
+  dir="$(mktemp -d "${TMPDIR:-/tmp}/arngz-discover.XXXXXX")"
+  options="$dir/options.json"
+  G="$grid" N="${save:-discovered}" yq -n -o json '.grid = strenv(G) | .name = strenv(N)' >"$options"
+  engine_call discover "" "$options"
+  yaml="$dir/desk.yaml"
+  render_desk "$ENGINE_RESPONSE" >"$yaml"
+  render_report "$ENGINE_RESPONSE" >&2
+  # What discover writes, the validator must accept: a refusal here is a bug in
+  # discover, and it is said rather than saved.
+  validate_desk_file "${save:-discovered}" "$yaml" || refuse "discover built a desk the validator refuses (kept at $yaml)"
   rm -rf "$(dirname "$ENGINE_RESPONSE")"
-  refuse "discover: printing the world as a desk: not yet: WP-04"
+
+  if [[ -z "$save" ]]; then
+    cat "$yaml"
+  else
+    mkdir -p "$(catalogue_dir)"
+    mv -- "$yaml" "$target"
+    info "saved $target"
+  fi
+  rm -rf "$dir"
 }
 
 cmd_doctor() {

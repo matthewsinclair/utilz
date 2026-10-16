@@ -12,7 +12,7 @@ A DOING / TODO / DONE view, projected from steel-thread and work-package status:
   - [-] 01: Spike: space moves and Dock bindings on macOS 27
   - [x] 02: Desk config, validator and the catalogue verbs
   - [x] 03: Engine: observe, the pure planner, execute, and the IPC contract
-  - [ ] 04: discover and diff
+  - [-] 04: discover and diff
   - [ ] 05: apply
   - [ ] 06: doctor, init, docs and the close
 

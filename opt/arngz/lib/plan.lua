@@ -96,6 +96,15 @@ end
 
 -- ------------------------------------------------------------- matching
 
+-- A screen's name without the " (n)" Hammerspoon appends when two panels share
+-- a name. The suffix follows enumeration order, so it is not identity: it is
+-- stripped on both sides of a match (D6 as amended, 16 Oct 2026), and discover
+-- never writes it.
+function P.panel_name(name)
+  if type(name) ~= "string" then return name end
+  return (string.gsub(name, "%s%(%d+%)$", ""))
+end
+
 -- A desk's `size` is the panel's, so it is read from the full frame, which
 -- includes the menu bar and the Dock that `frame` leaves out.
 local function size_of(screen)
@@ -151,7 +160,7 @@ function P.match_displays(desk, world, options)
     else
       local same = {}
       for _, s in ipairs(world.screens or {}) do
-        if m.name and s.name == m.name and (not m.size or size_of(s) == m.size) then
+        if m.name and P.panel_name(s.name) == P.panel_name(m.name) and (not m.size or size_of(s) == m.size) then
           same[#same + 1] = s
         end
       end
@@ -419,6 +428,273 @@ function P.plan(desk, world, options)
     ops[#ops + 1] = { op = "restart_dock", reason = "the Dock reads app bindings only when it starts" }
   end
   return ops
+end
+
+-- ------------------------------------------------------------- discover
+
+-- A window title as a pattern that matches exactly that title: its magic
+-- characters escaped, and anchored at both ends, because plan matches with
+-- string.find, which finds a substring, and "Inbox" must not take
+-- "Inbox - 2 messages".
+local function exact_pattern(text)
+  return "^" .. string.gsub(text, "([%^%$%(%)%%%.%[%]%*%+%-%?])", "%%%1") .. "$"
+end
+
+local function clamp(v, lo, hi)
+  if v < lo then return lo end
+  if v > hi then return hi end
+  return v
+end
+
+-- One axis of a window snapped to the grid: the nearest cell edges for its
+-- start and end, the larger distance in points between an edge and the cell
+-- edge it was given, and whether either edge sat a quarter of a cell or more
+-- from any cell edge, which is a window spanning part of a cell.
+local function snap_axis(start, length, origin, extent, cells)
+  local cell = extent / cells
+  local a = (start - origin) / cell
+  local b = (start + length - origin) / cell
+  local a0 = clamp(round(a), 0, cells - 1)
+  local b0 = clamp(round(b), a0 + 1, cells)
+  local off_a = math.abs(start - (origin + a0 * cell))
+  local off_b = math.abs((start + length) - (origin + b0 * cell))
+  local partial = math.abs(a - round(a)) >= 0.25 or math.abs(b - round(b)) >= 0.25
+  return a0, b0 - a0, math.max(off_a, off_b), partial
+end
+
+-- The layout a window's frame snaps to on a screen and grid, its misfit in
+-- whole points, and whether it spans part of a cell.
+function P.snap(frame, screen_frame, grid)
+  local x, w, mx, px = snap_axis(frame.x, frame.w, screen_frame.x, screen_frame.w, grid.w)
+  local y, h, my, py = snap_axis(frame.y, frame.h, screen_frame.y, screen_frame.h, grid.h)
+  return string.format("%d,%d %dx%d", x, y, w, h), round(math.max(mx, my)), px or py
+end
+
+-- The bundle ids discover never records: Hammerspoon's own windows are the
+-- engine, not the arrangement.
+P.NOT_RECORDED = { ["org.hammerspoon.Hammerspoon"] = true }
+
+local function sort_apps(apps)
+  table.sort(apps, function(p, q)
+    local lp, lq = P.parse_layout(p.layout), P.parse_layout(q.layout)
+    local yp, yq = lp and lp.y or -1, lq and lq.y or -1
+    if yp ~= yq then return yp < yq end
+    local xp, xq = lp and lp.x or -1, lq and lq.x or -1
+    if xp ~= xq then return xp < xq end
+    if p.app ~= q.app then return p.app < q.app end
+    return (p.title or "") < (q.title or "")
+  end)
+end
+
+-- A desk from a world (WP-04): what discover prints. PURE, like plan.
+--
+-- options: grid ("WxH", default 8x4, D19) and name (the desk's name). Returns
+-- the desk and the report lines that say what was not recorded and why --
+-- minimized windows, windows on every space, windows Accessibility could not
+-- name, a window whose title cannot tell it from its app's others, windows
+-- that span part of a cell, and the Dock bindings, which a v1 desk does not
+-- hold. Every display is recorded with all four match fields; a display's
+-- desk name is its position, which the validator needs unique.
+function P.desk_from_world(world, options)
+  options = options or {}
+  local grid_text = options.grid or "8x4"
+  local grid = P.parse_grid(grid_text)
+  if not grid or grid.w < 1 or grid.h < 1 then return nil, "the grid is not WxH: " .. tostring(grid_text) end
+  local notes = {}
+  local function note(fmt, ...) notes[#notes + 1] = string.format(fmt, ...) end
+
+  -- What observe could not read is refused, never written down as empty: a
+  -- desk that says "nothing here" where the engine could not look would be
+  -- applied as if it were true. The same refusal plan makes.
+  for _, s in ipairs(world.screens or {}) do
+    if s.spaces_error then
+      return nil, string.format("the spaces of screen %s could not be read: %s", tostring(s.uuid), tostring(s.spaces_error))
+    end
+    local why = untyped_space(s)
+    if why then return nil, why end
+    for _, sp in ipairs(s.spaces or {}) do
+      if sp.windows_error then
+        return nil, string.format("the windows of space %s on screen %s could not be read: %s", tostring(sp.id),
+          tostring(s.uuid), tostring(sp.windows_error))
+      end
+    end
+  end
+
+  -- A window listed on more than one space is on every space; it is no
+  -- space's, so it is said and left out.
+  local seen_on = {}
+  for _, s in ipairs(world.screens or {}) do
+    for _, sp in ipairs(s.spaces or {}) do
+      for _, w in ipairs(sp.windows or {}) do
+        seen_on[w.id] = (seen_on[w.id] or 0) + 1
+      end
+    end
+  end
+
+  -- The primary first, then the rest by position and uuid, so the same world
+  -- always gives the same desk.
+  local screens = {}
+  for _, s in ipairs(world.screens or {}) do screens[#screens + 1] = s end
+  table.sort(screens, function(a, b)
+    if (a.primary and true or false) ~= (b.primary and true or false) then return a.primary and true or false end
+    if tostring(a.position) ~= tostring(b.position) then return tostring(a.position) < tostring(b.position) end
+    return tostring(a.uuid) < tostring(b.uuid)
+  end)
+
+  -- How many windows each app has across the whole world decides whether its
+  -- entries need a window pattern. Per display would satisfy the validator,
+  -- but plan gives a bare entry every window of its app on every display, so
+  -- an app with a window on each of two displays needs a pattern on both, or
+  -- the discovered desk would not match its own world.
+  local per_app = {}
+  for _, s in ipairs(world.screens or {}) do
+    for _, sp in ipairs(s.spaces or {}) do
+      for _, w in ipairs(sp.windows or {}) do
+        if w.named and w.standard and not w.minimized and w.bundle and seen_on[w.id] == 1
+          and not P.NOT_RECORDED[w.bundle] then
+          per_app[w.bundle] = (per_app[w.bundle] or 0) + 1
+        end
+      end
+    end
+  end
+
+  local desk = { desk = options.name or "discovered", grid = grid_text, displays = {} }
+  local used_names = {}
+  for di, s in ipairs(screens) do
+    local label = tostring(s.position or ("display-" .. di))
+    if used_names[label] then label = label .. "-" .. di end
+    used_names[label] = true
+    local display = {
+      name = label,
+      match = { uuid = s.uuid, name = P.panel_name(s.name), size = size_of(s), position = s.position },
+      spaces = {},
+    }
+
+    -- Gather each desktop's windows, and file each full-screen space's window
+    -- under the desktop before it in Mission Control order (D11).
+    local desktops, current = {}, nil
+    local pending_fullscreen = {}
+    for _, sp in ipairs(s.spaces or {}) do
+      if P.is_user_space(sp.type) then
+        current = { space = sp, windows = {} }
+        desktops[#desktops + 1] = current
+        for _, w in ipairs(pending_fullscreen) do current.windows[#current.windows + 1] = w end
+        pending_fullscreen = {}
+      end
+      local named, recorded, minimized, unnamed, everywhere, own, other = 0, 0, 0, 0, 0, 0, 0
+      for _, w in ipairs(sp.windows or {}) do
+        if not w.named then
+          unnamed = unnamed + 1
+        else
+          named = named + 1
+          if seen_on[w.id] > 1 then
+            everywhere = everywhere + 1
+          elseif P.NOT_RECORDED[w.bundle or ""] then
+            own = own + 1
+          elseif w.minimized then
+            minimized = minimized + 1
+          elseif w.standard and w.bundle then
+            recorded = recorded + 1
+            local entry = { win = w, fullscreen = not P.is_user_space(sp.type) }
+            if current then current.windows[#current.windows + 1] = entry
+            else pending_fullscreen[#pending_fullscreen + 1] = entry end
+          else
+            other = other + 1
+          end
+        end
+      end
+      note("%s space %d (%s): %d windows, %d named, %d recorded%s%s%s%s%s", label, sp.ordinal or 0, tostring(sp.type),
+        #(sp.windows or {}), named, recorded,
+        other > 0 and string.format(", %d not standard windows", other) or "",
+        minimized > 0 and string.format(", %d minimized (no frame worth keeping)", minimized) or "",
+        everywhere > 0 and string.format(", %d on every space", everywhere) or "",
+        own > 0 and string.format(", %d Hammerspoon's own", own) or "",
+        unnamed > 0 and string.format(", %d Accessibility could not name", unnamed) or "")
+    end
+    -- A full-screen window goes under the desktop before it; one with no
+    -- desktop before it waits for the next, and one left over here means the
+    -- display has no desktop to file it under.
+    if #pending_fullscreen > 0 then
+      note("%s: %d full-screen window(s) and no desktop to file them under, so not recorded", label, #pending_fullscreen)
+    end
+
+    for si, d in ipairs(desktops) do
+      local apps, titles = {}, {}
+      for _, e in ipairs(d.windows) do
+        local w = e.win
+        local app = { app = w.bundle }
+        if per_app[w.bundle] > 1 then
+          local title = w.title or ""
+          local key = w.bundle .. "\0" .. title
+          if title == "" or titles[key] then
+            note("%s desktop %d: a window of %s is not recorded: its title %q does not tell it from the app's others",
+              label, si, w.bundle, title)
+            app = nil
+          else
+            titles[key] = true
+            app.window = exact_pattern(title)
+          end
+        end
+        if app then
+          if e.fullscreen then
+            app.layout = "fullscreen"
+          else
+            local layout, misfit, partial = P.snap(w.frame, s.frame, grid)
+            app.layout = layout
+            if misfit > 0 then app.misfit = string.format("%dpx", misfit) end
+            if partial then
+              note("%s desktop %d: %s %q spans part of a cell; snapped to %s, %dpx off", label, si, w.bundle,
+                w.title or "", layout, misfit)
+            end
+          end
+          app.title = w.title
+          apps[#apps + 1] = app
+        end
+      end
+      sort_apps(apps)
+      for _, a in ipairs(apps) do a.title = nil end
+      display.spaces[#display.spaces + 1] = { apps = apps }
+    end
+    desk.displays[#desk.displays + 1] = display
+  end
+
+  local all, one, other = 0, 0, 0
+  for _, b in ipairs(world.app_bindings or {}) do
+    if b.target == "AllSpaces" then all = all + 1
+    elseif type(b.target) == "string" then one = one + 1
+    else other = other + 1 end
+  end
+  note("%d Dock bindings: %d to all spaces, %d to one space%s; a v1 desk records none of them",
+    #(world.app_bindings or {}), all, one, other > 0 and string.format(", %d unreadable", other) or "")
+  return desk, notes
+end
+
+-- ------------------------------------------------------------- diff
+
+-- One line per op, as diff prints it: what apply would do, and why.
+local DESCRIBE = {
+  create_space = function(op) return "create a space on " .. tostring(op.screen) end,
+  launch = function(op) return "launch " .. tostring(op.bundle) end,
+  move = function(op)
+    return string.format("move window %s to space %s of %s", tostring(op.window), tostring(op.ordinal), tostring(op.screen))
+  end,
+  place = function(op)
+    return string.format("place window %s at %d,%d %dx%d", tostring(op.window), op.frame.x, op.frame.y, op.frame.w, op.frame.h)
+  end,
+  unseen = function(op) return "unseen " .. tostring(op.bundle) end,
+  bind = function(op) return string.format("bind %s to space %s", tostring(op.bundle), tostring(op.space or "(none)")) end,
+  restart_dock = function() return "restart the Dock" end,
+}
+
+function P.plan_report(ops)
+  local lines = {}
+  for _, op in ipairs(ops or {}) do
+    local describe = DESCRIBE[op.op]
+    local what = describe and describe(op) or tostring(op.op)
+    lines[#lines + 1] = string.format("%s%s: %s", what, op.path and (" (" .. op.path .. ")") or "", tostring(op.reason))
+  end
+  if #lines == 0 then lines[1] = "no change: this machine already matches the desk" end
+  return lines
 end
 
 -- ------------------------------------------------------------- the report

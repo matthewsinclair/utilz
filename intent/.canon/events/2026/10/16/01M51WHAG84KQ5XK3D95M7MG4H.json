@@ -1,0 +1,15 @@
+{
+  "id": "01M51WHAG84KQ5XK3D95M7MG4H",
+  "ts": "2026-10-16T08:16:26.632Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "hold",
+    "text": "tools/test-estate for WP-04: held until vc relays intent-vc's END of its heavy Intent bats run (hv, via vc, 16 Oct). Then run it, telling vc first, and require 22/22 suites."
+  }
+}

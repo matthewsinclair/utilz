@@ -1,0 +1,15 @@
+{
+  "id": "01M51WHBQ5XX7CEFV4E95FNJ56",
+  "ts": "2026-10-16T08:16:27.877Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "hold",
+    "text": "Marking AT-04.1..4 green and wp done ST0026/04: held until (a) the estate run above passes and (b) a critic-lua agent pass over plan.lua, arngz.lua, plan_test.lua, discover_response.lua and fixtures/worlds.lua reports 0 critical, 0 warning. The last pass had 5 warnings; all five are fixed in the banked commit (size_of reuse, world-wide pattern count, anchored patterns, untyped and unread spaces refused) but not yet re-reviewed."
+  }
+}

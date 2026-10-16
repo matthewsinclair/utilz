@@ -3,17 +3,17 @@ node: cc
 name: Control Claude
 role: control
 session_id: 67bcef6b-d20d-4bb9-ac53-ff7fbaf2e422
-heartbeat_at: 2026-10-16 04:57Z
+heartbeat_at: 2026-10-16 08:16Z
 status: active
-focus: "16 Oct: booted, holding for vc's instructions (hv's word this session). One open issue, 0065 (prez page numbers in PDF). No claims; nothing in flight. Pushing main is hv's."
-claims: []
+focus: "16 Oct: ST0026 WP-04 banked, not closed: two holds stand (estate after intent-vc's END; a clean critic-lua re-pass). Then green AT-04.1..4, wp done, SHA to vc. Taking instructions from vc."
+claims: [ST0026/04]
 ---
 
 # Control Claude (cc)
 
 ## DOING
 
-_(none)_
+- ST0026 WP-04 (discover and diff), claimed and started: built and banked at the commit that carries this item, not closed. discover (pure desk_from_world beside plan; --grid default 8x4; misfit sibling key; anchored window patterns, counted world-wide; display names by position; panel name without (n); unread spaces refused) and diff (plan verb, never execute; exit 1 on ops) are in, with hs stdin from /dev/null. plan_test 77/77 under luajit, arngz.bats 54/54. AT-04.1..4 minted, red proven retrospectively against 88c57ad (13 of 14 failed); not yet marked green. Next session: release the holds below, then at red->green AT-04.1..4, wp done ST0026/04, unclaim, SHA to vc.
 
 ## TODO
 
@@ -21,7 +21,8 @@ _(none)_
 
 ## Holds
 
-_(none)_
+- tools/test-estate for WP-04: held until vc relays intent-vc's END of its heavy Intent bats run (hv, via vc, 16 Oct). Then run it, telling vc first, and require 22/22 suites.
+- Marking AT-04.1..4 green and wp done ST0026/04: held until (a) the estate run above passes and (b) a critic-lua agent pass over plan.lua, arngz.lua, plan_test.lua, discover_response.lua and fixtures/worlds.lua reports 0 critical, 0 warning. The last pass had 5 warnings; all five are fixed in the banked commit (size_of reuse, world-wide pattern count, anchored patterns, untyped and unread spaces refused) but not yet re-reviewed.
 
 ## Watch-outs
 

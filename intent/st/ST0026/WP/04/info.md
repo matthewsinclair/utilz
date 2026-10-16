@@ -2,7 +2,7 @@
 wp_id: WP-04
 title: discover and diff
 scope: S
-status: Not Started
+status: WIP
 ---
 
 # WP-04: discover and diff

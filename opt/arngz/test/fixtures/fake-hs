@@ -15,6 +15,12 @@
 
 set -euo pipefail
 printf '%s\n' "$@" >"$FAKE_HS_LOG/argv"
+# Whether the caller gave hs /dev/null as stdin, which the real hs needs.
+if [[ /dev/fd/0 -ef /dev/null ]]; then
+  echo devnull >"$FAKE_HS_LOG/stdin"
+else
+  echo other >"$FAKE_HS_LOG/stdin"
+fi
 code=""
 while [[ $# -gt 0 ]]; do
   case "$1" in

@@ -349,7 +349,7 @@ EOF
 # The verbs the engine builds: present, and saying which work package
 # ============================================================================
 
-@test "apply, discover, diff and doctor say which work package builds them, exit 2" {
+@test "apply and doctor say which work package builds them, exit 2" {
   catalogue
   run_arngz apply zeop1
   assert_exit_code 2
@@ -357,12 +357,6 @@ EOF
   run_arngz zeop1
   assert_exit_code 2
   assert_output_contains "not yet: WP-05"
-  run_arngz discover
-  assert_exit_code 2
-  assert_output_contains "not yet: WP-04"
-  run_arngz diff zeop1
-  assert_exit_code 2
-  assert_output_contains "not yet: WP-04"
   run_arngz doctor
   assert_exit_code 2
   assert_output_contains "not yet: WP-06"
@@ -391,7 +385,7 @@ EOF
 fake_hs() {
   export FAKE_HS_MODE="$1"
   export FAKE_HS_LOG="$BATS_TEST_TMPDIR/hslog"
-  export FAKE_HS_RESPONSE="${2:-$FIXTURES/responses/observe.json}"
+  export FAKE_HS_RESPONSE="${2:-$FIXTURES/responses/discover.json}"
   mkdir -p "$FAKE_HS_LOG" "$BATS_TEST_TMPDIR/fakebin"
   cp "$FIXTURES/fake-hs" "$BATS_TEST_TMPDIR/fakebin/hs"
   export PATH="$BATS_TEST_TMPDIR/fakebin:$PATH"
@@ -406,18 +400,31 @@ fake_hs() {
   run yq -o json -I0 'keys' "$FAKE_HS_LOG/request.json"
   assert_output '["verb","desk","options"]'
   run yq -r '.verb' "$FAKE_HS_LOG/request.json"
-  assert_output "observe"
+  assert_output "discover"
   grep -qxF -- "-c" "$FAKE_HS_LOG/argv"
   grep -qF -- "return dofile(\"$UTILZ_HOME/opt/arngz/lib/arngz.lua\").run(\"" "$FAKE_HS_LOG/argv"
 }
 
-@test "AT-03.1: the CLI renders exactly the response's report, then says what is not built" {
+# WHAT THIS HOLDS, AND WHAT IT CANNOT. hs reads Lua from a stdin that is not a
+# terminal, so it must get /dev/null. The CLI says so explicitly, and bash also
+# gives a background job /dev/null when job control is off -- so removing the
+# explicit redirect alone does NOT redden this (measured 16 Oct 2026). It goes
+# red if hs is run in the foreground, or under job control, without the
+# redirect: the outcome is what it holds.
+@test "AT-03.1: hs runs with stdin from /dev/null, whatever the CLI's own stdin is" {
+  fake_hs ok
+  echo "return os.exit()" >"$BATS_TEST_TMPDIR/stdin.txt"
+  "$UTILZ_BIN_DIR/arngz" discover <"$BATS_TEST_TMPDIR/stdin.txt" >/dev/null 2>&1
+  run cat "$FAKE_HS_LOG/stdin"
+  assert_output "devnull"
+}
+
+@test "AT-03.1: the CLI renders exactly the response's report" {
   fake_hs ok
   run_arngz discover
-  assert_exit_code 2
-  assert_output_contains "FIXTURE-LINE-1 main Test Display (SCREEN-A): 2 spaces, 2 desktop; 3 windows, 3 named"
-  assert_output_contains "FIXTURE-LINE-2 separate spaces true"
-  assert_output_contains "not yet: WP-04"
+  assert_success
+  assert_output_contains "FIXTURE-LINE-1 main space 1 (user): 3 windows, 3 named, 1 recorded"
+  assert_output_contains "FIXTURE-LINE-2 0 Dock bindings"
   # The temp dir of a call that succeeded is removed.
   [ -z "$(ls -A "$TMPDIR")" ]
 }
@@ -531,4 +538,199 @@ lua_bin() {
   local wf="$UTILZ_HOME/.github/workflows/tests.yml"
   grep -q 'apt-get install.*lua5\.4' "$wf"
   grep -q 'brew install.* lua' "$wf"
+}
+
+# ============================================================================
+# AT-04 -- discover and diff (AC-04.1 to AC-04.4)
+# ============================================================================
+
+# discover's stdout alone: bats' run merges stderr into $output, so the report
+# is dropped inside the command, never by a redirect on run.
+discover_stdout() {
+  "$UTILZ_BIN_DIR/arngz" discover "$@" 2>/dev/null
+}
+
+# A response computed by the REAL pure functions from a fixture world, for the
+# fake hs to hand back: what the engine would answer on hv's machine.
+engine_response() {
+  local lua out="$BATS_TEST_TMPDIR/response-$1-$2.json"
+  lua="$(lua_bin)" || fail "no Lua interpreter (lua5.4, lua or luajit) on PATH; CI installs lua5.4"
+  "$lua" "$UTILZ_HOME/opt/arngz/test/discover_response.lua" "$UTILZ_HOME/opt/arngz/lib/plan.lua" \
+    "$UTILZ_HOME/opt/arngz/test/fixtures/worlds.lua" "$@" >"$out" || fail "discover_response.lua failed: $*"
+  printf '%s\n' "$out"
+}
+
+@test "AT-04.1: discover prints a desk the validator accepts, and the report goes to stderr" {
+  local response
+  response="$(engine_response discover discover_world "" "")"
+  fake_hs ok "$response"
+  run discover_stdout
+  assert_success
+  assert_output_contains "desk: discovered"
+  assert_output_contains "grid: 8x4"
+  refute_output_contains "2 Dock bindings"
+  printf '%s\n' "$output" >"$BATS_TEST_TMPDIR/printed.yaml"
+  mkdir -p "$XDG_CONFIG_HOME/arngz/desks"
+  sed 's/^desk: discovered$/desk: printed/' "$BATS_TEST_TMPDIR/printed.yaml" >"$XDG_CONFIG_HOME/arngz/desks/printed.yaml"
+  run_arngz show printed
+  assert_success
+}
+
+@test "AT-04.1: the request asks the engine to discover, with the grid and name" {
+  local response
+  response="$(engine_response discover discover_world "" "")"
+  fake_hs ok "$response"
+  run_arngz discover --grid 12x6
+  run yq -r '.verb + " " + .options.grid + " " + .options.name' "$FAKE_HS_LOG/request.json"
+  assert_output "discover 12x6 discovered"
+}
+
+@test "AT-04.1: every display carries uuid, name without its (n), size and position; full screen is fullscreen" {
+  local response
+  response="$(engine_response discover discover_world "" "")"
+  fake_hs ok "$response"
+  run discover_stdout
+  assert_output_contains "match: {uuid: SCREEN-B, name: VY229HF, size: 1920x1080, position: above-left}"
+  assert_output_contains "match: {uuid: SCREEN-A, name: VY229HF, size: 1920x1080, position: above-right}"
+  refute_output_contains "VY229HF ("
+  assert_output_contains "layout: fullscreen"
+  refute_output_contains "org.hammerspoon.Hammerspoon"
+  refute_output_contains "com.apple.Notes"
+}
+
+@test "AT-04.1: discover says what it did not record, and reads the Dock bindings" {
+  local response
+  response="$(engine_response discover discover_world "" "")"
+  fake_hs ok "$response"
+  run_arngz discover
+  assert_output_contains "1 minimized"
+  assert_output_contains "1 Accessibility could not name"
+  assert_output_contains "on every space"
+  assert_output_contains "2 Dock bindings: 1 to all spaces, 1 to one space"
+}
+
+@test "AT-04.1: the same world prints byte-identically, whatever order the engine's JSON keys arrive in" {
+  local response reversed
+  response="$(engine_response discover discover_world "" "")"
+  reversed="$BATS_TEST_TMPDIR/reversed.json"
+  jq 'walk(if type == "object" then (to_entries | reverse | from_entries) else . end)' "$response" >"$reversed"
+  ! cmp -s "$response" "$reversed"
+
+  fake_hs ok "$response"
+  "$UTILZ_BIN_DIR/arngz" discover >"$BATS_TEST_TMPDIR/one.yaml" 2>/dev/null
+  "$UTILZ_BIN_DIR/arngz" discover >"$BATS_TEST_TMPDIR/two.yaml" 2>/dev/null
+  fake_hs ok "$reversed"
+  "$UTILZ_BIN_DIR/arngz" discover >"$BATS_TEST_TMPDIR/three.yaml" 2>/dev/null
+  cmp "$BATS_TEST_TMPDIR/one.yaml" "$BATS_TEST_TMPDIR/two.yaml"
+  cmp "$BATS_TEST_TMPDIR/one.yaml" "$BATS_TEST_TMPDIR/three.yaml"
+}
+
+@test "AT-04.2: a window 3 px off a cell edge is recorded at that cell with its misfit beside the layout" {
+  local response
+  response="$(engine_response discover discover_world "" "")"
+  fake_hs ok "$response"
+  run discover_stdout
+  printf '%s\n' "$output" | grep -F -A3 'window: ^Docs %(draft%) 100%%$' | grep -qx '            layout: 4,0 4x4'
+  printf '%s\n' "$output" | grep -F -A3 'window: ^Docs %(draft%) 100%%$' | grep -qx '            misfit: 3px'
+}
+
+@test "AT-04.2: a window spanning part of a cell is snapped and reported, never silently rounded" {
+  local response
+  response="$(engine_response discover discover_world "" "")"
+  fake_hs ok "$response"
+  run_arngz discover
+  assert_output_contains 'com.microsoft.VSCode "arngz.lua - Utilz" spans part of a cell; snapped to 1,0 4x4, 75px off'
+}
+
+@test "AT-04.2: the validator accepts misfit as whole points and refuses anything else" {
+  catalogue
+  minimal_desk m
+  edit_desk m "            layout: 0,0 6x8" "            layout: 0,0 6x8
+            misfit: 3px"
+  run_arngz show m
+  assert_success
+  minimal_desk bad
+  edit_desk bad "            layout: 0,0 6x8" "            layout: 0,0 6x8
+            misfit: 3 points"
+  run_arngz show bad
+  assert_refusal bad "displays[0].spaces[0].apps[0].misfit" "3 points"
+}
+
+@test "AT-04.3: discover --save writes the desk into the catalogue, validated" {
+  local response
+  response="$(engine_response discover discover_world "" "zeop2")"
+  fake_hs ok "$response"
+  run_arngz discover --save zeop2
+  assert_success
+  assert_output_contains "saved $XDG_CONFIG_HOME/arngz/desks/zeop2.yaml"
+  run_arngz show zeop2
+  assert_success
+  assert_output_contains "desk: zeop2"
+}
+
+@test "AT-04.3: discover --save refuses an existing desk without --force, naming the file, before asking the engine" {
+  local response
+  response="$(engine_response discover discover_world "" "zeop2")"
+  fake_hs ok "$response"
+  mkdir -p "$XDG_CONFIG_HOME/arngz/desks"
+  echo "desk: keep me" >"$XDG_CONFIG_HOME/arngz/desks/zeop2.yaml"
+  run_arngz discover --save zeop2
+  assert_exit_code 2
+  assert_output_contains "$XDG_CONFIG_HOME/arngz/desks/zeop2.yaml"
+  assert_output_contains "--force"
+  [ ! -e "$FAKE_HS_LOG/request.json" ]
+  grep -qx "desk: keep me" "$XDG_CONFIG_HOME/arngz/desks/zeop2.yaml"
+
+  run_arngz discover --save zeop2 --force
+  assert_success
+  run_arngz show zeop2
+  assert_success
+}
+
+@test "AT-04.3: discover --save refuses a name the validator refuses, and a grid that is not WxH" {
+  fake_hs ok "$FIXTURES/responses/discover.json"
+  run_arngz discover --save list
+  assert_exit_code 2
+  assert_output_contains "a desk may not be named like a verb"
+  run_arngz discover --save ../out
+  assert_exit_code 2
+  run_arngz discover --grid 8 by 4
+  assert_exit_code 2
+  run_arngz discover --force
+  assert_exit_code 2
+  assert_output_contains "--force only means something with --save"
+}
+
+@test "AT-04.4: diff prints each op apply would run with its reason, exits 1, and asks only for a plan" {
+  local response
+  response="$(engine_response plan off_cell_world base_desk)"
+  fake_hs ok "$response"
+  catalogue
+  run_arngz diff zeop1
+  assert_exit_code 1
+  assert_output_contains "place window 102 at 600,25 600x800 (displays[0].spaces[0].apps[1]):"
+  run yq -r '.verb' "$FAKE_HS_LOG/request.json"
+  assert_output "plan"
+  run yq -r '.desk.desk' "$FAKE_HS_LOG/request.json"
+  assert_output "zeop1"
+}
+
+@test "AT-04.4: diff exits 0 and says so when apply would change nothing" {
+  local response
+  response="$(engine_response plan base_world base_desk)"
+  fake_hs ok "$response"
+  catalogue
+  run_arngz diff zeop1
+  assert_success
+  assert_output_contains "no change: this machine already matches the desk"
+}
+
+@test "AT-04.4: diff refuses a desk the validator refuses before asking the engine" {
+  fake_hs ok "$FIXTURES/responses/discover.json"
+  catalogue
+  minimal_desk g
+  edit_desk g "grid: 12x8" "grid: 12 by 8"
+  run_arngz diff g
+  assert_refusal g "grid" "12 by 8"
+  [ ! -e "$FAKE_HS_LOG/request.json" ]
 }

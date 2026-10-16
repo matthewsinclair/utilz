@@ -34,11 +34,12 @@ die() {
   exit 2
 }
 
-# One hs call under a wall clock, done when OUT appears: hs -c can finish its
-# work and never return (measured 16 Oct 2026), so its exit is not the signal.
+# One hs call under a wall clock, done when OUT appears. Stdin from /dev/null,
+# because hs reads Lua from a stdin that is not a terminal and waits on one
+# that stays open; and the file, not the exit, is the signal all the same.
 hs_call() {
   local code="$1" out="$2" pid deadline
-  hs -a -t 60 -c "$code" >/dev/null 2>&1 &
+  hs -a -t 60 -c "$code" </dev/null >/dev/null 2>&1 &
   pid=$!
   deadline=$((SECONDS + 60))
   while [[ ! -s "$out" ]] && kill -0 "$pid" 2>/dev/null && [[ $SECONDS -lt $deadline ]]; do

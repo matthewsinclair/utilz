@@ -36,59 +36,9 @@ end
 
 -- ------------------------------------------------------------- fixtures
 
--- One display, 1200x800 visible, a 12x8 grid, so a cell is 100x100 points and
--- every frame below can be checked by eye.
-local function base_desk()
-  return {
-    desk = "base",
-    grid = "12x8",
-    displays = {
-      {
-        name = "left",
-        match = { uuid = "SCREEN-A", name = "VY229HF", size = "1200x825", position = "main" },
-        spaces = {
-          { name = "comms", apps = {
-            { app = "com.apple.mail", layout = "0,0 6x8" },
-            { app = "com.apple.Safari", layout = "6,0 6x8" },
-          } },
-          { name = "code", apps = {
-            { app = "com.microsoft.VSCode", window = "Utilz", layout = "0,0 12x8" },
-          } },
-        },
-      },
-    },
-  }
-end
-
-local function win(id, bundle, title, x, y, w, h)
-  return { id = id, bundle = bundle, title = title, frame = { x = x, y = y, w = w, h = h },
-    named = true, standard = true, minimized = false }
-end
-
--- The world as observe() records it, with every window already where the base
--- desk puts it.
-local function base_world()
-  return {
-    screens = {
-      {
-        uuid = "SCREEN-A", name = "VY229HF", primary = true, position = "main",
-        frame = { x = 0, y = 25, w = 1200, h = 800 },
-        full_frame = { x = 0, y = 0, w = 1200, h = 825 },
-        spaces = {
-          { id = 11, ordinal = 1, type = "user", uuid = "SPACE-11", active = true, windows = {
-            win(101, "com.apple.mail", "Inbox", 0, 25, 600, 800),
-            win(102, "com.apple.Safari", "Docs", 600, 25, 600, 800),
-          } },
-          { id = 12, ordinal = 2, type = "user", uuid = "SPACE-12", active = false, windows = {
-            win(103, "com.microsoft.VSCode", "arngz.lua - Utilz", 0, 25, 1200, 800),
-          } },
-        },
-      },
-    },
-    apps_running = { "com.apple.mail", "com.apple.Safari", "com.microsoft.VSCode" },
-    app_bindings = {},
-  }
-end
+local here = (plan_path:match("^(.*)/lib/plan%.lua$") or "opt/arngz") .. "/test/fixtures/worlds.lua"
+local F = dofile(arg[2] or here)
+local base_desk, base_world, win = F.base_desk, F.base_world, F.win
 
 local function space(world, ordinal)
   return world.screens[1].spaces[ordinal]
@@ -410,6 +360,157 @@ do
     lines[1] == "main VY229HF (SCREEN-A): 3 spaces, 2 desktop; 5 windows, 3 named", lines[1])
   check("and ends with the settings and the binding count",
     lines[2] == "separate spaces true, accessibility true, stage manager false, 0 Dock bindings", lines[2])
+end
+
+-- ------------------------------------------------------------- discover
+
+print("discover")
+
+-- A deep, ordered rendering of a value, so two desks compare as text.
+local function render(v, indent)
+  indent = indent or ""
+  if type(v) ~= "table" then return string.format("%q", tostring(v)) end
+  local keys = {}
+  for k in pairs(v) do keys[#keys + 1] = k end
+  table.sort(keys, function(a, b) return tostring(a) < tostring(b) end)
+  local parts = {}
+  for _, k in ipairs(keys) do parts[#parts + 1] = indent .. tostring(k) .. "=" .. render(v[k], indent .. " ") end
+  return "{\n" .. table.concat(parts, "\n") .. "}"
+end
+
+local function notes_text(notes) return table.concat(notes or {}, " | ") end
+local function has_note(notes, text)
+  for _, n in ipairs(notes or {}) do
+    if string.find(n, text, 1, true) then return true end
+  end
+  return false
+end
+
+do
+  local desk = P.desk_from_world(base_world(), { grid = "12x8", name = "base" })
+  local ops, err = P.plan(desk, base_world(), {})
+  check("a desk discovered from a world plans nothing against that world", ops and #ops == 0, err or ops_text(ops))
+  local again = P.desk_from_world(base_world(), { grid = "12x8", name = "base" })
+  check("discovering the same world twice gives the same desk", render(desk) == render(again))
+  check("the default grid is 8x4", P.desk_from_world(base_world(), {}).grid == "8x4")
+end
+
+do
+  local world = F.discover_world()
+  local desk, notes = P.desk_from_world(world, { name = "zeop2" })
+  local d1, d2, d3 = desk.displays[1], desk.displays[2], desk.displays[3]
+  check("the primary is first and each display is named by its position",
+    d1.name == "main" and d2.name == "above-left" and d3.name == "above-right",
+    tostring(d1.name) .. "," .. tostring(d2.name) .. "," .. tostring(d3.name))
+  check("each display is recorded with all four match fields, the panel name without its (n)",
+    d2.match.uuid == "SCREEN-B" and d2.match.name == "VY229HF" and d2.match.size == "1920x1080"
+      and d2.match.position == "above-left")
+  local s1 = d1.spaces[1].apps
+  local by_app = {}
+  for _, a in ipairs(s1) do by_app[(a.window or a.app)] = a end
+  check("a window exactly on its cells has no misfit", by_app["com.apple.mail"] and by_app["com.apple.mail"].misfit == nil)
+  local docs
+  for _, a in ipairs(s1) do if a.window and string.find(a.window, "Docs", 1, true) then docs = a end end
+  check("a window 3 px off is recorded at its cell with misfit 3px",
+    docs and docs.layout == "4,0 4x4" and docs.misfit == "3px", docs and (docs.layout .. " " .. tostring(docs.misfit)))
+  check("the same app twice on a display carries a window pattern on each, its magic escaped",
+    docs and docs.window == "^Docs %(draft%) 100%%$", docs and docs.window)
+  local members = {}
+  for _, a in ipairs(s1) do members[#members + 1] = a.app .. "|" .. tostring(a.window) .. "|" .. a.layout end
+  table.sort(members)
+  check("the first desktop holds mail bare, both Safari windows by pattern, and the full-screen TV filed after it",
+    table.concat(members, " ") == "com.apple.Safari|^Docs %(draft%) 100%%$|4,0 4x4 com.apple.Safari|^News$|4,0 4x4"
+      .. " com.apple.TV|nil|fullscreen com.apple.mail|nil|0,0 4x4", table.concat(members, " "))
+  check("and that escaped pattern matches its own title",
+    docs and string.find("Docs (draft) 100%", docs.window) ~= nil)
+  check("an app with one window on its display carries no pattern", by_app["com.apple.mail"] ~= nil)
+  check("minimized, unnamed, every-space and Hammerspoon's windows are not recorded but said",
+    has_note(notes, "1 minimized") and has_note(notes, "1 Accessibility could not name")
+      and has_note(notes, "on every space") and has_note(notes, "Hammerspoon's own"), notes_text(notes))
+  local tv
+  for _, a in ipairs(d1.spaces[1].apps) do if a.app == "com.apple.TV" then tv = a end end
+  for _, a in ipairs(d1.spaces[2] and d1.spaces[2].apps or {}) do if a.app == "com.apple.TV" then tv = tv or a end end
+  check("a full-screen window is recorded as fullscreen", tv and tv.layout == "fullscreen")
+  check("a full-screen space takes no desktop slot: the laptop has two desktops", #d1.spaces == 2, tostring(#d1.spaces))
+  local code = d1.spaces[2].apps[1]
+  check("a window half a cell off is snapped and reported, never silently rounded",
+    code and code.app == "com.microsoft.VSCode" and code.misfit ~= nil and has_note(notes, "spans part of a cell"),
+    code and (tostring(code.layout) .. " " .. tostring(code.misfit)) or notes_text(notes))
+  check("the Dock bindings are read and reported, and none is recorded",
+    has_note(notes, "2 Dock bindings: 1 to all spaces, 1 to one space"), notes_text(notes))
+  check("a panel with no windows is still recorded with its one desktop",
+    #d3.spaces == 1 and #d3.spaces[1].apps == 0)
+  local ops, err = P.plan(desk, world, {})
+  local ok_round = ops ~= nil
+  for _, op in ipairs(ops or {}) do
+    if op.op ~= "place" then ok_round = false end
+  end
+  check("the discovered desk plans against its own world with nothing but snapping places",
+    ok_round, err or ops_text(ops))
+end
+
+-- One app on two displays, and one title inside another.
+do
+  local world = F.two_display_world()
+  local desk = P.desk_from_world(world, {})
+  local patterns = {}
+  for _, d in ipairs(desk.displays) do
+    for _, sp in ipairs(d.spaces) do
+      for _, a in ipairs(sp.apps) do
+        if a.app == "com.apple.mail" then patterns[#patterns + 1] = tostring(a.window) end
+      end
+    end
+  end
+  table.sort(patterns)
+  check("an app with a window on each of two displays gets an anchored pattern on both",
+    table.concat(patterns, " ") == "^Inbox %- 2 messages$ ^Inbox$", table.concat(patterns, " "))
+  check("and the anchored pattern for one title misses the title that contains it",
+    string.find("Inbox - 2 messages", "^Inbox$") == nil)
+  local ops, err = P.plan(desk, world, {})
+  local stray = {}
+  for _, op in ipairs(ops or {}) do
+    if op.op ~= "place" then stray[#stray + 1] = op.op end
+  end
+  check("so that desk plans against its own world with nothing but snapping places",
+    ops ~= nil and #stray == 0, err or table.concat(stray, ","))
+end
+
+-- The screen order in the world does not change the desk.
+do
+  local w = F.discover_world()
+  local reversed = F.discover_world()
+  local a, b, c = reversed.screens[1], reversed.screens[2], reversed.screens[3]
+  reversed.screens = { c, b, a }
+  check("discovering a world with its screens listed in another order gives the same desk",
+    render((P.desk_from_world(w, {}))) == render((P.desk_from_world(reversed, {}))))
+end
+
+-- What observe could not read is refused, never recorded as empty.
+do
+  local w = F.discover_world()
+  w.screens[1].spaces[3].type = nil
+  w.screens[1].spaces[3].type_error = "spaceType failed"
+  local desk, err = P.desk_from_world(w, {})
+  check("discover refuses a space whose type could not be read", desk == nil and string.find(tostring(err), "spaceType failed", 1, true) ~= nil, err)
+  local v = F.discover_world()
+  v.screens[2].spaces[1].windows_error = "windowsForSpace failed"
+  desk, err = P.desk_from_world(v, {})
+  check("discover refuses a space whose windows could not be read", desk == nil and string.find(tostring(err), "windowsForSpace failed", 1, true) ~= nil, err)
+  local u = F.discover_world()
+  u.screens[3].spaces_error = "spacesForScreen failed"
+  desk, err = P.desk_from_world(u, {})
+  check("discover refuses a screen whose spaces could not be read", desk == nil and string.find(tostring(err), "spacesForScreen failed", 1, true) ~= nil, err)
+end
+
+do
+  local lines = P.plan_report({})
+  check("diff says so when nothing would change", lines[1] == "no change: this machine already matches the desk")
+  local w = base_world()
+  space(w, 1).windows[2].frame = { x = 300, y = 100, w = 500, h = 400 }
+  local report = P.plan_report(P.plan(base_desk(), w, {}))
+  check("diff prints one line per op, with its path and reason",
+    #report == 1 and string.find(report[1], "place window 102 at 600,25 600x800 (displays[0].spaces[0].apps[1]): ", 1, true) == 1,
+    report[1])
 end
 
 print(string.format("plan_test: %d passed, %d failed", passed, failed))

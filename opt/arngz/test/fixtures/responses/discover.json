@@ -1,0 +1,19 @@
+{
+  "status": "ok",
+  "verb": "discover",
+  "desk": {
+    "desk": "discovered",
+    "grid": "8x4",
+    "displays": [
+      {
+        "name": "main",
+        "match": { "uuid": "SCREEN-A", "name": "Test Display", "size": "1200x825", "position": "main" },
+        "spaces": [ { "apps": [ { "app": "com.apple.mail", "layout": "0,0 4x4" } ] } ]
+      }
+    ]
+  },
+  "report": [
+    "FIXTURE-LINE-1 main space 1 (user): 3 windows, 3 named, 1 recorded",
+    "FIXTURE-LINE-2 0 Dock bindings: 0 to all spaces, 0 to one space; a v1 desk records none of them"
+  ]
+}

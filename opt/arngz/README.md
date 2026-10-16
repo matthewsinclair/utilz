@@ -7,7 +7,7 @@
 
 ## Overview
 
-Named window arrangements (desks) across displays and spaces. A desk says, for each display and each space on it, which apps live there and where on a grid their windows sit; `arngz <desk>` restores it. ST0026 builds it in work packages: the desk catalogue and its validator are in (WP-02), and the verbs that need Hammerspoon say which work package builds them.
+Named window arrangements (desks) across displays and spaces. A desk says, for each display and each space on it, which apps live there and where on a grid their windows sit; `arngz <desk>` restores it. ST0026 builds it in work packages: the desk catalogue and its validator (WP-02), the engine (WP-03), and `discover` and `diff` (WP-04) are in; `apply` and `doctor` say which work package builds them.
 
 ---
 
@@ -39,6 +39,8 @@ For detailed help: `utilz help arngz`
 arngz init          # create the catalogue
 arngz list          # each desk, with display and app counts
 arngz show zeop1    # one desk, validated
+arngz discover --save zeop1   # record what is on screen now
+arngz diff zeop1    # what apply would change
 ```
 
 ---

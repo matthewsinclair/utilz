@@ -304,10 +304,28 @@ end
 -- The engine's verbs. Each answers with what the CLI renders -- for observe,
 -- the world and the report lines P.observe_report computes -- so the CLI
 -- renders and never recomputes (design.md, "The engine").
+-- A refusal from a pure function travels back as an error raised here, which
+-- run() turns into an error response the CLI names.
 local VERBS = {
   observe = function()
     local world = M.observe()
     return { world = world, report = P.observe_report(world) }
+  end,
+  -- discover: the world as a desk (WP-04). options.grid, options.name.
+  discover = function(_, options)
+    local world = M.observe()
+    local desk, notes = P.desk_from_world(world, { grid = options.grid, name = options.name })
+    if not desk then error(notes, 0) end
+    return { desk = desk, report = notes }
+  end,
+  -- plan: what apply would do, and nothing done (diff, and apply --dry-run).
+  -- execute is never called on this path.
+  plan = function(desk, options)
+    if type(desk) ~= "table" then error("plan needs the desk", 0) end
+    local world = M.observe()
+    local ops, err = P.plan(desk, world, options)
+    if not ops then error(err, 0) end
+    return { ops = ops, report = P.plan_report(ops) }
   end,
 }
 

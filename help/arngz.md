@@ -16,7 +16,7 @@
 ```bash
 arngz <desk>
 arngz apply <desk> [--dry-run] [--no-launch] [--no-create] [--bind] [--map <name>=<uuid>]
-arngz discover [--save <desk>] [--force]
+arngz discover [--grid WxH] [--save <desk>] [--force]
 arngz diff <desk>
 arngz list
 arngz show <desk>
@@ -31,7 +31,7 @@ arngz doctor
 
 A **desk** is a named arrangement of windows: for each display, for each space on it, which apps live there and where on a grid their windows sit. `arngz <desk>` puts this machine's windows where the desk says; `arngz discover --save <desk>` records the arrangement on screen now as a desk.
 
-**Built so far: the desk catalogue and its validator.** `list`, `show`, `delete` and `init`'s catalogue half work. `apply`, `discover`, `diff`, `doctor` and `init`'s Hammerspoon half are part of the CLI already, and each says which work package of ST0026 builds it (`not yet: WP-0N`) and exits 2 rather than pretending.
+**Built so far: the catalogue, its validator, `discover` and `diff`.** `list`, `show`, `delete`, `discover`, `diff` and `init`'s catalogue half work. `apply`, `doctor` and `init`'s Hammerspoon half are part of the CLI already, and each says which work package of ST0026 builds it (`not yet: WP-0N`) and exits 2 rather than pretending. `discover` and `diff` reach Hammerspoon through its `hs` tool, so they need Hammerspoon running with `hs.ipc` loaded.
 
 ### The catalogue
 
@@ -82,6 +82,22 @@ displays:
 - **A space** is its order on its display. Its `name` is a label for people; macOS names no desktop space.
 - **An app** is its bundle id. `window` is a Lua pattern on the window title; without one, every window of the app takes the layout. The same app twice on one display needs a `window` on every entry.
 - **`layout`** is `x,y wxh` in grid cells, inside the grid, or `fullscreen`.
+- **`misfit`** is how far `discover` found the window from its cells, eg `3px`. It is information; `apply` ignores it.
+
+### discover
+
+`discover` asks Hammerspoon what is on screen and prints it as a desk: every display with its `uuid`, `name`, `size` and `position` (the name without the " (2)" Hammerspoon adds to a second panel of the same name), every desktop space in order, and every standard window on it, snapped to the grid.
+
+- **Snapping** puts each window edge on the nearest cell edge. When a window was not exactly on its cells, the desk says how far, beside the layout: `misfit: 3px`. A window that spanned part of a cell is snapped and named in the report.
+- **A full-screen window** is recorded as `layout: fullscreen`, under the desktop before its space.
+- **An app with more than one window on a display** gets a `window` pattern on each, made from the window's title.
+- **Not recorded, and said**: minimized windows, windows on every space, Hammerspoon's own windows, windows Accessibility could not name (counted per space), and the Dock's app bindings, which a desk does not hold.
+
+The desk goes to stdout and the report to stderr, so `arngz discover > desk.yaml` keeps the desk alone. `--save <desk>` writes it into the catalogue instead, refusing an existing desk unless `--force` is given. Either way, the desk is checked by the validator first.
+
+### diff
+
+`diff <desk>` prints what `apply` would do, one line per change with its reason, and changes nothing: it asks Hammerspoon for a plan, never for an action. It exits 0 when this machine already matches the desk, and 1 when it does not. A window discover found on a hidden space may read as `unseen` when Accessibility cannot name it at that moment.
 
 ### The validator
 
@@ -95,8 +111,8 @@ Every verb that reads a desk validates it first, and refuses with exit 2 on any 
 | --------------- | --------------------------------------------------------------------------------------- | ---------------------- |
 | `<desk>`        | the same as `apply <desk>`                                                              | as apply               |
 | `apply <desk>`  | arrange this machine's windows as the desk says (not yet: WP-05)                        | 2                      |
-| `discover`      | print the arrangement on screen now as a desk (not yet: WP-04)                          | 2                      |
-| `diff <desk>`   | print what apply would do, and change nothing (not yet: WP-04)                          | 2                      |
+| `discover`      | print the arrangement on screen now as a desk, or save it with `--save`                 | 0, or 2                |
+| `diff <desk>`   | print what apply would do, one line per change with its reason, and change nothing      | 0 same, 1 differs, 2   |
 | `list`          | each desk with its display and app counts; an invalid desk is named on its own line     | 0, or 1 if any invalid |
 | `show <desk>`   | the desk, validated, exactly as stored                                                  | 0, or 2                |
 | `delete <desk>` | remove the desk's file, naming it; a desk that no longer validates can still be deleted | 0, or 2                |
@@ -112,6 +128,7 @@ Every verb that reads a desk validates it first, and refuses with exit 2 on any 
 | `--no-create`         | `apply`    | do not create missing spaces                                 |
 | `--bind`              | `apply`    | also write the Dock's app-to-space bindings                  |
 | `--map <name>=<uuid>` | `apply`    | bind one desk display to one screen for this run             |
+| `--grid WxH`          | `discover` | the grid windows are snapped to; 8x4 when absent             |
 | `--save <desk>`       | `discover` | write the discovered desk into the catalogue                 |
 | `--force`             | `discover` | with `--save`, overwrite an existing desk                    |
 | `--yes`               | `init`     | do what init reports Hammerspoon needs, rather than print it |

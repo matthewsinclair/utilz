@@ -1,0 +1,15 @@
+{
+  "id": "01M51WH94FT1P8VRBS7R6MWA36",
+  "ts": "2026-10-16T08:16:25.231Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "doing",
+    "text": "ST0026 WP-04 (discover and diff), claimed and started: built and banked at the commit that carries this item, not closed. discover (pure desk_from_world beside plan; --grid default 8x4; misfit sibling key; anchored window patterns, counted world-wide; display names by position; panel name without (n); unread spaces refused) and diff (plan verb, never execute; exit 1 on ops) are in, with hs stdin from /dev/null. plan_test 77/77 under luajit, arngz.bats 54/54. AT-04.1..4 minted, red proven retrospectively against 88c57ad (13 of 14 failed); not yet marked green. Next session: release the holds below, then at red->green AT-04.1..4, wp done ST0026/04, unclaim, SHA to vc."
+  }
+}
