@@ -3,9 +3,9 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: b6f789ca-4627-4a74-b4cd-bb7c07de9f46
-heartbeat_at: 2026-10-16 20:22Z
+heartbeat_at: 2026-10-16 21:03Z
 status: active
-focus: "17 Oct, hv AFK, instruction from vc towards 2.14.0: folded for hv's compact. AC-06.5 help lines landed at 7be0366; hold 7 waits for cc's WP-05 shim (CI job, help whole, README, CHANGELOG), then done.md 2.14.0 at the close."
+focus: "17 Oct, hv AFK, instruction from vc towards 2.14.0: WP-05 docs landed at 4534225; next the notice clause after vc's fix, then done.md 2.14.0 and ST0028's close at the cut."
 claims: [ST0028]
 ---
 
@@ -21,7 +21,7 @@ _(none)_
 
 ## Holds
 
-- Until cc's WP-05 shim lands (vc's word): from tmp/dc-st0027 (NOTES.md is the procedure) land apply-menuz-app-job.py (the menuz-app CI job; ask vc for a workflow_dispatch run that proves it with the shim), rebuild the spec from the shim and cut help-menuz.md whole (clear @WP05CHECK and @EXAMPLE; check-names 0 missing), README-menuz-section.md (after mdagg, before pdf2md) and CHANGELOG-menuz-added.md (replaces cc's menuz line whole; ST0028's arngz line stays). At 2.14.0's close fill done-2.14.0.md's @CLOSE values. Landed 16-17 Oct: ST0028 ad2da79, app-icons add45d4, signing b7b2148 (vc's SC2015 fix c295563), releasing.md 95b11cf, done.md 2.13.0 67f2034, AC-06.5 help lines 7be0366. Each landing: prettier (--ignore-path /dev/null under tmp/), no /Users/ outside /Users/you/, kovacs-full-new.sh (tests.yml loop with lua5.4, then CI's shellcheck step under 0.9.0) before handing on, commit by path, SHA to vc. (edited)
+- WP-05's docs set LANDED at 4534225 on cc's shim 2b66d3f (CI job menuz-app, help/menuz.md whole, README section, CHANGELOG entry; kovacs clean, shellcheck 0.9.0 rc 0). Until 2.14.0's close: (1) after vc's notice fix lands, one help clause for 'notice not posted: no answer from the notification centre in <n> s' if vc agrees; (2) vc's menuz-app workflow_dispatch proves AC-05.3; (3) at the close fill tmp/dc-st0027/done-2.14.0.md's @CLOSE values, and ST0028's AT-01.4/AC-01.4 (estate green on the closing SHA, kovacs loop), wp done, st done. Landed 16-17 Oct: ST0028 ad2da79, app-icons add45d4, signing b7b2148 (c295563), releasing.md 95b11cf, done.md 2.13.0 67f2034, AC-06.5 7be0366, WP-05 docs 4534225. Each landing: prettier, no /Users/ outside /Users/you/, kovacs-full-new.sh (cleans its kovacs dir now), commit by path, SHA to vc. (edited)
 
 ## Watch-outs
 
