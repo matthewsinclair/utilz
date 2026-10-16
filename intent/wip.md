@@ -4,34 +4,11 @@ DOING and TODO only. Done work goes to `intent/done.md`; context to `intent/rest
 
 ## DOING
 
-- hv is AFK and vc has the pen (16 Oct, decision 20 on vc's board): drive ST0027 `menuz` and ST0028 to the 2.14.0 cut; cc and dc take instructions from vc; compiles in windows booked with intent-vc; the Ubuntu leg on kovacs; vc pushes main.
-- ST0027 WP-06, the first-use fixes (D13), landed at 8bea7ba (cc; verified by vc): the one-route `--notify` arm with the text in `MENUZ_NOTICE`, the first-launch placement line, the drawn mark rasterised by `bin/devbin macos app-icons` as icon and default glyph. Open: vc rebuilds the dev build under `~/.local/state` in a booked window (`tmp/vc-st0026/st0027/devbuild.sh`), runs `opt/menuz/test/notice-handrun.sh` (AC-06.4), relaunches hv's copy from the new build, mints AT-06.1 to AT-06.4 (`tmp/vc-st0026/st0027/mint-at06.sh`), rewrites AT-04.4's note, `wp done`; dc's help lines (AC-06.5) land against the landed app.
-- ST0027 WP-05 is go for cc since 20:19Z on `st0027-wp05` from 8bea7ba: the shim verbs, the keg install, `menuz.bats` with fakes, the `--unregister` arm; dc's signing half of `bin/devbin macos` (b7b2148, c295563) and `docs/releasing.md` (95b11cf) are landed; dc holds the `menuz-app` CI job (lands with the shim), the help verb table, the README section, the CHANGELOG entry and done.md's 2.14.0 draft under `tmp/dc-st0027`.
-- WP-05's close: vc verifies and pushes each SHA; the install hand run; AC-05.2's logout is hv's (edit the AC to what is measurable if hv is still away); AC-05.3's one `workflow_dispatch` of `menuz-app`; check all and the estate on the closing SHA in a booked window.
-- ST0028 (dc, ad2da79, verified and pushed): `wp done` and `st done` at the close, AC-01.4 folded into the estate run on the release SHA.
-- The cut: `st done` both, dehydrate, `restart.md`, then `bin/devbin release --minor` on hv's word (or vc's under decision 20), nothing pushed while step 11 waits on CI; the tap bump for 2.14.0; `Menuz.app.zip` published after hv's `bin/devbin macos store-creds`.
-- hv's keypresses: the 2.13.0 tap commit and push (the formula is copied into the tap clone and audited clean, 16 Oct 19:5xZ; the push was refused to vc by the permission layer); `.claude/settings.json`'s advisory (`intent claude upgrade --apply`); `store-creds`.
+- hv is AFK and vc has the pen (16 Oct, decisions 20 and 21 on vc's board): drive ST0027 `menuz` to the 2.14.0 cut; cc and dc take instructions from vc; compiles in windows booked with intent-vc; the Ubuntu leg on kovacs; vc pushes main.
+- ST0027's close: AC-05.3, the `menuz-app` dispatch on main at 7ac829a (dc dispatches; the first dispatch found Swift 6.1 refusing five closures in `MenuLoader.swift`, fixed at 554fe03); AC-06.4, the notice hand run `opt/menuz/test/notice-handrun.sh` on the dev build once hv allows menuz under System Settings > Notifications (the first launch's alert was withdrawn when the hand run quit the app, which macOS counts as no); then `wp done ST0027/05` and `ST0027/06`, `st done ST0027`, dehydrate.
+- The cut: `bin/devbin release --minor` under decision 21 once CI is green on the closing SHA, in a window booked with intent-vc (the pre-flight builds); nothing pushed while step 11 waits on CI; dc fills done.md's 2.14.0 @CLOSE values; the formula copied into the tap clone and audited (the tap push is hv's); `Menuz.app.zip` signed and published after hv's `bin/devbin macos store-creds`.
 
 ## TODO
 
-**Threads**
-
-- Follow-on to ST0017, if wanted: Rust `init` and `qr` for `prez showreel`.
-- Crawl recedes as it rises (Star Wars pre-roll): a 3D transform in `player.html`.
-- prez default look, "basic but cool enough out of the box". Needs a thread.
-
-**Fixes**
-
-- Issue 0066: `mermaid: ture` in a prez deck reads as off with no warning; hv says whether `mermaid:` takes the words `numbering:` takes.
-- Sweep the tree for issue 0053's class: a probe whose pipeline failure kills the script under `set -e` before the guard on the next line can speak. `stampz` had three and exited 1 in silence on an unreadable PDF; every utility runs `set -euo pipefail` and most read something through a pipeline.
-
-**Blocked**
-
-- Migrate the 101 flat AC/AT ids once Intent has a rename verb. ST0013's two are the pilot.
-
-**Opportunistic**
-
-- Remove em dashes. Never touch `opt/macoz/images/backgrounds/autumn-*.png` or `opt/cleanz/data/trope-indicators.txt`.
-- Point each `help/<name>.md` at the command instead of a hardcoded version, as `help/utilz.md` does.
-- VSCode / Zed / Vim integration families.
-- Emacs bridge v2: Transient grouped menu.
+- hv at return (hold 11 on vc's board): allow menuz's notifications, confirm the menu after a logout and login (AT-05.2's note), `bin/devbin macos store-creds`, the tap pushes for 2.13.0 and 2.14.0, `! intent claude upgrade --apply` for `.claude/settings.json`.
+- A second in-process notification request while the first launch's alert is up (cc's review of b7e07a3, point 7) is unmeasured until the id is allowed; one failing run under the alert in a later hand run settles it.
