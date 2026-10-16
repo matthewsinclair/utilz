@@ -54,6 +54,29 @@ release: stopped at step 1 (resolve). This run tagged nothing and pushed nothing
 
 **If a step fails**, read what it printed and fix the cause; the same command resumes. `bin/devbin release status <version>` prints where a cut got to, writing nothing, and exits non-zero if any row could not be read -- a map with a hole in it is not an answer.
 
+## After the cut: Menuz.app
+
+menuz's app ships as a release asset, `Menuz.app.zip`, beside the tag's source. The release core attaches no files: step 9 makes the release object with a title and notes only. So once step 9 has made it, hv signs, notarises and attaches the app on this machine, through the project's own `bin/devbin macos` (ST0027 D12, as Intent signs `Intent.app`). CI builds the app unsigned and reads no secrets.
+
+**Once per machine**, hv stores the notary credentials in the login keychain:
+
+```bash
+bin/devbin macos store-creds   # interactive: Apple ID, app-specific password, team id
+bin/devbin macos doctor        # each credential PRESENT or MISSING, the identity counted, a test-sign
+```
+
+Nothing is written to this repository, and nothing prints a value. `store-creds` refuses to run without a terminal.
+
+**After every cut, at the tag**, hv runs, in order:
+
+1. **`bin/devbin macos app-sign`**: builds Release through `utilz menuz build --release`, stages a copy under `${XDG_STATE_HOME:-~/.local/state}/menuz/build/macos/dist`, signs it inside-out with the Developer ID identity and the hardened runtime, and reads the identifier, the team and the runtime back off the signature.
+2. **`bin/devbin macos app-notarize`**: submits the signed copy to Apple and waits. Anything but `Accepted` prints Apple's log and staples nothing. Then it staples the ticket and checks a quarantined copy with `spctl` for `source=Notarized Developer ID`.
+3. **`bin/devbin macos publish`**: zips the stapled bundle as `Menuz.app.zip`, unpacks the zip and checks the bundle inside, then attaches it with `gh release upload` to the release for the top-level `VERSION`. It refuses, uploading nothing, when the bundle's version is not `opt/menuz/VERSION`, when that release object does not exist yet, and when the release already holds `Menuz.app.zip`.
+
+`bin/devbin macos app-verify` checks the signed bundle again at any time, read-only.
+
+**Publish before pushing the tap.** In a Homebrew install, `menuz install` fetches `Menuz.app.zip` from the release named by the install's own `VERSION`, and checks its signature, its notarisation, its bundle id and its version before replacing anything. Until the asset is attached, it exits 1, naming the URL it tried and saying that the release carries no Menuz.app. So a formula pushed before `publish` gives every new install a `menuz install` that fails until the asset arrives.
+
 ## After the cut: the Homebrew formula
 
 Utilz installs with Homebrew from the tap `matthewsinclair/homebrew-utilz`. Its formula builds from source at the bare tag, so it names the tag and the tag's commit. The formula is kept in this repository at `packaging/homebrew/utilz.rb` and copied into the tap.
