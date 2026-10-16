@@ -1,8 +1,24 @@
 ---
-verblock: "22 Sep 2026:v0.12: matts - 2.12.0 and 2.12.1 released, the first two cuts through devbin's release core"
+verblock: "16 Oct 2026:v0.13: matts - 2.13.0 released: arngz, and prez page numbers"
 ---
 
 # Done
+
+## 16 Oct 2026 -- 2.13.0 released: arngz, and prez page numbers
+
+**2.13.0 is out**: tag `2.13.0` on `01cf76d`, on both remotes, cut by devbin's release core with the vendored runtime at 0.1.10. CI is green on the release commit and on the tag (runs 38941090175 and 38941098741), and the release object exists. prez is 2.5.0. It carries ST0026 (`arngz` 1.0.0, the sixteenth utility) and issues 0065, 0067 and 0068. The CHANGELOG entry is the account of what it carries.
+
+**arngz (ST0026).** Named window arrangements, desks, across displays and spaces on macOS, with Hammerspoon as the engine: `discover` records the screen as a desk, and `apply` puts the windows back, launching apps and creating spaces as needed, and reports every entry as placed, launched, moved, skipped, unseen or failed. hv ruled the shape on 16 Oct (decision 19): Hammerspoon, a bash CLI in the Utilz shim format, YAML desks. Six work packages: the spike, the catalogue and validator, the engine with a pure planner, discover and diff, apply, and doctor and init. vc's hands-off re-run on hv's machine was green at `f8c2827`, and the estate at `da23005`.
+
+**prez 2.5.0 (issue 0065).** `numbering: on|off` in a deck's front matter, with a per-slide override, prints page numbers in a PDF, in print only.
+
+**Threads closed:** ST0026. **Issues closed:** 0065, 0067 (prez AT04's fullscreen check split for headless Chrome on macOS), 0068 (`check_command` no longer counts a file on PATH that cannot run). **Filed and open:** 0066, prez's unreadable `mermaid:` value.
+
+**Homebrew:** the formula names 2.13.0 and its commit (`c3a75fc`, from `tools/formula-bump`). **Still open on hv's side:** copying it into the tap, `brew audit --strict` and the tap push. The tap is on 2.12.1 until then, so `brew upgrade utilz` stays at 2.12.1, and arngz is not on a Homebrew user's `PATH`.
+
+**Swept:** devbin 0.1.10 (`c1eb526`, the manifest at `31cd2bb`).
+
+**Three things worth re-reading.** First, macOS 27's Spaces API lies: `moveWindowToSpace` returned true three times and moved nothing, and a Dock binding written with `defaults` read back and did not take. So `apply` moves a window the way a person does, holding its title bar and pressing Mission Control's shortcut, and reads every step back (D21). Second, `hs -c` from a tool shell waits forever after its Lua finishes, because a stdin that is not a terminal is read; every call takes `</dev/null` (D20). Third, bash's `command -v` names a file on PATH that cannot run when nothing executable matches, so a dependency could read as installed and fail when used (0068).
 
 ## 22 Sep 2026 -- 2.12.0 and 2.12.1 released, the first two cuts through devbin's release core
 
