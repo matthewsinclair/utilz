@@ -1,0 +1,23 @@
+desk: zeop1
+grid: 12x8
+displays:
+  - name: left
+    match: { uuid: 37D8832A-2D66-02CA-B9F7-8F30A301B230, name: VY229HF, size: 1920x1080, position: left }
+    spaces:
+      - name: comms            # ordinal 1 on this display
+        apps:
+          - app: com.tinyspeck.slackmacgap
+            layout: 0,0 6x8
+          - app: com.apple.mail
+            layout: 6,0 6x8
+      - name: code             # ordinal 2
+        apps:
+          - app: com.microsoft.VSCode
+            window: "Utilz"    # a Lua pattern on the window title; optional
+            layout: 0,0 12x8
+  - name: laptop
+    match: { uuid: 37D8832A-2D66-02CA-B9F7-8F30A301B231, name: Color LCD, size: 3024x1964, position: main }
+    spaces:
+      - apps:
+          - app: com.apple.Safari
+            layout: fullscreen

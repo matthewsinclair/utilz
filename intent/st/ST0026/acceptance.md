@@ -13,16 +13,16 @@ title: arngz: named window arrangements (desks) discovered and applied across di
 
 ## Acceptance Criteria
 
-### WP-01 -- Spike: space moves and Dock bindings on macOS 27 (status: Not Started)
+### WP-01 -- Spike: space moves and Dock bindings on macOS 27 (status: WIP)
 
 - AC-01.1 (non-test) The spike's three measurements (observe; a window moved to the next space on its display and to a space on another display, each read back; a Dock binding written and tested after a Dock restart) were run on hv's machine, and their JSON files and hv's notes are recorded in design.md under "The open input". -- satisfied: no
 - AC-01.2 (non-test) That section is resolved to one outcome, A, B or C, and names which apply flags exist as a result, --bind in particular. -- satisfied: no
 
-### WP-02 -- Desk config, validator and the catalogue verbs (status: Not Started)
+### WP-02 -- Desk config, validator and the catalogue verbs (status: Done)
 
-- AC-02.1 utilz arngz is dispatched by bin/utilz; opt/arngz/arngz.yaml declares yq, Hammerspoon and the hs tool as dependencies; utilz doctor reports each of them; utilz list shows arngz. -- satisfied: no (computed)
-- AC-02.2 The catalogue is ${XDG_CONFIG_HOME:-$HOME/.config}/arngz/desks/. list prints each desk with its display and app counts; show prints a validated desk; delete removes one by name; init creates the directory. A desk that does not exist is refused by name, exit 2. -- satisfied: no (computed)
-- AC-02.3 The validator refuses each of the design's seven conditions (an unknown key; a grid not WxH; a layout neither x,y wxh inside the grid nor fullscreen; two displays with one name; a match with neither uuid nor name; the same app twice on one display without a window pattern on each; a verb as a desk name), naming the desk, the path and the value, and accepts the design's example desk unchanged. -- satisfied: no (computed)
+- AC-02.1 utilz arngz is dispatched by bin/utilz; opt/arngz/arngz.yaml declares yq, Hammerspoon and the hs tool as dependencies; utilz doctor reports each of them; utilz list shows arngz. -- satisfied: yes (computed)
+- AC-02.2 The catalogue is ${XDG_CONFIG_HOME:-$HOME/.config}/arngz/desks/. list prints each desk with its display and app counts; show prints a validated desk; delete removes one by name; init creates the directory. A desk that does not exist is refused by name, exit 2. -- satisfied: yes (computed)
+- AC-02.3 The validator refuses each of the design's seven conditions (an unknown key; a grid not WxH; a layout neither x,y wxh inside the grid nor fullscreen; two displays with one name; a match with neither uuid nor name; the same app twice on one display without a window pattern on each; a verb as a desk name), naming the desk, the path and the value, and accepts the design's example desk unchanged. -- satisfied: yes (computed)
 
 ### WP-03 -- Engine: observe, the pure planner, execute, and the IPC contract (status: Not Started)
 
@@ -57,13 +57,15 @@ title: arngz: named window arrangements (desks) discovered and applied across di
 
 ## Acceptance Tests
 
-### WP-01 -- Spike: space moves and Dock bindings on macOS 27 (status: Not Started)
+### WP-01 -- Spike: space moves and Dock bindings on macOS 27 (status: WIP)
 
 _(no tests in this group)_
 
-### WP-02 -- Desk config, validator and the catalogue verbs (status: Not Started)
+### WP-02 -- Desk config, validator and the catalogue verbs (status: Done)
 
-_(no tests in this group)_
+- AT-02.1 `opt/arngz/test/arngz.bats` -- covers AC-02.1 -- status: green -- Dispatch, help naming every verb and flag, utilz list, the yaml's three dependency declarations, and doctor's report of each. RED at 16 Oct: against the generated stub, help named no verb and the yaml declared no dependency. GREEN at 16 Oct: 27/27 under bash 5 and 3.2; doctor's report of Hammerspoon is driven by stubbing check_app in both directions, and hs by hiding it from PATH; estate 22/22 suites.
+- AT-02.2 `opt/arngz/test/arngz.bats` -- covers AC-02.2 -- status: green -- The catalogue verbs over a fixture XDG_CONFIG_HOME: init, list with counts, show verbatim, delete, and a missing desk refused by name with exit 2. RED at 16 Oct: every limb failed against the generated stub. GREEN at 16 Oct: 27/27 under bash 5 and 3.2; estate 22/22 suites.
+- AT-02.3 `opt/arngz/test/arngz.bats` -- covers AC-02.3 -- status: green -- The validator's seven refusals, each naming desk, file, path and value with exit 2, the design's example desk accepted unchanged, and AC-05.7's verb-name refusal by show and by apply. RED at 16 Oct: every limb failed against the generated stub. GREEN at 16 Oct: 27/27 under bash 5 and 3.2, the example desk accepted byte-identical to design.md's; estate 22/22 suites.
 
 ### WP-03 -- Engine: observe, the pure planner, execute, and the IPC contract (status: Not Started)
 

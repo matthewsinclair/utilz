@@ -23,7 +23,7 @@
       "seq": 2,
       "title": "Desk config, validator and the catalogue verbs",
       "scope": "S",
-      "status": "wip",
+      "status": "done",
       "objective": "The utility's skeleton and the desk catalogue. `utilz generate arngz` scaffolds `opt/arngz/`, `bin/arngz` and `help/arngz.md`; `arngz.yaml` declares the dependencies doctor reports. The desk schema from the design, its validator (one function, every refusal naming desk, path and value), and the file-backed verbs: `list`, `show`, `delete`, and the catalogue half of `init`. The bats suite runs on every CI leg with `XDG_CONFIG_HOME` pointed at fixtures. No Hammerspoon call yet.",
       "body": "",
       "preamble": ""
@@ -267,8 +267,8 @@
       "covers": [
         "AC-02.1"
       ],
-      "status": "to-write",
-      "note": "Dispatch, help naming every verb and flag, utilz list, the yaml's three dependency declarations, and doctor's report of each. RED at 16 Oct: against the generated stub, help named no verb and the yaml declared no dependency."
+      "status": "green",
+      "note": "Dispatch, help naming every verb and flag, utilz list, the yaml's three dependency declarations, and doctor's report of each. RED at 16 Oct: against the generated stub, help named no verb and the yaml declared no dependency. GREEN at 16 Oct: 27/27 under bash 5 and 3.2; doctor's report of Hammerspoon is driven by stubbing check_app in both directions, and hs by hiding it from PATH; estate 22/22 suites."
     },
     {
       "id": "AT-02.2",
@@ -277,8 +277,8 @@
       "covers": [
         "AC-02.2"
       ],
-      "status": "to-write",
-      "note": "The catalogue verbs over a fixture XDG_CONFIG_HOME: init, list with counts, show verbatim, delete, and a missing desk refused by name with exit 2. RED at 16 Oct: every limb failed against the generated stub."
+      "status": "green",
+      "note": "The catalogue verbs over a fixture XDG_CONFIG_HOME: init, list with counts, show verbatim, delete, and a missing desk refused by name with exit 2. RED at 16 Oct: every limb failed against the generated stub. GREEN at 16 Oct: 27/27 under bash 5 and 3.2; estate 22/22 suites."
     },
     {
       "id": "AT-02.3",
@@ -287,8 +287,8 @@
       "covers": [
         "AC-02.3"
       ],
-      "status": "to-write",
-      "note": "The validator's seven refusals, each naming desk, file, path and value with exit 2, the design's example desk accepted unchanged, and AC-05.7's verb-name refusal by show and by apply. RED at 16 Oct: every limb failed against the generated stub."
+      "status": "green",
+      "note": "The validator's seven refusals, each naming desk, file, path and value with exit 2, the design's example desk accepted unchanged, and AC-05.7's verb-name refusal by show and by apply. RED at 16 Oct: every limb failed against the generated stub. GREEN at 16 Oct: 27/27 under bash 5 and 3.2, the example desk accepted byte-identical to design.md's; estate 22/22 suites."
     }
   ],
   "attachments": [

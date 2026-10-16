@@ -462,7 +462,7 @@ teardown_file() {
   # links, in both invocation forms. The count control is not decoration: an
   # install that shipped three utilities would otherwise pass this silently.
   local u n=0 bad=0 a b
-  for u in cleanz clipz cryptz expz gitz lnrel macoz mdagg pdf2md prez retry stampz syncz todo xtrct; do
+  for u in arngz cleanz clipz cryptz expz gitz lnrel macoz mdagg pdf2md prez retry stampz syncz todo xtrct; do
     [ -e "$GUARD_INSTALL/bin/$u" ] || continue
     n=$((n + 1))
     a=$(env -u UTILZ_HOME "$GUARD_INSTALL/bin/$u" --version 2>&1 | head -1)
@@ -470,7 +470,7 @@ teardown_file() {
     [[ "$a" == "utilz:$fw/$u:"* ]] || { echo "  $u (symlink form): $a"; bad=$((bad + 1)); }
     [ "$a" = "$b" ] || { echo "  $u: forms differ from the install"; bad=$((bad + 1)); }
   done
-  [ "$n" -eq 15 ] || fail "the install offered $n utilities, expected 15"
+  [ "$n" -eq 16 ] || fail "the install offered $n utilities, expected 16"
   [ "$bad" -eq 0 ] || fail "$bad install-side version failures"
 }
 
@@ -496,7 +496,7 @@ teardown_file() {
   assert_output_contains "installed at $GUARD_INSTALL"
 
   local u n=0 bad=0 a b marker hf
-  for u in cleanz clipz cryptz expz gitz lnrel macoz mdagg pdf2md prez retry stampz syncz todo xtrct; do
+  for u in arngz cleanz clipz cryptz expz gitz lnrel macoz mdagg pdf2md prez retry stampz syncz todo xtrct; do
     [ -e "$GUARD_INSTALL/bin/$u" ] || continue
     n=$((n + 1))
     hf="$GUARD_INSTALL/help/$u.md"
@@ -515,6 +515,6 @@ teardown_file() {
     printf '%s' "$a" | grep -qF "$marker" \
       || { echo "  $u: rendered the INLINE usage, not the curated file"; bad=$((bad + 1)); }
   done
-  [ "$n" -eq 15 ] || fail "the install offered $n utilities, expected 15"
+  [ "$n" -eq 16 ] || fail "the install offered $n utilities, expected 16"
   [ "$bad" -eq 0 ] || fail "$bad install-side --help failures"
 }

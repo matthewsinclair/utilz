@@ -2,7 +2,7 @@
 wp_id: WP-02
 title: Desk config, validator and the catalogue verbs
 scope: S
-status: Not Started
+status: Done
 ---
 
 # WP-02: Desk config, validator and the catalogue verbs

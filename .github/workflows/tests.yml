@@ -93,9 +93,10 @@ jobs:
         # this roster is hardcoded while test-macos derives its own from
         # `utilz list`, so a new utility is covered there for free and must be
         # added HERE by hand or it goes untested on this leg with nothing
-        # reporting the gap. stampz (ST0011) was added on 2026-09-03. Fixing
+        # reporting the gap. stampz (ST0011) was added on 2026-09-03, arngz
+        # (ST0026) on 2026-10-16: its suite stubs Hammerspoon out. Fixing
         # the roster is its own change; this line is the toll until then.
-        for utility in utilz cryptz gitz mdagg retry syncz pdf2md xtrct lnrel todo expz stampz; do
+        for utility in utilz cryptz gitz mdagg retry syncz pdf2md xtrct lnrel todo expz stampz arngz; do
           echo "Testing: $utility"
           utilz test $utility || exit 1
         done

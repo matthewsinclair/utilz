@@ -19,7 +19,7 @@ _utilities() {
   done
 }
 
-_expected_count=15
+_expected_count=16
 
 @test "AT01 / AC01: --help is byte-identical across both invocation forms, for every utility" {
   local u a b n=0 bad=0
@@ -156,7 +156,7 @@ _expected_count=15
   # prez is the second documented exception: its opt/prez/prez is a SHIM that
   # delegates to a compiled binary, and clap answers --help there. It carries
   # no arm and needs none. So the enforceable claim is that DIRECT EXECUTION
-  # STILL ANSWERS for all 15, and that the 14 shell utilities which own a usage
+  # STILL ANSWERS for all 16, and that the 15 shell utilities which own a usage
   # still own it -- never a count bent to fit whatever the tree happens to hold.
   local u n=0 arms=0 noarm="" broke=""
   for u in $(_utilities); do
@@ -198,7 +198,7 @@ _expected_count=15
     fi
   done
   [ "$n" -eq "$_expected_count" ] || fail "checked $n, expected $_expected_count"
-  [ "$arms" -eq 14 ] || fail "$arms utilities carry their own --help arm, expected 14"
+  [ "$arms" -eq 15 ] || fail "$arms utilities carry their own --help arm, expected 15"
   [ "$noarm" = " prez" ] || fail "expected prez alone to delegate; got:$noarm"
   [ -z "$broke" ] || fail "these cannot answer --help when executed directly:$broke"
 }

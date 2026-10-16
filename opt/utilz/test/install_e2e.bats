@@ -125,14 +125,14 @@ teardown_file() {
   assert_output_contains "installed at $E2E_PREFIX"
 }
 
-@test "AC01: utilz list enumerates all fifteen utilities from the install" {
+@test "AC01: utilz list enumerates all sixteen utilities from the install" {
   # Exercises each_utility plus a yaml read per utility, so it fails if the
   # symlinks, the implementations or the metadata did not arrive.
   run env -u UTILZ_HOME "$E2E_PREFIX/bin/utilz" list
   assert_success
 
   local name
-  for name in cleanz clipz cryptz expz gitz lnrel macoz mdagg pdf2md prez retry stampz syncz todo xtrct; do
+  for name in arngz cleanz clipz cryptz expz gitz lnrel macoz mdagg pdf2md prez retry stampz syncz todo xtrct; do
     assert_output_contains "$name"
   done
 }
@@ -147,7 +147,7 @@ teardown_file() {
   # asserting the checks that actually speak to AC01.
   assert_output_contains "All required directories present"
   assert_output_contains "bin/utilz exists and is executable"
-  assert_output_contains "Found 15 utilities, all properly configured"
+  assert_output_contains "Found 16 utilities, all properly configured"
   assert_output_contains "All required dependencies installed"
 
   # And the only thing it found is the PATH.
@@ -190,9 +190,9 @@ teardown_file() {
   assert_output ""
 }
 
-@test "the fifteen symlinks arrived as symlinks, not as dereferenced copies" {
+@test "the sixteen symlinks arrived as symlinks, not as dereferenced copies" {
   local name
-  for name in cleanz clipz cryptz expz gitz lnrel macoz mdagg pdf2md prez retry stampz syncz todo xtrct; do
+  for name in arngz cleanz clipz cryptz expz gitz lnrel macoz mdagg pdf2md prez retry stampz syncz todo xtrct; do
     [[ -L "$E2E_PREFIX/bin/$name" ]] || {
       echo "bin/$name is not a symlink in the install" >&2
       return 1

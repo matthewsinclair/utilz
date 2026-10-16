@@ -12,21 +12,22 @@ load "test_helper.bash"
 # THE OWNED SET (design.md D2)
 # ============================================================================
 
-@test "AT07: install_owned_paths names exactly the fifteen bin symlinks" {
+@test "AT07: install_owned_paths names exactly the sixteen bin symlinks" {
   run run_install_function "install_owned_paths '$UTILZ_HOME'"
   assert_success
 
   local listed
   listed=$(printf '%s\n' "$output" | grep -c '^bin/')
-  # 15 symlinks + bin/utilz itself. bin/devbin and bin/.devbin/ are vendored.
-  [[ "$listed" -eq 16 ]] || {
-    echo "expected 16 bin/ entries, got $listed" >&2
+  # 16 symlinks + bin/utilz itself. bin/devbin and bin/.devbin/ are vendored.
+  # arngz (ST0026) is the sixteenth, from 2026-10-16.
+  [[ "$listed" -eq 17 ]] || {
+    echo "expected 17 bin/ entries, got $listed" >&2
     printf '%s\n' "$output" | grep '^bin/' >&2
     return 1
   }
 
   local name
-  for name in cleanz clipz cryptz expz gitz lnrel macoz mdagg pdf2md prez retry stampz syncz todo xtrct; do
+  for name in arngz cleanz clipz cryptz expz gitz lnrel macoz mdagg pdf2md prez retry stampz syncz todo xtrct; do
     printf '%s\n' "$output" | grep -qx "bin/$name" || {
       echo "owned set is missing bin/$name" >&2
       return 1

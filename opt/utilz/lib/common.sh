@@ -289,6 +289,57 @@ check_command() {
   command -v "$1" >/dev/null 2>&1
 }
 
+# Check if a macOS app is installed, by bundle id, WITHOUT LAUNCHING IT.
+#
+# A dependency that is an app has no command on PATH (Hammerspoon is
+# /Applications/Hammerspoon.app), so check_command would call it missing on
+# every machine. This asks LaunchServices through NSWorkspace, which only looks
+# the app up. MEASURED, because the obvious form is wrong: osascript's
+# `path to application id "<id>"` LAUNCHES the app it is asked about (Chess,
+# not running, was running four seconds later), so a doctor using it would
+# start every app it checks. This form, run three times against Chess, left it
+# not running (pgrep 0 before and after), found Hammerspoon, and failed on a
+# made-up id. mdfind also leaves apps alone but answers from Spotlight's index,
+# which can be off, so it is not used.
+#
+# Off macOS there are no apps to find, so the answer is always missing.
+check_app() {
+  local bundle="$1"
+  if [[ "$(uname -s)" != "Darwin" ]]; then
+    return 1
+  fi
+  osascript -l JavaScript -e "ObjC.import('AppKit');
+    var u = \$.NSWorkspace.sharedWorkspace.URLForApplicationWithBundleIdentifier('$bundle');
+    if (u.isNil()) { throw new Error('no app with bundle id $bundle'); }
+    u.path.js" >/dev/null 2>&1
+}
+
+# Whether one declared dependency is present: an entry carrying `app: <bundle
+# id>` is an app and is looked up as one; every other entry is a command. The
+# one place that choice is made, for both of doctor's dependency lists.
+dependency_present() {
+  local yaml_file="$1" list="$2" index="$3" name="$4" app
+  app=$(yq eval ".${list}[${index}].app" "$yaml_file" 2>/dev/null)
+  if [[ -n "$app" && "$app" != "null" ]]; then
+    check_app "$app"
+  else
+    check_command "$name"
+  fi
+}
+
+# The purpose doctor prints for a missing dependency, plus why an app
+# dependency can never be present off macOS, so that line is not read as
+# something to install.
+dependency_purpose() {
+  local yaml_file="$1" list="$2" index="$3" purpose app
+  purpose=$(yq eval ".${list}[${index}].purpose" "$yaml_file" 2>/dev/null)
+  app=$(yq eval ".${list}[${index}].app" "$yaml_file" 2>/dev/null)
+  if [[ -n "$app" && "$app" != "null" && "$(uname -s)" != "Darwin" ]]; then
+    purpose="$purpose; a macOS app, so never present on $(uname -s)"
+  fi
+  printf '%s\n' "$purpose"
+}
+
 # THE leading-tilde expander. A YAML scalar or a --dest argument is not a shell
 # word, so an unexpanded ~ creates a directory literally named ~ under the cwd,
 # and every later command then finds it exactly where it looked -- silent and
@@ -706,13 +757,13 @@ run_doctor() {
       if [[ "$dep_count" =~ ^[0-9]+$ ]]; then
         for ((i = 0; i < dep_count; i++)); do
           dep_name=$(yq eval ".dependencies[$i].name" "$yaml_file" 2>/dev/null)
-          if check_command "$dep_name"; then
+          if dependency_present "$yaml_file" dependencies "$i" "$dep_name"; then
             continue
           fi
           dep_install=$(yq eval ".dependencies[$i].install" "$yaml_file" 2>/dev/null)
           dep_required=$(yq eval ".dependencies[$i].required" "$yaml_file" 2>/dev/null)
           if [[ "$dep_required" == "false" ]]; then
-            dep_purpose=$(yq eval ".dependencies[$i].purpose" "$yaml_file" 2>/dev/null)
+            dep_purpose=$(dependency_purpose "$yaml_file" dependencies "$i")
             optional_missing+=("$dep_name|$dep_install|$dep_purpose|$name")
           else
             missing_deps+=("$dep_name")
@@ -725,11 +776,11 @@ run_doctor() {
       if [[ "$dep_count" =~ ^[0-9]+$ ]]; then
         for ((i = 0; i < dep_count; i++)); do
           dep_name=$(yq eval ".optional_dependencies[$i].name" "$yaml_file" 2>/dev/null)
-          if check_command "$dep_name"; then
+          if dependency_present "$yaml_file" optional_dependencies "$i" "$dep_name"; then
             continue
           fi
           dep_install=$(yq eval ".optional_dependencies[$i].install" "$yaml_file" 2>/dev/null)
-          dep_purpose=$(yq eval ".optional_dependencies[$i].purpose" "$yaml_file" 2>/dev/null)
+          dep_purpose=$(dependency_purpose "$yaml_file" optional_dependencies "$i")
           optional_missing+=("$dep_name|$dep_install|$dep_purpose|$name")
         done
       fi

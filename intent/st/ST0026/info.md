@@ -32,7 +32,7 @@ Asked by hv on 16 Oct 2026 in a rubber-duck session with vc. The thread is creat
 | WP    | Title                                                            | Size | Status      |
 | ----- | ---------------------------------------------------------------- | ---- | ----------- |
 | WP-01 | Spike: space moves and Dock bindings on macOS 27                 | S    | WIP         |
-| WP-02 | Desk config, validator and the catalogue verbs                   | S    | WIP         |
+| WP-02 | Desk config, validator and the catalogue verbs                   | S    | Done        |
 | WP-03 | Engine: observe, the pure planner, execute, and the IPC contract | S    | Not Started |
 | WP-04 | discover and diff                                                | S    | Not Started |
 | WP-05 | apply                                                            | S    | Not Started |
