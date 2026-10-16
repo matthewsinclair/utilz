@@ -1,0 +1,14 @@
+{
+  "id": "01M52T6CKBCMV22RHWJC4E0PMV",
+  "ts": "2026-10-16T16:54:45.612Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.edit",
+  "subject": {
+    "type": "ac",
+    "id": "ST0027/AC-04.1"
+  },
+  "payload": {
+    "text": "An item's params are acquired through one form window holding every param in order (D4), each field typed from the param's type (text, secret, choice, file, folder; text when none is given; secret hidden) with its prompt and default; Cancel runs nothing and logs cancelled; required refuses an empty answer and a typed field refuses a value of the wrong kind, each named in the form; the values reach the run as exported variables under the declared names."
+  }
+}
