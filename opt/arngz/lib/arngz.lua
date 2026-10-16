@@ -61,10 +61,6 @@ local function read_defaults(domain)
   return t
 end
 
--- Every window Hammerspoon can NAME, by id. hs.window.allWindows sees only the
--- visible spaces; the default window filter is the documented route to
--- windows on the others (dc's spike). Which route named a window is kept.
---
 -- f() tried up to `times` times, a fifth of a second apart (never after the
 -- last): true and its value, or false and the last error.
 local function attempts(times, f)
@@ -77,31 +73,43 @@ local function attempts(times, f)
   return false, value
 end
 
+-- Every window Hammerspoon can NAME, by id. hs.window.allWindows sees only the
+-- visible spaces; the default window filter is the documented route to
+-- windows on the others (dc's spike). Which route named a window is kept.
+--
 -- A window can close, or not be backed yet, between Hammerspoon listing it and
 -- reading it, and allWindows then raises from inside hs.axuielement (measured
 -- by vc's hand run, 16 Oct 2026). So the listing is retried a few times, and
 -- only a failure that persists is recorded, as could-not-read, never as no
--- windows.
+-- windows. Every id read that fails is counted, with the first error, so an
+-- unseen entry can say a window may have gone unnamed. It counts reads, not
+-- windows: both routes list the windows on a shown space, so one window can
+-- fail twice, or fail on one route and be named by the other.
+-- Returns the index, the filter's note, the listing's error, and
+-- { count = n, first = error } for the id reads that failed.
 local function nameable()
-  local index = {}
+  local index, id_errors = {}, { count = 0 }
+  local function take(w, via)
+    local got, id = pcall(function() return w:id() end)
+    if not (got and id) then
+      id_errors.count = id_errors.count + 1
+      id_errors.first = id_errors.first or (got and "no id" or tostring(id))
+    elseif not index[id] then
+      index[id] = { win = w, via = via }
+    end
+  end
   local listed, all = attempts(4, hs.window.allWindows)
   if not listed then
-    return index, nil, "hs.window.allWindows failed four times: " .. tostring(all)
+    return index, nil, "hs.window.allWindows failed four times: " .. tostring(all), id_errors
   end
-  for _, w in ipairs(all) do
-    local got, id = pcall(function() return w:id() end)
-    if got and id then index[id] = { win = w, via = "allWindows" } end
-  end
+  for _, w in ipairs(all) do take(w, "allWindows") end
   local ok, windows = pcall(function() return hs.window.filter.default:getWindows() end)
   if ok then
-    for _, w in ipairs(windows) do
-      local got, id = pcall(function() return w:id() end)
-      if got and id and not index[id] then index[id] = { win = w, via = "filter.default" } end
-    end
+    for _, w in ipairs(windows) do take(w, "filter.default") end
   end
   local note = "ran"
   if not ok then note = "failed: " .. tostring(windows) end
-  return index, note, nil
+  return index, note, nil, id_errors
 end
 
 -- One window read, or, when it went away or is not backed yet between being
@@ -152,7 +160,7 @@ function M.observe()
     end
   end
 
-  local index, filter_note, list_err = nameable()
+  local index, filter_note, list_err, id_errors = nameable()
   local primary = hs.screen.primaryScreen()
   local primary_frame = rect(primary:fullFrame())
   local world = {
@@ -163,6 +171,8 @@ function M.observe()
     separate_spaces = hs.spaces.screensHaveSeparateSpaces(),
     window_filter = filter_note,
     windows_list_error = list_err,
+    window_id_errors = id_errors.count,
+    window_id_error = id_errors.first,
     managed_spaces_error = derr,
     screens = {},
     apps_running = {},
@@ -230,10 +240,9 @@ function M.observe()
   end
 
   -- Read as the windows are: a just-launched app can be listed before it can
-  -- be read, so one that raises is skipped, and a list that cannot be had at
-  -- all is recorded, never left looking like nothing running.
-  -- An app that cannot be read is retried with the whole list; one that
-  -- still cannot be is counted, never quietly taken for not running.
+  -- be read, and one that raises fails the whole read. So the whole list is
+  -- read again, up to four times, and a list that still cannot be had is
+  -- recorded as unread, never left looking like nothing running.
   local got, read = attempts(4, function()
     local bundles = {}
     for _, app in ipairs(hs.application.runningApplications()) do
@@ -871,9 +880,10 @@ end
 
 -- Observe until done(world) holds, for up to `seconds` on the monotonic
 -- clock, a quarter of a second between reads. An observe that raises while a
--- window is half there is tried again. Returns the last world read (done or
--- not), or raises the last error when no observe succeeded. The one polling
--- loop the settles below share.
+-- window is half there is tried again; done() is not guarded, so a crash in
+-- it is raised. Returns the last world read (done or not), or nil and the
+-- last error when no observe succeeded. The one polling loop the settles
+-- below share.
 local function observe_until(done, seconds)
   local deadline = now() + seconds * 1e9
   local world, err
@@ -888,6 +898,11 @@ local function observe_until(done, seconds)
     if now() >= deadline then break end
     hs.timer.usleep(250000)
   end
+  return world, err
+end
+
+-- A settle's world, or its error raised, for step() to report.
+local function settled(world, err)
   if world then return world end
   error(err, 0)
 end
@@ -895,12 +910,12 @@ end
 -- After create_space: until com.apple.spaces has caught up with the live
 -- list, for up to 3 s (design.md, apply 7).
 local function observe_settled()
-  return observe_until(function(world)
+  return settled(observe_until(function(world)
     for _, s in ipairs(world.screens or {}) do
       if s.order_error then return false end
     end
     return true
-  end, 3)
+  end, 3))
 end
 
 -- After launches: until every app whose launch was done runs and has a
@@ -908,7 +923,8 @@ end
 -- A launched window becomes nameable a beat after the launch sees it (vc's
 -- hand runs, 16 Oct 2026). Plan reports what is still not named as unseen.
 local function observe_launched(launched)
-  return observe_until(function(world) return #P.unsettled_launches(world, launched) == 0 end, M.LAUNCH_TIMEOUT)
+  return settled(observe_until(function(world) return #P.unsettled_launches(world, launched) == 0 end,
+    M.LAUNCH_TIMEOUT))
 end
 
 -- A plan that finds an entry unseen is planned again from fresh observes for
@@ -918,18 +934,22 @@ end
 local UNSEEN_SECONDS = 1.5
 
 -- plan from WORLD, planned again from fresh observes while an entry is
--- unseen, up to UNSEEN_SECONDS. A retry that cannot observe keeps the plan
--- in hand. Returns the world planned from, its ops, and plan's refusal.
+-- unseen, up to UNSEEN_SECONDS. The plan in hand is the last one plan made
+-- from a world it could read: a retry plan refuses (a listing that failed for
+-- a moment, which unread() refuses) does not replace it, and the wait goes
+-- on, as it does when a retry cannot observe at all. A crash in plan is
+-- raised, never taken for an unseen entry. Returns the world planned from,
+-- its ops, and plan's refusal.
 local function plan_settled(desk, world, options)
   local ops, err = P.plan(desk, world, options)
   if not (ops and #only(ops, { unseen = true }) > 0) then return world, ops, err end
-  local ok, later = pcall(observe_until, function(w)
-    local o, e = P.plan(desk, w, options)
-    ops, err, world = o, e, w
-    return not (o and #only(o, { unseen = true }) > 0)
+  observe_until(function(w)
+    local o = P.plan(desk, w, options)
+    if not o then return false end
+    ops, world = o, w
+    return #only(o, { unseen = true }) == 0
   end, UNSEEN_SECONDS)
-  if not ok then return world, ops, err end
-  return later, ops, err
+  return world, ops, nil
 end
 
 -- apply, steps 5 to 11 of design.md "apply, in order": everything after the

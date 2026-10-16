@@ -263,6 +263,16 @@ do
     kinds(vops) == "unseen" and vops[1].bundle == "com.apple.Safari"
       and string.find(vops[1].reason, "1 window(s) could not be read just now (incorrect type 'nil')", 1, true) ~= nil,
     verr or ops_text(vops))
+  local u = base_world()
+  table.remove(space(u, 1).windows, 2)
+  u.window_id_errors, u.window_id_error = 2, "axuielement gone"
+  u.window_filter = "failed: no filter"
+  local uops, uerr = P.plan(base_desk(), u, {})
+  check("an unseen reason counts the window id reads that failed, and names a window filter that failed",
+    kinds(uops) == "unseen"
+      and string.find(uops[1].reason, "2 window id read(s) failed (axuielement gone)", 1, true) ~= nil
+      and string.find(uops[1].reason, "names windows on other spaces failed: no filter", 1, true) ~= nil,
+    uerr or ops_text(uops))
 end
 
 -- After launching, apply waits until each launched app has a claimable

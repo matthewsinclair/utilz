@@ -424,6 +424,13 @@ function P.plan(desk, world, options)
   end
   local unread_note = (unreadable > 0)
     and string.format("; %d window(s) could not be read just now (%s)", unreadable, tostring(first_error)) or ""
+  if (world.window_id_errors or 0) > 0 then
+    unread_note = unread_note .. string.format("; %d window id read(s) failed (%s)",
+      world.window_id_errors, tostring(world.window_id_error))
+  end
+  if world.window_filter and world.window_filter ~= "ran" then
+    unread_note = unread_note .. "; the window filter that names windows on other spaces " .. world.window_filter
+  end
   local listed = P.listings(world)
   for _, e in ipairs(entries(desk)) do
     local a, s = e.app, screens[e.display]
