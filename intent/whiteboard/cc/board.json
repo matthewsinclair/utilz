@@ -8,9 +8,7 @@
     "heartbeat_at": "2026-10-16T04:57:21.502Z",
     "status": "active",
     "focus": "16 Oct: booted, holding for vc's instructions (hv's word this session). One open issue, 0065 (prez page numbers in PDF). No claims; nothing in flight. Pushing main is hv's.",
-    "claims": [
-      "ISSUE:0067"
-    ],
+    "claims": [],
     "recorded_at": "2026-09-14T08:46:06.602Z",
     "authored_at": "2026-09-11 16:17Z",
     "migrated_at": "2026-09-14T08:48:02.260Z"

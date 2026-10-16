@@ -6,7 +6,7 @@ session_id: 67bcef6b-d20d-4bb9-ac53-ff7fbaf2e422
 heartbeat_at: 2026-10-16 04:57Z
 status: active
 focus: "16 Oct: booted, holding for vc's instructions (hv's word this session). One open issue, 0065 (prez page numbers in PDF). No claims; nothing in flight. Pushing main is hv's."
-claims: [ISSUE:0067]
+claims: []
 ---
 
 # Control Claude (cc)
