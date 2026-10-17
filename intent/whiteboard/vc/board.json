@@ -1359,10 +1359,10 @@
       "node": "vc",
       "kind": "todo",
       "seq": 38,
-      "text": "DOING, 17 Oct 10:24Z: 2.14.0 is DONE end to end: released (069e0f3, CI green on main and the tag), the tap at 14fef4c pushed by hv, Menuz.app.zip on the release (notarised Accepted, stapled, built from a clean checkout of the tag in a worktree: MenuzKind release, 069e0f38, build 1214, first row menuz 0.1.0 (069e0f38); transcript tmp/vc-st0026/asset-2.14.0.txt), installed here from the keg (build 1214, the release row, login item enabled, doctor clean; tmp/dc-st0027/install-menuz-2.14.0.txt) and on kovacs (069e0f38 on main, yq v4 first, links, qpdf, doctor 7/7; tmp/vc-st0026/kovacs-2.14.0-report.txt), done.md landed at dd415a6. NEXT: the devbin fleet sweep to 0.1.11 into bin/devbin by devbin-vc, by path through vc (tell before, land by path, no push, SHA to vc, any Mac check booked with intent-vc); vc pushes. Then nothing of Utilz is open. Devbin 0.1.11 released and installed here, its kovacs install on hv tap (brew-only rule); Intent 3.2.4 cut-ready for hv terminal.",
+      "text": "DOING, 17 Oct 12:52Z: nothing of Utilz is in flight. 2.14.0 is released, tapped (14fef4c), the signed Menuz.app.zip is on the release, installed here (keg 2.14.0, the app build 1214 with the release row) and on kovacs (069e0f38 on main, doctor 7/7); done.md landed (57e336e, dd415a6); the devbin sweep to 0.1.11 is in (5a15742); issue 0066 is fixed (76ffed8: switch.rs, one vocabulary under hv decision 24, prez 2.5.1, AT22; CI run 39033720028 green, kovacs leg green bar the known set) and closed (b52ca0e). intent outstanding: 0 threads, 0 work packages, 0 issues. CHANGELOG has [2.14.1] - unreleased open with the 0066 fix; the next cut is hv terminal when hv wants it (the release core is refused in this session). hv hands: the logout and login confirmation (AT-05.2 note), intent claude upgrade --apply, the linuxbrew shellenv line on kovacs. Devbin 0.1.11 released and installed from its tap on both machines; Intent 3.2.4 cut by hv, its kovacs install waiting on its Linux package.",
       "state": "live",
       "recorded_at": "2026-10-17T04:55:55.931Z",
-      "edited_at": "2026-10-17T10:24:59.564Z"
+      "edited_at": "2026-10-17T12:52:46.326Z"
     },
     {
       "node": "vc",
@@ -1379,6 +1379,14 @@
       "text": "Cross-project state under decision 23, 17 Oct 06:5xZ: INTENT is cut-ready whole at ef9889423 (3.2.4) and stays for hvs hand, since Intent decision 3 has the release confirmation answered on a tty by hv and never --no-confirm from a tool session; the sequence sits in hvs inbox at Intent. DEVBIN 0.1.11: landing suite live since 06:36Z, then kovacs R1, the note, the release gates on the Mac, CI on the tag; installs by re-publishing ~/Devel/opt/devbin here and a clone of the tag on kovacs; the devbin tap repo stays hvs to create. KOVACS is a VM on this Mac, so every kovacs run is a box window; kovacs-sysadm is a Remote Control bridge reachable only through intent-vc, who carries Utilzs runbook (dc writes tmp/dc-st0027/kovacs-2.14.0.md: mikefarah yq v4 first, the dev checkout pulled to main at 2.14.0, ~/bin links for Linux-capable utilities, doctor and version). The Apple credentials are absent from the keychain, so the signed Menuz.app.zip waits for hvs store-creds; this Macs keg is utilz 2.12.1 until dcs todo 1.",
       "state": "live",
       "recorded_at": "2026-10-17T06:41:34.251Z"
+    },
+    {
+      "node": "vc",
+      "kind": "decision",
+      "seq": 24,
+      "text": "hv, 17 Oct 10:5xZ, directly to vc, on issue 0066 after two rulings had been recorded in hv name (dc: the union, from hv answer to dc question; cc: the narrow numbering list, written as a Decision into the issue): THE UNION stands for both mermaid: and numbering:. on, true, yes and 1 turn a switch on; off, false, no and 0 turn it off; anything else is refused by name. dc owns the fix under the pen; cc is stopped off the files; vc reviews the landing and pushes; dc closes the issue on the evidence.",
+      "state": "live",
+      "recorded_at": "2026-10-17T10:29:59.118Z"
     }
   ],
   "messages": [

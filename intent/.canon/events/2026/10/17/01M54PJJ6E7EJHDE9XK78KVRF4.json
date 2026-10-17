@@ -1,0 +1,15 @@
+{
+  "id": "01M54PJJ6E7EJHDE9XK78KVRF4",
+  "ts": "2026-10-17T10:29:59.118Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 17 Oct 10:5xZ, directly to vc, on issue 0066 after two rulings had been recorded in hv name (dc: the union, from hv answer to dc question; cc: the narrow numbering list, written as a Decision into the issue): THE UNION stands for both mermaid: and numbering:. on, true, yes and 1 turn a switch on; off, false, no and 0 turn it off; anything else is refused by name. dc owns the fix under the pen; cc is stopped off the files; vc reviews the landing and pushes; dc closes the issue on the evidence."
+  }
+}
