@@ -1,0 +1,15 @@
+{
+  "id": "01M543NVVTVD0556EFKTZH2AJ0",
+  "ts": "2026-10-17T04:59:44.378Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "todo",
+    "text": "Once 2.14.0 is tagged, Menuz.app.zip is on the release and the tap is pushed (hv asked, 17 Oct): install 2.14.0 on this Mac so utilz menuz and utilz arngz work from the command line. brew upgrade utilz, then utilz doctor, utilz menuz install (from the release asset), and check utilz menuz --version and utilz arngz --version read the new versions. Ask vc for the moment first."
+  }
+}

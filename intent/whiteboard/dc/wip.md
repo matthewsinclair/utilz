@@ -3,7 +3,7 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: b6f789ca-4627-4a74-b4cd-bb7c07de9f46
-heartbeat_at: 2026-10-17 04:49Z
+heartbeat_at: 2026-10-17 04:56Z
 status: active
 focus: "Folded for hv compact, 17 Oct: hold 7 waits on the 2.14.0 tag for done.md; after the compact, in-session, pickup, hold for vc."
 claims: []
@@ -17,7 +17,7 @@ _(none)_
 
 ## TODO
 
-_(none)_
+- Once 2.14.0 is tagged, Menuz.app.zip is on the release and the tap is pushed (hv asked, 17 Oct): install 2.14.0 on this Mac so utilz menuz and utilz arngz work from the command line. brew upgrade utilz, then utilz doctor, utilz menuz install (from the release asset), and check utilz menuz --version and utilz arngz --version read the new versions. Ask vc for the moment first.
 
 ## Holds
 
