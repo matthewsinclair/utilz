@@ -1363,6 +1363,22 @@
       "state": "live",
       "recorded_at": "2026-10-17T04:55:55.931Z",
       "edited_at": "2026-10-17T06:15:59.333Z"
+    },
+    {
+      "node": "vc",
+      "kind": "decision",
+      "seq": 23,
+      "text": "hv, 17 Oct 06:4xZ, directly to vc, going AFK: \"I will give you the pen, but liase with intent-vc, devbin-vc, and kovacs-sysadm as needed. I have let them know as well. All holds are off. Do what you need to do. I hope to get back and find that utilz, devbin, and intent are up-to-date and ready to release (or already released), including installed on both rhad and kovacs (where that makes sense, of course). Go!\" vc reads: the compacts are done and the box queue runs now (devbin landing suite, devbin kovacs R1, utilz-cc test window, the Utilz cut); vc drives all three projects to release through intent-vc and devbin-vc, who keep their own trees; every hold on vc (hold 10, hold 11) is released, so vc attempts the tap commit and push and the store-creds step itself and hands back only what the machine refuses; after each cut the new version is installed on this Mac (rhad) and on kovacs where the project installs there.",
+      "state": "live",
+      "recorded_at": "2026-10-17T06:36:55.503Z"
+    },
+    {
+      "node": "vc",
+      "kind": "todo",
+      "seq": 39,
+      "text": "Cross-project state under decision 23, 17 Oct 06:5xZ: INTENT is cut-ready whole at ef9889423 (3.2.4) and stays for hvs hand, since Intent decision 3 has the release confirmation answered on a tty by hv and never --no-confirm from a tool session; the sequence sits in hvs inbox at Intent. DEVBIN 0.1.11: landing suite live since 06:36Z, then kovacs R1, the note, the release gates on the Mac, CI on the tag; installs by re-publishing ~/Devel/opt/devbin here and a clone of the tag on kovacs; the devbin tap repo stays hvs to create. KOVACS is a VM on this Mac, so every kovacs run is a box window; kovacs-sysadm is a Remote Control bridge reachable only through intent-vc, who carries Utilzs runbook (dc writes tmp/dc-st0027/kovacs-2.14.0.md: mikefarah yq v4 first, the dev checkout pulled to main at 2.14.0, ~/bin links for Linux-capable utilities, doctor and version). The Apple credentials are absent from the keychain, so the signed Menuz.app.zip waits for hvs store-creds; this Macs keg is utilz 2.12.1 until dcs todo 1.",
+      "state": "live",
+      "recorded_at": "2026-10-17T06:41:34.251Z"
     }
   ],
   "messages": [
