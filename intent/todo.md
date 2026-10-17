@@ -8,13 +8,7 @@ A DOING / TODO / DONE view, projected from steel-thread and work-package status:
 
 ## DOING
 
-- [-] ST0027: menuz: a macOS menu bar app whose menu is a YAML file of commands to run
-  - [x] 01: Design settled with hv
-  - [x] 02: The shim, the config directory and the catalogue verbs
-  - [x] 03: The app: the menu from the file, watched, realised at open
-  - [x] 04: Running items: params, the runner, the log and the notice
-  - [x] 05: Build, install, launch and the close
-  - [-] 06: First-use fixes: notice, place, icon and glyph
+_(none)_
 
 ## TODO
 
@@ -142,6 +136,13 @@ _(none)_
   - [x] 04: discover and diff
   - [x] 05: apply
   - [x] 06: doctor, init, docs and the close
+- [x] ST0027: menuz: a macOS menu bar app whose menu is a YAML file of commands to run
+  - [x] 01: Design settled with hv
+  - [x] 02: The shim, the config directory and the catalogue verbs
+  - [x] 03: The app: the menu from the file, watched, realised at open
+  - [x] 04: Running items: params, the runner, the log and the notice
+  - [x] 05: Build, install, launch and the close
+  - [x] 06: First-use fixes: notice, place, icon and glyph
 - [x] ST0028: arngz: a desk saved from live terminal windows fails to apply minutes later
   - [x] 01: Discover's title patterns survive a moving title, and the report names each
 
