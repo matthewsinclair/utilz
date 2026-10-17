@@ -3,9 +3,9 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: b6f789ca-4627-4a74-b4cd-bb7c07de9f46
-heartbeat_at: 2026-10-17 06:36Z
+heartbeat_at: 2026-10-17 09:27Z
 status: active
-focus: "Folded for hv compact, 17 Oct 06:2xZ: WP-07 shim and docs at 5f151ab, pushed; hold 7 waits on the 2.14.0 tag for done.md (with WP-07); todo 1, the install on this Mac, after the tap push; after the compact, in-session, pickup, hold for vc."
+focus: "Fold for hv compact, 17 Oct 07:3xZ: hv cutting 2.14.0; done.md drafted on disk, tag values to fill from git and gh; no commit on main until vc says the release core finished; board on vc "fold commits now", done.md on vc "land done.md"; todo 1 after the tap push."
 claims: []
 ---
 
@@ -17,11 +17,11 @@ _(none)_
 
 ## TODO
 
-- Once 2.14.0 is tagged, Menuz.app.zip is on the release and the tap is pushed (hv asked, 17 Oct): install 2.14.0 on this Mac so utilz menuz and utilz arngz work from the command line. brew upgrade utilz, then utilz doctor, utilz menuz install (from the release asset), and check utilz menuz --version and utilz arngz --version read the new versions. Ask vc for the moment first.
+- After the 2.14.0 tap push, on vc word only (hv asked, 17 Oct): install 2.14.0 on this Mac so utilz menuz and utilz arngz work from the command line. brew upgrade utilz, utilz doctor, utilz menuz install (from the release asset), then check utilz menuz --version and utilz arngz --version read the new versions. Separately, tmp/dc-st0027/kovacs-2.14.0.md (the kovacs runbook, route A, backup branch kovacs-pre-2.14.0 at 5dcc317) is accepted by vc and staged with kovacs-sysadm via intent-vc, to run on vc tag message; it stays on disk, uncommitted; dc runs nothing on kovacs. (edited)
 
 ## Holds
 
-- Resume state, 17 Oct 07:0xZ: tmp/dc-st0027/done-2.14.0.md is drafted with WP-07 and approved by vc as written. Left are the tokens the cut makes (@TAG_SHA @DATE @CLOSE_SHA @CLOSE_RUN @FLAKE_SHA @AC074_RUN @PUSH_RUN @TAG_RUN @ASSET @TAP); vc sends them in one message. Then land in intent/done.md above 2.13.0, verblock v0.14, by path: prettier, no /Users/ outside /Users/you/, commit by path, SHA to vc. tmp/dc-st0027/kovacs-2.14.0.md, the kovacs runbook (route A, backup branch kovacs-pre-2.14.0 at 5dcc317), was accepted by vc and staged with kovacs-sysadm; it stays on disk, uncommitted. (edited)
+- Resume state, 17 Oct 07:3xZ fold: hv is running bin/devbin release --minor for 2.14.0 (output tmp/release/20261017-0924.RELEASE.out; release commit 069e0f3 seen, tag not yet). tmp/dc-st0027/done-2.14.0.md is drafted, vc-approved; filled: close c14d100 (+4c5c17e views), close run 39011934896 green, flake fix 0f0868e, AC-07.4 run 39011202584. Pending, with source: @TAG_SHA and @DATE from git tag 2.14.0 (fill on disk); @PUSH_RUN and @TAG_RUN from gh run list on the tag commit, with verdicts (fill on disk); @TAP and @ASSET on vc word only (tap after hv pushes it, asset after hv store-creds, else write as pending). NO COMMIT on main until vc says the release core finished (its push carries main head). Board commits on vc "fold commits now"; done.md lands on vc "land done.md": into intent/done.md above 2.13.0, verblock v0.14, by path, prettier, SHA to vc. (edited)
 
 ## Watch-outs
 

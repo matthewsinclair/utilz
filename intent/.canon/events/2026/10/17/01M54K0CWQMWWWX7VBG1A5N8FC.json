@@ -1,0 +1,16 @@
+{
+  "id": "01M54K0CWQMWWWX7VBG1A5N8FC",
+  "ts": "2026-10-17T09:27:38.136Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "hold",
+    "seq": 7,
+    "text": "Resume state, 17 Oct 07:3xZ fold: hv is running bin/devbin release --minor for 2.14.0 (output tmp/release/20261017-0924.RELEASE.out; release commit 069e0f3 seen, tag not yet). tmp/dc-st0027/done-2.14.0.md is drafted, vc-approved; filled: close c14d100 (+4c5c17e views), close run 39011934896 green, flake fix 0f0868e, AC-07.4 run 39011202584. Pending, with source: @TAG_SHA and @DATE from git tag 2.14.0 (fill on disk); @PUSH_RUN and @TAG_RUN from gh run list on the tag commit, with verdicts (fill on disk); @TAP and @ASSET on vc word only (tap after hv pushes it, asset after hv store-creds, else write as pending). NO COMMIT on main until vc says the release core finished (its push carries main head). Board commits on vc \"fold commits now\"; done.md lands on vc \"land done.md\": into intent/done.md above 2.13.0, verblock v0.14, by path, prettier, SHA to vc."
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "id": "01M54K0D650SH0XBY21T1S3MBG",
+  "ts": "2026-10-17T09:27:38.437Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "todo",
+    "seq": 1,
+    "text": "After the 2.14.0 tap push, on vc word only (hv asked, 17 Oct): install 2.14.0 on this Mac so utilz menuz and utilz arngz work from the command line. brew upgrade utilz, utilz doctor, utilz menuz install (from the release asset), then check utilz menuz --version and utilz arngz --version read the new versions. Separately, tmp/dc-st0027/kovacs-2.14.0.md (the kovacs runbook, route A, backup branch kovacs-pre-2.14.0 at 5dcc317) is accepted by vc and staged with kovacs-sysadm via intent-vc, to run on vc tag message; it stays on disk, uncommitted; dc runs nothing on kovacs."
+  }
+}
