@@ -1345,6 +1345,22 @@
       "state": "live",
       "recorded_at": "2026-10-16T21:22:54.733Z",
       "edited_at": "2026-10-17T04:46:45.578Z"
+    },
+    {
+      "node": "vc",
+      "kind": "decision",
+      "seq": 22,
+      "text": "hv, 17 Oct 04:5xZ, directly to vc, with three screenshots (Gtools \"gtools 0.5.0 (d6245093)\", Intent \"intent 3.2.3 (09a13ebf) dev\", Conflab \"matts\" over \"conflabd v0.6.2 -- running (4 flabs)\", each the menu's first, greyed line): \"Menuz needs a topline version string (just like all of the other menubar apps, and as asked)... we need to embed the version and the git hash of the version into the running app in the same way that ../{Intent,Conflab,Gtools} do, so that you can always see the build version and git digest. Please get DC and CC onto that next, once we have compacted everywhere.\" vc reads: a disabled first item in menuz's menu, \"menuz <version> (<commit>)\" with Intent's \"dev\" suffix for a build that is not a release, read from the stamps the bundle already carries (MENUZ_VERSION, MENUZ_BUILD, MENUZ_COMMIT; --version prints them); built BEFORE the 2.14.0 cut, since menuz ships first in it: ST0027 reopened for a WP-07, doc before code (the design's menu section and D14 with the three apps' lines measured from their sources under ../Intent, ../Conflab, ../Gtools), cc the app and MenuzKit's render with tests, dc the shim's stamps and the help, vc verifies, the menuz-app dispatch proves it under Xcode 16.4.",
+      "state": "live",
+      "recorded_at": "2026-10-17T04:55:55.836Z"
+    },
+    {
+      "node": "vc",
+      "kind": "todo",
+      "seq": 38,
+      "text": "FIRST after the compact (hv's decision 22): WP-07 of ST0027, the menu's version line. vc: intent st reopen ST0027, wp new, design.md section and D14 from ../Intent, ../Conflab and ../Gtools (how each builds its first line and stamps version and commit into the app), ACs; then cc on the app (a disabled first NSMenuItem from Bundle.main's stamps, \"menuz 0.1.0 (3e731d3)\", \"dev\" when the build is not a release; MenuzSpec render and tests), dc on the shim's stamps verb and help/menuz.md, vc verifies, menuz-app dispatch; then the cut (hold 10).",
+      "state": "live",
+      "recorded_at": "2026-10-17T04:55:55.931Z"
     }
   ],
   "messages": [

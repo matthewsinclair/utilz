@@ -1,0 +1,15 @@
+{
+  "id": "01M543EWRVW2FKSZQE7NBA3NJS",
+  "ts": "2026-10-17T04:55:55.931Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "todo",
+    "text": "FIRST after the compact (hv's decision 22): WP-07 of ST0027, the menu's version line. vc: intent st reopen ST0027, wp new, design.md section and D14 from ../Intent, ../Conflab and ../Gtools (how each builds its first line and stamps version and commit into the app), ACs; then cc on the app (a disabled first NSMenuItem from Bundle.main's stamps, \"menuz 0.1.0 (3e731d3)\", \"dev\" when the build is not a release; MenuzSpec render and tests), dc on the shim's stamps verb and help/menuz.md, vc verifies, menuz-app dispatch; then the cut (hold 10)."
+  }
+}

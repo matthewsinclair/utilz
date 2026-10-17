@@ -1,0 +1,15 @@
+{
+  "id": "01M543EWNWP3GBTX0AC9XEGNM0",
+  "ts": "2026-10-17T04:55:55.836Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 17 Oct 04:5xZ, directly to vc, with three screenshots (Gtools \"gtools 0.5.0 (d6245093)\", Intent \"intent 3.2.3 (09a13ebf) dev\", Conflab \"matts\" over \"conflabd v0.6.2 -- running (4 flabs)\", each the menu's first, greyed line): \"Menuz needs a topline version string (just like all of the other menubar apps, and as asked)... we need to embed the version and the git hash of the version into the running app in the same way that ../{Intent,Conflab,Gtools} do, so that you can always see the build version and git digest. Please get DC and CC onto that next, once we have compacted everywhere.\" vc reads: a disabled first item in menuz's menu, \"menuz <version> (<commit>)\" with Intent's \"dev\" suffix for a build that is not a release, read from the stamps the bundle already carries (MENUZ_VERSION, MENUZ_BUILD, MENUZ_COMMIT; --version prints them); built BEFORE the 2.14.0 cut, since menuz ships first in it: ST0027 reopened for a WP-07, doc before code (the design's menu section and D14 with the three apps' lines measured from their sources under ../Intent, ../Conflab, ../Gtools), cc the app and MenuzKit's render with tests, dc the shim's stamps and the help, vc verifies, the menuz-app dispatch proves it under Xcode 16.4."
+  }
+}
