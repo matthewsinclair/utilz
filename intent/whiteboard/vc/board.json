@@ -1359,10 +1359,10 @@
       "node": "vc",
       "kind": "todo",
       "seq": 38,
-      "text": "DOING, 17 Oct 06:2xZ (hv decision 22): WP-07 built. dc's shim half 5f151ab and cc's app half 90afe01 are on both remotes; vc's worktree verify of 90afe01 green (swift test 119, menuz test green, bats 128/128 under bash 5 and 3.2, the product's first render line exactly \"menuz 0.1.0 (90afe018) dev\"); the install on hv's Mac for AT-07.5 green at 06:08Z (build 1200, the row shown, source current, login item enabled, notifications granted; transcript tmp/vc-st0026/st0027/wp07/ac075-handrun-90afe01.txt). OPEN: the menuz-app dispatch 39008596471 on 90afe01 is RED on RunnerTests.swift:155, the interleave test's overlap-in-time expectation, a scheduling flake on the macos-15 runner (green on 38972250508), not WP-07's code; cc constructs the interleave with a flag file, builds in a second window, lands; vc re-dispatches, mints AT-07.1 to AT-07.5 (mint-at07.sh), satisfies AC-07.4 with the green dispatch, closes ST0027, dehydrates, then the cut (hold 10). The cut window is released at intent-vc until then.",
+      "text": "DOING, 17 Oct 07:0xZ: ST0027 CLOSED at c14d100 (WP-07 done, AT-07.1 to AT-07.5 green, AC-07.4 on dispatch 39011202584 green at 0238962, thread dehydrated) with the views and WP-07 objective at 4c5c17e, both on both remotes; a second dispatch 39011935654 runs on 4c5c17e for the two AT-id comment lines in the Swift tests. NEXT: the Mac window \"Utilz gates at 4c5c17e\" booked at intent-vc by name (check all and the estate) behind devbin dry run and kovacs R1; then the release core for 2.14.0 if this session is permitted to run it, else Utilz is cut-ready and the command goes in hv inbox. The permission layer (auto-mode classifier, Blind Apply) refused two of my messages that named a release with --yes: the authorisation to devbin-vc (Devbin now cut-ready for hv) and the cut-window ask (re-asked as the gates window). After the cut: hold 10 steps 3 to 6, the done.md values to dc, the kovacs runbook trigger through intent-vc, dc todo 1 here.",
       "state": "live",
       "recorded_at": "2026-10-17T04:55:55.931Z",
-      "edited_at": "2026-10-17T06:15:59.333Z"
+      "edited_at": "2026-10-17T07:01:05.364Z"
     },
     {
       "node": "vc",

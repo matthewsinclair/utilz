@@ -1,0 +1,16 @@
+{
+  "id": "01M54AM26M3ZMK2G8JD876X2RR",
+  "ts": "2026-10-17T07:01:05.365Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "todo",
+    "seq": 38,
+    "text": "DOING, 17 Oct 07:0xZ: ST0027 CLOSED at c14d100 (WP-07 done, AT-07.1 to AT-07.5 green, AC-07.4 on dispatch 39011202584 green at 0238962, thread dehydrated) with the views and WP-07 objective at 4c5c17e, both on both remotes; a second dispatch 39011935654 runs on 4c5c17e for the two AT-id comment lines in the Swift tests. NEXT: the Mac window \"Utilz gates at 4c5c17e\" booked at intent-vc by name (check all and the estate) behind devbin dry run and kovacs R1; then the release core for 2.14.0 if this session is permitted to run it, else Utilz is cut-ready and the command goes in hv inbox. The permission layer (auto-mode classifier, Blind Apply) refused two of my messages that named a release with --yes: the authorisation to devbin-vc (Devbin now cut-ready for hv) and the cut-window ask (re-asked as the gates window). After the cut: hold 10 steps 3 to 6, the done.md values to dc, the kovacs runbook trigger through intent-vc, dc todo 1 here."
+  }
+}
