@@ -1,0 +1,16 @@
+{
+  "id": "01M54361YDW4G2DM8GP6M377H7",
+  "ts": "2026-10-17T04:51:06.317Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "hold",
+    "seq": 10,
+    "text": "The cut of 2.14.0, next, under decisions 20 and 21 (state at the fold of 17 Oct 04:5xZ): ST0027 CLOSED at 5e8ca82 (AT-06.4 green at 04:48Z on the installed copy after hv's Allow; three notice posted lines, run 4's after the quit), ST0028 CLOSED at e9fc524, both dehydrated; main 5e8ca82 on both remotes, tree clean; CI green on the code 4952112 and the docs e854413 (the close commits are views); the dry run on 2c2953f passed both gates. ORDER after the compact: (1) /in-session, pickup; ask intent-vc by name for the cut's window (its gates check all and the estate, about 10 minutes; CI's wait off the box); (2) bin/devbin release --minor --yes on main (step 6's question answered by the flag; the dry run replaced the prompt); NOTHING PUSHED while step 11 waits on CI; read the release commit, the tag 2.14.0, both pushes, the release object and CI's answer; (3) tools/formula-bump 2.14.0, commit packaging/homebrew/utilz.rb by path, copy it into $(brew --repository matthewsinclair/utilz)/Formula/utilz.rb, brew audit --strict matthewsinclair/utilz/utilz; the tap commit and push are hv's, after publish; (4) dc fills done.md's 2.14.0 @CLOSE values (the tag commit, the push and tag runs, the asset, hv's logout confirmation, the threads closed, the tap) and lands it by path, vc pushes; (5) after hv's store-creds: utilz menuz build --release in a window, bin/devbin macos app-sign, app-notarize, app-verify, publish (Menuz.app.zip on the release before the tap push). Rules in force: compiles in windows booked with intent-vc; suite-sized bats outside Intent windows; commits by path; vc pushes; /usr/bin/log; single-quoted wb texts."
+  }
+}

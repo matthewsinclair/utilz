@@ -5,9 +5,9 @@
     "name": "Validation Claude",
     "role": "validation",
     "session_id": "3341dbaf-a82f-4073-bae3-2f8c30306f25",
-    "heartbeat_at": "2026-10-17T04:46:27.634Z",
+    "heartbeat_at": "2026-10-17T04:51:06.095Z",
     "status": "active",
-    "focus": "16 Oct 20:30Z, after hv's compact; hv AFK, vc has the pen (decision 20): driving ST0027 menuz and ST0028 to the 2.14.0 cut. CI green on main at 4be8533 (run 38961754419; c77cc76 differs by events and boards only). WP-06 landed at 8bea7ba; waiting on intent-vc's START for the dev build (one xcodebuild), then the notice hand run (AC-06.4), hv's copy relaunched, AT-06.1 to AT-06.4 minted, AC-06.5 satisfied on dc's 7be0366 lines, wp done ST0027/06. cc has the word for WP-05's non-compile work on st0027-wp05 (compiles in windows vc books); dc confirms the kovacs loop at 8bea7ba or later and a shellcheck 0.9.0 baseline. Compiles only in windows booked with intent-vc; suite-sized bats outside Intent windows; vc pushes main.",
+    "focus": "17 Oct 04:5xZ, localfold for hv's compact. ST0027 and ST0028 are CLOSED and dehydrated (5e8ca82 on both remotes), every criterion satisfied after hv allowed the notifications; 2.14.0 is cut-ready. After the compact: /in-session, pickup, then ask intent-vc for the cut's window and run bin/devbin release --minor --yes (hold 10 has the order); cc and dc hold for vc's word. hv's keypresses are hold 11.",
     "claims": [
       "ST0027"
     ],
@@ -1288,10 +1288,10 @@
       "node": "vc",
       "kind": "hold",
       "seq": 10,
-      "text": "2.14.0 is CUT-READY at 16 Oct 22:27Z bar one click of hv's (decisions 20, 21). main is e854413 on both remotes, CI green on it (run 38975178981) and on the code 4952112 (38974500505); the menuz-app dispatch 38972250508 on 9c6270a green on all eight jobs; the release dry run on 2c2953f passed both gates and predicts tag 2.14.0 dated 2026-10-17, stopping only at step 6's question (a session's cut carries --yes). ST0028 closed (e9fc524). ST0027: WP-05 done (aa3aca5); WP-06 has AC-06.1/2/3/5 satisfied and AC-06.4 waits on hv: System Settings > Notifications > Menuz > Allow, then vc quits the installed copy, reruns opt/menuz/test/notice-handrun.sh on the dev build (three notice posted lines wanted), relaunches with utilz menuz start, greens AT-06.4, wp done 06, st done ST0027, dehydrate, commit, push, then asks intent-vc for the cut's window: bin/devbin release --minor --yes (nothing pushed while step 11 waits on CI), tools/formula-bump 2.14.0 committed by path, the formula copied into the tap clone and audited (the tap push is hv's, after publish), dc fills done.md's @CLOSE values; Menuz.app.zip signed and published after hv's store-creds. Since the compact: three first-use defects fixed (the notification alert b7e07a3/d117591, the login item 3e731d3, Swift 6.1 554fe03/9c6270a), cc's shim error lines 4952112, dc's docs 4534225/c41a7ae/25b79ef/e07f462/e854413. Rules in force unchanged; /usr/bin/log, never the builtin; no backticks inside a double-quoted wb text.",
+      "text": "The cut of 2.14.0, next, under decisions 20 and 21 (state at the fold of 17 Oct 04:5xZ): ST0027 CLOSED at 5e8ca82 (AT-06.4 green at 04:48Z on the installed copy after hv's Allow; three notice posted lines, run 4's after the quit), ST0028 CLOSED at e9fc524, both dehydrated; main 5e8ca82 on both remotes, tree clean; CI green on the code 4952112 and the docs e854413 (the close commits are views); the dry run on 2c2953f passed both gates. ORDER after the compact: (1) /in-session, pickup; ask intent-vc by name for the cut's window (its gates check all and the estate, about 10 minutes; CI's wait off the box); (2) bin/devbin release --minor --yes on main (step 6's question answered by the flag; the dry run replaced the prompt); NOTHING PUSHED while step 11 waits on CI; read the release commit, the tag 2.14.0, both pushes, the release object and CI's answer; (3) tools/formula-bump 2.14.0, commit packaging/homebrew/utilz.rb by path, copy it into $(brew --repository matthewsinclair/utilz)/Formula/utilz.rb, brew audit --strict matthewsinclair/utilz/utilz; the tap commit and push are hv's, after publish; (4) dc fills done.md's 2.14.0 @CLOSE values (the tag commit, the push and tag runs, the asset, hv's logout confirmation, the threads closed, the tap) and lands it by path, vc pushes; (5) after hv's store-creds: utilz menuz build --release in a window, bin/devbin macos app-sign, app-notarize, app-verify, publish (Menuz.app.zip on the release before the tap push). Rules in force: compiles in windows booked with intent-vc; suite-sized bats outside Intent windows; commits by path; vc pushes; /usr/bin/log; single-quoted wb texts.",
       "state": "live",
       "recorded_at": "2026-10-16T12:21:33.315Z",
-      "edited_at": "2026-10-16T22:27:47.340Z"
+      "edited_at": "2026-10-17T04:51:06.317Z"
     },
     {
       "node": "vc",
