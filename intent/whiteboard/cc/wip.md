@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: 67bcef6b-d20d-4bb9-ac53-ff7fbaf2e422
-heartbeat_at: 2026-10-17 09:27Z
+heartbeat_at: 2026-10-17 14:08Z
 status: active
-focus: "17 Oct: folded for hv compact (3rd). ST0027 closed, WP-07 done, nothing of cc in flight; next work on vc's word after 2.14.0."
+focus: "17 Oct: localfold; nothing open (outst 0/0/0), docs leaned, holding for vc."
 claims: []
 ---
 
@@ -21,18 +21,13 @@ _(none)_
 
 ## Holds
 
-- Resume state for hv compact, 17 Oct (3rd): ST0027 is closed and WP-07 is done (app half at 90afe01; the RunnerTests fix 0f0868e green in the window at 0238962; vc re-dispatched menuz-app). Nothing of cc is in flight. Condition: after the compact, /in-session and pickup, then the next work on vc's word after 2.14.0.
+- Localfold, 17 Oct (4th): nothing of cc in flight; outst is 0/0/0 (0066 closed by dc, b52ca0e). Condition: vc names cc's next item.
 
 ## Watch-outs
 
-- One suite at a time with vc, and commits by explicit path only: vc's files have sat staged in the shared index while cc committed.
 - hv's rule: a gap in devbin's vendored release core (bin/.devbin/lib/release*) is fixed in devbin, as a default with an override, through vc to devbin-dc or devbin-2b. Never patch the vendored copy or add a Utilz-only branch. Vendored line numbers move with each devbin sweep: re-read a citation before trusting it.
-- Two claims narrowed on 2026-09-22 by the same mechanism, and it is worth suspecting a third: the INSTRUMENT measured layout extent (or one fixture) and the CLAIM was written about painted extent (or every reel). They agree on every case anybody looks at, so nothing reports the gap until something else goes looking. 0054 and 0055 are both closed that way, and the caveat lives beside the check rather than in the issue alone.
 - A green test suite says nothing about Rust formatting or clippy: run bin/devbin check all before handing a Rust change to vc, to CI or into a cut. Six cargo fmt diffs from cc 504825a rode five commits into main on 2026-09-22 under a green 13/13 thread and a green estate, reddened CI and would have refused the cut at step 5. cargo fmt --check fails the CI step AHEAD of clippy, so drift HIDES the clippy verdict rather than adding to it (0059, 0060). check all fixes with bin/devbin fmt rust; note its critic arm reads STAGED files only.
-- To learn what a command will do, RUN it in its read-only mode (--dry-run, --check, status). Sourcing its library functions into a shell of your own measures YOUR shell, not the command: cc answered whether the vendored core resolves 2.12.0 by sourcing release_versions into a plain bash -c, got 2.12.0 and success, and was wrong -- the handler runs under set -euo pipefail (cmd/release:24) and release_versions ends its loop with is_semver && printf, which v2.6.1 (last in byte order) leaves at 1. release --minor --dry-run stops at step 1. AND: vc ran cc s probe verbatim and agreed, which is one measurement taken twice, not a confirmation. A repeat of a method cannot find a method error.
 - The pre-commit gate is tracked in .githooks/ now, read through core.hooksPath (issue 0064, 39b0af4). It REFUSES a staged .md or .rs that is not formatted and never rewrites it, so fix with prettier --write <file> or bin/devbin fmt rust, git add, and commit again. Edits to .git/hooks/ are no longer read. What still holds from the old watch-out 5: a store body (an issue, a WP body) must be prettier-stable before intent set, or its view drifts and the doctor gate refuses every later commit.
-- Before saying the tree is clean, run git status --porcelain --untracked-files=all with NO pathspec and quote the count. On 2026-09-22 cc checked -- docs/ only and twice told vc and hv nothing of its was in the tree, while its board, wip view and four canon events sat uncommitted, and those events alone would have refused the cut at step 2. The narrow answer was true; the claim was wider than what was measured.
-- A linked worktree has no Intent gate: .githooks/pre-commit.intent (and the post-* carriers) are git-ignored, so a commit there is refused with GATE ABSENT. Copy the primary's .githooks/*.intent into the worktree before committing, so the commit runs through the real gate; never route around it.
 
 ## Decisions
 
