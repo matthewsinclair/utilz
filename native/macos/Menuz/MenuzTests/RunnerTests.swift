@@ -126,33 +126,62 @@ final class RunnerTests {
     #expect(lines.last?.contains("run 5 exit 0 in ") == true, "\(lines)")
   }
 
-  @Test("the app's writes and an appender's interleave, overlapping in time, with no line lost")
+  @Test("the app's writes land between an appender's, at the one append point, and no line of either is lost")
   func interleave() async throws {
-    let count = 2000
+    let half = 1000
+    let count = 2 * half
+    let flag = dir.appendingPathComponent("go-on").path
     // An appender as a wrapper is one: zsh with no startup files, its stdout
-    // the log opened O_APPEND.
+    // the log opened O_APPEND. It prints its first half, waits for the flag,
+    // then prints its second half.
     let appender = Process()
     appender.executableURL = URL(fileURLWithPath: "/bin/zsh")
-    appender.arguments = ["-f", "-c", "for i in {1..\(count)}; do print w$i; done"]
+    appender.arguments = [
+      "-f", "-c",
+      "for i in {1..\(half)}; do print w$i; done; while [[ ! -e $1 ]]; do sleep 0.01; done; "
+        + "for i in {\(half + 1)..\(count)}; do print w$i; done",
+      "zsh", flag,
+    ]
     let descriptor = open(log, O_WRONLY | O_APPEND | O_CREAT, 0o644)
     try #require(descriptor >= 0)
     appender.standardOutput = FileHandle(fileDescriptor: descriptor, closeOnDealloc: true)
     try appender.run()
+    // The appender never waits past this test, whatever it finds.
+    defer {
+      FileManager.default.createFile(atPath: flag, contents: nil)
+      appender.waitUntilExit()
+    }
     let file = log
-    let failures = await Task.detached {
-      (1...count).compactMap { AppLog.append("a\($0)\n", to: file) }
+    // The race: the app's first half against the appender's, unsynchronised.
+    let raced = await Task.detached {
+      (1...half).compactMap { AppLog.append("a\($0)\n", to: file) }
     }.value
+    // The constructed overlap: the app's second half while the appender is
+    // between its two halves, still holding the log open.
+    let paused = await eventually { self.logText().contains("w\(half)\n") }
+    try #require(paused, "the appender never printed w\(half)")
+    let between = await Task.detached {
+      (half + 1...count).compactMap { AppLog.append("a\($0)\n", to: file) }
+    }.value
+    FileManager.default.createFile(atPath: flag, contents: nil)
     appender.waitUntilExit()
-    #expect(failures == [])
+    #expect(appender.terminationStatus == 0)
+    #expect(raced == [])
+    #expect(between == [])
     let lines = logText().split(separator: "\n").map(String.init)
     let missingApp = (1...count).filter { !lines.contains("a\($0)") }
     let missingRun = (1...count).filter { !lines.contains("w\($0)") }
     #expect(missingApp.isEmpty, "app lines lost: \(missingApp.count)")
     #expect(missingRun.isEmpty, "appender lines lost: \(missingRun.count)")
-    // They overlapped: some app line lies between the appender's first and last.
-    let first = lines.firstIndex(of: "w1") ?? 0
-    let last = lines.lastIndex(of: "w\(count)") ?? 0
-    #expect(lines[first...last].contains { $0.hasPrefix("a") }, "the two writers did not overlap")
+    // The app's second half lies between the appender's two halves, so both
+    // wrote at one append point and neither overwrote the other.
+    let pause = try #require(lines.firstIndex(of: "w\(half)"))
+    let resume = try #require(lines.firstIndex(of: "w\(half + 1)"))
+    let outside = (half + 1...count).filter { n in
+      guard let at = lines.firstIndex(of: "a\(n)") else { return false }
+      return at < pause || at > resume
+    }
+    #expect(outside.isEmpty, "app lines outside the appender's pause: \(outside.count)")
   }
 }
 
