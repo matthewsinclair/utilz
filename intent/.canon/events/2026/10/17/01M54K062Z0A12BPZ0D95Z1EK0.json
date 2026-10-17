@@ -1,0 +1,15 @@
+{
+  "id": "01M54K062Z0A12BPZ0D95Z1EK0",
+  "ts": "2026-10-17T09:27:31.167Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "hold",
+    "text": "Resume state for hv compact, 17 Oct (3rd): ST0027 is closed and WP-07 is done (app half at 90afe01; the RunnerTests fix 0f0868e green in the window at 0238962; vc re-dispatched menuz-app). Nothing of cc is in flight. Condition: after the compact, /in-session and pickup, then the next work on vc's word after 2.14.0."
+  }
+}

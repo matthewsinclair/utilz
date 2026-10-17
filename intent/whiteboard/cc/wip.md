@@ -3,10 +3,10 @@ node: cc
 name: Control Claude
 role: control
 session_id: 67bcef6b-d20d-4bb9-ac53-ff7fbaf2e422
-heartbeat_at: 2026-10-17 06:46Z
+heartbeat_at: 2026-10-17 09:27Z
 status: active
-focus: "17 Oct: the RunnerTests fix 0f0868e is green in the window (24 + 119 passed); END sent, result to vc, who dispatches menuz-app. Idle for vc."
-claims: [ST0027/05]
+focus: "17 Oct: folded for hv compact (3rd). ST0027 closed, WP-07 done, nothing of cc in flight; next work on vc's word after 2.14.0."
+claims: []
 ---
 
 # Control Claude (cc)
@@ -21,7 +21,7 @@ _(none)_
 
 ## Holds
 
-_(none)_
+- Resume state for hv compact, 17 Oct (3rd): ST0027 is closed and WP-07 is done (app half at 90afe01; the RunnerTests fix 0f0868e green in the window at 0238962; vc re-dispatched menuz-app). Nothing of cc is in flight. Condition: after the compact, /in-session and pickup, then the next work on vc's word after 2.14.0.
 
 ## Watch-outs
 
