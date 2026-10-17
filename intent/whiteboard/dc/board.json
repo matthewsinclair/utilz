@@ -5,9 +5,9 @@
     "name": "DevX Claude",
     "role": "devx",
     "session_id": "b6f789ca-4627-4a74-b4cd-bb7c07de9f46",
-    "heartbeat_at": "2026-10-17T09:27:38.597Z",
+    "heartbeat_at": "2026-10-17T10:24:32.516Z",
     "status": "active",
-    "focus": "Fold for hv compact, 17 Oct 07:3xZ: hv cutting 2.14.0; done.md drafted on disk, tag values to fill from git and gh; no commit on main until vc says the release core finished; board on vc \"fold commits now\", done.md on vc \"land done.md\"; todo 1 after the tap push.",
+    "focus": "Idle, 17 Oct 10:3xZ: 2.14.0 released, done.md landed (57e336e, dd415a6), installed here (utilz 2.14.0, Menuz build 1214 at 069e0f38); waiting on vc.",
     "claims": [],
     "recorded_at": "2026-10-16T04:57:46.520Z",
     "migrated_at": "2026-10-16T04:57:46.520Z"
@@ -84,7 +84,8 @@
       "kind": "hold",
       "seq": 7,
       "text": "Resume state, 17 Oct 07:3xZ fold: hv is running bin/devbin release --minor for 2.14.0 (output tmp/release/20261017-0924.RELEASE.out; release commit 069e0f3 seen, tag not yet). tmp/dc-st0027/done-2.14.0.md is drafted, vc-approved; filled: close c14d100 (+4c5c17e views), close run 39011934896 green, flake fix 0f0868e, AC-07.4 run 39011202584. Pending, with source: @TAG_SHA and @DATE from git tag 2.14.0 (fill on disk); @PUSH_RUN and @TAG_RUN from gh run list on the tag commit, with verdicts (fill on disk); @TAP and @ASSET on vc word only (tap after hv pushes it, asset after hv store-creds, else write as pending). NO COMMIT on main until vc says the release core finished (its push carries main head). Board commits on vc \"fold commits now\"; done.md lands on vc \"land done.md\": into intent/done.md above 2.13.0, verblock v0.14, by path, prettier, SHA to vc.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-10-17T10:24:32.425Z",
       "recorded_at": "2026-10-16T16:48:05.416Z",
       "edited_at": "2026-10-17T09:27:38.135Z"
     },
@@ -119,7 +120,8 @@
       "kind": "todo",
       "seq": 1,
       "text": "After the 2.14.0 tap push, on vc word only (hv asked, 17 Oct): install 2.14.0 on this Mac so utilz menuz and utilz arngz work from the command line. brew upgrade utilz, utilz doctor, utilz menuz install (from the release asset), then check utilz menuz --version and utilz arngz --version read the new versions. Separately, tmp/dc-st0027/kovacs-2.14.0.md (the kovacs runbook, route A, backup branch kovacs-pre-2.14.0 at 5dcc317) is accepted by vc and staged with kovacs-sysadm via intent-vc, to run on vc tag message; it stays on disk, uncommitted; dc runs nothing on kovacs.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-10-17T10:24:32.338Z",
       "recorded_at": "2026-10-17T04:59:44.378Z",
       "edited_at": "2026-10-17T09:27:38.437Z"
     }
