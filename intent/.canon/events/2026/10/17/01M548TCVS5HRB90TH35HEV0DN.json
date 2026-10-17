@@ -1,0 +1,15 @@
+{
+  "id": "01M548TCVS5HRB90TH35HEV0DN",
+  "ts": "2026-10-17T06:29:35.737Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "hold",
+    "text": "The build window \"utilz-cc's build and test 2\" (one utilz menuz test at 0f0868e) is booked with intent-vc and held under hv's no-new-START rule across the compacts; devbin's landing suite, and kovacs R1 if ready, go first. Condition: intent-vc sends START by name."
+  }
+}

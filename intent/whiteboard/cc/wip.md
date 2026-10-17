@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: 67bcef6b-d20d-4bb9-ac53-ff7fbaf2e422
-heartbeat_at: 2026-10-17 06:26Z
+heartbeat_at: 2026-10-17 06:46Z
 status: active
-focus: "17 Oct: folded for hv compact (2nd). WP-07 app half at 90afe01; flake fix 0f0868e untested; next: build window, utilz menuz test, SHA to vc."
+focus: "17 Oct: the RunnerTests fix 0f0868e is green in the window (24 + 119 passed); END sent, result to vc, who dispatches menuz-app. Idle for vc."
 claims: [ST0027/05]
 ---
 
@@ -21,7 +21,7 @@ _(none)_
 
 ## Holds
 
-- Resume state for hv compact, 17 Oct (2nd): ST0027 WP-07 app half at 90afe01 (both remotes); the RunnerTests flake fix at 0f0868e is UNTESTED. Next: ask intent-vc by name for the build window, utilz menuz test, END, commit by path, SHA to vc (who re-dispatches menuz-app). Notes at tmp/cc/resume.md. Condition: after the compact, /in-session and pickup.
+_(none)_
 
 ## Watch-outs
 

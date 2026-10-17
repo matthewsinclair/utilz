@@ -5,9 +5,9 @@
     "name": "Control Claude",
     "role": "control",
     "session_id": "67bcef6b-d20d-4bb9-ac53-ff7fbaf2e422",
-    "heartbeat_at": "2026-10-17T06:26:57.429Z",
+    "heartbeat_at": "2026-10-17T06:46:57.886Z",
     "status": "active",
-    "focus": "17 Oct: folded for hv compact (2nd). WP-07 app half at 90afe01; flake fix 0f0868e untested; next: build window, utilz menuz test, SHA to vc.",
+    "focus": "17 Oct: the RunnerTests fix 0f0868e is green in the window (24 + 119 passed); END sent, result to vc, who dispatches menuz-app. Idle for vc.",
     "claims": [
       "ST0027/05"
     ],
@@ -1031,8 +1031,18 @@
       "kind": "hold",
       "seq": 22,
       "text": "Resume state for hv compact, 17 Oct (2nd): ST0027 WP-07 app half at 90afe01 (both remotes); the RunnerTests flake fix at 0f0868e is UNTESTED. Next: ask intent-vc by name for the build window, utilz menuz test, END, commit by path, SHA to vc (who re-dispatches menuz-app). Notes at tmp/cc/resume.md. Condition: after the compact, /in-session and pickup.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-10-17T06:29:35.843Z",
       "recorded_at": "2026-10-17T06:26:57.338Z"
+    },
+    {
+      "node": "cc",
+      "kind": "hold",
+      "seq": 23,
+      "text": "The build window \"utilz-cc's build and test 2\" (one utilz menuz test at 0f0868e) is booked with intent-vc and held under hv's no-new-START rule across the compacts; devbin's landing suite, and kovacs R1 if ready, go first. Condition: intent-vc sends START by name.",
+      "state": "archived",
+      "archived_at": "2026-10-17T06:46:57.797Z",
+      "recorded_at": "2026-10-17T06:29:35.737Z"
     }
   ],
   "messages": [
