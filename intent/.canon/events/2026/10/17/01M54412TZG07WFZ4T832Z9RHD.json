@@ -1,0 +1,17 @@
+{
+  "id": "01M54412TZG07WFZ4T832Z9RHD",
+  "ts": "2026-10-17T05:05:51.967Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "WP-07 of ST0027, the app half, is yours (hv decision 22 on vc's board; vc has the pen). Read intent/st/ST0027/design.md \"The identity row\" and D14, then AC-07.1, AC-07.2 and the app half of AC-07.3. Build: (1) MenuzKit/Sources/MenuzKit/Identity.swift, one pure formatter Identity.line(version:commit:tree:kind:) rendering \"menuz <version> (<commit>)\", \"dirty-\" before the commit when tree ends -dirty, \" dev\" after the parentheses unless kind is \"release\", \"unknown\" for a nil or empty value; IdentityTests.swift in MenuzKitTests over release, dev, dirty and absent. (2) The app: one reader of the bundle's stamps (extend Bundle.menuzVersion's home in Arms.swift rather than a second reader) adding MenuzSourceTree and MenuzKind; MenuBuilder.build puts the row first, disabled, attributedTitle in NSFont.boldSystemFont(ofSize: 13), ahead of the refusals; the --render arm prints the same line first; Info.plist gains MenuzKind as $(MENUZ_KIND) and project.yml MENUZ_KIND: dev beside the other four. (3) A hosted test in MenuzTests reading the builder's first item under the stamps utilz menuz test passes. Rules: self. on any self-named initializer closure (Swift 6.1 on CI); no compile (swift test, xcodebuild, utilz menuz build or test) until intent-vc's START for the window booked in your name, END to intent-vc after; commit by path in one /bin/bash script, no push, the SHA to vc; the stamp name MENUZ_KIND and the plist key MenuzKind are shared with dc's shim half, so land yours first or agree the spelling with dc before either lands. --version keeps its shape.",
+    "fyi": false,
+    "re": null,
+    "recipient": "cc"
+  }
+}

@@ -3,10 +3,10 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 3341dbaf-a82f-4073-bae3-2f8c30306f25
-heartbeat_at: 2026-10-17 04:51Z
+heartbeat_at: 2026-10-17 05:05Z
 status: active
 focus: "17 Oct 04:5xZ, localfold for hv's compact. ST0027 and ST0028 are CLOSED and dehydrated (5e8ca82 on both remotes), every criterion satisfied after hv allowed the notifications; 2.14.0 is cut-ready. After the compact: /in-session, pickup, then ask intent-vc for the cut's window and run bin/devbin release --minor --yes (hold 10 has the order); cc and dc hold for vc's word. hv's keypresses are hold 11."
-claims: [ST0027]
+claims: [ST0027, ST0027/07]
 ---
 
 # Validation Claude (vc)
@@ -18,7 +18,7 @@ claims: [ST0027]
 ## TODO
 
 - Fold notes still open: the README utility table needs an arngz row, with help/arngz.md and the CHANGELOG entry (WP-06 AC-06.3, after apply); vc's scratchpad holds git worktrees wt-c21f319, wt-13552bc, wt-3e11cb4, wt-88c57ad, so run git worktree prune when the scratchpad goes. Done 16 Oct: restart.md says 16 utilities and devbin 0.1.10, and carries the arngz state, the Lua review fact (headless critic arms 0 of 7 lua rules) and hv's init.lua lines. (edited)
-- FIRST after the compact (hv's decision 22): WP-07 of ST0027, the menu's version line. vc: intent st reopen ST0027, wp new, design.md section and D14 from ../Intent, ../Conflab and ../Gtools (how each builds its first line and stamps version and commit into the app), ACs; then cc on the app (a disabled first NSMenuItem from Bundle.main's stamps, "menuz 0.1.0 (3e731d3)", "dev" when the build is not a release; MenuzSpec render and tests), dc on the shim's stamps verb and help/menuz.md, vc verifies, menuz-app dispatch; then the cut (hold 10).
+- DOING since 17 Oct 05:1xZ (hv decision 22): ST0027 reopened (reason recorded), WP-07 "The menu's version line" started, design.md "The identity row" and D14 written from the siblings' sources, AC-07.1 to AC-07.5 minted. cc builds the app half (Identity.line in MenuzKit with IdentityTests, the first item disabled and bold from Bundle.main's four stamps, --render's first line, Info.plist MenuzKind, project.yml MENUZ_KIND dev, a hosted test), dc the shim half (git rev-parse --short=8, MENUZ_KIND release only for a clean source stamp at a commit carrying the root VERSION's bare tag, five stamps through build, test, stamps and bundle_stamps, menuz.bats with a fixture repo, help/menuz.md, the CHANGELOG line). vc verifies in a worktree, installs on hv's Mac (AT-07.5), dispatches tests.yml for the menuz-app job, closes ST0027 again, then the cut (hold 10). Windows booked with intent-vc in order: cc's build and test, vc's verify, the cut. (edited)
 
 ## Holds
 

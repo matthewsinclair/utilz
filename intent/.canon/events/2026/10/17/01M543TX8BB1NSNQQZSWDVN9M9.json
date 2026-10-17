@@ -1,0 +1,16 @@
+{
+  "id": "01M543TX8BB1NSNQQZSWDVN9M9",
+  "ts": "2026-10-17T05:02:29.644Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "st.reopen",
+  "subject": {
+    "type": "thread",
+    "id": "ST0027"
+  },
+  "payload": {
+    "from": "completed",
+    "reason": "hv's decision 22 (17 Oct): the menu's first line must name the build, 'menuz <version> (<commit>)' with 'dev' for a build that is not a release, as Intent.app's, Gtools.app's and Conflab.app's do; WP-07 builds it before the 2.14.0 cut",
+    "to": "wip"
+  }
+}

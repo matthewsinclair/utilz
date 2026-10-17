@@ -1,0 +1,16 @@
+{
+  "id": "01M54412N03Z46MW6AFXESANQZ",
+  "ts": "2026-10-17T05:05:51.776Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "todo",
+    "seq": 38,
+    "text": "DOING since 17 Oct 05:1xZ (hv decision 22): ST0027 reopened (reason recorded), WP-07 \"The menu's version line\" started, design.md \"The identity row\" and D14 written from the siblings' sources, AC-07.1 to AC-07.5 minted. cc builds the app half (Identity.line in MenuzKit with IdentityTests, the first item disabled and bold from Bundle.main's four stamps, --render's first line, Info.plist MenuzKind, project.yml MENUZ_KIND dev, a hosted test), dc the shim half (git rev-parse --short=8, MENUZ_KIND release only for a clean source stamp at a commit carrying the root VERSION's bare tag, five stamps through build, test, stamps and bundle_stamps, menuz.bats with a fixture repo, help/menuz.md, the CHANGELOG line). vc verifies in a worktree, installs on hv's Mac (AT-07.5), dispatches tests.yml for the menuz-app job, closes ST0027 again, then the cut (hold 10). Windows booked with intent-vc in order: cc's build and test, vc's verify, the cut."
+  }
+}

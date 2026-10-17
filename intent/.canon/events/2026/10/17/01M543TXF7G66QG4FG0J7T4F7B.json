@@ -1,0 +1,15 @@
+{
+  "id": "01M543TXF7G66QG4FG0J7T4F7B",
+  "ts": "2026-10-17T05:02:29.864Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wp.new",
+  "subject": {
+    "type": "wp",
+    "id": "ST0027/07"
+  },
+  "payload": {
+    "scope": "S",
+    "title": "The menu's version line"
+  }
+}
