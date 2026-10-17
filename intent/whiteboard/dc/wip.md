@@ -3,9 +3,9 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: b6f789ca-4627-4a74-b4cd-bb7c07de9f46
-heartbeat_at: 2026-10-17 04:56Z
+heartbeat_at: 2026-10-17 06:26Z
 status: active
-focus: "Folded for hv compact, 17 Oct: hold 7 waits on the 2.14.0 tag for done.md; after the compact, in-session, pickup, hold for vc."
+focus: "Folded for hv compact, 17 Oct 06:2xZ: WP-07 shim and docs at 5f151ab, pushed; hold 7 waits on the 2.14.0 tag for done.md (with WP-07); todo 1, the install on this Mac, after the tap push; after the compact, in-session, pickup, hold for vc."
 claims: []
 ---
 
@@ -21,7 +21,7 @@ _(none)_
 
 ## Holds
 
-- Resume state, 17 Oct fold: the 2.14.0 tag is not yet cut; vc names it. Then fill tmp/dc-st0027/done-2.14.0.md (NOTES.md last section is the resume): the tag commit, the cut push and tag runs, the asset after hv store-creds, hv logout confirmation, AT-06.4 (hv allowed the notices; vc runs it), threads and issues closed, the tap; land it in intent/done.md above 2.13.0, verblock v0.14, by path. Done and pushed: WP-05 docs 4534225, notice words c41a7ae 25b79ef, menuz-app log on failure e07f462, error-lines words e854413; closing code 4952112; menuz-app green 38972250508 (AC-05.3); kovacs clean at 6fe0a94 and on both later shim and docs commits. Each landing: prettier, no /Users/ outside /Users/you/, kovacs-full-new.sh, commit by path, SHA to vc. (edited)
+- Resume state, 17 Oct 06:2xZ fold: the 2.14.0 tag is not yet cut; vc names it. Then fill tmp/dc-st0027/done-2.14.0.md (NOTES.md last section is the resume): the tag commit, the cut push and tag runs, the asset after hv store-creds, hv logout confirmation, AT-06.4, threads and issues closed, the tap; and add WP-07 (hv decision 22, D14): seven work packages not six, the identity row menuz <version> (<commit>)[ dev] with dirty-, the fifth stamp MENUZ_KIND and the 8-char commit (dc shim and docs 5f151ab, cc app half 90afe01 and its interleave test fix), the menuz-app re-dispatch run for AC-07.4 (39008596471 failed on the flaky RunnerTests.interleave only). Land it in intent/done.md above 2.13.0, verblock v0.14, by path. Each landing: prettier, no /Users/ outside /Users/you/, kovacs-full-new.sh, commit by path, SHA to vc. (edited)
 
 ## Watch-outs
 
