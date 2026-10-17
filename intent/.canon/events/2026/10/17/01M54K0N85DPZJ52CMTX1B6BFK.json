@@ -1,0 +1,16 @@
+{
+  "id": "01M54K0N85DPZJ52CMTX1B6BFK",
+  "ts": "2026-10-17T09:27:46.693Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "todo",
+    "seq": 38,
+    "text": "DOING, 17 Oct 09:59Z: 2.14.0 RELEASED by hv terminal: release commit 069e0f3, annotated tag 2.14.0 on local and upstream, the release object made 09:48:53Z, CI green on the push run 39022551343 and the tag run 39022554908 (every job, menuz app included); the first run stopped at the estate gate on prez AT21 (a Chrome exit 2 under load, green alone, prez unchanged since 2.13.0), the resume was refused once by pre-flight on our fold files (stashed around the rerun, popped after). Formula bumped at d9d7478 on main, copied into the tap clone, audited clean (exit 0), committed there as 14fef4c; the tap push refused to vc (Create Public Surface), hv runs git -C $(brew --repository matthewsinclair/utilz) push origin main. NEXT: fold commits (cc, dc, vc) and done.md landed, one push; hv compacts; then after hv tap push dc todo 1 (brew upgrade utilz here, doctor, utilz menuz install, versions); the kovacs runbook Report through intent-vc; Menuz.app.zip after hv store-creds (utilz menuz build --release in a window, app-sign, app-notarize, app-verify, publish); the devbin fleet sweep to 0.1.11 after that."
+  }
+}

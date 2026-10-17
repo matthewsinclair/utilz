@@ -5,9 +5,9 @@
     "name": "Validation Claude",
     "role": "validation",
     "session_id": "3341dbaf-a82f-4073-bae3-2f8c30306f25",
-    "heartbeat_at": "2026-10-17T06:32:03.375Z",
+    "heartbeat_at": "2026-10-17T09:28:18.351Z",
     "status": "active",
-    "focus": "17 Oct 06:3xZ, post-compact. WP-07 (the identity row, hv decision 22) built and verified on this Mac: shim 5f151ab, app 90afe01, the installed build 1200 shows menuz 0.1.0 (90afe018) dev. OPEN: the menuz-app dispatch is red on a RunnerTests timing flake; cc tests its fix 0f0868e in a window booked third at intent-vc (after devbin landing suite and kovacs R1; START only after hv says the compacts are done); then vc re-dispatches, mints AT-07.1 to AT-07.5, closes ST0027, dehydrates, then the cut (hold 10). Folded everywhere: Intent d23c4d668, Devbin c13052dc, Utilz 35f6c09.",
+    "focus": "17 Oct 09:3xZ, localfold for hv compact while hv runs the 2.14.0 cut in hv terminal (tmp/release/20261017-0924.RELEASE.out; the release commit 069e0f3 is made, the gates run on it; the release core is refused in vc session). ST0027 CLOSED at c14d100 (WP-07 the identity row), CI green on main at the close, the dry run green at 5214f2e. After the compact: /in-session, pickup; when the tag 2.14.0 is in and CI has answered: fold commits for cc and dc on vc word, vc pushes once; then tools/formula-bump 2.14.0 by path, the formula into the tap clone and brew audit (the tap push is hv), done.md values to dc (\"land done.md\"), the kovacs runbook trigger through intent-vc (\"Utilz 2.14.0 tagged at <sha>, run the kovacs runbook\"), dc todo 1 the install here; Menuz.app.zip after hv store-creds. Intent 3.2.4 and Devbin 0.1.11 are cut-ready for hv terminal (decision 23, todo 39, hold 11).",
     "claims": [
       "ST0027",
       "ST0027/07"
@@ -1289,10 +1289,10 @@
       "node": "vc",
       "kind": "hold",
       "seq": 10,
-      "text": "The cut of 2.14.0 under decisions 20 and 21, AFTER WP-07 closes (state at the 06:2xZ fold of 17 Oct): ST0027 is WIP again for WP-07; the shim half 5f151ab and the app half 90afe01 are on both remotes and verified on this Mac (install green, the row shown); OPEN: the menuz-app dispatch is red on a RunnerTests timing flake, cc's fix banked untested; then re-dispatch, mint-at07.sh, AC-07.4, st done ST0027, dehydrate, commit the close by path, push. ORDER for the cut after that: (1) ask intent-vc by name for the cut window (its gates check all and the estate, about 10 minutes; CI's wait off the box); (2) bin/devbin release --minor --yes on main; NOTHING PUSHED while step 11 waits on CI; read the release commit, the tag 2.14.0, both pushes, the release object and CI's answer; (3) tools/formula-bump 2.14.0, commit packaging/homebrew/utilz.rb by path, copy it into $(brew --repository matthewsinclair/utilz)/Formula/utilz.rb, brew audit --strict matthewsinclair/utilz/utilz; the tap commit and push are hv's, after publish; (4) dc fills done.md's 2.14.0 @CLOSE values and lands by path, vc pushes; (5) after hv's store-creds: utilz menuz build --release in a window, bin/devbin macos app-sign, app-notarize, app-verify, publish (Menuz.app.zip on the release before the tap push); (6) then dc's todo 1, the install of 2.14.0 on this Mac, on vc's word. Rules in force: compiles in windows booked with intent-vc; suite-sized bats outside Intent windows; commits by path; vc pushes; /usr/bin/log; single-quoted wb texts.",
+      "text": "DONE 17 Oct 09:5xZ: 2.14.0 cut by hv terminal (release 069e0f3, tag on both remotes, CI green). Left of the order: the tap push (hv), dc done.md landed, the Menuz.app.zip asset after hv store-creds, dc todo 1 the install here after the tap push. Kept for the record: the cut order under decisions 20 and 21 was (1) window from intent-vc, (2) bin/devbin release on main with nothing pushed while step 11 waits on CI, (3) tools/formula-bump, the formula by path, the tap copy and audit, (4) done.md by dc, (5) the signed asset, (6) the install here.",
       "state": "live",
       "recorded_at": "2026-10-16T12:21:33.315Z",
-      "edited_at": "2026-10-17T06:26:33.490Z"
+      "edited_at": "2026-10-17T09:59:30.923Z"
     },
     {
       "node": "vc",
@@ -1359,10 +1359,10 @@
       "node": "vc",
       "kind": "todo",
       "seq": 38,
-      "text": "DOING, 17 Oct 07:0xZ: ST0027 CLOSED at c14d100 (WP-07 done, AT-07.1 to AT-07.5 green, AC-07.4 on dispatch 39011202584 green at 0238962, thread dehydrated) with the views and WP-07 objective at 4c5c17e, both on both remotes; a second dispatch 39011935654 runs on 4c5c17e for the two AT-id comment lines in the Swift tests. NEXT: the Mac window \"Utilz gates at 4c5c17e\" booked at intent-vc by name (check all and the estate) behind devbin dry run and kovacs R1; then the release core for 2.14.0 if this session is permitted to run it, else Utilz is cut-ready and the command goes in hv inbox. The permission layer (auto-mode classifier, Blind Apply) refused two of my messages that named a release with --yes: the authorisation to devbin-vc (Devbin now cut-ready for hv) and the cut-window ask (re-asked as the gates window). After the cut: hold 10 steps 3 to 6, the done.md values to dc, the kovacs runbook trigger through intent-vc, dc todo 1 here.",
+      "text": "DOING, 17 Oct 09:59Z: 2.14.0 RELEASED by hv terminal: release commit 069e0f3, annotated tag 2.14.0 on local and upstream, the release object made 09:48:53Z, CI green on the push run 39022551343 and the tag run 39022554908 (every job, menuz app included); the first run stopped at the estate gate on prez AT21 (a Chrome exit 2 under load, green alone, prez unchanged since 2.13.0), the resume was refused once by pre-flight on our fold files (stashed around the rerun, popped after). Formula bumped at d9d7478 on main, copied into the tap clone, audited clean (exit 0), committed there as 14fef4c; the tap push refused to vc (Create Public Surface), hv runs git -C $(brew --repository matthewsinclair/utilz) push origin main. NEXT: fold commits (cc, dc, vc) and done.md landed, one push; hv compacts; then after hv tap push dc todo 1 (brew upgrade utilz here, doctor, utilz menuz install, versions); the kovacs runbook Report through intent-vc; Menuz.app.zip after hv store-creds (utilz menuz build --release in a window, app-sign, app-notarize, app-verify, publish); the devbin fleet sweep to 0.1.11 after that.",
       "state": "live",
       "recorded_at": "2026-10-17T04:55:55.931Z",
-      "edited_at": "2026-10-17T07:01:05.364Z"
+      "edited_at": "2026-10-17T09:59:30.597Z"
     },
     {
       "node": "vc",

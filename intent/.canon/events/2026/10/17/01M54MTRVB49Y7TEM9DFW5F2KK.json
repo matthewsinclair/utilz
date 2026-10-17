@@ -1,0 +1,16 @@
+{
+  "id": "01M54MTRVB49Y7TEM9DFW5F2KK",
+  "ts": "2026-10-17T09:59:30.923Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "hold",
+    "seq": 10,
+    "text": "DONE 17 Oct 09:5xZ: 2.14.0 cut by hv terminal (release 069e0f3, tag on both remotes, CI green). Left of the order: the tap push (hv), dc done.md landed, the Menuz.app.zip asset after hv store-creds, dc todo 1 the install here after the tap push. Kept for the record: the cut order under decisions 20 and 21 was (1) window from intent-vc, (2) bin/devbin release on main with nothing pushed while step 11 waits on CI, (3) tools/formula-bump, the formula by path, the tap copy and audit, (4) done.md by dc, (5) the signed asset, (6) the install here."
+  }
+}
