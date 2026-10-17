@@ -71,7 +71,7 @@
       "title": "The menu's version line",
       "scope": "S",
       "status": "done",
-      "objective": "",
+      "objective": "The menu's first item names the build as the sibling menubar apps do: menuz <version> (<commit>), dirty- before the commit of a dirty source and dev after the parentheses unless the build is a release, read from the bundle's stamps (D14); the shim stamps MENUZ_KIND and the eight-character MENUZ_COMMIT, --render prints the row first, and the help and the CHANGELOG say so.",
       "body": "",
       "preamble": ""
     }
