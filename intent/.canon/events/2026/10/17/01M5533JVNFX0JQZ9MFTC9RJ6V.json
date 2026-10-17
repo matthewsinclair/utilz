@@ -1,0 +1,16 @@
+{
+  "id": "01M5533JVNFX0JQZ9MFTC9RJ6V",
+  "ts": "2026-10-17T14:08:59.765Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "todo",
+    "seq": 38,
+    "text": "DOING, 17 Oct 14:08Z: nothing of Utilz is in flight; folded at EOD. 2.14.0 is released (069e0f3), tapped (14fef4c), the signed Menuz.app.zip on the release, installed here (keg 2.14.0, the app build 1214 with the release row) and on kovacs (069e0f38 on main, doctor 7/7); done.md landed; the devbin sweep to 0.1.11 in (5a15742); issue 0066 fixed (76ffed8, one switch vocabulary under decision 24, prez 2.5.1) and closed (b52ca0e); canon at Intent 3.2.4 applied (ab1d603); relink.bats AT17 GNU-safe (fd2a621, CI 39037952353 green); the 3.2.4 fleet sweep step run (todo.md identical, index rebuilt, store 26.1 MB before and after, doctor 0 findings, nothing to commit). The kovacs linuxbrew shellenv is DONE (hv .zprofile lines 12-13, measured by intent-vc). intent outstanding 0/0/0. CHANGELOG has [2.14.1] - unreleased with the 0066 and relink fixes; the next cut is hv terminal (the release core is refused in this session; the dry run is the proof). hv hand left: the logout and login confirmation for AT-05.2 note. Intent 3.2.4 released with its site at v3.2.4; Devbin 0.1.11 released and installed from its tap on both machines."
+  }
+}

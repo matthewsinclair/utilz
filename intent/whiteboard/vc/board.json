@@ -5,9 +5,9 @@
     "name": "Validation Claude",
     "role": "validation",
     "session_id": "3341dbaf-a82f-4073-bae3-2f8c30306f25",
-    "heartbeat_at": "2026-10-17T09:28:18.351Z",
+    "heartbeat_at": "2026-10-17T14:08:59.529Z",
     "status": "active",
-    "focus": "17 Oct 09:3xZ, localfold for hv compact while hv runs the 2.14.0 cut in hv terminal (tmp/release/20261017-0924.RELEASE.out; the release commit 069e0f3 is made, the gates run on it; the release core is refused in vc session). ST0027 CLOSED at c14d100 (WP-07 the identity row), CI green on main at the close, the dry run green at 5214f2e. After the compact: /in-session, pickup; when the tag 2.14.0 is in and CI has answered: fold commits for cc and dc on vc word, vc pushes once; then tools/formula-bump 2.14.0 by path, the formula into the tap clone and brew audit (the tap push is hv), done.md values to dc (\"land done.md\"), the kovacs runbook trigger through intent-vc (\"Utilz 2.14.0 tagged at <sha>, run the kovacs runbook\"), dc todo 1 the install here; Menuz.app.zip after hv store-creds. Intent 3.2.4 and Devbin 0.1.11 are cut-ready for hv terminal (decision 23, todo 39, hold 11).",
+    "focus": "17 Oct 14:08Z, localfold at EOD. Utilz 2.14.0 released, tapped, signed and installed on rhad and kovacs; done.md landed; the devbin sweep to 0.1.11 in; issue 0066 fixed and closed; canon at Intent 3.2.4 applied; relink.bats made GNU-safe; the 3.2.4 fleet sweep step run with nothing to commit (store 26.1 MB, doctor 0 findings). intent outstanding 0/0/0. cc (debaa12) and dc (eec2d67) folded and holding; kovacs is down for the night, Intent and Devbin released. After the compact: /in-session, pickup, hold for hv; the next cut is hv terminal from [2.14.1] - unreleased; hv one hand left: the logout and login confirming the menu returns (AT-05.2 note).",
     "claims": [
       "ST0027",
       "ST0027/07"
@@ -1359,10 +1359,10 @@
       "node": "vc",
       "kind": "todo",
       "seq": 38,
-      "text": "DOING, 17 Oct 13:54Z: nothing of Utilz is in flight. 2.14.0 is released, tapped (14fef4c), the signed Menuz.app.zip on the release, installed here (keg 2.14.0, the app build 1214 with the release row) and on kovacs (069e0f38 on main, doctor 7/7); done.md landed; the devbin sweep to 0.1.11 in (5a15742); issue 0066 fixed (76ffed8, one switch vocabulary under decision 24, prez 2.5.1) and closed (b52ca0e); canon at Intent 3.2.4 applied (ab1d603: settings.json denies AGENTS.md edits, CLAUDE.md points at AGENTS.md); relink.bats AT17 made GNU-safe after the red run 39036616338 (fd2a621, link_stamps with inode and mtime, GNU stat -c first; CI green on 39037952353). intent outstanding: 0 threads, 0 work packages, 0 issues; doctor 0 findings. CHANGELOG has [2.14.1] - unreleased with the 0066 and relink fixes; the next cut is hv terminal. hv hands left: the logout and login confirmation (AT-05.2 note) and the linuxbrew shellenv line on kovacs. Intent 3.2.4 released with its site at v3.2.4; Devbin 0.1.11 released and installed from its tap on both machines.",
+      "text": "DOING, 17 Oct 14:08Z: nothing of Utilz is in flight; folded at EOD. 2.14.0 is released (069e0f3), tapped (14fef4c), the signed Menuz.app.zip on the release, installed here (keg 2.14.0, the app build 1214 with the release row) and on kovacs (069e0f38 on main, doctor 7/7); done.md landed; the devbin sweep to 0.1.11 in (5a15742); issue 0066 fixed (76ffed8, one switch vocabulary under decision 24, prez 2.5.1) and closed (b52ca0e); canon at Intent 3.2.4 applied (ab1d603); relink.bats AT17 GNU-safe (fd2a621, CI 39037952353 green); the 3.2.4 fleet sweep step run (todo.md identical, index rebuilt, store 26.1 MB before and after, doctor 0 findings, nothing to commit). The kovacs linuxbrew shellenv is DONE (hv .zprofile lines 12-13, measured by intent-vc). intent outstanding 0/0/0. CHANGELOG has [2.14.1] - unreleased with the 0066 and relink fixes; the next cut is hv terminal (the release core is refused in this session; the dry run is the proof). hv hand left: the logout and login confirmation for AT-05.2 note. Intent 3.2.4 released with its site at v3.2.4; Devbin 0.1.11 released and installed from its tap on both machines.",
       "state": "live",
       "recorded_at": "2026-10-17T04:55:55.931Z",
-      "edited_at": "2026-10-17T13:54:07.227Z"
+      "edited_at": "2026-10-17T14:08:59.765Z"
     },
     {
       "node": "vc",
