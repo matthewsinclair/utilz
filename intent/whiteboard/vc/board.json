@@ -1342,10 +1342,10 @@
       "node": "vc",
       "kind": "hold",
       "seq": 11,
-      "text": "hv's keypresses at return, in order: (1) System Settings > Notifications > Menuz: Allow (the first launch's alert was withdrawn when the hand run quit the app; macOS counts that as no; the running copy then posts); tell vc, who reruns the notice hand run for AT-06.4 and cuts 2.14.0. (2) Log out and in: the menu is back (the login item is enabled); tell vc for AT-05.2's note. (3) bin/devbin macos store-creds, then vc runs app-sign, app-notarize, app-verify and publish for the Menuz.app.zip asset. (4) DONE for 2.13.0 at 04:4xZ on 17 Oct: the tap is at 14b2e7a \"utilz 2.13.0\" (tag 2.13.0, revision 01cf76d), pushed by hv; the same for 2.14.0 after the cut (vc copies and audits the formula, hv commits and pushes). (5) .claude/settings.json's advisory: ! intent claude upgrade --apply.",
+      "text": "hv at return, 17 Oct 07:2xZ, in order: (0) THE CUT OF 2.14.0, hv terminal, this session refused the release core: cd ~/Devel/prj/Utilz && bin/devbin release v2.14.0 (the dry run at 5214f2e is green: check all, the estate, no step failed; the cut asks at step 6 and then stamps VERSION 2.14.0, commits \"release: 2.14.0\", tags 2.14.0, pushes commit and tag to local and upstream, makes the release object, waits on CI). Then tell vc, who runs tools/formula-bump 2.14.0, commits the formula by path, copies it into the tap clone and audits it, gives dc the done.md values, triggers the kovacs runbook through intent-vc, and gives dc the install here. (1) bin/devbin macos store-creds, then vc runs utilz menuz build --release in a window, app-sign, app-notarize, app-verify, publish for the Menuz.app.zip asset. (2) The tap: git commit and push in $(brew --repository matthewsinclair/utilz) after vc audits the formula (14b2e7a is 2.13.0). (3) Log out and in: the menu is back (the login item is enabled); tell vc for AT-05.2 note. (4) .claude/settings.json advisory: ! intent claude upgrade --apply. (5) Intent 3.2.4 and Devbin 0.1.11 are cut-ready for hv terminal too: their commands are in their own boards hv inboxes; devbin kovacs R1 and the Utilz kovacs runbook both wait on hv ! in the kovacs-sysadm session. Notifications were allowed at 04:4xZ.",
       "state": "live",
       "recorded_at": "2026-10-16T21:22:54.733Z",
-      "edited_at": "2026-10-17T04:46:45.578Z"
+      "edited_at": "2026-10-17T07:18:23.275Z"
     },
     {
       "node": "vc",

@@ -1,0 +1,17 @@
+{
+  "id": "01M54BM7KPFVMCX45J2N1P1KY2",
+  "ts": "2026-10-17T07:18:39.478Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc, 17 Oct 07:2xZ: UTILZ 2.14.0 IS CUT-READY FOR YOUR TERMINAL. The release core is refused in my session (the auto-mode classifier), so the one command is yours: cd ~/Devel/prj/Utilz && bin/devbin release v2.14.0. What it does (the dry run at 5214f2e is green, 07:09Z to 07:17Z: check all passed, the estate passed, no step failed): stamps VERSION 2.14.0 and dates the CHANGELOG note 2026-10-17, commits \"release: 2.14.0\", asks you at step 6, then tags 2.14.0 (annotated, the notes body), pushes the commit and the tag to local (Dropbox) and upstream (GitHub), makes the release object 2.14.0 with gh, and waits up to 20 minutes on CI. After it: tell me (or I see the tag) and I run tools/formula-bump 2.14.0, commit the formula by path, copy it into the tap clone and brew audit it; the tap commit and push are yours after that; dc fills done.md; the kovacs runbook runs through intent-vc and kovacs-sysadm (its session needs your ! for the run, as devbin R1 did); dc installs 2.14.0 here after the tap push. The signed Menuz.app.zip waits on your bin/devbin macos store-creds. ST0027 is closed (WP-07 the identity row), CI green on main at the close in both the push run and the menuz-app dispatch. Intent 3.2.4 and Devbin 0.1.11 are cut-ready for your terminal too, their commands on their own boards.",
+    "fyi": false,
+    "re": null,
+    "recipient": "hv"
+  }
+}

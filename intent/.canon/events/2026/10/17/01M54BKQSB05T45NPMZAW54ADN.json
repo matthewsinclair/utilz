@@ -1,0 +1,16 @@
+{
+  "id": "01M54BKQSB05T45NPMZAW54ADN",
+  "ts": "2026-10-17T07:18:23.275Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "hold",
+    "seq": 11,
+    "text": "hv at return, 17 Oct 07:2xZ, in order: (0) THE CUT OF 2.14.0, hv terminal, this session refused the release core: cd ~/Devel/prj/Utilz && bin/devbin release v2.14.0 (the dry run at 5214f2e is green: check all, the estate, no step failed; the cut asks at step 6 and then stamps VERSION 2.14.0, commits \"release: 2.14.0\", tags 2.14.0, pushes commit and tag to local and upstream, makes the release object, waits on CI). Then tell vc, who runs tools/formula-bump 2.14.0, commits the formula by path, copies it into the tap clone and audits it, gives dc the done.md values, triggers the kovacs runbook through intent-vc, and gives dc the install here. (1) bin/devbin macos store-creds, then vc runs utilz menuz build --release in a window, app-sign, app-notarize, app-verify, publish for the Menuz.app.zip asset. (2) The tap: git commit and push in $(brew --repository matthewsinclair/utilz) after vc audits the formula (14b2e7a is 2.13.0). (3) Log out and in: the menu is back (the login item is enabled); tell vc for AT-05.2 note. (4) .claude/settings.json advisory: ! intent claude upgrade --apply. (5) Intent 3.2.4 and Devbin 0.1.11 are cut-ready for hv terminal too: their commands are in their own boards hv inboxes; devbin kovacs R1 and the Utilz kovacs runbook both wait on hv ! in the kovacs-sysadm session. Notifications were allowed at 04:4xZ."
+  }
+}
