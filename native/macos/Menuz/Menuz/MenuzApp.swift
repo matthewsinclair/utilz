@@ -144,7 +144,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, MenuAc
 
   private func rebuild() {
     builder?.build(
-      spec: spec, refusals: refusals, realised: realised,
+      identity: Bundle.main.menuzIdentity, spec: spec, refusals: refusals, realised: realised,
       logExists: FileManager.default.fileExists(atPath: paths.logFile))
     setIcon(spec?.icon)
   }

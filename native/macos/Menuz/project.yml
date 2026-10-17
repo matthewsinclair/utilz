@@ -29,7 +29,7 @@ settings:
     ASSETCATALOG_COMPILER_GENERATE_ASSET_SYMBOLS: YES
     ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS: YES
     # The stamps. Info.plist substitutes them into the bundle, where `utilz
-    # menuz status` reads them; `utilz menuz build` passes all four on the
+    # menuz status` reads them; `utilz menuz build` passes all five on the
     # xcodebuild command line from opt/menuz/VERSION and git. A build from
     # inside Xcode gets these, so it says "dev" rather than a version it is
     # not.
@@ -37,6 +37,7 @@ settings:
     MENUZ_BUILD: "0"
     MENUZ_COMMIT: dev
     MENUZ_SOURCE_TREE: dev
+    MENUZ_KIND: dev
   configs:
     Debug:
       CODE_SIGN_STYLE: Automatic

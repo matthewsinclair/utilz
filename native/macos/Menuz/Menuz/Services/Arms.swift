@@ -53,6 +53,7 @@ enum Arms {
           outcome.notes.forEach { printError("Menuz: \($0)") }
           realised = outcome.realised
         }
+        print(Bundle.main.menuzIdentity)
         print(spec.render(realised: realised), terminator: "")
         return 0
       case .refused(let refusals):
@@ -160,10 +161,29 @@ enum Arms {
 extension Bundle {
   /// `<version> (build <build>, <commit>)`, from the stamps in Info.plist.
   var menuzVersion: String {
-    let info = infoDictionary ?? [:]
-    let version = info["CFBundleShortVersionString"] as? String ?? "unknown"
-    let build = info["CFBundleVersion"] as? String ?? "unknown"
-    let commit = info["MenuzCommit"] as? String ?? "unknown"
+    let version = stamp("CFBundleShortVersionString") ?? Identity.unknown
+    let build = stamp("CFBundleVersion") ?? Identity.unknown
+    let commit = stamp("MenuzCommit") ?? Identity.unknown
     return "\(version) (build \(build), \(commit))"
+  }
+
+  /// The menu's first line, from the same stamps (design.md "The identity
+  /// row").
+  var menuzIdentity: String {
+    Identity.line(
+      version: stamp("CFBundleShortVersionString"), commit: stamp("MenuzCommit"),
+      tree: stamp("MenuzSourceTree"), kind: menuzKind)
+  }
+
+  /// One stamp of Info.plist, nil when the plist does not carry it or
+  /// carries it empty.
+  private func stamp(_ key: String) -> String? {
+    guard let value = infoDictionary?[key] as? String, !value.isEmpty else { return nil }
+    return value
+  }
+
+  /// The kind stamp, as the identity row reads it.
+  var menuzKind: String? {
+    stamp("MenuzKind")
   }
 }

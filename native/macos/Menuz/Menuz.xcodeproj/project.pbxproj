@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0B5874BD2849165073737CBC /* IdentityRowTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC872A43CC981BBFB298B49E /* IdentityRowTests.swift */; };
 		184F74B5C1A84C179E4FFD0A /* MenuSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 746C4473977A35828A0457CF /* MenuSource.swift */; };
 		3EC6549C623D9165FE8920F6 /* Realiser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A012D3FACA5B5E47D174B0E /* Realiser.swift */; };
 		5E613632DB47D5AC9BB87171 /* MenuzKit in Frameworks */ = {isa = PBXBuildFile; productRef = 179FB1D9697FE3912ACB93C8 /* MenuzKit */; };
@@ -58,6 +59,7 @@
 		8A82B2DADFCB97CEDA1B96BA /* MenuBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBuilder.swift; sourceTree = "<group>"; };
 		AA910089979C343042FD394C /* MenuzApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuzApp.swift; sourceTree = "<group>"; };
 		C9CAAC271F6A8DE3D9BA5660 /* Notifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notifier.swift; sourceTree = "<group>"; };
+		CC872A43CC981BBFB298B49E /* IdentityRowTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentityRowTests.swift; sourceTree = "<group>"; };
 		D0DA05166681483F5F74E57C /* NotifyArmTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotifyArmTests.swift; sourceTree = "<group>"; };
 		DB1D82D84E6BED41563E3D23 /* RunnerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunnerTests.swift; sourceTree = "<group>"; };
 		F54C8007BA2E6C044E578B5A /* Runner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Runner.swift; sourceTree = "<group>"; };
@@ -137,6 +139,7 @@
 		904B4CE84C0C56752D6CE37B /* MenuzTests */ = {
 			isa = PBXGroup;
 			children = (
+				CC872A43CC981BBFB298B49E /* IdentityRowTests.swift */,
 				D0DA05166681483F5F74E57C /* NotifyArmTests.swift */,
 				DB1D82D84E6BED41563E3D23 /* RunnerTests.swift */,
 				6FB3DC0386DDBB630BCAECDE /* TestHostTests.swift */,
@@ -254,6 +257,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0B5874BD2849165073737CBC /* IdentityRowTests.swift in Sources */,
 				C1E380F3B804FBD7849FBB13 /* NotifyArmTests.swift in Sources */,
 				66CA1635FB54568EC7D32863 /* RunnerTests.swift in Sources */,
 				8A0ACEFEB1B35D3594B1FAFE /* TestHostTests.swift in Sources */,
@@ -380,6 +384,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MENUZ_BUILD = 0;
 				MENUZ_COMMIT = dev;
+				MENUZ_KIND = dev;
 				MENUZ_SOURCE_TREE = dev;
 				MENUZ_VERSION = dev;
 				MTL_ENABLE_DEBUG_INFO = NO;
@@ -488,6 +493,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MENUZ_BUILD = 0;
 				MENUZ_COMMIT = dev;
+				MENUZ_KIND = dev;
 				MENUZ_SOURCE_TREE = dev;
 				MENUZ_VERSION = dev;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;

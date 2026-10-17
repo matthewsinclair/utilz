@@ -37,6 +37,8 @@ final class Chosen: NSObject {
 @MainActor
 final class MenuBuilder {
   static let noLogTitle = "Open Log (no log yet)"
+  /// The identity row's font, as the sibling apps' first rows (D14).
+  static let identityFont = NSFont.boldSystemFont(ofSize: 13)
 
   let menu = NSMenu()
   private weak var target: MenuActions?
@@ -51,12 +53,17 @@ final class MenuBuilder {
     menu.autoenablesItems = false
   }
 
-  /// The whole menu: the refusals in red first, then the last good spec's
-  /// entries (none when the file has never loaded), then the tail.
-  func build(spec: MenuSpec?, refusals: [Refusal], realised: Realised, logExists: Bool) {
+  /// The whole menu: the build's identity row, then the refusals in red,
+  /// then the last good spec's entries (none when the file has never
+  /// loaded), then the tail.
+  func build(identity: String, spec: MenuSpec?, refusals: [Refusal], realised: Realised, logExists: Bool) {
     menu.removeAllItems()
     labels = [:]
     eaches = [:]
+    let row = NSMenuItem(title: identity, action: nil, keyEquivalent: "")
+    row.attributedTitle = NSAttributedString(string: identity, attributes: [.font: Self.identityFont])
+    row.isEnabled = false
+    menu.addItem(row)
     for refusal in refusals {
       let item = NSMenuItem(title: refusal.description, action: nil, keyEquivalent: "")
       item.attributedTitle = NSAttributedString(
