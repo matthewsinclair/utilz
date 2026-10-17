@@ -9,8 +9,12 @@
 # are the user's own keypresses, confirmed by them. The install is one
 # xcodebuild: book the box first. Without --install the read half runs
 # alone, on whatever is installed.
+# Since WP-07 (AT-07.5) it also prints the identity row, the first line of
+# the installed binary's --render and of utilz menuz render, and checks its
+# shape: menuz <version> (<eight-character commit>), dirty- before a dirty
+# tree's commit, dev after the parentheses unless the build is a release.
 # Usage: opt/menuz/test/install-handrun.sh [--install]
-# The transcript's lines go on AT-05.2's note in acceptance.md.
+# The transcript's lines go on AT-05.2's and AT-07.5's notes in acceptance.md.
 set -uo pipefail
 cd "$(dirname "$0")/../../.." || exit 2
 LOG="${XDG_STATE_HOME:-$HOME/.local/state}/menuz/menuz.log"
@@ -24,6 +28,9 @@ if [ "${1:-}" = "--install" ]; then
 fi
 [ -x "$BIN" ] || { echo "nothing installed at $APP"; exit 2; }
 echo "== the installed copy =="; "$BIN" --version </dev/null | sed 's/^/version: /'
+echo "== the identity row (AT-07.5) =="; "$BIN" --render </dev/null 2>/dev/null | head -1 | sed 's/^/app --render first line:   /'
+bin/utilz menuz render </dev/null 2>/dev/null | head -1 | sed 's/^/utilz menuz render first: /'
+for k in CFBundleShortVersionString MenuzCommit MenuzSourceTree MenuzKind; do printf 'stamp %s=' "$k"; plutil -extract "$k" raw "$APP/Contents/Info.plist" 2>&1; done
 codesign -dv "$APP" 2>&1 | grep -E '^(Identifier|TeamIdentifier)=' | sed 's/^/signing: /'
 echo "== status =="; bin/utilz menuz status </dev/null 2>&1 | sed 's/^/        /'; echo "status exit=${PIPESTATUS[0]}"
 echo "== doctor =="; bin/utilz menuz doctor </dev/null 2>&1 | sed 's/^/        /'; echo "doctor exit=${PIPESTATUS[0]}"
@@ -33,4 +40,5 @@ echo "== checks =="
 grep -c 'registered as a login item' "$LOG" 2>/dev/null | sed 's/^/registered lines: /'
 bin/utilz menuz status </dev/null 2>&1 | grep -E '^login item +enabled' >/dev/null && echo "login item enabled: yes" || echo "login item enabled: NO"
 pgrep -f "$BIN" >/dev/null && echo "running from $APP: yes" || echo "running from $APP: NO"
+"$BIN" --render </dev/null 2>/dev/null | head -1 | grep -E '^menuz [^ ]+ \((dirty-)?[0-9a-f]{8}\)( dev)?$' >/dev/null && echo "identity row shape: yes" || echo "identity row shape: NO"
 echo "the menu after a logout and login: the user's keypress, recorded on AT-05.2's note when confirmed"
