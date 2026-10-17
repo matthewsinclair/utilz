@@ -265,6 +265,20 @@ make_two_trees() {
   [[ "$(readlink "$bindir/stranger")" == "$before" ]]
 }
 
+# Each link in <dir> with its own inode and mtime, one per line, sorted. A
+# relink replaces the link, so the inode moves even within the same second.
+# GNU's form is tried first because GNU `stat -f` is not an error: it reports
+# the FILESYSTEM, whose free-block count moves whenever anything else on the
+# runner writes, and that read as a relink on CI (run 39036616338, 17 Oct).
+link_stamps() {
+  local f stamp listing=""
+  for f in "$1"/*; do
+    stamp=$(stat -c '%i %Y' "$f" 2>/dev/null || stat -f '%i %m' "$f") || return 1
+    listing+="${f##*/} $stamp"$'\n'
+  done
+  printf '%s' "$listing" | LC_ALL=C sort
+}
+
 @test "AT17: bare use REPORTS and changes nothing, asserted by mtime" {
   # A switch you cannot interrogate is one you run in order to find out where
   # you are. Asserted by link mtime rather than by the output looking right:
@@ -274,14 +288,14 @@ make_two_trees() {
   make_two_trees "$src" "$prefix" "$bindir"
 
   local before after
-  before=$(cd "$bindir" && for f in *; do printf '%s %s\n' "$f" "$(stat -f '%m %Sm' "$f" 2>/dev/null || stat -c '%Y' "$f")"; done | LC_ALL=C sort)
+  before=$(link_stamps "$bindir")
 
   run run_install_function "UTILZ_HOME='$src'; install_verb_use --bin-dir '$bindir'"
   assert_success
   assert_output_contains "$src"
   assert_output_contains "$prefix"
 
-  after=$(cd "$bindir" && for f in *; do printf '%s %s\n' "$f" "$(stat -f '%m %Sm' "$f" 2>/dev/null || stat -c '%Y' "$f")"; done | LC_ALL=C sort)
+  after=$(link_stamps "$bindir")
   [[ "$before" == "$after" ]] || {
     echo "bare 'use' changed link mtimes:" >&2
     diff <(printf '%s\n' "$before") <(printf '%s\n' "$after") >&2
