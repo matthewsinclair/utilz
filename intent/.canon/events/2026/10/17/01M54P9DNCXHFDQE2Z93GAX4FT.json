@@ -1,0 +1,16 @@
+{
+  "id": "01M54P9DNCXHFDQE2Z93GAX4FT",
+  "ts": "2026-10-17T10:24:59.564Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "todo",
+    "seq": 38,
+    "text": "DOING, 17 Oct 10:24Z: 2.14.0 is DONE end to end: released (069e0f3, CI green on main and the tag), the tap at 14fef4c pushed by hv, Menuz.app.zip on the release (notarised Accepted, stapled, built from a clean checkout of the tag in a worktree: MenuzKind release, 069e0f38, build 1214, first row menuz 0.1.0 (069e0f38); transcript tmp/vc-st0026/asset-2.14.0.txt), installed here from the keg (build 1214, the release row, login item enabled, doctor clean; tmp/dc-st0027/install-menuz-2.14.0.txt) and on kovacs (069e0f38 on main, yq v4 first, links, qpdf, doctor 7/7; tmp/vc-st0026/kovacs-2.14.0-report.txt), done.md landed at dd415a6. NEXT: the devbin fleet sweep to 0.1.11 into bin/devbin by devbin-vc, by path through vc (tell before, land by path, no push, SHA to vc, any Mac check booked with intent-vc); vc pushes. Then nothing of Utilz is open. Devbin 0.1.11 released and installed here, its kovacs install on hv tap (brew-only rule); Intent 3.2.4 cut-ready for hv terminal."
+  }
+}
