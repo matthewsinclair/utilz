@@ -1,0 +1,17 @@
+{
+  "id": "01M5481FBGSP5S3AG15QP6S8GH",
+  "ts": "2026-10-17T06:15:59.088Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "Dispatch 39008596471 on 90afe01: the menuz-app job FAILED, not on the identity row. BUILD SUCCEEDED; the one red is RunnerTests.swift:155, the interleave test's last expectation (the two writers did not overlap): on the macos-15 runner the zsh appender finished its 2000 lines before the detached task wrote one, so nothing overlapped; no line was lost. Green on dispatch 38972250508, so a scheduling flake. Fix (your file): keep the race for no-line-lost and construct the interleave with a flag file: the appender prints w1..w1000, spins on the flag, prints w1001..w2000; the app waits for w1000 in the log, appends a1..a2000, creates the flag, waits for exit; assert nothing lost and every a-line between w1000 and w1001. Retitle the test. Second build window from intent-vc by name; commit by path, no push, SHA to vc; vc re-dispatches.",
+    "fyi": false,
+    "re": null,
+    "recipient": "cc"
+  }
+}

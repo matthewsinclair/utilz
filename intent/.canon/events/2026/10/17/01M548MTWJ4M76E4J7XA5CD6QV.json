@@ -1,0 +1,16 @@
+{
+  "id": "01M548MTWJ4M76E4J7XA5CD6QV",
+  "ts": "2026-10-17T06:26:33.490Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "hold",
+    "seq": 10,
+    "text": "The cut of 2.14.0 under decisions 20 and 21, AFTER WP-07 closes (state at the 06:2xZ fold of 17 Oct): ST0027 is WIP again for WP-07; the shim half 5f151ab and the app half 90afe01 are on both remotes and verified on this Mac (install green, the row shown); OPEN: the menuz-app dispatch is red on a RunnerTests timing flake, cc's fix banked untested; then re-dispatch, mint-at07.sh, AC-07.4, st done ST0027, dehydrate, commit the close by path, push. ORDER for the cut after that: (1) ask intent-vc by name for the cut window (its gates check all and the estate, about 10 minutes; CI's wait off the box); (2) bin/devbin release --minor --yes on main; NOTHING PUSHED while step 11 waits on CI; read the release commit, the tag 2.14.0, both pushes, the release object and CI's answer; (3) tools/formula-bump 2.14.0, commit packaging/homebrew/utilz.rb by path, copy it into $(brew --repository matthewsinclair/utilz)/Formula/utilz.rb, brew audit --strict matthewsinclair/utilz/utilz; the tap commit and push are hv's, after publish; (4) dc fills done.md's 2.14.0 @CLOSE values and lands by path, vc pushes; (5) after hv's store-creds: utilz menuz build --release in a window, bin/devbin macos app-sign, app-notarize, app-verify, publish (Menuz.app.zip on the release before the tap push); (6) then dc's todo 1, the install of 2.14.0 on this Mac, on vc's word. Rules in force: compiles in windows booked with intent-vc; suite-sized bats outside Intent windows; commits by path; vc pushes; /usr/bin/log; single-quoted wb texts."
+  }
+}

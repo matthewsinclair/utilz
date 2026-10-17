@@ -5,7 +5,7 @@
     "name": "Validation Claude",
     "role": "validation",
     "session_id": "3341dbaf-a82f-4073-bae3-2f8c30306f25",
-    "heartbeat_at": "2026-10-17T05:05:52.161Z",
+    "heartbeat_at": "2026-10-17T06:26:33.659Z",
     "status": "active",
     "focus": "17 Oct 04:5xZ, localfold for hv's compact. ST0027 and ST0028 are CLOSED and dehydrated (5e8ca82 on both remotes), every criterion satisfied after hv allowed the notifications; 2.14.0 is cut-ready. After the compact: /in-session, pickup, then ask intent-vc for the cut's window and run bin/devbin release --minor --yes (hold 10 has the order); cc and dc hold for vc's word. hv's keypresses are hold 11.",
     "claims": [
@@ -1289,10 +1289,10 @@
       "node": "vc",
       "kind": "hold",
       "seq": 10,
-      "text": "The cut of 2.14.0, next, under decisions 20 and 21 (state at the fold of 17 Oct 04:5xZ): ST0027 CLOSED at 5e8ca82 (AT-06.4 green at 04:48Z on the installed copy after hv's Allow; three notice posted lines, run 4's after the quit), ST0028 CLOSED at e9fc524, both dehydrated; main 5e8ca82 on both remotes, tree clean; CI green on the code 4952112 and the docs e854413 (the close commits are views); the dry run on 2c2953f passed both gates. ORDER after the compact: (1) /in-session, pickup; ask intent-vc by name for the cut's window (its gates check all and the estate, about 10 minutes; CI's wait off the box); (2) bin/devbin release --minor --yes on main (step 6's question answered by the flag; the dry run replaced the prompt); NOTHING PUSHED while step 11 waits on CI; read the release commit, the tag 2.14.0, both pushes, the release object and CI's answer; (3) tools/formula-bump 2.14.0, commit packaging/homebrew/utilz.rb by path, copy it into $(brew --repository matthewsinclair/utilz)/Formula/utilz.rb, brew audit --strict matthewsinclair/utilz/utilz; the tap commit and push are hv's, after publish; (4) dc fills done.md's 2.14.0 @CLOSE values (the tag commit, the push and tag runs, the asset, hv's logout confirmation, the threads closed, the tap) and lands it by path, vc pushes; (5) after hv's store-creds: utilz menuz build --release in a window, bin/devbin macos app-sign, app-notarize, app-verify, publish (Menuz.app.zip on the release before the tap push). Rules in force: compiles in windows booked with intent-vc; suite-sized bats outside Intent windows; commits by path; vc pushes; /usr/bin/log; single-quoted wb texts.",
+      "text": "The cut of 2.14.0 under decisions 20 and 21, AFTER WP-07 closes (state at the 06:2xZ fold of 17 Oct): ST0027 is WIP again for WP-07; the shim half 5f151ab and the app half 90afe01 are on both remotes and verified on this Mac (install green, the row shown); OPEN: the menuz-app dispatch is red on a RunnerTests timing flake, cc's fix banked untested; then re-dispatch, mint-at07.sh, AC-07.4, st done ST0027, dehydrate, commit the close by path, push. ORDER for the cut after that: (1) ask intent-vc by name for the cut window (its gates check all and the estate, about 10 minutes; CI's wait off the box); (2) bin/devbin release --minor --yes on main; NOTHING PUSHED while step 11 waits on CI; read the release commit, the tag 2.14.0, both pushes, the release object and CI's answer; (3) tools/formula-bump 2.14.0, commit packaging/homebrew/utilz.rb by path, copy it into $(brew --repository matthewsinclair/utilz)/Formula/utilz.rb, brew audit --strict matthewsinclair/utilz/utilz; the tap commit and push are hv's, after publish; (4) dc fills done.md's 2.14.0 @CLOSE values and lands by path, vc pushes; (5) after hv's store-creds: utilz menuz build --release in a window, bin/devbin macos app-sign, app-notarize, app-verify, publish (Menuz.app.zip on the release before the tap push); (6) then dc's todo 1, the install of 2.14.0 on this Mac, on vc's word. Rules in force: compiles in windows booked with intent-vc; suite-sized bats outside Intent windows; commits by path; vc pushes; /usr/bin/log; single-quoted wb texts.",
       "state": "live",
       "recorded_at": "2026-10-16T12:21:33.315Z",
-      "edited_at": "2026-10-17T04:51:06.317Z"
+      "edited_at": "2026-10-17T06:26:33.490Z"
     },
     {
       "node": "vc",
@@ -1359,10 +1359,10 @@
       "node": "vc",
       "kind": "todo",
       "seq": 38,
-      "text": "DOING since 17 Oct 05:1xZ (hv decision 22): ST0027 reopened (reason recorded), WP-07 \"The menu's version line\" started, design.md \"The identity row\" and D14 written from the siblings' sources, AC-07.1 to AC-07.5 minted. cc builds the app half (Identity.line in MenuzKit with IdentityTests, the first item disabled and bold from Bundle.main's four stamps, --render's first line, Info.plist MenuzKind, project.yml MENUZ_KIND dev, a hosted test), dc the shim half (git rev-parse --short=8, MENUZ_KIND release only for a clean source stamp at a commit carrying the root VERSION's bare tag, five stamps through build, test, stamps and bundle_stamps, menuz.bats with a fixture repo, help/menuz.md, the CHANGELOG line). vc verifies in a worktree, installs on hv's Mac (AT-07.5), dispatches tests.yml for the menuz-app job, closes ST0027 again, then the cut (hold 10). Windows booked with intent-vc in order: cc's build and test, vc's verify, the cut.",
+      "text": "DOING, 17 Oct 06:2xZ (hv decision 22): WP-07 built. dc's shim half 5f151ab and cc's app half 90afe01 are on both remotes; vc's worktree verify of 90afe01 green (swift test 119, menuz test green, bats 128/128 under bash 5 and 3.2, the product's first render line exactly \"menuz 0.1.0 (90afe018) dev\"); the install on hv's Mac for AT-07.5 green at 06:08Z (build 1200, the row shown, source current, login item enabled, notifications granted; transcript tmp/vc-st0026/st0027/wp07/ac075-handrun-90afe01.txt). OPEN: the menuz-app dispatch 39008596471 on 90afe01 is RED on RunnerTests.swift:155, the interleave test's overlap-in-time expectation, a scheduling flake on the macos-15 runner (green on 38972250508), not WP-07's code; cc constructs the interleave with a flag file, builds in a second window, lands; vc re-dispatches, mints AT-07.1 to AT-07.5 (mint-at07.sh), satisfies AC-07.4 with the green dispatch, closes ST0027, dehydrates, then the cut (hold 10). The cut window is released at intent-vc until then.",
       "state": "live",
       "recorded_at": "2026-10-17T04:55:55.931Z",
-      "edited_at": "2026-10-17T05:05:51.776Z"
+      "edited_at": "2026-10-17T06:15:59.333Z"
     }
   ],
   "messages": [

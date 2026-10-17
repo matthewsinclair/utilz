@@ -1,0 +1,16 @@
+{
+  "id": "01M5481FK5J4QE0RNE7EN32RA0",
+  "ts": "2026-10-17T06:15:59.333Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "todo",
+    "seq": 38,
+    "text": "DOING, 17 Oct 06:2xZ (hv decision 22): WP-07 built. dc's shim half 5f151ab and cc's app half 90afe01 are on both remotes; vc's worktree verify of 90afe01 green (swift test 119, menuz test green, bats 128/128 under bash 5 and 3.2, the product's first render line exactly \"menuz 0.1.0 (90afe018) dev\"); the install on hv's Mac for AT-07.5 green at 06:08Z (build 1200, the row shown, source current, login item enabled, notifications granted; transcript tmp/vc-st0026/st0027/wp07/ac075-handrun-90afe01.txt). OPEN: the menuz-app dispatch 39008596471 on 90afe01 is RED on RunnerTests.swift:155, the interleave test's overlap-in-time expectation, a scheduling flake on the macos-15 runner (green on 38972250508), not WP-07's code; cc constructs the interleave with a flag file, builds in a second window, lands; vc re-dispatches, mints AT-07.1 to AT-07.5 (mint-at07.sh), satisfies AC-07.4 with the green dispatch, closes ST0027, dehydrates, then the cut (hold 10). The cut window is released at intent-vc until then."
+  }
+}
