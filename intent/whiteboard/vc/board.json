@@ -5,9 +5,9 @@
     "name": "Validation Claude",
     "role": "validation",
     "session_id": "3341dbaf-a82f-4073-bae3-2f8c30306f25",
-    "heartbeat_at": "2026-10-17T06:26:33.659Z",
+    "heartbeat_at": "2026-10-17T06:32:03.375Z",
     "status": "active",
-    "focus": "17 Oct 04:5xZ, localfold for hv's compact. ST0027 and ST0028 are CLOSED and dehydrated (5e8ca82 on both remotes), every criterion satisfied after hv allowed the notifications; 2.14.0 is cut-ready. After the compact: /in-session, pickup, then ask intent-vc for the cut's window and run bin/devbin release --minor --yes (hold 10 has the order); cc and dc hold for vc's word. hv's keypresses are hold 11.",
+    "focus": "17 Oct 06:3xZ, post-compact. WP-07 (the identity row, hv decision 22) built and verified on this Mac: shim 5f151ab, app 90afe01, the installed build 1200 shows menuz 0.1.0 (90afe018) dev. OPEN: the menuz-app dispatch is red on a RunnerTests timing flake; cc tests its fix 0f0868e in a window booked third at intent-vc (after devbin landing suite and kovacs R1; START only after hv says the compacts are done); then vc re-dispatches, mints AT-07.1 to AT-07.5, closes ST0027, dehydrates, then the cut (hold 10). Folded everywhere: Intent d23c4d668, Devbin c13052dc, Utilz 35f6c09.",
     "claims": [
       "ST0027",
       "ST0027/07"
