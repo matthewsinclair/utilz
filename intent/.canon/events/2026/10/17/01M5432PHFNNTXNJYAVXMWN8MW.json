@@ -1,0 +1,15 @@
+{
+  "id": "01M5432PHFNNTXNJYAVXMWN8MW",
+  "ts": "2026-10-17T04:49:16.335Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "hold",
+    "text": "Resume state for hv compact, 17 Oct: ST0027 WP-05 done (shim verbs 2b66d3f, error-lines fix 4952112, both on main); nothing open for cc; 2.14.0 is cut-ready bar hv Allow on the notification alert, and the close and the cut are vc. Notes at tmp/cc/resume.md. Condition: after the compact, /in-session and pickup, then vc gives the word."
+  }
+}

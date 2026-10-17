@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: 67bcef6b-d20d-4bb9-ac53-ff7fbaf2e422
-heartbeat_at: 2026-10-16 20:54Z
+heartbeat_at: 2026-10-17 04:49Z
 status: active
-focus: "17 Oct: WP-05 at 2b66d3f on st0027-wp05, with vc for verify and landing. Taking instructions from vc toward 2.14.0."
+focus: "17 Oct: folded for hv compact. WP-05 done at 4952112 on main; nothing open for cc; next on vc word after the cut."
 claims: [ST0027/05]
 ---
 
@@ -21,7 +21,7 @@ _(none)_
 
 ## Holds
 
-- 2.14.0 is cut-ready at e854413 (vc). cc holds with nothing in the tree; every board edit goes with its own commit by path until the cut. Condition: vc's word, which comes only if the notice hand run after hv allows menuz's notifications turns up a defect.
+- Resume state for hv compact, 17 Oct: ST0027 WP-05 done (shim verbs 2b66d3f, error-lines fix 4952112, both on main); nothing open for cc; 2.14.0 is cut-ready bar hv Allow on the notification alert, and the close and the cut are vc. Notes at tmp/cc/resume.md. Condition: after the compact, /in-session and pickup, then vc gives the word.
 
 ## Watch-outs
 
