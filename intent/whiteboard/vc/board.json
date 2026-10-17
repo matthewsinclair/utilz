@@ -5,7 +5,7 @@
     "name": "Validation Claude",
     "role": "validation",
     "session_id": "3341dbaf-a82f-4073-bae3-2f8c30306f25",
-    "heartbeat_at": "2026-10-16T20:30:16.063Z",
+    "heartbeat_at": "2026-10-17T04:46:27.634Z",
     "status": "active",
     "focus": "16 Oct 20:30Z, after hv's compact; hv AFK, vc has the pen (decision 20): driving ST0027 menuz and ST0028 to the 2.14.0 cut. CI green on main at 4be8533 (run 38961754419; c77cc76 differs by events and boards only). WP-06 landed at 8bea7ba; waiting on intent-vc's START for the dev build (one xcodebuild), then the notice hand run (AC-06.4), hv's copy relaunched, AT-06.1 to AT-06.4 minted, AC-06.5 satisfied on dc's 7be0366 lines, wp done ST0027/06. cc has the word for WP-05's non-compile work on st0027-wp05 (compiles in windows vc books); dc confirms the kovacs loop at 8bea7ba or later and a shellcheck 0.9.0 baseline. Compiles only in windows booked with intent-vc; suite-sized bats outside Intent windows; vc pushes main.",
     "claims": [
@@ -1341,9 +1341,10 @@
       "node": "vc",
       "kind": "hold",
       "seq": 11,
-      "text": "hv's keypresses at return, in order: (1) System Settings > Notifications > Menuz: Allow (the first launch's alert was withdrawn when the hand run quit the app; macOS counts that as no; the running copy then posts); tell vc, who reruns the notice hand run for AT-06.4. (2) Log out and in: the menu is back (the login item is enabled); tell vc for AT-05.2's note. (3) bin/devbin macos store-creds, then vc runs app-sign, app-notarize, app-verify and publish for the Menuz.app.zip asset. (4) The tap: git -C $(brew --repository matthewsinclair/utilz) commit -am 'utilz 2.13.0' && git -C ... push, then the same for 2.14.0 after the cut (vc copies and audits the formula). (5) .claude/settings.json's advisory: ! intent claude upgrade --apply.",
+      "text": "hv's keypresses at return, in order: (1) System Settings > Notifications > Menuz: Allow (the first launch's alert was withdrawn when the hand run quit the app; macOS counts that as no; the running copy then posts); tell vc, who reruns the notice hand run for AT-06.4 and cuts 2.14.0. (2) Log out and in: the menu is back (the login item is enabled); tell vc for AT-05.2's note. (3) bin/devbin macos store-creds, then vc runs app-sign, app-notarize, app-verify and publish for the Menuz.app.zip asset. (4) DONE for 2.13.0 at 04:4xZ on 17 Oct: the tap is at 14b2e7a \"utilz 2.13.0\" (tag 2.13.0, revision 01cf76d), pushed by hv; the same for 2.14.0 after the cut (vc copies and audits the formula, hv commits and pushes). (5) .claude/settings.json's advisory: ! intent claude upgrade --apply.",
       "state": "live",
-      "recorded_at": "2026-10-16T21:22:54.733Z"
+      "recorded_at": "2026-10-16T21:22:54.733Z",
+      "edited_at": "2026-10-17T04:46:45.578Z"
     }
   ],
   "messages": [
