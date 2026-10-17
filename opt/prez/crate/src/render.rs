@@ -17,7 +17,7 @@
 // in the artifact as a visible comment.
 
 use crate::fence;
-use crate::numbering::Numbering;
+use crate::switch::Switch;
 
 /// One rendered slide. Wrapping these in `<section>` is html.rs's job.
 #[derive(Debug, Default, PartialEq)]
@@ -26,7 +26,7 @@ pub struct Slide {
   pub background: Option<String>,
   /// `<!-- numbering: on|off -->`, overriding the deck's default for this slide
   /// (issue 0065). `None` follows the deck.
-  pub numbering: Option<Numbering>,
+  pub numbering: Option<Switch>,
   pub html: String,
 }
 
@@ -70,7 +70,7 @@ struct Lifted {
   body: String,
   classes: Vec<String>,
   background: Option<String>,
-  numbering: Option<Numbering>,
+  numbering: Option<Switch>,
 }
 
 impl Lifted {
@@ -108,8 +108,8 @@ fn lift_directives(source: &str) -> Lifted {
       // Last one wins, like `background:`, EXCEPT that an unreadable value is
       // never hidden by a later readable one: it is refused, by name.
       Some(Directive::Numbering(value)) => {
-        if !matches!(lifted.numbering, Some(Numbering::Unreadable(_))) {
-          lifted.numbering = Some(Numbering::read(value));
+        if !matches!(lifted.numbering, Some(Switch::Unreadable(_))) {
+          lifted.numbering = Some(Switch::read(value));
         }
       }
       None => lifted.keep(line),
@@ -255,10 +255,12 @@ mod tests {
   #[test]
   fn a_numbering_directive_is_lifted_and_read() {
     for (value, want) in [
-      ("on", Numbering::On),
-      ("true", Numbering::On),
-      ("OFF", Numbering::Off),
-      ("false", Numbering::Off),
+      ("on", Switch::On),
+      ("true", Switch::On),
+      ("OFF", Switch::Off),
+      ("false", Switch::Off),
+      ("yes", Switch::On),
+      ("0", Switch::Off),
     ] {
       let s = slide(&format!("<!-- numbering: {value} -->\n# One\n"));
       assert_eq!(s.numbering, Some(want), "{value}");
@@ -273,18 +275,18 @@ mod tests {
   #[test]
   fn an_unreadable_numbering_directive_is_kept_for_the_caller_to_refuse() {
     let s = slide("<!-- numbering: maybe -->\n# One\n");
-    assert_eq!(s.numbering, Some(Numbering::Unreadable("maybe".into())));
+    assert_eq!(s.numbering, Some(Switch::Unreadable("maybe".into())));
     assert!(!s.html.contains("maybe"), "{}", s.html);
   }
 
   #[test]
   fn a_later_readable_directive_does_not_hide_an_unreadable_one() {
     let s = slide("<!-- numbering: maybe -->\n<!-- numbering: on -->\n# One\n");
-    assert_eq!(s.numbering, Some(Numbering::Unreadable("maybe".into())));
+    assert_eq!(s.numbering, Some(Switch::Unreadable("maybe".into())));
     let s = slide("<!-- numbering: on -->\n<!-- numbering: off -->\n# One\n");
     assert_eq!(
       s.numbering,
-      Some(Numbering::Off),
+      Some(Switch::Off),
       "otherwise the last one wins"
     );
   }

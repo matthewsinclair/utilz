@@ -1400,6 +1400,44 @@ if want AT21; then
   finish
 fi
 
+# ---------------------------------------------------------- AT22 -- issue 0066
+
+if want AT22; then
+  start AT22 "mermaid: and numbering: read one vocabulary, and refuse anything else by name"
+  # hv's ruling, 17 Oct 2026: on, true, yes and 1 turn a switch on; off,
+  # false, no and 0 turn it off; anything else is refused by name. Before 0066
+  # `mermaid: ture` built a deck with its diagrams as plain code blocks and
+  # said nothing. Built HTML only, so no browser: the init script is in the
+  # artifact exactly when mermaid is on.
+  # at22deck <file> <front-matter line>
+  at22deck() {
+    printf -- '---\n%s\n---\n# One\n\n```mermaid\ngraph LR\n  A --> B\n```\n' "$2" > "$1"
+  }
+  # at22mermaid <description> <front-matter line> <yes|no>
+  at22mermaid() {
+    local md="$WORK/at22-$3-${2//[^a-z0-9]/_}.md"
+    at22deck "$md" "$2"
+    renders "$1" "$BIN" build "$md" -o "${md%.md}.html"
+    local got=no
+    grep -q 'mermaid.initialize' "${md%.md}.html" 2>/dev/null && got=yes
+    check "$1: diagrams on" "$got" "$3"
+  }
+  for word in on true yes 1 YES; do at22mermaid "mermaid: $word" "mermaid: $word" yes; done
+  for word in off false no 0; do at22mermaid "mermaid: $word" "mermaid: $word" no; done
+
+  at22deck "$WORK/at22-bad.md" "mermaid: ture"
+  exits "a mermaid value prez cannot read" 2 "$BIN" build "$WORK/at22-bad.md" -o "$WORK/at22-bad.html"
+  shaped "the refusal names the key and the value" "mermaid.*ture" "$WORK/refuses.err"
+  shaped "the refusal names the vocabulary" "yes, no, 1 and 0" "$WORK/refuses.err"
+
+  # numbering: reads the same words, so yes and 0 build where they were refused.
+  at22deck "$WORK/at22-num-yes.md" "numbering: yes"
+  renders "numbering: yes" "$BIN" build "$WORK/at22-num-yes.md" -o "$WORK/at22-num-yes.html"
+  at22deck "$WORK/at22-num-0.md" "numbering: 0"
+  renders "numbering: 0" "$BIN" build "$WORK/at22-num-0.md" -o "$WORK/at22-num-0.html"
+  finish
+fi
+
 # ---------------------------------------------------------------------- report
 
 printf '\n=======================================\n'

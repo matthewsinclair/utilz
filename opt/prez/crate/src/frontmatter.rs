@@ -30,7 +30,7 @@
 
 use std::collections::BTreeMap;
 
-use crate::numbering::Numbering;
+use crate::switch::Switch;
 
 #[derive(Debug, Default, PartialEq)]
 pub struct FrontMatter {
@@ -43,12 +43,16 @@ pub struct FrontMatter {
   /// simply moves into the deck, where it travels with the file.
   pub theme_file: Option<String>,
   pub include: Vec<String>,
-  pub mermaid: bool,
+  /// `mermaid:` -- diagrams on or off (issue 0066). An Option for the same two
+  /// reasons as `numbering:` below: a fragment's `mermaid: off` is still a key
+  /// it declared, and an unreadable value is kept for `switch::deck_key` to
+  /// refuse rather than read as off.
+  pub mermaid: Option<Switch>,
   /// `numbering:` -- the deck's default for page numbers in print (issue 0065).
   /// An Option, not a bool, so a fragment's `numbering: off` is still a key it
   /// declared, and an unreadable value is kept for `numbering::resolve` to
   /// refuse rather than read as off.
-  pub numbering: Option<Numbering>,
+  pub numbering: Option<Switch>,
   /// Keys we do not know. Kept rather than dropped so the caller can warn about
   /// each by name -- a typo'd `titel:` that vanished silently would present as
   /// "the title stopped working" with nothing to go on.
@@ -70,7 +74,7 @@ impl FrontMatter {
       ("theme", self.theme.is_some()),
       ("theme-file", self.theme_file.is_some()),
       ("include", !self.include.is_empty()),
-      ("mermaid", self.mermaid),
+      ("mermaid", self.mermaid.is_some()),
       ("numbering", self.numbering.is_some()),
     ];
     named
@@ -165,10 +169,10 @@ fn parse_block(block: &str) -> Option<FrontMatter> {
           .map(str::to_string)
           .collect()
       }
-      // Present-and-true rather than present-at-all: `mermaid: false` reads as
-      // an author turning it off, and honouring the word costs one comparison.
-      "mermaid" => fm.mermaid = matches!(value.to_ascii_lowercase().as_str(), "true" | "yes" | "1"),
-      "numbering" => fm.numbering = Some(Numbering::read(value)),
+      // Both switches read through switch.rs, and neither decides here what an
+      // unreadable value means: the deck refuses it by name (issue 0066).
+      "mermaid" => fm.mermaid = Some(Switch::read(value)),
+      "numbering" => fm.numbering = Some(Switch::read(value)),
       _ => {
         fm.unknown.insert(key, value.to_string());
       }
@@ -202,7 +206,7 @@ mod tests {
     let (fm, body) = parse(src);
     assert_eq!(fm.title.as_deref(), Some("A Deck"));
     assert_eq!(fm.author.as_deref(), Some("Someone"));
-    assert!(fm.mermaid);
+    assert_eq!(fm.mermaid, Some(Switch::On));
     assert_eq!(body, "# One\n");
   }
 
@@ -300,11 +304,27 @@ mod tests {
   #[test]
   fn mermaid_false_means_off() {
     let (fm, _) = parse("---\nmermaid: false\n---\n");
-    assert!(!fm.mermaid);
+    assert_eq!(fm.mermaid, Some(Switch::Off));
   }
 
-  // Issue 0065: the vocabulary itself is tested once, in numbering.rs. These
-  // prove the key reaches it and is kept, readable or not.
+  #[test]
+  fn an_unreadable_mermaid_value_is_kept_for_the_caller_to_refuse() {
+    // Issue 0066: `ture` used to read as off, with nothing to say so.
+    let (fm, _) = parse("---\nmermaid: ture\n---\n");
+    assert_eq!(fm.mermaid, Some(Switch::Unreadable("ture".into())));
+    assert!(fm.unknown.is_empty(), "a known key is not unknown");
+  }
+
+  #[test]
+  fn mermaid_is_declared_whenever_present_even_off() {
+    for value in ["true", "false", "ture"] {
+      let (fm, _) = parse(&format!("---\nmermaid: {value}\n---\n"));
+      assert_eq!(fm.declared(), vec!["mermaid".to_string()], "{value}");
+    }
+  }
+
+  // Issues 0065 and 0066: the vocabulary itself is tested once, in switch.rs.
+  // These prove each key reaches it and is kept, readable or not.
 
   #[test]
   fn numbering_is_absent_unless_the_deck_sets_it() {
@@ -315,16 +335,16 @@ mod tests {
   #[test]
   fn numbering_is_read_through_the_one_reader() {
     let (fm, _) = parse("---\nnumbering: \"on\"\n---\n");
-    assert_eq!(fm.numbering, Some(Numbering::On));
+    assert_eq!(fm.numbering, Some(Switch::On));
     let (fm, _) = parse("---\nnumbering: False\n---\n");
-    assert_eq!(fm.numbering, Some(Numbering::Off));
+    assert_eq!(fm.numbering, Some(Switch::Off));
     assert!(fm.unknown.is_empty(), "a known key is not unknown");
   }
 
   #[test]
   fn an_unreadable_numbering_value_is_kept_for_the_caller_to_refuse() {
     let (fm, _) = parse("---\nnumbering: ture\n---\n");
-    assert_eq!(fm.numbering, Some(Numbering::Unreadable("ture".into())));
+    assert_eq!(fm.numbering, Some(Switch::Unreadable("ture".into())));
     assert!(fm.unknown.is_empty());
   }
 

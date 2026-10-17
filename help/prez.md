@@ -183,7 +183,9 @@ Every theme is expected to declare a standard class vocabulary -- `title`, `sect
 
 **Mermaid diagrams are opt-in** with `mermaid: true` in front matter. The library is vendored into the binary, not fetched, so a diagram deck still opens on a plane. Without the opt-in, the artifact carries none of those bytes.
 
-**Page numbers in print are opt-in** with `numbering: on` in front matter, and `<!-- numbering: on|off -->` on a slide overrides the deck for that slide. A cover or section slide that should carry no number says `<!-- numbering: off -->`; the `title` class has no say. **Every slide uses up a number whether or not it shows one**, so the number on a page is that page's number in the PDF. The values are `on`, `off`, `true` and `false`, in any case; anything else is refused by name, and for a slide prez says which. Numbers appear in print only, in the theme's muted colour; the on-screen `4 / 12` counter is unchanged. In an included fragment, `numbering:` in front matter is ignored with a warning, like every fragment key, but its slides' `numbering:` directives apply.
+**`mermaid:` and `numbering:` are on/off switches, and read the same words**, in any case: `on`, `true`, `yes` and `1` turn one on, and `off`, `false`, `no` and `0` turn it off. Anything else, eg `mermaid: ture`, is refused by name rather than read as off.
+
+**Page numbers in print are opt-in** with `numbering: on` in front matter, and `<!-- numbering: on|off -->` on a slide overrides the deck for that slide. A cover or section slide that should carry no number says `<!-- numbering: off -->`; the `title` class has no say. **Every slide uses up a number whether or not it shows one**, so the number on a page is that page's number in the PDF. The values are the switch words above; anything else is refused by name, and for a slide prez says which. Numbers appear in print only, in the theme's muted colour; the on-screen `4 / 12` counter is unchanged. In an included fragment, `numbering:` in front matter is ignored with a warning, like every fragment key, but its slides' `numbering:` directives apply.
 
 ---
 

@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 The section still open names its version: `## [X.Y.Z] - unreleased`, never `## [Unreleased]`. Devbin's release core finds a section by its version and dates it at the cut; an unnamed section is one it cannot find (ST0019 D2).
 
+## [2.14.1] - unreleased
+
+### Fixed
+
+- **prez refuses a `mermaid:` value it cannot read, as it does for `numbering:`** (issue 0066). `mermaid:` turned diagrams on for `true`, `yes` or `1` and read every other value as off, so `mermaid: ture` built a deck whose diagrams were plain code blocks and nothing said why. `mermaid:`, `numbering:` and the `<!-- numbering: -->` slide directive now read one vocabulary, in any case: `on`, `true`, `yes` and `1` turn a switch on, and `off`, `false`, `no` and `0` turn it off. Anything else is refused by name, exit 2, naming the key and the value. No deck that built before changes meaning; `numbering:` gains `yes`, `no`, `1` and `0`. An included fragment's `mermaid:` is now named in the "ignored" warning when it is off too. prez goes from 2.5.0 to 2.5.1.
+
 ## [2.14.0] - 2026-10-17
 
 ### Added

@@ -20,6 +20,7 @@ mod notes;
 mod numbering;
 mod render;
 mod split;
+mod switch;
 mod theme;
 
 use std::process::ExitCode;

@@ -6,7 +6,9 @@
 // this file is the sentence they spell out.
 
 use crate::args::{Command, Verb};
-use crate::{drive, frontmatter, html, inline, notes, numbering, render, split, theme, Failure};
+use crate::{
+  drive, frontmatter, html, inline, notes, numbering, render, split, switch, theme, Failure,
+};
 use std::path::{Path, PathBuf};
 
 pub fn run(cmd: &Command) -> Result<(), Failure> {
@@ -190,6 +192,8 @@ fn compile(cmd: &Command, paper: Option<String>) -> Result<Compiled, Failure> {
   // Issue 0065: which slides show a page number in print, decided once, and an
   // unreadable `numbering:` at deck or slide level refused here by name.
   let numbered = numbering::resolve(front.numbering.as_ref(), &slides)?;
+  // Issue 0066: `mermaid:` likewise, refused by name rather than read as off.
+  let mermaid = switch::deck_key("mermaid", front.mermaid.as_ref())?;
 
   // AC01: FOUR SOURCES, RANKED. A flag of either kind beats a front-matter key
   // of either kind; the two flags are refused together in args.rs; the two deck
@@ -240,7 +244,7 @@ fn compile(cmd: &Command, paper: Option<String>) -> Result<Compiled, Failure> {
     title: front.title.as_deref(),
     slides: &slides,
     theme: &theme,
-    mermaid: front.mermaid,
+    mermaid,
     numbered: &numbered,
     paper,
   });
