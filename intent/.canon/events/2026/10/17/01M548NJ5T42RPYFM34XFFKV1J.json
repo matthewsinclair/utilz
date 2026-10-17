@@ -1,0 +1,15 @@
+{
+  "id": "01M548NJ5T42RPYFM34XFFKV1J",
+  "ts": "2026-10-17T06:26:57.338Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "hold",
+    "text": "Resume state for hv compact, 17 Oct (2nd): ST0027 WP-07 app half at 90afe01 (both remotes); the RunnerTests flake fix at 0f0868e is UNTESTED. Next: ask intent-vc by name for the build window, utilz menuz test, END, commit by path, SHA to vc (who re-dispatches menuz-app). Notes at tmp/cc/resume.md. Condition: after the compact, /in-session and pickup."
+  }
+}

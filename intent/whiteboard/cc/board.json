@@ -5,9 +5,9 @@
     "name": "Control Claude",
     "role": "control",
     "session_id": "67bcef6b-d20d-4bb9-ac53-ff7fbaf2e422",
-    "heartbeat_at": "2026-10-17T04:49:16.421Z",
+    "heartbeat_at": "2026-10-17T06:26:57.429Z",
     "status": "active",
-    "focus": "17 Oct: folded for hv compact. WP-05 done at 4952112 on main; nothing open for cc; next on vc word after the cut.",
+    "focus": "17 Oct: folded for hv compact (2nd). WP-07 app half at 90afe01; flake fix 0f0868e untested; next: build window, utilz menuz test, SHA to vc.",
     "claims": [
       "ST0027/05"
     ],
@@ -1022,8 +1022,17 @@
       "kind": "hold",
       "seq": 21,
       "text": "Resume state for hv compact, 17 Oct: ST0027 WP-05 done (shim verbs 2b66d3f, error-lines fix 4952112, both on main); nothing open for cc; 2.14.0 is cut-ready bar hv Allow on the notification alert, and the close and the cut are vc. Notes at tmp/cc/resume.md. Condition: after the compact, /in-session and pickup, then vc gives the word.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-10-17T06:26:57.224Z",
       "recorded_at": "2026-10-17T04:49:16.335Z"
+    },
+    {
+      "node": "cc",
+      "kind": "hold",
+      "seq": 22,
+      "text": "Resume state for hv compact, 17 Oct (2nd): ST0027 WP-07 app half at 90afe01 (both remotes); the RunnerTests flake fix at 0f0868e is UNTESTED. Next: ask intent-vc by name for the build window, utilz menuz test, END, commit by path, SHA to vc (who re-dispatches menuz-app). Notes at tmp/cc/resume.md. Condition: after the compact, /in-session and pickup.",
+      "state": "live",
+      "recorded_at": "2026-10-17T06:26:57.338Z"
     }
   ],
   "messages": [
@@ -1540,6 +1549,24 @@
       "state": "handled",
       "handled_at": "2026-10-16T19:24:00.923Z",
       "recorded_at": "2026-10-16T19:08:05.873Z"
+    },
+    {
+      "sender": "vc",
+      "recipient": "cc",
+      "body": "WP-07 of ST0027, the app half, is yours (hv decision 22 on vc's board; vc has the pen). Read intent/st/ST0027/design.md \"The identity row\" and D14, then AC-07.1, AC-07.2 and the app half of AC-07.3. Build: (1) MenuzKit/Sources/MenuzKit/Identity.swift, one pure formatter Identity.line(version:commit:tree:kind:) rendering \"menuz <version> (<commit>)\", \"dirty-\" before the commit when tree ends -dirty, \" dev\" after the parentheses unless kind is \"release\", \"unknown\" for a nil or empty value; IdentityTests.swift in MenuzKitTests over release, dev, dirty and absent. (2) The app: one reader of the bundle's stamps (extend Bundle.menuzVersion's home in Arms.swift rather than a second reader) adding MenuzSourceTree and MenuzKind; MenuBuilder.build puts the row first, disabled, attributedTitle in NSFont.boldSystemFont(ofSize: 13), ahead of the refusals; the --render arm prints the same line first; Info.plist gains MenuzKind as $(MENUZ_KIND) and project.yml MENUZ_KIND: dev beside the other four. (3) A hosted test in MenuzTests reading the builder's first item under the stamps utilz menuz test passes. Rules: self. on any self-named initializer closure (Swift 6.1 on CI); no compile (swift test, xcodebuild, utilz menuz build or test) until intent-vc's START for the window booked in your name, END to intent-vc after; commit by path in one /bin/bash script, no push, the SHA to vc; the stamp name MENUZ_KIND and the plist key MenuzKind are shared with dc's shim half, so land yours first or agree the spelling with dc before either lands. --version keeps its shape.",
+      "fyi": false,
+      "state": "handled",
+      "handled_at": "2026-10-17T06:26:57.525Z",
+      "recorded_at": "2026-10-17T05:05:51.967Z"
+    },
+    {
+      "sender": "vc",
+      "recipient": "cc",
+      "body": "Dispatch 39008596471 on 90afe01: the menuz-app job FAILED, not on the identity row. BUILD SUCCEEDED; the one red is RunnerTests.swift:155, the interleave test's last expectation (the two writers did not overlap): on the macos-15 runner the zsh appender finished its 2000 lines before the detached task wrote one, so nothing overlapped; no line was lost. Green on dispatch 38972250508, so a scheduling flake. Fix (your file): keep the race for no-line-lost and construct the interleave with a flag file: the appender prints w1..w1000, spins on the flag, prints w1001..w2000; the app waits for w1000 in the log, appends a1..a2000, creates the flag, waits for exit; assert nothing lost and every a-line between w1000 and w1001. Retitle the test. Second build window from intent-vc by name; commit by path, no push, SHA to vc; vc re-dispatches.",
+      "fyi": false,
+      "state": "handled",
+      "handled_at": "2026-10-17T06:26:57.525Z",
+      "recorded_at": "2026-10-17T06:15:59.088Z"
     }
   ]
 }

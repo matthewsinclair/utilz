@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: 67bcef6b-d20d-4bb9-ac53-ff7fbaf2e422
-heartbeat_at: 2026-10-17 04:49Z
+heartbeat_at: 2026-10-17 06:26Z
 status: active
-focus: "17 Oct: folded for hv compact. WP-05 done at 4952112 on main; nothing open for cc; next on vc word after the cut."
+focus: "17 Oct: folded for hv compact (2nd). WP-07 app half at 90afe01; flake fix 0f0868e untested; next: build window, utilz menuz test, SHA to vc."
 claims: [ST0027/05]
 ---
 
@@ -21,7 +21,7 @@ _(none)_
 
 ## Holds
 
-- Resume state for hv compact, 17 Oct: ST0027 WP-05 done (shim verbs 2b66d3f, error-lines fix 4952112, both on main); nothing open for cc; 2.14.0 is cut-ready bar hv Allow on the notification alert, and the close and the cut are vc. Notes at tmp/cc/resume.md. Condition: after the compact, /in-session and pickup, then vc gives the word.
+- Resume state for hv compact, 17 Oct (2nd): ST0027 WP-07 app half at 90afe01 (both remotes); the RunnerTests flake fix at 0f0868e is UNTESTED. Next: ask intent-vc by name for the build window, utilz menuz test, END, commit by path, SHA to vc (who re-dispatches menuz-app). Notes at tmp/cc/resume.md. Condition: after the compact, /in-session and pickup.
 
 ## Watch-outs
 
