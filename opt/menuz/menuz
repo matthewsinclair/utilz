@@ -335,20 +335,21 @@ running_pids() {
   esac
 }
 
-# The four stamps, one NAME=value a line, in the order build passes them.
+# The five stamps, one NAME=value a line, in the order build passes them.
 print_stamps() {
-  printf 'MENUZ_VERSION=%s\nMENUZ_BUILD=%s\nMENUZ_COMMIT=%s\nMENUZ_SOURCE_TREE=%s\n' "$@"
+  printf 'MENUZ_VERSION=%s\nMENUZ_BUILD=%s\nMENUZ_COMMIT=%s\nMENUZ_SOURCE_TREE=%s\nMENUZ_KIND=%s\n' "$@"
 }
 
-# The four stamps BUNDLE carries, as print_stamps prints them; 1 when its
+# The five stamps BUNDLE carries, as print_stamps prints them; 1 when its
 # Info.plist cannot be read. A stamp absent from it prints empty.
 bundle_stamps() {
-  local plist="$1/Contents/Info.plist" version build commit tree
+  local plist="$1/Contents/Info.plist" version build commit tree kind
   version="$(plist_value "$plist" CFBundleShortVersionString)" || return 1
   build="$(plist_value "$plist" CFBundleVersion)" || return 1
   commit="$(plist_value "$plist" MenuzCommit)" || return 1
   tree="$(plist_value "$plist" MenuzSourceTree)" || return 1
-  print_stamps "$version" "$build" "$commit" "$tree"
+  kind="$(plist_value "$plist" MenuzKind)" || return 1
+  print_stamps "$version" "$build" "$commit" "$tree" "$kind"
 }
 
 # One stamp's value out of print_stamps' lines.
@@ -526,21 +527,49 @@ cmd_status() {
 # BUILD AND TEST
 # ============================================================================
 
-# The four stamps of this source clone, one NAME=value a line: the version
-# from opt/menuz/VERSION, the commit count, the short commit, and the source
-# tree's stamp (source_stamp, the one status compares). 1 with why on stderr
-# when one cannot be read.
+# The five stamps of this source clone, one NAME=value a line: the version
+# from opt/menuz/VERSION, the commit count, the commit's first eight
+# characters, the source tree's stamp (source_stamp, the one status
+# compares), and the kind (build_kind). 1 with why on stderr when one cannot
+# be read.
 build_stamps() {
-  local version count commit tree
+  local version count commit tree kind
   version="$(tr -d '[:space:]' <"$UTILZ_HOME/opt/menuz/VERSION")" || return 1
   count="$(git -C "$UTILZ_HOME" rev-list --count HEAD)" || return 1
-  commit="$(git -C "$UTILZ_HOME" rev-parse --short HEAD)" || return 1
+  commit="$(git -C "$UTILZ_HOME" rev-parse --short=8 HEAD)" || return 1
   tree="$(source_stamp)" || return 1
   if [[ -z "$tree" ]]; then
     echo "menuz: no app source under git at $(source_dir)" >&2
     return 1
   fi
-  print_stamps "$version" "$count" "$commit" "$tree"
+  kind="$(build_kind "$tree")" || return 1
+  print_stamps "$version" "$count" "$commit" "$tree" "$kind"
+}
+
+# The build's kind for source stamp TREE, as Intent's build.rs decides its
+# own: release when TREE is clean and HEAD carries the release tag the root
+# VERSION file names (bare, 2.14.0, never v2.14.0), dev otherwise. The tags
+# are read with --points-at, since release tags are lightweight. 1 with why
+# on stderr when VERSION or the tags cannot be read.
+build_kind() {
+  local tree="$1" release tags tag
+  if ! release="$(tr -d '[:space:]' <"$UTILZ_HOME/VERSION")"; then
+    echo "menuz: $UTILZ_HOME/VERSION could not be read" >&2
+    return 1
+  fi
+  if ! tags="$(git -C "$UTILZ_HOME" tag --points-at HEAD)"; then
+    echo "menuz: git tag --points-at HEAD failed in $UTILZ_HOME" >&2
+    return 1
+  fi
+  if [[ -n "$release" && "$tree" != *-dirty ]]; then
+    while IFS= read -r tag; do
+      if [[ "$tag" == "$release" ]]; then
+        echo release
+        return 0
+      fi
+    done <<<"$tags"
+  fi
+  echo dev
 }
 
 # What xcodegen reads: project.yml's content and the set of file paths under

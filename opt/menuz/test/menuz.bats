@@ -88,9 +88,11 @@ EOF
 	<key>CFBundleVersion</key>
 	<string>42</string>
 	<key>MenuzCommit</key>
-	<string>deadbee</string>
+	<string>deadbeef</string>
 	<key>MenuzSourceTree</key>
 	<string>$tree</string>
+	<key>MenuzKind</key>
+	<string>release</string>
 </dict>
 </plist>
 EOF
@@ -98,8 +100,9 @@ EOF
 
 app_args() { tr '\n' ' ' <"$FAKES/app.args"; }
 
-# A fixture UTILZ_HOME that is a git repository: the real common.sh and shim,
-# and native/macos/Menuz with one source and one test, committed. With
+# A fixture UTILZ_HOME that is a git repository: the real common.sh, shim and
+# root VERSION, and native/macos/Menuz with one source and one test,
+# committed. With
 # --no-source it has no native/macos/Menuz. Status reads the source through
 # git on UTILZ_HOME, so a test of it never reads the real tree, whose
 # native/macos/Menuz exists from WP-03 on.
@@ -108,6 +111,7 @@ source_home() {
   mkdir -p "$SRC/opt/utilz/lib" "$SRC/opt/menuz/lib"
   cp "$UTILZ_HOME/opt/utilz/lib/common.sh" "$SRC/opt/utilz/lib/"
   cp "$UTILZ_HOME/opt/menuz/menuz" "$UTILZ_HOME/opt/menuz/VERSION" "$SRC/opt/menuz/"
+  cp "$UTILZ_HOME/VERSION" "$SRC/"
   cp "$EXAMPLE" "$SRC/opt/menuz/lib/"
   if [[ "${1:-}" != --no-source ]]; then
     mkdir -p "$SRC/native/macos/Menuz/Menuz" "$SRC/native/macos/Menuz/MenuzTests"
@@ -670,18 +674,19 @@ app_count() {
   assert_output_contains "$DEV"
 }
 
-@test "AT-05.1: build passes the four stamps as build settings" {
+@test "AT-05.1: build passes the five stamps as build settings" {
   source_home
   xcode_fakes
   run_src_menuz build
   assert_success
   local call commit
   call="$(xcodebuild_call)"
-  commit="$(git -C "$SRC" rev-parse --short HEAD)"
+  commit="$(git -C "$SRC" rev-parse --short=8 HEAD)"
   [[ "$call" == *" MENUZ_VERSION=$(cat "$SRC/opt/menuz/VERSION") "* ]] || false
   [[ "$call" == *" MENUZ_BUILD=1 "* ]] || false
   [[ "$call" == *" MENUZ_COMMIT=$commit "* ]] || false
   printf '%s\n' "$call" | grep -Eq ' MENUZ_SOURCE_TREE=[0-9a-f]{40}(-dirty)? '
+  [[ "$call" == *" MENUZ_KIND=dev "* ]] || false
 }
 
 @test "AT-05.1: build --release builds Release, where app-sign reads it" {
@@ -873,7 +878,9 @@ app_count() {
   [[ "$tree" =~ ^[0-9a-f]{40}$ ]] || false
   assert_output_contains "MENUZ_VERSION=$(cat "$SRC/opt/menuz/VERSION")"
   assert_output_contains "MENUZ_BUILD=1"
-  assert_output_contains "MENUZ_COMMIT=$(git -C "$SRC" rev-parse --short HEAD)"
+  assert_output_contains "MENUZ_COMMIT=$(git -C "$SRC" rev-parse --short=8 HEAD)"
+  assert_output_contains "MENUZ_KIND=dev"
+  [[ "$(printf '%s\n' "$output" | grep -c '^MENUZ_[A-Z_]*=')" -eq 5 ]] || false
   # The tree's stamp is the one status compares (WP-02's source_stamp).
   make_app "$INSTALLED" 0.1.0 "$tree"
   run_src_menuz status
@@ -890,8 +897,9 @@ app_count() {
   assert_success
   assert_output_contains "MENUZ_VERSION=2.0.1"
   assert_output_contains "MENUZ_BUILD=42"
-  assert_output_contains "MENUZ_COMMIT=deadbee"
+  assert_output_contains "MENUZ_COMMIT=deadbeef"
   assert_output_contains "MENUZ_SOURCE_TREE=feed42"
+  assert_output_contains "MENUZ_KIND=release"
   assert_output_contains "$INSTALLED"
 }
 
@@ -1360,4 +1368,88 @@ exec /bin/mv "$@"'
   assert_exit_code 2
   assert_output_contains "$SRC/VERSION"
   [[ "$(count_calls curl)" -eq 0 ]] || false
+}
+
+# ============================================================================
+# AT-07.3 -- the fifth stamp and the eight-character commit (AC-07.3, WP-07).
+# The fixture repository's root VERSION is the real one; a test tags its
+# HEAD, or does not, and reads the kind from stamps and from build.
+# ============================================================================
+
+kind_stamp() {
+  printf '%s\n' "$output" | sed -n 's/^MENUZ_KIND=//p'
+}
+
+@test "AT-07.3: the kind is release for a clean source whose HEAD carries the root VERSION's tag" {
+  source_home
+  git -C "$SRC" tag "$(cat "$SRC/VERSION")"
+  run_src_menuz stamps
+  assert_success
+  [[ "$(kind_stamp)" == release ]] || false
+  xcode_fakes
+  run_src_menuz build
+  assert_success
+  [[ "$(xcodebuild_call)" == *" MENUZ_KIND=release "* ]] || false
+}
+
+@test "AT-07.3: the kind is dev when HEAD carries no tag" {
+  source_home
+  run_src_menuz stamps
+  assert_success
+  [[ "$(kind_stamp)" == dev ]] || false
+}
+
+@test "AT-07.3: the kind is dev when the source is dirty, though HEAD carries the tag" {
+  source_home
+  git -C "$SRC" tag "$(cat "$SRC/VERSION")"
+  echo 'print("changed")' >>"$SRC/native/macos/Menuz/Menuz/App.swift"
+  run_src_menuz stamps
+  assert_success
+  printf '%s\n' "$output" | grep -Eq '^MENUZ_SOURCE_TREE=[0-9a-f]{40}-dirty$'
+  [[ "$(kind_stamp)" == dev ]] || false
+}
+
+@test "AT-07.3: the kind is dev when HEAD's tag is not the bare VERSION, or the tag is on an earlier commit" {
+  source_home
+  git -C "$SRC" tag "v$(cat "$SRC/VERSION")"
+  git -C "$SRC" tag 0.0.1
+  run_src_menuz stamps
+  assert_success
+  [[ "$(kind_stamp)" == dev ]] || false
+  git -C "$SRC" tag "$(cat "$SRC/VERSION")"
+  echo more >"$SRC/notes.txt"
+  git -C "$SRC" add notes.txt
+  git -C "$SRC" -c user.name=t -c user.email=t@t commit -qm later
+  run_src_menuz stamps
+  assert_success
+  [[ "$(kind_stamp)" == dev ]] || false
+}
+
+@test "AT-07.3: the commit stamp is HEAD's first eight characters" {
+  source_home
+  run_src_menuz stamps
+  assert_success
+  local commit
+  commit="$(printf '%s\n' "$output" | sed -n 's/^MENUZ_COMMIT=//p')"
+  [[ "$commit" =~ ^[0-9a-f]{8}$ ]] || false
+  [[ "$(git -C "$SRC" rev-parse HEAD)" == "$commit"* ]] || false
+}
+
+@test "AT-07.3: without the root VERSION, stamps is exit 1 naming it" {
+  source_home
+  rm "$SRC/VERSION"
+  run_src_menuz stamps
+  assert_exit_code 1
+  assert_output_contains "$SRC/VERSION"
+}
+
+@test "AT-07.3: in an install, a bundle with no MenuzKind prints the stamp empty" {
+  keg_home
+  make_app "$INSTALLED" 2.0.1 feed42
+  local plist="$INSTALLED/Contents/Info.plist"
+  grep -v -e '<key>MenuzKind</key>' -e '<string>release</string>' "$plist" >"$plist.new"
+  mv "$plist.new" "$plist"
+  run_src_menuz stamps
+  assert_success
+  printf '%s\n' "$output" | grep -qx 'MENUZ_KIND='
 }

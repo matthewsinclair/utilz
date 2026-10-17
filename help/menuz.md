@@ -188,7 +188,7 @@ menuz.yaml: notify = 'sometimes': notify is never, failure or always
 menuz.yaml: menu[0].colour = 'red': unknown key
 ```
 
-`menuz render` prints the menu as an outline, one entry per line, its labels realised: `# ` before a header, an item by its label, a caption in parentheses, `---` for a separator, and a submenu as `Name >` with its entries indented two spaces under it. The app's own entries come last.
+`menuz render` prints the menu as an outline, one entry per line, its labels realised: `# ` before a header, an item by its label, a caption in parentheses, `---` for a separator, and a submenu as `Name >` with its entries indented two spaces under it. Its first line is the menu's identity row, `menuz <version> (<commit>)` and its suffixes as below, so what `render` prints is what the menu shows; the app's own entries come last.
 
 ```
 # Desks
@@ -220,7 +220,17 @@ A file that fails in the running app keeps the last good menu on screen and show
 
 The app's source and its xcodegen project live at `native/macos/Menuz/`. `menuz build` runs xcodegen only when there is no `Menuz.xcodeproj`, `project.yml` changed, or a source file was added or removed, then builds Debug, or Release with `--release`, with every product and intermediate under `${XDG_STATE_HOME:-$HOME/.local/state}/menuz/build/macos/`, off the tree. It prints where xcodebuild's log is. A failed build prints the log's `error:` and `fatal error:` lines first, the first 20 with a count of the rest, then the log's last 40 lines. `--unsigned` builds with no signing identity, as CI does. `menuz test` runs the app's tests, `MenuzTests` and `MenuzKitTests`, the same way, in Debug.
 
-Each build stamps the app with four values, which `menuz stamps` prints one `NAME=value` a line before a build: `MENUZ_VERSION`, from `opt/menuz/VERSION`; `MENUZ_BUILD`, the commit count; `MENUZ_COMMIT`, the short commit; and `MENUZ_SOURCE_TREE`, the stamp of the app's sources, ending `-dirty` when the working tree differs from the commit there. `status` compares the installed app's `MENUZ_SOURCE_TREE` with the tree's to say whether it is current.
+Each build stamps the app with five values, which `menuz stamps` prints one `NAME=value` a line before a build: `MENUZ_VERSION`, from `opt/menuz/VERSION`; `MENUZ_BUILD`, the commit count; `MENUZ_COMMIT`, the commit's first eight characters; `MENUZ_SOURCE_TREE`, the stamp of the app's sources, ending `-dirty` when the working tree differs from the commit there; and `MENUZ_KIND`, `release` when the source stamp is clean and the commit carries the release tag that Utilz's root `VERSION` file names (a bare tag, `2.14.0`, never `v2.14.0`), and `dev` otherwise. `status` compares the installed app's `MENUZ_SOURCE_TREE` with the tree's to say whether it is current.
+
+The menu's first row, greyed, names the build from those stamps, in one of three forms:
+
+```
+menuz 0.1.0 (3e731d3a)
+menuz 0.1.0 (3e731d3a) dev
+menuz 0.1.0 (dirty-3e731d3a) dev
+```
+
+`dirty-` comes before the commit of a build from a dirty source tree, and ` dev` follows every build that is not `release`. The signed release asset is built at the tag from a clean tree, so a Homebrew install's app shows the first form; a build from a working tree, the development build included, shows ` dev`.
 
 `menuz install` builds Release, quits every running copy, puts the new one at `~/Applications/Menuz.app`, where the other menu bar apps install, registers it with Launch Services, so the build product is never the one opened for menuz, and launches it with an empty environment but `HOME`, so the app reads your login shell's environment for itself rather than the caller's. The old copy is replaced only once the new one is whole beside it, and put back if the move fails. The installed copy, and only that copy, registers itself as a login item when it launches; `menuz status` reports it.
 
