@@ -3,10 +3,10 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: b6f789ca-4627-4a74-b4cd-bb7c07de9f46
-heartbeat_at: 2026-10-16 21:03Z
+heartbeat_at: 2026-10-17 04:49Z
 status: active
-focus: "17 Oct, hv AFK, instruction from vc towards 2.14.0: WP-05 docs landed at 4534225; next the notice clause after vc's fix, then done.md 2.14.0 and ST0028's close at the cut."
-claims: [ST0028]
+focus: "Folded for hv compact, 17 Oct: hold 7 waits on the 2.14.0 tag for done.md; after the compact, in-session, pickup, hold for vc."
+claims: []
 ---
 
 # DevX Claude (dc)
@@ -21,7 +21,7 @@ _(none)_
 
 ## Holds
 
-- WP-05's docs set LANDED at 4534225 on cc's shim 2b66d3f (CI job menuz-app, help/menuz.md whole, README section, CHANGELOG entry; kovacs clean, shellcheck 0.9.0 rc 0). Until 2.14.0's close: (1) after vc's notice fix lands, one help clause for 'notice not posted: no answer from the notification centre in <n> s' if vc agrees; (2) vc's menuz-app workflow_dispatch proves AC-05.3; (3) at the close fill tmp/dc-st0027/done-2.14.0.md's @CLOSE values, and ST0028's AT-01.4/AC-01.4 (estate green on the closing SHA, kovacs loop), wp done, st done. Landed 16-17 Oct: ST0028 ad2da79, app-icons add45d4, signing b7b2148 (c295563), releasing.md 95b11cf, done.md 2.13.0 67f2034, AC-06.5 7be0366, WP-05 docs 4534225. Each landing: prettier, no /Users/ outside /Users/you/, kovacs-full-new.sh (cleans its kovacs dir now), commit by path, SHA to vc. (edited)
+- Resume state, 17 Oct fold: the 2.14.0 tag is not yet cut; vc names it. Then fill tmp/dc-st0027/done-2.14.0.md (NOTES.md last section is the resume): the tag commit, the cut push and tag runs, the asset after hv store-creds, hv logout confirmation, AT-06.4 (hv allowed the notices; vc runs it), threads and issues closed, the tap; land it in intent/done.md above 2.13.0, verblock v0.14, by path. Done and pushed: WP-05 docs 4534225, notice words c41a7ae 25b79ef, menuz-app log on failure e07f462, error-lines words e854413; closing code 4952112; menuz-app green 38972250508 (AC-05.3); kovacs clean at 6fe0a94 and on both later shim and docs commits. Each landing: prettier, no /Users/ outside /Users/you/, kovacs-full-new.sh, commit by path, SHA to vc. (edited)
 
 ## Watch-outs
 

@@ -1,0 +1,16 @@
+{
+  "id": "01M5432YMAEECWABYQTTX3K65N",
+  "ts": "2026-10-17T04:49:24.618Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "hold",
+    "seq": 7,
+    "text": "Resume state, 17 Oct fold: the 2.14.0 tag is not yet cut; vc names it. Then fill tmp/dc-st0027/done-2.14.0.md (NOTES.md last section is the resume): the tag commit, the cut push and tag runs, the asset after hv store-creds, hv logout confirmation, AT-06.4 (hv allowed the notices; vc runs it), threads and issues closed, the tap; land it in intent/done.md above 2.13.0, verblock v0.14, by path. Done and pushed: WP-05 docs 4534225, notice words c41a7ae 25b79ef, menuz-app log on failure e07f462, error-lines words e854413; closing code 4952112; menuz-app green 38972250508 (AC-05.3); kovacs clean at 6fe0a94 and on both later shim and docs commits. Each landing: prettier, no /Users/ outside /Users/you/, kovacs-full-new.sh, commit by path, SHA to vc."
+  }
+}
