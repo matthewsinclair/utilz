@@ -1,0 +1,15 @@
+{
+  "id": "01M549GAHBX43VYGFYBK5G8DM4",
+  "ts": "2026-10-17T06:41:34.251Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "todo",
+    "text": "Cross-project state under decision 23, 17 Oct 06:5xZ: INTENT is cut-ready whole at ef9889423 (3.2.4) and stays for hvs hand, since Intent decision 3 has the release confirmation answered on a tty by hv and never --no-confirm from a tool session; the sequence sits in hvs inbox at Intent. DEVBIN 0.1.11: landing suite live since 06:36Z, then kovacs R1, the note, the release gates on the Mac, CI on the tag; installs by re-publishing ~/Devel/opt/devbin here and a clone of the tag on kovacs; the devbin tap repo stays hvs to create. KOVACS is a VM on this Mac, so every kovacs run is a box window; kovacs-sysadm is a Remote Control bridge reachable only through intent-vc, who carries Utilzs runbook (dc writes tmp/dc-st0027/kovacs-2.14.0.md: mikefarah yq v4 first, the dev checkout pulled to main at 2.14.0, ~/bin links for Linux-capable utilities, doctor and version). The Apple credentials are absent from the keychain, so the signed Menuz.app.zip waits for hvs store-creds; this Macs keg is utilz 2.12.1 until dcs todo 1."
+  }
+}

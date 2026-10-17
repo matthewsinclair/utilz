@@ -3,6 +3,7 @@ import Testing
 @testable import MenuzKit
 
 /// The menu's identity row for each kind of build (AC-07.1).
+/// AT-07.1 (ST0027 acceptance.md) cites this file.
 @Suite("Identity")
 struct IdentityTests {
   @Test("a clean build at the release tag has no suffix")

@@ -8,6 +8,7 @@ import Testing
 /// The menu's first item names the build from the host bundle's own stamps
 /// (AC-07.2): under `utilz menuz test` those are the stamps the shim passes,
 /// the version from opt/menuz/VERSION and the eight-character commit.
+/// AT-07.2 (ST0027 acceptance.md) cites this file.
 @MainActor
 @Suite("Identity row")
 struct IdentityRowTests {

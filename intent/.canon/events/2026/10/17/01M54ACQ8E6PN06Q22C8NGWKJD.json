@@ -1,0 +1,14 @@
+{
+  "id": "01M54ACQ8E6PN06Q22C8NGWKJD",
+  "ts": "2026-10-17T06:57:04.783Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.satisfy",
+  "subject": {
+    "type": "ac",
+    "id": "ST0027/AC-07.4"
+  },
+  "payload": {
+    "evidence": "menuz-app dispatch run 39011202584 green on main at 0238962 (Menuz source unchanged since 90afe01; the RunnerTests flake fix 0f0868e green in cc's window too); bin/devbin check all green at b1ce021, transcript tmp/vc-st0026/st0027/wp07/check-all-b1ce021.txt; help/menuz.md and CHANGELOG.md carry the row and the five stamps (5f151ab)"
+  }
+}

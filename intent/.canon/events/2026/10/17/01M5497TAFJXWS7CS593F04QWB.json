@@ -1,0 +1,15 @@
+{
+  "id": "01M5497TAFJXWS7CS593F04QWB",
+  "ts": "2026-10-17T06:36:55.503Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 17 Oct 06:4xZ, directly to vc, going AFK: \"I will give you the pen, but liase with intent-vc, devbin-vc, and kovacs-sysadm as needed. I have let them know as well. All holds are off. Do what you need to do. I hope to get back and find that utilz, devbin, and intent are up-to-date and ready to release (or already released), including installed on both rhad and kovacs (where that makes sense, of course). Go!\" vc reads: the compacts are done and the box queue runs now (devbin landing suite, devbin kovacs R1, utilz-cc test window, the Utilz cut); vc drives all three projects to release through intent-vc and devbin-vc, who keep their own trees; every hold on vc (hold 10, hold 11) is released, so vc attempts the tap commit and push and the store-creds step itself and hands back only what the machine refuses; after each cut the new version is installed on this Mac (rhad) and on kovacs where the project installs there."
+  }
+}

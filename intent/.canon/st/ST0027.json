@@ -3,9 +3,10 @@
   "id": "ST0027",
   "title": "menuz: a macOS menu bar app whose menu is a YAML file of commands to run",
   "slug": "menuz-a-macos-menu-bar-app-whose-menu-is-a-yaml",
-  "status": "wip",
+  "status": "completed",
   "status_reason": "hv's decision 22 (17 Oct): the menu's first line must name the build, 'menuz <version> (<commit>)' with 'dev' for a build that is not a release, as Intent.app's, Gtools.app's and Conflab.app's do; WP-07 builds it before the 2.14.0 cut",
   "created": "2026-10-16",
+  "completed": "2026-10-17",
   "objective": "A new utility, `menuz`, that puts a menu of hv's own commands in the macOS menu bar. The menu is entirely a YAML file in a menuz config directory: the file says what the menu holds, each item runs something (a script, a `utilz` verb, any shell line), an item that needs parameters acquires them from the user before it runs, and whatever a run prints goes to one known `menuz.log` that can be tailed. The app reads its whole menu from the config files, notices when they change and updates the menu, and realises the variables in the menu each time the menu is displayed. The first thing on the menu is `arngz`: apply a desk from the menu bar.\n\nThree working menu bar apps already exist in sibling projects (Intent.app, Conflab.app, Gtools.app), all one shape: an xcodegen project, an `AppDelegate` with an `NSStatusItem`, the login shell's `PATH` handed to every child, `SMAppService` for launch at login, Apple Development signing, build products off the tree, and an `install` verb that builds Release, replaces the bundle under `~/Applications` and launches it with launchd's environment. menuz is that shape cut to a menu read from a file, and it invents nothing the shell or macOS already does: variable interpolation is the login shell's own expansion, parameters are acquired through macOS's standard dialogs, the log is a file `tail -f` reads.\n\nv1 is: the app (the menu from the file, watched, realised at open; parameters; the runner; the log and the notice), and the `utilz menuz` shim with `init`, `edit`, `log`, `validate`, `render`, `build`, `test`, `install`, `uninstall`, `start`, `stop`, `restart`, `status`, `stamps` and `doctor`.",
   "context": "Asked by hv on 16 Oct 2026, directly to vc, just before a compact: \"a very simple macOS (Swift) menu bar app that is entirely customisable from a yaml file that points to a .menuz config directory (in the appropriate location for that kind of dir) ... The main use case for menuz is for me to be able to run a list of common utilities easily by just selecting them from the menubar. The obvious one that I want to try is arngz.\" hv asked for the write-up first and a rubber-duck session to refine it before any code, and added two standing instructions on the bounce: the three sibling menu bar apps (`../Intent`, `../Conflab`, `../Gtools`) are the pattern, \"we DO NOT need to reinvent the wheel here\"; and nothing is rebuilt that macOS or the standard unix utilities already do, interpolation included.\n\nThe thread is created and started ahead of the rubber-duck: design.md carries the shape, the questions hv left open with vc's recommendation on each, and the work packages. The design's open questions are settled with hv before WP-02 starts; WP-01 is that settlement. Doc before code holds: no source under opt/menuz until the design stands.",
   "body": "",
@@ -69,7 +70,7 @@
       "seq": 7,
       "title": "The menu's version line",
       "scope": "S",
-      "status": "wip",
+      "status": "done",
       "objective": "",
       "body": "",
       "preamble": ""
@@ -294,7 +295,8 @@
       "text": "help/menuz.md names the identity row and its three forms, the fifth stamp and the kind's rule, and the CHANGELOG's menuz entry for 2.14.0 names the row; bin/devbin check all is green; the menuz-app job is green on a dispatch of tests.yml at the landed SHA, so the Swift builds under Xcode 16.4 as well as 27.1.",
       "kind": "non-test",
       "state": {
-        "is": "unsatisfied"
+        "is": "satisfied",
+        "evidence": "menuz-app dispatch run 39011202584 green on main at 0238962 (Menuz source unchanged since 90afe01; the RunnerTests flake fix 0f0868e green in cc's window too); bin/devbin check all green at b1ce021, transcript tmp/vc-st0026/st0027/wp07/check-all-b1ce021.txt; help/menuz.md and CHANGELOG.md carry the row and the five stamps (5f151ab)"
       }
     },
     {
@@ -486,6 +488,46 @@
       ],
       "status": "green",
       "note": "vc, 17 Oct, Mac16,6, macOS 27.0.1 (26A434), Xcode 27.1 (27A9275). PASSED at 04:48Z against the installed copy ~/Applications/Menuz.app, 0.1.0 build 1168 (3e731d3, every notice fix landed), after hv allowed menuz under System Settings > Notifications (tmp/vc-st0026/st0027/ac064-handrun-3e731d3-allowed.txt): the placement line logged at launch with the position key removed, 'notifications: granted' the same second, '[1] notice posted' for exit 3 while the app ran, '[2] notice posted' for notify: always with the last line, nothing for run 3's exit 0, '[4] notice posted' after the 'quit; runs still going: 4' line (the arm posting with the app gone), zero not-yet-allowed lines, the key written back as 700; the mark on hv's bar with no icon: line. Earlier attempts, kept: c77cc76 at 20:34Z (no launch line, every notice refused; usernoted's log showed macOS 27's alert presented and withdrawn when the run quit the app, D13 corrected) and 2b66d3f-fix at 21:02Z (the placement line logged, the launch line denied naming the setting, each arm the off-in-settings line). Unmeasured: a second in-process request while the alert is up (cc's review point 7)."
+    },
+    {
+      "id": "AT-07.1",
+      "kind": "test",
+      "file": "native/macos/Menuz/MenuzKit/Tests/MenuzKitTests/IdentityTests.swift",
+      "covers": [
+        "AC-07.1"
+      ],
+      "status": "green",
+      "note": "Identity.line over release (no suffix), dev, dirty- before the commit, unknown for a nil or empty stamp; landed at 90afe01"
+    },
+    {
+      "id": "AT-07.2",
+      "kind": "test",
+      "file": "native/macos/Menuz/MenuzTests/IdentityRowTests.swift",
+      "covers": [
+        "AC-07.2"
+      ],
+      "status": "green",
+      "note": "Hosted: the builder's first item is the identity row, disabled, bold 13 pt, ahead of the refusals and the entries, under the stamps utilz menuz test passes; --render's first line is the same row (vc's verify at 90afe01)"
+    },
+    {
+      "id": "AT-07.3",
+      "kind": "test",
+      "file": "opt/menuz/test/menuz.bats",
+      "covers": [
+        "AC-07.3"
+      ],
+      "status": "green",
+      "note": "The five stamps as build settings, MENUZ_COMMIT eight characters, MENUZ_KIND release with VERSION's bare tag at HEAD on a clean source and dev without the tag or with a dirty source, stamps' five lines in a clone and an install; landed at 5f151ab, green under bash 5 and 3.2 and on kovacs"
+    },
+    {
+      "id": "AT-07.5",
+      "kind": "test",
+      "file": "opt/menuz/test/install-handrun.sh",
+      "covers": [
+        "AC-07.5"
+      ],
+      "status": "green",
+      "note": "Hand run 17 Oct 06:08Z on hv's Mac (Mac16,6, macOS 27.0.1 build 26A434, Xcode 27.1): utilz menuz install at 90afe01 built Release (build 1200), replaced ~/Applications/Menuz.app and launched it; the installed binary's --render first line and utilz menuz render's first line both read \"menuz 0.1.0 (90afe018) dev\"; stamps CFBundleShortVersionString 0.1.0, MenuzCommit 90afe018, MenuzSourceTree clean, MenuzKind dev; identity row shape yes, login item enabled, running from ~/Applications. Transcript tmp/vc-st0026/st0027/wp07/ac075-handrun-90afe01.txt. The release asset's row without the dev suffix is read after the 2.14.0 cut."
     }
   ],
   "attachments": [
