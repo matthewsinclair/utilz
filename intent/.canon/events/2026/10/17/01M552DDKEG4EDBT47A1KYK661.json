@@ -1,0 +1,16 @@
+{
+  "id": "01M552DDKEG4EDBT47A1KYK661",
+  "ts": "2026-10-17T13:56:53.486Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "watchout",
+    "seq": 3,
+    "text": "Rules in force: every test run on this Mac or kovacs, however small (one bats file, one prez AT), is booked as a window with intent-vc by name through utilz-vc first, and ENDed by name; reading logs needs no window. CI shellcheck is ubuntu-latest apt 0.9.0, which flags A && B || C as SC2015 where 0.11.0 passes: run it under 0.9.0 on kovacs before handing on. A portable stat puts the GNU form first (stat -c), since GNU stat -f reports the filesystem rather than failing (relink.bats AT17, fd2a621). No Hammerspoon, pointer, xcodebuild or hv real keychain from dc; nothing pushed by dc."
+  }
+}

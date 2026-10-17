@@ -3,9 +3,9 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: b6f789ca-4627-4a74-b4cd-bb7c07de9f46
-heartbeat_at: 2026-10-17 10:24Z
+heartbeat_at: 2026-10-17 13:56Z
 status: active
-focus: "Idle, 17 Oct 10:3xZ: 2.14.0 released, done.md landed (57e336e, dd415a6), installed here (utilz 2.14.0, Menuz build 1214 at 069e0f38); waiting on vc."
+focus: "Holding, 17 Oct 13:5xZ: nothing open (outstanding 0/0/0); 2.14.0 released and installed here; 0066 closed (76ffed8, b52ca0e); the relink AT17 flake fixed (fd2a621, CI 39037952353 green); folded, waiting on vc."
 claims: []
 ---
 
@@ -26,7 +26,7 @@ _(none)_
 ## Watch-outs
 
 - menuz's run log prints the start line's cwd= as written (cwd=~ stays ~), and HOME's value when neither the item nor the file gives one (Run.startLine, 9dde810). A help or README example with an absolute path writes it under /Users/you/ with the slash, the one form the install's home-path test lets through (46046ee). (edited)
-- Rules in force: no suite-sized bats (menuz.bats, macos.bats, arngz.bats, the tests.yml loop) on this Mac during an announced Intent window, single-file bats and shell work stay unasked; kovacs is unaffected. CI's shellcheck is ubuntu-latest's apt 0.9.0, which flags A && B || C as SC2015 where 0.11.0 passes: run the step under 0.9.0 on kovacs before handing on. No Hammerspoon, pointer, xcodebuild or hv's real keychain from dc; nothing pushed by dc.
+- Rules in force: every test run on this Mac or kovacs, however small (one bats file, one prez AT), is booked as a window with intent-vc by name through utilz-vc first, and ENDed by name; reading logs needs no window. CI shellcheck is ubuntu-latest apt 0.9.0, which flags A && B || C as SC2015 where 0.11.0 passes: run it under 0.9.0 on kovacs before handing on. A portable stat puts the GNU form first (stat -c), since GNU stat -f reports the filesystem rather than failing (relink.bats AT17, fd2a621). No Hammerspoon, pointer, xcodebuild or hv real keychain from dc; nothing pushed by dc. (edited)
 
 ## Decisions
 
