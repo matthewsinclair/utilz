@@ -1,0 +1,16 @@
+{
+  "id": "01M549M8Y4WHEC629BECCJZG9Y",
+  "ts": "2026-10-17T06:43:43.684Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "hold",
+    "seq": 7,
+    "text": "Resume state, 17 Oct 07:0xZ: tmp/dc-st0027/done-2.14.0.md is drafted with WP-07 and approved by vc as written. Left are the tokens the cut makes (@TAG_SHA @DATE @CLOSE_SHA @CLOSE_RUN @FLAKE_SHA @AC074_RUN @PUSH_RUN @TAG_RUN @ASSET @TAP); vc sends them in one message. Then land in intent/done.md above 2.13.0, verblock v0.14, by path: prettier, no /Users/ outside /Users/you/, commit by path, SHA to vc. tmp/dc-st0027/kovacs-2.14.0.md, the kovacs runbook (route A, backup branch kovacs-pre-2.14.0 at 5dcc317), was accepted by vc and staged with kovacs-sysadm; it stays on disk, uncommitted."
+  }
+}

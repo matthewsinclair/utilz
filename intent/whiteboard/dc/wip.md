@@ -3,7 +3,7 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: b6f789ca-4627-4a74-b4cd-bb7c07de9f46
-heartbeat_at: 2026-10-17 06:26Z
+heartbeat_at: 2026-10-17 06:36Z
 status: active
 focus: "Folded for hv compact, 17 Oct 06:2xZ: WP-07 shim and docs at 5f151ab, pushed; hold 7 waits on the 2.14.0 tag for done.md (with WP-07); todo 1, the install on this Mac, after the tap push; after the compact, in-session, pickup, hold for vc."
 claims: []
@@ -21,7 +21,7 @@ _(none)_
 
 ## Holds
 
-- Resume state, 17 Oct 06:2xZ fold: the 2.14.0 tag is not yet cut; vc names it. Then fill tmp/dc-st0027/done-2.14.0.md (NOTES.md last section is the resume): the tag commit, the cut push and tag runs, the asset after hv store-creds, hv logout confirmation, AT-06.4, threads and issues closed, the tap; and add WP-07 (hv decision 22, D14): seven work packages not six, the identity row menuz <version> (<commit>)[ dev] with dirty-, the fifth stamp MENUZ_KIND and the 8-char commit (dc shim and docs 5f151ab, cc app half 90afe01 and its interleave test fix), the menuz-app re-dispatch run for AC-07.4 (39008596471 failed on the flaky RunnerTests.interleave only). Land it in intent/done.md above 2.13.0, verblock v0.14, by path. Each landing: prettier, no /Users/ outside /Users/you/, kovacs-full-new.sh, commit by path, SHA to vc. (edited)
+- Resume state, 17 Oct 07:0xZ: tmp/dc-st0027/done-2.14.0.md is drafted with WP-07 and approved by vc as written. Left are the tokens the cut makes (@TAG_SHA @DATE @CLOSE_SHA @CLOSE_RUN @FLAKE_SHA @AC074_RUN @PUSH_RUN @TAG_RUN @ASSET @TAP); vc sends them in one message. Then land in intent/done.md above 2.13.0, verblock v0.14, by path: prettier, no /Users/ outside /Users/you/, commit by path, SHA to vc. tmp/dc-st0027/kovacs-2.14.0.md, the kovacs runbook (route A, backup branch kovacs-pre-2.14.0 at 5dcc317), was accepted by vc and staged with kovacs-sysadm; it stays on disk, uncommitted. (edited)
 
 ## Watch-outs
 
