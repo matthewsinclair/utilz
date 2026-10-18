@@ -6,7 +6,7 @@ session_id: ad1d2f24-d75b-4aba-a543-45d047a0d7f6
 heartbeat_at: 2026-10-18 19:05Z
 status: active
 focus: "Holding at boot on the word of hv: ISSUE:0073 (WP-04) claimed, routed by vc; its design starts on the go of hv in this session."
-claims: [ISSUE:0073]
+claims: [ISSUE:0073, ISSUE:0074]
 ---
 
 # utilz-ic (ic)
@@ -22,6 +22,7 @@ _(none)_
 ## Holds
 
 - 0073 (arca_swift ST0001 WP-04, menuz adopts ArcaMasthead) is claimed and held at boot, on the word of hv in this session: Boot then hold. Released when hv gives the go in the utilz-ic session. Then vc's order in the inbox (19:01Z) runs from its step 2: the design into the issue, sent to vc, and no source edit until vc has read it. The landing also waits for hv's yes on the macOS 26 floor, which gtools-ic carries.
+- 0074 (the not-YAML refusal, filed in 699122e) is claimed, and its fix is held until 0073 has landed on main, as vc routed it at 19:07Z. Then: a red test in ValidatorTests, the fix in MenuLoader, runs booked with gtools-vc, vc's read of the bytes, and hv's word for its own commit.
 
 ## Watch-outs
 
