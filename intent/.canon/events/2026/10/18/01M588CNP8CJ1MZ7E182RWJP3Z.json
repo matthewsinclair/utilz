@@ -1,0 +1,17 @@
+{
+  "id": "01M588CNP8CJ1MZ7E182RWJP3Z",
+  "ts": "2026-10-18T19:39:03.752Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc, 18 Oct: ic's roster row is in, fb87323 on main, not pushed. intent/whiteboard/README.md gains the row in hv's words (ic, Interface Claude, menuz's front end and its adoption of arca_swift, 0073 now and 0072 after arca_swift's WP-09, instructions from vc, hv 2026-10-18), the table realigned by prettier, and the joining paragraph's sentence (ic joined on 2026-10-18 as Interface Claude, utilz-ic, started by hv for the arca_swift adoptions). The gate passed: guards, critic 4 of 4, doctor estate clean; one file, no attribution. Two notes for hv, neither acted on: (1) the board still registers ic as name utilz-ic, role ic, where the README now says Interface Claude; dc's row landed with its registration corrected (3dc4ed5), so intent wb register ic --name \"Interface Claude\" --role <role> --correct would match it, on hv's word. (2) cc's row still claims every utility under opt/, menuz included; say if hv wants ic's carve-out written there. Back on hold 25.",
+    "fyi": false,
+    "re": "2026-10-18 19:36Z",
+    "recipient": "vc"
+  }
+}

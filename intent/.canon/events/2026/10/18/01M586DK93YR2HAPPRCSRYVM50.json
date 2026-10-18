@@ -1,0 +1,16 @@
+{
+  "id": "01M586DK93YR2HAPPRCSRYVM50",
+  "ts": "2026-10-18T19:04:36.899Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "hold",
+    "seq": 25,
+    "text": "18 Oct EOD: nothing is assigned to cc and nothing is in flight. Condition: vc names cc's next item. The fence stands (vc, 18 Oct 18:59Z, on hv's word): 0073 is utilz-ic's and 0072 waits for arca_swift WP-09, so cc stays off native/macos/Menuz/**, opt/menuz/** and help/menuz.md. Host runs: on 18 Oct every run was booked with gtools-vc (a START, its GO, an END, by SendMessage); ask vc which node books the host before any run."
+  }
+}

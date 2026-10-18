@@ -2,10 +2,10 @@
 node: cc
 name: Control Claude
 role: control
-session_id: 67bcef6b-d20d-4bb9-ac53-ff7fbaf2e422
-heartbeat_at: 2026-10-17 14:08Z
+session_id: bd1e8cf2-0704-472d-b246-3f6d3e86193d
+heartbeat_at: 2026-10-18 20:03Z
 status: active
-focus: "17 Oct: localfold; nothing open (outst 0/0/0), docs leaned, holding for vc."
+focus: "18 Oct EOD: localfold; nothing in flight. Landed today: fb87323 (ic's README roster row), 34add4c (issue 0076 filed). Hold 25 waits for vc's next item."
 claims: []
 ---
 
@@ -21,17 +21,17 @@ _(none)_
 
 ## Holds
 
-- Localfold, 17 Oct (4th): nothing of cc in flight; outst is 0/0/0 (0066 closed by dc, b52ca0e). Condition: vc names cc's next item.
+- 18 Oct EOD: nothing is assigned to cc and nothing is in flight. Condition: vc names cc's next item. The fence stands (vc, 18 Oct 18:59Z, on hv's word): 0073 is utilz-ic's and 0072 waits for arca_swift WP-09, so cc stays off native/macos/Menuz/**, opt/menuz/** and help/menuz.md. Host runs: on 18 Oct every run was booked with gtools-vc (a START, its GO, an END, by SendMessage); ask vc which node books the host before any run. (edited)
 
 ## Watch-outs
 
 - hv's rule: a gap in devbin's vendored release core (bin/.devbin/lib/release*) is fixed in devbin, as a default with an override, through vc to devbin-dc or devbin-2b. Never patch the vendored copy or add a Utilz-only branch. Vendored line numbers move with each devbin sweep: re-read a citation before trusting it.
-- A green test suite says nothing about Rust formatting or clippy: run bin/devbin check all before handing a Rust change to vc, to CI or into a cut. Six cargo fmt diffs from cc 504825a rode five commits into main on 2026-09-22 under a green 13/13 thread and a green estate, reddened CI and would have refused the cut at step 5. cargo fmt --check fails the CI step AHEAD of clippy, so drift HIDES the clippy verdict rather than adding to it (0059, 0060). check all fixes with bin/devbin fmt rust; note its critic arm reads STAGED files only.
-- The pre-commit gate is tracked in .githooks/ now, read through core.hooksPath (issue 0064, 39b0af4). It REFUSES a staged .md or .rs that is not formatted and never rewrites it, so fix with prettier --write <file> or bin/devbin fmt rust, git add, and commit again. Edits to .git/hooks/ are no longer read. What still holds from the old watch-out 5: a store body (an issue, a WP body) must be prettier-stable before intent set, or its view drifts and the doctor gate refuses every later commit.
+- A green suite says nothing about Rust formatting or clippy: run bin/devbin check all before handing a Rust change to vc, to CI or into a cut. cargo fmt --check fails CI ahead of clippy, so fmt drift hides the clippy verdict (0059, 0060). Fix with bin/devbin fmt rust; check all's critic arm reads staged files only. (edited)
+- The pre-commit gate lives in .githooks/, read through core.hooksPath (0064). It refuses a staged .md or .rs that is not formatted and never rewrites it: prettier --write <file> or bin/devbin fmt rust, git add, commit again. A store body (an issue, a WP body) must be prettier-stable before intent set or intent issues add, or its view drifts and the doctor gate refuses every later commit. (edited)
 
 ## Decisions
 
-_(none)_
+- hv, 18 Oct 2026, directly to cc, answering cc's finding that CHANGELOG.md's [2.14.1] - unreleased section holds three Added entries (0069, 0070, 0071) and so reads as a minor: "2.14.1". The next Utilz cut is 2.14.1. The CHANGELOG heading and intent/wip.md's TODO (bin/devbin release v2.14.1) already say so, so nothing is retitled.
 
 ---
 
