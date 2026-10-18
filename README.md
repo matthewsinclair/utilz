@@ -179,6 +179,9 @@ arngz list
 arngz show work
 arngz delete old
 
+# The desk applied or saved last
+arngz current
+
 # What apply would change, then do it
 arngz diff work
 arngz apply work --dry-run

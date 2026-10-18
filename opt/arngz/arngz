@@ -26,7 +26,7 @@ fi
 # Every verb. A desk may not take one of these names (design.md, the
 # validator's seventh condition; AC-05.7), because `arngz <desk>` is apply and
 # a desk called `list` could never be applied that way.
-ARNGZ_VERBS="apply discover diff list show delete init doctor"
+ARNGZ_VERBS="apply discover diff list show delete current init doctor"
 
 # ============================================================================
 # USAGE
@@ -49,6 +49,7 @@ VERBS:
   list                       the desks in the catalogue, with display and app counts
   show <desk>                the desk, validated, as stored
   delete <desk>              remove a desk from the catalogue
+  current                    the desk applied or saved last, while it is in the catalogue
   init [--yes]               create the catalogue, and report what Hammerspoon needs
   doctor                     every precondition, each with its state
 
@@ -93,6 +94,67 @@ desk_name_refusal() {
     return 0
   fi
   return 1
+}
+
+# ============================================================================
+# THE CURRENT DESK (issue 0070)
+# ============================================================================
+
+# The desk the screen was last arranged as: the one a real apply was asked
+# for, or the one a discover --save just saved. It is state, not
+# configuration, so it lives under XDG_STATE_HOME and not in the catalogue.
+current_file() {
+  printf '%s/arngz/current\n' "${XDG_STATE_HOME:-$HOME/.local/state}"
+}
+
+# Record DESK as the current desk, written beside the file and moved over it so
+# a reader never sees half a name. A record that cannot be written is said,
+# with why, and the verb that asked keeps its own exit: the windows may have
+# moved, or the desk was saved, either way.
+record_current() {
+  local file tmp why
+  file="$(current_file)"
+  tmp="$file.$$"
+  # mv would move the temp file into a directory at the record's path and
+  # succeed, recording nothing, so that is said as the failure it is.
+  if [[ -d "$file" ]]; then
+    warn "arngz: could not record '$1' as the current desk: $file is a directory"
+    return 0
+  fi
+  if why="$({ mkdir -p -- "${file%/*}" && printf '%s\n' "$1" >"$tmp" && mv -f -- "$tmp" "$file"; } 2>&1)"; then
+    return 0
+  fi
+  # Only a temp file the failure left behind is removed. Under set -e a failed
+  # removal would end the verb before its own report; the warning names the
+  # failure either way.
+  if [[ -e "$tmp" ]]; then rm -f -- "$tmp" || :; fi
+  warn "arngz: could not record '$1' as the current desk in $file: ${why:-no reason given}"
+}
+
+# The recorded name on stdout: the record's first line. Exit 1 when there is no
+# record, and 2, said by name, when there is one that cannot be read, so an
+# unreadable record is never taken for an empty one. `read` returns 1 at a
+# last line with no newline, which is still a name, hence its `|| true`.
+read_current() {
+  local file name=""
+  file="$(current_file)"
+  [[ -f "$file" ]] || return 1
+  if [[ ! -r "$file" ]]; then
+    warn "arngz: the current desk's record $file cannot be read"
+    return 2
+  fi
+  IFS= read -r name <"$file" || true
+  printf '%s\n' "$name"
+}
+
+# Clear the record when it names DESK, which delete has just removed. A record
+# that cannot be read is left as it is, and read_current has said so.
+forget_current() {
+  local file name
+  file="$(current_file)"
+  name="$(read_current)" || return 0
+  [[ "$name" == "$1" ]] || return 0
+  rm -f -- "$file" || warn "arngz: could not clear '$1' as the current desk in $file"
 }
 
 # ============================================================================
@@ -1138,6 +1200,32 @@ cmd_delete() {
   fi
   rm -- "$file"
   printf 'deleted %s\n' "$file"
+  forget_current "$desk"
+}
+
+# current: the desk the screen was last arranged as (issue 0070). It prints
+# the name; it prints nothing and exits 1 when no apply or discover --save has
+# recorded one, or when the desk it names has since left the catalogue, so
+# `$(arngz current)` is empty then. It reads one file and asks no engine.
+cmd_current() {
+  if [[ $# -gt 0 ]]; then
+    refuse "current takes no arguments: '$1'"
+  fi
+  local file name rc=0
+  file="$(current_file)"
+  name="$(read_current)" || rc=$?
+  if [[ $rc -eq 1 ]]; then
+    info "no current desk: no apply or discover --save has recorded one in $file"
+    exit 1
+  fi
+  if [[ $rc -ne 0 ]]; then
+    exit 1
+  fi
+  if desk_name_refusal "$name" >/dev/null || [[ ! -f "$(desk_file "$name")" ]]; then
+    info "no current desk: $file names '$name', which is not in the catalogue"
+    exit 1
+  fi
+  printf '%s\n' "$name"
 }
 
 # PURE: what stops init --yes, and what only a person can do, from the two
@@ -1369,15 +1457,20 @@ cmd_apply() {
     engine_ask apply "$(desk_file "$desk")" "$options" || rc=$?
   fi
   rm -rf -- "$dir"
+  # Wherever the engine has taken an apply, the desk is the current one from
+  # then on, whatever the report says; a refusal leaves the record alone
+  # (issue 0070).
   if [[ $rc -ne 0 && $ENGINE_PENDING -eq 1 ]]; then
     # Taken and not answered: windows may be moving, so this is not "nothing
     # changed" (design.md "apply, in order", step 4).
+    if [[ $dry -eq 0 ]]; then record_current "$desk"; fi
     error "arngz: $ENGINE_ERROR (request kept at $ENGINE_DIR/request.json); fix: $ENGINE_FIX"
     exit 1
   fi
   if [[ $rc -eq 3 && $dry -eq 0 && "$ENGINE_KIND" != refused && -n "$ENGINE_RESPONSE" ]]; then
     # The engine answered, and not with a refusal: its own failure may come
     # after windows moved, so this is never "nothing changed".
+    record_current "$desk"
     error "arngz: $ENGINE_ERROR; its response is kept at $ENGINE_RESPONSE; fix: $ENGINE_FIX"
     exit 1
   fi
@@ -1393,6 +1486,7 @@ cmd_apply() {
   fi
   # From here apply has run: a failure to say how it went is exit 1, with the
   # response kept, never "nothing changed".
+  record_current "$desk"
   if ! render_report "$ENGINE_RESPONSE"; then
     error "arngz: apply ran, and its report could not be printed; its response is kept at $ENGINE_RESPONSE"
     exit 1
@@ -1486,6 +1580,8 @@ cmd_discover() {
     mkdir -p "$(catalogue_dir)"
     mv -- "$yaml" "$target"
     info "saved $target"
+    # What is on screen is that desk now (issue 0070).
+    record_current "$save"
   fi
   rm -rf "$dir"
 }
@@ -1566,7 +1662,9 @@ main() {
   fi
   local verb="$1"
   shift
-  if [[ "$verb" != -h && "$verb" != --help ]]; then
+  # current reads one file at every menu open that asks it, and needs no
+  # engine, so it skips the read of Hammerspoon's entry, as help does.
+  if [[ "$verb" != -h && "$verb" != --help && "$verb" != current ]]; then
     load_hammerspoon
   fi
   case "$verb" in
@@ -1576,6 +1674,7 @@ main() {
     list) cmd_list "$@" ;;
     show) cmd_show "$@" ;;
     delete) cmd_delete "$@" ;;
+    current) cmd_current "$@" ;;
     init) cmd_init "$@" ;;
     apply) cmd_apply "$@" ;;
     diff) cmd_diff "$@" ;;

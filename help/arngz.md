@@ -21,6 +21,7 @@ arngz diff <desk>
 arngz list
 arngz show <desk>
 arngz delete <desk>
+arngz current
 arngz init [--yes]
 arngz doctor
 arngz --help | -h
@@ -105,6 +106,7 @@ The report names every app entry in the desk with its outcome: `placed`, `launch
 - **Full-screen windows** are left alone. A full-screen window is a space of its own, and takes no ordinal on its display.
 - **`--dry-run`** prints the plan, one line per change with its reason, exactly as `diff` does, changes nothing, and exits 0; `diff` is the one whose exit says whether anything would change.
 - **The CLI waits** up to `ARNGZ_APPLY_TIMEOUT` seconds, 600 unless set, for apply's report. If it gives up, apply may still be running, so it says so and exits 1, naming the request it kept.
+- **The current desk.** An apply that ran makes its desk the current one, which `arngz current` prints. A `--dry-run` and a refusal do not.
 - **One apply at a time.** A second `apply` asked for while one is running is refused, exit 2, with the time the first was asked for. If arngz says an apply is running when none is, a crashed apply left that mark: reload Hammerspoon's config (`hs.reload()` in its console) to clear it.
 - **Reads during an apply.** `doctor`, `diff`, `discover` and `apply --dry-run` are answered between apply's phases, so what they report is a machine whose windows are still being moved: a `diff` asked for during an apply names the moves it has still to make.
 
@@ -117,7 +119,15 @@ The report names every app entry in the desk with its outcome: `placed`, `launch
 - **An app with more than one window** gets a `window` pattern on each, made from the window's title, because an entry with no pattern takes every window of its app. The pattern is the title without what leads it up to the first letter or digit (a glyph a terminal puts in front, a shell's `-`), escaped and anchored at neither end, so `◑ utilz-dc` gives `utilz%-dc` and still matches when the glyph changes. Where that would also match another window of the app, discover anchors it at its end, then uses the exact title. The report names every window it pinned and the pattern it wrote; tighten or loosen one in the desk if its title will move.
 - **Not recorded, and said**: minimized windows, windows on every space, Hammerspoon's own windows, windows Accessibility could not name (counted per space), and the Dock's app bindings, which a desk does not hold.
 
-The desk goes to stdout and the report to stderr, so `arngz discover > desk.yaml` keeps the desk alone. `--save <desk>` writes it into the catalogue instead, refusing an existing desk unless `--force` is given. Either way, the desk is checked by the validator first.
+The desk goes to stdout and the report to stderr, so `arngz discover > desk.yaml` keeps the desk alone. `--save <desk>` writes it into the catalogue instead, refusing an existing desk unless `--force` is given, and makes it the current desk. Either way, the desk is checked by the validator first.
+
+### current
+
+`current` prints the name of the desk the screen was last arranged as. An `apply` that ran records it, whatever its report says, because windows may have moved. A `discover --save` records the desk it saved. A `--dry-run`, and a refusal before anything changed, leave the record as it was. `delete` of that desk clears the record.
+
+`current` prints nothing and exits 1 when no desk is recorded, or when the recorded desk has since left the catalogue, so `$(arngz current)` is empty then. A record that exists and cannot be read is said by name, and exits 1 too. It reads one file and asks Hammerspoon nothing, so it is quick enough to run at every open of a menu.
+
+When the record cannot be written, the `apply` or `discover` that tried says so on stderr and keeps its own exit. The record then still names the desk before, so `current` lags behind that apply until the next one that records.
 
 ### diff
 
@@ -158,6 +168,7 @@ Every verb that reads a desk validates it first, and refuses with exit 2 on any 
 | `list`          | each desk with its display and app counts; an invalid desk is named on its own line     | 0, or 1 if any invalid |
 | `show <desk>`   | the desk, validated, exactly as stored                                                  | 0, or 2                |
 | `delete <desk>` | remove the desk's file, naming it; a desk that no longer validates can still be deleted | 0, or 2                |
+| `current`       | the desk applied or saved last; nothing and exit 1 when none is recorded or it is gone  | 0, or 1 if none        |
 | `init`          | create the catalogue and report what Hammerspoon needs; with `--yes`, provide it        | 0, 1, or 2             |
 | `doctor`        | every precondition, each with its state, and what fixes each one that does not hold     | 0, or 1 if any fails   |
 
@@ -197,6 +208,7 @@ arngz zeop1                   # arrange the windows; hands off the mouse
 arngz apply zeop1 --no-launch --no-create   # only what is running, on spaces that exist
 arngz apply zeop1 --map left=37D8832A-2D66-02CA-B9F7-8F30A301B230   # bind a display
 arngz delete old              # remove a desk
+arngz current                 # the desk applied or saved last
 ```
 
 ---
@@ -204,6 +216,7 @@ arngz delete old              # remove a desk
 ## Files
 
 - `${XDG_CONFIG_HOME:-$HOME/.config}/arngz/desks/<desk>.yaml` -- one desk.
+- `${XDG_STATE_HOME:-$HOME/.local/state}/arngz/current` -- the current desk's name, which `apply` and `discover --save` write and `delete` clears.
 - `${TMPDIR:-/tmp}/arngz.XXXXXX/` -- one call to Hammerspoon: its `request.json` and `response.json`. It is removed after a call that went well, and kept and named after one that did not.
 
 ---
@@ -211,6 +224,7 @@ arngz delete old              # remove a desk
 ## Environment
 
 - `XDG_CONFIG_HOME` -- where the catalogue lives; `$HOME/.config` when unset.
+- `XDG_STATE_HOME` -- where the current desk is recorded; `$HOME/.local/state` when unset.
 - `ARNGZ_HS_PREFIX` -- where `init --yes` links the `hs` tool; `/opt/homebrew` when unset.
 - `ARNGZ_HS_TIMEOUT` -- how many seconds one call to Hammerspoon may take; 60 when unset.
 - `ARNGZ_APPLY_TIMEOUT` -- how many seconds the CLI waits for apply's answer; 600 when unset. Hammerspoon may still be working when it gives up, and it says so.
@@ -221,7 +235,7 @@ arngz delete old              # remove a desk
 ## Exit Status
 
 - `0` -- done.
-- `1` -- `apply` skipped an app (not installed, or not running under `--no-launch`), saw no window for an entry, or a move or place did not take, each named in its report; `apply` was sent and did not answer within `ARNGZ_APPLY_TIMEOUT`, so it may still be running; `apply`'s engine failed rather than refused, which can come after windows moved, so its response is kept and named; `list` found a desk that does not validate, `diff` found that apply would change something, `doctor` found a precondition that does not hold, or `init --yes` stopped at a step that failed after it had changed something; each is named, and for `init` so is every step it had made.
+- `1` -- `apply` skipped an app (not installed, or not running under `--no-launch`), saw no window for an entry, or a move or place did not take, each named in its report; `apply` was sent and did not answer within `ARNGZ_APPLY_TIMEOUT`, so it may still be running; `apply`'s engine failed rather than refused, which can come after windows moved, so its response is kept and named; `list` found a desk that does not validate, `current` found no desk recorded or the recorded one gone from the catalogue, `diff` found that apply would change something, `doctor` found a precondition that does not hold, or `init --yes` stopped at a step that failed after it had changed something; each is named, and for `init` so is every step it had made.
 - `2` -- refused before anything changed: a desk that does not exist or does not validate, a bad name or option, a precondition `apply` checks first (a preference, Accessibility, the Move-space shortcuts, a mouse button or modifier held), another apply still running, or Hammerspoon not answering.
 
 ---

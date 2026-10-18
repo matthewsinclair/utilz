@@ -9,10 +9,17 @@
 #
 # THE CATALOGUE IS ALWAYS A FIXTURE. Every test points XDG_CONFIG_HOME at its
 # own temp directory, which is the one override the design allows, so no test
-# can read or write the real ~/.config/arngz.
+# can read or write the real ~/.config/arngz. SO IS THE STATE: every helper
+# that points XDG_CONFIG_HOME there points XDG_STATE_HOME there too, so the
+# current desk an apply or a discover --save records (issue 0070) never
+# reaches the real ~/.local/state/arngz.
 # AT-01.4 (ST0028 acceptance.md) cites this file: the suite the estate and the Ubuntu loop run on the closing SHA.
 
 load "../../utilz/test/test_helper.bash"
+
+# `run --separate-stderr` (issue 0070's tests) needs bats >= 1.5.0; without
+# this declaration bats warns BW02 on every run.
+bats_require_minimum_version 1.5.0
 
 FIXTURES="$UTILZ_HOME/opt/arngz/test/fixtures"
 
@@ -23,6 +30,7 @@ run_arngz() {
 # A fresh catalogue for this test, holding the design's example desk.
 catalogue() {
   export XDG_CONFIG_HOME="$BATS_TEST_TMPDIR/config"
+  export XDG_STATE_HOME="$BATS_TEST_TMPDIR/state"
   CAT="$XDG_CONFIG_HOME/arngz/desks"
   mkdir -p "$CAT"
   cp "$FIXTURES/desks/zeop1.yaml" "$CAT/zeop1.yaml"
@@ -79,7 +87,7 @@ assert_refusal() {
   run_utilz arngz --help
   assert_success
   local word
-  for word in apply discover diff list show delete init doctor \
+  for word in apply discover diff list show delete current init doctor \
     --dry-run --no-launch --no-create --map --save --force --yes; do
     assert_output_contains "$word"
   done
@@ -341,7 +349,7 @@ EOF
 @test "AT-02.3: a desk named like a verb is refused, by show and by apply" {
   catalogue
   local verb
-  for verb in apply discover diff list show delete init doctor; do
+  for verb in apply discover diff list show delete current init doctor; do
     minimal_desk "$verb"
     run_arngz show "$verb"
     assert_refusal "$verb" "desk name" "$verb"
@@ -365,6 +373,7 @@ fake_hs() {
   cp "$FIXTURES/fake-hs" "$BATS_TEST_TMPDIR/fakebin/hs"
   export PATH="$BATS_TEST_TMPDIR/fakebin:$PATH"
   export XDG_CONFIG_HOME="$BATS_TEST_TMPDIR/config"
+  export XDG_STATE_HOME="$BATS_TEST_TMPDIR/state"
   export TMPDIR="$BATS_TEST_TMPDIR/tmp"
   mkdir -p "$TMPDIR"
 }
@@ -1043,6 +1052,7 @@ apply_response() {
 machine() {
   export HOME="$BATS_TEST_TMPDIR/home"
   export XDG_CONFIG_HOME="$HOME/.config"
+  export XDG_STATE_HOME="$HOME/.local/state"
   export ARNGZ_HS_PREFIX="$BATS_TEST_TMPDIR/prefix"
   export TMPDIR="$BATS_TEST_TMPDIR/tmp"
   export FAKE_PREFS="$BATS_TEST_TMPDIR/prefs"
@@ -1843,4 +1853,193 @@ EOF
   chmod 755 "$BATS_TEST_TMPDIR/locked"
   assert_exit_code 2
   assert_output_contains "init changed nothing: could not make the catalogue $XDG_CONFIG_HOME/arngz/desks: "
+}
+
+# ============================================================================
+# Issue 0070 -- the current desk: recorded by an apply that ran and by a
+# discover --save, cleared by a delete of it, printed by current
+# ============================================================================
+
+# Where the record is, under this test's own XDG_STATE_HOME.
+current_record() {
+  printf '%s/arngz/current\n' "$XDG_STATE_HOME"
+}
+
+@test "0070: with nothing recorded, current prints nothing and exits 1, saying why on stderr" {
+  catalogue
+  run --separate-stderr "$UTILZ_BIN_DIR/arngz" current
+  assert_exit_code 1
+  [ -z "$output" ]
+  [[ "$stderr" == *"no current desk: no apply or discover --save has recorded one in $(current_record)"* ]]
+}
+
+@test "0070: an apply that placed every entry records its desk, and current prints it" {
+  local response
+  response="$(apply_response placed_results)"
+  apply_machine scheduled "$response"
+  run_arngz apply zeop1
+  assert_success
+  # The record is written beside itself and moved over, leaving nothing else.
+  [ "$(ls -A "$XDG_STATE_HOME/arngz")" = "current" ]
+  run --separate-stderr "$UTILZ_BIN_DIR/arngz" current
+  assert_success
+  assert_output "zeop1"
+}
+
+@test "0070: an apply the engine took and never answered, exit 1, records its desk" {
+  local response
+  response="$(apply_response placed_results)"
+  apply_machine scheduled-never "$response"
+  export ARNGZ_APPLY_TIMEOUT=1
+  run_arngz apply zeop1
+  assert_exit_code 1
+  [ "$(cat "$(current_record)")" = "zeop1" ]
+}
+
+@test "0070: an apply that ran with an entry not placed, exit 1, records its desk all the same" {
+  local response
+  response="$(apply_response launch_skipped_results)"
+  apply_machine scheduled "$response"
+  run_arngz apply zeop1
+  assert_exit_code 1
+  [ "$(cat "$(current_record)")" = "zeop1" ]
+}
+
+@test "0070: an apply whose engine failed after taking it, exit 1, records its desk too" {
+  local response="$BATS_TEST_TMPDIR/failed.json"
+  printf '%s\n' '{"status":"error","kind":"lua_error","verb":"apply","error":"FIXTURE attempt to index a nil value"}' >"$response"
+  apply_machine scheduled "$response"
+  run_arngz apply zeop1
+  assert_exit_code 1
+  [ "$(cat "$(current_record)")" = "zeop1" ]
+}
+
+@test "0070: a dry run, and an apply refused before anything changed, leave the record as it was" {
+  local response
+  response="$(engine_response plan off_cell_world base_desk)"
+  apply_machine ok "$response"
+  run_arngz apply --dry-run zeop1
+  assert_success
+  [ ! -e "$(current_record)" ]
+  mkdir -p "$XDG_STATE_HOME/arngz"
+  printf 'earlier\n' >"$(current_record)"
+  hs_on_path exit-69 "$FIXTURES/responses/observe.json"
+  run_arngz apply zeop1
+  assert_exit_code 2
+  run_arngz apply nosuchdesk
+  assert_exit_code 2
+  # The engine's own refusal comes with a response, and still records nothing.
+  local refused="$BATS_TEST_TMPDIR/running.json"
+  printf '%s\n' '{"status":"error","kind":"refused","verb":"apply","error":"an apply is already running (asked for at 2026-10-16T13:00:00Z)","fix":"wait for it to finish"}' >"$refused"
+  hs_on_path scheduled "$refused"
+  run_arngz apply zeop1
+  assert_exit_code 2
+  assert_output_contains "the engine refused apply"
+  [ "$(cat "$(current_record)")" = "earlier" ]
+}
+
+@test "0070: discover --save records the desk it saved; a discover that only prints records nothing" {
+  local response
+  response="$(engine_response discover discover_world "" "zeop2")"
+  fake_hs ok "$response"
+  run_arngz discover
+  assert_success
+  [ ! -e "$(current_record)" ]
+  run_arngz discover --save zeop2
+  assert_success
+  run --separate-stderr "$UTILZ_BIN_DIR/arngz" current
+  assert_success
+  assert_output "zeop2"
+}
+
+@test "0070: a delete of the current desk clears the record, and a delete of another desk keeps it" {
+  catalogue
+  minimal_desk other
+  mkdir -p "$XDG_STATE_HOME/arngz"
+  printf 'zeop1\n' >"$(current_record)"
+  run_arngz delete other
+  assert_success
+  [ "$(cat "$(current_record)")" = "zeop1" ]
+  run_arngz delete zeop1
+  assert_success
+  [ ! -e "$(current_record)" ]
+}
+
+@test "0070: a recorded desk that has left the catalogue is no current desk, exit 1, and current says so" {
+  catalogue
+  mkdir -p "$XDG_STATE_HOME/arngz"
+  printf 'gone\n' >"$(current_record)"
+  run --separate-stderr "$UTILZ_BIN_DIR/arngz" current
+  assert_exit_code 1
+  [ -z "$output" ]
+  [[ "$stderr" == *"names 'gone', which is not in the catalogue"* ]]
+}
+
+@test "0070: current takes no arguments, and asks Hammerspoon nothing" {
+  fake_hs ok
+  catalogue
+  mkdir -p "$XDG_STATE_HOME/arngz"
+  printf 'zeop1\n' >"$(current_record)"
+  run_arngz current zeop1
+  assert_exit_code 2
+  assert_output_contains "current takes no arguments: 'zeop1'"
+  run_arngz current
+  assert_success
+  assert_output "zeop1"
+  [ ! -e "$FAKE_HS_LOG/request.json" ]
+}
+
+@test "0070: a record that cannot be written is said, with why, and the apply keeps its own exit" {
+  local response
+  response="$(apply_response placed_results)"
+  apply_machine scheduled "$response"
+  export XDG_STATE_HOME="$BATS_TEST_TMPDIR/state-is-a-file"
+  : >"$XDG_STATE_HOME"
+  run_arngz apply zeop1
+  assert_success
+  assert_output_contains "could not record 'zeop1' as the current desk in $XDG_STATE_HOME/arngz/current: "
+  refute_output_contains "no reason given"
+}
+
+@test "0070: a directory where the record goes is said, and nothing is left inside it" {
+  local response
+  response="$(apply_response placed_results)"
+  apply_machine scheduled "$response"
+  mkdir -p "$(current_record)"
+  run_arngz apply zeop1
+  assert_success
+  assert_output_contains "could not record 'zeop1' as the current desk: $(current_record) is a directory"
+  [ -z "$(ls -A "$(current_record)")" ]
+}
+
+@test "0070: a record that cannot be read is said by name, never taken for no record at all" {
+  catalogue
+  mkdir -p "$XDG_STATE_HOME/arngz"
+  printf 'zeop1\n' >"$(current_record)"
+  chmod 000 "$(current_record)"
+  run --separate-stderr "$UTILZ_BIN_DIR/arngz" current
+  chmod 644 "$(current_record)"
+  assert_exit_code 1
+  [ -z "$output" ]
+  [[ "$stderr" == *"the current desk's record $(current_record) cannot be read"* ]]
+}
+
+@test "0070: a record that is not a desk name is no current desk, though its path reaches a desk's file" {
+  catalogue
+  mkdir -p "$XDG_STATE_HOME/arngz"
+  printf '../desks/zeop1\n' >"$(current_record)"
+  run --separate-stderr "$UTILZ_BIN_DIR/arngz" current
+  assert_exit_code 1
+  [ -z "$output" ]
+}
+
+@test "0070: current reads no Hammerspoon entry, so a broken one does not stop it" {
+  machine
+  catalogue
+  stub_failing yq '*Hammerspoon*'
+  mkdir -p "$XDG_STATE_HOME/arngz"
+  printf 'zeop1\n' >"$(current_record)"
+  run_arngz current
+  assert_success
+  assert_output "zeop1"
 }

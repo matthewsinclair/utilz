@@ -12,6 +12,7 @@ The section still open names its version: `## [X.Y.Z] - unreleased`, never `## [
 ### Added
 
 - **menuz's own items can sit anywhere in its menu** (issue 0069). A `menuz:` entry in `menuz.yaml` places **Log** (`menuz: log`), **Edit…** (`menuz: edit`) or **Reload** (`menuz: reload`) where it stands, in a submenu as readily as at the top, so a menu that keeps its tools in a **Utilities** submenu can keep menuz's there too. Each can be placed once. Those a file does not place stay below its entries, where all four sat before, and **Quit menuz** is always last there. `menuz validate` refuses any other word, `quit` included; a second placing, naming the entry that placed it first; and a `cwd` or `notify` beside one, which would do nothing. A file with no `menuz:` entry keeps all four below its entries, as before. menuz goes from 0.1.0 to 0.2.0.
+- **`arngz current` names the desk the screen was last arranged as** (issue 0070). An `apply` that ran records its desk, whatever its report says, and so does a `discover --save`. A `--dry-run`, or a refusal before anything changed, leaves the record as it was, and `delete` of that desk clears it. The record is one file, `${XDG_STATE_HOME:-~/.local/state}/arngz/current`. `current` prints the name; it prints nothing and exits 1 when none is recorded or the desk has left the catalogue, so `$(arngz current)` is empty then. It asks Hammerspoon nothing, so a menu can run it at every open. `current` joins the verbs, so a desk can no longer be named `current`. arngz goes from 1.0.1 to 1.1.0.
 
 ### Changed
 

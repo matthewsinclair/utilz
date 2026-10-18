@@ -26,7 +26,7 @@ ln -s utilz arngz
 
 ```bash
 arngz <desk>
-arngz <apply|discover|diff|list|show|delete|init|doctor> [ARGS]
+arngz <apply|discover|diff|list|show|delete|current|init|doctor> [ARGS]
 ```
 
 For detailed help: `utilz help arngz`
