@@ -1,0 +1,15 @@
+{
+  "id": "01M58927N3K1R4QVEKTKMJXM7Z",
+  "ts": "2026-10-18T19:50:50.275Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "doing",
+    "text": "Done: CI's shellcheck step under shellcheck 0.9.0 on this Mac (vc, 19:47Z) is clean at 1d0bb15: 24 files, exit 0, in gtools-vc's slot 45. The first control (echo as B and C) could not fire and is struck; the corrected one, [ -n \"$1\" ] && [ -n \"$2\" ] || false, gave SC2015 and rc 1. END sent to gtools-vc and vc; back to hold 10."
+  }
+}

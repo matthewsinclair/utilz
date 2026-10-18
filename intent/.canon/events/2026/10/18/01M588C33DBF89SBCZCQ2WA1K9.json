@@ -1,0 +1,15 @@
+{
+  "id": "01M588C33DBF89SBCZCQ2WA1K9",
+  "ts": "2026-10-18T19:38:44.717Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "doing",
+    "text": "The Linux leg on kovacs before hv pushes main (vc, 19:35Z, on hv's word at 19:16Z): tests.yml's test-linux steps at main's head in a mktemp dir cloned from a git bundle (mikefarah yq first, kovacs's own checkout untouched), and the shellcheck job's collector verbatim under shellcheck 0.9.0; booked with gtools-vc (START, GO, END); END to vc with the sha, each step's result and the logs. At 19:38Z kovacs is stopped (prlctl lists Ubuntu 24.04.3 ARM64 as stopped; ssh to 10.211.55.3:22 timed out; ping 0 of 2), so nothing is started; whether to start it is hv's, asked in dc's session."
+  }
+}

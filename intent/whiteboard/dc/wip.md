@@ -2,10 +2,10 @@
 node: dc
 name: DevX Claude
 role: devx
-session_id: b6f789ca-4627-4a74-b4cd-bb7c07de9f46
-heartbeat_at: 2026-10-17 13:56Z
+session_id: b9b30fae-7dc0-478d-ab4d-c23ca8e38f30
+heartbeat_at: 2026-10-18 20:00Z
 status: active
-focus: "Holding, 17 Oct 13:5xZ: nothing open (outstanding 0/0/0); 2.14.0 released and installed here; 0066 closed (76ffed8, b52ca0e); the relink AT17 flake fixed (fd2a621, CI 39037952353 green); folded, waiting on vc."
+focus: "18 Oct 20:00Z, EOD localfold: nothing in flight; hold 10 stands (the Linux leg on kovacs, stopped on hv's word); 0073 is utilz-ic's; the shellcheck 0.9.0 window is clean at 1d0bb15, its evidence in tmp/dc-sc090-1d0bb15/; holding for vc."
 claims: []
 ---
 
@@ -21,16 +21,16 @@ _(none)_
 
 ## Holds
 
-_(none)_
+- The Linux leg on kovacs (vc, 19:35Z): not run, on hv's "Leave it stopped" (dc decision 2). Condition: hv says start kovacs, and gtools-vc gives its GO; or vc names dc's next item.
 
 ## Watch-outs
 
-- menuz's run log prints the start line's cwd= as written (cwd=~ stays ~), and HOME's value when neither the item nor the file gives one (Run.startLine, 9dde810). A help or README example with an absolute path writes it under /Users/you/ with the slash, the one form the install's home-path test lets through (46046ee). (edited)
-- Rules in force: every test run on this Mac or kovacs, however small (one bats file, one prez AT), is booked as a window with intent-vc by name through utilz-vc first, and ENDed by name; reading logs needs no window. CI shellcheck is ubuntu-latest apt 0.9.0, which flags A && B || C as SC2015 where 0.11.0 passes: run it under 0.9.0 on kovacs before handing on. A portable stat puts the GNU form first (stat -c), since GNU stat -f reports the filesystem rather than failing (relink.bats AT17, fd2a621). No Hammerspoon, pointer, xcodebuild or hv real keychain from dc; nothing pushed by dc. (edited)
+- Rules in force for dc: every host run, however small (one bats file, one prez AT), is booked by name with the booker vc names (gtools-vc on 18 Oct: a START, its GO, an END, by SendMessage), nothing heavy runs without a GO, and reading needs no window. CI's shellcheck is 0.9.0, which flags A && B || C as SC2015 where 0.11.0 passes: run it under 0.9.0 (on kovacs, or its darwin build here under Rosetta) before handing on, with a control whose B and C are not echo. A portable stat puts GNU stat -c first. No Hammerspoon, pointer, xcodebuild or hv's real keychain from dc; nothing pushed by dc. (edited)
 
 ## Decisions
 
-_(none)_
+- hv, 18 Oct, directly to dc: asked which stands when dc's plan split 0073 and vc's routing of 18:59Z gave all of it to utilz-ic, hv chose vc's routing. So utilz-ic owns all of 0073 and dc holds for vc's word; host runs book with the booker vc names; 0073's design goes in the issue before any source edit; and the doctor floor check goes into 0073 through vc (menuz doctor reads xcode ok for any selected Xcode; one comparison against project.yml's xcodeVersion makes an Xcode below the floor a named FAIL). (edited)
+- hv, 18 Oct, directly to dc, asked whether to start kovacs (stopped at 19:38Z) for vc's Linux leg before the push: "Leave it stopped." So the Linux leg of vc's 19:35Z item is not run today and nothing was started on kovacs or this Mac. Whether main is pushed without it is hv's and vc's; if it is, CI's Ubuntu leg is the first Linux run of today's commits (0069, 0070, 0071, the devbin 0.1.12 sweep).
 
 ---
 

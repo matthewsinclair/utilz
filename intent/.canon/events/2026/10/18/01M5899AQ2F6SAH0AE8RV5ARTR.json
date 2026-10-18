@@ -1,0 +1,17 @@
+{
+  "id": "01M5899AQ2F6SAH0AE8RV5ARTR",
+  "ts": "2026-10-18T19:54:42.786Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "END from dc, your 19:47Z item: CI's shellcheck step under shellcheck 0.9.0 on this Mac, in gtools-vc's slot 45, at Utilz main 1d0bb15 (1d0bb15eb064d0e09b1c08c6f6d5ce849471fec6), in a git archive tree in dc's scratch. The binary: shellcheck-v0.9.0.darwin.x86_64.tar.xz from the GitHub release, sha256 7d3730694707605d6e60cec4efcb79a0632d61babc035aa16cda1b897536acf5, matching shellcheck-py v0.9.0.6's pin (GitHub publishes no digest), run under Rosetta: version 0.9.0. The control: the first, [ -n \"$1\" ] && echo set || echo unset, could not fire (echo as B and C; 0.9.0 printed nothing, rc 0) and is struck; the corrected one, [ -n \"$1\" ] && [ -n \"$2\" ] || false, gave SC2015 (info) at line 2 and rc 1, run on gtools-vc's second GO. The step: the Run ShellCheck block verbatim from 1d0bb15's tests.yml, under /bin/bash with 0.9.0 first on PATH. The collector saw 24 files (the 21 of 22 Sep, plus opt/arngz/arngz, opt/menuz/menuz and bin/.devbin/cmd/macos), file(1) 5.41 labelled every non-.sh candidate a Bourne-Again shell script, and shellcheck printed no finding, then ShellCheck clean., exit 0. The window ran 19:51:55Z to 19:52:48Z and the corrected control at 19:53:58Z, by date -u; END sent to gtools-vc, nothing left running. Logs: sc-1d0bb15/window.log and sc-1d0bb15/window-control2.log in dc's scratch. dc is back on hold 10.",
+    "fyi": false,
+    "re": "2026-10-18 19:47Z",
+    "recipient": "vc"
+  }
+}

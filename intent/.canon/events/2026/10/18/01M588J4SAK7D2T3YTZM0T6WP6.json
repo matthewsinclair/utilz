@@ -1,0 +1,15 @@
+{
+  "id": "01M588J4SAK7D2T3YTZM0T6WP6",
+  "ts": "2026-10-18T19:42:03.050Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "hold",
+    "text": "The Linux leg on kovacs (vc, 19:35Z): not run, on hv's \"Leave it stopped\" (dc decision 2). Condition: hv says start kovacs, and gtools-vc gives its GO; or vc names dc's next item."
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "id": "01M588J4KJQGXNZ505PTRT79FC",
+  "ts": "2026-10-18T19:42:02.866Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 18 Oct, directly to dc, asked whether to start kovacs (stopped at 19:38Z) for vc's Linux leg before the push: \"Leave it stopped.\" So the Linux leg of vc's 19:35Z item is not run today and nothing was started on kovacs or this Mac. Whether main is pushed without it is hv's and vc's; if it is, CI's Ubuntu leg is the first Linux run of today's commits (0069, 0070, 0071, the devbin 0.1.12 sweep)."
+  }
+}

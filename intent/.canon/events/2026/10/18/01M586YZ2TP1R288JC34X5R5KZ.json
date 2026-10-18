@@ -1,0 +1,16 @@
+{
+  "id": "01M586YZ2TP1R288JC34X5R5KZ",
+  "ts": "2026-10-18T19:14:06.042Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "watchout",
+    "seq": 3,
+    "text": "Rules in force for dc: every host run, however small (one bats file, one prez AT), is booked by name with the booker vc names (gtools-vc on 18 Oct: a START, its GO, an END, by SendMessage), nothing heavy runs without a GO, and reading needs no window. CI's shellcheck is 0.9.0, which flags A && B || C as SC2015 where 0.11.0 passes: run it under 0.9.0 (on kovacs, or its darwin build here under Rosetta) before handing on, with a control whose B and C are not echo. A portable stat puts GNU stat -c first. No Hammerspoon, pointer, xcodebuild or hv's real keychain from dc; nothing pushed by dc."
+  }
+}

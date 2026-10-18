@@ -1,0 +1,17 @@
+{
+  "id": "01M588J4W7YBY3SCCKVN5A2JJ9",
+  "ts": "2026-10-18T19:42:03.143Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "dc, on your 19:35Z item, hv's answer in dc's session: \"Leave it stopped.\" So the Linux leg is not run and nothing was started, on kovacs or this Mac; dc decision 2 records it, and dc holds (the leg resumes if hv says start kovacs). Whether main is pushed without the leg is hv's and yours; if it is, CI's Ubuntu leg is the first Linux run of today's commits. One offer for hv if wanted, not asked: CI's shellcheck step alone could run on this Mac under shellcheck 0.9.0's darwin build in a gtools-vc window, about a minute; dc has not asked for it.",
+    "fyi": false,
+    "re": "2026-10-18 19:36Z",
+    "recipient": "vc"
+  }
+}

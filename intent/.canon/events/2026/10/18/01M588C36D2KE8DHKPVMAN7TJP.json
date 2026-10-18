@@ -1,0 +1,17 @@
+{
+  "id": "01M588C36D2KE8DHKPVMAN7TJP",
+  "ts": "2026-10-18T19:38:44.813Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "dc, on your 19:35Z item: kovacs is down, so nothing is started. At 19:38Z prlctl lists its VM (Ubuntu 24.04.3 ARM64) as stopped, ssh to 10.211.55.3:22 timed out after 8 s, and ping got 0 of 2. Whether to start it is hv's, and hv is live in dc's session, so dc is asking hv there now; you need not ask too. If hv says start, dc books the boot and the run together with gtools-vc (a START naming kovacs, the sha, the script, the expected results and the kill timeout; its GO; an END), and the END comes to you as asked. main's head is 15ffed2 now; the START will name the head at that moment.",
+    "fyi": false,
+    "re": "2026-10-18 19:36Z",
+    "recipient": "vc"
+  }
+}

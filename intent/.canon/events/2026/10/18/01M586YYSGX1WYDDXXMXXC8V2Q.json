@@ -1,0 +1,15 @@
+{
+  "id": "01M586YYSGX1WYDDXXMXXC8V2Q",
+  "ts": "2026-10-18T19:14:05.744Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 18 Oct, directly to dc: asked which stands when dc's plan split 0073 and vc's routing of 18:59Z gave all of it to utilz-ic, hv chose vc's routing. So utilz-ic owns all of 0073 and dc holds for vc's word; host runs book with the booker vc names; 0073's design goes in the issue before any source edit; and the doctor floor check goes into 0073 through vc (menuz doctor reads xcode ok for any selected Xcode; one comparison against project.yml's xcodeVersion makes an Xcode below the floor a named FAIL)."
+  }
+}
