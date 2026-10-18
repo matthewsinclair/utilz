@@ -1,0 +1,15 @@
+{
+  "id": "01M589HT9M7W0H50SF38TS5JDM",
+  "ts": "2026-10-18T19:59:20.885Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "issues.add",
+  "subject": {
+    "type": "issue",
+    "id": "0075"
+  },
+  "payload": {
+    "severity": "low",
+    "title": "menuz's return after a logout and login is unconfirmed: ST0027 AC-05.2's last part, hv's keypress"
+  }
+}
