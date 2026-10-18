@@ -48,5 +48,7 @@ struct IdentityRowTests {
     #expect(font?.fontDescriptor.symbolicTraits.contains(.bold) == true)
     #expect(builder.menu.items[1].isSeparatorItem)
     #expect(builder.menu.items[2].title == Self.refusal.description)
+    // With refusals and no file, the tail still has its own line under them.
+    #expect(builder.menu.items.map(\.isSeparatorItem) == [false, true, false, true, false, false, false, false])
   }
 }

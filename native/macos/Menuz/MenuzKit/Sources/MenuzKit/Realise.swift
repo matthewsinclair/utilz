@@ -38,6 +38,16 @@ public struct Realised: Equatable, Sendable {
     return value
   }
 
+  /// The line `each` ticks: its `checked` as written when that is literal,
+  /// else as the shell realised it; nil when it has none, or the shell has
+  /// not answered it, or failed (issue 0071).
+  public func checked(_ each: Each) -> String? {
+    guard let text = each.checked else { return nil }
+    guard Realise.isDynamic(text) else { return text }
+    guard case .ok(let value) = labels[Realise.checkedId(each.path)] else { return nil }
+    return value
+  }
+
   /// This answer applied over the last one: a value the shell answered
   /// replaces the last, and one it failed keeps the last good value.
   public func merging(_ answer: Realised) -> Realised {
@@ -101,7 +111,15 @@ public enum Realise {
     text.contains("$") || text.contains("`")
   }
 
-  /// The dynamic labels and every each of a menu, in the menu's order.
+  /// The id an each's `checked` is realised under: the each's path and a
+  /// suffix no entry path can carry, so it rides with the labels in the one
+  /// shell call and never meets one of theirs.
+  public static func checkedId(_ path: String) -> String {
+    path + "#checked"
+  }
+
+  /// The dynamic labels and every each of a menu, in the menu's order; an
+  /// each's dynamic `checked` goes with the labels.
   public static func request(for spec: MenuSpec) -> RealiseRequest {
     var labels: [RealiseLabel] = []
     var eaches: [RealiseEach] = []
@@ -116,6 +134,9 @@ public enum Realise {
         labels.append(RealiseLabel(id: item.path, text: item.label))
       case .each(let each):
         eaches.append(RealiseEach(id: each.path, line: each.line, label: each.label))
+        if let checked = each.checked, isDynamic(checked) {
+          labels.append(RealiseLabel(id: checkedId(each.path), text: checked))
+        }
       case .submenu(_, let children):
         collect(children, labels: &labels, eaches: &eaches)
       default:
@@ -249,14 +270,35 @@ extension Realise {
     RealiseRequest(labels: [], eaches: [RealiseEach(id: choicesId, line: line, label: "$MENUZ_ITEM")])
   }
 
-  /// The choices that request's answer gives, or why there are none.
-  public static func choices(from answer: Realised, seconds: Double) -> Answer<[String]> {
+  /// The choices that request's answer gives, or why there are none:
+  /// `unanswered`, what the shell did instead, when it gave no answer.
+  public static func choices(from answer: Realised, unanswered: String) -> Answer<[String]> {
     switch answer.eaches[choicesId] {
     case .ok(let items)?: .ok(items.map(\.line))
     case .failed(let why)?: .failed(why)
-    case nil: .failed("no answer within \(seconds) s")
+    case nil: .failed(unanswered)
     }
   }
 
   private static let choicesId = "choices"
+}
+
+extension Realise {
+  /// A param's `default` that holds a `$` or a backtick, asked as a label
+  /// is when the form opens (issue 0071).
+  public static func defaultRequest(_ text: String) -> RealiseRequest {
+    RealiseRequest(labels: [RealiseLabel(id: defaultId, text: text)], eaches: [])
+  }
+
+  /// The default that request's answer gives, or why there is none:
+  /// `unanswered`, what the shell did instead, when it gave no answer.
+  public static func defaultValue(from answer: Realised, unanswered: String) -> Answer<String> {
+    switch answer.labels[defaultId] {
+    case .ok(let value)?: .ok(value)
+    case .failed(let why)?: .failed(why)
+    case nil: .failed(unanswered)
+    }
+  }
+
+  private static let defaultId = "default"
 }

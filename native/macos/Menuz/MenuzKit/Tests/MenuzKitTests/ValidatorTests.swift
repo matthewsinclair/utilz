@@ -134,6 +134,15 @@ struct ValidatorTests {
     #expect(Self.only("menu:\n  - menuz: log\n    run: echo\n") == Self.at("menu[0]", "run", "echo", "run goes with label or each, not menuz"))
   }
 
+  @Test("rule 3: checked goes with an each, and anywhere else is refused")
+  func checkedOffEach() {
+    #expect(Self.refusals("menu:\n  - each: ls\n    label: x\n    run: y\n    checked: a\n") == [])
+    #expect(Self.only("menu:\n  - label: a\n    checked: x\n") == Self.at("menu[0]", "checked", "x", "checked goes with each, not label"))
+    #expect(
+      Self.only("menu:\n  - submenu: s\n    checked: x\n    items:\n      - label: a\n")
+        == Self.at("menu[0]", "checked", "x", "checked goes with each, not submenu"))
+  }
+
   @Test("rule 3: cwd or notify beside menuz is refused, since an app item runs nothing of the file's")
   func cwdNotifyWithMenuz() {
     #expect(

@@ -14,8 +14,9 @@ public struct Entry: Equatable, Sendable {
   public enum Kind: Equatable, Sendable {
     /// An item: runs `run` when chosen, a caption when it has none.
     case item(label: String)
-    /// One item per stdout line of `line`, each labelled by `label`.
-    case each(line: String, label: String)
+    /// One item per stdout line of `line`, each labelled by `label`; the
+    /// item whose line is `checked`, as realised, is ticked (issue 0071).
+    case each(line: String, label: String, checked: String?)
     case header(String)
     case separator
     case submenu(title: String, items: [Entry])

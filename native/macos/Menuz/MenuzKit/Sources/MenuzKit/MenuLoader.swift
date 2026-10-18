@@ -56,7 +56,7 @@ private struct Validator {
 
   enum TopKey: String, CaseIterable { case icon, cwd, notify, realise, menu }
   enum EntryKey: String, CaseIterable {
-    case label, run, params, cwd, notify, each, header, separator, submenu, items, menuz
+    case label, run, params, cwd, notify, each, checked, header, separator, submenu, items, menuz
   }
   enum ParamKey: String, CaseIterable { case name, prompt, `default`, type, choices, required }
 
@@ -159,6 +159,10 @@ private struct Validator {
     if let node = keys[.items], kind != .submenu {
       refuse(place, EntryKey.items.rawValue, describe(node), "items go with submenu")
     }
+    // Only an each has lines for checked to pick from (issue 0071).
+    if let node = keys[.checked], kind != .each {
+      refuse(place, EntryKey.checked.rawValue, describe(node), "checked goes with each, not \(kind.rawValue)")
+    }
     // An app item runs nothing of the file's, so these would do nothing.
     for key in [EntryKey.cwd, .notify] {
       if let node = keys[key], kind == .menuz {
@@ -181,7 +185,10 @@ private struct Validator {
         refuse(place, kind.rawValue, text, "an each needs a label for its items")
         return nil
       }
-      return scalar(labelNode, at: place, key: EntryKey.label.rawValue).map { .each(line: text, label: $0) }
+      let checked = keys[.checked].flatMap { scalar($0, at: place, key: EntryKey.checked.rawValue) }
+      return scalar(labelNode, at: place, key: EntryKey.label.rawValue).map {
+        .each(line: text, label: $0, checked: checked)
+      }
     case .header:
       return .header(text)
     case .separator:

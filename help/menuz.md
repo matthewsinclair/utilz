@@ -77,11 +77,13 @@ menu:
       - each: ls "${XDG_CONFIG_HOME:-$HOME/.config}/arngz/desks" 2>/dev/null | sed 's/\.yaml$//'
         label: "$MENUZ_ITEM"
         run: arngz apply "$MENUZ_ITEM"
+        checked: "$(arngz current || true)"
   - label: Discover…
     params:
       - name: desk
         prompt: Save the arrangement on screen now as
-        default: today
+        default: "$(arngz current || echo today)"
+        required: true
     run: arngz discover --save "$desk" --force
   - separator: true
   - submenu: Utilities
@@ -110,16 +112,21 @@ menu:
 | `cwd`       | the run's working directory; the item's wins over the file's                                                                     |
 | `notify`    | `never`, `failure` or `always`; the item's wins over the file's                                                                  |
 | `each`      | a shell line whose output lines become one item each, at every menu open; `$MENUZ_ITEM` is the line, in `label`, `run` and `cwd` |
+| `checked`   | with `each`: a string realised like a label at every open; the item whose line it equals is ticked                               |
 | `header`    | a section header                                                                                                                 |
 | `separator` | a separator                                                                                                                      |
 | `submenu`   | a submenu, with its entries under `items`, nested as deep as wanted                                                              |
 | `menuz`     | one of the app's own items, placed here rather than below the file's entries: `log`, `edit` or `reload`, each at most once       |
 
-The app has four items of its own: **Edit…**, which opens `menuz.yaml` in the default text editor, **Log**, which opens the log, **Reload**, and **Quit menuz**. A `menuz` entry puts one of the first three where it stands, so the example keeps them in its **Utilities** submenu. Those the file does not place go below its entries, after a line (the file's own, when its last entry is a separator), and **Quit menuz** is always there, last. Before there is a log, **Log** reads **Log (no log yet)**, disabled, wherever it sits.
+A `separator` that starts the menu, or follows another at its top level, adds no line: the one under the identity row, or the one before it, serves. Inside a submenu, separators are drawn as the file gives them.
+
+The app has four items of its own: **Edit…**, which opens `menuz.yaml` in the default text editor, **Log**, which opens the log, **Reload**, and **Quit menuz**. A `menuz` entry puts one of the first three where it stands, so the example keeps them in its **Utilities** submenu. Those the file does not place go below its entries, after a line (the menu's own, when its last entry is a separator), and **Quit menuz** is always there, last. Before there is a log, **Log** reads **Log (no log yet)**, disabled, wherever it sits.
 
 ### Labels at every open
 
-A label or an `each` line with a `$` or a backtick is realised by the login shell each time the menu opens. All of a menu's such strings go to one `zsh -ilc`, so ten dynamic labels cost one shell start. The menu opens at once with the last values, the file's text on the first open, and the titles update in place when the shell answers. A string still unanswered after `realise` seconds keeps its last value, and the log says so. A label with neither a `$` nor a backtick is never sent to the shell.
+A label or an `each` line with a `$` or a backtick is realised by the login shell each time the menu opens. All of a menu's such strings go to one `zsh -ilc`, so ten dynamic labels cost one shell start. The menu opens at once with the last values, the file's text on the first open, and the titles update in place when the shell answers. A string still unanswered after `realise` seconds keeps its last value, and the log says so. A label with neither a `$` nor a backtick is never sent to the shell. An `each`'s `checked` goes to the same shell, with the labels, and the item whose line equals what it gives is ticked.
+
+A `$(...)` that exits other than 0 fails the string it is in, which then keeps its last value. So a command that may print nothing and fail, such as `arngz current` before any desk is recorded, is written with what the string should be then: `$(arngz current || true)` for no tick, `$(arngz current || echo today)` for a default.
 
 ### Parameters
 
@@ -129,7 +136,7 @@ An item's `params` is a list of the parameters it asks for, in order. A paramete
 | ---------- | ----------------------------------------------------------------------------------------------------------------------------- |
 | `name`     | the variable its value is exported as: lower case, `[a-z][a-z0-9_]*`, not one the login shell already exports, and not shared |
 | `prompt`   | the question asked                                                                                                            |
-| `default`  | the answer filled in; not allowed on a `secret` or a `choice`                                                                 |
+| `default`  | the answer filled in; with `$` or a backtick, realised by the login shell as the form opens; not on a `secret` or a `choice`  |
 | `required` | `true` refuses an empty answer; otherwise an empty answer is an empty variable                                                |
 | `type`     | the kind of answer, one of the five below; `text` when absent                                                                 |
 
@@ -147,8 +154,9 @@ The parameters are asked for in one form, which holds every parameter as a field
 
 - A `text` field shows its `prompt`, or the parameter's name when there is none, with its `default` filled in.
 - A `secret` field starts empty and hides what is typed.
-- A `choice` is a pop-up of its `choices`, the first selected. A `choices` shell line runs when the form opens, through the login shell, one choice per line it prints; a line that fails or prints nothing shows its failure in the field.
+- A `choice` is a pop-up of its `choices`, the first selected. A `choices` shell line runs when the form opens, through the login shell, one choice per line it prints; a line that fails or prints nothing shows its failure in the field, and a failure is logged too.
 - A `file` or `folder` field takes a path, with its `default` filled in, and a **Choose** button for the usual Open panel.
+- A `default` with a `$` or a backtick is realised by the login shell when the form opens. The field waits for it, and so does **Run** while nothing is typed there; what is typed first is never overwritten. A default that cannot be read is said under the field, which is left to be typed, and in the log.
 
 The form checks the answers as they are typed, and each refusal names its parameter: a `required` parameter left empty, a `file` that does not exist or is a folder, a `folder` that does not exist or is not a folder, a `choice` that is not one of the choices. **Run** stays disabled while any refusal stands. A parameter that is not `required` and is left empty is exported empty. **Cancel** runs nothing, and the log records the run as cancelled.
 
@@ -182,7 +190,7 @@ Each launch logs what macOS answered: `notifications: granted`, `notifications: 
 
 1. an unknown key anywhere;
 2. an entry that is none of the kinds, or more than one (`label` with `header`, `each` with `submenu`);
-3. `run` without `label` or `each`, `params` without `run`, or `cwd` or `notify` beside a `menuz`;
+3. `run` without `label` or `each`, `params` without `run`, `checked` anywhere but an `each`, or `cwd` or `notify` beside a `menuz`;
 4. a parameter name that is not `[a-z][a-z0-9_]*`, that the login shell already exports, or that two parameters share;
 5. a parameter `type` that is not `text`, `secret`, `choice`, `file` or `folder`, a `choice` without `choices`, or a `default` on a `secret` or a `choice`;
 6. a `notify` that is not `never`, `failure` or `always`, a `realise` that is not a positive number, or an `icon` this macOS has no SF Symbol for;
@@ -197,13 +205,13 @@ menuz.yaml: menu[0].colour = 'red': unknown key
 menuz.yaml: menu[3].items[8].menuz = 'log': menu[3].items[6] places it already
 ```
 
-`menuz render` prints the menu as an outline, one entry per line, its labels realised: `# ` before a header, an item by its label, a caption in parentheses, `---` for a separator, and a submenu as `Name >` with its entries indented two spaces under it. Its first line is the menu's identity row, `menuz <version> (<commit>)` and its suffixes as below, with the `---` the menu draws under it, so what `render` prints is what the menu shows. The app's own items come where the file places them, and the rest last.
+`menuz render` prints the menu as an outline, one entry per line, its labels realised: `# ` before a header, an item by its label, `✓ ` before the one an `each`'s `checked` names, a caption in parentheses, `---` for a separator, and a submenu as `Name >` with its entries indented two spaces under it. Its first line is the menu's identity row, `menuz <version> (<commit>)` and its suffixes as below, with the `---` the menu draws under it, so what `render` prints is what the menu shows. The app's own items come where the file places them, and the rest last.
 
 ```
-menuz 0.2.0 (3e731d3a)
+menuz 0.3.0 (3e731d3a)
 ---
 Desks… >
-  home
+  ✓ home
   work
 Discover…
 ---

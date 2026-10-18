@@ -43,6 +43,55 @@ struct RealiseTests {
     #expect(req.eaches == [RealiseEach(id: "menu[3]", line: "ls", label: "$MENUZ_ITEM")])
   }
 
+  @Test("an each's dynamic checked goes with the labels, under its own id; a literal one is not sent")
+  func checkedRequest() throws {
+    let s = try Self.spec(
+      """
+      menu:
+        - each: ls
+          label: "$MENUZ_ITEM"
+          run: x
+          checked: "$(arngz current || true)"
+        - each: ls
+          label: "$MENUZ_ITEM"
+          run: x
+          checked: work
+      """)
+    let req = Realise.request(for: s)
+    #expect(req.labels == [RealiseLabel(id: Realise.checkedId("menu[0]"), text: "$(arngz current || true)")])
+    #expect(req.eaches.map(\.id) == ["menu[0]", "menu[1]"])
+    #expect(Realise.checkedId("menu[0]") == "menu[0]#checked")
+  }
+
+  @Test("the checked line: a literal as written, a dynamic one as the shell answered, none unanswered or failed")
+  func checkedLine() {
+    let dynamic = Each(path: "menu[0]", line: "ls", label: "x", run: "y", checked: "$(c)")
+    let literal = Each(path: "menu[1]", line: "ls", label: "x", run: "y", checked: "work")
+    let none = Each(path: "menu[2]", line: "ls", label: "x", run: "y")
+    var r = Realised()
+    #expect(r.checked(literal) == "work")
+    #expect(r.checked(dynamic) == nil)
+    #expect(r.checked(none) == nil)
+    r.labels["menu[0]#checked"] = .ok("home")
+    #expect(r.checked(dynamic) == "home")
+    r.labels["menu[0]#checked"] = .failed("exit 1")
+    #expect(r.checked(dynamic) == nil)
+  }
+
+  @Test("a default with $ or a backtick is asked as a label; its answer is the value, or why there is none")
+  func defaultValue() {
+    #expect(
+      Realise.defaultRequest("$(arngz current)")
+        == RealiseRequest(labels: [RealiseLabel(id: "default", text: "$(arngz current)")], eaches: []))
+    var r = Realised()
+    let unanswered = "no answer within 5.0 s"
+    #expect(Realise.defaultValue(from: r, unanswered: unanswered) == .failed(unanswered))
+    r.labels["default"] = .ok("work")
+    #expect(Realise.defaultValue(from: r, unanswered: unanswered) == .ok("work"))
+    r.labels["default"] = .failed("exit 1")
+    #expect(Realise.defaultValue(from: r, unanswered: unanswered) == .failed("exit 1"))
+  }
+
   @Test("a menu with nothing dynamic asks the shell nothing")
   func nothingDynamic() throws {
     let s = try Self.spec("menu:\n  - label: a\n  - label: b\n")

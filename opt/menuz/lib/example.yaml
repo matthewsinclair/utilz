@@ -10,11 +10,13 @@ menu:
       - each: ls "${XDG_CONFIG_HOME:-$HOME/.config}/arngz/desks" 2>/dev/null | sed 's/\.yaml$//'
         label: "$MENUZ_ITEM"
         run: arngz apply "$MENUZ_ITEM"
+        checked: "$(arngz current || true)"
   - label: Discover…
     params:
       - name: desk
         prompt: Save the arrangement on screen now as
-        default: today
+        default: "$(arngz current || echo today)"
+        required: true
     run: arngz discover --save "$desk" --force
   - separator: true
   - submenu: Utilities

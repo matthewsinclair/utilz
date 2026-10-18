@@ -93,17 +93,18 @@ struct RunTests {
     #expect(!Run.wrapper.contains("osascript"))
   }
 
-  @Test("a choice line is asked as an each, and its answer is the lines, a failure, or no answer in time")
+  @Test("a choice line is asked as an each, and its answer is the lines, a failure, or what the shell did instead")
   func choices() {
     let request = Realise.choicesRequest("ls ~/Desks")
     #expect(request.labels == [])
     #expect(request.eaches.map(\.line) == ["ls ~/Desks"])
     let id = request.eaches[0].id
     var answer = Realised()
-    #expect(Realise.choices(from: answer, seconds: 5) == .failed("no answer within 5.0 s"))
+    let unanswered = "the login shell could not start: no zsh"
+    #expect(Realise.choices(from: answer, unanswered: unanswered) == .failed(unanswered))
     answer.eaches[id] = .ok([EachItem(line: "home", label: "home"), EachItem(line: "work", label: "work")])
-    #expect(Realise.choices(from: answer, seconds: 5) == .ok(["home", "work"]))
+    #expect(Realise.choices(from: answer, unanswered: unanswered) == .ok(["home", "work"]))
     answer.eaches[id] = .failed("exit 1")
-    #expect(Realise.choices(from: answer, seconds: 5) == .failed("exit 1"))
+    #expect(Realise.choices(from: answer, unanswered: unanswered) == .failed("exit 1"))
   }
 }

@@ -22,6 +22,7 @@ public struct Item: Equatable, Sendable {
 
 /// An `each`: `line` is run at every menu open and each line it prints
 /// becomes an item labelled by `label` with `$MENUZ_ITEM` set to the line.
+/// The item whose line is `checked`, realised like a label, is ticked.
 public struct Each: Equatable, Sendable {
   public let path: String
   public let line: String
@@ -30,10 +31,11 @@ public struct Each: Equatable, Sendable {
   public let params: [Param]
   public let cwd: String?
   public let notify: Notify?
+  public let checked: String?
 
   public init(
     path: String, line: String, label: String, run: String?, params: [Param] = [], cwd: String? = nil,
-    notify: Notify? = nil
+    notify: Notify? = nil, checked: String? = nil
   ) {
     self.path = path
     self.line = line
@@ -42,6 +44,7 @@ public struct Each: Equatable, Sendable {
     self.params = params
     self.cwd = cwd
     self.notify = notify
+    self.checked = checked
   }
 }
 
@@ -98,7 +101,7 @@ public struct MenuSpec: Equatable, Sendable {
   public let notify: Notify?
 
   public init(_ file: MenuFile) {
-    nodes = Self.nodes(file.menu, list: MenuPath.root)
+    nodes = Self.drawn(Self.nodes(file.menu, list: MenuPath.root))
     let placed = Self.placed(nodes)
     tail = Self.appItems.filter { !placed.contains($0.action) }
     icon = file.icon
@@ -115,6 +118,18 @@ public struct MenuSpec: Equatable, Sendable {
     case .openLog: TailItem(title: "Log", action: action, key: nil)
     case .reload: TailItem(title: "Reload", action: action, key: nil)
     case .quit: TailItem(title: "Quit menuz", action: action, key: "q")
+    }
+  }
+
+  /// The top level as the menu draws it. A separator that starts the menu,
+  /// or follows another, would draw a second line under the one already
+  /// there (the identity row's, or the separator before), so it is left out,
+  /// as the tail's line is when the menu's last entry is one (issue 0071).
+  /// A submenu's entries are drawn as the file gives them.
+  private static func drawn(_ nodes: [Node]) -> [Node] {
+    nodes.reduce(into: [Node]()) { kept, node in
+      if node == .separator, kept.last == nil || kept.last == .separator { return }
+      kept.append(node)
     }
   }
 
@@ -137,11 +152,11 @@ public struct MenuSpec: Equatable, Sendable {
         return .item(
           Item(
             path: path, label: label, run: entry.run, params: entry.params ?? [], cwd: entry.cwd, notify: entry.notify))
-      case .each(let line, let label):
+      case .each(let line, let label, let checked):
         return .each(
           Each(
             path: path, line: line, label: label, run: entry.run, params: entry.params ?? [], cwd: entry.cwd,
-            notify: entry.notify))
+            notify: entry.notify, checked: checked))
       case .header(let title):
         return .header(title)
       case .separator:
@@ -157,13 +172,14 @@ public struct MenuSpec: Equatable, Sendable {
   /// The menu as indented text, one entry per line, with the realised
   /// labels: the identity row and a `---` under it, then `# Header`, an
   /// item's label, `(caption)`, `---`, `Title >` with its children two
-  /// spaces in, an each's items (or `(each: line)` before it is realised),
-  /// the title of an app item the file placed, then a `---`, unless the
-  /// file's last entry is one, and the tail, as the menu draws them.
+  /// spaces in, an each's items with `✓ ` before the one its `checked`
+  /// names (or `(each: line)` before it is realised), the title of an app
+  /// item the file placed, then a `---`, unless the menu's last entry is one
+  /// or it has none, and the tail, as the menu draws them.
   public func render(identity: String, realised: Realised) -> String {
     var lines = [identity, "---"]
     Self.render(nodes, indent: "", realised: realised, into: &lines)
-    if nodes.last != .separator { lines.append("---") }
+    if let last = nodes.last, last != .separator { lines.append("---") }
     lines.append(contentsOf: tail.map(\.title))
     return lines.map { $0 + "\n" }.joined()
   }
@@ -187,7 +203,9 @@ public struct MenuSpec: Equatable, Sendable {
         case .failed(let why):
           lines.append("\(indent)(each: \(each.line) failed: \(why))")
         case .ok(let items):
-          lines.append(contentsOf: items.map { indent + shown($0.label, runs: each.run != nil) })
+          let checked = realised.checked(each)
+          lines.append(
+            contentsOf: items.map { indent + ($0.line == checked ? "✓ " : "") + shown($0.label, runs: each.run != nil) })
         }
       case .menuz(let item):
         lines.append(indent + item.title)

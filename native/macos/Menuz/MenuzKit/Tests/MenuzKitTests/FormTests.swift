@@ -142,6 +142,39 @@ struct FormTests {
         == [FormRefusal(name: "where", why: "no folder at /h/nope")])
   }
 
+  @Test("a default with $ or a backtick waits for the shell: empty, holding Run back while nothing is typed")
+  func dynamicDefault() throws {
+    var form = RunForm(try Self.params("      - name: desk\n        default: \"$(arngz current)\"\n        required: true\n"))
+    #expect(form.defaultTexts == ["desk": "$(arngz current)"])
+    #expect(form.fields[0].initial == "")
+    var answers = form.initialAnswers
+    #expect(form.refusals(answers, home: Self.home, pathKind: Self.kind) == [FormRefusal(name: "desk", why: "the default is not read yet")])
+    form.realisedDefault("desk", .ok("work"), answers: &answers)
+    #expect(answers["desk"] == "work")
+    #expect(form.canRun(answers, home: Self.home, pathKind: Self.kind))
+    #expect(RunForm(try Self.params("      - name: desk\n        default: today\n")).defaultTexts == [:])
+  }
+
+  @Test("a realised default never overwrites what was typed, and a typed answer needs no default")
+  func typedBeforeDefault() throws {
+    var form = RunForm(try Self.params("      - name: desk\n        default: \"$(arngz current)\"\n"))
+    var answers = ["desk": "mine"]
+    #expect(form.refusals(answers, home: Self.home, pathKind: Self.kind) == [])
+    form.realisedDefault("desk", .ok("work"), answers: &answers)
+    #expect(answers["desk"] == "mine")
+  }
+
+  @Test("a default the shell could not give is a note, not a refusal, and leaves the field to be typed")
+  func failedDefault() throws {
+    var form = RunForm(try Self.params("      - name: desk\n        default: \"$(arngz current)\"\n        required: true\n"))
+    var answers = form.initialAnswers
+    form.realisedDefault("desk", .failed("exit 1"), answers: &answers)
+    #expect(answers["desk"] == "")
+    #expect(form.note("desk") == "the default could not be read: exit 1")
+    #expect(form.note("other") == nil)
+    #expect(form.refusals(answers, home: Self.home, pathKind: Self.kind) == [FormRefusal(name: "desk", why: "required")])
+  }
+
   @Test("the form's title is the item's label without its trailing ellipsis")
   func title() {
     #expect(RunForm.title(for: "Discover…") == "Discover")

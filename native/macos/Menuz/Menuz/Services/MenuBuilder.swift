@@ -78,8 +78,9 @@ final class MenuBuilder {
     if let spec {
       add(spec.nodes, to: menu)
     }
-    // Two lines together say nothing: with no file loaded yet, or a file
-    // that ends in a separator, the line already last serves the tail.
+    // Two lines together say nothing: with no file loaded and nothing
+    // refused, or a menu whose own last entry is a separator, the line
+    // already last serves the tail.
     if menu.items.last?.isSeparatorItem == false {
       menu.addItem(.separator())
     }
@@ -96,14 +97,15 @@ final class MenuBuilder {
     openLogItem?.title = exists ? MenuSpec.appItem(.openLog).title : Self.noLogTitle
   }
 
-  /// The shell's answer, in place.
+  /// The shell's answer, in place: each label's title, and each each's
+  /// items with its checked line ticked.
   func apply(_ realised: Realised) {
     for (path, item) in labels {
       item.title = realised.label(path, else: item.title)
     }
-    for path in eaches.keys {
+    for (path, entry) in eaches {
       guard let answer = realised.eaches[path] else { continue }
-      replace(path, with: answer)
+      replace(path, with: answer, checked: realised.checked(entry.each))
     }
   }
 
@@ -131,13 +133,13 @@ final class MenuBuilder {
         anchor.isHidden = true
         menu.addItem(anchor)
         eaches[each.path] = (anchor, each, [])
-      case .menuz(let tail):
-        menu.addItem(appItem(tail))
+      case .menuz(let item):
+        menu.addItem(appItem(item))
       }
     }
   }
 
-  private func replace(_ path: String, with answer: Answer<[EachItem]>) {
+  private func replace(_ path: String, with answer: Answer<[EachItem]>, checked: String?) {
     guard let entry = eaches[path], let menu = entry.anchor.menu else { return }
     entry.items.forEach(menu.removeItem)
     let made: [NSMenuItem]
@@ -145,9 +147,11 @@ final class MenuBuilder {
     case .ok(let items):
       let each = entry.each
       made = items.map { found in
-        item(
+        let shown = item(
           label: found.label,
           chosen: each.run.map { Chosen(run: $0, params: each.params, cwd: each.cwd, notify: each.notify, line: found.line) })
+        shown.state = found.line == checked ? .on : .off
+        return shown
       }
     case .failed(let why):
       let failed = NSMenuItem(title: "\(entry.each.line) failed: \(why)", action: nil, keyEquivalent: "")
@@ -177,11 +181,11 @@ final class MenuBuilder {
 
   /// One of the app's own items, made the same wherever it sits: where the
   /// file placed it, or in the tail.
-  private func appItem(_ tail: TailItem) -> NSMenuItem {
-    let item = NSMenuItem(title: tail.title, action: selector(tail.action), keyEquivalent: tail.key ?? "")
-    item.target = target
-    if tail.action == .openLog { openLogItem = item }
-    return item
+  private func appItem(_ item: TailItem) -> NSMenuItem {
+    let made = NSMenuItem(title: item.title, action: selector(item.action), keyEquivalent: item.key ?? "")
+    made.target = target
+    if item.action == .openLog { openLogItem = made }
+    return made
   }
 
   private func selector(_ action: TailItem.Action) -> Selector {

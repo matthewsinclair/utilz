@@ -228,11 +228,21 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, MenuAc
     // The id is taken when the form opens, so a cancel is logged by it.
     guard let id = takeId(label: label) else { return }
     let paths = self.paths
+    let log = self.log
     let seconds = spec?.realiseSeconds ?? MenuSpec.defaultRealiseSeconds
     let form = RunForm(chosen.params)
     let controller = ParamFormController(
       title: RunForm.title(for: label), form: form, home: shell.environment["HOME"] ?? NSHomeDirectory(),
-      realise: { name in await Self.choices(form.choiceLines[name] ?? "", shell: shell, paths: paths, seconds: seconds) },
+      realise: { name, line in
+        await Self.formAnswer(
+          Realise.choicesRequest(line), "the choices for \(name)", label: label, log: log, shell: shell, paths: paths,
+          seconds: seconds, read: Realise.choices(from:unanswered:))
+      },
+      realiseDefault: { name, text in
+        await Self.formAnswer(
+          Realise.defaultRequest(text), "the default for \(name)", label: label, log: log, shell: shell, paths: paths,
+          seconds: seconds, read: Realise.defaultValue(from:unanswered:))
+      },
       onRun: { [weak self] controller, exports in
         self?.forms.removeValue(forKey: ObjectIdentifier(controller))
         self?.run(chosen, label: label, params: exports, shell: shell, id: id)
@@ -297,13 +307,20 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, MenuAc
     }
   }
 
-  /// A choice param's shell line, realised as an each is: one choice per
-  /// line it prints.
-  private nonisolated static func choices(
-    _ line: String, shell: LoginShell, paths: Paths, seconds: Double
-  ) async -> Answer<[String]> {
-    let outcome = await Realiser.realise(Realise.choicesRequest(line), shell: shell, paths: paths, seconds: seconds)
-    return Realise.choices(from: outcome.realised, seconds: seconds)
+  /// What a form asks the login shell when it opens, a choice param's shell
+  /// line or a default that holds a `$` or a backtick, read by `read` from
+  /// the answer. A failure shows in the form and is logged under the item's
+  /// label, as a menu open's are (issue 0071).
+  private static func formAnswer<Value>(
+    _ request: RealiseRequest, _ what: String, label: String, log: AppLog, shell: LoginShell, paths: Paths,
+    seconds: Double, read: (Realised, String) -> Answer<Value>
+  ) async -> Answer<Value> {
+    let outcome = await Realiser.realise(request, shell: shell, paths: paths, seconds: seconds)
+    let answer = read(outcome.realised, outcome.unanswered)
+    if case .failed(let why) = answer {
+      log.write("\"\(label)\" form: \(what) could not be read: \(why)")
+    }
+    return answer
   }
 
   /// `open` with these arguments; a failure is logged, never dropped.

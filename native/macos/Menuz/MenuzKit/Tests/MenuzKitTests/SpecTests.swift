@@ -118,10 +118,46 @@ struct SpecTests {
         """)
   }
 
-  @Test("a file that ends in a separator shares it with the tail: one line above the app's items, not two")
+  @Test("a menu whose last entry is a separator shares it with the tail: one line above the app's items, not two")
   func renderEndsInSeparator() throws {
     let s = try Self.spec("menu:\n  - label: a\n    run: x\n  - separator: true\n")
     #expect(s.render(identity: Self.identity, realised: Realised()).hasSuffix("\na\n---\nEdit…\nLog\nReload\nQuit menuz\n"))
+  }
+
+  @Test("a separator that starts the menu, or follows another, draws no second line, in the nodes and the render")
+  func separatorsDrawn() throws {
+    let s = try Self.spec(
+      "menu:\n  - separator: true\n  - label: a\n    run: x\n  - separator: true\n  - separator: true\n  - label: b\n    run: x\n")
+    #expect(s.nodes == [.item(Item(path: "menu[1]", label: "a", run: "x")), .separator, .item(Item(path: "menu[4]", label: "b", run: "x"))])
+    #expect(
+      s.render(identity: Self.identity, realised: Realised())
+        == "menuz 1.2.3 (0123abcd)\n---\na\n---\nb\n---\nEdit…\nLog\nReload\nQuit menuz\n")
+  }
+
+  @Test("a separator that ends the last submenu is the submenu's own: the tail keeps its line")
+  func separatorEndsSubmenu() throws {
+    let s = try Self.spec("menu:\n  - submenu: s\n    items:\n      - label: a\n        run: x\n      - separator: true\n")
+    #expect(
+      s.render(identity: Self.identity, realised: Realised())
+        == "menuz 1.2.3 (0123abcd)\n---\ns >\n  a\n  ---\n---\nEdit…\nLog\nReload\nQuit menuz\n")
+  }
+
+  @Test("a menu of separators alone draws the identity's one line above the tail")
+  func onlySeparators() throws {
+    let s = try Self.spec("menu:\n  - separator: true\n  - separator: true\n")
+    #expect(s.nodes == [])
+    #expect(s.render(identity: Self.identity, realised: Realised()) == "menuz 1.2.3 (0123abcd)\n---\nEdit…\nLog\nReload\nQuit menuz\n")
+  }
+
+  @Test("an each carries its checked, and the render ticks the item whose line it names once realised")
+  func checkedRender() throws {
+    let s = try Self.spec("menu:\n  - each: ls\n    label: \"Desk $MENUZ_ITEM\"\n    run: x\n    checked: \"$(c)\"\n")
+    #expect(s.nodes == [.each(Each(path: "menu[0]", line: "ls", label: "Desk $MENUZ_ITEM", run: "x", checked: "$(c)"))])
+    var r = Realised()
+    r.eaches["menu[0]"] = .ok([EachItem(line: "a", label: "Desk a"), EachItem(line: "b", label: "Desk b")])
+    #expect(s.render(identity: Self.identity, realised: r).hasPrefix("menuz 1.2.3 (0123abcd)\n---\nDesk a\nDesk b\n---\n"))
+    r.labels[Realise.checkedId("menu[0]")] = .ok("b")
+    #expect(s.render(identity: Self.identity, realised: r).hasPrefix("menuz 1.2.3 (0123abcd)\n---\nDesk a\n✓ Desk b\n---\n"))
   }
 
   @Test("the render shows realised labels and each's items")

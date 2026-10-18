@@ -107,11 +107,59 @@ struct MenuBuilderTests {
     #expect(builder.menu.items.map(\.isSeparatorItem) == [false, true, false, false, false, false])
   }
 
-  @Test("a file that ends in a separator shares it with the tail: one line above the app's items, not two")
+  @Test("a menu whose last entry is a separator shares it with the tail: one line above the app's items, not two")
   func endsInSeparator() throws {
     let actions = IdentityRowTests.NoActions()
     let spec = try Self.spec("menu:\n  - label: a\n    run: x\n  - separator: true\n")
     let builder = Self.built(spec, logExists: true, target: actions)
     #expect(builder.menu.items.map(\.isSeparatorItem) == [false, true, false, true, false, false, false, false])
+  }
+
+  @Test("a menu that starts with a separator draws one line under the identity, not two")
+  func startsWithSeparator() throws {
+    let actions = IdentityRowTests.NoActions()
+    let builder = Self.built(try Self.spec("menu:\n  - separator: true\n  - label: a\n    run: x\n"), logExists: true, target: actions)
+    #expect(builder.menu.items.map(\.isSeparatorItem) == [false, true, false, true, false, false, false, false])
+  }
+
+  @Test("a separator that ends the last submenu is the submenu's own: the tail keeps its line")
+  func submenuEndsInSeparator() throws {
+    let actions = IdentityRowTests.NoActions()
+    let spec = try Self.spec("menu:\n  - submenu: s\n    items:\n      - label: a\n        run: x\n      - separator: true\n")
+    let builder = Self.built(spec, logExists: true, target: actions)
+    #expect(builder.menu.items.map(\.isSeparatorItem) == [false, true, false, true, false, false, false, false])
+    let s = try #require(builder.menu.items.first { $0.title == "s" }?.submenu)
+    #expect(s.items.map(\.isSeparatorItem) == [false, true])
+  }
+
+  /// An each's answer, and its checked line's, as the shell sends them,
+  /// read back through the real parser.
+  static func answered(_ path: String, lines: [String], checked: String) -> Realised {
+    let unit = "\u{1F}"
+    let record = "\u{1E}"
+    var out = record
+    for line in lines {
+      out += path + unit + "line" + unit + line + record
+      out += path + unit + "label" + unit + line + record
+    }
+    out += path + unit + "end" + unit + record
+    out += Realise.checkedId(path) + unit + "ok" + unit + checked + record
+    return Realise.parse(out)
+  }
+
+  @Test("the each item whose line the checked value names is ticked, and only that one, at every answer")
+  func ticked() throws {
+    let actions = IdentityRowTests.NoActions()
+    let spec = try Self.spec(
+      "menu:\n  - each: ls\n    label: \"$MENUZ_ITEM\"\n    run: arngz apply \"$MENUZ_ITEM\"\n    checked: \"$(arngz current || true)\"\n")
+    let builder = MenuBuilder(target: actions)
+    builder.build(
+      identity: Self.identity, spec: spec, refusals: [], realised: Self.answered("menu[0]", lines: ["home", "work"], checked: "work"),
+      logExists: true)
+    let desks = { builder.menu.items.filter { ["home", "work"].contains($0.title) } }
+    #expect(desks().map(\.title) == ["home", "work"])
+    #expect(desks().map(\.state) == [.off, .on])
+    builder.apply(Self.answered("menu[0]", lines: ["home", "work"], checked: "home"))
+    #expect(desks().map(\.state) == [.on, .off])
   }
 }

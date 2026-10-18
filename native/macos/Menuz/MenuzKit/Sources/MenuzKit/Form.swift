@@ -39,10 +39,15 @@ public struct RunForm: Equatable, Sendable {
   public private(set) var choices: [String: Answer<[String]>] = [:]
   /// The choice params whose choices are a shell line still to realise.
   public let choiceLines: [String: String]
+  /// The params whose `default` holds a `$` or a backtick, realised by the
+  /// login shell when the form opens (issue 0071), and what it answered.
+  public let defaultTexts: [String: String]
+  private var defaults: [String: Answer<String>] = [:]
 
   public init(_ params: [Param]) {
     var lines: [String: String] = [:]
     var known: [String: Answer<[String]>] = [:]
+    var texts: [String: String] = [:]
     fields = params.map { param in
       var initial = param.defaultValue ?? ""
       switch (param.kind, param.choices) {
@@ -55,7 +60,10 @@ public struct RunForm: Equatable, Sendable {
         lines[param.name] = line
         initial = ""
       default:
-        break
+        if Realise.isDynamic(initial) {
+          texts[param.name] = initial
+          initial = ""
+        }
       }
       return FormField(
         name: param.name, kind: param.kind, label: param.prompt ?? param.name, initial: initial,
@@ -63,6 +71,7 @@ public struct RunForm: Equatable, Sendable {
     }
     choices = known
     choiceLines = lines
+    defaultTexts = texts
   }
 
   /// The form's window title: the item's label without the trailing
@@ -84,6 +93,21 @@ public struct RunForm: Equatable, Sendable {
     choices[name] = answer
     guard case .ok(let list) = answer, !list.contains(answers[name] ?? "") else { return }
     answers[name] = list.first ?? ""
+  }
+
+  /// A default the shell realised: taken in, and filled in only where
+  /// nothing has been typed yet, so it never overwrites an answer.
+  public mutating func realisedDefault(_ name: String, _ answer: Answer<String>, answers: inout [String: String]) {
+    defaults[name] = answer
+    guard case .ok(let value) = answer, (answers[name] ?? "").isEmpty else { return }
+    answers[name] = value
+  }
+
+  /// What the form says under a field that is not a refusal: a default the
+  /// shell could not give, which leaves the field to be typed.
+  public func note(_ name: String) -> String? {
+    guard case .failed(let why)? = defaults[name] else { return nil }
+    return "the default could not be read: \(why)"
   }
 
   /// Every reason the form will not run, in the fields' order.
@@ -125,6 +149,9 @@ public struct RunForm: Equatable, Sendable {
       case .ok(let list) where !list.contains(value): return "\(value) is not one of the choices"
       case .ok: return nil
       }
+    }
+    if value.isEmpty, defaultTexts[field.name] != nil, defaults[field.name] == nil {
+      return "the default is not read yet"
     }
     guard !value.isEmpty else { return field.required ? "required" : nil }
     guard field.kind == .file || field.kind == .folder else { return nil }

@@ -32,6 +32,10 @@ fileprivate final class ParamFormModel {
     form.realised(name, answer, answers: &answers)
   }
 
+  func realisedDefault(_ name: String, _ answer: Answer<String>) {
+    form.realisedDefault(name, answer, answers: &answers)
+  }
+
   nonisolated static func pathKind(_ path: String) -> PathKind {
     var isDirectory: ObjCBool = false
     guard FileManager.default.fileExists(atPath: path, isDirectory: &isDirectory) else { return .missing }
@@ -57,6 +61,11 @@ fileprivate struct ParamFormView: View {
             fieldView(field).accessibilityIdentifier(field.name)
             if let why = model.refusal(field.name) {
               Text(why).foregroundStyle(.red).font(.callout)
+            }
+            // Said beside a refusal too: a required field whose default
+            // failed says why it is empty as well as that it is.
+            if let note = model.form.note(field.name) {
+              Text(note).foregroundStyle(.orange).font(.callout)
             }
           }
         }
@@ -119,8 +128,9 @@ fileprivate struct ParamFormView: View {
 }
 
 /// One form's panel. It activates the app so the panel takes key, realises
-/// any shell-line choices as it opens, and answers once: Run with the
-/// form's exports, or Cancel (Escape, the Cancel button, or closing it).
+/// any shell-line choices, and any default holding a `$` or a backtick, as
+/// it opens, and answers once: Run with the form's exports, or Cancel
+/// (Escape, the Cancel button, or closing it).
 /// The panel stays up when the app loses focus (an LSUIElement app has no
 /// Dock icon to bring a hidden one back), and floats above other windows.
 /// It hands itself to its callbacks, so the delegate holds it without a
@@ -134,7 +144,9 @@ final class ParamFormController: NSObject, NSWindowDelegate {
   private var answered = false
 
   init(
-    title: String, form: RunForm, home: String, realise: @escaping (String) async -> Answer<[String]>,
+    title: String, form: RunForm, home: String,
+    realise: @escaping (_ name: String, _ line: String) async -> Answer<[String]>,
+    realiseDefault: @escaping (_ name: String, _ text: String) async -> Answer<String>,
     onRun: @escaping (ParamFormController, [String: String]) -> Void,
     onCancel: @escaping (ParamFormController) -> Void
   ) {
@@ -152,10 +164,16 @@ final class ParamFormController: NSObject, NSWindowDelegate {
     panel.delegate = self
     let view = ParamFormView(model: model, onRun: { [weak self] in self?.run() }, onCancel: { [weak self] in self?.cancel() })
     panel.contentView = NSHostingView(rootView: view)
-    for (name, _) in form.choiceLines {
+    for (name, line) in form.choiceLines {
       Task { [weak self] in
-        let answer = await realise(name)
+        let answer = await realise(name, line)
         self?.model.realised(name, answer)
+      }
+    }
+    for (name, text) in form.defaultTexts {
+      Task { [weak self] in
+        let answer = await realiseDefault(name, text)
+        self?.model.realisedDefault(name, answer)
       }
     }
   }
