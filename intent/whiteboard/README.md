@@ -10,14 +10,15 @@ The full protocol lives in the `/in-whiteboard` skill (pickup / ask / announce /
 
 `hv` is **Workstream Zero** -- the always-present human node, present in every Intent project. The working nodes are **made to order** per project (never assumed). Discovery is `intent wb status`, which lists the registered roster.
 
-Nodes are **made to order** when a concurrent stream actually exists, never in anticipation of one -- `intent claude ws new <wsid>`. Utilz ran single-stream (`hv` + `cc`) from 2026-07-29 until 2026-08-29, when `vc` was provisioned to take the validation role on ST0010. `dc` joined on 2026-10-16 as DevX Claude, registered by hv, and takes its instructions from `vc` on hv's word. A node joins the model with `intent wb register <moniker> --name <display> --role <role>`, and registering is hv's declaration, never an agent's tidy-up.
+Nodes are **made to order** when a concurrent stream actually exists, never in anticipation of one -- `intent claude ws new <wsid>`. Utilz ran single-stream (`hv` + `cc`) from 2026-07-29 until 2026-08-29, when `vc` was provisioned to take the validation role on ST0010. `dc` joined on 2026-10-16 as DevX Claude, registered by hv, and takes its instructions from `vc` on hv's word. `ic` joined on 2026-10-18 as Interface Claude (utilz-ic), started by hv for the arca_swift adoptions, and takes its instructions from `vc`. A node joins the model with `intent wb register <moniker> --name <display> --role <role>`, and registering is hv's declaration, never an agent's tidy-up.
 
-| Node | Name                   | Scope (Utilz)                                                                                                             |
-| ---- | ---------------------- | ------------------------------------------------------------------------------------------------------------------------- |
-| `hv` | Hypervisor (the human) | Workstream Zero: adjudicates scope, sequences work, owns releases + tags + pushes; escalation landing                     |
-| `cc` | Control Claude         | the whole framework: `bin/utilz` dispatcher, `opt/utilz/lib/common.sh`, every utility under `opt/`, help, docs, CI        |
-| `vc` | Validation Claude      | the independent check on `cc`'s landed and claimed work; **the named reader of `hv/inbox.*`** -- see "The hv inbox" below |
-| `dc` | DevX Claude            | developer experience; takes its instructions from `vc` (hv, 2026-10-16)                                                   |
+| Node | Name                   | Scope (Utilz)                                                                                                                                 |
+| ---- | ---------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| `hv` | Hypervisor (the human) | Workstream Zero: adjudicates scope, sequences work, owns releases + tags + pushes; escalation landing                                         |
+| `cc` | Control Claude         | the whole framework: `bin/utilz` dispatcher, `opt/utilz/lib/common.sh`, every utility under `opt/`, help, docs, CI                            |
+| `vc` | Validation Claude      | the independent check on `cc`'s landed and claimed work; **the named reader of `hv/inbox.*`** -- see "The hv inbox" below                     |
+| `dc` | DevX Claude            | developer experience; takes its instructions from `vc` (hv, 2026-10-16)                                                                       |
+| `ic` | Interface Claude       | menuz's front end and its adoption of arca_swift (0073 now, 0072 after arca_swift's WP-09); takes its instructions from `vc` (hv, 2026-10-18) |
 
 ## The hv inbox has a named reader, and it is `vc`
 
