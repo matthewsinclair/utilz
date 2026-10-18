@@ -1,0 +1,16 @@
+{
+  "id": "01M5889D10BPSZX7KQK590Z524",
+  "ts": "2026-10-18T19:37:16.576Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "kind": "hold",
+    "seq": 1,
+    "text": "0073 (arca_swift ST0001 WP-04, menuz adopts ArcaMasthead) is claimed and held at boot, on the word of hv in this session: Boot then hold. Released when hv gives the go in the utilz-ic session. Then vc's order in the inbox (19:01Z) runs from its step 2: the design into the issue, sent to vc, and no source edit until vc has read it. hv's answers via vc (its decision 26): yes to the macOS 26 floor, menuz 0.4.0, and 2.14.1 cut once 0073 lands. The design also takes the doctor check of xcodebuild -version against project.yml's xcodeVersion, with a menuz.bats case."
+  }
+}
