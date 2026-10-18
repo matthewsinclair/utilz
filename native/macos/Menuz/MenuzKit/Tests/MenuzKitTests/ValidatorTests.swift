@@ -3,8 +3,9 @@ import Testing
 
 @testable import MenuzKit
 
-/// The validator (design.md "Validation", rules 1 to 7, and the refusals
-/// WP-03's objective adds): every refusal names the file, where, the key
+/// The validator (design.md "Validation", rules 1 to 7, rule 8 for the
+/// app's own items (issue 0069), and the refusals WP-03's objective
+/// adds): every refusal names the file, where, the key
 /// and the value, and each test compares the whole refusal. Each fixture
 /// changes one thing in a menu that is otherwise valid, so its refusal can
 /// only be about that.
@@ -99,7 +100,7 @@ struct ValidatorTests {
   func noKind() {
     #expect(
       Self.only("menu:\n  - cwd: /tmp\n")
-        == Self.at("menu[0]", "cwd", "/tmp", "the entry is none of label, each, header, separator or submenu"))
+        == Self.at("menu[0]", "cwd", "/tmp", "the entry is none of label, each, header, separator, submenu or menuz"))
   }
 
   @Test("rule 2: an entry of two kinds is refused, naming both")
@@ -116,9 +117,54 @@ struct ValidatorTests {
         == Self.at("menu[0]", "submenu", "s", "the entry is each and submenu at once, and an entry is one kind"))
   }
 
+  @Test("rule 2: menuz with label is two kinds")
+  func menuzWithLabel() {
+    #expect(
+      Self.only("menu:\n  - label: a\n    menuz: log\n")
+        == Self.at("menu[0]", "menuz", "log", "the entry is label and menuz at once, and an entry is one kind"))
+  }
+
   @Test("rule 3: run without label or each is refused")
   func runWithoutLabel() {
     #expect(Self.only("menu:\n  - header: h\n    run: echo\n") == Self.at("menu[0]", "run", "echo", "run goes with label or each, not header"))
+  }
+
+  @Test("rule 3: run beside menuz is refused")
+  func runWithMenuz() {
+    #expect(Self.only("menu:\n  - menuz: log\n    run: echo\n") == Self.at("menu[0]", "run", "echo", "run goes with label or each, not menuz"))
+  }
+
+  @Test("rule 3: cwd or notify beside menuz is refused, since an app item runs nothing of the file's")
+  func cwdNotifyWithMenuz() {
+    #expect(
+      Self.refusals("menu:\n  - menuz: reload\n    cwd: /tmp\n    notify: always\n") == [
+        Self.at("menu[0]", "cwd", "/tmp", "cwd goes with label or each, not menuz"),
+        Self.at("menu[0]", "notify", "always", "notify goes with label or each, not menuz"),
+      ])
+  }
+
+  @Test("rule 8: an app item the file places is log, edit or reload, at any depth")
+  func menuzPlaced() {
+    #expect(
+      Self.refusals(
+        "menu:\n  - menuz: edit\n  - submenu: s\n    items:\n      - menuz: log\n      - submenu: t\n        items:\n          - menuz: reload\n"
+      ) == [])
+  }
+
+  @Test("rule 8: menuz other than log, edit or reload is refused, quit included")
+  func menuzUnknown() {
+    #expect(Self.only("menu:\n  - menuz: quit\n") == Self.at("menu[0]", "menuz", "quit", "menuz is log, edit or reload"))
+    #expect(Self.only("menu:\n  - menuz: logs\n") == Self.at("menu[0]", "menuz", "logs", "menuz is log, edit or reload"))
+  }
+
+  @Test("rule 8: an app item placed twice is refused, naming where it was placed first")
+  func menuzTwice() {
+    #expect(
+      Self.only("menu:\n  - menuz: log\n  - submenu: s\n    items:\n      - menuz: log\n")
+        == Self.at("menu[1].items[0]", "menuz", "log", "menu[0] places it already"))
+    #expect(
+      Self.only("menu:\n  - submenu: s\n    items:\n      - menuz: edit\n  - menuz: edit\n")
+        == Self.at("menu[1]", "menuz", "edit", "menu[0].items[0] places it already"))
   }
 
   @Test("rule 3: params without run is refused")
@@ -295,7 +341,7 @@ struct ValidatorTests {
       Self.refusals("colour: red\nnotify: loud\nmenu:\n  - cwd: /tmp\n") == [
         Self.top("colour", "red", "unknown key"),
         Self.top("notify", "loud", "notify is never, failure or always"),
-        Self.at("menu[0]", "cwd", "/tmp", "the entry is none of label, each, header, separator or submenu"),
+        Self.at("menu[0]", "cwd", "/tmp", "the entry is none of label, each, header, separator, submenu or menuz"),
       ])
   }
 

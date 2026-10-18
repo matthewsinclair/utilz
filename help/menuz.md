@@ -72,28 +72,34 @@ notify: failure       # never | failure | always; what a run's end posts as a no
 realise: 5            # seconds a menu open waits for its labels at most; 5 when absent
 
 menu:
-  - header: Desks
-  - each: ls "${XDG_CONFIG_HOME:-$HOME/.config}/arngz/desks" 2>/dev/null | sed 's/\.yaml$//'
-    label: "$MENUZ_ITEM"
-    run: arngz apply "$MENUZ_ITEM"
-  - label: Discover this arrangement
+  - submenu: Desks…
+    items:
+      - each: ls "${XDG_CONFIG_HOME:-$HOME/.config}/arngz/desks" 2>/dev/null | sed 's/\.yaml$//'
+        label: "$MENUZ_ITEM"
+        run: arngz apply "$MENUZ_ITEM"
+  - label: Discover…
     params:
       - name: desk
         prompt: Save the arrangement on screen now as
         default: today
     run: arngz discover --save "$desk" --force
-  - label: Hammerspoon doctor
-    run: arngz doctor
-    notify: always
   - separator: true
-  - submenu: Machine
+  - submenu: Utilities
     items:
       - label: "Up $(uptime | sed 's/.*up //; s/,.*//')"
-      - label: Sleep the display
+      - label: Sleep Display
         run: pmset displaysleepnow
-      - label: Empty the Trash
+      - label: Empty Trash
         run: osascript -e 'tell application "Finder" to empty trash'
         cwd: ~/.Trash
+      - separator: true
+      - label: Hammerspoon
+        run: arngz doctor
+        notify: always
+      - separator: true
+      - menuz: log
+      - menuz: edit
+      - menuz: reload
 ```
 
 | Key         | Meaning                                                                                                                          |
@@ -107,8 +113,9 @@ menu:
 | `header`    | a section header                                                                                                                 |
 | `separator` | a separator                                                                                                                      |
 | `submenu`   | a submenu, with its entries under `items`, nested as deep as wanted                                                              |
+| `menuz`     | one of the app's own items, placed here rather than below the file's entries: `log`, `edit` or `reload`, each at most once       |
 
-Below the file's entries the app adds its own: **Edit Menu…**, which opens `menuz.yaml` in the default text editor, **Open Log**, **Reload**, and **Quit menuz**.
+The app has four items of its own: **Edit…**, which opens `menuz.yaml` in the default text editor, **Log**, which opens the log, **Reload**, and **Quit menuz**. A `menuz` entry puts one of the first three where it stands, so the example keeps them in its **Utilities** submenu. Those the file does not place go below its entries, after a line (the file's own, when its last entry is a separator), and **Quit menuz** is always there, last. Before there is a log, **Log** reads **Log (no log yet)**, disabled, wherever it sits.
 
 ### Labels at every open
 
@@ -136,7 +143,7 @@ An item's `params` is a list of the parameters it asks for, in order. A paramete
 
 A yes-or-no is a `choice` of two lines.
 
-The parameters are asked for in one form, titled with the item's label, which holds every parameter as a field in the file's order, with **Run** and **Cancel** at its foot. Return is **Run**; Escape, or closing the form, is **Cancel**. An item with no parameters runs at once, with no form.
+The parameters are asked for in one form, which holds every parameter as a field in the file's order, with **Run** and **Cancel** at its foot. The form is titled with the item's label less a trailing `…` or `...`, so **Discover…** asks in a form titled **Discover**. Return is **Run**; Escape, or closing the form, is **Cancel**. An item with no parameters runs at once, with no form.
 
 - A `text` field shows its `prompt`, or the parameter's name when there is none, with its `default` filled in.
 - A `secret` field starts empty and hides what is typed.
@@ -158,7 +165,7 @@ Runs are concurrent and independent, each with its own id. Nothing is queued and
 Every run appends to `${XDG_STATE_HOME:-$HOME/.local/state}/menuz/menuz.log`, which is created on first use:
 
 ```
-2026-10-16T10:42:03Z run 17 start "Hammerspoon doctor" cwd=~: arngz doctor
+2026-10-16T10:42:03Z run 17 start "Hammerspoon" cwd=~: arngz doctor
 [17] hammerspoon  running (pid 4123)
 2026-10-16T10:42:04Z run 17 exit 0 in 1.3s
 ```
@@ -175,34 +182,42 @@ Each launch logs what macOS answered: `notifications: granted`, `notifications: 
 
 1. an unknown key anywhere;
 2. an entry that is none of the kinds, or more than one (`label` with `header`, `each` with `submenu`);
-3. `run` without `label` or `each`, or `params` without `run`;
+3. `run` without `label` or `each`, `params` without `run`, or `cwd` or `notify` beside a `menuz`;
 4. a parameter name that is not `[a-z][a-z0-9_]*`, that the login shell already exports, or that two parameters share;
 5. a parameter `type` that is not `text`, `secret`, `choice`, `file` or `folder`, a `choice` without `choices`, or a `default` on a `secret` or a `choice`;
 6. a `notify` that is not `never`, `failure` or `always`, a `realise` that is not a positive number, or an `icon` this macOS has no SF Symbol for;
-7. an empty `menu`.
+7. an empty `menu`;
+8. a `menuz` that is not `log`, `edit` or `reload`, or one of them placed a second time.
 
 It reports every refusal, not only the first, one to a line, as `<file>: <path>.<key> = '<value>': <why>`: a key at the top of the file has no path, and a file that is not YAML at all is `<file>: <why>`. A file that passes prints `ok`.
 
 ```
 menuz.yaml: notify = 'sometimes': notify is never, failure or always
 menuz.yaml: menu[0].colour = 'red': unknown key
+menuz.yaml: menu[3].items[8].menuz = 'log': menu[3].items[6] places it already
 ```
 
-`menuz render` prints the menu as an outline, one entry per line, its labels realised: `# ` before a header, an item by its label, a caption in parentheses, `---` for a separator, and a submenu as `Name >` with its entries indented two spaces under it. Its first line is the menu's identity row, `menuz <version> (<commit>)` and its suffixes as below, so what `render` prints is what the menu shows; the app's own entries come last.
+`menuz render` prints the menu as an outline, one entry per line, its labels realised: `# ` before a header, an item by its label, a caption in parentheses, `---` for a separator, and a submenu as `Name >` with its entries indented two spaces under it. Its first line is the menu's identity row, `menuz <version> (<commit>)` and its suffixes as below, with the `---` the menu draws under it, so what `render` prints is what the menu shows. The app's own items come where the file places them, and the rest last.
 
 ```
-# Desks
-Discover this arrangement
-Hammerspoon doctor
+menuz 0.2.0 (3e731d3a)
 ---
-Machine >
+Desks… >
+  home
+  work
+Discover…
+---
+Utilities >
   (Up 16 days)
-  Sleep the display
-  Empty the Trash
+  Sleep Display
+  Empty Trash
+  ---
+  Hammerspoon
+  ---
+  Log
+  Edit…
+  Reload
 ---
-Edit Menu…
-Open Log
-Reload
 Quit menuz
 ```
 

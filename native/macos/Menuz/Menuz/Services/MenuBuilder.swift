@@ -36,7 +36,7 @@ final class Chosen: NSObject {
 /// menu never has to be rebuilt while it is open.
 @MainActor
 final class MenuBuilder {
-  static let noLogTitle = "Open Log (no log yet)"
+  static let noLogTitle = MenuSpec.appItem(.openLog).title + " (no log yet)"
   /// The identity row's font, as the sibling apps' first rows (D14).
   static let identityFont = NSFont.boldSystemFont(ofSize: 13)
 
@@ -53,17 +53,21 @@ final class MenuBuilder {
     menu.autoenablesItems = false
   }
 
-  /// The whole menu: the build's identity row, then the refusals in red,
-  /// then the last good spec's entries (none when the file has never
-  /// loaded), then the tail.
+  /// The whole menu: the build's identity row and a separator under it, then
+  /// the refusals in red, then the last good spec's entries (none when the
+  /// file has never loaded), then a separator, unless one is last already,
+  /// and the tail: the app's own items the file did not place, all of them
+  /// without a file.
   func build(identity: String, spec: MenuSpec?, refusals: [Refusal], realised: Realised, logExists: Bool) {
     menu.removeAllItems()
     labels = [:]
     eaches = [:]
+    openLogItem = nil
     let row = NSMenuItem(title: identity, action: nil, keyEquivalent: "")
     row.attributedTitle = NSAttributedString(string: identity, attributes: [.font: Self.identityFont])
     row.isEnabled = false
     menu.addItem(row)
+    menu.addItem(.separator())
     for refusal in refusals {
       let item = NSMenuItem(title: refusal.description, action: nil, keyEquivalent: "")
       item.attributedTitle = NSAttributedString(
@@ -74,21 +78,22 @@ final class MenuBuilder {
     if let spec {
       add(spec.nodes, to: menu)
     }
-    menu.addItem(.separator())
-    for tail in MenuSpec.tail {
-      let item = NSMenuItem(title: tail.title, action: selector(tail.action), keyEquivalent: tail.key ?? "")
-      item.target = target
-      menu.addItem(item)
-      if tail.action == .openLog { openLogItem = item }
+    // Two lines together say nothing: with no file loaded yet, or a file
+    // that ends in a separator, the line already last serves the tail.
+    if menu.items.last?.isSeparatorItem == false {
+      menu.addItem(.separator())
+    }
+    for tail in spec?.tail ?? MenuSpec.appItems {
+      menu.addItem(appItem(tail))
     }
     setLogExists(logExists)
     apply(realised)
   }
 
-  /// Open Log opens the log, or says there is none yet.
+  /// Log opens the log, or says there is none yet, wherever it sits.
   func setLogExists(_ exists: Bool) {
     openLogItem?.isEnabled = exists
-    openLogItem?.title = exists ? "Open Log" : Self.noLogTitle
+    openLogItem?.title = exists ? MenuSpec.appItem(.openLog).title : Self.noLogTitle
   }
 
   /// The shell's answer, in place.
@@ -126,6 +131,8 @@ final class MenuBuilder {
         anchor.isHidden = true
         menu.addItem(anchor)
         eaches[each.path] = (anchor, each, [])
+      case .menuz(let tail):
+        menu.addItem(appItem(tail))
       }
     }
   }
@@ -165,6 +172,15 @@ final class MenuBuilder {
     } else {
       item.isEnabled = false
     }
+    return item
+  }
+
+  /// One of the app's own items, made the same wherever it sits: where the
+  /// file placed it, or in the tail.
+  private func appItem(_ tail: TailItem) -> NSMenuItem {
+    let item = NSMenuItem(title: tail.title, action: selector(tail.action), keyEquivalent: tail.key ?? "")
+    item.target = target
+    if tail.action == .openLog { openLogItem = item }
     return item
   }
 

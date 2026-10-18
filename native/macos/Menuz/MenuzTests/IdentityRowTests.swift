@@ -12,7 +12,7 @@ import Testing
 @MainActor
 @Suite("Identity row")
 struct IdentityRowTests {
-  /// Nothing in these tests chooses an item.
+  /// Nothing in these tests, or in MenuBuilderTests, chooses an item.
   final class NoActions: NSObject, MenuActions {
     func chooseItem(_ sender: NSMenuItem) {}
     func editMenu(_ sender: NSMenuItem) {}
@@ -33,7 +33,7 @@ struct IdentityRowTests {
     #expect(identity.hasSuffix(" dev") == (kind != "release"), "identity was \(identity), kind \(kind)")
   }
 
-  @Test("the first item is the identity, disabled and bold, ahead of the refusals")
+  @Test("the first item is the identity, disabled and bold, with a separator under it ahead of the refusals")
   func firstItem() throws {
     let actions = NoActions()
     let builder = MenuBuilder(target: actions)
@@ -46,6 +46,7 @@ struct IdentityRowTests {
     #expect(font == MenuBuilder.identityFont)
     #expect(font?.pointSize == 13)
     #expect(font?.fontDescriptor.symbolicTraits.contains(.bold) == true)
-    #expect(builder.menu.items[1].title == Self.refusal.description)
+    #expect(builder.menu.items[1].isSeparatorItem)
+    #expect(builder.menu.items[2].title == Self.refusal.description)
   }
 }

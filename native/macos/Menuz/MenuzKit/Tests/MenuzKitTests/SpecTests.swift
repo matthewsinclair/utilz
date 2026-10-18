@@ -12,6 +12,8 @@ struct SpecTests {
     try Fixtures.spec(yaml)
   }
 
+  static let identity = "menuz 1.2.3 (0123abcd)"
+
   @Test("entries become nodes in the file's order, each kind its own node")
   func order() throws {
     let s = try Self.spec(
@@ -51,13 +53,37 @@ struct SpecTests {
     #expect(set.realiseSeconds == 2)
   }
 
-  @Test("the fixed tail is Edit Menu, Open Log, Reload, Quit menuz")
-  func tail() {
-    #expect(MenuSpec.tail.map(\.title) == ["Edit Menu…", "Open Log", "Reload", "Quit menuz"])
-    #expect(MenuSpec.tail.map(\.key) == [nil, nil, nil, "q"])
+  @Test("the app's own items are Edit…, Log, Reload and Quit menuz, and all but Quit menuz may be placed")
+  func appItems() {
+    #expect(MenuSpec.appItems.map(\.title) == ["Edit…", "Log", "Reload", "Quit menuz"])
+    #expect(MenuSpec.appItems.map(\.key) == [nil, nil, nil, "q"])
+    #expect(MenuSpec.appItems.map(\.action.placeable) == [true, true, true, false])
+    #expect(MenuSpec.appItems.map(\.action.rawValue) == ["edit", "log", "reload", "quit"])
   }
 
-  @Test("the render is the menu as indented text, the tail included")
+  @Test("an app item the file places is a node where the file puts it, and the tail keeps the rest")
+  func placed() throws {
+    let s = try Self.spec("menu:\n  - submenu: Utilities\n    items:\n      - menuz: log\n")
+    #expect(s.nodes == [.submenu(title: "Utilities", children: [.menuz(MenuSpec.appItem(.openLog))])])
+    #expect(s.tail.map(\.title) == ["Edit…", "Reload", "Quit menuz"])
+    #expect(
+      s.render(identity: Self.identity, realised: Realised())
+        == "menuz 1.2.3 (0123abcd)\n---\nUtilities >\n  Log\n---\nEdit…\nReload\nQuit menuz\n")
+  }
+
+  @Test("an app item placed two submenus down leaves the tail as well")
+  func placedDeep() throws {
+    let s = try Self.spec("menu:\n  - submenu: a\n    items:\n      - submenu: b\n        items:\n          - menuz: log\n")
+    #expect(s.tail.map(\.title) == ["Edit…", "Reload", "Quit menuz"])
+  }
+
+  @Test("a file that places all three leaves Quit menuz alone in the tail")
+  func placedAll() throws {
+    let s = try Self.spec("menu:\n  - menuz: reload\n  - menuz: edit\n  - menuz: log\n")
+    #expect(s.tail.map(\.title) == ["Quit menuz"])
+  }
+
+  @Test("the render is the menu as indented text, a line under the identity, the tail included")
   func render() throws {
     let s = try Self.spec(
       """
@@ -73,8 +99,10 @@ struct SpecTests {
               run: true
       """)
     #expect(
-      s.render(realised: Realised())
+      s.render(identity: Self.identity, realised: Realised())
         == """
+        menuz 1.2.3 (0123abcd)
+        ---
         # Tools
         Run it
         (Just words)
@@ -82,12 +110,18 @@ struct SpecTests {
         More >
           Inner
         ---
-        Edit Menu…
-        Open Log
+        Edit…
+        Log
         Reload
         Quit menuz
 
         """)
+  }
+
+  @Test("a file that ends in a separator shares it with the tail: one line above the app's items, not two")
+  func renderEndsInSeparator() throws {
+    let s = try Self.spec("menu:\n  - label: a\n    run: x\n  - separator: true\n")
+    #expect(s.render(identity: Self.identity, realised: Realised()).hasSuffix("\na\n---\nEdit…\nLog\nReload\nQuit menuz\n"))
   }
 
   @Test("the render shows realised labels and each's items")
@@ -103,17 +137,17 @@ struct SpecTests {
     var r = Realised()
     r.labels["menu[0]"] = .ok("Up 3 days")
     r.eaches["menu[1]"] = .ok([EachItem(line: "a", label: "Desk a"), EachItem(line: "b", label: "Desk b")])
-    let text = s.render(realised: r)
-    #expect(text.hasPrefix("(Up 3 days)\nDesk a\nDesk b\n---\n"))
+    let text = s.render(identity: Self.identity, realised: r)
+    #expect(text.hasPrefix("menuz 1.2.3 (0123abcd)\n---\n(Up 3 days)\nDesk a\nDesk b\n---\n"))
   }
 
   @Test("an each not yet realised renders as its line, and a failed one says so")
   func renderEachPending() throws {
     let s = try Self.spec("menu:\n  - each: ls\n    label: x\n    run: y\n")
-    #expect(s.render(realised: Realised()).hasPrefix("(each: ls)\n"))
+    #expect(s.render(identity: Self.identity, realised: Realised()).hasPrefix("menuz 1.2.3 (0123abcd)\n---\n(each: ls)\n"))
     var r = Realised()
     r.eaches["menu[0]"] = .failed("exit 1")
-    #expect(s.render(realised: r).hasPrefix("(each: ls failed: exit 1)\n"))
+    #expect(s.render(identity: Self.identity, realised: r).hasPrefix("menuz 1.2.3 (0123abcd)\n---\n(each: ls failed: exit 1)\n"))
   }
 
   @Test("the example menu renders, unrealised, entry by entry")
@@ -121,21 +155,25 @@ struct SpecTests {
     let s = try Self.spec(Fixtures.example)
     #expect(s.icon == nil, "the example names no icon: menuz's own mark (D13)")
     #expect(
-      s.render(realised: Realised())
+      s.render(identity: Self.identity, realised: Realised())
         == #"""
-        # Desks
-        (each: ls "${XDG_CONFIG_HOME:-$HOME/.config}/arngz/desks" 2>/dev/null | sed 's/\.yaml$//')
-        Discover this arrangement
-        Hammerspoon doctor
+        menuz 1.2.3 (0123abcd)
         ---
-        Machine >
+        Desks… >
+          (each: ls "${XDG_CONFIG_HOME:-$HOME/.config}/arngz/desks" 2>/dev/null | sed 's/\.yaml$//')
+        Discover…
+        ---
+        Utilities >
           (Up $(uptime | sed 's/.*up //; s/,.*//'))
-          Sleep the display
-          Empty the Trash
+          Sleep Display
+          Empty Trash
+          ---
+          Hammerspoon
+          ---
+          Log
+          Edit…
+          Reload
         ---
-        Edit Menu…
-        Open Log
-        Reload
         Quit menuz
 
         """#)

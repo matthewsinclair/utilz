@@ -55,16 +55,21 @@ private struct Validator {
   typealias Place = Refusal.Place
 
   enum TopKey: String, CaseIterable { case icon, cwd, notify, realise, menu }
-  enum EntryKey: String, CaseIterable { case label, run, params, cwd, notify, each, header, separator, submenu, items }
+  enum EntryKey: String, CaseIterable {
+    case label, run, params, cwd, notify, each, header, separator, submenu, items, menuz
+  }
   enum ParamKey: String, CaseIterable { case name, prompt, `default`, type, choices, required }
 
   /// The keys that make an entry what it is. An `each` carries a `label`
   /// for its items, so `label` beside `each` is not a second kind.
-  static let kinds: [EntryKey] = [.label, .each, .header, .separator, .submenu]
+  static let kinds: [EntryKey] = [.label, .each, .header, .separator, .submenu, .menuz]
 
   let file: String
   let context: ValidationContext
   private(set) var refusals: [Refusal] = []
+  /// Where each of the app's own items was placed, so a second is refused
+  /// naming the first.
+  private var placed: [TailItem.Action: String] = [:]
 
   init(file: String, context: ValidationContext) {
     self.file = file
@@ -132,7 +137,7 @@ private struct Validator {
       let first = EntryKey.allCases.first { keys[$0] != nil }
       refuse(
         place, first?.rawValue, first.flatMap { keys[$0] }.map { describe($0) },
-        "the entry is none of label, each, header, separator or submenu")
+        "the entry is none of label, each, header, separator, submenu or menuz")
       return nil
     }
     guard kinds.count == 1 else {
@@ -153,6 +158,12 @@ private struct Validator {
     }
     if let node = keys[.items], kind != .submenu {
       refuse(place, EntryKey.items.rawValue, describe(node), "items go with submenu")
+    }
+    // An app item runs nothing of the file's, so these would do nothing.
+    for key in [EntryKey.cwd, .notify] {
+      if let node = keys[key], kind == .menuz {
+        refuse(place, key.rawValue, describe(node), "\(key.rawValue) goes with label or each, not menuz")
+      }
     }
     let cwd = keys[.cwd].flatMap { scalar($0, at: place, key: EntryKey.cwd.rawValue) }
     let notify = keys[.notify].flatMap { self.notify($0, at: place) }
@@ -186,6 +197,17 @@ private struct Validator {
       }
       return entries(items, list: MenuPath.items(of: path), owner: place, key: EntryKey.items.rawValue)
         .map { .submenu(title: text, items: $0) }
+    case .menuz:
+      guard let action = TailItem.Action(rawValue: text), action.placeable else {
+        refuse(place, kind.rawValue, text, "menuz is log, edit or reload")
+        return nil
+      }
+      if let first = placed[action] {
+        refuse(place, kind.rawValue, text, "\(first) places it already")
+        return nil
+      }
+      placed[action] = path
+      return .menuz(action)
     default:
       return .item(label: text)
     }

@@ -19,6 +19,8 @@ public struct Entry: Equatable, Sendable {
     case header(String)
     case separator
     case submenu(title: String, items: [Entry])
+    /// One of the app's own items, placed here rather than in the tail.
+    case menuz(TailItem.Action)
   }
 
   public let kind: Kind

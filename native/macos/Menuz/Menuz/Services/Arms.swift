@@ -53,8 +53,7 @@ enum Arms {
           outcome.notes.forEach { printError("Menuz: \($0)") }
           realised = outcome.realised
         }
-        print(Bundle.main.menuzIdentity)
-        print(spec.render(realised: realised), terminator: "")
+        print(spec.render(identity: Bundle.main.menuzIdentity, realised: realised), terminator: "")
         return 0
       case .refused(let refusals):
         refusals.forEach { print($0) }

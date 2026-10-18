@@ -231,7 +231,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, MenuAc
     let seconds = spec?.realiseSeconds ?? MenuSpec.defaultRealiseSeconds
     let form = RunForm(chosen.params)
     let controller = ParamFormController(
-      title: label, form: form, home: shell.environment["HOME"] ?? NSHomeDirectory(),
+      title: RunForm.title(for: label), form: form, home: shell.environment["HOME"] ?? NSHomeDirectory(),
       realise: { name in await Self.choices(form.choiceLines[name] ?? "", shell: shell, paths: paths, seconds: seconds) },
       onRun: { [weak self] controller, exports in
         self?.forms.removeValue(forKey: ObjectIdentifier(controller))

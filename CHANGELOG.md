@@ -9,6 +9,14 @@ The section still open names its version: `## [X.Y.Z] - unreleased`, never `## [
 
 ## [2.14.1] - unreleased
 
+### Added
+
+- **menuz's own items can sit anywhere in its menu** (issue 0069). A `menuz:` entry in `menuz.yaml` places **Log** (`menuz: log`), **Edit…** (`menuz: edit`) or **Reload** (`menuz: reload`) where it stands, in a submenu as readily as at the top, so a menu that keeps its tools in a **Utilities** submenu can keep menuz's there too. Each can be placed once. Those a file does not place stay below its entries, where all four sat before, and **Quit menuz** is always last there. `menuz validate` refuses any other word, `quit` included; a second placing, naming the entry that placed it first; and a `cwd` or `notify` beside one, which would do nothing. A file with no `menuz:` entry keeps all four below its entries, as before. menuz goes from 0.1.0 to 0.2.0.
+
+### Changed
+
+- **menuz's menu draws a line under its version row, and its own items are one word each** (issue 0069). A separator now divides the identity row from the menu, and `menuz render` prints a `---` under its first line to match. A file that ends in a separator shares it with the line above menuz's own items, rather than showing two. **Edit Menu…** is now **Edit…**, and **Open Log** is **Log**, which reads **Log (no log yet)** before there is a log. A form is titled with its item's label less a trailing ellipsis, so **Discover…** asks in a form titled **Discover**. The example `menuz.yaml` that `menuz init` writes is regrouped to match: a **Desks…** submenu of the known desks, **Discover…**, and a **Utilities** submenu holding the machine's items, **Hammerspoon**, and menuz's own **Log**, **Edit…** and **Reload**. A menu file of your own is not touched.
+
 ### Fixed
 
 - **prez refuses a `mermaid:` value it cannot read, as it does for `numbering:`** (issue 0066). `mermaid:` turned diagrams on for `true`, `yes` or `1` and read every other value as off, so `mermaid: ture` built a deck whose diagrams were plain code blocks and nothing said why. `mermaid:`, `numbering:` and the `<!-- numbering: -->` slide directive now read one vocabulary, in any case: `on`, `true`, `yes` and `1` turn a switch on, and `off`, `false`, `no` and `0` turn it off. Anything else is refused by name, exit 2, naming the key and the value. No deck that built before changes meaning; `numbering:` gains `yes`, `no`, `1` and `0`. An included fragment's `mermaid:` is now named in the "ignored" warning when it is off too. prez goes from 2.5.0 to 2.5.1.

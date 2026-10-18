@@ -65,6 +65,15 @@ public struct RunForm: Equatable, Sendable {
     choiceLines = lines
   }
 
+  /// The form's window title: the item's label without the trailing
+  /// ellipsis the menu shows because the item asks before it runs.
+  public static func title(for label: String) -> String {
+    guard let mark = ["…", "..."].first(where: { label.hasSuffix($0) }) else { return label }
+    var title = label.dropLast(mark.count)
+    while title.last == " " { title = title.dropLast() }
+    return title.isEmpty ? label : String(title)
+  }
+
   public var initialAnswers: [String: String] {
     Dictionary(uniqueKeysWithValues: fields.map { ($0.name, $0.initial) })
   }

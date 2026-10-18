@@ -45,9 +45,20 @@ public struct Each: Equatable, Sendable {
   }
 }
 
-/// One of the app's own items below the file's entries.
+/// One of the app's own items: where the file places it (`menuz:`), or in
+/// the tail below the file's entries when it does not.
 public struct TailItem: Equatable, Sendable {
-  public enum Action: Equatable, Sendable { case editMenu, openLog, reload, quit }
+  /// Declared in the tail's order. The raw value is the word `menuz:` takes
+  /// in the file, for all but `quit`: the file cannot place Quit menuz.
+  public enum Action: String, CaseIterable, Equatable, Sendable {
+    case editMenu = "edit"
+    case openLog = "log"
+    case reload
+    case quit
+
+    /// Whether the file may place it: all but Quit menuz, which never moves.
+    var placeable: Bool { self != .quit }
+  }
 
   public let title: String
   public let action: Action
@@ -56,8 +67,8 @@ public struct TailItem: Equatable, Sendable {
 }
 
 /// The validated file as the menu it becomes (design.md "The menu file"):
-/// nodes in the file's order, and the fixed tail. The app builds an NSMenu
-/// from it; `--render` prints it.
+/// nodes in the file's order, and the tail. The app builds an NSMenu from
+/// it; `--render` prints it.
 public struct MenuSpec: Equatable, Sendable {
   public indirect enum Node: Equatable, Sendable {
     case header(String)
@@ -65,19 +76,20 @@ public struct MenuSpec: Equatable, Sendable {
     case separator
     case submenu(title: String, children: [Node])
     case each(Each)
+    /// One of the app's own items, where the file placed it.
+    case menuz(TailItem)
   }
 
-  /// Below every menu: a separator, then these.
-  public static let tail: [TailItem] = [
-    TailItem(title: "Edit Menu…", action: .editMenu, key: nil),
-    TailItem(title: "Open Log", action: .openLog, key: nil),
-    TailItem(title: "Reload", action: .reload, key: nil),
-    TailItem(title: "Quit menuz", action: .quit, key: "q"),
-  ]
+  /// The app's own items, in the tail's order. A menu with no file loaded
+  /// shows them all below a separator.
+  public static let appItems: [TailItem] = TailItem.Action.allCases.map { appItem($0) }
 
   public static let defaultRealiseSeconds = 5.0
 
   public let nodes: [Node]
+  /// Below the file's entries, after a separator: the app's own items the
+  /// file did not place, Quit menuz always last.
+  public let tail: [TailItem]
   /// The SF Symbol `icon:` names, or nil for menuz's own mark (D13).
   public let icon: String?
   public let realiseSeconds: Double
@@ -87,10 +99,34 @@ public struct MenuSpec: Equatable, Sendable {
 
   public init(_ file: MenuFile) {
     nodes = Self.nodes(file.menu, list: MenuPath.root)
+    let placed = Self.placed(nodes)
+    tail = Self.appItems.filter { !placed.contains($0.action) }
     icon = file.icon
     realiseSeconds = file.realise ?? Self.defaultRealiseSeconds
     cwd = file.cwd
     notify = file.notify
+  }
+
+  /// The app's own item for `action`: the one place its title and key are
+  /// written.
+  public static func appItem(_ action: TailItem.Action) -> TailItem {
+    switch action {
+    case .editMenu: TailItem(title: "Edit…", action: action, key: nil)
+    case .openLog: TailItem(title: "Log", action: action, key: nil)
+    case .reload: TailItem(title: "Reload", action: action, key: nil)
+    case .quit: TailItem(title: "Quit menuz", action: action, key: "q")
+    }
+  }
+
+  /// The app's own items the file placed, at any depth.
+  private static func placed(_ nodes: [Node]) -> Set<TailItem.Action> {
+    nodes.reduce(into: Set<TailItem.Action>()) { found, node in
+      switch node {
+      case .menuz(let item): found.insert(item.action)
+      case .submenu(_, let children): found.formUnion(placed(children))
+      case .header, .item, .separator, .each: break
+      }
+    }
   }
 
   private static func nodes(_ entries: [Entry], list: String) -> [Node] {
@@ -112,19 +148,23 @@ public struct MenuSpec: Equatable, Sendable {
         return .separator
       case .submenu(let title, let items):
         return .submenu(title: title, children: nodes(items, list: MenuPath.items(of: path)))
+      case .menuz(let action):
+        return .menuz(appItem(action))
       }
     }
   }
 
   /// The menu as indented text, one entry per line, with the realised
-  /// labels: `# Header`, an item's label, `(caption)`, `---`, `Title >`
-  /// with its children two spaces in, an each's items (or `(each: line)`
-  /// before it is realised), then the tail.
-  public func render(realised: Realised) -> String {
-    var lines: [String] = []
+  /// labels: the identity row and a `---` under it, then `# Header`, an
+  /// item's label, `(caption)`, `---`, `Title >` with its children two
+  /// spaces in, an each's items (or `(each: line)` before it is realised),
+  /// the title of an app item the file placed, then a `---`, unless the
+  /// file's last entry is one, and the tail, as the menu draws them.
+  public func render(identity: String, realised: Realised) -> String {
+    var lines = [identity, "---"]
     Self.render(nodes, indent: "", realised: realised, into: &lines)
-    lines.append("---")
-    lines.append(contentsOf: Self.tail.map(\.title))
+    if nodes.last != .separator { lines.append("---") }
+    lines.append(contentsOf: tail.map(\.title))
     return lines.map { $0 + "\n" }.joined()
   }
 
@@ -149,6 +189,8 @@ public struct MenuSpec: Equatable, Sendable {
         case .ok(let items):
           lines.append(contentsOf: items.map { indent + shown($0.label, runs: each.run != nil) })
         }
+      case .menuz(let item):
+        lines.append(indent + item.title)
       }
     }
   }

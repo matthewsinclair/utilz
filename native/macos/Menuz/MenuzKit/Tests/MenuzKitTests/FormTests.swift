@@ -142,6 +142,14 @@ struct FormTests {
         == [FormRefusal(name: "where", why: "no folder at /h/nope")])
   }
 
+  @Test("the form's title is the item's label without its trailing ellipsis")
+  func title() {
+    #expect(RunForm.title(for: "Discover…") == "Discover")
+    #expect(RunForm.title(for: "Save as ...") == "Save as")
+    #expect(RunForm.title(for: "Wait… then run") == "Wait… then run")
+    #expect(RunForm.title(for: "…") == "…")
+  }
+
   @Test("the export is every param by name, an unanswered one empty")
   func exports() throws {
     let form = RunForm(try Self.params(Self.all))
