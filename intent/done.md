@@ -1,8 +1,18 @@
 ---
-verblock: "17 Oct 2026:v0.14: matts - 2.14.0 released: menuz, a menu bar of your own commands"
+verblock: "18 Oct 2026:v0.15: matts - menuz 0.3.0 and arngz 1.1.0 landed; menuz's adoption of arca_swift routed (no release yet)"
 ---
 
 # Done
+
+## 18 Oct 2026 -- menuz 0.3.0 and arngz 1.1.0 landed, and menuz's adoption of arca_swift routed (no release yet)
+
+**Three of hv's asks from the live menu landed**, each an issue fixed and closed in one commit with its evidence. gtools-ic did them from Gtools' session, with gtools-vc's reads and bookings; in Utilz's records of that morning, "ic" means gtools-ic. They wait for the next cut in the CHANGELOG's `[2.14.1] - unreleased` section.
+
+- **0069** (`6ed4397`, closed `2f46784`): menuz's own items, **Log**, **Edit…** and **Reload**, can be placed from the menu file with a `menuz:` entry; a line divides the version row from the menu; and the app's items are one word each. menuz 0.1.0 to 0.2.0.
+- **0070** (`afaf784`, closed `467155e`): `arngz current` names the desk the screen was last arranged as. An apply that ran and a `discover --save` record it, and a delete of that desk clears it. arngz 1.0.1 to 1.1.0.
+- **0071** (`56e0c90`, closed `f7b6e9d`): a param's `default:` can come from the login shell, and an `each` can tick one of its items with `checked:`, so **Desks…** ticks the current desk and **Discover…** offers its name. menuz 0.2.0 to 0.3.0.
+
+**arca_swift arrived.** hv's public Swift package for the menu bar apps (ArcaMasthead 0.1.0, tagged on 18 Oct) brings menuz two adoptions. 0073 is the masthead row and an About window, with menuz's floor moving to macOS 26 on hv's yes for all four apps; it belongs to the new Interface Claude node (utilz-ic, roster row `fb87323`). 0072 is the log console, held until arca_swift's WP-09 builds it. Issues 0074 (the Yams problem line) and 0075 (hv's logout check) were filed, and 0076 was filed and closed as dropped on hv's word (`b7bc35c`). The vendored devbin runtime went to 0.1.12 by fleet sweep (`6c61d22`).
 
 ## 17 Oct 2026 -- 2.14.0 released: menuz, a menu bar of your own commands
 
