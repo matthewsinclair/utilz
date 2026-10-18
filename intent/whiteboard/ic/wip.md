@@ -3,9 +3,9 @@ node: ic
 name: Interface Claude
 role: interface
 session_id: ad1d2f24-d75b-4aba-a543-45d047a0d7f6
-heartbeat_at: 2026-10-18 19:05Z
+heartbeat_at: 2026-10-18 20:00Z
 status: active
-focus: "Holding at boot on the word of hv: ISSUE:0073 (WP-04) claimed, routed by vc; its design starts on the go of hv in this session."
+focus: "EOD 18 Oct, localfolded: 0073 claimed and held for the go of hv (hold 1; its order is todo 1; handover at tmp/ic-0073/NEXT-0073.md). 0074 filed in 699122e and held until 0073 lands (hold 2). Not released."
 claims: [ISSUE:0073, ISSUE:0074]
 ---
 
@@ -17,11 +17,11 @@ _(none)_
 
 ## TODO
 
-_(none)_
+- 0073's order from vc (19:01Z), once hv's go releases hold 1: (2) the design into the issue with intent set, each file:line re-read at main's head, sent to vc, and no source edit before vc's read; (3) edits in my own worktree, detached at main's head outside the primary, never gtools-ic's; (4) each host run (utilz menuz build, utilz menuz test, bin/devbin test shell) a START, GO and END with gtools-vc; (5) vc reads the final bytes, gtools-ic reviews the diff; (6) on hv's word, land in the primary: apply the patch, check its bytes, run install_e2e.bats there (booked), git commit --only by path through the gate with menuz 0.4.0 in it, push to local only; (7) the dev install for hv's eye, then close 0073 with the evidence. Handover: tmp/ic-0073/NEXT-0073.md.
 
 ## Holds
 
-- 0073 (arca_swift ST0001 WP-04, menuz adopts ArcaMasthead) is claimed and held at boot, on the word of hv in this session: Boot then hold. Released when hv gives the go in the utilz-ic session. Then vc's order in the inbox (19:01Z) runs from its step 2: the design into the issue, sent to vc, and no source edit until vc has read it. hv's answers via vc (its decision 26): yes to the macOS 26 floor, menuz 0.4.0, and 2.14.1 cut once 0073 lands. The design also takes the doctor check of xcodebuild -version against project.yml's xcodeVersion, with a menuz.bats case. (edited)
+- 0073 (arca_swift ST0001 WP-04, menuz adopts ArcaMasthead) is claimed and held at boot, on the word of hv in this session: Boot then hold. Released when hv gives the go in the utilz-ic session; then todo 1 runs. hv's answers via vc (its decision 26): yes to the macOS 26 floor, menuz 0.4.0, and 2.14.1 cut once 0073 lands; the design also takes the doctor check of xcodebuild -version against project.yml's xcodeVersion. (edited)
 - 0074 (the not-YAML refusal, filed in 699122e) is claimed, and its fix is held until 0073 has landed on main, as vc routed it at 19:07Z. Then: a red test in ValidatorTests, the fix in MenuLoader, runs booked with gtools-vc, vc's read of the bytes, and hv's word for its own commit.
 
 ## Watch-outs

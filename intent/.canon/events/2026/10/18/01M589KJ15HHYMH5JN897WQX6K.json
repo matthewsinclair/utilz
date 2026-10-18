@@ -1,0 +1,15 @@
+{
+  "id": "01M589KJ15HHYMH5JN897WQX6K",
+  "ts": "2026-10-18T20:00:17.958Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "kind": "todo",
+    "text": "0073's order from vc (19:01Z), once hv's go releases hold 1: (2) the design into the issue with intent set, each file:line re-read at main's head, sent to vc, and no source edit before vc's read; (3) edits in my own worktree, detached at main's head outside the primary, never gtools-ic's; (4) each host run (utilz menuz build, utilz menuz test, bin/devbin test shell) a START, GO and END with gtools-vc; (5) vc reads the final bytes, gtools-ic reviews the diff; (6) on hv's word, land in the primary: apply the patch, check its bytes, run install_e2e.bats there (booked), git commit --only by path through the gate with menuz 0.4.0 in it, push to local only; (7) the dev install for hv's eye, then close 0073 with the evidence. Handover: tmp/ic-0073/NEXT-0073.md."
+  }
+}
