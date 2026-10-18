@@ -1,0 +1,15 @@
+{
+  "id": "01M573AKGQ6K1DD8VY5MY9JCKY",
+  "ts": "2026-10-18T08:51:18.680Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "issues.add",
+  "subject": {
+    "type": "issue",
+    "id": "0070"
+  },
+  "payload": {
+    "severity": "low",
+    "title": "arngz keeps no record of the desk applied last, so nothing can say which desk is current"
+  }
+}

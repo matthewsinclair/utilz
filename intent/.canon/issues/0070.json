@@ -1,0 +1,11 @@
+{
+  "schema": "intent/issue@3.0",
+  "number": 70,
+  "slug": "arngz-keeps-no-record-of-the-desk-applied-last-s",
+  "title": "arngz keeps no record of the desk applied last, so nothing can say which desk is current",
+  "status": "open",
+  "severity": "low",
+  "created": "2026-10-18",
+  "reporter": "Matthew Sinclair",
+  "body": "## What\n\nhv, 18 Oct 2026, looking at menuz's Desks… flyout: \"when I choose \"Discover\" the default shouldn't name be \"today\" it should be the name of the currently selected desk. And that also implies that there is a \"currently selected desk\". So we should put a tick mark here\", beside that desk in the flyout.\n\narngz has no notion of a current desk, so neither half can be done. menuz's half (a default the shell fills in, and a tick) is its own issue.\n\n## Measured\n\n18 Oct 2026, at `2f46784`. arngz keeps no state of its own.\n\n- `cmd_apply` (`opt/arngz/arngz:1325`) runs the engine, prints its report and exits with the engine's 0 or 1.\n- `cmd_discover --save` (`:1428`) writes the desk's file into the catalogue.\n- `cmd_delete` (`:1129`) removes one.\n- Nothing under `opt/arngz` reads or writes `XDG_STATE_HOME`.\n\nSo nothing can say which desk the screen was last arranged as.\n\n## Fix\n\nRuled 18 Oct 2026, in hv's stead:\n\n1. An `apply` that ran records the desk's name in `${XDG_STATE_HOME:-~/.local/state}/arngz/current`. That is exit 0 or 1, and neither `--dry-run` nor a refusal before anything changed. A `discover --save <desk>` records it too, since the arrangement on screen is then that desk.\n2. A `delete` of the recorded desk clears the record.\n3. A new verb, `arngz current`, prints the recorded name and exits 0. It exits 1 when nothing is recorded, or when the recorded desk is no longer in the catalogue.\n4. `list` prints what it prints today.\n\n`help/arngz.md` and the CHANGELOG describe it. arngz goes from 1.0.1 to 1.1.0.\n"
+}

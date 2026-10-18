@@ -1,0 +1,15 @@
+{
+  "id": "01M573AKNYQEZVEBPK8VMXFS0R",
+  "ts": "2026-10-18T08:51:18.847Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "issues.add",
+  "subject": {
+    "type": "issue",
+    "id": "0072"
+  },
+  "payload": {
+    "severity": "low",
+    "title": "menuz's Log opens the run log in Console.app; menuz should have Gtools.app's console instead"
+  }
+}
