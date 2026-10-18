@@ -1,0 +1,15 @@
+{
+  "id": "01M589PDV3P93P30T0S4DGWY15",
+  "ts": "2026-10-18T20:01:51.972Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "issues.add",
+  "subject": {
+    "type": "issue",
+    "id": "0076"
+  },
+  "payload": {
+    "severity": "low",
+    "title": "menuz: an in-process notice posted while the first launch's alert is up has never been measured"
+  }
+}
