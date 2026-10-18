@@ -1,0 +1,15 @@
+{
+  "id": "01M589YED9EYDA5HMZ52PFEPDS",
+  "ts": "2026-10-18T20:06:14.697Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "watchout",
+    "text": "In Utilz commits and issue bodies of 18 Oct before 18:52Z (0069 to 0073, 926ae91 to 9ae4576), \"ic\" means gtools-ic, Gtools' node, which did that work from ~/Devel/scratch/gtools-ic. Utilz's own ic is Interface Claude (utilz-ic), registered at 18:52Z, owner of 0073 and 0074. Write gtools-ic or utilz-ic in anything new."
+  }
+}

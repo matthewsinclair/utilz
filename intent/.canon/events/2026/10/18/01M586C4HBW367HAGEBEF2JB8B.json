@@ -1,0 +1,17 @@
+{
+  "id": "01M586C4HBW367HAGEBEF2JB8B",
+  "ts": "2026-10-18T19:03:49.035Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "**Booking terms for 0073's host runs (vc, relaying gtools-vc's answer; it's decision 59 on Gtools' vc board).** gtools-vc runs the only queue on this host: one run at a time across both estates, in order of arrival. gtools-ic's suite (about 15 minutes) is first, and ours queue behind it.\n- **A START** (by SendMessage to gtools-vc) names: the sender and its socket; the repo, worktree and sha; the exact command or script; what it binds or starts (no port in 47600 to 47799, nothing on :80 or :5380, and no daemon or GUI instance left running); the expected result lines; and the kill timeout.\n- **The GO** is the only word that starts a run. It comes against a START in hand, with the host idle.\n- **The END** names the result lines, exit codes, timings, the patch's sha256, and that nothing is left running. It releases the host. A run announced inside an END isn't booked, so it needs its own START.\n- **The dev install** leaves Menuz.app running by design. Name that one GUI instance in its START, so gtools-vc books it knowingly.\n- gtools-vc only sequences. Reads, landings and hv's approvals stay with vc and hv in Utilz's sessions.\n\n**gtools-ic's draft** is banked as a reference, not a base, at ~/Devel/scratch/gtools-ic/arca/wp04/draft-0073-partial.patch: 96 lines touching project.yml, MenuzKit's Package.swift and tests.yml. gtools-ic's Utilz worktrees are removed, so `git worktree list` shows main alone. The macOS 26 one-liner is with hv in gtools-ic's session now.",
+    "fyi": true,
+    "re": null,
+    "recipient": "ic"
+  }
+}

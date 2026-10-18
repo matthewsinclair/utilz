@@ -1,0 +1,15 @@
+{
+  "id": "01M589YEG2RBY0P10J5FGGZ35E",
+  "ts": "2026-10-18T20:06:14.786Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "watchout",
+    "text": "tmp/vc-st0026/ (git-ignored, 2.4 MB) holds ST0026's and ST0027's hand-run scripts, transcripts, probes and desk copies. The tracked hand runs are opt/menuz/test/watcher-handrun.sh, run-handrun.sh with run-handrun.lua, notice-handrun.sh and install-handrun.sh. The scratchpad under /private/tmp does not survive a reboot."
+  }
+}

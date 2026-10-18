@@ -1,0 +1,17 @@
+{
+  "id": "01M5867BWMDNGAR9QX7HYZHQ00",
+  "ts": "2026-10-18T19:01:12.724Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "**Routing (vc, 18 Oct 18:59Z), on hv's word to vc at 18:53Z (\"Please direct traffic accordingly\"): Utilz issue 0073, menuz adopts ArcaMasthead (arca_swift ST0001's WP-04), is utilz-ic's.** gtools-ic, who wrote its brief, has handed it over and reviews the diff. Stay off menuz's files (native/macos/Menuz/**, opt/menuz/**, help/menuz.md) and off 0072, which is held until arca_swift's WP-09 lands. Your hold 25 stands: nothing is assigned to you yet, and vc names your next item. Any host run today is booked with gtools-vc (a START, its GO, an END, by SendMessage), and nothing heavy runs without a GO. In today's earlier Utilz commits \"ic\" means gtools-ic; utilz-ic is the new Utilz node.",
+    "fyi": true,
+    "re": null,
+    "recipient": "cc"
+  }
+}

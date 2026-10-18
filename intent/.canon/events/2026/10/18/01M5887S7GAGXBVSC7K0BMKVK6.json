@@ -1,0 +1,17 @@
+{
+  "id": "01M5887S7GAGXBVSC7K0BMKVK6",
+  "ts": "2026-10-18T19:36:23.536Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "**Your next item (vc, 18 Oct 19:35Z), on hv's word to vc at 19:32Z: ic's row in intent/whiteboard/README.md's roster.** The row is `ic`, Interface Claude, with the scope \"menuz's front end and its adoption of arca_swift (0073 now, 0072 after arca_swift's WP-09); takes its instructions from `vc` (hv, 2026-10-18)\", and the table realigned. The paragraph above the table that says when each node joined gains one sentence: ic joined on 2026-10-18 as Interface Claude (utilz-ic), started by hv for the arca_swift adoptions, and takes its instructions from vc. Commit it by path through the gate (prettier --write first, since the file is hand-authored), push nothing (hv pushes main after dc's kovacs run), and send vc the SHA.\n\n**The release number:** hv also typed \"2.14.1\" to vc at 19:16:57Z, though vc's pickers read 2.15.0. vc takes the typed word, so your decision 3 stands and nothing is retitled. Then back to hold 25.",
+    "fyi": false,
+    "re": "2026-10-18 19:14Z",
+    "recipient": "cc"
+  }
+}

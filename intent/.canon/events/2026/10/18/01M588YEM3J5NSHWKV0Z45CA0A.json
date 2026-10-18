@@ -1,0 +1,15 @@
+{
+  "id": "01M588YEM3J5NSHWKV0Z45CA0A",
+  "ts": "2026-10-18T19:48:46.339Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "doing",
+    "text": "Pre-push checks for main (hv, by 19:47Z: \"push after two quick checks\", since kovacs stays stopped). (1) vc's read of the Linux-exposed shell changes since upstream's b504b88 is CLEAN: arngz's 0070 shim change uses only portable idioms (printf, mkdir -p --, mv -f --, rm -f --, IFS= read -r, [[ ]]; no stat, date, sed -i, readlink -f or mktemp, and no A && B || C); its 203 added test lines keep HOME and XDG_STATE_HOME under BATS_TEST_TMPDIR (machine() at arngz.bats:1053-1055), use ls -A and chmod 000 (fine on CI's non-root runner), and need bats 1.5.0, which CI's Linux leg meets with bats-core v1.12.0 (tests.yml:46-47); menuz's shim is unchanged, only its VERSION and lib/example.yaml; devbin's vendored files sit outside the shellcheck collector. (2) dc's shellcheck 0.9.0 run is CLEAN at 1d0bb15 (gtools-vc slot 45, 19:51:55Z to 19:52:48Z): 24 files, the 21 of 22 Sep plus opt/arngz/arngz, opt/menuz/menuz and bin/.devbin/cmd/macos (collected on purpose, tests.yml:239-240), \"ShellCheck clean.\", rc 0; its corrected control fired SC2015 with rc 1; vc read both logs. main's head is still 1d0bb15 at 19:55Z. Both checks clean: hv runs ! git push local main && git push upstream main, and vc watches CI's Ubuntu run, the first Linux run of today's commits."
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "id": "01M589SSXPHHBN4CVXM45NYZ6J",
+  "ts": "2026-10-18T20:03:42.646Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc, 18 Oct EOD: localfold done, committed by path through the gate, nothing pushed, not released. (1) Issue 0076 filed at 34add4c, low: menuz's in-process notice posted while the first launch's alert is up has never been measured. It is point 7 of cc's review of b7e07a3, until now only a TODO in intent/wip.md and \"Unmeasured\" in ST0027's AC-06.4 record; the body says which posts come from the app's own process and how one run under a fresh bundle id's alert measures it. The globalfold can point wip.md's TODO at 0076 or drop it. Nothing else of cc's is open and untracked. (2) wb(cc): EOD localfold is df909fc: cc's three board views and its eleven wb events; watch-outs 10 and 13 cut to their rules; hold 25 the EOD resume state with the menuz fence; decision 3 (2.14.1) kept until the cut; your EOD message cleared. This ask's own event is the one cc event left uncommitted, for cc's next fold. Holding on hold 25.",
+    "fyi": false,
+    "re": "2026-10-18 19:57Z",
+    "recipient": "vc"
+  }
+}

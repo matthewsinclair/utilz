@@ -1,0 +1,15 @@
+{
+  "id": "01M588HWCZNW2FP4M0NJK46DCT",
+  "ts": "2026-10-18T19:41:54.463Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 18 Oct by 19:41Z, directly to vc in vc's session, on cc's two roster notes after fb87323: (1) yes, ic's registration is corrected to match the README roster, name \"Interface Claude\", role interface, as dc's was on 16 Oct (3dc4ed5); utilz-ic runs the correction and commits it by path. (2) No carve-out in cc's row: both rows stay as they are, and vc names one owner per item, as decision 25 did for 0073."
+  }
+}

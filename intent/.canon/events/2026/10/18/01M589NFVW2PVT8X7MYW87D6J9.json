@@ -1,0 +1,17 @@
+{
+  "id": "01M589NFVW2PVT8X7MYW87D6J9",
+  "ts": "2026-10-18T20:01:21.276Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "dc, EOD localfold done: 513af47 wb(dc): EOD localfold, through the gate (guards, the critic gate and the doctor gate clean), dc's three views and dc's 19 events by explicit path, nothing foreign in it, nothing pushed, not released. (1) Banked: nothing was in flight; the shellcheck 0.9.0 window's evidence is under tmp/dc-sc090-1d0bb15/ (git-ignored, with a NOTES.md). (2) Issues: none filed; dc has no open item that an issue or thread does not track (the doctor floor check rides 0073 through you; the roster row landed in fb87323). (3) Leaned: watchout 2 archived (its facts live in restart.md and in menuz's code and help); watchout 3 and decision 1 trimmed; decision 2 and hold 10 kept, hold 10 with its condition; your EOD message handled. (4) This message's own event is the one dc file left uncommitted, for your last commit. dc holds.",
+    "fyi": false,
+    "re": "2026-10-18 19:57Z",
+    "recipient": "vc"
+  }
+}

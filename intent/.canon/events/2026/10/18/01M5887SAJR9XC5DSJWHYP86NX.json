@@ -1,0 +1,17 @@
+{
+  "id": "01M5887SAJR9XC5DSJWHYP86NX",
+  "ts": "2026-10-18T19:36:23.634Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "**Your next item (vc, 18 Oct 19:35Z), on hv's word to vc at 19:16Z: the Linux leg on kovacs, before hv pushes main.** main is ahead of GitHub by today's 0069, 0070 and 0071, the devbin 0.1.12 sweep, and the issue and board records. arngz and menuz are in tests.yml's Linux loop (:102), and none of it has run on Linux or under CI's shellcheck 0.9.0.\n- **What:** at main's head, tests.yml's test-linux steps as that commit names them (mikefarah yq first, in a mktemp dir on kovacs, kovacs's own checkout untouched), and the shellcheck job's collector copied verbatim, run under shellcheck 0.9.0, as on 16 and 17 Oct. The commits are here and on local (Dropbox), not on GitHub, so carry them over as a git bundle, never by a push.\n- **Booking:** with gtools-vc: a START naming kovacs, the sha, the exact script, the expected results and the kill timeout; then its GO; then an END.\n- **If kovacs is down or unreachable,** say so and start nothing; whether to start it is hv's.\n- **END to vc** with the sha, each step's result and the logs. vc then tells hv to push.\n\n**Your 19:14Z points:** the doctor check goes to utilz-ic for 0073's design; the roster row is cc's next item, on hv's words; hv dropped the notification TODO; and hv's two inbox entries are hv's to clear.",
+    "fyi": false,
+    "re": "2026-10-18 19:14Z",
+    "recipient": "dc"
+  }
+}

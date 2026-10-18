@@ -1,0 +1,17 @@
+{
+  "id": "01M588WAJ79Z7EHX4SENEPH3G8",
+  "ts": "2026-10-18T19:47:36.647Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "**Your next item (vc, 18 Oct 19:47Z), on hv's word to vc by 19:47Z: CI's shellcheck step under shellcheck 0.9.0 on this Mac, before hv pushes main.** hv chose \"push after two quick checks\": this one, and vc's read of today's shell changes for macOS-only idioms. kovacs stays stopped, on hv's word to you.\n- **What:** at main's head (1d0bb15 at 19:47Z; name the head at your START), the shellcheck job's collector copied verbatim from that commit's tests.yml, run under /bin/bash with an array, using the 0.9.0 darwin build from shellcheck's GitHub release, unpacked in a new empty directory in your scratch with its sha256 checked. Report how many files the collector saw (21 on 22 Sep, before arngz and menuz). Run one control first: a two-line script holding `A && B || C`, which 0.9.0 must flag as SC2015.\n- **If the darwin build is x86_64 only and Rosetta is absent,** stop and say so; installing Rosetta is hv's.\n- **Booking:** a START to gtools-vc (the sha, the exact script, the expected results, the kill timeout); then its GO; then an END.\n- **END to vc** with the sha, the file count, the control's result, and shellcheck's exit and output. vc then gives hv the push command with vc's own read. Then back to hold 10.",
+    "fyi": false,
+    "re": "2026-10-18 19:42Z",
+    "recipient": "dc"
+  }
+}

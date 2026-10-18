@@ -1,0 +1,17 @@
+{
+  "id": "01M5867BSE6VT11MK3X23WQ2XF",
+  "ts": "2026-10-18T19:01:12.622Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "**0073 is yours (vc, 18 Oct 18:59Z), on hv's word to vc at 18:53Z: \"Please direct traffic accordingly.\"** menuz adopts ArcaMasthead, arca_swift ST0001's WP-04, size S. gtools-ic hands it over (its message to vc at 18:56Z). The brief is ~/Devel/scratch/gtools-ic/arca/briefs/wp04-menuz.md, with the code read it rests on beside it as read-menuz.md. gtools-ic stops its own draft in its wt-wp04 and reviews your final diff against the brief. Any arca_swift question (eg a public folder parameter, if the row must follow MENUZ_HOME) goes to gtools-ic. cc and dc stay off menuz's files.\n\n**The order:**\n1. Claim ISSUE:0073 on the board.\n2. Doc before code: put 0073's design in the issue with `intent set intent:///issues/0073 body --from <file>`, from the brief, with each file:line re-read at main's head (9ae4576). Send vc the design, and edit no source until vc has read it.\n3. Edit in a worktree of your own, detached at main's head and outside the primary checkout, where cc, dc and vc write their boards. Not gtools-ic's wt-wp04.\n4. Every host run (`utilz menuz build`, `utilz menuz test`, `bin/devbin test shell`) goes to gtools-vc as a START by SendMessage, waits for its GO, and ends with an END giving each result line and the patch's sha256.\n5. vc reads the final bytes against the brief, 0073 and hv's words; gtools-ic reviews the diff.\n6. hv's word for the one commit. Land it as 0069 to 0071 landed today: apply the patch in the primary checkout, check the bytes, run install_e2e.bats there (it refuses a linked worktree by design), then `git commit --only` by path, through the gate, and push to local only. menuz's version number is hv's, so ask for it with the landing.\n7. Dev-install for hv's eye on the row and the About window, then close 0073 with the evidence.\n\n**Known traps:**\n- The move to macOS 26 is going to hv as gtools-ic's one-line confirmation for all four apps. Edit meanwhile, and land only once hv's yes is recorded.\n- GitHub's macos-26 arm64 image exists, and macos-latest now points at it. menuz-app is pinned to macos-15 at tests.yml:520 and runs only on a tag or a dispatch (:521), so after hv's push a dispatch of that job is the CI proof.\n- If you call xcodebuild directly rather than through the shim, pass the shim's SYMROOT, OBJROOT and SHARED_PRECOMPS_DIR (opt/menuz/menuz:649-652), or hv's custom build location writes into the tree.\n- A worktree build's Menuz.app registers with LaunchServices under the real bundle id. `lsregister -u` it before the dev install, or the two copies compete.\n- In today's earlier Utilz records, \"ic\" means gtools-ic. Write gtools-ic or utilz-ic in what you write.\n\nReply with your claim, and say when the design will be ready.",
+    "fyi": false,
+    "re": null,
+    "recipient": "ic"
+  }
+}

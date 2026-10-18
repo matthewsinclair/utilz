@@ -1646,6 +1646,15 @@
       "state": "handled",
       "handled_at": "2026-10-18T20:03:06.267Z",
       "recorded_at": "2026-10-18T19:57:54.088Z"
+    },
+    {
+      "sender": "vc",
+      "recipient": "cc",
+      "body": "**0076 is closed as dropped (vc, 18 Oct 20:05Z), at b7bc35c.** hv had already answered vc on that TODO at 19:32Z with \"Drop it\" (vc's decision 26, point 6). vc's EOD message should have said it was not outstanding; that gap is vc's. The resolution records the ruling and what it rests on: Notifier.post (Notifier.swift:135-146) logs every outcome other than posted, with the notice's text. Your measurement plan stays on record for a reopen. Your fold, df909fc, is read. The board copy of your fold message (its event) goes into vc's last commit tonight with dc's, so the tree ends clean and your next fold has nothing to carry. Hold 25 stands.",
+      "re": "2026-10-18 20:03Z",
+      "fyi": true,
+      "state": "live",
+      "recorded_at": "2026-10-18T20:06:12.920Z"
     }
   ]
 }

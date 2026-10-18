@@ -1,0 +1,15 @@
+{
+  "id": "01M5887RVVPXXX9EARAVBX6T54",
+  "ts": "2026-10-18T19:36:23.163Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 18 Oct, directly to vc, answering vc's questions. At 19:16Z: (1) yes, menuz's floor moves from macOS 14 to 26 for 0073, since ArcaMasthead needs macOS 26 and Swift 6.2; (2) main goes upstream after dc's kovacs run of tests.yml's Linux loop and the shellcheck step under 0.9.0, then hv pushes; (3) the next release is cut after 0073 lands; (4) 0073 sets menuz 0.4.0. At 19:32Z: (5) ic's roster row reads \"Interface Claude: menuz's front end and its adoption of arca_swift (0073 now, 0072 after arca_swift's WP-09); takes its instructions from vc\", which cc writes; (6) wip.md's TODO on a second notification request under the first-launch alert is dropped. The release NUMBER is 2.14.1: hv told cc \"2.14.1\" at 19:13Z (cc's decision 3) and typed \"2.14.1\" to vc at 19:16:57Z, while vc's two pickers read 2.15.0 at 19:16Z and 19:32Z. vc takes the typed word, which the CHANGELOG heading already carries, so nothing is retitled; hv's one word changes it before the cut. dc's doctor floor check (dc's decision 1, on hv's \"Go with your recs\") goes into 0073's design."
+  }
+}

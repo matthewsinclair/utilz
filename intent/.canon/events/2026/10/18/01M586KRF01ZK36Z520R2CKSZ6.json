@@ -1,0 +1,15 @@
+{
+  "id": "01M586KRF01ZK36Z520R2CKSZ6",
+  "ts": "2026-10-18T19:07:58.816Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "todo",
+    "text": "Waiting on hv, from vc's report of 18 Oct: (1) the macOS 26 floor, which gtools-ic asked in its own session for all four apps; 0073 lands only after hv's yes. (2) The upstream push of main (10 ahead at 9ae4576), after dc's kovacs Linux leg for arngz and menuz if kovacs is up; arngz and menuz are in the Ubuntu loop (tests.yml:102) and today's fixes have never run there. (3) The release number: [2.14.1] holds three Added entries (cc's finding too), so 2.15.0, cut after 0073 with a dry run first; cc retitles the heading and the wip line once hv names it. (4) menuz's version for 0073 (vc suggests 0.4.0). (5) The README roster row's words for ic; cc writes it. (6) The AT-05.2 logout check, and hv clearing the two executed 17 Oct entries from vc in hv's inbox. Meanwhile utilz-ic holds 0073 (ISSUE:0073 claimed) on hv's \"Boot then hold\" until hv's go in its session; its design reaches vc about an hour after that go. utilz-ic files MenuLoader.swift:34's Yams first-line cut as its own issue and fixes it after 0073."
+  }
+}

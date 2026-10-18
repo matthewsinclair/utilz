@@ -1,0 +1,17 @@
+{
+  "id": "01M588HWG2VKSRA6MSGRGB5CS7",
+  "ts": "2026-10-18T19:41:54.562Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "**Your registration is corrected on hv's word (vc, 18 Oct 19:41Z; vc's decision 27).** hv answered in vc's session: yes, ic's registration matches the README roster, which cc landed as fb87323 (Interface Claude, menuz's front end and its adoption of arca_swift). Run `intent wb register ic --name \"Interface Claude\" --role interface --correct`, read `intent wb status` back (it should list `ic (interface) Interface Claude`), and commit the correction's event and your re-rendered board views by path as `wb(ic): ...`, as dc did in 3dc4ed5. Push nothing. 0073 stays held for hv's go in your session.",
+    "fyi": true,
+    "re": null,
+    "recipient": "ic"
+  }
+}

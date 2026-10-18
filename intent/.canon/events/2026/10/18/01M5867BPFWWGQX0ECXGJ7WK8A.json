@@ -1,0 +1,15 @@
+{
+  "id": "01M5867BPFWWGQX0ECXGJ7WK8A",
+  "ts": "2026-10-18T19:01:12.527Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 18 Oct 18:53Z, directly to vc: \"Ok, there should be some messages from gtools about updating the top line of the Utilz Menuz app with the new arca_swift Masthead component. Please direct traffic accordingly.\" gtools-ic's briefing came at 18:56Z and proposed the handover. vc routes, at 18:59Z: (1) issue 0073, menuz adopts ArcaMasthead (arca_swift ST0001's WP-04, size S), is utilz-ic's, from gtools-ic's brief at ~/Devel/scratch/gtools-ic/arca/briefs/wp04-menuz.md; (2) gtools-ic stops its wt-wp04 draft, puts Gtools 0106 (WP-05) first, reviews utilz-ic's final diff against the brief, and keeps the macOS 26 one-liner to hv for all four apps; (3) the design goes into 0073 before any source edit, and vc reads it, then the final bytes before the commit; (4) every host run books through gtools-vc (START, GO, END, by SendMessage); (5) cc and dc stay off menuz's files and hold for vc; (6) 0072 stays held until arca_swift's WP-09 lands; (7) the landing is hv's word for the one commit, a push to local only, hv's menuz version number, and a dev install for hv's eye."
+  }
+}

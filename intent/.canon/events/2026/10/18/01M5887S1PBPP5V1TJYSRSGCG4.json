@@ -1,0 +1,15 @@
+{
+  "id": "01M5887S1PBPP5V1TJYSRSGCG4",
+  "ts": "2026-10-18T19:36:23.350Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "todo",
+    "text": "Waiting on hv, at the close of 18 Oct: (1) the go for 0073 in utilz-ic's session, where its \"Boot then hold\" stands until then; (2) the push of main: both pre-push checks were clean at 1d0bb15 (vc's portability read of the Linux-exposed shell changes, and dc's shellcheck 0.9.0 run of CI's collector, 24 files, in gtools-vc's slot 45), and everything since is records; then ! git push local main && git push upstream main, after which vc reads CI's Ubuntu run, the first Linux run of today's commits; (3) the logout check, now issue 0075; (4) clearing the two executed 17 Oct entries from vc in hv's inbox (! intent wb clear vc --node hv). The release is 2.14.1, cut after 0073 from hv's terminal after a dry run (decision 26)."
+  }
+}
