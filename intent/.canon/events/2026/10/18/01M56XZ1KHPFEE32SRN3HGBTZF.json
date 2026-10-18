@@ -1,0 +1,15 @@
+{
+  "id": "01M56XZ1KHPFEE32SRN3HGBTZF",
+  "ts": "2026-10-18T07:17:37.010Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "issues.add",
+  "subject": {
+    "type": "issue",
+    "id": "0069"
+  },
+  "payload": {
+    "severity": "low",
+    "title": "menuz's own items sit in a fixed tail the menu file cannot place, and no line divides the version row from the menu"
+  }
+}
