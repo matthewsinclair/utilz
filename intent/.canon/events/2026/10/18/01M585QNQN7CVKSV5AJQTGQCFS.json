@@ -1,0 +1,15 @@
+{
+  "id": "01M585QNQN7CVKSV5AJQTGQCFS",
+  "ts": "2026-10-18T18:52:38.517Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.register",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "name": "utilz-ic",
+    "role": "ic"
+  }
+}
