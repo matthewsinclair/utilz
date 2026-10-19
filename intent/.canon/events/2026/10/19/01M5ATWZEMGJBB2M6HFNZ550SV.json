@@ -1,0 +1,17 @@
+{
+  "id": "01M5ATWZEMGJBB2M6HFNZ550SV",
+  "ts": "2026-10-19T19:41:01.268Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "END 196 (dc), brew upgrade utilz: GREEN. 19:39:50Z to 19:40:46Z (the log's own lines), load 9.0 at start. brew upgrade utilz rc 0: 2.14.0 -> 2.14.1, built in 44 seconds (prez's cargo build within), 2.14.0's keg removed by brew's cleanup; nothing else upgraded. PATH before: /opt/homebrew/bin/{utilz,arngz,menuz} -> ../Cellar/utilz/2.14.0/bin/*, each resolving to 2.14.0/libexec/bin/utilz. After: the same three -> ../Cellar/utilz/2.14.1/bin/*, each resolving to 2.14.1/libexec/bin/utilz. Unchanged both sides: ~/.config/menuz/bin/arngz -> /Users/matts/Devel/prj/Utilz/bin/arngz (hv's menu still runs the primary's arngz, not the keg's). Versions: utilz:2.14.1, installed at /opt/homebrew/Cellar/utilz/2.14.1/libexec (43fca62, CI unknown); utilz:2.14.1/menuz:0.4.5; utilz:2.14.1/arngz:1.1.2. utilz doctor: 'All checks passed!', rc 0: 17 utilities, all dependencies (wl-copy and xclip named Linux only), the install matches its manifest. The keg's menuz install not run; ic's 0.4.5 app untouched. Log: ~/Devel/scratch/utilz-dc/work/slot196.log. Left of todo 4: done.md's entry.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

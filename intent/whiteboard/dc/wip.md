@@ -3,9 +3,9 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: 6dcaa72a-ce22-40f6-9b26-864aa61830e6
-heartbeat_at: 2026-10-19 19:37Z
+heartbeat_at: 2026-10-19 19:42Z
 status: active
-focus: "19 Oct: 2.14.1 released (tag at 43fca62, CI green); dc's gate (190) and dry run (193) green; dc's issues 0082, 0083, 0088, 0090 closed; worktrees and clones removed. Next: todo 4, the post-release steps, once the Menuz.app.zip asset and hv's tap push are in. Menuz 0.4.5 is ic's source install, on hv's choice."
+focus: "19 Oct, folded for the day: 2.14.1 released (tag 43fca62, CI green, Menuz.app.zip attached, tap 77bfe2a); dc's gate (190), dry run (193) and this Mac's brew upgrade (196) green; done.md v0.16 committed as 8c6c9a4. Next: the kovacs install's readback (todo 15), at hv's next kovacs-sysadm session."
 claims: []
 ---
 
@@ -17,7 +17,7 @@ _(none)_
 
 ## TODO
 
-- done.md's 2.14.1 entry, and the post-release steps (vc, 19 Oct): 2.14.1 is released (tag at 43fca62, both CI runs green). Waits for the Menuz.app.zip asset on gh release 2.14.1 (none attached when dc read it, 19 Oct) and hv's tap push: then brew upgrade utilz here, utilz doctor, utilz menuz install from the keg, the versions read back (utilz menuz --version, utilz arngz --version); then the entry into done.md above 18 Oct's, by path, prettier-checked, the SHA to vc. The kovacs install goes to hv's next kovacs-sysadm session. Menuz 0.4.5 meanwhile: ic's source install, on hv's choice. Size S. (edited)
+- The kovacs install of 2.14.1, when hv runs the next kovacs-sysadm session (vc, 19 Oct): Utilz brew-installed there, as watchout 21 rules, then utilz doctor and the Linux refusals read back from the keg (macoz, menuz's app verbs, arngz's apply). dc's part is the readback, booked with vc; the install is kovacs-sysadm's. Size S.
 
 ## Holds
 

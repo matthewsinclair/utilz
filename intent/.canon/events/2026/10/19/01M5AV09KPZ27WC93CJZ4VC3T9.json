@@ -1,0 +1,15 @@
+{
+  "id": "01M5AV09KPZ27WC93CJZ4VC3T9",
+  "ts": "2026-10-19T19:42:49.974Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "todo",
+    "text": "The kovacs install of 2.14.1, when hv runs the next kovacs-sysadm session (vc, 19 Oct): Utilz brew-installed there, as watchout 21 rules, then utilz doctor and the Linux refusals read back from the keg (macoz, menuz's app verbs, arngz's apply). dc's part is the readback, booked with vc; the install is kovacs-sysadm's. Size S."
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "id": "01M5ATRJXKC8CN2YNT3RP4JT9S",
+  "ts": "2026-10-19T19:38:37.363Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "START (dc), todo 4 minus the asset step: brew upgrade utilz on this Mac, 2.14.0 to 2.14.1 (tap 77bfe2a; brew update already run, read-only, it shows 'stable 2.14.1'). HEAVY, not light: the formula's install (bin/utilz install --managed-by brew) runs cargo build --release --workspace in opt/prez/crate. Only utilz is upgraded (brew upgrade utilz; the other outdated formulae left alone). Then utilz --version, utilz doctor, utilz menuz --version and utilz arngz --version, read back. No keg menuz install (ic's 0.4.5 stays). This replaces the keg hv's PATH resolves utilz from, so I read the PATH's utilz, arngz and menuz links before and after. Load 6.6. Waiting for your GO.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}
