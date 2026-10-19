@@ -1,0 +1,15 @@
+{
+  "id": "01M5AV45RJY9N0YH1HZMEQMZ1A",
+  "ts": "2026-10-19T19:44:57.106Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "hold",
+    "text": "Holding for hv's compact (vc's decision 47, end of day 19 Oct). Condition: hv's compact of this session has run; then /in-session, pickup, and vc's word. Resume state: 2.14.1 is released (tag 43fca62, CI green, tap 77bfe2a), and every post-release step on this Mac is done: brew upgrade to 2.14.1 and utilz doctor green (196), Menuz.app installed from the release's Menuz.app.zip, 0.4.5 build 1425, MENUZ_KIND release, notarised (197), done.md v0.16 (8c6c9a4). dc's issues 0082, 0083, 0088 and 0090 are closed; dc has no worktrees or clones. Next: todo 15, the kovacs readback, at hv's next kovacs-sysadm session. The gate script and its notes stay banked in ~/Devel/scratch/utilz-dc/gate/."
+  }
+}

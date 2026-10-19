@@ -1,0 +1,17 @@
+{
+  "id": "01M5AV3SYJDS0V1SWAXR01GFDM",
+  "ts": "2026-10-19T19:44:45.010Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "END 197 (dc), the keg's menuz install from 2.14.1's Menuz.app.zip: GREEN, the first end-to-end proof of the asset. 19:44:19Z to 19:44:23Z, /opt/homebrew/bin/utilz (2.14.1), rc 0. Its lines: 'fetching https://github.com/matthewsinclair/utilz/releases/download/2.14.1/Menuz.app.zip', 'quitting com.matthewsinclair.utilz.menuz (pid 32665)', 'installed /Users/matts/Applications/Menuz.app', 'launched /Users/matts/Applications/Menuz.app'. Its checks print only on a failure, so each read back from the installed app: codesign --verify --deep --strict valid, Identifier com.matthewsinclair.utilz.menuz, TeamIdentifier 76BQL8L47U; spctl 'accepted source=Notarized Developer ID'; stapler validate 'The validate action worked!'. Stamps (menuz stamps, the Info.plist): MENUZ_VERSION 0.4.5, MENUZ_BUILD 1425, MENUZ_COMMIT 43fca620 (the release commit), MENUZ_KIND release, MENUZ_SOURCE_TREE c6a28dd3. menuz status: installed /Users/matts/Applications/Menuz.app 0.4.5 build 1425 (43fca620); use installed (default); running pid 38041; login item enabled; source homebrew. Running: one Menuz (pgrep -x Menuz: 38041). Before: 0.4.5 build 1427 (b142ad9a), utilz-ic's source build. The post-release steps on this Mac are all done.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

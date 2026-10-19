@@ -1,0 +1,17 @@
+{
+  "id": "01M5AV2HXJW2PTCJ9KKXT33QZR",
+  "ts": "2026-10-19T19:44:04.019Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "START (dc), the last post-release step, on hv's word to me ('tap is pushed, do the post-release steps'): utilz menuz install from the 2.14.1 keg, which fetches the release's Menuz.app.zip (1733886 bytes, notarised and stapled) and checks its signature, notarisation, bundle id and version (0.4.5) before it quits Menuz, replaces ~/Applications/Menuz.app, registers and launches it. Installed now: 0.4.5 build 1427 (b142ad9a), utilz-ic's source build, running as pid 32665. You held this step while the asset was missing; it is attached now. Light: a download and a copy, no build. Then menuz status and --version read back. hv's menu blinks once (a quit and a launch). Waiting for your GO.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}
