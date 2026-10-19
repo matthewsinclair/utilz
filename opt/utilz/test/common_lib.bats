@@ -82,11 +82,13 @@ run_in_fake_home_with_path() {
 }
 
 # Run a common.sh function with yq unreachable: under test_helper's
-# path_without yq, which keeps every other command on PATH (issue 0084).
+# path_without yq, which keeps every other command on PATH (issue 0084). Under
+# `set -euo pipefail`, as bin/utilz runs a verb, so a no-yq path that strict
+# mode would end is seen ending (issue 0087).
 run_without_yq() {
   local farm
   farm="$(path_without yq)"
-  run env PATH="$farm" bash -c "source '$UTILZ_HOME/opt/utilz/lib/common.sh'; $*"
+  run env PATH="$farm" bash -c "set -euo pipefail; source '$UTILZ_HOME/opt/utilz/lib/common.sh'; $*"
 }
 
 # ============================================================================
@@ -675,6 +677,21 @@ doctor_issue_count() {
     fail "Expected $((before + 1)) issues, the one fault counted once, by [6/7]. Actual output:\n$output"
 }
 
+@test "run_doctor's [5/7] names a utility with no yaml and counts it (issue 0087)" {
+  local home before
+  home="$(make_fake_home)"
+  run_common_strict "$home" run_doctor
+  assert_output_contains "all properly configured"
+  before=$(doctor_issue_count)
+  rm "$home/opt/beta/beta.yaml"
+
+  run_common_strict "$home" run_doctor
+  assert_output_contains "    - beta (no beta.yaml)"
+  refute_output_contains "all properly configured"
+  [[ "$(doctor_issue_count)" -eq $((before + 1)) ]] ||
+    fail "Expected $((before + 1)) issues, the missing yaml counted once, by [5/7]. Actual output:\n$output"
+}
+
 # ============================================================================
 # ST0009 WP-01 -- each_utility(): THE walker of bin/
 # ============================================================================
@@ -760,6 +777,9 @@ beta"
   assert_output_contains "yq is not installed"
   assert_output_contains "brew install yq"
   assert_output_contains "issue"
+  # [5/7] read no utilz_version, so it calls no utility configured (issue 0087).
+  assert_output_contains "utilz_version is not checked without yq"
+  refute_output_contains "all properly configured"
 }
 
 # **THE DEPENDENCY VERDICT BELONGS TO STEP 6** (issue 0026). run_doctor printed

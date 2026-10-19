@@ -1082,6 +1082,7 @@ run_doctor() {
   # names, padded with spaces, for [6/7] to skip their dependencies (issue
   # 0083).
   local elsewhere_lines=() elsewhere_names=" " plat plat_status
+  local unchecked_count=0
   local framework_version framework_major
   framework_version=$(get_utilz_version)
   framework_major=$(echo "$framework_version" | cut -d. -f1)
@@ -1099,8 +1100,20 @@ run_doctor() {
       continue
     fi
 
-    # Version compatibility needs the YAML; check 6 reports the missing yq.
+    # A UTILITY WITHOUT A YAML IS AN ISSUE OF THIS SECTION'S (issue 0087). The
+    # metadata read answers 1 for it, which this section took as no
+    # requirement, and [6/7] skips it, so doctor named it nowhere while
+    # `<name> --version` called its version unknown. Asked before the yq branch,
+    # so it is named with or without yq.
+    if [[ ! -f "$(util_yaml_path "$name")" ]]; then
+      broken_utils+=("$name (no $name.yaml)")
+      continue
+    fi
+
+    # Version compatibility needs the YAML; check 6 reports the missing yq,
+    # and the verdict below says what was not checked.
     if [[ $have_yq -eq 0 ]]; then
+      unchecked_count=$((unchecked_count + 1))
       continue
     fi
 
@@ -1160,8 +1173,15 @@ run_doctor() {
       done
     fi
     issues=$((issues + 1))
-  elif [[ ${#unreadable_utils[@]} -eq 0 ]]; then
+  elif [[ $have_yq -eq 1 && ${#unreadable_utils[@]} -eq 0 ]]; then
     success "Found $util_count utilities, all properly configured"
+  fi
+  # NO VERDICT ON WHAT WAS NOT READ (issue 0087). Without yq no utilz_version is
+  # read, so no utility is called configured. [6/7] counts yq, so this does not.
+  # It counts only the utilities whose version yq alone kept unread, not those
+  # already listed above as broken.
+  if [[ $unchecked_count -gt 0 ]]; then
+    warn "utilz_version is not checked without yq: $unchecked_count of $util_count utilities, yq counted by [6/7]"
   fi
   if [[ ${#unreadable_utils[@]} -gt 0 ]]; then
     warn "utilz_version is not checked where a yaml cannot be read: ${#unreadable_utils[@]} of $util_count utilities, each counted by [6/7]:"
