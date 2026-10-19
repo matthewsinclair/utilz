@@ -1,12 +1,13 @@
-// swift-tools-version: 6.0
+// swift-tools-version: 6.2
 // MenuzKit: everything in Menuz.app that needs no AppKit (ST0027 WP-03), so
 // `swift test` runs it without an Xcode build. The app links it through
-// project.yml. Yams is the one package (D2).
+// project.yml. Yams is the one package (D2). Its floor is the app's, macOS
+// 26, which tools version 6.2 is the first to name (issue 0073).
 import PackageDescription
 
 let package = Package(
   name: "MenuzKit",
-  platforms: [.macOS(.v14)],
+  platforms: [.macOS(.v26)],
   products: [
     .library(name: "MenuzKit", targets: ["MenuzKit"])
   ],

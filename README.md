@@ -341,7 +341,7 @@ See `utilz help mdagg` for details.
 
 ### menuz
 
-A menu of your own commands in the macOS menu bar, read from one YAML file. Each item runs a shell line: a script, a `utilz` verb, anything the login shell can run. An item that takes parameters asks for them in one form first, and every run's output goes to one log that `menuz log` tails. Labels are expanded by the login shell each time the menu opens, and the menu follows the file as it changes, with no restart. On a full menu bar a new item can sit behind the overflow: hold Command and drag menuz's mark where you want it. At its first launch, answer macOS's alert with Allow, so its notices can post.
+A menu of your own commands in the macOS menu bar, read from one YAML file, on macOS 26 or later. Each item runs a shell line: a script, a `utilz` verb, anything the login shell can run. An item that takes parameters asks for them in one form first, and every run's output goes to one log that `menuz log` tails. Labels are expanded by the login shell each time the menu opens, and the menu follows the file as it changes, with no restart. On a full menu bar a new item can sit behind the overflow: hold Command and drag menuz's mark where you want it. At its first launch, answer macOS's alert with Allow, so its notices can post.
 
 ```bash
 # Create the config directory and the example menu (--force replaces the yaml)

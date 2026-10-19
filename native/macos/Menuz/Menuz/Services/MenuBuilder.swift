@@ -37,8 +37,6 @@ final class Chosen: NSObject {
 @MainActor
 final class MenuBuilder {
   static let noLogTitle = MenuSpec.appItem(.openLog).title + " (no log yet)"
-  /// The identity row's font, as the sibling apps' first rows (D14).
-  static let identityFont = NSFont.boldSystemFont(ofSize: 13)
 
   let menu = NSMenu()
   private weak var target: MenuActions?
@@ -53,21 +51,21 @@ final class MenuBuilder {
     menu.autoenablesItems = false
   }
 
-  /// The whole menu: the build's identity row and a separator under it, then
-  /// the refusals in red, then the last good spec's entries (none when the
-  /// file has never loaded), then a separator, unless one is last already,
-  /// and the tail: the app's own items the file did not place, all of them
-  /// without a file.
-  func build(identity: String, spec: MenuSpec?, refusals: [Refusal], realised: Realised, logExists: Bool) {
+  /// The whole menu: the top row and a separator under it, once the app has
+  /// made the row, then the refusals in red, then the last good spec's
+  /// entries (none when the file has never loaded), then a separator, unless
+  /// one is last already, and the tail: the app's own items the file did not
+  /// place, all of them without a file. The row is the app's one object,
+  /// kept across builds, so each build puts it back at the top (issue 0073).
+  func build(row: NSMenuItem?, spec: MenuSpec?, refusals: [Refusal], realised: Realised, logExists: Bool) {
     menu.removeAllItems()
     labels = [:]
     eaches = [:]
     openLogItem = nil
-    let row = NSMenuItem(title: identity, action: nil, keyEquivalent: "")
-    row.attributedTitle = NSAttributedString(string: identity, attributes: [.font: Self.identityFont])
-    row.isEnabled = false
-    menu.addItem(row)
-    menu.addItem(.separator())
+    if let row {
+      menu.addItem(row)
+      menu.addItem(.separator())
+    }
     for refusal in refusals {
       let item = NSMenuItem(title: refusal.description, action: nil, keyEquivalent: "")
       item.attributedTitle = NSAttributedString(

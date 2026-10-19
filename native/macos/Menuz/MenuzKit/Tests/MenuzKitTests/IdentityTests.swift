@@ -2,44 +2,45 @@ import Testing
 
 @testable import MenuzKit
 
-/// The menu's identity row for each kind of build (AC-07.1).
+/// The top row's commit and kind for each kind of build (AC-07.1, issue
+/// 0073).
 /// AT-07.1 (ST0027 acceptance.md) cites this file.
 @Suite("Identity")
 struct IdentityTests {
-  @Test("a clean build at the release tag has no suffix")
+  @Test("a clean build at the release tag is its commit, of kind release")
   func release() {
-    let line = Identity.line(version: "0.1.0", commit: "3e731d3a", tree: "4f2c9a10", kind: "release")
-    #expect(line == "menuz 0.1.0 (3e731d3a)")
+    #expect(Identity.commit("3e731d3a", tree: "4f2c9a10") == "3e731d3a")
+    #expect(Identity.kind("release") == "release")
   }
 
-  @Test("any other kind says dev after the parentheses")
+  @Test("any other kind is dev")
   func dev() {
-    #expect(Identity.line(version: "0.1.0", commit: "3e731d3a", tree: "4f2c9a10", kind: "dev") == "menuz 0.1.0 (3e731d3a) dev")
-    let capitalised = Identity.line(version: "0.1.0", commit: "3e731d3a", tree: "4f2c9a10", kind: "Release")
-    #expect(capitalised == "menuz 0.1.0 (3e731d3a) dev")
+    #expect(Identity.kind("dev") == "dev")
+    #expect(Identity.kind("Release") == "dev")
   }
 
   @Test("a dirty source tree puts dirty- before the commit")
   func dirty() {
-    let line = Identity.line(version: "0.1.0", commit: "3e731d3a", tree: "4f2c9a10-dirty", kind: "dev")
-    #expect(line == "menuz 0.1.0 (dirty-3e731d3a) dev")
+    #expect(Identity.commit("3e731d3a", tree: "4f2c9a10-dirty") == "dirty-3e731d3a")
   }
 
   @Test("a tree that only mentions dirty is clean")
   func notDirty() {
-    let line = Identity.line(version: "0.1.0", commit: "3e731d3a", tree: "dirty-4f2c9a10", kind: "release")
-    #expect(line == "menuz 0.1.0 (3e731d3a)")
+    #expect(Identity.commit("3e731d3a", tree: "dirty-4f2c9a10") == "3e731d3a")
   }
 
   @Test("an absent or empty stamp is unknown, and an absent kind is dev")
   func absent() {
-    #expect(Identity.line(version: nil, commit: nil, tree: nil, kind: nil) == "menuz unknown (unknown) dev")
-    #expect(Identity.line(version: "", commit: "", tree: "", kind: "") == "menuz unknown (unknown) dev")
-    #expect(Identity.line(version: "0.1.0", commit: nil, tree: "x-dirty", kind: "release") == "menuz 0.1.0 (dirty-unknown)")
+    #expect(Identity.commit(nil, tree: nil) == "unknown")
+    #expect(Identity.commit("", tree: "") == "unknown")
+    #expect(Identity.commit(nil, tree: "x-dirty") == "dirty-unknown")
+    #expect(Identity.kind(nil) == "dev")
+    #expect(Identity.kind("") == "dev")
   }
 
   @Test("the defaults project.yml gives a build from inside Xcode")
   func xcodeDefaults() {
-    #expect(Identity.line(version: "dev", commit: "dev", tree: "dev", kind: "dev") == "menuz dev (dev) dev")
+    #expect(Identity.commit("dev", tree: "dev") == "dev")
+    #expect(Identity.kind("dev") == "dev")
   }
 }

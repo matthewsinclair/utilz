@@ -142,6 +142,10 @@ project_file() {
   printf '%s/Menuz.xcodeproj\n' "$(source_dir)"
 }
 
+project_yml() {
+  printf '%s/project.yml\n' "$(source_dir)"
+}
+
 BUNDLE_ID="com.matthewsinclair.utilz.menuz"
 RELEASE_DOWNLOADS="https://github.com/matthewsinclair/utilz/releases/download"
 LSREGISTER="/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister"
@@ -190,7 +194,7 @@ require_build_tools() {
   if is_install; then
     refuse "$verb: this is an install of Utilz, which carries no app source; build from a source clone: git clone https://github.com/matthewsinclair/utilz"
   fi
-  [[ -f "$(source_dir)/project.yml" ]] || refuse "$verb: no app source at $(source_dir)"
+  [[ -f "$(project_yml)" ]] || refuse "$verb: no app source at $(source_dir)"
   if ! out="$(xcodebuild -version 2>&1)"; then
     refuse "$verb: Xcode is not available (xcodebuild -version: ${out##*$'\n'})"
   fi
@@ -583,7 +587,7 @@ project_inputs_hash() {
     if [[ -d "$dir/$d" ]]; then dirs+=("$d"); fi
   done
   {
-    cat "$dir/project.yml" || return 1
+    cat "$(project_yml)" || return 1
     if [[ ${#dirs[@]} -gt 0 ]]; then
       (cd "$dir" && find "${dirs[@]}" \( -name .build -o -name .swiftpm \) -prune -o -type f ! -name .DS_Store -print) | LC_ALL=C sort
     fi
@@ -940,12 +944,59 @@ doctor_line() {
   if [[ "$2" == FAIL ]]; then DOCTOR_FAILED=1; fi
 }
 
-# The build's preconditions: Xcode selected, xcodegen, and a codesigning
-# identity, counted and never printed.
+# project.yml's xcodeVersion, the Xcode floor's one home (issue 0073): the
+# double-quoted value of the key, indented two spaces, as project.yml writes
+# it, or nothing when the file has no such line. A file that cannot be read
+# fails, awk saying why.
+xcode_floor() {
+  awk -F'"' '/^  xcodeVersion:/ { print $2; exit }' "$(project_yml)"
+}
+
+# Whether Xcode version $1 is at least $2, part by part as numbers, a missing
+# part counting as 0, so 27.1 and 26.0.1 meet 26.0 and 16.4 does not. Exit 2
+# for a version that is not digits and dots: unreadable, never a pass.
+xcode_meets() {
+  local re='^[0-9]+(\.[0-9]+)*$' i have want
+  local -a haves wants
+  if [[ ! "$1" =~ $re || ! "$2" =~ $re ]]; then return 2; fi
+  IFS=. read -r -a haves <<<"$1"
+  IFS=. read -r -a wants <<<"$2"
+  for ((i = 0; i < ${#haves[@]} || i < ${#wants[@]}; i++)); do
+    have="${haves[i]:-0}"
+    want="${wants[i]:-0}"
+    if ((10#$have > 10#$want)); then return 0; fi
+    if ((10#$have < 10#$want)); then return 1; fi
+  done
+  return 0
+}
+
+# The build's preconditions: Xcode selected and at project.yml's floor,
+# xcodegen, and a codesigning identity, counted and never printed.
 doctor_build_lines() {
-  local dev ver found ids n rc=0
+  local dev ver line have="" floor meets=0 found ids n rc=0
   if dev="$(xcode-select -p 2>&1)" && ver="$(xcodebuild -version 2>&1)"; then
-    doctor_line xcode ok "$dev, ${ver%%$'\n'*}"
+    # The version is on the line that names Xcode: an install can print
+    # warnings to stderr ahead of it.
+    while IFS= read -r line; do
+      if [[ "$line" == "Xcode "* ]]; then
+        have="${line#Xcode }"
+        break
+      fi
+    done <<<"$ver"
+    if [[ -z "$have" ]]; then
+      doctor_line xcode FAIL "$dev: xcodebuild -version printed no Xcode line: ${ver%%$'\n'*}"
+    elif ! floor="$(xcode_floor 2>&1)"; then
+      doctor_line xcode FAIL "$dev, Xcode $have, and menuz's floor is unreadable: ${floor%%$'\n'*}"
+    elif [[ -z "$floor" ]]; then
+      doctor_line xcode FAIL "$dev, Xcode $have, and menuz's floor is unreadable: no xcodeVersion, double-quoted and indented two spaces, in $(project_yml)"
+    else
+      xcode_meets "$have" "$floor" || meets=$?
+      case "$meets" in
+        0) doctor_line xcode ok "$dev, Xcode $have" ;;
+        1) doctor_line xcode FAIL "$dev, Xcode $have is below menuz's floor, Xcode $floor (project.yml's xcodeVersion)" ;;
+        *) doctor_line xcode FAIL "$dev, Xcode $have: cannot compare it with menuz's floor, Xcode $floor" ;;
+      esac
+    fi
   else
     doctor_line xcode FAIL "no Xcode selected: ${ver:-$dev}"
   fi

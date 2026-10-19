@@ -516,8 +516,10 @@ jobs:
     # are the one build path here as on a desk: build runs xcodegen when the
     # project is stale and xcodebuild with the products under XDG state; test
     # runs the scheme, MenuzKitTests and MenuzTests both. macos.bats runs in
-    # test-macos's full run and in test-linux's loop, with its fakes.
-    runs-on: macos-15
+    # test-macos's full run and in test-linux's loop, with its fakes. The
+    # app's floor is macOS 26 and Swift 6.2 (issue 0073), which macos-15's
+    # Xcode 16 cannot build, so the job runs on macos-26's default Xcode.
+    runs-on: macos-26
     if: ${{ github.ref_type == 'tag' || github.event_name == 'workflow_dispatch' }}
 
     steps:

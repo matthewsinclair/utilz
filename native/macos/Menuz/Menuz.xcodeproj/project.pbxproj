@@ -7,8 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		03EF739060268D6FB11F129C /* about.md in Resources */ = {isa = PBXBuildFile; fileRef = 7CF7E8E8CA2418791548D6BA /* about.md */; };
 		0B5874BD2849165073737CBC /* IdentityRowTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC872A43CC981BBFB298B49E /* IdentityRowTests.swift */; };
 		184F74B5C1A84C179E4FFD0A /* MenuSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 746C4473977A35828A0457CF /* MenuSource.swift */; };
+		29A8876E8DAA2E3A3553409B /* Masthead.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7AACE446A510BA56FFFBC42 /* Masthead.swift */; };
 		3EC6549C623D9165FE8920F6 /* Realiser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A012D3FACA5B5E47D174B0E /* Realiser.swift */; };
 		4DA752B867A63455306A814A /* RealiserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F1E15B0CAAED35AF88ADCB2 /* RealiserTests.swift */; };
 		5E613632DB47D5AC9BB87171 /* MenuzKit in Frameworks */ = {isa = PBXBuildFile; productRef = 179FB1D9697FE3912ACB93C8 /* MenuzKit */; };
@@ -21,6 +23,7 @@
 		85D7375C47259446D9582937 /* Notifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9CAAC271F6A8DE3D9BA5660 /* Notifier.swift */; };
 		8A0ACEFEB1B35D3594B1FAFE /* TestHostTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FB3DC0386DDBB630BCAECDE /* TestHostTests.swift */; };
 		8FEBE6637B94EFB85C109330 /* Runner.swift in Sources */ = {isa = PBXBuildFile; fileRef = F54C8007BA2E6C044E578B5A /* Runner.swift */; };
+		94B23A16E55B53B76F9A8F40 /* ArcaMasthead in Frameworks */ = {isa = PBXBuildFile; productRef = 3CBD4F68970793021B1CB251 /* ArcaMasthead */; };
 		9BA03B276434DB812F3EE7EE /* Watcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AA7FC095B000E5E6F52EC5B /* Watcher.swift */; };
 		AD12842F54990380D974DDDB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 026662803F71C64000AFD10D /* Assets.xcassets */; };
 		B192BE55A3BD92863A209710 /* MenuBuilderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DAC1A3B15EDACFBFFBB4FC7 /* MenuBuilderTests.swift */; };
@@ -29,6 +32,7 @@
 		DE9C0C3FA1666B973E9DB06C /* LoginItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E028E7200976AF9A22C8E64 /* LoginItem.swift */; };
 		EAE4191C024DFE1B4BBE78F5 /* MenuzApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA910089979C343042FD394C /* MenuzApp.swift */; };
 		FB37AB1536AE3C8EEDC49F8F /* MenuzKit in Frameworks */ = {isa = PBXBuildFile; productRef = E176BB28E1D45EFD0D08551C /* MenuzKit */; };
+		FFF21E0660FED3A4BCFABA1C /* masthead.yaml in Resources */ = {isa = PBXBuildFile; fileRef = 0BF896F68BAE84BD7E7B1E19 /* masthead.yaml */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -43,6 +47,7 @@
 
 /* Begin PBXFileReference section */
 		026662803F71C64000AFD10D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		0BF896F68BAE84BD7E7B1E19 /* masthead.yaml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = masthead.yaml; sourceTree = "<group>"; };
 		0D78B2E5395802C4995350D1 /* LoginShell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginShell.swift; sourceTree = "<group>"; };
 		11104D7740E2D95237590C37 /* Shell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shell.swift; sourceTree = "<group>"; };
 		119B745E5FA30468AC4D6A81 /* MenuzKit */ = {isa = PBXFileReference; lastKnownFileType = folder; name = MenuzKit; path = MenuzKit; sourceTree = SOURCE_ROOT; };
@@ -57,6 +62,7 @@
 		746C4473977A35828A0457CF /* MenuSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuSource.swift; sourceTree = "<group>"; };
 		775285512609F81F861F1415 /* ParamForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParamForm.swift; sourceTree = "<group>"; };
 		7A012D3FACA5B5E47D174B0E /* Realiser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Realiser.swift; sourceTree = "<group>"; };
+		7CF7E8E8CA2418791548D6BA /* about.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = about.md; sourceTree = "<group>"; };
 		7F1E15B0CAAED35AF88ADCB2 /* RealiserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealiserTests.swift; sourceTree = "<group>"; };
 		7F4B5B698304EA469BFF20D9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		86DE1B4857DABEF4761E634D /* Arms.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Arms.swift; sourceTree = "<group>"; };
@@ -68,6 +74,7 @@
 		DB1D82D84E6BED41563E3D23 /* RunnerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunnerTests.swift; sourceTree = "<group>"; };
 		F54C8007BA2E6C044E578B5A /* Runner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Runner.swift; sourceTree = "<group>"; };
 		F79BAB43EFFF54B070289BA6 /* MenuzTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MenuzTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		F7AACE446A510BA56FFFBC42 /* Masthead.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Masthead.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -84,12 +91,22 @@
 			buildActionMask = 2147483647;
 			files = (
 				FB37AB1536AE3C8EEDC49F8F /* MenuzKit in Frameworks */,
+				94B23A16E55B53B76F9A8F40 /* ArcaMasthead in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		153B04875725DCFDDA95B077 /* Masthead */ = {
+			isa = PBXGroup;
+			children = (
+				7CF7E8E8CA2418791548D6BA /* about.md */,
+				0BF896F68BAE84BD7E7B1E19 /* masthead.yaml */,
+			);
+			path = Masthead;
+			sourceTree = "<group>";
+		};
 		16ADA0BE19B786BCD5825EB3 /* Services */ = {
 			isa = PBXGroup;
 			children = (
@@ -97,6 +114,7 @@
 				86DE1B4857DABEF4761E634D /* Arms.swift */,
 				2E028E7200976AF9A22C8E64 /* LoginItem.swift */,
 				0D78B2E5395802C4995350D1 /* LoginShell.swift */,
+				F7AACE446A510BA56FFFBC42 /* Masthead.swift */,
 				8A82B2DADFCB97CEDA1B96BA /* MenuBuilder.swift */,
 				746C4473977A35828A0457CF /* MenuSource.swift */,
 				C9CAAC271F6A8DE3D9BA5660 /* Notifier.swift */,
@@ -135,6 +153,7 @@
 				69D7BB98761B18EBC1D62714 /* Menuz.Debug.entitlements */,
 				408DCC006CB1D86D48104017 /* Menuz.entitlements */,
 				AA910089979C343042FD394C /* MenuzApp.swift */,
+				153B04875725DCFDDA95B077 /* Masthead */,
 				16ADA0BE19B786BCD5825EB3 /* Services */,
 			);
 			path = Menuz;
@@ -180,6 +199,7 @@
 			name = Menuz;
 			packageProductDependencies = (
 				E176BB28E1D45EFD0D08551C /* MenuzKit */,
+				3CBD4F68970793021B1CB251 /* ArcaMasthead */,
 			);
 			productName = Menuz;
 			productReference = 6847D972D776B11DB1D40E76 /* Menuz.app */;
@@ -212,7 +232,7 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
-				LastUpgradeCheck = 1600;
+				LastUpgradeCheck = 2600;
 				TargetAttributes = {
 					09C0BB04C25A1366A492DD92 = {
 						DevelopmentTeam = 76BQL8L47U;
@@ -234,6 +254,7 @@
 			mainGroup = 70904584922641BBDE082669;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
+				B0461F0572CC3BFC026FE41A /* XCRemoteSwiftPackageReference "arca_swift" */,
 				49AF3B870C8104DB5888EB44 /* XCLocalSwiftPackageReference "MenuzKit" */,
 			);
 			preferredProjectObjectVersion = 77;
@@ -253,6 +274,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				AD12842F54990380D974DDDB /* Assets.xcassets in Resources */,
+				03EF739060268D6FB11F129C /* about.md in Resources */,
+				FFF21E0660FED3A4BCFABA1C /* masthead.yaml in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -280,6 +303,7 @@
 				7A18260D751703EDDADAAE43 /* Arms.swift in Sources */,
 				DE9C0C3FA1666B973E9DB06C /* LoginItem.swift in Sources */,
 				737167339BCD0368AFD43609 /* LoginShell.swift in Sources */,
+				29A8876E8DAA2E3A3553409B /* Masthead.swift in Sources */,
 				647A99098E46609054F1591F /* MenuBuilder.swift in Sources */,
 				184F74B5C1A84C179E4FFD0A /* MenuSource.swift in Sources */,
 				EAE4191C024DFE1B4BBE78F5 /* MenuzApp.swift in Sources */,
@@ -389,7 +413,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
 				MENUZ_BUILD = 0;
 				MENUZ_COMMIT = dev;
 				MENUZ_KIND = dev;
@@ -498,7 +522,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
 				MENUZ_BUILD = 0;
 				MENUZ_COMMIT = dev;
 				MENUZ_KIND = dev;
@@ -555,10 +579,26 @@
 		};
 /* End XCLocalSwiftPackageReference section */
 
+/* Begin XCRemoteSwiftPackageReference section */
+		B0461F0572CC3BFC026FE41A /* XCRemoteSwiftPackageReference "arca_swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/builtwitharca/arca_swift";
+			requirement = {
+				kind = upToNextMinorVersion;
+				minimumVersion = 0.1.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
 /* Begin XCSwiftPackageProductDependency section */
 		179FB1D9697FE3912ACB93C8 /* MenuzKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = MenuzKit;
+		};
+		3CBD4F68970793021B1CB251 /* ArcaMasthead */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B0461F0572CC3BFC026FE41A /* XCRemoteSwiftPackageReference "arca_swift" */;
+			productName = ArcaMasthead;
 		};
 		E176BB28E1D45EFD0D08551C /* MenuzKit */ = {
 			isa = XCSwiftPackageProductDependency;

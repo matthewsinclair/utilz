@@ -170,14 +170,14 @@ public struct MenuSpec: Equatable, Sendable {
   }
 
   /// The menu as indented text, one entry per line, with the realised
-  /// labels: the identity row and a `---` under it, then `# Header`, an
-  /// item's label, `(caption)`, `---`, `Title >` with its children two
+  /// labels: the top row's lines and a `---` under them, then `# Header`,
+  /// an item's label, `(caption)`, `---`, `Title >` with its children two
   /// spaces in, an each's items with `✓ ` before the one its `checked`
   /// names (or `(each: line)` before it is realised), the title of an app
   /// item the file placed, then a `---`, unless the menu's last entry is one
   /// or it has none, and the tail, as the menu draws them.
-  public func render(identity: String, realised: Realised) -> String {
-    var lines = [identity, "---"]
+  public func render(masthead: [String], realised: Realised) -> String {
+    var lines = masthead + ["---"]
     Self.render(nodes, indent: "", realised: realised, into: &lines)
     if let last = nodes.last, last != .separator { lines.append("---") }
     lines.append(contentsOf: tail.map(\.title))

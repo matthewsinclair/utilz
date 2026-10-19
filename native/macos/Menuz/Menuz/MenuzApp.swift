@@ -14,6 +14,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, MenuAc
 
   private var statusItem: NSStatusItem?
   private var builder: MenuBuilder?
+  /// The menu's top row, made once the first capture answers and put back
+  /// at the top by every build (issue 0073).
+  private var masthead: NSMenuItem?
   private var watcher: Watcher?
   private var shell: LoginShell?
   private var paths = Paths(environment: ProcessInfo.processInfo.environment, home: NSHomeDirectory())
@@ -91,7 +94,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, MenuAc
   // MARK: - Loading
 
   /// Captures the login shell (again, on Reload), finds the paths from it,
-  /// watches the file there, and loads it.
+  /// watches the file there, makes the top row from the first capture, and
+  /// loads the file.
   private func reload(recapture: Bool) async {
     if recapture || shell == nil {
       let captured = await LoginShell.capture()
@@ -111,6 +115,14 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, MenuAc
       }
       watcher.start()
       self.watcher = watcher
+    }
+    if masthead == nil {
+      // Its environment finds its folder, so a Reload's capture keeps both;
+      // the menu file it names is read at each open, so that one follows.
+      // Made after the log has its file, which the row's refusals reach.
+      let log = self.log
+      masthead = MenuzMasthead.row(
+        environment: shell.environment, menu: { [weak self] in self?.paths.menuFile }, log: { log.write($0) })
     }
     registerLoginItem()
     fileChanged()
@@ -144,7 +156,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, MenuAc
 
   private func rebuild() {
     builder?.build(
-      identity: Bundle.main.menuzIdentity, spec: spec, refusals: refusals, realised: realised,
+      row: masthead, spec: spec, refusals: refusals, realised: realised,
       logExists: FileManager.default.fileExists(atPath: paths.logFile))
     setIcon(spec?.icon)
   }

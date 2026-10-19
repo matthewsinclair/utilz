@@ -53,7 +53,10 @@ enum Arms {
           outcome.notes.forEach { printError("Menuz: \($0)") }
           realised = outcome.realised
         }
-        print(spec.render(identity: Bundle.main.menuzIdentity, realised: realised), terminator: "")
+        // The top row as the menu makes it, so the two never differ.
+        let row = MenuzMasthead.row(
+          environment: shell.environment, menu: { path }, log: { printError("Menuz: \($0)") })
+        print(spec.render(masthead: MenuzMasthead.lines(row), realised: realised), terminator: "")
         return 0
       case .refused(let refusals):
         refusals.forEach { print($0) }
@@ -166,12 +169,10 @@ extension Bundle {
     return "\(version) (build \(build), \(commit))"
   }
 
-  /// The menu's first line, from the same stamps (design.md "The identity
-  /// row").
-  var menuzIdentity: String {
-    Identity.line(
-      version: stamp("CFBundleShortVersionString"), commit: stamp("MenuzCommit"),
-      tree: stamp("MenuzSourceTree"), kind: menuzKind)
+  /// The top row's commit, from the same stamps (design.md "The identity
+  /// row", issue 0073).
+  var menuzCommit: String {
+    Identity.commit(stamp("MenuzCommit"), tree: stamp("MenuzSourceTree"))
   }
 
   /// One stamp of Info.plist, nil when the plist does not carry it or
@@ -181,7 +182,7 @@ extension Bundle {
     return value
   }
 
-  /// The kind stamp, as the identity row reads it.
+  /// The kind stamp, as the top row reads it.
   var menuzKind: String? {
     stamp("MenuzKind")
   }

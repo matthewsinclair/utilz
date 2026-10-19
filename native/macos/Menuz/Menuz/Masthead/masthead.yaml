@@ -1,0 +1,9 @@
+# The menu's top row and its About window (issue 0073), read by arca_swift's
+# ArcaMasthead. A copy in ${XDG_CONFIG_HOME:-~/.config}/menuz/ replaces this
+# one with no rebuild. {version} is the bundle's own; menuz gives {commit},
+# {kind} and {menu}.
+heading: "menuz {version}"
+subheading: "{commit} · {kind}"
+icon: app
+about:
+  body: about.md

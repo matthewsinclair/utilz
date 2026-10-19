@@ -15,7 +15,11 @@ struct MenuBuilderTests {
     var description: String { "refused: \(refusals.map(\.description))" }
   }
 
-  static let identity = "menuz 1.2.3 (0123abcd)"
+  /// A row as the app's would sit: a plain item, since the builder asks
+  /// nothing more of it.
+  static func row() -> NSMenuItem {
+    NSMenuItem(title: "menuz 1.2.3", action: nil, keyEquivalent: "")
+  }
 
   /// Utilities holds a file item and the app's Log.
   static let placed = """
@@ -37,7 +41,7 @@ struct MenuBuilderTests {
 
   static func built(_ spec: MenuSpec?, logExists: Bool, target: MenuActions) -> MenuBuilder {
     let builder = MenuBuilder(target: target)
-    builder.build(identity: identity, spec: spec, refusals: [], realised: Realised(), logExists: logExists)
+    builder.build(row: row(), spec: spec, refusals: [], realised: Realised(), logExists: logExists)
     return builder
   }
 
@@ -92,19 +96,39 @@ struct MenuBuilderTests {
   func rebuiltLog() throws {
     let actions = IdentityRowTests.NoActions()
     let builder = Self.built(try Self.spec(Self.placed), logExists: true, target: actions)
-    builder.build(identity: Self.identity, spec: nil, refusals: [], realised: Realised(), logExists: true)
+    builder.build(row: builder.menu.items.first, spec: nil, refusals: [], realised: Realised(), logExists: true)
     builder.setLogExists(false)
     let log = try #require(builder.menu.items.first { $0.action == #selector(MenuActions.openLog(_:)) })
     #expect(log.title == "Log (no log yet)")
     #expect(!log.isEnabled)
   }
 
-  @Test("with no file loaded, the tail holds all four of the app's items, under the identity's one line")
+  @Test("with no file loaded, the tail holds all four of the app's items, under the row's one line")
   func noFile() {
     let actions = IdentityRowTests.NoActions()
     let builder = Self.built(nil, logExists: true, target: actions)
     #expect(builder.menu.items.map(\.title).suffix(4) == ["Edit…", "Log", "Reload", "Quit menuz"])
     #expect(builder.menu.items.map(\.isSeparatorItem) == [false, true, false, false, false, false])
+  }
+
+  @Test("each build puts the app's one row back at the top, once, with its line under it (issue 0073)")
+  func keptRow() throws {
+    let actions = IdentityRowTests.NoActions()
+    let row = Self.row()
+    let builder = MenuBuilder(target: actions)
+    builder.build(row: row, spec: try Self.spec(Self.placed), refusals: [], realised: Realised(), logExists: true)
+    builder.build(row: row, spec: nil, refusals: [], realised: Realised(), logExists: true)
+    #expect(builder.menu.items.first === row)
+    #expect(builder.menu.items.filter { $0 === row }.count == 1)
+    #expect(builder.menu.items.map(\.isSeparatorItem) == [false, true, false, false, false, false])
+  }
+
+  @Test("before the app has made its row, the menu starts with what sits under it, and no line above")
+  func noRowYet() {
+    let actions = IdentityRowTests.NoActions()
+    let builder = MenuBuilder(target: actions)
+    builder.build(row: nil, spec: nil, refusals: [], realised: Realised(), logExists: true)
+    #expect(builder.menu.items.map(\.title) == ["Edit…", "Log", "Reload", "Quit menuz"])
   }
 
   @Test("a menu whose last entry is a separator shares it with the tail: one line above the app's items, not two")
@@ -115,7 +139,7 @@ struct MenuBuilderTests {
     #expect(builder.menu.items.map(\.isSeparatorItem) == [false, true, false, true, false, false, false, false])
   }
 
-  @Test("a menu that starts with a separator draws one line under the identity, not two")
+  @Test("a menu that starts with a separator draws one line under the row, not two")
   func startsWithSeparator() throws {
     let actions = IdentityRowTests.NoActions()
     let builder = Self.built(try Self.spec("menu:\n  - separator: true\n  - label: a\n    run: x\n"), logExists: true, target: actions)
@@ -154,7 +178,7 @@ struct MenuBuilderTests {
       "menu:\n  - each: ls\n    label: \"$MENUZ_ITEM\"\n    run: arngz apply \"$MENUZ_ITEM\"\n    checked: \"$(arngz current || true)\"\n")
     let builder = MenuBuilder(target: actions)
     builder.build(
-      identity: Self.identity, spec: spec, refusals: [], realised: Self.answered("menu[0]", lines: ["home", "work"], checked: "work"),
+      row: Self.row(), spec: spec, refusals: [], realised: Self.answered("menu[0]", lines: ["home", "work"], checked: "work"),
       logExists: true)
     let desks = { builder.menu.items.filter { ["home", "work"].contains($0.title) } }
     #expect(desks().map(\.title) == ["home", "work"])
