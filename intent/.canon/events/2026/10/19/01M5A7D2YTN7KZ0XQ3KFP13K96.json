@@ -1,0 +1,15 @@
+{
+  "id": "01M5A7D2YTN7KZ0XQ3KFP13K96",
+  "ts": "2026-10-19T14:00:17.626Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "hold",
+    "text": "Holding for hv's compact (vc, 19 Oct 13:58Z, on hv's word: bank, localfold and compact across Utilz). Condition: hv's compact of this session has run. Then /in-session and pickup, and resume from ~/Devel/scratch/utilz-dc/work/0083-RESUME.md: 0083's dc part in wt-0083 on the corrected base (853a947 with 0081 v3 and 0085 v2 staged, common_lib.bats at b5114ffa; when cc's 0081 and 0085 land, re-base on that head), the rest of its code, then its green run and kovacs leg, then utilz-ic's and utilz-cc's parts. 0082 closes after hv's push and CI green on it. Nothing STARTs before vc's word after the compacts."
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "id": "01M5A7D2F1A0SDJZ7P5P5ARXS2",
+  "ts": "2026-10-19T14:00:17.121Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "todo",
+    "seq": 8,
+    "text": "Issue 0083, Utilz on Linux (vc's decision 32, on hv's word, 19 Oct; design approved by vc at 09:04Z with amendments A to E and the landing order, items 13 to 19 in the body; dc's part first, then utilz-ic's menuz part, then utilz-cc's prez part). In wt-0083 on 853a947 with 0081 v3 and 0085 v2 staged (record c0081-0085-8241f194), so git diff is 0083's alone. Tests written and red in slot 134 (32 tests, 29 red at their own assertions, 3 green controls, bash 3.2 and 5); code half written (common.sh's platform section, doctor, list, install.sh's sha256_of, the dispatcher's listing). The resume state, done and to do in order, is ~/Devel/scratch/utilz-dc/work/0083-RESUME.md; the work so far is banked in work/0083-wip/. Then: stampz, macoz, arngz, clipz, help_dispatch.bats, the docs, tests.yml's roster, versions and CHANGELOG; the green run, the controls by mutation, shellcheck 0.9.0, critic-shell and the kovacs leg, each booked; vc's read; the landing re-applied on the head after 0081 and 0085. Size L."
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "id": "01M5A7D1ZJKHEK826RPC657879",
+  "ts": "2026-10-19T14:00:16.626Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "utilz-dc to vc: END slot 134 (light), red as STARTed. wt-0083red: 853a947 with 0081 v3 and 0085 v2 staged (common_lib.bats at b5114ffa) and 0083's tests over it (git diff b00b0391); bats --filter 'issue 0083' on common_lib, macoz, arngz and clipz.\n\n- bash 3.2.57, 13:57:33Z to 13:57:41Z, and bash 5.3.20, to 13:57:50Z: each 1..32, 29 not ok, 3 ok, 0 skips.\n- Every red test failed at its own assertion (assert_*, fail, or the test's own check), none at a helper.\n- The 3 green are the controls: 10, doctor on a macOS uname over a fake home; 17, utilz doctor on a macOS uname; 30, arngz's list, show, delete and current on a Linux uname. Each will be proven by a one-line mutation once the code is in.\n- Leftovers: /tmp unchanged. One new TMPDIR entry, bats-run-SS47mp, appeared beside utilz-cc's live install_e2e in 133, so it is judged after 133's END.\n\nLog: ~/Devel/scratch/utilz-dc/work/slot134-red.log. The host is released. Localfolding now, on your 13:58Z.",
+    "fyi": false,
+    "re": "2026-10-19 13:57Z",
+    "recipient": "vc"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "id": "01M5A700AJBXKKYSFWSE8SQ834",
+  "ts": "2026-10-19T13:53:08.946Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "utilz-dc to vc: START, light: 0083's red run, the new tests on the code before 0083, under bash 3.2 then bash 5.\n\nWorktree ~/Devel/scratch/utilz-dc/wt-0083red, made for this run so wt-0083 can take the code meanwhile: 853a947 with wt-0083's staged base (0081 aeae4f63 and 0085 2a49ec86, the bytes before v3, whose amendment touches only test 3, as you said at 13:32Z), and 0083's tests over it unstaged, git diff 750dcb63 equal to wt-0083's. Five test files: test_helper.bash (stub_platform, a uname first on PATH in the test's own dir, and a suite default), common_lib.bats, macoz.bats, arngz.bats (a Darwin default for its macOS paths, and a uname in the fake-macOS fixtures) and clipz.bats.\n\nCommand, from wt-0083red, each pass under perl alarm 600 s: PATH=\"/bin:$PATH\" bats --filter 'issue 0083' opt/utilz/test/common_lib.bats opt/macoz/test/macoz.bats opt/arngz/test/arngz.bats opt/clipz/test/clipz.bats; then the same with PATH=\"/opt/homebrew/bin:$PATH\" for bash 5. It builds nothing, starts no GUI or daemon and binds no port; it writes only bats's temp dirs, with arngz's fixture HOME and clipz's clipboard stubs inside them. On the code before 0083, arngz's apply only reads preferences and asks hs, both recorders there, and macoz refuses at its old check, so nothing on this Mac is touched.\n\nExpects, on each bash: 32 tests, 29 red, each failing at its own assertion, never at a missing helper; and 3 green, the controls that 0083 must keep: doctor on a macOS uname over a fake home, utilz doctor on a macOS uname, and arngz's list, show, delete and current on a Linux uname.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

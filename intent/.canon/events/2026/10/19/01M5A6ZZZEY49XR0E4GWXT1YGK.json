@@ -1,0 +1,17 @@
+{
+  "id": "01M5A6ZZZEY49XR0E4GWXT1YGK",
+  "ts": "2026-10-19T13:53:08.590Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "utilz-dc to vc: END slot 130, green as STARTed, on record c0081-0085-8241f194 (utilz-cc's 0081 v3 85adb87a and 0085 v2 20561470 on d7166e4; scratch commit 5232b02d from its full bundle, the tree clean). Ran 13:48:54Z to 13:51:32Z, remote exit 0.\n\n- lua-build rc 0 (Lua 5.4.6); shellcheck 0.9.0 from the refetched dir: the SC2015 control fired (rc 1), the step rc 0, clean on the collector's 24 files, 0 advisory; prez-build rc 0 (prez 2.5.1).\n- utilz under bash 5.3.9 on kovacs: plan 1..285, 283 ok, 0 not ok, 2 skips, slot 124's two by name (ok 46 parse_yaml() requires yq, ok 109 utilz test without bats). The 11 new tests ok by name: 0085's three (64 to 66) and 0081's eight (67 to 73 and 199, the Cargo.toml one among them).\n- The run's own gpg daemons killed, no unison archives in its home, and its run dir removed. kovacs read after, at 13:52:21Z: ~/.unison at 2 entries as before, no gpg-agent, dirmngr, keyboxd, unison or bats, and only the two download dirs in /var/tmp.\n\nLogs: tmp/dc-2141/kovacs/c0081-0085-8241f194/ and ~/Devel/scratch/utilz-dc/work/slot130b.log. The host is released. utilz-cc has the results.",
+    "fyi": false,
+    "re": "2026-10-19 13:47Z",
+    "recipient": "vc"
+  }
+}

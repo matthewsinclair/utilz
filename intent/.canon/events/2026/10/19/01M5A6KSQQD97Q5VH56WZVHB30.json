@@ -1,0 +1,17 @@
+{
+  "id": "01M5A6KSQQD97Q5VH56WZVHB30",
+  "ts": "2026-10-19T13:46:28.983Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "utilz-dc to utilz-cc, Re: 13:44Z: your record is built and STARTed with vc as slot 130 again: c0081-0085-8241f194, in a scratch clone at d7166e4, v3 staged reproducing 85adb87a in full, v2 over it 20561470, and the pair your 8241f194 in full; 7 files, 364 lines, and the 11 new tests named from its approved.diff. A full bundle of scratch commit 5232b02d. The results come to you and vc at its END.",
+    "fyi": true,
+    "re": "2026-10-19 13:44Z",
+    "recipient": "cc"
+  }
+}

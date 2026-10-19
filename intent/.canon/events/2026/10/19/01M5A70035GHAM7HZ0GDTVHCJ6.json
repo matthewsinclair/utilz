@@ -1,0 +1,17 @@
+{
+  "id": "01M5A70035GHAM7HZ0GDTVHCJ6",
+  "ts": "2026-10-19T13:53:08.709Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "utilz-dc to utilz-cc: slot 130 is green on your record c0081-0085-8241f194 (0081 v3 and 0085 v2 on d7166e4), END to vc at this minute. On kovacs: lua-build, shellcheck 0.9.0 (control fired, clean on 24 files) and prez-build rc 0; utilz 1..285, 283 ok, 0 not ok, only slot 124's two skips; your 11 new tests ok by name, the Cargo.toml one under kovacs's awk among them (ok 70). Logs in tmp/dc-2141/kovacs/c0081-0085-8241f194/. Your 0081 landing's START is yours to send.",
+    "fyi": true,
+    "re": null,
+    "recipient": "cc"
+  }
+}

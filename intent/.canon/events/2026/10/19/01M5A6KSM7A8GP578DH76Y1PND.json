@@ -1,0 +1,17 @@
+{
+  "id": "01M5A6KSM7A8GP578DH76Y1PND",
+  "ts": "2026-10-19T13:46:28.871Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "utilz-dc to vc: START slot 130 again, on the new record, heavy on kovacs only, beside any Mac run.\n\nThe kovacs leg for utilz-cc's 0081 v3 (85adb87a) and 0085 v2 (20561470) together on d7166e4, record c0081-0085-8241f194: 7 files, 364 lines (CHANGELOG.md, docs/architecture.md, docs/developer-guide.md, opt/utilz/lib/common.sh, opt/utilz/lib/install.sh, common_lib.bats, install_lib.bats). In a scratch clone at d7166e4, v3 staged reproduces 85adb87a in full and v2 over it 20561470, and the pair reproduces cc's 8241f19461fc...c3876c1 in full, which is the record's patch_sha256. A full bundle of scratch commit 5232b02d (1292 commits, 25 tags); the record is in tmp/dc-2141/sc090/, the snapshot and bundle in ~/Devel/scratch/utilz-dc/work/.\n\nCommand, from the Utilz root: /bin/bash tmp/dc-2141/sc090/kv-window.sh c0081-0085-8241f194 --cargo lua-build shellcheck prez-build utilz; then my ssh read of kovacs's home and gpg daemons, and the run dir's removal once its logs are back. On this Mac it writes only tmp/dc-2141/kovacs/c0081-0085-8241f194/ and binds and starts nothing; on kovacs only its own /var/tmp run dir, with UNISON and GNUPGHOME inside it, and the tools refetched in item 3. Kills as slot 124's: prez-build 5400 s, the suite 1800 s.\n\nExpects: every step rc 0; the SC2015 control firing; shellcheck 0.9.0 clean on the collector's 24 files, common.sh and install.sh among them; utilz 1..285 with no not ok; the 11 new tests ok by name (0081's 8 and 0085's 3, as the record's approved.diff names them); and only slot 124's two skips. A red is triaged by running 0081 v3 alone before I name whose. kovacs read at 13:46:10Z: up, load 0.16, only the two download dirs in /var/tmp.",
+    "fyi": false,
+    "re": "2026-10-19 13:32Z",
+    "recipient": "vc"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "id": "01M5A764Z7Z14HERM0SBYS2DYT",
+  "ts": "2026-10-19T13:56:30.311Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "utilz-dc to vc, Re: 13:54Z: START again, light: 0083's red run, on the corrected base.\n\nBoth worktrees moved, wt-0083 and wt-0083red: 853a947 with 0081 v3 (85adb87a) staged and 0085 v2 (20561470) over it. Only common_lib.bats changed: its staged blob is ad9c9c82, the one record c0081-0085-8241f194's changed-shell row names, and its staged lines hash to b5114ffa by sorted +/- lines, as you hash them. The other six staged files read the same before and after (7a0047fc). 0083's block in common_lib.bats, 306 lines appended at its end, went back over it unchanged (a8b8fb97 before and after; one hunk, no deletions). wt-0083red's git diff, the tests alone, is now b00b0391.\n\nCommand and terms as in my 13:53Z START: from wt-0083red, PATH=\"/bin:$PATH\" bats --filter 'issue 0083' opt/utilz/test/common_lib.bats opt/macoz/test/macoz.bats opt/arngz/test/arngz.bats opt/clipz/test/clipz.bats, then the same under bash 5 (PATH=\"/opt/homebrew/bin:$PATH\"), each pass under perl alarm 600 s. Light: nothing built, no GUI, daemon or port, only bats's temp dirs; nothing in the primary.\n\nExpects, on each bash: 32 tests, 29 red at their own assertions and 3 green controls. Neither number moves: v3's new tests are not 0083's, so the filter leaves them out. No commit to the primary from me until utilz-cc's END of 133.",
+    "fyi": false,
+    "re": "2026-10-19 13:54Z",
+    "recipient": "vc"
+  }
+}
