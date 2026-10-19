@@ -336,6 +336,203 @@ utilz-dc to vc: END 139 (light), every control proven, 15:18:42Z to 15:18:50Z, w
 
 0088 is filed with its design and committed by path as 11e0fd4 on cf1cce2; it is my todo 10, and the gate is todo 11. critic-shell is still reading the diff. Next: the kovacs leg's START on 9bb32fa plus a441abcc, with shellcheck 0.9.0 its second step, once critic-shell's findings are in and settled.
 
+## (2026-10-19 15:24Z) Re: 2026-10-19 15:19Z (handled)
+
+utilz-dc to vc, Re: 15:19Z: critic-shell's read of 0083 is settled; the code changed, so the reruns follow. It found 0 critical, 2 warnings, 6 recommendations and 1 style point.
+
+Fixed:
+- W1, No Silent Errors: the unknown command's listing marked nothing where platforms_verdict answers 2. utility_platform_note now says why: " (its yaml cannot be read; utilz doctor says why)", or " (where it runs is not known without yq)". list_utilities keeps its own row for an unreadable yaml and does not ask the note for it. A new test covers both cases and the listing's single mark.
+- W2, set -euo pipefail in fixtures/fake-macos/uname: the fixture is gone, which was also the Highlander recommendation. machine() puts UTILZ_TEST_PLATFORM_BIN first in its PATH, as the other two hand-built PATHs do, so stub_platform is the one Darwin uname.
+- arngz: catalogue_desks is the one desk walk, which list and doctor's off-macOS check both call. refuse_engine_off_macos and engine_not_here_line hold the engine's refusal arguments once.
+- clipz.yaml declares platforms: [macos, linux], so list and doctor agree with clipz's own refusal elsewhere.
+- The developer guide says app: wins whatever the entry's platforms say.
+
+Not taken:
+- platforms_verdict's PFIC split: optional, and its judgement is tested through stubs.
+- devbin's own sha fallback: devbin is vendored.
+- macoz needs yq through require_platform: yq is the formula's one framework dependency, and every utility's metadata needs it, so this is as intended.
+
+v4: 84a84049 (git diff --full-index on 9bb32fa), 28 files, no untracked file; banked as work/0083-wip/0083-on-9bb32fa-v4.patch. shellcheck 0.11 is clean on the 7 code files.
+
+START (heavy: whole test files), ~/Devel/scratch/utilz-dc/work/run-0083-critic.sh:
+- Red: the new test in a shared clone, 9bb32fa plus a441abcc (the pre-critic code) with only common_lib.bats from now. bash 3.2 then 5; it must fail at its own assertion.
+- Green: in wt-0083 at v4, common_lib.bats, arngz.bats, clipz.bats and help_dispatch.bats whole, bash 3.2 then 5.
+- /tmp and TMPDIR are listed before and after, and the red clone is removed after.
+Asking your GO. M2's line in arngz moved with the helpers, but its control, test 30, runs whole here.
+
+## (2026-10-19 15:24Z) Re: 2026-10-19 15:24Z (handled)
+
+utilz-dc to vc: amended START for 145 (heavy), ~/Devel/scratch/utilz-dc/work/run-0083-critic.sh.
+
+1. Red: the new note test, in red-note-0083 (9bb32fa plus a441abcc, the pre-critic code, with only common_lib.bats from now), bash 3.2 then 5. It must fail at its own assertion.
+2. Green: a scratch clone, green-0083v4, 9bb32fa plus v4 84a84049. It is not a linked worktree, so install_e2e runs. The whole suites of utilz, macoz, arngz, clipz and stampz, bash 3.2 then 5. utilz's suite is in because common_lib, install_e2e, install_guards and install_lib all name clipz.
+3. Mutations: 139's M1 and M2 on v4 in wt-0083, light, after the green. Both lines did move: M1 to common.sh:515 and M2 to arngz:1750. mut-0083.sh now finds each line by its text, which must occur once, and refuses otherwise. The log is mut-0083-v4.log.
+
+/tmp and TMPDIR are listed before and after; the two clones are removed after the END. Asking your GO after 142.
+
+## (2026-10-19 15:28Z) Re: 2026-10-19 15:27Z (handled)
+
+utilz-dc to vc, Re: 15:27Z: 0088 takes utilz-cc's find. Its design already had cc's shape: utilz_teardown is test_helper's cleanup as a named function, and both teardown() functions call it (item 1). It already counted the leftover holding AT09's nover dir: 11 per run, 10 empty and 1 nover. And it already says no other suite overrides teardown. The body now credits cc's independent find, committed by path as 817e68f on 04866ca. Nothing else changes. Waiting on 145's GO.
+
+## (2026-10-19 15:42Z) Re: 2026-10-19 15:33Z (handled)
+
+utilz-dc to vc: END 145 (heavy), as STARTed: red, then green, then the mutations. 15:33:08Z to 15:40:45Z. Logs: ~/Devel/scratch/utilz-dc/work/run-0083-critic.log and mut-0083-v4.log.
+
+- Red. The new note test on the pre-critic code (9bb32fa plus a441abcc): on bash 3.2.57 and on 5.3.20, 1..1, not ok, at its own assertion, common_lib.bats:1480 assert_output " (its yaml cannot be read; utilz doctor says why)". Actual output was empty, the silent mark W1 named.
+- Green. Clone 9bb32fa plus v4 84a84049, 28 files, no untracked. Same counts on bash 3.2.57 and 5.3.20, every suite exit 0:
+  - utilz 307 ok, 2 skips, 0 not ok (install_e2e ran)
+  - macoz 16 ok, 1 skip, 0 not ok
+  - arngz 141 ok
+  - clipz 12 ok
+  - stampz 24 ok
+- Skips by name, on each bash: parse_yaml() requires yq (yq installed); utilz test runs without bats (bats installed); macoz setpicfor requires fileicon (fileicon installed).
+- Mutations on v4, each line found by its text:
+  - M1, common.sh:515, here=linux. On each bash: test 10 red at common_lib.bats:1330 and test 17 at :1431, both at refute_output_contains "not available on". Restored, sha256 f4b739380b9c8cc9.
+  - M2, arngz:1750, list out of the catalogue arm. On each bash: test 30 red at arngz.bats:2144, assert_success. Restored, sha256 d686c6ae9cc05408.
+  - The diff is 84a84049 before and after.
+- Leftovers, all mine, all removed:
+  - 22 utilz-test dirs, version_dispatch's 11 per pass, which is 0088.
+  - Two 179-byte files, tmp.4CcIQLscAh (15:33:36Z) and tmp.QL28BhcCi1 (15:37:19Z). Each is an empty "generator: utilz todo" file, a few seconds into each pass's utilz suite. That is a second leak already on main: todo's write_file does tmp=$(mktemp) and then mv, and a test in the utilz suite leaves the tmp, most likely bridge.bats:204, which runs every declaring utility.
+  - 137 left the same two at the same points (tmp.tg2uZDiOLL, tmp.14RkXyDyTg). In 137's END I put them down to the system or a peer, and that was wrong; they are removed now too.
+  - I'd fold this into 0088 as its second cause, with the test located as part of the red, or file it on its own: your call.
+  - /tmp unchanged.
+- Both clones are removed. The host is released.
+
+Next: the kovacs window, two legs in turn: 0083 v4 (its record built now from 84a84049), then cc's 0084+0087 (record c0084-0087-b2350911, built). Its START follows.
+
+## (2026-10-19 15:43Z) Re: 2026-10-19 15:42Z (handled)
+
+utilz-dc to vc: START, the kovacs window, beside cc's 147. It loads this Mac through kovacs's two vCPUs and writes nothing here but its logs under tmp/dc-2141/kovacs/<label>/. The script is ~/Devel/scratch/utilz-dc/work/kv-three-legs.sh: three legs in turn, each its own kv-window.sh --cargo call with its own logs and verdict lines. Each leg starts in an empty repository from its full bundle, and its kovacs dir is removed once its logs are back.
+
+1. c0083-84a84049, dc's 0083 v4: 28 files on 9bb32fa; kovacs checks out 11c4ce0. Steps: lua-build, shellcheck (0.9.0, control first), prez-build, lua-plan, relink, loop. The loop is the candidate's own tests.yml roster, so cleanz, clipz and macoz join it. Read against watch-out 4's baseline: any not ok, or any new skip, is the candidate's until shown otherwise. Then utilz doctor from the source tree, read from the loop's diagnostics log, is the Linux verdict the design names.
+2. c0084-0087-b2350911, cc's 0084 plus 0087: 10 files on 9bb32fa, equal by lines to cc's combined patch; kovacs checks out 1e22aab. The same steps. cc's five refusal tests are read by name, and none may skip.
+3. c0083p-e3c76fc9, cc's 0083 prez part (cc's 15:42Z ask, on your word): 5 files on 5b882e0, equal by lines to cc's patch; kovacs checks out b813f4b. Step: rust, which is cargo build and test --release --workspace per crate, with its black-box suites not run (your ruling). The 4 new drive::tests are read by name.
+
+The rust step is new in kv-remote.sh (bash -n and shellcheck clean), and this is its first run. The todo leak is noted as its own issue, mine, XS, after 0088; I file it with a design that first finds whether todo or a test leaks. 0083's landing START follows this window's END. Asking your GO.
+
+## (2026-10-19 15:56Z) Re: 2026-10-19 15:43Z (handled)
+
+utilz-dc to vc: END 148 (kovacs), 15:44:06Z to 15:54:40Z, three legs in turn. Legs 2 and 3 are green. Leg 1 has one red, a test of mine that was wrong; it is fixed, and its rerun's START follows. Logs are under tmp/dc-2141/kovacs/<label>/; the window's log is work/kv-three-legs.log.
+
+Leg 1, c0083-84a84049 (0083 v4; kovacs checked out 11c4ce0), exit 0 (the loop records its reds without stopping):
+- lua-build 0; shellcheck 0.9.0: control rc 1 (SC2015 fired), step rc 0 on 24 files. The advisory test_helper.bash rc 1 is out of the collector's set, and its findings are the base's own kinds. prez-build 0 (prez 2.5.1); lua-plan 193 passed; relink 19 ok.
+- The loop, on the candidate's own roster of 17. cryptz 12, gitz 13, mdagg 31, retry 12, syncz 79, pdf2md 15, xtrct 12, lnrel 12, todo 42, expz 9, stampz 24, arngz 141, menuz 130, cleanz 66, clipz 12 and macoz 17 are all ok, none not ok.
+- utilz: 308 ok, 1 not ok, test 115 (17 on the Mac), at common_lib.bats:1435, refute_output_contains "sudo apt install". kovacs has no ffmpeg, so doctor's optional line for prez's ffmpeg gives "brew install ffmpeg (macOS), or sudo apt install ffmpeg (Debian and Ubuntu)". My refute matched any apt line, where it meant only the clipz tools' own: the test's fault, not the code's. The Mac never showed it, since ffmpeg is installed there.
+- Skips: 27. These are the baseline's 11 (6 error paths where the tool is installed, AC-06.3 for want of rsvg-convert, and xtrct's 4 for want of ANTHROPIC_API_KEY), plus 16 from the suites 0083 adds to the roster: cleanz's 6 image tests for want of exiftool (tests.yml installs none, so CI skips them too) and macoz's 10 "Not on macOS" (its old tests, which skip off macOS as CI's would). No test 0083 added skips; macoz's 3 new tests ran and passed.
+- doctor from the source tree, the Linux verdict: in logs/loop-diagnostics.log, which I read in full before the landing.
+
+Leg 2, c0084-0087-b2350911 (cc's 0084+0087; kovacs checked out 1e22aab), exit 0:
+- lua-build 0; shellcheck control 1, step 0 on 24 files; prez-build 0; lua-plan 193; relink 19.
+- The loop, on its roster of 14: utilz 288, cryptz 12, gitz 13, mdagg 31, retry 12, syncz 79, pdf2md 15, xtrct 12, lnrel 12, todo 42, expz 9, stampz 24, arngz 136, menuz 130, all with 0 not ok.
+- Skips: 5 (AC-06.3, and xtrct's 4). cc's five ran and passed by name: parse_yaml() requires yq (46), utilz test runs without bats (111), cryptz encrypt requires gpg (7), gitz requires git (5), and yaml mode: requires yq (13).
+
+Leg 3, c0083p-e3c76fc9 (cc's 0083 prez part; kovacs checked out b813f4b), exit 0:
+- rust: cargo build and test --release --workspace, 1 crate, 0 failures. Test results: 35, 166, 5 and 179 passed, 0 failed. The 4 new tests are ok by name: on_macos_the_opener_is_open, on_macos_with_no_open_it_refuses_naming_open, off_macos_the_opener_is_xdg_open_even_where_an_open_exists, and off_macos_with_no_xdg_open_it_refuses_by_name_keeping_the_probe_list. Ubuntu acceptance is unproven by name, per your ruling.
+
+kovacs is left clean: each leg's run dir was removed once its logs were back, 0 run dirs of mine are left, and the 2 download dirs are kept.
+
+## (2026-10-19 15:56Z) (handled)
+
+utilz-dc to vc: START (light, then a kovacs leg), the v5 rerun after 148's red: ~/Devel/scratch/utilz-dc/work/run-0083-v5.sh. v5 is a1f2c584, the same 28 paths, and only test 17's refute changed: it now refutes "sudo apt install xclip" and "sudo apt install wl-clipboard", the clipz tools' own lines, where it refuted any apt line. Mac, in wt-0083: (1) test 17 by name, bash 3.2 then 5. (2) M1, M2 and a new M3 by text, each restored and checked by hash. M3 puts the install line into the purpose of a dependency this platform cannot have, on the line before the platform note is collected; test 17 must go red at its new refutes while its "Linux only" asserts still hold. Then kovacs: the utilz suite alone at v5 (record c0083-a1f2c584, kovacs checks out 590441f) under a perl alarm of 1800 s, with its run dir removed by name on a nonzero exit. Linux verdict from 148's diagnostics, read: macoz is "macOS only, not available on Linux", counted as nothing; Hammerspoon and hs are "macOS only" with no install line; fileicon is skipped with macoz; xclip is an optional dependency with its apt line. Asking your GO; 0083's landing START follows this END.
+
+## (2026-10-19 15:59Z) Re: 2026-10-19 15:57Z (handled)
+
+utilz-dc to vc: END 149 (light, then kovacs), green. 15:57:07Z to 15:59:16Z. Log: work/run-0083-v5.log and mut-0083-v5.log; kovacs's under tmp/dc-2141/kovacs/c0083-a1f2c584/.
+
+- Test 17 at v5 (a1f2c584): ok under bash 3.2.57 and under 5.3.20, from 15:57:07Z to 15:57:11Z.
+- Mutations, 15:57:11Z to 15:57:22Z, each line found by its text:
+  - M1, common.sh:515: tests 10 and 17 red at common_lib.bats:1330 and :1431 (refute "not available on"), on each bash. Restored, f4b739380b9c8cc9.
+  - M2, arngz:1750: test 30 red at arngz.bats:2144 (assert_success), on each bash. Restored, d686c6ae9cc05408.
+  - M3, common.sh:1280, the install line put into the purpose of a dependency this platform cannot have: test 17 red at common_lib.bats:1437, refute "sudo apt install xclip", on each bash, with its "Linux only" asserts, which come before, still holding. Restored, f4b739380b9c8cc9.
+  - The diff is a1f2c584 before and after.
+- kovacs, 15:57:23Z to 15:59:15Z: the utilz suite at v5, rc 0, 309 ok and 0 not ok (test 115, the Mac's 17, ok). 2 skips, both the baseline's: parse_yaml() requires yq, and utilz test runs without bats. Its run dir is removed, and 0 run dirs of mine are left there.
+- Leftovers: no utilz-test or todo file of mine in TMPDIR. The new entries there are swiftpm-testing-helper, its WebKit dirs and TemporaryDirectory.* (13): a peer's Swift test run, not this run's. /tmp is unchanged.
+
+Your question: test 17 runs utilz doctor over the real tree and the host's real tools, with only uname stubbed as Darwin. So which optional lines appear does depend on the host, as 148 showed. What the narrowed refutes look for depends on the yaml, though, not the host. "sudo apt install xclip" and "sudo apt install wl-clipboard" occur in exactly one place in the tree, clipz.yaml's two entries (grep of opt/). Under a Darwin uname both entries are platform notes, which print no install line whatever is installed, so a fuller Ubuntu image cannot bring either line back. Its other refutes, "not available on" and "macOS only", come from the yamls' platforms, not from tools, and they held on kovacs, a Linux host under the same stub. The one risk left: a later yaml that declares one of those two install lines for a tool of its own would turn test 17 red. I name that risk in the test's comment at the landing, rather than pinning a fixture, since 17's point is the real tree's doctor.
+
+0083's landing START follows.
+
+## (2026-10-19 16:00Z) (handled)
+
+utilz-dc to vc: START (heavy), 0083's landing, dc's part, in the primary. First, v6 for your read of the bytes: v6 is 38479150 (git diff --full-index on 9bb32fa), work/0083-wip/0083-on-9bb32fa-v6.patch, record tmp/dc-2141/sc090/c0083-38479150. It differs from v5, which 149 ran, by test 17's comment alone: three lines naming the risk I gave you (only clipz.yaml may carry the two refuted install lines). The same 28 paths. No code changed since v4, and no test since v5.
+
+The landing, ~/Devel/scratch/utilz-dc/work/land-0083/, in four steps, each stopping at its first refusal:
+1. dc-land-0083-apply.sh: refuses a staged index, a dirty path among the 28, a held index.lock, or a wt-0083 that is not v6. It re-applies v6 on the primary's HEAD (3b716af now) in a fresh shared clone, 3-way, and refuses any conflict. It checks that 0083's CHANGELOG line is in 2.14.1's Added, and compares each of the 28 files by its sorted +/- lines against wt-0083's. Only then does it write the 28 into the primary, uncommitted, each checked against the re-applied blob. Nothing has touched the 28 paths since 9bb32fa, so I expect no conflict.
+2. dc-land-0083-e2e.sh: install_e2e.bats in the primary under bash 3.2 then 5 (install.sh changed, and install_e2e refuses a worktree), each under a perl alarm of 1800 s.
+3. dc-land-0083-commit.sh: one commit by path of exactly the 28, with --only. It refuses if a commit since step 1 touched them or a path is not as written. Message: fix(0083), with no attribution, ending with the copyright line.
+4. check-landing.sh c0083-38479150 <sha>, the change against the record.
+
+Then the SHA both ways. The primary's other dirt (.intentfiles' peer 0089 line, and the board files) is left alone. Asking your read and your GO; ic's menuz part and cc's prez part land after it.
+
+## (2026-10-19 16:04Z) Re: 2026-10-19 16:01Z (handled)
+
+utilz-dc to vc: END 151 (heavy). 0083's dc part LANDED as 9ee7d59 (9ee7d59a7a0ca38b3e9fa29e2b0baaf79c60ede8), a local commit on main on 3b716af, not pushed. 16:01Z to 16:04:14Z. Logs: work/land-0083/.
+
+1. Re-applied v6 on 3b716af in a fresh shared clone, with no conflict. 0083's line is in 2.14.1's Added. All 28 files were the same as wt-0083's by sorted +/- lines, and were written into the primary, each checked against the re-applied blob.
+2. install_e2e.bats in the primary, 16:01:48Z to 16:03:59Z: 1..11 under bash 3.2.57 and under 5.3.20, 11 ok each, 0 not ok, 0 skips.
+3. The commit: --only, by path, of exactly the 28 (the commit's names equal the list). The gate passed: guards, critic for shell, rust, lua and swift, and doctor. 0 of the 28 are left dirty. intent/.intentfiles is left out and still dirty, as the peer's.
+4. check-landing.sh c0083-38479150 9ee7d59, exit 0. It is on main, and no remote branch holds it. Patch hash: landed 16d4e65e... equals approved 16d4e65e..., identical. The blobs are the same as the approved snapshot for all 28, each file's change is the approved one, and the verdict is that the landing makes exactly the approved change.
+
+Leftovers: no utilz-test entries in TMPDIR. The landing clone, work/land-0083-on-3b716af0, I remove after your check by change. The 28 paths are free in the primary for utilz-ic's menuz part, then utilz-cc's prez part, each re-applied on 9ee7d59. 0083 closes once all three parts have landed and hv's push is green on CI.
+
+## (2026-10-19 16:06Z) Re: 2026-10-19 16:05Z (handled)
+
+utilz-dc to vc: START (heavy), 0088's red and green, ~/Devel/scratch/utilz-dc/work/0088/run-0088.sh. The cleanups your check by change freed are done: the landing clone and wt-0083red are removed, and wt-0083 is kept until 0083 closes. The gate script needs no change for 9ee7d59. Its kovacs phase reads the roster from the sha's own tests.yml, and its Mac phase reads utilz list, as tests.yml's test-macos does.
+
+0088 v1 (6734c0ee, in wt-0088 on 9ee7d59), 4 files:
+- test_helper.bash: teardown() calls utilz_teardown, the one cleanup body (the cd back, end_gpg_home and the per-test dir).
+- version_dispatch.bats' teardown() ends with utilz_teardown.
+- isolation.bats: a guard that every suite under opt/ which defines teardown() calls utilz_teardown in it, and that at least one suite was checked.
+- One CHANGELOG line, last in 2.14.1's Fixed.
+
+The run uses two shared clones at the primary's HEAD, red (the tests alone, fb298954) and green (v1). Each count runs with TMPDIR at a fresh dir of its own, so a peer's run cannot blur it. Under bash 3.2 then 5:
+- red: isolation.bats, whose guard must fail at its own assertion naming version_dispatch.bats; then version_dispatch.bats alone, with 11 utilz-test leftovers expected;
+- green: the same two, with 0 expected; then the whole utilz suite in the green clone (a clone, so install_e2e runs), its leftovers counted too. Its "other" count reads 0090's todo file as a side measurement.
+Both clones are removed after. Asking your GO.
+
+For your list, not 0088's: menuz.bats and macos.bats (utilz-ic's) define their own setup(), which replaces the helper's, so isolate_tool_homes (0082's) never runs for menuz's tests. bats makes and removes their per-test dir itself, so nothing leaks into TMPDIR, but the unison, gpg and git-signing isolation is skipped there.
+
+## (2026-10-19 16:07Z) Re: 2026-10-19 16:07Z (handled)
+
+utilz-dc to vc, Re: 2026-10-19 16:07Z, for ic's lead (read only, nothing run): isolate_tool_homes adds three things. (1) UNISON in the test's dir: menuz's tests run no unison, and with HOME redirected unison's default would be the fake home anyway. (2) GNUPGHOME failing closed: menuz's tests run no gpg; a redirected HOME gives gpg an empty home, not the user's. (3) no_git_signing, which pins commit and tag signing off through GIT_CONFIG_COUNT: menuz.bats does run git, with commits at :125 and tags at :1423, :1442 and :1452. With HOME and XDG_CONFIG_HOME redirected, git reads neither the user's ~/.gitconfig nor their XDG config, so the one way in is the system gitconfig, /opt/homebrew/etc/gitconfig here, which sets no signing today. So the gap is a machine whose system gitconfig signs: menuz.bats' fixture commit would then ask gpg. Small, and ic's to judge: calling isolate_tool_homes in those two setups, or no_git_signing alone, closes it.
+
+## (2026-10-19 16:11Z) Re: 2026-10-19 16:11Z (handled)
+
+utilz-dc to vc, Re: 2026-10-19 16:11Z: I recommend the setup() guard goes in 0091, not 0088, with 0088 landing first. Added to 0088, it would be red at 0088's own landing, since menuz.bats and macos.bats call no isolate_tool_homes until 0091 adds the calls. 0088 would then have to wait on 0091, or land red. A guard belongs in the commit that makes it pass: 0091's red is the setup() guard failing on main by name, and its green is the calls. So the order is: 0088 (the teardown guard and utilz_teardown; 154 running now), then 0091 (ic's: the setup() guard beside 0088's in isolation.bats, in the same shape, every suite under opt/ defining setup() calls isolate_tool_homes in it and at least one suite is checked, plus the calls). ic can copy 0088's guard's awk as it lands, so the two read alike. If you would rather have one guard over both functions, I can fold it into 0088 after 0091 lands instead; that adds a round, so I don't recommend it.
+
+## (2026-10-19 16:16Z) (handled)
+
+utilz-dc to vc: END 154 (heavy), 0088 red then green as STARTed. 16:08:42Z to 16:14:09Z, both clones at b856382 (HEAD when the run began, on ic's c918dec). Log: work/0088/run-0088.log. Each count ran with TMPDIR at a fresh dir of its own.
+
+- Red (the tests alone, fb298954). On bash 3.2.57 and on 5.3.20: isolation.bats 1..2, 1 ok and 1 not ok. Test 2, the guard, failed at its own assertion (isolation.bats:45, fail "these define teardown() without calling utilz_teardown: opt/utilz/test/version_dispatch.bats"). version_dispatch.bats: 11 ok, and 11 utilz-test dirs left in its TMPDIR, the leak by count.
+- Green (v1 6734c0ee). On each bash: isolation.bats 2 ok; version_dispatch.bats 11 ok with 0 left; the whole utilz suite 308 ok, 0 not ok and 2 skips (parse_yaml() requires yq; utilz test runs without bats), with 0 utilz-test and 0 other left in its TMPDIR. install_e2e ran, in a clone.
+- A lead for 0090, measured in passing: the green utilz passes left nothing in their own TMPDIR, yet the system TMPDIR got an empty todo file 26 s and 5 s into each pass (16:09:24Z and 16:11:57Z), as in 137 and 145. So the call that leaks runs with TMPDIR not passed through, reset or cleared, and mktemp falls back to the system default. 0090's design step 1 starts there.
+- Leftovers: those two todo files, mine, are removed by guarded path. Both clones and the two red count dirs (11 dirs each, as the red expected) are removed. /tmp is unchanged.
+
+0088 is ready for your read of v1 (work/0088/v1.patch, 4 files), then its landing START. cc's 0084 also changes test_helper.bash, so whichever lands second re-applies.
+
+## (2026-10-19 16:18Z) Re: 2026-10-19 16:17Z (handled)
+
+utilz-dc to vc: START (light), 0088's landing in the primary, ahead of cc's 0084. ~/Devel/scratch/utilz-dc/work/land-0088/, four steps, each stopping at its first refusal:
+1. dc-land-0088-apply.sh: re-apply v1 (6734c0ee) on HEAD in a fresh shared clone, 3-way, refusing any conflict. 0088's line must be once in 2.14.1's Fixed. Each of the 4 files is compared by its sorted +/- lines against wt-0088's, and only then written into the primary, uncommitted, each checked against its re-applied blob. HEAD has moved past wt-0088's 9ee7d59 by ic's c918dec, which also changed CHANGELOG.md; the 3-way takes that.
+2. dc-land-0088-run.sh: in the primary, isolation.bats and version_dispatch.bats, under bash 3.2 then 5, each with TMPDIR at a fresh dir of its own and its leftovers counted (0 expected).
+3. dc-land-0088-commit.sh: one commit by path of exactly the 4, with --only.
+4. check-landing.sh c0088-6734c0ee <sha>, against the record built on 9ee7d59.
+Then the SHA both ways.
+
+On 0090, your two leads: no test in the utilz suite unsets or overrides TMPDIR. The utilz suite's only env -u calls are UTILZ_HOME, and TMPDIR is set by none. todo's mktemp is bare, with no /tmp and no -t. The answer, by reading: macOS's mktemp with no template ignores TMPDIR and uses _CS_DARWIN_USER_TEMP_DIR. The caller is bridge.bats:204's probe, utilz todo --file /nonexistent-probe.dat (todo.yaml declares input file and flags [--file]): write_file's mv onto / cannot succeed, and the temp file stays. It is in 0090's body as a lead for its step 1 to confirm, committed by path as cd4c67e. Asking your GO.
+
+## (2026-10-19 16:19Z) Re: 2026-10-19 16:18Z (handled)
+
+utilz-dc to vc: END 157. 0088 LANDED as c6da0b8 (c6da0b879132ebc20d90e5c7d3a5935e65ba2d82), a local commit on main on cd4c67e, not pushed. 16:18Z to 16:19:08Z. Logs: work/land-0088/.
+
+1. Re-applied v1 on cd4c67e in a fresh shared clone, 3-way, with no conflict. 0088's line is in 2.14.1's Fixed. All 4 files were the same as wt-0088's by sorted +/- lines, and were written into the primary.
+2. In the primary, 16:18:52Z to 16:19:02Z, under bash 3.2.57 and 5.3.20, each with a TMPDIR of its own: isolation.bats 2 ok, version_dispatch.bats 11 ok, 0 not ok, 0 skips, and 0 utilz-test dirs left on each.
+3. One commit by path of exactly the 4 (--only), the gate passing. 0 left dirty, and .intentfiles is left out.
+4. check-landing c0088-6734c0ee c6da0b8, exit 0. Its patch hash is not identical (landed b6fc02d9, approved d16b01a6), and CHANGELOG.md's blob differs (approved 1dc7c6c6, landed fa58941c), as expected: the record is on 9ee7d59, and ic's c918dec put its own lines in CHANGELOG.md since. By change, every file's +/- lines equal the approved ones, and the verdict is that the landing makes exactly the approved change.
+
+0088 closes after hv's push and CI green on it. wt-0088 and the record's clone go once you have checked it by change. cc's 0084 re-applies on c6da0b8 for test_helper.bash. 0090 is next: the design first, as you rule (a defect in todo itself; the temp is removed on every failure path; red by the leftover count). Its START follows the design.
+
 ---
 
 _Generated by Intent v3 from the whiteboard model. Do not edit this file -- it is rendered from the model, and `intent doctor` reports any hand-edit as skew._

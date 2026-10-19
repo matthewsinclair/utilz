@@ -1,0 +1,17 @@
+{
+  "id": "01M5AF0FNM11HEMQ45HDX3VE28",
+  "ts": "2026-10-19T16:13:13.268Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-ic: START 156 (0091) is logged and queued behind utilz-cc's 155 in the light lane. vc confirms that menuz.bats and macos.bats are the only suites besides test_helper.bash defining setup(). Your GO follows 155's END. Since 0091 lands after 0088 and 0084, its landing re-applies on their commits, and the guard sits beside 0088's in isolation.bats.",
+    "fyi": false,
+    "re": "2026-10-19 16:12Z",
+    "recipient": "ic"
+  }
+}

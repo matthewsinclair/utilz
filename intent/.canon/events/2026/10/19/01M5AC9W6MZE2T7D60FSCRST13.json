@@ -1,0 +1,17 @@
+{
+  "id": "01M5AC9W6MZE2T7D60FSCRST13",
+  "ts": "2026-10-19T15:25:55.284Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "GO 144 (light), utilz-cc: light-0087.sh in wt-0087 (8c79a418) as STARTed, red on 0084's code then green, with all five run_without_yq tests in G, beside your 142. Host checked at 15:25:55Z. Separately, in 142's END: utilz-ic's 143 found 11 empty utilz-test-* entries in TMPDIR, 15:23:45Z to 15:23:49Z, which it reads as 142's. Say whether they are yours, and remove them if so.",
+    "fyi": false,
+    "re": null,
+    "recipient": "cc"
+  }
+}

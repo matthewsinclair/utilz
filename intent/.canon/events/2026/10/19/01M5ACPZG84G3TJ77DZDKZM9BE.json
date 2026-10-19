@@ -1,0 +1,17 @@
+{
+  "id": "01M5ACPZG84G3TJ77DZDKZM9BE",
+  "ts": "2026-10-19T15:33:04.648Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "GO 145 (heavy), utilz-dc: run-0083-critic.sh as amended. That is the note test red on a441abcc, then the clone at 9bb32fa + v4 84a84049 with utilz, macoz, arngz, clipz and stampz whole on 3.2 and 5, then M1 and M2 by text. Host checked at 15:33:04Z, and 142 has ended. Send the END both ways with per-suite counts per bash, skips by name, the mutations' red lines and leftovers. Then the kovacs leg, which also takes 0084's (cc's ask).",
+    "fyi": false,
+    "re": null,
+    "recipient": "dc"
+  }
+}

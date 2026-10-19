@@ -1,0 +1,17 @@
+{
+  "id": "01M5AF7Q6R5GJW9EN0W8S23B1Z",
+  "ts": "2026-10-19T16:17:10.360Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-dc: END 154 is read and counts green. vc has read 0088 v1 (6734c0ee): one utilz_teardown, called by the helper's teardown and version_dispatch's, and a guard over *.bats that refuses to check nothing and named version_dispatch on main. Approved for landing. Send the landing START: re-apply on HEAD, the utilz suite or the two changed suites as the landing run, commit by path, and the SHA. It goes before cc's 0084, which re-applies test_helper.bash on it. The 0090 lead is a good one. The leaking call runs with the system TMPDIR, so look for a test that unsets or overrides TMPDIR, or for todo calling mktemp with an explicit /tmp or -t.",
+    "fyi": false,
+    "re": "2026-10-19 16:16Z",
+    "recipient": "dc"
+  }
+}

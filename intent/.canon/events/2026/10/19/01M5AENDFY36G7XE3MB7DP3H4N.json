@@ -1,0 +1,17 @@
+{
+  "id": "01M5AENDFY36G7XE3MB7DP3H4N",
+  "ts": "2026-10-19T16:07:10.590Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-dc: START 154 (0088's red and green) is logged and queued behind utilz-ic's heavy 152. The design is right: one cleanup, version_dispatch's teardown calling it, and a guard over every suite that defines teardown. Your GO follows 152's END. The menuz setup() lead goes to ic. Both suites set their own HOME, XDG_CONFIG_HOME and XDG_STATE_HOME, so the gap is what 0082's isolate_tool_homes adds beyond those.",
+    "fyi": false,
+    "re": "2026-10-19 16:06Z",
+    "recipient": "dc"
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "id": "01M5AEB9BX7XFH793HVN4C3TYS",
+  "ts": "2026-10-19T16:01:38.685Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.announce",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "Slot 151 (heavy, utilz-dc) is running: 0083's landing in the primary, 28 files. Until its END, nobody edits or commits any of them in the primary: tests.yml, CHANGELOG.md, README.md, bin/utilz, the developer guide, help/arngz, macoz and utilz, opt/arngz, clipz, macoz and stampz, opt/utilz/lib/common.sh and install.sh, common_lib.bats, help_dispatch.bats, test_helper.bash, and the formula. Whiteboard commits by path are fine.",
+    "recipients": [
+      "cc",
+      "hv",
+      "dc",
+      "ic"
+    ]
+  }
+}

@@ -967,6 +967,145 @@ Then dc's kovacs leg on Ubuntu, where yq, gpg and git sit in /usr/bin beside eve
 
 cc to utilz-vc: 0087's design is in its issue as approved, with item 4 amended as you asked: fa054ef1, by path, 3 files (the view, the canon and its event). The code waits for 0084's commit. Meanwhile I'm building 0087 in a worktree over 0084's candidate, re-based when 0084 lands, as 0085 was on 0081.
 
+## (2026-10-19 15:22Z) (handled)
+
+START (light) from utilz-cc: 0087's tests, red then green, in ~/Devel/scratch/utilz-cc/wt-0087. It is detached at 9bb32fa, with 0084's candidate 3164bffe staged and 0087 over it: candidate 8c79a418 (git diff --abbrev=7), 3 files: opt/utilz/lib/common.sh, opt/utilz/test/common_lib.bats, CHANGELOG.md. It runs under /bin/bash 3.2.57, then bash 5.3.20. Nothing is built, and no GUI, daemon or port is touched. It can run beside 142, which is heavy, if you allow it.
+
+critic-shell read it first: 0 critical, 0 warning, 2 recommendations, both taken.
+- run_without_yq now runs `set -euo pipefail` first, as bin/utilz does. This was the test-helpers trap: a no-yq path that strict mode would end went unseen.
+- The no-yq line counts only the utilities whose version yq alone kept unread: `utilz_version is not checked without yq: <n> of <N> utilities, yq counted by [6/7]`. That is item 2's wording with "of <N>" added, and the line is printed only when n > 0.
+
+light-0087.sh <label> 3.2, then 5:
+(A) 0087's tests on 0084's code. common.sh is taken back to the index, which 0084 leaves as main's; common_lib.bats stays 0087's. Run with bats -f 'issue 0087|completes without yq and names it'. Expected: both red, each at its own assertion. "names a utility with no yaml" is red at `    - beta (no beta.yaml)`; "completes without yq" is red at "utilz_version is not checked without yq". Then 0087's common.sh is put back and the hash re-checked.
+(G) the candidate: 0087's two, 0081's and 0080's tests, and the no-yq tests ('issue 008[017]|without yq|yq install hint is printed once'), all ok, 0 skips, each run killed at 300 s.
+Then the heavy run, which design item 4 says is 0084's set, once 0084 lands and 0087 is re-based on it.
+
+## (2026-10-19 15:23Z) (handled)
+
+cc to utilz-vc, Re: 144: added to the START. (G)'s filter now adds 'parse_yaml\(\) requires yq', so it holds all five tests that call run_without_yq, each by name: list_utilities() without yq fails loudly; parse_yaml() requires yq; run_doctor() completes without yq; the yq install hint is printed once; without yq, doctor says the optional declarations went unread (0041). The candidate is unchanged at 8c79a418; only light-0087.sh moved. The strict run_without_yq lands in 0087's commit alone, as you say.
+
+## (2026-10-19 15:27Z) (handled)
+
+cc to utilz-vc, Re: GO 144: END slot 144 (light), green as STARTed. Candidate 8c79a418 in wt-0087, unchanged after the run.
+- (A) on 0084's code (common.sh from the index; the tree hashed f9c780d1 meanwhile):
+  - bash 3.2.57 at 15:26:00Z: 1..2, both red at their own assertions. "run_doctor's [5/7] names a utility with no yaml and counts it (issue 0087)" at assert_output_contains "    - beta (no beta.yaml)"; "run_doctor() completes without yq and names it as missing" at assert_output_contains "utilz_version is not checked without yq".
+  - bash 5.3.20 at 15:26:16Z: the same two, at the same lines.
+  - After each leg, 0087's common.sh went back and the tree re-hashed to 8c79a418.
+- (G) the candidate: bash 3.2 at 15:26:03Z, 1..17, 17 ok, 0 not ok, 0 skips; bash 5 at 15:26:18Z, the same. The 17 are 0087's new test, 0080's 4, 0081's 7, and the five that call the now-strict run_without_yq: parse_yaml() requires yq; list_utilities() without yq fails loudly; the yq install hint is printed once; run_doctor() completes without yq (extended for 0087); without yq, doctor says the optional declarations went unread (0041).
+- Left: no bats process or bats-run dir of 144's. 142 is still running.
+Next: 142's END, with the utilz-test-* dirs. In short: they are mine, from a bug on main that I've found.
+
+## (2026-10-19 15:32Z) (handled)
+
+cc to utilz-vc, Re: GO 142: END slot 142 (heavy), 15:21:27Z to 15:31:51Z. 16 of 17 suites green on both bashes. utilz's has one not ok on each: install_e2e.bats's setup_file refused the linked worktree, by design. I should have named that refusal in the START. Candidate 3164bffe, unchanged after the run.
+- Build: cargo build --release --workspace in wt-0084's crate, 15:21:27Z to 15:21:42Z, exit 0; prez and showreel at 15:21Z.
+- Per suite, the same on bash 3.2.57 and bash 5.3.20 (plan, ok, not ok, skips):
+  - utilz 287, 276, 1, 0. The not ok is "not ok 141 setup_file failed", install_e2e.bats line 38: "/…/wt-0084/.git is not a directory (a linked worktree?) … Run this file from a primary checkout." Its 11 tests did not run; every other utilz test is ok.
+  - arngz 136, 136, 0, 0; cleanz 66, 66, 0, 0; clipz 10, 10, 0, 0; cryptz 12, 12, 0, 0; expz 9, 9, 0, 0; gitz 13, 13, 0, 0; lnrel 12, 12, 0, 0; mdagg 31, 31, 0, 0; menuz 130, 130, 0, 0; pdf2md 15, 15, 0, 0; retry 12, 12, 0, 0; stampz 24, 24, 0, 0; syncz 79, 79, 0, 0; todo 42, 42, 0, 0.
+  - macoz 15, 15, 0, 1. The skip is "macoz requires macOS # skip Running on macOS", which goes to 0083.
+  - xtrct 12, 12, 0, 4, each "# skip ANTHROPIC_API_KEY not set", as before 0084.
+- 0084's seven, the control and run_without_yq's four were all ok by name on both bashes. None skipped. They were: cryptz encrypt (ok 7) and decrypt (ok 10); gitz (ok 5); mdagg yaml mode (ok 13); macoz setpicfor (ok 14); parse_yaml (ok 46); path_without's control (ok 47); list_utilities without yq (ok 79); the install hint (ok 80); doctor without yq (ok 81); 0041's (ok 87); utilz test without bats (ok 110).
+- install_e2e's 11 run in the primary at 0084's landing, as for 0081 and 0085.
+- Leftovers: no bats, cargo or rustc process of mine. The utilz-test-* dirs come from issue 0088's teardown bug, in sets of 11, all mine: 13:48Z and 13:50Z (127's two utilz-suite legs), 15:23Z and 15:28Z (142's two). I removed all 44 by exact path, from a list at ~/Devel/scratch/utilz-cc/20261019/utilz-test-dirs-142.txt, through a script that refuses any path that is not a utilz-test-* dir directly under TMPDIR. None is left in TMPDIR.
+Next: dc's kovacs leg for 0084 (the Ubuntu loop, the case the farm exists for), then 0084's landing START in the primary, where install_e2e runs on both bashes.
+
+## (2026-10-19 15:40Z) (handled)
+
+START (heavy) from utilz-cc: 0083's prez part (items 7, 15 and 16; design items 20 to 24) in ~/Devel/scratch/utilz-cc/wt-0083p, detached at 5b882e0. Candidate e3c76fc9 (git diff --abbrev=7), 5 files: opt/prez/crate/src/drive.rs, opt/prez/crate/Cargo.toml and Cargo.lock (prez 2.5.1 to 2.5.2), help/prez.md (:273), CHANGELOG.md.
+
+The code:
+- open_presenting asks browser::find once and keeps its refusal; a --browser that is not there is still refused.
+- With no browser named and none found, fallback_opener(std::env::consts::OS, artifact::path::on_path, no_browser) chooses `open` when os is "macos" and `xdg-open` otherwise, and looks it up. The os is read once, at that call. There is no cfg(target_os); every line compiles and lints on the Mac.
+- With no opener, the refusal is the finder's, extended: its probe list plus "and no '<opener>' on PATH to open the deck with", its remedy plus ", or put <opener> on PATH", and its exit code, 2.
+- The warning names the opener, and prints only once one is found.
+- Four unit tests in drive.rs, both os values each way: macos finds open; linux finds xdg-open even where an open exists; linux with no xdg-open refuses, keeping the probe list, with the remedy pinned; macos with no open refuses, with the remedy pinned.
+
+critic-rust read it first: 0 critical, 0 warning, 3 recommendations, and it expects nothing from fmt or clippy -D warnings. I took the first: the remedy and code are now built from the finder's refusal, where they had been retyped, so the browser list has one home. Two I did not take, for your call:
+(a) On macOS with PATH unset, on_path finds nothing, so present now refuses with "no 'open' on PATH", where execvp's default path used to find /usr/bin/open. The refusal is loud and rare.
+(b) artifact::path::on_path counts a non-executable file as found. That is the shared helper's, outside 0083; a spawn failure there is still loud.
+rustfmt --check is clean with the crate's rustfmt.toml; prettier is clean on the two markdown files.
+
+heavy-0083p.sh <label> all, in wt-0083p's own crate target (CARGO_TARGET_DIR unset), so the first cargo builds from cold:
+(R) red: fallback_opener's body swapped for main's behaviour (`open` everywhere, no lookup), then `cargo test --release -p prez --lib -- on_macos off_macos`, killed at 1200 s. Expected: the build compiles and all 4 tests fail at their own assertion or expect. Then the body is put back and re-hashed to e3c76fc9.
+(G) `cargo test --release --workspace --no-fail-fast` in the crate, killed at 1800 s. Expected: every test passes, the 4 named.
+(C) `bin/devbin check all` from wt-0083p, killed at 1800 s: fmt, clippy -D warnings and the critics. Its critic arm reads staged files only and wt-0083p stages nothing, so critic-rust's read above stands for that arm.
+Then dc's kovacs leg for the crate's tests, on Linux, where the fallback is the live path. It lands third of 0083's three commits, re-applied on the head.
+
+## (2026-10-19 15:42Z) (handled)
+
+cc to utilz-vc, Re: 147: (a) is noted as accepted. (b) is filed as 0089 (8b0da2fb, by path: the view, the canon, its event), low, cc's, XS, after 0087, design first. The crate's kovacs leg is asked of dc, after 0084+0087's, on 0083p-candidate-v1.diff (e3c76fc9).
+
+## (2026-10-19 15:43Z) (handled)
+
+cc to utilz-vc, Re: GO 147: END slot 147 (heavy), green, with one slip of my script's, fixed inside the slot. Candidate e3c76fc9 in wt-0083p, unchanged after the run.
+- The slip: R's first attempt, at 15:42:30Z, ran `cargo test -p prez --lib`. prez has no library target; drive.rs's tests are in the prez binary (src/main.rs). cargo refused, exit 101 in 0.2 s, before any build or test, so that attempt proved nothing. I fixed it to `--bin prez` and reran R alone at 15:43:28Z, still inside 147. It is the R reported here.
+- R, on main's behaviour (fallback_opener's body swapped for `open` everywhere, no lookup; the tree hashed d72f77b6 meanwhile): it built, then 4 failed, 0 passed, 162 filtered out, each at its own assertion:
+  - on_macos_the_opener_is_open at drive.rs:363, assert_eq left "open" right "/usr/bin/open";
+  - off_macos_the_opener_is_xdg_open_even_where_an_open_exists at :372, left "open" right "xdg-open";
+  - off_macos_with_no_xdg_open_it_refuses_by_name_keeping_the_probe_list at :379, expect_err "with no xdg-open on PATH, present refuses: ("open", "open")";
+  - on_macos_with_no_open_it_refuses_naming_open at :402, expect_err "with no open on PATH, present refuses: ("open", "open")".
+  - Then the body went back, and the re-hash was e3c76fc9.
+- G, `cargo test --release --workspace --no-fail-fast`, 15:42:31Z to 15:42:54Z, exit 0. artifact 35 passed; prez's binary 166 passed, the 4 new drive::tests ok by name; prez's tests/manifest.rs 5 passed; showreel 179 passed; three empty targets. That is 385 passed, 0 failed, 0 ignored.
+- C, `bin/devbin check all` from wt-0083p, 15:42:54Z to 15:42:59Z, exit 0: "6 of 8 check options ran; 2 inactive here … all check options passed". clippy, format, autotests, targetdir and toolchain are each clean, with empty .errors files; clippy finished its dev profile in 4.35 s. The critic arm examined no files, since nothing is staged in wt-0083p, so critic-rust's earlier read (0 critical, 0 warning) stands for it.
+- Left running: no cargo, rustc or clippy process. The one line pgrep printed was this session's own shell, whose command text names cargo.
+Next: dc's leg 3 on kovacs (c0083p-e3c76fc9). It lands third in 0083's order, re-applied on the head.
+
+## (2026-10-19 15:44Z) (handled)
+
+cc to utilz-vc: 0089's design, for your read, at ~/Devel/scratch/utilz-cc/20261019/0089-design.md (6 items, XS). In short: one artifact::path::is_executable (a regular file with an execute bit, through PermissionsExt with no cfg, as the crates already use std::os::unix unconditionally); find_in and the browser finder both ask it, and browser.rs's is_runnable goes; tests through find_in with a PATH of the test's own, red on main's is_file(); prez to 2.5.3. Next, unbooked: rehearsing 0084 and 0087 over 0083 v4.
+
+## (2026-10-19 15:46Z) (handled)
+
+cc to utilz-vc: 0089's design is in its issue as approved (3b716af0, by path). The rehearsal over 0083 v4 is done, unbooked, in a throwaway worktree at 9bb32fa, now removed: v4 (84a84049) applied, then 0084 (3164bffe) 3-way, then 0087 (8c79a418) 3-way.
+- 0084: all 9 files applied cleanly. Each one's net change, per line, equals 3164bffe's own.
+- One thing found and fixed in my checker. macoz.bats first read 'CHANGE DIFFERS'. Once v4 moves the context, git pairs one blank line differently: it removes two blank lines and adds one, where 3164bffe's own diff removes one. The file before and after is the same. land-0084.sh and the rehearsal now compare each file's net change per line (~/Devel/scratch/utilz-cc/net-change.awk), which is the same for any two diffs of the same before and after. The CHANGELOG check stays on the raw lines, for 0084's one line exactly.
+- 0087: one conflict, as dc found, at [5/7]'s locals. Resolved by keeping 0083's elsewhere_lines line, then 0087's unchecked_count. The script refuses any other conflict. bash -n passes, and all 3 files' net change equals 8c79a418's.
+- land-0084.sh re-rehearsed on main's 3b716af: all 8 files the same, the CHANGELOG line alone, applied sha256 3164bffe.
+Each landing still re-applies on 0083's landed head, then gets the light START with the doctor tests by name on both bashes, then its heavy START.
+
+## (2026-10-19 16:05Z) (handled)
+
+START (light) from utilz-cc: 0084 and 0087 re-based on 0083's 9ee7d59, their doctor tests and 0084's by name, under /bin/bash 3.2.57 then bash 5.3.20. Nothing is built, and no GUI, daemon or port is touched. It can run beside ic's heavy landing.
+The re-base, done unbooked (rebase-on-9ee7d59.sh), each in a new worktree detached at 9ee7d59:
+- wt-0084b: 0084 (3164bffe) applied 3-way, cleanly, with all 9 files the same net change as 3164bffe. Unstaged sha256 fd7c3915.
+- wt-0087b: wt-0084b's change staged, then 0087 (8c79a418) applied 3-way. One conflict, at [5/7]'s locals, resolved as agreed: 0083's elsewhere_lines line, then 0087's unchecked_count; the script refuses any other conflict. bash -n passes on both bashes, and all 3 files are the same net change as 8c79a418. Staged fd7c3915, unstaged 6f1e8a58.
+light-merged.sh <label> 3.2, then 5. In each worktree, one bats -f run over common_lib, dispatcher, cryptz, gitz, mdagg and macoz.bats, killed at 600 s. The filter: issue 0080, 0081, 0083, 0084 and 0087; the no-yq tests; 0084's seven and its control; every test naming doctor.
+Expected: all ok and no skips in both worktrees, on both bashes. 0083's [5/7] "elsewhere" tests and 0087's no-yaml and no-yq tests pass together in wt-0087b. The END gives each run's plan and counts, and every skip and not ok by name.
+Then, in your order after ic's landing, 0084's landing START in the primary (land-0084.sh re-pointed at wt-0084b, then install_e2e on both bashes), then 0087's (land-0087.sh, then its heavy run).
+
+## (2026-10-19 16:12Z) (handled)
+
+cc to utilz-vc, Re: GO 153: END slot 153 (light), RED, from one real fault, now fixed in new bytes; a new START follows. No timing-like failure: the same test failed the same way in all four runs.
+- Runs, on 9ee7d59: wt-0084b (fd7c3915), 1..71, 70 ok, 1 not ok, 0 skips, under bash 3.2 (16:06:14Z) and bash 5 (16:08:28Z). wt-0087b (6f1e8a58 over fd7c3915), 1..72, 71 ok, 1 not ok, 0 skips, under both (16:07:21Z, 16:09:22Z).
+- The not ok, in all four: 0083's "sha256_of says what it needs when neither shasum nor sha256sum is on PATH (issue 0083)", at assert_failure: exit 0, output ba7816bf…, the sha256 of 'abc'. 0083's test hid both tools through run_without_yq, whose old 17-tool allowlist held neither. 0084 puts run_without_yq on path_without yq, which keeps every command but yq, so sha256_of found shasum. The fault is 0084's, in its re-base, not 0083's: 0083's code is right, and its test leaned on an accident of the helper.
+- The fix, in wt-0084b and carried into wt-0087b's staged 0084:
+  - path_without takes several tools (`path_without <tool>...`): each is checked, each removed, and each confirmed gone.
+  - 0083's test now hides both itself, `farm=$(path_without shasum sha256sum)`, and runs sha256_of under it with the paths as arguments, asserting the same words.
+  - Nothing else used the old allowlist's gaps: grep finds no yqless_path in the tree. "utility_platform_note says why … no yq" uses run_without_yq for yq alone, and it was ok in all four runs.
+  - New hashes: wt-0084b e75d54e7, wt-0087b staged e75d54e7 and unstaged 9c949383. 0087's unstaged hash moved only through its index lines; its net change in all 3 files is still 8c79a418's.
+- Sorted +/- against net, as you asked: one file differs that way. macoz.bats over 0083 (in the v4 rehearsal and again on 9ee7d59) re-pairs a blank line: the sorted +/- lines differ, and the net per line is equal. No other file of 0084's or 0087's differs either way.
+- Two more found and fixed, unbooked, in rehearsal only:
+  - land-0087.sh's head checks used `git show HEAD:CHANGELOG.md | grep -q` under pipefail. grep -q exits at its first match, and on a 93 KB CHANGELOG git show then dies of SIGPIPE, so the check refused a head that has the line. Both checks now read the file whole into grep.
+  - A stray `git stash` in my 15:45Z macoz.bats rehearsal command left one stash entry in the shared repo: 7351827, v4's 28 files on 9bb32fa. It was mine, the only entry, and checked by its SHA; I dropped it. The stash list is empty.
+- Rehearsed after the fixes, on main's ce3f0f58 (with ic's c918dec): land-0084.sh then land-0087.sh, every file the same net change, each CHANGELOG line alone. 0084 then 0087 apply in order.
+
+## (2026-10-19 16:12Z) (handled)
+
+START (light) from utilz-cc: 153's run again on the fixed bytes, light-merged.sh under /bin/bash 3.2.57 then bash 5.3.20, in wt-0084b (e75d54e7) and wt-0087b (staged e75d54e7, unstaged 9c949383), both on 9ee7d59. The same filter and files as 153, each run killed at 600 s. Nothing is built. Expected: all ok, 0 not ok, 0 skips, the sha256_of test ok by name, in both worktrees, on both bashes. Its END gives each run's counts and the sha256_of line by name.
+
+## (2026-10-19 16:19Z) (handled)
+
+cc to utilz-vc, Re: GO 155: END slot 155 (light), green as STARTed, the M5 forms added as you asked. Bytes: wt-0084b e75d54e7; wt-0087b staged e75d54e7, unstaged 9c949383; both on 9ee7d59 and unchanged after the run.
+- 153's run on the fixed bytes: wt-0084b 1..71, 71 ok, 0 not ok, 0 skips (bash 3.2 at 16:13:23Z, bash 5 at 16:16:53Z). wt-0087b 1..72, 72 ok, 0 not ok, 0 skips (16:14:29Z, 16:17:45Z). The sha256_of test (issue 0083) is ok by name in all four.
+- path_without's multi-tool form, by mutation in wt-0084b, over 13 tests (0084's seven, its control, the five run_without_yq tests and the sha256_of test). The same on both bashes:
+  - M5a, hide only the first tool named (`for tool in "$1"`): red only "sha256_of says what it needs …" at assert_failure; 12 ok. sha256sum (/sbin/sha256sum on this Mac) was left to find.
+  - M5b, hide only the last (`for tool in "${!#}"`): red only the same test, at assert_failure; 12 ok. shasum was left.
+  - M5c, hide none (the rm taken out, so path_without refuses): all 13 red, each at its path_without or run_without_yq call.
+  - Each restore re-hashed to e75d54e7.
+- Left: no bats process and no new bats-run dir of mine.
+- Noted: 0084's heavy landing runs the utilz suite whole on both bashes, beside install_e2e. Rehearsals stay out of git stash.
+Next: dc's 0088 landed as c6da0b8 and changes test_helper.bash's teardown, so I re-rehearse 0084 and 0087 on it (net change per file), and then send 0084's landing START.
+
 ---
 
 _Generated by Intent v3 from the whiteboard model. Do not edit this file -- it is rendered from the model, and `intent doctor` reports any hand-edit as skew._

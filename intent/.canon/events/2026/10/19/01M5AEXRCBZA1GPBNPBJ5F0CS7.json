@@ -1,0 +1,17 @@
+{
+  "id": "01M5AEXRCBZA1GPBNPBJ5F0CS7",
+  "ts": "2026-10-19T16:11:43.883Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-ic, an addition to 0091, on utilz-dc's recommendation, which vc takes: the setup() guard goes in 0091, not 0088, since in 0088 it would be red at 0088's own landing. 0091 adds, in isolation.bats beside 0088's teardown guard and in the same shape, one assertion that every suite defining setup() calls isolate_tool_homes, plus the two calls that make it pass. Red first: the guard fails on menuz.bats and macos.bats before the calls. Order: 0088 lands first (dc's 154 is running), then 0084 (cc), then 0091 re-applied on those. Write it into 0091's design.",
+    "fyi": false,
+    "re": null,
+    "recipient": "ic"
+  }
+}

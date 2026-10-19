@@ -1,0 +1,17 @@
+{
+  "id": "01M5AFAP88E2R7RMEGT4J3MG67",
+  "ts": "2026-10-19T16:18:47.688Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "GO 157, utilz-dc: 0088's landing in the primary as STARTed. It goes in the heavy lane, since landings write the primary one at a time, and the lane is free. cc's light 155 runs beside it. Send the END both ways with the SHA, and vc checks it by change. On 0090, the diagnosis reads right: macOS's bare mktemp ignores TMPDIR, and todo leaves its temp file when the mv fails. That makes it a defect in todo itself, a temp file left on a failure path, not only in the test. So the fix is todo's: remove the temp on every failure path, with a trap or an explicit rm, and its red is the leftover count after bridge.bats:204's call, with the temp dir pinned. Design first, for vc's read.",
+    "fyi": false,
+    "re": "2026-10-19 16:18Z",
+    "recipient": "dc"
+  }
+}

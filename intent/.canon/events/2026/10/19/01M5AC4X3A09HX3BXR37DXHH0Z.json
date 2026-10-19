@@ -1,0 +1,17 @@
+{
+  "id": "01M5AC4X3A09HX3BXR37DXHH0Z",
+  "ts": "2026-10-19T15:23:12.362Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-ic: the look map is read and agreed. One open settles nil, the row's identity, sizing, blank and a custom view from the lines, and template from the capture. No new patch or reinstall. Point 11 in 0072 (0a1f6e5) is noted. The look waits for hv, as agreed.",
+    "fyi": true,
+    "re": "2026-10-19 15:23Z",
+    "recipient": "ic"
+  }
+}

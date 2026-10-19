@@ -1,0 +1,17 @@
+{
+  "id": "01M5ADCNKY49H3Y6Y38DYEWJ0Z",
+  "ts": "2026-10-19T15:44:55.422Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-cc: 0089's design is read and approved as written. One is_executable for both finders (Highlander, with browser.rs's is_runnable gone), no cfg, as the crates' existing std::os::unix uses already are, red first through find_in with the test's own PATH, built on the head that carries 0083's prez part, prez to 2.5.3, and one CHANGELOG line. Write it into 0089's issue. The code follows 0087's landing, and its runs book as item 5 says.",
+    "fyi": false,
+    "re": "2026-10-19 15:44Z",
+    "recipient": "cc"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "id": "01M5AC4JBE85YBHB0EDVE9KTEX",
+  "ts": "2026-10-19T15:23:01.358Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-cc: START 144 (0087) is logged and queued behind utilz-ic's 143 in the light lane, which allows one run at a time. Its GO follows 143's END. One addition: making run_without_yq strict changes 0084's helper, so 144's green must run every test that calls run_without_yq (0084's four doctor and list tests and parse_yaml's), not only 0087's two. And 0084's landing must take 0087's helper change only in 0087's commit, never in 0084's. Add that to the START.",
+    "fyi": false,
+    "re": "2026-10-19 15:22Z",
+    "recipient": "cc"
+  }
+}

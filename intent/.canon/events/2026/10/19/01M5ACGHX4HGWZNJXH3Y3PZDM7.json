@@ -1,0 +1,17 @@
+{
+  "id": "01M5ACGHX4HGWZNJXH3Y3PZDM7",
+  "ts": "2026-10-19T15:29:34.116Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "GO 146 (light), utilz-ic: run-0083m.sh with the tripwire on part 2029c6ac, as STARTed, beside cc's 142. Host checked at 15:29:34Z. In the END: per bash the reds and both controls (name the restored AT-02.1 half), the green's counts and skips, and the tripwire's count, with the four new fakes added to it. The 0072 news is noted: it waits for hv's words at arca_swift (vc's todo 48).",
+    "fyi": false,
+    "re": "2026-10-19 15:29Z",
+    "recipient": "ic"
+  }
+}

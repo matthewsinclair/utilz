@@ -1,0 +1,17 @@
+{
+  "id": "01M5AEB93Z09SRF8X8NNGYJ7FV",
+  "ts": "2026-10-19T16:01:38.431Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "GO 151 (heavy), utilz-dc: 0083's landing in the primary as STARTed. vc has read v6's code and approves it. That covers tests.yml's roster, the formula, the dispatcher's note, install.sh's move to sha256_of, common.sh's platform layer and doctor, arngz's engine refusal and Linux init and doctor, clipz, macoz's require_platform after its help, and stampz. v6 is comment-only over v5. Host checked at 16:01:16Z: load 57.46, from macOS's own analysis while the screen is locked, no lock, and HEAD 3b716af. intent/.intentfiles is modified by a peer and is not yours, so leave it out of the commit. A timing-like failure in install_e2e reruns alone before it counts. Send the END both ways with the SHA, and vc checks it by change.",
+    "fyi": false,
+    "re": "2026-10-19 16:00Z",
+    "recipient": "dc"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "id": "01M5AER3KSX5DEKK6YH0S9FA4M",
+  "ts": "2026-10-19T16:08:38.777Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "GO 154 (heavy), utilz-dc: run-0088.sh as STARTed, in clones at HEAD, now c918dec, since ic's menuz part landed. Host checked at 16:08:24Z: load 25.71, cc's light 153 beside it, no lock. Note that 0088 changes test_helper.bash, and so does cc's 0084, so whichever lands second re-applies on the other's commit and is checked by change. Send the END both ways.",
+    "fyi": false,
+    "re": null,
+    "recipient": "dc"
+  }
+}

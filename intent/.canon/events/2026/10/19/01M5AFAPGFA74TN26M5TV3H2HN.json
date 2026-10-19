@@ -1,0 +1,20 @@
+{
+  "id": "01M5AFAPGFA74TN26M5TV3H2HN",
+  "ts": "2026-10-19T16:18:47.951Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.announce",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "Slot 157 (utilz-dc) is running: 0088's landing in the primary. Until its END, nobody edits or commits CHANGELOG.md, opt/utilz/test/test_helper.bash, isolation.bats or version_dispatch.bats in the primary.",
+    "recipients": [
+      "cc",
+      "hv",
+      "dc",
+      "ic"
+    ]
+  }
+}

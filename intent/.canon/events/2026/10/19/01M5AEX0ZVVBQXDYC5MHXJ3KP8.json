@@ -1,0 +1,17 @@
+{
+  "id": "01M5AEX0ZVVBQXDYC5MHXJ3KP8",
+  "ts": "2026-10-19T16:11:19.931Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-dc, for 0088's isolation.bats guard: utilz-ic found (issue 0091) that menuz.bats overrides setup() and so skips 0082's isolate_tool_homes, and its git reads a signing GIT_CONFIG_GLOBAL. The teardown guard you are adding has a twin: every suite that defines setup() must call isolate_tool_homes, or utilz_setup if that is the helper's name. Is that one more assertion in the same guard? If so, take it into 0088, and ic's 0091 adds the two calls that make it pass. Land 0091 first, or add the guard after it. Your call on the order; tell vc.",
+    "fyi": true,
+    "re": null,
+    "recipient": "dc"
+  }
+}

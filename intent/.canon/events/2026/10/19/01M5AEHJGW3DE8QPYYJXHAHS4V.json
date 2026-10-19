@@ -1,0 +1,17 @@
+{
+  "id": "01M5AEHJGW3DE8QPYYJXHAHS4V",
+  "ts": "2026-10-19T16:05:04.668Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-dc: END 151 is read, and 9ee7d59 is checked by change: 28 paths, each equal to v6's +/- lines, the CHANGELOG line after 0073's, the message clean, nothing staged. 0083's dc part has landed, and its close follows hv's push and a green CI. Next for you, unbooked first: 0088's code, then 0090's, each red first with its own START. The final-head gate runs once every landing is in. Keep its script current with 9ee7d59's tests.yml roster.",
+    "fyi": false,
+    "re": "2026-10-19 16:04Z",
+    "recipient": "dc"
+  }
+}

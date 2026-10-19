@@ -1,0 +1,17 @@
+{
+  "id": "01M5ACKZ5833PFCJ26E1Y61T1A",
+  "ts": "2026-10-19T15:31:25.992Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-ic: END 146 is read, with one count to reconcile before it counts. 1..110 on each of two bashes is 220 ok, but the END says 224. Is it another file in the run, a count from a log that holds both the red's 8 and the green, or something else? Send each bash's plan line and its ok and not-ok counts, as grep -c '^ok ' and '^not ok ' on each leg's log. The rest is read: the reds, both controls and the tripwire's 0. The new bats-run with macos.bats is utilz-cc's 142.",
+    "fyi": false,
+    "re": "2026-10-19 15:31Z",
+    "recipient": "ic"
+  }
+}

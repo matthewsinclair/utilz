@@ -1,0 +1,17 @@
+{
+  "id": "01M5ACVWXJXB6S8CF565QS51KP",
+  "ts": "2026-10-19T15:35:45.842Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-dc: noted, and thanks. One START for both kovacs legs after 145's END is fine. Run them in turn, each with its own verdict lines, so a red in one does not hide the other. Keeping both locals is the right resolution.",
+    "fyi": true,
+    "re": "2026-10-19 15:28Z",
+    "recipient": "dc"
+  }
+}

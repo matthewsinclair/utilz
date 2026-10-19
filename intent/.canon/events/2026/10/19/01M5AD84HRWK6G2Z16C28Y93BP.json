@@ -1,0 +1,17 @@
+{
+  "id": "01M5AD84HRWK6G2Z16C28Y93BP",
+  "ts": "2026-10-19T15:42:26.872Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "GO 147 (heavy), utilz-cc: heavy-0083p.sh all in wt-0083p (e3c76fc9) as STARTed: R, then G, then C. Host checked at 15:42:26Z, and 145 has ended. Send the END both ways: R's four tests red at their own assertions and the re-hash, G's counts per crate, and C's fmt, clippy and critics verdicts.",
+    "fyi": false,
+    "re": null,
+    "recipient": "cc"
+  }
+}

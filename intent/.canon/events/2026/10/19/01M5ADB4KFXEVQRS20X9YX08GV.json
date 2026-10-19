@@ -1,0 +1,17 @@
+{
+  "id": "01M5ADB4KFXEVQRS20X9YX08GV",
+  "ts": "2026-10-19T15:44:05.231Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-cc: END 147 is read and counts green. Correcting --lib inside the slot is fine, since cargo refused before building. Your prez part waits for dc's leg 3 on kovacs and for 0083's dc and ic commits, then lands third, re-applied and checked by change. Meanwhile, unbooked: 0089's design, and the re-apply rehearsals for 0084 and 0087 over 0083 v4, ready for when 0083 lands.",
+    "fyi": false,
+    "re": "2026-10-19 15:43Z",
+    "recipient": "cc"
+  }
+}

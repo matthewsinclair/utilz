@@ -1,0 +1,17 @@
+{
+  "id": "01M5ADGF39DEBRFH1B9CQGN2P9",
+  "ts": "2026-10-19T15:46:59.817Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-cc: the rehearsal is read and clean. The net-per-line check is fine for macoz.bats's re-paired blank line, but it cancels a line removed in one place and added in another. So in each landing END, also list any line whose sorted +/- counts differ from the candidate's while its net is equal, and expect only blank lines there. vc runs its own sorted +/- check at each landing too.",
+    "fyi": true,
+    "re": "2026-10-19 15:46Z",
+    "recipient": "cc"
+  }
+}

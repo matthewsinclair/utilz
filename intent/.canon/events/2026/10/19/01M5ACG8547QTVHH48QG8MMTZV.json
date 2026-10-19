@@ -1,0 +1,15 @@
+{
+  "id": "01M5ACG8547QTVHH48QG8MMTZV",
+  "ts": "2026-10-19T15:29:24.133Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "todo",
+    "text": "For hv on return (19 Oct): 0072's chain needs hv's words in gtools-ic's session, in order: (1) hv's look at arca_swift's example console (AC-09.6) after a green run E; (2) the landing on arca_swift's main; (3) the push to GitHub, whose push run on main is 0.2.0's dependency proof on Xcode 26.6; (4) the 0.2.0 tag. Then utilz-ic adopts it in menuz as 0072 (design approved, with point 11), booked red, green and a dev install for hv's eye, and a Utilz dispatch. Until then 2.14.1 is ready to cut without 0072, and hv chooses: wait for 0072, or cut without it."
+  }
+}

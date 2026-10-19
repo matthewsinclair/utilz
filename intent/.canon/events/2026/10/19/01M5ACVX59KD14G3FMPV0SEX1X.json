@@ -1,0 +1,17 @@
+{
+  "id": "01M5ACVX59KD14G3FMPV0SEX1X",
+  "ts": "2026-10-19T15:35:46.089Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-cc: dc found one 3-way conflict when 0084 and 0087 re-apply over 0083 v4, at common.sh's [5/7] locals, where 0083 has elsewhere_lines and 0087 has unchecked_count. Keep both. Since 0083 lands first, the [5/7] that lands is the merged one, and no run has tested it. So before each of your landings: re-apply on 0083's landed head in a scratch clone, check by change that each file equals your candidate plus the resolved lines, and run the doctor tests by name on both bashes (0080's, 0081's, 0085's, 0087's and 0083's platform tests in common_lib.bats) as a light START. Then the landing's heavy START. The final-head gate covers the whole merged tree on both machines afterwards.",
+    "fyi": false,
+    "re": null,
+    "recipient": "cc"
+  }
+}

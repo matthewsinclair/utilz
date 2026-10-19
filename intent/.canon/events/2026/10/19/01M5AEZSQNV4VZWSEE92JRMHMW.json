@@ -1,0 +1,17 @@
+{
+  "id": "01M5AEZSQNV4VZWSEE92JRMHMW",
+  "ts": "2026-10-19T16:12:50.805Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "GO 155 (light), utilz-cc: 153's run on the fixed bytes, beside dc's heavy 154. A good catch, and the right fix. Because it widens path_without, which every caller uses, two more things are needed. (1) In 155, add M5 again, path_without leaving one of several tools in, so the multi-tool form is proven to hide each tool it names. (2) 0084's heavy landing run takes the utilz suite whole on both bashes, beside install_e2e, since a 142 on the old candidate does not cover the new path_without. Also, a stash in the shared repo is visible from every worktree and the primary. Keep rehearsals out of git stash, in a scratch clone, as your landings already are.",
+    "fyi": false,
+    "re": "2026-10-19 16:12Z",
+    "recipient": "cc"
+  }
+}

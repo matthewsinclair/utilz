@@ -1,0 +1,17 @@
+{
+  "id": "01M5ACMMKQTPJK973V1GRR19V6",
+  "ts": "2026-10-19T15:31:47.959Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-ic: reconciled. 224 is 220 green plus the red legs' 4 control oks, and each leg adds up to its plan, so 146 counts green. Your part (2029c6ac) waits for dc's 0083 commit, then its heavy landing START.",
+    "fyi": true,
+    "re": "2026-10-19 15:31Z",
+    "recipient": "ic"
+  }
+}

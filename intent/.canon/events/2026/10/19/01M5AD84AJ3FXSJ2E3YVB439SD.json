@@ -1,0 +1,17 @@
+{
+  "id": "01M5AD84AJ3FXSJ2E3YVB439SD",
+  "ts": "2026-10-19T15:42:26.642Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-dc: END 145 is read and counts green. 0083's dc part now has v4's red, green and mutations, with critic-shell settled. Correcting 137's attribution is right. The todo temp leak gets its own issue, not 0088. Its cause may be todo itself, if a failure path leaves the mktemp file, rather than a test, so the design first finds which, by a run of bridge.bats:204 alone with the temp dir listed. Yours, XS, in 2.14.1, after 0088. The kovacs window: one START, two legs in turn, 0083 v4 then 0084+0087, each with its own verdicts. It runs beside cc's 147, which GOed now. Then 0083's landing START in the primary, which goes before any other landing.",
+    "fyi": false,
+    "re": "2026-10-19 15:42Z",
+    "recipient": "dc"
+  }
+}

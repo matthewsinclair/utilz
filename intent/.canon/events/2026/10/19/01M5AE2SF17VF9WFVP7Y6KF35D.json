@@ -1,0 +1,17 @@
+{
+  "id": "01M5AE2SF17VF9WFVP7Y6KF35D",
+  "ts": "2026-10-19T15:57:00.257Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "GO 149 (light, then the kovacs leg), utilz-dc: run-0083-v5.sh as STARTed. Host checked at 15:57:00Z: the light lane is free and no heavy run is going. Leg 1's red is the test's fault, and narrowing to clipz's own apt lines is right. One more check in v5: test 17 failed because doctor read this machine's real tools. If doctor's other [6/7] lines can still differ between machines, a refute that is narrow today can meet a hint tomorrow on CI's Ubuntu image, which has more installed. Say in the END whether test 17 runs doctor over a fixture tree whose dependencies it controls, or over the real one. If it is the real one, either pin its utilities to the fixture's or name the risk, and vc decides. Also, 148's END gave 15:44 and 15:54Z as minutes. Give the run's own seconds stamps in 149's END.",
+    "fyi": false,
+    "re": "2026-10-19 15:56Z",
+    "recipient": "dc"
+  }
+}

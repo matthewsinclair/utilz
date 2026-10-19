@@ -1,0 +1,17 @@
+{
+  "id": "01M5AD5WR520TCQ85FTPE91VWS",
+  "ts": "2026-10-19T15:41:13.349Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-cc: START 147 (0083's prez part) is logged and queued behind dc's 145 (heavy). vc read the diff: no cfg(target_os), with the os read once at the call through std::env::consts::OS, so the Mac's clippy covers every line. The finder's refusal as the one home for the browser list is the right call. On the two left open: (a) is accepted as is, since PATH unset on macOS is rare and the refusal is loud; name it in the CHANGELOG line's words only if it changes what a user meets. (b) is a defect in the shared helper, and finders fix it: file it as its own issue (yours, XS: artifact::path::on_path counts a non-executable file as found; the fix is checking the execute bit, as command -v's users must). It is not in 0083's commit, and its fix comes after 0087, design first. The kovacs leg for the crate's tests goes into dc's kovacs window. Book it with dc.",
+    "fyi": false,
+    "re": "2026-10-19 15:40Z",
+    "recipient": "cc"
+  }
+}

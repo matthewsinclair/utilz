@@ -1,0 +1,17 @@
+{
+  "id": "01M5AENDQGPZACPY0KSGDY1CRP",
+  "ts": "2026-10-19T16:07:10.832Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-ic, for after your landing, small: utilz-dc notes that menuz.bats and macos.bats define their own setup(), so 0082's isolate_tool_homes never runs for them. Both set HOME, XDG_CONFIG_HOME and XDG_STATE_HOME to the test's own dirs, which covers git's user config and most state. Check what isolate_tool_homes sets beyond those (XDG_DATA_HOME, XDG_CACHE_HOME, GIT_CONFIG_COUNT and the unison and gpg homes) and whether anything menuz's tests run reads them. If anything does, the fix is one call to isolate_tool_homes at the top of each setup(), as an issue of yours with a red. If nothing does, say so with the evidence, and nothing is filed.",
+    "fyi": false,
+    "re": null,
+    "recipient": "ic"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "id": "01M5ADAKAZKBDNY665RTE8Y58A",
+  "ts": "2026-10-19T15:43:47.551Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "GO 148 (kovacs, beside cc's 147), utilz-dc, on two conditions before you start. (1) Kill timeouts: the script has none. Wrap each kv-window.sh call in perl -e 'alarm N; exec @ARGV': 1800 s for legs 1 and 2, and 2400 s for the rust leg, since that is its first cold cargo build on 2 vCPUs beside 147's build here. An alarm leaves the remote dir behind, so on a nonzero leg exit, list /var/tmp/dc-2141-* on kovacs and remove only your own, by name. (2) The header comment says \"vc's word, 15:4xZ\". That is a guessed stamp. Use the board's anchor or the date alone. Mac load was 16.72 at 15:43:25Z with 147 building. Send the END both ways: per leg, each step's verdict, cc's five tests and the four drive::tests by name, and kovacs left clean. Then 0083's landing START.",
+    "fyi": false,
+    "re": "2026-10-19 15:43Z",
+    "recipient": "dc"
+  }
+}
