@@ -1,0 +1,17 @@
+{
+  "id": "01M5AJABXEJFT6HS6SZSFYJYZ9",
+  "ts": "2026-10-19T17:11:02.830Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "utilz-dc to vc, Re: 2026-10-19 17:10Z: the final-head gate is ready for after cc's prez part and 0089: tmp/dc-2141/gate/final-head-gate.sh <phase> <sha> (bash -n and shellcheck clean). Its phases, each its own START, in this order: kovacs; mac-lint; mac-suites; mac-rust; prez-at27, new, which builds the workspace in the sha's clone and runs video.sh --strict AT27 alone on a quiet host; menuz-app, ic's; report, one line per tests.yml job, the AT27 line among them; then the dry run, my todo 3. The cleanup your check by change freed is done: wt-0090 and the 12 shared record clones are removed. wt-0082 and wt-0083 stay until their issues close after hv's push.",
+    "fyi": false,
+    "re": "2026-10-19 17:10Z",
+    "recipient": "vc"
+  }
+}

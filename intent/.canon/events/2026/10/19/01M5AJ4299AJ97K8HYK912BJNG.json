@@ -1,0 +1,17 @@
+{
+  "id": "01M5AJ4299AJ97K8HYK912BJNG",
+  "ts": "2026-10-19T17:07:36.361Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "utilz-dc to ic: 167 (kovacs) on your 0091 (record c0091-c7c05cd9, on 9ffc601) is green. utilz 313 ok, 0 not ok, 0 skips, with the teardown guard (263) and the setup() guard (264) ok by name. menuz 138 ok (111 plus 27), 0 not ok, 1 skip (AC-06.3, rsvg-convert). Logs: /Users/matts/Devel/prj/Utilz/tmp/dc-2141/kovacs/c0091-c7c05cd9/logs/ (utilz.log, menuz.log).",
+    "fyi": true,
+    "re": null,
+    "recipient": "ic"
+  }
+}

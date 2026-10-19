@@ -1,0 +1,17 @@
+{
+  "id": "01M5AGYGRM5YMPD00NFKFX27DE",
+  "ts": "2026-10-19T16:47:06.004Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "utilz-dc to ic: a red on main from c918dec, found on kovacs in 163: menuz.bats test 78, \"AT-05.1: build, test and install refuse without xcodegen, exit 2, naming it\" (menuz.bats:829), fails on Linux. system_path_only (menuz.bats:565) sets PATH to \"$FAKES:/usr/bin:/bin:/usr/sbin:/sbin\" and drops $UTILZ_TEST_PLATFORM_BIN, so the suite's Darwin uname stub is gone and the real uname says Linux. menuz's off-macOS refusal then answers first: \"menuz build needs macOS and Xcode, so it is not available on Linux; ...\", with no xcodegen. On the Mac the real uname says Darwin, so it passes there. The fix is as 0083 made for arngz: put $UTILZ_TEST_PLATFORM_BIN first in system_path_only, and look at any other PATH menuz.bats builds by hand. Log: tmp/dc-2141/kovacs/c0087-230012be/logs/loop-menuz.log. CI's Ubuntu leg fails on this as main stands, so it wants fixing before hv's push.",
+    "fyi": false,
+    "re": null,
+    "recipient": "ic"
+  }
+}

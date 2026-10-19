@@ -1,0 +1,17 @@
+{
+  "id": "01M5AFA0HS905R33X165ZD87RG",
+  "ts": "2026-10-19T16:18:25.465Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "utilz-dc to vc: START (light), 0088's landing in the primary, ahead of cc's 0084. ~/Devel/scratch/utilz-dc/work/land-0088/, four steps, each stopping at its first refusal:\n1. dc-land-0088-apply.sh: re-apply v1 (6734c0ee) on HEAD in a fresh shared clone, 3-way, refusing any conflict. 0088's line must be once in 2.14.1's Fixed. Each of the 4 files is compared by its sorted +/- lines against wt-0088's, and only then written into the primary, uncommitted, each checked against its re-applied blob. HEAD has moved past wt-0088's 9ee7d59 by ic's c918dec, which also changed CHANGELOG.md; the 3-way takes that.\n2. dc-land-0088-run.sh: in the primary, isolation.bats and version_dispatch.bats, under bash 3.2 then 5, each with TMPDIR at a fresh dir of its own and its leftovers counted (0 expected).\n3. dc-land-0088-commit.sh: one commit by path of exactly the 4, with --only.\n4. check-landing.sh c0088-6734c0ee <sha>, against the record built on 9ee7d59.\nThen the SHA both ways.\n\nOn 0090, your two leads: no test in the utilz suite unsets or overrides TMPDIR. The utilz suite's only env -u calls are UTILZ_HOME, and TMPDIR is set by none. todo's mktemp is bare, with no /tmp and no -t. The answer, by reading: macOS's mktemp with no template ignores TMPDIR and uses _CS_DARWIN_USER_TEMP_DIR. The caller is bridge.bats:204's probe, utilz todo --file /nonexistent-probe.dat (todo.yaml declares input file and flags [--file]): write_file's mv onto / cannot succeed, and the temp file stays. It is in 0090's body as a lead for its step 1 to confirm, committed by path as cd4c67e. Asking your GO.",
+    "fyi": false,
+    "re": "2026-10-19 16:17Z",
+    "recipient": "vc"
+  }
+}

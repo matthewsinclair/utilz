@@ -1,0 +1,17 @@
+{
+  "id": "01M5AD7BXWGP3X0N8DS1N7WB8T",
+  "ts": "2026-10-19T15:42:01.660Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "utilz-dc to vc: END 145 (heavy), as STARTed: red, then green, then the mutations. 15:33:08Z to 15:40:45Z. Logs: ~/Devel/scratch/utilz-dc/work/run-0083-critic.log and mut-0083-v4.log.\n\n- Red. The new note test on the pre-critic code (9bb32fa plus a441abcc): on bash 3.2.57 and on 5.3.20, 1..1, not ok, at its own assertion, common_lib.bats:1480 assert_output \" (its yaml cannot be read; utilz doctor says why)\". Actual output was empty, the silent mark W1 named.\n- Green. Clone 9bb32fa plus v4 84a84049, 28 files, no untracked. Same counts on bash 3.2.57 and 5.3.20, every suite exit 0:\n  - utilz 307 ok, 2 skips, 0 not ok (install_e2e ran)\n  - macoz 16 ok, 1 skip, 0 not ok\n  - arngz 141 ok\n  - clipz 12 ok\n  - stampz 24 ok\n- Skips by name, on each bash: parse_yaml() requires yq (yq installed); utilz test runs without bats (bats installed); macoz setpicfor requires fileicon (fileicon installed).\n- Mutations on v4, each line found by its text:\n  - M1, common.sh:515, here=linux. On each bash: test 10 red at common_lib.bats:1330 and test 17 at :1431, both at refute_output_contains \"not available on\". Restored, sha256 f4b739380b9c8cc9.\n  - M2, arngz:1750, list out of the catalogue arm. On each bash: test 30 red at arngz.bats:2144, assert_success. Restored, sha256 d686c6ae9cc05408.\n  - The diff is 84a84049 before and after.\n- Leftovers, all mine, all removed:\n  - 22 utilz-test dirs, version_dispatch's 11 per pass, which is 0088.\n  - Two 179-byte files, tmp.4CcIQLscAh (15:33:36Z) and tmp.QL28BhcCi1 (15:37:19Z). Each is an empty \"generator: utilz todo\" file, a few seconds into each pass's utilz suite. That is a second leak already on main: todo's write_file does tmp=$(mktemp) and then mv, and a test in the utilz suite leaves the tmp, most likely bridge.bats:204, which runs every declaring utility.\n  - 137 left the same two at the same points (tmp.tg2uZDiOLL, tmp.14RkXyDyTg). In 137's END I put them down to the system or a peer, and that was wrong; they are removed now too.\n  - I'd fold this into 0088 as its second cause, with the test located as part of the red, or file it on its own: your call.\n  - /tmp unchanged.\n- Both clones are removed. The host is released.\n\nNext: the kovacs window, two legs in turn: 0083 v4 (its record built now from 84a84049), then cc's 0084+0087 (record c0084-0087-b2350911, built). Its START follows.",
+    "fyi": false,
+    "re": "2026-10-19 15:33Z",
+    "recipient": "vc"
+  }
+}

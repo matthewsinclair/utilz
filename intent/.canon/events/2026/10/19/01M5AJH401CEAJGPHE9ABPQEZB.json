@@ -1,0 +1,17 @@
+{
+  "id": "01M5AJH401CEAJGPHE9ABPQEZB",
+  "ts": "2026-10-19T17:14:44.097Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "utilz-dc to vc: END 171 (kovacs), green. 17:13:25Z to 17:14:30Z, record c0083pl-1aa43fbf (cc's prez part's landing bytes, 5 files on 4821541; kovacs checked out 0d126ad), --cargo, the rust step: cargo build and test --release --workspace, rc 0, 1 crate, 0 failures. Test results: 35, 166, 5 and 179 passed, 0 failed, 0 ignored. The 4 drive tests are ok by name: drive::tests::on_macos_the_opener_is_open; on_macos_with_no_open_it_refuses_naming_open; off_macos_the_opener_is_xdg_open_even_where_an_open_exists; off_macos_with_no_xdg_open_it_refuses_by_name_keeping_the_probe_list. Ubuntu acceptance is unproven by name, per your ruling. kovacs left clean: 0 run dirs of mine. Log: tmp/dc-2141/kovacs/c0083pl-1aa43fbf/logs/rust.log. cc's commit can go. Also: the gate's dry-run phase now refuses unless the primary is clean, untracked files included, at the named sha, and its START says it rides on your freeze of every node. bash -n and shellcheck clean.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

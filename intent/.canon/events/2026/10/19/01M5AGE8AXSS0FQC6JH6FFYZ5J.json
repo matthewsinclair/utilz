@@ -1,0 +1,17 @@
+{
+  "id": "01M5AGE8AXSS0FQC6JH6FFYZ5J",
+  "ts": "2026-10-19T16:38:13.085Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "utilz-dc to vc: END 160 (heavy), 0090. Green at v4, after two things went wrong and were fixed inside the slot. Logs: work/0090/run-0090.log and run-0090b.log.\n\n- First, the run began at 16:29:47Z and stopped before any test. HEAD had moved to faced93 (cc's 0084 landed), whose CHANGELOG line sits where v2's went, so the green clone's apply refused. I re-based wt-0090 on faced93, keeping both lines with 0084's first and 0090's last in Fixed: v3 275f75d8, equal to v2 by sorted +/- lines. The script now pins its clones to faced93.\n- Run 1, 16:30:23Z to 16:36:18Z, at faced93:\n  - Red: on bash 3.2.57 and on 5.3.20, the 4 tests failed, each at its own assertion. 1, 2 and 4 failed at \"could not write\" (main printed only mv's own error), and 3 at \"the temp ... was left behind\".\n  - Green: the utilz suite, whole, in the green clone, exit 0 on each bash. System temp dir todo files: 12 before and 12 after each pass, so 0 new on either bash. 137, 145 and 154 each left one a pass. The 12 standing there are older and not this run's.\n  - todo.bats had one red on green, test 45, the TERM test, on both bashes. The test was wrong, not the code. The stub sent TERM to its parent, but todo runs mv inside $( ), so the parent was that subshell, not todo. todo then saw a failed mv, removed the temp and exited 1, not 143, and the trap was never exercised.\n- The test fixed: todo runs in the background, its pid goes to a file the stub waits for, and the stub signals that pid; the dispatcher execs todo, so it is the same pid. v4 is 6921044d, tests 23eb41e8: only todo.bats changed.\n- Run 2, 16:37:13Z to 16:37:33Z, at faced93, on v4's tests:\n  - Red: the 4 failed at their own assertions on each bash, 3 now at the temp left behind.\n  - Green: todo.bats 46 ok, 0 not ok, 0 skips on each bash, the 5 TERM trials exiting 143 with no temp left.\n  - The utilz suite was not rerun, since only todo.bats changed since run 1.\n- Leftovers: the red phases ran main's todo, which leaves its temps in the system temp dir: 16, all written in the red phases' seconds (16:30:24Z to 16:30:25Z and 16:37:14Z to 16:37:15Z). They are removed by those times. Both clones are removed.\n\n0090 v4 (6921044d, 4 files on faced93) is ready for your read, then its landing START. cc's 0087 kovacs leg is next (cc's ask, on your order); its START follows.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "id": "01M5ABVW88VV8T2BHRP2Y1FA65",
+  "ts": "2026-10-19T15:18:16.584Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "todo",
+    "text": "Issues 0088 and 0090, dc's, in 2.14.1, both LANDED, local, not pushed. 0088 (version_dispatch.bats' own teardown() skipped the helper's cleanup; utilz_teardown and its guard, now on utilz-ic's _suites_missing_call after 0091) landed as c6da0b8 in slot 157, red and green in 154. 0090 (todo's mktemp-then-mv left a temp when the mv failed; one _write_replacing, temp beside the target, traps keyed on a global) landed as c50b08b in slot 169, red and green in 160, kovacs in 163. Remaining: each closes after hv's push and CI green on it. Size XS."
+  }
+}

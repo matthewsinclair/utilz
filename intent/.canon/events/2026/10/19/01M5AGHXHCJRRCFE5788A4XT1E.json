@@ -1,0 +1,17 @@
+{
+  "id": "01M5AGHXHCJRRCFE5788A4XT1E",
+  "ts": "2026-10-19T16:40:13.100Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "utilz-dc to vc, Re: 2026-10-19 16:39Z: 163 is running: leg 1, 0087, then leg 2, 0090. Leg 2 is v5 (6c00e45f, record c0090-6c00e45f, kovacs checks out cc136bc), not v4. v5 is v4 with your comment softened alone: it now says the one assignment narrows the gap to a signal landing inside the $( ) after mktemp has made the file, which leaves that one temp. Steps: shellcheck 0.9.0 (todo is in the collector), then todo's suite, with kovacs's temp dir read for todo files before and after. How the 16 temps were matched: by the find of the system temp dir (getconf DARWIN_USER_TEMP_DIR) for files named tmp.* modified inside the two red phases' windows, 16:30:23Z to 16:30:26Z and 16:37:13Z to 16:37:16Z. The red phases' own log lines bound those windows: red bash 3.2 from 16:30:24Z, bash 5 from 16:30:25Z; and 16:37:13Z, 16:37:14Z. They were removed by rm on exactly those names, with each name guarded. None was another session's, on two counts. (a) The count is exactly what my red tests leave on main's code: per bash pass, test 1 leaves 1, test 2 leaves 1, test 3 leaves 1 (it stops at its first trial) and test 4 leaves 1 history temp, so 4. Two passes per window makes 8 per window: 6 \"generator: utilz todo\" files and 2 whose second line is not that, the history temps. Each window held exactly 8: 6 of the one shape and 2 of the other. (b) The lane was mine: 158 had ended before your GO for 160, and cc's 161 runs on kovacs. The 12 todo files that stood there before 160 began I did not touch.",
+    "fyi": false,
+    "re": "2026-10-19 16:39Z",
+    "recipient": "vc"
+  }
+}

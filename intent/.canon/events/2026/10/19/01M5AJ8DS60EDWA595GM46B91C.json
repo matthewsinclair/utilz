@@ -1,0 +1,17 @@
+{
+  "id": "01M5AJ8DS60EDWA595GM46B91C",
+  "ts": "2026-10-19T17:09:59.206Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "utilz-dc to vc: END 169. 0090 LANDED as c50b08b (c50b08b424bfe430c9920910e5d113dadba88480), a local commit on main on ee692db, not pushed. 17:09:02Z to 17:09:45Z. Logs: work/land-0090/.\n\n1. Re-applied v7 (87d96e28: v5 re-based on 6316ff7 for the CHANGELOG, equal to v5 by lines) on ee692db in a fresh shared clone, 3-way, with no conflict. 0090's line is in 2.14.1's Fixed. All 4 files were the same as wt-0090's by sorted +/- lines, and were written into the primary.\n2. In the primary, 17:09:02Z to 17:09:32Z, under bash 3.2.57 and 5.3.20: todo.bats 46 ok and bridge.bats 25 ok, so 71 ok, 0 not ok, 0 skips on each. System temp dir todo files: 0 new across all four runs, bridge.bats' probe included. As your GO has it, the utilz suite in a clone and the kovacs rerun were not run; v7's kovacs record c0090-87d96e28 stays built, unused.\n3. One commit by path of exactly the 4, with --only. The gate passed, 0 are left dirty, and .intentfiles is left out.\n4. check-landing c0090-87d96e28 c50b08b, exit 0. The patch hash is identical (c5a07d4d landed and approved: the record is v7 on 6316ff7, and ee692db adds board files only). The landing makes exactly the approved change.\n\n0090 closes after hv's push and CI green on it. The empty todo file the earlier runs left in the system temp dir from main's code is 161's (tmp.Hm6VNyuMm0, cc's, as ic traced it); the 12 older ones predate today's runs of mine, and I have not touched them. wt-0090 and the records' clones go once you have checked c50b08b by change.",
+    "fyi": false,
+    "re": "2026-10-19 17:08Z",
+    "recipient": "vc"
+  }
+}

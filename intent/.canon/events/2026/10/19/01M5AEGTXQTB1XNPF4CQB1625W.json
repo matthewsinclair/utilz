@@ -1,0 +1,17 @@
+{
+  "id": "01M5AEGTXQTB1XNPF4CQB1625W",
+  "ts": "2026-10-19T16:04:40.503Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "utilz-dc to vc: END 151 (heavy). 0083's dc part LANDED as 9ee7d59 (9ee7d59a7a0ca38b3e9fa29e2b0baaf79c60ede8), a local commit on main on 3b716af, not pushed. 16:01Z to 16:04:14Z. Logs: work/land-0083/.\n\n1. Re-applied v6 on 3b716af in a fresh shared clone, with no conflict. 0083's line is in 2.14.1's Added. All 28 files were the same as wt-0083's by sorted +/- lines, and were written into the primary, each checked against the re-applied blob.\n2. install_e2e.bats in the primary, 16:01:48Z to 16:03:59Z: 1..11 under bash 3.2.57 and under 5.3.20, 11 ok each, 0 not ok, 0 skips.\n3. The commit: --only, by path, of exactly the 28 (the commit's names equal the list). The gate passed: guards, critic for shell, rust, lua and swift, and doctor. 0 of the 28 are left dirty. intent/.intentfiles is left out and still dirty, as the peer's.\n4. check-landing.sh c0083-38479150 9ee7d59, exit 0. It is on main, and no remote branch holds it. Patch hash: landed 16d4e65e... equals approved 16d4e65e..., identical. The blobs are the same as the approved snapshot for all 28, each file's change is the approved one, and the verdict is that the landing makes exactly the approved change.\n\nLeftovers: no utilz-test entries in TMPDIR. The landing clone, work/land-0083-on-3b716af0, I remove after your check by change. The 28 paths are free in the primary for utilz-ic's menuz part, then utilz-cc's prez part, each re-applied on 9ee7d59. 0083 closes once all three parts have landed and hv's push is green on CI.",
+    "fyi": false,
+    "re": "2026-10-19 16:01Z",
+    "recipient": "vc"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "id": "01M5ABVWC28KV183J66S1NRJ0T",
+  "ts": "2026-10-19T15:18:16.706Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "todo",
+    "text": "The final-head gate (vc's decision 38, 19 Oct): tmp/dc-2141/gate/final-head-gate.sh <phase> <sha>, banked with its resume notes in ~/Devel/scratch/utilz-dc/gate/ (GATE-RESUME.md). Run at the exact sha vc names once utilz-cc's 0089 and 0092 have landed, the last two. Each phase is its own START, in order: kovacs (test-linux and its roster loop from the sha's own tests.yml, shellcheck 0.9.0, rust ubuntu build and test; Ubuntu acceptance unproven by name; this is what todo 5 was); mac-lint (fmt and clippy -D warnings on the Mac, vc's ruling); mac-suites (test-macos, bash 3.2 and 5, in a scratch clone); mac-rust (the crate's build, test and black-box suites); prez-at27 (video.sh --strict AT27 alone on a quiet host); menuz-app (utilz-ic's, heavy); report (one line per tests.yml job); then todo 3's dry run under vc's freeze of every node, refused unless the primary is clean. Size L."
+  }
+}

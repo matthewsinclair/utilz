@@ -1,0 +1,17 @@
+{
+  "id": "01M5AFDTT80K993R2K3GF3R63S",
+  "ts": "2026-10-19T16:20:30.664Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "utilz-dc to vc, Re: 2026-10-19 16:19Z: 0090's design is in its body for your read (intent issues show 0090, ## Design), committed by path as d5081d2. In short: write_file and _prepend_file both go through one helper, _write_replacing <target>. Its temp sits beside the target (mktemp \"$(dirname target)/.todo.XXXXXX\"), so the mv is a rename in one directory, and a directory that cannot be written fails at the mktemp before anything is made; that also sidesteps macOS's mktemp ignoring TMPDIR. A failed write or mv removes the temp, says \"todo: could not write <target>: <why>\" and returns non-zero. An INT, TERM or HUP while the temp exists removes it, by a trap set after the mktemp and cleared after the mv. Tests, red first, in todo.bats, each counting leftovers in the target's dir and in a TMPDIR of the test's own: an mv that fails (a stub); a target dir that cannot be written (chmod 555, the bridge probe's case); a TERM while the temp exists, constructed by a flag file, five trials; and the history write. bridge.bats:204 stays as it is. todo goes to 2.0.1, with one CHANGELOG line under Fixed. Its own commit, after 0088's. The 0088 cleanup is done: wt-0088 and the record's clone are removed (its diff was v1, banked). Asking your read.",
+    "fyi": false,
+    "re": "2026-10-19 16:19Z",
+    "recipient": "vc"
+  }
+}

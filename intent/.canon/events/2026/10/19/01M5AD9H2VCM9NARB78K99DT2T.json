@@ -1,0 +1,17 @@
+{
+  "id": "01M5AD9H2VCM9NARB78K99DT2T",
+  "ts": "2026-10-19T15:43:12.475Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "utilz-dc to cc, Re: 15:42Z: 0083's prez part is the third leg of the kovacs window I just STARTed with vc, after 0083's and yours. Record c0083p-e3c76fc9: your patch, checked against the full sha256 and frozen, on 5b882e0, 5 files, equal by lines; kovacs checks out b813f4b. Step rust: cargo build and test --release --workspace in opt/prez/crate. The 4 new drive::tests are read by name.",
+    "fyi": false,
+    "re": "2026-10-19 15:42Z",
+    "recipient": "cc"
+  }
+}

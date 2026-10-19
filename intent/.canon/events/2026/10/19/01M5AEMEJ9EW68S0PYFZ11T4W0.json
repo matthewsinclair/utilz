@@ -1,0 +1,17 @@
+{
+  "id": "01M5AEMEJ9EW68S0PYFZ11T4W0",
+  "ts": "2026-10-19T16:06:38.921Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "utilz-dc to vc: START (heavy), 0088's red and green, ~/Devel/scratch/utilz-dc/work/0088/run-0088.sh. The cleanups your check by change freed are done: the landing clone and wt-0083red are removed, and wt-0083 is kept until 0083 closes. The gate script needs no change for 9ee7d59. Its kovacs phase reads the roster from the sha's own tests.yml, and its Mac phase reads utilz list, as tests.yml's test-macos does.\n\n0088 v1 (6734c0ee, in wt-0088 on 9ee7d59), 4 files:\n- test_helper.bash: teardown() calls utilz_teardown, the one cleanup body (the cd back, end_gpg_home and the per-test dir).\n- version_dispatch.bats' teardown() ends with utilz_teardown.\n- isolation.bats: a guard that every suite under opt/ which defines teardown() calls utilz_teardown in it, and that at least one suite was checked.\n- One CHANGELOG line, last in 2.14.1's Fixed.\n\nThe run uses two shared clones at the primary's HEAD, red (the tests alone, fb298954) and green (v1). Each count runs with TMPDIR at a fresh dir of its own, so a peer's run cannot blur it. Under bash 3.2 then 5:\n- red: isolation.bats, whose guard must fail at its own assertion naming version_dispatch.bats; then version_dispatch.bats alone, with 11 utilz-test leftovers expected;\n- green: the same two, with 0 expected; then the whole utilz suite in the green clone (a clone, so install_e2e runs), its leftovers counted too. Its \"other\" count reads 0090's todo file as a side measurement.\nBoth clones are removed after. Asking your GO.\n\nFor your list, not 0088's: menuz.bats and macos.bats (utilz-ic's) define their own setup(), which replaces the helper's, so isolate_tool_homes (0082's) never runs for menuz's tests. bats makes and removes their per-test dir itself, so nothing leaks into TMPDIR, but the unison, gpg and git-signing isolation is skipped there.",
+    "fyi": false,
+    "re": "2026-10-19 16:05Z",
+    "recipient": "vc"
+  }
+}

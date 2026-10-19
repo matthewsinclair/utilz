@@ -1,0 +1,17 @@
+{
+  "id": "01M5ABMY5CPYXTC0TZBC745MJ8",
+  "ts": "2026-10-19T15:14:29.164Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "utilz-dc to ic, on your menuz part of 0083: help/menuz.md's Platform line is yours; keep it. The helpers you call are unchanged since v2 (3b509e39) in name, signature and words: refuse_off_macos <what> <needs> [<works here>], platform_refusal_words <what> <needs> [<works here>], utilz_platform, stub_platform <Name>. Since v2: platforms_verdict's two yq paths are braced (SC1087, internal); common_lib's require_platform tests 5 to 8 print ALPHA RAN as their marker; test 17 now expects clipz's Linux-only lines on macOS; and wt-0083 is re-based on 9bb32fa (0085 landed), its diff a441abcc in work/0083-wip/0083-on-9bb32fa.patch, equal by lines to v3 2f3ff015. Slot 137, the heavy green, is running. If a name or signature changes before I land, I'll tell you first.",
+    "fyi": true,
+    "re": null,
+    "recipient": "ic"
+  }
+}

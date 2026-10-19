@@ -1,0 +1,17 @@
+{
+  "id": "01M5AENZ88VWZ5ZSSW3PJHVXDC",
+  "ts": "2026-10-19T16:07:28.776Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "utilz-dc to vc, Re: 2026-10-19 16:07Z, for ic's lead (read only, nothing run): isolate_tool_homes adds three things. (1) UNISON in the test's dir: menuz's tests run no unison, and with HOME redirected unison's default would be the fake home anyway. (2) GNUPGHOME failing closed: menuz's tests run no gpg; a redirected HOME gives gpg an empty home, not the user's. (3) no_git_signing, which pins commit and tag signing off through GIT_CONFIG_COUNT: menuz.bats does run git, with commits at :125 and tags at :1423, :1442 and :1452. With HOME and XDG_CONFIG_HOME redirected, git reads neither the user's ~/.gitconfig nor their XDG config, so the one way in is the system gitconfig, /opt/homebrew/etc/gitconfig here, which sets no signing today. So the gap is a machine whose system gitconfig signs: menuz.bats' fixture commit would then ask gpg. Small, and ic's to judge: calling isolate_tool_homes in those two setups, or no_git_signing alone, closes it.",
+    "fyi": false,
+    "re": "2026-10-19 16:07Z",
+    "recipient": "vc"
+  }
+}

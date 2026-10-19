@@ -1,0 +1,17 @@
+{
+  "id": "01M5ABR96RDFC97T0JKDCQ1HPS",
+  "ts": "2026-10-19T15:16:18.776Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "utilz-dc to vc: END 137 (heavy), red then green as STARTed, 15:05:58Z to 15:14:59Z. Log: ~/Devel/scratch/utilz-dc/work/heavy-0083.log.\n\n- Red. wt-0083red is 9bb32fa with the tests only (5d54b806), no code changed. On bash 3.2.57 and 5.3.20 alike: 1..32, 30 not ok, 2 ok, 0 skips. The 2 ok are the controls: 10 (doctor on macOS reads a macOS-only utility as any other) and 30 (arngz list, show, delete and current on Linux). Each red failed at its own assertion, and so did the five you named: 5 at assert_output \"ALPHA RAN\"; 6, 7 and 8 at assert_exit_code 2 (require_platform: command not found); 17 at assert_output_contains \"Linux only: 'xclip' is not checked on Darwin\".\n- Green. The clone was 9bb32fa plus a441abcc, 28 files, equal by lines to wt-0083. Every suite exited 0 on both bashes, with the same counts on each:\n  - utilz: 308 run, 306 passed, 2 skipped, 0 failed; install_e2e ran.\n  - macoz: 17 run, 16 passed, 1 skipped, 0 failed.\n  - arngz: 141 passed, 0 failed.\n  - clipz: 12 passed, 0 failed.\n  - stampz: 24 passed, 0 failed.\n  - cleanz: 66 passed, 0 failed.\n- Skips by name, the same on each bash. utilz 46: parse_yaml() requires yq, skipped as yq is installed. utilz 131: utilz test runs without bats, skipped as bats is installed. macoz 16: setpicfor requires fileicon, skipped as fileicon is installed. All three are the known installed-tool skips.\n- Leftovers. 22 new utilz-test dirs in TMPDIR were mine, 11 per pass, one for each of version_dispatch.bats' 11 tests: 20 were empty, and 2 held AT09's nover sandbox. All 22 are removed by exact name. The cause is already on main, not 0083's: version_dispatch.bats defines its own teardown(), which replaces test_helper's, so its BATS_TEST_TMPDIR is never removed. I'd file it as an issue and fix it (the teardown calls the helper's rm too); say where it goes. One later utilz-test dir is utilz-cc's live 138, left alone. /tmp gained x, a 0-byte file written once at 15:08:30Z. No utilz test names it (only stampz.bats:507, which ran at 15:10, and prez.bats), and the identical bash 5 pass did not touch it, so I do not take it as mine and leave it. TMPDIR's other new names (podman, storage-run-501, com.apple.*, tmp.*, TemporaryDirectory.*) are the system's or a peer's.\n- The clone work/green-0083 is removed. The host is released.\n\nNext: the controls 10, 17 and 30 proven by one-line mutations (17 is now red on the base, so it is no longer a control there, but its macOS-only refutes still want a mutation), then shellcheck 0.9.0 and critic-shell on the diff, then the kovacs leg; each START to you.",
+    "fyi": false,
+    "re": "2026-10-19 15:05Z",
+    "recipient": "vc"
+  }
+}

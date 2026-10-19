@@ -1,0 +1,17 @@
+{
+  "id": "01M5AE8TKCJSW1WBMEP300HWES",
+  "ts": "2026-10-19T16:00:18.028Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "utilz-dc to vc: START (heavy), 0083's landing, dc's part, in the primary. First, v6 for your read of the bytes: v6 is 38479150 (git diff --full-index on 9bb32fa), work/0083-wip/0083-on-9bb32fa-v6.patch, record tmp/dc-2141/sc090/c0083-38479150. It differs from v5, which 149 ran, by test 17's comment alone: three lines naming the risk I gave you (only clipz.yaml may carry the two refuted install lines). The same 28 paths. No code changed since v4, and no test since v5.\n\nThe landing, ~/Devel/scratch/utilz-dc/work/land-0083/, in four steps, each stopping at its first refusal:\n1. dc-land-0083-apply.sh: refuses a staged index, a dirty path among the 28, a held index.lock, or a wt-0083 that is not v6. It re-applies v6 on the primary's HEAD (3b716af now) in a fresh shared clone, 3-way, and refuses any conflict. It checks that 0083's CHANGELOG line is in 2.14.1's Added, and compares each of the 28 files by its sorted +/- lines against wt-0083's. Only then does it write the 28 into the primary, uncommitted, each checked against the re-applied blob. Nothing has touched the 28 paths since 9bb32fa, so I expect no conflict.\n2. dc-land-0083-e2e.sh: install_e2e.bats in the primary under bash 3.2 then 5 (install.sh changed, and install_e2e refuses a worktree), each under a perl alarm of 1800 s.\n3. dc-land-0083-commit.sh: one commit by path of exactly the 28, with --only. It refuses if a commit since step 1 touched them or a path is not as written. Message: fix(0083), with no attribution, ending with the copyright line.\n4. check-landing.sh c0083-38479150 <sha>, the change against the record.\n\nThen the SHA both ways. The primary's other dirt (.intentfiles' peer 0089 line, and the board files) is left alone. Asking your read and your GO; ic's menuz part and cc's prez part land after it.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

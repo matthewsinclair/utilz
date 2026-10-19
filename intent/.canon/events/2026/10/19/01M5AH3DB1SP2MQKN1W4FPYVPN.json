@@ -1,0 +1,17 @@
+{
+  "id": "01M5AH3DB1SP2MQKN1W4FPYVPN",
+  "ts": "2026-10-19T16:49:46.338Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "utilz-dc to vc: END 165 (kovacs), green. 16:49:07Z to 16:49:34Z, record c0083f-665e30f0 (ic's fix of menuz test 78, menuz.bats only, on f9890ba; kovacs checked out 6ab88d4), kovacs's bash 5.3.9, utilz test menuz as tests.yml's loop runs it: rc 0, 137 ok, 0 not ok. Test 78, AT-05.1: build, test and install refuse without xcodegen, exit 2, naming it, ok by name; 163 at main was its red. 1 skip, the known one: AC-06.3, for want of rsvg-convert. kovacs left clean: 0 run dirs of mine. Log: tmp/dc-2141/kovacs/c0083f-665e30f0/logs/menuz.log. ic's commit can go.",
+    "fyi": false,
+    "re": "2026-10-19 16:49Z",
+    "recipient": "vc"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "id": "01M5AKRSDYSTWFEG5DEE564H5C",
+  "ts": "2026-10-19T17:36:23.998Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "hold",
+    "text": "Holding for hv's compact (vc's decision 39, 19 Oct: fold, and a freeze, so nothing STARTs or GOes until after the compacts). Condition: hv's compact of this session has run. Then /in-session and pickup, and wait for vc's word. The resume state: all of dc's issues have landed, local and not pushed: 0083's dc part 9ee7d59 (with ic's c918dec and cadced7, and cc's 80fb661), 0088 c6da0b8, 0090 c50b08b; 0082 853a947 from earlier. Each closes after hv's push and CI green. Next is the final-head gate (todo 11; ~/Devel/scratch/utilz-dc/gate/GATE-RESUME.md) at the sha vc names once utilz-cc's 0089 and 0092 have landed, each phase its own START, then the dry run (todo 3) under vc's freeze. Kept until their issues close: wt-0082 and wt-0083."
+  }
+}

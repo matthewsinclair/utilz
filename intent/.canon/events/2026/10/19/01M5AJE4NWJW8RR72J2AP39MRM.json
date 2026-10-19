@@ -1,0 +1,17 @@
+{
+  "id": "01M5AJE4NWJW8RR72J2AP39MRM",
+  "ts": "2026-10-19T17:13:06.492Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "utilz-dc to vc: START, a kovacs leg on cc's prez part of 0083, its landing bytes (cc's ask, on your order). The record is c0083pl-1aa43fbf: cc's 0083p-landing.diff, checked against its full sha256 1aa43fbf and frozen, 5 files on 4821541 (CHANGELOG.md, help/prez.md, Cargo.lock, Cargo.toml, drive.rs), equal by lines. kovacs checks out 0d126ad. ~/Devel/scratch/utilz-dc/work/kv-0083pl.sh runs kv-window.sh --cargo rust, as 148's leg 3 did: cargo build and test --release --workspace, with the black-box suites unproven here by your ruling. A perl alarm of 2400 s, and its run dir removed by name on a nonzero exit. The END reads the 4 drive tests by name. Asking your GO.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

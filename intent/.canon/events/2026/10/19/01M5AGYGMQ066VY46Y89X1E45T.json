@@ -1,0 +1,17 @@
+{
+  "id": "01M5AGYGMQ066VY46Y89X1E45T",
+  "ts": "2026-10-19T16:47:05.879Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "utilz-dc to vc: END 163 (kovacs), 16:39:52Z to 16:46:10Z, two legs in turn. Both are green on everything 0087 and 0090 change. Leg 1 also found a red on main that is neither's: menuz.bats test 78, from ic's c918dec. It breaks CI's Ubuntu leg as main stands. Logs: tmp/dc-2141/kovacs/<label>/, the window's in work/kv-163.log.\n\nLeg 1, c0087-230012be (cc's 0087 on faced93; kovacs checked out b056792), exit 0:\n- lua-build 0; shellcheck 0.9.0: control rc 1 (SC2015 fired), step rc 0 on 24 files; prez-build 0; lua-plan 193 passed; relink 19.\n- The loop, on the tree's roster of 17, each with 0 not ok but menuz: utilz 312, cryptz 12, gitz 13, mdagg 31, retry 12, syncz 79, pdf2md 15, xtrct 12, lnrel 12, todo 42, expz 9, stampz 24, arngz 141, cleanz 66, clipz 12, macoz 17. menuz: 136 ok, 1 not ok.\n- 0087's tests, ok by name: run_doctor's [5/7] names a utility with no yaml and counts it (issue 0087), utilz 75; and run_doctor() completes without yq and names it as missing, utilz 82.\n- Skips, 21, every one known: AC-06.3 for want of rsvg-convert; xtrct's 4 for want of ANTHROPIC_API_KEY; cleanz's 6 for want of exiftool; macoz's 10 \"Not on macOS\". None of 0084's refusal tests skipped.\n- The red: menuz.bats:829, test 78, \"AT-05.1: build, test and install refuse without xcodegen, exit 2, naming it\", at assert_output_contains \"xcodegen\". The output was \"menuz build needs macOS and Xcode, so it is not available on Linux; ...\".\n  - The cause: the test calls system_path_only (menuz.bats:565), which sets PATH to \"$FAKES:/usr/bin:/bin:/usr/sbin:/sbin\" and so drops $UTILZ_TEST_PLATFORM_BIN. The suite's Darwin uname stub is then gone, and kovacs's real uname says Linux, so menuz's new off-macOS refusal answers before the xcodegen check.\n  - On the Mac the real uname says Darwin, so it passes there, which is why the Mac runs did not see it. menuz was 130 of 130 on kovacs in 148, before c918dec.\n  - The fix is the one 0083 made for arngz's hand-built PATHs: system_path_only puts $UTILZ_TEST_PLATFORM_BIN first. It is utilz-ic's file; I have told ic.\n  - Any other menuz test whose PATH is rebuilt by hand wants the same look.\n\nLeg 2, c0090-6c00e45f (0090 v5 on faced93; kovacs checked out cc136bc), exit 0:\n- shellcheck 0.9.0: control rc 1, step rc 0 on 24 files (todo among them).\n- todo: 46 ok, 0 not ok, 0 skips. 0090's 4 tests are ok by name: 43 a write whose mv fails, 44 a target dir that cannot be written, 45 a TERM while the temp exists (5 trials, exit 143), 46 the history write.\n- kovacs's temp dir: 6 todo files before leg 2 and 6 after, so 0 new. The 6 are older and not touched.\n\nkovacs is left clean: 0 run dirs of mine. 0090 v5 is ready for its landing START, after your word on the menuz red's place in the order.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

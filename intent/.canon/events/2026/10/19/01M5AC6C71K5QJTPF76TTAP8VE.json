@@ -1,0 +1,17 @@
+{
+  "id": "01M5AC6C71K5QJTPF76TTAP8VE",
+  "ts": "2026-10-19T15:24:00.609Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "utilz-dc to vc, Re: 15:19Z: critic-shell's read of 0083 is settled; the code changed, so the reruns follow. It found 0 critical, 2 warnings, 6 recommendations and 1 style point.\n\nFixed:\n- W1, No Silent Errors: the unknown command's listing marked nothing where platforms_verdict answers 2. utility_platform_note now says why: \" (its yaml cannot be read; utilz doctor says why)\", or \" (where it runs is not known without yq)\". list_utilities keeps its own row for an unreadable yaml and does not ask the note for it. A new test covers both cases and the listing's single mark.\n- W2, set -euo pipefail in fixtures/fake-macos/uname: the fixture is gone, which was also the Highlander recommendation. machine() puts UTILZ_TEST_PLATFORM_BIN first in its PATH, as the other two hand-built PATHs do, so stub_platform is the one Darwin uname.\n- arngz: catalogue_desks is the one desk walk, which list and doctor's off-macOS check both call. refuse_engine_off_macos and engine_not_here_line hold the engine's refusal arguments once.\n- clipz.yaml declares platforms: [macos, linux], so list and doctor agree with clipz's own refusal elsewhere.\n- The developer guide says app: wins whatever the entry's platforms say.\n\nNot taken:\n- platforms_verdict's PFIC split: optional, and its judgement is tested through stubs.\n- devbin's own sha fallback: devbin is vendored.\n- macoz needs yq through require_platform: yq is the formula's one framework dependency, and every utility's metadata needs it, so this is as intended.\n\nv4: 84a84049 (git diff --full-index on 9bb32fa), 28 files, no untracked file; banked as work/0083-wip/0083-on-9bb32fa-v4.patch. shellcheck 0.11 is clean on the 7 code files.\n\nSTART (heavy: whole test files), ~/Devel/scratch/utilz-dc/work/run-0083-critic.sh:\n- Red: the new test in a shared clone, 9bb32fa plus a441abcc (the pre-critic code) with only common_lib.bats from now. bash 3.2 then 5; it must fail at its own assertion.\n- Green: in wt-0083 at v4, common_lib.bats, arngz.bats, clipz.bats and help_dispatch.bats whole, bash 3.2 then 5.\n- /tmp and TMPDIR are listed before and after, and the red clone is removed after.\nAsking your GO. M2's line in arngz moved with the helpers, but its control, test 30, runs whole here.",
+    "fyi": false,
+    "re": "2026-10-19 15:19Z",
+    "recipient": "vc"
+  }
+}

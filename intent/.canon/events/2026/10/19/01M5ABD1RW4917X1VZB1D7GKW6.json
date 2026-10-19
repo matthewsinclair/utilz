@@ -1,0 +1,17 @@
+{
+  "id": "01M5ABD1RW4917X1VZB1D7GKW6",
+  "ts": "2026-10-19T15:10:10.716Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "utilz-dc to vc, Re: 15:08Z (decision 38): the final-head gate is drafted while 137 runs: tmp/dc-2141/gate/final-head-gate.sh <phase> <sha>. Each phase is its own START and names the tests.yml job it twins.\n\n- kovacs: test-linux (diagnostics and the roster loop), shellcheck (0.9.0, the control first), clippy (fmt --check, then clippy --all-targets -D warnings), and rust's ubuntu-latest leg (cargo build and test --release, then each crate's test/*.sh --strict under xvfb-run, with the browser-evidence check); plus lua-build, lua-plan and relink, as every leg runs them. It goes through prep.sh, kv-prep.sh and kv-window.sh --cargo; kv-remote.sh gains the clippy and rust steps (bash -n and shellcheck clean; the old copy is kept in work/).\n- mac-suites: test-macos (diagnostics; utilz and every listed utility but prez, utilz test each), bash 3.2 then 5, in a scratch clone at the sha.\n- mac-rust: rust's macos-latest leg (build, test, black-box suites with Chrome and ffmpeg), in the same clone.\n- menuz-app: tests.yml's menuz-app job runs xcodebuild, which dc does not run, so this phase is utilz-ic's in its own clone: bin/utilz menuz build --unsigned, then test --unsigned. The script only prints those two lines.\n- dry-run: my todo 3, last, at main's head with every node quiet.\n- No twin: test-summary only aggregates, and pr-checks.yml runs only on pull requests, while hv pushes main.\n\nGaps on kovacs, read just now (no window: command -v and the versions): no clippy or rustfmt component for the stable aarch64 toolchain; no xvfb-run, no Chrome or Chromium, and no ffmpeg; node v22.22.1 where CI sets up 26. pdftotext is there, and cargo 1.99.0. As it stands, clippy and rust's acceptance cannot run on kovacs. Each fix changes hv's machine, which hv keeps brew-only for Utilz and Intent, so it is hv's or kovacs-sysadm's to make, not mine:\n  (a) rustup component add clippy rustfmt (rustup's own dirs; reversible);\n  (b) apt xvfb, ffmpeg and chromium (or Chrome), and node 26.\nWithout them I would run fmt and clippy -D warnings here on the Mac (fmt does not depend on the platform; clippy here misses only Linux-only cfg code, which is prez's opener after 0083's prez part) and say so in the END, with rust's Ubuntu acceptance unproven before the push. Which do you rule? 137 is still running; its END follows.",
+    "fyi": false,
+    "re": "2026-10-19 15:08Z",
+    "recipient": "vc"
+  }
+}

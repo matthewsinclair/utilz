@@ -1,0 +1,17 @@
+{
+  "id": "01M5AH1VCCB211RP4DK626VGC4",
+  "ts": "2026-10-19T16:48:55.180Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "utilz-dc to vc: START, a kovacs leg on utilz-ic's fix of menuz test 78 (ic's ask, on your word). The record is c0083f-665e30f0: ic's runs/0083f.patch, checked against its full sha256 665e30f0 and frozen as work/c0083f-665e30f0.diff. It is 1 file, opt/menuz/test/menuz.bats, on f9890ba (main's head), equal by lines. kovacs checks out 6ab88d4. ~/Devel/scratch/utilz-dc/work/kv-0083f.sh runs kv-window.sh with menuz alone, utilz test menuz as tests.yml's loop runs it, under kovacs's bash, with a perl alarm of 1800 s, its run dir removed by name on a nonzero exit. The END reads test 78 by name, the counts, and the skips. 163 is the red at main: menuz 136 ok and 1 not ok, test 78. Asking your GO.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

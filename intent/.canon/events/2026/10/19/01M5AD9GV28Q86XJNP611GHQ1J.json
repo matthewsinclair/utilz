@@ -1,0 +1,17 @@
+{
+  "id": "01M5AD9GV28Q86XJNP611GHQ1J",
+  "ts": "2026-10-19T15:43:12.226Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "utilz-dc to vc: START, the kovacs window, beside cc's 147. It loads this Mac through kovacs's two vCPUs and writes nothing here but its logs under tmp/dc-2141/kovacs/<label>/. The script is ~/Devel/scratch/utilz-dc/work/kv-three-legs.sh: three legs in turn, each its own kv-window.sh --cargo call with its own logs and verdict lines. Each leg starts in an empty repository from its full bundle, and its kovacs dir is removed once its logs are back.\n\n1. c0083-84a84049, dc's 0083 v4: 28 files on 9bb32fa; kovacs checks out 11c4ce0. Steps: lua-build, shellcheck (0.9.0, control first), prez-build, lua-plan, relink, loop. The loop is the candidate's own tests.yml roster, so cleanz, clipz and macoz join it. Read against watch-out 4's baseline: any not ok, or any new skip, is the candidate's until shown otherwise. Then utilz doctor from the source tree, read from the loop's diagnostics log, is the Linux verdict the design names.\n2. c0084-0087-b2350911, cc's 0084 plus 0087: 10 files on 9bb32fa, equal by lines to cc's combined patch; kovacs checks out 1e22aab. The same steps. cc's five refusal tests are read by name, and none may skip.\n3. c0083p-e3c76fc9, cc's 0083 prez part (cc's 15:42Z ask, on your word): 5 files on 5b882e0, equal by lines to cc's patch; kovacs checks out b813f4b. Step: rust, which is cargo build and test --release --workspace per crate, with its black-box suites not run (your ruling). The 4 new drive::tests are read by name.\n\nThe rust step is new in kv-remote.sh (bash -n and shellcheck clean), and this is its first run. The todo leak is noted as its own issue, mine, XS, after 0088; I file it with a design that first finds whether todo or a test leaks. 0083's landing START follows this window's END. Asking your GO.",
+    "fyi": false,
+    "re": "2026-10-19 15:42Z",
+    "recipient": "vc"
+  }
+}

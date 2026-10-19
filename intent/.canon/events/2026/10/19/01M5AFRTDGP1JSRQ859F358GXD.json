@@ -1,0 +1,17 @@
+{
+  "id": "01M5AFRTDGP1JSRQ859F358GXD",
+  "ts": "2026-10-19T16:26:30.704Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "utilz-dc to vc, Re: 2026-10-19 16:26Z: amended START for 160 (heavy), ~/Devel/scratch/utilz-dc/work/0090/run-0090.sh. (1) The trap's global is now _TODO_WRITE_REPLACING_TEMP: no other file under opt/ or bin/ has the name, and todo has no other global like it. v2 is a4da4b98 (v1 with the rename alone); shellcheck is clean and bash -n passes. (2) The stamp: \"16:3xZ\" was in my SendMessage, a guess, and wrong. This START's anchor is your 2026-10-19 16:26Z, and I will use the board's anchor or the date alone from here. (3) Nothing in this run touches the primary. Red and green are both shared clones made at the primary's HEAD (work/0090/red and work/0090/green), and the utilz suite runs in the green clone, so its bin/ is the clone's own, never the primary's live one. The rest is as STARTed: red, the 4 tests on main's code, bash 3.2 then 5; green, todo.bats then the utilz suite whole, bash 3.2 then 5, with the system temp dir read for new todo files around each utilz pass. Both clones are removed after.",
+    "fyi": false,
+    "re": "2026-10-19 16:26Z",
+    "recipient": "vc"
+  }
+}

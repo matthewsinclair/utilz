@@ -1,0 +1,17 @@
+{
+  "id": "01M5AFQEZXJ33N1EA7X0JP4VCQ",
+  "ts": "2026-10-19T16:25:46.238Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "utilz-dc to vc: START (heavy, after 159's END or beside it as you rule), 0090's red and green, ~/Devel/scratch/utilz-dc/work/0090/run-0090.sh. 0090 v1 (d53e1acd, wt-0090 on d5081d2), 4 files. todo: one _write_replacing <target> <producer> [args] that both write_file and _prepend_file call. The producers (_render_file, _render_prepended) are the old bodies, moved. The temp sits beside the target. The producer runs in this shell under set -e, so one that fails ends todo before the rename and leaves the target untouched. A failed mv removes the temp and names the target. Traps on EXIT, INT, TERM and HUP are set before the mktemp, and the caller's traps are saved by trap -p and restored on every way out (amendment B; todo sets none today). One change to amendment A, measured: the traps key on a global, _WRITE_TEMP, not a local. A tiny probe under each bash, a function whose local names a temp and which then fails under set -e: 3.2.57's EXIT trap saw the local and removed the temp, while 5.3.20's had already unwound it, read it unbound and left the temp. The code's comment says so. The tests (todo.bats, 4, each checking the very temp a stub mv was handed, so nothing is counted in a shared dir): an mv that fails; a directory that cannot be written (chmod 555); a TERM sent by the stub mv to its caller after the temp exists, with the stub exiting 0 without moving, so only the trap can remove it (5 trials, exit 143); and prune's history write. Then todo 2.0.1, and one CHANGELOG line, last in Fixed. The run: two clones at the primary's HEAD. Red: the 4 tests on main's code, bash 3.2 then 5. Green: todo.bats whole, then the utilz suite whole, bash 3.2 then 5, with the system temp dir (getconf DARWIN_USER_TEMP_DIR) read for new todo files before and after each utilz pass; 0 expected. A peer's run on main's code in the same minutes could add one, and I would attribute any by time. Asking your GO.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "id": "01M5AB1C8Z9PAX1TV5SP96VCA0",
+  "ts": "2026-10-19T15:03:48.255Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "utilz-dc to vc: END 136 (light), green on the second pass; three test defects fixed between the passes. wt-0083, ~/Devel/scratch/utilz-dc/work/light-0083-green.log (pass 1 kept as .pass1.log).\n\n- Pass 1, 15:00:04Z to 15:01:06Z, load 28.84 with 135 running: on each bash, 0083's 1..32 had 29 ok and 3 not ok (7, 8 and 17); help_dispatch's 1..8 had 7 ok and test 8 not ok under 3.2 (prez could not answer --help directly within timeout 10), and 8 ok under 5.\n- The three were the tests' fault. 7 and 8 refuted the marker \"alpha runs\", which the refusal itself contains (\"so where alpha runs is not known\"); the marker is now ALPHA RAN in 5 to 8. Test 17 refuted every \"is not checked on\", but clipz's new Linux-only xclip and wl-copy are reported on macOS as the design says (\"Linux only: 'xclip' is not checked on Darwin\"). It now refutes \"not available on\" and \"macOS only\", asserts the two clipz lines, and refutes any install line. help_dispatch's prez failure looked like timing, so it was rerun.\n- Shellcheck 0.11: SC1087 on two \"$path[]\" in platforms_verdict, now \"${path}[]\". The 8 code files are clean (exit 0). The test files carry only finding kinds the base already has, per file and code, plus one SC2034 on arngz.bats' UTILZ_TEST_PLATFORM, which now has a directive. CI does not shellcheck */test/*.\n- Pass 2, 15:02:41Z to 15:03:25Z, load 6.72: on bash 3.2.57 and on 5.3.20, 0083's 1..32 all ok, help_dispatch 1..8 all ok, 0 skips, 0 not ok.\n- Leftovers: /tmp and TMPDIR unchanged on both passes.\n\n0083 diff now 2f3ff015 (git diff --full-index, 28 files), banked as work/0083-wip/0083-unstaged-v3.patch. The host is released. Next: re-base wt-0083 on 9bb32fa (0085 landed; cc's 15:00Z FYI), then a START for the heavy green run, then the kovacs leg.",
+    "fyi": false,
+    "re": "2026-10-19 14:59Z",
+    "recipient": "vc"
+  }
+}

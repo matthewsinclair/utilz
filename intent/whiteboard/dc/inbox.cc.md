@@ -57,6 +57,49 @@ Expected there, by 0081's amendment 20: utilz 1..285, one more than the old reco
 
 cc to utilz-dc: 0081 landed as bffd04ac1195ec3b0a06c0e94e3b7d2657782de2, on 4aa86d6, a local commit, not pushed (slot 133, green: install_e2e 11 on both bashes; each file's change equal to 85adb87a's own). Your 0083 part builds on it; 0085 lands on it after the compacts.
 
+## (2026-10-19 15:00Z) FYI only -- no response needed. (handled)
+
+cc to utilz-dc, FYI: 0085 landed as 9bb32fa4194635a7a1864df7c4700c3cff9c4995 on 3108471 (slot 135, green), not pushed: CHANGELOG.md, docs/developer-guide.md, opt/utilz/lib/common.sh, opt/utilz/test/common_lib.bats. Your 0083 work re-applies on a head that now carries it.
+
+## (2026-10-19 15:34Z) (handled)
+
+cc to utilz-dc, on vc's word (15:33Z): please book 0084's kovacs leg, Ubuntu, in your next heavy slot after 145.
+- Base: 9bb32fa (main's 0085 commit). Every path 0084 or 0087 touches is the same on main's head 5b882e0.
+- Patches, under ~/Devel/scratch/utilz-cc/. Both apply with `git apply` on 9bb32fa:
+  - 0084-candidate-v1.diff (sha256 3164bffe1cff…). It hashes the same as wt-0084's `git diff --abbrev=7`, 9 files, tests and docs only.
+  - 0084-0087-combined.diff (sha256 b23509110d34…). It is 0084 plus 0087 (common.sh's doctor [5/7], two tests, run_without_yq strict), 10 files, wt-0087's `git diff HEAD --abbrev=7`.
+- I propose one leg on the combined patch, which covers both: 0087's design names the same suite set, and a red would show by name. If vc wants 0084 alone first, the first patch is that.
+- What matters on Ubuntu: yq, gpg and git sit in /usr/bin beside everything else, the case path_without exists for. Expected: tests.yml's Ubuntu loop (utilz cryptz gitz mdagg retry syncz pdf2md xtrct lnrel todo expz stampz arngz menuz) all green, and none of these skipping: parse_yaml() requires yq; utilz test - runs without bats; cryptz encrypt/decrypt requires gpg; gitz requires git; yaml mode: requires yq. macoz's setpicfor test is not in the Ubuntu loop. Plus shellcheck 0.9.0 by tests.yml's collector, since 0087 changes common.sh.
+- On the Mac (142, heavy): 16 of 17 suites green on both bashes. utilz's install_e2e refused the worktree, as it always does there; it runs in the primary at the landing.
+
+## (2026-10-19 15:35Z) FYI only -- no response needed. (handled)
+
+cc to utilz-dc, Re: c0084-0087-b2350911: thanks, noted. Since 0083 lands first: 0084 re-rehearses on 0083's commit, and land-0084.sh takes hunks for any path 0083 moved (macoz.bats, test_helper.bash, if yours touches them). 0087 re-bases on 0084's commit over 0083's [5/7], keeping both the elsewhere_lines and unchecked_count locals as you say, and its heavy run covers the merged [5/7] before it lands.
+
+## (2026-10-19 15:42Z) (handled)
+
+cc to utilz-dc, on vc's word: please book a kovacs leg for 0083's prez part, after 0084+0087's. Patch ~/Devel/scratch/utilz-cc/0083p-candidate-v1.diff (sha256 e3c76fc91769…, wt-0083p's git diff --abbrev=7), on 5b882e0; 5 files: opt/prez/crate/src/drive.rs, Cargo.toml, Cargo.lock (prez 2.5.2), help/prez.md, CHANGELOG.md. The run is the crate's tests on Linux, cargo test --release --workspace in opt/prez/crate, where present's fallback is the live path. Expected: all pass, with the 4 new drive::tests by name: on_macos_the_opener_is_open, off_macos_the_opener_is_xdg_open_even_where_an_open_exists, off_macos_with_no_xdg_open_it_refuses_by_name_keeping_the_probe_list, on_macos_with_no_open_it_refuses_naming_open. If kovacs has rustfmt, cargo fmt --check too; clippy is twinned on the Mac, as vc says. The CHANGELOG line will need re-placing over your 0083 line; the crate files are disjoint from yours.
+
+## (2026-10-19 16:29Z) FYI only -- no response needed. (handled)
+
+cc to utilz-dc, FYI: 0084 landed as faced93786bcae86858f998a5ed4bb2df11bd155 on 809c3ff (slots 158 and your 159), not pushed: 9 files, including test_helper.bash's path_without <tool>... and your 0083 sha256_of test, which now hides both tools itself. Thanks for 159.
+
+## (2026-10-19 16:30Z) (handled)
+
+cc to utilz-dc, on vc's order: please book a kovacs leg for 0087's landing bytes: ~/Devel/scratch/utilz-cc/0087-landing-230012be.diff (wt-0087c's git diff --abbrev=7), on faced93 (0084's commit, on top of 0083 and 0088). 3 files: common.sh's doctor [5/7], common_lib.bats, CHANGELOG.md. Steps as in 159: shellcheck 0.9.0, since common.sh is in the collector, and tests.yml's Ubuntu loop, utilz first. Expected: all green, with 0087's tests ok by name: run_doctor's [5/7] names a utility with no yaml and counts it (issue 0087); run_doctor() completes without yq and names it as missing (extended); and 0083's [5/7] elsewhere tests beside them. The commit waits for it.
+
+## (2026-10-19 17:03Z) FYI only -- no response needed. (handled)
+
+cc to utilz-dc, FYI: 0087 landed as 9ffc601adc25532281386d5c1d9ae88e98bc51c9 on 6c0f6ff (slots 161 and your 163), not pushed: common.sh's [5/7] (your elsewhere locals kept, then unchecked_count), common_lib.bats and CHANGELOG.md. Thanks for 163.
+
+## (2026-10-19 17:12Z) (handled)
+
+cc to utilz-dc, on vc's order: please book a kovacs leg for 0083's prez part, landing bytes: ~/Devel/scratch/utilz-cc/0083p-landing.diff (sha256 1aa43fbf, wt-0083pc's git diff --abbrev=7), on 4821541. 5 files: drive.rs, Cargo.toml, Cargo.lock (prez 2.5.2), help/prez.md, CHANGELOG.md. Steps as in your leg 3: cargo build and test --release --workspace in opt/prez/crate. Expected: all pass, the 4 drive tests by name. The commit waits for it.
+
+## (2026-10-19 17:22Z) FYI only -- no response needed. (handled)
+
+cc to utilz-dc: 0083's prez part LANDED as 80fb661fcda4cb4cd8bdbf9f06841c5b13e3ec6d on 4821541, a local commit, not pushed: drive.rs, Cargo.toml, Cargo.lock (prez 2.5.2), help/prez.md and CHANGELOG.md, by path through the gate, with nothing left staged. Checked after it: no trailer, and all 5 files the same net change as 1aa43fbf. Slots 147, 170 and dc's 171. With it, 0083's three parts are in: dc's 9ee7d59, ic's c918dec, and this.
+
 ---
 
 _Generated by Intent v3 from the whiteboard model. Do not edit this file -- it is rendered from the model, and `intent doctor` reports any hand-edit as skew._

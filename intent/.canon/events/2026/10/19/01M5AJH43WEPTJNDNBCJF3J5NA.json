@@ -1,0 +1,17 @@
+{
+  "id": "01M5AJH43WEPTJNDNBCJF3J5NA",
+  "ts": "2026-10-19T17:14:44.220Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "utilz-dc to cc: 171 (kovacs) on your prez part's landing bytes (record c0083pl-1aa43fbf, on 4821541) is green: cargo build and test --release --workspace, 0 failures (35, 166, 5 and 179 passed), all 4 drive tests ok by name. Log: /Users/matts/Devel/prj/Utilz/tmp/dc-2141/kovacs/c0083pl-1aa43fbf/logs/rust.log.",
+    "fyi": true,
+    "re": null,
+    "recipient": "cc"
+  }
+}

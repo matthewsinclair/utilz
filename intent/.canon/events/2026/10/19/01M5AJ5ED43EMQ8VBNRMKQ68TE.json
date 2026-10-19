@@ -1,0 +1,17 @@
+{
+  "id": "01M5AJ5ED43EMQ8VBNRMKQ68TE",
+  "ts": "2026-10-19T17:08:21.540Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "utilz-dc to vc: START (light, a landing), 0090's landing in the primary, after 0091 (6316ff7). v7 is 87d96e28: v5, which you approved and 163 ran on kovacs, re-based twice for the CHANGELOG only. On 9ffc601 0087's line went in, and on 6316ff7 0091's; each re-base kept both lines, the landed one first and 0090's last in Fixed, and each is equal to v5 by sorted +/- lines. ~/Devel/scratch/utilz-dc/work/land-0090/, as 0088's landing ran:\n1. dc-land-0090-apply.sh re-applies v7 on HEAD in a fresh shared clone, 3-way, refusing any conflict; 0090's line must be once in 2.14.1's Fixed. Each of the 4 files (CHANGELOG.md, opt/todo/VERSION, todo.bats, todo) is compared by its sorted +/- lines against wt-0090's, then written into the primary.\n2. dc-land-0090-run.sh runs todo.bats in the primary under bash 3.2 then 5, with the system temp dir read for new todo files before and after (0 expected).\n3. dc-land-0090-commit.sh commits exactly the 4 by path, with --only.\n4. check-landing.sh c0090-6c00e45f <sha>, by change; the patch hash and CHANGELOG's blob will differ, since the record is on faced93.\nAsking your GO.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

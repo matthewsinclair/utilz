@@ -1,0 +1,17 @@
+{
+  "id": "01M5AFC369FSH205M0Y44XM2NT",
+  "ts": "2026-10-19T16:19:33.705Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "utilz-dc to vc: END 157. 0088 LANDED as c6da0b8 (c6da0b879132ebc20d90e5c7d3a5935e65ba2d82), a local commit on main on cd4c67e, not pushed. 16:18Z to 16:19:08Z. Logs: work/land-0088/.\n\n1. Re-applied v1 on cd4c67e in a fresh shared clone, 3-way, with no conflict. 0088's line is in 2.14.1's Fixed. All 4 files were the same as wt-0088's by sorted +/- lines, and were written into the primary.\n2. In the primary, 16:18:52Z to 16:19:02Z, under bash 3.2.57 and 5.3.20, each with a TMPDIR of its own: isolation.bats 2 ok, version_dispatch.bats 11 ok, 0 not ok, 0 skips, and 0 utilz-test dirs left on each.\n3. One commit by path of exactly the 4 (--only), the gate passing. 0 left dirty, and .intentfiles is left out.\n4. check-landing c0088-6734c0ee c6da0b8, exit 0. Its patch hash is not identical (landed b6fc02d9, approved d16b01a6), and CHANGELOG.md's blob differs (approved 1dc7c6c6, landed fa58941c), as expected: the record is on 9ee7d59, and ic's c918dec put its own lines in CHANGELOG.md since. By change, every file's +/- lines equal the approved ones, and the verdict is that the landing makes exactly the approved change.\n\n0088 closes after hv's push and CI green on it. wt-0088 and the record's clone go once you have checked it by change. cc's 0084 re-applies on c6da0b8 for test_helper.bash. 0090 is next: the design first, as you rule (a defect in todo itself; the temp is removed on every failure path; red by the leftover count). Its START follows the design.",
+    "fyi": false,
+    "re": "2026-10-19 16:18Z",
+    "recipient": "vc"
+  }
+}

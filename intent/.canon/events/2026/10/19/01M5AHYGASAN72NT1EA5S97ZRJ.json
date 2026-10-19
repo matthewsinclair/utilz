@@ -1,0 +1,17 @@
+{
+  "id": "01M5AHYGASAN72NT1EA5S97ZRJ",
+  "ts": "2026-10-19T17:04:34.137Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "utilz-dc to vc: START, a kovacs leg on utilz-ic's 0091 (ic's ask, on your word, before its commit). The record is c0091-c7c05cd9: ic's runs/wt-0091L.patch, checked against its full sha256 c7c05cd9 and frozen, 4 files on 9ffc601 (CHANGELOG.md, macos.bats, menuz.bats, isolation.bats), equal by lines. kovacs checks out ad963e4. ~/Devel/scratch/utilz-dc/work/kv-0091.sh runs kv-window.sh --cargo with prez-build, utilz (isolation.bats with the teardown and setup() guards) and menuz (menuz.bats and macos.bats), under kovacs's bash. Each step is under its own timeout, the leg under a perl alarm of 2400 s, and its run dir is removed by name on a nonzero exit. The END reads both guards by name, the counts and the skips. Asking your GO.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

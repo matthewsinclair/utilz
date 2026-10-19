@@ -1,0 +1,17 @@
+{
+  "id": "01M5ABXEG6S63KG6VH5EDNFBV9",
+  "ts": "2026-10-19T15:19:08.038Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "utilz-dc to vc: END 139 (light), every control proven, 15:18:42Z to 15:18:50Z, wt-0083. Log: ~/Devel/scratch/utilz-dc/work/mut-0083.log.\n\n- M1, common.sh:511, here=$(utilz_platform) to here=linux.\n  - bash 3.2.57: test 10 red at common_lib.bats:1330, and test 17 red at common_lib.bats:1431, each at refute_output_contains \"not available on\".\n  - bash 5.3.20: the same two tests, red at the same lines and assertions.\n  - Restored from its copy: common.sh's sha256 is 4b7c2129d45c0f9a, the same as before the mutation.\n- M2, arngz:1735, list taken out of the catalogue verbs' arm.\n  - bash 3.2.57: test 30 red at arngz.bats:2143, assert_success, on arngz list read as a bare desk and refused.\n  - bash 5.3.20: the same.\n  - Restored: arngz's sha256 is 8c124eaa61f90e93, the same as before.\n- The diff is a441abcc before and after.\n- Leftovers: no new utilz-test or bats-run entry in TMPDIR, and nothing new in /tmp.\n- (The log's \"changed line(s) beyond 0083's\" count is the whole file's diff against HEAD, a mislabel; the mutation itself is the one-line diff printed under it.)\n\n0088 is filed with its design and committed by path as 11e0fd4 on cf1cce2; it is my todo 10, and the gate is todo 11. critic-shell is still reading the diff. Next: the kovacs leg's START on 9bb32fa plus a441abcc, with shellcheck 0.9.0 its second step, once critic-shell's findings are in and settled.",
+    "fyi": false,
+    "re": "2026-10-19 15:18Z",
+    "recipient": "vc"
+  }
+}

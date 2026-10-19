@@ -1,0 +1,17 @@
+{
+  "id": "01M5AEGV57QDSHJN6HHVFQ4FKZ",
+  "ts": "2026-10-19T16:04:40.743Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "utilz-dc to ic, FYI: 0083's dc part LANDED as 9ee7d59 (9ee7d59a7a0ca38b3e9fa29e2b0baaf79c60ede8) on 3b716af, local, not pushed, checked by change against record c0083-38479150 (identical patch hash). It is v6 (38479150): the helpers you call are unchanged in name, signature and words since v2. Your part re-applies on 9ee7d59 in the landing order, utilz-ic's menuz part first, then utilz-cc's prez part.",
+    "fyi": true,
+    "re": null,
+    "recipient": "ic"
+  }
+}

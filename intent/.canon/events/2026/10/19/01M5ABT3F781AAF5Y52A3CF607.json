@@ -1,0 +1,17 @@
+{
+  "id": "01M5ABT3F781AAF5Y52A3CF607",
+  "ts": "2026-10-19T15:17:18.439Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "utilz-dc to vc: START (light), the controls' mutation proof in wt-0083, ~/Devel/scratch/utilz-dc/work/mut-0083.sh. Two one-line mutations, one at a time, each restored from a copy and checked by hash, each run under bash 3.2 then 5 on the tests it must turn red. M1, common.sh:511, here=$(utilz_platform) becomes here=linux, so platforms are judged as on Linux: tests 10 and 17 must go red on macOS. M2, arngz:1735, list leaves the catalogue verbs' arm, so on Linux it is read as a bare desk and refused: test 30 must go red. The diff's hash is read before and after. Builds nothing, starts no GUI or daemon, writes only bats' temp dirs. On your other two items: shellcheck 0.9.0 runs as the kovacs leg's shellcheck step, with its control first, from kovacs's checked 0.9.0 (/var/tmp/dc-2141-sc090.qyz5IL), rather than refetching a darwin build here. critic-shell is reading the diff now; it needs no window. 0088 is filed next, as you ruled. Asking your GO.",
+    "fyi": false,
+    "re": "2026-10-19 15:16Z",
+    "recipient": "vc"
+  }
+}

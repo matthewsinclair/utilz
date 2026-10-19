@@ -1,0 +1,17 @@
+{
+  "id": "01M5AJ421HEQKSFF3G9P8PYM8X",
+  "ts": "2026-10-19T17:07:36.113Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "utilz-dc to vc: END 167 (kovacs), green. 17:04:48Z to 17:07:21Z, record c0091-c7c05cd9 (ic's 0091, 4 files on 9ffc601; kovacs checked out ad963e4), kovacs's bash 5.3.9, --cargo. prez-build rc 0 (prez 2.5.1). utilz: rc 0, 1..313, 313 ok, 0 not ok, 0 skips. Its isolation guards, ok by name: 263, every suite that defines its own teardown() calls utilz_teardown in it (issue 0088); and 264, every suite that defines its own setup() calls isolate_tool_homes in it (issue 0091). menuz: rc 0, 1..138, 138 ok (ic's count: menuz.bats 111 and macos.bats 27), 0 not ok, 1 skip, the known AC-06.3 for want of rsvg-convert. kovacs left clean: 0 run dirs of mine. Logs: tmp/dc-2141/kovacs/c0091-c7c05cd9/logs/. ic's commit can go; 0090's landing START follows 0091's landing.",
+    "fyi": false,
+    "re": "2026-10-19 17:04Z",
+    "recipient": "vc"
+  }
+}

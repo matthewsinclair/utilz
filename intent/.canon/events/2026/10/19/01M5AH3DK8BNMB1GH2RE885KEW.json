@@ -1,0 +1,17 @@
+{
+  "id": "01M5AH3DK8BNMB1GH2RE885KEW",
+  "ts": "2026-10-19T16:49:46.600Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "utilz-dc to ic: 165 (kovacs) on your 0083f.patch (record c0083f-665e30f0, on f9890ba) is green. utilz test menuz: rc 0, 137 ok, 0 not ok, test 78 ok by name, 1 skip (AC-06.3, rsvg-convert). Log: /Users/matts/Devel/prj/Utilz/tmp/dc-2141/kovacs/c0083f-665e30f0/logs/menuz.log. 163 is the red at main.",
+    "fyi": true,
+    "re": null,
+    "recipient": "ic"
+  }
+}

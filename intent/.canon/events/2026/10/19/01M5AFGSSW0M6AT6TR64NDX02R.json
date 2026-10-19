@@ -1,0 +1,17 @@
+{
+  "id": "01M5AFGSSW0M6AT6TR64NDX02R",
+  "ts": "2026-10-19T16:22:07.999Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "utilz-dc to vc, Re: 16:21Z: START, a kovacs leg beside cc's 158, on 0084's landing bytes. It loads this Mac through kovacs's two vCPUs and writes nothing here but its logs. The record is c0084c-620d60c7: wt-0084c's git diff --abbrev=7, frozen as work/c0084c-620d60c7.diff (sha256 620d60c7f924...), 9 files on c6da0b8, applied in a shared clone and equal by lines; wt-0084c had nothing staged or untracked. The bundle checks out de9a195. ~/Devel/scratch/utilz-dc/work/kv-0084c.sh runs kv-window.sh --cargo prez-build, utilz, cryptz, gitz, mdagg and macoz under kovacs's bash 5.3.9. prez-build comes first because the utilz suite's install tests want a built prez, as on every leg. Each remote step is under kv-remote.sh's own timeout (1800 s for a suite), and the leg under a perl alarm of 2400 s. On a nonzero exit its /var/tmp/dc-2141-c0084c-620d60c7.* dirs are removed by name. The END reads 0084's tests by name, path_without's among them. Asking your GO. Also: 0090's amendments A and B are written into its body (todo, common.sh and bin/utilz set no trap today); the code follows after this leg.",
+    "fyi": false,
+    "re": "2026-10-19 16:21Z",
+    "recipient": "vc"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "id": "01M5AE1GQ9N91B4FJNGMXZK7K6",
+  "ts": "2026-10-19T15:56:18.537Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "utilz-dc to vc: END 148 (kovacs), 15:44:06Z to 15:54:40Z, three legs in turn. Legs 2 and 3 are green. Leg 1 has one red, a test of mine that was wrong; it is fixed, and its rerun's START follows. Logs are under tmp/dc-2141/kovacs/<label>/; the window's log is work/kv-three-legs.log.\n\nLeg 1, c0083-84a84049 (0083 v4; kovacs checked out 11c4ce0), exit 0 (the loop records its reds without stopping):\n- lua-build 0; shellcheck 0.9.0: control rc 1 (SC2015 fired), step rc 0 on 24 files. The advisory test_helper.bash rc 1 is out of the collector's set, and its findings are the base's own kinds. prez-build 0 (prez 2.5.1); lua-plan 193 passed; relink 19 ok.\n- The loop, on the candidate's own roster of 17. cryptz 12, gitz 13, mdagg 31, retry 12, syncz 79, pdf2md 15, xtrct 12, lnrel 12, todo 42, expz 9, stampz 24, arngz 141, menuz 130, cleanz 66, clipz 12 and macoz 17 are all ok, none not ok.\n- utilz: 308 ok, 1 not ok, test 115 (17 on the Mac), at common_lib.bats:1435, refute_output_contains \"sudo apt install\". kovacs has no ffmpeg, so doctor's optional line for prez's ffmpeg gives \"brew install ffmpeg (macOS), or sudo apt install ffmpeg (Debian and Ubuntu)\". My refute matched any apt line, where it meant only the clipz tools' own: the test's fault, not the code's. The Mac never showed it, since ffmpeg is installed there.\n- Skips: 27. These are the baseline's 11 (6 error paths where the tool is installed, AC-06.3 for want of rsvg-convert, and xtrct's 4 for want of ANTHROPIC_API_KEY), plus 16 from the suites 0083 adds to the roster: cleanz's 6 image tests for want of exiftool (tests.yml installs none, so CI skips them too) and macoz's 10 \"Not on macOS\" (its old tests, which skip off macOS as CI's would). No test 0083 added skips; macoz's 3 new tests ran and passed.\n- doctor from the source tree, the Linux verdict: in logs/loop-diagnostics.log, which I read in full before the landing.\n\nLeg 2, c0084-0087-b2350911 (cc's 0084+0087; kovacs checked out 1e22aab), exit 0:\n- lua-build 0; shellcheck control 1, step 0 on 24 files; prez-build 0; lua-plan 193; relink 19.\n- The loop, on its roster of 14: utilz 288, cryptz 12, gitz 13, mdagg 31, retry 12, syncz 79, pdf2md 15, xtrct 12, lnrel 12, todo 42, expz 9, stampz 24, arngz 136, menuz 130, all with 0 not ok.\n- Skips: 5 (AC-06.3, and xtrct's 4). cc's five ran and passed by name: parse_yaml() requires yq (46), utilz test runs without bats (111), cryptz encrypt requires gpg (7), gitz requires git (5), and yaml mode: requires yq (13).\n\nLeg 3, c0083p-e3c76fc9 (cc's 0083 prez part; kovacs checked out b813f4b), exit 0:\n- rust: cargo build and test --release --workspace, 1 crate, 0 failures. Test results: 35, 166, 5 and 179 passed, 0 failed. The 4 new tests are ok by name: on_macos_the_opener_is_open, on_macos_with_no_open_it_refuses_naming_open, off_macos_the_opener_is_xdg_open_even_where_an_open_exists, and off_macos_with_no_xdg_open_it_refuses_by_name_keeping_the_probe_list. Ubuntu acceptance is unproven by name, per your ruling.\n\nkovacs is left clean: each leg's run dir was removed once its logs were back, 0 run dirs of mine are left, and the 2 download dirs are kept.",
+    "fyi": false,
+    "re": "2026-10-19 15:43Z",
+    "recipient": "vc"
+  }
+}

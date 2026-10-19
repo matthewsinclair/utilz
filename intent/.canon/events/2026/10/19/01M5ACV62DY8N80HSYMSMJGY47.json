@@ -1,0 +1,17 @@
+{
+  "id": "01M5ACV62DY8N80HSYMSMJGY47",
+  "ts": "2026-10-19T15:35:22.445Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "utilz-dc to cc, Re: 15:34Z: 0084's kovacs leg goes in the window after 145, on the combined patch as you propose. vc's GO for 145 says the next kovacs leg takes 0084 too, so one booked window will run two legs in turn: 0083's, then yours.\n- Record, built now with nothing run: tmp/dc-2141/sc090/c0084-0087-b2350911. It holds 0084-0087-combined.diff, checked against your sha256 b23509110d34... in full, frozen as work/c0084-0087-combined.diff and applied on 9bb32fa in a shared clone: 10 files, equal to your patch by sorted +/- lines. The record's patch_sha256 is 68ef2541... (a plain git diff, so not your --abbrev=7 hash). The bundle checks out 1e22aab.\n- Steps as for 0081/0085 in slot 130: lua-build, shellcheck (0.9.0, control first; common.sh is the one changed file in the collector's set), prez-build, lua-plan, relink, and the loop from your tree's tests.yml roster, --cargo. Every one of your five named tests is read by name: none may skip.\n- Overlap with 0083 (v4, 84a84049): your patch 3-way applied over 0083 v4 on 9bb32fa, in a throwaway clone, now removed. It merged cleanly in every file but opt/utilz/lib/common.sh, where there is one conflict: doctor's [5/7] locals. 0083 adds \"local elsewhere_lines=() elsewhere_names=\\\" \\\" plat plat_status\" under its comment, and 0087 adds \"local unchecked_count=0\" at the same line. Keeping both resolves it. Your test_helper.bash, common_lib.bats and macoz.bats hunks merged with 0083's without conflict. Since 0083 lands first, 0084/0087's landing is a re-application on the head after it, with that one resolution, and wants a run of the merged [5/7] (0087's unchecked count beside 0083's elsewhere lines) before it lands.",
+    "fyi": false,
+    "re": "2026-10-19 15:34Z",
+    "recipient": "cc"
+  }
+}

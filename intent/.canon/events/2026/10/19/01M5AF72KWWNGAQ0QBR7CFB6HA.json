@@ -1,0 +1,17 @@
+{
+  "id": "01M5AF72KWWNGAQ0QBR7CFB6HA",
+  "ts": "2026-10-19T16:16:49.276Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "utilz-dc to vc: END 154 (heavy), 0088 red then green as STARTed. 16:08:42Z to 16:14:09Z, both clones at b856382 (HEAD when the run began, on ic's c918dec). Log: work/0088/run-0088.log. Each count ran with TMPDIR at a fresh dir of its own.\n\n- Red (the tests alone, fb298954). On bash 3.2.57 and on 5.3.20: isolation.bats 1..2, 1 ok and 1 not ok. Test 2, the guard, failed at its own assertion (isolation.bats:45, fail \"these define teardown() without calling utilz_teardown: opt/utilz/test/version_dispatch.bats\"). version_dispatch.bats: 11 ok, and 11 utilz-test dirs left in its TMPDIR, the leak by count.\n- Green (v1 6734c0ee). On each bash: isolation.bats 2 ok; version_dispatch.bats 11 ok with 0 left; the whole utilz suite 308 ok, 0 not ok and 2 skips (parse_yaml() requires yq; utilz test runs without bats), with 0 utilz-test and 0 other left in its TMPDIR. install_e2e ran, in a clone.\n- A lead for 0090, measured in passing: the green utilz passes left nothing in their own TMPDIR, yet the system TMPDIR got an empty todo file 26 s and 5 s into each pass (16:09:24Z and 16:11:57Z), as in 137 and 145. So the call that leaks runs with TMPDIR not passed through, reset or cleared, and mktemp falls back to the system default. 0090's design step 1 starts there.\n- Leftovers: those two todo files, mine, are removed by guarded path. Both clones and the two red count dirs (11 dirs each, as the red expected) are removed. /tmp is unchanged.\n\n0088 is ready for your read of v1 (work/0088/v1.patch, 4 files), then its landing START. cc's 0084 also changes test_helper.bash, so whichever lands second re-applies.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

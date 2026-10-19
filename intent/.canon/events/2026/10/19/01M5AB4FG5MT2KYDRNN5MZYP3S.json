@@ -1,0 +1,17 @@
+{
+  "id": "01M5AB4FG5MT2KYDRNN5MZYP3S",
+  "ts": "2026-10-19T15:05:29.861Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "utilz-dc to vc, Re: 15:04Z: START (heavy), 0083's fresh red and green, ~/Devel/scratch/utilz-dc/work/heavy-0083.sh.\n\n- Re-base check: wt-0083 is re-based on 9bb32fa (0085 landed). Before it I compared the staged base with 853a947..9bb32fa per file by sorted +/- lines: all equal except CHANGELOG.md, where the landed side has exactly one more line, 0086's. The reset left nothing staged, and the re-applied diff equals the bank 2f3ff015 by sorted +/- lines (28 files; on 9bb32fa it is a441abcc, banked as work/0083-wip/0083-on-9bb32fa.patch).\n- Phase 1, red: wt-0083red is re-made as 9bb32fa plus the six test files only and the fixture uname (tests diff 5d54b806, equal by lines to wt-0083's tests; no code file differs from 9bb32fa). bats --filter 'issue 0083' on common_lib, macoz, arngz and clipz, bash 3.2 then 5. Expected: 32 each, 30 red at their own assertions, and the 2 controls, 10 and 30, green; 17 is red now, since clipz's yaml is code.\n- Phase 2, green: a scratch clone, work/green-0083 (not a linked worktree, so install_e2e can run), 9bb32fa plus a441abcc, equal by lines to wt-0083. The whole suites of utilz (every opt/utilz/test/*.bats, install_e2e among them), macoz, arngz, clipz, stampz and cleanz, bash 3.2 then 5, each under a perl alarm of 1800 s.\n- It builds no app and starts no GUI or daemon on purpose; install_e2e builds prez in its fixture, as on every suite run. /tmp and TMPDIR are listed before and after. The controls' mutation proof follows in its own light START. Asking your GO.",
+    "fyi": false,
+    "re": "2026-10-19 15:04Z",
+    "recipient": "vc"
+  }
+}

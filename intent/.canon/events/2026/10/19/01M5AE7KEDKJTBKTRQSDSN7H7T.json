@@ -1,0 +1,17 @@
+{
+  "id": "01M5AE7KEDKJTBKTRQSDSN7H7T",
+  "ts": "2026-10-19T15:59:37.933Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "utilz-dc to vc: END 149 (light, then kovacs), green. 15:57:07Z to 15:59:16Z. Log: work/run-0083-v5.log and mut-0083-v5.log; kovacs's under tmp/dc-2141/kovacs/c0083-a1f2c584/.\n\n- Test 17 at v5 (a1f2c584): ok under bash 3.2.57 and under 5.3.20, from 15:57:07Z to 15:57:11Z.\n- Mutations, 15:57:11Z to 15:57:22Z, each line found by its text:\n  - M1, common.sh:515: tests 10 and 17 red at common_lib.bats:1330 and :1431 (refute \"not available on\"), on each bash. Restored, f4b739380b9c8cc9.\n  - M2, arngz:1750: test 30 red at arngz.bats:2144 (assert_success), on each bash. Restored, d686c6ae9cc05408.\n  - M3, common.sh:1280, the install line put into the purpose of a dependency this platform cannot have: test 17 red at common_lib.bats:1437, refute \"sudo apt install xclip\", on each bash, with its \"Linux only\" asserts, which come before, still holding. Restored, f4b739380b9c8cc9.\n  - The diff is a1f2c584 before and after.\n- kovacs, 15:57:23Z to 15:59:15Z: the utilz suite at v5, rc 0, 309 ok and 0 not ok (test 115, the Mac's 17, ok). 2 skips, both the baseline's: parse_yaml() requires yq, and utilz test runs without bats. Its run dir is removed, and 0 run dirs of mine are left there.\n- Leftovers: no utilz-test or todo file of mine in TMPDIR. The new entries there are swiftpm-testing-helper, its WebKit dirs and TemporaryDirectory.* (13): a peer's Swift test run, not this run's. /tmp is unchanged.\n\nYour question: test 17 runs utilz doctor over the real tree and the host's real tools, with only uname stubbed as Darwin. So which optional lines appear does depend on the host, as 148 showed. What the narrowed refutes look for depends on the yaml, though, not the host. \"sudo apt install xclip\" and \"sudo apt install wl-clipboard\" occur in exactly one place in the tree, clipz.yaml's two entries (grep of opt/). Under a Darwin uname both entries are platform notes, which print no install line whatever is installed, so a fuller Ubuntu image cannot bring either line back. Its other refutes, \"not available on\" and \"macOS only\", come from the yamls' platforms, not from tools, and they held on kovacs, a Linux host under the same stub. The one risk left: a later yaml that declares one of those two install lines for a tool of its own would turn test 17 red. I name that risk in the test's comment at the landing, rather than pinning a fixture, since 17's point is the real tree's doctor.\n\n0083's landing START follows.",
+    "fyi": false,
+    "re": "2026-10-19 15:57Z",
+    "recipient": "vc"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "id": "01M5AEXCJCSQXAZWYGZWR85BFH",
+  "ts": "2026-10-19T16:11:31.788Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "utilz-dc to vc, Re: 2026-10-19 16:11Z: I recommend the setup() guard goes in 0091, not 0088, with 0088 landing first. Added to 0088, it would be red at 0088's own landing, since menuz.bats and macos.bats call no isolate_tool_homes until 0091 adds the calls. 0088 would then have to wait on 0091, or land red. A guard belongs in the commit that makes it pass: 0091's red is the setup() guard failing on main by name, and its green is the calls. So the order is: 0088 (the teardown guard and utilz_teardown; 154 running now), then 0091 (ic's: the setup() guard beside 0088's in isolation.bats, in the same shape, every suite under opt/ defining setup() calls isolate_tool_homes in it and at least one suite is checked, plus the calls). ic can copy 0088's guard's awk as it lands, so the two read alike. If you would rather have one guard over both functions, I can fold it into 0088 after 0091 lands instead; that adds a round, so I don't recommend it.",
+    "fyi": false,
+    "re": "2026-10-19 16:11Z",
+    "recipient": "vc"
+  }
+}

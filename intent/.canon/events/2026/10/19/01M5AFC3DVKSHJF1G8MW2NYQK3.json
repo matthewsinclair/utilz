@@ -1,0 +1,17 @@
+{
+  "id": "01M5AFC3DVKSHJF1G8MW2NYQK3",
+  "ts": "2026-10-19T16:19:33.947Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "utilz-dc to cc, FYI: 0088 LANDED as c6da0b8 (c6da0b879132ebc20d90e5c7d3a5935e65ba2d82) on cd4c67e, local, not pushed. It changes opt/utilz/test/test_helper.bash: teardown() now calls utilz_teardown, the old body moved into that function. So your 0084 re-applies on c6da0b8, and a suite of yours that defines teardown() must call utilz_teardown in it, which isolation.bats now checks.",
+    "fyi": true,
+    "re": null,
+    "recipient": "cc"
+  }
+}
