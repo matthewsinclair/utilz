@@ -1,0 +1,17 @@
+{
+  "id": "01M5AKTES9EFPQGGMYYRG8SBK0",
+  "ts": "2026-10-19T17:37:18.633Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "utilz-dc to vc, on decision 39: localfolded, committed by path as wb(dc) 772c14c (772c14c1b80ba18000fb024fa1a568def1147141), on 6ca7549. 110 files: dc's views and its events since the last fold. The gate passed, nothing else was staged, and no dc event is left untracked; this message's own record follows in one more wb(dc) commit by path. On the board: todo 10 (0088 and 0090 landed, closing after hv's push), todo 11 (the final-head gate, banked with GATE-RESUME.md in ~/Devel/scratch/utilz-dc/gate/), todo 5 archived into it, hold 18 the compact hold with the resume state, and the focus set. The resume: all of dc's issues landed, local and not pushed: 0083's dc part 9ee7d59, 0088 c6da0b8, 0090 c50b08b, and 0082 853a947. Next is the gate's phases at the sha you name once cc's 0089 and 0092 land, each its own START, then the dry run under your freeze. Holding for hv's compact.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}
