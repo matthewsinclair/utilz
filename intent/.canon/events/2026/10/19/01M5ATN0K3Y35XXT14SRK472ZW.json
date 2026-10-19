@@ -1,0 +1,15 @@
+{
+  "id": "01M5ATN0K3Y35XXT14SRK472ZW",
+  "ts": "2026-10-19T19:36:40.292Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "doing",
+    "text": "2.14.1's formula bump (todo 43 step 1, vc's word after hv's tag at 43fca62): main bb95e49 by path (formula-bump, the revision equal to GitHub's peeled tag), the formula copied into the tap clone uncommitted, brew audit --strict clean. Left: hv's tap commit and push; the first install after it is the revision's proof."
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "id": "01M5ATMTP9T27KBX0EKPN5AV8T",
+  "ts": "2026-10-19T19:36:34.249Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc to vc, todo 43 step 1 done, nothing pushed. Main: bb95e49ee8dc67abdad90a5acaaec1492440f4fa on 43fca62, by path (packaging/homebrew/utilz.rb, 2 lines), through the gate, no attribution, nothing staged: tools/formula-bump 2.14.1 wrote tag 2.14.1 and revision 43fca620d051734516f9c2b84083425383b7cd3f from git rev-parse 2.14.1^{commit}; GitHub's 2.14.1 tag (git ls-remote on the formula's own URL) peels to the same commit. Tap: /opt/homebrew/Library/Taps/matthewsinclair/homebrew-utilz, clean and level with origin/main at 14fef4c (utilz 2.14.0) before; Formula/utilz.rb copied from main's (cmp equal), left uncommitted for hv. Its diff, saved at ~/Devel/scratch/utilz-cc/tap-2.14.1.diff: the tag and revision, depends_on :macos removed, and the caveats' three Linux lines (0083's formula change, which reaches the tap with this bump). brew audit --strict matthewsinclair/utilz/utilz (HOMEBREW_NO_AUTO_UPDATE=1): exit 0, no findings. As releasing.md says, the offline audit does not fetch, so the first brew install after hv's tap push is the real proof of the revision. For hv: in the tap clone, git commit -am 'utilz 2.14.1' (the house subject), then git push.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: 737d3449-c07c-46aa-b88e-17a3524f8b46
-heartbeat_at: 2026-10-19 18:42Z
-status: active
-focus: "19 Oct: every cc issue for 2.14.1 landed and closed (0093 last, b262242, closed d5beb38). Holding for vc's word: the gate rerun, the dry run, then todo 32's formula-bump role after hv's tag."
+heartbeat_at: 2026-10-19 19:44Z
+status: paused
+focus: "19 Oct, closed out: 2.14.1 released (43fca62), tap pushed (77bfe2a), brew install proven by dc's slot 196; every cc issue landed and closed; no worktree left. Tomorrow: 0072 is ic's, behind hv's arca_swift 0.2.0 steps; cc has nothing open."
 claims: [ISSUE:0080, ISSUE:0081, ISSUE:0084, ISSUE:0085, ISSUE:0087]
 ---
 
@@ -13,15 +13,15 @@ claims: [ISSUE:0080, ISSUE:0081, ISSUE:0084, ISSUE:0085, ISSUE:0087]
 
 ## DOING
 
-- 0093 (low, cc's; hv: "Nix them, please."; in 2.14.1 by vc's decision 45) landed at b262242 on ccf5847 (19 Oct 18:31Z), by path through the gate, no push, and closed at d5beb38 on hv's ruling that finished issues close at once. v2 (1c143245): artifact::testing's TempDir, always compiled and doc(hidden), no manifest moved. Red: 180 (82 entries on main, the same 82 names as dc's 185 on kovacs). v1 went red on prez's tests/manifest.rs ([dev-dependencies] needs hv). Green: 187 (390 passed, manifest tests ok, 0 left, check all, the message proof) and dc's 188 on kovacs (read by cc). SHAs to vc and dc. Left: nothing but CI after hv's push.
+_(none)_
 
 ## TODO
 
-- 2.14.1 cut role (vc, 19 Oct 05:29Z): after hv's tag, tools/formula-bump 2.14.1 and its commit, the formula copied into the tap clone, brew audit --strict there. The tap push is hv's.
+_(none)_
 
 ## Holds
 
-- Code freeze until hv's cut of 2.14.1 at d5beb38, the final head (vc, 19 Oct): cc touches no code and starts no run. Released by hv's tag; then todo 32's formula bump, on vc's word.
+- End of 19 Oct (vc's decision 47). Released by hv's next session and vc's word. Resume state: nothing of cc's open. 2.14.1 is released at 43fca62, the tap pushed at 77bfe2a, and the brew install proven by dc's slot 196 (doctor all passed). Every cc issue is landed and closed (0080, 0081, 0083's prez part, 0084, 0085, 0087, 0089, 0092, 0093). No worktree is left; the patches are banked under ~/Devel/scratch/utilz-cc/. TMPDIR holds 794 old prez/showreel/artifact test dirs from ten runs before 0093 landed (66 per full run), from cc's and peers' runs, for hv to rule on. Next in Utilz: 0072, ic's, behind hv's arca_swift 0.2.0 steps (vc's todo 48).
 
 ## Watch-outs
 

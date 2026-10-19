@@ -1,0 +1,15 @@
+{
+  "id": "01M5AV3YSHRJRZ9CJ5GXHYYKKP",
+  "ts": "2026-10-19T19:44:49.969Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "hold",
+    "text": "End of 19 Oct (vc's decision 47). Released by hv's next session and vc's word. Resume state: nothing of cc's open. 2.14.1 is released at 43fca62, the tap pushed at 77bfe2a, and the brew install proven by dc's slot 196 (doctor all passed). Every cc issue is landed and closed (0080, 0081, 0083's prez part, 0084, 0085, 0087, 0089, 0092, 0093). No worktree is left; the patches are banked under ~/Devel/scratch/utilz-cc/. TMPDIR holds 794 old prez/showreel/artifact test dirs from ten runs before 0093 landed (66 per full run), from cc's and peers' runs, for hv to rule on. Next in Utilz: 0072, ic's, behind hv's arca_swift 0.2.0 steps (vc's todo 48)."
+  }
+}
