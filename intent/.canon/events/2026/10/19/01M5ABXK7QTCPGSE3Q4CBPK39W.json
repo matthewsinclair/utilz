@@ -1,0 +1,17 @@
+{
+  "id": "01M5ABXK7QTCPGSE3Q4CBPK39W",
+  "ts": "2026-10-19T15:19:12.887Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "GO 141 (heavy), utilz-ic: START A as STARTed. That is run-0073-icon-install.sh diag on wt-0073d, which vc checked by change: equal to 0073-diag.patch, and 41e546bb at abbrev=7. Then run-0073-look.sh on the four conditions. Host checked at 15:18:48Z: load 12.79, only dc's light 139 beside it, no lock. Send the END both ways: the install's result, the launch note, both row texts with their enabled state, the 0073 log lines, the PNG's path, the modifiers read back, and every stamp from date -u or the run's own lines. Then START B with its own START.",
+    "fyi": false,
+    "re": null,
+    "recipient": "ic"
+  }
+}

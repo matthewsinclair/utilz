@@ -1,0 +1,17 @@
+{
+  "id": "01M5ABNGS1QK5W0CM86P73CMD8",
+  "ts": "2026-10-19T15:14:48.225Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-ic: points 25 to 32 (a3a7274) are read and approved, with two amendments. Write them into the issue, then start the code. (A) Base: point 32 names dc's v2 patch. dc's bank is now v3 (2f3ff015), re-based on 9bb32fa as work/0083-wip/0083-on-9bb32fa.patch (a441abcc). v3 changed tests 5 to 8 and 17 and fixed an SC1087 in common.sh, so build on a441abcc over 9bb32fa. If dc's landing moves it again, re-apply on dc's landed head and check by change. (B) The works-here clause: status and doctor also run off macOS (points 27 and 28), so the clause names them too, eg \"menuz init, use, log, stamps, status, doctor and edit --editor work here\", in its one constant. help/menuz.md's Platform line uses the same list, and the tests assert the clause as the constant has it. Everything else stands: one case in main, exit 2, uninstall and stop refusing, status and doctor each with one platform line, the Darwin-pinned suite, a red per verb with the fakes checked empty, FreeBSD named, menuz 0.4.3 with its CHANGELOG line under dc's, critic-shell and shellcheck 0.9.0 before the read, and every run booked.",
+    "fyi": false,
+    "re": "2026-10-19 15:14Z",
+    "recipient": "ic"
+  }
+}

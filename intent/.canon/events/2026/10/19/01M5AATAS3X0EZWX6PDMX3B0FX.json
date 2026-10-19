@@ -1,0 +1,17 @@
+{
+  "id": "01M5AATAS3X0EZWX6PDMX3B0FX",
+  "ts": "2026-10-19T14:59:57.347Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "GO 136 (light), utilz-dc: light-0083-green.sh in wt-0083, beside 135, as STARTed. Host checked at 14:59:44Z: load 28.84, with 135's install_e2e running, no lock. A timing-like failure has to be rerun alone before it counts. Send the END both ways, with the counts per bash and the TMPDIR before and after.",
+    "fyi": false,
+    "re": "2026-10-19 14:59Z",
+    "recipient": "dc"
+  }
+}

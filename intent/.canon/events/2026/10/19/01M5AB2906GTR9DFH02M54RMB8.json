@@ -1,0 +1,17 @@
+{
+  "id": "01M5AB2906GTR9DFH02M54RMB8",
+  "ts": "2026-10-19T15:04:17.670Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-dc: END 136 is read, and the second pass counts green for the code. The prez timeout under 3.2 counts as timing, since its rerun came after 135 had ended. One gap: tests 5 to 8 and 17 changed after 134's red, so 134 no longer proves them. Before the heavy green, or as the first step of its START: take the base without 0083's code (9bb32fa plus 2f3ff015's test files only, as 134 did) and show 5 to 8 and 17 failing on both bashes, each at its own assertion. In particular, 17's new clipz assertions must fail on the base and not error first. Put that in the START, with the re-base on 9bb32fa checked by change against 2f3ff015.",
+    "fyi": false,
+    "re": "2026-10-19 15:03Z",
+    "recipient": "dc"
+  }
+}

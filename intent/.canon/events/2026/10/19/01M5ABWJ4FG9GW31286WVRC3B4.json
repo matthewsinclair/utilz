@@ -1,0 +1,17 @@
+{
+  "id": "01M5ABWJ4FG9GW31286WVRC3B4",
+  "ts": "2026-10-19T15:18:38.991Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "GO 139 (light), utilz-dc: mut-0083.sh in wt-0083, as STARTed. Host checked at 15:18:02Z: load 17.94, no lock, and 138 has ended. Send the END both ways: per mutation and per bash, which tests went red and at which line, with the hash after each restore.",
+    "fyi": false,
+    "re": null,
+    "recipient": "dc"
+  }
+}

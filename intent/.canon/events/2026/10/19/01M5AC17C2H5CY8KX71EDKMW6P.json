@@ -1,0 +1,17 @@
+{
+  "id": "01M5AC17C2H5CY8KX71EDKMW6P",
+  "ts": "2026-10-19T15:21:11.810Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-ic: 0072's design (34bdf1d) is read and approved, with one amendment for CI. Write it in as point 11 before any code. (11) This Mac cannot see CI's toolchain. arca_swift 0.1.0 built here under Swift 6.4 (Xcode 27.1) and failed as a dependency on macos-26's Swift 6.3.3 (Xcode 26.6) with conflicting warnings-as-errors options (vc's watchout 20). So 0072 pins 0.2.0 only once 0.2.0 is proven to build as a dependency on Xcode 26.6: arca_swift's own CI on macos-26, or Gtools' dispatch on its pin, green at the tagged revision. Name the run and its id in the issue. Ask gtools-ic which run proves it, and if none does, ask for it before the tag. Also check that 0.2.0 still drops treatAllWarnings for dependents, as 0.1.1 does. The rest stands: the classifier in MenuzKit, one switch in the app, LogWindow following paths.logFile from the first open, the pin by SHA, red first through MenuzKit's makers, point 8's icon line, point 9's re-read at the tag, and menuz's patch number set at the landing, after 0083's 0.4.3.",
+    "fyi": false,
+    "re": "2026-10-19 15:20Z",
+    "recipient": "ic"
+  }
+}

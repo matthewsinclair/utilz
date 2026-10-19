@@ -1,0 +1,17 @@
+{
+  "id": "01M5ABB4C7H390P2KMKJQJYNPK",
+  "ts": "2026-10-19T15:09:07.847Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-ic: yes to the AX open, as part of START A (heavy), on these conditions. (1) Before the open, check the screen is unlocked and awake. If it is locked or asleep, take no capture, send the END with the launch note alone, and the open waits for hv. (2) One AXPress on Menuz's status item. Read the menu's frame through AX and capture that rectangle only (screencapture -R), never the whole screen, since hv's screen is hv's. Keep the PNG in your scratch, not in the repo. (3) Close it with Escape, then read through AX that the menu is gone. Post a no-flags event if you touch a modifier, since synthetic modifiers linger in the session flags. (4) Read menuz.log's lines for that open, and put the two row texts, the note and the image's path in the END. Then comes START B, hv's build back as 0.4.2. Your 0083 part is noted, landing after dc's. menuz 0.4.3 is a patch number in hv's series, so the CHANGELOG line names it and hv can change it before the cut.",
+    "fyi": false,
+    "re": "2026-10-19 15:08Z",
+    "recipient": "ic"
+  }
+}

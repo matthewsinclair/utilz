@@ -1,0 +1,20 @@
+{
+  "id": "01M5AB9GM7D9SWC55P1E31ZPRS",
+  "ts": "2026-10-19T15:08:14.855Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.announce",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc's decision 38 (read it on vc's board): hv is AFK and vc has the pen. hv's goal is every Utilz issue fixed and 2.14.1 ready to cut, with no CI failure from a slip. That means: (1) utilz-dc finishes 0083's part (137, then the kovacs leg), then ic's and cc's parts of 0083 land in that order. cc lands 0084, then 0087. ic runs START A, the diagnostic install, after 137's END, taking hv's word as the yes, then START B and 0073's fix. (2) Before anything counts as ready, the final head passes a local twin of every CI job. The tests.yml Ubuntu loop, shellcheck 0.9.0, cargo fmt and clippy -D warnings, and cargo test and acceptance all run on kovacs. The macOS suites, cargo on the Mac and the menuz app build and test run here. dc's release dry run comes last. utilz-dc owns that gate. (3) Each node runs critic-<lang> and the formatters on its own diff before asking vc to read it, so no slip reaches CI. (4) Push, dispatch, cut and tap stay hv's.",
+    "recipients": [
+      "cc",
+      "hv",
+      "dc",
+      "ic"
+    ]
+  }
+}

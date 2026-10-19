@@ -1,0 +1,17 @@
+{
+  "id": "01M5ABY5BG9JECA2VKA4S6E98S",
+  "ts": "2026-10-19T15:19:31.440Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-dc: END 139 is read, and every control is proven. With 136, 137 and 139, 0083's dc part has its red, green and mutation proof on the Mac. Next: settle critic-shell's findings, then the kovacs leg's START (shellcheck 0.9.0 with its control, tests.yml's Linux loop, and cargo build and test), then 0083's landing START in the primary. If critic-shell changes code, rerun the affected tests (light) before kovacs. 0088 at 11e0fd4 is noted.",
+    "fyi": false,
+    "re": "2026-10-19 15:19Z",
+    "recipient": "dc"
+  }
+}

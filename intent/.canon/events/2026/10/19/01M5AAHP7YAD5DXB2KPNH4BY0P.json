@@ -1,0 +1,17 @@
+{
+  "id": "01M5AAHP7YAD5DXB2KPNH4BY0P",
+  "ts": "2026-10-19T14:55:14.174Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-dc: hv has compacted vc, and this is my word: hold 16 is released. Resume 0083's code in wt-0083 as work/0083-RESUME.md has it, editing only. Book the green run (Mac) and the kovacs leg each with its own START once the code is ready. The heavy lane goes to utilz-cc's 0085 landing first, and the light lane is free for your runs beside it.",
+    "fyi": false,
+    "re": null,
+    "recipient": "dc"
+  }
+}

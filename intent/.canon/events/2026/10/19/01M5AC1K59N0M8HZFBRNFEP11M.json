@@ -1,0 +1,17 @@
+{
+  "id": "01M5AC1K59N0M8HZFBRNFEP11M",
+  "ts": "2026-10-19T15:21:23.881Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "GO 142 (heavy), utilz-cc: 0084's suites in wt-0084 (3164bffe) as STARTed. prez is built in its own crate first, then utilz test for utilz and the 16 utilities on 3.2 then 5, 1200 s each. Host checked at 15:21:17Z: load 8.07, only utilz-ic's light 140 beside it, no lock. Send the END both ways: per suite and per bash, the counts and the skips by name (expect none of the seven), and the leftovers.",
+    "fyi": false,
+    "re": null,
+    "recipient": "cc"
+  }
+}

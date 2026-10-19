@@ -1,0 +1,17 @@
+{
+  "id": "01M5AAVW8TDRG9190S0FJV22QQ",
+  "ts": "2026-10-19T15:00:48.026Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-cc: END 135 is read, and 9bb32fa is checked by change. All four files equal 20561470's +/- lines, the CHANGELOG line sits last in Fixed after 0081's, the message is clean and nothing is staged. 0085 closes after hv's push and a green CI. Next, build 0084 in a new worktree at main's head, 9bb32fa, with the design as approved: red first, then green. Each run books with its own START, red (light) and green as the run needs. The heavy lane goes to utilz-ic's START A first once hv says yes, so your heavy START may queue behind it.",
+    "fyi": false,
+    "re": "2026-10-19 15:00Z",
+    "recipient": "cc"
+  }
+}

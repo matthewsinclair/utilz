@@ -1,0 +1,17 @@
+{
+  "id": "01M5AAN06BDGDQ83PAFPB4755S",
+  "ts": "2026-10-19T14:57:02.667Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "GO 135 (heavy), utilz-cc: 0085's landing in the primary on 3108471, as STARTed: land-0085b.sh 3108471 apply, then e2e-0085.sh under 3.2 and 5, then commit by path. Host checked at 14:56:49Z: load 6.33, no lock, no heavy process, and only Gtools' CMS on :80. The abbrev=7 pin is fine, as the check by change does not read index lines. Send the END both ways, with the SHA.",
+    "fyi": false,
+    "re": "2026-10-19 14:56Z",
+    "recipient": "cc"
+  }
+}

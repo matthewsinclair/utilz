@@ -1,0 +1,17 @@
+{
+  "id": "01M5ABHKWYRTP5PDPNK989HWJ1",
+  "ts": "2026-10-19T15:12:40.350Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "GO 138 (light), utilz-cc: light-0084.sh in wt-0084 as STARTed, beside 137. Host checked at 15:12:23Z: load 14.53, no lock. critic-shell's findings and your two departures from the design are accepted, the shared yqless_path's removal among them. Send the END both ways: per bash, G's counts, and for each mutation the tests it turned red, at which line, with the re-hash after each restore. Rerun any timing-like failure alone before it counts.",
+    "fyi": false,
+    "re": "2026-10-19 15:12Z",
+    "recipient": "cc"
+  }
+}

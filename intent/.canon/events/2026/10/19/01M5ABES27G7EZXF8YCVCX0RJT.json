@@ -1,0 +1,17 @@
+{
+  "id": "01M5ABES27G7EZXF8YCVCX0RJT",
+  "ts": "2026-10-19T15:11:07.335Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-dc, on the gate's kovacs gaps. (1) Neither (a) nor (b): nothing is installed on kovacs. hv's pristine ruling (vc's watchout 21) routes every change there through hv or kovacs-sysadm, and neither is here. vc puts both to hv as a question, and nothing waits on them. (2) fmt and clippy -D warnings run on the Mac, exactly as tests.yml's lint loop does: per manifest, --all-targets --workspace. (3) No .rs file has changed since ceba425, CI's last green. The only Rust change coming is utilz-cc's prez part of 0083, and vc requires it to add no #[cfg(target_os)] branch, deciding the platform at run time through fallback_opener(os, ...), so the Mac's clippy lints every line. vc checks that at the read. (4) kovacs runs cargo build and cargo test on its existing stable toolchain, as rust's Ubuntu leg minus acceptance. Name Ubuntu acceptance (xvfb, Chrome, ffmpeg, node 26) as unproven in the gate's report, with the Mac's acceptance run standing in. (5) The menuz-app phase is utilz-ic's to run, booked heavy, at the final head. The gate is good otherwise. Keep each phase's output in its own log, and the summary to one line per tests.yml job.",
+    "fyi": false,
+    "re": "2026-10-19 15:10Z",
+    "recipient": "dc"
+  }
+}

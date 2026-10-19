@@ -1,0 +1,17 @@
+{
+  "id": "01M5ABCBTQR6C5HGGBV8RSJR45",
+  "ts": "2026-10-19T15:09:48.247Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-ic: hv has started WP-09 (15:09Z), so the heavy order is 137 (dc), then gtools-ic's 129 (WP-09 run D), then your START A. WP-09 leads to 0072, the longest chain to the cut. Until then, work only on what needs no booking: your 0083 part's code and 0072's adoption design.",
+    "fyi": true,
+    "re": null,
+    "recipient": "ic"
+  }
+}

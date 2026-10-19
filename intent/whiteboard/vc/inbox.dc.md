@@ -251,6 +251,91 @@ Log: ~/Devel/scratch/utilz-dc/work/slot134-red.log. The host is released. Localf
 
 utilz-dc to vc, Re: 13:58Z: localfolded, committed by path as wb(dc) 25a0f2c (25a0f2c4bcece7febf82e316d2247b5602e87325), on utilz-ic's 911d224, after utilz-cc's END of 133 (0081 landed as bffd04a). 22 files: dc's four views and its 18 events since 25f1c21; the gate passed, nothing else was staged, and no dc event is left untracked. This reply's own record follows in one more wb(dc) commit by path. On the board: 134's END (13:59Z); todo 9 and hold 14 archived (130 green, 131 landed); todo 8 at the resume note; watch-out 3's booker brought up to date; hold 16 the compact hold, carrying the resume state; the focus set. The resume state, done and to do in order, is ~/Devel/scratch/utilz-dc/work/0083-RESUME.md, and 0083's work so far is banked in work/0083-wip/ (its unstaged diff c89e9d8a, 8 files, and the base 744efc02). The primary holds no code of mine. Holding for hv's compact.
 
+## (2026-10-19 14:54Z) Re: 2026-10-19 14:02Z (handled)
+
+utilz-dc to vc: back after hv's compact; /in-session run and picked up. Your 14:01Z FYI handled. wt-0083 is intact: HEAD 853a947, its unstaged diff equal by sorted +/- lines to the banked 0083-unstaged.patch (c89e9d8a), the fixture uname still untracked. Hold 16's condition is met; I hold for your word. On it I resume 0083's code in wt-0083 (stampz, macoz, arngz, clipz, help_dispatch.bats, docs, tests.yml's roster, versions, CHANGELOG), editing only; no run STARTs without its own booking.
+
+## (2026-10-19 14:59Z) Re: 2026-10-19 14:57Z (handled)
+
+utilz-dc to vc: START (light), 0083's code in wt-0083, beside slot 135 (heavy). 0083's code is written: stampz, macoz, arngz, clipz, help_dispatch.bats, the docs (formula, README, help pages, developer guide's platforms), tests.yml's roster (cleanz, clipz, macoz), versions and the CHANGELOG line; 28 files, git diff --full-index 3b509e39, banked in work/0083-wip/. The run, ~/Devel/scratch/utilz-dc/work/light-0083-green.sh: in wt-0083, under bash 3.2 then 5, bats --filter 'issue 0083' on common_lib, macoz, arngz and clipz (the 32 of slot 134), and help_dispatch.bats whole; then the local shellcheck (0.11) on the 14 changed shell files. Builds nothing, starts no GUI or daemon, binds no port, writes only bats' own temp dirs; /tmp and TMPDIR listed before and after. Not the green run: the whole suites (heavy) and the kovacs leg each get their own START after this. Asking your GO.
+
+## (2026-10-19 15:03Z) Re: 2026-10-19 14:59Z (handled)
+
+utilz-dc to vc: END 136 (light), green on the second pass; three test defects fixed between the passes. wt-0083, ~/Devel/scratch/utilz-dc/work/light-0083-green.log (pass 1 kept as .pass1.log).
+
+- Pass 1, 15:00:04Z to 15:01:06Z, load 28.84 with 135 running: on each bash, 0083's 1..32 had 29 ok and 3 not ok (7, 8 and 17); help_dispatch's 1..8 had 7 ok and test 8 not ok under 3.2 (prez could not answer --help directly within timeout 10), and 8 ok under 5.
+- The three were the tests' fault. 7 and 8 refuted the marker "alpha runs", which the refusal itself contains ("so where alpha runs is not known"); the marker is now ALPHA RAN in 5 to 8. Test 17 refuted every "is not checked on", but clipz's new Linux-only xclip and wl-copy are reported on macOS as the design says ("Linux only: 'xclip' is not checked on Darwin"). It now refutes "not available on" and "macOS only", asserts the two clipz lines, and refutes any install line. help_dispatch's prez failure looked like timing, so it was rerun.
+- Shellcheck 0.11: SC1087 on two "$path[]" in platforms_verdict, now "${path}[]". The 8 code files are clean (exit 0). The test files carry only finding kinds the base already has, per file and code, plus one SC2034 on arngz.bats' UTILZ_TEST_PLATFORM, which now has a directive. CI does not shellcheck */test/*.
+- Pass 2, 15:02:41Z to 15:03:25Z, load 6.72: on bash 3.2.57 and on 5.3.20, 0083's 1..32 all ok, help_dispatch 1..8 all ok, 0 skips, 0 not ok.
+- Leftovers: /tmp and TMPDIR unchanged on both passes.
+
+0083 diff now 2f3ff015 (git diff --full-index, 28 files), banked as work/0083-wip/0083-unstaged-v3.patch. The host is released. Next: re-base wt-0083 on 9bb32fa (0085 landed; cc's 15:00Z FYI), then a START for the heavy green run, then the kovacs leg.
+
+## (2026-10-19 15:05Z) Re: 2026-10-19 15:04Z (handled)
+
+utilz-dc to vc, Re: 15:04Z: START (heavy), 0083's fresh red and green, ~/Devel/scratch/utilz-dc/work/heavy-0083.sh.
+
+- Re-base check: wt-0083 is re-based on 9bb32fa (0085 landed). Before it I compared the staged base with 853a947..9bb32fa per file by sorted +/- lines: all equal except CHANGELOG.md, where the landed side has exactly one more line, 0086's. The reset left nothing staged, and the re-applied diff equals the bank 2f3ff015 by sorted +/- lines (28 files; on 9bb32fa it is a441abcc, banked as work/0083-wip/0083-on-9bb32fa.patch).
+- Phase 1, red: wt-0083red is re-made as 9bb32fa plus the six test files only and the fixture uname (tests diff 5d54b806, equal by lines to wt-0083's tests; no code file differs from 9bb32fa). bats --filter 'issue 0083' on common_lib, macoz, arngz and clipz, bash 3.2 then 5. Expected: 32 each, 30 red at their own assertions, and the 2 controls, 10 and 30, green; 17 is red now, since clipz's yaml is code.
+- Phase 2, green: a scratch clone, work/green-0083 (not a linked worktree, so install_e2e can run), 9bb32fa plus a441abcc, equal by lines to wt-0083. The whole suites of utilz (every opt/utilz/test/*.bats, install_e2e among them), macoz, arngz, clipz, stampz and cleanz, bash 3.2 then 5, each under a perl alarm of 1800 s.
+- It builds no app and starts no GUI or daemon on purpose; install_e2e builds prez in its fixture, as on every suite run. /tmp and TMPDIR are listed before and after. The controls' mutation proof follows in its own light START. Asking your GO.
+
+## (2026-10-19 15:10Z) Re: 2026-10-19 15:08Z (handled)
+
+utilz-dc to vc, Re: 15:08Z (decision 38): the final-head gate is drafted while 137 runs: tmp/dc-2141/gate/final-head-gate.sh <phase> <sha>. Each phase is its own START and names the tests.yml job it twins.
+
+- kovacs: test-linux (diagnostics and the roster loop), shellcheck (0.9.0, the control first), clippy (fmt --check, then clippy --all-targets -D warnings), and rust's ubuntu-latest leg (cargo build and test --release, then each crate's test/*.sh --strict under xvfb-run, with the browser-evidence check); plus lua-build, lua-plan and relink, as every leg runs them. It goes through prep.sh, kv-prep.sh and kv-window.sh --cargo; kv-remote.sh gains the clippy and rust steps (bash -n and shellcheck clean; the old copy is kept in work/).
+- mac-suites: test-macos (diagnostics; utilz and every listed utility but prez, utilz test each), bash 3.2 then 5, in a scratch clone at the sha.
+- mac-rust: rust's macos-latest leg (build, test, black-box suites with Chrome and ffmpeg), in the same clone.
+- menuz-app: tests.yml's menuz-app job runs xcodebuild, which dc does not run, so this phase is utilz-ic's in its own clone: bin/utilz menuz build --unsigned, then test --unsigned. The script only prints those two lines.
+- dry-run: my todo 3, last, at main's head with every node quiet.
+- No twin: test-summary only aggregates, and pr-checks.yml runs only on pull requests, while hv pushes main.
+
+Gaps on kovacs, read just now (no window: command -v and the versions): no clippy or rustfmt component for the stable aarch64 toolchain; no xvfb-run, no Chrome or Chromium, and no ffmpeg; node v22.22.1 where CI sets up 26. pdftotext is there, and cargo 1.99.0. As it stands, clippy and rust's acceptance cannot run on kovacs. Each fix changes hv's machine, which hv keeps brew-only for Utilz and Intent, so it is hv's or kovacs-sysadm's to make, not mine:
+  (a) rustup component add clippy rustfmt (rustup's own dirs; reversible);
+  (b) apt xvfb, ffmpeg and chromium (or Chrome), and node 26.
+Without them I would run fmt and clippy -D warnings here on the Mac (fmt does not depend on the platform; clippy here misses only Linux-only cfg code, which is prez's opener after 0083's prez part) and say so in the END, with rust's Ubuntu acceptance unproven before the push. Which do you rule? 137 is still running; its END follows.
+
+## (2026-10-19 15:16Z) Re: 2026-10-19 15:05Z (handled)
+
+utilz-dc to vc: END 137 (heavy), red then green as STARTed, 15:05:58Z to 15:14:59Z. Log: ~/Devel/scratch/utilz-dc/work/heavy-0083.log.
+
+- Red. wt-0083red is 9bb32fa with the tests only (5d54b806), no code changed. On bash 3.2.57 and 5.3.20 alike: 1..32, 30 not ok, 2 ok, 0 skips. The 2 ok are the controls: 10 (doctor on macOS reads a macOS-only utility as any other) and 30 (arngz list, show, delete and current on Linux). Each red failed at its own assertion, and so did the five you named: 5 at assert_output "ALPHA RAN"; 6, 7 and 8 at assert_exit_code 2 (require_platform: command not found); 17 at assert_output_contains "Linux only: 'xclip' is not checked on Darwin".
+- Green. The clone was 9bb32fa plus a441abcc, 28 files, equal by lines to wt-0083. Every suite exited 0 on both bashes, with the same counts on each:
+  - utilz: 308 run, 306 passed, 2 skipped, 0 failed; install_e2e ran.
+  - macoz: 17 run, 16 passed, 1 skipped, 0 failed.
+  - arngz: 141 passed, 0 failed.
+  - clipz: 12 passed, 0 failed.
+  - stampz: 24 passed, 0 failed.
+  - cleanz: 66 passed, 0 failed.
+- Skips by name, the same on each bash. utilz 46: parse_yaml() requires yq, skipped as yq is installed. utilz 131: utilz test runs without bats, skipped as bats is installed. macoz 16: setpicfor requires fileicon, skipped as fileicon is installed. All three are the known installed-tool skips.
+- Leftovers. 22 new utilz-test dirs in TMPDIR were mine, 11 per pass, one for each of version_dispatch.bats' 11 tests: 20 were empty, and 2 held AT09's nover sandbox. All 22 are removed by exact name. The cause is already on main, not 0083's: version_dispatch.bats defines its own teardown(), which replaces test_helper's, so its BATS_TEST_TMPDIR is never removed. I'd file it as an issue and fix it (the teardown calls the helper's rm too); say where it goes. One later utilz-test dir is utilz-cc's live 138, left alone. /tmp gained x, a 0-byte file written once at 15:08:30Z. No utilz test names it (only stampz.bats:507, which ran at 15:10, and prez.bats), and the identical bash 5 pass did not touch it, so I do not take it as mine and leave it. TMPDIR's other new names (podman, storage-run-501, com.apple.*, tmp.*, TemporaryDirectory.*) are the system's or a peer's.
+- The clone work/green-0083 is removed. The host is released.
+
+Next: the controls 10, 17 and 30 proven by one-line mutations (17 is now red on the base, so it is no longer a control there, but its macOS-only refutes still want a mutation), then shellcheck 0.9.0 and critic-shell on the diff, then the kovacs leg; each START to you.
+
+## (2026-10-19 15:17Z) Re: 2026-10-19 15:16Z (handled)
+
+utilz-dc to vc: START (light), the controls' mutation proof in wt-0083, ~/Devel/scratch/utilz-dc/work/mut-0083.sh. Two one-line mutations, one at a time, each restored from a copy and checked by hash, each run under bash 3.2 then 5 on the tests it must turn red. M1, common.sh:511, here=$(utilz_platform) becomes here=linux, so platforms are judged as on Linux: tests 10 and 17 must go red on macOS. M2, arngz:1735, list leaves the catalogue verbs' arm, so on Linux it is read as a bare desk and refused: test 30 must go red. The diff's hash is read before and after. Builds nothing, starts no GUI or daemon, writes only bats' temp dirs. On your other two items: shellcheck 0.9.0 runs as the kovacs leg's shellcheck step, with its control first, from kovacs's checked 0.9.0 (/var/tmp/dc-2141-sc090.qyz5IL), rather than refetching a darwin build here. critic-shell is reading the diff now; it needs no window. 0088 is filed next, as you ruled. Asking your GO.
+
+## (2026-10-19 15:19Z) Re: 2026-10-19 15:18Z (handled)
+
+utilz-dc to vc: END 139 (light), every control proven, 15:18:42Z to 15:18:50Z, wt-0083. Log: ~/Devel/scratch/utilz-dc/work/mut-0083.log.
+
+- M1, common.sh:511, here=$(utilz_platform) to here=linux.
+  - bash 3.2.57: test 10 red at common_lib.bats:1330, and test 17 red at common_lib.bats:1431, each at refute_output_contains "not available on".
+  - bash 5.3.20: the same two tests, red at the same lines and assertions.
+  - Restored from its copy: common.sh's sha256 is 4b7c2129d45c0f9a, the same as before the mutation.
+- M2, arngz:1735, list taken out of the catalogue verbs' arm.
+  - bash 3.2.57: test 30 red at arngz.bats:2143, assert_success, on arngz list read as a bare desk and refused.
+  - bash 5.3.20: the same.
+  - Restored: arngz's sha256 is 8c124eaa61f90e93, the same as before.
+- The diff is a441abcc before and after.
+- Leftovers: no new utilz-test or bats-run entry in TMPDIR, and nothing new in /tmp.
+- (The log's "changed line(s) beyond 0083's" count is the whole file's diff against HEAD, a mislabel; the mutation itself is the one-line diff printed under it.)
+
+0088 is filed with its design and committed by path as 11e0fd4 on cf1cce2; it is my todo 10, and the gate is todo 11. critic-shell is still reading the diff. Next: the kovacs leg's START on 9bb32fa plus a441abcc, with shellcheck 0.9.0 its second step, once critic-shell's findings are in and settled.
+
 ---
 
 _Generated by Intent v3 from the whiteboard model. Do not edit this file -- it is rendered from the model, and `intent doctor` reports any hand-edit as skew._

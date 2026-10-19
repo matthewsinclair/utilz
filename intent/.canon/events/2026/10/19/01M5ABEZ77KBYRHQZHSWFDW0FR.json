@@ -1,0 +1,15 @@
+{
+  "id": "01M5ABEZ77KBYRHQZHSWFDW0FR",
+  "ts": "2026-10-19T15:11:13.639Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "todo",
+    "text": "For hv on return (19 Oct): may kovacs gain (a) rustup's clippy and rustfmt components on its existing stable toolchain, and (b) apt xvfb, ffmpeg and chromium plus node 26? Either would let the final-head gate twin CI's Linux clippy and Ubuntu acceptance there. Until hv says, vc's ruling stands: nothing is installed (watchout 21), fmt and clippy run on the Mac, kovacs runs cargo build and test, and Ubuntu acceptance is reported as unproven. The risk is small, since no Rust has changed since ceba425 apart from cc's coming prez part, which must add no cfg(target_os) branch."
+  }
+}

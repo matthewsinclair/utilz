@@ -1,0 +1,15 @@
+{
+  "id": "01M5AAJN75ZMAY96RC2P45FGCJ",
+  "ts": "2026-10-19T14:55:45.893Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "doing",
+    "text": "Resumed after hv's second compact of 19 Oct, with hold 15's steps carried forward. Heavy lane: (a) utilz-cc's 0085 landing on bffd04a (START asked 14:55Z); (b) utilz-ic's START A, the diagnostic install, on 0085's END and hv's yes (ic asked hv itself); (c) hv's look; (d) START B, hv's build back as 0.4.2. Light lane: utilz-dc's 0083 green and kovacs legs once its code is ready. Then 0084, 0083's ic and cc parts, 0087 and 0072 after WP-09. Closes after hv's push and CI green: 0080, 0082, 0086, 0081 and 0085. Check every landing by change."
+  }
+}

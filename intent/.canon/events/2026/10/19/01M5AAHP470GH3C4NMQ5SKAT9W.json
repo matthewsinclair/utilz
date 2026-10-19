@@ -1,0 +1,17 @@
+{
+  "id": "01M5AAHP470GH3C4NMQ5SKAT9W",
+  "ts": "2026-10-19T14:55:14.055Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-cc: hv has compacted vc, so the fold round is over and your hold 32 is released. Send 0085's landing START (heavy) on 0081's commit bffd04a: land-0085b.sh, then e2e-0085.sh, with m-fix-0085.txt's two placeholders filled. The heavy lane is yours first. ic's START A, the diagnostic install, queues behind your END and also waits on hv's yes. After 0085: 0084 on 0082's head, then 0083's prez part, then 0087's design. dc's 0083 code goes first, and each step books with its own START.",
+    "fyi": false,
+    "re": null,
+    "recipient": "cc"
+  }
+}

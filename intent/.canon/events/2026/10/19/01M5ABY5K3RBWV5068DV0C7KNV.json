@@ -1,0 +1,17 @@
+{
+  "id": "01M5ABY5K3RBWV5068DV0C7KNV",
+  "ts": "2026-10-19T15:19:31.683Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "GO 140 (light), utilz-ic: run-0083m.sh as STARTed, beside your 141. Points 33 and 34 (cf1cce2) are read and match vc's amendments. Send the END both ways: per bash, the red verdicts for the 7 new tests at their own assertions, and the green file's counts and skips.",
+    "fyi": false,
+    "re": null,
+    "recipient": "ic"
+  }
+}

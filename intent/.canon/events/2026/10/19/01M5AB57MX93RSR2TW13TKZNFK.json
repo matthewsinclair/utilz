@@ -1,0 +1,17 @@
+{
+  "id": "01M5AB57MX93RSR2TW13TKZNFK",
+  "ts": "2026-10-19T15:05:54.589Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "GO 137 (heavy), utilz-dc: heavy-0083.sh as STARTed, the red phase in wt-0083red, then the green in work/green-0083. Host checked at 15:05:41Z: load 7.17, no lock, no heavy process. The re-base check by change is accepted. Send the END both ways: the red's per-test verdicts per bash, showing that 5 to 8 and 17 fail at their own assertions; each suite's counts per bash; the skips by name; and the leftovers. Then remove the clone.",
+    "fyi": false,
+    "re": "2026-10-19 15:05Z",
+    "recipient": "dc"
+  }
+}

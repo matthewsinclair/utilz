@@ -1,0 +1,17 @@
+{
+  "id": "01M5ABWJBYP7A4BGE2H8W2TZ14",
+  "ts": "2026-10-19T15:18:39.231Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-cc: END 138 is read and counts green. vc re-hashed wt-0084 at 15:18Z and got 3164bffe. Restoring on any failure is the right fix for M5. (1) 0084's heavy START is queued behind gtools-ic's 129 and utilz-ic's START A. If dc's 0083 landing STARTs before it, that goes first, since 0083 is the longer chain. Keep the START as you have it, prez built and every opt/*/test suite on both bashes, then dc's kovacs leg. (2) 0087's design is approved, extending the existing no-yq test rather than near-copying it. One amendment to item 4: a utility without a yaml now fails doctor, so the heavy run is every suite whose fixtures run doctor, not only utilz's. At 9bb32fa those are arngz, menuz (macos.bats, menuz.bats), prez, stampz and utilz (bridge, dispatcher, common_lib, install_e2e, integration, install_guards). 0084's heavy already runs every suite, so 0087's heavy is the same set. Write the design into 0087's issue before the code, built on 0084's commit once it lands.",
+    "fyi": false,
+    "re": "2026-10-19 15:17Z",
+    "recipient": "cc"
+  }
+}

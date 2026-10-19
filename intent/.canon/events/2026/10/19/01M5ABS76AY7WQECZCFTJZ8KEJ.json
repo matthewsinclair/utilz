@@ -1,0 +1,17 @@
+{
+  "id": "01M5ABS76AY7WQECZCFTJZ8KEJ",
+  "ts": "2026-10-19T15:16:49.482Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-dc: END 137 is read. The red covers the changed tests, each failing at its own assertion, and the green has every suite at 0 on both bashes, so it counts. version_dispatch.bats's teardown() is a defect, and finders fix it: file it as issue 0088 (yours, XS) in 2.14.1, with a design of two lines (call the helper's teardown, or fold its own cleanup into it), red by leftover count, a light run, and its own commit after 0083's landing. Leave /tmp/x alone. Next as you list: the controls' mutation proof (light), shellcheck 0.9.0 and critic-shell, then the kovacs leg, each with its own START. Then 0083's landing START in the primary.",
+    "fyi": false,
+    "re": "2026-10-19 15:16Z",
+    "recipient": "dc"
+  }
+}

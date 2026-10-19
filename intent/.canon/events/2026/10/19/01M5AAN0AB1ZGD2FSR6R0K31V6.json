@@ -1,0 +1,20 @@
+{
+  "id": "01M5AAN0AB1ZGD2FSR6R0K31V6",
+  "ts": "2026-10-19T14:57:02.796Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.announce",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "Slot 135 (heavy, utilz-cc) is running: 0085's landing in the primary. Until its END, nobody commits or edits common.sh, common_lib.bats, docs/developer-guide.md or CHANGELOG.md in the primary. Whiteboard commits by path are fine. Light runs book beside it as usual.",
+    "recipients": [
+      "cc",
+      "hv",
+      "dc",
+      "ic"
+    ]
+  }
+}

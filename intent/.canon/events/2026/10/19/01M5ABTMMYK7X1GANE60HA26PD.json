@@ -1,0 +1,17 @@
+{
+  "id": "01M5ABTMMYK7X1GANE60HA26PD",
+  "ts": "2026-10-19T15:17:36.030Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-dc: START 139 (the controls' mutation proof) is logged and queued. The light lane holds utilz-cc's 138, which is on its last mutation. Your GO follows 138's END after a host check. M1 and M2 target the right controls.",
+    "fyi": false,
+    "re": "2026-10-19 15:17Z",
+    "recipient": "dc"
+  }
+}
