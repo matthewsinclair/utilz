@@ -26,6 +26,9 @@ setup() {
   export XDG_STATE_HOME="$BATS_TEST_TMPDIR/state"
   unset MENUZ_HOME VISUAL EDITOR
   mkdir -p "$HOME"
+  # This setup() replaces test_helper's, so it isolates the tools that keep
+  # state as that one does: unison, gpg, and git's signing (issue 0091).
+  isolate_tool_homes
   CONFIG="$XDG_CONFIG_HOME/menuz"
   LOG="$XDG_STATE_HOME/menuz/menuz.log"
   INSTALLED="$HOME/Applications/Menuz.app"
@@ -1626,4 +1629,19 @@ config      ok   $CONFIG/menuz.yaml"
   assert_exit_code 1
   assert_output "platform    skip Menuz.app, menuz's menu bar app, needs macOS, so it is not available on Linux; $WORKS_HERE
 config      FAIL no $CONFIG/menuz.yaml (menuz init creates it)"
+}
+
+# ============================================================================
+# ISOLATION (issue 0091)
+# ============================================================================
+
+@test "AT-02.1: a git config the environment names, that signs, does not reach the fixture's commit (issue 0091)" {
+  local rec="$BATS_TEST_TMPDIR/gpg-calls" gpg="$BATS_TEST_TMPDIR/recording-gpg"
+  printf '#!/bin/sh\necho "$*" >>"%s"\nexit 1\n' "$rec" >"$gpg"
+  chmod +x "$gpg"
+  printf '[commit]\n\tgpgsign = true\n[tag]\n\tgpgsign = true\n[gpg]\n\tprogram = %s\n' "$gpg" >"$BATS_TEST_TMPDIR/signing.gitconfig"
+  export GIT_CONFIG_GLOBAL="$BATS_TEST_TMPDIR/signing.gitconfig"
+  run source_home
+  [[ ! -e "$rec" ]] || fail "the fixture's commit asked gpg to sign: $(cat "$rec")"
+  assert_success
 }

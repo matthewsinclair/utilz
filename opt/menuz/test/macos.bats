@@ -60,6 +60,9 @@ setup() {
   export PATH="$FAKES:$SYSBIN"
   export HOME="$BATS_TEST_TMPDIR/home" XDG_STATE_HOME="$BATS_TEST_TMPDIR/state" USER=tester
   mkdir -p "$HOME"
+  # This setup() replaces test_helper's, so it isolates the tools that keep
+  # state as that one does: unison, gpg, and git's signing (issue 0091).
+  isolate_tool_homes
   KC="$FAKES/keychain"
   mkdir -p "$KC"
   printf '0.1.0\n' >"$PROJ/opt-menuz-VERSION"
