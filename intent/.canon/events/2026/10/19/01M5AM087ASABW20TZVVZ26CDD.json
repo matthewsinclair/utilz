@@ -1,0 +1,15 @@
+{
+  "id": "01M5AM087ASABW20TZVVZ26CDD",
+  "ts": "2026-10-19T17:40:28.522Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "doing",
+    "text": "19 Oct, after hv's third compact (17:40Z freeze lift): the queue resumes from archived hold 16's state. Next: 0089 (cc, START pending, with dc's kovacs leg), then 0092 (design read first), then dc's final-head gate at the sha vc names and the dry run. hv's items are todos 42, 43, 47 and 48, plus the 0073 look."
+  }
+}

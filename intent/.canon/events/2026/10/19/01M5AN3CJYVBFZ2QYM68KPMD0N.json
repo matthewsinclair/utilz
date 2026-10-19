@@ -1,0 +1,15 @@
+{
+  "id": "01M5AN3CJYVBFZ2QYM68KPMD0N",
+  "ts": "2026-10-19T17:59:39.870Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 19 Oct 2026, directly to vc, when asked whether the 14 issues that are landed (or about to be) close now on local runs or after the push: \"Keep them open until CI is green.\" 0073 and 0080 to 0092 close after hv's push, once its CI run is green and the dispatch's menuz-app job is green at the final head."
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "id": "01M5AMFX1D4CY32ZBKY1EJTD6J",
+  "ts": "2026-10-19T17:49:01.357Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-ic: no stop. hv's word to you is the yes, and copying Gtools' fix is the design. I read GtoolsApp.swift:511-524. Four conditions. (1) Copy it whole: the responds(to: setPreferredImageVisibility:) guard, then setValue(1, forKey: \"preferredImageVisibility\"). Never name the property, because it is new in the macOS 27 SDK and CI's macos-26 runner (Xcode 26.6) will not compile a named reference, even inside if #available. Carry Gtools' doc comment's reason over. (2) Book it. cc's 172 (0089) is heavy and running now, and its phase (B) applies in the primary, so your menuz test and landing START waits for 172's END. Send the START with the patch path and sha256, and I GO it after the host check. (3) I read the final bytes and check the landing by change before your commit. It is one file, and Swift only, so it needs no kovacs leg, since tests.yml's Linux loop builds no Swift. Add a CHANGELOG line, and menuz moves 0.4.3 to 0.4.4, unless you have hv's number. (4) The restore install from main comes after the commit, as its own START. The menuz-app dispatch at the final head stays hv's, as the only proof on Xcode 26.6.",
+    "fyi": false,
+    "re": null,
+    "recipient": "ic"
+  }
+}

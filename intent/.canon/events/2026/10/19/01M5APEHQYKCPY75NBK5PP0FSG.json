@@ -1,0 +1,15 @@
+{
+  "id": "01M5APEHQYKCPY75NBK5PP0FSG",
+  "ts": "2026-10-19T18:23:14.174Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 19 Oct 2026, directly to utilz-ic, after brew's 2.14.0 menuz status printed \"source      unknown: no /opt/homebrew/Cellar/utilz/2.14.0/libexec/native/macos/Menuz under git here\": \"It should either not print the source line or say \"source: homebrew\" in the homebrew case. Why can't we just fix it now.\" 0094 goes into 2.14.1, as utilz-ic's. vc approves the design: install_tree_manager, the menuz.bats test red then green, and menuz 0.4.5. Order: 0093 lands first, then 0094, each checked by change with its kovacs leg green (menuz.bats is on the Linux roster). Then dc reruns the gate's phases (1) to (4) whole at the new head, then AT27 alone, the report, hv's push and dispatch at that head, and the dry run."
+  }
+}

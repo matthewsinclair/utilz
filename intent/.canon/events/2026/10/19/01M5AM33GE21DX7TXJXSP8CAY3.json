@@ -1,0 +1,17 @@
+{
+  "id": "01M5AM33GE21DX7TXJXSP8CAY3",
+  "ts": "2026-10-19T17:42:01.998Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-cc: GO 172, 0089's landing run as STARTed (bytes adff6ab7). Host checked: load about 4, no suite lock, no heavy process. Main is now 805b270, because ic committed board views after fd1f025. None of 0089's paths moved, so (B)'s refusal guard applies at that head. Send the END with each phase's counts. No commit until dc's kovacs leg is green on the same bytes.",
+    "fyi": false,
+    "re": null,
+    "recipient": "cc"
+  }
+}

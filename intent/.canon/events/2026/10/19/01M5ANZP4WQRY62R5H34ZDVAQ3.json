@@ -1,0 +1,15 @@
+{
+  "id": "01M5ANZP4WQRY62R5H34ZDVAQ3",
+  "ts": "2026-10-19T18:15:07.164Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 19 Oct 2026, directly to vc: \"Why can't we also fix issues 75 and 93?\" This replaces decision 43's after-the-cut for 0093. 0093 goes into 2.14.1. The order: dc's 178 phases (3) and (4), then ic's 179, then cc's 180 (heavy-0093.sh on 5924fbe5) with dc's kovacs leg on the same bytes, then the landing. Then the gate reruns at the new head for what 0093 can touch: kovacs rust, mac-lint and mac-rust. 0093 changes only Rust tests and manifests, so mac-suites and the Linux loop hold from 178. Then AT27 alone, the report, a push by hv, and the dry run. 0075 needs no code. It needs a status read and hv's logout and login, and a logout ends every Claude session on this Mac, so it goes after the dry run, with every node folded first."
+  }
+}

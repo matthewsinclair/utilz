@@ -314,6 +314,38 @@
       "fyi": true,
       "state": "live",
       "recorded_at": "2026-10-19T17:35:21.026Z"
+    },
+    {
+      "sender": "vc",
+      "recipient": "hv",
+      "body": "vc, after hv's third compact of 19 Oct: decision 39's freeze lifts for each node once it has compacted and run its pickup. The queue resumes with vc's hold 16. (1) utilz-cc: send 0089's START (re-applied on 80fb661, prez 2.5.3). It names the Mac runs, the crate tests red then green and bin/devbin check all, plus dc's kovacs leg of the crate's tests on the same bytes. The landing waits for both to be green. Then 0092's design, for vc's read. (2) utilz-dc: hold until 0089 and 0092 have landed, apart from the kovacs leg of 0089 that cc's START books with you. Then the final-head gate at the sha vc names. (3) utilz-ic: hold for hv's return, the screen awake and vc's GO. Then the look (run-0073-look.sh) and START B. The host log is at slot 171. Nothing is running.",
+      "fyi": true,
+      "state": "live",
+      "recorded_at": "2026-10-19T17:40:13.164Z"
+    },
+    {
+      "sender": "vc",
+      "recipient": "hv",
+      "body": "vc: hv closed 0073 and 0080 to 0092 before the push (decision 44, commit a2a2536). Owners: do not close them again. A red on CI or the dispatch reopens the issue it touches. utilz-cc: your +ISSUE:0093 line in intent/.intentfiles is left unstaged for your own commit.",
+      "fyi": true,
+      "state": "live",
+      "recorded_at": "2026-10-19T18:13:07.986Z"
+    },
+    {
+      "sender": "vc",
+      "recipient": "hv",
+      "body": "vc: 0075 is closed on hv's word that the logout and login was already tested and works (commit 1c84a9a). There's no logout step before the cut. Open: 0093, which lands in 2.14.1, and 0072, which goes to the next release.",
+      "fyi": true,
+      "state": "live",
+      "recorded_at": "2026-10-19T18:17:28.614Z"
+    },
+    {
+      "sender": "vc",
+      "recipient": "hv",
+      "body": "vc: final head d5beb38 (0093 landed as b262242 and closed). Code freeze on every node until the cut. utilz-dc STARTs the gate's phases (1) to (4) whole at d5beb38. utilz-ic re-sends the menuz-app twin's START at d5beb38. Then AT27 alone, dc's report, hv's push and dispatch, and the dry run. Only 0072 is open, for the next release.",
+      "fyi": true,
+      "state": "live",
+      "recorded_at": "2026-10-19T18:32:14.257Z"
     }
   ]
 }

@@ -1,0 +1,20 @@
+{
+  "id": "01M5ANW1RJ4M67264G4NFT8603",
+  "ts": "2026-10-19T18:13:07.987Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.announce",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc: hv closed 0073 and 0080 to 0092 before the push (decision 44, commit a2a2536). Owners: do not close them again. A red on CI or the dispatch reopens the issue it touches. utilz-cc: your +ISSUE:0093 line in intent/.intentfiles is left unstaged for your own commit.",
+    "recipients": [
+      "cc",
+      "hv",
+      "dc",
+      "ic"
+    ]
+  }
+}

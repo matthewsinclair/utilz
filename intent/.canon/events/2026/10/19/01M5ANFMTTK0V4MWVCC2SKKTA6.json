@@ -1,0 +1,15 @@
+{
+  "id": "01M5ANFMTTK0V4MWVCC2SKKTA6",
+  "ts": "2026-10-19T18:06:21.530Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 19 Oct 2026, directly to vc: \"Cut without 0072, ship it next release.\" This replaces decision 41's wait. 2.14.1's code is 910af45, and dc's 178 (with ic's 179 and the AT27 run alone) is the final-head gate, followed by the report and the dry run under a freeze of every node's code and board. 0072 moves to the next release. Gtools' arca_swift 0.2.0 no longer gates Utilz and goes at Gtools' own pace. utilz-ic adopts it after the cut, in a worktree, and lands nothing on main until 2.14.1's CI and tap are done. vc's call on decision 42, the TMPDIR leftovers: they are test-only, so the fix lands straight after the cut rather than forcing a second gate. One word from hv puts it back in 2.14.1, at the cost of an M-sized gate rerun."
+  }
+}

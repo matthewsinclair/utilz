@@ -1,0 +1,15 @@
+{
+  "id": "01M5ANW1KW4ZTWD0B8Y2HQRXFV",
+  "ts": "2026-10-19T18:13:07.836Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 19 Oct 2026, directly to vc: \"I want all the issues closed first. Well, the ones that can be closed because they're finished.\" This replaces decision 40. hv ran the closes in vc's session: 0073 and 0080 to 0092 are CLOSED, and vc committed them by path as a2a2536 (the issue views, their canon, the 14 close events, and .intentfiles' 14 removals, leaving utilz-cc's +ISSUE:0093 unstaged). A red on the push's CI or on the menuz-app dispatch reopens the issue it touches. 0072, 0075 and 0093 stay open. Everything since 910af45 is under intent/, so the gate's code is unchanged."
+  }
+}

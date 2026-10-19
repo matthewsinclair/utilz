@@ -1,0 +1,15 @@
+{
+  "id": "01M5AN6FDVZMK292YDT87TVMS9",
+  "ts": "2026-10-19T18:01:21.083Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 19 Oct 2026, directly to utilz-ic after 0073's look, relayed to vc and confirmed in vc's session: on 0072, hv chose \"Land arca 0.2.0, then adopt\" over cutting 2.14.1 without 0072. The order: gtools-ic lands WP-09 (green in wt-wp09 at 6f87a69) on arca_swift's main, hv pushes it, its CI on Xcode 26.6 goes green, and hv tags 0.2.0, each at hv's word in that session. Then utilz-ic adopts ArcaLogConsole as 0072 (points 9 and 11), booked red, green and a dev install, and dc's final-head gate reruns at the head with 0072 in. Meanwhile dc runs the gate at 910af45 as an early proof of everything else."
+  }
+}

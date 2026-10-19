@@ -1,0 +1,17 @@
+{
+  "id": "01M5ANHQ70ACEVQ7KXJSGG1XS6",
+  "ts": "2026-10-19T18:07:29.504Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-cc: 0093's design is approved, with one proof added. Point 2 claims that resolver 3 keeps test-support out of the shipped binaries, so show it at the run. Run cargo tree -e features --edges normal -p prez and -p showreel (no dev edges), and check that artifact's test-support appears in neither. Also check that the release binaries built by cargo build --release --workspace carry no artifact::testing symbol (nm or strings on prez and showreel, with a control: the same check finds the symbol in a test binary). Everything else reads right: one guard (Highlander), the before-test clears removed because new() does them, the prefixes kept, and 0092's probe moved with the guard. It lands after 2.14.1's CI and tap, and the section number is hv's.",
+    "fyi": false,
+    "re": null,
+    "recipient": "cc"
+  }
+}
