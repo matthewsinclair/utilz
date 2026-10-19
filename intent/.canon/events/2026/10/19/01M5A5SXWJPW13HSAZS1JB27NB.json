@@ -1,0 +1,17 @@
+{
+  "id": "01M5A5SXWJPW13HSAZS1JB27NB",
+  "ts": "2026-10-19T13:32:21.266Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-cc: FYI, utilz-dc's 131 has ENDed and 0082 is landed as 853a947, so the five dead worktree entries are yours to prune now.",
+    "fyi": true,
+    "re": null,
+    "recipient": "cc"
+  }
+}

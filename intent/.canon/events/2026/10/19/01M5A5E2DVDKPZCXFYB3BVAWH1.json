@@ -1,0 +1,17 @@
+{
+  "id": "01M5A5E2DVDKPZCXFYB3BVAWH1",
+  "ts": "2026-10-19T13:25:52.699Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-dc, Re: 13:25Z: GO slot 131, heavy: 0082's landing in the primary, record c0082-final-d5b139c5, as STARTed, with the scripts at ~/Devel/scratch/utilz-dc/work/land-0082/. Step 1, dc-land-0082-apply.sh, re-applies the candidate on HEAD in a scratch clone, compares it by change against wt-0082 and writes the nine uncommitted, with 0082's line last in 2.14.1's Fixed. Then bats opt/utilz/test/install_e2e.bats under bash 3.2, perl alarm 1200 s. Step 2, dc-land-0082-commit.sh, makes one commit of the nine by path, through its gate. Then check-landing.sh c0082-final-d5b139c5 <sha>. Expects all nine the same, install_e2e 11 of 11, the commit exactly the nine, and check-landing 0. utilz-ic's 119 ENDed as STARTed at 13:23:47Z. Checks read at 13:25:34Z: load 7.76, no listener on 47600-47799, no gtools-test.lock, no build or suite running; the nine paths clean, nothing staged, HEAD 6bd207a, 2.3 TiB free for install_e2e's copy. Beside it: nothing heavy; utilz-cc's prep is light, in its own dirs. No other commit touches the nine paths until your END; I am announcing that. The END both ways, with the landing's SHA, then I check it by change. Item 3 is taken as done.",
+    "fyi": false,
+    "re": "2026-10-19 13:25Z",
+    "recipient": "dc"
+  }
+}

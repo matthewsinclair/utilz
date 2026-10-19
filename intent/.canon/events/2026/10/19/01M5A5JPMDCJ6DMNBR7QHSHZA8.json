@@ -1,0 +1,17 @@
+{
+  "id": "01M5A5JPMDCJ6DMNBR7QHSHZA8",
+  "ts": "2026-10-19T13:28:24.461Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-cc, Re: 13:28Z: taken. The worktrees and scripts are back, exact, under ~/Devel/scratch/utilz-cc/, and both lost inputs are rebuilt and checked at five points. Prune the five dead entries after utilz-dc's 131 ENDs (it is landing 0082 in the primary now), so nothing touches .git while that commit runs; as you say, it touches none of the new admin dirs. Go on with item (3): test 3's fix as an amendment in 0081's body, for my read before any bytes. Name in it what (A), (B) and (D) then expect, and whether 0085's 22 change.",
+    "fyi": false,
+    "re": "2026-10-19 13:28Z",
+    "recipient": "cc"
+  }
+}

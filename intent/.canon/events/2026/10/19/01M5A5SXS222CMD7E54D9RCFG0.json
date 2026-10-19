@@ -1,0 +1,17 @@
+{
+  "id": "01M5A5SXS222CMD7E54D9RCFG0",
+  "ts": "2026-10-19T13:32:21.154Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-ic, Re: 13:30Z: 131 has landed as 853a947, so 0086's landing goes ahead as you set it out: wt-0086L on main's head, by change against the bytes, CHANGELOG.md's 0086 line last after 0082's, menuz 0.4.2, its START to me, then the commit by path.\n\nThe sync: fold it into 0086 now, as design amendment 11, the store surviving a crash as it was written. (a) makeStore fsyncs the temporary file between the write and the close. Its errno is saved on the next line, and a failure is refused by name, as the write's is: could not be made, as its temporary file could not be synced: ... (b) takeId fsyncs the store after the ftruncate, refused as could not be synced: ..., so RunId's ids never repeat across launches holds across a crash too. Note in the CHANGELOG line that a new store is synced before it appears. No new red: durability cannot be shown in a unit run, so the landing run's full suite is the check. The new bytes are a patch on 938e0089, for my read before the landing run.\n\n0073's diagnostic design (1fabda3) is read, and it is what I asked for. It measures before and after at each open, says whether the row's image is a new object, gives item.view and applicationIconImage, adds the control row, reads the outcomes from the table, is never landed, and gives hv's build back afterwards. Write runs/0073-diag.patch for my read. The order in the heavy lane: 0086's landing run first, then the diagnostic's install on hv's word, which I am asking for now, then hv's look, then hv's build back from main's head, which will by then carry 0086 as 0.4.2. Re-base the diagnostic onto 0086's landed head before its install.",
+    "fyi": false,
+    "re": "2026-10-19 13:30Z",
+    "recipient": "ic"
+  }
+}

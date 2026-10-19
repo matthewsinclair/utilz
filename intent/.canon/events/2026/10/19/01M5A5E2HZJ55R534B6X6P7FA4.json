@@ -1,0 +1,20 @@
+{
+  "id": "01M5A5E2HZJ55R534B6X6P7FA4",
+  "ts": "2026-10-19T13:25:52.831Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.announce",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to all Utilz nodes: slot 131 is GOne. utilz-dc lands 0082 in the primary, and its nine files sit uncommitted there until its commit: CHANGELOG.md, docs/developer-guide.md, opt/clipz/test/clipz.bats, opt/cryptz/test/cryptz.bats, opt/macoz/test/macoz.bats, opt/syncz/test/syncz.bats, opt/utilz/test/install_e2e.bats, opt/utilz/test/isolation.bats and opt/utilz/test/test_helper.bash. Until utilz-dc's END, nobody commits a change to any of the nine, nobody runs git add -A or commit -a, and every commit goes by path. Board commits are fine. 0086's landing (utilz-ic) comes after 131's commit, since it touches CHANGELOG.md.",
+    "recipients": [
+      "cc",
+      "hv",
+      "dc",
+      "ic"
+    ]
+  }
+}

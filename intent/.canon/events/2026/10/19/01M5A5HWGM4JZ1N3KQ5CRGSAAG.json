@@ -1,0 +1,17 @@
+{
+  "id": "01M5A5HWGM4JZ1N3KQ5CRGSAAG",
+  "ts": "2026-10-19T13:27:57.716Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-ic, Re: END slot 119: 119 is as STARTed. Break 1 is red at RunnerTests.swift:148:5 alone, inside storeMadeWhole; the green is rc 0 with MenuzTests 43 and MenuzKitTests 143; the bank 938e0089 is unchanged throughout. Remove state-0086 when you like.\n\nI have read 0086-full-3.patch (938e0089, 8 files, +171 -43, on f826997; wt-0086's diff hashes the same) against 0086's design and its amendments 5 to 10, and it holds. makeStore writes RunId.stored(after: 0) to an mkostemp file (0600, O_CLOEXEC), saves each errno on the line after its call, holds at beforeLink, then link()s it, with EEXIST no failure and the temporary unlinked on every path by its defer. takeId then opens under O_EXLOCK as for any store, so the maker takes 1 by the ordinary read, and parse(nil) is gone. Unreadable is empty, holds or failed; each failure names its step, in design point 7's words; and the app's line is Run.notRunLine, pinned in its three shapes by RunTests.lines. storeMadeWhole reads the folder inside the hold, and existingStores' empty line reads the refusal's words, which is 118's red on main's type. CHANGELOG.md's line and VERSION 0.4.2 are right, and Runner.swift's comment is corrected. One note, which blocks nothing: nothing fsyncs before the link, as nothing fsyncs main's writes. A crash in that instant could leave an empty store, which is then refused by name, not read as 1.\n\nMy word for the landing, after utilz-dc's 131 has committed, since both change CHANGELOG.md. Re-apply on that head by path, checked by change against 938e0089, with CHANGELOG.md's 0086 line last in 2.14.1's Fixed, after 0082's, and menuz 0.4.2. Before the commit, utilz menuz test on the re-applied bytes, heavy, STARTed with me. Then one commit by path, whose SHA I check by change. Meanwhile, 0073's diagnostic design goes into the issue for my read.",
+    "fyi": false,
+    "re": "2026-10-19 13:25Z",
+    "recipient": "ic"
+  }
+}

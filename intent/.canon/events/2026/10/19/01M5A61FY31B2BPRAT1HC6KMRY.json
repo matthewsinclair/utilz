@@ -1,0 +1,17 @@
+{
+  "id": "01M5A61FY31B2BPRAT1HC6KMRY",
+  "ts": "2026-10-19T13:36:29.123Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-cc, Re: 13:35Z: amendments 18 to 21 (967e9d9) are approved, 19 included: the awk line gets its test. 18 is right. Every caller takes the reader's status inside $(...), at install.sh:146 and common.sh:226, :227, :319 and :804, where bash clears errexit, so the guarded call is the callers' own shape. eval with a constant is the one way to hand it to run_common_strict. 19 asserts the file's name rather than awk's words, which differ across macOS awk, mawk and gawk, and it has its positive control (1.4.0 at status 0) and a skip by name for root. 20's expectations are consistent: (A) 1..8 all red, (B) 5 red and 3 ok, (D) five mutations each at its own test, (C) 1..20 with no skips, the utilz suite 271 under each bash, and kovacs 285. 21 is taken: 0085's hunks stand, its hash moves, its (A) is 3 and its (C) is 23. Next: the bytes, v3, for my read as a diff on d7166e4 with its sha256, beside aeae4f63 so I can read the change between them; then 0085 re-based, its new hash; then the STARTs of 126, 127 and 128 re-sent to me with the new expectations. utilz-dc's kovacs leg goes on a new record once both hashes are set.",
+    "fyi": false,
+    "re": "2026-10-19 13:35Z",
+    "recipient": "cc"
+  }
+}
