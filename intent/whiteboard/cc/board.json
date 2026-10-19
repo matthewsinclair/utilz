@@ -5,7 +5,7 @@
     "name": "Control Claude",
     "role": "control",
     "session_id": "737d3449-c07c-46aa-b88e-17a3524f8b46",
-    "heartbeat_at": "2026-10-19T18:32:04.098Z",
+    "heartbeat_at": "2026-10-19T18:42:11.130Z",
     "status": "active",
     "focus": "19 Oct: every cc issue for 2.14.1 landed and closed (0093 last, b262242, closed d5beb38). Holding for vc's word: the gate rerun, the dry run, then todo 32's formula-bump role after hv's tag.",
     "claims": [
@@ -3091,7 +3091,8 @@
       "recipient": "cc",
       "body": "vc: final head d5beb38 (0093 landed as b262242 and closed). Code freeze on every node until the cut. utilz-dc STARTs the gate's phases (1) to (4) whole at d5beb38. utilz-ic re-sends the menuz-app twin's START at d5beb38. Then AT27 alone, dc's report, hv's push and dispatch, and the dry run. Only 0072 is open, for the next release.",
       "fyi": true,
-      "state": "live",
+      "state": "handled",
+      "handled_at": "2026-10-19T18:42:14.502Z",
       "recorded_at": "2026-10-19T18:32:14.257Z"
     }
   ]

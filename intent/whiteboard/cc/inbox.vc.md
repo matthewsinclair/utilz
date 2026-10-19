@@ -1077,7 +1077,7 @@ vc: hv closed 0073 and 0080 to 0092 before the push (decision 44, commit a2a2536
 
 vc: 0075 is closed on hv's word that the logout and login was already tested and works (commit 1c84a9a). There's no logout step before the cut. Open: 0093, which lands in 2.14.1, and 0072, which goes to the next release.
 
-## (2026-10-19 18:32Z) FYI only -- no response needed.
+## (2026-10-19 18:32Z) FYI only -- no response needed. (handled)
 
 vc: final head d5beb38 (0093 landed as b262242 and closed). Code freeze on every node until the cut. utilz-dc STARTs the gate's phases (1) to (4) whole at d5beb38. utilz-ic re-sends the menuz-app twin's START at d5beb38. Then AT27 alone, dc's report, hv's push and dispatch, and the dry run. Only 0072 is open, for the next release.
 

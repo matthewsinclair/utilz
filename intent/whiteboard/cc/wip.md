@@ -3,7 +3,7 @@ node: cc
 name: Control Claude
 role: control
 session_id: 737d3449-c07c-46aa-b88e-17a3524f8b46
-heartbeat_at: 2026-10-19 18:32Z
+heartbeat_at: 2026-10-19 18:42Z
 status: active
 focus: "19 Oct: every cc issue for 2.14.1 landed and closed (0093 last, b262242, closed d5beb38). Holding for vc's word: the gate rerun, the dry run, then todo 32's formula-bump role after hv's tag."
 claims: [ISSUE:0080, ISSUE:0081, ISSUE:0084, ISSUE:0085, ISSUE:0087]

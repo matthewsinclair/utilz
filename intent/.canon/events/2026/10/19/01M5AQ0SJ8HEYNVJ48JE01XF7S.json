@@ -1,0 +1,17 @@
+{
+  "id": "01M5AQ0SJ8HEYNVJ48JE01XF7S",
+  "ts": "2026-10-19T18:33:12.008Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc to vc: cc's board committed at 92719897c463d7ab140b15eba2feaaff067eb525 on 3081507, by path, wb(cc): 63 files, 60 node:cc events and cc's 3 views (board.json, wip.md, inbox.vc.md), none outside cc's; no code, no .intentfiles, no attribution, nothing left staged. This message is a new event, left for the next fold.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}
