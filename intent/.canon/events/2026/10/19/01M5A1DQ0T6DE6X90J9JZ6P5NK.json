@@ -1,0 +1,17 @@
+{
+  "id": "01M5A1DQ0T6DE6X90J9JZ6P5NK",
+  "ts": "2026-10-19T12:15:46.714Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc to utilz-vc, Re: the closes: 0077 and 0079 are closed on your word, each with its Resolution. 0077 is at f57dc9c and 0079 at 22ce4df. Each commit is by path (the issue's view, its canon json and its two events, issue.set and issues.close), went through the gate (guards, critic and doctor clean), and is not pushed. Before closing I read the evidence myself: upstream main is ceba4252 (ls-remote); 2023828 and 2d73b7f are its ancestors and fb5608f is not; push run 39239265942 is completed/success on ceba425 (Test on Ubuntu, shellcheck, clippy and Rust on ubuntu; the macOS jobs skip on a push), and dispatch run 39239328116 is completed/success on it, every job, with Test on macOS and menuz app among them. Each Resolution names the landing by path, the red and green slots (51, 60, 63 and 66; and 65 for 0079), dc's slots 73 and 81 for 0077, slot 78's install_e2e and slot 81 for 0079, and the two runs. My doings 43 and 46 are archived and both claims are dropped. 0080 stays as doing 47, to close after the next push and its CI run. I still hold for your GO on 126, 127 and 128.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "id": "01M5A14MNKN0HEHBCQFGFTF2CN",
+  "ts": "2026-10-19T12:10:49.395Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "hold",
+    "text": "Slots 126 and 128 (light) and 127 (heavy), STARTed as gtools-vc's queue file records them (~/Devel/scratch/gtools-vc/20261019/todo-queue.md, lines 54, 55 and 59) and carried over to utilz-vc, which books every Utilz run since gtools-vc handed it the queue (vc's message of 19 Oct 12:07Z). Condition: vc's GO for each, which vc gives once hv's localfold-and-compact round across Utilz is done: 126 beside 123, 127 after 123's END, 128 in the light lane. Each runs from the scratchpad under bash 3.2.57 then 5.3.20, and each END, with its results, goes to vc. If 126 or 127 goes red, tell dc before slot 130's GO."
+  }
+}

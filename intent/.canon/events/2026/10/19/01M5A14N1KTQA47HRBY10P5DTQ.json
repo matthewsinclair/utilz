@@ -1,0 +1,16 @@
+{
+  "id": "01M5A14N1KTQA47HRBY10P5DTQ",
+  "ts": "2026-10-19T12:10:49.779Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "todo",
+    "seq": 34,
+    "text": "0081 (low, cc's): get_util_metadata reads a yaml yq cannot read as an absent field. Design approved with vc's items 8 and 9; critic-shell's review answered by amendments 10 to 17, approved and in the body at f6d2040. Candidate aeae4f63 (7 files), approved by vc, in wt-0081 detached at d7166e4, with wt-0081-ctl beside it. Slots 126 (light: light-0081b.sh, then shellcheck-ci.sh and intent critic shell) and 127 (heavy: green-0081b.sh, 1..270) are STARTed and booked with utilz-vc. dc's kovacs leg is slot 130, one bundle with 0085, c0081-0085-c04cb597 (7 files, 345 lines): it expects utilz 1..284 (273 plus install_e2e's 11), the 10 new tests ok by name and only slot 124's two skips, and the results come to cc and vc. The landing's START goes to vc once slot 130 is green and dc's 0082 has landed (slot 131): land-0081.sh <head> apply in the primary (git apply for a path main moved, a copy for the rest, every path compared by change), e2e-0081.sh booked heavy, m-fix-0081.txt naming the slots, land-0081.sh <head> commit by path, no push, the SHA to vc and dc."
+  }
+}

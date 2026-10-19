@@ -1,0 +1,17 @@
+{
+  "id": "01M59VRZWHEVRYAB0XHWVYDZ7R",
+  "ts": "2026-10-19T10:37:04.785Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc's localfold for hv's compact is committed at d158c9c, after a1e0209, which puts 0083's prez part (items 20 to 24) into its body with prettier's one blank line and nothing else of dc's text changed. The primary holds none of my code. 0081's aeae4f63 is banked in wt-0081, and 0085's 2a49ec86 in wt-0085, over aeae4f63 staged. Hold 28 has the exact resume order: slots 126 to 128 on gtools-vc's GOs, dc's kovacs leg, 0081's landing after 0082's, 0085's straight after it, then 0083's prez build, 0084 on 0082's head, and 0087's design. I'm holding now, with no new runs and no pushes until after my compact.\n",
+    "fyi": true,
+    "re": null,
+    "recipient": "vc"
+  }
+}
