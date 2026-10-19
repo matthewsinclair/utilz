@@ -13,7 +13,7 @@
 use crate::html;
 use crate::Failure;
 use artifact::browser;
-use std::path::Path;
+use std::path::{Path, PathBuf};
 use std::process::{Command, Stdio};
 
 /// Print an artifact to PDF through headless Chrome.
@@ -252,21 +252,61 @@ pub fn open_presenting(
   // plus `f` in the runtime for a fullscreen the browser actually performs and
   // the key bar actually advertises. A flag nobody can observe working is worse
   // than an honest key.
-  if let Ok(found) = browser::find(explicit) {
-    let mut command = Command::new(&found);
-    command.args(presenting_argv(artifact, w, h));
-    return spawn(&mut command, &found.display().to_string());
-  }
+  let no_browser = match browser::find(explicit) {
+    Ok(found) => {
+      let mut command = Command::new(&found);
+      command.args(presenting_argv(artifact, w, h));
+      return spawn(&mut command, &found.display().to_string());
+    }
+    Err(refusal) => refusal,
+  };
   if explicit.is_some() {
     // A named browser that could not be found is an error, never a fallback.
-    browser::find(explicit)?;
+    return Err(no_browser);
   }
 
-  // No Chromium anywhere: hand it to the system opener. The deck still
+  // No Chromium anywhere: hand it to the platform's opener. The deck still
   // presents, just with the browser's own chrome around it and `f` to fill
-  // the screen.
-  eprintln!("prez: warning: no Chromium-family browser found; opening with the system default, so the window will not be de-chromed");
-  spawn(Command::new("open").arg(artifact), "open")
+  // the screen. The platform is read here, once, so the choice below is a
+  // plain function of it and is tested for both on either (issue 0083).
+  let (opener, path) = fallback_opener(std::env::consts::OS, artifact::path::on_path, no_browser)?;
+  eprintln!("prez: warning: no Chromium-family browser found; opening with {opener}, so the window will not be de-chromed");
+  spawn(Command::new(&path).arg(artifact), opener)
+}
+
+/// The opener `present` falls back to when no browser is found, or the
+/// refusal when there is none (issue 0083).
+///
+/// **`open` IS macOS's, NOT EVERYONE'S.** `present` spawned `open` on every
+/// platform, so on Linux it reached no opener -- or Debian's `open`, a link to
+/// `openvt` -- and failed at the exec with "could not launch 'open'", if at
+/// all. Elsewhere the opener is `xdg-open`. Each is looked up with `lookup`,
+/// which `present` passes as `on_path`; a test passes its own, since the
+/// artifact crate's tests empty PATH while they run.
+///
+/// With no opener either, the refusal is the finder's, extended: its list of
+/// every path it probed and its remedy, each with the opener added, and its
+/// exit code. So the browsers it names have one home, the finder.
+fn fallback_opener(
+  os: &str,
+  lookup: impl Fn(&str) -> Option<PathBuf>,
+  no_browser: Failure,
+) -> Result<(&'static str, PathBuf), Failure> {
+  let opener = if os == "macos" { "open" } else { "xdg-open" };
+  match lookup(opener) {
+    Some(path) => Ok((opener, path)),
+    None => Err(Failure {
+      message: format!(
+        "{}\n  and no '{opener}' on PATH to open the deck with",
+        no_browser.message
+      ),
+      remedy: Some(match no_browser.remedy {
+        Some(remedy) => format!("{remedy}, or put {opener} on PATH"),
+        None => format!("put {opener} on PATH"),
+      }),
+      code: no_browser.code,
+    }),
+  }
 }
 
 fn spawn(command: &mut Command, what: &str) -> Result<(), Failure> {
@@ -307,6 +347,84 @@ fn code(status: &std::process::ExitStatus) -> String {
 #[cfg(test)]
 mod tests {
   use super::*;
+
+  // ---- issue 0083: the opener is the platform's, or a refusal by name ------
+
+  fn finder_refusal() -> Failure {
+    Failure::new(
+      "no Chromium-family browser found. Probed:\n    /Applications/Google Chrome.app\n    chromium (on PATH)",
+      "install Chrome, Chromium, Edge or Brave, or name one with --browser PATH",
+    )
+  }
+
+  /// A PATH holding only `names`, each at /usr/bin/<name>.
+  fn path_with(names: &'static [&'static str]) -> impl Fn(&str) -> Option<PathBuf> {
+    move |name| {
+      names
+        .contains(&name)
+        .then(|| PathBuf::from(format!("/usr/bin/{name}")))
+    }
+  }
+
+  #[test]
+  fn on_macos_the_opener_is_open() {
+    let (opener, path) =
+      fallback_opener("macos", path_with(&["open", "xdg-open"]), finder_refusal())
+        .expect("open is on PATH");
+    assert_eq!(opener, "open");
+    assert_eq!(path, PathBuf::from("/usr/bin/open"));
+  }
+
+  #[test]
+  fn off_macos_the_opener_is_xdg_open_even_where_an_open_exists() {
+    // Debian's /usr/bin/open is openvt, which is no way to open a deck.
+    let (opener, path) =
+      fallback_opener("linux", path_with(&["open", "xdg-open"]), finder_refusal())
+        .expect("xdg-open is on PATH");
+    assert_eq!(opener, "xdg-open");
+    assert_eq!(path, PathBuf::from("/usr/bin/xdg-open"));
+  }
+
+  #[test]
+  fn off_macos_with_no_xdg_open_it_refuses_by_name_keeping_the_probe_list() {
+    let refusal = fallback_opener("linux", path_with(&["open"]), finder_refusal())
+      .expect_err("with no xdg-open on PATH, present refuses");
+    assert_eq!(refusal.code, 2);
+    assert!(
+      refusal.message.contains("chromium (on PATH)"),
+      "the finder's probe list is kept: {}",
+      refusal.message
+    );
+    assert!(
+      refusal
+        .message
+        .ends_with("and no 'xdg-open' on PATH to open the deck with"),
+      "{}",
+      refusal.message
+    );
+    assert_eq!(
+      refusal.remedy.as_deref(),
+      Some("install Chrome, Chromium, Edge or Brave, or name one with --browser PATH, or put xdg-open on PATH")
+    );
+  }
+
+  #[test]
+  fn on_macos_with_no_open_it_refuses_naming_open() {
+    let refusal = fallback_opener("macos", path_with(&[]), finder_refusal())
+      .expect_err("with no open on PATH, present refuses");
+    assert_eq!(refusal.code, 2);
+    assert!(
+      refusal
+        .message
+        .ends_with("and no 'open' on PATH to open the deck with"),
+      "{}",
+      refusal.message
+    );
+    assert_eq!(
+      refusal.remedy.as_deref(),
+      Some("install Chrome, Chromium, Edge or Brave, or name one with --browser PATH, or put open on PATH")
+    );
+  }
 
   // ---- AC19: the presenting window has a shape -----------------------------
 

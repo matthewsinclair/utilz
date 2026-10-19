@@ -340,7 +340,7 @@ dependencies = [
 
 [[package]]
 name = "prez"
-version = "2.5.1"
+version = "2.5.2"
 dependencies = [
  "artifact",
  "comrak",

@@ -270,7 +270,9 @@ A theme referencing anything outside the artifact -- `http://`, `https://`, a pr
 
 ## The browser
 
-`pdf` and `present` drive a Chromium-family browser. prez probes for one and, failing that, refuses **naming every path it tried** -- so the fix is always in front of you. `--browser PATH` overrides the probe.
+`pdf` and `present` drive a Chromium-family browser. prez probes for one. `--browser PATH` overrides the probe, and a `--browser` that is not there is refused, never replaced.
+
+When the probe finds none, `pdf` refuses **naming every path it tried** -- so the fix is always in front of you. `present` falls back to the platform's opener instead, `open` on macOS and `xdg-open` elsewhere, with a warning that names it: the deck still presents, in a window with the browser's own chrome around it. With no opener on `PATH` either, `present` refuses with the same list of paths, says which opener it lacked, and exits 2.
 
 `present` launches the window and exits. It does not stay resident, watch, or manage the browser.
 
