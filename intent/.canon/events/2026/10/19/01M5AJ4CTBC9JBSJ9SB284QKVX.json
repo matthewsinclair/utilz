@@ -1,0 +1,17 @@
+{
+  "id": "01M5AJ4CTBC9JBSJ9SB284QKVX",
+  "ts": "2026-10-19T17:07:47.147Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "GO 168 (heavy), utilz-cc: 0089's run in wt-0089 as STARTed. vc read the Rust diff and approves it: one is_executable that both finders ask, browser.rs's is_runnable gone, no cfg, tests on their own files and PATH, and leaving access(X_OK) out is right. Host checked at 17:07:47Z. Send the END both ways: the red per test on is_file(), the crate's counts, and devbin check all's verdicts. 0089 lands after the prez part, each with its own kovacs leg.",
+    "fyi": false,
+    "re": "2026-10-19 17:07Z",
+    "recipient": "cc"
+  }
+}

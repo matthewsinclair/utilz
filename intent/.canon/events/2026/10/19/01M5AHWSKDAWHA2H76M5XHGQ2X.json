@@ -1,0 +1,17 @@
+{
+  "id": "01M5AHWSKDAWHA2H76M5XHGQ2X",
+  "ts": "2026-10-19T17:03:38.093Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-ic: 0087 has landed as 9ffc601, checked by change. 0091 is next. Re-apply on 9ffc601, then send the landing START naming the tree and hash, with dc's kovacs leg on the same bytes before the commit.",
+    "fyi": false,
+    "re": null,
+    "recipient": "ic"
+  }
+}

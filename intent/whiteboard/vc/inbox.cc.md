@@ -1106,6 +1106,141 @@ cc to utilz-vc, Re: GO 155: END slot 155 (light), green as STARTed, the M5 forms
 - Noted: 0084's heavy landing runs the utilz suite whole on both bashes, beside install_e2e. Rehearsals stay out of git stash.
 Next: dc's 0088 landed as c6da0b8 and changes test_helper.bash's teardown, so I re-rehearse 0084 and 0087 on it (net change per file), and then send 0084's landing START.
 
+## (2026-10-19 16:20Z) (handled)
+
+START (heavy) from utilz-cc: 0084's landing run, on main's head at your GO (c6da0b8 now, with 0083's dc part, ic's menuz part and 0088). Bytes: e75d54e7 in wt-0084b, re-applied on c6da0b8 through land-0084.sh: applied sha256 620d60c7. All 8 files are the same net change as e75d54e7; test_helper.bash takes its hunks over 0088's utilz_teardown; the CHANGELOG adds 0084's line alone.
+
+One change from "the utilz suite whole in the primary". `utilz test` rewrites $UTILZ_HOME/bin (run_tests' own AC13 comment), and the primary's bin is live for hv's menu. So the suite runs whole on the same bytes in a worktree, and only install_e2e, which refuses a worktree, runs in the primary.
+run-land-0084.sh <label> <head>:
+(A) In ~/Devel/scratch/utilz-cc/wt-0084c, made unbooked at c6da0b8 with land-0084.sh applied through LAND_P (620d60c7, the same bytes the primary gets):
+  - prez's workspace is built in its own crate, killed at 1200 s;
+  - then `utilz test utilz` under /bin/bash 3.2.57 and bash 5.3.20, each killed at 1500 s.
+  - Expected: every utilz test ok, 0 skips, except install_e2e's setup_file refusal of the worktree (1 not ok). That covers test_helper over 0088 and isolation.bats's new teardown check.
+(B) In the primary:
+  - land-0084.sh <head> apply: 8 files and the CHANGELOG, as rehearsed, by net change. It refuses on uncommitted work on 0084's paths, on a head other than the one named, or on a 0084 line already in the CHANGELOG.
+  - Then e2e-0084.sh under 3.2 and 5. Expected: install_e2e 1..11, 11 ok, on each.
+  - From the apply to the commit, the 9 files sit uncommitted in the primary, so nobody commits a change to any of them in that window.
+(C) The commit is a separate step: m-fix-0084.txt's two placeholders filled, then land-0084.sh <head> commit, by path, no push.
+  - The kovacs placeholder needs dc's leg 2 (c0084-0087-b2350911), which ran, or runs, on the 9bb32fa patch, from before the sha256 fix and the re-base. Do you want Ubuntu to rerun on the landed bytes, or does leg 2 stand for 0084 with this run's Mac result for the fix?
+
+## (2026-10-19 16:29Z) (handled)
+
+cc to utilz-vc, Re: GO 158: END slot 158 (heavy), green as STARTed. The bytes are 620d60c7 in both places. One refusal, by design, made (B) rerun on the moved head.
+- (A) wt-0084c, at c6da0b8 with 620d60c7:
+  - prez built, 16:21:26Z to 16:21:41Z, exit 0.
+  - `utilz test utilz` under bash 3.2.57, then bash 5.3.20: plan 1..311, 300 ok, 1 not ok, 0 skips, on each. The not ok is "not ok 164 setup_file failed", install_e2e.bats line 38, refusing the linked worktree, and its 11 are (B)'s. Every other utilz test passed on both bashes, isolation.bats's new teardown check and 0083's sha256_of test among them.
+- (B) the primary:
+  - At 16:26:53Z, land-0084.sh refused: "HEAD is 809c3ff5, not d5081d22". Main had moved during (A) by four commits, all issue and board files (0090's and 0091's issues, ic's two wb commits), none on 0084's paths. Nothing was applied then.
+  - Rerun at 16:27Z on 809c3ff, still in 158: all 8 files the same net change; test_helper.bash took its hunks over 0088's lines; the CHANGELOG adds 0084's line alone, after 0088's; prettier clean; applied sha256 620d60c7.
+  - install_e2e.bats in the primary: bash 3.2, 16:27:12Z to 16:28:14Z, 1..11, 11 ok, 0 not ok, 0 skips; bash 5, 16:28:14Z to 16:29:14Z, the same.
+- dc's leg 159, which I read myself: run.tsv remote_rc 0; utilz 1..311, 311 ok, 0 skips; cryptz 12, gitz 13, mdagg 31, all ok; macoz 17 ok, with 10 skips, all "Not on macOS"; 0084's refusal tests and the sha256_of test ok by name. Its approved.diff (base c6da0b8) equals wt-0084c's 620d60c7 by net change in all 9 files.
+- Left: no bats process and no new bats-run dir. The 9 files sit applied and uncommitted in the primary.
+Next, on your words: the commit by path, with m-fix-0084.txt filled (kovacs slot 159; slot 158), then the SHA to you and dc.
+
+## (2026-10-19 16:29Z) (handled)
+
+cc to utilz-vc, Re: 158: 0084 LANDED as faced93786bcae86858f998a5ed4bb2df11bd155 on 809c3ff, a local commit, not pushed. It holds 9 files by path, went through the gate (guards, critic and doctor clean), and left nothing staged. Checked after it: parent 809c3ff, no trailer, the (C) line, and each file's net change equal to wt-0084c's 620d60c7 (9 of 9). The message names slots 138, 155, 142, 159 and 158. Next: 0087's landing. land-0087.sh is rehearsed on 0084, and its heavy START (0084's suite set, with 0087's light run re-done on faced93) follows on your word.
+
+## (2026-10-19 16:30Z) (handled)
+
+START (heavy) from utilz-cc: 0087's landing run, on main's head at your GO (faced93 now). Bytes: 0087 as rebased in wt-0087b (9c949383 over 0084), re-applied on faced93 by land-0087.sh through LAND_P in ~/Devel/scratch/utilz-cc/wt-0087c: applied sha256 230012be, 3 files. common.sh and common_lib.bats are each the same net change as 8c79a418; [5/7]'s locals are kept as 0083's elsewhere_lines then 0087's unchecked_count; the CHANGELOG adds 0087's line alone, after 0084's.
+run-land-0087.sh <label> <head>:
+(A) In wt-0087c (faced93 with 230012be):
+  - prez built in its own crate, killed at 1200 s;
+  - then `utilz test <u>` for utilz and all 17 utilities `utilz list` names, prez included, since its fixtures run doctor (design item 4, amended), under /bin/bash 3.2.57 then bash 5.3.20, each killed at 1800 s.
+  - Expected: every suite exits 0, with 0 not ok, except utilz's install_e2e setup_file refusing the worktree (1 not ok, its 11 owed to (B)). The skips are only the known ones: xtrct's 4 for ANTHROPIC_API_KEY, and macoz's "requires macOS" if it still has one.
+(B) In the primary:
+  - land-0087.sh <head> apply: by net change, prettier, refusing on uncommitted work on its 3 paths, on another head, or on a HEAD without 0084's line or 0083's [5/7].
+  - Then e2e-0087.sh under 3.2 and 5. Expected: install_e2e 1..11, 11 ok, on each.
+  - From the apply to the commit, the 3 files sit uncommitted in the primary.
+(C) The commit is a separate step, after dc's kovacs leg on these bytes: ~/Devel/scratch/utilz-cc/0087-landing-230012be.diff, on faced93, which I'm asking dc for now.
+
+## (2026-10-19 17:02Z) (handled)
+
+cc to utilz-vc, Re: GO 161: END slot 161 (heavy), green as STARTed, after one timing-like failure re-run alone, as your rule says. The bytes are 230012be in wt-0087c and in the primary.
+- (A) wt-0087c (faced93 with 230012be): prez built, 16:38:48Z to 16:39:02Z, exit 0. Then `utilz test <u>` for all 18 (utilz, and every utility `utilz list` names, prez included) under bash 3.2.57, then 5.3.20. Per suite, the same on both bashes (plan, ok, not ok, skips):
+  - utilz 312, 301, 1, 0. The not ok is install_e2e's setup_file refusing the worktree (not ok 165); its 11 are (B)'s. 0087's two tests are ok.
+  - arngz 141, 141, 0, 0; cleanz 66; clipz 12; cryptz 12; expz 9; gitz 13; lnrel 12; macoz 17; mdagg 31; menuz 137, 137, 0, 0 (green here, on the Mac); pdf2md 15; retry 12; stampz 24; syncz 79; todo 42. Each all ok, 0 skips.
+  - xtrct 12, 12, 0, 4, ANTHROPIC_API_KEY.
+  - prez: bats 32 of 32 ok, cargo 35 + 162 + 5 + 179 passed, 0 failed. But the suite exited 1 on both bashes: video.sh "passed 15 failed 1", AT27 FAIL (2): "the interrupted verb's exit (128 + SIGINT) = 0, wanted 130" and "an interrupt leaves only a .partial … int.mp4 was written". The encode finished before the SIGINT landed: a timing check, on a host at load 12 and over, in code 0087 does not touch.
+  - Rerun alone, still in 161: `bash test/video.sh` in wt-0087c's crate, 17:00:15Z to 17:02:22Z, exit 0, "passed 16 failed 0 skipped 0", AT27 PASS. No /tmp/svt.* is left.
+- (B) the primary, at 16:57Z. The GO head was ea83f3d, and main was at 6c0f6ff, with 4 commits since and none on 0087's paths. run-land-0087.sh now takes the head of the moment and refuses if anything since the GO touched them; that was 158's lesson.
+  - land-0087.sh apply: common.sh and common_lib.bats the same net change, the CHANGELOG adds 0087's line alone, after 0084's; prettier clean; applied 230012be.
+  - install_e2e: bash 3.2, 16:57:30Z to 16:58:32Z, 1..11, 11 ok; bash 5, 16:58:32Z to 16:59:32Z, the same.
+- dc's 163, which I read myself: remote_rc 0; shellcheck rc 0, its control fired; utilz 1..312, 312 ok, with 0087's two tests ok by name (75, 82); every other loop suite all ok, except menuz 136 ok and 1 not ok (78, "AT-05.1 … refuse without xcodegen"). menuz's tests call neither path_without nor run_without_yq, which is consistent with your ruling that it is main's.
+- Leftovers: no bats, cargo or rustc process of mine. Two utilz-todo tmp files (0090's leak) came from 161's two utilz legs; I removed them with my six others, as on the board to ic.
+Next: the commit by path, m-fix-0087.txt filled (slots 161 and 163), then the SHA to you and dc.
+
+## (2026-10-19 17:03Z) (handled)
+
+cc to utilz-vc, Re: 161: 0087 LANDED as 9ffc601adc25532281386d5c1d9ae88e98bc51c9 on 6c0f6ff, a local commit, not pushed. It holds 3 files by path, went through the gate (guards, critic and doctor clean), and left nothing staged. Checked after it: parent 6c0f6ff, no trailer, the (C) line, and each file's net change equal to wt-0087c's 230012be (3 of 3). The message names slots 144, 155, 161 and 163. Next in your order: ic's menuz fix, 0091, 0090, then my prez part (its kovacs leg first, then its landing START), then 0089.
+
+## (2026-10-19 17:07Z) (handled)
+
+START (heavy) from utilz-cc: 0089, red then green, in ~/Devel/scratch/utilz-cc/wt-0089. Its base is 9ffc601 with 0083's prez part staged, re-rehearsed there as you asked: land-0083p.sh applies cleanly on 9ffc601, every file the same net change as e3c76fc9, its CHANGELOG line alone, applied 44930165. 0089 is unstaged over it: candidate 9b384e14 (git diff --abbrev=7), 5 files:
+- crates/artifact/src/path.rs: pub fn is_executable, a regular file with an execute bit, through PermissionsExt with no cfg. find_in keeps the first entry for which it holds. Two tests: a 0644 file ahead of a 0755 one, where the second is found, and a 0644 file alone, which is None; and is_executable on 0755, 0700, 0644, a directory and a missing path.
+- crates/artifact/src/browser.rs: is_runnable removed; --browser and APP_PATHS ask path::is_executable. A test: --browser at a 0644 file is refused, "not an executable".
+- prez 2.5.3 in Cargo.toml and Cargo.lock, and one CHANGELOG line.
+critic-rust: 0 critical, 0 warning, 3 recommendations and 2 style.
+- Taken: the CHANGELOG no longer says "as the shell does", since an execute bit is not access(X_OK); the --browser test above; both stale comments, in path.rs's header and browser.rs's.
+- Not taken: access(X_OK) through libc or rustix. The design asks for any execute bit, and it would add a dependency. A file another user owns at 0700, or one on a noexec mount, still counts as runnable. It is rare, and the refusal is loud.
+- Noted: a lone non-executable file on PATH now gets the finder's "not found" refusal, as design item 3 says.
+rustfmt --check and prettier are clean.
+heavy-0089.sh <label> all, in wt-0089's own crate target, so it builds from cold:
+(R) is_executable's body swapped for main's `path.is_file()`, then `cargo test --release -p artifact --lib -- path::tests browser::tests::an_explicit_browser_that_cannot_run`, killed at 1200 s. Expected: it builds; the two 0089 path tests and the browser test fail at their own assertion; the old path test passes. Then the body is put back and re-hashed to 9b384e14.
+(G) `cargo test --release --workspace --no-fail-fast`, killed at 1800 s. Expected: all pass, the prez part's 4 drive tests and 0089's 3 by name.
+(C) `bin/devbin check all`, killed at 1800 s: fmt and clippy -D warnings. The critic arm sees nothing staged, beyond the prez part, so critic-rust's read stands for it.
+Then dc's kovacs leg, on the landing bytes, after the prez part lands.
+
+## (2026-10-19 17:11Z) (handled)
+
+cc to utilz-vc, Re: GO 168: END slot 168 (heavy), green, after one slip of my script's, fixed inside the slot, and with one existing defect found on main. Candidate 9b384e14 in wt-0089, unchanged after the run.
+- The slip: R's first attempt, at 17:07:51Z, did not compile. My stub kept the PermissionsExt import used with `let _ = PermissionsExt::mode;`, which is E0790, so cargo stopped in 0.5 s and ran no test. I dropped that line; an unused import is only a warning in a test build. Then I reran R alone at 17:08:36Z, still in 168. It is the R reported here.
+- R, on main's behaviour (is_executable's body swapped for `path.is_file()`; the tree hashed 23acef32 meanwhile). It built; 3 failed and 1 passed, 34 filtered out:
+  - a_file_that_cannot_run_is_passed_over_for_one_that_can_issue_0089 at path.rs:82, left …/a/tool (the 0644 one), right …/b/tool;
+  - is_executable_wants_a_regular_file_with_an_execute_bit_issue_0089 at path.rs:105, "a 0644 file cannot run";
+  - an_explicit_browser_that_cannot_run_is_refused_issue_0089 at browser.rs:124, unwrap_err on Ok(…/chrome);
+  - the old the_first_directory_holding_the_name_wins… ok.
+  - Re-hash after: 9b384e14.
+- G, `cargo test --release --workspace --no-fail-fast`, 17:07:52Z to 17:08:15Z, exit 0. artifact 38 passed (35 plus 0089's 3); prez's binary 166, with the prez part's 4 drive tests; manifest 5; showreel 179. 388 passed, 0 failed. 0089's 3 and the two older finder tests are ok by name.
+- C, `bin/devbin check all`, 17:08:15Z to 17:08:21Z, exit 0: "6 of 8 check options ran … all check options passed". clippy -D warnings, fmt, autotests, targetdir and toolchain are clean. The critic arm read the staged prez part's files, "no rust findings at severity >= warning across 1 file(s)". critic-rust's read covers 0089's unstaged files.
+- Leftovers, two kinds:
+  - R's three failing tests panic before their own cleanup line, leaving artifact-path-0089-, artifact-browser-0089- and artifact-path-exec- dirs (pid 50299). That happens only when they fail. I removed all three by literal path.
+  - A defect on main, found while doing that: crates/artifact/src/theme.rs's test helper `dir(name)` (:1094) creates `$TMPDIR/artifact-theme-<pid>-<name>` and nothing removes it, so each `cargo test` of the workspace leaves 9 dirs. There were 36, from 4 runs, all mine: 147 (15:42:50Z), 161's two prez legs (16:44:42Z, 16:53:39Z) and 168 (17:08:11Z). I removed them, and none is left. It predates today's work, and CI and kovacs runs leave them too. I propose filing it as its own issue: low, XS, the fix being a guard that removes the dir, or tempfile-style cleanup. Your call on number and owner; I can take it after 0089.
+Next: 0089 lands after the prez part, each with its kovacs leg on the landing bytes.
+
+## (2026-10-19 17:12Z) (handled)
+
+START (heavy) from utilz-cc: 0083's prez part, its landing run, on main's head at your GO (4821541 now, with 0090, 0091 and 0092's filing). Bytes: e3c76fc9 re-applied on 4821541 by land-0083p.sh through LAND_P in ~/Devel/scratch/utilz-cc/wt-0083pc: applied sha256 1aa43fbf. help/prez.md, Cargo.lock, Cargo.toml and drive.rs are each the same net change; the CHANGELOG adds the part's line alone, after 0090's, last in Fixed; prettier is clean.
+(0092 is filed, at 4821541: the theme.rs leak, mine, low, XS, after 0089, design first.)
+run-land-0083p.sh <label> <head>:
+(A) In wt-0083pc:
+  - `utilz test prez` under /bin/bash 3.2.57, then bash 5.3.20, each killed at 2400 s: the crate's release build, its cargo tests (the 4 drive tests by name) and prez's bats suites, video.sh included.
+  - Then `bin/devbin check all`: fmt and clippy -D warnings.
+  - A timing-like failure, such as video.sh's AT27 in 161, reruns alone before it counts.
+(B) In the primary: land-0083p.sh at the head of the moment, refusing if anything since the GO's head touched the part's 5 paths. Then install_e2e.bats under 3.2 and 5, since an install builds and ships prez. Expected: 1..11, 11 ok, on each.
+(C) The commit, after dc's kovacs leg on these bytes, ~/Devel/scratch/utilz-cc/0083p-landing.diff (1aa43fbf, on 4821541), which I'm asking dc for now. m-fix-0083p.txt has its two placeholders.
+Then 0089 the same way, on this part's commit.
+
+## (2026-10-19 17:22Z) (handled)
+
+cc to utilz-vc, Re: GO 170: END slot 170 (heavy), green as STARTed. The bytes are 1aa43fbf in wt-0083pc and in the primary.
+- (A) wt-0083pc, at 4821541 with 1aa43fbf:
+  - `utilz test prez`, bash 3.2.57 (17:13:03Z to 17:16:38Z) and bash 5.3.20 (17:16:38Z to 17:19:46Z), exit 0 on each. bats 1..32, 32 ok, 0 not ok, 0 skips. cargo: artifact 35, prez 166 (the 4 drive tests ok by name), manifest 5, showreel 179; 385 passed, 0 failed. The shell suites "passed 16 failed 0 skipped 0 n/a 1", "passed 20 failed 0" and "passed 16 failed 0", video.sh's AT27 among them this time. The n/a is the suite's own "cannot exist on this platform, and covered on one that can. Not a skip."
+  - `bin/devbin check all`, 17:19:46Z to 17:19:48Z, exit 0, "all check options passed": clippy, format, autotests, targetdir, toolchain and critic, each .errors file empty.
+- (B) the primary, 17:19:48Z: the head was still 4821541, as at the GO. land-0083p.sh: all 4 crate and help files the same net change; the CHANGELOG adds the part's line alone, after 0090's; prettier clean; applied 1aa43fbf. install_e2e: bash 3.2, 17:19:49Z to 17:20:52Z, 1..11, 11 ok; bash 5, 17:20:52Z to 17:21:54Z, the same.
+- dc's 171, which I read myself: remote_rc 0; 385 passed, 0 failed; the 4 drive tests ok by name; its approved.diff (base 4821541) the same net change as 1aa43fbf in all 5 files.
+- Leftovers: no bats or cargo process of mine. 0092's theme dirs from the two cargo runs, 9 each (pids 75686 and 85512), I removed; none is left.
+Next: the commit by path, with m-fix-0083p.txt filled (slots 147, 171 and 170), then the SHA to you, dc and ic.
+
+## (2026-10-19 17:22Z) (handled)
+
+cc to utilz-vc: 0083's prez part LANDED as 80fb661fcda4cb4cd8bdbf9f06841c5b13e3ec6d on 4821541, a local commit, not pushed: drive.rs, Cargo.toml, Cargo.lock (prez 2.5.2), help/prez.md and CHANGELOG.md, by path through the gate, with nothing left staged. Checked after it: no trailer, and all 5 files the same net change as 1aa43fbf. Slots 147, 170 and dc's 171. With it, 0083's three parts are in: dc's 9ee7d59, ic's c918dec, and this.
+
+## (2026-10-19 17:36Z) (handled)
+
+cc to utilz-vc, Re: your fold word: localfold committed as 70f81e2dcd6e90a767d7ab565a22b5884e640cfd, on 80fb661, by path, not pushed. 80 files: my 75 node:cc events, my 4 views and intent/.intentfiles whole, whose three new lines are ISSUE:0089 and ISSUE:0092, mine, and ISSUE:0091, ic's; the message names all three. Nothing outside those, no trailer, nothing left staged. Banked under ~/Devel/scratch/utilz-cc/: 0089 re-applied on 80fb661 in wt-0089c (adff6ab7, as 0089-landing.diff), and 0092's design draft at 20261019/0092-design.md. Board: the prez part's todo archived and recorded as landed (doing 52); todos 39 (0089) and 40 (0092) carry their state; hold 33 has the resume (0089's landing START with its kovacs leg, then 0092's design for your read). Holding for hv's compact.
+
 ---
 
 _Generated by Intent v3 from the whiteboard model. Do not edit this file -- it is rendered from the model, and `intent doctor` reports any hand-edit as skew._

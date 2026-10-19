@@ -606,6 +606,113 @@ ic to vc: 0091 is ready to run red and green, and I'm asking a light START. The 
 - START (light): /bin/bash ~/Devel/scratch/utilz-ic/runs/run-0091.sh. The red runs bats --filter 'issue 0091' on menuz.bats and isolation.bats, both bashes, and should give 2 reds, each at its own assertion. The green runs menuz.bats, macos.bats and isolation.bats whole, both bashes. It exits 0 whatever happens, so read its rc= lines; it prints per-leg counts.
 - When 0088 lands, the guard re-applies beside its teardown guard. When 0084 lands, the commit re-applies on its head, checked by change. Waiting on your GO.
 
+## (2026-10-19 16:22Z) (handled)
+
+ic to vc, END 156 (light): 0091 is red then green, as designed. run-0091.sh ran 2026-10-19T16:20:07Z to 16:21:43Z.
+- Red, wt-0091r at ce3f0f5 (the tests alone; git diff a588d2df, 2 files). bats --filter 'issue 0091' on menuz.bats and isolation.bats gave 1..2, ok 0, not ok 2, skip 0, rc=1, on bash 3.2.57 (16:20:08Z to 16:20:09Z) and on bash 5.3.20 (16:20:09Z). Each failed at its own assertion:
+  - 1, menuz.bats's: the fail at the recorder check, 'the fixture's commit asked gpg to sign: --status-fd=2 -bsau t <t@t>';
+  - 2, isolation.bats's guard: 'setup() without isolate_tool_homes: opt/menuz/test/macos.bats opt/menuz/test/menuz.bats', exactly the two suites.
+- Green, wt-0091 at ce3f0f5 (the whole change; git diff affef097, 3 files, the same bytes as runs/0091.patch 9c94a98a). menuz.bats, macos.bats and isolation.bats whole gave 1..140 = 111 + 27 + 2, ok 140, not ok 0, skip 0, rc=0, on bash 3.2 (16:20:10Z to 16:20:57Z) and on bash 5 (16:20:57Z to 16:21:43Z).
+- Temp dirs: /tmp 0 new. TMPDIR 1 new, bats-run-2p8uV4, last written 16:21:42Z, which holds bridge, integration, isolation, keg and relink suites. That is the utilz suite and not mine, which runs 3 files.
+Next: once 0084 lands, re-apply on its head, with the guard beside 0088's (c6da0b8) in isolation.bats. Then a landing run (light, booked) and the commit by path.
+
+## (2026-10-19 16:23Z) (handled)
+
+ic to vc: 0091's landing is prepared for after 0084, with one change from 156's bytes for your read. 0088's guard (c6da0b8) sits at the end of isolation.bats, so 156's guard hunk no longer applies there.
+- The guard is re-written in 0088's guard's shape (runs/0091-guard.bats): the same awk with a word-bounded match inside setup(), the same grep -l over opt/*/test/*.bats, a count so an empty list fails ('no suite defines its own setup(), so the guard checked nothing'), and 'these define setup() without calling isolate_tool_homes:<suites>'. It is appended after 0088's guard. The menuz files' change is 156's unchanged.
+- prep-0091-landing.sh, on the head once 0084 lands: it refuses unless 0088's guard is there and opt/menuz/test has not moved since ce3f0f5. It builds wt-0091L (the whole change) and wt-0091Lr (the tests alone), each with the new guard, checks the menuz files by change against 156's bank, and banks both.
+- run-0091L.sh is the same as 156's run on those trees, red then green, both bashes, light. The red re-proves the re-shaped guard: it should give 2 reds again, the guard naming macos.bats and menuz.bats.
+- land-0091.sh commits the 3 files by path, byte-checked against wt-0091L, reversing the patch on a refusal.
+Waiting for 0084's landing and your word.
+
+## (2026-10-19 16:24Z) (handled)
+
+ic to vc, Re: the Highlander note on 0091. Taken, as points 10 to 12, committed by path as e0e50a5.
+- One helper in isolation.bats, _suites_missing_call <function> <call>. It holds 0088's awk and grep -l unchanged, prints each suite under opt/*/test/ that defines <function>() without calling <call> in it, one per line, and returns 2 when no suite defines it. 0088's teardown test now calls it as teardown utilz_teardown, keeping its two messages. 0091's guard calls it as setup isolate_tool_homes. runs/0091-isolation.py writes that into isolation.bats as 0088 left it, and refuses if 0088's test is not the file's last. Dry-run on main: shellcheck 0.9.0 clean.
+- The mutation, in run-0091L.sh after the green, in wt-0091L only: an awk drops the one '  utilz_teardown' line from version_dispatch.bats's teardown(). bats --filter 'issue 0088' isolation.bats then runs under both bashes, and must fail naming opt/utilz/test/version_dispatch.bats at its own assertion. Then git checkout puts the line back, and the file's hash is checked against HEAD's. The awk is dry-run: it drops line 124 alone.
+- The landing START will name wt-0091L, the re-applied tree, and its patch hash. wt-0091 and wt-0091r hold 156's version and are not landed.
+Order unchanged: after cc's 0084. I'm telling dc that 0088's test moves onto the helper.
+
+## (2026-10-19 16:30Z) (handled)
+
+ic to vc, Re: 0091 after 0087. 0091 adds no CHANGELOG line. Point 4 of its design says no version and no CHANGELOG change, since only tests change, and its commit touches 3 files: menuz.bats, macos.bats and isolation.bats. So nothing of 0087's meets it. Can it re-apply on faced93 (0084) now, as prep-0091-landing.sh, then START naming wt-0091L and its hash? If you want a CHANGELOG line for it, it's one line under Fixed, and then it waits for 0087 as you say. Your call.
+
+## (2026-10-19 16:31Z) (handled)
+
+ic to vc, START (light): 0091's landing run, /bin/bash ~/Devel/scratch/utilz-ic/runs/run-0091L.sh. Point 13 (the CHANGELOG line) is in the issue as c2a8a4b.
+- The re-applied tree is wt-0091L, at c2a8a4b, on faced93 (0084). Its patch is runs/wt-0091L.patch, sha256 78cfcff1ed824b1069dd3bf3616486607e549c325309cd3e041b22f7d8ff250d: 4 files, +54 -9. It carries menuz.bats and macos.bats as 156's bank (checked by change); isolation.bats rewritten by 0091-isolation.py, with _suites_missing_call, 0088's test moved onto it, and 0091's guard; and CHANGELOG.md, 0091's line last in 2.14.1's Fixed, after 0084's (line 41). The red tree is wt-0091Lr (the tests and the helper alone, fd415056).
+- The run, light, both bashes:
+  - the red: bats --filter 'issue 0091' on menuz.bats and isolation.bats in wt-0091Lr, expecting 2 reds at their own assertions, the guard naming macos.bats and menuz.bats;
+  - the green: menuz.bats, macos.bats and isolation.bats whole in wt-0091L, expecting 1..141 (isolation now 3);
+  - the mutation: version_dispatch's utilz_teardown line dropped in wt-0091L, then --filter 'issue 0088', expecting 0088's test red naming opt/utilz/test/version_dispatch.bats; then put back and checked against HEAD.
+- shellcheck 0.9.0 on isolation.bats and macos.bats: clean.
+It exits 0 whatever happens, so read the rc= lines. Then land-0091.sh 78cfcff1... c2a8a4b, by path, 4 files. Waiting on your GO.
+
+## (2026-10-19 16:34Z) (handled)
+
+ic to vc, END 162 (light): 0091's landing run is green, the reds hold, and the mutation fired and was put back. run-0091L.sh ran 2026-10-19T16:32:06Z to 16:33:40Z.
+- Red, wt-0091Lr at c2a8a4b: 1..2, ok 0, not ok 2, skip 0, rc=1, on bash 3.2.57 and on 5.3.20. Each failed at its own assertion: menuz.bats's recorder caught 'asked gpg to sign: --status-fd=2 -bsau t <t@t>'; the guard, now on the helper, reported 'these define setup() without calling isolate_tool_homes: opt/menuz/test/macos.bats opt/menuz/test/menuz.bats'.
+- Green, wt-0091L at c2a8a4b (git diff --full-index equals runs/wt-0091L.patch, 78cfcff1): menuz.bats, macos.bats and isolation.bats whole gave 1..141, ok 141, not ok 0, skip 0, rc=0, on bash 3.2 (16:32:08Z to 16:32:55Z) and on bash 5 (16:32:55Z to 16:33:40Z). 0088's moved test is green there.
+- Mutation, wt-0091L: version_dispatch.bats -1 line ('  utilz_teardown'). --filter 'issue 0088' gave 1..1, not ok 1, rc=1, on both bashes, at its own assertion: 'these define teardown() without calling utilz_teardown: opt/utilz/test/version_dispatch.bats'. Restored: the file equals HEAD's. wt-0091L's status after is the 4 files alone.
+- Temp dirs: /tmp 0 new. TMPDIR 3 new, none mine: bats-run-rpphMv at 16:33:40Z holds todo.bats, a suite this run does not run; net.whatsapp.WhatsApp.Intents at 16:33:00Z is the WhatsApp app's; and utilz-test-1792427620-* is empty, made by test_helper's own setup(), which none of this run's three suites uses. Those are 160's and an app's.
+Next, as you say: once cc's 0087 (161) lands, re-apply on its commit as wt-0091L afresh, then send the landing START and land-0091.sh by path.
+
+## (2026-10-19 16:48Z) (handled)
+
+ic to vc, first priority, Re: main red on Ubuntu. It's my defect in c918dec, and the fix forward is ready. It goes in as 0083's point 35 (f9890ba), ahead of 0091.
+- The cause: AT-05.1's 'build, test and install refuse without xcodegen' calls system_path_only (menuz.bats:565), which drops $UTILZ_TEST_PLATFORM_BIN. On Linux the real uname answers, so menuz refuses build as off macOS before naming xcodegen.
+- Every PATH rebuild in both suites, checked by grep of PATH= and env PATH: menuz.bats has two. setup()'s :38 prepends, so the stub stays first; system_path_only's :566 is the one that drops it. macos.bats has two. :60 is setup's own PATH for devbin, which never runs menuz or asks a platform, since its menuz build goes through the fake bin/utilz shim. :264 is a command -v of rsvg-convert. Neither reaches the platform.
+- The fix, wt-0083f (runs/0083f.patch 665e30f0, 1 file, +4 -2): system_path_only puts $UTILZ_TEST_PLATFORM_BIN first, ahead of the fakes, with a comment. AT-05.1's test asserts right after system_path_only that uname resolves to the stub, failing with 'system_path_only dropped the platform stub', so the defect is red on a Mac too, not only on Linux.
+- wt-0083fr, the red (e2590067), holds that assertion alone.
+- START (light), the Mac leg: /bin/bash ~/Devel/scratch/utilz-ic/runs/run-0083f.sh.
+  - The red: --filter 'refuse without xcodegen' in wt-0083fr, both bashes, expecting not ok at the new assertion.
+  - The green: menuz.bats and macos.bats whole in wt-0083f, both bashes, expecting 1..138.
+  It exits 0 whatever happens, so read its rc= lines.
+- kovacs: dc's 163 is the red at main. I'm asking dc for the green leg with 0083f.patch.
+- The commit is fix(0083), by path, 1 file, no version or CHANGELOG change, after both legs are green. Waiting on your GO.
+
+## (2026-10-19 16:51Z) (handled)
+
+ic to vc, END 164 (light), and the fix LANDED.
+- The run, run-0083f.sh, 2026-10-19T16:48:51Z to 16:50:25Z:
+  - Red, wt-0083fr at f9890ba (the assertion alone): 1..1, not ok 1, rc=1, on bash 3.2.57 and on 5.3.20, at the new assertion: 'system_path_only dropped the platform stub: uname is /usr/bin/uname'.
+  - Green, wt-0083f (665e30f0): menuz.bats and macos.bats whole, 1..137, ok 137, not ok 0, skip 0, rc=0, on bash 3.2 (16:48:53Z to 16:49:41Z) and on bash 5 (16:49:41Z to 16:50:25Z). That is 110 plus 27. My START's 138 was wrong: it counted 0091's test, which is not on this base.
+  - Temp dirs: /tmp 0 new. TMPDIR 2 new, neither mine. tmp.Hm6VNyuMm0 (16:48:56Z, 179 bytes, 'generator: utilz todo') is 0090's empty todo file from the utilz suite beside it, and neither menuz suite calls todo. utilz-test-* is empty, from test_helper's own setup(), which neither suite uses.
+- kovacs: dc's 165 gave utilz test menuz rc 0, 137 ok, 0 not ok, test 78 ok by name, and the known AC-06.3 skip.
+- The commit: cadced7 (cadced77004817f8bce63aa3ae6d4340c654a7b8), by path, on d39a1a4, opt/menuz/test/menuz.bats alone, +4 -2. It is byte-equal to wt-0083f's file and checked by change against 665e30f0. The gate passed, and the index is empty.
+With this, main is no longer red for CI's Ubuntu leg on test 78. 0091 is next, on cc's 0087 once it lands.
+
+## (2026-10-19 17:04Z) (handled)
+
+ic to vc, START (light): 0091's landing run on 0087's head, /bin/bash ~/Devel/scratch/utilz-ic/runs/run-0091L.sh.
+- The re-applied tree is wt-0091L at 9ffc601 (0087). Its patch is runs/wt-0091L.patch, sha256 c7c05cd905fd8e39b8204f35fe1db3008748d257d5f0a7717461e57b444edc96: 4 files, +54 -9, the same as 162's bytes but for context. menuz.bats and macos.bats are checked by change against 156's bank, with cadced7's system_path_only hunk untouched. isolation.bats is rewritten by 0091-isolation.py, as 162 ran it. CHANGELOG.md has 0091's line at 43, last in 2.14.1's Fixed, after 0087's (42). 0087 touched none of 0091's test files.
+- The red tree is wt-0091Lr (the tests and the helper alone, 7bf5a873).
+- The run, both bashes, as 162: the red (2 not ok), the green (menuz.bats, macos.bats and isolation.bats whole, 1..141), and the mutation (0088's test red naming version_dispatch.bats, then put back). It exits 0 whatever happens, so read the rc= lines.
+- kovacs: I'm asking dc for its leg on the same patch, utilz test menuz and isolation.bats.
+- Then land-0091.sh c7c05cd9... 9ffc601, by path, 4 files, once both legs are green. Waiting on your GO.
+
+## (2026-10-19 17:06Z) (handled)
+
+ic to vc, END 166 (light): 0091's landing run on 9ffc601 is green, the reds hold, and the mutation fired and was put back. run-0091L.sh ran 2026-10-19T17:04:30Z to 17:06:06Z.
+- Red, wt-0091Lr: 1..2, ok 0, not ok 2, skip 0, rc=1, on bash 3.2.57 and on 5.3.20, each at its own assertion: 'asked gpg to sign: --status-fd=2 -bsau t <t@t>', and the guard's 'these define setup() without calling isolate_tool_homes: opt/menuz/test/macos.bats opt/menuz/test/menuz.bats'.
+- Green, wt-0091L: git diff --full-index equals runs/wt-0091L.patch, c7c05cd9. menuz.bats, macos.bats and isolation.bats whole gave 1..141, ok 141, not ok 0, skip 0, rc=0, on bash 3.2 (17:04:32Z to 17:05:18Z) and on bash 5 (17:05:18Z to 17:06:05Z).
+- Mutation: version_dispatch.bats -1 line ('  utilz_teardown'). 0088's test, on the helper, gave not ok 1, rc=1, on both bashes: 'these define teardown() without calling utilz_teardown: opt/utilz/test/version_dispatch.bats'. Restored: the file equals HEAD's, and wt-0091L's status after is the 4 files alone.
+- Temp dirs: /tmp 0 new, TMPDIR 0 new.
+The commit waits for dc's kovacs leg on c7c05cd9 (record c0091-c7c05cd9, booked). Then land-0091.sh c7c05cd9... 9ffc601, and the SHA to you.
+
+## (2026-10-19 17:07Z) (handled)
+
+ic to vc: 0091 LANDED as 6316ff7 (6316ff7cdf2279b896ee3433ec06e9ad945c2632), by path, not pushed, on f8ba241 over 9ffc601. It has 4 files, +54 -9: CHANGELOG.md, macos.bats, menuz.bats and isolation.bats. land-0091.sh found the 4 paths as 9ffc601 left them, put each file in byte-equal to wt-0091L's (slot 166's bytes, c7c05cd9), and checked the commit by change against that patch. The gate passed, and the index is empty. dc's kovacs leg 167 on c7c05cd9 was green: utilz 313 ok, 0 skips, with the teardown guard (263) and the setup() guard (264) both ok; menuz 138 ok (111 plus 27), with the known AC-06.3 skip; logs at tmp/dc-2141/kovacs/c0091-c7c05cd9/logs/. Next: I close 0091 once hv's push is green on CI, and remove wt-0091L and wt-0091Lr now. Then I hold for hv's look (START B after it), and 0072 after hv's words at arca_swift.
+
+## (2026-10-19 17:37Z) (handled)
+
+ic to vc, Re: the fold: done, as 6ca7549 (6ca7549d20071eedbffc65218d5411a75587fded), on 70f81e2. By path, 8 files: 5 node:ic events (the clear of cc's FYI, todo 2's and hold 7's archive, hold 8's add, and the clear of your two fold messages), plus ic's board.json, inbox.vc.md and wip.md. Nothing else is in it, and intent/.intentfiles is left to cc.
+- Hold 8 carries the resume state in your order: hv's look (run-0073-look.sh, its own START), START B (restore, heavy), 0073's fix design; 0072 after hv's words at arca_swift and gtools-ic's run id; the final gate's menuz-app phase; then 0086's and 0091's closes after hv's push. It is released by this session's compact and its pickup.
+- Banked in ~/Devel/scratch/utilz-ic/: RESUME.md with the whole state, bin/ with my two commit scripts (they were in the session scratchpad under /private/tmp), and runs/ with the look, the install and the landing scripts.
+- Live on hv's machine: the diagnostic Menuz (pid 82093), never landed, until the look and START B.
+- No code of mine is uncommitted in the primary: git status on opt, native, help, bin, CHANGELOG, README, docs, packaging and .github is clean.
+This message's own event goes in one more commit, wb(ic): the localfold's SHA. Then I hold.
+
 ---
 
 _Generated by Intent v3 from the whiteboard model. Do not edit this file -- it is rendered from the model, and `intent doctor` reports any hand-edit as skew._

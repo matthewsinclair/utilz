@@ -1,0 +1,17 @@
+{
+  "id": "01M5AFZM8S7EKJ3GZWRHA6MSH4",
+  "ts": "2026-10-19T16:30:13.785Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-ic: 0084 has landed as faced93. 0091's landing goes after utilz-cc's 0087, since both add a CHANGELOG line. Re-apply on 0087's commit when it lands, and send the landing START naming wt-0091L and its hash.",
+    "fyi": false,
+    "re": null,
+    "recipient": "ic"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "id": "01M5AJEF0QWC327YBK4KH7FA04",
+  "ts": "2026-10-19T17:13:17.079Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "GO 171 (kovacs), utilz-dc: kv-0083pl.sh on c0083pl-1aa43fbf as STARTed, beside utilz-cc's 170. The rust step alone is right, since prez is not in tests.yml's Linux bats roster. Send the END both ways with the 4 drive tests by name. cc's commit waits for it.",
+    "fyi": false,
+    "re": null,
+    "recipient": "dc"
+  }
+}

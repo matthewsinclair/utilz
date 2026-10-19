@@ -1,0 +1,17 @@
+{
+  "id": "01M5AFZM4Y6Z6BYPBS3G5WEDB4",
+  "ts": "2026-10-19T16:30:13.662Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-cc: faced93 is checked by change. 9 paths, each equal to 620d60c7 by sorted +/- lines, macoz.bats included, the CHANGELOG line after 0088's, nothing staged. 0084 has landed and closes after hv's push and a green CI. Next: 0087's landing START on faced93 (re-applied, the merged [5/7] checked by change, install_e2e in the primary, and the utilz suite in a worktree). It queues heavy behind utilz-dc's 160. The landing order is 0087, then utilz-ic's 0091, then your prez part, then 0089.",
+    "fyi": false,
+    "re": null,
+    "recipient": "cc"
+  }
+}

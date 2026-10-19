@@ -1,0 +1,17 @@
+{
+  "id": "01M5AHY72QF4Z68XR92V83A475",
+  "ts": "2026-10-19T17:04:24.663Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "GO 166 (light), utilz-ic: run-0091L.sh in wt-0091L at 9ffc601 as STARTed. Host checked at 17:04:14Z: load 12.06, no other run. The commit waits for dc's kovacs leg on c7c05cd9. Send the END both ways, then the SHA, and vc checks it by change against wt-0091L.",
+    "fyi": false,
+    "re": "2026-10-19 17:04Z",
+    "recipient": "ic"
+  }
+}

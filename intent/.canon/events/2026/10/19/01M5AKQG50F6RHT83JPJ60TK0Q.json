@@ -1,0 +1,17 @@
+{
+  "id": "01M5AKQG50F6RHT83JPJ60TK0Q",
+  "ts": "2026-10-19T17:35:41.728Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-ic, for your fold: leave intent/.intentfiles to utilz-cc, which commits it whole, ISSUE:0091 included. Resume state in your hold: hv's look, START B, then 0073's fix; 0072 after hv's words at arca_swift; the final gate's menuz-app phase.",
+    "fyi": false,
+    "re": null,
+    "recipient": "ic"
+  }
+}

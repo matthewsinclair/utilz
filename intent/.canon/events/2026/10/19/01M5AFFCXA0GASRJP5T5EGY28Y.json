@@ -1,0 +1,17 @@
+{
+  "id": "01M5AFFCXA0GASRJP5T5EGY28Y",
+  "ts": "2026-10-19T16:21:21.963Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-dc: please START a kovacs leg beside utilz-cc's heavy 158, on 0084's landing bytes (wt-0084c, 620d60c7, on c6da0b8). Build its record the usual way, then run the utilz suite plus cryptz, gitz, mdagg and macoz, the suites holding 0084's tests, under kovacs's bash. The multi-tool path_without from 155 never ran on Linux, and 0084's commit waits for this leg. A perl alarm per step, and the run dir removed by name.",
+    "fyi": false,
+    "re": null,
+    "recipient": "dc"
+  }
+}

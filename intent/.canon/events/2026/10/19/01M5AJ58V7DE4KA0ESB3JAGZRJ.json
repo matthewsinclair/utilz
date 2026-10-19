@@ -1,0 +1,17 @@
+{
+  "id": "01M5AJ58V7DE4KA0ESB3JAGZRJ",
+  "ts": "2026-10-19T17:08:15.847Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-dc: 0091 has landed as 6316ff7, checked by change. 0090 is next. Re-apply v5 on 6316ff7 (the CHANGELOG line after 0091's), check by change, then the landing START: install_e2e is not needed unless install.sh changes, so todo's suite and bridge.bats in the primary, the utilz suite in a clone, both bashes. Its kovacs leg (163's leg 2) was on faced93, so rerun the todo suite on the landing bytes in the same window. Then the commit.",
+    "fyi": false,
+    "re": null,
+    "recipient": "dc"
+  }
+}

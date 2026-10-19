@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 83178a10-c03c-4b65-9e11-cf7c8d8daeaa
-heartbeat_at: 2026-10-19 15:40Z
+heartbeat_at: 2026-10-19 17:37Z
 status: active
-focus: "19 Oct, hv AFK, vc has the pen (decision 38): land 0083 (dc 137, then ic, cc), 0084 and 0087 (cc), 0073's diagnostic (ic, START A after 137); then dc's final-head gate, a local twin of every CI job, and the dry run; push and cut are hv's"
+focus: "19 Oct, folded for hv's third compact (decision 39): 0083, 0084, 0087, 0088, 0090 and 0091 landed and checked; left 0089 and 0092 (cc), then dc's final-head gate and the dry run. Resume from hold 16."
 claims: []
 ---
 
@@ -13,7 +13,7 @@ claims: []
 
 ## DOING
 
-- Resumed after hv's second compact of 19 Oct, with hold 15's steps carried forward. Heavy lane: (a) utilz-cc's 0085 landing on bffd04a (START asked 14:55Z); (b) utilz-ic's START A, the diagnostic install, on 0085's END and hv's yes (ic asked hv itself); (c) hv's look; (d) START B, hv's build back as 0.4.2. Light lane: utilz-dc's 0083 green and kovacs legs once its code is ready. Then 0084, 0083's ic and cc parts, 0087 and 0072 after WP-09. Closes after hv's push and CI green: 0080, 0082, 0086, 0081 and 0085. Check every landing by change.
+_(none)_
 
 ## TODO
 
@@ -24,7 +24,7 @@ claims: []
 
 ## Holds
 
-_(none)_
+- Held for hv's compact, the third round of 19 Oct. Released when hv has compacted vc. Resume from here. (1) Host queue: the log is ~/Devel/scratch/utilz-vc/20261019/host-queue.log, slots to 171, the freeze of decision 39 lifting at the compacts. Landed today since ceba425, all local and each checked by change: 0080, 0082 (853a947), 0086 (d1fd58c), 0081 (bffd04a), 0085 (9bb32fa), 0083 (dc 9ee7d59, ic c918dec, fix cadced7, cc 80fb661), 0088 (c6da0b8), 0084 (faced93), 0087 (9ffc601), 0091 (6316ff7), 0090 (c50b08b). (2) Left to land, each with its kovacs leg green on the same bytes before the commit (vc's memory kovacs-leg-before-every-landing): 0089 (cc, re-applied on 80fb661, prez 2.5.3), then 0092 (cc, theme.rs's test dirs, design for vc's read). (3) Then utilz-dc's final-head gate at the sha vc names: kovacs, mac-lint, mac-suites, mac-rust, prez AT27 alone (161 timed it out under load), menuz-app (utilz-ic), report, then the dry run under a freeze of every node. (4) hv's: the 0073 look (the diagnostic stays installed; ic's run-0073-look.sh, then START B), todo 47 (kovacs installs), todo 48 (0072's chain at arca_swift), todo 42 (3) and 43, the push, the dispatch at the final head (menuz-app runs only there), the cut and the tap. (5) Closes after hv's push and CI green: 0080 to 0091 as landed. (6) For hv's report: 12 old todo temp files in the system temp dir (0090's debris, owners unknown), and AT27's timing.
 
 ## Watch-outs
 
@@ -48,6 +48,7 @@ _(none)_
 - hv, 19 Oct 2026, directly to vc, on vc's recommendation to drop depends_on :macos from the formula in 2.14.1: "Yep, agree. It can't only depend on macOS. We need to make it work on both Linux and macOS and the bits that can't work as-is outside macOS (ie menubar app) degrade sensibly in non-macOS environments." The same yes reached kovacs-sysadm in its session, which withdrew the post-cut checkout runbook for kovacs: after the cut and hv's tap push, kovacs runs brew tap matthewsinclair/utilz, brew install utilz and utilz doctor, each at hv's approval there, on vc's go. vc's reading: 2.14.1 carries Utilz on Linux as an issue of its own, utilz-dc's, design first. The formula drops depends_on :macos; every utility either works on Linux or degrades by name (the menu bar app, arngz's Hammerspoon desks, macoz, and what the audit finds); utilz doctor reports a macOS-only utility as not available here rather than as missing dependencies. The existing guards (macoz:26, clipz:26, common.sh:346, :376, :898) start the audit. It lands after 0080, whose run_doctor change it builds on.
 - hv, 19 Oct 2026, directly to vc, while 133 (utilz-cc's 0081 landing) and 134 (utilz-dc's 0083 red run) ran: "Ok, context is high. While that stuff is running, we should coordinate a bank-what-we-have-then-localfold-and-compact run here across DC, IC, and CC while we wait." vc called the fold at 13:58Z, with decision 35's steps. Each node finishes what it has in flight, so that utilz-cc's 133 commits 0081 and utilz-dc's 134 ENDs. Each archives, sets its focus and a hold with its resume state, and commits wb(<node>): localfold by path after 133's END. Each sends vc the SHA and holds for hv's compact. vc folds last. Nothing new STARTs or GOes until after the compacts.
 - hv, 19 Oct 2026, directly to vc, about 15:07Z: "Ok, continue. I'm AFK for a while. You have the pen. I want utilz issues fixed and the release cut, please. Or ready to cut, at least. And I don't want CI/CD failing for some arbitrary slipup reason." vc's reading. (1) Drive every open Utilz issue that can finish without hv to landed and checked: 0083's three parts (dc, ic, cc), 0084 and 0087 (cc), and 0073 (ic). (2) This is the yes for ic's START A, the diagnostic install. It is reversible, since START B puts hv's build back as 0.4.2, and its launch note in menuz.log tells ic what the row reads, so the fix's design can proceed before hv's look. hv's look stays the condition for closing 0073. (3) Ready to cut means the final head passes a local twin of every CI job: tests.yml's Ubuntu loop and shellcheck 0.9.0 on kovacs; the macOS suites here; cargo build, test and acceptance on both OSes; cargo fmt and clippy -D warnings on Linux; and the menuz app build and test here, plus utilz-dc's release dry run. The push, the dispatch at that head (menuz-app runs only on a tag or a dispatch, and its macos-26 Xcode 26.6 differs from this Mac's 27.1), the cut and the tap stay hv's. (4) 0072 waits on Gtools' WP-09, which hv holds, and 0075 on hv's logout after the cut. Neither can finish without hv, so the cut is ready without them unless hv says otherwise.
+- hv, 19 Oct 2026, directly to vc, at about 17:35Z, with 0083 wholly landed (80fb661) and 0089 next: "Ok, context is high. While that stuff is running, we should coordinate a bank-what-we-have-then-localfold-and-compact run here across DC, IC, and CC while we wait. Please coordinate the Claudes here accordingly." vc calls the fold at 17:35Z, with decision 37's steps. Nothing is running, and nothing new STARTs or GOes until after the compacts. Each node banks its in-flight work in its own scratch under ~/Devel/scratch/utilz-<node>/, never /private/tmp, so the primary holds no uncommitted code. Each archives what is finished, sets its focus and a hold with its exact resume state, and commits wb(<node>): localfold by path, its own events and views and any intent/.intentfiles line it wrote. Each sends vc the SHA and holds for hv's compact. vc checks each fold by change and folds last.
 
 ---
 

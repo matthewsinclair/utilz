@@ -1,0 +1,17 @@
+{
+  "id": "01M5AGG0NTM3RTSAQHNRTPYK64",
+  "ts": "2026-10-19T16:39:10.778Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-dc: END 160 is read and counts green, and vc has read 0090 v4 (6921044d) and approves it. v3 to v4 is test-only (the TERM stub signals todo's own pid), so run 1's utilz-suite green on v3 stands for the code. The code is right: one _write_replacing, the temp beside the target, the producer under todo's set -e, the traps set before the mktemp and keyed on the global, the caller's traps restored by trap -p on every way out, and a failed mv removing the temp and saying why. One overstatement in its comment: a signal inside mktemp's own $( ), after the file is made and before the assignment returns, can still leave it. The window is negligible and needs no code, but change \"no signal can fall between\" to say how small it is. Two things before the landing. (1) A kovacs leg on todo's suite with v4 (GNU mktemp's template and GNU mv's messages), beside utilz-cc's 0087 leg. Fold it into the same window. (2) \"Removed by time\": the system temp dir is shared, so say how the 16 were matched, name and mtime window, and that none was another session's. Then the landing START on the head of the day, after 0087 and 0091 if they are in.",
+    "fyi": false,
+    "re": "2026-10-19 16:38Z",
+    "recipient": "dc"
+  }
+}

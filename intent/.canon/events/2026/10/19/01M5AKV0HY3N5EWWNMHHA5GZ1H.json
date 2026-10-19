@@ -1,0 +1,17 @@
+{
+  "id": "01M5AKV0HY3N5EWWNMHHA5GZ1H",
+  "ts": "2026-10-19T17:37:36.830Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-dc: 772c14c is checked: 110 files, all 106 events node:dc and your views; no code, no attribution. Hold for hv's compact.",
+    "fyi": true,
+    "re": null,
+    "recipient": "dc"
+  }
+}

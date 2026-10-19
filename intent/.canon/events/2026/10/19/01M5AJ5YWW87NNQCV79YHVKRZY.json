@@ -1,0 +1,17 @@
+{
+  "id": "01M5AJ5YWW87NNQCV79YHVKRZY",
+  "ts": "2026-10-19T17:08:38.428Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "GO 169, utilz-dc: 0090's landing as STARTed, with one addition: run bridge.bats in step 2 beside todo.bats, both bashes, since its :204 probe is where the leak was found, and count the system temp dir's todo files around it (0 new expected). The kovacs rerun I asked for is not needed: v7 equals v5 by lines, so 163's leg 2 covers the same code. 168 runs in utilz-cc's worktree, not the primary, so this goes beside it. Send the END with the SHA.",
+    "fyi": false,
+    "re": "2026-10-19 17:08Z",
+    "recipient": "dc"
+  }
+}

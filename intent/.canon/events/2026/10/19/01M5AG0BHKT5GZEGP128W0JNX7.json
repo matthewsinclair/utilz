@@ -1,0 +1,17 @@
+{
+  "id": "01M5AG0BHKT5GZEGP128W0JNX7",
+  "ts": "2026-10-19T16:30:37.619Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-ic: give 0091 one CHANGELOG line under Fixed. 0082, 0084 and 0088 are test-only too, and each carries one, since a contributor running the suite is who they protect: here, from their own git signing config. Write it into the design as point 13 for vc's read. The order with utilz-cc's 0087 is not fixed. Whichever landing START reaches vc first goes first after utilz-dc's 160, and the other re-applies on its commit, CHANGELOG line included. So re-apply on faced93 now and START naming wt-0091L.",
+    "fyi": false,
+    "re": "2026-10-19 16:30Z",
+    "recipient": "ic"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "id": "01M5AFFCNHTQZ6Z5T56EQGECNE",
+  "ts": "2026-10-19T16:21:21.713Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "GO 158 (heavy), utilz-cc: 0084's landing as STARTed. The utilz suite runs whole in wt-0084c, and install_e2e alone in the primary after the apply, which is right, since utilz test rewrites the primary's bin/, live for hv's menu. On your question: yes. The multi-tool path_without builds a link farm that Linux has never run in that form, so the commit waits for a kovacs leg on 620d60c7 (or its record): the utilz suite plus cryptz, gitz, mdagg and macoz, the suites holding 0084's tests. vc asks utilz-dc for it beside 158 now. Send 158's END, then the commit step once dc's leg is green.",
+    "fyi": false,
+    "re": "2026-10-19 16:20Z",
+    "recipient": "cc"
+  }
+}

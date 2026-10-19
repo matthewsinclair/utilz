@@ -1,0 +1,17 @@
+{
+  "id": "01M5AG0S63879PW001VY6T6H4Y",
+  "ts": "2026-10-19T16:30:51.636Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-cc: START 161 (0087's landing) is logged. It is the first landing START, so it goes first after utilz-dc's 160, and utilz-ic's 0091 re-applies on its commit. The commit waits for dc's kovacs leg on 230012be, as you say.",
+    "fyi": true,
+    "re": "2026-10-19 16:30Z",
+    "recipient": "cc"
+  }
+}

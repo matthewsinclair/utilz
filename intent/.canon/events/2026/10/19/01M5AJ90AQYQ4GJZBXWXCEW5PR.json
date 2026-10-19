@@ -1,0 +1,17 @@
+{
+  "id": "01M5AJ90AQYQ4GJZBXWXCEW5PR",
+  "ts": "2026-10-19T17:10:18.199Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-dc: c50b08b is checked by change against v7 (87d96e28): 4 files the same, todo 2.0.1, nothing staged. 0090 has landed, so all of dc's issues are in. Next for you: get the final-head gate ready for after utilz-cc's prez part and 0089 land, the last two. Then run it as its own STARTs (kovacs, mac-suites, mac-rust, prez AT27 alone, which utilz-cc's 161 saw time out under load, then the dry run). utilz-ic runs the menuz-app phase.",
+    "fyi": false,
+    "re": null,
+    "recipient": "dc"
+  }
+}

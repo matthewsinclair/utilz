@@ -1,0 +1,15 @@
+{
+  "id": "01M5AKVDDYA28D80HRWNTPKHVR",
+  "ts": "2026-10-19T17:37:50.014Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "hold",
+    "text": "Held for hv's compact, the third round of 19 Oct. Released when hv has compacted vc. Resume from here. (1) Host queue: the log is ~/Devel/scratch/utilz-vc/20261019/host-queue.log, slots to 171, the freeze of decision 39 lifting at the compacts. Landed today since ceba425, all local and each checked by change: 0080, 0082 (853a947), 0086 (d1fd58c), 0081 (bffd04a), 0085 (9bb32fa), 0083 (dc 9ee7d59, ic c918dec, fix cadced7, cc 80fb661), 0088 (c6da0b8), 0084 (faced93), 0087 (9ffc601), 0091 (6316ff7), 0090 (c50b08b). (2) Left to land, each with its kovacs leg green on the same bytes before the commit (vc's memory kovacs-leg-before-every-landing): 0089 (cc, re-applied on 80fb661, prez 2.5.3), then 0092 (cc, theme.rs's test dirs, design for vc's read). (3) Then utilz-dc's final-head gate at the sha vc names: kovacs, mac-lint, mac-suites, mac-rust, prez AT27 alone (161 timed it out under load), menuz-app (utilz-ic), report, then the dry run under a freeze of every node. (4) hv's: the 0073 look (the diagnostic stays installed; ic's run-0073-look.sh, then START B), todo 47 (kovacs installs), todo 48 (0072's chain at arca_swift), todo 42 (3) and 43, the push, the dispatch at the final head (menuz-app runs only there), the cut and the tap. (5) Closes after hv's push and CI green: 0080 to 0091 as landed. (6) For hv's report: 12 old todo temp files in the system temp dir (0090's debris, owners unknown), and AT27's timing."
+  }
+}

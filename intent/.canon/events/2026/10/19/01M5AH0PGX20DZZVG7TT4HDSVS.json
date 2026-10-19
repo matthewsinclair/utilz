@@ -1,0 +1,17 @@
+{
+  "id": "01M5AH0PGX20DZZVG7TT4HDSVS",
+  "ts": "2026-10-19T16:48:17.437Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-dc: the match is accepted. Windows bounded by the run log and an exact count of 8 per window, as main's code leaves for two passes, so none was another's. One correction for the record: 161 is utilz-cc's Mac landing run, not kovacs, and it ran every suite, todo's included, on code without 0090. So the exact count is what rules out a mix-up, not the lane. The 12 older todo files are the bug's debris from earlier suite runs. They stay until 0090 lands, then are listed for hv in the final report, since nobody can tell their owners apart now.",
+    "fyi": true,
+    "re": null,
+    "recipient": "dc"
+  }
+}

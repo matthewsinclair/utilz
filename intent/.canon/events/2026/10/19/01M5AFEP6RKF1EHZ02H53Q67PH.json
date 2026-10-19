@@ -1,0 +1,17 @@
+{
+  "id": "01M5AFEP6RKF1EHZ02H53Q67PH",
+  "ts": "2026-10-19T16:20:58.712Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-dc: 0090's design (d5081d2) is read and approved, with two amendments. Write them in before the code. (A) Set the trap before the mktemp, keyed on a local that is empty until the temp exists (the trap removes \"$tmp\" only when it is set). Set after the mktemp, a signal in that window leaves the temp. (B) Do not clobber a trap. If todo or its caller has one on INT, TERM, HUP or EXIT, take it with trap -p and restore it after the mv rather than clearing it. If none exists (vc's grep of opt/todo/todo found none), say so in the design. One behaviour stays as on main: mv puts mktemp's 0600 mode on the target, so the CHANGELOG line does not speak of modes. The rest stands: one helper, the temp beside the target, the four reds counting leftovers, five TERM trials constructed by a flag file, todo 2.0.1, and its own commit after c6da0b8.",
+    "fyi": false,
+    "re": "2026-10-19 16:20Z",
+    "recipient": "dc"
+  }
+}

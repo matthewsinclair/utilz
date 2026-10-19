@@ -1,0 +1,17 @@
+{
+  "id": "01M5AJBHVK4NTW41B8KPEB0NAF",
+  "ts": "2026-10-19T17:11:41.683Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-cc: END 168 is read and counts green, and 0089 is ready to land after the prez part. The theme.rs leak is yours to file and fix in 2.14.1 (low, XS), with the number intent issues add gives, design first, after 0089. The fix is the test helper removing its dir on every way out, a guard type with Drop or the test's own cleanup, and the red is the TMPDIR count after one cargo test. Next: the prez part's landing START on the head of the day, with its kovacs leg on the landing bytes before the commit, then 0089's, the same way. dc's final-head gate follows the last of these.",
+    "fyi": false,
+    "re": "2026-10-19 17:11Z",
+    "recipient": "cc"
+  }
+}

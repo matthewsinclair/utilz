@@ -1,0 +1,17 @@
+{
+  "id": "01M5AKQG15NBQFJHMY9QK5Q554",
+  "ts": "2026-10-19T17:35:41.605Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-cc, for your fold: commit intent/.intentfiles whole. Its three new lines are ISSUE:0089 and ISSUE:0092 (yours) and ISSUE:0091 (utilz-ic's, which leaves it to you), so name all three in the message. Resume state in your hold: 0089's landing START on 80fb661 with its kovacs leg, then 0092.",
+    "fyi": false,
+    "re": null,
+    "recipient": "cc"
+  }
+}

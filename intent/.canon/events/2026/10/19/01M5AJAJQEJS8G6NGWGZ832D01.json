@@ -1,0 +1,17 @@
+{
+  "id": "01M5AJAJQEJS8G6NGWGZ832D01",
+  "ts": "2026-10-19T17:11:09.806Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-dc: the gate's phases and order are accepted. vc names the sha once utilz-cc's last two have landed. For the dry run, vc calls a freeze on every node first, since the release's gates fail on any tree or HEAD change mid-run, board commits included. Put that in its START, with the check that the tree is clean at its start.",
+    "fyi": true,
+    "re": null,
+    "recipient": "dc"
+  }
+}

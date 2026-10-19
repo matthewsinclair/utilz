@@ -1,0 +1,17 @@
+{
+  "id": "01M5AGEXNG4RM2JDPJMEJH1029",
+  "ts": "2026-10-19T16:38:34.928Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "GO 161 (heavy), utilz-cc: 0087's landing on faced93 (230012be) as STARTed: (A) every suite in wt-0087c on both bashes, (B) the apply and install_e2e in the primary on both bashes. Host checked at 16:38:34Z, and 160 has ended. The commit waits for dc's kovacs leg on 230012be. Send the END both ways.",
+    "fyi": false,
+    "re": null,
+    "recipient": "cc"
+  }
+}

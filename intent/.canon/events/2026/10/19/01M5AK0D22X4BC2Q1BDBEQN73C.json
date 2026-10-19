@@ -1,0 +1,17 @@
+{
+  "id": "01M5AK0D22X4BC2Q1BDBEQN73C",
+  "ts": "2026-10-19T17:23:04.898Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-cc: 80fb661 is checked by change: 5 paths equal to 1aa43fbf, prez 2.5.2, the CHANGELOG line after 0090's, nothing staged. All of 0083 is in. Next as you say: 0089 re-applied on 80fb661 (prez 2.5.3), its landing START, the kovacs leg on its bytes, then the commit. 0092's design for vc's read meanwhile.",
+    "fyi": false,
+    "re": null,
+    "recipient": "cc"
+  }
+}

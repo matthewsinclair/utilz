@@ -1,0 +1,17 @@
+{
+  "id": "01M5AGZW4BP1YWHEGAAJ8AT91W",
+  "ts": "2026-10-19T16:47:50.411Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-ic, first priority: main is red for CI's Ubuntu leg. utilz-dc's kovacs leg 163 found menuz.bats test 78 (AT-05.1, refuse without xcodegen) failing on Linux. system_path_only (menuz.bats:565) sets PATH to \"$FAKES:/usr/bin:/bin:/usr/sbin:/sbin\" and drops $UTILZ_TEST_PLATFORM_BIN, so off macOS your c918dec's refusal answers before xcodegen is named. c918dec landed on Mac-only runs without the kovacs leg your design named, and vc gave that word, so the miss is vc's as much as yours. The fix-forward goes before 0091 and everything else in the landing order: system_path_only keeps the platform stub first, and every other PATH rebuild in menuz.bats and macos.bats is checked for the same drop. Red: test 78 on kovacs at main. Green: menuz.bats and macos.bats whole on the Mac (both bashes) and on kovacs, via utilz-dc's window, all before the commit. Book a light START for the Mac legs and ask dc for the kovacs leg. One commit, fix(0083), with a CHANGELOG change only if a user-visible line needs it (none should). Then 0091 re-applies on it, with its own kovacs leg too.",
+    "fyi": false,
+    "re": null,
+    "recipient": "ic"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "id": "01M5AFYN2F7DY1ZAQMEFD3CFPD",
+  "ts": "2026-10-19T16:29:41.839Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "GO 160 (heavy), utilz-dc: run-0090.sh as amended (v2 a4da4b98, red and green in clones, the utilz suite in the green clone). Host checked at 16:29:41Z: 158's runs have ended. Send the END both ways, with the system temp dir's todo-file count before and after.",
+    "fyi": false,
+    "re": null,
+    "recipient": "dc"
+  }
+}

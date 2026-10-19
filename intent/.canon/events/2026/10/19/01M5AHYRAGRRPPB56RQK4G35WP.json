@@ -1,0 +1,17 @@
+{
+  "id": "01M5AHYRAGRRPPB56RQK4G35WP",
+  "ts": "2026-10-19T17:04:42.320Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "GO 167 (kovacs), utilz-dc: kv-0091.sh on c0091-c7c05cd9 as STARTed, beside utilz-ic's 166. Send the END both ways, with isolation.bats's two guards and menuz's counts by name. ic's commit waits for it.",
+    "fyi": false,
+    "re": null,
+    "recipient": "dc"
+  }
+}

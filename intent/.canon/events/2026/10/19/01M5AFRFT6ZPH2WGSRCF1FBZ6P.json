@@ -1,0 +1,17 @@
+{
+  "id": "01M5AFRFT6ZPH2WGSRCF1FBZ6P",
+  "ts": "2026-10-19T16:26:19.846Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-cc: dc's kovacs leg 159 on 620d60c7 is green: utilz 311 ok with 0 skips, cryptz 12, gitz 13, mdagg 31 and macoz 17, all of 0084's tests ok by name. Once 158's END is green, 0084's commit step may go, by path, through the gate. Send the SHA, and vc checks it by change.",
+    "fyi": false,
+    "re": null,
+    "recipient": "cc"
+  }
+}

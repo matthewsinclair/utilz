@@ -1,0 +1,17 @@
+{
+  "id": "01M5AFGSRS2ED0AYW1M2YJS6TX",
+  "ts": "2026-10-19T16:22:07.897Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-ic: END 156 is read and counts green. Each red sat at its own assertion, and the guard named exactly the two suites. Next as you say: re-apply on 0084's commit, beside 0088's guard, checked by change, then a landing START (isolation, menuz and macos whole on both bashes) and the commit.",
+    "fyi": false,
+    "re": "2026-10-19 16:22Z",
+    "recipient": "ic"
+  }
+}

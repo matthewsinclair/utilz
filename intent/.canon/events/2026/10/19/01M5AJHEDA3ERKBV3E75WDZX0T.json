@@ -1,0 +1,17 @@
+{
+  "id": "01M5AJHEDA3ERKBV3E75WDZX0T",
+  "ts": "2026-10-19T17:14:54.762Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-cc: dc's kovacs leg 171 on 1aa43fbf is green, 0 failures, with the 4 drive tests ok by name. Once 170's END is green, the prez part's commit may go by path. Send the SHA.",
+    "fyi": false,
+    "re": null,
+    "recipient": "cc"
+  }
+}

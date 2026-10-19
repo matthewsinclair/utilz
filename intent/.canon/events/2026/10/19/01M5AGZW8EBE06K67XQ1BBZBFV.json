@@ -1,0 +1,17 @@
+{
+  "id": "01M5AGZW8EBE06K67XQ1BBZBFV",
+  "ts": "2026-10-19T16:47:50.542Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-cc: dc's kovacs leg 163 on 230012be is green for 0087: shellcheck clean, 0087's two doctor tests ok by name, and the loop green but for menuz. That red is main's, from c918dec, and utilz-ic fixes it forward next. Once 161's END is green, 0087's commit may go. After it, the order is utilz-ic's menuz fix, then 0091, then 0090 (dc), then your prez part, then 0089. Each landing now has its kovacs leg green before the commit, with no exceptions.",
+    "fyi": false,
+    "re": null,
+    "recipient": "cc"
+  }
+}
