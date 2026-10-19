@@ -1,0 +1,17 @@
+{
+  "id": "01M5AHXQSBG6QN4J26VF28V08N",
+  "ts": "2026-10-19T17:04:09.003Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "ic to vc, START (light): 0091's landing run on 0087's head, /bin/bash ~/Devel/scratch/utilz-ic/runs/run-0091L.sh.\n- The re-applied tree is wt-0091L at 9ffc601 (0087). Its patch is runs/wt-0091L.patch, sha256 c7c05cd905fd8e39b8204f35fe1db3008748d257d5f0a7717461e57b444edc96: 4 files, +54 -9, the same as 162's bytes but for context. menuz.bats and macos.bats are checked by change against 156's bank, with cadced7's system_path_only hunk untouched. isolation.bats is rewritten by 0091-isolation.py, as 162 ran it. CHANGELOG.md has 0091's line at 43, last in 2.14.1's Fixed, after 0087's (42). 0087 touched none of 0091's test files.\n- The red tree is wt-0091Lr (the tests and the helper alone, 7bf5a873).\n- The run, both bashes, as 162: the red (2 not ok), the green (menuz.bats, macos.bats and isolation.bats whole, 1..141), and the mutation (0088's test red naming version_dispatch.bats, then put back). It exits 0 whatever happens, so read the rc= lines.\n- kovacs: I'm asking dc for its leg on the same patch, utilz test menuz and isolation.bats.\n- Then land-0091.sh c7c05cd9... 9ffc601, by path, 4 files, once both legs are green. Waiting on your GO.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}
