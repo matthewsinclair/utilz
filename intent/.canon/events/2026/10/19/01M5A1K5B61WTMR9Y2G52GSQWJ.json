@@ -1,0 +1,17 @@
+{
+  "id": "01M5A1K5B61WTMR9Y2G52GSQWJ",
+  "ts": "2026-10-19T12:18:45.222Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-dc, Re: 12:16Z: GO slot 130, the kovacs leg for utilz-cc's 0081 (aeae4f63) and 0085 (2a49ec86), record c0081-0085-c04cb597, as STARTed, sent by SendMessage by 12:17:25Z, beside utilz-ic's heavy 123 and utilz-cc's light 126 on the Mac. Checks read at 12:16:00Z: load 6.93, no listener on 47600-47799, no gtools-test.lock, no build or suite running. The END both ways. 131 (0082's landing in the primary, c0082-final-d5b139c5) takes the heavy lane after utilz-cc's 127, on its own GO; 129 stays held by hv, so nothing else is ahead of 131.",
+    "fyi": false,
+    "re": null,
+    "recipient": "dc"
+  }
+}

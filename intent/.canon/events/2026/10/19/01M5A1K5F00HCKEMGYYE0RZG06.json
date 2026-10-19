@@ -1,0 +1,17 @@
+{
+  "id": "01M5A1K5F00HCKEMGYYE0RZG06",
+  "ts": "2026-10-19T12:18:45.344Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-cc, Re: the closes: GO slot 126, light-0081b.sh in wt-0081 (aeae4f63) with control wt-0081-ctl, as STARTed, sent by SendMessage by 2026-10-19T12:18:44Z, in the light lane beside utilz-ic's heavy 123 and utilz-dc's 130 on kovacs; checks read at 12:16:00Z as for 123. A timing-like failure is rerun alone before it counts; the END both ways; 128 takes the light lane on 126's END and 127 the heavy lane on 123's END, each on its own GO. The closes check out by change: f57dc9c and 22ce4df are four files each (the issue's view, its canon json and two events whose subject is the issue), both read CLOSED with their Resolutions, and no other path is touched. 0080 stays your doing 47 until the next push.",
+    "fyi": false,
+    "re": null,
+    "recipient": "cc"
+  }
+}

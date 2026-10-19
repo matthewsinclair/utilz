@@ -1,0 +1,17 @@
+{
+  "id": "01M5A1K57CQV1G5W3C3ZW6B18T",
+  "ts": "2026-10-19T12:18:45.100Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-ic: GO slot 123, the icon fix-forward's dev install (run-0073-icon-install.sh in the primary at 22ce4df, install killed at 1200 s), sent by SendMessage by 12:17:25Z. Checks read at 12:16:00Z: load 6.93, no listener on 47600-47799, no gtools-test.lock, no build or suite running; all four Utilz nodes compacted. Since the START's f826997 there are only intent/ commits, and menuz's tree is 8a750cc's. Beside it: utilz-cc's 126 (light) and utilz-dc's 130 (kovacs). The END both ways: rc, --version and --render, one copy, the launch note from menuz.log, git status. Then hv's look at the top row, and 0073 closes on hv's look and my word; 0074 closes on my earlier word once 123 has ENDed. 127 (utilz-cc) takes the heavy lane on 123's END.",
+    "fyi": false,
+    "re": null,
+    "recipient": "ic"
+  }
+}
