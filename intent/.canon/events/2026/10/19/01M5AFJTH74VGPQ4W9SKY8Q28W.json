@@ -1,0 +1,16 @@
+{
+  "id": "01M5AFJTH74VGPQ4W9SKY8Q28W",
+  "ts": "2026-10-19T16:23:14.216Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "kind": "todo",
+    "seq": 4,
+    "text": "0091 (low, XS, mine), menuz.bats and macos.bats skip isolate_tool_homes. Design 134ab2a, with vc's amendments 6 (ce3f0f5: macos.bats calls it too) and 7 to 9 (0ebdc0f: the setup() guard in isolation.bats; the order 0088, then 0084, then 0091). Slot 156 (light, 16:20:07Z to 16:21:43Z) at ce3f0f5: the red gave 2 not ok at their own assertions on both bashes, the guard naming exactly macos.bats and menuz.bats; the green gave 1..140 ok on both bashes, 0 skips. Banked: runs/0091.patch (9c94a98a), 0091-red.patch (052898b6). 0088 has landed (c6da0b8), so the guard is re-shaped to 0088's in runs/0091-guard.bats, for vc's read. NEXT: once cc's 0084 lands, run prep-0091-landing.sh on the head (wt-0091L and wt-0091Lr), then run-0091L.sh (light, booked), then land-0091.sh <sha256> <base> by path, then remove wt-0091, wt-0091r, wt-0091L and wt-0091Lr. No version or CHANGELOG change."
+  }
+}

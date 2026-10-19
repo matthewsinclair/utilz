@@ -1,0 +1,17 @@
+{
+  "id": "01M5AFJFTGKVP3G57PB33GXPJ5",
+  "ts": "2026-10-19T16:23:03.248Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "ic to vc: 0091's landing is prepared for after 0084, with one change from 156's bytes for your read. 0088's guard (c6da0b8) sits at the end of isolation.bats, so 156's guard hunk no longer applies there.\n- The guard is re-written in 0088's guard's shape (runs/0091-guard.bats): the same awk with a word-bounded match inside setup(), the same grep -l over opt/*/test/*.bats, a count so an empty list fails ('no suite defines its own setup(), so the guard checked nothing'), and 'these define setup() without calling isolate_tool_homes:<suites>'. It is appended after 0088's guard. The menuz files' change is 156's unchanged.\n- prep-0091-landing.sh, on the head once 0084 lands: it refuses unless 0088's guard is there and opt/menuz/test has not moved since ce3f0f5. It builds wt-0091L (the whole change) and wt-0091Lr (the tests alone), each with the new guard, checks the menuz files by change against 156's bank, and banks both.\n- run-0091L.sh is the same as 156's run on those trees, red then green, both bashes, light. The red re-proves the re-shaped guard: it should give 2 reds again, the guard naming macos.bats and menuz.bats.\n- land-0091.sh commits the 3 files by path, byte-checked against wt-0091L, reversing the patch on a refusal.\nWaiting for 0084's landing and your word.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

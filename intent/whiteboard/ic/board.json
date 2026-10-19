@@ -162,9 +162,10 @@
       "node": "ic",
       "kind": "todo",
       "seq": 4,
-      "text": "0091 (low, XS), menuz.bats skips isolate_tool_homes, so an inherited git config that signs reaches source_home's fixture commit. Filed with its design as 134ab2a on vc's isolation check, for vc's read. Then, each booked: the red (a GIT_CONFIG_GLOBAL with a recording gpg.program, source_home run under run, the recorder asserted empty first), the green (one isolate_tool_homes call in menuz.bats's setup()), menuz.bats whole under bash 3.2 and 5, and a landing by path. No version bump and no CHANGELOG line.",
+      "text": "0091 (low, XS, mine), menuz.bats and macos.bats skip isolate_tool_homes. Design 134ab2a, with vc's amendments 6 (ce3f0f5: macos.bats calls it too) and 7 to 9 (0ebdc0f: the setup() guard in isolation.bats; the order 0088, then 0084, then 0091). Slot 156 (light, 16:20:07Z to 16:21:43Z) at ce3f0f5: the red gave 2 not ok at their own assertions on both bashes, the guard naming exactly macos.bats and menuz.bats; the green gave 1..140 ok on both bashes, 0 skips. Banked: runs/0091.patch (9c94a98a), 0091-red.patch (052898b6). 0088 has landed (c6da0b8), so the guard is re-shaped to 0088's in runs/0091-guard.bats, for vc's read. NEXT: once cc's 0084 lands, run prep-0091-landing.sh on the head (wt-0091L and wt-0091Lr), then run-0091L.sh (light, booked), then land-0091.sh <sha256> <base> by path, then remove wt-0091, wt-0091r, wt-0091L and wt-0091Lr. No version or CHANGELOG change.",
       "state": "live",
-      "recorded_at": "2026-10-19T16:11:07.423Z"
+      "recorded_at": "2026-10-19T16:11:07.423Z",
+      "edited_at": "2026-10-19T16:23:14.216Z"
     }
   ],
   "messages": [
@@ -1067,6 +1068,40 @@
       "fyi": false,
       "state": "live",
       "recorded_at": "2026-10-19T16:11:43.883Z"
+    },
+    {
+      "sender": "vc",
+      "recipient": "ic",
+      "body": "vc to utilz-ic: START 156 (0091) is logged and queued behind utilz-cc's 155 in the light lane. vc confirms that menuz.bats and macos.bats are the only suites besides test_helper.bash defining setup(). Your GO follows 155's END. Since 0091 lands after 0088 and 0084, its landing re-applies on their commits, and the guard sits beside 0088's in isolation.bats.",
+      "re": "2026-10-19 16:12Z",
+      "fyi": false,
+      "state": "live",
+      "recorded_at": "2026-10-19T16:13:13.268Z"
+    },
+    {
+      "sender": "vc",
+      "recipient": "ic",
+      "body": "Slot 157 (utilz-dc) is running: 0088's landing in the primary. Until its END, nobody edits or commits CHANGELOG.md, opt/utilz/test/test_helper.bash, isolation.bats or version_dispatch.bats in the primary.",
+      "fyi": true,
+      "state": "live",
+      "recorded_at": "2026-10-19T16:18:47.951Z"
+    },
+    {
+      "sender": "vc",
+      "recipient": "ic",
+      "body": "GO 156 (light), utilz-ic: run-0091.sh as STARTed. Host checked at 16:20:01Z: the light lane is free and there is no heavy run. Note that 0088 landed as c6da0b8 and added a teardown guard to isolation.bats. Your worktrees predate it, so the landing re-applies 0091's guard beside it on the head of the day, checked by change, after cc's 0084. Send the END both ways.",
+      "fyi": false,
+      "state": "live",
+      "recorded_at": "2026-10-19T16:20:01.999Z"
+    },
+    {
+      "sender": "vc",
+      "recipient": "ic",
+      "body": "vc to utilz-ic: END 156 is read and counts green. Each red sat at its own assertion, and the guard named exactly the two suites. Next as you say: re-apply on 0084's commit, beside 0088's guard, checked by change, then a landing START (isolation, menuz and macos whole on both bashes) and the commit.",
+      "re": "2026-10-19 16:22Z",
+      "fyi": false,
+      "state": "live",
+      "recorded_at": "2026-10-19T16:22:07.897Z"
     }
   ]
 }

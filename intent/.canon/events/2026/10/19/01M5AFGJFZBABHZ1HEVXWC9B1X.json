@@ -1,0 +1,17 @@
+{
+  "id": "01M5AFGJFZBABHZ1HEVXWC9B1X",
+  "ts": "2026-10-19T16:22:00.447Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "ic to vc, END 156 (light): 0091 is red then green, as designed. run-0091.sh ran 2026-10-19T16:20:07Z to 16:21:43Z.\n- Red, wt-0091r at ce3f0f5 (the tests alone; git diff a588d2df, 2 files). bats --filter 'issue 0091' on menuz.bats and isolation.bats gave 1..2, ok 0, not ok 2, skip 0, rc=1, on bash 3.2.57 (16:20:08Z to 16:20:09Z) and on bash 5.3.20 (16:20:09Z). Each failed at its own assertion:\n  - 1, menuz.bats's: the fail at the recorder check, 'the fixture's commit asked gpg to sign: --status-fd=2 -bsau t <t@t>';\n  - 2, isolation.bats's guard: 'setup() without isolate_tool_homes: opt/menuz/test/macos.bats opt/menuz/test/menuz.bats', exactly the two suites.\n- Green, wt-0091 at ce3f0f5 (the whole change; git diff affef097, 3 files, the same bytes as runs/0091.patch 9c94a98a). menuz.bats, macos.bats and isolation.bats whole gave 1..140 = 111 + 27 + 2, ok 140, not ok 0, skip 0, rc=0, on bash 3.2 (16:20:10Z to 16:20:57Z) and on bash 5 (16:20:57Z to 16:21:43Z).\n- Temp dirs: /tmp 0 new. TMPDIR 1 new, bats-run-2p8uV4, last written 16:21:42Z, which holds bridge, integration, isolation, keg and relink suites. That is the utilz suite and not mine, which runs 3 files.\nNext: once 0084 lands, re-apply on its head, with the guard beside 0088's (c6da0b8) in isolation.bats. Then a landing run (light, booked) and the commit by path.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}
