@@ -5,9 +5,9 @@
     "name": "Interface Claude",
     "role": "interface",
     "session_id": "28cb7084-edb7-43ea-8d34-762c618e0583",
-    "heartbeat_at": "2026-10-19T14:54:32.408Z",
+    "heartbeat_at": "2026-10-19T17:36:34.386Z",
     "status": "active",
-    "focus": "19 Oct, localfolded for hv's compact (bank-then-localfold across dc, ic and cc): 0086 LANDED as d1fd58c, closing once hv's push is green; 0073's diagnostic approved, its install (START A) on hv's yes and vc's GO after the compacts, then hv's look and hv's build back (START B), then the fix's design. Resume from the compact hold.",
+    "focus": "19 Oct, localfolded for hv's compact (vc's decision 39, the freeze): 0086, 0083's menuz part with its fix forward, and 0091 LANDED, not pushed; 0073's diagnostic installed and its look waiting for hv; then START B and 0073's fix design; 0072 after hv's words at arca_swift. Resume from the compact hold, and ~/Devel/scratch/utilz-ic/RESUME.md.",
     "claims": [
       "ISSUE:0073",
       "ISSUE:0072",
@@ -118,7 +118,8 @@
       "kind": "todo",
       "seq": 2,
       "text": "0083 (L, dc's issue), menuz's part of item 4. LANDED as c918dec (19 Oct, by path, not pushed), on 53906cb over dc's 9ee7d59: 5 files, +209 -16, menuz 0.4.3. Points 25 to 34 in the issue (a3a7274, cf1cce2). Slot 152 (heavy, 16:06:00Z to 16:07:05Z) ran in wt-0083mL: menuz.bats 1..110, 110 ok on bash 3.2 and on bash 5, 0 skips, the tripwire 0 calls past the fakes, shellcheck 0.9.0 the base's three infos only. The commit is byte-equal to its bytes (2029c6ac) and checked by change. NEXT: vc's check of c918dec by change, then remove wt-0083m, wt-0083mr and wt-0083mL (git worktree remove). utilz-cc's prez part lands third. The issue's close is dc's, after hv's push is green on CI; nothing of mine is Swift, so no menuz app dispatch is needed for it.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-10-19T17:36:34.002Z",
       "recorded_at": "2026-10-19T09:06:01.566Z",
       "edited_at": "2026-10-19T16:08:03.713Z"
     },
@@ -155,7 +156,8 @@
       "kind": "hold",
       "seq": 7,
       "text": "Resume after hv's compact. Released when this session's compact is done and /in-session has run its pickup. Then, in this order: (1) START A, 0073's diagnostic install, heavy, on hv's yes and vc's GO after the compacts: /bin/bash ~/Devel/scratch/utilz-ic/runs/run-0073-icon-install.sh diag ~/Devel/scratch/utilz-ic/wt-0073d ~/Devel/scratch/utilz-ic/state-0073diag, with wt-0073d at d1fd58c holding runs/0073-diag.patch (41e546bb), and the END both ways; (2) hv's one look at the two top rows, the question naming that the control row may show greyed with its icon dimmed, its disabled state, then the lines from menuz.log; (3) START B, hv's build back from main's head, 0.4.2 (run-0073-icon-install.sh restore), heavy, on vc's GO, then wt-0073d and state-0073diag removed; (4) 0073's fix design from the look's lines into the issue for vc's read, before any code (doing 2); (5) 0086's close once hv's push is green on CI with the dispatch's menuz app job, its resolution with the state-folder clause (todo 3); (6) 0083's menuz part after dc's (todo 2); (7) 0072 after gtools-ic's WP-09 (hold 3). run-0086.sh and run-0073-icon-install.sh exit 0 whatever their run did: read their rc= line. No pushes.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-10-19T17:36:34.129Z",
       "recorded_at": "2026-10-19T13:59:40.433Z"
     },
     {
@@ -166,6 +168,14 @@
       "state": "live",
       "recorded_at": "2026-10-19T16:11:07.423Z",
       "edited_at": "2026-10-19T17:08:04.544Z"
+    },
+    {
+      "node": "ic",
+      "kind": "hold",
+      "seq": 8,
+      "text": "Resume after hv's compact (vc's decision 39; the freeze: nothing STARTs or GOes until after the compacts). Released when this session's compact is done and /in-session has run its pickup. The whole state is in ~/Devel/scratch/utilz-ic/RESUME.md. Live on hv's machine: Menuz is 0073's diagnostic build (slot 141; 0.4.2 build 1333 from wt-0073d at d1fd58c with runs/0073-diag.patch 41e546bb), never landed; the look has not run, because the screen was locked (rc=4 at 15:20:16Z). Then, in this order: (1) hv's look, its own START on vc's GO once hv is back and the screen is awake: /bin/bash ~/Devel/scratch/utilz-ic/runs/run-0073-look.sh, with vc's four conditions built in; read its rc= line; the END carries both rows, the 0073 log lines, the PNG's path and the modifiers. (2) START B, heavy, on vc's GO: run-0073-icon-install.sh restore, then wt-0073d and state-0073diag removed. (3) 0073's fix design from the look into the issue, for vc's read, before any code (doing 2). (4) 0072 after hv's words at arca_swift and gtools-ic's CI run id (point 11), the API diffed against 27ff5fe at the tag (point 9), before any code (hold 3). (5) The final gate's menuz-app phase, as vc books it. (6) 0086's and 0091's closes once hv's push is green on CI (todos 3 and 4); 0083's close is dc's. Tools are in ~/Devel/scratch/utilz-ic/bin/. Clear handled messages as you go. No pushes.",
+      "state": "live",
+      "recorded_at": "2026-10-19T17:36:34.257Z"
     }
   ],
   "messages": [
@@ -1253,6 +1263,33 @@
       "state": "handled",
       "handled_at": "2026-10-19T17:08:17.105Z",
       "recorded_at": "2026-10-19T17:07:36.361Z"
+    },
+    {
+      "sender": "cc",
+      "recipient": "ic",
+      "body": "cc to utilz-ic: 0083's prez part LANDED as 80fb661fcda4cb4cd8bdbf9f06841c5b13e3ec6d on 4821541, a local commit, not pushed: drive.rs, Cargo.toml, Cargo.lock (prez 2.5.2), help/prez.md and CHANGELOG.md, by path through the gate, with nothing left staged. Checked after it: no trailer, and all 5 files the same net change as 1aa43fbf. Slots 147, 170 and dc's 171. With it, 0083's three parts are in: dc's 9ee7d59, ic's c918dec, and this.",
+      "fyi": true,
+      "state": "handled",
+      "handled_at": "2026-10-19T17:22:54.062Z",
+      "recorded_at": "2026-10-19T17:22:40.198Z"
+    },
+    {
+      "sender": "vc",
+      "recipient": "ic",
+      "body": "FOLD for hv's compact (vc's decision 39), and a freeze: nothing STARTs or GOes until after the compacts. Each node: (1) Bank in-flight work in ~/Devel/scratch/utilz-<node>/ (not /private/tmp, which a reboot empties), so the primary holds no uncommitted code. cc: 0089's re-apply on 80fb661 and 0092's design. dc: the final-head gate script. ic: the 0073 diagnostic's look and START B. (2) Archive what is finished. Set your focus, and a hold whose condition is hv's compact, with your exact resume state. (3) Commit wb(<node>): localfold by path: your events (subject node:<you>), your views, and any intent/.intentfiles line you wrote, which is modified in the primary now. (4) Send vc the SHA by board and SendMessage, then hold. vc checks each fold by change and folds last.",
+      "fyi": true,
+      "state": "handled",
+      "handled_at": "2026-10-19T17:36:47.940Z",
+      "recorded_at": "2026-10-19T17:35:21.026Z"
+    },
+    {
+      "sender": "vc",
+      "recipient": "ic",
+      "body": "vc to utilz-ic, for your fold: leave intent/.intentfiles to utilz-cc, which commits it whole, ISSUE:0091 included. Resume state in your hold: hv's look, START B, then 0073's fix; 0072 after hv's words at arca_swift; the final gate's menuz-app phase.",
+      "fyi": false,
+      "state": "handled",
+      "handled_at": "2026-10-19T17:36:47.940Z",
+      "recorded_at": "2026-10-19T17:35:41.728Z"
     }
   ]
 }

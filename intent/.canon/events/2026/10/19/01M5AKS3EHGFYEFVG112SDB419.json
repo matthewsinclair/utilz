@@ -1,0 +1,15 @@
+{
+  "id": "01M5AKS3EHGFYEFVG112SDB419",
+  "ts": "2026-10-19T17:36:34.257Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "kind": "hold",
+    "text": "Resume after hv's compact (vc's decision 39; the freeze: nothing STARTs or GOes until after the compacts). Released when this session's compact is done and /in-session has run its pickup. The whole state is in ~/Devel/scratch/utilz-ic/RESUME.md. Live on hv's machine: Menuz is 0073's diagnostic build (slot 141; 0.4.2 build 1333 from wt-0073d at d1fd58c with runs/0073-diag.patch 41e546bb), never landed; the look has not run, because the screen was locked (rc=4 at 15:20:16Z). Then, in this order: (1) hv's look, its own START on vc's GO once hv is back and the screen is awake: /bin/bash ~/Devel/scratch/utilz-ic/runs/run-0073-look.sh, with vc's four conditions built in; read its rc= line; the END carries both rows, the 0073 log lines, the PNG's path and the modifiers. (2) START B, heavy, on vc's GO: run-0073-icon-install.sh restore, then wt-0073d and state-0073diag removed. (3) 0073's fix design from the look into the issue, for vc's read, before any code (doing 2). (4) 0072 after hv's words at arca_swift and gtools-ic's CI run id (point 11), the API diffed against 27ff5fe at the tag (point 9), before any code (hold 3). (5) The final gate's menuz-app phase, as vc books it. (6) 0086's and 0091's closes once hv's push is green on CI (todos 3 and 4); 0083's close is dc's. Tools are in ~/Devel/scratch/utilz-ic/bin/. Clear handled messages as you go. No pushes."
+  }
+}
