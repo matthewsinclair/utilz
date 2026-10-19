@@ -1,0 +1,15 @@
+{
+  "id": "01M5A14GDQBP2223CBH20ET93N",
+  "ts": "2026-10-19T12:10:45.047Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "kind": "hold",
+    "text": "Resume after hv's compact. Released when this session's compact is done and /in-session has run its pickup. Then, in this order, each host run on vc's GO (vc books every Utilz run now): (1) slot 123: /bin/bash ~/Devel/scratch/utilz-ic/runs/run-0073-icon-install.sh (heavy, pins no head), then the END to vc; (2) hv's look at the row's icon, and the launch note's before part to vc with the END; (3) 0073's close with the evidence: 6583e70 and 8a750cc, the runs, hv's two looks (doing 2); (4) slots 118 and 119, after 131 and the 0081 landing: run-0086.sh red (9ad7c622 in wt-0086r), then run-0086.sh green (break 1, then the green 938e0089 in wt-0086), both worktrees on f826997, and the bytes to vc with the ENDs (todo 3); (5) 0086's landing on main's head by path on vc's word, menuz 0.4.2, checked by change; (6) 0083's menuz part after dc's (todo 2); (7) 0072 after gtools-ic's WP-09 (hold 3). 0074 closes on vc's word (doing 3). No pushes."
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "id": "01M5A14FX9TE6FSKA4N85Q9GP6",
+  "ts": "2026-10-19T12:10:44.521Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 3,
+    "text": "0074 (S), menuz's not-YAML refusal keeps Yams' problem: LANDED as ceba425 (19 Oct 08:32:33Z, by path, not pushed), menuz 0.4.1 on 6583e70. Approved by vc as runs/0074-final.patch (9e8f0886, green in slot 67); re-applied on 6583e70 as runs/0074-landing.patch, sha256 a6019b03297319e707b0bc01e8bdf2f6e45f9793271b046b30003df9762198e2, 4 files, each file's change the bank's but VERSION's minus line (0.4.0 for 0.3.0, the moved head), its CHANGELOG entry last in 2.14.1's Fixed. Its one landing run, slot 95 (08:31:20Z to 08:32:05Z): utilz menuz test green in a fresh scratch state (MenuzTests 39, MenuzKitTests 143), no file changed. vc verified it by change (08:33Z): three files carry 9e8f0886's changed lines exactly, VERSION differs only in its minus line, Fixed runs 0066, AT17, 0078, 0077, 0079, 0074. No dev install of 0.4.1 (vc): hv's 0.4.0 stays for the look, and the Gtools cut's signed app replaces it. hv pushed ceba425, and dispatch run 39239328116 is green on it, its menuz app job on Xcode 26.6 included: menuz 0.4.1 on arca_swift 0.1.1 builds and tests on macos-26 (vc, 19 Oct). Waiting: 0074 closes on vc's word, then intent issues close 0074 with the evidence. dc checked it in slot 96 (08:34:33Z): exact up to the moved head; both Swift files, the CHANGELOG entry and VERSION's file equal the approved, and check-landing.sh flags only VERSION's minus line (0.4.0 for 0.3.0), which is the base's (tmp/dc-2141/sc090/c0074-9e8f0886/check-ceba4252.log)."
+  }
+}
