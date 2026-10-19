@@ -1,8 +1,69 @@
 ---
-verblock: "18 Oct 2026:v0.15: matts - menuz 0.3.0 and arngz 1.1.0 landed; menuz's adoption of arca_swift routed (no release yet)"
+verblock: "19 Oct 2026:v0.16: matts - 2.14.1 released: menuz 0.4.5, Utilz on Linux, and the tests that wrote the user's own state"
 ---
 
 # Done
+
+## 19 Oct 2026 -- 2.14.1 released: menuz's masthead, Utilz on Linux, and the tests that wrote the user's own state
+
+**2.14.1 is out**: tag `2.14.1` on `43fca62` ("release: 2.14.1", committed 19:10Z; the tag 19:20Z), cut by `bin/devbin release v2.14.1` from hv's terminal. CI is green on the cut: the push run 39310176010 on main and the tag run 39310186170, every job green, `menuz app (macOS)` among them. hv ruled that everything outstanding ships in 2.14.1, stacked into one release: the fixes landed after 2.14.0 on 17 and 18 Oct, and the issues of 19 Oct from hv's live menu, its new desk and the estate's own tests. 0093 and 0094 joined on hv's word the same evening. 0072 goes to the next release. The CHANGELOG entry is the account of what it carries.
+
+**Before the cut.** The final head was `d5beb38`, and the cut came from `90d510a`, whose code equals it.
+
+- **A local twin of every tests.yml job ran green at `d5beb38`** (vc's decision 38, slots 190 and 191):
+  - test-linux, and shellcheck 0.9.0, on kovacs;
+  - fmt and clippy, test-macos on bash 3.2 and 5, and the Rust legs, on the Mac;
+  - the menuz-app build and test.
+
+  Ubuntu acceptance and Xcode 26.6 stood on CI alone, and CI's push and tag runs proved them.
+
+- **Every candidate had its own Linux leg on kovacs before it landed.** Each was a full bundle into a run dir of its own, installing nothing, so kovacs stayed pristine.
+- **Then the dry run, slot 193**: no step failed, and both gates passed on HEAD in place, with the test estate's 23 suites all passing.
+
+**Issues closed and shipped** (fix commits; each was designed in its tracker entry and read by vc before any source edit, then landed and checked by its change):
+
+- **On 17 and 18 Oct**: 0066 (`76ffed8`, prez 2.5.1) and the relink.bats AT17 flake (`fd2a621`); 0069, 0070 and 0071 (`6ed4397`, `afaf784`, `56e0c90`), in that day's entry.
+- **menuz**:
+  - 0073, the masthead and About window, macOS 26 (`8a750cc`, `6583e70`, `18e13a7`);
+  - 0074, the not-YAML refusal's problem line (`ceba425`);
+  - 0078, realise puts the menu's `bin/` first (`0150478`);
+  - 0086, the run-id store (`d1fd58c`);
+  - 0091, menuz's suites isolate tool homes (`6316ff7`);
+  - 0094, `status` says `homebrew` (`a2802b7`).
+
+  menuz 0.3.0 to 0.4.5.
+
+- **arngz**: 0077, a one-space display just attached (`2023828`), arngz 1.1.1.
+- **utilz**:
+  - 0079, `use` and `relink` link a utility added since (`2d73b7f`);
+  - 0080, cleanz and three utilz verbs name a yaml they cannot use (`fb5608f`);
+  - 0081, a yaml that cannot be read is said (`bffd04a`);
+  - 0085, a dependency entry naming nothing (`9bb32fa`);
+  - 0087, doctor names a utility with no yaml (`9ffc601`).
+- **Utilz on Linux**: 0083 (`9ee7d59`; menuz's part `c918dec` and `cadced7`; prez's `80fb661`). The formula drops `depends_on :macos`, each macOS-only part refuses by name, and `utilz doctor` says what is not here.
+- **The tests**:
+  - 0082, tests no longer write the user's unison, gpg, wallpaper or clipboard (`853a947`);
+  - 0084, seven refusal tests that skipped wherever their tool was installed (`faced93`);
+  - 0088, version_dispatch.bats' temp dirs (`c6da0b8`);
+  - 0090, todo's temp file on a failed write (`c50b08b`, todo 2.0.1);
+  - 0092 and 0093, prez's crate tests leave nothing in TMPDIR, 9 then 82 (`910af45`, `b262242`).
+- **prez**: 0089, a file on `PATH` with no execute bit is passed over (`6a9735e`), prez 2.5.3.
+
+**Threads closed:** none. **Issues closed:** 0066, 0069 to 0071, 0073, 0074, 0077 to 0094, and 0075 on hv's word that menuz returns after a logout and login. **Still open:** 0072, menuz adopts ArcaLogConsole, which goes to the next release.
+
+**Homebrew:** the tap at `77bfe2a` "utilz 2.14.1", pushed by hv. **Release asset:** `Menuz.app.zip` on release 2.14.1, 1733886 bytes, notarised, stapled and passed by Gatekeeper.
+
+**Installs:**
+
+- **On this Mac**: `brew upgrade utilz` 2.14.0 to 2.14.1 (slot 196). `utilz doctor` passed every check, with 17 utilities and the install matching its manifest. menuz is 0.4.5 and arngz 1.1.2. The app is the 0.4.5 build that utilz-ic installed from the source on hv's choice, and `menuz status` says `source homebrew`.
+- **On kovacs**: through hv's next kovacs-sysadm session.
+
+**Worth re-reading.**
+
+- **A pass on a Mac proves nothing about Linux for a suite pinned to Darwin.** menuz's landing `c918dec` was red on Ubuntu in test 78 while every Mac run passed, and only a kovacs leg found it. Every landing since has had a kovacs leg first.
+- **A harness can fail where the code does not.** The gate's bash 5 pass put `/opt/homebrew/bin` first to pick its bash, and that brought the Homebrew keg's `utilz` ahead of the clone's, so every suite refused at once. Each pass now puts a dir holding only its bash first, and logs the bash and the `utilz` it resolved.
+- **A green leaver count can hide a red elsewhere.** 0093's first candidate left 0 entries and failed prez's manifest test on its new `[dev-dependencies]` table, which needs hv. Its second puts the guard behind no manifest change.
+- **macOS `mktemp` with no template ignores TMPDIR**, and bash 5 unwinds a function's locals before an EXIT trap runs. Both shaped 0090's fix.
 
 ## 18 Oct 2026 -- menuz 0.3.0 and arngz 1.1.0 landed, and menuz's adoption of arca_swift routed (no release yet)
 
