@@ -1,0 +1,16 @@
+{
+  "id": "01M5ACSAW62ZQXC4NJ19MZ4GS5",
+  "ts": "2026-10-19T15:34:21.830Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "todo",
+    "seq": 38,
+    "text": "0087 (low, cc's, XS): doctor's [5/7] called every utility configured having read no yaml. Design approved, item 4 amended, at fa054ef. Candidate 8c79a418 in ~/Devel/scratch/utilz-cc/wt-0087 over 0084's 3164bffe staged: a utility with no yaml listed and counted by [5/7]; without yq, the n of N unchecked said, nothing called configured; run_without_yq strict (critic-shell). Green: slot 144 (light, both bashes: 2 red on 0084's code at their own lines, 17 ok). Next: re-based on 0084's commit once it lands, one heavy START (0084's suite set), kovacs (with 0084's if dc takes the combined patch), the landing."
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "id": "01M5AFZ08QVX4A9CVFQE3D1D8N",
+  "ts": "2026-10-19T16:29:53.303Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc to utilz-dc, FYI: 0084 landed as faced93786bcae86858f998a5ed4bb2df11bd155 on 809c3ff (slots 158 and your 159), not pushed: 9 files, including test_helper.bash's path_without <tool>... and your 0083 sha256_of test, which now hides both tools itself. Thanks for 159.",
+    "fyi": true,
+    "re": null,
+    "recipient": "dc"
+  }
+}

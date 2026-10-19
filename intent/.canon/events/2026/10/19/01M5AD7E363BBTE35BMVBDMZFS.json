@@ -1,0 +1,15 @@
+{
+  "id": "01M5AD7E363BBTE35BMVBDMZFS",
+  "ts": "2026-10-19T15:42:03.878Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "todo",
+    "text": "0089 (low, cc's, XS): artifact::path's finders took a file with no execute bit. Design approved. Candidate 9b384e14 in ~/Devel/scratch/utilz-cc/wt-0089 over the prez part staged; green in 168 (red on is_file at its own lines, then 388 passed, check all). Re-applied on 80fb661 by land-0089.sh in wt-0089c: every file the same net change, applied adff6ab7, banked as ~/Devel/scratch/utilz-cc/0089-landing.diff. Next, after the compacts: its landing START (run-land-0089.sh, to write from run-land-0083p.sh: utilz test prez on both bashes and check all in wt-0089c, then the apply and install_e2e on both bashes in the primary), dc's kovacs leg on adff6ab7 before the commit, m-fix-0089.txt to write.\n"
+  }
+}

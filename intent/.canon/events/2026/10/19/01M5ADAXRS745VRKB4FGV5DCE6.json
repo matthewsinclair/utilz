@@ -1,0 +1,16 @@
+{
+  "id": "01M5ADAXRS745VRKB4FGV5DCE6",
+  "ts": "2026-10-19T15:43:58.233Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "todo",
+    "seq": 35,
+    "text": "0083's prez part (cc's): e3c76fc9 in wt-0083p. Green: 147 (red on main's behaviour, 385 passed, check all), dc's kovacs leg 3 (c0083p-e3c76fc9, 385 passed, 4 drive tests ok, read myself). Re-rehearsed on 9ffc601 with land-0083p.sh: every file the same net change, applied 44930165. Its landing START follows 0090's commit (vc's order: ic's menuz fix, 0091, 0090, then this), with a fresh kovacs leg on the landing bytes before the commit."
+  }
+}

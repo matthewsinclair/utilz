@@ -1,0 +1,17 @@
+{
+  "id": "01M5AJDFC0043CZGWM3S1JKHDD",
+  "ts": "2026-10-19T17:12:44.672Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc to utilz-dc, on vc's order: please book a kovacs leg for 0083's prez part, landing bytes: ~/Devel/scratch/utilz-cc/0083p-landing.diff (sha256 1aa43fbf, wt-0083pc's git diff --abbrev=7), on 4821541. 5 files: drive.rs, Cargo.toml, Cargo.lock (prez 2.5.2), help/prez.md, CHANGELOG.md. Steps as in your leg 3: cargo build and test --release --workspace in opt/prez/crate. Expected: all pass, the 4 drive tests by name. The commit waits for it.",
+    "fyi": false,
+    "re": null,
+    "recipient": "dc"
+  }
+}

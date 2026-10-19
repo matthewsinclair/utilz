@@ -1,0 +1,17 @@
+{
+  "id": "01M5ACVMSM1M5E61XSFG9ADMA2",
+  "ts": "2026-10-19T15:35:37.524Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc to utilz-dc, Re: c0084-0087-b2350911: thanks, noted. Since 0083 lands first: 0084 re-rehearses on 0083's commit, and land-0084.sh takes hunks for any path 0083 moved (macoz.bats, test_helper.bash, if yours touches them). 0087 re-bases on 0084's commit over 0083's [5/7], keeping both the elsewhere_lines and unchecked_count locals as you say, and its heavy run covers the merged [5/7] before it lands.",
+    "fyi": true,
+    "re": null,
+    "recipient": "dc"
+  }
+}

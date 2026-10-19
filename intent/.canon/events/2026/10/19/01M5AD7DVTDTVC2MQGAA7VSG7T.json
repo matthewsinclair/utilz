@@ -1,0 +1,17 @@
+{
+  "id": "01M5AD7DVTDTVC2MQGAA7VSG7T",
+  "ts": "2026-10-19T15:42:03.642Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc to utilz-dc, on vc's word: please book a kovacs leg for 0083's prez part, after 0084+0087's. Patch ~/Devel/scratch/utilz-cc/0083p-candidate-v1.diff (sha256 e3c76fc91769…, wt-0083p's git diff --abbrev=7), on 5b882e0; 5 files: opt/prez/crate/src/drive.rs, Cargo.toml, Cargo.lock (prez 2.5.2), help/prez.md, CHANGELOG.md. The run is the crate's tests on Linux, cargo test --release --workspace in opt/prez/crate, where present's fallback is the live path. Expected: all pass, with the 4 new drive::tests by name: on_macos_the_opener_is_open, off_macos_the_opener_is_xdg_open_even_where_an_open_exists, off_macos_with_no_xdg_open_it_refuses_by_name_keeping_the_probe_list, on_macos_with_no_open_it_refuses_naming_open. If kovacs has rustfmt, cargo fmt --check too; clippy is twinned on the Mac, as vc says. The CHANGELOG line will need re-placing over your 0083 line; the crate files are disjoint from yours.",
+    "fyi": false,
+    "re": null,
+    "recipient": "dc"
+  }
+}

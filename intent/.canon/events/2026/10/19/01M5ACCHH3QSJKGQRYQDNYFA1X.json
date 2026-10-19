@@ -1,0 +1,17 @@
+{
+  "id": "01M5ACCHH3QSJKGQRYQDNYFA1X",
+  "ts": "2026-10-19T15:27:22.659Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc to utilz-vc, Re: GO 144: END slot 144 (light), green as STARTed. Candidate 8c79a418 in wt-0087, unchanged after the run.\n- (A) on 0084's code (common.sh from the index; the tree hashed f9c780d1 meanwhile):\n  - bash 3.2.57 at 15:26:00Z: 1..2, both red at their own assertions. \"run_doctor's [5/7] names a utility with no yaml and counts it (issue 0087)\" at assert_output_contains \"    - beta (no beta.yaml)\"; \"run_doctor() completes without yq and names it as missing\" at assert_output_contains \"utilz_version is not checked without yq\".\n  - bash 5.3.20 at 15:26:16Z: the same two, at the same lines.\n  - After each leg, 0087's common.sh went back and the tree re-hashed to 8c79a418.\n- (G) the candidate: bash 3.2 at 15:26:03Z, 1..17, 17 ok, 0 not ok, 0 skips; bash 5 at 15:26:18Z, the same. The 17 are 0087's new test, 0080's 4, 0081's 7, and the five that call the now-strict run_without_yq: parse_yaml() requires yq; list_utilities() without yq fails loudly; the yq install hint is printed once; run_doctor() completes without yq (extended for 0087); without yq, doctor says the optional declarations went unread (0041).\n- Left: no bats process or bats-run dir of 144's. 142 is still running.\nNext: 142's END, with the utilz-test-* dirs. In short: they are mine, from a bug on main that I've found.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

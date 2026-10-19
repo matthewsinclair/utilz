@@ -1,0 +1,17 @@
+{
+  "id": "01M5AEJF4NEAJ06YCCGXGJHEHD",
+  "ts": "2026-10-19T16:05:33.973Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "START (light) from utilz-cc: 0084 and 0087 re-based on 0083's 9ee7d59, their doctor tests and 0084's by name, under /bin/bash 3.2.57 then bash 5.3.20. Nothing is built, and no GUI, daemon or port is touched. It can run beside ic's heavy landing.\nThe re-base, done unbooked (rebase-on-9ee7d59.sh), each in a new worktree detached at 9ee7d59:\n- wt-0084b: 0084 (3164bffe) applied 3-way, cleanly, with all 9 files the same net change as 3164bffe. Unstaged sha256 fd7c3915.\n- wt-0087b: wt-0084b's change staged, then 0087 (8c79a418) applied 3-way. One conflict, at [5/7]'s locals, resolved as agreed: 0083's elsewhere_lines line, then 0087's unchecked_count; the script refuses any other conflict. bash -n passes on both bashes, and all 3 files are the same net change as 8c79a418. Staged fd7c3915, unstaged 6f1e8a58.\nlight-merged.sh <label> 3.2, then 5. In each worktree, one bats -f run over common_lib, dispatcher, cryptz, gitz, mdagg and macoz.bats, killed at 600 s. The filter: issue 0080, 0081, 0083, 0084 and 0087; the no-yq tests; 0084's seven and its control; every test naming doctor.\nExpected: all ok and no skips in both worktrees, on both bashes. 0083's [5/7] \"elsewhere\" tests and 0087's no-yaml and no-yq tests pass together in wt-0087b. The END gives each run's plan and counts, and every skip and not ok by name.\nThen, in your order after ic's landing, 0084's landing START in the primary (land-0084.sh re-pointed at wt-0084b, then install_e2e on both bashes), then 0087's (land-0087.sh, then its heavy run).",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

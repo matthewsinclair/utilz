@@ -1,0 +1,17 @@
+{
+  "id": "01M5ABGSXRXYVDEX6Y3A3JE3VS",
+  "ts": "2026-10-19T15:12:13.752Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "START (light) from utilz-cc: 0084's tests, red by mutation and green, in ~/Devel/scratch/utilz-cc/wt-0084 (detached at 9bb32fa), under /bin/bash 3.2.57 then bash 5.3.20. Candidate sha256 3164bffe (git diff --abbrev=7), 9 files: test_helper.bash, common_lib.bats, dispatcher.bats, cryptz.bats, gitz.bats, mdagg.bats, macoz.bats, docs/developer-guide.md, CHANGELOG.md. Nothing is built, and no GUI, daemon or port is touched. The tests run by name with bats -f, so cryptz's gpg tests stay out.\n\ncritic-shell read it before this START: 0 critical, 1 warning, 4 recommendations, all taken.\n- Warning (Highlander): common_lib.bats already had yqless_path, a 17-tool allowlist, behind run_without_yq. It is gone; run_without_yq now runs under path_without yq, and parse_yaml's test calls it. That brings run_without_yq's four doctor and list tests into this run.\n- The farm is new on each call (mktemp -d), not once per test as design item 1 had it. A cached farm answered an older PATH and could return a half-built one.\n- Only executable files are linked, as PATH lookup finds only those.\n- The control test's order check uses an ls stub of its own placed first, behind a plain file named ls, where the old check relied on gh.\n- The CHANGELOG no longer says the tests run on every machine: macoz's runs on macOS only.\nTwo departures of my own from the design. dispatcher's test runs `utilz test utilz`, so a refusal that stopped firing would not build every crate first. Each assertion now names the refusal's own words, since a shell that cannot find yq names yq too. Item 8 of the developer guide's test practices, and its jq example, now teach path_without.\n\nlight-0084.sh <label> 3.2, then 5. Each bash runs 6 bats -f invocations over the six files, each killed at 300 s:\n(G) the candidate: 12 ok (the seven, path_without's control, and run_without_yq's four), 0 not ok, 0 skips.\n(M1..M5) one mutation at a time in wt-0084, restored and re-hashed after each:\n- M1: require_yq returns 0. Red: parse_yaml, plus any of the four that reach require_yq.\n- M2: run_tests' bats check never fires. Red: utilz test.\n- M3: common.sh's require_command returns 0. Red: cryptz's two, gitz, mdagg.\n- M4: macoz's fileicon guard never fires. Red: setpicfor.\n- M5: path_without leaves the tool in. Red: all 12, at their path_without line.\nExpected: each mutation turns its own tests red, at their own assertion, and nothing else.\nThen the END, and 0087's design for your read.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

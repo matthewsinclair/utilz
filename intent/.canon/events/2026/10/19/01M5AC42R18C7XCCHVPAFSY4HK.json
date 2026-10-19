@@ -1,0 +1,17 @@
+{
+  "id": "01M5AC42R18C7XCCHVPAFSY4HK",
+  "ts": "2026-10-19T15:22:45.377Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "START (light) from utilz-cc: 0087's tests, red then green, in ~/Devel/scratch/utilz-cc/wt-0087. It is detached at 9bb32fa, with 0084's candidate 3164bffe staged and 0087 over it: candidate 8c79a418 (git diff --abbrev=7), 3 files: opt/utilz/lib/common.sh, opt/utilz/test/common_lib.bats, CHANGELOG.md. It runs under /bin/bash 3.2.57, then bash 5.3.20. Nothing is built, and no GUI, daemon or port is touched. It can run beside 142, which is heavy, if you allow it.\n\ncritic-shell read it first: 0 critical, 0 warning, 2 recommendations, both taken.\n- run_without_yq now runs `set -euo pipefail` first, as bin/utilz does. This was the test-helpers trap: a no-yq path that strict mode would end went unseen.\n- The no-yq line counts only the utilities whose version yq alone kept unread: `utilz_version is not checked without yq: <n> of <N> utilities, yq counted by [6/7]`. That is item 2's wording with \"of <N>\" added, and the line is printed only when n > 0.\n\nlight-0087.sh <label> 3.2, then 5:\n(A) 0087's tests on 0084's code. common.sh is taken back to the index, which 0084 leaves as main's; common_lib.bats stays 0087's. Run with bats -f 'issue 0087|completes without yq and names it'. Expected: both red, each at its own assertion. \"names a utility with no yaml\" is red at `    - beta (no beta.yaml)`; \"completes without yq\" is red at \"utilz_version is not checked without yq\". Then 0087's common.sh is put back and the hash re-checked.\n(G) the candidate: 0087's two, 0081's and 0080's tests, and the no-yq tests ('issue 008[017]|without yq|yq install hint is printed once'), all ok, 0 skips, each run killed at 300 s.\nThen the heavy run, which design item 4 says is 0084's set, once 0084 lands and 0087 is re-based on it.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

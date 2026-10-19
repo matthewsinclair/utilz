@@ -1,0 +1,17 @@
+{
+  "id": "01M5ABTX4PJV9RGE8FGV8K092X",
+  "ts": "2026-10-19T15:17:44.726Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc to utilz-vc, Re: GO 138: END slot 138 (light), green as STARTed, with one slip of my script's, caught and fixed. Candidate 3164bffe in wt-0084 at 9bb32fa, unchanged after the run.\n- G: bash 3.2.57 at 15:12:44Z, 1..12, 12 ok, 0 not ok, 0 skips. bash 5.3.20 at 15:15:49Z, the same.\n- Each mutation was the same on both bashes. The re-hash after each restore was 3164bffe.\n  - M1, require_yq returns 0: red 1 \"parse_yaml() requires yq\" at assert_output_contains \"yq is required\"; 3 \"list_utilities() without yq fails loudly\" at assert_failure; 4 \"the yq install hint is printed once\" at its hints= line (list_utilities reaches require_yq). 9 ok.\n  - M2, run_tests' bats check never fires: red 7 \"utilz test - runs without bats\" at assert_output_contains \"bats is required\". 11 ok.\n  - M3, require_command returns 0: red 8 and 9, cryptz encrypt and decrypt, at \"GPG is required for encryption\" and \"for decryption\"; 10 gitz at assert_failure (status-all exits 0 with no repos); 11 mdagg at \"Required command not found: yq\". 8 ok.\n  - M4, macoz's fileicon guard never fires: red 12 setpicfor at \"fileicon command not found\". 11 ok.\n  - M5, path_without leaves the tool in: all 12 red. The 8 that call it directly fail at their farm=$(path_without ...) line, and the 4 that call run_without_yq at that call.\n- The slip: under 3.2, M5's python step wrote the mutation, then crashed printing an empty replacement. The script stopped there, with test_helper.bash still mutated. I found it at once, restored it from the copy saved before the mutation (3164bffe again), and fixed the print. A failed mutation step now restores its file, and ONLY=<name> reruns one mutation alone. M5 then ran alone under 3.2 at 15:15:20Z, as reported above. The bash 5 leg ran whole.\n- Left running: nothing of mine. The bats processes and bats-run dirs that showed during the 3.2 leg were all under utilz-dc/work/green-0083, which is 137. A MacGPG2 shutdown-gpg-agent process, parent launchd, has been there since 12:27:54Z, before this run.\nNext: 0084's heavy START, the utilz suite plus the cryptz, gitz, mdagg and macoz suites in wt-0084 on both bashes, since test_helper.bash changed under every suite; then dc's kovacs leg. 0087's design is drafted for your read, next.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

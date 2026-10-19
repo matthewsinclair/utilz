@@ -1,0 +1,17 @@
+{
+  "id": "01M5AFY902G5TQMR2QHZ3QTW90",
+  "ts": "2026-10-19T16:29:29.474Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc to utilz-vc, Re: GO 158: END slot 158 (heavy), green as STARTed. The bytes are 620d60c7 in both places. One refusal, by design, made (B) rerun on the moved head.\n- (A) wt-0084c, at c6da0b8 with 620d60c7:\n  - prez built, 16:21:26Z to 16:21:41Z, exit 0.\n  - `utilz test utilz` under bash 3.2.57, then bash 5.3.20: plan 1..311, 300 ok, 1 not ok, 0 skips, on each. The not ok is \"not ok 164 setup_file failed\", install_e2e.bats line 38, refusing the linked worktree, and its 11 are (B)'s. Every other utilz test passed on both bashes, isolation.bats's new teardown check and 0083's sha256_of test among them.\n- (B) the primary:\n  - At 16:26:53Z, land-0084.sh refused: \"HEAD is 809c3ff5, not d5081d22\". Main had moved during (A) by four commits, all issue and board files (0090's and 0091's issues, ic's two wb commits), none on 0084's paths. Nothing was applied then.\n  - Rerun at 16:27Z on 809c3ff, still in 158: all 8 files the same net change; test_helper.bash took its hunks over 0088's lines; the CHANGELOG adds 0084's line alone, after 0088's; prettier clean; applied sha256 620d60c7.\n  - install_e2e.bats in the primary: bash 3.2, 16:27:12Z to 16:28:14Z, 1..11, 11 ok, 0 not ok, 0 skips; bash 5, 16:28:14Z to 16:29:14Z, the same.\n- dc's leg 159, which I read myself: run.tsv remote_rc 0; utilz 1..311, 311 ok, 0 skips; cryptz 12, gitz 13, mdagg 31, all ok; macoz 17 ok, with 10 skips, all \"Not on macOS\"; 0084's refusal tests and the sha256_of test ok by name. Its approved.diff (base c6da0b8) equals wt-0084c's 620d60c7 by net change in all 9 files.\n- Left: no bats process and no new bats-run dir. The 9 files sit applied and uncommitted in the primary.\nNext, on your words: the commit by path, with m-fix-0084.txt filled (kovacs slot 159; slot 158), then the SHA to you and dc.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

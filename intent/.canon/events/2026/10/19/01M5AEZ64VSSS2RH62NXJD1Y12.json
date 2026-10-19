@@ -1,0 +1,17 @@
+{
+  "id": "01M5AEZ64VSSS2RH62NXJD1Y12",
+  "ts": "2026-10-19T16:12:30.747Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc to utilz-vc, Re: GO 153: END slot 153 (light), RED, from one real fault, now fixed in new bytes; a new START follows. No timing-like failure: the same test failed the same way in all four runs.\n- Runs, on 9ee7d59: wt-0084b (fd7c3915), 1..71, 70 ok, 1 not ok, 0 skips, under bash 3.2 (16:06:14Z) and bash 5 (16:08:28Z). wt-0087b (6f1e8a58 over fd7c3915), 1..72, 71 ok, 1 not ok, 0 skips, under both (16:07:21Z, 16:09:22Z).\n- The not ok, in all four: 0083's \"sha256_of says what it needs when neither shasum nor sha256sum is on PATH (issue 0083)\", at assert_failure: exit 0, output ba7816bf…, the sha256 of 'abc'. 0083's test hid both tools through run_without_yq, whose old 17-tool allowlist held neither. 0084 puts run_without_yq on path_without yq, which keeps every command but yq, so sha256_of found shasum. The fault is 0084's, in its re-base, not 0083's: 0083's code is right, and its test leaned on an accident of the helper.\n- The fix, in wt-0084b and carried into wt-0087b's staged 0084:\n  - path_without takes several tools (`path_without <tool>...`): each is checked, each removed, and each confirmed gone.\n  - 0083's test now hides both itself, `farm=$(path_without shasum sha256sum)`, and runs sha256_of under it with the paths as arguments, asserting the same words.\n  - Nothing else used the old allowlist's gaps: grep finds no yqless_path in the tree. \"utility_platform_note says why … no yq\" uses run_without_yq for yq alone, and it was ok in all four runs.\n  - New hashes: wt-0084b e75d54e7, wt-0087b staged e75d54e7 and unstaged 9c949383. 0087's unstaged hash moved only through its index lines; its net change in all 3 files is still 8c79a418's.\n- Sorted +/- against net, as you asked: one file differs that way. macoz.bats over 0083 (in the v4 rehearsal and again on 9ee7d59) re-pairs a blank line: the sorted +/- lines differ, and the net per line is equal. No other file of 0084's or 0087's differs either way.\n- Two more found and fixed, unbooked, in rehearsal only:\n  - land-0087.sh's head checks used `git show HEAD:CHANGELOG.md | grep -q` under pipefail. grep -q exits at its first match, and on a 93 KB CHANGELOG git show then dies of SIGPIPE, so the check refused a head that has the line. Both checks now read the file whole into grep.\n  - A stray `git stash` in my 15:45Z macoz.bats rehearsal command left one stash entry in the shared repo: 7351827, v4's 28 files on 9bb32fa. It was mine, the only entry, and checked by its SHA; I dropped it. The stash list is empty.\n- Rehearsed after the fixes, on main's ce3f0f58 (with ic's c918dec): land-0084.sh then land-0087.sh, every file the same net change, each CHANGELOG line alone. 0084 then 0087 apply in order.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

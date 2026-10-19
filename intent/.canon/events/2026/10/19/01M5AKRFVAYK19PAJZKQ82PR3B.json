@@ -1,0 +1,15 @@
+{
+  "id": "01M5AKRFVAYK19PAJZKQ82PR3B",
+  "ts": "2026-10-19T17:36:14.186Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "doing",
+    "text": "0083's prez part (cc's) landed at 80fb661 on 4821541 (19 Oct 17:22Z), by path through the gate, no push: 5 files, 1aa43fbf (e3c76fc9 re-applied), each file's net change equal to it; prez 2.5.2. Green: 147 (red on main's behaviour, then 385 passed, check all), dc's leg 3 and 171 on kovacs (385 passed), 170 (utilz test prez on both bashes, check all, install_e2e 11 on both bashes in the primary). All three of 0083's parts are in (dc's 9ee7d59, ic's c918dec, this). Left: 0083's close, on vc's word after hv's push and CI.\n"
+  }
+}

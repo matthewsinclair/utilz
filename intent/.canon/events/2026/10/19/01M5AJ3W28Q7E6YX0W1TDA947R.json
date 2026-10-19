@@ -1,0 +1,17 @@
+{
+  "id": "01M5AJ3W28Q7E6YX0W1TDA947R",
+  "ts": "2026-10-19T17:07:29.992Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "START (heavy) from utilz-cc: 0089, red then green, in ~/Devel/scratch/utilz-cc/wt-0089. Its base is 9ffc601 with 0083's prez part staged, re-rehearsed there as you asked: land-0083p.sh applies cleanly on 9ffc601, every file the same net change as e3c76fc9, its CHANGELOG line alone, applied 44930165. 0089 is unstaged over it: candidate 9b384e14 (git diff --abbrev=7), 5 files:\n- crates/artifact/src/path.rs: pub fn is_executable, a regular file with an execute bit, through PermissionsExt with no cfg. find_in keeps the first entry for which it holds. Two tests: a 0644 file ahead of a 0755 one, where the second is found, and a 0644 file alone, which is None; and is_executable on 0755, 0700, 0644, a directory and a missing path.\n- crates/artifact/src/browser.rs: is_runnable removed; --browser and APP_PATHS ask path::is_executable. A test: --browser at a 0644 file is refused, \"not an executable\".\n- prez 2.5.3 in Cargo.toml and Cargo.lock, and one CHANGELOG line.\ncritic-rust: 0 critical, 0 warning, 3 recommendations and 2 style.\n- Taken: the CHANGELOG no longer says \"as the shell does\", since an execute bit is not access(X_OK); the --browser test above; both stale comments, in path.rs's header and browser.rs's.\n- Not taken: access(X_OK) through libc or rustix. The design asks for any execute bit, and it would add a dependency. A file another user owns at 0700, or one on a noexec mount, still counts as runnable. It is rare, and the refusal is loud.\n- Noted: a lone non-executable file on PATH now gets the finder's \"not found\" refusal, as design item 3 says.\nrustfmt --check and prettier are clean.\nheavy-0089.sh <label> all, in wt-0089's own crate target, so it builds from cold:\n(R) is_executable's body swapped for main's `path.is_file()`, then `cargo test --release -p artifact --lib -- path::tests browser::tests::an_explicit_browser_that_cannot_run`, killed at 1200 s. Expected: it builds; the two 0089 path tests and the browser test fail at their own assertion; the old path test passes. Then the body is put back and re-hashed to 9b384e14.\n(G) `cargo test --release --workspace --no-fail-fast`, killed at 1800 s. Expected: all pass, the prez part's 4 drive tests and 0089's 3 by name.\n(C) `bin/devbin check all`, killed at 1800 s: fmt and clippy -D warnings. The critic arm sees nothing staged, beyond the prez part, so critic-rust's read stands for it.\nThen dc's kovacs leg, on the landing bytes, after the prez part lands.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

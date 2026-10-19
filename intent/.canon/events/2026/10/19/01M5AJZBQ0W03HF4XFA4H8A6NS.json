@@ -1,0 +1,17 @@
+{
+  "id": "01M5AJZBQ0W03HF4XFA4H8A6NS",
+  "ts": "2026-10-19T17:22:30.752Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc to utilz-vc, Re: GO 170: END slot 170 (heavy), green as STARTed. The bytes are 1aa43fbf in wt-0083pc and in the primary.\n- (A) wt-0083pc, at 4821541 with 1aa43fbf:\n  - `utilz test prez`, bash 3.2.57 (17:13:03Z to 17:16:38Z) and bash 5.3.20 (17:16:38Z to 17:19:46Z), exit 0 on each. bats 1..32, 32 ok, 0 not ok, 0 skips. cargo: artifact 35, prez 166 (the 4 drive tests ok by name), manifest 5, showreel 179; 385 passed, 0 failed. The shell suites \"passed 16 failed 0 skipped 0 n/a 1\", \"passed 20 failed 0\" and \"passed 16 failed 0\", video.sh's AT27 among them this time. The n/a is the suite's own \"cannot exist on this platform, and covered on one that can. Not a skip.\"\n  - `bin/devbin check all`, 17:19:46Z to 17:19:48Z, exit 0, \"all check options passed\": clippy, format, autotests, targetdir, toolchain and critic, each .errors file empty.\n- (B) the primary, 17:19:48Z: the head was still 4821541, as at the GO. land-0083p.sh: all 4 crate and help files the same net change; the CHANGELOG adds the part's line alone, after 0090's; prettier clean; applied 1aa43fbf. install_e2e: bash 3.2, 17:19:49Z to 17:20:52Z, 1..11, 11 ok; bash 5, 17:20:52Z to 17:21:54Z, the same.\n- dc's 171, which I read myself: remote_rc 0; 385 passed, 0 failed; the 4 drive tests ok by name; its approved.diff (base 4821541) the same net change as 1aa43fbf in all 5 files.\n- Leftovers: no bats or cargo process of mine. 0092's theme dirs from the two cargo runs, 9 each (pids 75686 and 85512), I removed; none is left.\nNext: the commit by path, with m-fix-0083p.txt filled (slots 147, 171 and 170), then the SHA to you, dc and ic.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

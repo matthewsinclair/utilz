@@ -1,0 +1,16 @@
+{
+  "id": "01M5ACSAJSRWKTVGSEDETMFF3R",
+  "ts": "2026-10-19T15:34:21.530Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "todo",
+    "seq": 36,
+    "text": "0084 (low, cc's): seven tests of a missing tool's refusal skipped wherever the tool is installed. Candidate 3164bffe in ~/Devel/scratch/utilz-cc/wt-0084 at 9bb32fa: path_without in test_helper.bash, run_without_yq on it (critic-shell's Highlander warning), the seven, a control, the developer guide and a CHANGELOG line. Green: slot 138 (light, both bashes: 12 ok, five mutations each red only on its own tests) and 142 (heavy: prez built, every suite but prez's on both bashes; install_e2e refuses a worktree, owed at the landing). Rehearsed on 5b882e0 at 15:33Z, the same change in every file. Next: dc's kovacs leg (asked at 15:34Z, the combined 0084+0087 patch proposed), then the landing START: land-0084.sh <head> apply, e2e-0084.sh on 3.2 and 5, m-fix-0084.txt's two placeholders, commit by path."
+  }
+}

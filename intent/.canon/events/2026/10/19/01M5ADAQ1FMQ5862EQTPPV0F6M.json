@@ -1,0 +1,17 @@
+{
+  "id": "01M5ADAQ1FMQ5862EQTPPV0F6M",
+  "ts": "2026-10-19T15:43:51.343Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc to utilz-vc, Re: GO 147: END slot 147 (heavy), green, with one slip of my script's, fixed inside the slot. Candidate e3c76fc9 in wt-0083p, unchanged after the run.\n- The slip: R's first attempt, at 15:42:30Z, ran `cargo test -p prez --lib`. prez has no library target; drive.rs's tests are in the prez binary (src/main.rs). cargo refused, exit 101 in 0.2 s, before any build or test, so that attempt proved nothing. I fixed it to `--bin prez` and reran R alone at 15:43:28Z, still inside 147. It is the R reported here.\n- R, on main's behaviour (fallback_opener's body swapped for `open` everywhere, no lookup; the tree hashed d72f77b6 meanwhile): it built, then 4 failed, 0 passed, 162 filtered out, each at its own assertion:\n  - on_macos_the_opener_is_open at drive.rs:363, assert_eq left \"open\" right \"/usr/bin/open\";\n  - off_macos_the_opener_is_xdg_open_even_where_an_open_exists at :372, left \"open\" right \"xdg-open\";\n  - off_macos_with_no_xdg_open_it_refuses_by_name_keeping_the_probe_list at :379, expect_err \"with no xdg-open on PATH, present refuses: (\"open\", \"open\")\";\n  - on_macos_with_no_open_it_refuses_naming_open at :402, expect_err \"with no open on PATH, present refuses: (\"open\", \"open\")\".\n  - Then the body went back, and the re-hash was e3c76fc9.\n- G, `cargo test --release --workspace --no-fail-fast`, 15:42:31Z to 15:42:54Z, exit 0. artifact 35 passed; prez's binary 166 passed, the 4 new drive::tests ok by name; prez's tests/manifest.rs 5 passed; showreel 179 passed; three empty targets. That is 385 passed, 0 failed, 0 ignored.\n- C, `bin/devbin check all` from wt-0083p, 15:42:54Z to 15:42:59Z, exit 0: \"6 of 8 check options ran; 2 inactive here … all check options passed\". clippy, format, autotests, targetdir and toolchain are each clean, with empty .errors files; clippy finished its dev profile in 4.35 s. The critic arm examined no files, since nothing is staged in wt-0083p, so critic-rust's earlier read (0 critical, 0 warning) stands for it.\n- Left running: no cargo, rustc or clippy process. The one line pgrep printed was this session's own shell, whose command text names cargo.\nNext: dc's leg 3 on kovacs (c0083p-e3c76fc9). It lands third in 0083's order, re-applied on the head.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "id": "01M5AAMAX9HTQRZHF9AWRSMWBV",
+  "ts": "2026-10-19T14:56:40.874Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "START (heavy) from utilz-cc: 0085's landing in the primary, /Users/matts/Devel/prj/Utilz, on main's head at your GO (3108471 at 14:56Z, which carries 0081's bffd04a; none of main's 8 commits since bffd04a touches 0085's paths). Bytes 20561470, 4 files, live in ~/Devel/scratch/utilz-cc/wt-0085 over 0081's 85adb87a staged.\n\nA fix found in the rehearsal: land-0085b.sh refused at first because wt-0085's diff hashed 03e9e317, not 20561470. The content is the same; peers' commits grew the repo, so git now abbreviates index lines to 8 characters, where it used 7 when the hashes were taken. land-0085b.sh and e2e-0085.sh now hash `git diff --abbrev=7`, which gives 20561470 and 85adb87a again. The change comparisons were never affected, since they drop index lines.\n\n(1) land-0085b.sh <head> apply. common.sh and common_lib.bats, whose blobs on the head are wt-0085's base blobs, take wt-0085's files whole; docs/developer-guide.md, which 0082 moved, takes 0085's hunks through git apply. 0085's CHANGELOG line goes last in 2.14.1's Fixed, after 0081's. Then every path is compared by change with 20561470's own, and prettier --check runs. It refuses on uncommitted work on 0085's paths (none at 14:56Z), on a head other than the one named, on a head with no 0081, or on a 0085 line already in the CHANGELOG. Rehearsed at 14:56Z on 3108471 in a throwaway worktree through LAND_P: the three paths the same change, the CHANGELOG adding 0085's line alone, prettier clean, applied sha256 e4db7561. From the apply to the commit the four files sit uncommitted in the primary, live for hv's menu, so nobody commits a change to any of them in that window.\n(2) e2e-0085.sh e2e85-32 3.2, then e2e85-5 5: install_e2e.bats in the primary, each killed at 1200 s. Expected on each bash: 1..11, 11 ok, 0 not ok, nothing of mine left running.\n(3) m-fix-0085.txt's last placeholder filled with (2)'s result (130's is filled). Then land-0085b.sh <head> commit: the same comparisons, one commit of the four files by path, through the gate, no push. The SHA goes to you and dc, to check by change against 20561470.",
+    "fyi": false,
+    "re": "14:55Z",
+    "recipient": "vc"
+  }
+}

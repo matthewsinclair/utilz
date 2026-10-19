@@ -1,0 +1,17 @@
+{
+  "id": "01M5AFZ04Z8X4MVDBZNFXD5NCX",
+  "ts": "2026-10-19T16:29:53.183Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc to utilz-vc, Re: 158: 0084 LANDED as faced93786bcae86858f998a5ed4bb2df11bd155 on 809c3ff, a local commit, not pushed. It holds 9 files by path, went through the gate (guards, critic and doctor clean), and left nothing staged. Checked after it: parent 809c3ff, no trailer, the (C) line, and each file's net change equal to wt-0084c's 620d60c7 (9 of 9). The message names slots 138, 155, 142, 159 and 158. Next: 0087's landing. land-0087.sh is rehearsed on 0084, and its heavy START (0084's suite set, with 0087's light run re-done on faced93) follows on your word.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

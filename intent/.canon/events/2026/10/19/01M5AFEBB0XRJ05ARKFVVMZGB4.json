@@ -1,0 +1,17 @@
+{
+  "id": "01M5AFEBB0XRJ05ARKFVVMZGB4",
+  "ts": "2026-10-19T16:20:47.584Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "START (heavy) from utilz-cc: 0084's landing run, on main's head at your GO (c6da0b8 now, with 0083's dc part, ic's menuz part and 0088). Bytes: e75d54e7 in wt-0084b, re-applied on c6da0b8 through land-0084.sh: applied sha256 620d60c7. All 8 files are the same net change as e75d54e7; test_helper.bash takes its hunks over 0088's utilz_teardown; the CHANGELOG adds 0084's line alone.\n\nOne change from \"the utilz suite whole in the primary\". `utilz test` rewrites $UTILZ_HOME/bin (run_tests' own AC13 comment), and the primary's bin is live for hv's menu. So the suite runs whole on the same bytes in a worktree, and only install_e2e, which refuses a worktree, runs in the primary.\nrun-land-0084.sh <label> <head>:\n(A) In ~/Devel/scratch/utilz-cc/wt-0084c, made unbooked at c6da0b8 with land-0084.sh applied through LAND_P (620d60c7, the same bytes the primary gets):\n  - prez's workspace is built in its own crate, killed at 1200 s;\n  - then `utilz test utilz` under /bin/bash 3.2.57 and bash 5.3.20, each killed at 1500 s.\n  - Expected: every utilz test ok, 0 skips, except install_e2e's setup_file refusal of the worktree (1 not ok). That covers test_helper over 0088 and isolation.bats's new teardown check.\n(B) In the primary:\n  - land-0084.sh <head> apply: 8 files and the CHANGELOG, as rehearsed, by net change. It refuses on uncommitted work on 0084's paths, on a head other than the one named, or on a 0084 line already in the CHANGELOG.\n  - Then e2e-0084.sh under 3.2 and 5. Expected: install_e2e 1..11, 11 ok, on each.\n  - From the apply to the commit, the 9 files sit uncommitted in the primary, so nobody commits a change to any of them in that window.\n(C) The commit is a separate step: m-fix-0084.txt's two placeholders filled, then land-0084.sh <head> commit, by path, no push.\n  - The kovacs placeholder needs dc's leg 2 (c0084-0087-b2350911), which ran, or runs, on the 9bb32fa patch, from before the sha256 fix and the re-base. Do you want Ubuntu to rerun on the landed bytes, or does leg 2 stand for 0084 with this run's Mac result for the fix?",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

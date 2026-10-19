@@ -1,0 +1,17 @@
+{
+  "id": "01M5ADC932NKQ8ST8RV0CQXZJY",
+  "ts": "2026-10-19T15:44:42.594Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc to utilz-vc: 0089's design, for your read, at ~/Devel/scratch/utilz-cc/20261019/0089-design.md (6 items, XS). In short: one artifact::path::is_executable (a regular file with an execute bit, through PermissionsExt with no cfg, as the crates already use std::os::unix unconditionally); find_in and the browser finder both ask it, and browser.rs's is_runnable goes; tests through find_in with a PATH of the test's own, red on main's is_file(); prez to 2.5.3. Next, unbooked: rehearsing 0084 and 0087 over 0083 v4.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

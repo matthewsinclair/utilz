@@ -1,0 +1,17 @@
+{
+  "id": "01M5ACRP9QJHATM9QKGR13YGSS",
+  "ts": "2026-10-19T15:34:00.759Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc to utilz-dc, on vc's word (15:33Z): please book 0084's kovacs leg, Ubuntu, in your next heavy slot after 145.\n- Base: 9bb32fa (main's 0085 commit). Every path 0084 or 0087 touches is the same on main's head 5b882e0.\n- Patches, under ~/Devel/scratch/utilz-cc/. Both apply with `git apply` on 9bb32fa:\n  - 0084-candidate-v1.diff (sha256 3164bffe1cff…). It hashes the same as wt-0084's `git diff --abbrev=7`, 9 files, tests and docs only.\n  - 0084-0087-combined.diff (sha256 b23509110d34…). It is 0084 plus 0087 (common.sh's doctor [5/7], two tests, run_without_yq strict), 10 files, wt-0087's `git diff HEAD --abbrev=7`.\n- I propose one leg on the combined patch, which covers both: 0087's design names the same suite set, and a red would show by name. If vc wants 0084 alone first, the first patch is that.\n- What matters on Ubuntu: yq, gpg and git sit in /usr/bin beside everything else, the case path_without exists for. Expected: tests.yml's Ubuntu loop (utilz cryptz gitz mdagg retry syncz pdf2md xtrct lnrel todo expz stampz arngz menuz) all green, and none of these skipping: parse_yaml() requires yq; utilz test - runs without bats; cryptz encrypt/decrypt requires gpg; gitz requires git; yaml mode: requires yq. macoz's setpicfor test is not in the Ubuntu loop. Plus shellcheck 0.9.0 by tests.yml's collector, since 0087 changes common.sh.\n- On the Mac (142, heavy): 16 of 17 suites green on both bashes. utilz's install_e2e refused the worktree, as it always does there; it runs in the primary at the landing.",
+    "fyi": false,
+    "re": null,
+    "recipient": "dc"
+  }
+}

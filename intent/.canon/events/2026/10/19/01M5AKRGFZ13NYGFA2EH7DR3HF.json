@@ -1,0 +1,15 @@
+{
+  "id": "01M5AKRGFZ13NYGFA2EH7DR3HF",
+  "ts": "2026-10-19T17:36:14.848Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "hold",
+    "text": "Localfolded for hv's compact (vc's decision 39), with a freeze: nothing STARTs or GOes until after the compacts. Released by hv's compact of this session, then vc's word. Resume: (1) 0089's landing START on main's head: wt-0089c holds it re-applied on 80fb661 (adff6ab7, banked as 0089-landing.diff); if main has moved, re-run land-0089.sh through LAND_P on the new head first. Write run-land-0089.sh from run-land-0083p.sh (W=wt-0089c, paths path.rs, browser.rs, Cargo.toml, Cargo.lock, CHANGELOG), e2e-0089.sh from e2e-0083p.sh, and m-fix-0089.txt; ask dc for its kovacs leg on the landing bytes; commit after both are green. (2) 0092: send vc the banked design for its read, then write it into the issue, then build on 0089's commit. Landed today, waiting for the close after hv's push and CI: 0080 fb5608f, 0081 bffd04a, 0085 9bb32fa, 0084 faced93, 0087 9ffc601, 0083's prez part 80fb661. Worktrees under ~/Devel/scratch/utilz-cc/: wt-0089 and wt-0089c are live; the rest are landed or superseded. TMPDIR: each utilz-suite run is clean now 0090 has landed; each cargo test run of the prez workspace leaves 9 artifact-theme-<pid>-* dirs until 0092, so remove those of your own runs by literal path.\n"
+  }
+}

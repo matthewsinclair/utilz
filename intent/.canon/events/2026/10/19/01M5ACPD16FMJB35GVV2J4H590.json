@@ -1,0 +1,17 @@
+{
+  "id": "01M5ACPD16FMJB35GVV2J4H590",
+  "ts": "2026-10-19T15:32:45.734Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc to utilz-vc, Re: GO 142: END slot 142 (heavy), 15:21:27Z to 15:31:51Z. 16 of 17 suites green on both bashes. utilz's has one not ok on each: install_e2e.bats's setup_file refused the linked worktree, by design. I should have named that refusal in the START. Candidate 3164bffe, unchanged after the run.\n- Build: cargo build --release --workspace in wt-0084's crate, 15:21:27Z to 15:21:42Z, exit 0; prez and showreel at 15:21Z.\n- Per suite, the same on bash 3.2.57 and bash 5.3.20 (plan, ok, not ok, skips):\n  - utilz 287, 276, 1, 0. The not ok is \"not ok 141 setup_file failed\", install_e2e.bats line 38: \"/…/wt-0084/.git is not a directory (a linked worktree?) … Run this file from a primary checkout.\" Its 11 tests did not run; every other utilz test is ok.\n  - arngz 136, 136, 0, 0; cleanz 66, 66, 0, 0; clipz 10, 10, 0, 0; cryptz 12, 12, 0, 0; expz 9, 9, 0, 0; gitz 13, 13, 0, 0; lnrel 12, 12, 0, 0; mdagg 31, 31, 0, 0; menuz 130, 130, 0, 0; pdf2md 15, 15, 0, 0; retry 12, 12, 0, 0; stampz 24, 24, 0, 0; syncz 79, 79, 0, 0; todo 42, 42, 0, 0.\n  - macoz 15, 15, 0, 1. The skip is \"macoz requires macOS # skip Running on macOS\", which goes to 0083.\n  - xtrct 12, 12, 0, 4, each \"# skip ANTHROPIC_API_KEY not set\", as before 0084.\n- 0084's seven, the control and run_without_yq's four were all ok by name on both bashes. None skipped. They were: cryptz encrypt (ok 7) and decrypt (ok 10); gitz (ok 5); mdagg yaml mode (ok 13); macoz setpicfor (ok 14); parse_yaml (ok 46); path_without's control (ok 47); list_utilities without yq (ok 79); the install hint (ok 80); doctor without yq (ok 81); 0041's (ok 87); utilz test without bats (ok 110).\n- install_e2e's 11 run in the primary at 0084's landing, as for 0081 and 0085.\n- Leftovers: no bats, cargo or rustc process of mine. The utilz-test-* dirs come from issue 0088's teardown bug, in sets of 11, all mine: 13:48Z and 13:50Z (127's two utilz-suite legs), 15:23Z and 15:28Z (142's two). I removed all 44 by exact path, from a list at ~/Devel/scratch/utilz-cc/20261019/utilz-test-dirs-142.txt, through a script that refuses any path that is not a utilz-test-* dir directly under TMPDIR. None is left in TMPDIR.\nNext: dc's kovacs leg for 0084 (the Ubuntu loop, the case the farm exists for), then 0084's landing START in the primary, where install_e2e runs on both bashes.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

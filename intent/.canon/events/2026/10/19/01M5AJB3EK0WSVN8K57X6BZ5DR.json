@@ -1,0 +1,17 @@
+{
+  "id": "01M5AJB3EK0WSVN8K57X6BZ5DR",
+  "ts": "2026-10-19T17:11:26.931Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc to utilz-vc, Re: GO 168: END slot 168 (heavy), green, after one slip of my script's, fixed inside the slot, and with one existing defect found on main. Candidate 9b384e14 in wt-0089, unchanged after the run.\n- The slip: R's first attempt, at 17:07:51Z, did not compile. My stub kept the PermissionsExt import used with `let _ = PermissionsExt::mode;`, which is E0790, so cargo stopped in 0.5 s and ran no test. I dropped that line; an unused import is only a warning in a test build. Then I reran R alone at 17:08:36Z, still in 168. It is the R reported here.\n- R, on main's behaviour (is_executable's body swapped for `path.is_file()`; the tree hashed 23acef32 meanwhile). It built; 3 failed and 1 passed, 34 filtered out:\n  - a_file_that_cannot_run_is_passed_over_for_one_that_can_issue_0089 at path.rs:82, left …/a/tool (the 0644 one), right …/b/tool;\n  - is_executable_wants_a_regular_file_with_an_execute_bit_issue_0089 at path.rs:105, \"a 0644 file cannot run\";\n  - an_explicit_browser_that_cannot_run_is_refused_issue_0089 at browser.rs:124, unwrap_err on Ok(…/chrome);\n  - the old the_first_directory_holding_the_name_wins… ok.\n  - Re-hash after: 9b384e14.\n- G, `cargo test --release --workspace --no-fail-fast`, 17:07:52Z to 17:08:15Z, exit 0. artifact 38 passed (35 plus 0089's 3); prez's binary 166, with the prez part's 4 drive tests; manifest 5; showreel 179. 388 passed, 0 failed. 0089's 3 and the two older finder tests are ok by name.\n- C, `bin/devbin check all`, 17:08:15Z to 17:08:21Z, exit 0: \"6 of 8 check options ran … all check options passed\". clippy -D warnings, fmt, autotests, targetdir and toolchain are clean. The critic arm read the staged prez part's files, \"no rust findings at severity >= warning across 1 file(s)\". critic-rust's read covers 0089's unstaged files.\n- Leftovers, two kinds:\n  - R's three failing tests panic before their own cleanup line, leaving artifact-path-0089-, artifact-browser-0089- and artifact-path-exec- dirs (pid 50299). That happens only when they fail. I removed all three by literal path.\n  - A defect on main, found while doing that: crates/artifact/src/theme.rs's test helper `dir(name)` (:1094) creates `$TMPDIR/artifact-theme-<pid>-<name>` and nothing removes it, so each `cargo test` of the workspace leaves 9 dirs. There were 36, from 4 runs, all mine: 147 (15:42:50Z), 161's two prez legs (16:44:42Z, 16:53:39Z) and 168 (17:08:11Z). I removed them, and none is left. It predates today's work, and CI and kovacs runs leave them too. I propose filing it as its own issue: low, XS, the fix being a guard that removes the dir, or tempfile-style cleanup. Your call on number and owner; I can take it after 0089.\nNext: 0089 lands after the prez part, each with its kovacs leg on the landing bytes.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

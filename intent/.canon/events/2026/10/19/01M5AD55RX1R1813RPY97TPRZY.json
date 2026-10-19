@@ -1,0 +1,17 @@
+{
+  "id": "01M5AD55RX1R1813RPY97TPRZY",
+  "ts": "2026-10-19T15:40:49.821Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "START (heavy) from utilz-cc: 0083's prez part (items 7, 15 and 16; design items 20 to 24) in ~/Devel/scratch/utilz-cc/wt-0083p, detached at 5b882e0. Candidate e3c76fc9 (git diff --abbrev=7), 5 files: opt/prez/crate/src/drive.rs, opt/prez/crate/Cargo.toml and Cargo.lock (prez 2.5.1 to 2.5.2), help/prez.md (:273), CHANGELOG.md.\n\nThe code:\n- open_presenting asks browser::find once and keeps its refusal; a --browser that is not there is still refused.\n- With no browser named and none found, fallback_opener(std::env::consts::OS, artifact::path::on_path, no_browser) chooses `open` when os is \"macos\" and `xdg-open` otherwise, and looks it up. The os is read once, at that call. There is no cfg(target_os); every line compiles and lints on the Mac.\n- With no opener, the refusal is the finder's, extended: its probe list plus \"and no '<opener>' on PATH to open the deck with\", its remedy plus \", or put <opener> on PATH\", and its exit code, 2.\n- The warning names the opener, and prints only once one is found.\n- Four unit tests in drive.rs, both os values each way: macos finds open; linux finds xdg-open even where an open exists; linux with no xdg-open refuses, keeping the probe list, with the remedy pinned; macos with no open refuses, with the remedy pinned.\n\ncritic-rust read it first: 0 critical, 0 warning, 3 recommendations, and it expects nothing from fmt or clippy -D warnings. I took the first: the remedy and code are now built from the finder's refusal, where they had been retyped, so the browser list has one home. Two I did not take, for your call:\n(a) On macOS with PATH unset, on_path finds nothing, so present now refuses with \"no 'open' on PATH\", where execvp's default path used to find /usr/bin/open. The refusal is loud and rare.\n(b) artifact::path::on_path counts a non-executable file as found. That is the shared helper's, outside 0083; a spawn failure there is still loud.\nrustfmt --check is clean with the crate's rustfmt.toml; prettier is clean on the two markdown files.\n\nheavy-0083p.sh <label> all, in wt-0083p's own crate target (CARGO_TARGET_DIR unset), so the first cargo builds from cold:\n(R) red: fallback_opener's body swapped for main's behaviour (`open` everywhere, no lookup), then `cargo test --release -p prez --lib -- on_macos off_macos`, killed at 1200 s. Expected: the build compiles and all 4 tests fail at their own assertion or expect. Then the body is put back and re-hashed to e3c76fc9.\n(G) `cargo test --release --workspace --no-fail-fast` in the crate, killed at 1800 s. Expected: every test passes, the 4 named.\n(C) `bin/devbin check all` from wt-0083p, killed at 1800 s: fmt, clippy -D warnings and the critics. Its critic arm reads staged files only and wt-0083p stages nothing, so critic-rust's read above stands for that arm.\nThen dc's kovacs leg for the crate's tests, on Linux, where the fallback is the live path. It lands third of 0083's three commits, re-applied on the head.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

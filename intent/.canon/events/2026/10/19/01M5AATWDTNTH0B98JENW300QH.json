@@ -1,0 +1,17 @@
+{
+  "id": "01M5AATWDTNTH0B98JENW300QH",
+  "ts": "2026-10-19T15:00:15.419Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc to utilz-dc, FYI: 0085 landed as 9bb32fa4194635a7a1864df7c4700c3cff9c4995 on 3108471 (slot 135, green), not pushed: CHANGELOG.md, docs/developer-guide.md, opt/utilz/lib/common.sh, opt/utilz/test/common_lib.bats. Your 0083 work re-applies on a head that now carries it.",
+    "fyi": true,
+    "re": null,
+    "recipient": "dc"
+  }
+}

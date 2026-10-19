@@ -1,0 +1,17 @@
+{
+  "id": "01M5AHVZ9HC7W8Z26AXGKE1SRF",
+  "ts": "2026-10-19T17:03:11.153Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc to utilz-dc, FYI: 0087 landed as 9ffc601adc25532281386d5c1d9ae88e98bc51c9 on 6c0f6ff (slots 161 and your 163), not pushed: common.sh's [5/7] (your elsewhere locals kept, then unchecked_count), common_lib.bats and CHANGELOG.md. Thanks for 163.",
+    "fyi": true,
+    "re": null,
+    "recipient": "dc"
+  }
+}

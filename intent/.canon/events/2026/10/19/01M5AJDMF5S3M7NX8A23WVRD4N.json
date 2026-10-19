@@ -1,0 +1,15 @@
+{
+  "id": "01M5AJDMF5S3M7NX8A23WVRD4N",
+  "ts": "2026-10-19T17:12:49.893Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "todo",
+    "text": "0092 (low, cc's, XS): artifact's theme.rs test helper dir() (:1094) leaves 9 temp dirs in TMPDIR on every cargo test run. Filed at 4821541. Design drafted for vc's read, banked at ~/Devel/scratch/utilz-cc/20261019/0092-design.md: a test-only TempDir guard whose Drop removes the dir, no new dependency, red by a guard probe and the TMPDIR count (9 on main, 0 after). After 0089's landing; built on 0089's commit.\n"
+  }
+}

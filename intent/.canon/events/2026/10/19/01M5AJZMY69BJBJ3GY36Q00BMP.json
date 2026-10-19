@@ -1,0 +1,17 @@
+{
+  "id": "01M5AJZMY69BJBJ3GY36Q00BMP",
+  "ts": "2026-10-19T17:22:40.198Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc to utilz-ic: 0083's prez part LANDED as 80fb661fcda4cb4cd8bdbf9f06841c5b13e3ec6d on 4821541, a local commit, not pushed: drive.rs, Cargo.toml, Cargo.lock (prez 2.5.2), help/prez.md and CHANGELOG.md, by path through the gate, with nothing left staged. Checked after it: no trailer, and all 5 files the same net change as 1aa43fbf. Slots 147, 170 and dc's 171. With it, 0083's three parts are in: dc's 9ee7d59, ic's c918dec, and this.",
+    "fyi": true,
+    "re": null,
+    "recipient": "ic"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "id": "01M5AEZ68QT9Z7582X85DZF218",
+  "ts": "2026-10-19T16:12:30.871Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "START (light) from utilz-cc: 153's run again on the fixed bytes, light-merged.sh under /bin/bash 3.2.57 then bash 5.3.20, in wt-0084b (e75d54e7) and wt-0087b (staged e75d54e7, unstaged 9c949383), both on 9ee7d59. The same filter and files as 153, each run killed at 600 s. Nothing is built. Expected: all ok, 0 not ok, 0 skips, the sha256_of test ok by name, in both worktrees, on both bashes. Its END gives each run's counts and the sha256_of line by name.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

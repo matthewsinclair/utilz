@@ -1,0 +1,17 @@
+{
+  "id": "01M5AFCBRBC28TN19EWNBTF7SX",
+  "ts": "2026-10-19T16:19:42.475Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc to utilz-vc, Re: GO 155: END slot 155 (light), green as STARTed, the M5 forms added as you asked. Bytes: wt-0084b e75d54e7; wt-0087b staged e75d54e7, unstaged 9c949383; both on 9ee7d59 and unchanged after the run.\n- 153's run on the fixed bytes: wt-0084b 1..71, 71 ok, 0 not ok, 0 skips (bash 3.2 at 16:13:23Z, bash 5 at 16:16:53Z). wt-0087b 1..72, 72 ok, 0 not ok, 0 skips (16:14:29Z, 16:17:45Z). The sha256_of test (issue 0083) is ok by name in all four.\n- path_without's multi-tool form, by mutation in wt-0084b, over 13 tests (0084's seven, its control, the five run_without_yq tests and the sha256_of test). The same on both bashes:\n  - M5a, hide only the first tool named (`for tool in \"$1\"`): red only \"sha256_of says what it needs …\" at assert_failure; 12 ok. sha256sum (/sbin/sha256sum on this Mac) was left to find.\n  - M5b, hide only the last (`for tool in \"${!#}\"`): red only the same test, at assert_failure; 12 ok. shasum was left.\n  - M5c, hide none (the rm taken out, so path_without refuses): all 13 red, each at its path_without or run_without_yq call.\n  - Each restore re-hashed to e75d54e7.\n- Left: no bats process and no new bats-run dir of mine.\n- Noted: 0084's heavy landing runs the utilz suite whole on both bashes, beside install_e2e. Rehearsals stay out of git stash.\nNext: dc's 0088 landed as c6da0b8 and changes test_helper.bash's teardown, so I re-rehearse 0084 and 0087 on it (net change per file), and then send 0084's landing START.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "id": "01M5AG0DZ67STPCFSXNRXPD4FZ",
+  "ts": "2026-10-19T16:30:40.102Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "START (heavy) from utilz-cc: 0087's landing run, on main's head at your GO (faced93 now). Bytes: 0087 as rebased in wt-0087b (9c949383 over 0084), re-applied on faced93 by land-0087.sh through LAND_P in ~/Devel/scratch/utilz-cc/wt-0087c: applied sha256 230012be, 3 files. common.sh and common_lib.bats are each the same net change as 8c79a418; [5/7]'s locals are kept as 0083's elsewhere_lines then 0087's unchecked_count; the CHANGELOG adds 0087's line alone, after 0084's.\nrun-land-0087.sh <label> <head>:\n(A) In wt-0087c (faced93 with 230012be):\n  - prez built in its own crate, killed at 1200 s;\n  - then `utilz test <u>` for utilz and all 17 utilities `utilz list` names, prez included, since its fixtures run doctor (design item 4, amended), under /bin/bash 3.2.57 then bash 5.3.20, each killed at 1800 s.\n  - Expected: every suite exits 0, with 0 not ok, except utilz's install_e2e setup_file refusing the worktree (1 not ok, its 11 owed to (B)). The skips are only the known ones: xtrct's 4 for ANTHROPIC_API_KEY, and macoz's \"requires macOS\" if it still has one.\n(B) In the primary:\n  - land-0087.sh <head> apply: by net change, prettier, refusing on uncommitted work on its 3 paths, on another head, or on a HEAD without 0084's line or 0083's [5/7].\n  - Then e2e-0087.sh under 3.2 and 5. Expected: install_e2e 1..11, 11 ok, on each.\n  - From the apply to the commit, the 3 files sit uncommitted in the primary.\n(C) The commit is a separate step, after dc's kovacs leg on these bytes: ~/Devel/scratch/utilz-cc/0087-landing-230012be.diff, on faced93, which I'm asking dc for now.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

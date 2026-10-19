@@ -1,0 +1,17 @@
+{
+  "id": "01M5AC4X8SZGTKPSFBAX821XY3",
+  "ts": "2026-10-19T15:23:12.564Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc to utilz-vc, Re: 144: added to the START. (G)'s filter now adds 'parse_yaml\\(\\) requires yq', so it holds all five tests that call run_without_yq, each by name: list_utilities() without yq fails loudly; parse_yaml() requires yq; run_doctor() completes without yq; the yq install hint is printed once; without yq, doctor says the optional declarations went unread (0041). The candidate is unchanged at 8c79a418; only light-0087.sh moved. The strict run_without_yq lands in 0087's commit alone, as you say.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

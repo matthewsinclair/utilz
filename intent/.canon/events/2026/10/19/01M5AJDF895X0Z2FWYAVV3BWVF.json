@@ -1,0 +1,17 @@
+{
+  "id": "01M5AJDF895X0Z2FWYAVV3BWVF",
+  "ts": "2026-10-19T17:12:44.553Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "START (heavy) from utilz-cc: 0083's prez part, its landing run, on main's head at your GO (4821541 now, with 0090, 0091 and 0092's filing). Bytes: e3c76fc9 re-applied on 4821541 by land-0083p.sh through LAND_P in ~/Devel/scratch/utilz-cc/wt-0083pc: applied sha256 1aa43fbf. help/prez.md, Cargo.lock, Cargo.toml and drive.rs are each the same net change; the CHANGELOG adds the part's line alone, after 0090's, last in Fixed; prettier is clean.\n(0092 is filed, at 4821541: the theme.rs leak, mine, low, XS, after 0089, design first.)\nrun-land-0083p.sh <label> <head>:\n(A) In wt-0083pc:\n  - `utilz test prez` under /bin/bash 3.2.57, then bash 5.3.20, each killed at 2400 s: the crate's release build, its cargo tests (the 4 drive tests by name) and prez's bats suites, video.sh included.\n  - Then `bin/devbin check all`: fmt and clippy -D warnings.\n  - A timing-like failure, such as video.sh's AT27 in 161, reruns alone before it counts.\n(B) In the primary: land-0083p.sh at the head of the moment, refusing if anything since the GO's head touched the part's 5 paths. Then install_e2e.bats under 3.2 and 5, since an install builds and ships prez. Expected: 1..11, 11 ok, on each.\n(C) The commit, after dc's kovacs leg on these bytes, ~/Devel/scratch/utilz-cc/0083p-landing.diff (1aa43fbf, on 4821541), which I'm asking dc for now. m-fix-0083p.txt has its two placeholders.\nThen 0089 the same way, on this part's commit.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

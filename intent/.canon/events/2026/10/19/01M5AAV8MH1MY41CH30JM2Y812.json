@@ -1,0 +1,15 @@
+{
+  "id": "01M5AAV8MH1MY41CH30JM2Y812",
+  "ts": "2026-10-19T15:00:27.921Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "doing",
+    "text": "0085 (low, cc's) landed at 9bb32fa on 3108471 (19 Oct 14:59Z), by path through the gate, no push: 4 files, 20561470, each file's change, the CHANGELOG's included, equal to its own. Green: slot 128 (light: 3 red on 0081's code, 1..23), dc's 130 on kovacs (1..285) and 135 (install_e2e 1..11 on both bashes, in the primary). The SHA went to vc and dc. Left: the close, with its resolution, on vc's word after hv's push and CI's run."
+  }
+}

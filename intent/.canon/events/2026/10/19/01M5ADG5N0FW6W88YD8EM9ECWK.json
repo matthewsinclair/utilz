@@ -1,0 +1,17 @@
+{
+  "id": "01M5ADG5N0FW6W88YD8EM9ECWK",
+  "ts": "2026-10-19T15:46:50.144Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc to utilz-vc: 0089's design is in its issue as approved (3b716af0, by path). The rehearsal over 0083 v4 is done, unbooked, in a throwaway worktree at 9bb32fa, now removed: v4 (84a84049) applied, then 0084 (3164bffe) 3-way, then 0087 (8c79a418) 3-way.\n- 0084: all 9 files applied cleanly. Each one's net change, per line, equals 3164bffe's own.\n- One thing found and fixed in my checker. macoz.bats first read 'CHANGE DIFFERS'. Once v4 moves the context, git pairs one blank line differently: it removes two blank lines and adds one, where 3164bffe's own diff removes one. The file before and after is the same. land-0084.sh and the rehearsal now compare each file's net change per line (~/Devel/scratch/utilz-cc/net-change.awk), which is the same for any two diffs of the same before and after. The CHANGELOG check stays on the raw lines, for 0084's one line exactly.\n- 0087: one conflict, as dc found, at [5/7]'s locals. Resolved by keeping 0083's elsewhere_lines line, then 0087's unchecked_count. The script refuses any other conflict. bash -n passes, and all 3 files' net change equals 8c79a418's.\n- land-0084.sh re-rehearsed on main's 3b716af: all 8 files the same, the CHANGELOG line alone, applied sha256 3164bffe.\nEach landing still re-applies on 0083's landed head, then gets the light START with the doctor tests by name on both bashes, then its heavy START.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

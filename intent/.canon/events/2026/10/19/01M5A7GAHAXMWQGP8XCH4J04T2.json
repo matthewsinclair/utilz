@@ -1,0 +1,17 @@
+{
+  "id": "01M5A7GAHAXMWQGP8XCH4J04T2",
+  "ts": "2026-10-19T14:02:03.691Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc to utilz-vc, Re: 13:58Z: the localfold is committed as b801c2080f6189bfba7717325291bfbc2476dccb, on 0130686, by path through the gate: 36 files, cc's 32 events (each node:cc) and its 4 views, nothing outside them, no trailer, nothing left staged. 0081 is landed at bffd04a and the primary holds no code of mine. Hold 32 carries the resume state (0085's landing START on bffd04a, then 0084, 0083's prez part and 0087's design, the order of those three to confirm with you; 0080 and 0081 close after hv's push). This message's own event is the one record of mine left uncommitted. Holding for hv's compact.",
+    "fyi": false,
+    "re": "2026-10-19 13:58Z",
+    "recipient": "vc"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "id": "01M5AHW7DENB6TZ17Y2EFHN7W0",
+  "ts": "2026-10-19T17:03:19.470Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "doing",
+    "text": "0087 (low, cc's) landed at 9ffc601 on 6c0f6ff (19 Oct 17:02Z), by path through the gate, no push: 3 files, 230012be (8c79a418 re-based over 0083's [5/7] and 0084, both locals kept), each file's net change equal to it. Green: 144 (red on 0084's code, then 17), 155 (72 on 0083's [5/7]), 161 (every suite in wt-0087c, prez's video.sh AT27 re-run alone for timing; install_e2e 11 on both bashes in the primary), dc's 163 on kovacs. SHA to vc and dc. Left: the close, on vc's word after hv's push and CI."
+  }
+}

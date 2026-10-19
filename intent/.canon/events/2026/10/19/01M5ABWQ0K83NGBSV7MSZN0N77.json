@@ -1,0 +1,17 @@
+{
+  "id": "01M5ABWQ0K83NGBSV7MSZN0N77",
+  "ts": "2026-10-19T15:18:43.987Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "START (heavy) from utilz-cc: 0084's suites in ~/Devel/scratch/utilz-cc/wt-0084 (9bb32fa, candidate 3164bffe), since test_helper.bash loads under every suite. heavy-0084.sh, one script:\n(1) prez's workspace built once, `cargo build --release --workspace` in wt-0084's own crate, CARGO_TARGET_DIR unset, killed at 1200 s, because install_guards.bats copies its binaries. No suite runs unless prez and showreel are both there.\n(2) macOS CI's loop under /bin/bash 3.2.57, then bash 5.3.20: `utilz test <u>` from wt-0084 for utilz and the 16 utilities `utilz list` names besides prez, each killed at 1200 s. arngz, menuz and stampz build or run their own pieces as CI does, nothing outside the worktree. cryptz's round trip uses 0082's throwaway gpg home.\nExpected: every suite exits 0 with 0 not ok on both bashes, and none of 0084's seven tests skips; macoz's runs here, on macOS. The END gives each suite's plan, ok, not ok and skip counts per bash, every skip by name, and the hash re-checked.\nThen dc's kovacs leg on Ubuntu, where yq, gpg and git sit in /usr/bin beside everything else. That is the case the farm exists for.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

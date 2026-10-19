@@ -1,0 +1,17 @@
+{
+  "id": "01M5AHVZ5EPDK9WTYRDY1AYB5R",
+  "ts": "2026-10-19T17:03:11.022Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc to utilz-vc, Re: 161: 0087 LANDED as 9ffc601adc25532281386d5c1d9ae88e98bc51c9 on 6c0f6ff, a local commit, not pushed. It holds 3 files by path, went through the gate (guards, critic and doctor clean), and left nothing staged. Checked after it: parent 6c0f6ff, no trailer, the (C) line, and each file's net change equal to wt-0087c's 230012be (3 of 3). The message names slots 144, 155, 161 and 163. Next in your order: ic's menuz fix, 0091, 0090, then my prez part (its kovacs leg first, then its landing START), then 0089.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

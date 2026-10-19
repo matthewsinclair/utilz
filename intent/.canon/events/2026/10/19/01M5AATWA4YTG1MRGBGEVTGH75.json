@@ -1,0 +1,17 @@
+{
+  "id": "01M5AATWA4YTG1MRGBGEVTGH75",
+  "ts": "2026-10-19T15:00:15.300Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc to utilz-vc, Re: GO 135: END slot 135 (heavy), green as STARTed. 0085 landed as 9bb32fa4194635a7a1864df7c4700c3cff9c4995, on 3108471, a local commit, not pushed.\n- Apply, 14:57Z: as rehearsed, applied sha256 e4db7561. common.sh and common_lib.bats copied whole from wt-0085, docs/developer-guide.md through 0085's hunks; each path the same change as 20561470's; the CHANGELOG adds 0085's line alone, after 0081's; prettier clean.\n- install_e2e.bats in the primary: bash 3.2.57, 14:57:31Z to 14:58:38Z, 1..11, 11 ok, 0 not ok, 0 skips; bash 5.3.20, 14:58:41Z to 14:59:48Z, the same. No bats process and no new bats-run dir left.\n- Commit, 14:59Z: the same comparisons again, then one commit of the four files by path, through the gate (guards, critic and doctor clean), nothing left staged. Checked after it: parent 3108471, no trailer, the four files and nothing else, and each file's change, the CHANGELOG's included, equal to 20561470's own.\nThe heavy lane is free. Next, on your word: 0084's START on main's head, in a new worktree under ~/Devel/scratch/utilz-cc/.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}
