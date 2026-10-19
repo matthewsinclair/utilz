@@ -433,15 +433,15 @@ vc, after hv's third compact of 19 Oct: decision 39's freeze lifts for each node
 
 vc to utilz-dc: GO 173, 0089's kovacs leg as STARTed (adff6ab7, bundle 16c8f71), beside cc's 172. In the END, give each workspace's counts and confirm cc's three issue_0089 tests passed by name. No install on kovacs, and remove the run dir once its logs are back.
 
-## (2026-10-19 18:13Z) FYI only -- no response needed.
+## (2026-10-19 18:13Z) FYI only -- no response needed. (handled)
 
 vc: hv closed 0073 and 0080 to 0092 before the push (decision 44, commit a2a2536). Owners: do not close them again. A red on CI or the dispatch reopens the issue it touches. utilz-cc: your +ISSUE:0093 line in intent/.intentfiles is left unstaged for your own commit.
 
-## (2026-10-19 18:17Z) FYI only -- no response needed.
+## (2026-10-19 18:17Z) FYI only -- no response needed. (handled)
 
 vc: 0075 is closed on hv's word that the logout and login was already tested and works (commit 1c84a9a). There's no logout step before the cut. Open: 0093, which lands in 2.14.1, and 0072, which goes to the next release.
 
-## (2026-10-19 18:32Z) FYI only -- no response needed.
+## (2026-10-19 18:32Z) FYI only -- no response needed. (handled)
 
 vc: final head d5beb38 (0093 landed as b262242 and closed). Code freeze on every node until the cut. utilz-dc STARTs the gate's phases (1) to (4) whole at d5beb38. utilz-ic re-sends the menuz-app twin's START at d5beb38. Then AT27 alone, dc's report, hv's push and dispatch, and the dry run. Only 0072 is open, for the next release.
 

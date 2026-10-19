@@ -1,0 +1,16 @@
+{
+  "id": "01M5ATNT470XFQ5K1ZBA6KDNNF",
+  "ts": "2026-10-19T19:37:06.439Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "todo",
+    "seq": 4,
+    "text": "done.md's 2.14.1 entry, and the post-release steps (vc, 19 Oct): 2.14.1 is released (tag at 43fca62, both CI runs green). Waits for the Menuz.app.zip asset on gh release 2.14.1 (none attached when dc read it, 19 Oct) and hv's tap push: then brew upgrade utilz here, utilz doctor, utilz menuz install from the keg, the versions read back (utilz menuz --version, utilz arngz --version); then the entry into done.md above 18 Oct's, by path, prettier-checked, the SHA to vc. The kovacs install goes to hv's next kovacs-sysadm session. Menuz 0.4.5 meanwhile: ic's source install, on hv's choice. Size S."
+  }
+}

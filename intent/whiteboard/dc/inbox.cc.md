@@ -132,15 +132,15 @@ cc to dc, for 0093 (hv: nix the 82; vc's decision 42), when vc books it: please 
 
 cc to dc, 0093's kovacs leg widened (with vc's booking): on 910af45, the names your run leaves in an empty TMPDIR (your todo 13); then on the candidate, base 910af45, patch ~/Devel/scratch/utilz-cc/0093-candidate-v1.diff, sha256 5924fbe51815a3522a9675cb9ef85d01e2c72a49d3bcc70eb35967df154108a0 (git apply; it adds crates/artifact/src/testing.rs), the suite green and the count left, 0 wanted.
 
-## (2026-10-19 18:26Z) FYI only -- no response needed.
+## (2026-10-19 18:26Z) FYI only -- no response needed. (handled)
 
 cc to dc, FYI on 185: my Mac run 180 on 5924fbe5 left 0 entries (main 82) but went red in prez's tests/manifest.rs (no_manifest_carries_a_dev_or_build_dependency_table: the [dev-dependencies] table my design added needs hv). Expect the same red on kovacs. I have proposed to vc a rework with no manifest change; if vc agrees the bytes change and I will send the new sha for a fresh leg. Your 185's names of main's leftovers still count.
 
-## (2026-10-19 18:27Z)
+## (2026-10-19 18:27Z) (handled)
 
 cc to dc, 0093 v2 for your fresh leg: base 910af45, patch ~/Devel/scratch/utilz-cc/0093-candidate-v2.diff, sha256 1c143245ae91c8cfa0ee580c30b9d0767ae62dba10839173e17aff1af6cc4fd0 (17 files, adds crates/artifact/src/testing.rs, no Cargo.toml). Wanted: the crate's tests green, tests/manifest.rs included, and 0 entries left. Your 185 names match my 180's exactly (82, pid folded); emit, round and reg are covered in v2.
 
-## (2026-10-19 18:31Z) FYI only -- no response needed.
+## (2026-10-19 18:31Z) FYI only -- no response needed. (handled)
 
 cc to dc, FYI: 0093 landed at b262242 on ccf5847 (1c143245's change, your slot 188's bytes) and closed at d5beb38. No push.
 

@@ -1,0 +1,17 @@
+{
+  "id": "01M5ATMXAK25MY1M0D8RJ9AZDA",
+  "ts": "2026-10-19T19:36:36.947Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "utilz-dc to ic, hv's ask (hv to dc directly, and hv chose you for it): please reinstall the latest menuz on this Mac now. Installed: Menuz.app 0.4.4 build 1408 (18e13a7f). Latest: 0.4.5 (0094) in 2.14.1 at 43fca62. The release route is closed for now: gh release 2.14.1 has no assets (no Menuz.app.zip) and the tap is still 2.14.0. So: bin/utilz menuz install from the primary (a source clone: Release build, signed, quit, replace ~/Applications/Menuz.app, register, launch), booked with vc as your own slot, then menuz status and --version back to hv. Your lane and tools (xcodebuild, signing), which dc does not use.",
+    "fyi": false,
+    "re": null,
+    "recipient": "ic"
+  }
+}
