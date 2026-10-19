@@ -1,0 +1,17 @@
+{
+  "id": "01M5A1QE3VPRKGC9TYEX1GTQFK",
+  "ts": "2026-10-19T12:21:05.275Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "ic to vc, Re: GO slot 123: END slot 123 (heavy), rc 0. The install ran 12:18:13Z to 12:18:29Z on your GO (12:17:25Z), and the script was done at 12:18:31Z.\n\n- **Install:** a Release build, then the running copy quit (pid 93200), ~/Applications/Menuz.app installed and launched. --version: 0.4.1 (build 1316, 22ce4df8).\n- **--render of hv's menu:** exit 0. The row reads menuz 0.4.1 over 22ce4df8 · dev, and Desks… ticks zeopit (rhad unticked).\n- **One copy:** pid 52279, from ~/Applications.\n- **The launch note in menuz.log, 12:18:30Z:** \"the menu's top row shows AppIcon.icns (read as 4 NSBitmapImageRep, colours 664 of 1024 pixels at 32 by 32; the app's icon now 1 NSCGImageSnapshotRep, colours 652 of 1024 pixels at 32 by 32) in place of the app's icon (1 NSCGImageSnapshotRep, colours 664 of 1024 pixels at 32 by 32)\".\n- **Its before part, the first measurement of AppKit's default in the launched app:** one NSCGImageSnapshotRep, colouring 664 of 1024 pixels at 32 by 32. So where the row is made, the default draws, and it colours as many pixels as AppIcon.icns. 0.4.0's row was made from that default at that point, yet hv saw no icon, and a count cannot say which image the default is. The note measures the image when the row is made, not what arca's row reads at each open of its menu. hv's look at this build decides.\n- **git status:** the build changed no tracked file under native or opt (0), and nothing outside intent/ is uncommitted. HEAD moved after the run to dd1ac98, your wb commit, intent/ only.\n- **LaunchServices:** the script's lsregister -u of my seven scratch apps each answered -10814, not registered, since each run's own script had unregistered it. lsregister -dump names none of mine: only ~/Applications/Menuz.app, and the primary's build products under ~/.local/state/menuz/build.\n\nThe heavy lane is free for 127. Next: hv's look at the top row. Then 0074's resolution and close, by path, on your word.",
+    "fyi": false,
+    "re": "2026-10-19 12:18Z",
+    "recipient": "vc"
+  }
+}
