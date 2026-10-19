@@ -1265,6 +1265,30 @@ install_link_census() {
   done
 }
 
+# Echo one row per utility of <tree> with no link in <bindir>:
+# "<name><TAB>missing" when nothing holds its name there, or
+# "<name><TAB>not-a-link" when a file that is not a link does. A link of that
+# name is the census's to judge. The tree's utilities, not the running
+# tree's, since only those can be linked into it (issue 0079). Each name is
+# looked up rather than listed, so the census stays the one walk of the bin
+# dir.
+install_link_gaps() {
+  local tree="$1"
+  local bindir="$2"
+  local name
+
+  while IFS= read -r name; do
+    if [[ -L "$bindir/$name" ]]; then
+      continue
+    fi
+    if [[ -e "$bindir/$name" ]]; then
+      printf '%s\tnot-a-link\n' "$name"
+    else
+      printf '%s\tmissing\n' "$name"
+    fi
+  done < <(each_utility "$tree")
+}
+
 install_usage_relink() {
   cat <<'USAGE'
 Usage: utilz relink [--prefix DIR] [--bin-dir DIR]
@@ -1275,7 +1299,10 @@ Repoint the PATH symlinks at a Utilz tree.
   --bin-dir DIR  Where the links live. Default: ~/.local/bin
 
 Links that resolve into a Utilz tree are repointed; anything else is left
-alone and reported as skipped. install and upgrade NEVER do this implicitly.
+alone and reported as skipped. Where the directory holds a Utilz link, each
+utility of the tree with no link there gets one, and a link for a utility
+the tree does not have is left as it is. install and upgrade NEVER do this
+implicitly.
 USAGE
 }
 
@@ -1342,6 +1369,16 @@ install_verb_relink() {
       ;;
   esac
 
+  # Absolute, once. A relative tree went into each link as typed, and the
+  # kernel reads a relative target from the link's own directory, so every
+  # link broke while the report said changed (issue 0079). Logical pwd, as
+  # _install_link_root resolves the links' trees, so the census's roots
+  # compare with it.
+  prefix=$(CDPATH='' cd -- "$prefix" && pwd) || {
+    error "could not resolve the tree's path: $prefix"
+    return 1
+  }
+
   if [[ ! -d "$bindir" ]]; then
     error "no such directory: $bindir"
     return 1
@@ -1349,8 +1386,8 @@ install_verb_relink() {
 
   echo "relink: $bindir into $prefix"
 
-  local name target root newtarget
-  local changed=0 already=0 left=0
+  local name target root newtarget gap
+  local changed=0 already=0 left=0 linked=0 ours=0
 
   # Process substitution, never a pipe: the counters below accumulate in this
   # shell and a pipe would subshell the loop body away.
@@ -1362,6 +1399,17 @@ install_verb_relink() {
       # quietly tidies what it was not pointed at is the same shape as a
       # manifest check that re-blesses a file it refused.
       echo "  skipped:   $name (not a Utilz link)"
+      left=$((left + 1))
+      continue
+    fi
+    ours=$((ours + 1))
+
+    # A utility the tree does not have keeps the link it has: pointed into
+    # the tree it would name nothing, as `use opt` would make of a utility
+    # added since the install was published, and a link into the tree whose
+    # file has gone is not already correct (issue 0079).
+    if [[ ! -e "$prefix/bin/$name" ]]; then
+      echo "  skipped:   $name (not in $prefix)"
       left=$((left + 1))
       continue
     fi
@@ -1394,7 +1442,27 @@ install_verb_relink() {
     changed=$((changed + 1))
   done < <(install_link_census "$bindir")
 
-  success "$changed changed, $already already correct, $left left alone"
+  # Each utility of the tree with nothing in the bin dir gets a link, which a
+  # census of the links already there can never name (issue 0079). Only where
+  # the census found a Utilz link: a directory holding none is not Utilz's to
+  # fill.
+  if [[ $ours -gt 0 ]]; then
+    while IFS=$'\t' read -r name gap; do
+      if [[ "$gap" == "not-a-link" ]]; then
+        echo "  skipped:   $name (not a link)"
+        left=$((left + 1))
+        continue
+      fi
+      ln -s "$prefix/bin/$name" "$bindir/$name" || {
+        error "could not link $name"
+        return 1
+      }
+      echo "  linked:    $name -> $prefix/bin/$name"
+      linked=$((linked + 1))
+    done < <(install_link_gaps "$prefix" "$bindir")
+  fi
+
+  success "$changed changed, $linked linked, $already already correct, $left left alone"
 }
 
 # Echo the tree that <word> names -- `opt` or `dev` -- for the source tree

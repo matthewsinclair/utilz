@@ -362,3 +362,117 @@ link_stamps() {
   refute_output_contains "predates source-tree"
   refute_output_contains "no install at"
 }
+
+# ============================================================================
+# 0079 - the bin dir follows the tree's utilities, both ways
+# ============================================================================
+#
+# relink runs here under set -euo pipefail, as bin/utilz runs it: the
+# run_install_function shell is not strict, so without it a fault that strict
+# mode turns into an exit would pass.
+
+@test "0079: relink links a utility of the tree that has no link here, names it, and links nothing else" {
+  local old="$BATS_TEST_TMPDIR/old-add" new="$BATS_TEST_TMPDIR/new-add"
+  local bindir="$BATS_TEST_TMPDIR/bin-add"
+  make_fake_src "$old"
+  run run_install_function "UTILZ_HOME='$old'; install_verb_install --prefix '$new'"
+  assert_success
+  make_fake_bin "$bindir" "$old"
+  # Links made before alpha was a utility.
+  rm "$bindir/alpha"
+
+  run run_install_function "set -euo pipefail; install_verb_relink --prefix '$new' --bin-dir '$bindir'"
+  assert_success
+  assert_output_contains "linked:    alpha -> $new/bin/alpha"
+  [[ "$(readlink "$bindir/alpha")" == "$new/bin/alpha" ]] || {
+    echo "alpha is $(readlink "$bindir/alpha" || echo 'not a link')" >&2
+    return 1
+  }
+  # The tree's own utilities and no others: this suite runs with UTILZ_HOME at
+  # the real checkout, whose utilities the fixture install does not have.
+  [[ "$(cd "$bindir" && echo *)" == "alpha beta stranger utilz" ]] || {
+    echo "the bin dir holds: $(cd "$bindir" && echo *)" >&2
+    return 1
+  }
+
+  run run_install_function "set -euo pipefail; install_verb_relink --prefix '$new' --bin-dir '$bindir'"
+  assert_success
+  assert_output_contains "unchanged: alpha"
+  refute_output_contains "  linked:"
+}
+
+@test "0079: relink leaves a link for a utility the tree lacks where it points, and says so" {
+  local old="$BATS_TEST_TMPDIR/old-lack" new="$BATS_TEST_TMPDIR/new-lack"
+  local bindir="$BATS_TEST_TMPDIR/bin-lack"
+  make_fake_src "$old"
+  run run_install_function "UTILZ_HOME='$old'; install_verb_install --prefix '$new'"
+  assert_success
+  # gamma came to the source after the install was published, and has a link.
+  ln -s utilz "$old/bin/gamma"
+  make_fake_bin "$bindir" "$old"
+  ln -s "$old/bin/gamma" "$bindir/gamma"
+
+  run run_install_function "set -euo pipefail; install_verb_relink --prefix '$new' --bin-dir '$bindir'"
+  assert_success
+  assert_output_contains "skipped:   gamma (not in $new)"
+  [[ "$(readlink "$bindir/gamma")" == "$old/bin/gamma" ]] || {
+    echo "gamma now points at $(readlink "$bindir/gamma"), which $new does not have" >&2
+    return 1
+  }
+}
+
+@test "0079: relink makes no link where no Utilz link is, and leaves a file in a utility's place alone" {
+  local old="$BATS_TEST_TMPDIR/old-safe" new="$BATS_TEST_TMPDIR/new-safe"
+  make_fake_src "$old"
+  run run_install_function "UTILZ_HOME='$old'; install_verb_install --prefix '$new'"
+  assert_success
+
+  # A directory that is not Utilz's: its one link is nobody's.
+  local plain="$BATS_TEST_TMPDIR/bin-plain"
+  mkdir -p "$plain" "$BATS_TEST_TMPDIR/elsewhere"
+  printf '#!/usr/bin/env bash\n' > "$BATS_TEST_TMPDIR/elsewhere/stranger"
+  ln -s "$BATS_TEST_TMPDIR/elsewhere/stranger" "$plain/stranger"
+  run run_install_function "set -euo pipefail; install_verb_relink --prefix '$new' --bin-dir '$plain'"
+  assert_success
+  [[ ! -e "$plain/alpha" && ! -L "$plain/alpha" ]] || {
+    echo "relink linked alpha into a directory holding no Utilz link" >&2
+    return 1
+  }
+
+  # A Utilz directory where alpha's name is held by somebody else's file.
+  local bindir="$BATS_TEST_TMPDIR/bin-taken"
+  make_fake_bin "$bindir" "$old"
+  rm "$bindir/alpha"
+  printf 'not utilz\n' > "$bindir/alpha"
+  run run_install_function "set -euo pipefail; install_verb_relink --prefix '$new' --bin-dir '$bindir'"
+  assert_success
+  assert_output_contains "skipped:   alpha (not a link)"
+  [[ ! -L "$bindir/alpha" && "$(cat "$bindir/alpha")" == "not utilz" ]] || {
+    echo "the file in alpha's place was changed" >&2
+    return 1
+  }
+}
+
+@test "0079: relink makes a relative --prefix absolute, so every link it writes resolves" {
+  local old="$BATS_TEST_TMPDIR/old-rel" new="$BATS_TEST_TMPDIR/new-rel"
+  local bindir="$BATS_TEST_TMPDIR/bin-rel"
+  make_fake_src "$old"
+  run run_install_function "UTILZ_HOME='$old'; install_verb_install --prefix '$new'"
+  assert_success
+  make_fake_bin "$bindir" "$old"
+  rm "$bindir/alpha"
+
+  # The suite's cwd is BATS_TEST_TMPDIR, so new-rel names the install. A
+  # relative target would be read from the bin dir, where it names nothing.
+  # beta and utilz first: the repoints the defect wrote, ahead of the new link.
+  run run_install_function "set -euo pipefail; install_verb_relink --prefix new-rel --bin-dir '$bindir'"
+  assert_success
+  local link target
+  for link in beta utilz alpha; do
+    target=$(readlink "$bindir/$link") || target=""
+    [[ "$target" == /* && -e "$bindir/$link" ]] || {
+      echo "$link -> '$target', which is relative or names nothing" >&2
+      return 1
+    }
+  done
+}

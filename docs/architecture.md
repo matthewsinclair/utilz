@@ -230,7 +230,7 @@ The library provides these categories of functions:
    - Returns non-zero when the YAML file or `yq` is missing, rather than an empty string a caller would read as an absent key
 
 5. **Discovery**: `each_utility()`
-   - The single walker of `bin/`: emits the name of every symlink resolving to the dispatcher, one per line
+   - The single walker of `bin/`: emits the name of every symlink resolving to the dispatcher, one per line, from the running tree's `bin/` or from the tree it is given, as relink gives the tree it links into
    - Consume with process substitution (`< <(each_utility)`), never a pipe, so accumulator variables survive the loop
 
 6. **Testing**: `run_tests()`, `run_doctor()`

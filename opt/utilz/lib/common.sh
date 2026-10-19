@@ -532,23 +532,29 @@ ensure_venv() {
   success "Virtual environment ready"
 }
 
-# THE walker of bin/. Emits the name of every installed utility -- a symlink
-# in bin/ pointing at the dispatcher -- one per line, excluding the
-# dispatcher itself.
+# THE walker of bin/. Emits the name of every installed utility of a tree --
+# a symlink in its bin/ pointing at the dispatcher -- one per line, excluding
+# the dispatcher itself. The tree is the running one unless one is given:
+# relink names the tree it links into, which may not have the running tree's
+# utilities (issue 0079).
 #
-# Every consumer iterates this and nothing else: list_utilities, run_doctor,
-# run_tests, emit_integration_tsv, emacs_doctor. Those five previously
-# open-coded the same glob-and-filter loop, and had already drifted -- two
-# checked that the symlink resolved to utilz, three accepted any symlink in
-# bin/ at all, so a stray link was a utility to doctor and not to list.
+# Every consumer iterates this and nothing else. Here: list_utilities,
+# run_doctor twice (its version check and its dependency sweep), run_tests,
+# emit_integration_tsv and emacs_doctor. Elsewhere: the dispatcher's help
+# listing in bin/utilz, and relink's install_link_gaps. The first five
+# previously open-coded the same glob-and-filter loop, and had already
+# drifted -- two checked that the symlink resolved to utilz, three accepted
+# any symlink in bin/ at all, so a stray link was a utility to doctor and not
+# to list.
 #
 # Consume with process substitution, not a pipe, so accumulator variables
 # survive the loop:
 #   while IFS= read -r name; do ...; done < <(each_utility)
 each_utility() {
+  local tree="${1:-$UTILZ_HOME}"
   local symlink name target
 
-  for symlink in "$UTILZ_HOME"/bin/*; do
+  for symlink in "$tree"/bin/*; do
     if [[ ! -L "$symlink" ]]; then
       continue
     fi

@@ -183,6 +183,8 @@ utilz use dev     # point them at the source the install was published from
 utilz use         # report which tree they serve now, and change nothing
 ```
 
+A utility of that tree with no link yet gets one, as `utilz relink` below says.
+
 ### `utilz relink`
 
 The mechanism `utilz use` is built on, when you want to name a tree yourself.
@@ -196,6 +198,8 @@ utilz relink --bin-dir DIR    # links live somewhere other than ~/.local/bin
 Links resolving into a Utilz tree are repointed; anything else is left alone
 and reported as skipped. **`install` and `upgrade` never do this implicitly** --
 relinking your environment takes a verb you typed.
+
+Where the directory holds a link into a Utilz tree, each utility of the tree with no link there gets one, reported as `linked:`, so a utility added since the links were made reaches your PATH. A file of something else's under that name is left alone and reported. A link for a utility the tree does not have, such as one added since an install was published, is left pointing where it does and reported, never pointed at a file the tree does not hold. A relative `--prefix` is made absolute first, so every link relink writes names the tree from wherever it sits.
 
 ### `utilz integration <verb>`
 
@@ -290,7 +294,7 @@ All utilities have access to shared functions in `opt/utilz/lib/common.sh`:
 - `require_command "cmd" "install hint"` - Require command or exit with hint
 - `parse_yaml "file.yaml" "query"` - Parse YAML using `yq`
 - `require_yq` - Gate on the `yq` hard dependency; call ONCE before a loop, never per-iteration
-- `each_utility` - Emit every installed utility name, one per line; consume with `< <(each_utility)`, not a pipe
+- `each_utility [tree]` - Emit every installed utility name of a tree, the running one unless given, one per line; consume with `< <(each_utility)`, not a pipe
 
 **Colors** (automatically disabled when not a TTY):
 
