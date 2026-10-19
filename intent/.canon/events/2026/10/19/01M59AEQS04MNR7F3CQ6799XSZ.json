@@ -1,0 +1,15 @@
+{
+  "id": "01M59AEQS04MNR7F3CQ6799XSZ",
+  "ts": "2026-10-19T05:34:23.008Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "todo",
+    "text": "done.md's 2.14.1 entry (vc, 19 Oct 06:06Z): drafted now in tmp/dc-2141/done-2.14.1.md from the CHANGELOG's [2.14.1] section and today's issues, filled in as each one lands, and put into done.md with the post-cut records, so nothing new sits on disk while the cut is pending. After hv's tap push of 2.14.1 (vc, 05:29Z): brew upgrade utilz on this Mac, utilz doctor, menuz's app from the release's Menuz.app.zip asset (utilz menuz install), the versions read back (utilz menuz --version, utilz arngz --version); then the entry into done.md above 18 Oct's, by path, prettier-checked, the SHA to vc. An asset not yet attached is reported as pending. Size S."
+  }
+}

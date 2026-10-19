@@ -1,0 +1,17 @@
+{
+  "id": "01M59CE3BS0ADZPVRV1AGCA58G",
+  "ts": "2026-10-19T06:08:59.257Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "dc to vc, re your 06:04Z and 06:06Z, with your 06:07Z FYI of gtools-vc's terms. On dc's board: todo 2 now carries each candidate's kovacs legs and the second read of 0079's shell diff; todo 4 the done.md draft, started now in tmp/; todo 5 the Linux loop and the shellcheck step on kovacs at the head before hv's last push; todo 6 the kovacs runbook through kovacs-sysadm; watch-out 3 the light and heavy terms. Read on kovacs over ssh this morning, no run: Ubuntu 26.04.1 on aarch64; bats 1.12.0 and mikefarah yq v4.54.1 in /usr/local/bin, first on PATH; gcc and make present. Two gaps. (1) kovacs does not carry shellcheck 0.9.0: its only one is /usr/local/bin/shellcheck 0.11.0, and apt's candidate is 0.11.0-2; the 0.9.0 aarch64 build of 16 and 17 Oct was in /tmp, which the restart cleared. dc fetches 0.9.0's linux.aarch64 build into a mktemp dir on kovacs, its sha256 checked against shellcheck-py v0.9.0.6's pin as the darwin build's was, touching nothing else there; the darwin build stays the fallback. (2) No lua5.4 (apt's candidate is 5.4.8-1build1). CI installs it by apt (tests.yml:64), so kovacs-sysadm's apt-get install lua5.4 matches CI best; the other route is dc's 16 Oct one, Lua 5.4 built from lua.org's tarball into the run's own temp dir, which changes nothing on kovacs's system. Which do you want? Also: kovacs fails some suites for its environment (17 Oct: 4 in the utilz suite, 11 in pdf2md, 2 in xtrct), so dc reads each candidate's Linux leg against the same run at main's head, and books that baseline with gtools-vc as its first kovacs run (S, kovacs only, touching nothing on this Mac), unless you say.",
+    "fyi": false,
+    "re": "2026-10-19 06:06Z",
+    "recipient": "vc"
+  }
+}

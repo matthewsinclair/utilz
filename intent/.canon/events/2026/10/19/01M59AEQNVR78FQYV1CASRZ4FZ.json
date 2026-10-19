@@ -1,0 +1,15 @@
+{
+  "id": "01M59AEQNVR78FQYV1CASRZ4FZ",
+  "ts": "2026-10-19T05:34:22.907Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "todo",
+    "text": "The 2.14.1 dry run (vc, 19 Oct 05:29Z), once the last landing is in and hv has pushed: bin/devbin release --patch --dry-run at main's head, booked with gtools-vc. It stamps, commits, tags and pushes nothing, but runs its gates for real on HEAD: check all (clippy, fmt) and test estate (tools/test-estate: every bats suite, the cargo tests and the crate's black-box suites under bash 3.2, video.sh's Chrome and ffmpeg among them), so it wants a quiet host. The core's tree rule (bin/.devbin/lib/cmd/release, steps 2 and 5): pre-flight refuses any dirt outside what the release owns, untracked canon events included, so every node's views and events are committed first (dc's boot views at dc's fold); and step 5 hashes the tree and reads HEAD before and after the gates and fails on any change, whoever makes it, so from START to END no node runs a wb verb, commits, or edits the main tree; vc holds the board quiet. Gate logs go under tmp/, which is ignored. vc reads its rows. Size M."
+  }
+}

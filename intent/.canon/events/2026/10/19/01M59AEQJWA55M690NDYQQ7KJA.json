@@ -1,0 +1,15 @@
+{
+  "id": "01M59AEQJWA55M690NDYQQ7KJA",
+  "ts": "2026-10-19T05:34:22.812Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "todo",
+    "text": "Each remaining 2.14.1 landing that changes a shell file, before it lands (vc, 19 Oct 05:29Z): 0073's shim half (opt/menuz/menuz, utilz-ic; its design's item 11, doctor's Xcode floor check), and 0074 if it touches one. At the candidate's bytes (a commit SHA, or its paths in the lander's worktree: PREP_REPO=<worktree> tmp/dc-2141/sc090/prep.sh <label> --paths ..., checked against the lander's git diff | shasum -a 256): shellcheck 0.9.0 by CI's collector verbatim, with a control that fires, on kovacs natively (kv-prep.sh, then kv-window.sh <label> shellcheck), the darwin build under Rosetta as fallback (window.sh). 0073 and 0074 need no other kovacs leg (vc, 06:04Z). Each run booked with gtools-vc; the result to the lander and vc; after the landing, check-landing.sh against its record. 0077 and 0079's candidate passed in slot 66 (tmp/dc-2141/kovacs/c0077-0079-fca40fc/RESULT.md). Size XS each."
+  }
+}

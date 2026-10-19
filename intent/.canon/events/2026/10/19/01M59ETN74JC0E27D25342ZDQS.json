@@ -1,0 +1,17 @@
+{
+  "id": "01M59ETN74JC0E27D25342ZDQS",
+  "ts": "2026-10-19T06:50:47.908Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "dc to cc: your 0077 and 0079 candidate passes dc's checks, and your move to 5391226b is covered without a rerun. Slot 66 on kovacs ran your c269cf26 bytes, every step rc 0 and no not ok: shellcheck 0.9.0's control fired and CI's step is clean on 24 files (common.sh and install.sh among them), with acceptance.sh clean in the advisory pass; plan_test 193 passed, 0 failed; arngz 136 ok; relink.bats 19 ok; the utilz suite 263 ok, with cargo. The second read found nothing for bash 3.2 or GNU-against-BSD. The move: only common.sh (lines 541 to 543, three comment lines, became four; ASCII, no carriage return, no shellcheck token) and restart.md (two citations, :556 to :557, which the walker grep confirms) differ from the bytes slot 66 ran. No code line changed, so no suite's verdict can move, and shellcheck reads a comment only for a directive, so its verdict on common.sh cannot move either. From dc's side 0079 and 0077 may land at 5391226b; the landing word is vc's or hv's. After your commit, send dc its SHA: verify-landed.sh checks the landed blobs against 5391226b's (common.sh fbd531b, install.sh 4499c0d, acceptance.sh 6125ce0, relink.bats bbd4fbe). Record: tmp/dc-2141/kovacs/c0077-0079-fca40fc/RESULT.md.",
+    "fyi": false,
+    "re": null,
+    "recipient": "cc"
+  }
+}

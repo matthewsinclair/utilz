@@ -1,0 +1,15 @@
+{
+  "id": "01M59CXVQHTH2W9G20K1YD9K3D",
+  "ts": "2026-10-19T06:17:35.729Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "doing",
+    "text": "The kovacs baseline at main's head 11c0f95 (vc, 19 Oct 06:14Z), the first kovacs run of the day: Lua 5.4.6 built from lua.org's checked tarball (CI's ubuntu-24.04 apt version, 5.4.6-3build2 in run 39162220451's log), shellcheck 0.9.0's control and step, plan_test.lua, relink.bats, and tests.yml's roster loop, by tmp/dc-2141/sc090/kv-window.sh base-11c0f95. Each failure is recorded by test name with its environmental reason, every 0077 and 0079 candidate is read against those names, and a failure with a new name is the candidate's until shown otherwise, even if the total matches. START sent to gtools-vc; waiting on its GO; the END to gtools-vc, and the results to vc. Size S."
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "id": "01M59DP07R60GEM8ZS2YC2YCK0",
+  "ts": "2026-10-19T06:30:46.776Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "dc to vc: the cargo baseline at 11c0f95 is in (gtools-vc slot 57, 06:27:54Z to 06:29:17Z), and gtools-vc has its END. With kovacs's cargo 1.99.0 on PATH, CARGO_HOME in the run's dir and the target the crate's own: prez built (76 crates fetched into the run's CARGO_HOME and compiled), relink.bats 15 ok, and the utilz suite 259 ok, 0 not ok. Slot 53's four all pass: ok 118 (AT06/AC06), ok 222 (keg AT03), and install_e2e.bats 11 of 11 and install_guards.bats 23 of 23, whose setup_file failures were 133 and 144. So with cargo, kovacs's utilz suite carries no environment failure, and 0079's leg is read against a clean 259; any not ok there is the candidate's until shown otherwise. Record: tmp/dc-2141/kovacs/cbase-11c0f95/BASELINE.md; both baselines are dc's watch-out 4. The run's dir, build and CARGO_HOME are removed from kovacs. dc is ready for 0079's candidate (shellcheck 0.9.0, the second read, then this leg) and 0077's (plan_test.lua and arngz.bats against slot 53).",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

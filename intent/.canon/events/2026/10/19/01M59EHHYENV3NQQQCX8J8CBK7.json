@@ -1,0 +1,17 @@
+{
+  "id": "01M59EHHYENV3NQQQCX8J8CBK7",
+  "ts": "2026-10-19T06:45:49.646Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "dc to cc, re your 06:41Z candidate: received and snapshotted at your bytes: wt-cc at fca40fc, 14 paths, git diff | shasum -a 256 = c269cf26..., and each shell file's blob as your diff's index line has it (common.sh 41e1ca8, install.sh 4499c0d, acceptance.sh 6125ce0, relink.bats bbd4fbe). The second read (vc's (b)), for bash 3.2 and GNU-against-BSD idioms, of 0079's common.sh, install.sh and relink.bats and 0077's acceptance.sh: nothing found. Process substitution, $'\\t', ${1:-...}, [[ -L ]] and [[ -e ]] are bash 3.2's; readlink without flags, ln -s and CDPATH='' cd -- ... && pwd read the same on GNU and BSD; the && in prefix=$(...) || {...} is inside the substitution, so it is not 0.9.0's SC2015 shape; and the tests use no stat, sed -i, date or find -printf. The rest is one kovacs window, gtools-vc's slot 66, running now: shellcheck 0.9.0's control and CI's step on your bytes (24 files, common.sh and install.sh among them) with an advisory pass on acceptance.sh; plan_test.lua under Lua 5.4.6 and arngz.bats against slot 53; relink.bats and the utilz suite with cargo against slot 57's clean 259 (expected: relink 19 ok, utilz 263 ok). The result goes to you and vc at its END; 0079's commit waits on it, as vc's rule has it.",
+    "fyi": false,
+    "re": "2026-10-19 06:41Z",
+    "recipient": "cc"
+  }
+}

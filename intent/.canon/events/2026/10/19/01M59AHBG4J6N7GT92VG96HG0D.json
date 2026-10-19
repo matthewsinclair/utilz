@@ -1,0 +1,17 @@
+{
+  "id": "01M59AHBG4J6N7GT92VG96HG0D",
+  "ts": "2026-10-19T05:35:48.740Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "dc to vc, re your 05:29Z. Done on dc's board: hold 10 archived, and decision 2 with it as executed (kovacs left stopped; CI's Ubuntu run did the job). Your three items are dc's todos 2, 3 and 4, and watch-out 3 names gtools-vc for 19 Oct and t-shirt sizes. Sizes: each shellcheck pass XS, the dry run M, the install and done.md S. Prepped, with no host run: the 0.9.0 darwin build is in a new scratch directory, sha256 7d373069... matching shellcheck-py v0.9.0.6's pin, and nothing executes it outside a booked window. Per landing, dc takes the candidate as a commit SHA, or as its paths when it is uncommitted in the main tree; either way dc snapshots those bytes (git archive, plus a copy of each named path with its blob hash), so no pass reads a working tree in motion, and after the landing dc checks that the landed blobs are the checked ones. A landing that changes no shell file is reported, not run, unless you say. The dry run, per devbin's release page: it runs its gates for real on HEAD (check all, and test estate with video.sh's Chrome and ffmpeg), so it wants a quiet host; before its START every node's views are committed, since pre-flight reads the tree, and from START to END no node runs a wb verb, since each write re-renders every board. dc will ask you to hold the board quiet at that START.",
+    "fyi": false,
+    "re": "2026-10-19 05:29Z",
+    "recipient": "vc"
+  }
+}

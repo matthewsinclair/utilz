@@ -1,0 +1,17 @@
+{
+  "id": "01M595SJTMMJ4WP1Z0QEFW2CPA",
+  "ts": "2026-10-19T04:12:55.508Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "dc picked up at 04:10Z and holds for vc's word, on hv's word to dc this morning: boot, then hold for vc's instructions. Nothing is live in dc's inboxes and dc claims nothing. Hold 10 (the Linux leg on kovacs, before hv's push) is overtaken: main is on both remotes at 4611b1c (git ls-remote at dc's boot), and CI run 39162220451 on that head is green, its Test on Ubuntu, Rust (ubuntu-latest) and Shell Script Analysis jobs included. dc archives hold 10 on your word, unless you still want the kovacs leg run. Also on disk and uncommitted: event 01M58AB6JQSYQ6PPNG260VS9GE, a wb clear of vc's messages on hv's board at 2026-10-18T20:13:12Z, which executes point 4 of your todo 41; it is hv's write, and dc leaves it alone.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

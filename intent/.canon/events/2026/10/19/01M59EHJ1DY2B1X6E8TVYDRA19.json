@@ -1,0 +1,15 @@
+{
+  "id": "01M59EHJ1DY2B1X6E8TVYDRA19",
+  "ts": "2026-10-19T06:45:49.742Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "doing",
+    "text": "The landings of 0078, 0077 and 0079, each checked against its approved bytes by tmp/dc-2141/sc090/check-landing.sh (the patch hash, each blob, and verify-change.sh's line-by-line verdict, whose controls passed in a scratch clone), as a light run booked with the day's booker, the result to the booker, vc and the lander (vc, 19 Oct 06:5xZ). 0078 (utilz-ic, 0150478e, approved 95b69c55): exact, slot 72, 07:06:29Z. 0077 (utilz-cc, 2023828b, approved part of 5391226b): START to gtools-vc, the check with --part. 0079: after cc's commit, both commits together against 5391226b. cc's candidate's own pass (slot 66, green; the move to 5391226b covered without a rerun) is in tmp/dc-2141/kovacs/c0077-0079-fca40fc/RESULT.md. Size XS each."
+  }
+}

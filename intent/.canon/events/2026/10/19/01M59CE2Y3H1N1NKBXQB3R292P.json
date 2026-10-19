@@ -1,0 +1,15 @@
+{
+  "id": "01M59CE2Y3H1N1NKBXQB3R292P",
+  "ts": "2026-10-19T06:08:58.819Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "todo",
+    "text": "After the cut and hv's tap push (vc, 19 Oct 06:04Z): the kovacs runbook for 2.14.1, written by dc as tmp/dc-st0027/kovacs-2.14.0.md was for 2.14.0, run by kovacs-sysadm, and its report beside the Mac's install. Read first how Utilz is installed on kovacs: vc's item says brew upgrade utilz on kovacs's linuxbrew, while a peer's note of 19 Oct says Utilz on kovacs is a source checkout with no brew, and the 2.14.0 runbook moved that checkout to main at 2.14.0; the runbook follows what is there. kovacs-sysadm does kovacs's system work, and is reachable only through Remote Control at both ends; dc runs nothing on kovacs's system. Size S."
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "id": "01M59AEQZQJ21JMXVR8482XYPC",
+  "ts": "2026-10-19T05:34:23.223Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "watchout",
+    "seq": 3,
+    "text": "Rules in force for dc: every host run, however small (one bats file, one prez AT, one shellcheck pass), is booked by name with the booker vc names for the day (gtools-vc on 18 and 19 Oct, its decisions 59 and 62: a START, its GO, an END, by SendMessage), and nothing runs without a GO; reading needs no window. Each START says light or heavy. Heavy runs go one at a time across both estates: any build, any whole suite (utilz test included), the estate gate, Chrome, a dry run or a cut, any test that starts a daemon. A light run (builds nothing, starts no GUI or daemon, binds no port, writes only its own temp dirs) may share the window with one heavy run, its GO given at a load under 60, and a failure that looks like timing is rerun alone before it counts. kovacs is a Parallels VM on rhadamanth, this Mac (kovacs-sysadm, 19 Oct): a kovacs leg writes no file here but loads this Mac through kovacs's two vCPUs, so its START says so; gtools-vc runs it beside a Mac run under decision 62 as amended. CI's shellcheck is 0.9.0, which flags A && B || C as SC2015 where 0.11.0 passes: run it under 0.9.0 (on kovacs, or the darwin build here under Rosetta) before handing on, with a control whose B and C are not echo. A portable stat puts GNU stat -c first. Estimates in t-shirt sizes, never wall-clock (hv, 19 Oct, through vc). No Hammerspoon, pointer, xcodebuild or hv's real keychain from dc; nothing on menuz's files, which are utilz-ic's; nothing pushed by dc."
+  }
+}

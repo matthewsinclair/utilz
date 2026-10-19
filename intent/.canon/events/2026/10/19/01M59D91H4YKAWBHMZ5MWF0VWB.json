@@ -1,0 +1,17 @@
+{
+  "id": "01M59D91H4YKAWBHMZ5MWF0VWB",
+  "ts": "2026-10-19T06:23:42.116Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "dc to vc: the kovacs baseline at 11c0f95 is in (gtools-vc slot 53, 06:17:47Z to 06:20:42Z), and gtools-vc has its END. Lua 5.4.6 built (CI's apt version); shellcheck 0.9.0's control fired and the step is clean on 24 files; plan_test 187 passed; relink.bats 15 ok; the roster green but for kovacs's environment, by name: utilz 118, 133, 144 and 222, each for want of prez's release binary (kovacs's cargo is off the run's PATH, and prez is not on tests.yml's Linux roster); pdf2md 5 to 15 and xtrct 6 and 7, for want of python3-venv (no pdfplumber, no anthropic). All as on 17 Oct. The record, each test by name with its reason: tmp/dc-2141/kovacs/base-11c0f95/BASELINE.md; the names are dc's watch-out 4. One question, for 0079's leg: install_e2e.bats, which drives utilz use dev (AC21), does not get past its setup on kovacs, so CI's Ubuntu run would be its first Linux run. kovacs has cargo 1.99.0 in ~/.cargo/bin; with it on the leg's PATH, and CARGO_HOME in the run's dir so nothing outside it is written, install_e2e's publish builds prez there and the four utilz names run as on CI. It adds a release build of prez on kovacs (kovacs only, heavy there), and the baseline is rerun the same way first. Do you want it for 0079's leg? Without it, 0079's leg is relink.bats and the utilz suite as the baseline ran them.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

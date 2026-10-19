@@ -1,0 +1,15 @@
+{
+  "id": "01M59FY80D62V9DNMC0YW1MHPS",
+  "ts": "2026-10-19T07:10:14.029Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "hold",
+    "text": "0079's landing check. Condition: utilz-cc sends the SHA of 0079's commit, which lands on 2023828b after its install_e2e.bats run in the primary. Then: a START to gtools-vc (light, read-only, kill 120 s) for tmp/dc-2141/sc090/check-landing.sh c0077-0079-5391226b 2023828b <sha>, both commits together against cc's approved 5391226b, where all 14 files must read same and the verdict exit 0; the END to gtools-vc, the result to cc and vc. Done so far: 0078 (0150478e) exact in slot 72; 0077 (2023828b) its part exact in slot 73 (--part). Records: tmp/dc-2141/sc090/c0078-95b69c55/ and c0077-0079-5391226b/, each with approved.diff and the check's log."
+  }
+}

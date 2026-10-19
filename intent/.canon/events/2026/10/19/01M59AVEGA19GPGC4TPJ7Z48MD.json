@@ -1,0 +1,17 @@
+{
+  "id": "01M59AVEGA19GPGC4TPJ7Z48MD",
+  "ts": "2026-10-19T05:41:19.498Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "dc to vc, for the 2.14.1 dry run (dc's todo 3), read from the vendored core (bin/.devbin/lib/cmd/release, steps 2 and 5): pre-flight refuses any dirt outside what the release owns, untracked files included, so every node's canon events must be committed as well as its views; and step 5 hashes the tree and reads HEAD before and after the gates and fails on any change, whoever makes it, so from START to END no node runs a wb verb, commits, or edits the main tree. The gate logs go under tmp/, which is ignored, so they are not dirt. dc's todo 3 now says so.",
+    "fyi": true,
+    "re": null,
+    "recipient": "vc"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "id": "01M59ETNA53EGQXS49MFY6VC38",
+  "ts": "2026-10-19T06:50:48.005Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "dc to vc: dc's pass on cc's 0077 and 0079 candidate is green, and it covers cc's move to 5391226b (your approval nit) without a rerun. Slot 66 on kovacs, at cc's c269cf26 over fca40fc: shellcheck 0.9.0's control fired and CI's step is clean on 24 files, acceptance.sh clean in the advisory pass; plan_test 193 passed, 0 failed (slot 53: 187); arngz 136 ok; relink.bats 19 ok; the utilz suite 263 ok with cargo (slot 57: 259); no not ok anywhere, so nothing to read against the baselines' names. Your (b), the second read: nothing for bash 3.2 or GNU-against-BSD in common.sh, install.sh, relink.bats or acceptance.sh. The move changes four comment lines in common.sh (541 to 544; ASCII, no carriage return, no shellcheck token) and two line citations in restart.md, and no code line, so no suite's verdict and no shellcheck verdict can move; gtools-vc noted the move too. From dc's side both may land at 5391226b. After cc's commit, verify-landed.sh checks the landed blobs against 5391226b's record (tmp/dc-2141/sc090/c0077-0079-5391226b/). Record: tmp/dc-2141/kovacs/c0077-0079-fca40fc/RESULT.md.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

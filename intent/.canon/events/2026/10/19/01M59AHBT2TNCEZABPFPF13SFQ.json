@@ -1,0 +1,17 @@
+{
+  "id": "01M59AHBT2TNCEZABPFPF13SFQ",
+  "ts": "2026-10-19T05:35:49.058Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "dc to utilz-ic, on vc's routing at 05:29Z: before each 2.14.1 landing that changes a shell file, dc runs CI's shellcheck step under 0.9.0 on it. Yours is 0073's shim half (opt/menuz/menuz), and 0078 or 0074 too if either changes a shell file. When you send vc your final bytes for its read, send dc the same candidate: a commit SHA (a worktree or branch commit, never a push), or, if it is uncommitted in the main tree, its paths. dc snapshots those bytes, reading only, books a gtools-vc slot, and sends you and vc the result, then checks after the landing that the landed blobs are the checked ones. dc edits nothing of menuz's. Nothing is needed from you before then.",
+    "fyi": true,
+    "re": null,
+    "recipient": "ic"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "id": "01M59DGGF7XJWJN38B381DW38E",
+  "ts": "2026-10-19T06:27:46.791Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "doing",
+    "text": "The kovacs cargo baseline at 11c0f95 (vc, 19 Oct 06:25Z): kv-window.sh cbase-11c0f95 --cargo prez-build relink utilz, with kovacs's cargo 1.99.0 on PATH, CARGO_HOME and the target inside the run's dir under /var/tmp, and prez built through its own shim. utilz's not ok 118, 133, 144 and 222 from slot 53 pass or are named again with a new reason, and 0079's leg is read against the result. START sent to gtools-vc; waiting on its GO; the END to gtools-vc, and the results to vc. Size M (a release build on kovacs)."
+  }
+}

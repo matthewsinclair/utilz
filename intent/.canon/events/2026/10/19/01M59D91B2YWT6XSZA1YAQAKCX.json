@@ -1,0 +1,15 @@
+{
+  "id": "01M59D91B2YWT6XSZA1YAQAKCX",
+  "ts": "2026-10-19T06:23:41.922Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "watchout",
+    "text": "kovacs's baselines at 11c0f95 (19 Oct), which every candidate's leg is read against, failure by name. Slot 53, no cargo (tmp/dc-2141/kovacs/base-11c0f95/BASELINE.md), for 0077's leg and the loop: utilz not ok 118 (AT06/AC06), 133 (install_e2e setup_file), 144 (install_guards setup_file) and 222 (keg AT03), all for want of prez's release binary; pdf2md not ok 5 to 15 and xtrct not ok 6 and 7, for want of python3-venv (no pdfplumber, no anthropic). Slot 57, with kovacs's cargo on PATH (tmp/dc-2141/kovacs/cbase-11c0f95/BASELINE.md), for 0079's leg: prez built, relink.bats 15 ok, utilz 259 ok and 0 not ok, install_e2e 11 of 11 and install_guards 23 of 23, so with cargo the utilz suite has no environment failure. A failure with any other name is the candidate's until shown otherwise, even if the total matches. kovacs keeps two checked download dirs for the day: /tmp/dc-2141-sc090.i5YjL5 (shellcheck 0.9.0) and /tmp/dc-2141-lua.61GdRV (Lua 5.4.6's tarball); each run's own dir goes under /var/tmp and is removed once its logs are back."
+  }
+}

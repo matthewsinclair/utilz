@@ -1,0 +1,15 @@
+{
+  "id": "01M59FY83580PC6G9SRYGP71E6",
+  "ts": "2026-10-19T07:10:14.117Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "hold",
+    "text": "The kovacs baseline rerun with python3-venv. Condition: kovacs-sysadm reports python3-venv installed on kovacs (hv has been asked to approve it; vc relays). Then: at main's head, prep.sh <label> --sha HEAD and kv-prep.sh <label>, a START to gtools-vc as a kovacs leg (it loads this Mac through kovacs's two vCPUs), kv-window.sh <label> --cargo lua-build shellcheck prez-build lua-plan relink loop; pdf2md's not ok 5 to 15 and xtrct's 6 and 7 should go, and every remaining failure is named in watch-out 4. Then todo 5 at the last landing's head before hv's push. kovacs's two checked download dirs stay in its /tmp until a restart clears them: /tmp/dc-2141-sc090.i5YjL5 and /tmp/dc-2141-lua.61GdRV (refetch with tmp/dc-2141/sc090/kovacs-fetch.sh and kovacs-lua-fetch.sh, then fix the two paths in kv-remote.sh)."
+  }
+}

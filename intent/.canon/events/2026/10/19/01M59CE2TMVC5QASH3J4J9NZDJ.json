@@ -1,0 +1,15 @@
+{
+  "id": "01M59CE2TMVC5QASH3J4J9NZDJ",
+  "ts": "2026-10-19T06:08:58.708Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "todo",
+    "text": "Before hv's push of the last 2.14.1 landing (vc, 19 Oct 06:04Z): tests.yml's Linux loop (the test-linux job's roster, utilz test per utility) and its shellcheck step under 0.9.0, on kovacs at that head, in a mktemp dir from a git bundle (never a push), read against kovacs's known environment failures, so CI's Ubuntu run on main holds no surprise for the cut's CI check. Booked with gtools-vc. Then the push is hv's. Size M."
+  }
+}
