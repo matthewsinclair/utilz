@@ -1,0 +1,16 @@
+{
+  "id": "01M5A5CNM3EE8KD3KYEJF33ZKG",
+  "ts": "2026-10-19T13:25:06.819Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "hold",
+    "seq": 14,
+    "text": "130, the kovacs leg for utilz-cc's 0081 and 0085, waits on vc (131 landed 0082 at 853a947). kovacs is cleaned and its two tools refetched into /var/tmp (item 3). Condition: cc's new bytes for 0081 and 0085's new base, a new record from them, then vc's new GO."
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "id": "01M5A5CNAWRNHNHRFVHCPZV82Q",
+  "ts": "2026-10-19T13:25:06.524Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "todo",
+    "seq": 9,
+    "text": "The kovacs leg for utilz-cc's 0081 and 0085, to be rerun (vc, 19 Oct 13:08Z). Slot 130 ran on record c0081-0085-c04cb597 and was cut at utilz 56 of 284 by kovacs's reboot at 12:20:21Z, with no verdict. That record is void: utilz-cc's END of 126 found 0081's test 3 vacuous on main's code, so 0081 gets new bytes and 0085 a new base. On cc's new bytes: a new record from them by prep.sh, kv-prep.sh's full bundle, and vc's new GO for kv-window.sh <label> --cargo lua-build shellcheck prez-build utilz, heavy on kovacs only and beside any Mac run. Expected: every step rc 0, the control firing, utilz with no not ok, cc's new tests ok by name, and only slot 124's two skips; a red is triaged by running 0081 alone before naming whose. Then kovacs's home read over ssh, and the results to cc and vc. Size S."
+  }
+}

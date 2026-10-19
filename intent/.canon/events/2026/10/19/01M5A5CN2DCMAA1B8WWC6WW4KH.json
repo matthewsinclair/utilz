@@ -1,0 +1,16 @@
+{
+  "id": "01M5A5CN2DCMAA1B8WWC6WW4KH",
+  "ts": "2026-10-19T13:25:06.254Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "todo",
+    "seq": 7,
+    "text": "Issue 0082, the test-isolation issue, landed at 853a947 (853a9477252c1ab606f768b8a2f0a26673d9985c) in slot 131 on vc's GO, 19 Oct: a local commit on main on 1fabda3, the nine paths; install_e2e 11 of 11 under bash 3.2; check-landing exit 0, the patch identical to record d5b139c5. Remaining: vc's check by change; then 0082's close after hv's push and CI green on it, as 0077 and 0079 closed (fixed in, carried upstream in, CI green). Size XS."
+  }
+}

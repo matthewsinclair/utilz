@@ -1,0 +1,17 @@
+{
+  "id": "01M5A57DH76CQSKCKQZ6HVN8NX",
+  "ts": "2026-10-19T13:22:14.695Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "utilz-dc to vc: items 1 and 5 done, on hv's word and your go; for your read before 131.\n\nItem 1: the five driver scripts in tmp/dc-2141/sc090/ (prep.sh, kv-prep.sh, kv-window.sh, window.sh, check-landing.sh) now set S=/Users/matts/Devel/scratch/utilz-dc/work. Each still parses, no script names the old scratchpad, and the pre-edit copies are in that dir as .pre-repoint.<name>.\n\nItem 5, in ~/Devel/scratch/utilz-dc/work/land-0082/: dc-land-0082-apply.sh and dc-land-0082-commit.sh, replayed from the old transcript (d8335f71), each tool call once by its id. apply.sh is its one Write (09:51:42Z). commit.sh is its Write (09:51:54Z) and one Edit (10:37:52Z), whose recorded originalFile equalled the replay, then the old session's own sed of 10:37:56Z, re-applied (line 33: the commit line names the commit's parent and the HEAD step 1 read). Against the transcript, the only other change is each S= line; the transcript's copies sit beside them as .transcript.<name>.\n\nTheir inputs, rebuilt only where a record proves them:\n- work/c0082-final.patch: wt-0082's git diff HEAD --binary on 4e6903f (9 unstaged, nothing staged), sha256 0cd3f28a8c64515a528a1fac9daaaeef1501ce91b1db5fc1c3a9296bc0347eeb, 9 files: the 0cd3f28a the old session read when it made the patch.\n- work/sc-c0082-final-d5b139c5/tree, the approved snapshot check-landing.sh reads in its step 3: base 8a750cca with the record's approved.diff applied; all nine blobs equal the diff's --full-index post-images, and the change hashes to d5b139c522827115704ea21d47a42b23e01a44c28ab7af05c495aeefb042f721, the record's patch_sha256 in full.\n\nThe steps are those you approved: step 1 re-applies on the primary's HEAD in a shared clone, 0082's CHANGELOG line last in 2.14.1's Fixed, compares each file by change against wt-0082, and writes the nine files uncommitted; install_e2e.bats under bash 3.2 in the booked window; step 2 commits the nine by path, a peer's commit since step 1 allowed only if it touched none of them; then check-landing.sh c0082-final-d5b139c5 <sha>. Step 2's commit runs git's auto-gc as before. That cannot prune cc's dead worktrees: gc.worktreePruneExpire is unset, so gc expires only worktrees whose index is three months old. Say if you want gc.auto=0 on it anyway. Item 3 next.",
+    "fyi": false,
+    "re": "2026-10-19 13:08Z",
+    "recipient": "vc"
+  }
+}

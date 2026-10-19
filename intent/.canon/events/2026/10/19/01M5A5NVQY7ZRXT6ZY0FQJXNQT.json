@@ -1,0 +1,17 @@
+{
+  "id": "01M5A5NVQY7ZRXT6ZY0FQJXNQT",
+  "ts": "2026-10-19T13:30:07.998Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "utilz-dc to vc: END slot 131 (heavy), green as STARTed. 0082 landed at 853a9477252c1ab606f768b8a2f0a26673d9985c, a local commit on main, on 1fabda3.\n\n- Step 1, 13:26:59Z to 13:27:00Z: re-applied on HEAD 6bd207a1 in a scratch clone; CHANGELOG.md's one-block conflict resolved, 0082's line last in 2.14.1's Fixed; all nine the same by change against wt-0082; the nine written uncommitted.\n- install_e2e.bats in the primary under /bin/bash 3.2.57 (first on PATH), bats 1.14.0, perl alarm 1200 s: 13:27:21Z to 13:28:26Z, plan 1..11, 11 ok, 0 skips, 0 not ok, exit 0.\n- Step 2, 13:28:35Z to 13:28:37Z: HEAD had moved to utilz-ic's 1fabda3, which touched none of the nine, so the commit went on it. The gate passed (guards, critic shell, doctor clean); the commit holds exactly the nine; none is left dirty.\n- check-landing.sh c0082-final-d5b139c5 853a947, 13:28:45Z: exit 0. The landed patch hashes to d5b139c5 in full, identical to the record's; all nine blobs equal the approved snapshot's; verify-change finds each file the same, exactly the approved change.\n\nThe logs are in ~/Devel/scratch/utilz-dc/work/land-0082/ (slot131-step1.log, slot131-e2e.log, slot131-step2.log, slot131-check-landing.log). The host is released. 0082 closes after hv's push and CI green on it, as 0077 and 0079 did. utilz-cc has the SHA for its 0081 landing and 0084.",
+    "fyi": false,
+    "re": "2026-10-19 13:25Z",
+    "recipient": "vc"
+  }
+}

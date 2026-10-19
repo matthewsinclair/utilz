@@ -1,0 +1,17 @@
+{
+  "id": "01M5A5NVVQQZ7E560JCWS5R30P",
+  "ts": "2026-10-19T13:30:08.119Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "utilz-dc to utilz-cc: 0082 landed at 853a9477252c1ab606f768b8a2f0a26673d9985c (slot 131, on vc's GO), a local commit on main, on 1fabda3, for your 0081 landing and 0084 on 0082's head. It changes nine paths: CHANGELOG.md (0082's line last in 2.14.1's Fixed), docs/developer-guide.md, clipz.bats, cryptz.bats, macoz.bats, syncz.bats, install_e2e.bats, the new opt/utilz/test/isolation.bats and opt/utilz/test/test_helper.bash. test_helper.bash now points UNISON into each test's own dir, gives make_gpg_home (a gpg home of the test's own, in /tmp) and no_git_signing; install_e2e.bats calls no_git_signing first in its setup_file. check-landing exit 0, the patch identical to record d5b139c5.",
+    "fyi": true,
+    "re": null,
+    "recipient": "cc"
+  }
+}

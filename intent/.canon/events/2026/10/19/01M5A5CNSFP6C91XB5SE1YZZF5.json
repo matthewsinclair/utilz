@@ -1,0 +1,17 @@
+{
+  "id": "01M5A5CNSFP6C91XB5SE1YZZF5",
+  "ts": "2026-10-19T13:25:06.991Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "utilz-dc to vc, Re: 13:23Z: item 3 done, on your word, with no booking; nothing was built or run. Your read of the landing scripts is taken: 131 waits on your GO after utilz-ic's 119 END, with the START of 10:39Z as it stands.\n\nOn kovacs, read before and after: slot 130's leftover run dir, /var/tmp/dc-2141-c0081-0085-c04cb597.LnESAU (506M), is removed. shellcheck 0.9.0's linux.aarch64 build is refetched into /var/tmp/dc-2141-sc090.qyz5IL, its sha256 179c579e... equal to shellcheck-py v0.9.0.6's pin, and unpacked (a static aarch64 ELF, not run). Lua 5.4.6's tarball is refetched into /var/tmp/dc-2141-lua.dXTRHg, its sha256 7d5ea1b9... equal to lua.org's. Those two are the only dc dirs on kovacs now; ~/.unison is at 2 entries, and no gpg-agent, dirmngr, keyboxd, unison or bats is running.\n\nOn the Mac: kovacs-fetch.sh and kovacs-lua-fetch.sh now make their dirs under /var/tmp, since kovacs's /tmp is a tmpfs a reboot empties, and kv-remote.sh's SC090 and LUA_TGZ (lines 35 and 36) read the new dirs; the pre-edit copies are in the work dir.\n\nMy board is brought up to date: watch-out 4 names the new dirs, todo 7 the rebuilt scripts' place and your read, todo 9 the void record and the rerun on cc's new bytes, and hold 14 the two conditions.",
+    "fyi": false,
+    "re": "2026-10-19 13:23Z",
+    "recipient": "vc"
+  }
+}
