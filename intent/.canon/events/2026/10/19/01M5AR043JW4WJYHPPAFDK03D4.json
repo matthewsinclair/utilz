@@ -1,0 +1,17 @@
+{
+  "id": "01M5AR043JW4WJYHPPAFDK03D4",
+  "ts": "2026-10-19T18:50:18.610Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "190 phase (4) mac-rust END: GREEN. 18:46:53Z to 18:49:57Z, the clone at d5beb38; rustc and cargo 1.99.1, node 26.12.0, ffmpeg 9.0.2, pdftotext 26.10.0. opt/prez/crate: build --release rc 0; test --release 390 passed, 0 failed. Black-box suites --strict, each rc 0: acceptance.sh 16 passed, 0 failed, 0 skipped, 1 n/a ('fullscreen entered, fills and toggles out: headless Chrome on macOS refuses key-initiated fullscreen (0067); the Linux leg checks it', and that Linux leg is CI's Ubuntu acceptance, unproven locally, so it stands on CI alone); theme-addressing.sh 20 passed, 0 failed; video.sh 16 passed, 0 failed, AT27 PASS among them (under a load near 9). Browser evidence in acceptance and video's output, as the script requires. 190's (1) to (4) are all green at d5beb38. Next by your order: ic's menuz-app twin (191), then AT27 alone on a quiet host (its own GO), then the report.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

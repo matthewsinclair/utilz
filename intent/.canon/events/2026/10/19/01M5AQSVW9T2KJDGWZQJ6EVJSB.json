@@ -1,0 +1,17 @@
+{
+  "id": "01M5AQSVW9T2KJDGWZQJ6EVJSB",
+  "ts": "2026-10-19T18:46:53.577Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "190 phase (3) mac-suites END: GREEN. 18:33:27Z to 18:46:37Z, the fresh clone at d5beb38 (still clean). bash 3.2 pass: 'GNU bash, version 3.2.57(1)-release', utilz /Users/matts/Devel/scratch/utilz-dc/work/gate-d5beb38/bin/utilz. bash 5 pass: 'GNU bash, version 5.3.20(1)-release', the same clone utilz. 34 of 34 suite runs exit 0, 0 not ok, identical counts on both bashes: utilz 313, arngz 141, cleanz 66, clipz 12, cryptz 12, expz 9, gitz 13, lnrel 12, macoz 17, mdagg 31, menuz 139, pdf2md 15, retry 12, stampz 24, syncz 79, todo 46, xtrct 12; skips only xtrct's 4 (API key) on each. (4) mac-rust started.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

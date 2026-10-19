@@ -1,0 +1,17 @@
+{
+  "id": "01M5AR3P3K3KBE8YVY0R8DNC37",
+  "ts": "2026-10-19T18:52:15.347Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "START (dc), the 2.14.1 dry run (todo 3): cd /Users/matts/Devel/prj/Utilz && bin/devbin release --patch --dry-run, at main's head (d5beb38 plus board-only commits; I read and name the exact sha at the GO). It stamps, commits, tags and pushes nothing; it runs its gates for real on HEAD in the primary: check all (fmt, clippy) and test estate (every bats suite, the cargo tests and the crate's black-box suites, Chrome and ffmpeg among them), so it wants a quiet host. Load now 21.6 (from 12.5): I ask the GO under 10. Pre-flight refuses any dirt, untracked events included, and step 5 fails on any change to the tree or HEAD from START to END, so: your freeze of every node, board writes included; every node's views and events committed first (I commit dc's straight after this message, and tell you its sha); and hv's push either done before the GO or held until the END. The gate script's dry-run phase checks HEAD and a clean primary before I run it. Logs under tmp/ (ignored). The END carries every row. Waiting for your freeze and GO.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

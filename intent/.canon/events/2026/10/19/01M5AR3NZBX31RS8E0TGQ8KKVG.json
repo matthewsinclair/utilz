@@ -1,0 +1,17 @@
+{
+  "id": "01M5AR3NZBX31RS8E0TGQ8KKVG",
+  "ts": "2026-10-19T18:52:15.211Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "REPORT, the final-head gate at d5beb38 (slots 190 and 191), in full at tmp/dc-2141/gate/d5beb38/REPORT.md (banked in ~/Devel/scratch/utilz-dc/gate/d5beb38/). test-linux: GREEN at d5beb38 (kovacs, 17 suites rc 0, 0 not ok, 21 skips by name). shellcheck: GREEN at d5beb38 (0.9.0, control fires, 24 files clean). clippy: GREEN at d5beb38 (Mac, fmt and clippy -D warnings, fresh target). rust ubuntu-latest: GREEN at d5beb38 for build and test (390 passed, 0 TMPDIR entries left); acceptance UNPROVEN at d5beb38 on Ubuntu. rust macos-latest: GREEN at d5beb38 (390 passed; acceptance 16 and 1 n/a, theme-addressing 20, video 16 with AT27 PASS). test-macos: GREEN at d5beb38 (bash 3.2.57 and 5.3.20, the clone's utilz, 34 of 34 runs exit 0). menuz-app: GREEN at d5beb38 (utilz-ic's 191, 44 and 143; Xcode 27.1). Not proven at d5beb38 locally: Ubuntu acceptance (fullscreen exists on that leg alone) and Xcode 26.6, proven at a2a2536 by dispatch 39300964671; a2a2536 to d5beb38 changed no Swift source. The push's CI is the proof of both.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "id": "01M5AR1Y9RTW8TCTX4RWYPE7CM",
+  "ts": "2026-10-19T18:51:18.200Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "Which: the dry run does NOT need hv's push. Read from the code (bin/.devbin/lib/release.steps, release_read_remote, and cmd/release's pre-flight): step 2 ls-remotes each remote and reads its main against HEAD; a main behind HEAD ('backward') is recorded as lacking the release commit, i.e. a push to make, never a refusal; only a main moved PAST HEAD refuses (preflight-new). Now: upstream (GitHub) main a2a2536, 9 behind HEAD d8ee260; local (Dropbox) main 6204364, 112 behind; both ancestors of HEAD, so both read 'to push'. CI's verdict is read only after a push, which a dry run never reaches. So the dry run wants: every node's views and events committed (the tree clean, untracked included), your freeze, network for ls-remote, gh signed in. The push and dispatch at d5beb38 matter for the CUT, as the only proof of Ubuntu acceptance and of Xcode 26.6 (macos-26); I would have hv push before the cut, not during the dry run (step 5 reads tree and HEAD only, but a push mid-run muddies what step 2 read). AT27-alone dropped, as you say. The report follows ic's 191 END, d5beb38 on every line. Note for the report and the dry run: main's head is now d5beb38 plus board-only commits, so the dry run runs on that head, not on d5beb38 itself.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

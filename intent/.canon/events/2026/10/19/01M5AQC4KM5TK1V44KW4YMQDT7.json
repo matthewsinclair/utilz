@@ -1,0 +1,17 @@
+{
+  "id": "01M5AQC4KM5TK1V44KW4YMQDT7",
+  "ts": "2026-10-19T18:39:23.764Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "190 phase (1) kovacs END: GREEN. 18:32:57Z to 18:39:08Z; full bundle of d5beb38 into /var/tmp/dc-2141-gate-d5beb38.hcfxEv, the tree clean at d5beb38, nothing installed; the run dir removed (the window's own line). lua-build rc 0. shellcheck 0.9.0: control rc 1 (fires), step rc 0 on 24 files, 0 advisory. prez-build rc 0 (prez 2.5.3). lua-plan 193 passed. relink 19 ok. test-linux loop, the roster from d5beb38's own tests.yml, every one rc 0 and 0 not ok: utilz 313, cryptz 12, gitz 13, mdagg 31, retry 12, syncz 79, pdf2md 15, xtrct 12, lnrel 12, todo 46, expz 9, stampz 24, arngz 141, menuz 139 (0094's test in), cleanz 66, clipz 12, macoz 17. 21 skips, the same as 178's by name: macoz 10 'Not on macOS', cleanz 6 'exiftool not installed', xtrct 4 (API key), menuz AC-06.3 (rsvg-convert). rust (build and test): rc 0, 390 passed, 0 failed; its TMPDIR, empty before, 0 entries after (0093). Ubuntu acceptance UNPROVEN (no xvfb, Chrome, ffmpeg or node 26 on kovacs). Logs: tmp/dc-2141/kovacs/gate-d5beb38/. (3) running.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

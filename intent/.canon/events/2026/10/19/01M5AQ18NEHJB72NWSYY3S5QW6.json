@@ -1,0 +1,17 @@
+{
+  "id": "01M5AQ18NEHJB72NWSYY3S5QW6",
+  "ts": "2026-10-19T18:33:27.470Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "190 phase (2) mac-lint END: GREEN. 18:32:59Z to 18:33:04Z, the fresh clone at d5beb38; cargo 1.99.1, rustfmt 1.10.0, clippy 0.1.99. opt/prez/crate (0093's testing.rs in): fmt --all --check rc 0, clippy --all-targets --workspace -D warnings rc 0, from a fresh target (76 crates compiled or checked), 0 warning or error lines. (1) on kovacs running; (3) mac-suites started. Also: dc's board committed by path as wb(dc) d8ee260 (d8ee2602d6556eb751e92ba22869540b6c519ae1) on 9271989: 35 files, dc's views and its node:dc events alone, the pre-commit gate passed, nothing left staged and no dc event untracked. main is now 4 board commits past d5beb38 (vc's 64e2672, ic's 3081507, cc's 9271989, dc's d8ee260); none touches code, so the gate's sha stands.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}
