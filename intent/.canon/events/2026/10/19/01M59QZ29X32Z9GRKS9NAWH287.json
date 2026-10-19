@@ -1,0 +1,15 @@
+{
+  "id": "01M59QZ29X32Z9GRKS9NAWH287",
+  "ts": "2026-10-19T09:30:29.565Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "kind": "todo",
+    "text": "0086 (medium), menuz's run-id store can be seen empty while it is being created, so a second run gets no id (found in slot 112, filed 19 Oct as 9d730f6, in 2.14.1; design approved by vc with notes: mkstemp temporary removed on every path, link failure but EEXIST named with errno, the seam a closure defaulting to nothing documented for the test; 0.4.1 to 0.4.2 with a Fixed line). Built on 5297168: the red, RunnerTests.existingStores' empty store expecting \"it is empty\" (red on main, which refused with an empty text), is runs/0086-red.patch (2c7b1e38) in wt-0086r; the fix, makeStore (mkstemp, write stored(after: 0), beforeLink, link, EEXIST no failure) and RunId.parse refusing an empty store as \"it is empty\", with storeMadeWhole and RunTests updated, the CHANGELOG line and VERSION 0.4.2, is runs/0086-full.patch (2b74230c, 6 files) in wt-0086. Now: critic-swift's review; the red and green STARTed with vc behind the icon's slot 116; then the bytes to vc, the landing after the icon fix-forward; then the 0083 part."
+  }
+}

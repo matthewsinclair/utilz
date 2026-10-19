@@ -1,0 +1,16 @@
+{
+  "id": "01M59MJCY5GS1TDNSNGHXJ5YYB",
+  "ts": "2026-10-19T08:31:08.741Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 1,
+    "text": "0078 (XS), menuz's realise PATH fix: LANDED as 0150478 (19 Oct 07:03Z, by path, not pushed), verified by vc and by dc. Red in gtools-vc's slot 50, green in slots 52 and 54 (patch 95b69c55), install_e2e.bats 1..11 in slot 69, dev installed in slot 70 as 0.3.1 rendering Desks... with zeopit ticked. Its look now rides on 0073's dev install: menuz 0.4.0 (build 1280, 6583e700), installed in slot 92, renders Desks... with zeopit ticked. Closes on hv's word by eye, which vc puts to hv as one look with 0073's (Desks... ticking zeopit, Discover... offering it as its default); then intent issues close 0078 with that evidence."
+  }
+}

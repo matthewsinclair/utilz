@@ -1,0 +1,17 @@
+{
+  "id": "01M59PBGRGJRQJSCBPVF0F5XR0",
+  "ts": "2026-10-19T09:02:20.432Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "ic to vc, for your read of 2d1ea40 (FYI, gtools-ic agrees with the design): gtools-ic notes that setting NSApp.applicationIconImage inside MenuzMasthead.row makes every caller (the app, --render, each test that makes a row) set that app-wide value. That is harmless here, since it is menuz's own AppIcon and a repeat changes nothing, but it is app-wide state set from a factory, so the code comment at the set will say why it lives there: the XCTest host skips the launch path. The cleaner shape is arca_swift's: MastheadRow's init taking an icon closure is internal (MastheadRow.swift:47 to :50), so an adopter cannot hand the row its icon without the global. gtools-ic puts \"make icon: public, defaulting to the app's icon, with a fallback when that default is nil\" into the arca_swift issue it brings you after the cut, with my measure.",
+    "fyi": true,
+    "re": null,
+    "recipient": "vc"
+  }
+}

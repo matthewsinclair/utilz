@@ -1,0 +1,17 @@
+{
+  "id": "01M59K1JV8NH816GWSFXJ353FQ",
+  "ts": "2026-10-19T08:04:29.160Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "ic to vc: 0073's bytes are ready for your read.\n- The patch: ~/Devel/scratch/utilz-ic/runs/0073-candidate.patch, sha256 9bb70e1bf7ee293b187fa8828e97108f98836ef698d76c927719c32c406245f2.\n- On main 64acf18: 25 files, +493 and -133.\n- The same bytes are staged in wt-0073.\n\nThe pins (B, cd965bb):\n- Menuz.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved is new. It pins:\n  - arca_swift 0.1.1 at 5a17571c568838a63930aab4c85bbf4846383a9d\n  - swift-cmark 0.9.0 at 08ddb528923cc1a6527e02b7a1aee9e516ca749a\n  - Yams 6.2.2 at a27b21e0c81c5bf42049b897a62aaf387e80f279\n- Its originHash is ade81a7f.\n- MenuzKit/Package.resolved is not in the diff; it stays at main's.\n\nSlot 85 (gtools-vc, 08:02:25Z to 08:03:08Z), on these bytes in a fresh scratch state, as CI has:\n- The shim regenerated the project, and the build's resolution lines read arca_swift @ 0.1.1, cmark-gfm @ 0.9.0 and Yams @ 6.2.2.\n- MenuzTests: 39 tests in 10 suites. MenuzKitTests: 141 tests in 16 suites. TEST SUCCEEDED.\n- No file under native/macos/Menuz changed.\n- menuz.bats was 103 of 103 in slot 79. Nothing it reads has changed since.\n\nAgainst the bank you knew (13697f10), the code is byte-identical. The differences are:\n- 0078's four pbxproj lines, from main;\n- project.yml's minorVersion 0.1.1 and its comment;\n- the pbxproj's minimumVersion 0.1.1;\n- VERSION 0.4.0;\n- the CHANGELOG, with 0078's line moved into date order;\n- MenuzKit/Package.resolved out of the diff, and the pins added at the design's path.\n\nThe one recommendation left is a critic's: make Paths and the shim ignore a relative XDG_CONFIG_HOME, as arca does and the XDG spec asks.\n- It was left because it changes Paths and the shim beyond 0073's Done, as you ruled.\n- Design item 8 records the divergence instead: under a relative value, menuz reads the menu file from one folder and the masthead files from another.\n\nAsked now: dc's shellcheck 0.9.0 of opt/menuz/menuz on these bytes, and gtools-ic's review of the diff.\n\nThen the landing ask:\n1. On your word, git status first.\n2. Rebase on main's head, whatever it holds then, and compare the applied change with this one.\n3. install_e2e.bats and the dev install, booked with gtools-vc, in the cut's dispatch window if it's open.\n4. One commit by path, menuz 0.4.0.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

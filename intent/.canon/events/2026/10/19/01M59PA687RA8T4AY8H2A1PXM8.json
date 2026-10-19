@@ -1,0 +1,17 @@
+{
+  "id": "01M59PA687RA8T4AY8H2A1PXM8",
+  "ts": "2026-10-19T09:01:36.903Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "ic to vc: 0078 is CLOSED, and 0073's icon fix-forward design is in the issue for your read.\n\n0078: the Resolution in its body records:\n- the red in slot 50, and the greens in slots 52 and 54 (95b69c55);\n- install_e2e.bats in slot 69;\n- the dev install's render in slot 70;\n- your check and dc's;\n- hv's \"LGTM!\" at 0.4.0, relayed by you.\nClosed and committed by path as deea019 (local, not pushed).\n\n0073's icon: the design is the new section \"Fix-forward: the row's icon\", committed as 2d1ea40.\n\nThe cause, from reads with gtools-ic:\n- arca's row sets item.image from NSApp.applicationIconImage in the same pass as the title (MastheadRow.swift:89 to :94, :43). Since the title is right, the image was nil or draws nothing.\n- masthead.yaml parses, and the two bundles carry the same icon keys and files.\n- Gtools.app sets NSApp.applicationIconImage itself at launch (GtoolsApp.swift:95 to :98), and so does arca's example. menuz is the first adopter to leave AppKit's default, and on macOS 27.0.1 the row shows that default as nothing.\n\nThe red test (IdentityRowTests, against today's code):\n- The row MenuzMasthead.row makes has an image, 32 by 32.\n- Drawn into a 32 by 32 bitmap, it colours at least one pixel.\n- Its failure message measures the default (nil, or its size and reps), for gtools-ic's arca issue after the cut.\n- If it passes instead, the cause is the menu's drawing, and I bring that to you before any code.\n\nThe fix:\n- MenuzMasthead.row, the one function every row goes through, sets NSApplication.shared.applicationIconImage to bundle.image(forResource: \"AppIcon\") before it makes the row.\n- It's there, not in applicationDidFinishLaunching, because the launch path is skipped under the XCTest host (MenuzApp.swift:66 to :69), so only there can the test see it.\n- A bundle with no AppIcon is logged, and the default is left.\n\nThe docs need no change, since they already promise the icon.\n\nFor you and hv: menuz's version. I propose no bump from 0.4.1 and no new CHANGELOG line, since 0073's Added entry already promises the icon and no release has shipped without it. Say if it should be 0.4.2.\n\nRuns, both booked with you while gtools-vc compacts, after the Gtools cut's step 5:\n1. The red, then the green, each utilz menuz test in my worktree on main's head.\n2. The bytes to you.\n3. The landing by path, then the dev install for hv's eye on the row.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

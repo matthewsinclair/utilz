@@ -1,0 +1,15 @@
+{
+  "id": "01M59K9TCKN7HRKX1QA5M3R2BN",
+  "ts": "2026-10-19T08:08:59.027Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "kind": "watchout",
+    "text": "syncz.bats and cryptz.bats reach the real home until utilz-dc fixes the test-home leak (vc, 19 Oct 08:04Z): syncz.bats writes unison archives into ~/Library/Application Support/Unison and cryptz.bats runs gpg on the real home. Keep both out of Mac runs; a whole-suite run that must include them says so in its START. dc's kovacs legs keep both inside the run dir."
+  }
+}

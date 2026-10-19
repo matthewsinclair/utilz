@@ -1,0 +1,16 @@
+{
+  "id": "01M59GZD2Q86F47R56T3X56NG6",
+  "ts": "2026-10-19T07:28:20.567Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "kind": "hold",
+    "seq": 4,
+    "text": "Held for hv's compact (vc, 19 Oct 07:08Z, on hv's word \"context is high\"). Released once the compact is done and I have run /in-session and intent wb pickup --node ic; then resume in this order. (a) 0078 is LANDED as 0150478, verified by vc and by dc (tmp/dc-2141/sc090/c0078-95b69c55/check-0150478e.log). It closes on hv's word by eye, which vc relays: Desks... ticking zeopit and Discover... offering it. Then intent issues close 0078 with the evidence: red in slot 50, green in slots 52 and 54, install_e2e.bats in slot 69 at 1..11 with bin/ matching HEAD, the dev install in slot 70 rendering zeopit ticked. (b) 0073 waits for arca_swift 0.1.1's tag, which gtools-ic announces once hv gives the tag word. 0.1.1 is settled: issue 0002's build fix alone (7fb5027), with no API or library change; issue 0001 closed with no code, since the About window does come to the front (hv's check). Then, in ~/Devel/scratch/utilz-ic/wt-0073, banked as runs/0073-wip.patch with sha256 13697f10: rebase on main's head (0078 is in); set project.yml's minorVersion to 0.1.1; move 0078's CHANGELOG line into date order (the section runs oldest first); a booked xcodebuild -resolvePackageDependencies, with the shim's -project, -derivedDataPath, SYMROOT, OBJROOT and SHARED_PRECOMPS_DIR, so that Package.resolved pins 0.1.1 or later with its revision; the build through the shim showing it reads that pin; the final build and test; dc's shellcheck 0.9.0; vc's read, naming the one recommendation left; gtools-ic's review; menuz 0.4.0. (c) 0074 is approved as runs/0074-final.patch, sha256 9e8f0886, in wt-0074. It lands after 0073, re-applied on 0073's head with VERSION 0.4.0 to 0.4.1, after one booked test run, by path. (d) 0072: hold 3. Every run books with gtools-vc (START, GO, END, light or heavy). No pushes."
+  }
+}

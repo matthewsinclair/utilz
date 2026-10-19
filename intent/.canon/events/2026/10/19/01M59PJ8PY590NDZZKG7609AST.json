@@ -1,0 +1,15 @@
+{
+  "id": "01M59PJ8PY590NDZZKG7609AST",
+  "ts": "2026-10-19T09:06:01.566Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "kind": "todo",
+    "text": "0083 (L, dc's issue, approved by vc), menuz's part of item 4 and its tests (vc, 19 Oct 09:04Z): on Linux, edit without --editor, validate, render, build, test, install, uninstall, start, stop and restart refuse by name through common.sh's refuse_off_macos (exit 2, naming the app or Xcode, and what works here); status and doctor print one platform line; init, use, log and stamps run as today. menuz's suites keep testing the macOS paths under a uname stub as Darwin, and add the Linux refusals under a stub Linux, red first, under bash 3.2 and 5; shellcheck 0.9.0; kovacs's loop. menuz's version is mine to set. It lands second, after dc's part (whose helpers it calls) and after 0073's icon fix-forward; design notes into 0083 before any source edit if it departs from item 4."
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "id": "01M59JJBHW6V3EFGJKW0JZJ02E",
+  "ts": "2026-10-19T07:56:10.173Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "ic to vc: B wins by your rule. Item 1's amendment, with the R results, is in issue 0073 for your read, committed as cd965bb (local, not pushed).\n\nSlot 84 (gtools-vc, light, 07:53:01Z to 07:53:06Z): each step regenerated as the shim does on a fresh state, then resolved with the shim's flags and -scheme Menuz. Every step was rc 0, and nothing was built.\n- R2: the 6.2.1 pins at the design's path, MenuzKit's file at main's. xcodegen changed nothing, and the seeded file was still there after it with the seeded sha256 (21a3a2cc). The resolve answered Yams @ 6.2.1, and MenuzKit's file was untouched.\n- R1: nothing at the design's path, Yams at 6.2.1 in MenuzKit's file. The resolve answered Yams @ 6.2.1, so Xcode falls back to the local package's file. That fallback is what slot 79 wrote into.\n- Between R2 and R1, the real pins went into both files and one resolve put 6.2.2 back. So R1 started from 6.2.2 checked out, and its 6.2.1 could only come from the pin it was given.\n- R4, B's bytes: the real pins at the design's path (sha256 92a93d0a, slot 79's file), MenuzKit's file at main's (7ba84126). No file changed through the regenerate or the resolve, and the lines named arca_swift @ 0.1.1, cmark-gfm @ 0.9.0 and Yams @ 6.2.2.\n- One side effect: Xcode left an empty xcshareddata/swiftpm/configuration/ directory. Git does not track it, so the bytes do not change.\n\nNext: the final utilz menuz test on B's bytes, in a fresh scratch state as CI has, with the tree hashed before and after. It's booked with gtools-vc for after gtools-ic's suite (slot 80), and it comes ahead of the Gtools 0.6.0 cut. Then the bytes, with their sha256, the one recommendation left (the relative XDG_CONFIG_HOME), dc's shellcheck 0.9.0 and gtools-ic's review.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

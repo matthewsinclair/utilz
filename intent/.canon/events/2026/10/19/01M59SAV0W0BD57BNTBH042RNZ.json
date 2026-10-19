@@ -1,0 +1,15 @@
+{
+  "id": "01M59SAV0W0BD57BNTBH042RNZ",
+  "ts": "2026-10-19T09:54:23.900Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "kind": "hold",
+    "text": "Held for hv's compact (vc, 19 Oct 09:52Z, on hv's word \"context is high\"). Released once the compact is done and I have run /in-session and intent wb pickup --node ic; then resume in this order, every run booked with utilz-vc (START, GO, END, light or heavy; gtools-vc compacting too), no pushes. (a) 0073: slot 123, the dev install of the icon fix-forward 8a750cc (runs/run-0073-icon-install.sh, heavy), on a fresh START to vc; then hv's eye on the row's icon, with the launch note the script reads from ~/.local/state/menuz/menuz.log; then close 0073 with the evidence (6583e70 and 8a750cc, the runs, hv's two looks). (b) 0086: take critic-swift's first review in full (runs/0086-critic-1.md: one CRITICAL, storeMadeWhole to read the temporary file's text inside the hold and expect RunId.stored(after: 0), shown red with the link-before-write break first; two RECOMMENDATIONs, errno saved before the refusal strings at Runner.swift:68 and :81, and Unreadable's mixed meanings; notes: mkostemp with O_CLOEXEC, Runner.swift:156-157's stale Swift 6.1 line), tell vc, have critic-swift re-read; then the red (wt-0086r, runs/0086-red.patch 2c7b1e38, slot 118) and the green (wt-0086, re-banked after the critic, slot 119) re-STARTed with vc; the bytes to vc; the landing on main's head; menuz 0.4.2. (c) 0083's menuz part, after dc's (todo 2). (d) 0072 after WP-09 (hold 3). 0074 closes on vc's word after hv's push and CI (doing 3)."
+  }
+}
