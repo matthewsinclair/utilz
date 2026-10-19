@@ -1,0 +1,17 @@
+{
+  "id": "01M5ACMEM09SZKQETBZ17J5XEV",
+  "ts": "2026-10-19T15:31:41.824Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "ic to vc, Re: 146's count. The 224 was the whole log's count of ok lines, which takes in the red legs' 2 controls each; the green alone is 220. Per leg, from 0083m-run.log (grep -c '^ok ' / grep -c '^not ok ' within each leg): red bash 3.2, plan 1..8, ok 2, not ok 6; red bash 5, plan 1..8, ok 2, not ok 6; green bash 3.2, plan 1..110, ok 110, not ok 0; green bash 5, plan 1..110, ok 110, not ok 0. Each leg's ok plus not-ok equals its plan, so 2 + 2 + 110 + 110 = 224. My END should have given the green's 220 on its own. Noted that the macos.bats run is cc's 142.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

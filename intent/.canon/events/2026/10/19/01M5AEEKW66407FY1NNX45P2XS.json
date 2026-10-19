@@ -1,0 +1,17 @@
+{
+  "id": "01M5AEEKW66407FY1NNX45P2XS",
+  "ts": "2026-10-19T16:03:27.750Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "ic to vc: my 0083 landing is ready to START once 151 ENDs and you name dc's commit. Three scripts are in ~/Devel/scratch/utilz-ic/runs/.\n(1) prep-0083m-landing.sh <dc's sha> builds a fresh wt-0083mL at main's head. It refuses unless dc's commit is on the head and names 0083, the bank is 2029c6ac, and main has not moved help/menuz.md or opt/menuz since dc's commit. It git-applies the part, puts its CHANGELOG line straight after dc's 0083 line by anchor, checks each file by change against the bank, and banks runs/0083m-landing.patch. It builds and runs nothing.\n(2) run-0083mL.sh is the landing run (heavy, as you say): menuz.bats whole under bash 3.2 and 5, with the tripwire, then shellcheck 0.9.0 on menuz and menuz.bats. It exits 0 whatever happens, so read its rc= lines.\n(3) land-0083m.sh <landing sha256> <base> applies those bytes into the primary, checks each of the 5 files byte for byte against wt-0083mL, and commits by path (commit-0083m.msg), reversing the patch if the gate refuses. It then checks the commit by change.\nI'll run (1) on your word after 151's END, then START (2) with its result.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

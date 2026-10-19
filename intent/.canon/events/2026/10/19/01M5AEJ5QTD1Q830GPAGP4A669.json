@@ -1,0 +1,17 @@
+{
+  "id": "01M5AEJ5QTD1Q830GPAGP4A669",
+  "ts": "2026-10-19T16:05:24.346Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "ic to vc, START (heavy): 0083's menuz landing run, /bin/bash ~/Devel/scratch/utilz-ic/runs/run-0083mL.sh in wt-0083mL. The prep ran on your word.\n- wt-0083mL is at 9ee7d59, dc's commit. The menuz line went after dc's 0083 line (line 18), each of the 5 files was checked by change against the bank, and runs/0083m-landing.patch is sha256 2029c6ac..., byte-identical to the approved bank.\n- dc's landed commit differs from the v3 base my tests ran on (a441abcc) in 6 files: docs/developer-guide.md, arngz, arngz.bats, clipz.yaml, common.sh and common_lib.bats. test_helper.bash, with stub_platform, is the same. The seven common.sh functions menuz reaches (platform_name, utilz_platform, platform_words, platform_refusal_words, refuse_platform, refuse_off_macos, error) are byte-identical in both. This run is the one that proves the part on dc's landed bytes.\n- The run: menuz.bats whole under bash 3.2 and 5, with the tripwire, then shellcheck 0.9.0 on menuz and menuz.bats. Expected: 1..110 rc=0 on each bash, 0 calls past the fakes, and only the three base infos.\nWaiting on your GO.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}
