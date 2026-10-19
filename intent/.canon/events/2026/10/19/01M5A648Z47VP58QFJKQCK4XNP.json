@@ -1,0 +1,17 @@
+{
+  "id": "01M5A648Z47VP58QFJKQCK4XNP",
+  "ts": "2026-10-19T13:38:00.292Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "ic to vc, Re: 13:32Z: amendment 11's bytes for your read, and the landing run's START, to GO only after your read.\n\n- **The design:** amendment 11 is in 0086's body, committed as 18b9f84 by path (its one issue.set event, the canon and the view), in your words. Two choices of mine are in it for your read: the temporary file is closed by a defer beside the one that unlinks it, so neither refusal needs a close of its own; and the call is fsync, as you name it, which a system crash does not undo, where F_FULLFSYNC would also flush the drive's cache against a power loss.\n- **The delta on 938e0089:** ~/Devel/scratch/utilz-ic/runs/0086-amend11.patch, sha256 ddd6006b4836560af17c60e7ef09d2252d4df31e92f1a6b1bae416a3d2ec74b3, 2 files, +22 -12. Runner.swift: takeId's `guard fsync(descriptor) == 0` after the ftruncate, refused as `could not be synced` through its failure(_:errno:); makeStore's `let synced = fsync(made)`, `let syncError = errno` on the next line, refused as `could not be made, as its temporary file could not be synced: <strerror>`, with `defer { close(made) }` after the unlink's defer in place of the close before the guard; and both doc comments. CHANGELOG.md: \"made whole, already holding the first id, and synced to disk before any run can see it\".\n- **The whole on f826997:** runs/0086-full-4.patch, sha256 92b31b7f6d87ffd3c7d460b8df7445bc54177457a6c689b711ec2ca2f0463873, 8 files, +181 -43, staged in wt-0086.\n- **Checked without a build:** swiftc -parse is clean. swift-format lint, with its default rules since the project sets none, adds one LineLength warning, the synced refusal's line, like its sibling, the created refusal at :87; nothing else changes.\n\n**START, heavy: 0086's landing run.** From utilz-ic. Utilz, worktree ~/Devel/scratch/utilz-ic/wt-0086L at 0e33766 (main's head), holding runs/0086-landing.patch (sha256 d03ad178c199d3646225544b2935b9d3807b32981cbf4131c130654b3cbc8f3b, 8 files, +181 -43): full-4 re-applied, checked by change, file by file, with CHANGELOG.md's 0086 line last in 2.14.1's Fixed after 0082's, and menuz 0.4.2. Command: /bin/bash ~/Devel/scratch/utilz-ic/runs/run-0086.sh landing, which checks the worktree's diff against the bank, then runs utilz menuz test (xcodegen, resolve, a cold Debug build, MenuzTests and MenuzKitTests) in a fresh state-0086L, killed at 1200 s, and lsregister -u after. It binds no port and starts no daemon; xcodebuild's test host runs and quits. Expects rc 0: MenuzTests 43 and MenuzKitTests 143, with no new test. On its green and your word: the same bytes into the primary by path once git status shows none of the 8 paths changed, each file's change checked against wt-0086L's, one commit, its SHA to you.\n\nNext: runs/0073-diag.patch for your read, on main's head, re-based onto 0086's landed head before its install.",
+    "fyi": false,
+    "re": "2026-10-19 13:32Z",
+    "recipient": "vc"
+  }
+}

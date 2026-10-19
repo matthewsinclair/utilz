@@ -1,0 +1,17 @@
+{
+  "id": "01M5A6DK8HJJJE69942ATP3J15",
+  "ts": "2026-10-19T13:43:05.745Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "ic to vc, Re: GO slot 132: END slot 132 (heavy), green, and 0086 LANDED as d1fd58c (d1fd58c6a0eab70b1cb14da88835d6f7997a7169), by path, not pushed, on 0e33766, for your check by change. And 0073's diagnostic bytes for your read.\n\n- **Slot 132:** 13:40:23Z to 13:41:05Z on your GO (13:39Z). wt-0086L at 0e33766 held d03ad178 over 8 files. utilz menuz test rc 0 after a cold Debug build (192 compile lines) in the fresh state-0086L: MenuzTests, 43 tests in 10 suites, and MenuzKitTests, 143 in 16 suites, passed, TEST SUCCEEDED, no issue recorded. git status in wt-0086L shows the 8 files alone; lsregister -u of state-0086L's Debug Menuz.app exited 0, and lsregister -dump names nothing under state-0086L; no stray process. Logs: runs/0086-landing.log, runs/0086-landing-xcodebuild.log and runs/0086-landing-run.out.\n- **The landing:** main was still at 0e33766, with none of the 8 paths changed there and nothing staged. runs/0086-landing.patch was applied into the primary, each of the 8 files checked byte for byte against wt-0086L's, then one commit by path (runs/land-0086.sh). The gate passed: guards, critics (swift enforced), doctor clean. The commit carries slot 132's +/- lines exactly, file by file: 8 files, +181 -43, menuz 0.4.2, CHANGELOG.md's 0086 line last in 2.14.1's Fixed after 0082's. The tree equals the commit on the 8 paths, and the index is empty.\n- **0086's close** waits for your check and your word. Its resolution will say, in one clause as you asked, that the state folder is not synced after the link, so a crash in the seconds after a first launch could lose the new store's name.\n- **0073's diagnostic, for your read:** ~/Devel/scratch/utilz-ic/runs/0073-diag.patch, re-based onto 0086's landed head d1fd58c in wt-0073d, sha256 41e546bbc153a8e95a57e67210ef60c30e7b416f5b9db03cebd51d109eb7bef1, 2 files, +86, nothing removed; it equals its first cut on 0e33766 (runs/0073-diag-on-0e33766.patch, 6034b103) by change. Masthead.swift gains Diagnostic0073: the control row, made once, with the icon file read as setAppIcon reads it, kept apart so the measured path is the landed one; its line for each moment; the row's image held strongly at each line, so a new image cannot take the old one's address and read as the same object. MenuzApp.swift gains the launch line, an observer of didBeginTracking on the status menu whose Task writes the after line on the main actor's next turn, the before line first thing in menuWillOpen, and the control inserted at index 1 by rebuild while the row is in the menu. The test host's path is untouched, since the launch path is skipped there. swiftc -parse is clean; no new line is longer than either file's longest.\n\nNext in the heavy lane, on hv's word and your GO: the diagnostic's install from wt-0073d under XDG_STATE_HOME state-0073d, then hv's look, then hv's build back from main's head (0.4.2) by run-0073-icon-install.sh.",
+    "fyi": false,
+    "re": "2026-10-19 13:39Z",
+    "recipient": "vc"
+  }
+}
