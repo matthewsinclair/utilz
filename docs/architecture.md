@@ -320,7 +320,7 @@ Utilities that want to be auto-exposed to editor bridges (Emacs, and future VSCo
 - `flags`: a list of always-pass flags (rarely used).
 - `prompts`: optional suggestions shown to the user when they hit `C-u` to add extra flags.
 
-The manifest is exposed as TSV via `utilz integration commands` — one row per utility that has an `integration:` block. Format: `name<TAB>description<TAB>input<TAB>output<TAB>flags`. The single walker is `emit_integration_tsv` in `opt/utilz/lib/common.sh` (Highlander: no editor parses YAML itself; the TSV is the only cross-boundary contract).
+The manifest is exposed as TSV via `utilz integration commands` — one row per utility that has an `integration:` block. Format: `name<TAB>description<TAB>input<TAB>output<TAB>flags`. The walker is `emit_integration_tsv` in `opt/utilz/lib/common.sh`, and the integration block's rules live in one function beside it, `integration_fields`, which `emacs_doctor` asks too (Highlander: no editor parses YAML itself; the TSV is the only cross-boundary contract).
 
 Editor-specific installers live alongside the neutral manifest: `utilz emacs install` and `utilz emacs doctor` ship today; additional editor families (`utilz vscode …`, `utilz vim …`, `utilz zed …`) slot in parallel without needing a new walker.
 

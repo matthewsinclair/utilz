@@ -265,3 +265,136 @@ run_common_function() {
     }
   done
 }
+
+# ============================================================================
+# THE INTEGRATION WALKERS ON A YAML THEY CANNOT USE (issue 0080)
+# ============================================================================
+#
+# emit_integration_tsv and emacs_doctor read each utility's yaml under
+# bin/utilz's `set -euo pipefail`. A first read with no || ended the verb at a
+# yaml yq could not read, before a word, and `join` did the same at flags that
+# were not a list. Each test runs the walker strict, as bin/utilz does, over a
+# scratch tree and never the checkout. alpha's and gamma's blocks are good,
+# omega has none, and each test gives beta the yaml it is about. gamma and
+# omega sort after beta, so a walker that stopped at beta's refusal fails.
+
+make_integration_home() {
+  local home="$BATS_TEST_TMPDIR/integration-home"
+  local name
+
+  mkdir -p "$home/bin" "$home/opt"
+  printf '#!/usr/bin/env bash\nexit 0\n' > "$home/bin/utilz"
+  chmod +x "$home/bin/utilz"
+  for name in alpha beta gamma omega; do
+    mkdir -p "$home/opt/$name"
+    printf '#!/usr/bin/env bash\nexit 0\n' > "$home/opt/$name/$name"
+    chmod +x "$home/opt/$name/$name"
+    ln -s utilz "$home/bin/$name"
+  done
+  cat > "$home/opt/alpha/alpha.yaml" <<'YAML'
+name: alpha
+description: Fake alpha for tests
+integration:
+  input: stdin
+  output: buffer
+  flags: [--x]
+YAML
+  cat > "$home/opt/gamma/gamma.yaml" <<'YAML'
+name: gamma
+description: Fake gamma for tests
+integration:
+  input: file
+  output: message
+  flags: []
+YAML
+  printf 'name: omega\ndescription: Fake omega for tests\n' > "$home/opt/omega/omega.yaml"
+  echo "$home"
+}
+
+# gamma's row, which a walker emits only if it went on past beta.
+gamma_row() {
+  printf 'gamma\tFake gamma for tests\tfile\tmessage\t'
+}
+
+@test "emit_integration_tsv names a yaml it cannot read, skips it, and emits the rest (issue 0080)" {
+  local home
+  home="$(make_integration_home)"
+  printf 'name: beta\nintegration: [\n' > "$home/opt/beta/beta.yaml"
+
+  run_common_strict "$home" emit_integration_tsv
+  assert_success
+  assert_output_contains "$(printf 'alpha\tFake alpha for tests\tstdin\tbuffer\t--x')"
+  assert_output_contains "beta: beta.yaml cannot be read: "
+  refute_output_contains "$(printf 'beta\t')"
+  assert_output_contains "$(gamma_row)"
+}
+
+@test "emit_integration_tsv names an integration block that is not a map, and skips that utility (issue 0080)" {
+  local home
+  home="$(make_integration_home)"
+  printf 'name: beta\nintegration: [stdin, buffer]\n' > "$home/opt/beta/beta.yaml"
+
+  run_common_strict "$home" emit_integration_tsv
+  assert_success
+  assert_output_contains "beta: integration is a list, not a map; skipping"
+  refute_output_contains "$(printf 'beta\t')"
+  assert_output_contains "$(gamma_row)"
+}
+
+@test "emit_integration_tsv emits a block with no flags, with an empty flags column (issue 0080)" {
+  local home
+  home="$(make_integration_home)"
+  printf 'name: beta\ndescription: Fake beta\nintegration:\n  input: file\n  output: message\n' > "$home/opt/beta/beta.yaml"
+
+  run_common_strict "$home" emit_integration_tsv
+  assert_success
+  printf '%s\n' "$output" | grep -qxF "$(printf 'beta\tFake beta\tfile\tmessage\t')" ||
+    fail "Expected beta's row with an empty flags column. Actual output:\n$output"
+  assert_output_contains "$(gamma_row)"
+}
+
+@test "emit_integration_tsv names flags that are not a list, and skips that utility (issue 0080)" {
+  local home
+  home="$(make_integration_home)"
+  printf 'name: beta\nintegration:\n  input: file\n  output: message\n  flags: --file\n' > "$home/opt/beta/beta.yaml"
+
+  run_common_strict "$home" emit_integration_tsv
+  assert_success
+  assert_output_contains "beta: integration.flags is a string, not a list; skipping"
+  refute_output_contains "$(printf 'beta\t')"
+  assert_output_contains "$(gamma_row)"
+}
+
+@test "emit_integration_tsv skips an input outside the bridge's set, as emacs doctor refuses it (issue 0080)" {
+  local home
+  home="$(make_integration_home)"
+  printf 'name: beta\nintegration:\n  input: clipboard\n  output: message\n  flags: []\n' > "$home/opt/beta/beta.yaml"
+
+  run_common_strict "$home" emit_integration_tsv
+  assert_success
+  assert_output_contains "beta: integration.input is clipboard, not one of stdin, file, path, none; skipping"
+  refute_output_contains "$(printf 'beta\t')"
+  assert_output_contains "$(gamma_row)"
+}
+
+@test "emacs_doctor lists a yaml it cannot read as invalid, and finishes its report (issue 0080)" {
+  local home
+  home="$(make_integration_home)"
+  printf 'name: beta\nintegration: [\n' > "$home/opt/beta/beta.yaml"
+
+  run_common_strict "$home" emacs_doctor
+  assert_output_contains "    - beta (beta.yaml cannot be read: "
+  assert_output_contains "    - omega (opt/omega/omega.yaml)"
+  assert_output_contains "[3/3]"
+}
+
+@test "emacs_doctor lists flags that are not a list as invalid, as the manifest skips them (issue 0080)" {
+  local home
+  home="$(make_integration_home)"
+  printf 'name: beta\nintegration:\n  input: file\n  output: message\n  flags: --file\n' > "$home/opt/beta/beta.yaml"
+
+  run_common_strict "$home" emacs_doctor
+  assert_output_contains "    - beta (integration.flags is a string, not a list)"
+  assert_output_contains "    - omega (opt/omega/omega.yaml)"
+  assert_output_contains "[3/3]"
+}

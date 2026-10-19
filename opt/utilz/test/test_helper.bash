@@ -108,6 +108,20 @@ run_mdagg() {
   run "$UTILZ_BIN_DIR/mdagg" "$@"
 }
 
+# Run a common.sh function over the tree <home> as bin/utilz runs a verb:
+# `set -euo pipefail` first (bin/utilz:9), then the lib sourced from the tree
+# under test, then the function as a plain statement, under the first bash on
+# PATH (issue 0080). run_common_function and run_in_fake_home run non-strict,
+# so they cannot see a verb that strict mode ends at a failing assignment. The
+# paths and the words travel as arguments, never spliced into the script.
+# Usage: run_common_strict "$home" emit_integration_tsv
+run_common_strict() {
+  local home="$1"
+  shift
+  run bash -c 'set -euo pipefail; export UTILZ_HOME="$1"; source "$2/opt/utilz/lib/common.sh"; shift 2; "$@"' \
+    _ "$home" "$UTILZ_HOME" "$@"
+}
+
 # ============================================================================
 # TEST DATA CREATION
 # ============================================================================

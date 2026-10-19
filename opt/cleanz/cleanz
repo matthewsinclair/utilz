@@ -403,9 +403,13 @@ detect_tropes() {
       continue
     fi
 
+    # first_match is sliced in the shell, not by `printf | head -1` (issue
+    # 0080): head stopping early killed printf with SIGPIPE once the matches
+    # passed the 64 KiB pipe, and pipefail made that the end of cleanz, before
+    # its report. wc reads everything, so match_count's pipe cannot do that.
     if [[ -n "$matches" ]]; then
       match_count=$(printf '%s\n' "$matches" | wc -l | tr -d ' ')
-      first_match=$(printf '%s\n' "$matches" | head -1)
+      first_match=${matches%%$'\n'*}
     fi
 
     if [[ $match_count -gt 0 ]]; then
@@ -429,8 +433,11 @@ detect_tropes() {
       if [[ "$current_threshold" == "density" ]]; then
         detail="$match_count occurrences (threshold: $current_density)"
       else
-        local line_ref
-        line_ref=$(printf '%s' "$first_match" | sed 's/^\([0-9]*\):/line \1: /' | head -c 80)
+        # grep -n's "N:text" as "line N: text", cut at 80 characters, in the
+        # shell for first_match's reason: `sed | head -c 80` died of SIGPIPE on
+        # one matching line longer than the pipe (issue 0080).
+        local line_ref="line ${first_match%%:*}: ${first_match#*:}"
+        line_ref=${line_ref:0:80}
         detail="$line_ref"
       fi
 

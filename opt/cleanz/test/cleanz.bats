@@ -667,6 +667,38 @@ skip_if_no_exiftool() {
   assert_output_contains "No tropes detected"
 }
 
+# THE REPORT OUTLIVES A LONG TEXT (issue 0080). detect_tropes runs under
+# `set -euo pipefail`, and it sliced its matches with `x=$(printf | head ...)`.
+# Once the text a slice read passed the 64 KiB pipe, printf or sed died of
+# SIGPIPE, pipefail made 141 the assignment's status, and cleanz exited 141
+# with the cleaned text written and no report. Each test asserts the exact
+# line ref, so a slice that kept more than the first line fails it. The text
+# is ASCII: cleanz sets no locale, and a substring counts characters only in
+# a UTF-8 one.
+
+@test "cleanz --detrope reports on a text whose matches outgrow the pipe (issue 0080)" {
+  local test_file="$BATS_TEST_TMPDIR/many.txt"
+  awk 'BEGIN { for (i = 1; i <= 20000; i++) printf "Line %d: we delve into the matter.\n", i }' > "$test_file"
+  run bash -c "'$UTILZ_BIN_DIR/cleanz' --detrope -o '$BATS_TEST_TMPDIR/out.txt' '$test_file' 2>&1"
+  assert_success
+  printf '%s\n' "$output" | grep -qxE '  \[MEDIUM\] +WC-02 delve-and-friends +line 1: Line 1: we delve into the matter\.' ||
+    fail "Expected WC-02's ref to be line 1 alone. Actual output:\n$output"
+  # grep -x reads a ref that kept more lines as several lines, the first of
+  # them right, so the line after it is checked too. With -o the cleaned text
+  # is in out.txt, so grep -n's "2:" can reach the report only through a ref
+  # that kept line 2.
+  refute_output_contains "2:Line 2:"
+}
+
+@test "cleanz --detrope reports a match on one line longer than the pipe (issue 0080)" {
+  local test_file="$BATS_TEST_TMPDIR/long.txt"
+  { head -c 300000 /dev/zero | tr '\0' x; printf ' we delve here\n'; } > "$test_file"
+  run bash -c "'$UTILZ_BIN_DIR/cleanz' --detrope -o '$BATS_TEST_TMPDIR/out.txt' '$test_file' 2>&1"
+  assert_success
+  printf '%s\n' "$output" | grep -qxE '  \[MEDIUM\] +WC-02 delve-and-friends +line 1: x{72}' ||
+    fail "Expected WC-02's ref cut at 80 characters. Actual output:\n$output"
+}
+
 @test "cleanz --detrope works with stdin" {
   run bash -c "printf 'We must delve into this problem.\n' | '$UTILZ_BIN_DIR/cleanz' --detrope 2>&1"
   assert_success

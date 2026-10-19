@@ -217,7 +217,7 @@ utilz integration commands | column -t -s$'\t'
 utilz integration commands
 ```
 
-The walker lives in `opt/utilz/lib/common.sh` as `emit_integration_tsv` and is the single source of truth (Highlander). Utilities without an `integration:` block are silently omitted.
+The walker lives in `opt/utilz/lib/common.sh` as `emit_integration_tsv`. The block's rules live beside it in `integration_fields`, which `utilz emacs doctor` asks too, so the manifest and the doctor cannot disagree (Highlander). Utilities without an `integration:` block are left out without a word. A utility whose yaml yq cannot read, whose `integration:` is not a map, whose `input` or `output` is missing or outside the bridge's sets, or whose `flags` is not a list is named on stderr and left out of the TSV. `flags` may be absent, for none.
 
 ### `utilz emacs <verb>`
 

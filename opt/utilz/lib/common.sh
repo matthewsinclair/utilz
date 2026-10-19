@@ -144,6 +144,46 @@ get_util_metadata() {
   echo "$result"
 }
 
+# Why yq cannot read <yaml>, for a walker whose read of the file has just
+# failed, to name the reason in its refusal (issue 0080). A yaml that does not
+# parse gets yq's own first line of complaint, without the "Error: " it opens
+# with. One that parses gets what about its shape stopped the read: more than
+# one document, or a top level that is not a map, where every read asks for a
+# key. It returns 0 whatever yq does: a helper that died here would be the
+# silent exit it exists to name.
+yaml_read_error() {
+  local why="" top=""
+  if ! why=$(yq eval 'true' "$1" 2>&1 >/dev/null); then
+    why=${why%%$'\n'*}
+    why=${why#Error: }
+    printf '%s\n' "${why:-yq gave no reason}"
+    return 0
+  fi
+  if ! top=$(yq eval 'type' "$1" 2>/dev/null); then
+    top=""
+  fi
+  if [[ "$top" == *$'\n'* ]]; then
+    echo "it holds more than one document"
+  elif [[ -n "$top" && "$top" != '!!map' ]]; then
+    echo "its top level is $(yaml_type_words "$top"), not a map"
+  else
+    echo "it parses, but yq could not read the part asked for"
+  fi
+}
+
+# A yq type tag in words, for a refusal: !!str is "a string".
+yaml_type_words() {
+  case "$1" in
+    '!!str') echo "a string" ;;
+    '!!map') echo "a map" ;;
+    '!!seq') echo "a list" ;;
+    '!!int'|'!!float') echo "a number" ;;
+    '!!bool') echo "a boolean" ;;
+    '') echo "nothing" ;;
+    *) echo "a ${1#!!}" ;;
+  esac
+}
+
 # Show help for a utility
 show_help() {
   local util="${1:-utilz}"
@@ -351,6 +391,29 @@ check_app() {
     warn "$out"
   fi
   return "$rc"
+}
+
+# How many entries a yaml's dependency <list> holds, for doctor's sweep: 0
+# when it is absent or null (issue 0080). A <list> that is not a list prints
+# why and returns 1, where `dependencies: jq` was once read as two entries with
+# empty names. A yaml yq cannot read, or whose answer is not one type, returns
+# 2, for the caller to name with yaml_read_error. Call it as
+# `x=$(dependency_count ...) || status=$?`: each status is an answer, and a
+# plain statement under set -e would end its caller at the first that is not 0.
+dependency_count() {
+  local yaml_file="$1" list="$2" kind
+  if ! kind=$(yq eval ".${list} | type" "$yaml_file" 2>/dev/null) ||
+    [[ -z "$kind" || "$kind" == *$'\n'* ]]; then
+    return 2
+  fi
+  case "$kind" in
+    '!!seq') yq eval ".${list} | length" "$yaml_file" 2>/dev/null || return 2 ;;
+    '!!null') echo 0 ;;
+    *)
+      printf '%s is %s, not a list\n' "$list" "$(yaml_type_words "$kind")"
+      return 1
+      ;;
+  esac
 }
 
 # Whether one declared dependency is present: an entry carrying `app: <bundle
@@ -776,7 +839,8 @@ run_doctor() {
   local missing_deps=()
   local missing_dep_info=()
   local optional_missing=()
-  local yaml_file dep_count dep_name dep_install dep_purpose dep_required i
+  local yaml_file dep_count dep_name dep_install dep_purpose dep_required dep_status dep_list i
+  local refused_lists=0
 
   # yq is reported by hand, and first: it is the framework's own hard
   # dependency and the only YAML parser, so nothing below can read a single
@@ -798,37 +862,57 @@ run_doctor() {
         continue
       fi
 
-      dep_count=$(yq eval '.dependencies | length' "$yaml_file" 2>/dev/null)
-      if [[ "$dep_count" =~ ^[0-9]+$ ]]; then
+      # EACH LIST IS READ, OR REFUSED BY NAME (issue 0080). This was the first
+      # read of each yaml, with no ||, so a yaml yq could not read ended doctor
+      # here under bin/utilz's set -e, before a word; and a list that was not a
+      # list was read as one of its length. A refusal counts as an issue, and a
+      # yaml that cannot be read is left for the next utility. One loop takes
+      # both lists: an entry of optional_dependencies is optional by its list,
+      # and one of dependencies when it says required: false.
+      for dep_list in dependencies optional_dependencies; do
+        dep_status=0
+        dep_count=$(dependency_count "$yaml_file" "$dep_list") || dep_status=$?
+        case $dep_status in
+          0) ;;
+          2)
+            # continue 2 stops both lists, so the words and the count say both,
+            # unless the yaml failed only at the second, after the first read.
+            if [[ "$dep_list" == dependencies ]]; then
+              error "$name: $name.yaml cannot be read, so neither of its dependency lists is checked: $(yaml_read_error "$yaml_file")"
+              refused_lists=$((refused_lists + 2))
+            else
+              error "$name: $name.yaml cannot be read, so its optional dependencies are not checked: $(yaml_read_error "$yaml_file")"
+              refused_lists=$((refused_lists + 1))
+            fi
+            issues=$((issues + 1))
+            continue 2
+            ;;
+          *)
+            error "$name: $dep_count, so it is not checked"
+            issues=$((issues + 1))
+            refused_lists=$((refused_lists + 1))
+            continue
+            ;;
+        esac
         for ((i = 0; i < dep_count; i++)); do
-          dep_name=$(yq eval ".dependencies[$i].name" "$yaml_file" 2>/dev/null)
-          if dependency_present "$yaml_file" dependencies "$i" "$dep_name"; then
+          dep_name=$(yq eval ".${dep_list}[$i].name" "$yaml_file" 2>/dev/null)
+          if dependency_present "$yaml_file" "$dep_list" "$i" "$dep_name"; then
             continue
           fi
-          dep_install=$(yq eval ".dependencies[$i].install" "$yaml_file" 2>/dev/null)
-          dep_required=$(yq eval ".dependencies[$i].required" "$yaml_file" 2>/dev/null)
+          dep_install=$(yq eval ".${dep_list}[$i].install" "$yaml_file" 2>/dev/null)
+          dep_required=false
+          if [[ "$dep_list" == dependencies ]]; then
+            dep_required=$(yq eval ".dependencies[$i].required" "$yaml_file" 2>/dev/null)
+          fi
           if [[ "$dep_required" == "false" ]]; then
-            dep_purpose=$(dependency_purpose "$yaml_file" dependencies "$i")
+            dep_purpose=$(dependency_purpose "$yaml_file" "$dep_list" "$i")
             optional_missing+=("$dep_name|$dep_install|$dep_purpose|$name")
           else
             missing_deps+=("$dep_name")
             missing_dep_info+=("$dep_name|$dep_install|$name")
           fi
         done
-      fi
-
-      dep_count=$(yq eval '.optional_dependencies | length' "$yaml_file" 2>/dev/null)
-      if [[ "$dep_count" =~ ^[0-9]+$ ]]; then
-        for ((i = 0; i < dep_count; i++)); do
-          dep_name=$(yq eval ".optional_dependencies[$i].name" "$yaml_file" 2>/dev/null)
-          if dependency_present "$yaml_file" optional_dependencies "$i" "$dep_name"; then
-            continue
-          fi
-          dep_install=$(yq eval ".optional_dependencies[$i].install" "$yaml_file" 2>/dev/null)
-          dep_purpose=$(dependency_purpose "$yaml_file" optional_dependencies "$i")
-          optional_missing+=("$dep_name|$dep_install|$dep_purpose|$name")
-        done
-      fi
+      done
     done < <(printf '%s\n' "utilz"; each_utility)
 
     # ONE LINE PER NAME, naming every utility that declares it: glow is
@@ -930,6 +1014,10 @@ run_doctor() {
       fi
     done
     issues=$((issues + 1))
+  elif [[ $refused_lists -gt 0 ]]; then
+    # Not "all installed": a list refused above was never read (issue 0080).
+    # Each was counted as an issue where it was refused.
+    warn "$refused_lists dependency list(s) not checked, named above; every dependency that was read is installed"
   else
     success "All required dependencies installed"
   fi
@@ -1366,44 +1454,100 @@ run_tests() {
 # INTEGRATION METADATA & EDITOR BRIDGES
 # ============================================================================
 
+# THE INTEGRATION BLOCK'S RULES, IN ONE PLACE (issue 0080). Both walkers of
+# the integration blocks ask this, emit_integration_tsv and emacs_doctor, so
+# the manifest and the doctor cannot disagree about a block. The rules: the
+# yaml reads; the block is a map; input and output are present and inside the
+# bridge's sets; and flags is a list, or absent for none.
+#
+# For a block it accepts, prints its description, input, output and flags,
+# tab-separated, and returns 0. For one it refuses, prints the reason and
+# returns 1. A yaml with no integration block prints nothing and returns 2.
+# Call it as `x=$(integration_fields ...) || status=$?`: each status is an
+# answer, and a plain statement under set -e would end its caller at the
+# first that is not 0.
+integration_fields() {
+  local name="$1" yaml_file="$2"
+  local kind desc input output flags
+
+  if ! kind=$(yq eval '.integration | type' "$yaml_file" 2>/dev/null) ||
+    [[ -z "$kind" || "$kind" == *$'\n'* ]]; then
+    printf '%s.yaml cannot be read: %s\n' "$name" "$(yaml_read_error "$yaml_file")"
+    return 1
+  fi
+  case "$kind" in
+    '!!null') return 2 ;;
+    '!!map') ;;
+    *) echo "integration is $(yaml_type_words "$kind"), not a map" ; return 1 ;;
+  esac
+  if ! desc=$(yq eval '.description' "$yaml_file" 2>/dev/null) ||
+    ! input=$(yq eval '.integration.input' "$yaml_file" 2>/dev/null) ||
+    ! output=$(yq eval '.integration.output' "$yaml_file" 2>/dev/null) ||
+    ! kind=$(yq eval '.integration.flags | type' "$yaml_file" 2>/dev/null); then
+    printf '%s.yaml cannot be read: %s\n' "$name" "$(yaml_read_error "$yaml_file")"
+    return 1
+  fi
+  if [[ "$desc" == "null" ]]; then desc=""; fi
+
+  if [[ -z "$input" || "$input" == "null" ]]; then
+    echo "integration.input missing or null"
+    return 1
+  fi
+  case "$input" in
+    stdin|file|path|none) ;;
+    *) echo "integration.input is $input, not one of stdin, file, path, none" ; return 1 ;;
+  esac
+  if [[ -z "$output" || "$output" == "null" ]]; then
+    echo "integration.output missing or null"
+    return 1
+  fi
+  case "$output" in
+    replace|buffer|message|discard) ;;
+    *) echo "integration.output is $output, not one of replace, buffer, message, discard" ; return 1 ;;
+  esac
+  case "$kind" in
+    '!!seq')
+      if ! flags=$(yq eval '.integration.flags | join(",")' "$yaml_file" 2>/dev/null); then
+        echo "integration.flags is a list yq cannot join"
+        return 1
+      fi
+      ;;
+    '!!null') flags="" ;;
+    *) echo "integration.flags is $(yaml_type_words "$kind"), not a list" ; return 1 ;;
+  esac
+
+  printf '%s\t%s\t%s\t%s\n' "$desc" "$input" "$output" "$flags"
+}
+
 # Emit a TSV manifest of utilities that declare an `integration:` block.
 # Columns (tab-separated): name  description  input  output  flags
-# `flags` is a comma-separated list (empty for default `flags: []`).
+# `flags` is a comma-separated list, empty when the block declares none.
 # Skips: utilz core, utilities without an integration block, non-symlinks.
-# Warns (to stderr) and skips utilities whose integration values are missing.
+# Warns (to stderr) and skips a utility whose block integration_fields
+# refuses, naming the reason: a yaml yq cannot read, a block that is not a
+# map, an input or output missing or outside the bridge's sets, or flags that
+# are not a list.
 #
-# This is the single walker of the YAML corpus (Highlander). Every editor
-# integration (Emacs, future VSCode / Zed / Vim) consumes this TSV directly.
+# What is single is the block's RULES: integration_fields holds them, and this
+# and emacs_doctor both ask it (Highlander). This TSV is the only contract
+# that crosses to an editor: every integration (Emacs, future VSCode / Zed /
+# Vim) consumes it directly, and none reads the yamls itself.
 emit_integration_tsv() {
   require_yq || return 1
 
-  local name yaml_file has_integration desc input output flags
+  local name yaml_file fields status
 
   while IFS= read -r name; do
     yaml_file="$UTILZ_HOME/opt/$name/$name.yaml"
     if [[ ! -f "$yaml_file" ]]; then continue; fi
 
-    has_integration=$(yq eval '.integration' "$yaml_file" 2>/dev/null)
-    if [[ "$has_integration" == "null" ]]; then continue; fi
-
-    desc=$(yq eval '.description' "$yaml_file" 2>/dev/null)
-    input=$(yq eval '.integration.input' "$yaml_file" 2>/dev/null)
-    output=$(yq eval '.integration.output' "$yaml_file" 2>/dev/null)
-    flags=$(yq eval '.integration.flags | join(",")' "$yaml_file" 2>/dev/null)
-
-    if [[ "$flags" == "null" ]]; then flags=""; fi
-    if [[ "$desc" == "null" ]]; then desc=""; fi
-
-    if [[ -z "$input" || "$input" == "null" ]]; then
-      warn "$name: integration.input missing or null; skipping"
-      continue
-    fi
-    if [[ -z "$output" || "$output" == "null" ]]; then
-      warn "$name: integration.output missing or null; skipping"
-      continue
-    fi
-
-    printf '%s\t%s\t%s\t%s\t%s\n' "$name" "$desc" "$input" "$output" "$flags"
+    status=0
+    fields=$(integration_fields "$name" "$yaml_file") || status=$?
+    case $status in
+      0) printf '%s\t%s\n' "$name" "$fields" ;;
+      2) ;;
+      *) warn "$name: $fields; skipping" ;;
+    esac
   done < <(each_utility)
 }
 
@@ -1438,30 +1582,20 @@ emacs_doctor() {
 
   require_yq || return 1
 
-  local name yaml_file has_integration input output
+  # The block's rules are integration_fields', the manifest's own (issue
+  # 0080), so a block this lists as invalid is one the manifest leaves out.
+  local name yaml_file fields status
   while IFS= read -r name; do
     yaml_file="$UTILZ_HOME/opt/$name/$name.yaml"
     if [[ ! -f "$yaml_file" ]]; then continue; fi
 
-    has_integration=$(yq eval '.integration' "$yaml_file" 2>/dev/null)
-    if [[ "$has_integration" == "null" ]]; then
-      missing+=("$name")
-      continue
-    fi
-
-    input=$(yq eval '.integration.input' "$yaml_file" 2>/dev/null)
-    output=$(yq eval '.integration.output' "$yaml_file" 2>/dev/null)
-
-    case "$input" in
-      stdin|file|path|none) ;;
-      *) invalid+=("$name (input='$input')") ; continue ;;
+    status=0
+    fields=$(integration_fields "$name" "$yaml_file") || status=$?
+    case $status in
+      0) exposed=$((exposed + 1)) ;;
+      2) missing+=("$name") ;;
+      *) invalid+=("$name ($fields)") ;;
     esac
-    case "$output" in
-      replace|buffer|message|discard) ;;
-      *) invalid+=("$name (output='$output')") ; continue ;;
-    esac
-
-    exposed=$((exposed + 1))
   done < <(each_utility)
 
   # NOT BOUND IS NOT BROKEN (issue 0006, hv 2026-08-29). The bridge is opt-in,

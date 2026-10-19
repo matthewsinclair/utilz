@@ -405,6 +405,98 @@ EOF
   fi
 }
 
+# ----------------------------------------------------------------------------
+# doctor's dependency sweep on a yaml it cannot use (issue 0080)
+# ----------------------------------------------------------------------------
+#
+# The sweep's first read of each yaml had no ||, so under bin/utilz's
+# `set -euo pipefail` a yaml yq could not read ended doctor under its [6/7]
+# title, with no verdict. And a dependencies list that was not a list was read
+# as a list of its length: `dependencies: jq` checked two entries with empty
+# names. Each test runs run_doctor strict, as bin/utilz does, and checks that
+# the refusal adds exactly one issue to the same home before beta's yaml.
+
+# A good utility that sorts after beta, with one dependency no machine has:
+# doctor names it only if its sweep went on past beta.
+add_gamma() {
+  local home="$1"
+  mkdir -p "$home/opt/gamma"
+  printf '#!/usr/bin/env bash\nexit 0\n' > "$home/opt/gamma/gamma"
+  chmod +x "$home/opt/gamma/gamma"
+  printf 'name: gamma\nversion: 1.0.0\ndescription: Fake gamma for tests\ndependencies:\n  - name: zz-absent-0080\n    install: none\n' > "$home/opt/gamma/gamma.yaml"
+  ln -s utilz "$home/bin/gamma"
+}
+
+# The N of doctor's "Found N issue(s)" in $output, or 0 when it found none.
+doctor_issue_count() {
+  local n
+  n=$(printf '%s\n' "$output" | sed -n 's/.*Found \([0-9][0-9]*\) issue(s).*/\1/p')
+  printf '%s\n' "${n:-0}"
+}
+
+@test "run_doctor names a yaml it cannot read, and still reaches its verdict (issue 0080)" {
+  local home before
+  home="$(make_fake_home)"
+  add_gamma "$home"
+  run_common_strict "$home" run_doctor
+  before=$(doctor_issue_count)
+  printf 'name: beta\ndependencies: [\n' > "$home/opt/beta/beta.yaml"
+
+  run_common_strict "$home" run_doctor
+  assert_output_contains "beta: beta.yaml cannot be read, so neither of its dependency lists is checked: "
+  assert_output_contains "zz-absent-0080"
+  assert_output_contains "[7/7]"
+  [[ "$(doctor_issue_count)" -eq $((before + 1)) ]] ||
+    fail "Expected $((before + 1)) issues, one more than the $before before beta's yaml. Actual output:\n$output"
+}
+
+@test "run_doctor names a yaml whose top level is not a map (issue 0080)" {
+  local home before
+  home="$(make_fake_home)"
+  run_common_strict "$home" run_doctor
+  before=$(doctor_issue_count)
+  printf -- '- name: beta\n- version: 1.0.0\n' > "$home/opt/beta/beta.yaml"
+
+  run_common_strict "$home" run_doctor
+  assert_output_contains "beta: beta.yaml cannot be read, so neither of its dependency lists is checked: its top level is a list, not a map"
+  assert_output_contains "2 dependency list(s) not checked"
+  assert_output_contains "[7/7]"
+  [[ "$(doctor_issue_count)" -eq $((before + 1)) ]] ||
+    fail "Expected $((before + 1)) issues, one more than the $before before beta's yaml. Actual output:\n$output"
+}
+
+@test "run_doctor refuses dependencies that are not a list, by name, and does not call the rest installed (issue 0080)" {
+  local home before
+  home="$(make_fake_home)"
+  run_common_strict "$home" run_doctor
+  before=$(doctor_issue_count)
+  printf 'name: beta\nversion: 1.0.0\ndescription: Fake beta\ndependencies: jq\n' > "$home/opt/beta/beta.yaml"
+
+  run_common_strict "$home" run_doctor
+  assert_output_contains "beta: dependencies is a string, not a list, so it is not checked"
+  assert_output_contains "1 dependency list(s) not checked"
+  refute_output_contains "All required dependencies installed"
+  assert_output_contains "[7/7]"
+  [[ "$(doctor_issue_count)" -eq $((before + 1)) ]] ||
+    fail "Expected $((before + 1)) issues, one more than the $before before beta's yaml. Actual output:\n$output"
+}
+
+@test "run_doctor refuses optional_dependencies that are not a list, by name (issue 0080)" {
+  local home before
+  home="$(make_fake_home)"
+  add_gamma "$home"
+  run_common_strict "$home" run_doctor
+  before=$(doctor_issue_count)
+  printf 'name: beta\nversion: 1.0.0\ndescription: Fake beta\ndependencies: []\noptional_dependencies: {glow: brew install glow}\n' > "$home/opt/beta/beta.yaml"
+
+  run_common_strict "$home" run_doctor
+  assert_output_contains "beta: optional_dependencies is a map, not a list, so it is not checked"
+  assert_output_contains "zz-absent-0080"
+  assert_output_contains "[7/7]"
+  [[ "$(doctor_issue_count)" -eq $((before + 1)) ]] ||
+    fail "Expected $((before + 1)) issues, one more than the $before before beta's yaml. Actual output:\n$output"
+}
+
 # ============================================================================
 # ST0009 WP-01 -- each_utility(): THE walker of bin/
 # ============================================================================
