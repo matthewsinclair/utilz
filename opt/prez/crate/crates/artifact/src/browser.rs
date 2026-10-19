@@ -14,6 +14,7 @@
 // tools hands the browser its file by, and it moved from prez's drive.rs,
 // unchanged, when showreel's `video` became its second caller.
 
+use crate::path::is_executable;
 use crate::Failure;
 use std::path::{Path, PathBuf};
 
@@ -41,11 +42,12 @@ pub fn find(explicit: Option<&str>) -> Result<PathBuf, Failure> {
 
   if let Some(given) = explicit {
     let path = PathBuf::from(given);
-    if is_runnable(&path) {
+    if is_executable(&path) {
       return Ok(path);
     }
-    // An explicit --browser that does not exist is a typo, not an invitation to
-    // fall back and silently drive something the user did not name.
+    // An explicit --browser that does not exist, or cannot run, is a mistake to
+    // name, not an invitation to fall back and silently drive something the
+    // user did not name.
     return Err(Failure::new(
       format!("--browser '{given}' is not an executable file"),
       "give the full path to a Chrome, Chromium, Edge or Brave binary",
@@ -55,7 +57,7 @@ pub fn find(explicit: Option<&str>) -> Result<PathBuf, Failure> {
   for candidate in APP_PATHS {
     probed.push((*candidate).to_string());
     let path = PathBuf::from(candidate);
-    if is_runnable(&path) {
+    if is_executable(&path) {
       return Ok(path);
     }
   }
@@ -73,10 +75,6 @@ pub fn find(explicit: Option<&str>) -> Result<PathBuf, Failure> {
     ),
     "install Chrome, Chromium, Edge or Brave, or name one with --browser PATH",
   ))
-}
-
-fn is_runnable(path: &Path) -> bool {
-  path.is_file()
 }
 
 /// A `file://` URL for an absolute path.
@@ -111,6 +109,20 @@ mod tests {
     // did not choose while reporting success.
     let e = find(Some("/nonexistent/browser")).unwrap_err();
     assert!(e.message.contains("/nonexistent/browser"), "{}", e.message);
+    assert!(e.message.contains("not an executable"), "{}", e.message);
+  }
+
+  #[test]
+  fn an_explicit_browser_that_cannot_run_is_refused_issue_0089() {
+    use std::os::unix::fs::PermissionsExt;
+    let dir = std::env::temp_dir().join(format!("artifact-browser-0089-{}", std::process::id()));
+    std::fs::create_dir_all(&dir).unwrap();
+    let browser = dir.join("chrome");
+    std::fs::write(&browser, b"x").unwrap();
+    std::fs::set_permissions(&browser, std::fs::Permissions::from_mode(0o644)).unwrap();
+
+    let e = find(Some(browser.to_str().unwrap())).unwrap_err();
+    std::fs::remove_dir_all(&dir).unwrap();
     assert!(e.message.contains("not an executable"), "{}", e.message);
   }
 
