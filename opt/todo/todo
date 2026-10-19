@@ -324,36 +324,92 @@ _emit_bucket() {
   done
 }
 
+# THE one way todo replaces a file (issue 0090): <producer> [args] writes the
+# new content to a temp beside <target>, which is then renamed over it, so a
+# reader never sees half a file and no temp outlives a failure or a signal.
+# Beside the target, the rename never crosses a filesystem, and a directory
+# that cannot be written fails at the mktemp, before anything is made. A bare
+# mktemp went to the system temp dir instead (on macOS, whatever TMPDIR said),
+# and an mv onto a target it could not reach left the temp there.
+#
+# The producer runs in this shell under todo's set -e, so one that fails ends
+# todo before the rename, and the target is untouched. The traps are set
+# before the mktemp, keyed on _TODO_WRITE_REPLACING_TEMP, which is empty until the temp
+# exists: EXIT for a producer that fails, and INT, TERM and HUP for a signal.
+# A global, not a local, because bash 5 has unwound the function's locals by
+# the time an exit under set -e runs the EXIT trap (measured under 5.3.20,
+# where the local read unbound and the temp stayed; 3.2.57 still saw it).
+# Traps the caller had are restored on every way out.
+_TODO_WRITE_REPLACING_TEMP=""
+_write_replacing() {
+  local target="$1" saved why
+  shift
+  saved="$(trap -p INT TERM HUP EXIT)"
+  trap '[[ -z "$_TODO_WRITE_REPLACING_TEMP" ]] || rm -f -- "$_TODO_WRITE_REPLACING_TEMP"' EXIT
+  trap '[[ -z "$_TODO_WRITE_REPLACING_TEMP" ]] || rm -f -- "$_TODO_WRITE_REPLACING_TEMP"; _TODO_WRITE_REPLACING_TEMP=""; exit 130' INT
+  trap '[[ -z "$_TODO_WRITE_REPLACING_TEMP" ]] || rm -f -- "$_TODO_WRITE_REPLACING_TEMP"; _TODO_WRITE_REPLACING_TEMP=""; exit 143' TERM
+  trap '[[ -z "$_TODO_WRITE_REPLACING_TEMP" ]] || rm -f -- "$_TODO_WRITE_REPLACING_TEMP"; _TODO_WRITE_REPLACING_TEMP=""; exit 129' HUP
+  # One assignment, which narrows the gap between the temp's making and
+  # _TODO_WRITE_REPLACING_TEMP naming it to a signal that lands inside the
+  # $( ) after mktemp has made the file: then that one temp stays. mktemp says
+  # why on its own stderr when it cannot.
+  if ! _TODO_WRITE_REPLACING_TEMP="$(mktemp "$(dirname -- "$target")/.todo.XXXXXX")"; then
+    _TODO_WRITE_REPLACING_TEMP=""
+    _restore_traps "$saved"
+    error "todo: could not write $target: no temp file could be made beside it"
+    return 1
+  fi
+  "$@" >"$_TODO_WRITE_REPLACING_TEMP"
+  if ! why="$(mv -- "$_TODO_WRITE_REPLACING_TEMP" "$target" 2>&1)"; then
+    rm -f -- "$_TODO_WRITE_REPLACING_TEMP"
+    _TODO_WRITE_REPLACING_TEMP=""
+    _restore_traps "$saved"
+    error "todo: could not write $target: $why"
+    return 1
+  fi
+  _TODO_WRITE_REPLACING_TEMP=""
+  _restore_traps "$saved"
+}
+
+# Put back the INT, TERM, HUP and EXIT traps <saved> holds, as trap -p printed
+# them; with none saved, the defaults.
+_restore_traps() {
+  trap - INT TERM HUP EXIT
+  if [[ -n "$1" ]]; then
+    eval "$1"
+  fi
+}
+
 write_file() {
   guard_foreign_todo
   _counts
-  local tmp
-  tmp=$(mktemp)
-  {
-    printf -- '---\n'
-    printf 'generator: %s\n' "$TODO_GENERATOR"
-    printf 'title: "%s"\n' "$TITLE"
-    printf 'history: %s\n' "$HISTORY"
-    printf 'next-id: %s\n' "$NEXT_ID"
-    printf -- '---\n\n'
-    printf '%s\n\n' "$TITLE"
+  _write_replacing "$TODO_FILE" _render_file
+}
 
-    printf '## DOING\n\n'
-    if [[ $A -gt 0 ]]; then _emit_bucket '-' DOING; fi
-    if [[ ${#DOING_ORPHANS[@]} -gt 0 ]]; then printf '%s\n' "${DOING_ORPHANS[@]}"; fi
-    if [[ $A -eq 0 && ${#DOING_ORPHANS[@]} -eq 0 ]]; then printf '_(none)_\n'; fi
+# The todo file's whole text, from the parsed state, on stdout.
+_render_file() {
+  printf -- '---\n'
+  printf 'generator: %s\n' "$TODO_GENERATOR"
+  printf 'title: "%s"\n' "$TITLE"
+  printf 'history: %s\n' "$HISTORY"
+  printf 'next-id: %s\n' "$NEXT_ID"
+  printf -- '---\n\n'
+  printf '%s\n\n' "$TITLE"
 
-    printf '\n## TODO\n\n'
-    if [[ $B -gt 0 ]]; then _emit_bucket ' ' TODO; fi
-    if [[ ${#TODO_ORPHANS[@]} -gt 0 ]]; then printf '%s\n' "${TODO_ORPHANS[@]}"; fi
-    if [[ $B -eq 0 && ${#TODO_ORPHANS[@]} -eq 0 ]]; then printf '_(none)_\n'; fi
+  printf '## DOING\n\n'
+  if [[ $A -gt 0 ]]; then _emit_bucket '-' DOING; fi
+  if [[ ${#DOING_ORPHANS[@]} -gt 0 ]]; then printf '%s\n' "${DOING_ORPHANS[@]}"; fi
+  if [[ $A -eq 0 && ${#DOING_ORPHANS[@]} -eq 0 ]]; then printf '_(none)_\n'; fi
 
-    printf '\n## DONE:%s\n\n' "$WATERMARK"
-    if [[ $C -gt 0 ]]; then _emit_bucket 'x' DONE; fi
-    if [[ ${#DONE_ORPHANS[@]} -gt 0 ]]; then printf '%s\n' "${DONE_ORPHANS[@]}"; fi
-    if [[ $C -eq 0 && ${#DONE_ORPHANS[@]} -eq 0 ]]; then printf '_(none)_\n'; fi
-  } >"$tmp"
-  mv "$tmp" "$TODO_FILE"
+  printf '\n## TODO\n\n'
+  if [[ $B -gt 0 ]]; then _emit_bucket ' ' TODO; fi
+  if [[ ${#TODO_ORPHANS[@]} -gt 0 ]]; then printf '%s\n' "${TODO_ORPHANS[@]}"; fi
+  if [[ $B -eq 0 && ${#TODO_ORPHANS[@]} -eq 0 ]]; then printf '_(none)_\n'; fi
+
+  printf '\n## DONE:%s\n\n' "$WATERMARK"
+  if [[ $C -gt 0 ]]; then _emit_bucket 'x' DONE; fi
+  if [[ ${#DONE_ORPHANS[@]} -gt 0 ]]; then printf '%s\n' "${DONE_ORPHANS[@]}"; fi
+  if [[ $C -eq 0 && ${#DONE_ORPHANS[@]} -eq 0 ]]; then printf '_(none)_\n'; fi
 }
 
 # ============================================================================
@@ -474,14 +530,16 @@ _resolve_history() {
 
 # Prepend a block of text to a file (newest batch on top).
 _prepend_file() {
-  local f="$1" block="$2" tmp
-  tmp=$(mktemp)
-  printf '%s\n' "$block" >"$tmp"
-  if [[ -s "$f" ]]; then
-    printf '\n' >>"$tmp"
-    cat "$f" >>"$tmp"
+  _write_replacing "$1" _render_prepended "$1" "$2"
+}
+
+# <block>, then a blank line and <file>'s text when it has any, on stdout.
+_render_prepended() {
+  printf '%s\n' "$2"
+  if [[ -s "$1" ]]; then
+    printf '\n'
+    cat "$1"
   fi
-  mv "$tmp" "$f"
 }
 
 # ============================================================================

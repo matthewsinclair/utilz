@@ -812,3 +812,99 @@ EOF
   echo "$output" | jq -e '.todo[0] == {num: 2, text: "b"}'
   echo "$output" | jq -e '.done[0] == {num: 1, text: "a"}'
 }
+
+# ----------------------------------------------------------------------------
+# No temp file outlives a write (issue 0090)
+# ----------------------------------------------------------------------------
+
+# A stand-in mv, first on PATH, that records the temp it is handed in
+# $BATS_TEST_TMPDIR/mv.calls and then acts by <mode>: fail (exit 1), pass (the
+# real mv), or term (send TERM to the todo whose pid the test wrote to
+# $BATS_TEST_TMPDIR/todo.pid, waiting for that file, and exit 0 without
+# moving, so the temp still exists when todo handles the signal). Not $PPID:
+# todo runs mv inside $( ), so mv's parent is that subshell, not todo.
+stub_mv() {
+  local mode="$1" bin="$BATS_TEST_TMPDIR/mv-stub" real
+  real="$(command -v mv)"
+  mkdir -p "$bin"
+  cat > "$bin/mv" <<STUB
+#!/bin/bash
+if [[ "\$1" == -- ]]; then shift; fi
+printf '%s\n' "\$1" >> "$BATS_TEST_TMPDIR/mv.calls"
+case "$mode" in
+  fail) echo "mv: stub refuses" >&2; exit 1 ;;
+  pass) exec "$real" "\$@" ;;
+  term)
+    for _ in \$(seq 100); do [[ -s "$BATS_TEST_TMPDIR/todo.pid" ]] && break; sleep 0.05; done
+    kill -TERM "\$(cat "$BATS_TEST_TMPDIR/todo.pid")"
+    exit 0
+    ;;
+esac
+STUB
+  chmod +x "$bin/mv"
+  export PATH="$bin:$PATH"
+}
+
+# Every temp the stub was handed is gone; at least one was, or this checks
+# nothing.
+assert_no_temp_left() {
+  local calls="$BATS_TEST_TMPDIR/mv.calls" t n=0
+  [[ -s "$calls" ]] || fail "mv was never called, so no temp was checked"
+  while IFS= read -r t; do
+    n=$((n + 1))
+    [[ ! -e "$t" ]] || fail "the temp $t was left behind"
+  done < "$calls"
+  echo "$n temp(s) checked"
+}
+
+@test "a write whose mv fails leaves no temp, and names the target (issue 0090)" {
+  stub_mv fail
+  run "$UTILZ_BIN_DIR/todo" add "first"
+  assert_failure
+  assert_output_contains "could not write"
+  assert_output_contains "todo.md"
+  assert_no_temp_left
+}
+
+@test "a target whose directory cannot be written leaves no temp anywhere (issue 0090)" {
+  local ro="$BATS_TEST_TMPDIR/ro"
+  mkdir -p "$ro"
+  chmod 555 "$ro"
+  stub_mv pass
+  run "$UTILZ_BIN_DIR/todo" --file "$ro/todo.md" list
+  chmod 755 "$ro"
+  assert_failure
+  assert_output_contains "could not write $ro/todo.md"
+  [[ -z "$(ls -A "$ro")" ]] || fail "left in the directory: $(ls -A "$ro")"
+  # The bridge's probe (bridge.bats:204): on main the temp was made in the
+  # system temp dir, and the mv onto the target failed. Any temp handed to mv
+  # must be gone too.
+  if [[ -s "$BATS_TEST_TMPDIR/mv.calls" ]]; then assert_no_temp_left; fi
+}
+
+# todo runs in the background, so its pid can be written for the stub before
+# the stub needs it; the dispatcher execs todo, so it is todo's pid.
+@test "a TERM while the temp exists removes it, and todo exits 143, five times (issue 0090)" {
+  local i pid rc
+  stub_mv term
+  for i in 1 2 3 4 5; do
+    rm -f "$BATS_TEST_TMPDIR/mv.calls" "$BATS_TEST_TMPDIR/todo.pid"
+    "$UTILZ_BIN_DIR/todo" add "trial $i" > "$BATS_TEST_TMPDIR/todo.out" 2>&1 3>&- &
+    pid=$!
+    printf '%s\n' "$pid" > "$BATS_TEST_TMPDIR/todo.pid"
+    rc=0
+    wait "$pid" || rc=$?
+    [[ $rc -eq 143 ]] || fail "trial $i: exit $rc, not 143: $(cat "$BATS_TEST_TMPDIR/todo.out")"
+    assert_no_temp_left
+  done
+}
+
+@test "the history write whose mv fails leaves no temp (issue 0090)" {
+  TODO add "to prune"
+  TODO done 1
+  stub_mv fail
+  run "$UTILZ_BIN_DIR/todo" done --prune
+  assert_failure
+  assert_output_contains "could not write"
+  assert_no_temp_left
+}
