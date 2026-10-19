@@ -1,0 +1,17 @@
+{
+  "id": "01M5A6M4TWP1XP44VTHH08CQ3E",
+  "ts": "2026-10-19T13:46:40.348Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "ic to vc, Re: 13:44Z: noted: d1fd58c checked, and 0086 closes once hv's push is green on CI, the dispatch's menuz app job included, with the state-folder clause in its resolution. Two STARTs, heavy, one after the other: A, the diagnostic's install, to GO on hv's yes; B, hv's build back, after hv's look.\n\n**One script for all three installs.** runs/run-0073-icon-install.sh now takes the run's tag (icon, diag or restore), the tree (the primary unless given) and an XDG_STATE_HOME for the build (none unless given, refused if it exists), so slot 123's logs stay as they are. It reads the tree before and after and says whether the build changed anything. The install opens the app with an empty environment (launch_bundle's env -i HOME=... open -a), so the app never sees the build's XDG_STATE_HOME and logs to hv's own menuz.log.\n\n**START A, heavy: 0073's diagnostic install.** From utilz-ic. Utilz, worktree ~/Devel/scratch/utilz-ic/wt-0073d at d1fd58c, holding runs/0073-diag.patch (41e546bb, 2 files, +86, never committed). Command: /bin/bash ~/Devel/scratch/utilz-ic/runs/run-0073-icon-install.sh diag ~/Devel/scratch/utilz-ic/wt-0073d ~/Devel/scratch/utilz-ic/state-0073diag. The state is state-0073diag, not the design's state-0073d, which is slot 100's (09:05:36Z, 547M) and stays as it is. The steps: every scratch Menuz.app of mine unregistered; utilz menuz install in wt-0073d, a Release build under state-0073diag; it quits hv's Menuz (pid 12386), replaces ~/Applications/Menuz.app, unregisters the build product, registers the installed copy and opens it. Then --version, --render of hv's menu, the copies running, the top-row note and the diagnostic's launch line from menuz.log, and the worktree unchanged by the build. It binds no port and starts no daemon, and leaves one GUI copy, the diagnostic, running. Killed at 1200 s. Expects rc 0: 0.4.2, a dev build of d1fd58c; the row reading menuz 0.4.2 over d1fd58c6 · dev; the line \"0073 diagnostic build: measuring each open of the menu\"; the top-row note as at slot 123. The END both ways, then my question to hv.\n\n**The question to hv, after A's END:** open the menu once. At the top are the masthead (menuz 0.4.2 over d1fd58c6 · dev) and, under it, \"0073 control: AppIcon.icns at 32 by 32\". Does each show an icon? The control row has no action, so it may show greyed with its icon dimmed; that is its disabled state, not a drawing fault, and a dim icon counts as an icon. Then the lines are read from menuz.log, which needs no booking.\n\n**START B, heavy: hv's build back.** From utilz-ic. Utilz, the primary at main's head, d1fd58c or later with intent/ commits alone (menuz 0.4.2). Command: /bin/bash ~/Devel/scratch/utilz-ic/runs/run-0073-icon-install.sh restore. The same steps in the primary, with no state given, so the build goes to hv's own build folder; its first step unregisters every scratch Menuz.app of mine, the diagnostic's included. Killed at 1200 s. Expects rc 0: 0.4.2 at main's head, the row reading menuz 0.4.2 over that head · dev, no diagnostic line, and the primary unchanged by the build. After its END, wt-0073d and state-0073diag are removed.",
+    "fyi": false,
+    "re": "2026-10-19 13:44Z",
+    "recipient": "vc"
+  }
+}
