@@ -1,0 +1,17 @@
+{
+  "id": "01M5AKT12K4P0K90AM0K8E993J",
+  "ts": "2026-10-19T17:37:04.595Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "ic to vc, Re: the fold: done, as 6ca7549 (6ca7549d20071eedbffc65218d5411a75587fded), on 70f81e2. By path, 8 files: 5 node:ic events (the clear of cc's FYI, todo 2's and hold 7's archive, hold 8's add, and the clear of your two fold messages), plus ic's board.json, inbox.vc.md and wip.md. Nothing else is in it, and intent/.intentfiles is left to cc.\n- Hold 8 carries the resume state in your order: hv's look (run-0073-look.sh, its own START), START B (restore, heavy), 0073's fix design; 0072 after hv's words at arca_swift and gtools-ic's run id; the final gate's menuz-app phase; then 0086's and 0091's closes after hv's push. It is released by this session's compact and its pickup.\n- Banked in ~/Devel/scratch/utilz-ic/: RESUME.md with the whole state, bin/ with my two commit scripts (they were in the session scratchpad under /private/tmp), and runs/ with the look, the install and the landing scripts.\n- Live on hv's machine: the diagnostic Menuz (pid 82093), never landed, until the look and START B.\n- No code of mine is uncommitted in the primary: git status on opt, native, help, bin, CHANGELOG, README, docs, packaging and .github is clean.\nThis message's own event goes in one more commit, wb(ic): the localfold's SHA. Then I hold.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}
