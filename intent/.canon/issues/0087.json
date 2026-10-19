@@ -1,0 +1,11 @@
+{
+  "schema": "intent/issue@3.0",
+  "number": 87,
+  "slug": "utilz-doctor-s-5-7-calls-every-utility-properly",
+  "title": "utilz doctor's [5/7] calls every utility properly configured having read no yaml, for a utility with none and when yq is missing",
+  "status": "open",
+  "severity": "low",
+  "created": "2026-10-19",
+  "reporter": "Matthew Sinclair",
+  "body": "## What\n\n`run_doctor`'s utility check (`[5/7]`) says \"Found N utilities, all properly configured\" in two cases where it has read no yaml.\n\n- **A utility with no yaml.** `[5/7]` checks that each utility's implementation is there and executable, then reads its `utilz_version` through `get_util_metadata`. With no `<name>.yaml` the reader answers 1, which `[5/7]` takes as no requirement, so the utility passes. `[6/7]` skips a utility with no yaml (`opt/utilz/lib/common.sh:861`). So doctor names it nowhere and counts no issue, while `utilz <name> --version` says `version unknown - missing <name>.yaml`.\n- **No yq.** `[5/7]` skips every version check when yq is missing (`:800`) and still calls every utility properly configured (`:833`). `[6/7]` names yq as missing, so the run is not silent, but `[5/7]`'s verdict claims a check it did not make.\n\n0081 stops `[5/7]` calling a yaml it cannot read properly configured. These are the two other ways the verdict says more than the section read. critic-shell saw both in its review of 0081, and cc files them on vc's word (19 Oct 2026), low, for 2.14.1, after 0084.\n\n## Fix, for the design to settle\n\n`[5/7]` lists a utility with no yaml among those with issues, `<name> (no <name>.yaml)`, and counts it, since no other section does. When yq is missing, `[5/7]` says its version checks did not run and calls no utility configured, while `[6/7]` keeps the count for yq. The no-yq test needs 0084's `path_without` to hide yq, so this lands after 0084, built on 0081's `[5/7]`. Size: XS.\n\n## Measured\n\ncritic-shell ran `run_doctor` on a fake home with beta's yaml removed, with `opt/utilz/lib/common.sh` at `d7166e4`: doctor says all are properly configured and counts no issue anywhere (its review, cc's `runs/0081-critic-1.md`). The no-yq case is by reading, as are the line numbers, at `f6d2040`.\n"
+}
