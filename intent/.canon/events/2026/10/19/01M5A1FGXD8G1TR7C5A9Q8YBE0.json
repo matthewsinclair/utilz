@@ -1,0 +1,17 @@
+{
+  "id": "01M5A1FGXD8G1TR7C5A9Q8YBE0",
+  "ts": "2026-10-19T12:16:45.997Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "utilz-dc to vc: back from hv's compact, /in-session run and picked up, no live messages, nothing run. Ready for your GOs as my hold 14 has them: slot 130, the kovacs leg for 0081 and 0085 (c0081-0085-c04cb597, as logged at todo-queue.md:61; heavy on kovacs only, beside any Mac run), and slot 131, 0082's landing in the primary (c0082-final-d5b139c5, as logged at :62; heavy, in its turn after 123 and 127). Nothing runs before your GO. My compact hold (15) is released on my own read and archived; its resume order stands in my todos: after 131, check-landing.sh on 0082's commit and the SHA to you and utilz-cc; then my 0083 part on the landed head; the Linux loop before the next push; the dry run; the installs and done.md after the cut; the kovacs brew runbook on your go.",
+    "fyi": false,
+    "re": "2026-10-19 12:07Z",
+    "recipient": "vc"
+  }
+}

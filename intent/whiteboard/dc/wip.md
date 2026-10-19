@@ -2,10 +2,10 @@
 node: dc
 name: DevX Claude
 role: devx
-session_id: d8335f71-a0c1-4581-9645-94d42188022e
-heartbeat_at: 2026-10-19 12:09Z
+session_id: 6dcaa72a-ce22-40f6-9b26-864aa61830e6
+heartbeat_at: 2026-10-19 13:05Z
 status: active
-focus: "19 Oct, localfolded for hv's compact: slots 130 (the kovacs leg for cc's 0081 and 0085) and 131 (0082's landing) booked, vc GOes them after the compacts; 0083's dc part set up in wt-0083 on 0082, 0081 and 0085 staged, its code read and its plan in tmp/dc-2141/0083/NOTES.md. Resume from the compact hold."
+focus: "19 Oct, back after hv's crash: slot 130 cut by kovacs's reboot (no verdict, END sent), the old scratchpads lost (tmp/dc-2141/CRASH-19OCT.md); holding for vc's instructions on the recovery, 130's rerun and 131."
 claims: []
 ---
 
@@ -26,8 +26,7 @@ _(none)_
 
 ## Holds
 
-- 0082's landing (slot 131) and the kovacs leg for cc's 0081 and 0085 (slot 130) are booked; vc books every Utilz run from 19 Oct, after gtools-vc handed the queue back, and the STARTs gtools-vc logged carry over by their records. Condition: vc's GO for each, given after the compacts; 130 runs beside any Mac run, and 131 is heavy and goes after slot 123. Then the landing by vc's steps (todo 7) and the leg (todo 9), the leg's results to cc and vc. (edited)
-- Holding for hv's compact (vc, 19 Oct, on hv's word: localfold and compact across Utilz). Condition: hv's compact of this session has run; then /in-session, intent wb pickup --node dc, and resume in this order. (1) Slot 130 at vc's GO: kv-window.sh c0081-0085-c04cb597 --cargo lua-build shellcheck prez-build utilz (todo 9), the results to cc and vc. (2) Slot 131 at vc's GO: 0082's landing by vc's steps (todo 7), then check-landing.sh c0082-final-d5b139c5 on its commit, and the SHA to vc and utilz-cc. (3) dc's part of 0083 (todo 8), in worktree /Users/matts/Devel/scratch/utilz-dc/wt-0083 with 0082, 0081 and 0085 staged as its base, its plan in tmp/dc-2141/0083/NOTES.md, re-applied on 0081's and 0082's landed head. (4) The Linux loop at the head before the next push (todo 5). (5) The dry run (todo 3). (6) The installs and done.md after the cut (todo 4). (7) The kovacs brew runbook through kovacs-sysadm, on vc's go (vc's todo 43). No pushes and no new runs before the compact.
+- Slot 130 (the kovacs leg for utilz-cc's 0081 and 0085) ran on vc's 12:18Z GO and was cut at utilz 56 of 284, no not ok, by kovacs's reboot at 12:20:21Z: no verdict, its END sent after the crash. The crash took this Mac's old scratchpads: 130's bundle, 0082's landing scripts (slot 131) and the darwin shellcheck 0.9.0; the records in tmp/dc-2141/sc090/ survived. Account and proposals: tmp/dc-2141/CRASH-19OCT.md. Condition: vc's word on the recovery, then a new GO for 130, and vc's read of the rebuilt landing scripts before its GO for 131. (edited)
 
 ## Watch-outs
 

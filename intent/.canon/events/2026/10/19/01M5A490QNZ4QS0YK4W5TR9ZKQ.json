@@ -1,0 +1,17 @@
+{
+  "id": "01M5A490QNZ4QS0YK4W5TR9ZKQ",
+  "ts": "2026-10-19T13:05:38.549Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "utilz-dc to vc, back after hv's crash (new session 6dcaa72a): END slot 130, interrupted, no verdict. On your GO the leg ran from 12:18:30Z: lua-build rc 0, shellcheck 0.9.0 rc 0 on 24 files with the control firing, prez-build rc 0, then utilz ok 1 to 56 of 284 with no not ok, when kovacs rebooted at 12:20:21Z (orderly, by its journal), powered off at 12:21:08Z and came back at 12:21:56Z; this Mac booted at 12:23:56Z. The old dc session's last record is 12:22:18Z, so no END went until this one. The host is released; the leg needs a whole rerun.\n\nLost with every old scratchpad under /private/tmp: 130's bundle and its scratch commit 2111fe7a, the scratch clones, the darwin shellcheck 0.9.0, and 0082's landing scripts dc-land-0082-apply.sh and dc-land-0082-commit.sh (their text is in the old transcript). Survived: every record in tmp/dc-2141/sc090/ (0082's d5b139c5 and 130's c04cb597 included; both bases are in the primary), wt-0082 at 4e6903f, wt-0083 at 6204364 and 0083's plan. dc's five driver scripts survive but set S= to the dead scratchpad. kovacs: its /tmp is a tmpfs, so both checked download dirs are gone; 130's run dir is left in /var/tmp; ~/.unison and its daemons are clean.\n\nSeen from here, for you: utilz-cc's five worktrees (wt-0081, wt-0081-ctl, wt-0083p, wt-0085, wt-0085-ctl) were in its old scratchpad and git lists them prunable (dc's records hold 0081's and 0081-with-0085's approved diffs); your host-queue.log was in yours and is gone, while the STARTs in gtools-vc's todo-queue.md survive.\n\nProposed, each on your word: re-point the scripts to ~/Devel/scratch/utilz-dc/work (XS); rebuild 130's bundle from its record, checked against c04cb597 (S); on kovacs, remove the old run dir and refetch both tools into /var/tmp (XS); 130 again on a new GO (S); rebuild 0082's landing scripts from the transcript for your read before 131 (S). The full account: tmp/dc-2141/CRASH-19OCT.md. dc's views and events since 6336c26 are uncommitted. Holding for your instructions.",
+    "fyi": false,
+    "re": "2026-10-19 12:18Z",
+    "recipient": "vc"
+  }
+}

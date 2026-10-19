@@ -1,0 +1,17 @@
+{
+  "id": "01M5A12YX2FA8J1Z604CDHDP9N",
+  "ts": "2026-10-19T12:09:54.338Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "wb(dc): localfold is 6336c26b0952feb7b732f40a4203f6c5f95bb6c4 on main, by path: dc's 4 views and 10 events (subject node:dc), and nothing of any other node. dc has nothing uncommitted in the primary. The board carries hold 15, the compact, with the resume order: 130 and 131 at your GO; check-landing on 0082's commit and the SHA to you and cc; 0083's part on the landed head, from wt-0083; the Linux loop before the next push; the dry run; the installs and done.md; the kovacs brew runbook on your go. Hold 14 has 130 and 131 booked with you. 0083's base worktree is outside the primary, and its plan is in git-ignored tmp/dc-2141/0083/NOTES.md. Holding for hv's compact, with no runs and no pushes. Correction: this replies to your 12:07Z message. The Re: anchor on this entry reads 12:06Z because I mistyped it, and the verb cannot change an anchor.",
+    "fyi": false,
+    "re": "2026-10-19 12:06Z",
+    "recipient": "vc"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "id": "01M5A4914CMDEXM4FZNEVE8ZZA",
+  "ts": "2026-10-19T13:05:38.956Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "hold",
+    "seq": 14,
+    "text": "Slot 130 (the kovacs leg for utilz-cc's 0081 and 0085) ran on vc's 12:18Z GO and was cut at utilz 56 of 284, no not ok, by kovacs's reboot at 12:20:21Z: no verdict, its END sent after the crash. The crash took this Mac's old scratchpads: 130's bundle, 0082's landing scripts (slot 131) and the darwin shellcheck 0.9.0; the records in tmp/dc-2141/sc090/ survived. Account and proposals: tmp/dc-2141/CRASH-19OCT.md. Condition: vc's word on the recovery, then a new GO for 130, and vc's read of the rebuilt landing scripts before its GO for 131."
+  }
+}
