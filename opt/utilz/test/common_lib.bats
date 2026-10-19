@@ -497,6 +497,55 @@ doctor_issue_count() {
     fail "Expected $((before + 1)) issues, one more than the $before before beta's yaml. Actual output:\n$output"
 }
 
+# A dependency entry that names no dependency (issue 0085): one written as a
+# bare string or as a map with no name was checked as a dependency with no
+# name, and one written as a list ended doctor at the read of its name.
+
+@test "run_doctor refuses a dependency written as a bare string, by name, and does not call the rest installed (issue 0085)" {
+  local home before
+  home="$(make_fake_home)"
+  run_common_strict "$home" run_doctor
+  assert_output_contains "All required dependencies installed"
+  before=$(doctor_issue_count)
+  printf 'name: beta\nversion: 1.0.0\ndescription: Fake beta\ndependencies: [jq]\n' > "$home/opt/beta/beta.yaml"
+
+  run_common_strict "$home" run_doctor
+  assert_output_contains "beta: dependencies[0] is a string, not a map with a name"
+  refute_output_contains "Missing dependencies"
+  refute_output_contains "All required dependencies installed"
+  assert_output_contains "1 dependency entr(ies) not checked, named above"
+  [[ "$(doctor_issue_count)" -eq $((before + 1)) ]] ||
+    fail "Expected $((before + 1)) issues, one more than the $before before beta's entry. Actual output:\n$output"
+}
+
+@test "run_doctor refuses a dependency entry with no name, by name (issue 0085)" {
+  local home before
+  home="$(make_fake_home)"
+  run_common_strict "$home" run_doctor
+  before=$(doctor_issue_count)
+  printf 'name: beta\nversion: 1.0.0\ndescription: Fake beta\ndependencies:\n  - install: brew install jq\n' > "$home/opt/beta/beta.yaml"
+
+  run_common_strict "$home" run_doctor
+  assert_output_contains "beta: dependencies[0] has no name"
+  refute_output_contains "Missing dependencies"
+  [[ "$(doctor_issue_count)" -eq $((before + 1)) ]] ||
+    fail "Expected $((before + 1)) issues, one more than the $before before beta's entry. Actual output:\n$output"
+}
+
+@test "run_doctor refuses a dependency entry written as a list, by name, and reaches its verdict (issue 0085)" {
+  local home before
+  home="$(make_fake_home)"
+  run_common_strict "$home" run_doctor
+  before=$(doctor_issue_count)
+  printf 'name: beta\nversion: 1.0.0\ndescription: Fake beta\ndependencies: []\noptional_dependencies: [[jq]]\n' > "$home/opt/beta/beta.yaml"
+
+  run_common_strict "$home" run_doctor
+  assert_output_contains "beta: optional_dependencies[0] is a list, not a map with a name"
+  assert_output_contains "[7/7]"
+  [[ "$(doctor_issue_count)" -eq $((before + 1)) ]] ||
+    fail "Expected $((before + 1)) issues, one more than the $before before beta's entry. Actual output:\n$output"
+}
+
 # ----------------------------------------------------------------------------
 # get_util_metadata on a yaml yq cannot read, and its four callers (issue 0081)
 # ----------------------------------------------------------------------------

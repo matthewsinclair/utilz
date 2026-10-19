@@ -493,6 +493,21 @@ dependency_purpose() {
   printf '%s\n' "$purpose"
 }
 
+# Why entry <index> of <list> names no dependency, for doctor to refuse it by
+# name (issue 0085): a map with no `name`, or an entry that is not a map at
+# all, such as `- jq`. It returns 0 whatever yq does, as yaml_read_error does.
+dependency_entry_fault() {
+  local yaml_file="$1" list="$2" index="$3" kind=""
+  if ! kind=$(yq eval ".${list}[${index}] | type" "$yaml_file" 2>/dev/null); then
+    kind=""
+  fi
+  if [[ "$kind" == '!!map' ]]; then
+    printf '%s[%s] has no name\n' "$list" "$index"
+  else
+    printf '%s[%s] is %s, not a map with a name\n' "$list" "$index" "$(yaml_type_words "$kind")"
+  fi
+}
+
 # THE leading-tilde expander. A YAML scalar or a --dest argument is not a shell
 # word, so an unexpanded ~ creates a directory literally named ~ under the cwd,
 # and every later command then finds it exactly where it looked -- silent and
@@ -911,7 +926,7 @@ run_doctor() {
   local missing_dep_info=()
   local optional_missing=()
   local yaml_file dep_count dep_name dep_install dep_purpose dep_required dep_status dep_list i
-  local refused_lists=0
+  local refused_lists=0 refused_entries=0
 
   # yq is reported by hand, and first: it is the framework's own hard
   # dependency and the only YAML parser, so nothing below can read a single
@@ -966,7 +981,21 @@ run_doctor() {
             ;;
         esac
         for ((i = 0; i < dep_count; i++)); do
-          dep_name=$(yq eval ".${dep_list}[$i].name" "$yaml_file" 2>/dev/null)
+          # AN ENTRY IS CHECKED ONLY IF IT NAMES A DEPENDENCY (issue 0085). One
+          # written as a bare string, `- jq`, reads its name as empty, and one
+          # with no name reads `null`, so each was checked as a dependency with
+          # no name. One written as a list cannot be asked for a name at all,
+          # and this read, bare, ended doctor. Each is refused by name, counted
+          # as an issue, and the sweep goes on.
+          if ! dep_name=$(yq eval ".${dep_list}[$i].name" "$yaml_file" 2>/dev/null); then
+            dep_name=""
+          fi
+          if [[ -z "$dep_name" || "$dep_name" == "null" ]]; then
+            error "$name: $(dependency_entry_fault "$yaml_file" "$dep_list" "$i")"
+            issues=$((issues + 1))
+            refused_entries=$((refused_entries + 1))
+            continue
+          fi
           if dependency_present "$yaml_file" "$dep_list" "$i" "$dep_name"; then
             continue
           fi
@@ -1085,10 +1114,17 @@ run_doctor() {
       fi
     done
     issues=$((issues + 1))
-  elif [[ $refused_lists -gt 0 ]]; then
-    # Not "all installed": a list refused above was never read (issue 0080).
-    # Each was counted as an issue where it was refused.
-    warn "$refused_lists dependency list(s) not checked, named above; every dependency that was read is installed"
+  elif [[ $refused_lists -gt 0 || $refused_entries -gt 0 ]]; then
+    # Not "all installed": a list or an entry refused above was never checked
+    # (issues 0080 and 0085). Each was counted as an issue where it was refused.
+    local read_installed="; every dependency that was read is installed"
+    if [[ $refused_lists -gt 0 ]]; then
+      warn "$refused_lists dependency list(s) not checked, named above$read_installed"
+      read_installed=""
+    fi
+    if [[ $refused_entries -gt 0 ]]; then
+      warn "$refused_entries dependency entr(ies) not checked, named above$read_installed"
+    fi
   else
     success "All required dependencies installed"
   fi

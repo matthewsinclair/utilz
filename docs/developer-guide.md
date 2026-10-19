@@ -343,6 +343,8 @@ optional_dependencies:
     purpose: Syntax highlighting for output
 ```
 
+Each entry is a map with a `name`. `utilz doctor` refuses one that is not, such as `- jq` written as a bare string, by name, and counts it as an issue (issue 0085).
+
 ### Complete Example
 
 ```yaml
