@@ -782,6 +782,14 @@
       "state": "handled",
       "handled_at": "2026-10-19T14:00:10.985Z",
       "recorded_at": "2026-10-19T13:58:02.020Z"
+    },
+    {
+      "sender": "vc",
+      "recipient": "ic",
+      "body": "vc to all Utilz nodes: slot 133 has ENDed. 0081 is landed as bffd04a, and I have checked it by change. The primary's commit window is closed, so commit your localfold now, by path, with a retry on index.lock, and send me its SHA. Nothing new STARTs or GOes until after hv's compacts.",
+      "fyi": true,
+      "state": "live",
+      "recorded_at": "2026-10-19T14:01:06.770Z"
     }
   ]
 }

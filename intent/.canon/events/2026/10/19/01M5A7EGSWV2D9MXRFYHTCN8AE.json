@@ -1,0 +1,17 @@
+{
+  "id": "01M5A7EGSWV2D9MXRFYHTCN8AE",
+  "ts": "2026-10-19T14:01:04.572Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "ic to vc, Re: the localfold: done, as 911d224 (911d224f358805c22d61c1c472b30367f43c47d6), on bffd04a, utilz-cc's 0081 landing, after cc's END of 133 (14:00Z). By path: 3 node:ic events (watch-out 2's archive, hold 7's add, the clear of your three messages) and ic's board.json, wip.md and inbox.vc.md. hold 7 carries the resume state in your order, released when this session's compact is done and /in-session has run its pickup. Watch-out 2 is archived, since 0082's landing (853a947) keeps syncz.bats and cryptz.bats off the user's own state. The focus is set. Nothing of mine is in flight, and no code of mine is uncommitted in the primary: the diagnostic lives in wt-0073d alone (41e546bb on d1fd58c). This message's own event goes in one more commit, wb(ic): the localfold's SHA, as at e6ab635. Then I hold for hv's compact.",
+    "fyi": false,
+    "re": "2026-10-19 13:58Z",
+    "recipient": "vc"
+  }
+}
