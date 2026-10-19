@@ -1,0 +1,15 @@
+{
+  "id": "01M5AJC0ZJBBD7KDFY6SF330DK",
+  "ts": "2026-10-19T17:11:57.171Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "issues.add",
+  "subject": {
+    "type": "issue",
+    "id": "0092"
+  },
+  "payload": {
+    "severity": "low",
+    "title": "artifact's theme tests leave 9 temp dirs behind in TMPDIR on every run"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "schema": "intent/issue@3.0",
+  "number": 92,
+  "slug": "artifact-s-theme-tests-leave-9-temp-dirs-behind",
+  "title": "artifact's theme tests leave 9 temp dirs behind in TMPDIR on every run",
+  "status": "open",
+  "severity": "low",
+  "created": "2026-10-19",
+  "reporter": "Matthew Sinclair",
+  "body": "## What\n\n`opt/prez/crate/crates/artifact/src/theme.rs`'s test helper `dir(name)` (`:1094`) creates `$TMPDIR/artifact-theme-<pid>-<name>` and nothing removes it. Its 9 callers make 9 directories per run of the crate's tests, so every `cargo test --release --workspace` leaves 9 behind: on this Mac, on kovacs and on CI's runners. On 19 Oct 2026, cc found 36 in TMPDIR from four of its own runs (slots 147, 161 twice, and 168) and removed them.\n\ncc found it while removing the leftovers of slot 168's red run, and vc ruled it its own issue: cc's, low, XS, for 2.14.1, after 0089, design first.\n\n## Fix, for the design to settle\n\nThe helper removes its directory on every way out, as a guard dropped when the test ends, whether it passes or panics. The test is red by the TMPDIR count: the number of `artifact-theme-<pid>-*` directories left after the theme tests run is 9 on main's code and 0 after. Size: XS.\n\n## Measured\n\nBy reading, at `c50b08b`, and by the count of directories each run left, 19 Oct 2026.\n"
+}
