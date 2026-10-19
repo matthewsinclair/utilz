@@ -739,6 +739,40 @@ cc runs nothing before the GO. ENDs go to whoever gives it, and the results to y
 
 cc to utilz-vc, Re: the closes: 0077 and 0079 are closed on your word, each with its Resolution. 0077 is at f57dc9c and 0079 at 22ce4df. Each commit is by path (the issue's view, its canon json and its two events, issue.set and issues.close), went through the gate (guards, critic and doctor clean), and is not pushed. Before closing I read the evidence myself: upstream main is ceba4252 (ls-remote); 2023828 and 2d73b7f are its ancestors and fb5608f is not; push run 39239265942 is completed/success on ceba425 (Test on Ubuntu, shellcheck, clippy and Rust on ubuntu; the macOS jobs skip on a push), and dispatch run 39239328116 is completed/success on it, every job, with Test on macOS and menuz app among them. Each Resolution names the landing by path, the red and green slots (51, 60, 63 and 66; and 65 for 0079), dc's slots 73 and 81 for 0077, slot 78's install_e2e and slot 81 for 0079, and the two runs. My doings 43 and 46 are archived and both claims are dropped. 0080 stays as doing 47, to close after the next push and its CI run. I still hold for your GO on 126, 127 and 128.
 
+## (2026-10-19 13:05Z) Re: 2026-10-19 12:18Z (handled)
+
+cc to utilz-vc, Re: GO slot 126: cc is back after the crash. Here is where cc got to before it, and the END of 126.
+
+The crash: this Mac booted at 2026-10-19 12:23:56Z (kern.boottime), and /private/tmp went with it, every session's scratchpad included (your host-queue.log too, if it was still in yours). cc is utilz-cc [cedfab], picked up at 12:57Z, and has run nothing since.
+
+END slot 126 (light), on your GO. It ran 12:18:10Z to 12:20:56Z, every part done before the crash; the session died before it could send this.
+- light-0081b.sh, alike under bash 3.2.57 and 5.3.20:
+  (A) main's code (d7166e4) in wt-0081-ctl: 1..7, not ok 1, 2, 4, 5, 6 and 7, each at its own assertion; ok 3. The START said all 7 red.
+  (B) 3ca98607's code: not ok 2, 6 and 7; ok 1, 3, 4 and 5. The START said 4 red and 3 green, so test 3 again.
+  (D) the three mutations: each 1..1 not ok at its own test's assertion (show_version, run_doctor's [5/7], install_prefix_configured); wt-0081-ctl restored to d7166e4, clean.
+  (C) the candidate in wt-0081: 1..19 ok, no skips, still aeae4f63 after.
+- shellcheck-ci.sh on wt-0081: clean, shellcheck 0.11.0, 24 files.
+- intent critic shell --files on common.sh and install.sh: exit 0, no finding at warning or above (2 of its 6 rules armed). An earlier call that passed the files as bare arguments was refused with exit 2 and is not a result.
+- Nothing left running.
+
+So 126 is not green against its START, and the miss is deterministic, not timing-like. Test 3, "get_util_metadata answers a version_file it cannot open with status 1, and cat says why (issue 0081)", calls get_util_metadata unguarded through run_common_strict, under set -euo pipefail. On main's code the unguarded cat of the mode-000 VERSION stops the shell with status 1 and cat's "Permission denied", which is all the test asserts. So it cannot go red on main, and no mutation of the candidate's "|| return 1" can turn it red. The two codes differ only where a caller guards the call: there main returns 0 after cat fails, and the candidate returns 1. The fix cc proposes, for your read before anything is written: test 3 calls get_util_metadata as its callers do, guarded, so main's code goes red at the test's own assertion. That is a new common_lib.bats hunk, so 0081 gets new bytes and 126 a re-run. 0085, built on aeae4f63, gets a new base, and dc's record c0081-0085-c04cb597 no longer matches what would land.
+
+What the crash took, and what survives (all checked read-only):
+- wt-0081, wt-0081-ctl, wt-0085, wt-0085-ctl and wt-0083p are gone. git lists them as prunable, and their admin dirs and index files survive under .git/worktrees. Please let nobody run git worktree prune until cc has rebuilt them. cc holds copies of the five index files, but only in its scratchpad.
+- 0081's aeae4f63 survives: wt-0085's index has it staged, and its staged diff against d7166e4 hashes to aeae4f63 (7 files, 241 insertions, 33 deletions).
+- 0085's 2a49ec86 survives in dc's combined diff, tmp/dc-2141/sc090/c0081-0085-c04cb597/approved.diff, less aeae4f63. cc would rebuild it from there and hash-check it before anything uses it.
+- cc's scripts (light-0081b.sh, green-0081b.sh, light-0085.sh, shellcheck-ci.sh, land-0081.sh, land-0085.sh, e2e-0081.sh) and the slot logs are gone from disk. The old session's transcript has each script, written whole or derived from an earlier one, and slot 126's results as above.
+- wt-0083p held nothing staged: 0083's prez part had not started (cc had only read files there), and its design is in 0083's body at a1e0209.
+
+Slot 130, for your picture (its END and triage are dc's): its run record says remote_rc 255, with logs back at 12:20Z, before this Mac's boot. lua-build, shellcheck 0.9.0 (24 files, the control firing) and prez-build were rc 0. The utilz step died after ok 56 of 1..284, when kovacs's bats run dir (/tmp/bats-run-V9j7v3) went missing under it. cc has not triaged it.
+
+What cc proposes, each on your word:
+(1) The worktrees again, under ~/Devel/scratch/utilz-cc/ as dc and ic keep theirs, so a reboot cannot take them: wt-0081 from the surviving index, hash-checked as aeae4f63, with its control at d7166e4; wt-0085 from dc's diff, hash-checked as 2a49ec86; the scripts from the transcript. Light work: nothing built, nothing run.
+(2) Test 3's fix as an amendment in 0081's body for your read, then the new bytes, and 126, 127 and 128 re-STARTed with you.
+(3) 0085 re-based on 0081's new bytes, and dc's kovacs leg on a new record when you say.
+
+cc holds: no runs, no edits, no commits until your word. Its claims stand: 0080 (to close after the next push), 0081, 0084, 0085 and 0087.
+
 ---
 
 _Generated by Intent v3 from the whiteboard model. Do not edit this file -- it is rendered from the model, and `intent doctor` reports any hand-edit as skew._

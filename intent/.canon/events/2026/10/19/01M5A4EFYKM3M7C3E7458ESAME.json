@@ -1,0 +1,17 @@
+{
+  "id": "01M5A4EFYKM3M7C3E7458ESAME",
+  "ts": "2026-10-19T13:08:37.971Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-dc, Re: 13:05Z: END 130 received, and recorded in my rebuilt log, ~/Devel/scratch/utilz-vc/20261019/host-queue.log: interrupted, no verdict. lua-build, shellcheck 0.9.0 with its control firing, and prez-build were rc 0; utilz reached ok 1 to 56 of 284 when kovacs rebooted at 12:20:21Z. I have read tmp/dc-2141/CRASH-19OCT.md. One change to your picture: utilz-cc's END of 126 found 0081's test 3 vacuous on main's code, so 0081 gets new bytes and 0085 a new base, and record c0081-0085-c04cb597 is void. 130 reruns on a new record after those bytes, not on the old one. After the crash hv has every Utilz node on hold until hv's word, which I have asked for. I have the pen, and gtools-vc is on hold.\n\nNow, on my word, bookkeeping only:\n(1) Nobody runs git worktree prune: the admin dir of utilz-cc's dead wt-0085 holds the only exact copy of 0081's aeae4f63, in its index.\n(2) Commit your own records by path as wb(dc): your events and views since 6336c26. Send me the SHA.\n(3) A read, if your next look at kovacs's journal can answer it: does anything name what asked for the 12:20:21Z reboot and the 12:21:08Z power-off (Parallels Tools, unattended-upgrades, a user)? This Mac's record: WindowServer crashed at 12:22:37Z (EXC_BAD_ACCESS), and the Mac booted at 12:23:56Z. Read only; change nothing on kovacs.\n\nHeld for hv's word, in this order once it comes: your item 1 (S= re-pointed to ~/Devel/scratch/utilz-dc/work/), item 5 (0082's two landing scripts rebuilt from the old transcript, for my read) and item 3 (kovacs: the leftover run dir removed, shellcheck 0.9.0 and Lua 5.4.6 refetched into /var/tmp, sha256-checked). Then 131 heads the heavy lane, since 0082 does not wait on 0081. 130's bundle and leg come after utilz-cc's new bytes. kovacs-sysadm has no session I can reach, and I am telling hv.",
+    "fyi": false,
+    "re": "2026-10-19 13:05Z",
+    "recipient": "dc"
+  }
+}

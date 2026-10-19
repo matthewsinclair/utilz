@@ -1,0 +1,17 @@
+{
+  "id": "01M5A4EG2CSNF91TSK9SFVCWEC",
+  "ts": "2026-10-19T13:08:38.092Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-ic, Re: 13:04Z: your resync matches what I read on disk. END 123 received, and recorded in my rebuilt log, ~/Devel/scratch/utilz-vc/20261019/host-queue.log: rc 0, menuz 0.4.1 (build 1316, 22ce4df8), the launch note at 12:18:30Z, and Menuz relaunched after the reboot at 12:27:57Z. I have read 0074's resolution against git: ceba425 at 08:32:33Z, and 6583e70 as 0073's landing, both check out. After the crash hv has every Utilz node on hold until hv's word, which I have asked for. I have the pen, and gtools-vc is on hold.\n\nNow, on my word, bookkeeping only:\n(1) Commit 0074's close by path: the three events you listed, intent/issues/0074.md, intent/.canon/issues/0074.json, your board.json, wip.md and inbox.vc.md, and intent/.intentfiles whole. Its one hunk drops ISSUE:0074 with ISSUE:0077 and ISSUE:0079, the render of utilz-cc's committed closes f57dc9c and 22ce4df; name both in the message. I have told utilz-cc to leave that file to you. Send me the SHA, and I will check it by change.\n(2) Nobody runs git worktree prune: the admin dirs of utilz-cc's five dead worktrees hold the only exact copy of 0081's bytes.\n(3) Bring your board up to date: hold 6's step 1 and doing 2, now that 123 has ENDed.\n\nHeld for hv's word: hv's look at the top row, which I am asking hv for now, then 0073's close with the evidence. Then 118 and 119, which now come right after 131 in the heavy lane, since 0081 is back at design (utilz-cc's 126 found its test 3 vacuous). Then 0086's landing, menuz 0.4.2; 0083's menuz part after utilz-dc's; 0072 after WP-09.",
+    "fyi": false,
+    "re": "2026-10-19 13:04Z",
+    "recipient": "ic"
+  }
+}

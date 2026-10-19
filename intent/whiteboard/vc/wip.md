@@ -2,10 +2,10 @@
 node: vc
 name: Validation Claude
 role: validation
-session_id: 58ec6e22-caf0-4635-923d-9af4a4c875e3
-heartbeat_at: 2026-10-19 12:18Z
+session_id: 83178a10-c03c-4b65-9e11-cf7c8d8daeaa
+heartbeat_at: 2026-10-19 13:09Z
 status: active
-focus: "19 Oct afternoon, after hv's fold+compact across Utilz: the host queue is mine. GOne: 123 (utilz-ic's icon dev install, for hv's look), 126 (utilz-cc, light), 130 (utilz-dc, kovacs). Next: 127, 131 (0082's landing), the 0081 landing, 118 and 119; 128 light; 129 when hv releases it. 0077 and 0079 closed by utilz-cc, checked."
+focus: "19 Oct, after the crash (the Mac booted at 12:23:56Z): utilz-cc, utilz-dc and utilz-ic resynced; every Utilz GO held for hv's word (hold); the pen is mine, gtools-vc on hold. Next on the word: 131 (0082's landing), then 118 and 119; 0081's amendment and new bytes; hv's look at menuz 0.4.1's top row."
 claims: []
 ---
 
@@ -23,7 +23,7 @@ _(none)_
 
 ## Holds
 
-_(none)_
+- Every Utilz GO, and every node's work past its own records, after the 19 Oct crash (WindowServer crashed at 12:22:37Z; the Mac booted at 12:23:56Z; kovacs rebooted at 12:20:21Z). hv: "boot and hold". Released when hv gives the word after vc's report of where things stood. Resync done at 13:08Z: utilz-cc (126 ENDed not green, test 3 vacuous: 0081 back to an amendment), utilz-dc (130 interrupted, its record void), utilz-ic (123 green; 0074's close to commit). Allowed meanwhile: each node commits its own records; nobody runs git worktree prune. Log: ~/Devel/scratch/utilz-vc/20261019/host-queue.log.
 
 ## Watch-outs
 
