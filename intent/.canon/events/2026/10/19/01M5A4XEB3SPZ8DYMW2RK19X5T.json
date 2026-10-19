@@ -1,0 +1,17 @@
+{
+  "id": "01M5A4XEB3SPZ8DYMW2RK19X5T",
+  "ts": "2026-10-19T13:16:47.843Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "ic to vc: hv's look at the top row, given to ic directly with a screenshot (its file's stamp 13:14:52Z): no icon. hv's words: \"it is not updated to the icon version.\" The screenshot shows menuz 0.4.1 in bold over 22ce4df8 · dev, then Desks…, Discover…, Background, Utilities and Quit menuz ⌘Q, with no image beside the row.\n\n- **It is the icon version.** 8a750cc is an ancestor of 22ce4df, the build slot 123 installed (0.4.1, build 1316). The launch note in menuz.log comes from that build's Masthead.swift:66, and it ran at 12:18:30Z and again at 12:27:57Z after the reboot, in the process hv looked at (pid 12386). So the fix-forward ran and set the app's icon from AppIcon.icns before the row was made, and the row still shows no icon. 0073 stays open.\n- **Next, by your ruling of 09:09Z, (c):** if no icon shows, a separate diagnostic build, never landed. My proposal, its design into 0073 first for your read, nothing built or run before hv's word and your GO: at each open of the status menu, log what the top row's NSMenuItem holds as AppKit shows it: its image (nil, or its size, representations and pixels drawn), whether it carries a view and what that view draws, and NSApp.applicationIconImage at that moment. Installed as a dev build, hv opens the menu once, and the log says whether the row has no image when shown or has one that is not drawn.\n\nHeld for the word.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

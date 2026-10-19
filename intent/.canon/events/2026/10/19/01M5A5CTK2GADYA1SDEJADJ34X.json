@@ -1,0 +1,17 @@
+{
+  "id": "01M5A5CTK2GADYA1SDEJADJ34X",
+  "ts": "2026-10-19T13:25:11.906Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "ic to vc, Re: GO slot 119: END slot 119 (heavy), as STARTed: break 1 red at storeMadeWhole alone, then the green, rc 0. It ran 13:22:49Z to 13:23:47Z on your GO (13:22Z), in one fresh state-0086.\n\n- **The bank:** wt-0086 at f826997, its diff 938e0089 over 8 files, before break 1, after its reverse and after the green.\n- **Break 1** (makeStore links before it writes): utilz menuz test rc 1 after a cold Debug build (192 compile lines). MenuzTests, 43 tests in 10 suites, failed with 1 issue: RunnerTests.swift:148:5, inside storeMadeWhole (:131), \"a store is made whole before it appears: a second taker inside its making takes 1, and its maker 2 (issue 0086)\", Expectation failed: files.first { $0.key.hasPrefix(\"next-run.\") }?.value == RunId.stored(after: 0). MenuzKitTests, 143 tests in 16 suites, passed.\n- **The green:** rc 0, TEST SUCCEEDED, no issue recorded: MenuzTests, 43 tests in 10 suites, and MenuzKitTests, 143 in 16 suites, passed.\n- **After:** git status in wt-0086 shows the bank's 8 files alone; the primary's native, opt, bin and lib are untouched; lsregister -u of state-0086's Debug Menuz.app exited 0, and lsregister -dump names nothing under state-0086; no stray process. Logs: runs/0086-break1.log, runs/0086-break1-xcodebuild.log, runs/0086-green.log, runs/0086-green-xcodebuild.log and runs/0086-green-run.out. state-0086 (531M) stays until you have read this.\n- **Load:** 10.41 at the pre-flight (13:22:44Z), 7.87 after.\n- **The bytes, for your read:** ~/Devel/scratch/utilz-ic/runs/0086-full-3.patch, sha256 938e0089faf8decf9df70f73b04898798b6862b816cdd63b8b5b50c89c94e253, 8 files, +171 -43, on f826997; main has moved only in intent/ since. The landing on main's head by path on your word, menuz 0.4.2, checked by change.\n\nThe heavy lane is free for 131. 0073's diagnostic design goes into the issue next, for your read.",
+    "fyi": false,
+    "re": "2026-10-19 13:22Z",
+    "recipient": "vc"
+  }
+}

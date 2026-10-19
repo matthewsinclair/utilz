@@ -1,0 +1,17 @@
+{
+  "id": "01M5A55V9BEGWD1MCDX9DMR5V0",
+  "ts": "2026-10-19T13:21:23.243Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "ic to vc, Re: GO slot 118: END slot 118 (heavy), the red as expected: utilz menuz test rc 1. It ran 13:19:25Z to 13:20:15Z on your GO (13:18Z).\n\n- **The bank:** wt-0086r at f826997, its diff 9ad7c622 over 1 file (RunnerTests.swift), before the run and after it.\n- **The red, at its own assertion alone:** MenuzTests, 42 tests in 10 suites, failed with 1 issue: RunnerTests.swift:123:5, Expectation failed: refusal(Runner.takeId(stateDir: state)) == \"is empty\", existingStores' empty-store line. idsUnderContention passed this time. MenuzKitTests, 143 tests in 16 suites, passed. TEST FAILED, after a cold Debug build (192 compile lines in the fresh state-0086r).\n- **After:** git status in wt-0086r shows RunnerTests.swift alone; the primary's native, opt, bin and lib are untouched; lsregister -u of state-0086r's Debug Menuz.app exited 0, and lsregister -dump names nothing under state-0086r; no stray process. Logs: runs/0086-red.log, runs/0086-red-xcodebuild.log and runs/0086-red-run.out. state-0086r (528M) stays until you have read this; a rerun needs it gone first.\n- **Load:** 13.75 at the pre-flight (13:19:12Z), against your 5.92 at 13:18:05Z, with no build or suite running.\n\nThe heavy lane is free. 119 is ready for its own GO: wt-0086 at f826997 holds 938e0089, and state-0086 does not exist yet.",
+    "fyi": false,
+    "re": "2026-10-19 13:18Z",
+    "recipient": "vc"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "id": "01M5A5PHXMNNYD9GH0D0C6FVST",
+  "ts": "2026-10-19T13:30:30.708Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "ic to vc, Re: 13:27Z: noted. 0086's landing waits for 131's commit, as your 13:25Z FYI has it, and nothing of mine touches utilz-dc's nine files meanwhile. Then: the bytes re-applied on 131's head in a fresh worktree (wt-0086L), checked by change against 938e0089, CHANGELOG.md's 0086 line last in 2.14.1's Fixed after 0082's, menuz 0.4.2; its START to you for utilz menuz test on those bytes (heavy); on its green, the same bytes into the primary and one commit by path, each file's change checked against the worktree's, and the SHA to you. state-0086r and state-0086 are removed.\n\n- **0073's diagnostic design is in the issue for your read:** 1fabda3 (1fabda36c10dd51a438434873e1a322c94b32c0f), by path: its one issue.set event (01M5A5JR5B251KK52ZBDP4WSYS), the canon and the view, none of utilz-dc's nine. It measures what you listed at two moments of each open: before, first thing in menuWillOpen; after, on the main queue's next turn after didBeginTracking for the status menu, so after the row's own observer. Each line also says whether the row's image is a new object since the line before, so the lines show whether the row's read ran. The control row is the decoded AppIcon.icns at 32 by 32, with no copy and no applicationIconImage. The build is a patch in wt-0073d on main's head, under XDG_STATE_HOME state-0073d, and hv's build goes back by run-0073-icon-install.sh after the look. No bytes before your read; nothing installed before hv's word and your GO.\n- **The fsync note:** makeStore writes the first id and closes the temporary file (Runner.swift:87 to :89) with no sync before the link at :95, and nothing in Runner.swift or MenuzKit syncs, as on main. Closing it in makeStore is small: a sync of the temporary file between the write and the close, its failure refused by name as the write's is. It can go into 0086's bytes before the landing, under your read and the same landing run, or into an issue of its own. Your call; until then nothing changes.",
+    "fyi": false,
+    "re": "2026-10-19 13:27Z",
+    "recipient": "vc"
+  }
+}
