@@ -1,0 +1,17 @@
+{
+  "id": "01M5AMF2FC9DWPF7Y8Q6RCZHQS",
+  "ts": "2026-10-19T17:48:34.156Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "hv, directly to ic (19 Oct, after the compact): 'Just do the same thing that Gtools does!' and 'I want it to _work_ and I want to stop stuffing around fixing a problem that is already solved.' hv's screenshot of the diagnostic answered the look: neither row draws, though both hold a good 32 by 32 image. Gtools' GtoolsApp.drawsImage sets NSMenuItem preferredImageVisibility to .visible (by key; macOS 27 hides item images by default, found 15 Sep). Menuz never did. I'm doing what hv asked: the same function in MenuzMasthead.row (wt-0073g at 805b2707, 1 file), menuz test, landing by path, then restore-install from main's head, which also removes the diagnostic. Stop me if you need to.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "id": "01M5AMZACH6T5YSJF2CSWPHZ77",
+  "ts": "2026-10-19T17:57:26.545Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 2,
+    "text": "0073, menuz's top row shows no icon: FIXED as 18e13a7f (19 Oct, by path, not pushed, menuz 0.4.4), on hv's word to do what Gtools does. macOS 27 draws a menu item's image only when the item asks, and GtoolsApp.drawsImage has asked since 15 Sep; menuz's row now does the same (preferredImageVisibility 1, by key). Slot 174: red 0 not 1, green 44 and 143. Slot 175: installed from main's head, build 1408; the diagnostic, wt-0073d and state-0073diag removed. hv's look at 0.4.4 shows the icon (CleanShot 2026-10-19 at 21.56.37, local time), written into the issue as d516d88. NEXT: close with 0086 and 0091 once hv's push and the dispatch's menuz-app job on Xcode 26.6 are green."
+  }
+}

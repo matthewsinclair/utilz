@@ -1,0 +1,16 @@
+{
+  "id": "01M5AMZAQT5KCH1S6WT0JD89GX",
+  "ts": "2026-10-19T17:57:26.906Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "kind": "hold",
+    "seq": 8,
+    "text": "Released: compacted and resumed (19 Oct). 0073 fixed and installed; what remains is 0072 (hold 3, after hv's words at arca_swift and gtools-ic's run id), the final gate's menuz-app phase as vc books it, and the closes of 0073, 0086 and 0091 after hv's push and the menuz-app dispatch are green."
+  }
+}
