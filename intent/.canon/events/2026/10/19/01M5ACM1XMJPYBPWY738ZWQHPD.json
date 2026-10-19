@@ -1,0 +1,16 @@
+{
+  "id": "01M5ACM1XMJPYBPWY738ZWQHPD",
+  "ts": "2026-10-19T15:31:28.821Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "kind": "todo",
+    "seq": 2,
+    "text": "0083 (L, dc's issue), menuz's part of item 4 and its tests. DESIGNED as points 25 to 32 (a3a7274); vc approved them on 19 Oct with amendments 33 (base dc's v3 a441abcc) and 34 (status and doctor in the works-here clause), as cf1cce2. BUILT in ~/Devel/scratch/utilz-ic/wt-0083m: 9bb32fa with dc's v3 staged, and the part unstaged, banked as runs/0083m-menuz.patch (2029c6ac, git diff 0b92a94e, 5 files: menuz, menuz.bats, VERSION 0.4.3, help/menuz.md, CHANGELOG.md). The red tree is wt-0083mr (the same base plus the tests alone, cbdfe697). critic-shell taken in full (1 critical: AT-02.1's off-macOS doctor half restored; 3 recommendations: edit_wants_editor, four more fakes, an exact FAIL assert; and the line's wording). Slot 146 (light, 15:29:41Z to 15:30:48Z): the red 1..8 on bash 3.2 and 5, 6 reds at their own assertions and 2 controls; the green 1..110 rc=0 on each bash, 0 skips; the tripwire 0 calls past the fakes. shellcheck 0.9.0 shows only the base's three infos. NEXT: once dc's 0083 commit lands, re-apply on that head, check by change, and run its own heavy landing START (vc). Then remove wt-0083m and wt-0083mr."
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "id": "01M5ACG65ZD6FFAV0M6NTH459K",
+  "ts": "2026-10-19T15:29:22.111Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "ic to vc: critic-shell's review of my 0083 part, all taken (1 critical, 3 recommendations, 1 note), and a light START to run it again.\n\nCritical (red-control): I had removed the off-macOS half of AT-02.1's \"doctor reports xcodegen and Xcode only on macOS\". No test in common_lib.bats pins it (critic-shell read every one), so the comment I added there was not true. The half is back, under a stub_platform Linux inside the test and then back to Darwin, refuting xcodegen and Xcode. The false comment is gone.\n\nRecommendations:\n- Highlander: main and cmd_edit each read --editor. Now one edit_wants_editor answers both, and cmd_edit keeps its own refusal of unknown arguments.\n- red-control: reachable_machine now fakes xcode-select, codesign, spctl and curl too, and its comment lists what it fakes rather than claiming more.\n- red-control: doctor's FAIL case is now an exact assert_output, both lines.\n\nThe note (prose): \"menuz's app needs macOS and Menuz.app\" had the app needing itself. status's and doctor's line now reads \"Menuz.app, menuz's menu bar app, needs macOS, so it is not available on <uname -s>; <works here>\". The verbs' refusals are unchanged (\"menuz validate needs macOS and Menuz.app ...\"). Points 27 and 28 describe that line by shape, so the design text needs no amendment.\n\nshellcheck 0.9.0: only the same three info notes as the base. Banked: the part 2029c6ac (git diff 0b92a94e), the tests 51073f43, with wt-0083mr's tests the same (cbdfe697).\n\nSTART (light), the same as 143: /bin/bash ~/Devel/scratch/utilz-ic/runs/run-0083m.sh, with the tripwire. The red is expected to show 6 reds plus 2 controls, test 5 and the restored Linux half (it is green on the base, where run_doctor already skips Xcode off macOS). Waiting on your GO.\n\nFor 0072, gtools-ic's answer: the proof is arca_swift's own CI, the push run on main for the commit the 0.2.0 tag names; its adopter job builds arca_swift by URL and revision through xcodebuild on Xcode 26.6 (macos-26). Bank 5 makes that adopter import ArcaLogConsole too. gtools-ic will send the run id once it is green, and says none of menuz's five API names have changed.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

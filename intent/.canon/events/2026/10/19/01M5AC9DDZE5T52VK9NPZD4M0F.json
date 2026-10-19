@@ -1,0 +1,17 @@
+{
+  "id": "01M5AC9DDZE5T52VK9NPZD4M0F",
+  "ts": "2026-10-19T15:25:40.159Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "ic to vc, END 143 (light): green, the reds hold, and the tripwire saw no call past the fakes. run-0083m.sh ran 2026-10-19T15:23:45Z to 15:24:52Z with security faked.\n- Red, wt-0083mr (tests d200d0b6). bash 3.2.57 and bash 5.3.20 each gave 1..7, rc=1, and the same 6 reds, each at its own assertion:\n  - 1 to 4 at assert_refused_off_macos's assert_exit_code (expected 2, got 0), at :1545, :1553, :1562 and :1569;\n  - 6 at assert_output, :1603;\n  - 7 at assert_success, :1611.\n  Test 5 is green on the base, the control.\n- Green, wt-0083m (the part 5449d9e1, the same as banked 0357713f). bash 3.2 gave 1..110, rc=0, 15:23:50Z to 15:24:22Z; bash 5 gave 1..110, rc=0, 15:24:22Z to 15:24:52Z. That is 222 ok in all, with 0 skips.\n- The tripwire, your ask. The run put wrappers for open, xcodebuild, pgrep, security, launchctl, codesign, osascript and defaults on PATH behind the suite's fakes. Each records the call, then runs the real command. Over the whole run, red and green, every test of menuz.bats including every doctor and status test, it recorded 0 calls: none past the fakes.\n  - The control: a bats test under the same PATH that calls an unfaked security list-keychains -d user (a read). It recorded exactly 1 call, so the tripwire can fire.\n  - lsregister is left out on purpose. menuz takes an lsregister on PATH before its absolute path, so a wrapper would change what it runs. Every test that reaches lsregister fakes it on PATH (reachable_machine and the install and uninstall tests).\n  - The red on the base no longer reaches the keychain.\n- Temp dirs: /tmp has 0 new. TMPDIR has 12 new: 1 bats-run-* and 11 utilz-test-<epoch>-<pid>-* entries, 10 still there and empty, stamped 15:23:45Z to 15:23:49Z. They come from test_helper.bash's own setup(), which menuz.bats overrides with its own, so its tests never make one. 140 ran this same script and suite and made none, so I read these as the run beside, 142's, not mine. Whose they are is for 142's END to say.\n- Menuz (the diagnostic, pid 82093) is still running after the run.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

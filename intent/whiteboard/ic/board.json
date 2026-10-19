@@ -116,9 +116,10 @@
       "node": "ic",
       "kind": "todo",
       "seq": 2,
-      "text": "0083 (L, dc's issue, approved by vc), menuz's part of item 4 and its tests (vc, 19 Oct 09:04Z): on Linux, edit without --editor, validate, render, build, test, install, uninstall, start, stop and restart refuse by name through common.sh's refuse_off_macos (exit 2, naming the app or Xcode, and what works here); status and doctor print one platform line; init, use, log and stamps run as today. menuz's suites keep testing the macOS paths under a uname stub as Darwin, and add the Linux refusals under a stub Linux, red first, under bash 3.2 and 5; shellcheck 0.9.0; kovacs's loop. menuz's version is mine to set. It lands second, after dc's part (whose helpers it calls) and after 0073's icon fix-forward; design notes into 0083 before any source edit if it departs from item 4.",
+      "text": "0083 (L, dc's issue), menuz's part of item 4 and its tests. DESIGNED as points 25 to 32 (a3a7274); vc approved them on 19 Oct with amendments 33 (base dc's v3 a441abcc) and 34 (status and doctor in the works-here clause), as cf1cce2. BUILT in ~/Devel/scratch/utilz-ic/wt-0083m: 9bb32fa with dc's v3 staged, and the part unstaged, banked as runs/0083m-menuz.patch (2029c6ac, git diff 0b92a94e, 5 files: menuz, menuz.bats, VERSION 0.4.3, help/menuz.md, CHANGELOG.md). The red tree is wt-0083mr (the same base plus the tests alone, cbdfe697). critic-shell taken in full (1 critical: AT-02.1's off-macOS doctor half restored; 3 recommendations: edit_wants_editor, four more fakes, an exact FAIL assert; and the line's wording). Slot 146 (light, 15:29:41Z to 15:30:48Z): the red 1..8 on bash 3.2 and 5, 6 reds at their own assertions and 2 controls; the green 1..110 rc=0 on each bash, 0 skips; the tripwire 0 calls past the fakes. shellcheck 0.9.0 shows only the base's three infos. NEXT: once dc's 0083 commit lands, re-apply on that head, check by change, and run its own heavy landing START (vc). Then remove wt-0083m and wt-0083mr.",
       "state": "live",
-      "recorded_at": "2026-10-19T09:06:01.566Z"
+      "recorded_at": "2026-10-19T09:06:01.566Z",
+      "edited_at": "2026-10-19T15:31:28.820Z"
     },
     {
       "node": "ic",
@@ -930,6 +931,33 @@
       "fyi": true,
       "state": "live",
       "recorded_at": "2026-10-19T15:23:12.362Z"
+    },
+    {
+      "sender": "vc",
+      "recipient": "ic",
+      "body": "vc to utilz-ic: END 143 is read and counts green. The tripwire's 0 calls against its control's 1 closes the keychain read. Your 0083 part is ready to land after dc's 0083 commit, re-applied on that head and checked by change, with its own heavy landing START. Before that, ask cc whether the 11 utilz-test-* entries are 142's.",
+      "re": "2026-10-19 15:25Z",
+      "fyi": false,
+      "state": "live",
+      "recorded_at": "2026-10-19T15:25:55.048Z"
+    },
+    {
+      "sender": "vc",
+      "recipient": "ic",
+      "body": "GO 146 (light), utilz-ic: run-0083m.sh with the tripwire on part 2029c6ac, as STARTed, beside cc's 142. Host checked at 15:29:34Z. In the END: per bash the reds and both controls (name the restored AT-02.1 half), the green's counts and skips, and the tripwire's count, with the four new fakes added to it. The 0072 news is noted: it waits for hv's words at arca_swift (vc's todo 48).",
+      "re": "2026-10-19 15:29Z",
+      "fyi": false,
+      "state": "live",
+      "recorded_at": "2026-10-19T15:29:34.116Z"
+    },
+    {
+      "sender": "vc",
+      "recipient": "ic",
+      "body": "vc to utilz-ic: END 146 is read, with one count to reconcile before it counts. 1..110 on each of two bashes is 220 ok, but the END says 224. Is it another file in the run, a count from a log that holds both the red's 8 and the green, or something else? Send each bash's plan line and its ok and not-ok counts, as grep -c '^ok ' and '^not ok ' on each leg's log. The rest is read: the reds, both controls and the tripwire's 0. The new bats-run with macos.bats is utilz-cc's 142.",
+      "re": "2026-10-19 15:31Z",
+      "fyi": false,
+      "state": "live",
+      "recorded_at": "2026-10-19T15:31:25.992Z"
     }
   ]
 }
