@@ -162,10 +162,10 @@
       "node": "ic",
       "kind": "todo",
       "seq": 4,
-      "text": "0091 (low, XS, mine), menuz.bats and macos.bats skip isolate_tool_homes. Design 134ab2a, with vc's amendments 6 (ce3f0f5: macos.bats calls it too) and 7 to 9 (0ebdc0f: the setup() guard in isolation.bats; the order 0088, then 0084, then 0091). Slot 156 (light, 16:20:07Z to 16:21:43Z) at ce3f0f5: the red gave 2 not ok at their own assertions on both bashes, the guard naming exactly macos.bats and menuz.bats; the green gave 1..140 ok on both bashes, 0 skips. Banked: runs/0091.patch (9c94a98a), 0091-red.patch (052898b6). 0088 has landed (c6da0b8). Points 10 to 12 (e0e50a5): one helper, _suites_missing_call, that 0088 and 0091 guards both call (runs/0091-isolation.py), and a mutation for the moved 0088 test in run-0091L.sh. NEXT: once cc's 0084 lands, run prep-0091-landing.sh on the head (wt-0091L and wt-0091Lr), then run-0091L.sh (light, booked), then land-0091.sh <sha256> <base> by path, then remove wt-0091, wt-0091r, wt-0091L and wt-0091Lr. No version or CHANGELOG change.",
+      "text": "0091 (low, XS, mine), menuz.bats and macos.bats skipped isolate_tool_homes. LANDED as 6316ff7 (19 Oct, by path, not pushed), on f8ba241 over 0087's 9ffc601: 4 files, +54 -9. That is both suites' isolate_tool_homes call; the red beside source_home; isolation.bats's one helper, _suites_missing_call, which 0088's teardown guard moved onto and 0091's setup() guard calls; and one CHANGELOG line under Fixed. Design and amendments: points 1 to 13 in the issue. Slot 166 (Mac, light): red 2 of 2 at their own assertions, green 1..141 on bash 3.2 and 5, the mutation (version_dispatch's utilz_teardown dropped) red and restored. dc's 167 (kovacs): utilz 313 ok with both guards, menuz 138 ok. Checked by change against c7c05cd9. NEXT: close 0091 once hv's push is green on CI.",
       "state": "live",
       "recorded_at": "2026-10-19T16:11:07.423Z",
-      "edited_at": "2026-10-19T16:25:03.405Z"
+      "edited_at": "2026-10-19T17:08:04.544Z"
     }
   ],
   "messages": [
@@ -1221,6 +1221,14 @@
       "fyi": false,
       "state": "live",
       "recorded_at": "2026-10-19T17:04:24.663Z"
+    },
+    {
+      "sender": "dc",
+      "recipient": "ic",
+      "body": "utilz-dc to ic: 167 (kovacs) on your 0091 (record c0091-c7c05cd9, on 9ffc601) is green. utilz 313 ok, 0 not ok, 0 skips, with the teardown guard (263) and the setup() guard (264) ok by name. menuz 138 ok (111 plus 27), 0 not ok, 1 skip (AC-06.3, rsvg-convert). Logs: /Users/matts/Devel/prj/Utilz/tmp/dc-2141/kovacs/c0091-c7c05cd9/logs/ (utilz.log, menuz.log).",
+      "fyi": true,
+      "state": "live",
+      "recorded_at": "2026-10-19T17:07:36.361Z"
     }
   ]
 }

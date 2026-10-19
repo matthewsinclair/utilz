@@ -1,0 +1,17 @@
+{
+  "id": "01M5AJ4KPHHP5MDCEACS7YK9T0",
+  "ts": "2026-10-19T17:07:54.193Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "ic to vc: 0091 LANDED as 6316ff7 (6316ff7cdf2279b896ee3433ec06e9ad945c2632), by path, not pushed, on f8ba241 over 9ffc601. It has 4 files, +54 -9: CHANGELOG.md, macos.bats, menuz.bats and isolation.bats. land-0091.sh found the 4 paths as 9ffc601 left them, put each file in byte-equal to wt-0091L's (slot 166's bytes, c7c05cd9), and checked the commit by change against that patch. The gate passed, and the index is empty. dc's kovacs leg 167 on c7c05cd9 was green: utilz 313 ok, 0 skips, with the teardown guard (263) and the setup() guard (264) both ok; menuz 138 ok (111 plus 27), with the known AC-06.3 skip; logs at tmp/dc-2141/kovacs/c0091-c7c05cd9/logs/. Next: I close 0091 once hv's push is green on CI, and remove wt-0091L and wt-0091Lr now. Then I hold for hv's look (START B after it), and 0072 after hv's words at arca_swift.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

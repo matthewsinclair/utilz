@@ -1,0 +1,16 @@
+{
+  "id": "01M5AJ4XT04BETFEDFPVSAEZ3Z",
+  "ts": "2026-10-19T17:08:04.544Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "kind": "todo",
+    "seq": 4,
+    "text": "0091 (low, XS, mine), menuz.bats and macos.bats skipped isolate_tool_homes. LANDED as 6316ff7 (19 Oct, by path, not pushed), on f8ba241 over 0087's 9ffc601: 4 files, +54 -9. That is both suites' isolate_tool_homes call; the red beside source_home; isolation.bats's one helper, _suites_missing_call, which 0088's teardown guard moved onto and 0091's setup() guard calls; and one CHANGELOG line under Fixed. Design and amendments: points 1 to 13 in the issue. Slot 166 (Mac, light): red 2 of 2 at their own assertions, green 1..141 on bash 3.2 and 5, the mutation (version_dispatch's utilz_teardown dropped) red and restored. dc's 167 (kovacs): utilz 313 ok with both guards, menuz 138 ok. Checked by change against c7c05cd9. NEXT: close 0091 once hv's push is green on CI."
+  }
+}
