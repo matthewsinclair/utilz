@@ -3,9 +3,10 @@
   "number": 94,
   "slug": "menuz-status-says-the-source-is-unknown-on-a-hom",
   "title": "menuz status says the source is unknown on a Homebrew install",
-  "status": "open",
+  "status": "closed",
   "severity": "low",
   "created": "2026-10-19",
+  "closed": "2026-10-19",
   "reporter": "Matthew Sinclair",
   "body": "## What\n\nOn a Homebrew install, `menuz status` ends with `source      unknown: no /opt/homebrew/Cellar/utilz/2.14.0/libexec/native/macos/Menuz under git here`. That is accurate, since a keg is not a git checkout, so there is no source to compare the installed app with, but it reads like a fault on the normal install. hv, 19 Oct 2026, running utilz 2.14.0's `menuz status`: \"It should either not print the source line or say \"source: homebrew\" in the homebrew case. Why can't we just fix it now.\"\n\n## Design\n\n1. `cmd_status` (opt/menuz/menuz) asks common.sh's `install_tree_manager \"$UTILZ_HOME\"` before it reads the source. That is the one test of a Homebrew keg, by the managed-by row its manifest carries, never a Cellar path. Where it answers `brew`, the line is `source      homebrew` and nothing is compared. Where it fails (a manifest it cannot read), the line is `source      unknown: <why>`. Every other tree is read as now.\n2. A menuz.bats test under AT-02.3: a source home whose manifest says `managed-by\tbrew` prints `source      homebrew`, and no `unknown`. It is red on main, which prints `unknown` there (no git), and green with the change. The existing no-source test (a `utilz` tree) keeps its `unknown` line.\n3. menuz 0.4.4 to 0.4.5, and one CHANGELOG line under Fixed.\n"
 }
