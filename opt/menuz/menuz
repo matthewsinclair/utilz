@@ -534,8 +534,14 @@ cmd_status() {
     fi
   fi
 
-  local tree stamp
-  if ! tree="$(source_stamp)"; then
+  # A Homebrew keg is no git checkout, so it has no source to compare with
+  # (issue 0094); install_tree_manager is the one test of a keg.
+  local tree stamp manager
+  if ! manager="$(install_tree_manager "$UTILZ_HOME" 2>&1)"; then
+    printf 'source      unknown: %s\n' "$manager"
+  elif [[ "$manager" == brew ]]; then
+    printf 'source      homebrew\n'
+  elif ! tree="$(source_stamp)"; then
     printf 'source      unknown: the tree under %s could not be read\n' "$(source_dir)"
   elif [[ -z "$tree" ]]; then
     printf 'source      unknown: no %s under git here\n' "$(source_dir)"

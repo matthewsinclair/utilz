@@ -489,6 +489,17 @@ run_src_menuz() {
   assert_output_contains "source      unknown: no $SRC/native/macos/Menuz under git here"
 }
 
+@test "AT-02.3: on a Homebrew install status says the source is homebrew, and compares nothing (issue 0094)" {
+  source_home
+  rm -rf "$SRC/.git"
+  printf 'managed-by\tbrew\n' >"$SRC/manifest.sha256"
+  make_app "$INSTALLED"
+  run_src_menuz status
+  assert_success
+  assert_output_contains "source      homebrew"
+  [[ "$output" != *"source      unknown"* ]] || fail "a keg's source still reads as unknown: $output"
+}
+
 @test "AT-02.3: status reads the login item through the selected app, and says when it cannot" {
   make_app "$INSTALLED"
   rm "$INSTALLED/Contents/MacOS/Menuz"
