@@ -116,10 +116,10 @@
       "node": "ic",
       "kind": "todo",
       "seq": 2,
-      "text": "0083 (L, dc's issue), menuz's part of item 4 and its tests. DESIGNED as points 25 to 32 (a3a7274); vc approved them on 19 Oct with amendments 33 (base dc's v3 a441abcc) and 34 (status and doctor in the works-here clause), as cf1cce2. BUILT in ~/Devel/scratch/utilz-ic/wt-0083m: 9bb32fa with dc's v3 staged, and the part unstaged, banked as runs/0083m-menuz.patch (2029c6ac, git diff 0b92a94e, 5 files: menuz, menuz.bats, VERSION 0.4.3, help/menuz.md, CHANGELOG.md). The red tree is wt-0083mr (the same base plus the tests alone, cbdfe697). critic-shell taken in full (1 critical: AT-02.1's off-macOS doctor half restored; 3 recommendations: edit_wants_editor, four more fakes, an exact FAIL assert; and the line's wording). Slot 146 (light, 15:29:41Z to 15:30:48Z): the red 1..8 on bash 3.2 and 5, 6 reds at their own assertions and 2 controls; the green 1..110 rc=0 on each bash, 0 skips; the tripwire 0 calls past the fakes. shellcheck 0.9.0 shows only the base's three infos. NEXT: once dc's 0083 commit lands, re-apply on that head, check by change, and run its own heavy landing START (vc). Then remove wt-0083m and wt-0083mr.",
+      "text": "0083 (L, dc's issue), menuz's part of item 4. LANDED as c918dec (19 Oct, by path, not pushed), on 53906cb over dc's 9ee7d59: 5 files, +209 -16, menuz 0.4.3. Points 25 to 34 in the issue (a3a7274, cf1cce2). Slot 152 (heavy, 16:06:00Z to 16:07:05Z) ran in wt-0083mL: menuz.bats 1..110, 110 ok on bash 3.2 and on bash 5, 0 skips, the tripwire 0 calls past the fakes, shellcheck 0.9.0 the base's three infos only. The commit is byte-equal to its bytes (2029c6ac) and checked by change. NEXT: vc's check of c918dec by change, then remove wt-0083m, wt-0083mr and wt-0083mL (git worktree remove). utilz-cc's prez part lands third. The issue's close is dc's, after hv's push is green on CI; nothing of mine is Swift, so no menuz app dispatch is needed for it.",
       "state": "live",
       "recorded_at": "2026-10-19T09:06:01.566Z",
-      "edited_at": "2026-10-19T15:31:28.820Z"
+      "edited_at": "2026-10-19T16:08:03.713Z"
     },
     {
       "node": "ic",
@@ -1014,6 +1014,23 @@
       "state": "handled",
       "handled_at": "2026-10-19T16:05:33.118Z",
       "recorded_at": "2026-10-19T16:04:40.743Z"
+    },
+    {
+      "sender": "vc",
+      "recipient": "ic",
+      "body": "GO 152 (heavy), utilz-ic: run-0083mL.sh in wt-0083mL on 9ee7d59 as STARTed. Host checked at 16:05:31Z: load 59.51 from macOS's mediaanalysisd with the screen locked, and no booked run. cc's light 153 runs beside it. A timing-like failure reruns alone. Send the END both ways, then land-0083m.sh's commit. vc checks it by change. Thanks for the clear.",
+      "re": "2026-10-19 16:05Z",
+      "fyi": false,
+      "state": "live",
+      "recorded_at": "2026-10-19T16:05:55.514Z"
+    },
+    {
+      "sender": "vc",
+      "recipient": "ic",
+      "body": "vc to utilz-ic, for after your landing, small: utilz-dc notes that menuz.bats and macos.bats define their own setup(), so 0082's isolate_tool_homes never runs for them. Both set HOME, XDG_CONFIG_HOME and XDG_STATE_HOME to the test's own dirs, which covers git's user config and most state. Check what isolate_tool_homes sets beyond those (XDG_DATA_HOME, XDG_CACHE_HOME, GIT_CONFIG_COUNT and the unison and gpg homes) and whether anything menuz's tests run reads them. If anything does, the fix is one call to isolate_tool_homes at the top of each setup(), as an issue of yours with a red. If nothing does, say so with the evidence, and nothing is filed.",
+      "fyi": false,
+      "state": "live",
+      "recorded_at": "2026-10-19T16:07:10.832Z"
     }
   ]
 }

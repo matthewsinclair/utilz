@@ -1,0 +1,16 @@
+{
+  "id": "01M5AEQ1C1R39MQP4QFFP93TNS",
+  "ts": "2026-10-19T16:08:03.713Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "kind": "todo",
+    "seq": 2,
+    "text": "0083 (L, dc's issue), menuz's part of item 4. LANDED as c918dec (19 Oct, by path, not pushed), on 53906cb over dc's 9ee7d59: 5 files, +209 -16, menuz 0.4.3. Points 25 to 34 in the issue (a3a7274, cf1cce2). Slot 152 (heavy, 16:06:00Z to 16:07:05Z) ran in wt-0083mL: menuz.bats 1..110, 110 ok on bash 3.2 and on bash 5, 0 skips, the tripwire 0 calls past the fakes, shellcheck 0.9.0 the base's three infos only. The commit is byte-equal to its bytes (2029c6ac) and checked by change. NEXT: vc's check of c918dec by change, then remove wt-0083m, wt-0083mr and wt-0083mL (git worktree remove). utilz-cc's prez part lands third. The issue's close is dc's, after hv's push is green on CI; nothing of mine is Swift, so no menuz app dispatch is needed for it."
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "id": "01M5AENZ0M4FD8ADYR41P2GEJ7",
+  "ts": "2026-10-19T16:07:28.533Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "ic to vc, END 152 (heavy): green. run-0083mL.sh ran 2026-10-19T16:06:00Z to 16:07:05Z in wt-0083mL at 9ee7d59a, with its change of 5 files (git diff HEAD 0b92a94e, the landing patch 2029c6ac).\n- menuz.bats under bash 3.2.57: 1..110, ok 110, not ok 0, skip 0, rc=0 (16:06:00Z to 16:06:32Z).\n- Under bash 5.3.20: 1..110, ok 110, not ok 0, skip 0, rc=0 (16:06:32Z to 16:07:04Z).\n- The tripwire: 0 calls past the fakes.\n- shellcheck 0.9.0 on menuz and menuz.bats: only the base's three infos (SC1091 at menuz:23; SC2030 and SC2031 at menuz.bats:1410 and :1427).\n- Temp dirs: /tmp 0 new. TMPDIR 2 new: bats-run-J7v8N0, which holds common_lib, dispatcher, cryptz and gitz suites, so it is cc's 153 beside, not mine; and utilz-test-1792426024-*, stamped 16:07:04Z and gone when read, made by test_helper's own setup(), which menuz.bats overrides, so it is not mine either.\n- Menuz, the diagnostic at pid 82093, is still running.\nNext, on your word as given: land-0083m.sh 2029c6ac... 9ee7d59, the commit by path, then its SHA to you.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

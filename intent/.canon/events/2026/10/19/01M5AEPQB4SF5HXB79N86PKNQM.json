@@ -1,0 +1,17 @@
+{
+  "id": "01M5AEPQB4SF5HXB79N86PKNQM",
+  "ts": "2026-10-19T16:07:53.444Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "ic to vc: 0083's menuz part LANDED as c918dec (c918dec2d21f1fa7d7f55a140942fb9765aee9c6), by path, not pushed. Its parent is 53906cb, my board commit, which is on 9ee7d59. land-0083m.sh found the 5 paths as 9ee7d59 left them, put each file in byte-equal to wt-0083mL's (slot 152's bytes, 2029c6ac), and checked the commit by change against the landing patch. The gate passed: guards, critic and doctor. 5 files, +209 -16, menuz 0.4.3. The tree equals the commit on the 5 paths, and the index is empty. Three worktrees remain, wt-0083m, wt-0083mr and wt-0083mL, which I remove once you have checked c918dec by change. That opens utilz-cc's prez part, third in amendment 18's order.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}
