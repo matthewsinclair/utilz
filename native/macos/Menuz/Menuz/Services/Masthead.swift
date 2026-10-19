@@ -27,9 +27,26 @@ enum MenuzMasthead {
     log: @escaping @MainActor (String) -> Void, note: @MainActor (String) -> Void
   ) -> NSMenuItem {
     note(setAppIcon(bundle: bundle))
-    return MastheadRow(
+    let row = MastheadRow(
       app: "menuz", environment: environment, bundle: bundle, owned: owned,
       value: { value($0, bundle: bundle, menu: menu()) }, log: log)
+    drawsImage(row)
+    return row
+  }
+
+  /// macOS 27 draws a menu item's image only when the item asks for it: the
+  /// default visibility is automatic, and automatic drew no image in menuz's
+  /// top row (issue 0073), as it drew none in Gtools' menu (15 Sep 2026), so
+  /// the row asks for `.visible` (raw value 1 in NSMenuItem.h), as
+  /// GtoolsApp.drawsImage does. It is set by key, once the item says it has
+  /// the setter, because the property is new in the macOS 27 SDK: a named
+  /// reference does not compile against an older SDK, such as CI's runner
+  /// builds with, even inside `if #available`.
+  @MainActor
+  static func drawsImage(_ item: NSMenuItem) {
+    if item.responds(to: NSSelectorFromString("setPreferredImageVisibility:")) {
+      item.setValue(1, forKey: "preferredImageVisibility")
+    }
   }
 
   /// Sets the app's icon to the icon file the bundle names, decoded, and says

@@ -108,6 +108,17 @@ struct IdentityRowTests {
     #expect(coloured > 0, "the row's image draws nothing; the app's icon is \(app)")
   }
 
+  /// macOS 27 draws the row's image only where the row asks for it (issue
+  /// 0073). An older macOS has no such setting, and draws it anyway, so there
+  /// is nothing to ask there: CI's runner is one.
+  @Test("on a macOS whose items choose whether to draw their image, the row asks for it to be drawn")
+  func drawsImage() throws {
+    let row = masthead(under: scratchFolder())
+    guard row.responds(to: NSSelectorFromString("setPreferredImageVisibility:")) else { return }
+    let visibility = row.value(forKey: "preferredImageVisibility") as? Int
+    #expect(visibility == 1, "the row's preferredImageVisibility is \(visibility.map(String.init) ?? "unreadable"), not 1 (visible)")
+  }
+
   @Test("making the row gives a blank app icon the bundle's AppIcon.icns, which draws, and notes both, once")
   func iconNote() throws {
     NSApplication.shared.applicationIconImage = Self.blank(side: 16)
