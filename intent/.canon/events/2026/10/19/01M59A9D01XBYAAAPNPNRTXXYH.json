@@ -1,0 +1,15 @@
+{
+  "id": "01M59A9D01XBYAAAPNPNRTXXYH",
+  "ts": "2026-10-19T05:31:28.129Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "kind": "doing",
+    "text": "0078 (XS), first on vc's GO of 19 Oct 05:29Z: menuz's realise shell rebuilt PATH ahead of the menu's bin/, so labels, ticks and defaults ran the keg's arngz 1.0.1 while runs ran the menu's own. Design approved 05:38Z (40150cb). In ~/Devel/scratch/utilz-ic/wt-0078 on 23d7575: red in gtools-vc's slot 50 at 06:06Z (the label and the each answered login, the control passed); green in slot 52 at 06:08Z (MenuzTests 35, MenuzKitTests 141, no issue); the bytes, runs/0078-final.patch, approved by vc at 06:13Z as decba76f; critic-swift then found no critical or warning, and its revision (binFirst internal, two doc lines) re-ran green in slot 54 at 06:23Z as sha256 95b69c55, approved by vc. vc gave the landing word at 06:58Z, from hv's \"Ok, do it\" (vc's decision 30), as menuz 0.3.1; applied in the primary at 07:00Z, the applied diff matching 95b69c55; install_e2e.bats is slot 69, utilz-vc holding the queue while gtools-vc compacts. LANDED as 0150478 at 07:03Z, by path, not pushed: install_e2e.bats in slot 69 was 1..11 ok with bin/ unchanged and matching HEAD, and the commit's diff hashes to 95b69c55; the SHA is with vc and dc (dc's blob check). Dev installed in slot 70 at 07:04Z: 0.3.1 (build 1268, 0150478e), running from ~/Applications, and its --render of hv's menu shows Desks... with zeopit ticked; vc verified the landing and the render. Now: hv's eye on Desks... and Discover..., relayed by vc or given in my session; then close 0078 with the evidence. Runs book with gtools-vc again."
+  }
+}

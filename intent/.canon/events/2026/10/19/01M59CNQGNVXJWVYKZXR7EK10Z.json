@@ -1,0 +1,15 @@
+{
+  "id": "01M59CNQGNVXJWVYKZXR7EK10Z",
+  "ts": "2026-10-19T06:13:09.269Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "kind": "watchout",
+    "text": "Landings (vc, 19 Oct 06:11Z): apply a patch only into a primary that holds no one else's uncommitted hunks. git status first, and if anything there is not mine, stop and tell vc. Every START says light or heavy (gtools-vc's terms from 06:06Z): any build, whole suite, Chrome, dry run or cut is heavy and runs alone; a light run (no build, no GUI or daemon, no port, only its own temp dirs) may share the window with one heavy run, and a failure that looks like timing beside a heavy run is rerun alone before it counts."
+  }
+}

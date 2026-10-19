@@ -1,0 +1,15 @@
+{
+  "id": "01M59CNQKW1EHER4ADM1VB1AXV",
+  "ts": "2026-10-19T06:13:09.372Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "kind": "hold",
+    "text": "0072 (menuz adopts ArcaLogConsole, arca_swift WP-10) is mine and in 2.14.1 on hv's \"Yes\" (vc, 19 Oct 07:08Z). Released when gtools-ic's WP-09 (ArcaLogConsole, arca_swift 0.2.0) has fixed its shape; then its design goes into the issue for vc's read, after 0073 and 0074."
+  }
+}

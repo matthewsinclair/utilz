@@ -1,0 +1,16 @@
+{
+  "id": "01M595XM2XZR6AGQAY8VR1QNFX",
+  "ts": "2026-10-19T04:15:07.869Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "kind": "todo",
+    "seq": 1,
+    "text": "0073 (menuz adopts ArcaMasthead), after 0078, on vc's order of 18 Oct 19:01Z as changed by vc's GO of 19 Oct 05:29Z: (2) the design is in the issue (19 Oct 05:49Z), waiting for vc's read after 0078's, written from gtools-ic's Arca menu rule (layout A, The Arca menu in arca_swift 42ee0e3's ST0001 design.md) and the updated WP-04 brief, each file:line re-read at main's head, the test bundle depending on the app alone; vc reads it before any source edit and decides about.md and an owned {menu} there; (3) edits in my own worktree, detached at main's head outside the primary; (4) each host run a START, GO and END with gtools-vc, the final runs and hv's look only after arca_swift 0.1.1 is tagged, so a fresh resolve takes the About-to-front fix; (5) vc reads the final bytes, dc gets the same candidate (a SHA, or the paths) for its shellcheck 0.9.0 run of the shim half, and gtools-ic reviews the diff; (6) the landing ask names menuz's number (0.4.0, hv's word of 18 Oct), then on the landing word (hv's, or vc's if hv gives it today): apply the patch in the primary, check its bytes, install_e2e.bats there (booked), git commit --only by path through the gate, push to local only; (7) the dev install for hv's eye, then close 0073 with the evidence. Handover: tmp/ic-0073/NEXT-0073.md."
+  }
+}

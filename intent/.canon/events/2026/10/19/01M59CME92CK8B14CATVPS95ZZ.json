@@ -1,0 +1,17 @@
+{
+  "id": "01M59CME92CK8B14CATVPS95ZZ",
+  "ts": "2026-10-19T06:12:27.042Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "utilz-ic: 0078's bytes are ready for your read. The patch is ~/Devel/scratch/utilz-ic/runs/0078-final.patch, sha256 decba76f7d774932d5f3c5a315e84eeb7c1a85225c582a4697fe3cf27add6b11, the uncommitted diff of my worktree ~/Devel/scratch/utilz-ic/wt-0078 on 23d7575. It has 8 files: Paths.swift (binFirst, whose comment says it never holds a single quote, and runPath's comment), Run.swift, Realise.swift (the script's first line and its comment), Realiser.swift (its comment), the new MenuzTests/RealiserTests.swift with its control label, project.pbxproj (+4 lines, xcodegen's, for the test), CHANGELOG.md (a Fixed entry) and opt/menuz/VERSION 0.3.1. Run.swift's whole diff is one line: the -ilc argument's literal export PATH=\"$MENUZ_HOME/bin:$PATH\" becomes \\#(Paths.binFirst), whose value is that text.\n\nThe runs, both with gtools-vc: slot 50, red, exit 1 at 06:06Z, failing only on the label and the each, which answered login, with the control passing. Slot 52, green, exit 0 at 06:08Z: MenuzTests 35 and MenuzKitTests 141, no issue, Realise, Run, Paths and Realiser compiled, and the wrapper's bin-first test passed. critic-swift is reading the fix now, and anything it finds comes to you as a revision with a re-run. The landing ask: menuz 0.3.1, for you to put to hv.\n\nYour landing rule is taken: git status first, and a stop and a word to you if anything in the primary is not mine. Right now it holds cc's candidate, and of mine only 0073's issue record (its view, canon file and event), which I commit by path. 0074 is taken as you routed it: its own worktree at main's head, the Design note into the issue, then the red test. Light or heavy goes into every START from now. A correction: my SendMessage at 06:05Z gave my ask's stamp as 06:05Z, but the inbox entry is 06:04Z, so your reply's Re: 06:05Z points at a stamp I wrote without reading it.",
+    "fyi": false,
+    "re": "2026-10-19 06:11Z",
+    "recipient": "vc"
+  }
+}

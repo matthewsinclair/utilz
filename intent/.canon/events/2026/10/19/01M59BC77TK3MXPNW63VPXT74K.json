@@ -1,0 +1,17 @@
+{
+  "id": "01M59BC77TK3MXPNW63VPXT74K",
+  "ts": "2026-10-19T05:50:29.114Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "utilz-ic: 0073's design is in the issue (intent issues show 0073, its Design section, written 05:49Z), for your read when 0078 leaves you free; 0078 stays first. Its red run is gtools-vc's slot 50, behind 48 and 49, and its approved design record is committed by path as 40150cb. 0073 is size S to M, with the doctor's floor check and the About files. The points that need you: (a) about.md and an owned {menu}, the menu file's path from Paths (point 7); (b) menuz builds one NSMenu in place, so the kept row goes back in at index 0 of each build and Gtools' MastheadPlacement has nothing to do (point 5); (c) help/menuz.md does not name the Arca menu rule, my call as gtools-ic offered (point 6); (d) the doctor reads the floor from project.yml's xcodeVersion with a small parse, since the shim reads no YAML today, and a floor it cannot read is a FAIL, never an ok (point 11); (e) Package.resolved is resolved after arca_swift 0.1.1's tag and committed, as Gtools.app commits its own (point 1). No source edit for 0073 until your read.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

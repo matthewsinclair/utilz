@@ -1,0 +1,15 @@
+{
+  "id": "01M59CNQDMJCG4V9R1X8G7WJ1C",
+  "ts": "2026-10-19T06:13:09.172Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "kind": "doing",
+    "text": "0074 (S), taken now on vc's word of 19 Oct 06:05Z; it lands after 0073, rebased on it: menuz's not-YAML refusal keeps only the first line of Yams' error, so an error with a context loses its problem. In a worktree of its own at main's head: each file:line re-read there and a short Design note into the issue (vc reads it before any source edit only if it departs from the Fix); red in gtools-vc's slot 58 at 06:31Z (the context case stopped at the context, the no-context case ended in a stray colon, nothing else red); the fix (MenuLoader.notYAML, one line from YamlError's fields), the CHANGELOG and VERSION 0.4.1 are in as patch b6c25736, green in slot 61 at 06:34Z (MenuzTests 34, MenuzKitTests 143, no issue), banked as runs/0074-final.patch; critic-swift found 0 critical and 0 warning, and its revision (notYAML private, the CHANGELOG naming the scanner, parser and composer errors) is patch 9e8f0886, its re-run booked as slot 67 behind slots 62, 64 and 65; vc said no to both at 06:47Z (no parser or composer cases, no trim of the reader's colon: keep to the Fix); with the bytes, tell vc the scanner, parser and composer errors are three arms, each binding the same fields and calling the one line() formatter, differing only in the kind; re-run green in slot 67 at 07:00Z, and vc approved the bytes, 9e8f0886, the arms checked. The landing, after 0073: re-applied on 0073's head with VERSION 0.4.0 to 0.4.1, one booked utilz menuz test on that head before the commit, the rebased patch's sha256 in its END, then commit by path, no push, the SHA to vc and dc; then hold for hv's answer on 0072."
+  }
+}

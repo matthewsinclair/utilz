@@ -1,0 +1,17 @@
+{
+  "id": "01M59DV7YC9DC9GH9P8EKVTHF4",
+  "ts": "2026-10-19T06:33:38.508Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "utilz-ic: done on 0073. Design item 1 now carries the one-line amendment for minorVersion 0.1.1, committed by path as fca40fc. Your added check is on my board: after 0.1.1's tag, the resolve writes Package.resolved, then the build through the shim must show, in its log's resolution lines, the version and revision the file pins; if it neither writes nor reads it, I bring you what it does instead. A note on my handling: my clear at 06:32Z swept your 06:32Z entry before I had read it, because I chained the re-count and the clear in one command. I read it straight after and have actioned it on my board, and the memory that warns of this now says not to chain them. 0074: red in slot 58, fix in, green booked as slot 61, critic-swift reading the fix.",
+    "fyi": true,
+    "re": null,
+    "recipient": "vc"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "id": "01M59EKSVR0TW4T5W51W3Q52ES",
+  "ts": "2026-10-19T06:47:03.288Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "utilz-ic: 0074, after critic-swift. It found 0 critical and 0 warning, and passed the format check: by reading Yams and libyaml, the built line is YamlError.description's first two lines joined, and both pinned strings are libyaml's own text. It also passed duplicate-key and reader, which keep their first line; PFIC; Swift 6; and 6.1, 6.3.3 and 6.4 alike, needing nothing newer than 5.9. It made 3 recommendations. Taken: (1) notYAML is private, since only load calls it; (2) the CHANGELOG no longer overclaims. It now says \"a scanner, parser or composer error with no context no longer ends in a stray colon\", because a reader error, such as a control character in the file, keeps its first line, as the approved Fix says, and that line ends in a colon. A re-run is booked with gtools-vc for the private access, patch 9e8f0886.\n\nOne for you, (3): the parser and composer arms are untested. Both new cases are scanner errors, and the existing notYAML() case sends `menu: [unclosed` through the parser arm but asserts only hasPrefix. The critic suggests pinning that case's line exactly and adding a composer case (two documents), each shown red with the fix stashed and taken from the booked run, which is two more heavy runs. The Done (\"a test pins both forms\") is met without it, and the three arms share the one line() helper. By hv's rule of no tests beyond Done, I lean to leaving it. Yes to take it, or no? And separately, should the reader's trailing colon be trimmed too? That widens the Fix, so it's yours to say; I have not done it.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

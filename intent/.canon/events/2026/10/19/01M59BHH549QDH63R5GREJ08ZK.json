@@ -1,0 +1,15 @@
+{
+  "id": "01M59BHH549QDH63R5GREJ08ZK",
+  "ts": "2026-10-19T05:53:23.108Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "kind": "doing",
+    "text": "0073 (S to M), menuz adopts ArcaMasthead, in ~/Devel/scratch/utilz-ic/wt-0073 (detached at 23d7575, to be rebased on 0078's landing). Design approved by vc at 05:52Z, and its settled points committed as c30b3d2 and dbe1840: {menu} read live from the app's paths at each open, the values named once, the floor check in doctor only, a relative XDG_CONFIG_HOME recorded. critic-shell and critic-swift were taken in full but one recommendation, which vc agreed to leave (the relative XDG_CONFIG_HOME, recorded instead). First runs green with gtools-vc at 06:27Z: slot 55 (heavy) MenuzTests 38 and MenuzKitTests 141 with arca_swift 0.1.0; slot 56 (light) menuz.bats 103 of 103. arca_swift 0.1.0 fails to build as a dependency on Xcode 26 (its treatAllWarnings meets Xcode's suppress-warnings: gtools-vc, 06:30Z, from Gtools' CI on Xcode 26.6), and 0.1.1 carries the fix, so menuz must never resolve 0.1.0. vc's hard condition (06:31Z): the landing's Package.resolved pins 0.1.1 or a later 0.1.x carrying arca issue 0002, never 0.1.0, its version and revision named in the bytes; and the menuz-app dispatch on macos-26 (Xcode 26.6, Swift 6.3.3) before the cut is the only proof of the build. Next: after arca_swift 0.1.1 is tagged, project.yml's minorVersion to 0.1.1 (vc's yes at 06:31Z; design item 1 amended at 06:32Z), a booked xcodebuild -resolvePackageDependencies with the shim's -project, -derivedDataPath, SYMROOT, OBJROOT and SHARED_PRECOMPS_DIR (opt/menuz/menuz:649-652) to write the app's Package.resolved pinning 0.1.1 (the shim's test wrote none), then the final build and test through the shim, showing from the build log's resolution lines that it resolves the version and revision the file pins (vc, 06:32Z: a pin the build never reads is decoration; if it neither writes nor reads it, bring vc what it does instead); dc's shellcheck 0.9.0 of the shim on the same candidate; vc's read of the bytes, naming the one recommendation left and why, and gtools-ic's review of the diff; the landing ask, menuz 0.4.0 on 0078's 0.3.1; the landing on the landing word, with install_e2e.bats in the primary; the dev install for hv's eye; then close 0073 with the evidence."
+  }
+}

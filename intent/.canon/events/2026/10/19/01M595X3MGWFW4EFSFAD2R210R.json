@@ -1,0 +1,16 @@
+{
+  "id": "01M595X3MGWFW4EFSFAD2R210R",
+  "ts": "2026-10-19T04:14:51.024Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "kind": "hold",
+    "seq": 1,
+    "text": "0073 (arca_swift ST0001 WP-04, menuz adopts ArcaMasthead) is claimed and held. hv's word in this session at boot on 19 Oct: boot, then \"hold for instructions from VC\". Released when vc's instruction to start 0073 arrives; then todo 1 runs. hv's answers via vc (its decision 26): yes to the macOS 26 floor, menuz 0.4.0, and 2.14.1 cut once 0073 lands; the design also takes the doctor check of xcodebuild -version against project.yml's xcodeVersion."
+  }
+}

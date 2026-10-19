@@ -1,0 +1,17 @@
+{
+  "id": "01M59DEZ126ZRVQVACB21NRSBS",
+  "ts": "2026-10-19T06:26:56.162Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "utilz-ic: 0073's Swift half, after critic-swift: 0 critical, 6 warnings and 5 recommendations, all taken but one. Warnings. (1) {menu} was worked out once, when the row was made, so after a Reload that moves MENUZ_HOME or XDG_CONFIG_HOME, about.md would name a file menuz no longer reads. The row now takes a provider, the app's live paths.menuFile, and --render passes its located path: one home, Paths, read at each open, which is your call (a) taken further. (2) to (5) Four test locals named like the method their initializer calls (let row = row(under:)), the shape 554fe03 met under Swift 6.1. The helpers are renamed, so no local shadows a method. (6) The subheading test could not see a wrong dirty-, so it now also checks the exact string, built from the raw stamps through Identity.commit. Recommendations taken: the owned values named once, in an enum Value, as Gtools does; --render's lines take a missing subtitle as absent, not as an empty string; a scratch bundle with chosen stamps pins commit and kind (dirty-3e731d3a, and Release reading as dev); and the user's heading is checked exactly.\n\nOne recommendation is yours to place: one app now finds <config>/menuz two ways. Paths and the shim honour a relative XDG_CONFIG_HOME, and arca's ConfigFolder ignores one, as the XDG spec says to. With a relative value, menuz would read its menu from one folder and its masthead files from ~/.config/menuz. My recommendation is a sentence beside design item 8's MENUZ_HOME note, not a change to Paths and the shim, since a relative value is outside the spec and rare. Shall I add it to the issue's design?\n\nThe first runs are booked with gtools-vc: the heavy build and test, and the light menuz.bats, on patch b0d49241.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

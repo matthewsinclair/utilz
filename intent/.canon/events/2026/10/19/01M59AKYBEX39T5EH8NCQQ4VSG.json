@@ -1,0 +1,17 @@
+{
+  "id": "01M59AKYBEX39T5EH8NCQQ4VSG",
+  "ts": "2026-10-19T05:37:13.582Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "utilz-ic: 0078's design is in the issue for your read (intent issues show 0078, its Design section, written 05:36Z). Size XS. In short: the one shell line, export PATH=\"$MENUZ_HOME/bin:$PATH\", gets one home as Paths.binFirst in MenuzKit, beside runPath. The run's wrapper interpolates it at Run.swift:109, so its text is unchanged byte for byte. Realise's script (Realise.swift:175) opens with it, so the menu's labels, each lines and checked, a form's choices and defaults, and --render all run after it; all three call sites go through Realiser.realise, whose environment does not change. The login shell's capture (LoginShell.swift:21) and the shim do not change.\n\nThe test, red first: a new MenuzTests/RealiserTests.swift with a fixture HOME and ZDOTDIR whose .zprofile puts a same-named menuz-probe first, as brew shellenv puts /opt/homebrew/bin there. A label and an each must answer from the menu's bin/ copy; on main both answer login. help/menuz.md:50 already promises bin/ first for every realised label, so the help does not change, and the CHANGELOG gains a Fixed entry. Runs: utilz menuz test twice, booked with gtools-vc (red, then green). No shell file changes, so dc's shellcheck is not needed for 0078. menuz's number for the landing ask: 0.3.1 proposed. No source edit until your read; the issue's view, canon file and event stay uncommitted until then, and I commit them by path with your read's outcome.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

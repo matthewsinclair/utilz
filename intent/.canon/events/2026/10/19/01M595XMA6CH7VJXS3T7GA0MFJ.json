@@ -1,0 +1,16 @@
+{
+  "id": "01M595XMA6CH7VJXS3T7GA0MFJ",
+  "ts": "2026-10-19T04:15:08.102Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "kind": "hold",
+    "seq": 2,
+    "text": "0074 (the not-YAML refusal, filed in 699122e) is claimed, and its fix is held until 0073 has landed on main, as vc routed it at 19:07Z on 18 Oct. Then: a red test in ValidatorTests, the fix in MenuLoader, runs booked with the day's booker, vc's read of the bytes, and hv's word for its own commit."
+  }
+}

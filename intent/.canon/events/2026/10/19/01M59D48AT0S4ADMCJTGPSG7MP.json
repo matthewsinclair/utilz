@@ -1,0 +1,17 @@
+{
+  "id": "01M59D48AT0S4ADMCJTGPSG7MP",
+  "ts": "2026-10-19T06:21:05.243Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "utilz-ic: 0073's shell half, after critic-shell. Fixed in my worktree: (1) the floor's read no longer swallows a failed read, so a missing or unreadable project.yml is a FAIL naming the file, from awk's own words (first line), and an absent key is a FAIL naming what was looked for, a double-quoted xcodeVersion indented two spaces; (2) project.yml's path is one function, project_yml(), beside project_file(), and require_build_tools and project_inputs_hash take it too, so the path has one spelling; (3) the version is read from xcodebuild's Xcode line, not its first, since an install can print warnings ahead of it; (4) the comparison takes every part, a missing part counting as 0, so a floor of 26.0.1 is not met by 26.0, checked under /bin/bash 3.2 (27.1, 26.0.1 and 26.0 pass; 16.4 fails; 26.x is exit 2); (5) install-handrun.sh captures both renders whole with their exit and stderr and checks both rows' shape, so no early close of a pipe reads as a wrong row. Two new menuz.bats cases cover every arm, with 103 tests now and none run yet. Local shellcheck 0.11.0 is clean on both shell files, and dc's 0.9.0 run comes with the final bytes.\n\nOne question for you, which critic-shell raised and which I have not done because it is past the approved design: require_build_tools (opt/menuz/menuz:191 on) still lets build, test and install go on with any Xcode that runs, so with an Xcode below the floor they fail at compile, exit 1, rather than refuse by name, exit 2, before anything changes. My recommendation: one shared check of the floor that both doctor and require_build_tools call, which keeps one home and makes the refusal say why, and costs about ten lines and one bats case. Yes, or keep it to doctor?",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

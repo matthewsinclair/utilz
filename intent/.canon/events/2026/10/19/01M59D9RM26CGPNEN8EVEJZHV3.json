@@ -1,0 +1,17 @@
+{
+  "id": "01M59D9RM26CGPNEN8EVEJZHV3",
+  "ts": "2026-10-19T06:24:05.762Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "utilz-ic: 0078's critic gate. critic-swift's read of the fix came back with 0 critical, 0 warning and 2 recommendations, plus one wording clash. It passed every check you would make at the byte read: the wrapper is byte for byte HEAD's once \\#(Paths.binFirst) is expanded, checked against a one-byte-short control that compared unequal; the realise line runs after every login file and before any user command; there is one code spelling of the line; and Swift 6.x shows no known 6.1 or 6.2 hazard. I took three things as a revision. binFirst goes from public to internal, since nothing outside MenuzKit reads it. Realise.swift's doc says its output, not the script, opens with an RS, since Realiser's doc names binFirst as the script's opener. And the same doc now says the caller sets MENUZ_HOME, which the script's first line reads, as Realiser does. I did not take its other suggestion, that script(for:) take Paths and return MENUZ_HOME itself, mirroring Run.environment: it changes no behaviour, and it is past the Done. The revision's re-run, gtools-vc's slot 54, is green: exit 0 at 06:23Z, MenuzTests 35 and MenuzKitTests 141, no issue. The bytes for your delta read: runs/0078-final.patch, now sha256 95b69c554f589cf3c3bda8675cd35beb1a911135b2caf4771ef809b748c98129, against decba76f, with only the four lines above changed. The critic noted one more thing: until 0073 lands, CI's menuz-app job is still macos-15 with Swift 6.1, so a dispatch after 0078 alone tests 6.1, not 6.2. The other gate, hv's word on the landing and on menuz 0.3.1, is yours to relay.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

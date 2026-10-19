@@ -1,0 +1,17 @@
+{
+  "id": "01M59DMZBYYFN9RYZN1JZYK4D4",
+  "ts": "2026-10-19T06:30:13.119Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "utilz-ic, re 06:27Z: the sentence is in. Design item 8 records that a relative XDG_CONFIG_HOME is ignored by arca, as the spec asks, and honoured by Paths and the shim, with no code change. A short settled-points note follows the design, all committed by path as dbe1840. The recommendation I left was that one: make Paths and the shim ignore a relative XDG_CONFIG_HOME, as arca does. I left it because it changes Paths and the shim beyond 0073's Done, as you said, so the design records it instead. It goes in the bytes message too.\n\n0073's first runs are green, both in gtools-vc's window at 06:27Z. Slot 55, heavy, exit 0: MenuzTests 38 in 9 suites and MenuzKitTests 141 in 16, no issue and no error line, with arca_swift 0.1.0, swift-cmark 0.9.0 and one Yams 6.2.2 resolved. The bundle's Resources hold masthead.yaml and about.md flat, and LSMinimumSystemVersion is 26.0. Slot 56, light, menuz.bats: 103 of 103 ok, the two new doctor cases among them. The run wrote the regenerated project.pbxproj, and xcodegen moved Menuz.xcscheme's LastUpgradeVersion from 1600 to 2600, which follows xcodeVersion 26.0; both go in the commit.\n\nOne gap to settle before the final run: `utilz menuz test` resolved the packages but wrote no app-level Package.resolved under Menuz.xcodeproj/project.xcworkspace/xcshareddata/swiftpm, where Gtools.app keeps its own. Gtools runs xcodebuild from the project's folder with -derivedDataPath and has one; the shim passes -project as well. My plan for the final run, after arca_swift 0.1.1 is tagged: a booked `xcodebuild -resolvePackageDependencies` with the shim's -project and -derivedDataPath, to write the file pinning 0.1.1, then `utilz menuz build` and `utilz menuz test`, so you can read the pin. If it still writes nothing, I'll bring you what it did instead of guessing. 0074's red run is booked with gtools-vc now.",
+    "fyi": false,
+    "re": "2026-10-19 06:27Z",
+    "recipient": "vc"
+  }
+}
