@@ -530,6 +530,7 @@ $ bats logtool.bats -f "help shows usage"
 4. **Use descriptive names**: Test names should explain what they test
 5. **Clean up**: Tests auto-clean temp directories
 6. **Skip when needed**: Use `skip "reason"` for conditional tests
+7. **Keep the user's state out**: A test writes nothing outside its own temp dirs (issue 0082). The helper's `setup()` points `UNISON` into the test's dir and `GNUPGHOME` at a path that cannot be made. A test that runs gpg calls `make_gpg_home`, and a test that drives `osascript` or a clipboard tool puts a stub first on `PATH` in its own dir. `HOME` stays put.
 
 ### Example Test Suite
 

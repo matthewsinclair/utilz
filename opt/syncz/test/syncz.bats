@@ -1019,3 +1019,29 @@ command -v unison &>/dev/null && HAVE_UNISON=true
   assert_success
   assert_output_contains "unison"
 }
+
+# UNISON KEEPS ITS STATE IN THE TEST'S OWN DIR (issue 0082). Run as the unison
+# tests above run it, with HOME pointed at a scratch home inside the test's
+# dir. That home holds Library/Application Support, as every macOS home does:
+# without it, unison on macOS exits 3 rather than write there (0082's probe),
+# and the leak this test exists to catch would not show.
+@test "unison-bidi: unison writes nothing under HOME (issue 0082)" {
+  [[ "$HAVE_UNISON" == "true" ]] || skip "unison not installed"
+
+  local home="$BATS_TEST_TMPDIR/home"
+  local dir1="$BATS_TEST_TMPDIR/ih1"
+  local dir2="$BATS_TEST_TMPDIR/ih2"
+  mkdir -p "$home/Library/Application Support" "$dir1" "$dir2"
+  echo "content" > "$dir1/file.txt"
+
+  run env HOME="$home" "$UTILZ_BIN_DIR/syncz" --bidi --backend unison "$dir1" "$dir2"
+  assert_success
+  assert_file_exists "$dir2/file.txt"
+
+  # Nothing of unison's under the scratch home, on either platform ...
+  assert_directory_not_exists "$home/.unison"
+  assert_directory_not_exists "$home/Library/Application Support/Unison"
+  # ... and its archives where the helper put them.
+  [[ "${UNISON:-}" == "$BATS_TEST_TMPDIR"/* ]] || fail "UNISON is not inside the test's dir: '${UNISON:-}'"
+  [[ -n "$(find "$UNISON" -name 'ar*' -type f)" ]] || fail "no unison archive under UNISON ($UNISON)"
+}

@@ -110,37 +110,68 @@ run_cryptz() {
 # ============================================================================
 
 @test "cryptz encrypt/decrypt round-trip" {
-  # Skip if gpg not configured with keys
   if ! command_exists gpg; then
     skip "gpg not installed"
   fi
 
-  # Check if user has gpg keys configured
-  if ! gpg --list-keys >/dev/null 2>&1; then
-    skip "gpg keys not configured"
+  # THE ROUND TRIP RUNS FOR REAL, ON EVERY MACHINE (issue 0082). It used to run
+  # on the user's own keyring, asserted nothing about the encrypt, and made the
+  # decrypt opt-in because pinentry-mac could stop the suite on a password box.
+  # A home of the test's own, with a throwaway key that needs no passphrase,
+  # means no prompt, no key lookup over the network and no user key.
+  make_gpg_home
+  run gpg --batch --pinentry-mode loopback --passphrase '' \
+    --quick-gen-key 'utilz test <utilz-test@example.invalid>' future-default default never < /dev/null
+  assert_success
+  export CRYPTZ_EMAIL=utilz-test@example.invalid
+
+  echo "secret message" > test_encrypt.txt
+  run_cryptz encrypt test_encrypt.txt test_encrypt.txt.gpg
+  assert_success
+  assert_file_exists test_encrypt.txt.gpg
+
+  run_cryptz decrypt test_encrypt.txt.gpg test_decrypted.txt
+  assert_success
+  assert_file_contains test_decrypted.txt "secret message"
+
+  # Its daemons go with the home. First the control: the decrypt has just used
+  # the home's gpg-agent, so pgrep must find a process naming the home, or the
+  # absence below would prove nothing. Then, once the helper's teardown step
+  # for gpg has run, none may be left; gpgconf asks the daemons to stop, so
+  # they get a few seconds to finish exiting. pgrep's 1 is "none".
+  local home="$UTILZ_GPG_HOME" tries=0
+  run pgrep -f -- "$home"
+  [[ $status -eq 0 ]] || fail "the control failed: no process names $home after the decrypt (pgrep status $status), so pgrep cannot see gpg's daemons here"
+  end_gpg_home
+  run pgrep -f -- "$home"
+  while [[ $status -eq 0 && $tries -lt 50 ]]; do
+    sleep 0.1
+    tries=$((tries + 1))
+    run pgrep -f -- "$home"
+  done
+  [[ $status -eq 1 ]] || fail "a process still names $home, or pgrep could not run (status $status): $output"
+}
+
+# A GPG RUN WITHOUT A HOME OF ITS OWN WRITES NOTHING UNDER HOME (issue 0082).
+# The helper points GNUPGHOME at a path that cannot be made, so such a run
+# fails by name rather than reaching the user's keyring; a test that wants gpg
+# calls make_gpg_home. Run as the round trip ran gpg before 0082, with HOME
+# pointed at a scratch home inside the test's dir.
+@test "cryptz: gpg without make_gpg_home writes nothing under HOME (issue 0082)" {
+  if ! command_exists gpg; then
+    skip "gpg not installed"
   fi
 
-  # Create test file
+  local home="$BATS_TEST_TMPDIR/home"
+  mkdir -p "$home"
   echo "secret message" > test_encrypt.txt
 
-  # Try encrypt (may fail if recipient key not available, that's ok)
-  run_cryptz encrypt test_encrypt.txt test_encrypt.txt.gpg
+  run env HOME="$home" gpg --list-keys < /dev/null
+  assert_directory_not_exists "$home/.gnupg"
+  assert_failure
+  assert_output_contains "call-make_gpg_home"
 
-  # THE DECRYPT HALF IS OPT-IN, AND THE REASON IS THAT IT ASSERTED NOTHING.
-  # It used to run unconditionally under the comment "decrypt may prompt for
-  # passphrase, so we don't assert success" -- which handled the ASSERTION and
-  # not the PROMPT. Closing stdin above stops a tty pinentry, but on macOS
-  # pinentry-mac opens a GUI dialog that no redirection suppresses, so the
-  # suite stopped dead on a password box with nothing to type into it.
-  #
-  # A call that asserts nothing and can block the suite is pure cost. It runs
-  # only when someone has deliberately set up a key that needs no interaction
-  # and says so by exporting CRYPTZ_TEST_DECRYPT=1.
-  if [[ $status -eq 0 && -n "${CRYPTZ_TEST_DECRYPT:-}" ]]; then
-    run_cryptz decrypt test_encrypt.txt.gpg test_decrypted.txt
-    assert_success
-  fi
-
-  # Cleanup
-  rm -f test_encrypt.txt test_encrypt.txt.gpg test_decrypted.txt
+  run env HOME="$home" "$UTILZ_BIN_DIR/cryptz" encrypt test_encrypt.txt test_encrypt.txt.gpg < /dev/null
+  assert_directory_not_exists "$home/.gnupg"
+  assert_failure
 }

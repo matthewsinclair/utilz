@@ -33,6 +33,19 @@ export PATH="$UTILZ_BIN_DIR:$PATH"
 # answer points INSTALL_GH at its own stub.
 export PATH="$UTILZ_TEST_DIR/stub-bin:$PATH"
 
+# NO TEST WRITES OUTSIDE ITS OWN TEMP DIRS (issue 0082). Tools that keep state
+# in the user's home or session -- unison's archives and its default.prf, gpg's
+# keyring and daemons, the desktop picture, the clipboard -- get the test's own
+# instead. setup() points UNISON into the per-test dir, and GNUPGHOME at a path
+# that cannot be made, so a test that runs gpg without make_gpg_home fails by
+# name rather than reaching the user's keyring; and it turns git's signing off,
+# so no commit or tag a test makes is signed with the user's key, whatever their
+# git config says. HOME is never changed: rustup's
+# and cargo's homes, which the prez and install suites need, stay where they
+# are. A suite with its own setup() that runs unison or gpg calls
+# isolate_tool_homes; a test that drives osascript or a clipboard tool puts a
+# stub first on PATH in its own dir.
+
 # Disable colors in tests for consistent output
 export NO_COLOR=1
 export TERM=dumb
@@ -68,6 +81,8 @@ setup() {
 
   # Change to test temp directory
   cd "$BATS_TEST_TMPDIR"
+
+  isolate_tool_homes
 }
 
 # Per-test teardown - runs after each test
@@ -77,9 +92,81 @@ teardown() {
     cd "$ORIGINAL_PWD"
   fi
 
+  # A gpg home the test made goes first, daemons and all (issue 0082).
+  end_gpg_home
+
   # Clean up test temporary directory
   if [[ -n "$BATS_TEST_TMPDIR" && -d "$BATS_TEST_TMPDIR" ]]; then
     rm -rf "$BATS_TEST_TMPDIR"
+  fi
+}
+
+# THE per-test homes of the tools that keep state (issue 0082). setup() calls
+# it once the per-test dir exists, as does any suite's own setup() that runs
+# unison or gpg.
+isolate_tool_homes() {
+  # unison makes this dir itself and keeps its archives, its log and its own
+  # default.prf there, so no preference of the user's reaches a test.
+  export UNISON="$BATS_TEST_TMPDIR/unison"
+  # Fail closed: no such path can be made, and gpg's own error names the fix.
+  # A home only make_gpg_home made is ended by teardown, never one inherited.
+  unset UTILZ_GPG_HOME
+  export GNUPGHOME="/nonexistent/utilz-test-gnupg-call-make_gpg_home"
+  no_git_signing
+}
+
+# No git a test runs signs with the user's key, whatever their git config says
+# (issue 0082). Two keys, added after any the environment already carries; the
+# user's name, email and everything else in their config still apply. Its own
+# function for a suite's setup_file that commits before any test's dir exists,
+# as install_e2e.bats does.
+no_git_signing() {
+  local n="${GIT_CONFIG_COUNT:-0}"
+  export "GIT_CONFIG_KEY_$n=commit.gpgsign" "GIT_CONFIG_VALUE_$n=false"
+  n=$((n + 1))
+  export "GIT_CONFIG_KEY_$n=tag.gpgsign" "GIT_CONFIG_VALUE_$n=false"
+  export GIT_CONFIG_COUNT=$((n + 1))
+}
+
+# A gpg home of the test's own, for a test that runs gpg (issue 0082). It is in
+# /tmp, not the per-test dir: on macOS gpg-agent cannot start at the per-test
+# dir's depth, where its socket's path is past the limit (0082's probe, at 88
+# characters). Nothing in it can prompt or reach the network: its pinentry
+# fails, and key lookups stay local. teardown() ends it.
+make_gpg_home() {
+  local home
+  home="$(mktemp -d /tmp/utilz-gpg.XXXXXX)" || return 1
+  # Recorded at once, so teardown removes it even if a step below fails.
+  export UTILZ_GPG_HOME="$home"
+  chmod 700 "$home" || return 1
+  printf 'pinentry-program /usr/bin/false\n' > "$home/gpg-agent.conf" || return 1
+  printf 'auto-key-locate local\nno-auto-key-retrieve\n' > "$home/gpg.conf" || return 1
+  export GNUPGHOME="$home"
+}
+
+# Ends make_gpg_home's home: its daemons, then the dir. Never silenced: a kill
+# that cannot run or fails, and a home that cannot be removed, are said on
+# bats's fd 3, which shows even when the test passes (its stderr would not).
+end_gpg_home() {
+  local home="${UTILZ_GPG_HOME:-}" out note=""
+  if [[ -z "$home" ]]; then
+    return 0
+  fi
+  if ! command -v gpgconf > /dev/null 2>&1; then
+    note="gpgconf not found, so gpg's daemons for $home may outlive the test"
+  elif ! out="$(gpgconf --homedir "$home" --kill all 2>&1)"; then
+    note="gpgconf --kill all failed for $home: ${out:-no output}"
+  fi
+  if ! out="$(rm -rf "$home" 2>&1)"; then
+    note="${note:+$note; }could not remove $home: ${out:-no output}"
+  fi
+  unset UTILZ_GPG_HOME
+  if [[ -n "$note" ]]; then
+    if { true >&3; } 2> /dev/null; then
+      printf '# teardown: %s\n' "$note" >&3
+    else
+      printf 'teardown: %s\n' "$note" >&2
+    fi
   fi
 }
 

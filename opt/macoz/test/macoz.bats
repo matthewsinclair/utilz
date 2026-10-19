@@ -16,6 +16,21 @@ is_macos() {
   [[ "$(uname)" == "Darwin" ]]
 }
 
+# NO TEST SETS THE USER'S DESKTOP PICTURE (issue 0082). macoz runs osascript by
+# name, so this stub, first on PATH in the test's own dir, takes every call: it
+# records the script it was asked to run and exits 0. A test asserts the
+# record, which the real osascript never writes.
+stub_osascript() {
+  local stub="$BATS_TEST_TMPDIR/stub"
+  mkdir -p "$stub" || return 1
+  cat > "$stub/osascript" <<EOF
+#!/bin/bash
+printf '%s\n' "\$*" >> "$BATS_TEST_TMPDIR/osascript.calls"
+EOF
+  chmod +x "$stub/osascript" || return 1
+  export PATH="$stub:$PATH"
+}
+
 # ============================================================================
 # BASIC TESTS
 # ============================================================================
@@ -69,10 +84,11 @@ is_macos() {
     skip "Not on macOS"
   fi
 
+  stub_osascript
   run_macoz background
-  # Should show auto-selected message
+  assert_success
   assert_output_contains "Auto-selected"
-  # We don't assert success because setting background may be restricted
+  assert_file_contains "$BATS_TEST_TMPDIR/osascript.calls" "set picture to \"$UTILZ_HOME/opt/macoz/images/backgrounds/"
 }
 
 @test "macoz background with missing file shows error" {
@@ -97,15 +113,10 @@ is_macos() {
     skip "Test image not found"
   fi
 
-  # Test command - may fail if osascript restrictions, that's ok
+  stub_osascript
   run_macoz background "$test_image"
-
-  # We don't assert success because setting background may be restricted
-  # Just verify the command ran and tried to do something
-  if [[ $status -ne 0 ]]; then
-    # If it failed, make sure it's not a file-not-found error
-    refute_output_contains "not found"
-  fi
+  assert_success
+  assert_file_contains "$BATS_TEST_TMPDIR/osascript.calls" "set picture to \"$test_image\""
 }
 
 @test "macoz background alias bg works" {
@@ -114,8 +125,11 @@ is_macos() {
   fi
 
   # Test that 'bg' alias works (auto-selects seasonal)
+  stub_osascript
   run_macoz bg
+  assert_success
   assert_output_contains "Auto-selected"
+  assert_file_contains "$BATS_TEST_TMPDIR/osascript.calls" "set picture to \"$UTILZ_HOME/opt/macoz/images/backgrounds/"
 }
 
 # ============================================================================

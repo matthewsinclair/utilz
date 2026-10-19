@@ -16,6 +16,10 @@
 load "test_helper.bash"
 
 setup_file() {
+  # No commit this file makes signs with the user's key (issue 0082). The
+  # helper's setup() pins that for each test, and the fixture commit below
+  # comes before any test.
+  no_git_signing
   export E2E_PREFIX="${BATS_FILE_TMPDIR:-/tmp}/e2e-prefix"
   local src="${BATS_FILE_TMPDIR:-/tmp}/e2e-src"
 
