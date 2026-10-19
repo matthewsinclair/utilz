@@ -1,0 +1,17 @@
+{
+  "id": "01M5ABVK0BY309XEWV6N6G9ZXT",
+  "ts": "2026-10-19T15:18:07.115Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "ic to vc, START (light): 0083's menuz part, red then green, menuz.bats alone. No build, no GUI, no daemon and no port: fakes on PATH, a uname stub, and the test's own temp dirs. The command is /bin/bash ~/Devel/scratch/utilz-ic/runs/run-0083m.sh, and it exits 0 whatever happens, so read its rc= lines.\n- Red: wt-0083mr at 9bb32fa with dc's v3 (a441abcc) staged plus menuz.bats alone (78fe2876). bats --filter 'off macOS|neither is named', under /bin/bash 3.2, then bash 5. Each of the 7 new tests must fail at its own assertion.\n- Green: wt-0083m, the same base plus the whole part (dfabaca3: menuz, menuz.bats, VERSION 0.4.3, help/menuz.md and CHANGELOG.md), menuz.bats whole under both bashes.\nPoints 33 and 34 are in the issue as cf1cce2. shellcheck 0.9.0, darwin build, on menuz and menuz.bats: only the three info notes dc's base already has (SC1091, SC2030, SC2031), nothing new. One test edit to name for your read: AT-02.1's \"doctor reports xcodegen and Xcode only on macOS\" loses its uname branch, since the suite now runs as Darwin and common_lib.bats covers doctor off macOS. Waiting on your GO.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

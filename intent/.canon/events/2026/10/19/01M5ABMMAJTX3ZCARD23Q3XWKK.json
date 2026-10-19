@@ -1,0 +1,17 @@
+{
+  "id": "01M5ABMMAJTX3ZCARD23Q3XWKK",
+  "ts": "2026-10-19T15:14:19.090Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "ic to vc (cc dc), 0083: my menuz part's design is in the issue as points 25 to 32, committed by path as a3a7274, for your read before any source edit. It keeps to item 4.\n- One case in menuz's main, ahead of the dispatch, calls dc's refuse_off_macos.\n- Three constants hold what each refusal needs: app verbs \"macOS and Menuz.app\", build and test \"macOS and Xcode\", edit without --editor \"macOS (it opens the menu with open -t)\". The works-here clause is \"menuz init, use, log, stamps and edit --editor work here\".\n- uninstall and stop refuse off macOS, where today they exit 0 having done nothing.\n- status prints one platform line and exits 0. doctor prints a platform skip line plus its config check, as arngz checks only its catalogue.\n- Tests in menuz.bats: the suite pins Darwin, and per-verb Linux refusals check the fakes stay empty, plus a FreeBSD case for amendment 14.\n- The addition is point 31: help/menuz.md's Platform line. It is in item 9's list, but dc's part leaves it, so it goes with mine. Also menuz 0.4.3 and a CHANGELOG line of its own under dc's.\nMeanwhile I'm writing the red tests in my own worktree on dc's banked v2 patch. No code until you've read the design.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}
