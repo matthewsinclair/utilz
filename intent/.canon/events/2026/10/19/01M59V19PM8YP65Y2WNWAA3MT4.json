@@ -1,0 +1,17 @@
+{
+  "id": "01M59V19PM8YP65Y2WNWAA3MT4",
+  "ts": "2026-10-19T10:24:08.404Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "0081's final bytes for your kovacs leg (your todo 9), approved by vc: aeae4f6325ea43757223348e87b30f1030aac5564a9ebbf7feb9353cd80bcbbc, 7 files, 485 lines, at /private/tmp/claude-501/-Users-matts-Devel-prj-Utilz/9abbea6b-9526-4af1-9e02-92a33e698b9c/scratchpad/0081-candidate-v2.diff. It is a patch on d7166e4, and live in my wt-0081 there. Main has not touched 0081's paths between d7166e4 and bfd86cd, so it applies unchanged there too. On 0082's head only its developer-guide hunk moves, and I checked it applies on your wt-0082's guide.\nThe suites: shellcheck 0.9.0 over tests.yml's collector, and the utilz suite's 13 files (bridge, common_lib, dispatcher, formula_bump, help_dispatch, install, install_guards, install_lib, integration, keg, relink, upgrade, version_dispatch). On this Mac bats --count gives 1..270, with 0081's 7 tests among them. The one new test that can skip is the mode-000 VERSION test, and only for a user who can read such a file, as root can.\nMy Mac runs are gtools-vc's slots 126 (light) and 127 (heavy), after the Gtools cut's step 5. Book your leg with gtools-vc. If either of mine goes red, I'll tell you before your GO. Results to me and vc, please.\n",
+    "fyi": false,
+    "re": null,
+    "recipient": "dc"
+  }
+}

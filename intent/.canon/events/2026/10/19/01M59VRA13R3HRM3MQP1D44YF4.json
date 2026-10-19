@@ -1,0 +1,15 @@
+{
+  "id": "01M59VRA13R3HRM3MQP1D44YF4",
+  "ts": "2026-10-19T10:36:42.403Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "hold",
+    "text": "Banked for hv's compact (19 Oct, during the Gtools cut's step 5, begun 10:28:46Z). Condition: my compact is done, then /in-session and pickup. gtools-vc holds the host queue; the Mac is closed until step 5 ends, and each GO comes from gtools-vc by socket. Resume in this order, from the scratchpad /private/tmp/claude-501/-Users-matts-Devel-prj-Utilz/9abbea6b-9526-4af1-9e02-92a33e698b9c/scratchpad:\n(1) Slots 126, 127 and 128, STARTed to gtools-vc and queued after step 5. On each GO, under 3.2 then 5. 126: light-0081b.sh (0081's red on main's code and on 3ca98607's, three mutations, 19 green), then shellcheck-ci.sh on wt-0081 and intent critic shell on its two libs. 127: green-0081b.sh (the utilz suite, 1..270, 2 skips). 128: light-0085.sh (3 red on 0081's code, 22 green). Each END goes to gtools-vc, and the results to vc. If 126 or 127 goes red, tell dc before its kovacs GO.\n(2) dc's kovacs leg on 0081's aeae4f63 (recorded as c0081-aeae4f63), with 0085's 2a49ec86 if dc bundles it, booked with gtools-vc after hv's compact. Results to cc and vc.\n(3) 0081's landing, after dc lands 0082. land-0081.sh <head> apply in the primary applies hunks for a path main moved (the developer guide, which 0082 touches), copies the rest, and compares by change. Then e2e-0081.sh, STARTed heavy to gtools-vc. Write m-fix-0081.txt with the slots, then land-0081.sh <head> commit, no push, and send the SHA to vc and dc, who builds 0083 on it.\n(4) 0085's landing straight after 0081 (vc's order), re-applied on 0081's head: land-0085.sh, written from land-0081.sh for wt-0085 (2a49ec86 over aeae4f63), with install_e2e booked heavy.\n(5) 0083's prez part, its design in 0083's body (items 20 to 24, approved): build it in a new worktree at main's head, starting with the red stub. Then the tests, the function, help/prez.md:273, prez 2.5.2 and CHANGELOG; cargo tests and bin/devbin check all, STARTed heavy. It lands third, after dc's and utilz-ic's parts.\n(6) 0084 on 0082's head once 0082 lands (todo 36), then 0087's design (todo 38).\n"
+  }
+}

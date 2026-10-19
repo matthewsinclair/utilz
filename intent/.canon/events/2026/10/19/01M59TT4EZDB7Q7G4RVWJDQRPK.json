@@ -1,0 +1,15 @@
+{
+  "id": "01M59TT4EZDB7Q7G4RVWJDQRPK",
+  "ts": "2026-10-19T10:20:13.663Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "todo",
+    "text": "0087 (low, cc's, XS): doctor's [5/7] calls every utility properly configured having read no yaml, for a utility with none and when yq is missing. Filed on vc's word at bfd86cd, from critic-shell's review of 0081. Design after 0084, whose path_without its no-yq test needs, built on 0081's [5/7]; then vc's read, red first, booked runs.\n"
+  }
+}

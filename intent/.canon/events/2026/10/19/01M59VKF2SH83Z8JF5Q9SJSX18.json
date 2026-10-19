@@ -1,0 +1,16 @@
+{
+  "id": "01M59VKF2SH83Z8JF5Q9SJSX18",
+  "ts": "2026-10-19T10:34:03.737Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "todo",
+    "seq": 37,
+    "text": "0085 (low, cc's, XS): a dependency entry written as a bare string is checked as a dependency with no name. Design approved, and amendment 7 (a list entry ended doctor at the bare name read, 0053's class) at a5a9153. Bytes 2a49ec86 (4 files) approved by vc, built on 0081's aeae4f63 in wt-0085 (aeae4f63 staged as the base; 0085-candidate.diff). Slot 128 with gtools-vc, light (light-0085.sh: 3 red on 0081's code, 22 green), after the cut's step 5. dc's kovacs leg may share 0081's bundle. Lands straight after 0081 (vc), re-applied on its head, install_e2e at the landing.\n"
+  }
+}

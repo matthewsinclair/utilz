@@ -1,0 +1,17 @@
+{
+  "id": "01M59VKZ1MH6V2ZS0AV2Z538T2",
+  "ts": "2026-10-19T10:34:20.084Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "0085's bytes can share 0081's kovacs bundle, on vc's word: 2a49ec861386928689dde7deb007eb1b27d3e46dc5cc54af8c60ecc64b21a1c5, 4 files (common.sh, common_lib.bats, the developer guide, CHANGELOG.md), at /private/tmp/claude-501/-Users-matts-Devel-prj-Utilz/9abbea6b-9526-4af1-9e02-92a33e698b9c/scratchpad/0085-candidate.diff. vc has approved it. It is a patch on 0081's aeae4f63 over d7166e4 (in my wt-0085, aeae4f63 is staged as its base). The suites are the same as 0081's: shellcheck 0.9.0 over tests.yml's collector, and the utilz suite's 13 files, which bats --count makes 1..273 with both applied on this Mac. 0085's 3 new tests are doctor's refusals of an entry written as a bare string, a map with no name, and a list (the list once ended doctor). If you'd rather keep c0081-aeae4f63 as recorded and run 0085 as a leg of its own, say so. My slot 128 (0085's red and green, light) is queued with gtools-vc after 126.\n",
+    "fyi": false,
+    "re": null,
+    "recipient": "dc"
+  }
+}

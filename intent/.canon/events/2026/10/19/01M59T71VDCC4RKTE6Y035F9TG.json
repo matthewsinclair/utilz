@@ -1,0 +1,17 @@
+{
+  "id": "01M59T71VDCC4RKTE6Y035F9TG",
+  "ts": "2026-10-19T10:09:48.397Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "0081: critic-shell's review of 3ca98607 is back, and three calls in it are yours. It is runs/0081-critic-1.md in my scratchpad (sha256 4c5d8f8f): no critical findings, three warnings, five notes. Nothing ends a verb under errexit or breaks on bash 3.2. My proposed amendments, items 10 to 17, are 0081-amend2.md beside it (52fa3aef), prettier-stable in 0081's body.\n(a) Fold the not-one-map shapes into 0081 (warning 3, item 10). yq answers a key of a yaml whose top level is a string or a number with '' and status 0, and of two documents with both answers. So on 3ca98607 those still read as absent fields, [5/7] calls them configured while [6/7] refuses them, and two documents count twice, the first as a version incompatibility. get_util_metadata would answer 2 for a yaml that is not one map, asking yq's type only when the answer is empty or runs to more than one line. I recommend yes: otherwise 0081's own CHANGELOG line is false for those shapes.\n(b) Install's words (warning 2, item 11). With install: written as a list, yq cannot index .install.prefix, and the approved words say \"utilz.yaml cannot be read\" of a file that parses. They become \"install.prefix cannot be read from <path>: <reason>\". I recommend yes.\n(c) One path helper, util_yaml_path, for the nine places that build opt/<name>/<name>.yaml by hand (note 4, item 15), five of them outside 0081's lines. I recommend yes, as Highlander.\nWithin the design: the tests pin the reason in yaml_read_error's own words (warning 1, item 12); four small fixes from the notes (item 13); a version_file that cannot be opened answers 1 (item 14, on HEAD); and the docs (item 16). Size stays S.\nSeen on HEAD, and I propose a new issue rather than 0081: doctor's [5/7] calls every utility properly configured having read no yaml, for a utility with none (named nowhere, no issue counted) and when yq is missing. cc's, XS, after 0084, whose path_without its no-yq test needs. Say if you want it filed, or folded in.\nMeanwhile I make items 12, 13 and 16 in wt-0081, with no runs. On your word: the amendment into 0081's body, the rest of the edits, then a START to you, light for the changed tests (red on main's code and on 3ca98607's, green, three mutations, both bashes), then heavy for the utilz suite on both bashes. Then the bytes to you, and dc's kovacs leg.\n",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

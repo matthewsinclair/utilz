@@ -1,0 +1,16 @@
+{
+  "id": "01M59T725D169FNTRF145NQ8ZA",
+  "ts": "2026-10-19T10:09:48.717Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "todo",
+    "seq": 34,
+    "text": "0081 (low, cc's): get_util_metadata reads a yaml yq cannot read as an absent field. Design approved with vc's items 8 and 9, and critic-shell's review answered by amendments 10 to 17, approved by vc and in the body at f6d2040. Candidate aeae4f63 (7 files) in wt-0081, detached at d7166e4; wt-0081-ctl beside it at d7166e4 for the red and mutation phases. Queued with gtools-vc for after the Gtools cut's step 5: slot 126, light (light-0081b.sh: red on main's code and on 3ca98607's, three mutations, 19 green, shellcheck and the critic), and slot 127, heavy (green-0081b.sh, the utilz suite, 1..270, both bashes). Then the bytes to vc, dc's kovacs leg on them, and the landing by vc's steps: re-apply on the head (land-0080.sh adapted, CHANGELOG last in Fixed), compare by change, install_e2e booked heavy, one commit by path, no push, the SHA to vc and dc, who builds 0083 on it.\n"
+  }
+}

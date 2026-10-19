@@ -1,0 +1,17 @@
+{
+  "id": "01M59SCJ1MS0TE6275MPBJHTGE",
+  "ts": "2026-10-19T09:55:20.244Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "Localfold for hv's compact committed at 370eb44: 37 files, cc's four views and its 33 events, all of subject cc, by path, no push. The primary holds nothing of cc's code. 0081's candidate 3ca98607 is banked in wt-0081, and hold 27 carries the exact resume state: critic-shell's outcome on 3ca98607, re-run if its report is lost; dc's kovacs leg on the final bytes; the landing by your steps; then 0084's build (your two points for its bytes are in todo 36), 0085's, and 0083's prez part. Holding for the compact, no new runs.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "id": "01M59TV1Q2S23MCPM45F2V1DTN",
+  "ts": "2026-10-19T10:20:43.618Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "0081: amendments 10 to 17 are in the body at f6d2040, and the amended candidate is ready for your read while the Mac is closed. It is aeae4f6325ea43757223348e87b30f1030aac5564a9ebbf7feb9353cd80bcbbc: 7 files, 485 lines, saved as 0081-candidate-v2.diff in my scratchpad, and live in wt-0081 at d7166e4.\nAgainst 3ca98607 it adds:\n- util_yaml_path, used in all nine places.\n- get_util_metadata's type check: status 2 for a top-level string or number and for two documents, asked only of an empty or multi-line answer. Also status 1 for a version_file that cat or awk cannot open.\n- Install's \"install.prefix cannot be read from <path>: <reason>\".\n- [5/7] keeps the name alone and asks the reason where it prints the line. Its two warn lines read true for one utility.\n- show_version's comment on its description read.\n- The tests pin yaml_read_error's own words: a top-level list for show_version, two documents for [5/7], and install: as a list for install.\n- A new test for item 10, and one for item 14 (a VERSION of mode 000, skipped only for a user who can still read it).\n- [5/7]'s baseline check, and the version-home test now names an unreadable yaml.\n- The docs and the CHANGELOG line.\nbash -n is clean on both bashes, and prettier is clean on the three markdown files. gtools-vc has queued slots 126 (light) and 127 (heavy) for after the cut's step 5. 0087 is filed at bfd86cd (low, XS, mine, after 0084) and claimed. After both ENDs, the bytes go to dc for the kovacs leg.\n",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "id": "01M59VJJ24NG51ZE9QQ0905JD0",
+  "ts": "2026-10-19T10:33:34.020Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "0083's prez part (items 7, 15 and 16): my design draft, items 20 to 24, is 0083-prez-design.md in my scratchpad, for your read.\n- open_presenting asks browser::find once and keeps its refusal: a --browser that is not there is still an error, never a fallback.\n- With no browser named and none found, fallback_opener(os, lookup, no_browser) chooses open on macOS and xdg-open elsewhere and looks it up on PATH. It returns the opener, or refuses with exit 2, keeping the finder's list of probed paths and naming the opener.\n- os and lookup are passed in, so both platforms are tested on either, and no test touches PATH.\n- Red first, on a first build that keeps main's behaviour (open everywhere, no lookup).\n- help/prez.md:273 is corrected: it says present refuses when it finds no browser, and it falls back instead.\n- prez goes to 2.5.2, with one CHANGELOG line under Fixed, check all before your read, and dc's kovacs leg for the crate's tests.\nIt goes into 0083's body after the cut's step 5, since the commit's gate would load the Mac during it.\nFor dc: 0083's body is not prettier-stable today. Item 18's closing paragraph wants a blank line before item 19, so my append carries prettier's one blank line there, and nothing else of the body changes.\n",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}
