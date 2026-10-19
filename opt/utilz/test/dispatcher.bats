@@ -84,12 +84,12 @@ load "test_helper.bash"
 }
 
 @test "utilz test - runs without bats shows error" {
-  # Skip if bats is installed (it should be, but test the error path)
-  if command_exists bats; then
-    skip "bats is installed"
-  fi
-
-  run_utilz test
+  # bats is hidden from the PATH utilz runs under (issue 0084), so the refusal
+  # runs on every machine. It asks for utilz's suite alone, so a refusal that
+  # stopped firing would not go on to build every crate first.
+  local farm
+  farm=$(path_without bats)
+  run env PATH="$farm" "$UTILZ_BIN_DIR/utilz" test utilz
   assert_failure
   assert_output_contains "bats is required"
 }

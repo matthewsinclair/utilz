@@ -159,15 +159,16 @@ EOF
 }
 
 @test "yaml mode: requires yq" {
-  if command_exists yq; then
-    skip "yq is installed - cannot test error path"
-  fi
-
+  # yq is hidden from the PATH mdagg runs under (issue 0084), so the refusal
+  # runs on every machine. Its own words, since a shell that cannot find yq
+  # names yq too.
+  local farm
+  farm=$(path_without yq)
   create_mdagg_yaml_config "config.yaml"
 
-  run_mdagg config.yaml
+  run env PATH="$farm" "$UTILZ_BIN_DIR/mdagg" config.yaml
   assert_failure
-  assert_output_contains "yq"
+  assert_output_contains "Required command not found: yq"
 }
 
 # ============================================================================

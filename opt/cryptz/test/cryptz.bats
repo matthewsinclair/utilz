@@ -70,13 +70,14 @@ run_cryptz() {
 }
 
 @test "cryptz encrypt requires gpg" {
-  if ! command_exists gpg; then
-    run_cryptz encrypt test.txt
-    assert_failure
-    assert_output_contains "GPG"
-  else
-    skip "gpg is installed"
-  fi
+  # gpg is hidden from the PATH cryptz runs under (issue 0084), so the refusal
+  # runs on every machine. The input exists, so gpg is the one thing missing.
+  local farm
+  farm=$(path_without gpg)
+  echo "secret" > test.txt
+  run env PATH="$farm" "$UTILZ_BIN_DIR/cryptz" encrypt test.txt < /dev/null
+  assert_failure
+  assert_output_contains "GPG is required for encryption"
 }
 
 # ============================================================================
@@ -96,13 +97,13 @@ run_cryptz() {
 }
 
 @test "cryptz decrypt requires gpg" {
-  if ! command_exists gpg; then
-    run_cryptz decrypt test.gpg
-    assert_failure
-    assert_output_contains "GPG"
-  else
-    skip "gpg is installed"
-  fi
+  # As for encrypt (issue 0084): gpg hidden, the input present.
+  local farm
+  farm=$(path_without gpg)
+  echo "not really ciphertext" > test.gpg
+  run env PATH="$farm" "$UTILZ_BIN_DIR/cryptz" decrypt test.gpg < /dev/null
+  assert_failure
+  assert_output_contains "GPG is required for decryption"
 }
 
 # ============================================================================

@@ -81,29 +81,12 @@ run_in_fake_home_with_path() {
   run /bin/bash -c "export UTILZ_HOME='$home'; export PATH='$extra_path':\"\$PATH\"; source '$UTILZ_HOME/opt/utilz/lib/common.sh'; $*"
 }
 
-# A PATH carrying the tools common.sh needs, minus yq. Built by symlinking real
-# tool paths into a sandbox rather than by filtering $PATH: CI installs yq into
-# /usr/bin on Linux, so filtering out its directory would take the core tools
-# with it. Echoes the sandbox path.
-yqless_path() {
-  local sandbox="$BATS_TEST_TMPDIR/yqless-bin"
-  mkdir -p "$sandbox"
-
-  local tool real
-  for tool in basename dirname readlink cat cut sed grep tr awk sort uniq head tail wc ls date git; do
-    if real="$(command -v "$tool" 2>/dev/null)"; then
-      ln -sf "$real" "$sandbox/$tool"
-    fi
-  done
-
-  echo "$sandbox"
-}
-
-# Run a common.sh function with yq unreachable.
+# Run a common.sh function with yq unreachable: under test_helper's
+# path_without yq, which keeps every other command on PATH (issue 0084).
 run_without_yq() {
-  local sandbox
-  sandbox="$(yqless_path)"
-  run /bin/bash -c "PATH='$sandbox'; export PATH; source '$UTILZ_HOME/opt/utilz/lib/common.sh'; $*"
+  local farm
+  farm="$(path_without yq)"
+  run env PATH="$farm" bash -c "source '$UTILZ_HOME/opt/utilz/lib/common.sh'; $*"
 }
 
 # ============================================================================
@@ -273,13 +256,37 @@ run_without_yq() {
 }
 
 @test "parse_yaml() requires yq" {
-  if ! command_exists yq; then
-    run run_common_function parse_yaml test.yaml ".foo"
-    assert_failure
-    assert_output_contains "yq is required"
-  else
-    skip "yq is installed - cannot test error path"
-  fi
+  # yq is hidden from the PATH parse_yaml runs under (issue 0084), so its
+  # refusal runs on every machine, not only one without yq.
+  run_without_yq parse_yaml test.yaml .foo
+  assert_failure
+  assert_output_contains "yq is required"
+}
+
+@test "path_without hides its one tool and keeps every other command on PATH (issue 0084)" {
+  local farm
+  farm=$(path_without cat)
+  command -v cat >/dev/null
+
+  run env PATH="$farm" bash -c 'command -v cat'
+  assert_failure
+
+  run env PATH="$farm" bash -c 'command -v bash && command -v env && command -v ls'
+  assert_success
+
+  # A command an earlier PATH directory carries wins, as it does on PATH: an
+  # ls of the test's own, first on PATH, wins over the machine's. A plain file
+  # named ls ahead of it, which PATH lookup passes over, does not hide it.
+  # `|| fail` on each, since bash 3.2 lets a failing [[ ]] pass mid-test.
+  mkdir first plain
+  printf '#!/bin/sh\necho stub\n' > first/ls
+  chmod +x first/ls
+  touch plain/ls
+  farm=$(PATH="$PWD/plain:$PWD/first:$PATH" path_without cat)
+  [[ "$(readlink "$farm/ls")" == "$PWD/first/ls" ]] ||
+    fail "the farm's ls is $(readlink "$farm/ls"), not the first one on PATH"
+  [[ "$(readlink "$farm/bash")" == "$(command -v bash)" ]] ||
+    fail "the farm's bash is $(readlink "$farm/bash"), not PATH's $(command -v bash)"
 }
 
 @test "parse_yaml() extracts values from YAML" {
@@ -1502,9 +1509,13 @@ dependencies: []'
 }
 
 @test "sha256_of says what it needs when neither shasum nor sha256sum is on PATH (issue 0083)" {
+  local farm
   printf 'abc' > "$BATS_TEST_TMPDIR/abc"
-  # yqless_path's sandbox holds neither tool, nor yq, which this does not use.
-  run_without_yq "sha256_of '$BATS_TEST_TMPDIR/abc'"
+  # Both tools hidden, by name (issue 0084): run_without_yq's PATH keeps every
+  # command but yq, so it no longer lacks them by accident.
+  farm=$(path_without shasum sha256sum)
+  run env PATH="$farm" bash -c 'source "$1/opt/utilz/lib/common.sh"; sha256_of "$2"' \
+    _ "$UTILZ_HOME" "$BATS_TEST_TMPDIR/abc"
   assert_failure
   assert_output_contains "no sha256 tool found: need shasum or sha256sum"
 }

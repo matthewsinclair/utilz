@@ -592,6 +592,71 @@ require_command() {
   fi
 }
 
+# A PATH THAT LACKS ONE TOOL (issue 0084). A test of a missing tool's refusal
+# used to skip wherever the tool was installed, which was every machine that
+# ran it, so no refusal it was written for ever ran. PATH order cannot hide a
+# tool that shares a directory with everything else, as yq, gpg and git do in
+# Ubuntu's /usr/bin, so this builds a farm: a dir of links to every command on
+# the current PATH except <tool>, new on each call under BATS_TEST_TMPDIR, so
+# it always answers the PATH of the moment; it prints the farm's path. Only
+# executable files are linked, as PATH lookup finds only those, so a dangling
+# link or a plain file in an earlier directory cannot hide a command a later
+# one carries. The directories are linked last to first, so a command an
+# earlier one carries wins, as it does on PATH. That is one ln per directory,
+# whose arguments are that directory's names alone (about 1,000 at most on
+# this project's machines), well inside ARG_MAX. Relative and empty PATH
+# entries are skipped. Run the verb under the farm, never bats, so bats and
+# the test's assertions keep the test's own PATH:
+#   farm=$(path_without gpg)
+#   run env PATH="$farm" "$UTILZ_BIN_DIR/cryptz" encrypt test.txt
+# A verb that takes either of two tools needs both hidden, so it takes several:
+#   farm=$(path_without shasum sha256sum)
+# Usage: path_without <tool>...
+path_without() {
+  local tool farm dirs=() names=() i dir name
+
+  if [[ $# -eq 0 ]]; then
+    echo "path_without: name a tool to hide" >&2
+    return 1
+  fi
+  for tool in "$@"; do
+    if [[ -z "$tool" || "$tool" == */* ]]; then
+      echo "path_without: name a tool, not a path: '$tool'" >&2
+      return 1
+    fi
+  done
+  if [[ ! -d "${BATS_TEST_TMPDIR:-}" ]]; then
+    echo "path_without: BATS_TEST_TMPDIR is not a directory: '${BATS_TEST_TMPDIR:-}'" >&2
+    return 1
+  fi
+
+  farm=$(mktemp -d "$BATS_TEST_TMPDIR/path-without-$1.XXXXXX") || return 1
+  IFS=: read -r -a dirs <<<"$PATH"
+  for ((i = ${#dirs[@]} - 1; i >= 0; i--)); do
+    dir="${dirs[$i]}"
+    [[ "$dir" == /* && -d "$dir" ]] || continue
+    names=()
+    for name in "$dir"/*; do
+      [[ -f "$name" && -x "$name" ]] && names+=("$name")
+    done
+    # bash 3.2 calls an empty array unbound under set -u, so ask its length.
+    [[ ${#names[@]} -gt 0 ]] || continue
+    if ! ln -sfn "${names[@]}" "$farm/"; then
+      rm -rf "$farm"
+      echo "path_without: could not link $dir into $farm" >&2
+      return 1
+    fi
+  done
+  for tool in "$@"; do
+    rm -f "$farm/$tool"
+    if [[ -e "$farm/$tool" || -L "$farm/$tool" ]]; then
+      echo "path_without: $tool is still in $farm" >&2
+      return 1
+    fi
+  done
+  echo "$farm"
+}
+
 # Print debug information (only when UTILZ_TEST_DEBUG=1)
 debug() {
   if [[ "${UTILZ_TEST_DEBUG:-0}" == "1" ]]; then

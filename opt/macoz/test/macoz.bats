@@ -234,19 +234,16 @@ EOF
     skip "Not on macOS"
   fi
 
-  if ! command -v fileicon >/dev/null 2>&1; then
-    # fileicon not installed - test error message
-    touch "$BATS_TEST_TMPDIR/test.png"
+  # fileicon is hidden from the PATH macoz runs under (issue 0084), so the
+  # refusal runs wherever macOS does, not only where fileicon is missing.
+  local farm
+  farm=$(path_without fileicon)
+  touch "$BATS_TEST_TMPDIR/test.png"
 
-    run_macoz setpicfor "$BATS_TEST_TMPDIR/test.png"
-    assert_failure
-    assert_output_contains "fileicon command not found"
-    assert_output_contains "brew install fileicon"
-
-    rm -f "$BATS_TEST_TMPDIR/test.png"
-  else
-    skip "fileicon is installed"
-  fi
+  run env PATH="$farm" "$UTILZ_BIN_DIR/macoz" setpicfor "$BATS_TEST_TMPDIR/test.png"
+  assert_failure
+  assert_output_contains "fileicon command not found"
+  assert_output_contains "brew install fileicon"
 }
 
 @test "macoz setpicfor --all dry-run mode" {

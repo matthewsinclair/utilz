@@ -61,13 +61,13 @@ create_test_git_repo() {
 }
 
 @test "gitz requires git" {
-  if ! command_exists git; then
-    run_gitz status-all
-    assert_failure
-    assert_output_contains "Git is required"
-  else
-    skip "git is installed"
-  fi
+  # git is hidden from the PATH gitz runs under (issue 0084), so the refusal
+  # runs on every machine.
+  local farm
+  farm=$(path_without git)
+  run env PATH="$farm" "$UTILZ_BIN_DIR/gitz" status-all
+  assert_failure
+  assert_output_contains "Git is required"
 }
 
 # ============================================================================

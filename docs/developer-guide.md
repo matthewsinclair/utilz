@@ -558,6 +558,7 @@ $ bats logtool.bats -f "help shows usage"
 5. **Clean up**: Tests auto-clean temp directories
 6. **Skip when needed**: Use `skip "reason"` for conditional tests
 7. **Keep the user's state out**: A test writes nothing outside its own temp dirs (issue 0082). The helper's `setup()` points `UNISON` into the test's dir and `GNUPGHOME` at a path that cannot be made. A test that runs gpg calls `make_gpg_home`, and a test that drives `osascript` or a clipboard tool puts a stub first on `PATH` in its own dir. `HOME` stays put.
+8. **Test a missing tool's refusal everywhere**: Never skip it because the tool is installed, since every machine that runs the suite has it (issue 0084). `path_without <tool>` prints a dir of links to every command on `PATH` but that one; run only the verb under it, as `run env PATH="$(path_without jq)" ...`, so bats keeps its own `PATH`.
 
 ### Example Test Suite
 
@@ -591,11 +592,12 @@ load "../../utilz/test/test_helper.bash"
 }
 
 @test "requires jq dependency" {
-    if ! command_exists jq; then
-        run_utility logtool --json test.log
-        assert_failure
-        assert_output_contains "jq"
-    fi
+  local farm
+  farm=$(path_without jq)
+  echo "INFO: test" > test.log
+  run env PATH="$farm" "$UTILZ_BIN_DIR/logtool" --json test.log
+  assert_failure
+  assert_output_contains "jq is required"
 }
 ```
 
