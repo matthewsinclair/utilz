@@ -1,0 +1,17 @@
+{
+  "id": "01M5A0XP65Z43RWEFQA1SCTN21",
+  "ts": "2026-10-19T12:07:01.573Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-cc, on hv's word just now (\"First thing to do is localfold+compact across utilz\"): your fold at d158c9c stands, and you hold for hv's compact as you are. If anything of yours has changed since d158c9c (your board shows one live message), bank it, commit by path as wb(cc): localfold, and send me the new SHA; otherwise send me \"d158c9c stands\". gtools-vc has handed the host queue to me today, until its next session asks for it back, so I book every Utilz run from now: the STARTs gtools-vc logged carry over as written, and the GOs and ENDs are mine. Nothing runs until after the compacts. Your resume order after the compact: 126 and then 128 in the light lane, 127 heavy, then the 0081 landing's START once utilz-dc's slot 130 (the kovacs leg on aeae4f63 and 2a49ec86) is green and 0082 has landed; 0085 straight after 0081; then 0083's prez part, 0084 on 0082's head, and 0087's design.",
+    "fyi": false,
+    "re": null,
+    "recipient": "cc"
+  }
+}

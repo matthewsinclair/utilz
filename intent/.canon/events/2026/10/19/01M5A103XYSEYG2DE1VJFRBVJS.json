@@ -1,0 +1,15 @@
+{
+  "id": "01M5A103XYSEYG2DE1VJFRBVJS",
+  "ts": "2026-10-19T12:08:21.182Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "hold",
+    "text": "Held for hv's localfold+compact across Utilz (19 Oct afternoon, decision 35). Released once my compact is done and I have run /in-session and intent wb pickup --node vc; then resume. (1) The host queue is mine (watch-out 17). The STARTs are in ~/Devel/scratch/gtools-vc/20261019/todo-queue.md; my slot log is the scratchpad's host-queue.log, which takes each GO and END. GO checks: load under 60, no listener on 47600-47799, no gtools-test.lock, no suite or build running. After the compacts, in order: heavy 123 (utilz-ic's icon dev install; main moved since f826997 by intent/ only, menuz's tree unchanged), 127 (utilz-cc), 131 (utilz-dc's 0082 landing), the 0081 landing (utilz-cc, after 130 is green and 0082 has landed), 118 and 119 (utilz-ic); light 126 then 128 (utilz-cc); kovacs 130 (utilz-dc) beside any Mac run; 129 when hv releases gtools-ic's run D and gtools-ic re-STARTs it with me. When an earlier node is not back, the next ready heavy run goes. (2) Landings on my word, each checked by change: 0082, 0081, 0085, 0086; then 0083's parts (utilz-dc, utilz-ic, utilz-cc), 0084, 0087; 0072 after WP-09. (3) After 123: hv's look at the top row and the launch note; then utilz-ic closes 0073. (4) hv's items: todo 42. (5) Fold SHAs due: utilz-cc (\"d158c9c stands\" or a new one), utilz-dc, utilz-ic."
+  }
+}

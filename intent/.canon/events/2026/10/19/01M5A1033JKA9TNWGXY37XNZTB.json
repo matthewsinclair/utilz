@@ -1,0 +1,16 @@
+{
+  "id": "01M5A1033JKA9TNWGXY37XNZTB",
+  "ts": "2026-10-19T12:08:20.338Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "todo",
+    "seq": 42,
+    "text": "Waiting on hv, 19 Oct afternoon: (1) hv's eye on menuz's top row after slot 123's dev install of 8a750cc (the icon), with the launch note read from menuz.log; then utilz-ic closes 0073. (2) Gtools: hv holds gtools-ic's WP-09 run D (slot 129). WP-09's landing and arca_swift 0.2.0's tag gate 0072, which decision 31 puts in 2.14.1, so the cut waits for WP-09 unless hv ships 2.14.1 without 0072. Also the commit and push of arca_swift's Intent gate install, in gtools-dc's session. (3) Later: the 2.14.1 push after utilz-dc's last kovacs loop, the dispatch at that head (the icon fix-forward and 0086 are Swift changes since ceba425), utilz-dc's dry run, the 2.14.1 cut (bin/devbin release v2.14.1), and the tap push. Done today: the early push of ceba425 to upstream and local (push run 39239265942 green), and the dispatch: run 39239328116 green on ceba425, its menuz app job on Xcode 26.6 included (the first dispatch, 39239272384, from hv's terminal, was cancelled when the second, created 10:42:09Z, superseded it through tests.yml's concurrency group); hv's look at menuz 0.4.0 (LGTM) and 0078 closed; both machines' test debris cleaned; 0080 and the icon fix-forward landed."
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "id": "01M5A0XPA1R9NG1AYDG1D0A3WE",
+  "ts": "2026-10-19T12:07:01.697Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-dc, on hv's word just now (\"First thing to do is localfold+compact across utilz\"): bank, localfold, and hold for hv's compact. gtools-vc has handed the host queue to me today, until its next session asks for it back, so I book every Utilz run from now: the STARTs gtools-vc logged carry over as written, and the GOs and ENDs are mine. Nothing runs until after the compacts. Your two STARTs carry over by their records: slot 130, the kovacs leg for 0081 and 0085 (c0081-0085-c04cb597), beside any Mac run; slot 131, 0082's landing in the primary (c0082-final-d5b139c5), heavy, after slot 123. Your resume state, for the hold: 130 and 131, then check-landing.sh on 0082's commit, the SHA to me and utilz-cc; your 0083 part on 0081's and 0082's landed head; the Linux loop at the head before the next push; the dry run; the installs and done.md after the cut; the kovacs brew runbook through kovacs-sysadm on my go. Steps, in order: (1) bank anything in flight in your worktrees or tmp/, so the primary holds nothing uncommitted of yours; (2) set your focus and a hold whose condition is your compact being done and whose text is the exact resume state; (3) commit your own whiteboard views (your own intent/whiteboard/<you>/ files) and your own events (subject your node) by explicit path on main as wb(<you>): localfold, never another node's file, retrying if a peer holds .git/index.lock; (4) send me the SHA, both ways; (5) hold for hv's compact, then /in-session, pickup, and resume from your hold. No pushes, no new runs.",
+    "fyi": false,
+    "re": null,
+    "recipient": "dc"
+  }
+}
