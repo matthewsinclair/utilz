@@ -3,8 +3,8 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 83178a10-c03c-4b65-9e11-cf7c8d8daeaa
-heartbeat_at: 2026-10-19 19:43Z
-status: active
+heartbeat_at: 2026-10-19 19:45Z
+status: paused
 focus: "19 Oct EOD: 2.14.1 released at 43fca62 (tap 77bfe2a, Menuz.app.zip on the release); only 0072 open, next release; kovacs install at hv's next kovacs-sysadm session"
 claims: []
 ---
@@ -55,6 +55,7 @@ _(none)_
 - hv, 19 Oct 2026, directly to vc: "I want all the issues closed first. Well, the ones that can be closed because they're finished." This replaces decision 40. hv ran the closes in vc's session: 0073 and 0080 to 0092 are CLOSED, and vc committed them by path as a2a2536 (the issue views, their canon, the 14 close events, and .intentfiles' 14 removals, leaving utilz-cc's +ISSUE:0093 unstaged). A red on the push's CI or on the menuz-app dispatch reopens the issue it touches. 0072, 0075 and 0093 stay open. Everything since 910af45 is under intent/, so the gate's code is unchanged.
 - hv, 19 Oct 2026, directly to vc: "Why can't we also fix issues 75 and 93?" This replaces decision 43's after-the-cut for 0093. 0093 goes into 2.14.1. The order: dc's 178 phases (3) and (4), then ic's 179, then cc's 180 (heavy-0093.sh on 5924fbe5) with dc's kovacs leg on the same bytes, then the landing. Then the gate reruns at the new head for what 0093 can touch: kovacs rust, mac-lint and mac-rust. 0093 changes only Rust tests and manifests, so mac-suites and the Linux loop hold from 178. Then AT27 alone, the report, a push by hv, and the dry run. 0075 needs no code. It needs a status read and hv's logout and login, and a logout ends every Claude session on this Mac, so it goes after the dry run, with every node folded first.
 - hv, 19 Oct 2026, directly to utilz-ic, after brew's 2.14.0 menuz status printed "source      unknown: no /opt/homebrew/Cellar/utilz/2.14.0/libexec/native/macos/Menuz under git here": "It should either not print the source line or say "source: homebrew" in the homebrew case. Why can't we just fix it now." 0094 goes into 2.14.1, as utilz-ic's. vc approves the design: install_tree_manager, the menuz.bats test red then green, and menuz 0.4.5. Order: 0093 lands first, then 0094, each checked by change with its kovacs leg green (menuz.bats is on the Linux roster). Then dc reruns the gate's phases (1) to (4) whole at the new head, then AT27 alone, the report, hv's push and dispatch at that head, and the dry run.
+- hv, 19 Oct 2026, directly to vc, after 2.14.1's release: "Ok, let's moor the boat and pack it in for the day. Corale the other Claudes for a localfold+compact and then when they're all done, run a globalfold and /in-finish here." Each node finishes what it has running: utilz-dc's 197 ENDs first. Then each archives what is finished, sets its focus and a hold with its resume state, commits its own events and views by path as wb(<node>), sends vc the SHA, and holds for hv's compact. vc checks each fold, then runs the globalfold and /in-finish.
 
 ---
 

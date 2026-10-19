@@ -689,77 +689,85 @@ START (dc), the final-head gate at 910af45 (910af45ef72ef94a8b8c82af4217a0cf049f
 
 178 phase (3) mac-suites: RED BY THE HARNESS, not by the code; stopped there as GOed. 18:02:49Z to 18:10:06Z. bash 3.2 pass: all 17 suites rc 0, 0 not ok (utilz 313, arngz 141, cleanz 66, clipz 12, cryptz 12, expz 9, gitz 13, lnrel 12, macoz 17, mdagg 31, menuz 138, pdf2md 15, retry 12, stampz 24, syncz 79, todo 46, xtrct 12, its 4 skips the API key). bash 5 pass: every suite exit 1 at once, 'utilz test cannot run from an install tree: /opt/homebrew/Cellar/utilz/2.14.0/libexec'. The cause is mine: the script put /opt/homebrew/bin ahead of the clone's bin to pick bash 5, which brought brew's utilz first. Fixed: each pass now puts a dir holding only that bash first, and logs the bash and the utilz it resolves (checked by hand: bash 5.3.20, the clone's bin/utilz). Script 9ce54016, banked; the red log kept as mac-suites.harness-red.log. The clone is still clean. Asking your GO to rerun phase (3) whole (both bashes), then (4).
 
-## (2026-10-19 18:23Z)
+## (2026-10-19 18:23Z) (handled)
 
 178 phase (3) mac-suites rerun END: GREEN, 18:11:09Z to 18:23:28Z, script 9ce54016, in the clone at 910af45 (still clean). bash 3.2 pass: 'GNU bash, version 3.2.57(1)-release', utilz /Users/matts/Devel/scratch/utilz-dc/work/gate-910af45/bin/utilz. bash 5 pass: 'GNU bash, version 5.3.20(1)-release', the same clone utilz. 34 of 34 suite runs exit 0, 0 not ok, identical counts on both bashes: utilz 313, arngz 141, cleanz 66, clipz 12, cryptz 12, expz 9, gitz 13, lnrel 12, macoz 17, mdagg 31, menuz 138, pdf2md 15, retry 12, stampz 24, syncz 79, todo 46, xtrct 12; skips only xtrct's 4 (ANTHROPIC_API_KEY) on each. (4) skipped at 910af45, as agreed. 178 at 910af45 ends here: (1) (2) (3) green; the whole of (1) to (4) reruns at the head after 0093 and 0094.
 
-## (2026-10-19 18:23Z)
+## (2026-10-19 18:23Z) (handled)
 
 START (dc), 0093's kovacs leg beside cc's 180. Bytes: cc's 0093-candidate-v1.diff, sha256 5924fbe51815a3522a9675cb9ef85d01e2c72a49d3bcc70eb35967df154108a0, frozen into my work dir and hash-checked, applied in a clone at 910af45; record c0093-5924fbe5; bundle commit 8514758 over 910af45, its change equal to the patch's by sorted +/- lines (20 files, testing.rs added). Run: kv-window.sh c0093-5924fbe5 --cargo rust tmpdir-control, on kovacs in a /var/tmp run dir, nothing installed, the run dir removed at its end. rust: the candidate's prez crate build and test --release, its tests in an empty TMPDIR of the run's own, every name left kept in logs/rust-tmpdir-1.txt (0 wanted). tmpdir-control: 910af45's crate files put back and testing.rs removed, an empty TMPDIR, the names kept in logs/control-tmpdir.txt (the 82 on main), then the tree restored. kv-remote.sh banked as 6e5627cd plus the control's added-file handling. Heavy for kovacs, so it loads this Mac; on the Mac it writes only tmp/dc-2141/kovacs/c0093-5924fbe5/. Waiting for your GO.
 
-## (2026-10-19 18:24Z)
+## (2026-10-19 18:24Z) (handled)
 
 START (dc), 0094's kovacs leg, queued after 0093's (kovacs one run at a time; both light on the Mac but for kovacs's vCPUs, and this one builds nothing). Bytes: ic's 0094.patch, sha256 fb329445ec993e058f00613d56ea12dd9a9f5920cb936e1e7b0caf88ab266ea9, frozen and hash-checked, applied in a clone at 1c84a9a (910af45 plus two issue closes); record c0094-fb329445; bundle commit be96d1f, its change equal to the patch's (5 files, +22 -4). Run: kv-window.sh c0094-fb329445 shellcheck menuz: shellcheck 0.9.0, the control first then tests.yml's step (opt/menuz/menuz is in its set), and utilz test menuz (menuz.bats, its setup pinning Darwin, so ic's new status test runs there rather than skips). No cargo, nothing installed, the run dir removed at its end; on the Mac it writes only tmp/dc-2141/kovacs/c0094-fb329445/. Waiting for your GO, after 0093's END.
 
-## (2026-10-19 18:26Z)
+## (2026-10-19 18:26Z) (handled)
 
 END 185 (dc), 0093's kovacs leg on 5924fbe5: RED, the same red as cc's 180, and complete before your stop word came (18:24:26Z to 18:26:03Z). rust: build rc 0; test rc 1, 389 passed and 1 FAILED: tests/manifest.rs no_manifest_carries_a_dev_or_build_dependency_table ('Cargo.toml has a [dev-dependencies] table ... needs hv'). The candidate's TMPDIR: 0 entries left. Control (910af45's 19 crate files back, testing.rs removed, 389 passed, 0 failed): 82 entries, 0 of them artifact-theme-*; the tree restored, 0 dirty. The 82 by helper: prez-deck 3, prez-drive 1, prez-inline 7, prez-theme 5, showreel-admit 7, -build 5, -deliver 7, -emit 11, -norm 1, -payload 13, -plan 9, -reg 1, -round 1, -slide 10, -theme 1. Both lists for cc: ~/Devel/scratch/utilz-dc/work/0093-kovacs-names/ (main-910af45-82.txt, candidate-5924fbe5-0.txt). Nothing installed; the run dir /var/tmp/dc-2141-c0093-5924fbe5.gGnrxM removed (the window's own line). 186 (0094) has been running since 185 ended. A fresh 0093 leg on cc's new bytes takes a new START.
 
-## (2026-10-19 18:27Z)
+## (2026-10-19 18:27Z) (handled)
 
 END 186 (dc), 0094's kovacs leg on fb329445: GREEN. 18:26:12Z to 18:27:26Z; tree be96d1f (1c84a9a + ic's patch) from the bundle alone, clean. shellcheck 0.9.0: control rc 1 (fires), step rc 0 on 24 files (opt/menuz/menuz among them), 0 advisory. menuz.bats: rc 0, 139 ok, 0 not ok (138 at 910af45, plus ic's one); the one skip AC-06.3 (rsvg-convert), as in the baseline. ic's test ok by name: 62 'AT-02.3: on a Homebrew install status says the source is homebrew, and compares nothing (issue 0094)'. uname is the stub in this run: test 79 (AT-05.1, refuse without xcodegen) asserts command -v uname is $UTILZ_TEST_PLATFORM_BIN/uname after system_path_only, ok; and the Linux-stubbed tests 132 to 138 (off macOS, status's one platform line among them) ok. Nothing installed; the run dir /var/tmp/dc-2141-c0094-fb329445.AatzbJ removed (the window's own line). Logs: tmp/dc-2141/kovacs/c0094-fb329445/. Next: 0093 v2 (cc's 1c143245), prepping now, a new START.
 
-## (2026-10-19 18:28Z)
+## (2026-10-19 18:28Z) (handled)
 
 START (dc), 0093 v2's kovacs leg, on 185's terms. Bytes: cc's 0093-candidate-v2.diff, sha256 1c143245ae91c8cfa0ee580c30b9d0767ae62dba10839173e17aff1af6cc4fd0, frozen and hash-checked, applied in a clone at 910af45; record c0093-1c143245; bundle commit ac30d84, its change equal to the patch's (17 files, testing.rs added, 0 Cargo.toml). Run: kv-window.sh c0093-1c143245 --cargo rust tmpdir-control: the whole crate suite (tests/manifest.rs included) in an empty TMPDIR, its names kept (0 wanted); the control at 910af45's files, its names kept (82 expected); nothing installed; the run dir removed at its end. Heavy for kovacs. Waiting for your GO.
 
-## (2026-10-19 18:30Z)
+## (2026-10-19 18:30Z) (handled)
 
 END 188 (dc), 0093 v2's kovacs leg on 1c143245: GREEN. 18:28:27Z to 18:29:56Z; tree ac30d84 (910af45 + cc's v2) from the bundle alone, clean. rust: the prez crate's build and test --release rc 0, 390 passed, 0 failed (389 at 910af45, plus v2's one). tests/manifest.rs all 5 ok by name, among them no_manifest_carries_a_dev_or_build_dependency_table and every_dependency_table_matches_its_approved_budget. The candidate's TMPDIR, empty before: 0 entries left. Control (910af45's crate files back, testing.rs removed; 389 passed, 0 failed): 82 entries, the same 82 names as 185's but for the pid; tree restored, 0 dirty. Lists in ~/Devel/scratch/utilz-dc/work/0093-kovacs-names/ (candidate-1c143245-0.txt added). Nothing installed; the run dir /var/tmp/dc-2141-c0093-1c143245.pLfayo removed (the window's own line). Logs: tmp/dc-2141/kovacs/c0093-1c143245/. Once 0093 and 0094 have landed, name the head and I send the START for 178's (1) to (4) whole there.
 
-## (2026-10-19 18:32Z)
+## (2026-10-19 18:32Z) (handled)
 
 START (dc), the final-head gate at d5beb38 (d5beb38cd654e65caf62a42c80cbda6a8063bfbd): 178's phases (1) to (4) whole, in order, each heavy, an END line after each; stop at the first red, a timing-like one rerun alone before it counts. Scripts: final-head-gate.sh 9ce54016 (the bash-shim fix in) and kv-remote.sh e2a64876 (rust's TMPDIR names kept). (1) kovacs: a full bundle of d5beb38 into a /var/tmp run dir, nothing installed: lua-build, shellcheck 0.9.0 (control first), prez-build, lua-plan, relink, the test-linux loop from d5beb38's own tests.yml, rust (build and test, an empty TMPDIR, its leftovers counted; 0 expected after 0093); Ubuntu acceptance unproven by name. (2) mac-lint: fmt --check and clippy -D warnings per crate. (3) mac-suites: every listed utility but prez, bash 3.2 then 5, each pass logging its bash and its utilz. (4) mac-rust: per crate build, test and the black-box suites --strict. The Mac phases in a fresh scratch clone, ~/Devel/scratch/utilz-dc/work/gate-d5beb38; logs under tmp/dc-2141/gate/d5beb38/ and tmp/dc-2141/kovacs/gate-d5beb38/. As in 178, (1) beside (2) and then (3), a kovacs leg beside a Mac run; (4) after (3). Load now 10.0. Then ic's menuz-app twin, AT27 alone (its own GO), the report. Waiting for your GO.
 
-## (2026-10-19 18:33Z)
+## (2026-10-19 18:33Z) (handled)
 
 190 phase (2) mac-lint END: GREEN. 18:32:59Z to 18:33:04Z, the fresh clone at d5beb38; cargo 1.99.1, rustfmt 1.10.0, clippy 0.1.99. opt/prez/crate (0093's testing.rs in): fmt --all --check rc 0, clippy --all-targets --workspace -D warnings rc 0, from a fresh target (76 crates compiled or checked), 0 warning or error lines. (1) on kovacs running; (3) mac-suites started. Also: dc's board committed by path as wb(dc) d8ee260 (d8ee2602d6556eb751e92ba22869540b6c519ae1) on 9271989: 35 files, dc's views and its node:dc events alone, the pre-commit gate passed, nothing left staged and no dc event untracked. main is now 4 board commits past d5beb38 (vc's 64e2672, ic's 3081507, cc's 9271989, dc's d8ee260); none touches code, so the gate's sha stands.
 
-## (2026-10-19 18:39Z)
+## (2026-10-19 18:39Z) (handled)
 
 190 phase (1) kovacs END: GREEN. 18:32:57Z to 18:39:08Z; full bundle of d5beb38 into /var/tmp/dc-2141-gate-d5beb38.hcfxEv, the tree clean at d5beb38, nothing installed; the run dir removed (the window's own line). lua-build rc 0. shellcheck 0.9.0: control rc 1 (fires), step rc 0 on 24 files, 0 advisory. prez-build rc 0 (prez 2.5.3). lua-plan 193 passed. relink 19 ok. test-linux loop, the roster from d5beb38's own tests.yml, every one rc 0 and 0 not ok: utilz 313, cryptz 12, gitz 13, mdagg 31, retry 12, syncz 79, pdf2md 15, xtrct 12, lnrel 12, todo 46, expz 9, stampz 24, arngz 141, menuz 139 (0094's test in), cleanz 66, clipz 12, macoz 17. 21 skips, the same as 178's by name: macoz 10 'Not on macOS', cleanz 6 'exiftool not installed', xtrct 4 (API key), menuz AC-06.3 (rsvg-convert). rust (build and test): rc 0, 390 passed, 0 failed; its TMPDIR, empty before, 0 entries after (0093). Ubuntu acceptance UNPROVEN (no xvfb, Chrome, ffmpeg or node 26 on kovacs). Logs: tmp/dc-2141/kovacs/gate-d5beb38/. (3) running.
 
-## (2026-10-19 18:46Z)
+## (2026-10-19 18:46Z) (handled)
 
 190 phase (3) mac-suites END: GREEN. 18:33:27Z to 18:46:37Z, the fresh clone at d5beb38 (still clean). bash 3.2 pass: 'GNU bash, version 3.2.57(1)-release', utilz /Users/matts/Devel/scratch/utilz-dc/work/gate-d5beb38/bin/utilz. bash 5 pass: 'GNU bash, version 5.3.20(1)-release', the same clone utilz. 34 of 34 suite runs exit 0, 0 not ok, identical counts on both bashes: utilz 313, arngz 141, cleanz 66, clipz 12, cryptz 12, expz 9, gitz 13, lnrel 12, macoz 17, mdagg 31, menuz 139, pdf2md 15, retry 12, stampz 24, syncz 79, todo 46, xtrct 12; skips only xtrct's 4 (API key) on each. (4) mac-rust started.
 
-## (2026-10-19 18:50Z)
+## (2026-10-19 18:50Z) (handled)
 
 190 phase (4) mac-rust END: GREEN. 18:46:53Z to 18:49:57Z, the clone at d5beb38; rustc and cargo 1.99.1, node 26.12.0, ffmpeg 9.0.2, pdftotext 26.10.0. opt/prez/crate: build --release rc 0; test --release 390 passed, 0 failed. Black-box suites --strict, each rc 0: acceptance.sh 16 passed, 0 failed, 0 skipped, 1 n/a ('fullscreen entered, fills and toggles out: headless Chrome on macOS refuses key-initiated fullscreen (0067); the Linux leg checks it', and that Linux leg is CI's Ubuntu acceptance, unproven locally, so it stands on CI alone); theme-addressing.sh 20 passed, 0 failed; video.sh 16 passed, 0 failed, AT27 PASS among them (under a load near 9). Browser evidence in acceptance and video's output, as the script requires. 190's (1) to (4) are all green at d5beb38. Next by your order: ic's menuz-app twin (191), then AT27 alone on a quiet host (its own GO), then the report.
 
-## (2026-10-19 18:51Z)
+## (2026-10-19 18:51Z) (handled)
 
 Which: the dry run does NOT need hv's push. Read from the code (bin/.devbin/lib/release.steps, release_read_remote, and cmd/release's pre-flight): step 2 ls-remotes each remote and reads its main against HEAD; a main behind HEAD ('backward') is recorded as lacking the release commit, i.e. a push to make, never a refusal; only a main moved PAST HEAD refuses (preflight-new). Now: upstream (GitHub) main a2a2536, 9 behind HEAD d8ee260; local (Dropbox) main 6204364, 112 behind; both ancestors of HEAD, so both read 'to push'. CI's verdict is read only after a push, which a dry run never reaches. So the dry run wants: every node's views and events committed (the tree clean, untracked included), your freeze, network for ls-remote, gh signed in. The push and dispatch at d5beb38 matter for the CUT, as the only proof of Ubuntu acceptance and of Xcode 26.6 (macos-26); I would have hv push before the cut, not during the dry run (step 5 reads tree and HEAD only, but a push mid-run muddies what step 2 read). AT27-alone dropped, as you say. The report follows ic's 191 END, d5beb38 on every line. Note for the report and the dry run: main's head is now d5beb38 plus board-only commits, so the dry run runs on that head, not on d5beb38 itself.
 
-## (2026-10-19 18:52Z)
+## (2026-10-19 18:52Z) (handled)
 
 REPORT, the final-head gate at d5beb38 (slots 190 and 191), in full at tmp/dc-2141/gate/d5beb38/REPORT.md (banked in ~/Devel/scratch/utilz-dc/gate/d5beb38/). test-linux: GREEN at d5beb38 (kovacs, 17 suites rc 0, 0 not ok, 21 skips by name). shellcheck: GREEN at d5beb38 (0.9.0, control fires, 24 files clean). clippy: GREEN at d5beb38 (Mac, fmt and clippy -D warnings, fresh target). rust ubuntu-latest: GREEN at d5beb38 for build and test (390 passed, 0 TMPDIR entries left); acceptance UNPROVEN at d5beb38 on Ubuntu. rust macos-latest: GREEN at d5beb38 (390 passed; acceptance 16 and 1 n/a, theme-addressing 20, video 16 with AT27 PASS). test-macos: GREEN at d5beb38 (bash 3.2.57 and 5.3.20, the clone's utilz, 34 of 34 runs exit 0). menuz-app: GREEN at d5beb38 (utilz-ic's 191, 44 and 143; Xcode 27.1). Not proven at d5beb38 locally: Ubuntu acceptance (fullscreen exists on that leg alone) and Xcode 26.6, proven at a2a2536 by dispatch 39300964671; a2a2536 to d5beb38 changed no Swift source. The push's CI is the proof of both.
 
-## (2026-10-19 18:52Z)
+## (2026-10-19 18:52Z) (handled)
 
 START (dc), the 2.14.1 dry run (todo 3): cd /Users/matts/Devel/prj/Utilz && bin/devbin release --patch --dry-run, at main's head (d5beb38 plus board-only commits; I read and name the exact sha at the GO). It stamps, commits, tags and pushes nothing; it runs its gates for real on HEAD in the primary: check all (fmt, clippy) and test estate (every bats suite, the cargo tests and the crate's black-box suites, Chrome and ffmpeg among them), so it wants a quiet host. Load now 21.6 (from 12.5): I ask the GO under 10. Pre-flight refuses any dirt, untracked events included, and step 5 fails on any change to the tree or HEAD from START to END, so: your freeze of every node, board writes included; every node's views and events committed first (I commit dc's straight after this message, and tell you its sha); and hv's push either done before the GO or held until the END. The gate script's dry-run phase checks HEAD and a clean primary before I run it. Logs under tmp/ (ignored). The END carries every row. Waiting for your freeze and GO.
 
-## (2026-10-19 19:38Z)
+## (2026-10-19 19:38Z) (handled)
 
 START (dc), todo 4 minus the asset step: brew upgrade utilz on this Mac, 2.14.0 to 2.14.1 (tap 77bfe2a; brew update already run, read-only, it shows 'stable 2.14.1'). HEAVY, not light: the formula's install (bin/utilz install --managed-by brew) runs cargo build --release --workspace in opt/prez/crate. Only utilz is upgraded (brew upgrade utilz; the other outdated formulae left alone). Then utilz --version, utilz doctor, utilz menuz --version and utilz arngz --version, read back. No keg menuz install (ic's 0.4.5 stays). This replaces the keg hv's PATH resolves utilz from, so I read the PATH's utilz, arngz and menuz links before and after. Load 6.6. Waiting for your GO.
 
-## (2026-10-19 19:41Z)
+## (2026-10-19 19:41Z) (handled)
 
 END 196 (dc), brew upgrade utilz: GREEN. 19:39:50Z to 19:40:46Z (the log's own lines), load 9.0 at start. brew upgrade utilz rc 0: 2.14.0 -> 2.14.1, built in 44 seconds (prez's cargo build within), 2.14.0's keg removed by brew's cleanup; nothing else upgraded. PATH before: /opt/homebrew/bin/{utilz,arngz,menuz} -> ../Cellar/utilz/2.14.0/bin/*, each resolving to 2.14.0/libexec/bin/utilz. After: the same three -> ../Cellar/utilz/2.14.1/bin/*, each resolving to 2.14.1/libexec/bin/utilz. Unchanged both sides: ~/.config/menuz/bin/arngz -> /Users/matts/Devel/prj/Utilz/bin/arngz (hv's menu still runs the primary's arngz, not the keg's). Versions: utilz:2.14.1, installed at /opt/homebrew/Cellar/utilz/2.14.1/libexec (43fca62, CI unknown); utilz:2.14.1/menuz:0.4.5; utilz:2.14.1/arngz:1.1.2. utilz doctor: 'All checks passed!', rc 0: 17 utilities, all dependencies (wl-copy and xclip named Linux only), the install matches its manifest. The keg's menuz install not run; ic's 0.4.5 app untouched. Log: ~/Devel/scratch/utilz-dc/work/slot196.log. Left of todo 4: done.md's entry.
 
-## (2026-10-19 19:44Z)
+## (2026-10-19 19:44Z) (handled)
 
 START (dc), the last post-release step, on hv's word to me ('tap is pushed, do the post-release steps'): utilz menuz install from the 2.14.1 keg, which fetches the release's Menuz.app.zip (1733886 bytes, notarised and stapled) and checks its signature, notarisation, bundle id and version (0.4.5) before it quits Menuz, replaces ~/Applications/Menuz.app, registers and launches it. Installed now: 0.4.5 build 1427 (b142ad9a), utilz-ic's source build, running as pid 32665. You held this step while the asset was missing; it is attached now. Light: a download and a copy, no build. Then menuz status and --version read back. hv's menu blinks once (a quit and a launch). Waiting for your GO.
+
+## (2026-10-19 19:44Z) (handled)
+
+END 197 (dc), the keg's menuz install from 2.14.1's Menuz.app.zip: GREEN, the first end-to-end proof of the asset. 19:44:19Z to 19:44:23Z, /opt/homebrew/bin/utilz (2.14.1), rc 0. Its lines: 'fetching https://github.com/matthewsinclair/utilz/releases/download/2.14.1/Menuz.app.zip', 'quitting com.matthewsinclair.utilz.menuz (pid 32665)', 'installed /Users/matts/Applications/Menuz.app', 'launched /Users/matts/Applications/Menuz.app'. Its checks print only on a failure, so each read back from the installed app: codesign --verify --deep --strict valid, Identifier com.matthewsinclair.utilz.menuz, TeamIdentifier 76BQL8L47U; spctl 'accepted source=Notarized Developer ID'; stapler validate 'The validate action worked!'. Stamps (menuz stamps, the Info.plist): MENUZ_VERSION 0.4.5, MENUZ_BUILD 1425, MENUZ_COMMIT 43fca620 (the release commit), MENUZ_KIND release, MENUZ_SOURCE_TREE c6a28dd3. menuz status: installed /Users/matts/Applications/Menuz.app 0.4.5 build 1425 (43fca620); use installed (default); running pid 38041; login item enabled; source homebrew. Running: one Menuz (pgrep -x Menuz: 38041). Before: 0.4.5 build 1427 (b142ad9a), utilz-ic's source build. The post-release steps on this Mac are all done.
+
+## (2026-10-19 19:45Z) (handled)
+
+utilz-dc to vc: 197's END is sent; localfolded for hv's compact, committed by path as wb(dc) 002ce82 (002ce82d069124c4f10d0bdedee64c5c2f83208a) on f2ebc98: 5 files, dc's views and node:dc events alone, the pre-commit gate passed, nothing left staged. Hold 20 carries the resume state; todo 15 (the kovacs readback) is the next work; the focus is set. This message's own record follows in one more wb(dc) commit. Holding for hv's compact.
 
 ---
 

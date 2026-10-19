@@ -1,0 +1,15 @@
+{
+  "id": "01M5AV3H2XG1JENVZD9N0DBNJF",
+  "ts": "2026-10-19T19:44:35.933Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 19 Oct 2026, directly to vc, after 2.14.1's release: \"Ok, let's moor the boat and pack it in for the day. Corale the other Claudes for a localfold+compact and then when they're all done, run a globalfold and /in-finish here.\" Each node finishes what it has running: utilz-dc's 197 ENDs first. Then each archives what is finished, sets its focus and a hold with its resume state, commits its own events and views by path as wb(<node>), sends vc the SHA, and holds for hv's compact. vc checks each fold, then runs the globalfold and /in-finish."
+  }
+}

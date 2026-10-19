@@ -12,3 +12,4 @@ DOING and TODO only. Done work goes to `intent/done.md`; context to `intent/rest
 - 0072 (utilz-ic, next release): menuz adopts ArcaLogConsole once arca_swift 0.2.0 is tagged with a green CI run on Xcode 26.6 (design approved, with point 11).
 - hv: may kovacs gain rustup's clippy and rustfmt, and apt's xvfb, ffmpeg and chromium with node 26, so the local gate can twin CI's Linux clippy and Ubuntu acceptance?
 - hv: the leftover `~/Devel/prj/Utilz` checkout and its `~/bin` links on kovacs, to remove when hv says.
+- hv: this Mac's TMPDIR holds 794 prez, showreel and artifact test dirs from runs before 0093, and 12 todo temp files from before 0090, from every node's runs; remove them on hv's word.
