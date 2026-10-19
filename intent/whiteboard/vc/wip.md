@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 83178a10-c03c-4b65-9e11-cf7c8d8daeaa
-heartbeat_at: 2026-10-19 18:07Z
+heartbeat_at: 2026-10-19 19:43Z
 status: active
-focus: "19 Oct, after hv's third compact: 0089 (cc) next, then 0092, then dc's final-head gate and the dry run"
+focus: "19 Oct EOD: 2.14.1 released at 43fca62 (tap 77bfe2a, Menuz.app.zip on the release); only 0072 open, next release; kovacs install at hv's next kovacs-sysadm session"
 claims: []
 ---
 
@@ -13,14 +13,13 @@ claims: []
 
 ## DOING
 
-- 19 Oct, after hv's third compact (17:40Z freeze lift): the queue resumes from archived hold 16's state. Next: 0089 (cc, START pending, with dc's kovacs leg), then 0092 (design read first), then dc's final-head gate at the sha vc names and the dry run. hv's items are todos 42, 43, 47 and 48, plus the 0073 look.
+_(none)_
 
 ## TODO
 
-- Waiting on hv, 19 Oct afternoon: (1) hv's eye on menuz's top row after slot 123's dev install of 8a750cc (the icon), with the launch note read from menuz.log; then utilz-ic closes 0073. (2) Gtools: hv holds gtools-ic's WP-09 run D (slot 129). WP-09's landing and arca_swift 0.2.0's tag gate 0072, which decision 31 puts in 2.14.1, so the cut waits for WP-09 unless hv ships 2.14.1 without 0072. Also the commit and push of arca_swift's Intent gate install, in gtools-dc's session. (3) Later: the 2.14.1 push after utilz-dc's last kovacs loop, the dispatch at that head (the icon fix-forward and 0086 are Swift changes since ceba425), utilz-dc's dry run, the 2.14.1 cut (bin/devbin release v2.14.1), and the tap push. Done today: the early push of ceba425 to upstream and local (push run 39239265942 green), and the dispatch: run 39239328116 green on ceba425, its menuz app job on Xcode 26.6 included (the first dispatch, 39239272384, from hv's terminal, was cancelled when the second, created 10:42:09Z, superseded it through tests.yml's concurrency group); hv's look at menuz 0.4.0 (LGTM) and 0078 closed; both machines' test debris cleaned; 0080 and the icon fix-forward landed. (edited)
-- After the 2.14.1 cut, in order, nothing pushed to main while the core waits on CI: (1) utilz-cc: tools/formula-bump 2.14.1, commit by path, copy the formula into the tap clone, brew audit --strict; the tap commit and push are hv's. (2) vc: the signed Menuz.app.zip from a clean worktree at the tag (app-sign, app-notarize, app-verify, publish), booked heavy with gtools-vc. (3) utilz-dc, after hv's tap push: brew upgrade utilz here, utilz doctor, the app from the release asset, and done.md's entry from its tmp/ draft. (4) kovacs, through kovacs-sysadm, on vc's go once the tap has 2.14.1, each step at hv's approval in its session (decision 32; the checkout runbook is withdrawn): brew tap matthewsinclair/utilz, brew install utilz, utilz doctor, and command -v utilz resolving under /home/linuxbrew/.linuxbrew, ahead of the leftover ~/bin links, which stay until hv says. Doctor's verdict there is the one utilz-dc's Linux issue designs. (5) 0075: utilz menuz status reads the login item on the final install, then hv logs out and in once. (6) vc's globalfold: wip.md, restart.md, done.md. (edited)
 - For hv on return (19 Oct): may kovacs gain (a) rustup's clippy and rustfmt components on its existing stable toolchain, and (b) apt xvfb, ffmpeg and chromium plus node 26? Either would let the final-head gate twin CI's Linux clippy and Ubuntu acceptance there. Until hv says, vc's ruling stands: nothing is installed (watchout 21), fmt and clippy run on the Mac, kovacs runs cargo build and test, and Ubuntu acceptance is reported as unproven. The risk is small, since no Rust has changed since ceba425 apart from cc's coming prez part, which must add no cfg(target_os) branch.
 - For hv on return (19 Oct): 0072's chain needs hv's words in gtools-ic's session, in order: (1) hv's look at arca_swift's example console (AC-09.6) after a green run E; (2) the landing on arca_swift's main; (3) the push to GitHub, whose push run on main is 0.2.0's dependency proof on Xcode 26.6; (4) the 0.2.0 tag. Then utilz-ic adopts it in menuz as 0072 (design approved, with point 11), booked red, green and a dev install for hv's eye, and a Utilz dispatch. Until then 2.14.1 is ready to cut without 0072, and hv chooses: wait for 0072, or cut without it.
+- kovacs, at hv's next kovacs-sysadm session (it may have a new address): send the 2.14.1 go. Then, each step at hv's approval there: brew tap matthewsinclair/utilz, brew install utilz, utilz doctor, and command -v utilz under /home/linuxbrew/.linuxbrew. utilz-dc reads it back (its todo 15).
 
 ## Holds
 

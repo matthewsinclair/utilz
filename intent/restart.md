@@ -1,12 +1,14 @@
 ---
-verblock: "18 Oct 2026:v1.30: matts - EOD: 0069 to 0071 landed (menuz 0.3.0, arngz 1.1.0); arca_swift's adoption routed (0073 to utilz-ic, 0072 held); 0074 and 0075 open, 0076 dropped; main unpushed with both pre-push checks clean at 1d0bb15; vc released for the day"
+verblock: "19 Oct 2026:v1.31: matts - EOD: 2.14.1 released at 43fca62 (0073, 0080 to 0094, 0075 closed); tap 77bfe2a; Menuz.app.zip on the release; only 0072 open, for the next release; kovacs install waits for hv's next kovacs-sysadm session"
 ---
 
 # Restart Context
 
 Cross-session continuity. `intent/wip.md` holds DOING and TODO; `intent/done.md` holds the record of what shipped. This file holds what the next session needs to know before it touches anything.
 
-## Key Context (as of 18 Oct 2026)
+## Key Context (as of 19 Oct 2026)
+
+- **19 Oct 2026: 2.14.1 is RELEASED** (tag at `43fca62`, cut by hv from hv's terminal with `bin/devbin release v2.14.1`; done.md has the full entry). It carries 0073 (menuz's top row draws its icon, by key as Gtools does), 0080 to 0094, and 0075 closed on hv's word. CI was green on the push and tag runs, the menuz-app dispatch included. The formula is at `bb95e49` and the tap at `77bfe2a`, pushed by hv; `Menuz.app.zip` is on the release, notarised and stapled. This Mac runs brew's 2.14.1, and menuz 0.4.5 from the primary. **Open:** 0072 only, for the next release; the kovacs brew install waits for hv's next kovacs-sysadm session (wip.md). **Rules learned on 19 Oct:** a landing waits for its kovacs leg on the same bytes whenever its suite is on tests.yml's Linux roster; hv wants a finished issue closed as soon as it lands and is checked; prez's `tests/manifest.rs` refuses any `[dev-dependencies]` table without hv (0093 v1); a push never runs CI's macOS jobs, only a tag or a dispatch does. The bullets below are 18 Oct's and earlier, kept for their standing facts.
 
 - **18 Oct 2026: menuz 0.3.0 and arngz 1.1.0 landed, arca_swift arrived, and main is not yet on GitHub.**
   - **Landed** (done.md has them): 0069, 0070 and 0071, by gtools-ic from Gtools' session through gtools-vc's reads and bookings. In Utilz's records before 18:52Z, "ic" means gtools-ic. The CHANGELOG's `[2.14.1] - unreleased` holds them with 0066 and the relink fix. **The next cut is 2.14.1, after 0073 lands**: hv typed "2.14.1" to cc at 19:13Z and to vc at 19:16:57Z, while vc's two pickers read 2.15.0, and vc took the typed word (vc's decision 26, cc's decision 3). The `arngz` on hv's PATH is Homebrew's 2.14.0 keg (arngz 1.0.1, no `current`), so the **Desks…** tick in hv's menu waits for 2.14.1's keg. The installed `~/Applications/Menuz.app` is the dev install of menuz 0.3.0, build 1242 (`56e0c90d`).

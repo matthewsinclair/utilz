@@ -1,0 +1,15 @@
+{
+  "id": "01M5AV2B2068ERNBW153B98TAS",
+  "ts": "2026-10-19T19:43:56.992Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "todo",
+    "text": "kovacs, at hv's next kovacs-sysadm session (it may have a new address): send the 2.14.1 go. Then, each step at hv's approval there: brew tap matthewsinclair/utilz, brew install utilz, utilz doctor, and command -v utilz under /home/linuxbrew/.linuxbrew. utilz-dc reads it back (its todo 15)."
+  }
+}

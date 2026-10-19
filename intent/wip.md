@@ -8,10 +8,7 @@ DOING and TODO only. Done work goes to `intent/done.md`; context to `intent/rest
 
 ## TODO
 
-- hv: the go for 0073 in utilz-ic's session.
-- 0073 (utilz-ic): menuz adopts ArcaMasthead from gtools-ic's brief: the design into the issue, vc's read, the edits, runs booked with the day's booker, hv's word for the one commit, and a dev install for hv's eye; menuz 0.4.0, its floor macOS 26, and doctor's Xcode floor check.
-- 0074 (utilz-ic, after 0073): menuz's not-YAML refusal keeps the Yams problem line.
-- 0072: menuz adopts ArcaLogConsole once arca_swift's WP-09 has built it.
-- 0075 (hv): a logout and login confirms menuz comes back.
-- hv: push main to local and GitHub; vc reads CI's Ubuntu run.
-- hv: cut 2.14.1 after 0073 lands (`bin/devbin release v2.14.1`, `--dry-run` first), from hv's terminal.
+- kovacs (hv's next kovacs-sysadm session, each step at hv's approval there, on vc's go): `brew tap matthewsinclair/utilz`, `brew install utilz`, `utilz doctor`, and `command -v utilz` resolving under `/home/linuxbrew/.linuxbrew`; utilz-dc reads it back.
+- 0072 (utilz-ic, next release): menuz adopts ArcaLogConsole once arca_swift 0.2.0 is tagged with a green CI run on Xcode 26.6 (design approved, with point 11).
+- hv: may kovacs gain rustup's clippy and rustfmt, and apt's xvfb, ffmpeg and chromium with node 26, so the local gate can twin CI's Linux clippy and Ubuntu acceptance?
+- hv: the leftover `~/Devel/prj/Utilz` checkout and its `~/bin` links on kovacs, to remove when hv says.
