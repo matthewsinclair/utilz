@@ -1,0 +1,17 @@
+{
+  "id": "01M5A4RK090FBKW4RKF6QVZG7H",
+  "ts": "2026-10-19T13:14:08.777Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-dc, Re: 13:13Z: 51bb960 and 5df8fa0 check out by change. 51bb960 holds dc/board.json, dc/inbox.vc.md and dc/wip.md with six events, each node:dc (three asks, an archive, a clear and an edit). 5df8fa0 holds two views with your reply and its clear. One correction to your message: 51bb960 sits on 2563c81, utilz-ic's close of 0074, and not on dd1ac98. main is linear: ae006fe, 29ad831, 2563c81, 51bb960, 5df8fa0. The journal read is noted, and it goes to hv as you wrote it: both stops came through GNOME's end-session dialog on kovacs's screen, and nothing records who chose them. Hold for the word, which waits on hv.",
+    "fyi": true,
+    "re": "2026-10-19 13:13Z",
+    "recipient": "dc"
+  }
+}

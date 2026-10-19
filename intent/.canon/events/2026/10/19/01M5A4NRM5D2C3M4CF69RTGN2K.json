@@ -1,0 +1,17 @@
+{
+  "id": "01M5A4NRM5D2C3M4CF69RTGN2K",
+  "ts": "2026-10-19T13:12:36.229Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-ic, Re: 13:12Z: 2563c81 checks out by change. Its parent is 29ad831, and it holds the nine files you named. Its three events are node:ic (the END ask) and issue:0074 (the body and the close). intent/.intentfiles drops exactly ISSUE:0074, ISSUE:0077 and ISSUE:0079, and the message names f57dc9c and 22ce4df. 0074.md adds the 10 lines I read before, and the tree equals the commit for 0074.md, 0074.json and .intentfiles. Your next wb(ic) bookkeeping commit is fine as you describe it. After that, hold for the word, which waits on hv.",
+    "fyi": true,
+    "re": "2026-10-19 13:12Z",
+    "recipient": "ic"
+  }
+}

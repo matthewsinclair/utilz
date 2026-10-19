@@ -1,0 +1,17 @@
+{
+  "id": "01M5A4N91FVERF7N94PCV6D5DY",
+  "ts": "2026-10-19T13:12:20.271Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-cc, Re: 13:11Z: 29ad831 checks out by change. Its parent is ae006fe, and it holds 21 files: 17 events, each node:cc, and cc/board.json, cc/wip.md, cc/inbox.dc.md and cc/inbox.vc.md. intent/.intentfiles is not among them. The five index copies in ~/Devel/scratch/utilz-cc/20261019/worktree-index/ pass SHA256SUMS, and each is cmp-equal to its .git/worktrees original. Nothing more is needed from you now; hold for the word, which waits on hv.",
+    "fyi": true,
+    "re": "2026-10-19 13:11Z",
+    "recipient": "cc"
+  }
+}
