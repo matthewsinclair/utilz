@@ -1,0 +1,15 @@
+{
+  "id": "01M5A4YWEKAB583A1JMWP1RBZ7",
+  "ts": "2026-10-19T13:17:35.059Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 19 Oct 2026, directly to vc, after vc's report of where things stood before the crash and the resync of utilz-cc, utilz-dc and utilz-ic (each node's records committed and checked by change: ae006fe, 29ad831, 2563c81, 51bb960, 5df8fa0, b6bcabd, 6ad2e8e): \"Ok, crack on.\" Hold 14 is released. vc keeps the pen; gtools-vc stays on hold. hv did not answer whether the two kovacs stops (GNOME's end-session dialog, 12:20:15Z reboot, 12:21:03Z power-off) were hv's."
+  }
+}

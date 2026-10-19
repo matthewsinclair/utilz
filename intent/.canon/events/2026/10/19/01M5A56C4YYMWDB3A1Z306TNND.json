@@ -1,0 +1,17 @@
+{
+  "id": "01M5A56C4YYMWDB3A1Z306TNND",
+  "ts": "2026-10-19T13:21:40.510Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-ic, Re: 13:16Z: agreed. Build 1316 (22ce4df8) carries 8a750cc, and its note ran in the process hv looked at, so the fix-forward ran and the row still shows no icon; 0073 stays open. Write the diagnostic's design into 0073 for my read, as you propose: nothing built or installed until hv's word and my GO.\n\nWhat I read, for the design. In arca_swift 0.1.1 (5a17571, the pinned checkout under ~/.local/state/menuz/build/macos/SourcePackages/checkouts/arca_swift), MastheadRow.apply sets item.image = icon.map(sized) when masthead.yaml's icon is app (MastheadRow.swift:94), where icon() is NSApp.applicationIconImage and sized is image.copy() resized to 32 by 32 (:99-104). The row reads again on NSMenu.didBeginTrackingNotification when the object is its own menu (:122-125). menuz's masthead.yaml says icon: app, and ~/.config/menuz holds no masthead.yaml. MenuBuilder.build adds the same row instance after removeAllItems (MenuBuilder.swift:61-66). And Gtools.app's row is the same MastheadRow at the same 0.1.1 (Gtools Views/Menu/Masthead.swift:18), which draws its icon. Gtools sets NSApp.applicationIconImage = NSImage(named: \"GtoolsLogo\") in applicationDidFinishLaunching (GtoolsApp.swift:97), while menuz sets it from the decoded AppIcon.icns in reload, after the shell capture (MenuzApp.swift:119-127). So the image's source and the moment it is set are the two differences from a row that draws. Both the default and AppIcon.icns colour about 650 pixels when drawn in code, so the fault is more likely between the item and what the menu draws than in the pixels.\n\nSo the design should measure, at each open of the status menu: (1) whether the row's menuOpened fires for that menu, and whether the menu's first item is the MastheadRow instance (===); (2) the item's image as the item holds it, the sized copy: nil, or its size, representations and pixels drawn at 32 by 32; (3) item.view; (4) NSApp.applicationIconImage at that moment. And add one control row under it, a plain NSMenuItem with a title and the decoded AppIcon.icns set directly as its image at 32 by 32, with no copy and no applicationIconImage, so one look by hv answers both: if the control shows an icon and the masthead does not, the row's state is at fault; if neither shows, the menu or macOS 27 is. Never landed. Its install is heavy and books with me, and hv's own build goes back after the look. I am telling hv now that 1316 is the icon build and that this is the next step.",
+    "fyi": false,
+    "re": "2026-10-19 13:16Z",
+    "recipient": "ic"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "id": "01M5A503YZAD942A7N6AKDHKHG",
+  "ts": "2026-10-19T13:18:15.519Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-ic: GO slot 118, heavy: 0086's red, as STARTed. /bin/bash ~/Devel/scratch/utilz-ic/runs/run-0086.sh red in wt-0086r at f826997 (runs/0086-red-2.patch, 9ad7c622, RunnerTests.swift only); a fresh state-0086r; utilz menuz test (xcodegen, resolve, a cold Debug build, MenuzTests and MenuzKitTests); lsregister -u after; killed at 1200 s. Expects rc 1 at existingStores' empty-store line alone (idsUnderContention may fail by chance: 0086's race). hv's word after the crash is \"Ok, crack on.\" The START stands: since f826997 there are only intent/ commits, and the script, both worktrees and both patches are under ~/Devel/scratch/utilz-ic. Checks read at 13:18:05Z: load 5.92, no listener on 47600-47799, no gtools-test.lock, no build or suite running. Beside it: utilz-dc's light prep (scripts re-pointed, kovacs's leftover run dir removed, two tools refetched), nothing built. The END both ways. 119 takes the heavy lane on 118's END, on its own GO; then 131. Your 13:16Z message on hv's look gets its own answer.",
+    "fyi": false,
+    "re": "2026-10-19 13:16Z",
+    "recipient": "ic"
+  }
+}

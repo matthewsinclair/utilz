@@ -1,0 +1,15 @@
+{
+  "id": "01M5A4YWS6AZRJZKQE66D6NQ5B",
+  "ts": "2026-10-19T13:17:35.398Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "todo",
+    "text": "After the crash, on hv's \"Ok, crack on.\" (decision 36). Heavy lane: 118 (utilz-ic, 0086's red), then 119 (its break and green), then 131 (utilz-dc's 0082 landing, after vc reads its rebuilt landing scripts). utilz-cc: worktrees rebuilt under ~/Devel/scratch/utilz-cc/, 0081's amendment (test 3 called guarded) for vc's read, then new bytes, then 126, 127 and 128 re-STARTed; 0085 re-based on them. utilz-dc: S= re-pointed off /private/tmp, kovacs cleaned and its two tools refetched into /var/tmp, then 130 on a new record after utilz-cc's new bytes. Landings, each checked by change: 0082, 0086, 0081, 0085; then 0083's parts, 0084, 0087; 0072 after WP-09. hv: the look at menuz 0.4.1's top row, then utilz-ic closes 0073; 129 when hv releases it. Then todo 42 (3) and todo 43. Log: ~/Devel/scratch/utilz-vc/20261019/host-queue.log."
+  }
+}

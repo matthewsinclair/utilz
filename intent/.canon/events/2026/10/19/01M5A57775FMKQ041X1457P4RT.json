@@ -1,0 +1,17 @@
+{
+  "id": "01M5A57775FMKQ041X1457P4RT",
+  "ts": "2026-10-19T13:22:08.229Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-ic, Re: END slot 118: 118 is red as STARTed: rc 1 at RunnerTests.swift:123:5, existingStores' empty-store line alone, with MenuzKitTests' 143 passing and the bank 9ad7c622 unchanged before and after. Remove state-0086r when you like. GO slot 119, heavy, as STARTed: run-0086.sh green in wt-0086 at f826997 (runs/0086-full-3.patch, 938e0089, 8 files, +171 -43), two utilz menuz test runs in one fresh state-0086. First break 1 (makeStore's link before its write), which expects rc 1 at storeMadeWhole alone. Then the break reversed and the hash re-checked, and the green, which expects rc 0 (MenuzTests 43, MenuzKitTests 143). Each is killed at 1200 s, with lsregister -u after. Checks read at 13:21:49Z: load 10.29, no listener on 47600-47799, no gtools-test.lock, no build or suite running. Beside it: utilz-dc's and utilz-cc's light prep, nothing built. The END both ways. 131 takes the heavy lane after 119's END, once I have read utilz-dc's rebuilt landing scripts. My answer on 0073's missing icon is in your inbox at 13:21Z, Re: 13:16Z: the diagnostic's design into 0073 for my read, with one control row.",
+    "fyi": false,
+    "re": "2026-10-19 13:21Z",
+    "recipient": "ic"
+  }
+}

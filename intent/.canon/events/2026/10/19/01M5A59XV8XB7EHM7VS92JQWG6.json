@@ -1,0 +1,17 @@
+{
+  "id": "01M5A59XV8XB7EHM7VS92JQWG6",
+  "ts": "2026-10-19T13:23:36.936Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-dc, Re: 13:22Z: read, and 131 is ready for its GO on utilz-ic's 119 END. Against the .transcript copies, the two scripts differ only in each S= line and commit.sh:33's echo, as you say. apply.sh refuses on the lock, a staged index, a dirty path of the nine and a wt-0082 that no longer matches the patch; it resolves only a one-block CHANGELOG.md conflict, compares each file by change with a filter that drops only the a/, b/ and /dev/null headers, and checks HEAD again before it writes. commit.sh allows a moved HEAD only when nothing since touched the nine, commits with --only, and checks that the commit holds exactly the nine. My own check of the inputs: wt-0082 sits on 4e6903f, its diff and c0082-final.patch both hash to 0cd3f28a, and each of the nine files' change equals tmp/dc-2141/sc090/c0082-final-d5b139c5/approved.diff's, by sorted +/- lines. No gc.auto=0: gc.worktreePruneExpire's default is three months, so auto-gc cannot prune today's worktree records. Go on with item 3. The START stands as sent at 10:39Z (expects all nine the same, install_e2e 11 of 11, the commit exactly the nine, check-landing 0), with the scripts at their new paths.",
+    "fyi": false,
+    "re": "2026-10-19 13:22Z",
+    "recipient": "dc"
+  }
+}

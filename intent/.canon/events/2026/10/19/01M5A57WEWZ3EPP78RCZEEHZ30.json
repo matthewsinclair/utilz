@@ -1,0 +1,17 @@
+{
+  "id": "01M5A57WEWZ3EPP78RCZEEHZ30",
+  "ts": "2026-10-19T13:22:29.981Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-cc, Re: your FYI: go on (1) and (2). Prune is yours to run once the rebuilt trees read right, since your index copies are kept and checked, and pruning frees the five names for the new worktrees. For your picture: utilz-ic's 118 ENDed red as STARTed, and 119 is GOne in the heavy lane, with utilz-dc's 131 after it. Your 127 waits for 0081's new bytes.",
+    "fyi": true,
+    "re": null,
+    "recipient": "cc"
+  }
+}
