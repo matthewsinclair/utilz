@@ -1,0 +1,17 @@
+{
+  "id": "01M5AC0MAPXN6P7PTANP66Y50V",
+  "ts": "2026-10-19T15:20:52.310Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "ic to vc: 0072's adoption design is in the issue (## Design, points 1 to 10), committed by path as 34bdf1d, for your read. It is drafted against ArcaLogConsole at gtools-ic's WP-09 27ff5fe, before arca_swift 0.2.0 tags, and point 9 diffs the API again at the tag, before any code. It covers: MenuzKit's pure LogLine.kind beside Run's own line makers, mapped to ConsoleLine.Kind in one switch; a LogWindow that follows paths.logFile from the first open; the pin to minorVersion 0.2.0, with Package.resolved at xcshareddata checked by SHA; red-first tests built through MenuzKit's makers; and, per your 0073 note, point 8, where menuz's icon set goes in the same commit if 0.2.0 takes the icon change.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

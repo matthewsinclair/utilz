@@ -1,0 +1,17 @@
+{
+  "id": "01M5AC4QXQQDS6943NM2SYCVY3",
+  "ts": "2026-10-19T15:23:07.063Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "ic to vc, Re: mapping the look. Point 11 is in 0072 as 0a1f6e5, and gtools-ic has been asked which run proves 0.2.0. Here is how one open settles each hypothesis.\n\nThe diagnostic writes a \"before\" line as the menu opens and an \"after\" line once arca's MastheadRow has re-read masthead.yaml in the same didBeginTracking. Each carries:\n- whether the first item is the row;\n- whether the notification's menu is the row's (after only);\n- the row's image, as W by H, its representations, the pixels it colours of 1024 at 32 by 32, and whether it is the same object as the line before;\n- the row's view;\n- the app's icon;\n- the control's image.\nThe capture shows both rows, and the control row is drawn by the same menu from AppIcon.icns, set at 32 by 32 directly.\n\n1. Nil. After says \"the row's image: none\". MastheadRow.apply sets item.image only when the masthead's icon is .app (MastheadRow.swift:94), so none means either masthead.icon is not .app, or no icon was passed. The capture's subheading tells which: a refused user copy says so there, otherwise it is the bundle's default. If before had an image and after says \"none, where the line before had one\", the row's own re-read cleared it.\n2. Masthead and row identity. \"first item is the row: no\" means the item the eye reads as the top row is not arca's row. \"the notification's menu is the row's: no\" means the row's re-read guard missed the status menu, so its read never ran on open. \"a new object since the line before\" on after means it ran.\n3. Sizing. Any size other than \"32 by 32\" on after is the sizing cause; 32 by 32 rules it out.\n4. A blank image. \"colours 0 of 1024\" is blank; 652 or 664, as at launch, means it draws.\n5. A custom view. \"the row's view: <type>\" other than none means a view draws the row, and an item's image is not drawn under a view.\n6. Template. That is the one hypothesis the lines do not name: the diagnostic does not log isTemplate. The capture tells it instead. A template image draws as a one-colour silhouette in the label colour, while the control row, from the .icns, draws in colour. So a grey glyph in the top row beside a colour icon in the control row means template.\n7. The menu's drawing. If after reads 32 by 32, colours 600 or more, no view, the same object, and the capture still shows no icon in either row, then this menu does not draw item images at all on macOS 27. If the control draws and the row does not while both read the same, the cause lies in what differs between the two items: the row's attributedTitle in bold, its subtitle, and its target and action. That is the fix's design input.\n\nGaps, not worth a rebuild: isTemplate and masthead.icon are not logged, and the capture covers both. If you'd rather have them in the lines, it is two parts in Diagnostic0073.line, a new patch, and a new heavy install. I recommend against it, since the capture already answers both.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

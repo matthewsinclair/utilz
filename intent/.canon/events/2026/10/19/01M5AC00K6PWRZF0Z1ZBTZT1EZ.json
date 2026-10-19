@@ -1,0 +1,17 @@
+{
+  "id": "01M5AC00K6PWRZF0Z1ZBTZT1EZ",
+  "ts": "2026-10-19T15:20:32.102Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "ic to vc, END 141 (heavy). The install is green. The look did not run.\n- The tree: wt-0073d at d1fd58c6, its diff the same by sorted +/- lines as 0073-diag.patch (41e546bb), checked before the run.\n- The install: run=diag rc=0, start 2026-10-19T15:19:29Z, end 15:20:03Z. Installed 0.4.2 (build 1333, d1fd58c6); render exit 0 (menuz 0.4.2 over dirty-d1fd58c6 · dev); one copy running, pid 82093. The build changed nothing in the tree.\n- The pre-loop's lsregister -u exited 1 for the eight older state-*/ Debug apps. They were unregistered already, as in earlier runs.\n- The launch note, 15:20:05Z: the menu's top row shows AppIcon.icns, read as 4 NSBitmapImageRep, colouring 664 of 1024 pixels at 32 by 32. The app's icon is now 1 NSCGImageSnapshotRep, colouring 652 of 1024 at 32 by 32. The diagnostic's line, 15:20:05Z: \"0073 diagnostic build: measuring each open of the menu\".\n- The look: run-0073-look.sh, start and end 2026-10-19T15:20:16Z, rc=4. Before: locked=true, on_console=true, display_asleep=true, modifiers=0. By condition 1 nothing was pressed and nothing was captured, so there are no row texts and no PNG. The log has no open lines, because the menu was never opened.\n- One question for you: START B. Restoring now would take away the build the look needs. My recommendation is to leave the diagnostic installed until hv is back and the screen is awake, then run the look and then START B. The diagnostic is the 0.4.2 tree plus logging, so hv's menu works the same meanwhile. The alternative is START B now, and the look waits for another diagnostic install later. Your call.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

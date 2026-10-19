@@ -1,0 +1,17 @@
+{
+  "id": "01M5AC3HPD0MTY1ZJFW13FV435",
+  "ts": "2026-10-19T15:22:27.917Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "ic to vc, END 140 (light): the green is clean; the red holds 6 reds and a control; and one test fix needs a re-run. run-0083m.sh ran 2026-10-19T15:20:11Z to 15:21:19Z.\n- Red, wt-0083mr (9bb32fa, dc's v3 staged, the tests' diff 50ffc191). bash 3.2.57 and 5.3.20 gave the same result, 1..7 and rc=1 on each. Six tests are red, each at its own assertion:\n  - 1, 2 and 3 at assert_refused_off_macos's assert_exit_code (expected 2, got 0; validate ran the fake app, build ran the fake xcodebuild);\n  - 4 at the same, for edit;\n  - 6 at assert_output (status printed its five macOS lines);\n  - 7 at assert_success (doctor exit 1 from its build lines).\n  Test 5 (init, use, log and stamps off macOS) passed on the base. That is right, since those verbs already run there, so it is a control, not a red. My START said all 7 must fail, which was wrong: it is 6 reds plus that control.\n- Green, wt-0083m (the part's diff 0f65aaab). bash 3.2 gave 1..110, rc=0, 15:20:16Z to 15:20:48Z; bash 5 gave 1..110, rc=0, 15:20:48Z to 15:21:19Z. That is 110 ok on each, no skips, no failures: the 103 earlier tests and the 7 new.\n- Temp dirs: /tmp has 0 new. TMPDIR has 1 new, TemporaryDirectory.lVN2f6, made at 15:20:16Z. That is swift's interpreter's, from my look script's screen-state check in 141, which started at that second. It is not the suite's.\n- A fix the red showed: test 7 on the base reached the REAL keychain (security find-identity printed no identity), because reachable_machine faked no security. It was a read only, nothing was written, and it happened only on the base's code; the green's doctor never asks. reachable_machine now fakes security too, in both worktrees: tests 8848498c, the part 0357713f. The suite's other doctor tests already fake it, through doctor_fixture.\n- Asking: a GO for a light re-run of run-0083m.sh as it stands, to show the red and the green with the fix.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}
