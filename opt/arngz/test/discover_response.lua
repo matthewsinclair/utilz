@@ -48,21 +48,23 @@ local function encode(v)
   return "{" .. table.concat(parts, ",") .. "}"
 end
 
+-- A refusal is answered as the engine's error_response answers one: kind
+-- refused, and the fix where the refusal names one (issue 0077).
 local response
 if verb == "discover" then
   local function given(v) if v == nil or v == "" then return nil end return v end
-  local desk, notes = P.desk_from_world(F[arg[4]](), { grid = given(arg[5]), name = given(arg[6]) })
+  local desk, notes, fix = P.desk_from_world(F[arg[4]](), { grid = given(arg[5]), name = given(arg[6]) })
   if desk then
     response = { status = "ok", verb = "discover", desk = desk, report = notes }
   else
-    response = { status = "error", verb = "discover", error = notes }
+    response = { status = "error", kind = "refused", verb = "discover", error = notes, fix = fix }
   end
 elseif verb == "plan" then
-  local ops, err = P.plan(F[arg[5]](), F[arg[4]](), {})
+  local ops, err, fix = P.plan(F[arg[5]](), F[arg[4]](), {})
   if ops then
     response = { status = "ok", verb = "plan", ops = ops, report = P.plan_report(ops) }
   else
-    response = { status = "error", verb = "plan", error = err }
+    response = { status = "error", kind = "refused", verb = "plan", error = err, fix = fix }
   end
 elseif verb == "apply" then
   local results = F[arg[4]]()

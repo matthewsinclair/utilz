@@ -39,8 +39,9 @@ M.LAUNCH_TIMEOUT = 20
 local function utc_now() return os.date("!%Y-%m-%dT%H:%M:%SZ") end
 
 -- A refusal: raised as a tagged table, so answer() can tell "refused before
--- anything changed" from a Lua error inside the engine (D25).
-local function refuse(why) error({ refused = why }, 0) end
+-- anything changed" from a Lua error inside the engine (D25). A fix, where
+-- the refusal names one, goes into the response for the CLI to print.
+local function refuse(why, fix) error({ refused = why, fix = fix }, 0) end
 
 local function rect(r)
   if not r then return nil end
@@ -218,19 +219,18 @@ function M.observe(bundles)
     if not spaces then entry.spaces_error = serr or "spacesForScreen returned nothing" end
     -- Mission Control's order is com.apple.spaces', not the live list's
     -- (D22, measured 16 Oct 2026). Without it the spaces are still recorded,
-    -- in the live order, and order_error says why: plan refuses that.
+    -- in the live order, and order_error says why: plan refuses that. A lone
+    -- space no list holds yet is ordered, and order_pending says why no
+    -- desktop can be added beside it yet (issue 0077).
     local ordered = spaces
     if spaces then
-      if monitors then
-        local oerr
-        ordered, oerr = P.order_spaces(spaces, monitors)
-        if not ordered then
-          ordered = spaces
-          entry.order_error = oerr
-        end
+      local oerr, ofix
+      ordered, oerr, ofix = P.order_spaces(spaces, monitors, spaces_err)
+      if ordered then
+        entry.order_pending, entry.order_fix = oerr, ofix
       else
-        entry.order_error = "com.apple.spaces carries no display configuration"
-          .. (spaces_err and (": " .. spaces_err) or "")
+        ordered = spaces
+        entry.order_error, entry.order_fix = oerr, ofix
       end
     end
     for ordinal, id in ipairs(ordered or {}) do
@@ -1050,10 +1050,11 @@ local function observe_until(done, seconds, bundles)
 end
 
 -- The plan verb: plan from WORLD, planned again from fresh observes while an
--- entry is unseen, up to UNSEEN_SECONDS. Returns the ops and plan's refusal.
+-- entry is unseen, up to UNSEEN_SECONDS. Returns the ops, or plan's refusal
+-- and its fix.
 local function plan_settled(desk, world, options)
-  local ops, err = P.plan(desk, world, options)
-  if not (ops and has_unseen(ops)) then return ops, err end
+  local ops, err, fix = P.plan(desk, world, options)
+  if not (ops and has_unseen(ops)) then return ops, err, fix end
   local held = { desk = desk, options = options, ops = ops, world = world }
   observe_until(function(w) return retry_unseen(held, w) end, UNSEEN_SECONDS, P.desk_bundles(desk))
   return held.ops, nil
@@ -1098,10 +1099,11 @@ local function waiting(job, name, seconds, done, next_phase, must_observe)
 end
 
 -- Plan from job.world with job.options: the held plan, then a wait while an
--- entry is unseen, then `after`. A refusal is plan's err, for the caller.
+-- entry is unseen, then `after`. A refusal is plan's err and fix, for the
+-- caller.
 local function plan_then(job, after)
-  local ops, err = P.plan(job.desk, job.world, job.options)
-  if not ops then return nil, err end
+  local ops, err, fix = P.plan(job.desk, job.world, job.options)
+  if not ops then return nil, err, fix end
   job.ops, job.after_unseen = ops, after
   job.deadlines.unseen, job.observed.unseen, job.observe_errors.unseen = nil, nil, nil
   if has_unseen(ops) then return "unseen", POLL_SECONDS end
@@ -1115,8 +1117,8 @@ function PHASE.inventory(job)
   -- Only Hammerspoon can say whether it holds the grant; the preferences are
   -- the CLI's to judge, before it asks (D26).
   if job.world.accessibility ~= true then refuse(ACCESSIBILITY) end
-  local nxt, err = plan_then(job, "prepare")
-  if not nxt then refuse(err) end
+  local nxt, err, fix = plan_then(job, "prepare")
+  if not nxt then refuse(err, fix) end
   return nxt
 end
 
@@ -1223,7 +1225,7 @@ end
 -- Lua error, for the CLI (D25).
 local function error_response(verb, err)
   if type(err) == "table" and err.refused then
-    return { status = "error", kind = "refused", verb = verb, error = tostring(err.refused) }
+    return { status = "error", kind = "refused", verb = verb, error = tostring(err.refused), fix = err.fix }
   end
   return { status = "error", kind = "lua_error", verb = verb, error = tostring(err) }
 end
@@ -1322,16 +1324,16 @@ local VERBS = {
   -- discover: the world as a desk (WP-04). options.grid, options.name.
   discover = function(_, options)
     local world = M.observe()
-    local desk, notes = P.desk_from_world(world, { grid = options.grid, name = options.name })
-    if not desk then refuse(notes) end
+    local desk, notes, fix = P.desk_from_world(world, { grid = options.grid, name = options.name })
+    if not desk then refuse(notes, fix) end
     return { desk = desk, report = notes }
   end,
   -- plan: what apply would do, and nothing done (diff, and apply --dry-run).
   -- execute is never called on this path.
   plan = function(desk, options)
     if type(desk) ~= "table" then refuse("plan needs the desk") end
-    local ops, err = plan_settled(desk, M.observe(P.desk_bundles(desk)), options)
-    if not ops then refuse(err) end
+    local ops, err, fix = plan_settled(desk, M.observe(P.desk_bundles(desk)), options)
+    if not ops then refuse(err, fix) end
     return { ops = ops, report = P.plan_report(ops) }
   end,
 }

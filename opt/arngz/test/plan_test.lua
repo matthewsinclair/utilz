@@ -319,10 +319,38 @@ end
 -- ordered by guess.
 do
   local w = base_world()
-  w.screens[1].order_error = "no list in com.apple.spaces holds exactly this screen's spaces"
-  local ops, err = P.plan(base_desk(), w, {})
+  -- What observe keeps for a screen of two spaces no list holds: order_spaces'
+  -- own refusal and fix.
+  local _, owhy, ofix = P.order_spaces({ 3215, 3216 }, {})
+  w.screens[1].order_error, w.screens[1].order_fix = owhy, ofix
+  local ops, err, fix = P.plan(base_desk(), w, {})
   check("plan refuses a screen whose space order could not be read",
     ops == nil and string.find(tostring(err), "order of screen SCREEN-A", 1, true) ~= nil, err or ops_text(ops))
+  -- plan and discover return the fix third, which the engine writes into the
+  -- refusal's response (issue 0077).
+  local desk, derr, dfix = P.desk_from_world(w, {})
+  check("plan and discover hand on the order's fix with the refusal",
+    ofix ~= nil and fix == ofix and desk == nil and dfix == ofix,
+    tostring(fix) .. " / " .. tostring(dfix) .. " / " .. tostring(derr))
+end
+
+-- A lone space no list holds yet takes no new desktop: apply would add one,
+-- then wait for a list macOS may take minutes to write, and fail after a
+-- change. Refused before anything changes, with the wait fix (issue 0077,
+-- D25).
+do
+  local w = base_world()
+  local vscode = table.remove(w.screens[1].spaces, 2).windows[1]
+  table.insert(space(w, 1).windows, vscode)
+  local _, pwhy, pfix = P.order_spaces({ 3215 }, {})
+  w.screens[1].order_pending, w.screens[1].order_fix = pwhy, pfix
+  local ops, err, fix = P.plan(base_desk(), w, {})
+  check("a screen ordered without a list takes no new desktop, refused before anything changes, with the wait fix",
+    ops == nil and string.find(tostring(err), "screen SCREEN-A cannot take a new desktop yet", 1, true) ~= nil
+      and string.find(tostring(err), "has not recorded", 1, true) ~= nil and pfix ~= nil and fix == pfix,
+    tostring(err) .. " / " .. tostring(fix))
+  local without = P.plan(base_desk(), w, { no_create = true })
+  check("and under --no-create it plans as before, creating nothing", kinds(without) == "no_space", ops_text(without))
 end
 
 -- One app named in two cases in a desk is launched once.
@@ -532,15 +560,44 @@ do
   local order = P.order_spaces({ 1, 3, 2588, 305, 1733 }, monitors)
   check("a screen's spaces take the plist's order, not the live list's",
     order and table.concat(order, ",") == "1,3,2588,1733,305", order and table.concat(order, ","))
-  local one = P.order_spaces({ 2634 }, monitors)
-  check("a screen's list is the one holding exactly its spaces, wherever it sits", one and one[1] == 2634)
+  -- Two spaces, so the list is read: the second of three, in an order the
+  -- live list does not give.
+  local later = { monitors[1],
+    { ["Display Identifier"] = "2F1BFA83", Spaces = { { ManagedSpaceID = 3216 }, { ManagedSpaceID = 3215 } } },
+    monitors[3] }
+  local found = P.order_spaces({ 3215, 3216 }, later)
+  check("a screen's list is the one holding exactly its spaces, wherever it sits",
+    found and table.concat(found, ",") == "3216,3215", found and table.concat(found, ","))
   local missing, why = P.order_spaces({ 1, 3, 2588, 305, 1733, 4000 }, monitors)
   check("a screen with a space the plist does not list yet has no order, and says why",
     missing == nil and string.find(tostring(why), "4000", 1, true) ~= nil, why)
   local fewer = P.order_spaces({ 1, 3 }, monitors)
   check("a list holding more than the screen's spaces is not its list", fewer == nil)
-  local twice, why2 = P.order_spaces({ 2634 }, { monitors[2], monitors[2] })
-  check("two lists that both fit refuse rather than choose", twice == nil and why2 ~= nil, why2)
+  -- Waiting is not known to clear two lists, so that refusal names no fix.
+  local twice, why2, fix2 = P.order_spaces({ 3215, 3216 }, { later[2], later[2] })
+  check("two lists that both fit refuse rather than choose, and name no fix",
+    twice == nil and string.find(tostring(why2), "two lists", 1, true) ~= nil and fix2 == nil,
+    tostring(why2) .. " / " .. tostring(fix2))
+  -- Just after a display attaches, macOS has not yet written its list (hv's
+  -- zeopit desk, 19 Oct 2026, issue 0077). One space has one order, so it
+  -- needs none; two or more refuse, and say what to do.
+  local alone = P.order_spaces({ 3215 }, monitors)
+  check("a screen with one space is its own order, though no list holds it",
+    alone ~= nil and #alone == 1 and alone[1] == 3215, alone and table.concat(alone, ","))
+  local unknown, uwhy, ufix = P.order_spaces({ 3215, 3216 }, monitors)
+  check("a screen with two spaces and no list refuses, saying macOS has not recorded them yet, and to wait",
+    unknown == nil and string.find(tostring(uwhy), "has not recorded this screen's spaces (3215, 3216) yet", 1, true) ~= nil
+      and string.find(tostring(uwhy), "just after a display attaches", 1, true) ~= nil
+      and ufix == "wait for macOS to record them, then run arngz again",
+    tostring(uwhy) .. " / " .. tostring(ufix))
+  -- With no display configuration in com.apple.spaces, the same rule, in
+  -- order_spaces' words, and no fix, since waiting is not known to bring one.
+  local solo = P.order_spaces({ 3215 }, nil, "defaults export failed")
+  local pair, pwhy, pfix = P.order_spaces({ 3215, 3216 }, nil, "defaults export failed")
+  check("with no display configuration, one space is ordered and two are refused, saying why, with no fix",
+    solo ~= nil and solo[1] == 3215 and pair == nil and pfix == nil
+      and string.find(tostring(pwhy), "carries no display configuration: defaults export failed", 1, true) ~= nil,
+    tostring(pwhy) .. " / " .. tostring(pfix))
 end
 
 -- ------------------------------------------------------------- moving (D21)

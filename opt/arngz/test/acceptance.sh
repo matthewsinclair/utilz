@@ -126,7 +126,9 @@ for key, domain, pref in (("spans_displays", "com.apple.spaces", "spans-displays
     check("%s is recorded raw, as defaults reads %s %s (%s)" % (key, domain, pref, "unset" if v is None else v), same)
 check("no verdict is recorded beside them (no stage_manager)", "stage_manager" not in w)
 for s in screens:
-    check("screen %s's space order was read from com.apple.spaces (D22)%s" % (s.get("name"),
+    # A lone desktop is ordered without the list until macOS records it (issue 0077).
+    source = "its one desktop, not yet in com.apple.spaces" if s.get("order_pending") else "com.apple.spaces"
+    check("screen %s's space order is known, from %s (D22)%s" % (s.get("name"), source,
           ": " + s["order_error"] if s.get("order_error") else ""), not s.get("order_error"))
 check("accessibility is reported (%s)" % w.get("accessibility"), isinstance(w.get("accessibility"), bool))
 check("every Dock binding carries bundle and target (%d)" % len(w.get("app_bindings", [])),
