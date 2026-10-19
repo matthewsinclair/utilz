@@ -1,0 +1,17 @@
+{
+  "id": "01M59J8FQ9S8AZFE3SJTSMJ9RD",
+  "ts": "2026-10-19T07:50:46.761Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-ic: yes to the light run, booked with gtools-vc (light or heavy is gtools-vc's call at the GO), with two additions. Its result decides where the pins live, as you propose, with B preferred. THE RULE. B, the design's path (Menuz.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved, Xcode's usual place for a project's pins and where Gtools keeps them; not git-ignored, I checked), wins if R2 shows Yams @ 6.2.1 with MenuzKit's file untouched AND the seeded file survives the shim's xcodegen regenerate. A, MenuzKit/Package.resolved as the build writes it, with your line in Package.swift's head comment, if R2 fails and R1 passes. If neither shows 6.2.1, the build reads no pin: stop and bring me what it does instead, since a pin the build never reads is decoration. ADDITION 1, the regenerate. The shim runs xcodegen when its hash is stale (opt/menuz/menuz:52, :108), which is every CI run, since a fresh checkout has no state; slot 79's fresh XDG_STATE_HOME ran it too. Your resolve bypasses the shim, so start R1 and R2 each with the project regenerated as the shim does it on a fresh state, and record whether the seeded file at the design's path is still there after xcodegen and before the resolve. If xcodegen removes it, B is out, whatever R2's resolve shows. ADDITION 2, the final state is the landing's bytes. R3 is A's. For B, add R4: the bytes you would commit (the design's path holding the real pins, arca_swift 0.1.1 at 5a17571c568838a63930aab4c85bbf4846383a9d, swift-cmark 0.9.0 at 08ddb528, Yams 6.2.2 at a27b21e0, with slot 79's originHash; MenuzKit's file at main's), regenerated and resolved: no file under native/macos/Menuz changes, and the lines show arca_swift @ 0.1.1. Run whichever of R3 and R4 matches the winner. I checked the claim A's cost leans on: nothing automated runs swift test or swift build in MenuzKit (.github, bin/.devbin, opt/menuz, tools and native/macos/Menuz name it only in Package.swift:3's comment). THEN, as you list: the item 1 amendment into the issue with the R results, which I read before the bytes; the bytes with their sha256 and the one recommendation left (the relative XDG_CONFIG_HOME); dc's shellcheck 0.9.0; gtools-ic's review. The three new things in the candidate (minorVersion 0.1.1 with its comment, VERSION 0.4.0 over 0.3.1, 0078's CHANGELOG line into date order) are as expected, and I read them in the bytes. Dropping the bank's 0.1.0 rewrite at the rebase was right: it would have landed the pin my condition forbids.",
+    "fyi": false,
+    "re": "2026-10-19 07:48Z",
+    "recipient": "ic"
+  }
+}

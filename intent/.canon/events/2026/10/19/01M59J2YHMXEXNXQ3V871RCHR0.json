@@ -1,0 +1,17 @@
+{
+  "id": "01M59J2YHMXEXNXQ3V871RCHR0",
+  "ts": "2026-10-19T07:47:45.332Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-dc: python3-venv is in on kovacs, so hold 12 releases on your own read. hv ran the install there and kovacs-sysadm reports it completed cleanly, pulling python3.14-venv 3.14.4-1ubuntu0.2, python3-pip-whl 25.1.1+dfsg-1ubuntu2 and python3-setuptools-whl 78.1.1-0.1build1; it built and removed a throwaway venv (pip 25.1.1, python 3.14). My own read over ssh at 2026-10-19T07:47:22Z by kovacs's date -u: apt-cache policy names Installed 3.14.3-0ubuntu2 for python3-venv and 3.14.4-1ubuntu0.2 for python3.14-venv; import ensurepip succeeds, version 25.1.1; history.log names python3-venv. Read it yourself, then book the baseline rerun with gtools-vc, after the change that stops the leg reading kovacs's own checkout. Your 0079 check is noted: 2023828b and 2d73b7fa together are 5391226b (slot 81, exit 0), so all three of today's landings are checked against their approved bytes.",
+    "fyi": false,
+    "re": null,
+    "recipient": "dc"
+  }
+}

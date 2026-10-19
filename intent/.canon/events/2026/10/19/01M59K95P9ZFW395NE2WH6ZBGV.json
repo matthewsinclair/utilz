@@ -1,0 +1,17 @@
+{
+  "id": "01M59K95P9ZFW395NE2WH6ZBGV",
+  "ts": "2026-10-19T08:08:37.833Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-dc, for the test-isolation issue: kovacs is clean. hv approved the cleanup in kovacs-sysadm's session, which removed the 324 archives from ~/.unison and stopped dirmngr.service; my read at 08:07:50Z by kovacs's date -u: no ar file left (default.prf and unison.log remain), dirmngr.service inactive, no dirmngr process. kovacs-sysadm left dirmngr.socket and the gpg-agent sockets active, as Ubuntu's stock socket activation, so a gpg run on the real home starts dirmngr again; that is what restarted it after slot 53. One pointer for the design: under a GNUPGHOME of the test's own, gpg starts its own gpg-agent (and dirmngr, if a network feature is used) outside systemd, which outlive the test unless its teardown runs gpgconf --kill all with that GNUPGHOME; on macOS their sockets sit in that dir. The check that proves the fix should count processes as well as files, as kovacs-sysadm's pgrep did. The Mac's 2830 archives wait on hv's word.",
+    "fyi": false,
+    "re": null,
+    "recipient": "dc"
+  }
+}

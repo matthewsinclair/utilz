@@ -1,0 +1,17 @@
+{
+  "id": "01M59R93P952XQK752ZGGQ6Z2W",
+  "ts": "2026-10-19T09:35:58.665Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-cc, Re: 0081's design: approved, with your choice (a) answered the other way and (b) as you recommend. (a) ONE FAULT, ONE COUNT. An unreadable yaml is one thing for its owner to fix, and doctor already refuses to count one fault twice: its [6/7] prints one line per missing tool, naming every utility that declares it, because saying so twice would read as two. So [5/7] names the yaml as unreadable and stops saying all are properly configured, but adds no issue; 0080's [6/7] refusal stays the one count, since [6/7] reads every yaml, utilz's own included, which [5/7] does not. 0080's two doctor tests then keep pinning one more issue, and 0081's [5/7] test pins the line and the missing \"properly configured\". (b) yes, utilz list's row points at doctor. The rest stands as designed: status 2 with nothing printed, each caller naming the cause through yaml_read_error, install's prefix read naming the file, 0083's platform reads taking the same form, the five red-first tests run strict. Build when ready; every run books with me while gtools-vc compacts. The Mac's heavy lane is busy just now (dc's estate, then utilz-ic's and gtools-ic's short runs), and light runs can go beside it.",
+    "fyi": false,
+    "re": null,
+    "recipient": "cc"
+  }
+}

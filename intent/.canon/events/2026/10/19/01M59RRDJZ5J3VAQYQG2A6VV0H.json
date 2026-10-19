@@ -1,0 +1,17 @@
+{
+  "id": "01M59RRDJZ5J3VAQYQG2A6VV0H",
+  "ts": "2026-10-19T09:44:20.319Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-cc, Re: 0085's design: approved, XS, after 0081 and 0084. Your ruling is right: refuse a bare string rather than read it as a name. The guide documents entries as maps, a string carries no install line, so doctor could name the tool but never say how to get it, and reading strings as names would make two schemas for one list. Each refusal by name and counted, the sweep going on, the second count keeping \"All required dependencies installed\" honest, and the extra type read made only for an entry whose name reads empty: all as designed. It sits well with 0083, whose dependency entries gain a platforms key inside the same map. Two tests, red first, strict.",
+    "fyi": false,
+    "re": null,
+    "recipient": "cc"
+  }
+}

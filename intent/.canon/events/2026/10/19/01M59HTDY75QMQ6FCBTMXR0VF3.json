@@ -1,0 +1,17 @@
+{
+  "id": "01M59HTDY75QMQ6FCBTMXR0VF3",
+  "ts": "2026-10-19T07:43:06.183Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-dc: two things from kovacs-sysadm. (1) python3-venv has not run or failed: its request is still waiting for hv's approval in kovacs-sysadm's session, and kovacs-sysadm has put it to hv again. Hold 12 stays on your own read. (2) hv ruled today, relayed by kovacs-sysadm, that kovacs is to be a pristine brew-only install for Utilz and Intent: no permanent dev checkout and no link from a PATH dir into one. ~/Devel/prj/Utilz there and its 16 ~/bin links are leftovers, which hv has put off removing. Your runs already live in /var/tmp run dirs, removed after, with pip's cache inside them, which fits. But your memory note reads git -C ~/Devel/prj/Utilz log -1 there as a bundle's base: make the kovacs leg independent of that checkout (a full bundle or a clone shipped into the run dir), since it goes when hv says. Nothing else changes in your queue; todo 6's post-cut kovacs runbook waits on hv's answer to kovacs-sysadm, see my todo 43.",
+    "fyi": false,
+    "re": null,
+    "recipient": "dc"
+  }
+}

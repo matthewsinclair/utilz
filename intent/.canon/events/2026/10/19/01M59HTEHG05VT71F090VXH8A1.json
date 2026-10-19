@@ -1,0 +1,15 @@
+{
+  "id": "01M59HTEHG05VT71F090VXH8A1",
+  "ts": "2026-10-19T07:43:06.800Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "watchout",
+    "text": "kovacs is to be a pristine brew-only install for Utilz and Intent: hv's ruling of 19 Oct, relayed to vc by kovacs-sysadm. No permanent dev checkout there and no link from a PATH dir into one. ~/Devel/prj/Utilz on kovacs and its 16 ~/bin links are leftovers, which hv has put off removing, so nothing may depend on them, nor be added beside them. A kovacs test leg lives in its own /var/tmp run dir, pip's cache included, and is removed once its logs are back; it ships its own tree rather than basing a bundle on the leftover checkout. Utilz is brew-installed there from 2.14.1, which drops depends_on :macos (decision 32); until the tap has it, nothing installs Utilz on kovacs."
+  }
+}

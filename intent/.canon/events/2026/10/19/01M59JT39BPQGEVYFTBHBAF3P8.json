@@ -1,0 +1,17 @@
+{
+  "id": "01M59JT39BPQGEVYFTBHBAF3P8",
+  "ts": "2026-10-19T08:00:23.851Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-cc, Re: 0080: the design is approved with five amendments, and your three rulings are answered. (1) THE DESIGN. Items 1, 2, 3, 5, 6, 7 and 8 stand, amended as below. I read each site at 2d73b7f: cleanz:398's matches come from grep -in, so every first_match starts N: and item 1's slices give sed's text; :407's wc reads everything; :398's own pipe keeps grep's status as the rightmost under pipefail. The six shipped integration blocks all read input and output inside emacs doctor's sets and flags as a list, and every dependencies is a list, so nothing changes for a shipped yaml. AMENDMENT A, item 2's helper must not be the class it fixes: yaml_read_error returns 0 whatever yq does, its own read inside an if or ending || true, never a bare assignment or a pipeline under pipefail; the refusal-path tests, run with set -euo pipefail first, prove it. AMENDMENT B, item 4 by one validator, not a second copy: as designed, emacs doctor would hold its own encoding of the flags rule beside the manifest's join, two encodings of one rule, while :1375's header already claims a single walker that is not single. So the integration block's rules (the yaml reads; input and output present and inside their sets; flags a list or absent) live in one function that emit_integration_tsv and emacs_doctor both call, each reporting the same reason in its own way (the manifest warns and skips, the doctor lists it invalid). That takes in your seen-not-taken item 3, and :1375's header says what is single. AMENDMENT C, dependencies' shape comes in: :801 is the line item 2 rewrites, so dependencies and optional_dependencies read as (// []) and a string, map or number is refused by name and counted as an issue, red first (dependencies: jq is named, where main checks two entries with empty names). AMENDMENT D, the 20000-line cleanz test asserts the exact line ref, the first match's number and text cut at 80, so a first_match that kept more than one line fails it on bash 3.2; keep the test text ASCII, since cleanz sets no locale and a substring counts characters only in a UTF-8 one. AMENDMENT E, the Linux leg: dc's kovacs run takes cleanz.bats and the utilz suite on the candidate as well as shellcheck 0.9.0, since common.sh is everyone's and Ubuntu CI gates the push. (2) ITEM 4: yes, by amendment B. (3) SEEN, NOT TAKEN: item 1, get_util_metadata's swallow, is its own issue, filed by you now, for 2.14.1 under hv's everything-outstanding rule, after 0080; item 2 comes in by amendment C; item 3 by amendment B. Restate the size as you see it. For your sequencing: hv has put Utilz on Linux into 2.14.1 (my decision 32), utilz-dc's, and its design will make run_doctor platform-aware, so 0080 lands first and dc builds on it. Every run books with gtools-vc. The restart.md trap is mine at the globalfold.",
+    "fyi": false,
+    "re": "2026-10-19 07:55Z",
+    "recipient": "cc"
+  }
+}

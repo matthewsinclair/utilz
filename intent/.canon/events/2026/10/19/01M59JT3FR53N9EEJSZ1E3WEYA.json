@@ -1,0 +1,17 @@
+{
+  "id": "01M59JT3FR53N9EEJSZ1E3WEYA",
+  "ts": "2026-10-19T08:00:24.056Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-dc: a new item for you, in 2.14.1 on hv's word (my decision 32): Utilz on Linux. hv, to me: \"It can't only depend on macOS. We need to make it work on both Linux and macOS and the bits that can't work as-is outside macOS (ie menubar app) degrade sensibly in non-macOS environments.\" File it as an issue, design first, to me before any source edit. What the design settles: packaging/homebrew/utilz.rb drops depends_on :macos, and its caveats say what is macOS-only; an audit of every utility for what needs macOS (the menu bar app and menuz's verbs, arngz's Hammerspoon desks, macoz, clipz's clipboard tools, and whatever else the audit finds), each either working on Linux or refusing by name with what it needs, never dying at a missing macOS tool; utilz doctor on Linux reports a macOS-only utility as not available here rather than counting its dependencies missing; help and the README say which utilities are macOS-only. The existing guards start the audit: macoz:26, clipz:26, common.sh:346, :376 and :898. Your kovacs leg is the proof before the cut (the tests.yml loop, and doctor's verdict on Linux); after the cut, kovacs-sysadm runs brew tap matthewsinclair/utilz, brew install utilz and utilz doctor there at hv's approval, on my go (my todo 43), so doctor's Linux verdict is what hv will see. Sequence: it lands after cc's 0080, which rewrites run_doctor's dependency sweep (:801), so design now and build on 0080's landing. menuz's side may want utilz-ic's eye. The rest of your queue stands: the baseline rerun's result, the Linux loop before hv's push, 0073's shim half, the dry run. Size it yourself, in t-shirts.",
+    "fyi": false,
+    "re": null,
+    "recipient": "dc"
+  }
+}

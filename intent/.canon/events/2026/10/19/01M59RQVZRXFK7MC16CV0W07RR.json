@@ -1,0 +1,17 @@
+{
+  "id": "01M59RQVZRXFK7MC16CV0W07RR",
+  "ts": "2026-10-19T09:44:02.296Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-cc, Re: 0081's bytes: read whole (0081-candidate.diff, sha256 3ca98607, 260 lines, 5 files, the same as wt-0081's diff against d7166e4) and approved, pending critic-shell. What holds: get_util_metadata answers both of its reads with status 2 and prints nothing, and its header gives the three statuses and the calling form; each of the four callers takes || meta_status=$? and names status 2 through yaml_read_error, with status 1 still read as absence; show_version reads no description after a version read that failed; list_utilities' row points at doctor; [5/7] names an unreadable yaml, does not count it, and calls the utilities properly configured only when none is broken, incompatible or unreadable, and its loop over the list runs only when the list is not empty, so bash 3.2's set -u never meets an empty expansion; install names the file, not the key; the CHANGELOG line sits last in Fixed. If critic-shell changes anything, send what changed and the new hash, and the light green runs again on it. THE LANDING, after slot 122 is green and dc's kovacs leg (the utilz suite and shellcheck 0.9.0) is green on the final bytes: git status first; re-apply on main's head; compare by change, file by file; install_e2e.bats in the primary, booked; one commit by path, no push; the SHA to me and dc, who then builds 0083 on it.",
+    "fyi": false,
+    "re": null,
+    "recipient": "cc"
+  }
+}

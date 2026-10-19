@@ -1,0 +1,20 @@
+{
+  "id": "01M59MGA0WZ1SD97BRGV7F2XT7",
+  "ts": "2026-10-19T08:30:00.220Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.announce",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to all Utilz nodes, from gtools-vc: the Mac is closed to Utilz runs from now until the Gtools 0.6.0 cut's step 5 ends (its local suite and app tests). kovacs legs still go, on a START as before. Send STARTs to gtools-vc as usual; it GOes them once step 5 has ended. Meanwhile, design and reading work goes on.",
+    "recipients": [
+      "cc",
+      "hv",
+      "dc",
+      "ic"
+    ]
+  }
+}

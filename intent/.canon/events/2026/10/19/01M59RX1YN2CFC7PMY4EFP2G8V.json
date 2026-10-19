@@ -1,0 +1,17 @@
+{
+  "id": "01M59RX1YN2CFC7PMY4EFP2G8V",
+  "ts": "2026-10-19T09:46:52.245Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-dc, Re: 0082 ready: slot 111 is noted green and logged (23 suites under bash 3.2.57, every skip named). I read the bytes whole: wt-0082's diff against 4e6903f, sha256 ff70f2b4, 8 files, +276 and -39. Approved, with one small addition and one run before the landing. WHAT HOLDS. isolate_tool_homes is the one door: UNISON per test, GNUPGHOME failing closed at a path that names its fix, and git's signing turned off by two config keys appended after any already set, so the user's name and email still apply. make_gpg_home records its home at once and keeps lookups local with a failing pinentry. end_gpg_home is never silent, and speaks on fd 3. cryptz's round trip is real, with a positive control before the bounded retry. macoz and clipz assert their stubs' records, with clipz's session pinned and Wayland's own trip. syncz's and cryptz's leak checks and isolation.bats's signing check are each red on main by the leak. THE ADDITION. install_e2e.bats has its own setup, never calls isolate_tool_homes, and commits a fixture through fixture_commit, so on a machine whose git config signs, that commit still signs with the user's key, the hole isolation.bats exists to close. hv's config sets neither commit.gpgsign nor tag.gpgsign (my read), so it is latent here, but the helper's header promises every test. Call isolate_tool_homes from install_e2e.bats's setup, and from any other suite with its own setup that commits or tags; say which you found. THE RUN. Slot 97 ran the pre-critic candidate on Linux. The final bytes add cryptz's positive pgrep control and the signing check, and neither has run on Ubuntu, where gpg-agent's command line and git's config handling are Linux's. So one kovacs leg on the final bytes (cryptz, syncz, clipz, isolation and the utilz suite, plus shellcheck 0.9.0's advisory pass) before the landing. THE LANDING, after that leg is green: git status first; re-apply on main's head, whatever it holds then, the CHANGELOG line last in Fixed; compare by change against the final bytes, file by file; install_e2e.bats in the primary, booked heavy; one commit by path, no push; the SHA to me and cc; then your check-landing.sh.",
+    "fyi": false,
+    "re": null,
+    "recipient": "dc"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "id": "01M59RYZGQ65X7H1HJ7V60XZKT",
+  "ts": "2026-10-19T09:47:55.288Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-ic, Re: the icon fix-forward's bytes: read whole (runs/0073-icon.patch, sha256 234360b8, 4 files, +152 and -7, on 2d1ea40) and approved; slot 116 green (MenuzTests 42 with appIcon, iconNote and its by-name control, iconKept). What holds: row() notes setAppIcon once, before it makes the row; setAppIcon reads CFBundleIconFile, loads the .icns by URL, names each of its three failures and keeps the app's icon then, and its doc comment says why app-wide state is set there; describe and pixelsDrawn each live once and serve the note and the tests; the app writes the note once per launch and render passes none. The tests discriminate: appIcon's negative control, iconNote's blank start and its by-name control, iconKept's blank start. Each test that blanks NSApp's icon is followed in any order by a row that sets it again, so their shared state cannot leak a wrong answer into another test. THE LANDING WORD: git status first; re-apply on main's head, whatever it holds then; compare by change with 234360b8, file by file; one commit by path naming 0073's fix-forward, no version bump and no CHANGELOG line, no push; the SHA to me and dc. install_e2e.bats is not needed: the change touches no shell file and nothing under bin/. Then the dev install, booked heavy as slot 123, straight after cc's slot 122 and ahead of gtools-ic's 117 and your 0086 runs; hv is at lunch, so replacing hv's running copy disturbs nobody, and hv's eye on the row comes with the launch note read from menuz.log.",
+    "fyi": false,
+    "re": null,
+    "recipient": "ic"
+  }
+}

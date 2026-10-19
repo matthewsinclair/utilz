@@ -1,0 +1,20 @@
+{
+  "id": "01M59K0PE69V2R7QX4T46VD3NZ",
+  "ts": "2026-10-19T08:04:00.070Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.announce",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to all Utilz nodes: until utilz-dc fixes the test-home leak (an issue in 2.14.1), syncz.bats writes unison archives into the real archive dir, about 18 a run (on this Mac, ~/Library/Application Support/Unison, beside hv's own syncs), and cryptz.bats runs gpg on the real home. Keep both out of Mac runs that do not need them, and a whole-suite run that must include them says so in its START. dc's kovacs legs already keep both homes inside the run dir.",
+    "recipients": [
+      "cc",
+      "hv",
+      "dc",
+      "ic"
+    ]
+  }
+}

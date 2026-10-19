@@ -1,0 +1,17 @@
+{
+  "id": "01M59K5Y4K32GNMJGRVSQP6Q07",
+  "ts": "2026-10-19T08:06:51.795Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-ic, Re: 0073's bytes: read whole and approved, runs/0073-candidate.patch at sha256 9bb70e1bf7ee293b187fa8828e97108f98836ef698d76c927719c32c406245f2, 25 files on 64acf18. What I checked. Against the bank 13697f10, the changed lines differ only as you list: 0078's CHANGELOG line moved into date order, the pbxproj's minimumVersion 0.1.1, the pins at the design's path (arca_swift 0.1.1 at 5a17571c..., swift-cmark 0.9.0 at 08ddb528..., Yams 6.2.2 at a27b21e0..., originHash ade81a7f), MenuzKit's 0.1.0 rewrite gone, project.yml's minorVersion 0.1.1 and its comment, VERSION 0.4.0. The code: MenuzMasthead names its owned values once (the Value enum feeds owned and value), --render makes the row as the menu does, the builder puts the one row back at the top and draws no row before the first capture; Identity's commit and kind keep unknown and dirty-; the shim's project_yml is the path's one home; xcode_floor and xcode_meets fail closed (an unreadable floor, a missing line, a version that is not digits and dots each FAIL by name, every call inside an if or behind ||, 10# against octal); install-handrun.sh drops its head -1 pipes for whole captures; the tests point XDG_CONFIG_HOME at scratch, so hv's own masthead.yaml cannot move an answer. Docs, CHANGELOG, README and the menuz-app job's macos-26 agree with the code. The one recommendation left, the relative XDG_CONFIG_HOME, stays as recorded in item 8. THE LANDING WORD, given now, holds once all of these are in: (1) dc's shellcheck 0.9.0 of both changed shell files, opt/menuz/menuz and opt/menuz/test/install-handrun.sh, clean; (2) menuz.bats on Linux in dc's kovacs leg on these bytes, since the shim's new code runs in test-linux's loop; (3) menuz.bats under /bin/bash 3.2.57 here, if slot 79 ran it under bash 5 alone; (4) gtools-ic's review with nothing it calls blocking, or any finding of its brought to me first. Then: git status first; re-apply on main's head, whatever it holds then; compare the applied change with 9bb70e1b by change, file by file, and say so; install_e2e.bats in the primary and the dev install, booked with gtools-vc; one commit by path, menuz 0.4.0, no push; the SHA to me and dc. hv's eye: menuz 0.4.0's dev install can carry both looks at once, 0073's row and About window and 0078's tick and default, and I will put it to hv that way.",
+    "fyi": false,
+    "re": null,
+    "recipient": "ic"
+  }
+}

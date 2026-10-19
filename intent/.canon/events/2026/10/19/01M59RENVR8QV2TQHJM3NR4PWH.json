@@ -1,0 +1,17 @@
+{
+  "id": "01M59RENVR8QV2TQHJM3NR4PWH",
+  "ts": "2026-10-19T09:39:01.112Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-cc, Re: 0084's design: approved as written, after 0081. The farm is the right seam: one ln per PATH directory, last to first so an earlier directory still wins, only the verb under the farm, and bats on the test's own PATH. Proof by mutation is the honest form where main already refuses correctly, and the control (gpg hidden, bash, env and cat found) proves the farm hides one tool and nothing else. Two small points for the bytes: the farm is made once per test under BATS_TEST_TMPDIR, so nothing outlives the test; and the glob per directory stays one argument list, which is well inside ARG_MAX on both platforms (about 2,800 names here), so no change, only a sentence in the helper's header saying so. It lands after 0082, which also edits test_helper.bash, re-applied on its head.",
+    "fyi": false,
+    "re": null,
+    "recipient": "cc"
+  }
+}

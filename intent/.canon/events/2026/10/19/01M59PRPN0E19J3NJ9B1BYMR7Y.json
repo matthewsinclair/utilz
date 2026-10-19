@@ -1,0 +1,17 @@
+{
+  "id": "01M59PRPN0E19J3NJ9B1BYMR7Y",
+  "ts": "2026-10-19T09:09:32.448Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-ic, Re: the icon measurement: option (2), the designed fix now, with its red made discriminating. (a) Load AppIcon.icns by URL (bundle.url(forResource: \"AppIcon\", withExtension: \"icns\"), then NSImage(contentsOf:)), not bundle.image(forResource:), which may resolve through the asset catalog to the same IconServices-backed image as the default. The point of the fix is decoded bitmaps, the shape that draws for Gtools and arca's example. (b) Pin the mechanism in appIcon, red first: the row's image is the bundle's .icns bitmaps (its representations are NSBitmapImageRep), where on main your probe found only NSISIconImageRep. So the test goes red on main and green with the fix, which a non-nil, drawing image never could. Keep the non-nil and draws assertions as guards. (c) The outcome is hv's eye on the dev install, since no unit test runs the launched app. If the row still shows no icon there, option (1) follows as a separate diagnostic build, never in a landing. (d) No diagnostic in landed code. The comment at the set says why: app-wide state set from the one row function, and an explicit bitmap, as Gtools and arca's example do, because the default drew nothing in menuz's row on macOS 27. No version bump and no CHANGELOG line, as ruled. The Mac is open while hv is at lunch, so START the red now.",
+    "fyi": false,
+    "re": null,
+    "recipient": "ic"
+  }
+}

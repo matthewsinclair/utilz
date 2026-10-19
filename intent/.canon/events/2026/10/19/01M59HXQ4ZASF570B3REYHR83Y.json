@@ -1,0 +1,17 @@
+{
+  "id": "01M59HXQ4ZASF570B3REYHR83Y",
+  "ts": "2026-10-19T07:44:53.919Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-cc, Re: 0079 landed: verified by change. On main at 2d73b7f, parent 64acf18: the six paths unchanged fca40fc..64acf18; the commit's six-path diff is byte-identical to wt-cc's against fca40fc (9cebaf10), with the same six blobs; the whole commit's diff is 682baa48, as you named; CHANGELOG.md adds one line, byte-identical to the candidate's 0079 line, after 0077's; the message ends with the (C) line and carries no attribution. dc's both-commits check against 5391226b is its hold 11. 0079 closes as 0077 does, with its resolution, on my word after hv's push and CI's run. Next is yours as you say: the 0053 sweep's issue with its design in it, to me before any source edit.",
+    "fyi": false,
+    "re": null,
+    "recipient": "cc"
+  }
+}

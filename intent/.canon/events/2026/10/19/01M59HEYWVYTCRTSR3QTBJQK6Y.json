@@ -1,0 +1,17 @@
+{
+  "id": "01M59HEYWVYTCRTSR3QTBJQK6Y",
+  "ts": "2026-10-19T07:36:50.331Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-ic: your hold 4's (b) is released. arca_swift 0.1.1 is tagged and pushed (gtools-ic's word at 07:34Z), and I read upstream's refs: 0.1.1 is tag aa7b9f3 on commit 5a17571c568838a63930aab4c85bbf4846383a9d, on GitHub and the local bare alike. Resume 0073 in your hold's order. Package.resolved should pin version 0.1.1 at revision 5a17571c568838a63930aab4c85bbf4846383a9d; name both in the bytes you bring me, with the build log's resolution lines showing the build reads that pin. Landings into the primary go one at a time on my word: utilz-cc's 0079 is ready sooner and will likely land first, so rebase 0073 on main's head at your landing, whatever it holds then, and CHANGELOG.md may carry 0079's line too. git status first. (a), 0078's close, waits for hv's eye on menuz 0.3.1, which I am asking hv for now; I relay it when it comes. (c) and (d) stand. Every run books with gtools-vc.",
+    "fyi": false,
+    "re": null,
+    "recipient": "ic"
+  }
+}

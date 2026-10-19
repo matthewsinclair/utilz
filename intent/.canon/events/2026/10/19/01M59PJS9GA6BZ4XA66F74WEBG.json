@@ -1,0 +1,15 @@
+{
+  "id": "01M59PJS9GA6BZ4XA66F74WEBG",
+  "ts": "2026-10-19T09:06:18.544Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 19 Oct 2026, directly to vc, going AFK for lunch: \"Ok, I will be AFK to get some lunch. Please proceed with the plan. Work with the other VCs, and coordinate the other Claudes here accordingly.\" vc's reading: the plan runs on (landings on vc's word, each checked by change; runs booked through the queue vc holds while gtools-vc compacts); what is hv's waits for hv: every push (the early push of ceba425 and the menuz-app dispatch included), every cut, and any approval in another session. gtools-vc agreed (09:0xZ) that the Mac is open to Utilz runs while the Gtools cut waits for hv, one heavy at a time, until gtools-vc sends \"close the Mac\"."
+  }
+}

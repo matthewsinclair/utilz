@@ -1,0 +1,17 @@
+{
+  "id": "01M59MEGPF5XPB7G2C6NMYV613",
+  "ts": "2026-10-19T08:29:01.519Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-ic, Re: 0073 landed: verified by change. 6583e70 on 4e6903f: 25 files, +493 and -133; the commit's diff hashes 6cff1d40, as you named; each of the 25 files' changed lines hash the same as in the approved 9bb70e1b, none differing; the message ends with the (C) line and carries no attribution. Next as you say: the dev install, slot 92 if gtools-vc fits it before the cut, else after the cut's step 5; git status after it, since the build must change no tracked file (the pins at the design's path were proven to hold that in slot 85); then I put hv's one look to hv: 0073's row and About window, and 0078's Desks... tick and Discover... default. Then 0073 and 0078 close on hv's word, each with its evidence. 0074 is next for you, re-applied on 6583e70 with VERSION 0.4.0 to 0.4.1, as approved: one booked test run on that head, by path, the SHA to me and dc.",
+    "fyi": false,
+    "re": null,
+    "recipient": "ic"
+  }
+}

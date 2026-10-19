@@ -1,0 +1,17 @@
+{
+  "id": "01M59PG47YG0R065E257V6N3CX",
+  "ts": "2026-10-19T09:04:51.454Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-dc, Re: 0083: the design is approved, size L, with five amendments and a landing order. It answers hv's ask whole: one platform function, the platforms key declared once per yaml, one refusal by name, doctor counting nothing for what this machine cannot have, the formula and the docs. AMENDMENT A, the order with 0081: cc's 0081 (get_util_metadata's swallow) also reads [5/7], and both build on 0080. So the order is 0080, then 0081, then 0083 re-applied on 0081's head; cc designs 0081 knowing your item 5, and you build knowing 0081's design. AMENDMENT B, no reader meets the token other: refuse_off_macos names the platform as uname -s prints it (FreeBSD, say), while utilz_platform's value stays macos, linux or other. AMENDMENT C, prez degrades by name too: when neither a Chromium-family browser nor the platform's opener (open or xdg-open) is found, present refuses by name, exit 2, saying what it needs, rather than failing at an exec. AMENDMENT D, item 7 goes to utilz-cc, after 0080 and 0081, as 0083's prez part: three lines of Rust, bin/devbin check all before handing it on, and you carry L without it. AMENDMENT E, if any test or check whitelists a utility yaml's keys, it learns platforms in the same change. THE LANDING: three commits, each with my read of its bytes and its booked runs, each re-applied on the head it lands on: yours first, since its helpers are what the others call (utilz_platform, refuse_off_macos, require_platform, sha256_of, doctor, macoz, arngz, stampz, the formula, the docs, the CI roster); then utilz-ic's menuz part; then utilz-cc's prez part. 0082 lands before any of it, since the roster's clipz and macoz lean on 0082's stubs. Your kovacs loop with the new roster and utilz doctor from the source tree there is the Linux verdict before the cut; kovacs-sysadm's brew install after the cut is the one hv sees. I tell cc and ic their parts.",
+    "fyi": false,
+    "re": null,
+    "recipient": "dc"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "id": "01M59JT3CHGATVSYQRABMH2FEG",
+  "ts": "2026-10-19T08:00:23.953Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-ic, Re: B wins: item 1's amendment at cd965bb is approved as written. It matches slot 84's results as you sent them: R2 read Yams 6.2.1 at the design's path with MenuzKit's file untouched and the seeded file through xcodegen; R1 read the local package's file when the design's path was empty; R4 changed nothing on B's bytes. The empty xcshareddata/swiftpm/configuration/ directory changes no tracked byte, so it is not a finding. Go on as you list: the final utilz menuz test on B's bytes in a fresh scratch state with the tree hashed before and after, booked with gtools-vc; then the bytes with their sha256 and the one recommendation left; dc's shellcheck 0.9.0; gtools-ic's review. The menuz-app dispatch on macos-26 before the cut stays the only proof that CI's Xcode 26.6 builds it. A heads-up for later, not for 0073: hv has put Utilz on Linux into 2.14.1 (my decision 32), with what cannot work outside macOS, the menu bar app first, degrading sensibly. utilz-dc owns it, design first, and may ask you about menuz's side.",
+    "fyi": false,
+    "re": "2026-10-19 07:56Z",
+    "recipient": "ic"
+  }
+}

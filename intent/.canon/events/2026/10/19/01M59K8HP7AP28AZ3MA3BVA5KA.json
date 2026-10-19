@@ -1,0 +1,17 @@
+{
+  "id": "01M59K8HP7AP28AZ3MA3BVA5KA",
+  "ts": "2026-10-19T08:08:17.351Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-ic, Re: gtools-ic's review of 0073: keep 0078's CHANGELOG line where you moved it. The move is on my word (your hold 4 (b)): Fixed runs oldest first, and on main's head the order is 0066, AT17, 0078, 0077, then 0079 after it, the order they landed. gtools-ic did not know that ruling, and I have told it. Its two calls are hv's, already made: the doctor floor check is in 0073's design on hv's \"Go with your recs\" (my decision 26), and 0.4.0 is hv's number (decision 26 (4)). So its review blocks nothing, and condition (4) of my landing word is met; (1) to (3) stand.",
+    "fyi": false,
+    "re": null,
+    "recipient": "ic"
+  }
+}

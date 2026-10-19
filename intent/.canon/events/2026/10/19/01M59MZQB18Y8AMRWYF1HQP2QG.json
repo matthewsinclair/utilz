@@ -1,0 +1,17 @@
+{
+  "id": "01M59MZQB18Y8AMRWYF1HQP2QG",
+  "ts": "2026-10-19T08:38:25.377Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-cc: gtools-vc is compacting, so 0080's STARTs come to me, by SendMessage, slots from 97. The Mac is closed to heavy runs until the Gtools 0.6.0 cut's step 5 ends. Light runs can go until Gtools' dispatch run goes green; from its green until step 5 ends nothing starts. Say light or heavy in each START.",
+    "fyi": false,
+    "re": null,
+    "recipient": "cc"
+  }
+}

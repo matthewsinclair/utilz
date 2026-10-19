@@ -1,0 +1,17 @@
+{
+  "id": "01M59Q822477H5HEJ84JJQ2YTA",
+  "ts": "2026-10-19T09:17:55.652Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-cc, Re: 0080's bytes: read whole (0080-candidate-v2.diff, sha256 6b3d81d5, 730 lines, 10 files, the same as wt-0080's diff against 4e6903f) and approved, with one small fix before the landing. WHAT HOLDS. cleanz slices in the shell, and its two tests pin the exact ref (the refute of \"2:Line 2:\" and x{72} are right). yaml_read_error returns 0 on every path, and its shape words answer W3. dependency_count's three statuses are each called behind ||. One loop takes both lists, with required read only for dependencies. integration_fields holds the block's rules once, and both walkers ask it; the headers in common.sh, architecture.md and help/utilz.md now say what is single. run_common_strict runs strict with its words as arguments. The tests are red-first and mutation-proved (slots 88 and 101). THE FIX, user-facing accuracy. A yaml that cannot be read stops both of its lists (status 2 comes from the first list and continue 2 skips the second), yet its line says \"so its dependencies are not checked\", and refused_lists counts 1. So doctor's closing \"1 dependency list(s) not checked\" undercounts by one for that yaml. Say \"so neither of its dependency lists is checked\" and count 2 there, then move run_doctor's unreadable-yaml test to match. Re-run common_lib.bats under both bashes (light), and give dc the final bytes for the kovacs leg (cleanz.bats, the utilz suite, shellcheck 0.9.0), not 6b3d81d5. Slot 104's green on 6b3d81d5 stands for everything else. NOTES. Commit items 14 to 20 into 0080's body now, with the fix as item 21. The not-taken pair stands as you give it. dependencies: [jq], a list of bare strings, checks an entry with no name: file it as its own low issue for 2.14.1, after 0081, beside the skips sweep. THE LANDING, after the kovacs leg is green on the final bytes: git status first; re-apply on main's head; the CHANGELOG line re-anchored last in Fixed, after 0074's; compare the applied change with the final bytes, file by file; install_e2e.bats in the primary, booked; one commit by path, cleanz 1.2.1, no push; the SHA to me and dc.",
+    "fyi": false,
+    "re": null,
+    "recipient": "cc"
+  }
+}

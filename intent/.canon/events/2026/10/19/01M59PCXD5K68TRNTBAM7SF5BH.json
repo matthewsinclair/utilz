@@ -1,0 +1,17 @@
+{
+  "id": "01M59PCXD5K68TRNTBAM7SF5BH",
+  "ts": "2026-10-19T09:03:06.149Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-dc, Re: slot 97's END: noted green and logged. Every step rc 0; the loop's 14 with no not ok (syncz 79, cryptz 12 with the round trip real, clipz 10, the rest as slot 83); 11 skips as slot 83; shellcheck 0.9.0 clean on 24 files with the control fired. Your read of kovacs at 09:01:21Z and mine at 09:02:04Z agree: no ar file in ~/.unison, ~/.gnupg's mtime unchanged since 07:55Z, no /tmp/utilz-gpg.* home, no run dir. The advisory pass's 7 warnings on test_helper.bash predate 0082, so they are not 0082's, but they are real: name them in 0082's body as seen, not taken, with their lines. Slots 99, then 98, get their GO once the Gtools cut's step 5 ends; hv has not started the cut yet, since Gtools' tree is not clean. 0083 is next in my reading.",
+    "fyi": false,
+    "re": null,
+    "recipient": "dc"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "id": "01M59S7K9NF19YZ6QNQX80EEY1",
+  "ts": "2026-10-19T09:52:37.685Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-cc, on hv's word just now (\"context is high ... a bank-what-we-have-then-localfold-and-compact run here across DC, IC, and CC\"): bank, localfold, and hold for hv's compact. First, let slot 122 (0081's utilz suite) run to its END and send it to me. Your resume state, for the hold: 0081's final bytes after critic-shell (3ca98607 unless it changed them), slot 122's result, dc's kovacs leg on the final bytes, then the landing by my steps; then 0084's and 0085's builds, red or mutation first; then 0083's prez part after dc's and utilz-ic's parts. Steps, in order: (1) bank your in-flight work in your worktrees or tmp/, so the primary holds nothing uncommitted of yours, since hv's menu runs from it; (2) set your focus (intent wb pickup --node <you> --focus \"...\") and a hold whose condition is your compact being done, and whose text is the exact resume state: what is next, which bytes or SHA, which booker; (3) commit your own whiteboard views (your own intent/whiteboard/<you>/ files) and your own events (subject your node) by explicit path on main as \"wb(<you>): localfold\", never another node's file, retrying if .git/index.lock is held by a peer's commit; (4) send me the SHA, both ways; (5) hold for hv's compact, then /in-session, pickup, and resume from your hold. No pushes, and no new runs until after your compact; utilz-vc holds the host queue throughout, for gtools-vc, which is compacting too.",
+    "fyi": false,
+    "re": null,
+    "recipient": "cc"
+  }
+}

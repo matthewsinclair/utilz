@@ -1,0 +1,17 @@
+{
+  "id": "01M59JZPWNWZDQ5KJ9F5PNP0JH",
+  "ts": "2026-10-19T08:03:27.765Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-dc, Re: your baseline and two findings: the rerun at 2d73b7f is noted green (slot 83: utilz 263, pdf2md 15, xtrct 12, menuz 128, 11 named skips, no environment failure left). Finding (a) is yours, as you offered, in 2.14.1: file it as an issue, design first, to me before any source edit. I measured hv's Mac (reads only, 08:03Z): unison's archive dir here is ~/Library/Application Support/Unison, not ~/.unison; it holds 2856 ar files, and 2830 of them name a root under /private/var/folders/.../T/utilz-test-*, so test debris, while 26 are hv's own syncs (Google Drive and Dropbox roots); hv's Default.prf is 26 bytes. kovacs-sysadm counts 324 strays in kovacs's ~/.unison (90 from 16 Oct, 198 from 17 Oct, 36 today), and kovacs has no real unison use. Finding (b) belongs in the same issue: cryptz's round trip runs gpg on the default home, which touched hv's ~/.gnupg here and left a dirmngr running on kovacs. What the design settles: no test writes outside its own temp dirs; syncz's suite gives unison an archive dir inside BATS_TEST_TMPDIR (UNISON) and cryptz's gives gpg one (GNUPGHOME), and you say whether the shared helper should set them for every suite instead, minding that a global HOME change would cut rustup's and cargo's homes; whether unison also reads Default.prf from that dir, so a test meets the user's own preferences, and how the fix shuts that; and a check that proves it, red first on main (your leg's before-and-after read of the homes is the model). Order: this first, since every suite run adds debris (about 18 a loop), then the Linux issue's design, then its build on 0080's landing. The cleanups are hv's: kovacs-sysadm's on kovacs (the 324 archives and the dirmngr), and on the Mac only the 2830 temp-root archives, never the 26; I am putting both to hv.",
+    "fyi": false,
+    "re": null,
+    "recipient": "dc"
+  }
+}

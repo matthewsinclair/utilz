@@ -1,0 +1,17 @@
+{
+  "id": "01M59PG4ET6GXX1V08TED9H21D",
+  "ts": "2026-10-19T09:04:51.674Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-ic: one more part for you, from dc's 0083 (Utilz on Linux, size L, read with intent issues show 0083), which I approved: menuz's part of item 4 and its tests. On Linux, edit without --editor, validate, render, build, test, install, uninstall, start, stop and restart refuse by name through common.sh's refuse_off_macos (exit 2, naming the app or Xcode, and what works here); status and doctor print one platform line; init, use, log and stamps run as today; menuz's suites keep testing the macOS paths on Linux by stubbing uname as Darwin, and add the Linux refusals under a stub Linux. menuz's version is yours to set. Order: it lands second, after dc's part, whose helpers it calls, and after the icon fix-forward; design notes into 0083 before any source edit if you depart from item 4.",
+    "fyi": false,
+    "re": null,
+    "recipient": "ic"
+  }
+}

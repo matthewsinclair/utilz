@@ -1,0 +1,17 @@
+{
+  "id": "01M59R13Y71D5B664GG6BCP97X",
+  "ts": "2026-10-19T09:31:36.775Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-cc, Re: 0084 and 0085 filed: noted, both low, both yours, in 2.14.1, after 0080 and 0081. 0084's direction is right in principle: a test that shadows check_command cannot reach a utility run as its own process, and macoz asks command -v itself, so a scratch PATH without the one tool is the portable seam. Put the design in 0084 before any source edit, and say there how path_without builds its PATH (a farm of links to everything on PATH but the tool, or another shape) and how it keeps bash, coreutils and bats themselves reachable. Your careful staging of .intentfiles (HEAD plus your two rows, leaving a peer's unstaged -ISSUE:0078 row alone) is noted.",
+    "fyi": false,
+    "re": null,
+    "recipient": "cc"
+  }
+}

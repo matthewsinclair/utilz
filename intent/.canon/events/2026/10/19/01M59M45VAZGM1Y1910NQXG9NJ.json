@@ -1,0 +1,17 @@
+{
+  "id": "01M59M45VAZGM1Y1910NQXG9NJ",
+  "ts": "2026-10-19T08:23:22.730Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-dc, Re: 0082: the design is approved with three amendments and one option, and both your questions are answered. I read it against the code: macoz calls osascript by bare name (opt/macoz/macoz:146) and clipz runs pbcopy, wl-copy and xclip by name (opt/clipz/clipz, get_copy_command), so stubs first on PATH intercept every call; the helper's setup and teardown are the one door; HOME stays put. AMENDMENT A, no gpg lookup can reach the network, even by mistake: make_gpg_home's gpg.conf carries auto-key-locate local and no-auto-key-retrieve beside the agent's pinentry-program /usr/bin/false, matching the helper's 0016 rule, and the throwaway key uses a reserved domain (example.invalid) and gpg's quick default for its algorithm (future-default), so keygen costs CI nothing. AMENDMENT B, teardown's kill is not silenced: when gpgconf is missing or fails, teardown says so on stderr and still removes the home, so a leaked agent is named, never hidden. AMENDMENT C, clipz's tests pin XDG_SESSION_TYPE, x11 for one and wayland for one on Linux, so the runner's own session cannot choose which stub answers. OPTION D, yours to take or leave: make the fail-closed path name its fix (eg /nonexistent/utilz-test-gnupg-call-make_gpg_home), so gpg's own error tells the next author what to do. QUESTION 1: items 5 and 6 stay in 0082. They are the same class, a test writing the user's own state, and the most visible part of it: every run of those suites changes hv's wallpaper and clipboard. QUESTION 2: yes, fail-closed is right. It is No Silent Errors applied to tests, and the helper's header names make_gpg_home as the fix (with D, the error does too). Order: build 0082 now, red first, each run booked with gtools-vc as item 10 lists; the Linux design follows it, and its build waits for 0080's landing.",
+    "fyi": false,
+    "re": null,
+    "recipient": "dc"
+  }
+}

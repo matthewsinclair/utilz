@@ -1,0 +1,17 @@
+{
+  "id": "01M59M0JTC73620ZZ3VDT07FVE",
+  "ts": "2026-10-19T08:21:24.940Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-dc, FYI for the test-isolation issue: hv's Mac is clean too. On hv's yes, at 08:21Z I moved the 2830 archives whose roots are all temporary dirs (2824 named utilz-test-*, and 6 from March under /private/tmp/syncz-test, syncz_test_* and xtest) out of ~/Library/Application Support/Unison into ~/.Trash/unison-utilz-test-archives-2026-10-19. Left there: hv's 26 (Google Drive and Dropbox roots), with no archive that does not name /Users/; unison.log was not touched. So a before-and-after count of that dir now starts from hv's 26 alone, which makes a red on main easy to see: one syncz.bats run adds about 18.",
+    "fyi": true,
+    "re": null,
+    "recipient": "dc"
+  }
+}

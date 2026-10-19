@@ -1,0 +1,17 @@
+{
+  "id": "01M59S7KDNETC0EC5V1R20PJ0F",
+  "ts": "2026-10-19T09:52:37.813Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-dc, on hv's word just now (\"context is high ... a bank-what-we-have-then-localfold-and-compact run here across DC, IC, and CC\"): bank, localfold, and hold for hv's compact. First, let slot 124 (0082's kovacs leg on the final bytes) and slot 125 (the icon landing check) run to their END and send them to me. Your resume state, for the hold: 0082's landing after 124 is green, by my steps (git status, re-apply on the head with CHANGELOG last in Fixed, compare by change, install_e2e.bats booked, one commit by path, the SHA to me and cc, then check-landing.sh); 0081's kovacs leg for cc, on its final bytes; 0083's build on 0081's landed head; the Linux loop at the head before the next push; the dry run; the installs and done.md; the kovacs brew runbook after the cut. Commit 0083's body if your edits to it are still uncommitted. Steps, in order: (1) bank your in-flight work in your worktrees or tmp/, so the primary holds nothing uncommitted of yours, since hv's menu runs from it; (2) set your focus (intent wb pickup --node <you> --focus \"...\") and a hold whose condition is your compact being done, and whose text is the exact resume state: what is next, which bytes or SHA, which booker; (3) commit your own whiteboard views (your own intent/whiteboard/<you>/ files) and your own events (subject your node) by explicit path on main as \"wb(<you>): localfold\", never another node's file, retrying if .git/index.lock is held by a peer's commit; (4) send me the SHA, both ways; (5) hold for hv's compact, then /in-session, pickup, and resume from your hold. No pushes, and no new runs until after your compact; utilz-vc holds the host queue throughout, for gtools-vc, which is compacting too.",
+    "fyi": false,
+    "re": null,
+    "recipient": "dc"
+  }
+}

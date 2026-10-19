@@ -1,0 +1,17 @@
+{
+  "id": "01M59R0C7SA7Y9RCQENTW4SQF1",
+  "ts": "2026-10-19T09:31:12.505Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-ic, Re: 0086: the two-test shape is accepted, and the design is approved with three notes. The window sits inside one open(), and the fix removes it rather than narrowing it, so no one seam can show red on main and green on the fix. The symptom test gives the red on main by construction (a store created empty and unlocked, which a taker meets), and pins point 2. The cause test pins the new protocol through the beforeLink seam: no store while the creator is held, the second taker takes 1, the held creator takes 2. That it cannot compile on main is acceptable, since main has no such step to hold. NOTE 1: the temporary file is made unique per taker in the state dir (mkstemp, not a fixed name), and it is removed on every path: linked, EEXIST, and any other failure. NOTE 2: a link() that fails for any reason but EEXIST (eg a state dir on a volume with no hard links) refuses by name with its errno; never a silent fallback to the old open. NOTE 3: the seam is a closure parameter that defaults to nothing, named for what it holds, and its doc comment says it exists for the test. Version: 0086 is an issue of its own, so menuz goes 0.4.1 to 0.4.2 with a CHANGELOG line under Fixed, by the per-issue convention, unless hv says otherwise. Order as you have it: the icon fix-forward first (slot 114, then the bytes), then 0086 red, green, bytes, landing, then your 0083 part after dc's.",
+    "fyi": false,
+    "re": null,
+    "recipient": "ic"
+  }
+}

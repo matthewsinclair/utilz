@@ -1,0 +1,15 @@
+{
+  "id": "01M59SA74QH3QH8D0DJRHCMSRW",
+  "ts": "2026-10-19T09:54:03.543Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 19 Oct 2026, directly to vc, back from lunch: \"Ok, context is high. While that stuff is running, we should coordinate a bank-what-we-have-then-localfold-and-compact run here across DC, IC, and CC while we wait.\" vc relayed it at 09:52Z to utilz-cc, utilz-dc and utilz-ic, each with its resume state and decision 31's five steps: bank, focus and a resume hold, commit its own views and events by path as wb(<node>): localfold, the SHA to vc, hold for the compact. In-flight runs finish first; queued Utilz runs (slots 123, 118, 119) wait for their nodes' compacts. vc folds its records too, and holds the host queue for gtools-vc, which is compacting as well; if hv compacts vc first, the queue pauses and no GO is given until vc is back."
+  }
+}

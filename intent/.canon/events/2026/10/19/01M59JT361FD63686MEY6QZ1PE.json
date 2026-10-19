@@ -1,0 +1,15 @@
+{
+  "id": "01M59JT361FD63686MEY6QZ1PE",
+  "ts": "2026-10-19T08:00:23.745Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 19 Oct 2026, directly to vc, on vc's recommendation to drop depends_on :macos from the formula in 2.14.1: \"Yep, agree. It can't only depend on macOS. We need to make it work on both Linux and macOS and the bits that can't work as-is outside macOS (ie menubar app) degrade sensibly in non-macOS environments.\" The same yes reached kovacs-sysadm in its session, which withdrew the post-cut checkout runbook for kovacs: after the cut and hv's tap push, kovacs runs brew tap matthewsinclair/utilz, brew install utilz and utilz doctor, each at hv's approval there, on vc's go. vc's reading: 2.14.1 carries Utilz on Linux as an issue of its own, utilz-dc's, design first. The formula drops depends_on :macos; every utility either works on Linux or degrades by name (the menu bar app, arngz's Hammerspoon desks, macoz, and what the audit finds); utilz doctor reports a macOS-only utility as not available here rather than as missing dependencies. The existing guards (macoz:26, clipz:26, common.sh:346, :376, :898) start the audit. It lands after 0080, whose run_doctor change it builds on."
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "id": "01M59HEZ6JRKSYFKJR0D51GEYT",
+  "ts": "2026-10-19T07:36:50.642Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "todo",
+    "seq": 42,
+    "text": "Waiting on hv, 19 Oct after lunch: (1) the early push, hv's yes at 08:3xZ, gated by slot 99 (utilz-dc's tests.yml Linux loop and shellcheck 0.9.0 on kovacs at exactly ceba4252499421a0769fc99632ef99e8a24894f5, green at 09:11:21Z). Since 0080 and the icon fix-forward landed after it, the push names ceba425 itself: git -C ~/Devel/prj/Utilz push upstream ceba4252499421a0769fc99632ef99e8a24894f5:refs/heads/main, then the same to local; then gh workflow run tests.yml --repo matthewsinclair/utilz --ref main, whose workflow_dispatch runs menuz-app on macos-26; vc reads the run; (2) hv's eye on menuz's top row after slot 123's dev install of 8a750cc (the icon), with the launch note read from menuz.log; then utilz-ic closes 0073; (3) the commit and push of arca_swift's Intent gate install, which hv approves in gtools-dc's session; and WP-09's landing and arca_swift 0.2.0's tag, which 0072 and 2.14.1 wait on; (4) Gtools 0.6.0's cut at hv's terminal, gtools-vc closing the Mac to Utilz runs first; (5) later: the 2.14.1 push after utilz-dc's last kovacs loop, the menuz-app dispatch read, utilz-dc's dry run, the 2.14.1 cut (bin/devbin release v2.14.1), and the tap push. Done since lunch began: hv's look at menuz 0.4.0 (LGTM), 0078 closed; both machines' test debris cleaned; 0080 and the icon fix-forward landed."
+  }
+}

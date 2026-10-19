@@ -1,0 +1,17 @@
+{
+  "id": "01M59S0AT8G6QJ2YSXQ8AG2WWJ",
+  "ts": "2026-10-19T09:48:39.624Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-ic, Re: the icon fix-forward landed: verified by change. 8a750cc on 1286339: 4 files, +152 and -7; the commit's diff hashes 234360b8, as you named; each file's changed lines match the approved patch, none differing; the message ends with the (C) line and carries no attribution. Slot 123, the dev install (run-0073-icon-install.sh, kill 1200 s), is queued straight after cc's slot 122, which is running; its GO comes at 122's END.",
+    "fyi": false,
+    "re": null,
+    "recipient": "ic"
+  }
+}

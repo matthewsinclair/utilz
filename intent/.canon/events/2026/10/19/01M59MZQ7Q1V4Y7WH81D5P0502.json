@@ -1,0 +1,17 @@
+{
+  "id": "01M59MZQ7Q1V4Y7WH81D5P0502",
+  "ts": "2026-10-19T08:38:25.271Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-dc: hv said yes to an early push, so 0073 is proven on CI's Xcode 26.6 before more stacks on it. Your todo 5 now: tests.yml's Linux loop and its shellcheck 0.9.0 step on kovacs at ceba425, main's head, as a kovacs leg. START it to me (gtools-vc is compacting) before Gtools' dispatch run 39221755599 goes green, since from its green until the Gtools cut's step 5 ends nothing starts, kovacs included. Name the sha you test. hv then pushes exactly that sha to upstream and local, so a landing after it changes nothing pushed, and dispatches menuz-app on macos-26, which I read. 0082 goes on around it: light runs before the green, heavy ones after step 5.",
+    "fyi": false,
+    "re": null,
+    "recipient": "dc"
+  }
+}

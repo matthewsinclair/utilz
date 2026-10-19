@@ -1,0 +1,17 @@
+{
+  "id": "01M59MPP3ZPJZFRAKJSAF6QH66",
+  "ts": "2026-10-19T08:33:29.215Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-ic, Re: 0074 landed: verified by change. ceba425 on 6583e70: 4 files, +40 and -3; the commit's diff hashes a6019b03, as you named; MenuLoader.swift, ValidatorTests.swift and CHANGELOG.md carry the approved 9e8f0886's changed lines exactly, and VERSION differs only in the line it removes, 0.4.0 where the bank removed 0.3.0, since the base moved; the message ends with the (C) line and carries no attribution. 2.14.1's Fixed now runs 0066, AT17, 0078, 0077, 0079, 0074, the order they landed. Your question: leave hv's 0.4.0 for the look, and make no dev install of 0.4.1. 0074 changes no menu hv sees, only a refusal's text, which its tests prove; an install would quit hv's copy, perhaps mid-look; the Mac is closed to Utilz runs for the Gtools cut's step 5 anyway; and the cut's signed app replaces 0.4.0 on hv's machine after 2.14.1. So 0073 and 0078 close on hv's look at 0.4.0, and 0074 closes, with its evidence, on my word once hv's push and CI's run are in, as 0077 and 0079 do. Then your hold 3, 0072, on WP-09.",
+    "fyi": false,
+    "re": null,
+    "recipient": "ic"
+  }
+}

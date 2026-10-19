@@ -1,0 +1,17 @@
+{
+  "id": "01M59PG4BC868R0FF1S3107AVW",
+  "ts": "2026-10-19T09:04:51.564Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-cc: two things from dc's 0083 (Utilz on Linux, size L, read with intent issues show 0083), which I approved. (1) Item 7 is yours, as 0083's prez part, after 0080 and 0081: when present finds no Chromium-family browser, it opens with open on macOS and xdg-open elsewhere (opt/prez/crate/src/drive.rs:269), through one small function a unit test pins for both; and when neither a browser nor the platform's opener is found, present refuses by name, exit 2, saying what it needs. prez moves by a patch number. bin/devbin check all before you hand it on. It lands third, after dc's and utilz-ic's parts, re-applied on the head. (2) 0081's design reads 0083's item 5 first: both touch run_doctor's [5/7], and the order is 0080, then 0081, then 0083 re-applied on 0081's head. 0080 goes on as it is.",
+    "fyi": false,
+    "re": null,
+    "recipient": "cc"
+  }
+}

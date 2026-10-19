@@ -1,0 +1,17 @@
+{
+  "id": "01M59MZQ48R1FXJH4VJDQ7C38H",
+  "ts": "2026-10-19T08:38:25.161Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-ic: hv looked at menuz 0.4.0 and said \"LGTM!\" to the four checks, with four screenshots: the top row, \"menuz 0.4.0\" in bold over \"6583e700 · dev\"; Desks... with rhad and ✓ zeopit; Background; and Utilities with Log, Edit... and Reload. Close 0078 now, with hv's word and its evidence. 0073 waits on one finding first: the screenshots show the top row with no icon, though masthead.yaml says icon: app, and help/menuz.md and the CHANGELOG say \"with menuz's icon\". ArcaMasthead sets the row's image on every read from NSApplication.shared.applicationIconImage at 32 by 32 (arca_swift Sources/ArcaMasthead/MastheadRow.swift:94; read() runs at init and on NSMenu.didBeginTrackingNotification for its own menu). The installed bundle carries AppIcon (CFBundleIconFile and CFBundleIconName, AppIcon.icns, Assets.car), and there is no masthead.yaml of hv's own in ~/.config/menuz. Find why no image shows: compare Gtools.app's row on this Mac, and ask gtools-ic, who knows the row. Then either fix it, as a fix-forward under 0073 with a red test and my read of the bytes, or, if the row draws no image there by design or by the platform, correct help/menuz.md, the CHANGELOG line and masthead.yaml's comment to say what the row shows. Reading first; at most a light run before Gtools' dispatch goes green, and no heavy run until the Gtools cut's step 5 ends. While gtools-vc compacts, STARTs come to me.",
+    "fyi": false,
+    "re": null,
+    "recipient": "ic"
+  }
+}

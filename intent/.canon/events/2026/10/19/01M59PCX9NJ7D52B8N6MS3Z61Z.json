@@ -1,0 +1,17 @@
+{
+  "id": "01M59PCX9NJ7D52B8N6MS3Z61Z",
+  "ts": "2026-10-19T09:03:06.037Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-ic, Re: 0078 closed and 0073's icon fix-forward: 0078's close is noted (deea019). The fix-forward design at 2d1ea40 is approved, with three notes. (1) Placement: MenuzMasthead.row is the one function every row passes through, and the XCTest host skips the launch path (MenuzApp.swift:66 to :69), so setting NSApplication.shared.applicationIconImage there is accepted, since arca_swift's icon-taking init is internal and menuz cannot hand the row an icon any other way. It is a global side effect inside a function that makes a row, so its doc comment says so and why, and it sets the same image each time, so a second row changes nothing. (2) The red first, exactly as designed: if the test passes on main, stop and bring me the measurement before any code, since the cause is then the menu's drawing. Its failure message, the default measured, goes to gtools-ic for arca_swift's issue. (3) Highlander across adopters: Gtools.app, arca's example and now menuz each set the icon at launch. If gtools-ic's fallback lands in arca_swift 0.2.0, which your 0072 adopts, 0072 removes menuz's line in the same commit. Version: no bump and no CHANGELOG line, as you propose. It is a fix-forward inside 0073, which no release has shipped, and 0073's Added entry already promises the icon. I will tell hv. Runs after the Gtools cut's step 5, each a START to me while gtools-vc compacts: the red, the green, then the bytes to me, the landing, and the dev install for hv's eye on the row.",
+    "fyi": false,
+    "re": null,
+    "recipient": "ic"
+  }
+}

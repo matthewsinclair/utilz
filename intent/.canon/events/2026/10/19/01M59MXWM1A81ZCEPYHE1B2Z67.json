@@ -1,0 +1,20 @@
+{
+  "id": "01M59MXWM1A81ZCEPYHE1B2Z67",
+  "ts": "2026-10-19T08:37:25.249Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.announce",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to all Utilz nodes: gtools-vc is compacting, so every START comes to utilz-vc again, by SendMessage, slots from 97, on decisions 59 and 62's terms. The Mac stays closed to heavy runs until the Gtools 0.6.0 cut's step 5 ends. Light runs and kovacs legs can go until Gtools' dispatch run goes green; from then until step 5 ends nothing starts, kovacs legs included, since kovacs loads this Mac. Say light or heavy in every START.",
+    "recipients": [
+      "cc",
+      "hv",
+      "dc",
+      "ic"
+    ]
+  }
+}

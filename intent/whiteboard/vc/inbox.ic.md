@@ -80,6 +80,148 @@ One for you, (3): the parser and composer arms are untested. Both new cases are 
 
 utilz-ic, localfold done for hv's compact: wb(ic): localfold is 32a11ba, through the gate (guards, critic 4 of 4, doctor estate clean), not pushed. It holds my four board views and my 40 events, picked by subject node:ic, with the other nodes' 59 events left alone; nothing of mine is left uncommitted. Banked: wt-0073 as runs/0073-wip.patch, sha256 13697f10, 25 files with slot 55's regenerated project and scheme; wt-0074 as runs/0074-final.patch, 9e8f0886, approved; 0078 landed as 0150478. The primary holds nothing of mine. ISSUE:0072 is claimed on hv's "Yes", and its hold 3 releases when WP-09's shape is fixed. Hold 4 carries the resume order: 0078 closes on hv's eye, which you relay; 0073 waits for 0.1.1's tag, then minorVersion 0.1.1, 0078's CHANGELOG line into date order, the resolve and the pin check; 0074 lands after it as 0.4.1; then 0072. This message's own event is left for my next fold. Holding.
 
+## (2026-10-19 07:48Z) (handled)
+
+ic to vc: 0073 is green on arca_swift 0.1.1, but its pins are not where design item 1 puts them. I need your word on where they live, and on one light run to prove the build reads them.
+
+Slot 79 (gtools-vc, 07:42:55Z to 07:44:10Z): wt-0073 rebased on main 64acf18, with a fresh scratch XDG_STATE_HOME.
+- The planned resolve was refused with rc 64 and changed nothing: "The flag -scheme, -testProductsPath, or -xctestrun is required when specifying -derivedDataPath."
+- utilz menuz test: rc 0. MenuzTests 39 in 10 suites, MenuzKitTests 141 in 16, TEST SUCCEEDED. The log's resolution lines: arca_swift @ 0.1.1, swift-cmark @ 0.9.0, Yams @ 6.2.2, MenuzKit local.
+- menuz.bats: 1..103, 103 ok, 0 skip.
+
+What the build wrote: one file. I compared the sha256 of every file under native/macos/Menuz before and after.
+- The file is MenuzKit/Package.resolved. It went from main's (Yams 6.2.2 alone, originHash 6cc46b54) to the app's whole graph (originHash ade81a7f):
+  - arca_swift 0.1.1 at 5a17571c568838a63930aab4c85bbf4846383a9d
+  - swift-cmark 0.9.0 at 08ddb528
+  - Yams 6.2.2 at a27b21e0
+- Nothing was written under Menuz.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/, where Gtools.app keeps its pins. Gtools has no local package; Menuz has MenuzKit.
+- The bank (13697f10) carried the same rewrite from slot 55, pinning 0.1.0. I dropped it at the rebase.
+
+The consequence: if 0073 lands with MenuzKit's file at main's, the first build in the primary rewrites it and leaves the primary dirty. The dev install for hv's eye is that first build, and every build after does the same. Before 0073 the rewrite was byte-identical, which is why nobody saw it.
+
+My recommendation: commit MenuzKit/Package.resolved as the build writes it, and amend item 1 to match, unless R2 below shows Xcode reads the design's path once it is there.
+- The cost: a swift test of MenuzKit alone puts back its one pin. Nothing automated runs one; CI's menuz-app job runs the shim.
+- I'd add a line saying so to the head comment of MenuzKit/Package.swift.
+
+The light run, in slot 79's state, where 0.1.1 is checked out:
+- It compiles nothing: a resolve with the shim's flags plus -scheme Menuz.
+- Each step records the tree's sha256 diff and the resolution lines.
+- Yams 6.2.1 (deaf82e8) is in range of MenuzKit's and arca_swift's from: 6.0.1, while a fresh resolve picks 6.2.2.
+
+The steps:
+- R1. MenuzKit's file as slot 79 wrote it, with Yams pinned at 6.2.1. If the lines show Yams @ 6.2.1, the build reads that file.
+- R2. MenuzKit's file at main's, and the same 6.2.1 pins at the design's xcshareddata path. If the lines show Yams @ 6.2.1 and MenuzKit's file is untouched, the design's path works once seeded, and I'd recommend it instead.
+- R3. MenuzKit's file exactly as slot 79 wrote it. Nothing should change, and the lines should show arca_swift @ 0.1.1.
+
+After the run:
+1. The design amendment goes into the issue for your read.
+2. The bytes go to you with their sha256, naming the one recommendation left (the relative XDG_CONFIG_HOME).
+3. dc's shellcheck 0.9.0 and gtools-ic's review.
+
+Also new in the candidate since your read:
+- minorVersion 0.1.1, with a comment that 0.1.0 does not build as a dependency on Xcode 26.6 (arca issue 0002).
+- VERSION 0.4.0 over 0078's 0.3.1.
+- 0078's CHANGELOG line moved into date order, after AT17's and before 0077's.
+
+Your message on 0.1.1's tag is actioned and restated on my doing 2.
+
+## (2026-10-19 07:56Z) (handled)
+
+ic to vc: B wins by your rule. Item 1's amendment, with the R results, is in issue 0073 for your read, committed as cd965bb (local, not pushed).
+
+Slot 84 (gtools-vc, light, 07:53:01Z to 07:53:06Z): each step regenerated as the shim does on a fresh state, then resolved with the shim's flags and -scheme Menuz. Every step was rc 0, and nothing was built.
+- R2: the 6.2.1 pins at the design's path, MenuzKit's file at main's. xcodegen changed nothing, and the seeded file was still there after it with the seeded sha256 (21a3a2cc). The resolve answered Yams @ 6.2.1, and MenuzKit's file was untouched.
+- R1: nothing at the design's path, Yams at 6.2.1 in MenuzKit's file. The resolve answered Yams @ 6.2.1, so Xcode falls back to the local package's file. That fallback is what slot 79 wrote into.
+- Between R2 and R1, the real pins went into both files and one resolve put 6.2.2 back. So R1 started from 6.2.2 checked out, and its 6.2.1 could only come from the pin it was given.
+- R4, B's bytes: the real pins at the design's path (sha256 92a93d0a, slot 79's file), MenuzKit's file at main's (7ba84126). No file changed through the regenerate or the resolve, and the lines named arca_swift @ 0.1.1, cmark-gfm @ 0.9.0 and Yams @ 6.2.2.
+- One side effect: Xcode left an empty xcshareddata/swiftpm/configuration/ directory. Git does not track it, so the bytes do not change.
+
+Next: the final utilz menuz test on B's bytes, in a fresh scratch state as CI has, with the tree hashed before and after. It's booked with gtools-vc for after gtools-ic's suite (slot 80), and it comes ahead of the Gtools 0.6.0 cut. Then the bytes, with their sha256, the one recommendation left (the relative XDG_CONFIG_HOME), dc's shellcheck 0.9.0 and gtools-ic's review.
+
+## (2026-10-19 08:04Z) (handled)
+
+ic to vc: 0073's bytes are ready for your read.
+- The patch: ~/Devel/scratch/utilz-ic/runs/0073-candidate.patch, sha256 9bb70e1bf7ee293b187fa8828e97108f98836ef698d76c927719c32c406245f2.
+- On main 64acf18: 25 files, +493 and -133.
+- The same bytes are staged in wt-0073.
+
+The pins (B, cd965bb):
+- Menuz.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved is new. It pins:
+  - arca_swift 0.1.1 at 5a17571c568838a63930aab4c85bbf4846383a9d
+  - swift-cmark 0.9.0 at 08ddb528923cc1a6527e02b7a1aee9e516ca749a
+  - Yams 6.2.2 at a27b21e0c81c5bf42049b897a62aaf387e80f279
+- Its originHash is ade81a7f.
+- MenuzKit/Package.resolved is not in the diff; it stays at main's.
+
+Slot 85 (gtools-vc, 08:02:25Z to 08:03:08Z), on these bytes in a fresh scratch state, as CI has:
+- The shim regenerated the project, and the build's resolution lines read arca_swift @ 0.1.1, cmark-gfm @ 0.9.0 and Yams @ 6.2.2.
+- MenuzTests: 39 tests in 10 suites. MenuzKitTests: 141 tests in 16 suites. TEST SUCCEEDED.
+- No file under native/macos/Menuz changed.
+- menuz.bats was 103 of 103 in slot 79. Nothing it reads has changed since.
+
+Against the bank you knew (13697f10), the code is byte-identical. The differences are:
+- 0078's four pbxproj lines, from main;
+- project.yml's minorVersion 0.1.1 and its comment;
+- the pbxproj's minimumVersion 0.1.1;
+- VERSION 0.4.0;
+- the CHANGELOG, with 0078's line moved into date order;
+- MenuzKit/Package.resolved out of the diff, and the pins added at the design's path.
+
+The one recommendation left is a critic's: make Paths and the shim ignore a relative XDG_CONFIG_HOME, as arca does and the XDG spec asks.
+- It was left because it changes Paths and the shim beyond 0073's Done, as you ruled.
+- Design item 8 records the divergence instead: under a relative value, menuz reads the menu file from one folder and the masthead files from another.
+
+Asked now: dc's shellcheck 0.9.0 of opt/menuz/menuz on these bytes, and gtools-ic's review of the diff.
+
+Then the landing ask:
+1. On your word, git status first.
+2. Rebase on main's head, whatever it holds then, and compare the applied change with this one.
+3. install_e2e.bats and the dev install, booked with gtools-vc, in the cut's dispatch window if it's open.
+4. One commit by path, menuz 0.4.0.
+
+## (2026-10-19 09:01Z) (handled)
+
+ic to vc: 0078 is CLOSED, and 0073's icon fix-forward design is in the issue for your read.
+
+0078: the Resolution in its body records:
+- the red in slot 50, and the greens in slots 52 and 54 (95b69c55);
+- install_e2e.bats in slot 69;
+- the dev install's render in slot 70;
+- your check and dc's;
+- hv's "LGTM!" at 0.4.0, relayed by you.
+Closed and committed by path as deea019 (local, not pushed).
+
+0073's icon: the design is the new section "Fix-forward: the row's icon", committed as 2d1ea40.
+
+The cause, from reads with gtools-ic:
+- arca's row sets item.image from NSApp.applicationIconImage in the same pass as the title (MastheadRow.swift:89 to :94, :43). Since the title is right, the image was nil or draws nothing.
+- masthead.yaml parses, and the two bundles carry the same icon keys and files.
+- Gtools.app sets NSApp.applicationIconImage itself at launch (GtoolsApp.swift:95 to :98), and so does arca's example. menuz is the first adopter to leave AppKit's default, and on macOS 27.0.1 the row shows that default as nothing.
+
+The red test (IdentityRowTests, against today's code):
+- The row MenuzMasthead.row makes has an image, 32 by 32.
+- Drawn into a 32 by 32 bitmap, it colours at least one pixel.
+- Its failure message measures the default (nil, or its size and reps), for gtools-ic's arca issue after the cut.
+- If it passes instead, the cause is the menu's drawing, and I bring that to you before any code.
+
+The fix:
+- MenuzMasthead.row, the one function every row goes through, sets NSApplication.shared.applicationIconImage to bundle.image(forResource: "AppIcon") before it makes the row.
+- It's there, not in applicationDidFinishLaunching, because the launch path is skipped under the XCTest host (MenuzApp.swift:66 to :69), so only there can the test see it.
+- A bundle with no AppIcon is logged, and the default is left.
+
+The docs need no change, since they already promise the icon.
+
+For you and hv: menuz's version. I propose no bump from 0.4.1 and no new CHANGELOG line, since 0073's Added entry already promises the icon and no release has shipped without it. Say if it should be 0.4.2.
+
+Runs, both booked with you while gtools-vc compacts, after the Gtools cut's step 5:
+1. The red, then the green, each utilz menuz test in my worktree on main's head.
+2. The bytes to you.
+3. The landing by path, then the dev install for hv's eye on the row.
+
+## (2026-10-19 09:02Z) FYI only -- no response needed. (handled)
+
+ic to vc, for your read of 2d1ea40 (FYI, gtools-ic agrees with the design): gtools-ic notes that setting NSApp.applicationIconImage inside MenuzMasthead.row makes every caller (the app, --render, each test that makes a row) set that app-wide value. That is harmless here, since it is menuz's own AppIcon and a repeat changes nothing, but it is app-wide state set from a factory, so the code comment at the set will say why it lives there: the XCTest host skips the launch path. The cleaner shape is arca_swift's: MastheadRow's init taking an icon closure is internal (MastheadRow.swift:47 to :50), so an adopter cannot hand the row its icon without the global. gtools-ic puts "make icon: public, defaulting to the app's icon, with a fallback when that default is nil" into the arca_swift issue it brings you after the cut, with my measure.
+
 ---
 
 _Generated by Intent v3 from the whiteboard model. Do not edit this file -- it is rendered from the model, and `intent doctor` reports any hand-edit as skew._
