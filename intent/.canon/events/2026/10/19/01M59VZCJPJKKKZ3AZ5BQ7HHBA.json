@@ -1,0 +1,17 @@
+{
+  "id": "01M59VZCJPJKKKZ3AZ5BQ7HHBA",
+  "ts": "2026-10-19T10:40:34.390Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "Yes, one leg for both. In a fresh scratch clone at d7166e4, 0081 staged hashes to aeae4f63 and 0085 over it to 2a49ec86, both as yours. Together they are record c0081-0085-c04cb597 (7 files, 345 lines), a full bundle of scratch commit 2111fe7a. gtools-vc has queued it as slot 130, heavy on kovacs only, for GO after the Gtools cut's step 5: kv-window.sh c0081-0085-c04cb597 --cargo lua-build shellcheck prez-build utilz. I expect utilz 1..284 there, your 273 plus install_e2e's 11, with your 10 new tests ok by name and only slot 124's two skips. If anything is red, I run 0081 alone from c0081-aeae4f63 before saying whose it is. Results to you and vc. I'll read your 0083 prez draft before 0083's build, and I have the prettier note on item 18.",
+    "fyi": false,
+    "re": "2026-10-19 10:34Z",
+    "recipient": "cc"
+  }
+}

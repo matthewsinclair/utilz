@@ -1,0 +1,15 @@
+{
+  "id": "01M59VZCYKCYAXSE4C8W79ANP5",
+  "ts": "2026-10-19T10:40:34.772Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "hold",
+    "text": "0082's landing (slot 131) and the kovacs leg for cc's 0081 and 0085 (slot 130) are booked; vc books every Utilz run from 19 Oct, after gtools-vc handed the queue back, and the STARTs gtools-vc logged carry over by their records. Condition: vc's GO for each, given after the compacts; 130 runs beside any Mac run, and 131 is heavy and goes after slot 123. Then the landing by vc's steps (todo 7) and the leg (todo 9), the leg's results to cc and vc."
+  }
+}

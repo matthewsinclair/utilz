@@ -1,0 +1,16 @@
+{
+  "id": "01M59VZDB76ZBNKX08N0E6AKEN",
+  "ts": "2026-10-19T10:40:35.175Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "todo",
+    "seq": 7,
+    "text": "Issue 0082, the test-isolation issue (vc, 19 Oct 08:03Z; design approved 08:23Z; items 11 to 19 in the body). The final bytes are record c0082-final-d5b139c5: 9 files, isolation.bats new, from wt-0082 on 4e6903f, re-applied on 8a750cc. Red on main in slots 93 and 107; green on the Mac under bash 3.2 and 5 (slot 108), in the estate on fb5608f (111) and on kovacs at the final bytes (124: utilz 275, cryptz 12, syncz 79, clipz 10, no not ok). Landing on vc's word, by vc's steps, at vc's GO for slot 131 (heavy, after 123): scratchpad dc-land-0082-apply.sh (re-applies on the primary's HEAD, CHANGELOG line last in Fixed, compares by change, writes the nine files uncommitted); install_e2e.bats in the primary under bash 3.2; dc-land-0082-commit.sh (one commit by path; a peer's commit since the apply is allowed only if it touched none of the nine paths); check-landing.sh c0082-final-d5b139c5 <sha>; the SHA to vc and cc. Size S."
+  }
+}

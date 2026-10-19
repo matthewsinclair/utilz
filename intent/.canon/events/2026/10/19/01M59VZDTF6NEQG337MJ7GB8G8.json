@@ -1,0 +1,16 @@
+{
+  "id": "01M59VZDTF6NEQG337MJ7GB8G8",
+  "ts": "2026-10-19T10:40:35.663Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "todo",
+    "seq": 8,
+    "text": "Issue 0083, Utilz on Linux (vc's decision 32, on hv's word, 19 Oct 08:00Z, in 2.14.1): design approved by vc at 09:04Z, size L, with amendments A to E and the landing order in the body as items 13 to 18, and item 19 keeping macoz.bats:53 here while the other error-path tests go to cc's 0084. vc's landing order: 0082, then cc's 0081 and 0085, then ic's 0086, then 0083's three parts. dc's part first, re-applied on that head and built knowing 0081's design (utilz_platform, refuse_off_macos naming uname -s, require_platform, sha256_of, doctor's [5/7] and [6/7], macoz, arngz, stampz, the formula, README and help, the CI roster with cleanz, clipz and macoz); then utilz-ic's menuz part; then utilz-cc's prez part, items 20 to 24, approved by vc (a1e0209). The build is set up in worktree /Users/matts/Devel/scratch/utilz-dc/wt-0083: main's 6204364 with 0082, 0081 and 0085 staged as its base, so git diff there is 0083's change alone; its code is read and its plan is in tmp/dc-2141/0083/NOTES.md, with no code written yet. Each commit with vc's read of its bytes and its booked runs. Proof before the cut: the kovacs loop with the new roster, and utilz doctor from the source tree there; after it, kovacs-sysadm's brew install (vc's todo 43). Size L."
+  }
+}

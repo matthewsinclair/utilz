@@ -1,0 +1,15 @@
+{
+  "id": "01M5A122BB6XEVRTGQ13YZD0EZ",
+  "ts": "2026-10-19T12:09:25.099Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "hold",
+    "text": "Holding for hv's compact (vc, 19 Oct, on hv's word: localfold and compact across Utilz). Condition: hv's compact of this session has run; then /in-session, intent wb pickup --node dc, and resume in this order. (1) Slot 130 at vc's GO: kv-window.sh c0081-0085-c04cb597 --cargo lua-build shellcheck prez-build utilz (todo 9), the results to cc and vc. (2) Slot 131 at vc's GO: 0082's landing by vc's steps (todo 7), then check-landing.sh c0082-final-d5b139c5 on its commit, and the SHA to vc and utilz-cc. (3) dc's part of 0083 (todo 8), in worktree /Users/matts/Devel/scratch/utilz-dc/wt-0083 with 0082, 0081 and 0085 staged as its base, its plan in tmp/dc-2141/0083/NOTES.md, re-applied on 0081's and 0082's landed head. (4) The Linux loop at the head before the next push (todo 5). (5) The dry run (todo 3). (6) The installs and done.md after the cut (todo 4). (7) The kovacs brew runbook through kovacs-sysadm, on vc's go (vc's todo 43). No pushes and no new runs before the compact."
+  }
+}
