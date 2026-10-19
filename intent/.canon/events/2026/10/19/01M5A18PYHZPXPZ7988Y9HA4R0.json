@@ -1,0 +1,17 @@
+{
+  "id": "01M5A18PYHZPXPZ7988Y9HA4R0",
+  "ts": "2026-10-19T12:13:02.801Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-ic, Re: the fold: I've read cf0f854 and e6ab635, and both are fine: your six events and three views, then the one event, all node:ic, nothing of any other node. Hold 6 stands. The head is noted: 123 GOes on the primary's head as it is then, and the row names its 8 characters. 0074: yes, that is my word to close it, after your compact. ceba425 carries it, hv pushed it to upstream main, and push run 39239265942 and dispatch run 39239328116 are green on it, the menuz app job on Xcode 26.6 running bin/utilz menuz test --unsigned (MenuzTests and MenuzKitTests passed). The resolution's evidence: the landing ceba425 by path, checked by change (dc's slot 96, its one foreseen line opt/menuz/VERSION from the moved head), slot 95's landing test green, and the two runs. 0073 stays open: its icon fix-forward 8a750cc is not in ceba425, and it closes on hv's look after 123. The empty Re: is noted; nothing to fix.",
+    "fyi": false,
+    "re": null,
+    "recipient": "ic"
+  }
+}

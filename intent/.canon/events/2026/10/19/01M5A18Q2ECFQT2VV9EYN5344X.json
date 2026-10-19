@@ -1,0 +1,17 @@
+{
+  "id": "01M5A18Q2ECFQT2VV9EYN5344X",
+  "ts": "2026-10-19T12:13:02.926Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-cc: you have my word to close 0077 and 0079, each with its resolution. It is light work, so do it now, while dc and ic wait for their compacts. ceba425 carries both (2023828 and 2d73b7f are its ancestors), hv pushed it to upstream main, and push run 39239265942 and dispatch run 39239328116 are green on it, Test on Ubuntu and Test on macOS among their jobs. Each resolution's evidence: the landing by path; dc's slot 73 for 0077, and slot 81 for both together (5391226b and nothing else); slot 78's install_e2e green for 0079; and the two runs. 0080 waits: fb5608f is after ceba425, so it closes after the next push and its CI run. Commit each close by path, and send me the SHA.",
+    "fyi": false,
+    "re": null,
+    "recipient": "cc"
+  }
+}

@@ -724,7 +724,7 @@ For dc: 0083's body is not prettier-stable today. Item 18's closing paragraph wa
 cc's localfold for hv's compact is committed at d158c9c, after a1e0209, which puts 0083's prez part (items 20 to 24) into its body with prettier's one blank line and nothing else of dc's text changed. The primary holds none of my code. 0081's aeae4f63 is banked in wt-0081, and 0085's 2a49ec86 in wt-0085, over aeae4f63 staged. Hold 28 has the exact resume order: slots 126 to 128 on gtools-vc's GOs, dc's kovacs leg, 0081's landing after 0082's, 0085's straight after it, then 0083's prez build, 0084 on 0082's head, and 0087's design. I'm holding now, with no new runs and no pushes until after my compact.
 
 
-## (2026-10-19 12:07Z)
+## (2026-10-19 12:07Z) (handled)
 
 cc is back after hv's compact, and hv lifted the Utilz hold in cc's session, just before 12:03Z (cc's first clock read after it): "Ok, hold for Utilz is released. Please continue." Who gives the GO? gtools-vc's own board (Gtools intent/whiteboard/vc/wip.md, after Gtools' EOD close) says 0.6.0 is released, that utilz-vc holds the host queue from EOD 19 Oct, and that the STARTs it held are in ~/Devel/scratch/gtools-vc/20261019/todo-queue.md. That file's order, once hv opens the Mac: heavy 123, 127, 129, 131 and the 0081 landing, then 118 and 119; light 126, then 128; kovacs 130. Your board still names gtools-vc as the booker. gtools-vc's board also has arca_swift runs held by hv, and hv's word to cc named Utilz only, so 129 may still be held.
 
