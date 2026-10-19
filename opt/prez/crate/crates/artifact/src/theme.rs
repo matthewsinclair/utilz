@@ -1091,10 +1091,46 @@ mod tests {
     "artifact",
   );
 
-  fn dir(name: &str) -> PathBuf {
+  /// A test's own directory under TMPDIR, removed when the guard drops, so a
+  /// run leaves none behind whether the test passes or panics (issue 0092).
+  struct TempDir(PathBuf);
+
+  impl std::ops::Deref for TempDir {
+    type Target = PathBuf;
+
+    fn deref(&self) -> &PathBuf {
+      &self.0
+    }
+  }
+
+  impl Drop for TempDir {
+    fn drop(&mut self) {
+      match std::fs::remove_dir_all(&self.0) {
+        Ok(()) => {}
+        Err(e) if e.kind() == std::io::ErrorKind::NotFound => {}
+        // A panic inside an unwind aborts the test binary and hides the
+        // failure that started it, so a test already failing only says so.
+        Err(e) if std::thread::panicking() => {
+          eprintln!("cannot remove the test directory {}: {e}", self.0.display())
+        }
+        Err(e) => panic!("cannot remove the test directory {}: {e}", self.0.display()),
+      }
+    }
+  }
+
+  fn dir(name: &str) -> TempDir {
     let d = std::env::temp_dir().join(format!("artifact-theme-{}-{name}", std::process::id()));
     std::fs::create_dir_all(&d).unwrap();
-    d
+    TempDir(d)
+  }
+
+  #[test]
+  fn a_test_directory_is_removed_when_its_guard_drops_issue_0092() {
+    let d = dir("guard-probe");
+    std::fs::write(d.join("theme.css"), "body{}\n").unwrap();
+    let path = d.to_path_buf();
+    drop(d);
+    assert!(!path.exists(), "{} survived its test", path.display());
   }
 
   #[test]
@@ -1155,7 +1191,7 @@ mod tests {
     let t = FAKE
       .load(
         Some(Spec::Name("housestyle")),
-        std::slice::from_ref(&d),
+        std::slice::from_ref(&*d),
         Duplicates::First,
       )
       .unwrap();
@@ -1163,7 +1199,7 @@ mod tests {
       Origin::SearchPath { dir, name, source } => {
         assert_eq!(name, "housestyle");
         assert_eq!(*source, SearchSource::Flag);
-        assert_eq!(dir, &d);
+        assert_eq!(dir, &*d);
       }
       other => panic!("expected a search-path origin, got {other:?}"),
     }
@@ -1249,7 +1285,7 @@ mod tests {
     let down = FAKE
       .load(
         Some(Spec::Name("housestyle")),
-        std::slice::from_ref(&root),
+        std::slice::from_ref(&*root),
         Duplicates::First,
       )
       .unwrap();
@@ -1264,7 +1300,7 @@ mod tests {
     let flat = FAKE
       .load(
         Some(Spec::Name("solo")),
-        std::slice::from_ref(&root),
+        std::slice::from_ref(&*root),
         Duplicates::First,
       )
       .unwrap();
@@ -1279,7 +1315,7 @@ mod tests {
     for (label, t) in [("<name>/theme.css", &down), ("<name>.css", &flat)] {
       match &t.origin {
         Origin::SearchPath { dir, .. } => {
-          assert_eq!(dir, &root, "{label}: origin keeps the SEARCHED directory");
+          assert_eq!(dir, &*root, "{label}: origin keeps the SEARCHED directory");
         }
         other => panic!("{label}: expected a search-path origin, got {other:?}"),
       }
@@ -1521,7 +1557,7 @@ mod tests {
     let e = FAKE
       .load(
         Some(Spec::Name("bypass")),
-        std::slice::from_ref(&d),
+        std::slice::from_ref(&*d),
         Duplicates::First,
       )
       .expect_err("a live href between two stray comment markers must not build");
