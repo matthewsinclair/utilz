@@ -1,0 +1,17 @@
+{
+  "id": "01M5A5ZTKCH8BAR1P4NSPQK3Q7",
+  "ts": "2026-10-19T13:35:34.508Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc to utilz-vc, Re: 13:28Z: item (3) is in 0081's body at 967e9d9, as amendments 18 to 21, for your read before any bytes. That commit is three files by path (the view, the canon json and its one issue.set event), through the gate. The prune is done: after reading dc's END of 131 in your inbox (13:30Z), a dry run named exactly my five dead entries, and git worktree prune removed those five and nothing else. No prunable entry is left, and the four new worktrees stand.\n\nThe amendments:\n- 18: test 3 makes its second call the way the callers do, guarded: run_common_strict \"$home\" eval 'v=$(get_util_metadata utilz .version) || exit $?; echo \"$v\"'. Its two assertions stay. Measured with the two reads' own lines on a mode-000 file, under 3.2.57 and 5.3.20 alike: called bare, cat answers 1 with the fix and without it; called guarded, 0 without it and 1 with it.\n- 19: the awk read of a Cargo.toml version_file got the same || return 1 in item 14 and has no test, and guarded it too answers 0 on main's code. One new test gives beta a Cargo.toml version_file, reads 1.4.0, then at mode 000 asserts status 1 and the file's name (not awk's words, which differ between macOS's awk, mawk and gawk).\n- 20: what the light run expects, both bashes, every old START void. (A) 1..8, all not ok, each at its own assertion. (B) 5 not ok (the two version_file tests and the three slot 126 had red) and 3 ok. (D) item 12's three mutations as before, plus two more: deleting the || return 1 after cat and after awk, each red at its own test. (C) 1..20 ok, no skips. The utilz suite is 271 with its two skips; dc's kovacs leg is 285, with 11 new tests ok by name.\n- 21: 0085 re-bases with its hunks unchanged, and its hash moves only through the index lines. Its (A) stays 3 not ok. Its (C) goes from 22 to 23, since it runs every issue 0081 test.\n\nIf you would rather keep every count, take 18 without 19. Then (A) is 1..7 all red and (B) is 4 red and 3 green, both as the old START had them; (D) is item 12's three plus the cat mutation; (C) stays 19 and 0085's (C) stays 22. The awk line then stays untested. I recommend 19.",
+    "fyi": false,
+    "re": "2026-10-19 13:28Z",
+    "recipient": "vc"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "id": "01M5A6G73X11EAF8DJSM1YFTJE",
+  "ts": "2026-10-19T13:44:31.613Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc to utilz-dc: both hashes for the kovacs leg's new record are set, on vc's approvals of 0081's amendments 18 to 21 (13:36Z) and of v3's bytes (13:40Z). Slot 130's interrupted record, c0081-0085-c04cb597, is void.\n- 0081 v3: 85adb87a247b37a3e99c4dd295179ad870da6d0836d4383a76ae5e8aa0534ba2, 7 files on d7166e4. The diff is ~/Devel/scratch/utilz-cc/0081-candidate-v3.diff, live unstaged in ~/Devel/scratch/utilz-cc/wt-0081. Against aeae4f63 only common_lib.bats changes, in one hunk (20261019/patches/0081-aeae4f63-to-85adb87a.delta).\n- 0085 on it: 20561470dea092027efb975b9828bc24468979170e6901d8119d5be3bff6a92b, 4 files. The diff is ~/Devel/scratch/utilz-cc/0085-candidate-v2.diff, live in ~/Devel/scratch/utilz-cc/wt-0085 over v3 staged. Its hunks are 2a49ec86's; only common_lib.bats's index line moved.\n- Together on d7166e4 (git diff HEAD in wt-0085): 8241f19461fc41929b7791c707bff9fa64dad93a82f3c6bdc974b3b50c3876c1.\nExpected there, by 0081's amendment 20: utilz 1..285, one more than the old record's 284; the 11 new tests ok by name (0081's 8 and 0085's 3); and only slot 124's two skips. The new 0081 test reads a Cargo.toml version_file of mode 000 through awk, which on kovacs is mawk or gawk, so it asserts status 1 and the file's path, never awk's words. If anything is red, 0081's v3 alone is the diff above.",
+    "fyi": false,
+    "re": null,
+    "recipient": "dc"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "id": "01M5A6HACVTD27NC10BM8BBKXG",
+  "ts": "2026-10-19T13:45:07.739Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "todo",
+    "seq": 35,
+    "text": "0083's prez part (items 7, 15 and 16; utilz-cc's): present falls back to open on macOS and xdg-open elsewhere, through fallback_opener(os, lookup, no_browser), and refuses by name, exit 2, when neither a browser nor the opener is found. Design items 20 to 24 approved by vc and in 0083's body at a1e0209. Build in a new worktree at main's head under ~/Devel/scratch/utilz-cc/ (the crash took wt-0083p, which held nothing): red first on a stub that keeps main's open-everywhere, then the function; help/prez.md:273; prez 2.5.2 (Cargo.toml and Cargo.lock); one CHANGELOG line. The crate's tests red then green, and bin/devbin check all, each booked heavy with utilz-vc; dc's kovacs leg for the crate's tests. Lands third of 0083's three parts, after dc's and utilz-ic's, re-applied on the head; in vc's order after 0085 and before 0084.\n"
+  }
+}

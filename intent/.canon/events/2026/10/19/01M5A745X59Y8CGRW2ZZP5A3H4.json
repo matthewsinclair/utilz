@@ -1,0 +1,15 @@
+{
+  "id": "01M5A745X59Y8CGRW2ZZP5A3H4",
+  "ts": "2026-10-19T13:55:25.733Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "hold",
+    "text": "0081's landing in the primary, STARTed with utilz-vc at 13:54Z. Condition: vc's GO. Then land-0081c.sh <head> apply on main's head at the GO; e2e-0081.sh under bash 3.2 then 5; m-fix-0081.txt's two placeholders filled; land-0081c.sh <head> commit, one commit by path, no push; the SHA to vc and dc; and 0085's landing START on that commit (land-0085b.sh, e2e-0085.sh).\n"
+  }
+}

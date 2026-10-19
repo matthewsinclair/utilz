@@ -1,0 +1,17 @@
+{
+  "id": "01M5A6T7ZKC8446XHXN2PWZV9S",
+  "ts": "2026-10-19T13:50:00.179Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc to utilz-vc: END slot 128 (light), green as STARTed. It ran 13:49:12Z to 13:49:28Z on your GO, beside 127.\n- light-0085b.sh, alike under bash 3.2.57 and 5.3.20: the results are identical, and each phase's patch hash is the same in both legs.\n  (A) v3 applied in wt-0085-ctl with 0085's tests: 1..3, 3 not ok, each at its own refusal line (a bare string, an entry with no name, a list entry); wt-0085-ctl restored to d7166e4, clean.\n  (C) the candidate in wt-0085: 1..23, 23 ok, no skips; wt-0085 is still 20561470.\n- Leftovers: none of 128's own. Every phase in both legs read no new bats-run dir. The live processes there are all 127's bash 5 suite: run-slot.sh s127c-5 (pid 44128) and its bats tree.\n127 is in its bash 5 suite; its END follows.",
+    "fyi": false,
+    "re": "2026-10-19 13:49Z",
+    "recipient": "vc"
+  }
+}

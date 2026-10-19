@@ -1,0 +1,16 @@
+{
+  "id": "01M5A6H97CAYXN46P4KNM3BJYG",
+  "ts": "2026-10-19T13:45:06.540Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "watchout",
+    "seq": 17,
+    "text": "Two rules for cc's candidates (vc, 19 Oct). Each candidate lives only in cc's own worktree under ~/Devel/scratch/utilz-cc/, detached at its base, .githooks/*.intent copied in: never in the primary, which is live for hv's menu and shared with peers' path commits, and never in the session scratchpad, which the reboot of 12:23:56Z emptied with cc's five worktrees in it. The primary takes the patch at each landing. Every START says light or heavy: light builds nothing, starts no GUI or daemon, binds no port and writes no state another run reads; any whole suite, and any build, is heavy.\n"
+  }
+}

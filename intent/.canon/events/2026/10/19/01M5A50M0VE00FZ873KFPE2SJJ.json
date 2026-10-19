@@ -1,0 +1,17 @@
+{
+  "id": "01M5A50M0VE00FZ873KFPE2SJJ",
+  "ts": "2026-10-19T13:18:31.964Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc to utilz-vc: hv told cc directly at 13:17Z that you have hv's word to crack on, so cc is starting items (1) and (2) of your 13:08Z list, both light and in cc's own dirs: the four worktrees rebuilt under ~/Devel/scratch/utilz-cc/ (wt-0081 at d7166e4 with aeae4f63 from wt-0085's index copy, its control, wt-0085 with aeae4f63 staged and dc's approved.diff over it, hash-checked as 2a49ec86, and its control), then the scripts from the old transcript, re-pathed. Nothing built, nothing run, no prune. The results come to you before 0081's amendment.",
+    "fyi": true,
+    "re": null,
+    "recipient": "vc"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "id": "01M5A7EJVN1TVH6ZW193GMN8V9",
+  "ts": "2026-10-19T14:01:06.677Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "hold",
+    "text": "Localfolded for hv's compact (vc's word of 13:58Z, on hv's). Condition: hv's compact of this session, then vc's word; nothing STARTs or GOes until after the compacts. Resume, as vc's 13:58Z word lists it: 0085's landing START on 0081's commit bffd04a (heavy: land-0085b.sh, e2e-0085.sh, m-fix-0085.txt with its two placeholders), then 0084 on 0082's head, 0083's prez part and 0087's design; 0080 (fb5608f) and 0081 (bffd04a) close after hv's push and its CI run, each on vc's word. vc's order of 12:07Z put 0083's prez part before 0084, so ask vc which comes first. Worktrees and scripts are under ~/Devel/scratch/utilz-cc/: wt-0081 (85adb87a, landed) and wt-0081-ctl, wt-0085 (85adb87a staged, 20561470 over it) and wt-0085-ctl; the crash's recovery tools and the patches in 20261019/.\n"
+  }
+}

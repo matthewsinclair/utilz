@@ -1,0 +1,16 @@
+{
+  "id": "01M5A6H9GQZV4RYZVTR34RRBHD",
+  "ts": "2026-10-19T13:45:06.839Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "todo",
+    "seq": 34,
+    "text": "0081 (low, cc's): get_util_metadata reads a yaml yq cannot read as an absent field. Design approved (items 8 and 9; amendments 10 to 17 at f6d2040; 18 to 21 at 967e9d9). v3, 85adb87a, approved by vc at 13:40Z and live in ~/Devel/scratch/utilz-cc/wt-0081. Green as STARTed: slot 126 (light, 13:46Z: (A) 8 red, (B) 5 red, (D) five mutations, (C) 1..20), slot 127 (heavy, 13:46Z to 13:50Z: prez built in wt-0081, the utilz suite 1..271 on both bashes) and dc's slot 130 on kovacs (record c0081-0085-8241f194: utilz 1..285, 0 not ok, the 11 new tests ok by name). The landing is STARTed (13:54Z), rehearsed on 4aa86d6: land-0081c.sh <head> apply in the primary, e2e-0081.sh under bash 3.2 then 5 (install_e2e 1..11), m-fix-0081.txt filled, land-0081c.sh <head> commit by path, no push, the SHA to vc and dc.\n"
+  }
+}

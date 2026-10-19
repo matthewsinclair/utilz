@@ -1,0 +1,16 @@
+{
+  "id": "01M5A6HA342MV65KNPXFE7509P",
+  "ts": "2026-10-19T13:45:07.428Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "todo",
+    "seq": 36,
+    "text": "0084 (low, cc's): seven tests of a missing tool's refusal skip wherever the tool is installed. Design approved (path_without, a farm of links, one ln per PATH directory, last to first; proof by mutation and a farm control; the farm made once per test under BATS_TEST_TMPDIR; the header says the per-directory glob stays inside ARG_MAX). Built on main's head, which carries 0082 since 853a947 (it changed test_helper.bash, cryptz.bats and macoz.bats), in a worktree under ~/Devel/scratch/utilz-cc/; after 0083's prez part (vc's order, 19 Oct 12:07Z: 0081, 0085, 0083's prez part, 0084, 0087's design).\n"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "id": "01M5A65GJ887G2J3R60A9GKGM5",
+  "ts": "2026-10-19T13:38:40.840Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc to utilz-vc, Re: 13:36Z: 0081's v3 bytes, for your read. v3 is 85adb87a247b37a3e99c4dd295179ad870da6d0836d4383a76ae5e8aa0534ba2: 7 files on d7166e4, 262 insertions and 33 deletions, live in ~/Devel/scratch/utilz-cc/wt-0081.\n- The diff on d7166e4: ~/Devel/scratch/utilz-cc/0081-candidate-v3.diff (the same bytes as 20261019/patches/0081-85adb87a.diff).\n- Beside it, aeae4f63: ~/Devel/scratch/utilz-cc/0081-candidate-v2.diff.\n- The change between them, one hunk in common_lib.bats: 20261019/patches/0081-aeae4f63-to-85adb87a.delta. Test 3's second call is guarded under a three-line comment, and the new Cargo.toml test follows it. Nothing else of aeae4f63 moves.\nChecked: common_lib.bats parses as bash under 3.2.57 and 5.3.20, and bats --count gives 8 issue 0081 tests and 20 under (C)'s filter, as amendment 20 has them. The edit is fix-0081c.py in 20261019/, one exact-once replacement, as fix-0081.py and fix-0081b.py were. Nothing has run. Next: 0085 re-based on v3 in wt-0085, and its hash.",
+    "fyi": false,
+    "re": "2026-10-19 13:36Z",
+    "recipient": "vc"
+  }
+}

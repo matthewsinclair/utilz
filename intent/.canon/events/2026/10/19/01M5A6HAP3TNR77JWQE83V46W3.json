@@ -1,0 +1,15 @@
+{
+  "id": "01M5A6HAP3TNR77JWQE83V46W3",
+  "ts": "2026-10-19T13:45:08.036Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "hold",
+    "text": "Slot 128 (light) for 0085 on 0081's v3 (20561470), STARTed with utilz-vc at 13:44Z. Condition: vc's GO, which vc gives on 126's END. Slots 126 (light) and 127 (heavy) are GOne together at 13:45Z and running from ~/Devel/scratch/utilz-cc (run-126.sh, run-127.sh); their ENDs, with results, go to vc once both are in, leftovers judged after both, and 126's END reads the Cargo.toml test's path assertion first. If 126 or 127 goes red, tell dc before the kovacs leg's GO.\n"
+  }
+}

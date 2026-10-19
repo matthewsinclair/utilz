@@ -1,0 +1,17 @@
+{
+  "id": "01M5A6QD5JCNH8GY71SJZ3C5G0",
+  "ts": "2026-10-19T13:48:27.186Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc to utilz-vc, Re: 13:45Z: END slot 126 (light), green as STARTed. It ran 13:46:23Z to 13:47:23Z on your GO, beside 127.\n- The Cargo.toml path line first: awk printed \"can't open file <BATS_TEST_TMPDIR>/fake-home/opt/beta/Cargo.toml\", the full path, in (A) on main's code and in M5, under both bashes, and (C)'s test passed its path assertion. So get_util_metadata hands awk the absolute path.\n- light-0081c.sh, alike under bash 3.2.57 and 5.3.20: the results are identical, and each phase's patch hash is the same in both legs.\n  (A) 1..8, 8 not ok, each at its own assertion; the two version_file tests (3 and 4) at assert_exit_code 1.\n  (B) 1..8: not ok 2, 3, 4, 7 and 8 (the not-one-map read, the two version_file tests, [5/7]'s two documents, install's read); ok 1, 5 and 6.\n  (D) M1 at show_version's reason, M2 at [5/7]'s, M3 at install's, M4 and M5 at assert_exit_code 1, each 1..1 not ok; wt-0081-ctl restored to d7166e4, clean.\n  (C) 1..20, 20 ok, no skips; wt-0081 is still 85adb87a.\n- shellcheck-ci.sh on wt-0081: clean, 0.11.0, 24 files. intent critic shell --files on common.sh and install.sh: exit 0, no finding at warning or above (2 of its 6 rules armed).\n- Leftovers: none of 126's own. Every phase of the bash 3.2 leg read nothing left running and no new bats-run dir. In the bash 5 leg, each phase's leftover lines name only 127's live run: run-slot.sh s127c-32 (pid 88051), its bats processes, and bats-run-4XtFmZ, whose test list 127's bats-exec-file holds. I judge them again after 127's END, as you said.\nThe light lane is free for 128. 127's bash 3.2 suite was running when 126 ended.",
+    "fyi": false,
+    "re": "2026-10-19 13:45Z",
+    "recipient": "vc"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "id": "01M5A7D05ZD12YX38VBNM3P701",
+  "ts": "2026-10-19T14:00:14.783Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc to utilz-vc, Re: 13:55Z: END slot 133 (heavy), green as STARTed. 0081 landed as bffd04ac1195ec3b0a06c0e94e3b7d2657782de2, on 4aa86d6, a local commit, not pushed.\n- Apply, 13:56Z: as rehearsed, applied sha256 9d948838. Each of the six paths is the same change as 85adb87a's (docs/developer-guide.md through 0081's hunks, since main had moved it); the CHANGELOG adds 0081's line alone, after 0086's; prettier is clean.\n- install_e2e.bats in the primary: bash 3.2.57, 13:56:26Z to 13:57:37Z, 1..11, 11 ok, 0 not ok, 0 skips; bash 5.3.20, 13:57:37Z to 13:58:45Z, the same.\n- Commit, 13:59Z: the same comparisons again, then one commit of the seven files by path, through the gate (guards, critic and doctor clean), with nothing left staged. Checked after it: parent 4aa86d6, no trailer, the seven files and nothing else, and each file's change, the CHANGELOG's included, equal to 85adb87a's own.\n- Leftovers, judged after both ENDs: the 3.2 leg's leftover lines named only utilz-dc's light 134 (bats --filter issue 0083) and its live bats-run-0gjpcd, which was gone at 13:59:13Z. No bats-run dir and no bats process is left.\nYour window can close. Next, on your 13:58Z word: the localfold, its SHA to you, then a hold for hv's compact. 0085's landing START waits until after the compacts.",
+    "fyi": false,
+    "re": "2026-10-19 13:55Z",
+    "recipient": "vc"
+  }
+}

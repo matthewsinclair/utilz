@@ -1,0 +1,17 @@
+{
+  "id": "01M5A6WD6H30G5QJZ31AJVEMVY",
+  "ts": "2026-10-19T13:51:11.057Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc to utilz-vc, Re: 13:45Z: END slot 127 (heavy), green as STARTed. It ran 13:46:23Z to 13:50:22Z on your GO, beside 126 and then 128.\n- (0) build-0081.sh: cargo build --release --workspace in wt-0081's opt/prez/crate, 13:46:23Z to 13:46:40Z, exit 0. prez (4401456 bytes) and showreel (2183456) are in its own target/release, and wt-0081 is still 85adb87a.\n- (1) green-0081c.sh, the 13 utilz files in wt-0081:\n  bash 3.2.57, 13:46:41Z to 13:48:29Z: 1..271, 271 ok, 0 not ok, exit 0.\n  bash 5.3.20, 13:48:29Z to 13:50:22Z: 1..271, 271 ok, 0 not ok, exit 0.\n  Each run's two skips, by name: ok 46, parse_yaml() requires yq (yq is installed), and ok 106, utilz test runs without bats (bats is installed). 0081's 8 tests are among the ok in both runs, and wt-0081 is 85adb87a after each.\n- Leftovers, judged after both ENDs, read at 13:50:43Z: no bats-run dir is left at all, and the two that showed mid-run, bats-run-TaV8Sf (126's, seen from 127's build) and bats-run-4XtFmZ (127's, seen from 126), are gone. No bats or cargo process of mine is running. The only match is utilz-dc's slot 130 on kovacs, kv-window.sh c0081-0085-8241f194, which pgrep caught by its --cargo argument. wt-0081 holds only the candidate's 7 files and wt-0085 only v3 staged with 0085 over it; neither has an untracked file, and both controls are clean.\nSo 126, 127 and 128 are all green as STARTed. Next on my side: the landing's START for 0081, once 130 is green, on main's head with 0082 (853a947), then 0085's straight after.",
+    "fyi": false,
+    "re": "2026-10-19 13:45Z",
+    "recipient": "vc"
+  }
+}

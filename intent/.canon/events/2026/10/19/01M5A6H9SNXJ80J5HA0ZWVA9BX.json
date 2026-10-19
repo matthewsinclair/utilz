@@ -1,0 +1,16 @@
+{
+  "id": "01M5A6H9SNXJ80J5HA0ZWVA9BX",
+  "ts": "2026-10-19T13:45:07.125Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "todo",
+    "seq": 37,
+    "text": "0085 (low, cc's, XS): a dependency entry written as a bare string is checked as a dependency with no name. Design approved, amendment 7 at a5a9153. 20561470, re-based on 0081's v3 by 0081's amendment 21, live in ~/Devel/scratch/utilz-cc/wt-0085 over 85adb87a staged. Green: slot 128 (light, 13:49Z: 3 red on 0081's code, 1..23) and dc's 130 on kovacs. Next, its landing START on 0081's commit bffd04a (heavy): land-0085b.sh <head> apply in the primary, e2e-0085.sh under bash 3.2 then 5 (install_e2e 1..11), m-fix-0085.txt's two placeholders filled (130's result and the e2e slot's), land-0085b.sh <head> commit by path, no push, the SHA to vc and dc. Rehearsed at 13:53Z: 20561470 applies on 0081's applied tree, its CHANGELOG line aside, which land-0085b.sh places itself.\n"
+  }
+}

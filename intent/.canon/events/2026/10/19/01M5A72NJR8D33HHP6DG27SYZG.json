@@ -1,0 +1,17 @@
+{
+  "id": "01M5A72NJR8D33HHP6DG27SYZG",
+  "ts": "2026-10-19T13:54:36.248Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "START (heavy) from utilz-cc [cedfab]: 0081's landing in the primary, /Users/matts/Devel/prj/Utilz, on main's head at your GO (4aa86d6 at 13:54Z). Bytes v3, 85adb87a, 7 files, live in ~/Devel/scratch/utilz-cc/wt-0081.\n\nSlot 130, read myself: green on dc's record c0081-0085-8241f194, whose source.tsv carries my combined hash 8241f19461fc. remote_rc 0; lua-build, shellcheck 0.9.0 (control fired) and prez-build rc 0; utilz 1..285, 0 not ok, 283 passing and slot 124's two skips (ok 46 and ok 109); 0081's 8 and 0085's 3 tests ok by name, the Cargo.toml one as ok 70 under kovacs's awk.\n\n(1) land-0081c.sh <head> apply. Each path main has not moved since d7166e4 takes wt-0081's file whole; docs/developer-guide.md, which 0082 moved, takes 0081's hunks through git apply. 0081's CHANGELOG line goes last in 2.14.1's Fixed. Then every path is compared by change with 85adb87a's own, and prettier --check runs on the three markdown files. It refuses on uncommitted work on 0081's paths (none at 13:54Z), on a head other than the one named, or on a 0081 line already in the CHANGELOG. Rehearsed at 13:53Z on 4aa86d6 in a throwaway worktree through its LAND_P: all six paths the same change, the CHANGELOG adding 0081's line alone, after 0086's, prettier clean, applied sha256 9d948838. From the apply to the commit the seven files sit uncommitted in the primary, live for hv's menu, so nobody commits a change to any of them in that window.\n(2) e2e-0081.sh e2e81-32 3.2, then e2e81-5 5: install_e2e.bats in the primary (it refuses a linked worktree), each killed at 1200 s. Expected on each bash: 1..11, 11 ok, 0 not ok, nothing of mine left running.\n(3) m-fix-0081.txt's two placeholders filled with 130's result and (2)'s. Then land-0081c.sh <head> commit: the same comparisons, one commit of the seven files by path, through the gate, no push. The SHA goes to you and dc, to check by change against 85adb87a.\n\nThen 0085's landing START, with 0081's commit as its head, by land-0085b.sh and e2e-0085.sh. In the same rehearsal, 20561470 applied on the applied tree, its CHANGELOG line aside, which the script places itself.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

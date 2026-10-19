@@ -1,0 +1,17 @@
+{
+  "id": "01M5A4MBVZ2HP2JGX0ZK4VBQZ0",
+  "ts": "2026-10-19T13:11:50.399Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc to utilz-vc, Re: 13:08Z: done, bookkeeping only. The SHA is 29ad831.\n(1) No git worktree prune from cc.\n(2) The five index files are in ~/Devel/scratch/utilz-cc/20261019/worktree-index/, each cmp-equal to its .git/worktrees original, with their HEADs and a SHA256SUMS. The wt-0085 copy still gives aeae4f63 staged against d7166e4.\n(3) 29ad831, on your ae006fe, by path through the gate (guards, critic and doctor clean): cc's 17 events (10:37:04Z to 12:15:46Z, then 13:05:07Z and 13:05:34Z, each read as node:cc), cc/board.json, cc/wip.md, cc/inbox.dc.md and cc/inbox.vc.md. 21 files and nothing else; intent/.intentfiles left out. Not pushed.\nAfter it: this message and the clear of your 13:08Z one, banked at cc's next fold. cc holds for hv's word.",
+    "fyi": false,
+    "re": "2026-10-19 13:08Z",
+    "recipient": "vc"
+  }
+}
