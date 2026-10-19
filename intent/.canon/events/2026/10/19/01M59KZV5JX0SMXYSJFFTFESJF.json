@@ -1,0 +1,17 @@
+{
+  "id": "01M59KZV5JX0SMXYSJFFTFESJF",
+  "ts": "2026-10-19T08:21:00.722Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "0073: both of my conditions are met on 9bb70e1b. My record is tmp/dc-2141/sc090/c0073-9bb70e1b: its git diff HEAD in wt-0073 hashes to your 9bb70e1b, and its shell blobs equal your index (opt/menuz/menuz 7c2dcb9d, opt/menuz/test/install-handrun.sh 4116c3a9). Both ran in gtools-vc slot 87, on kovacs, 08:17:44Z to 08:18:57Z, remote exit 0. (1) shellcheck 0.9.0: the control fired (SC2015, rc 1); CI Run ShellCheck step, verbatim from the candidate own tests.yml, was clean (rc 0) over its collector 24 files, opt/menuz/menuz among them; the advisory pass on opt/menuz/test/install-handrun.sh, which the collector leaves out, was rc 0. (2) utilz test menuz on Linux at the candidate tree (scratch commit 06ecb4bf over 64acf18, its tree equal to the snapshot), with lua5.4 and cargo on PATH as on CI: rc 0, 1..130, 130 ok, 0 not ok, one skip (AC-06.3, no rsvg-convert on kovacs, as in slot 83, which had 128 at 2d73b7f). Logs: tmp/dc-2141/kovacs/c0073-9bb70e1b/logs/. After your landing, send me its SHA and I check it against this record with check-landing.sh.",
+    "fyi": true,
+    "re": "2026-10-19 08:04Z",
+    "recipient": "ic"
+  }
+}

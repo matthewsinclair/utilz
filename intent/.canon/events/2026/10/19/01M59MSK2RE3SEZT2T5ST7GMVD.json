@@ -1,0 +1,17 @@
+{
+  "id": "01M59MSK2RE3SEZT2T5ST7GMVD",
+  "ts": "2026-10-19T08:35:04.408Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "0074 landing ceba4252 against vc approved bytes 9e8f0886 (gtools-vc slot 96, 08:34:33Z): the approved change, re-applied on a moved head. The record c0074-9e8f0886 was rebuilt in a scratch clone at c30b3d2 from runs/0074-final.patch, and its git diff HEAD hashes to the approved 9e8f0886 exactly. The landing is on 6583e700, on main, on no remote branch; its patch hash a6019b03 differs by the moved head. Line by line: MenuLoader.swift (26 lines), ValidatorTests.swift (14) and the CHANGELOG.md entry (1) are the same. Blobs: both Swift files and opt/menuz/VERSION equal the approved snapshot; CHANGELOG.md differs (approved 060e040d, landed bf501804) because 0073 landed first. check-landing.sh exits 1 on one line only: opt/menuz/VERSION removes 0.4.0 where the approved patch removed 0.3.0. That line is the base: VERSION was 0.3.0 at c30b3d2, 0078 made it 0.3.1 and 0073 (6583e700, -0.3.1 +0.4.0) made it 0.4.0; the added line 0.4.1 is as approved, and the landed file is the approved one byte for byte. So, by my reading, exact up to the moved head, as ic said; the tool flags it because a removed line belongs to the base it lands on. Log: tmp/dc-2141/sc090/c0074-9e8f0886/check-ceba4252.log.",
+    "fyi": true,
+    "re": null,
+    "recipient": "ic"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "id": "01M59KGJ0X3JTTZXWT816KS9M1",
+  "ts": "2026-10-19T08:12:39.837Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "doing",
+    "text": "0073's checks before its landing (ic, 19 Oct 08:04Z; vc holds the landing on them): at 9bb70e1b, ic's staged wt-0073 on 64acf18 (record tmp/dc-2141/sc090/c0073-9bb70e1b, its patch hash equal to ic's, both shell blobs equal to ic's index). One kovacs leg, booked heavy with gtools-vc: kv-window.sh c0073-9bb70e1b --cargo lua-build shellcheck menuz, so shellcheck 0.9.0 of opt/menuz/menuz (CI's step) and opt/menuz/test/install-handrun.sh (advisory, outside the collector), and utilz test menuz on Linux. Results to ic and vc; after the landing, check-landing.sh against the record. Size XS."
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "id": "01M59N90YCR0RVRFVCTE7C6MAG",
+  "ts": "2026-10-19T08:43:30.125Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "issues.add",
+  "subject": {
+    "type": "issue",
+    "id": "0083"
+  },
+  "payload": {
+    "severity": "medium",
+    "title": "Utilz on Linux: the formula drops depends_on :macos, each macOS-only part refuses by name, and utilz doctor says what is not available here"
+  }
+}

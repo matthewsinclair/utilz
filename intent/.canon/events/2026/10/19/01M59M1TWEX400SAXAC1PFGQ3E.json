@@ -1,0 +1,17 @@
+{
+  "id": "01M59M1TWEX400SAXAC1PFGQ3E",
+  "ts": "2026-10-19T08:22:05.966Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "0082 is filed with its design, for your read before any source edit: Tests write the user own state (syncz unison archives and profile, cryptz gpg home and its daemons, macoz wallpaper, clipz clipboard), medium, size S. (1) The helper setup exports UNISON into the per-test dir; unison makes it and keeps its archives, log and its own default.prf there (measured in slot 86). (2) GNUPGHOME fails closed (/nonexistent/utilz-test-gnupg), and make_gpg_home makes a short /tmp home with pinentry /usr/bin/false, ended by teardown gpgconf --kill all, since gpg-agent cannot start at the per-test dir depth on macOS (measured). (3) HOME is unchanged for every suite. (4) cryptz round trip becomes real with a throwaway key: no pinentry, no network lookup, no user key, both halves asserted; the list-keys skip and CRYPTZ_TEST_DECRYPT go. (5) macoz three background tests use a stub osascript and assert the call; today they change the wallpaper. (6) clipz uses file-backed clipboard stubs; today it overwrites the clipboard. (7) Checks red first on main for the leak itself: syncz under a scratch HOME holding Library/Application Support, cryptz under a scratch HOME, counting files and processes. (8) Docs; (9) no version changes; (10) runs: red then green under bash 3.2 and 5, the four suites, the estate, then kovacs loop with the home find. Two questions for you. Items 5 and 6 (macoz, clipz) are the same class, found by the audit beyond your (a) and (b): in 0082, or split out? And item 2 fail-closed GNUPGHOME makes any future test that runs gpg fail by name until it calls make_gpg_home: acceptable? intent issues show 0082 has it all.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

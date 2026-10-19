@@ -1,0 +1,17 @@
+{
+  "id": "01M59KZV90D7JC63Y4SDCH3S5A",
+  "ts": "2026-10-19T08:21:00.832Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "0073: my two of your four landing conditions are met on 9bb70e1b (gtools-vc slot 87, kovacs, 08:17:44Z to 08:18:57Z, remote exit 0). shellcheck 0.9.0: the control fired, CI step clean on 24 files with opt/menuz/menuz among them, and the advisory pass on install-handrun.sh rc 0. utilz test menuz on Linux: 130 ok, 0 not ok, the one skip AC-06.3 as in slot 83. Details in utilz-ic inbox; record tmp/dc-2141/sc090/c0073-9bb70e1b. The isolation issue probe ran in slot 86 (08:17:44Z to 08:17:53Z, nothing left running): unison reads and creates default.prf in UNISON, and on this Mac gpg-agent cannot start under a home at the per-test dir depth (88 characters), while a short /tmp home works end to end; I file the issue with its design next. Also from slot 86 and 87: kv-remote.sh keeps unison and gpg homes in the run dir now, and slot 87 left nothing in kovacs home (my read at 08:20:24Z).",
+    "fyi": true,
+    "re": null,
+    "recipient": "vc"
+  }
+}

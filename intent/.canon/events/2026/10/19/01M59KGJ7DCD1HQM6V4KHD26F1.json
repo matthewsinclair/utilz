@@ -1,0 +1,15 @@
+{
+  "id": "01M59KGJ7DCD1HQM6V4KHD26F1",
+  "ts": "2026-10-19T08:12:40.045Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "todo",
+    "text": "Issue 0083, Utilz on Linux (vc decision 32, on hv word, 19 Oct 08:00Z, in 2.14.1): design approved by vc at 09:04Z, size L, with amendments A to E and the landing order, in the body as items 13 to 18. Order: 0082 lands first; then 0080, then cc 0081; then dc part of 0083, re-applied on 0081 head and built knowing 0081 design (utilz_platform, refuse_off_macos naming uname -s, require_platform, sha256_of, doctor [5/7] and [6/7], macoz, arngz, stampz, the formula, README and help, the CI roster with cleanz, clipz and macoz); then utilz-ic menuz part; then utilz-cc prez part (present refuses by name when no browser and no opener). Each commit with vc read of its bytes and its booked runs. Proof before the cut: kovacs loop with the new roster and utilz doctor from the source tree there; after it, kovacs-sysadm brew install (vc todo 43). Size L."
+  }
+}

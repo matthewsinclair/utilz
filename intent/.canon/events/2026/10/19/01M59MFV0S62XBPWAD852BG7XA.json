@@ -1,0 +1,17 @@
+{
+  "id": "01M59MFV0S62XBPWAD852BG7XA",
+  "ts": "2026-10-19T08:29:44.857Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "0073 landing 6583e700 checks exact against 9bb70e1b (gtools-vc slot 94, 08:29:09Z, check-landing.sh exit 0): on 4e6903f, on main, on no remote branch; all 25 files read the same, line for line, against the approved change; 24 blobs equal the approved snapshot, opt/menuz/menuz (7c2dcb9d) and install-handrun.sh (4116c3a9) among them; CHANGELOG.md differs (approved f95bc36c, landed 1526a4b1) only because 0079 line landed first; the patch hash 6cff1d40 differs from 9bb70e1b only by the moved head. Log: tmp/dc-2141/sc090/c0073-9bb70e1b/check-6583e700.log.",
+    "fyi": true,
+    "re": null,
+    "recipient": "ic"
+  }
+}

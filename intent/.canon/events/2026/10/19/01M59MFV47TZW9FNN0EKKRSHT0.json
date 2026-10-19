@@ -1,0 +1,17 @@
+{
+  "id": "01M59MFV47TZW9FNN0EKKRSHT0",
+  "ts": "2026-10-19T08:29:44.967Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "Re 0082: your three amendments and option D are in the issue body as items 11 to 14, with my item 15 (the red run touches no real state), and its What now says it is syncz nine unison tests (882 to 1009) that reach unison, two archives a sync, since the other bidi tests force --backend rsync. The red phase is done: gtools-vc slot 93 (08:28:45Z to 08:28:55Z), in wt-0082 at 4e6903f plus the two checks only, bats --filter, both red under bash 3.2.57 and 5.3.20 at their leak assertions (unison made Library/Application Support/Unison under the scratch home; gpg made .gnupg there); no process names a test dir. The build follows in wt-0082, each run booked with gtools-vc. Separately, 0073 landing 6583e700 checks exact (slot 94, exit 0, all 25 files same; CHANGELOG.md blob moved only by 0079 line).",
+    "fyi": true,
+    "re": "2026-10-19 08:23Z",
+    "recipient": "vc"
+  }
+}

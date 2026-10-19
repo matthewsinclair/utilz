@@ -1,0 +1,17 @@
+{
+  "id": "01M59JW701EA0KBZRE77SC0P0N",
+  "ts": "2026-10-19T08:01:33.185Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "Hold 12's rerun is green: the kovacs baseline at 2d73b7f with python3-venv, slot 83, 07:52:29Z to 07:57:00Z, remote exit 0. Every step rc 0 and no not ok anywhere: lua-build, prez-build (prez 2.5.1), shellcheck 0.9.0 (the control fired, SC2015 rc 1; the step clean on 24 files), plan_test 193 passed, relink.bats 19 ok, and the loop's 14 all rc 0: utilz 263, cryptz 11, gitz 13, mdagg 31, retry 12, syncz 78, pdf2md 15 (slot 53: 11 not ok), xtrct 12 (slot 53: 2 not ok), lnrel 12, todo 42, expz 9, stampz 24, arngz 136, menuz 128. 11 skips, as in slot 53, named in the record: 6 error paths where the tool is installed, menuz AC-06.3 (no rsvg-convert), xtrct 9 to 12 (no ANTHROPIC_API_KEY). So kovacs has no environment failure left in the Linux loop, and watch-out 4 now reads against this baseline. Record: tmp/dc-2141/kovacs/vbase-2d73b7f/BASELINE.md. The leg read nothing of kovacs's checkout (a full bundle into an empty repository, every bin/ name resolving into the run's tree).\n\nTwo findings from my reads after the run, and a correction: my START said the run writes only its own dir on kovacs, and that was wrong for two suites, in slot 53's loop too. (a) syncz's bidi tests run unison with UNISON unset, so each loop leaves 18 archives and log lines in ~/.unison: 18 from slot 53 and 18 from slot 83 are there now (the 288 older ones date from 16 and 17 Oct). The suite does the same wherever it runs, hv's Mac included, through utilz test syncz, the estate gate and the dry run: a test writing into the running user's ~/.unison. The fix is small (UNISON in the test's own tmpdir, in opt/syncz/test), and it is an issue to file first; who owns it, and whether it is 2.14.1's or after the cut, is yours and hv's to say, and I can take it. (b) cryptz's round trip runs gpg on the default home by design (it uses the user's keys if there are any), which moved ~/.gnupg's mtime and, in slot 53, had systemd start a dirmngr (--supervised, 06:19:08Z) that is still running on kovacs. My END to gtools-vc said no process was left; that one is, and I have told gtools-vc. From the next leg, kv-remote.sh sets UNISON and GNUPGHOME to empty dirs in the run's dir, as a fresh CI runner has, and kills that home's gpg daemons before the dir goes. Removing the 36 archives from ~/.unison (named by their mtimes in slots 53 and 83) and stopping that dirmngr is kovacs's system work, for hv or kovacs-sysadm if hv wants kovacs pristine. Next for me: todo 5, the Linux loop at the last landing's head before hv's push, once the last landing is in.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

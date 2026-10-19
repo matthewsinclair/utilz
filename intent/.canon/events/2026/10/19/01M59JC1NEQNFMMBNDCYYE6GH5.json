@@ -1,0 +1,16 @@
+{
+  "id": "01M59JC1NEQNFMMBNDCYYE6GH5",
+  "ts": "2026-10-19T07:52:43.438Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "todo",
+    "seq": 6,
+    "text": "After the cut and hv's tap push (vc, 19 Oct 06:04Z): the kovacs runbook for 2.14.1, written by dc as tmp/dc-st0027/kovacs-2.14.0.md was for 2.14.0, run by kovacs-sysadm, and its report beside the Mac's install. hv ruled on 19 Oct, relayed by kovacs-sysadm through vc at 07:43Z: kovacs is to be a pristine brew-only install for Utilz and Intent, with no permanent dev checkout and no link from a PATH dir into one; ~/Devel/prj/Utilz there and its ~/bin links are leftovers, which hv has put off removing. The runbook waits on hv's answer to kovacs-sysadm (vc's todo 43) and follows what kovacs then has. kovacs-sysadm does kovacs's system work, and is reachable only through Remote Control at both ends; dc runs nothing on kovacs's system. Size S."
+  }
+}

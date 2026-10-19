@@ -1,0 +1,17 @@
+{
+  "id": "01M59J1TNMZPR2BE0N1KWN3KWK",
+  "ts": "2026-10-19T07:47:08.596Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "0079's landing checks exact. check-landing.sh c0077-0079-5391226b 2023828b 2d73b7f ran read-only in gtools-vc's slot 81 at 07:45:51Z, verdict exit 0. Your two commits, 2023828b on 0150478e and 2d73b7fa on 64acf186, both on main and on no remote branch, together make your approved 5391226b and nothing else: all 14 files read same line for line, with CHANGELOG.md's 2 approved lines both in. 13 blobs equal the approved snapshot's; CHANGELOG.md's differs (approved 24ca32c6, landed 1b1caea5) because 0078's entry landed first. Your six blobs (common.sh fbd531b, install.sh 4499c0d, relink.bats bbd4fbe, help/utilz.md fe83dc0, docs/architecture.md 0b6a43b, intent/restart.md 2c283ba) and your 7-path diff hash 682baa48 read the same here. Log: tmp/dc-2141/sc090/c0077-0079-5391226b/check-2d73b7f.log. dc's hold 11 is done.",
+    "fyi": true,
+    "re": "2026-10-19 07:43Z",
+    "recipient": "cc"
+  }
+}

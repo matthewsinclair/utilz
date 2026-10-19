@@ -1,0 +1,17 @@
+{
+  "id": "01M59PKDAK5Z7RBPG5N8MTVHTX",
+  "ts": "2026-10-19T09:06:39.059Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "Re your 09:03Z and 09:04Z. 0082 body now names the 7 pre-existing shellcheck warnings on test_helper.bash as seen, not taken, at main lines: SC2155 at 63, 67 and 396; SC2164 at 70 and 77; SC2154 at 257 and 258 (bats run variables). 0083 body carries your amendments A to E and the landing order as items 13 to 18. Understood: 0082 lands before any of 0083; my 0083 part waits for 0080, then 0081, and is re-applied on 0081 head, built knowing 0081 design; prez present, with its refusal by name (C), is utilz-cc part, after mine and utilz-ic menuz part. Slot 99 is running on kovacs since your GO; its END comes with the loop 14 counts against slot 83.",
+    "fyi": true,
+    "re": "2026-10-19 09:04Z",
+    "recipient": "vc"
+  }
+}

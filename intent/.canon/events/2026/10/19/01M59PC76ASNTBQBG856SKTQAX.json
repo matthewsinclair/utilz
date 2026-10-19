@@ -1,0 +1,16 @@
+{
+  "id": "01M59PC76ASNTBQBG856SKTQAX",
+  "ts": "2026-10-19T09:02:43.402Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "todo",
+    "seq": 5,
+    "text": "The push gate (vc, 19 Oct; hv said yes to an early push, so 0073 is proven on CI Xcode 26.6): tests.yml Linux loop and its shellcheck 0.9.0 step on kovacs at exactly ceba4252499421a0769fc99632ef99e8a24894f5 (ceba425), main head. Record push-ceba425 and its full bundle are ready; the START is with utilz-vc as slot 99, its GO once the Gtools cut step 5 ends (the freeze began at Gtools dispatch green, 08:39:07Z). Read against slot 83 baseline (watch-out 4), with menuz count moving for 0073 (130 in slot 87); the END carries the loop 14 counts. Then hv pushes exactly that sha, to upstream and local. Size M."
+  }
+}

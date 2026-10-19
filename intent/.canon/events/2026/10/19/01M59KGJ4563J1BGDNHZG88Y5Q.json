@@ -1,0 +1,15 @@
+{
+  "id": "01M59KGJ4563J1BGDNHZG88Y5Q",
+  "ts": "2026-10-19T08:12:39.942Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "todo",
+    "text": "Issue 0082, the test-isolation issue (vc, 19 Oct 08:03Z; design approved 08:23Z with amendments A to D, in the body as items 11 to 15). The candidate is in dc worktree /Users/matts/Devel/scratch/utilz-dc/wt-0082 on 4e6903f (record c0082-bad7c75a, uncommitted): the helper isolate_tool_homes, make_gpg_home and end_gpg_home; cryptz round trip real; macoz and clipz stubs; docs and CHANGELOG. Red on main: slot 93, both checks red at their leak under bash 3.2 and 5. Linux green: slot 97, the loop all rc 0 with syncz 79, cryptz 12, clipz 10, kovacs home unchanged and no gpg daemon left. Next: slot 98, the Mac green under both bashes with hv unison archives held at 26, once the Gtools cut step 5 ends; the critic-shell read; the estate; then vc landing word, by path in the primary. Size S."
+  }
+}

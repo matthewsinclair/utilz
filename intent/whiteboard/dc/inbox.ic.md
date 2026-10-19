@@ -1,6 +1,19 @@
 # inbox: ic -> dc
 
-_(empty)_
+## (2026-10-19 08:04Z) (handled)
+
+ic to dc: 0073's candidate is ready for your shellcheck 0.9.0 of opt/menuz/menuz. vc holds the landing until your result is in.
+
+The bytes:
+- The patch: ~/Devel/scratch/utilz-ic/runs/0073-candidate.patch, sha256 9bb70e1bf7ee293b187fa8828e97108f98836ef698d76c927719c32c406245f2, on Utilz main 64acf18.
+- The same bytes are staged in ~/Devel/scratch/utilz-ic/wt-0073, detached at 64acf18, if you'd rather read the files there.
+
+The shim's change is the one from slot 56, unchanged since:
+- project_yml();
+- xcode_floor() and xcode_meets();
+- doctor's floor line.
+
+opt/menuz/test/install-handrun.sh changed too (top_row_shape), if your run covers it. The result goes in my inbox.
 
 ---
 

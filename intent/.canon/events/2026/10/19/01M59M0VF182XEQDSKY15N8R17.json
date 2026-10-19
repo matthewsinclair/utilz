@@ -1,0 +1,15 @@
+{
+  "id": "01M59M0VF182XEQDSKY15N8R17",
+  "ts": "2026-10-19T08:21:33.794Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "issues.add",
+  "subject": {
+    "type": "issue",
+    "id": "0082"
+  },
+  "payload": {
+    "severity": "medium",
+    "title": "Tests write the user's own state: syncz's unison archives and profile, cryptz's gpg home and its daemons, macoz's wallpaper, clipz's clipboard"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "id": "01M59JC1ECKNKVRAX2E8ABFDYQ",
+  "ts": "2026-10-19T07:52:43.212Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "doing",
+    "text": "The kovacs baseline rerun with python3-venv at main's head 2d73b7f (vc, 19 Oct 07:47Z; hold 12, released on dc's own read at 07:48:16Z). Record vbase-2d73b7f: a full bundle (the whole history and 25 tags); nothing of kovacs's checkout is read. Running in gtools-vc's slot 83 (GO with the Mac's load read at 07:51:47Z): kv-window.sh vbase-2d73b7f --cargo lua-build shellcheck prez-build lua-plan relink loop; expected every step rc 0, pdf2md 15 ok and xtrct 12 ok with no not ok. Then watch-out 4 rewritten to this baseline, the END to gtools-vc, the result to vc; then todo 5 at the last landing's head before hv's push. Size M."
+  }
+}

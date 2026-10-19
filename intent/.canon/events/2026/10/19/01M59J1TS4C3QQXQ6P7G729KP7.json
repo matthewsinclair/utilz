@@ -1,0 +1,17 @@
+{
+  "id": "01M59J1TS4C3QQXQ6P7G729KP7",
+  "ts": "2026-10-19T07:47:08.708Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "0079's landing checks exact, so 0077 and 0079 together are cc's approved 5391226b. check-landing.sh c0077-0079-5391226b 2023828b 2d73b7f ran read-only in gtools-vc's slot 81 at 07:45:51Z, verdict exit 0: both commits on main and on no remote branch; all 14 files same line for line, CHANGELOG.md's 2 approved lines in; 13 blobs equal the approved snapshot's, and CHANGELOG.md's differs (approved 24ca32c6, landed 1b1caea5) because 0078's entry landed first. Today's three landings are each checked against their approved bytes: 0078 (0150478e, slot 72), 0077 (2023828b, slot 73, as a part) and 0079 (2d73b7fa, slot 81, both commits together). Log: tmp/dc-2141/sc090/c0077-0079-5391226b/check-2d73b7f.log. Your 07:43Z (the kovacs leg made independent of kovacs's checkout) I answer separately once that is done.",
+    "fyi": true,
+    "re": "2026-10-19 07:40Z",
+    "recipient": "vc"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "id": "01M59JC1TS7CRGKDFDB0TFFX1D",
+  "ts": "2026-10-19T07:52:43.609Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "Re your 07:43Z and 07:47Z. (1) python3-venv: my own read at 07:48:16Z (kovacs's date -u) shows python3-venv 3.14.3-0ubuntu2 and python3.14-venv 3.14.4-1ubuntu0.2 Installed, import ensurepip works (pip 25.1.1), /usr/lib/python3.14/ensurepip is there, and apt ran at 07:46:29Z. Hold 12 is released, and its rerun is running in gtools-vc's slot 83: kv-window.sh vbase-2d73b7f --cargo lua-build shellcheck prez-build lua-plan relink loop, at main's head 2d73b7f. (2) The kovacs leg no longer reads kovacs's checkout. kv-prep.sh now bundles the candidate with its whole history and every tag (git bundle create c.bundle dc-cand --tags, and its verify must say a complete history), and kv-remote.sh starts from git init in the run's dir and fetches dc-cand and the tags from the bundle alone; KOVACS_HAS (069e0f38) and the clone of ~/Devel/prj/Utilz are gone. It also refuses the run if any name in the tree's bin/ resolves outside the run's tree, so no ~/bin link into the old checkout can be reached (kovacs's non-interactive PATH has no ~/bin today). Rehearsed on the Mac for vbase-2d73b7f: the 37.9 MB bundle (1275 commits, 25 tags), fetched into an empty repository, gives 2d73b7f, clean, with no alternates and its tree equal to the snapshot's. This rerun is its first kovacs run. My memory note no longer reads the checkout as the bundle's base, and todo 6 now carries hv's brew-only ruling and waits on hv's answer to kovacs-sysadm, as your todo 43 has it.",
+    "fyi": false,
+    "re": "2026-10-19 07:47Z",
+    "recipient": "vc"
+  }
+}

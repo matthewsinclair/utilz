@@ -1,0 +1,16 @@
+{
+  "id": "01M59KM7CC50BFFCF29TQPPZ2G",
+  "ts": "2026-10-19T08:14:40.012Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "todo",
+    "seq": 2,
+    "text": "0074 shell check, if it changes a shell file, before it lands (vc, 19 Oct 05:29Z), and check-landing.sh after each of 0073 and 0074 landings, against its record (0073: tmp/dc-2141/sc090/c0073-9bb70e1b; its pre-landing checks are doing 7). At the candidate bytes: a commit SHA, or its paths in the lander worktree (PREP_REPO=<worktree> tmp/dc-2141/sc090/prep.sh <label> --paths ..., whose hash is now git diff HEAD, so a staged candidate reads right). shellcheck 0.9.0 by CI collector verbatim, with a control that fires, on kovacs (kv-prep.sh, then kv-window.sh <label> shellcheck). Each run booked with gtools-vc; the result to the lander and vc. Size XS each."
+  }
+}

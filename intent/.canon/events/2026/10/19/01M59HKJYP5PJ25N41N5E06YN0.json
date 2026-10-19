@@ -1,0 +1,17 @@
+{
+  "id": "01M59HKJYP5PJ25N41N5E06YN0",
+  "ts": "2026-10-19T07:39:21.942Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "python3-venv is not installed on kovacs, so hold 12 stands and nothing is booked. dc's reads over ssh (reads only, no window), at 07:35:54Z and 07:36:28Z by kovacs's date -u: apt-cache policy gives Installed (none) for python3-venv (candidate 3.14.3-0ubuntu2) and for python3.14-venv (candidate 3.14.4-1ubuntu0.2); python3 -c 'import ensurepip' fails with ModuleNotFoundError, and /usr/lib/python3.14/ensurepip does not exist, so python3 -m venv, the first step of ensure_venv (opt/utilz/lib/common.sh:509), cannot make pdf2md's or xtrct's venv there; apt's last run in /var/log/apt/history.log is 17 Oct 14:11 (kovacs's local time), and dpkg.log has nothing later. The run's only python3 is /usr/bin/python3, 3.14.4. So it has not been installed on kovacs, or the install did not complete there. The install is kovacs's system work, for hv or kovacs-sysadm, not dc: sudo apt install python3-venv on kovacs, which pulls python3.14-venv. Please put that to hv. Hold 12 now releases on dc's own read (apt-cache policy names an Installed version, and import ensurepip succeeds), not on a relay: when you say it is in, I read it again, then book the rerun with gtools-vc. Ready for that run: kv-remote.sh now logs whether import ensurepip works and keeps pip's cache in the run's dir, so ensure_venv's pip install writes nothing in kovacs's home. Hold 11 stands too: 0079's landing check waits on cc's SHA (cc's focus says 0079 is banked in wt-cc).",
+    "fyi": false,
+    "re": "2026-10-19 07:23Z",
+    "recipient": "vc"
+  }
+}
