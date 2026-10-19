@@ -27,3 +27,20 @@ load "test_helper.bash"
   [[ ! -e "$calls" ]] || fail "git asked gpg to sign: $(cat "$calls")"
   [[ "$(git -C "$repo" log -1 --format=%G?)" == "N" ]] || fail "the commit carries a signature"
 }
+
+# EVERY SUITE'S TEARDOWN ENDS THE HELPER'S (issue 0088). A suite's own
+# teardown() replaces the helper's, and version_dispatch.bats' did: its
+# per-test dir, any gpg home and the cd back were skipped for each of its
+# tests, and the utilz suite left 11 dirs in TMPDIR a run. So every suite under
+# opt/ that defines teardown() calls utilz_teardown in it.
+@test "every suite that defines its own teardown() calls utilz_teardown in it (issue 0088)" {
+  local f n=0 missing=""
+  while IFS= read -r f; do
+    n=$((n + 1))
+    if ! awk '/^teardown\(\) \{/ { inside = 1; next } inside && /^\}/ { exit } inside && /(^|[^_[:alnum:]])utilz_teardown([^_[:alnum:]]|$)/ { found = 1 } END { exit !found }' "$f"; then
+      missing="$missing ${f#"$UTILZ_HOME"/}"
+    fi
+  done < <(grep -l -E '^teardown\(\) \{' "$UTILZ_HOME"/opt/*/test/*.bats)
+  [[ $n -gt 0 ]] || fail "no suite defines its own teardown(), so the guard checked nothing"
+  [[ -z "$missing" ]] || fail "these define teardown() without calling utilz_teardown:$missing"
+}

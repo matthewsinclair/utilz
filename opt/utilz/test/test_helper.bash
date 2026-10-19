@@ -90,8 +90,16 @@ setup() {
   fi
 }
 
-# Per-test teardown - runs after each test
+# Per-test teardown - runs after each test. A suite that needs a teardown of
+# its own defines teardown() and calls utilz_teardown in it, since its own
+# replaces this one (issue 0088); isolation.bats checks every suite does.
 teardown() {
+  utilz_teardown
+}
+
+# THE per-test cleanup: the cd back, any gpg home the test made, and the
+# per-test dir.
+utilz_teardown() {
   # Return to original directory
   if [[ -n "$ORIGINAL_PWD" && -d "$ORIGINAL_PWD" ]]; then
     cd "$ORIGINAL_PWD"

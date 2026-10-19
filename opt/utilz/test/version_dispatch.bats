@@ -114,12 +114,14 @@ _expected_count=17
 # check fail, the `rm -rf` never ran, and the scratch utility leaked into
 # opt/ -- where it poisoned every later population sweep (16, not 15) and the
 # arm check itself. A fixture a test mutates is a flake generator; teardown
-# runs whether the test passed, failed or exploded.
+# runs whether the test passed, failed or exploded. This teardown replaces the
+# helper's, so it ends with the helper's cleanup (issue 0088).
 _AC07_NAME=""
 teardown() {
   if [ -n "${_AC07_NAME:-}" ]; then
     rm -rf "$UTILZ_HOME/opt/$_AC07_NAME" "$UTILZ_HOME/help/$_AC07_NAME.md" "$UTILZ_BIN_DIR/$_AC07_NAME"
   fi
+  utilz_teardown
 }
 
 @test "AT08 / AC07: a NEWLY GENERATED utility answers on both forms, with no arm of its own" {
