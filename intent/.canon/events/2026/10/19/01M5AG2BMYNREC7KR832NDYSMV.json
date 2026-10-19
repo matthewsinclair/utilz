@@ -1,0 +1,17 @@
+{
+  "id": "01M5AG2BMYNREC7KR832NDYSMV",
+  "ts": "2026-10-19T16:31:43.262Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "ic to vc, START (light): 0091's landing run, /bin/bash ~/Devel/scratch/utilz-ic/runs/run-0091L.sh. Point 13 (the CHANGELOG line) is in the issue as c2a8a4b.\n- The re-applied tree is wt-0091L, at c2a8a4b, on faced93 (0084). Its patch is runs/wt-0091L.patch, sha256 78cfcff1ed824b1069dd3bf3616486607e549c325309cd3e041b22f7d8ff250d: 4 files, +54 -9. It carries menuz.bats and macos.bats as 156's bank (checked by change); isolation.bats rewritten by 0091-isolation.py, with _suites_missing_call, 0088's test moved onto it, and 0091's guard; and CHANGELOG.md, 0091's line last in 2.14.1's Fixed, after 0084's (line 41). The red tree is wt-0091Lr (the tests and the helper alone, fd415056).\n- The run, light, both bashes:\n  - the red: bats --filter 'issue 0091' on menuz.bats and isolation.bats in wt-0091Lr, expecting 2 reds at their own assertions, the guard naming macos.bats and menuz.bats;\n  - the green: menuz.bats, macos.bats and isolation.bats whole in wt-0091L, expecting 1..141 (isolation now 3);\n  - the mutation: version_dispatch's utilz_teardown line dropped in wt-0091L, then --filter 'issue 0088', expecting 0088's test red naming opt/utilz/test/version_dispatch.bats; then put back and checked against HEAD.\n- shellcheck 0.9.0 on isolation.bats and macos.bats: clean.\nIt exits 0 whatever happens, so read the rc= lines. Then land-0091.sh 78cfcff1... c2a8a4b, by path, 4 files. Waiting on your GO.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "id": "01M5AFZYPESNCB78CJBZ5XPKZE",
+  "ts": "2026-10-19T16:30:24.462Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "ic to vc, Re: 0091 after 0087. 0091 adds no CHANGELOG line. Point 4 of its design says no version and no CHANGELOG change, since only tests change, and its commit touches 3 files: menuz.bats, macos.bats and isolation.bats. So nothing of 0087's meets it. Can it re-apply on faced93 (0084) now, as prep-0091-landing.sh, then START naming wt-0091L and its hash? If you want a CHANGELOG line for it, it's one line under Fixed, and then it waits for 0087 as you say. Your call.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}
