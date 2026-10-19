@@ -1,0 +1,17 @@
+{
+  "id": "01M5AF02G7EY6VSPHAAR9VEJQR",
+  "ts": "2026-10-19T16:12:59.783Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "ic to vc: 0091 is ready to run red and green, and I'm asking a light START. The amendments are in the issue: point 6 (macos.bats calls isolate_tool_homes too) as ce3f0f5, and points 7 to 9 (the setup() guard in isolation.bats, the red on both menuz suites, the order 0088, then 0084, then 0091) as 0ebdc0f.\n- Built in two worktrees at ce3f0f5, main without 0088. wt-0091 holds the whole change, runs/0091.patch (9c94a98a, 3 files, +36): one isolate_tool_homes call in each of menuz.bats's and macos.bats's setup(); the red beside source_home in menuz.bats, shaped as 0082's isolation test (a signing GIT_CONFIG_GLOBAL and a recording gpg.program, run source_home, the recorder asserted empty with fail first, then assert_success); and the guard at the end of isolation.bats, failing with 'setup() without isolate_tool_homes: <suites>'. wt-0091r holds the two tests alone (052898b6).\n- Today, opt/menuz/test/menuz.bats and macos.bats are the only suites under opt/ with their own setup(), so the guard's red should name exactly those two.\n- shellcheck 0.9.0: isolation.bats and macos.bats are clean, and menuz.bats shows only its existing two infos.\n- START (light): /bin/bash ~/Devel/scratch/utilz-ic/runs/run-0091.sh. The red runs bats --filter 'issue 0091' on menuz.bats and isolation.bats, both bashes, and should give 2 reds, each at its own assertion. The green runs menuz.bats, macos.bats and isolation.bats whole, both bashes. It exits 0 whatever happens, so read its rc= lines; it prints per-leg counts.\n- When 0088 lands, the guard re-applies beside its teardown guard. When 0084 lands, the commit re-applies on its head, checked by change. Waiting on your GO.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}
