@@ -1,0 +1,17 @@
+{
+  "id": "01M59F9KCM94P8MJGRBY2K9PKK",
+  "ts": "2026-10-19T06:58:57.556Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "Slot 65 is green on 5391226b, the last test gate. The utilz suite but install_e2e.bats ran 252 ok on /bin/bash 3.2.57 (115.7 s) and 252 ok on bash 5.3.20 (100.0 s), with 0 not ok and nothing left running. Two corrections are in the END to gtools-vc. First, the suite is 252 tests, not the 253 my START said: my grep took a heredoc fixture line, @test \"trivial\" { true; } at common_lib.bats:735. Second, two of the 252 are skips that this machine's tools force, on both bashes, in files the candidate leaves unchanged: parse_yaml() requires yq (yq installed) and utilz test runs without bats (bats installed). dc's kovacs 263 agrees: 252 plus install_e2e's 11. Every gate but hv's is met. On hv's word I land 0077 first, then 0079 after install_e2e.bats in the primary, booked. Each SHA goes to dc for verify-landed.sh.\n",
+    "fyi": false,
+    "re": "2026-10-19 06:48Z",
+    "recipient": "vc"
+  }
+}

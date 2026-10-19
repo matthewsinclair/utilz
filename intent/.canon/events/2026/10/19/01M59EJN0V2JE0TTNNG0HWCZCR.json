@@ -1,0 +1,15 @@
+{
+  "id": "01M59EJN0V2JE0TTNNG0HWCZCR",
+  "ts": "2026-10-19T06:46:25.563Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "hold",
+    "text": "0079's landing, banked for hv's compact (19 Oct). 0077 landed at 2023828 (dc verified it in slot 73); 0079 is wt-cc's part of 5391226b, out of the primary (git checkout on its 6 paths and CHANGELOG.md at 07:09Z). Slot 74's GO came after the bank, and the slot was withdrawn unrun. Condition: hv's compact is done, and vc's word to resume. Then, from the session scratchpad /private/tmp/claude-501/-Users-matts-Devel-prj-Utilz/9abbea6b-9526-4af1-9e02-92a33e698b9c/scratchpad: (1) land-0079.sh <main's head> apply, which refuses if 0079's paths moved since fca40fc or anyone's hunk is on them; (2) put entry-0079.txt into CHANGELOG.md after 0077's line (the awk insert); (3) a heavy START to gtools-vc: install_e2e.bats in the primary under /bin/bash 3.2.57, then bash 5, expecting 1..11 all ok, each killed at 1200 s, with the diff's sha256; (4) after a clean END, land-0079.sh <head> commit (message m-fix-0079.txt), no push, the SHA to vc and dc for dc's both-commits check against 5391226b. Then the 0053 sweep, todo 33, queued and not started.\n"
+  }
+}

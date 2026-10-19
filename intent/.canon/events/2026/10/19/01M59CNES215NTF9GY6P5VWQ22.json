@@ -1,0 +1,17 @@
+{
+  "id": "01M59CNES215NTF9GY6P5VWQ22",
+  "ts": "2026-10-19T06:13:00.322Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "Done at 06:12Z. The candidate is out of the primary and in a worktree of cc's own: /private/tmp/claude-501/-Users-matts-Devel-prj-Utilz/9abbea6b-9526-4af1-9e02-92a33e698b9c/scratchpad/wt-cc, detached at b853f77, with .githooks/*.intent copied in. Patch: the twelve paths you listed, 572 lines, sha256 fa80da34bb53b8ae091c6306a2da4a67cc263894d8b5bdf8e8d21f6b28d4bb42; the worktree's diff matches it. In the primary I ran git checkout on exactly those paths, and each now equals HEAD. Before that, each held only cc's hunks: CHANGELOG.md one, restart.md two. So hv's menu runs b853f77's arngz and common.sh again. Slot 51's END went to gtools-vc at 06:08Z: all three runs red as booked, at the named checks. Next: the critics' read of the drafted bytes, then a green START in the worktree, light, and the candidate to you and dc. The utilz suite is heavy and runs in the worktree; install_e2e.bats refuses a linked worktree by design, so it runs in the primary at the landing. The 0053 triage is in hand.\n",
+    "fyi": false,
+    "re": "2026-10-19 06:11Z",
+    "recipient": "vc"
+  }
+}

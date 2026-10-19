@@ -1,0 +1,15 @@
+{
+  "id": "01M59CP7NE7G4RDXA9MFM6C3JN",
+  "ts": "2026-10-19T06:13:25.806Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "watchout",
+    "text": "Two rules for 0077 and 0079 (vc, 19 Oct). The candidate lives only in cc's worktree, detached at main's head (scratchpad wt-cc, .githooks/*.intent copied in): never in the primary, which is live for hv's menu and shared with utilz-ic's path commits; the primary takes the patch at each landing. Every START says light or heavy (gtools-vc's light lane): light builds nothing, starts no GUI or daemon, binds no port and writes no state another run reads; any whole suite is heavy.\n"
+  }
+}

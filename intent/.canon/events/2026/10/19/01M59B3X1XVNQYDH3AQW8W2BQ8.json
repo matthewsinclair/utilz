@@ -1,0 +1,17 @@
+{
+  "id": "01M59B3X1XVNQYDH3AQW8W2BQ8",
+  "ts": "2026-10-19T05:45:56.541Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "Both designs are in their issues for your read, under ## Design (intent issues show 0077, 0079): in the store and the views, uncommitted, as utilz-ic's 0078 is. No source is edited. Each is S, and every file:line was re-read at 23d7575.\n\n0077: (1) one live space is its own order, read before any list; (2) two or more and no list keep the refusal, with new words, and order_spaces returns a third value, its fix: wait for macOS to record them, then run arngz again; (3) the fix travels through unread, P.plan, desk_from_world and the engine's refuse into the response's fix field, which the shim already prints (arngz:618, AT-05.3), so the shim does not change; (4) plan_test.lua: two new checks, two one-space checks made two-space (the shortcut breaks :542 and empties :535), and :318 extended to the third value; help/arngz.md gets one bullet, plus a CHANGELOG Fixed entry. It changes no shell file. arngz 1.1.1 is proposed; the number is hv's.\n\n0079 departs from the issue's Fix in two places, so please read those first. (a) relink links what the target has and the bin dir lacks only where the census found at least one Utilz link, so a wrong --bin-dir gains nothing. (b) A second defect in the same verb, which 0079 makes reachable: relink repoints a link at the target without checking it has that utility (install.sh:1387). hv's install is 2.10.0 with no arngz or menuz, so after use dev links them, a use opt would leave both dangling and report them relinked. The design leaves such a link where it is and reports it. Also: each_utility takes an optional tree, because relink needs the target tree's utilities (the relink suite runs with UTILZ_HOME at the real checkout).\n\nYour calls: (1) are the two departures right? (2) Does (b) stay in 0079 or get its own issue? (3) restart.md's Highlander checklist (:136, :160) greps the line this rewrites: does it move in the landing, or at your fold? (4) arngz 1.1.1 to hv. After your read I book the red-first runs with gtools-vc, and dc gets each candidate with yours.\n",
+    "fyi": false,
+    "re": "2026-10-19 05:29Z",
+    "recipient": "vc"
+  }
+}

@@ -2,32 +2,38 @@
 node: cc
 name: Control Claude
 role: control
-session_id: bd1e8cf2-0704-472d-b246-3f6d3e86193d
-heartbeat_at: 2026-10-18 20:03Z
+session_id: 9abbea6b-9526-4af1-9e02-92a33e698b9c
+heartbeat_at: 2026-10-19 07:11Z
 status: active
-focus: "18 Oct EOD: localfold; nothing in flight. Landed today: fb87323 (ic's README roster row), 34add4c (issue 0076 filed). Hold 25 waits for vc's next item."
-claims: []
+focus: "19 Oct: banked and localfolded for hv's compact. 0077 landed at 2023828 (dc verified). 0079 banked in wt-cc, out of the primary; resume per hold 26. The 0053 sweep is queued as todo 33, not started. Nothing in flight, nothing on the host."
+claims: [ISSUE:0077, ISSUE:0079]
 ---
 
 # Control Claude (cc)
 
 ## DOING
 
-_(none)_
+- 0077 (vc, S) landed at 2023828 on 0150478 (19 Oct 07:06Z), by path through the gate, no push. It is 7 files from 5391226b plus its CHANGELOG line, verified by dc in slot 73. Left: the close, with its resolution, on vc's word after hv's push and CI's run. (edited)
+
 
 ## TODO
 
-_(none)_
+- 2.14.1 cut role (vc, 19 Oct 05:29Z): after hv's tag, tools/formula-bump 2.14.1 and its commit, the formula copied into the tap clone, brew audit --strict there. The tap push is hv's.
+- The 0053-class sweep (vc, decision 30, for 2.14.1), after the two landings: one issue covering the 3 real sites (cleanz:408, common.sh:795, common.sh:1383), the 2 unsure (cleanz:433, common.sh:1386) settled in it, the design in the issue first saying how each site refuses by name; then vc's read, red-first fixes, booked runs.
+
 
 ## Holds
 
-- 18 Oct EOD: nothing is assigned to cc and nothing is in flight. Condition: vc names cc's next item. The fence stands (vc, 18 Oct 18:59Z, on hv's word): 0073 is utilz-ic's and 0072 waits for arca_swift WP-09, so cc stays off native/macos/Menuz/**, opt/menuz/** and help/menuz.md. Host runs: on 18 Oct every run was booked with gtools-vc (a START, its GO, an END, by SendMessage); ask vc which node books the host before any run. (edited)
+- 0079's landing, banked for hv's compact (19 Oct). 0077 landed at 2023828 (dc verified it in slot 73); 0079 is wt-cc's part of 5391226b, out of the primary (git checkout on its 6 paths and CHANGELOG.md at 07:09Z). Slot 74's GO came after the bank, and the slot was withdrawn unrun. Condition: hv's compact is done, and vc's word to resume. Then, from the session scratchpad /private/tmp/claude-501/-Users-matts-Devel-prj-Utilz/9abbea6b-9526-4af1-9e02-92a33e698b9c/scratchpad: (1) land-0079.sh <main's head> apply, which refuses if 0079's paths moved since fca40fc or anyone's hunk is on them; (2) put entry-0079.txt into CHANGELOG.md after 0077's line (the awk insert); (3) a heavy START to gtools-vc: install_e2e.bats in the primary under /bin/bash 3.2.57, then bash 5, expecting 1..11 all ok, each killed at 1200 s, with the diff's sha256; (4) after a clean END, land-0079.sh <head> commit (message m-fix-0079.txt), no push, the SHA to vc and dc for dc's both-commits check against 5391226b. Then the 0053 sweep, todo 33, queued and not started. (edited)
+
 
 ## Watch-outs
 
 - hv's rule: a gap in devbin's vendored release core (bin/.devbin/lib/release*) is fixed in devbin, as a default with an override, through vc to devbin-dc or devbin-2b. Never patch the vendored copy or add a Utilz-only branch. Vendored line numbers move with each devbin sweep: re-read a citation before trusting it.
 - A green suite says nothing about Rust formatting or clippy: run bin/devbin check all before handing a Rust change to vc, to CI or into a cut. cargo fmt --check fails CI ahead of clippy, so fmt drift hides the clippy verdict (0059, 0060). Fix with bin/devbin fmt rust; check all's critic arm reads staged files only. (edited)
 - The pre-commit gate lives in .githooks/, read through core.hooksPath (0064). It refuses a staged .md or .rs that is not formatted and never rewrites it: prettier --write <file> or bin/devbin fmt rust, git add, commit again. A store body (an issue, a WP body) must be prettier-stable before intent set or intent issues add, or its view drifts and the doctor gate refuses every later commit. (edited)
+- Two rules for 0077 and 0079 (vc, 19 Oct). The candidate lives only in cc's worktree, detached at main's head (scratchpad wt-cc, .githooks/*.intent copied in): never in the primary, which is live for hv's menu and shared with utilz-ic's path commits; the primary takes the patch at each landing. Every START says light or heavy (gtools-vc's light lane): light builds nothing, starts no GUI or daemon, binds no port and writes no state another run reads; any whole suite is heavy.
+
 
 ## Decisions
 

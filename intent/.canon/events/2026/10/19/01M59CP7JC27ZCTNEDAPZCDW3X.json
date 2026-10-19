@@ -1,0 +1,15 @@
+{
+  "id": "01M59CP7JC27ZCTNEDAPZCDW3X",
+  "ts": "2026-10-19T06:13:25.708Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "doing",
+    "text": "0053-class triage (vc, S, read-only): for each one-line var=$(... | ...) assignment with no || true, and each x=$(f) where f ends in a pipeline, ask whether user input can fail the probe and whether a guard after it would then never print; report real, harmless and unsure counts to vc, with file:line for each real one. No source edit and no issue until hv answers in or out.\n"
+  }
+}

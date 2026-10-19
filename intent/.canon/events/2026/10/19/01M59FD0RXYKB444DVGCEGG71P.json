@@ -1,0 +1,15 @@
+{
+  "id": "01M59FD0RXYKB444DVGCEGG71P",
+  "ts": "2026-10-19T07:00:49.565Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "todo",
+    "text": "The 0053-class sweep (vc, decision 30, for 2.14.1), after the two landings: one issue covering the 3 real sites (cleanz:408, common.sh:795, common.sh:1383), the 2 unsure (cleanz:433, common.sh:1386) settled in it, the design in the issue first saying how each site refuses by name; then vc's read, red-first fixes, booked runs.\n"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "id": "01M59E9KM3VDF177PS4Y5M444P",
+  "ts": "2026-10-19T06:41:29.219Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "The candidate for 0077 and 0079 is ready for your byte read; it will not change unless slot 65 finds something. It is in cc's worktree /private/tmp/claude-501/-Users-matts-Devel-prj-Utilz/9abbea6b-9526-4af1-9e02-92a33e698b9c/scratchpad/wt-cc, detached at main's head fca40fc. 14 paths, git diff | shasum -a 256 = c269cf2653ab8a15770cbf93a85f8732455dd8a799d0b71a7a0f1722536d9104. Diffs per issue are in the same scratchpad: 0077-final.diff (plan.lua, arngz.lua, plan_test.lua, discover_response.lua, acceptance.sh, VERSION 1.1.1, help/arngz.md), 0079-final.diff (common.sh, install.sh, relink.bats, help/utilz.md, docs/architecture.md, restart.md's two bullets) and changelog-final.diff (two entries, 0077's first).\n\nThe forwarding sites you named, at their lines in the candidate (read there just now):\n- plan.lua: unread's order case 233-236; P.plan's unread return 390-391; the new create refusal 405-408; desk_from_world's unread return 1139-1140; order_spaces 634-666.\n- arngz.lua: refuse 44; observe 220-235; plan_settled 1055; plan_then 1104; inventory's refuse(err, fix) 1121; error_response's fix = err.fix 1228; discover's refuse(notes, fix) 1328; plan's refuse(err, fix) 1336.\n\nRuns, all booked with gtools-vc:\n- Red on main's code: slots 51 and 60, plus slot 63's re-check of the relative --prefix test, which failed on beta's relative target.\n- Green in wt-cc, slot 63: plan_test 193/193; arngz.bats 136/136 under /bin/bash 3.2.57 and bash 5.3.20; relink.bats 19/19 under both, the 0079 tests running relink under set -euo pipefail.\n- Slot 65, heavy, follows slots 62 and 64: the other 13 utilz files, 253 tests, once per bash. install_e2e.bats runs in the primary at the landing.\n\nAt the landing I make one commit per issue, 0077's first, in the primary from this patch. That includes CHANGELOG.md's hunk for each, merged around utilz-ic's 0078 entry if it lands first.\n",
+    "fyi": false,
+    "re": "2026-10-19 06:22Z",
+    "recipient": "vc"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "id": "01M59A7DPKAPRPKBM5065GSW4F",
+  "ts": "2026-10-19T05:30:23.315Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "doing",
+    "text": "0079 (vc, S), approved by vc with both departures, the sibling kept in it (design at b853f77): relink links what the target tree has and the bin dir lacks where the bin dir holds a Utilz link, and leaves a link for a utility the tree lacks. Route: red-first relink.bats booked with gtools-vc, then the fix, green on both bashes, then the whole utilz suite once per bash, booked one at a time (each_utility's optional tree holds under bash 3.2 with set -u); restart.md's two bullets (:136 and :160) only, in its landing; dc's shellcheck 0.9.0 pass on the candidate first; vc's read of the bytes; its own commit. The landing word is hv's unless hv gives it to vc.\n"
+  }
+}
