@@ -671,6 +671,58 @@ Two choices are yours:
 
 Localfold for hv's compact committed at 370eb44: 37 files, cc's four views and its 33 events, all of subject cc, by path, no push. The primary holds nothing of cc's code. 0081's candidate 3ca98607 is banked in wt-0081, and hold 27 carries the exact resume state: critic-shell's outcome on 3ca98607, re-run if its report is lost; dc's kovacs leg on the final bytes; the landing by your steps; then 0084's build (your two points for its bytes are in todo 36), 0085's, and 0083's prez part. Holding for the compact, no new runs.
 
+## (2026-10-19 10:09Z) (handled)
+
+0081: critic-shell's review of 3ca98607 is back, and three calls in it are yours. It is runs/0081-critic-1.md in my scratchpad (sha256 4c5d8f8f): no critical findings, three warnings, five notes. Nothing ends a verb under errexit or breaks on bash 3.2. My proposed amendments, items 10 to 17, are 0081-amend2.md beside it (52fa3aef), prettier-stable in 0081's body.
+(a) Fold the not-one-map shapes into 0081 (warning 3, item 10). yq answers a key of a yaml whose top level is a string or a number with '' and status 0, and of two documents with both answers. So on 3ca98607 those still read as absent fields, [5/7] calls them configured while [6/7] refuses them, and two documents count twice, the first as a version incompatibility. get_util_metadata would answer 2 for a yaml that is not one map, asking yq's type only when the answer is empty or runs to more than one line. I recommend yes: otherwise 0081's own CHANGELOG line is false for those shapes.
+(b) Install's words (warning 2, item 11). With install: written as a list, yq cannot index .install.prefix, and the approved words say "utilz.yaml cannot be read" of a file that parses. They become "install.prefix cannot be read from <path>: <reason>". I recommend yes.
+(c) One path helper, util_yaml_path, for the nine places that build opt/<name>/<name>.yaml by hand (note 4, item 15), five of them outside 0081's lines. I recommend yes, as Highlander.
+Within the design: the tests pin the reason in yaml_read_error's own words (warning 1, item 12); four small fixes from the notes (item 13); a version_file that cannot be opened answers 1 (item 14, on HEAD); and the docs (item 16). Size stays S.
+Seen on HEAD, and I propose a new issue rather than 0081: doctor's [5/7] calls every utility properly configured having read no yaml, for a utility with none (named nowhere, no issue counted) and when yq is missing. cc's, XS, after 0084, whose path_without its no-yq test needs. Say if you want it filed, or folded in.
+Meanwhile I make items 12, 13 and 16 in wt-0081, with no runs. On your word: the amendment into 0081's body, the rest of the edits, then a START to you, light for the changed tests (red on main's code and on 3ca98607's, green, three mutations, both bashes), then heavy for the utilz suite on both bashes. Then the bytes to you, and dc's kovacs leg.
+
+
+## (2026-10-19 10:20Z) (handled)
+
+0081: amendments 10 to 17 are in the body at f6d2040, and the amended candidate is ready for your read while the Mac is closed. It is aeae4f6325ea43757223348e87b30f1030aac5564a9ebbf7feb9353cd80bcbbc: 7 files, 485 lines, saved as 0081-candidate-v2.diff in my scratchpad, and live in wt-0081 at d7166e4.
+Against 3ca98607 it adds:
+- util_yaml_path, used in all nine places.
+- get_util_metadata's type check: status 2 for a top-level string or number and for two documents, asked only of an empty or multi-line answer. Also status 1 for a version_file that cat or awk cannot open.
+- Install's "install.prefix cannot be read from <path>: <reason>".
+- [5/7] keeps the name alone and asks the reason where it prints the line. Its two warn lines read true for one utility.
+- show_version's comment on its description read.
+- The tests pin yaml_read_error's own words: a top-level list for show_version, two documents for [5/7], and install: as a list for install.
+- A new test for item 10, and one for item 14 (a VERSION of mode 000, skipped only for a user who can still read it).
+- [5/7]'s baseline check, and the version-home test now names an unreadable yaml.
+- The docs and the CHANGELOG line.
+bash -n is clean on both bashes, and prettier is clean on the three markdown files. gtools-vc has queued slots 126 (light) and 127 (heavy) for after the cut's step 5. 0087 is filed at bfd86cd (low, XS, mine, after 0084) and claimed. After both ENDs, the bytes go to dc for the kovacs leg.
+
+
+## (2026-10-19 10:29Z) (handled)
+
+0085: one amendment and the bytes, for your read.
+(7) Amendment 7, in the body at a5a9153: a dependency entry written as a list ends doctor today. yq cannot ask a list for a name and exits 1 (measured), and the sweep's read of the name is a bare assignment (common.sh:898 on main), so doctor stops there under set -e with no verdict, 0053's class. The read takes `if !`, so a list entry is refused in item 1's words, "<list>[<i>] is a list, not a map with a name". One helper, dependency_entry_fault, words all three refusals from the entry's type. A third test pins it.
+The bytes are built on 0081's candidate: 2a49ec861386928689dde7deb007eb1b27d3e46dc5cc54af8c60ecc64b21a1c5, 4 files (common.sh, common_lib.bats, the developer guide, CHANGELOG.md), saved as 0085-candidate.diff in my scratchpad and live in wt-0085, with aeae4f63 staged as its base. bash -n is clean on both bashes and prettier on the markdown. The red and green go to gtools-vc as one light START, after the cut's step 5: (A) the 3 tests red on 0081's code, (C) 22 green with 0081's and 0080's tests.
+A sequencing call for you: 0085 needs only 0081, not 0084, which waits on 0082's landing for test_helper.bash, cryptz.bats and macoz.bats. I recommend 0085 land straight after 0081, then 0084 on 0082's head, then 0087.
+
+
+## (2026-10-19 10:33Z) (handled)
+
+0083's prez part (items 7, 15 and 16): my design draft, items 20 to 24, is 0083-prez-design.md in my scratchpad, for your read.
+- open_presenting asks browser::find once and keeps its refusal: a --browser that is not there is still an error, never a fallback.
+- With no browser named and none found, fallback_opener(os, lookup, no_browser) chooses open on macOS and xdg-open elsewhere and looks it up on PATH. It returns the opener, or refuses with exit 2, keeping the finder's list of probed paths and naming the opener.
+- os and lookup are passed in, so both platforms are tested on either, and no test touches PATH.
+- Red first, on a first build that keeps main's behaviour (open everywhere, no lookup).
+- help/prez.md:273 is corrected: it says present refuses when it finds no browser, and it falls back instead.
+- prez goes to 2.5.2, with one CHANGELOG line under Fixed, check all before your read, and dc's kovacs leg for the crate's tests.
+It goes into 0083's body after the cut's step 5, since the commit's gate would load the Mac during it.
+For dc: 0083's body is not prettier-stable today. Item 18's closing paragraph wants a blank line before item 19, so my append carries prettier's one blank line there, and nothing else of the body changes.
+
+
+## (2026-10-19 10:37Z) FYI only -- no response needed. (handled)
+
+cc's localfold for hv's compact is committed at d158c9c, after a1e0209, which puts 0083's prez part (items 20 to 24) into its body with prettier's one blank line and nothing else of dc's text changed. The primary holds none of my code. 0081's aeae4f63 is banked in wt-0081, and 0085's 2a49ec86 in wt-0085, over aeae4f63 staged. Hold 28 has the exact resume order: slots 126 to 128 on gtools-vc's GOs, dc's kovacs leg, 0081's landing after 0082's, 0085's straight after it, then 0083's prez build, 0084 on 0082's head, and 0087's design. I'm holding now, with no new runs and no pushes until after my compact.
+
 ---
 
 _Generated by Intent v3 from the whiteboard model. Do not edit this file -- it is rendered from the model, and `intent doctor` reports any hand-edit as skew._

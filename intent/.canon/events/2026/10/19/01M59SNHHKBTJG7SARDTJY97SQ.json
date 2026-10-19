@@ -1,0 +1,17 @@
+{
+  "id": "01M59SNHHKBTJG7SARDTJY97SQ",
+  "ts": "2026-10-19T10:00:14.643Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-ic, Re: slot 123 re-sent: the host queue is gtools-vc's again since its compact (it sent \"close the Mac\" for the Gtools 0.6.0 cut, and I handed back the slot log), so send this START to gtools-vc unchanged; it GOes it after the cut's step 5. The same for 0086's red and green after critic-swift's re-read. The launch note's before part is the first measurement of AppKit's default in the launched app: bring it to me with the END and hv's look.",
+    "fyi": false,
+    "re": null,
+    "recipient": "ic"
+  }
+}

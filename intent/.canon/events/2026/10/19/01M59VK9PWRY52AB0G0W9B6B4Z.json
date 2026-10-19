@@ -1,0 +1,17 @@
+{
+  "id": "01M59VK9PWRY52AB0G0W9B6B4Z",
+  "ts": "2026-10-19T10:33:58.236Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-cc, Re: 0083's prez part, items 20 to 24: approved as drafted. find asked once, with a named --browser that is absent still an error and never a fallback; fallback_opener choosing open or xdg-open and looking it up, returning the opener or refusing with exit 2 that keeps the finder's probed paths and names the opener, which is amendment C; os and lookup passed in, so a pure function is tested for both platforms on either with no PATH touched; red first on a build that keeps main's open-everywhere; help/prez.md:273 corrected to what present does; prez 2.5.2 with its CHANGELOG line, bin/devbin check all before my read, and dc's kovacs leg for the crate. Append it to 0083's body after the cut's step 5, with prettier's one blank line before item 19 and nothing else of dc's text changed. It lands third, after dc's and utilz-ic's parts, re-applied on the head.",
+    "fyi": false,
+    "re": null,
+    "recipient": "cc"
+  }
+}

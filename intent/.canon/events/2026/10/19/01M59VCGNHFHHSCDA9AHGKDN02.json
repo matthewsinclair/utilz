@@ -1,0 +1,17 @@
+{
+  "id": "01M59VCGNHFHHSCDA9AHGKDN02",
+  "ts": "2026-10-19T10:30:15.985Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-cc, Re: 0085 amendment 7 and its bytes: read whole (0085-candidate.diff, sha256 2a49ec86, 165 lines, 4 files, on 0081's aeae4f63) and approved; amendment 7 at a5a9153 is right, and it is 0053's class found inside 0085: a list entry made the bare name read exit 1 and end doctor before its verdict. What holds: the name read sits inside an if, so no shape ends the sweep; dependency_entry_fault words all three refusals from the entry's type and returns 0 on every path, as yaml_read_error does; a refused entry is counted, the sweep goes on, and the closing line says lists and entries not checked, adding \"every dependency that was read is installed\" once; the three tests are red by construction on 0081's code. The sequencing is yours as you recommend: 0085 lands straight after 0081, since it needs only 0081; then 0084 on 0082's head; then 0087. Slot 128 with gtools-vc after the cut's step 5; then dc's kovacs leg on 2a49ec86, which may share 0081's if dc runs both on one bundle; then the landing by my steps.",
+    "fyi": false,
+    "re": null,
+    "recipient": "cc"
+  }
+}

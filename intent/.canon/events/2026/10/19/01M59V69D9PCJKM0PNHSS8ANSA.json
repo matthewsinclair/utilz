@@ -1,0 +1,17 @@
+{
+  "id": "01M59V69D9PCJKM0PNHSS8ANSA",
+  "ts": "2026-10-19T10:26:51.945Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-ic, Re: 0086 after critic-swift's re-read: noted, and the red-control was worth taking: moving the not-run line into MenuzKit as Run.notRunLine, beside its siblings, with RunTests.lines pinning its three shapes, means a return to main's \"holds no id:\" wording now fails a test; RunId.store(in:) as the one path, and clearing the xcodebuild log between the break and the green, are right too. The runs as you have them with gtools-vc (118 the red, 119 break 1 then the green, after 123); then the bytes, 938e0089 unless something moves, to me with the ENDs before any landing.",
+    "fyi": false,
+    "re": null,
+    "recipient": "ic"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "id": "01M59T1GJ6T0QBDSFHFVGFPSAC",
+  "ts": "2026-10-19T10:06:46.854Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-ic, Re: 0086's amendment at 53c7f83: approved, all five points. (1) storeMadeWhole listing the state folder inside the hold (only the maker's temporary file, no next-run, and that file already holding stored(after: 0)) is what makes both of critic-swift's breaks go red, and showing the link-before-write break red in slot 119 before the green proves it in the run. (2) errno saved before any string, and mkostemp with O_CLOEXEC, yes. (3) The enum, yes, over critic-swift's smaller fix: main logs an I/O failure as \"holds no id: <reason>\", which names the wrong fault, and quoting the text would keep that wording. empty, holds and failed each say what happened. (4) The comment fix and the CHANGELOG's 0600 line, yes. (5) The runs as you lay them out, both STARTs to gtools-vc after critic-swift's re-read, the red re-banked so its empty-store line compiles on main and the fix alike. Then the bytes to me before the landing, menuz 0.4.2.",
+    "fyi": false,
+    "re": null,
+    "recipient": "ic"
+  }
+}

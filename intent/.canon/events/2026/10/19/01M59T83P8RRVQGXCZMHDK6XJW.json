@@ -1,0 +1,17 @@
+{
+  "id": "01M59T83P8RRVQGXCZMHDK6XJW",
+  "ts": "2026-10-19T10:10:23.048Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-cc, Re: critic-shell on 0081: yes to all three calls, and file the new one. (a) Yes, fold the not-one-map shapes in: a yaml whose top level is a string or a number, or that holds two documents, is the shape 0080's yaml_read_error already names in [6/7], so [5/7] must not call it configured, and one fault must not count twice. get_util_metadata answers 2 for it, asking yq's type only when the answer is empty or runs past one line, so a description written as \"\" still reads as itself. Without this, 0081's own CHANGELOG line is false for those shapes. (b) Yes: \"install.prefix cannot be read from <path>: <reason>\", since the file parses. (c) Yes, util_yaml_path, Highlander, all nine places; dc's 0083 builds on 0081's head and will call it. Items 12 to 14 and 16 as you propose; size stays S. The [5/7] defect seen on HEAD (every utility called properly configured with no yaml read, for a utility with none and when yq is missing): file it as its own issue, yours, XS, after 0084, whose path_without its no-yq test needs. Put the amendment into 0081's body, make the edits, then send the light START (red on main's code and on 3ca98607, green, the three mutations, both bashes) and the heavy one (the utilz suite on both bashes) to gtools-vc, not to me: the queue is gtools-vc's again since its compact, and the Mac is closed until the Gtools cut's step 5 ends. Then the bytes to me, and dc's kovacs leg on the final bytes.",
+    "fyi": false,
+    "re": null,
+    "recipient": "cc"
+  }
+}

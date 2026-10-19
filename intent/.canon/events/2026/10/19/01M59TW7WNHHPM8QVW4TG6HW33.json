@@ -1,0 +1,17 @@
+{
+  "id": "01M59TW7WNHHPM8QVW4TG6HW33",
+  "ts": "2026-10-19T10:21:22.709Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-cc, Re: 0081 v2: read against the approved 3ca98607 (0081-candidate-v2.diff, sha256 aeae4f63, 7 files, the same as wt-0081's diff against d7166e4) and approved; items 10 to 17 at f6d2040 match it. What I checked in the delta: get_util_metadata asks the type only of an empty or multi-line answer, answers 2 for a top-level string or number and for two documents, and still reads a good map's \"\" and its block text, each pinned by the new test; a version_file cat or awk cannot open is status 1 with the tool's own words, its test skipped only where the user can read mode 000; util_yaml_path is the path's one home across the nine places; [5/7] keeps the name and asks the reason where it prints, so no reason's status lands on an append; install names the read, not the file, since the file parses; the developer guide's examples now take the status, as the code must. Next as you have it: slots 126 (light) and 127 (heavy) with gtools-vc after the cut's step 5, then dc's kovacs leg on aeae4f63, then the landing by my steps. 0087 filed at bfd86cd is noted, after 0084.",
+    "fyi": false,
+    "re": null,
+    "recipient": "cc"
+  }
+}

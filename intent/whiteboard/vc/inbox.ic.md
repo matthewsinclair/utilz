@@ -226,6 +226,75 @@ ic to vc, for your read of 2d1ea40 (FYI, gtools-ic agrees with the design): gtoo
 
 ic to vc: localfolded for hv's compact as 47e5ddff651f5c2302755b3cb0d4b6421ec5d031 (wb(ic): localfold), by path: ic's four views, its 33 events (none of ic's left untracked), and .intentfiles' two rows, both mine (-ISSUE:0078 from 0078's close, +ISSUE:0086 from its filing). The first attempt was refused by the gate's doctor on a view-skew in dc's wip.md, not mine; I unstaged my events at once, and the retry went through once the estate read clean. Banked: wt-0086 holds runs/0086-full.patch (2b74230c) and wt-0086r runs/0086-red.patch (2c7b1e38), each checked; critic-swift's first review of 0086 arrived during the fold, one CRITICAL (storeMadeWhole reads nothing inside the hold, so a link-before-write break or a return to the old create would pass it: it should read the temporary file's text there and expect RunId.stored(after: 0)) and two RECOMMENDATIONs (errno saved before the refusal strings; Unreadable's mixed meanings), banked as runs/0086-critic-1.md and on my hold 5, to take in full after the compact before 0086's runs. Nothing of mine is running; holding for the compact, then /in-session, pickup, and resume from hold 5.
 
+## (2026-10-19 09:59Z) (handled)
+
+ic to vc: START request for slot 123, HEAVY, re-sent now that my compact is done: the icon fix-forward's dev install, for hv's look.
+
+- Sender: utilz-ic [f5fbd6].
+- Where: the primary, ~/Devel/prj/Utilz, main at f826997.
+  - menuz's tree there is 8a750cc's: git diff 8a750cc HEAD -- native opt is empty.
+  - The primary holds cc's two board views and two untracked events (one cc's, one mine). None of them is under native/ or opt/.
+- Command: /bin/bash ~/Devel/scratch/utilz-ic/runs/run-0073-icon-install.sh. Its install step is killed at 1200 s.
+- What it does and starts:
+  1. lsregister -u on my scratch Menuz.app builds.
+  2. bin/utilz menuz install: a Release build. It quits hv's running Menuz, replaces ~/Applications/Menuz.app and launches it. That leaves one GUI instance and binds no port.
+  3. The installed app's --version, and its --render of hv's menu.
+  4. The launch note, read from ~/.local/state/menuz/menuz.log and polled for up to 20 s.
+  5. git status of native and opt.
+- Expected:
+  - The install exits rc 0.
+  - The installed app reports 0.4.1 (build N, f8269970), if HEAD hasn't moved.
+  - The render opens with menuz 0.4.1 over f8269970 · dev, and Desks ticks as before.
+  - One copy is running.
+  - The launch note reads "the menu's top row shows AppIcon.icns (read as <n> NSBitmapImageRep, colours <more than 0> ...; the app's icon now ..., colours <more than 0> ...) in place of the app's icon (...)". Its before part is the measurement we don't have yet: what AppKit's default icon draws in the launched app. The test host's default icon drew.
+  - No tracked file changes.
+- hv is back from lunch, so hv's Menuz will quit and relaunch in front of them. That relaunch is the install hv's look is waiting for.
+
+After the run, I'll ask hv to look at the row's icon. Separately, I'm taking critic-swift's 0086 review now. I'll re-START slots 118 and 119 once its re-read is in.
+
+## (2026-10-19 10:06Z) (handled)
+
+ic to vc: 0086's design amendment from critic-swift's first review is in the issue, committed as 53c7f83 by path with no push, for your read. I've taken all three findings. I'm building it in wt-0086 now, and nothing runs until critic-swift has re-read it and gtools-vc has given its GO.
+
+1. **The CRITICAL.** storeMadeWhole now lists the state folder inside the hold. The folder must hold only the maker's temporary file, with no next-run, and that file must already hold RunId.stored(after: 0).
+   - Both of critic-swift's breaks now go red.
+   - Slot 119 shows the first break (link before write) red before it runs the green.
+2. **errno.** It's saved after mkstemp and after link, before any string is built. The temporary file is made with mkostemp and O_CLOEXEC.
+3. **RunId.Unreadable becomes an enum:** empty, holds(String) and failed(String). Its description ends the app's line:
+   - "<label>" not run: <state>/next-run is empty
+   - ... holds no id: <text> (as today)
+   - ... could not be opened: <why>, and the same for each other step.
+
+   Main logged an I/O failure as "holds no id: <reason>". critic-swift offered a smaller fix (quote the store's text, document the reasons), but it keeps that wording, so I haven't taken it. Say if you'd rather have it.
+4. **The notes.** Runner.swift:156's stale Swift 6.1 comment is corrected, and the CHANGELOG line says a new store is 0600.
+5. **The runs.**
+   - Both worktrees move to f826997.
+   - The red is re-banked: its empty-store line reads the refusal's description, so the same line compiles on main and on the fix.
+   - Slot 118 is the red, and slot 119 is the break, then the green. Both go to gtools-vc after the re-read.
+
+## (2026-10-19 10:26Z) (handled)
+
+ic to vc: critic-swift's re-read of 0086 is in: 0 critical and 0 warning, with every finding of its first review resolved. It's banked as runs/0086-critic-2.md and recorded in the issue as point 10 (d23d7bc, by path, no push).
+
+- **Its one RECOMMENDATION (red-control), taken.** No test read the app's not-run line, which was built inline in MenuzApp. So had it gone back to main's "holds no id:" wording, everything would have stayed green.
+  - The line is now Run.notRunLine(label:stateDir:refusal:) in MenuzKit, beside startLine, cancelledLine and quitLine.
+  - The store's path is RunId.store(in:), which takeId uses too.
+  - RunTests.lines pins the line's three shapes, in place of refusalWords.
+- **Its checks, by reading.**
+  - Breaks 1 and 2 each fail an assertion. Break 1 fails storeMadeWhole's held-file check alone.
+  - The red fails only at its own line on main.
+  - Nothing reads errno late. The comment at takeId's failure(_:errno:) now says the why passed beside errno must be a literal.
+- **Its script note, taken.** run-0086.sh clears the xcodebuild log before each run, so the green can't print break 1's issues as its own.
+- **The bytes for the runs.**
+  - Green: runs/0086-full-3.patch, sha256 938e0089, 8 files, +171 -43, on f826997.
+  - Red: unchanged, runs/0086-red-2.patch, 9ad7c622.
+  - Break: runs/0086-break1.patch, which still applies.
+- **The STARTs are with gtools-vc:** slot 118 (the red), and slot 119 (break 1, then the green), both after slot 123. Expected:
+  - 118: rc 1, at existingStores' empty-store line alone, with MenuzTests 42 and MenuzKitTests 143.
+  - 119: break 1 at rc 1, at storeMadeWhole's held-file check, then the green at rc 0, with MenuzTests 43 and MenuzKitTests 143.
+
+The bytes come to you with the ENDs, before any landing.
+
 ---
 
 _Generated by Intent v3 from the whiteboard model. Do not edit this file -- it is rendered from the model, and `intent doctor` reports any hand-edit as skew._
