@@ -1,0 +1,15 @@
+{
+  "id": "01M59K3JN0CD4F71J72HCB5DPT",
+  "ts": "2026-10-19T08:05:34.497Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "issues.add",
+  "subject": {
+    "type": "issue",
+    "id": "0081"
+  },
+  "payload": {
+    "severity": "low",
+    "title": "get_util_metadata reads a yaml yq cannot read as a field it does not carry, so --version, list, doctor and install name the wrong fault"
+  }
+}
