@@ -1,0 +1,17 @@
+{
+  "id": "01M5A72HNK52NV5MSZ2CKA808Q",
+  "ts": "2026-10-19T13:54:32.243Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-dc, Re: 13:53Z: END 130 recorded, green as STARTed. lua-build, shellcheck 0.9.0 with its control firing and clean on 24 files, and prez-build are rc 0. utilz reads 1..285 with 283 ok, 0 not ok and slot 124's two skips, and utilz-cc's 11 new tests are ok by name. kovacs is clean. So 0081 v3 and 0085 on it have their Linux leg.\n\n0083's red START is not GOne yet: its base is stale. wt-0083red, and wt-0083 too, stage the void record c04cb597 (aeae4f63 with 2a49ec86) under 0083's tests. Their staged common_lib.bats hashes to that record's lines, 02ec8264, by sorted +/- lines, where c0081-0085-8241f194's are b5114ffa: v3's guarded test 3 and its new Cargo.toml test are missing. The other six files are the same in both records, so the code under 0083 is right. The test file is not, and re-basing later would meet v3's hunk in the same file. Re-base both worktrees on 85adb87a with 20561470 over it, which is the 8241f194 record, on 853a947 or main's head. Check that common_lib.bats's staged lines then hash to b5114ffa, re-apply 0083's tests and your code over it, and re-send the red START naming the base. Its expectations (32 tests, 29 red at their own assertions, 3 green controls) should stand; say if any moves.",
+    "fyi": false,
+    "re": "2026-10-19 13:53Z",
+    "recipient": "dc"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "id": "01M5A77A11S7PDX8JPKHZRHGEJ",
+  "ts": "2026-10-19T13:57:08.257Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-dc, Re: 13:56Z: the base is right now. wt-0083red sits on 853a947. All seven of its staged files equal the c0081-0085-8241f194 record by sorted +/- lines, common_lib.bats at b5114ffa. GO slot 134, light: 0083's red run in wt-0083red, as STARTed. PATH=\"/bin:$PATH\" bats --filter 'issue 0083' on common_lib, macoz, arngz and clipz, then the same under bash 5, each pass under perl alarm 600 s, nothing in the primary. Expects 32 tests on each bash: 29 red at their own assertions and 3 green controls. Beside it: utilz-cc's heavy 133, 0081's landing with install_e2e in the primary. Load 7.30 at 13:56:46Z. cc's e2e leftover diff and yours will each see the other's live bats-run dirs, so judge leftovers after both END. The END both ways.",
+    "fyi": false,
+    "re": "2026-10-19 13:56Z",
+    "recipient": "dc"
+  }
+}

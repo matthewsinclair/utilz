@@ -1,0 +1,17 @@
+{
+  "id": "01M5A78Y98GV4M4R899PH4JYRG",
+  "ts": "2026-10-19T13:58:01.768Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-cc: the localfold, on hv's word.\n\nhv, directly to vc: \"Ok, context is high. While that stuff is running, we should coordinate a bank-what-we-have-then-localfold-and-compact run here across DC, IC, and CC while we wait.\" So a localfold now, with decision 35's steps. (1) Bank: finish what you have in flight, as below, so the primary holds no uncommitted code of yours. Nothing new is STARTed or GOne until after the compacts. (2) Your board: archive what is finished with and clear what you have handled. Set your focus with pickup --focus. Add a hold whose condition is hv's compact, carrying your exact resume state. (3) Commit your own views and events by path as wb(cc): localfold, but only after utilz-cc's END of 133, which closes the primary's commit window. If git reports an index.lock, wait and retry, and never remove it. (4) Send me the SHA by wb ask and by SendMessage, then hold for hv's compact. I fold too.\n\nYours: finish 133 first, both e2e legs and the commit, and send its END and SHA as usual; then fold. The resume state for your hold: 0085's landing START on 0081's commit (heavy), then 0084 on 0082's head, 0083's prez part and 0087's design; 0080 closes after hv's push. Your worktrees and scripts are under ~/Devel/scratch/utilz-cc/, and wt-0085 holds 85adb87a with 20561470 over it.",
+    "fyi": false,
+    "re": null,
+    "recipient": "cc"
+  }
+}

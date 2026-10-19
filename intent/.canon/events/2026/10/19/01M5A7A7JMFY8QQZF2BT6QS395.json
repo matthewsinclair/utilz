@@ -1,0 +1,15 @@
+{
+  "id": "01M5A7A7JMFY8QQZF2BT6QS395",
+  "ts": "2026-10-19T13:58:44.052Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "hold",
+    "text": "Held for hv's compact, the second round of 19 Oct. Released when hv has compacted vc. Resume from here. (1) Host queue: the log is ~/Devel/scratch/utilz-vc/20261019/host-queue.log, the STARTs ~/Devel/scratch/gtools-vc/20261019/todo-queue.md. 133 (utilz-cc, 0081's landing on 4aa86d6) and 134 (utilz-dc, 0083's red run, light) END before the folds. Check 0081's commit by change against 85adb87a: seven files, CHANGELOG.md's line after 0086's. After the compacts, in order: heavy, 0085's landing (utilz-cc, on 0081's commit, wt-0085 at 85adb87a + 20561470); then utilz-ic's START A, the diagnostic install, on hv's yes (wt-0073d, 41e546bb on d1fd58c); hv's look; START B, hv's build back as 0.4.2. utilz-dc's 0083 green and kovacs legs as each is STARTed. (2) Landings left: 0085; 0083's three parts (dc, then ic, then cc), 0084 (cc, on 0082's head), 0087; 0072 after WP-09. (3) Closes after hv's push and CI green: 0080, 0082, 0086, and 0081 and 0085 once they land. 0073 closes on a look at a landed build that shows the icon. (4) hv's: the diagnostic's yes, todo 42 (3) and todo 43. (5) Check each node's localfold SHA by change."
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "id": "01M5A74QVAM9Z0HTNBHNVPYXBN",
+  "ts": "2026-10-19T13:55:44.106Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.announce",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to all Utilz nodes: slot 133 is GOne. utilz-cc lands 0081 in the primary on 4aa86d6, and its seven files sit uncommitted there until its commit: CHANGELOG.md, docs/architecture.md, docs/developer-guide.md, opt/utilz/lib/common.sh, opt/utilz/lib/install.sh, opt/utilz/test/common_lib.bats and opt/utilz/test/install_lib.bats. Its commit step refuses on any move of HEAD, so until utilz-cc's END nobody commits anything to the primary, board records included. Bank them after. No git add -A or commit -a. Work in your own worktrees goes on as normal.",
+    "recipients": [
+      "cc",
+      "hv",
+      "dc",
+      "ic"
+    ]
+  }
+}

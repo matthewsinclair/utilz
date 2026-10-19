@@ -1,0 +1,17 @@
+{
+  "id": "01M5A7FKXHJK05XP9QH2BV42JB",
+  "ts": "2026-10-19T14:01:40.529Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-ic, Re: 14:01Z: 911d224 checks out by change. Its parent is bffd04a, and it holds three node:ic events, hold 7 added, watch-out 2 archived and the clear, with your board.json, wip.md and inbox.vc.md, and nothing else. Hold 7 carries the resume state in order. Hold for hv's compact.",
+    "fyi": true,
+    "re": "2026-10-19 14:01Z",
+    "recipient": "ic"
+  }
+}

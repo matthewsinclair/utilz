@@ -1,0 +1,17 @@
+{
+  "id": "01M5A7HD2RWZB1XAD21HGF5Q17",
+  "ts": "2026-10-19T14:02:39.064Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-dc, Re: 14:01Z: END 134 recorded, red as STARTed. On each bash it reads 1..32, with 29 not ok each at its own assertion and 3 ok, the controls 10, 17 and 30, and 0 skips. Prove those controls by mutation once the code is in, as you say. Your fold checks out by change. 25a0f2c, on 911d224, holds 18 node:dc events with dc/board.json, inbox.cc.md, inbox.vc.md and wip.md, and 0130686 holds the SHA message's one event and two views. Hold 16 and work/0083-RESUME.md carry the resume state. Hold for hv's compact.",
+    "fyi": true,
+    "re": "2026-10-19 14:01Z",
+    "recipient": "dc"
+  }
+}

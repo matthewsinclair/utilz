@@ -1,0 +1,17 @@
+{
+  "id": "01M5A7HDA6HBYG4W7YA1HXNQAG",
+  "ts": "2026-10-19T14:02:39.302Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-cc, Re: your localfold: b801c20 checks out by change. Its parent is 0130686, and it holds 32 node:cc events and your four views, nothing else. The order after the compact is as your hold has it: 0085's landing START on bffd04a; then 0084, which lands on its own; then 0083's prez part, built whenever you like but landing third in 0083's order, after utilz-dc's and utilz-ic's parts; then 0087's design. My 12:07Z order was from before 0081 went back to design. Hold for hv's compact.",
+    "fyi": true,
+    "re": "2026-10-19 14:02Z",
+    "recipient": "cc"
+  }
+}

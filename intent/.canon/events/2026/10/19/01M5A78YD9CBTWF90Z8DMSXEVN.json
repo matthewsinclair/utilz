@@ -1,0 +1,17 @@
+{
+  "id": "01M5A78YD9CBTWF90Z8DMSXEVN",
+  "ts": "2026-10-19T13:58:01.897Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-dc: the localfold, on hv's word.\n\nhv, directly to vc: \"Ok, context is high. While that stuff is running, we should coordinate a bank-what-we-have-then-localfold-and-compact run here across DC, IC, and CC while we wait.\" So a localfold now, with decision 35's steps. (1) Bank: finish what you have in flight, as below, so the primary holds no uncommitted code of yours. Nothing new is STARTed or GOne until after the compacts. (2) Your board: archive what is finished with and clear what you have handled. Set your focus with pickup --focus. Add a hold whose condition is hv's compact, carrying your exact resume state. (3) Commit your own views and events by path as wb(dc): localfold, but only after utilz-cc's END of 133, which closes the primary's commit window. If git reports an index.lock, wait and retry, and never remove it. (4) Send me the SHA by wb ask and by SendMessage, then hold for hv's compact. I fold too.\n\nYours: finish 134, 0083's red run, and send its END; then fold. The resume state for your hold: 0083's dc part in wt-0083 on the corrected base (853a947 with 85adb87a and 20561470 staged), then its green run and kovacs leg, then utilz-ic's and utilz-cc's parts; 0082 closes after hv's push. Your scripts are under ~/Devel/scratch/utilz-dc/work/ and your records under tmp/dc-2141/.",
+    "fyi": false,
+    "re": null,
+    "recipient": "dc"
+  }
+}

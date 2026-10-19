@@ -206,6 +206,51 @@ Command, from the Utilz root: /bin/bash tmp/dc-2141/sc090/kv-window.sh c0081-008
 
 Expects: every step rc 0; the SC2015 control firing; shellcheck 0.9.0 clean on the collector's 24 files, common.sh and install.sh among them; utilz 1..285 with no not ok; the 11 new tests ok by name (0081's 8 and 0085's 3, as the record's approved.diff names them); and only slot 124's two skips. A red is triaged by running 0081 v3 alone before I name whose. kovacs read at 13:46:10Z: up, load 0.16, only the two download dirs in /var/tmp.
 
+## (2026-10-19 13:53Z) Re: 2026-10-19 13:47Z (handled)
+
+utilz-dc to vc: END slot 130, green as STARTed, on record c0081-0085-8241f194 (utilz-cc's 0081 v3 85adb87a and 0085 v2 20561470 on d7166e4; scratch commit 5232b02d from its full bundle, the tree clean). Ran 13:48:54Z to 13:51:32Z, remote exit 0.
+
+- lua-build rc 0 (Lua 5.4.6); shellcheck 0.9.0 from the refetched dir: the SC2015 control fired (rc 1), the step rc 0, clean on the collector's 24 files, 0 advisory; prez-build rc 0 (prez 2.5.1).
+- utilz under bash 5.3.9 on kovacs: plan 1..285, 283 ok, 0 not ok, 2 skips, slot 124's two by name (ok 46 parse_yaml() requires yq, ok 109 utilz test without bats). The 11 new tests ok by name: 0085's three (64 to 66) and 0081's eight (67 to 73 and 199, the Cargo.toml one among them).
+- The run's own gpg daemons killed, no unison archives in its home, and its run dir removed. kovacs read after, at 13:52:21Z: ~/.unison at 2 entries as before, no gpg-agent, dirmngr, keyboxd, unison or bats, and only the two download dirs in /var/tmp.
+
+Logs: tmp/dc-2141/kovacs/c0081-0085-8241f194/ and ~/Devel/scratch/utilz-dc/work/slot130b.log. The host is released. utilz-cc has the results.
+
+## (2026-10-19 13:53Z) (handled)
+
+utilz-dc to vc: START, light: 0083's red run, the new tests on the code before 0083, under bash 3.2 then bash 5.
+
+Worktree ~/Devel/scratch/utilz-dc/wt-0083red, made for this run so wt-0083 can take the code meanwhile: 853a947 with wt-0083's staged base (0081 aeae4f63 and 0085 2a49ec86, the bytes before v3, whose amendment touches only test 3, as you said at 13:32Z), and 0083's tests over it unstaged, git diff 750dcb63 equal to wt-0083's. Five test files: test_helper.bash (stub_platform, a uname first on PATH in the test's own dir, and a suite default), common_lib.bats, macoz.bats, arngz.bats (a Darwin default for its macOS paths, and a uname in the fake-macOS fixtures) and clipz.bats.
+
+Command, from wt-0083red, each pass under perl alarm 600 s: PATH="/bin:$PATH" bats --filter 'issue 0083' opt/utilz/test/common_lib.bats opt/macoz/test/macoz.bats opt/arngz/test/arngz.bats opt/clipz/test/clipz.bats; then the same with PATH="/opt/homebrew/bin:$PATH" for bash 5. It builds nothing, starts no GUI or daemon and binds no port; it writes only bats's temp dirs, with arngz's fixture HOME and clipz's clipboard stubs inside them. On the code before 0083, arngz's apply only reads preferences and asks hs, both recorders there, and macoz refuses at its old check, so nothing on this Mac is touched.
+
+Expects, on each bash: 32 tests, 29 red, each failing at its own assertion, never at a missing helper; and 3 green, the controls that 0083 must keep: doctor on a macOS uname over a fake home, utilz doctor on a macOS uname, and arngz's list, show, delete and current on a Linux uname.
+
+## (2026-10-19 13:56Z) Re: 2026-10-19 13:54Z (handled)
+
+utilz-dc to vc, Re: 13:54Z: START again, light: 0083's red run, on the corrected base.
+
+Both worktrees moved, wt-0083 and wt-0083red: 853a947 with 0081 v3 (85adb87a) staged and 0085 v2 (20561470) over it. Only common_lib.bats changed: its staged blob is ad9c9c82, the one record c0081-0085-8241f194's changed-shell row names, and its staged lines hash to b5114ffa by sorted +/- lines, as you hash them. The other six staged files read the same before and after (7a0047fc). 0083's block in common_lib.bats, 306 lines appended at its end, went back over it unchanged (a8b8fb97 before and after; one hunk, no deletions). wt-0083red's git diff, the tests alone, is now b00b0391.
+
+Command and terms as in my 13:53Z START: from wt-0083red, PATH="/bin:$PATH" bats --filter 'issue 0083' opt/utilz/test/common_lib.bats opt/macoz/test/macoz.bats opt/arngz/test/arngz.bats opt/clipz/test/clipz.bats, then the same under bash 5 (PATH="/opt/homebrew/bin:$PATH"), each pass under perl alarm 600 s. Light: nothing built, no GUI, daemon or port, only bats's temp dirs; nothing in the primary.
+
+Expects, on each bash: 32 tests, 29 red at their own assertions and 3 green controls. Neither number moves: v3's new tests are not 0083's, so the filter leaves them out. No commit to the primary from me until utilz-cc's END of 133.
+
+## (2026-10-19 14:00Z) Re: 2026-10-19 13:57Z (handled)
+
+utilz-dc to vc: END slot 134 (light), red as STARTed. wt-0083red: 853a947 with 0081 v3 and 0085 v2 staged (common_lib.bats at b5114ffa) and 0083's tests over it (git diff b00b0391); bats --filter 'issue 0083' on common_lib, macoz, arngz and clipz.
+
+- bash 3.2.57, 13:57:33Z to 13:57:41Z, and bash 5.3.20, to 13:57:50Z: each 1..32, 29 not ok, 3 ok, 0 skips.
+- Every red test failed at its own assertion (assert_*, fail, or the test's own check), none at a helper.
+- The 3 green are the controls: 10, doctor on a macOS uname over a fake home; 17, utilz doctor on a macOS uname; 30, arngz's list, show, delete and current on a Linux uname. Each will be proven by a one-line mutation once the code is in.
+- Leftovers: /tmp unchanged. One new TMPDIR entry, bats-run-SS47mp, appeared beside utilz-cc's live install_e2e in 133, so it is judged after 133's END.
+
+Log: ~/Devel/scratch/utilz-dc/work/slot134-red.log. The host is released. Localfolding now, on your 13:58Z.
+
+## (2026-10-19 14:01Z) Re: 2026-10-19 13:58Z (handled)
+
+utilz-dc to vc, Re: 13:58Z: localfolded, committed by path as wb(dc) 25a0f2c (25a0f2c4bcece7febf82e316d2247b5602e87325), on utilz-ic's 911d224, after utilz-cc's END of 133 (0081 landed as bffd04a). 22 files: dc's four views and its 18 events since 25f1c21; the gate passed, nothing else was staged, and no dc event is left untracked. This reply's own record follows in one more wb(dc) commit by path. On the board: 134's END (13:59Z); todo 9 and hold 14 archived (130 green, 131 landed); todo 8 at the resume note; watch-out 3's booker brought up to date; hold 16 the compact hold, carrying the resume state; the focus set. The resume state, done and to do in order, is ~/Devel/scratch/utilz-dc/work/0083-RESUME.md, and 0083's work so far is banked in work/0083-wip/ (its unstaged diff c89e9d8a, 8 files, and the base 744efc02). The primary holds no code of mine. Holding for hv's compact.
+
 ---
 
 _Generated by Intent v3 from the whiteboard model. Do not edit this file -- it is rendered from the model, and `intent doctor` reports any hand-edit as skew._
