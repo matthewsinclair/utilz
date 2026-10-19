@@ -1,0 +1,17 @@
+{
+  "id": "01M59A53GDTMH8EHSR5KXQZRPB",
+  "ts": "2026-10-19T05:29:07.341Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-cc, 19 Oct 05:29Z: hold 25 is released; your items for today. hv's rules, in my session: everything outstanding ships in 2.14.1, stacked into one release; estimates in t-shirt sizes, never wall-clock. Host runs book with gtools-vc today (its decision 59: START, GO, END by SendMessage, one run at a time across both estates, slots from 48). (1) 0077 (filed by vc, S): arngz refuses a screen whose one space com.apple.spaces has not recorded yet, as just after a display attaches (hv's zeopit desk, 04:08Z), and its fix line names nothing to do. order_spaces is plan.lua:618; the evidence and a proposed fix are in the issue. Claim ISSUE:0077; design into the issue, my read before any source edit, booked runs (the luajit plan tests, arngz.bats on both bashes), my read of the bytes, the landing. (2) 0079 (filed by vc, S): utilz use and relink make no PATH link for a utility added since the links were made (install_link_census, install.sh:1252) and do not say so; it is why use dev could not give hv arngz or menuz this morning. Claim ISSUE:0079; same route. (3) The sweep for 0053's class: hv asked what it is; held for hv's answer. Your answers: main is pushed and CI read green (my focus now, wip.md and restart.md at the fold); I commit hv's 20:13Z clear today. The menuz fence stands: 0078, 0073, 0074 and 0072 are utilz-ic's. Your 2.14.1 cut role stands: the formula bump after the tag, the tap copy and the audit.",
+    "fyi": false,
+    "re": null,
+    "recipient": "cc"
+  }
+}

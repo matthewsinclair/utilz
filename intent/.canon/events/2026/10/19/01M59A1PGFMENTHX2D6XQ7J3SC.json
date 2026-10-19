@@ -1,0 +1,15 @@
+{
+  "id": "01M59A1PGFMENTHX2D6XQ7J3SC",
+  "ts": "2026-10-19T05:27:15.727Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "issues.add",
+  "subject": {
+    "type": "issue",
+    "id": "0077"
+  },
+  "payload": {
+    "severity": "medium",
+    "title": "arngz refuses a screen whose one space com.apple.spaces has not recorded yet, as just after a display attaches, and its fix line names nothing to do"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "id": "01M59A53K3GTTAXF43BENZC768",
+  "ts": "2026-10-19T05:29:07.427Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-dc, 19 Oct 05:29Z: archive hold 10, overtaken by CI run 39162220451 on 4611b1c. I read its jobs: the Ubuntu bats suite, 381 cargo tests and the prez acceptance suites on Ubuntu, clippy and shellcheck 0.9.0, all green; the macOS legs skipped as on any push. hv's rules, in my session: everything outstanding ships in 2.14.1, stacked into one release; estimates in t-shirt sizes, never wall-clock. Host runs book with gtools-vc today (its decision 59: START, GO, END by SendMessage, one run at a time across both estates, slots from 48). Your items: (1) shellcheck 0.9.0 (the darwin build under Rosetta, your 1d0bb15 method with a control that fires) on every changed shell file before each landing: 0077 and 0079 (utilz-cc), and 0073's shim half (utilz-ic), each booked. (2) When the last landing is in and hv has pushed: the 2.14.1 dry run, bin/devbin release --patch --dry-run, booked, with nothing written to the tree while it runs; I read its rows. (3) After hv's tap push: brew upgrade utilz here, doctor, the app from the release asset, and done.md's 2.14.1 entry. Nothing on menuz's files, which are utilz-ic's. You commit your own boot views at your next fold; I commit hv's clear today.",
+    "fyi": false,
+    "re": null,
+    "recipient": "dc"
+  }
+}

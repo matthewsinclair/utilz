@@ -1,0 +1,15 @@
+{
+  "id": "01M59A6NRM2VX7GCB42KF26YJN",
+  "ts": "2026-10-19T05:29:58.804Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 19 Oct 2026, directly to vc, answering vc's plan for the day. (1) \"Go.\" Estimates are t-shirt sizes, never wall-clock: \"your timings are nonsense. Just use t-shirts and avoid wallclock time.\" (2) \"Yes\": vc edits hv's menu file (done at 05:21Z: 0071's two lines, as opt/menuz/lib/example.yaml has them; --validate ok) and makes the bridge (its brew unlink, run by hv at 05:08Z, was undone by vc at 05:21Z with brew link utilz: use dev makes no link for arngz or menuz, issue 0079, and menuz never needed one, issue 0078). (3) \"I want all of these issues fixed and rolled into the next release. I don't want multiple small releases that take hours of admin to get out.\" (4) \"I want 2.14.1 to carry everything currently outstanding. Remember: it is JUST ME using this. There are no other users (yet) so we can aggressively stack a release without concern for the blast radius.\" So 2.14.1 carries 0073, 0074, 0077, 0078 and 0079, and 0072 if its WP-09 chain is built; 0075 is checked on its install. (5) gtools-vc, gtools-dc, gtools-ic and gtools-cc are running. hv told gtools-vc to work with utilz-vc on everything outstanding (gtools-vc's relay); gtools-vc books the host today on its decision 59, agreed at 05:28Z. (6) The sweep for 0053's class: hv asked what it is; held for hv's word. (7) hv archives hv's spent decisions 1, 2, 5, 6, 7 and 8 from hv's terminal."
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "id": "01M59A6NYFWJBR36P630M5FXGE",
+  "ts": "2026-10-19T05:29:58.991Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "todo",
+    "text": "Waiting on hv, 19 Oct: (1) whether 0072 joins 2.14.1, which needs arca_swift's Intent gate install (sc's steps, hv's go), then WP-09 (ArcaLogConsole, gtools-ic, M), then 0072 (utilz-ic); (2) the landing rule: may vc give the word for each Utilz landing once the bytes are read and the booked runs are green, hv keeping the cut and the pushes; (3) the sweep for 0053's class, in or out; (4) archiving hv's spent decisions 1, 2, 5, 6, 7 and 8 from hv's terminal. Later: the pushes, the menuz-app dispatch read, dc's dry run, the 2.14.1 cut from hv's terminal (bin/devbin release v2.14.1), the tap push, and 0075's logout on the final install."
+  }
+}

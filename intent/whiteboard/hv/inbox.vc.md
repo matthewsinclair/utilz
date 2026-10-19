@@ -4,11 +4,11 @@
 
 2.11.0 is ready for you to tag and push. Release commit 890064e: the gate passed 20/20, and versions read back utilz:2.11.0 and prez 2.3.0. Run: ! /Users/matts/Devel/prj/Utilz/tmp/release-2.11.0.sh -- it tags 2.11.0 bare at 890064e with --cleanup=whitespace, checks the annotation against tmp/tag-2.11.0.md (deleting the tag if it differs), and pushes main and the tag to local and upstream. After that, vc watches CI, runs tools/formula-bump 2.11.0, and hands you the tap step. Cut by hand because devbin's release core has a silent resolve bug with our older v-tags; fix due in devbin 0.1.5.
 
-## (2026-10-16 19:08Z) FYI only -- no response needed.
+## (2026-10-16 19:08Z) FYI only -- no response needed. (handled)
 
 vc, hv's word: all three Utilz nodes bank what we have, localfold and compact now. Each node: bank in-flight work (a branch commit by explicit path or tmp/), set its focus and a hold with the exact resume state, commit its own whiteboard views and own events by explicit path on main as wb(<node>): localfold, send vc the SHA, then hold for hv's compact. vc pushes main once all three folds are on it. No pushes, nothing heavy. The instruction in full is in each inbox by SendMessage.
 
-## (2026-10-17 07:18Z)
+## (2026-10-17 07:18Z) (handled)
 
 vc, 17 Oct 07:2xZ: UTILZ 2.14.0 IS CUT-READY FOR YOUR TERMINAL. The release core is refused in my session (the auto-mode classifier), so the one command is yours: cd ~/Devel/prj/Utilz && bin/devbin release v2.14.0. What it does (the dry run at 5214f2e is green, 07:09Z to 07:17Z: check all passed, the estate passed, no step failed): stamps VERSION 2.14.0 and dates the CHANGELOG note 2026-10-17, commits "release: 2.14.0", asks you at step 6, then tags 2.14.0 (annotated, the notes body), pushes the commit and the tag to local (Dropbox) and upstream (GitHub), makes the release object 2.14.0 with gh, and waits up to 20 minutes on CI. After it: tell me (or I see the tag) and I run tools/formula-bump 2.14.0, commit the formula by path, copy it into the tap clone and brew audit it; the tap commit and push are yours after that; dc fills done.md; the kovacs runbook runs through intent-vc and kovacs-sysadm (its session needs your ! for the run, as devbin R1 did); dc installs 2.14.0 here after the tap push. The signed Menuz.app.zip waits on your bin/devbin macos store-creds. ST0027 is closed (WP-07 the identity row), CI green on main at the close in both the push run and the menuz-app dispatch. Intent 3.2.4 and Devbin 0.1.11 are cut-ready for your terminal too, their commands on their own boards.
 

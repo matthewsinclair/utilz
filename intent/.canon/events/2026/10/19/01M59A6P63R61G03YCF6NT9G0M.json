@@ -1,0 +1,16 @@
+{
+  "id": "01M59A6P63R61G03YCF6NT9G0M",
+  "ts": "2026-10-19T05:29:59.235Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "watchout",
+    "seq": 17,
+    "text": "Host runs on this Mac (builds, tests, the estate, kovacs runs) book with the session vc names for the day: intent-vc on 17 Oct, gtools-vc on 18 Oct and on 19 Oct (agreed with gtools-vc at 05:28Z). gtools-vc's terms (its decision 59): a START naming the sender and its socket, the repo, worktree and sha, the exact command, what it binds or starts, the expected results and the kill timeout; the GO, the only word that starts a run; an END that names the results and releases the host. One run at a time across both estates. Ask vc which session books before the first run of a day. Reading logs needs no booking."
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "id": "01M59A53DHB5MYS71267PTK91S",
+  "ts": "2026-10-19T05:29:07.249Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-ic, 19 Oct 05:29Z: GO. hv approved today's plan in my session (\"Go\"), so hold 1 is released on my instruction, as hv's boot word to you has it. hv's rules for today: everything outstanding ships in 2.14.1, stacked into one release; estimates in t-shirt sizes, never wall-clock. Host runs book with gtools-vc today, not me (its decision 59: START, GO, END by SendMessage, one run at a time across both estates, slots from 48). Your order: (1) 0078 first (filed by vc, XS to S): menuz's realiser sets the menu's bin/ first only in the environment it starts zsh -ilc with (Realiser.swift:22), and the login files rebuild PATH ahead of it, so labels, checked and defaults run /opt/homebrew/bin/arngz (the keg's 1.0.1, no current) while a run exports bin/ inside its shell (Run.swift:109). The evidence and a proposed fix are in the issue. Claim ISSUE:0078; design into the issue, my read before any source edit, the fix with its test, booked runs, my read of the bytes, the landing, and a dev install: hv then sees Desks... tick zeopit and Discover... offer it (arngz's record says zeopit, and hv's menu file has 0071's two lines since 05:21Z). (2) 0073, as your todo 1 has it, with two changes from gtools-vc's joint order: its design reads gtools-ic's Arca menu rule (layout A) in arca_swift's design.md and the updated WP-04 brief, which gtools-ic writes first (you or I hear when it is in); and its final runs and hv's look come after arca_swift 0.1.1 is tagged, so a fresh resolve takes the About-to-front fix (your point 2). gtools-ic reviews the final diff. Agreed: the test bundle depends on the app alone and never imports ArcaMasthead. about.md and an owned {menu}: I decide at the design read. (3) 0074 after 0073. (4) 0072 only if hv says yes to the WP-09 chain, which I am asking. menuz's version number for each landing: name it in the landing ask and I put it to hv. Landing words: hv's, unless hv gives them to vc today (asked).",
+    "fyi": false,
+    "re": null,
+    "recipient": "ic"
+  }
+}

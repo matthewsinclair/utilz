@@ -1,0 +1,15 @@
+{
+  "id": "01M59A1PKBX8H4DB5YXNSW75YK",
+  "ts": "2026-10-19T05:27:15.819Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "issues.add",
+  "subject": {
+    "type": "issue",
+    "id": "0078"
+  },
+  "payload": {
+    "severity": "medium",
+    "title": "menuz realises labels, ticks and defaults with its own bin/ behind the login PATH, while runs put it first, so the two run different binaries"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "id": "01M59A1PPG9AED43MQTAD9ZMPJ",
+  "ts": "2026-10-19T05:27:15.921Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "issues.add",
+  "subject": {
+    "type": "issue",
+    "id": "0079"
+  },
+  "payload": {
+    "severity": "low",
+    "title": "utilz use and relink give no PATH link to a utility added since the links were made, and do not say so"
+  }
+}
