@@ -200,9 +200,8 @@ mod tests {
   /// path means one thread truncating a file another is reading. That is not
   /// hypothetical: it made `a_local_image_becomes_a_data_uri` fail with an empty
   /// base64 payload as soon as unrelated tests changed the scheduling.
-  fn fixture(test: &str) -> std::path::PathBuf {
-    let dir = std::env::temp_dir().join(format!("prez-inline-{}-{test}", std::process::id()));
-    std::fs::create_dir_all(&dir).unwrap();
+  fn fixture(test: &str) -> artifact::testing::TempDir {
+    let dir = artifact::testing::TempDir::new("prez-inline", test);
     std::fs::write(dir.join("dot.gif"), b"GIF89a\x01\x00").unwrap();
     std::fs::write(dir.join("a space.png"), b"\x89PNG").unwrap();
     dir

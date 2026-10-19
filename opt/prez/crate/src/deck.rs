@@ -660,10 +660,8 @@ mod tests {
     );
   }
 
-  fn sandbox(name: &str) -> PathBuf {
-    let dir = std::env::temp_dir().join(format!("prez-deck-{}-{name}", std::process::id()));
-    std::fs::create_dir_all(&dir).unwrap();
-    dir
+  fn sandbox(name: &str) -> artifact::testing::TempDir {
+    artifact::testing::TempDir::new("prez-deck", name)
   }
 
   #[test]

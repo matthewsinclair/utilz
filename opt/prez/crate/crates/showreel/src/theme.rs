@@ -443,7 +443,7 @@ mod tests {
   /// theme's. The assertion on `dir` is what pins which of the two it is.
   #[test]
   fn a_named_theme_carries_the_directory_its_sidecar_is_read_from() {
-    let root = std::env::temp_dir().join(format!("showreel-reg-{}", std::process::id()));
+    let root = artifact::testing::TempDir::new("showreel-reg", "housestyle");
     let theme_dir = root.join("housestyle");
     std::fs::create_dir_all(&theme_dir).unwrap();
     std::fs::write(theme_dir.join("theme.css"), "body{color:#111}\n").unwrap();
@@ -453,7 +453,7 @@ mod tests {
     )
     .unwrap();
 
-    let t = for_reel(Some("housestyle"), std::slice::from_ref(&root)).unwrap();
+    let t = for_reel(Some("housestyle"), std::slice::from_ref(&*root)).unwrap();
     assert_eq!(
       t.dir.as_deref(),
       Some(theme_dir.as_path()),
@@ -662,9 +662,7 @@ mod tests {
 
   #[test]
   fn a_theme_with_no_theme_yaml_is_valid_and_a_missing_one_is_not_an_error() {
-    let d = std::env::temp_dir().join(format!("showreel-theme-{}", std::process::id()));
-    std::fs::create_dir_all(&d).unwrap();
-    let _ = std::fs::remove_file(d.join("theme.yaml"));
+    let d = artifact::testing::TempDir::new("showreel-theme", "no-yaml");
     assert!(Meta::read(&d).expect("absence is valid").is_none());
   }
 
@@ -678,10 +676,8 @@ mod tests {
   );
 
   /// Build a theme directory with the files named, and return it.
-  fn theme_dir(tag: &str, files: &[(&str, &[u8])]) -> PathBuf {
-    let d = std::env::temp_dir().join(format!("showreel-emit-{}-{tag}", std::process::id()));
-    let _ = std::fs::remove_dir_all(&d);
-    std::fs::create_dir_all(&d).unwrap();
+  fn theme_dir(tag: &str, files: &[(&str, &[u8])]) -> artifact::testing::TempDir {
+    let d = artifact::testing::TempDir::new("showreel-emit", tag);
     std::fs::write(d.join("theme.css"), "body{color:#111}\n").unwrap();
     for (name, bytes) in files {
       std::fs::write(d.join(name), bytes).unwrap();

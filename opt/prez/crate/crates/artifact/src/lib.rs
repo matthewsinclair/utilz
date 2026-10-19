@@ -26,5 +26,8 @@ pub mod browser;
 pub mod path;
 pub mod theme;
 
+#[doc(hidden)]
+pub mod testing;
+
 mod failure;
 pub use failure::Failure;

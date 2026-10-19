@@ -51,7 +51,7 @@ mod tests {
 
   #[test]
   fn the_first_directory_holding_the_name_wins_and_a_missing_name_is_none() {
-    let root = std::env::temp_dir().join(format!("artifact-path-{}", std::process::id()));
+    let root = crate::testing::TempDir::new("artifact-path", "first-wins");
     let (a, b) = (root.join("a"), root.join("b"));
     std::fs::create_dir_all(&a).unwrap();
     std::fs::create_dir_all(&b).unwrap();
@@ -66,12 +66,11 @@ mod tests {
       None,
       "a directory is no command"
     );
-    std::fs::remove_dir_all(&root).unwrap();
   }
 
   #[test]
   fn a_file_that_cannot_run_is_passed_over_for_one_that_can_issue_0089() {
-    let root = std::env::temp_dir().join(format!("artifact-path-0089-{}", std::process::id()));
+    let root = crate::testing::TempDir::new("artifact-path", "0089");
     let (a, b) = (root.join("a"), root.join("b"));
     std::fs::create_dir_all(&a).unwrap();
     std::fs::create_dir_all(&b).unwrap();
@@ -90,13 +89,11 @@ mod tests {
       None,
       "a file that cannot run, alone, is none"
     );
-    std::fs::remove_dir_all(&root).unwrap();
   }
 
   #[test]
   fn is_executable_wants_a_regular_file_with_an_execute_bit_issue_0089() {
-    let root = std::env::temp_dir().join(format!("artifact-path-exec-{}", std::process::id()));
-    std::fs::create_dir_all(&root).unwrap();
+    let root = crate::testing::TempDir::new("artifact-path", "exec");
     file_with_mode(&root.join("runs"), 0o755);
     file_with_mode(&root.join("owner-only"), 0o700);
     file_with_mode(&root.join("plain"), 0o644);
@@ -112,6 +109,5 @@ mod tests {
       !is_executable(&root.join("absent")),
       "nor is a missing path"
     );
-    std::fs::remove_dir_all(&root).unwrap();
   }
 }

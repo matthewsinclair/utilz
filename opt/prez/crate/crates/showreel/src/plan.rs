@@ -235,10 +235,8 @@ pub fn report(reel: &Path, used: &BTreeSet<PathBuf>, dropped: &[String]) -> Vec<
 mod tests {
   use super::*;
 
-  fn reel(tag: &str, files: &[&str]) -> PathBuf {
-    let d = std::env::temp_dir().join(format!("showreel-plan-{}-{tag}", std::process::id()));
-    let _ = std::fs::remove_dir_all(&d);
-    std::fs::create_dir_all(&d).unwrap();
+  fn reel(tag: &str, files: &[&str]) -> artifact::testing::TempDir {
+    let d = artifact::testing::TempDir::new("showreel-plan", tag);
     for f in files {
       let p = d.join(f);
       std::fs::create_dir_all(p.parent().unwrap()).unwrap();

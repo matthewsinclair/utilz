@@ -191,10 +191,8 @@ pub fn declares(theme: &Theme, class: &str) -> bool {
 mod tests {
   use super::*;
 
-  fn dir(name: &str) -> PathBuf {
-    let d = std::env::temp_dir().join(format!("prez-theme-{}-{name}", std::process::id()));
-    std::fs::create_dir_all(&d).unwrap();
-    d
+  fn dir(name: &str) -> artifact::testing::TempDir {
+    artifact::testing::TempDir::new("prez-theme", name)
   }
 
   #[test]

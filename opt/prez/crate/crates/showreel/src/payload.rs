@@ -432,12 +432,9 @@ fn qr_text(qr: Option<&slide::Qr>) -> Result<String, Failure> {
 #[cfg(test)]
 mod tests {
   use super::*;
-  use std::path::PathBuf;
 
-  fn reel(tag: &str, files: &[(&str, &str)]) -> PathBuf {
-    let d = std::env::temp_dir().join(format!("showreel-payload-{}-{tag}", std::process::id()));
-    let _ = std::fs::remove_dir_all(&d);
-    std::fs::create_dir_all(&d).unwrap();
+  fn reel(tag: &str, files: &[(&str, &str)]) -> artifact::testing::TempDir {
+    let d = artifact::testing::TempDir::new("showreel-payload", tag);
     for (name, body) in files {
       let p = d.join(name);
       std::fs::create_dir_all(p.parent().unwrap()).unwrap();

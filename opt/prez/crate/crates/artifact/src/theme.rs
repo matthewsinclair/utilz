@@ -1091,46 +1091,10 @@ mod tests {
     "artifact",
   );
 
-  /// A test's own directory under TMPDIR, removed when the guard drops, so a
-  /// run leaves none behind whether the test passes or panics (issue 0092).
-  struct TempDir(PathBuf);
-
-  impl std::ops::Deref for TempDir {
-    type Target = PathBuf;
-
-    fn deref(&self) -> &PathBuf {
-      &self.0
-    }
-  }
-
-  impl Drop for TempDir {
-    fn drop(&mut self) {
-      match std::fs::remove_dir_all(&self.0) {
-        Ok(()) => {}
-        Err(e) if e.kind() == std::io::ErrorKind::NotFound => {}
-        // A panic inside an unwind aborts the test binary and hides the
-        // failure that started it, so a test already failing only says so.
-        Err(e) if std::thread::panicking() => {
-          eprintln!("cannot remove the test directory {}: {e}", self.0.display())
-        }
-        Err(e) => panic!("cannot remove the test directory {}: {e}", self.0.display()),
-      }
-    }
-  }
-
-  fn dir(name: &str) -> TempDir {
-    let d = std::env::temp_dir().join(format!("artifact-theme-{}-{name}", std::process::id()));
-    std::fs::create_dir_all(&d).unwrap();
-    TempDir(d)
-  }
-
-  #[test]
-  fn a_test_directory_is_removed_when_its_guard_drops_issue_0092() {
-    let d = dir("guard-probe");
-    std::fs::write(d.join("theme.css"), "body{}\n").unwrap();
-    let path = d.to_path_buf();
-    drop(d);
-    assert!(!path.exists(), "{} survived its test", path.display());
+  /// A test's own directory under TMPDIR, removed when the test ends (issues
+  /// 0092 and 0093).
+  fn dir(name: &str) -> crate::testing::TempDir {
+    crate::testing::TempDir::new("artifact-theme", name)
   }
 
   #[test]

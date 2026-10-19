@@ -509,8 +509,7 @@ mod tests {
 
   #[test]
   fn a_pdf_shorter_than_the_deck_is_reported_with_the_usual_cause() {
-    let dir = std::env::temp_dir().join(format!("prez-drive-{}", std::process::id()));
-    std::fs::create_dir_all(&dir).unwrap();
+    let dir = artifact::testing::TempDir::new("prez-drive", "short");
     let pdf = dir.join("short.pdf");
     std::fs::write(&pdf, b"<</Type /Pages>> <</Type /Page>> <</Type /Page>>").unwrap();
 
@@ -531,8 +530,7 @@ mod tests {
 
   #[test]
   fn an_unreadable_page_count_is_reported_rather_than_passed() {
-    let dir = std::env::temp_dir().join(format!("prez-drive-{}", std::process::id()));
-    std::fs::create_dir_all(&dir).unwrap();
+    let dir = artifact::testing::TempDir::new("prez-drive", "opaque");
     let pdf = dir.join("opaque.pdf");
     std::fs::write(&pdf, b"nothing recognisable here").unwrap();
     let warnings = verify_pagination(&pdf, 6);

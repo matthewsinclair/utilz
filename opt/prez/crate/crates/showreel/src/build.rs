@@ -321,9 +321,8 @@ mod tests {
 
   /// A reel on disk: real PNGs, because the build DECODES where `check` only
   /// admits.
-  fn reel(tag: &str, yaml: &str, files: &[(&str, &str)]) -> PathBuf {
-    let d = std::env::temp_dir().join(format!("showreel-build-{}-{tag}", std::process::id()));
-    let _ = std::fs::remove_dir_all(&d);
+  fn reel(tag: &str, yaml: &str, files: &[(&str, &str)]) -> artifact::testing::TempDir {
+    let d = artifact::testing::TempDir::new("showreel-build", tag);
     std::fs::create_dir_all(d.join("art")).unwrap();
     std::fs::write(d.join("showreel.yaml"), yaml).unwrap();
     for (name, body) in files {

@@ -398,10 +398,8 @@ mod tests {
     }
   }
 
-  fn out(tag: &str, names: &[&str]) -> PathBuf {
-    let d = std::env::temp_dir().join(format!("showreel-deliver-{}-{tag}", std::process::id()));
-    let _ = std::fs::remove_dir_all(&d);
-    std::fs::create_dir_all(&d).unwrap();
+  fn out(tag: &str, names: &[&str]) -> artifact::testing::TempDir {
+    let d = artifact::testing::TempDir::new("showreel-deliver", tag);
     for n in names {
       std::fs::write(d.join(n), b"x").unwrap();
     }

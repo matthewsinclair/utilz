@@ -115,14 +115,12 @@ mod tests {
   #[test]
   fn an_explicit_browser_that_cannot_run_is_refused_issue_0089() {
     use std::os::unix::fs::PermissionsExt;
-    let dir = std::env::temp_dir().join(format!("artifact-browser-0089-{}", std::process::id()));
-    std::fs::create_dir_all(&dir).unwrap();
+    let dir = crate::testing::TempDir::new("artifact-browser", "0089");
     let browser = dir.join("chrome");
     std::fs::write(&browser, b"x").unwrap();
     std::fs::set_permissions(&browser, std::fs::Permissions::from_mode(0o644)).unwrap();
 
     let e = find(Some(browser.to_str().unwrap())).unwrap_err();
-    std::fs::remove_dir_all(&dir).unwrap();
     assert!(e.message.contains("not an executable"), "{}", e.message);
   }
 

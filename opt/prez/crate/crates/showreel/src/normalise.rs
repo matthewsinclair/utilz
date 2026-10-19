@@ -309,12 +309,13 @@ mod tests {
     out
   }
 
-  fn write(tag: &str, bytes: &[u8]) -> std::path::PathBuf {
-    let d = std::env::temp_dir().join(format!("showreel-norm-{}", std::process::id()));
-    std::fs::create_dir_all(&d).unwrap();
+  /// The PNG at `<dir>/<tag>.png`, and the guard that removes its directory,
+  /// which the test holds for as long as it reads the file.
+  fn write(tag: &str, bytes: &[u8]) -> (artifact::testing::TempDir, std::path::PathBuf) {
+    let d = artifact::testing::TempDir::new("showreel-norm", tag);
     let p = d.join(format!("{tag}.png"));
     std::fs::write(&p, bytes).unwrap();
-    p
+    (d, p)
   }
 
   /// **THE RULING, AS ONE ASSERTION: A FULLY-OPAQUE RGBA BECOMES A JPEG.**
@@ -326,7 +327,7 @@ mod tests {
   /// that differs between the passes.**
   #[test]
   fn a_fully_opaque_rgba_is_demoted_to_jpeg_at_both_edges() {
-    let p = write("opaque", &png(64, 64, 255));
+    let (_d, p) = write("opaque", &png(64, 64, 255));
     for edge in [MASTER, TARGET] {
       let out = normalise(&p, edge).unwrap();
       assert_eq!(
@@ -340,7 +341,7 @@ mod tests {
   /// The other direction, or the rule above is satisfied by "always JPEG".
   #[test]
   fn a_genuinely_transparent_image_keeps_its_alpha_and_its_encoder() {
-    let p = write("transparent", &png(64, 64, 128));
+    let (_d, p) = write("transparent", &png(64, 64, 128));
     let out = normalise(&p, MASTER).unwrap();
     assert_eq!(out.mime, "image/png", "real transparency survives");
     assert!(out.has_alpha);
@@ -361,7 +362,7 @@ mod tests {
     image::DynamicImage::ImageRgba8(img)
       .write_to(&mut Cursor::new(&mut bytes), image::ImageFormat::Png)
       .unwrap();
-    let out = normalise(&write("onepixel", &bytes), MASTER).unwrap();
+    let out = normalise(&write("onepixel", &bytes).1, MASTER).unwrap();
     assert_eq!(out.mime, "image/png", "254 is not 255");
     assert!(out.has_alpha);
   }
@@ -377,7 +378,7 @@ mod tests {
   /// nothing here is a control over it.
   #[test]
   fn a_large_opaque_rgba_is_still_demoted_after_being_downsized() {
-    let p = write("bigopaque", &png(3000, 1200, 255));
+    let (_d, p) = write("bigopaque", &png(3000, 1200, 255));
     let out = normalise(&p, MASTER).unwrap();
     assert_eq!(
       out.mime, "image/jpeg",
@@ -399,7 +400,7 @@ mod tests {
 
   #[test]
   fn an_image_under_the_edge_is_not_resized() {
-    let p = write("small", &png(300, 200, 128));
+    let (_d, p) = write("small", &png(300, 200, 128));
     let out = normalise(&p, MASTER).unwrap();
     assert_eq!((out.width, out.height), (300, 200));
   }
@@ -467,7 +468,7 @@ mod tests {
   /// admission layer should have caught it first; this is the second line.
   #[test]
   fn a_file_that_is_not_an_image_refuses_with_its_name() {
-    let p = write("bogus", b"this is not a png");
+    let (_d, p) = write("bogus", b"this is not a png");
     let e = normalise(&p, MASTER).unwrap_err();
     assert!(e.message.contains("cannot decode"), "{}", e.message);
     assert!(e.message.contains("bogus"), "names the file: {}", e.message);
@@ -507,7 +508,7 @@ mod tests {
   /// are. Decoded independently rather than compared against the encoder.
   #[test]
   fn an_embedded_picture_round_trips_to_the_bytes_normalise_produced() {
-    let p = write("embed-opaque", &png(64, 64, 255));
+    let (_d, p) = write("embed-opaque", &png(64, 64, 255));
     let e = embed(&p, TARGET, Role::Slide).unwrap();
     let head = "data:image/jpeg;base64,";
     assert!(
@@ -535,7 +536,7 @@ mod tests {
   /// brand marks actually take.
   #[test]
   fn a_genuinely_transparent_picture_embeds_as_png() {
-    let p = write("embed-clear", &png(64, 64, 128));
+    let (_d, p) = write("embed-clear", &png(64, 64, 128));
     let e = embed(&p, TARGET, Role::Slide).unwrap();
     assert!(
       e.uri.starts_with("data:image/png;base64,"),
@@ -549,7 +550,7 @@ mod tests {
   /// the three numbers; it cannot notice `embed` ignoring the role it was passed.
   #[test]
   fn each_role_embeds_at_the_edge_its_role_asks_for() {
-    let p = write("embed-roles", &png(3000, 3000, 255));
+    let (_d, p) = write("embed-roles", &png(3000, 3000, 255));
     let seen: Vec<u32> = [Role::Slide, Role::Mark, Role::Bug]
       .iter()
       .map(|r| embed(&p, TARGET, *r).unwrap().width)
@@ -588,8 +589,7 @@ mod tests {
   /// half is a property of the input and we had never written one.
   #[test]
   fn a_dimension_landing_exactly_on_a_half_rounds_the_way_python_rounds() {
-    let d = std::env::temp_dir().join(format!("showreel-round-{}", std::process::id()));
-    std::fs::create_dir_all(&d).unwrap();
+    let d = artifact::testing::TempDir::new("showreel-round", "half");
     let p = d.join("half.png");
     let img = image::RgbImage::from_fn(8, 5, |x, _| image::Rgb([(x * 30) as u8, 1, 2]));
     image::DynamicImage::ImageRgb8(img).save(&p).unwrap();

@@ -280,9 +280,8 @@ pub fn scanned(reel: &Path, rel: &str, site: Site) -> Result<Scan, Failure> {
 mod tests {
   use super::*;
 
-  fn reel(tag: &str, files: &[&str]) -> PathBuf {
-    let d = std::env::temp_dir().join(format!("showreel-admit-{}-{tag}", std::process::id()));
-    let _ = std::fs::remove_dir_all(&d);
+  fn reel(tag: &str, files: &[&str]) -> artifact::testing::TempDir {
+    let d = artifact::testing::TempDir::new("showreel-admit", tag);
     std::fs::create_dir_all(d.join("assets")).unwrap();
     for f in files {
       let p = d.join(f);
