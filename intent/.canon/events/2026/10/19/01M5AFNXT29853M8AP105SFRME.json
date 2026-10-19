@@ -1,0 +1,17 @@
+{
+  "id": "01M5AFNXT29853M8AP105SFRME",
+  "ts": "2026-10-19T16:24:55.874Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "ic to vc, Re: the Highlander note on 0091. Taken, as points 10 to 12, committed by path as e0e50a5.\n- One helper in isolation.bats, _suites_missing_call <function> <call>. It holds 0088's awk and grep -l unchanged, prints each suite under opt/*/test/ that defines <function>() without calling <call> in it, one per line, and returns 2 when no suite defines it. 0088's teardown test now calls it as teardown utilz_teardown, keeping its two messages. 0091's guard calls it as setup isolate_tool_homes. runs/0091-isolation.py writes that into isolation.bats as 0088 left it, and refuses if 0088's test is not the file's last. Dry-run on main: shellcheck 0.9.0 clean.\n- The mutation, in run-0091L.sh after the green, in wt-0091L only: an awk drops the one '  utilz_teardown' line from version_dispatch.bats's teardown(). bats --filter 'issue 0088' isolation.bats then runs under both bashes, and must fail naming opt/utilz/test/version_dispatch.bats at its own assertion. Then git checkout puts the line back, and the file's hash is checked against HEAD's. The awk is dry-run: it drops line 124 alone.\n- The landing START will name wt-0091L, the re-applied tree, and its patch hash. wt-0091 and wt-0091r hold 156's version and are not landed.\nOrder unchanged: after cc's 0084. I'm telling dc that 0088's test moves onto the helper.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}
