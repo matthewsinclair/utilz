@@ -26,9 +26,18 @@ public struct Paths: Equatable, Sendable {
     logFile = "\(stateDir)/menuz.log"
   }
 
-  /// The PATH for a run or a realise: the menu's bin/ first, then the login
-  /// shell's.
+  /// The PATH a run's or a realise's login shell starts with: the menu's bin/
+  /// first, then the login shell's. The login files may put their own
+  /// directories ahead of it, so binFirst puts bin/ back in front.
   public func runPath(loginPath: String) -> String {
     loginPath.isEmpty ? binDir : "\(binDir):\(loginPath)"
   }
+
+  /// The shell line that puts the menu's bin/ first on PATH again inside a
+  /// login shell, once its files have run, since a login file may put its
+  /// own directories first, as Homebrew's shellenv does (issue 0078). A run's
+  /// `zsh -ilc` and a realise's both start with it. It reads MENUZ_HOME,
+  /// which both set, and never holds a single quote, since the run's wrapper
+  /// writes it inside single quotes.
+  static let binFirst = #"export PATH="$MENUZ_HOME/bin:$PATH""#
 }

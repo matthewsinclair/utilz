@@ -3,8 +3,8 @@ import MenuzKit
 
 /// The realiser's impure half (design.md "Interpolation"): every dynamic
 /// label and every `each` of a menu, in one `zsh -ilc`, capped at the
-/// file's `realise` seconds. The menu's own `bin/` is first on PATH, as for
-/// a run.
+/// file's `realise` seconds. The menu's own `bin/` is first on PATH after the
+/// login files, as for a run: the script opens with `Paths.binFirst`.
 enum Realiser {
   struct Outcome: Sendable {
     let realised: Realised

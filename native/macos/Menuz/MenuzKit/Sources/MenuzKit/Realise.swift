@@ -145,16 +145,19 @@ public enum Realise {
     }
   }
 
-  /// The script and the environment it reads. No menu text is in the
-  /// script: every id, label and line reaches it as a variable, so nothing
-  /// of the file is ever spliced into shell source. A label is expanded by
+  /// The script and the environment it reads, but for MENUZ_HOME, which its
+  /// first line reads and the caller sets, as Realiser does. No menu text is
+  /// in the script: every id, label and line reaches it as a variable, so
+  /// nothing of the file is ever spliced into shell source. A label is expanded by
   /// zsh's `(e)` flag, which does what a double-quoted string does (`$VAR`,
   /// `${VAR:-default}`, `$(command)`, backticks, `\$`) and leaves a quote in
   /// the label as a quote; each in its own subshell, so a failure costs only
   /// itself; an each's line is run and each line it prints is
   /// one item, its label expanded with `MENUZ_ITEM` exported. Answers are
-  /// records `id US status US value RS`; the script opens with an RS so
-  /// whatever a login file prints first parses as no record.
+  /// records `id US status US value RS`; its output opens with an RS so
+  /// whatever a login file prints first parses as no record. Its first line
+  /// is `Paths.binFirst`, so the menu's bin/ is first on PATH for all of it,
+  /// after the login files, as for a run (issue 0078).
   public static func script(for request: RealiseRequest) -> (script: String, env: [String: String]) {
     var env: [String: String] = [:]
     let labels = request.labels.filter { isDynamic($0.text) }
@@ -173,6 +176,7 @@ public enum Realise {
   }
 
   private static let script = #"""
+    \#(Paths.binFirst)
     _menuz_put() {
       print -rn -- "$1"$'\x1f'"$2"$'\x1f'"${3//[$'\x1e\x1f']/}"$'\x1e'
     }

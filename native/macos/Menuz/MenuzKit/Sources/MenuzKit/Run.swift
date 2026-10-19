@@ -106,7 +106,7 @@ public enum Run {
       print -r -- "[$_menuz_id] menuz: cannot enter $MENUZ_CWD"
       _menuz_rc=126
     else
-      /bin/zsh -ilc 'export PATH="$MENUZ_HOME/bin:$PATH"; eval "$MENUZ_RUN"' </dev/null 2>&1 |
+      /bin/zsh -ilc '\#(Paths.binFirst); eval "$MENUZ_RUN"' </dev/null 2>&1 |
         while IFS= read -r _menuz_line || [[ -n $_menuz_line ]]; do
           print -r -- "[$_menuz_id] $_menuz_line"
           _menuz_last=$_menuz_line
