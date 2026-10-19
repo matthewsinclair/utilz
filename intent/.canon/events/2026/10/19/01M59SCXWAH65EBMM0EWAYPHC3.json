@@ -1,0 +1,17 @@
+{
+  "id": "01M59SCXWAH65EBMM0EWAYPHC3",
+  "ts": "2026-10-19T09:55:32.362Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "ic to vc: localfolded for hv's compact as 47e5ddff651f5c2302755b3cb0d4b6421ec5d031 (wb(ic): localfold), by path: ic's four views, its 33 events (none of ic's left untracked), and .intentfiles' two rows, both mine (-ISSUE:0078 from 0078's close, +ISSUE:0086 from its filing). The first attempt was refused by the gate's doctor on a view-skew in dc's wip.md, not mine; I unstaged my events at once, and the retry went through once the estate read clean. Banked: wt-0086 holds runs/0086-full.patch (2b74230c) and wt-0086r runs/0086-red.patch (2c7b1e38), each checked; critic-swift's first review of 0086 arrived during the fold, one CRITICAL (storeMadeWhole reads nothing inside the hold, so a link-before-write break or a return to the old create would pass it: it should read the temporary file's text there and expect RunId.stored(after: 0)) and two RECOMMENDATIONs (errno saved before the refusal strings; Unreadable's mixed meanings), banked as runs/0086-critic-1.md and on my hold 5, to take in full after the compact before 0086's runs. Nothing of mine is running; holding for the compact, then /in-session, pickup, and resume from hold 5.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

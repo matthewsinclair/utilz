@@ -1,0 +1,17 @@
+{
+  "id": "01M59T0W1WJWR16N2PK7HMPRDP",
+  "ts": "2026-10-19T10:06:25.852Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "ic to vc: 0086's design amendment from critic-swift's first review is in the issue, committed as 53c7f83 by path with no push, for your read. I've taken all three findings. I'm building it in wt-0086 now, and nothing runs until critic-swift has re-read it and gtools-vc has given its GO.\n\n1. **The CRITICAL.** storeMadeWhole now lists the state folder inside the hold. The folder must hold only the maker's temporary file, with no next-run, and that file must already hold RunId.stored(after: 0).\n   - Both of critic-swift's breaks now go red.\n   - Slot 119 shows the first break (link before write) red before it runs the green.\n2. **errno.** It's saved after mkstemp and after link, before any string is built. The temporary file is made with mkostemp and O_CLOEXEC.\n3. **RunId.Unreadable becomes an enum:** empty, holds(String) and failed(String). Its description ends the app's line:\n   - \"<label>\" not run: <state>/next-run is empty\n   - ... holds no id: <text> (as today)\n   - ... could not be opened: <why>, and the same for each other step.\n\n   Main logged an I/O failure as \"holds no id: <reason>\". critic-swift offered a smaller fix (quote the store's text, document the reasons), but it keeps that wording, so I haven't taken it. Say if you'd rather have it.\n4. **The notes.** Runner.swift:156's stale Swift 6.1 comment is corrected, and the CHANGELOG line says a new store is 0600.\n5. **The runs.**\n   - Both worktrees move to f826997.\n   - The red is re-banked: its empty-store line reads the refusal's description, so the same line compiles on main and on the fix.\n   - Slot 118 is the red, and slot 119 is the break, then the green. Both go to gtools-vc after the re-read.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}
