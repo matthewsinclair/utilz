@@ -6,6 +6,12 @@
 # HOME and every XDG directory are fixtures under the test's own temp
 # directory, the app is a fake bundle that records its arguments, and open,
 # pgrep and tail are fakes on PATH where a verb would otherwise reach out.
+#
+# EVERY TEST RUNS AS MACOS, ON ANY MACHINE, unless it pins another platform
+# (issue 0083). Off macOS the verbs that need the app, Xcode or open -t
+# refuse before anything else, and CI's Linux leg runs this suite, so its
+# macOS paths are tested there under a Darwin uname, set in setup. The tests
+# under THE PLATFORM pin Linux, or another name.
 
 # The fakes' bodies are written literally into each fake and expand when the
 # fake runs, so their single quotes are deliberate.
@@ -32,6 +38,7 @@ setup() {
   export PATH="$FAKES:$PATH"
   # pgrep finds no Menuz unless a test says otherwise.
   fake pgrep 'exit 1'
+  stub_platform Darwin
 }
 
 run_menuz() {
@@ -181,13 +188,15 @@ run_src_menuz() {
   # shellcheck disable=SC2016
   local missing='check_command() { [[ "$1" == xcodegen ]] && return 1; command -v "$1" >/dev/null 2>&1; }'
   run /bin/bash -c "export UTILZ_HOME='$SRC'; source '$SRC/opt/utilz/lib/common.sh'; $missing; run_doctor"
-  if [[ "$(uname -s)" == Darwin ]]; then
-    assert_output_contains "brew install xcodegen"
-    assert_output_contains "xcodebuild -version does not run"
-  else
-    refute_output_contains "xcodegen"
-    refute_output_contains "Xcode"
-  fi
+  assert_output_contains "brew install xcodegen"
+  assert_output_contains "xcodebuild -version does not run"
+  # Off macOS the same machine says nothing of them (issue 0083): the suite
+  # runs as macOS, so this pins Linux ahead of setup's Darwin.
+  stub_platform Linux
+  run /bin/bash -c "export UTILZ_HOME='$SRC'; source '$SRC/opt/utilz/lib/common.sh'; $missing; run_doctor"
+  refute_output_contains "xcodegen"
+  refute_output_contains "Xcode"
+  stub_platform Darwin
   rm -rf "$SRC/native/macos/Menuz"
   run /bin/bash -c "export UTILZ_HOME='$SRC'; source '$SRC/opt/utilz/lib/common.sh'; $missing; run_doctor"
   refute_output_contains "xcodegen"
@@ -1490,4 +1499,129 @@ kind_stamp() {
   run_src_menuz stamps
   assert_success
   printf '%s\n' "$output" | grep -qx 'MENUZ_KIND='
+}
+
+# ============================================================================
+# THE PLATFORM (issue 0083)
+# ============================================================================
+#
+# Every other test here runs as macOS (setup's stub). These pin Linux, or
+# another name: the verbs that need the app, Xcode or open -t refuse by name
+# before they ask anything, status and doctor say so in one line, and init,
+# use, log, stamps and edit --editor work as they do anywhere.
+
+WORKS_HERE="menuz init, use, log, stamps, status, doctor and edit --editor work here"
+
+# Everything a refused verb could reach first is there to be reached: a menu,
+# an installed and a dev app, a running pid, and fakes for every tool a verb
+# runs on macOS: open, osascript, ditto, lsregister, xcodebuild, xcodegen,
+# xcode-select, security (doctor's identity check), codesign, spctl and curl
+# (a keg's install). A refusal leaves $FAKES/calls empty, and every file
+# where it was.
+reachable_machine() {
+  run_menuz init
+  assert_success
+  make_app "$INSTALLED"
+  make_app "$DEV"
+  fake pgrep 'echo 4242'
+  local tool
+  for tool in open osascript ditto lsregister xcodebuild xcodegen xcode-select security codesign spctl curl; do
+    fake "$tool" 'exit 0'
+  done
+  : >"$FAKES/calls"
+}
+
+# The refusal of menuz <verb> on <platform>, needing <needs>, and nothing run.
+assert_refused_off_macos() {
+  local verb="$1" needs="$2" platform="$3"
+  assert_exit_code 2
+  assert_output_contains "menuz $verb needs $needs, so it is not available on $platform; $WORKS_HERE"
+  [[ ! -s "$FAKES/calls" ]] || {
+    echo "a refused verb ran: $(cat "$FAKES/calls")"
+    false
+  }
+  [[ -d "$INSTALLED" && -f "$CONFIG/menuz.yaml" ]] || false
+}
+
+@test "AT-02.1: off macOS, validate, render, install, uninstall, start, stop and restart refuse by name, exit 2, and run nothing" {
+  stub_platform Linux
+  reachable_machine
+  local verb
+  for verb in validate render install uninstall start stop restart; do
+    run_menuz "$verb"
+    assert_refused_off_macos "$verb" "macOS and Menuz.app" Linux
+  done
+}
+
+@test "AT-02.1: off macOS, build and test refuse by name, naming Xcode, exit 2, and run nothing" {
+  stub_platform Linux
+  reachable_machine
+  run_menuz build --release
+  assert_refused_off_macos build "macOS and Xcode" Linux
+  run_menuz test
+  assert_refused_off_macos test "macOS and Xcode" Linux
+}
+
+@test "AT-02.1: a platform that is neither is named as uname -s names it" {
+  stub_platform FreeBSD
+  reachable_machine
+  run_menuz build
+  assert_refused_off_macos build "macOS and Xcode" FreeBSD
+}
+
+@test "AT-02.2: off macOS, edit refuses by name, exit 2, and edit --editor runs the editor" {
+  stub_platform Linux
+  reachable_machine
+  run_menuz edit
+  assert_refused_off_macos edit "macOS (it opens the menu with open -t)" Linux
+  fake myedit 'exit 0'
+  export EDITOR=myedit
+  run_menuz edit --editor
+  assert_success
+  [[ "$(cat "$FAKES/myedit.args")" == "$CONFIG/menuz.yaml" ]] || false
+}
+
+@test "AT-02.2: off macOS, init, use, log and stamps run as on macOS" {
+  stub_platform Linux
+  run_menuz init
+  assert_success
+  [[ -f "$CONFIG/menuz.yaml" ]] || false
+  run_menuz use dev
+  assert_success
+  run_menuz use
+  assert_success
+  assert_output_contains "dev"
+  mkdir -p "$(dirname "$LOG")"
+  printf 'one\ntwo\n' >"$LOG"
+  run_menuz log -n 1
+  assert_success
+  assert_output_contains "two"
+  source_home
+  run_src_menuz stamps
+  assert_success
+  assert_output_contains "MENUZ_VERSION="
+}
+
+@test "AT-02.3: off macOS, status prints the one platform line, exit 0, and asks nothing" {
+  stub_platform Linux
+  reachable_machine
+  run_menuz status
+  assert_success
+  assert_output "platform    Menuz.app, menuz's menu bar app, needs macOS, so it is not available on Linux; $WORKS_HERE"
+  [[ ! -s "$FAKES/calls" ]] || false
+}
+
+@test "AT-02.3: off macOS, doctor prints its platform line and checks the menu file alone" {
+  stub_platform Linux
+  reachable_machine
+  run_menuz doctor
+  assert_success
+  assert_output "platform    skip Menuz.app, menuz's menu bar app, needs macOS, so it is not available on Linux; $WORKS_HERE
+config      ok   $CONFIG/menuz.yaml"
+  [[ ! -s "$FAKES/calls" ]] || false
+  rm "$CONFIG/menuz.yaml"
+  run_menuz doctor
+  assert_exit_code 1
+  assert_output "platform    skip Menuz.app, menuz's menu bar app, needs macOS, so it is not available on Linux; $WORKS_HERE
+config      FAIL no $CONFIG/menuz.yaml (menuz init creates it)"
 }

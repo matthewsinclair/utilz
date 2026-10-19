@@ -78,6 +78,15 @@ refuse() {
   exit 2
 }
 
+# What needs macOS, in the words of the one refusal (issue 0083): the verbs
+# that ask the app, Xcode or open -t refuse by name off macOS, and status and
+# doctor say it there in one line.
+MENUZ_APP="Menuz.app, menuz's menu bar app,"
+MENUZ_APP_NEEDS="macOS and Menuz.app"
+MENUZ_BUILD_NEEDS="macOS and Xcode"
+MENUZ_EDIT_NEEDS="macOS (it opens the menu with open -t)"
+MENUZ_WORKS_HERE="menuz init, use, log, stamps, status, doctor and edit --editor work here"
+
 # ============================================================================
 # PATHS (one function each)
 # ============================================================================
@@ -409,18 +418,28 @@ cmd_init() {
   printf 'menuz: wrote %s and %s/bin/\n' "$menu" "$dir"
 }
 
+# Whether edit's arguments ask for the editor: the one reading of edit's
+# --editor, for main's refusal off macOS and for cmd_edit.
+edit_wants_editor() {
+  local arg
+  for arg in "$@"; do
+    if [[ "$arg" == --editor ]]; then return 0; fi
+  done
+  return 1
+}
+
 cmd_edit() {
-  local use_editor=0 arg
+  local arg
   for arg in "$@"; do
     case "$arg" in
-      --editor) use_editor=1 ;;
+      --editor) ;;
       *) refuse "edit: unknown argument '$arg'" ;;
     esac
   done
   local menu
   menu="$(menu_file)"
   [[ -f "$menu" ]] || refuse "edit: $menu does not exist; menuz init creates it"
-  if [[ $use_editor -eq 1 ]]; then
+  if edit_wants_editor "$@"; then
     local editor="${VISUAL:-${EDITOR:-}}"
     [[ -n "$editor" ]] || refuse "edit --editor: neither VISUAL nor EDITOR is set"
     # Word-split on purpose: an editor is often set with its flags ("code -w").
@@ -471,6 +490,12 @@ cmd_app_arm() {
 
 cmd_status() {
   no_args status "$@"
+  # Off macOS every other line would ask the app or Launch Services: the one
+  # line that says so (issue 0083).
+  if [[ "$(utilz_platform)" != macos ]]; then
+    printf 'platform    %s\n' "$(platform_refusal_words "$MENUZ_APP" macOS "$MENUZ_WORKS_HERE")"
+    return 0
+  fi
   local use bundle bin
   use="$(describe_use)" || exit $?
 
@@ -1022,8 +1047,28 @@ doctor_build_lines() {
   fi
 }
 
+# doctor's config line, on every platform: the menu file is there, or init
+# makes it.
+doctor_config_line() {
+  local menu
+  menu="$(menu_file)"
+  if [[ -f "$menu" ]]; then
+    doctor_line config ok "$menu"
+  else
+    doctor_line config FAIL "no $menu (menuz init creates it)"
+  fi
+}
+
 cmd_doctor() {
   no_args doctor "$@"
+  # Off macOS the app's preconditions are not this machine's to meet: the one
+  # line that says so, and the menu file, which init, edit --editor and log
+  # use here (issue 0083).
+  if [[ "$(utilz_platform)" != macos ]]; then
+    doctor_line platform skip "$(platform_refusal_words "$MENUZ_APP" macOS "$MENUZ_WORKS_HERE")"
+    doctor_config_line
+    return "$DOCTOR_FAILED"
+  fi
   if is_install; then
     doctor_line build skip "an install of Utilz carries no app source, so Xcode, xcodegen and an identity are not needed; install fetches the release's app"
   else
@@ -1032,11 +1077,7 @@ cmd_doctor() {
 
   local menu bin out installed pids
   menu="$(menu_file)"
-  if [[ -f "$menu" ]]; then
-    doctor_line config ok "$menu"
-  else
-    doctor_line config FAIL "no $menu (menuz init creates it)"
-  fi
+  doctor_config_line
 
   if ! bin="$(require_app 2>&1)"; then
     doctor_line menu FAIL "no app to validate it with: $bin"
@@ -1088,6 +1129,21 @@ main() {
   fi
   local verb="$1"
   shift
+  # Off macOS the verbs that need the app, Xcode or open -t refuse by name
+  # before anything else (issue 0083); on macOS this says nothing.
+  case "$verb" in
+    validate | render | install | uninstall | start | stop | restart)
+      refuse_off_macos "menuz $verb" "$MENUZ_APP_NEEDS" "$MENUZ_WORKS_HERE"
+      ;;
+    build | test)
+      refuse_off_macos "menuz $verb" "$MENUZ_BUILD_NEEDS" "$MENUZ_WORKS_HERE"
+      ;;
+    edit)
+      if ! edit_wants_editor "$@"; then
+        refuse_off_macos "menuz edit" "$MENUZ_EDIT_NEEDS" "$MENUZ_WORKS_HERE"
+      fi
+      ;;
+  esac
   case "$verb" in
     -h | --help) usage ;;
     init) cmd_init "$@" ;;

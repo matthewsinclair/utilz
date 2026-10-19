@@ -40,6 +40,8 @@ menuz puts a menu of your own commands in the macOS menu bar. The menu is one YA
 
 There are two halves. `Menuz.app` shows the menu and runs the items. The `menuz` command creates and checks the config directory, reads the log, and builds, installs and drives the app. The YAML is parsed in one place, the app: `menuz validate` and `menuz render` ask the app's own command-line arms and parse nothing themselves.
 
+**Platform**: the app, and so `validate`, `render`, `build`, `test`, `install`, `uninstall`, `start`, `stop`, `restart` and `edit` without `--editor`, needs macOS (`build` and `test` need Xcode too). Elsewhere each refuses, exit 2, before it asks anything, saying what it needs and that init, use, log, stamps, status, doctor and edit --editor work here. There, `status` prints that one line, and `doctor` says it and checks the menu file alone.
+
 menuz adds no syntax of its own. A label or a shell line is expanded by the login shell, the way it expands a double-quoted string, so `$VAR`, `${VAR:-default}` and `$(command)` mean what they mean in zsh.
 
 ### The config directory
