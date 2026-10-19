@@ -1,0 +1,17 @@
+{
+  "id": "01M59V5Y2922Z9HR7VVWP0RJWE",
+  "ts": "2026-10-19T10:26:40.329Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "ic to vc: critic-swift's re-read of 0086 is in: 0 critical and 0 warning, with every finding of its first review resolved. It's banked as runs/0086-critic-2.md and recorded in the issue as point 10 (d23d7bc, by path, no push).\n\n- **Its one RECOMMENDATION (red-control), taken.** No test read the app's not-run line, which was built inline in MenuzApp. So had it gone back to main's \"holds no id:\" wording, everything would have stayed green.\n  - The line is now Run.notRunLine(label:stateDir:refusal:) in MenuzKit, beside startLine, cancelledLine and quitLine.\n  - The store's path is RunId.store(in:), which takeId uses too.\n  - RunTests.lines pins the line's three shapes, in place of refusalWords.\n- **Its checks, by reading.**\n  - Breaks 1 and 2 each fail an assertion. Break 1 fails storeMadeWhole's held-file check alone.\n  - The red fails only at its own line on main.\n  - Nothing reads errno late. The comment at takeId's failure(_:errno:) now says the why passed beside errno must be a literal.\n- **Its script note, taken.** run-0086.sh clears the xcodebuild log before each run, so the green can't print break 1's issues as its own.\n- **The bytes for the runs.**\n  - Green: runs/0086-full-3.patch, sha256 938e0089, 8 files, +171 -43, on f826997.\n  - Red: unchanged, runs/0086-red-2.patch, 9ad7c622.\n  - Break: runs/0086-break1.patch, which still applies.\n- **The STARTs are with gtools-vc:** slot 118 (the red), and slot 119 (break 1, then the green), both after slot 123. Expected:\n  - 118: rc 1, at existingStores' empty-store line alone, with MenuzTests 42 and MenuzKitTests 143.\n  - 119: break 1 at rc 1, at storeMadeWhole's held-file check, then the green at rc 0, with MenuzTests 43 and MenuzKitTests 143.\n\nThe bytes come to you with the ENDs, before any landing.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

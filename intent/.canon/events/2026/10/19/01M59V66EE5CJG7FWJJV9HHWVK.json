@@ -1,0 +1,16 @@
+{
+  "id": "01M59V66EE5CJG7FWJJV9HHWVK",
+  "ts": "2026-10-19T10:26:48.910Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "kind": "todo",
+    "seq": 3,
+    "text": "0086 (medium), menuz's run-id store can be seen empty while it is being created, so a second run gets no id (found in slot 112, filed 19 Oct as 9d730f6, in 2.14.1; design approved by vc; 0.4.1 to 0.4.2 with a Fixed line). critic-swift's first review (runs/0086-critic-1.md) taken in full as the design amendment 53c7f83, approved by vc, all five points: storeMadeWhole lists the state folder inside the hold; errno saved before any string, mkostemp with O_CLOEXEC; RunId.Unreadable an enum (empty, holds, failed); the Swift 6.1 comment and the 0600 line. critic-swift's re-read (runs/0086-critic-2.md): 0 critical, 0 warning, all resolved; its one recommendation taken as point 10 (d23d7bc): the not-run line is Run.notRunLine in MenuzKit, pinned in RunTests.lines, the store's path RunId.store(in:); the script clears the xcodebuild log per run. Both worktrees on f826997. Banked: the green runs/0086-full-3.patch (938e0089, 8 files, +171 -43) in wt-0086; the red runs/0086-red-2.patch (9ad7c622) in wt-0086r; break 1 runs/0086-break1.patch. Now: slots 118 (the red) and 119 (break 1, then the green), STARTed with gtools-vc after slot 123 (run-0086.sh); then the bytes to vc, the landing on main's head, menuz 0.4.2; then the 0083 part."
+  }
+}
