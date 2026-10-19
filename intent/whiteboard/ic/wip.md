@@ -3,9 +3,9 @@ node: ic
 name: Interface Claude
 role: interface
 session_id: 28cb7084-edb7-43ea-8d34-762c618e0583
-heartbeat_at: 2026-10-19 13:47Z
+heartbeat_at: 2026-10-19 13:59Z
 status: active
-focus: "19 Oct, after the crash, on hv's word: 0086 LANDED as d1fd58c (menuz 0.4.2), checked by vc; it closes once hv's push is green on CI. 0073: the diagnostic approved (41e546bb on d1fd58c); its install (START A) GOes on hv's yes, then hv's look, then hv's build back (START B). Then 0083's menuz part after dc's; 0072 after WP-09."
+focus: "19 Oct, localfolded for hv's compact (bank-then-localfold across dc, ic and cc): 0086 LANDED as d1fd58c, closing once hv's push is green; 0073's diagnostic approved, its install (START A) on hv's yes and vc's GO after the compacts, then hv's look and hv's build back (START B), then the fix's design. Resume from the compact hold."
 claims: [ISSUE:0073, ISSUE:0072, ISSUE:0086]
 ---
 
@@ -23,11 +23,11 @@ claims: [ISSUE:0073, ISSUE:0072, ISSUE:0086]
 ## Holds
 
 - 0072 (menuz adopts ArcaLogConsole, arca_swift WP-10) is mine and in 2.14.1 on hv's "Yes" (vc, 19 Oct 07:08Z). Released when gtools-ic's WP-09 (ArcaLogConsole, arca_swift 0.2.0) has fixed its shape; then its design goes into the issue for vc's read, after 0073 and 0074. (edited)
+- Resume after hv's compact. Released when this session's compact is done and /in-session has run its pickup. Then, in this order: (1) START A, 0073's diagnostic install, heavy, on hv's yes and vc's GO after the compacts: /bin/bash ~/Devel/scratch/utilz-ic/runs/run-0073-icon-install.sh diag ~/Devel/scratch/utilz-ic/wt-0073d ~/Devel/scratch/utilz-ic/state-0073diag, with wt-0073d at d1fd58c holding runs/0073-diag.patch (41e546bb), and the END both ways; (2) hv's one look at the two top rows, the question naming that the control row may show greyed with its icon dimmed, its disabled state, then the lines from menuz.log; (3) START B, hv's build back from main's head, 0.4.2 (run-0073-icon-install.sh restore), heavy, on vc's GO, then wt-0073d and state-0073diag removed; (4) 0073's fix design from the look's lines into the issue for vc's read, before any code (doing 2); (5) 0086's close once hv's push is green on CI with the dispatch's menuz app job, its resolution with the state-folder clause (todo 3); (6) 0083's menuz part after dc's (todo 2); (7) 0072 after gtools-ic's WP-09 (hold 3). run-0086.sh and run-0073-icon-install.sh exit 0 whatever their run did: read their rc= line. No pushes.
 
 ## Watch-outs
 
 - Landings (vc, 19 Oct 06:11Z): apply a patch only into a primary that holds no one else's uncommitted hunks. git status first, and if anything there is not mine, stop and tell vc. Every START says light or heavy (gtools-vc's terms from 06:06Z): any build, whole suite, Chrome, dry run or cut is heavy and runs alone; a light run (no build, no GUI or daemon, no port, only its own temp dirs) may share the window with one heavy run, and a failure that looks like timing beside a heavy run is rerun alone before it counts.
-- syncz.bats and cryptz.bats reach the real home until utilz-dc fixes the test-home leak (vc, 19 Oct 08:04Z): syncz.bats writes unison archives into ~/Library/Application Support/Unison and cryptz.bats runs gpg on the real home. Keep both out of Mac runs; a whole-suite run that must include them says so in its START. dc's kovacs legs keep both inside the run dir.
 
 ## Decisions
 

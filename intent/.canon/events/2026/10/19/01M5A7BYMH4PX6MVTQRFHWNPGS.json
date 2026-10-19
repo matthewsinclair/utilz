@@ -1,0 +1,15 @@
+{
+  "id": "01M5A7BYMH4PX6MVTQRFHWNPGS",
+  "ts": "2026-10-19T13:59:40.433Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "kind": "hold",
+    "text": "Resume after hv's compact. Released when this session's compact is done and /in-session has run its pickup. Then, in this order: (1) START A, 0073's diagnostic install, heavy, on hv's yes and vc's GO after the compacts: /bin/bash ~/Devel/scratch/utilz-ic/runs/run-0073-icon-install.sh diag ~/Devel/scratch/utilz-ic/wt-0073d ~/Devel/scratch/utilz-ic/state-0073diag, with wt-0073d at d1fd58c holding runs/0073-diag.patch (41e546bb), and the END both ways; (2) hv's one look at the two top rows, the question naming that the control row may show greyed with its icon dimmed, its disabled state, then the lines from menuz.log; (3) START B, hv's build back from main's head, 0.4.2 (run-0073-icon-install.sh restore), heavy, on vc's GO, then wt-0073d and state-0073diag removed; (4) 0073's fix design from the look's lines into the issue for vc's read, before any code (doing 2); (5) 0086's close once hv's push is green on CI with the dispatch's menuz app job, its resolution with the state-folder clause (todo 3); (6) 0083's menuz part after dc's (todo 2); (7) 0072 after gtools-ic's WP-09 (hold 3). run-0086.sh and run-0073-icon-install.sh exit 0 whatever their run did: read their rc= line. No pushes."
+  }
+}
