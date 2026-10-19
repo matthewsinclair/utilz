@@ -119,10 +119,12 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, MenuAc
     if masthead == nil {
       // Its environment finds its folder, so a Reload's capture keeps both;
       // the menu file it names is read at each open, so that one follows.
-      // Made after the log has its file, which the row's refusals reach.
+      // Made after the log has its file, which the row's refusals reach, and
+      // its note: the icon it gave the app, once per launch.
       let log = self.log
       masthead = MenuzMasthead.row(
-        environment: shell.environment, menu: { [weak self] in self?.paths.menuFile }, log: { log.write($0) })
+        environment: shell.environment, menu: { [weak self] in self?.paths.menuFile }, log: { log.write($0) },
+        note: { log.write($0) })
     }
     registerLoginItem()
     fileChanged()

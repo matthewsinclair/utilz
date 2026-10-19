@@ -34,7 +34,13 @@ struct IdentityRowTests {
   }
 
   private func masthead(under folder: URL) -> NSMenuItem {
-    MenuzMasthead.row(environment: ["XDG_CONFIG_HOME": folder.path], menu: { "/m/menuz.yaml" }, log: { _ in })
+    MenuzMasthead.row(
+      environment: ["XDG_CONFIG_HOME": folder.path], menu: { "/m/menuz.yaml" }, log: { _ in }, note: { _ in })
+  }
+
+  /// An image `side` points square with a representation and nothing drawn.
+  private static func blank(side: CGFloat) -> NSImage {
+    NSImage(size: NSSize(width: side, height: side), flipped: false) { _ in true }
   }
 
   @Test("the row names the build from the shim's stamps: menuz and its version, over its commit and kind")
@@ -88,6 +94,73 @@ struct IdentityRowTests {
     let version = try #require(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String)
     #expect(row.title == "mine \(version)")
     #expect(row.subtitle == nil, "the user's copy has no subheading, yet the row shows \(row.subtitle ?? "")")
+  }
+
+  @Test("a guard: the row shows an icon that is not blank, at arca's 32 by 32, and a blank image counts as blank")
+  func appIcon() throws {
+    #expect(MenuzMasthead.pixelsDrawn(Self.blank(side: 32)) == 0, "the probe counts a blank image as drawn")
+    let row = masthead(under: scratchFolder())
+    let app = MenuzMasthead.describe(NSApplication.shared.applicationIconImage)
+    let image = try #require(row.image, "the row has no image; the app's icon is \(app)")
+    // arca_swift's contract, not menuz's: its row draws the icon at 32 by 32.
+    #expect(image.size == NSSize(width: 32, height: 32), "the row's image is \(image.size.width) by \(image.size.height)")
+    let coloured = try #require(MenuzMasthead.pixelsDrawn(image), "no bitmap to draw the row's image in")
+    #expect(coloured > 0, "the row's image draws nothing; the app's icon is \(app)")
+  }
+
+  @Test("making the row gives a blank app icon the bundle's AppIcon.icns, which draws, and notes both, once")
+  func iconNote() throws {
+    NSApplication.shared.applicationIconImage = Self.blank(side: 16)
+    var notes: [String] = []
+    _ = MenuzMasthead.row(
+      environment: ["XDG_CONFIG_HOME": scratchFolder().path], menu: { nil }, log: { _ in }, note: { notes.append($0) })
+    #expect(notes.count == 1, "the notes were \(notes)")
+    let line = try #require(notes.first)
+    let parts = line.components(separatedBy: " in place of the app's icon (")
+    try #require(parts.count == 2, "the note was \(line)")
+    #expect(parts[0].hasPrefix("the menu's top row shows AppIcon.icns (read as "), "the note was \(line)")
+    // Read by URL, the file decodes to bitmaps alone; by name, it would not
+    // (the control below), so this tells the two loads apart.
+    #expect(
+      parts[0].firstMatch(of: #/read as \d+ NSBitmapImageRep, colours [1-9]/#) != nil,
+      "the icon was not read as bitmaps that draw: \(line)")
+    #expect(
+      parts[0].firstMatch(of: #/the app's icon now \d+ [A-Za-z]+, colours [1-9]/#) != nil,
+      "the app's icon draws nothing after the set: \(line)")
+    #expect(parts[1].hasSuffix(", colours 0 of 1024 pixels at 32 by 32)"), "the blank icon before is not the one named: \(line)")
+    let byName = try #require(Bundle.main.image(forResource: "AppIcon"), "the bundle gives no AppIcon by name")
+    #expect(
+      !byName.representations.allSatisfy { $0 is NSBitmapImageRep },
+      "a load by name also gives bitmaps alone, so \"read as\" cannot tell it from a load by URL")
+  }
+
+  @Test("a bundle naming no icon file, missing it, or holding one that is not an image is noted, and the app's icon is kept")
+  func iconKept() throws {
+    let base = scratchFolder()
+    defer { try? FileManager.default.removeItem(at: base) }
+    let cases: [(bundle: String, info: [String: Any], icon: Data?, says: String)] = [
+      ("Unnamed.bundle", [:], nil, "the bundle names no icon file (CFBundleIconFile): "),
+      ("Missing.bundle", ["CFBundleIconFile": "AppIcon"], nil, "the bundle has no AppIcon.icns: "),
+      ("Unreadable.bundle", ["CFBundleIconFile": "AppIcon"], Data("not an icon".utf8), "/AppIcon.icns is not an image: "),
+    ]
+    // From a blank icon, so a kept icon still colours nothing, and a set or a
+    // reset to any icon that draws shows.
+    NSApplication.shared.applicationIconImage = Self.blank(side: 16)
+    for each in cases {
+      let contents = base.appendingPathComponent("\(each.bundle)/Contents")
+      try FileManager.default.createDirectory(
+        at: contents.appendingPathComponent("Resources"), withIntermediateDirectories: true)
+      let plist = try PropertyListSerialization.data(fromPropertyList: each.info, format: .xml, options: 0)
+      try plist.write(to: contents.appendingPathComponent("Info.plist"))
+      if let icon = each.icon { try icon.write(to: contents.appendingPathComponent("Resources/AppIcon.icns")) }
+      let bundle = try #require(Bundle(url: contents.deletingLastPathComponent()))
+      let before = MenuzMasthead.describe(NSApplication.shared.applicationIconImage)
+      let line = MenuzMasthead.setAppIcon(bundle: bundle)
+      #expect(line.contains(each.says), "\(each.bundle) was noted as \(line)")
+      #expect(line.hasSuffix("the menu's top row keeps the app's icon (\(before))"), "\(each.bundle): \(line)")
+      #expect(before.hasSuffix(", colours 0 of 1024 pixels at 32 by 32"), "the icon before \(each.bundle) was \(before)")
+      #expect(MenuzMasthead.describe(NSApplication.shared.applicationIconImage) == before, "\(each.bundle) changed the icon")
+    }
   }
 
   @Test("the first item is the row, with a separator under it ahead of the refusals")

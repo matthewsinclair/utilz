@@ -53,9 +53,10 @@ enum Arms {
           outcome.notes.forEach { printError("Menuz: \($0)") }
           realised = outcome.realised
         }
-        // The top row as the menu makes it, so the two never differ.
+        // The top row as the menu makes it, so the two never differ. Its text
+        // shows no icon, so the icon's note goes nowhere.
         let row = MenuzMasthead.row(
-          environment: shell.environment, menu: { path }, log: { printError("Menuz: \($0)") })
+          environment: shell.environment, menu: { path }, log: { printError("Menuz: \($0)") }, note: { _ in })
         print(spec.render(masthead: MenuzMasthead.lines(row), realised: realised), terminator: "")
         return 0
       case .refused(let refusals):
