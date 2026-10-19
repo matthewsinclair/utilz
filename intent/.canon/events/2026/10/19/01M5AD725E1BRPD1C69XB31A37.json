@@ -1,0 +1,15 @@
+{
+  "id": "01M5AD725E1BRPD1C69XB31A37",
+  "ts": "2026-10-19T15:41:51.663Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "issues.add",
+  "subject": {
+    "type": "issue",
+    "id": "0089"
+  },
+  "payload": {
+    "severity": "low",
+    "title": "artifact's on_path takes a file on PATH that is not executable, where PATH lookup passes over it"
+  }
+}
