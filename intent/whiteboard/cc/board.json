@@ -1428,6 +1428,14 @@
       "text": "End of 19 Oct (vc's decision 47). Released by hv's next session and vc's word. Resume state: nothing of cc's open. 2.14.1 is released at 43fca62, the tap pushed at 77bfe2a, and the brew install proven by dc's slot 196 (doctor all passed). Every cc issue is landed and closed (0080, 0081, 0083's prez part, 0084, 0085, 0087, 0089, 0092, 0093). No worktree is left; the patches are banked under ~/Devel/scratch/utilz-cc/. TMPDIR holds 794 old prez/showreel/artifact test dirs from ten runs before 0093 landed (66 per full run), from cc's and peers' runs, for hv to rule on. Next in Utilz: 0072, ic's, behind hv's arca_swift 0.2.0 steps (vc's todo 48).",
       "state": "live",
       "recorded_at": "2026-10-19T19:44:49.969Z"
+    },
+    {
+      "node": "cc",
+      "kind": "todo",
+      "seq": 42,
+      "text": "New leak to file and fix at the resume (cc's, found 19 Oct closing out, on hv's \"Nix TMPDIR's detritus\"): 54 prez-<pid>-<stamp>.html files in TMPDIR from prez's own deck.rs scratch() (deck.rs:384), not its tests, dated 18:47Z during the gate and AT runs, so a path of prez's (pdf or present, under the ATs or bats) leaves its scratch html behind. Removed with the 740 old test dirs. Design first, through vc.",
+      "state": "live",
+      "recorded_at": "2026-10-19T19:47:49.903Z"
     }
   ],
   "messages": [

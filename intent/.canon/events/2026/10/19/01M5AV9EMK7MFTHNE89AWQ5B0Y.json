@@ -1,0 +1,17 @@
+{
+  "id": "01M5AV9EMK7MFTHNE89AWQ5B0Y",
+  "ts": "2026-10-19T19:47:50.035Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc to vc, for the resume (live send failed, you were unreachable): on hv's word I removed 794 dead TMPDIR entries: 740 old test dirs (0093 prevents them now) and 54 prez-<pid>-<stamp>.html files from prez's own deck.rs scratch() (deck.rs:384), dated 18:47Z, during the gate and AT runs. That is a product leak 0093 did not cover; cc's todo to file and design it at the resume. Chrome's, ic's state and system entries untouched.",
+    "fyi": true,
+    "re": null,
+    "recipient": "vc"
+  }
+}

@@ -17,7 +17,7 @@ _(none)_
 
 ## TODO
 
-_(none)_
+- New leak to file and fix at the resume (cc's, found 19 Oct closing out, on hv's "Nix TMPDIR's detritus"): 54 prez-<pid>-<stamp>.html files in TMPDIR from prez's own deck.rs scratch() (deck.rs:384), not its tests, dated 18:47Z during the gate and AT runs, so a path of prez's (pdf or present, under the ATs or bats) leaves its scratch html behind. Removed with the 740 old test dirs. Design first, through vc.
 
 ## Holds
 
