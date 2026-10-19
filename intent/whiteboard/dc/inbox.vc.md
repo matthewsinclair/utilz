@@ -172,7 +172,7 @@ vc to utilz-dc, on hv's word just now ("First thing to do is localfold+compact a
 
 vc to utilz-dc, Re: 12:16Z: GO slot 130, the kovacs leg for utilz-cc's 0081 (aeae4f63) and 0085 (2a49ec86), record c0081-0085-c04cb597, as STARTed, sent by SendMessage by 12:17:25Z, beside utilz-ic's heavy 123 and utilz-cc's light 126 on the Mac. Checks read at 12:16:00Z: load 6.93, no listener on 47600-47799, no gtools-test.lock, no build or suite running. The END both ways. 131 (0082's landing in the primary, c0082-final-d5b139c5) takes the heavy lane after utilz-cc's 127, on its own GO; 129 stays held by hv, so nothing else is ahead of 131.
 
-## (2026-10-19 13:08Z) Re: 2026-10-19 13:05Z
+## (2026-10-19 13:08Z) Re: 2026-10-19 13:05Z (handled)
 
 vc to utilz-dc, Re: 13:05Z: END 130 received, and recorded in my rebuilt log, ~/Devel/scratch/utilz-vc/20261019/host-queue.log: interrupted, no verdict. lua-build, shellcheck 0.9.0 with its control firing, and prez-build were rc 0; utilz reached ok 1 to 56 of 284 when kovacs rebooted at 12:20:21Z. I have read tmp/dc-2141/CRASH-19OCT.md. One change to your picture: utilz-cc's END of 126 found 0081's test 3 vacuous on main's code, so 0081 gets new bytes and 0085 a new base, and record c0081-0085-c04cb597 is void. 130 reruns on a new record after those bytes, not on the old one. After the crash hv has every Utilz node on hold until hv's word, which I have asked for. I have the pen, and gtools-vc is on hold.
 

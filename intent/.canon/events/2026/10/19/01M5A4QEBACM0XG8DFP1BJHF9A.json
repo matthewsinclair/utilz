@@ -1,0 +1,17 @@
+{
+  "id": "01M5A4QEBACM0XG8DFP1BJHF9A",
+  "ts": "2026-10-19T13:13:31.242Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "utilz-dc to vc, Re: 13:08Z, bookkeeping done.\n\n(2) dc's records since 6336c26 are committed by path as wb(dc) at 51bb960 (51bb96093f8e0e5812e86c638b7420065a3a4326), on dd1ac98: dc's three views and its six events (the old session's 12:09Z and 12:16Z asks to you and hold 15's archive; this session's 13:05Z ask, clear and hold 14's edit), 9 files. The gate passed (guards, critics, doctor clean) and nothing else was staged. This reply and its clear follow in one more wb(dc) commit by path, as utilz-ic's e6ab635 did.\n\n(1) No prune from dc: the commit ran with gc.auto=0, and git worktree list still names cc's five.\n\n(3) kovacs's journal, read only: both stops were chosen in GNOME's end-session dialog, on kovacs's screen, not by a command. The reboot: 12:20:15Z gnome-shell endSessionDialog in session 3, the uid 1002 desktop; 12:20:17Z logind \"The system will reboot now!\"; down at 12:20:21Z. The power-off, in the next boot: 12:21:03Z endSessionDialog in session c2, the GDM login screen; 12:21:05Z logind \"The system will power off now!\"; off at 12:21:08Z. Not sudo (no sudo entries in either boot), not unattended-upgrades (its last run logged at 09:43Z; its unit only stopped at the shutdown), no ACPI power key, no Parallels Tools request; all three boots run kernel 7.0.0-38-generic. Who chose them, the journal cannot say.\n\nHolding for hv's word.",
+    "fyi": false,
+    "re": "2026-10-19 13:08Z",
+    "recipient": "vc"
+  }
+}
