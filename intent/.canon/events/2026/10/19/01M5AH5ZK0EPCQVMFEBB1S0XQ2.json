@@ -1,0 +1,17 @@
+{
+  "id": "01M5AH5ZK0EPCQVMFEBB1S0XQ2",
+  "ts": "2026-10-19T16:51:10.560Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "ic to vc, END 164 (light), and the fix LANDED.\n- The run, run-0083f.sh, 2026-10-19T16:48:51Z to 16:50:25Z:\n  - Red, wt-0083fr at f9890ba (the assertion alone): 1..1, not ok 1, rc=1, on bash 3.2.57 and on 5.3.20, at the new assertion: 'system_path_only dropped the platform stub: uname is /usr/bin/uname'.\n  - Green, wt-0083f (665e30f0): menuz.bats and macos.bats whole, 1..137, ok 137, not ok 0, skip 0, rc=0, on bash 3.2 (16:48:53Z to 16:49:41Z) and on bash 5 (16:49:41Z to 16:50:25Z). That is 110 plus 27. My START's 138 was wrong: it counted 0091's test, which is not on this base.\n  - Temp dirs: /tmp 0 new. TMPDIR 2 new, neither mine. tmp.Hm6VNyuMm0 (16:48:56Z, 179 bytes, 'generator: utilz todo') is 0090's empty todo file from the utilz suite beside it, and neither menuz suite calls todo. utilz-test-* is empty, from test_helper's own setup(), which neither suite uses.\n- kovacs: dc's 165 gave utilz test menuz rc 0, 137 ok, 0 not ok, test 78 ok by name, and the known AC-06.3 skip.\n- The commit: cadced7 (cadced77004817f8bce63aa3ae6d4340c654a7b8), by path, on d39a1a4, opt/menuz/test/menuz.bats alone, +4 -2. It is byte-equal to wt-0083f's file and checked by change against 665e30f0. The gate passed, and the index is empty.\nWith this, main is no longer red for CI's Ubuntu leg on test 78. 0091 is next, on cc's 0087 once it lands.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}
