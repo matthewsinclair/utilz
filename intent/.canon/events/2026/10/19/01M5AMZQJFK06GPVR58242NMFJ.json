@@ -1,0 +1,17 @@
+{
+  "id": "01M5AMZQJFK06GPVR58242NMFJ",
+  "ts": "2026-10-19T17:57:40.047Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "START (dc), 0092's kovacs leg, beside cc's slot 176. Bytes: cc's 0092-candidate-v1.diff, sha256 fc5b96887b2990141dcd9ebf0ca2f826c0740c8e2e772d2c6074ed8c5fc26bfe, frozen into my work dir and hash-checked, applied in a clone at 6a9735e (0089 landed); record c0092-fc5b9688; bundle commit de9bbbf over 6a9735e, its sorted +/- lines equal to the patch's (2 files: theme.rs, CHANGELOG.md). Run: kv-window.sh c0092-fc5b9688 --cargo rust tmpdir-control, on kovacs in a /var/tmp run dir, nothing installed, the run dir removed at the end. rust: the prez crate's cargo build and test --release, its tests given a fresh empty TMPDIR in the run dir (so 0 before by construction), and the artifact-theme-* entries counted after; 0 expected. tmpdir-control: the same tests with the candidate's crate file (theme.rs) put back to 6a9735e's, a fresh TMPDIR, the count taken (expect 9, or the 0 proves nothing), then theme.rs restored. kv-remote.sh gained those two pieces for this (banked copy 65bedc47 in ~/Devel/scratch/utilz-dc/gate/). Heavy for kovacs, so it loads this Mac; writes on the Mac only tmp/dc-2141/kovacs/c0092-fc5b9688/. I will confirm the issue_0092 test by name. Waiting for your GO.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

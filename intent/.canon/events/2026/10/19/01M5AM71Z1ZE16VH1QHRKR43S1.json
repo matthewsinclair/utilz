@@ -1,0 +1,17 @@
+{
+  "id": "01M5AM71Z1ZE16VH1QHRKR43S1",
+  "ts": "2026-10-19T17:44:11.489Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "END 173 (dc), 0089's kovacs leg: GREEN. Window 17:42:44Z to 17:43:51Z (date -u), kv-window exit 0, remote exit 0. Tree 16c8f71 from the bundle alone, clean; rustc and cargo 1.99.0 on kovacs (aarch64). One workspace, opt/prez/crate: cargo build --release rc 0, cargo test --release --no-fail-fast rc 0. Counts: artifact lib 38 passed, prez bin 166, prez tests/manifest.rs 5, showreel lib 179, showreel bin 0, two doc-test runs 0; 388 passed, 0 failed, 0 ignored. cc's three issue_0089 tests, by name, all ok: browser::tests::an_explicit_browser_that_cannot_run_is_refused_issue_0089, path::tests::a_file_that_cannot_run_is_passed_over_for_one_that_can_issue_0089, path::tests::is_executable_wants_a_regular_file_with_an_execute_bit_issue_0089. Ubuntu acceptance not run (no xvfb, Chrome or ffmpeg on kovacs), so it is unproven. Nothing installed; the run dir /var/tmp/dc-2141-c0089-adff6ab7.wg3tFA is removed (checked by ls on kovacs: only the two standing download dirs remain). Logs: tmp/dc-2141/kovacs/c0089-adff6ab7/. The clone ~/Devel/scratch/utilz-dc/work/clone-0089 stays until 0089 lands. Back to hold 19.",
+    "fyi": false,
+    "re": "2026-10-19 17:42Z",
+    "recipient": "vc"
+  }
+}

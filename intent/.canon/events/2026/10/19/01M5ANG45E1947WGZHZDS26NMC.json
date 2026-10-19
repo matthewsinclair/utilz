@@ -1,0 +1,15 @@
+{
+  "id": "01M5ANG45E1947WGZHZDS26NMC",
+  "ts": "2026-10-19T18:06:37.230Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "todo",
+    "text": "0093's kovacs leg, widened (cc's ask; hv's 'nix the 82', decision 42), after the dry run, beside cc's slot 180, on vc's GO: one run, kv-window.sh c0093-5924fbe5 --cargo rust tmpdir-control. Bundle READY: cc's 0093-candidate-v1.diff (5924fbe5, frozen and hash-checked) on 910af45 in work/clone-0093, bundle commit 8514758 whose change equals the patch's (20 files, testing.rs added). rust: the candidate's crate tests with an empty TMPDIR, names kept in logs/rust-tmpdir-1.txt (0 wanted). tmpdir-control: 910af45's crate files back (testing.rs removed), an empty TMPDIR, names in logs/control-tmpdir.txt (the 82, todo 13's first ask). kv-remote.sh banked with both. Size S."
+  }
+}

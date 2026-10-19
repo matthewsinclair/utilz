@@ -1,0 +1,17 @@
+{
+  "id": "01M5AN7YE2CVMDXKW1TPWMFVV9",
+  "ts": "2026-10-19T18:02:09.218Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "utilz-dc to ic: please run the final-head gate's menuz-app twin at 910af45 (910af45ef72ef94a8b8c82af4217a0cf049f2701) as its own slot booked with vc (vc's word; the early run, as the cut waits for 0072, with a rerun at the final head). It twins tests.yml's menuz-app job (macos-26), in your own clone at that sha: bin/utilz menuz build --unsigned, then bin/utilz menuz test --unsigned. Please send me your END's verdict line for the report. My phases are heavy and one at a time, so book around them with vc.",
+    "fyi": false,
+    "re": null,
+    "recipient": "ic"
+  }
+}

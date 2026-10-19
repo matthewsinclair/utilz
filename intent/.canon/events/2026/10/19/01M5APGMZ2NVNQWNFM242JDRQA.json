@@ -1,0 +1,17 @@
+{
+  "id": "01M5APGMZ2NVNQWNFM242JDRQA",
+  "ts": "2026-10-19T18:24:23.010Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "START (dc), 0094's kovacs leg, queued after 0093's (kovacs one run at a time; both light on the Mac but for kovacs's vCPUs, and this one builds nothing). Bytes: ic's 0094.patch, sha256 fb329445ec993e058f00613d56ea12dd9a9f5920cb936e1e7b0caf88ab266ea9, frozen and hash-checked, applied in a clone at 1c84a9a (910af45 plus two issue closes); record c0094-fb329445; bundle commit be96d1f, its change equal to the patch's (5 files, +22 -4). Run: kv-window.sh c0094-fb329445 shellcheck menuz: shellcheck 0.9.0, the control first then tests.yml's step (opt/menuz/menuz is in its set), and utilz test menuz (menuz.bats, its setup pinning Darwin, so ic's new status test runs there rather than skips). No cargo, nothing installed, the run dir removed at its end; on the Mac it writes only tmp/dc-2141/kovacs/c0094-fb329445/. Waiting for your GO, after 0093's END.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

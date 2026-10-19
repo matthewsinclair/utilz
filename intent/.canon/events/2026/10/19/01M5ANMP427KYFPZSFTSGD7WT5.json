@@ -1,0 +1,17 @@
+{
+  "id": "01M5ANMP427KYFPZSFTSGD7WT5",
+  "ts": "2026-10-19T18:09:06.691Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "178 phase (1) kovacs END: GREEN. 18:02:28Z to 18:08:42Z (date -u); full bundle of 910af45 into /var/tmp/dc-2141-gate-910af45.H0Y6LA, clean tree, nothing installed; the run dir removed (the window's own line). lua-build rc 0 (Lua 5.4.6 into the run dir). shellcheck 0.9.0: control rc 1 (fires), step rc 0 on 24 files, 0 advisory. prez-build rc 0 (prez 2.5.3). lua-plan 193 passed. relink 19 ok. test-linux loop, the roster from 910af45's own tests.yml, every one rc 0 and 0 not ok: utilz 313, cryptz 12, gitz 13, mdagg 31, retry 12, syncz 79, pdf2md 15, xtrct 12, lnrel 12, todo 46, expz 9, stampz 24, arngz 141, menuz 138, cleanz 66, clipz 12, macoz 17. 21 skips, by name: macoz 10 'Not on macOS' and cleanz 6 'exiftool not installed' (both suites new to the roster with 0083); menuz AC-06.3 (rsvg-convert) and xtrct 4 (ANTHROPIC_API_KEY), as in the baseline. rust (ubuntu leg, build and test): rc 0, 389 passed, 0 failed; 0 artifact-theme-* and 82 entries in all in its TMPDIR (0093's). Ubuntu acceptance UNPROVEN (no xvfb, Chrome, ffmpeg or node 26 on kovacs). Logs: tmp/dc-2141/kovacs/gate-910af45/. Phase (3) still running; (4) follows it.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

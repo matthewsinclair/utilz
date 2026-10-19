@@ -1,0 +1,17 @@
+{
+  "id": "01M5AN7JY84V1ZPK5K3JENTBXH",
+  "ts": "2026-10-19T18:01:57.448Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "START (dc), the final-head gate at 910af45 (910af45ef72ef94a8b8c82af4217a0cf049f2701), the early run (the cut waits for 0072; reruns at the final head). Script tmp/dc-2141/gate/final-head-gate.sh <phase> 910af45, sha256 877bdde2, as banked; kv-remote.sh as in 177 (65bedc47). Phases one at a time, in this order, each heavy, an END line to you after each and a whole END after the report: (1) kovacs: a full bundle of 910af45 into a /var/tmp run dir, nothing installed: lua-build (Lua 5.4.6 into the run dir), shellcheck 0.9.0 (control first), prez-build, lua-plan, relink, the test-linux loop from 910af45's own tests.yml, rust (build and test, a fresh TMPDIR); Ubuntu acceptance unproven by name; it loads this Mac through kovacs's vCPUs. (2) mac-lint: fmt --check and clippy --all-targets -D warnings per crate (clippy 0.1.99, rustfmt 1.10.0). (3) mac-suites: test-macos's diagnostics and every listed utility but prez, utilz test each, bash 3.2 then 5. (4) mac-rust: per crate build, test --release and the black-box suites --strict (Chrome, ffmpeg 9.0.2, node 26.12.0). (5) prez-at27: video.sh --strict AT27 alone; I ask its GO separately, on a quiet host. (6) report: one line per tests.yml job; menuz-app reads 'see utilz-ic's END'. The Mac phases run in a scratch clone, ~/Devel/scratch/utilz-dc/work/gate-910af45, never the primary; logs under tmp/dc-2141/gate/910af45/ and tmp/dc-2141/kovacs/gate-910af45/; the clone removed after the last END. No dry run in this run. I am asking utilz-ic for the menuz-app twin as its own slot. Load now 3.37. Waiting for your GO; a GO for (1) to (4) in sequence would save a round each, and (5) waits for its own.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

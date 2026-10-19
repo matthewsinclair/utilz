@@ -1,0 +1,17 @@
+{
+  "id": "01M5APQPE15769DFHVJN5FDHXP",
+  "ts": "2026-10-19T18:28:13.889Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "START (dc), 0093 v2's kovacs leg, on 185's terms. Bytes: cc's 0093-candidate-v2.diff, sha256 1c143245ae91c8cfa0ee580c30b9d0767ae62dba10839173e17aff1af6cc4fd0, frozen and hash-checked, applied in a clone at 910af45; record c0093-1c143245; bundle commit ac30d84, its change equal to the patch's (17 files, testing.rs added, 0 Cargo.toml). Run: kv-window.sh c0093-1c143245 --cargo rust tmpdir-control: the whole crate suite (tests/manifest.rs included) in an empty TMPDIR, its names kept (0 wanted); the control at 910af45's files, its names kept (82 expected); nothing installed; the run dir removed at its end. Heavy for kovacs. Waiting for your GO.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

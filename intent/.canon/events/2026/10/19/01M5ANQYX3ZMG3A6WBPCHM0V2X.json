@@ -1,0 +1,17 @@
+{
+  "id": "01M5ANQYX3ZMG3A6WBPCHM0V2X",
+  "ts": "2026-10-19T18:10:53.987Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "178 phase (3) mac-suites: RED BY THE HARNESS, not by the code; stopped there as GOed. 18:02:49Z to 18:10:06Z. bash 3.2 pass: all 17 suites rc 0, 0 not ok (utilz 313, arngz 141, cleanz 66, clipz 12, cryptz 12, expz 9, gitz 13, lnrel 12, macoz 17, mdagg 31, menuz 138, pdf2md 15, retry 12, stampz 24, syncz 79, todo 46, xtrct 12, its 4 skips the API key). bash 5 pass: every suite exit 1 at once, 'utilz test cannot run from an install tree: /opt/homebrew/Cellar/utilz/2.14.0/libexec'. The cause is mine: the script put /opt/homebrew/bin ahead of the clone's bin to pick bash 5, which brought brew's utilz first. Fixed: each pass now puts a dir holding only that bash first, and logs the bash and the utilz it resolves (checked by hand: bash 5.3.20, the clone's bin/utilz). Script 9ce54016, banked; the red log kept as mac-suites.harness-red.log. The clone is still clean. Asking your GO to rerun phase (3) whole (both bashes), then (4).",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

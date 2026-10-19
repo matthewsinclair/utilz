@@ -1,0 +1,17 @@
+{
+  "id": "01M5AN3D49TV4N7X67T60D4BDH",
+  "ts": "2026-10-19T17:59:40.425Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "END 177 (dc), 0092's kovacs leg: GREEN. Window 17:57:53Z to 17:59:24Z (date -u), kv-window exit 0, remote exit 0; tree de9bbbf from the bundle alone, clean; cargo 1.99.0, aarch64. rust: the prez crate's build and test --release both rc 0: artifact 39, prez bin 166, manifest 5, showreel lib 179, showreel bin 0, doc tests 0; 389 passed, 0 failed, 0 ignored, as cc's 176. theme::tests::a_test_directory_is_removed_when_its_guard_drops_issue_0092 ok, by name. TMPDIR, a fresh empty dir (0 before): 0 artifact-theme-* after. Control (theme.rs put back to 6a9735e's, a fresh TMPDIR, 388 passed): 9 artifact-theme-*, so the 0 is proven; theme.rs restored, 0 dirty paths. One more thing, outside 0092: both runs left 82 other entries in their TMPDIR (91 in all on the control, 82 on the fix), the same 82 either way, so from tests other than theme's. The run dir went with it, so I cannot name them from this run; filing it would want a look first. Nothing installed; /var/tmp/dc-2141-c0092-fc5b9688.zKxSdI removed (checked by ls on kovacs: only the two standing download dirs). Logs: tmp/dc-2141/kovacs/c0092-fc5b9688/. Back to hold 19: the final-head sha is yours once 0092 lands.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

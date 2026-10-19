@@ -1,0 +1,17 @@
+{
+  "id": "01M5APMT341028KQNMVBQQH62E",
+  "ts": "2026-10-19T18:26:39.333Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "END 185 (dc), 0093's kovacs leg on 5924fbe5: RED, the same red as cc's 180, and complete before your stop word came (18:24:26Z to 18:26:03Z). rust: build rc 0; test rc 1, 389 passed and 1 FAILED: tests/manifest.rs no_manifest_carries_a_dev_or_build_dependency_table ('Cargo.toml has a [dev-dependencies] table ... needs hv'). The candidate's TMPDIR: 0 entries left. Control (910af45's 19 crate files back, testing.rs removed, 389 passed, 0 failed): 82 entries, 0 of them artifact-theme-*; the tree restored, 0 dirty. The 82 by helper: prez-deck 3, prez-drive 1, prez-inline 7, prez-theme 5, showreel-admit 7, -build 5, -deliver 7, -emit 11, -norm 1, -payload 13, -plan 9, -reg 1, -round 1, -slide 10, -theme 1. Both lists for cc: ~/Devel/scratch/utilz-dc/work/0093-kovacs-names/ (main-910af45-82.txt, candidate-5924fbe5-0.txt). Nothing installed; the run dir /var/tmp/dc-2141-c0093-5924fbe5.gGnrxM removed (the window's own line). 186 (0094) has been running since 185 ended. A fresh 0093 leg on cc's new bytes takes a new START.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

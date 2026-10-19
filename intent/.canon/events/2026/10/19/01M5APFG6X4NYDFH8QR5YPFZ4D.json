@@ -1,0 +1,17 @@
+{
+  "id": "01M5APFG6X4NYDFH8QR5YPFZ4D",
+  "ts": "2026-10-19T18:23:45.373Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "START (dc), 0093's kovacs leg beside cc's 180. Bytes: cc's 0093-candidate-v1.diff, sha256 5924fbe51815a3522a9675cb9ef85d01e2c72a49d3bcc70eb35967df154108a0, frozen into my work dir and hash-checked, applied in a clone at 910af45; record c0093-5924fbe5; bundle commit 8514758 over 910af45, its change equal to the patch's by sorted +/- lines (20 files, testing.rs added). Run: kv-window.sh c0093-5924fbe5 --cargo rust tmpdir-control, on kovacs in a /var/tmp run dir, nothing installed, the run dir removed at its end. rust: the candidate's prez crate build and test --release, its tests in an empty TMPDIR of the run's own, every name left kept in logs/rust-tmpdir-1.txt (0 wanted). tmpdir-control: 910af45's crate files put back and testing.rs removed, an empty TMPDIR, the names kept in logs/control-tmpdir.txt (the 82 on main), then the tree restored. kv-remote.sh banked as 6e5627cd plus the control's added-file handling. Heavy for kovacs, so it loads this Mac; on the Mac it writes only tmp/dc-2141/kovacs/c0093-5924fbe5/. Waiting for your GO.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "id": "01M5APFG2PJDRTK9STSBFT2MQX",
+  "ts": "2026-10-19T18:23:45.238Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "178 phase (3) mac-suites rerun END: GREEN, 18:11:09Z to 18:23:28Z, script 9ce54016, in the clone at 910af45 (still clean). bash 3.2 pass: 'GNU bash, version 3.2.57(1)-release', utilz /Users/matts/Devel/scratch/utilz-dc/work/gate-910af45/bin/utilz. bash 5 pass: 'GNU bash, version 5.3.20(1)-release', the same clone utilz. 34 of 34 suite runs exit 0, 0 not ok, identical counts on both bashes: utilz 313, arngz 141, cleanz 66, clipz 12, cryptz 12, expz 9, gitz 13, lnrel 12, macoz 17, mdagg 31, menuz 138, pdf2md 15, retry 12, stampz 24, syncz 79, todo 46, xtrct 12; skips only xtrct's 4 (ANTHROPIC_API_KEY) on each. (4) skipped at 910af45, as agreed. 178 at 910af45 ends here: (1) (2) (3) green; the whole of (1) to (4) reruns at the head after 0093 and 0094.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

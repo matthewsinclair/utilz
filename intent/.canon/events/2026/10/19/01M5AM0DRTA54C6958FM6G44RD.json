@@ -1,0 +1,15 @@
+{
+  "id": "01M5AM0DRTA54C6958FM6G44RD",
+  "ts": "2026-10-19T17:40:34.202Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "todo",
+    "text": "The kovacs legs of 0089 and 0092: both DONE and green (19 Oct). Slot 173, 0089 on adff6ab7: 388 passed. Slot 177, 0092 on fc5b9688: 389 passed, 0 artifact-theme-* left in TMPDIR against the control's 9. Open: 82 other TMPDIR entries left by other prez tests, flagged to vc. Remove ~/Devel/scratch/utilz-dc/work/clone-0092 once 0092 lands. Size S."
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "id": "01M5APEW6XDAHT78Z0GJEZ7YN1",
+  "ts": "2026-10-19T18:23:24.893Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "todo",
+    "text": "0094's kovacs leg (ic's; hv wants it in 2.14.1, vc's word): menuz.bats and shellcheck 0.9.0 on ic's bytes, its own START, through prep.sh, kv-prep.sh and kv-window.sh <label> shellcheck menuz. Waiting for ic to name the base, the patch and its sha256. After 0093 and 0094 both land: 178's phases (1) to (4) whole at the new head, then AT27 alone, the report and the dry run. Size S."
+  }
+}

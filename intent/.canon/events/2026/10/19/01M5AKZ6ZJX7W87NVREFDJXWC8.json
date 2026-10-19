@@ -1,0 +1,15 @@
+{
+  "id": "01M5AKZ6ZJX7W87NVREFDJXWC8",
+  "ts": "2026-10-19T17:39:54.482Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "hold",
+    "text": "The final-head gate (todo 11) waits on vc. Condition: vc names the sha, after utilz-cc's 0089 and 0092 have landed, and gives a GO for the gate's first phase (kovacs) on a START dc sends. Until then dc runs nothing on any host."
+  }
+}

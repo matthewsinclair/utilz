@@ -1,0 +1,17 @@
+{
+  "id": "01M5APVB8XF4244AFFDXEQ8T85",
+  "ts": "2026-10-19T18:30:13.533Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "END 188 (dc), 0093 v2's kovacs leg on 1c143245: GREEN. 18:28:27Z to 18:29:56Z; tree ac30d84 (910af45 + cc's v2) from the bundle alone, clean. rust: the prez crate's build and test --release rc 0, 390 passed, 0 failed (389 at 910af45, plus v2's one). tests/manifest.rs all 5 ok by name, among them no_manifest_carries_a_dev_or_build_dependency_table and every_dependency_table_matches_its_approved_budget. The candidate's TMPDIR, empty before: 0 entries left. Control (910af45's crate files back, testing.rs removed; 389 passed, 0 failed): 82 entries, the same 82 names as 185's but for the pid; tree restored, 0 dirty. Lists in ~/Devel/scratch/utilz-dc/work/0093-kovacs-names/ (candidate-1c143245-0.txt added). Nothing installed; the run dir /var/tmp/dc-2141-c0093-1c143245.pLfayo removed (the window's own line). Logs: tmp/dc-2141/kovacs/c0093-1c143245/. Once 0093 and 0094 have landed, name the head and I send the START for 178's (1) to (4) whole there.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

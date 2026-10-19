@@ -3,7 +3,7 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: 6dcaa72a-ce22-40f6-9b26-864aa61830e6
-heartbeat_at: 2026-10-19 17:36Z
+heartbeat_at: 2026-10-19 17:39Z
 status: active
 focus: "19 Oct, folded for hv's compact: all of dc's issues landed (0083's dc part 9ee7d59, 0088 c6da0b8, 0090 c50b08b; 0082 853a947), closing after hv's push; next the final-head gate at vc's sha after 0089 and 0092 (todo 11, ~/Devel/scratch/utilz-dc/gate/). Resume from the compact hold."
 claims: []
@@ -23,10 +23,13 @@ _(none)_
 - Issue 0083, Utilz on Linux (vc's decision 32, 19 Oct). All three parts LANDED, local, not pushed: dc's part 9ee7d59 (slot 151, v6 38479150, check-landing exact); utilz-ic's menuz part c918dec and its fix forward cadced7 (menuz test 78 on Linux, found by dc's 163, green in 165); utilz-cc's prez part 80fb661 (green on kovacs in 171). Remaining: 0083 closes after hv's push and CI green on it, as 0077 and 0079 closed. Remove wt-0083 then. Size L. (edited)
 - Issues 0088 and 0090, dc's, in 2.14.1, both LANDED, local, not pushed. 0088 (version_dispatch.bats' own teardown() skipped the helper's cleanup; utilz_teardown and its guard, now on utilz-ic's _suites_missing_call after 0091) landed as c6da0b8 in slot 157, red and green in 154. 0090 (todo's mktemp-then-mv left a temp when the mv failed; one _write_replacing, temp beside the target, traps keyed on a global) landed as c50b08b in slot 169, red and green in 160, kovacs in 163. Remaining: each closes after hv's push and CI green on it. Size XS. (edited)
 - The final-head gate (vc's decision 38, 19 Oct): tmp/dc-2141/gate/final-head-gate.sh <phase> <sha>, banked with its resume notes in ~/Devel/scratch/utilz-dc/gate/ (GATE-RESUME.md). Run at the exact sha vc names once utilz-cc's 0089 and 0092 have landed, the last two. Each phase is its own START, in order: kovacs (test-linux and its roster loop from the sha's own tests.yml, shellcheck 0.9.0, rust ubuntu build and test; Ubuntu acceptance unproven by name; this is what todo 5 was); mac-lint (fmt and clippy -D warnings on the Mac, vc's ruling); mac-suites (test-macos, bash 3.2 and 5, in a scratch clone); mac-rust (the crate's build, test and black-box suites); prez-at27 (video.sh --strict AT27 alone on a quiet host); menuz-app (utilz-ic's, heavy); report (one line per tests.yml job); then todo 3's dry run under vc's freeze of every node, refused unless the primary is clean. Size L. (edited)
+- The kovacs legs of 0089 and 0092: both DONE and green (19 Oct). Slot 173, 0089 on adff6ab7: 388 passed. Slot 177, 0092 on fc5b9688: 389 passed, 0 artifact-theme-* left in TMPDIR against the control's 9. Open: 82 other TMPDIR entries left by other prez tests, flagged to vc. Remove ~/Devel/scratch/utilz-dc/work/clone-0092 once 0092 lands. Size S. (edited)
+- 0093's kovacs leg, widened (cc's ask; hv's 'nix the 82', decision 42), after the dry run, beside cc's slot 180, on vc's GO: one run, kv-window.sh c0093-5924fbe5 --cargo rust tmpdir-control. Bundle READY: cc's 0093-candidate-v1.diff (5924fbe5, frozen and hash-checked) on 910af45 in work/clone-0093, bundle commit 8514758 whose change equals the patch's (20 files, testing.rs added). rust: the candidate's crate tests with an empty TMPDIR, names kept in logs/rust-tmpdir-1.txt (0 wanted). tmpdir-control: 910af45's crate files back (testing.rs removed), an empty TMPDIR, names in logs/control-tmpdir.txt (the 82, todo 13's first ask). kv-remote.sh banked with both. Size S. (edited)
+- 0094's kovacs leg (ic's; hv wants it in 2.14.1, vc's word): menuz.bats and shellcheck 0.9.0 on ic's bytes, its own START, through prep.sh, kv-prep.sh and kv-window.sh <label> shellcheck menuz. Waiting for ic to name the base, the patch and its sha256. After 0093 and 0094 both land: 178's phases (1) to (4) whole at the new head, then AT27 alone, the report and the dry run. Size S.
 
 ## Holds
 
-- Holding for hv's compact (vc's decision 39, 19 Oct: fold, and a freeze, so nothing STARTs or GOes until after the compacts). Condition: hv's compact of this session has run. Then /in-session and pickup, and wait for vc's word. The resume state: all of dc's issues have landed, local and not pushed: 0083's dc part 9ee7d59 (with ic's c918dec and cadced7, and cc's 80fb661), 0088 c6da0b8, 0090 c50b08b; 0082 853a947 from earlier. Each closes after hv's push and CI green. Next is the final-head gate (todo 11; ~/Devel/scratch/utilz-dc/gate/GATE-RESUME.md) at the sha vc names once utilz-cc's 0089 and 0092 have landed, each phase its own START, then the dry run (todo 3) under vc's freeze. Kept until their issues close: wt-0082 and wt-0083.
+_(none)_
 
 ## Watch-outs
 

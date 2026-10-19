@@ -1,0 +1,17 @@
+{
+  "id": "01M5APPYQR6KE2ZW5EG9KM7YBW",
+  "ts": "2026-10-19T18:27:49.624Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "END 186 (dc), 0094's kovacs leg on fb329445: GREEN. 18:26:12Z to 18:27:26Z; tree be96d1f (1c84a9a + ic's patch) from the bundle alone, clean. shellcheck 0.9.0: control rc 1 (fires), step rc 0 on 24 files (opt/menuz/menuz among them), 0 advisory. menuz.bats: rc 0, 139 ok, 0 not ok (138 at 910af45, plus ic's one); the one skip AC-06.3 (rsvg-convert), as in the baseline. ic's test ok by name: 62 'AT-02.3: on a Homebrew install status says the source is homebrew, and compares nothing (issue 0094)'. uname is the stub in this run: test 79 (AT-05.1, refuse without xcodegen) asserts command -v uname is $UTILZ_TEST_PLATFORM_BIN/uname after system_path_only, ok; and the Linux-stubbed tests 132 to 138 (off macOS, status's one platform line among them) ok. Nothing installed; the run dir /var/tmp/dc-2141-c0094-fb329445.AatzbJ removed (the window's own line). Logs: tmp/dc-2141/kovacs/c0094-fb329445/. Next: 0093 v2 (cc's 1c143245), prepping now, a new START.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

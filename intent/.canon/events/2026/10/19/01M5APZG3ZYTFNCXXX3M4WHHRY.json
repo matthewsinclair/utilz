@@ -1,0 +1,17 @@
+{
+  "id": "01M5APZG3ZYTFNCXXX3M4WHHRY",
+  "ts": "2026-10-19T18:32:29.567Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "START (dc), the final-head gate at d5beb38 (d5beb38cd654e65caf62a42c80cbda6a8063bfbd): 178's phases (1) to (4) whole, in order, each heavy, an END line after each; stop at the first red, a timing-like one rerun alone before it counts. Scripts: final-head-gate.sh 9ce54016 (the bash-shim fix in) and kv-remote.sh e2a64876 (rust's TMPDIR names kept). (1) kovacs: a full bundle of d5beb38 into a /var/tmp run dir, nothing installed: lua-build, shellcheck 0.9.0 (control first), prez-build, lua-plan, relink, the test-linux loop from d5beb38's own tests.yml, rust (build and test, an empty TMPDIR, its leftovers counted; 0 expected after 0093); Ubuntu acceptance unproven by name. (2) mac-lint: fmt --check and clippy -D warnings per crate. (3) mac-suites: every listed utility but prez, bash 3.2 then 5, each pass logging its bash and its utilz. (4) mac-rust: per crate build, test and the black-box suites --strict. The Mac phases in a fresh scratch clone, ~/Devel/scratch/utilz-dc/work/gate-d5beb38; logs under tmp/dc-2141/gate/d5beb38/ and tmp/dc-2141/kovacs/gate-d5beb38/. As in 178, (1) beside (2) and then (3), a kovacs leg beside a Mac run; (4) after (3). Load now 10.0. Then ic's menuz-app twin, AT27 alone (its own GO), the report. Waiting for your GO.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

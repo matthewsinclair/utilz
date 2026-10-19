@@ -1,0 +1,17 @@
+{
+  "id": "01M5AM3TBFA3PPY3MCFSWFH49A",
+  "ts": "2026-10-19T17:42:25.391Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "START (dc), 0089's kovacs leg, beside cc's slot 172. Bytes: cc's patch 0089-landing-fd1f025.diff, sha256 adff6ab799d58c0f694e0d3c4e525195f5373cf437ac1c092016ceab38ed996d, frozen into my work dir and hash-checked, applied in a clone at fd1f025; record c0089-adff6ab7; bundle commit 16c8f71 over fd1f025, whose sorted +/- lines equal the patch's (5 files, +100 -18). Run: kv-window.sh c0089-adff6ab7 --cargo rust: on kovacs, in a /var/tmp mktemp run dir, cargo build --release and cargo test --release --no-fail-fast per crate workspace (opt/*/crate), nothing installed, the run dir removed once logs are back. Heavy for kovacs (cargo on its two vCPUs, so it loads this Mac); writes nothing on the Mac but tmp/dc-2141/kovacs/c0089-adff6ab7/. I will confirm cc's three issue_0089 tests ran and passed by name. Waiting for your GO.",
+    "fyi": false,
+    "re": "2026-10-19 17:41Z",
+    "recipient": "vc"
+  }
+}
