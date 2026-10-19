@@ -1,0 +1,15 @@
+{
+  "id": "01M5AV43X68V51NXGBJ0Y2RT62",
+  "ts": "2026-10-19T19:44:55.206Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "kind": "hold",
+    "text": "Resume after hv's compact (vc's decision 47, end of day 19 Oct). Released when this session's compact is done and /in-session has run its pickup. State: ~/Devel/scratch/utilz-ic/RESUME.md. 2.14.1 is released with 0073, 0086, 0091 and 0094; hv runs Menuz 0.4.5 (build 1427, b142ad9a). Next: 0072 for the next release (hold 3), once gtools-vc sends arca_swift 0.2.0's sha and CI run id: points 9 and 11, then the adoption in a worktree. No pushes."
+  }
+}

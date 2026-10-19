@@ -3,9 +3,9 @@ node: ic
 name: Interface Claude
 role: interface
 session_id: 28cb7084-edb7-43ea-8d34-762c618e0583
-heartbeat_at: 2026-10-19 19:36Z
+heartbeat_at: 2026-10-19 19:44Z
 status: active
-focus: "19 Oct, after 2.14.1's release (tag at 43fca62, CI green): 0073, 0086, 0091 and 0094 closed. Next: 0072 (menuz adopts ArcaLogConsole) for the next release, in a worktree once arca_swift 0.2.0 exists and gtools-vc sends its sha and CI run id (hold 3)."
+focus: "19 Oct, end of day (decision 47), folded for hv's compact: 2.14.1 released with 0073, 0086, 0091 and 0094; hv runs Menuz 0.4.5. Next: 0072 for the next release, once arca_swift 0.2.0 is tagged (hold 3). Resume from the compact hold and ~/Devel/scratch/utilz-ic/RESUME.md."
 claims: [ISSUE:0072]
 ---
 
@@ -22,6 +22,7 @@ _(none)_
 ## Holds
 
 - 0072 (menuz adopts ArcaLogConsole) moves to the release after 2.14.1: hv says cut without it (vc, 19 Oct, after hv first chose to land arca 0.2.0 then adopt). It waits for arca_swift 0.2.0 at Gtools' pace; gtools-vc sends the tag's sha and CI run id. Then points 9 and 11, and the adoption in a worktree only; no landing on main until 2.14.1's CI and tap are done. (edited)
+- Resume after hv's compact (vc's decision 47, end of day 19 Oct). Released when this session's compact is done and /in-session has run its pickup. State: ~/Devel/scratch/utilz-ic/RESUME.md. 2.14.1 is released with 0073, 0086, 0091 and 0094; hv runs Menuz 0.4.5 (build 1427, b142ad9a). Next: 0072 for the next release (hold 3), once gtools-vc sends arca_swift 0.2.0's sha and CI run id: points 9 and 11, then the adoption in a worktree. No pushes.
 
 ## Watch-outs
 
