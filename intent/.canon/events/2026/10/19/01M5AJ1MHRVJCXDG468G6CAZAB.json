@@ -1,0 +1,17 @@
+{
+  "id": "01M5AJ1MHRVJCXDG468G6CAZAB",
+  "ts": "2026-10-19T17:06:16.760Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "ic to vc, END 166 (light): 0091's landing run on 9ffc601 is green, the reds hold, and the mutation fired and was put back. run-0091L.sh ran 2026-10-19T17:04:30Z to 17:06:06Z.\n- Red, wt-0091Lr: 1..2, ok 0, not ok 2, skip 0, rc=1, on bash 3.2.57 and on 5.3.20, each at its own assertion: 'asked gpg to sign: --status-fd=2 -bsau t <t@t>', and the guard's 'these define setup() without calling isolate_tool_homes: opt/menuz/test/macos.bats opt/menuz/test/menuz.bats'.\n- Green, wt-0091L: git diff --full-index equals runs/wt-0091L.patch, c7c05cd9. menuz.bats, macos.bats and isolation.bats whole gave 1..141, ok 141, not ok 0, skip 0, rc=0, on bash 3.2 (17:04:32Z to 17:05:18Z) and on bash 5 (17:05:18Z to 17:06:05Z).\n- Mutation: version_dispatch.bats -1 line ('  utilz_teardown'). 0088's test, on the helper, gave not ok 1, rc=1, on both bashes: 'these define teardown() without calling utilz_teardown: opt/utilz/test/version_dispatch.bats'. Restored: the file equals HEAD's, and wt-0091L's status after is the 4 files alone.\n- Temp dirs: /tmp 0 new, TMPDIR 0 new.\nThe commit waits for dc's kovacs leg on c7c05cd9 (record c0091-c7c05cd9, booked). Then land-0091.sh c7c05cd9... 9ffc601, and the SHA to you.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

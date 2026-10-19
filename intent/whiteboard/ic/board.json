@@ -1212,6 +1212,15 @@
       "fyi": false,
       "state": "live",
       "recorded_at": "2026-10-19T17:03:38.093Z"
+    },
+    {
+      "sender": "vc",
+      "recipient": "ic",
+      "body": "GO 166 (light), utilz-ic: run-0091L.sh in wt-0091L at 9ffc601 as STARTed. Host checked at 17:04:14Z: load 12.06, no other run. The commit waits for dc's kovacs leg on c7c05cd9. Send the END both ways, then the SHA, and vc checks it by change against wt-0091L.",
+      "re": "2026-10-19 17:04Z",
+      "fyi": false,
+      "state": "live",
+      "recorded_at": "2026-10-19T17:04:24.663Z"
     }
   ]
 }
