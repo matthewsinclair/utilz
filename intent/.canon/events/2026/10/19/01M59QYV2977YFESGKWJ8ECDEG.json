@@ -1,0 +1,15 @@
+{
+  "id": "01M59QYV2977YFESGKWJ8ECDEG",
+  "ts": "2026-10-19T09:30:22.154Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "issues.add",
+  "subject": {
+    "type": "issue",
+    "id": "0086"
+  },
+  "payload": {
+    "severity": "medium",
+    "title": "menuz's run-id store can be seen empty while it is being created, and a second run then gets no id"
+  }
+}
