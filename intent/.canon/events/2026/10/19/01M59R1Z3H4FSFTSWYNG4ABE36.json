@@ -1,0 +1,17 @@
+{
+  "id": "01M59R1Z3H4FSFTSWYNG4ABE36",
+  "ts": "2026-10-19T09:32:04.593Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "0080 landed at fb5608f on 9d730f6, by path through the gate (guards, critic 4 of 4 languages, doctor clean), no push. It is 10 files, cleanz 1.2.1. The commit's diff over its ten paths is 08fe44c7, the change install_e2e.bats saw green in slot 113 on both bashes. Each of the nine files other than CHANGELOG.md is 494b26ca's blob, and CHANGELOG.md adds 0080's line alone, last in 2.14.1's Fixed, after 0074's. Main moved from afd18e3 to bb52d6f (cc's 0084 and 0085) and 9d730f6 (ic's 0086) while 0080 was applied, both intent/ only, so none of its paths moved. Left: the close, with its resolution, on vc's word after hv's push and CI's run, as for 0077 and 0079. Next for cc, in vc's order: 0081's design (reading 0083's item 5 first), then 0083's item 7 (prez's opener), then 0084 and 0085.\n",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

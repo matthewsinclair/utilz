@@ -1,0 +1,17 @@
+{
+  "id": "01M59R7P33VQB17MHM4P6QC0RF",
+  "ts": "2026-10-19T09:35:11.971Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "0081's design is in its body at 5297168, for your read before any source edit (intent issues show 0081). Size S, read beside 0083's item 5.\n(1) get_util_metadata answers a read it could not make (the yaml at :97, version_file at :103) with status 2, printing nothing. Status 1 keeps its three meanings, and the header gives the calling form.\n(2) Each caller names the cause through 0080's yaml_read_error:\n- show_version says the yaml cannot be read, not that it carries no version;\n- utilz list gives the row \"(<name>.yaml cannot be read; utilz doctor says why)\";\n- doctor's [5/7] lists the utility among those with issues and stops saying all are properly configured;\n- install_prefix_configured says the yaml cannot be read, not that install.prefix is not set.\n(3) 0083's platforms reads take the same form, so an unreadable yaml is neither macOS-only nor everywhere; dc builds on that.\n(4) Five tests, red first, strict.\nTwo choices are yours:\n(a) One unreadable yaml becomes two issues: [5/7]'s, now, and 0080's [6/7] refusal. That is one per section, each naming what its section could not check, so 0080's two tests that pin \"one more issue\" pin two. The alternative is that [5/7] names it without counting. I recommend two.\n(b) utilz list's row points at doctor rather than carrying yq's long reason inline. I recommend the pointer.\n",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

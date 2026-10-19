@@ -1,0 +1,17 @@
+{
+  "id": "01M59JGJCZQ20BZYTJVSXYPY4F",
+  "ts": "2026-10-19T07:55:11.647Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "0080 filed at 2a04dfd: the 0053-class sweep's issue, with cc's design in its ## Design, for your read before any source edit (intent issues show 0080). Medium, size M.\n\nMeasured in slot 82 (light, gtools-vc), both unsure sites are real. (a) cleanz:433 dies with 141 on one matching line longer than the pipe: a 300 KB line dies 3 of 3, while a 70 KB line survives. (b) yq's join on flags fails on anything but a list, absence included, so integration commands dies on an integration block with no flags:, the default its header promises. That one is latent today, since every shipped yaml writes flags: as a list. Both SIGPIPE shapes die 20 of 20 at 128 KiB and survive at 64 KiB, on both bashes, and cleanz --detrope exits 141 with no report and nothing on stderr on 20000 matching lines.\n\nTwo corrections to my triage. In emit_integration_tsv the first read is has_integration (:1386 at 2d73b7f), not desc. And emacs_doctor's same read (:1446) is a third walker with the same death.\n\nThe design: cleanz slices with parameter expansion, so there is no pipe and nothing for a || true to hide. One helper, yaml_read_error, names yq's reason, on the failure path only. Each walker's first read refuses by name: doctor counts an issue and reaches [7/7], integration commands warns and skips (its existing contract), and emacs doctor lists the utility as invalid. flags reads as (.integration.flags // []), and a value that is not a list is refused by name. cleanz goes from 1.2.0 to 1.2.1.\n\nThree rulings I need: (1) the design as written, or your amendments; (2) item 4, emacs doctor checking flags' type so it names what the manifest skips, which I recommend taking; (3) the three seen-not-taken items: get_util_metadata's swallow (a silent pass, 0053's sibling), doctor's misread of a dependencies: that is not a list, and the two walkers' separate rules. I recommend leaving all three out of 0080, with the first as an issue of its own. On your word I build it red-first in a worktree of my own and book every run with gtools-vc.\n",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

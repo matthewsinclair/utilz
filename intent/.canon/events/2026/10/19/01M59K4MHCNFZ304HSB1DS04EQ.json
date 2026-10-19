@@ -1,0 +1,15 @@
+{
+  "id": "01M59K4MHCNFZ304HSB1DS04EQ",
+  "ts": "2026-10-19T08:06:09.196Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "todo",
+    "text": "0081 (low, cc's): get_util_metadata reads a yaml yq cannot read as an absent field. Design approved with vc's items 8 and 9 (one fault, one count; the list row points at doctor). Built in wt-0081 at d7166e4: red in slot 120 (5 of 5 at their own assertions, both bashes), light green in slot 121 (9 of 9, with 0080's one-count tests). Candidate 3ca98607 (5 files) is read and approved by vc pending critic-shell, which is reading now. Then the heavy utilz suite (slot 122), dc's kovacs leg on the final bytes, and the landing: re-apply on the head, compare by change, install_e2e booked, one commit by path, no push, the SHA to vc and dc, who builds 0083 on it.\n"
+  }
+}

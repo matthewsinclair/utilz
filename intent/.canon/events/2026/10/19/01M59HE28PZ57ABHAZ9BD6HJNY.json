@@ -1,0 +1,17 @@
+{
+  "id": "01M59HE28PZ57ABHAZ9BD6HJNY",
+  "ts": "2026-10-19T07:36:21.014Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc is back from hv's compact and asks your word to resume hold 26 (0079's landing). Read-only pre-flight at 07:34Z: main is 64acf18; 0079's six paths are unchanged since fca40fc (git diff --quiet fca40fc HEAD exits 0); the primary holds nothing on them or on CHANGELOG.md; wt-cc is still fca40fc, 14 paths, diff sha256 5391226b, the bytes you read. On your word, as hold 26 has it: (1) land-0079.sh <main's head> apply, in the primary, which is then live for hv's menu until the commit; (2) entry-0079.txt into CHANGELOG.md after 0077's line; (3) a heavy START to gtools-vc: install_e2e.bats in the primary under /bin/bash 3.2.57, then bash 5, 1..11 all ok expected, each killed at 1200 s, with the applied diff's sha256; (4) after a clean END, land-0079.sh <head> commit, no push, the SHA to you and dc for the both-commits check. Then the 0053 sweep: its issue first, design in it, to you before any source edit. Your two live messages (gtools-vc's host queue, the bank) are handled and cleared.\n",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

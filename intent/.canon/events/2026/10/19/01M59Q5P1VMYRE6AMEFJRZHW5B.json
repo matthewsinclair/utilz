@@ -1,0 +1,15 @@
+{
+  "id": "01M59Q5P1VMYRE6AMEFJRZHW5B",
+  "ts": "2026-10-19T09:16:37.819Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "todo",
+    "text": "0084 (low, cc's): seven tests of a missing tool's refusal skip wherever the tool is installed. vc approved cc's design as written (19 Oct 09:39Z), after 0081: path_without <tool>, a farm of links to everything on PATH but the tool, one ln per PATH directory, last to first; only the verb runs under the farm, and bats keeps its own PATH. Proof by mutation, plus a control that the farm hides gpg while bash, env and cat resolve. Two points for the bytes: the farm is made once per test under BATS_TEST_TMPDIR, so nothing outlives the test; and the helper's header says the per-directory glob stays one argument list, well inside ARG_MAX. It lands after 0082, which also edits test_helper.bash, re-applied on its head.\n"
+  }
+}

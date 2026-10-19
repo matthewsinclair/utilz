@@ -1,0 +1,15 @@
+{
+  "id": "01M59SATTZXD83EBFARDBASZZY",
+  "ts": "2026-10-19T09:54:23.711Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "hold",
+    "text": "Banked for hv's compact (19 Oct, after slot 122). Condition: my compact is done, then /in-session and pickup. vc holds the host queue, and every run books with vc until gtools-vc is back. Resume in this order, from the scratchpad /private/tmp/claude-501/-Users-matts-Devel-prj-Utilz/9abbea6b-9526-4af1-9e02-92a33e698b9c/scratchpad:\n(1) 0081: candidate 3ca98607 in wt-0081, detached at d7166e4, saved as 0081-candidate.diff. Red in slot 120, light green in 121, heavy green in 122 (268 on both bashes). vc approved the bytes pending critic-shell's read, which was launched before the compact and reports back to this session; if its report is lost, re-run critic-shell on wt-0081's diff. Fix any finding in wt-0081, re-run light-0081.sh (booked light) and send vc the changed bytes.\n(2) dc's kovacs leg on the final bytes: send dc the diff path and sha256; dc books it with vc.\n(3) The landing, by vc's steps: git status; re-apply on main's head, adapting land-0080.sh to 0081's 5 paths, with its CHANGELOG line last in Fixed, after 0080's; compare by change; START install_e2e.bats to vc, heavy, adapting e2e-0080.sh; one commit by path, writing m-fix-0081.txt, no push; the SHA to vc and dc, who builds 0083 on it.\n(4) 0084's build (todo 36), then (5) 0085's (todo 37), then (6) 0083's prez part (todo 35), which lands after dc's and utilz-ic's parts.\n"
+  }
+}

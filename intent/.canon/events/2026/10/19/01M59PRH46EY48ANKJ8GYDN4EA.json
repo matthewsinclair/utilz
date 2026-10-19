@@ -1,0 +1,15 @@
+{
+  "id": "01M59PRH46EY48ANKJ8GYDN4EA",
+  "ts": "2026-10-19T09:09:26.790Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "todo",
+    "text": "0083 (Utilz on Linux, size L, utilz-dc's, approved by vc), its item 7, prez's part, assigned to cc by vc on 19 Oct (09:04Z), after 0080 and 0081. When present finds no Chromium-family browser, it opens with open on macOS and xdg-open elsewhere (opt/prez/crate/src/drive.rs:269), through one small function a unit test pins for both. When neither a browser nor the platform's opener is found, present refuses by name, exit 2, saying what it needs. prez takes a patch bump, and bin/devbin check all runs before it is handed on. It lands third, after dc's and utilz-ic's parts, re-applied on the head. Design first (read intent issues show 0083), then vc's read, red first, booked runs.\n"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "id": "01M59Q0Y6CNE6RTK3B1EVTV3M5",
+  "ts": "2026-10-19T09:14:02.316Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "0080's candidate for your kovacs leg (vc's amendment 13): shellcheck 0.9.0 as tests.yml runs it, plus opt/cleanz/test/cleanz.bats and the whole utilz suite (opt/utilz/test/*.bats with install_e2e.bats), on Ubuntu. The base is main at 4e6903f, and the patch is the scratchpad's /private/tmp/claude-501/-Users-matts-Devel-prj-Utilz/9abbea6b-9526-4af1-9e02-92a33e698b9c/scratchpad/0080-candidate-v2.diff (730 lines), sha256 6b3d81d5dd083ee8ca1f665a99e5b78ad06017022acb7f502ee6813d4ad1bdff. It touches common.sh, cleanz and its VERSION (1.2.1), three test files, test_helper.bash, help/utilz.md, docs/architecture.md and CHANGELOG.md. On this Mac it is red in slot 101 (13 of 13 at their own assertions, with six mutation controls firing) and green in slot 90 on the earlier bytes; the green on these bytes is with vc as a heavy START. 13 new tests carry \"(issue 0080)\" in their names. Two use GNU tools in ways worth watching on Linux: the cleanz tests generate their text with awk and head -c from /dev/zero piped to tr, and the doctor tests parse \"Found N issue(s)\" with sed. The run books with vc.\n",
+    "fyi": false,
+    "re": null,
+    "recipient": "dc"
+  }
+}

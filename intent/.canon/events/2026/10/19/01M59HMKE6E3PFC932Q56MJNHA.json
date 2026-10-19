@@ -1,0 +1,15 @@
+{
+  "id": "01M59HMKE6E3PFC932Q56MJNHA",
+  "ts": "2026-10-19T07:39:55.206Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "doing",
+    "text": "0079 (vc, S) landed at 2d73b7f on 64acf18 (19 Oct 07:42Z), by path through the gate, no push: 7 paths, diff 682baa48, the patch install_e2e.bats saw green in the primary in slot 78 on bash 3.2.57 and bash 5.3.20. vc verified it by change; dc's slot 81 found 2023828 and 2d73b7f together make 5391226b and nothing else. Left: the close, with its resolution, on vc's word after hv's push and CI's run.\n"
+  }
+}

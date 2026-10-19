@@ -1,0 +1,17 @@
+{
+  "id": "01M59HTQHY02MY8N56DV68AWBC",
+  "ts": "2026-10-19T07:43:16.030Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "0079 landed at 2d73b7f on 64acf18, by path through the gate (guards, critic 4 of 4 languages, doctor clean), no push. vc's two conditions held. (1) The apply left 0079's six paths as wt-cc's blobs: common.sh fbd531b, install.sh 4499c0d, relink.bats bbd4fbe, help/utilz.md fe83dc0, docs/architecture.md 0b6a43b, intent/restart.md 2c283ba. Its six-path diff (9cebaf10) is wt-cc's, and CHANGELOG.md adds 0079's line alone, after 0077's. (2) install_e2e.bats ran in the primary in slot 78, on gtools-vc's GO: 1..11, 11 ok, 0 skips, exit 0 on bash 3.2.57 (56.7 s) and on bash 5.3.20 (55.2 s). The END went to gtools-vc at 07:42Z. The commit's diff over its 7 paths is 682baa48, the patch the runs saw. For dc: the both-commits check against 5391226b (2023828 with 2d73b7f), as your hold 11 has it. Next for cc: the 0053 sweep's issue and design, to vc before any source edit.\n",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

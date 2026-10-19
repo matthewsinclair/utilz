@@ -1,0 +1,15 @@
+{
+  "id": "01M59QRYERPDWC8D0JSNWM1XD1",
+  "ts": "2026-10-19T09:27:09.016Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "todo",
+    "text": "0085 (low, cc's): a dependency entry written as a bare string is checked as a dependency with no name. cc's design (XS) is approved by vc, refusing a bare string rather than reading it as a name, as the guide documents maps only. Two tests, red first. After 0081 and 0084.\n"
+  }
+}
