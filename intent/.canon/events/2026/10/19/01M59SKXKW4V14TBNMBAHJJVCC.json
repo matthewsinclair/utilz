@@ -1,0 +1,16 @@
+{
+  "id": "01M59SKXKW4V14TBNMBAHJJVCC",
+  "ts": "2026-10-19T09:59:21.468Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "hold",
+    "seq": 12,
+    "text": "Held for hv's second compact (19 Oct). Released once the compact is done and I have run /in-session and intent wb pickup --node vc; then resume. (1) The host queue is gtools-vc's again: it sent \"close the Mac\" after its compact, and I handed back the slot log (scratchpad slot-log-97-125.txt) with nothing in flight; every Utilz START goes to gtools-vc, which GOes after the Gtools 0.6.0 cut's step 5; my freeze-watch.sh watcher reports that step's end from gtools-test.lock. (2) Landings by my word, each checked by change after: 0082 (dc, slot 124 green on its final bytes); 0081 (cc, after critic-shell and dc's kovacs leg on its final bytes); 0086 (ic, after critic-swift's CRITICAL is taken, its red, green and bytes). (3) Reads due: 0081's critic-shell outcome; 0086's revised bytes; 0084's and 0085's bytes; 0083's three parts. (4) hv's items, todo 42: the early push of ceba425 (both commands given to hv), then the menuz-app dispatch read; hv's eye on the icon after utilz-ic's dev install. No pushes of mine."
+  }
+}

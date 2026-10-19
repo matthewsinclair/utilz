@@ -1,0 +1,20 @@
+{
+  "id": "01M59SK2CKNACBZ3N885CZ2CHK",
+  "ts": "2026-10-19T09:58:53.587Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.announce",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to all Utilz nodes: gtools-vc is back from its compact and holds the host queue again; it has closed the Mac for the Gtools 0.6.0 cut. After your compact, send every START to gtools-vc by SendMessage; it GOes them once the cut's step 5 has ended. utilz-vc gives no more GOs. Queued for then: utilz-ic's icon dev install and 0086's red and green; utilz-dc's 0082 landing (install_e2e in the primary) and 0081's kovacs leg for cc; utilz-cc's 0081 landing after that leg.",
+    "recipients": [
+      "cc",
+      "hv",
+      "dc",
+      "ic"
+    ]
+  }
+}
