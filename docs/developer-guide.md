@@ -345,6 +345,25 @@ optional_dependencies:
 
 Each entry is a map with a `name`. `utilz doctor` refuses one that is not, such as `- jq` written as a bare string, by name, and counts it as an issue (issue 0085).
 
+### Platforms
+
+Utilz runs on macOS and Linux (issue 0083). A utility that runs on one alone says so at its top level, and a dependency needed on one alone says so in its entry:
+
+```yaml
+platforms: [macos]
+
+dependencies:
+  - name: xclip
+    platforms: [linux]
+    required: false
+    install: sudo apt install xclip
+    purpose: The X11 clipboard
+```
+
+`platforms` is a list of `macos` and `linux`; absent means everywhere, and an entry carrying `app:` is a macOS app, whatever its `platforms` say. Where a utility's platforms leave this one out, `utilz list` marks it `(macOS only)` and `utilz doctor` says it is not available here and skips its dependencies; a dependency left out is one line, with no install line. Neither counts as an issue. A `platforms` that is not such a list is one.
+
+In the utility, ask common.sh rather than `uname`: `utilz_platform` answers `macos`, `linux` or `other`; `require_platform <util>` refuses, exit 2, where the yaml's platforms leave this one out; and `refuse_off_macos "<what>" "<needs>" ["<works here>"]` refuses one verb off macOS, as `<what> needs <needs>, so it is not available on Linux`. Call either after the help arms, so `--help` answers everywhere. In a test, `stub_platform Linux` (or `Darwin`) puts a `uname` first on PATH, so both platforms are tested on either.
+
 ### Complete Example
 
 ```yaml

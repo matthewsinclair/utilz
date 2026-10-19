@@ -62,6 +62,8 @@ echo 'export PATH="$HOME/Devel/prj/Utilz/bin:$PATH"' >> ~/.zshrc
 utilz doctor
 ```
 
+**Platforms.** Utilz runs on macOS and Linux. What needs macOS says so: macoz and menuz's app run on macOS alone, and arngz's apply, diff and discover need macOS and Hammerspoon, while its list, show, delete and current work anywhere. Elsewhere each refuses by name, `utilz list` marks a utility `(macOS only)`, and `utilz doctor` names what this machine lacks rather than count it as missing.
+
 **Do NOT export `UTILZ_HOME`.** The dispatcher works out which tree it belongs
 to from its own location, following the symlink chain from `$0` and taking the
 parent of `bin/`. An exported `UTILZ_HOME` is ignored.
@@ -162,6 +164,8 @@ Both methods work identically.
 ### arngz
 
 Named window arrangements across displays and spaces, on macOS. A desk is a YAML file in arngz's catalogue that says, for each display and each space on it, which apps live there and where on a grid their windows sit. `arngz discover` records the arrangement on screen now as a desk, and `arngz <desk>` puts the windows back. Hammerspoon is the engine: `arngz init --yes` connects it, and `arngz doctor` checks every precondition.
+
+**Platform**: apply, diff, discover and `init --yes` need macOS and Hammerspoon; list, show, delete and current work on Linux too.
 
 **`apply` takes the pointer.** macOS has no working call to move a window to another space, so apply moves each window the way a person does, by its title bar. Keep your hands off the mouse and keyboard while it runs; moving the pointer stops it.
 
@@ -306,6 +310,8 @@ Requires GNU coreutils on macOS (`brew install coreutils`). See `utilz help lnre
 
 macOS system utilities - desktop backgrounds and folder icons.
 
+**Platform**: macOS only. Elsewhere every command refuses, naming the platform; `--help` answers everywhere.
+
 ```bash
 # Desktop backgrounds with seasonal auto-selection
 macoz bg                              # Auto-select current season
@@ -342,6 +348,8 @@ See `utilz help mdagg` for details.
 ### menuz
 
 A menu of your own commands in the macOS menu bar, read from one YAML file, on macOS 26 or later. Each item runs a shell line: a script, a `utilz` verb, anything the login shell can run. An item that takes parameters asks for them in one form first, and every run's output goes to one log that `menuz log` tails. Labels are expanded by the login shell each time the menu opens, and the menu follows the file as it changes, with no restart. On a full menu bar a new item can sit behind the overflow: hold Command and drag menuz's mark where you want it. At its first launch, answer macOS's alert with Allow, so its notices can post.
+
+**Platform**: macOS 26 or later; the menu bar app needs macOS.
 
 ```bash
 # Create the config directory and the example menu (--force replaces the yaml)

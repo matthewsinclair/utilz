@@ -1169,3 +1169,342 @@ VERSION_LITERAL='"?v?[0-9]'
   [ "$checked" -gt 14 ] || fail "only $checked utilities checked; the loop measured almost nothing"
   [ -z "$missing" ] || fail "these utilities resolve no version:$missing"
 }
+
+# ============================================================================
+# THE PLATFORM (issue 0083)
+# ============================================================================
+#
+# Utilz runs on macOS and Linux. utilz_platform is the one reader of which,
+# from uname -s, and each test here pins the platform it is about with
+# stub_platform, a uname first on PATH, so both platforms' paths are tested on
+# either. A test that says nothing changes on macOS passes on the code before
+# 0083 too: it is the control for its Linux twin.
+
+# alpha's yaml in <home>, written fresh: its own fields, then <extra>, the
+# yaml under test.
+write_alpha() {
+  local home="$1" extra="$2"
+  {
+    printf 'name: alpha\nversion: 1.0.0\nutilz_version: "^2.0.0"\ndescription: Fake alpha for tests\n'
+    printf '%s\n' "$extra"
+  } > "$home/opt/alpha/alpha.yaml"
+}
+
+# Append to <home>'s <util> an optional dependency <name> declared to run on
+# <platforms>, given as yaml, with an install line and a purpose.
+declare_optional_on() {
+  local yaml="$1/opt/$2/$2.yaml" name="$3" platforms="$4"
+  cat >> "$yaml" <<YAML
+optional_dependencies:
+  - name: $name
+    platforms: $platforms
+    install: brew install $name
+    purpose: A tool only one platform has
+YAML
+}
+
+@test "utilz_platform reads uname -s: Darwin is macos, Linux is linux, and anything else is other (issue 0083)" {
+  stub_platform Darwin
+  run run_common_function utilz_platform
+  assert_output "macos"
+  stub_platform Linux
+  run run_common_function utilz_platform
+  assert_output "linux"
+  stub_platform FreeBSD
+  run run_common_function utilz_platform
+  assert_output "other"
+}
+
+@test "refuse_off_macos lets macOS through, saying nothing (issue 0083)" {
+  stub_platform Darwin
+  run run_common_function 'refuse_off_macos "thing go" "macOS" "thing list works here"; echo went on'
+  assert_success
+  assert_output "went on"
+}
+
+@test "refuse_off_macos refuses off macOS by name: what refused, what it needs, the platform and what works here, exit 2 (issue 0083)" {
+  stub_platform Linux
+  run run_common_function 'refuse_off_macos "thing go" "macOS and a widget" "thing list works here"; echo went on'
+  assert_exit_code 2
+  assert_output_contains "thing go needs macOS and a widget, so it is not available on Linux; thing list works here"
+  refute_output_contains "went on"
+}
+
+@test "refuse_off_macos names the platform as uname -s does, never the token other (issue 0083)" {
+  stub_platform FreeBSD
+  run run_common_function 'refuse_off_macos "thing go" "macOS"'
+  assert_exit_code 2
+  assert_output_contains "thing go needs macOS, so it is not available on FreeBSD"
+  refute_output_contains "other"
+}
+
+@test "require_platform lets a utility that declares no platforms run anywhere (issue 0083)" {
+  local home
+  home="$(make_fake_home)"
+  stub_platform Linux
+  run_in_fake_home "$home" 'require_platform alpha; echo ALPHA RAN'
+  assert_success
+  assert_output "ALPHA RAN"
+}
+
+@test "require_platform refuses a macOS-only utility on Linux by name, exit 2, and lets it run on macOS (issue 0083)" {
+  local home
+  home="$(make_fake_home)"
+  write_alpha "$home" 'platforms: [macos]
+dependencies: []'
+  stub_platform Linux
+  run_in_fake_home "$home" 'require_platform alpha; echo ALPHA RAN'
+  assert_exit_code 2
+  assert_output_contains "alpha needs macOS, so it is not available on Linux"
+  refute_output_contains "ALPHA RAN"
+
+  stub_platform Darwin
+  run_in_fake_home "$home" 'require_platform alpha; echo ALPHA RAN'
+  assert_success
+  assert_output "ALPHA RAN"
+}
+
+@test "require_platform refuses a platforms that is not a list of macos and linux, naming why, and never lets it run (issue 0083)" {
+  local home value want
+  home="$(make_fake_home)"
+  stub_platform Darwin
+  for value in 'macos' '[windows]' '[]' '[[macos]]'; do
+    case "$value" in
+      macos) want="platforms is a string, not a list" ;;
+      '[windows]') want="platforms names 'windows', which is not macos or linux" ;;
+      '[]') want="platforms is an empty list, so it names nowhere to run" ;;
+      *) want="platforms names a list, which is not macos or linux" ;;
+    esac
+    write_alpha "$home" "platforms: $value
+dependencies: []"
+    run_in_fake_home "$home" 'require_platform alpha; echo ALPHA RAN'
+    assert_exit_code 2
+    assert_output_contains "alpha: alpha.yaml's $want, so where alpha runs is not known"
+    refute_output_contains "ALPHA RAN"
+  done
+}
+
+@test "require_platform refuses where the yaml cannot be read, naming why, and never lets the utility run (issue 0083)" {
+  local home
+  home="$(make_fake_home)"
+  stub_platform Darwin
+  printf 'name: alpha\nplatforms: [\n' > "$home/opt/alpha/alpha.yaml"
+  run_in_fake_home "$home" 'require_platform alpha; echo ALPHA RAN'
+  assert_exit_code 2
+  assert_output_contains "alpha: alpha.yaml cannot be read, so where alpha runs is not known: "
+  refute_output_contains "ALPHA RAN"
+}
+
+@test "doctor on Linux reads a macOS-only utility as not available here, skips its dependencies, and counts nothing for it (issue 0083)" {
+  local home before_status before
+  home="$(make_fake_home)"
+  stub_platform Linux
+  run_common_strict "$home" run_doctor
+  before_status=$status
+  before=$(doctor_issue_count)
+
+  write_alpha "$home" 'platforms: [macos]
+dependencies: []
+optional_dependencies:
+  - name: zz-absent-0083
+    install: brew install zz-absent-0083
+    purpose: A tool no machine has'
+  run_common_strict "$home" run_doctor
+  assert_output_contains "alpha: macOS only, not available on Linux"
+  refute_output_contains "zz-absent-0083"
+  [ "$status" -eq "$before_status" ] || fail "doctor's status moved from $before_status to $status: $output"
+  [ "$(doctor_issue_count)" -eq "$before" ] || fail "doctor's issue count moved from $before: $output"
+}
+
+@test "doctor on macOS reads a macOS-only utility as any other, and checks its dependencies (issue 0083)" {
+  local home
+  home="$(make_fake_home)"
+  stub_platform Darwin
+  write_alpha "$home" 'platforms: [macos]
+dependencies: []
+optional_dependencies:
+  - name: zz-absent-0083
+    install: brew install zz-absent-0083
+    purpose: A tool no machine has'
+  run_common_strict "$home" run_doctor
+  refute_output_contains "not available on"
+  assert_output_contains "Optional: 'zz-absent-0083' is not installed: A tool no machine has (declared by alpha)"
+}
+
+@test "doctor on Linux reports a dependency declared macOS only in one line, with no install line, and counts nothing for it (issue 0083)" {
+  local home before_status before
+  home="$(make_fake_home)"
+  stub_platform Linux
+  run_common_strict "$home" run_doctor
+  before_status=$status
+  before=$(doctor_issue_count)
+
+  declare_optional_on "$home" alpha zz-mac-0083 "[macos]"
+  run_common_strict "$home" run_doctor
+  assert_output_contains "macOS only: 'zz-mac-0083' is not checked on Linux: A tool only one platform has (declared by alpha)"
+  refute_output_contains "brew install zz-mac-0083"
+  refute_output_contains "Optional: 'zz-mac-0083'"
+  [ "$status" -eq "$before_status" ] || fail "doctor's status moved from $before_status to $status: $output"
+  [ "$(doctor_issue_count)" -eq "$before" ] || fail "doctor's issue count moved from $before: $output"
+}
+
+@test "doctor on Linux reads an app dependency as macOS only, never as missing, even when it is required (issue 0083)" {
+  local home before_status before
+  home="$(make_fake_home)"
+  stub_platform Linux
+  run_common_strict "$home" run_doctor
+  before_status=$status
+  before=$(doctor_issue_count)
+
+  write_alpha "$home" 'dependencies:
+  - name: ZzApp0083
+    app: com.example.zzapp0083
+    required: true
+    install: brew install --cask zz-app-0083
+    purpose: An app only macOS has'
+  run_common_strict "$home" run_doctor
+  assert_output_contains "macOS only: 'ZzApp0083' is not checked on Linux: An app only macOS has (declared by alpha)"
+  refute_output_contains "brew install --cask zz-app-0083"
+  refute_output_contains "Missing dependencies"
+  refute_output_contains "never present on"
+  [ "$status" -eq "$before_status" ] || fail "doctor's status moved from $before_status to $status: $output"
+  [ "$(doctor_issue_count)" -eq "$before" ] || fail "doctor's issue count moved from $before: $output"
+}
+
+@test "a dependency two utilities declare macOS only is one line on Linux, naming both (issue 0083)" {
+  local home lines
+  home="$(make_fake_home)"
+  stub_platform Linux
+  declare_optional_on "$home" alpha zz-mac-0083 "[macos]"
+  declare_optional_on "$home" beta zz-mac-0083 "[macos]"
+  run_common_strict "$home" run_doctor
+  lines=$(printf '%s\n' "$output" | grep -c "'zz-mac-0083' is not checked on Linux" || true)
+  [ "$lines" -eq 1 ] || fail "reported $lines times: $output"
+  assert_output_contains "(declared by alpha, beta)"
+}
+
+@test "doctor counts a utility's platforms that is not a list as one issue, by name (issue 0083)" {
+  local home before
+  home="$(make_fake_home)"
+  stub_platform Linux
+  run_common_strict "$home" run_doctor
+  before=$(doctor_issue_count)
+
+  write_alpha "$home" 'platforms: macos
+dependencies: []'
+  run_common_strict "$home" run_doctor
+  assert_output_contains "alpha (alpha.yaml's platforms is a string, not a list)"
+  [ "$(doctor_issue_count)" -eq $((before + 1)) ] ||
+    fail "Expected $((before + 1)) issues, one more than the $before before. Actual output:\n$output"
+}
+
+@test "doctor refuses a dependency's platforms that is not a list, by name, and counts it (issue 0083)" {
+  local home before
+  home="$(make_fake_home)"
+  stub_platform Linux
+  run_common_strict "$home" run_doctor
+  before=$(doctor_issue_count)
+
+  declare_optional_on "$home" alpha zz-bad-0083 "linux"
+  run_common_strict "$home" run_doctor
+  assert_output_contains "alpha: optional_dependencies[0] (zz-bad-0083): platforms is a string, not a list"
+  [ "$(doctor_issue_count)" -eq $((before + 1)) ] ||
+    fail "Expected $((before + 1)) issues, one more than the $before before. Actual output:\n$output"
+}
+
+@test "utilz doctor on Linux reads macoz as not available here, and arngz's hs and Hammerspoon as macOS only with no install line (issue 0083)" {
+  stub_platform Linux
+  run_utilz doctor
+  assert_output_contains "macoz: macOS only, not available on Linux"
+  assert_output_contains "macOS only: 'hs' is not checked on Linux"
+  assert_output_contains "macOS only: 'Hammerspoon' is not checked on Linux"
+  refute_output_contains "brew install --cask hammerspoon"
+  refute_output_contains "'fileicon'"
+}
+
+# On macOS nothing that needs macOS is set aside: no utility reads as not
+# available, and no macOS-only dependency as not checked. clipz's Linux-only
+# clipboard tools are, by name, the dependency lines the design asks for.
+@test "utilz doctor on macOS sets nothing macOS-only aside, and names clipz's Linux-only tools as not checked here (issue 0083)" {
+  stub_platform Darwin
+  run_utilz doctor
+  refute_output_contains "not available on"
+  refute_output_contains "macOS only"
+  assert_output_contains "Linux only: 'xclip' is not checked on Darwin"
+  assert_output_contains "Linux only: 'wl-copy' is not checked on Darwin"
+  # Their own install lines, by name: another tool's hint may name apt too,
+  # as prez's ffmpeg does where ffmpeg is missing (kovacs, slot 148). doctor
+  # here reads the host's real tools, so only clipz.yaml may carry these two
+  # lines: another yaml declaring either would turn this red.
+  refute_output_contains "sudo apt install xclip"
+  refute_output_contains "sudo apt install wl-clipboard"
+}
+
+@test "utilz list marks a macOS-only utility on Linux, and not on macOS (issue 0083)" {
+  stub_platform Linux
+  run_utilz list
+  assert_success
+  printf '%s\n' "$output" | grep -Eq '^ +macoz +.*\(macOS only\)$' || fail "no marked row for macoz: $output"
+
+  stub_platform Darwin
+  run_utilz list
+  assert_success
+  refute_output_contains "(macOS only)"
+}
+
+@test "list_utilities marks a platforms it cannot judge with a pointer to doctor, and lists the rest (issue 0083)" {
+  local home
+  home="$(make_fake_home)"
+  stub_platform Linux
+  write_alpha "$home" 'platforms: macos
+dependencies: []'
+  run_in_fake_home "$home" list_utilities
+  assert_success
+  assert_output_contains "Fake alpha for tests (its platforms cannot be read; utilz doctor says why)"
+  assert_output_contains "Fake beta for tests"
+}
+
+@test "an unknown command's listing marks a macOS-only utility on Linux (issue 0083)" {
+  stub_platform Linux
+  run_utilz zz-no-such-command-0083
+  assert_exit_code 1
+  printf '%s\n' "$output" | grep -Eq 'utilz macoz \[args\] +- Run macoz utility \(macOS only\)$' ||
+    fail "no marked line for macoz: $output"
+}
+
+# Where the platforms cannot be read, the mark says why rather than nothing:
+# the unknown command's listing has no row text of its own for it, as
+# list_utilities has (critic-shell's read of 0083).
+@test "utility_platform_note says why where it cannot judge: a yaml it cannot read, or no yq (issue 0083)" {
+  local home
+  home="$(make_fake_home)"
+  stub_platform Linux
+  printf 'name: alpha\nplatforms: [\n' > "$home/opt/alpha/alpha.yaml"
+  run_in_fake_home "$home" 'utility_platform_note alpha'
+  assert_success
+  assert_output " (its yaml cannot be read; utilz doctor says why)"
+
+  run_without_yq 'utility_platform_note macoz'
+  assert_success
+  assert_output " (where it runs is not known without yq)"
+
+  # list_utilities' own row for that yaml says it once, with no second mark.
+  run_in_fake_home "$home" list_utilities
+  assert_output_contains "(alpha.yaml cannot be read; utilz doctor says why)"
+  refute_output_contains "its yaml cannot be read"
+}
+
+@test "sha256_of prints a file's sha256 (issue 0083)" {
+  printf 'abc' > "$BATS_TEST_TMPDIR/abc"
+  run run_common_function "sha256_of '$BATS_TEST_TMPDIR/abc'"
+  assert_success
+  assert_output "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad"
+}
+
+@test "sha256_of says what it needs when neither shasum nor sha256sum is on PATH (issue 0083)" {
+  printf 'abc' > "$BATS_TEST_TMPDIR/abc"
+  # yqless_path's sandbox holds neither tool, nor yq, which this does not use.
+  run_without_yq "sha256_of '$BATS_TEST_TMPDIR/abc'"
+  assert_failure
+  assert_output_contains "no sha256 tool found: need shasum or sha256sum"
+}

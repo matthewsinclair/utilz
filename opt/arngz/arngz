@@ -28,6 +28,23 @@ fi
 # a desk called `list` could never be applied that way.
 ARNGZ_VERBS="apply discover diff list show delete current init doctor"
 
+# What needs macOS, in the words of the one refusal (issue 0083): the engine
+# verbs refuse by name off macOS, and init and doctor say it there without
+# refusing, since the catalogue verbs work anywhere.
+ARNGZ_ENGINE="arngz's engine (apply, diff, discover and init --yes)"
+ARNGZ_ENGINE_NEEDS="macOS and Hammerspoon"
+ARNGZ_WORKS_HERE="arngz list, show, delete and current work here"
+
+# Refuse engine verb <what> off macOS, in the one refusal's words.
+refuse_engine_off_macos() {
+  refuse_off_macos "$1" "$ARNGZ_ENGINE_NEEDS" "$ARNGZ_WORKS_HERE"
+}
+
+# The one line init and doctor say off macOS, without refusing.
+engine_not_here_line() {
+  platform_refusal_words "$ARNGZ_ENGINE" "$ARNGZ_ENGINE_NEEDS" "$ARNGZ_WORKS_HERE"
+}
+
 # ============================================================================
 # USAGE
 # ============================================================================
@@ -69,6 +86,17 @@ catalogue_dir() {
 
 desk_file() {
   printf '%s/%s.yaml\n' "$(catalogue_dir)" "$1"
+}
+
+# The desks in the catalogue, one name per line: every <desk>.yaml file in it.
+# list names them and doctor counts them.
+catalogue_desks() {
+  local file
+  for file in "$(catalogue_dir)"/*.yaml; do
+    if [[ -f "$file" ]]; then
+      basename "$file" .yaml
+    fi
+  done
 }
 
 # A refusal, in the one shape every one of them takes: what refused, and exit 2
@@ -1108,6 +1136,19 @@ accessibility_verdict() {
   esac
 }
 
+# PURE: the catalogue's verdict, from its directory and how many desks it
+# holds, or `none` when there is no directory: doctor's one check off macOS.
+catalogue_verdict() {
+  local dir="$1" desks="$2"
+  if [[ "$desks" == none ]]; then
+    record FAIL "missing: no catalogue at $dir" "arngz init"
+  elif [[ "$desks" -eq 1 ]]; then
+    record ok "$dir, 1 desk" ""
+  else
+    record ok "$dir, $desks desks" ""
+  fi
+}
+
 # One line of doctor's report, from the verdict VERDICT ARGS... gives for the
 # precondition WHAT: ok, FAIL or skip, the precondition, its state, and for one
 # that does not hold what fixes it. The verdict is taken whole before it is
@@ -1149,20 +1190,17 @@ cmd_list() {
   if [[ $# -gt 0 ]]; then
     refuse "list takes no arguments: '$1'"
   fi
-  local dir name file width=0 status=0
+  local dir name width=0 status=0
   dir="$(catalogue_dir)"
   if [[ ! -d "$dir" ]]; then
     info "no catalogue at $dir (arngz init creates it)"
     return 0
   fi
   local names=()
-  for file in "$dir"/*.yaml; do
-    if [[ -f "$file" ]]; then
-      name="$(basename "$file" .yaml)"
-      names+=("$name")
-      if [[ ${#name} -gt $width ]]; then width=${#name}; fi
-    fi
-  done
+  while IFS= read -r name; do
+    names+=("$name")
+    if [[ ${#name} -gt $width ]]; then width=${#name}; fi
+  done < <(catalogue_desks)
   if [[ ${#names[@]} -eq 0 ]]; then
     info "no desks in $dir (arngz discover --save <desk> records one)"
     return 0
@@ -1271,6 +1309,18 @@ init_closing() {
   fi
 }
 
+# init's first step on every platform: the catalogue, made where it is not.
+init_catalogue() {
+  local dir
+  dir="$(catalogue_dir)"
+  if [[ -d "$dir" ]]; then
+    printf 'catalogue: %s (exists)\n' "$dir"
+  else
+    init_step "make the catalogue $dir" mkdir -p "$dir"
+    printf 'catalogue: %s (created)\n' "$dir"
+  fi
+}
+
 # init: the catalogue, and what Hammerspoon needs for arngz (D16). Without
 # --yes it creates the catalogue, says what --yes would do, and changes nothing
 # else. With --yes it links the hs tool under the prefix, as Hammerspoon's own
@@ -1291,8 +1341,15 @@ cmd_init() {
     esac
   done
 
-  local dir prefix app app_rc=0 hs_plan config_plan gate hs_kind hs_a hs_b hs_c config_kind config config_c blocked for_you
-  dir="$(catalogue_dir)"
+  # Off macOS there is no Hammerspoon to set up: the catalogue, and the one
+  # line that says so (issue 0083). init --yes was refused in main.
+  if [[ "$(utilz_platform)" != macos ]]; then
+    init_catalogue
+    engine_not_here_line
+    return 0
+  fi
+
+  local prefix app app_rc=0 hs_plan config_plan gate hs_kind hs_a hs_b hs_c config_kind config config_c blocked for_you
   prefix="$(hs_prefix)"
   app="$(app_path "$HAMMERSPOON_BUNDLE")" || app_rc=$?
   # Each plan is taken whole before it is split, so a plan that fails is said
@@ -1311,12 +1368,7 @@ cmd_init() {
   fi
 
   INIT_MADE=""
-  if [[ -d "$dir" ]]; then
-    printf 'catalogue: %s (exists)\n' "$dir"
-  else
-    init_step "make the catalogue $dir" mkdir -p "$dir"
-    printf 'catalogue: %s (created)\n' "$dir"
-  fi
+  init_catalogue
   case "$app_rc" in
     0) printf 'Hammerspoon: installed at %s\n' "$app" ;;
     1) printf 'Hammerspoon: not installed: %s\n' "$HAMMERSPOON_INSTALL" ;;
@@ -1596,6 +1648,19 @@ cmd_doctor() {
   if [[ $# -gt 0 ]]; then
     refuse "doctor takes no arguments: '$1'"
   fi
+  # Off macOS the engine's preconditions are not this machine's to meet: the
+  # one line that says so, and the catalogue, which the verbs here read
+  # (issue 0083).
+  if [[ "$(utilz_platform)" != macos ]]; then
+    engine_not_here_line
+    local dir desks=none
+    dir="$(catalogue_dir)"
+    if [[ -d "$dir" ]]; then
+      desks="$(catalogue_desks | wc -l | tr -d ' ')"
+    fi
+    doctor_check catalogue catalogue_verdict "$dir" "$desks"
+    doctor_close
+  fi
   local app app_rc=0 uid ps ps_rc=0 tool state detail fix hs="" outcome granted="" kept=""
 
   # Hammerspoon: this user's, because with fast user switching another
@@ -1644,11 +1709,18 @@ cmd_doctor() {
     doctor_check "$what" record "$status" "$state" "$fix"
   done <<<"$verdicts"
 
+  doctor_close
+}
+
+# doctor's last line, from the counts doctor_check kept: exit 1 when any
+# precondition does not hold, exit 0 when all do.
+doctor_close() {
   if [[ $DOCTOR_FAILED -gt 0 ]]; then
     printf 'arngz doctor: %d of %d preconditions do not hold\n' "$DOCTOR_FAILED" "$DOCTOR_LINES"
     exit 1
   fi
   printf 'arngz doctor: all %d preconditions hold\n' "$DOCTOR_LINES"
+  exit 0
 }
 
 # ============================================================================
@@ -1660,8 +1732,26 @@ main() {
     usage >&2
     exit 2
   fi
-  local verb="$1"
+  local verb="$1" arg
   shift
+  # Off macOS the engine verbs refuse by name before anything else, the read
+  # of Hammerspoon's entry included (issue 0083). A bare desk is apply.
+  case "$verb" in
+    apply | diff | discover)
+      refuse_engine_off_macos "arngz $verb"
+      ;;
+    init)
+      for arg in "$@"; do
+        if [[ "$arg" == --yes ]]; then
+          refuse_engine_off_macos "arngz init --yes"
+        fi
+      done
+      ;;
+    -* | list | show | delete | current | doctor) ;;
+    *)
+      refuse_engine_off_macos "arngz apply"
+      ;;
+  esac
   # current reads one file at every menu open that asks it, and needs no
   # engine, so it skips the read of Hammerspoon's entry, as help does.
   if [[ "$verb" != -h && "$verb" != --help && "$verb" != current ]]; then

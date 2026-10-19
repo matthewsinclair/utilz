@@ -173,11 +173,12 @@ _expected_count=17
       noarm="$noarm $u"
     fi
     # A UTILITY MAY REFUSE FOR A STATED PLATFORM REASON, AND THAT IS AN ANSWER.
-    # macoz calls check_macos() at its line 431, BEFORE the arg loop at 451, so
-    # `macoz --help` exits 1 on Linux saying "macoz utilities require macOS".
-    # That predates ST0016 and is not a regression -- this row is new, and its
-    # first form asserted platform-independent behaviour of a platform-specific
-    # utility. CI caught it on Ubuntu; macOS cannot.
+    # macoz once refused --help on Linux before its help arm ran; since issue
+    # 0083 every utility answers --help on every platform, and a refusal for
+    # want of a platform takes one shape, common.sh's refuse_platform: "<what>
+    # needs <needs>, so it is not available on <platform>". This row's first
+    # form asserted platform-independent behaviour of a platform-specific
+    # utility, and CI caught it on Ubuntu; macOS cannot.
     #
     # The exemption is BEHAVIOURAL, not a name: refusing is accepted only when
     # the refusal SAYS it is about the platform. A utility that is simply broken
@@ -187,13 +188,13 @@ _expected_count=17
     # substitution takes that command's exit status, and under bats' `set -e`
     # a non-zero one aborts the test AT THIS LINE -- before any `rc=$?` on the
     # next line can run. The first form of this did exactly that and CI caught
-    # it on Ubuntu, where macoz exits 1; macOS cannot reach the branch at all
-    # because all 16 exit 0 there. Same family as this project's note that a
+    # it on Ubuntu, where macoz then exited 1; macOS cannot reach the branch at
+    # all because all 16 exit 0 there. Same family as this project's note that a
     # check whose green is "no matches" aborts on success under `set -e`.
     local out rc=0
     out=$(UTILZ_HOME="$UTILZ_HOME" timeout 10 "$UTILZ_HOME/opt/$u/$u" --help 2>&1 </dev/null) || rc=$?
     if [ "$rc" -ne 0 ]; then
-      printf '%s' "$out" | grep -qiE 'require(s)? (macos|linux|darwin)|only on (macos|linux)' \
+      printf '%s' "$out" | grep -qE 'needs .*, so it is not available on ' \
         || broke="$broke $u"
     fi
   done

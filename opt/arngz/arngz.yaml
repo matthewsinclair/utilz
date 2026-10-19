@@ -9,6 +9,7 @@ dependencies:
     install: brew install yq
     purpose: Reads and validates desks
   - name: hs
+    platforms: [macos]
     required: false
     install: arngz init --yes (installs Hammerspoon's hs tool under /opt/homebrew)
     purpose: Hammerspoon's command-line tool; needed by arngz apply and discover

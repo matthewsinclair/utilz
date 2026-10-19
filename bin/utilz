@@ -283,10 +283,12 @@ EOF
         # Width computed from the longest label rather than a hardcoded run of
         # spaces, so the descriptions line up whatever the names are. Guarded
         # expansion: bash 3.2 under `set -u` treats "${empty[@]}" as unbound.
+        # A utility not available here says so, as utilz list marks it
+        # (issue 0083).
         if [[ ${#UTIL_NAMES[@]} -gt 0 ]]; then
           for name in "${UTIL_NAMES[@]}"; do
-            printf '  %-*s - Run %s utility\n' \
-              "$LABEL_WIDTH" "utilz $name [args]" "$name"
+            printf '  %-*s - Run %s utility%s\n' \
+              "$LABEL_WIDTH" "utilz $name [args]" "$name" "$(utility_platform_note "$name")"
           done
         fi
         exit 1

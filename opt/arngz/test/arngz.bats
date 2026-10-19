@@ -23,6 +23,14 @@ bats_require_minimum_version 1.5.0
 
 FIXTURES="$UTILZ_HOME/opt/arngz/test/fixtures"
 
+# EVERY TEST RUNS AS MACOS, ON ANY MACHINE, unless it pins another platform
+# (issue 0083). Off macOS the engine verbs refuse before anything else, and
+# CI's Linux leg runs this suite, so its macOS paths are tested there under a
+# Darwin uname (test_helper's setup). A test that builds its own PATH, the
+# fixture machine among them, puts UTILZ_TEST_PLATFORM_BIN first in it.
+# shellcheck disable=SC2034 # read by test_helper's setup()
+UTILZ_TEST_PLATFORM=Darwin
+
 run_arngz() {
   run "$UTILZ_BIN_DIR/arngz" "$@"
 }
@@ -148,7 +156,7 @@ doctor_with_app() {
   for tool in yq git bash; do
     ln -s "$(command -v "$tool")" "$bin/$tool"
   done
-  run /bin/bash -c "export PATH='$bin:/usr/bin:/bin'; source '$UTILZ_HOME/opt/utilz/lib/common.sh'; check_app() { return 0; }; run_doctor"
+  run /bin/bash -c "export PATH='$UTILZ_TEST_PLATFORM_BIN:$bin:/usr/bin:/bin'; source '$UTILZ_HOME/opt/utilz/lib/common.sh'; check_app() { return 0; }; run_doctor"
   assert_output_contains "Optional: 'hs' is not installed"
   assert_output_contains "declared by arngz"
 }
@@ -428,7 +436,7 @@ fake_hs() {
   for tool in yq bash; do
     ln -s "$(command -v "$tool")" "$bin/$tool"
   done
-  run env PATH="$bin:/usr/bin:/bin" "$UTILZ_BIN_DIR/arngz" discover
+  run env PATH="$UTILZ_TEST_PLATFORM_BIN:$bin:/usr/bin:/bin" "$UTILZ_BIN_DIR/arngz" discover
   assert_exit_code 2
   assert_output_contains "the hs tool, which arngz reaches Hammerspoon through, is missing: not on PATH; fix: arngz init --yes links it under $ARNGZ_HS_PREFIX"
 }
@@ -1067,7 +1075,9 @@ machine() {
   for tool in yq bash; do
     ln -s "$(command -v "$tool")" "$tools/$tool"
   done
-  export PATH="$STUBS:$ARNGZ_HS_PREFIX/bin:$tools:/usr/bin:/bin"
+  # The suite's platform (UTILZ_TEST_PLATFORM, at the top) first: the
+  # machine is a Mac whatever the host, unless a test pins another after.
+  export PATH="$UTILZ_TEST_PLATFORM_BIN:$STUBS:$ARNGZ_HS_PREFIX/bin:$tools:/usr/bin:/bin"
   pref com.apple.dock mru-spaces 0
   pref com.apple.WindowManager GloballyEnabled 0
 }
@@ -2042,4 +2052,104 @@ current_record() {
   run_arngz current
   assert_success
   assert_output "zeop1"
+}
+
+# ============================================================================
+# THE PLATFORM (issue 0083)
+# ============================================================================
+#
+# Every other test here runs as macOS (UTILZ_TEST_PLATFORM, at the top). These
+# pin Linux: the engine verbs refuse by name before they read or ask anything,
+# init makes the catalogue alone, doctor checks the catalogue alone, and the
+# catalogue verbs work as they do anywhere.
+
+ENGINE_OFF_LINUX="arngz's engine (apply, diff, discover and init --yes) needs macOS and Hammerspoon, so it is not available on Linux; arngz list, show, delete and current work here"
+
+# Recorders for every tool an engine verb reaches first, first on PATH: each
+# call is written to $BATS_TEST_TMPDIR/calls, which a refusal leaves unwritten.
+record_engine_tools() {
+  local rec="$BATS_TEST_TMPDIR/recorders" tool
+  mkdir -p "$rec"
+  for tool in defaults hs osascript pgrep; do
+    printf '#!/bin/sh\necho "%s $*" >> "%s/calls"\n' "$tool" "$BATS_TEST_TMPDIR" >"$rec/$tool"
+    chmod +x "$rec/$tool"
+  done
+  export PATH="$rec:$PATH"
+}
+
+@test "AT-02.1: arngz.yaml declares the hs tool macOS only (issue 0083)" {
+  run yq -o=json -I=0 '.dependencies[] | select(.name == "hs") | .platforms' "$UTILZ_HOME/opt/arngz/arngz.yaml"
+  assert_output '["macos"]'
+}
+
+@test "on Linux, apply, a bare desk, diff, discover and init --yes refuse by name before any defaults or hs call (issue 0083)" {
+  machine
+  hammerspoon_installed
+  catalogue
+  record_engine_tools
+  stub_platform Linux
+  local args verb
+  for args in "apply zeop1" "zeop1" "diff zeop1" "discover" "init --yes"; do
+    verb="arngz $args"
+    verb="${verb% zeop1}"
+    if [[ "$args" == zeop1 ]]; then
+      verb="arngz apply"
+    fi
+    # shellcheck disable=SC2086 # each case is a verb and its words
+    run_arngz $args
+    assert_exit_code 2
+    assert_output_contains "$verb needs macOS and Hammerspoon, so it is not available on Linux; arngz list, show, delete and current work here"
+  done
+  [ ! -e "$BATS_TEST_TMPDIR/calls" ] || fail "an engine tool was called: $(cat "$BATS_TEST_TMPDIR/calls")"
+  [ -z "$(ls -A "$FAKE_HS_LOG")" ] || fail "the fake hs was called: $(ls "$FAKE_HS_LOG")"
+}
+
+@test "on Linux, init makes the catalogue and gives no Hammerspoon advice (issue 0083)" {
+  machine
+  stub_platform Linux
+  run_arngz init
+  assert_success
+  [ -d "$XDG_CONFIG_HOME/arngz/desks" ] || fail "no catalogue at $XDG_CONFIG_HOME/arngz/desks: $output"
+  assert_output_contains "catalogue: $XDG_CONFIG_HOME/arngz/desks (created)"
+  assert_output_contains "$ENGINE_OFF_LINUX"
+  refute_output_contains "Hammerspoon:"
+  refute_output_contains "hs tool:"
+  refute_output_contains "init.lua:"
+}
+
+@test "on Linux, doctor says the engine is not available here and checks the catalogue alone (issue 0083)" {
+  machine
+  stub_platform Linux
+  run_arngz doctor
+  assert_exit_code 1
+  assert_output_contains "$ENGINE_OFF_LINUX"
+  assert_output_contains "FAIL  catalogue"
+  assert_output_contains "fix: arngz init"
+  refute_output_contains "hs tool"
+  refute_output_contains "Accessibility"
+  assert_output_contains "arngz doctor: 1 of 1 preconditions do not hold"
+
+  run_arngz init
+  assert_success
+  run_arngz doctor
+  assert_success
+  assert_output_contains "ok    catalogue"
+  assert_output_contains "arngz doctor: all 1 preconditions hold"
+}
+
+@test "on Linux, list, show, delete and current work as they do anywhere (issue 0083)" {
+  catalogue
+  stub_platform Linux
+  run_arngz list
+  assert_success
+  assert_output_contains "zeop1"
+  run_arngz show zeop1
+  assert_success
+  assert_output_contains "desk: zeop1"
+  run_arngz current
+  assert_exit_code 1
+  refute_output_contains "not available on"
+  run_arngz delete zeop1
+  assert_success
+  assert_output_contains "deleted"
 }

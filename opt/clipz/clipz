@@ -19,30 +19,17 @@ if [[ "$(type -t info 2>/dev/null)" != "function" ]]; then
 fi
 
 # ============================================================================
-# PLATFORM DETECTION
+# PLATFORM
 # ============================================================================
 
-detect_platform() {
-  case "$OSTYPE$(uname)" in
-    [dD]arwin*)
-      echo "macos"
-      ;;
-    [lL]inux*)
-      echo "linux"
-      ;;
-    *)
-      echo "unknown"
-      ;;
-  esac
-}
-
+# Which platform this is, common.sh's utilz_platform answers (issue 0083).
 is_wayland() {
   [[ "${XDG_SESSION_TYPE:-}" == "wayland" ]]
 }
 
 get_copy_command() {
   local platform
-  platform=$(detect_platform)
+  platform=$(utilz_platform)
 
   case "$platform" in
     macos)
@@ -68,7 +55,7 @@ get_copy_command() {
       fi
       ;;
     *)
-      error "Unsupported platform: $OSTYPE (Windows support coming soon)"
+      error "Unsupported platform: $(platform_name) (Windows support coming soon)"
       return 1
       ;;
   esac
@@ -76,7 +63,7 @@ get_copy_command() {
 
 get_paste_command() {
   local platform
-  platform=$(detect_platform)
+  platform=$(utilz_platform)
 
   case "$platform" in
     macos)
@@ -102,7 +89,7 @@ get_paste_command() {
       fi
       ;;
     *)
-      error "Unsupported platform: $OSTYPE (Windows support coming soon)"
+      error "Unsupported platform: $(platform_name) (Windows support coming soon)"
       return 1
       ;;
   esac

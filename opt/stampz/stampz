@@ -502,7 +502,7 @@ main() {
       exit 1
     fi
 
-    before=$(shasum -a 256 "$f" | cut -c1-16)
+    before=$(sha256_of "$f" | cut -c1-16)
 
     qpdf "$f" "${overlay[@]}" "$work/out-$base" ||
       { error "$base: qpdf overlay failed"; exit 1; }
@@ -514,7 +514,7 @@ main() {
     fi
 
     mv "$work/out-$base" "$out/$base"
-    after=$(shasum -a 256 "$out/$base" | cut -c1-16)
+    after=$(sha256_of "$out/$base" | cut -c1-16)
 
     printf '%-42s %-7s %-18s %s\n' "$base" "$pages" "$before" "$after" >> "$manifest"
     # A file of several sizes says so. This used to be a refusal, and a change

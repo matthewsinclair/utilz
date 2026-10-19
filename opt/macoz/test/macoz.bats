@@ -60,19 +60,59 @@ EOF
 }
 
 @test "macoz with unknown command shows error" {
+  # macOS's answer, on any machine: off macOS every command refuses first
+  # (issue 0083).
+  stub_platform Darwin
   run_macoz unknown-command
   assert_failure
   assert_output_contains "Unknown command"
 }
 
-@test "macoz requires macOS" {
-  if ! is_macos; then
-    run_macoz background test.jpg
-    assert_failure
-    assert_output_contains "macOS"
-  else
-    skip "Running on macOS"
-  fi
+# ============================================================================
+# THE PLATFORM (issue 0083)
+# ============================================================================
+
+# It ran only off macOS, and macoz was off CI's Linux roster, so it ran nowhere
+# (issue 0083, item 19). Under a Linux uname it runs on every machine.
+@test "macoz refuses every command off macOS by name, exit 2 (issue 0083)" {
+  stub_platform Linux
+  local args
+  for args in "background test.jpg" "bg" "setpicfor icon.png" "unknown-command"; do
+    # shellcheck disable=SC2086 # each case is a command and its words
+    run_macoz $args
+    assert_exit_code 2
+    assert_output_contains "macoz needs macOS, so it is not available on Linux"
+  done
+}
+
+@test "macoz answers --help, --version and no arguments off macOS (issue 0083)" {
+  stub_platform Linux
+  run_macoz --help
+  assert_success
+  assert_output_contains "background"
+
+  run_macoz --version
+  assert_success
+  assert_output_matches "^utilz:[0-9]+\.[0-9]+\.[0-9]+/macoz:[0-9]+\.[0-9]+\.[0-9]+($|[^0-9.])"
+
+  run_macoz
+  assert_success
+  assert_output_contains "Usage"
+
+  # The script itself, as the dispatcher runs it, answers its help arm first.
+  run "$UTILZ_HOME/opt/macoz/macoz" --help
+  assert_success
+  assert_output_contains "Usage"
+}
+
+@test "macoz.yaml declares macOS as its only platform, and fileicon as an optional dependency (issue 0083)" {
+  local y="$UTILZ_HOME/opt/macoz/macoz.yaml"
+  run yq -o=json -I=0 '.platforms' "$y"
+  assert_output '["macos"]'
+  run yq '.dependencies[] | select(.name == "fileicon") | .required' "$y"
+  assert_output "false"
+  run yq '.dependencies[] | select(.name == "fileicon") | .purpose' "$y"
+  assert_output_contains "setpicfor"
 }
 
 # ============================================================================

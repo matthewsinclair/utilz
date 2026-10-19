@@ -3,4 +3,18 @@ version_file: VERSION
 utilz_version: "^2.0.0"
 description: Cross-platform clipboard copy and paste utility
 author: Matthew Sinclair
-dependencies: []
+# Where clipz has a clipboard to reach; elsewhere it refuses (issue 0083).
+platforms: [macos, linux]
+dependencies:
+  # On Linux the clipboard is X11's or Wayland's, each through its own tool;
+  # clipz takes xsel when xclip is absent (issue 0083).
+  - name: xclip
+    platforms: [linux]
+    required: false
+    install: sudo apt install xclip
+    purpose: The X11 clipboard; xsel serves in its place
+  - name: wl-copy
+    platforms: [linux]
+    required: false
+    install: sudo apt install wl-clipboard
+    purpose: The Wayland clipboard, from wl-clipboard (wl-copy and wl-paste)

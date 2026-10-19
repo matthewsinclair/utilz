@@ -53,20 +53,7 @@ INSTALL_EXCLUDE_RE='^(bin/devbin$|bin/\.devbin/|opt/[^/]+/test/|opt/prez/crate/)
 # PURE: facts about a tree
 # ============================================================================
 
-# Echo the sha256 of one file. macOS ships shasum, Linux ships sha256sum, and
-# CI runs both.
-_install_sha256() {
-  local file="$1"
-
-  if command -v shasum >/dev/null 2>&1; then
-    shasum -a 256 "$file" | awk '{print $1}'
-  elif command -v sha256sum >/dev/null 2>&1; then
-    sha256sum "$file" | awk '{print $1}'
-  else
-    error "no sha256 tool found: need shasum or sha256sum"
-    return 1
-  fi
-}
+# A file's sha256 is common.sh's sha256_of, shared with stampz (issue 0083).
 
 # True when <tree> is the TOP LEVEL of a git worktree, not merely inside one.
 # Publishing from a subdirectory would enumerate a set relative to the wrong
@@ -280,7 +267,7 @@ install_manifest_rows() {
       }
       printf 'link\t%s\t%s\n' "$target" "$path"
     elif [[ -f "$tree/$path" ]]; then
-      sum=$(_install_sha256 "$tree/$path") || {
+      sum=$(sha256_of "$tree/$path") || {
         error "could not checksum: $path"
         return 1
       }
@@ -505,7 +492,7 @@ install_manifest_check() {
         continue
       fi
 
-      actual=$(_install_sha256 "$root/$path") || return 2
+      actual=$(sha256_of "$root/$path") || return 2
 
       if [[ "$actual" != "$value" ]]; then
         printf 'modified\t%s\n' "$path"

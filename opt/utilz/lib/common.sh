@@ -357,18 +357,22 @@ list_utilities() {
   echo "Available utilities:"
   echo ""
 
-  local name desc meta_status
+  local name desc meta_status note
   while IFS= read -r name; do
     # A yaml that cannot be read gets a row of its own words, and doctor says
     # why (issue 0081): yq's reason is too long for a listing.
     meta_status=0
     desc=$(get_util_metadata "$name" ".description") || meta_status=$?
+    note=""
     if [[ $meta_status -eq 2 ]]; then
       desc="($name.yaml cannot be read; utilz doctor says why)"
-    elif [[ $meta_status -ne 0 ]]; then
-      desc=""
+    else
+      if [[ $meta_status -ne 0 ]]; then
+        desc=""
+      fi
+      note="$(utility_platform_note "$name")"
     fi
-    printf "  ${BOLD}%-15s${RESET} %s\n" "$name" "${desc:-No description available}"
+    printf "  ${BOLD}%-15s${RESET} %s\n" "$name" "${desc:-No description available}$note"
   done < <(each_utility)
 
   echo ""
@@ -382,6 +386,210 @@ list_utilities() {
 check_command() {
   local p
   p="$(command -v "$1" 2>/dev/null)" && [[ "$p" != /* || -x "$p" ]]
+}
+
+# THE sha256 of one file, as 64 hex digits. macOS ships shasum, Linux ships
+# sha256sum, and CI runs both. install's manifest and stampz's before and after
+# sums share it (issue 0083): stampz called shasum alone.
+sha256_of() {
+  local file="$1"
+
+  if check_command shasum; then
+    shasum -a 256 "$file" | awk '{print $1}'
+  elif check_command sha256sum; then
+    sha256sum "$file" | awk '{print $1}'
+  else
+    error "no sha256 tool found: need shasum or sha256sum"
+    return 1
+  fi
+}
+
+# ============================================================================
+# PLATFORM (issue 0083)
+# ============================================================================
+#
+# Utilz runs on macOS and Linux. What needs macOS says so by name where it is
+# asked for, and utilz doctor reads what is not available here as that, never
+# as something missing. A utility's yaml may declare `platforms: [macos]`, and
+# so may a dependency entry; absent means everywhere, and an entry carrying
+# `app:` is a macOS app.
+
+# This platform's name as uname -s gives it (Darwin, Linux, FreeBSD): the
+# name a reader is told. The one place uname is asked which platform this is.
+platform_name() {
+  uname -s
+}
+
+# THE answer to "which platform": macos, linux or other. check_app, the
+# dependency sweep, the Xcode check, require_platform, clipz and arngz all ask
+# it by name, so a test pins a platform with a uname first on PATH. No reader
+# meets the token `other`: a refusal names the platform as uname -s does.
+utilz_platform() {
+  case "$(platform_name)" in
+    Darwin) echo macos ;;
+    Linux) echo linux ;;
+    *) echo other ;;
+  esac
+}
+
+# A platform token in a reader's words: macos is macOS, linux is Linux.
+platform_words() {
+  case "$1" in
+    macos) echo macOS ;;
+    linux) echo Linux ;;
+    *) echo "$1" ;;
+  esac
+}
+
+# The one sentence of a refusal for want of a platform: <what> needs <needs>,
+# so it is not available on <this platform>, then what does work here, when
+# given. arngz's doctor and init say it without refusing.
+platform_refusal_words() {
+  local what="$1" needs="$2" works="${3:-}"
+  printf '%s needs %s, so it is not available on %s%s\n' "$what" "$needs" "$(platform_name)" "${works:+; $works}"
+}
+
+# THE refusal for want of a platform: its sentence, as an error, then exit 2,
+# since nothing has changed. refuse_off_macos and require_platform refuse
+# through it.
+refuse_platform() {
+  error "$(platform_refusal_words "$@")"
+  exit 2
+}
+
+# Refuse <what> anywhere but macOS, naming what it <needs> and, when given,
+# what works here; on macOS it returns 0 and says nothing.
+# Usage: refuse_off_macos "arngz apply" "macOS and Hammerspoon" "arngz list works here"
+refuse_off_macos() {
+  if [[ "$(utilz_platform)" == macos ]]; then
+    return 0
+  fi
+  refuse_platform "$@"
+}
+
+# Where a platforms declaration says to run, judged against this platform: the
+# one reading of a utility's `platforms` and of a dependency entry's. <yaml> and
+# the yq path of the declaration, eg `.platforms` or
+# `.dependencies[2].platforms`. Prints `here` when it is absent or names this
+# platform, or `elsewhere <words>` when it names others alone, <words> being
+# what it names in a reader's words (`macOS`, or `macOS and Linux`); both
+# return 0. One that is not a list of macos and linux prints why and returns 1.
+# A yaml yq cannot read returns 2 with nothing printed, for the caller to name
+# through yaml_read_error. Call it as `x=$(platforms_verdict ...) || status=$?`.
+platforms_verdict() {
+  local yaml_file="$1" path="$2" kind types items here item seen="" words="" found=0
+  if ! kind=$(yq eval "$path | type" "$yaml_file" 2>/dev/null) ||
+    [[ -z "$kind" || "$kind" == *$'\n'* ]]; then
+    return 2
+  fi
+  case "$kind" in
+    '!!null')
+      echo here
+      return 0
+      ;;
+    '!!seq') ;;
+    *)
+      printf 'platforms is %s, not a list\n' "$(yaml_type_words "$kind")"
+      return 1
+      ;;
+  esac
+  if ! types=$(yq eval "${path}[] | type" "$yaml_file" 2>/dev/null) ||
+    ! items=$(yq eval "${path}[]" "$yaml_file" 2>/dev/null); then
+    return 2
+  fi
+  if [[ -z "$types" ]]; then
+    echo "platforms is an empty list, so it names nowhere to run"
+    return 1
+  fi
+  while IFS= read -r item; do
+    if [[ "$item" != '!!str' ]]; then
+      printf 'platforms names %s, which is not macos or linux\n' "$(yaml_type_words "$item")"
+      return 1
+    fi
+  done <<<"$types"
+  # One line per name, or a name ran past its line and is no platform's.
+  if [[ "$(printf '%s\n' "$items" | wc -l)" -ne "$(printf '%s\n' "$types" | wc -l)" ]]; then
+    echo "platforms names a value that runs past one line, which is not macos or linux"
+    return 1
+  fi
+  here=$(utilz_platform)
+  while IFS= read -r item; do
+    case "$item" in
+      macos | linux) ;;
+      *)
+        printf "platforms names '%s', which is not macos or linux\n" "$item"
+        return 1
+        ;;
+    esac
+    if [[ "$item" == "$here" ]]; then
+      found=1
+    fi
+    if [[ " $seen " != *" $item "* ]]; then
+      seen="$seen $item"
+      words="${words:+$words and }$(platform_words "$item")"
+    fi
+  done <<<"$items"
+  if [[ $found -eq 1 ]]; then
+    echo here
+  else
+    echo "elsewhere $words"
+  fi
+}
+
+# Refuse utility <util> where its yaml's platforms say it does not run: absent
+# runs everywhere, and a list names where it runs. A declaration that cannot be
+# judged, a yaml that cannot be read, and a missing one each refuse by name,
+# exit 2, and never let the utility run. macoz calls it after its help arms.
+require_platform() {
+  local util="$1" yaml_file verdict status=0
+  yaml_file=$(util_yaml_path "$util")
+  if [[ ! -f "$yaml_file" ]]; then
+    error "$util: $yaml_file is missing, so where $util runs is not known"
+    exit 2
+  fi
+  require_yq || exit 2
+  verdict=$(platforms_verdict "$yaml_file" .platforms) || status=$?
+  case $status in
+    0) ;;
+    1)
+      error "$util: $util.yaml's $verdict, so where $util runs is not known"
+      exit 2
+      ;;
+    *)
+      error "$util: $util.yaml cannot be read, so where $util runs is not known: $(yaml_read_error "$yaml_file")"
+      exit 2
+      ;;
+  esac
+  if [[ "$verdict" == elsewhere\ * ]]; then
+    refuse_platform "$util" "${verdict#elsewhere }"
+  fi
+}
+
+# A utility's mark in a listing: ` (macOS only)` where its yaml's platforms
+# leave this platform out, nothing where it runs here, and otherwise why it
+# cannot say: a pointer to doctor for platforms it cannot judge or a yaml it
+# cannot read, or that yq is missing. utilz list and the dispatcher's listing
+# both print it; utilz list, which names an unreadable yaml in its own row,
+# does not ask it for that row.
+utility_platform_note() {
+  local verdict status=0
+  verdict=$(platforms_verdict "$(util_yaml_path "$1")" .platforms) || status=$?
+  case $status in
+    0)
+      if [[ "$verdict" == elsewhere\ * ]]; then
+        printf ' (%s only)\n' "${verdict#elsewhere }"
+      fi
+      ;;
+    1) printf ' (its platforms cannot be read; utilz doctor says why)\n' ;;
+    *)
+      if check_command yq; then
+        printf ' (its yaml cannot be read; utilz doctor says why)\n'
+      else
+        printf ' (where it runs is not known without yq)\n'
+      fi
+      ;;
+  esac
+  return 0
 }
 
 # Where a macOS app is installed, by bundle id, WITHOUT LAUNCHING IT. Prints
@@ -434,7 +642,7 @@ app_path() {
 # answer, so it then lists the app with the missing ones, but never silently.
 check_app() {
   local out rc=0
-  if [[ "$(uname -s)" != "Darwin" ]]; then
+  if [[ "$(utilz_platform)" != macos ]]; then
     return 1
   fi
   out="$(app_path "$1")" || rc=$?
@@ -480,17 +688,34 @@ dependency_present() {
   fi
 }
 
-# The purpose doctor prints for a missing dependency, plus why an app
-# dependency can never be present off macOS, so that line is not read as
-# something to install.
+# The purpose doctor prints beside a dependency it names. An app off macOS is
+# said as one this platform cannot have (dependency_platforms), so its line no
+# longer explains itself here (issue 0083).
 dependency_purpose() {
-  local yaml_file="$1" list="$2" index="$3" purpose app
-  purpose=$(yq eval ".${list}[${index}].purpose" "$yaml_file" 2>/dev/null)
-  app=$(yq eval ".${list}[${index}].app" "$yaml_file" 2>/dev/null)
-  if [[ -n "$app" && "$app" != "null" && "$(uname -s)" != "Darwin" ]]; then
-    purpose="$purpose; a macOS app, so never present on $(uname -s)"
+  local yaml_file="$1" list="$2" index="$3" purpose=""
+  if ! purpose=$(yq eval ".${list}[${index}].purpose" "$yaml_file" 2>/dev/null); then
+    purpose=""
   fi
   printf '%s\n' "$purpose"
+}
+
+# Where dependency entry <index> of <list> runs, as platforms_verdict says it
+# (issue 0083): an entry carrying `app:` is a macOS app, and any other reads its
+# own `platforms`, everywhere when it has none.
+dependency_platforms() {
+  local yaml_file="$1" list="$2" index="$3" app
+  if ! app=$(yq eval ".${list}[${index}].app" "$yaml_file" 2>/dev/null); then
+    return 2
+  fi
+  if [[ -n "$app" && "$app" != "null" ]]; then
+    if [[ "$(utilz_platform)" == macos ]]; then
+      echo here
+    else
+      echo "elsewhere $(platform_words macos)"
+    fi
+    return 0
+  fi
+  platforms_verdict "$yaml_file" ".${list}[${index}].platforms"
 }
 
 # Why entry <index> of <list> names no dependency, for doctor to refuse it by
@@ -708,17 +933,24 @@ each_utility() {
 # DOCTOR COMMAND
 # ============================================================================
 
-# One missing optional dependency, as check 6 reports it: info, never a
-# failure, with the install line and purpose its declarers' yaml gives.
-_doctor_optional() {
-  local name="$1" install="$2" purpose="$3" declarers="$4"
+# One of check 6's notes, which are info and never a failure, with the purpose
+# its declarers' yaml gives. <kind> optional: a missing optional dependency,
+# with its install line as <detail>. <kind> platform: a dependency this
+# platform cannot have, with the platforms it runs on as <detail>, and no
+# install line, since nothing installs it here (issue 0083).
+_doctor_dep_note() {
+  local kind="$1" name="$2" detail="$3" purpose="$4" declarers="$5"
   local why=""
   if [[ -n "$purpose" && "$purpose" != "null" ]]; then
     why=": $purpose"
   fi
+  if [[ "$kind" == platform ]]; then
+    info "$detail only: '$name' is not checked on $(platform_name)$why (declared by $declarers)"
+    return 0
+  fi
   info "Optional: '$name' is not installed$why (declared by $declarers)"
-  if [[ -n "$install" && "$install" != "null" ]]; then
-    echo -e "    $install"
+  if [[ -n "$detail" && "$detail" != "null" ]]; then
+    echo -e "    $detail"
   fi
 }
 
@@ -846,6 +1078,10 @@ run_doctor() {
   local incompatible_utils=()
   local name impl required_utilz_version required_major meta_status
   local unreadable_utils=()
+  # What runs elsewhere alone, said once each and counted as nothing, and the
+  # names, padded with spaces, for [6/7] to skip their dependencies (issue
+  # 0083).
+  local elsewhere_lines=() elsewhere_names=" " plat plat_status
   local framework_version framework_major
   framework_version=$(get_utilz_version)
   framework_major=$(echo "$framework_version" | cut -d. -f1)
@@ -877,6 +1113,23 @@ run_doctor() {
       unreadable_utils+=("$name")
       continue
     fi
+
+    # WHERE IT RUNS (issue 0083). One whose platforms leave this one out is
+    # said below, as not available here, and is no issue; one whose platforms
+    # cannot be judged is this utility's fault, listed with the others.
+    plat_status=0
+    plat=$(platforms_verdict "$(util_yaml_path "$name")" .platforms) || plat_status=$?
+    case $plat_status in
+      0)
+        if [[ "$plat" == elsewhere\ * ]]; then
+          elsewhere_lines+=("$name: ${plat#elsewhere } only, not available on $(platform_name)")
+          elsewhere_names="$elsewhere_names$name "
+        fi
+        ;;
+      1) broken_utils+=("$name ($name.yaml's $plat)") ;;
+      *) unreadable_utils+=("$name") ;;
+    esac
+
     if [[ $meta_status -ne 0 ]]; then
       required_utilz_version=""
     fi
@@ -918,14 +1171,21 @@ run_doctor() {
       echo "    - $util ($util.yaml cannot be read: $(yaml_read_error "$(util_yaml_path "$util")"))"
     done
   fi
+  if [[ ${#elsewhere_lines[@]} -gt 0 ]]; then
+    for util in "${elsewhere_lines[@]}"; do
+      info "$util"
+    done
+  fi
   echo ""
 
   # Check 6: External dependencies
   echo -e "${BOLD}[6/7]${RESET} Checking external dependencies..."
   local missing_deps=()
   local missing_dep_info=()
-  local optional_missing=()
+  # Info lines, one per name: kind|name|detail|purpose|declarer (_doctor_dep_note).
+  local dep_notes=()
   local yaml_file dep_count dep_name dep_install dep_purpose dep_required dep_status dep_list i
+  local dep_where dep_where_status
   local refused_lists=0 refused_entries=0
 
   # yq is reported by hand, and first: it is the framework's own hard
@@ -945,6 +1205,11 @@ run_doctor() {
     while IFS= read -r name; do
       yaml_file=$(util_yaml_path "$name")
       if [[ ! -f "$yaml_file" ]]; then
+        continue
+      fi
+      # A utility that runs elsewhere alone has no dependency here to check:
+      # [5/7] said so (issue 0083).
+      if [[ "$elsewhere_names" == *" $name "* ]]; then
         continue
       fi
 
@@ -996,6 +1261,26 @@ run_doctor() {
             refused_entries=$((refused_entries + 1))
             continue
           fi
+          # WHERE IT RUNS, BEFORE WHETHER IT IS HERE (issue 0083). One this
+          # platform cannot have is said once, with no install line, and never
+          # counted: nothing installs it here. One whose platforms cannot be
+          # judged is refused by name, as an entry with no name is.
+          dep_where_status=0
+          dep_where=$(dependency_platforms "$yaml_file" "$dep_list" "$i") || dep_where_status=$?
+          if [[ $dep_where_status -ne 0 ]]; then
+            if [[ $dep_where_status -eq 2 ]]; then
+              dep_where="$name.yaml cannot be read there: $(yaml_read_error "$yaml_file")"
+            fi
+            error "$name: ${dep_list}[$i] ($dep_name): $dep_where"
+            issues=$((issues + 1))
+            refused_entries=$((refused_entries + 1))
+            continue
+          fi
+          if [[ "$dep_where" == elsewhere\ * ]]; then
+            dep_purpose=$(dependency_purpose "$yaml_file" "$dep_list" "$i")
+            dep_notes+=("platform|$dep_name|${dep_where#elsewhere }|$dep_purpose|$name")
+            continue
+          fi
           if dependency_present "$yaml_file" "$dep_list" "$i" "$dep_name"; then
             continue
           fi
@@ -1006,7 +1291,7 @@ run_doctor() {
           fi
           if [[ "$dep_required" == "false" ]]; then
             dep_purpose=$(dependency_purpose "$yaml_file" "$dep_list" "$i")
-            optional_missing+=("$dep_name|$dep_install|$dep_purpose|$name")
+            dep_notes+=("optional|$dep_name|$dep_install|$dep_purpose|$name")
           else
             missing_deps+=("$dep_name")
             missing_dep_info+=("$dep_name|$dep_install|$name")
@@ -1018,23 +1303,25 @@ run_doctor() {
     # ONE LINE PER NAME, naming every utility that declares it: glow is
     # declared by utilz and by mdagg, and saying so twice would read as two
     # problems. The sort is stable, so the first declarer's install line and
-    # purpose are the ones shown.
-    if [[ ${#optional_missing[@]} -gt 0 ]]; then
-      local last="" shown_install="" shown_purpose="" declarers="" used_by
-      while IFS='|' read -r dep_name dep_install dep_purpose used_by; do
-        if [[ "$dep_name" == "$last" ]]; then
+    # purpose are the ones shown. A name is one line per kind of note: missing
+    # and optional, or not on this platform (issue 0083).
+    if [[ ${#dep_notes[@]} -gt 0 ]]; then
+      local last="" shown_kind="" shown_detail="" shown_purpose="" declarers="" used_by kind dep_detail
+      while IFS='|' read -r kind dep_name dep_detail dep_purpose used_by; do
+        if [[ "$kind|$dep_name" == "$last" ]]; then
           declarers="$declarers, $used_by"
           continue
         fi
         if [[ -n "$last" ]]; then
-          _doctor_optional "$last" "$shown_install" "$shown_purpose" "$declarers"
+          _doctor_dep_note "$shown_kind" "${last#*|}" "$shown_detail" "$shown_purpose" "$declarers"
         fi
-        last="$dep_name"
-        shown_install="$dep_install"
+        last="$kind|$dep_name"
+        shown_kind="$kind"
+        shown_detail="$dep_detail"
         shown_purpose="$dep_purpose"
         declarers="$used_by"
-      done < <(printf '%s\n' "${optional_missing[@]}" | sort -s -t'|' -k1,1)
-      _doctor_optional "$last" "$shown_install" "$shown_purpose" "$declarers"
+      done < <(printf '%s\n' "${dep_notes[@]}" | sort -s -t'|' -k1,2)
+      _doctor_dep_note "$shown_kind" "${last#*|}" "$shown_detail" "$shown_purpose" "$declarers"
     fi
   else
     error "yq is not installed; it is required to parse utility metadata"
@@ -1079,7 +1366,7 @@ run_doctor() {
   # an executable /usr/bin/xcodebuild, and without Xcode it only says it
   # requires Xcode. The Command Line Tools' xcodebuild refuses the same way, so
   # the one fix named is Xcode itself.
-  if [[ "$(uname -s)" == Darwin && -d "$UTILZ_HOME/native/macos/Menuz" ]]; then
+  if [[ "$(utilz_platform)" == macos && -d "$UTILZ_HOME/native/macos/Menuz" ]]; then
     if ! check_command "xcodegen"; then
       info "Required: Install 'xcodegen' to build menuz's app (native/macos/Menuz)"
       echo -e "    brew install xcodegen"

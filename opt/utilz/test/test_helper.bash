@@ -83,6 +83,11 @@ setup() {
   cd "$BATS_TEST_TMPDIR"
 
   isolate_tool_homes
+
+  # A suite about one platform's paths names it at its top (issue 0083).
+  if [[ -n "${UTILZ_TEST_PLATFORM:-}" ]]; then
+    stub_platform "$UTILZ_TEST_PLATFORM"
+  fi
 }
 
 # Per-test teardown - runs after each test
@@ -168,6 +173,45 @@ end_gpg_home() {
       printf 'teardown: %s\n' "$note" >&2
     fi
   fi
+}
+
+# PINS THE PLATFORM A TEST RUNS AS (issue 0083). A uname first on PATH, in the
+# test's own dir, answers `uname` and `uname -s` with <name> -- Darwin, Linux,
+# or another, such as FreeBSD -- and hands every other question to the real
+# one, so either platform's paths are tested on either. utilz_platform reads
+# uname -s, so this is the one switch a test needs. Its dir is exported as
+# UTILZ_TEST_PLATFORM_BIN for a test that builds a PATH of its own. A suite
+# whose tests are about one platform's paths sets UTILZ_TEST_PLATFORM at its
+# top, and setup() pins it for every test; a test pins another by calling this.
+stub_platform() {
+  local name="$1" dir real=""
+  if [[ ! "$name" =~ ^[A-Za-z][A-Za-z0-9]*$ ]]; then
+    echo "stub_platform: '$name' is not a platform name" >&2
+    return 1
+  fi
+  for real in /usr/bin/uname /bin/uname; do
+    if [[ -x "$real" ]]; then
+      break
+    fi
+    real=""
+  done
+  if [[ -z "$real" ]]; then
+    echo "stub_platform: no uname in /usr/bin or /bin to hand other questions to" >&2
+    return 1
+  fi
+  dir="$BATS_TEST_TMPDIR/platform-$name"
+  mkdir -p "$dir" || return 1
+  cat > "$dir/uname" <<EOF || return 1
+#!/bin/sh
+if [ \$# -eq 0 ] || [ "\$1" = -s ]; then
+  echo $name
+  exit 0
+fi
+exec $real "\$@"
+EOF
+  chmod +x "$dir/uname" || return 1
+  export UTILZ_TEST_PLATFORM_BIN="$dir"
+  export PATH="$dir:$PATH"
 }
 
 # ============================================================================

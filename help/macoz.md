@@ -23,7 +23,7 @@ macoz <command> [args]
 
 macOS system utilities - various macOS-specific operations.
 
-**Platform**: Requires macOS (Darwin)
+**Platform**: macOS only. Elsewhere every command refuses, exit 2, saying `macoz needs macOS, so it is not available on <platform>`; `--help`, `--version` and no arguments answer everywhere. `setpicfor` needs fileicon (`brew install fileicon`), which `utilz doctor` reports as optional.
 
 ---
 

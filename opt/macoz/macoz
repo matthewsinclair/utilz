@@ -19,17 +19,6 @@ if [[ "$(type -t info 2>/dev/null)" != "function" ]]; then
 fi
 
 # ============================================================================
-# PLATFORM CHECK
-# ============================================================================
-
-check_macos() {
-  if [[ "$(uname)" != "Darwin" ]]; then
-    error "macoz utilities require macOS"
-    exit 1
-  fi
-}
-
-# ============================================================================
 # HELPER FUNCTIONS
 # ============================================================================
 
@@ -417,7 +406,7 @@ SEASONS:
   spring, summer, autumn, winter
 
 PLATFORM:
-  Requires macOS
+  macOS only: elsewhere every command refuses, naming the platform
 
 For detailed help, run: utilz help macoz
 EOF
@@ -427,10 +416,8 @@ EOF
 # MAIN
 # ============================================================================
 
-# Check platform
-check_macos
-
-# Parse command
+# No arguments and the help arms answer on any platform; every command after
+# them needs macOS, as macoz.yaml's platforms say (issue 0083).
 if [[ $# -eq 0 ]]; then
   usage
   exit 0
@@ -440,6 +427,15 @@ COMMAND="$1"
 shift
 
 case "$COMMAND" in
+  -h|--help)
+    usage
+    exit 0
+    ;;
+esac
+
+require_platform macoz
+
+case "$COMMAND" in
   background|bg)
     # Arguments are optional - will auto-select seasonal if not provided
     cmd_background "${1:-}" "${2:-}"
@@ -447,10 +443,6 @@ case "$COMMAND" in
   setpicfor)
     # Set folder icon from image file
     cmd_setpicfor "$@"
-    ;;
-  -h|--help)
-    usage
-    exit 0
     ;;
   *)
     error "Unknown command: $COMMAND"

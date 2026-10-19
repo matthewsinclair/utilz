@@ -14,7 +14,6 @@ class Utilz < Formula
   license "MIT"
 
   depends_on "rust" => :build
-  depends_on :macos
   # The framework's one dependency to start. Each utility's own dependencies
   # are reported by utilz doctor, with install lines, rather than installed
   # here for every utility at once (D3).
@@ -36,6 +35,9 @@ class Utilz < Formula
         utilz doctor
       utilz upgrade, relink and use refuse inside this install: upgrade it
       with brew upgrade utilz.
+      On Linux, macoz and menuz's app need macOS, and arngz's apply, diff and
+      discover need macOS and Hammerspoon; utilz doctor names what this
+      machine lacks.
     EOS
   end
 

@@ -146,3 +146,37 @@ clipboard_copier() {
   if [[ "$(uname)" == "Darwin" ]]; then want=pbcopy; fi
   [[ "$(clipboard_copier)" == "$want" ]] || fail "expected $want to take the copy; the stubs recorded: $(cat "$BATS_TEST_TMPDIR/clipboard.calls")"
 }
+
+# ============================================================================
+# THE PLATFORM (issue 0083)
+# ============================================================================
+
+@test "clipz takes its tool by the platform utilz_platform reads: xclip on Linux, pbcopy on macOS (issue 0083)" {
+  stub_clipboard
+  stub_platform Linux
+  run bash -c "printf 'linux trip' | '$UTILZ_BIN_DIR/clipz' copy"
+  assert_success
+  [[ "$(clipboard_copier)" == xclip ]] ||
+    fail "expected xclip to take the copy on Linux; the stubs recorded: $(cat "$BATS_TEST_TMPDIR/clipboard.calls")"
+
+  : > "$BATS_TEST_TMPDIR/clipboard.calls"
+  stub_platform Darwin
+  run bash -c "printf 'mac trip' | '$UTILZ_BIN_DIR/clipz' copy"
+  assert_success
+  [[ "$(clipboard_copier)" == pbcopy ]] ||
+    fail "expected pbcopy to take the copy on macOS; the stubs recorded: $(cat "$BATS_TEST_TMPDIR/clipboard.calls")"
+}
+
+@test "clipz.yaml declares xclip and wl-copy as optional on Linux, naming xsel and wl-clipboard (issue 0083)" {
+  local y="$UTILZ_HOME/opt/clipz/clipz.yaml" tool
+  for tool in xclip wl-copy; do
+    run yq -o=json -I=0 ".dependencies[] | select(.name == \"$tool\") | .platforms" "$y"
+    assert_output '["linux"]'
+    run yq ".dependencies[] | select(.name == \"$tool\") | .required" "$y"
+    assert_output "false"
+  done
+  run yq '.dependencies[] | select(.name == "xclip") | .purpose' "$y"
+  assert_output_contains "xsel"
+  run yq '.dependencies[] | select(.name == "wl-copy") | .purpose' "$y"
+  assert_output_contains "wl-clipboard"
+}

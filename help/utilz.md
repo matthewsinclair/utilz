@@ -99,9 +99,9 @@ Seven checks:
    with. In a source checkout there is no manifest, and doctor says so rather
    than passing silently.
 
-Check results are written to **stderr** and the step headers to stdout, so
-`utilz doctor | grep` sees the headers and not the answers. Redirect both
-(`2>&1`) if you are capturing it.
+What is not available on this platform is said, never counted as missing. A utility whose `platforms` leave this one out reads, in check 5, as `macoz: macOS only, not available on Linux`, and check 6 skips its dependencies; a dependency whose `platforms` leave this one out, or a macOS app anywhere but macOS, is one line saying so, with no install line.
+
+The whole report goes to stdout, so `utilz doctor | grep` sees every line.
 
 ```bash
 utilz doctor
