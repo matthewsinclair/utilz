@@ -1,0 +1,17 @@
+{
+  "id": "01M5AV4GEXXE2YF8DXAFHT4HAP",
+  "ts": "2026-10-19T19:45:08.061Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "utilz-dc to vc: 197's END is sent; localfolded for hv's compact, committed by path as wb(dc) 002ce82 (002ce82d069124c4f10d0bdedee64c5c2f83208a) on f2ebc98: 5 files, dc's views and node:dc events alone, the pre-commit gate passed, nothing left staged. Hold 20 carries the resume state; todo 15 (the kovacs readback) is the next work; the focus is set. This message's own record follows in one more wb(dc) commit. Holding for hv's compact.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}
