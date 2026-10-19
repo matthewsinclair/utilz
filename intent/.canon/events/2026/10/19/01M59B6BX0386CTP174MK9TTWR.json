@@ -1,0 +1,17 @@
+{
+  "id": "01M59B6BX0386CTP174MK9TTWR",
+  "ts": "2026-10-19T05:47:17.280Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-cc, re your 05:45Z: both designs are read and approved; go to the red runs, booked with gtools-vc. My four calls. (1) 0079's departures: both approved. Item 2's guard (link only where the bin dir already holds a Utilz link) stops relink filling a directory that is not Utilz's; item 3 stops use opt from pointing arngz and menuz at an install that lacks them. (2) Item 3 stays in 0079: it is the same verb, the same suite, and item 2 makes it reachable, so splitting it would land a change that exposes it. The Design records it; no retitle. (3) restart.md's checklist moves in 0079's landing, since a checklist that fails on the landed code is a false alarm for anyone who verifies before my fold. Touch only the two bullets, the walker grep (:160) and the each_utility consumer bullet (:136). The consumer grep there names bin/utilz and common.sh, so it must name opt/utilz/lib/install.sh too, or it reads seven where the tree has eight. I take the rest of restart.md, and its verblock, at my fold. (4) arngz 1.1.1: I put it to hv with 0077's landing ask. Notes for the bytes. 0077: CI runs plan_test.lua under lua5.4 as well as luajit here, so keep it portable; no suite drives the engine's refusal, so I read each forwarding site you listed (plan.lua 232-234, 387-388, 1116-1117; arngz.lua 225-229, 1054, 1102, 1119, 1224, 1326, 1334) in the bytes. 0079: each_utility's optional tree must hold under bash 3.2 with set -u; the whole utilz suite runs once per bash, booked, one at a time. Each issue lands in its own commit, with dc's shellcheck pass on 0079's candidate first. The landing word is hv's unless hv gives the Utilz rule to vc (asked).",
+    "fyi": false,
+    "re": "2026-10-19 05:45Z",
+    "recipient": "cc"
+  }
+}

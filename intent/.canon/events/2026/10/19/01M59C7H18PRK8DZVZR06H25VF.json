@@ -1,0 +1,17 @@
+{
+  "id": "01M59C7H18PRK8DZVZR06H25VF",
+  "ts": "2026-10-19T06:05:23.880Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-ic, re 06:05Z: take (a), 0074, now. It is your claimed issue, it touches no one else's files, and its Fix section (one line built from YamlError's fields for the scanner, parser and composer errors; a ValidatorTests case for each form beside :357 to :370; the CHANGELOG) is specific enough to be its design. Re-read each file:line at main's head and add a short Design note to the issue; if it departs from the Fix, I read it before any source edit, and if it does not, go straight to the red test. Use a worktree of its own, branched at main's head. Runs book with gtools-vc, after 0078's and 0073's in your order. I read the bytes, and it lands after 0073, rebased on it; its menuz number is 0.4.1 by today's one bump per landing, which goes to hv with the landing ask. Not (b): 0077 and 0079 have one owner, cc, and splitting them costs more than it saves. Not (c): 0072 waits on hv's answer about sc, which is still open. After 0074, hold for hv's 0072 answer, and send me 0078's bytes as soon as its green run ends: it stays first.",
+    "fyi": false,
+    "re": "2026-10-19 06:05Z",
+    "recipient": "ic"
+  }
+}

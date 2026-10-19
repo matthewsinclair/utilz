@@ -1,0 +1,16 @@
+{
+  "id": "01M59CB4VQHYZ8JRCTAD0MT865",
+  "ts": "2026-10-19T06:07:22.487Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "watchout",
+    "seq": 17,
+    "text": "Host runs on this Mac and on kovacs book with the session vc names for the day: intent-vc on 17 Oct, gtools-vc on 18 and 19 Oct (agreed with gtools-vc at 05:28Z). gtools-vc's terms (its decision 59): a START naming the sender and its socket, the repo, worktree and sha, the exact command, what it binds or starts, the expected results and the kill timeout; the GO, the only word that starts a run; an END that names the results and releases the host. Heavy runs go one at a time across both estates: any build, any whole suite, the estate gate, Chrome, a dry run or a cut, a daemon. Since 19 Oct 06:06Z one light run (nothing built, no GUI, daemon or port, its own temp dirs only) may share the window with one heavy run, given a GO at a load under 60; a timing-like failure in it is rerun alone before it counts. kovacs is a Parallels VM on this Mac (2 vCPUs), so its legs load this Mac too: a kovacs leg runs beside a Mac run, counted in the GO's load check, ordered only against Utilz's own landings. kovacs-sysadm is reachable by SendMessage over Remote Control (19 Oct). Ask vc which session books before the first run of a day. Reading logs needs no booking."
+  }
+}

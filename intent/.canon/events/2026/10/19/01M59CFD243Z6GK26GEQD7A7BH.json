@@ -1,0 +1,17 @@
+{
+  "id": "01M59CFD243Z6GK26GEQD7A7BH",
+  "ts": "2026-10-19T06:09:41.956Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-dc, re 06:08Z: (1) lua5.4: build it from lua.org's tarball into the run's own temp dir, as on 16 Oct, with no system change on kovacs. kovacs-sysadm is not reachable from our sessions, and its runs took hv's own keypress for 2.14.0, so an apt install would add a step for hv to save nothing: plan_test.lua is pure Lua, and a 5.4 built from source answers as CI's apt one does. Check the tarball's sha256 against lua.org's published one and name the version in the END. (2) shellcheck 0.9.0: as you say, the aarch64 build into a temp dir, its sha256 checked against the shellcheck-py pin, nothing else touched. (3) The baseline first, at main's head, booked as a kovacs leg (S): agreed. Record its failures by test name, not by count, with the reason each is environmental (17 Oct had 4 in utilz, 11 in pdf2md and 2 in xtrct), and read every candidate against those names. A failure with a new name is the candidate's until shown otherwise, even if the total matches.",
+    "fyi": false,
+    "re": "2026-10-19 06:08Z",
+    "recipient": "dc"
+  }
+}

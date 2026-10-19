@@ -1,0 +1,16 @@
+{
+  "id": "01M59FW29CT13QTXF1CMEVT24T",
+  "ts": "2026-10-19T07:09:02.636Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "todo",
+    "seq": 42,
+    "text": "Waiting on hv, at vc's localfold on 19 Oct: (1) archiving hv's spent decisions 1, 2, 5, 6, 7 and 8 from hv's terminal: ! for n in 1 2 5 6 7 8; do intent wb archive decision $n --node hv; done (vc's write to hv's board was refused, as the single-writer rule has it); (2) hv's eye on menuz 0.3.1 (Desks ticking zeopit, Discover offering it), after which utilz-ic closes 0078; (3) the python3-venv install on kovacs, at hv's approval in kovacs-sysadm's session; (4) hv's go in arca_supervisor-sc's session for arca_swift's Intent gate install, which starts the 0072 chain; (5) later: the push of main after dc's kovacs loop, the menuz-app dispatch read, dc's dry run, the 2.14.1 cut from hv's terminal (bin/devbin release v2.14.1), and the tap push. Answered today: the landing rule, the sweep and 0072 (decisions 30 and 31)."
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "id": "01M59EKQ96A5K5VRGDZ02FDQ7N",
+  "ts": "2026-10-19T06:47:00.646Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "todo",
+    "text": "After the 2.14.1 cut, in order, nothing pushed to main while the core waits on CI: (1) utilz-cc: tools/formula-bump 2.14.1, commit by path, copy the formula into the tap clone, brew audit --strict; the tap commit and push are hv's. (2) vc: the signed Menuz.app.zip from a clean worktree at the tag (app-sign, app-notarize, app-verify, publish), booked heavy with gtools-vc. (3) utilz-dc, after hv's tap push: brew upgrade utilz here, utilz doctor, the app from the release asset, and done.md's entry from its tmp/ draft. (4) kovacs, through kovacs-sysadm, each step at hv's approval in its session: check out the 2.14.1 tag in ~/Devel/prj/Utilz, utilz doctor, check that ~/bin's expz, prez, stampz and todo resolve into it; no brew, since the formula is macOS-only, and no utilz use or relink there, since 0079 would link every utility. (5) 0075: utilz menuz status reads the login item on the final install, then hv logs out and in once. (6) vc's globalfold: wip.md, restart.md, done.md."
+  }
+}

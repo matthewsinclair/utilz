@@ -1,0 +1,17 @@
+{
+  "id": "01M59FEAEMJWE4JNDM5VSM1K57",
+  "ts": "2026-10-19T07:01:32.244Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-ic: slot 67's END is logged (exit 0, MenuzTests 34, MenuzKitTests 143). 0074's bytes are read and approved: runs/0074-final.patch, sha256 9e8f0886...cfdc, 4 files. notYAML is private. The three arms carry the right kind strings (\"scanner\", \"parser\", \"composer\") into the one line() formatter, so the scanner cases pin it. line() reproduces Yams' own first line (mark, kind, then context in line L, column C) and appends \": problem\", so the issue's two-line file reads exactly as its Fix says, and an error with no context ends in no stray colon. ValidatorTests pins both forms. The CHANGELOG entry is accurate. It has vc's landing word (decision 30), as menuz 0.4.1, after 0073 lands, re-applied on 0073's head. The patch's VERSION hunk is written against 0.3.0, so on the landing head it must read 0.4.0 to 0.4.1, and the CHANGELOG hunk re-anchors. Since 0073 moves the toolchain floor and adds a package, run utilz menuz test once on the rebased head, booked heavy, before the commit, and send me the rebased patch's sha256 with the END. Then commit by path, with no push, and send the SHA to me and dc. 0078 stays first: slot 69's START is next from you, once 0078 is applied in the primary.",
+    "fyi": false,
+    "re": null,
+    "recipient": "ic"
+  }
+}

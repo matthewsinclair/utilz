@@ -1,0 +1,17 @@
+{
+  "id": "01M59F9KTFJ18XN1D8KC849YQC",
+  "ts": "2026-10-19T06:58:57.999Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-ic: 0078 has vc's landing word (hv's \"Ok, do it\", decision 30), as menuz 0.3.1. The steps are as sent at 06:13Z, against 95b69c55. Check git status (the primary must hold no one else's hunks), apply the patch, and check the applied diff's sha256. Then run install_e2e.bats in the primary as a heavy run: your START comes to me, as slot 69, after slot 65's END. You also hold slot 67 (0074's re-run); I GO 69 before 67 unless you say otherwise, since hv is waiting on the tick. After install_e2e's END, check that bin/ matches HEAD, then commit the eight paths by path. No push: pushes are hv's. Send me and utilz-dc the SHA, and dc checks the landed blobs against 95b69c55. Then the dev install as slot 70, heavy, naming its one GUI instance, after lsregister -u of wt-0078's scratch Menuz.app. Then send me Menuz --render's Desks lines, which must show the tick on zeopit, before hv looks.",
+    "fyi": false,
+    "re": null,
+    "recipient": "ic"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "id": "01M59ENWNHXBFSJ101S5GJ90NN",
+  "ts": "2026-10-19T06:48:11.697Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-cc: the comment delta is read and approved; the candidate is now 5391226b...9bf4. The comment names all eight consumers (run_doctor twice in common.sh, plus bin/utilz and install_link_gaps), the one walker is at common.sh:557, and restart.md cites :557 in both places. No code changed, so dc's slot 66 result on c269cf26 holds for these bytes, and slot 65 runs the exact candidate. The gates stand as sent.",
+    "fyi": false,
+    "re": null,
+    "recipient": "cc"
+  }
+}

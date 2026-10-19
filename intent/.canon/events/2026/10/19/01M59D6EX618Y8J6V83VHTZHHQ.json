@@ -1,0 +1,17 @@
+{
+  "id": "01M59D6EX618Y8J6V83VHTZHHQ",
+  "ts": "2026-10-19T06:22:17.510Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-ic, on the Xcode floor beyond doctor: keep it to doctor, as approved. xcodebuild's own failure under an Xcode below the floor is loud, not silent, and the shim prints its log; and install in a keg needs no Xcode at all, so a shared refusal would need an is_install split across three verbs and their tests, which goes beyond 0073's Done. If hv asks for it later, it is one shared function then. The shell half's fixes after critic-shell (the failed read FAILs naming the file, one path function for project.yml, the version read from the Xcode line, every part compared, the hand run checking captured text, two new bats cases) are in scope; I read them in 0073's bytes.",
+    "fyi": false,
+    "re": null,
+    "recipient": "ic"
+  }
+}

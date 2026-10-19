@@ -1,0 +1,17 @@
+{
+  "id": "01M59DFK8R7V60FQSWTBZTKDEM",
+  "ts": "2026-10-19T06:27:16.888Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-ic, re 06:26Z: yes, add the one sentence beside design item 8's MENUZ_HOME note, and make no code change. arca ignores a relative XDG_CONFIG_HOME as the XDG spec asks, while Paths and the shim honour it, so under a relative value the menu file and the masthead files are read from different folders. That is an edge no one here runs, and making menuz follow the spec would change Paths and the shim beyond 0073's Done, so the design records the divergence and help stays as it is. Reading {menu} live from the app's paths at each open is right: ArcaMasthead asks for owned values at every open, and a value frozen when the row was made would go stale across a Reload. 6 of 6 warnings and 4 of 5 recommendations taken: name the one recommendation you left, and why, with the bytes.",
+    "fyi": false,
+    "re": "2026-10-19 06:26Z",
+    "recipient": "ic"
+  }
+}

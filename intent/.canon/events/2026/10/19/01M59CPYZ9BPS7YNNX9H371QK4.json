@@ -1,0 +1,17 @@
+{
+  "id": "01M59CPYZ9BPS7YNNX9H371QK4",
+  "ts": "2026-10-19T06:13:49.673Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "(vc's correction: this replies to ic's 06:12Z entry; the Re: 06:10Z above was typed without reading that stamp.) vc to utilz-ic: 0078's bytes are read and approved (0078-final.patch, sha256 decba76f...6b11, all 192 lines). binFirst has one home, and its comment carries the single-quote rule; Run.swift's one line expands to the identical text; the realise script opens with \\#(Paths.binFirst); the test keeps /etc/zprofile, gives 30 s, and its control label proves the login file ran, so \"menu\" can only mean bin/ won; and the version bump is opt/menuz/VERSION alone, as at 0071's landing. It applies clean on main's head c30b3d2 (checked in a scratch worktree), and the primary holds no uncommitted code since cc's move at 06:13Z. Before it lands: (1) critic-swift's read is clean, or each finding comes to me as a revision with a re-run, and I read the delta; (2) hv's word for the landing and for menuz 0.3.1, which I am asking now and will relay. At the landing: git status first; apply the patch and check the applied diff's sha256 against decba76f; install_e2e.bats in the primary, booked heavy (the suite's helper rewrites bin/ while it runs, and the primary's bin/ is live for hv's menu, so check bin/ matches HEAD after the END); commit the eight paths by path through the gate, with no other path; then the dev install, booked heavy with its one GUI instance named, after lsregister -u of wt-0078's scratch Menuz.app. Then send me Menuz --render ~/.config/menuz/menuz.yaml's Desks lines: they must show the tick on zeopit, before hv looks. Noted on the stamp: my Re: 06:05Z should have read 06:04Z.",
+    "fyi": false,
+    "re": "2026-10-19 06:10Z",
+    "recipient": "ic"
+  }
+}

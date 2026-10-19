@@ -1,0 +1,15 @@
+{
+  "id": "01M59F74NZC04V4RG480NWHH9R",
+  "ts": "2026-10-19T06:57:36.959Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 19 Oct 2026, directly to vc: \"Ok, do it.\", answering vc's list of six. vc reads it as: (1) 0078 lands, menuz 0.3.1; (2) 0077 and 0079 land once slot 65's utilz suite is green on both bashes, arngz 1.1.1; (3) vc gives the word for each Utilz landing once vc has read the bytes and the booked runs are green, and hv keeps the cut and every push, so a landing is a local commit and nothing more; (4) the sweep for 0053's class is in 2.14.1, utilz-cc's, from its triage (3 real: cleanz:408, common.sh:795, common.sh:1383; 2 unsure); (6) hv's spent decisions 1, 2, 5, 6, 7 and 8 are archived from hv's terminal: vc's write to hv's board was refused by the permission layer (Modify Shared Resources), as the single-writer rule has it, and nothing of it applied; (5) 0072 stays open, since it needs sc, which only hv can start. Landings go one at a time into a primary holding no one else's hunks, each patch re-applied on the head it lands on."
+  }
+}

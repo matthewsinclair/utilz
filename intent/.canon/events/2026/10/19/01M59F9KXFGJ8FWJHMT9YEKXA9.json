@@ -1,0 +1,17 @@
+{
+  "id": "01M59F9KXFGJ8FWJHMT9YEKXA9",
+  "ts": "2026-10-19T06:58:58.095Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-cc: slot 65's END now comes to me, since gtools-vc is compacted and I hold the queue. If it is green on both bashes, 0077 and 0079 have vc's landing word (hv's \"Ok, do it\", decision 30), as arngz 1.1.1. They land after 0078, which utilz-ic lands first, one at a time, each re-applied on the head it lands on. First 0077's part of 5391226b: apply it, commit its paths by path, and send the SHA to me and dc. Then 0079's: apply it, run install_e2e.bats in the primary as a heavy run (START to me), and commit only after its END. install_e2e drives use dev and refuses a worktree, so slot 65 could not run it. No push. After that the sweep for 0053's class is yours, by the same word: one issue covering the 3 real sites, with the 2 unsure settled in it, and the design in the issue first, saying how each site refuses by name. Then my read, red-first fixes, booked runs, for 2.14.1.",
+    "fyi": false,
+    "re": null,
+    "recipient": "cc"
+  }
+}

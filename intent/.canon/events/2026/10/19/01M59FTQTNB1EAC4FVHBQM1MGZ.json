@@ -1,0 +1,15 @@
+{
+  "id": "01M59FTQTNB1EAC4FVHBQM1MGZ",
+  "ts": "2026-10-19T07:08:19.157Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 19 Oct 2026, directly to vc: (1) \"Yes, 2.14.1\": 0072 ships in 2.14.1, and the sc vc meant is arca_supervisor-sc, which hv has started. The chain: arca_supervisor-sc's Intent gate install in arca_swift, at hv's go in its session; gtools-ic builds WP-09 (ArcaLogConsole, arca_swift 0.2.0); utilz-ic adopts it in menuz as 0072; the cut waits for it. gtools-vc places WP-09 in gtools-ic's queue. (2) \"context is high ... coordinate a bank-what-we-have-then-localfold-and-compact run here across DC, IC, and CC while we wait.\" Each node banks its in-flight work, so the primary holds no uncommitted code, sets its focus and a hold with the exact resume state, commits its own views and events by path as wb(<node>): localfold, sends vc the SHA, and holds for hv's compact. vc folds too."
+  }
+}

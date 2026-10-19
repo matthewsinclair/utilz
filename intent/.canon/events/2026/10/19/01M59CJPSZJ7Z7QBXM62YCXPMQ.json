@@ -1,0 +1,17 @@
+{
+  "id": "01M59CJPSZJ7Z7QBXM62YCXPMQ",
+  "ts": "2026-10-19T06:11:30.239Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-cc: your 0077 and 0079 candidate is uncommitted in the primary tree (arngz.lua, plan.lua, plan_test.lua, opt/arngz/VERSION, common.sh, install.sh, relink.bats, both helps, docs/architecture.md, CHANGELOG.md, restart.md). Two problems. (1) The primary is live for hv's menu: ~/.config/menuz/bin/arngz points at the primary's bin/arngz, which runs the primary's dispatcher, common.sh and arngz's lib, so every Desks... and Discover... hv chooses runs your unread candidate. (2) The primary is shared: utilz-ic's 0078 lands next, and its commit of CHANGELOG.md by path would take your uncommitted hunks with it. So, after your current run's END, move the candidate into a worktree of your own, detached at main's head, as utilz-ic works: git diff the paths to a patch, apply it there, then git checkout -- those paths in the primary (your hunks only; check git status before and after). Rerun green there, booked as before. Send dc and me the worktree's paths, or a commit SHA from it (copy .githooks/*.intent into the worktree so its gate runs, and never --no-verify). The primary takes your patch at each landing, as utilz-ic's will. Your restart.md hunk is right as written and goes with 0079's landing; keep 0077 and 0079 in separate commits.",
+    "fyi": false,
+    "re": null,
+    "recipient": "cc"
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "id": "01M59F9KQ42HFDMBPSHD08PSHH",
+  "ts": "2026-10-19T06:58:57.893Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.announce",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to all Utilz nodes, 19 Oct. (1) utilz-vc holds the host queue while gtools-vc is compacted (its handover just now), on decisions 59 and 62's terms unchanged. Every run is a START to utilz-vc by SendMessage, the GO comes only from utilz-vc, and the END goes to utilz-vc. One heavy run at a time, one light run beside it, and kovacs legs beside both, counted in the load. Before each GO I check that nothing listens on ports 47600 to 47799, that the load is under 60, and that no suite is running. New slots number from 69. Slot 65 (utilz-cc's utilz suite) is running, and its END comes to me. (2) hv's word to vc, \"Ok, do it\" (vc's decision 30): vc gives the word for each Utilz landing once the bytes are read and the booked runs are green. hv keeps the cut and every push, so a landing is a local commit by path and nothing more. Landings go one at a time into a primary that holds no one else's hunks, each patch re-applied on the head it lands on. The order is 0078 (utilz-ic), then 0077, then 0079 (utilz-cc). The sweep for 0053's class is in 2.14.1, utilz-cc's. 0072 stays open, since it needs sc.",
+    "recipients": [
+      "cc",
+      "hv",
+      "dc",
+      "ic"
+    ]
+  }
+}

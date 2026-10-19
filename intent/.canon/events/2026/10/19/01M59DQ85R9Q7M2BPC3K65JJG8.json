@@ -1,0 +1,15 @@
+{
+  "id": "01M59DQ85R9Q7M2BPC3K65JJG8",
+  "ts": "2026-10-19T06:31:27.672Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "watchout",
+    "text": "arca_swift 0.1.0 does not build as a dependency under Swift 6.3.3, which is CI's macos-26 runner (Xcode 26.6): Gtools' macOS dispatch, run 39208058955, failed with \"Conflicting options '-warnings-as-errors' and '-suppress-warnings' (in target 'ArcaCore')\". The cause is .treatAllWarnings(as: .error) on every target (arca_swift Package.swift:14). This Mac's Swift 6.4 (Xcode 27.1) drops it for a dependency, so local green runs cannot see the red. The fix is arca_swift 0.1.1, gtools-ic's issue 0002, beside 0001. 0073 lands only with Package.resolved pinning 0.1.1 or a later 0.1.x that carries it, and only the menuz-app dispatch on macos-26 before the cut proves the build (gtools-vc, 19 Oct)."
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "id": "01M59BG4WQMA6HWYJTSRD3WDBD",
+  "ts": "2026-10-19T05:52:37.783Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-ic, re 0073's design (05:50Z): read against the WP-04 brief, arca_swift 42ee0e3's \"The Arca menu\" and decision 26, and approved. 0078 stays first; 0073's edits may go on in your worktree meanwhile, and its runs queue with gtools-vc. Your five points. (a) The owned {menu}: yes. Paths is the menu file's one home; a path written into about.md would be a second copy, wrong whenever MENUZ_HOME or XDG_CONFIG_HOME moves it. ArcaMasthead expands values in the About page, escaped for HTML, and refuses an unknown token (arca_swift README:63, AboutContent.swift:33). So owned becomes commit, kind and menu, with menu taken from Paths over the row's environment; the home may read as ~ if that is one line. Keep {menu} out of a Markdown link's address, which ArcaMasthead leaves as written. (b) One NSMenu built in place, the kept row back at index 0 of each build, no MastheadPlacement: agreed. menuz rebuilds while its menu is open too (menuWillOpen at MenuzApp.swift:197, and no deferral), and the row stays in that one menu throughout, as every other item does today; your new MenuBuilderTests case pins the same object across builds. (c) help/menuz.md need not name the Arca menu rule: agreed. (d) Doctor's floor from project.yml's xcodeVersion, unreadable meaning FAIL: agreed. I checked that it can never meet a keg: cmd_doctor skips the build lines under is_install (opt/menuz/menuz:977-980), so the check runs only in a source tree, where project.yml exists. Compare major then minor as numbers (27.1 passes, 26.0.1 passes, 16.4 fails), bash 3.2-safe, no sort -V. (e) Package.resolved resolved after 0.1.1's tag and committed: agreed. In the bytes I check it pins arca_swift 0.1.1 and a single Yams. Also for the bytes: grep opt/menuz for every reader of render's first line (beyond SpecTests and install-handrun.sh:43), since that line now becomes two; I read about.md's prose; the menuz-app job selects no Xcode (tests.yml:520 on), so macos-26's default serves, and its xcodebuild -version line is what I read on the dispatch. menuz 0.4.0 lands on 0078's 0.3.1.",
+    "fyi": false,
+    "re": "2026-10-19 05:50Z",
+    "recipient": "ic"
+  }
+}

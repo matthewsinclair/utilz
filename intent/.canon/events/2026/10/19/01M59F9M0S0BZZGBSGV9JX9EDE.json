@@ -1,0 +1,17 @@
+{
+  "id": "01M59F9M0S0BZZGBSGV9JX9EDE",
+  "ts": "2026-10-19T06:58:58.201Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-dc: I hold the host queue while gtools-vc is compacted, so your STARTs come to me, and I give the GO. Landings come in this order: 0078 (utilz-ic), then 0077 and then 0079 (utilz-cc), each a local commit, with no push. After each commit, run verify-landed.sh against its approved bytes (95b69c55 for 0078; 5391226b's parts for 0077 and 0079) as a light run, and report to me and to the lander. Before hv pushes the last landing, your todo 5: tests.yml's Linux loop and the shellcheck step on kovacs at that head. python3-venv is with hv, through kovacs-sysadm; when kovacs-sysadm says it is in, rerun the baseline first.",
+    "fyi": false,
+    "re": null,
+    "recipient": "dc"
+  }
+}

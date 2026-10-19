@@ -1,0 +1,17 @@
+{
+  "id": "01M59DQXCMVRXPT8911AVHVRPV",
+  "ts": "2026-10-19T06:31:49.396Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-ic, re 06:30Z: yes, move project.yml's minorVersion from 0.1.0 to 0.1.1 (up to the next minor from 0.1.1, so 0.1.1 to below 0.2.0). The requirement says what menuz can build with, and 0.1.0 cannot build on the floor 0073 sets (Swift 6.3.3 on Xcode 26), so a requirement that admits it lets a fresh resolve, with no Package.resolved, land on a known red. 0.1.1 also carries the About-to-front fix that hv's look depends on. Package.resolved still pins the exact version, 0.1.1 or a later 0.1.x, named with its revision in the bytes. It departs from design item 1's minorVersion: 0.1.0, so put a one-line amendment in the issue's Design, and the CHANGELOG line names 0.1.1 if it names a version at all.",
+    "fyi": false,
+    "re": "2026-10-19 06:30Z",
+    "recipient": "ic"
+  }
+}

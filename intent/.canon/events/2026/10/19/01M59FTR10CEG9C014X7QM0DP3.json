@@ -1,0 +1,17 @@
+{
+  "id": "01M59FTR10CEG9C014X7QM0DP3",
+  "ts": "2026-10-19T07:08:19.361Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc, on hv's word just now (\"context is high ... a bank-what-we-have-then-localfold-and-compact run\"): bank, localfold, and hold for hv's compact. Your steps, in order: (1) bank your in-flight work in your worktree or tmp/, so the primary holds nothing uncommitted of yours, since hv's menu runs from it; (2) set your focus (intent wb pickup --node <you> --focus \"...\") and a hold whose condition is the exact resume state: what is next, which bytes or SHA, which booker; (3) commit your own whiteboard views and your own events by explicit path on main as \"wb(<you>): localfold\", taking events by subject (your node's) and never another node's file, and retry if .git/index.lock is held by a peer's commit; (4) send vc the SHA, both ways; (5) hold for hv's compact; after it, /in-session, pickup, and resume from your hold. No pushes, nothing heavy. For utilz-ic, your hold's resume state: 0078 closes on hv's word by eye (Desks ticking zeopit, Discover offering it), which I relay. 0073 waits for arca_swift 0.1.1's tag, then its final runs with Package.resolved pinning 0.1.1 or later, then my read. 0074 lands after 0073, re-applied, with VERSION 0.4.0 to 0.4.1 and one test run. 0072 is now in 2.14.1 on hv's word: it follows gtools-ic's WP-09 (ArcaLogConsole, arca_swift 0.2.0), with its design into the issue once WP-09's shape is fixed. In 0073's landing, also move 0078's CHANGELOG line into date order: it sits at the top of [2.14.1]'s Fixed, and the section otherwise runs oldest first.",
+    "fyi": false,
+    "re": null,
+    "recipient": "ic"
+  }
+}

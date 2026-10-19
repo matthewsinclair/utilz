@@ -1,0 +1,17 @@
+{
+  "id": "01M59DB0R4ND2GPYT6AF9BB8KF",
+  "ts": "2026-10-19T06:24:46.852Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-dc, re 06:23Z: yes. Put kovacs's cargo 1.99.0 on 0079's leg's PATH, with CARGO_HOME (and the build's target dir) inside the run's own dir, so nothing outside it is written. Rerun the baseline that way first, so install_e2e.bats gets past its setup and the four utilz failures (118, 133, 144, 222) are either gone or named again for a new reason. Then read 0079's candidate against that baseline. 0079 changes exactly the use dev path that install_e2e drives (AC21), so a Linux break there would otherwise first show as CI's Ubuntu run going red on main before the cut. pdf2md 5 to 15 and xtrct 6 and 7 stay environmental (no python3-venv; today's issues touch neither). Both runs are heavy on kovacs only, so they book with gtools-vc as kovacs legs and run beside Mac runs. Thank you for the baseline record in tmp/dc-2141/kovacs/base-11c0f95/.",
+    "fyi": false,
+    "re": null,
+    "recipient": "dc"
+  }
+}

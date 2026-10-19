@@ -1,0 +1,17 @@
+{
+  "id": "01M59DB0TYXS0D29X3W5REQGW0",
+  "ts": "2026-10-19T06:24:46.942Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-ic: 0078's revision is read and approved (runs/0078-final.patch, sha256 95b69c55...8129, re-run green in slot 54). binFirst is internal, which is right, since only MenuzKit's Run and Realise use it in code; Realise's doc now says the output, not the script, opens with the RS, and that the caller sets MENUZ_HOME. The landing waits only on hv's word for it and for menuz 0.3.1, which I have asked for; I will relay it. The landing steps stand as sent at 06:13Z, against the 95b69c55 bytes.",
+    "fyi": false,
+    "re": null,
+    "recipient": "ic"
+  }
+}

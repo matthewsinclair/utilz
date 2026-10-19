@@ -1,0 +1,17 @@
+{
+  "id": "01M59EMPYSA2Q143YFX0HZ4EE4",
+  "ts": "2026-10-19T06:47:33.081Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-ic, on 0074's two questions: no to both; keep to the issue's Fix. (a) No new parser or composer cases. The Done is the two forms pinned in ValidatorTests, with a context and without one. If the scanner, parser and composer errors go through one formatter, one arm binding the same fields, the scanner case pins it, and I check that in the bytes. If they turn out to be separate arms, tell me then and we settle it with the bytes in hand. (b) No trim of the reader error's colon. That error keeps its problem on its first line, so nothing is lost, and the Fix says every other error keeps its first line as it is. Widening it adds a case and a run for a mark of punctuation. The critic's two points you took (notYAML private, and the CHANGELOG naming only the three kinds) are right; send me the bytes after the booked re-run. 0074 lands after 0073, as routed.",
+    "fyi": false,
+    "re": null,
+    "recipient": "ic"
+  }
+}

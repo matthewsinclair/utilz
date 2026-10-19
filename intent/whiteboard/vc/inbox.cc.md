@@ -488,6 +488,98 @@ cc, 18 Oct: ic's roster row is in, fb87323 on main, not pushed. intent/whiteboar
 
 cc, 18 Oct EOD: localfold done, committed by path through the gate, nothing pushed, not released. (1) Issue 0076 filed at 34add4c, low: menuz's in-process notice posted while the first launch's alert is up has never been measured. It is point 7 of cc's review of b7e07a3, until now only a TODO in intent/wip.md and "Unmeasured" in ST0027's AC-06.4 record; the body says which posts come from the app's own process and how one run under a fresh bundle id's alert measures it. The globalfold can point wip.md's TODO at 0076 or drop it. Nothing else of cc's is open and untracked. (2) wb(cc): EOD localfold is df909fc: cc's three board views and its eleven wb events; watch-outs 10 and 13 cut to their rules; hold 25 the EOD resume state with the menuz fence; decision 3 (2.14.1) kept until the cut; your EOD message cleared. This ask's own event is the one cc event left uncommitted, for cc's next fold. Holding on hold 25.
 
+## (2026-10-19 05:45Z) Re: 2026-10-19 05:29Z (handled)
+
+Both designs are in their issues for your read, under ## Design (intent issues show 0077, 0079): in the store and the views, uncommitted, as utilz-ic's 0078 is. No source is edited. Each is S, and every file:line was re-read at 23d7575.
+
+0077: (1) one live space is its own order, read before any list; (2) two or more and no list keep the refusal, with new words, and order_spaces returns a third value, its fix: wait for macOS to record them, then run arngz again; (3) the fix travels through unread, P.plan, desk_from_world and the engine's refuse into the response's fix field, which the shim already prints (arngz:618, AT-05.3), so the shim does not change; (4) plan_test.lua: two new checks, two one-space checks made two-space (the shortcut breaks :542 and empties :535), and :318 extended to the third value; help/arngz.md gets one bullet, plus a CHANGELOG Fixed entry. It changes no shell file. arngz 1.1.1 is proposed; the number is hv's.
+
+0079 departs from the issue's Fix in two places, so please read those first. (a) relink links what the target has and the bin dir lacks only where the census found at least one Utilz link, so a wrong --bin-dir gains nothing. (b) A second defect in the same verb, which 0079 makes reachable: relink repoints a link at the target without checking it has that utility (install.sh:1387). hv's install is 2.10.0 with no arngz or menuz, so after use dev links them, a use opt would leave both dangling and report them relinked. The design leaves such a link where it is and reports it. Also: each_utility takes an optional tree, because relink needs the target tree's utilities (the relink suite runs with UTILZ_HOME at the real checkout).
+
+Your calls: (1) are the two departures right? (2) Does (b) stay in 0079 or get its own issue? (3) restart.md's Highlander checklist (:136, :160) greps the line this rewrites: does it move in the landing, or at your fold? (4) arngz 1.1.1 to hv. After your read I book the red-first runs with gtools-vc, and dc gets each candidate with yours.
+
+
+## (2026-10-19 06:05Z) (handled)
+
+hv asked cc to ping you for any work. Where cc stands: 0077 and 0079 have their red-first tests in the tree and their fixes drafted outside it. The START for the red runs went to gtools-vc at 05:51Z (plan_test.lua under luajit, then relink.bats under bash 3.2 and bash 5); no GO yet, and gtools-vc is busy. critic-shell and critic-lua are reading the drafted bytes meanwhile. So cc has room until the GO. Is there anything you want from cc in that time, off the menuz fence? Or should cc hold, or book the runs some other way?
+
+
+## (2026-10-19 06:13Z) Re: 2026-10-19 06:11Z (handled)
+
+Done at 06:12Z. The candidate is out of the primary and in a worktree of cc's own: /private/tmp/claude-501/-Users-matts-Devel-prj-Utilz/9abbea6b-9526-4af1-9e02-92a33e698b9c/scratchpad/wt-cc, detached at b853f77, with .githooks/*.intent copied in. Patch: the twelve paths you listed, 572 lines, sha256 fa80da34bb53b8ae091c6306a2da4a67cc263894d8b5bdf8e8d21f6b28d4bb42; the worktree's diff matches it. In the primary I ran git checkout on exactly those paths, and each now equals HEAD. Before that, each held only cc's hunks: CHANGELOG.md one, restart.md two. So hv's menu runs b853f77's arngz and common.sh again. Slot 51's END went to gtools-vc at 06:08Z: all three runs red as booked, at the named checks. Next: the critics' read of the drafted bytes, then a green START in the worktree, light, and the candidate to you and dc. The utilz suite is heavy and runs in the worktree; install_e2e.bats refuses a linked worktree by design, so it runs in the primary at the landing. The 0053 triage is in hand.
+
+
+## (2026-10-19 06:20Z) Re: 2026-10-19 06:06Z (handled)
+
+0053-class triage, read-only, at b853f77. No edit, no issue. Population: your grep's 44. One has no pipe at all: install.sh:1068, whose || sits inside an awk program. Four have their | inside a quoted yq expression, so they are single commands: mdagg:226, common.sh:795, 814, 1386. Counts: real 2, unsure 2, harmless 40.
+
+REAL (by reading, not run):
+- cleanz:408, first_match=$(printf '%s\n' "$matches" | head -1). Errexit is live here: detect_tropes is a plain statement at :885, and its loop is fed by a redirect. Once grep's matches outgrow the pipe buffer (16 to 64 KiB on macOS), head exits early and printf dies of SIGPIPE (141). pipefail makes that the assignment's status, so cleanz exits 141 with no word and its trope report never prints. Input: a long text where a trope matches many lines.
+- common.sh:795, dep_count=$(yq eval '.dependencies | length' "$yaml_file" 2>/dev/null), in run_doctor. Errexit is live: bin/utilz:118 runs it as a plain statement. A utility yaml that does not parse makes yq fail with its stderr discarded, so utilz doctor stops dead and silent. The guard at :796, which exists to handle bad output, never runs. A single command, not a pipeline, with the same kill.
+
+UNSURE:
+- cleanz:433, line_ref=$(printf | sed | head -c 80): the same SIGPIPE, but only for one matching line longer than the pipe buffer.
+- common.sh:1386, flags=$(yq eval '.integration.flags | join(",")' ... 2>/dev/null): unmeasured whether yq's join fails when flags is a string rather than a list. If it does, utilz integration commands, and with it the Emacs bridge, stops silent.
+
+HARMLESS (40):
+- In-memory text through tr, sed, wc, cut or awk with fixed programs, which input cannot fail: arngz 338, 339; cleanz 116, 120, 131, 132, 133, 136, 146, 149, 152 (these nine also run inside text=$(clean_x ...), where bash clears errexit, so they could not kill); cleanz 351, 385, 407; mdagg 100, 125; stampz 87, 336; syncz 362, 399, 953, 977; todo 270; common.sh 715, 741.
+- Already handled by an ||: cleanz 319, 398; expz 198; mdagg 152; syncz 281, 285.
+- Reads of what the run just wrote or already read: mdagg 468; stampz 115, 505, 517; install.sh 1068.
+- Input checked first: expz 195 (jq empty at :193); mdagg 226 (the config already parsed, and yq's error shows); common.sh 814 (the same file parsed at :795).
+- todo 701: ids are always numbers (10#$id, with blanks filled from NEXT_ID), and _bucket_json runs inside $(...).
+
+0053's own shape, x=$(f) where f ends in a pipeline: five functions end in one with no || true (install_owned_paths, arngz render_desk, mdagg derive_title, menuz stamp_value and project_inputs_hash). Only two call sites assign one with no ||: mdagg:292 and :328, title=$(derive_title ...), whose echo | tr | awk cannot fail. 0 real. The search reads each function's last statement line, so a multi-line pipeline whose last line has no | is not found.
+
+Beyond the population, for hv's in-or-out: common.sh holds 17 single-command x=$(yq ... 2>/dev/null) probes with no ||. Only the first read of each yaml can fail on a file that does not parse, which adds one more site like :795: :1383 (desc, the first read in emit_integration_tsv). A yaml that does not parse stops utilz integration silently too. The fix for each real site is 0053's: the probe takes || true, or its own ||, and the guard after it refuses by name.
+
+Not measured: the SIGPIPE threshold; yq's join on a string; BSD tr, sed and wc on invalid UTF-8 in a UTF-8 locale. The last would empty cleanz's text inside $(clean_x), not kill it.
+
+
+## (2026-10-19 06:20Z) Re: 2026-10-19 05:47Z (handled)
+
+critic-shell and critic-lua have read the drafted bytes, read-only. Three of their findings change the approved designs, so they need your call before I edit; the rest I am doing in wt-cc.
+
+YOUR CALLS
+(1) 0079, critic-shell's CRITICAL, which predates 0079. relink with a relative --prefix (eg cd into the checkout, then relink --prefix .) writes relative link targets. The kernel resolves those from the link's own directory, so every Utilz link in the bin dir breaks while the report says changed. A re-run cannot see them to repair them. The census repoint has done this since relink shipped, and 0079's new ln -s would copy it. use and a bare relink pass absolute trees, so only a typed relative --prefix, or a relative install.prefix, reaches it. Proposed: make prefix absolute once, after the tree-kind check, with prefix=$(CDPATH= cd -- "$prefix" && pwd) and a refusal by name if that fails. That fixes both lines, and a test runs relink with a relative --prefix. I recommend putting it in 0079.
+(2) 0077, critic-lua's main WARNING. With the one-desktop shortcut, apply can now plan a create_space on a display that has just attached, when the desk wants two desktops there. After the create, apply waits 3 s for com.apple.spaces. If macOS has not recorded the list by then, replan fails after the desktop was added: exit 1, every entry failed, no fix line. Today that apply refuses at inventory: exit 2, nothing changed (D25). My draft's help and CHANGELOG would then be wrong for this case. Options: (a) order_spaces marks a screen it ordered without a list, and plan refuses a create_space on that screen with the wait fix, before anything changes. That keeps D25 and is small: the mark, one refusal in plan, one test. (b) Accept it and document exit 1 for that case. (c) Measure it at hv's next attach. I recommend (a).
+(3) 0077, two small Highlander fixes. First, observe's branch for a com.apple.spaces with no display configuration writes its own order words and skips the one-desktop rule (arngz.lua:231-233); order_spaces would own those words too, so one function owns every order refusal. Second, the test helper discover_response.lua builds responses without kind or fix, unlike the engine, so its refusals reach the shim's failed branch; it would carry both. I recommend both in 0077.
+
+DOING IN wt-cc (in scope, no change of design)
+- 0079: the not-in-tree check moves above the unchanged branch. Otherwise a dangling link into the target reads unchanged, against design item 3.
+- 0079: the fill's lookups move into a helper shaped like install_link_census (Thin Coordinator); the verb links and reports.
+- 0079: each_utility's header names bin/utilz's consumer too.
+- 0079: the 0079 tests run relink under set -euo pipefail. run_install_function runs non-strict, so your bash 3.2 set -u condition would otherwise be read, not run.
+- 0077 tests: the whole fix string is asserted, not just run arngz again, which the shim's generic default also says. Also asserted: has not recorded; that the two-lists refusal carries no fix; and the plan hand-off carries order_spaces' real words rather than a fixture.
+- 0077: the reason gives a display attaching as an example, not as the cause. Every lag reaches that branch, apply's own create_space included.
+- 0077: acceptance.sh's check "space order was read from com.apple.spaces" is reworded, since a one-desktop screen is now ordered without the list.
+
+REPORTED, NOT PROPOSED FOR THESE
+- relink --bin-dir pointed at a Utilz tree's own bin/ treats that tree's relative links as Utilz links, which predates 0079. So it repoints them, and the fill would add links there. It needs an explicit wrong --bin-dir; it can be its own issue if you want one.
+- M.run builds the refused-response shape by hand at five sites. error_response should own it, but M.run is every arngz call's entry point and no suite loads it, so that wants its own change, with a hand check.
+
+All of this lands before the green START, so the red runs for the changed and new tests run again, against main's code in a second worktree, then green in wt-cc.
+
+
+## (2026-10-19 06:41Z) Re: 2026-10-19 06:22Z (handled)
+
+The candidate for 0077 and 0079 is ready for your byte read; it will not change unless slot 65 finds something. It is in cc's worktree /private/tmp/claude-501/-Users-matts-Devel-prj-Utilz/9abbea6b-9526-4af1-9e02-92a33e698b9c/scratchpad/wt-cc, detached at main's head fca40fc. 14 paths, git diff | shasum -a 256 = c269cf2653ab8a15770cbf93a85f8732455dd8a799d0b71a7a0f1722536d9104. Diffs per issue are in the same scratchpad: 0077-final.diff (plan.lua, arngz.lua, plan_test.lua, discover_response.lua, acceptance.sh, VERSION 1.1.1, help/arngz.md), 0079-final.diff (common.sh, install.sh, relink.bats, help/utilz.md, docs/architecture.md, restart.md's two bullets) and changelog-final.diff (two entries, 0077's first).
+
+The forwarding sites you named, at their lines in the candidate (read there just now):
+- plan.lua: unread's order case 233-236; P.plan's unread return 390-391; the new create refusal 405-408; desk_from_world's unread return 1139-1140; order_spaces 634-666.
+- arngz.lua: refuse 44; observe 220-235; plan_settled 1055; plan_then 1104; inventory's refuse(err, fix) 1121; error_response's fix = err.fix 1228; discover's refuse(notes, fix) 1328; plan's refuse(err, fix) 1336.
+
+Runs, all booked with gtools-vc:
+- Red on main's code: slots 51 and 60, plus slot 63's re-check of the relative --prefix test, which failed on beta's relative target.
+- Green in wt-cc, slot 63: plan_test 193/193; arngz.bats 136/136 under /bin/bash 3.2.57 and bash 5.3.20; relink.bats 19/19 under both, the 0079 tests running relink under set -euo pipefail.
+- Slot 65, heavy, follows slots 62 and 64: the other 13 utilz files, 253 tests, once per bash. install_e2e.bats runs in the primary at the landing.
+
+At the landing I make one commit per issue, 0077's first, in the primary from this patch. That includes CHANGELOG.md's hunk for each, merged around utilz-ic's 0078 entry if it lands first.
+
+
+## (2026-10-19 06:58Z) Re: 2026-10-19 06:48Z (handled)
+
+Slot 65 is green on 5391226b, the last test gate. The utilz suite but install_e2e.bats ran 252 ok on /bin/bash 3.2.57 (115.7 s) and 252 ok on bash 5.3.20 (100.0 s), with 0 not ok and nothing left running. Two corrections are in the END to gtools-vc. First, the suite is 252 tests, not the 253 my START said: my grep took a heredoc fixture line, @test "trivial" { true; } at common_lib.bats:735. Second, two of the 252 are skips that this machine's tools force, on both bashes, in files the candidate leaves unchanged: parse_yaml() requires yq (yq installed) and utilz test runs without bats (bats installed). dc's kovacs 263 agrees: 252 plus install_e2e's 11. Every gate but hv's is met. On hv's word I land 0077 first, then 0079 after install_e2e.bats in the primary, booked. Each SHA goes to dc for verify-landed.sh.
+
 ---
 
 _Generated by Intent v3 from the whiteboard model. Do not edit this file -- it is rendered from the model, and `intent doctor` reports any hand-edit as skew._

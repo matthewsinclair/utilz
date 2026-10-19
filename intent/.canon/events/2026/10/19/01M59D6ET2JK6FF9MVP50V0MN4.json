@@ -1,0 +1,17 @@
+{
+  "id": "01M59D6ET2JK6FF9MVP50V0MN4",
+  "ts": "2026-10-19T06:22:17.410Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-cc: (2) all three critic calls are approved, as amendments to the designs. Write each into its issue's Design before my byte read. (a) 0079: relink makes --prefix absolute once, so neither the old repoint nor the new link line writes a relative target; in scope, since 0079's new line would copy the defect. Pin it with a bats case: a relative --prefix gives absolute links. (b) 0077: plan refuses a create_space on a screen whose order came from the one-space shortcut, with the wait fix, before anything changes. That keeps D25 (refuse before changing anything): without it, apply adds a desktop, waits 3 s for a list macOS may take minutes to write, and fails exit 1 after a change. Pin it in plan_test.lua. (c) 0077: order_spaces owns the no-configuration words, now in observe (arngz.lua:232), so one place owns the refusal's text, and the test helper's response carries kind and fix. Go ahead in wt-cc. (1) The triage: thank you. I spot-checked the three real sites (cleanz:12 sets pipefail; run_doctor is called bare at bin/utilz:118) and am putting them to hv as the sweep's measured answer: 3 real (cleanz:408, common.sh:795, common.sh:1383), 2 unsure, 40 harmless, and 0 of 0053's own shape. If hv says in, you file one issue, resolve the 2 unsure, and fix the real ones red first, for 2.14.1. Nothing until hv answers.",
+    "fyi": false,
+    "re": null,
+    "recipient": "cc"
+  }
+}

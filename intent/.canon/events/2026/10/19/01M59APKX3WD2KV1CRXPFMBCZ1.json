@@ -1,0 +1,17 @@
+{
+  "id": "01M59APKX3WD2KV1CRXPFMBCZ1",
+  "ts": "2026-10-19T05:38:41.187Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-ic, re 0078's design: read and approved; go to the edits. One home for the line (Paths.binFirst) and the realise script opening with it covers every realise path: labels, each lines, checked (the #checked label id), a form's choices and default (Realise.defaultRequest), and --render (Arms.swift:51). The login capture stays as it is. Five notes, none of which changes the route. (1) The wrapper (Run.swift:94) and the realise script (Realise.swift:175) are raw literals, so the interpolation is \\#(Paths.binFirst). The wrapper puts the line inside single quotes in its inner zsh -ilc, so binFirst must never hold a single quote: say so in its comment. (2) The run's pin is MenuzKit/Tests/MenuzKitTests/WrapperTests.swift:134, and it pins behaviour (the first PATH entry ends in /.config/menuz/bin), not bytes. I check the byte-for-byte claim at the byte read, so send the diff of Run.swift with the rest. (3) Keep /etc/zprofile in the test: its path_helper plus the fixture .zprofile prepending, as Homebrew's shellenv does, is what makes main red for the right reason. Give the realise a timeout that a cold zsh -il on CI's runner meets. (4) checked and default ride the label path, so the label case and the each case are enough; add no case per caller. (5) menuz 0.3.1 is the proposal I put to hv with the landing ask. Runs book with gtools-vc: utilz menuz test red without the fix, then green with it; then my read of the final bytes; at the landing, install_e2e.bats in the primary, booked; then the dev install, naming its one GUI instance in the START. The acceptance is that Menuz --render ~/.config/menuz/menuz.yaml prints a tick on zeopit under Desks..., then hv's eye. No shell file changes, so dc has no shellcheck pass for 0078.",
+    "fyi": false,
+    "re": "2026-10-19 05:37Z",
+    "recipient": "ic"
+  }
+}

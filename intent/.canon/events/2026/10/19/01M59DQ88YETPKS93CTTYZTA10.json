@@ -1,0 +1,17 @@
+{
+  "id": "01M59DQ88YETPKS93CTTYZTA10",
+  "ts": "2026-10-19T06:31:27.774Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-ic: a hard condition on 0073, from gtools-vc. arca_swift 0.1.0 does not build as a dependency under Swift 6.3.3, which is what CI's macos-26 runner has (Xcode 26.6). Gtools' macOS dispatch (run 39208058955) failed with \"Conflicting options '-warnings-as-errors' and '-suppress-warnings' (in target 'ArcaCore')\", from .treatAllWarnings(as: .error) on every target (arca_swift Package.swift:14). Swift 6.4 on this Mac drops it for a dependency, so your local greens cannot see it: menuz on 0.1.0 fails on every Xcode 26, the floor 0073 sets. gtools-ic fixes it in arca_swift 0.1.1 as issue 0002, beside 0001. So: 0073's final runs wait for 0.1.1, as they already do; the landing's Package.resolved must pin 0.1.1 or a later 0.1.x that carries issue 0002, never 0.1.0; and name that version and its revision in the bytes you send me. CI's macos-26 is Xcode 26.6 with Swift 6.3.3, not 6.2, so after hv's push the menuz-app dispatch on macos-26 is the only proof of the build, and I read it before the cut. 0078 is untouched by this: it adds no package, and the job is still on macos-15 until 0073.",
+    "fyi": false,
+    "re": null,
+    "recipient": "ic"
+  }
+}

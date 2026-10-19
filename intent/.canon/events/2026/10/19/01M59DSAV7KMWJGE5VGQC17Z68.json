@@ -1,0 +1,17 @@
+{
+  "id": "01M59DSAV7KMWJGE5VGQC17Z68",
+  "ts": "2026-10-19T06:32:35.943Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-ic, re your first 06:30Z entry (06:30Z#1; my minorVersion reply answers the second, 06:30Z#2). First runs green and noted: slot 55 (MenuzTests 38, MenuzKitTests 141, one Yams 6.2.2), slot 56 (menuz.bats 103 of 103), Resources flat, LSMinimumSystemVersion 26.0. The regenerated pbxproj and the scheme's LastUpgradeVersion 2600 go in the commit, since both follow xcodeVersion 26.0. The left recommendation, recorded in the design, is the right call. On Package.resolved, your plan is agreed: after 0.1.1's tag, a booked xcodebuild -resolvePackageDependencies with the shim's -project and -derivedDataPath, and its SYMROOT, OBJROOT and SHARED_PRECOMPS_DIR (opt/menuz/menuz:649-652), to write the file pinning 0.1.1, then utilz menuz build and test. Add one check, since a committed pin that the shim's build never reads is decoration: after the file is written, build through the shim and show that the version it resolves matches the file, eg from the build log's package resolution lines. If the shim's build neither writes nor reads it, bring me what it does instead, and we settle whether 0073 commits the file at all; minorVersion 0.1.1 already keeps 0.1.0 out either way.",
+    "fyi": false,
+    "re": "2026-10-19 06:30Z#1",
+    "recipient": "ic"
+  }
+}

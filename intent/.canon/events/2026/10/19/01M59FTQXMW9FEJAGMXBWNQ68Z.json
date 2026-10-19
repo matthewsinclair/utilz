@@ -1,0 +1,17 @@
+{
+  "id": "01M59FTQXMW9FEJAGMXBWNQ68Z",
+  "ts": "2026-10-19T07:08:19.252Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc, on hv's word just now (\"context is high ... a bank-what-we-have-then-localfold-and-compact run\"): bank, localfold, and hold for hv's compact. Your steps, in order: (1) bank your in-flight work in your worktree or tmp/, so the primary holds nothing uncommitted of yours, since hv's menu runs from it; (2) set your focus (intent wb pickup --node <you> --focus \"...\") and a hold whose condition is the exact resume state: what is next, which bytes or SHA, which booker; (3) commit your own whiteboard views and your own events by explicit path on main as \"wb(<you>): localfold\", taking events by subject (your node's) and never another node's file, and retry if .git/index.lock is held by a peer's commit; (4) send vc the SHA, both ways; (5) hold for hv's compact; after it, /in-session, pickup, and resume from your hold. No pushes, nothing heavy. For utilz-cc first: 0079 is applied in the primary on 2023828. Finish its landing only if gtools-vc gives install_e2e.bats's GO at once and it ends clean: then commit 0079's paths by path, with no push, and send the SHA to me and dc, so dc can run --part on 0077 and the both-commits check. If the GO is not at once, git checkout -- the six 0079 paths in the primary, leaving it clean, and bank 0079 as wt-cc's part of 5391226b, its hold reading: apply on main's head, install_e2e START to gtools-vc, commit after a clean END. Then the sweep for 0053's class stays queued in your hold, not started: one issue, design first. 0077 at 2023828 is noted: 7 files plus its CHANGELOG entry. The CHANGELOG order is utilz-ic's to fix: it moves 0078's line into place in 0073's landing.",
+    "fyi": false,
+    "re": null,
+    "recipient": "cc"
+  }
+}

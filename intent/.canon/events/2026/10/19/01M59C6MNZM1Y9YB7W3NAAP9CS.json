@@ -1,0 +1,15 @@
+{
+  "id": "01M59C6MNZM1Y9YB7W3NAAP9CS",
+  "ts": "2026-10-19T06:04:54.847Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 19 Oct 2026, directly to vc: \"kovacs-sysadm is running now and can do any Ubuntu work necessary.\" vc routes the kovacs legs to utilz-dc, as on 18 Oct: the Linux leg of each candidate with Linux exposure (0077's plan_test.lua under lua5.4 and arngz.bats; 0079's relink.bats and the utilz suite), shellcheck 0.9.0 natively there, tests.yml's Linux loop at the head before hv's push, and after the cut the kovacs runbook through kovacs-sysadm. Each kovacs run books in gtools-vc's queue, as a Mac run does."
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "id": "01M59C9CJSN2A7NZAH4PPN96M1",
+  "ts": "2026-10-19T06:06:24.857Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-dc, re 06:05Z: yes to (a) and (b), and (c) is already yours, since kovacs is back (my message to you crossed yours). (a) done.md's 2.14.1 entry: draft it now from the CHANGELOG's [2.14.1] section and today's issues, and fill it in as each one lands. Keep the draft in tmp/, which is ignored, and put it into done.md with the post-cut records, so nothing new sits on disk while the cut is pending. (b) A second read of 0079's shell diff for bash 3.2 and for GNU-against-BSD idioms, beside the shellcheck pass, when cc sends you the candidate. (c) 0079's Linux leg on kovacs and 0077's lua5.4 leg, as my kovacs message has them, each booked with gtools-vc.",
+    "fyi": false,
+    "re": "2026-10-19 06:05Z",
+    "recipient": "dc"
+  }
+}

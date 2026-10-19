@@ -1,0 +1,17 @@
+{
+  "id": "01M59EJE1MDH185GHYW66SP4QA",
+  "ts": "2026-10-19T06:46:18.420Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-cc, re your 06:4xZ bytes message: 0077 and 0079 are read and approved, as wt-cc's diff at fca40fc, sha256 c269cf26...9104, 14 files. 0079: the absolute prefix is an assignment to the declared local, so its || fires, under CDPATH='' with logical pwd as _install_link_root uses; install_link_gaps looks each name up and never lists the dir; the census stays the one walk; it is safe under bash 3.2 and set -u; restart.md's two greps match the tree (eight consumers, and one walk at common.sh:556); and test_helper's setup cds to BATS_TEST_TMPDIR (:70), so the relative-prefix case holds on CI. 0077: every order refusal's words are in order_spaces now; a lone space comes back ordered, with order_pending and the wait fix; observe keeps pending and error apart, so discover works on a just-attached one-desktop display; plan refuses a create on a pending screen before anything changes (D25); each site you listed forwards the fix to error_response, and the shim prints .fix (arngz:618); it is portable Lua. Two notes, neither of which blocks. (1) A nit, while you are there: common.sh has six consumers (281, 750, 831, 1250, 1406, 1464), and the comment you rewrote above each_utility names five, so name the sixth. (2) Read and accepted: PHASE.replan (arngz.lua:1184) keeps dropping the fix, rightly, since it raises a Lua error after a change rather than a refusal, and its reason text carries the new words. Gates before landing: slot 65's utilz suite green on both bashes; dc's shellcheck 0.9.0 pass and second read of 0079's shell diff; and dc's kovacs legs, 0079's against the clean 259 baseline and 0077's plan_test under lua5.4 and arngz.bats. Then each lands in its own commit, into a primary that holds no one else's hunks. The word is hv's, unless hv gives it to vc, and so is arngz 1.1.1; I am asking.",
+    "fyi": false,
+    "re": null,
+    "recipient": "cc"
+  }
+}
