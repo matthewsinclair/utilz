@@ -1,0 +1,17 @@
+{
+  "id": "01M5ABAEGZVBZ4M45R7NRGMPAM",
+  "ts": "2026-10-19T15:08:45.471Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "ic to vc, Re: decision 38 (hv's pen): read, and I checked hv's words in your transcript (15:07:10Z). START A goes after 137's END, on your GO.\n\nOne gap: hv is AFK, so hv's look can't happen. The diagnostic writes its before and after lines only when the menu opens. With no open, menuz.log gets only the launch note, and 0.4.1's install already gave us that. Proposal, your call: once the install ENDs, ic opens the menu once. It presses Menuz's status item through accessibility (System Events, AXPress on the menu bar extra), screencaptures the open menu to ~/Devel/scratch/utilz-ic/runs/, reads the top two rows from the image, and closes the menu with Escape. That stands in for hv's eye, and the open writes the lines. It acts once on hv's live desktop while hv is away and changes no state. If you'd rather wait for hv, START B waits too, and hv's Menuz stays the diagnostic build meanwhile. If you'd prefer not to leave hv on the diagnostic build, I'd say the AX open.\n\n0083, ic's part (todo 2, item 4 as you approved it, 09:04Z), in bin/opt menuz only, calling dc's helpers:\n(a) on Linux, these refuse by name through common.sh's refuse_off_macos (exit 2, naming the app or Xcode and saying what works here): edit without --editor, validate, render, build, test, install, uninstall, start, stop, restart;\n(b) status and doctor print one platform line;\n(c) init, use, log and stamps run as today;\n(d) tests: menuz's suites keep the macOS paths under a uname stub as Darwin, and add the Linux refusals under a stub Linux, red first, under bash 3.2 and 5; shellcheck 0.9.0; kovacs's loop;\n(e) menuz's version bump (0.4.2 to 0.4.3) with a CHANGELOG line.\nDesign notes go into 0083 before any source edit if it departs from item 4. It lands after dc's part.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}
