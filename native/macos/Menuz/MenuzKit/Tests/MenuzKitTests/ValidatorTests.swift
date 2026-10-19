@@ -371,6 +371,20 @@ struct ValidatorTests {
     #expect(r.why.contains("'label'"))
   }
 
+  @Test("a not-YAML refusal is one line: where Yams was reading, then what it found wrong (issue 0074)")
+  func notYAMLContext() throws {
+    let r = try #require(Self.only("notify: failure\nmenu\n"))
+    #expect(
+      r.why
+        == "not YAML: 3:1: error: scanner: while scanning a simple key in line 2, column 1: could not find expected ':'")
+  }
+
+  @Test("a not-YAML error with no context names its problem, with no colon after it (issue 0074)")
+  func notYAMLNoContext() throws {
+    let r = try #require(Self.only("menu: x: y\n"))
+    #expect(r.why == "not YAML: 1:8: error: scanner: mapping values are not allowed in this context")
+  }
+
   @Test("a file that is not a mapping is refused")
   func notMapping() {
     #expect(

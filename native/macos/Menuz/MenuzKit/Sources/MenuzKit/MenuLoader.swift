@@ -31,8 +31,7 @@ public enum MenuLoader {
     do {
       root = try Yams.compose(yaml: text)
     } catch {
-      let first = String(describing: error).split(separator: "\n").first.map(String.init) ?? ""
-      return .refused([Refusal(file: file, place: .file, key: nil, value: nil, why: "not YAML: \(first)")])
+      return .refused([Refusal(file: file, place: .file, key: nil, value: nil, why: "not YAML: \(notYAML(error))")])
     }
     var validator = Validator(file: file, context: context)
     let menu = validator.file(root)
@@ -43,6 +42,29 @@ public enum MenuLoader {
       return .refused(validator.refusals)
     }
     return .ok(menu)
+  }
+
+  /// What a compose error says, in one line (issue 0074). A scanner, parser
+  /// or composer error's text puts its context on the first line and its
+  /// problem on the next, so its line is built from its fields: where the
+  /// error is, its kind, the context and where that began, then the problem.
+  /// Every other error keeps its first line, which names its problem.
+  private static func notYAML(_ error: Error) -> String {
+    switch error as? YamlError {
+    case let .scanner(context, problem, mark, _):
+      line(mark, "scanner", context, problem)
+    case let .parser(context, problem, mark, _):
+      line(mark, "parser", context, problem)
+    case let .composer(context, problem, mark, _):
+      line(mark, "composer", context, problem)
+    default:
+      String(describing: error).split(separator: "\n").first.map(String.init) ?? ""
+    }
+  }
+
+  private static func line(_ mark: Mark, _ kind: String, _ context: YamlError.Context?, _ problem: String) -> String {
+    let began = context.map { "\($0.text) in line \($0.mark.line), column \($0.mark.column): " } ?? ""
+    return "\(mark): error: \(kind): \(began)\(problem)"
   }
 }
 
