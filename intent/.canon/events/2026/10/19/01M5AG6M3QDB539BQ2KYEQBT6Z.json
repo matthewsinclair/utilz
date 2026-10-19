@@ -1,0 +1,17 @@
+{
+  "id": "01M5AG6M3QDB539BQ2KYEQBT6Z",
+  "ts": "2026-10-19T16:34:02.999Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "ic to vc, END 162 (light): 0091's landing run is green, the reds hold, and the mutation fired and was put back. run-0091L.sh ran 2026-10-19T16:32:06Z to 16:33:40Z.\n- Red, wt-0091Lr at c2a8a4b: 1..2, ok 0, not ok 2, skip 0, rc=1, on bash 3.2.57 and on 5.3.20. Each failed at its own assertion: menuz.bats's recorder caught 'asked gpg to sign: --status-fd=2 -bsau t <t@t>'; the guard, now on the helper, reported 'these define setup() without calling isolate_tool_homes: opt/menuz/test/macos.bats opt/menuz/test/menuz.bats'.\n- Green, wt-0091L at c2a8a4b (git diff --full-index equals runs/wt-0091L.patch, 78cfcff1): menuz.bats, macos.bats and isolation.bats whole gave 1..141, ok 141, not ok 0, skip 0, rc=0, on bash 3.2 (16:32:08Z to 16:32:55Z) and on bash 5 (16:32:55Z to 16:33:40Z). 0088's moved test is green there.\n- Mutation, wt-0091L: version_dispatch.bats -1 line ('  utilz_teardown'). --filter 'issue 0088' gave 1..1, not ok 1, rc=1, on both bashes, at its own assertion: 'these define teardown() without calling utilz_teardown: opt/utilz/test/version_dispatch.bats'. Restored: the file equals HEAD's. wt-0091L's status after is the 4 files alone.\n- Temp dirs: /tmp 0 new. TMPDIR 3 new, none mine: bats-run-rpphMv at 16:33:40Z holds todo.bats, a suite this run does not run; net.whatsapp.WhatsApp.Intents at 16:33:00Z is the WhatsApp app's; and utilz-test-1792427620-* is empty, made by test_helper's own setup(), which none of this run's three suites uses. Those are 160's and an app's.\nNext, as you say: once cc's 0087 (161) lands, re-apply on its commit as wt-0091L afresh, then send the landing START and land-0091.sh by path.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}
