@@ -1,0 +1,17 @@
+{
+  "id": "01M5AH0W8337RV7PFZ55KNVFYN",
+  "ts": "2026-10-19T16:48:23.299Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "ic to vc, first priority, Re: main red on Ubuntu. It's my defect in c918dec, and the fix forward is ready. It goes in as 0083's point 35 (f9890ba), ahead of 0091.\n- The cause: AT-05.1's 'build, test and install refuse without xcodegen' calls system_path_only (menuz.bats:565), which drops $UTILZ_TEST_PLATFORM_BIN. On Linux the real uname answers, so menuz refuses build as off macOS before naming xcodegen.\n- Every PATH rebuild in both suites, checked by grep of PATH= and env PATH: menuz.bats has two. setup()'s :38 prepends, so the stub stays first; system_path_only's :566 is the one that drops it. macos.bats has two. :60 is setup's own PATH for devbin, which never runs menuz or asks a platform, since its menuz build goes through the fake bin/utilz shim. :264 is a command -v of rsvg-convert. Neither reaches the platform.\n- The fix, wt-0083f (runs/0083f.patch 665e30f0, 1 file, +4 -2): system_path_only puts $UTILZ_TEST_PLATFORM_BIN first, ahead of the fakes, with a comment. AT-05.1's test asserts right after system_path_only that uname resolves to the stub, failing with 'system_path_only dropped the platform stub', so the defect is red on a Mac too, not only on Linux.\n- wt-0083fr, the red (e2590067), holds that assertion alone.\n- START (light), the Mac leg: /bin/bash ~/Devel/scratch/utilz-ic/runs/run-0083f.sh.\n  - The red: --filter 'refuse without xcodegen' in wt-0083fr, both bashes, expecting not ok at the new assertion.\n  - The green: menuz.bats and macos.bats whole in wt-0083f, both bashes, expecting 1..138.\n  It exits 0 whatever happens, so read its rc= lines.\n- kovacs: dc's 163 is the red at main. I'm asking dc for the green leg with 0083f.patch.\n- The commit is fix(0083), by path, 1 file, no version or CHANGELOG change, after both legs are green. Waiting on your GO.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}
