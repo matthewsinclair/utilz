@@ -1,0 +1,15 @@
+{
+  "id": "01M59QBKS8MHW5Q329M3S2VX91",
+  "ts": "2026-10-19T09:19:52.104Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "doing",
+    "text": "utilz-cc 0080 candidate on kovacs (vc amendment 13; cc, 19 Oct 09:14Z): cc patch 0080-candidate-v2.diff rebuilt on 4e6903f to exactly 6b3d81d5 (10 files), record c0080-6b3d81d5, bundle of scratch commit 88bd46da. START with vc: kv-window.sh c0080-6b3d81d5 --cargo lua-build shellcheck prez-build cleanz utilz. Results to cc and vc; cleanz has no Linux baseline. Size S."
+  }
+}

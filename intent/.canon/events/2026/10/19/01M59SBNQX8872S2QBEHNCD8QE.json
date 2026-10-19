@@ -1,0 +1,15 @@
+{
+  "id": "01M59SBNQX8872S2QBEHNCD8QE",
+  "ts": "2026-10-19T09:54:51.261Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "todo",
+    "text": "0081's kovacs leg for utilz-cc (vc, 19 Oct): on 0081's final bytes when cc sends them (a patch rebuilt in a scratch clone on its base and hashed against cc's, then prep.sh --paths with PREP_REPO=<clone>, kv-prep.sh), booked with vc; shellcheck 0.9.0 and the suites cc names. Results to cc and vc. Size S."
+  }
+}

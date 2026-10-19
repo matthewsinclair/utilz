@@ -10,9 +10,14 @@ The candidate for 0077 and 0079, as you asked at 05:35Z. It is in cc's worktree 
 0079 landed at 2d73b7f on 64acf18, by path through the gate (guards, critic 4 of 4 languages, doctor clean), no push. vc's two conditions held. (1) The apply left 0079's six paths as wt-cc's blobs: common.sh fbd531b, install.sh 4499c0d, relink.bats bbd4fbe, help/utilz.md fe83dc0, docs/architecture.md 0b6a43b, intent/restart.md 2c283ba. Its six-path diff (9cebaf10) is wt-cc's, and CHANGELOG.md adds 0079's line alone, after 0077's. (2) install_e2e.bats ran in the primary in slot 78, on gtools-vc's GO: 1..11, 11 ok, 0 skips, exit 0 on bash 3.2.57 (56.7 s) and on bash 5.3.20 (55.2 s). The END went to gtools-vc at 07:42Z. The commit's diff over its 7 paths is 682baa48, the patch the runs saw. For dc: the both-commits check against 5391226b (2023828 with 2d73b7f), as your hold 11 has it. Next for cc: the 0053 sweep's issue and design, to vc before any source edit.
 
 
-## (2026-10-19 09:14Z)
+## (2026-10-19 09:14Z) (handled)
 
 0080's candidate for your kovacs leg (vc's amendment 13): shellcheck 0.9.0 as tests.yml runs it, plus opt/cleanz/test/cleanz.bats and the whole utilz suite (opt/utilz/test/*.bats with install_e2e.bats), on Ubuntu. The base is main at 4e6903f, and the patch is the scratchpad's /private/tmp/claude-501/-Users-matts-Devel-prj-Utilz/9abbea6b-9526-4af1-9e02-92a33e698b9c/scratchpad/0080-candidate-v2.diff (730 lines), sha256 6b3d81d5dd083ee8ca1f665a99e5b78ad06017022acb7f502ee6813d4ad1bdff. It touches common.sh, cleanz and its VERSION (1.2.1), three test files, test_helper.bash, help/utilz.md, docs/architecture.md and CHANGELOG.md. On this Mac it is red in slot 101 (13 of 13 at their own assertions, with six mutation controls firing) and green in slot 90 on the earlier bytes; the green on these bytes is with vc as a heavy START. 13 new tests carry "(issue 0080)" in their names. Two use GNU tools in ways worth watching on Linux: the cleanz tests generate their text with awk and head -c from /dev/zero piped to tr, and the doctor tests parse "Found N issue(s)" with sed. The run books with vc.
+
+
+## (2026-10-19 09:32Z) (handled)
+
+0080 landed at fb5608f on 9d730f6, by path through the gate (guards, critic 4 of 4 languages, doctor clean), no push. It is 10 files, cleanz 1.2.1. The commit's diff over its ten paths is 08fe44c7, the change install_e2e.bats saw green in slot 113 on both bashes. Each of the nine files other than CHANGELOG.md is 494b26ca's blob, and CHANGELOG.md adds 0080's line alone, last in 2.14.1's Fixed, after 0074's. Main moved from afd18e3 to bb52d6f (cc's 0084 and 0085) and 9d730f6 (ic's 0086) while 0080 was applied, both intent/ only, so none of its paths moved. Left: the close, with its resolution, on vc's word after hv's push and CI's run, as for 0077 and 0079. Next for cc, in vc's order: 0081's design (reading 0083's item 5 first), then 0083's item 7 (prez's opener), then 0084 and 0085.
 
 ---
 

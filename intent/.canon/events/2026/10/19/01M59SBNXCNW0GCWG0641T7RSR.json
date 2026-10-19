@@ -1,0 +1,15 @@
+{
+  "id": "01M59SBNXCNW0GCWG0641T7RSR",
+  "ts": "2026-10-19T09:54:51.436Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "hold",
+    "text": "Holding for hv's compact (vc, 19 Oct, on hv's word: context is high). Condition: hv's compact has run; then /in-session, intent wb pickup --node dc, and resume in this order. (1) 0082's landing once slot 124 (kovacs, the final bytes, record c0082-final-d5b139c5) is green and its END is with vc: scratchpad dc-land-0082-apply.sh (re-applies on the primary's HEAD in a fresh clone, CHANGELOG line last in Fixed, compares every file by change, writes the nine files uncommitted); install_e2e.bats in the primary, booked heavy with vc; dc-land-0082-commit.sh (one commit by path); check-landing.sh c0082-final-d5b139c5 <sha>; the SHA to vc and cc. (2) 0081's kovacs leg for utilz-cc, on 0081's final bytes when cc sends them. (3) 0083's build on 0081's head (todo 8). (4) The Linux loop at main's head before the next push (todo 5). (5) The dry run (todo 3), the installs and done.md (todo 4), and the kovacs brew runbook through kovacs-sysadm (vc's todo 43). No pushes, and no new runs before the compact."
+  }
+}

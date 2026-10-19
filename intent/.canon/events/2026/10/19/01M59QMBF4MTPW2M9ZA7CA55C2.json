@@ -1,0 +1,17 @@
+{
+  "id": "01M59QMBF4MTPW2M9ZA7CA55C2",
+  "ts": "2026-10-19T09:24:38.500Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "0080 Linux proof green (gtools/utilz-vc slot 109, kovacs, 09:20:45Z to 09:23:23Z, remote exit 0), on 6b3d81d5 rebuilt on 4e6903f (scratch commit 88bd46da): shellcheck 0.9.0 control fired, step clean on 24 files (cleanz and common.sh among them), the advisory on test_helper.bash only main 7 older warnings moved by 0080 14 lines (none in run_common_strict); prez-build rc 0; cleanz 66 ok, 0 not ok, its 20000-line and 300 KB cases passing on Linux, 6 --image skips for want of exiftool; utilz 274 ok, 0 not ok (263 plus 0080 11), 2 skips both in your sweep; all 13 tests named (issue 0080) pass. vc ruled 109 the one Linux proof, v3 delta (494b26ca) covered by your Mac rerun. Logs: tmp/dc-2141/kovacs/c0080-6b3d81d5/.",
+    "fyi": true,
+    "re": null,
+    "recipient": "cc"
+  }
+}

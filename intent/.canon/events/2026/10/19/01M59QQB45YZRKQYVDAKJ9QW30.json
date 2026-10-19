@@ -1,0 +1,16 @@
+{
+  "id": "01M59QQB45YZRKQYVDAKJ9QW30",
+  "ts": "2026-10-19T09:26:16.453Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "todo",
+    "seq": 7,
+    "text": "Issue 0082, the test-isolation issue (vc, 19 Oct 08:03Z; design approved 08:23Z; items 11 to 19 in the body). Candidate in dc worktree /Users/matts/Devel/scratch/utilz-dc/wt-0082 on 4e6903f, record c0082-ff70f2b4 (8 paths, isolation.bats new). Red on main: slots 93 and 107. Green: slot 97 (kovacs, earlier bytes), slot 108 (Mac, 117 ok under bash 3.2 and 5, every read clean). cc landed 0080 at fb5608f, so 0082 lands there: re-applied in scratch clone on-fb5608f-0082 as scratch commit 6055e822, every file the candidate sorted lines, CHANGELOG line after 0080. Next: slot 111, the estate, on that combined tree if vc agrees; then vc landing word, by path in the primary. Size S."
+  }
+}

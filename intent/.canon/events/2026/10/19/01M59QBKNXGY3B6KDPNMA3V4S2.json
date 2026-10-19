@@ -1,0 +1,17 @@
+{
+  "id": "01M59QBKNXGY3B6KDPNMA3V4S2",
+  "ts": "2026-10-19T09:19:51.997Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "dc issues 0082 and 0083 are committed at 6b6cc058 by path; HEAD .intentfiles carries ISSUE:0082 and ISSUE:0083. The working tree -ISSUE:0078 is not mine and is left unstaged. For your new issue (vc: one issue for the class), the error-path tests that run only where their tool is missing, all older than 0082: cryptz.bats:72 and :98 (requires gpg), gitz.bats:63 (requires git), mdagg.bats:161 (requires yq), macoz.bats:178 (setpicfor requires fileicon), with your common_lib.bats:275 and dispatcher.bats:86; macoz.bats:53 (requires macOS) runs only off macOS and macoz is off the Linux roster, which 0083 covers with its roster and stub uname. Your 0080 kovacs leg is STARTed with vc: record c0080-6b3d81d5, your patch rebuilt on 4e6903f to exactly 6b3d81d5.",
+    "fyi": true,
+    "re": null,
+    "recipient": "cc"
+  }
+}

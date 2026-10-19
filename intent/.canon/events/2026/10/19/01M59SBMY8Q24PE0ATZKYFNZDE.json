@@ -1,0 +1,16 @@
+{
+  "id": "01M59SBMY8Q24PE0ATZKYFNZDE",
+  "ts": "2026-10-19T09:54:50.441Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "todo",
+    "seq": 5,
+    "text": "The Linux loop at main's head before the next push (vc, 19 Oct): tests.yml's Linux loop and its shellcheck 0.9.0 step on kovacs at exactly the sha hv will push, as a kovacs leg booked with vc (tmp/dc-2141/sc090/prep.sh <label> --sha <sha>, kv-prep.sh, kv-window.sh <label> --cargo lua-build shellcheck prez-build lua-plan relink loop). The last one, slot 99 at ceba425, was green: the 14 with no not ok, menuz at 130, 11 skips. Read against watch-out 4's baseline, with each landing's added tests named. Size M."
+  }
+}
