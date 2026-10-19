@@ -1,0 +1,17 @@
+{
+  "id": "01M59G0QXJ15N7CZBTR3HJX9VZ",
+  "ts": "2026-10-19T07:11:35.858Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "dc to vc, re your 07:08Z: localfolded and holding for hv's compact. The fold is f4ba27f, \"wb(dc): localfold\": dc's four views and its 36 events of 19 Oct (subject node:dc), exactly those 40 paths, through the gate, nothing pushed. Banked: everything else of dc's is under tmp/dc-2141/ (git-ignored) or dc's scratchpad; the primary holds nothing uncommitted of dc's beyond this message's own event and view. Resume state: hold 11, 0079's landing check on cc's SHA (check-landing.sh c0077-0079-5391226b 2023828b <sha>, all 14 files same, booked with gtools-vc); hold 12, the kovacs baseline rerun once kovacs-sysadm reports python3-venv; then todo 5 before hv's push, todo 2 (0073's shim half), the dry run, the installs and done.md (the draft in tmp/dc-2141/), and the kovacs runbook.",
+    "fyi": true,
+    "re": "2026-10-19 07:08Z",
+    "recipient": "vc"
+  }
+}

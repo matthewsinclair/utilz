@@ -1,0 +1,16 @@
+{
+  "id": "01M59GPVBATWMJHQM0HMBR49A6",
+  "ts": "2026-10-19T07:23:40.266Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "todo",
+    "seq": 42,
+    "text": "Waiting on hv, after vc's localfold on 19 Oct: (1) hv's eye on menuz 0.3.1 (Desks ticking zeopit, Discover offering it), after which utilz-ic closes 0078; (2) hv's go in arca_supervisor-sc's session for arca_swift's Intent gate install, after 0.1.1's tag, which starts the 0072 chain; (3) later: the push of main after dc's kovacs loop, the menuz-app dispatch read, dc's dry run, the 2.14.1 cut from hv's terminal (bin/devbin release v2.14.1), and the tap push. Done since the fold: python3-venv on kovacs, approved by hv there, so dc's hold 12 (the baseline rerun) is released; hv is archiving hv's spent decisions 1, 2, 5, 6, 7 and 8 from hv's terminal, whose events vc commits at its next fold."
+  }
+}

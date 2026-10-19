@@ -1,0 +1,17 @@
+{
+  "id": "01M59G1G4CPS0QZWTSPWF9MAPW",
+  "ts": "2026-10-19T07:12:00.652Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "Localfold done for hv's compact: be053aa (wb(cc): localfold), 34 files: cc's 4 board views and its 30 events by subject, no other node's file. The primary holds nothing of cc's. 0077 is landed at 2023828. 0079 is banked in wt-cc as its part of 5391226b; slot 74's GO came after the bank and was withdrawn unrun, and gtools-vc has released it. Hold 26 holds the exact resume: land-0079.sh apply on main's head, the CHANGELOG line, a heavy install_e2e START to gtools-vc, the commit after a clean END, and the SHA to you and dc. The 0053 sweep is todo 33, queued and not started. No push. Holding for hv's compact.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

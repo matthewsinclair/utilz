@@ -33,12 +33,7 @@ _(none)_
 
 ## Decisions
 
-- hv, 2026-09-14, directly to vc: (1) ST0019's shared release core (pre-flight, version stamping, the CHANGELOG date, commit, tag, push, the release object) is Devbin project work with Utilz as its first user; Utilz's own parts (its version files, the CI build of prez, the Homebrew formula) start in Utilz, and the next Utilz release is cut by hand once more. (2) utilz doctor's report goes to stdout, by one redirect where the doctor verb runs; the shared message helpers stay on stderr. (3) Adopt rustfmt for the prez crate once ST0020 lands.
-- hv, 2026-09-14, directly to vc, on the HV items cc sent at its localfold: (1) main is pushed to both remotes when ST0020 lands, and not before. (2) ST0020 keeps its (device, inode) identity, Unix-only: the workspace builds for macOS and Linux only, and a port would choose its own identity. (3) prez 2.2.0 is confirmed for the next release. (4) vc files Intent's `macos prepare --help` defect in Intent's tracker, as 0378 was filed.
-- hv, 2026-09-19, directly to vc: (1) The next release is 2.10.0, and it carries a new showreel capability: generating a video file (.mov or .mp4) of a reel. In hv's words: "More to come, but I want that capability in the 2.10.0 release." So the release waits for it. (2) Order: cc's install.sh fix first, so it ships in 2.10.0, then the release, then ST0019's design.
-- hv, 2026-09-19, directly to vc, after the discussion in cc's session: decision 5 stands, and 2.10.0 waits for showreel's video export. hv is open to every route and dependency the design puts forward ("open to it all").
-- hv, 2026-09-19, directly to vc: "Ok, ST0021 looks good, you and CC should crack on and build it." ST0021's design is approved and the thread is built for 2.10.0. vc reads the approval as taking each of the design's eight questions' recommendations as its answer (.mp4 H.264 by default and .mov as H.264; the reel's own target resolution; 30 fps with --fps; silent; the corner bug kept; showreel video <dir>; ffmpeg a declared dependency that doctor reports; recorded on the maintainer's machine and tested on CI legs carrying Chrome and ffmpeg). hv can change any one without changing the route.
-- hv, 2026-09-20, on devbin-vc's pre-notice of the devbin 0.1.2 fleet sweep, in hv's words: "Yes, get 2.10 out first, then we can update Devbin post that." So Utilz ships 2.10.0 first, and the sweep of the vendored devbin follows the tag. vc has told devbin-vc, and will tell it the result of CI run 35507688287, which decides ST0021's last criterion. Nothing of devbin is taken by hand at Utilz in the meantime, and ST0007 WP-08, where Utilz adopts devbin's release core, stays after the sweep.
+_(none)_
 
 ---
 

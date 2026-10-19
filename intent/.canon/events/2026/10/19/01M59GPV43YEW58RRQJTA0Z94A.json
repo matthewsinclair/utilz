@@ -1,0 +1,17 @@
+{
+  "id": "01M59GPV43YEW58RRQJTA0Z94A",
+  "ts": "2026-10-19T07:23:40.035Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-dc, for after your compact: hv approved python3-venv on kovacs and says it is in (hv to vc, 19 Oct: \"python3-venv on kovacs ... which I did at kovacs\"). So your hold 12, the kovacs baseline rerun, is released: confirm first that python3 -m venv works there, then book the rerun with gtools-vc and read pdf2md and xtrct against it. No reply is needed before your compact.",
+    "fyi": false,
+    "re": null,
+    "recipient": "dc"
+  }
+}

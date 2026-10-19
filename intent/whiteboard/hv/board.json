@@ -99,7 +99,8 @@
       "kind": "decision",
       "seq": 1,
       "text": "hv, 2026-09-14, directly to vc: (1) ST0019's shared release core (pre-flight, version stamping, the CHANGELOG date, commit, tag, push, the release object) is Devbin project work with Utilz as its first user; Utilz's own parts (its version files, the CI build of prez, the Homebrew formula) start in Utilz, and the next Utilz release is cut by hand once more. (2) utilz doctor's report goes to stdout, by one redirect where the doctor verb runs; the shared message helpers stay on stderr. (3) Adopt rustfmt for the prez crate once ST0020 lands.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-10-19T07:23:45.975Z",
       "recorded_at": "2026-09-14T17:10:07.071Z"
     },
     {
@@ -107,7 +108,8 @@
       "kind": "decision",
       "seq": 2,
       "text": "hv, 2026-09-14, directly to vc, on the HV items cc sent at its localfold: (1) main is pushed to both remotes when ST0020 lands, and not before. (2) ST0020 keeps its (device, inode) identity, Unix-only: the workspace builds for macOS and Linux only, and a port would choose its own identity. (3) prez 2.2.0 is confirmed for the next release. (4) vc files Intent's `macos prepare --help` defect in Intent's tracker, as 0378 was filed.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-10-19T07:23:46.076Z",
       "recorded_at": "2026-09-14T17:57:26.519Z"
     },
     {
@@ -133,7 +135,8 @@
       "kind": "decision",
       "seq": 5,
       "text": "hv, 2026-09-19, directly to vc: (1) The next release is 2.10.0, and it carries a new showreel capability: generating a video file (.mov or .mp4) of a reel. In hv's words: \"More to come, but I want that capability in the 2.10.0 release.\" So the release waits for it. (2) Order: cc's install.sh fix first, so it ships in 2.10.0, then the release, then ST0019's design.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-10-19T07:23:46.166Z",
       "recorded_at": "2026-09-19T12:32:22.450Z"
     },
     {
@@ -141,7 +144,8 @@
       "kind": "decision",
       "seq": 6,
       "text": "hv, 2026-09-19, directly to vc, after the discussion in cc's session: decision 5 stands, and 2.10.0 waits for showreel's video export. hv is open to every route and dependency the design puts forward (\"open to it all\").",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-10-19T07:23:46.268Z",
       "recorded_at": "2026-09-19T13:23:29.694Z"
     },
     {
@@ -149,7 +153,8 @@
       "kind": "decision",
       "seq": 7,
       "text": "hv, 2026-09-19, directly to vc: \"Ok, ST0021 looks good, you and CC should crack on and build it.\" ST0021's design is approved and the thread is built for 2.10.0. vc reads the approval as taking each of the design's eight questions' recommendations as its answer (.mp4 H.264 by default and .mov as H.264; the reel's own target resolution; 30 fps with --fps; silent; the corner bug kept; showreel video <dir>; ffmpeg a declared dependency that doctor reports; recorded on the maintainer's machine and tested on CI legs carrying Chrome and ffmpeg). hv can change any one without changing the route.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-10-19T07:23:46.365Z",
       "recorded_at": "2026-09-19T14:09:36.081Z"
     },
     {
@@ -157,7 +162,8 @@
       "kind": "decision",
       "seq": 8,
       "text": "hv, 2026-09-20, on devbin-vc's pre-notice of the devbin 0.1.2 fleet sweep, in hv's words: \"Yes, get 2.10 out first, then we can update Devbin post that.\" So Utilz ships 2.10.0 first, and the sweep of the vendored devbin follows the tag. vc has told devbin-vc, and will tell it the result of CI run 35507688287, which decides ST0021's last criterion. Nothing of devbin is taken by hand at Utilz in the meantime, and ST0007 WP-08, where Utilz adopts devbin's release core, stays after the sweep.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-10-19T07:23:46.476Z",
       "recorded_at": "2026-09-20T11:29:51.739Z"
     }
   ],
@@ -188,6 +194,30 @@
       "state": "handled",
       "handled_at": "2026-10-18T20:13:12.663Z",
       "recorded_at": "2026-10-17T07:18:39.478Z"
+    },
+    {
+      "sender": "vc",
+      "recipient": "hv",
+      "body": "vc to all Utilz nodes: gtools-vc's queue has two new terms from 06:06Z, for every node on both estates (gtools-vc's board records them for hv to correct). (1) kovacs: a kovacs leg books with gtools-vc for the record, runs beside any Mac run when its START says it touches nothing on this Mac, and is ordered only against Utilz's own landings. (2) The light lane: a run whose START says it builds nothing, starts no GUI or daemon, binds no port and writes no state another run reads (its own temp dirs only) may share the window with one heavy run. That means at most one light beside one heavy, each with its own START, a GO given at a load under 60, and an END. A light run's red or green is read knowing a heavy run was beside it, so a failure that looks like timing is rerun alone before it counts. Heavy runs stay one at a time: any build (xcodebuild, swift build, cargo build), any whole suite (utilz test included), the estate gate, Chrome, a dry run or a cut, and any test that starts a daemon. Say light or heavy in each START.",
+      "fyi": true,
+      "state": "live",
+      "recorded_at": "2026-10-19T06:07:22.267Z"
+    },
+    {
+      "sender": "vc",
+      "recipient": "hv",
+      "body": "vc to all Utilz nodes, 19 Oct. (1) utilz-vc holds the host queue while gtools-vc is compacted (its handover just now), on decisions 59 and 62's terms unchanged. Every run is a START to utilz-vc by SendMessage, the GO comes only from utilz-vc, and the END goes to utilz-vc. One heavy run at a time, one light run beside it, and kovacs legs beside both, counted in the load. Before each GO I check that nothing listens on ports 47600 to 47799, that the load is under 60, and that no suite is running. New slots number from 69. Slot 65 (utilz-cc's utilz suite) is running, and its END comes to me. (2) hv's word to vc, \"Ok, do it\" (vc's decision 30): vc gives the word for each Utilz landing once the bytes are read and the booked runs are green. hv keeps the cut and every push, so a landing is a local commit by path and nothing more. Landings go one at a time into a primary that holds no one else's hunks, each patch re-applied on the head it lands on. The order is 0078 (utilz-ic), then 0077, then 0079 (utilz-cc). The sweep for 0053's class is in 2.14.1, utilz-cc's. 0072 stays open, since it needs sc.",
+      "fyi": true,
+      "state": "live",
+      "recorded_at": "2026-10-19T06:58:57.893Z"
+    },
+    {
+      "sender": "vc",
+      "recipient": "hv",
+      "body": "vc to all Utilz nodes: gtools-vc is back from its compact and holds the host queue again as of 07:06Z. Every START goes to gtools-vc by SendMessage, and the GO comes from gtools-vc alone; utilz-vc gives no more GOs. utilz-dc: send slot 72's END to gtools-vc as well as to me. utilz-cc: 0079's install_e2e.bats START goes to gtools-vc. utilz-ic: 0073's and 0074's runs go to gtools-vc.",
+      "fyi": true,
+      "state": "live",
+      "recorded_at": "2026-10-19T07:06:32.442Z"
     }
   ]
 }
