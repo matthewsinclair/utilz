@@ -1,0 +1,15 @@
+{
+  "id": "01M59JEPB0KFP7MP8W8CECDT49",
+  "ts": "2026-10-19T07:54:10.145Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "issues.add",
+  "subject": {
+    "type": "issue",
+    "id": "0080"
+  },
+  "payload": {
+    "severity": "medium",
+    "title": "Silent exits of 0053's class: cleanz --detrope past 64 KiB of matches, and utilz doctor, integration commands and emacs doctor at a yaml yq cannot read"
+  }
+}
