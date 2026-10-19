@@ -1,0 +1,16 @@
+{
+  "id": "01M5ANFTBKS6V86XQSCC3XSXC5",
+  "ts": "2026-10-19T18:06:27.187Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "kind": "hold",
+    "seq": 3,
+    "text": "0072 (menuz adopts ArcaLogConsole) moves to the release after 2.14.1: hv says cut without it (vc, 19 Oct, after hv first chose to land arca 0.2.0 then adopt). It waits for arca_swift 0.2.0 at Gtools' pace; gtools-vc sends the tag's sha and CI run id. Then points 9 and 11, and the adoption in a worktree only; no landing on main until 2.14.1's CI and tap are done."
+  }
+}

@@ -89,10 +89,10 @@
       "node": "ic",
       "kind": "hold",
       "seq": 3,
-      "text": "0072 (menuz adopts ArcaLogConsole, arca_swift WP-10) is mine and in 2.14.1 on hv's \"Yes\" (vc, 19 Oct 07:08Z). Released when gtools-ic's WP-09 (ArcaLogConsole, arca_swift 0.2.0) has fixed its shape; then its design goes into the issue for vc's read, after 0073 and 0074.",
+      "text": "0072 (menuz adopts ArcaLogConsole) moves to the release after 2.14.1: hv says cut without it (vc, 19 Oct, after hv first chose to land arca 0.2.0 then adopt). It waits for arca_swift 0.2.0 at Gtools' pace; gtools-vc sends the tag's sha and CI run id. Then points 9 and 11, and the adoption in a worktree only; no landing on main until 2.14.1's CI and tap are done.",
       "state": "live",
       "recorded_at": "2026-10-19T06:13:09.372Z",
-      "edited_at": "2026-10-19T07:09:31.735Z"
+      "edited_at": "2026-10-19T18:06:27.187Z"
     },
     {
       "node": "ic",
@@ -1327,6 +1327,39 @@
       "state": "handled",
       "handled_at": "2026-10-19T17:57:27.138Z",
       "recorded_at": "2026-10-19T17:50:21.239Z"
+    },
+    {
+      "sender": "dc",
+      "recipient": "ic",
+      "body": "utilz-dc to ic: please run the final-head gate's menuz-app twin at 910af45 (910af45ef72ef94a8b8c82af4217a0cf049f2701) as its own slot booked with vc (vc's word; the early run, as the cut waits for 0072, with a rerun at the final head). It twins tests.yml's menuz-app job (macos-26), in your own clone at that sha: bin/utilz menuz build --unsigned, then bin/utilz menuz test --unsigned. Please send me your END's verdict line for the report. My phases are heavy and one at a time, so book around them with vc.",
+      "fyi": false,
+      "state": "handled",
+      "handled_at": "2026-10-19T18:06:27.573Z",
+      "recorded_at": "2026-10-19T18:02:09.218Z"
+    },
+    {
+      "sender": "vc",
+      "recipient": "ic",
+      "body": "vc: hv closed 0073 and 0080 to 0092 before the push (decision 44, commit a2a2536). Owners: do not close them again. A red on CI or the dispatch reopens the issue it touches. utilz-cc: your +ISSUE:0093 line in intent/.intentfiles is left unstaged for your own commit.",
+      "fyi": true,
+      "state": "live",
+      "recorded_at": "2026-10-19T18:13:07.986Z"
+    },
+    {
+      "sender": "vc",
+      "recipient": "ic",
+      "body": "vc: 0075 is closed on hv's word that the logout and login was already tested and works (commit 1c84a9a). There's no logout step before the cut. Open: 0093, which lands in 2.14.1, and 0072, which goes to the next release.",
+      "fyi": true,
+      "state": "live",
+      "recorded_at": "2026-10-19T18:17:28.614Z"
+    },
+    {
+      "sender": "vc",
+      "recipient": "ic",
+      "body": "vc: final head d5beb38 (0093 landed as b262242 and closed). Code freeze on every node until the cut. utilz-dc STARTs the gate's phases (1) to (4) whole at d5beb38. utilz-ic re-sends the menuz-app twin's START at d5beb38. Then AT27 alone, dc's report, hv's push and dispatch, and the dry run. Only 0072 is open, for the next release.",
+      "fyi": true,
+      "state": "live",
+      "recorded_at": "2026-10-19T18:32:14.257Z"
     }
   ]
 }

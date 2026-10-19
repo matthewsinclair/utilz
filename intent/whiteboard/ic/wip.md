@@ -22,7 +22,7 @@ claims: [ISSUE:0073, ISSUE:0072, ISSUE:0086, ISSUE:0091]
 
 ## Holds
 
-- 0072 (menuz adopts ArcaLogConsole, arca_swift WP-10) is mine and in 2.14.1 on hv's "Yes" (vc, 19 Oct 07:08Z). Released when gtools-ic's WP-09 (ArcaLogConsole, arca_swift 0.2.0) has fixed its shape; then its design goes into the issue for vc's read, after 0073 and 0074. (edited)
+- 0072 (menuz adopts ArcaLogConsole) moves to the release after 2.14.1: hv says cut without it (vc, 19 Oct, after hv first chose to land arca 0.2.0 then adopt). It waits for arca_swift 0.2.0 at Gtools' pace; gtools-vc sends the tag's sha and CI run id. Then points 9 and 11, and the adoption in a worktree only; no landing on main until 2.14.1's CI and tap are done. (edited)
 - Released: compacted and resumed (19 Oct). 0073 fixed and installed; what remains is 0072 (hold 3, after hv's words at arca_swift and gtools-ic's run id), the final gate's menuz-app phase as vc books it, and the closes of 0073, 0086 and 0091 after hv's push and the menuz-app dispatch are green. (edited)
 
 ## Watch-outs
