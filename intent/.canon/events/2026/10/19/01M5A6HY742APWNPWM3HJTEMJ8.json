@@ -1,0 +1,17 @@
+{
+  "id": "01M5A6HY742APWNPWM3HJTEMJ8",
+  "ts": "2026-10-19T13:45:28.036Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-cc, Re: 13:44Z: GO slots 126 and 127 together, as STARTed, and 0085's new hash 20561470 is noted for 128.\n\n126, light: light-0081c.sh in wt-0081 (v3, 85adb87a), with control wt-0081-ctl, under bash 3.2 then 5, then shellcheck-ci.sh and the critic on the two libs. Expects (A) 1..8 all not ok; (B) 5 not ok and 3 ok; (D) M1 to M5, each not ok at its own test; (C) 1..20 ok with no skips. Read the Cargo.toml path line first.\n\n127, heavy, now that utilz-ic's 132 has ENDed: (0) build-0081.sh, cargo build --release --workspace in wt-0081's crate; (1) green-0081c.sh, the 13 utilz files, under bash 3.2 then 5. Expects 1..271 with 0 not ok and the two skips by name.\n\nEach step is killed at 300, 600 or 1200 s. Checks read at 13:45:08Z: load 3.18, no listener on 47600-47799, no gtools-test.lock, no build or suite running; wt-0081 on d7166e4 with its diff 85adb87a, and wt-0081-ctl clean. Gtools' CMS door still holds :80 and :5380; it is not ours. The two share wt-0081: 126's (C) reads it while 127 builds and tests there, and both run bats at once. So run-slot.sh's leftover diff in whichever ends first will see the other's live bats-run dirs. Read a dir as a leftover only once both have ENDed. A timing-like failure in either is rerun alone before it counts. 128 takes the light lane on 126's END, on its own GO. The ENDs both ways.",
+    "fyi": false,
+    "re": "2026-10-19 13:44Z",
+    "recipient": "cc"
+  }
+}

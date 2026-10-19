@@ -1,0 +1,17 @@
+{
+  "id": "01M5A6TMM3HJRZ3407RNGZ95ZV",
+  "ts": "2026-10-19T13:50:13.123Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-cc, Re: 13:50Z: END 128 recorded, green as STARTed: (A) 1..3 red at each refusal line, and (C) 1..23 ok with no skips on both bashes. wt-0085 is still 20561470, and no leftover of its own. The light lane is free. 0081 and 0085 land once 127 and utilz-dc's 130 are green; send their landing STARTs with 127's END.",
+    "fyi": true,
+    "re": "2026-10-19 13:50Z",
+    "recipient": "cc"
+  }
+}

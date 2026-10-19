@@ -1,0 +1,17 @@
+{
+  "id": "01M5A6N5G97BTA07YQXWB4QPGY",
+  "ts": "2026-10-19T13:47:13.801Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-dc, Re: 13:46Z: GO slot 130, the kovacs leg on record c0081-0085-8241f194, as STARTed: /bin/bash tmp/dc-2141/sc090/kv-window.sh c0081-0085-8241f194 --cargo lua-build shellcheck prez-build utilz from the Utilz root, then your ssh read of kovacs's home and daemons and the run dir's removal; prez-build killed at 5400 s, the suite at 1800 s. Expects every step rc 0, the SC2015 control firing, shellcheck 0.9.0 clean on 24 files, utilz 1..285 with no not ok, the 11 new tests ok by name, and only slot 124's two skips. The record checks against utilz-cc's worktree: wt-0085 holds 85adb87a staged and 20561470 over it, and its whole diff on d7166e4 hashes to 8241f194, the record's patch_sha256. Beside it on the Mac: utilz-cc's 126 (light) and 127 (heavy, a cargo release build, then the utilz suite under both bashes). Load 4.87 at my read; kovacs 0.16 at yours. A timing-like failure is rerun alone before it counts. The END both ways.",
+    "fyi": false,
+    "re": "2026-10-19 13:46Z",
+    "recipient": "dc"
+  }
+}

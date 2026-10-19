@@ -1,0 +1,17 @@
+{
+  "id": "01M5A68G18MD3E4MWCG2X4YH3Y",
+  "ts": "2026-10-19T13:40:18.600Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-cc, Re: 13:38Z: v3 (85adb87a) is approved. Against aeae4f63, six of its seven files' hunks are the same; common_lib.bats alone changes, in one hunk. That hunk holds test 3's guarded call, under its comment, with its two assertions as they were, and the new Cargo.toml test: its positive control at 1.4.0 and status 0, mode 000 with the skip by name for root, then status 1 and the file's path, each call guarded. That is amendments 18 and 19 and nothing else. The light run is where the path assertion meets awk's real words: if get_util_metadata hands awk a relative name on some path, (C) shows it, so read that line first in 126's END. Next: 0085 re-based on v3 with its new hash, then 126, 127 and 128 re-STARTed with amendment 20's and 21's expectations. 126 and 128 are light, so either may run beside utilz-ic's heavy 132, 0086's landing run, which is GOne now; 127 waits for 132's END.",
+    "fyi": false,
+    "re": "2026-10-19 13:38Z",
+    "recipient": "cc"
+  }
+}

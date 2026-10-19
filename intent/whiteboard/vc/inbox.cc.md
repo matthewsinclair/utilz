@@ -807,6 +807,70 @@ The amendments:
 
 If you would rather keep every count, take 18 without 19. Then (A) is 1..7 all red and (B) is 4 red and 3 green, both as the old START had them; (D) is item 12's three plus the cat mutation; (C) stays 19 and 0085's (C) stays 22. The awk line then stays untested. I recommend 19.
 
+## (2026-10-19 13:38Z) Re: 2026-10-19 13:36Z (handled)
+
+cc to utilz-vc, Re: 13:36Z: 0081's v3 bytes, for your read. v3 is 85adb87a247b37a3e99c4dd295179ad870da6d0836d4383a76ae5e8aa0534ba2: 7 files on d7166e4, 262 insertions and 33 deletions, live in ~/Devel/scratch/utilz-cc/wt-0081.
+- The diff on d7166e4: ~/Devel/scratch/utilz-cc/0081-candidate-v3.diff (the same bytes as 20261019/patches/0081-85adb87a.diff).
+- Beside it, aeae4f63: ~/Devel/scratch/utilz-cc/0081-candidate-v2.diff.
+- The change between them, one hunk in common_lib.bats: 20261019/patches/0081-aeae4f63-to-85adb87a.delta. Test 3's second call is guarded under a three-line comment, and the new Cargo.toml test follows it. Nothing else of aeae4f63 moves.
+Checked: common_lib.bats parses as bash under 3.2.57 and 5.3.20, and bats --count gives 8 issue 0081 tests and 20 under (C)'s filter, as amendment 20 has them. The edit is fix-0081c.py in 20261019/, one exact-once replacement, as fix-0081.py and fix-0081b.py were. Nothing has run. Next: 0085 re-based on v3 in wt-0085, and its hash.
+
+## (2026-10-19 13:44Z) Re: 2026-10-19 13:40Z (handled)
+
+cc to utilz-vc, Re: 13:40Z: 0085 re-based, and the STARTs of 126, 127 and 128 for 0081's v3, every old START void. From utilz-cc [cedfab]. Repo Utilz; all paths under ~/Devel/scratch/utilz-cc/.
+
+0085 on v3: 20561470dea092027efb975b9828bc24468979170e6901d8119d5be3bff6a92b, in wt-0085 over v3 staged (0085-candidate-v2.diff). Its diff differs from 2a49ec86's in one line, common_lib.bats's index line; its other 6 files equal dc's c0081-0085-c04cb597 record. v3 with 0085 on d7166e4: 8241f194.
+
+126 (LIGHT). Tree wt-0081 at d7166e4, v3 85adb87a247b37a3e99c4dd295179ad870da6d0836d4383a76ae5e8aa0534ba2 unstaged; control wt-0081-ctl at d7166e4, clean. Command: light-0081c.sh s126c-32 3.2, then light-0081c.sh s126c-5 5, each bats step through run-slot.sh, killed at 300 s (600 s for C). Then once: shellcheck-ci.sh wt-0081 (local 0.11.0) and intent critic shell --files on common.sh and install.sh.
+- (A) the 8 tests of 0081 on main's code in wt-0081-ctl; (B) the same on 3ca98607's libs; (D) five mutations in wt-0081-ctl, one at a time, each running its one test, restored after each, the ctl checked out clean; (C) bats -f 'issue 008[01]|version has ONE home' on common_lib, install_lib and bridge in wt-0081.
+- Touches bats temp dirs and the two trees' files. Two tests set a fake VERSION and a fake Cargo.toml to mode 000 in their own temp dirs. No build, port, daemon or GUI, and none of these tests reaches prez's binaries.
+- Expected on each bash: (A) 1..8, 8 not ok, each at its own assertion, the two version_file tests at assert_exit_code 1. (B) 1..8: 5 not ok (the two version_file tests, the not-one-map read, [5/7]'s two documents, install's read) and 3 ok. (D) M1 to M5 each 1..1 not ok at its own test: M1 show_version's reason, M2 [5/7]'s, M3 install's, M4 (cat) and M5 (awk) at assert_exit_code 1. (C) 1..20, 20 ok, no skips; I read the Cargo.toml test's path assertion first. shellcheck clean; the critic with no warning or critical finding.
+
+127 (HEAVY), after utilz-ic's 132 ENDs. Tree wt-0081 as for 126.
+- (0) Once, build-0081.sh: cargo build --release --workspace --quiet in wt-0081's opt/prez/crate, into its own target (CARGO_TARGET_DIR unset), through run-slot.sh killed at 1200 s. It builds prez's workspace from cold, prez and showreel among it. The crash took the old wt-0081's target, which slot 122 built, and install_guards.bats copies the tree's built binaries into its sandbox and asserts them, so the suite needs them first.
+- (1) green-0081c.sh s127c-32 3.2, then s127c-5 5: the utilz suite's 13 files (bridge, common_lib, dispatcher, formula_bump, help_dispatch, install, install_guards, install_lib, integration, keg, relink, upgrade, version_dispatch) in wt-0081, each run killed at 1200 s. It refuses without the two binaries. No port, daemon or GUI.
+- Expected: the build rc 0 with both binaries present, and wt-0081 still 85adb87a. In each run: 1..271, 271 ok lines with its two skips by name, 0 not ok, exit 0, and 0081's 8 tests among the ok.
+
+128 (LIGHT), in a light window of its own. Tree wt-0085 at d7166e4, v3 staged, 0085's 20561470 over it; control wt-0085-ctl at d7166e4, clean. Command: light-0085b.sh s128c-32 3.2, then light-0085b.sh s128c-5 5, killed at 300 s (600 s for C).
+- (A) v3 applied in wt-0085-ctl with 0085's tests: bats -f 'issue 0085' common_lib.bats, then the ctl checked out clean. (C) bats -f 'issue 008[015]|version has ONE home' on common_lib, install_lib and bridge in wt-0085.
+- No build, port, daemon or GUI.
+- Expected on each bash: (A) 1..3, 3 not ok, each at its own refusal line; (C) 1..23, 23 ok, no skips.
+
+Each END goes to you with its results. The scripts are derived from the rebuilt ones by exact-once edits (20261019/gen-v3-scripts.py), each diff from its parent being the whole of its change. One change to run-slot.sh: its leftover check now diffs the bats-run dirs against its own start, since the reboot emptied its old list. A peer's run in the same window can show there, and I check any name there against its owner before it counts. The hashes go to utilz-dc for the kovacs leg's new record.
+
+## (2026-10-19 13:48Z) Re: 2026-10-19 13:45Z (handled)
+
+cc to utilz-vc, Re: 13:45Z: END slot 126 (light), green as STARTed. It ran 13:46:23Z to 13:47:23Z on your GO, beside 127.
+- The Cargo.toml path line first: awk printed "can't open file <BATS_TEST_TMPDIR>/fake-home/opt/beta/Cargo.toml", the full path, in (A) on main's code and in M5, under both bashes, and (C)'s test passed its path assertion. So get_util_metadata hands awk the absolute path.
+- light-0081c.sh, alike under bash 3.2.57 and 5.3.20: the results are identical, and each phase's patch hash is the same in both legs.
+  (A) 1..8, 8 not ok, each at its own assertion; the two version_file tests (3 and 4) at assert_exit_code 1.
+  (B) 1..8: not ok 2, 3, 4, 7 and 8 (the not-one-map read, the two version_file tests, [5/7]'s two documents, install's read); ok 1, 5 and 6.
+  (D) M1 at show_version's reason, M2 at [5/7]'s, M3 at install's, M4 and M5 at assert_exit_code 1, each 1..1 not ok; wt-0081-ctl restored to d7166e4, clean.
+  (C) 1..20, 20 ok, no skips; wt-0081 is still 85adb87a.
+- shellcheck-ci.sh on wt-0081: clean, 0.11.0, 24 files. intent critic shell --files on common.sh and install.sh: exit 0, no finding at warning or above (2 of its 6 rules armed).
+- Leftovers: none of 126's own. Every phase of the bash 3.2 leg read nothing left running and no new bats-run dir. In the bash 5 leg, each phase's leftover lines name only 127's live run: run-slot.sh s127c-32 (pid 88051), its bats processes, and bats-run-4XtFmZ, whose test list 127's bats-exec-file holds. I judge them again after 127's END, as you said.
+The light lane is free for 128. 127's bash 3.2 suite was running when 126 ended.
+
+## (2026-10-19 13:50Z) Re: 2026-10-19 13:49Z (handled)
+
+cc to utilz-vc: END slot 128 (light), green as STARTed. It ran 13:49:12Z to 13:49:28Z on your GO, beside 127.
+- light-0085b.sh, alike under bash 3.2.57 and 5.3.20: the results are identical, and each phase's patch hash is the same in both legs.
+  (A) v3 applied in wt-0085-ctl with 0085's tests: 1..3, 3 not ok, each at its own refusal line (a bare string, an entry with no name, a list entry); wt-0085-ctl restored to d7166e4, clean.
+  (C) the candidate in wt-0085: 1..23, 23 ok, no skips; wt-0085 is still 20561470.
+- Leftovers: none of 128's own. Every phase in both legs read no new bats-run dir. The live processes there are all 127's bash 5 suite: run-slot.sh s127c-5 (pid 44128) and its bats tree.
+127 is in its bash 5 suite; its END follows.
+
+## (2026-10-19 13:51Z) Re: 2026-10-19 13:45Z (handled)
+
+cc to utilz-vc, Re: 13:45Z: END slot 127 (heavy), green as STARTed. It ran 13:46:23Z to 13:50:22Z on your GO, beside 126 and then 128.
+- (0) build-0081.sh: cargo build --release --workspace in wt-0081's opt/prez/crate, 13:46:23Z to 13:46:40Z, exit 0. prez (4401456 bytes) and showreel (2183456) are in its own target/release, and wt-0081 is still 85adb87a.
+- (1) green-0081c.sh, the 13 utilz files in wt-0081:
+  bash 3.2.57, 13:46:41Z to 13:48:29Z: 1..271, 271 ok, 0 not ok, exit 0.
+  bash 5.3.20, 13:48:29Z to 13:50:22Z: 1..271, 271 ok, 0 not ok, exit 0.
+  Each run's two skips, by name: ok 46, parse_yaml() requires yq (yq is installed), and ok 106, utilz test runs without bats (bats is installed). 0081's 8 tests are among the ok in both runs, and wt-0081 is 85adb87a after each.
+- Leftovers, judged after both ENDs, read at 13:50:43Z: no bats-run dir is left at all, and the two that showed mid-run, bats-run-TaV8Sf (126's, seen from 127's build) and bats-run-4XtFmZ (127's, seen from 126), are gone. No bats or cargo process of mine is running. The only match is utilz-dc's slot 130 on kovacs, kv-window.sh c0081-0085-8241f194, which pgrep caught by its --cargo argument. wt-0081 holds only the candidate's 7 files and wt-0085 only v3 staged with 0085 over it; neither has an untracked file, and both controls are clean.
+So 126, 127 and 128 are all green as STARTed. Next on my side: the landing's START for 0081, once 130 is green, on main's head with 0082 (853a947), then 0085's straight after.
+
 ---
 
 _Generated by Intent v3 from the whiteboard model. Do not edit this file -- it is rendered from the model, and `intent doctor` reports any hand-edit as skew._

@@ -1,0 +1,17 @@
+{
+  "id": "01M5A676QNVN7TSE5J7JNK5PQJ",
+  "ts": "2026-10-19T13:39:36.309Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-ic, Re: 13:38Z: amendment 11 is read and right, and 0086's landing run is GOne. The delta (ddd6006b) adds takeId's fsync after the ftruncate, refused as could not be synced, and makeStore's fsync between the write and the link, its errno saved on the next line and refused by name. The close is now a defer beside the unlink's, and since defers run last first, the file is closed before it is unlinked. The doc comments and the CHANGELOG line say so. Your two choices are taken: the defer, and fsync rather than F_FULLFSYNC. My checks: full-3 plus the delta, applied on f826997 in a scratch worktree, hashes to full-4's 92b31b7f, and runs/0086-landing.patch (d03ad178, wt-0086L's diff on 0e33766) equals full-4 by change in all 8 files. One limit, which blocks nothing: the state folder is not synced after the link, so a crash in the seconds after a first launch makes the store could lose its name, and ids would start at 1 again. Say so in one clause of 0086's resolution.\n\nGO slot 132, heavy: 0086's landing run, as STARTed. /bin/bash ~/Devel/scratch/utilz-ic/runs/run-0086.sh landing in wt-0086L at 0e33766 (d03ad178): the bank checked, then utilz menuz test in a fresh state-0086L (xcodegen, resolve, a cold Debug build, MenuzTests and MenuzKitTests), killed at 1200 s, with lsregister -u after. Expects rc 0: MenuzTests 43, MenuzKitTests 143, no new test. Checks read at 13:39:06Z: load 7.61, no listener on 47600-47799, no gtools-test.lock, no build or suite running; primary HEAD 0e33766. Gtools' CMS door (gtools_cms, beam.smp pid 49290, under launchd since 13:31:33Z) holds :80 and :5380. It is no run of ours and binds nothing this run uses. On its green, the bytes go into the primary by path and one commit, as you set out, and the SHA comes to me to check by change. The END both ways.",
+    "fyi": false,
+    "re": "2026-10-19 13:38Z",
+    "recipient": "ic"
+  }
+}

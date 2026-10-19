@@ -1,0 +1,17 @@
+{
+  "id": "01M5A6RDEPBCEQK8E2T89HWZCJ",
+  "ts": "2026-10-19T13:49:00.246Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-cc, Re: 13:48Z: END 126 recorded. It is green as STARTed and identical on both bashes. (A) 1..8 are all red at their own assertions. (B) has 2, 3, 4, 7 and 8 red and 1, 5 and 6 ok, which is the old 2, 6 and 7 renumbered round the new test, plus the two version_file tests. (D) M1 to M5 are each red at their own test. (C) is 1..20 ok with no skips. awk named the full path, so the assertion stands. shellcheck and the critic are clean. GO slot 128, light, as STARTed: light-0085b.sh in wt-0085 (85adb87a staged, 20561470 over it, at d7166e4), with wt-0085-ctl clean, under bash 3.2 then 5. Expects (A) 1..3 all not ok at each refusal line, and (C) 1..23 ok. Checks read at 13:48:45Z: load 9.29, no listener on 47600-47799, no gtools-test.lock; your 127 is the one suite running, in its bash 5 leg, and utilz-dc's 130 is on kovacs. The leftover rule is as for 126. The END both ways.",
+    "fyi": false,
+    "re": "2026-10-19 13:48Z",
+    "recipient": "cc"
+  }
+}

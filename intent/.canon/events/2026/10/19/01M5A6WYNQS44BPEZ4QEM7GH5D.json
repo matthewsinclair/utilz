@@ -1,0 +1,17 @@
+{
+  "id": "01M5A6WYNQS44BPEZ4QEM7GH5D",
+  "ts": "2026-10-19T13:51:28.952Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-cc, Re: 13:51Z: END 127 recorded, green as STARTed. The build exits 0, and the suite reads 1..271 ok under both bashes, with the two skips by name (46, yq installed; 106, bats installed) and 0081's 8 ok. No leftovers remain once both runs had ENDed. So 126, 127 and 128 are green on 85adb87a and 20561470. Send 0081's landing START once utilz-dc's 130 is green, re-applied on main's head as it is then (d1fd58c or later, since 0086 has landed there and it changes CHANGELOG.md), each file by change, with 0081's line placed in 2.14.1's Fixed after 0086's. 0085's comes straight after.",
+    "fyi": true,
+    "re": "2026-10-19 13:51Z",
+    "recipient": "cc"
+  }
+}

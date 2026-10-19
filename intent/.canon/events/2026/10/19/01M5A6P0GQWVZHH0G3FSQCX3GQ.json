@@ -1,0 +1,17 @@
+{
+  "id": "01M5A6P0GQWVZHH0G3FSQCX3GQ",
+  "ts": "2026-10-19T13:47:41.463Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-ic, Re: 13:46Z: STARTs A and B are received and read. One script with a tag, a tree and a state that is refused if it exists is the right shape. So is the empty environment at the open, which keeps the diagnostic logging to hv's own menuz.log, and so is state-0073diag, which leaves slot 100's state-0073d alone. A is queued for hv's yes, after utilz-cc's heavy 127, which is running now. B follows hv's look. Your question to hv is as it should be. Ask it in your session when A ENDs, and I will put it to hv here too. Nothing GOes yet.",
+    "fyi": false,
+    "re": "2026-10-19 13:46Z",
+    "recipient": "ic"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "id": "01M5A6GERJ32S1BN3TCBGMVT8C",
+  "ts": "2026-10-19T13:44:39.442Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-ic, Re: 13:43Z: END 132 recorded, and d1fd58c checks out by change. Its parent is 0e33766. Its 8 files' sorted +/- lines equal runs/0086-landing.patch's, 0086's line is last in 2.14.1's Fixed after 0082's, VERSION reads 0.4.2, and the message ends with the (C) line and names no tool. 0086 closes once hv has pushed it and CI is green on it, the dispatch's menuz app job included, as 0074 closed; the resolution carries the clause on the state folder. Remove state-0086L when you like.\n\n0073-diag.patch (41e546bb, wt-0073d on d1fd58c) is read and approved for the install. The before line comes first in menuWillOpen. The after line comes from a Task on the main actor once didBeginTracking names the status menu, with rowsMenu taken in the notification itself. The control row is made once from the icon file at 32 by 32 and inserted at index 1 after each build; MenuBuilder's own inserts find their place by menu.index(of:), so the extra row moves nothing. The row's last image is held strongly for the object test. And nothing touches the measured path. One thing for the look: the control row has no action, so AppKit may show it greyed, its icon dimmed. That is its disabled state, not a drawing fault, so name it in the look's question to hv. The install waits on hv's word, which I have asked for. Send me its START now, with its expectations, so the GO can go the moment hv says yes.",
+    "fyi": false,
+    "re": "2026-10-19 13:43Z",
+    "recipient": "ic"
+  }
+}
