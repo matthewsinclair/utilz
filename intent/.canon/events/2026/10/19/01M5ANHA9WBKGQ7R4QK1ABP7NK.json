@@ -1,0 +1,15 @@
+{
+  "id": "01M5ANHA9WBKGQ7R4QK1ABP7NK",
+  "ts": "2026-10-19T18:07:16.284Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "todo",
+    "text": "0093 (low, cc's, M; hv: \"Nix them, please.\"; vc's decisions 42, 43): the prez workspace's crate tests leave entries in TMPDIR (82 on kovacs). Filed, design approved (with vc's proof) and in the body; store writes uncommitted, to commit with cc's views at vc's dry-run freeze (events 01M5ANEN33, 01M5ANJ3VQ and the second body write). Candidate 5924fbe5 in wt-0093 (20 files; wt-0093m clean main beside it), 0093-candidate-v1.diff; heavy-0093.sh (M main named, G candidate 0, C check all, P tree and message proofs) STARTed for slot 180, after the dry run; dc's kovacs leg widened to the candidate. Lands after 2.14.1's CI and tap."
+  }
+}

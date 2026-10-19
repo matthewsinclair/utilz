@@ -1,0 +1,16 @@
+{
+  "id": "01M5AMXR8D9FXK84DS4ZPRAS06",
+  "ts": "2026-10-19T17:56:35.213Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "todo",
+    "seq": 40,
+    "text": "0092 (low, cc's, XS): theme.rs's test helper dir() left 9 temp dirs per cargo test run. Design approved by vc with two points (Drop: NotFound ignored, else panic unless already panicking; one CHANGELOG line), written into the issue. Candidate fc5b9688 in ~/Devel/scratch/utilz-cc/wt-0092 on 6a9735e (0092-candidate-v1.diff). Heavy START sent, queued behind ic's 174: heavy-0092.sh (R probe on main's helper, count 10; G workspace, count 0; C check all), then dc's kovacs leg on the same bytes, then the landing apply and commit by path on vc's word."
+  }
+}

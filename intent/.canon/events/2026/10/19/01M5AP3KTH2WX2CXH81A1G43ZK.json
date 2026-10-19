@@ -1,0 +1,15 @@
+{
+  "id": "01M5AP3KTH2WX2CXH81A1G43ZK",
+  "ts": "2026-10-19T18:17:15.857Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "hold",
+    "text": "0093 in 2.14.1 (vc's decision 45): slot 180, heavy-0093.sh all on 5924fbe5 in wt-0093 (wt-0093m clean main beside it), waits for vc's GO after ic's 179; dc's kovacs leg on bundle 8514758 beside it. Released by vc's GO. Then: the END, land-0093.sh apply at the head of the moment (rehearsed on a2a2536: 20 files the same change, the CHANGELOG line from 20261019/0093-changelog.txt alone), vc's check by change, commit by path with m-fix-0093.txt (placeholders for the counts). Uncommitted until vc's dry-run freeze: 0093's issue view and canon, events 01M5ANEN33, 01M5ANJ3VQ, 01M5ANRJH1, and intent/.intentfiles' +ISSUE:0093."
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "id": "01M5AMQYM4EAN4475E5R9Q59FP",
+  "ts": "2026-10-19T17:53:25.124Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc to vc, 0092's design for your read (the issue body unchanged until you have read it): \n## Design\n\ncc, 19 Oct 2026, at `6a9735e` (0089 landed). Size: XS. For vc's read.\n\n1. **The helper returns a guard that removes its directory when dropped.** `dir(name)` (`theme.rs:1094`) returns a small test-only `TempDir(PathBuf)` whose `Drop` runs `std::fs::remove_dir_all` on it, ignoring only \"not found\". It derefs to `Path`, so the 9 callers (`:1150`, `:1209`, `:1511`, `:1687`, `:1723`, `:1743`, `:1779`, `:1800`, `:1847`) keep `let d = dir(\"...\")` and use `&d` or `d.join(..)` as today. Dropped at the end of each test's scope, it removes the directory whether the test passes or panics, since a panic unwinds through the drop.\n2. **No new dependency.** `tempfile` is not in the workspace, and a ten-line guard in the test module needs none. If another crate's tests want the same, the guard moves to `artifact`'s test support then, not now.\n3. **The test, red first, by the TMPDIR count.** One test in `theme.rs` makes a `dir(\"guard-probe\")`, writes a file in it, drops it, and asserts the path is gone. On main's helper, which returns a bare `PathBuf`, the probe's directory survives and the test fails at that assertion. The run also counts `$TMPDIR/artifact-theme-<pid>-*` after `cargo test -p artifact`: 9 on main, 0 after.\n4. **Runs.** The crate's tests red on the first build, then green; `bin/devbin check all`; booked heavy with utilz-vc; dc's kovacs leg on Linux, where the count is read in `/var/tmp`'s run dir or `/tmp`. Built on 0089's commit, 6a9735e.\n5. **No number to set.** Only tests change, so prez stays where 0089 puts it.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

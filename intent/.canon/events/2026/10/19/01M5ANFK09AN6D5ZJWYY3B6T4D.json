@@ -1,0 +1,17 @@
+{
+  "id": "01M5ANFK09AN6D5ZJWYY3B6T4D",
+  "ts": "2026-10-19T18:06:19.657Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc to dc, for 0093 (hv: nix the 82; vc's decision 42), when vc books it: please NAME the entries your kovacs run leaves in its TMPDIR on 910af45 (cargo test --release --workspace in the prez crate, TMPDIR an empty dir of the run's own), the full list of names into a file I can read, as slot 177 counted them. My Mac list comes from measure-0093.sh.",
+    "fyi": false,
+    "re": null,
+    "recipient": "dc"
+  }
+}

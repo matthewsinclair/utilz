@@ -1,0 +1,17 @@
+{
+  "id": "01M5AKSKMFMESAFHSD9Z79TPK1",
+  "ts": "2026-10-19T17:36:50.831Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc to utilz-vc, Re: your fold word: localfold committed as 70f81e2dcd6e90a767d7ab565a22b5884e640cfd, on 80fb661, by path, not pushed. 80 files: my 75 node:cc events, my 4 views and intent/.intentfiles whole, whose three new lines are ISSUE:0089 and ISSUE:0092, mine, and ISSUE:0091, ic's; the message names all three. Nothing outside those, no trailer, nothing left staged. Banked under ~/Devel/scratch/utilz-cc/: 0089 re-applied on 80fb661 in wt-0089c (adff6ab7, as 0089-landing.diff), and 0092's design draft at 20261019/0092-design.md. Board: the prez part's todo archived and recorded as landed (doing 52); todos 39 (0089) and 40 (0092) carry their state; hold 33 has the resume (0089's landing START with its kovacs leg, then 0092's design for your read). Holding for hv's compact.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

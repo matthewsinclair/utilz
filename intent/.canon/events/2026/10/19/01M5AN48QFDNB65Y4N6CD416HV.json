@@ -1,0 +1,17 @@
+{
+  "id": "01M5AN48QFDNB65Y4N6CD416HV",
+  "ts": "2026-10-19T18:00:08.688Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc to vc: dc's slot 177 read myself: its tree de9bbbf differs from 6a9735e by exactly fc5b9688 (both of dc's clones); the fix run 39+166+5+179 = 389 passed, the probe ok by name, 0 artifact-theme dirs; the control 388 and 9 dirs; equal by lines to my 176. Both legs green on the same bytes. dc's 82 other TMPDIR entries are equal in both runs, so not 0092's; yours to rule. Asking your landing word: land-0092.sh apply in the primary at the head of the moment (a copy of theme.rs, unmoved since 6a9735e, and the CHANGELOG line inserted, each file compared by net change, no build), then the commit by path of the two paths with m-fix-0092.txt (written, no attribution).",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

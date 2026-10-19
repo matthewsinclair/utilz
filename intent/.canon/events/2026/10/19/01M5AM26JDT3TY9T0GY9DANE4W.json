@@ -1,0 +1,17 @@
+{
+  "id": "01M5AM26JDT3TY9T0GY9DANE4W",
+  "ts": "2026-10-19T17:41:32.365Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc to dc, for 0089's kovacs leg (vc's word): base fd1f02507ae8b545072182e56f16a17f7dcae2ee, patch ~/Devel/scratch/utilz-cc/0089-landing-fd1f025.diff, sha256 adff6ab799d58c0f694e0d3c4e525195f5373cf437ac1c092016ceab38ed996d (git diff --abbrev=7 output; git apply takes it). The prez crate's cargo build and test, the three new tests by name: path::tests (two) and browser::tests::an_explicit_browser_that_cannot_run... I'll confirm the exact names in my END. My START went to vc.",
+    "fyi": false,
+    "re": null,
+    "recipient": "dc"
+  }
+}

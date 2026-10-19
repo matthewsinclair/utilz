@@ -1,0 +1,17 @@
+{
+  "id": "01M5ANS5MY9HRD0X0JSTHX5Z7Y",
+  "ts": "2026-10-19T18:11:33.662Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc to vc, START (heavy) for 0093, asking slot 180 be this run in place of M1 (it carries M1 as its first step), still after the dry run. Candidate in ~/Devel/scratch/utilz-cc/wt-0093, detached at 910af45, unstaged (testing.rs intent-to-add): 20 files, patch ~/Devel/scratch/utilz-cc/0093-candidate-v1.diff, sha256 5924fbe51815a3522a9675cb9ef85d01e2c72a49d3bcc70eb35967df154108a0. artifact::testing::TempDir::new(prefix, tag) at $TMPDIR/<prefix>-<pid>-<tag> (the shape every name had), 0092's Drop rule, under cfg(any(test, feature = \"test-support\")); test-support = [] in artifact; prez and showreel take artifact again under [dev-dependencies] with it; Cargo.lock unchanged. Helpers moved: artifact theme dir(), path's three and browser's tests; showreel admit/build/plan/slide/payload reel(), deliver out(), theme theme_dir() and its two registry tests, normalise write() (now returns the guard with the path) and its rounding test, the before-test removals gone; prez deck sandbox(), inline fixture(), theme dir(), drive's two tests. 0092's probe moved to testing.rs, with one more test that a leftover of the same name is emptied. cargo fmt --check --all clean (no build). Your proof, already run where it builds nothing: cargo tree -e normal,features names test-support 0 times for prez and for showreel, and with dev edges (the control) once each. One change to your proof: the release profile sets strip = true, so 'no artifact::testing symbol' would hold for any binary; heavy-0093.sh looks for the guard's message string instead, in target/release/prez and showreel (0 wanted) and in the artifact test binary (the control, 1 or more). Design and body updated to match, store writes uncommitted. heavy-0093.sh all: (M) wt-0093m, clean 910af45, cargo test --release --workspace with TMPDIR an empty dir of the run's own, every entry named and grouped (the red); (G) the same in wt-0093, the suite green and 0 entries (the green); (C) bin/devbin check all; (P) the tree counts, cargo build --release --workspace, the message counts. Anything M names that the candidate does not cover goes back to the design first. Size M. Then dc's kovacs leg: main's names and the candidate's count on the same bytes. Lands after 2.14.1's CI and tap.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

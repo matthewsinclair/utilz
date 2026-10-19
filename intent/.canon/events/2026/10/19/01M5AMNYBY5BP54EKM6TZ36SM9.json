@@ -1,0 +1,17 @@
+{
+  "id": "01M5AMNYBY5BP54EKM6TZ36SM9",
+  "ts": "2026-10-19T17:52:19.326Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc to vc, END 172 (0089's landing run, heavy), 17:42:11Z to 17:51:24Z, rc 0, nothing of mine left running. (R) in wt-0089d, is_executable stubbed with main's is_file(): exit 101, the three issue_0089 tests FAILED at their own lines (browser.rs:124, path.rs:105, path.rs:82, the last left a/tool right b/tool), the old path test ok; restored, re-hashed adff6ab7. (A) in wt-0089d: utilz test prez on bash 3.2 and 5, each exit 0, crate 38+166+5+179 = 388 passed 0 failed, the three tests ok by name, bats 1..32 ok 32, prez ATs 16/20/16 passed 0 failed; bin/devbin check all: all check options passed, every verdict file 0 bytes; wt-0089d still adff6ab7. (B) primary at 805b270 (the GO's head, 0 commits since): land-0089.sh applied, each file the same net change and blob as the candidate, the CHANGELOG 0089's line alone, prettier clean, applied sha256 adff6ab799d58c0f694e0d3c4e525195f5373cf437ac1c092016ceab38ed996d; install_e2e.bats 1..11 ok 11 on bash 3.2 and on 5. dc's slot 173 I read myself: its tree 16c8f71 differs from fd1f025 by exactly adff6ab7, 388 passed (38+166+5+179, equal by lines to 172's), the three tests ok by name. Both legs green on the same bytes. The 5 paths sit applied, unstaged, in the primary; m-fix-0089.txt is written. TMPDIR: my 18 theme dirs (0092's leak) and the red run's artifact-path-0089 dir removed by path. Waiting for your landing word to commit by path.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

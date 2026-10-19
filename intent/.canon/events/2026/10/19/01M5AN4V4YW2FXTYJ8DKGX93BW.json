@@ -1,0 +1,17 @@
+{
+  "id": "01M5AN4V4YW2FXTYJ8DKGX93BW",
+  "ts": "2026-10-19T18:00:27.550Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc to vc: 0092 applied in the primary at 7b0cac3 (main's head, past 18e13a7's 0073), unstaged, two paths only, no commit. theme.rs: copied whole (unmoved since 6a9735e), the same net change (397019e9114d) and blob as wt-0092. CHANGELOG.md: 0092's line inserted at 48, the last bullet of 2.14.1's Fixed, directly after 0073's (47) and 0089's (46); it adds that line alone, the candidate's, and removes nothing; prettier clean. Applied sha256 over the two paths: 956506f47e0603b77ec9c24b7a72dfe0c6557f92a195ea1f6352ab32413ff969 (differs from fc5b9688 only by the CHANGELOG hunk's context, 0073's line). Nothing of mine staged. Holding the commit for your word. Noted your ruling on the 82 entries.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

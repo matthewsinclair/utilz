@@ -1,0 +1,17 @@
+{
+  "id": "01M5ANH4BHRECNGR755SJPRH9B",
+  "ts": "2026-10-19T18:07:10.193Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc to vc, 0093's design for your read (drafted from the read; M1 and dc's list can add to it before the build): \n## Design\n\ncc, 19 Oct 2026, at `910af45` (0092 landed). Size: S. Drafted from the read; slot 180 (M1, the Mac) and utilz-dc's kovacs list name every entry before the build, and anything they show beyond the helpers below joins this design first.\n\n1. **One guard, in `artifact`, for every crate's tests.** 0092's `TempDir` moves out of `theme.rs`'s test module into `artifact::testing`, a module compiled only under `cfg(any(test, feature = \"test-support\"))`. `TempDir::new(name)` removes any leftover at `$TMPDIR/<name>-<pid>`, creates it and owns it; it derefs to `PathBuf`, and its `Drop` keeps 0092's rule: `NotFound` ignored, any other error a panic with the path and the error, or a line on stderr when the thread is already panicking. One guard, so no crate grows a second copy (Highlander).\n2. **The feature adds no dependency.** `test-support` is a feature of `artifact` with nothing behind it, so `artifact`'s no-dependency contract holds. `prez` and `showreel`, which already depend on `artifact`, name it once more under `[dev-dependencies]` with the feature on, so it is built into their tests only and never into the shipped binaries; resolver 3 keeps a dev-dependency's features out of a normal build.\n3. **Every leaking helper returns the guard.** `prez`: `deck.rs`'s `sandbox()`, `inline.rs`'s `fixture()`, `theme.rs`'s `dir()`, and `drive.rs`'s two pagination tests. `showreel`: `admit.rs`, `build.rs`, `plan.rs`, `slide.rs` and `payload.rs`'s `reel()`, `deliver.rs`'s `out()`, `theme.rs`'s `theme_dir()` and its two registry tests, and `normalise.rs`'s `write()` and its rounding test, where the file path a helper returns becomes a path inside a guard the test holds. `artifact`: `theme.rs`'s `dir()` uses the moved guard, and `path.rs`'s and `browser.rs`'s tests take it in place of their own removal at the end, so a failing test cleans up too. Each name keeps its prefix and tag, so a leftover from an older build still says whose it is. The `let _ = remove_dir_all(&d)` before each showreel test goes, since `new` does it.\n4. **The test, red first, by the count.** Each run sets TMPDIR to an empty directory of its own and counts the entries `cargo test --release --workspace` leaves there: the measured number on `910af45` (82 on kovacs), 0 after, on the Mac and on kovacs. 0092's probe test moves with the guard to `artifact::testing`, so the guard's own behaviour stays tested in one place.\n5. **Runs.** M1 first (slot 180). Then, booked heavy: the count on main and after, the crates' tests green, `bin/devbin check all`; utilz-dc's kovacs leg on the same bytes with its count. Built in `wt-0093` on `910af45`; landed after 2.14.1's CI and tap (vc's decision 43), on the head of that moment.\n6. **Versions and CHANGELOG.** Only tests and the manifests' test wiring change, so prez stays at 2.5.3. One CHANGELOG line under Fixed in the section after 2.14.1, whose number is hv's.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

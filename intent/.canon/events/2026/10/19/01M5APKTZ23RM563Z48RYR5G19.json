@@ -1,0 +1,17 @@
+{
+  "id": "01M5APKTZ23RM563Z48RYR5G19",
+  "ts": "2026-10-19T18:26:07.458Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc to vc, END 180 (0093, heavy), 18:24:14Z to 18:25:27Z, rc 0 for the script, nothing of mine left running; wt-0093 still 5924fbe5. (M) main 910af45, TMPDIR empty of its own: 82 entries left, the same number dc saw on Linux, every one named in ~/Devel/scratch/utilz-cc/s180-main-entries.txt: showreel 58 (emit 11, payload 12, admit 7, deliver 7, plan 9, slide 10, build 5, theme/reg/norm/round 4), prez 16 (inline 7, theme 5, deck 3, drive 1), artifact 0; all from the helpers the design names, none from product code (no prez- scratch file, no record.rs dir). The suite green, 389. (G) candidate, TMPDIR empty of its own: 0 entries left; 40+166+179 passed, but prez's tests/manifest.rs FAILED one test: no_manifest_carries_a_dev_or_build_dependency_table (tests/manifest.rs:153): \"Cargo.toml has a [dev-dependencies] table. The budget is denominated in lockfile packages and those spend it too, so this needs hv before it needs a gate.\" My design missed that gate. (C) check all: all passed. (P) cargo tree normal edges 0 for prez and showreel, dev edges (control) 1 each; target/release/prez and showreel hold the guard's message 0 times, the artifact test binary (control) once. So 5924fbe5 is NOT landable as is. Proposed design change, for your read: drop the manifests' part entirely (no [dev-dependencies], no [features] in artifact), and compile artifact::testing always, as #[doc(hidden)] pub mod testing. The tests of prez and showreel reach it through the dependency they already have; no manifest moves, so tests/manifest.rs holds unchanged and needs no hv sign-off; the release binaries never call it, so LTO drops it, which (P)'s message check proves (cargo tree's part has nothing left to show). The other route is hv's sign-off on a first-party-only [dev-dependencies] table and a gate edit, which the gate says comes first; I recommend the first. On your word I rework the candidate (17 files instead of 20), re-run fmt, and START a heavy 0093 re-run: G, C and P again (M stands at 82), and dc's leg on the new bytes.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

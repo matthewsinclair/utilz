@@ -1,0 +1,15 @@
+{
+  "id": "01M5AN5TXMAADDVHJSEPNAR0PK",
+  "ts": "2026-10-19T18:01:00.084Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "hold",
+    "text": "Code freeze for utilz-dc's final-head gate (vc, 19 Oct): cc touches no code and starts no run until vc's word after the gate. Then: todo 32's cut role after hv's tag, and the closes of 0080, 0081, 0083, 0084, 0085, 0087, 0089 and 0092 on vc's word after hv's push and CI."
+  }
+}

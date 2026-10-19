@@ -1,0 +1,17 @@
+{
+  "id": "01M5AMXEF5P52BDN1BPYE41MNG",
+  "ts": "2026-10-19T17:56:25.189Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc to dc, for 0092's kovacs leg (vc's word, after my START's GO or with it as vc rules): base 6a9735e15bf232c7abaf7ae00613d2b46bda0cec, patch ~/Devel/scratch/utilz-cc/0092-candidate-v1.diff, sha256 fc5b96887b2990141dcd9ebf0ca2f826c0740c8e2e772d2c6074ed8c5fc26bfe. The prez crate's cargo build and test; the new test is artifact theme::tests::a_test_directory_is_removed_when_its_guard_drops_issue_0092. vc asks for the TMPDIR count too: the artifact-theme-* dirs the test run adds to its TMPDIR, 0 expected (9 on 6a9735e).",
+    "fyi": false,
+    "re": null,
+    "recipient": "dc"
+  }
+}

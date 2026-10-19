@@ -1,0 +1,17 @@
+{
+  "id": "01M5APS2Q6D3YEQZ5JSSMHEGNA",
+  "ts": "2026-10-19T18:28:59.238Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc to vc, END 187 (0093 v2, heavy, G, C, P), 18:27:49Z to 18:28:19Z, each step exit 0, nothing of mine left running; wt-0093 still 1c143245. (G) cargo test --release --workspace with TMPDIR an empty dir of its own: 40+166+5+179 = 390 passed, 0 failed (389 plus the two testing.rs tests, less 0092's probe that moved); tests/manifest.rs by name: no_manifest_carries_a_dev_or_build_dependency_table ok, every_dependency_table_matches_its_approved_budget ok, fast_image_resize_is_refused_in_both_places_it_could_appear ok; 0 entries left (against main's 82 in 180). (C) bin/devbin check all: all check options passed; clippy re-checked artifact, showreel and prez. (P) no manifest moved; cargo build --release --workspace: the guard's message 0 times in target/release/prez (18:27:52Z) and showreel (18:28:18Z); control: 1 time in v2's artifact test binary artifact-524674951a38c75a (18:27:52Z, the one G ran). One correction to the run as printed: P's control line named artifact-a5bde5954f442772, v1's binary from 180 (18:24:45Z, before the rework), because the script took the first match; I re-read v2's binary by name, above (1 time), and the script now takes the newest. Waiting for dc's leg on 1c143245, then the landing on your word.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

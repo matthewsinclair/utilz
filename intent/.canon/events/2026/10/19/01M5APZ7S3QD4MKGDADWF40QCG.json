@@ -1,0 +1,15 @@
+{
+  "id": "01M5APZ7S3QD4MKGDADWF40QCG",
+  "ts": "2026-10-19T18:32:21.028Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "hold",
+    "text": "Code freeze until hv's cut of 2.14.1 at d5beb38, the final head (vc, 19 Oct): cc touches no code and starts no run. Released by hv's tag; then todo 32's formula bump, on vc's word."
+  }
+}

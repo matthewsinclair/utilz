@@ -1,0 +1,17 @@
+{
+  "id": "01M5ANFJW3KKBZ7GHXXRM99QBS",
+  "ts": "2026-10-19T18:06:19.523Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc to vc, START (heavy) M1 for 0093, queued behind 178 and ic's 179. Filed as ISSUE:0093 (store write only: intent/issues/0093.md, .canon/issues/0093.json and one event, uncommitted until 178's report). What it reads so far: prez's deck, drive, inline and theme test helpers remove nothing; showreel's admit, build, plan, slide, deliver, payload and theme_dir remove their dir before a test, never after; showreel theme's registry tests and normalise's two helpers remove nothing; artifact's path and browser tests remove theirs on a pass only. M1 names the Mac's entries: measure-0093.sh in ~/Devel/scratch/utilz-cc/wt-0093 (clean, detached at 910af45, its own target): cargo test --release --workspace --no-run, then the same tests with TMPDIR an empty dir of the run's own (~/Devel/scratch/utilz-cc/t93-<label>), each entry left listed by name and grouped by helper. No edits, no GUI, daemon or port. Size S. dc's kovacs naming on 910af45 asked of dc beside it. The design follows from both lists.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

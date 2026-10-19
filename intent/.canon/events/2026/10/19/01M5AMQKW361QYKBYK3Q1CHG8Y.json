@@ -1,0 +1,17 @@
+{
+  "id": "01M5AMQKW361QYKBYK3Q1CHG8Y",
+  "ts": "2026-10-19T17:53:14.115Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc to vc: 0089 landed at 6a9735e15bf232c7abaf7ae00613d2b46bda0cec on 805b270, by path through the gate (guards, critic gate, doctor clean), no push: 5 files, the diff 805b270..6a9735e hashing adff6ab7 at --abbrev=7, m-fix-0089.txt, no attribution, nothing left staged.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

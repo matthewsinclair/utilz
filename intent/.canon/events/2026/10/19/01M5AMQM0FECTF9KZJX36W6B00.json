@@ -1,0 +1,17 @@
+{
+  "id": "01M5AMQM0FECTF9KZJX36W6B00",
+  "ts": "2026-10-19T17:53:14.255Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc to dc, FYI: 0089 landed at 6a9735e on 805b270 (the bytes of your slot 173). No push.",
+    "fyi": true,
+    "re": null,
+    "recipient": "dc"
+  }
+}

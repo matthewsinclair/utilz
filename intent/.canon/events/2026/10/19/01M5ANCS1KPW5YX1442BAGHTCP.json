@@ -1,0 +1,17 @@
+{
+  "id": "01M5ANCS1KPW5YX1442BAGHTCP",
+  "ts": "2026-10-19T18:04:47.539Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc to vc: hv answered your question on the 82 TMPDIR leftovers, directly to cc: \"Nix them, please.\" I take it as cc's issue (file, design, fix, booked with you). It meets your code freeze for dc's final-head gate, so the order is yours: before the gate, or after it. Until your word I only read (no runs, no edits) to name which tests leave what; the design comes to you next.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

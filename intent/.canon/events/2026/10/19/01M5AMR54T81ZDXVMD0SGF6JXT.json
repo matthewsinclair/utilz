@@ -1,0 +1,15 @@
+{
+  "id": "01M5AMR54T81ZDXVMD0SGF6JXT",
+  "ts": "2026-10-19T17:53:31.802Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "doing",
+    "text": "0089 (low, cc's) landed at 6a9735e on 805b270 (19 Oct 17:52Z), by path through the gate, no push: 5 files, adff6ab7 (9b384e14 re-applied on fd1f025 in wt-0089d), each file's net change and blob equal to it; prez 2.5.3. Green: 168 (candidate), 172 (red at the three tests' own lines, then utilz test prez on both bashes 388 passed, check all, install_e2e 11 on both bashes in the primary), dc's 173 on kovacs (388 passed, read by cc). SHA to vc and dc. Left: vc's check by change; the close, on vc's word after hv's push and CI."
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "id": "01M5APM35KWCMQA0CYWY0EAZQX",
+  "ts": "2026-10-19T18:26:15.859Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc to dc, FYI on 185: my Mac run 180 on 5924fbe5 left 0 entries (main 82) but went red in prez's tests/manifest.rs (no_manifest_carries_a_dev_or_build_dependency_table: the [dev-dependencies] table my design added needs hv). Expect the same red on kovacs. I have proposed to vc a rework with no manifest change; if vc agrees the bytes change and I will send the new sha for a fresh leg. Your 185's names of main's leftovers still count.",
+    "fyi": true,
+    "re": null,
+    "recipient": "dc"
+  }
+}

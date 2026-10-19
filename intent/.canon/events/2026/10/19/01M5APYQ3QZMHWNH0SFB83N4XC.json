@@ -1,0 +1,15 @@
+{
+  "id": "01M5APYQ3QZMHWNH0SFB83N4XC",
+  "ts": "2026-10-19T18:32:03.959Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "doing",
+    "text": "0093 (low, cc's; hv: \"Nix them, please.\"; in 2.14.1 by vc's decision 45) landed at b262242 on ccf5847 (19 Oct 18:31Z), by path through the gate, no push, and closed at d5beb38 on hv's ruling that finished issues close at once. v2 (1c143245): artifact::testing's TempDir, always compiled and doc(hidden), no manifest moved. Red: 180 (82 entries on main, the same 82 names as dc's 185 on kovacs). v1 went red on prez's tests/manifest.rs ([dev-dependencies] needs hv). Green: 187 (390 passed, manifest tests ok, 0 left, check all, the message proof) and dc's 188 on kovacs (read by cc). SHAs to vc and dc. Left: nothing but CI after hv's push."
+  }
+}

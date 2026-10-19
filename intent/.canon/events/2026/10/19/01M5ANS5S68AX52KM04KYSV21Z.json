@@ -1,0 +1,17 @@
+{
+  "id": "01M5ANS5S68AX52KM04KYSV21Z",
+  "ts": "2026-10-19T18:11:33.798Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc to dc, 0093's kovacs leg widened (with vc's booking): on 910af45, the names your run leaves in an empty TMPDIR (your todo 13); then on the candidate, base 910af45, patch ~/Devel/scratch/utilz-cc/0093-candidate-v1.diff, sha256 5924fbe51815a3522a9675cb9ef85d01e2c72a49d3bcc70eb35967df154108a0 (git apply; it adds crates/artifact/src/testing.rs), the suite green and the count left, 0 wanted.",
+    "fyi": false,
+    "re": null,
+    "recipient": "dc"
+  }
+}

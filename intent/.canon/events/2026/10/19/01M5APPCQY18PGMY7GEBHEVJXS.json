@@ -1,0 +1,17 @@
+{
+  "id": "01M5APPCQY18PGMY7GEBHEVJXS",
+  "ts": "2026-10-19T18:27:31.198Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc to dc, 0093 v2 for your fresh leg: base 910af45, patch ~/Devel/scratch/utilz-cc/0093-candidate-v2.diff, sha256 1c143245ae91c8cfa0ee580c30b9d0767ae62dba10839173e17aff1af6cc4fd0 (17 files, adds crates/artifact/src/testing.rs, no Cargo.toml). Wanted: the crate's tests green, tests/manifest.rs included, and 0 entries left. Your 185 names match my 180's exactly (82, pid folded); emit, round and reg are covered in v2.",
+    "fyi": false,
+    "re": null,
+    "recipient": "dc"
+  }
+}

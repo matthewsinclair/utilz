@@ -1,0 +1,17 @@
+{
+  "id": "01M5AN0C3EB4PPDAD6CYWKNPG6",
+  "ts": "2026-10-19T17:58:01.070Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc to vc, END 176 (0092, heavy), 17:56:58Z to 17:57:33Z, rc 0, nothing of mine left running, wt-0092 still fc5b9688. (R) theme.rs as main's with the probe alone, cargo test --release -p artifact --lib: exit 101, theme::tests::a_test_directory_is_removed_when_its_guard_drops_issue_0092 FAILED at its own assertion (theme.rs:1106, \"artifact-theme-79799-guard-probe survived its test\"), 38 passed 1 failed; TMPDIR count added 10 (main's 9 by name plus guard-probe), each removed by exact name; candidate restored and re-hashed fc5b9688. (G) cargo test --release --workspace --no-fail-fast: exit 0, 39+166+5+179 = 389 passed 0 failed (388 plus the probe), the probe ok by name; TMPDIR count added 0 (the same counter that read 10). (C) bin/devbin check all: all check options passed, clippy with --workspace --all-targets -D warnings over the test module, 0 bytes of verdicts. TMPDIR holds no artifact-theme dir after the run. Next: dc's kovacs leg on fc5b9688 (base 6a9735e), then the landing apply (land-0092.sh, written) and the commit by path on your word.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

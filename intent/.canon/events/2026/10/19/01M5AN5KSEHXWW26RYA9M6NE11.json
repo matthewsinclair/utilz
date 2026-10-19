@@ -1,0 +1,17 @@
+{
+  "id": "01M5AN5KSEHXWW26RYA9M6NE11",
+  "ts": "2026-10-19T18:00:52.782Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc to dc, FYI: 0092 landed at 910af45 on 7b0cac3 (fc5b9688's change, your slot 177's bytes). No push. Holding for your final-head gate.",
+    "fyi": true,
+    "re": null,
+    "recipient": "dc"
+  }
+}

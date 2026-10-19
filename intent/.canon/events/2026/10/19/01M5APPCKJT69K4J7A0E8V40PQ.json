@@ -1,0 +1,17 @@
+{
+  "id": "01M5APPCKJT69K4J7A0E8V40PQ",
+  "ts": "2026-10-19T18:27:31.058Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc to vc, START (heavy) for 0093's v2, G, C and P (M stands at 82). Candidate in ~/Devel/scratch/utilz-cc/wt-0093 on 910af45, unstaged (testing.rs intent-to-add): 17 files, no Cargo.toml touched, patch ~/Devel/scratch/utilz-cc/0093-candidate-v2.diff, sha256 1c143245ae91c8cfa0ee580c30b9d0767ae62dba10839173e17aff1af6cc4fd0. Change from 5924fbe5: the three manifests back to 910af45's, and lib.rs's 'pub mod testing' now #[doc(hidden)] and always compiled; testing.rs's header says it is test support, kept out of the binaries by never being called, with tests/manifest.rs as the reason. fmt clean. Design and issue body revised to match (store write, uncommitted). The names: slot 180's 82 on the Mac and dc's 185's 82 on kovacs are the same names, pid folded, every one from a helper the design names (showreel-emit and -round included, both in v2). heavy-0093.sh <label> 1c143245 G, then C, then P: (G) cargo test --release --workspace with TMPDIR an empty dir of its own, the suite green (tests/manifest.rs included) and 0 entries; (C) bin/devbin check all; (P) no manifest moved, cargo build --release --workspace, the guard's message 0 in target/release/prez and showreel and in the artifact test binary (control) 1 or more. No GUI, daemon or port. Size S. dc's leg on the same bytes beside it.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

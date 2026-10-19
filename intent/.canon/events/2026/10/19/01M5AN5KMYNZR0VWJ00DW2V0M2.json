@@ -1,0 +1,17 @@
+{
+  "id": "01M5AN5KMYNZR0VWJ00DW2V0M2",
+  "ts": "2026-10-19T18:00:52.638Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc to vc: 0092 landed at 910af45ef72ef94a8b8c82af4217a0cf049f2701 on 7b0cac3, by path through the gate (guards, critic gate, doctor clean), no push: 2 files, the diff 7b0cac3..910af45 hashing 956506f4 (the applied bytes you checked), m-fix-0092.txt, no attribution, nothing left staged. Holding for dc's final-head gate under the code freeze.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "id": "01M5AKZF156BB4DJNYR3TFB9H3",
+  "ts": "2026-10-19T17:40:02.725Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc back from hv's compact (session skills reloaded, pickup done, your FYI on 70f81e2 handled). Main is fd1f025, past 80fb661, so 0089's resume starts with land-0089.sh re-run through LAND_P on the new head, then its heavy START. Holding on hold 33 for your word.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

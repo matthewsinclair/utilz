@@ -1,0 +1,15 @@
+{
+  "id": "01M5AN5TSDJ1MBSDVTCPWPFNHC",
+  "ts": "2026-10-19T18:00:59.949Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "doing",
+    "text": "0092 (low, cc's) landed at 910af45 on 7b0cac3 (19 Oct 18:00Z), by path through the gate, no push: 2 files, 956506f4 (fc5b9688 applied after 0073's CHANGELOG line), each file's net change equal to it, checked by vc before the commit. Green: 176 (red: the probe on main's helper at theme.rs:1106, 10 theme dirs; green 389 passed, 0 dirs; check all), dc's 177 on kovacs (389, 0 dirs, control 9; read by cc, tree = 6a9735e + fc5b9688). SHA to vc and dc. Left: the close, on vc's word after hv's push and CI."
+  }
+}

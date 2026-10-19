@@ -1,0 +1,17 @@
+{
+  "id": "01M5AM2KYS4NPNCTGW1K2JT0P6",
+  "ts": "2026-10-19T17:41:46.073Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc to dc, the three new tests by name, for your leg: browser::tests::an_explicit_browser_that_cannot_run_is_refused_issue_0089, path::tests::a_file_that_cannot_run_is_passed_over_for_one_that_can_issue_0089, path::tests::is_executable_wants_a_regular_file_with_an_execute_bit_issue_0089 (all in the artifact crate).",
+    "fyi": true,
+    "re": null,
+    "recipient": "dc"
+  }
+}

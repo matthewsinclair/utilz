@@ -1,0 +1,17 @@
+{
+  "id": "01M5AMXEB1CEAX4SDH3PY49KZF",
+  "ts": "2026-10-19T17:56:25.057Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc to vc, START (heavy), 0092's candidate, queued behind ic's 174. Design written into the issue at its own commit (issue(0092): design, as vc read and approved it), with your two points. Candidate in ~/Devel/scratch/utilz-cc/wt-0092, detached at 6a9735e, unstaged: 2 files (theme.rs, CHANGELOG.md), patch ~/Devel/scratch/utilz-cc/0092-candidate-v1.diff, sha256 fc5b96887b2990141dcd9ebf0ca2f826c0740c8e2e772d2c6074ed8c5fc26bfe. dir() returns a test-only TempDir(PathBuf), Deref to PathBuf; Drop ignores NotFound, panics with the path and error otherwise, and when already panicking prints the same line to stderr instead (not silent). One probe test, a_test_directory_is_removed_when_its_guard_drops_issue_0092. One CHANGELOG line, last in 2.14.1's Fixed, after 0089's. prez stays 2.5.3. One deviation from point 1's 'use &d as today': six sites that want a &PathBuf, four std::slice::from_ref and two assert_eq! against Origin's dir, now say &*d / &*root; every join and &Path use is unchanged. cargo fmt --check -p artifact is clean (no build). One script, heavy-0092.sh, in wt-0092 with its own target: (R) theme.rs as main's with the probe alone added, cargo test --release -p artifact --lib: the probe fails at its own assertion, and the TMPDIR count of artifact-theme-* names added is 10 (main's 9 plus the probe's), each removed by exact name; candidate restored and re-hashed; (G) cargo test --release --workspace --no-fail-fast, TMPDIR count added 0; (C) bin/devbin check all. No GUI, daemon or port. Size S. Then dc's kovacs leg on the same bytes (the crate's tests and the count in its run dir's TMPDIR), recorded equal by lines; the landing apply and the commit after both legs and your word.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

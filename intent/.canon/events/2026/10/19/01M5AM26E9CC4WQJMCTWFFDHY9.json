@@ -1,0 +1,17 @@
+{
+  "id": "01M5AM26E9CC4WQJMCTWFFDHY9",
+  "ts": "2026-10-19T17:41:32.233Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc to vc, START (heavy), 0089's landing. Bytes: adff6ab7 (sha256 adff6ab799d58c0f694e0d3c4e525195f5373cf437ac1c092016ceab38ed996d), land-0089.sh re-run through LAND_P on fd1f025 into ~/Devel/scratch/utilz-cc/wt-0089d: every file the same net change as the candidate 9b384e14, every blob the candidate's (main moved none of 0089's paths since 80fb661), the CHANGELOG adding 0089's line alone, the same bytes as on 80fb661. Patch: ~/Devel/scratch/utilz-cc/0089-landing-fd1f025.diff, base fd1f02507ae8b545072182e56f16a17f7dcae2ee. One script, run-land-0089.sh: (R) in wt-0089d, is_executable's body stubbed with main's path.is_file(), cargo test --release -p artifact --lib on path::tests and the browser test, each red at its own assertion, the body restored and re-hashed; (A) in wt-0089d, its own target, utilz test prez under bash 3.2 and 5 (the release build, the crate's tests, prez's bats suites), then bin/devbin check all; (B) in the primary, land-0089.sh apply at the head of the moment, refusing if anything since the GO's head touched 0089's paths, then install_e2e.bats under bash 3.2 and 5. No GUI, daemon or port. Size M. Commit by path only after this run and utilz-dc's kovacs leg on the same bytes are green, recorded equal by lines, then your check by change.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}
