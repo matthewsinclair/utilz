@@ -65,7 +65,7 @@ struct RunTests {
     }
   }
 
-  @Test("the app's lines: start with the run as written, cancelled, and quit")
+  @Test("the app's lines: start with the run as written, cancelled, quit, and not run, with the store's refusal")
   func lines() {
     #expect(
       Run.startLine(Self.request(cwd: "~/x"), home: "/h")
@@ -74,16 +74,29 @@ struct RunTests {
     #expect(Run.cancelledLine(id: 17, label: "Hammerspoon doctor") == "run 17 cancelled \"Hammerspoon doctor\"")
     #expect(Run.quitLine(going: [17, 19]) == "quit; runs still going: 17, 19")
     #expect(Run.quitLine(going: []) == "quit; runs still going: none")
+    // A refusal's words follow the store's path (issue 0086).
+    #expect(
+      Run.notRunLine(label: "Desks", stateDir: "/s", refusal: .empty) == "\"Desks\" not run: /s/next-run is empty")
+    #expect(
+      Run.notRunLine(label: "Desks", stateDir: "/s", refusal: .holds("twelve"))
+        == "\"Desks\" not run: /s/next-run holds no id: twelve")
+    #expect(
+      Run.notRunLine(label: "Desks", stateDir: "/s", refusal: .failed("could not be read: Bad file descriptor"))
+        == "\"Desks\" not run: /s/next-run could not be read: Bad file descriptor")
   }
 
-  @Test("the next-id store: only a store not yet made starts at 1; one holding no id is refused")
+  @Test("the next-id store: a new store holds 1; one holding no id is refused with its text, an empty one as empty")
   func nextId() {
-    #expect(RunId.parse(nil) == .success(1))
+    #expect(RunId.parse(RunId.stored(after: 0)) == .success(1))
     #expect(RunId.parse("12\n") == .success(12))
-    #expect(RunId.parse("") == .failure(RunId.Unreadable(text: "")))
-    #expect(RunId.parse("twelve") == .failure(RunId.Unreadable(text: "twelve")))
-    #expect(RunId.parse("0") == .failure(RunId.Unreadable(text: "0")))
+    #expect(RunId.parse("") == .failure(.empty))
+    #expect(RunId.parse(" \n") == .failure(.empty))
+    #expect(RunId.parse("twelve") == .failure(.holds("twelve")))
+    #expect(RunId.parse("0") == .failure(.holds("0")))
+    // A store's own text never reads as the empty refusal.
+    #expect(RunId.parse("is empty") == .failure(.holds("is empty")))
     #expect(RunId.stored(after: 12) == "13\n")
+    #expect(RunId.store(in: "/s") == "/s/next-run")
   }
 
   @Test("the wrapper posts through the app's own --notify arm, the text in the environment, never osascript (D13)")

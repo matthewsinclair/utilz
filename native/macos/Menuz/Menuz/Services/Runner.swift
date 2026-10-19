@@ -19,40 +19,95 @@ final class Runner {
   var stillGoing: [Int] { going.keys.sorted() }
 
   /// The next id from `<state>/next-run`, taken under an exclusive lock so
-  /// two copies of the app, or two runs at once, never share one. Only a
-  /// store that does not exist yet starts at 1 (RunId.parse); one that
-  /// exists and holds no id is refused. The next id is written before the
-  /// file is cut to its length, and it never gets shorter, so a crash
-  /// between the two leaves a store that still parses.
-  nonisolated static func takeId(stateDir: String) -> Result<Int, RunId.Unreadable> {
-    func failure(_ why: String) -> Result<Int, RunId.Unreadable> { .failure(RunId.Unreadable(text: why)) }
+  /// two copies of the app, or two runs at once, never share one. A store
+  /// that does not exist yet is made whole first (`makeStore`), so no taker
+  /// ever reads one empty; one that exists and holds no id is refused
+  /// (RunId.parse), and a step that fails is refused naming the step. The
+  /// next id is written before the file is cut to its length, and it never
+  /// gets shorter, so a crash between the two leaves a store that still
+  /// parses; the store is synced before the id is given, so a crash after
+  /// that never hands the id out again. `beforeLink` exists for the test
+  /// alone: it holds a taker that is making the store at the moment before
+  /// the store appears (issue 0086).
+  nonisolated static func takeId(stateDir: String, beforeLink: () -> Void = {}) -> Result<Int, RunId.Unreadable> {
+    // `code` is errno, passed in so it is read before any string is built,
+    // which holds only while the `why` passed beside it is a literal: one
+    // interpolated there would be built first.
+    func failure(_ why: String, errno code: Int32? = nil) -> Result<Int, RunId.Unreadable> {
+      .failure(.failed(code.map { "\(why): \(String(cString: strerror($0)))" } ?? why))
+    }
     do {
       try FileManager.default.createDirectory(atPath: stateDir, withIntermediateDirectories: true)
     } catch {
-      return failure(error.localizedDescription)
+      return failure("is in a folder that could not be made: \(error.localizedDescription)")
     }
-    let path = "\(stateDir)/next-run"
-    var created = false
+    let path = RunId.store(in: stateDir)
     var descriptor = open(path, O_RDWR | O_EXLOCK | O_CLOEXEC)
     if descriptor < 0, errno == ENOENT {
-      descriptor = open(path, O_RDWR | O_CREAT | O_EXCL | O_EXLOCK | O_CLOEXEC, 0o644)
-      created = descriptor >= 0
-      if descriptor < 0, errno == EEXIST { descriptor = open(path, O_RDWR | O_EXLOCK | O_CLOEXEC) }
+      if let why = makeStore(path, beforeLink: beforeLink) { return failure(why) }
+      descriptor = open(path, O_RDWR | O_EXLOCK | O_CLOEXEC)
     }
-    guard descriptor >= 0 else { return failure(String(cString: strerror(errno))) }
+    guard descriptor >= 0 else { return failure("could not be opened", errno: errno) }
     defer { close(descriptor) }
     var buffer = [UInt8](repeating: 0, count: 64)
     let count = read(descriptor, &buffer, buffer.count)
-    guard count >= 0 else { return failure(String(cString: strerror(errno))) }
-    let parsed = RunId.parse(created ? nil : String(decoding: buffer.prefix(count), as: UTF8.self))
+    guard count >= 0 else { return failure("could not be read", errno: errno) }
+    let parsed = RunId.parse(String(decoding: buffer.prefix(count), as: UTF8.self))
     guard case .success(let id) = parsed else { return parsed }
     let next = Array(RunId.stored(after: id).utf8)
     let written = pwrite(descriptor, next, next.count, 0)
     guard written == next.count else {
-      return failure(written < 0 ? String(cString: strerror(errno)) : "wrote \(written) of \(next.count) bytes")
+      return written < 0
+        ? failure("could not be written", errno: errno)
+        : failure("could not be written: wrote \(written) of \(next.count) bytes")
     }
-    guard ftruncate(descriptor, off_t(next.count)) == 0 else { return failure(String(cString: strerror(errno))) }
+    guard ftruncate(descriptor, off_t(next.count)) == 0 else {
+      return failure("could not be cut to its length", errno: errno)
+    }
+    guard fsync(descriptor) == 0 else {
+      return failure("could not be synced", errno: errno)
+    }
     return .success(id)
+  }
+
+  /// Makes the store at `path` whole, already holding the first id: a
+  /// temporary file of this taker's own beside it, written and synced, then
+  /// linked into place, so no other taker can see the store before it holds
+  /// the id, and no crash can leave it there empty. A link that fails with
+  /// EEXIST means another taker made the store first, which is no failure.
+  /// The temporary file is closed and removed on every path. Nil when the
+  /// store is there; why not otherwise, as the words after the store's path,
+  /// never a silent fallback. Each errno is saved on the line after its
+  /// call, before any string is built.
+  private nonisolated static func makeStore(_ path: String, beforeLink: () -> Void) -> String? {
+    var template = Array("\(path).XXXXXX".utf8CString)
+    let made = mkostemp(&template, O_CLOEXEC)
+    let makeError = errno
+    guard made >= 0 else {
+      return "could not be made, as its temporary file could not be created: \(String(cString: strerror(makeError)))"
+    }
+    let temporary = String(decoding: template.prefix { $0 != 0 }.map(UInt8.init(bitPattern:)), as: UTF8.self)
+    defer { unlink(temporary) }
+    defer { close(made) }
+    let first = Array(RunId.stored(after: 0).utf8)
+    let written = write(made, first, first.count)
+    let writeError = errno
+    guard written == first.count else {
+      let why = written < 0 ? String(cString: strerror(writeError)) : "wrote \(written) of \(first.count) bytes"
+      return "could not be made, as its temporary file could not be written: \(why)"
+    }
+    let synced = fsync(made)
+    let syncError = errno
+    guard synced == 0 else {
+      return "could not be made, as its temporary file could not be synced: \(String(cString: strerror(syncError)))"
+    }
+    beforeLink()
+    let linked = link(temporary, path)
+    let linkError = errno
+    guard linked == 0 || linkError == EEXIST else {
+      return "could not be linked into place: \(String(cString: strerror(linkError)))"
+    }
+    return nil
   }
 
   /// Logs the start line and spawns the wrapper. False, logged and
@@ -125,8 +180,9 @@ final class Runner {
     for (code, step) in steps {
       if let error = check(code, step) { return .failure(error) }
     }
-    // The literal is typed first: Swift 6.1 (Xcode 16, project.yml's promise)
-    // types it from strdup's parameter and the `+ [nil]`, as C pointers.
+    // The literal is typed first: Swift 6.1 (Xcode 16) typed it from strdup's
+    // parameter and the `+ [nil]`, as C pointers. project.yml has promised
+    // Swift 6.2 since issue 0073; the type is kept, as it costs nothing.
     let args: [String] = ["/bin/zsh", "-f", "-c", Run.wrapper]
     let argv = args.map { strdup($0) } + [nil]
     let envp = environment.map { strdup("\($0.key)=\($0.value)") } + [nil]

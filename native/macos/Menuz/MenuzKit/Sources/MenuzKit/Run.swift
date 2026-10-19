@@ -84,6 +84,13 @@ public enum Run {
     "quit; runs still going: \(ids.isEmpty ? "none" : ids.map(String.init).joined(separator: ", "))"
   }
 
+  /// `"<label>" not run: <store> <refusal>`, for a run the store in
+  /// `stateDir` gave no id: the refusal's words follow the store's path
+  /// (issue 0086).
+  public static func notRunLine(label: String, stateDir: String, refusal: RunId.Unreadable) -> String {
+    "\"\(label)\" not run: \(RunId.store(in: stateDir)) \(refusal)"
+  }
+
   /// The wrapper, run as `/bin/zsh -f -c <wrapper>` in its own session with
   /// its stdout and stderr on the log. It enters the working directory,
   /// runs the line in the login shell with `bin/` first even after .zshrc,

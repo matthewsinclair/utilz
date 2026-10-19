@@ -51,6 +51,13 @@ final class RunnerTests {
     return done()
   }
 
+  /// What a taker's refusal says, as the app's line ends after the store's
+  /// path; nil when it took an id.
+  func refusal(_ taken: Result<Int, RunId.Unreadable>) -> String? {
+    guard case .failure(let unreadable) = taken else { return nil }
+    return "\(unreadable)"
+  }
+
   @Test("a run is in its own session, and its lines reach the log through its wrapper alone")
   func detached() async throws {
     guard case .success(let pid) = Runner.spawn(environment: environment("print hello; sleep 1", id: 3), log: log, home: home.path)
@@ -100,17 +107,53 @@ final class RunnerTests {
     #expect(try String(contentsOfFile: state + "/next-run", encoding: .utf8) == "\(2 * perTaker + 1)\n")
   }
 
-  @Test("a store an earlier build left goes on from its id; one that exists and holds no id is refused, never read as 1")
+  @Test(
+    "a store an earlier build left goes on from its id; one that exists and holds no id is refused by name, never read as 1"
+  )
   func existingStores() throws {
     let state = dir.appendingPathComponent("state").path
     try FileManager.default.createDirectory(atPath: state, withIntermediateDirectories: true)
     try "2\n".write(toFile: state + "/next-run", atomically: true, encoding: .utf8)
     #expect(Runner.takeId(stateDir: state) == .success(2))
     #expect(try String(contentsOfFile: state + "/next-run", encoding: .utf8) == "3\n")
+    // Empty, as a maker showed the store inside its open (issue 0086): the
+    // refusal says so, where main's said nothing. It is read as the app's
+    // line ends, so this line is also 0086's red on main's type.
     try "".write(toFile: state + "/next-run", atomically: true, encoding: .utf8)
-    #expect(Runner.takeId(stateDir: state) == .failure(RunId.Unreadable(text: "")))
+    #expect(refusal(Runner.takeId(stateDir: state)) == "is empty")
     try "nonsense".write(toFile: state + "/next-run", atomically: true, encoding: .utf8)
-    #expect(Runner.takeId(stateDir: state) == .failure(RunId.Unreadable(text: "nonsense")))
+    #expect(Runner.takeId(stateDir: state) == .failure(.holds("nonsense")))
+  }
+
+  @Test(
+    "a store is made whole before it appears: a second taker inside its making takes 1, and its maker 2 (issue 0086)"
+  )
+  func storeMadeWhole() throws {
+    let state = dir.appendingPathComponent("state").path
+    var whileHeld: Result<[String: String], any Error>?
+    var second: Result<Int, RunId.Unreadable>?
+    let held = Runner.takeId(stateDir: state) {
+      // What a taker looking now would find: each file there, and its text.
+      whileHeld = Result {
+        try Dictionary(
+          uniqueKeysWithValues: FileManager.default.contentsOfDirectory(atPath: state).map {
+            ($0, try String(contentsOfFile: state + "/" + $0, encoding: .utf8))
+          })
+      }
+      second = Runner.takeId(stateDir: state)
+    }
+    let files = try #require(whileHeld, "the maker was never held").get()
+    #expect(files["next-run"] == nil, "the store was there before its maker linked it")
+    #expect(files.count == 1, "the state folder held \(files.keys.sorted()) while the maker was held")
+    #expect(
+      files.first { $0.key.hasPrefix("next-run.") }?.value == RunId.stored(after: 0),
+      "the maker's file did not hold the first id before its link: \(files)")
+    let secondTaken = try #require(second, "the second taker never ran")
+    #expect(secondTaken == .success(1), "the second taker got \(secondTaken)")
+    #expect(held == .success(2), "the held maker got \(held)")
+    #expect(try String(contentsOfFile: state + "/next-run", encoding: .utf8) == "3\n")
+    let left = try FileManager.default.contentsOfDirectory(atPath: state).filter { $0 != "next-run" }
+    #expect(left.isEmpty, "temporary files were left: \(left)")
   }
 
   @Test("a started run is going until its wrapper ends, then not; the start line is the app's")
@@ -195,7 +238,7 @@ private final class Taken: @unchecked Sendable {
     lock.withLock {
       switch result {
       case .success(let id): gathered.append(id)
-      case .failure(let why): refused.append(why.text)
+      case .failure(let why): refused.append("\(why)")
       }
     }
   }

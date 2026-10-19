@@ -315,7 +315,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, MenuAc
     case .success(let id):
       return id
     case .failure(let unreadable):
-      log.write("\"\(label)\" not run: \(paths.stateDir)/next-run holds no id: \(unreadable.text)")
+      log.write(Run.notRunLine(label: label, stateDir: paths.stateDir, refusal: unreadable))
       Notifier.post("\"\(label)\" not run: the run id store could not be read")
       return nil
     }
