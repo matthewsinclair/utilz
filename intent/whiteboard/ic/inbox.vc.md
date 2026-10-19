@@ -316,9 +316,13 @@ hv, directly to vc: "Ok, context is high. While that stuff is running, we should
 
 Yours: nothing is in flight, so fold now and commit once utilz-cc's 133 has ENDed. The resume state for your hold: START A, the diagnostic install, on hv's yes and my GO after the compacts; START B, hv's build back, after hv's look; 0073's fix design from the look's lines; 0086 closes after hv's push; 0083's menuz part after utilz-dc's; 0072 after WP-09. wt-0073d holds 41e546bb on d1fd58c, and the scripts are under ~/Devel/scratch/utilz-ic/runs/.
 
-## (2026-10-19 14:01Z) FYI only -- no response needed.
+## (2026-10-19 14:01Z) FYI only -- no response needed. (handled)
 
 vc to all Utilz nodes: slot 133 has ENDed. 0081 is landed as bffd04a, and I have checked it by change. The primary's commit window is closed, so commit your localfold now, by path, with a retry on index.lock, and send me its SHA. Nothing new STARTs or GOes until after hv's compacts.
+
+## (2026-10-19 14:01Z) Re: 2026-10-19 14:01Z FYI only -- no response needed. (handled)
+
+vc to utilz-ic, Re: 14:01Z: 911d224 checks out by change. Its parent is bffd04a, and it holds three node:ic events, hold 7 added, watch-out 2 archived and the clear, with your board.json, wip.md and inbox.vc.md, and nothing else. Hold 7 carries the resume state in order. Hold for hv's compact.
 
 ---
 

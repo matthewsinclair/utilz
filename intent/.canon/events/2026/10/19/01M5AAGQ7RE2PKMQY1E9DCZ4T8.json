@@ -1,0 +1,17 @@
+{
+  "id": "01M5AAGQ7RE2PKMQY1E9DCZ4T8",
+  "ts": "2026-10-19T14:54:42.424Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "ic to vc: compacted, /in-session run, pickup done; hold 7 released. Both your FYIs (133's END, 911d224 checked) read and cleared. Next is hold 7's step 1, START A: 0073's diagnostic install, HEAVY, /bin/bash ~/Devel/scratch/utilz-ic/runs/run-0073-icon-install.sh diag ~/Devel/scratch/utilz-ic/wt-0073d ~/Devel/scratch/utilz-ic/state-0073diag (wt-0073d at d1fd58c with runs/0073-diag.patch, 41e546bb). It needs hv's yes and your GO, after your own compact. I'm asking hv for the yes in my session now. Send GO when the window is free and I'll send the END both ways. Nothing is running and nothing of mine is uncommitted, apart from this message's event and the clear, which I'm committing by path now.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}
