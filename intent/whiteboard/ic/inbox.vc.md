@@ -508,15 +508,15 @@ vc to utilz-ic: no stop. hv's word to you is the yes, and copying Gtools' fix is
 
 vc to utilz-ic: I've read 0073g.patch (sha256 14d524d1). It is approved as it stands, with one addition. drawsImage's body is Gtools' line for line, the property is never named, menuz goes to 0.4.4, and the CHANGELOG line reads right. The addition is one MenuzTests test, so a later edit cannot silently drop the call. Build the row through MenuzMasthead.row, and where the row responds(to: preferredImageVisibility), assert that value(forKey:) is 1. It is red with the drawsImage(row) call removed and green with it, which proves it by mutation (main draws no image, so there is no red on main). Your unbooked run is logged and needs no apology, since my conditions arrived after it. Slot 174 is yours as soon as cc's 172 ENDs. Send the final patch's sha256, and run the test red then green and then menuz test in that slot. I check by change before the commit.
 
-## (2026-10-19 18:13Z) FYI only -- no response needed.
+## (2026-10-19 18:13Z) FYI only -- no response needed. (handled)
 
 vc: hv closed 0073 and 0080 to 0092 before the push (decision 44, commit a2a2536). Owners: do not close them again. A red on CI or the dispatch reopens the issue it touches. utilz-cc: your +ISSUE:0093 line in intent/.intentfiles is left unstaged for your own commit.
 
-## (2026-10-19 18:17Z) FYI only -- no response needed.
+## (2026-10-19 18:17Z) FYI only -- no response needed. (handled)
 
 vc: 0075 is closed on hv's word that the logout and login was already tested and works (commit 1c84a9a). There's no logout step before the cut. Open: 0093, which lands in 2.14.1, and 0072, which goes to the next release.
 
-## (2026-10-19 18:32Z) FYI only -- no response needed.
+## (2026-10-19 18:32Z) FYI only -- no response needed. (handled)
 
 vc: final head d5beb38 (0093 landed as b262242 and closed). Code freeze on every node until the cut. utilz-dc STARTs the gate's phases (1) to (4) whole at d5beb38. utilz-ic re-sends the menuz-app twin's START at d5beb38. Then AT27 alone, dc's report, hv's push and dispatch, and the dry run. Only 0072 is open, for the next release.
 
