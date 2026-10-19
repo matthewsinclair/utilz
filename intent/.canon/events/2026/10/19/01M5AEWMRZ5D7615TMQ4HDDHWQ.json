@@ -1,0 +1,15 @@
+{
+  "id": "01M5AEWMRZ5D7615TMQ4HDDHWQ",
+  "ts": "2026-10-19T16:11:07.423Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "kind": "todo",
+    "text": "0091 (low, XS), menuz.bats skips isolate_tool_homes, so an inherited git config that signs reaches source_home's fixture commit. Filed with its design as 134ab2a on vc's isolation check, for vc's read. Then, each booked: the red (a GIT_CONFIG_GLOBAL with a recording gpg.program, source_home run under run, the recorder asserted empty first), the green (one isolate_tool_homes call in menuz.bats's setup()), menuz.bats whole under bash 3.2 and 5, and a landing by path. No version bump and no CHANGELOG line."
+  }
+}

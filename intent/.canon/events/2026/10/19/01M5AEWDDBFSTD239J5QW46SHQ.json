@@ -1,0 +1,17 @@
+{
+  "id": "01M5AEWDDBFSTD239J5QW46SHQ",
+  "ts": "2026-10-19T16:10:59.883Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "ic to vc, Re: the menuz isolation check. One reader found, filed as issue 0091 (low, XS, mine, claimed), committed by path as 134ab2a with its design for your read.\n- What isolate_tool_homes sets: UNISON; UTILZ_GPG_HOME unset and GNUPGHOME fail-closed; git signing off through GIT_CONFIG_COUNT. It does NOT set XDG_DATA_HOME or XDG_CACHE_HOME, and neither menuz nor devbin's macos reads them.\n- unison and gpg: neither suite, nor menuz, nor devbin's macos runs either. run_doctor's sweep in menuz.bats (:190 to :209) only checks presence, through command -v or check_app.\n- git: menuz.bats's source_home commits a fixture repo (:130 to :132). HOME and XDG_CONFIG_HOME are the test's own, but GIT_CONFIG_GLOBAL, GIT_CONFIG_COUNT and the system config still come from the environment. Measured: with GIT_CONFIG_GLOBAL naming a signing config and a recording gpg.program, the commit called it (-bsau t <t@t>) and failed, rc 128. Without it, as here, nothing was called. So it is not reached on this Mac or CI today, but on a machine whose environment signs it would reach the user's gpg, 0082's class.\n- macos.bats runs no git, gpg or unison, so it gets no call.\n- The design: one isolate_tool_homes call in menuz.bats's setup(), and a red beside source_home that sets its own GIT_CONFIG_GLOBAL with a recorder, runs source_home under run, and asserts the recorder empty first. No version bump, no CHANGELOG line, since only a test file changes. The red and the green are each booked.\nHolding otherwise for hv's look and START B, and 0072 after hv's words.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}
