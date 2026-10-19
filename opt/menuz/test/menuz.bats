@@ -561,9 +561,10 @@ exit "${FAKE_XCODEBUILD_RC:-0}"'
 }
 
 # Only the system's own directories after the fakes, so a real xcodegen
-# (Homebrew's) cannot answer for a missing one.
+# (Homebrew's) cannot answer for a missing one. The platform stub setup pinned
+# stays first, or the real uname would answer (issue 0083).
 system_path_only() {
-  export PATH="$FAKES:/usr/bin:/bin:/usr/sbin:/sbin"
+  export PATH="$UTILZ_TEST_PLATFORM_BIN:$FAKES:/usr/bin:/bin:/usr/sbin:/sbin"
 }
 
 # Menuz running as pid 4242 until the fake osascript is asked to quit it.
@@ -822,6 +823,7 @@ app_count() {
   xcode_fakes
   rm "$FAKES/xcodegen"
   system_path_only
+  [[ "$(command -v uname)" == "$UTILZ_TEST_PLATFORM_BIN/uname" ]] || fail "system_path_only dropped the platform stub: uname is $(command -v uname)"
   local verb
   for verb in build test install; do
     run_src_menuz "$verb"
