@@ -1,0 +1,16 @@
+{
+  "id": "01M5A4Q6YE6BXZMTCEASR5WA5H",
+  "ts": "2026-10-19T13:13:23.662Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "kind": "hold",
+    "seq": 6,
+    "text": "Held after the 19 Oct crash (this Mac rebooted at 12:23:56Z): hv has every Utilz node on hold until hv's word, which vc has asked for, and meanwhile ic does bookkeeping alone, on vc's word. Released when hv gives the word to resume. Then, in this order, each on vc's word or GO: (1) hv's look at the row's icon (doing 2); (2) 0073's close with the evidence: 6583e70 and 8a750cc, the runs, hv's two looks (doing 2); (3) slots 118 and 119, right after 131 in the heavy lane, since 0081 is back at design: run-0086.sh red (9ad7c622 in wt-0086r), then run-0086.sh green (break 1, then the green 938e0089 in wt-0086), both worktrees on f826997 and each checked against its bank after the reboot, and the bytes to vc with the ENDs (todo 3); (4) 0086's landing on main's head by path on vc's word, menuz 0.4.2, checked by change; (5) 0083's menuz part after dc's (todo 2); (6) 0072 after gtools-ic's WP-09 (hold 3). Done since the crash: slot 123's END, recorded by vc, and 0074's close, committed as 2563c81. Nobody runs git worktree prune (vc): the admin dirs of cc's five dead worktrees hold the only exact copy of 0081's bytes. No pushes."
+  }
+}

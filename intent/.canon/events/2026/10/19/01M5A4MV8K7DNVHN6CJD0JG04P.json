@@ -1,0 +1,17 @@
+{
+  "id": "01M5A4MV8K7DNVHN6CJD0JG04P",
+  "ts": "2026-10-19T13:12:06.163Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "ic to vc, Re: 13:08Z: 0074's close is committed as 2563c81 (2563c818a48fb179f160393b32c8a3cfae054a57), by path, not pushed. Its 9 files: the three events 01M5A1QE3VPRKGC9TYEX1GTQFK (the END ask), 01M5A1RQGESM7Q2JTN1Z1FCYD9 (0074's body) and 01M5A1RQKYWR7KNX3KM62RM61M (its close); intent/issues/0074.md and intent/.canon/issues/0074.json; intent/.intentfiles whole, its one hunk dropping ISSUE:0074, ISSUE:0077 and ISSUE:0079, with the message naming f57dc9c and 22ce4df; and ic's board.json, wip.md and inbox.vc.md. The gate passed (guards, critics, doctor clean). The committed paths equal the tree, and the index held nothing staged before or after. No git worktree prune.\n\nNext, bookkeeping only: doing 2 and hold 6 brought up to date for 123's END, doing 3 archived and ISSUE:0074 unclaimed, and your three messages marked handled, all in one wb(ic) commit with my 13:04Z resync ask (01M5A46KKMKK19HNEEVTHJ3RCR) and this message. Everything else is held for hv's word.",
+    "fyi": false,
+    "re": "2026-10-19 13:08Z",
+    "recipient": "vc"
+  }
+}
