@@ -68,6 +68,12 @@ get_utilz_version() {
   fi
 }
 
+# THE path of a utility's yaml, in the running tree or the one passed (issue
+# 0081): the reader and every refusal that names the file build it here.
+util_yaml_path() {
+  printf '%s\n' "${2:-$UTILZ_HOME}/opt/$1/$1.yaml"
+}
+
 # Get utility metadata from YAML file
 # Usage: get_util_metadata "mdagg" ".description"
 #
@@ -84,23 +90,48 @@ get_utilz_version() {
 # install.sh for doctor's install-integrity check, so one deliberate subshell
 # propagated 39 findings across 18 files and reddened a gate that had been green.
 # Passing the root is also simply better than rebinding a global to fake it.
+#
+# ITS STATUS IS AN ANSWER (issue 0081). 0 prints the value, and yq's `null` for
+# a key the yaml lacks. 1 means no yaml, no yq, or a version_file this tree does
+# not carry or cannot open, which names itself on stderr. 2 means the yaml is
+# there and cannot be read: yq could not read what was asked, or the yaml is not
+# one map. It prints nothing, so each caller names the cause through
+# yaml_read_error. Call it as `x=$(get_util_metadata ...) || status=$?`: a bare
+# `|| x=""` reads status 2 as absence, which is how every caller once took a
+# yaml's fault for a field it does not carry.
 get_util_metadata() {
   local util_name="$1"
   local query="$2"
   local tree="${3:-$UTILZ_HOME}"
-  local yaml_file="$tree/opt/$util_name/$util_name.yaml"
+  local yaml_file
+  yaml_file=$(util_yaml_path "$util_name" "$tree")
 
   [[ -f "$yaml_file" ]] || return 1
   require_yq || return 1
 
-  local result
-  result=$(yq eval "$query" "$yaml_file" 2>/dev/null)
+  local result top=""
+  if ! result=$(yq eval "$query" "$yaml_file" 2>/dev/null); then
+    return 2
+  fi
+  # NOT ONE MAP, NOT READ (issue 0081). yq answers a key of a yaml whose top
+  # level is a string or a number with an empty line, and a key of one with two
+  # documents with both answers, each with status 0, so either would pass for a
+  # value. The yaml's type settles it, asked only of an answer that is empty or
+  # runs past one line: a one-line answer costs no second read, and a good map's
+  # empty value or block text passes.
+  if [[ -z "$result" || "$result" == *$'\n'* ]]; then
+    if ! top=$(yq eval 'type' "$yaml_file" 2>/dev/null) || [[ "$top" != '!!map' ]]; then
+      return 2
+    fi
+  fi
 
   # A utility may defer its version to a shared file rather than inline it:
   # utilz itself points version_file at the repo-root VERSION.
   if [[ "$query" == ".version" && "$result" == "null" ]]; then
     local version_file_ref
-    version_file_ref=$(yq eval ".version_file" "$yaml_file" 2>/dev/null)
+    if ! version_file_ref=$(yq eval ".version_file" "$yaml_file" 2>/dev/null); then
+      return 2
+    fi
     if [[ -n "$version_file_ref" && "$version_file_ref" != "null" ]]; then
       local abs_version_file
       abs_version_file="$(dirname "$yaml_file")/$version_file_ref"
@@ -125,15 +156,18 @@ get_util_metadata() {
         #
         # Anchored on [package] so a DEPENDENCY's version can never be returned:
         # every dependency lives under its own [[package]] or [dependencies].
+        #
+        # A file it cannot open is status 1, in the tool's own words on stderr
+        # (issue 0081), not 0 with nothing printed.
         case "$abs_version_file" in
           *.toml)
             awk -F'"' '/^\[package\]/ { p = 1; next }
                        /^\[/          { p = 0 }
                        p && /^version[[:space:]]*=/ { print $2; exit }' \
-              "$abs_version_file"
+              "$abs_version_file" || return 1
             ;;
           *)
-            cat "$abs_version_file"
+            cat "$abs_version_file" || return 1
             ;;
         esac
         return 0
@@ -222,8 +256,17 @@ show_version() {
   # Get version from YAML metadata (single source of truth). Absence is a
   # handled case here (reported below as "version unknown"), so tolerate the
   # non-zero explicitly rather than masking it inside a `local` assignment.
-  local version description
-  version=$(get_util_metadata "$util" ".version") || version=""
+  local version description meta_status=0
+  version=$(get_util_metadata "$util" ".version") || meta_status=$?
+  if [[ $meta_status -eq 2 ]]; then
+    echo "$util (version unknown - $util.yaml cannot be read: $(yaml_read_error "$(util_yaml_path "$util")"))"
+    return 1
+  fi
+  if [[ $meta_status -ne 0 ]]; then
+    version=""
+  fi
+  # The version read of this same file has answered 0 or 1 by here, so this
+  # read cannot answer 2: an empty description is simply none.
   description=$(get_util_metadata "$util" ".description") || description=""
 
   if [[ -n "$version" && "$version" != "null" ]]; then
@@ -259,7 +302,7 @@ show_version() {
     # readable -- sending the reader to the wrong file, which is the same
     # defect as a warning naming the wrong mechanism. get_util_metadata has
     # already said WHICH file on stderr in the version_file case.
-    if [[ ! -f "$UTILZ_HOME/opt/$util/$util.yaml" ]]; then
+    if [[ ! -f "$(util_yaml_path "$util")" ]]; then
       echo "$util (version unknown - missing $util.yaml)"
     else
       echo "$util (version unknown - $util.yaml carries no version this tree can read)"
@@ -314,9 +357,17 @@ list_utilities() {
   echo "Available utilities:"
   echo ""
 
-  local name desc
+  local name desc meta_status
   while IFS= read -r name; do
-    desc=$(get_util_metadata "$name" ".description") || desc=""
+    # A yaml that cannot be read gets a row of its own words, and doctor says
+    # why (issue 0081): yq's reason is too long for a listing.
+    meta_status=0
+    desc=$(get_util_metadata "$name" ".description") || meta_status=$?
+    if [[ $meta_status -eq 2 ]]; then
+      desc="($name.yaml cannot be read; utilz doctor says why)"
+    elif [[ $meta_status -ne 0 ]]; then
+      desc=""
+    fi
     printf "  ${BOLD}%-15s${RESET} %s\n" "$name" "${desc:-No description available}"
   done < <(each_utility)
 
@@ -778,7 +829,8 @@ run_doctor() {
   local util_count=0
   local broken_utils=()
   local incompatible_utils=()
-  local name impl required_utilz_version required_major
+  local name impl required_utilz_version required_major meta_status
+  local unreadable_utils=()
   local framework_version framework_major
   framework_version=$(get_utilz_version)
   framework_major=$(echo "$framework_version" | cut -d. -f1)
@@ -801,7 +853,18 @@ run_doctor() {
       continue
     fi
 
-    required_utilz_version=$(get_util_metadata "$name" ".utilz_version") || required_utilz_version=""
+    # ONE FAULT, ONE COUNT (issue 0081). A yaml that cannot be read is named
+    # here, so this section no longer calls every utility properly configured,
+    # but [6/7] counts it: [6/7] reads every yaml, utilz's own too.
+    meta_status=0
+    required_utilz_version=$(get_util_metadata "$name" ".utilz_version") || meta_status=$?
+    if [[ $meta_status -eq 2 ]]; then
+      unreadable_utils+=("$name")
+      continue
+    fi
+    if [[ $meta_status -ne 0 ]]; then
+      required_utilz_version=""
+    fi
     if [[ -z "$required_utilz_version" || "$required_utilz_version" == "null" ]]; then
       continue
     fi
@@ -817,7 +880,7 @@ run_doctor() {
     info "No utilities installed yet"
   elif [[ ${#broken_utils[@]} -gt 0 ]] || [[ ${#incompatible_utils[@]} -gt 0 ]]; then
     if [[ ${#broken_utils[@]} -gt 0 ]]; then
-      warn "Found $util_count utilities, but ${#broken_utils[@]} have issues:"
+      warn "Found $util_count utilities, ${#broken_utils[@]} of them with issues:"
       for util in "${broken_utils[@]}"; do
         echo "    - $util"
       done
@@ -829,8 +892,16 @@ run_doctor() {
       done
     fi
     issues=$((issues + 1))
-  else
+  elif [[ ${#unreadable_utils[@]} -eq 0 ]]; then
     success "Found $util_count utilities, all properly configured"
+  fi
+  if [[ ${#unreadable_utils[@]} -gt 0 ]]; then
+    warn "utilz_version is not checked where a yaml cannot be read: ${#unreadable_utils[@]} of $util_count utilities, each counted by [6/7]:"
+    # The reason is asked here, in an argument, so its status is no statement's,
+    # as it would be the array append's above.
+    for util in "${unreadable_utils[@]}"; do
+      echo "    - $util ($util.yaml cannot be read: $(yaml_read_error "$(util_yaml_path "$util")"))"
+    done
   fi
   echo ""
 
@@ -857,7 +928,7 @@ run_doctor() {
     # missing requirement. A missing optional dependency is info, with the
     # yaml's own install line and purpose, and it never moves the verdict.
     while IFS= read -r name; do
-      yaml_file="$UTILZ_HOME/opt/$name/$name.yaml"
+      yaml_file=$(util_yaml_path "$name")
       if [[ ! -f "$yaml_file" ]]; then
         continue
       fi
@@ -1538,7 +1609,7 @@ emit_integration_tsv() {
   local name yaml_file fields status
 
   while IFS= read -r name; do
-    yaml_file="$UTILZ_HOME/opt/$name/$name.yaml"
+    yaml_file=$(util_yaml_path "$name")
     if [[ ! -f "$yaml_file" ]]; then continue; fi
 
     status=0
@@ -1586,7 +1657,7 @@ emacs_doctor() {
   # 0080), so a block this lists as invalid is one the manifest leaves out.
   local name yaml_file fields status
   while IFS= read -r name; do
-    yaml_file="$UTILZ_HOME/opt/$name/$name.yaml"
+    yaml_file=$(util_yaml_path "$name")
     if [[ ! -f "$yaml_file" ]]; then continue; fi
 
     status=0

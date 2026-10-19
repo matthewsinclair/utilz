@@ -298,17 +298,19 @@ This allows a single source of truth for the framework version (`/VERSION` file)
 
 ### Reading Metadata
 
-The framework reads utility metadata through `get_util_metadata()` -- it backs `utilz list`, `utilz doctor`, and the editor-integration manifest. It is a framework-internal helper, not a utility-facing API; utilities do not call it:
+The framework reads utility metadata through `get_util_metadata()` -- it backs `--version`, `utilz list`, doctor's `[5/7]`, and install's read of `install.prefix`. It is a framework-internal helper, not a utility-facing API; utilities do not call it. Its status is an answer (issue 0081): 0 prints the value, and yq's `null` for a key the yaml lacks; 1 means no yaml, no yq, or a `version_file` the tree does not carry or cannot open; 2 means the yaml cannot be read, and `yaml_read_error` says why:
 
 ```bash
 # Get utility version
-version=$(get_util_metadata "mdagg" ".version")
+status=0
+version=$(get_util_metadata "mdagg" ".version") || status=$?
+if [[ $status -eq 2 ]]; then
+  error "mdagg.yaml cannot be read: $(yaml_read_error "$(util_yaml_path mdagg)")"
+fi
 
-# Get description
-description=$(get_util_metadata "mdagg" ".description")
-
-# Get required framework version
-utilz_version=$(get_util_metadata "mdagg" ".utilz_version")
+# Get description, and the required framework version, each the same way
+description=$(get_util_metadata "mdagg" ".description") || status=$?
+utilz_version=$(get_util_metadata "mdagg" ".utilz_version") || status=$?
 ```
 
 ### Integration Manifest

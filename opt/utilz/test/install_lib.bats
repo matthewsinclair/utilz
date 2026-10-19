@@ -199,6 +199,21 @@ EOF
   assert_output "/opt/utilz"
 }
 
+@test "install_prefix_configured names a read it cannot make, and why, not a missing key (issue 0081)" {
+  # get_util_metadata read a yaml yq could not read as an absent field, so
+  # this refused with "install.prefix is not set", sending the reader after a
+  # key the file may well carry. install: written as a list parses, and no
+  # prefix can be read from it, so the refusal names the read, not the file.
+  local src="$BATS_TEST_TMPDIR/src-unreadable"
+  make_fake_src "$src"
+  printf 'name: utilz\ninstall:\n  - prefix: /opt/utilz\n' > "$src/opt/utilz/utilz.yaml"
+
+  run run_install_function "set -euo pipefail; install_prefix_configured '$src'"
+  assert_exit_code 1
+  assert_output_contains "install.prefix cannot be read from $src/opt/utilz/utilz.yaml: it parses, but yq could not read the part asked for"
+  refute_output_contains "install.prefix is not set"
+}
+
 # ============================================================================
 # THE MANIFEST (design.md D4, AC06, AC07)
 # ============================================================================

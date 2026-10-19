@@ -138,12 +138,22 @@ $INSTALL_PREZ_VERSION_FILE"
 # Only one of those is silent.
 install_prefix_configured() {
   local tree="$1"
-  local raw
+  local raw meta_status=0 yaml
+  yaml=$(util_yaml_path utilz "$tree")
 
   # The tree under examination is PASSED, not bound ambiently. AC05 requires the
   # read go through the one metadata reader like every other utility's yaml, and
-  # that reader now takes the root as its third argument.
-  raw=$(get_util_metadata utilz '.install.prefix' "$tree") || raw=""
+  # that reader now takes the root as its third argument. A read it cannot make
+  # is named as that, not as a key that is not set (issue 0081). The yaml may
+  # well parse: `install:` written as a list does, and no prefix can be read.
+  raw=$(get_util_metadata utilz '.install.prefix' "$tree") || meta_status=$?
+  if [[ $meta_status -eq 2 ]]; then
+    error "install.prefix cannot be read from $yaml: $(yaml_read_error "$yaml")"
+    return 1
+  fi
+  if [[ $meta_status -ne 0 ]]; then
+    raw=""
+  fi
 
   # yq prints the four-character string `null` for an absent key and
   # get_util_metadata ends `echo "$result"`, so it passes straight through.
@@ -151,7 +161,7 @@ install_prefix_configured() {
   # PASSES on unset, then publishes to a directory called ./null and reports
   # success. Measured 7 Sep against opt/utilz/utilz.yaml.
   if [[ -z "$raw" || "$raw" == "null" ]]; then
-    error "install.prefix is not set in $tree/opt/utilz/utilz.yaml"
+    error "install.prefix is not set in $yaml"
     return 1
   fi
 

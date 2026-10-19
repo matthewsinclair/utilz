@@ -420,15 +420,21 @@ require_command "jq" "jq is required for JSON parsing"
 
 ### Metadata Access
 
+`get_util_metadata`'s status is an answer (issue 0081): 1 means no yaml or no yq, and 2 means the yaml cannot be read, which `yaml_read_error` names. Take the status rather than masking it:
+
 ```bash
 # Get utility version
-version=$(get_util_metadata "logtool" ".version")
+status=0
+version=$(get_util_metadata "logtool" ".version") || status=$?
+if [[ $status -eq 2 ]]; then
+  error "logtool.yaml cannot be read: $(yaml_read_error "$(util_yaml_path logtool)")"
+fi
 
 # Get description
-description=$(get_util_metadata "logtool" ".description")
+description=$(get_util_metadata "logtool" ".description") || status=$?
 
 # Get framework requirement
-utilz_version=$(get_util_metadata "logtool" ".utilz_version")
+utilz_version=$(get_util_metadata "logtool" ".utilz_version") || status=$?
 ```
 
 ### Framework Functions

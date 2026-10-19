@@ -497,6 +497,128 @@ doctor_issue_count() {
     fail "Expected $((before + 1)) issues, one more than the $before before beta's yaml. Actual output:\n$output"
 }
 
+# ----------------------------------------------------------------------------
+# get_util_metadata on a yaml yq cannot read, and its four callers (issue 0081)
+# ----------------------------------------------------------------------------
+#
+# get_util_metadata runs inside $(...), where bash clears errexit, so a read of
+# a yaml yq could not read ended in `echo "$result"` with status 0, and every
+# caller took the yaml's fault for an absent field. It now answers that read
+# with status 2 and prints nothing, as it does for a yaml that is not one map,
+# and each caller names the cause in yaml_read_error's own words, which no yq
+# version moves. In each test alpha's yaml is good and beta's is the fault.
+
+@test "get_util_metadata answers a yaml it cannot read with status 2 and no output (issue 0081)" {
+  local home
+  home="$(make_fake_home)"
+  run_common_strict "$home" get_util_metadata alpha .nosuchkey
+  assert_success
+  assert_output "null"
+  printf 'name: beta\ndescription: [\n' > "$home/opt/beta/beta.yaml"
+
+  run_common_strict "$home" get_util_metadata beta .description
+  assert_exit_code 2
+  assert_output ""
+}
+
+@test "get_util_metadata answers a yaml that is not one map with status 2, and still reads a good map's empty value (issue 0081)" {
+  local home
+  home="$(make_fake_home)"
+  printf 'name: beta\ndescription: ""\n' > "$home/opt/beta/beta.yaml"
+  run_common_strict "$home" get_util_metadata beta .description
+  assert_success
+  assert_output ""
+  printf 'name: beta\ndescription: |\n  one\n  ---\n  two\n' > "$home/opt/beta/beta.yaml"
+  run_common_strict "$home" get_util_metadata beta .description
+  assert_success
+  assert_output "$(printf 'one\n---\ntwo')"
+
+  printf 'just a string\n' > "$home/opt/beta/beta.yaml"
+  run_common_strict "$home" get_util_metadata beta .description
+  assert_exit_code 2
+  assert_output ""
+  # yq answers two documents with the block text's very lines; only the yaml's
+  # type tells the two apart.
+  printf 'name: beta\ndescription: one\n---\nname: beta\ndescription: two\n' > "$home/opt/beta/beta.yaml"
+  run_common_strict "$home" get_util_metadata beta .description
+  assert_exit_code 2
+  assert_output ""
+}
+
+@test "get_util_metadata answers a version_file it cannot open with status 1, and cat says why (issue 0081)" {
+  local home
+  home="$(make_fake_home)"
+  run_common_strict "$home" get_util_metadata utilz .version
+  assert_success
+  assert_output "2.3.0"
+  chmod 000 "$home/VERSION"
+  [[ ! -r "$home/VERSION" ]] || skip "this user can read a file of mode 000, as root can"
+
+  # Called as every caller calls it, inside $(...) with its status taken, where
+  # bash clears errexit. Called bare under set -e, the failing cat ends the shell
+  # with status 1 on main's code too, and the test could not tell them apart.
+  run_common_strict "$home" eval 'v=$(get_util_metadata utilz .version) || exit $?; echo "$v"'
+  assert_exit_code 1
+  assert_output_contains "Permission denied"
+}
+
+@test "get_util_metadata answers a Cargo.toml version_file it cannot open with status 1, and awk names it (issue 0081)" {
+  local home
+  home="$(make_fake_home)"
+  printf 'name: beta\nversion_file: Cargo.toml\ndescription: Fake beta for tests\ndependencies: []\n' > "$home/opt/beta/beta.yaml"
+  printf '[package]\nname = "beta"\nversion = "1.4.0"\n' > "$home/opt/beta/Cargo.toml"
+  # Guarded as the test above calls it, for the same reason. awk's own words
+  # differ between macOS's awk, mawk and gawk, so the test asserts the file's name.
+  run_common_strict "$home" eval 'v=$(get_util_metadata beta .version) || exit $?; echo "$v"'
+  assert_success
+  assert_output "1.4.0"
+  chmod 000 "$home/opt/beta/Cargo.toml"
+  [[ ! -r "$home/opt/beta/Cargo.toml" ]] || skip "this user can read a file of mode 000, as root can"
+
+  run_common_strict "$home" eval 'v=$(get_util_metadata beta .version) || exit $?; echo "$v"'
+  assert_exit_code 1
+  assert_output_contains "$home/opt/beta/Cargo.toml"
+}
+
+@test "show_version names a yaml it cannot read, and why, not a missing version (issue 0081)" {
+  local home
+  home="$(make_fake_home)"
+  printf -- '- name: beta\n- version: 1.0.0\n' > "$home/opt/beta/beta.yaml"
+
+  run_common_strict "$home" show_version beta
+  assert_failure
+  assert_output "beta (version unknown - beta.yaml cannot be read: its top level is a list, not a map)"
+}
+
+@test "list_utilities gives a yaml it cannot read a row that points at doctor (issue 0081)" {
+  local home
+  home="$(make_fake_home)"
+  printf 'name: beta\ndescription: [\n' > "$home/opt/beta/beta.yaml"
+
+  run_common_strict "$home" list_utilities
+  assert_success
+  assert_output_contains "Fake alpha for tests"
+  assert_output_contains "(beta.yaml cannot be read; utilz doctor says why)"
+  refute_output_contains "No description available"
+}
+
+@test "run_doctor's [5/7] names a yaml it cannot read, and why, and [6/7] counts it once (issue 0081)" {
+  local home before
+  home="$(make_fake_home)"
+  run_common_strict "$home" run_doctor
+  assert_output_contains "all properly configured"
+  before=$(doctor_issue_count)
+  # Two documents, each a good map, which yq answers with both values.
+  printf 'name: beta\nutilz_version: "^2.0.0"\n---\nname: beta\nutilz_version: "^2.0.0"\n' > "$home/opt/beta/beta.yaml"
+
+  run_common_strict "$home" run_doctor
+  assert_output_contains "    - beta (beta.yaml cannot be read: it holds more than one document)"
+  refute_output_contains "all properly configured"
+  refute_output_contains "Version incompatibilities"
+  [[ "$(doctor_issue_count)" -eq $((before + 1)) ]] ||
+    fail "Expected $((before + 1)) issues, the one fault counted once, by [6/7]. Actual output:\n$output"
+}
+
 # ============================================================================
 # ST0009 WP-01 -- each_utility(): THE walker of bin/
 # ============================================================================
@@ -988,7 +1110,9 @@ VERSION_LITERAL='"?v?[0-9]'
     util=$(basename "$yaml" .yaml)
     [ -d "$UTILZ_HOME/opt/$util" ] || continue
     checked=$((checked + 1))
-    resolved=$(bash -c "source '$UTILZ_HOME/opt/utilz/lib/common.sh'; get_util_metadata '$util' '.version'" 2>/dev/null)
+    # A yaml that cannot be read resolves no version either: it is named with
+    # the rest rather than ending the test at this read (issue 0081).
+    resolved=$(bash -c "source '$UTILZ_HOME/opt/utilz/lib/common.sh'; get_util_metadata '$util' '.version'" 2>/dev/null) || resolved=""
     case "$resolved" in
       ""|null) missing="$missing $util" ;;
     esac
