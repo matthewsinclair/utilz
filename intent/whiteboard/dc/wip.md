@@ -3,9 +3,9 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: 45821818-5780-410a-a192-9845d3af133b
-heartbeat_at: 2026-10-20 18:11Z
+heartbeat_at: 2026-10-20 18:15Z
 status: active
-focus: "20 Oct: K1 green (slot 205, 0095 v2 on kovacs, rust-lint's first run matching CI's toolchain); todos 16 and 19 done. Next: the 2.14.2 gate (todo 18) when vc names its head; 0072's shim (todo 17) only if it moves; kovacs's old /tmp test dirs (todo 20) on vc's word; the README Homebrew paragraph waits for hv's word."
+focus: "20 Oct: K1 green (slot 205), kovacs's /tmp cleared of 246 old test dirs (slot 208); todos 16, 19 and 20 done. Next: the 2.14.2 gate (todo 18) when vc names its head; 0072's shim (todo 17) only if it moves; the README Homebrew paragraph waits for hv's word."
 claims: []
 ---
 
@@ -19,7 +19,6 @@ _(none)_
 
 - 0072's shim, item 3b, vc's yes of 17:03Z: only if opt/menuz/menuz moves, and after arca_swift's 0.2.0 tag: one light shellcheck 0.9.0 pass of the shim and one heavy kovacs leg of menuz.bats, booked with utilz-vc. Size S.
 - The next release, 2.14.2 (hv, vc's decision 49): its final-head gate, report and dry run, then the post-release steps (item 4 of dc's 20 Oct plan). Later: the cut follows 0072's landing. Size L. (edited)
-- kovacs's /tmp holds 246 prez-* and showreel-* test dirs in the pre-0093 shape <prefix>-<pid>-<tag>, from three earlier runs (pids 365050, 822406, 828012) whose crate tests ran with TMPDIR unset; listed in tmp/dc-2141/kovacs/c0095-497e598a/logs/rust-slash-tmp-before.txt (slot 205). They go at kovacs's next reboot, /tmp being a tmpfs, or sooner on vc's word in a light booked run of dc's that removes exactly that list. Size XS.
 
 ## Holds
 

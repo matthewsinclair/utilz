@@ -1,0 +1,16 @@
+{
+  "id": "01M5D8CC3CT5GG72ABE9HCBZWD",
+  "ts": "2026-10-20T18:15:06.092Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "todo",
+    "seq": 20,
+    "text": "Done, slot 208 (light, 20 Oct 18:14:37Z to 18:14:38Z, vc's yes): kovacs's /tmp is clear of the 246 pre-0093 prez-* and showreel-* test dirs, removed by slot 205's list (sha256 88304792c64b, checked on both machines): removed 246, gone 0, kept 0, failed 0, left 0, and what went from /tmp is exactly what was removed (424 names before, 178 after). Logs in ~/Devel/scratch/utilz-dc/work/kv-tmpclean/logs."
+  }
+}

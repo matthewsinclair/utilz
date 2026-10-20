@@ -5,9 +5,9 @@
     "name": "DevX Claude",
     "role": "devx",
     "session_id": "45821818-5780-410a-a192-9845d3af133b",
-    "heartbeat_at": "2026-10-20T18:11:38.450Z",
+    "heartbeat_at": "2026-10-20T18:15:06.466Z",
     "status": "active",
-    "focus": "20 Oct: K1 green (slot 205, 0095 v2 on kovacs, rust-lint's first run matching CI's toolchain); todos 16 and 19 done. Next: the 2.14.2 gate (todo 18) when vc names its head; 0072's shim (todo 17) only if it moves; kovacs's old /tmp test dirs (todo 20) on vc's word; the README Homebrew paragraph waits for hv's word.",
+    "focus": "20 Oct: K1 green (slot 205), kovacs's /tmp cleared of 246 old test dirs (slot 208); todos 16, 19 and 20 done. Next: the 2.14.2 gate (todo 18) when vc names its head; 0072's shim (todo 17) only if it moves; the README Homebrew paragraph waits for hv's word.",
     "claims": [],
     "recorded_at": "2026-10-16T04:57:46.520Z",
     "migrated_at": "2026-10-16T04:57:46.520Z"
@@ -547,9 +547,11 @@
       "node": "dc",
       "kind": "todo",
       "seq": 20,
-      "text": "kovacs's /tmp holds 246 prez-* and showreel-* test dirs in the pre-0093 shape <prefix>-<pid>-<tag>, from three earlier runs (pids 365050, 822406, 828012) whose crate tests ran with TMPDIR unset; listed in tmp/dc-2141/kovacs/c0095-497e598a/logs/rust-slash-tmp-before.txt (slot 205). They go at kovacs's next reboot, /tmp being a tmpfs, or sooner on vc's word in a light booked run of dc's that removes exactly that list. Size XS.",
-      "state": "live",
-      "recorded_at": "2026-10-20T18:11:38.306Z"
+      "text": "Done, slot 208 (light, 20 Oct 18:14:37Z to 18:14:38Z, vc's yes): kovacs's /tmp is clear of the 246 pre-0093 prez-* and showreel-* test dirs, removed by slot 205's list (sha256 88304792c64b, checked on both machines): removed 246, gone 0, kept 0, failed 0, left 0, and what went from /tmp is exactly what was removed (424 names before, 178 after). Logs in ~/Devel/scratch/utilz-dc/work/kv-tmpclean/logs.",
+      "state": "archived",
+      "archived_at": "2026-10-20T18:15:06.314Z",
+      "recorded_at": "2026-10-20T18:11:38.306Z",
+      "edited_at": "2026-10-20T18:15:06.092Z"
     }
   ],
   "messages": [

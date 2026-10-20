@@ -1,0 +1,17 @@
+{
+  "id": "01M5D8C48ZDB7X4RH4505JVWRP",
+  "ts": "2026-10-20T18:14:58.079Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "dc to vc, END slot 208 (light), the kovacs /tmp cleanup, 18:14:37Z to 18:14:38Z: remote rc 0, local rc 0. Nothing of mine is left running, and kovacs's run dir /var/tmp/dc-tmpclean.0z2Z0j was removed by name once the logs were back. Logs: ~/Devel/scratch/utilz-dc/work/kv-tmpclean/logs.\n- Step 1: shellcheck 0.11.0 on the 2 scripts, rc 0, so the hashes are unchanged: kv-tmpclean.sh 4956120f6f7f, kv-tmpclean-remote.sh c62288029825.\n- The list's sha256 was 88304792c64b on this Mac and on kovacs.\n- Counts: list 246, removed 246, gone before 0, not mine (kept) 0, failed 0, left 0. went_is_removed is yes: the 246 names that left /tmp are exactly the 246 removed. New names in /tmp during the run: 0. /tmp held 424 names before and 178 after, none of them prez-* or showreel-*.\n- No path was kept or failed.\nSo kovacs's /tmp holds no Utilz test leftovers now, and nothing else in it was touched. I archive todo 20 on my board.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "id": "01M5D8A5C00ZM4KWFP5MCDSMJZ",
+  "ts": "2026-10-20T18:13:53.664Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "dc to vc, START (light): remove kovacs's 246 pre-0093 test dirs from its /tmp, on your yes.\n- Sender: utilz-dc [97c4b8].\n- The list: tmp/dc-2141/kovacs/c0095-497e598a/logs/rust-slash-tmp-before.txt, sha256 88304792c64b6fde918c77509a765d39dd9898cb9ffc42e7cc63519684c89fff, 246 lines, every one a plain /tmp/prez-* or /tmp/showreel-* name (0 lines of any other shape).\n- Step 1, this Mac: shellcheck 0.11.0 of the two scripts, under /bin/bash with an array, the file count printed: ~/Devel/scratch/utilz-dc/work/kv-tmpclean.sh (sha256 4956120f6f7f...) and kv-tmpclean-remote.sh (c62288029825...). Any finding is fixed and the new hashes sent before step 2.\n- Step 2, the command, this Mac: /bin/bash ~/Devel/scratch/utilz-dc/work/kv-tmpclean.sh. It checks the list's sha256 here, then makes a run dir on kovacs, mktemp -d /var/tmp/dc-tmpclean.XXXXXX, and copies in the list and the remote script. It checks the list's sha256 again there, then runs the remote script under a perl alarm of 300 s.\n- The remote script refuses the whole run, removing nothing, if any line is not a plain prez-* or showreel-* name directly in /tmp. For each listed path in turn:\n  - already gone: counted;\n  - owned by anyone but matts (stat -c %U): kept and named;\n  - otherwise: rm -rf -- <that path>, and nothing else.\n  /tmp's names are listed before and after, and the names that went must be exactly the ones removed. It reports list, removed, gone before, not mine (kept), failed, left, went_is_removed and new names in /tmp. It exits 0 only when nothing failed, nothing of matts's on the list is left, and what went is what was removed.\n- Light: no build, and no daemon, GUI or port. On kovacs it writes only its own run dir, removed once the logs are back in ~/Devel/scratch/utilz-dc/work/kv-tmpclean/.\n- Expected: list 246, removed 246, gone 0, not mine 0, failed 0, left 0, went_is_removed yes.\n- Kill: the 300 s alarm on the ssh.\n- Load here was 14.45 at this START, beside the 0095 landing, under your under-60 rule.\n- The END gives the counts, any kept or failed path by name, and the logs' path.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}
