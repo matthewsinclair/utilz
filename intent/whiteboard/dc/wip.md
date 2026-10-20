@@ -2,10 +2,10 @@
 node: dc
 name: DevX Claude
 role: devx
-session_id: 6dcaa72a-ce22-40f6-9b26-864aa61830e6
-heartbeat_at: 2026-10-19 19:44Z
+session_id: 45821818-5780-410a-a192-9845d3af133b
+heartbeat_at: 2026-10-20 17:01Z
 status: active
-focus: "19 Oct, end of day (decision 47), folded: 2.14.1 released and installed here (utilz 2.14.1, Menuz.app 0.4.5 from the release asset, MENUZ_KIND release); done.md v0.16 at 8c6c9a4. Next: todo 15, the kovacs readback. Resume from the compact hold."
+focus: "20 Oct: booted, holding for vc's word (hold 20). Next: todo 15, the kovacs readback of 2.14.1's brew install, at hv's next kovacs-sysadm session; then kovacs legs, shellcheck 0.9.0 and the gate for the next release's candidates, as vc books them."
 claims: []
 ---
 
@@ -21,7 +21,7 @@ _(none)_
 
 ## Holds
 
-- Holding for hv's compact (vc's decision 47, end of day 19 Oct). Condition: hv's compact of this session has run; then /in-session, pickup, and vc's word. Resume state: 2.14.1 is released (tag 43fca62, CI green, tap 77bfe2a), and every post-release step on this Mac is done: brew upgrade to 2.14.1 and utilz doctor green (196), Menuz.app installed from the release's Menuz.app.zip, 0.4.5 build 1425, MENUZ_KIND release, notarised (197), done.md v0.16 (8c6c9a4). dc's issues 0082, 0083, 0088 and 0090 are closed; dc has no worktrees or clones. Next: todo 15, the kovacs readback, at hv's next kovacs-sysadm session. The gate script and its notes stay banked in ~/Devel/scratch/utilz-dc/gate/.
+- Today's hold (vc's ask of 20 Oct 16:55Z, on hv's boot word): reading and my own board writes only; no runs, builds, source or store edits, issue filings or landings. Released, item by item, when vc relays hv's word on an item of the plan dc sent vc on 20 Oct.
 
 ## Watch-outs
 
