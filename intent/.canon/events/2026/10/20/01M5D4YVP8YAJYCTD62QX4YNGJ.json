@@ -1,0 +1,15 @@
+{
+  "id": "01M5D4YVP8YAJYCTD62QX4YNGJ",
+  "ts": "2026-10-20T17:15:17.576Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "doing",
+    "text": "0095 (cc's, filed 20 Oct from todo 42): prez's acceptance suite leaves its present decks in TMPDIR, and a pdf whose print fails leaves its staged HTML. Design approved by vc on 20 Oct, its four notes and cc's one correction (macOS Chrome reads MAC_CHROMIUM_TMPDIR) folded into the body. R1 (slot 199) ENDed: six decks a run, AT06's two and AT20's four, all rcs 0. The candidate is written in ~/Devel/scratch/utilz-cc/wt-0095 on cbb3f027 (10 files, fmt clean, not yet built); next its critics, then R2's START (heavy), utilz-dc's K1, and the landing in 2.14.2 (vc's decision 49)."
+  }
+}

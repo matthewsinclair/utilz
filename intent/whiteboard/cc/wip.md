@@ -2,26 +2,26 @@
 node: cc
 name: Control Claude
 role: control
-session_id: 737d3449-c07c-46aa-b88e-17a3524f8b46
-heartbeat_at: 2026-10-19 19:44Z
-status: paused
-focus: "19 Oct, closed out: 2.14.1 released (43fca62), tap pushed (77bfe2a), brew install proven by dc's slot 196; every cc issue landed and closed; no worktree left. Tomorrow: 0072 is ic's, behind hv's arca_swift 0.2.0 steps; cc has nothing open."
-claims: [ISSUE:0080, ISSUE:0081, ISSUE:0084, ISSUE:0085, ISSUE:0087]
+session_id: 9c567467-c0fd-43d8-bf41-98005d410e1e
+heartbeat_at: 2026-10-20 17:37Z
+status: active
+focus: "20 Oct: 0095 (prez's TMPDIR leftovers) designed and approved, R1 ENDed as predicted; the candidate is in wt-0095, next R2 (heavy) through utilz-vc, then K1 and the landing in 2.14.2."
+claims: [ISSUE:0095]
 ---
 
 # Control Claude (cc)
 
 ## DOING
 
-_(none)_
+- 0095 (cc's, filed 20 Oct from todo 42): prez's acceptance suite leaves its present decks in TMPDIR, and a pdf whose print fails leaves its staged HTML. Design approved by vc on 20 Oct, its four notes and cc's one correction (macOS Chrome reads MAC_CHROMIUM_TMPDIR) folded into the body. R1 (slot 199) ENDed: six decks a run, AT06's two and AT20's four, all rcs 0. The candidate is written in ~/Devel/scratch/utilz-cc/wt-0095 on cbb3f027 (10 files, fmt clean, not yet built); next its critics, then R2's START (heavy), utilz-dc's K1, and the landing in 2.14.2 (vc's decision 49). (edited)
 
 ## TODO
 
-- New leak to file and fix at the resume (cc's, found 19 Oct closing out, on hv's "Nix TMPDIR's detritus"): 54 prez-<pid>-<stamp>.html files in TMPDIR from prez's own deck.rs scratch() (deck.rs:384), not its tests, dated 18:47Z during the gate and AT runs, so a path of prez's (pdf or present, under the ATs or bats) leaves its scratch html behind. Removed with the 740 old test dirs. Design first, through vc.
+_(none)_
 
 ## Holds
 
-- End of 19 Oct (vc's decision 47). Released by hv's next session and vc's word. Resume state: nothing of cc's open. 2.14.1 is released at 43fca62, the tap pushed at 77bfe2a, and the brew install proven by dc's slot 196 (doctor all passed). Every cc issue is landed and closed (0080, 0081, 0083's prez part, 0084, 0085, 0087, 0089, 0092, 0093). No worktree is left; the patches are banked under ~/Devel/scratch/utilz-cc/. TMPDIR holds 794 old prez/showreel/artifact test dirs from ten runs before 0093 landed (66 per full run), from cc's and peers' runs, for hv to rule on. Next in Utilz: 0072, ic's, behind hv's arca_swift 0.2.0 steps (vc's todo 48).
+_(none)_
 
 ## Watch-outs
 

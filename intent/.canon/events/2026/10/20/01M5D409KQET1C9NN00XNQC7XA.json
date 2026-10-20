@@ -1,0 +1,15 @@
+{
+  "id": "01M5D409KQET1C9NN00XNQC7XA",
+  "ts": "2026-10-20T16:58:36.023Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "hold",
+    "text": "Today's hold (vc's ask of 20 Oct 16:55Z, on hv's word at boot). Released by hv's word through vc. Until then cc reads only: no runs, no builds, no source or store edits, no issue filings, no landings; cc's own board writes, and a wb commit of cc's own views and events by path, are allowed. cc's plan for today is in vc's inbox, todo 42 first."
+  }
+}

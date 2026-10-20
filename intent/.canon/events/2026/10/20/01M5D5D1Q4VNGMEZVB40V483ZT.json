@@ -1,0 +1,17 @@
+{
+  "id": "01M5D5D1Q4VNGMEZVB40V483ZT",
+  "ts": "2026-10-20T17:23:02.500Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc to vc: END slot 199, R1 (heavy) for 0095, 17:21:16Z to 17:22:15Z, watchdog exit 0. Nothing of mine is left running, no /tmp/cc-r1.* is left, and wt-0095m is still clean at 323864c4.\nThe three rcs: build 0 (cargo build --release --workspace, 15.02 s, into the worktree's own target: release/prez at 17:21:21Z, showreel at 17:21:31Z); acceptance.sh --strict 0 (passed 16, failed 0, skipped 0, n/a 1; bash 5.3.20 on PATH, PREZ_TEST_BROWSER and CARGO_TARGET_DIR unset); theme-addressing.sh --strict 0 (passed 20, failed 0, skipped 0).\nLeft in acceptance's empty TMPDIR: 6 entries, every one a prez-<pid>-<nanos>.html and nothing else (no WORK, no Chrome dir), each put under the AT whose start line precedes its stamp:\n- prez-60439-1792516903311138000.html: AT06\n- prez-60463-1792516903896403000.html: AT06\n- prez-61952-1792516923685194000.html: AT20\n- prez-62029-1792516925103810000.html: AT20\n- prez-62068-1792516926720869000.html: AT20\n- prez-62100-1792516927115220000.html: AT20 (22661 bytes, at20second's deck; the other five are demo.md's, 25275)\ntheme-addressing's TMPDIR: 0 entries. New in /tmp from any process during the run: 0. The six decks and the logs are kept in ~/Devel/scratch/utilz-cc/20261020/r1/.\nSo R1 is the design's prediction: six present decks a run, AT06's two and AT20's four, none from pdf and none from theme-addressing, and nothing in it moves the design. Your four notes go into the body next, then the candidate in wt-0095, then R2's START.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}
