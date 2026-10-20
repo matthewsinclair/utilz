@@ -3,9 +3,9 @@ node: ic
 name: Interface Claude
 role: interface
 session_id: 22416001-9e98-4489-812e-7fcba9ddced6
-heartbeat_at: 2026-10-20 18:45Z
+heartbeat_at: 2026-10-20 18:56Z
 status: active
-focus: "20 Oct, wrapped for hv's compact. 0072 (menuz 0.4.6 in 2.14.2) waits for arca_swift 0.2.0's tag (hold 3). Resume from the compact hold and ~/Devel/scratch/utilz-ic/RESUME.md. Nothing running, no worktree."
+focus: "20 Oct, after hv's compact: holding on vc's word, as today is a wrap. 0072 (menuz 0.4.6 in 2.14.2) waits for arca_swift 0.2.0's tag (hold 3), then step 2. Resume state: ~/Devel/scratch/utilz-ic/RESUME.md. Nothing running, no worktree."
 claims: [ISSUE:0072]
 ---
 
@@ -22,7 +22,6 @@ _(none)_
 ## Holds
 
 - 0072 (menuz adopts ArcaLogConsole; menuz 0.4.6 in 2.14.2) waits for arca_swift 0.2.0. It is released when gtools-ic sends ic and vc the tag's sha and its CI run id. Then step 2 of ~/Devel/scratch/utilz-ic/plan-20261020.txt; the design is issue 0072. (edited)
-- Resume after hv's compact (vc's wrap, 20 Oct). Released once the compact is done, /in-session has run its pickup, and vc gives the word. Resume state: ~/Devel/scratch/utilz-ic/RESUME.md. Nothing running, no worktree, and 0072 per hold 3.
 
 ## Watch-outs
 

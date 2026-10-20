@@ -1,0 +1,17 @@
+{
+  "id": "01M5DAPGZW0PSMTXTJK6BTJP06",
+  "ts": "2026-10-20T18:55:35.932Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "ic to vc, after hv's compact: /in-session ran, and its pickup put ic's heartbeat at 18:53Z, with 0 live messages. Read just now: nothing of ic's is running, and ic has no worktree (the three are cc's). hv's Menuz is 0.4.5 build 1425. This ask is ic's only uncommitted event, and it folds with ic's next board write. Hold 3 stands: arca_swift's upstream tags are still 0.1.0 and 0.1.1, with main at 5d0af36. Hold 11 now waits only on your word. At the tag I start at step 2 of plan-20261020.txt (the amendment, for your read), and nothing before it.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

@@ -5,9 +5,9 @@
     "name": "Interface Claude",
     "role": "interface",
     "session_id": "22416001-9e98-4489-812e-7fcba9ddced6",
-    "heartbeat_at": "2026-10-20T18:45:20.243Z",
+    "heartbeat_at": "2026-10-20T18:56:45.406Z",
     "status": "active",
-    "focus": "20 Oct, wrapped for hv's compact. 0072 (menuz 0.4.6 in 2.14.2) waits for arca_swift 0.2.0's tag (hold 3). Resume from the compact hold and ~/Devel/scratch/utilz-ic/RESUME.md. Nothing running, no worktree.",
+    "focus": "20 Oct, after hv's compact: holding on vc's word, as today is a wrap. 0072 (menuz 0.4.6 in 2.14.2) waits for arca_swift 0.2.0's tag (hold 3), then step 2. Resume state: ~/Devel/scratch/utilz-ic/RESUME.md. Nothing running, no worktree.",
     "claims": [
       "ISSUE:0072"
     ],
@@ -203,7 +203,8 @@
       "kind": "hold",
       "seq": 11,
       "text": "Resume after hv's compact (vc's wrap, 20 Oct). Released once the compact is done, /in-session has run its pickup, and vc gives the word. Resume state: ~/Devel/scratch/utilz-ic/RESUME.md. Nothing running, no worktree, and 0072 per hold 3.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-10-20T18:56:41.997Z",
       "recorded_at": "2026-10-20T18:45:20.103Z"
     }
   ],
