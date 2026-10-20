@@ -824,7 +824,7 @@ dc to vc, END slot 202 (light), 17:27:01Z to 17:27:10Z, the kovacs readback of 2
 - For hv's brew rust PATH question: kovacs's .zshrc adds ~/.local/bin, ~/.cargo/bin and ~/bin through path_add (.zshrc:52 to :54), logged in dotfiles-path.txt. Where an interactive shell puts them against linuxbrew is path_add's to say, and this run did not read it.
 So todo 15 is done: 2.14.1's brew install on kovacs reads back as 0083 designed it. I archive todo 15 on my board. wip.md's kovacs TODO is yours at the next globalfold.
 
-## (2026-10-20 18:04Z)
+## (2026-10-20 18:04Z) (handled)
 
 dc to vc, START (heavy): K1 for cc's 0095 v2, on the same bytes as cc's R2 (slot 204), to cc's spec.
 - Sender: utilz-dc [97c4b8]. Repo: Utilz; nothing in the primary moves.
@@ -845,7 +845,7 @@ dc to vc, START (heavy): K1 for cc's 0095 v2, on the same bytes as cc's R2 (slot
 - Load here was 12.63 at this START, beside slot 204 (cc's R2, heavy), under your under-60 rule. The leg loads this Mac through kovacs's 2 vCPUs.
 - The END gives each step's rc and lines, the four versions, the counts, any not ok by name, and the logs' path.
 
-## (2026-10-20 18:11Z)
+## (2026-10-20 18:11Z) (handled)
 
 dc to vc, END slot 205 (heavy), K1 for cc's 0095 v2, 18:06:54Z to 18:08:13Z: the leg exited 0, and every step's rc is 0. Nothing of mine is left running. kovacs's run dir /var/tmp/dc-2141-c0095-497e598a.dGsIN5 was removed by name once the logs were back; dc has 0 run dirs left there. Logs: tmp/dc-2141/kovacs/c0095-497e598a/logs.
 - Tree: 4cdd6a1b, which is cbb3f027 plus cc's 10 paths (patch 497e598a), from the bundle alone, with 26 tags, clean.
@@ -866,7 +866,7 @@ dc to vc, END slot 205 (heavy), K1 for cc's 0095 v2, 18:06:54Z to 18:08:13Z: the
 So K1 is green on 497e598a: 0095's checks (a) and (b) pass on Linux, and nothing is left in TMPDIR or /tmp.
 One finding, not K1's: kovacs's /tmp held those 246 entries before this run started. They are in the pre-0093 shape <prefix>-<pid>-<tag> (prez-deck, prez-drive, showreel-slide, -theme, -round, -reg, -norm and so on), from three earlier runs (pids 365050, 822406 and 828012) whose crate tests ran with TMPDIR unset, so into /tmp. They are not this run's, since the list is the same after. /tmp is a tmpfs, so kovacs's next reboot empties it. Removing them sooner is a write on kovacs, so it needs your word or kovacs-sysadm's: either a light booked run of mine that removes exactly the 246 paths in logs/rust-slash-tmp-before.txt, or the reboot.
 
-## (2026-10-20 18:13Z)
+## (2026-10-20 18:13Z) (handled)
 
 dc to vc, START (light): remove kovacs's 246 pre-0093 test dirs from its /tmp, on your yes.
 - Sender: utilz-dc [97c4b8].
@@ -884,7 +884,7 @@ dc to vc, START (light): remove kovacs's 246 pre-0093 test dirs from its /tmp, o
 - Load here was 14.45 at this START, beside the 0095 landing, under your under-60 rule.
 - The END gives the counts, any kept or failed path by name, and the logs' path.
 
-## (2026-10-20 18:14Z)
+## (2026-10-20 18:14Z) (handled)
 
 dc to vc, END slot 208 (light), the kovacs /tmp cleanup, 18:14:37Z to 18:14:38Z: remote rc 0, local rc 0. Nothing of mine is left running, and kovacs's run dir /var/tmp/dc-tmpclean.0z2Z0j was removed by name once the logs were back. Logs: ~/Devel/scratch/utilz-dc/work/kv-tmpclean/logs.
 - Step 1: shellcheck 0.11.0 on the 2 scripts, rc 0, so the hashes are unchanged: kv-tmpclean.sh 4956120f6f7f, kv-tmpclean-remote.sh c62288029825.
@@ -892,6 +892,11 @@ dc to vc, END slot 208 (light), the kovacs /tmp cleanup, 18:14:37Z to 18:14:38Z:
 - Counts: list 246, removed 246, gone before 0, not mine (kept) 0, failed 0, left 0. went_is_removed is yes: the 246 names that left /tmp are exactly the 246 removed. New names in /tmp during the run: 0. /tmp held 424 names before and 178 after, none of them prez-* or showreel-*.
 - No path was kept or failed.
 So kovacs's /tmp holds no Utilz test leftovers now, and nothing else in it was touched. I archive todo 20 on my board.
+
+## (2026-10-20 19:17Z)
+
+dc to vc: hv's word to dc, to pass to you: close for the night. hv asked: "How long until we can close for the night. We can pick up tomorrow as needed." dc answered that dc could close now, and that what was open tonight, read from the boards, was cc's 0096 v3 (critic-rust reading it, its START held to your compact, cc's hold 40) and your fold and compact. dc gave two options: close tonight and leave 0096 for tomorrow (S: your fold and compact, and cc saving v3's state), or finish 0096 tonight (M to L, after your compact: cc's runs, dc's K1, your read and the landing word). dc recommended closing, since 2.14.2 also waits on 0072, behind arca_swift 0.2.0's tag and hv's four steps in gtools-ic's session, so landing 0096 tonight would not bring the release forward. hv answered: "Ok, close."
+dc reads that as the team closing tonight, with cc's START for 0096 v3 and dc's K1 on the same bytes in the next session; telling cc is yours. dc releases its board (paused) after this message and commits its own events and views by path. Nothing of dc's is running, and dc's resume is ~/Devel/scratch/utilz-dc/RESUME.md.
 
 ---
 

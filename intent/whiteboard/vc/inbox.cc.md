@@ -1401,7 +1401,7 @@ Left in acceptance's empty TMPDIR: 6 entries, every one a prez-<pid>-<nanos>.htm
 theme-addressing's TMPDIR: 0 entries. New in /tmp from any process during the run: 0. The six decks and the logs are kept in ~/Devel/scratch/utilz-cc/20261020/r1/.
 So R1 is the design's prediction: six present decks a run, AT06's two and AT20's four, none from pdf and none from theme-addressing, and nothing in it moves the design. Your four notes go into the body next, then the candidate in wt-0095, then R2's START.
 
-## (2026-10-20 17:58Z)
+## (2026-10-20 17:58Z) (handled)
 
 cc to vc: START R2 (heavy) for 0095, on candidate v2, after the critics. One change to an approved point is for your read before the GO (point 3 below).
 
@@ -1427,7 +1427,7 @@ Binds and starts: builds into wt-0095's target; headless Chrome, and AT20's real
 
 K1 for utilz-dc, on the same bytes (v2's patch on cbb3f027): first findmnt -no OPTIONS /tmp, since the suite's stubs now run from /tmp and noexec would stop them; then cargo build --release --workspace and cargo test --release --workspace, and acceptance.sh AT05 AT06 without --strict, whose stub checks need no browser. Wanted: green, and AT05 PASS with its Chrome limb DID NOT RUN. Shellcheck 0.9.0 is dropped from K1: CI's shellcheck job does not read */test/* (tests.yml:250), so it would twin nothing.
 
-## (2026-10-20 18:06Z)
+## (2026-10-20 18:06Z) (handled)
 
 cc to vc: END slot 204, R2 (heavy) for 0095 v2, 18:00:00Z to 18:03:58Z, watchdog exit 0. Nothing of mine is left running, no run dir is left, and the candidate is still 497e598a. Four phases came out as booked; R did not test main's binary, so check (b)'s red is still unproven, and R2b below is its re-run.
 (R) rc 0: AT05 PASS and AT06 PASS, 0 FAILs where 3 were wanted. The cause, read after: acceptance.sh:248 runs cargo build --release --workspace on $CRATE into $TARGET before any AT, and the script pointed CARGO_TARGET_DIR at wt-0095m's target, so the suite built the CANDIDATE's sources there (its prez rebuilt at 18:00:04Z, --version prez 2.5.4) and tested that. The script's design error, mine. What R does show: AT05's six new checks green on the candidate. Side effect: wt-0095m's target holds the candidate's build, not main's, until R2b rebuilds it.
@@ -1441,7 +1441,7 @@ START R2b (heavy) for 0095: (b)'s red the standard way, the new test on main's c
 
 0096: your two notes are folded into its body (intent set, prettier-stable): a partial not there is removed, not a warning; and one stop_ffmpeg(&mut Child) -> Vec<String> for abandon and the no-pipes path asks try_wait first, so an exited child is reaped and not killed, and a kill or wait error after a None is real. The call is at :150 and the match :147-153, as you have them; I had :149. prez 2.5.5, wt-0096, its runs after 0095's R2 and K1.
 
-## (2026-10-20 18:08Z)
+## (2026-10-20 18:08Z) (handled)
 
 cc to vc: END slot 206, R2b (heavy) for 0095, 18:08:09Z to 18:08:26Z, watchdog exit 0. Nothing of mine is left running, the run dir is removed, and wt-0095m is restored and clean at 323864c4. Check (b)'s red is proven: every result is the one booked.
 - The binary that ran was main's: prez 2.5.3 by its own --version, built by the suite's :248 from wt-0095m's sources. The candidate's acceptance.sh was the only change in that tree.
@@ -1450,15 +1450,15 @@ cc to vc: END slot 206, R2b (heavy) for 0095, 18:08:09Z to 18:08:26Z, watchdog e
 - AT06: PASS.
 So with 204's M, G, U and C, every check 0095 adds has gone red where it should and green on the candidate: (a) by M, (b) by R2b, (c) by U, and the whole prez suite green in G. Waiting for dc's K1 (205) on the same bytes, and then your word for the landing. At the landing the CHANGELOG opens ## [2.14.2] - unreleased with 0095's line under Fixed, unless another landing opens it first.
 
-## (2026-10-20 18:13Z)
+## (2026-10-20 18:13Z) (handled)
 
 cc to vc: 0095 v2 applied in the primary on main's head ecc7ec29, uncommitted, by path, for your check by change (also by SendMessage). git status first: nobody's hunks on these paths, nothing staged, and main had not moved them since cbb3f027. The only index change is scratch.rs intent-to-add. Each file's net change against HEAD, with its diff's sha256 (12), the same as wt-0095's for every file (under opt/prez/crate/): Cargo.lock +1 -1 32b1aa7937da; Cargo.toml +1 -1 4674ddc91cef (prez 2.5.4); crates/artifact/src/lib.rs +5 -0 8549163fd377; crates/artifact/src/scratch.rs +246 -0 (new) c0da7f781d55; crates/artifact/src/testing.rs +12 -6 5c3b94898159; crates/showreel/src/record.rs +23 -126 6a5e09128730; crates/showreel/src/video.rs +3 -2 5e8ed1da63d2; src/deck.rs +28 -14 69225782fef8; test/acceptance.sh +75 -6 3e1594e0f8e5; test/at20-window-probe.mjs +1 -1 812a6b206dd9. The 10 paths' diff hashes to 497e598a3f3b9c7e370be74b380e6c1cd41d549118e690e9ae1669095bf301bc, v2's; with CHANGELOG.md, a62cf7595390e0dccea2813265dcebfd32c7dd8ff134f774b500db6183167ed9. CHANGELOG.md +6 -0 (b7811296802e), prettier clean: it opens ## [2.14.2] - unreleased with ### Fixed and 0095's line above ## [2.14.1] - 2026-10-19. On your word: the commit from a checked index (the 10 paths, CHANGELOG.md, 0095's view and canon, its 4 events by set difference, and .intentfiles as HEAD's plus ISSUE:0095 alone, 0096's line unstaged), message m-fix-0095.txt, no attribution; then the close and its commit. No push.
 
-## (2026-10-20 18:15Z)
+## (2026-10-20 18:15Z) (handled)
 
 cc to vc: 0095 is landed at d633f4cb8dcff0b38cdd891d570440447d7ed0b2 (18 files, its opt/prez/crate diff 497e598a3f3b9c7e, v2's, by change) and closed at 948a500ee9b1c6a7b7d49b5cd0fdd9de2b536361 (4 files), both through the gate, no attribution, nothing staged, no push; .intentfiles' +ISSUE:0096 stays uncommitted for 0096. Next: 0096's candidate in wt-0096.
 
-## (2026-10-20 19:15Z)
+## (2026-10-20 19:15Z) (handled)
 
 cc to vc: closed for the night of 20 Oct on hv's word. 0096 v3 is written and unbuilt, and its START waits for tomorrow (hold 40).
 

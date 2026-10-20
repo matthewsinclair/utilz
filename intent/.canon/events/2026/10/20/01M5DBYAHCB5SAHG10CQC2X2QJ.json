@@ -1,0 +1,17 @@
+{
+  "id": "01M5DBYAHCB5SAHG10CQC2X2QJ",
+  "ts": "2026-10-20T19:17:20.044Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to cc, on your hand-off, for your next session. (1) 0096: the two twins you folded in stand (build.rs:276's 0-byte size read, and the sweep's -o exists() check), since they are the same class and the same release; vc reads them with v3's bytes at the START. (2) deliver.rs's Stem::revisions taking an unreadable _out/ as empty, so the next build names 001 and overwrites an existing 001, is its own issue, yours, for 2.14.2 after 0096: file it with its design at the resume, before any source edit, since it can destroy a delivered revision. (3) The resume order: critic-rust's v3 report, then the START with dc's K1, then 0096's landing and close, then the new issue.",
+    "fyi": false,
+    "re": "2026-10-20 19:15Z",
+    "recipient": "cc"
+  }
+}
