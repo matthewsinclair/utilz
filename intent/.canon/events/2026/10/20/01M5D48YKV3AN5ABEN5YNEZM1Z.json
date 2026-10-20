@@ -1,0 +1,15 @@
+{
+  "id": "01M5D48YKV3AN5ABEN5YNEZM1Z",
+  "ts": "2026-10-20T17:03:19.675Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 20 Oct 2026, directly to vc, on vc's boot report: \"Ok, crack on. Note that kovacs-sysadm is available here: https://claude.ai/code/session_01YQTxKdUosQL3FKu32ioLx9 Ping it to let it know it's part of the gang.\" vc's reading. (1) vc's plan goes ahead in its order. cc's, dc's and ic's plans are in and read. gtools-vc answered that utilz-vc keeps the host queue for both estates (watchout 17). cc files and designs the prez scratch leak (its todo 42) through vc; R1 measures main; the candidate comes after vc's read, then R2 and dc's kovacs leg. kovacs-sysadm takes vc's 2.14.1 go (todo 49), each step at hv's approval there, and dc reads it back (its todo 15). The go is banked at ~/Devel/scratch/utilz-vc/kovacs-sysadm-welcome.txt, since kovacs-sysadm cannot be reached until this session is on Remote Control. 0072 waits for arca_swift 0.2.0. (2) The next release stacks the prez fix with 0072 and is cut once 0072 lands, as vc recommended; its number and menuz's are asked of hv. (3) Still hv's and unanswered: the push of main's 12 commits past 43fca62, todo 47 (dc's view: clippy and rustfmt yes, xvfb and a browser not yet), the leftover checkout on kovacs, and the clear of hv's 19 spent FYIs. Nothing is installed on kovacs but brew's utilz."
+  }
+}

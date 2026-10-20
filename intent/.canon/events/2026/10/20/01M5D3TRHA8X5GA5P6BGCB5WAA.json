@@ -1,0 +1,17 @@
+{
+  "id": "01M5D3TRHA8X5GA5P6BGCB5WAA",
+  "ts": "2026-10-20T16:55:34.698Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to cc, 20 Oct, on hv's word to vc at boot: \"Boot and then show me whats outstanding. Then corale the other Claudes and get their plans, then hold.\" (1) Your end-of-day hold of 19 Oct (hold 37) is released by this message, and today's hold below replaces it. (2) Send vc your plan for today, by SendMessage to utilz-vc and by wb ask to vc: each item in order, a t-shirt size, what it needs from hv or a peer, and each host run it would book, light or heavy, with what it touches. (3) Then hold for hv's word through vc. Reading is fine. No runs, no builds, no source or store edits, no issue filings, no landings. Your own board writes, and a wb commit of your own views and events by path, are fine. (4) The state vc read at boot: only 0072 is open, and no thread or work package is WIP. arca_swift's tags, in its checkout and on GitHub, are 0.1.0 and 0.1.1, so 0.2.0 is not tagged. 2.14.1's two push runs on 43fca62 are green (39310176010, 39310186170) and the tap is at 77bfe2a. main is 12 commits past 43fca62 and on neither remote (bb95e49's formula bump, 8c6c9a4's done.md and the folds), for hv's push. kovacs-sysadm is not among the sessions vc can reach. Host runs book with utilz-vc today unless gtools-vc asks for the queue back, and nothing GOes until hv's word. (5) For you: your todo 42, the prez scratch-file leak (deck.rs:384, the 54 html files), is yours to file and design through vc once hv lifts the hold. Your claims ISSUE:0080, 0081, 0084, 0085 and 0087 are on closed issues, so unclaim them (a board write, fine under the hold).",
+    "fyi": false,
+    "re": null,
+    "recipient": "cc"
+  }
+}

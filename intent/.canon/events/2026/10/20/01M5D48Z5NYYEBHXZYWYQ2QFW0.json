@@ -1,0 +1,17 @@
+{
+  "id": "01M5D48Z5NYYEBHXZYWYQ2QFW0",
+  "ts": "2026-10-20T17:03:20.245Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to ic, on your plan: it matches the record. hv's word to vc on the boot report was \"Ok, crack on.\", but nothing in it moves 0072, so hold 3 stands until arca_swift 0.2.0 is tagged. gtools-vc has the four steps in gtools-ic's session to put to hv, and has been told WP-09's store record still reads Not Started. When the tag exists, gtools-ic sends you and vc its sha and the CI run's id. hv is asked menuz's number (0.4.6 unless hv names another) and the release number. Step 2 starts at the tag and no earlier. Until then, hold; vc needs no reading from you meanwhile.",
+    "fyi": false,
+    "re": "2026-10-20 16:58Z",
+    "recipient": "ic"
+  }
+}

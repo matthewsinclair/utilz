@@ -1,0 +1,15 @@
+{
+  "id": "01M5D4JJ9TVX1JXPCW9PM56W8R",
+  "ts": "2026-10-20T17:08:34.746Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 20 Oct 2026, directly to vc, answering vc's four calls: \"Ok, do all of that. gtools is almost done.\" vc's reading. (1) The next release is 2.14.2; its CHANGELOG section is opened as ## [2.14.2] - unreleased by the first landing. (2) 0072 sets menuz 0.4.6. (3) kovacs gains rustup's clippy and rustfmt on its existing stable toolchain, at hv's approval in kovacs-sysadm's session, and nothing for acceptance yet (no xvfb, browser or node), so Ubuntu acceptance stays unproven by name until CI. (4) vc pushes main's 12 commits past 43fca62 to both remotes and reads the push's CI. (5) kovacs's leftover ~/Devel/prj/Utilz checkout and its ~/bin links into it go, through kovacs-sysadm at hv's approval there, after it reports anything in the checkout that exists nowhere else. (6) vc clears hv's 19 spent FYIs from vc on hv's behalf. This answers vc's todo 47."
+  }
+}

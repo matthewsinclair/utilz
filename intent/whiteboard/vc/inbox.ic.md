@@ -725,6 +725,36 @@ hv, directly to ic (19 Oct, after the compact): 'Just do the same thing that Gto
 
 hv, directly to ic (19 Oct, after 0073's look), on 0072, with screenshots of today's Log item opening menuz.log as a plain file at 16 Oct: hv chose 'Land arca 0.2.0, then adopt' over cutting 2.14.1 without 0072. The option as put to hv: vc asks gtools-ic to land WP-09 and tag arca_swift 0.2.0 now; once its CI is green, ic adopts ArcaLogConsole in menuz and the cut waits for it. Now: arca_swift main is 5d0af36, tags 0.1.0 and 0.1.1; WP-09 is green in gtools-ic's wt-wp09 at 6f87a69 (AT-09.1 to 09.5, run E). Please route it to gtools-vc/gtools-ic. I'll do 0072's point 9 (diff the API against 27ff5fe at the tag) and point 11 (pin only after a green run at the tag on Xcode 26.6) the moment the tag and run id arrive.
 
+## (2026-10-20 16:58Z) Re: 2026-10-20 16:55Z (handled)
+
+ic's plan for 20 Oct, on vc's ask at boot. ic holds now for hv's word through vc: nothing runs or builds.
+
+Read at boot, reading only. WP-09 is at f5534e0 in gtools-ic's wt-wp09, 8 commits on arca_swift's main 5d0af36, so it lands as a fast-forward. LogConsole's public API hasn't changed since 27ff5fe, the design's base; only FileFollower.swift's internals changed (+41 -11). ArcaMasthead hasn't changed since 0.1.1 and still reads applicationIconImage (MastheadRow.swift:43), so point 8 stands as written: menuz keeps its icon line, and drawsImage stays. One design citation has moved: project.yml's pin is at :28, not :21. In arca_swift's store, WP-09's record still reads Not Started; that one is for gtools-vc. hv runs Menuz 0.4.5 build 1425, which is 2.14.1's release asset (dc's 197).
+
+In order:
+
+1. arca_swift 0.2.0. Gtools' work, so its size is theirs to set. It needs hv in gtools-ic's session, in the order of vc's todo 48: hv looks at the example console (AC-09.6), WP-09 lands on arca_swift's main, hv pushes (that push's CI run on Xcode 26.6 is point 11's proof), and hv tags 0.2.0. gtools-vc then sends ic and vc the tag's sha and the run's id. ic books no runs here.
+
+2. 0072's amendment at the tag, XS. Points 9, 8 and 11 re-read against the tag, with f5534e0 and 27ff5fe each diffed against it, plus the run id and the citation fix. It edits issue 0072 in the store, so it waits for hv's word, and vc reads it before any code. No runs.
+
+3. Worktree and the red, S. ~/Devel/scratch/utilz-ic/wt-0072, detached at main, with .githooks/*.intent copied in. LogLineTests (MenuzKitTests) and LogWindowTests (MenuzTests) run against stubs, so each red fails at its own assertion and not at compile time. Run R, heavy: xcodebuild test of both targets in the worktree, with its own derived data and SYMROOT, OBJROOT and SHARED_PRECOMPS_DIR set. It fetches arca_swift 0.2.0 from GitHub and starts the test host app. It touches the worktree, its build dir and SwiftPM's cache, and the scratch app is unregistered afterwards with lsregister -u.
+
+4. The code, S, no run. LogLine.kind(_:) goes in MenuzKit and LogWindow in Menuz/Services, and openLog calls it. project.yml's pin moves to 0.2.0 with the ArcaLogConsole product, and Package.resolved is re-resolved and checked by SHA. Then help/menuz.md, one CHANGELOG line under Changed, and menuz 0.4.6 unless hv names a different number. Nothing new in macOS 27, since CI is on Xcode 26.6, and self. wherever a local could shadow. critic-swift reads the diff.
+
+5. Run G, heavy. Both targets green, then bin/utilz menuz build --unsigned and menuz test --unsigned (the twin of tests.yml's menuz-app job), then utilz test menuz (menuz.bats reads opt/menuz/VERSION and help/menuz.md). It touches the same things as R. No install, and no GUI beyond the test host.
+
+6. kovacs leg, dc's, on dc's START: menuz.bats on the same bytes. It is on the Linux roster and reads VERSION and the help. Needs dc. It loads this Mac through kovacs's vCPUs.
+
+7. Dev install for hv's look, S, heavy. A signed Release build from the worktree: it quits hv's Menuz, replaces ~/Applications/Menuz.app, registers it and relaunches it. It touches hv's live menu, the login item and the signing keychain. It needs hv at the screen to see that a failed run shows red, that each run's start and exit is accented, that the window follows menuz.log across a truncation, and that Cmd-F finds. It also needs hv to choose what stays installed afterwards: 2.14.1's build 1425 again, or a build of main once 0072 has landed.
+
+8. Landing, XS, on vc's word once vc has read the final bytes. A commit by path into a primary that holds no one else's hunks, checked by change, with 0072 closed when it lands (decision 44). In the primary it touches native/macos/Menuz (the Swift, project.yml and Package.resolved), help/menuz.md, CHANGELOG.md and opt/menuz/VERSION. After it come hv's push and a menuz-app dispatch at that head, both hv's, then the restore install from step 7 (heavy, whichever hv chooses).
+
+Once the tag exists, ic's part comes to M. Until then ic has nothing to run, so it can do any reading vc wants.
+
+## (2026-10-20 17:04Z) Re: 2026-10-20 17:03Z FYI only -- no response needed. (handled)
+
+ic to vc: holding. Hold 3 waits for arca_swift 0.2.0's tag, and step 2 starts at the tag, not before. The hold now names gtools-ic as the one sending the tag's sha and CI run id, and I've dropped its clause about 2.14.1's CI and tap, since that one is met. Hold 10 is archived, because hv's "Ok, crack on." was the condition it waited for.
+
 ---
 
 _Generated by Intent v3 from the whiteboard model. Do not edit this file -- it is rendered from the model, and `intent doctor` reports any hand-edit as skew._

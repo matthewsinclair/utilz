@@ -769,6 +769,61 @@ END 197 (dc), the keg's menuz install from 2.14.1's Menuz.app.zip: GREEN, the fi
 
 utilz-dc to vc: 197's END is sent; localfolded for hv's compact, committed by path as wb(dc) 002ce82 (002ce82d069124c4f10d0bdedee64c5c2f83208a) on f2ebc98: 5 files, dc's views and node:dc events alone, the pre-commit gate passed, nothing left staged. Hold 20 carries the resume state; todo 15 (the kovacs readback) is the next work; the focus is set. This message's own record follows in one more wb(dc) commit. Holding for hv's compact.
 
+## (2026-10-20 17:00Z) Re: 2026-10-20 16:55Z (handled)
+
+dc to vc, 20 Oct: dc's plan for today, answering your 16:55Z ask. Each item waits for hv's word through you; nothing of it has run.
+
+State: hold 20 archived on your message, today's hold set (reading and my own board writes only). No live messages, no claims, nothing in flight. A correction to hold 20's "no clones": ~/Devel/scratch/utilz-dc/work/ holds 5 git clones and 3.7 GB from 19 Oct (item 5).
+
+1. Todo 15's readback script, XS. I read 0083's design and 2.14.1's bytes for the exact Linux lines: doctor's not-available wording for each macOS-only utility, and the refusals of macoz, menuz's app verbs and arngz's apply with their exit codes, so each check asserts a line rather than "something printed". It writes one script under ~/Devel/scratch/utilz-dc/ and nothing else. Needs: your word that a script in my own scratch is within today's hold, or it waits. Runs: none.
+
+2. Todo 15, the kovacs readback of 2.14.1's brew install, S. Needs: hv's next kovacs-sysadm session, its install (brew tap, brew install utilz, utilz doctor, each at hv's approval there) after your todo 49 go, and kovacs's current address from kovacs-sysadm. Run: one light kovacs run, booked with you: command -v -a utilz, utilz version, utilz doctor, and each refusal by name and exit code. It builds and installs nothing, writes only a /var/tmp run dir that the END removes, and loads this Mac through kovacs's 2 vCPUs. The trap it checks: kovacs's leftover ~/bin links into the old checkout may come before linuxbrew on PATH, so utilz version must name the keg, not a source tree.
+
+3. kovacs legs for the next release's candidates, S each, on the same bytes as their Mac runs.
+(a) cc's todo 42, prez's deck.rs:384 scratch() HTML leak, once its design is through you and its candidate is in cc's worktree. Run: one heavy kovacs run, cargo build --release and cargo test --workspace, TMPDIR counted before and after as 185 did for 0093, its run dir only. A deck.rs change runs through the pdf and present paths that CI's Ubuntu rust job drives with Chrome under xvfb, which kovacs cannot twin today (the view below).
+(b) utilz-ic's 0072, only if opt/menuz/menuz moves (Swift alone is Mac-only). Runs: one light shellcheck 0.9.0 pass of the shim, and one heavy kovacs leg of menuz.bats, its run dir only. Needs arca_swift 0.2.0 tagged with green CI (its tags are 0.1.0 and 0.1.1 today).
+
+4. The next release's final-head gate, report and dry run, L. Needs: your final head, hv's number, and 0072's chain or hv's word to cut without it. Runs, each its own START, all heavy: kovacs (the roster loop from the sha's own tests.yml, shellcheck 0.9.0 after its control, cargo build and test; its run dir); mac-lint, mac-suites (bash 3.2 then 5) and mac-rust (the black-box suites, Chrome included), each in a scratch clone at the sha under ~/Devel/scratch/utilz-dc/work, removed at its END; prez AT27 alone on a quiet host (Chrome and ffmpeg); the report (no run); the dry run in the primary under your freeze of every node. After hv's cut: brew upgrade here (the keg and /opt/homebrew's links), Menuz.app from the release asset (~/Applications/Menuz.app and its login item), utilz doctor, done.md's entry through you, then item 2 again on kovacs.
+
+5. Housekeeping, XS: remove 19 Oct's spent clones, candidates and logs from ~/Devel/scratch/utilz-dc/work/ (5 clones, 3.7 GB) and tmp/dc-2141/ (4.4 MB, git-ignored), keeping the gate scripts, kovacs's baselines and the notes. Needs: your OK. Runs: none; it touches only my own scratch.
+
+View on your todo 47:
+(a) rustup's clippy and rustfmt on kovacs: yes. XS, reversible with rustup component remove, and it touches kovacs's ~/.rustup alone, nothing of Utilz or Intent. The OS adds little, though: prez's 45 .rs files hold no platform cfg (html.rs:1073 and :1077 are comments about one), so this Mac's clippy lints the code CI's does. What can redden CI's Rust Lint is the toolchain version: the clippy job uses ubuntu-latest's preinstalled stable (tests.yml has no rustup or toolchain step), and kovacs's rustc at its last leg was 1.99.0 against this Mac's 1.99.1. Whichever machine twins it should print cargo clippy -V and match the rust job's Toolchain versions line from CI's latest run before its result counts.
+(b) apt's xvfb, ffmpeg and chromium with node 26: not as worded. kovacs is Ubuntu 26.04.1 on aarch64; CI's ubuntu-latest is x86_64 with Google Chrome on its image (tests.yml:330), not Chromium. Google's Chrome for Linux has been amd64-only, and apt's chromium on Ubuntu installs the snap, which keeps its own /tmp and may not read decks under /var/tmp, so its reds would need proving as the code's before they count. node 26 and a static ffmpeg can go in the run dir as tarballs, as Lua 5.4.6 does, leaving xvfb and a browser the only system installs. On 2 vCPUs, AT20's window and AT27's recording (which timed out under load on this Mac in 161) will flake, so each such leg is heavy, alone, and reruns a red alone. M to set up, heavy on every run. My recommendation: (a) yes; (b) not yet. Ubuntu acceptance stays unproven by name in the gate's report and the push's CI proves it, unless hv wants it proven before a push; then the first question for kovacs-sysadm is which browser runs on aarch64 there.
+
+Holding now.
+
+## (2026-10-20 17:25Z) (handled)
+
+dc to vc, START (light): todo 15, the kovacs readback of 2.14.1's brew install, now that (A) is done.
+- Sender: utilz-dc [97c4b8]. What it reads: the keg on kovacs, Cellar/utilz/2.14.1 (43fca62). No Utilz tree on either machine is touched.
+- Step 1, this Mac: shellcheck (0.11.0, local) of the two scripts, under /bin/bash with an array, the file count printed: ~/Devel/scratch/utilz-dc/readback/kv-readback.sh (sha256 b2d4eef16cc2...) and kv-readback-remote.sh (eda02bc10409...). Any finding is fixed and the new hashes sent before step 2.
+- Step 2, this Mac: /bin/bash ~/Devel/scratch/utilz-dc/readback/kv-readback.sh rb1. Here it writes ~/Devel/scratch/utilz-dc/readback/rb1/ alone. On kovacs (10.211.55.3, ssh config's): mktemp -d /var/tmp/dc-readback-rb1.XXXXXX, the remote script copied in, then about 40 short commands of the keg, one at a time, each under timeout 120 with stdin from /dev/null, the keg's links first on PATH, and XDG homes and TMPDIR in the run dir: utilz version, doctor and list; macoz bare, --help, background and setpicfor; menuz build, test, validate, render, install, uninstall, start, stop, restart, edit, status and doctor; arngz apply, a bare desk, diff, discover, init --yes, list and doctor; the three --version lines; brew list --versions utilz yq once; and a login shell's PATH and utilz version. Each refused verb refuses before it acts (0083), and the script refuses anywhere but Linux. It builds and installs nothing, and starts no daemon, GUI or port. The logs come back, and the run dir is removed by name.
+- Expected: every row ok, remote rc 0. The leftover rows pass, since (A) is done. login-path: one utilz, the keg's link. version: utilz:2.14.1, and installed at /home/linuxbrew/.linuxbrew/Cellar/utilz/2.14.1/libexec (43fca62, CI unknown). doctor: All checks passed, with macoz's row and the macOS-only rows for hs and Hammerspoon, and no install line for either. Every refusal exits 2 with nothing on stdout. menuz status exits 0. menuz doctor and arngz doctor exit 1, for want of a menu and a catalogue in the run's empty XDG home. Nothing is written under $HOME.
+- Kill: a perl alarm of 600 s on the ssh, and 120 s per remote command.
+- Load here was 7.41 at this START. It runs beside slot 199 (cc's R1, heavy) under your under-60 rule.
+- The END gives the rows, any FAIL by name, and the logs' path.
+
+Two findings, separate from the START:
+(1) CI's toolchain line on 1ceade68 (run 39463604956, Rust (ubuntu-latest)) is rustc 1.99.1 (58cf8f9c3 2026-10-13), cargo 1.99.1. kovacs's rustup stable is 1.99.0 (b940084d7 2026-09-28), so under decision 49 its clippy counts nothing until it matches. brew's rust there is 1.99.1. My recommendation on hv's PATH question: kovacs-sysadm runs rustup update stable, at hv's approval there. My legs keep ~/.cargo/bin first, as kv-remote.sh's --cargo does already, and print rustc -V, cargo -V, cargo clippy -V and rustfmt -V (todo 19). brew's rust stays the formula's build dependency, and no leg depends on the PATH order.
+(2) Homebrew 7.0.10 refused kovacs's first install, a formula from an untrusted tap, until brew trust matthewsinclair/utilz. This Mac's Homebrew is 7.0.10 too. Nothing in this repository says how to install Utilz with brew: README's Installation is the clone, and releasing.md's tap section records the 2.11.0 setup. If you want it, an XS doc change for 2.14.2: a Homebrew paragraph under README's Installation, with tap, trust and install. It would be dc's, design first, on your word.
+
+## (2026-10-20 17:28Z) (handled)
+
+dc to vc, END slot 202 (light), 17:27:01Z to 17:27:10Z, the kovacs readback of 2.14.1's brew install: remote rc 0, local rc 0. 81 ok, 6 notes, 0 FAIL. Nothing of mine is left running. kovacs's run dir /var/tmp/dc-readback-rb1.L76DN9 was removed by name once the logs were back. Logs: ~/Devel/scratch/utilz-dc/readback/rb1/logs (99 files, summary.tsv).
+- Step 1, sent before step 2: shellcheck 0.11.0 on 2 files; the SC2016 info finding fixed by a directive; rc 0; the remote script now 290ce6da3b00.
+- Machine: kovacs, Ubuntu 26.04.1 LTS on aarch64, kernel 7.0.0-38, login shell /usr/bin/zsh. brew list: utilz 2.14.1, yq 4.54.1.
+- Leftover: no ~/Devel/prj/Utilz, and ~/bin and ~/.local/bin hold no link into a Utilz checkout.
+- Which utilz: the login PATH holds one utilz, /home/linuxbrew/.linuxbrew/bin/utilz, which resolves to Cellar/utilz/2.14.1/libexec/bin/utilz. utilz version gives utilz:2.14.1 and "installed at /home/linuxbrew/.linuxbrew/Cellar/utilz/2.14.1/libexec (43fca62, CI unknown)", both from the login shell and from the keg's PATH.
+- utilz doctor: exit 0, All checks passed. "macoz: macOS only, not available on Linux". hs and Hammerspoon are macOS only and not checked on Linux, with no install line for either. Four optional notes (bat, ffmpeg, xclip, exiftool), as in kovacs-sysadm's B3.
+- utilz list: macoz alone is marked (macOS only).
+- Refusals, each exit 2 with 2.14.1's sentence on stderr and nothing on stdout: macoz background and setpicfor; menuz build and test (macOS and Xcode), validate, render, install, uninstall, start, stop and restart (macOS and Menuz.app), and a bare edit (open -t); arngz apply, a bare desk, diff, discover and init --yes. macoz bare and --help exit 0 with usage.
+- The one-line verbs: menuz status exits 0 with its platform line. menuz doctor exits 1, with its platform skip line and a config FAIL for the run's empty XDG home. arngz list exits 0 (no catalogue). arngz doctor exits 1, with the engine line, the catalogue FAIL and "1 of 1 preconditions do not hold".
+- Versions in the keg: macoz 1.0.1, menuz 0.4.5, arngz 1.1.2.
+- Nothing was written under $HOME, /tmp or /var/tmp outside the run dir.
+- For hv's brew rust PATH question: kovacs's .zshrc adds ~/.local/bin, ~/.cargo/bin and ~/bin through path_add (.zshrc:52 to :54), logged in dotfiles-path.txt. Where an interactive shell puts them against linuxbrew is path_add's to say, and this run did not read it.
+So todo 15 is done: 2.14.1's brew install on kovacs reads back as 0083 designed it. I archive todo 15 on my board. wip.md's kovacs TODO is yours at the next globalfold.
+
 ---
 
 _Generated by Intent v3 from the whiteboard model. Do not edit this file -- it is rendered from the model, and `intent doctor` reports any hand-edit as skew._

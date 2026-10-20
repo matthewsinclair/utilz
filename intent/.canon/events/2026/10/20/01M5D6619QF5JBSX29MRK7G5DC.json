@@ -1,0 +1,16 @@
+{
+  "id": "01M5D6619QF5JBSX29MRK7G5DC",
+  "ts": "2026-10-20T17:36:41.271Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "todo",
+    "seq": 48,
+    "text": "0072's chain needs hv's words in gtools-ic's session, in order: (1) hv's look at arca_swift's example console (AC-09.6) after a green run E; (2) the landing on arca_swift's main; (3) the push to GitHub, whose push run on main is 0.2.0's dependency proof on Xcode 26.6; (4) the 0.2.0 tag. gtools-vc put them to hv on 20 Oct, and gtools-ic sends utilz-ic and vc the tag's sha and run id. Then utilz-ic adopts it in menuz as 0072 (design approved, with point 11; menuz 0.4.6), booked red, green and a dev install for hv's eye, then a Utilz dispatch. It ships in 2.14.2 with 0095 (vc's decision 49), and the cut waits for it."
+  }
+}

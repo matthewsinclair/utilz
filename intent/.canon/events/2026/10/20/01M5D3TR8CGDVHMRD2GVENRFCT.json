@@ -1,0 +1,15 @@
+{
+  "id": "01M5D3TR8CGDVHMRD2GVENRFCT",
+  "ts": "2026-10-20T16:55:34.412Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "todo",
+    "text": "At the next globalfold. (1) intent/wip.md drops four TODOs: the TMPDIR one (cc removed the 794 entries on hv's word, 19 Oct 19:47Z, and no todo temp file is left); the kovacs install and the kovacs leftover checkout (both done 20 Oct through kovacs-sysadm at hv's approval); and the kovacs tooling question (vc's decision 49: clippy and rustfmt added, nothing for acceptance). It gains 0095 (cc) and 0072 (ic) for 2.14.2. (2) restart.md: the trap on 0053's class says the sweep landed as 0080 in 2.14.1, where it now reads \"Sweeping the tree for the class is a TODO\"; kovacs is brew-only since 20 Oct (watchout 21); a fresh Homebrew 7 refuses an untrusted tap until brew trust matthewsinclair/utilz; and 2.14.2 carries 0095 and 0072 (vc's decision 49). (3) vc's todo 48 drops its 2.14.1 half."
+  }
+}
