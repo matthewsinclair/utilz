@@ -5,9 +5,9 @@
     "name": "DevX Claude",
     "role": "devx",
     "session_id": "45821818-5780-410a-a192-9845d3af133b",
-    "heartbeat_at": "2026-10-20T17:28:29.631Z",
+    "heartbeat_at": "2026-10-20T17:37:09.603Z",
     "status": "active",
-    "focus": "20 Oct: todo 15 done (slot 202, the kovacs readback of 2.14.1's brew install, 0 FAIL). Next: todo 19, the gate's kovacs fmt and clippy, once rustup there matches CI's 1.99.1; todo 16, cc's prez leak leg; todo 17, 0072's shim if it moves; todo 18, 2.14.2's gate. The README Homebrew paragraph waits for hv's word.",
+    "focus": "20 Oct, localfold on hv's word (no compact): todo 15 done (slot 202, 0 FAIL). Waiting on cc's R2 START for 0095's bytes, then K1 (todo 16), booked with utilz-vc; todo 19's rust-lint is built for its first run; 0072's shim (todo 17) and 2.14.2's gate (todo 18) later; the README Homebrew paragraph waits for hv's word.",
     "claims": [],
     "recorded_at": "2026-10-16T04:57:46.520Z",
     "migrated_at": "2026-10-16T04:57:46.520Z"
@@ -246,10 +246,10 @@
       "node": "dc",
       "kind": "watchout",
       "seq": 4,
-      "text": "kovacs's baseline for todo 5's loop: slot 83 at 2d73b7f (19 Oct, tmp/dc-2141/kovacs/vbase-2d73b7f/BASELINE.md), with python3-venv installed and kovacs's cargo on PATH. Every step rc 0 and no not ok anywhere: utilz 263, relink 19, plan_test 193, pdf2md 15, xtrct 12, arngz 136, menuz 128, and the rest of the roster as in slot 53. 11 skips by name: 6 error paths where the tool is installed, menuz AC-06.3 for want of rsvg-convert, xtrct 9 to 12 for want of ANTHROPIC_API_KEY. So any not ok, and any new skip, in a later leg is the candidate's until shown otherwise. The baselines at 11c0f95 (slot 53 without cargo, slot 57 with it) stay in tmp/dc-2141/kovacs/ for their environment failures by name. The leg carries a full bundle (the whole history and the tags) into an empty repository and reads nothing of kovacs's checkout. From the next leg, UNISON and GNUPGHOME are empty dirs in the run's dir and its gpg daemons are killed at its end, since slots 53 and 83 left 36 unison archives in kovacs's ~/.unison and a dirmngr running. \"kovacs keeps two checked download dirs, refetched after the 19 Oct crash into /var/tmp because its /tmp is a tmpfs that a reboot empties: /var/tmp/dc-2141-sc090.qyz5IL (shellcheck 0.9.0) and /var/tmp/dc-2141-lua.dXTRHg (Lua 5.4.6's tarball), both read by kv-remote.sh. Each run's own dir goes under /var/tmp too and is removed once its logs are back.\"",
+      "text": "kovacs's baseline for todo 5's loop: slot 83 at 2d73b7f (19 Oct, tmp/dc-2141/kovacs/vbase-2d73b7f/BASELINE.md), with python3-venv installed and kovacs's cargo on PATH. Every step rc 0 and no not ok anywhere: utilz 263, relink 19, plan_test 193, pdf2md 15, xtrct 12, arngz 136, menuz 128, and the rest of the roster as in slot 53. 11 skips by name: 6 error paths where the tool is installed, menuz AC-06.3 for want of rsvg-convert, xtrct 9 to 12 for want of ANTHROPIC_API_KEY. So any not ok, and any new skip, in a later leg is the candidate's until shown otherwise. The baselines at 11c0f95 (slot 53 without cargo, slot 57 with it) stay in tmp/dc-2141/kovacs/ for their environment failures by name. The leg carries a full bundle (the whole history and the tags) into an empty repository and reads nothing of kovacs's checkout. From the next leg, UNISON and GNUPGHOME are empty dirs in the run's dir and its gpg daemons are killed at its end, since slots 53 and 83 left 36 unison archives in kovacs's ~/.unison and a dirmngr running. \"kovacs keeps two checked download dirs, refetched after the 19 Oct crash into /var/tmp because its /tmp is a tmpfs that a reboot empties: /var/tmp/dc-2141-sc090.qyz5IL (shellcheck 0.9.0) and /var/tmp/dc-2141-lua.dXTRHg (Lua 5.4.6's tarball), both read by kv-remote.sh. Each run's own dir goes under /var/tmp too and is removed once its logs are back.\" Since 20 Oct (kovacs-sysadm, at hv's approval) kovacs carries brew's Utilz 2.14.1 (/home/linuxbrew/.linuxbrew, its tap trusted), with brew's rust 1.99.1 and yq 4.54.1 first on a login shell's PATH, and rustup's stable at 1.99.1, CI's, with clippy and rustfmt; the leftover ~/Devel/prj/Utilz and its ~/bin links are gone, Molt's link stays. A leg still runs only its bundle's tree (kv-remote.sh refuses a bin/ name that resolves elsewhere, the keg's included), with rustup's cargo first on its PATH and the four versions printed, so a later leg differs from slot 83's in the toolchain line alone.",
       "state": "live",
       "recorded_at": "2026-10-19T06:23:41.922Z",
-      "edited_at": "2026-10-19T13:25:05.951Z"
+      "edited_at": "2026-10-20T17:37:04.109Z"
     },
     {
       "node": "dc",
