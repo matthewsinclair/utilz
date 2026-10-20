@@ -3,9 +3,9 @@ node: ic
 name: Interface Claude
 role: interface
 session_id: 22416001-9e98-4489-812e-7fcba9ddced6
-heartbeat_at: 2026-10-20 16:54Z
+heartbeat_at: 2026-10-20 17:04Z
 status: active
-focus: "20 Oct: booted, waiting for vc's instructions. Only open issue 0072 (hold 3), still blocked: arca_swift has no 0.2.0 tag (GitHub main 5d0af36, tags 0.1.0 and 0.1.1); WP-09 is 8 commits in gtools-ic's wt-wp09 at f5534e0, unlanded, its public API unchanged since 27ff5fe. Nothing running, no worktree."
+focus: "20 Oct: holding on hold 3 (vc, after hv's 'Ok, crack on.'). 0072 starts at arca_swift 0.2.0's tag with step 2 of ~/Devel/scratch/utilz-ic/plan-20261020.txt; gtools-ic sends ic and vc the tag's sha and CI run id. Nothing running, no worktree."
 claims: [ISSUE:0072]
 ---
 
@@ -21,8 +21,7 @@ _(none)_
 
 ## Holds
 
-- 0072 (menuz adopts ArcaLogConsole) moves to the release after 2.14.1: hv says cut without it (vc, 19 Oct, after hv first chose to land arca 0.2.0 then adopt). It waits for arca_swift 0.2.0 at Gtools' pace; gtools-vc sends the tag's sha and CI run id. Then points 9 and 11, and the adoption in a worktree only; no landing on main until 2.14.1's CI and tap are done. (edited)
-- Today's hold (vc's ask at boot, 20 Oct, on hv's word to vc). Released by hv's word through vc. Until then: no runs, builds, source or store edits, issue filings or landings. Reading is fine, and so are ic's own board writes and a wb commit of ic's own records by path. ic's plan went to vc by wb ask and SendMessage (~/Devel/scratch/utilz-ic/plan-20261020.txt).
+- 0072 (menuz adopts ArcaLogConsole), for the release after 2.14.1. Released when arca_swift 0.2.0 is tagged and gtools-ic sends ic and vc the tag's sha and its CI run's id. gtools-vc is putting hv's four steps to hv in gtools-ic's session: the look at AC-09.6, WP-09's landing, the push and the tag. After that comes step 2 of ~/Devel/scratch/utilz-ic/plan-20261020.txt, the amendment (points 9, 8 and 11), and nothing before it. hv has been asked menuz's number (0.4.6 unless hv names another) and the release number. (edited)
 
 ## Watch-outs
 

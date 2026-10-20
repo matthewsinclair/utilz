@@ -1,0 +1,16 @@
+{
+  "id": "01M5D4B0P0S6VFJNABKWEJVF42",
+  "ts": "2026-10-20T17:04:27.329Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "kind": "hold",
+    "seq": 3,
+    "text": "0072 (menuz adopts ArcaLogConsole), for the release after 2.14.1. Released when arca_swift 0.2.0 is tagged and gtools-ic sends ic and vc the tag's sha and its CI run's id. gtools-vc is putting hv's four steps to hv in gtools-ic's session: the look at AC-09.6, WP-09's landing, the push and the tag. After that comes step 2 of ~/Devel/scratch/utilz-ic/plan-20261020.txt, the amendment (points 9, 8 and 11), and nothing before it. hv has been asked menuz's number (0.4.6 unless hv names another) and the release number."
+  }
+}

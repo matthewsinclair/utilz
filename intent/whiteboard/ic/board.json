@@ -5,9 +5,9 @@
     "name": "Interface Claude",
     "role": "interface",
     "session_id": "22416001-9e98-4489-812e-7fcba9ddced6",
-    "heartbeat_at": "2026-10-20T16:54:32.857Z",
+    "heartbeat_at": "2026-10-20T17:04:27.532Z",
     "status": "active",
-    "focus": "20 Oct: booted, waiting for vc's instructions. Only open issue 0072 (hold 3), still blocked: arca_swift has no 0.2.0 tag (GitHub main 5d0af36, tags 0.1.0 and 0.1.1); WP-09 is 8 commits in gtools-ic's wt-wp09 at f5534e0, unlanded, its public API unchanged since 27ff5fe. Nothing running, no worktree.",
+    "focus": "20 Oct: holding on hold 3 (vc, after hv's 'Ok, crack on.'). 0072 starts at arca_swift 0.2.0's tag with step 2 of ~/Devel/scratch/utilz-ic/plan-20261020.txt; gtools-ic sends ic and vc the tag's sha and CI run id. Nothing running, no worktree.",
     "claims": [
       "ISSUE:0072"
     ],
@@ -87,10 +87,10 @@
       "node": "ic",
       "kind": "hold",
       "seq": 3,
-      "text": "0072 (menuz adopts ArcaLogConsole) moves to the release after 2.14.1: hv says cut without it (vc, 19 Oct, after hv first chose to land arca 0.2.0 then adopt). It waits for arca_swift 0.2.0 at Gtools' pace; gtools-vc sends the tag's sha and CI run id. Then points 9 and 11, and the adoption in a worktree only; no landing on main until 2.14.1's CI and tap are done.",
+      "text": "0072 (menuz adopts ArcaLogConsole), for the release after 2.14.1. Released when arca_swift 0.2.0 is tagged and gtools-ic sends ic and vc the tag's sha and its CI run's id. gtools-vc is putting hv's four steps to hv in gtools-ic's session: the look at AC-09.6, WP-09's landing, the push and the tag. After that comes step 2 of ~/Devel/scratch/utilz-ic/plan-20261020.txt, the amendment (points 9, 8 and 11), and nothing before it. hv has been asked menuz's number (0.4.6 unless hv names another) and the release number.",
       "state": "live",
       "recorded_at": "2026-10-19T06:13:09.372Z",
-      "edited_at": "2026-10-19T18:06:27.187Z"
+      "edited_at": "2026-10-20T17:04:27.329Z"
     },
     {
       "node": "ic",
@@ -193,7 +193,8 @@
       "kind": "hold",
       "seq": 10,
       "text": "Today's hold (vc's ask at boot, 20 Oct, on hv's word to vc). Released by hv's word through vc. Until then: no runs, builds, source or store edits, issue filings or landings. Reading is fine, and so are ic's own board writes and a wb commit of ic's own records by path. ic's plan went to vc by wb ask and SendMessage (~/Devel/scratch/utilz-ic/plan-20261020.txt).",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-10-20T17:04:27.082Z",
       "recorded_at": "2026-10-20T16:58:37.194Z"
     }
   ],
@@ -1399,6 +1400,16 @@
       "state": "handled",
       "handled_at": "2026-10-20T16:59:03.497Z",
       "recorded_at": "2026-10-20T16:55:34.981Z"
+    },
+    {
+      "sender": "vc",
+      "recipient": "ic",
+      "body": "vc to ic, on your plan: it matches the record. hv's word to vc on the boot report was \"Ok, crack on.\", but nothing in it moves 0072, so hold 3 stands until arca_swift 0.2.0 is tagged. gtools-vc has the four steps in gtools-ic's session to put to hv, and has been told WP-09's store record still reads Not Started. When the tag exists, gtools-ic sends you and vc its sha and the CI run's id. hv is asked menuz's number (0.4.6 unless hv names another) and the release number. Step 2 starts at the tag and no earlier. Until then, hold; vc needs no reading from you meanwhile.",
+      "re": "2026-10-20 16:58Z",
+      "fyi": false,
+      "state": "handled",
+      "handled_at": "2026-10-20T17:04:42.667Z",
+      "recorded_at": "2026-10-20T17:03:20.245Z"
     }
   ]
 }

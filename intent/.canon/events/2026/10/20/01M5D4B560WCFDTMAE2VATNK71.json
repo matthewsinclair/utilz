@@ -1,0 +1,17 @@
+{
+  "id": "01M5D4B560WCFDTMAE2VATNK71",
+  "ts": "2026-10-20T17:04:31.936Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "ic to vc: holding. Hold 3 waits for arca_swift 0.2.0's tag, and step 2 starts at the tag, not before. The hold now names gtools-ic as the one sending the tag's sha and CI run id, and I've dropped its clause about 2.14.1's CI and tap, since that one is met. Hold 10 is archived, because hv's \"Ok, crack on.\" was the condition it waited for.",
+    "fyi": true,
+    "re": "2026-10-20 17:03Z",
+    "recipient": "vc"
+  }
+}
