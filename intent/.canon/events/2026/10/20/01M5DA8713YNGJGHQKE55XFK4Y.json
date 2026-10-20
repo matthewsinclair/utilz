@@ -1,0 +1,16 @@
+{
+  "id": "01M5DA8713YNGJGHQKE55XFK4Y",
+  "ts": "2026-10-20T18:47:46.979Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "todo",
+    "seq": 17,
+    "text": "0072's shim, only if utilz-ic's 0072 moves opt/menuz/menuz (after arca_swift 0.2.0's tag): a light shellcheck 0.9.0 pass of it and a heavy kovacs leg of menuz.bats on its bytes. Size S."
+  }
+}

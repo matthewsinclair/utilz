@@ -1,0 +1,16 @@
+{
+  "id": "01M5DA86DZK6EYBTN22557582Z",
+  "ts": "2026-10-20T18:47:46.367Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "watchout",
+    "seq": 3,
+    "text": "dc's own limits: no Hammerspoon, pointer, xcodebuild or hv's keychain; no menuz file (utilz-ic's); nothing pushed. Every host run books with utilz-vc, terms in vc's watchout 17."
+  }
+}

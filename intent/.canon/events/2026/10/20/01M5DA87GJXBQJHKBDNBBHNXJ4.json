@@ -1,0 +1,15 @@
+{
+  "id": "01M5DA87GJXBQJHKBDNBBHNXJ4",
+  "ts": "2026-10-20T18:47:47.474Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "todo",
+    "text": "K1 for 0096 (cc's), when cc's R2 START names its bytes: one heavy kovacs leg on them, to cc's spec (method in ~/Devel/scratch/utilz-dc/RESUME.md). Size S."
+  }
+}

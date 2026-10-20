@@ -5,9 +5,9 @@
     "name": "DevX Claude",
     "role": "devx",
     "session_id": "45821818-5780-410a-a192-9845d3af133b",
-    "heartbeat_at": "2026-10-20T18:15:06.466Z",
+    "heartbeat_at": "2026-10-20T18:49:09.056Z",
     "status": "active",
-    "focus": "20 Oct: K1 green (slot 205), kovacs's /tmp cleared of 246 old test dirs (slot 208); todos 16, 19 and 20 done. Next: the 2.14.2 gate (todo 18) when vc names its head; 0072's shim (todo 17) only if it moves; the README Homebrew paragraph waits for hv's word.",
+    "focus": "20 Oct, wrapped and folded for hv's compact: 0095's K1 green (slot 205), kovacs's /tmp clear (slot 208). Resume: 0096's K1 when cc STARTs it, then 2.14.2's final-head gate once 0096 and 0072 land; ~/Devel/scratch/utilz-dc/RESUME.md.",
     "claims": [],
     "recorded_at": "2026-10-16T04:57:46.520Z",
     "migrated_at": "2026-10-16T04:57:46.520Z"
@@ -112,10 +112,10 @@
       "node": "dc",
       "kind": "watchout",
       "seq": 3,
-      "text": "Rules in force for dc: every host run, however small (one bats file, one prez AT, one shellcheck pass), \"is booked by name with the booker vc names (utilz-vc, which books both estates from 20 Oct on gtools-vc's word, under gtools-vc's decisions 59 and 62: a START, its GO, an END, on the board and by SendMessage)\", and nothing runs without a GO; reading needs no window. Each START says light or heavy. Heavy runs go one at a time across both estates: any build, any whole suite (utilz test included), the estate gate, Chrome, a dry run or a cut, any test that starts a daemon. A light run (builds nothing, starts no GUI or daemon, binds no port, writes only its own temp dirs) may share the window with one heavy run, its GO given at a load under 60, and a failure that looks like timing is rerun alone before it counts. kovacs is a Parallels VM on rhadamanth, this Mac (kovacs-sysadm, 19 Oct): a kovacs leg writes no file here but loads this Mac through kovacs's two vCPUs, so its START says so; gtools-vc runs it beside a Mac run under decision 62 as amended. CI's shellcheck is 0.9.0, which flags A && B || C as SC2015 where 0.11.0 passes: run it under 0.9.0 (on kovacs, or the darwin build here under Rosetta) before handing on, with a control whose B and C are not echo. A portable stat puts GNU stat -c first. Estimates in t-shirt sizes, never wall-clock (hv, 19 Oct, through vc). No Hammerspoon, pointer, xcodebuild or hv's real keychain from dc; nothing on menuz's files, which are utilz-ic's; nothing pushed by dc.",
+      "text": "dc's own limits: no Hammerspoon, pointer, xcodebuild or hv's keychain; no menuz file (utilz-ic's); nothing pushed. Every host run books with utilz-vc, terms in vc's watchout 17.",
       "state": "live",
       "recorded_at": "2026-10-16T20:22:25.420Z",
-      "edited_at": "2026-10-20T17:05:00.151Z"
+      "edited_at": "2026-10-20T18:47:46.367Z"
     },
     {
       "node": "dc",
@@ -246,10 +246,10 @@
       "node": "dc",
       "kind": "watchout",
       "seq": 4,
-      "text": "kovacs's baseline for todo 5's loop: slot 83 at 2d73b7f (19 Oct, tmp/dc-2141/kovacs/vbase-2d73b7f/BASELINE.md), with python3-venv installed and kovacs's cargo on PATH. Every step rc 0 and no not ok anywhere: utilz 263, relink 19, plan_test 193, pdf2md 15, xtrct 12, arngz 136, menuz 128, and the rest of the roster as in slot 53. 11 skips by name: 6 error paths where the tool is installed, menuz AC-06.3 for want of rsvg-convert, xtrct 9 to 12 for want of ANTHROPIC_API_KEY. So any not ok, and any new skip, in a later leg is the candidate's until shown otherwise. The baselines at 11c0f95 (slot 53 without cargo, slot 57 with it) stay in tmp/dc-2141/kovacs/ for their environment failures by name. The leg carries a full bundle (the whole history and the tags) into an empty repository and reads nothing of kovacs's checkout. From the next leg, UNISON and GNUPGHOME are empty dirs in the run's dir and its gpg daemons are killed at its end, since slots 53 and 83 left 36 unison archives in kovacs's ~/.unison and a dirmngr running. \"kovacs keeps two checked download dirs, refetched after the 19 Oct crash into /var/tmp because its /tmp is a tmpfs that a reboot empties: /var/tmp/dc-2141-sc090.qyz5IL (shellcheck 0.9.0) and /var/tmp/dc-2141-lua.dXTRHg (Lua 5.4.6's tarball), both read by kv-remote.sh. Each run's own dir goes under /var/tmp too and is removed once its logs are back.\" Since 20 Oct (kovacs-sysadm, at hv's approval) kovacs carries brew's Utilz 2.14.1 (/home/linuxbrew/.linuxbrew, its tap trusted), with brew's rust 1.99.1 and yq 4.54.1 first on a login shell's PATH, and rustup's stable at 1.99.1, CI's, with clippy and rustfmt; the leftover ~/Devel/prj/Utilz and its ~/bin links are gone, Molt's link stays. A leg still runs only its bundle's tree (kv-remote.sh refuses a bin/ name that resolves elsewhere, the keg's included), with rustup's cargo first on its PATH and the four versions printed, so a later leg differs from slot 83's in the toolchain line alone.",
+      "text": "kovacs legs: the method, tools and kovacs's state are in ~/Devel/scratch/utilz-dc/RESUME.md, and the baseline is tmp/dc-2141/kovacs/vbase-2d73b7f/BASELINE.md (slot 83). A leg runs only its bundle's tree, with rustup's cargo first and the four versions printed.",
       "state": "live",
       "recorded_at": "2026-10-19T06:23:41.922Z",
-      "edited_at": "2026-10-20T17:37:04.109Z"
+      "edited_at": "2026-10-20T18:47:46.676Z"
     },
     {
       "node": "dc",
@@ -520,18 +520,19 @@
       "node": "dc",
       "kind": "todo",
       "seq": 17,
-      "text": "0072's shim, item 3b, vc's yes of 17:03Z: only if opt/menuz/menuz moves, and after arca_swift's 0.2.0 tag: one light shellcheck 0.9.0 pass of the shim and one heavy kovacs leg of menuz.bats, booked with utilz-vc. Size S.",
+      "text": "0072's shim, only if utilz-ic's 0072 moves opt/menuz/menuz (after arca_swift 0.2.0's tag): a light shellcheck 0.9.0 pass of it and a heavy kovacs leg of menuz.bats on its bytes. Size S.",
       "state": "live",
-      "recorded_at": "2026-10-20T17:04:20.347Z"
+      "recorded_at": "2026-10-20T17:04:20.347Z",
+      "edited_at": "2026-10-20T18:47:46.979Z"
     },
     {
       "node": "dc",
       "kind": "todo",
       "seq": 18,
-      "text": "The next release, 2.14.2 (hv, vc's decision 49): its final-head gate, report and dry run, then the post-release steps (item 4 of dc's 20 Oct plan). Later: the cut follows 0072's landing. Size L.",
+      "text": "2.14.2's final-head gate, once 0096 and 0072 have landed and vc names the sha: final-head-gate.sh's phases, the report and the dry run, then the post-release steps (~/Devel/scratch/utilz-dc/RESUME.md). Size L.",
       "state": "live",
       "recorded_at": "2026-10-20T17:04:20.480Z",
-      "edited_at": "2026-10-20T17:14:48.633Z"
+      "edited_at": "2026-10-20T18:47:47.289Z"
     },
     {
       "node": "dc",
@@ -552,6 +553,22 @@
       "archived_at": "2026-10-20T18:15:06.314Z",
       "recorded_at": "2026-10-20T18:11:38.306Z",
       "edited_at": "2026-10-20T18:15:06.092Z"
+    },
+    {
+      "node": "dc",
+      "kind": "todo",
+      "seq": 21,
+      "text": "K1 for 0096 (cc's), when cc's R2 START names its bytes: one heavy kovacs leg on them, to cc's spec (method in ~/Devel/scratch/utilz-dc/RESUME.md). Size S.",
+      "state": "live",
+      "recorded_at": "2026-10-20T18:47:47.474Z"
+    },
+    {
+      "node": "dc",
+      "kind": "hold",
+      "seq": 22,
+      "text": "Holding for hv's compact (vc's wrap of 20 Oct, on hv's word). Condition: hv's compact of this session has run; then /in-session, pickup and vc's word. Resume state: nothing running, and nothing of dc's in the primary. 0095's K1 is green (slot 205) and kovacs's /tmp is clear (slot 208). Next: todo 21, 0096's K1, when cc's R2 START names its bytes; then todo 18, 2.14.2's final-head gate, once 0096 and 0072 have landed; todo 17 only if 0072 moves the menuz shim. The method and where everything is: ~/Devel/scratch/utilz-dc/RESUME.md.",
+      "state": "live",
+      "recorded_at": "2026-10-20T18:49:08.916Z"
     }
   ],
   "messages": [

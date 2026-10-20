@@ -1,0 +1,16 @@
+{
+  "id": "01M5DA86QMPAT4KFA8YDN95NHE",
+  "ts": "2026-10-20T18:47:46.676Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "watchout",
+    "seq": 4,
+    "text": "kovacs legs: the method, tools and kovacs's state are in ~/Devel/scratch/utilz-dc/RESUME.md, and the baseline is tmp/dc-2141/kovacs/vbase-2d73b7f/BASELINE.md (slot 83). A leg runs only its bundle's tree, with rustup's cargo first and the four versions printed."
+  }
+}
