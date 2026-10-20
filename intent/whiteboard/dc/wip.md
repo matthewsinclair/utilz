@@ -3,9 +3,9 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: 45821818-5780-410a-a192-9845d3af133b
-heartbeat_at: 2026-10-20 17:05Z
+heartbeat_at: 2026-10-20 17:28Z
 status: active
-focus: "20 Oct: booted, holding for vc's word (hold 20). Next: todo 15, the kovacs readback of 2.14.1's brew install, at hv's next kovacs-sysadm session; then kovacs legs, shellcheck 0.9.0 and the gate for the next release's candidates, as vc books them."
+focus: "20 Oct: todo 15 done (slot 202, the kovacs readback of 2.14.1's brew install, 0 FAIL). Next: todo 19, the gate's kovacs fmt and clippy, once rustup there matches CI's 1.99.1; todo 16, cc's prez leak leg; todo 17, 0072's shim if it moves; todo 18, 2.14.2's gate. The README Homebrew paragraph waits for hv's word."
 claims: []
 ---
 
@@ -17,7 +17,6 @@ _(none)_
 
 ## TODO
 
-- The kovacs install of 2.14.1 (vc, 19 Oct; vc's yes of 20 Oct 17:03Z on hv's crack on). kovacs-sysadm, each step at hv's approval there, removes the leftover ~/Devel/prj/Utilz and its 16 ~/bin links (Molt's stay), runs the install from the tap (brew tap matthewsinclair/utilz, brew install utilz, utilz doctor, command -v utilz), then adds clippy and rustfmt; vc relays each output to dc. kovacs is 10.211.55.3, ssh config's address. Then dc's readback, a light run booked with utilz-vc: ~/Devel/scratch/utilz-dc/readback/kv-readback.sh <label>, which ships kv-readback-remote.sh to a /var/tmp run dir and removes it once the logs are back. It reads: the leftover gone, the keg's link first on the login PATH and utilz version naming the keg (43fca62), utilz doctor's three Linux rows with no install line for hs or Hammerspoon, utilz list marking macoz alone, and the refusals of macoz, menuz's app and Xcode verbs and arngz's engine verbs, each by 2.14.1's words and exit 2, with status and doctor's one line; nothing written under $HOME. Size S. (edited)
 - kovacs leg for cc's todo 42 (prez's deck.rs:384 scratch() HTML leak), item 3a, vc's yes of 17:03Z: one heavy kovacs run on the same bytes as cc's R2, once vc has read cc's design and the candidate exists: cargo build --release and cargo test --workspace, TMPDIR counted before and after, its run dir only; booked with utilz-vc. Size S.
 - 0072's shim, item 3b, vc's yes of 17:03Z: only if opt/menuz/menuz moves, and after arca_swift's 0.2.0 tag: one light shellcheck 0.9.0 pass of the shim and one heavy kovacs leg of menuz.bats, booked with utilz-vc. Size S.
 - The next release, 2.14.2 (hv, vc's decision 49): its final-head gate, report and dry run, then the post-release steps (item 4 of dc's 20 Oct plan). Later: the cut follows 0072's landing. Size L. (edited)

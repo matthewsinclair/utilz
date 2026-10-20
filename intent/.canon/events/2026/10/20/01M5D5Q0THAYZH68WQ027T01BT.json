@@ -1,0 +1,16 @@
+{
+  "id": "01M5D5Q0THAYZH68WQ027T01BT",
+  "ts": "2026-10-20T17:28:29.265Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "todo",
+    "seq": 15,
+    "text": "Done, slot 202 (light, 20 Oct 17:27:01Z to 17:27:10Z): the kovacs readback of 2.14.1's brew install, 81 ok, 6 notes, 0 FAIL; logs in ~/Devel/scratch/utilz-dc/readback/rb1/logs. kovacs-sysadm's steps (the leftover removed, the tap trusted, the install, doctor 7/7, clippy and rustfmt added) read back as 0083 designed: one utilz on the login PATH, the keg's (43fca62); doctor's Linux rows with no install line for hs or Hammerspoon; macoz alone marked in utilz list; every refusal exit 2 with nothing on stdout; nothing written under $HOME."
+  }
+}

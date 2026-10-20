@@ -5,9 +5,9 @@
     "name": "DevX Claude",
     "role": "devx",
     "session_id": "45821818-5780-410a-a192-9845d3af133b",
-    "heartbeat_at": "2026-10-20T17:05:00.637Z",
+    "heartbeat_at": "2026-10-20T17:28:29.631Z",
     "status": "active",
-    "focus": "20 Oct: booted, holding for vc's word (hold 20). Next: todo 15, the kovacs readback of 2.14.1's brew install, at hv's next kovacs-sysadm session; then kovacs legs, shellcheck 0.9.0 and the gate for the next release's candidates, as vc books them.",
+    "focus": "20 Oct: todo 15 done (slot 202, the kovacs readback of 2.14.1's brew install, 0 FAIL). Next: todo 19, the gate's kovacs fmt and clippy, once rustup there matches CI's 1.99.1; todo 16, cc's prez leak leg; todo 17, 0072's shim if it moves; todo 18, 2.14.2's gate. The README Homebrew paragraph waits for hv's word.",
     "claims": [],
     "recorded_at": "2026-10-16T04:57:46.520Z",
     "migrated_at": "2026-10-16T04:57:46.520Z"
@@ -463,10 +463,11 @@
       "node": "dc",
       "kind": "todo",
       "seq": 15,
-      "text": "The kovacs install of 2.14.1 (vc, 19 Oct; vc's yes of 20 Oct 17:03Z on hv's crack on). kovacs-sysadm, each step at hv's approval there, removes the leftover ~/Devel/prj/Utilz and its 16 ~/bin links (Molt's stay), runs the install from the tap (brew tap matthewsinclair/utilz, brew install utilz, utilz doctor, command -v utilz), then adds clippy and rustfmt; vc relays each output to dc. kovacs is 10.211.55.3, ssh config's address. Then dc's readback, a light run booked with utilz-vc: ~/Devel/scratch/utilz-dc/readback/kv-readback.sh <label>, which ships kv-readback-remote.sh to a /var/tmp run dir and removes it once the logs are back. It reads: the leftover gone, the keg's link first on the login PATH and utilz version naming the keg (43fca62), utilz doctor's three Linux rows with no install line for hs or Hammerspoon, utilz list marking macoz alone, and the refusals of macoz, menuz's app and Xcode verbs and arngz's engine verbs, each by 2.14.1's words and exit 2, with status and doctor's one line; nothing written under $HOME. Size S.",
-      "state": "live",
+      "text": "Done, slot 202 (light, 20 Oct 17:27:01Z to 17:27:10Z): the kovacs readback of 2.14.1's brew install, 81 ok, 6 notes, 0 FAIL; logs in ~/Devel/scratch/utilz-dc/readback/rb1/logs. kovacs-sysadm's steps (the leftover removed, the tap trusted, the install, doctor 7/7, clippy and rustfmt added) read back as 0083 designed: one utilz on the login PATH, the keg's (43fca62); doctor's Linux rows with no install line for hs or Hammerspoon; macoz alone marked in utilz list; every refusal exit 2 with nothing on stdout; nothing written under $HOME.",
+      "state": "archived",
+      "archived_at": "2026-10-20T17:28:29.479Z",
       "recorded_at": "2026-10-19T19:42:49.974Z",
-      "edited_at": "2026-10-20T17:14:48.339Z"
+      "edited_at": "2026-10-20T17:28:29.265Z"
     },
     {
       "node": "dc",

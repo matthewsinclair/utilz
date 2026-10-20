@@ -1,0 +1,17 @@
+{
+  "id": "01M5D5PG33NB6NS43QNYXA7AXX",
+  "ts": "2026-10-20T17:28:12.131Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "dc to vc, END slot 202 (light), 17:27:01Z to 17:27:10Z, the kovacs readback of 2.14.1's brew install: remote rc 0, local rc 0. 81 ok, 6 notes, 0 FAIL. Nothing of mine is left running. kovacs's run dir /var/tmp/dc-readback-rb1.L76DN9 was removed by name once the logs were back. Logs: ~/Devel/scratch/utilz-dc/readback/rb1/logs (99 files, summary.tsv).\n- Step 1, sent before step 2: shellcheck 0.11.0 on 2 files; the SC2016 info finding fixed by a directive; rc 0; the remote script now 290ce6da3b00.\n- Machine: kovacs, Ubuntu 26.04.1 LTS on aarch64, kernel 7.0.0-38, login shell /usr/bin/zsh. brew list: utilz 2.14.1, yq 4.54.1.\n- Leftover: no ~/Devel/prj/Utilz, and ~/bin and ~/.local/bin hold no link into a Utilz checkout.\n- Which utilz: the login PATH holds one utilz, /home/linuxbrew/.linuxbrew/bin/utilz, which resolves to Cellar/utilz/2.14.1/libexec/bin/utilz. utilz version gives utilz:2.14.1 and \"installed at /home/linuxbrew/.linuxbrew/Cellar/utilz/2.14.1/libexec (43fca62, CI unknown)\", both from the login shell and from the keg's PATH.\n- utilz doctor: exit 0, All checks passed. \"macoz: macOS only, not available on Linux\". hs and Hammerspoon are macOS only and not checked on Linux, with no install line for either. Four optional notes (bat, ffmpeg, xclip, exiftool), as in kovacs-sysadm's B3.\n- utilz list: macoz alone is marked (macOS only).\n- Refusals, each exit 2 with 2.14.1's sentence on stderr and nothing on stdout: macoz background and setpicfor; menuz build and test (macOS and Xcode), validate, render, install, uninstall, start, stop and restart (macOS and Menuz.app), and a bare edit (open -t); arngz apply, a bare desk, diff, discover and init --yes. macoz bare and --help exit 0 with usage.\n- The one-line verbs: menuz status exits 0 with its platform line. menuz doctor exits 1, with its platform skip line and a config FAIL for the run's empty XDG home. arngz list exits 0 (no catalogue). arngz doctor exits 1, with the engine line, the catalogue FAIL and \"1 of 1 preconditions do not hold\".\n- Versions in the keg: macoz 1.0.1, menuz 0.4.5, arngz 1.1.2.\n- Nothing was written under $HOME, /tmp or /var/tmp outside the run dir.\n- For hv's brew rust PATH question: kovacs's .zshrc adds ~/.local/bin, ~/.cargo/bin and ~/bin through path_add (.zshrc:52 to :54), logged in dotfiles-path.txt. Where an interactive shell puts them against linuxbrew is path_add's to say, and this run did not read it.\nSo todo 15 is done: 2.14.1's brew install on kovacs reads back as 0083 designed it. I archive todo 15 on my board. wip.md's kovacs TODO is yours at the next globalfold.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}
