@@ -1,0 +1,16 @@
+{
+  "id": "01M5D62VGQZHZAKM87T2J2JKQX",
+  "ts": "2026-10-20T17:34:57.047Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "todo",
+    "seq": 19,
+    "text": "The gate's kovacs phase gains fmt and clippy (hv, vc's decision 49 (a)): built 20 Oct, banked in ~/Devel/scratch/utilz-dc/gate/. kv-remote.sh's rust-lint runs cargo fmt --all --check, then cargo clippy --all-targets --workspace -D warnings, per crate; it is rc 3, never a pass, unless kovacs's rustc -V is CI's line, which ci-toolchain.sh reads from main's latest push run (rustc 1.99.1 (58cf8f9c3 2026-10-13) on 20 Oct, run 39463604956). Every cargo leg prints the four versions and where each resolved. final-head-gate.sh's kovacs phase calls both, and its report gains the line, with mac-lint kept as a cross-check. kovacs's rustup is 1.99.1 since kovacs-sysadm's update. Left: its first run, in K1 if vc keeps it there, else 2.14.2's gate. Size S."
+  }
+}

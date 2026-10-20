@@ -1,0 +1,16 @@
+{
+  "id": "01M5D62V64XP4579AAB83KANV2",
+  "ts": "2026-10-20T17:34:56.708Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "todo",
+    "seq": 16,
+    "text": "K1, the kovacs leg for cc's 0095 (prez's present decks and a failed pdf's HTML left in TMPDIR), vc's yes of 17:03Z and its word after slot 202. Once cc's R2 START names its bytes, on the same bytes: PREP_REPO=<cc's wt-0095> tmp/dc-2141/sc090/prep.sh c0095-<sha8> --paths <its paths> (the patch's sha256 checked against cc's), kv-prep.sh and ci-toolchain.sh, then one heavy kovacs run booked with utilz-vc: kv-window.sh c0095-<sha8> --cargo rust prez-build prez-at-stub shellcheck, with rust-lint if vc keeps it in K1. That is cargo build and test of the workspace with TMPDIR counted, acceptance.sh AT05 AT06 without --strict (0095's checks (a) and (b) on Linux, /tmp's prez-* listed before and after), and shellcheck 0.9.0 after its control, with the toolchain's four versions printed (rustup's 1.99.1 from ~/.cargo/bin). Size S."
+  }
+}
