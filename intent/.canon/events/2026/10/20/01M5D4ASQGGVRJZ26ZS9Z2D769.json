@@ -1,0 +1,15 @@
+{
+  "id": "01M5D4ASQGGVRJZ26ZS9Z2D769",
+  "ts": "2026-10-20T17:04:20.208Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "todo",
+    "text": "kovacs leg for cc's todo 42 (prez's deck.rs:384 scratch() HTML leak), item 3a, vc's yes of 17:03Z: one heavy kovacs run on the same bytes as cc's R2, once vc has read cc's design and the candidate exists: cargo build --release and cargo test --workspace, TMPDIR counted before and after, its run dir only; booked with utilz-vc. Size S."
+  }
+}

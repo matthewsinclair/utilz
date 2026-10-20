@@ -1,0 +1,16 @@
+{
+  "id": "01M5D4C113QB01BWN428YRTDPH",
+  "ts": "2026-10-20T17:05:00.451Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "todo",
+    "seq": 15,
+    "text": "The kovacs install of 2.14.1 (vc, 19 Oct; vc's yes of 20 Oct 17:03Z on hv's crack on). kovacs-sysadm, each step at hv's approval there, removes the leftover ~/Devel/prj/Utilz and its 16 ~/bin links (Molt's stay), runs the install from the tap (brew tap matthewsinclair/utilz, brew install utilz, utilz doctor, command -v utilz), then adds clippy and rustfmt; vc relays each output to dc. kovacs is 10.211.55.3, ssh config's address. Then dc's readback, a light run booked with utilz-vc: ~/Devel/scratch/utilz-dc/readback/kv-readback.sh <label>, which ships kv-readback-remote.sh to a /var/tmp run dir and removes it once the logs are back. It reads: the leftover gone, the keg's link first on the login PATH and utilz version naming the keg (43fca62), utilz doctor's three Linux rows with no install line for hs or Hammerspoon, utilz list marking macoz alone, and the refusals of macoz, menuz's app and Xcode verbs and arngz's engine verbs, each by 2.14.1's words and exit 2, with status and doctor's one line; nothing written under $HOME. Size S."
+  }
+}

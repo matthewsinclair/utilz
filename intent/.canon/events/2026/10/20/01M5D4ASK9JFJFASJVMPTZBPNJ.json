@@ -1,0 +1,15 @@
+{
+  "id": "01M5D4ASK9JFJFASJVMPTZBPNJ",
+  "ts": "2026-10-20T17:04:20.073Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "doing",
+    "text": "Housekeeping done (item 5 of dc's 20 Oct plan, vc's OK of 17:03Z): 623 paths removed by manifest, listed in ~/Devel/scratch/utilz-dc/housekeeping-19oct/manifest.txt. From ~/Devel/scratch/utilz-dc/work/ (3.8 GB to 340K): the 5 git clones (appr-c0083pl, land-0082-on-6bd207a1, land-0088-on-cd4c67e5, land-0090-on-ee692dbd, snap-src-c0082-final-d5b139c5), the 20 kovacs bundles (kv-*), the 23 sc-* source trees, 8 candidate and landing dirs (0083-wip, 0088, 0090, 0093-kovacs-names, land-0082, -0083, -0088, -0090), and 83 logs, diffs and patches. From tmp/dc-2141 (4.4 MB to 568K): 484 candidate and leg logs. Kept: work/'s 76 scripts (9 of them the kovacs tools' pre-edit copies) and its 2 notes; in tmp/dc-2141 every .md and .sh (the gate's and kovacs's tools, NOTES.md, CRASH-19OCT.md, done-2.14.1.md), the baselines base-11c0f95, cbase-11c0f95 and vbase-2d73b7f in kovacs/ and sc090/, and the three logs closed issues cite (0074's sc090/c0074-9e8f0886/check-ceba4252.log, 0078's sc090/c0078-95b69c55/check-0150478e.log, 0083's kovacs/c0087-230012be/logs/loop-menuz.log), with 0082's isolation/probe.sh; ~/Devel/scratch/utilz-dc/gate/ untouched. A board message that names a removed path now points at nothing."
+  }
+}

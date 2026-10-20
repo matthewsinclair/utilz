@@ -1,0 +1,15 @@
+{
+  "id": "01M5D4XZM59V0209F0YBB4XR6Z",
+  "ts": "2026-10-20T17:14:48.837Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "todo",
+    "text": "The gate's kovacs phase gains fmt and clippy (hv, vc's decision 49 (a)): once kovacs-sysadm has added clippy and rustfmt to kovacs's stable toolchain and vc has relayed rustc -V, cargo clippy -V and rustfmt -V, kv-remote.sh's rust step runs cargo fmt --all --check and cargo clippy --all-targets --workspace -D warnings per crate, as tests.yml's clippy job does; each counts only once cargo clippy -V matches the rust job's Toolchain versions line on CI's latest run, and a mismatch is reported by name, never as a pass. Ubuntu acceptance stays unproven by name (decision 49 (b)). Size S."
+  }
+}

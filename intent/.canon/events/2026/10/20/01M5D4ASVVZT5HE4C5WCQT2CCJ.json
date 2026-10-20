@@ -1,0 +1,15 @@
+{
+  "id": "01M5D4ASVVZT5HE4C5WCQT2CCJ",
+  "ts": "2026-10-20T17:04:20.347Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "todo",
+    "text": "0072's shim, item 3b, vc's yes of 17:03Z: only if opt/menuz/menuz moves, and after arca_swift's 0.2.0 tag: one light shellcheck 0.9.0 pass of the shim and one heavy kovacs leg of menuz.bats, booked with utilz-vc. Size S."
+  }
+}
