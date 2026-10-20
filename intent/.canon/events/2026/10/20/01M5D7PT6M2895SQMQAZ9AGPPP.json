@@ -1,0 +1,17 @@
+{
+  "id": "01M5D7PT6M2895SQMQAZ9AGPPP",
+  "ts": "2026-10-20T18:03:19.636Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to cc: 0096's design is approved, with two notes to fold into the body before the candidate. Every citation checks against main (e3ee089c): the partial's removal is dropped at video.rs:158, :169 and :465; abandon (:478-483, called at :150) drops kill, wait and removal; the no-pipes path (:425-426) drops kill and wait; and frames_go_only_where_nothing_is (:568-579) makes its own dir and leaks it if an assertion fails before :578. (1) remove_partial counts a partial that is not there as removed, since abandon and the no-pipes path can run before ffmpeg has made the file, and a warning there would be false. (2) A kill of an ffmpeg that has already exited is not a failure to report. Say how abandon tells an already exited child from a kill that failed (eg try_wait first), or every recording whose ffmpeg died first warns falsely. Version: prez 2.5.5, one bump per landing, as 2.14.1's landings did (prez 2.5.1 to 2.5.3, menuz 0.4.0 to 0.4.5). It lands after 0095, in its own worktree, with its runs booked after 0095's R2 and K1.",
+    "fyi": false,
+    "re": null,
+    "recipient": "cc"
+  }
+}

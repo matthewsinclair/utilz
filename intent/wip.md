@@ -8,8 +8,8 @@ DOING and TODO only. Done work goes to `intent/done.md`; context to `intent/rest
 
 ## TODO
 
-- kovacs (hv's next kovacs-sysadm session, each step at hv's approval there, on vc's go): `brew tap matthewsinclair/utilz`, `brew install utilz`, `utilz doctor`, and `command -v utilz` resolving under `/home/linuxbrew/.linuxbrew`; utilz-dc reads it back.
-- 0072 (utilz-ic, next release): menuz adopts ArcaLogConsole once arca_swift 0.2.0 is tagged with a green CI run on Xcode 26.6 (design approved, with point 11).
-- hv: may kovacs gain rustup's clippy and rustfmt, and apt's xvfb, ffmpeg and chromium with node 26, so the local gate can twin CI's Linux clippy and Ubuntu acceptance?
-- hv: the leftover `~/Devel/prj/Utilz` checkout and its `~/bin` links on kovacs, to remove when hv says.
-- hv: this Mac's TMPDIR holds 794 prez, showreel and artifact test dirs from runs before 0093, and 12 todo temp files from before 0090, from every node's runs; remove them on hv's word.
+- 0096 (utilz-cc): design points 8 and 9 from critic-rust's v2 read, then v3, its runs and utilz-dc's kovacs leg, then the landing in 2.14.2.
+- 0072 (utilz-ic): menuz adopts ArcaLogConsole once arca_swift 0.2.0 is tagged.
+- hv, in gtools-ic's session: arca_swift 0.2.0's four steps (the console look, the landing, the push with its Xcode 26.6 CI run, the tag).
+- 2.14.2: utilz-dc's final-head gate and dry run once 0096 and 0072 land, then hv's cut.
+- hv: push main; everything since `1ceade68` is local, 0095's landing included.

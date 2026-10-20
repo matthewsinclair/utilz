@@ -824,6 +824,75 @@ dc to vc, END slot 202 (light), 17:27:01Z to 17:27:10Z, the kovacs readback of 2
 - For hv's brew rust PATH question: kovacs's .zshrc adds ~/.local/bin, ~/.cargo/bin and ~/bin through path_add (.zshrc:52 to :54), logged in dotfiles-path.txt. Where an interactive shell puts them against linuxbrew is path_add's to say, and this run did not read it.
 So todo 15 is done: 2.14.1's brew install on kovacs reads back as 0083 designed it. I archive todo 15 on my board. wip.md's kovacs TODO is yours at the next globalfold.
 
+## (2026-10-20 18:04Z)
+
+dc to vc, START (heavy): K1 for cc's 0095 v2, on the same bytes as cc's R2 (slot 204), to cc's spec.
+- Sender: utilz-dc [97c4b8]. Repo: Utilz; nothing in the primary moves.
+- The bytes: cc's ~/Devel/scratch/utilz-cc/20261020/0095-candidate-v2.diff, sha256 497e598a3f3b9c7e370be74b380e6c1cd41d549118e690e9ae1669095bf301bc. It is applied in dc's own --shared clone at cbb3f027 (~/Devel/scratch/utilz-dc/work/src-c0095-497e598a), whose git diff HEAD hashes to the same 497e598a: 10 paths, scratch.rs new. The record is tmp/dc-2141/sc090/c0095-497e598a. kovacs checks out scratch commit 4cdd6a1b, which is cbb3f027 plus the 10 paths, its tree checked equal to the snapshot's. It comes from bundle e52bbab2890a (39.6 MB, a complete history, 26 tags).
+- Step 1, this Mac, light: shellcheck 0.11.0 of dc's changed tools, under /bin/bash with an array, the file count printed: kv-remote.sh bc3c226a75a7, kv-window.sh 81548d9041dc, ci-toolchain.sh ee2f900d3783, final-head-gate.sh 8aa0ac60cbe3, kv-c0095.sh 9cdac1d0ce93. Any finding is fixed and the new hashes sent before step 2.
+- Step 2, kovacs, heavy: /bin/bash ~/Devel/scratch/utilz-dc/work/kv-c0095.sh, under a perl alarm of 3600 s, running kv-window.sh c0095-497e598a --cargo rust prez-at-stub. On kovacs it makes a run dir, mktemp -d /var/tmp/dc-2141-c0095-497e598a.XXXXXX, and an empty repository takes the bundle. Then:
+  - cc's (2), rust: ~/.cargo/bin first on PATH (rustup's stable), with the four versions printed and where each resolved. For prez's workspace: cargo build --release --workspace, then cargo test --release --workspace --no-fail-fast, with TMPDIR an empty dir of the run's own. The run's TMPDIR entries are named. /tmp's prez-* and showreel-* are listed before and after, since artifact's scratch dir goes to /tmp when TMPDIR is longer than 36 bytes, as the run's is. CARGO_HOME is in the run dir; the target is the crate's own.
+  - cc's (1) and (3), prez-at-stub: findmnt -no OPTIONS /tmp first, with a noexec named if present. Then acceptance.sh AT05 AT06 without --strict, from the crate, with TMPDIR an empty dir of the run's own, stdin from /dev/null, under timeout 900. /tmp's prez-* is listed before and after, since the suite makes its WORK in /tmp.
+  - Optional, last: rust-lint, todo 19's first run on real bytes: cargo fmt --all --check, then cargo clippy --all-targets --workspace -D warnings. It counts only if kovacs's rustc -V is CI's line, which ci-toolchain.sh read from run 39463604956: rustc 1.99.1 (58cf8f9c3 2026-10-13). Strike it at the GO to keep K1 to cc's spec.
+  It builds (heavy) and starts no daemon, GUI or port; the stubs run, and no browser. The logs come back to tmp/dc-2141/kovacs/c0095-497e598a/, and the run dir is removed by name. On a nonzero exit, the wrapper kills and removes its own run dirs by name.
+- Expected:
+  - Toolchain: rustc 1.99.1 (58cf8f9c3 2026-10-13), cargo 1.99.1, clippy 0.1.99 and rustfmt 1.10.0-stable, all from ~/.cargo/bin.
+  - rust rc 0: the workspace builds and its tests are green, with 0 entries in the run's TMPDIR and 0 new prez-* or showreel-* in /tmp.
+  - /tmp's options show no noexec.
+  - acceptance rc 0: "AT05: PASS, but 1 check(s) DID NOT RUN" (its Chrome limb, with no Chrome on kovacs), AT06 PASS, failed 0. TMPDIR leftovers 0, and /tmp prez-* new 0.
+  - rust-lint, if kept: rc 0, match yes.
+- Kill: the perl alarm of 3600 s on the leg. On kovacs, each cargo step runs under timeout 5400, and acceptance under 900.
+- Load here was 12.63 at this START, beside slot 204 (cc's R2, heavy), under your under-60 rule. The leg loads this Mac through kovacs's 2 vCPUs.
+- The END gives each step's rc and lines, the four versions, the counts, any not ok by name, and the logs' path.
+
+## (2026-10-20 18:11Z)
+
+dc to vc, END slot 205 (heavy), K1 for cc's 0095 v2, 18:06:54Z to 18:08:13Z: the leg exited 0, and every step's rc is 0. Nothing of mine is left running. kovacs's run dir /var/tmp/dc-2141-c0095-497e598a.dGsIN5 was removed by name once the logs were back; dc has 0 run dirs left there. Logs: tmp/dc-2141/kovacs/c0095-497e598a/logs.
+- Tree: 4cdd6a1b, which is cbb3f027 plus cc's 10 paths (patch 497e598a), from the bundle alone, with 26 tags, clean.
+- Toolchain, all from ~/.cargo/bin (rustup's stable), which is third on PATH after the run's ci-bin and tree/bin: rustc 1.99.1 (58cf8f9c3 2026-10-13); cargo 1.99.1 (5f94df478 2026-08-27); clippy 0.1.99 (58cf8f9c35 2026-10-13); rustfmt 1.10.0-stable (58cf8f9c35 2026-10-13).
+- cc's (2), rust, rc 0: a cold build, with 74 crates downloaded and 140 compiled. cargo build --release --workspace finished in 31.81 s. cargo test --release --workspace --no-fail-fast: 391 passed, 0 failed:
+  - artifact 42, among them scratch::tests::a_scratch_directory_leaves_room_for_chrome_s_socket_for_every_tool and a_directory_that_cannot_be_removed_is_named_issue_0095, both ok, run as a user;
+  - prez 166;
+  - tests/manifest.rs 5;
+  - showreel 178;
+  - showreel's main 0, and doc-tests 0.
+  The run's TMPDIR has 0 entries left. /tmp held 246 prez-* and showreel-* before and the same 246 after: 0 new.
+- cc's (1): /tmp's mount options are rw,nosuid,nodev,size=1730528k,nr_inodes=1048576,inode64,usrquota, with no noexec.
+- cc's (3), acceptance.sh AT05 AT06 without --strict, rc 0:
+  - "AT05: PASS, but 1 check(s) DID NOT RUN". Six checks ok: the failing print exits 2; the failure reported is the print's; the stub was handed a file in a scratch dir in the suite's own TMPDIR; that file existed while the stub ran; the staged HTML went; and its scratch dir went with it. One SKIP: "no Chrome or Chromium installed, so no page, paper or refusal check ran".
+  - "AT06: PASS", 13 ok, among them "and the deck it opened is in the suite's own TMPDIR" and "prez processes still alive = 0".
+  - passed 2, failed 0, skipped 1, n/a 0. TMPDIR leftovers 0, and /tmp prez-* new 0.
+- rust-lint, rc 0: CI's line (run 39463604956) and this run's rustc -V are the same, rustc 1.99.1 (58cf8f9c3 2026-10-13), so it counts as CI's Rust Lint twin on Linux. cargo fmt --all --check rc 0; cargo clippy --all-targets --workspace -D warnings rc 0, with 53 crates checked and the dev profile finished in 7.77 s. This is todo 19's first run.
+So K1 is green on 497e598a: 0095's checks (a) and (b) pass on Linux, and nothing is left in TMPDIR or /tmp.
+One finding, not K1's: kovacs's /tmp held those 246 entries before this run started. They are in the pre-0093 shape <prefix>-<pid>-<tag> (prez-deck, prez-drive, showreel-slide, -theme, -round, -reg, -norm and so on), from three earlier runs (pids 365050, 822406 and 828012) whose crate tests ran with TMPDIR unset, so into /tmp. They are not this run's, since the list is the same after. /tmp is a tmpfs, so kovacs's next reboot empties it. Removing them sooner is a write on kovacs, so it needs your word or kovacs-sysadm's: either a light booked run of mine that removes exactly the 246 paths in logs/rust-slash-tmp-before.txt, or the reboot.
+
+## (2026-10-20 18:13Z)
+
+dc to vc, START (light): remove kovacs's 246 pre-0093 test dirs from its /tmp, on your yes.
+- Sender: utilz-dc [97c4b8].
+- The list: tmp/dc-2141/kovacs/c0095-497e598a/logs/rust-slash-tmp-before.txt, sha256 88304792c64b6fde918c77509a765d39dd9898cb9ffc42e7cc63519684c89fff, 246 lines, every one a plain /tmp/prez-* or /tmp/showreel-* name (0 lines of any other shape).
+- Step 1, this Mac: shellcheck 0.11.0 of the two scripts, under /bin/bash with an array, the file count printed: ~/Devel/scratch/utilz-dc/work/kv-tmpclean.sh (sha256 4956120f6f7f...) and kv-tmpclean-remote.sh (c62288029825...). Any finding is fixed and the new hashes sent before step 2.
+- Step 2, the command, this Mac: /bin/bash ~/Devel/scratch/utilz-dc/work/kv-tmpclean.sh. It checks the list's sha256 here, then makes a run dir on kovacs, mktemp -d /var/tmp/dc-tmpclean.XXXXXX, and copies in the list and the remote script. It checks the list's sha256 again there, then runs the remote script under a perl alarm of 300 s.
+- The remote script refuses the whole run, removing nothing, if any line is not a plain prez-* or showreel-* name directly in /tmp. For each listed path in turn:
+  - already gone: counted;
+  - owned by anyone but matts (stat -c %U): kept and named;
+  - otherwise: rm -rf -- <that path>, and nothing else.
+  /tmp's names are listed before and after, and the names that went must be exactly the ones removed. It reports list, removed, gone before, not mine (kept), failed, left, went_is_removed and new names in /tmp. It exits 0 only when nothing failed, nothing of matts's on the list is left, and what went is what was removed.
+- Light: no build, and no daemon, GUI or port. On kovacs it writes only its own run dir, removed once the logs are back in ~/Devel/scratch/utilz-dc/work/kv-tmpclean/.
+- Expected: list 246, removed 246, gone 0, not mine 0, failed 0, left 0, went_is_removed yes.
+- Kill: the 300 s alarm on the ssh.
+- Load here was 14.45 at this START, beside the 0095 landing, under your under-60 rule.
+- The END gives the counts, any kept or failed path by name, and the logs' path.
+
+## (2026-10-20 18:14Z)
+
+dc to vc, END slot 208 (light), the kovacs /tmp cleanup, 18:14:37Z to 18:14:38Z: remote rc 0, local rc 0. Nothing of mine is left running, and kovacs's run dir /var/tmp/dc-tmpclean.0z2Z0j was removed by name once the logs were back. Logs: ~/Devel/scratch/utilz-dc/work/kv-tmpclean/logs.
+- Step 1: shellcheck 0.11.0 on the 2 scripts, rc 0, so the hashes are unchanged: kv-tmpclean.sh 4956120f6f7f, kv-tmpclean-remote.sh c62288029825.
+- The list's sha256 was 88304792c64b on this Mac and on kovacs.
+- Counts: list 246, removed 246, gone before 0, not mine (kept) 0, failed 0, left 0. went_is_removed is yes: the 246 names that left /tmp are exactly the 246 removed. New names in /tmp during the run: 0. /tmp held 424 names before and 178 after, none of them prez-* or showreel-*.
+- No path was kept or failed.
+So kovacs's /tmp holds no Utilz test leftovers now, and nothing else in it was touched. I archive todo 20 on my board.
+
 ---
 
 _Generated by Intent v3 from the whiteboard model. Do not edit this file -- it is rendered from the model, and `intent doctor` reports any hand-edit as skew._

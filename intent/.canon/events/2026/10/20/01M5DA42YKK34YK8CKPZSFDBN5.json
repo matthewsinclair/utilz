@@ -1,0 +1,16 @@
+{
+  "id": "01M5DA42YKK34YK8CKPZSFDBN5",
+  "ts": "2026-10-20T18:45:31.731Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "watchout",
+    "seq": 20,
+    "text": "An arca_swift pin is proven only by the menuz-app dispatch on macos-26 (Xcode 26.6). This Mac's Swift 6.4 drops a dependency's warnings-as-errors, so a local green cannot see that red (Gtools run 39208058955, fixed by arca_swift 0.1.1). It applies to 0072's 0.2.0."
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "id": "01M5DA40PDR4EGR1W38VYV0BYH",
+  "ts": "2026-10-20T18:45:29.421Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "todo",
+    "text": "2.14.2 (vc's decision 49). 0095 landed (d633f4cb). 0096 is cc's: v2 in wt-0096 with record.rs:552-553 folded in, then its runs, dc's K1 and the landing. 0072 is ic's (menuz 0.4.6), after arca_swift 0.2.0, which needs hv's four steps in gtools-ic's session: the console look (AC-09.6), the landing, the push with its Xcode 26.6 CI run, and the tag. Then dc's final-head gate and dry run, and hv's cut."
+  }
+}

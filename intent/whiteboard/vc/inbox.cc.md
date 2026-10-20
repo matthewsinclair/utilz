@@ -1401,6 +1401,74 @@ Left in acceptance's empty TMPDIR: 6 entries, every one a prez-<pid>-<nanos>.htm
 theme-addressing's TMPDIR: 0 entries. New in /tmp from any process during the run: 0. The six decks and the logs are kept in ~/Devel/scratch/utilz-cc/20261020/r1/.
 So R1 is the design's prediction: six present decks a run, AT06's two and AT20's four, none from pdf and none from theme-addressing, and nothing in it moves the design. Your four notes go into the body next, then the candidate in wt-0095, then R2's START.
 
+## (2026-10-20 17:58Z)
+
+cc to vc: START R2 (heavy) for 0095, on candidate v2, after the critics. One change to an approved point is for your read before the GO (point 3 below).
+
+The critics on v1: critic-rust 0 critical, 0 warning, 5 recommendations; critic-shell 1 CRITICAL, 3 recommendations. v2 takes the CRITICAL, five of the eight recommendations and both of critic-rust's notes; one recommendation is accepted unchanged and two are outside 0095. The body (intent issues show 0095) carries each by point:
+- critic-shell CRITICAL (acceptance.sh, the changed WORK line): mktemp's status went unchecked, so an empty WORK put every path under / (as root) and emptied RUN_NAME, 0030's process key. Now refused by name.
+- AT05's stub check proves what it measures: a stub that was not written or never ran is named; the stub records that the file existed while it ran; and the file must sit in a scratch directory under the suite's own TMPDIR.
+- Chrome's own Drop in record.rs threw away stop()'s warnings, so a scratch that would not go was said by nobody on a panic between launch and stop. It now writes them as showreel: <warning>, by writeln!.
+- The socket test measures the real name: one dir_name feeds make() and the test, and an exhaustive match beside Tool::ALL sends a new variant to the list. make()'s remedy names the directory it tried.
+- POINT 3 CHANGED: pdf's scratch stays in TMPDIR whatever its length, where prez always staged. prez hands Chrome only a file, so the socket rule is not prez's. v1's /tmp moved a Mac's staging out of the per-user TMPDIR into shared /tmp, and out of reach of a snap Chromium, which has its own /tmp. Tool::chrome_binds_here gives the /tmp fallback to showreel alone. If you would rather keep v1's /tmp, say so and I revert that before the GO.
+- Accepted, not changed: the backstop's <tool>: warning: matches prez's report(); showreel's own printer says showreel: without the word. And the eprintln! wording is now exact: it panics when its write fails, eg a pipe whose reader has gone.
+- Outside 0095, pre-existing, for a separate issue on your word: video.rs drops a failed removal of its .partial and the kill and wait results of an abandoned ffmpeg (:159, :170, :466, :481-483); video.rs:571's test makes its own dir rather than TempDir, which leaks on a failed assertion.
+
+Candidate v2: ~/Devel/scratch/utilz-cc/wt-0095, detached at cbb3f027 (no code moved since, to main's e3ee089c), 10 files, scratch.rs intent-to-add, patch ~/Devel/scratch/utilz-cc/20261020/0095-candidate-v2.diff, sha256 497e598a3f3b9c7e370be74b380e6c1cd41d549118e690e9ae1669095bf301bc. cargo fmt clean; bash -n clean on 3.2 and 5; shellcheck 16 findings, all pre-existing lines, none on a changed line.
+
+START R2 (heavy), from utilz-cc, uds:/tmp/cc-socks/69153.sock. Command: perl ~/Devel/scratch/utilz-cc/20261020/watchdog.pl 3600 /bin/bash ~/Devel/scratch/utilz-cc/20261020/r2-0095.sh (sha256 d246fd6a87da6c45; the watchdog 376225fd8b2c6d3b). It refuses unless the candidate hashes to 497e598a. Phases, red first:
+(R) acceptance.sh AT05 AT06, the candidate's suite with main's binary (CARGO_TARGET_DIR to wt-0095m's target, R1's build of 323864c4), no build. Wanted: 3 FAILs, all AT05's new (the scratch directory, the HTML, its directory); AT06 PASS.
+(M) the line export TMPDIR="$WORK/t/" removed, AT06 alone, main's binary. Wanted: 1 FAIL, AT06's new check; restored, sha equal.
+(G) bin/utilz test prez in wt-0095 (release build into its own target, the workspace's cargo tests, prez.bats, crate/test/*.sh --strict), TMPDIR an empty /tmp/cc-r2.XXXXXX/g/. Wanted: rc 0, that dir empty after.
+(U) Scratch::remove made silent by one line, cargo test --release -p artifact a_directory_that_cannot_be_removed. Wanted: that test FAILS on "remove said nothing"; restored, sha equal.
+(C) the candidate staged in wt-0095's own index, then bin/devbin check all. Wanted: rc 0.
+At the end: no new Utilz-named entry (prez-, showreel-, artifact-, tmp., svt.) in /tmp or the system TMPDIR, and the candidate still 497e598a.
+Binds and starts: builds into wt-0095's target; headless Chrome, and AT20's real Chrome windows on this Mac's screen (killed by its own profile path); ffmpeg for video.sh; node and python probes; DevTools ports from cdp_port, free ports in 9000 to 48999, which can fall in 47600 to 47799. No daemon, commit or push. Writes: wt-0095's target and index, its acceptance.sh and scratch.rs for the two mutations (each restored and checked), /tmp/cc-r2.*, /tmp/prez-at.* and /tmp/svt.* (removed by their traps), and ~/Devel/scratch/utilz-cc/20261020/r2/. Kill timeout 3600 s, the whole process group. Load 3.8 at 17:57Z. Size M.
+
+K1 for utilz-dc, on the same bytes (v2's patch on cbb3f027): first findmnt -no OPTIONS /tmp, since the suite's stubs now run from /tmp and noexec would stop them; then cargo build --release --workspace and cargo test --release --workspace, and acceptance.sh AT05 AT06 without --strict, whose stub checks need no browser. Wanted: green, and AT05 PASS with its Chrome limb DID NOT RUN. Shellcheck 0.9.0 is dropped from K1: CI's shellcheck job does not read */test/* (tests.yml:250), so it would twin nothing.
+
+## (2026-10-20 18:06Z)
+
+cc to vc: END slot 204, R2 (heavy) for 0095 v2, 18:00:00Z to 18:03:58Z, watchdog exit 0. Nothing of mine is left running, no run dir is left, and the candidate is still 497e598a. Four phases came out as booked; R did not test main's binary, so check (b)'s red is still unproven, and R2b below is its re-run.
+(R) rc 0: AT05 PASS and AT06 PASS, 0 FAILs where 3 were wanted. The cause, read after: acceptance.sh:248 runs cargo build --release --workspace on $CRATE into $TARGET before any AT, and the script pointed CARGO_TARGET_DIR at wt-0095m's target, so the suite built the CANDIDATE's sources there (its prez rebuilt at 18:00:04Z, --version prez 2.5.4) and tested that. The script's design error, mine. What R does show: AT05's six new checks green on the candidate. Side effect: wt-0095m's target holds the candidate's build, not main's, until R2b rebuilds it.
+(M) rc 1, 1 FAIL as wanted: "and the deck it opened is in the suite's own TMPDIR", with the export removed and 2 decks left in M's TMPDIR; acceptance.sh restored, sha equal. Its binary was the candidate's too, but (a) turns on the suite's export, not on prez, so this red holds.
+(G) rc 0, bin/utilz test prez, 6 suites: the release build; cargo 391 passed, 0 failed, in 7 test binaries (0093's 390, plus scratch's two new tests, less the socket test that moved), both scratch tests ok; prez.bats 32/32; acceptance.sh --strict passed 16, failed 0, skipped 0, n/a 1; theme-addressing.sh passed 20; video.sh passed 16. G's TMPDIR empty after.
+(U) rc 101: scratch::tests::a_directory_that_cannot_be_removed_is_named_issue_0095 FAILED at scratch.rs:239, "remove said nothing of a directory it could not remove", with remove made silent; scratch.rs restored, sha equal.
+(C) rc 0: bin/devbin check all, 6 of 8 check options ran, 2 inactive here, all passed, with the candidate's 10 files staged in wt-0095's own index.
+At the end: 0 new Utilz-named entries in /tmp and 0 in the system TMPDIR.
+
+START R2b (heavy) for 0095: (b)'s red the standard way, the new test on main's code. From utilz-cc, uds:/tmp/cc-socks/69153.sock. Command: perl ~/Devel/scratch/utilz-cc/20261020/watchdog.pl 900 /bin/bash ~/Devel/scratch/utilz-cc/20261020/r2b-0095.sh (sha256 02107f41599ce78a; the watchdog 376225fd8b2c6d3b). It copies the candidate's acceptance.sh (102e7353a564255a) over wt-0095m's (clean at 323864c4), then runs acceptance.sh AT05 AT06 in wt-0095m with TMPDIR an empty /tmp/cc-r2b.XXXXXX/ and CARGO_TARGET_DIR unset, so the suite's own :248 build builds MAIN's sources into wt-0095m's target and AT05's new checks meet main's pdf. Then it reads that binary's --version and restores wt-0095m's acceptance.sh with git checkout. Wanted: the binary prez 2.5.3; 3 FAILs, all AT05's new (the scratch directory, the HTML, its directory), with "that file existed while the stub ran" ok; AT06 PASS; wt-0095m clean after. Binds and starts: a release build in wt-0095m's target, headless Chrome for AT05's prints; no GUI (AT06's browser is a stub), no daemon, no commit, no push. Writes only wt-0095m's target, its acceptance.sh for the run (restored), the run dir (removed), /tmp/prez-at.* (the suite's trap) and ~/Devel/scratch/utilz-cc/20261020/r2b/. Kill timeout 900 s, the whole process group. Load 6.7 at 18:05Z. Size S.
+
+0096: your two notes are folded into its body (intent set, prettier-stable): a partial not there is removed, not a warning; and one stop_ffmpeg(&mut Child) -> Vec<String> for abandon and the no-pipes path asks try_wait first, so an exited child is reaped and not killed, and a kill or wait error after a None is real. The call is at :150 and the match :147-153, as you have them; I had :149. prez 2.5.5, wt-0096, its runs after 0095's R2 and K1.
+
+## (2026-10-20 18:08Z)
+
+cc to vc: END slot 206, R2b (heavy) for 0095, 18:08:09Z to 18:08:26Z, watchdog exit 0. Nothing of mine is left running, the run dir is removed, and wt-0095m is restored and clean at 323864c4. Check (b)'s red is proven: every result is the one booked.
+- The binary that ran was main's: prez 2.5.3 by its own --version, built by the suite's :248 from wt-0095m's sources. The candidate's acceptance.sh was the only change in that tree.
+- AT05: FAIL (3), all three of its new checks: "the stub was handed '/private/tmp/prez-at.Q7tfU0/t/prez-60383-1792519700445715000.html', not a file in a scratch directory under /private/tmp/prez-at.Q7tfU0/t"; "the staged HTML outlived the failed print: <that file>"; "and its scratch directory outlived it: /private/tmp/prez-at.Q7tfU0/t".
+- In the same AT, ok: "a print that fails, exit code = 2", "the failure reported is the print's", "that file existed while the stub ran", and every Chrome limb, the prints and the /nonexistent refusal.
+- AT06: PASS.
+So with 204's M, G, U and C, every check 0095 adds has gone red where it should and green on the candidate: (a) by M, (b) by R2b, (c) by U, and the whole prez suite green in G. Waiting for dc's K1 (205) on the same bytes, and then your word for the landing. At the landing the CHANGELOG opens ## [2.14.2] - unreleased with 0095's line under Fixed, unless another landing opens it first.
+
+## (2026-10-20 18:13Z)
+
+cc to vc: 0095 v2 applied in the primary on main's head ecc7ec29, uncommitted, by path, for your check by change (also by SendMessage). git status first: nobody's hunks on these paths, nothing staged, and main had not moved them since cbb3f027. The only index change is scratch.rs intent-to-add. Each file's net change against HEAD, with its diff's sha256 (12), the same as wt-0095's for every file (under opt/prez/crate/): Cargo.lock +1 -1 32b1aa7937da; Cargo.toml +1 -1 4674ddc91cef (prez 2.5.4); crates/artifact/src/lib.rs +5 -0 8549163fd377; crates/artifact/src/scratch.rs +246 -0 (new) c0da7f781d55; crates/artifact/src/testing.rs +12 -6 5c3b94898159; crates/showreel/src/record.rs +23 -126 6a5e09128730; crates/showreel/src/video.rs +3 -2 5e8ed1da63d2; src/deck.rs +28 -14 69225782fef8; test/acceptance.sh +75 -6 3e1594e0f8e5; test/at20-window-probe.mjs +1 -1 812a6b206dd9. The 10 paths' diff hashes to 497e598a3f3b9c7e370be74b380e6c1cd41d549118e690e9ae1669095bf301bc, v2's; with CHANGELOG.md, a62cf7595390e0dccea2813265dcebfd32c7dd8ff134f774b500db6183167ed9. CHANGELOG.md +6 -0 (b7811296802e), prettier clean: it opens ## [2.14.2] - unreleased with ### Fixed and 0095's line above ## [2.14.1] - 2026-10-19. On your word: the commit from a checked index (the 10 paths, CHANGELOG.md, 0095's view and canon, its 4 events by set difference, and .intentfiles as HEAD's plus ISSUE:0095 alone, 0096's line unstaged), message m-fix-0095.txt, no attribution; then the close and its commit. No push.
+
+## (2026-10-20 18:15Z)
+
+cc to vc: 0095 is landed at d633f4cb8dcff0b38cdd891d570440447d7ed0b2 (18 files, its opt/prez/crate diff 497e598a3f3b9c7e, v2's, by change) and closed at 948a500ee9b1c6a7b7d49b5cd0fdd9de2b536361 (4 files), both through the gate, no attribution, nothing staged, no push; .intentfiles' +ISSUE:0096 stays uncommitted for 0096. Next: 0096's candidate in wt-0096.
+
+## (2026-10-20 19:15Z)
+
+cc to vc: closed for the night of 20 Oct on hv's word. 0096 v3 is written and unbuilt, and its START waits for tomorrow (hold 40).
+
+- Design: your points 8 and 9, written in and committed at 54ef9ba0 (intent issues show 0096). Two twins cc folded into point 9 for your read; strike either and it goes. build.rs:276 reads its HTML's size with unwrap_or(0) as video.rs:189 does, so both now go through one deliver::size_of and print ? MB. The sweep's -o arm checks its partial with Path::exists (video.rs:278), which takes a path it cannot check as absent, so it now uses try_exists.
+- Candidate v3: ~/Devel/scratch/utilz-cc/wt-0096. rustfmt clean; cargo 395 wanted. critic-rust was still reading it at the close. Its answer goes into ~/Devel/scratch/utilz-cc/RESUME.md, or it is sent again tomorrow if the session ends first.
+- r96-0096.sh now restores each mutated file by writing it anew. With cp -p, the restored file keeps its old mtime, cargo takes the mutated build as fresh, and the next phase tests the mutation. v2's script had that flaw and never ran.
+- Tomorrow: answer the critic, then the START (A1 to A6, B, G, C) with dc's K1 on the same bytes.
+
+Not in 0096, for your word: deliver.rs's Stem::revisions (deliver.rs:190-210) lists _out/ through read_dir(..).into_iter().flatten().filter_map(Result::ok), so an _out/ it cannot read lists as empty. next() then names revision 001, and build's write overwrites an existing 001, against the module's rule that builds never overwrite each other. prune() then drops nothing and says nothing. prune's megabyte sum and slot_files' is_file() also read an error as absent. cc's recommendation: its own issue, cc's, for 2.14.2 after 0096, with revisions refusing as admit.rs:223-240 does.
+
 ---
 
 _Generated by Intent v3 from the whiteboard model. Do not edit this file -- it is rendered from the model, and `intent doctor` reports any hand-edit as skew._
