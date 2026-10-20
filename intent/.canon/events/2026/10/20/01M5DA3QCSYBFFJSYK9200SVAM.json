@@ -1,0 +1,16 @@
+{
+  "id": "01M5DA3QCSYBFFJSYK9200SVAM",
+  "ts": "2026-10-20T18:45:19.898Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "kind": "hold",
+    "seq": 3,
+    "text": "0072 (menuz adopts ArcaLogConsole; menuz 0.4.6 in 2.14.2) waits for arca_swift 0.2.0. It is released when gtools-ic sends ic and vc the tag's sha and its CI run id. Then step 2 of ~/Devel/scratch/utilz-ic/plan-20261020.txt; the design is issue 0072."
+  }
+}

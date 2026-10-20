@@ -3,9 +3,9 @@ node: ic
 name: Interface Claude
 role: interface
 session_id: 22416001-9e98-4489-812e-7fcba9ddced6
-heartbeat_at: 2026-10-20 17:04Z
+heartbeat_at: 2026-10-20 18:45Z
 status: active
-focus: "20 Oct: holding on hold 3 (vc, after hv's 'Ok, crack on.'). 0072 starts at arca_swift 0.2.0's tag with step 2 of ~/Devel/scratch/utilz-ic/plan-20261020.txt; gtools-ic sends ic and vc the tag's sha and CI run id. Nothing running, no worktree."
+focus: "20 Oct, wrapped for hv's compact. 0072 (menuz 0.4.6 in 2.14.2) waits for arca_swift 0.2.0's tag (hold 3). Resume from the compact hold and ~/Devel/scratch/utilz-ic/RESUME.md. Nothing running, no worktree."
 claims: [ISSUE:0072]
 ---
 
@@ -21,11 +21,12 @@ _(none)_
 
 ## Holds
 
-- 0072 (menuz adopts ArcaLogConsole) goes in 2.14.2, and that cut waits for it (vc's decisions 48 and 49). Released when arca_swift 0.2.0 is tagged and gtools-ic sends ic and vc the tag's sha and its CI run's id. gtools-vc is putting hv's four steps to hv in gtools-ic's session: the look at AC-09.6, WP-09's landing, the push and the tag. Then comes step 2 of ~/Devel/scratch/utilz-ic/plan-20261020.txt, the amendment (points 9, 8 and 11), and nothing before it. 0072 sets menuz 0.4.6. Its CHANGELOG line goes under ## [2.14.2] - unreleased, which whichever landing comes first opens. (edited)
+- 0072 (menuz adopts ArcaLogConsole; menuz 0.4.6 in 2.14.2) waits for arca_swift 0.2.0. It is released when gtools-ic sends ic and vc the tag's sha and its CI run id. Then step 2 of ~/Devel/scratch/utilz-ic/plan-20261020.txt; the design is issue 0072. (edited)
+- Resume after hv's compact (vc's wrap, 20 Oct). Released once the compact is done, /in-session has run its pickup, and vc gives the word. Resume state: ~/Devel/scratch/utilz-ic/RESUME.md. Nothing running, no worktree, and 0072 per hold 3.
 
 ## Watch-outs
 
-- Landings (vc, 19 Oct 06:11Z): apply a patch only into a primary that holds no one else's uncommitted hunks. git status first, and if anything there is not mine, stop and tell vc. Every START says light or heavy (gtools-vc's terms from 06:06Z): any build, whole suite, Chrome, dry run or cut is heavy and runs alone; a light run (no build, no GUI or daemon, no port, only its own temp dirs) may share the window with one heavy run, and a failure that looks like timing beside a heavy run is rerun alone before it counts.
+_(none)_
 
 ## Decisions
 

@@ -1,0 +1,15 @@
+{
+  "id": "01M5DA3QK7ZJX3TK8ZZHZY1V00",
+  "ts": "2026-10-20T18:45:20.103Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "kind": "hold",
+    "text": "Resume after hv's compact (vc's wrap, 20 Oct). Released once the compact is done, /in-session has run its pickup, and vc gives the word. Resume state: ~/Devel/scratch/utilz-ic/RESUME.md. Nothing running, no worktree, and 0072 per hold 3."
+  }
+}
