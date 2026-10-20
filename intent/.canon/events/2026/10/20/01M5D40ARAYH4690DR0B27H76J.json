@@ -1,0 +1,15 @@
+{
+  "id": "01M5D40ARAYH4690DR0B27H76J",
+  "ts": "2026-10-20T16:58:37.194Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "kind": "hold",
+    "text": "Today's hold (vc's ask at boot, 20 Oct, on hv's word to vc). Released by hv's word through vc. Until then: no runs, builds, source or store edits, issue filings or landings. Reading is fine, and so are ic's own board writes and a wb commit of ic's own records by path. ic's plan went to vc by wb ask and SendMessage (~/Devel/scratch/utilz-ic/plan-20261020.txt)."
+  }
+}

@@ -2,10 +2,10 @@
 node: ic
 name: Interface Claude
 role: interface
-session_id: 28cb7084-edb7-43ea-8d34-762c618e0583
-heartbeat_at: 2026-10-19 19:44Z
+session_id: 22416001-9e98-4489-812e-7fcba9ddced6
+heartbeat_at: 2026-10-20 16:54Z
 status: active
-focus: "19 Oct, end of day (decision 47), folded for hv's compact: 2.14.1 released with 0073, 0086, 0091 and 0094; hv runs Menuz 0.4.5. Next: 0072 for the next release, once arca_swift 0.2.0 is tagged (hold 3). Resume from the compact hold and ~/Devel/scratch/utilz-ic/RESUME.md."
+focus: "20 Oct: booted, waiting for vc's instructions. Only open issue 0072 (hold 3), still blocked: arca_swift has no 0.2.0 tag (GitHub main 5d0af36, tags 0.1.0 and 0.1.1); WP-09 is 8 commits in gtools-ic's wt-wp09 at f5534e0, unlanded, its public API unchanged since 27ff5fe. Nothing running, no worktree."
 claims: [ISSUE:0072]
 ---
 
@@ -22,7 +22,7 @@ _(none)_
 ## Holds
 
 - 0072 (menuz adopts ArcaLogConsole) moves to the release after 2.14.1: hv says cut without it (vc, 19 Oct, after hv first chose to land arca 0.2.0 then adopt). It waits for arca_swift 0.2.0 at Gtools' pace; gtools-vc sends the tag's sha and CI run id. Then points 9 and 11, and the adoption in a worktree only; no landing on main until 2.14.1's CI and tap are done. (edited)
-- Resume after hv's compact (vc's decision 47, end of day 19 Oct). Released when this session's compact is done and /in-session has run its pickup. State: ~/Devel/scratch/utilz-ic/RESUME.md. 2.14.1 is released with 0073, 0086, 0091 and 0094; hv runs Menuz 0.4.5 (build 1427, b142ad9a). Next: 0072 for the next release (hold 3), once gtools-vc sends arca_swift 0.2.0's sha and CI run id: points 9 and 11, then the adoption in a worktree. No pushes.
+- Today's hold (vc's ask at boot, 20 Oct, on hv's word to vc). Released by hv's word through vc. Until then: no runs, builds, source or store edits, issue filings or landings. Reading is fine, and so are ic's own board writes and a wb commit of ic's own records by path. ic's plan went to vc by wb ask and SendMessage (~/Devel/scratch/utilz-ic/plan-20261020.txt).
 
 ## Watch-outs
 
