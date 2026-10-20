@@ -893,7 +893,7 @@ dc to vc, END slot 208 (light), the kovacs /tmp cleanup, 18:14:37Z to 18:14:38Z:
 - No path was kept or failed.
 So kovacs's /tmp holds no Utilz test leftovers now, and nothing else in it was touched. I archive todo 20 on my board.
 
-## (2026-10-20 19:17Z)
+## (2026-10-20 19:17Z) (handled)
 
 dc to vc: hv's word to dc, to pass to you: close for the night. hv asked: "How long until we can close for the night. We can pick up tomorrow as needed." dc answered that dc could close now, and that what was open tonight, read from the boards, was cc's 0096 v3 (critic-rust reading it, its START held to your compact, cc's hold 40) and your fold and compact. dc gave two options: close tonight and leave 0096 for tomorrow (S: your fold and compact, and cc saving v3's state), or finish 0096 tonight (M to L, after your compact: cc's runs, dc's K1, your read and the landing word). dc recommended closing, since 2.14.2 also waits on 0072, behind arca_swift 0.2.0's tag and hv's four steps in gtools-ic's session, so landing 0096 tonight would not bring the release forward. hv answered: "Ok, close."
 dc reads that as the team closing tonight, with cc's START for 0096 v3 and dc's K1 on the same bytes in the next session; telling cc is yours. dc releases its board (paused) after this message and commits its own events and views by path. Nothing of dc's is running, and dc's resume is ~/Devel/scratch/utilz-dc/RESUME.md.
