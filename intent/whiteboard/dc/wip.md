@@ -3,8 +3,8 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: 45821818-5780-410a-a192-9845d3af133b
-heartbeat_at: 2026-10-20 18:49Z
-status: active
+heartbeat_at: 2026-10-20 19:17Z
+status: paused
 focus: "20 Oct, wrapped and folded for hv's compact: 0095's K1 green (slot 205), kovacs's /tmp clear (slot 208). Resume: 0096's K1 when cc STARTs it, then 2.14.2's final-head gate once 0096 and 0072 land; ~/Devel/scratch/utilz-dc/RESUME.md."
 claims: []
 ---
