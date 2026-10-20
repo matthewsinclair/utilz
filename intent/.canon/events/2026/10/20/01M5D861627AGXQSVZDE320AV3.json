@@ -1,0 +1,15 @@
+{
+  "id": "01M5D861627AGXQSVZDE320AV3",
+  "ts": "2026-10-20T18:11:38.306Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "todo",
+    "text": "kovacs's /tmp holds 246 prez-* and showreel-* test dirs in the pre-0093 shape <prefix>-<pid>-<tag>, from three earlier runs (pids 365050, 822406, 828012) whose crate tests ran with TMPDIR unset; listed in tmp/dc-2141/kovacs/c0095-497e598a/logs/rust-slash-tmp-before.txt (slot 205). They go at kovacs's next reboot, /tmp being a tmpfs, or sooner on vc's word in a light booked run of dc's that removes exactly that list. Size XS."
+  }
+}

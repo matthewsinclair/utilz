@@ -1,0 +1,16 @@
+{
+  "id": "01M5D860TXP61TFK9S5KTR090C",
+  "ts": "2026-10-20T18:11:37.949Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "todo",
+    "seq": 19,
+    "text": "Done 20 Oct: the gate's kovacs phase twins CI's Rust Lint (hv, vc's decision 49 (a)). kv-remote.sh's rust-lint (fmt --check, then clippy -D warnings, per crate, rc 3 unless kovacs's rustc -V is CI's line, which ci-toolchain.sh reads), the four versions on every cargo leg, and final-head-gate.sh's kovacs phase and report calling them; banked in ~/Devel/scratch/utilz-dc/gate/. First run green in slot 205 (K1), toolchain matching CI's 1.99.1. Its next run is 2.14.2's gate (todo 18)."
+  }
+}

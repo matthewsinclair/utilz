@@ -1,0 +1,16 @@
+{
+  "id": "01M5D860C7DYQT01M7XX69XJKN",
+  "ts": "2026-10-20T18:11:37.479Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "todo",
+    "seq": 16,
+    "text": "Done, slot 205 (heavy, 20 Oct 18:06:54Z to 18:08:13Z): K1 for cc's 0095 v2 (patch 497e598a on cbb3f027, kovacs's tree 4cdd6a1b), every step rc 0; logs tmp/dc-2141/kovacs/c0095-497e598a/logs. Toolchain rustup's 1.99.1 from ~/.cargo/bin. rust: cold build, 391 tests passed, 0 failed, 0 left in the run's TMPDIR and 0 new prez-* or showreel-* in /tmp. /tmp is not noexec. acceptance.sh AT05 AT06: AT05 PASS, but 1 check DID NOT RUN (its Chrome limb), AT06 PASS, nothing left. rust-lint: fmt and clippy rc 0, toolchain matching CI's."
+  }
+}

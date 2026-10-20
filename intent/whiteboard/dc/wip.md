@@ -3,9 +3,9 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: 45821818-5780-410a-a192-9845d3af133b
-heartbeat_at: 2026-10-20 17:37Z
+heartbeat_at: 2026-10-20 18:11Z
 status: active
-focus: "20 Oct, localfold on hv's word (no compact): todo 15 done (slot 202, 0 FAIL). Waiting on cc's R2 START for 0095's bytes, then K1 (todo 16), booked with utilz-vc; todo 19's rust-lint is built for its first run; 0072's shim (todo 17) and 2.14.2's gate (todo 18) later; the README Homebrew paragraph waits for hv's word."
+focus: "20 Oct: K1 green (slot 205, 0095 v2 on kovacs, rust-lint's first run matching CI's toolchain); todos 16 and 19 done. Next: the 2.14.2 gate (todo 18) when vc names its head; 0072's shim (todo 17) only if it moves; kovacs's old /tmp test dirs (todo 20) on vc's word; the README Homebrew paragraph waits for hv's word."
 claims: []
 ---
 
@@ -17,10 +17,9 @@ _(none)_
 
 ## TODO
 
-- K1, the kovacs leg for cc's 0095 (prez's present decks and a failed pdf's HTML left in TMPDIR), vc's yes of 17:03Z and its word after slot 202. Once cc's R2 START names its bytes, on the same bytes: PREP_REPO=<cc's wt-0095> tmp/dc-2141/sc090/prep.sh c0095-<sha8> --paths <its paths> (the patch's sha256 checked against cc's), kv-prep.sh and ci-toolchain.sh, then one heavy kovacs run booked with utilz-vc: kv-window.sh c0095-<sha8> --cargo rust prez-build prez-at-stub shellcheck, with rust-lint if vc keeps it in K1. That is cargo build and test of the workspace with TMPDIR counted, acceptance.sh AT05 AT06 without --strict (0095's checks (a) and (b) on Linux, /tmp's prez-* listed before and after), and shellcheck 0.9.0 after its control, with the toolchain's four versions printed (rustup's 1.99.1 from ~/.cargo/bin). Size S. (edited)
 - 0072's shim, item 3b, vc's yes of 17:03Z: only if opt/menuz/menuz moves, and after arca_swift's 0.2.0 tag: one light shellcheck 0.9.0 pass of the shim and one heavy kovacs leg of menuz.bats, booked with utilz-vc. Size S.
 - The next release, 2.14.2 (hv, vc's decision 49): its final-head gate, report and dry run, then the post-release steps (item 4 of dc's 20 Oct plan). Later: the cut follows 0072's landing. Size L. (edited)
-- The gate's kovacs phase gains fmt and clippy (hv, vc's decision 49 (a)): built 20 Oct, banked in ~/Devel/scratch/utilz-dc/gate/. kv-remote.sh's rust-lint runs cargo fmt --all --check, then cargo clippy --all-targets --workspace -D warnings, per crate; it is rc 3, never a pass, unless kovacs's rustc -V is CI's line, which ci-toolchain.sh reads from main's latest push run (rustc 1.99.1 (58cf8f9c3 2026-10-13) on 20 Oct, run 39463604956). Every cargo leg prints the four versions and where each resolved. final-head-gate.sh's kovacs phase calls both, and its report gains the line, with mac-lint kept as a cross-check. kovacs's rustup is 1.99.1 since kovacs-sysadm's update. Left: its first run, in K1 if vc keeps it there, else 2.14.2's gate. Size S. (edited)
+- kovacs's /tmp holds 246 prez-* and showreel-* test dirs in the pre-0093 shape <prefix>-<pid>-<tag>, from three earlier runs (pids 365050, 822406, 828012) whose crate tests ran with TMPDIR unset; listed in tmp/dc-2141/kovacs/c0095-497e598a/logs/rust-slash-tmp-before.txt (slot 205). They go at kovacs's next reboot, /tmp being a tmpfs, or sooner on vc's word in a light booked run of dc's that removes exactly that list. Size XS.
 
 ## Holds
 
