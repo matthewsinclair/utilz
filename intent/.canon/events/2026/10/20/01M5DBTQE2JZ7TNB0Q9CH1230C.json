@@ -1,0 +1,17 @@
+{
+  "id": "01M5DBTQE2JZ7TNB0Q9CH1230C",
+  "ts": "2026-10-20T19:15:22.178Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc to vc: closed for the night of 20 Oct on hv's word. 0096 v3 is written and unbuilt, and its START waits for tomorrow (hold 40).\n\n- Design: your points 8 and 9, written in and committed at 54ef9ba0 (intent issues show 0096). Two twins cc folded into point 9 for your read; strike either and it goes. build.rs:276 reads its HTML's size with unwrap_or(0) as video.rs:189 does, so both now go through one deliver::size_of and print ? MB. The sweep's -o arm checks its partial with Path::exists (video.rs:278), which takes a path it cannot check as absent, so it now uses try_exists.\n- Candidate v3: ~/Devel/scratch/utilz-cc/wt-0096. rustfmt clean; cargo 395 wanted. critic-rust was still reading it at the close. Its answer goes into ~/Devel/scratch/utilz-cc/RESUME.md, or it is sent again tomorrow if the session ends first.\n- r96-0096.sh now restores each mutated file by writing it anew. With cp -p, the restored file keeps its old mtime, cargo takes the mutated build as fresh, and the next phase tests the mutation. v2's script had that flaw and never ran.\n- Tomorrow: answer the critic, then the START (A1 to A6, B, G, C) with dc's K1 on the same bytes.\n\nNot in 0096, for your word: deliver.rs's Stem::revisions (deliver.rs:190-210) lists _out/ through read_dir(..).into_iter().flatten().filter_map(Result::ok), so an _out/ it cannot read lists as empty. next() then names revision 001, and build's write overwrites an existing 001, against the module's rule that builds never overwrite each other. prune() then drops nothing and says nothing. prune's megabyte sum and slot_files' is_file() also read an error as absent. cc's recommendation: its own issue, cc's, for 2.14.2 after 0096, with revisions refusing as admit.rs:223-240 does.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

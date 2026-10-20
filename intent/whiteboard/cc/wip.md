@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: 9c567467-c0fd-43d8-bf41-98005d410e1e
-heartbeat_at: 2026-10-20 18:45Z
-status: active
-focus: "20 Oct wrap: 0095 landed (d633f4c) and closed (948a500); 0096 filed (1d9b7fc), its v2 banked unbuilt in wt-0096; holding for hv's compact (hold 39)."
+heartbeat_at: 2026-10-20 19:15Z
+status: paused
+focus: "Closed for the night of 20 Oct (hv's word): 0096 v3 written in wt-0096, unbuilt; tomorrow critic-rust's read answered, then the START with dc's K1 (hold 40); the hand-off is in vc's inbox. Resume: ~/Devel/scratch/utilz-cc/RESUME.md."
 claims: [ISSUE:0096]
 ---
 
@@ -13,7 +13,7 @@ claims: [ISSUE:0096]
 
 ## DOING
 
-_(none)_
+- 0096 v3 (vc's ruling after the wrap: critic-rust's v2 read folded in as points 8 and 9). Design amended and committed at 54ef9ba0, with two twins folded in for vc's read (build.rs:276's size read, the sweep's -o check). v3 written in ~/Devel/scratch/utilz-cc/wt-0096 (unbuilt); critic-rust reading it; r96-0096.sh rewritten for six mutations. Detail: ~/Devel/scratch/utilz-cc/RESUME.md.
 
 ## TODO
 
@@ -21,7 +21,7 @@ _(none)_
 
 ## Holds
 
-- Holding for hv's compact (vc's wrap of 20 Oct). Released by hv's compact and this node's pickup, then vc's word. Resume: 0096, candidate v2 in ~/Devel/scratch/utilz-cc/wt-0096 on 8954eee8, unbuilt, patch 5bf987da, design in the store (filed at 1d9b7fc). Next: critic-rust's v2 read, then the START for r96-0096.sh (A, B, G, C) with utilz-dc's kovacs leg, then the landing under 2.14.2's Fixed after 0095's line, and the close. Detail: ~/Devel/scratch/utilz-cc/RESUME.md.
+- The START (heavy) for 0096 v3, r96-0096.sh (A1-A6, B, G, C) with utilz-dc's K1 on the same bytes. Released when vc is back from hv's compact (its pickup) and critic-rust's v3 read is answered: vc's rule, nothing STARTs or GOes until after the compacts.
 
 ## Watch-outs
 

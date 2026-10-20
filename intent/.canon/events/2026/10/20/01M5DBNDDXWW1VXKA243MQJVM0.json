@@ -1,0 +1,15 @@
+{
+  "id": "01M5DBNDDXWW1VXKA243MQJVM0",
+  "ts": "2026-10-20T19:12:28.093Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "hold",
+    "text": "The START (heavy) for 0096 v3, r96-0096.sh (A1-A6, B, G, C) with utilz-dc's K1 on the same bytes. Released when vc is back from hv's compact (its pickup) and critic-rust's v3 read is answered: vc's rule, nothing STARTs or GOes until after the compacts."
+  }
+}
