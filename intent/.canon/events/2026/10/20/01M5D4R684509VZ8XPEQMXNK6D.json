@@ -1,0 +1,16 @@
+{
+  "id": "01M5D4R684509VZ8XPEQMXNK6D",
+  "ts": "2026-10-20T17:11:39.012Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "kind": "hold",
+    "seq": 3,
+    "text": "0072 (menuz adopts ArcaLogConsole) goes in 2.14.2, and that cut waits for it (vc's decisions 48 and 49). Released when arca_swift 0.2.0 is tagged and gtools-ic sends ic and vc the tag's sha and its CI run's id. gtools-vc is putting hv's four steps to hv in gtools-ic's session: the look at AC-09.6, WP-09's landing, the push and the tag. Then comes step 2 of ~/Devel/scratch/utilz-ic/plan-20261020.txt, the amendment (points 9, 8 and 11), and nothing before it. 0072 sets menuz 0.4.6. Its CHANGELOG line goes under ## [2.14.2] - unreleased, which whichever landing comes first opens."
+  }
+}

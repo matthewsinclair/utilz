@@ -21,7 +21,7 @@ _(none)_
 
 ## Holds
 
-- 0072 (menuz adopts ArcaLogConsole), for the release after 2.14.1. Released when arca_swift 0.2.0 is tagged and gtools-ic sends ic and vc the tag's sha and its CI run's id. gtools-vc is putting hv's four steps to hv in gtools-ic's session: the look at AC-09.6, WP-09's landing, the push and the tag. After that comes step 2 of ~/Devel/scratch/utilz-ic/plan-20261020.txt, the amendment (points 9, 8 and 11), and nothing before it. hv has been asked menuz's number (0.4.6 unless hv names another) and the release number. (edited)
+- 0072 (menuz adopts ArcaLogConsole) goes in 2.14.2, and that cut waits for it (vc's decisions 48 and 49). Released when arca_swift 0.2.0 is tagged and gtools-ic sends ic and vc the tag's sha and its CI run's id. gtools-vc is putting hv's four steps to hv in gtools-ic's session: the look at AC-09.6, WP-09's landing, the push and the tag. Then comes step 2 of ~/Devel/scratch/utilz-ic/plan-20261020.txt, the amendment (points 9, 8 and 11), and nothing before it. 0072 sets menuz 0.4.6. Its CHANGELOG line goes under ## [2.14.2] - unreleased, which whichever landing comes first opens. (edited)
 
 ## Watch-outs
 
