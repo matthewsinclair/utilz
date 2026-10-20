@@ -9,6 +9,7 @@ use crate::args::{Command, Verb};
 use crate::{
   drive, frontmatter, html, inline, notes, numbering, render, split, switch, theme, Failure,
 };
+use artifact::scratch::{Scratch, Tool};
 use std::path::{Path, PathBuf};
 
 pub fn run(cmd: &Command) -> Result<(), Failure> {
@@ -30,25 +31,34 @@ fn build(cmd: &Command) -> Result<PathBuf, Failure> {
 fn pdf(cmd: &Command) -> Result<(), Failure> {
   let browser = artifact::browser::find(cmd.browser.as_deref())?;
   let out = output_path(cmd, "pdf");
-  // The intermediate HTML is a build product of THIS run and belongs in the
-  // temp directory: writing it beside the deck would leave a file the user did
-  // not ask for and did not know to delete.
-  let staged = scratch("html");
   let compiled = compile(cmd, paper_rule(cmd.paper.as_deref())?)?;
-  write(&staged, &compiled.artifact)?;
+  // The intermediate HTML is a build product of THIS run and belongs in a
+  // scratch directory of its own: writing it beside the deck would leave a file
+  // the user did not ask for and did not know to delete. **THE DIRECTORY GOES
+  // BEFORE THIS RETURNS, ON EVERY PATH** (issue 0095): the write's and the
+  // print's result are held until it has, so no `?` steps past the removal, and
+  // a removal that fails is said, whether the print worked or not.
+  let mut scratch = Scratch::new(Tool::Prez)?;
+  let staged = scratch.path().join("deck.html");
 
   // The slide count travels so the printer can check what came back against
   // what went in -- the base print rules are order-protected, not
   // !important-proof (drive::verify_pagination).
-  report(&drive::print_to_pdf(
-    &browser,
-    &staged,
-    &out,
-    compiled.slides,
-  )?);
-  let _ = std::fs::remove_file(&staged);
-  println!("prez: wrote {}", out.display());
-  Ok(())
+  let printed = write(&staged, &compiled.artifact)
+    .and_then(|()| drive::print_to_pdf(&browser, &staged, &out, compiled.slides));
+  let left: Vec<String> = scratch.remove().into_iter().collect();
+  match printed {
+    Ok(warnings) => {
+      report(&warnings);
+      report(&left);
+      println!("prez: wrote {}", out.display());
+      Ok(())
+    }
+    Err(failure) => {
+      report(&left);
+      Err(failure)
+    }
+  }
 }
 
 fn present(cmd: &Command) -> Result<(), Failure> {
@@ -381,6 +391,10 @@ fn output_path(cmd: &Command, extension: &str) -> PathBuf {
   }
 }
 
+/// `present`'s staged deck, without `-o`: a file in TMPDIR that must OUTLIVE
+/// prez, because the browser is still reading it after prez exits (spec 6).
+/// So it is not an `artifact::scratch::Scratch`, whose point is that it goes
+/// before its run ends.
 fn scratch(extension: &str) -> PathBuf {
   let stamp = std::time::SystemTime::now()
     .duration_since(std::time::UNIX_EPOCH)

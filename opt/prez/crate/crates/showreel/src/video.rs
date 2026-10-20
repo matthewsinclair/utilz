@@ -16,10 +16,11 @@
 //! next run removes it before it starts.
 
 use crate::aspect::Aspect;
-use crate::record::{self, Frame, Scratch};
+use crate::record::{self, Frame};
 use crate::tail::Tail;
 use crate::zone::Zone;
 use crate::{build, deliver};
+use artifact::scratch::{Scratch, Tool};
 use artifact::Failure;
 use std::fmt::Write as _;
 use std::io::Write;
@@ -100,7 +101,7 @@ pub fn run(dir: &Path, o: &Options, progress: &mut dyn FnMut(u64, u64)) -> Resul
 
   // With `-o` the HTML is built into the recording's own temporary directory,
   // because the caller named only a video, and it goes when the recording does.
-  let scratch = Scratch::new()?;
+  let scratch = Scratch::new(Tool::Showreel)?;
   let built = build::run(
     dir,
     &build::Options {

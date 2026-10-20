@@ -24,14 +24,13 @@
 
 use crate::cdp::Session;
 use crate::tail::Tail;
+use artifact::scratch::Scratch;
 use artifact::{base64, browser, Failure};
 use serde::Deserialize;
 use serde_json::{json, Value};
-use std::fs;
-use std::io::ErrorKind;
-use std::os::unix::fs::DirBuilderExt;
+use std::io::Write;
 use std::os::unix::process::CommandExt;
-use std::path::{Path, PathBuf};
+use std::path::Path;
 use std::process::{Child, ChildStdin, Command, Stdio};
 use std::time::Duration;
 
@@ -136,54 +135,20 @@ pub struct Recording {
   pub warnings: Vec<String>,
 }
 
-/// A private directory for one recording. It holds Chrome's profile and its
-/// TMPDIR, and the reel's HTML when the caller named only a video (`-o`).
-///
-/// **IT GOES WHEN THE RECORDING ENDS, ON EVERY PATH.** `record` takes it, and
-/// Chrome's shutdown removes it; after an interrupt the wrapper's trap does;
-/// and a recording that never started drops it, which removes it too. Created
-/// by the caller rather than inside `record`, so that whatever the caller puts
-/// in it is covered by the same three.
-pub struct Scratch {
-  dir: PathBuf,
-}
-
-impl Scratch {
-  pub fn new() -> Result<Self, Failure> {
-    scratch_dir().map(|dir| Self { dir })
-  }
-
-  pub fn path(&self) -> &Path {
-    &self.dir
-  }
-
-  /// Removes the directory, and says so when it cannot.
-  fn remove(&self) -> Option<String> {
-    match fs::remove_dir_all(&self.dir) {
-      Ok(()) => None,
-      Err(e) if e.kind() == ErrorKind::NotFound => None,
-      Err(e) => Some(format!(
-        "could not remove the recording's temporary directory {}: {e}",
-        self.dir.display()
-      )),
-    }
-  }
-}
-
-impl Drop for Scratch {
-  /// The backstop for a recording that never reached Chrome's shutdown, which
-  /// is where a directory that will not go is reported.
-  fn drop(&mut self) {
-    let _ = self.remove();
-  }
-}
-
 /// Records the reel at `reel` into frames of `size` pixels at `fps`, in
 /// `scratch`, handing each frame to `sink` as it is captured. The page is laid
 /// out `scale` times smaller than the frame and drawn at that device scale
 /// (`Aspect::scale`, design D5a), so the frame keeps its pixels. `zone` is the
 /// platform safe zone's word, which the player reads off the URL (ST0024 D5c);
 /// `None` asks for none and changes the URL not at all.
+///
+/// `scratch` (`artifact::scratch`) holds Chrome's profile and its TMPDIR, and
+/// the reel's HTML when the caller named only a video (`-o`). **IT GOES WHEN
+/// THE RECORDING ENDS, ON EVERY PATH.** `record` takes it, and Chrome's
+/// shutdown removes it; after an interrupt the wrapper's trap does; and a
+/// recording that never started drops it, which removes it too. Created by the
+/// caller rather than inside `record`, so that whatever the caller puts in it
+/// is covered by the same three.
 #[allow(clippy::too_many_arguments)]
 pub fn record(
   browser: &Path,
@@ -634,8 +599,13 @@ impl Chrome {
 
 impl Drop for Chrome {
   /// The backstop for a path that never reached `stop`: a panic in a test.
+  /// What `stop` could not do is said here, since no caller is left to report
+  /// it (issue 0095), by `writeln!` rather than `eprintln!`, for the reason
+  /// `artifact::scratch`'s own backstop gives.
   fn drop(&mut self) {
-    self.stop(false);
+    for warning in self.stop(false) {
+      let _ = writeln!(std::io::stderr(), "showreel: {warning}");
+    }
   }
 }
 
@@ -650,57 +620,6 @@ fn kill_group(pgid: u32) -> std::io::Result<()> {
     .stderr(Stdio::null())
     .status()
     .map(|_| ())
-}
-
-/// The longest directory a recording's scratch directory is made in.
-///
-/// **CHROME BINDS A UNIX SOCKET INSIDE IT, AND A SOCKET'S PATH IS SHORT.** The
-/// process singleton makes `<dir>/.<prefix>.XXXXXX/SingletonSocket`: up to 46
-/// bytes past `<dir>`, for Chromium's `.org.chromium.Chromium` prefix, the
-/// longest of the four browsers the finder takes. The path must fit `sun_path`,
-/// 104 bytes on macOS and 108 on Linux with the terminating NUL, or Chrome
-/// aborts at its start. CI's Linux leg measured that as "Chrome closed the
-/// DevTools pipe during the start", under video.sh's nested TMPDIR. So a base
-/// longer than this is swapped for /tmp: 36, a slash, and `showreel-<pid>-<n>`
-/// at most 19, leave 57, and 57 + 46 is 103.
-const SCRATCH_BASE_MAX: usize = 36;
-
-/// Where a scratch directory is made: TMPDIR, unless it is too long for the
-/// socket Chrome puts inside it.
-fn scratch_base(temp: PathBuf) -> PathBuf {
-  if temp.as_os_str().len() <= SCRATCH_BASE_MAX {
-    temp
-  } else {
-    PathBuf::from("/tmp")
-  }
-}
-
-/// Creates a directory no other process can read, for one recording.
-fn scratch_dir() -> Result<PathBuf, Failure> {
-  let base = scratch_base(std::env::temp_dir());
-  for n in 0..100 {
-    let dir = base.join(format!("showreel-{}-{n}", std::process::id()));
-    match fs::DirBuilder::new().mode(0o700).create(&dir) {
-      Ok(()) => return Ok(dir),
-      Err(e) if e.kind() == ErrorKind::AlreadyExists => continue,
-      Err(e) => {
-        return Err(Failure::new(
-          format!(
-            "could not create a temporary directory in {}: {e}",
-            base.display()
-          ),
-          "check TMPDIR names a writable directory",
-        ))
-      }
-    }
-  }
-  Err(Failure::new(
-    format!(
-      "could not find a free temporary directory name in {}",
-      base.display()
-    ),
-    "clear old showreel-* directories out of it",
-  ))
 }
 
 /// A string field of a reply that the recording cannot go on without.
@@ -730,6 +649,8 @@ fn read<T: serde::de::DeserializeOwned>(value: Value, what: &str) -> Result<T, F
 #[cfg(test)]
 mod tests {
   use super::*;
+  use artifact::scratch::Tool;
+  use std::fs;
 
   /// **WIDESCREEN'S METRICS ARE PINNED BYTE FOR BYTE**, because they are what
   /// every recording made before ST0022 was laid out at: a 16:9 frame at scale
@@ -835,37 +756,12 @@ mod tests {
     }
   }
 
-  /// The scratch directory leaves room for the socket Chrome binds in it, on
-  /// the longest TMPDIR as on the shortest.
-  #[test]
-  fn a_scratch_directory_leaves_room_for_chrome_s_socket() {
-    let long = PathBuf::from("/var/folders/nn/p40vzghs67v8yq0p5y416yf80000gn/T/");
-    assert_eq!(
-      scratch_base(long),
-      PathBuf::from("/tmp"),
-      "too long, so /tmp"
-    );
-    assert_eq!(scratch_base(PathBuf::from("/tmp/")), PathBuf::from("/tmp/"));
-    let widest = format!(
-      "{}/showreel-{}-{}",
-      "x".repeat(SCRATCH_BASE_MAX),
-      u32::MAX / 1000,
-      99
-    );
-    assert!(widest.len() <= 57, "{} bytes: {widest}", widest.len());
-    let socket = format!("{widest}/.org.chromium.Chromium.XXXXXX/SingletonSocket");
-    assert!(
-      socket.len() < 104,
-      "{} bytes, over macOS's sun_path: {socket}",
-      socket.len()
-    );
-  }
-
   /// The trap is what removes the profile after an interrupt, when no Rust
   /// runs. Here the thing it waits for is `true`, which exits at once.
   #[test]
   fn the_wrapper_removes_its_directory_when_what_it_ran_exits() {
-    let dir = scratch_dir().unwrap();
+    let scratch = Scratch::new(Tool::Showreel).unwrap();
+    let dir = scratch.path().to_path_buf();
     fs::write(dir.join("profile-file"), b"x").unwrap();
     let status = Command::new("/bin/sh")
       .arg("-c")
@@ -887,7 +783,8 @@ mod tests {
   /// own shutdown, which is what vc measured Chrome doing.
   #[test]
   fn the_wrapper_ends_what_it_runs_when_its_parent_dies_and_removes_its_directory() {
-    let dir = scratch_dir().unwrap();
+    let scratch = Scratch::new(Tool::Showreel).unwrap();
+    let dir = scratch.path().to_path_buf();
     fs::write(dir.join("profile-file"), b"x").unwrap();
     let mut parent = Command::new("/bin/sh")
       .arg("-c")

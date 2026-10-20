@@ -37,7 +37,7 @@ const NO_WINDOW = 3;
 const [, , portArg, wantWArg, wantHArg, label = 'window', excludeFile = ''] = process.argv;
 
 // SELECTING THE RIGHT WINDOW WHEN TWO ARE OPEN.
-// `prez present` builds into a TEMP file -- file:///.../T/prez-<pid>-<nanos> --
+// `prez present` builds into a TEMP file -- <TMPDIR>/prez-<pid>-<nanos> --
 // so neither the deck's name nor any predictable string reaches the URL, and a
 // filter written against "demo" matches nothing. (Measured 7 Sep; it is why the
 // forwarding leg first reported no target on a browser that had one.) What IS

@@ -12,6 +12,7 @@
 // remember to remove it" -- which every one of them had, and most forgot the
 // second half of.
 
+use std::io::Write;
 use std::path::PathBuf;
 
 /// `$TMPDIR/<prefix>-<pid>-<tag>`, made empty when the guard is made and
@@ -46,15 +47,20 @@ impl Drop for TempDir {
   }
 }
 
-/// Gone already is fine; any other failure fails the test by name. A panic
-/// inside an unwind aborts the test binary and hides the failure that started
-/// it, so a test already failing only says so.
+/// Gone already is fine (`scratch::remove_dir`, the crate's one removal); any
+/// other failure fails the test by name. A panic inside an unwind aborts the
+/// test binary and hides the failure that started it, so a test already
+/// failing only says so, by `writeln!` rather than `eprintln!`, which panics
+/// when its write fails (issue 0095).
 fn remove(d: &std::path::Path) {
-  match std::fs::remove_dir_all(d) {
+  match crate::scratch::remove_dir(d) {
     Ok(()) => {}
-    Err(e) if e.kind() == std::io::ErrorKind::NotFound => {}
     Err(e) if std::thread::panicking() => {
-      eprintln!("cannot remove the test directory {}: {e}", d.display())
+      let _ = writeln!(
+        std::io::stderr(),
+        "cannot remove the test directory {}: {e}",
+        d.display()
+      );
     }
     Err(e) => panic!("cannot remove the test directory {}: {e}", d.display()),
   }

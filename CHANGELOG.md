@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 The section still open names its version: `## [X.Y.Z] - unreleased`, never `## [Unreleased]`. Devbin's release core finds a section by its version and dates it at the cut; an unnamed section is one it cannot find (ST0019 D2).
 
+## [2.14.2] - unreleased
+
+### Fixed
+
+- **prez's acceptance suite no longer leaves its decks in TMPDIR, and a `pdf` whose print fails leaves nothing behind** (issue 0095). `prez present` stages its deck in TMPDIR and leaves it there for the browser on purpose, so the suite's six `present` runs left six decks in the caller's TMPDIR on every run; the suite now gives everything it runs a TMPDIR inside its own work directory, removed when it ends. `prez pdf` staged its HTML in TMPDIR and removed it only after a print that worked, so a print that failed left it behind; it now stages in a scratch directory of its own, removed on every path out, and a removal that fails is said. The scratch directory is showreel's, moved into `artifact` so the two tools share one. prez 2.5.4.
+
 ## [2.14.1] - 2026-10-19
 
 ### Added

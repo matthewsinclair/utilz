@@ -86,17 +86,34 @@ file_size() {
 # with 128 unit tests green and every other block passing. Nothing was wrong
 # with the runtime or the probe; the browser had simply not finished starting.
 
-WORK="$(mktemp -d "${TMPDIR:-/tmp}/prez-at.XXXXXX")"
+# THE SUITE'S OWN TMPDIR, INSIDE WORK (issue 0095), so that everything it runs
+# -- prez, Chrome, node, python -- leaves its temporary files where the trap
+# removes them. `prez present` stages its deck in TMPDIR and leaves it there for
+# the browser on purpose (spec 6), so AT06 and AT20 left six decks in the
+# caller's TMPDIR on every run. WORK is made in /tmp rather than in the caller's
+# TMPDIR because Linux Chrome binds its process singleton's socket under TMPDIR,
+# and a socket's path is short (crates/artifact/src/scratch.rs,
+# SCRATCH_BASE_MAX): $WORK/t/ under this Mac's own TMPDIR would be 67 bytes,
+# where /tmp/prez-at.XXXXXX/t/ is 22.
+if ! WORK="$(mktemp -d /tmp/prez-at.XXXXXX)" || [ -z "$WORK" ]; then
+  printf '%s: could not make its work directory in /tmp\n' "${0##*/}" >&2
+  exit 1
+fi
 trap 'rm -rf "$WORK"' EXIT
+if ! mkdir "$WORK/t"; then
+  printf '%s: could not make its TMPDIR, %s\n' "${0##*/}" "$WORK/t" >&2
+  exit 1
+fi
+export TMPDIR="$WORK/t/"
 
 # THIS RUN'S OWN NAME, AND THE ONLY SAFE KEY FOR A PROCESS MATCHER (issue 0030).
 # mktemp made it unique, so a process whose command line carries it was started
 # by this run and by no other. A matcher keyed on text every run shares reaches
 # processes that are not ours: AT06 counted any prez on the machine as its own
 # and failed a correct build, and AT20's cleanup matched every run's browser.
-# The directory's NAME rather than its path, because TMPDIR ends in a slash on
-# macOS and $WORK carries a doubled one; a process handed a tidied spelling of
-# the path still carries the name.
+# The directory's NAME rather than its path, because a process may be handed
+# another spelling of the path (on macOS, /tmp is /private/tmp), and it still
+# carries the name.
 RUN_NAME="${WORK##*/}"
 
 # THE HARNESS IS SHARED (issue 0040, vc's ruling 2026-09-19): every helper this
@@ -376,7 +393,50 @@ fi
 
 if want AT05; then
   start AT05 "pdf: one slide per page, and a refusal that names what it probed"
-  if ! chrome >/dev/null; then skip "no Chrome or Chromium installed"
+
+  # A PRINT THAT FAILS LEAVES NOTHING STAGED (issue 0095). pdf stages its HTML
+  # in a scratch directory of its own and removes it on every path out; before
+  # 0095 a failed print returned past the removal and left the file in TMPDIR.
+  # A stub stands in for the browser, so this needs no Chrome and runs where the
+  # rest of AT05 cannot. It records the URL it was handed, and whether that file
+  # existed while it ran, which is what lets its absence afterwards mean
+  # something; then it fails the way a browser does.
+  cat > "$WORK/failing-browser" <<'STUB'
+#!/usr/bin/env bash
+here="$(dirname "$0")"
+printf '%s\n' "$@" > "$here/failing-argv.txt"
+for arg in "$@"; do
+  case "$arg" in
+    file://*) if [ -e "${arg#file://}" ]; then echo "it existed" > "$here/failing-saw.txt"; fi ;;
+  esac
+done
+exit 1
+STUB
+  if [ ! -s "$WORK/failing-browser" ] || ! chmod +x "$WORK/failing-browser"; then
+    bad "could not make the stub browser at $WORK/failing-browser"
+  fi
+  "$BIN" pdf "$DEMO" --browser "$WORK/failing-browser" -o "$WORK/failed.pdf" >/dev/null 2>"$WORK/failed.err"
+  check "a print that fails, exit code" "$?" "2"
+  present "and the failure reported is the print's" "failed while printing" "$WORK/failed.err"
+  if [ ! -f "$WORK/failing-argv.txt" ]; then
+    bad "the stub browser never ran"
+  else
+    at05staged="$(sed -n 's|^file://||p' "$WORK/failing-argv.txt" | tail -1)"
+    at05tmp="$(cd "$WORK/t" && pwd -P)"
+    case "$at05staged" in
+      "$at05tmp"/prez-*/*) ok "the stub was handed a file in a scratch directory in the suite's own TMPDIR" ;;
+      *) bad "the stub was handed '$at05staged', not a file in a scratch directory under $at05tmp" ;;
+    esac
+    present "and that file existed while the stub ran" "it existed" "$WORK/failing-saw.txt"
+    if [ -n "$at05staged" ]; then
+      if [ -e "$at05staged" ]; then bad "the staged HTML outlived the failed print: $at05staged"
+      else ok "the staged HTML went with the failed print"; fi
+      if [ -e "${at05staged%/*}" ]; then bad "and its scratch directory outlived it: ${at05staged%/*}"
+      else ok "and its scratch directory with it"; fi
+    fi
+  fi
+
+  if ! chrome >/dev/null; then unchecked "no Chrome or Chromium installed, so no page, paper or refusal check ran"
   else
     "$BIN" pdf "$DEMO" -o "$WORK/demo.pdf" >/dev/null 2>&1
     check "pages" "$(pages_in "$WORK/demo.pdf")" "6"
@@ -405,8 +465,8 @@ if want AT05; then
     check "--browser /nonexistent exit code" "$?" "2"
     present "the refusal names the path given" "/nonexistent" "$WORK/refuse.err"
     [ -f "$WORK/never.pdf" ] && bad "a refused pdf left a partial file" || ok "a refused pdf left no file"
-    finish
   fi
+  finish
 fi
 
 # ---------------------------------------------------------------- AT06 -- AC06
@@ -469,6 +529,15 @@ STUB
 
   if [ -f "$WORK/argv.txt" ]; then
     present "launched with --app on a file:// URL" "--app=file://" "$WORK/argv.txt"
+
+    # AND THE DECK IT OPENED IS THE SUITE'S, NOT THE CALLER'S (issue 0095).
+    # present leaves it for the browser on purpose (spec 6), so it has to land
+    # in the TMPDIR the trap removes: $WORK/t itself, and never whatever TMPDIR
+    # holds, which would read green if the suite stopped setting it. The URL
+    # is canonical (browser::file_url), so it is compared with $WORK/t's
+    # canonical spelling.
+    at06tmp="$(cd "$WORK/t" && pwd -P)"
+    present "and the deck it opened is in the suite's own TMPDIR" "--app=file://$at06tmp/prez-" "$WORK/argv.txt"
     present "launched in its own window" "--new-window" "$WORK/argv.txt"
 
     # AC19. THE WINDOW HAS A SHAPE NOW, and the default is the deck's own 16:9
