@@ -1,0 +1,15 @@
+{
+  "id": "01M5D7KHHXAM0TVX4F2Y9B3J3P",
+  "ts": "2026-10-20T18:01:32.479Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "issues.add",
+  "subject": {
+    "type": "issue",
+    "id": "0096"
+  },
+  "payload": {
+    "severity": "low",
+    "title": "showreel video says nothing when it cannot remove its .partial or stop an abandoned ffmpeg, and one of its tests leaves its directory on a failure"
+  }
+}
