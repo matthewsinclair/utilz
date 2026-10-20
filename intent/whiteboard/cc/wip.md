@@ -3,17 +3,17 @@ node: cc
 name: Control Claude
 role: control
 session_id: 9c567467-c0fd-43d8-bf41-98005d410e1e
-heartbeat_at: 2026-10-20 17:37Z
+heartbeat_at: 2026-10-20 18:45Z
 status: active
-focus: "20 Oct: 0095 (prez's TMPDIR leftovers) designed and approved, R1 ENDed as predicted; the candidate is in wt-0095, next R2 (heavy) through utilz-vc, then K1 and the landing in 2.14.2."
-claims: [ISSUE:0095]
+focus: "20 Oct wrap: 0095 landed (d633f4c) and closed (948a500); 0096 filed (1d9b7fc), its v2 banked unbuilt in wt-0096; holding for hv's compact (hold 39)."
+claims: [ISSUE:0096]
 ---
 
 # Control Claude (cc)
 
 ## DOING
 
-- 0095 (cc's, filed 20 Oct from todo 42): prez's acceptance suite leaves its present decks in TMPDIR, and a pdf whose print fails leaves its staged HTML. Design approved by vc on 20 Oct, its four notes and cc's one correction (macOS Chrome reads MAC_CHROMIUM_TMPDIR) folded into the body. R1 (slot 199) ENDed: six decks a run, AT06's two and AT20's four, all rcs 0. The candidate is written in ~/Devel/scratch/utilz-cc/wt-0095 on cbb3f027 (10 files, fmt clean, not yet built); next its critics, then R2's START (heavy), utilz-dc's K1, and the landing in 2.14.2 (vc's decision 49). (edited)
+_(none)_
 
 ## TODO
 
@@ -21,19 +21,15 @@ _(none)_
 
 ## Holds
 
-_(none)_
+- Holding for hv's compact (vc's wrap of 20 Oct). Released by hv's compact and this node's pickup, then vc's word. Resume: 0096, candidate v2 in ~/Devel/scratch/utilz-cc/wt-0096 on 8954eee8, unbuilt, patch 5bf987da, design in the store (filed at 1d9b7fc). Next: critic-rust's v2 read, then the START for r96-0096.sh (A, B, G, C) with utilz-dc's kovacs leg, then the landing under 2.14.2's Fixed after 0095's line, and the close. Detail: ~/Devel/scratch/utilz-cc/RESUME.md.
 
 ## Watch-outs
 
-- hv's rule: a gap in devbin's vendored release core (bin/.devbin/lib/release*) is fixed in devbin, as a default with an override, through vc to devbin-dc or devbin-2b. Never patch the vendored copy or add a Utilz-only branch. Vendored line numbers move with each devbin sweep: re-read a citation before trusting it.
-- A green suite says nothing about Rust formatting or clippy: run bin/devbin check all before handing a Rust change to vc, to CI or into a cut. cargo fmt --check fails CI ahead of clippy, so fmt drift hides the clippy verdict (0059, 0060). Fix with bin/devbin fmt rust; check all's critic arm reads staged files only. (edited)
-- The pre-commit gate lives in .githooks/, read through core.hooksPath (0064). It refuses a staged .md or .rs that is not formatted and never rewrites it: prettier --write <file> or bin/devbin fmt rust, git add, commit again. A store body (an issue, a WP body) must be prettier-stable before intent set or intent issues add, or its view drifts and the doctor gate refuses every later commit. (edited)
-- Two rules for cc's candidates (vc, 19 Oct). Each candidate lives only in cc's own worktree under ~/Devel/scratch/utilz-cc/, detached at its base, .githooks/*.intent copied in: never in the primary, which is live for hv's menu and shared with peers' path commits, and never in the session scratchpad, which the reboot of 12:23:56Z emptied with cc's five worktrees in it. The primary takes the patch at each landing. Every START says light or heavy: light builds nothing, starts no GUI or daemon, binds no port and writes no state another run reads; any whole suite, and any build, is heavy. (edited)
-
+- hv's rule: a gap in devbin's vendored release core (bin/.devbin/lib/release*) is fixed in devbin, as a default with an override, through vc; never patch the vendored copy or add a Utilz-only branch. (edited)
 
 ## Decisions
 
-- hv, 18 Oct 2026, directly to cc, answering cc's finding that CHANGELOG.md's [2.14.1] - unreleased section holds three Added entries (0069, 0070, 0071) and so reads as a minor: "2.14.1". The next Utilz cut is 2.14.1. The CHANGELOG heading and intent/wip.md's TODO (bin/devbin release v2.14.1) already say so, so nothing is retitled.
+_(none)_
 
 ---
 

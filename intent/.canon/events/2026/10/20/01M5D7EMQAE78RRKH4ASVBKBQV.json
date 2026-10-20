@@ -1,0 +1,16 @@
+{
+  "id": "01M5D7EMQAE78RRKH4ASVBKBQV",
+  "ts": "2026-10-20T17:58:51.882Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 57,
+    "text": "0095 (cc's, filed 20 Oct from todo 42): prez's acceptance suite leaves its present decks in TMPDIR, and a pdf whose print fails leaves its staged HTML. Design approved by vc on 20 Oct, with its four notes and cc's correction folded in. R1 (slot 199) ENDed as predicted. Candidate v2 in ~/Devel/scratch/utilz-cc/wt-0095 on cbb3f027 (patch 497e598a), after critic-rust and critic-shell (one CRITICAL fixed; point 3 changed: pdf's scratch stays in TMPDIR, for vc's read). R2's START (heavy) is with utilz-vc; then utilz-dc's K1, and the landing in 2.14.2 (vc's decision 49)."
+  }
+}

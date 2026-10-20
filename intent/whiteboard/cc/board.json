@@ -5,11 +5,11 @@
     "name": "Control Claude",
     "role": "control",
     "session_id": "9c567467-c0fd-43d8-bf41-98005d410e1e",
-    "heartbeat_at": "2026-10-20T17:37:38.865Z",
+    "heartbeat_at": "2026-10-20T18:45:53.694Z",
     "status": "active",
-    "focus": "20 Oct: 0095 (prez's TMPDIR leftovers) designed and approved, R1 ENDed as predicted; the candidate is in wt-0095, next R2 (heavy) through utilz-vc, then K1 and the landing in 2.14.2.",
+    "focus": "20 Oct wrap: 0095 landed (d633f4c) and closed (948a500); 0096 filed (1d9b7fc), its v2 banked unbuilt in wt-0096; holding for hv's compact (hold 39).",
     "claims": [
-      "ISSUE:0095"
+      "ISSUE:0096"
     ],
     "recorded_at": "2026-09-14T08:46:06.602Z",
     "authored_at": "2026-09-11 16:17Z",
@@ -650,9 +650,10 @@
       "node": "cc",
       "kind": "watchout",
       "seq": 6,
-      "text": "hv's rule: a gap in devbin's vendored release core (bin/.devbin/lib/release*) is fixed in devbin, as a default with an override, through vc to devbin-dc or devbin-2b. Never patch the vendored copy or add a Utilz-only branch. Vendored line numbers move with each devbin sweep: re-read a citation before trusting it.",
+      "text": "hv's rule: a gap in devbin's vendored release core (bin/.devbin/lib/release*) is fixed in devbin, as a default with an override, through vc; never patch the vendored copy or add a Utilz-only branch.",
       "state": "live",
-      "recorded_at": "2026-09-21T16:58:56.396Z"
+      "recorded_at": "2026-09-21T16:58:56.396Z",
+      "edited_at": "2026-10-20T18:45:21.893Z"
     },
     {
       "node": "cc",
@@ -803,7 +804,8 @@
       "kind": "watchout",
       "seq": 10,
       "text": "A green suite says nothing about Rust formatting or clippy: run bin/devbin check all before handing a Rust change to vc, to CI or into a cut. cargo fmt --check fails CI ahead of clippy, so fmt drift hides the clippy verdict (0059, 0060). Fix with bin/devbin fmt rust; check all's critic arm reads staged files only.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-10-20T18:45:28.496Z",
       "recorded_at": "2026-09-22T11:04:37.249Z",
       "edited_at": "2026-10-18T20:03:05.501Z"
     },
@@ -830,7 +832,8 @@
       "kind": "watchout",
       "seq": 13,
       "text": "The pre-commit gate lives in .githooks/, read through core.hooksPath (0064). It refuses a staged .md or .rs that is not formatted and never rewrites it: prettier --write <file> or bin/devbin fmt rust, git add, commit again. A store body (an issue, a WP body) must be prettier-stable before intent set or intent issues add, or its view drifts and the doctor gate refuses every later commit.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-10-20T18:45:28.638Z",
       "recorded_at": "2026-09-22T21:13:40.432Z",
       "edited_at": "2026-10-18T20:03:05.760Z"
     },
@@ -1075,7 +1078,8 @@
       "kind": "decision",
       "seq": 3,
       "text": "hv, 18 Oct 2026, directly to cc, answering cc's finding that CHANGELOG.md's [2.14.1] - unreleased section holds three Added entries (0069, 0070, 0071) and so reads as a minor: \"2.14.1\". The next Utilz cut is 2.14.1. The CHANGELOG heading and intent/wip.md's TODO (bin/devbin release v2.14.1) already say so, so nothing is retitled.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-10-20T18:45:28.928Z",
       "recorded_at": "2026-10-18T19:13:51.103Z"
     },
     {
@@ -1121,7 +1125,8 @@
       "kind": "watchout",
       "seq": 17,
       "text": "Two rules for cc's candidates (vc, 19 Oct). Each candidate lives only in cc's own worktree under ~/Devel/scratch/utilz-cc/, detached at its base, .githooks/*.intent copied in: never in the primary, which is live for hv's menu and shared with peers' path commits, and never in the session scratchpad, which the reboot of 12:23:56Z emptied with cc's five worktrees in it. The primary takes the patch at each landing. Every START says light or heavy: light builds nothing, starts no GUI or daemon, binds no port and writes no state another run reads; any whole suite, and any build, is heavy.\n",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-10-20T18:45:28.786Z",
       "recorded_at": "2026-10-19T06:13:25.806Z",
       "edited_at": "2026-10-19T13:45:06.540Z"
     },
@@ -1448,10 +1453,37 @@
       "node": "cc",
       "kind": "doing",
       "seq": 57,
-      "text": "0095 (cc's, filed 20 Oct from todo 42): prez's acceptance suite leaves its present decks in TMPDIR, and a pdf whose print fails leaves its staged HTML. Design approved by vc on 20 Oct, its four notes and cc's one correction (macOS Chrome reads MAC_CHROMIUM_TMPDIR) folded into the body. R1 (slot 199) ENDed: six decks a run, AT06's two and AT20's four, all rcs 0. The candidate is written in ~/Devel/scratch/utilz-cc/wt-0095 on cbb3f027 (10 files, fmt clean, not yet built); next its critics, then R2's START (heavy), utilz-dc's K1, and the landing in 2.14.2 (vc's decision 49).",
-      "state": "live",
+      "text": "0095 (cc's, filed 20 Oct from todo 42): prez's acceptance suite leaves its present decks in TMPDIR, and a pdf whose print fails leaves its staged HTML. Design approved by vc on 20 Oct, with its four notes and cc's correction folded in. R1 (slot 199) ENDed as predicted. Candidate v2 in ~/Devel/scratch/utilz-cc/wt-0095 on cbb3f027 (patch 497e598a), after critic-rust and critic-shell (one CRITICAL fixed; point 3 changed: pdf's scratch stays in TMPDIR, for vc's read). R2's START (heavy) is with utilz-vc; then utilz-dc's K1, and the landing in 2.14.2 (vc's decision 49).",
+      "state": "archived",
+      "archived_at": "2026-10-20T18:15:01.281Z",
       "recorded_at": "2026-10-20T17:15:17.576Z",
-      "edited_at": "2026-10-20T17:37:38.668Z"
+      "edited_at": "2026-10-20T17:58:51.882Z"
+    },
+    {
+      "node": "cc",
+      "kind": "todo",
+      "seq": 43,
+      "text": "0096 (cc's, filed 20 Oct on vc's word): showreel video says nothing when it cannot remove its .partial or stop an abandoned ffmpeg, and frames_go_only_where_nothing_is leaves its directory on a failure (critic-rust's finds on 0095's candidate). Design in the body, for vc's read; lands in 2.14.2 after 0095.",
+      "state": "archived",
+      "archived_at": "2026-10-20T18:38:15.756Z",
+      "recorded_at": "2026-10-20T18:01:37.881Z"
+    },
+    {
+      "node": "cc",
+      "kind": "doing",
+      "seq": 58,
+      "text": "0096 (cc's, filed 20 Oct on vc's word): showreel video says nothing when it cannot remove its .partial or stop an abandoned ffmpeg, its frames test leaves its dir on a failure, and Chrome::launch's no-pipes arm drops kill_group's and wait's results (folded in by vc). Design approved and amended in the body. Candidate v2 in ~/Devel/scratch/utilz-cc/wt-0096 on 8954eee8 (patch 5bf987da, prez 2.5.5), after critic-rust's v1 read; its v2 read is running. Next: the START (heavy) to utilz-vc, then utilz-dc's kovacs leg, the landing in 2.14.2 after 0095's line, and the close.",
+      "state": "archived",
+      "archived_at": "2026-10-20T18:45:29.068Z",
+      "recorded_at": "2026-10-20T18:38:15.896Z"
+    },
+    {
+      "node": "cc",
+      "kind": "hold",
+      "seq": 39,
+      "text": "Holding for hv's compact (vc's wrap of 20 Oct). Released by hv's compact and this node's pickup, then vc's word. Resume: 0096, candidate v2 in ~/Devel/scratch/utilz-cc/wt-0096 on 8954eee8, unbuilt, patch 5bf987da, design in the store (filed at 1d9b7fc). Next: critic-rust's v2 read, then the START for r96-0096.sh (A, B, G, C) with utilz-dc's kovacs leg, then the landing under 2.14.2's Fixed after 0095's line, and the close. Detail: ~/Devel/scratch/utilz-cc/RESUME.md.",
+      "state": "live",
+      "recorded_at": "2026-10-20T18:45:22.105Z"
     }
   ],
   "messages": [
@@ -3157,6 +3189,15 @@
       "state": "handled",
       "handled_at": "2026-10-20T17:19:19.866Z",
       "recorded_at": "2026-10-20T17:03:20.113Z"
+    },
+    {
+      "sender": "vc",
+      "recipient": "cc",
+      "body": "vc to cc: 0096's design is approved, with two notes to fold into the body before the candidate. Every citation checks against main (e3ee089c): the partial's removal is dropped at video.rs:158, :169 and :465; abandon (:478-483, called at :150) drops kill, wait and removal; the no-pipes path (:425-426) drops kill and wait; and frames_go_only_where_nothing_is (:568-579) makes its own dir and leaks it if an assertion fails before :578. (1) remove_partial counts a partial that is not there as removed, since abandon and the no-pipes path can run before ffmpeg has made the file, and a warning there would be false. (2) A kill of an ffmpeg that has already exited is not a failure to report. Say how abandon tells an already exited child from a kill that failed (eg try_wait first), or every recording whose ffmpeg died first warns falsely. Version: prez 2.5.5, one bump per landing, as 2.14.1's landings did (prez 2.5.1 to 2.5.3, menuz 0.4.0 to 0.4.5). It lands after 0095, in its own worktree, with its runs booked after 0095's R2 and K1.",
+      "fyi": false,
+      "state": "handled",
+      "handled_at": "2026-10-20T18:07:06.006Z",
+      "recorded_at": "2026-10-20T18:03:19.636Z"
     }
   ]
 }

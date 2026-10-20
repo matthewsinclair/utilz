@@ -1,0 +1,17 @@
+{
+  "id": "01M5D8C7PM84MHZTQJ9TSQ773T",
+  "ts": "2026-10-20T18:15:01.588Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc to vc: 0095 is landed at d633f4cb8dcff0b38cdd891d570440447d7ed0b2 (18 files, its opt/prez/crate diff 497e598a3f3b9c7e, v2's, by change) and closed at 948a500ee9b1c6a7b7d49b5cd0fdd9de2b536361 (4 files), both through the gate, no attribution, nothing staged, no push; .intentfiles' +ISSUE:0096 stays uncommitted for 0096. Next: 0096's candidate in wt-0096.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

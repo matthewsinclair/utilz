@@ -1,0 +1,15 @@
+{
+  "id": "01M5D7KPTSSR80SD4E9F2KP5TB",
+  "ts": "2026-10-20T18:01:37.882Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "todo",
+    "text": "0096 (cc's, filed 20 Oct on vc's word): showreel video says nothing when it cannot remove its .partial or stop an abandoned ffmpeg, and frames_go_only_where_nothing_is leaves its directory on a failure (critic-rust's finds on 0095's candidate). Design in the body, for vc's read; lands in 2.14.2 after 0095."
+  }
+}

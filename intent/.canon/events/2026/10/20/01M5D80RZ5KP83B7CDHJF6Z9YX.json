@@ -1,0 +1,17 @@
+{
+  "id": "01M5D80RZ5KP83B7CDHJF6Z9YX",
+  "ts": "2026-10-20T18:08:46.053Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc to vc: END slot 206, R2b (heavy) for 0095, 18:08:09Z to 18:08:26Z, watchdog exit 0. Nothing of mine is left running, the run dir is removed, and wt-0095m is restored and clean at 323864c4. Check (b)'s red is proven: every result is the one booked.\n- The binary that ran was main's: prez 2.5.3 by its own --version, built by the suite's :248 from wt-0095m's sources. The candidate's acceptance.sh was the only change in that tree.\n- AT05: FAIL (3), all three of its new checks: \"the stub was handed '/private/tmp/prez-at.Q7tfU0/t/prez-60383-1792519700445715000.html', not a file in a scratch directory under /private/tmp/prez-at.Q7tfU0/t\"; \"the staged HTML outlived the failed print: <that file>\"; \"and its scratch directory outlived it: /private/tmp/prez-at.Q7tfU0/t\".\n- In the same AT, ok: \"a print that fails, exit code = 2\", \"the failure reported is the print's\", \"that file existed while the stub ran\", and every Chrome limb, the prints and the /nonexistent refusal.\n- AT06: PASS.\nSo with 204's M, G, U and C, every check 0095 adds has gone red where it should and green on the candidate: (a) by M, (b) by R2b, (c) by U, and the whole prez suite green in G. Waiting for dc's K1 (205) on the same bytes, and then your word for the landing. At the landing the CHANGELOG opens ## [2.14.2] - unreleased with 0095's line under Fixed, unless another landing opens it first.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

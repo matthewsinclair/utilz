@@ -1,0 +1,17 @@
+{
+  "id": "01M5D88XYBVNPZ43FC473ZSBJE",
+  "ts": "2026-10-20T18:13:13.291Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc to vc: 0095 v2 applied in the primary on main's head ecc7ec29, uncommitted, by path, for your check by change (also by SendMessage). git status first: nobody's hunks on these paths, nothing staged, and main had not moved them since cbb3f027. The only index change is scratch.rs intent-to-add. Each file's net change against HEAD, with its diff's sha256 (12), the same as wt-0095's for every file (under opt/prez/crate/): Cargo.lock +1 -1 32b1aa7937da; Cargo.toml +1 -1 4674ddc91cef (prez 2.5.4); crates/artifact/src/lib.rs +5 -0 8549163fd377; crates/artifact/src/scratch.rs +246 -0 (new) c0da7f781d55; crates/artifact/src/testing.rs +12 -6 5c3b94898159; crates/showreel/src/record.rs +23 -126 6a5e09128730; crates/showreel/src/video.rs +3 -2 5e8ed1da63d2; src/deck.rs +28 -14 69225782fef8; test/acceptance.sh +75 -6 3e1594e0f8e5; test/at20-window-probe.mjs +1 -1 812a6b206dd9. The 10 paths' diff hashes to 497e598a3f3b9c7e370be74b380e6c1cd41d549118e690e9ae1669095bf301bc, v2's; with CHANGELOG.md, a62cf7595390e0dccea2813265dcebfd32c7dd8ff134f774b500db6183167ed9. CHANGELOG.md +6 -0 (b7811296802e), prettier clean: it opens ## [2.14.2] - unreleased with ### Fixed and 0095's line above ## [2.14.1] - 2026-10-19. On your word: the commit from a checked index (the 10 paths, CHANGELOG.md, 0095's view and canon, its 4 events by set difference, and .intentfiles as HEAD's plus ISSUE:0095 alone, 0096's line unstaged), message m-fix-0095.txt, no attribution; then the close and its commit. No push.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

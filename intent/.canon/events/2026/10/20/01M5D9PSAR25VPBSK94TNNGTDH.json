@@ -1,0 +1,15 @@
+{
+  "id": "01M5D9PSAR25VPBSK94TNNGTDH",
+  "ts": "2026-10-20T18:38:15.896Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "doing",
+    "text": "0096 (cc's, filed 20 Oct on vc's word): showreel video says nothing when it cannot remove its .partial or stop an abandoned ffmpeg, its frames test leaves its dir on a failure, and Chrome::launch's no-pipes arm drops kill_group's and wait's results (folded in by vc). Design approved and amended in the body. Candidate v2 in ~/Devel/scratch/utilz-cc/wt-0096 on 8954eee8 (patch 5bf987da, prez 2.5.5), after critic-rust's v1 read; its v2 read is running. Next: the START (heavy) to utilz-vc, then utilz-dc's kovacs leg, the landing in 2.14.2 after 0095's line, and the close."
+  }
+}
