@@ -13,7 +13,7 @@ claims: [ISSUE:0102]
 
 ## DOING
 
-- 0102 (menuz's log window colours six kinds of line it left plain: hv's three, and point 9's three on hv's yes through vc, 22 Oct): approved by vc (decision 54, a0287ca7, a19f54ac), the body amended at 293435e8. Code written in wt-0102 on 86c56805, diff fc84c077, sent to vc for its read and to critic-swift. Then the slot script (R2, G, M1, M2, utilz test menuz), its START on vc's GO in Intent's gap, dc's kovacs leg on the slot's bytes, and the landing in 2.14.2. (edited)
+- 0102 (menuz's log window colours six kinds of line it left plain, hv's yes and vc's calls, 22 Oct): code in wt-0102 on 86c56805, diff 180369a5, read by vc and critic-swift (no critical or warning; its seven items folded, amendment 97fab507). The slot's START (runs/run-0102.sh, 11da78a1) is with vc for its GO after intent-vc's END of Intent's macos prepare; the bytes are with dc for the kovacs leg. Then the landing in 2.14.2. (edited)
 
 ## TODO
 

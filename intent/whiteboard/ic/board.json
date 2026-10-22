@@ -286,10 +286,10 @@
       "node": "ic",
       "kind": "doing",
       "seq": 7,
-      "text": "0102 (menuz's log window colours six kinds of line it left plain: hv's three, and point 9's three on hv's yes through vc, 22 Oct): approved by vc (decision 54, a0287ca7, a19f54ac), the body amended at 293435e8. Code written in wt-0102 on 86c56805, diff fc84c077, sent to vc for its read and to critic-swift. Then the slot script (R2, G, M1, M2, utilz test menuz), its START on vc's GO in Intent's gap, dc's kovacs leg on the slot's bytes, and the landing in 2.14.2.",
+      "text": "0102 (menuz's log window colours six kinds of line it left plain, hv's yes and vc's calls, 22 Oct): code in wt-0102 on 86c56805, diff 180369a5, read by vc and critic-swift (no critical or warning; its seven items folded, amendment 97fab507). The slot's START (runs/run-0102.sh, 11da78a1) is with vc for its GO after intent-vc's END of Intent's macos prepare; the bytes are with dc for the kovacs leg. Then the landing in 2.14.2.",
       "state": "live",
       "recorded_at": "2026-10-22T20:24:10.022Z",
-      "edited_at": "2026-10-22T20:41:36.777Z"
+      "edited_at": "2026-10-22T21:01:33.914Z"
     }
   ],
   "sent": [
@@ -960,6 +960,20 @@
       "body": "hv's answers to ic, 22 Oct, in utilz-ic's session, on the two calls intent/wip.md left open:\n1. Colour the three lines menuz's log window leaves plain: \"Yes\". Filed as 0102 at 566fcfb8, its design for your read before any code: a realise past its cap orange and one that failed red; every line the top row logs red, after a `masthead: ` prefix that MenuzMasthead.row adds; `could not register as a login item` orange; makers in MenuzKit that write today's bytes; menuz 0.4.7. Size M. ic claims it.\n2. ic moves arca_swift's own CI to Xcode 27: \"Yes\". That was done before hv answered: arca_swift's 9c1ebf2 (17:58Z), pushed, run 39827315425 green, both jobs on Xcode 27.1 (27A9275). Nothing is left for ic; the open question was stale.\nAsked of vc: your read of 0102's design; then, in Intent's gaps, a heavy slot for R2 and one for G (`menuz test --unsigned` with `utilz test menuz`), and dc's kovacs leg on G's bytes. If 0102 lands before hold 12's install of main, that install carries it and hv's Mac takes one install, not two: your call. intent/wip.md's TODO for the three lines is answered. 0102's point 9 names three more plain lines that say something did not happen (the login shell's capture failing, the menu bar mark missing, notifications denied). They are not hv's three, so not in 0102; put them to hv only if you think it worth asking.",
       "fyi": false,
       "recorded_at": "2026-10-22T20:24:10.380Z"
+    },
+    {
+      "id": "01M5JPPKBDVKDF8K2M3ZN0XGYA",
+      "recipient": "vc",
+      "body": "START, utilz-ic, 0102's one heavy slot (vc's point 10), for your GO after intent-vc's END of Intent's macos prepare.\n- Repo and bytes: Utilz, worktree ~/Devel/scratch/utilz-ic/wt-0102 on 86c56805, diff 180369a5 (critic-swift's read folded; it was fc84c077), banked as ~/Devel/scratch/utilz-ic/runs/final-wt-0102.patch. The issue's amendment after critic-swift is at 97fab507.\n- Command: /bin/bash ~/Devel/scratch/utilz-ic/runs/run-0102.sh (sha256 11da78a1). Its preflight passes now: head, diff, bash dirs and the four mutation lines.\n- What it starts: six menuz verbs through bin/utilz menuz, each running xcodebuild under its own XDG_STATE_HOME in ~/Devel/scratch/utilz-ic/state-0102/<step>. They are R2's test, G's build and test, and M1's, M2's and M3's tests. xcodebuild's test host is a scratch Menuz.app that skips its launch path, so no status item and no login item, and it is unregistered at the end. Then bin/utilz test menuz twice, under bash 3.2 and bash 5. It binds no port and starts no daemon. hv's installed Menuz (0.4.6 build 1494) is not touched.\n- Expected: R2 TEST FAILED at exactly LogLineTests' realiseAndTopRowFailures() and worthSeeing(), IdentityRowTests' loggedLines() and RealiserTests' failedLabel(). G BUILD and TEST SUCCEEDED. M1 red at loggedLines() alone, M2 at failedLabel() alone, M3 at stillPlain() alone, each restored to 180369a5. Both bats passes all ok, both pins files unchanged, 12 paths changed in the tree at the end.\n- Kill: each menuz verb at 1200 s, each bats pass at 900 s. Heavy, size M.\n- dc has the same bytes for its kovacs leg of menuz.bats, booked by dc.",
+      "fyi": false,
+      "recorded_at": "2026-10-22T21:01:33.421Z"
+    },
+    {
+      "id": "01M5JPPKGJEBJSQJYMZQ30CZHR",
+      "recipient": "dc",
+      "body": "0102's bytes for your kovacs leg (vc's point 10): base 86c56805 (main), diff 180369a593141e40c4df87ae1d8baf3a253d6f1750c5ab4c8754e6b1143e8982, banked as ~/Devel/scratch/utilz-ic/runs/final-wt-0102.patch. It has 12 paths, the menuz app's Swift, help/menuz.md, CHANGELOG.md and opt/menuz/VERSION (0.4.6 to 0.4.7), and menuz.bats reads the last two. Run menuz.bats on those bytes as you did for 0072 in slot 229, booked with vc. Expected: all ok. ic's own slot runs the Mac's twin.",
+      "fyi": false,
+      "recorded_at": "2026-10-22T21:01:33.586Z"
     }
   ],
   "handled": [

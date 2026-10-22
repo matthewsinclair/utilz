@@ -1,0 +1,16 @@
+{
+  "id": "01M5JPPKTS0J8VNXDF5AM9BERT",
+  "ts": "2026-10-22T21:01:33.914Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 7,
+    "text": "0102 (menuz's log window colours six kinds of line it left plain, hv's yes and vc's calls, 22 Oct): code in wt-0102 on 86c56805, diff 180369a5, read by vc and critic-swift (no critical or warning; its seven items folded, amendment 97fab507). The slot's START (runs/run-0102.sh, 11da78a1) is with vc for its GO after intent-vc's END of Intent's macos prepare; the bytes are with dc for the kovacs leg. Then the landing in 2.14.2."
+  }
+}

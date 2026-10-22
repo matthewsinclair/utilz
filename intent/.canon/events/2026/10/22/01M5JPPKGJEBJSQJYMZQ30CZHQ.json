@@ -1,0 +1,17 @@
+{
+  "id": "01M5JPPKGJEBJSQJYMZQ30CZHQ",
+  "ts": "2026-10-22T21:01:33.586Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "0102's bytes for your kovacs leg (vc's point 10): base 86c56805 (main), diff 180369a593141e40c4df87ae1d8baf3a253d6f1750c5ab4c8754e6b1143e8982, banked as ~/Devel/scratch/utilz-ic/runs/final-wt-0102.patch. It has 12 paths, the menuz app's Swift, help/menuz.md, CHANGELOG.md and opt/menuz/VERSION (0.4.6 to 0.4.7), and menuz.bats reads the last two. Run menuz.bats on those bytes as you did for 0072 in slot 229, booked with vc. Expected: all ok. ic's own slot runs the Mac's twin.",
+    "fyi": false,
+    "re": null,
+    "recipient": "dc"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "id": "01M5JPPKBDVKDF8K2M3ZN0XGY9",
+  "ts": "2026-10-22T21:01:33.421Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "START, utilz-ic, 0102's one heavy slot (vc's point 10), for your GO after intent-vc's END of Intent's macos prepare.\n- Repo and bytes: Utilz, worktree ~/Devel/scratch/utilz-ic/wt-0102 on 86c56805, diff 180369a5 (critic-swift's read folded; it was fc84c077), banked as ~/Devel/scratch/utilz-ic/runs/final-wt-0102.patch. The issue's amendment after critic-swift is at 97fab507.\n- Command: /bin/bash ~/Devel/scratch/utilz-ic/runs/run-0102.sh (sha256 11da78a1). Its preflight passes now: head, diff, bash dirs and the four mutation lines.\n- What it starts: six menuz verbs through bin/utilz menuz, each running xcodebuild under its own XDG_STATE_HOME in ~/Devel/scratch/utilz-ic/state-0102/<step>. They are R2's test, G's build and test, and M1's, M2's and M3's tests. xcodebuild's test host is a scratch Menuz.app that skips its launch path, so no status item and no login item, and it is unregistered at the end. Then bin/utilz test menuz twice, under bash 3.2 and bash 5. It binds no port and starts no daemon. hv's installed Menuz (0.4.6 build 1494) is not touched.\n- Expected: R2 TEST FAILED at exactly LogLineTests' realiseAndTopRowFailures() and worthSeeing(), IdentityRowTests' loggedLines() and RealiserTests' failedLabel(). G BUILD and TEST SUCCEEDED. M1 red at loggedLines() alone, M2 at failedLabel() alone, M3 at stillPlain() alone, each restored to 180369a5. Both bats passes all ok, both pins files unchanged, 12 paths changed in the tree at the end.\n- Kill: each menuz verb at 1200 s, each bats pass at 900 s. Heavy, size M.\n- dc has the same bytes for its kovacs leg of menuz.bats, booked by dc.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}
