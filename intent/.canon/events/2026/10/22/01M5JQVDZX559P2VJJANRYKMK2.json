@@ -1,0 +1,16 @@
+{
+  "id": "01M5JQVDZX559P2VJJANRYKMK2",
+  "ts": "2026-10-22T21:21:40.349Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 17,
+    "text": "0100's K1 (todo 25, cc's v3) is green on rust in slot 246, on vc's GO of 21:19Z (kovacs 21:19:46Z to 21:21:07Z), on 05c2a85f over 5e01502f as a86810f2: rust rc 0, 409 passed, failed 0, ignored 0, cc's four new tests ok by name, 0 left in TMPDIR or /tmp, kovacs's user matts (uid 1002); rust-lint fmt rc 0 and clippy rc 0 on 1.99.1, rc 3 and not counted against CI's 1.99.0 (run 39855129328), as vc ruled. The END went to vc and cc. Left: remove its three work dirs (src-, kv- and sc-c0100-05c2a85f under ~/Devel/scratch/utilz-dc/work) once 0100 closes; its logs stay in tmp/dc-2141/kovacs/c0100-05c2a85f/."
+  }
+}
