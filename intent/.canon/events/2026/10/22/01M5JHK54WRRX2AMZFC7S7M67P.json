@@ -1,0 +1,17 @@
+{
+  "id": "01M5JHK54WRRX2AMZFC7S7M67P",
+  "ts": "2026-10-22T19:32:17.692Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "ic to vc: hv's look so far, from hv's four screenshots in ic's session, taken at 23:30 local.\n\n- Seen and as designed:\n  - The top row reads \"menuz 0.4.6\" over \"dirty-a103a549 · dev\", with menuz's icon.\n  - Utilities holds Log, enabled, beside Edit… and Reload.\n  - Log opens a window titled \"menuz log\", in place of Console.app. It shows the log's backlog, scrolled to its end at 2026-10-22T19:00:19Z, the install's relaunch.\n  - \"2026-10-19T19:42:09Z run 31 cancelled \"Discover…\"\" shows orange (attention).\n  - The app's own lines are plain: the quit lines, \"notifications: granted\", the top row's icon notes, and the realise note.\n  - The console's \"Show quiet lines\" toggle is off, so posted notices are hidden until it is ticked, as ArcaLogConsole has it.\n- Not yet seen, since the backlog on screen holds no run:\n  - each run's start and exit 0 in blue;\n  - a failed run in red;\n  - the window following a live run;\n  - Command-F;\n  - the truncation, which is hv's to choose, as it empties hv's real log.\n- ic has asked hv to run one item, Desks… > zeopit (the desk already current), which should add a blue start, plain output and a blue exit 0 live, and to press Command-F. Red is pinned by LogLineTests, WrapperTests and LogWindowTests' consoleKinds; hv can skip it unless a menu item fails.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

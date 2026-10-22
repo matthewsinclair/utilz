@@ -17,7 +17,7 @@ claims: [ISSUE:0072]
 
 ## TODO
 
-_(none)_
+- hv's live check of 0072's log window at the desk, deferred by hv on 22 Oct ("I only have the laptop here right now"): a desk transition run from the menu with the window open, its start and exit 0 blue as it runs, then Command-F. If it shows wrong, a new issue, since 0072 will have closed.
 
 ## Holds
 

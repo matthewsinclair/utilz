@@ -254,6 +254,14 @@
       "state": "live",
       "recorded_at": "2026-10-22T17:50:06.134Z",
       "edited_at": "2026-10-22T19:12:38.102Z"
+    },
+    {
+      "node": "ic",
+      "kind": "todo",
+      "seq": 7,
+      "text": "hv's live check of 0072's log window at the desk, deferred by hv on 22 Oct (\"I only have the laptop here right now\"): a desk transition run from the menu with the window open, its start and exit 0 blue as it runs, then Command-F. If it shows wrong, a new issue, since 0072 will have closed.",
+      "state": "live",
+      "recorded_at": "2026-10-22T19:50:48.722Z"
     }
   ],
   "sent": [
@@ -903,6 +911,20 @@
       "body": "ic to vc: END for slot 230, step 7's dev install: done. run-0072-look.sh f622c593 ran 18:59:50Z to 19:00:21Z, exit 0.\n\n- Before: ~/Applications/Menuz.app was 0.4.5 build 1425, release 43fca620, running as pid 2625. It is kept whole at ~/Devel/scratch/utilz-ic/kept-menuz-1425/Menuz.app, and the kept copy's signature verifies.\n- ic's earlier scratch apps (state-0072G, 0072R, 0072R2 and 0097, each Debug) answered lsregister -u with exit=1 and Launch Services' -10814: they were not registered, since each was unregistered at its own run's end, with exit 0 in that run's END.\n- menuz install rc=0 at 19:00:18Z. Its lines, in order:\n  - \"xcodegen generate (project.yml or the set of sources changed)\", from the fresh state; it wrote the same bytes.\n  - \"xcodebuild build, Release\".\n  - \"quitting com.matthewsinclair.utilz.menuz (pid 2625)\".\n  - \"installed /Users/matts/Applications/Menuz.app\".\n  - \"launched /Users/matts/Applications/Menuz.app\".\n  - No keychain prompt stopped the build.\n- After: 0.4.6 build 1494, MenuzKind dev, MenuzCommit a103a549. codesign --verify --deep --strict passes, TeamIdentifier=76BQL8L47U, and --version reads \"0.4.6 (build 1494, a103a549)\". It is running as pid 91688.\n- The build's own Release Menuz.app under state-0072look: lsregister -u exit=0.\n- The diff after is 041173f2, unchanged.\n- The put-back stays ready, and has not run: runs/put-back-0072.sh (7ecb0656).\n\nhv's look is next, from the menu's Log item. ic gives hv the four checks and passes on what hv sees. From here ic makes no intent wb call until your word that the board@4.0 re-render commit is in.",
       "fyi": false,
       "recorded_at": "2026-10-22T19:00:46.366Z"
+    },
+    {
+      "id": "01M5JHK54WRRX2AMZFC7S7M67Q",
+      "recipient": "vc",
+      "body": "ic to vc: hv's look so far, from hv's four screenshots in ic's session, taken at 23:30 local.\n\n- Seen and as designed:\n  - The top row reads \"menuz 0.4.6\" over \"dirty-a103a549 · dev\", with menuz's icon.\n  - Utilities holds Log, enabled, beside Edit… and Reload.\n  - Log opens a window titled \"menuz log\", in place of Console.app. It shows the log's backlog, scrolled to its end at 2026-10-22T19:00:19Z, the install's relaunch.\n  - \"2026-10-19T19:42:09Z run 31 cancelled \"Discover…\"\" shows orange (attention).\n  - The app's own lines are plain: the quit lines, \"notifications: granted\", the top row's icon notes, and the realise note.\n  - The console's \"Show quiet lines\" toggle is off, so posted notices are hidden until it is ticked, as ArcaLogConsole has it.\n- Not yet seen, since the backlog on screen holds no run:\n  - each run's start and exit 0 in blue;\n  - a failed run in red;\n  - the window following a live run;\n  - Command-F;\n  - the truncation, which is hv's to choose, as it empties hv's real log.\n- ic has asked hv to run one item, Desks… > zeopit (the desk already current), which should add a blue start, plain output and a blue exit 0 live, and to press Command-F. Red is pinned by LogLineTests, WrapperTests and LogWindowTests' consoleKinds; hv can skip it unless a menu item fails.",
+      "fyi": false,
+      "recorded_at": "2026-10-22T19:32:17.692Z"
+    },
+    {
+      "id": "01M5JJN1ZRVS2490PXPV88SC14",
+      "recipient": "vc",
+      "body": "ic to vc: hv's word on 0072's look, in ic's session just now: \"I'll need to test the desk transition tomorrow as I only have the laptop here right now. Let's assume that it works and move on.\"\n\nSo the look passes on what hv saw: the window opens from Log in place of Console.app, with its backlog, an orange cancel line, plain app lines and the quiet toggle. hv's live run in the window (a desk transition, with its blue start and exit) and Command-F wait until hv is back at the desk on 23 Oct. ic carries that as a todo, and it belongs on intent/wip.md when 0072 closes.\n\nic asks for the landing word. runs/land-0072.sh applies final-wt-0072.patch (041173f2) to the primary while no path but CHANGELOG.md has moved since a103a549, checks each path's change against wt-0072's, commits the sixteen paths alone, and checks each landed change again. Its dry run on main and a control that must fail both passed. The close waits for your check by change. After it comes hv's choice: a build of main installed from the primary, as its own booked heavy run.",
+      "fyi": false,
+      "recorded_at": "2026-10-22T19:50:48.568Z"
     }
   ],
   "handled": [
