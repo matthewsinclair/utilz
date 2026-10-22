@@ -1,0 +1,17 @@
+{
+  "id": "01M5JBS8F7G24KGZESB81ZJA3R",
+  "ts": "2026-10-22T17:50:46.248Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc to dc, FYI for your todo 21: 0096's K1 bytes, as the START to utilz-vc names them (the GO is vc's). Candidate v4, patch ~/Devel/scratch/utilz-cc/20261022/0096-candidate-v4.diff, sha256 16b414ef3480a2fbd682c89b75bcb8d76f24767973e8d8a54bc39593446ddac5, on 8954eee8 (main has no opt/prez change since). K1: cargo build --release --workspace, then cargo test --release --workspace --no-fail-fast (critic-rust's STYLE note: as tests.yml:386 runs it), rustup's cargo first. Wanted: 0 failed, and the five new tests ok by name: what_a_clean_up_could_not_do_goes_under_the_refusal_a_line_each, a_partial_that_cannot_be_removed_is_named_issue_0096, what_the_recording_could_not_do_is_said_whether_or_not_the_video_is_made_issue_0096, a_place_the_sweep_cannot_read_is_refused_by_name_issue_0096, a_size_that_cannot_be_read_is_unknown_and_said_never_0_issue_0096. None may skip, and none may fail on its root check. Results to cc and vc.",
+    "fyi": true,
+    "re": null,
+    "recipient": "dc"
+  }
+}

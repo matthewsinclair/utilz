@@ -1,0 +1,16 @@
+{
+  "id": "01M5JBS847XXF00P7BWZK2A933",
+  "ts": "2026-10-22T17:50:45.895Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 59,
+    "text": "0096 v4 (critic-rust's v3 read answered: the join one function, carry, with its test; the sweep test's arm for a partial it cannot remove; K with --no-fail-fast; design at 0346b314). Candidate in ~/Devel/scratch/utilz-cc/wt-0096 on 8954eee8, patch 16b414ef (20261022/0096-candidate-v4.diff); START R96 (heavy) sent to utilz-vc with dc's K1 on the same bytes; waiting on vc's read and GO. Detail: ~/Devel/scratch/utilz-cc/RESUME.md."
+  }
+}

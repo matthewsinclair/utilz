@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: c487a9ec-e4b1-4372-8b54-4909bcfb102c
-heartbeat_at: 2026-10-22 17:32Z
+heartbeat_at: 2026-10-22 17:50Z
 status: active
-focus: "22 Oct: 0096: critic-rust's v3 read running again (reading only), then v3 answered, PATCH_WANT set and the START with dc's K1 (hold 40), then the landing and close. Then 0098 (approved, point 5 taken) on 0096's landing, then 0099 (filed, with vc for its read). Resume: ~/Devel/scratch/utilz-cc/RESUME.md."
+focus: "22 Oct: 0096 v4 START R96 (heavy) sent to utilz-vc with dc's K1 on the same bytes (patch 16b414ef); waiting on vc's read and GO. Then the END, 0096's landing and close, 0098 on its landing, then 0099. Resume: ~/Devel/scratch/utilz-cc/RESUME.md."
 claims: [ISSUE:0096, ISSUE:0098, ISSUE:0099]
 ---
 
@@ -13,7 +13,7 @@ claims: [ISSUE:0096, ISSUE:0098, ISSUE:0099]
 
 ## DOING
 
-- 0096 v3 (vc's ruling after the wrap: critic-rust's v2 read folded in as points 8 and 9). Design amended and committed at 54ef9ba0, with two twins folded in for vc's read (build.rs:276's size read, the sweep's -o check). v3 written in ~/Devel/scratch/utilz-cc/wt-0096 (unbuilt; no opt/prez change on main since its base 8954eee8). critic-rust's v3 read was stopped unreported at the night's close (20 Oct), so it is dispatched again with the same prompt; r96-0096.sh rewritten for six mutations. Detail: ~/Devel/scratch/utilz-cc/RESUME.md. (edited)
+- 0096 v4 (critic-rust's v3 read answered: the join one function, carry, with its test; the sweep test's arm for a partial it cannot remove; K with --no-fail-fast; design at 0346b314). Candidate in ~/Devel/scratch/utilz-cc/wt-0096 on 8954eee8, patch 16b414ef (20261022/0096-candidate-v4.diff); START R96 (heavy) sent to utilz-vc with dc's K1 on the same bytes; waiting on vc's read and GO. Detail: ~/Devel/scratch/utilz-cc/RESUME.md. (edited)
 - 0098 (deliver.rs's revision overwrite): filed at 215d7653, approved by vc 22 Oct with point 5 taken (create_new through Stem::write_next), body amended at 53dfc574; severity medium, prez 2.5.6, on 0096's landing. Next, once 0096 lands: the candidate in its own worktree, critic-rust's read, the START with dc's K leg, the landing and close. (edited)
 
 ## TODO
@@ -22,7 +22,7 @@ claims: [ISSUE:0096, ISSUE:0098, ISSUE:0099]
 
 ## Holds
 
-- The START (heavy) for 0096 v3, r96-0096.sh (A1-A6, B, G, C) with utilz-dc's K1 on the same bytes. Released when vc is back from hv's compact (its pickup) and critic-rust's v3 read is answered: vc's rule, nothing STARTs or GOes until after the compacts.
+_(none)_
 
 ## Watch-outs
 
