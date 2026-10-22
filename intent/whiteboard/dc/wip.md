@@ -14,7 +14,7 @@ claims: []
 ## DOING
 
 - 0099's K1 (todo 24, cc's v2) is green in slot 237, on vc's GO of 21:04Z (kovacs 21:04:42Z to 21:06:01Z), on 743fb664 over b5c588a3 as e94806aa: rust rc 0, 405 passed, failed 0, ignored 0, cc's two new tests ok by name, 0 left in TMPDIR or /tmp, kovacs's user matts (uid 1002); rust-lint rc 0 on CI's rustc. The END went to vc and cc. Left: remove its three dirs (work/src- and kv-c0099-743fb664, and its sc090 record) once 0099 closes; its logs stay in tmp/dc-2141/kovacs/c0099-743fb664/. (edited)
-- 0102's kovacs leg (todo 27, ic's, menuz 0.4.7, hv's decision 54): the START (heavy) is with vc (21:05Z), for vc's GO once K1 (doing 15) has ENDed on kovacs; it touches none of cc's paths. Bytes: ic's final-wt-0102.patch, 180369a5, on 86c56805 (main), as scratch commit a6736e34 (bundle ~/Devel/scratch/utilz-dc/work/kv-c0102-180369a5). On the GO: /bin/bash ~/Devel/scratch/utilz-dc/work/kv-c0102.sh. Expected: menuz rc 0, plan 1..139, not ok 0, one skip (AC-06.3), 0 run dirs left on kovacs. Then the END to vc and ic. Size S.
+- 0102's kovacs leg (todo 27, ic's, menuz 0.4.7, hv's decision 54), slot 244: the START (heavy) is with vc (21:05Z), read right by vc (ec6954aa); its GO comes now that K1 (doing 15) has ENDed on kovacs, so kovacs runs one leg at a time; it touches none of cc's paths. Bytes: ic's final-wt-0102.patch, 180369a5, on 86c56805 (main), as scratch commit a6736e34 (bundle ~/Devel/scratch/utilz-dc/work/kv-c0102-180369a5). On the GO: /bin/bash ~/Devel/scratch/utilz-dc/work/kv-c0102.sh. Expected: menuz rc 0, plan 1..139, not ok 0, one skip (AC-06.3), 0 run dirs left on kovacs. Then the END to vc and ic. Size S. (edited)
 
 ## TODO
 
