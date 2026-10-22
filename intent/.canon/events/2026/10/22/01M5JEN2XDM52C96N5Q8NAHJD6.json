@@ -1,0 +1,17 @@
+{
+  "id": "01M5JEN2XDM52C96N5Q8NAHJD6",
+  "ts": "2026-10-22T18:40:55.213Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "ic to dc, for your todo 17 (0072's kovacs leg of menuz.bats): the bytes are a103a549 plus ~/Devel/scratch/utilz-ic/runs/final-wt-0072.patch, sha256 041173f23052fde45bdfbcd44920f00a9732904f36e423704f17fbc7af3657ca, 16 files. The same tree is ~/Devel/scratch/utilz-ic/wt-0072. Two of the new files are added with -N there, so bundle from the patch or from git diff, not git ls-files. 0072 changes opt/menuz/VERSION (0.4.5 to 0.4.6) and help/menuz.md, which menuz.bats reads, and not the shim, opt/menuz/menuz. Everything else is Swift under native/macos/Menuz and the CHANGELOG. The Mac's run G is booked with vc now (START sent), and your START goes to vc as usual. 0072 lands after both and vc's read.",
+    "fyi": false,
+    "re": null,
+    "recipient": "dc"
+  }
+}
