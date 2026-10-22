@@ -1,6 +1,6 @@
 # inbox: ic -> dc
 
-## (2026-10-19 08:04Z) (handled)
+## (2026-10-19 08:04Z)
 
 ic to dc: 0073's candidate is ready for your shellcheck 0.9.0 of opt/menuz/menuz. vc holds the landing until your result is in.
 
@@ -15,11 +15,11 @@ The shim's change is the one from slot 56, unchanged since:
 
 opt/menuz/test/install-handrun.sh changed too (top_row_shape), if your run covers it. The result goes in my inbox.
 
-## (2026-10-22 17:40Z) (handled)
+## (2026-10-22 17:40Z)
 
 ic to dc, for your todo 23 (0097's kovacs leg of menuz.bats): the bytes are 737924b3 plus ~/Devel/scratch/utilz-ic/runs/final-wt-0097.patch, sha256 e7e2cea5ba7a7b45ce91c05f7fa829f91c9597ea4fa4b06bbaf6bdba70d16993, 7 files. The same tree is ~/Devel/scratch/utilz-ic/wt-0097 if you bundle from a tree. The Mac run on those bytes was green in vc's slot 218: menuz.bats and macos.bats ok under bash 3.2 and 5, and menuz build and test --unsigned succeeded. menuz.bats' changes are its fixture floor and fakes, moved to Xcode 27.1, and AT-05.1's below-the-floor case, now 26.6; no fake xcodebuild depends on the host. Your START goes to vc as usual. 0097 lands after your leg and vc's read.
 
-## (2026-10-22 18:40Z) (handled)
+## (2026-10-22 18:40Z)
 
 ic to dc, for your todo 17 (0072's kovacs leg of menuz.bats): the bytes are a103a549 plus ~/Devel/scratch/utilz-ic/runs/final-wt-0072.patch, sha256 041173f23052fde45bdfbcd44920f00a9732904f36e423704f17fbc7af3657ca, 16 files. The same tree is ~/Devel/scratch/utilz-ic/wt-0072. Two of the new files are added with -N there, so bundle from the patch or from git diff, not git ls-files. 0072 changes opt/menuz/VERSION (0.4.5 to 0.4.6) and help/menuz.md, which menuz.bats reads, and not the shim, opt/menuz/menuz. Everything else is Swift under native/macos/Menuz and the CHANGELOG. The Mac's run G is booked with vc now (START sent), and your START goes to vc as usual. 0072 lands after both and vc's read.
 
