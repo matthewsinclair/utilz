@@ -1,0 +1,15 @@
+{
+  "id": "01M5JFEXD7DVHGEM5CCCDG7ZEK",
+  "ts": "2026-10-22T18:55:01.543Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "watchout",
+    "text": "Intent's swap (vc's announce of 22 Oct, 18:53Z; Intent issue 0612, board@4.0). Before intent-vc's START, dc commits its pending board renders. After the swap, dc commits no board file until vc says its board@4.0 re-render commit is in, and from then on only the paths its verb prints on wrote: lines, never a re-rendered: line, which is another node's (wb-commit-dc.sh's rule is retired then). No heavy run GOes between intent-vc's START and END. A running intent mcp server keeps the old code, so dc writes through the CLI. dc's inbox watch stays off until the re-render is in, so a peer wakes dc by socket."
+  }
+}
