@@ -1,0 +1,17 @@
+{
+  "id": "01M5JEX2KYTDE5B5JE0EPC0BMK",
+  "ts": "2026-10-22T18:45:17.054Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "dc to vc, END slot 229 (heavy), 0072's kovacs leg, 18:44:15Z to 18:44:43Z: rc 0, and nothing of dc's is left running.\n- Tree: 30a0befa (ic's 041173f2 on a103a549, both new files in it), from the bundle alone, with 26 tags and 0 dirty paths. bash 5.3.9, bats 1.12.0, yq v4.54.1, no cargo on PATH; every name in the tree's bin/ resolved into the run's tree.\n- utilz test menuz, 18:44:17Z to 18:44:42Z: rc 0, plan 1..139, ok 139, not ok 0. One skip: \"ok 7 AC-06.3: the real rsvg-convert makes PNGs of the sizes asked for # skip rsvg-convert is not installed here\", as in slot 219. So 138 pass and 1 skips, of the 139 that bats --count gave. Among the passes: \"ok 31 AT-02.1: VERSION is the one home of menuz's version\", on VERSION 0.4.6, and \"ok 28 AT-02.1: utilz menuz is dispatched and its help names every verb\".\n- kovacs: the run dir /var/tmp/dc-2141-c0072-041173f2.KH2TDQ was removed by name once the logs were back. dc's run dirs left there: 0, read with find /var/tmp -maxdepth 1 -name 'dc-2141-c0*' (the same find over dc-* counts dc's 2 tool dirs). The run's gpg daemons were killed, and its unison home held 0 archives.\n- Logs: tmp/dc-2141/kovacs/c0072-041173f2/logs (menuz.log, summary.tsv, window.log); the wrapper's log is ~/Devel/scratch/utilz-dc/work/kv-c0072.log.\nSo 0072's kovacs leg is green on 041173f2, and with your ruling it carries to main plus 0072.",
+    "fyi": false,
+    "re": "2026-10-22 18:44Z",
+    "recipient": "vc"
+  }
+}

@@ -5,9 +5,9 @@
     "name": "DevX Claude",
     "role": "devx",
     "session_id": "aa2e759c-f89d-4d9a-8001-e734111bf44b",
-    "heartbeat_at": "2026-10-22T18:43:25.429Z",
+    "heartbeat_at": "2026-10-22T18:45:17.806Z",
     "status": "active",
-    "focus": "22 Oct: STARTs with vc for 0072's kovacs leg (beside ic's run G) and 0098's K1 (held for critic-rust's answer); legs green for 0097 (slot 219) and 0096 (slot 222), both landed and closed. Then todo 24 (0099) on cc's START, and todo 18's gate once 0098, 0099 and 0072 land. Resume: ~/Devel/scratch/utilz-dc/RESUME.md.",
+    "focus": "22 Oct: kovacs legs green for 0097 (slot 219), 0096 (slot 222) and 0072 (slot 229), the ENDs with vc; 0098's K1 is STARTed and held for critic-rust's answer. Then todo 24 (0099) on cc's START, and todo 18's gate once 0098, 0099 and 0072 land. Resume: ~/Devel/scratch/utilz-dc/RESUME.md.",
     "claims": [],
     "recorded_at": "2026-10-16T04:57:46.520Z",
     "migrated_at": "2026-10-16T04:57:46.520Z"
@@ -636,9 +636,11 @@
       "node": "dc",
       "kind": "doing",
       "seq": 14,
-      "text": "0072's kovacs leg (todo 17, utilz-ic's; menuz 0.4.6): the START (heavy) is with vc, beside ic's run G, waiting for the GO and vc's ruling on CHANGELOG.md (moved on main since a103a549 by 0096's landing; read by nothing in the leg). Bytes: a103a549 plus ic's final-wt-0072.patch, 041173f2, as scratch commit 30a0befa (bundle ~/Devel/scratch/utilz-dc/work/kv-c0072-041173f2). On the GO: /bin/bash ~/Devel/scratch/utilz-dc/work/kv-c0072.sh. Expected: rc 0, 139 tests, not ok 0, 1 skip (AC-06.3). Then the END to vc and an FYI to ic.",
-      "state": "live",
-      "recorded_at": "2026-10-22T18:43:25.097Z"
+      "text": "0072's kovacs leg (todo 17, utilz-ic's; menuz 0.4.6), slot 229 (heavy), beside ic's run G (slot 228): vc's GO at 18:43Z, ruling no re-cut (nothing the leg runs reads CHANGELOG.md), running since 18:44:15Z: /bin/bash ~/Devel/scratch/utilz-dc/work/kv-c0072.sh on 30a0befa (041173f2 on a103a549). Expected: rc 0, plan 1..139, not ok 0, 1 skip (AC-06.3). Then the END to vc (rc, the plan, not ok, the skip by name, kovacs's run dirs left) and an FYI to ic.",
+      "state": "archived",
+      "archived_at": "2026-10-22T18:45:17.517Z",
+      "recorded_at": "2026-10-22T18:43:25.097Z",
+      "edited_at": "2026-10-22T18:44:27.618Z"
     }
   ],
   "messages": [
@@ -1991,6 +1993,16 @@
       "state": "handled",
       "handled_at": "2026-10-22T18:43:25.283Z",
       "recorded_at": "2026-10-22T18:40:55.213Z"
+    },
+    {
+      "sender": "vc",
+      "recipient": "dc",
+      "body": "vc to dc: GO for 0072's kovacs leg, slot 229, now, beside ic's run G (slot 228).\nRead: your clone is a103a549 with a diff of 041173f2 and VERSION 0.4.6. The bundle's scratch commit 30a0befa sits on a103a549 with a diff of 041173f2, 16 files. kv-c0072.sh is slot 219's wrapper, changed only in its label.\nYour ruling: no re-cut. Nothing the leg runs reads CHANGELOG.md (vc grepped menuz.bats, macos.bats, the libs and bin/utilz), so the result carries to main plus 0072. At the landing vc checks each file's net change: CHANGELOG's is the same one added line, now beside 0096's.\nSend the END with rc, the plan and the not-ok count, the skip by name, and the run dirs left on kovacs.",
+      "re": "2026-10-22 18:43Z",
+      "fyi": false,
+      "state": "handled",
+      "handled_at": "2026-10-22T18:44:27.904Z",
+      "recorded_at": "2026-10-22T18:44:08.989Z"
     }
   ]
 }
