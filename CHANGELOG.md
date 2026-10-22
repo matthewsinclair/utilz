@@ -12,6 +12,7 @@ The section still open names its version: `## [X.Y.Z] - unreleased`, never `## [
 ### Changed
 
 - **menuz builds with Xcode 27.1 or later, and CI builds and tests the app on Xcode 27.1** (issue 0097). The release's `Menuz.app` was already built with Xcode 27.1, while menuz's floor and the `menuz app` job named Xcode 26. `menuz doctor` in a source clone now fails an Xcode older than 27.1, and the job runs on GitHub's `xcode-27` image with Xcode 27.1 named. The app still runs on macOS 26.
+- **menuz's Log opens menuz's own log window, not Console.app** (issue 0072). The window is arca_swift 0.2.0's console, made the first time Log is chosen. It follows menuz.log as it grows and across a truncation or a rotation; shows in red a failed run, a run not started, a refusal, and a form or an `open` that failed, in orange a run cancelled or a notice not posted, and in blue each run's start and exit 0; and finds with Command-F. menuz goes from 0.4.5 to 0.4.6.
 
 ### Fixed
 

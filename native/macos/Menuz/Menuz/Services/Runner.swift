@@ -117,7 +117,7 @@ final class Runner {
     log.write(Run.startLine(request, home: home))
     switch Self.spawn(environment: environment, log: log.file, home: home) {
     case .failure(let why):
-      log.write("run \(request.id) could not start: \(why)")
+      log.write(Run.couldNotStartLine(id: request.id, why: "\(why)"))
       Notifier.post("\"\(request.label)\" could not start: \(why)")
       return false
     case .success(let pid):

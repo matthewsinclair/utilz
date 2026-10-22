@@ -91,6 +91,12 @@ struct WrapperTests {
     return sameFormat && now && duration.wholeMatch(of: /[0-9]+\.[0-9]s/) != nil
   }
 
+  /// Each line of a run's log as the log window reads it (issue 0072), so
+  /// LogLine.kind is pinned to what the wrapper writes, not to a copy of it.
+  static func kinds(_ log: String) -> [LogLine.Kind] {
+    log.split(separator: "\n").map { LogLine.kind(String($0)) }
+  }
+
   @Test("the end-line check itself refuses a local time, a missing decimal and a stale stamp")
   func endLineCheck() {
     #expect(Self.endLine(LogLine.format("run 7 exit 0 in 0.3s", at: Date()), code: 0))
@@ -108,6 +114,7 @@ struct WrapperTests {
     let lines = ran.log.split(separator: "\n").map(String.init)
     #expect(Array(lines.prefix(2)) == ["[7] out", "[7] err"])
     #expect(Self.endLine(ran.log, code: 3), "end line: \(lines.last ?? "")")
+    #expect(Self.kinds(ran.log) == [.output, .output, .quiet, .failure], "\(ran.log)")
   }
 
   @Test("the working directory as written: ~ and a variable expand; one that cannot be entered ends the run")
@@ -121,6 +128,7 @@ struct WrapperTests {
     #expect(!none.log.contains("[7] ran"))
     #expect(none.log.contains("[7] menuz: cannot enter /no/such/dir"))
     #expect(Self.endLine(none.log, code: 126))
+    #expect(Self.kinds(none.log) == [.output, .quiet, .failure], "\(none.log)")
     #expect(none.err.isEmpty)
     let bad = try Self.run("print ran", cwd: "bad ${")
     #expect(bad.status == 126)
@@ -149,6 +157,7 @@ struct WrapperTests {
     let clean = try Self.run("exit 0")
     #expect(clean.notices == [])
     #expect(!clean.log.contains("notice"))
+    #expect(Self.kinds(clean.log) == [.frame], "\(clean.log)")
     #expect(try Self.run("print last; exit 2").notices == ["\"Say it\" exited 2"])
     #expect(try Self.run("print one; print last; exit 0", notify: .always).notices == ["\"Say it\" exited 0: last"])
     let never = try Self.run("exit 2", notify: .never)
@@ -163,8 +172,10 @@ struct WrapperTests {
     #expect(lines.dropLast().last == "[7] notice posted", "\(posted.log)")
     #expect(posted.status == 2)
     #expect(Self.endLine(posted.log, code: 2), "\(posted.log)")
+    #expect(Self.kinds(posted.log) == [.quiet, .failure], "\(posted.log)")
     let refused = try Self.run("exit 2", armExit: 1)
     #expect(refused.log.contains("[7] notice not posted: the fake refused\n"), "\(refused.log)")
+    #expect(Self.kinds(refused.log) == [.attention, .failure], "\(refused.log)")
     #expect(!refused.log.contains("--notify exited"), "exit 1 says why on its own line: \(refused.log)")
     #expect(refused.status == 2, "the arm's answer never changes the run's code")
     #expect(Self.endLine(refused.log, code: 2))
@@ -177,9 +188,11 @@ struct WrapperTests {
     #expect(missing.log.contains("[7] menuz: notice not posted: /no/such/Menuz --notify exited 127\n"), "\(missing.log)")
     #expect(missing.status == 3)
     #expect(Self.endLine(missing.log, code: 3))
+    #expect(Self.kinds(missing.log).suffix(2) == [.attention, .failure], "\(missing.log)")
     #expect(missing.err.isEmpty, "\(missing.err)")
     let unset = try Self.run("exit 4", unsetExec: true)
     #expect(unset.log.contains("[7] menuz: notice not posted: MENUZ_EXEC is not set\n"), "\(unset.log)")
+    #expect(Self.kinds(unset.log) == [.attention, .failure], "\(unset.log)")
     #expect(unset.notices == [])
     #expect(unset.status == 4)
     #expect(Self.endLine(unset.log, code: 4))

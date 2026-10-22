@@ -122,7 +122,7 @@ menu:
 
 A `separator` that starts the menu, or follows another at its top level, adds no line: the one under the top row, or the one before it, serves. Inside a submenu, separators are drawn as the file gives them.
 
-The app has four items of its own: **Edit…**, which opens `menuz.yaml` in the default text editor, **Log**, which opens the log, **Reload**, and **Quit menuz**. A `menuz` entry puts one of the first three where it stands, so the example keeps them in its **Utilities** submenu. Those the file does not place go below its entries, after a line (the menu's own, when its last entry is a separator), and **Quit menuz** is always there, last. Before there is a log, **Log** reads **Log (no log yet)**, disabled, wherever it sits.
+The app has four items of its own: **Edit…**, which opens `menuz.yaml` in the default text editor, **Log**, which opens menuz's log window, **Reload**, and **Quit menuz**. The log window follows the log as it grows, and across a truncation or a rotation. It shows in red a run that exited other than 0, could not start or was not run, a refusal, and a form or an `open` that failed; in orange a run cancelled or a notice not posted; and in blue each run's start and its exit 0. Command-F finds. A `menuz` entry puts one of the first three where it stands, so the example keeps them in its **Utilities** submenu. Those the file does not place go below its entries, after a line (the menu's own, when its last entry is a separator), and **Quit menuz** is always there, last. Before there is a log, **Log** reads **Log (no log yet)**, disabled, wherever it sits.
 
 ### Labels at every open
 

@@ -136,7 +136,7 @@ enum Notifier {
     Task {
       let outcome = await Notices.post(text, center: SystemNoticeCenter())
       guard outcome != .posted else { return }
-      let line = "\(Notice.answer(outcome).line): \(text)"
+      let line = Notice.notPostedLine(outcome, about: text)
       guard toLog, let log else {
         AppLog.logger.error("\(line, privacy: .public)")
         return

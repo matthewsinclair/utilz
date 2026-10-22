@@ -91,6 +91,23 @@ public enum Run {
     "\"\(label)\" not run: \(RunId.store(in: stateDir)) \(refusal)"
   }
 
+  /// `"<label>" not run: ...`, for an item chosen with no run, or before
+  /// the login shell is read.
+  public static func noRunForItemLine(label: String) -> String {
+    "\"\(label)\" not run: the menu has no run for it, or the login shell is not read yet"
+  }
+
+  /// `run <id> could not start: <why>`, when its wrapper was not spawned.
+  public static func couldNotStartLine(id: Int, why: String) -> String {
+    "run \(id) could not start: \(why)"
+  }
+
+  /// `"<label>" form: <what> could not be read: <why>`, for a form's choices
+  /// or default the login shell did not answer (issue 0071).
+  public static func formUnreadLine(label: String, what: String, why: String) -> String {
+    "\"\(label)\" form: \(what) could not be read: \(why)"
+  }
+
   /// The wrapper, run as `/bin/zsh -f -c <wrapper>` in its own session with
   /// its stdout and stderr on the log. It enters the working directory,
   /// runs the line in the login shell with `bin/` first even after .zshrc,

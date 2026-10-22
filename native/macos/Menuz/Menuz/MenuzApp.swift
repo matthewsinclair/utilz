@@ -22,6 +22,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, MenuAc
   private var paths = Paths(environment: ProcessInfo.processInfo.environment, home: NSHomeDirectory())
   private lazy var log = AppLog(file: paths.logFile)
   private lazy var runner = Runner(log: log)
+  /// menuz's own log window, made when Log is first chosen (issue 0072).
+  private lazy var logWindow = LogWindow(console: ArcaConsole())
   /// The forms open now, each held until it answers.
   private var forms: [ObjectIdentifier: ParamFormController] = [:]
   /// The last menu that loaded, kept on screen while the file is refused.
@@ -146,7 +148,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, MenuAc
       passed = true
     case .refused(let found):
       refusals = found
-      found.forEach { log.write("refused: \($0)") }
+      found.forEach { log.write(LogLine.refusedLine($0)) }
       passed = false
     }
     rebuild()
@@ -232,7 +234,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, MenuAc
   func chooseItem(_ sender: NSMenuItem) {
     let label = sender.title
     guard let chosen = sender.representedObject as? Chosen, let shell else {
-      log.write("\"\(label)\" not run: the menu has no run for it, or the login shell is not read yet")
+      log.write(Run.noRunForItemLine(label: label))
       return
     }
     guard !chosen.params.isEmpty else {
@@ -273,8 +275,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, MenuAc
     open(["-t", paths.menuFile])
   }
 
+  /// Shows menuz's log window, following the log where it is now (issue 0072).
   func openLog(_ sender: NSMenuItem) {
-    open([paths.logFile])
+    logWindow.show(logFile: paths.logFile)
   }
 
   func reload(_ sender: NSMenuItem) {
@@ -332,7 +335,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, MenuAc
     let outcome = await Realiser.realise(request, shell: shell, paths: paths, seconds: seconds)
     let answer = read(outcome.realised, outcome.unanswered)
     if case .failed(let why) = answer {
-      log.write("\"\(label)\" form: \(what) could not be read: \(why)")
+      log.write(Run.formUnreadLine(label: label, what: what, why: why))
     }
     return answer
   }
@@ -342,7 +345,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, MenuAc
     Task {
       let result = await Shell.run("/usr/bin/open", arguments, timeout: .seconds(10))
       if result.outcome != .exited(0) {
-        log.write("open \(arguments.joined(separator: " ")) did not succeed: \(result.outcome)")
+        log.write(LogLine.openFailedLine(arguments, outcome: "\(result.outcome)"))
       }
     }
   }

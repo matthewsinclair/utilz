@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		03EF739060268D6FB11F129C /* about.md in Resources */ = {isa = PBXBuildFile; fileRef = 7CF7E8E8CA2418791548D6BA /* about.md */; };
+		0B16E99E170F79D4122D2C3C /* LogWindowTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37D4FCEC8ACF4EC756D724A1 /* LogWindowTests.swift */; };
 		0B5874BD2849165073737CBC /* IdentityRowTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC872A43CC981BBFB298B49E /* IdentityRowTests.swift */; };
 		184F74B5C1A84C179E4FFD0A /* MenuSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 746C4473977A35828A0457CF /* MenuSource.swift */; };
 		29A8876E8DAA2E3A3553409B /* Masthead.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7AACE446A510BA56FFFBC42 /* Masthead.swift */; };
@@ -15,12 +16,14 @@
 		4DA752B867A63455306A814A /* RealiserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F1E15B0CAAED35AF88ADCB2 /* RealiserTests.swift */; };
 		5E613632DB47D5AC9BB87171 /* MenuzKit in Frameworks */ = {isa = PBXBuildFile; productRef = 179FB1D9697FE3912ACB93C8 /* MenuzKit */; };
 		647A99098E46609054F1591F /* MenuBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A82B2DADFCB97CEDA1B96BA /* MenuBuilder.swift */; };
+		6484415C26A2D867238CFE46 /* LogWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A03E4B4D5385E44C58A57D5 /* LogWindow.swift */; };
 		66CA1635FB54568EC7D32863 /* RunnerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1D82D84E6BED41563E3D23 /* RunnerTests.swift */; };
 		698D5FF25A59BB86422C638D /* AppLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1434161DD51B33FFBEA2FB62 /* AppLog.swift */; };
 		6EAD658E87554EF44E6805B2 /* Shell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11104D7740E2D95237590C37 /* Shell.swift */; };
 		737167339BCD0368AFD43609 /* LoginShell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D78B2E5395802C4995350D1 /* LoginShell.swift */; };
 		7A18260D751703EDDADAAE43 /* Arms.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86DE1B4857DABEF4761E634D /* Arms.swift */; };
 		85D7375C47259446D9582937 /* Notifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9CAAC271F6A8DE3D9BA5660 /* Notifier.swift */; };
+		89B31A304753B045E259888F /* ArcaLogConsole in Frameworks */ = {isa = PBXBuildFile; productRef = 768D3FBAABC7FD84D8859C41 /* ArcaLogConsole */; };
 		8A0ACEFEB1B35D3594B1FAFE /* TestHostTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FB3DC0386DDBB630BCAECDE /* TestHostTests.swift */; };
 		8FEBE6637B94EFB85C109330 /* Runner.swift in Sources */ = {isa = PBXBuildFile; fileRef = F54C8007BA2E6C044E578B5A /* Runner.swift */; };
 		94B23A16E55B53B76F9A8F40 /* ArcaMasthead in Frameworks */ = {isa = PBXBuildFile; productRef = 3CBD4F68970793021B1CB251 /* ArcaMasthead */; };
@@ -54,10 +57,12 @@
 		1434161DD51B33FFBEA2FB62 /* AppLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLog.swift; sourceTree = "<group>"; };
 		2DAC1A3B15EDACFBFFBB4FC7 /* MenuBuilderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBuilderTests.swift; sourceTree = "<group>"; };
 		2E028E7200976AF9A22C8E64 /* LoginItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginItem.swift; sourceTree = "<group>"; };
+		37D4FCEC8ACF4EC756D724A1 /* LogWindowTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogWindowTests.swift; sourceTree = "<group>"; };
 		408DCC006CB1D86D48104017 /* Menuz.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Menuz.entitlements; sourceTree = "<group>"; };
 		5AA7FC095B000E5E6F52EC5B /* Watcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Watcher.swift; sourceTree = "<group>"; };
 		6847D972D776B11DB1D40E76 /* Menuz.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Menuz.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		69D7BB98761B18EBC1D62714 /* Menuz.Debug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Menuz.Debug.entitlements; sourceTree = "<group>"; };
+		6A03E4B4D5385E44C58A57D5 /* LogWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogWindow.swift; sourceTree = "<group>"; };
 		6FB3DC0386DDBB630BCAECDE /* TestHostTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestHostTests.swift; sourceTree = "<group>"; };
 		746C4473977A35828A0457CF /* MenuSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuSource.swift; sourceTree = "<group>"; };
 		775285512609F81F861F1415 /* ParamForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParamForm.swift; sourceTree = "<group>"; };
@@ -92,6 +97,7 @@
 			files = (
 				FB37AB1536AE3C8EEDC49F8F /* MenuzKit in Frameworks */,
 				94B23A16E55B53B76F9A8F40 /* ArcaMasthead in Frameworks */,
+				89B31A304753B045E259888F /* ArcaLogConsole in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -114,6 +120,7 @@
 				86DE1B4857DABEF4761E634D /* Arms.swift */,
 				2E028E7200976AF9A22C8E64 /* LoginItem.swift */,
 				0D78B2E5395802C4995350D1 /* LoginShell.swift */,
+				6A03E4B4D5385E44C58A57D5 /* LogWindow.swift */,
 				F7AACE446A510BA56FFFBC42 /* Masthead.swift */,
 				8A82B2DADFCB97CEDA1B96BA /* MenuBuilder.swift */,
 				746C4473977A35828A0457CF /* MenuSource.swift */,
@@ -163,6 +170,7 @@
 			isa = PBXGroup;
 			children = (
 				CC872A43CC981BBFB298B49E /* IdentityRowTests.swift */,
+				37D4FCEC8ACF4EC756D724A1 /* LogWindowTests.swift */,
 				2DAC1A3B15EDACFBFFBB4FC7 /* MenuBuilderTests.swift */,
 				D0DA05166681483F5F74E57C /* NotifyArmTests.swift */,
 				7F1E15B0CAAED35AF88ADCB2 /* RealiserTests.swift */,
@@ -200,6 +208,7 @@
 			packageProductDependencies = (
 				E176BB28E1D45EFD0D08551C /* MenuzKit */,
 				3CBD4F68970793021B1CB251 /* ArcaMasthead */,
+				768D3FBAABC7FD84D8859C41 /* ArcaLogConsole */,
 			);
 			productName = Menuz;
 			productReference = 6847D972D776B11DB1D40E76 /* Menuz.app */;
@@ -287,6 +296,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0B5874BD2849165073737CBC /* IdentityRowTests.swift in Sources */,
+				0B16E99E170F79D4122D2C3C /* LogWindowTests.swift in Sources */,
 				B192BE55A3BD92863A209710 /* MenuBuilderTests.swift in Sources */,
 				C1E380F3B804FBD7849FBB13 /* NotifyArmTests.swift in Sources */,
 				4DA752B867A63455306A814A /* RealiserTests.swift in Sources */,
@@ -301,6 +311,7 @@
 			files = (
 				698D5FF25A59BB86422C638D /* AppLog.swift in Sources */,
 				7A18260D751703EDDADAAE43 /* Arms.swift in Sources */,
+				6484415C26A2D867238CFE46 /* LogWindow.swift in Sources */,
 				DE9C0C3FA1666B973E9DB06C /* LoginItem.swift in Sources */,
 				737167339BCD0368AFD43609 /* LoginShell.swift in Sources */,
 				29A8876E8DAA2E3A3553409B /* Masthead.swift in Sources */,
@@ -585,7 +596,7 @@
 			repositoryURL = "https://github.com/builtwitharca/arca_swift";
 			requirement = {
 				kind = upToNextMinorVersion;
-				minimumVersion = 0.1.1;
+				minimumVersion = 0.2.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
@@ -599,6 +610,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = B0461F0572CC3BFC026FE41A /* XCRemoteSwiftPackageReference "arca_swift" */;
 			productName = ArcaMasthead;
+		};
+		768D3FBAABC7FD84D8859C41 /* ArcaLogConsole */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B0461F0572CC3BFC026FE41A /* XCRemoteSwiftPackageReference "arca_swift" */;
+			productName = ArcaLogConsole;
 		};
 		E176BB28E1D45EFD0D08551C /* MenuzKit */ = {
 			isa = XCSwiftPackageProductDependency;

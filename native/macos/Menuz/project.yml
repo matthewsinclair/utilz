@@ -18,13 +18,14 @@ configs:
 packages:
   MenuzKit:
     path: MenuzKit
-  # The menu's top row and its About window (issue 0073). XcodeGen's
-  # up-to-next-minor: before 1.0 a minor release may change the API, so a new
-  # one is taken on purpose, never by a fresh resolve. It needs macOS 26 and
-  # Swift 6.2, which menuz's Xcode floor, xcodeVersion above, meets.
+  # The menu's top row and its About window (issue 0073), and its log window
+  # (issue 0072). XcodeGen's up-to-next-minor: before 1.0 a minor release may
+  # change the API, so a new one is taken on purpose, never by a fresh
+  # resolve. It needs macOS 26 and Swift 6.2, which menuz's Xcode floor,
+  # xcodeVersion above, meets.
   ArcaSwift:
     url: https://github.com/builtwitharca/arca_swift
-    minorVersion: 0.1.1
+    minorVersion: 0.2.0
 settings:
   base:
     SWIFT_VERSION: "6.0"
@@ -63,6 +64,8 @@ targets:
       - package: MenuzKit
       - package: ArcaSwift
         product: ArcaMasthead
+      - package: ArcaSwift
+        product: ArcaLogConsole
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.matthewsinclair.utilz.menuz

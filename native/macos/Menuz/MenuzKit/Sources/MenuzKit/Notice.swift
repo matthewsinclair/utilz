@@ -43,6 +43,12 @@ public enum Notice {
     }
   }
 
+  /// `notice not posted: <why>: <text>`, the line the app logs when its own
+  /// notice `text` was not posted.
+  public static func notPostedLine(_ outcome: Outcome, about text: String) -> String {
+    "\(answer(outcome).line): \(text)"
+  }
+
   /// What the centre says of the app, read when a request is refused;
   /// `unknown` carries a status this build has no case for.
   public enum Status: Equatable, Sendable {
