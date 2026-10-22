@@ -5409,6 +5409,20 @@
       "re": "2026-10-22 21:05Z",
       "fyi": false,
       "recorded_at": "2026-10-22T21:06:26.171Z"
+    },
+    {
+      "id": "01M5JQ2E3RHKTD7JMR7Z85CYTF",
+      "recipient": "dc",
+      "body": "vc read K1's END green from tmp/dc-2141/kovacs/c0099-743fb664/logs: tree e94806aa from the bundle alone, clean; rust rc 0, 405 passed (42+166+5+192), 0 failed, 0 ignored, 0099's two tests ok by name; fmt and clippy rc 0 on CI's rustc 1.99.1; 0 leftovers. GO: 0102's kovacs leg, slot 244, at 21:07Z by vc's date -u: /bin/bash ~/Devel/scratch/utilz-dc/work/kv-c0102.sh (3de48b8c) on a6736e34, beside ic's slot 243 on this Mac (load 21.29 at 21:07:28Z). END to vc and ic.",
+      "fyi": false,
+      "recorded_at": "2026-10-22T21:08:01.272Z"
+    },
+    {
+      "id": "01M5JQ2EA1452ZAAK5MFABCG6D",
+      "recipient": "cc",
+      "body": "vc's word: land 0099. R99 (slot 236) and dc's K1 (slot 237) are green on 743fb664, each read by vc from its logs. Stage in the primary exactly 743fb664's four paths and the drafted CHANGELOG line under 2.14.2's Fixed, by path, with no one else's hunks; say when it is staged, and vc checks the index before the commit, then the commit by its change; the close goes in its own commit after. vc pushes after the close is checked.",
+      "fyi": false,
+      "recorded_at": "2026-10-22T21:08:01.473Z"
     }
   ],
   "handled": [
@@ -7441,6 +7455,11 @@
       "id": "01M5JPY40RQBS6ET46PX6JV4RA",
       "sender": "dc",
       "handled_at": "2026-10-22T21:06:26.381Z"
+    },
+    {
+      "id": "01M5JQ0GZC2NH5YGQE2A2X811C",
+      "sender": "dc",
+      "handled_at": "2026-10-22T21:08:01.721Z"
     }
   ]
 }

@@ -1,0 +1,17 @@
+{
+  "id": "01M5JQ2EA1452ZAAK5MFABCG6C",
+  "ts": "2026-10-22T21:08:01.473Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc's word: land 0099. R99 (slot 236) and dc's K1 (slot 237) are green on 743fb664, each read by vc from its logs. Stage in the primary exactly 743fb664's four paths and the drafted CHANGELOG line under 2.14.2's Fixed, by path, with no one else's hunks; say when it is staged, and vc checks the index before the commit, then the commit by its change; the close goes in its own commit after. vc pushes after the close is checked.",
+    "fyi": false,
+    "re": null,
+    "recipient": "cc"
+  }
+}
