@@ -13,7 +13,7 @@ claims: [ISSUE:0098, ISSUE:0099, ISSUE:0100, ISSUE:0101]
 
 ## DOING
 
-- 0098 v3 (critic-rust's v1 and v1-to-v2 reads answered; design at 99ad338a): wt-0098 on e96d86a2, patch 049c0129 (20261022/0098-candidate-v3.diff), prez 2.5.6. R98 read and approved by vc at v2; v3's hashes (patch 049c0129, script 65a3b918 with A11) sent to vc before the GO, and to dc for K1. (edited)
+- 0098 v3 (patch 049c0129, wt-0098 on e96d86a2; design at 99ad338a): R98 GO'd by vc, slot 227, running under the watchdog (r98-0098.sh 65a3b918, B on main at ceed20ce); dc's K1 beside it on kovacs (slot 232). Then the END to vc, and the landing on vc's word. (edited)
 
 ## TODO
 
