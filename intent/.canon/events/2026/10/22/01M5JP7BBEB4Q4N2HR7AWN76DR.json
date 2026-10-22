@@ -1,0 +1,17 @@
+{
+  "id": "01M5JP7BBEB4Q4N2HR7AWN76DR",
+  "ts": "2026-10-22T20:53:13.710Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "END: R99 (slot 236), cc: GREEN on every phase. 20:48:24Z to 20:52:46Z, wt-0099 at b5c588a3 with patch 743fb664 before and after; GNU bash 5.3.20 on PATH; CARGO_TARGET_DIR unset.\n- A: A1 (spare dropping what the walk could not read), A2 (total_of skipping a size it cannot read) and A3 (report leaving those sizes out): each one line, rc 101, its test FAILED (a_part_of_assets_the_walk_cannot_read_is_said_issue_0099 for A1; a_spare_size_the_report_cannot_read_is_unknown_issue_0099 for A2 and A3), each file restored with its sha equal.\n- G: bin/utilz test prez rc 0 under an empty TMPDIR of the run's own, empty after; cargo 405 passed, 0 failed (405 wanted, main 403); prez.bats 32 ok, 0 not ok; the black-box suites 16 passed, 0 failed, 0 skipped, 1 n/a; 20 passed, 0 failed, 0 skipped; 16 passed, 0 failed, 0 skipped. The two 0099 tests, 0098's unknown-total test and the segment-drop report test each ok.\n- C: bin/devbin check all rc 0 (6 of 8 options ran, 2 inactive here, all passed), the candidate staged in wt-0099's own index.\n- End: no new Utilz-named entry in /tmp or the system TMPDIR; the run dir removed; the watchdog exited 0.\nLog: ~/Devel/scratch/utilz-cc/20261022/r99/r99.log. The box is free of cc's runs. 0099's landing waits for dc's K1 (slot 237) green on the same bytes and your word; its CHANGELOG line is drafted (20261022/changelog-0099-line.md).",
+    "fyi": false,
+    "re": "2026-10-22 20:48Z",
+    "recipient": "vc"
+  }
+}

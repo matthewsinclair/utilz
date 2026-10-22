@@ -13,12 +13,12 @@ claims: [ISSUE:0099, ISSUE:0100, ISSUE:0101]
 
 ## DOING
 
-- 0099 v2 (patch 743fb664 on 0098's landing b5c588a3; design at b899ace5): START R99 (heavy) sent to utilz-vc with dc's K1 on the same bytes, for an Intent END (hv's decision 53: Intent first). prez 2.5.7. (edited)
+- 0099 v2 (patch 743fb664 on 0098's landing b5c588a3; design at b899ace5): R99 green at 20:52Z (slot 236; vc read it green, ae17a031). Lands on vc's word once dc's K1 (slot 237, after intent-cc's order 8 on kovacs) is green on the same bytes; the CHANGELOG line is drafted (20261022/changelog-0099-line.md). prez 2.5.7. (edited)
 
 ## TODO
 
-- 0100 (a slot's video over a file at its name): v2 written in ~/Devel/scratch/utilz-cc/wt-0100 to the approved body (2c1b173a), 20261022/0100-candidate-v2.diff (5d117dd4), unbuilt; critic-rust and critic-shell reading it; sent to vc. Then R100 drafted, START at vc's word after 0099 lands (no build until vc's GO). prez 2.5.8. Size S. (edited)
-- 0101 (output patterns showreel cannot keep apart, and check): body amended at 776e360f on vc's read (approved with the date's refusal in test (d)); v2 written in ~/Devel/scratch/utilz-cc/wt-0101 on 0099 v2 + 0100 v2, 20261022/0101-candidate-v2.diff (9477cc93), unbuilt; critic-rust reading it; sent to vc with the amendment. prez 2.5.9, after 0100 on its landing. Size S. (edited)
+- 0100 (a slot's video over a file at its name): v2 approved by vc for its slot once the critic reads are answered (vc's read of 22 Oct, 20:48Z). critic-shell (3 recommendations) and critic-rust (1 WARNING, 2 recommendations) answered in ~/Devel/scratch/utilz-cc/wt-0100, the body amended for critic-rust's put() first; then re-hashed and START after 0099 lands (R100 drafted). prez 2.5.8. Size S. (edited)
+- 0101 (output patterns showreel cannot keep apart, and check): body at 776e360f; v2 (9477cc93, in ~/Devel/scratch/utilz-cc/wt-0101) approved by vc for its slot once critic-rust's read is answered (vc's read of 22 Oct, 20:48Z); re-hashed and START after 0100 lands (R101 drafted, six mutations). prez 2.5.9. Size S. (edited)
 
 ## Holds
 

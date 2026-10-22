@@ -1,0 +1,16 @@
+{
+  "id": "01M5JP9RPXDWJQ6ERD69HF7QJY",
+  "ts": "2026-10-22T20:54:32.925Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 61,
+    "text": "0099 v2 (patch 743fb664 on 0098's landing b5c588a3; design at b899ace5): R99 green at 20:52Z (slot 236; vc read it green, ae17a031). Lands on vc's word once dc's K1 (slot 237, after intent-cc's order 8 on kovacs) is green on the same bytes; the CHANGELOG line is drafted (20261022/changelog-0099-line.md). prez 2.5.7."
+  }
+}
