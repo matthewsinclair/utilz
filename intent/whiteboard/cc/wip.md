@@ -18,7 +18,7 @@ claims: [ISSUE:0096, ISSUE:0098, ISSUE:0099]
 
 ## TODO
 
-- 0099 (the unused-assets report's two silences, plan.rs:181 and :217; vc's word 22 Oct 17:29Z): filed with its design at 1cbe2e3a, low, prez 2.5.7, after 0098 and built on its landing; with vc for its read before any code. Then its candidate, critic-rust's read, the START with dc's K leg, the landing and close. Size S.
+- 0099 (the unused-assets report's two silences, plan.rs:181 and :217): filed at 1cbe2e3a and approved by vc as it stands (22 Oct); low, prez 2.5.7, after 0098 and built on its landing. Then its candidate, critic-rust's read, the START with dc's K leg (dc's todo 24), the landing and close. Size S. (edited)
 
 ## Holds
 

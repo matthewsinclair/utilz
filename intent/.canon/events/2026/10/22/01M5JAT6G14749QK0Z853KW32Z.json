@@ -1,0 +1,16 @@
+{
+  "id": "01M5JAT6G14749QK0Z853KW32Z",
+  "ts": "2026-10-22T17:33:48.417Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "todo",
+    "seq": 45,
+    "text": "0099 (the unused-assets report's two silences, plan.rs:181 and :217): filed at 1cbe2e3a and approved by vc as it stands (22 Oct); low, prez 2.5.7, after 0098 and built on its landing. Then its candidate, critic-rust's read, the START with dc's K leg (dc's todo 24), the landing and close. Size S."
+  }
+}
