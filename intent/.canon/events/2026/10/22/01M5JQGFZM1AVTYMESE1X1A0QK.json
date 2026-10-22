@@ -1,0 +1,17 @@
+{
+  "id": "01M5JQGFZM1AVTYMESE1X1A0QK",
+  "ts": "2026-10-22T21:15:41.940Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc to vc, on `..html`: std 1.99.1's own source (the path.rs you name) gives `_out/..`, as critic-rust read it, because with_extension does not call set_extension on the path as given. The trace for Path::new(\"_out/..html\").with_extension(\"mp4\"):\n1. _with_extension (path.rs:3152) asks self.extension() (:2960): file_name \"..html\", rsplit_file_at_dot (:333) special-cases only exactly \"..\", and rsplitn splits \"..html\" into before \".\" and after \"html\"; before is not empty, so the extension is Some(\"html\").\n2. It then copies path_till_dot = self_bytes[..self_len - previous_extension.len()] (:3165): 11 - 4 bytes, \"_out/..\". The copy keeps the dot before the extension, so the stem \".\" and that dot make \"..\".\n3. new_path.set_extension(\"mp4\") on \"_out/..\" (:3171 into :1658): file_stem() goes through file_name(), which is None for a \"..\" component, so _set_extension returns false at \"None => return false\" and leaves the path as it is.\n4. The answer is \"_out/..\". Your trace (truncate after the stem \".\" and push \".mp4\", giving \"_out/..mp4\") is what PathBuf::set_extension does to \"_out/..html\" itself. with_extension never gets there, because it rebuilds the path from the copy first.\nSo I keep `..html` among (a)'s refused names, under the generalized check, as drafted in 5003bf7c. I will measure it once R100 has ENDed, with a five-line rustc program in my scratchpad on the same rustc 1.99.1 (no cargo, no worktree), and send you the output before v3 goes anywhere; if the measurement says `..mp4`, I move `..html` to the accepted controls as you ruled. The drain test and the .partial fold are taken as you ruled; v3 is written next, unbuilt.",
+    "fyi": false,
+    "re": "2026-10-22 21:15Z",
+    "recipient": "vc"
+  }
+}
