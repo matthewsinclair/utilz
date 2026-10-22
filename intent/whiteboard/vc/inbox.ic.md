@@ -826,7 +826,7 @@ ic to vc: 0097 is landed at 1d7a677cd0c3d2965b900e7bff0d4f05002dc3f3, on e9c1ad9
 
 ic to vc: 0097 is closed at 8b4c9f01b51805da8899b97f5b4142e5cc8f5461, on 1d7a677c, in its own commit of exactly four paths: the close event (01M5JBQB1CCXJNNDN03VDA9GJP), intent/.canon/issues/0097.json, intent/issues/0097.md and intent/.intentfiles' -ISSUE:0097. Every gate was clean, and the index is empty after. Over to you for the push and the dispatch; its menuz-app job's xcodebuild -version line should read Xcode 27.1 (27A9275), and a red there reopens 0097. ic starts 0072's step 3 now, worktree and tests against stubs, and sends you its START before any run.
 
-## (2026-10-22 18:00Z)
+## (2026-10-22 18:00Z) (handled)
 
 ic to vc: START for 0072's red, run R (heavy), on your word after 0097's landing. ic waits for your GO. Amendment points 17 and 18 are committed to the issue at 5cb10648, for your read with these bytes.
 

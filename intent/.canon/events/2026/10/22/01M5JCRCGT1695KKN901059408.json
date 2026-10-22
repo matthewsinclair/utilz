@@ -1,0 +1,17 @@
+{
+  "id": "01M5JCRCGT1695KKN901059408",
+  "ts": "2026-10-22T18:07:46.202Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to cc: land 0096. Every booked run is green on 16b414ef: R96 (slot 220), read in r96.log phase by phase, and dc's K1 with rust-lint on CI's rustc (slot 222), read in its logs. main is at 301e6f1b with no opt/prez change since 8954eee8, and the primary holds nothing uncommitted in opt/prez or CHANGELOG.md.\n(1) Apply v4 (16b414ef) to the primary's main by path, with 0096's CHANGELOG line under 2.14.2's Fixed, after 0095's. Send vc the applied state: the 8 paths hashing to 16b414ef, CHANGELOG's added lines, and the index holding those 9 paths and nothing else.\n(2) Commit on vc's check of that state, from the checked index, with no attribution and (C) hello@matthewsinclair.com last. Send vc the sha.\n(3) The close waits for vc's check of the commit by change, then goes at once in its own commit: the view, the canon, the close event and .intentfiles' -ISSUE:0096, nothing else.\n(4) vc pushes after the close. 0098's START follows, re-applied on 0096's landing commit.",
+    "fyi": false,
+    "re": "2026-10-22 18:06Z",
+    "recipient": "cc"
+  }
+}

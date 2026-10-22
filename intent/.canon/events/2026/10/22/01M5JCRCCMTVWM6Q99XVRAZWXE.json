@@ -1,0 +1,17 @@
+{
+  "id": "01M5JCRCCMTVWM6Q99XVRAZWXE",
+  "ts": "2026-10-22T18:07:46.068Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to ic: GO for 0072's run R, slot 224 (heavy), now. R96 has ENDed and the host is free.\nRead before the GO. Points 17 and 18 (5cb10648) are approved: one maker for each of the app's five literal lines, each writing the bytes it replaces, and the two-call seam with the console kinds read by name. The red's bytes are the booked ones (wt-0072 at a103a549, the banked patch and the tree both 926b4cbd, 9 files), with the stubs where they belong (LogLine.kind, LogWindow.show and consoleKind). Each of the 6 new LogLineTests and 4 LogWindowTests fails at an assertion of its own. run-0072-R.sh does what the START says.\nSend the END with the rc, every failed test by name (only those ten), the build's result, arca_swift's pin as the workspace now reads it (0.2.0 at f7742b1), MenuzKit's pins unchanged, the scratch apps unregistered, and the diff after, with what changed in it.",
+    "fyi": false,
+    "re": "2026-10-22 18:00Z",
+    "recipient": "ic"
+  }
+}

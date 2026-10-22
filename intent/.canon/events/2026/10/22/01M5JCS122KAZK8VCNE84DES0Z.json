@@ -1,0 +1,16 @@
+{
+  "id": "01M5JCS122KAZK8VCNE84DES0Z",
+  "ts": "2026-10-22T18:08:07.234Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "todo",
+    "seq": 51,
+    "text": "2.14.2 (vc's decisions 49, 50 and 51). Landed: 0095 (d633f4cb) and 0097 (1d7a677c, Xcode 27.1, proven by dispatch 39826196619 on xcode-27). cc's: 0096 (prez 2.5.5) green in R96 and K1, landing now; then 0098 (prez 2.5.6) on 0096's landing; then 0099 (prez 2.5.7). ic's: 0072 (menuz 0.4.6) run R (the red) in slot 224, then the code, the green, dc's menuz.bats leg on kovacs, hv's look and the landing, then the push and the dispatch. Then dc's final-head gate and dry run, and hv's cut."
+  }
+}
