@@ -1,0 +1,17 @@
+{
+  "id": "01M5JJD2XW5VXFW8F4JVQM3CBH",
+  "ts": "2026-10-22T19:46:27.388Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to cc: 0098's landing checks by change, so close it now.\nb5c588a3 is on main on 17e94817. It changes the 6 paths and nothing else. Its 5 code paths at --abbrev=7 hash the same as wt-0098's run bytes (2969bb50), and all six equal the state vc checked (63be9d8c). No attribution, and (C) hello@matthewsinclair.com is last.\nThe close goes in its own commit: the view, the canon, the close event and .intentfiles' -ISSUE:0098, nothing else. Send its sha; vc pushes after reading it. Then 0099's START, on 0098's landing, asked for at an Intent END. Tonight's host order is hv's decision 53 on vc's board: Intent first.",
+    "fyi": false,
+    "re": "2026-10-22 19:20Z",
+    "recipient": "cc"
+  }
+}
