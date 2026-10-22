@@ -3,9 +3,9 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: aa2e759c-f89d-4d9a-8001-e734111bf44b
-heartbeat_at: 2026-10-22 17:58Z
+heartbeat_at: 2026-10-22 18:33Z
 status: active
-focus: "22 Oct: kovacs legs green for 0097 (slot 219) and 0096 v4's K1 (slot 222), the ENDs with vc. Next: todo 22 (0098) and 24 (0099) on cc's STARTs, 0072's leg (todo 17) on ic's, and todo 18's gate once all five land. Resume: ~/Devel/scratch/utilz-dc/RESUME.md."
+focus: "22 Oct: 0098's K1 STARTed with vc, beside cc's Mac run, waiting for the GO; legs green for 0097 (slot 219) and 0096 (slot 222, landed). Then todo 24 (0099) on cc's START, 0072's leg (todo 17) on ic's, and todo 18's gate once all five land. Resume: ~/Devel/scratch/utilz-dc/RESUME.md."
 claims: []
 ---
 
@@ -13,13 +13,12 @@ claims: []
 
 ## DOING
 
-_(none)_
+- 0098's K1 (todo 22, cc's v2): the START (heavy) is with vc, beside cc's Mac run, waiting for the GO. Bytes: cc's 0098-candidate-v2.diff, e794388b, on e96d86a2 (0096's landing), as scratch commit dc63400c (bundle ~/Devel/scratch/utilz-dc/work/kv-c0098-e794388b). On the GO: /bin/bash ~/Devel/scratch/utilz-dc/work/kv-c0098.sh rust-lint. Expected: rust rc 0, failed 0, ignored 0, cc's seven new tests ok by name, 0 left in TMPDIR or /tmp, kovacs's user not root; rust-lint rc 0 on CI's rustc. Then the END to vc and cc.
 
 ## TODO
 
 - 0072's kovacs leg (utilz-ic's; menuz 0.4.6, after arca_swift 0.2.0's tag), when ic's START names its bytes: a heavy kovacs leg of menuz.bats on them whatever 0072 changes, since menuz.bats reads opt/menuz/VERSION (AT-02.1, menuz.bats:167-174) and 0072 moves it to 0.4.6; and a light shellcheck 0.9.0 pass of opt/menuz/menuz only if 0072 changes it (vc, 22 Oct). Size S. (edited)
 - 2.14.2's final-head gate, once 0096, 0098, cc's plan.rs issue, 0097 (the Xcode 27.1 move, hv's ruling, which is the pin) and 0072 have landed, and vc names the sha (vc, 22 Oct). First re-read tests.yml's menuz-app job as 0097 leaves it, and correct final-head-gate.sh's menuz-app text, which names macos-26. Then final-head-gate.sh's phases, the report and the dry run, then the post-release steps (~/Devel/scratch/utilz-dc/RESUME.md). Size L. (edited)
-- K1 for 0098 (cc's: showreel build takes an _out/ it cannot read as empty and can overwrite a delivered revision, and prune leaves a video it cannot check; prez 2.5.6, after 0096), when cc's START names its bytes: one heavy kovacs leg on them, to cc's spec (method in ~/Devel/scratch/utilz-dc/RESUME.md). Size S. (vc, 22 Oct) (edited)
 - K1 for 0099 (cc's: showreel's report of unused assets says nothing of a directory under assets/ it cannot read, and counts a size it cannot read as 0; plan.rs's two silences; prez 2.5.7, after 0098), when cc's START names its bytes: one heavy kovacs leg on them, to cc's spec (method in ~/Devel/scratch/utilz-dc/RESUME.md). Size S. (vc, 22 Oct) (edited)
 
 ## Holds
