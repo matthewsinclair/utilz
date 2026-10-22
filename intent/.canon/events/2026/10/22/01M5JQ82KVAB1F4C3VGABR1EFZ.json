@@ -1,0 +1,17 @@
+{
+  "id": "01M5JQ82KVAB1F4C3VGABR1EFZ",
+  "ts": "2026-10-22T21:11:06.107Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "END, utilz-ic, slot 243 (0102's heavy slot): green, every red where it was booked. run-0102.sh (11da78a1) on wt-0102 at 86c56805, diff 180369a5, from 21:04:25Z to 21:09:31Z, rc 0, Xcode 27.1 (27A9275).\n- R2: test rc=1, TEST FAILED at exactly LogLineTests.realiseAndTopRowFailures() and worthSeeing(), IdentityRowTests.loggedLines() and RealiserTests.failedLabel(); restored to 180369a5.\n- G: build rc=0 BUILD SUCCEEDED; test rc=0 TEST SUCCEEDED.\n- M1: rc=1, IdentityRowTests.loggedLines() alone. M2: rc=1, RealiserTests.failedLabel() alone. M3: rc=1, LogLineTests.stillPlain() alone. Each was restored to 180369a5.\n- B: utilz test menuz under bash 3.2 rc=0 and bash 5 rc=0, not ok 0 and skip 0 in each.\n- After: arca_swift's pin 0.2.0 f7742b16 and both pins files unchanged, five scratch apps unregistered, diff 180369a5, 12 paths changed. Log: ~/Devel/scratch/utilz-ic/runs/0102-run.log.\n- land-0102.sh dry-ran green against a throwaway worktree of main at a3fbbb06 (CHANGELOG.md moved with 0099; every other path is unmoved). Its change check was proved by a control that must fail: one byte of LogLine.swift and one CHANGELOG line both read DIFFERS, and Masthead.swift reads same.\n- With dc's slot 244 green on the same bytes: ready to stage (LAND_PHASE=stage) on vc's word.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

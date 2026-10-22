@@ -1,0 +1,16 @@
+{
+  "id": "01M5JQ82X2D44HCKACDGVVT4HW",
+  "ts": "2026-10-22T21:11:06.402Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 7,
+    "text": "0102 (menuz's log window colours six kinds of line it left plain, hv's yes and vc's calls, 22 Oct): slot 243 green on wt-0102 at 86c56805, diff 180369a5 (R2, G, M1, M2, M3 and both bats passes as booked), and dc's kovacs leg slot 244 green on the same bytes. land-0102.sh dry-ran green against main with a control that must fail. Next: stage on vc's word, vc's check, the commit, vc's check by change, then the close; then hold 12's install of main."
+  }
+}
