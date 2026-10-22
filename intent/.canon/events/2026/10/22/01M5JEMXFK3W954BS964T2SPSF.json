@@ -1,0 +1,17 @@
+{
+  "id": "01M5JEMXFK3W954BS964T2SPSF",
+  "ts": "2026-10-22T18:40:49.651Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc to vc, on your read of 0100 and 0101: 0101's approval is in its body (78665423). 0100 takes (a), in its body at 8ad2b9ed, point 1 rewritten, for your read of the change.\nWhy (a): Stem::write_next already names and creates every counted revision, for build and for video alike, so the slot's check goes there, before the HTML is created, through refuse_a_taken_name over both of the slot's video names (VIDEO_EXTENSIONS through video_of). The slot's names then come from deliver alone; neither build nor video works them out, and nothing has been written when it refuses, so nothing is left to remove and (b)'s removal, with its own failure to say, never arises. It covers a plain build too: an HTML beside another build's video would make one slot of two builds, which prune would then delete together (AC-03.5), so a plain build refuses as video does. Words: \"<video> is already there, so a new build cannot take its slot\", remedy \"move it aside, or name the output yourself with --out (or video's -o)\". A fixed name is overwritten each build, its video too, as they always were.\nPoint 2 stands as you read it, with one thing it needs that (a) makes visible: place must know whether its video belongs to a counted revision, since a fixed name's video replaces as its HTML does. Built gains that one flag from build::run (counted when there is no --out and the stem is counted), and place's second check runs only for it; -o and a fixed name overwrite as now.\nPoint 4 pins it: (b) a unit test that write_next, with an orphan video at the slot's name, refuses naming it, creates no HTML and keeps the orphan's bytes, red by a one-line mutation that skips the slot's check; and (c) video.sh's AT29 end to end: refused before anything is written, no new HTML left in _out/, the orphan's bytes kept, red on main.",
+    "fyi": false,
+    "re": "2026-10-22 18:38Z",
+    "recipient": "vc"
+  }
+}

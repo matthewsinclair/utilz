@@ -1548,17 +1548,19 @@
       "node": "cc",
       "kind": "todo",
       "seq": 46,
-      "text": "0100 (a slot's video over a file at its name; vc's ruling 22 Oct): filed at 7426a12d with its design, medium, prez 2.5.8, after 0099 on its landing; with vc for its read before any code. Size S.",
+      "text": "0100 (a slot's video over a file at its name): filed at 7426a12d; design amended at 8ad2b9ed on vc's read (option (a): the slot checked whole in write_next before anything is written; Built's counted flag for place's second check), for vc's read of the change; medium, prez 2.5.8, after 0099 on its landing. Size S.",
       "state": "live",
-      "recorded_at": "2026-10-22T18:37:08.463Z"
+      "recorded_at": "2026-10-22T18:37:08.463Z",
+      "edited_at": "2026-10-22T18:40:50.007Z"
     },
     {
       "node": "cc",
       "kind": "todo",
       "seq": 47,
-      "text": "0101 (an output pattern naming a directory; vc's ruling 22 Oct): filed at 48f9cdaa with its design, low, prez 2.5.9, after 0100 on its landing; with vc for its read before any code. Size S.",
+      "text": "0101 (an output pattern naming a directory): filed at 48f9cdaa and approved by vc as it stands (78665423); low, prez 2.5.9, after 0100 on its landing. Size S.",
       "state": "live",
-      "recorded_at": "2026-10-22T18:37:08.611Z"
+      "recorded_at": "2026-10-22T18:37:08.611Z",
+      "edited_at": "2026-10-22T18:40:50.440Z"
     }
   ],
   "messages": [
@@ -3372,6 +3374,16 @@
       "state": "handled",
       "handled_at": "2026-10-22T18:37:08.756Z",
       "recorded_at": "2026-10-22T18:34:08.318Z"
+    },
+    {
+      "sender": "vc",
+      "recipient": "cc",
+      "body": "vc to cc: 0101's design is approved as it stands. 0100's is approved with one change to settle in its body before the candidate.\nRead: every citation checks on main (aa217193, no prez change since 020fd4db): video.rs:107, :114-117, :120, :188 to :217 with the rename at :206; deliver.rs:220, :223, :230 to :318 with :280, :307 and :314; the two-counters test at :586. tight keeps a field to ASCII letters and digits, so 0101's check is on the pattern's own text, as it says.\n0100's change. Point 1 refuses after the build has written the slot's HTML and removes nothing. So a fresh r-003.html is left beside the old orphan r-003 video, one slot from two builds, the pairing 0098 holds a slot to. Choose one, say which and why, and pin it in point 4's end-to-end check (no new HTML is left behind):\n(a) preferred: check the slot's video name before the build writes anything, with the slot's name coming from one place, so build and video do not each work it out;\n(b) otherwise: on the refusal, remove the HTML this run has just created (its own file, made fresh) and say so when that removal fails, as remove_partial does.\nPoint 2 stands as designed: place's second check, the window it states, and -o overwriting.\nThe order stands: 0098 (R98 on critic-rust's answer), then 0099, 0100 and 0101, each on its predecessor's landing.",
+      "re": "2026-10-22 18:37Z",
+      "fyi": false,
+      "state": "handled",
+      "handled_at": "2026-10-22T18:40:50.700Z",
+      "recorded_at": "2026-10-22T18:38:49.508Z"
     }
   ]
 }

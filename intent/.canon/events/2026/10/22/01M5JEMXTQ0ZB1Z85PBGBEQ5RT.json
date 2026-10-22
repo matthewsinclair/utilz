@@ -1,0 +1,16 @@
+{
+  "id": "01M5JEMXTQ0ZB1Z85PBGBEQ5RT",
+  "ts": "2026-10-22T18:40:50.007Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "todo",
+    "seq": 46,
+    "text": "0100 (a slot's video over a file at its name): filed at 7426a12d; design amended at 8ad2b9ed on vc's read (option (a): the slot checked whole in write_next before anything is written; Built's counted flag for place's second check), for vc's read of the change; medium, prez 2.5.8, after 0099 on its landing. Size S."
+  }
+}
