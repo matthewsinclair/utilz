@@ -1,0 +1,16 @@
+{
+  "id": "01M5JM496GYJRQAXY8MG8F38BJ",
+  "ts": "2026-10-22T20:16:36.048Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "todo",
+    "seq": 46,
+    "text": "0100 (a slot's video over a file at its name): v2 on vc's ruling of 22 Oct on the critic reads (critic-rust's two WARNINGs and critic-shell's, one home for \"counted\" and for the name check, the .mov orphan; critic-shell's other findings at cc's judgement, named in the body). Body amended first for vc's read, then v2 code in ~/Devel/scratch/utilz-cc/wt-0100, no build until vc's GO. prez 2.5.8, after 0099 on its landing. Size S."
+  }
+}

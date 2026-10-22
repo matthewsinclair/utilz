@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: c487a9ec-e4b1-4372-8b54-4909bcfb102c
-heartbeat_at: 2026-10-22 20:13Z
+heartbeat_at: 2026-10-22 20:16Z
 status: active
-focus: "22 Oct, localfold for hv's compact: 0096 and 0098 landed and closed; 0099's R99 approved and held for Intent's gap (hold); 0100 and 0101 v1 written in their worktrees, critic reads pending. Resume: ~/Devel/scratch/utilz-cc/RESUME.md."
+focus: "22 Oct, after hv's compact: amending 0100's and 0101's bodies for vc's read before their v2 code; R99 and dc's K1 for 0099 held for intent-vc's gap (decision 53); no build until vc's GO. Resume: ~/Devel/scratch/utilz-cc/RESUME.md."
 claims: [ISSUE:0099, ISSUE:0100, ISSUE:0101]
 ---
 
@@ -17,12 +17,12 @@ claims: [ISSUE:0099, ISSUE:0100, ISSUE:0101]
 
 ## TODO
 
-- 0100 (a slot's video over a file at its name): design approved (option (a), 8ad2b9ed); v1 written in ~/Devel/scratch/utilz-cc/wt-0100 (b5c588a3 with 0099 v2 staged as its base; unbuilt; 20261022/0100-candidate-v1.diff a5768b22), critic-rust and critic-shell reading it. prez 2.5.8, after 0099 on its landing. Size S. (edited)
-- 0101 (an output pattern naming a directory): approved as it stands (78665423); v1 written in ~/Devel/scratch/utilz-cc/wt-0101 (b5c588a3 with 0099 v2 and 0100 v1 staged as its base; unbuilt; 20261022/0101-candidate-v1.diff 7738a45c), critic-rust reading it; r101 drafted. prez 2.5.9, after 0100 on its landing. Size S. (edited)
+- 0100 (a slot's video over a file at its name): v2 on vc's ruling of 22 Oct on the critic reads (critic-rust's two WARNINGs and critic-shell's, one home for "counted" and for the name check, the .mov orphan; critic-shell's other findings at cc's judgement, named in the body). Body amended first for vc's read, then v2 code in ~/Devel/scratch/utilz-cc/wt-0100, no build until vc's GO. prez 2.5.8, after 0099 on its landing. Size S. (edited)
+- 0101 (an output pattern showreel cannot keep apart): v2 on vc's ruling of 22 Oct: refuse a fixed "..", "." or "" name too, and fold in the counter in the name's last extension (its own words, its own test); title and CHANGELOG line name both shapes. Body and title amended first for vc's read, then v2 code in ~/Devel/scratch/utilz-cc/wt-0101, no build until vc's GO. prez 2.5.9, after 0100 on its landing. Size S. (edited)
 
 ## Holds
 
-- Holding for hv's compact (vc's localfold of 22 Oct 20:01Z, on hv's word). Released once the compact has run, then /in-session, cc's pickup and vc's word. Until then nothing STARTs; R99 and dc's K1 for 0099 wait for intent-vc's gap after Intent's macos prepare (hv's decision 53). Resume: ~/Devel/scratch/utilz-cc/RESUME.md.
+_(none)_
 
 ## Watch-outs
 

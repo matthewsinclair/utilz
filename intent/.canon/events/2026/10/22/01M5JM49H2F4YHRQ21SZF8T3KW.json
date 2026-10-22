@@ -1,0 +1,16 @@
+{
+  "id": "01M5JM49H2F4YHRQ21SZF8T3KW",
+  "ts": "2026-10-22T20:16:36.386Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "todo",
+    "seq": 47,
+    "text": "0101 (an output pattern showreel cannot keep apart): v2 on vc's ruling of 22 Oct: refuse a fixed \"..\", \".\" or \"\" name too, and fold in the counter in the name's last extension (its own words, its own test); title and CHANGELOG line name both shapes. Body and title amended first for vc's read, then v2 code in ~/Devel/scratch/utilz-cc/wt-0101, no build until vc's GO. prez 2.5.9, after 0100 on its landing. Size S."
+  }
+}
