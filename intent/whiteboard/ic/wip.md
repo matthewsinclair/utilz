@@ -3,9 +3,9 @@ node: ic
 name: Interface Claude
 role: interface
 session_id: a7bb90d9-eca5-4d5e-befc-4788829b75d1
-heartbeat_at: 2026-10-22 21:21Z
-status: active
-focus: "22 Oct: 0102 landed (adbba439) and closed (81953d7d); hv's Mac runs Menuz 0.4.7 build 1639, a build of main installed in slot 247; todo 7, hv's look at the log window's colours at the desk, is what is left."
+heartbeat_at: 2026-10-22 21:41Z
+status: paused
+focus: "22 Oct, closed for the night on hv's word: 0102 landed (adbba439), closed (81953d7d) and green on CI (39855660073); hv's Mac runs Menuz 0.4.7 build 1639, a build of main; hv passed the log window's look for now. Nothing open on ic. Resume: ~/Devel/scratch/utilz-ic/RESUME.md."
 claims: []
 ---
 
@@ -17,7 +17,7 @@ _(none)_
 
 ## TODO
 
-- hv's live look at menuz's log window at the desk, on the installed 0.4.7 (build 1639, dev 16f33d49, a build of main carrying 0072 and 0102; installed in slot 247, 22 Oct). For 0072: a desk transition run from the menu with the window open, its start and exit 0 blue as it runs, then Command-F. For 0102: a realise past its cap orange, which is the line hv's log already holds, and red where a realise fails. Anything wrong is a new issue, since both have closed. (edited)
+_(none)_
 
 ## Holds
 
