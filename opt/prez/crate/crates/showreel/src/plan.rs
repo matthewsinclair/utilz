@@ -20,7 +20,7 @@
 //! enters `used` through the slide walk anyway and a build that dropped it
 //! entirely still counts 14. The arithmetic agrees for the wrong reason.
 
-use crate::{config, segment, slide};
+use crate::{config, deliver, segment, slide};
 use artifact::Failure;
 use std::collections::BTreeSet;
 use std::path::{Component, Path, PathBuf};
@@ -170,22 +170,40 @@ pub fn plan(reel: &Path, cfg: &config::Reel) -> Result<Plan, Failure> {
   })
 }
 
-/// Files under `assets/` that a build of this config would not read.
-pub fn spare(reel: &Path, used: &BTreeSet<PathBuf>) -> Vec<PathBuf> {
+/// Files under `assets/` that a build of this config would not read, and a
+/// line for each part of `assets/` the walk could not read. The report deletes
+/// nothing, so a read that fails is said rather than refused (issue 0099).
+pub fn spare(reel: &Path, used: &BTreeSet<PathBuf>) -> (Vec<PathBuf>, Vec<String>) {
   let root = reel.join("assets");
+  // A stat of `assets/` itself that fails reads as no `assets/`: only a link
+  // that loops or dangles, or an I/O error, reaches it with the reel readable,
+  // and issue 0099 leaves it out, as 0098 left admit.rs's `is_file`.
   if !root.is_dir() {
-    return Vec::new();
+    return (Vec::new(), Vec::new());
   }
+  let mut unread = Vec::new();
   let mut spare: Vec<PathBuf> = walkdir::WalkDir::new(&root)
     .into_iter()
-    .filter_map(Result::ok)
+    .filter_map(|entry| match entry {
+      Ok(e) => Some(e),
+      Err(e) => {
+        let place = e.path().unwrap_or(&root).display().to_string();
+        let why = e
+          .io_error()
+          .map_or_else(|| e.to_string(), |io| io.to_string());
+        unread.push(format!(
+          "could not read {place} for the report of unused assets: {why}"
+        ));
+        None
+      }
+    })
     .filter(|e| e.file_type().is_file())
     .filter(|e| !e.file_name().to_string_lossy().starts_with('.'))
     .map(|e| tidy(e.path()))
     .filter(|p| !used.contains(p))
     .collect();
   spare.sort();
-  spare
+  (spare, unread)
 }
 
 /// Name what the build did not use: inputs a segment DROPPED, then files under
@@ -206,21 +224,24 @@ pub fn spare(reel: &Path, used: &BTreeSet<PathBuf>) -> Vec<PathBuf> {
 /// were, in the first draft of this change, which would have made a segment's
 /// drop invisible on exactly the tidy reels where it is the only thing worth
 /// saying.
+///
+/// **AND WHAT THE WALK COULD NOT READ IS SAID AHEAD OF IT TOO** (issue 0099), so
+/// an `assets/` whose contents could not be read at all is said, not taken as
+/// tidy (`spare` names the one case left: `assets/` itself unstatable). A size
+/// that cannot be read makes the total unknown, never low, and is named.
 pub fn report(reel: &Path, used: &BTreeSet<PathBuf>, dropped: &[String]) -> Vec<String> {
   let mut out: Vec<String> = dropped.to_vec();
-  let spare = spare(reel, used);
+  let (spare, unread) = spare(reel, used);
+  out.extend(unread);
   if spare.is_empty() {
     return out;
   }
-  let bytes: u64 = spare
-    .iter()
-    .filter_map(|p| std::fs::metadata(p).ok())
-    .map(|m| m.len())
-    .sum();
-  let mb = bytes as f64 / 1_048_576.0;
+  let mut not_sized = Vec::new();
+  let total = deliver::total_of(&spare, &mut not_sized);
   out.push(format!(
-    "{} unused asset(s) under assets/, {mb:.1} MB:",
-    spare.len()
+    "{} unused asset(s) under assets/, {}:",
+    spare.len(),
+    deliver::megabytes(total)
   ));
   for p in &spare {
     out.push(format!(
@@ -228,6 +249,7 @@ pub fn report(reel: &Path, used: &BTreeSet<PathBuf>, dropped: &[String]) -> Vec<
       p.strip_prefix(reel).unwrap_or(p).display()
     ));
   }
+  out.extend(not_sized);
   out
 }
 
@@ -417,7 +439,7 @@ mod tests {
     let cfg = parse("artist: {handle: x}\nsegments: [{id: g, type: gallery, from: art}]\n");
     let p = plan(&r, &cfg).unwrap();
     assert!(
-      spare(&r, &p.used()).is_empty(),
+      spare(&r, &p.used()).0.is_empty(),
       "no assets/ dir, so nothing is exhaust"
     );
     let lines = report(&r, &p.used(), &p.dropped);
@@ -476,6 +498,75 @@ mod tests {
       report(&r, &p.used(), &p.dropped).is_empty(),
       "{:?}",
       report(&r, &p.used(), &p.dropped)
+    );
+  }
+
+  /// **A PART OF `assets/` THE WALK CANNOT READ IS SAID, NEVER SKIPPED** (issue
+  /// 0099), and ahead of the early return, so a report with nothing spare
+  /// still says it may be short. A mode binds a user and not root, so where it
+  /// does not bind the test fails saying so.
+  #[test]
+  fn a_part_of_assets_the_walk_cannot_read_is_said_issue_0099() {
+    use std::os::unix::fs::PermissionsExt;
+    let r = reel("unwalked", &["assets/old/a.jpg"]);
+    let old = r.join("assets").join("old");
+    let mode = |bits: u32| {
+      std::fs::set_permissions(&old, std::fs::Permissions::from_mode(bits)).unwrap();
+    };
+    mode(0o300);
+    let binds = std::fs::read_dir(&old).is_err();
+    let lines = report(&r, &BTreeSet::new(), &[]);
+    mode(0o700);
+    assert!(
+      binds,
+      "a mode does not stop a read here (root?), so this test cannot run"
+    );
+    let named = old.display().to_string();
+    let walk = format!("could not read {named} for the report of unused assets: ");
+    assert!(
+      lines.iter().any(|l| l.starts_with(&walk)),
+      "the directory the walk could not read is not said: {lines:?}"
+    );
+    assert!(
+      !lines.iter().any(|l| l.contains("unused asset(s)")),
+      "nothing is spare here, so only the early return can carry the line: {lines:?}"
+    );
+  }
+
+  /// **A SIZE THE REPORT CANNOT READ MAKES ITS TOTAL UNKNOWN, NEVER LOW**
+  /// (issue 0099): a spare file in a directory that can be listed and not
+  /// searched is counted, the total is `? MB`, and the size not read is named.
+  /// A mode binds a user and not root, so where it does not bind the test
+  /// fails saying so.
+  #[test]
+  fn a_spare_size_the_report_cannot_read_is_unknown_issue_0099() {
+    use std::os::unix::fs::PermissionsExt;
+    let r = reel("not_sized", &["assets/old/a.jpg"]);
+    let old = r.join("assets").join("old");
+    let file = old.join("a.jpg");
+    let mode = |bits: u32| {
+      std::fs::set_permissions(&old, std::fs::Permissions::from_mode(bits)).unwrap();
+    };
+    mode(0o400);
+    let binds = std::fs::metadata(&file).is_err();
+    let lines = report(&r, &BTreeSet::new(), &[]);
+    mode(0o700);
+    assert!(
+      binds,
+      "a mode does not stop a look here (root?), so this test cannot run"
+    );
+    assert!(
+      lines
+        .iter()
+        .any(|l| l.starts_with("1 unused asset(s)") && l.contains("? MB")),
+      "{lines:?}"
+    );
+    let named = file.display().to_string();
+    assert!(
+      lines
+        .iter()
+        .any(|l| l.contains("could not read the size of") && l.contains(&named)),
+      "the size not read is not named: {lines:?}"
     );
   }
 }

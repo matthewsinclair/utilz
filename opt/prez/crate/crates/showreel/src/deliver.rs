@@ -448,6 +448,15 @@ pub fn megabytes(bytes: Option<u64>) -> String {
   )
 }
 
+/// The sizes of `paths` summed, `None` when any cannot be read, each of which
+/// `said` gets from `size_of`. Every size is read before the sum, since
+/// `Option`'s sum stops at the first `None` and would name only that one
+/// (issues 0098 and 0099).
+pub fn total_of(paths: &[PathBuf], said: &mut Vec<String>) -> Option<u64> {
+  let sizes: Vec<Option<u64>> = paths.iter().map(|p| size_of(p, said)).collect();
+  sizes.into_iter().sum()
+}
+
 /// Drop the oldest revisions, or say once that there are a lot of them.
 ///
 /// **THE DEFAULT KEEPS EVERYTHING AND COMPLAINS**, because silently deleting a
@@ -478,11 +487,7 @@ pub fn prune(
   }
   if keep == 0 && sibs.len() > 5 {
     let mut unread = Vec::new();
-    let files = slots(&sibs)?;
-    // Every size is read before the sum, so each one that cannot be read is
-    // said: `Option`'s sum stops at the first `None`.
-    let sizes: Vec<Option<u64>> = files.iter().map(|f| size_of(f, &mut unread)).collect();
-    let total: Option<u64> = sizes.into_iter().sum();
+    let total = total_of(&slots(&sibs)?, &mut unread);
     let mut said = vec![format!(
       "{} revisions of this reel in _out/ ({}). Use --keep N to drop the oldest.",
       sibs.len(),
