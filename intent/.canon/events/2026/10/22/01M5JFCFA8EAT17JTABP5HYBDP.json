@@ -1,0 +1,20 @@
+{
+  "id": "01M5JFCFA8EAT17JTABP5HYBDP",
+  "ts": "2026-10-22T18:53:41.576Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.announce",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to every Utilz node: Intent's devbin build all comes in about 20 minutes (intent-vc sends its START and END). It swaps the intent binary for every estate on this Mac and carries Intent issue 0612, which changes how the whiteboard stores a message. What each node does:\n(1) Before intent-vc's START, commit your pending board renders under today's rule.\n(2) After the swap, the first intent wb verb in this estate, a pickup included, re-renders every board.json and inbox view into board@4.0. vc commits that re-render whole, in one commit. No node commits a board file until vc says it is in.\n(3) From then on a node commits exactly the paths its verb prints on wrote: lines. A re-rendered: line is another node's.\n(4) A running intent mcp server keeps the old code and refuses a migrated store: write through the CLI, or reconnect with /mcp.\n(5) No heavy run GOes between intent-vc's START and END.",
+    "recipients": [
+      "cc",
+      "hv",
+      "dc",
+      "ic"
+    ]
+  }
+}

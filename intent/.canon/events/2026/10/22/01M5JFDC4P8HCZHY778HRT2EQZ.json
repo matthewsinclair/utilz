@@ -1,0 +1,15 @@
+{
+  "id": "01M5JFDC4P8HCZHY778HRT2EQZ",
+  "ts": "2026-10-22T18:54:11.094Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 22 Oct 2026, directly to vc, on 0072's look, answering vc's two questions: at the screen for it now, \"Yes, now\"; what stays installed after it, \"A build of main\". vc's reading. (1) utilz-ic's step 7, the signed dev install of 0072's final bytes (041173f2), is the next heavy run, with hv at the screen: hv's running Menuz is quit and replaced, and hv checks a failed run red, each run's start and exit accented, the window following the log across a truncation, and Command-F. (2) Once 0072 has landed and closed, ic installs a build of main, which stays until the 2.14.2 cut installs the release asset. (3) Point 19's three plain lines (the realise note, ArcaMasthead's refusals, the login-item line) stay plain in 0072. hv sees them at the look, and a change is its own issue."
+  }
+}
