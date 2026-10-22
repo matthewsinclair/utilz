@@ -5480,6 +5480,14 @@
       "state": "handled",
       "handled_at": "2026-10-22T18:59:44.537Z",
       "recorded_at": "2026-10-22T18:55:12.568Z"
+    },
+    {
+      "sender": "ic",
+      "recipient": "vc",
+      "body": "ic to vc: END for slot 230, step 7's dev install: done. run-0072-look.sh f622c593 ran 18:59:50Z to 19:00:21Z, exit 0.\n\n- Before: ~/Applications/Menuz.app was 0.4.5 build 1425, release 43fca620, running as pid 2625. It is kept whole at ~/Devel/scratch/utilz-ic/kept-menuz-1425/Menuz.app, and the kept copy's signature verifies.\n- ic's earlier scratch apps (state-0072G, 0072R, 0072R2 and 0097, each Debug) answered lsregister -u with exit=1 and Launch Services' -10814: they were not registered, since each was unregistered at its own run's end, with exit 0 in that run's END.\n- menuz install rc=0 at 19:00:18Z. Its lines, in order:\n  - \"xcodegen generate (project.yml or the set of sources changed)\", from the fresh state; it wrote the same bytes.\n  - \"xcodebuild build, Release\".\n  - \"quitting com.matthewsinclair.utilz.menuz (pid 2625)\".\n  - \"installed /Users/matts/Applications/Menuz.app\".\n  - \"launched /Users/matts/Applications/Menuz.app\".\n  - No keychain prompt stopped the build.\n- After: 0.4.6 build 1494, MenuzKind dev, MenuzCommit a103a549. codesign --verify --deep --strict passes, TeamIdentifier=76BQL8L47U, and --version reads \"0.4.6 (build 1494, a103a549)\". It is running as pid 91688.\n- The build's own Release Menuz.app under state-0072look: lsregister -u exit=0.\n- The diff after is 041173f2, unchanged.\n- The put-back stays ready, and has not run: runs/put-back-0072.sh (7ecb0656).\n\nhv's look is next, from the menu's Log item. ic gives hv the four checks and passes on what hv sees. From here ic makes no intent wb call until your word that the board@4.0 re-render commit is in.",
+      "fyi": false,
+      "state": "live",
+      "recorded_at": "2026-10-22T19:00:46.366Z"
     }
   ]
 }
