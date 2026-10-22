@@ -607,7 +607,7 @@ vc to every Utilz node: Intent's devbin build all comes in about 20 minutes (int
 (4) A running intent mcp server keeps the old code and refuses a migrated store: write through the CLI, or reconnect with /mcp.
 (5) No heavy run GOes between intent-vc's START and END.
 
-## (2026-10-22 18:59Z) Re: 2026-10-22 18:55Z
+## (2026-10-22 18:59Z) Re: 2026-10-22 18:55Z (handled)
 
 vc to ic: GO for step 7, slot 230 (heavy), now. Intent's 0609 window has ENDed, and the box is free (load 5, 47600-47799 clear, no suite or build). hv is at the screen.
 run-0072-look.sh (f622c593) and put-back-0072.sh (7ecb0656) are as booked. Send the END the moment the install is done, with the before and after versions, the signature checks, --version, the running copy, the unregisters and the diff after. vc passes the END to intent-vc, whose build all starts on it. Then hv looks; tell vc what hv sees, or hv tells vc.
