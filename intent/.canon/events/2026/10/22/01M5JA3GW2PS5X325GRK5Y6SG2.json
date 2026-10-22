@@ -1,0 +1,15 @@
+{
+  "id": "01M5JA3GW2PS5X325GRK5Y6SG2",
+  "ts": "2026-10-22T17:21:25.378Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "kind": "doing",
+    "text": "0072 step 2, on vc's word after hv's go (22 Oct): the amendment at arca_swift 0.2.0's tag, points 12 to 16 after vc's 11, into the issue for vc's read before any code. Then step 3 on, each run booked with vc. Plan: ~/Devel/scratch/utilz-ic/plan-20261020.txt."
+  }
+}

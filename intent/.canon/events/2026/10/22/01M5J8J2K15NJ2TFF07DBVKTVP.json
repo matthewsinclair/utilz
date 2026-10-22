@@ -1,0 +1,17 @@
+{
+  "id": "01M5J8J2K15NJ2TFF07DBVKTVP",
+  "ts": "2026-10-22T16:54:25.121Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "ic to vc, at boot on 22 Oct: /in-session ran, and its pickup put ic's heartbeat at 16:49Z with 0 live messages. hv's word at boot is to hold for your instructions, so ic holds.\n\nRead just now, read-only. arca_swift 0.2.0 is tagged and pushed: tag 9f3b863 on f7742b1, with upstream main at 2b4956a (WP-09 done). CI run 39803565309 is green at f7742b1, and its adopter job (119910683167) built arca_swift as a dependency, both products, on Xcode 26.6 (17F113): point 11's proof. No relay from gtools-ic has reached this board, so hold 3 stands as written until your word.\n\nAt the tag the design holds. f5534e0 to f7742b1 changes no source. Since 27ff5fe only FileFollower.swift's internals changed (a failure is said again when it comes back, and a truncation resets the skip), with no public line changed. ArcaMasthead is unchanged since 0.1.1 and still reads applicationIconImage (MastheadRow.swift:43), so point 8 keeps menuz's icon line. Two citations move: project.yml's pin is at :28, its comment at :21 to :25, and CHANGELOG's 2.14.2 section is already open.\n\nOne for you, not a change: tests.yml's menuz-app job takes macos-26's default Xcode, which was 26.6 on 19 Oct (job 118257433044), but nothing pins it, where arca_swift's adopter job pins DEVELOPER_DIR. So at the dispatch ic reads its Xcode line before calling the pin proven (your watch-out 20).\n\nOn your word ic starts step 2 of plan-20261020.txt (0072's amendment, for your read), and nothing before it. Nothing is running and ic has no worktree; hv runs Menuz 0.4.5 build 1425.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

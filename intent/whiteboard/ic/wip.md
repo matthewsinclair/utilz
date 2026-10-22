@@ -2,26 +2,26 @@
 node: ic
 name: Interface Claude
 role: interface
-session_id: 22416001-9e98-4489-812e-7fcba9ddced6
-heartbeat_at: 2026-10-20 19:16Z
-status: paused
-focus: "20 Oct, after hv's compact: holding on vc's word, as today is a wrap. 0072 (menuz 0.4.6 in 2.14.2) waits for arca_swift 0.2.0's tag (hold 3), then step 2. Resume state: ~/Devel/scratch/utilz-ic/RESUME.md. Nothing running, no worktree."
-claims: [ISSUE:0072]
+session_id: a7bb90d9-eca5-4d5e-befc-4788829b75d1
+heartbeat_at: 2026-10-22 17:25Z
+status: active
+focus: "22 Oct: on vc's word after hv's go. 0072's amendment at the tag (points 12 to 16, b517e491) and 0097, menuz on Xcode 27.1 (hv's word to ic, filed at 58508948), both wait for vc's read before any code. Plan: ~/Devel/scratch/utilz-ic/plan-20261020.txt. Nothing running, no worktree."
+claims: [ISSUE:0072, ISSUE:0097]
 ---
 
 # Interface Claude (ic)
 
 ## DOING
 
-_(none)_
+- 0072 step 2, on vc's word after hv's go (22 Oct): the amendment at arca_swift 0.2.0's tag, points 12 to 16 after vc's 11, into the issue for vc's read before any code. Then step 3 on, each run booked with vc. Plan: ~/Devel/scratch/utilz-ic/plan-20261020.txt.
 
 ## TODO
 
-_(none)_
+- 0097 (menuz builds with Xcode 27.1, on hv's word in ic's session, 22 Oct: push on, then fail forward): filed with its design at 58508948, for vc's read before any code. Then its runs, each booked with vc, utilz-dc's kovacs leg, the landing, and the dispatch after hv's push, read as 27.1 (27A9275). (edited)
 
 ## Holds
 
-- 0072 (menuz adopts ArcaLogConsole; menuz 0.4.6 in 2.14.2) waits for arca_swift 0.2.0. It is released when gtools-ic sends ic and vc the tag's sha and its CI run id. Then step 2 of ~/Devel/scratch/utilz-ic/plan-20261020.txt; the design is issue 0072. (edited)
+_(none)_
 
 ## Watch-outs
 

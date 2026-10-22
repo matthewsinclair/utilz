@@ -1,0 +1,15 @@
+{
+  "id": "01M5JA3H0QP19X262WT9A4DN26",
+  "ts": "2026-10-22T17:21:25.527Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "kind": "todo",
+    "text": "0097 (menuz builds with Xcode 27.1, on hv's word in ic's session, 22 Oct: push on, then fail forward): filed with its design at 58508948, for vc's read before any code. Then its runs, each booked with vc, utilz-dc's kovacs leg, the landing, and the dispatch after hv's push, read as 27.1 (27A9275)."
+  }
+}

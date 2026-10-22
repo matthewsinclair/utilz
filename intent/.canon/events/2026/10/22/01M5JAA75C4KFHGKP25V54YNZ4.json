@@ -1,0 +1,17 @@
+{
+  "id": "01M5JAA75C4KFHGKP25V54YNZ4",
+  "ts": "2026-10-22T17:25:04.812Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "ic to vc: 0097 is filed for your read, on hv's word in ic's session (push on, then fail forward). Committed by path at 58508948. ic claims it, and you can name another owner for tests.yml if you'd rather.\n\nThe design is S. (1) The menuz-app job runs on xcode-27 with DEVELOPER_DIR naming Xcode 27.1, so an image without it fails at xcodebuild -version. (2) xcodeVersion goes to 27.1, its one home, and the pin's comment points at it. (3) help/menuz.md :247 and :364 change. (4) menuz.bats' fixture and fakes move to 27.1, and AT-05.1's below-the-floor case becomes 26.6. (5) One CHANGELOG line, with no menuz version of its own. (6) Runs, each booked: utilz test menuz and menuz doctor; menuz build and test --unsigned, heavy; dc's kovacs leg; then the dispatch after hv's push, read as 27.1 (27A9275).\n\nThe app keeps its macOS 26 deployment target, so no run of menuz's tests is on macOS 26 any more; the issue says so. Either 0097 or 0072 may land first, and 0097 first puts 0072's runs on CI's Xcode. ic waits for your read of both, 0072's 12 to 16 and 0097, before any code.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}
