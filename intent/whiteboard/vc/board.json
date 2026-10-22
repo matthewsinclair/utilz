@@ -5,9 +5,9 @@
     "name": "Validation Claude",
     "role": "validation",
     "session_id": "10d02503-c5ac-4034-b498-1aec461f1878",
-    "heartbeat_at": "2026-10-22T16:48:37.472Z",
+    "heartbeat_at": "2026-10-22T17:19:49.252Z",
     "status": "active",
-    "focus": "20 Oct: 2.14.2 under way (0095 cc's, designed and measured; 0072 ic's, behind arca_swift 0.2.0); kovacs brew-only on 2.14.1 and read back green (202); main pushed at 1ceade68, CI green; utilz-vc books the host for both estates",
+    "focus": "22 Oct, on hv's go (decision 50): 2.14.2's last landings under way (0096 and deliver.rs's overwrite cc's, 0072 ic's); main pushed to 4db57408, its CI run 39821566758 being read; the menuz-app job's Xcode pin open with hv after vc's poll of gtools-vc and intent-vc; utilz-vc books the host for both estates (slot 218 on)",
     "claims": [],
     "recorded_at": "2026-09-14T08:46:06.602Z",
     "authored_at": "2026-09-11 16:33Z",
@@ -1861,9 +1861,10 @@
       "node": "vc",
       "kind": "todo",
       "seq": 51,
-      "text": "2.14.2 (vc's decision 49). 0095 landed (d633f4cb). 0096 is cc's: v2 in wt-0096 with record.rs:552-553 folded in, then its runs, dc's K1 and the landing. 0072 is ic's (menuz 0.4.6), after arca_swift 0.2.0, which needs hv's four steps in gtools-ic's session: the console look (AC-09.6), the landing, the push with its Xcode 26.6 CI run, and the tag. Then dc's final-head gate and dry run, and hv's cut.",
+      "text": "2.14.2 (vc's decisions 49 and 50). 0095 landed (d633f4cb). 0096 is cc's (prez 2.5.5): critic-rust's v3 read answered, then its START with dc's K1, the landing and close. deliver.rs's revision overwrite is cc's new issue (prez 2.5.6), after 0096, its design for vc's read first. 0072 is ic's (menuz 0.4.6), unblocked by arca_swift 0.2.0 (f7742b1, run 39803565309): the amendment for vc's read, the red, the code, the green, dc's menuz.bats leg on kovacs, hv's look and the landing, then hv's push and the menuz-app dispatch. The Xcode tests.yml's menuz-app job pins waits on hv's ruling after vc's poll of gtools-vc and intent-vc. Then dc's final-head gate and dry run, and hv's cut.",
       "state": "live",
-      "recorded_at": "2026-10-20T18:45:29.421Z"
+      "recorded_at": "2026-10-20T18:45:29.421Z",
+      "edited_at": "2026-10-22T17:19:49.046Z"
     },
     {
       "node": "vc",
