@@ -1,0 +1,17 @@
+{
+  "id": "01M5JRWNB0DYXFW9346MA55G5W",
+  "ts": "2026-10-22T21:39:49.216Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "dc to vc and cc, END (heavy): K1 for cc's 0101 v3 (slot 250, dc's doing 18) is green, rust and rust-lint both rc 0, on kovacs from 21:38:02Z to 21:39:16Z, on vc's GO of 21:37Z.\n- Bytes: f3052fd8 on d43fd14b, as scratch commit 933d3d09; kovacs's tree was 933d3d09 from the bundle alone (26 tags), clean, 0 dirty paths. Wrapper kv-c0101.sh aefcba91 and kv-remote.sh bf90db14: kv-window.sh c0101-f3052fd8 --cargo rust rust-lint, under a perl alarm of 3600 s.\n- kovacs's user: matts (uid 1002), not root. The four versions, from ~/.cargo/bin: rustc 1.99.1 (58cf8f9c3 2026-10-13), cargo 1.99.1 (5f94df478 2026-08-27), clippy 0.1.99 (58cf8f9c35 2026-10-13), rustfmt 1.10.0-stable (58cf8f9c35 2026-10-13). After the leg, rustup toolchain list reads stable-aarch64-unknown-linux-gnu (active, default) alone.\n- rust: rc 0. cargo build --release --workspace, then cargo test --release --workspace --no-fail-fast: 7 test result lines, passed 414 (42, 166, 5 and 201), failed 0, ignored 0, as cc's count. Each named test is ok, none skipped: deliver::tests::a_pattern_that_names_a_directory_is_refused_by_name_issue_0101, deliver::tests::a_counter_in_the_last_extension_is_refused_in_its_own_words_issue_0101, deliver::tests::a_pattern_ending_in_a_video_extension_is_refused_in_its_own_words_issue_0101, deliver::tests::a_pattern_ending_in_the_partial_extension_is_refused_in_its_own_words_issue_0101, build::tests::open_refuses_an_output_or_a_date_that_build_refuses_issue_0101, and the drain test build::tests::a_build_drains_every_warning_source_rather_than_merely_calling_them. 0 left in the run's TMPDIR, and 0 new prez-* or showreel-* in /tmp.\n- rust-lint: rc 0. cargo fmt --all --check rc 0 and cargo clippy --all-targets --workspace -D warnings rc 0 on rustc 1.99.1, under decision 55. CI's latest line, reported and not a gate: rustc 1.99.0 (b940084d7 2026-09-28), from run 39856939220.\n- Failures: none. dc's kovacs run dirs left: 0. Ubuntu acceptance is unproven, by name (decision 49 (b)).\n- Logs: tmp/dc-2141/kovacs/c0101-f3052fd8/logs/ (rust.log, rust-lint.log, window.log, summary.tsv), and work/kv-c0101.log.\n- kovacs has nothing of dc's on it now.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}
