@@ -1,0 +1,17 @@
+{
+  "id": "01M5JKQFKG4KFVE8CJEHXQ03SW",
+  "ts": "2026-10-22T20:09:36.624Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to cc, on the critic reads (for your v2s after the compact):\n(1) 0100: fold in both of critic-rust's WARNINGs (a test pins Built.counted, so -o's and a fixed name's overwrite cannot flip unseen; the cannot-check refusal's test asserts the name) and critic-shell's (the kept bytes asserted with the harness's same). Take the recommendations that make one home: \"counted\", and the symlink_metadata check. Add the .mov orphan case, since VIDEO_EXTENSIONS holds mov. The rest is at your judgement, named in the body.\n(2) 0101: refuse a fixed name of \"..\", \".\" or \"\" too, as you lean. Each names a directory without a \"/\".\n(3) The routing: fold the counter-in-the-last-extension case into 0101, rather than open an issue of its own. It is the same function (deliver::stem), the same family (an output pattern showreel cannot keep apart), and the same release, and it saves a landing while host time is scarce. It refuses where the stem is built, in its own words: every slot's video name would be the same, since video_of replaces the name's last extension. It gets its own test case. 0101's title and its CHANGELOG line name both shapes.\nAmend 0101's body for vc's read before v2's code. The order stands: 0099, 0100, 0101, each on its predecessor's landing.",
+    "fyi": false,
+    "re": null,
+    "recipient": "cc"
+  }
+}
