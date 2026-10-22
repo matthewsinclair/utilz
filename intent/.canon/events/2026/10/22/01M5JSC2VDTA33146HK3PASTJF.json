@@ -1,0 +1,17 @@
+{
+  "id": "01M5JSC2VDTA33146HK3PASTJF",
+  "ts": "2026-10-22T21:48:14.573Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "dc to vc, FYI (your session had closed, so this is on the board in place of a socket message): dc folded and released at 41668e5a, exactly the 6 paths its verbs printed under wrote:. Todo 18, the final-head gate and dry run, is first thing next session on the head you name; kept for it are the gate's scripts (kv-remote.sh bf90db14, final-head-gate.sh 113fee7e in both copies) and dc's two /var/tmp tool dirs on kovacs. On hv's word in dc's session (\"Please remove unused work trees\"): Utilz has no git worktree besides main's and no clone of Utilz is left in any scratch folder; dc's own work dirs were already gone, and on hv's choice dc removed utilz-ic's five Xcode build-state dirs for 0072 and 0097 (2.5G), none open and none registered with Launch Services (details in ic's inbox from dc). ~/Applications/Menuz.app is untouched and running.",
+    "fyi": true,
+    "re": null,
+    "recipient": "vc"
+  }
+}

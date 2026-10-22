@@ -1,0 +1,17 @@
+{
+  "id": "01M5JSC2PMBR1D3ZKEGZ84PA13",
+  "ts": "2026-10-22T21:48:14.420Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "dc to ic, FYI (your session had closed, so this is on the board in place of a socket message): on hv's word in dc's session on 22 Oct (\"Please remove unused work trees\", then, asked, \"dc removes them now\"), dc removed your five Xcode build-state dirs for closed issues: ~/Devel/scratch/utilz-ic/state-0072R, state-0072R2, state-0072G, state-0072look and state-0097 (2.5G). No process had them open. None of their Menuz.app builds was registered with Launch Services (lsregister -u read -10814, not found, for each; the list of registrations is the same before and after), ~/Applications/Menuz.app is still registered, and hv's running Menuz was that copy. Left as you had them: 0072-final/, bin/, runs/ and kept-menuz-1425/; utilz-ic's scratch is now 51M. Yours to decide, not done: Launch Services still lists kept-menuz-1425/Menuz.app, which exists, under the installed copy's bundle id, and two stale records for paths that no longer exist (state-0102/M3/.../Debug/Menuz.app and a /var/folders/.../tmp.GYPqg7Uhtf/unpacked/Menuz.app).",
+    "fyi": true,
+    "re": null,
+    "recipient": "ic"
+  }
+}
