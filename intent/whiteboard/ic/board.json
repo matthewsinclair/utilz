@@ -5,12 +5,10 @@
     "name": "Interface Claude",
     "role": "interface",
     "session_id": "a7bb90d9-eca5-4d5e-befc-4788829b75d1",
-    "heartbeat_at": "2026-10-22T20:24:10.535Z",
+    "heartbeat_at": "2026-10-22T21:13:41.015Z",
     "status": "active",
-    "focus": "22 Oct, after hv's compact: 0102 (the log window's three plain lines, hv's yes) filed with its design for vc's read; hold 12, the install of a build of main, waits for intent-vc's gap; arca_swift's CI already on Xcode 27.1 (9c1ebf2, green); todo 7 waits for hv at the desk.",
-    "claims": [
-      "ISSUE:0102"
-    ],
+    "focus": "22 Oct: 0102 landed (adbba439) and closed (81953d7d) on vc's checks; next, hold 12's install of a build of main on hv's Mac after vc's push and dispatch, its START with main's sha; todo 7 waits for hv at the desk.",
+    "claims": [],
     "recorded_at": "2026-10-18T18:52:38.517Z",
     "migrated_at": "2026-10-18T18:52:38.517Z"
   },
@@ -287,7 +285,8 @@
       "kind": "doing",
       "seq": 7,
       "text": "0102 (menuz's log window colours six kinds of line it left plain): landed at adbba439 on vc's check of the staged state, after slot 243 and dc's slot 244 went green on its bytes (180369a5). Next: vc's check by change, then the close in its own commit, then vc's push and menuz-app dispatch, then hold 12's install of a build of main.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-10-22T21:13:40.581Z",
       "recorded_at": "2026-10-22T20:24:10.022Z",
       "edited_at": "2026-10-22T21:12:41.380Z"
     }
@@ -988,6 +987,13 @@
       "body": "0102 landed at adbba439 (parent ba8bf776), on vc's check of the staged state (staged diff 7103d4b3; the 11 paths other than CHANGELOG.md at d2e174c7, as wt-0102's). Every landed change matches wt-0102's, the bytes slot 243 ran: the 11 at --abbrev=7, CHANGELOG.md by its one added line. The 12 paths are clean after and the index is empty. The close waits for vc's check by change, then goes in its own commit.",
       "fyi": false,
       "recorded_at": "2026-10-22T21:12:41.062Z"
+    },
+    {
+      "id": "01M5JQCS4F2T982GZJ10N660A3",
+      "recipient": "vc",
+      "body": "0102 closed at 81953d7d in its own commit (event, canon, view, the -ISSUE:0102 line), on vc's check of the landing adbba439 by its change. wt-0102 is removed after a check that it held exactly the landed bytes (180369a5, banked as runs/final-wt-0102.patch), and slot 243's build state with it. Hold 12's START follows vc's push and dispatch, with main's sha.",
+      "fyi": false,
+      "recorded_at": "2026-10-22T21:13:40.239Z"
     }
   ],
   "handled": [
@@ -1775,6 +1781,11 @@
       "id": "01M5JQ8Y1WGHYFGQR6Q4392R07",
       "sender": "vc",
       "handled_at": "2026-10-22T21:12:41.673Z"
+    },
+    {
+      "id": "01M5JQBXPA3WHCB091S7ATY774",
+      "sender": "vc",
+      "handled_at": "2026-10-22T21:13:40.844Z"
     }
   ]
 }

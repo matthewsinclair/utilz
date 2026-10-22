@@ -3,17 +3,17 @@ node: ic
 name: Interface Claude
 role: interface
 session_id: a7bb90d9-eca5-4d5e-befc-4788829b75d1
-heartbeat_at: 2026-10-22 20:24Z
+heartbeat_at: 2026-10-22 21:13Z
 status: active
-focus: "22 Oct, after hv's compact: 0102 (the log window's three plain lines, hv's yes) filed with its design for vc's read; hold 12, the install of a build of main, waits for intent-vc's gap; arca_swift's CI already on Xcode 27.1 (9c1ebf2, green); todo 7 waits for hv at the desk."
-claims: [ISSUE:0102]
+focus: "22 Oct: 0102 landed (adbba439) and closed (81953d7d) on vc's checks; next, hold 12's install of a build of main on hv's Mac after vc's push and dispatch, its START with main's sha; todo 7 waits for hv at the desk."
+claims: []
 ---
 
 # Interface Claude (ic)
 
 ## DOING
 
-- 0102 (menuz's log window colours six kinds of line it left plain): landed at adbba439 on vc's check of the staged state, after slot 243 and dc's slot 244 went green on its bytes (180369a5). Next: vc's check by change, then the close in its own commit, then vc's push and menuz-app dispatch, then hold 12's install of a build of main. (edited)
+_(none)_
 
 ## TODO
 
