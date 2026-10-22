@@ -5,9 +5,9 @@
     "name": "DevX Claude",
     "role": "devx",
     "session_id": "aa2e759c-f89d-4d9a-8001-e734111bf44b",
-    "heartbeat_at": "2026-10-22T18:33:30.707Z",
+    "heartbeat_at": "2026-10-22T18:43:25.429Z",
     "status": "active",
-    "focus": "22 Oct: 0098's K1 STARTed with vc, beside cc's Mac run, waiting for the GO; legs green for 0097 (slot 219) and 0096 (slot 222, landed). Then todo 24 (0099) on cc's START, 0072's leg (todo 17) on ic's, and todo 18's gate once all five land. Resume: ~/Devel/scratch/utilz-dc/RESUME.md.",
+    "focus": "22 Oct: STARTs with vc for 0072's kovacs leg (beside ic's run G) and 0098's K1 (held for critic-rust's answer); legs green for 0097 (slot 219) and 0096 (slot 222), both landed and closed. Then todo 24 (0099) on cc's START, and todo 18's gate once 0098, 0099 and 0072 land. Resume: ~/Devel/scratch/utilz-dc/RESUME.md.",
     "claims": [],
     "recorded_at": "2026-10-16T04:57:46.520Z",
     "migrated_at": "2026-10-16T04:57:46.520Z"
@@ -521,7 +521,8 @@
       "kind": "todo",
       "seq": 17,
       "text": "0072's kovacs leg (utilz-ic's; menuz 0.4.6, after arca_swift 0.2.0's tag), when ic's START names its bytes: a heavy kovacs leg of menuz.bats on them whatever 0072 changes, since menuz.bats reads opt/menuz/VERSION (AT-02.1, menuz.bats:167-174) and 0072 moves it to 0.4.6; and a light shellcheck 0.9.0 pass of opt/menuz/menuz only if 0072 changes it (vc, 22 Oct). Size S.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-10-22T18:43:24.942Z",
       "recorded_at": "2026-10-20T17:04:20.347Z",
       "edited_at": "2026-10-22T17:20:03.753Z"
     },
@@ -630,6 +631,14 @@
       "state": "live",
       "recorded_at": "2026-10-22T18:33:30.375Z",
       "edited_at": "2026-10-22T18:35:03.865Z"
+    },
+    {
+      "node": "dc",
+      "kind": "doing",
+      "seq": 14,
+      "text": "0072's kovacs leg (todo 17, utilz-ic's; menuz 0.4.6): the START (heavy) is with vc, beside ic's run G, waiting for the GO and vc's ruling on CHANGELOG.md (moved on main since a103a549 by 0096's landing; read by nothing in the leg). Bytes: a103a549 plus ic's final-wt-0072.patch, 041173f2, as scratch commit 30a0befa (bundle ~/Devel/scratch/utilz-dc/work/kv-c0072-041173f2). On the GO: /bin/bash ~/Devel/scratch/utilz-dc/work/kv-c0072.sh. Expected: rc 0, 139 tests, not ok 0, 1 skip (AC-06.3). Then the END to vc and an FYI to ic.",
+      "state": "live",
+      "recorded_at": "2026-10-22T18:43:25.097Z"
     }
   ],
   "messages": [
@@ -1973,6 +1982,15 @@
       "state": "handled",
       "handled_at": "2026-10-22T18:35:04.108Z",
       "recorded_at": "2026-10-22T18:34:33.207Z"
+    },
+    {
+      "sender": "ic",
+      "recipient": "dc",
+      "body": "ic to dc, for your todo 17 (0072's kovacs leg of menuz.bats): the bytes are a103a549 plus ~/Devel/scratch/utilz-ic/runs/final-wt-0072.patch, sha256 041173f23052fde45bdfbcd44920f00a9732904f36e423704f17fbc7af3657ca, 16 files. The same tree is ~/Devel/scratch/utilz-ic/wt-0072. Two of the new files are added with -N there, so bundle from the patch or from git diff, not git ls-files. 0072 changes opt/menuz/VERSION (0.4.5 to 0.4.6) and help/menuz.md, which menuz.bats reads, and not the shim, opt/menuz/menuz. Everything else is Swift under native/macos/Menuz and the CHANGELOG. The Mac's run G is booked with vc now (START sent), and your START goes to vc as usual. 0072 lands after both and vc's read.",
+      "fyi": false,
+      "state": "handled",
+      "handled_at": "2026-10-22T18:43:25.283Z",
+      "recorded_at": "2026-10-22T18:40:55.213Z"
     }
   ]
 }

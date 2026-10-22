@@ -3,9 +3,9 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: aa2e759c-f89d-4d9a-8001-e734111bf44b
-heartbeat_at: 2026-10-22 18:33Z
+heartbeat_at: 2026-10-22 18:43Z
 status: active
-focus: "22 Oct: 0098's K1 STARTed with vc, beside cc's Mac run, waiting for the GO; legs green for 0097 (slot 219) and 0096 (slot 222, landed). Then todo 24 (0099) on cc's START, 0072's leg (todo 17) on ic's, and todo 18's gate once all five land. Resume: ~/Devel/scratch/utilz-dc/RESUME.md."
+focus: "22 Oct: STARTs with vc for 0072's kovacs leg (beside ic's run G) and 0098's K1 (held for critic-rust's answer); legs green for 0097 (slot 219) and 0096 (slot 222), both landed and closed. Then todo 24 (0099) on cc's START, and todo 18's gate once 0098, 0099 and 0072 land. Resume: ~/Devel/scratch/utilz-dc/RESUME.md."
 claims: []
 ---
 
@@ -14,10 +14,10 @@ claims: []
 ## DOING
 
 - 0098's K1 (todo 22, cc's v2): vc has read the START (18:33Z) and holds the GO until critic-rust has answered on cc's v1-to-v2 change, since its answer could change the bytes; the GO comes with cc's R98. Bytes now: cc's 0098-candidate-v2.diff, e794388b, on e96d86a2, as scratch commit dc63400c (bundle ~/Devel/scratch/utilz-dc/work/kv-c0098-e794388b). If the bytes change, dc preps the new patch under its own label and STARTs again. On the GO: /bin/bash ~/Devel/scratch/utilz-dc/work/kv-c0098.sh rust-lint. Expected: rust rc 0, failed 0, ignored 0, cc's seven new tests ok by name, 0 left in TMPDIR or /tmp, kovacs's user not root; rust-lint rc 0 on CI's rustc. Then the END to vc and cc. (edited)
+- 0072's kovacs leg (todo 17, utilz-ic's; menuz 0.4.6): the START (heavy) is with vc, beside ic's run G, waiting for the GO and vc's ruling on CHANGELOG.md (moved on main since a103a549 by 0096's landing; read by nothing in the leg). Bytes: a103a549 plus ic's final-wt-0072.patch, 041173f2, as scratch commit 30a0befa (bundle ~/Devel/scratch/utilz-dc/work/kv-c0072-041173f2). On the GO: /bin/bash ~/Devel/scratch/utilz-dc/work/kv-c0072.sh. Expected: rc 0, 139 tests, not ok 0, 1 skip (AC-06.3). Then the END to vc and an FYI to ic.
 
 ## TODO
 
-- 0072's kovacs leg (utilz-ic's; menuz 0.4.6, after arca_swift 0.2.0's tag), when ic's START names its bytes: a heavy kovacs leg of menuz.bats on them whatever 0072 changes, since menuz.bats reads opt/menuz/VERSION (AT-02.1, menuz.bats:167-174) and 0072 moves it to 0.4.6; and a light shellcheck 0.9.0 pass of opt/menuz/menuz only if 0072 changes it (vc, 22 Oct). Size S. (edited)
 - 2.14.2's final-head gate, once 0096, 0098, 0099, 0097 and 0072 have landed (0096 and 0097 had by 22 Oct), and vc names the sha (vc, 22 Oct). Its menuz-app phase's text names 0097's job since 22 Oct (runs-on xcode-27, Xcode 27.1 by DEVELOPER_DIR), in both copies. Then final-head-gate.sh's phases, the report and the dry run, then the post-release steps (~/Devel/scratch/utilz-dc/RESUME.md). Size L. (edited)
 - K1 for 0099 (cc's: showreel's report of unused assets says nothing of a directory under assets/ it cannot read, and counts a size it cannot read as 0; plan.rs's two silences; prez 2.5.7, after 0098), when cc's START names its bytes: one heavy kovacs leg on them, to cc's spec (method in ~/Devel/scratch/utilz-dc/RESUME.md). Size S. (vc, 22 Oct) (edited)
 
