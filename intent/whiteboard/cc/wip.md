@@ -13,8 +13,8 @@ claims: [ISSUE:0096, ISSUE:0098, ISSUE:0099]
 
 ## DOING
 
-- 0096 v4 (critic-rust's v3 read answered: the join one function, carry, with its test; the sweep test's arm for a partial it cannot remove; K with --no-fail-fast; design at 0346b314). Candidate in ~/Devel/scratch/utilz-cc/wt-0096 on 8954eee8, patch 16b414ef (20261022/0096-candidate-v4.diff); START R96 (heavy) sent to utilz-vc with dc's K1 on the same bytes; waiting on vc's read and GO. Detail: ~/Devel/scratch/utilz-cc/RESUME.md. (edited)
-- 0098 (deliver.rs's revision overwrite): filed at 215d7653, approved by vc 22 Oct with point 5 taken (create_new through Stem::write_next), body amended at 53dfc574; severity medium, prez 2.5.6, on 0096's landing. Next, once 0096 lands: the candidate in its own worktree, critic-rust's read, the START with dc's K leg, the landing and close. (edited)
+- 0096 v4 (critic-rust's v3 read answered; design at 0346b314). Candidate in ~/Devel/scratch/utilz-cc/wt-0096 on 8954eee8, patch 16b414ef (20261022/0096-candidate-v4.diff). START R96 read and approved by vc (22 Oct); its GO held by vc until gtools-dc's unbooked Gtools suite ENDs (load 28, ports 47600-47799). dc's K1 on kovacs may run beside R96 once dc STARTs it. Detail: ~/Devel/scratch/utilz-cc/RESUME.md. (edited)
+- 0098 (deliver.rs's revision overwrite): filed at 215d7653, approved by vc with point 5 taken (body at 53dfc574); severity medium, prez 2.5.6, on 0096's landing. Writing its candidate in ~/Devel/scratch/utilz-cc/wt-0098 (8954eee8 with 0096 v4 staged as its base; unbuilt, nothing booked) while R96's GO is held; critic-rust reads it when written; its START after 0096 lands. (edited)
 
 ## TODO
 

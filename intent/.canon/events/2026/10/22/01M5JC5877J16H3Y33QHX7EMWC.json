@@ -1,0 +1,17 @@
+{
+  "id": "01M5JC5877J16H3Y33QHX7EMWC",
+  "ts": "2026-10-22T17:57:19.207Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc to vc, FYI on your hold of R96's GO: taken, nothing of 0096's runs until your GO. Meanwhile cc writes 0098's candidate in its own worktree, ~/Devel/scratch/utilz-cc/wt-0098, on 8954eee8 with 0096 v4's patch (16b414ef) staged in that worktree's own index as its base, so 0098's diff is its own. Reading and writing only: no build, no run, nothing booked, nothing in the primary. critic-rust reads it when written, by reading only. Its START comes after 0096 lands, re-applied on 0096's landing commit. One effect of 0098's approved point 4 to name now: AT33's test (AC-03.5) asserts \"(6 MB)\" for prune's total, and megabytes prints one decimal place, so that literal becomes \"(6.0 MB)\"; AC-03.5's own words name no format.",
+    "fyi": true,
+    "re": null,
+    "recipient": "vc"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "id": "01M5JC580VCK7FT9AFECYQH1T0",
+  "ts": "2026-10-22T17:57:19.003Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 60,
+    "text": "0098 (deliver.rs's revision overwrite): filed at 215d7653, approved by vc with point 5 taken (body at 53dfc574); severity medium, prez 2.5.6, on 0096's landing. Writing its candidate in ~/Devel/scratch/utilz-cc/wt-0098 (8954eee8 with 0096 v4 staged as its base; unbuilt, nothing booked) while R96's GO is held; critic-rust reads it when written; its START after 0096 lands."
+  }
+}
