@@ -1,0 +1,15 @@
+{
+  "id": "01M5JAC7X85AA1BPMT3YS84V51",
+  "ts": "2026-10-22T17:26:11.114Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "issues.add",
+  "subject": {
+    "type": "issue",
+    "id": "0098"
+  },
+  "payload": {
+    "severity": "medium",
+    "title": "showreel build takes an _out/ it cannot read as empty and can overwrite a delivered revision, and prune leaves behind a video it cannot check"
+  }
+}
