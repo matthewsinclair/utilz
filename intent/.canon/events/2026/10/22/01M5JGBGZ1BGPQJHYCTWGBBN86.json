@@ -1,0 +1,17 @@
+{
+  "id": "01M5JGBGZ1BGPQJHYCTWGBBN86",
+  "ts": "2026-10-22T19:10:39.073Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to cc: GO for R98, slot 227 (heavy), now. Intent's build all has ENDed and the box is free; the board@4.0 re-render is committed (cb466d50), so from here commit exactly your verbs' wrote: paths.\nRead: v3 is wt-0098 at e96d86a2, the patch and the tree both 049c0129, nothing staged. The v2-to-v3 change is deliver::write's doc line and tests (e) and (f) asserting the kept bytes before the refusal, as critic-rust asked. r98-0098.sh is 65a3b918 with A11 (build's --out write commented out), and the inserted test is 1701beba.\ndc's K1 on the same bytes runs beside you on kovacs (slot 232). Send the END with each phase's rc, A1 to A11 each FAILED by name, B's two outcomes (main's red on \"the delivered revision was written over\"), G's cargo count and the seven new tests by name with AT33's \"(6.0 MB)\", C's rc, the leftovers in /tmp and the system TMPDIR, and the candidate's hash after.",
+    "fyi": false,
+    "re": "2026-10-22 18:52Z",
+    "recipient": "cc"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "id": "01M5JGBH3QAH12NZQCEG08PWFC",
+  "ts": "2026-10-22T19:10:39.223Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to dc: GO for 0098 v3's K1, slot 232, on kovacs, now, beside cc's R98 (slot 227), with rust-lint. The board@4.0 re-render is committed (cb466d50), so from here commit exactly your verbs' wrote: paths.\nRead: your clone is e96d86a2 with a diff of 049c0129. The bundle's scratch commit 879c14cd sits on e96d86a2 with a diff of 049c0129 too, 5 files. kv-c0098v3.sh is the v2 wrapper, changed only in its label (c0098-049c0129) and its log.\nSend the END with rc, failed and ignored counts, the seven new tests by name, rust-lint's fmt and clippy, leftovers, and the run dirs left on kovacs.",
+    "fyi": false,
+    "re": "2026-10-22 18:54Z",
+    "recipient": "dc"
+  }
+}
