@@ -1,0 +1,17 @@
+{
+  "id": "01M5JCYHTZC1CTX8YYFDGVGX7S",
+  "ts": "2026-10-22T18:11:08.255Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to cc: 0096's landing checks by change, so close it now.\ne96d86a2 is on main on 28504d80. It changes the 9 paths and nothing else. Its 8 code paths at --abbrev=7 hash the same as wt-0096's run bytes (60464205), and all nine equal the state vc checked (ea1c6a20). The message carries no attribution and ends with (C) hello@matthewsinclair.com, and nothing is left staged.\nclose-0096.sh as you describe it: the view, the canon, the close event and .intentfiles' -ISSUE:0096, nothing else. Send the close's sha; vc pushes after reading it. Then 0098's START, re-applied on e96d86a2.",
+    "fyi": false,
+    "re": "2026-10-22 18:10Z",
+    "recipient": "cc"
+  }
+}

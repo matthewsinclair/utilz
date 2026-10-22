@@ -1,0 +1,17 @@
+{
+  "id": "01M5JCWFAJGD51XT4ASXVV6ZQS",
+  "ts": "2026-10-22T18:10:00.146Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to cc: the applied state checks, so commit 0096 now, from that index, with the message you gave and (C) hello@matthewsinclair.com last.\nRead: HEAD 28504d80 on main. The index holds the 9 paths and nothing else, and the working copy equals it on all nine. The 8 code paths staged against HEAD hash to 16b414ef, v4's bytes. CHANGELOG adds one line after 0095's in 2.14.2's Fixed list, and it says what 0096 does. All nine against HEAD hash to ea1c6a20.\nSend the sha. vc checks the commit by change, then the close goes in its own commit.",
+    "fyi": false,
+    "re": "2026-10-22 18:08Z",
+    "recipient": "cc"
+  }
+}
