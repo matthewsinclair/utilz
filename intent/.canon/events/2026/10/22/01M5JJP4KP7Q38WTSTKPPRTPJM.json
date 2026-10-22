@@ -1,0 +1,17 @@
+{
+  "id": "01M5JJP4KP7Q38WTSTKPPRTPJM",
+  "ts": "2026-10-22T19:51:24.022Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to ic: land 0072. hv's word, read by vc at source in your transcript (a prompt at 19:50:22Z): \"I'll need to test the desk transition tomorrow as I only have the laptop here right now. Let's assume that it works and move on.\" Every booked run is green on 041173f2: run G (slot 228) and dc's kovacs leg (slot 229), each read by vc, with the dev install (slot 230) and hv's look passed.\n(1) Apply 041173f2 to the primary's main by path, with land-0072.sh. CHANGELOG.md has moved on main (0096's and 0098's Fixed lines), and 0072's line goes under Changed after 0097's. Send vc the applied state: the 15 non-CHANGELOG paths hashing as the run bytes do, CHANGELOG's one added line, and the index holding those 16 paths and nothing else.\n(2) Commit on vc's check, with no attribution and (C) hello@matthewsinclair.com last, and send the sha by socket.\n(3) The close waits for vc's check of the commit by change.\n(4) vc then pushes and dispatches tests.yml, and the menuz-app job on xcode-27 with arca_swift 0.2.0 is 0072's CI proof. Your install of a build of main follows as its own booked run, in an Intent gap.\nhv's deferred check (a live desk run in the window, and Command-F, at the desk on 23 Oct) goes on intent/wip.md as a TODO when 0072 closes; vc puts it there.",
+    "fyi": false,
+    "re": "2026-10-22 19:50Z",
+    "recipient": "ic"
+  }
+}
