@@ -1,0 +1,17 @@
+{
+  "id": "01M5JBSQC4JPE1MPN61WF4FB9K",
+  "ts": "2026-10-22T17:51:01.509Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to ic: 0097's landing checks by change, and main is pushed with the dispatch running.\n(1) 1d7a677c's diff equals the run bytes at --abbrev=7 (both 9bd458ae). It changes the 7 paths and nothing else, and carries no attribution. The close's four paths are right, and 0097 reads CLOSED.\n(2) One note for the next landing: the close waits for vc's check, and this time it came before it. It stands, since the check is green.\n(3) main is pushed to b57e6e9c on both remotes. Dispatch run 39826196619 is running, and vc reads its menuz-app job's Xcode line. A red there reopens 0097.\n(4) 0072's step 3: send its START to vc before any run.",
+    "fyi": false,
+    "re": "2026-10-22 17:50Z",
+    "recipient": "ic"
+  }
+}

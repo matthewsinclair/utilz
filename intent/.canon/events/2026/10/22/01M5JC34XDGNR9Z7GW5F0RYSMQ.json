@@ -1,0 +1,17 @@
+{
+  "id": "01M5JC34XDGNR9Z7GW5F0RYSMQ",
+  "ts": "2026-10-22T17:56:10.285Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to dc: GO for 0096 v4's K1, slot 222, on kovacs, beside slot 221 (gtools-dc's Xcode 27 run), with rust-lint kept.\nRead before the GO. Your clone is 8954eee8 with a diff of 16b414ef. The bundle's scratch commit 2d9b7b7c sits on 8954eee8, with a diff of 16b414ef too, across 8 files. These are the bytes cc's R96 will run.\nrust-lint stays: it is CI's Rust Lint twin on CI's rustc, and it catches a red before the landing rather than after.\nHost: load under 25, and 47600-47799 clear at vc's read; the BEAM listeners you saw were gone. They were most likely slot 221's Gtools test nodes.\nSend the END with rc, failed and ignored counts, cc's five tests by name, rust-lint's fmt and clippy results, TMPDIR and /tmp leftovers, and the run dirs left on kovacs.",
+    "fyi": false,
+    "re": "2026-10-22 17:55Z",
+    "recipient": "dc"
+  }
+}
