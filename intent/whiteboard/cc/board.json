@@ -1549,19 +1549,19 @@
       "node": "cc",
       "kind": "todo",
       "seq": 46,
-      "text": "0100 (a slot's video over a file at its name): body amended at 2c1b173a on vc's ruling of 22 Oct on the critic reads, sent for vc's read; then v2 code in ~/Devel/scratch/utilz-cc/wt-0100 to the amended body, no build until vc's GO. prez 2.5.8, after 0099 on its landing. Size S.",
+      "text": "0100 (a slot's video over a file at its name): body approved as amended (2c1b173a, vc's read of 22 Oct); v2 being written in ~/Devel/scratch/utilz-cc/wt-0100 (writing only, no cargo until vc's GO), then critic-rust and critic-shell read it. prez 2.5.8, after 0099 on its landing. Size S.",
       "state": "live",
       "recorded_at": "2026-10-22T18:37:08.463Z",
-      "edited_at": "2026-10-22T20:26:09.876Z"
+      "edited_at": "2026-10-22T20:34:42.768Z"
     },
     {
       "node": "cc",
       "kind": "todo",
       "seq": 47,
-      "text": "0101 (an output pattern showreel cannot keep apart): body amended and retitled at ee8075d8 on vc's ruling of 22 Oct (a fixed \"..\", \".\" or \"\" name; the counter in the name's last extension), sent for vc's read with two findings for vc's routing (a pattern ending in a video's extension; check never builds the stem); then v2 code in ~/Devel/scratch/utilz-cc/wt-0101 to the amended body, no build until vc's GO. prez 2.5.9, after 0100 on its landing. Size S.",
+      "text": "0101 (output patterns showreel cannot keep apart, and check): amended and retitled again at 86c56805 on vc's read (a video container's extension; check refusing what build refuses, through build::open), sent for vc's read before its v2 code in ~/Devel/scratch/utilz-cc/wt-0101, no build until vc's GO. prez 2.5.9, after 0100 on its landing. Size S.",
       "state": "live",
       "recorded_at": "2026-10-22T18:37:08.611Z",
-      "edited_at": "2026-10-22T20:26:10.225Z"
+      "edited_at": "2026-10-22T20:34:43.109Z"
     },
     {
       "node": "cc",
@@ -3114,6 +3114,14 @@
       "re": "2026-10-22 20:15Z",
       "fyi": false,
       "recorded_at": "2026-10-22T20:25:48.754Z"
+    },
+    {
+      "id": "01M5JN4V9DZH0VNY4WMC4A8XX2",
+      "recipient": "vc",
+      "body": "cc to vc: 0101 amended and retitled at 86c56805 for your read, before its code.\n- Point 3, the third shape: counted and fixed alike, refused in its own words when the name revision 001 takes, or the fixed name, is one of its own videos' names. It asks video_of for each of VIDEO_EXTENSIONS and compares without case, through one comparison that point 2 uses too. The words: \"output pattern gives the HTML a video's extension: '<pattern>'\", with the remedy ending \"end the pattern with .html\". Test (c): {date}-{nnn}.mp4, a fixed reel.mp4 and {nnn}.MOV refuse; {date}-{nnn}.mp4.html builds.\n- Point 4, check: build::open, the one opener both verbs call (its own doc gives the reason), now stamps the date and builds the stem, and Opened carries the stem and the stamp's warnings. run takes both, so said's order is unchanged. check therefore refuses every pattern refusal, and a bad iso: date, with build's words and exit 2, and says the stamp's warnings on stderr as build does. Test (d) is on open, in build.rs, because main.rs holds no tests by the crate's own rule (lib.rs): two counters and {date}.{nnn} refuse in stem's words with exit 2, red by a one-line mutation in open that skips the stem's refusal. One consequence, named in the body: build's stem and date refusals now come before the payload and the render.\n- One change to v1's approved point 1: the / check moves from the pattern's text to the assembled names (critic-rust's note on v1), so it no longer relies on the fields holding no /, and every check of the names sits in one function that points 2 and 3 share. Say if you would rather keep the text check.\n- R: five mutations (the / check, the fixed name's, point 2's, point 3's, and open's). G and K unchanged.\nMeanwhile I write 0100's v2 in wt-0100, writing only, with no cargo.",
+      "re": "2026-10-22 20:29Z",
+      "fyi": false,
+      "recorded_at": "2026-10-22T20:34:23.149Z"
     }
   ],
   "handled": [
@@ -4136,6 +4144,11 @@
       "id": "01M5JM1S876C0M9323EBR3TRDP",
       "sender": "vc",
       "handled_at": "2026-10-22T20:26:09.584Z"
+    },
+    {
+      "id": "01M5JMVHKATZSK63HBP5AYPD6J",
+      "sender": "vc",
+      "handled_at": "2026-10-22T20:34:42.490Z"
     }
   ]
 }

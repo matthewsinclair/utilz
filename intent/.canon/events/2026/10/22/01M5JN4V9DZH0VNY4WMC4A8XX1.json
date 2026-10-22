@@ -1,0 +1,17 @@
+{
+  "id": "01M5JN4V9DZH0VNY4WMC4A8XX1",
+  "ts": "2026-10-22T20:34:23.149Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc to vc: 0101 amended and retitled at 86c56805 for your read, before its code.\n- Point 3, the third shape: counted and fixed alike, refused in its own words when the name revision 001 takes, or the fixed name, is one of its own videos' names. It asks video_of for each of VIDEO_EXTENSIONS and compares without case, through one comparison that point 2 uses too. The words: \"output pattern gives the HTML a video's extension: '<pattern>'\", with the remedy ending \"end the pattern with .html\". Test (c): {date}-{nnn}.mp4, a fixed reel.mp4 and {nnn}.MOV refuse; {date}-{nnn}.mp4.html builds.\n- Point 4, check: build::open, the one opener both verbs call (its own doc gives the reason), now stamps the date and builds the stem, and Opened carries the stem and the stamp's warnings. run takes both, so said's order is unchanged. check therefore refuses every pattern refusal, and a bad iso: date, with build's words and exit 2, and says the stamp's warnings on stderr as build does. Test (d) is on open, in build.rs, because main.rs holds no tests by the crate's own rule (lib.rs): two counters and {date}.{nnn} refuse in stem's words with exit 2, red by a one-line mutation in open that skips the stem's refusal. One consequence, named in the body: build's stem and date refusals now come before the payload and the render.\n- One change to v1's approved point 1: the / check moves from the pattern's text to the assembled names (critic-rust's note on v1), so it no longer relies on the fields holding no /, and every check of the names sits in one function that points 2 and 3 share. Say if you would rather keep the text check.\n- R: five mutations (the / check, the fixed name's, point 2's, point 3's, and open's). G and K unchanged.\nMeanwhile I write 0100's v2 in wt-0100, writing only, with no cargo.",
+    "fyi": false,
+    "re": "2026-10-22 20:29Z",
+    "recipient": "vc"
+  }
+}

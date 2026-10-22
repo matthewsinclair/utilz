@@ -1,0 +1,16 @@
+{
+  "id": "01M5JN5ES50VXSPRGS1KJPSXSJ",
+  "ts": "2026-10-22T20:34:43.109Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "todo",
+    "seq": 47,
+    "text": "0101 (output patterns showreel cannot keep apart, and check): amended and retitled again at 86c56805 on vc's read (a video container's extension; check refusing what build refuses, through build::open), sent for vc's read before its v2 code in ~/Devel/scratch/utilz-cc/wt-0101, no build until vc's GO. prez 2.5.9, after 0100 on its landing. Size S."
+  }
+}

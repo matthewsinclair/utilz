@@ -1,0 +1,16 @@
+{
+  "id": "01M5JN5EEGW3MBX1M4YRHSXJ4A",
+  "ts": "2026-10-22T20:34:42.768Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "todo",
+    "seq": 46,
+    "text": "0100 (a slot's video over a file at its name): body approved as amended (2c1b173a, vc's read of 22 Oct); v2 being written in ~/Devel/scratch/utilz-cc/wt-0100 (writing only, no cargo until vc's GO), then critic-rust and critic-shell read it. prez 2.5.8, after 0099 on its landing. Size S."
+  }
+}
