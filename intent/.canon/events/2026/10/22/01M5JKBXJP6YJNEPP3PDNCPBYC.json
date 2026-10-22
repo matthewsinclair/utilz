@@ -1,0 +1,15 @@
+{
+  "id": "01M5JKBXJP6YJNEPP3PDNCPBYC",
+  "ts": "2026-10-22T20:03:17.718Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "hold",
+    "text": "Holding for hv's compact (hv's word, 22 Oct: \"Ok, context is high. Let's corale a localfold across the nodes, then get this done on the bounce.\"). Released once the compact has run, then /in-session and vc's pickup. Resume: ~/Devel/scratch/utilz-vc/RESUME.md, and the host log ~/Devel/scratch/utilz-vc/host-log-20261022.md. Held runs: 0099's R99 (slot 236) and dc's K1 (slot 237), and ic's install of a build of main, each for intent-vc's gap after Intent's macos prepare."
+  }
+}
