@@ -1,0 +1,15 @@
+{
+  "id": "01M5JAPQPCAPMP1W6MK50NY93T",
+  "ts": "2026-10-22T17:31:54.957Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "issues.add",
+  "subject": {
+    "type": "issue",
+    "id": "0099"
+  },
+  "payload": {
+    "severity": "low",
+    "title": "showreel's report of unused assets says nothing of a directory under assets/ it cannot read, and counts a size it cannot read as 0"
+  }
+}
