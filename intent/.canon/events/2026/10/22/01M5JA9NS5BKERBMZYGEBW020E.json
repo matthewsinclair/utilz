@@ -1,0 +1,15 @@
+{
+  "id": "01M5JA9NS5BKERBMZYGEBW020E",
+  "ts": "2026-10-22T17:24:47.015Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "issues.add",
+  "subject": {
+    "type": "issue",
+    "id": "0097"
+  },
+  "payload": {
+    "severity": "low",
+    "title": "menuz's floor and CI job name Xcode 26, while its release is built with Xcode 27.1; move both to 27.1"
+  }
+}
