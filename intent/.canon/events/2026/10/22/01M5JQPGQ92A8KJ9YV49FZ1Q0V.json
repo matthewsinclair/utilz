@@ -1,0 +1,16 @@
+{
+  "id": "01M5JQPGQ92A8KJ9YV49FZ1Q0V",
+  "ts": "2026-10-22T21:18:59.305Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 16,
+    "text": "0102's kovacs leg (todo 27, ic's, menuz 0.4.7, hv's decision 54) is green in slot 244, on vc's GO of 21:07Z (kovacs 21:07:53Z to 21:08:24Z), on 180369a5 over 86c56805 as a6736e34: menuz rc 0, plan 1..139, not ok 0, one skip (AC-06.3, rsvg-convert not on kovacs), as in slot 229; 0 run dirs left. The END went to vc and ic. Left: remove its three work dirs (src-, kv- and sc-c0102-180369a5 under ~/Devel/scratch/utilz-dc/work) once 0102 closes; its logs stay in tmp/dc-2141/kovacs/c0102-180369a5/."
+  }
+}
