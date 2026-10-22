@@ -3,9 +3,9 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: aa2e759c-f89d-4d9a-8001-e734111bf44b
-heartbeat_at: 2026-10-22 19:49Z
+heartbeat_at: 2026-10-22 20:03Z
 status: active
-focus: "22 Oct: 0099's K1 STARTed with vc, its GO at an Intent END; legs green for 0097 (219), 0096 (222), 0072 (229) and 0098 (232). Next: todo 25 (0100) and 26 (0101) on cc's STARTs, then todo 18, 2.14.2's gate and dry run, after Intent's cut (hv's decision 53). Resume: ~/Devel/scratch/utilz-dc/RESUME.md."
+focus: "22 Oct, folded for hv's compact (hold 23): 0099's K1 STARTed and held with R99 (slot 237) for intent-vc's gap; legs green for 0097, 0096, 0072 and 0098. Then todos 25 and 26 (0100, 0101) on cc's STARTs, and todo 18 after Intent's cut (hv's decision 53). Resume: ~/Devel/scratch/utilz-dc/RESUME.md."
 claims: []
 ---
 
@@ -13,7 +13,7 @@ claims: []
 
 ## DOING
 
-- 0099's K1 (todo 24, cc's v2): the START (heavy) is with vc, waiting for its GO at an Intent END (hv's decision 53). Bytes: cc's 0099-candidate-v2-on-b5c588a3.diff, 743fb664, on b5c588a3 (0098's landing), as scratch commit e94806aa (bundle ~/Devel/scratch/utilz-dc/work/kv-c0099-743fb664). On the GO: /bin/bash ~/Devel/scratch/utilz-dc/work/kv-c0099.sh rust-lint. Expected: rust rc 0, 405 passed, failed 0, ignored 0, cc's two new tests ok by name, 0 left in TMPDIR or /tmp, kovacs's user not root; rust-lint rc 0 on CI's rustc. Then the END to vc and cc.
+- 0099's K1 (todo 24, cc's v2): the START (heavy) is with vc (19:49Z), held with cc's R99 (slots 236 and 237) for intent-vc's gap after Intent's macos prepare (hv's decision 53; vc's localfold). Bytes: cc's 0099-candidate-v2-on-b5c588a3.diff, 743fb664, on b5c588a3 (0098's landing), as scratch commit e94806aa (bundle ~/Devel/scratch/utilz-dc/work/kv-c0099-743fb664). On the GO: /bin/bash ~/Devel/scratch/utilz-dc/work/kv-c0099.sh rust-lint. Expected: rust rc 0, 405 passed, failed 0, ignored 0, cc's two new tests ok by name, 0 left in TMPDIR or /tmp, kovacs's user not root; rust-lint rc 0 on CI's rustc. Then the END to vc and cc. (edited)
 
 ## TODO
 
@@ -23,13 +23,13 @@ claims: []
 
 ## Holds
 
-_(none)_
+- Holding for hv's compact (vc's localfold of 22 Oct, on hv's word to vc: "Ok, context is high. Let's corale a localfold across the nodes, then get this done on the bounce."). Condition: hv's compact of this session has run; then /in-session, dc's pickup and vc's word. Resume state: nothing of dc's is running, and nothing of dc's is in the primary but its board views. 0099's K1 is STARTed and held with R99 (slot 237) for intent-vc's gap (doing 15). Then todos 25 and 26 (0100's and 0101's K1s) on cc's STARTs, and todo 18 (2.14.2's final-head gate and dry run) after Intent's cut (hv's decision 53). The method and where everything is: ~/Devel/scratch/utilz-dc/RESUME.md.
 
 ## Watch-outs
 
 - dc's own limits: no Hammerspoon, pointer, xcodebuild or hv's keychain; no menuz file (utilz-ic's); nothing pushed. Every host run books with utilz-vc, terms in vc's watchout 17. (edited)
 - kovacs legs: the method, tools and kovacs's state are in ~/Devel/scratch/utilz-dc/RESUME.md, and the baseline is tmp/dc-2141/kovacs/vbase-2d73b7f/BASELINE.md (slot 83). A leg runs only its bundle's tree, with rustup's cargo first and the four versions printed. (edited)
-- Intent's swap (vc's announce of 22 Oct, 18:53Z; Intent issue 0612, board@4.0). Before intent-vc's START, dc commits its pending board renders. After the swap, dc commits no board file until vc says its board@4.0 re-render commit is in, and from then on only the paths its verb prints on wrote: lines, never a re-rendered: line, which is another node's (wb-commit-dc.sh's rule is retired then). No heavy run GOes between intent-vc's START and END. A running intent mcp server keeps the old code, so dc writes through the CLI. dc's inbox watch stays off until the re-render is in, so a peer wakes dc by socket.
+- board@4.0 since 22 Oct (Intent issue 0612, intent 3.2.4; vc's re-render cb466d50): dc commits exactly the paths its own wb verbs print on wrote: lines, through ~/Devel/scratch/utilz-dc/wb-commit-wrote.sh, never a re-rendered: line, which is another node's; an ask's wrote: lines include the recipient's inbox view. Live messages are read from intent wb show dc --json (.messages[] with state live), since the inbox views no longer mark a message (handled). (edited at the localfold: the swap's one-off steps are done) (edited)
 
 ## Decisions
 
