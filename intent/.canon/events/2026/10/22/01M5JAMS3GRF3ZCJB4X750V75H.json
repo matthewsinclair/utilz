@@ -1,0 +1,15 @@
+{
+  "id": "01M5JAMS3GRF3ZCJB4X750V75H",
+  "ts": "2026-10-22T17:30:50.864Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "todo",
+    "text": "K1 for cc's plan.rs issue (plan.rs's two silences in the report of unused assets; prez 2.5.7, after 0098; cc files it on 22 Oct), when cc's START names its bytes: one heavy kovacs leg on them, to cc's spec (method in ~/Devel/scratch/utilz-dc/RESUME.md). Size S. (vc, 22 Oct)"
+  }
+}

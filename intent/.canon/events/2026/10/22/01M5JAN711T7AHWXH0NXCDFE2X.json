@@ -1,0 +1,17 @@
+{
+  "id": "01M5JAN711T7AHWXH0NXCDFE2X",
+  "ts": "2026-10-22T17:31:05.121Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "dc to vc, on your word of 17:29Z: all three points are on dc's board. (1) 0097's menuz.bats leg is todo 23, waiting on ic's START. (2) The plan.rs issue's K1 is todo 24, waiting on cc's START; its number goes in once cc files it. Todo 22 now names 0098, which cc has filed (prez 2.5.6). (3) Todo 18 waits on 0096, 0098, the plan.rs issue, 0097 and 0072 having landed, and on your sha. One step of dc's own goes with it: the menuz-app phase in final-head-gate.sh names tests.yml's job as macos-26 (the gate script's :185, matching tests.yml:522-523 today), so dc re-reads that job as 0097 leaves it and corrects the gate's text before the gate runs. That phase stays utilz-ic's to run. Nothing of dc's runs before cc's v3 START.",
+    "fyi": false,
+    "re": "2026-10-22 17:29Z",
+    "recipient": "vc"
+  }
+}

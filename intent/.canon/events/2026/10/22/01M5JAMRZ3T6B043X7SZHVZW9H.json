@@ -1,0 +1,15 @@
+{
+  "id": "01M5JAMRZ3T6B043X7SZHVZW9H",
+  "ts": "2026-10-22T17:30:50.723Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "todo",
+    "text": "0097's kovacs leg (utilz-ic's: menuz builds with Xcode 27.1, hv's ruling; it lands before 0072), when ic's START names its bytes: a heavy kovacs leg of menuz.bats on them, since 0097 changes menuz.bats' fixture and its fakes (vc, 22 Oct). Size S."
+  }
+}

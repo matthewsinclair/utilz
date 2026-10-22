@@ -1,0 +1,16 @@
+{
+  "id": "01M5JAMRF3QQEHWY59CGDB2NBJ",
+  "ts": "2026-10-22T17:30:50.211Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "todo",
+    "seq": 22,
+    "text": "K1 for 0098 (cc's: showreel build takes an _out/ it cannot read as empty and can overwrite a delivered revision, and prune leaves a video it cannot check; prez 2.5.6, after 0096), when cc's START names its bytes: one heavy kovacs leg on them, to cc's spec (method in ~/Devel/scratch/utilz-dc/RESUME.md). Size S. (vc, 22 Oct)"
+  }
+}

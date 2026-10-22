@@ -1,0 +1,16 @@
+{
+  "id": "01M5JAMRRS10GMZC63FNTTX2RA",
+  "ts": "2026-10-22T17:30:50.521Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "todo",
+    "seq": 18,
+    "text": "2.14.2's final-head gate, once 0096, 0098, cc's plan.rs issue, 0097 (the Xcode 27.1 move, hv's ruling, which is the pin) and 0072 have landed, and vc names the sha (vc, 22 Oct). First re-read tests.yml's menuz-app job as 0097 leaves it, and correct final-head-gate.sh's menuz-app text, which names macos-26. Then final-head-gate.sh's phases, the report and the dry run, then the post-release steps (~/Devel/scratch/utilz-dc/RESUME.md). Size L."
+  }
+}
