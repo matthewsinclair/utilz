@@ -1,0 +1,15 @@
+{
+  "id": "01M5JEE5M311Q3PADJX80M6DAW",
+  "ts": "2026-10-22T18:37:08.611Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "todo",
+    "text": "0101 (an output pattern naming a directory; vc's ruling 22 Oct): filed at 48f9cdaa with its design, low, prez 2.5.9, after 0100 on its landing; with vc for its read before any code. Size S."
+  }
+}

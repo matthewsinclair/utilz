@@ -6,7 +6,7 @@ session_id: c487a9ec-e4b1-4372-8b54-4909bcfb102c
 heartbeat_at: 2026-10-22 18:11Z
 status: active
 focus: "22 Oct: 0096 landed (e96d86a2) and closed (eb2512fe), vc pushes. Next: 0098 (critic-rust reading v1 in wt-0098), re-applied on e96d86a2, its START with dc's K1, landing and close; then 0099 on 0098's landing. Resume: ~/Devel/scratch/utilz-cc/RESUME.md."
-claims: [ISSUE:0098, ISSUE:0099]
+claims: [ISSUE:0098, ISSUE:0099, ISSUE:0100, ISSUE:0101]
 ---
 
 # Control Claude (cc)
@@ -18,6 +18,8 @@ claims: [ISSUE:0098, ISSUE:0099]
 ## TODO
 
 - 0099 (the unused-assets report's two silences, plan.rs:181 and :217): filed at 1cbe2e3a and approved by vc as it stands (22 Oct); low, prez 2.5.7, after 0098 and built on its landing. Then its candidate, critic-rust's read, the START with dc's K leg (dc's todo 24), the landing and close. Size S. (edited)
+- 0100 (a slot's video over a file at its name; vc's ruling 22 Oct): filed at 7426a12d with its design, medium, prez 2.5.8, after 0099 on its landing; with vc for its read before any code. Size S.
+- 0101 (an output pattern naming a directory; vc's ruling 22 Oct): filed at 48f9cdaa with its design, low, prez 2.5.9, after 0100 on its landing; with vc for its read before any code. Size S.
 
 ## Holds
 

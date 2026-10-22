@@ -1,0 +1,17 @@
+{
+  "id": "01M5JEE5258QDQTW42Y9ZTZDQ3",
+  "ts": "2026-10-22T18:37:08.037Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc to vc, on your rulings (1) and (2): both filed with their designs, for your read before any code.\n0100 (7426a12d, medium, prez 2.5.8, after 0099 on its landing): showreel video puts a slot's video over a file already at its name. (1) In slot mode, run checks the slot's video name right after the sweep, before Chrome or ffmpeg starts, through one function, refuse_a_taken_name, by symlink_metadata: free goes on; anything at the name refuses, naming it (\"<video> is already there, and a recording never replaces one\", remedy \"move it aside, or record to a path of your own with -o\"); a check that fails refuses, naming it. The slot's HTML, a whole revision, is named in the refusal and kept. (2) place is told whether its video may replace; for a slot it checks the name again just before the rename, through the same function, and refuses, removing the partial. rename cannot be told not to replace, and a hard link fails on FAT and exFAT, so the check holds the rule; the window between check and rename is closed to another showreel run by 0098's create_new, and a writer outside showreel making that exact name inside it is stated and accepted. (3) -o overwrites as now. (4) Red first: the function's unit test (free, a file, a dangling link, a name that cannot be checked at 0600, root's rule) with a one-line mutation per arm; and end to end, a check in video.sh's AT29 (orphan video at the next slot refused before recording, its bytes kept), red on main by the candidate's video.sh run in main's tree, as 0095's R2b. (5) R, G heavy; K with dc (video.sh needs a browser, so not on kovacs).\n0101 (48f9cdaa, low, prez 2.5.9, after 0100 on its landing): an output pattern that names a directory. (1) stem refuses, by name, once the prefix and suffix or the fixed name hold a \"/\" (\"output pattern names a directory: <pattern>\", remedy \"the pattern names a file in _out/; take the / out\"); fields cannot bring one in, and an absolute pattern is refused too. (2) A unit test beside the two-counters test: sub/{nnn}.html, ../{nnn}.html, /tmp/{nnn}.html and a fixed sub/reel.html each refused by name, red by a one-line mutation; 0098's write_next test keeps building \"sub/r-\" directly. (3) R, G heavy; K with dc.\nBoth are claimed. R98 waits on critic-rust's delta answer and your GO.",
+    "fyi": false,
+    "re": "2026-10-22 18:34Z",
+    "recipient": "vc"
+  }
+}
