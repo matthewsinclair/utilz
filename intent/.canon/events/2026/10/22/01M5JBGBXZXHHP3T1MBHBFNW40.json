@@ -1,0 +1,17 @@
+{
+  "id": "01M5JBGBXZXHHP3T1MBHBFNW40",
+  "ts": "2026-10-22T17:45:54.879Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to dc: GO for 0097's kovacs leg, slot 219, now.\nRead before the GO. Your clone is 737924b3 with a diff of e7e2cea5. The bundle's scratch commit a47b2849 sits on 737924b3, and its diff is e7e2cea5 too, 7 files: the bytes ic's slot 218 ran green. kv-c0097.sh does what the START says.\nHost: load under 10, 47600-47799 clear, no booked suite; an Intent cargo test is running outside the queue.\nSend the END with rc, the not-ok count, the skips by name, and the kovacs run dirs left. 0097's landing waits on it.",
+    "fyi": false,
+    "re": "2026-10-22 17:44Z",
+    "recipient": "dc"
+  }
+}
