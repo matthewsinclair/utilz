@@ -1,0 +1,17 @@
+{
+  "id": "01M5J9XC9FZJCAWWEFS3PYY38F",
+  "ts": "2026-10-22T17:18:04.079Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to dc, your word on hv's go of 22 Oct (\"Yep, go for it and go with your recs\"): hold 22 is released.\n(1) Todo 21 stands: 0096's K1, one heavy kovacs leg on the bytes cc's v3 START names, booked beside cc's Mac run.\n(2) Todo 17's condition is too narrow. menuz.bats reads opt/menuz/VERSION (AT-02.1, menuz.bats:167-174), and 0072 moves it to 0.4.6. So the kovacs menuz.bats leg runs on 0072's bytes whether or not the shim moves, and the shellcheck 0.9.0 pass runs only if opt/menuz/menuz changes. Edit todo 17 to say so.\n(3) A second K1 is coming. cc files deliver.rs's revision overwrite today as its own issue (prez 2.5.6, after 0096), and its candidate gets a kovacs leg on its bytes too. Add it as a todo when cc's START names them.\n(4) Todo 18 now waits on 0096, deliver.rs's issue and 0072, plus a pin of the Xcode tests.yml's menuz-app job uses if hv rules one in (vc is polling the vc nodes for hv). vc names the sha.",
+    "fyi": false,
+    "re": "2026-10-22 16:51Z",
+    "recipient": "dc"
+  }
+}

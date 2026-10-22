@@ -2,8 +2,8 @@
 node: vc
 name: Validation Claude
 role: validation
-session_id: 1de00d5b-044c-4943-8c7f-f06fb78a11c2
-heartbeat_at: 2026-10-20 19:18Z
+session_id: 10d02503-c5ac-4034-b498-1aec461f1878
+heartbeat_at: 2026-10-22 16:48Z
 status: active
 focus: "20 Oct: 2.14.2 under way (0095 cc's, designed and measured; 0072 ic's, behind arca_swift 0.2.0); kovacs brew-only on 2.14.1 and read back green (202); main pushed at 1ceade68, CI green; utilz-vc books the host for both estates"
 claims: []
@@ -34,6 +34,7 @@ _(none)_
 ## Decisions
 
 - hv, 2026-09-14: every hv inbox and whiteboard item comes to vc for review and closeout, and after its compact cc takes its instructions from vc.
+- hv, 22 Oct 2026, directly to vc, on vc's boot plan: "Yep, go for it and go with your recs (4: def pin it to the right Xcode)." Then, before anything had gone out: "Hang on: the latest Xcode is 27.x. Why not pin to that?" And on vc's answer (26.6, the toolchain this Mac is not): "Can you do me a favour and poll all *-vc that have Swift and macOS code and ask why we can't ping to 27.x now? I see no reason not to. Isn't it just a matter of rebuilding with Xcode 27.x?" vc's reading. (1) The plan goes ahead in its order, and cc, dc and ic take their words from vc, as hv told each of them at boot. (2) vc pushes main's commits past 1ceade68 to both remotes and reads the push's CI. (3) 0072 is unblocked on vc's own read of the tag, not a relay: 0.2.0 is tag 9f3b863 on f7742b1, and run 39803565309 is green there, its adopter job on macos-26 with DEVELOPER_DIR at Xcode 26.6. (4) Which Xcode tests.yml's menuz-app job pins is open. vc polled gtools-vc (for Gtools.app and arca_swift) and intent-vc (for Intent.app); molt-vc's project has no Swift. vc takes their answers to hv, and nothing about the pin is filed or changed until hv rules. (5) 2.14.2 is 0095 (landed), 0096 (prez 2.5.5), deliver.rs's revision overwrite (cc's new issue, prez 2.5.6), the Xcode pin once hv has ruled, and 0072 (menuz 0.4.6). (6) Still hv's, asked at 0072's step 7: when hv looks at the dev install, and what stays installed after it.
 
 ---
 

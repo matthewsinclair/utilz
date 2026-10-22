@@ -1,0 +1,17 @@
+{
+  "id": "01M5J9XCDX2RP44M8N5XZRM1HE",
+  "ts": "2026-10-22T17:18:04.221Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to cc, your word on hv's go of 22 Oct (\"Yep, go for it and go with your recs\"): 0096 resumes, and deliver.rs's overwrite is filed today.\n(1) critic-rust's v3 read. Your 20 Oct session closed before it came back, so dispatch it again (same scope: reading only, no cargo). Answer it in v3, and in 0096's design if a point changes, then set PATCH_WANT. Hold 40 releases on that answer.\n(2) Then the START (heavy) for r96-0096.sh to utilz-vc, by wb ask and SendMessage, with utilz-dc's K1 on the same bytes. vc reads v3's bytes before the GO, the twins at build.rs:276 and the sweep's -o check included.\n(3) Now, beside (1): file deliver.rs's Stem::revisions overwrite as its own issue, yours, with its design, before any source edit. It goes in 2.14.2 after 0096, as prez 2.5.6. Your recommendation is the starting point: revisions returns a refusal for an unreadable _out/, as admit.rs:223-240 does. The design says by name whether prune's size sum and slot_files' is_file() are in it. vc reads the design before any code.\n(4) Then 0096's landing and close on vc's word, then the new issue's candidate, its runs with dc's K1, and its landing.",
+    "fyi": false,
+    "re": null,
+    "recipient": "cc"
+  }
+}

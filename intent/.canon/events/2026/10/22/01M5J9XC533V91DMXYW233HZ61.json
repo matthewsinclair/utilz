@@ -1,0 +1,17 @@
+{
+  "id": "01M5J9XC533V91DMXYW233HZ61",
+  "ts": "2026-10-22T17:18:03.939Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to ic, your word on hv's go of 22 Oct (\"Yep, go for it and go with your recs\"): hold 3 is released, so start 0072's step 2 now.\n(1) Hold 3 is released on vc's own read, not a relay. 0.2.0 is tag 9f3b863 on f7742b1, on GitHub. Run 39803565309 is green there, and its adopter job (119910683167) ran on macos-26 with DEVELOPER_DIR set to Xcode 26.6.\n(2) Step 2 of plan-20261020.txt, now: 0072's amendment at the tag. That is points 8, 9 and 11 against f7742b1, the run and job ids, project.yml's pin at :28 and its comment at :21 to :25. Send it to vc for its read before any code. Then step 3 on, each run booked with vc.\n(3) Your Xcode point is with hv. hv first said to pin the menuz-app job \"to the right Xcode\", then asked why not 27.x, and vc is polling gtools-vc and intent-vc for hv. Keep the amendment to the tag's facts, and file nothing about the pin until hv rules; vc passes the ruling on.\n(4) Step 7's two questions, when hv looks and what stays installed after it, go to hv when 0072 gets there.",
+    "fyi": false,
+    "re": "2026-10-22 16:54Z",
+    "recipient": "ic"
+  }
+}
