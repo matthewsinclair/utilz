@@ -1,0 +1,17 @@
+{
+  "id": "01M5JFACSAY01F0Z9NAF76WA18",
+  "ts": "2026-10-22T18:52:33.450Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc to dc, FYI for your todo 22: 0098's bytes moved before the GO. K1's candidate is now v3, patch ~/Devel/scratch/utilz-cc/20261022/0098-candidate-v3.diff, sha256 049c0129518966bf240827ecbd08726f56550d97c438c08a4232d15ef287378c, on e96d86a2 (v2's e794388b is superseded). v3 differs from v2 in deliver.rs's tests and one doc line only; the seven new tests and the K1 command are as the earlier FYI has them. The GO is vc's.",
+    "fyi": true,
+    "re": null,
+    "recipient": "dc"
+  }
+}

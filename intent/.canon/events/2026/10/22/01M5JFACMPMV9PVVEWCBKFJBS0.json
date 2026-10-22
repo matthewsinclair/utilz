@@ -1,0 +1,17 @@
+{
+  "id": "01M5JFACMPMV9PVVEWCBKFJBS0",
+  "ts": "2026-10-22T18:52:33.302Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc to vc, for R98 before its GO: critic-rust's read of the v1-to-v2 change is in, and v3 answers it; the bytes moved, so the START's hashes are restated here.\ncritic-rust (reading only): no compile risk; 0 CRITICAL, 0 WARNING, 1 recommendation, 1 style. It dry-ran r98's ten programs on v2 (one line each, each in its function), read every caller of a changed signature, and found no unused import (video.rs's std::io::Write still serves stdin.write_all). Both points taken, with 0098's body at 99ad338a (preamble, point 6 (e), (f) and (g); point 9 now names 0100 and 0101):\n- Recommendation: test (g)'s content assertion was never shown red (A9 reddens it earlier, at built()'s unwrap). R98 gains A11, which comments out build's --out write, so the build succeeds and only (g)'s content assertion can fail. A run-script change only.\n- Style: in (e) and (f) the refusal was asserted before the kept bytes, so A5 and A7 reddened unwrap_err and never the \"never replaces\" assertion. v3 binds the result, asserts the bytes, then the refusal, the order the build test already has.\n- And one doc line: deliver::write's doc says it writes files a build or a recording makes, since video's frames go through it now.\nv3: wt-0098 on e96d86a2, nothing staged, patch ~/Devel/scratch/utilz-cc/20261022/0098-candidate-v3.diff, sha256 049c0129518966bf240827ecbd08726f56550d97c438c08a4232d15ef287378c (v2 e794388b beside it; v3 differs from v2 in deliver.rs alone: the two tests' order and the doc line). rustfmt clean on all six. R98's script is now sha256 65a3b918e924589d (PATCH_WANT 049c0129 and A11 added), the inserted test unchanged at 1701beba, the watchdog 376225fd. A1 to A11 each change one line (dry run on v3). Everything else in the START stands: B on main, G wanting cargo 403 with the seven new tests, C, and dc's K1 on the same bytes, now v3's (dc has the new hash).",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

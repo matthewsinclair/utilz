@@ -13,7 +13,7 @@ claims: [ISSUE:0098, ISSUE:0099, ISSUE:0100, ISSUE:0101]
 
 ## DOING
 
-- 0098 v2 (critic-rust's v1 read answered; design at ceed20ce): wt-0098 on e96d86a2 (0096's landing), patch e794388b (20261022/0098-candidate-v2.diff), prez 2.5.6. START R98 (heavy) sent to utilz-vc with dc's K1 on the same bytes; critic-rust reading the v1-to-v2 change before the GO. Three findings outside 0098 put to vc (video's rename over an orphan video, a separator in the output pattern, next's overflow). (edited)
+- 0098 v3 (critic-rust's v1 and v1-to-v2 reads answered; design at 99ad338a): wt-0098 on e96d86a2, patch 049c0129 (20261022/0098-candidate-v3.diff), prez 2.5.6. R98 read and approved by vc at v2; v3's hashes (patch 049c0129, script 65a3b918 with A11) sent to vc before the GO, and to dc for K1. (edited)
 
 ## TODO
 
