@@ -13,7 +13,7 @@ claims: [ISSUE:0099, ISSUE:0100, ISSUE:0101]
 
 ## DOING
 
-- 0099 (the unused-assets report's two silences): approved by vc; v2 in ~/Devel/scratch/utilz-cc/wt-0099 (critic-rust's v1 read answered; design at b899ace5), to be re-based on 0098's landing b5c588a3, then its START (heavy) to utilz-vc with dc's K1, GO'd at an Intent END (hv's decision 53: Intent first). prez 2.5.7.
+- 0099 v2 (patch 743fb664 on 0098's landing b5c588a3; design at b899ace5): START R99 (heavy) sent to utilz-vc with dc's K1 on the same bytes, for an Intent END (hv's decision 53: Intent first). prez 2.5.7. (edited)
 
 ## TODO
 
