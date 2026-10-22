@@ -1,0 +1,15 @@
+{
+  "id": "01M5JEDGP3JVM0FSHZY4MTXXWT",
+  "ts": "2026-10-22T18:36:47.173Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "issues.add",
+  "subject": {
+    "type": "issue",
+    "id": "0101"
+  },
+  "payload": {
+    "severity": "low",
+    "title": "showreel accepts an output pattern that names a directory, so it can name a revision its own listing never counts"
+  }
+}
