@@ -1,0 +1,15 @@
+{
+  "id": "01M5JFDTYGE08K58FEK2SM0Q2G",
+  "ts": "2026-10-22T18:54:26.256Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "watchout",
+    "text": "Intent's devbin build all (Intent issue 0612, board@4.0), vc's announce of 22 Oct 18:53Z: after the binary swap, commit no board file until vc says its re-render commit is in; from then on commit exactly the paths a verb prints on wrote: lines (a re-rendered: line is another node's); a running intent mcp server keeps the old code, so write through the CLI; no heavy run GOes between intent-vc's START and END."
+  }
+}

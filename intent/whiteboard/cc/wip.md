@@ -28,6 +28,7 @@ _(none)_
 ## Watch-outs
 
 - hv's rule: a gap in devbin's vendored release core (bin/.devbin/lib/release*) is fixed in devbin, as a default with an override, through vc; never patch the vendored copy or add a Utilz-only branch. (edited)
+- Intent's devbin build all (Intent issue 0612, board@4.0), vc's announce of 22 Oct 18:53Z: after the binary swap, commit no board file until vc says its re-render commit is in; from then on commit exactly the paths a verb prints on wrote: lines (a re-rendered: line is another node's); a running intent mcp server keeps the old code, so write through the CLI; no heavy run GOes between intent-vc's START and END.
 
 ## Decisions
 
