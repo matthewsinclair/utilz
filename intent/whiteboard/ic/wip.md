@@ -3,17 +3,17 @@ node: ic
 name: Interface Claude
 role: interface
 session_id: a7bb90d9-eca5-4d5e-befc-4788829b75d1
-heartbeat_at: 2026-10-22 20:02Z
+heartbeat_at: 2026-10-22 20:24Z
 status: active
-focus: "22 Oct, folded for hv's compact: 0097 and 0072 landed and closed; hv runs 0.4.6 build 1494 (dev, from wt-0072); the install of a build of main is held for intent-vc's gap; hv's desk check waits for 23 Oct. Resume: ~/Devel/scratch/utilz-ic/RESUME.md."
-claims: []
+focus: "22 Oct, after hv's compact: 0102 (the log window's three plain lines, hv's yes) filed with its design for vc's read; hold 12, the install of a build of main, waits for intent-vc's gap; arca_swift's CI already on Xcode 27.1 (9c1ebf2, green); todo 7 waits for hv at the desk."
+claims: [ISSUE:0102]
 ---
 
 # Interface Claude (ic)
 
 ## DOING
 
-_(none)_
+- 0102 (menuz's log window colours the three lines it left plain, hv's yes, 22 Oct): filed with its design at 566fcfb8 for vc's read before any code; then R2 and G in Intent's gaps on vc's GO, dc's kovacs leg, critic-swift's read, and the landing in 2.14.2.
 
 ## TODO
 
@@ -22,7 +22,6 @@ _(none)_
 ## Holds
 
 - The install of a build of main on hv's Mac, in place of 0.4.6 build 1494, the dev build hv looked at (hv's choice: main until the 2.14.2 cut installs the release asset). It runs as runs/run-main-install.sh <main's sha>. Released when vc names intent-vc's gap after Intent's macos prepare and GOes its START.
-- Holding for hv's compact (vc's localfold, 22 Oct, on hv's word). Released once the compact has run, then /in-session, ic's pickup and vc's word. Resume state: ~/Devel/scratch/utilz-ic/RESUME.md.
 
 ## Watch-outs
 

@@ -1,0 +1,15 @@
+{
+  "id": "01M5JMJ4H6X4BCGQ367R76WDNR",
+  "ts": "2026-10-22T20:24:10.022Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "kind": "doing",
+    "text": "0102 (menuz's log window colours the three lines it left plain, hv's yes, 22 Oct): filed with its design at 566fcfb8 for vc's read before any code; then R2 and G in Intent's gaps on vc's GO, dc's kovacs leg, critic-swift's read, and the landing in 2.14.2."
+  }
+}
