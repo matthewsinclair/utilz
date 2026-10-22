@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: c487a9ec-e4b1-4372-8b54-4909bcfb102c
-heartbeat_at: 2026-10-22 21:41Z
-status: active
-focus: "22 Oct: cc's 2.14.2 issues all landed and closed (0096, 0098, 0099 5e01502f, 0100 d43fd14b, 0101 d1fa2f57); vc pushes, then dc's final-head gate and dry run, then hv's cut. cc holds for vc's word. Resume: ~/Devel/scratch/utilz-cc/RESUME.md."
+heartbeat_at: 2026-10-22 21:43Z
+status: paused
+focus: "22 Oct, folded for the night on vc's word (hv: fold now, gate tomorrow): every 2.14.2 issue landed and closed, main pushed (b3374e73); cc's worktrees removed. Tomorrow: dc's gate and dry run, then hv's cut; cc waits for vc's word. Resume: ~/Devel/scratch/utilz-cc/RESUME.md."
 claims: []
 ---
 
