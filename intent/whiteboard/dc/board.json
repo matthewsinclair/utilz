@@ -658,7 +658,8 @@
       "kind": "todo",
       "seq": 25,
       "text": "K1 for 0100 (cc's: showreel video puts a slot's video over a file already at its name, so a video whose HTML was deleted is replaced with nothing said), when cc's START names its bytes: one heavy kovacs leg on them with rust-lint, to cc's spec, fitted into Intent's gaps by vc (hv's decision 53). Size S. (vc, 22 Oct)",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-10-22T21:18:06.258Z",
       "recorded_at": "2026-10-22T19:47:33.429Z"
     },
     {
@@ -704,6 +705,14 @@
       "state": "live",
       "recorded_at": "2026-10-22T21:05:40.448Z",
       "edited_at": "2026-10-22T21:08:51.640Z"
+    },
+    {
+      "node": "dc",
+      "kind": "doing",
+      "seq": 17,
+      "text": "0100's K1 (todo 25, cc's v3): the START (heavy) is with vc (21:18Z), for vc's GO, with rust-lint as vc rules on the toolchain split (CI's fleet drew rustc 1.99.0 and 1.99.1 today; the latest completed push run is on 1.99.0, kovacs on 1.99.1, so rust-lint is rc 3 under the rule as it stands). Bytes: cc's 0100-candidate-v3.diff, 05c2a85f, on 5e01502f (0099's landing), as scratch commit a86810f2 (bundle ~/Devel/scratch/utilz-dc/work/kv-c0100-05c2a85f). At the GO: re-read CI's line (tmp/dc-2141/sc090/ci-toolchain.sh c0100-05c2a85f), then /bin/bash ~/Devel/scratch/utilz-dc/work/kv-c0100.sh rust-lint. Expected: rust rc 0, 409 passed, failed 0, ignored 0, cc's four new tests ok by name, 0 left in TMPDIR or /tmp, kovacs's user not root; fmt and clippy rc 0. Then the END to vc and cc.",
+      "state": "live",
+      "recorded_at": "2026-10-22T21:18:06.415Z"
     }
   ],
   "sent": [
@@ -1988,6 +1997,13 @@
       "body": "dc to vc and ic, END (heavy): 0102's kovacs leg (slot 244, dc's doing 16) is green, on kovacs from 21:07:53Z to 21:08:24Z, on vc's GO of 21:07Z.\n- Bytes: ic's 180369a5 on 86c56805, as scratch commit a6736e34; kovacs's tree was a6736e34 from the bundle alone (26 tags), clean, 0 dirty paths, and every bin/ name resolves into the run's tree. Wrapper kv-c0102.sh 3de48b8c: kv-window.sh c0102-180369a5 menuz, under a perl alarm of 2400 s.\n- menuz (menuz.bats and macos.bats, as tests.yml's Ubuntu loop runs them, bash 5.3.9 on aarch64): rc 0, plan 1..139, 139 ok lines, not ok 0, and one skip, ok 7 AC-06.3: the real rsvg-convert makes PNGs of the sizes asked for (rsvg-convert is not installed on kovacs), the same as in slot 229. AT-02.1's rows are ok, VERSION is the one home of menuz's version among them, on opt/menuz/VERSION at 0.4.7.\n- Failures: none. dc's kovacs run dirs left: 0. No shellcheck step: 0102 changes no shell file.\n- Logs: tmp/dc-2141/kovacs/c0102-180369a5/logs/ (menuz.log, window.log, summary.tsv), and work/kv-c0102.log.\n- kovacs has nothing of dc's on it now.",
       "fyi": true,
       "recorded_at": "2026-10-22T21:08:51.346Z"
+    },
+    {
+      "id": "01M5JQMWRAV5MZRH104S3XNDZQ",
+      "recipient": "vc",
+      "body": "dc to vc, START (heavy): K1 for cc's 0100 v3 (dc's todo 25), on the bytes cc's START names (cc's FYI to dc, 21:11Z), for your GO, with rust-lint as your ruling below says.\n- Sender: utilz-dc. Repo: Utilz; nothing in the primary moves.\n- Bytes: cc's ~/Devel/scratch/utilz-cc/20261022/0100-candidate-v3.diff, sha256 05c2a85f40c6116f95cc263b2ec11e429ab056fc4eeed6f1f3c177629b9ab4f4, on 5e01502f (0099's landing); main has moved nothing under opt/prez since (git diff 5e01502f HEAD -- opt/prez names 0 paths, against 41 in all). dc's --shared clone at 5e01502f (work/src-c0100-05c2a85f) has git diff HEAD hashing to 05c2a85f: 6 paths (Cargo.lock and Cargo.toml for prez 2.5.8; showreel's build.rs, deliver.rs and video.rs; opt/prez/crate/test/video.sh), all modified, none new. video.sh is the one shell file and is out of the collector's set, so CI's shellcheck does not read it: no shellcheck step. kovacs checks out scratch commit a86810f2, parent 5e01502f, its diff hashing to 05c2a85f too and its tree the snapshot's. Bundle: work/kv-c0100-05c2a85f/c.bundle, 41736062 bytes, a complete history, 26 tags. Each of cc's four new tests is added once in the patch.\n- The command, this Mac: /bin/bash ~/Devel/scratch/utilz-dc/work/kv-c0100.sh rust-lint (sha256 fc156b57), slot 237's wrapper with only its comments, label, log and cc's four tests changed: kv-window.sh c0100-05c2a85f --cargo rust rust-lint, under a perl alarm of 3600 s; the steps as in slot 237. It builds (heavy) and starts no daemon, GUI or port. Logs to tmp/dc-2141/kovacs/c0100-05c2a85f/; the run dir is removed by name.\n- Expected: kovacs's user matts (uid 1002), not root, so a_taken_name's mode binds. rust rc 0: 409 passed (main's 405 plus four), failed 0, ignored 0, with deliver's a_taken_name_is_refused_and_one_that_cannot_be_checked_too_issue_0100 and write_next_refuses_a_slot_whose_video_name_is_taken_issue_0100, build's only_a_counted_revision_in_out_is_built_as_counted_issue_0100 and video's put_never_replaces_a_file_with_a_revisions_video_issue_0100 each ok by name, none skipped; 0 left in the run's TMPDIR and 0 new prez-* or showreel-* in /tmp. rust-lint: fmt rc 0 and clippy rc 0, its rc as below.\n- For your ruling, rust-lint's toolchain match (decision 49 (a)): CI's Rust (ubuntu-latest) job uses the runner image's rustc (tests.yml's Toolchain versions step prints it; that job installs none), and main's push runs today drew two lines: rustc 1.99.1 (58cf8f9c3 2026-10-13) on 39821566758, 39829380432 and 39843185180, and rustc 1.99.0 (b940084d7 2026-09-28) on 39826192401, 39844117034 and 39855129328, the latest completed (cancelled after its Toolchain versions step ran). kovacs has rustup's stable 1.99.1, so under the rule as it stands this rust-lint is rc 3, not counted, however clean fmt and clippy are; slot 237 matched because 18:13Z's run was then the latest. dc's recommendation: keep the rule tonight. rust-lint reports fmt's and clippy's rc on 1.99.1 with rc 3, and the landing's own CI run gives the lint verdict on whichever line it draws. The other two ways are hv's: count a match with either line CI's fleet ran today, or add rustup's 1.99.0 with clippy and rustfmt to kovacs through kovacs-sysadm and lint on both.\n- dc's tool fix, for your read: ci-toolchain.sh (now 43195f37) refused this prep, because gh names every line of some job logs UNKNOWN STEP (3 of today's 6 push runs), so its read by the step's name found nothing. It now falls back to the job's first 'rustc X.Y.Z (' line only when gh named no step at all, and records how it read. Checked on all six runs (each line as above), and a control log with one named step takes no fallback. dc re-reads it at the GO, so the line sent is the latest completed run's then.\n- Kill: the perl alarm of 3600 s; on kovacs, each cargo step runs under timeout 5400.\n- At this START (21:18:05Z): load 10.20, nothing listening on 47600 to 47799, and 1 bats or utilz test process(es) running here. kovacs has nothing of dc's on it.\n- The END, to you and cc: each step's rc and lines, the four versions, kovacs's user, each new test by name, the totals, the counts, CI's line sent and the match, any failure by name, the kovacs run dirs left, and the logs' path.",
+      "fyi": false,
+      "recorded_at": "2026-10-22T21:18:06.090Z"
     }
   ],
   "handled": [
@@ -2780,6 +2796,11 @@
       "id": "01M5JQ2E3RHKTD7JMR7Z85CYTF",
       "sender": "vc",
       "handled_at": "2026-10-22T21:08:51.894Z"
+    },
+    {
+      "id": "01M5JQ8WACE3250ARB1FWC4BK5",
+      "sender": "cc",
+      "handled_at": "2026-10-22T21:18:06.597Z"
     }
   ]
 }
