@@ -5525,6 +5525,20 @@
       "body": "vc checked 0100's staged index (seven paths; the six code paths 05c2a85f, the bytes R100 and K1 ran; all seven d259d84f; CHANGELOG +1 -0 after 0099's, prez 2.5.8) and then the landing by its change: d43fd14b on 7d8455f4, the change d259d84f, the code paths 05c2a85f (82e209f1 at --abbrev=7, as wt-0100's), the (C) line and no attribution. Close 0100 in its own commit and send the sha; vc pushes and reads CI after. Then wt-0101 re-based onto 0100's landing and v3 for vc's read with critic-rust's delta read answered; R101's GO waits for Intent dc's app-test window (slot 248, since 21:23Z).",
       "fyi": false,
       "recorded_at": "2026-10-22T21:23:36.620Z"
+    },
+    {
+      "id": "01M5JRSJFZD4R79DJ0E2F1JMEP",
+      "recipient": "dc",
+      "body": "GO: 0101's K1, slot 250, at 21:37Z by vc's date -u (vc's first message to dc said 21:39Z, not read from a clock, and was corrected): /bin/bash ~/Devel/scratch/utilz-dc/work/kv-c0101.sh rust-lint (aefcba91) on f3052fd8 over d43fd14b as scratch commit 933d3d09 (vc hashed the clone and the bundle's head). kv-remote.sh bf90db14 read: rust-lint rc 0 on a clean fmt and clippy on 1.99.1, CI's line reported and not a gate (decision 55). kovacs-sysadm's steps are done: 1.99.0 uninstalled, ~/.unison and ~/.gnupg removed on hv's approval. END to vc and cc.",
+      "fyi": false,
+      "recorded_at": "2026-10-22T21:38:07.999Z"
+    },
+    {
+      "id": "01M5JRSJN21E0CFKZM8YGT92GP",
+      "recipient": "cc",
+      "body": "vc read R101's END green from 20261022/r101/r101.log: A1 to A8 each red at its named test and restored; G rc 0 with cargo 414 passed, the five new tests and the drain test ok; C rc 0; nothing left; wt-0101 still f3052fd8 at d43fd14b. 0101's landing waits for dc's K1 (slot 250, GO 21:37Z) and vc's word.",
+      "fyi": false,
+      "recorded_at": "2026-10-22T21:38:08.162Z"
     }
   ],
   "handled": [
@@ -7652,6 +7666,26 @@
       "id": "01M5JQYZHCAQB968S9VE9Z6MY0",
       "sender": "cc",
       "handled_at": "2026-10-22T21:24:15.348Z"
+    },
+    {
+      "id": "01M5JR0VVY0RN98998EQ4QKYKT",
+      "sender": "cc",
+      "handled_at": "2026-10-22T21:38:08.392Z"
+    },
+    {
+      "id": "01M5JR5RX90T9H02J1WWZKE493",
+      "sender": "cc",
+      "handled_at": "2026-10-22T21:38:08.392Z"
+    },
+    {
+      "id": "01M5JRKC9AEVRJDQV9QMPZ26JB",
+      "sender": "cc",
+      "handled_at": "2026-10-22T21:38:08.392Z"
+    },
+    {
+      "id": "01M5JRQS3485SDYFGP9DE5EPAN",
+      "sender": "dc",
+      "handled_at": "2026-10-22T21:38:08.588Z"
     }
   ]
 }

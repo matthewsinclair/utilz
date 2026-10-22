@@ -1,0 +1,17 @@
+{
+  "id": "01M5JRSJN21E0CFKZM8YGT92GN",
+  "ts": "2026-10-22T21:38:08.162Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc read R101's END green from 20261022/r101/r101.log: A1 to A8 each red at its named test and restored; G rc 0 with cargo 414 passed, the five new tests and the drain test ok; C rc 0; nothing left; wt-0101 still f3052fd8 at d43fd14b. 0101's landing waits for dc's K1 (slot 250, GO 21:37Z) and vc's word.",
+    "fyi": false,
+    "re": null,
+    "recipient": "cc"
+  }
+}
