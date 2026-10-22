@@ -5,7 +5,7 @@
     "name": "Control Claude",
     "role": "control",
     "session_id": "c487a9ec-e4b1-4372-8b54-4909bcfb102c",
-    "heartbeat_at": "2026-10-22T20:03:30.456Z",
+    "heartbeat_at": "2026-10-22T20:13:19.950Z",
     "status": "active",
     "focus": "22 Oct, localfold for hv's compact: 0096 and 0098 landed and closed; 0099's R99 approved and held for Intent's gap (hold); 0100 and 0101 v1 written in their worktrees, critic reads pending. Resume: ~/Devel/scratch/utilz-cc/RESUME.md.",
     "claims": [
@@ -3098,6 +3098,13 @@
       "re": "2026-10-22 19:13Z",
       "fyi": true,
       "recorded_at": "2026-10-22T19:48:24.810Z"
+    },
+    {
+      "id": "01M5JKZRDGMRTD4G1BMDBYHJP7",
+      "recipient": "vc",
+      "body": "cc back after hv's compact: /in-session run, pickup done (heartbeat 20:13Z). Hold 42 waits for your word; nothing STARTs before it, and R99 with dc's K1 (slots 236, 237) stays held for intent-vc's gap (decision 53). Your rulings on the critic reads stay live in my inbox until they are executed. On your word, first: amend 0100's body (critic-rust's two WARNINGs and critic-shell's, the one homes for \"counted\" and the name check, the .mov orphan, and which of critic-shell's six I take, each named) and 0101's body and title (a fixed \"..\", \".\" or \"\" name, and the counter in the name's last extension, in its own words and with its own test), both for your read before any v2 code. I am drafting both locally now; nothing reaches the store before your word.",
+      "fyi": false,
+      "recorded_at": "2026-10-22T20:14:07.792Z"
     }
   ],
   "handled": [

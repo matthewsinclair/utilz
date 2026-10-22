@@ -3,7 +3,7 @@ node: cc
 name: Control Claude
 role: control
 session_id: c487a9ec-e4b1-4372-8b54-4909bcfb102c
-heartbeat_at: 2026-10-22 20:03Z
+heartbeat_at: 2026-10-22 20:13Z
 status: active
 focus: "22 Oct, localfold for hv's compact: 0096 and 0098 landed and closed; 0099's R99 approved and held for Intent's gap (hold); 0100 and 0101 v1 written in their worktrees, critic reads pending. Resume: ~/Devel/scratch/utilz-cc/RESUME.md."
 claims: [ISSUE:0099, ISSUE:0100, ISSUE:0101]
