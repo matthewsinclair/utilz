@@ -3,9 +3,9 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: aa2e759c-f89d-4d9a-8001-e734111bf44b
-heartbeat_at: 2026-10-22 20:16Z
-status: active
-focus: "22 Oct, back from hv's compact (hold 23 released on vc's word): 0099's K1 (doing 15) STARTed and held with R99 (slot 237) for intent-vc's gap; then todos 25 and 26 (0100, 0101) on cc's STARTs, and todo 18 after Intent's cut (hv's decision 53). Resume: ~/Devel/scratch/utilz-dc/RESUME.md."
+heartbeat_at: 2026-10-22 21:44Z
+status: paused
+focus: "22 Oct, folded for the night (hv's "Fold now, gate tomorrow"): kovacs legs green for 0099, 0102, 0100 and 0101, and every 2.14.2 issue landed and closed. Next session's first act: todo 18, the final-head gate and dry run, on the head vc names. Resume: ~/Devel/scratch/utilz-dc/RESUME.md."
 claims: []
 ---
 
@@ -13,12 +13,11 @@ claims: []
 
 ## DOING
 
-- 0102's kovacs leg (todo 27, ic's, menuz 0.4.7, hv's decision 54) is green in slot 244, on vc's GO of 21:07Z (kovacs 21:07:53Z to 21:08:24Z), on 180369a5 over 86c56805 as a6736e34: menuz rc 0, plan 1..139, not ok 0, one skip (AC-06.3, rsvg-convert not on kovacs), as in slot 229; 0 run dirs left. The END went to vc and ic. Left: remove its three work dirs (src-, kv- and sc-c0102-180369a5 under ~/Devel/scratch/utilz-dc/work) once 0102 closes; its logs stay in tmp/dc-2141/kovacs/c0102-180369a5/. (edited)
-- 0101's K1 (todo 26, cc's v3) is green in slot 250, on vc's GO of 21:37Z (kovacs 21:38:02Z to 21:39:16Z), on f3052fd8 over d43fd14b as 933d3d09: rust rc 0, 414 passed, failed 0, ignored 0, cc's five new tests and the drain test ok by name, 0 left in TMPDIR or /tmp, kovacs's user matts (uid 1002); rust-lint rc 0, fmt and clippy clean on 1.99.1 (decision 55; CI's 1.99.0 reported). The END went to vc and cc. Left: remove its three work dirs (src-, kv- and sc-c0101-f3052fd8 under ~/Devel/scratch/utilz-dc/work) once 0101 closes; its logs stay in tmp/dc-2141/kovacs/c0101-f3052fd8/. (edited)
+_(none)_
 
 ## TODO
 
-- 2.14.2's final-head gate, once 0099, 0100, 0101 (cc's) and 0102 (ic's) have landed and vc names the sha, and after Intent's cut: tonight's host order is Intent first, then this gate and dry run, then hv's 2.14.2 cut (hv's decision 53). 0072 and 0095 to 0098 have landed. The menuz-app phase's text names 0097's job (xcode-27, Xcode 27.1). Then final-head-gate.sh's phases, the report and the dry run, then the post-release steps (~/Devel/scratch/utilz-dc/RESUME.md). Size L. (edited)
+- 2.14.2's final-head gate and dry run, first thing next session (hv's "Fold now, gate tomorrow", through vc, 22 Oct), on the head vc names then: main's head, whose code is b3374e73's unless something lands first. Every 2.14.2 issue has landed and closed (0072 and 0095 to 0102). Then final-head-gate.sh's phases (113fee7e; the kovacs phase's rust-lint under vc's decision 55, on kv-remote.sh bf90db14), the report and the dry run under vc's freeze, then hv's 2.14.2 cut and the post-release steps (~/Devel/scratch/utilz-dc/RESUME.md). Size L. (edited)
 
 ## Holds
 

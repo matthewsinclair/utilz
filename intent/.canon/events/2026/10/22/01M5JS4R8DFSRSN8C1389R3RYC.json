@@ -1,0 +1,16 @@
+{
+  "id": "01M5JS4R8DFSRSN8C1389R3RYC",
+  "ts": "2026-10-22T21:44:14.349Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "todo",
+    "seq": 18,
+    "text": "2.14.2's final-head gate and dry run, first thing next session (hv's \"Fold now, gate tomorrow\", through vc, 22 Oct), on the head vc names then: main's head, whose code is b3374e73's unless something lands first. Every 2.14.2 issue has landed and closed (0072 and 0095 to 0102). Then final-head-gate.sh's phases (113fee7e; the kovacs phase's rust-lint under vc's decision 55, on kv-remote.sh bf90db14), the report and the dry run under vc's freeze, then hv's 2.14.2 cut and the post-release steps (~/Devel/scratch/utilz-dc/RESUME.md). Size L."
+  }
+}
