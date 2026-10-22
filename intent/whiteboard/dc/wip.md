@@ -14,12 +14,11 @@ claims: []
 ## DOING
 
 - 0102's kovacs leg (todo 27, ic's, menuz 0.4.7, hv's decision 54) is green in slot 244, on vc's GO of 21:07Z (kovacs 21:07:53Z to 21:08:24Z), on 180369a5 over 86c56805 as a6736e34: menuz rc 0, plan 1..139, not ok 0, one skip (AC-06.3, rsvg-convert not on kovacs), as in slot 229; 0 run dirs left. The END went to vc and ic. Left: remove its three work dirs (src-, kv- and sc-c0102-180369a5 under ~/Devel/scratch/utilz-dc/work) once 0102 closes; its logs stay in tmp/dc-2141/kovacs/c0102-180369a5/. (edited)
-- 0100's K1 (todo 25, cc's v3) is green on rust in slot 246, on vc's GO of 21:19Z (kovacs 21:19:46Z to 21:21:07Z), on 05c2a85f over 5e01502f as a86810f2: rust rc 0, 409 passed, failed 0, ignored 0, cc's four new tests ok by name, 0 left in TMPDIR or /tmp, kovacs's user matts (uid 1002); rust-lint fmt rc 0 and clippy rc 0 on 1.99.1, rc 3 and not counted against CI's 1.99.0 (run 39855129328), as vc ruled. The END went to vc and cc. Left: remove its three work dirs (src-, kv- and sc-c0100-05c2a85f under ~/Devel/scratch/utilz-dc/work) once 0100 closes; its logs stay in tmp/dc-2141/kovacs/c0100-05c2a85f/. (edited)
+- 0101's K1 (todo 26, cc's v3): the START (heavy) is with vc (21:37Z), for vc's GO, best after kovacs-sysadm's 1.99.0 removal and step 2. rust-lint under hv's ruling of 22 Oct: rustc 1.99.1 only, green when fmt and clippy are clean, CI's latest line reported, not a gate (kv-remote.sh bf90db1410e8 and final-head-gate.sh 113fee7ebb44, for vc's read). Bytes: cc's 0101-candidate-v3.diff, f3052fd8, on d43fd14b (0100's landing), as scratch commit 933d3d09 (bundle ~/Devel/scratch/utilz-dc/work/kv-c0101-f3052fd8). On the GO: /bin/bash ~/Devel/scratch/utilz-dc/work/kv-c0101.sh rust-lint. Expected: rust rc 0, 414 passed, failed 0, ignored 0, cc's five new tests and the drain test ok by name, 0 left in TMPDIR or /tmp, kovacs's user not root; rust-lint rc 0 on 1.99.1. Then the END to vc and cc.
 
 ## TODO
 
 - 2.14.2's final-head gate, once 0099, 0100, 0101 (cc's) and 0102 (ic's) have landed and vc names the sha, and after Intent's cut: tonight's host order is Intent first, then this gate and dry run, then hv's 2.14.2 cut (hv's decision 53). 0072 and 0095 to 0098 have landed. The menuz-app phase's text names 0097's job (xcode-27, Xcode 27.1). Then final-head-gate.sh's phases, the report and the dry run, then the post-release steps (~/Devel/scratch/utilz-dc/RESUME.md). Size L. (edited)
-- K1 for 0101 (cc's: showreel accepts an output pattern that names a directory, so it can name a revision its own listing never counts), when cc's START names its bytes: one heavy kovacs leg on them with rust-lint, to cc's spec, fitted into Intent's gaps by vc (hv's decision 53). Size S. (vc, 22 Oct)
 
 ## Holds
 
