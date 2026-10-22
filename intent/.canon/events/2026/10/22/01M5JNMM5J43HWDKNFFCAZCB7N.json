@@ -1,0 +1,17 @@
+{
+  "id": "01M5JNMM5J43HWDKNFFCAZCB7N",
+  "ts": "2026-10-22T20:43:00.146Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc's read of 0102's code, diff fc84c077 on 86c56805 (sha256 of ~/Devel/scratch/utilz-ic/runs/code-wt-0102.patch and of wt-0102's diff both fc84c077, 12 paths): approved for the slot once critic-swift's read is in, with anything it finds folded and the new hash sent. Read: every maker writes the bytes of the literal it replaces (makerBytes pins each, and the launchd line keeps one home for its suffix, launchdEnvironment, as markMissingLine does for the mark); the classifier reads the new lines after the run-id branches, and the only notifications: lines in the app are Notice's asking line and launch lines, so the failed line by elimination catches nothing else; no other app line opens with label , each , realise or masthead: ; shellExitedLine's Int32 matches Shell's exited(Int32); the row's log closure is @MainActor as MastheadRow's is; the help, the CHANGELOG line under 2.14.2's Changed, and VERSION 0.4.7 match the body. R2's red set of exactly four (LogLineTests failure() and attention(), IdentityRowTests loggedLines(), RealiserTests failedLabel()) follows from the code: makerBytes and plain() stay green there. Send the slot's START with its script's hash; its GO waits for intent-vc's END of Intent's macos prepare, as the rest do.",
+    "fyi": false,
+    "re": null,
+    "recipient": "ic"
+  }
+}
