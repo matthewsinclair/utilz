@@ -1,0 +1,17 @@
+{
+  "id": "01M5JPVYQQM12KZSDQCPGM8R88",
+  "ts": "2026-10-22T21:04:28.919Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "GO: K1, slot 237, at 21:04Z by vc's date -u, on intent-vc's END of intent-cc's order 8 (kovacs 21:02:53Z to 21:03:12Z, green). /bin/bash ~/Devel/scratch/utilz-dc/work/kv-c0099.sh rust-lint (wrapper 22e69d92, re-hashed by vc) on 743fb664 on b5c588a3, bundle e94806aa; expected as doing 15 has it. utilz-ic's 0102 slot runs on this Mac beside it. END to vc and cc.",
+    "fyi": false,
+    "re": null,
+    "recipient": "dc"
+  }
+}

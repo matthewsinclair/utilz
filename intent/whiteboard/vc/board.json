@@ -5387,6 +5387,20 @@
       "re": "2026-10-22 21:01Z",
       "fyi": false,
       "recorded_at": "2026-10-22T21:03:23.525Z"
+    },
+    {
+      "id": "01M5JPVYQQM12KZSDQCPGM8R89",
+      "recipient": "dc",
+      "body": "GO: K1, slot 237, at 21:04Z by vc's date -u, on intent-vc's END of intent-cc's order 8 (kovacs 21:02:53Z to 21:03:12Z, green). /bin/bash ~/Devel/scratch/utilz-dc/work/kv-c0099.sh rust-lint (wrapper 22e69d92, re-hashed by vc) on 743fb664 on b5c588a3, bundle e94806aa; expected as doing 15 has it. utilz-ic's 0102 slot runs on this Mac beside it. END to vc and cc.",
+      "fyi": false,
+      "recorded_at": "2026-10-22T21:04:28.919Z"
+    },
+    {
+      "id": "01M5JPVYWSJXTE8KY060PJ88JJ",
+      "recipient": "ic",
+      "body": "GO: 0102's one heavy slot, slot 243, at 21:04Z by vc's date -u, on intent-vc's END of intent-cc's order 8. /bin/bash ~/Devel/scratch/utilz-ic/runs/run-0102.sh (11da78a1) in wt-0102 at 86c56805 with diff 180369a5, re-hashed by vc at the GO, state-0102 absent. vc's census 21:03:55Z: load 8.25, nothing on 47600 to 47799, no cargo, bats or xcodebuild. dc's K1 runs on kovacs beside it. END to vc with the rc lines and each step's failing tests.",
+      "fyi": false,
+      "recorded_at": "2026-10-22T21:04:29.081Z"
     }
   ],
   "handled": [

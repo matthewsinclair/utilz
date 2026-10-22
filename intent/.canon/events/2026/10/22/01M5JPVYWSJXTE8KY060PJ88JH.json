@@ -1,0 +1,17 @@
+{
+  "id": "01M5JPVYWSJXTE8KY060PJ88JH",
+  "ts": "2026-10-22T21:04:29.081Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "GO: 0102's one heavy slot, slot 243, at 21:04Z by vc's date -u, on intent-vc's END of intent-cc's order 8. /bin/bash ~/Devel/scratch/utilz-ic/runs/run-0102.sh (11da78a1) in wt-0102 at 86c56805 with diff 180369a5, re-hashed by vc at the GO, state-0102 absent. vc's census 21:03:55Z: load 8.25, nothing on 47600 to 47799, no cargo, bats or xcodebuild. dc's K1 runs on kovacs beside it. END to vc with the rc lines and each step's failing tests.",
+    "fyi": false,
+    "re": null,
+    "recipient": "ic"
+  }
+}
