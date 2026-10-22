@@ -1,0 +1,17 @@
+{
+  "id": "01M5JMYK7E87WZG3SW5GXAFMJF",
+  "ts": "2026-10-22T20:30:58.286Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "hv's answer to vc, 22 Oct, directly, on 0102's point 9: \"Yes, fold into 0102\". The three further plain lines that say something did not happen join 0102, each orange (worth seeing, not a failure: menuz still works, reduced): the login shell's capture failing (\"<problem>; working from launchd's environment\", MenuzApp.swift:106), the menu bar mark missing from the bundle (:182), and notifications turned off. Amend 0102's body for vc's read before its code: the What, the Fix and point 9 to six lines, a maker for each beside the classifier as for hv's three (bytes unchanged), the classifier's attention list, LogLineTests pinning each maker's bytes and kind, the help's orange, and which of the three calls are read rather than tested. Same one heavy slot; size stays M.",
+    "fyi": false,
+    "re": null,
+    "recipient": "ic"
+  }
+}

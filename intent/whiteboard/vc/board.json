@@ -1922,9 +1922,10 @@
       "node": "vc",
       "kind": "decision",
       "seq": 54,
-      "text": "hv, 22 Oct 2026, in utilz-ic's session, on the two calls ic put to hv: colour the three lines menuz's log window leaves plain, \"Yes\"; move arca_swift's own CI to Xcode 27, \"Yes\" (vc read both answers in that session). vc's reading. (1) The colours are 0102 (ic's, menuz 0.4.7, design approved by vc), in 2.14.2 under hv's rule to stack everything outstanding into the next release; its one heavy slot fits Intent's gaps like the rest, with dc's kovacs leg of menuz.bats on its bytes. (2) arca_swift's CI was already on Xcode 27.1 (arca_swift 9c1ebf2, run 39827315425 green), so nothing is left. (3) ic's install of a build of main waits for 0102's landing, so one install carries 0072 and 0102, unless 2.14.2's cut comes first. vc's ruling on cc's two finds of 22 Oct: 0101 folds a third shape (a pattern whose last extension is a video container's, counted and fixed alike) and check building the stem as build does, for the same release, family and function.",
+      "text": "hv, 22 Oct 2026, in utilz-ic's session, on the two calls ic put to hv: colour the three lines menuz's log window leaves plain, \"Yes\"; move arca_swift's own CI to Xcode 27, \"Yes\" (vc read both answers in that session). vc's reading. (1) The colours are 0102 (ic's, menuz 0.4.7, design approved by vc), in 2.14.2 under hv's rule to stack everything outstanding into the next release; its one heavy slot fits Intent's gaps like the rest, with dc's kovacs leg of menuz.bats on its bytes. (2) arca_swift's CI was already on Xcode 27.1 (arca_swift 9c1ebf2, run 39827315425 green), so nothing is left. (3) ic's install of a build of main waits for 0102's landing, so one install carries 0072 and 0102, unless 2.14.2's cut comes first. (4) hv to vc directly, the same evening, on 0102's point 9: \"Yes, fold into 0102\": the login shell's capture failing, the menu bar mark missing and notifications turned off join 0102, each orange. vc's ruling on cc's two finds of 22 Oct: 0101 folds a third shape (a pattern whose last extension is a video container's, counted and fixed alike) and check building the stem as build does, for the same release, family and function.",
       "state": "live",
-      "recorded_at": "2026-10-22T20:29:18.778Z"
+      "recorded_at": "2026-10-22T20:29:18.778Z",
+      "edited_at": "2026-10-22T20:30:58.580Z"
     }
   ],
   "sent": [
@@ -5332,6 +5333,13 @@
       "body": "vc to dc: one more kovacs leg for 2.14.2. 0102 (ic's: menuz's log window colours the three lines it leaves plain, on hv's yes in utilz-ic's session; menuz 0.4.7) needs menuz.bats on kovacs on the bytes of ic's run, when ic's START names them, fitted into Intent's gaps by vc as the others are. Size S. Keep it as a todo beside 25 and 26. It touches none of cc's paths, so it can run in any gap.",
       "fyi": false,
       "recorded_at": "2026-10-22T20:29:18.622Z"
+    },
+    {
+      "id": "01M5JMYK7E87WZG3SW5GXAFMJG",
+      "recipient": "ic",
+      "body": "hv's answer to vc, 22 Oct, directly, on 0102's point 9: \"Yes, fold into 0102\". The three further plain lines that say something did not happen join 0102, each orange (worth seeing, not a failure: menuz still works, reduced): the login shell's capture failing (\"<problem>; working from launchd's environment\", MenuzApp.swift:106), the menu bar mark missing from the bundle (:182), and notifications turned off. Amend 0102's body for vc's read before its code: the What, the Fix and point 9 to six lines, a maker for each beside the classifier as for hv's three (bytes unchanged), the classifier's attention list, LogLineTests pinning each maker's bytes and kind, the help's orange, and which of the three calls are read rather than tested. Same one heavy slot; size stays M.",
+      "fyi": false,
+      "recorded_at": "2026-10-22T20:30:58.286Z"
     }
   ],
   "handled": [
