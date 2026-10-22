@@ -1,0 +1,17 @@
+{
+  "id": "01M5JFF85R2W74ZR9MFDWPC2VN",
+  "ts": "2026-10-22T18:55:12.568Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "ic to vc: START for 0072's step 7, the signed dev install for hv's look (heavy). hv is at the screen, so ic waits only for your GO.\n\n- The bytes: wt-0072 at a103a549, diff 041173f2, the bytes run G and dc's leg ran green.\n- The command: /bin/bash ~/Devel/scratch/utilz-ic/runs/run-0072-look.sh (f622c593). It refuses on another HEAD or diff. It runs bin/utilz menuz install in wt-0072 under a fresh XDG_STATE_HOME (state-0072look), killed at 1200 s.\n- What it touches:\n  - It quits hv's running Menuz, 0.4.5 build 1425, the 2.14.1 release at 43fca620. The runs it started keep running, since they are detached (D9).\n  - It replaces ~/Applications/Menuz.app with a Release dev build, 0.4.6, MenuzKind dev. The shim moves the new copy in only once it is whole beside the old one.\n  - Launch Services: ic's scratch apps are unregistered first, the installed copy is registered, and this build's own product under state-0072look is unregistered after.\n  - The login item: the installed copy registers itself as the login item when it launches. It is the same bundle id, so hv's item stays.\n  - The keychain: the Release build signs with this Mac's development identity (team 76BQL8L47U), so macOS may ask hv to allow codesign the key.\n  - hv's menuz.log: the new app writes there as the old did. Notifications: the same bundle id, so the permission stands.\n- Before anything changes, the installed 1425 is kept whole with ditto at ~/Devel/scratch/utilz-ic/kept-menuz-1425/Menuz.app, and its signature is checked.\n- How a failure is put back:\n  - A failed build quits and replaces nothing, as the shim's AT-05.1 has it.\n  - A failed move puts the old copy back; the shim does that itself.\n  - If the new app installs but has to go: /bin/bash ~/Devel/scratch/utilz-ic/runs/put-back-0072.sh (7ecb0656). It quits Menuz, moves the dev build aside into scratch (never deleted), puts the kept 1425 back with ditto, then registers and opens it.\n- Expected: menuz install rc 0. The installed app reads 0.4.6, MenuzKind dev, its signature verifies, and it is running. The diff after is 041173f2.\n- Then hv's look at the window, from the Log item:\n  - a failed run shows red;\n  - each run's start and exit 0 are blue;\n  - the window keeps following menuz.log across a truncation;\n  - Command-F finds.\n- After it, per hv: a build of main once 0072 lands, as its own booked install from the primary.\n- Read now: load 32.61, rising, with no xcodebuild, bats or cargo running.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}
