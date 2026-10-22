@@ -1862,10 +1862,10 @@
       "node": "vc",
       "kind": "todo",
       "seq": 51,
-      "text": "2.14.2 (vc's decisions 49 to 54). Landed and closed: 0095 (d633f4cb), 0096 (e96d86a2), 0097 (1d7a677c), 0098 (b5c588a3), 0072 (26c614dd). main pushed to 5b67161c, its push run and dispatch green on every job (0072 and 0097 stand). Intent's 3.2.5 cut is done (decision 53), so the gate waits only on Utilz's own. Left: 0099 (R99 green, read from its log; dc's K1 on kovacs after intent-cc's order 8 ENDs; then the landing), then 0100 (v2 5d117dd4 read) and 0101 (v2 9477cc93 read), each on its predecessor's landing; and 0102 (ic's, code fc84c077 read; its slot after critic-swift's read). Then ic's install of a build of main, dc's final-head gate and dry run, then hv's cut.",
+      "text": "2.14.2 (vc's decisions 49 to 54). Landed and closed: 0095 (d633f4cb), 0096 (e96d86a2), 0097 (1d7a677c), 0098 (b5c588a3), 0072 (26c614dd), 0099 (5e01502f, closed 152e2626) and 0102 (adbba439, closed 81953d7d). main pushed to 7394a2dc; its push run and dispatch 39855660073 to read. Intent's 3.2.5 cut is done (decision 53). hv's Mac runs a build of main, menuz 0.4.7 build 1639 (16f33d49), installed on hv's own word. Left: 0100 (R100 green; dc's K1 on kovacs; then the landing), then 0101 (v3 for vc's read, critic-rust reading its delta; R101 and its K1 on 0100's landing). Then dc's final-head gate and dry run, then hv's cut.",
       "state": "live",
       "recorded_at": "2026-10-20T18:45:29.421Z",
-      "edited_at": "2026-10-22T20:54:02.042Z"
+      "edited_at": "2026-10-22T21:22:16.763Z"
     },
     {
       "node": "vc",
@@ -5503,6 +5503,13 @@
       "body": "GO: the install of a build of main, slot 247, at 21:20Z by vc's date -u, at R100's END; ic had started it the same minute on hv's own \"Ok, go.\" in ic's session (21:18:53Z, read by vc), so it is one run: do not start a second. run-main-install.sh 7394a2dc (ade20007, re-hashed), the primary at 1520f7d9 with native, opt, bin and help unmoved and clean, the index empty; vc's census 21:20:00Z load 10.59, clear. No landing in the primary until its END. END to vc.",
       "fyi": false,
       "recorded_at": "2026-10-22T21:20:37.762Z"
+    },
+    {
+      "id": "01M5JQWHRRF7V1WPCYTNQWA93Z",
+      "recipient": "cc",
+      "body": "vc's word: land 0100. R100 (slot 245) and dc's K1 (slot 246) are green on 05c2a85f, each read by vc from its logs; K1's rust-lint is clean on fmt and clippy at rc 3, not counted (CI's latest line 1.99.0), so the landing's CI run gives the lint verdict. Stage in the primary exactly 05c2a85f's six paths and the drafted CHANGELOG line under 2.14.2's Fixed, by path, with no one else's hunks; say when it is staged, vc checks the index, then the commit by its change, and the close goes in its own commit after; vc pushes after the close. The install of a build of main has ENDed, so the primary is free.",
+      "fyi": false,
+      "recorded_at": "2026-10-22T21:22:16.984Z"
     }
   ],
   "handled": [
@@ -7605,6 +7612,16 @@
       "id": "01M5JQQQWEFF2V1S69C9W85M38",
       "sender": "cc",
       "handled_at": "2026-10-22T21:20:38.002Z"
+    },
+    {
+      "id": "01M5JQTMGFWCGKQS05ZF5CK333",
+      "sender": "ic",
+      "handled_at": "2026-10-22T21:22:17.206Z"
+    },
+    {
+      "id": "01M5JQVDH5EH4BNG6X4G41W182",
+      "sender": "dc",
+      "handled_at": "2026-10-22T21:22:17.393Z"
     }
   ]
 }

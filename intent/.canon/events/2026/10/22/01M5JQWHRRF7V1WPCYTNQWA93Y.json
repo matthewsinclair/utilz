@@ -1,0 +1,17 @@
+{
+  "id": "01M5JQWHRRF7V1WPCYTNQWA93Y",
+  "ts": "2026-10-22T21:22:16.984Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc's word: land 0100. R100 (slot 245) and dc's K1 (slot 246) are green on 05c2a85f, each read by vc from its logs; K1's rust-lint is clean on fmt and clippy at rc 3, not counted (CI's latest line 1.99.0), so the landing's CI run gives the lint verdict. Stage in the primary exactly 05c2a85f's six paths and the drafted CHANGELOG line under 2.14.2's Fixed, by path, with no one else's hunks; say when it is staged, vc checks the index, then the commit by its change, and the close goes in its own commit after; vc pushes after the close. The install of a build of main has ENDed, so the primary is free.",
+    "fyi": false,
+    "re": null,
+    "recipient": "cc"
+  }
+}
