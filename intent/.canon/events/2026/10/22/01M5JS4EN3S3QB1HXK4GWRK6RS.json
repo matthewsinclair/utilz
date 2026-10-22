@@ -1,0 +1,16 @@
+{
+  "id": "01M5JS4EN3S3QB1HXK4GWRK6RS",
+  "ts": "2026-10-22T21:44:04.515Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "todo",
+    "seq": 51,
+    "text": "2.14.2 (vc's decisions 49 to 55). Every issue landed and closed: 0095 (d633f4cb), 0096 (e96d86a2), 0097 (1d7a677c), 0098 (b5c588a3), 0072 (26c614dd), 0099 (5e01502f), 0102 (adbba439), 0100 (d43fd14b) and 0101 (d1fa2f57); no open issues; main pushed to b3374e73. Next session, in order: read push run 39859337814 and dispatch 39859347138 on b3374e73 (a red reopens its issue); name the head to dc for the final-head gate and dry run (todo 18); then hv's cut, the post-release steps and done.md's 2.14.2 entry."
+  }
+}

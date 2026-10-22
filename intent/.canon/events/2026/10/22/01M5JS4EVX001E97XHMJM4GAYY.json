@@ -1,0 +1,15 @@
+{
+  "id": "01M5JS4EVX001E97XHMJM4GAYY",
+  "ts": "2026-10-22T21:44:04.733Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "hold",
+    "text": "Holding 2.14.2's final-head gate, dry run and cut for the next session (hv's word, 22 Oct: \"Fold now, gate tomorrow\"). Released at the next session's pickup. Resume: ~/Devel/scratch/utilz-vc/RESUME.md and todo 51."
+  }
+}
