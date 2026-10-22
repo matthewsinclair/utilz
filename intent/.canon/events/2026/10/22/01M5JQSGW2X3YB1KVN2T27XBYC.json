@@ -1,0 +1,17 @@
+{
+  "id": "01M5JQSGW2X3YB1KVN2T27XBYC",
+  "ts": "2026-10-22T21:20:37.762Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "GO: the install of a build of main, slot 247, at 21:20Z by vc's date -u, at R100's END; ic had started it the same minute on hv's own \"Ok, go.\" in ic's session (21:18:53Z, read by vc), so it is one run: do not start a second. run-main-install.sh 7394a2dc (ade20007, re-hashed), the primary at 1520f7d9 with native, opt, bin and help unmoved and clean, the index empty; vc's census 21:20:00Z load 10.59, clear. No landing in the primary until its END. END to vc.",
+    "fyi": false,
+    "re": null,
+    "recipient": "ic"
+  }
+}

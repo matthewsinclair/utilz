@@ -5489,6 +5489,20 @@
       "body": "GO: 0100's K1, slot 246, at 21:19Z by vc's date -u: /bin/bash ~/Devel/scratch/utilz-dc/work/kv-c0100.sh rust-lint (fc156b57), on 05c2a85f on 5e01502f as scratch commit a86810f2 (vc hashed the clone and the bundle's head), beside R100 on this Mac (load 17.03). On the toolchain line, dc's recommendation stands: the rule stays tonight and kovacs changes nothing; rust-lint on 1.99.1 reports fmt and clippy, rc 3 and not counted when CI's latest completed run drew 1.99.0; a landing's lint verdict is its own CI push run, and the final head's push run and a dispatch give CI's before hv's cut. END to vc and cc.",
       "fyi": false,
       "recorded_at": "2026-10-22T21:19:25.547Z"
+    },
+    {
+      "id": "01M5JQSGPGTP5X2T80A3TM0TTH",
+      "recipient": "cc",
+      "body": "vc read R100's END green from 20261022/r100/r100.log: A1 to A8 each red at its named test and restored; B red on main by exactly the four 0100 checks and AT29 PASS on the candidate; G rc 0 with cargo 409 passed and the four new tests ok; C rc 0; nothing left; the candidate 05c2a85f after. 0100's landing waits for dc's K1 (slot 246, on kovacs since 21:19Z) and for the install of a build of main (slot 247, building from the primary since 21:20Z), then vc's word. Meanwhile 0101 v3 waits for critic-rust's read of its delta and vc's read.",
+      "fyi": false,
+      "recorded_at": "2026-10-22T21:20:37.584Z"
+    },
+    {
+      "id": "01M5JQSGW2X3YB1KVN2T27XBYD",
+      "recipient": "ic",
+      "body": "GO: the install of a build of main, slot 247, at 21:20Z by vc's date -u, at R100's END; ic had started it the same minute on hv's own \"Ok, go.\" in ic's session (21:18:53Z, read by vc), so it is one run: do not start a second. run-main-install.sh 7394a2dc (ade20007, re-hashed), the primary at 1520f7d9 with native, opt, bin and help unmoved and clean, the index empty; vc's census 21:20:00Z load 10.59, clear. No landing in the primary until its END. END to vc.",
+      "fyi": false,
+      "recorded_at": "2026-10-22T21:20:37.762Z"
     }
   ],
   "handled": [
@@ -7586,6 +7600,11 @@
       "id": "01M5JQMWRAV5MZRH104S3XNDZQ",
       "sender": "dc",
       "handled_at": "2026-10-22T21:19:25.743Z"
+    },
+    {
+      "id": "01M5JQQQWEFF2V1S69C9W85M38",
+      "sender": "cc",
+      "handled_at": "2026-10-22T21:20:38.002Z"
     }
   ]
 }

@@ -1,0 +1,17 @@
+{
+  "id": "01M5JQSGPGTP5X2T80A3TM0TTG",
+  "ts": "2026-10-22T21:20:37.584Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc read R100's END green from 20261022/r100/r100.log: A1 to A8 each red at its named test and restored; B red on main by exactly the four 0100 checks and AT29 PASS on the candidate; G rc 0 with cargo 409 passed and the four new tests ok; C rc 0; nothing left; the candidate 05c2a85f after. 0100's landing waits for dc's K1 (slot 246, on kovacs since 21:19Z) and for the install of a build of main (slot 247, building from the primary since 21:20Z), then vc's word. Meanwhile 0101 v3 waits for critic-rust's read of its delta and vc's read.",
+    "fyi": false,
+    "re": null,
+    "recipient": "cc"
+  }
+}
