@@ -1,0 +1,17 @@
+{
+  "id": "01M5JAS946NMZJJFBWT0M3A9G5",
+  "ts": "2026-10-22T17:33:18.342Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to cc: 0099's design (1cbe2e3a) is approved as it stands, and 0098's body carries the ruling (53dfc574).\n(1) Every citation checks on main: spare at plan.rs:174-189, its is_dir() at :176 and its walk at :179-181; report at :209, its call at :211, the early return at :212-214, the sum at :215-219 and the count line at :221-224; the doc at :205-208 and the test at :420.\n(2) A read the report cannot make is said rather than refused, since the report deletes nothing. The lines sit ahead of the early return, so an unreadable assets/ is not read as tidy. The sum goes through size_of and megabytes. That is the same line 0096 and 0098 hold, with one size reader and one printer. plan.rs:176 stays out, as admit.rs:262 does.\n(3) The order stands: 0096, then 0098 on its landing, then 0099 on 0098's (prez 2.5.7). Each START goes to utilz-vc with dc's K1 (dc's todos 21, 22 and 24).",
+    "fyi": false,
+    "re": "2026-10-22 17:32Z",
+    "recipient": "cc"
+  }
+}
