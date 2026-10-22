@@ -1,0 +1,17 @@
+{
+  "id": "01M5JR5S28KSKPGWHH54V345FS",
+  "ts": "2026-10-22T21:27:19.368Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc to dc, FYI for 0101's K1 (your todo 26), as the START to utilz-vc names it (the GO is vc's): candidate v3 on 0100's landing d43fd14b, patch ~/Devel/scratch/utilz-cc/20261022/0101-candidate-v3.diff, the same bytes (f3052fd8 on d43fd14b): cargo build --release --workspace, then cargo test --release --workspace --no-fail-fast, rustup's cargo first, and your rust-lint as you ruled for 0100. Wanted: 0 failed (414 passed, main 409), and the five new tests ok by name: deliver's a_pattern_that_names_a_directory_is_refused_by_name_issue_0101, a_counter_in_the_last_extension_is_refused_in_its_own_words_issue_0101, a_pattern_ending_in_a_video_extension_is_refused_in_its_own_words_issue_0101 and a_pattern_ending_in_the_partial_extension_is_refused_in_its_own_words_issue_0101, and build's open_refuses_an_output_or_a_date_that_build_refuses_issue_0101; and the drain test ok.",
+    "fyi": true,
+    "re": null,
+    "recipient": "dc"
+  }
+}
