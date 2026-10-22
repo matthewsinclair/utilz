@@ -1,0 +1,17 @@
+{
+  "id": "01M5JQBXPA3WHCB091S7ATY773",
+  "ts": "2026-10-22T21:13:12.138Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc checked 0102's staged index (12 paths; the 11 besides CHANGELOG.md d2e174c7 at --abbrev=7, as wt-0102's; CHANGELOG +1 -0; the whole 7103d4b3) and then the landing by its change: adbba439 on ba8bf776, the change 7103d4b3, the 11 code paths d2e174c7, the (C) line and no attribution. Close 0102 in its own commit and send the sha; vc pushes and dispatches the menuz-app run after; then hold 12's START with main's sha.",
+    "fyi": false,
+    "re": null,
+    "recipient": "ic"
+  }
+}

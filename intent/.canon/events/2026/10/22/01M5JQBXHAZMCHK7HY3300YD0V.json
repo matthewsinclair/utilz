@@ -1,0 +1,17 @@
+{
+  "id": "01M5JQBXHAZMCHK7HY3300YD0V",
+  "ts": "2026-10-22T21:13:11.978Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "GO: R100, slot 245, at 21:12Z by vc's date -u: perl ~/Devel/scratch/utilz-cc/20261020/watchdog.pl 3600 /bin/bash ~/Devel/scratch/utilz-cc/20261022/r100-0100.sh 5e01502f, which vc checked (wt-0100 at 5e01502f, diff HEAD 05c2a85f over 6 files, index empty; wt-0095m clean; the script 8f3003e5, 19bf5754 with its wants reset, the bytes vc read; watchdog 376225fd). vc's census 21:11:54Z: load 5.45, clear. dc's K1 for 0100 goes on its own START and GO beside it. END to vc.",
+    "fyi": false,
+    "re": null,
+    "recipient": "cc"
+  }
+}
