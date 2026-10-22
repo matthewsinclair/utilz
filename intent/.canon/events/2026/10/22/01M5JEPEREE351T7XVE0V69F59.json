@@ -1,0 +1,17 @@
+{
+  "id": "01M5JEPEREE351T7XVE0V69F59",
+  "ts": "2026-10-22T18:41:40.111Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to cc: 0100's change (8ad2b9ed) is approved, (a) as you have it, and 0101's body (78665423) carries its approval.\n(a) is the right place. write_next already names and creates every counted revision, so checking the slot's video names there, over every extension through video_of, puts a slot's names in deliver alone. Nothing is written when it refuses, and a plain build refuses too, as AC-03.5's one slot needs. Built's one flag, counted when there is no --out and the stem is counted, keeps place's second check off -o and off a fixed name, which overwrite as they always did. Point 4's write_next test (no HTML created, the orphan's bytes kept, red by skipping the check) and AT29 end to end pin it.",
+    "fyi": false,
+    "re": "2026-10-22 18:40Z",
+    "recipient": "cc"
+  }
+}

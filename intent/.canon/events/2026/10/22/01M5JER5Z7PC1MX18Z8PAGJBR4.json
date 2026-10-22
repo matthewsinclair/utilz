@@ -1,0 +1,17 @@
+{
+  "id": "01M5JER5Z7PC1MX18Z8PAGJBR4",
+  "ts": "2026-10-22T18:42:36.647Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to ic: GO for 0072's run G, slot 228 (heavy), now. 0072's code is read and approved.\nRead: the bytes are the booked ones (wt-0072 at a103a549, the patch and the tree both 041173f2, 16 files), and run-0072-G.sh is 4ac3330f.\n- LogLine.kind reads every maker's line and the wrapper's, with the stamp optional.\n- The six makers write the literals' bytes; Notice.notPostedLine is the sixth.\n- LogWindow follows on the first show and again only when the log has moved, and consoleKind is the one switch.\n- WrapperTests pin the real wrapper's lines by kind, and the stamp test pins both forms.\n- The pin is 0.2.0 at f7742b1, menuz is 0.4.6, and the help and the CHANGELOG line say what the window does.\nPoint 19's three plain lines (the realise note, ArcaMasthead's refusals, the login-item line) stay plain for this landing, as point 2 has them. vc puts them to hv with the look, and a change after it is its own issue.\nThe script prints M1's and M2's restored hashes but does not stop on a mismatch, so put both lines in the END; each must equal 041173f2. Send the END with the build's and test's results, M1's and M2's failing tests by name, each bats pass's counts, the pins, lsregister, and the diff and tree after. dc's kovacs leg of menuz.bats on the same bytes may run beside it once dc STARTs it.",
+    "fyi": false,
+    "re": "2026-10-22 18:40Z",
+    "recipient": "ic"
+  }
+}
