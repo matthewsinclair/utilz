@@ -3,9 +3,9 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: aa2e759c-f89d-4d9a-8001-e734111bf44b
-heartbeat_at: 2026-10-22 17:31Z
+heartbeat_at: 2026-10-22 17:45Z
 status: active
-focus: "22 Oct, on vc's word: kovacs legs on each candidate's START. cc's: todo 21 (0096 v3), 22 (0098), 24 (the plan.rs issue). ic's: todo 23 (0097), 17 (0072). Then todo 18, 2.14.2's final-head gate once all five land. Resume: ~/Devel/scratch/utilz-dc/RESUME.md."
+focus: "22 Oct: 0097's kovacs leg STARTed with vc at 17:44Z, waiting for the GO. Then cc's K1s (todo 21, 22, 24) on cc's STARTs, 0072's leg (todo 17) on ic's, and todo 18's gate once all five land. Resume: ~/Devel/scratch/utilz-dc/RESUME.md."
 claims: []
 ---
 
@@ -13,7 +13,7 @@ claims: []
 
 ## DOING
 
-_(none)_
+- 0097's kovacs leg (todo 23, utilz-ic's): the START (heavy) is with vc since 17:44Z, waiting for the GO. Bytes: 737924b3 plus ic's final-wt-0097.patch, e7e2cea5, as scratch commit a47b2849 (bundle ~/Devel/scratch/utilz-dc/work/kv-c0097-e7e2cea5). On the GO: /bin/bash ~/Devel/scratch/utilz-dc/work/kv-c0097.sh. Expected: rc 0, 139 tests, not ok 0, 1 skip (AC-06.3). Then the END to vc and an FYI to ic.
 
 ## TODO
 
@@ -21,7 +21,6 @@ _(none)_
 - 2.14.2's final-head gate, once 0096, 0098, cc's plan.rs issue, 0097 (the Xcode 27.1 move, hv's ruling, which is the pin) and 0072 have landed, and vc names the sha (vc, 22 Oct). First re-read tests.yml's menuz-app job as 0097 leaves it, and correct final-head-gate.sh's menuz-app text, which names macos-26. Then final-head-gate.sh's phases, the report and the dry run, then the post-release steps (~/Devel/scratch/utilz-dc/RESUME.md). Size L. (edited)
 - K1 for 0096 (cc's), when cc's v3 START names its bytes: one heavy kovacs leg on them, booked beside cc's Mac run, to cc's spec (method in ~/Devel/scratch/utilz-dc/RESUME.md). Size S. (edited)
 - K1 for 0098 (cc's: showreel build takes an _out/ it cannot read as empty and can overwrite a delivered revision, and prune leaves a video it cannot check; prez 2.5.6, after 0096), when cc's START names its bytes: one heavy kovacs leg on them, to cc's spec (method in ~/Devel/scratch/utilz-dc/RESUME.md). Size S. (vc, 22 Oct) (edited)
-- 0097's kovacs leg (utilz-ic's: menuz builds with Xcode 27.1, hv's ruling; it lands before 0072), when ic's START names its bytes: a heavy kovacs leg of menuz.bats on them, since 0097 changes menuz.bats' fixture and its fakes (vc, 22 Oct). Size S.
 - K1 for cc's plan.rs issue (plan.rs's two silences in the report of unused assets; prez 2.5.7, after 0098; cc files it on 22 Oct), when cc's START names its bytes: one heavy kovacs leg on them, to cc's spec (method in ~/Devel/scratch/utilz-dc/RESUME.md). Size S. (vc, 22 Oct)
 
 ## Holds

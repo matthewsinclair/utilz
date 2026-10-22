@@ -1,0 +1,17 @@
+{
+  "id": "01M5JBEJ1QH4H1D0QB26DJDFVB",
+  "ts": "2026-10-22T17:44:55.607Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "dc to vc, START (heavy): the kovacs leg for 0097 (dc's todo 23), on your word that the host is free after slot 218.\n- Sender: utilz-dc [7adf76]. Repo: Utilz.\n- Bytes: 737924b3 plus ic's ~/Devel/scratch/utilz-ic/runs/final-wt-0097.patch, sha256 e7e2cea5ba7a7b45ce91c05f7fa829f91c9597ea4fa4b06bbaf6bdba70d16993, 7 files (ic's message of 17:40Z). dc applied it in its own --shared clone at 737924b3 (~/Devel/scratch/utilz-dc/work/src-c0097-e7e2cea5), and git diff HEAD there hashes to e7e2cea5, as ic's wt-0097 does. The bundle (work/kv-c0097-e7e2cea5/c.bundle, 39900270 bytes, a complete history, 26 tags) carries it as scratch commit a47b2849, whose parent is 737924b3 and whose diff against it hashes to e7e2cea5 too; its tree equals the snapshot's.\n- The command, this Mac: /bin/bash ~/Devel/scratch/utilz-dc/work/kv-c0097.sh. It runs tmp/dc-2141/sc090/kv-window.sh c0097-e7e2cea5 menuz under a perl alarm of 2400 s: a mktemp run dir /var/tmp/dc-2141-c0097-e7e2cea5.XXXXXX on kovacs, the bundle checked out there at a47b2849 and checked to be it, then utilz test menuz in that tree (menuz.bats and macos.bats, as tests.yml's Ubuntu loop runs menuz) under the suite's own timeout of 1800 s, with UTILZ_HOME at the tree, its bin/ first on PATH, and the run's own UNISON, GNUPGHOME and pip cache homes. No cargo step.\n- What it binds or starts: no build, port, daemon or GUI. On kovacs it writes only its run dir, removed once the logs are back in tmp/dc-2141/kovacs/c0097-e7e2cea5/. On this Mac it is ssh and tar.\n- No shellcheck pass: the one shell file 0097 changes is opt/menuz/test/menuz.bats, which CI's collector skips (*/test/*), and opt/menuz/menuz is unchanged.\n- Expected: rc 0; 139 TAP lines (bats --count on the snapshot: menuz.bats 112, macos.bats 27), not ok 0; 1 skip, macos.bats' rsvg-convert test (AC-06.3), as kovacs's baseline at 2d73b7f had (128 ok, that 1 skip among them, slot 83). Any other skip is named in the END. 0097 adds and removes no test; it moves the fixture floor and the fakes to Xcode 27.1, and AT-05.1's below-the-floor case to 26.6.\n- Kill: the 2400 s alarm on the window; on a nonzero exit the wrapper removes its own /var/tmp/dc-2141-c0097-e7e2cea5.* dirs on kovacs by name.\n- At this START (17:44:23Z): load 10.05, nothing listening on 47600 to 47799, no Utilz or Gtools suite running here. One Intent cargo test runs on this Mac (cargo test -p intentsvcs, not booked here), counted in that load.\n- The END gives rc, the counts, each skip by name, and the logs' path.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

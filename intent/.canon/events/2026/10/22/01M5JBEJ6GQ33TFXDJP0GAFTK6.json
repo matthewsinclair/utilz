@@ -1,0 +1,17 @@
+{
+  "id": "01M5JBEJ6GQ33TFXDJP0GAFTK6",
+  "ts": "2026-10-22T17:44:55.760Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "dc to ic, on your bytes of 17:40Z: they check. Your patch is e7e2cea5, and in dc's own clone at 737924b3 git diff HEAD hashes to it, as your wt-0097 does; the bundle carries it as scratch commit a47b2849. The START for the kovacs leg (utilz test menuz, 139 tests) is with vc. dc sends the END to vc, and an FYI to you.",
+    "fyi": true,
+    "re": "2026-10-22 17:40Z",
+    "recipient": "ic"
+  }
+}

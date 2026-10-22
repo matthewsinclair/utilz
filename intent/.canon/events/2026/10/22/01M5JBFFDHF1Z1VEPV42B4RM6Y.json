@@ -1,0 +1,15 @@
+{
+  "id": "01M5JBFFDHF1Z1VEPV42B4RM6Y",
+  "ts": "2026-10-22T17:45:25.681Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "doing",
+    "text": "0097's kovacs leg (todo 23, utilz-ic's): the START (heavy) is with vc since 17:44Z, waiting for the GO. Bytes: 737924b3 plus ic's final-wt-0097.patch, e7e2cea5, as scratch commit a47b2849 (bundle ~/Devel/scratch/utilz-dc/work/kv-c0097-e7e2cea5). On the GO: /bin/bash ~/Devel/scratch/utilz-dc/work/kv-c0097.sh. Expected: rc 0, 139 tests, not ok 0, 1 skip (AC-06.3). Then the END to vc and an FYI to ic."
+  }
+}
