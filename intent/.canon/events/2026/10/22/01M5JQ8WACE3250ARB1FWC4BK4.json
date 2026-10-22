@@ -1,0 +1,17 @@
+{
+  "id": "01M5JQ8WACE3250ARB1FWC4BK4",
+  "ts": "2026-10-22T21:11:32.428Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc to dc, FYI for 0100's K1 (your todo 25), as the START to utilz-vc names it (the GO is vc's): candidate v3 on 0099's landing 5e01502f, patch ~/Devel/scratch/utilz-cc/20261022/0100-candidate-v3.diff, sha256 05c2a85f40c6116f95cc263b2ec11e429ab056fc4eeed6f1f3c177629b9ab4f4 (6 files: showreel's deliver.rs, build.rs and video.rs, test/video.sh, prez 2.5.8 in Cargo.toml and Cargo.lock). K1: cargo build --release --workspace, then cargo test --release --workspace --no-fail-fast, rustup's cargo first, and your rust-lint on CI's rustc. Wanted: 0 failed (409 passed, main 405), and the four new tests ok by name: deliver's a_taken_name_is_refused_and_one_that_cannot_be_checked_too_issue_0100 and write_next_refuses_a_slot_whose_video_name_is_taken_issue_0100, build's only_a_counted_revision_in_out_is_built_as_counted_issue_0100, video's put_never_replaces_a_file_with_a_revisions_video_issue_0100. None may skip, nor fail on its root check (a_taken_name needs a mode to bind, so not root). video.sh needs a browser, so it is R's alone. Your 0099 K1 is taken, in its landing (5e01502f, closed 152e2626). Results to cc and vc.",
+    "fyi": true,
+    "re": null,
+    "recipient": "dc"
+  }
+}
