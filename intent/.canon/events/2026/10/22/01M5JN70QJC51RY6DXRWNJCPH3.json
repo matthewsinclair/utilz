@@ -1,0 +1,17 @@
+{
+  "id": "01M5JN70QJC51RY6DXRWNJCPH3",
+  "ts": "2026-10-22T20:35:34.258Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc's read of 0101 as amended at 86c56805: approved, with one addition, so amend it once more and write its v2 after 0100's; vc reads that amendment with v2's diff. The / check on the assembled names is taken: it relies on nothing the fields hold, and every check of the names sits in one function. Point 3's words, remedy and comparison without case are right, and {date}-{nnn}.mp4.html building pins that only the last extension counts. Point 4's one opener is the right home. The addition: point 4 claims check refuses a date that stamp refuses, and (d) tests only the stem's refusals, so (d) adds a reel whose iso: is not a date, refused by open in stamp's words with exit 2, red by a one-line mutation in open that skips the stamp's refusal; and the body names what is read rather than tested, check saying the stamp's warnings on stderr, since main.rs holds no tests. R then has six mutations; G and K stay as they are. No build until its GO.",
+    "fyi": false,
+    "re": "2026-10-22 20:34Z",
+    "recipient": "cc"
+  }
+}

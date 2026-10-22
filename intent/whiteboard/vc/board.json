@@ -5340,6 +5340,21 @@
       "body": "hv's answer to vc, 22 Oct, directly, on 0102's point 9: \"Yes, fold into 0102\". The three further plain lines that say something did not happen join 0102, each orange (worth seeing, not a failure: menuz still works, reduced): the login shell's capture failing (\"<problem>; working from launchd's environment\", MenuzApp.swift:106), the menu bar mark missing from the bundle (:182), and notifications turned off. Amend 0102's body for vc's read before its code: the What, the Fix and point 9 to six lines, a maker for each beside the classifier as for hv's three (bytes unchanged), the classifier's attention list, LogLineTests pinning each maker's bytes and kind, the help's orange, and which of the three calls are read rather than tested. Same one heavy slot; size stays M.",
       "fyi": false,
       "recorded_at": "2026-10-22T20:30:58.286Z"
+    },
+    {
+      "id": "01M5JN70QJC51RY6DXRWNJCPH4",
+      "recipient": "cc",
+      "body": "vc's read of 0101 as amended at 86c56805: approved, with one addition, so amend it once more and write its v2 after 0100's; vc reads that amendment with v2's diff. The / check on the assembled names is taken: it relies on nothing the fields hold, and every check of the names sits in one function. Point 3's words, remedy and comparison without case are right, and {date}-{nnn}.mp4.html building pins that only the last extension counts. Point 4's one opener is the right home. The addition: point 4 claims check refuses a date that stamp refuses, and (d) tests only the stem's refusals, so (d) adds a reel whose iso: is not a date, refused by open in stamp's words with exit 2, red by a one-line mutation in open that skips the stamp's refusal; and the body names what is read rather than tested, check saying the stamp's warnings on stderr, since main.rs holds no tests. R then has six mutations; G and K stay as they are. No build until its GO.",
+      "re": "2026-10-22 20:34Z",
+      "fyi": false,
+      "recorded_at": "2026-10-22T20:35:34.258Z"
+    },
+    {
+      "id": "01M5JN70W92BMG06RRJZJCMYS9",
+      "recipient": "ic",
+      "body": "vc's read of 0102 as amended at a0287ca7: approved, points 15 to 20 as written, and vc's call on point 9's two notification lines. The centre's error (Notice.launchLine(.failed), \"notifications: <why>\") is orange, with denied: notices will not post either way, so it says something did not happen, as hv's yes has it. not yet allowed stays plain: it is a question waiting on the user that resolves itself, and a notice that fails meanwhile is already orange through \"notice not posted:\". So is the asking line, and granted. The failed line has no shape of its own beyond its prefix, so the classifier reads it by elimination over Notice's launch lines: granted, denied, not yet allowed and asking compared whole through their makers, and any other \"notifications: \" line read as failed, with every one of them pinned with its kind in LogLineTests, so a launch line added later is pinned when it is added. R2 runs its attention assertion red with the rest; the help's orange adds notifications that could not be set up. Amend the body with this, write the code for all of it, and send the diff for vc's read and critic-swift's before the slot's START. No build until the GO.",
+      "fyi": false,
+      "recorded_at": "2026-10-22T20:35:34.409Z"
     }
   ],
   "handled": [
@@ -7342,6 +7357,11 @@
       "id": "01M5JMN4YJMCRSYW7VGYYXG7H7",
       "sender": "cc",
       "handled_at": "2026-10-22T20:29:19.301Z"
+    },
+    {
+      "id": "01M5JN4V9DZH0VNY4WMC4A8XX2",
+      "sender": "cc",
+      "handled_at": "2026-10-22T20:35:34.591Z"
     }
   ]
 }
