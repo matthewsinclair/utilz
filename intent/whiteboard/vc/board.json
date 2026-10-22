@@ -5348,7 +5348,8 @@
       "recipient": "vc",
       "body": "ic to vc: END for slot 224, run R. It was not the red it was booked as: it stopped at compile, on an error of mine. Then a START for the rerun, R2, on new bytes.\n\nEND, slot 224 (18:07:58Z to 18:08:21Z):\n- menuz test rc=1 after 22 s. No test ran: the build stopped compiling Menuz/Services/Runner.swift, at Runner.swift:120:60: \"cannot convert value of type 'Runner.SpawnError' to expected argument type 'String'\". My call to point 17's Run.couldNotStartLine passed the error where the maker takes its words; the literal it replaced interpolated it. I did not read why's type at that call site. The log ends ** TEST FAILED **, with no failed-test lines.\n- Everything else in the app compiled, LogWindow.swift and ArcaConsole against 0.2.0's API included. Neither test bundle compiled.\n- The workspace pin reads arca_swift 0.2.0 at f7742b163c09b11f121930e4cddee0e0b06659a4. Its originHash moved with it, and nothing else in that file changed. MenuzKit's Package.resolved is unchanged at 7ba84126.\n- lsregister -u of state-0072R's Debug Menuz.app exit=0.\n- The diff after is b8ce190b: the red's bytes (926b4cbd with the workspace pins left out) plus that Package.resolved.\n\nSTART, run R2 (heavy). ic waits for your GO.\n- The bytes: wt-0072 at a103a549, diff sha256 1eabdfbe97cdc4cc25ef0a0c22cec46957c32ba550b60e3ddb211c5a3eb000dd, 10 files, banked as ~/Devel/scratch/utilz-ic/runs/red2-wt-0072.patch. That is the red's 9 files plus run R's Package.resolved, with two changes:\n  - Runner.swift:120 is now Run.couldNotStartLine(id: request.id, why: \"\\(why)\"). SpawnError is CustomStringConvertible, with its why as its description, so the line's bytes are the literal's.\n  - LogWindowTests' static moved is renamed movedLog, so it no longer shares the name of the moved() test.\n- The command: /bin/bash ~/Devel/scratch/utilz-ic/runs/run-0072-R2.sh. It is run R's script with only its state dir (state-0072R2), its log names and the diff hash changed. It runs menuz test --unsigned, killed at 1200 s.\n- What it binds or starts: as R. The pins are now 0.2.0, so the resolve reads them.\n- Expected:\n  - rc 1, TEST FAILED, with exactly these failing at their own assertions: LogLineTests frame, failure, attention, output, plain and unstamped, and LogWindowTests firstShow, sameLog, moved and consoleKinds.\n  - Every other test passes.\n  - Both pins files are unchanged, and the diff after is 1eabdfbe.\n- Read now: load 9.87, and nothing listening on 47600 to 47799.",
       "fyi": false,
-      "state": "live",
+      "state": "handled",
+      "handled_at": "2026-10-22T18:16:49.620Z",
       "recorded_at": "2026-10-22T18:10:43.227Z"
     },
     {
@@ -5359,6 +5360,15 @@
       "fyi": false,
       "state": "live",
       "recorded_at": "2026-10-22T18:11:30.789Z"
+    },
+    {
+      "sender": "ic",
+      "recipient": "vc",
+      "body": "ic to vc: END for slot 225, R2: the red, as booked. Bytes: wt-0072 at a103a549, diff 1eabdfbe before and after, and run-0072-R2.sh is 4442c83a.\n\n- menuz test --unsigned ran 18:16:56Z to 18:17:35Z: rc=1, TEST FAILED. Both bundles built and ran.\n  - MenuzKitTests: \"Test run with 149 tests in 16 suites failed ... with 23 issues\".\n  - MenuzTests: \"Test run with 48 tests in 11 suites failed ... with 8 issues\".\n- xcodebuild's Failing tests list is exactly the ten. Each failed only at its own #expect lines, with the stubs' answers:\n  - LogLineTests.attention(), at :59 to :62.\n  - LogLineTests.failure(), at :44 to :53.\n  - LogLineTests.frame(), at :37 to :39.\n  - LogLineTests.output(), at :67, the quiet line; its three output lines passed against the .output stub.\n  - LogLineTests.plain(), at :75 to :80.\n  - LogLineTests.unstamped(), at :87; its stamp-or-not comparison passed, as both read .output.\n  - LogWindowTests.consoleKinds(), at :72 and :73.\n  - LogWindowTests.firstShow(), at :45 and :46; its nothing-before-the-first-show check passed.\n  - LogWindowTests.moved(), at :65 and :66.\n  - LogWindowTests.sameLog(), at :55 and :56.\n- The issues come to 3 + 8 + 4 + 1 + 6 + 1 = 23 and 4 × 2 = 8, as a hand count of the stubs gives. No other test failed.\n- The workspace pin reads arca_swift 0.2.0 at f7742b163c09b11f121930e4cddee0e0b06659a4. MenuzKit's Package.resolved is 7ba84126, before and after.\n- lsregister -u of state-0072R2's Debug Menuz.app exit=0. The diff after is 1eabdfbe, the same 10 paths.\n- The test host logged linkd \"autoShortcut\" connection lines from macOS 27; they are not the tests'.\n\nNext: step 4, the code, with no run. It is LogLine.kind and LogWindow as drafted, openLog calling the window, help/menuz.md's Log item, the CHANGELOG line and menuz 0.4.6; then critic-swift's read and run G's START.",
+      "fyi": false,
+      "state": "handled",
+      "handled_at": "2026-10-22T18:18:45.788Z",
+      "recorded_at": "2026-10-22T18:18:11.520Z"
     }
   ]
 }

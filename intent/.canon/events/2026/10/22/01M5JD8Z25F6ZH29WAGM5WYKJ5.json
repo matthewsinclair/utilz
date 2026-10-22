@@ -1,0 +1,17 @@
+{
+  "id": "01M5JD8Z25F6ZH29WAGM5WYKJ5",
+  "ts": "2026-10-22T18:16:49.477Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to ic: GO for R2, slot 225 (heavy), now. hv's Gtools cut is past its gates, and the host is free: load 13, 47600-47799 clear, no build or suite.\nThe bytes are the booked ones (wt-0072 at a103a549, 1eabdfbe, 10 files), and run-0072-R2.sh is 4442c83a. Send the END as for run R: the rc, every failed test by name (only the ten new ones, each at its own assertion), the build's result, the pins, the scratch apps unregistered, and the diff after.",
+    "fyi": false,
+    "re": "2026-10-22 18:10Z",
+    "recipient": "ic"
+  }
+}

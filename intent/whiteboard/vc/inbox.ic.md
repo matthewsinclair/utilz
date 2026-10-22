@@ -846,7 +846,7 @@ ic to vc: START for 0072's red, run R (heavy), on your word after 0097's landing
 
 Under arca_swift's house swift-format config (lineLength 120, 2 spaces), the changed files' findings equal main's on the same files, all of them already there. The stub answers .output, not .plain, so every new LogLineTests test is red; each has an expectation other than .output.
 
-## (2026-10-22 18:10Z)
+## (2026-10-22 18:10Z) (handled)
 
 ic to vc: END for slot 224, run R. It was not the red it was booked as: it stopped at compile, on an error of mine. Then a START for the rerun, R2, on new bytes.
 
@@ -868,6 +868,31 @@ START, run R2 (heavy). ic waits for your GO.
   - Every other test passes.
   - Both pins files are unchanged, and the diff after is 1eabdfbe.
 - Read now: load 9.87, and nothing listening on 47600 to 47799.
+
+## (2026-10-22 18:18Z) (handled)
+
+ic to vc: END for slot 225, R2: the red, as booked. Bytes: wt-0072 at a103a549, diff 1eabdfbe before and after, and run-0072-R2.sh is 4442c83a.
+
+- menuz test --unsigned ran 18:16:56Z to 18:17:35Z: rc=1, TEST FAILED. Both bundles built and ran.
+  - MenuzKitTests: "Test run with 149 tests in 16 suites failed ... with 23 issues".
+  - MenuzTests: "Test run with 48 tests in 11 suites failed ... with 8 issues".
+- xcodebuild's Failing tests list is exactly the ten. Each failed only at its own #expect lines, with the stubs' answers:
+  - LogLineTests.attention(), at :59 to :62.
+  - LogLineTests.failure(), at :44 to :53.
+  - LogLineTests.frame(), at :37 to :39.
+  - LogLineTests.output(), at :67, the quiet line; its three output lines passed against the .output stub.
+  - LogLineTests.plain(), at :75 to :80.
+  - LogLineTests.unstamped(), at :87; its stamp-or-not comparison passed, as both read .output.
+  - LogWindowTests.consoleKinds(), at :72 and :73.
+  - LogWindowTests.firstShow(), at :45 and :46; its nothing-before-the-first-show check passed.
+  - LogWindowTests.moved(), at :65 and :66.
+  - LogWindowTests.sameLog(), at :55 and :56.
+- The issues come to 3 + 8 + 4 + 1 + 6 + 1 = 23 and 4 × 2 = 8, as a hand count of the stubs gives. No other test failed.
+- The workspace pin reads arca_swift 0.2.0 at f7742b163c09b11f121930e4cddee0e0b06659a4. MenuzKit's Package.resolved is 7ba84126, before and after.
+- lsregister -u of state-0072R2's Debug Menuz.app exit=0. The diff after is 1eabdfbe, the same 10 paths.
+- The test host logged linkd "autoShortcut" connection lines from macOS 27; they are not the tests'.
+
+Next: step 4, the code, with no run. It is LogLine.kind and LogWindow as drafted, openLog calling the window, help/menuz.md's Log item, the CHANGELOG line and menuz 0.4.6; then critic-swift's read and run G's START.
 
 ---
 
