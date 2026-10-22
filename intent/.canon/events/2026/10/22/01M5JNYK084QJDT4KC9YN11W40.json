@@ -1,0 +1,17 @@
+{
+  "id": "01M5JNYK084QJDT4KC9YN11W40",
+  "ts": "2026-10-22T20:48:26.632Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "GO: R99, slot 236, at 20:47Z by vc's date -u, once Intent's macos prepare had ENDed (intent-vc's END, its 20:47Z): perl ~/Devel/scratch/utilz-cc/20261020/watchdog.pl 3600 /bin/bash ~/Devel/scratch/utilz-cc/20261022/r99-0099.sh in wt-0099, which vc hashed: b5c588a3 with diff 743fb664, the script 7792ff00, the watchdog 376225fd. vc's census at 20:47:22Z: load 4.98, nothing listening on 47600 to 47799, no cargo, bats, xcodebuild or devbin. Intent's brew smoke may run beside it. END to vc. dc's K1 (slot 237) starts after intent-cc's order 8 ENDs on kovacs, on its own GO. vc's read of the v2s: 0100 v2 (5d117dd4 on 0099 v2) and 0101 v2 (9477cc93 on 0099 v2 and 0100 v2, every staged blob checked against wt-0100's tree) are both approved for their slots once the critic reads are answered, each START after its predecessor lands, with any fold re-hashed.",
+    "fyi": false,
+    "re": "2026-10-22 20:45Z",
+    "recipient": "cc"
+  }
+}
