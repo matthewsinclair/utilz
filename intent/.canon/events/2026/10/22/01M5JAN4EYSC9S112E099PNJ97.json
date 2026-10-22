@@ -1,0 +1,15 @@
+{
+  "id": "01M5JAN4EYSC9S112E099PNJ97",
+  "ts": "2026-10-22T17:31:02.494Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "kind": "doing",
+    "text": "0097 (menuz builds with Xcode 27.1; vc approved the design, ic owns it, it lands before 0072): the edits in ~/Devel/scratch/utilz-ic/wt-0097, then its runs, each booked with vc, utilz-dc's kovacs leg of menuz.bats on its bytes, the landing on vc's word, and vc's push and dispatch, read as Xcode 27.1 (27A9275)."
+  }
+}

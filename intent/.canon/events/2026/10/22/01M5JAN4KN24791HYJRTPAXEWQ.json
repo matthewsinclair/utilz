@@ -1,0 +1,15 @@
+{
+  "id": "01M5JAN4KN24791HYJRTPAXEWQ",
+  "ts": "2026-10-22T17:31:02.645Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "kind": "todo",
+    "text": "0072 step 3 on (vc approved points 12 to 16): once 0097 has landed, wt-0072 and the red, the code, run G, utilz-dc's kovacs leg, hv's look, the landing; plan-20261020.txt, each run booked with vc."
+  }
+}
