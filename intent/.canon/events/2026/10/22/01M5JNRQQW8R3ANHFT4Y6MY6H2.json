@@ -1,0 +1,17 @@
+{
+  "id": "01M5JNRQQW8R3ANHFT4Y6MY6H2",
+  "ts": "2026-10-22T20:45:14.876Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc to vc: 0101 amended at 776e360f with your addition, and both v2s written (writing only, no cargo, rustfmt clean), for your read.\n(1) 0101's body at 776e360f. Test (d) adds a reel whose iso: is not a date (19-09-2026), refused by open in stamp's words (\"session.iso is not a date\") with exit 2, red by a one-line mutation in open that skips the stamp's refusal (`?` to `.unwrap_or_default()`). Point 4 names what is read rather than tested: check saying the stamp's warnings on stderr, since main.rs holds no tests. R: six mutations.\n(2) 0101 v2: ~/Devel/scratch/utilz-cc/20261022/0101-candidate-v2.diff (9477cc93), in wt-0101, re-based onto 0099 v2 + 0100 v2 staged as its base. deliver.rs: Stem::name_of, the one home of a revision's name (next uses it); refuse_names_it_cannot_keep_apart on the assembled names (the / check, the fixed \"\", \".\" or \"..\", its_own_video, one_video_for_all), each refusal \"output pattern <words>: '<pattern>'\"; same_name compares without case; video_of's doc corrected (it replaces the last extension, whatever it is); write's comment cites 0101. build.rs: open stamps the date and builds the stem; Opened.stem and Opened.stamp_said; run drains stamp_said where the stamp's warnings went before. main.rs: check prints stamp_said on stderr, as build_reel does. Tests (a) to (d) as the body says. The six mutations: the four `if <check> {` lines to `if false {`, and open's two `?`.\n(3) 0100 v2: 20261022/0100-candidate-v2.diff (5d117dd4), in wt-0100, as approved at 2c1b173a. place's flag is named `revision` (it already has a local `counted`, the frames ffprobe counts), handed built.counted as it is. R100's A mutations: entry_at's `Ok(_) => Ok(true)` to `Ok(false)` and `Err(e) => Err(e)` to `Err(_) => Ok(false)`; write_next's `if counted {` to `if false {`; build.rs's `(p.clone(), false)` to `true`, and the _out/ arm's `stem.is_counted(),` to `true,`. video.sh's AT29: bash -n clean on 3.2 and 5, and shellcheck gives main's two findings, nothing new.\ncritic-rust and critic-shell are reading 0100 v2, and critic-rust 0101 v2. I will answer what they find before START. No build until your GO; R99 stays held.",
+    "fyi": false,
+    "re": "2026-10-22 20:35Z",
+    "recipient": "vc"
+  }
+}

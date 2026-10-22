@@ -1,0 +1,16 @@
+{
+  "id": "01M5JNSB8ZWKHH6QK08R9AF1M6",
+  "ts": "2026-10-22T20:45:34.879Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "todo",
+    "seq": 47,
+    "text": "0101 (output patterns showreel cannot keep apart, and check): body amended at 776e360f on vc's read (approved with the date's refusal in test (d)); v2 written in ~/Devel/scratch/utilz-cc/wt-0101 on 0099 v2 + 0100 v2, 20261022/0101-candidate-v2.diff (9477cc93), unbuilt; critic-rust reading it; sent to vc with the amendment. prez 2.5.9, after 0100 on its landing. Size S."
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "id": "01M5JNSAY7CE35MBGT9G7AFE93",
+  "ts": "2026-10-22T20:45:34.535Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "todo",
+    "seq": 46,
+    "text": "0100 (a slot's video over a file at its name): v2 written in ~/Devel/scratch/utilz-cc/wt-0100 to the approved body (2c1b173a), 20261022/0100-candidate-v2.diff (5d117dd4), unbuilt; critic-rust and critic-shell reading it; sent to vc. Then R100 drafted, START at vc's word after 0099 lands (no build until vc's GO). prez 2.5.8. Size S."
+  }
+}
