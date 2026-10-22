@@ -4,7 +4,7 @@ name: Validation Claude
 role: validation
 session_id: 10d02503-c5ac-4034-b498-1aec461f1878
 heartbeat_at: 2026-10-22 21:44Z
-status: active
+status: paused
 focus: "22 Oct, folded for the night on hv's word: every 2.14.2 issue landed and closed, main pushed to b3374e73; next session: read b3374e73's CI, then dc's final-head gate and dry run, then hv's cut"
 claims: []
 ---
