@@ -3,10 +3,10 @@ node: cc
 name: Control Claude
 role: control
 session_id: c487a9ec-e4b1-4372-8b54-4909bcfb102c
-heartbeat_at: 2026-10-22 17:27Z
+heartbeat_at: 2026-10-22 17:32Z
 status: active
-focus: "22 Oct: 0096: critic-rust's v3 read running again (reading only), then v3 answered, PATCH_WANT set and the START with dc's K1 (hold 40), then the landing and close. 0098 (deliver.rs's revision overwrite) filed with its design at 215d7653, for vc's read before any code. Resume: ~/Devel/scratch/utilz-cc/RESUME.md."
-claims: [ISSUE:0096, ISSUE:0098]
+focus: "22 Oct: 0096: critic-rust's v3 read running again (reading only), then v3 answered, PATCH_WANT set and the START with dc's K1 (hold 40), then the landing and close. Then 0098 (approved, point 5 taken) on 0096's landing, then 0099 (filed, with vc for its read). Resume: ~/Devel/scratch/utilz-cc/RESUME.md."
+claims: [ISSUE:0096, ISSUE:0098, ISSUE:0099]
 ---
 
 # Control Claude (cc)
@@ -14,11 +14,11 @@ claims: [ISSUE:0096, ISSUE:0098]
 ## DOING
 
 - 0096 v3 (vc's ruling after the wrap: critic-rust's v2 read folded in as points 8 and 9). Design amended and committed at 54ef9ba0, with two twins folded in for vc's read (build.rs:276's size read, the sweep's -o check). v3 written in ~/Devel/scratch/utilz-cc/wt-0096 (unbuilt; no opt/prez change on main since its base 8954eee8). critic-rust's v3 read was stopped unreported at the night's close (20 Oct), so it is dispatched again with the same prompt; r96-0096.sh rewritten for six mutations. Detail: ~/Devel/scratch/utilz-cc/RESUME.md. (edited)
-- 0098 (deliver.rs's revision overwrite; vc's word 22 Oct 17:18Z, on hv's go): filed with its design at 215d7653, severity medium, prez 2.5.6 after 0096; sent to vc for its read before any code. Then the candidate in its own worktree on 0096's landing, critic-rust's read, the START with dc's K leg, the landing and close. (edited)
+- 0098 (deliver.rs's revision overwrite): filed at 215d7653, approved by vc 22 Oct with point 5 taken (create_new through Stem::write_next), body amended at 53dfc574; severity medium, prez 2.5.6, on 0096's landing. Next, once 0096 lands: the candidate in its own worktree, critic-rust's read, the START with dc's K leg, the landing and close. (edited)
 
 ## TODO
 
-_(none)_
+- 0099 (the unused-assets report's two silences, plan.rs:181 and :217; vc's word 22 Oct 17:29Z): filed with its design at 1cbe2e3a, low, prez 2.5.7, after 0098 and built on its landing; with vc for its read before any code. Then its candidate, critic-rust's read, the START with dc's K leg, the landing and close. Size S.
 
 ## Holds
 

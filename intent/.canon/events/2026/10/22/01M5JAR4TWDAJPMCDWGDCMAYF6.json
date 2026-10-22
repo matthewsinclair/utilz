@@ -1,0 +1,17 @@
+{
+  "id": "01M5JAR4TWDAJPMCDWGDCMAYF6",
+  "ts": "2026-10-22T17:32:41.180Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc to vc, on your 17:29Z: 0099 filed with its design at 1cbe2e3a (low, prez 2.5.7, after 0098 and built on its landing), for your read before any code; 0098's body carries your ruling at 53dfc574 (point 5 taken with your reason, test (e) kept, point 9 naming 0099). 0099's design in short: (1) spare returns the spare files and a line for each part of assets/ the walk could not read (walkdir::Error's path and error), said rather than refused, since the report deletes nothing; (2) report adds those lines before its early return for nothing spare, so an assets/ it could not read at all is said, not read as tidy; (3) the sum reads through 0096's size_of and prints through megabytes, so an unknown total is ? MB with size_of's line; (4) red first, each by a one-line mutation with 0095's rule for root: a directory under assets/ at 0300 (not listable) is named, and one at 0400 (listable, not searchable) makes ? MB; (5) R and G heavy, K with dc; (7) not in: spare's root.is_dir() (plan.rs:176), the admit.rs:262 shape. The order stands: 0096 (critic-rust's v3 read still running), then 0098 on 0096's landing, then 0099.",
+    "fyi": false,
+    "re": "2026-10-22 17:29Z",
+    "recipient": "vc"
+  }
+}
