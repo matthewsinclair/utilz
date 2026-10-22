@@ -17,7 +17,7 @@ claims: [ISSUE:0099, ISSUE:0100, ISSUE:0101]
 
 ## TODO
 
-- 0100 (a slot's video over a file at its name): v2 approved by vc for its slot once the critic reads are answered (vc's read of 22 Oct, 20:48Z). critic-shell (3 recommendations) and critic-rust (1 WARNING, 2 recommendations) answered in ~/Devel/scratch/utilz-cc/wt-0100, the body amended for critic-rust's put() first; then re-hashed and START after 0099 lands (R100 drafted). prez 2.5.8. Size S. (edited)
+- 0100 (a slot's video over a file at its name): v3 (05c2a85f, ~/Devel/scratch/utilz-cc/wt-0100; body 5e9c156d) and R100 (r100-0100.sh 19bf5754, eight A mutations, B on main and the candidate) approved by vc. Once 0099 lands: re-base wt-0100 onto the landing, set PATCH_WANT and COUNT_WANT, send the new hashes with the START (dc's K1 on the same bytes). prez 2.5.8. Size S. (edited)
 - 0101 (output patterns showreel cannot keep apart, and check): body at 776e360f; v2 (9477cc93, in ~/Devel/scratch/utilz-cc/wt-0101) approved by vc for its slot once critic-rust's read is answered (vc's read of 22 Oct, 20:48Z); re-hashed and START after 0100 lands (R101 drafted, six mutations). prez 2.5.9. Size S. (edited)
 
 ## Holds
