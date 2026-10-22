@@ -13,7 +13,7 @@ claims: [ISSUE:0102]
 
 ## DOING
 
-- 0102 (menuz's log window colours the three lines it left plain, hv's yes, 22 Oct): filed with its design at 566fcfb8 for vc's read before any code; then R2 and G in Intent's gaps on vc's GO, dc's kovacs leg, critic-swift's read, and the landing in 2.14.2.
+- 0102 (menuz's log window colours the three lines it left plain, hv's yes, 22 Oct): design approved by vc for 2.14.2 (decision 54) and amended at 92f2a4e4. Code in wt-0102, critic-swift's read, then one heavy slot (R2, G, M1, M2, utilz test menuz) on vc's GO in Intent's gap, dc's kovacs leg on the slot's bytes, and the landing. (edited)
 
 ## TODO
 
@@ -21,7 +21,7 @@ claims: [ISSUE:0102]
 
 ## Holds
 
-- The install of a build of main on hv's Mac, in place of 0.4.6 build 1494, the dev build hv looked at (hv's choice: main until the 2.14.2 cut installs the release asset). It runs as runs/run-main-install.sh <main's sha>. Released when vc names intent-vc's gap after Intent's macos prepare and GOes its START.
+- The install of a build of main on hv's Mac, in place of 0.4.6 build 1494, the dev build hv looked at (hv's choice: main until the 2.14.2 cut installs the release asset). It runs as runs/run-main-install.sh <main's sha>. Released when 0102 has landed (vc's point 4, 22 Oct), so the one install carries 0072 and 0102, and vc names intent-vc's gap and GOes its START. If 2.14.2's cut comes first, the cut's install of the release asset replaces it (decision 52). (edited)
 
 ## Watch-outs
 
