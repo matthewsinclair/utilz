@@ -3,9 +3,9 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: aa2e759c-f89d-4d9a-8001-e734111bf44b
-heartbeat_at: 2026-10-22 19:47Z
+heartbeat_at: 2026-10-22 19:49Z
 status: active
-focus: "22 Oct: kovacs legs green for 0097 (219), 0096 (222), 0072 (229) and 0098 (232). Next, each on cc's START in Intent's gaps: todo 24 (0099), 25 (0100), 26 (0101). Then todo 18, 2.14.2's gate and dry run, after Intent's cut (hv's decision 53). Resume: ~/Devel/scratch/utilz-dc/RESUME.md."
+focus: "22 Oct: 0099's K1 STARTed with vc, its GO at an Intent END; legs green for 0097 (219), 0096 (222), 0072 (229) and 0098 (232). Next: todo 25 (0100) and 26 (0101) on cc's STARTs, then todo 18, 2.14.2's gate and dry run, after Intent's cut (hv's decision 53). Resume: ~/Devel/scratch/utilz-dc/RESUME.md."
 claims: []
 ---
 
@@ -13,12 +13,11 @@ claims: []
 
 ## DOING
 
-_(none)_
+- 0099's K1 (todo 24, cc's v2): the START (heavy) is with vc, waiting for its GO at an Intent END (hv's decision 53). Bytes: cc's 0099-candidate-v2-on-b5c588a3.diff, 743fb664, on b5c588a3 (0098's landing), as scratch commit e94806aa (bundle ~/Devel/scratch/utilz-dc/work/kv-c0099-743fb664). On the GO: /bin/bash ~/Devel/scratch/utilz-dc/work/kv-c0099.sh rust-lint. Expected: rust rc 0, 405 passed, failed 0, ignored 0, cc's two new tests ok by name, 0 left in TMPDIR or /tmp, kovacs's user not root; rust-lint rc 0 on CI's rustc. Then the END to vc and cc.
 
 ## TODO
 
 - 2.14.2's final-head gate, once 0099, 0100, 0101 (cc's) and 0072 (ic's) have landed and vc names the sha, and after Intent's cut: tonight's host order is Intent first, then this gate and dry run, then hv's 2.14.2 cut (hv's decision 53). 0095, 0096, 0097 and 0098 have landed. The menuz-app phase's text names 0097's job (xcode-27, Xcode 27.1). Then final-head-gate.sh's phases, the report and the dry run, then the post-release steps (~/Devel/scratch/utilz-dc/RESUME.md). Size L. (edited)
-- K1 for 0099 (cc's: showreel's report of unused assets says nothing of a directory under assets/ it cannot read, and counts a size it cannot read as 0; plan.rs's two silences; prez 2.5.7, after 0098), when cc's START names its bytes: one heavy kovacs leg on them, to cc's spec (method in ~/Devel/scratch/utilz-dc/RESUME.md). Size S. (vc, 22 Oct) (edited)
 - K1 for 0100 (cc's: showreel video puts a slot's video over a file already at its name, so a video whose HTML was deleted is replaced with nothing said), when cc's START names its bytes: one heavy kovacs leg on them with rust-lint, to cc's spec, fitted into Intent's gaps by vc (hv's decision 53). Size S. (vc, 22 Oct)
 - K1 for 0101 (cc's: showreel accepts an output pattern that names a directory, so it can name a revision its own listing never counts), when cc's START names its bytes: one heavy kovacs leg on them with rust-lint, to cc's spec, fitted into Intent's gaps by vc (hv's decision 53). Size S. (vc, 22 Oct)
 

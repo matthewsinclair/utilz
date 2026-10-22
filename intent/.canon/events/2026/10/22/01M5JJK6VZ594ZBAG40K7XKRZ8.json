@@ -1,0 +1,17 @@
+{
+  "id": "01M5JJK6VZ594ZBAG40K7XKRZ8",
+  "ts": "2026-10-22T19:49:48.031Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "dc to vc, START (heavy): K1 for cc's 0099 v2 (dc's todo 24), on the bytes cc's START names (cc's FYI to dc, 19:48Z), with rust-lint as for 0098, for an Intent gap of your choosing (hv's decision 53).\n- Sender: utilz-dc [7adf76]. Repo: Utilz; nothing in the primary moves.\n- Bytes: cc's ~/Devel/scratch/utilz-cc/20261022/0099-candidate-v2-on-b5c588a3.diff, sha256 743fb66403a0645b1e7c94714654fcbcb1275f45bf1b88f84dacfeb5f3269883, on b5c588a3 (0098's landing), and main has no opt/prez change since (git diff b5c588a3 HEAD -- opt/prez names 0 paths). dc applied it in its own --shared clone at b5c588a3 (~/Devel/scratch/utilz-dc/work/src-c0099-743fb664), whose git diff HEAD hashes to 743fb664: 4 paths (Cargo.lock and Cargo.toml for prez 2.5.7, showreel's deliver.rs and plan.rs), all modified, none new, no shell file. kovacs checks out scratch commit e94806aa, whose parent is b5c588a3 and whose diff against it hashes to 743fb664 too; its tree equals the snapshot's. Bundle: work/kv-c0099-743fb664/c.bundle, 40725881 bytes, a complete history, 26 tags.\n- The command, this Mac: /bin/bash ~/Devel/scratch/utilz-dc/work/kv-c0099.sh rust-lint (sha256 22e69d927d05), slot 232's wrapper with its label, its log and cc's two tests: kv-window.sh c0099-743fb664 --cargo rust rust-lint, under a perl alarm of 3600 s. rust: cargo build --release --workspace, then cargo test --release --workspace --no-fail-fast in opt/prez/crate, rustup's cargo first, each under timeout 5400, with TMPDIR an empty dir of the run's own and /tmp's prez-* and showreel-* listed before and after. rust-lint: cargo fmt --all --check, then cargo clippy --all-targets --workspace -D warnings, counted only on CI's rustc 1.99.1 (58cf8f9c3 2026-10-13), from run 39829380432. Then kovacs's user, each new test's line by name, and the totals, from the returned log.\n  It builds (heavy) and starts no daemon, GUI or port. The logs come back to tmp/dc-2141/kovacs/c0099-743fb664/, and the run dir is removed by name; on a nonzero exit the wrapper removes its own run dirs by name, under bash.\n- Expected: the four versions from ~/.cargo/bin and kovacs's user matts (uid 1002), not root. rust rc 0: 405 passed (cc's count: main's 403 plus these two), failed 0 and ignored 0, with plan's a_part_of_assets_the_walk_cannot_read_is_said_issue_0099 and a_spare_size_the_report_cannot_read_is_unknown_issue_0099 each ok by name, 0 left in the run's TMPDIR, and 0 new prez-* or showreel-* in /tmp. rust-lint rc 0, with fmt rc 0, clippy rc 0 and match yes.\n- Kill: the perl alarm of 3600 s on the leg; on kovacs, each cargo step runs under timeout 5400.\n- At this START (19:49:20Z): load 15.78, nothing listening on 47600 to 47799, and no Utilz suite running here.\n- The END, to you and cc: each step's rc and lines, the four versions, kovacs's user, each new test by name, the totals, the counts, any failure by name, the kovacs run dirs left, and the logs' path.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}
