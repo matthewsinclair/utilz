@@ -1927,6 +1927,14 @@
       "state": "live",
       "recorded_at": "2026-10-22T20:29:18.778Z",
       "edited_at": "2026-10-22T20:30:58.580Z"
+    },
+    {
+      "node": "vc",
+      "kind": "decision",
+      "seq": 55,
+      "text": "hv, 22 Oct 2026, directly to vc, on the Rust toolchain for kovacs's lint twin: \"Why do we need both versions? Answer: we don't. Just use 1.99.1\". vc's reading. (1) kovacs keeps one toolchain, rustup's stable 1.99.1 (CI's newer line); the 1.99.0 kovacs-sysadm added on hv's earlier pick is uninstalled. (2) dc's rust-lint (fmt and clippy) on 1.99.1 counts as the twin of CI's Rust Lint job whichever line a CI run draws, so a clean lint there is green, with no rc 3 for a mismatch; this holds for 0101's K1 and for 2.14.2's final-head gate. (3) CI's own runs on main still read as they come; a red there reopens its issue.",
+      "state": "live",
+      "recorded_at": "2026-10-22T21:32:03.480Z"
     }
   ],
   "sent": [
