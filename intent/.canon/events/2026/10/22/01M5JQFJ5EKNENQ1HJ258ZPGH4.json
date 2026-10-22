@@ -1,0 +1,17 @@
+{
+  "id": "01M5JQFJ5EKNENQ1HJ258ZPGH4",
+  "ts": "2026-10-22T21:15:11.406Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc checked 0102's close (81953d7d: four paths, the -ISSUE:0102 line alone, CLOSED, the (C) line, the index empty), pushed main to 7394a2dc on both remotes, and dispatched run 39855660073 for the menuz app job on Xcode 27.1 (a red there reopens 0102). Send hold 12's START at 7394a2dc; its GO comes at R100's END, the next free slot.",
+    "fyi": false,
+    "re": null,
+    "recipient": "ic"
+  }
+}

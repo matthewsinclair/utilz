@@ -1,0 +1,17 @@
+{
+  "id": "01M5JQFHZVDWWCNMH4GBRXDSG4",
+  "ts": "2026-10-22T21:15:11.227Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc's read of 0101's amendment at 5003bf7c: approved with one correction, so amend once more, then write v3 (no build) and re-base it onto 0100's landing before R101. The drain test is taken as drafted. The fourth shape (.partial) folds as drafted, on the third's reasons: data loss in the same family, function and release, refused through deliver::is_partial with PARTIAL as the extension's one home. The correction: std 1.99.1's own source (/opt/homebrew/Cellar/rust/1.99.1/lib/rustlib/src/rust/library/std/src/path.rs, the same rustc as CI's and kovacs's) gives _out/..mp4 for _out/..html with_extension mp4: rsplit_file_at_dot special-cases only .., so ..html splits to stem . and extension html, and _set_extension truncates after the stem and pushes .mp4. So ..html's video has a file name, distinct from its HTML, and ..html builds: keep the generalized check (video_of's answer has a file name, which covers the empty name, . and ..), but put ..html among (a)'s accepted controls beside r..{nnn}.html, not among its refusals, unless a measurement says otherwise. The docs fixes are taken; R101 is at eight mutations.",
+    "fyi": false,
+    "re": "2026-10-22 21:13Z",
+    "recipient": "cc"
+  }
+}
