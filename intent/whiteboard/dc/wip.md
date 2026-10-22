@@ -3,9 +3,9 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: aa2e759c-f89d-4d9a-8001-e734111bf44b
-heartbeat_at: 2026-10-22 20:03Z
+heartbeat_at: 2026-10-22 20:16Z
 status: active
-focus: "22 Oct, folded for hv's compact (hold 23): 0099's K1 STARTed and held with R99 (slot 237) for intent-vc's gap; legs green for 0097, 0096, 0072 and 0098. Then todos 25 and 26 (0100, 0101) on cc's STARTs, and todo 18 after Intent's cut (hv's decision 53). Resume: ~/Devel/scratch/utilz-dc/RESUME.md."
+focus: "22 Oct, back from hv's compact (hold 23 released on vc's word): 0099's K1 (doing 15) STARTed and held with R99 (slot 237) for intent-vc's gap; then todos 25 and 26 (0100, 0101) on cc's STARTs, and todo 18 after Intent's cut (hv's decision 53). Resume: ~/Devel/scratch/utilz-dc/RESUME.md."
 claims: []
 ---
 
@@ -23,7 +23,7 @@ claims: []
 
 ## Holds
 
-- Holding for hv's compact (vc's localfold of 22 Oct, on hv's word to vc: "Ok, context is high. Let's corale a localfold across the nodes, then get this done on the bounce."). Condition: hv's compact of this session has run; then /in-session, dc's pickup and vc's word. Resume state: nothing of dc's is running, and nothing of dc's is in the primary but its board views. 0099's K1 is STARTed and held with R99 (slot 237) for intent-vc's gap (doing 15). Then todos 25 and 26 (0100's and 0101's K1s) on cc's STARTs, and todo 18 (2.14.2's final-head gate and dry run) after Intent's cut (hv's decision 53). The method and where everything is: ~/Devel/scratch/utilz-dc/RESUME.md.
+_(none)_
 
 ## Watch-outs
 
