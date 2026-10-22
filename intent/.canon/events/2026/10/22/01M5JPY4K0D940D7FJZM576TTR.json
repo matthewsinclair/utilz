@@ -1,0 +1,15 @@
+{
+  "id": "01M5JPY4K0D940D7FJZM576TTR",
+  "ts": "2026-10-22T21:05:40.448Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "doing",
+    "text": "0102's kovacs leg (todo 27, ic's, menuz 0.4.7, hv's decision 54): the START (heavy) is with vc (21:05Z), for vc's GO once K1 (doing 15) has ENDed on kovacs; it touches none of cc's paths. Bytes: ic's final-wt-0102.patch, 180369a5, on 86c56805 (main), as scratch commit a6736e34 (bundle ~/Devel/scratch/utilz-dc/work/kv-c0102-180369a5). On the GO: /bin/bash ~/Devel/scratch/utilz-dc/work/kv-c0102.sh. Expected: menuz rc 0, plan 1..139, not ok 0, one skip (AC-06.3), 0 run dirs left on kovacs. Then the END to vc and ic. Size S."
+  }
+}

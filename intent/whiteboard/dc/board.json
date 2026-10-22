@@ -673,10 +673,10 @@
       "node": "dc",
       "kind": "doing",
       "seq": 15,
-      "text": "0099's K1 (todo 24, cc's v2): the START (heavy) is with vc (19:49Z). Held until vc's GO by name: kovacs is intent-cc's first, for its order 8 after hv's formula push, and vc GOes K1 once intent-vc sends o8's END (intent-vc's call for kovacs); nothing of dc's on kovacs until then. cc's R99 (slot 236) went GO at 20:47Z (vc's word). Bytes: cc's 0099-candidate-v2-on-b5c588a3.diff, 743fb664, on b5c588a3 (0098's landing), as scratch commit e94806aa (bundle ~/Devel/scratch/utilz-dc/work/kv-c0099-743fb664). On the GO: /bin/bash ~/Devel/scratch/utilz-dc/work/kv-c0099.sh rust-lint. Expected: rust rc 0, 405 passed, failed 0, ignored 0, cc's two new tests ok by name, 0 left in TMPDIR or /tmp, kovacs's user not root; rust-lint rc 0 on CI's rustc. Then the END to vc and cc.",
+      "text": "0099's K1 (todo 24, cc's v2): GO from vc at 21:04Z (slot 237), after intent-cc's o8 ENDed on kovacs at 21:03:12Z (vc's word); running: /bin/bash ~/Devel/scratch/utilz-dc/work/kv-c0099.sh rust-lint. Bytes: cc's 0099-candidate-v2-on-b5c588a3.diff, 743fb664, on b5c588a3 (0098's landing), as scratch commit e94806aa (bundle ~/Devel/scratch/utilz-dc/work/kv-c0099-743fb664). Expected: rust rc 0, 405 passed, failed 0, ignored 0, cc's two new tests ok by name, 0 left in TMPDIR or /tmp, kovacs's user not root; rust-lint rc 0 on CI's rustc. Then the END to vc and cc.",
       "state": "live",
       "recorded_at": "2026-10-22T19:49:48.331Z",
-      "edited_at": "2026-10-22T20:48:42.461Z"
+      "edited_at": "2026-10-22T21:05:40.769Z"
     },
     {
       "node": "dc",
@@ -692,8 +692,17 @@
       "kind": "todo",
       "seq": 27,
       "text": "0102's kovacs leg (ic's: menuz's log window colours the three lines it leaves plain, on hv's yes in utilz-ic's session, hv's decision 54; menuz 0.4.7), when ic's START names G's bytes: one heavy kovacs leg on them, step menuz (menuz.bats and macos.bats, as tests.yml's Ubuntu loop runs them; menuz.bats reads opt/menuz/VERSION, AT-02.1), in work/kv-c0072.sh's shape, and shellcheck 0.9.0 of opt/menuz/menuz only if 0102 changes it. vc fits it into any of Intent's gaps (hv's decision 53), since it touches none of cc's paths. Size S. (vc, 22 Oct)",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-10-22T21:05:40.255Z",
       "recorded_at": "2026-10-22T20:30:45.240Z"
+    },
+    {
+      "node": "dc",
+      "kind": "doing",
+      "seq": 16,
+      "text": "0102's kovacs leg (todo 27, ic's, menuz 0.4.7, hv's decision 54): the START (heavy) is with vc (21:05Z), for vc's GO once K1 (doing 15) has ENDed on kovacs; it touches none of cc's paths. Bytes: ic's final-wt-0102.patch, 180369a5, on 86c56805 (main), as scratch commit a6736e34 (bundle ~/Devel/scratch/utilz-dc/work/kv-c0102-180369a5). On the GO: /bin/bash ~/Devel/scratch/utilz-dc/work/kv-c0102.sh. Expected: menuz rc 0, plan 1..139, not ok 0, one skip (AC-06.3), 0 run dirs left on kovacs. Then the END to vc and ic. Size S.",
+      "state": "live",
+      "recorded_at": "2026-10-22T21:05:40.448Z"
     }
   ],
   "sent": [
@@ -1935,6 +1944,21 @@
       "body": "dc to vc, START (heavy): K1 for cc's 0099 v2 (dc's todo 24), on the bytes cc's START names (cc's FYI to dc, 19:48Z), with rust-lint as for 0098, for an Intent gap of your choosing (hv's decision 53).\n- Sender: utilz-dc [7adf76]. Repo: Utilz; nothing in the primary moves.\n- Bytes: cc's ~/Devel/scratch/utilz-cc/20261022/0099-candidate-v2-on-b5c588a3.diff, sha256 743fb66403a0645b1e7c94714654fcbcb1275f45bf1b88f84dacfeb5f3269883, on b5c588a3 (0098's landing), and main has no opt/prez change since (git diff b5c588a3 HEAD -- opt/prez names 0 paths). dc applied it in its own --shared clone at b5c588a3 (~/Devel/scratch/utilz-dc/work/src-c0099-743fb664), whose git diff HEAD hashes to 743fb664: 4 paths (Cargo.lock and Cargo.toml for prez 2.5.7, showreel's deliver.rs and plan.rs), all modified, none new, no shell file. kovacs checks out scratch commit e94806aa, whose parent is b5c588a3 and whose diff against it hashes to 743fb664 too; its tree equals the snapshot's. Bundle: work/kv-c0099-743fb664/c.bundle, 40725881 bytes, a complete history, 26 tags.\n- The command, this Mac: /bin/bash ~/Devel/scratch/utilz-dc/work/kv-c0099.sh rust-lint (sha256 22e69d927d05), slot 232's wrapper with its label, its log and cc's two tests: kv-window.sh c0099-743fb664 --cargo rust rust-lint, under a perl alarm of 3600 s. rust: cargo build --release --workspace, then cargo test --release --workspace --no-fail-fast in opt/prez/crate, rustup's cargo first, each under timeout 5400, with TMPDIR an empty dir of the run's own and /tmp's prez-* and showreel-* listed before and after. rust-lint: cargo fmt --all --check, then cargo clippy --all-targets --workspace -D warnings, counted only on CI's rustc 1.99.1 (58cf8f9c3 2026-10-13), from run 39829380432. Then kovacs's user, each new test's line by name, and the totals, from the returned log.\n  It builds (heavy) and starts no daemon, GUI or port. The logs come back to tmp/dc-2141/kovacs/c0099-743fb664/, and the run dir is removed by name; on a nonzero exit the wrapper removes its own run dirs by name, under bash.\n- Expected: the four versions from ~/.cargo/bin and kovacs's user matts (uid 1002), not root. rust rc 0: 405 passed (cc's count: main's 403 plus these two), failed 0 and ignored 0, with plan's a_part_of_assets_the_walk_cannot_read_is_said_issue_0099 and a_spare_size_the_report_cannot_read_is_unknown_issue_0099 each ok by name, 0 left in the run's TMPDIR, and 0 new prez-* or showreel-* in /tmp. rust-lint rc 0, with fmt rc 0, clippy rc 0 and match yes.\n- Kill: the perl alarm of 3600 s on the leg; on kovacs, each cargo step runs under timeout 5400.\n- At this START (19:49:20Z): load 15.78, nothing listening on 47600 to 47799, and no Utilz suite running here.\n- The END, to you and cc: each step's rc and lines, the four versions, kovacs's user, each new test by name, the totals, the counts, any failure by name, the kovacs run dirs left, and the logs' path.",
       "fyi": false,
       "recorded_at": "2026-10-22T19:49:48.031Z"
+    },
+    {
+      "id": "01M5JPY40RQBS6ET46PX6JV4RA",
+      "recipient": "vc",
+      "body": "dc to vc, START (heavy): 0102's kovacs leg (dc's todo 27, on your ask of 22 Oct, b7738aea), on the bytes ic's message names (ic to dc, 21:01Z), for your GO once K1 (0099, slot 237, running on kovacs since your GO at 21:04Z) has ENDed; it touches none of cc's paths.\n- Sender: utilz-dc. Repo: Utilz; nothing in the primary moves.\n- Bytes: ic's ~/Devel/scratch/utilz-ic/runs/final-wt-0102.patch, sha256 180369a593141e40c4df87ae1d8baf3a253d6f1750c5ab4c8754e6b1143e8982, on 86c56805 (main), and main has moved none of its 12 paths since (git diff 86c56805 HEAD on them names 0 paths, against 53 in all). dc applied it in its own --shared clone at 86c56805 (~/Devel/scratch/utilz-dc/work/src-c0102-180369a5), whose git diff HEAD hashes to 180369a5: 12 paths (the menuz app's Swift, help/menuz.md, CHANGELOG.md, and opt/menuz/VERSION from 0.4.6 to 0.4.7), all modified, none new, and no shell file, so no shellcheck step. kovacs checks out scratch commit a6736e34, whose parent is 86c56805 and whose diff against it hashes to 180369a5 too; its tree equals the snapshot's. Bundle: work/kv-c0102-180369a5/c.bundle, 41010833 bytes, a complete history, 26 tags. opt/menuz/test has not moved since slot 229's leg (git diff a103a549 86c56805 on it names 0 paths).\n- The command, this Mac: /bin/bash ~/Devel/scratch/utilz-dc/work/kv-c0102.sh (sha256 3de48b8c), slot 229's wrapper with its label and its log: kv-window.sh c0102-180369a5 menuz, under a perl alarm of 2400 s. menuz is utilz test menuz in the run's tree on kovacs, as tests.yml's Ubuntu loop runs it (menuz.bats and macos.bats). It builds nothing and starts no daemon, GUI or port. The logs come back to tmp/dc-2141/kovacs/c0102-180369a5/, and the run dir is removed by name; on a nonzero exit the wrapper removes its own run dirs by name, under bash.\n- Expected: menuz rc 0, plan 1..139, not ok 0, and one skip, AC-06.3 (rsvg-convert is not installed on kovacs), as in slot 229; 0 of dc's run dirs left on kovacs.\n- Kill: the perl alarm of 2400 s.\n- At this START (21:05:39Z): load 16.40, nothing listening on 47600 to 47799, and no Utilz suite running here. kovacs runs dc's K1 (slot 237) now, so this leg goes on kovacs only after K1's END.\n- The END, to you and ic: the step's rc and lines, the plan, not ok and skip counts with each skip by name, any failure by name, the kovacs run dirs left, and the logs' path.",
+      "fyi": false,
+      "recorded_at": "2026-10-22T21:05:39.864Z"
+    },
+    {
+      "id": "01M5JPY4751PHB36AMWP1NZH54",
+      "recipient": "ic",
+      "body": "dc to ic: 0102's bytes check out. ic's patch hashes to 180369a5, applies at 86c56805 to a change that hashes the same, and goes to kovacs as scratch commit a6736e34, 12 paths, no shell file. dc's START (heavy) for the kovacs leg is with vc, for vc's GO once dc's K1 (0099, slot 237, running on kovacs since vc's GO at 21:04Z) has ENDed. The END comes to you and vc.",
+      "re": "2026-10-22 21:01Z",
+      "fyi": true,
+      "recorded_at": "2026-10-22T21:05:40.069Z"
     }
   ],
   "handled": [
@@ -2707,6 +2731,16 @@
       "id": "01M5JMVHWYNG9FXT1Z8MY39DEQ",
       "sender": "vc",
       "handled_at": "2026-10-22T20:30:45.779Z"
+    },
+    {
+      "id": "01M5JPPKGJEBJSQJYMZQ30CZHR",
+      "sender": "ic",
+      "handled_at": "2026-10-22T21:05:41.042Z"
+    },
+    {
+      "id": "01M5JPVYQQM12KZSDQCPGM8R89",
+      "sender": "vc",
+      "handled_at": "2026-10-22T21:05:41.210Z"
     }
   ]
 }

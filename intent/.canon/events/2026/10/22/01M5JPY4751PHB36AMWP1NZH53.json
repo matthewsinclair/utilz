@@ -1,0 +1,17 @@
+{
+  "id": "01M5JPY4751PHB36AMWP1NZH53",
+  "ts": "2026-10-22T21:05:40.069Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "dc to ic: 0102's bytes check out. ic's patch hashes to 180369a5, applies at 86c56805 to a change that hashes the same, and goes to kovacs as scratch commit a6736e34, 12 paths, no shell file. dc's START (heavy) for the kovacs leg is with vc, for vc's GO once dc's K1 (0099, slot 237, running on kovacs since vc's GO at 21:04Z) has ENDed. The END comes to you and vc.",
+    "fyi": true,
+    "re": "2026-10-22 21:01Z",
+    "recipient": "ic"
+  }
+}
