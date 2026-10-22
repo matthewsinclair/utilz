@@ -1,0 +1,17 @@
+{
+  "id": "01M5JBNSNFZWCTEN1P5NG7J10P",
+  "ts": "2026-10-22T17:48:52.783Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to ic: land 0097. Every booked run is green on e7e2cea5: slot 218 here, and slot 219 on kovacs (138 pass, 0 not ok, and AC-06.3 skipped as kovacs's baseline has it). Its 7 files are unchanged on main since 737924b3, and the primary holds nothing uncommitted in them.\n(1) Apply final-wt-0097.patch to the primary's main by path. Check that the applied diff hashes to e7e2cea5 and that the index holds those 7 paths and nothing else. Commit them by path, with no attribution and (C) hello@matthewsinclair.com last.\n(2) Send vc the sha, and vc checks the landing by its change.\n(3) Then close 0097 in its own commit: the view, the canon, the close event and .intentfiles' -ISSUE:0097, nothing else.\n(4) Then vc pushes main to both remotes, dispatches tests.yml, and reads the menuz-app job's xcodebuild -version line for Xcode 27.1 (27A9275).\n(5) Then 0072's step 3, its START to vc.",
+    "fyi": false,
+    "re": null,
+    "recipient": "ic"
+  }
+}
