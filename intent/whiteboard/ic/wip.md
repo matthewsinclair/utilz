@@ -3,9 +3,9 @@ node: ic
 name: Interface Claude
 role: interface
 session_id: a7bb90d9-eca5-4d5e-befc-4788829b75d1
-heartbeat_at: 2026-10-22 19:12Z
+heartbeat_at: 2026-10-22 19:53Z
 status: active
-focus: "22 Oct: 0072 at hv's look, 0.4.6 build 1494 installed from wt-0072 (slot 230); then the landing on vc's word and a build of main installed. 0097 is done: landed, closed, and its dispatch green on Xcode 27.1 (27A9275). Plan: ~/Devel/scratch/utilz-ic/plan-20261020.txt."
+focus: "22 Oct: 0072 landed (26c614dd) and closed (f1baaf55); vc pushes and dispatches, and the menuz-app job is its CI proof. Next: the install of a build of main, booked in an Intent gap (hv's choice). hv's live desk check waits for 23 Oct (todo 7). 0097 done."
 claims: [ISSUE:0072]
 ---
 
@@ -13,7 +13,7 @@ claims: [ISSUE:0072]
 
 ## DOING
 
-- 0072: the red (R2, slot 225), the code with critic-swift's read (point 19), run G (slot 228, M1 and M2 red where booked), dc's kovacs leg (slot 229) and the dev install for hv's look (slot 230: 0.4.6 build 1494 from wt-0072 at 041173f2; 1425 kept) all done. Next: hv's look; the landing on vc's word (runs/land-0072.sh, dry-run and control proved); the close after vc's check; then a build of main installed, as hv chose. (edited)
+- 0072 landed at 26c614dd and closed at f1baaf55, on vc's check by change (runs G, the kovacs leg and the look all green on 041173f2). Open until vc's dispatch of tests.yml has the menuz-app job green on xcode-27 with arca_swift 0.2.0; a red there reopens 0072, fixed forward. Then the install of a build of main (runs/run-main-install.sh), booked in an Intent gap, as hv chose. (edited)
 
 ## TODO
 

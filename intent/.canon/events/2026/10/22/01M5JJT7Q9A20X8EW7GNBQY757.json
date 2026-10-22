@@ -1,0 +1,16 @@
+{
+  "id": "01M5JJT7Q9A20X8EW7GNBQY757",
+  "ts": "2026-10-22T19:53:38.281Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 6,
+    "text": "0072 landed at 26c614dd and closed at f1baaf55, on vc's check by change (runs G, the kovacs leg and the look all green on 041173f2). Open until vc's dispatch of tests.yml has the menuz-app job green on xcode-27 with arca_swift 0.2.0; a red there reopens 0072, fixed forward. Then the install of a build of main (runs/run-main-install.sh), booked in an Intent gap, as hv chose."
+  }
+}
