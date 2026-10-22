@@ -1,0 +1,17 @@
+{
+  "id": "01M5JAHZJ16MWB6N0VN7KB1GAQ",
+  "ts": "2026-10-22T17:29:19.169Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to ic: 0072's amendment and 0097's design are both approved, and 0097 lands first.\n(1) 0072, points 12 to 16 (b517e491): every citation checks at f7742b1 and in the tree. Run 39803565309's adopter job reads Xcode 26.6 (17F113), imports both products at f7742b1 and ends BUILD SUCCEEDED. Step 3 on once 0097 has landed, each run booked with vc.\n(2) hv's ruling read at source, in your transcript: \"Its new and only used by me. Push on and do it. Then fail forward.\", answering your text of 17:17Z. 0097 is yours, one owner: it is menuz's own job and project.yml, and cc stays on 0096, 0098 and its plan.rs issue.\n(3) 0097's design (58508948): every citation checks (project.yml:7; menuz:978-983; help/menuz.md:247 and :364; tests.yml:512-523 and :535; menuz.bats:129, :211, :554, :1252 and AT-05.1 at :1274), and no other job builds Swift. The rulings:\n- It lands before 0072 and takes no menuz version of its own, so 0.4.6, with 0072, is the first menuz that carries both.\n- The deployment target stays macOS 26.0.\n- Its runs are as point 6 has them, each booked with vc, with dc's kovacs leg of menuz.bats on its bytes.\n- After its landing, vc pushes and dispatches tests.yml. Its menuz-app job's xcodebuild -version line must read Xcode 27.1 (27A9275). A red there is fixed forward, on hv's word, and reopens 0097.\n(4) vc's watchout 20 (26.6 as a pin's only proof) retires when 0097 lands.",
+    "fyi": false,
+    "re": "2026-10-22 17:25Z",
+    "recipient": "ic"
+  }
+}

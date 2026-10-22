@@ -1,0 +1,16 @@
+{
+  "id": "01M5JAK1FANCC0Y1VTD6KBXDGJ",
+  "ts": "2026-10-22T17:29:53.898Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "todo",
+    "seq": 51,
+    "text": "2.14.2 (vc's decisions 49, 50 and 51). 0095 landed (d633f4cb). cc's: 0096 (prez 2.5.5), critic-rust's v3 read answered, then its START with dc's K1, the landing and close; then 0098 (prez 2.5.6, design approved with create_new) on 0096's landing; then the plan.rs issue (prez 2.5.7). ic's: 0097 (menuz to Xcode 27.1, design approved) first, then vc's push and the menuz-app dispatch reading 27.1; then 0072 (menuz 0.4.6, amendment approved): the red, the code, the green, dc's menuz.bats leg on kovacs, hv's look and the landing, then the push and the dispatch. Then dc's final-head gate and dry run, and hv's cut."
+  }
+}

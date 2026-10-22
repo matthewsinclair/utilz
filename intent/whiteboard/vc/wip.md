@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 10d02503-c5ac-4034-b498-1aec461f1878
-heartbeat_at: 2026-10-22 17:19Z
+heartbeat_at: 2026-10-22 17:29Z
 status: active
-focus: "22 Oct, on hv's go (decision 50): 2.14.2's last landings under way (0096 and deliver.rs's overwrite cc's, 0072 ic's); main pushed to 4db57408, its CI run 39821566758 being read; the menuz-app job's Xcode pin open with hv after vc's poll of gtools-vc and intent-vc; utilz-vc books the host for both estates (slot 218 on)"
+focus: "22 Oct: 2.14.2's landings under way (cc: 0096, 0098, the plan.rs issue; ic: 0097 to Xcode 27.1, then 0072); main pushed to 4db57408 with CI green (39821566758); hv's Xcode ruling carried to gtools-vc and intent-vc; utilz-vc books the host for both estates (slot 218 on)"
 claims: []
 ---
 
@@ -17,7 +17,7 @@ _(none)_
 
 ## TODO
 
-- 2.14.2 (vc's decisions 49 and 50). 0095 landed (d633f4cb). 0096 is cc's (prez 2.5.5): critic-rust's v3 read answered, then its START with dc's K1, the landing and close. deliver.rs's revision overwrite is cc's new issue (prez 2.5.6), after 0096, its design for vc's read first. 0072 is ic's (menuz 0.4.6), unblocked by arca_swift 0.2.0 (f7742b1, run 39803565309): the amendment for vc's read, the red, the code, the green, dc's menuz.bats leg on kovacs, hv's look and the landing, then hv's push and the menuz-app dispatch. The Xcode tests.yml's menuz-app job pins waits on hv's ruling after vc's poll of gtools-vc and intent-vc. Then dc's final-head gate and dry run, and hv's cut. (edited)
+- 2.14.2 (vc's decisions 49, 50 and 51). 0095 landed (d633f4cb). cc's: 0096 (prez 2.5.5), critic-rust's v3 read answered, then its START with dc's K1, the landing and close; then 0098 (prez 2.5.6, design approved with create_new) on 0096's landing; then the plan.rs issue (prez 2.5.7). ic's: 0097 (menuz to Xcode 27.1, design approved) first, then vc's push and the menuz-app dispatch reading 27.1; then 0072 (menuz 0.4.6, amendment approved): the red, the code, the green, dc's menuz.bats leg on kovacs, hv's look and the landing, then the push and the dispatch. Then dc's final-head gate and dry run, and hv's cut. (edited)
 
 ## Holds
 
@@ -35,6 +35,7 @@ _(none)_
 
 - hv, 2026-09-14: every hv inbox and whiteboard item comes to vc for review and closeout, and after its compact cc takes its instructions from vc.
 - hv, 22 Oct 2026, directly to vc, on vc's boot plan: "Yep, go for it and go with your recs (4: def pin it to the right Xcode)." Then, before anything had gone out: "Hang on: the latest Xcode is 27.x. Why not pin to that?" And on vc's answer (26.6, the toolchain this Mac is not): "Can you do me a favour and poll all *-vc that have Swift and macOS code and ask why we can't ping to 27.x now? I see no reason not to. Isn't it just a matter of rebuilding with Xcode 27.x?" vc's reading. (1) The plan goes ahead in its order, and cc, dc and ic take their words from vc, as hv told each of them at boot. (2) vc pushes main's commits past 1ceade68 to both remotes and reads the push's CI. (3) 0072 is unblocked on vc's own read of the tag, not a relay: 0.2.0 is tag 9f3b863 on f7742b1, and run 39803565309 is green there, its adopter job on macos-26 with DEVELOPER_DIR at Xcode 26.6. (4) Which Xcode tests.yml's menuz-app job pins is open. vc polled gtools-vc (for Gtools.app and arca_swift) and intent-vc (for Intent.app); molt-vc's project has no Swift. vc takes their answers to hv, and nothing about the pin is filed or changed until hv rules. (5) 2.14.2 is 0095 (landed), 0096 (prez 2.5.5), deliver.rs's revision overwrite (cc's new issue, prez 2.5.6), the Xcode pin once hv has ruled, and 0072 (menuz 0.4.6). (6) Still hv's, asked at 0072's step 7: when hv looks at the dev install, and what stays installed after it.
+- hv, 22 Oct 2026, in utilz-ic's session, read by vc at source (a mid-turn message in ic's transcript a7bb90d9), quoting "arca_swift" from ic's answer of 17:17Z on why not Xcode 27.x everywhere: "Its new and only used by me. Push on and do it. Then fail forward." vc's reading. (1) menuz moves to Xcode 27.1 as issue 0097, utilz-ic's (one owner: menuz's own job and project.yml): tests.yml's menuz-app job on GitHub's xcode-27 image with Xcode 27.1 named by DEVELOPER_DIR, project.yml's xcodeVersion at 27.1, its restatements and menuz.bats' fixture. Its design is approved. It lands before 0072 with no menuz version of its own, so menuz 0.4.6, with 0072, is the first that carries both. The deployment target stays macOS 26.0. (2) After 0097 lands, vc pushes and dispatches tests.yml, and the menuz-app job's xcodebuild -version must read Xcode 27.1 (27A9275). A red there is fixed forward and reopens 0097. (3) Watchout 20 retires when 0097 lands. (4) vc carried the ruling, with its source, to gtools-vc (Gtools.app and arca_swift) and intent-vc (Intent.app); each acts on hv's word in its own project. (5) 2.14.2 is now 0095 (landed), 0096 (prez 2.5.5), 0098 (prez 2.5.6), cc's plan.rs issue (prez 2.5.7), 0097, and 0072 (menuz 0.4.6).
 
 ---
 

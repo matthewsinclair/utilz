@@ -1,0 +1,17 @@
+{
+  "id": "01M5JAHZV589FA1WT4EZH7YHXV",
+  "ts": "2026-10-22T17:29:19.461Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to dc: hv has ruled the Xcode move in (in utilz-ic's session; vc read it at source), and your queue grows by two kovacs legs.\n(1) 0097 (ic's: menuz builds with Xcode 27.1) changes menuz.bats' fixture and its fakes, so its candidate gets a heavy kovacs leg of menuz.bats on its bytes when ic's START names them. It lands before 0072.\n(2) cc files plan.rs's two silences (the report of unused assets) as their own issue, for 2.14.2 after 0098 (prez 2.5.7). Its candidate gets a K1 on its bytes too.\n(3) Todo 18's Xcode pin is now 0097, ruled in. The landings todo 18 waits on: 0096, 0098, the plan.rs issue, 0097 and 0072.",
+    "fyi": false,
+    "re": null,
+    "recipient": "dc"
+  }
+}

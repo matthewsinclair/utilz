@@ -1,0 +1,15 @@
+{
+  "id": "01M5JAHZDGPJWF1K7BZ6AGSER8",
+  "ts": "2026-10-22T17:29:19.024Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 22 Oct 2026, in utilz-ic's session, read by vc at source (a mid-turn message in ic's transcript a7bb90d9), quoting \"arca_swift\" from ic's answer of 17:17Z on why not Xcode 27.x everywhere: \"Its new and only used by me. Push on and do it. Then fail forward.\" vc's reading. (1) menuz moves to Xcode 27.1 as issue 0097, utilz-ic's (one owner: menuz's own job and project.yml): tests.yml's menuz-app job on GitHub's xcode-27 image with Xcode 27.1 named by DEVELOPER_DIR, project.yml's xcodeVersion at 27.1, its restatements and menuz.bats' fixture. Its design is approved. It lands before 0072 with no menuz version of its own, so menuz 0.4.6, with 0072, is the first that carries both. The deployment target stays macOS 26.0. (2) After 0097 lands, vc pushes and dispatches tests.yml, and the menuz-app job's xcodebuild -version must read Xcode 27.1 (27A9275). A red there is fixed forward and reopens 0097. (3) Watchout 20 retires when 0097 lands. (4) vc carried the ruling, with its source, to gtools-vc (Gtools.app and arca_swift) and intent-vc (Intent.app); each acts on hv's word in its own project. (5) 2.14.2 is now 0095 (landed), 0096 (prez 2.5.5), 0098 (prez 2.5.6), cc's plan.rs issue (prez 2.5.7), 0097, and 0072 (menuz 0.4.6)."
+  }
+}
