@@ -1,0 +1,16 @@
+{
+  "id": "01M5JNJ2R9Z2AZWWKCBYVK5NKP",
+  "ts": "2026-10-22T20:41:36.777Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 7,
+    "text": "0102 (menuz's log window colours six kinds of line it left plain: hv's three, and point 9's three on hv's yes through vc, 22 Oct): approved by vc (decision 54, a0287ca7, a19f54ac), the body amended at 293435e8. Code written in wt-0102 on 86c56805, diff fc84c077, sent to vc for its read and to critic-swift. Then the slot script (R2, G, M1, M2, utilz test menuz), its START on vc's GO in Intent's gap, dc's kovacs leg on the slot's bytes, and the landing in 2.14.2."
+  }
+}

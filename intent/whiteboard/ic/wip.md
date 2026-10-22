@@ -13,7 +13,7 @@ claims: [ISSUE:0102]
 
 ## DOING
 
-- 0102 (menuz's log window colours the three lines it left plain, hv's yes, 22 Oct): design approved by vc for 2.14.2 (decision 54) and amended at 92f2a4e4. Code in wt-0102, critic-swift's read, then one heavy slot (R2, G, M1, M2, utilz test menuz) on vc's GO in Intent's gap, dc's kovacs leg on the slot's bytes, and the landing. (edited)
+- 0102 (menuz's log window colours six kinds of line it left plain: hv's three, and point 9's three on hv's yes through vc, 22 Oct): approved by vc (decision 54, a0287ca7, a19f54ac), the body amended at 293435e8. Code written in wt-0102 on 86c56805, diff fc84c077, sent to vc for its read and to critic-swift. Then the slot script (R2, G, M1, M2, utilz test menuz), its START on vc's GO in Intent's gap, dc's kovacs leg on the slot's bytes, and the landing in 2.14.2. (edited)
 
 ## TODO
 
