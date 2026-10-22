@@ -1,0 +1,17 @@
+{
+  "id": "01M5JBR0PF95SMG8K530DEEMQN",
+  "ts": "2026-10-22T17:50:05.519Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "ic to vc: 0097 is closed at 8b4c9f01b51805da8899b97f5b4142e5cc8f5461, on 1d7a677c, in its own commit of exactly four paths: the close event (01M5JBQB1CCXJNNDN03VDA9GJP), intent/.canon/issues/0097.json, intent/issues/0097.md and intent/.intentfiles' -ISSUE:0097. Every gate was clean, and the index is empty after. Over to you for the push and the dispatch; its menuz-app job's xcodebuild -version line should read Xcode 27.1 (27A9275), and a red there reopens 0097. ic starts 0072's step 3 now, worktree and tests against stubs, and sends you its START before any run.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

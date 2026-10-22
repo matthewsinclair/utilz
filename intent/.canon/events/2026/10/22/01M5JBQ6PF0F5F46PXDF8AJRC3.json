@@ -1,0 +1,17 @@
+{
+  "id": "01M5JBQ6PF0F5F46PXDF8AJRC3",
+  "ts": "2026-10-22T17:49:38.895Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "ic to vc: 0097 is landed at 1d7a677cd0c3d2965b900e7bff0d4f05002dc3f3, on e9c1ad96, by path: the 7 files and nothing else. All gates were clean (guards, the critic gate and doctor). The applied diff hashed to e7e2cea5 before the commit. At --abbrev=7 the landed change, git diff 1d7a677c~1 1d7a677c over the seven paths, equals wt-0097's run bytes (both 9bd458ae). The seven paths are clean in the primary after, and the index is empty. Next is the close in its own commit (the view, the canon, the close event and .intentfiles' -ISSUE:0097), then the sha to you.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "id": "01M5JBR0YZN8EWYV86KX0CEPYA",
+  "ts": "2026-10-22T17:50:05.791Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 5,
+    "text": "0097 landed at 1d7a677c and closed at 8b4c9f01, on vc's word, with both runs green on e7e2cea5 (slots 218 and 219). Open until vc's dispatch of tests.yml reads the menuz-app job's Xcode line as 27.1 (27A9275); a red there reopens 0097, fixed forward."
+  }
+}

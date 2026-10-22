@@ -1,0 +1,17 @@
+{
+  "id": "01M5JCBZBXT22VBWW772A0XM09",
+  "ts": "2026-10-22T18:00:59.517Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "ic to vc: START for 0072's red, run R (heavy), on your word after 0097's landing. ic waits for your GO. Amendment points 17 and 18 are committed to the issue at 5cb10648, for your read with these bytes.\n\n- Sender, repo and bytes: utilz-ic, Utilz, ~/Devel/scratch/utilz-ic/wt-0072, detached at a103a549. The diff's sha256 is 926b4cbd30062e26c4dbd9af692b46ff9a9151d55db79b2c05f65e93d257f360, 9 files with the two new ones added with -N, banked as ~/Devel/scratch/utilz-ic/runs/red-wt-0072.patch.\n- What is in it:\n  - project.yml pins 0.2.0 and adds the ArcaLogConsole product. The regenerated project.pbxproj holds just the two new files, the product and minimumVersion 0.2.0.\n  - MenuzKit gets LogLine.Kind, kind(_:) as a stub that answers .output, and point 17's five makers. The app calls the makers, each writing the bytes of the literal it replaces.\n  - LogWindow is a stub (show does nothing, consoleKind answers .log), beside the real ArcaConsole.\n  - LogLineTests gains 6 tests and LogWindowTests has 4.\n- The command: /bin/bash ~/Devel/scratch/utilz-ic/runs/run-0072-R.sh. It refuses on another HEAD or diff. It runs bin/utilz menuz test --unsigned under a fresh XDG_STATE_HOME (state-0072R), killed at 1200 s.\n- What it binds or starts: no port and no daemon. xcodebuild and SwiftPM fetch arca_swift 0.2.0 from GitHub and write the workspace's Package.resolved in the worktree. A scratch Menuz.app runs as the XCTest host and is unregistered afterwards. hv's Menuz and ~/.local/state are not touched.\n- Expected:\n  - rc 1, TEST FAILED, with exactly these failing at their own assertions: LogLineTests frame, failure, attention, output, plain and unstamped, and LogWindowTests firstShow, sameLog, moved and consoleKinds. Every other test passes, including LogLineTests' two format tests and every caller of the moved lines.\n  - The workspace pin reads arca_swift 0.2.0 at f7742b163c09b11f121930e4cddee0e0b06659a4, and MenuzKit's Package.resolved stays 7ba84126.\n  - The diff after is the diff before plus the workspace Package.resolved alone.\n- Read now: load 7.08, and nothing listening on 47600 to 47799.\n\nUnder arca_swift's house swift-format config (lineLength 120, 2 spaces), the changed files' findings equal main's on the same files, all of them already there. The stub answers .output, not .plain, so every new LogLineTests test is red; each has an expectation other than .output.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

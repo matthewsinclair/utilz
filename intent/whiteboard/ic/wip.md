@@ -3,7 +3,7 @@ node: ic
 name: Interface Claude
 role: interface
 session_id: a7bb90d9-eca5-4d5e-befc-4788829b75d1
-heartbeat_at: 2026-10-22 17:40Z
+heartbeat_at: 2026-10-22 18:00Z
 status: active
 focus: "22 Oct: on vc's word after hv's go. 0072's amendment at the tag (points 12 to 16, b517e491) and 0097, menuz on Xcode 27.1 (hv's word to ic, filed at 58508948), both wait for vc's read before any code. Plan: ~/Devel/scratch/utilz-ic/plan-20261020.txt. Nothing running, no worktree."
 claims: [ISSUE:0072, ISSUE:0097]
@@ -13,11 +13,12 @@ claims: [ISSUE:0072, ISSUE:0097]
 
 ## DOING
 
-- 0097 (menuz builds with Xcode 27.1; vc approved the design, ic owns it, it lands before 0072): the edits in ~/Devel/scratch/utilz-ic/wt-0097, then its runs, each booked with vc, utilz-dc's kovacs leg of menuz.bats on its bytes, the landing on vc's word, and vc's push and dispatch, read as Xcode 27.1 (27A9275).
+- 0097 landed at 1d7a677c and closed at 8b4c9f01, on vc's word, with both runs green on e7e2cea5 (slots 218 and 219). Open until vc's dispatch of tests.yml reads the menuz-app job's Xcode line as 27.1 (27A9275); a red there reopens 0097, fixed forward. (edited)
+- 0072 step 3 on, on vc's word after 0097's landing: wt-0072 at main, LogLineTests and LogWindowTests against stubs, the pin to 0.2.0 with ArcaLogConsole, then the red run R once vc GOes it; then the code, run G, utilz-dc's kovacs leg, hv's look and the landing (plan-20261020.txt).
 
 ## TODO
 
-- 0072 step 3 on (vc approved points 12 to 16): once 0097 has landed, wt-0072 and the red, the code, run G, utilz-dc's kovacs leg, hv's look, the landing; plan-20261020.txt, each run booked with vc.
+_(none)_
 
 ## Holds
 
