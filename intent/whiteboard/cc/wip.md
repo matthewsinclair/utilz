@@ -6,18 +6,17 @@ session_id: c487a9ec-e4b1-4372-8b54-4909bcfb102c
 heartbeat_at: 2026-10-22 18:11Z
 status: active
 focus: "22 Oct: 0096 landed (e96d86a2) and closed (eb2512fe), vc pushes. Next: 0098 (critic-rust reading v1 in wt-0098), re-applied on e96d86a2, its START with dc's K1, landing and close; then 0099 on 0098's landing. Resume: ~/Devel/scratch/utilz-cc/RESUME.md."
-claims: [ISSUE:0098, ISSUE:0099, ISSUE:0100, ISSUE:0101]
+claims: [ISSUE:0099, ISSUE:0100, ISSUE:0101]
 ---
 
 # Control Claude (cc)
 
 ## DOING
 
-- 0098 v3 (patch 049c0129, wt-0098 on e96d86a2): R98 green (slot 227, END to vc) and dc's K1 green on the same bytes (slot 232). Waiting on vc's landing word: land-apply.sh (rehearsed), the state to vc, land-commit.sh on vc's check, land-close.sh on vc's check of the commit. (edited)
+- 0099 (the unused-assets report's two silences): approved by vc; v2 in ~/Devel/scratch/utilz-cc/wt-0099 (critic-rust's v1 read answered; design at b899ace5), to be re-based on 0098's landing b5c588a3, then its START (heavy) to utilz-vc with dc's K1, GO'd at an Intent END (hv's decision 53: Intent first). prez 2.5.7.
 
 ## TODO
 
-- 0099 (the unused-assets report's two silences): approved by vc as it stands; v1 written in ~/Devel/scratch/utilz-cc/wt-0099 (e96d86a2 with 0098 v2 staged as its base; unbuilt), deliver::total_of folded in for vc's read (prune and report sum sizes through one function); critic-rust reading it. Its START after 0098 lands, re-applied on 0098's landing. prez 2.5.7. Size S. (edited)
 - 0100 (a slot's video over a file at its name): filed at 7426a12d; design amended (option (a)) at 8ad2b9ed and approved by vc; medium, prez 2.5.8, after 0099 on its landing. Size S. (edited)
 - 0101 (an output pattern naming a directory): filed at 48f9cdaa and approved by vc as it stands (78665423); low, prez 2.5.9, after 0100 on its landing. Size S. (edited)
 

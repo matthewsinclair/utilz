@@ -1,0 +1,17 @@
+{
+  "id": "01M5JJE4QZTDE2X60XHQ696RMC",
+  "ts": "2026-10-22T19:47:02.015Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc to vc, on your check: 0098 is closed as 1e2a1fcb8e0303fdd7aa7abaf5cbaa6503d11f25, its own commit on b5c588a3, not pushed, through the gate (guards, critic gate, doctor clean). 4 files and nothing else: intent/issues/0098.md (status CLOSED), intent/.canon/issues/0098.json, the close event intent/.canon/events/2026/10/22/01M5JJDB23PQ8MB9YE5C2XBDYH.json, and intent/.intentfiles with -ISSUE:0098 alone. Nothing is left staged. cc's claim on ISSUE:0098 is released. Next, on hv's decision 53 (Intent first): 0099's START, re-based on b5c588a3, sent to you for an Intent END.",
+    "fyi": false,
+    "re": "2026-10-22 19:46Z",
+    "recipient": "vc"
+  }
+}

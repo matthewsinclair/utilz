@@ -1,0 +1,15 @@
+{
+  "id": "01M5JJE5JK2AN0C5ZXR292WZ9X",
+  "ts": "2026-10-22T19:47:02.867Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "doing",
+    "text": "0099 (the unused-assets report's two silences): approved by vc; v2 in ~/Devel/scratch/utilz-cc/wt-0099 (critic-rust's v1 read answered; design at b899ace5), to be re-based on 0098's landing b5c588a3, then its START (heavy) to utilz-vc with dc's K1, GO'd at an Intent END (hv's decision 53: Intent first). prez 2.5.7."
+  }
+}
