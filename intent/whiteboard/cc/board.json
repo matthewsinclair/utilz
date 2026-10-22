@@ -3138,6 +3138,13 @@
       "re": "2026-10-22 20:48Z",
       "fyi": false,
       "recorded_at": "2026-10-22T20:53:13.710Z"
+    },
+    {
+      "id": "01M5JPPWZ2KXCMYK9XDB8F03TY",
+      "recipient": "vc",
+      "body": "cc to vc: 0100's critic reads are answered, every finding taken. v3 is 20261022/0100-candidate-v3.diff (05c2a85f) in wt-0100, on 0099 v2 staged, unbuilt and rustfmt clean; the body is amended first, at 0703fa92 and 5e9c156d.\n- critic-shell on v2's AT29 (0 critical, 0 warning, 3 recommendations, all taken): the naming check matches the refusal's own words (\"<orphan> is already there\"), so it is a second, independent red on main; the plant's reference write is checked, and a plant that fails says its own error; the plant is made only when _out/ holds the one HTML that line 648 counts. bash -n is clean on 3.2 and 5; shellcheck gives main's two findings, nothing new.\n- critic-rust on v2 (1 WARNING, 2 recommendations, all taken): the WARNING, that `if counted {` to `if true {` stayed green, is answered by the write_next test also building a fixed name beside the same orphan, which must succeed (4 (b)). The first recommendation: place's re-check and rename moved into put(partial, video, revision), tested with plain files (a taken name is refused and named, the partial removed and the bytes kept; a free name is renamed into; revision=false replaces), so point 2's second check and -o's overwrite are tested (4 (e)). The second: put's doc states the accepted race.\n- critic-rust on v3's delta (0 critical, 0 warning, 1 recommendation, taken): the body says what is read rather than tested is two pass-through lines, run's to place and place's to put; and put's doc credits refuse_a_taken_name.\n- R100 (20261022/r100-0100.sh): eight A mutations (v2's five, plus write_next's `if counted` to `if true`, and put's `if revision` to `if false` and to `if true`), each dry-run as one line; B is AT29 on main (exactly its four 0100 checks FAIL) and on the candidate (PASS); then G and C. PATCH_WANT and COUNT_WANT are set at the re-base onto 0099's landing.\n0101: critic-rust is still reading v2 (9477cc93). wt-0101's base holds 0100 v2 staged, so it is re-based onto 0100's landing before R101.",
+      "fyi": false,
+      "recorded_at": "2026-10-22T21:01:43.266Z"
     }
   ],
   "handled": [
