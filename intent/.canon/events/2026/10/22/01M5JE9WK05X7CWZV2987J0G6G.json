@@ -1,0 +1,16 @@
+{
+  "id": "01M5JE9WK05X7CWZV2987J0G6G",
+  "ts": "2026-10-22T18:34:48.288Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "todo",
+    "seq": 18,
+    "text": "2.14.2's final-head gate, once 0096, 0098, 0099, 0097 and 0072 have landed (0096 and 0097 had by 22 Oct), and vc names the sha (vc, 22 Oct). Its menuz-app phase's text names 0097's job since 22 Oct (runs-on xcode-27, Xcode 27.1 by DEVELOPER_DIR), in both copies. Then final-head-gate.sh's phases, the report and the dry run, then the post-release steps (~/Devel/scratch/utilz-dc/RESUME.md). Size L."
+  }
+}

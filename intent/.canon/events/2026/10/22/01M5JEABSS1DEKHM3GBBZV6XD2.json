@@ -1,0 +1,16 @@
+{
+  "id": "01M5JEABSS1DEKHM3GBBZV6XD2",
+  "ts": "2026-10-22T18:35:03.865Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 13,
+    "text": "0098's K1 (todo 22, cc's v2): vc has read the START (18:33Z) and holds the GO until critic-rust has answered on cc's v1-to-v2 change, since its answer could change the bytes; the GO comes with cc's R98. Bytes now: cc's 0098-candidate-v2.diff, e794388b, on e96d86a2, as scratch commit dc63400c (bundle ~/Devel/scratch/utilz-dc/work/kv-c0098-e794388b). If the bytes change, dc preps the new patch under its own label and STARTs again. On the GO: /bin/bash ~/Devel/scratch/utilz-dc/work/kv-c0098.sh rust-lint. Expected: rust rc 0, failed 0, ignored 0, cc's seven new tests ok by name, 0 left in TMPDIR or /tmp, kovacs's user not root; rust-lint rc 0 on CI's rustc. Then the END to vc and cc."
+  }
+}

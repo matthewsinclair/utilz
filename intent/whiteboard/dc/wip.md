@@ -13,12 +13,12 @@ claims: []
 
 ## DOING
 
-- 0098's K1 (todo 22, cc's v2): the START (heavy) is with vc, beside cc's Mac run, waiting for the GO. Bytes: cc's 0098-candidate-v2.diff, e794388b, on e96d86a2 (0096's landing), as scratch commit dc63400c (bundle ~/Devel/scratch/utilz-dc/work/kv-c0098-e794388b). On the GO: /bin/bash ~/Devel/scratch/utilz-dc/work/kv-c0098.sh rust-lint. Expected: rust rc 0, failed 0, ignored 0, cc's seven new tests ok by name, 0 left in TMPDIR or /tmp, kovacs's user not root; rust-lint rc 0 on CI's rustc. Then the END to vc and cc.
+- 0098's K1 (todo 22, cc's v2): vc has read the START (18:33Z) and holds the GO until critic-rust has answered on cc's v1-to-v2 change, since its answer could change the bytes; the GO comes with cc's R98. Bytes now: cc's 0098-candidate-v2.diff, e794388b, on e96d86a2, as scratch commit dc63400c (bundle ~/Devel/scratch/utilz-dc/work/kv-c0098-e794388b). If the bytes change, dc preps the new patch under its own label and STARTs again. On the GO: /bin/bash ~/Devel/scratch/utilz-dc/work/kv-c0098.sh rust-lint. Expected: rust rc 0, failed 0, ignored 0, cc's seven new tests ok by name, 0 left in TMPDIR or /tmp, kovacs's user not root; rust-lint rc 0 on CI's rustc. Then the END to vc and cc. (edited)
 
 ## TODO
 
 - 0072's kovacs leg (utilz-ic's; menuz 0.4.6, after arca_swift 0.2.0's tag), when ic's START names its bytes: a heavy kovacs leg of menuz.bats on them whatever 0072 changes, since menuz.bats reads opt/menuz/VERSION (AT-02.1, menuz.bats:167-174) and 0072 moves it to 0.4.6; and a light shellcheck 0.9.0 pass of opt/menuz/menuz only if 0072 changes it (vc, 22 Oct). Size S. (edited)
-- 2.14.2's final-head gate, once 0096, 0098, cc's plan.rs issue, 0097 (the Xcode 27.1 move, hv's ruling, which is the pin) and 0072 have landed, and vc names the sha (vc, 22 Oct). First re-read tests.yml's menuz-app job as 0097 leaves it, and correct final-head-gate.sh's menuz-app text, which names macos-26. Then final-head-gate.sh's phases, the report and the dry run, then the post-release steps (~/Devel/scratch/utilz-dc/RESUME.md). Size L. (edited)
+- 2.14.2's final-head gate, once 0096, 0098, 0099, 0097 and 0072 have landed (0096 and 0097 had by 22 Oct), and vc names the sha (vc, 22 Oct). Its menuz-app phase's text names 0097's job since 22 Oct (runs-on xcode-27, Xcode 27.1 by DEVELOPER_DIR), in both copies. Then final-head-gate.sh's phases, the report and the dry run, then the post-release steps (~/Devel/scratch/utilz-dc/RESUME.md). Size L. (edited)
 - K1 for 0099 (cc's: showreel's report of unused assets says nothing of a directory under assets/ it cannot read, and counts a size it cannot read as 0; plan.rs's two silences; prez 2.5.7, after 0098), when cc's START names its bytes: one heavy kovacs leg on them, to cc's spec (method in ~/Devel/scratch/utilz-dc/RESUME.md). Size S. (vc, 22 Oct) (edited)
 
 ## Holds
