@@ -640,10 +640,14 @@ fi
 
 if want AT29; then
   start AT29 "the slot: the video lands beside its HTML in the next _out/ slot, and -o writes only the video"
+  # Set here, so a value from outside this AT can never place issue 0100's plant.
+  html=""
+  htmls=""
   if tools_here; then
     if ensure one; then
       html=$(find "$REEL/_out" -name '*.html' | head -1)
-      check "HTML files in _out/" "$(find "$REEL/_out" -name '*.html' | grep -c '')" "1"
+      htmls=$(find "$REEL/_out" -name '*.html' | grep -c '')
+      check "HTML files in _out/" "$htmls" "1"
       if [ -n "$html" ] && [ -f "${html%.html}.mp4" ]; then ok "the video is ${html##*/} with .html swapped for .mp4"
       else bad "no ${html##*/} with .html swapped for .mp4 in _out/: $(find "$REEL/_out" -mindepth 1 -maxdepth 1 -exec basename {} \; | tr '\n' ' ')"; fi
       check "entries in _out/ after one recording" "$(entries "$REEL/_out")" "2"
@@ -655,6 +659,46 @@ if want AT29; then
       check "entries in _out/ after a recording with -o" "$(entries "$REEL/_out")" "2"
     else
       bad "the recording with -o failed: $(said two)"
+    fi
+    # Issue 0100: a slot whose video name is already taken, as by a video whose
+    # HTML was deleted by hand, is refused before anything is written, with a
+    # refusal's exit and the name: _out/ keeps every entry it held, and the file
+    # at that name keeps its bytes, read against the copy it was planted from.
+    # The next slot is the one after the recording's, so its name is worked out
+    # only when _out/ holds the one HTML counted above, and only from an HTML of
+    # the slot's shape; the plant never replaces a file, and it is removed after.
+    if [ "$htmls" != 1 ]; then html=""; fi
+    if [ -n "$html" ]; then
+      case "${html##*/}" in
+        *-[0-9][0-9][0-9].showreel.html) ;;
+        *) bad "the recording's HTML is not named as a slot (*-NNN.showreel.html): ${html##*/}"; html="" ;;
+      esac
+    fi
+    if [ -n "$html" ]; then
+      n="${html##*-}"
+      n="${n%%.*}"
+      orphan="${html%-"$n".showreel.html}-$(printf '%03d' $((10#$n + 1))).showreel.mp4"
+      if ! printf 'a video whose HTML was deleted\n' >"$WORK/orphan.planted"; then
+        bad "could not write the plant's reference copy, $WORK/orphan.planted"
+      elif ! (set -C; cat "$WORK/orphan.planted" >"$orphan") 2>"$WORK/plant.err"; then
+        bad "could not plant ${orphan##*/}: $(head -1 "$WORK/plant.err")"
+      else
+        held=$(entries "$REEL/_out")
+        run_argv orphan
+        "${RUN[@]}" >"$WORK/orphan.out" 2>"$WORK/orphan.err"
+        rc=$?
+        if [ "$rc" -eq 0 ]; then
+          bad "a slot whose video name was taken was recorded into"
+        elif grep -qF "${orphan##*/} is already there" "$WORK/orphan.err"; then
+          ok "a slot whose video name is taken is refused, naming it"
+        else
+          bad "the refusal does not name ${orphan##*/} as already there: $(said orphan)"
+        fi
+        check "the taken slot's refusal exits" "$rc" "2"
+        check "entries in _out/ after the refusal" "$(entries "$REEL/_out")" "$held"
+        same "the file at the taken name keeps its bytes" "$orphan" "$WORK/orphan.planted"
+        rm -f "$orphan" || bad "could not remove the planted ${orphan##*/}"
+      fi
     fi
   fi
   finish

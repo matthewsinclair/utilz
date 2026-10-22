@@ -158,7 +158,15 @@ pub fn run(dir: &Path, o: &Options, progress: &mut dyn FnMut(u64, u64)) -> Resul
   // scratch directory, is said whatever comes next: under the refusal when the
   // video is not made, beside the video when it is (issue 0096).
   let chrome_said = recording.warnings;
-  let made = place(encoder, &ffprobe, &partial, &video, recording.frames).and_then(|()| {
+  let made = place(
+    encoder,
+    &ffprobe,
+    &partial,
+    &video,
+    recording.frames,
+    built.counted,
+  )
+  .and_then(|()| {
     let Some(frames) = &o.frames else {
       return Ok(());
     };
@@ -188,13 +196,16 @@ pub fn run(dir: &Path, o: &Options, progress: &mut dyn FnMut(u64, u64)) -> Resul
 
 /// Ends the encode and puts the video in place: the partial becomes the video
 /// only once ffmpeg has exited 0 and ffprobe counts the frames the recording
-/// made, and each refusal here removes the partial, saying when it cannot.
+/// made, and each refusal here removes the partial, saying when it cannot. The
+/// placing itself is `put`'s, told whether the video is a counted revision's
+/// (`revision`, `Built::counted` as `run` hands it on).
 fn place(
   encoder: Encoder,
   ffprobe: &Path,
   partial: &Path,
   video: &Path,
   frames: u64,
+  revision: bool,
 ) -> Result<(), Failure> {
   encoder.finish()?;
   let counted = frames_in(ffprobe, partial);
@@ -206,6 +217,24 @@ fn place(
     );
     and_also(&mut failure, remove_partial(partial));
     return Err(failure);
+  }
+  put(partial, video, revision)
+}
+
+/// Puts the finished partial at the video's name. A counted revision's video
+/// (`revision`) never replaces a file: its name was free when the build took
+/// the slot, and is checked again here, a taken name, or one it cannot check,
+/// refusing through `refuse_a_taken_name`, as in `write_next`, and removing the
+/// partial (issue 0100). `-o`'s video and a fixed name's replace, as they always
+/// did. `rename` cannot be told not to replace,
+/// so a file another program makes at that name between the check and the
+/// rename is the one case left.
+fn put(partial: &Path, video: &Path, revision: bool) -> Result<(), Failure> {
+  if revision {
+    deliver::refuse_a_taken_name(video).map_err(|mut failure| {
+      and_also(&mut failure, remove_partial(partial));
+      failure
+    })?;
   }
   std::fs::rename(partial, video).map_err(|e| {
     let mut failure = Failure::new(
@@ -696,6 +725,52 @@ mod tests {
       said.contains(&partial.display().to_string()),
       "the message does not name {}: {said}",
       partial.display()
+    );
+  }
+
+  /// **A REVISION'S VIDEO NEVER REPLACES A FILE; `-o`'s AND A FIXED NAME'S DO**
+  /// (issue 0100). For a revision, `put` checks the name again: a taken one
+  /// refuses, naming it, and removes the partial, and the file keeps its bytes;
+  /// a free one takes the video. A video that is not a revision's replaces what
+  /// is at its name, as it always did. Plain files: no recording is needed.
+  #[test]
+  fn put_never_replaces_a_file_with_a_revisions_video_issue_0100() {
+    let guard = artifact::testing::TempDir::new("showreel-video", "put");
+    let partial = guard.join("r-002.mp4.partial");
+    let video = guard.join("r-002.mp4");
+    let plant = |path: &Path, bytes: &[u8]| std::fs::write(path, bytes).unwrap();
+
+    plant(&partial, b"the recording");
+    plant(&video, b"a video whose HTML was deleted");
+    let e = put(&partial, &video, true).unwrap_err();
+    assert!(
+      e.message.contains(&video.display().to_string()),
+      "the refusal does not name {}: {}",
+      video.display(),
+      e.message
+    );
+    assert!(!partial.exists(), "the refused partial was left behind");
+    assert_eq!(
+      std::fs::read(&video).unwrap(),
+      b"a video whose HTML was deleted",
+      "the file at the taken name was touched"
+    );
+
+    std::fs::remove_file(&video).unwrap();
+    plant(&partial, b"the recording");
+    put(&partial, &video, true).unwrap();
+    assert_eq!(
+      std::fs::read(&video).unwrap(),
+      b"the recording",
+      "a free name did not take the revision's video"
+    );
+
+    plant(&partial, b"a second recording");
+    put(&partial, &video, false).unwrap();
+    assert_eq!(
+      std::fs::read(&video).unwrap(),
+      b"a second recording",
+      "a video that is not a revision's did not replace the file at its name"
     );
   }
 

@@ -1,6 +1,6 @@
 [package]
 name = "prez"
-version = "2.5.7"
+version = "2.5.8"
 edition = "2021"
 description = "Markdown to a self-contained HTML presentation. A pipeline, not a viewer."
 license = "MIT"

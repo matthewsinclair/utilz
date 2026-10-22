@@ -196,6 +196,13 @@ pub fn entries(dir: &Path) -> std::io::Result<Vec<PathBuf>> {
 }
 
 impl Stem {
+  /// Whether this stem names counted revisions, the one home of that question
+  /// (issue 0100): `write_next` asks it for both of its choices, the slot's
+  /// check and creating fresh, and `build` asks it for what `Built` says.
+  pub fn is_counted(&self) -> bool {
+    matches!(self, Stem::Counted { .. })
+  }
+
   /// Existing builds of this stem, lowest revision first.
   ///
   /// **AN `_out/` THAT CANNOT BE READ IS REFUSED, NEVER TAKEN AS EMPTY**: the
@@ -251,10 +258,20 @@ impl Stem {
   /// **A COUNTED REVISION IS CREATED, NEVER REPLACED**, so the rule above holds
   /// at the write itself: two builds of one reel at once cannot both take one
   /// number, since the second finds the first's file there and refuses (issue
-  /// 0098). A fixed name is overwritten each build, as it always was.
+  /// 0098). **AND ITS SLOT IS CHECKED WHOLE FIRST** (issue 0100): a file at
+  /// either of the slot's video names refuses before anything is written,
+  /// since an HTML beside another build's video would make one slot of two
+  /// builds, which `prune` would then delete together. A fixed name is
+  /// overwritten each build, its video too, as they always were.
   pub fn write_next(&self, out_dir: &Path, bytes: &[u8]) -> Result<PathBuf, Failure> {
     let path = self.next(out_dir)?;
-    write(&path, bytes, matches!(self, Stem::Counted { .. }))?;
+    let counted = self.is_counted();
+    if counted {
+      for ext in VIDEO_EXTENSIONS {
+        refuse_a_taken_name(&video_of(&path, ext))?;
+      }
+    }
+    write(&path, bytes, counted)?;
     Ok(path)
   }
 }
@@ -396,6 +413,47 @@ pub fn video_of(html: &Path, ext: &str) -> PathBuf {
   html.with_extension(ext)
 }
 
+/// Whether anything is at a name: its own entry, not what the entry points
+/// to, so a dangling link is there too. `NotFound` is the one answer read as
+/// nothing there; any other error is returned, since a look that failed is
+/// never an empty name (issue 0100). The one look at a slot's names, for
+/// `refuse_a_taken_name` and `slot_files`, each saying in its own words what
+/// it could not check.
+fn entry_at(name: &Path) -> std::io::Result<bool> {
+  match std::fs::symlink_metadata(name) {
+    Ok(_) => Ok(true),
+    Err(e) if e.kind() == std::io::ErrorKind::NotFound => Ok(false),
+    Err(e) => Err(e),
+  }
+}
+
+/// Refuses a name a slot would take when anything is already at it, a
+/// dangling link included, since a slot never replaces a file; and refuses a
+/// name it cannot check, since an answer it could not read is never "free"
+/// (issue 0100). The one check of a slot's names, for `write_next` before a
+/// build writes and for `video` before it places a recording.
+pub fn refuse_a_taken_name(name: &Path) -> Result<(), Failure> {
+  let taken = entry_at(name).map_err(|e| {
+    Failure::new(
+      format!(
+        "cannot check for {}, so a new build cannot take its slot: {e}",
+        name.display()
+      ),
+      "make the directory readable and searchable",
+    )
+  })?;
+  if taken {
+    return Err(Failure::new(
+      format!(
+        "{} is already there, so a new build cannot take its slot",
+        name.display()
+      ),
+      "move it aside, or name the output yourself with --out (or video's -o)",
+    ));
+  }
+  Ok(())
+}
+
 /// Every file one revision holds: its HTML, and the video recorded from it.
 ///
 /// **A SLOT IS ONE REVISION** (ST0021 AC-03.5). A video pruned apart from its
@@ -406,19 +464,18 @@ pub fn video_of(html: &Path, ext: &str) -> PathBuf {
 pub fn slot_files(html: &Path) -> Result<Vec<PathBuf>, Failure> {
   let mut files = vec![html.to_path_buf()];
   for video in VIDEO_EXTENSIONS.iter().map(|ext| video_of(html, ext)) {
-    match std::fs::symlink_metadata(&video) {
-      Ok(_) => files.push(video),
-      Err(e) if e.kind() == std::io::ErrorKind::NotFound => {}
-      Err(e) => {
-        return Err(Failure::new(
-          format!(
-            "cannot check for {}, which goes with {}: {e}",
-            video.display(),
-            html.display()
-          ),
-          "a revision is pruned whole: make the directory readable and searchable",
-        ));
-      }
+    let there = entry_at(&video).map_err(|e| {
+      Failure::new(
+        format!(
+          "cannot check for {}, which goes with {}: {e}",
+          video.display(),
+          html.display()
+        ),
+        "a revision is pruned whole: make the directory readable and searchable",
+      )
+    })?;
+    if there {
+      files.push(video);
     }
   }
   Ok(files)
@@ -1042,5 +1099,84 @@ mod tests {
       taken.display(),
       e.message
     );
+  }
+
+  /// **A TAKEN NAME IS REFUSED, AND ONE THAT CANNOT BE CHECKED IS NOT FREE**
+  /// (issue 0100): a file at the name, or a dangling link, refuses, naming it,
+  /// and the file keeps its bytes; a free name passes. A mode binds a user and
+  /// not root, so where it does not bind the test fails saying so.
+  #[test]
+  fn a_taken_name_is_refused_and_one_that_cannot_be_checked_too_issue_0100() {
+    use std::os::unix::fs::PermissionsExt;
+    let dir = out("taken-name", &["r-001.mp4"]);
+    let file = dir.join("r-001.mp4");
+    let link = dir.join("r-002.mp4");
+    std::os::unix::fs::symlink(dir.join("nowhere.mp4"), &link).unwrap();
+    refuse_a_taken_name(&dir.join("r-003.mp4")).unwrap();
+    for name in [&file, &link] {
+      let e = refuse_a_taken_name(name).unwrap_err();
+      assert!(
+        e.message.contains(&name.display().to_string()),
+        "the refusal does not name {}: {}",
+        name.display(),
+        e.message
+      );
+    }
+    assert_eq!(
+      std::fs::read(&file).unwrap(),
+      b"x",
+      "the file at the taken name was touched"
+    );
+
+    let mode = |bits: u32| {
+      std::fs::set_permissions(&*dir, std::fs::Permissions::from_mode(bits)).unwrap();
+    };
+    mode(0o600);
+    let binds = std::fs::symlink_metadata(&file).is_err();
+    let checked = refuse_a_taken_name(&dir.join("r-004.mp4"));
+    mode(0o700);
+    assert!(
+      binds,
+      "a mode does not stop a look here (root?), so this test cannot run"
+    );
+    let unchecked = dir.join("r-004.mp4");
+    let e = checked.unwrap_err();
+    assert!(
+      e.message.starts_with("cannot check for")
+        && e.message.contains(&unchecked.display().to_string()),
+      "the refusal does not name {}: {}",
+      unchecked.display(),
+      e.message
+    );
+  }
+
+  /// **A SLOT IS CHECKED WHOLE BEFORE ANYTHING IS WRITTEN** (issue 0100): a
+  /// video at the next revision's video name, whose HTML was deleted, refuses
+  /// the build, naming it; no HTML is created beside it, and it keeps its
+  /// bytes. Each container a slot's video may be, in a directory of its own.
+  /// A fixed name beside the same video builds, overwriting as a fixed name
+  /// always did: the slot's check is a counted revision's alone.
+  #[test]
+  fn write_next_refuses_a_slot_whose_video_name_is_taken_issue_0100() {
+    for (tag, name) in [("orphan-mp4", "r-002.mp4"), ("orphan-mov", "r-002.mov")] {
+      let dir = out(tag, &["r-001.html", name]);
+      let orphan = dir.join(name);
+      let refused = counted().write_next(&dir, b"a build");
+      assert!(
+        !dir.join("r-002.html").exists(),
+        "an HTML was written beside {name}"
+      );
+      assert_eq!(std::fs::read(&orphan).unwrap(), b"x", "{name} was touched");
+      let e = refused.unwrap_err();
+      assert!(
+        e.message.contains(&orphan.display().to_string()),
+        "the refusal does not name {}: {}",
+        orphan.display(),
+        e.message
+      );
+      if let Err(e) = Stem::Fixed("r-002.html".to_string()).write_next(&dir, b"a build") {
+        panic!("a fixed name beside {name} was refused: {}", e.message);
+      }
+    }
   }
 }

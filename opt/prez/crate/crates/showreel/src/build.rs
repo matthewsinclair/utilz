@@ -199,6 +199,12 @@ pub struct Built {
   /// The reel's own `safe_zone:`, which `video` records inside unless
   /// `--safe-zone` names another.
   pub safe_zone: Option<crate::zone::Zone>,
+  /// Whether the HTML is a counted revision in `_out/`, created fresh, so
+  /// `video` places that slot's video without replacing a file (issue 0100).
+  /// It is decided where the HTML's destination is: `--out`'s file, which
+  /// `video`'s `-o` builds to, is not one, and a fixed name's is not, so both
+  /// overwrite as they did.
+  pub counted: bool,
   /// Everything the build wants said, in the order it was produced. **The
   /// caller MUST drain this**: three of its six sources have no other consumer.
   pub said: Vec<String>,
@@ -253,11 +259,12 @@ pub fn run(path: &Path, f: &Options) -> Result<Built, Failure> {
   let out_dir = o.dir.join("_out");
   let stem = deliver::stem(&o.cfg, &o.cfg.session, &date)?;
   // A revision in `_out/` is created and never replaces one (issue 0098);
-  // `--out` is outside the rotation and overwritten, as it always was.
-  let out = match &f.out {
+  // `--out` is outside the rotation and overwritten, as it always was. Each
+  // arm says whether what it wrote is a counted revision (issue 0100).
+  let (out, counted) = match &f.out {
     Some(p) => {
       deliver::write(p, html.as_bytes(), false)?;
-      p.clone()
+      (p.clone(), false)
     }
     None => {
       std::fs::create_dir_all(&out_dir).map_err(|e| {
@@ -266,7 +273,10 @@ pub fn run(path: &Path, f: &Options) -> Result<Built, Failure> {
           "check the reel directory is writable",
         )
       })?;
-      stem.write_next(&out_dir, html.as_bytes())?
+      (
+        stem.write_next(&out_dir, html.as_bytes())?,
+        stem.is_counted(),
+      )
     }
   };
 
@@ -313,6 +323,7 @@ pub fn run(path: &Path, f: &Options) -> Result<Built, Failure> {
     target: o.cfg.embed_target(),
     aspect: o.cfg.aspect,
     safe_zone: o.cfg.safe_zone,
+    counted,
   })
 }
 
@@ -477,6 +488,29 @@ segments:
     assert_eq!(b.path, out);
     let left = std::fs::read_dir(d.join("_out")).unwrap().count();
     assert_eq!(left, 3, "--keep 1 pruned alongside an explicit --out");
+  }
+
+  /// **ONLY A COUNTED REVISION IN `_out/` IS BUILT AS COUNTED** (issue 0100),
+  /// which is what tells `video` that slot's video never replaces a file.
+  /// `--out`'s file, which `video`'s `-o` builds to, and a fixed name's
+  /// overwrite as they did, so neither may flip unseen.
+  #[test]
+  fn only_a_counted_revision_in_out_is_built_as_counted_issue_0100() {
+    let d = reel("counted", BASE, &[]);
+    assert!(
+      built(&d, &plain()).counted,
+      "a plain build's revision is not counted"
+    );
+    let elsewhere = Options {
+      out: Some(d.join("elsewhere.html")),
+      keep: 0,
+    };
+    assert!(!built(&d, &elsewhere).counted, "--out's file is counted");
+    let fixed = reel("fixed-name", &format!("{BASE}output: reel.html\n"), &[]);
+    assert!(
+      !built(&fixed, &plain()).counted,
+      "a fixed name's revision is counted"
+    );
   }
 
   /// **`--keep n` DELETES THE OLDEST AND SAYS SO.** The deletion is the caller's
