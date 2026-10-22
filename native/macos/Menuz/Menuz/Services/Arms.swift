@@ -133,7 +133,7 @@ enum Arms {
   private static func locate(_ file: String?) -> (LoginShell, String) {
     let shell = blocking { await LoginShell.capture() }
     if let problem = shell.problem {
-      printError("Menuz: \(problem); working from launchd's environment")
+      printError("Menuz: \(LogLine.launchdEnvironmentLine(problem))")
     }
     return (shell, file ?? Paths(environment: shell.environment, home: NSHomeDirectory()).menuFile)
   }

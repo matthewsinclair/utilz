@@ -306,3 +306,43 @@ extension Realise {
 
   private static let defaultId = "default"
 }
+
+/// The notes a realise leaves in the log (issue 0102), each made here so that
+/// LogLine.kind reads what Realiser writes.
+extension Realise {
+  /// `realise passed its <s> s cap`, and the ids that kept their last value.
+  public static func capPassedLine(seconds: Double, kept ids: [String]) -> String {
+    "realise passed its \(seconds) s cap\(kept(ids))"
+  }
+
+  /// `realise could not start the login shell: <why>`, and the ids that kept
+  /// their last value.
+  public static func shellNotStartedLine(why: String, kept ids: [String]) -> String {
+    "realise could not start the login shell: \(why)\(kept(ids))"
+  }
+
+  /// `realise's shell exited <code>`, and the ids that kept their last value.
+  public static func shellExitedLine(code: Int32, kept ids: [String]) -> String {
+    "realise's shell exited \(code)\(kept(ids))"
+  }
+
+  /// `label <id> failed to realise (<why>); it keeps its last value`.
+  public static func labelFailedLine(id: String, why: String) -> String {
+    "label \(id) failed to realise (\(why)); it keeps its last value"
+  }
+
+  /// `each <id> failed (<why>)`.
+  public static func eachFailedLine(id: String, why: String) -> String {
+    "each \(id) failed (\(why))"
+  }
+
+  /// `each <id>: the label for "<line>" failed to realise (<why>); it shows
+  /// the line`.
+  public static func eachLabelFailedLine(id: String, line: String, why: String) -> String {
+    "each \(id): the label for \"\(line)\" failed to realise (\(why)); it shows the line"
+  }
+
+  private static func kept(_ ids: [String]) -> String {
+    ids.isEmpty ? "" : "; kept the last value of \(ids.joined(separator: ", "))"
+  }
+}

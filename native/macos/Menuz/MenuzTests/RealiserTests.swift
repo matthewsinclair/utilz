@@ -46,6 +46,25 @@ struct RealiserTests {
     #expect(outcome.realised.eaches["each"] == .ok([EachItem(line: "menu", label: "menu")]), "notes: \(outcome.notes)")
   }
 
+  @Test("a label whose command fails is noted, and the log window reads its note as a failure (issue 0102)")
+  func failedLabel() async throws {
+    let dir = FileManager.default.temporaryDirectory.appendingPathComponent("menuz-realiser-\(UUID().uuidString)")
+    defer { try? FileManager.default.removeItem(at: dir) }
+    let home = dir.appendingPathComponent("home")
+    let paths = Paths(
+      environment: ["HOME": home.path, "MENUZ_HOME": dir.appendingPathComponent("menuz").path], home: home.path)
+    for folder in [home.path, paths.binDir] {
+      try FileManager.default.createDirectory(atPath: folder, withIntermediateDirectories: true)
+    }
+    let shell = LoginShell(
+      environment: ["HOME": home.path, "ZDOTDIR": home.path, "PATH": "/usr/bin:/bin"], problem: nil)
+    let request = RealiseRequest(labels: [RealiseLabel(id: "failing", text: "$(exit 3)")], eaches: [])
+    let outcome = await Realiser.realise(request, shell: shell, paths: paths, seconds: Self.seconds)
+    #expect(outcome.realised.labels["failing"] == .failed("exit 3"), "notes: \(outcome.notes)")
+    #expect(outcome.notes == [Realise.labelFailedLine(id: "failing", why: "exit 3")])
+    #expect(outcome.notes.map { LogLine.kind($0) } == [.failure])
+  }
+
   /// An executable `name` in `dir` that prints `word`.
   static func probe(_ name: String, in dir: String, says word: String) throws {
     let path = "\(dir)/\(name)"

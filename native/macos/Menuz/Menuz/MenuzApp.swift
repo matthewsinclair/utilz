@@ -103,7 +103,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, MenuAc
       let captured = await LoginShell.capture()
       shell = captured
       if let problem = captured.problem {
-        log.write("\(problem); working from launchd's environment")
+        log.write(LogLine.launchdEnvironmentLine(problem))
       }
     }
     guard let shell else { return }
@@ -179,7 +179,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, MenuAc
       button.title = "M"
       if !markMissingLogged {
         markMissingLogged = true
-        log.write("the menu bar mark is missing from the bundle (MenuBarIcon in Assets.xcassets): showing M")
+        log.write(LogLine.markMissingLine)
       }
     }
   }
@@ -194,7 +194,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, MenuAc
         try SMAppService.mainApp.register()
         log.write("registered as a login item")
       } catch {
-        log.write("could not register as a login item: \(error.localizedDescription)")
+        log.write(LogLine.couldNotRegisterLine(error.localizedDescription))
       }
     case .notInstalledCopy:
       log.write("not the installed copy at \(installed): no login item registered")

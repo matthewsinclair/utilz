@@ -19,8 +19,11 @@ enum MenuzMasthead {
 
   static let owned = Set(Value.allCases.map(\.rawValue))
 
-  /// `note` is told, once, what setAppIcon did: the app writes it to its log
-  /// at each launch, and `--render`, which shows no icon, notes nothing.
+  /// `log` is told each line the row logs, a refusal or a failure, after
+  /// `masthead: ` (LogLine.mastheadLine, issue 0102), so the log window
+  /// shows it red. `note` is told, once, what setAppIcon did: the app writes
+  /// it to its log at each launch, and `--render`, which shows no icon, notes
+  /// nothing.
   @MainActor
   static func row(
     environment: [String: String], menu: @escaping @MainActor () -> String?, bundle: Bundle = .main,
@@ -29,7 +32,7 @@ enum MenuzMasthead {
     note(setAppIcon(bundle: bundle))
     let row = MastheadRow(
       app: "menuz", environment: environment, bundle: bundle, owned: owned,
-      value: { value($0, bundle: bundle, menu: menu()) }, log: log)
+      value: { value($0, bundle: bundle, menu: menu()) }, log: { log(LogLine.mastheadLine($0)) })
     drawsImage(row)
     return row
   }

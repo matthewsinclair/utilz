@@ -96,6 +96,29 @@ struct IdentityRowTests {
     #expect(row.subtitle == nil, "the user's copy has no subheading, yet the row shows \(row.subtitle ?? "")")
   }
 
+  @Test("what the row logs, here a refusal of the user's masthead.yaml, opens with masthead: and is red (issue 0102)")
+  func loggedLines() throws {
+    let base = scratchFolder()
+    defer { try? FileManager.default.removeItem(at: base) }
+    let menuz = base.appendingPathComponent("menuz")
+    try FileManager.default.createDirectory(at: menuz, withIntermediateDirectories: true)
+    try Data("- a list, not a mapping of keys\n".utf8).write(to: menuz.appendingPathComponent("masthead.yaml"))
+    let logged = Logged()
+    _ = MenuzMasthead.row(
+      environment: ["XDG_CONFIG_HOME": base.path], menu: { nil }, log: { logged.lines.append($0) }, note: { _ in })
+    #expect(!logged.lines.isEmpty, "the row logged nothing")
+    for line in logged.lines {
+      #expect(line.hasPrefix("masthead: ") && line.contains("masthead.yaml: "), "the line was \(line)")
+      #expect(LogLine.kind(line) == .failure, "the line was \(line)")
+    }
+  }
+
+  /// What a row's `log` is told, in order.
+  @MainActor
+  private final class Logged {
+    var lines: [String] = []
+  }
+
   @Test("a guard: the row shows an icon that is not blank, at arca's 32 by 32, and a blank image counts as blank")
   func appIcon() throws {
     #expect(MenuzMasthead.pixelsDrawn(Self.blank(side: 32)) == 0, "the probe counts a blank image as drawn")

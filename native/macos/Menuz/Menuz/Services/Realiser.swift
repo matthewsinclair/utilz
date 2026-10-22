@@ -30,34 +30,29 @@ enum Realiser {
     switch result.outcome {
     case .timedOut:
       unanswered = "no answer within \(seconds) s"
-      notes.append("realise passed its \(seconds) s cap\(kept(missing))")
+      notes.append(Realise.capPassedLine(seconds: seconds, kept: missing))
     case .couldNotStart(let why):
       unanswered = "the login shell could not start: \(why)"
-      notes.append("realise could not start the login shell: \(why)\(kept(missing))")
+      notes.append(Realise.shellNotStartedLine(why: why, kept: missing))
     case .exited(let code):
       unanswered = "the login shell exited \(code) before it answered"
-      if !missing.isEmpty { notes.append("realise's shell exited \(code)\(kept(missing))") }
+      if !missing.isEmpty { notes.append(Realise.shellExitedLine(code: code, kept: missing)) }
     }
     for (id, answer) in realised.labels {
       guard case .failed(let why) = answer else { continue }
-      notes.append("label \(id) failed to realise (\(why)); it keeps its last value")
+      notes.append(Realise.labelFailedLine(id: id, why: why))
     }
     for (id, answer) in realised.eaches {
       switch answer {
       case .failed(let why):
-        notes.append("each \(id) failed (\(why))")
+        notes.append(Realise.eachFailedLine(id: id, why: why))
       case .ok(let items):
         for item in items {
           guard let why = item.labelFailure else { continue }
-          notes.append("each \(id): the label for \"\(item.line)\" failed to realise (\(why)); it shows the line")
+          notes.append(Realise.eachLabelFailedLine(id: id, line: item.line, why: why))
         }
       }
     }
     return Outcome(realised: realised, notes: notes, unanswered: unanswered)
   }
-
-  private static func kept(_ ids: [String]) -> String {
-    ids.isEmpty ? "" : "; kept the last value of \(ids.joined(separator: ", "))"
-  }
-
 }
