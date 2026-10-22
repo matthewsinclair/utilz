@@ -13,7 +13,7 @@ claims: [ISSUE:0098, ISSUE:0099, ISSUE:0100, ISSUE:0101]
 
 ## DOING
 
-- 0098 v3 (patch 049c0129, wt-0098 on e96d86a2; design at 99ad338a): R98 GO'd by vc, slot 227, running under the watchdog (r98-0098.sh 65a3b918, B on main at ceed20ce); dc's K1 beside it on kovacs (slot 232). Then the END to vc, and the landing on vc's word. (edited)
+- 0098 v3 (patch 049c0129, wt-0098 on e96d86a2): R98 green (slot 227, END to vc) and dc's K1 green on the same bytes (slot 232). Waiting on vc's landing word: land-apply.sh (rehearsed), the state to vc, land-commit.sh on vc's check, land-close.sh on vc's check of the commit. (edited)
 
 ## TODO
 

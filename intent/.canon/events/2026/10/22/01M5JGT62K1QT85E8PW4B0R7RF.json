@@ -1,0 +1,17 @@
+{
+  "id": "01M5JGT62K1QT85E8PW4B0R7RF",
+  "ts": "2026-10-22T19:18:39.443Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc to vc: END slot 227, R98 (heavy) for 0098 v3, 19:11:14Z to 19:18:03Z, watchdog exit 0. Every phase came out as booked; nothing of mine is left running, the run dir is removed, wt-0095m is clean at ceed20ce, and the candidate is still 049c0129. Log: ~/Devel/scratch/utilz-cc/20261022/r98/r98.log.\n(A) each mutation changed one line, exited 101 and FAILED its named test, each file restored with its sha equal: A1 an_out_dir_that_cannot_be_read_is_refused_never_empty_issue_0098 (deliver.rs:896); A2 and A3 a_slot_is_pruned_whole_or_refused_by_name_issue_0098 (:917, the dangling video left behind; :933, the refusal gone); A4 and A10 many_revisions_with_a_size_not_read_print_an_unknown_total_issue_0098 (:959, a number where ? MB was wanted; :965, the second size not named under the lazy sum); A5 and A6 a_fresh_write_refuses_a_file_already_there_and_leaves_it_issue_0098 (:983, the kept bytes, \"another\" where \"x\" was wanted; :997, \"y longer file\" where \"y\" was wanted); A7 and A8 write_next_overwrites_a_fixed_name_and_never_replaces_a_revision_issue_0098 (:1028, the kept bytes, \"another\" where \"delivered\" was wanted; :1013, the fixed name refused); A9 and A11 an_explicit_destination_already_there_is_overwritten_issue_0098 (build.rs:353, --out refused; build.rs:561, the content assertion, the file never written).\n(B) a_build_never_replaces_a_delivered_revision_issue_0098 inserted into main's build.rs (39 lines added, wt-0095m at ceed20ce): rc 101, FAILED at build.rs:529, the delivered-bytes assertion, with the build's HTML (\"<!doctype html>...\") where \"delivered\" was wanted; restored, wt-0095m clean. On the candidate: rc 0, ok.\n(G) bin/utilz test prez, rc 0: cargo 403 passed, 0 failed (main 396); prez.bats 32 ok, 0 not ok; acceptance.sh --strict passed 16, failed 0, skipped 0, n/a 1; theme-addressing passed 20; video.sh passed 16. The seven new tests ok by name (deliver's an_out_dir..., a_slot_is_pruned..., many_revisions..., a_fresh_write..., write_next_overwrites...; build's an_explicit_destination... and a_build_never_replaces...), and AT33's a_pruned_slot_takes_its_video... ok with \"(6.0 MB)\". G's TMPDIR empty after.\n(C) bin/devbin check all with the 5 files staged in wt-0098's own index: rc 0, 6 of 8 check options ran, 2 inactive here, all passed.\nAt the end: 0 new Utilz-named entries in /tmp and 0 in the system TMPDIR.\nWith dc's K1 green on the same bytes (slot 232, rust-lint clean on CI's rustc), 0098 waits on your landing word. The landing is scripted generically from 0096's (land-apply.sh, land-commit.sh, land-close.sh in ~/Devel/scratch/utilz-cc/20261022/) and rehearsed in a throwaway worktree at 2ad7f3e4: the 5 code paths apply to 049c0129, and 0098's line goes after 0096's in 2.14.2's Fixed list. On your word: apply and stage, the state to you, the commit on your check, the close on your check of the commit.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}
