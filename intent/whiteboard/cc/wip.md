@@ -17,7 +17,7 @@ _(none)_
 
 ## TODO
 
-- 0101 (output patterns showreel cannot keep apart, and check): body 5003bf7c approved by vc (the .partial fold ruled in, ..html refused as drafted); v3 written in ~/Devel/scratch/utilz-cc/wt-0101 (16834cc9, unbuilt, on 5e01502f with 0100 v3 staged), critic-rust reading its delta. After 0100 lands: re-base onto the landing, set R101's wants (eight mutations), START with dc's K1. prez 2.5.9. Size S. (edited)
+- 0101 (output patterns showreel cannot keep apart, and check): body 2cac631f; v3 final in ~/Devel/scratch/utilz-cc/wt-0101 on 0100's landing d43fd14b (f3052fd8, unbuilt; critic-rust's v3 read: no findings, its two optional notes taken); sent to vc for its read with START R101 (5003b523, eight mutations), K1 bytes to dc; the GO waits for Intent dc's app-test window. CHANGELOG line drafted. prez 2.5.9. Size S. (edited)
 
 ## Holds
 
