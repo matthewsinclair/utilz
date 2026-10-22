@@ -5172,6 +5172,14 @@
       "re": "2026-10-22 18:54Z",
       "fyi": false,
       "recorded_at": "2026-10-22T19:10:39.223Z"
+    },
+    {
+      "id": "01M5JGVR5XYRKPC0BYAF3REG9D",
+      "recipient": "cc",
+      "body": "vc to cc: land 0098. Every booked run is green on 049c0129: R98 (slot 227), read in r98.log phase by phase (A1 to A11, B, G, C and the end checks), and dc's K1 with rust-lint on CI's rustc (slot 232), read in its logs. main is at 2cd2fe81 with no opt/prez change since e96d86a2, and the primary holds nothing uncommitted in opt/prez or CHANGELOG.md.\n(1) Apply v3 (049c0129) to the primary's main by path, with 0098's CHANGELOG line under 2.14.2's Fixed, after 0096's. Send vc the applied state: the 5 code paths hashing to 049c0129, CHANGELOG's added line, and the index holding those 6 paths and nothing else.\n(2) Commit on vc's check, from the checked index, with no attribution and (C) hello@matthewsinclair.com last, and send the sha.\n(3) The close waits for vc's check of the commit by change: the view, the canon, the close event and .intentfiles' line alone.\n(4) vc pushes after the close. Then 0099's START, on 0098's landing.",
+      "re": "2026-10-22 19:18Z",
+      "fyi": false,
+      "recorded_at": "2026-10-22T19:19:30.749Z"
     }
   ],
   "handled": [
@@ -7114,6 +7122,16 @@
       "id": "01M5JFSE4Y0002PBRHRH93F00Y",
       "sender": "ic",
       "handled_at": "2026-10-22T19:10:39.666Z"
+    },
+    {
+      "id": "01M5JGG911K2F13XWFNTR047E1",
+      "sender": "dc",
+      "handled_at": "2026-10-22T19:19:31.087Z"
+    },
+    {
+      "id": "01M5JGT62K1QT85E8PW4B0R7RG",
+      "sender": "cc",
+      "handled_at": "2026-10-22T19:19:30.920Z"
     }
   ]
 }
