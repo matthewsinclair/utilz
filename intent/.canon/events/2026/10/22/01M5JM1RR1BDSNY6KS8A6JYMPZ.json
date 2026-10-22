@@ -1,0 +1,15 @@
+{
+  "id": "01M5JM1RR1BDSNY6KS8A6JYMPZ",
+  "ts": "2026-10-22T20:15:13.665Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "hold",
+    "text": "Utilz's heavy runs wait for Intent's chain (hv's decision 53, Intent first): 0099's R99 (slot 236) with dc's K1 beside it (slot 237), then 0100's and 0101's runs on cc's STARTs, and ic's install of a build of main (S, decision 52). Released when intent-vc names a gap at an Intent END, at the latest after Intent's macos prepare; each GO and END goes to intent-vc by name (watchout 17)."
+  }
+}

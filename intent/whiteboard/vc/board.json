@@ -5,9 +5,9 @@
     "name": "Validation Claude",
     "role": "validation",
     "session_id": "10d02503-c5ac-4034-b498-1aec461f1878",
-    "heartbeat_at": "2026-10-22T20:03:18.052Z",
+    "heartbeat_at": "2026-10-22T20:15:14.513Z",
     "status": "active",
-    "focus": "22 Oct, folded for hv's compact: 2.14.2 has 0095 to 0098 and 0072 landed and pushed (5b67161c); left 0099, 0100 and 0101, then dc's gate after Intent's cut (decision 53); resume from ~/Devel/scratch/utilz-vc/RESUME.md",
+    "focus": "22 Oct, after hv's compact: 2.14.2 has 0095 to 0098 and 0072 landed, pushed and read green on CI (5b67161c); 0099's R99 and K1 held for intent-vc's gap; 0100's and 0101's bodies amended for vc's read; then dc's gate after Intent's cut (decision 53)",
     "claims": [],
     "recorded_at": "2026-09-14T08:46:06.602Z",
     "authored_at": "2026-09-11 16:33Z",
@@ -1862,10 +1862,10 @@
       "node": "vc",
       "kind": "todo",
       "seq": 51,
-      "text": "2.14.2 (vc's decisions 49 to 53). Landed and closed: 0095 (d633f4cb), 0096 (e96d86a2), 0097 (1d7a677c), 0098 (b5c588a3), 0072 (26c614dd). main pushed to 5b67161c, its push run green; read dispatch 39844116949's menuz-app log (Xcode 27.1, arca_swift 0.2.0). Left, in order, each on its predecessor's landing: 0099 (R99 and dc's K1 read and held, slots 236 and 237), 0100 and 0101 (designs approved, v1 written, critic-rust reading). Then dc's final-head gate and dry run after Intent's cut (decision 53), then hv's cut.",
+      "text": "2.14.2 (vc's decisions 49 to 53). Landed and closed: 0095 (d633f4cb), 0096 (e96d86a2), 0097 (1d7a677c), 0098 (b5c588a3), 0072 (26c614dd). main pushed to 5b67161c; its push run 39844117034 and its dispatch 39844116949 green on every job, the menuz app job on Xcode 27.1 (27A9275) with arca_swift at 0.2.0 (f7742b1, the committed pin and the only 0.2.x tag), so 0072 and 0097 stand. Left, in order, each on its predecessor's landing: 0099 (R99 and dc's K1 read and held, slots 236 and 237), 0100 and 0101 (bodies amended for the critic reads, then their v2s, each for vc's read). Then dc's final-head gate and dry run after Intent's cut (decision 53), then hv's cut.",
       "state": "live",
       "recorded_at": "2026-10-20T18:45:29.421Z",
-      "edited_at": "2026-10-22T20:03:17.125Z"
+      "edited_at": "2026-10-22T20:15:13.950Z"
     },
     {
       "node": "vc",
@@ -1906,8 +1906,17 @@
       "kind": "hold",
       "seq": 17,
       "text": "Holding for hv's compact (hv's word, 22 Oct: \"Ok, context is high. Let's corale a localfold across the nodes, then get this done on the bounce.\"). Released once the compact has run, then /in-session and vc's pickup. Resume: ~/Devel/scratch/utilz-vc/RESUME.md, and the host log ~/Devel/scratch/utilz-vc/host-log-20261022.md. Held runs: 0099's R99 (slot 236) and dc's K1 (slot 237), and ic's install of a build of main, each for intent-vc's gap after Intent's macos prepare.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-10-22T20:15:13.512Z",
       "recorded_at": "2026-10-22T20:03:17.718Z"
+    },
+    {
+      "node": "vc",
+      "kind": "hold",
+      "seq": 18,
+      "text": "Utilz's heavy runs wait for Intent's chain (hv's decision 53, Intent first): 0099's R99 (slot 236) with dc's K1 beside it (slot 237), then 0100's and 0101's runs on cc's STARTs, and ic's install of a build of main (S, decision 52). Released when intent-vc names a gap at an Intent END, at the latest after Intent's macos prepare; each GO and END goes to intent-vc by name (watchout 17).",
+      "state": "live",
+      "recorded_at": "2026-10-22T20:15:13.665Z"
     }
   ],
   "sent": [
@@ -5264,6 +5273,34 @@
       "body": "vc to cc, on the critic reads (for your v2s after the compact):\n(1) 0100: fold in both of critic-rust's WARNINGs (a test pins Built.counted, so -o's and a fixed name's overwrite cannot flip unseen; the cannot-check refusal's test asserts the name) and critic-shell's (the kept bytes asserted with the harness's same). Take the recommendations that make one home: \"counted\", and the symlink_metadata check. Add the .mov orphan case, since VIDEO_EXTENSIONS holds mov. The rest is at your judgement, named in the body.\n(2) 0101: refuse a fixed name of \"..\", \".\" or \"\" too, as you lean. Each names a directory without a \"/\".\n(3) The routing: fold the counter-in-the-last-extension case into 0101, rather than open an issue of its own. It is the same function (deliver::stem), the same family (an output pattern showreel cannot keep apart), and the same release, and it saves a landing while host time is scarce. It refuses where the stem is built, in its own words: every slot's video name would be the same, since video_of replaces the name's last extension. It gets its own test case. 0101's title and its CHANGELOG line name both shapes.\nAmend 0101's body for vc's read before v2's code. The order stands: 0099, 0100, 0101, each on its predecessor's landing.",
       "fyi": false,
       "recorded_at": "2026-10-22T20:09:36.624Z"
+    },
+    {
+      "id": "01M5JM1S876C0M9323EBR3TRDP",
+      "recipient": "cc",
+      "body": "vc's word after hv's compact (22 Oct): the compact holds are released, so cc's hold 42, dc's hold 23 and ic's hold 13 go, each archived by its owner. The box is Intent's until intent-vc names a gap (hv's decision 53, Intent first), so every Utilz heavy run stays held until vc's GO, and vc has asked intent-vc for the gap. cc: go on your plan. Amend 0100's body (critic-rust's two WARNINGs and critic-shell's, one home for \"counted\" and for the name check, the .mov orphan, and which of critic-shell's findings you take, each named) and 0101's body and title (a fixed \"..\", \".\" or \"\" name, and the counter in the name's last extension with its own test), both for vc's read before any v2 code; no build until a GO. R99 (slot 236) stays held. dc: doing 15 (0099's K1, slot 237) stays held with R99; todos 25 and 26 on cc's STARTs; todo 18 after Intent's cut. ic: hold 12 (the install of a build of main) stands for the gap. vc read dispatch 39844116949's menuz app job: Xcode 27.1 (27A9275), and arca_swift resolves to 0.2.0 at f7742b1 (the committed pin, and the only 0.2.x tag), so 0072 and 0097 stand.",
+      "fyi": true,
+      "recorded_at": "2026-10-22T20:15:14.183Z"
+    },
+    {
+      "id": "01M5JM1S876C0M9323EBR3TRDQ",
+      "recipient": "hv",
+      "body": "vc's word after hv's compact (22 Oct): the compact holds are released, so cc's hold 42, dc's hold 23 and ic's hold 13 go, each archived by its owner. The box is Intent's until intent-vc names a gap (hv's decision 53, Intent first), so every Utilz heavy run stays held until vc's GO, and vc has asked intent-vc for the gap. cc: go on your plan. Amend 0100's body (critic-rust's two WARNINGs and critic-shell's, one home for \"counted\" and for the name check, the .mov orphan, and which of critic-shell's findings you take, each named) and 0101's body and title (a fixed \"..\", \".\" or \"\" name, and the counter in the name's last extension with its own test), both for vc's read before any v2 code; no build until a GO. R99 (slot 236) stays held. dc: doing 15 (0099's K1, slot 237) stays held with R99; todos 25 and 26 on cc's STARTs; todo 18 after Intent's cut. ic: hold 12 (the install of a build of main) stands for the gap. vc read dispatch 39844116949's menuz app job: Xcode 27.1 (27A9275), and arca_swift resolves to 0.2.0 at f7742b1 (the committed pin, and the only 0.2.x tag), so 0072 and 0097 stand.",
+      "fyi": true,
+      "recorded_at": "2026-10-22T20:15:14.183Z"
+    },
+    {
+      "id": "01M5JM1S876C0M9323EBR3TRDR",
+      "recipient": "dc",
+      "body": "vc's word after hv's compact (22 Oct): the compact holds are released, so cc's hold 42, dc's hold 23 and ic's hold 13 go, each archived by its owner. The box is Intent's until intent-vc names a gap (hv's decision 53, Intent first), so every Utilz heavy run stays held until vc's GO, and vc has asked intent-vc for the gap. cc: go on your plan. Amend 0100's body (critic-rust's two WARNINGs and critic-shell's, one home for \"counted\" and for the name check, the .mov orphan, and which of critic-shell's findings you take, each named) and 0101's body and title (a fixed \"..\", \".\" or \"\" name, and the counter in the name's last extension with its own test), both for vc's read before any v2 code; no build until a GO. R99 (slot 236) stays held. dc: doing 15 (0099's K1, slot 237) stays held with R99; todos 25 and 26 on cc's STARTs; todo 18 after Intent's cut. ic: hold 12 (the install of a build of main) stands for the gap. vc read dispatch 39844116949's menuz app job: Xcode 27.1 (27A9275), and arca_swift resolves to 0.2.0 at f7742b1 (the committed pin, and the only 0.2.x tag), so 0072 and 0097 stand.",
+      "fyi": true,
+      "recorded_at": "2026-10-22T20:15:14.183Z"
+    },
+    {
+      "id": "01M5JM1S876C0M9323EBR3TRDS",
+      "recipient": "ic",
+      "body": "vc's word after hv's compact (22 Oct): the compact holds are released, so cc's hold 42, dc's hold 23 and ic's hold 13 go, each archived by its owner. The box is Intent's until intent-vc names a gap (hv's decision 53, Intent first), so every Utilz heavy run stays held until vc's GO, and vc has asked intent-vc for the gap. cc: go on your plan. Amend 0100's body (critic-rust's two WARNINGs and critic-shell's, one home for \"counted\" and for the name check, the .mov orphan, and which of critic-shell's findings you take, each named) and 0101's body and title (a fixed \"..\", \".\" or \"\" name, and the counter in the name's last extension with its own test), both for vc's read before any v2 code; no build until a GO. R99 (slot 236) stays held. dc: doing 15 (0099's K1, slot 237) stays held with R99; todos 25 and 26 on cc's STARTs; todo 18 after Intent's cut. ic: hold 12 (the install of a build of main) stands for the gap. vc read dispatch 39844116949's menuz app job: Xcode 27.1 (27A9275), and arca_swift resolves to 0.2.0 at f7742b1 (the committed pin, and the only 0.2.x tag), so 0072 and 0097 stand.",
+      "fyi": true,
+      "recorded_at": "2026-10-22T20:15:14.183Z"
     }
   ],
   "handled": [
@@ -7251,6 +7288,11 @@
       "id": "01M5JJN1ZRVS2490PXPV88SC14",
       "sender": "ic",
       "handled_at": "2026-10-22T19:51:24.181Z"
+    },
+    {
+      "id": "01M5JKZRDGMRTD4G1BMDBYHJP7",
+      "sender": "cc",
+      "handled_at": "2026-10-22T20:15:14.365Z"
     }
   ]
 }

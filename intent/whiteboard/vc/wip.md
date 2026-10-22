@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 10d02503-c5ac-4034-b498-1aec461f1878
-heartbeat_at: 2026-10-22 20:03Z
+heartbeat_at: 2026-10-22 20:15Z
 status: active
-focus: "22 Oct, folded for hv's compact: 2.14.2 has 0095 to 0098 and 0072 landed and pushed (5b67161c); left 0099, 0100 and 0101, then dc's gate after Intent's cut (decision 53); resume from ~/Devel/scratch/utilz-vc/RESUME.md"
+focus: "22 Oct, after hv's compact: 2.14.2 has 0095 to 0098 and 0072 landed, pushed and read green on CI (5b67161c); 0099's R99 and K1 held for intent-vc's gap; 0100's and 0101's bodies amended for vc's read; then dc's gate after Intent's cut (decision 53)"
 claims: []
 ---
 
@@ -17,11 +17,11 @@ _(none)_
 
 ## TODO
 
-- 2.14.2 (vc's decisions 49 to 53). Landed and closed: 0095 (d633f4cb), 0096 (e96d86a2), 0097 (1d7a677c), 0098 (b5c588a3), 0072 (26c614dd). main pushed to 5b67161c, its push run green; read dispatch 39844116949's menuz-app log (Xcode 27.1, arca_swift 0.2.0). Left, in order, each on its predecessor's landing: 0099 (R99 and dc's K1 read and held, slots 236 and 237), 0100 and 0101 (designs approved, v1 written, critic-rust reading). Then dc's final-head gate and dry run after Intent's cut (decision 53), then hv's cut. (edited)
+- 2.14.2 (vc's decisions 49 to 53). Landed and closed: 0095 (d633f4cb), 0096 (e96d86a2), 0097 (1d7a677c), 0098 (b5c588a3), 0072 (26c614dd). main pushed to 5b67161c; its push run 39844117034 and its dispatch 39844116949 green on every job, the menuz app job on Xcode 27.1 (27A9275) with arca_swift at 0.2.0 (f7742b1, the committed pin and the only 0.2.x tag), so 0072 and 0097 stand. Left, in order, each on its predecessor's landing: 0099 (R99 and dc's K1 read and held, slots 236 and 237), 0100 and 0101 (bodies amended for the critic reads, then their v2s, each for vc's read). Then dc's final-head gate and dry run after Intent's cut (decision 53), then hv's cut. (edited)
 
 ## Holds
 
-- Holding for hv's compact (hv's word, 22 Oct: "Ok, context is high. Let's corale a localfold across the nodes, then get this done on the bounce."). Released once the compact has run, then /in-session and vc's pickup. Resume: ~/Devel/scratch/utilz-vc/RESUME.md, and the host log ~/Devel/scratch/utilz-vc/host-log-20261022.md. Held runs: 0099's R99 (slot 236) and dc's K1 (slot 237), and ic's install of a build of main, each for intent-vc's gap after Intent's macos prepare.
+- Utilz's heavy runs wait for Intent's chain (hv's decision 53, Intent first): 0099's R99 (slot 236) with dc's K1 beside it (slot 237), then 0100's and 0101's runs on cc's STARTs, and ic's install of a build of main (S, decision 52). Released when intent-vc names a gap at an Intent END, at the latest after Intent's macos prepare; each GO and END goes to intent-vc by name (watchout 17).
 
 ## Watch-outs
 
