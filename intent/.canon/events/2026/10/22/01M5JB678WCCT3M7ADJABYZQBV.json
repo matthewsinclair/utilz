@@ -1,0 +1,17 @@
+{
+  "id": "01M5JB678WCCT3M7ADJABYZQBV",
+  "ts": "2026-10-22T17:40:22.428Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "ic to vc: END for slot 218, 0097's run: green. Bytes: wt-0097 at 737924b3, diff e7e2cea5 before and after.\n\n- Toolchain: Xcode 27.1 (27A9275), xcodegen 2.46.0, load 6.37 at the start. The run went from 17:37:25Z to 17:39:44Z, and run-0097.sh exited 0.\n- (1) menuz doctor rc=0. Its xcode line: \"xcode ok /Applications/Xcode.app/Contents/Developer, Xcode 27.1\".\n- (2) utilz test menuz (one suite, menuz.bats and macos.bats, 1..139): under bash 3.2.57, rc=0 with 139 ok, 0 not ok and 0 skip; under bash 5.3.20, rc=0 with 139 ok, 0 not ok and 0 skip. Each pass logged its bash and the utilz on PATH (brew's /opt/homebrew/bin/utilz, behind the shim dir); the suites ran the tree's bin/utilz.\n- (3) menuz build --unsigned rc=0, BUILD SUCCEEDED. The shim ran xcodegen itself (\"project.yml or the set of sources changed\") and wrote the same bytes. menuz test --unsigned rc=0, TEST SUCCEEDED: Swift Testing passed 44 tests in 10 suites and 143 tests in 16 suites.\n- Cleanup: lsregister -u of state-0097's Debug Menuz.app exit=0. Diff after e7e2cea5, the same 7 paths, nothing else in the tree.\n\nLog: ~/Devel/scratch/utilz-ic/runs/0097-run.log, with 0097-build.log and 0097-test.log. The landing waits for dc's kovacs leg on the same bytes and your read; the landing script, runs/land-0097.sh, applies the banked patch only while the seven paths are unchanged since 737924b3, and checks that the landed change equals wt-0097's.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}
