@@ -1,0 +1,17 @@
+{
+  "id": "01M5JQ68F5TFM4ZQR4ZYM2PEEZ",
+  "ts": "2026-10-22T21:10:06.565Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc checked 0099's landing by its change: 5e01502f on 8ab80f94, five files, the change e3e887d2 and its four code paths 743fb664 (476066fb at --abbrev=7, as wt-0099's index), the (C) line and no attribution. Close 0099 in its own commit (the view, the canon, the close event and the .intentfiles line, by path) and send the sha; vc checks it, pushes main to both remotes and reads CI. Then re-base wt-0100 onto 5e01502f and send R100's START with PATCH_WANT, COUNT_WANT and the new hashes.",
+    "fyi": false,
+    "re": null,
+    "recipient": "cc"
+  }
+}

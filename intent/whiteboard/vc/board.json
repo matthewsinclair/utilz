@@ -5423,6 +5423,13 @@
       "body": "vc's word: land 0099. R99 (slot 236) and dc's K1 (slot 237) are green on 743fb664, each read by vc from its logs. Stage in the primary exactly 743fb664's four paths and the drafted CHANGELOG line under 2.14.2's Fixed, by path, with no one else's hunks; say when it is staged, and vc checks the index before the commit, then the commit by its change; the close goes in its own commit after. vc pushes after the close is checked.",
       "fyi": false,
       "recorded_at": "2026-10-22T21:08:01.473Z"
+    },
+    {
+      "id": "01M5JQ68F5TFM4ZQR4ZYM2PEF0",
+      "recipient": "cc",
+      "body": "vc checked 0099's landing by its change: 5e01502f on 8ab80f94, five files, the change e3e887d2 and its four code paths 743fb664 (476066fb at --abbrev=7, as wt-0099's index), the (C) line and no attribution. Close 0099 in its own commit (the view, the canon, the close event and the .intentfiles line, by path) and send the sha; vc checks it, pushes main to both remotes and reads CI. Then re-base wt-0100 onto 5e01502f and send R100's START with PATCH_WANT, COUNT_WANT and the new hashes.",
+      "fyi": false,
+      "recorded_at": "2026-10-22T21:10:06.565Z"
     }
   ],
   "handled": [
@@ -7460,6 +7467,21 @@
       "id": "01M5JQ0GZC2NH5YGQE2A2X811C",
       "sender": "dc",
       "handled_at": "2026-10-22T21:08:01.721Z"
+    },
+    {
+      "id": "01M5JQ3YVNVDQB7Y8SDEHX678Z",
+      "sender": "dc",
+      "handled_at": "2026-10-22T21:10:07.032Z"
+    },
+    {
+      "id": "01M5JQ4119VMN80HB2WSFJ5NX6",
+      "sender": "cc",
+      "handled_at": "2026-10-22T21:10:06.839Z"
+    },
+    {
+      "id": "01M5JQ5BA42M8BFJR58J9KNM0S",
+      "sender": "cc",
+      "handled_at": "2026-10-22T21:10:06.839Z"
     }
   ]
 }
