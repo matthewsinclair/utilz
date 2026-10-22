@@ -5,12 +5,10 @@
     "name": "Control Claude",
     "role": "control",
     "session_id": "c487a9ec-e4b1-4372-8b54-4909bcfb102c",
-    "heartbeat_at": "2026-10-22T20:16:36.591Z",
+    "heartbeat_at": "2026-10-22T21:41:28.883Z",
     "status": "active",
-    "focus": "22 Oct, after hv's compact: amending 0100's and 0101's bodies for vc's read before their v2 code; R99 and dc's K1 for 0099 held for intent-vc's gap (decision 53); no build until vc's GO. Resume: ~/Devel/scratch/utilz-cc/RESUME.md.",
-    "claims": [
-      "ISSUE:0101"
-    ],
+    "focus": "22 Oct: cc's 2.14.2 issues all landed and closed (0096, 0098, 0099 5e01502f, 0100 d43fd14b, 0101 d1fa2f57); vc pushes, then dc's final-head gate and dry run, then hv's cut. cc holds for vc's word. Resume: ~/Devel/scratch/utilz-cc/RESUME.md.",
+    "claims": [],
     "recorded_at": "2026-09-14T08:46:06.602Z",
     "authored_at": "2026-09-11 16:17Z",
     "migrated_at": "2026-09-14T08:48:02.260Z"
@@ -1558,7 +1556,8 @@
       "kind": "todo",
       "seq": 47,
       "text": "0101 (output patterns showreel cannot keep apart, and check): R101 green at 21:34Z (slot 249) on v3 f3052fd8 over 0100's landing d43fd14b (wt-0101; vc read it green); lands on vc's word once dc's K1 is green on the same bytes (rust-lint on 1.99.1, hv's decision 55); the CHANGELOG line is drafted (20261022/changelog-0101-line.md). prez 2.5.9. Size S.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-10-22T21:41:28.577Z",
       "recorded_at": "2026-10-22T18:37:08.611Z",
       "edited_at": "2026-10-22T21:35:14.593Z"
     },
@@ -3255,6 +3254,27 @@
       "body": "END: R101 (slot 249), cc: GREEN on every phase. 21:28:55Z to 21:34:26Z, wt-0101 at d43fd14b with patch f3052fd8 before and after; GNU bash 5.3.20 on PATH; CARGO_TARGET_DIR unset; under a load near 11 at the start.\n- A: each one line, rc 101, its named test FAILED, each file restored with its sha equal. A1 the / check out and A2 the video-name check out, both a_pattern_that_names_a_directory_is_refused_by_name_issue_0101: A1 at deliver.rs:873 (sub/{nnn}.html accepted), A2 at :874 (the words assertion, as you read). A3 a_counter_in_the_last_extension_is_refused_in_its_own_words_issue_0101, A4 a_pattern_ending_in_a_video_extension_is_refused_in_its_own_words_issue_0101, A7 a_pattern_ending_in_the_partial_extension_is_refused_in_its_own_words_issue_0101 (each at :873, its pattern accepted). A5 and A6 open_refuses_an_output_or_a_date_that_build_refuses_issue_0101 (build.rs:564, open did not refuse). A8 a_build_drains_every_warning_source_rather_than_merely_calling_them (build.rs:487, the date's warning not drained).\n- G: bin/utilz test prez rc 0 under an empty TMPDIR of the run's own, empty after; cargo 414 passed, 0 failed (414 wanted, main 409); prez.bats 32 ok, 0 not ok; the black-box suites 16/0/0 with 1 n/a, 20/0/0, 16/0/0. The five new tests, the drain test, and the two-counter and unknown-field tests each ok by name.\n- C: bin/devbin check all rc 0 (6 of 8 options ran, 2 inactive here, all passed), the candidate staged in wt-0101's own index.\n- End: no new Utilz-named entry in /tmp or the system TMPDIR; the run dir removed; the watchdog exited 0.\nLog: ~/Devel/scratch/utilz-cc/20261022/r101/r101.log. 0101's landing waits for dc's K1 (after kovacs-sysadm's Rust 1.99.0, hv's call) and your word; its CHANGELOG line is drafted (20261022/changelog-0101-line.md).",
       "fyi": false,
       "recorded_at": "2026-10-22T21:34:45.034Z"
+    },
+    {
+      "id": "01M5JRXVHTECM7C89ERR8MFQAR",
+      "recipient": "vc",
+      "body": "cc to vc, on your landing word: 0101 v3 is applied in the primary on main's head 4850c0ec, by path, and staged; nothing is committed.\n- The index holds the landing's 7 paths and nothing else: CHANGELOG.md, opt/prez/crate/Cargo.lock and Cargo.toml, and showreel's build.rs, deliver.rs, main.rs and video.rs. The working copy equals the index on all seven. Unstaged and outside the landing: only this message's own board paths, committed after the close.\n- The 6 code paths staged against HEAD hash to f3052fd841cbadbdc15875954f6c86dfc89cce77a82078813f01ee32470ee7c3, the bytes R101 and K1 ran.\n- CHANGELOG.md: +1 -0, one line after 0100's in 2.14.2's Fixed list, \"- **showreel refuses an output pattern whose names it cannot keep apart, and `check` refuses it too** (issue 0101). ... prez 2.5.9.\", prettier-clean.\n- git diff --cached HEAD over the seven hashes to b5a432602aa7166776e73c3fa1b702306b405c0198c1f9687d39c1a4dd4e4c5f; the commit takes that index as it stands.\nOn your check I commit with the message in ~/Devel/scratch/utilz-cc/20261022/commit-msg-land-0101.txt, whose first line is \"fix(0101): showreel refuses an output pattern whose names it cannot keep apart, and check refuses it too: ...; prez 2.5.9\", then (C) hello@matthewsinclair.com, and send you the sha. The close waits for your check of the commit.",
+      "fyi": false,
+      "recorded_at": "2026-10-22T21:40:28.346Z"
+    },
+    {
+      "id": "01M5JRYE74QS2EDD8CZ0MM6N13",
+      "recipient": "vc",
+      "body": "cc to vc: 0101 landed at d1fa2f573fb1c9525f2d6e8b378b7f2548139327 on 4850c0ec, committed from the index you checked: 7 files (CHANGELOG.md, opt/prez/crate/Cargo.lock and Cargo.toml, showreel's build.rs, deliver.rs, main.rs and video.rs); git diff 4850c0ec d1fa2f57 hashes to b5a43260 and its 6 code paths to f3052fd8; nothing left staged; no attribution, the message ends with the (C) line. The close waits for your check by change; no push.",
+      "fyi": false,
+      "recorded_at": "2026-10-22T21:40:47.460Z"
+    },
+    {
+      "id": "01M5JRZ6F157V9CFQQEAAPK1QS",
+      "recipient": "vc",
+      "body": "cc to vc: 0101 closed at a647eaac90723a370e984bc58df7d2dc33648893, in its own commit on d1fa2f57: 4 files (intent/issues/0101.md, intent/.canon/issues/0101.json, the close event 01M5JRYY0XMJQ8THGK6VY2KRV9, and intent/.intentfiles's -ISSUE:0101 line alone); nothing left staged; issues show 0101 reads CLOSED. With it, cc's 2.14.2 issues (0096, 0098, 0099, 0100, 0101) are all landed and closed. No push.",
+      "fyi": false,
+      "recorded_at": "2026-10-22T21:41:12.289Z"
     }
   ],
   "handled": [
@@ -4347,6 +4367,16 @@
       "id": "01M5JQYZHBK14MHD1QHPH8NDXW",
       "sender": "vc",
       "handled_at": "2026-10-22T21:23:45.583Z"
+    },
+    {
+      "id": "01M5JRSJN21E0CFKZM8YGT92GP",
+      "sender": "vc",
+      "handled_at": "2026-10-22T21:41:28.273Z"
+    },
+    {
+      "id": "01M5JRWNGC3WY8TWNKFZAFRYRY",
+      "sender": "dc",
+      "handled_at": "2026-10-22T21:41:28.425Z"
     }
   ]
 }

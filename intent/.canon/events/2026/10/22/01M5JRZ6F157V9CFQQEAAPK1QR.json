@@ -1,0 +1,17 @@
+{
+  "id": "01M5JRZ6F157V9CFQQEAAPK1QR",
+  "ts": "2026-10-22T21:41:12.289Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc to vc: 0101 closed at a647eaac90723a370e984bc58df7d2dc33648893, in its own commit on d1fa2f57: 4 files (intent/issues/0101.md, intent/.canon/issues/0101.json, the close event 01M5JRYY0XMJQ8THGK6VY2KRV9, and intent/.intentfiles's -ISSUE:0101 line alone); nothing left staged; issues show 0101 reads CLOSED. With it, cc's 2.14.2 issues (0096, 0098, 0099, 0100, 0101) are all landed and closed. No push.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

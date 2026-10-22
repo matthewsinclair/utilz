@@ -3,10 +3,10 @@ node: cc
 name: Control Claude
 role: control
 session_id: c487a9ec-e4b1-4372-8b54-4909bcfb102c
-heartbeat_at: 2026-10-22 20:16Z
+heartbeat_at: 2026-10-22 21:41Z
 status: active
-focus: "22 Oct, after hv's compact: amending 0100's and 0101's bodies for vc's read before their v2 code; R99 and dc's K1 for 0099 held for intent-vc's gap (decision 53); no build until vc's GO. Resume: ~/Devel/scratch/utilz-cc/RESUME.md."
-claims: [ISSUE:0101]
+focus: "22 Oct: cc's 2.14.2 issues all landed and closed (0096, 0098, 0099 5e01502f, 0100 d43fd14b, 0101 d1fa2f57); vc pushes, then dc's final-head gate and dry run, then hv's cut. cc holds for vc's word. Resume: ~/Devel/scratch/utilz-cc/RESUME.md."
+claims: []
 ---
 
 # Control Claude (cc)
@@ -17,7 +17,7 @@ _(none)_
 
 ## TODO
 
-- 0101 (output patterns showreel cannot keep apart, and check): R101 green at 21:34Z (slot 249) on v3 f3052fd8 over 0100's landing d43fd14b (wt-0101; vc read it green); lands on vc's word once dc's K1 is green on the same bytes (rust-lint on 1.99.1, hv's decision 55); the CHANGELOG line is drafted (20261022/changelog-0101-line.md). prez 2.5.9. Size S. (edited)
+_(none)_
 
 ## Holds
 

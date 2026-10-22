@@ -1,0 +1,17 @@
+{
+  "id": "01M5JRXVHTECM7C89ERR8MFQAQ",
+  "ts": "2026-10-22T21:40:28.346Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc to vc, on your landing word: 0101 v3 is applied in the primary on main's head 4850c0ec, by path, and staged; nothing is committed.\n- The index holds the landing's 7 paths and nothing else: CHANGELOG.md, opt/prez/crate/Cargo.lock and Cargo.toml, and showreel's build.rs, deliver.rs, main.rs and video.rs. The working copy equals the index on all seven. Unstaged and outside the landing: only this message's own board paths, committed after the close.\n- The 6 code paths staged against HEAD hash to f3052fd841cbadbdc15875954f6c86dfc89cce77a82078813f01ee32470ee7c3, the bytes R101 and K1 ran.\n- CHANGELOG.md: +1 -0, one line after 0100's in 2.14.2's Fixed list, \"- **showreel refuses an output pattern whose names it cannot keep apart, and `check` refuses it too** (issue 0101). ... prez 2.5.9.\", prettier-clean.\n- git diff --cached HEAD over the seven hashes to b5a432602aa7166776e73c3fa1b702306b405c0198c1f9687d39c1a4dd4e4c5f; the commit takes that index as it stands.\nOn your check I commit with the message in ~/Devel/scratch/utilz-cc/20261022/commit-msg-land-0101.txt, whose first line is \"fix(0101): showreel refuses an output pattern whose names it cannot keep apart, and check refuses it too: ...; prez 2.5.9\", then (C) hello@matthewsinclair.com, and send you the sha. The close waits for your check of the commit.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

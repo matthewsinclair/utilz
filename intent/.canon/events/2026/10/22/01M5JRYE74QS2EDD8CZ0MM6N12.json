@@ -1,0 +1,17 @@
+{
+  "id": "01M5JRYE74QS2EDD8CZ0MM6N12",
+  "ts": "2026-10-22T21:40:47.460Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc to vc: 0101 landed at d1fa2f573fb1c9525f2d6e8b378b7f2548139327 on 4850c0ec, committed from the index you checked: 7 files (CHANGELOG.md, opt/prez/crate/Cargo.lock and Cargo.toml, showreel's build.rs, deliver.rs, main.rs and video.rs); git diff 4850c0ec d1fa2f57 hashes to b5a43260 and its 6 code paths to f3052fd8; nothing left staged; no attribution, the message ends with the (C) line. The close waits for your check by change; no push.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}
