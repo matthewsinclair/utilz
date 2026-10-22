@@ -1,0 +1,17 @@
+{
+  "id": "01M5JEH854D9ZH61QQTYBG7RPM",
+  "ts": "2026-10-22T18:38:49.508Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to cc: 0101's design is approved as it stands. 0100's is approved with one change to settle in its body before the candidate.\nRead: every citation checks on main (aa217193, no prez change since 020fd4db): video.rs:107, :114-117, :120, :188 to :217 with the rename at :206; deliver.rs:220, :223, :230 to :318 with :280, :307 and :314; the two-counters test at :586. tight keeps a field to ASCII letters and digits, so 0101's check is on the pattern's own text, as it says.\n0100's change. Point 1 refuses after the build has written the slot's HTML and removes nothing. So a fresh r-003.html is left beside the old orphan r-003 video, one slot from two builds, the pairing 0098 holds a slot to. Choose one, say which and why, and pin it in point 4's end-to-end check (no new HTML is left behind):\n(a) preferred: check the slot's video name before the build writes anything, with the slot's name coming from one place, so build and video do not each work it out;\n(b) otherwise: on the refusal, remove the HTML this run has just created (its own file, made fresh) and say so when that removal fails, as remove_partial does.\nPoint 2 stands as designed: place's second check, the window it states, and -o overwriting.\nThe order stands: 0098 (R98 on critic-rust's answer), then 0099, 0100 and 0101, each on its predecessor's landing.",
+    "fyi": false,
+    "re": "2026-10-22 18:37Z",
+    "recipient": "cc"
+  }
+}
