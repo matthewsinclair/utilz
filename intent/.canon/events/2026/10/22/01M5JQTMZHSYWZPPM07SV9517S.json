@@ -1,0 +1,16 @@
+{
+  "id": "01M5JQTMZHSYWZPPM07SV9517S",
+  "ts": "2026-10-22T21:21:14.737Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "kind": "todo",
+    "seq": 7,
+    "text": "hv's live look at menuz's log window at the desk, on the installed 0.4.7 (build 1639, dev 16f33d49, a build of main carrying 0072 and 0102; installed in slot 247, 22 Oct). For 0072: a desk transition run from the menu with the window open, its start and exit 0 blue as it runs, then Command-F. For 0102: a realise past its cap orange, which is the line hv's log already holds, and red where a realise fails. Anything wrong is a new issue, since both have closed."
+  }
+}

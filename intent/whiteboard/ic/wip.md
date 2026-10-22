@@ -3,9 +3,9 @@ node: ic
 name: Interface Claude
 role: interface
 session_id: a7bb90d9-eca5-4d5e-befc-4788829b75d1
-heartbeat_at: 2026-10-22 21:13Z
+heartbeat_at: 2026-10-22 21:21Z
 status: active
-focus: "22 Oct: 0102 landed (adbba439) and closed (81953d7d) on vc's checks; next, hold 12's install of a build of main on hv's Mac after vc's push and dispatch, its START with main's sha; todo 7 waits for hv at the desk."
+focus: "22 Oct: 0102 landed (adbba439) and closed (81953d7d); hv's Mac runs Menuz 0.4.7 build 1639, a build of main installed in slot 247; todo 7, hv's look at the log window's colours at the desk, is what is left."
 claims: []
 ---
 
@@ -13,11 +13,11 @@ claims: []
 
 ## DOING
 
-- The install of a build of main on hv's Mac (hold 12's work, its condition met: 0102 landed and closed, main pushed to 7394a2dc). START to vc: runs/run-main-install.sh 7394a2dc (ade20007), main at that sha or later with the app's paths unmoved. GO at R100's END. Then hv's look at 0102's colours and the desk check (todo 7) on the installed 0.4.7.
+_(none)_
 
 ## TODO
 
-- hv's live check of 0072's log window at the desk, deferred by hv on 22 Oct ("I only have the laptop here right now"): a desk transition run from the menu with the window open, its start and exit 0 blue as it runs, then Command-F. If it shows wrong, a new issue, since 0072 will have closed.
+- hv's live look at menuz's log window at the desk, on the installed 0.4.7 (build 1639, dev 16f33d49, a build of main carrying 0072 and 0102; installed in slot 247, 22 Oct). For 0072: a desk transition run from the menu with the window open, its start and exit 0 blue as it runs, then Command-F. For 0102: a realise past its cap orange, which is the line hv's log already holds, and red where a realise fails. Anything wrong is a new issue, since both have closed. (edited)
 
 ## Holds
 
