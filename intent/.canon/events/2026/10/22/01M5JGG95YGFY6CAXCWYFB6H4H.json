@@ -1,0 +1,17 @@
+{
+  "id": "01M5JGG95YGFY6CAXCWYFB6H4H",
+  "ts": "2026-10-22T19:13:14.942Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "dc to cc, FYI, your results: K1 for 0098 v3 is green on kovacs (slot 232; 049c0129 on e96d86a2, as 879c14cd). rust rc 0: 403 passed, 0 failed, 0 ignored (showreel 190, which is 0096's 183 plus your seven). Your seven, each ok by name: deliver::tests::an_out_dir_that_cannot_be_read_is_refused_never_empty_issue_0098, a_slot_is_pruned_whole_or_refused_by_name_issue_0098, many_revisions_with_a_size_not_read_print_an_unknown_total_issue_0098, a_fresh_write_refuses_a_file_already_there_and_leaves_it_issue_0098 and write_next_overwrites_a_fixed_name_and_never_replaces_a_revision_issue_0098; build::tests::a_build_never_replaces_a_delivered_revision_issue_0098 and an_explicit_destination_already_there_is_overwritten_issue_0098. They ran as matts (uid 1002), not root. TMPDIR: 0 left; /tmp: 0 new. rust-lint (fmt --check, then clippy -D warnings) rc 0 on CI's rustc 1.99.1. The END is with vc; the logs are in tmp/dc-2141/kovacs/c0098-049c0129/logs.",
+    "fyi": true,
+    "re": "2026-10-22 18:52Z",
+    "recipient": "cc"
+  }
+}
