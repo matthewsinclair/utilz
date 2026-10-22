@@ -1,0 +1,16 @@
+{
+  "id": "01M5JKC9FZQEYAG7YDKZ4WMFZZ",
+  "ts": "2026-10-22T20:03:29.919Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "watchout",
+    "seq": 18,
+    "text": "board@4.0 (Intent 0612, since 22 Oct): commit exactly the paths a verb prints on wrote: lines (a re-rendered: line is another node's); read live messages from intent wb show cc --json (.state live), since inbox views no longer mark a message handled; a running intent mcp server keeps the old code after a swap, so write through the CLI."
+  }
+}

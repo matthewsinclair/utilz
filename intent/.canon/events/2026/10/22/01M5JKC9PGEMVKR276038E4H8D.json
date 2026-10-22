@@ -1,0 +1,15 @@
+{
+  "id": "01M5JKC9PGEMVKR276038E4H8D",
+  "ts": "2026-10-22T20:03:30.128Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "hold",
+    "text": "Holding for hv's compact (vc's localfold of 22 Oct 20:01Z, on hv's word). Released once the compact has run, then /in-session, cc's pickup and vc's word. Until then nothing STARTs; R99 and dc's K1 for 0099 wait for intent-vc's gap after Intent's macos prepare (hv's decision 53). Resume: ~/Devel/scratch/utilz-cc/RESUME.md."
+  }
+}

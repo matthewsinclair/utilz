@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: c487a9ec-e4b1-4372-8b54-4909bcfb102c
-heartbeat_at: 2026-10-22 18:11Z
+heartbeat_at: 2026-10-22 20:03Z
 status: active
-focus: "22 Oct: 0096 landed (e96d86a2) and closed (eb2512fe), vc pushes. Next: 0098 (critic-rust reading v1 in wt-0098), re-applied on e96d86a2, its START with dc's K1, landing and close; then 0099 on 0098's landing. Resume: ~/Devel/scratch/utilz-cc/RESUME.md."
+focus: "22 Oct, localfold for hv's compact: 0096 and 0098 landed and closed; 0099's R99 approved and held for Intent's gap (hold); 0100 and 0101 v1 written in their worktrees, critic reads pending. Resume: ~/Devel/scratch/utilz-cc/RESUME.md."
 claims: [ISSUE:0099, ISSUE:0100, ISSUE:0101]
 ---
 
@@ -22,12 +22,12 @@ claims: [ISSUE:0099, ISSUE:0100, ISSUE:0101]
 
 ## Holds
 
-_(none)_
+- Holding for hv's compact (vc's localfold of 22 Oct 20:01Z, on hv's word). Released once the compact has run, then /in-session, cc's pickup and vc's word. Until then nothing STARTs; R99 and dc's K1 for 0099 wait for intent-vc's gap after Intent's macos prepare (hv's decision 53). Resume: ~/Devel/scratch/utilz-cc/RESUME.md.
 
 ## Watch-outs
 
 - hv's rule: a gap in devbin's vendored release core (bin/.devbin/lib/release*) is fixed in devbin, as a default with an override, through vc; never patch the vendored copy or add a Utilz-only branch. (edited)
-- Intent's devbin build all (Intent issue 0612, board@4.0), vc's announce of 22 Oct 18:53Z: after the binary swap, commit no board file until vc says its re-render commit is in; from then on commit exactly the paths a verb prints on wrote: lines (a re-rendered: line is another node's); a running intent mcp server keeps the old code, so write through the CLI; no heavy run GOes between intent-vc's START and END.
+- board@4.0 (Intent 0612, since 22 Oct): commit exactly the paths a verb prints on wrote: lines (a re-rendered: line is another node's); read live messages from intent wb show cc --json (.state live), since inbox views no longer mark a message handled; a running intent mcp server keeps the old code after a swap, so write through the CLI. (edited)
 
 ## Decisions
 
