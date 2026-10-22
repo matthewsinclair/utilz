@@ -1,0 +1,16 @@
+{
+  "id": "01M5JC44MYRDGPDTX6N1539A18",
+  "ts": "2026-10-22T17:56:42.782Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 12,
+    "text": "0096's K1 (todo 21, cc's v4), slot 222 (heavy), beside slot 221 (gtools-dc's Xcode 27 run): vc's GO at 17:56Z with rust-lint kept, running since 17:56:21Z: /bin/bash ~/Devel/scratch/utilz-dc/work/kv-c0096.sh rust-lint on 2d9b7b7c (16b414ef on 8954eee8). Expected: rust rc 0, failed 0, ignored 0, cc's five new tests ok by name, 0 left in TMPDIR or /tmp, kovacs's user not root; rust-lint rc 0 on CI's rustc. Then the END to vc and cc."
+  }
+}

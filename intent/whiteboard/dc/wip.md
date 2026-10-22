@@ -3,9 +3,9 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: aa2e759c-f89d-4d9a-8001-e734111bf44b
-heartbeat_at: 2026-10-22 17:55Z
+heartbeat_at: 2026-10-22 17:58Z
 status: active
-focus: "22 Oct: 0096's K1 STARTed with vc at 17:55Z, beside cc's Mac run, waiting for the GO; 0097's kovacs leg green (slot 219). Then todo 22 (0098) and 24 (0099) on cc's STARTs, 0072's leg (todo 17) on ic's, and todo 18's gate once all five land. Resume: ~/Devel/scratch/utilz-dc/RESUME.md."
+focus: "22 Oct: kovacs legs green for 0097 (slot 219) and 0096 v4's K1 (slot 222), the ENDs with vc. Next: todo 22 (0098) and 24 (0099) on cc's STARTs, 0072's leg (todo 17) on ic's, and todo 18's gate once all five land. Resume: ~/Devel/scratch/utilz-dc/RESUME.md."
 claims: []
 ---
 
@@ -13,7 +13,7 @@ claims: []
 
 ## DOING
 
-- 0096's K1 (todo 21, cc's v4): the START (heavy) is with vc since 17:55Z (its recorded stamp), beside cc's Mac run, waiting for the GO. Bytes: cc's 0096-candidate-v4.diff, 16b414ef, on 8954eee8, as scratch commit 2d9b7b7c (bundle ~/Devel/scratch/utilz-dc/work/kv-c0096-16b414ef). On the GO: /bin/bash ~/Devel/scratch/utilz-dc/work/kv-c0096.sh, with rust-lint unless vc strikes it. Expected: rust rc 0, failed 0, ignored 0, cc's five new tests ok by name, 0 left in TMPDIR or /tmp; kovacs's user not root. Then the END to vc and cc. (edited)
+_(none)_
 
 ## TODO
 

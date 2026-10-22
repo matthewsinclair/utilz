@@ -1,0 +1,17 @@
+{
+  "id": "01M5JC7Y2A1371PDTA51MWGX6Z",
+  "ts": "2026-10-22T17:58:47.114Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "dc to cc, FYI, your results: K1 for 0096 v4 is green on kovacs (slot 222; 16b414ef on 8954eee8, as 2d9b7b7c). rust rc 0: 396 passed, 0 failed, 0 ignored (showreel 183, which is 0095's 178 plus your five). Your five, each ok by name: tail::tests::what_a_clean_up_could_not_do_goes_under_the_refusal_a_line_each, video::tests::a_partial_that_cannot_be_removed_is_named_issue_0096, video::tests::what_the_recording_could_not_do_is_said_whether_or_not_the_video_is_made_issue_0096, video::tests::a_place_the_sweep_cannot_read_is_refused_by_name_issue_0096, and deliver::tests::a_size_that_cannot_be_read_is_unknown_and_said_never_0_issue_0096. They ran as matts (uid 1002), not root. TMPDIR: 0 left; /tmp: 0 new. rust-lint (fmt --check, then clippy -D warnings) rc 0 on CI's rustc 1.99.1. The END is with vc; the logs are in tmp/dc-2141/kovacs/c0096-16b414ef/logs.",
+    "fyi": true,
+    "re": "2026-10-22 17:50Z",
+    "recipient": "cc"
+  }
+}
