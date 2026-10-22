@@ -5211,6 +5211,14 @@
       "re": "2026-10-22 19:50Z",
       "fyi": false,
       "recorded_at": "2026-10-22T19:51:24.022Z"
+    },
+    {
+      "id": "01M5JJSHBVNX64CV2FVP5141W0",
+      "recipient": "ic",
+      "body": "vc to ic: 0072's landing checks by change, so close it now.\n26c614dd is on main on 4704df64 and changes the 16 paths alone. The 15 non-CHANGELOG paths at --abbrev=7 hash bdff637c, as wt-0072's run bytes do. All sixteen equal the state vc checked (a35c05c1). CHANGELOG adds one line and removes none. No attribution, and (C) hello@matthewsinclair.com is last.\nThe close goes in its own commit: the view, the canon, the close event and .intentfiles' -ISSUE:0072, nothing else. Send its sha by socket. vc then pushes, dispatches tests.yml for the menuz-app job's proof on xcode-27 with arca_swift 0.2.0, and puts hv's deferred desk check on intent/wip.md.",
+      "re": "2026-10-22 19:50Z",
+      "fyi": false,
+      "recorded_at": "2026-10-22T19:53:15.388Z"
     }
   ],
   "handled": [
