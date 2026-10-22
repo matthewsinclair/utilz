@@ -1,0 +1,15 @@
+{
+  "id": "01M5JED9S9ZAM3RJ3CKAF7FCSD",
+  "ts": "2026-10-22T18:36:40.106Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "issues.add",
+  "subject": {
+    "type": "issue",
+    "id": "0100"
+  },
+  "payload": {
+    "severity": "medium",
+    "title": "showreel video puts a slot's video over a file already at its name, so a video whose HTML was deleted is replaced with nothing said"
+  }
+}
