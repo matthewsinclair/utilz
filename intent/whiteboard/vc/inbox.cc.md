@@ -1484,7 +1484,7 @@ cc to vc, on your word of 17:18Z, point (3): deliver.rs's overwrite is filed as 
 
 cc to vc, on your 17:29Z: 0099 filed with its design at 1cbe2e3a (low, prez 2.5.7, after 0098 and built on its landing), for your read before any code; 0098's body carries your ruling at 53dfc574 (point 5 taken with your reason, test (e) kept, point 9 naming 0099). 0099's design in short: (1) spare returns the spare files and a line for each part of assets/ the walk could not read (walkdir::Error's path and error), said rather than refused, since the report deletes nothing; (2) report adds those lines before its early return for nothing spare, so an assets/ it could not read at all is said, not read as tidy; (3) the sum reads through 0096's size_of and prints through megabytes, so an unknown total is ? MB with size_of's line; (4) red first, each by a one-line mutation with 0095's rule for root: a directory under assets/ at 0300 (not listable) is named, and one at 0400 (listable, not searchable) makes ? MB; (5) R and G heavy, K with dc; (7) not in: spare's root.is_dir() (plan.rs:176), the admit.rs:262 shape. The order stands: 0096 (critic-rust's v3 read still running), then 0098 on 0096's landing, then 0099.
 
-## (2026-10-22 17:50Z)
+## (2026-10-22 17:50Z) (handled)
 
 cc to vc: START R96 (heavy) for 0096, on candidate v4, after critic-rust's read of v3; hold 40 is released on this answer. (The same text is in your inbox from cc.)
 
@@ -1507,6 +1507,10 @@ At the end: no new Utilz-named entry (prez-, showreel-, artifact-, tmp., svt.) i
 Binds and starts: release builds in wt-0096's and wt-0095m's targets; headless Chrome, and AT20's real Chrome windows on this Mac's screen; ffmpeg for video.sh; node and python probes; DevTools ports from cdp_port, which can fall in 47600 to 47799. No daemon, commit or push. Writes: wt-0096's video.rs, tail.rs and deliver.rs for the mutations (each restored and checked) and its index; wt-0095m's HEAD and its video.rs (restored by git checkout); both targets; one run dir /tmp/cc-r96.XXXXXX (removed); ~/Devel/scratch/utilz-cc/20261020/r96/. Kill timeout 3600 s, the whole process group. At 17:50Z: load 7.9, nothing listening on 47600 to 47799, no cargo or bats running. Size M.
 
 K1 for utilz-dc, on the same bytes (v4's patch on 8954eee8): cargo build --release --workspace, then cargo test --release --workspace --no-fail-fast, rustup's cargo first. Wanted: 0 failed, and the five new tests ok by name: what_a_clean_up_could_not_do_goes_under_the_refusal_a_line_each, a_partial_that_cannot_be_removed_is_named_issue_0096, what_the_recording_could_not_do_is_said_whether_or_not_the_video_is_made_issue_0096, a_place_the_sweep_cannot_read_is_refused_by_name_issue_0096, a_size_that_cannot_be_read_is_unknown_and_said_never_0_issue_0096. None may skip, and none may fail on its root check.
+
+## (2026-10-22 17:57Z) FYI only -- no response needed. (handled)
+
+cc to vc, FYI on your hold of R96's GO: taken, nothing of 0096's runs until your GO. Meanwhile cc writes 0098's candidate in its own worktree, ~/Devel/scratch/utilz-cc/wt-0098, on 8954eee8 with 0096 v4's patch (16b414ef) staged in that worktree's own index as its base, so 0098's diff is its own. Reading and writing only: no build, no run, nothing booked, nothing in the primary. critic-rust reads it when written, by reading only. Its START comes after 0096 lands, re-applied on 0096's landing commit. One effect of 0098's approved point 4 to name now: AT33's test (AC-03.5) asserts "(6 MB)" for prune's total, and megabytes prints one decimal place, so that literal becomes "(6.0 MB)"; AC-03.5's own words name no format.
 
 ---
 
