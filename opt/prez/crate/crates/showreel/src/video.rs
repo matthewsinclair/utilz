@@ -322,7 +322,8 @@ fn empty_directory(dir: &Path) -> Result<(), Failure> {
 /// Where ffmpeg writes until the video is proven finished.
 fn partial_of(video: &Path) -> PathBuf {
   let mut name = video.as_os_str().to_owned();
-  name.push(".partial");
+  name.push(".");
+  name.push(deliver::PARTIAL);
   PathBuf::from(name)
 }
 
@@ -346,7 +347,7 @@ fn sweep_partials(video: &Path, in_slot: bool) -> Result<Vec<String>, Failure> {
         )
       })?
       .into_iter()
-      .filter(|p| p.extension().is_some_and(|e| e == "partial"))
+      .filter(|p| deliver::is_partial(p))
       .collect()
   } else {
     let own = partial_of(video);

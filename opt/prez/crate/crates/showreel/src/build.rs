@@ -44,6 +44,12 @@ pub struct Opened {
   pub meta: Option<theme::Meta>,
   pub inlined: theme::Inlined,
   pub plan: plan::Plan,
+  /// The output's stem, built from the date the session is stamped with
+  /// (issue 0101).
+  pub stem: deliver::Stem,
+  /// What stamping the date wants said. **Each verb MUST say it**: `build` in
+  /// its `said`, where it always was, and `check` on stderr.
+  pub stamp_said: Vec<String>,
 }
 
 pub fn open(path: &Path) -> Result<Opened, Failure> {
@@ -83,6 +89,13 @@ pub fn open(path: &Path) -> Result<Opened, Failure> {
   // never embeds, so this is the whole of the build's decision-making without
   // any of its cost -- which is exactly why `check` can run it.
   let plan = plan::plan(&dir, &cfg)?;
+
+  // **AND THE OUTPUT'S NAME, AS A BUILD NAMES IT** (issue 0101): the date the
+  // session is stamped with and the stem built from it, so an `output:` or a
+  // date that `build` refuses, `check` refuses too, in the same words, rather
+  // than calling the reel valid.
+  let (date, stamp_said) = deliver::stamp(&cfg.session)?;
+  let stem = deliver::stem(&cfg, &cfg.session, &date)?;
   Ok(Opened {
     dir,
     cfg,
@@ -90,6 +103,8 @@ pub fn open(path: &Path) -> Result<Opened, Failure> {
     meta,
     inlined,
     plan,
+    stem,
+    stamp_said,
   })
 }
 
@@ -221,8 +236,9 @@ pub fn run(path: &Path, f: &Options) -> Result<Built, Failure> {
   let mut said: Vec<String> = Vec::new();
   let (socials, warn) = payload::socials(&o.dir, &o.cfg);
   said.extend(warn);
-  let (date, warn) = deliver::stamp(&o.cfg.session)?;
-  said.extend(warn);
+  // `open` stamped the date (issue 0101); what that wants said goes here, where
+  // it always went.
+  said.extend_from_slice(&o.stamp_said);
 
   let payload = reel_payload(&o, socials)?;
   let data = serde_json::to_string(&payload).map_err(json_failed)?;
@@ -257,7 +273,7 @@ pub fn run(path: &Path, f: &Options) -> Result<Built, Failure> {
   )?;
 
   let out_dir = o.dir.join("_out");
-  let stem = deliver::stem(&o.cfg, &o.cfg.session, &date)?;
+  let stem = &o.stem;
   // A revision in `_out/` is created and never replaces one (issue 0098);
   // `--out` is outside the rotation and overwritten, as it always was. Each
   // arm says whether what it wrote is a counted revision (issue 0100).
@@ -294,7 +310,7 @@ pub fn run(path: &Path, f: &Options) -> Result<Built, Failure> {
   // FILE.** An explicit `--out` is outside the rotation, so the retention policy
   // must not delete alongside it. The reference's `if not args.out`.
   if f.out.is_none() {
-    let (drop, warn) = deliver::prune(&out_dir, &stem, f.keep)?;
+    let (drop, warn) = deliver::prune(&out_dir, stem, f.keep)?;
     said.extend(warn);
     for p in drop {
       std::fs::remove_file(&p).map_err(|e| {
@@ -426,15 +442,17 @@ segments:
   /// **EVERY WARNING SOURCE IS DRAINED, AND THIS IS THE ONE TEST THAT WOULD
   /// CATCH A BUILD GOING QUIET.** design.md 4.9: this port turned warnings from
   /// prints into return values, so a source nobody reads is silent and NOTHING
-  /// ELSE FAILS -- no gate, no test, and the build still succeeds. Three
-  /// sources at once, each asserted by its own text.
+  /// ELSE FAILS -- no gate, no test, and the build still succeeds. Four
+  /// sources at once, each asserted by its own text: the date's among them,
+  /// which `open` stamps and `run` drains (issue 0101), from a session that
+  /// gives a day and a month and no year.
   #[test]
   fn a_build_drains_every_warning_source_rather_than_merely_calling_them() {
     let d = reel(
       "warnings",
       "\
 artist: {handle: t, name: Tester}
-session: {venue: The Hall, city: Derby, iso: 2026-09-19}
+session: {venue: The Hall, city: Derby, date: 19th September}
 theme: default
 target: 640
 socials: [{label: Web, handle: t, url: 'https://new.example'}]
@@ -465,6 +483,10 @@ segments:
     assert!(
       said.contains("spare.png"),
       "the unused asset was not drained:\n{said}"
+    );
+    assert!(
+      said.contains("carries no year"),
+      "the date's warning was not drained:\n{said}"
     );
   }
 
@@ -511,6 +533,39 @@ segments:
       !built(&fixed, &plain()).counted,
       "a fixed name's revision is counted"
     );
+  }
+
+  /// **`check` REFUSES WHAT `build` REFUSES IN THE OUTPUT'S NAME** (issue
+  /// 0101): `open`, which is all `check` runs before it calls a reel valid,
+  /// stamps the date and builds the stem, so an `output:` or a date that
+  /// `build` refuses is refused there, in the same words and with exit 2.
+  #[test]
+  fn open_refuses_an_output_or_a_date_that_build_refuses_issue_0101() {
+    let cases = [
+      (
+        "two-counters",
+        format!("{BASE}output: 'r-{{nnn}}-{{nnn}}.html'\n"),
+        "more than once",
+      ),
+      (
+        "one-video-name",
+        format!("{BASE}output: '{{date}}.{{nnn}}'\n"),
+        "gives every revision's video the same name",
+      ),
+      (
+        "not-a-date",
+        BASE.replace("iso: 2026-09-19", "iso: 19-09-2026"),
+        "session.iso is not a date",
+      ),
+    ];
+    for (tag, yaml, words) in cases {
+      let d = reel(tag, &yaml, &[]);
+      let Err(e) = open(&d) else {
+        panic!("{tag}: open did not refuse");
+      };
+      assert!(e.message.contains(words), "{tag}: {}", e.message);
+      assert_eq!(e.code, 2, "{tag}: the exit");
+    }
   }
 
   /// **`--keep n` DELETES THE OLDEST AND SAYS SO.** The deletion is the caller's

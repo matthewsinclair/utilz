@@ -244,12 +244,18 @@ impl Stem {
   /// file somebody copied to a stick, and "which one did I copy" needs an answer
   /// that is not a timestamp.
   pub fn next(&self, out_dir: &Path) -> Result<PathBuf, Failure> {
+    let prev = self.revisions(out_dir)?.last().map_or(0, |(n, _)| *n);
+    Ok(out_dir.join(self.name_of(prev + 1)))
+  }
+
+  /// The name revision `n` takes: its number, three digits at least, between
+  /// a counted stem's prefix and suffix, or the fixed name every build takes.
+  /// The one home of a revision's name, for `next` and for the checks `stem`
+  /// makes of the names it assembles (issue 0101).
+  fn name_of(&self, n: u32) -> String {
     match self {
-      Stem::Fixed(name) => Ok(out_dir.join(name)),
-      Stem::Counted { prefix, suffix } => {
-        let prev = self.revisions(out_dir)?.last().map_or(0, |(n, _)| *n);
-        Ok(out_dir.join(format!("{prefix}{:03}{suffix}", prev + 1)))
-      }
+      Stem::Fixed(name) => name.clone(),
+      Stem::Counted { prefix, suffix } => format!("{prefix}{n:03}{suffix}"),
     }
   }
 
@@ -292,8 +298,9 @@ pub fn write(path: &Path, bytes: &[u8], fresh: bool) -> Result<(), Failure> {
     .and_then(|mut file| file.write_all(bytes));
   written.map_err(|e| {
     // What is known is that the file is there: a build that ran beside this
-    // one, or a pattern naming a place the listing does not read, can each
-    // put it there, so the words name no cause (issue 0098).
+    // one can put it there, and so can a hand, so the words name no cause
+    // (issue 0098). A pattern naming a place the listing does not read could
+    // too, until issue 0101 refused it where the stem is built.
     if fresh && e.kind() == std::io::ErrorKind::AlreadyExists {
       Failure::new(
         format!(
@@ -312,6 +319,9 @@ pub fn write(path: &Path, bytes: &[u8], fresh: bool) -> Result<(), Failure> {
 }
 
 /// Build the output stem from the configured pattern.
+///
+/// **A PATTERN WHOSE NAMES SHOWREEL CANNOT KEEP APART IS REFUSED BY NAME**
+/// (issue 0101), once the stem is assembled: see `refuse_names_it_cannot_keep_apart`.
 pub fn stem(cfg: &config::Reel, session: &config::Session, date: &str) -> Result<Stem, Failure> {
   let pattern = cfg.output.as_deref().unwrap_or(OUTPUT_DEFAULT);
   let artist = if cfg.artist.handle.is_empty() {
@@ -387,28 +397,120 @@ pub fn stem(cfg: &config::Reel, session: &config::Session, date: &str) -> Result
     }
     rest = &rest[close + 1..];
   }
-  match suffix {
+  let stem = match suffix {
     Some(mut tail) => {
       tail.push_str(rest);
-      Ok(Stem::Counted {
+      Stem::Counted {
         prefix,
         suffix: tail,
-      })
+      }
     }
     None => {
       prefix.push_str(rest);
-      Ok(Stem::Fixed(prefix))
+      Stem::Fixed(prefix)
     }
+  };
+  refuse_names_it_cannot_keep_apart(&stem, pattern)?;
+  Ok(stem)
+}
+
+/// Refuses a stem whose names showreel could not keep apart, each shape in its
+/// own words, naming the pattern (issue 0101). The checks read the names the
+/// stem assembles, so they rely on nothing the fields hold:
+///
+/// - **a name that names a directory**: one holding `/`, which is outside
+///   `_out/` itself, where the revisions' listing never counts it; or one
+///   whose video would have no name of its own: a fixed name that is empty,
+///   `.` or `..`, which is `_out/` or its parent, or one of two dots and an
+///   extension, such as `..html`, which `Path::with_extension` turns into `..`;
+/// - **an HTML with a video's extension**, which would take one of its own
+///   videos' names, counted or fixed;
+/// - **an HTML with the partial's extension**, which `video`'s sweep removes as
+///   what an interrupted recording left, counted or fixed;
+/// - **a counter in the name's last extension**, which `video_of` replaces, so
+///   every revision's video would take the same name. Two revisions settle it,
+///   since the counter is wholly inside that extension or wholly outside it.
+///
+/// The checks of a video's name ask `video_of` itself, so they hold whatever it
+/// does, and need no rule of their own for which dot starts an extension.
+fn refuse_names_it_cannot_keep_apart(stem: &Stem, pattern: &str) -> Result<(), Failure> {
+  let refusal = |words: &str, remedy: &str| {
+    Failure::new(format!("output pattern {words}: '{pattern}'"), remedy)
+  };
+  let first = stem.name_of(1);
+  if first.contains('/') {
+    return Err(refusal(
+      "names a directory",
+      "the pattern names a file in _out/; take the / out",
+    ));
   }
+  let html = Path::new(&first);
+  let nameless = video_of(html, VIDEO_EXTENSIONS[0]).file_name().is_none();
+  if nameless {
+    return Err(refusal(
+      "names a directory",
+      "the pattern names a file in _out/; give it a name, eg reel.html",
+    ));
+  }
+  let its_own_video = VIDEO_EXTENSIONS
+    .iter()
+    .any(|ext| same_name(&video_of(html, ext), html));
+  if its_own_video {
+    return Err(refusal(
+      "gives the HTML a video's extension",
+      "a revision's videos take its name with the last extension replaced by mp4 or mov, so this HTML would take one of its own videos' names; end the pattern with .html",
+    ));
+  }
+  if is_partial(html) {
+    return Err(refusal(
+      "gives the HTML the extension of an unfinished recording",
+      "showreel video removes every .partial in _out/ as what an interrupted recording left, so it would remove this HTML; end the pattern with .html",
+    ));
+  }
+  let second = stem.name_of(2);
+  let one_video_for_all = stem.is_counted()
+    && same_name(
+      &video_of(html, VIDEO_EXTENSIONS[0]),
+      &video_of(Path::new(&second), VIDEO_EXTENSIONS[0]),
+    );
+  if one_video_for_all {
+    return Err(refusal(
+      "gives every revision's video the same name",
+      "a video takes its revision's name with the last extension replaced, and here that extension holds the counter; end the pattern with an extension after it, eg {date}-{nnn}.html",
+    ));
+  }
+  Ok(())
+}
+
+/// Whether two names are one name to the filesystem: compared without ASCII
+/// case, since APFS does not tell case apart by default (issue 0101).
+fn same_name(a: &Path, b: &Path) -> bool {
+  a.as_os_str().eq_ignore_ascii_case(b.as_os_str())
 }
 
 /// The containers `showreel video` writes, by extension: `.mp4` first, which a
 /// slot's video always is, and `.mov`, which `-o` may name (ST0021).
 pub const VIDEO_EXTENSIONS: [&str; 2] = ["mp4", "mov"];
 
-/// The video a revision's HTML is recorded to: its name, with `.html` swapped
-/// for the container's extension. The one home of that rule, for `video`,
-/// which writes it, and `slot_files`, which prunes it.
+/// The extension of a recording not yet finished: ffmpeg writes to
+/// `<video>.partial`, and `video`'s sweep removes every one in `_out/` as what an
+/// interrupted recording left. The one home of that name, for `video`, which
+/// names and sweeps the partials, and `stem`'s checks (issue 0101).
+pub const PARTIAL: &str = "partial";
+
+/// Whether a name is a recording's partial, by its extension, as `video`'s sweep
+/// reads it: the one predicate for the sweep and for `stem`'s checks, so a
+/// pattern is refused for exactly what the sweep would remove (issue 0101).
+pub fn is_partial(name: &Path) -> bool {
+  name.extension().is_some_and(|e| e == PARTIAL)
+}
+
+/// The video a revision's HTML is recorded to: its name with the last extension
+/// replaced by the container's, or the container's added when there is none
+/// (`Path::with_extension`), which swaps `.html` for the default pattern's
+/// names. The one home of that rule, for `video`, which writes it, `slot_files`,
+/// which prunes it, and `stem`'s checks, which refuse a pattern whose videos it
+/// could not keep apart (issue 0101).
 pub fn video_of(html: &Path, ext: &str) -> PathBuf {
   html.with_extension(ext)
 }
@@ -754,6 +856,105 @@ mod tests {
       "names the pattern: {}",
       e.message
     );
+  }
+
+  /// The stem a reel whose `output:` is `pattern` builds, or its refusal.
+  fn stem_of(pattern: &str) -> Result<Stem, Failure> {
+    let cfg = config::parse(
+      &format!("artist: {{handle: x}}\noutput: '{pattern}'\nsegments: []\n"),
+      "t",
+    )
+    .unwrap();
+    stem(&cfg, &session("", "", "", ""), "20260919")
+  }
+
+  /// That `pattern` is refused in `words`, naming the pattern as it quotes it.
+  fn refused_in(pattern: &str, words: &str) {
+    let e = stem_of(pattern).expect_err(pattern);
+    assert!(
+      e.message.contains(words) && e.message.contains(&format!("'{pattern}'")),
+      "{pattern}: {}",
+      e.message
+    );
+  }
+
+  /// **A PATTERN THAT NAMES A DIRECTORY IS REFUSED BY NAME** (issue 0101), a
+  /// counted one or a fixed one, a relative directory or an absolute one: the
+  /// revisions' listing reads `_out/` alone, so it would never count them. A
+  /// fixed name that is empty, `.` or `..` names `_out/` or its parent with no
+  /// `/` in it, and `..html`'s video would be `..`, so each is refused the same
+  /// way. Two dots inside a name, or at its start, are no directory, so
+  /// `r..{nnn}.html` and `..{nnn}.html` build.
+  #[test]
+  fn a_pattern_that_names_a_directory_is_refused_by_name_issue_0101() {
+    for pattern in [
+      "sub/{nnn}.html",
+      "../{nnn}.html",
+      "/tmp/{nnn}.html",
+      "sub/reel.html",
+      "..",
+      ".",
+      "",
+      "..html",
+    ] {
+      refused_in(pattern, "names a directory");
+    }
+    for pattern in ["r..{nnn}.html", "..{nnn}.html"] {
+      if let Err(e) = stem_of(pattern) {
+        panic!(
+          "{pattern}, a name with two dots in it, was refused: {}",
+          e.message
+        );
+      }
+    }
+  }
+
+  /// **A COUNTER IN THE NAME'S LAST EXTENSION IS REFUSED IN ITS OWN WORDS**
+  /// (issue 0101): `video_of` replaces that extension, so every revision's video
+  /// would take the same name. An extension after the counter builds, and so
+  /// does a name with none, or whose only dot begins it, since `video_of` adds
+  /// one to either.
+  #[test]
+  fn a_counter_in_the_last_extension_is_refused_in_its_own_words_issue_0101() {
+    for pattern in ["{date}.{nnn}", "r.{nnn}x"] {
+      refused_in(pattern, "gives every revision's video the same name");
+    }
+    for pattern in ["{date}.{nnn}.html", "{nnn}", ".{nnn}"] {
+      if let Err(e) = stem_of(pattern) {
+        panic!("{pattern} was refused: {}", e.message);
+      }
+    }
+  }
+
+  /// **AN HTML WITH A VIDEO'S EXTENSION IS REFUSED IN ITS OWN WORDS** (issue
+  /// 0101), counted or fixed, in either case, since APFS does not tell case
+  /// apart by default: it would take one of its own videos' names. Only the
+  /// last extension counts.
+  #[test]
+  fn a_pattern_ending_in_a_video_extension_is_refused_in_its_own_words_issue_0101() {
+    for pattern in ["{date}-{nnn}.mp4", "reel.mp4", "{nnn}.MOV"] {
+      refused_in(pattern, "gives the HTML a video's extension");
+    }
+    if let Err(e) = stem_of("{date}-{nnn}.mp4.html") {
+      panic!("a pattern ending .mp4.html was refused: {}", e.message);
+    }
+  }
+
+  /// **AN HTML WITH THE PARTIAL'S EXTENSION IS REFUSED IN ITS OWN WORDS** (issue
+  /// 0101), counted or fixed: `video`'s sweep removes every `.partial` in
+  /// `_out/` as what an interrupted recording left, so it would remove the HTML.
+  /// Only the last extension counts.
+  #[test]
+  fn a_pattern_ending_in_the_partial_extension_is_refused_in_its_own_words_issue_0101() {
+    for pattern in ["{date}-{nnn}.partial", "reel.partial"] {
+      refused_in(
+        pattern,
+        "gives the HTML the extension of an unfinished recording",
+      );
+    }
+    if let Err(e) = stem_of("{date}-{nnn}.partial.html") {
+      panic!("a pattern ending .partial.html was refused: {}", e.message);
+    }
   }
 
   #[test]

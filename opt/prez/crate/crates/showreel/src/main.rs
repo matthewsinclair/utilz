@@ -111,6 +111,10 @@ WP-05 still owns the manifest, the doctor line and a `bin/` entry of its own.";
 
 fn check(path: &Path) -> Result<(), Failure> {
   let o = build::open(path)?;
+  // What stamping the date wants said, said as `build` says it (issue 0101).
+  for line in &o.stamp_said {
+    eprintln!("showreel: {line}");
+  }
   let (cfg, plan) = (&o.cfg, &o.plan);
   let file = o.dir.join("showreel.yaml");
   let pace = plan.pace;
