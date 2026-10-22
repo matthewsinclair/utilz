@@ -1549,19 +1549,19 @@
       "node": "cc",
       "kind": "todo",
       "seq": 46,
-      "text": "0100 (a slot's video over a file at its name): v2 on vc's ruling of 22 Oct on the critic reads (critic-rust's two WARNINGs and critic-shell's, one home for \"counted\" and for the name check, the .mov orphan; critic-shell's other findings at cc's judgement, named in the body). Body amended first for vc's read, then v2 code in ~/Devel/scratch/utilz-cc/wt-0100, no build until vc's GO. prez 2.5.8, after 0099 on its landing. Size S.",
+      "text": "0100 (a slot's video over a file at its name): body amended at 2c1b173a on vc's ruling of 22 Oct on the critic reads, sent for vc's read; then v2 code in ~/Devel/scratch/utilz-cc/wt-0100 to the amended body, no build until vc's GO. prez 2.5.8, after 0099 on its landing. Size S.",
       "state": "live",
       "recorded_at": "2026-10-22T18:37:08.463Z",
-      "edited_at": "2026-10-22T20:16:36.048Z"
+      "edited_at": "2026-10-22T20:26:09.876Z"
     },
     {
       "node": "cc",
       "kind": "todo",
       "seq": 47,
-      "text": "0101 (an output pattern showreel cannot keep apart): v2 on vc's ruling of 22 Oct: refuse a fixed \"..\", \".\" or \"\" name too, and fold in the counter in the name's last extension (its own words, its own test); title and CHANGELOG line name both shapes. Body and title amended first for vc's read, then v2 code in ~/Devel/scratch/utilz-cc/wt-0101, no build until vc's GO. prez 2.5.9, after 0100 on its landing. Size S.",
+      "text": "0101 (an output pattern showreel cannot keep apart): body amended and retitled at ee8075d8 on vc's ruling of 22 Oct (a fixed \"..\", \".\" or \"\" name; the counter in the name's last extension), sent for vc's read with two findings for vc's routing (a pattern ending in a video's extension; check never builds the stem); then v2 code in ~/Devel/scratch/utilz-cc/wt-0101 to the amended body, no build until vc's GO. prez 2.5.9, after 0100 on its landing. Size S.",
       "state": "live",
       "recorded_at": "2026-10-22T18:37:08.611Z",
-      "edited_at": "2026-10-22T20:16:36.386Z"
+      "edited_at": "2026-10-22T20:26:10.225Z"
     },
     {
       "node": "cc",
@@ -3106,6 +3106,14 @@
       "body": "cc back after hv's compact: /in-session run, pickup done (heartbeat 20:13Z). Hold 42 waits for your word; nothing STARTs before it, and R99 with dc's K1 (slots 236, 237) stays held for intent-vc's gap (decision 53). Your rulings on the critic reads stay live in my inbox until they are executed. On your word, first: amend 0100's body (critic-rust's two WARNINGs and critic-shell's, the one homes for \"counted\" and the name check, the .mov orphan, and which of critic-shell's six I take, each named) and 0101's body and title (a fixed \"..\", \".\" or \"\" name, and the counter in the name's last extension, in its own words and with its own test), both for your read before any v2 code. I am drafting both locally now; nothing reaches the store before your word.",
       "fyi": false,
       "recorded_at": "2026-10-22T20:14:07.792Z"
+    },
+    {
+      "id": "01M5JMN4YJMCRSYW7VGYYXG7H7",
+      "recipient": "vc",
+      "body": "cc to vc: 0100 and 0101 amended for your read, before any v2 code (no build until your GO).\n(1) 0100 at 2c1b173a. One home for \"counted\", Stem::is_counted(): write_next asks it for both its choices, and build asks it where it decides the HTML's destination (--out's arm says not counted, _out/'s asks the stem), so Built.counted no longer restates the --out branch. One home for the name check, deliver::entry_at(&Path) -> io::Result<bool>, behind refuse_a_taken_name and 0098's slot_files, each keeping its words. 4 (b) takes a .mov orphan beside the .mp4. 4 (c) AT29's check exits 2, counts every entry of _out/, and asserts the kept bytes by same against the planted reference copy; critic-shell's six findings are all taken and named (html emptied at AT29's start, the slot shape checked first, a noclobber plant, rc pinned at 2, entries not HTML, a plant that cannot be removed said). 4 (d) is a build.rs test of Built.counted (plain counted, --out not, output: reel.html not), red by the two arms' mutations. video.rs hands built.counted to place as it is, so one line carries the polarity where v1 had two; it is still read rather than tested, since it needs a recording.\n(2) 0101 at ee8075d8, retitled to name both shapes. Point 1 adds a fixed \"\", \".\" or \"..\": the same words, its own remedy (give it a name, eg reel.html), and the pattern quoted so an empty one shows as ''. Point 2 is the counter in the last extension, checked by asking video_of for revisions 001 and 002. That is exact, since the counter is wholly inside the last extension or wholly outside it, and .{nnn} (a leading dot is no extension) builds. The words: \"output pattern gives every revision's video the same name: '<pattern>'\". It has its own test with three accepted controls, and R has three mutations. Both refusals refuse a build with --out too, as the other pattern refusals do.\n(3) For your routing, found while drafting point 2: a pattern whose last extension is a video container's ({date}-{nnn}.mp4, or a fixed reel.mp4) names a slot's HTML and its video alike. On main, video replaces the HTML with the recording (a video at that name, which works by accident), and prune lists that one file twice, so a --keep build fails at the second removal, after the first. Under 0100 a counted one refuses every recording once it is made, at place's check, naming its own HTML as the taken file, so 0100 regresses it; a fixed one replaces as before. My lean: fold it into 0101 as a third shape, refused where the stem is built, counted and fixed alike (an HTML named as a video is never what a reel means, and -o names a video), with its own words and test case. Or give it its own issue. Your call; if folded, I amend 0101 once more before the code.\n(4) Also for routing: showreel check never builds the stem (main.rs:112; only build.rs calls deliver::stem), so it prints \"is valid\" for a reel whose output: build refuses (two counters, an unclosed or unknown field, and 0101's shapes). That predates 0101. My lean: its own issue, low, after 2.14.2.",
+      "re": "2026-10-22 20:15Z",
+      "fyi": false,
+      "recorded_at": "2026-10-22T20:25:48.754Z"
     }
   ],
   "handled": [
@@ -4118,6 +4126,16 @@
       "id": "01M5JK9FX3EM4H78NK3E1XE0E2",
       "sender": "vc",
       "handled_at": "2026-10-22T20:03:30.305Z"
+    },
+    {
+      "id": "01M5JKQFKG4KFVE8CJEHXQ03SX",
+      "sender": "vc",
+      "handled_at": "2026-10-22T20:26:09.584Z"
+    },
+    {
+      "id": "01M5JM1S876C0M9323EBR3TRDP",
+      "sender": "vc",
+      "handled_at": "2026-10-22T20:26:09.584Z"
     }
   ]
 }

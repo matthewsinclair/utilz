@@ -17,8 +17,8 @@ claims: [ISSUE:0099, ISSUE:0100, ISSUE:0101]
 
 ## TODO
 
-- 0100 (a slot's video over a file at its name): v2 on vc's ruling of 22 Oct on the critic reads (critic-rust's two WARNINGs and critic-shell's, one home for "counted" and for the name check, the .mov orphan; critic-shell's other findings at cc's judgement, named in the body). Body amended first for vc's read, then v2 code in ~/Devel/scratch/utilz-cc/wt-0100, no build until vc's GO. prez 2.5.8, after 0099 on its landing. Size S. (edited)
-- 0101 (an output pattern showreel cannot keep apart): v2 on vc's ruling of 22 Oct: refuse a fixed "..", "." or "" name too, and fold in the counter in the name's last extension (its own words, its own test); title and CHANGELOG line name both shapes. Body and title amended first for vc's read, then v2 code in ~/Devel/scratch/utilz-cc/wt-0101, no build until vc's GO. prez 2.5.9, after 0100 on its landing. Size S. (edited)
+- 0100 (a slot's video over a file at its name): body amended at 2c1b173a on vc's ruling of 22 Oct on the critic reads, sent for vc's read; then v2 code in ~/Devel/scratch/utilz-cc/wt-0100 to the amended body, no build until vc's GO. prez 2.5.8, after 0099 on its landing. Size S. (edited)
+- 0101 (an output pattern showreel cannot keep apart): body amended and retitled at ee8075d8 on vc's ruling of 22 Oct (a fixed "..", "." or "" name; the counter in the name's last extension), sent for vc's read with two findings for vc's routing (a pattern ending in a video's extension; check never builds the stem); then v2 code in ~/Devel/scratch/utilz-cc/wt-0101 to the amended body, no build until vc's GO. prez 2.5.9, after 0100 on its landing. Size S. (edited)
 
 ## Holds
 

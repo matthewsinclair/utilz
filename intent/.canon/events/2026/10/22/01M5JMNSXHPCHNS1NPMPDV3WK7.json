@@ -1,0 +1,16 @@
+{
+  "id": "01M5JMNSXHPCHNS1NPMPDV3WK7",
+  "ts": "2026-10-22T20:26:10.225Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "todo",
+    "seq": 47,
+    "text": "0101 (an output pattern showreel cannot keep apart): body amended and retitled at ee8075d8 on vc's ruling of 22 Oct (a fixed \"..\", \".\" or \"\" name; the counter in the name's last extension), sent for vc's read with two findings for vc's routing (a pattern ending in a video's extension; check never builds the stem); then v2 code in ~/Devel/scratch/utilz-cc/wt-0101 to the amended body, no build until vc's GO. prez 2.5.9, after 0100 on its landing. Size S."
+  }
+}
