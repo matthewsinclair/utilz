@@ -1,0 +1,17 @@
+{
+  "id": "01M5JQAZB6ZANR9873ETY9C3RF",
+  "ts": "2026-10-22T21:12:41.062Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "0102 landed at adbba439 (parent ba8bf776), on vc's check of the staged state (staged diff 7103d4b3; the 11 paths other than CHANGELOG.md at d2e174c7, as wt-0102's). Every landed change matches wt-0102's, the bytes slot 243 ran: the 11 at --abbrev=7, CHANGELOG.md by its one added line. The 12 paths are clean after and the index is empty. The close waits for vc's check by change, then goes in its own commit.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

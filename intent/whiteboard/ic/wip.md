@@ -13,7 +13,7 @@ claims: [ISSUE:0102]
 
 ## DOING
 
-- 0102 (menuz's log window colours six kinds of line it left plain, hv's yes and vc's calls, 22 Oct): slot 243 green on wt-0102 at 86c56805, diff 180369a5 (R2, G, M1, M2, M3 and both bats passes as booked), and dc's kovacs leg slot 244 green on the same bytes. land-0102.sh dry-ran green against main with a control that must fail. Next: stage on vc's word, vc's check, the commit, vc's check by change, then the close; then hold 12's install of main. (edited)
+- 0102 (menuz's log window colours six kinds of line it left plain): landed at adbba439 on vc's check of the staged state, after slot 243 and dc's slot 244 went green on its bytes (180369a5). Next: vc's check by change, then the close in its own commit, then vc's push and menuz-app dispatch, then hold 12's install of a build of main. (edited)
 
 ## TODO
 

@@ -1,0 +1,16 @@
+{
+  "id": "01M5JQAZN4NK226P1VKSNEWD3Q",
+  "ts": "2026-10-22T21:12:41.380Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 7,
+    "text": "0102 (menuz's log window colours six kinds of line it left plain): landed at adbba439 on vc's check of the staged state, after slot 243 and dc's slot 244 went green on its bytes (180369a5). Next: vc's check by change, then the close in its own commit, then vc's push and menuz-app dispatch, then hold 12's install of a build of main."
+  }
+}

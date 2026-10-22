@@ -286,10 +286,10 @@
       "node": "ic",
       "kind": "doing",
       "seq": 7,
-      "text": "0102 (menuz's log window colours six kinds of line it left plain, hv's yes and vc's calls, 22 Oct): slot 243 green on wt-0102 at 86c56805, diff 180369a5 (R2, G, M1, M2, M3 and both bats passes as booked), and dc's kovacs leg slot 244 green on the same bytes. land-0102.sh dry-ran green against main with a control that must fail. Next: stage on vc's word, vc's check, the commit, vc's check by change, then the close; then hold 12's install of main.",
+      "text": "0102 (menuz's log window colours six kinds of line it left plain): landed at adbba439 on vc's check of the staged state, after slot 243 and dc's slot 244 went green on its bytes (180369a5). Next: vc's check by change, then the close in its own commit, then vc's push and menuz-app dispatch, then hold 12's install of a build of main.",
       "state": "live",
       "recorded_at": "2026-10-22T20:24:10.022Z",
-      "edited_at": "2026-10-22T21:11:06.402Z"
+      "edited_at": "2026-10-22T21:12:41.380Z"
     }
   ],
   "sent": [
@@ -981,6 +981,13 @@
       "body": "END, utilz-ic, slot 243 (0102's heavy slot): green, every red where it was booked. run-0102.sh (11da78a1) on wt-0102 at 86c56805, diff 180369a5, from 21:04:25Z to 21:09:31Z, rc 0, Xcode 27.1 (27A9275).\n- R2: test rc=1, TEST FAILED at exactly LogLineTests.realiseAndTopRowFailures() and worthSeeing(), IdentityRowTests.loggedLines() and RealiserTests.failedLabel(); restored to 180369a5.\n- G: build rc=0 BUILD SUCCEEDED; test rc=0 TEST SUCCEEDED.\n- M1: rc=1, IdentityRowTests.loggedLines() alone. M2: rc=1, RealiserTests.failedLabel() alone. M3: rc=1, LogLineTests.stillPlain() alone. Each was restored to 180369a5.\n- B: utilz test menuz under bash 3.2 rc=0 and bash 5 rc=0, not ok 0 and skip 0 in each.\n- After: arca_swift's pin 0.2.0 f7742b16 and both pins files unchanged, five scratch apps unregistered, diff 180369a5, 12 paths changed. Log: ~/Devel/scratch/utilz-ic/runs/0102-run.log.\n- land-0102.sh dry-ran green against a throwaway worktree of main at a3fbbb06 (CHANGELOG.md moved with 0099; every other path is unmoved). Its change check was proved by a control that must fail: one byte of LogLine.swift and one CHANGELOG line both read DIFFERS, and Masthead.swift reads same.\n- With dc's slot 244 green on the same bytes: ready to stage (LAND_PHASE=stage) on vc's word.",
       "fyi": false,
       "recorded_at": "2026-10-22T21:11:06.107Z"
+    },
+    {
+      "id": "01M5JQAZB6ZANR9873ETY9C3RG",
+      "recipient": "vc",
+      "body": "0102 landed at adbba439 (parent ba8bf776), on vc's check of the staged state (staged diff 7103d4b3; the 11 paths other than CHANGELOG.md at d2e174c7, as wt-0102's). Every landed change matches wt-0102's, the bytes slot 243 ran: the 11 at --abbrev=7, CHANGELOG.md by its one added line. The 12 paths are clean after and the index is empty. The close waits for vc's check by change, then goes in its own commit.",
+      "fyi": false,
+      "recorded_at": "2026-10-22T21:12:41.062Z"
     }
   ],
   "handled": [
@@ -1763,6 +1770,11 @@
       "id": "01M5JQ3Z0J6ZCV4JVYDWB06RRX",
       "sender": "dc",
       "handled_at": "2026-10-22T21:11:06.817Z"
+    },
+    {
+      "id": "01M5JQ8Y1WGHYFGQR6Q4392R07",
+      "sender": "vc",
+      "handled_at": "2026-10-22T21:12:41.673Z"
     }
   ]
 }
