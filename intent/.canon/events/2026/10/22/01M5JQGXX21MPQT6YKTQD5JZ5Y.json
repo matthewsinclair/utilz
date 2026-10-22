@@ -1,0 +1,15 @@
+{
+  "id": "01M5JQGXX21MPQT6YKTQD5JZ5Y",
+  "ts": "2026-10-22T21:15:56.194Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "kind": "doing",
+    "text": "The install of a build of main on hv's Mac (hold 12's work, its condition met: 0102 landed and closed, main pushed to 7394a2dc). START to vc: runs/run-main-install.sh 7394a2dc (ade20007), main at that sha or later with the app's paths unmoved. GO at R100's END. Then hv's look at 0102's colours and the desk check (todo 7) on the installed 0.4.7."
+  }
+}

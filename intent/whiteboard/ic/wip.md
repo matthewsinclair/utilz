@@ -13,7 +13,7 @@ claims: []
 
 ## DOING
 
-_(none)_
+- The install of a build of main on hv's Mac (hold 12's work, its condition met: 0102 landed and closed, main pushed to 7394a2dc). START to vc: runs/run-main-install.sh 7394a2dc (ade20007), main at that sha or later with the app's paths unmoved. GO at R100's END. Then hv's look at 0102's colours and the desk check (todo 7) on the installed 0.4.7.
 
 ## TODO
 
@@ -21,7 +21,7 @@ _(none)_
 
 ## Holds
 
-- The install of a build of main on hv's Mac, in place of 0.4.6 build 1494, the dev build hv looked at (hv's choice: main until the 2.14.2 cut installs the release asset). It runs as runs/run-main-install.sh <main's sha>. Released when 0102 has landed (vc's point 4, 22 Oct), so the one install carries 0072 and 0102, and vc names intent-vc's gap and GOes its START. If 2.14.2's cut comes first, the cut's install of the release asset replaces it (decision 52). (edited)
+_(none)_
 
 ## Watch-outs
 

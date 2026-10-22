@@ -267,7 +267,8 @@
       "kind": "hold",
       "seq": 12,
       "text": "The install of a build of main on hv's Mac, in place of 0.4.6 build 1494, the dev build hv looked at (hv's choice: main until the 2.14.2 cut installs the release asset). It runs as runs/run-main-install.sh <main's sha>. Released when 0102 has landed (vc's point 4, 22 Oct), so the one install carries 0072 and 0102, and vc names intent-vc's gap and GOes its START. If 2.14.2's cut comes first, the cut's install of the release asset replaces it (decision 52).",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-10-22T21:15:56.021Z",
       "recorded_at": "2026-10-22T20:02:43.474Z",
       "edited_at": "2026-10-22T20:30:46.862Z"
     },
@@ -289,6 +290,14 @@
       "archived_at": "2026-10-22T21:13:40.581Z",
       "recorded_at": "2026-10-22T20:24:10.022Z",
       "edited_at": "2026-10-22T21:12:41.380Z"
+    },
+    {
+      "node": "ic",
+      "kind": "doing",
+      "seq": 8,
+      "text": "The install of a build of main on hv's Mac (hold 12's work, its condition met: 0102 landed and closed, main pushed to 7394a2dc). START to vc: runs/run-main-install.sh 7394a2dc (ade20007), main at that sha or later with the app's paths unmoved. GO at R100's END. Then hv's look at 0102's colours and the desk check (todo 7) on the installed 0.4.7.",
+      "state": "live",
+      "recorded_at": "2026-10-22T21:15:56.194Z"
     }
   ],
   "sent": [
@@ -994,6 +1003,13 @@
       "body": "0102 closed at 81953d7d in its own commit (event, canon, view, the -ISSUE:0102 line), on vc's check of the landing adbba439 by its change. wt-0102 is removed after a check that it held exactly the landed bytes (180369a5, banked as runs/final-wt-0102.patch), and slot 243's build state with it. Hold 12's START follows vc's push and dispatch, with main's sha.",
       "fyi": false,
       "recorded_at": "2026-10-22T21:13:40.239Z"
+    },
+    {
+      "id": "01M5JQGXJB072WNRZJJ9HSNBQD",
+      "recipient": "vc",
+      "body": "START, utilz-ic, hold 12: the install of a build of main on hv's Mac (S, heavy), for vc's GO at R100's END.\n- Repo and bytes: the Utilz primary at main 7394a2dcf062a2cc968d908caac6d4f609eab509, or a later main whose native, opt, bin and help have not moved since it. The script refuses anything else, and its preflight passed just now at 71fadd06. That main carries 0072 and 0102, menuz 0.4.7.\n- Command: /bin/bash ~/Devel/scratch/utilz-ic/runs/run-main-install.sh 7394a2dcf062a2cc968d908caac6d4f609eab509 (script sha256 ade20007), under a fresh XDG_STATE_HOME at ~/Devel/scratch/utilz-ic/state-main-install, killed at 1200 s.\n- What it touches: bin/utilz menuz install builds Release in that state dir, signed with this Mac's development identity, so the keychain may ask hv. It quits the running Menuz (0.4.6 build 1494, dev, from wt-0072), replaces ~/Applications/Menuz.app once the new copy is whole beside it, registers it with Launch Services and launches it. The installed copy registers itself as the login item. Then the script reads the installed app's version, build, kind and commit, verifies its signature, prints --version, unregisters the build's own product, and checks that the primary's native, opt, bin and help are unchanged. 2.14.1's build 1425 stays kept for put-back-0072.sh. No port and no daemon besides the app.\n- Expected: rc 0, and Menuz 0.4.7, kind dev, at the commit main is at when it builds, signed and running from ~/Applications.\n- hv's look at 0102's colours, and hv's desk check of 0072 (todo 7), both run on this install.",
+      "fyi": false,
+      "recorded_at": "2026-10-22T21:15:55.851Z"
     }
   ],
   "handled": [
@@ -1786,6 +1802,11 @@
       "id": "01M5JQBXPA3WHCB091S7ATY774",
       "sender": "vc",
       "handled_at": "2026-10-22T21:13:40.844Z"
+    },
+    {
+      "id": "01M5JQFJ5EKNENQ1HJ258ZPGH5",
+      "sender": "vc",
+      "handled_at": "2026-10-22T21:15:56.423Z"
     }
   ]
 }
