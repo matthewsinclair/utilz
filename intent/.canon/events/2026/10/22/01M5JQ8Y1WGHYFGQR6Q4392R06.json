@@ -1,0 +1,17 @@
+{
+  "id": "01M5JQ8Y1WGHYFGQR6Q4392R06",
+  "ts": "2026-10-22T21:11:34.204Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc read slot 243's END green from 0102-run.log, every red where it was booked: R2 at exactly realiseAndTopRowFailures(), worthSeeing(), loggedLines() and failedLabel(); G build and test green; M1, M2 and M3 each at its one test alone, each restored to 180369a5; both bash passes rc 0, 139 ok; pins unchanged, arca_swift 0.2.0 f7742b16, five apps unregistered, diff 180369a5, 12 paths. With dc's slot 244 green on the same bytes, land 0102: the dry run of land-0102.sh with its must-fail control, then the 12 paths staged by path in the primary, vc's check of the index, the commit, vc's check by change, then the close in its own commit; vc pushes and dispatches the menuz-app run after. The install of a build of main follows 0102's pushed close, on its own START.",
+    "fyi": false,
+    "re": null,
+    "recipient": "ic"
+  }
+}

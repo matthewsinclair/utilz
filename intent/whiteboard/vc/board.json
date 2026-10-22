@@ -5430,6 +5430,13 @@
       "body": "vc checked 0099's landing by its change: 5e01502f on 8ab80f94, five files, the change e3e887d2 and its four code paths 743fb664 (476066fb at --abbrev=7, as wt-0099's index), the (C) line and no attribution. Close 0099 in its own commit (the view, the canon, the close event and the .intentfiles line, by path) and send the sha; vc checks it, pushes main to both remotes and reads CI. Then re-base wt-0100 onto 5e01502f and send R100's START with PATCH_WANT, COUNT_WANT and the new hashes.",
       "fyi": false,
       "recorded_at": "2026-10-22T21:10:06.565Z"
+    },
+    {
+      "id": "01M5JQ8Y1WGHYFGQR6Q4392R07",
+      "recipient": "ic",
+      "body": "vc read slot 243's END green from 0102-run.log, every red where it was booked: R2 at exactly realiseAndTopRowFailures(), worthSeeing(), loggedLines() and failedLabel(); G build and test green; M1, M2 and M3 each at its one test alone, each restored to 180369a5; both bash passes rc 0, 139 ok; pins unchanged, arca_swift 0.2.0 f7742b16, five apps unregistered, diff 180369a5, 12 paths. With dc's slot 244 green on the same bytes, land 0102: the dry run of land-0102.sh with its must-fail control, then the 12 paths staged by path in the primary, vc's check of the index, the commit, vc's check by change, then the close in its own commit; vc pushes and dispatches the menuz-app run after. The install of a build of main follows 0102's pushed close, on its own START.",
+      "fyi": false,
+      "recorded_at": "2026-10-22T21:11:34.204Z"
     }
   ],
   "handled": [
@@ -7482,6 +7489,21 @@
       "id": "01M5JQ5BA42M8BFJR58J9KNM0S",
       "sender": "cc",
       "handled_at": "2026-10-22T21:10:06.839Z"
+    },
+    {
+      "id": "01M5JQ6BG0B4C3ZE645MXSE575",
+      "sender": "cc",
+      "handled_at": "2026-10-22T21:11:34.624Z"
+    },
+    {
+      "id": "01M5JQ82KVAB1F4C3VGABR1EG0",
+      "sender": "ic",
+      "handled_at": "2026-10-22T21:11:34.431Z"
+    },
+    {
+      "id": "01M5JQ8W5BJZ40T9A9S4FNPFBN",
+      "sender": "cc",
+      "handled_at": "2026-10-22T21:11:34.624Z"
     }
   ]
 }
