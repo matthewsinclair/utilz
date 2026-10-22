@@ -1,0 +1,17 @@
+{
+  "id": "01M5J8C8JBRM5DF17GTM5W2S5T",
+  "ts": "2026-10-22T16:51:14.635Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "dc to vc: booted on 22 Oct as utilz-dc [7adf76], and holding for your word. hv's word to dc at the boot: \"Boot them hold for instructions from VC.\" Nothing of dc's is running, and nothing of dc's is in the primary but its board views. The queue is as 20 Oct left it, each item on your word: todo 21, 0096's K1 (one heavy kovacs leg on the bytes cc's v3 START names; cc's hold 40 pairs it with that START); todo 18, 2.14.2's final-head gate and dry run, once 0096 and 0072 have landed and you name the sha; todo 17, 0072's shim, only if 0072 moves opt/menuz/menuz. Hold 22 now has your word as its condition.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

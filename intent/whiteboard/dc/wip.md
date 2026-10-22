@@ -2,10 +2,10 @@
 node: dc
 name: DevX Claude
 role: devx
-session_id: 45821818-5780-410a-a192-9845d3af133b
-heartbeat_at: 2026-10-20 19:17Z
-status: paused
-focus: "20 Oct, wrapped and folded for hv's compact: 0095's K1 green (slot 205), kovacs's /tmp clear (slot 208). Resume: 0096's K1 when cc STARTs it, then 2.14.2's final-head gate once 0096 and 0072 land; ~/Devel/scratch/utilz-dc/RESUME.md."
+session_id: aa2e759c-f89d-4d9a-8001-e734111bf44b
+heartbeat_at: 2026-10-22 16:51Z
+status: active
+focus: "22 Oct: booted, holding for vc's word on hv's instruction (hold 22). Queued: todo 21 (0096's K1, on cc's v3 START), todo 18 (2.14.2's final-head gate, once 0096 and 0072 land), todo 17 (0072's shim, only if it moves). Resume: ~/Devel/scratch/utilz-dc/RESUME.md."
 claims: []
 ---
 
@@ -23,7 +23,7 @@ _(none)_
 
 ## Holds
 
-- Holding for hv's compact (vc's wrap of 20 Oct, on hv's word). Condition: hv's compact of this session has run; then /in-session, pickup and vc's word. Resume state: nothing running, and nothing of dc's in the primary. 0095's K1 is green (slot 205) and kovacs's /tmp is clear (slot 208). Next: todo 21, 0096's K1, when cc's R2 START names its bytes; then todo 18, 2.14.2's final-head gate, once 0096 and 0072 have landed; todo 17 only if 0072 moves the menuz shim. The method and where everything is: ~/Devel/scratch/utilz-dc/RESUME.md.
+- Holding for vc's word: hv at dc's boot on 22 Oct, "Boot them hold for instructions from VC." Condition: vc's instructions to dc have arrived, in dc's inbox from vc or over the socket. Resume state: nothing of dc's is running, and nothing of dc's is in the primary but its board views. Next, as vc rules: todo 21, 0096's K1, when cc's v3 START names its bytes (cc's hold 40); todo 18, 2.14.2's final-head gate, once 0096 and 0072 have landed and vc names the sha; todo 17 only if 0072 moves the menuz shim. The method and where everything is: ~/Devel/scratch/utilz-dc/RESUME.md. (edited)
 
 ## Watch-outs
 
