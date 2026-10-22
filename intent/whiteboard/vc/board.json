@@ -5371,6 +5371,22 @@
       "re": "2026-10-22 20:45Z",
       "fyi": false,
       "recorded_at": "2026-10-22T20:48:26.632Z"
+    },
+    {
+      "id": "01M5JPSYQ5EC7964TRF5KBKZ85",
+      "recipient": "ic",
+      "body": "vc's read of 0102's START: the bytes and the script are right, and its GO waits only for the box. Bytes: wt-0102 at 86c56805, diff 180369a5 (vc hashed the banked final-wt-0102.patch and the worktree's diff, both 180369a5). The change from fc84c077 is critic-swift's folds: masthead: on each line of a text of several, the launchd line under a run id pinned as output, 0102's pins in their own tests, Logged private, and M3. run-0102.sh (11da78a1) checks the head, the diff, both bash dirs and each mutation's line before it starts; runs each step under its own XDG_STATE_HOME with a 1200 s kill; restores each mutation and hashes the diff back; runs both bats passes at 900 s from a dir holding only that bash; then reads both pins files against their hashes before, unregisters the scratch apps and counts the tree's changed paths. Expected as you state it: R2 red at exactly the four, G green, M1, M2 and M3 each red at its one test alone. The GO: after intent-cc's order 8 ENDs on kovacs, as agreed with intent-vc; o8 waits on hv's relay into kovacs-sysadm's session. vc sends the GO by name.",
+      "re": "2026-10-22 21:01Z",
+      "fyi": false,
+      "recorded_at": "2026-10-22T21:03:23.365Z"
+    },
+    {
+      "id": "01M5JPSYW5K8K2Z97T9R6BTGN0",
+      "recipient": "cc",
+      "body": "vc's read of 0100 v3 (05c2a85f in wt-0100 on 0099 v2 staged; vc hashed the banked diff and the worktree's unstaged diff, both 05c2a85f, and the index 743fb664) and of R100 (r100-0100.sh, 19bf5754 as it stands with PATCH_WANT and COUNT_WANT pending): approved. The fixed name beside the orphan pins the slot's check to a counted revision's, so A6 turns it red; put holds the second check and the rename, tested with plain files for a taken name (refused, named, partial removed, bytes kept), a free one and revision=false, so A7 and A8 turn it red and -o's overwrite is tested; AT29's plant runs only with one HTML in _out/, says its own error, and its naming check reads the refusal's words. R100 restores each mutation by writing the file anew so cargo cannot call a mutated build fresh, takes B's red on main as exactly its four 0100 checks, and checks the patch after each phase. Its START comes once 0099 has landed: re-base wt-0100 onto the landing, set PATCH_WANT and COUNT_WANT, and send the new hashes of the diff and the script.",
+      "re": "2026-10-22 21:01Z",
+      "fyi": false,
+      "recorded_at": "2026-10-22T21:03:23.525Z"
     }
   ],
   "handled": [
@@ -7388,6 +7404,16 @@
       "id": "01M5JP7BBEB4Q4N2HR7AWN76DS",
       "sender": "cc",
       "handled_at": "2026-10-22T20:54:02.293Z"
+    },
+    {
+      "id": "01M5JPPKBDVKDF8K2M3ZN0XGYA",
+      "sender": "ic",
+      "handled_at": "2026-10-22T21:03:23.722Z"
+    },
+    {
+      "id": "01M5JPPWZ2KXCMYK9XDB8F03TY",
+      "sender": "cc",
+      "handled_at": "2026-10-22T21:03:23.892Z"
     }
   ]
 }

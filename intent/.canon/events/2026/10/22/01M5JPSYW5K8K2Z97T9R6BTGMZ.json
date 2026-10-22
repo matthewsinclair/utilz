@@ -1,0 +1,17 @@
+{
+  "id": "01M5JPSYW5K8K2Z97T9R6BTGMZ",
+  "ts": "2026-10-22T21:03:23.525Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc's read of 0100 v3 (05c2a85f in wt-0100 on 0099 v2 staged; vc hashed the banked diff and the worktree's unstaged diff, both 05c2a85f, and the index 743fb664) and of R100 (r100-0100.sh, 19bf5754 as it stands with PATCH_WANT and COUNT_WANT pending): approved. The fixed name beside the orphan pins the slot's check to a counted revision's, so A6 turns it red; put holds the second check and the rename, tested with plain files for a taken name (refused, named, partial removed, bytes kept), a free one and revision=false, so A7 and A8 turn it red and -o's overwrite is tested; AT29's plant runs only with one HTML in _out/, says its own error, and its naming check reads the refusal's words. R100 restores each mutation by writing the file anew so cargo cannot call a mutated build fresh, takes B's red on main as exactly its four 0100 checks, and checks the patch after each phase. Its START comes once 0099 has landed: re-base wt-0100 onto the landing, set PATCH_WANT and COUNT_WANT, and send the new hashes of the diff and the script.",
+    "fyi": false,
+    "re": "2026-10-22 21:01Z",
+    "recipient": "cc"
+  }
+}
