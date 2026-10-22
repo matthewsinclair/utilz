@@ -3,9 +3,9 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: aa2e759c-f89d-4d9a-8001-e734111bf44b
-heartbeat_at: 2026-10-22 17:45Z
+heartbeat_at: 2026-10-22 17:48Z
 status: active
-focus: "22 Oct: 0097's kovacs leg STARTed with vc at 17:44Z, waiting for the GO. Then cc's K1s (todo 21, 22, 24) on cc's STARTs, 0072's leg (todo 17) on ic's, and todo 18's gate once all five land. Resume: ~/Devel/scratch/utilz-dc/RESUME.md."
+focus: "22 Oct: 0097's kovacs leg green (slot 219), the END with vc. Next: cc's K1s (todo 21, 22, 24) on cc's STARTs, 0072's leg (todo 17) on ic's, and todo 18's gate once all five land. Resume: ~/Devel/scratch/utilz-dc/RESUME.md."
 claims: []
 ---
 
@@ -13,7 +13,7 @@ claims: []
 
 ## DOING
 
-- 0097's kovacs leg (todo 23, utilz-ic's): the START (heavy) is with vc since 17:44Z, waiting for the GO. Bytes: 737924b3 plus ic's final-wt-0097.patch, e7e2cea5, as scratch commit a47b2849 (bundle ~/Devel/scratch/utilz-dc/work/kv-c0097-e7e2cea5). On the GO: /bin/bash ~/Devel/scratch/utilz-dc/work/kv-c0097.sh. Expected: rc 0, 139 tests, not ok 0, 1 skip (AC-06.3). Then the END to vc and an FYI to ic.
+_(none)_
 
 ## TODO
 

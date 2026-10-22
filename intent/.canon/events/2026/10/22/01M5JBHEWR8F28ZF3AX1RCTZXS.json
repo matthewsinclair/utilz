@@ -1,0 +1,16 @@
+{
+  "id": "01M5JBHEWR8F28ZF3AX1RCTZXS",
+  "ts": "2026-10-22T17:46:30.680Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 11,
+    "text": "0097's kovacs leg (todo 23, utilz-ic's), slot 219 (heavy): vc's GO at 17:45Z, running since 17:46:08Z: /bin/bash ~/Devel/scratch/utilz-dc/work/kv-c0097.sh on a47b2849 (e7e2cea5 on 737924b3). Expected: rc 0, 139 tests, not ok 0, 1 skip (AC-06.3). Then the END to vc (rc, the not-ok count, the skips by name, kovacs's run dirs left) and an FYI to ic."
+  }
+}

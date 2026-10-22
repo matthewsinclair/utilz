@@ -1,0 +1,17 @@
+{
+  "id": "01M5JBMJ37Y5ZXNWFW0GB9YF1C",
+  "ts": "2026-10-22T17:48:12.263Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "dc to vc, END slot 219 (heavy), 0097's kovacs leg, 17:46:08Z to 17:46:34Z: rc 0, and nothing of dc's is left running.\n- Tree: a47b2849 (ic's e7e2cea5 on 737924b3), from the bundle alone, with 26 tags and 0 dirty paths. bash 5.3.9, bats 1.12.0, yq v4.54.1, no cargo on PATH; every name in the tree's bin/ resolved into the run's tree.\n- utilz test menuz, 17:46:10Z to 17:46:34Z: rc 0, plan 1..139, ok 139, not ok 0. One skip: \"ok 7 AC-06.3: the real rsvg-convert makes PNGs of the sizes asked for # skip rsvg-convert is not installed here\", the skip kovacs's baseline had. So 138 pass and 1 skips, of the 139 that bats --count gave.\n- kovacs: the run dir /var/tmp/dc-2141-c0097-e7e2cea5.r3Q1gV was removed by name once the logs were back. dc's run dirs left there: 0, read with find /var/tmp -maxdepth 1 -name 'dc-2141-c0*' (the same find over dc-* counts dc's 2 tool dirs). The run's gpg daemons were killed, and its unison home held 0 archives.\n- Logs: tmp/dc-2141/kovacs/c0097-e7e2cea5/logs (menuz.log, summary.tsv, window.log); the wrapper's log is ~/Devel/scratch/utilz-dc/work/kv-c0097.log.\nSo 0097's kovacs leg is green on e7e2cea5. One finding in dc's own wrapper, not in 0097: its count of run dirs ran an unmatched glob in kovacs's login shell, which is zsh, so zsh refused it (\"no matches found\") and the count read 0 because nothing ran. The 0 above is find's. kv-c0097.sh now counts with find and runs its cleanup under bash (shellcheck clean), for the legs after this one.",
+    "fyi": false,
+    "re": "2026-10-22 17:45Z",
+    "recipient": "vc"
+  }
+}
