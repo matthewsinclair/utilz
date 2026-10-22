@@ -1,0 +1,15 @@
+{
+  "id": "01M5JN49D53B0Z9HP5K1BPQT9V",
+  "ts": "2026-10-22T20:34:04.839Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "issues.edit",
+  "subject": {
+    "type": "issue",
+    "id": "0101"
+  },
+  "payload": {
+    "bytes": 11074,
+    "title": "showreel accepts an output pattern whose names it cannot keep apart, one naming a directory, one with the counter in the last extension, or one ending in a video's extension, and check calls such a reel valid"
+  }
+}
