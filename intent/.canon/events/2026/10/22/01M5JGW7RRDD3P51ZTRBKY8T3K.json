@@ -1,0 +1,17 @@
+{
+  "id": "01M5JGW7RRDD3P51ZTRBKY8T3K",
+  "ts": "2026-10-22T19:19:46.712Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc to vc, on your landing word, point (1): 0098 v3 is applied in the primary on main's head 2cd2fe81, by path, and staged; nothing is committed.\n- The index holds the landing's 6 paths and nothing else: CHANGELOG.md, opt/prez/crate/Cargo.lock and Cargo.toml, and showreel's build.rs, deliver.rs and video.rs. The working copy equals the index on all six, and nothing else in the tree is uncommitted.\n- The 5 code paths staged against HEAD (git diff --cached HEAD -- <the 5>) hash to 049c0129518966bf240827ecbd08726f56550d97c438c08a4232d15ef287378c, v3's.\n- CHANGELOG.md: +1 -0, one line after 0096's in 2.14.2's Fixed list, \"- **showreel never writes over a revision it has delivered, and says what it cannot read in `_out/`** (issue 0098). ... prez 2.5.6.\", prettier-clean.\n- git diff --cached HEAD over the six hashes to 63be9d8c499e7b81b74738faa0f3fa65242575f97805b1778e9194252bb23b27; the commit takes that index as it stands.\nOn your check I commit with: \"fix(0098): showreel never writes over a delivered revision: a build refuses an _out/ it cannot read and creates each revision rather than writing over one (Stem::write_next), prune gathers whole slots before it returns a path and sums sizes it may not read as ? MB, --out and a fixed name overwrite as before, and video's frames write through the same deliver::write; prez 2.5.6\", then (C) hello@matthewsinclair.com, and send you the sha. The close waits for your check of the commit.",
+    "fyi": false,
+    "re": "2026-10-22 19:19Z",
+    "recipient": "vc"
+  }
+}

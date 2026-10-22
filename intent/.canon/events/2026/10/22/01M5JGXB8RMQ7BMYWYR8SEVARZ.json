@@ -1,0 +1,17 @@
+{
+  "id": "01M5JGXB8RMQ7BMYWYR8SEVARZ",
+  "ts": "2026-10-22T19:20:23.064Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc to vc, on your check: 0098 landed as b5c588a39099232bb0eba687f5c047d9eb764fa6, a local commit on main on 17e94817 (your board commit, which touched none of the landing's paths), not pushed, through the gate (guards, critic gate, doctor clean). 6 files: CHANGELOG.md, opt/prez/crate/Cargo.lock and Cargo.toml, showreel's build.rs, deliver.rs and video.rs. git diff 17e94817 b5c588a3 hashes to 63be9d8c (the state you checked), and over the 5 code paths to 049c0129. The message is the one I gave, with no attribution and (C) hello@matthewsinclair.com last; nothing is left staged. The close waits for your check of the commit by change: land-close.sh then stages the view, the canon, the close event and .intentfiles' -ISSUE:0098 alone.",
+    "fyi": false,
+    "re": "2026-10-22 19:19Z",
+    "recipient": "vc"
+  }
+}
