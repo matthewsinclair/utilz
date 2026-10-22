@@ -1,0 +1,17 @@
+{
+  "id": "01M5JEZ3YYQ90TGHZT4D5ZPV87",
+  "ts": "2026-10-22T18:46:23.966Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "ic to vc: END for slot 228, run G: green, with both mutation proofs red where booked. Bytes: wt-0072 at a103a549, diff 041173f2 before and after, run-0072-G.sh 4ac3330f. The run went from 18:42:40Z to 18:45:47Z.\n\n- (1) menuz build --unsigned rc=0, BUILD SUCCEEDED. menuz test --unsigned rc=0, TEST SUCCEEDED: \"Test run with 48 tests in 11 suites passed\" (MenuzTests) and \"Test run with 149 tests in 16 suites passed\" (MenuzKitTests), with no failing tests.\n- (2) M1, LogLine.swift's [<id>] branch returning kind(String(output)), one line changed: rc=1, TEST FAILED.\n  - MenuzKitTests failed with 5 issues; MenuzTests passed.\n  - Failing tests: LogLineTests.output(), at :70, :71 and :72, the three [<id>] lines; WrapperTests.prefixes(), at :117; and WrapperTests.cwd(), at :131.\n  - \"M1 restored: diff 041173f23052fde45bdfbcd44920f00a9732904f36e423704f17fbc7af3657ca\".\n- (3) M2, LogWindow's init following at once, one line changed: rc=1, TEST FAILED.\n  - MenuzTests failed with 4 issues; MenuzKitTests passed.\n  - Failing tests: LogWindowTests.firstShow(), at :43 (follows.isEmpty, the assertion critic-swift wanted proved) and :45; LogWindowTests.sameLog(), at :55; and LogWindowTests.moved(), at :65.\n  - \"M2 restored: diff 041173f23052fde45bdfbcd44920f00a9732904f36e423704f17fbc7af3657ca\".\n- (4) utilz test menuz: bash 3.2.57, rc=0, 139 ok, 0 not ok, 0 skip; bash 5.3.20, rc=0, 139 ok, 0 not ok, 0 skip.\n- The pin reads arca_swift 0.2.0 at f7742b163c09b11f121930e4cddee0e0b06659a4. The workspace pins are bb76569e and MenuzKit's 7ba84126, each the same before and after.\n- lsregister -u of state-0072G's Debug Menuz.app exit=0. The diff after is 041173f2, and the tree holds 16 changed paths, as booked.\n\nThe logs: runs/0072G-run.log, plus each verb's xcodebuild log as runs/0072G-{build,test,M1,M2}-xcodebuild.log. utilz-dc's kovacs leg on the same bytes was green (slot 229).\n\nNext, as plan-20261020.txt has it: step 7, hv's look on a dev install, then step 8, the landing, on your word. The look's two questions are for hv: when hv is at the screen, and what stays installed after. I recommend a build of main once 0072 has landed, since that is what 2.14.2 ships. If you would rather land first, the look then runs on main's build. runs/land-0072.sh is ready: it applies the banked patch while no path but CHANGELOG.md has moved since a103a549, checks CHANGELOG.md by its changed lines and every other path by its whole diff, and the close waits for your check.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}
