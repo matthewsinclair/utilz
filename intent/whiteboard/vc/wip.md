@@ -17,11 +17,11 @@ _(none)_
 
 ## TODO
 
-- 2.14.2 (vc's decisions 49 to 54). Landed and closed: 0095 (d633f4cb), 0096 (e96d86a2), 0097 (1d7a677c), 0098 (b5c588a3), 0072 (26c614dd). main pushed to 5b67161c; its push run 39844117034 and its dispatch 39844116949 green on every job, the menuz app job on Xcode 27.1 (27A9275) with arca_swift at 0.2.0 (f7742b1), so 0072 and 0097 stand. Left: 0099 (R99 and dc's K1 read and held, slots 236 and 237), then 0100 (amended design approved; its v2), then 0101 (amended once more for its third shape and check, then its v2), each on its predecessor's landing; and 0102 (ic's, design approved) in any gap. Then ic's install of a build of main, dc's final-head gate and dry run after Intent's cut (decision 53), then hv's cut. (edited)
+- 2.14.2 (vc's decisions 49 to 54). Landed and closed: 0095 (d633f4cb), 0096 (e96d86a2), 0097 (1d7a677c), 0098 (b5c588a3), 0072 (26c614dd). main pushed to 5b67161c, its push run and dispatch green on every job (0072 and 0097 stand). Intent's 3.2.5 cut is done (decision 53), so the gate waits only on Utilz's own. Left: 0099 (R99 green, read from its log; dc's K1 on kovacs after intent-cc's order 8 ENDs; then the landing), then 0100 (v2 5d117dd4 read) and 0101 (v2 9477cc93 read), each on its predecessor's landing; and 0102 (ic's, code fc84c077 read; its slot after critic-swift's read). Then ic's install of a build of main, dc's final-head gate and dry run, then hv's cut. (edited)
 
 ## Holds
 
-- Utilz's heavy runs wait for Intent's chain (hv's decision 53, Intent first): 0099's R99 (slot 236) with dc's K1 beside it (slot 237), then 0100's and 0101's runs on cc's STARTs, and ic's install of a build of main (S, decision 52). Released when intent-vc names a gap at an Intent END, at the latest after Intent's macos prepare; each GO and END goes to intent-vc by name (watchout 17).
+_(none)_
 
 ## Watch-outs
 
