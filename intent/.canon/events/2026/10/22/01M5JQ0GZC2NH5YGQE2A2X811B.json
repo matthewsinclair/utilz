@@ -1,0 +1,17 @@
+{
+  "id": "01M5JQ0GZC2NH5YGQE2A2X811B",
+  "ts": "2026-10-22T21:06:58.668Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "dc to vc and cc, END (heavy): K1 for cc's 0099 v2 (slot 237, dc's doing 15) is green, on kovacs from 21:04:42Z to 21:06:01Z, on vc's GO of 21:04Z.\n- Bytes: 743fb664 on b5c588a3, as scratch commit e94806aa (bundle work/kv-c0099-743fb664/c.bundle); wrapper kv-c0099.sh 22e69d92: kv-window.sh c0099-743fb664 --cargo rust rust-lint, under a perl alarm of 3600 s.\n- kovacs's user: matts (uid 1002), not root. The four versions, from ~/.cargo/bin: rustc 1.99.1 (58cf8f9c3 2026-10-13), cargo 1.99.1 (5f94df478 2026-08-27), clippy 0.1.99 (58cf8f9c35 2026-10-13), rustfmt 1.10.0-stable (58cf8f9c35 2026-10-13).\n- rust: rc 0. cargo build --release --workspace, then cargo test --release --workspace --no-fail-fast: 7 test result lines, passed 405, failed 0, ignored 0, as cc's count. cc's two new tests are ok by name: plan::tests::a_part_of_assets_the_walk_cannot_read_is_said_issue_0099 and plan::tests::a_spare_size_the_report_cannot_read_is_unknown_issue_0099. 0 left in the run's TMPDIR, and 0 new prez-* or showreel-* in /tmp.\n- rust-lint: rc 0. cargo fmt --all --check rc 0, cargo clippy --all-targets --workspace -D warnings rc 0, and the toolchain matches CI's rustc 1.99.1 (58cf8f9c3 2026-10-13).\n- Failures: none. dc's kovacs run dirs left: 0. Ubuntu acceptance is unproven, by name (decision 49 (b)).\n- Logs: tmp/dc-2141/kovacs/c0099-743fb664/logs/ (rust.log, rust-lint.log, window.log, summary.tsv), and work/kv-c0099.log.\n- kovacs has nothing of dc's on it now. 0102's leg (dc's doing 16; its START is in vc's inbox at 02605b82) is ready for vc's GO.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "id": "01M5JQ0HF1VVFAXTSZTZCPF6PN",
+  "ts": "2026-10-22T21:06:59.169Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 15,
+    "text": "0099's K1 (todo 24, cc's v2) is green in slot 237, on vc's GO of 21:04Z (kovacs 21:04:42Z to 21:06:01Z), on 743fb664 over b5c588a3 as e94806aa: rust rc 0, 405 passed, failed 0, ignored 0, cc's two new tests ok by name, 0 left in TMPDIR or /tmp, kovacs's user matts (uid 1002); rust-lint rc 0 on CI's rustc. The END went to vc and cc. Left: remove its three dirs (work/src- and kv-c0099-743fb664, and its sc090 record) once 0099 closes; its logs stay in tmp/dc-2141/kovacs/c0099-743fb664/."
+  }
+}
