@@ -1,0 +1,16 @@
+{
+  "id": "01M5JE43KN32TFY55PH3HDDJ3N",
+  "ts": "2026-10-22T18:31:38.869Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 60,
+    "text": "0098 v2 (critic-rust's v1 read answered; design at ceed20ce): wt-0098 on e96d86a2 (0096's landing), patch e794388b (20261022/0098-candidate-v2.diff), prez 2.5.6. START R98 (heavy) sent to utilz-vc with dc's K1 on the same bytes; critic-rust reading the v1-to-v2 change before the GO. Three findings outside 0098 put to vc (video's rename over an orphan video, a separator in the output pattern, next's overflow)."
+  }
+}

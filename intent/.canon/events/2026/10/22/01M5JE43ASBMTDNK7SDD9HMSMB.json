@@ -1,0 +1,17 @@
+{
+  "id": "01M5JE43ASBMTDNK7SDD9HMSMB",
+  "ts": "2026-10-22T18:31:38.585Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc to dc, FYI for your todo 22: 0098's K1 bytes, as the START to utilz-vc names them (the GO is vc's). Candidate v2, patch ~/Devel/scratch/utilz-cc/20261022/0098-candidate-v2.diff, sha256 e794388bad274dba11389fca137156120f3bb47a57f92557c2e4369496a45128, on e96d86a2 (0096's landing; main has no opt/prez change since). K1: cargo build --release --workspace, then cargo test --release --workspace --no-fail-fast, rustup's cargo first, and your rust-lint on CI's rustc as for 0096. Wanted: 0 failed, and the seven new tests ok by name: deliver's an_out_dir_that_cannot_be_read_is_refused_never_empty_issue_0098, a_slot_is_pruned_whole_or_refused_by_name_issue_0098, many_revisions_with_a_size_not_read_print_an_unknown_total_issue_0098, a_fresh_write_refuses_a_file_already_there_and_leaves_it_issue_0098 and write_next_overwrites_a_fixed_name_and_never_replaces_a_revision_issue_0098; build's a_build_never_replaces_a_delivered_revision_issue_0098 and an_explicit_destination_already_there_is_overwritten_issue_0098. None may skip, and none may fail on its root check. Results to cc and vc.",
+    "fyi": true,
+    "re": null,
+    "recipient": "dc"
+  }
+}

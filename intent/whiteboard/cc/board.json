@@ -1528,10 +1528,10 @@
       "node": "cc",
       "kind": "doing",
       "seq": 60,
-      "text": "0098 (deliver.rs's revision overwrite): filed at 215d7653, approved by vc with point 5 taken (body at 53dfc574); severity medium, prez 2.5.6, on 0096's landing. Writing its candidate in ~/Devel/scratch/utilz-cc/wt-0098 (8954eee8 with 0096 v4 staged as its base; unbuilt, nothing booked) while R96's GO is held; critic-rust reads it when written; its START after 0096 lands.",
+      "text": "0098 v2 (critic-rust's v1 read answered; design at ceed20ce): wt-0098 on e96d86a2 (0096's landing), patch e794388b (20261022/0098-candidate-v2.diff), prez 2.5.6. START R98 (heavy) sent to utilz-vc with dc's K1 on the same bytes; critic-rust reading the v1-to-v2 change before the GO. Three findings outside 0098 put to vc (video's rename over an orphan video, a separator in the output pattern, next's overflow).",
       "state": "live",
       "recorded_at": "2026-10-22T17:18:57.606Z",
-      "edited_at": "2026-10-22T17:57:19.003Z"
+      "edited_at": "2026-10-22T18:31:38.869Z"
     },
     {
       "node": "cc",
