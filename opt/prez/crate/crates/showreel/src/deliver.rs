@@ -15,6 +15,7 @@
 
 use crate::config;
 use artifact::Failure;
+use std::io::Write as _;
 use std::path::{Path, PathBuf};
 
 pub const OUTPUT_DEFAULT: &str = "{date}-{artist}-{venue}-{city}-{nnn}.showreel.html";
@@ -185,28 +186,48 @@ pub enum Stem {
   Counted { prefix: String, suffix: String },
 }
 
+/// Every path a directory holds, or the error that stopped the read: a read
+/// that fails is never an empty directory (`admit.rs`'s rule). The one listing
+/// of `_out/`, for its revisions and for `video`'s sweep (issue 0098).
+pub fn entries(dir: &Path) -> std::io::Result<Vec<PathBuf>> {
+  std::fs::read_dir(dir)?
+    .map(|entry| entry.map(|e| e.path()))
+    .collect()
+}
+
 impl Stem {
   /// Existing builds of this stem, lowest revision first.
-  pub fn revisions(&self, out_dir: &Path) -> Vec<(u32, PathBuf)> {
+  ///
+  /// **AN `_out/` THAT CANNOT BE READ IS REFUSED, NEVER TAKEN AS EMPTY**: the
+  /// next number comes from what it holds, so an empty answer would name a
+  /// revision that may already be there (issue 0098).
+  pub fn revisions(&self, out_dir: &Path) -> Result<Vec<(u32, PathBuf)>, Failure> {
     let Stem::Counted { prefix, suffix } = self else {
-      return Vec::new();
+      return Ok(Vec::new());
     };
-    let mut found: Vec<(u32, PathBuf)> = std::fs::read_dir(out_dir)
+    let listed = entries(out_dir).map_err(|e| {
+      Failure::new(
+        format!(
+          "cannot read {} for the next revision's number: {e}",
+          out_dir.display()
+        ),
+        "make the directory readable, or name the output with --out",
+      )
+    })?;
+    let mut found: Vec<(u32, PathBuf)> = listed
       .into_iter()
-      .flatten()
-      .filter_map(Result::ok)
-      .filter_map(|e| {
-        let name = e.file_name().to_string_lossy().into_owned();
+      .filter_map(|path| {
+        let name = path.file_name()?.to_string_lossy().into_owned();
         let digits = name
           .strip_prefix(prefix.as_str())?
           .strip_suffix(suffix.as_str())?;
         // The reference's `(\d+)`: all digits, at least one, nothing else.
         (!digits.is_empty() && digits.bytes().all(|b| b.is_ascii_digit()))
-          .then(|| digits.parse::<u32>().ok().map(|n| (n, e.path())))?
+          .then(|| digits.parse::<u32>().ok().map(|n| (n, path)))?
       })
       .collect();
     found.sort();
-    found
+    Ok(found)
   }
 
   /// Where the next build goes.
@@ -215,15 +236,62 @@ impl Stem {
   /// ONE**, which matters because the thing that goes on a shop television is a
   /// file somebody copied to a stick, and "which one did I copy" needs an answer
   /// that is not a timestamp.
-  pub fn next(&self, out_dir: &Path) -> PathBuf {
+  pub fn next(&self, out_dir: &Path) -> Result<PathBuf, Failure> {
     match self {
-      Stem::Fixed(name) => out_dir.join(name),
+      Stem::Fixed(name) => Ok(out_dir.join(name)),
       Stem::Counted { prefix, suffix } => {
-        let prev = self.revisions(out_dir).last().map_or(0, |(n, _)| *n);
-        out_dir.join(format!("{prefix}{:03}{suffix}", prev + 1))
+        let prev = self.revisions(out_dir)?.last().map_or(0, |(n, _)| *n);
+        Ok(out_dir.join(format!("{prefix}{:03}{suffix}", prev + 1)))
       }
     }
   }
+
+  /// Writes the next build where `next` names it, and says where.
+  ///
+  /// **A COUNTED REVISION IS CREATED, NEVER REPLACED**, so the rule above holds
+  /// at the write itself: two builds of one reel at once cannot both take one
+  /// number, since the second finds the first's file there and refuses (issue
+  /// 0098). A fixed name is overwritten each build, as it always was.
+  pub fn write_next(&self, out_dir: &Path, bytes: &[u8]) -> Result<PathBuf, Failure> {
+    let path = self.next(out_dir)?;
+    write(&path, bytes, matches!(self, Stem::Counted { .. }))?;
+    Ok(path)
+  }
+}
+
+/// Writes a file that a build or a recording makes, the one writer of either.
+/// A `fresh` write creates it, so a file already at its name refuses and keeps
+/// its bytes; any other write replaces what is there.
+pub fn write(path: &Path, bytes: &[u8], fresh: bool) -> Result<(), Failure> {
+  let mut options = std::fs::OpenOptions::new();
+  options.write(true);
+  if fresh {
+    options.create_new(true);
+  } else {
+    options.create(true).truncate(true);
+  }
+  let written = options
+    .open(path)
+    .and_then(|mut file| file.write_all(bytes));
+  written.map_err(|e| {
+    // What is known is that the file is there: a build that ran beside this
+    // one, or a pattern naming a place the listing does not read, can each
+    // put it there, so the words name no cause (issue 0098).
+    if fresh && e.kind() == std::io::ErrorKind::AlreadyExists {
+      Failure::new(
+        format!(
+          "cannot create {}: a file is already there, and a build never replaces one",
+          path.display()
+        ),
+        "if another build of this reel was running, build again; if not, move that file aside",
+      )
+    } else {
+      Failure::new(
+        format!("cannot write {}: {e}", path.display()),
+        "check the path",
+      )
+    }
+  })
 }
 
 /// Build the output stem from the configured pattern.
@@ -331,19 +399,32 @@ pub fn video_of(html: &Path, ext: &str) -> PathBuf {
 /// Every file one revision holds: its HTML, and the video recorded from it.
 ///
 /// **A SLOT IS ONE REVISION** (ST0021 AC-03.5). A video pruned apart from its
-/// HTML, or left behind by it, is a file nothing names any more.
-pub fn slot_files(html: &Path) -> Vec<PathBuf> {
+/// HTML, or left behind by it, is a file nothing names any more. So the video
+/// is found by its own entry, not by what the entry points to: one that is a
+/// dangling link goes with its HTML, and one that cannot be checked refuses
+/// rather than being left behind (issue 0098).
+pub fn slot_files(html: &Path) -> Result<Vec<PathBuf>, Failure> {
   let mut files = vec![html.to_path_buf()];
-  files.extend(
-    VIDEO_EXTENSIONS
-      .iter()
-      .map(|ext| video_of(html, ext))
-      .filter(|video| video.is_file()),
-  );
-  files
+  for video in VIDEO_EXTENSIONS.iter().map(|ext| video_of(html, ext)) {
+    match std::fs::symlink_metadata(&video) {
+      Ok(_) => files.push(video),
+      Err(e) if e.kind() == std::io::ErrorKind::NotFound => {}
+      Err(e) => {
+        return Err(Failure::new(
+          format!(
+            "cannot check for {}, which goes with {}: {e}",
+            video.display(),
+            html.display()
+          ),
+          "a revision is pruned whole: make the directory readable and searchable",
+        ));
+      }
+    }
+  }
+  Ok(files)
 }
 
-/// The size of a file just written. One that cannot be read is `None`, never
+/// The size of a file. One that cannot be read is `None`, never
 /// 0 bytes, and `said` gets why (issue 0096).
 pub fn size_of(path: &Path, said: &mut Vec<String>) -> Option<u64> {
   match std::fs::metadata(path) {
@@ -373,39 +454,54 @@ pub fn megabytes(bytes: Option<u64>) -> String {
 /// build somebody may already have copied to a stick is a worse default than a
 /// directory that needs tidying. Returns what it did and what it wants said.
 /// Both count whole slots: a revision's video goes with its HTML, and its
-/// megabytes are in the total.
-pub fn prune(out_dir: &Path, stem: &Stem, keep: usize) -> (Vec<PathBuf>, Vec<String>) {
+/// megabytes are in the total. A size that cannot be read makes the total
+/// unknown, never low, and is said; an `_out/` that cannot be read, or a
+/// slot that cannot be checked, refuses before a path is returned, so
+/// nothing is deleted (issue 0098).
+pub fn prune(
+  out_dir: &Path,
+  stem: &Stem,
+  keep: usize,
+) -> Result<(Vec<PathBuf>, Vec<String>), Failure> {
   let sibs: Vec<PathBuf> = stem
-    .revisions(out_dir)
+    .revisions(out_dir)?
     .into_iter()
     .map(|(_, p)| p)
     .collect();
   if keep > 0 && sibs.len() > keep {
     let old = &sibs[..sibs.len() - keep];
-    let drop: Vec<PathBuf> = old.iter().flat_map(|p| slot_files(p)).collect();
     let said = vec![format!(
       "pruned {} older revision(s), kept {keep}",
       old.len()
     )];
-    return (drop, said);
+    return Ok((slots(old)?, said));
   }
   if keep == 0 && sibs.len() > 5 {
-    let mb: f64 = sibs
-      .iter()
-      .flat_map(|p| slot_files(p))
-      .filter_map(|p| std::fs::metadata(p).ok())
-      .map(|m| m.len())
-      .sum::<u64>() as f64
-      / 1_048_576.0;
-    return (
-      Vec::new(),
-      vec![format!(
-        "{} revisions of this reel in _out/ ({mb:.0} MB). Use --keep N to drop the oldest.",
-        sibs.len()
-      )],
-    );
+    let mut unread = Vec::new();
+    let files = slots(&sibs)?;
+    // Every size is read before the sum, so each one that cannot be read is
+    // said: `Option`'s sum stops at the first `None`.
+    let sizes: Vec<Option<u64>> = files.iter().map(|f| size_of(f, &mut unread)).collect();
+    let total: Option<u64> = sizes.into_iter().sum();
+    let mut said = vec![format!(
+      "{} revisions of this reel in _out/ ({}). Use --keep N to drop the oldest.",
+      sibs.len(),
+      megabytes(total)
+    )];
+    said.extend(unread);
+    return Ok((Vec::new(), said));
   }
-  (Vec::new(), Vec::new())
+  Ok((Vec::new(), Vec::new()))
+}
+
+/// Every file the given revisions hold, each slot whole, gathered before
+/// anything is deleted, so a slot that cannot be checked deletes nothing.
+fn slots(revisions: &[PathBuf]) -> Result<Vec<PathBuf>, Failure> {
+  let mut files = Vec::new();
+  for html in revisions {
+    files.extend(slot_files(html)?);
+  }
+  Ok(files)
 }
 
 #[cfg(test)]
@@ -533,7 +629,7 @@ mod tests {
     );
     let dir = out("default", &[]);
     assert_eq!(
-      stem.next(&dir).file_name().unwrap(),
+      stem.next(&dir).unwrap().file_name().unwrap(),
       "20260919-45h-forbiddenplanet-nottingham-001.showreel.html"
     );
   }
@@ -564,15 +660,15 @@ mod tests {
 
     let dir = out("fixed", &["reel.html"]);
     assert_eq!(
-      stem.next(&dir).file_name().unwrap(),
+      stem.next(&dir).unwrap().file_name().unwrap(),
       "reel.html",
       "the same name every build"
     );
     assert!(
-      stem.revisions(&dir).is_empty(),
+      stem.revisions(&dir).unwrap().is_empty(),
       "and nothing to revision or prune"
     );
-    assert_eq!(prune(&dir, &stem, 1), (Vec::new(), Vec::new()));
+    assert_eq!(prune(&dir, &stem, 1).unwrap(), (Vec::new(), Vec::new()));
   }
 
   /// **TWO COUNTERS ARE REFUSED, AND THIS IS WHERE THE PORT DIVERGES ON PURPOSE.**
@@ -630,7 +726,12 @@ mod tests {
         "r-.html",
       ],
     );
-    let seen: Vec<u32> = stem.revisions(&dir).iter().map(|(n, _)| *n).collect();
+    let seen: Vec<u32> = stem
+      .revisions(&dir)
+      .unwrap()
+      .iter()
+      .map(|(n, _)| *n)
+      .collect();
     // **`r-9.html` IS WHAT MAKES THIS TEST ABLE TO FAIL.** Every name here was
     // zero-padded at first, so lexical and numeric order COINCIDED and the
     // assertion passed with the sort keyed on the filename -- the injection moved
@@ -644,7 +745,7 @@ mod tests {
       "only its own, sorted numerically not lexically"
     );
     assert_eq!(
-      stem.next(&dir).file_name().unwrap(),
+      stem.next(&dir).unwrap().file_name().unwrap(),
       "r-011.html",
       "one past the highest"
     );
@@ -663,7 +764,7 @@ mod tests {
     let refs: Vec<&str> = names.iter().map(String::as_str).collect();
 
     let dir = out("prune-keep", &refs);
-    let (dropped, said) = prune(&dir, &stem, 2);
+    let (dropped, said) = prune(&dir, &stem, 2).unwrap();
     assert_eq!(dropped.len(), 5, "seven minus the two kept");
     assert!(dropped
       .iter()
@@ -671,7 +772,7 @@ mod tests {
     assert!(said[0].contains("kept 2"), "{}", said[0]);
 
     let dir = out("prune-none", &refs);
-    let (dropped, said) = prune(&dir, &stem, 0);
+    let (dropped, said) = prune(&dir, &stem, 0).unwrap();
     assert!(dropped.is_empty(), "the default deletes nothing");
     assert_eq!(said.len(), 1);
     assert!(said[0].contains("7 revisions"), "{}", said[0]);
@@ -698,7 +799,7 @@ mod tests {
         "r-003.showreel.mp4",
       ],
     );
-    let (dropped, said) = prune(&dir, &stem, 1);
+    let (dropped, said) = prune(&dir, &stem, 1).unwrap();
     let mut gone: Vec<String> = dropped
       .iter()
       .filter_map(|p| p.file_name())
@@ -731,11 +832,11 @@ mod tests {
       )
       .unwrap();
     }
-    let (dropped, said) = prune(&dir, &stem, 0);
+    let (dropped, said) = prune(&dir, &stem, 0).unwrap();
     assert!(dropped.is_empty(), "the default still deletes nothing");
     assert!(said[0].contains("6 revisions"), "{}", said[0]);
     assert!(
-      said[0].contains("(6 MB)"),
+      said[0].contains("(6.0 MB)"),
       "the videos are counted: {}",
       said[0]
     );
@@ -763,5 +864,178 @@ mod tests {
     );
     assert_eq!(megabytes(None), "? MB");
     assert_eq!(megabytes(Some(1_572_864)), "1.5 MB");
+  }
+
+  fn counted() -> Stem {
+    Stem::Counted {
+      prefix: "r-".to_string(),
+      suffix: ".html".to_string(),
+    }
+  }
+
+  /// **AN `_out/` THAT CANNOT BE READ IS REFUSED, NEVER TAKEN AS EMPTY**
+  /// (issue 0098): taken as empty, it named 001 again, over a delivered
+  /// revision. A mode binds a user and not root, so where it does not bind the
+  /// test fails saying so.
+  #[test]
+  fn an_out_dir_that_cannot_be_read_is_refused_never_empty_issue_0098() {
+    use std::os::unix::fs::PermissionsExt;
+    let dir = out("unread", &["r-001.html"]);
+    let mode = |bits: u32| {
+      std::fs::set_permissions(&*dir, std::fs::Permissions::from_mode(bits)).unwrap();
+    };
+    mode(0o300);
+    let binds = std::fs::read_dir(&*dir).is_err();
+    let listed = counted().revisions(&dir);
+    let named = counted().next(&dir);
+    mode(0o700);
+    assert!(
+      binds,
+      "a mode does not stop a read here (root?), so this test cannot run"
+    );
+    for e in [listed.unwrap_err(), named.unwrap_err()] {
+      assert!(
+        e.message.contains(&dir.display().to_string()),
+        "the refusal does not name {}: {}",
+        dir.display(),
+        e.message
+      );
+    }
+  }
+
+  /// **A SLOT IS PRUNED WHOLE OR NOT AT ALL** (issue 0098): a video that is a
+  /// dangling link goes with its HTML, and one that cannot be checked refuses,
+  /// naming it, before anything is deleted. A mode binds a user and not root,
+  /// so where it does not bind the test fails saying so.
+  #[test]
+  fn a_slot_is_pruned_whole_or_refused_by_name_issue_0098() {
+    use std::os::unix::fs::PermissionsExt;
+    let dir = out("whole", &["r-001.html", "r-002.html"]);
+    let video = video_of(&dir.join("r-001.html"), "mp4");
+    std::os::unix::fs::symlink(dir.join("nowhere.mp4"), &video).unwrap();
+    let (dropped, _) = prune(&dir, &counted(), 1).unwrap();
+    assert!(
+      dropped.contains(&video),
+      "the dangling video was left behind: {dropped:?}"
+    );
+
+    let mode = |bits: u32| {
+      std::fs::set_permissions(&*dir, std::fs::Permissions::from_mode(bits)).unwrap();
+    };
+    mode(0o600);
+    let binds = std::fs::symlink_metadata(&video).is_err();
+    let pruned = prune(&dir, &counted(), 1);
+    mode(0o700);
+    assert!(
+      binds,
+      "a mode does not stop a look here (root?), so this test cannot run"
+    );
+    let e = pruned.unwrap_err();
+    assert!(
+      e.message.contains(&video.display().to_string()),
+      "the refusal does not name {}: {}",
+      video.display(),
+      e.message
+    );
+  }
+
+  /// **A SIZE THAT CANNOT BE READ MAKES THE TOTAL UNKNOWN, NEVER LOW** (issue
+  /// 0098): the warning past five revisions prints `? MB` and names every size
+  /// it could not read, not only the first.
+  #[test]
+  fn many_revisions_with_a_size_not_read_print_an_unknown_total_issue_0098() {
+    let names: Vec<String> = (1..=6).map(|n| format!("r-{n:03}.html")).collect();
+    let refs: Vec<&str> = names.iter().map(String::as_str).collect();
+    let dir = out("unsized", &refs);
+    let videos = [
+      video_of(&dir.join("r-001.html"), "mp4"),
+      video_of(&dir.join("r-002.html"), "mov"),
+    ];
+    for video in &videos {
+      std::os::unix::fs::symlink(dir.join("nowhere.mp4"), video).unwrap();
+    }
+    let (dropped, said) = prune(&dir, &counted(), 0).unwrap();
+    assert!(dropped.is_empty(), "the default deletes nothing");
+    assert!(
+      said[0].contains("6 revisions") && said[0].contains("(? MB)"),
+      "{said:?}"
+    );
+    for video in &videos {
+      let named = video.display().to_string();
+      assert!(
+        said[1..]
+          .iter()
+          .any(|s| s.contains("could not read the size of") && s.contains(&named)),
+        "{named} is not named: {said:?}"
+      );
+    }
+  }
+
+  /// **A FRESH WRITE CREATES, NEVER REPLACES** (issue 0098): one that finds a
+  /// file at its name refuses, naming it, and leaves its bytes, which is what
+  /// keeps two builds of one reel off one number. Any other write replaces the
+  /// file whole, a longer one included.
+  #[test]
+  fn a_fresh_write_refuses_a_file_already_there_and_leaves_it_issue_0098() {
+    let dir = out("fresh", &["r-001.html"]);
+    let path = dir.join("r-001.html");
+    let fresh = write(&path, b"another", true);
+    assert_eq!(
+      std::fs::read(&path).unwrap(),
+      b"x",
+      "a fresh write replaced the file"
+    );
+    let e = fresh.unwrap_err();
+    assert!(
+      e.message.contains(&path.display().to_string()),
+      "the refusal does not name {}: {}",
+      path.display(),
+      e.message
+    );
+    std::fs::write(&path, b"a longer file").unwrap();
+    write(&path, b"y", false).unwrap();
+    assert_eq!(
+      std::fs::read(&path).unwrap(),
+      b"y",
+      "the overwrite kept the old file's tail"
+    );
+  }
+
+  /// **`write_next` ASKS FOR THE RIGHT WRITE** (issue 0098): a fixed name is
+  /// overwritten each build, whole; a counted revision is created and never
+  /// replaces a file, even one the listing did not count, which a prefix naming
+  /// a directory below `_out/` makes here.
+  #[test]
+  fn write_next_overwrites_a_fixed_name_and_never_replaces_a_revision_issue_0098() {
+    let dir = out("next", &[]);
+    let fixed = Stem::Fixed("reel.html".to_string());
+    fixed.write_next(&dir, b"a first build").unwrap();
+    let path = fixed.write_next(&dir, b"second").unwrap();
+    assert_eq!(
+      std::fs::read(&path).unwrap(),
+      b"second",
+      "a fixed name was not overwritten whole"
+    );
+
+    std::fs::create_dir(dir.join("sub")).unwrap();
+    let taken = dir.join("sub").join("r-001.html");
+    std::fs::write(&taken, b"delivered").unwrap();
+    let below = Stem::Counted {
+      prefix: "sub/r-".to_string(),
+      suffix: ".html".to_string(),
+    };
+    let refused = below.write_next(&dir, b"another");
+    assert_eq!(
+      std::fs::read(&taken).unwrap(),
+      b"delivered",
+      "a counted revision replaced a file"
+    );
+    let e = refused.unwrap_err();
+    assert!(
+      e.message.contains(&taken.display().to_string()),
+      "the refusal does not name {}: {}",
+      taken.display(),
+      e.message
+    );
   }
 }

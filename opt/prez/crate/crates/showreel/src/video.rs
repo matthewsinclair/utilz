@@ -166,7 +166,11 @@ pub fn run(dir: &Path, o: &Options, progress: &mut dyn FnMut(u64, u64)) -> Resul
       "# t0_ms={} fps={}\nframe\tpage_ms\tslide\n",
       recording.t0_ms, o.fps
     );
-    write(&frames.join("frames.tsv"), (head + &table).as_bytes())
+    deliver::write(
+      &frames.join("frames.tsv"),
+      (head + &table).as_bytes(),
+      false,
+    )
   });
   carry(made, chrome_said, &mut said)?;
   Ok(Video {
@@ -301,11 +305,7 @@ fn sweep_partials(video: &Path, in_slot: bool) -> Result<Vec<String>, Failure> {
   let stale: Vec<PathBuf> = if in_slot {
     let dir = video.parent().unwrap_or(Path::new("."));
     // A read that fails is never an empty directory (`admit.rs`'s rule).
-    let listed = std::fs::read_dir(dir).and_then(|entries| {
-      entries
-        .map(|entry| entry.map(|e| e.path()))
-        .collect::<std::io::Result<Vec<PathBuf>>>()
-    });
+    let listed = deliver::entries(dir);
     listed
       .map_err(|e| {
         Failure::new(
@@ -385,16 +385,11 @@ fn refuse_a_zone_on_a_wide_frame(zone: Zone, aspect: Aspect) -> Result<(), Failu
 
 /// One frame, kept as a PNG under `--frames`.
 fn keep_frame(dir: &Path, frame: &Frame) -> Result<(), Failure> {
-  write(&dir.join(format!("f{:05}.png", frame.index)), &frame.png)
-}
-
-fn write(path: &Path, bytes: &[u8]) -> Result<(), Failure> {
-  std::fs::write(path, bytes).map_err(|e| {
-    Failure::new(
-      format!("cannot write {}: {e}", path.display()),
-      "check the directory is writable",
-    )
-  })
+  deliver::write(
+    &dir.join(format!("f{:05}.png", frame.index)),
+    &frame.png,
+    false,
+  )
 }
 
 /// How many frames ffprobe reads in a video.

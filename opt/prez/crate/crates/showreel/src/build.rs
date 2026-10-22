@@ -252,8 +252,13 @@ pub fn run(path: &Path, f: &Options) -> Result<Built, Failure> {
 
   let out_dir = o.dir.join("_out");
   let stem = deliver::stem(&o.cfg, &o.cfg.session, &date)?;
+  // A revision in `_out/` is created and never replaces one (issue 0098);
+  // `--out` is outside the rotation and overwritten, as it always was.
   let out = match &f.out {
-    Some(p) => p.clone(),
+    Some(p) => {
+      deliver::write(p, html.as_bytes(), false)?;
+      p.clone()
+    }
     None => {
       std::fs::create_dir_all(&out_dir).map_err(|e| {
         Failure::new(
@@ -261,15 +266,9 @@ pub fn run(path: &Path, f: &Options) -> Result<Built, Failure> {
           "check the reel directory is writable",
         )
       })?;
-      stem.next(&out_dir)
+      stem.write_next(&out_dir, html.as_bytes())?
     }
   };
-  std::fs::write(&out, &html).map_err(|e| {
-    Failure::new(
-      format!("cannot write {}: {e}", out.display()),
-      "check the path",
-    )
-  })?;
 
   // **THE SIZE IS THE FINISHED FILE's, NOT THE SUM OF WHAT WAS EMBEDDED.**
   // `Embedded::encoded` is pre-base64 and per-picture, and the artifact also
@@ -285,7 +284,7 @@ pub fn run(path: &Path, f: &Options) -> Result<Built, Failure> {
   // FILE.** An explicit `--out` is outside the rotation, so the retention policy
   // must not delete alongside it. The reference's `if not args.out`.
   if f.out.is_none() {
-    let (drop, warn) = deliver::prune(&out_dir, &stem, f.keep);
+    let (drop, warn) = deliver::prune(&out_dir, &stem, f.keep)?;
     said.extend(warn);
     for p in drop {
       std::fs::remove_file(&p).map_err(|e| {
@@ -500,6 +499,68 @@ segments:
       b.said.iter().any(|s| s.contains("pruned")),
       "the prune said nothing: {:?}",
       b.said
+    );
+  }
+
+  /// **A BUILD NEVER REPLACES A DELIVERED REVISION** (issue 0098): with
+  /// `_out/` writable but not listable, the build refuses before it writes,
+  /// and the revision already there keeps its bytes, where main named 001
+  /// again and wrote over it. A mode binds a user and not root, so where it
+  /// does not bind the test fails saying so.
+  #[test]
+  fn a_build_never_replaces_a_delivered_revision_issue_0098() {
+    use std::os::unix::fs::PermissionsExt;
+    let d = reel("delivered", BASE, &[]);
+    let delivered = built(&d, &plain()).path;
+    std::fs::write(&delivered, b"delivered").unwrap();
+    let out_dir = d.join("_out");
+    let mode = |bits: u32| {
+      std::fs::set_permissions(&out_dir, std::fs::Permissions::from_mode(bits)).unwrap();
+    };
+    mode(0o300);
+    let binds = std::fs::read_dir(&out_dir).is_err();
+    let again = run(&d, &plain());
+    mode(0o700);
+    assert!(
+      binds,
+      "a mode does not stop a read here (root?), so this test cannot run"
+    );
+    assert_eq!(
+      std::fs::read(&delivered).unwrap(),
+      b"delivered",
+      "the delivered revision was written over"
+    );
+    let e = again
+      .err()
+      .expect("a build went ahead with an _out/ it cannot read");
+    assert!(
+      e.message.contains(&out_dir.display().to_string()),
+      "the refusal does not name {}: {}",
+      out_dir.display(),
+      e.message
+    );
+  }
+
+  /// **`--out` IS OVERWRITTEN, AS IT ALWAYS WAS** (issue 0098): an explicit
+  /// destination is outside the rotation, so a build replaces a file already
+  /// there rather than refusing.
+  #[test]
+  fn an_explicit_destination_already_there_is_overwritten_issue_0098() {
+    let d = reel("overwritten", BASE, &[]);
+    let out = d.join("elsewhere.html");
+    std::fs::write(&out, b"an earlier build").unwrap();
+    let b = built(
+      &d,
+      &Options {
+        out: Some(out.clone()),
+        keep: 0,
+      },
+    );
+    assert_eq!(b.path, out);
+    let html = std::fs::read_to_string(&out).unwrap();
+    assert!(
+      !html.contains("an earlier build"),
+      "the file already there was not replaced"
     );
   }
 }
