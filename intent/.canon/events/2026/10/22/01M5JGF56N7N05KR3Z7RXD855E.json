@@ -1,0 +1,16 @@
+{
+  "id": "01M5JGF56N7N05KR3Z7RXD855E",
+  "ts": "2026-10-22T19:12:38.102Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 6,
+    "text": "0072: the red (R2, slot 225), the code with critic-swift's read (point 19), run G (slot 228, M1 and M2 red where booked), dc's kovacs leg (slot 229) and the dev install for hv's look (slot 230: 0.4.6 build 1494 from wt-0072 at 041173f2; 1425 kept) all done. Next: hv's look; the landing on vc's word (runs/land-0072.sh, dry-run and control proved); the close after vc's check; then a build of main installed, as hv chose."
+  }
+}
