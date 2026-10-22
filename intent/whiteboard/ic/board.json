@@ -286,10 +286,10 @@
       "node": "ic",
       "kind": "doing",
       "seq": 7,
-      "text": "0102 (menuz's log window colours six kinds of line it left plain, hv's yes and vc's calls, 22 Oct): code in wt-0102 on 86c56805, diff 180369a5, read by vc and critic-swift (no critical or warning; its seven items folded, amendment 97fab507). The slot's START (runs/run-0102.sh, 11da78a1) is with vc for its GO after intent-vc's END of Intent's macos prepare; the bytes are with dc for the kovacs leg. Then the landing in 2.14.2.",
+      "text": "0102 (menuz's log window colours six kinds of line it left plain, hv's yes and vc's calls, 22 Oct): code in wt-0102 on 86c56805, diff 180369a5, read by vc and critic-swift (amendment 97fab507). vc read the START (runs/run-0102.sh, 11da78a1; 0be47394): its GO comes by name once intent-cc's order 8 on kovacs has ENDed, which waits on hv's relay into kovacs-sysadm's session. The bytes are with dc for the kovacs leg. Then the landing in 2.14.2.",
       "state": "live",
       "recorded_at": "2026-10-22T20:24:10.022Z",
-      "edited_at": "2026-10-22T21:01:33.914Z"
+      "edited_at": "2026-10-22T21:03:49.992Z"
     }
   ],
   "sent": [
@@ -1731,6 +1731,16 @@
       "id": "01M5JN70W92BMG06RRJZJCMYS9",
       "sender": "vc",
       "handled_at": "2026-10-22T20:41:37.042Z"
+    },
+    {
+      "id": "01M5JNMM5J43HWDKNFFCAZCB7P",
+      "sender": "vc",
+      "handled_at": "2026-10-22T21:03:50.275Z"
+    },
+    {
+      "id": "01M5JPSYQ5EC7964TRF5KBKZ85",
+      "sender": "vc",
+      "handled_at": "2026-10-22T21:03:50.275Z"
     }
   ]
 }

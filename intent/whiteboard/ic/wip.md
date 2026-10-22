@@ -13,7 +13,7 @@ claims: [ISSUE:0102]
 
 ## DOING
 
-- 0102 (menuz's log window colours six kinds of line it left plain, hv's yes and vc's calls, 22 Oct): code in wt-0102 on 86c56805, diff 180369a5, read by vc and critic-swift (no critical or warning; its seven items folded, amendment 97fab507). The slot's START (runs/run-0102.sh, 11da78a1) is with vc for its GO after intent-vc's END of Intent's macos prepare; the bytes are with dc for the kovacs leg. Then the landing in 2.14.2. (edited)
+- 0102 (menuz's log window colours six kinds of line it left plain, hv's yes and vc's calls, 22 Oct): code in wt-0102 on 86c56805, diff 180369a5, read by vc and critic-swift (amendment 97fab507). vc read the START (runs/run-0102.sh, 11da78a1; 0be47394): its GO comes by name once intent-cc's order 8 on kovacs has ENDed, which waits on hv's relay into kovacs-sysadm's session. The bytes are with dc for the kovacs leg. Then the landing in 2.14.2. (edited)
 
 ## TODO
 

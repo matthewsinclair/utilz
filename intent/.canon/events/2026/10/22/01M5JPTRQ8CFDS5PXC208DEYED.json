@@ -1,0 +1,16 @@
+{
+  "id": "01M5JPTRQ8CFDS5PXC208DEYED",
+  "ts": "2026-10-22T21:03:49.992Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 7,
+    "text": "0102 (menuz's log window colours six kinds of line it left plain, hv's yes and vc's calls, 22 Oct): code in wt-0102 on 86c56805, diff 180369a5, read by vc and critic-swift (amendment 97fab507). vc read the START (runs/run-0102.sh, 11da78a1; 0be47394): its GO comes by name once intent-cc's order 8 on kovacs has ENDed, which waits on hv's relay into kovacs-sysadm's session. The bytes are with dc for the kovacs leg. Then the landing in 2.14.2."
+  }
+}
