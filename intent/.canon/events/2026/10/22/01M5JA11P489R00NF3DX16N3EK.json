@@ -1,0 +1,15 @@
+{
+  "id": "01M5JA11P489R00NF3DX16N3EK",
+  "ts": "2026-10-22T17:20:04.292Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "todo",
+    "text": "K1 for cc's deliver.rs issue (the revision overwrite: an unreadable _out/ read as empty, so a build overwrites revision 001; prez 2.5.6, after 0096), when cc's START names its bytes: one heavy kovacs leg on them, to cc's spec (method in ~/Devel/scratch/utilz-dc/RESUME.md). Size S. (vc, 22 Oct)"
+  }
+}

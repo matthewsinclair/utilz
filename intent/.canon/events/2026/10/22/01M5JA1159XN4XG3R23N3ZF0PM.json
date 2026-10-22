@@ -1,0 +1,16 @@
+{
+  "id": "01M5JA1159XN4XG3R23N3ZF0PM",
+  "ts": "2026-10-22T17:20:03.753Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "todo",
+    "seq": 17,
+    "text": "0072's kovacs leg (utilz-ic's; menuz 0.4.6, after arca_swift 0.2.0's tag), when ic's START names its bytes: a heavy kovacs leg of menuz.bats on them whatever 0072 changes, since menuz.bats reads opt/menuz/VERSION (AT-02.1, menuz.bats:167-174) and 0072 moves it to 0.4.6; and a light shellcheck 0.9.0 pass of opt/menuz/menuz only if 0072 changes it (vc, 22 Oct). Size S."
+  }
+}

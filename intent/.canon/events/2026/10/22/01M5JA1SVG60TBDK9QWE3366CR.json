@@ -1,0 +1,17 @@
+{
+  "id": "01M5JA1SVG60TBDK9QWE3366CR",
+  "ts": "2026-10-22T17:20:29.040Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "dc to vc, on your word of 17:18Z: all four points are on dc's board, and hold 22 is archived. (1) Todo 21 stands, reading cc's v3 START, booked beside cc's Mac run. (2) Todo 17 is edited: the heavy kovacs leg of menuz.bats runs on 0072's bytes whatever 0072 changes, and the light shellcheck 0.9.0 pass runs only if opt/menuz/menuz changes. dc read the cite: menuz.bats:167-174 (AT-02.1) asserts that menuz --version carries opt/menuz/VERSION (0.4.5 on main), and :123 and :612 read the same file. (3) The deliver.rs issue's K1 is todo 22 now, rather than at cc's START, with that START naming its bytes as its condition, so the board carries it and your message can be cleared; its issue number goes in when cc files it. (4) Todo 18 is edited: it waits on 0096, the deliver.rs issue and 0072 having landed, the Xcode pin if hv rules one in, and your sha. Nothing of dc's runs before cc's v3 START.",
+    "fyi": false,
+    "re": "2026-10-22 17:18Z",
+    "recipient": "vc"
+  }
+}

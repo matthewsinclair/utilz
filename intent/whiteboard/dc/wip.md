@@ -3,9 +3,9 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: aa2e759c-f89d-4d9a-8001-e734111bf44b
-heartbeat_at: 2026-10-22 16:51Z
+heartbeat_at: 2026-10-22 17:20Z
 status: active
-focus: "22 Oct: booted, holding for vc's word on hv's instruction (hold 22). Queued: todo 21 (0096's K1, on cc's v3 START), todo 18 (2.14.2's final-head gate, once 0096 and 0072 land), todo 17 (0072's shim, only if it moves). Resume: ~/Devel/scratch/utilz-dc/RESUME.md."
+focus: "22 Oct, on vc's word (hv's go): hold 22 released. Next: todo 21, 0096's K1 on cc's v3 START; todo 22, the deliver.rs issue's K1 on cc's START; todo 17, 0072's menuz.bats leg on ic's bytes; todo 18, 2.14.2's final-head gate once all three land. Resume: ~/Devel/scratch/utilz-dc/RESUME.md."
 claims: []
 ---
 
@@ -17,13 +17,14 @@ _(none)_
 
 ## TODO
 
-- 0072's shim, only if utilz-ic's 0072 moves opt/menuz/menuz (after arca_swift 0.2.0's tag): a light shellcheck 0.9.0 pass of it and a heavy kovacs leg of menuz.bats on its bytes. Size S. (edited)
-- 2.14.2's final-head gate, once 0096 and 0072 have landed and vc names the sha: final-head-gate.sh's phases, the report and the dry run, then the post-release steps (~/Devel/scratch/utilz-dc/RESUME.md). Size L. (edited)
-- K1 for 0096 (cc's), when cc's R2 START names its bytes: one heavy kovacs leg on them, to cc's spec (method in ~/Devel/scratch/utilz-dc/RESUME.md). Size S.
+- 0072's kovacs leg (utilz-ic's; menuz 0.4.6, after arca_swift 0.2.0's tag), when ic's START names its bytes: a heavy kovacs leg of menuz.bats on them whatever 0072 changes, since menuz.bats reads opt/menuz/VERSION (AT-02.1, menuz.bats:167-174) and 0072 moves it to 0.4.6; and a light shellcheck 0.9.0 pass of opt/menuz/menuz only if 0072 changes it (vc, 22 Oct). Size S. (edited)
+- 2.14.2's final-head gate, once 0096, cc's deliver.rs issue (the revision overwrite) and 0072 have landed, with the pin of the Xcode that tests.yml's menuz-app job uses if hv rules one in, and vc names the sha (vc, 22 Oct). Then final-head-gate.sh's phases, the report and the dry run, then the post-release steps (~/Devel/scratch/utilz-dc/RESUME.md). Size L. (edited)
+- K1 for 0096 (cc's), when cc's v3 START names its bytes: one heavy kovacs leg on them, booked beside cc's Mac run, to cc's spec (method in ~/Devel/scratch/utilz-dc/RESUME.md). Size S. (edited)
+- K1 for cc's deliver.rs issue (the revision overwrite: an unreadable _out/ read as empty, so a build overwrites revision 001; prez 2.5.6, after 0096), when cc's START names its bytes: one heavy kovacs leg on them, to cc's spec (method in ~/Devel/scratch/utilz-dc/RESUME.md). Size S. (vc, 22 Oct)
 
 ## Holds
 
-- Holding for vc's word: hv at dc's boot on 22 Oct, "Boot them hold for instructions from VC." Condition: vc's instructions to dc have arrived, in dc's inbox from vc or over the socket. Resume state: nothing of dc's is running, and nothing of dc's is in the primary but its board views. Next, as vc rules: todo 21, 0096's K1, when cc's v3 START names its bytes (cc's hold 40); todo 18, 2.14.2's final-head gate, once 0096 and 0072 have landed and vc names the sha; todo 17 only if 0072 moves the menuz shim. The method and where everything is: ~/Devel/scratch/utilz-dc/RESUME.md. (edited)
+_(none)_
 
 ## Watch-outs
 
