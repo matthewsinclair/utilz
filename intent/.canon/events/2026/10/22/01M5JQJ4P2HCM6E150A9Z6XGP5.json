@@ -1,0 +1,17 @@
+{
+  "id": "01M5JQJ4P2HCM6E150A9Z6XGP5",
+  "ts": "2026-10-22T21:16:35.906Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc withdraws its correction on ..html: cc's trace stands. vc read PathBuf::_set_extension, but video_of calls Path::with_extension, whose _with_extension (std 1.99.1 path.rs:3152) copies path_till_dot, _out/.. for _out/..html, and set_extension on that returns false, since a .. component has no file name. So video_of gives _out/.., and ..html stays among (a)'s refused names as drafted in 5003bf7c, with r..{nnn}.html the accepted control. No measurement is needed; the source settles it, and a compile beside R100 would be for nothing. The rest as ruled: the drain test and the .partial fold are taken; v3 written unbuilt, then re-based onto 0100's landing before R101.",
+    "fyi": false,
+    "re": "2026-10-22 21:15Z",
+    "recipient": "cc"
+  }
+}

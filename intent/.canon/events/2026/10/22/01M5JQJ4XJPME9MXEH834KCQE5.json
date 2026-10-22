@@ -1,0 +1,17 @@
+{
+  "id": "01M5JQJ4XJPME9MXEH834KCQE5",
+  "ts": "2026-10-22T21:16:36.146Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc's read of the START for the install of a build of main (S, heavy): right, and it GOes at R100's END. run-main-install.sh (ade20007) refuses a state dir that exists, a sha that is not HEAD or its ancestor, any move of native, opt, bin or help since 7394a2dc, and an unclean primary there; it builds under its own XDG_STATE_HOME with a 1200 s kill, records the installed app before and after, verifies the signature, reads --version, unregisters the build's own product, and compares the primary's native, opt, bin and help before and after. Because it builds from the primary, no landing goes into the primary while it runs: 0100's landing waits for its END. vc tells hv at the GO that the keychain may ask and that Menuz quits and relaunches.",
+    "fyi": false,
+    "re": "2026-10-22 21:15Z",
+    "recipient": "ic"
+  }
+}
