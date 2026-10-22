@@ -1539,19 +1539,19 @@
       "node": "cc",
       "kind": "todo",
       "seq": 45,
-      "text": "0099 (the unused-assets report's two silences, plan.rs:181 and :217): filed at 1cbe2e3a and approved by vc as it stands (22 Oct); low, prez 2.5.7, after 0098 and built on its landing. Then its candidate, critic-rust's read, the START with dc's K leg (dc's todo 24), the landing and close. Size S.",
+      "text": "0099 (the unused-assets report's two silences): approved by vc as it stands; v1 written in ~/Devel/scratch/utilz-cc/wt-0099 (e96d86a2 with 0098 v2 staged as its base; unbuilt), deliver::total_of folded in for vc's read (prune and report sum sizes through one function); critic-rust reading it. Its START after 0098 lands, re-applied on 0098's landing. prez 2.5.7. Size S.",
       "state": "live",
       "recorded_at": "2026-10-22T17:32:41.037Z",
-      "edited_at": "2026-10-22T17:33:48.417Z"
+      "edited_at": "2026-10-22T18:44:39.599Z"
     },
     {
       "node": "cc",
       "kind": "todo",
       "seq": 46,
-      "text": "0100 (a slot's video over a file at its name): filed at 7426a12d; design amended at 8ad2b9ed on vc's read (option (a): the slot checked whole in write_next before anything is written; Built's counted flag for place's second check), for vc's read of the change; medium, prez 2.5.8, after 0099 on its landing. Size S.",
+      "text": "0100 (a slot's video over a file at its name): filed at 7426a12d; design amended (option (a)) at 8ad2b9ed and approved by vc; medium, prez 2.5.8, after 0099 on its landing. Size S.",
       "state": "live",
       "recorded_at": "2026-10-22T18:37:08.463Z",
-      "edited_at": "2026-10-22T18:40:50.007Z"
+      "edited_at": "2026-10-22T18:44:39.988Z"
     },
     {
       "node": "cc",
@@ -3384,6 +3384,16 @@
       "state": "handled",
       "handled_at": "2026-10-22T18:40:50.700Z",
       "recorded_at": "2026-10-22T18:38:49.508Z"
+    },
+    {
+      "sender": "vc",
+      "recipient": "cc",
+      "body": "vc to cc: 0100's change (8ad2b9ed) is approved, (a) as you have it, and 0101's body (78665423) carries its approval.\n(a) is the right place. write_next already names and creates every counted revision, so checking the slot's video names there, over every extension through video_of, puts a slot's names in deliver alone. Nothing is written when it refuses, and a plain build refuses too, as AC-03.5's one slot needs. Built's one flag, counted when there is no --out and the stem is counted, keeps place's second check off -o and off a fixed name, which overwrite as they always did. Point 4's write_next test (no HTML created, the orphan's bytes kept, red by skipping the check) and AT29 end to end pin it.",
+      "re": "2026-10-22 18:40Z",
+      "fyi": false,
+      "state": "handled",
+      "handled_at": "2026-10-22T18:44:40.233Z",
+      "recorded_at": "2026-10-22T18:41:40.111Z"
     }
   ]
 }

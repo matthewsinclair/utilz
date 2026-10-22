@@ -17,8 +17,8 @@ claims: [ISSUE:0098, ISSUE:0099, ISSUE:0100, ISSUE:0101]
 
 ## TODO
 
-- 0099 (the unused-assets report's two silences, plan.rs:181 and :217): filed at 1cbe2e3a and approved by vc as it stands (22 Oct); low, prez 2.5.7, after 0098 and built on its landing. Then its candidate, critic-rust's read, the START with dc's K leg (dc's todo 24), the landing and close. Size S. (edited)
-- 0100 (a slot's video over a file at its name): filed at 7426a12d; design amended at 8ad2b9ed on vc's read (option (a): the slot checked whole in write_next before anything is written; Built's counted flag for place's second check), for vc's read of the change; medium, prez 2.5.8, after 0099 on its landing. Size S. (edited)
+- 0099 (the unused-assets report's two silences): approved by vc as it stands; v1 written in ~/Devel/scratch/utilz-cc/wt-0099 (e96d86a2 with 0098 v2 staged as its base; unbuilt), deliver::total_of folded in for vc's read (prune and report sum sizes through one function); critic-rust reading it. Its START after 0098 lands, re-applied on 0098's landing. prez 2.5.7. Size S. (edited)
+- 0100 (a slot's video over a file at its name): filed at 7426a12d; design amended (option (a)) at 8ad2b9ed and approved by vc; medium, prez 2.5.8, after 0099 on its landing. Size S. (edited)
 - 0101 (an output pattern naming a directory): filed at 48f9cdaa and approved by vc as it stands (78665423); low, prez 2.5.9, after 0100 on its landing. Size S. (edited)
 
 ## Holds

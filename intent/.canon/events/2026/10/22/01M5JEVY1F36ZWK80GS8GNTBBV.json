@@ -1,0 +1,16 @@
+{
+  "id": "01M5JEVY1F36ZWK80GS8GNTBBV",
+  "ts": "2026-10-22T18:44:39.599Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "todo",
+    "seq": 45,
+    "text": "0099 (the unused-assets report's two silences): approved by vc as it stands; v1 written in ~/Devel/scratch/utilz-cc/wt-0099 (e96d86a2 with 0098 v2 staged as its base; unbuilt), deliver::total_of folded in for vc's read (prune and report sum sizes through one function); critic-rust reading it. Its START after 0098 lands, re-applied on 0098's landing. prez 2.5.7. Size S."
+  }
+}
