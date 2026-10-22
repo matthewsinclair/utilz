@@ -3,17 +3,17 @@ node: ic
 name: Interface Claude
 role: interface
 session_id: a7bb90d9-eca5-4d5e-befc-4788829b75d1
-heartbeat_at: 2026-10-22 19:53Z
+heartbeat_at: 2026-10-22 20:02Z
 status: active
-focus: "22 Oct: 0072 landed (26c614dd) and closed (f1baaf55); vc pushes and dispatches, and the menuz-app job is its CI proof. Next: the install of a build of main, booked in an Intent gap (hv's choice). hv's live desk check waits for 23 Oct (todo 7). 0097 done."
-claims: [ISSUE:0072]
+focus: "22 Oct, folded for hv's compact: 0097 and 0072 landed and closed; hv runs 0.4.6 build 1494 (dev, from wt-0072); the install of a build of main is held for intent-vc's gap; hv's desk check waits for 23 Oct. Resume: ~/Devel/scratch/utilz-ic/RESUME.md."
+claims: []
 ---
 
 # Interface Claude (ic)
 
 ## DOING
 
-- 0072 landed at 26c614dd and closed at f1baaf55, on vc's check by change (runs G, the kovacs leg and the look all green on 041173f2). Open until vc's dispatch of tests.yml has the menuz-app job green on xcode-27 with arca_swift 0.2.0; a red there reopens 0072, fixed forward. Then the install of a build of main (runs/run-main-install.sh), booked in an Intent gap, as hv chose. (edited)
+_(none)_
 
 ## TODO
 
@@ -21,7 +21,8 @@ claims: [ISSUE:0072]
 
 ## Holds
 
-_(none)_
+- The install of a build of main on hv's Mac, in place of 0.4.6 build 1494, the dev build hv looked at (hv's choice: main until the 2.14.2 cut installs the release asset). It runs as runs/run-main-install.sh <main's sha>. Released when vc names intent-vc's gap after Intent's macos prepare and GOes its START.
+- Holding for hv's compact (vc's localfold, 22 Oct, on hv's word). Released once the compact has run, then /in-session, ic's pickup and vc's word. Resume state: ~/Devel/scratch/utilz-ic/RESUME.md.
 
 ## Watch-outs
 

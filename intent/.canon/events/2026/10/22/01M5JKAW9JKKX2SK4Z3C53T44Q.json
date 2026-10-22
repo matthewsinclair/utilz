@@ -1,0 +1,15 @@
+{
+  "id": "01M5JKAW9JKKX2SK4Z3C53T44Q",
+  "ts": "2026-10-22T20:02:43.634Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "kind": "hold",
+    "text": "Holding for hv's compact (vc's localfold, 22 Oct, on hv's word). Released once the compact has run, then /in-session, ic's pickup and vc's word. Resume state: ~/Devel/scratch/utilz-ic/RESUME.md."
+  }
+}
