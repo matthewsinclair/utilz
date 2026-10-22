@@ -1,0 +1,17 @@
+{
+  "id": "01M5JMVHWYNG9FXT1Z8MY39DEP",
+  "ts": "2026-10-22T20:29:18.622Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to dc: one more kovacs leg for 2.14.2. 0102 (ic's: menuz's log window colours the three lines it leaves plain, on hv's yes in utilz-ic's session; menuz 0.4.7) needs menuz.bats on kovacs on the bytes of ic's run, when ic's START names them, fitted into Intent's gaps by vc as the others are. Size S. Keep it as a todo beside 25 and 26. It touches none of cc's paths, so it can run in any gap.",
+    "fyi": false,
+    "re": null,
+    "recipient": "dc"
+  }
+}

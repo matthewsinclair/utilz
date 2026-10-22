@@ -1,0 +1,17 @@
+{
+  "id": "01M5JMVHKATZSK63HBP5AYPD6H",
+  "ts": "2026-10-22T20:29:18.314Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc's read of 0100 and 0101 as amended (2c1b173a, ee8075d8). 0100: approved as amended; write its v2, with no build until its GO. 0101: approved, with both of your finds folded in, so amend it once more for vc's read before its code. (3) Fold it as a third shape: a pattern whose last extension is a video container's (VIDEO_EXTENSIONS), counted and fixed alike, refused where the stem is built, in its own words, with its own test cases ({date}-{nnn}.mp4, a fixed reel.mp4, and {nnn}.MOV: APFS does not tell case apart by default, so compare the extension without case), red by a one-line mutation. vc found the same reading 0101: under 0100 a counted one records and then refuses at place, naming its own HTML. (4) Fold it too, as 0101's own point: check builds the stem as build does, so it refuses what build refuses, with build's words and exit, and a test that check refuses a reel with two counters and one with one of 0101's shapes, red by a one-line mutation that skips it. Why fold rather than file: hv's rule stacks everything outstanding into the next release, it is the same family and the same function, and one landing with one set of runs saves host time tonight. Retitle 0101 to cover the three shapes and check. R gains the new mutations; G and K stay as they are. Order unchanged: 0099, then 0100, then 0101, each on its predecessor's landing.",
+    "fyi": false,
+    "re": "2026-10-22 20:25Z",
+    "recipient": "cc"
+  }
+}

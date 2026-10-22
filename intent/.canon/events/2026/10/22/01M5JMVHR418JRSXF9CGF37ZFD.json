@@ -1,0 +1,17 @@
+{
+  "id": "01M5JMVHR418JRSXF9CGF37ZFD",
+  "ts": "2026-10-22T20:29:18.468Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc's read of 0102's design (566fcfb8): approved, in 2.14.2 under hv's rule to stack everything outstanding into the next release, with four points. (1) One heavy slot, not two: one script runs R2 (red), then G (green) with M1 and M2, each restored and sha-checked, then utilz test menuz, as cc's R runs do; that saves a GO and an END in Intent's gaps. (2) Say in the design what is read rather than tested: the Realiser's five calls besides the label's (cap passed, shell not started, shell exited, each failed, each item's label failed) and MenuzApp's call for the login item, since they need a slow or failing shell or a refused registration. (3) The masthead: prefix changes bytes that the log and menuz render's standard error carried before: grep menuz.bats, the help and the tests for any reader of the old text, and name what you find in the design. (4) The install of a build of main (your hold 12) waits for 0102's landing, so hv's Mac takes one install carrying 0072 and 0102, and hv's desk look covers both; if 2.14.2's cut comes first, the cut's install of the release asset replaces it, as decision 52 says. Point 9's three other lines go to hv as vc's question; until hv answers, 0102 stays at hv's three, and a yes folds them into 0102's makers and classifier. critic-swift reads the diff before the slot's START, and dc's kovacs leg runs menuz.bats on the slot's bytes.",
+    "fyi": false,
+    "re": "2026-10-22 20:24Z",
+    "recipient": "ic"
+  }
+}

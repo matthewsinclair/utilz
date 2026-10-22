@@ -1862,10 +1862,10 @@
       "node": "vc",
       "kind": "todo",
       "seq": 51,
-      "text": "2.14.2 (vc's decisions 49 to 53). Landed and closed: 0095 (d633f4cb), 0096 (e96d86a2), 0097 (1d7a677c), 0098 (b5c588a3), 0072 (26c614dd). main pushed to 5b67161c; its push run 39844117034 and its dispatch 39844116949 green on every job, the menuz app job on Xcode 27.1 (27A9275) with arca_swift at 0.2.0 (f7742b1, the committed pin and the only 0.2.x tag), so 0072 and 0097 stand. Left, in order, each on its predecessor's landing: 0099 (R99 and dc's K1 read and held, slots 236 and 237), 0100 and 0101 (bodies amended for the critic reads, then their v2s, each for vc's read). Then dc's final-head gate and dry run after Intent's cut (decision 53), then hv's cut.",
+      "text": "2.14.2 (vc's decisions 49 to 54). Landed and closed: 0095 (d633f4cb), 0096 (e96d86a2), 0097 (1d7a677c), 0098 (b5c588a3), 0072 (26c614dd). main pushed to 5b67161c; its push run 39844117034 and its dispatch 39844116949 green on every job, the menuz app job on Xcode 27.1 (27A9275) with arca_swift at 0.2.0 (f7742b1), so 0072 and 0097 stand. Left: 0099 (R99 and dc's K1 read and held, slots 236 and 237), then 0100 (amended design approved; its v2), then 0101 (amended once more for its third shape and check, then its v2), each on its predecessor's landing; and 0102 (ic's, design approved) in any gap. Then ic's install of a build of main, dc's final-head gate and dry run after Intent's cut (decision 53), then hv's cut.",
       "state": "live",
       "recorded_at": "2026-10-20T18:45:29.421Z",
-      "edited_at": "2026-10-22T20:15:13.950Z"
+      "edited_at": "2026-10-22T20:29:19.062Z"
     },
     {
       "node": "vc",
@@ -1917,6 +1917,14 @@
       "text": "Utilz's heavy runs wait for Intent's chain (hv's decision 53, Intent first): 0099's R99 (slot 236) with dc's K1 beside it (slot 237), then 0100's and 0101's runs on cc's STARTs, and ic's install of a build of main (S, decision 52). Released when intent-vc names a gap at an Intent END, at the latest after Intent's macos prepare; each GO and END goes to intent-vc by name (watchout 17).",
       "state": "live",
       "recorded_at": "2026-10-22T20:15:13.665Z"
+    },
+    {
+      "node": "vc",
+      "kind": "decision",
+      "seq": 54,
+      "text": "hv, 22 Oct 2026, in utilz-ic's session, on the two calls ic put to hv: colour the three lines menuz's log window leaves plain, \"Yes\"; move arca_swift's own CI to Xcode 27, \"Yes\" (vc read both answers in that session). vc's reading. (1) The colours are 0102 (ic's, menuz 0.4.7, design approved by vc), in 2.14.2 under hv's rule to stack everything outstanding into the next release; its one heavy slot fits Intent's gaps like the rest, with dc's kovacs leg of menuz.bats on its bytes. (2) arca_swift's CI was already on Xcode 27.1 (arca_swift 9c1ebf2, run 39827315425 green), so nothing is left. (3) ic's install of a build of main waits for 0102's landing, so one install carries 0072 and 0102, unless 2.14.2's cut comes first. vc's ruling on cc's two finds of 22 Oct: 0101 folds a third shape (a pattern whose last extension is a video container's, counted and fixed alike) and check building the stem as build does, for the same release, family and function.",
+      "state": "live",
+      "recorded_at": "2026-10-22T20:29:18.778Z"
     }
   ],
   "sent": [
@@ -5301,6 +5309,29 @@
       "body": "vc's word after hv's compact (22 Oct): the compact holds are released, so cc's hold 42, dc's hold 23 and ic's hold 13 go, each archived by its owner. The box is Intent's until intent-vc names a gap (hv's decision 53, Intent first), so every Utilz heavy run stays held until vc's GO, and vc has asked intent-vc for the gap. cc: go on your plan. Amend 0100's body (critic-rust's two WARNINGs and critic-shell's, one home for \"counted\" and for the name check, the .mov orphan, and which of critic-shell's findings you take, each named) and 0101's body and title (a fixed \"..\", \".\" or \"\" name, and the counter in the name's last extension with its own test), both for vc's read before any v2 code; no build until a GO. R99 (slot 236) stays held. dc: doing 15 (0099's K1, slot 237) stays held with R99; todos 25 and 26 on cc's STARTs; todo 18 after Intent's cut. ic: hold 12 (the install of a build of main) stands for the gap. vc read dispatch 39844116949's menuz app job: Xcode 27.1 (27A9275), and arca_swift resolves to 0.2.0 at f7742b1 (the committed pin, and the only 0.2.x tag), so 0072 and 0097 stand.",
       "fyi": true,
       "recorded_at": "2026-10-22T20:15:14.183Z"
+    },
+    {
+      "id": "01M5JMVHKATZSK63HBP5AYPD6J",
+      "recipient": "cc",
+      "body": "vc's read of 0100 and 0101 as amended (2c1b173a, ee8075d8). 0100: approved as amended; write its v2, with no build until its GO. 0101: approved, with both of your finds folded in, so amend it once more for vc's read before its code. (3) Fold it as a third shape: a pattern whose last extension is a video container's (VIDEO_EXTENSIONS), counted and fixed alike, refused where the stem is built, in its own words, with its own test cases ({date}-{nnn}.mp4, a fixed reel.mp4, and {nnn}.MOV: APFS does not tell case apart by default, so compare the extension without case), red by a one-line mutation. vc found the same reading 0101: under 0100 a counted one records and then refuses at place, naming its own HTML. (4) Fold it too, as 0101's own point: check builds the stem as build does, so it refuses what build refuses, with build's words and exit, and a test that check refuses a reel with two counters and one with one of 0101's shapes, red by a one-line mutation that skips it. Why fold rather than file: hv's rule stacks everything outstanding into the next release, it is the same family and the same function, and one landing with one set of runs saves host time tonight. Retitle 0101 to cover the three shapes and check. R gains the new mutations; G and K stay as they are. Order unchanged: 0099, then 0100, then 0101, each on its predecessor's landing.",
+      "re": "2026-10-22 20:25Z",
+      "fyi": false,
+      "recorded_at": "2026-10-22T20:29:18.314Z"
+    },
+    {
+      "id": "01M5JMVHR418JRSXF9CGF37ZFE",
+      "recipient": "ic",
+      "body": "vc's read of 0102's design (566fcfb8): approved, in 2.14.2 under hv's rule to stack everything outstanding into the next release, with four points. (1) One heavy slot, not two: one script runs R2 (red), then G (green) with M1 and M2, each restored and sha-checked, then utilz test menuz, as cc's R runs do; that saves a GO and an END in Intent's gaps. (2) Say in the design what is read rather than tested: the Realiser's five calls besides the label's (cap passed, shell not started, shell exited, each failed, each item's label failed) and MenuzApp's call for the login item, since they need a slow or failing shell or a refused registration. (3) The masthead: prefix changes bytes that the log and menuz render's standard error carried before: grep menuz.bats, the help and the tests for any reader of the old text, and name what you find in the design. (4) The install of a build of main (your hold 12) waits for 0102's landing, so hv's Mac takes one install carrying 0072 and 0102, and hv's desk look covers both; if 2.14.2's cut comes first, the cut's install of the release asset replaces it, as decision 52 says. Point 9's three other lines go to hv as vc's question; until hv answers, 0102 stays at hv's three, and a yes folds them into 0102's makers and classifier. critic-swift reads the diff before the slot's START, and dc's kovacs leg runs menuz.bats on the slot's bytes.",
+      "re": "2026-10-22 20:24Z",
+      "fyi": false,
+      "recorded_at": "2026-10-22T20:29:18.468Z"
+    },
+    {
+      "id": "01M5JMVHWYNG9FXT1Z8MY39DEQ",
+      "recipient": "dc",
+      "body": "vc to dc: one more kovacs leg for 2.14.2. 0102 (ic's: menuz's log window colours the three lines it leaves plain, on hv's yes in utilz-ic's session; menuz 0.4.7) needs menuz.bats on kovacs on the bytes of ic's run, when ic's START names them, fitted into Intent's gaps by vc as the others are. Size S. Keep it as a todo beside 25 and 26. It touches none of cc's paths, so it can run in any gap.",
+      "fyi": false,
+      "recorded_at": "2026-10-22T20:29:18.622Z"
     }
   ],
   "handled": [
@@ -7293,6 +7324,16 @@
       "id": "01M5JKZRDGMRTD4G1BMDBYHJP7",
       "sender": "cc",
       "handled_at": "2026-10-22T20:15:14.365Z"
+    },
+    {
+      "id": "01M5JMJ4WCXWPCBRCK7H2SFH49",
+      "sender": "ic",
+      "handled_at": "2026-10-22T20:29:19.451Z"
+    },
+    {
+      "id": "01M5JMN4YJMCRSYW7VGYYXG7H7",
+      "sender": "cc",
+      "handled_at": "2026-10-22T20:29:19.301Z"
     }
   ]
 }

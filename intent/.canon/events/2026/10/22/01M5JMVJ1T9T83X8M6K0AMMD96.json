@@ -1,0 +1,15 @@
+{
+  "id": "01M5JMVJ1T9T83X8M6K0AMMD96",
+  "ts": "2026-10-22T20:29:18.778Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 22 Oct 2026, in utilz-ic's session, on the two calls ic put to hv: colour the three lines menuz's log window leaves plain, \"Yes\"; move arca_swift's own CI to Xcode 27, \"Yes\" (vc read both answers in that session). vc's reading. (1) The colours are 0102 (ic's, menuz 0.4.7, design approved by vc), in 2.14.2 under hv's rule to stack everything outstanding into the next release; its one heavy slot fits Intent's gaps like the rest, with dc's kovacs leg of menuz.bats on its bytes. (2) arca_swift's CI was already on Xcode 27.1 (arca_swift 9c1ebf2, run 39827315425 green), so nothing is left. (3) ic's install of a build of main waits for 0102's landing, so one install carries 0072 and 0102, unless 2.14.2's cut comes first. vc's ruling on cc's two finds of 22 Oct: 0101 folds a third shape (a pattern whose last extension is a video container's, counted and fixed alike) and check building the stem as build does, for the same release, family and function."
+  }
+}

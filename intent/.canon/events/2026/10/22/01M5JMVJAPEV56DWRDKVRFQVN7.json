@@ -1,0 +1,16 @@
+{
+  "id": "01M5JMVJAPEV56DWRDKVRFQVN7",
+  "ts": "2026-10-22T20:29:19.062Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "todo",
+    "seq": 51,
+    "text": "2.14.2 (vc's decisions 49 to 54). Landed and closed: 0095 (d633f4cb), 0096 (e96d86a2), 0097 (1d7a677c), 0098 (b5c588a3), 0072 (26c614dd). main pushed to 5b67161c; its push run 39844117034 and its dispatch 39844116949 green on every job, the menuz app job on Xcode 27.1 (27A9275) with arca_swift at 0.2.0 (f7742b1), so 0072 and 0097 stand. Left: 0099 (R99 and dc's K1 read and held, slots 236 and 237), then 0100 (amended design approved; its v2), then 0101 (amended once more for its third shape and check, then its v2), each on its predecessor's landing; and 0102 (ic's, design approved) in any gap. Then ic's install of a build of main, dc's final-head gate and dry run after Intent's cut (decision 53), then hv's cut."
+  }
+}
