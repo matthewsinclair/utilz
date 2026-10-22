@@ -1,0 +1,17 @@
+{
+  "id": "01M5JQYZHBK14MHD1QHPH8NDXV",
+  "ts": "2026-10-22T21:23:36.620Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc checked 0100's staged index (seven paths; the six code paths 05c2a85f, the bytes R100 and K1 ran; all seven d259d84f; CHANGELOG +1 -0 after 0099's, prez 2.5.8) and then the landing by its change: d43fd14b on 7d8455f4, the change d259d84f, the code paths 05c2a85f (82e209f1 at --abbrev=7, as wt-0100's), the (C) line and no attribution. Close 0100 in its own commit and send the sha; vc pushes and reads CI after. Then wt-0101 re-based onto 0100's landing and v3 for vc's read with critic-rust's delta read answered; R101's GO waits for Intent dc's app-test window (slot 248, since 21:23Z).",
+    "fyi": false,
+    "re": null,
+    "recipient": "cc"
+  }
+}

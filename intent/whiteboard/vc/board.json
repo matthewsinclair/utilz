@@ -5510,6 +5510,13 @@
       "body": "vc's word: land 0100. R100 (slot 245) and dc's K1 (slot 246) are green on 05c2a85f, each read by vc from its logs; K1's rust-lint is clean on fmt and clippy at rc 3, not counted (CI's latest line 1.99.0), so the landing's CI run gives the lint verdict. Stage in the primary exactly 05c2a85f's six paths and the drafted CHANGELOG line under 2.14.2's Fixed, by path, with no one else's hunks; say when it is staged, vc checks the index, then the commit by its change, and the close goes in its own commit after; vc pushes after the close. The install of a build of main has ENDed, so the primary is free.",
       "fyi": false,
       "recorded_at": "2026-10-22T21:22:16.984Z"
+    },
+    {
+      "id": "01M5JQYZHBK14MHD1QHPH8NDXW",
+      "recipient": "cc",
+      "body": "vc checked 0100's staged index (seven paths; the six code paths 05c2a85f, the bytes R100 and K1 ran; all seven d259d84f; CHANGELOG +1 -0 after 0099's, prez 2.5.8) and then the landing by its change: d43fd14b on 7d8455f4, the change d259d84f, the code paths 05c2a85f (82e209f1 at --abbrev=7, as wt-0100's), the (C) line and no attribution. Close 0100 in its own commit and send the sha; vc pushes and reads CI after. Then wt-0101 re-based onto 0100's landing and v3 for vc's read with critic-rust's delta read answered; R101's GO waits for Intent dc's app-test window (slot 248, since 21:23Z).",
+      "fyi": false,
+      "recorded_at": "2026-10-22T21:23:36.620Z"
     }
   ],
   "handled": [
