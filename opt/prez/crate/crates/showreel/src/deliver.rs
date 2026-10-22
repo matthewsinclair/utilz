@@ -343,6 +343,30 @@ pub fn slot_files(html: &Path) -> Vec<PathBuf> {
   files
 }
 
+/// The size of a file just written. One that cannot be read is `None`, never
+/// 0 bytes, and `said` gets why (issue 0096).
+pub fn size_of(path: &Path, said: &mut Vec<String>) -> Option<u64> {
+  match std::fs::metadata(path) {
+    Ok(meta) => Some(meta.len()),
+    Err(e) => {
+      said.push(format!(
+        "could not read the size of {}: {e}",
+        path.display()
+      ));
+      None
+    }
+  }
+}
+
+/// A size as the summaries print it, in megabytes: `? MB` for one `size_of`
+/// could not read.
+pub fn megabytes(bytes: Option<u64>) -> String {
+  bytes.map_or_else(
+    || "? MB".to_string(),
+    |n| format!("{:.1} MB", n as f64 / 1_048_576.0),
+  )
+}
+
 /// Drop the oldest revisions, or say once that there are a lot of them.
 ///
 /// **THE DEFAULT KEEPS EVERYTHING AND COMPLAINS**, because silently deleting a
@@ -715,5 +739,29 @@ mod tests {
       "the videos are counted: {}",
       said[0]
     );
+  }
+
+  /// A size that cannot be read is unknown and said, never 0 (issue 0096).
+  #[test]
+  fn a_size_that_cannot_be_read_is_unknown_and_said_never_0_issue_0096() {
+    let dir = out("size", &["r-001.showreel.mp4"]);
+    let mut said = Vec::new();
+    assert_eq!(size_of(&dir.join("r-001.showreel.mp4"), &mut said), Some(1));
+    assert!(
+      said.is_empty(),
+      "a size that was read says nothing: {said:?}"
+    );
+
+    let gone = dir.join("r-002.showreel.mp4");
+    assert_eq!(size_of(&gone, &mut said), None);
+    assert_eq!(said.len(), 1, "{said:?}");
+    assert!(
+      said[0].contains(&gone.display().to_string()),
+      "the line does not name {}: {}",
+      gone.display(),
+      said[0]
+    );
+    assert_eq!(megabytes(None), "? MB");
+    assert_eq!(megabytes(Some(1_572_864)), "1.5 MB");
   }
 }

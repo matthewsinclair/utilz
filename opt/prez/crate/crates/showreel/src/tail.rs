@@ -57,6 +57,17 @@ impl Tail {
   }
 }
 
+/// Adds what a refusal's clean-up could not do to the refusal itself, a line
+/// each, so the refusal stays the exit status and what was left is named. The
+/// one wording of those lines: the recording's and the encoder's both come
+/// here (issue 0096).
+pub fn and_also(failure: &mut Failure, said: impl IntoIterator<Item = String>) {
+  for line in said {
+    failure.message.push_str("\n  and ");
+    failure.message.push_str(&line);
+  }
+}
+
 /// Reads to the end, keeping the last `KEEP` bytes.
 fn keep_end(mut from: impl Read, into: &Mutex<Vec<u8>>) {
   let mut chunk = [0u8; 4096];
@@ -112,6 +123,17 @@ mod tests {
     drop(writer);
     let mut failure = Failure::new("it stopped", "try again");
     quiet.append_to(&mut failure, "Chrome");
+    assert_eq!(failure.message, "it stopped");
+  }
+
+  #[test]
+  fn what_a_clean_up_could_not_do_goes_under_the_refusal_a_line_each() {
+    let mut failure = Failure::new("it stopped", "try again");
+    and_also(&mut failure, ["one".to_string(), "two".to_string()]);
+    assert_eq!(failure.message, "it stopped\n  and one\n  and two");
+
+    let mut failure = Failure::new("it stopped", "try again");
+    and_also(&mut failure, None::<String>);
     assert_eq!(failure.message, "it stopped");
   }
 }

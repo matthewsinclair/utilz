@@ -185,7 +185,9 @@ fn json_failed(e: serde_json::Error) -> Failure {
 pub struct Built {
   pub path: PathBuf,
   pub slides: usize,
-  pub bytes: u64,
+  /// The finished file's size, `None` when it could not be read, which `said`
+  /// then names (issue 0096).
+  pub bytes: Option<u64>,
   pub theme: String,
   pub pace: &'static str,
   /// The long edge the reel's pictures were fitted to (`embed_target`), which
@@ -272,10 +274,10 @@ pub fn run(path: &Path, f: &Options) -> Result<Built, Failure> {
   // **THE SIZE IS THE FINISHED FILE's, NOT THE SUM OF WHAT WAS EMBEDDED.**
   // `Embedded::encoded` is pre-base64 and per-picture, and the artifact also
   // carries the shell, the theme and the JSON. Its own doc says nothing budgets
-  // against it; this is what does.
-  let bytes = std::fs::metadata(&out).map(|m| m.len()).unwrap_or(0);
-  let mb = bytes as f64 / 1_048_576.0;
-  if mb > 12.0 {
+  // against it; this is what does. A size that cannot be read is said, and
+  // checks nothing (issue 0096).
+  let bytes = deliver::size_of(&out, &mut said);
+  if bytes.is_some_and(|n| n as f64 / 1_048_576.0 > 12.0) {
     said.push("over 12 MB. Lower `target:` in showreel.yaml for a television stick.".to_string());
   }
 

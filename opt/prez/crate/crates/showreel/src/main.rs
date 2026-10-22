@@ -23,7 +23,7 @@
 use artifact::Failure;
 use showreel::aspect::Aspect;
 use showreel::zone::Zone;
-use showreel::{build, limits, plan, video};
+use showreel::{build, deliver, limits, plan, video};
 use std::io::IsTerminal;
 use std::path::{Path, PathBuf};
 
@@ -257,9 +257,9 @@ fn build_reel(path: &Path, f: &build::Options) -> Result<(), Failure> {
   let b = build::run(path, f)?;
   println!("showreel: wrote {}", b.path.display());
   println!(
-    "  {} slides, {:.1} MB self-contained, theme={}, pace={}",
+    "  {} slides, {} self-contained, theme={}, pace={}",
     b.slides,
-    b.bytes as f64 / 1_048_576.0,
+    deliver::megabytes(b.bytes),
     b.theme,
     b.pace
   );
@@ -285,13 +285,13 @@ fn video_reel(path: &Path, f: &video::Options) -> Result<(), Failure> {
   let v = video::run(path, f, &mut progress)?;
   println!("showreel: wrote {}", v.path.display());
   println!(
-    "  {} frames at {} fps, {:.1} s, {}x{}, {:.1} MB, recorded by {}",
+    "  {} frames at {} fps, {:.1} s, {}x{}, {}, recorded by {}",
     v.frames,
     v.fps,
     v.duration_ms / 1000.0,
     v.size.0,
     v.size.1,
-    v.bytes as f64 / 1_048_576.0,
+    deliver::megabytes(v.bytes),
     v.chrome
   );
   println!("  frame 0 taken {} ms after the reel's start", v.late_ms);

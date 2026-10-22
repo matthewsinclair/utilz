@@ -23,7 +23,7 @@
 //! sees its parent go, ends Chrome itself, and the trap runs after it.
 
 use crate::cdp::Session;
-use crate::tail::Tail;
+use crate::tail::{and_also, Tail};
 use artifact::scratch::Scratch;
 use artifact::{base64, browser, Failure};
 use serde::Deserialize;
@@ -181,10 +181,7 @@ pub fn record(
     // headless Chrome narrates, and a recording that worked has nothing to say.
     Err(mut failure) => {
       chrome.stderr.append_to(&mut failure, "Chrome");
-      for warning in warnings {
-        failure.message.push_str("\n  and ");
-        failure.message.push_str(&warning);
-      }
+      and_also(&mut failure, warnings);
       Err(failure)
     }
   }
@@ -549,12 +546,12 @@ impl Chrome {
       wrapper.stdout.take(),
       wrapper.stderr.take(),
     ) else {
-      let _ = kill_group(wrapper.id());
-      let _ = wrapper.wait();
-      return Err(Failure::new(
+      let mut failure = Failure::new(
         "Chrome started without the pipes it was given",
         "report it with the platform",
-      ));
+      );
+      and_also(&mut failure, end_wrapper(&mut wrapper));
+      return Err(failure);
     };
     Ok(Self {
       wrapper,
@@ -581,20 +578,29 @@ impl Chrome {
         self.cdp.closes_within(GRACE);
       }
     }
-    // Before the wrapper is reaped, because its pid is the group's id and
-    // cannot be given to another process until then (issue 0030's trap).
-    if let Err(e) = kill_group(self.wrapper.id()) {
-      warnings.push(format!(
-        "could not run /bin/kill for Chrome's process group {}: {e}",
-        self.wrapper.id()
-      ));
-    }
-    if let Err(e) = self.wrapper.wait() {
-      warnings.push(format!("could not wait for Chrome's wrapper: {e}"));
-    }
+    warnings.extend(end_wrapper(&mut self.wrapper));
     warnings.extend(self.scratch.remove());
     warnings
   }
+}
+
+/// Kills the wrapper's process group, Chrome and everything it started, then
+/// reaps the wrapper, and says what it could not do: the one wording of both,
+/// for `stop` and for a launch whose pipes never came (issue 0096). The kill
+/// comes before the reap, because the wrapper's pid is the group's id and
+/// cannot be given to another process until then (issue 0030's trap).
+fn end_wrapper(wrapper: &mut Child) -> Vec<String> {
+  let mut said = Vec::new();
+  if let Err(e) = kill_group(wrapper.id()) {
+    said.push(format!(
+      "could not run /bin/kill for Chrome's process group {}: {e}",
+      wrapper.id()
+    ));
+  }
+  if let Err(e) = wrapper.wait() {
+    said.push(format!("could not wait for Chrome's wrapper: {e}"));
+  }
+  said
 }
 
 impl Drop for Chrome {
