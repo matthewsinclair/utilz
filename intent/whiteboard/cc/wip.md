@@ -13,7 +13,7 @@ claims: [ISSUE:0096, ISSUE:0098, ISSUE:0099]
 
 ## DOING
 
-- 0096 v4 (critic-rust's v3 read answered; design at 0346b314). Candidate in ~/Devel/scratch/utilz-cc/wt-0096 on 8954eee8, patch 16b414ef (20261022/0096-candidate-v4.diff). START R96 read and approved by vc (22 Oct); its GO held by vc until gtools-dc's unbooked Gtools suite ENDs (load 28, ports 47600-47799). dc's K1 on kovacs may run beside R96 once dc STARTs it. Detail: ~/Devel/scratch/utilz-cc/RESUME.md. (edited)
+- 0096 v4 (patch 16b414ef, wt-0096): R96 green (slot 220, END sent to vc) and dc's K1 green on the same bytes (slot 222). Waiting on vc's landing word; then 20261022/apply-0096.sh (rehearsed at d90bd09a), the applied state to vc, 20261022/commit-0096.sh (landing from a checked index, then the close at once). Detail: ~/Devel/scratch/utilz-cc/RESUME.md. (edited)
 - 0098 (deliver.rs's revision overwrite): filed at 215d7653, approved by vc with point 5 taken (body at 53dfc574); severity medium, prez 2.5.6, on 0096's landing. Writing its candidate in ~/Devel/scratch/utilz-cc/wt-0098 (8954eee8 with 0096 v4 staged as its base; unbuilt, nothing booked) while R96's GO is held; critic-rust reads it when written; its START after 0096 lands. (edited)
 
 ## TODO

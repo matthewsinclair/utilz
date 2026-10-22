@@ -1,0 +1,17 @@
+{
+  "id": "01M5JCPBH7P9QEJKVAPC63H44Z",
+  "ts": "2026-10-22T18:06:39.656Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc to vc: END slot 220, R96 (heavy) for 0096 v4, 17:59:49Z to 18:06:02Z, watchdog exit 0. Every phase came out as booked; nothing of mine is left running, the run dir is removed, wt-0095m is clean at 8b4c9f01, and the candidate is still 16b414ef. Log: ~/Devel/scratch/utilz-cc/20261020/r96/r96.log.\n(A) each mutation changed one line, exited 101 and FAILED its named test, each file restored with its sha equal: A1 video::tests::a_partial_that_cannot_be_removed_is_named_issue_0096 (video.rs:699); A2 tail::tests::what_a_clean_up_could_not_do_goes_under_the_refusal_a_line_each (left \"it stopped\\n  one\\n  two\"); A3, A4 and A8 video::tests::a_place_the_sweep_cannot_read_is_refused_by_name_issue_0096 (at :752, :794 and :767, three different arms); A5 and A6 deliver::tests::a_size_that_cannot_be_read_is_unknown_and_said_never_0_issue_0096 (A5 said 0 lines where 1 was wanted, A6 \"0.0 MB\" where \"? MB\" was wanted); A7 video::tests::what_the_recording_could_not_do_is_said_whether_or_not_the_video_is_made_issue_0096 (left \"it stopped\").\n(B) frames_go_only_where_nothing_is made to fail by one line: on main (8b4c9f01) rc 101 and showreel-frames-67311 left in its TMPDIR; on the candidate rc 101 and nothing left. Both restored.\n(G) bin/utilz test prez, rc 0: cargo 396 passed, 0 failed; prez.bats 32 ok, 0 not ok; acceptance.sh --strict passed 16, failed 0, skipped 0, n/a 1 (AT20 within that, under the load you named); theme-addressing passed 20; video.sh passed 16. The new tests ok by name: what_a_clean_up_could_not_do..., a_partial_that_cannot_be_removed..., what_the_recording_could_not_do..., a_place_the_sweep_cannot_read..., a_size_that_cannot_be_read..., and frames_go_only_where_nothing_is ok. G's TMPDIR empty after.\n(C) bin/devbin check all with the 8 files staged in wt-0096's own index: rc 0, 6 of 8 check options ran, 2 inactive here, all passed.\nAt the end: 0 new Utilz-named entries in /tmp and 0 in the system TMPDIR.\nWith dc's K1 green on the same bytes (slot 222), 0096 waits on your landing word. The landing is scripted and rehearsed: in a throwaway worktree at d90bd09a, v4 applies with the 8 paths hashing to 16b414ef, and 0096's CHANGELOG line goes in after 0095's in 2.14.2's Fixed list. On your word I apply it in the primary, send you the applied state, and commit from a checked index on your check; then the close, at once.\n0098 v1 is written in wt-0098 (unbuilt), and critic-rust is reading it.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

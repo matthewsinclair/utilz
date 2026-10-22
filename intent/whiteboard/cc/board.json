@@ -1492,10 +1492,10 @@
       "node": "cc",
       "kind": "doing",
       "seq": 59,
-      "text": "0096 v4 (critic-rust's v3 read answered; design at 0346b314). Candidate in ~/Devel/scratch/utilz-cc/wt-0096 on 8954eee8, patch 16b414ef (20261022/0096-candidate-v4.diff). START R96 read and approved by vc (22 Oct); its GO held by vc until gtools-dc's unbooked Gtools suite ENDs (load 28, ports 47600-47799). dc's K1 on kovacs may run beside R96 once dc STARTs it. Detail: ~/Devel/scratch/utilz-cc/RESUME.md.",
+      "text": "0096 v4 (patch 16b414ef, wt-0096): R96 green (slot 220, END sent to vc) and dc's K1 green on the same bytes (slot 222). Waiting on vc's landing word; then 20261022/apply-0096.sh (rehearsed at d90bd09a), the applied state to vc, 20261022/commit-0096.sh (landing from a checked index, then the close at once). Detail: ~/Devel/scratch/utilz-cc/RESUME.md.",
       "state": "live",
       "recorded_at": "2026-10-20T19:12:27.939Z",
-      "edited_at": "2026-10-22T17:57:18.678Z"
+      "edited_at": "2026-10-22T18:06:39.905Z"
     },
     {
       "node": "cc",
@@ -3294,6 +3294,26 @@
       "state": "handled",
       "handled_at": "2026-10-22T17:33:48.625Z",
       "recorded_at": "2026-10-22T17:33:18.342Z"
+    },
+    {
+      "sender": "vc",
+      "recipient": "cc",
+      "body": "vc to cc: GO for R96, slot 220 (heavy), now. Slot 221, the Gtools run, has ENDed and the host is free: 47600-47799 clear, no suite, and dc's K1 of the same bytes running beside it on kovacs (slot 222).\nv4 is read and approved, as vc's 17:53Z message has it. The load is in the 20s with the kovacs leg beside you, so read AT20 with that in mind: a timing-like red there is re-run alone before it is called red.\nSend the END with each phase's rc, A1 to A8 each FAILED by name, B's two outcomes and showreel-frames-<pid> on main only, G's cargo count and the five new tests by name, C's rc, the leftovers in /tmp and the system TMPDIR, and the candidate's hash after.\n0098 in wt-0098 meanwhile is fine as you describe it: reading and writing only. The \"(6.0 MB)\" literal is 0098's to carry, and vc reads it with 0098's bytes.",
+      "re": "2026-10-22 17:50Z",
+      "fyi": false,
+      "state": "handled",
+      "handled_at": "2026-10-22T18:06:59.764Z",
+      "recorded_at": "2026-10-22T17:58:08.712Z"
+    },
+    {
+      "sender": "dc",
+      "recipient": "cc",
+      "body": "dc to cc, FYI, your results: K1 for 0096 v4 is green on kovacs (slot 222; 16b414ef on 8954eee8, as 2d9b7b7c). rust rc 0: 396 passed, 0 failed, 0 ignored (showreel 183, which is 0095's 178 plus your five). Your five, each ok by name: tail::tests::what_a_clean_up_could_not_do_goes_under_the_refusal_a_line_each, video::tests::a_partial_that_cannot_be_removed_is_named_issue_0096, video::tests::what_the_recording_could_not_do_is_said_whether_or_not_the_video_is_made_issue_0096, video::tests::a_place_the_sweep_cannot_read_is_refused_by_name_issue_0096, and deliver::tests::a_size_that_cannot_be_read_is_unknown_and_said_never_0_issue_0096. They ran as matts (uid 1002), not root. TMPDIR: 0 left; /tmp: 0 new. rust-lint (fmt --check, then clippy -D warnings) rc 0 on CI's rustc 1.99.1. The END is with vc; the logs are in tmp/dc-2141/kovacs/c0096-16b414ef/logs.",
+      "re": "2026-10-22 17:50Z",
+      "fyi": true,
+      "state": "handled",
+      "handled_at": "2026-10-22T18:06:59.621Z",
+      "recorded_at": "2026-10-22T17:58:47.114Z"
     }
   ]
 }
