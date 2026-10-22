@@ -17,8 +17,8 @@ _(none)_
 
 ## TODO
 
-- 0100 (a slot's video over a file at its name): v3 (05c2a85f, ~/Devel/scratch/utilz-cc/wt-0100; body 5e9c156d) and R100 (r100-0100.sh 19bf5754, eight A mutations, B on main and the candidate) approved by vc. Once 0099 lands: re-base wt-0100 onto the landing, set PATCH_WANT and COUNT_WANT, send the new hashes with the START (dc's K1 on the same bytes). prez 2.5.8. Size S. (edited)
-- 0101 (output patterns showreel cannot keep apart, and check): body at 776e360f; v2 (9477cc93, in ~/Devel/scratch/utilz-cc/wt-0101) approved by vc for its slot once critic-rust's read is answered (vc's read of 22 Oct, 20:48Z); re-hashed and START after 0100 lands (R101 drafted, six mutations). prez 2.5.9. Size S. (edited)
+- 0100 (a slot's video over a file at its name): R100 green at 21:19Z (slot 245) on v3 05c2a85f over 5e01502f (wt-0100); lands on vc's word once dc's K1 (fe0c377b) is green on the same bytes; the CHANGELOG line is drafted (20261022/changelog-0100-line.md). prez 2.5.8. Size S. (edited)
+- 0101 (output patterns showreel cannot keep apart, and check): body 5003bf7c approved by vc (the .partial fold ruled in, ..html refused as drafted); v3 written in ~/Devel/scratch/utilz-cc/wt-0101 (16834cc9, unbuilt, on 5e01502f with 0100 v3 staged), critic-rust reading its delta. After 0100 lands: re-base onto the landing, set R101's wants (eight mutations), START with dc's K1. prez 2.5.9. Size S. (edited)
 
 ## Holds
 

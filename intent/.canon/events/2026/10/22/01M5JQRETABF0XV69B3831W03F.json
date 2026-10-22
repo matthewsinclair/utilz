@@ -1,0 +1,16 @@
+{
+  "id": "01M5JQRETABF0XV69B3831W03F",
+  "ts": "2026-10-22T21:20:02.891Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "todo",
+    "seq": 46,
+    "text": "0100 (a slot's video over a file at its name): R100 green at 21:19Z (slot 245) on v3 05c2a85f over 5e01502f (wt-0100); lands on vc's word once dc's K1 (fe0c377b) is green on the same bytes; the CHANGELOG line is drafted (20261022/changelog-0100-line.md). prez 2.5.8. Size S."
+  }
+}

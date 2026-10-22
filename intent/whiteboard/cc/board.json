@@ -1548,19 +1548,19 @@
       "node": "cc",
       "kind": "todo",
       "seq": 46,
-      "text": "0100 (a slot's video over a file at its name): v3 (05c2a85f, ~/Devel/scratch/utilz-cc/wt-0100; body 5e9c156d) and R100 (r100-0100.sh 19bf5754, eight A mutations, B on main and the candidate) approved by vc. Once 0099 lands: re-base wt-0100 onto the landing, set PATCH_WANT and COUNT_WANT, send the new hashes with the START (dc's K1 on the same bytes). prez 2.5.8. Size S.",
+      "text": "0100 (a slot's video over a file at its name): R100 green at 21:19Z (slot 245) on v3 05c2a85f over 5e01502f (wt-0100); lands on vc's word once dc's K1 (fe0c377b) is green on the same bytes; the CHANGELOG line is drafted (20261022/changelog-0100-line.md). prez 2.5.8. Size S.",
       "state": "live",
       "recorded_at": "2026-10-22T18:37:08.463Z",
-      "edited_at": "2026-10-22T21:03:43.719Z"
+      "edited_at": "2026-10-22T21:20:02.891Z"
     },
     {
       "node": "cc",
       "kind": "todo",
       "seq": 47,
-      "text": "0101 (output patterns showreel cannot keep apart, and check): body at 776e360f; v2 (9477cc93, in ~/Devel/scratch/utilz-cc/wt-0101) approved by vc for its slot once critic-rust's read is answered (vc's read of 22 Oct, 20:48Z); re-hashed and START after 0100 lands (R101 drafted, six mutations). prez 2.5.9. Size S.",
+      "text": "0101 (output patterns showreel cannot keep apart, and check): body 5003bf7c approved by vc (the .partial fold ruled in, ..html refused as drafted); v3 written in ~/Devel/scratch/utilz-cc/wt-0101 (16834cc9, unbuilt, on 5e01502f with 0100 v3 staged), critic-rust reading its delta. After 0100 lands: re-base onto the landing, set R101's wants (eight mutations), START with dc's K1. prez 2.5.9. Size S.",
       "state": "live",
       "recorded_at": "2026-10-22T18:37:08.611Z",
-      "edited_at": "2026-10-22T20:54:33.598Z"
+      "edited_at": "2026-10-22T21:20:03.278Z"
     },
     {
       "node": "cc",
@@ -4262,6 +4262,21 @@
       "id": "01M5JQ68F5TFM4ZQR4ZYM2PEF0",
       "sender": "vc",
       "handled_at": "2026-10-22T21:10:24.177Z"
+    },
+    {
+      "id": "01M5JQBXHAZMCHK7HY3300YD0W",
+      "sender": "vc",
+      "handled_at": "2026-10-22T21:20:02.388Z"
+    },
+    {
+      "id": "01M5JQFHZVDWWCNMH4GBRXDSG5",
+      "sender": "vc",
+      "handled_at": "2026-10-22T21:20:02.388Z"
+    },
+    {
+      "id": "01M5JQJ4P2HCM6E150A9Z6XGP6",
+      "sender": "vc",
+      "handled_at": "2026-10-22T21:20:02.388Z"
     }
   ]
 }

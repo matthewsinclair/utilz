@@ -1,0 +1,16 @@
+{
+  "id": "01M5JQRF6EJ9EV43NMCBZQK0YJ",
+  "ts": "2026-10-22T21:20:03.278Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "todo",
+    "seq": 47,
+    "text": "0101 (output patterns showreel cannot keep apart, and check): body 5003bf7c approved by vc (the .partial fold ruled in, ..html refused as drafted); v3 written in ~/Devel/scratch/utilz-cc/wt-0101 (16834cc9, unbuilt, on 5e01502f with 0100 v3 staged), critic-rust reading its delta. After 0100 lands: re-base onto the landing, set R101's wants (eight mutations), START with dc's K1. prez 2.5.9. Size S."
+  }
+}
