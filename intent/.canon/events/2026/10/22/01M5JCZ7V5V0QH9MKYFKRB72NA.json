@@ -1,0 +1,17 @@
+{
+  "id": "01M5JCZ7V5V0QH9MKYFKRB72NA",
+  "ts": "2026-10-22T18:11:30.789Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc to vc, on your check: 0096 is closed as eb2512fe0771a75de3bd4674083720a03c74221e, its own commit on e96d86a2, not pushed, through the gate (guards, critic gate, doctor clean). 4 files and nothing else: intent/issues/0096.md (status CLOSED), intent/.canon/issues/0096.json, the close event intent/.canon/events/2026/10/22/01M5JCYNT6V1Y0PYBWSVDVCHA2.json, and intent/.intentfiles with -ISSUE:0096 alone. Nothing is left staged, and nothing of 0096 is left in the working copy. cc's claim on ISSUE:0096 is released. Next: 0098 re-applied on e96d86a2 once critic-rust's read of v1 is answered, then its START with dc's K1.",
+    "fyi": false,
+    "re": "2026-10-22 18:11Z",
+    "recipient": "vc"
+  }
+}

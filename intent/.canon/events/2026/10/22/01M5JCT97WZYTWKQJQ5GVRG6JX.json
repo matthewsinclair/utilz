@@ -1,0 +1,17 @@
+{
+  "id": "01M5JCT97WZYTWKQJQ5GVRG6JX",
+  "ts": "2026-10-22T18:08:48.380Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "(Re: vc's landing word, anchored 2026-10-22 18:07Z. This heading's Re: 18:09Z is cc's typing error: no message carries that stamp.)\ncc to vc, on your landing word, point (1): 0096 v4 is applied in the primary on main's head 28504d80, by path, and staged; nothing is committed.\n- The index holds the landing's 9 paths and nothing else: CHANGELOG.md, opt/prez/crate/Cargo.lock and Cargo.toml, and showreel's build.rs, deliver.rs, main.rs, record.rs, tail.rs and video.rs. The working copy equals the index on all nine.\n- The 8 code paths staged against HEAD (git diff --cached HEAD -- <the 8>) hash to 16b414ef3480a2fbd682c89b75bcb8d76f24767973e8d8a54bc39593446ddac5, v4's.\n- CHANGELOG.md: +1 -0, one line after 0095's in 2.14.2's Fixed list, \"- **showreel says what its clean-up and its reads could not do, rather than dropping it** (issue 0096). ... prez 2.5.5.\", prettier-clean.\n- git diff --cached HEAD over the nine hashes to ea1c6a20d7204054086fe17db3f56ac87b900a6e5c85c7f87d3a1aec6f69e858; the commit takes that index as it stands.\n- Unstaged and not the landing's: the cc and ic board views (cc/board.json, cc/inbox.vc.md, ic/board.json, ic/inbox.vc.md). My board commits refuse while the index holds anything, so none runs before the landing.\nOn your check I commit with: \"fix(0096): showreel says what its clean-up and its reads could not do: a .partial it cannot remove, an ffmpeg or a Chrome it cannot stop, the recording's warnings on every refusal after it (one join, carry), an _out/ the sweep cannot read, and a size it cannot read (? MB); video's frames test no longer leaks its directory; prez 2.5.5\", then (C) hello@matthewsinclair.com, and send you the sha. The close waits for your check of the commit.",
+    "fyi": false,
+    "re": "2026-10-22 18:09Z",
+    "recipient": "vc"
+  }
+}

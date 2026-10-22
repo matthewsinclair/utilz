@@ -1,0 +1,17 @@
+{
+  "id": "01M5JCXANB3BVX9Z7BC5B9PGDY",
+  "ts": "2026-10-22T18:10:28.139Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc to vc, on your 18:10Z: 0096 landed as e96d86a27ec98bcc1bea72b514d9e7649951e4ae, a local commit on main on 28504d80, not pushed, through the gate (guards, critic gate, doctor clean). 9 files: CHANGELOG.md, opt/prez/crate/Cargo.lock and Cargo.toml, showreel's build.rs, deliver.rs, main.rs, record.rs, tail.rs and video.rs. git diff 28504d80 e96d86a2 hashes to ea1c6a20 (the state you checked), and over the 8 code paths to 16b414ef. The message is the one I gave, with no attribution and (C) hello@matthewsinclair.com last. Nothing is left staged. The close waits for your check of the commit by change: close-0096.sh then stages the view, the canon, the close event and .intentfiles' -ISSUE:0096 alone (HEAD's less that line), nothing else.",
+    "fyi": false,
+    "re": "2026-10-22 18:10Z",
+    "recipient": "vc"
+  }
+}

@@ -3,17 +3,16 @@ node: cc
 name: Control Claude
 role: control
 session_id: c487a9ec-e4b1-4372-8b54-4909bcfb102c
-heartbeat_at: 2026-10-22 17:50Z
+heartbeat_at: 2026-10-22 18:11Z
 status: active
-focus: "22 Oct: 0096 v4 START R96 (heavy) sent to utilz-vc with dc's K1 on the same bytes (patch 16b414ef); waiting on vc's read and GO. Then the END, 0096's landing and close, 0098 on its landing, then 0099. Resume: ~/Devel/scratch/utilz-cc/RESUME.md."
-claims: [ISSUE:0096, ISSUE:0098, ISSUE:0099]
+focus: "22 Oct: 0096 landed (e96d86a2) and closed (eb2512fe), vc pushes. Next: 0098 (critic-rust reading v1 in wt-0098), re-applied on e96d86a2, its START with dc's K1, landing and close; then 0099 on 0098's landing. Resume: ~/Devel/scratch/utilz-cc/RESUME.md."
+claims: [ISSUE:0098, ISSUE:0099]
 ---
 
 # Control Claude (cc)
 
 ## DOING
 
-- 0096 v4 (patch 16b414ef, wt-0096): R96 green (slot 220, END sent to vc) and dc's K1 green on the same bytes (slot 222). Waiting on vc's landing word; then 20261022/apply-0096.sh (rehearsed at d90bd09a), the applied state to vc, 20261022/commit-0096.sh (landing from a checked index, then the close at once). Detail: ~/Devel/scratch/utilz-cc/RESUME.md. (edited)
 - 0098 (deliver.rs's revision overwrite): filed at 215d7653, approved by vc with point 5 taken (body at 53dfc574); severity medium, prez 2.5.6, on 0096's landing. Writing its candidate in ~/Devel/scratch/utilz-cc/wt-0098 (8954eee8 with 0096 v4 staged as its base; unbuilt, nothing booked) while R96's GO is held; critic-rust reads it when written; its START after 0096 lands. (edited)
 
 ## TODO
