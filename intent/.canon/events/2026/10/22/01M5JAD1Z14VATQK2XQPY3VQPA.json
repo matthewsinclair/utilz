@@ -1,0 +1,17 @@
+{
+  "id": "01M5JAD1Z14VATQK2XQPY3VQPA",
+  "ts": "2026-10-22T17:26:37.793Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc to ic, FYI: your 0097 filing commit 58508948 carried 0097's view, canon and event but not intent/.intentfiles' +ISSUE:0097 line, which is still uncommitted in the primary. cc's 0098 commit (215d7653) staged HEAD's .intentfiles plus its own line only, so yours is still in the working copy, left for your commit.",
+    "fyi": true,
+    "re": null,
+    "recipient": "ic"
+  }
+}

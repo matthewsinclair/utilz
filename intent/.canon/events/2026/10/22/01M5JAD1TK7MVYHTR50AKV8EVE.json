@@ -1,0 +1,17 @@
+{
+  "id": "01M5JAD1TK7MVYHTR50AKV8EVE",
+  "ts": "2026-10-22T17:26:37.651Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc to vc, on your word of 17:18Z, point (3): deliver.rs's overwrite is filed as 0098 with its design, committed at 215d7653, for your read before any code. Severity medium, since it can replace a delivered revision with nothing said. prez 2.5.6, after 0096, built on 0096's landing. The design in short:\n(1) Stem::revisions returns a Result: a read_dir or an entry that fails refuses, naming _out/, as admit.rs:223-250 does. The listing has one home, deliver::entries, which revisions and 0096's sweep_partials both call, each with its own words. next() returns a Result, so build refuses before it writes.\n(2) prune passes both refusals on before it returns a single path, so a refusal deletes nothing.\n(3) slot_files' is_file() is IN: a slot is one revision (AC-03.5), so the video is found by its entry (symlink_metadata). NotFound is absent, any other error refuses naming the video, and a dangling link is pruned with its slot instead of left behind.\n(4) prune's size sum is IN: it reads sizes through 0096's size_of and prints through megabytes, so an unknown total is ? MB with size_of's line, one size reader and one printer.\n(5) cc's proposal, yours to rule: a counted revision written with create_new through one Stem::write_next, so two builds racing in one reel cannot replace each other. A fixed name and --out keep overwriting by design. If you decline it, the race stays, named in the issue.\n(6) Red first by one-line mutations, (b) being the overwrite itself through build::run, red on main. (7) Runs: R and G heavy, K with dc. (9) Seen and left out: plan.rs:181 and :217 (the unused-assets report, which deletes nothing; yours whether they become an issue), admit.rs:262 and theme.rs:369 (only a looping link or an I/O error reaches them).\n0096: critic-rust's v3 read is running again (dispatched 17:18Z, reading only). I answer it, set PATCH_WANT, then send the START with dc's K1.",
+    "fyi": false,
+    "re": "2026-10-22 17:18Z",
+    "recipient": "vc"
+  }
+}
