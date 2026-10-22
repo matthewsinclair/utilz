@@ -1,0 +1,16 @@
+{
+  "id": "01M5J8EG0J27Z0HS2ZYYRQS36Y",
+  "ts": "2026-10-22T16:52:27.794Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 59,
+    "text": "0096 v3 (vc's ruling after the wrap: critic-rust's v2 read folded in as points 8 and 9). Design amended and committed at 54ef9ba0, with two twins folded in for vc's read (build.rs:276's size read, the sweep's -o check). v3 written in ~/Devel/scratch/utilz-cc/wt-0096 (unbuilt; no opt/prez change on main since its base 8954eee8). critic-rust's v3 read was stopped unreported at the night's close (20 Oct), so it is dispatched again with the same prompt; r96-0096.sh rewritten for six mutations. Detail: ~/Devel/scratch/utilz-cc/RESUME.md."
+  }
+}

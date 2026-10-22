@@ -2,10 +2,10 @@
 node: cc
 name: Control Claude
 role: control
-session_id: 9c567467-c0fd-43d8-bf41-98005d410e1e
-heartbeat_at: 2026-10-20 19:15Z
-status: paused
-focus: "Closed for the night of 20 Oct (hv's word): 0096 v3 written in wt-0096, unbuilt; tomorrow critic-rust's read answered, then the START with dc's K1 (hold 40); the hand-off is in vc's inbox. Resume: ~/Devel/scratch/utilz-cc/RESUME.md."
+session_id: c487a9ec-e4b1-4372-8b54-4909bcfb102c
+heartbeat_at: 2026-10-22 16:52Z
+status: active
+focus: "22 Oct: booted, holding for vc's instructions (hv's word). Next on vc's word: critic-rust's v3 read again (20 Oct's was stopped unreported), the START with dc's K1 (hold 40), 0096's landing and close, then the deliver.rs issue (todo). Resume: ~/Devel/scratch/utilz-cc/RESUME.md."
 claims: [ISSUE:0096]
 ---
 
@@ -13,15 +13,16 @@ claims: [ISSUE:0096]
 
 ## DOING
 
-- 0096 v3 (vc's ruling after the wrap: critic-rust's v2 read folded in as points 8 and 9). Design amended and committed at 54ef9ba0, with two twins folded in for vc's read (build.rs:276's size read, the sweep's -o check). v3 written in ~/Devel/scratch/utilz-cc/wt-0096 (unbuilt); critic-rust reading it; r96-0096.sh rewritten for six mutations. Detail: ~/Devel/scratch/utilz-cc/RESUME.md.
+- 0096 v3 (vc's ruling after the wrap: critic-rust's v2 read folded in as points 8 and 9). Design amended and committed at 54ef9ba0, with two twins folded in for vc's read (build.rs:276's size read, the sweep's -o check). v3 written in ~/Devel/scratch/utilz-cc/wt-0096 (unbuilt; no opt/prez change on main since its base 8954eee8). critic-rust's v3 read was stopped unreported at the night's close (20 Oct), so it is dispatched again with the same prompt; r96-0096.sh rewritten for six mutations. Detail: ~/Devel/scratch/utilz-cc/RESUME.md. (edited)
 
 ## TODO
 
-_(none)_
+- deliver.rs's revision overwrite (vc's word, 20 Oct 19:17Z): Stem::revisions (deliver.rs:190-210) takes an _out/ it cannot read as empty, so next() names 001 and build.rs:265's std::fs::write overwrites a delivered 001. Its own issue, cc's, for 2.14.2 after 0096: filed with its design before any source edit, for vc's read. Size M.
 
 ## Holds
 
 - The START (heavy) for 0096 v3, r96-0096.sh (A1-A6, B, G, C) with utilz-dc's K1 on the same bytes. Released when vc is back from hv's compact (its pickup) and critic-rust's v3 read is answered: vc's rule, nothing STARTs or GOes until after the compacts.
+- Holding for vc's instructions (hv's word at boot, 22 Oct). Released by vc's first word to cc dated 22 Oct. Until then reading only: no dispatch, run, build, source or store edit, filing or landing.
 
 ## Watch-outs
 
