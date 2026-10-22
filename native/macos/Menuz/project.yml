@@ -3,8 +3,8 @@ options:
   bundleIdPrefix: com.matthewsinclair.utilz
   deploymentTarget:
     macOS: "26.0"
-  # The Xcode floor's one home: `menuz doctor` reads it (issue 0073).
-  xcodeVersion: "26.0"
+  # The Xcode floor's one home: `menuz doctor` reads it (issues 0073, 0097).
+  xcodeVersion: "27.1"
   generateEmptyDirectories: true
 # Gtools' project.yml cut to what Menuz.app needs (ST0027 WP-03): an
 # LSUIElement app over the MenuzKit package, Automatic signing with the
@@ -21,8 +21,7 @@ packages:
   # The menu's top row and its About window (issue 0073). XcodeGen's
   # up-to-next-minor: before 1.0 a minor release may change the API, so a new
   # one is taken on purpose, never by a fresh resolve. It needs macOS 26 and
-  # Swift 6.2, so Xcode 26, and 0.1.1 or later, since 0.1.0 does not build as
-  # a dependency on Xcode 26.6 (arca_swift issue 0002).
+  # Swift 6.2, which menuz's Xcode floor, xcodeVersion above, meets.
   ArcaSwift:
     url: https://github.com/builtwitharca/arca_swift
     minorVersion: 0.1.1

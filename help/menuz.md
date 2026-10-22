@@ -244,7 +244,7 @@ A file that fails in the running app keeps the last good menu on screen and show
 
 ### Building and installing
 
-The app's source and its xcodegen project live at `native/macos/Menuz/`. The app runs on macOS 26 or later, and builds with Xcode 26 or later, the floor `project.yml`'s `xcodeVersion` names and `menuz doctor` checks. `menuz build` runs xcodegen only when there is no `Menuz.xcodeproj`, `project.yml` changed, or a source file was added or removed, then builds Debug, or Release with `--release`, with every product and intermediate under `${XDG_STATE_HOME:-$HOME/.local/state}/menuz/build/macos/`, off the tree. It prints where xcodebuild's log is. A failed build prints the log's `error:` and `fatal error:` lines first, the first 20 with a count of the rest, then the log's last 40 lines. `--unsigned` builds with no signing identity, as CI does. `menuz test` runs the app's tests, `MenuzTests` and `MenuzKitTests`, the same way, in Debug.
+The app's source and its xcodegen project live at `native/macos/Menuz/`. The app runs on macOS 26 or later, and builds with Xcode 27.1 or later, the floor `project.yml`'s `xcodeVersion` names and `menuz doctor` checks. `menuz build` runs xcodegen only when there is no `Menuz.xcodeproj`, `project.yml` changed, or a source file was added or removed, then builds Debug, or Release with `--release`, with every product and intermediate under `${XDG_STATE_HOME:-$HOME/.local/state}/menuz/build/macos/`, off the tree. It prints where xcodebuild's log is. A failed build prints the log's `error:` and `fatal error:` lines first, the first 20 with a count of the rest, then the log's last 40 lines. `--unsigned` builds with no signing identity, as CI does. `menuz test` runs the app's tests, `MenuzTests` and `MenuzKitTests`, the same way, in Debug.
 
 Each build stamps the app with five values, which `menuz stamps` prints one `NAME=value` a line before a build: `MENUZ_VERSION`, from `opt/menuz/VERSION`; `MENUZ_BUILD`, the commit count; `MENUZ_COMMIT`, the commit's first eight characters; `MENUZ_SOURCE_TREE`, the stamp of the app's sources, ending `-dirty` when the working tree differs from the commit there; and `MENUZ_KIND`, `release` when the source stamp is clean and the commit carries the release tag that Utilz's root `VERSION` file names (a bare tag, `2.14.0`, never `v2.14.0`), and `dev` otherwise. `status` compares the installed app's `MENUZ_SOURCE_TREE` with the tree's to say whether it is current.
 
@@ -361,7 +361,7 @@ Every run also has `MENUZ_HOME`, `MENUZ_LABEL`, `MENUZ_RUN_ID` and, under `each`
 ## Dependencies
 
 - macOS 26 or later -- for `Menuz.app`, whose top row and About window need it.
-- Xcode 26 or later and `xcodegen` (optional) -- needed by `build`, `test` and `install` in a source clone; `utilz doctor` reports them only where the app's source, `native/macos/Menuz/`, is present.
+- Xcode 27.1 or later and `xcodegen` (optional) -- needed by `build`, `test` and `install` in a source clone; `utilz doctor` reports them only where the app's source, `native/macos/Menuz/`, is present.
 
 ---
 

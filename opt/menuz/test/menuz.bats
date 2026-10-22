@@ -126,7 +126,7 @@ source_home() {
   if [[ "${1:-}" != --no-source ]]; then
     mkdir -p "$SRC/native/macos/Menuz/Menuz" "$SRC/native/macos/Menuz/MenuzTests"
     # The Xcode floor, as project.yml carries it: doctor reads it (issue 0073).
-    printf 'name: Menuz\noptions:\n  xcodeVersion: "26.0"\n' >"$SRC/native/macos/Menuz/project.yml"
+    printf 'name: Menuz\noptions:\n  xcodeVersion: "27.1"\n' >"$SRC/native/macos/Menuz/project.yml"
     echo 'print("menuz")' >"$SRC/native/macos/Menuz/Menuz/App.swift"
     echo 'test' >"$SRC/native/macos/Menuz/MenuzTests/AppTests.swift"
   fi
@@ -208,7 +208,7 @@ run_src_menuz() {
 
 @test "AT-02.1: doctor says nothing of Xcode when xcodebuild runs" {
   source_home
-  fake xcodebuild 'echo "Xcode 26.0"; exit 0'
+  fake xcodebuild 'echo "Xcode 27.1"; exit 0'
   run /bin/bash -c "export UTILZ_HOME='$SRC'; source '$SRC/opt/utilz/lib/common.sh'; run_doctor"
   refute_output_contains "xcodebuild -version does not run"
 }
@@ -551,7 +551,7 @@ xcode_fakes() {
   fake xcodegen 'mkdir -p Menuz.xcodeproj'
   fake xcodebuild '
 if [[ "$1" == -version ]]; then
-  printf "Xcode 26.0\nBuild version 17A100\n"
+  printf "Xcode 27.1\nBuild version 27A9275\n"
   exit 0
 fi
 sym="" cfg="" prev=""
@@ -1249,7 +1249,7 @@ doctor_fixture() {
     printf '%s\n' "$output" | grep -Eq "^$label +ok "
   done
   assert_output_contains "/Applications/Xcode.app/Contents/Developer"
-  assert_output_contains "Xcode 26.0"
+  assert_output_contains "Xcode 27.1"
   assert_output_contains "2 codesigning"
   refute_output_contains "0123ABCD"
   refute_output_contains "4567EF01"
@@ -1274,18 +1274,18 @@ doctor_fixture() {
 @test "AT-05.1: doctor fails an Xcode below project.yml's xcodeVersion, and a floor it cannot read or compare (issue 0073)" {
   doctor_fixture
   local yml="$SRC/native/macos/Menuz/project.yml"
-  fake xcodebuild 'printf "Xcode 16.4\nBuild version 16F6\n"'
+  fake xcodebuild 'printf "Xcode 26.6\nBuild version 17F113\n"'
   run_src_menuz doctor
   assert_exit_code 1
-  printf '%s\n' "$output" | grep -Eq "^xcode +FAIL .*Xcode 16\.4 is below menuz's floor, Xcode 26\.0 "
-  fake xcodebuild 'printf "Xcode 26.0.1\nBuild version 17A101\n"'
+  printf '%s\n' "$output" | grep -Eq "^xcode +FAIL .*Xcode 26\.6 is below menuz's floor, Xcode 27\.1 "
+  fake xcodebuild 'printf "Xcode 27.1.1\nBuild version 27A9301\n"'
   run_src_menuz doctor
   assert_success
-  printf '%s\n' "$output" | grep -Eq "^xcode +ok .*Xcode 26\.0\.1$"
-  printf 'name: Menuz\noptions:\n  xcodeVersion: "26.x"\n' >"$yml"
+  printf '%s\n' "$output" | grep -Eq "^xcode +ok .*Xcode 27\.1\.1$"
+  printf 'name: Menuz\noptions:\n  xcodeVersion: "27.x"\n' >"$yml"
   run_src_menuz doctor
   assert_exit_code 1
-  printf '%s\n' "$output" | grep -Eq "^xcode +FAIL .*Xcode 26\.0\.1: cannot compare it with menuz's floor, Xcode 26\.x$"
+  printf '%s\n' "$output" | grep -Eq "^xcode +FAIL .*Xcode 27\.1\.1: cannot compare it with menuz's floor, Xcode 27\.x$"
   echo 'name: Menuz' >"$yml"
   run_src_menuz doctor
   assert_exit_code 1
@@ -1298,10 +1298,10 @@ doctor_fixture() {
 
 @test "AT-05.1: doctor reads Xcode's version from its own line, past anything xcodebuild prints first (issue 0073)" {
   doctor_fixture
-  fake xcodebuild 'echo "xcodebuild[1:1] Requested but did not find extension point" >&2; printf "Xcode 26.0\nBuild version 17A100\n"'
+  fake xcodebuild 'echo "xcodebuild[1:1] Requested but did not find extension point" >&2; printf "Xcode 27.1\nBuild version 27A9275\n"'
   run_src_menuz doctor
   assert_success
-  printf '%s\n' "$output" | grep -Eq "^xcode +ok .*Xcode 26\.0$"
+  printf '%s\n' "$output" | grep -Eq "^xcode +ok .*Xcode 27\.1$"
   fake xcodebuild 'echo "no version here"'
   run_src_menuz doctor
   assert_exit_code 1

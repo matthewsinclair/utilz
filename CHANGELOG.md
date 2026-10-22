@@ -9,6 +9,10 @@ The section still open names its version: `## [X.Y.Z] - unreleased`, never `## [
 
 ## [2.14.2] - unreleased
 
+### Changed
+
+- **menuz builds with Xcode 27.1 or later, and CI builds and tests the app on Xcode 27.1** (issue 0097). The release's `Menuz.app` was already built with Xcode 27.1, while menuz's floor and the `menuz app` job named Xcode 26. `menuz doctor` in a source clone now fails an Xcode older than 27.1, and the job runs on GitHub's `xcode-27` image with Xcode 27.1 named. The app still runs on macOS 26.
+
 ### Fixed
 
 - **prez's acceptance suite no longer leaves its decks in TMPDIR, and a `pdf` whose print fails leaves nothing behind** (issue 0095). `prez present` stages its deck in TMPDIR and leaves it there for the browser on purpose, so the suite's six `present` runs left six decks in the caller's TMPDIR on every run; the suite now gives everything it runs a TMPDIR inside its own work directory, removed when it ends. `prez pdf` staged its HTML in TMPDIR and removed it only after a print that worked, so a print that failed left it behind; it now stages in a scratch directory of its own, removed on every path out, and a removal that fails is said. The scratch directory is showreel's, moved into `artifact` so the two tools share one. prez 2.5.4.

@@ -518,10 +518,14 @@ jobs:
     # project is stale and xcodebuild with the products under XDG state; test
     # runs the scheme, MenuzKitTests and MenuzTests both. macos.bats runs in
     # test-macos's full run and in test-linux's loop, with its fakes. The
-    # app's floor is macOS 26 and Swift 6.2 (issue 0073), which macos-15's
-    # Xcode 16 cannot build, so the job runs on macos-26's default Xcode.
-    runs-on: macos-26
+    # app runs on macOS 26 (issue 0073) and builds with Xcode 27.1, the Xcode
+    # the release asset is built with (issue 0097), so the job runs on the
+    # xcode-27 image, a preview on macOS 27, with 27.1 named: the image's
+    # default moves, and on an image without 27.1 xcodebuild -version fails.
+    runs-on: xcode-27
     if: ${{ github.ref_type == 'tag' || github.event_name == 'workflow_dispatch' }}
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_27.1.app/Contents/Developer
 
     steps:
     - uses: actions/checkout@v7.0.1
