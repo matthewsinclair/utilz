@@ -1,0 +1,16 @@
+{
+  "id": "01M5JRM951V01QNHJAJ9HPA7H5",
+  "ts": "2026-10-22T21:35:14.593Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "todo",
+    "seq": 47,
+    "text": "0101 (output patterns showreel cannot keep apart, and check): R101 green at 21:34Z (slot 249) on v3 f3052fd8 over 0100's landing d43fd14b (wt-0101; vc read it green); lands on vc's word once dc's K1 is green on the same bytes (rust-lint on 1.99.1, hv's decision 55); the CHANGELOG line is drafted (20261022/changelog-0101-line.md). prez 2.5.9. Size S."
+  }
+}

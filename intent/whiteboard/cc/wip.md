@@ -17,7 +17,7 @@ _(none)_
 
 ## TODO
 
-- 0101 (output patterns showreel cannot keep apart, and check): R101 green at 21:34Z (slot 249) on v3 f3052fd8 over 0100's landing d43fd14b (wt-0101); lands on vc's word once dc's K1 is green on the same bytes (K1 waits for kovacs-sysadm's Rust 1.99.0, hv's call); the CHANGELOG line is drafted (20261022/changelog-0101-line.md). prez 2.5.9. Size S. (edited)
+- 0101 (output patterns showreel cannot keep apart, and check): R101 green at 21:34Z (slot 249) on v3 f3052fd8 over 0100's landing d43fd14b (wt-0101; vc read it green); lands on vc's word once dc's K1 is green on the same bytes (rust-lint on 1.99.1, hv's decision 55); the CHANGELOG line is drafted (20261022/changelog-0101-line.md). prez 2.5.9. Size S. (edited)
 
 ## Holds
 
