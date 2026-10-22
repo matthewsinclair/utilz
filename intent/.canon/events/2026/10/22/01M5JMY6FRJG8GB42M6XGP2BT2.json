@@ -1,0 +1,15 @@
+{
+  "id": "01M5JMY6FRJG8GB42M6XGP2BT2",
+  "ts": "2026-10-22T20:30:45.240Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "todo",
+    "text": "0102's kovacs leg (ic's: menuz's log window colours the three lines it leaves plain, on hv's yes in utilz-ic's session, hv's decision 54; menuz 0.4.7), when ic's START names G's bytes: one heavy kovacs leg on them, step menuz (menuz.bats and macos.bats, as tests.yml's Ubuntu loop runs them; menuz.bats reads opt/menuz/VERSION, AT-02.1), in work/kv-c0072.sh's shape, and shellcheck 0.9.0 of opt/menuz/menuz only if 0102 changes it. vc fits it into any of Intent's gaps (hv's decision 53), since it touches none of cc's paths. Size S. (vc, 22 Oct)"
+  }
+}

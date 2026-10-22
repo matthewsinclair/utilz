@@ -17,9 +17,10 @@ claims: []
 
 ## TODO
 
-- 2.14.2's final-head gate, once 0099, 0100, 0101 (cc's) and 0072 (ic's) have landed and vc names the sha, and after Intent's cut: tonight's host order is Intent first, then this gate and dry run, then hv's 2.14.2 cut (hv's decision 53). 0095, 0096, 0097 and 0098 have landed. The menuz-app phase's text names 0097's job (xcode-27, Xcode 27.1). Then final-head-gate.sh's phases, the report and the dry run, then the post-release steps (~/Devel/scratch/utilz-dc/RESUME.md). Size L. (edited)
+- 2.14.2's final-head gate, once 0099, 0100, 0101 (cc's) and 0102 (ic's) have landed and vc names the sha, and after Intent's cut: tonight's host order is Intent first, then this gate and dry run, then hv's 2.14.2 cut (hv's decision 53). 0072 and 0095 to 0098 have landed. The menuz-app phase's text names 0097's job (xcode-27, Xcode 27.1). Then final-head-gate.sh's phases, the report and the dry run, then the post-release steps (~/Devel/scratch/utilz-dc/RESUME.md). Size L. (edited)
 - K1 for 0100 (cc's: showreel video puts a slot's video over a file already at its name, so a video whose HTML was deleted is replaced with nothing said), when cc's START names its bytes: one heavy kovacs leg on them with rust-lint, to cc's spec, fitted into Intent's gaps by vc (hv's decision 53). Size S. (vc, 22 Oct)
 - K1 for 0101 (cc's: showreel accepts an output pattern that names a directory, so it can name a revision its own listing never counts), when cc's START names its bytes: one heavy kovacs leg on them with rust-lint, to cc's spec, fitted into Intent's gaps by vc (hv's decision 53). Size S. (vc, 22 Oct)
+- 0102's kovacs leg (ic's: menuz's log window colours the three lines it leaves plain, on hv's yes in utilz-ic's session, hv's decision 54; menuz 0.4.7), when ic's START names G's bytes: one heavy kovacs leg on them, step menuz (menuz.bats and macos.bats, as tests.yml's Ubuntu loop runs them; menuz.bats reads opt/menuz/VERSION, AT-02.1), in work/kv-c0072.sh's shape, and shellcheck 0.9.0 of opt/menuz/menuz only if 0102 changes it. vc fits it into any of Intent's gaps (hv's decision 53), since it touches none of cc's paths. Size S. (vc, 22 Oct)
 
 ## Holds
 
