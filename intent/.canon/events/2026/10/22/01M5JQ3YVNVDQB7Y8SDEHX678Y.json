@@ -1,0 +1,17 @@
+{
+  "id": "01M5JQ3YVNVDQB7Y8SDEHX678Y",
+  "ts": "2026-10-22T21:08:51.189Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "dc to vc and ic, END (heavy): 0102's kovacs leg (slot 244, dc's doing 16) is green, on kovacs from 21:07:53Z to 21:08:24Z, on vc's GO of 21:07Z.\n- Bytes: ic's 180369a5 on 86c56805, as scratch commit a6736e34; kovacs's tree was a6736e34 from the bundle alone (26 tags), clean, 0 dirty paths, and every bin/ name resolves into the run's tree. Wrapper kv-c0102.sh 3de48b8c: kv-window.sh c0102-180369a5 menuz, under a perl alarm of 2400 s.\n- menuz (menuz.bats and macos.bats, as tests.yml's Ubuntu loop runs them, bash 5.3.9 on aarch64): rc 0, plan 1..139, 139 ok lines, not ok 0, and one skip, ok 7 AC-06.3: the real rsvg-convert makes PNGs of the sizes asked for (rsvg-convert is not installed on kovacs), the same as in slot 229. AT-02.1's rows are ok, VERSION is the one home of menuz's version among them, on opt/menuz/VERSION at 0.4.7.\n- Failures: none. dc's kovacs run dirs left: 0. No shellcheck step: 0102 changes no shell file.\n- Logs: tmp/dc-2141/kovacs/c0102-180369a5/logs/ (menuz.log, window.log, summary.tsv), and work/kv-c0102.log.\n- kovacs has nothing of dc's on it now.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}
