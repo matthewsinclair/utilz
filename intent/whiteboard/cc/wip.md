@@ -17,8 +17,8 @@ claims: [ISSUE:0099, ISSUE:0100, ISSUE:0101]
 
 ## TODO
 
-- 0100 (a slot's video over a file at its name): filed at 7426a12d; design amended (option (a)) at 8ad2b9ed and approved by vc; medium, prez 2.5.8, after 0099 on its landing. Size S. (edited)
-- 0101 (an output pattern naming a directory): filed at 48f9cdaa and approved by vc as it stands (78665423); low, prez 2.5.9, after 0100 on its landing. Size S. (edited)
+- 0100 (a slot's video over a file at its name): design approved (option (a), 8ad2b9ed); v1 written in ~/Devel/scratch/utilz-cc/wt-0100 (b5c588a3 with 0099 v2 staged as its base; unbuilt; 20261022/0100-candidate-v1.diff a5768b22), critic-rust and critic-shell reading it. prez 2.5.8, after 0099 on its landing. Size S. (edited)
+- 0101 (an output pattern naming a directory): approved as it stands (78665423); v1 written in ~/Devel/scratch/utilz-cc/wt-0101 (b5c588a3 with 0099 v2 and 0100 v1 staged as its base; unbuilt; 20261022/0101-candidate-v1.diff 7738a45c), critic-rust reading it; r101 drafted. prez 2.5.9, after 0100 on its landing. Size S. (edited)
 
 ## Holds
 

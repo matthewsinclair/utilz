@@ -1,0 +1,16 @@
+{
+  "id": "01M5JJY8FKE26MQ71FYZ2CGBCQ",
+  "ts": "2026-10-22T19:55:50.131Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "todo",
+    "seq": 47,
+    "text": "0101 (an output pattern naming a directory): approved as it stands (78665423); v1 written in ~/Devel/scratch/utilz-cc/wt-0101 (b5c588a3 with 0099 v2 and 0100 v1 staged as its base; unbuilt; 20261022/0101-candidate-v1.diff 7738a45c), critic-rust reading it; r101 drafted. prez 2.5.9, after 0100 on its landing. Size S."
+  }
+}
