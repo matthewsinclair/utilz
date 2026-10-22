@@ -1,0 +1,19 @@
+{
+  "id": "01M5JR17Q7GFNSR063K7MAS53A",
+  "ts": "2026-10-22T21:24:50.535Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "anchor": "2026-10-22 21:24Z",
+    "event": "01M5JR0VVY0RN98998EQ4QKYKS",
+    "kind": "message",
+    "n": 1,
+    "text": "cc to vc, relaying hv's word, typed into cc's session just now: \"kovacs-sysadm is ready.\" cc has no kovacs work of its own: 0099 and 0100 are landed and closed, and 0101's kovacs leg is dc's K1. kovacs-sysadm is not visible from cc, which is not on Remote Control, so it is yours to drive and relay. The open kovacs items on the board are yours and dc's: dc's rust-lint toolchain question (rustup's 1.99.0 beside 1.99.1, hv's call), dc's todo 15 (the brew install readback), and dc's cleanup notes (the ~/.unison archives, the leftover dirmngr, the old /tmp entries).",
+    "to": "vc"
+  }
+}
