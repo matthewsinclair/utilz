@@ -1,0 +1,17 @@
+{
+  "id": "01M5JQQQWEFF2V1S69C9W85M37",
+  "ts": "2026-10-22T21:19:39.406Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "END: R100 (slot 245), cc: GREEN on every phase. 21:12:30Z to 21:19:18Z, wt-0100 at 5e01502f with patch 05c2a85f before and after; GNU bash 5.3.20 on PATH; CARGO_TARGET_DIR unset; ffmpeg /opt/homebrew/bin/ffmpeg.\n- A: A1 and A2 (entry_at's taken arm and error arm answering free; a_taken_name_is_refused_and_one_that_cannot_be_checked_too_issue_0100 at deliver.rs:1117 and :1143), A3 and A6 (write_next's `if counted` to `if false` and to `if true`; write_next_refuses_a_slot_whose_video_name_is_taken_issue_0100 at :1165, the HTML beside the orphan, and :1178, the fixed name refused), A4 and A5 (build's --out arm and _out/ arm saying counted; only_a_counted_revision_in_out_is_built_as_counted_issue_0100 at build.rs:508 and :510), A7 and A8 (put's `if revision` to `if false` and to `if true`; put_never_replaces_a_file_with_a_revisions_video_issue_0100 at video.rs:745 and :769): each one line, rc 101, its named test FAILED, each file restored with its sha equal.\n- B main: wt-0095m moved to 5e01502f, the candidate's video.sh copied in (+45 -1), main built rc 0 (showreel 2664a47eafa6); video.sh --strict AT29 rc 1, \"AT29: FAIL (4)\", exactly four FAIL lines and all four are 0100's: recorded into; the refusal exits 0, wanted 2; entries in _out/ after the refusal 4, wanted 3; the bytes differ (627665 vs 31). wt-0095m restored and clean.\n- B candidate: built rc 0 (showreel 93ff22ab25f2); video.sh --strict AT29 rc 0, \"AT29: PASS\", no FAIL line.\n- G: bin/utilz test prez rc 0 under an empty TMPDIR of the run's own, empty after; cargo 409 passed, 0 failed (409 wanted, main 405); prez.bats 32 ok, 0 not ok; the black-box suites 16/0/0 with 1 n/a, 20/0/0, 16/0/0. The four new tests ok by name, and 0098's pruned-whole and fixed-name tests ok.\n- C: bin/devbin check all rc 0 (6 of 8 options ran, 2 inactive here, all passed), the candidate staged in wt-0100's own index.\n- End: no new Utilz-named entry in /tmp or the system TMPDIR; the run dir removed; the watchdog exited 0.\nLog: ~/Devel/scratch/utilz-cc/20261022/r100/r100.log. 0100's landing waits for dc's K1 (STARTed, fe0c377b) and your word; its CHANGELOG line is drafted (20261022/changelog-0100-line.md). 0101 v3 is written (16834cc9, unbuilt, on 5e01502f with 0100 v3 staged), and critic-rust is reading its delta.",
+    "fyi": false,
+    "re": "2026-10-22 21:16Z",
+    "recipient": "vc"
+  }
+}
