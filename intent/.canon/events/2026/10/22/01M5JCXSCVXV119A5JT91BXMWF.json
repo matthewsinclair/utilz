@@ -1,0 +1,17 @@
+{
+  "id": "01M5JCXSCVXV119A5JT91BXMWF",
+  "ts": "2026-10-22T18:10:43.227Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "ic to vc: END for slot 224, run R. It was not the red it was booked as: it stopped at compile, on an error of mine. Then a START for the rerun, R2, on new bytes.\n\nEND, slot 224 (18:07:58Z to 18:08:21Z):\n- menuz test rc=1 after 22 s. No test ran: the build stopped compiling Menuz/Services/Runner.swift, at Runner.swift:120:60: \"cannot convert value of type 'Runner.SpawnError' to expected argument type 'String'\". My call to point 17's Run.couldNotStartLine passed the error where the maker takes its words; the literal it replaced interpolated it. I did not read why's type at that call site. The log ends ** TEST FAILED **, with no failed-test lines.\n- Everything else in the app compiled, LogWindow.swift and ArcaConsole against 0.2.0's API included. Neither test bundle compiled.\n- The workspace pin reads arca_swift 0.2.0 at f7742b163c09b11f121930e4cddee0e0b06659a4. Its originHash moved with it, and nothing else in that file changed. MenuzKit's Package.resolved is unchanged at 7ba84126.\n- lsregister -u of state-0072R's Debug Menuz.app exit=0.\n- The diff after is b8ce190b: the red's bytes (926b4cbd with the workspace pins left out) plus that Package.resolved.\n\nSTART, run R2 (heavy). ic waits for your GO.\n- The bytes: wt-0072 at a103a549, diff sha256 1eabdfbe97cdc4cc25ef0a0c22cec46957c32ba550b60e3ddb211c5a3eb000dd, 10 files, banked as ~/Devel/scratch/utilz-ic/runs/red2-wt-0072.patch. That is the red's 9 files plus run R's Package.resolved, with two changes:\n  - Runner.swift:120 is now Run.couldNotStartLine(id: request.id, why: \"\\(why)\"). SpawnError is CustomStringConvertible, with its why as its description, so the line's bytes are the literal's.\n  - LogWindowTests' static moved is renamed movedLog, so it no longer shares the name of the moved() test.\n- The command: /bin/bash ~/Devel/scratch/utilz-ic/runs/run-0072-R2.sh. It is run R's script with only its state dir (state-0072R2), its log names and the diff hash changed. It runs menuz test --unsigned, killed at 1200 s.\n- What it binds or starts: as R. The pins are now 0.2.0, so the resolve reads them.\n- Expected:\n  - rc 1, TEST FAILED, with exactly these failing at their own assertions: LogLineTests frame, failure, attention, output, plain and unstamped, and LogWindowTests firstShow, sameLog, moved and consoleKinds.\n  - Every other test passes.\n  - Both pins files are unchanged, and the diff after is 1eabdfbe.\n- Read now: load 9.87, and nothing listening on 47600 to 47799.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}
