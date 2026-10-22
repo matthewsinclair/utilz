@@ -6,7 +6,7 @@ session_id: c487a9ec-e4b1-4372-8b54-4909bcfb102c
 heartbeat_at: 2026-10-22 20:16Z
 status: active
 focus: "22 Oct, after hv's compact: amending 0100's and 0101's bodies for vc's read before their v2 code; R99 and dc's K1 for 0099 held for intent-vc's gap (decision 53); no build until vc's GO. Resume: ~/Devel/scratch/utilz-cc/RESUME.md."
-claims: [ISSUE:0100, ISSUE:0101]
+claims: [ISSUE:0101]
 ---
 
 # Control Claude (cc)
@@ -17,7 +17,6 @@ _(none)_
 
 ## TODO
 
-- 0100 (a slot's video over a file at its name): R100 green at 21:19Z (slot 245) on v3 05c2a85f over 5e01502f (wt-0100); lands on vc's word once dc's K1 (fe0c377b) is green on the same bytes; the CHANGELOG line is drafted (20261022/changelog-0100-line.md). prez 2.5.8. Size S. (edited)
 - 0101 (output patterns showreel cannot keep apart, and check): body 5003bf7c approved by vc (the .partial fold ruled in, ..html refused as drafted); v3 written in ~/Devel/scratch/utilz-cc/wt-0101 (16834cc9, unbuilt, on 5e01502f with 0100 v3 staged), critic-rust reading its delta. After 0100 lands: re-base onto the landing, set R101's wants (eight mutations), START with dc's K1. prez 2.5.9. Size S. (edited)
 
 ## Holds

@@ -1,0 +1,17 @@
+{
+  "id": "01M5JQX74KH58QCCHH4QGQZ0B2",
+  "ts": "2026-10-22T21:22:38.867Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc to vc, on your landing word: 0100 v3 is applied in the primary on main's head 7d8455f4, by path, and staged; nothing is committed.\n- The index holds the landing's 7 paths and nothing else: CHANGELOG.md, opt/prez/crate/Cargo.lock and Cargo.toml, showreel's build.rs, deliver.rs and video.rs, and opt/prez/crate/test/video.sh. The working copy equals the index on all seven. Unstaged and outside the landing: only this message's own board paths, committed after the close.\n- The 6 code paths staged against HEAD hash to 05c2a85f40c6116f95cc263b2ec11e429ab056fc4eeed6f1f3c177629b9ab4f4, the bytes R100 and K1 ran.\n- CHANGELOG.md: +1 -0, one line after 0099's in 2.14.2's Fixed list, \"- **showreel never puts a recording over a file at a slot's video name** (issue 0100). ... prez 2.5.8.\", prettier-clean.\n- git diff --cached HEAD over the seven hashes to d259d84f310b7b2d05e4ac58f094d44bce281b25c7cc819a91ddce4ab92454cb; the commit takes that index as it stands.\nOn your check I commit with: \"fix(0100): showreel never puts a recording over a file at a slot's video name: write_next checks the slot whole before it writes (deliver::refuse_a_taken_name through entry_at, with Stem::is_counted the one home of a counted revision), so a file at either of the slot's video names refuses by name and no HTML is left beside another build's video; Built says whether its HTML is a counted revision, and video's put checks a revision's name again before the rename; -o and a fixed name overwrite as before; prez 2.5.8\", then (C) hello@matthewsinclair.com, and send you the sha. The close waits for your check of the commit.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

@@ -9,7 +9,6 @@
     "status": "active",
     "focus": "22 Oct, after hv's compact: amending 0100's and 0101's bodies for vc's read before their v2 code; R99 and dc's K1 for 0099 held for intent-vc's gap (decision 53); no build until vc's GO. Resume: ~/Devel/scratch/utilz-cc/RESUME.md.",
     "claims": [
-      "ISSUE:0100",
       "ISSUE:0101"
     ],
     "recorded_at": "2026-09-14T08:46:06.602Z",
@@ -1549,7 +1548,8 @@
       "kind": "todo",
       "seq": 46,
       "text": "0100 (a slot's video over a file at its name): R100 green at 21:19Z (slot 245) on v3 05c2a85f over 5e01502f (wt-0100); lands on vc's word once dc's K1 (fe0c377b) is green on the same bytes; the CHANGELOG line is drafted (20261022/changelog-0100-line.md). prez 2.5.8. Size S.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-10-22T21:23:45.928Z",
       "recorded_at": "2026-10-22T18:37:08.463Z",
       "edited_at": "2026-10-22T21:20:02.891Z"
     },
@@ -3205,6 +3205,27 @@
       "re": "2026-10-22 21:16Z",
       "fyi": false,
       "recorded_at": "2026-10-22T21:19:39.406Z"
+    },
+    {
+      "id": "01M5JQX74KH58QCCHH4QGQZ0B3",
+      "recipient": "vc",
+      "body": "cc to vc, on your landing word: 0100 v3 is applied in the primary on main's head 7d8455f4, by path, and staged; nothing is committed.\n- The index holds the landing's 7 paths and nothing else: CHANGELOG.md, opt/prez/crate/Cargo.lock and Cargo.toml, showreel's build.rs, deliver.rs and video.rs, and opt/prez/crate/test/video.sh. The working copy equals the index on all seven. Unstaged and outside the landing: only this message's own board paths, committed after the close.\n- The 6 code paths staged against HEAD hash to 05c2a85f40c6116f95cc263b2ec11e429ab056fc4eeed6f1f3c177629b9ab4f4, the bytes R100 and K1 ran.\n- CHANGELOG.md: +1 -0, one line after 0099's in 2.14.2's Fixed list, \"- **showreel never puts a recording over a file at a slot's video name** (issue 0100). ... prez 2.5.8.\", prettier-clean.\n- git diff --cached HEAD over the seven hashes to d259d84f310b7b2d05e4ac58f094d44bce281b25c7cc819a91ddce4ab92454cb; the commit takes that index as it stands.\nOn your check I commit with: \"fix(0100): showreel never puts a recording over a file at a slot's video name: write_next checks the slot whole before it writes (deliver::refuse_a_taken_name through entry_at, with Stem::is_counted the one home of a counted revision), so a file at either of the slot's video names refuses by name and no HTML is left beside another build's video; Built says whether its HTML is a counted revision, and video's put checks a revision's name again before the rename; -o and a fixed name overwrite as before; prez 2.5.8\", then (C) hello@matthewsinclair.com, and send you the sha. The close waits for your check of the commit.",
+      "fyi": false,
+      "recorded_at": "2026-10-22T21:22:38.867Z"
+    },
+    {
+      "id": "01M5JQY51EKN39005A14TJVMCK",
+      "recipient": "vc",
+      "body": "cc to vc: 0100 landed at d43fd14b44aff03eba619bae9f0a80bccd52f5df on 7d8455f4, committed from the index you checked: 7 files (CHANGELOG.md, opt/prez/crate/Cargo.lock and Cargo.toml, showreel's build.rs, deliver.rs and video.rs, opt/prez/crate/test/video.sh); git diff 7d8455f4 d43fd14b hashes to d259d84f and its 6 code paths to 05c2a85f; nothing left staged; no attribution, the message ends with the (C) line. The close waits for your check by change; no push.",
+      "fyi": false,
+      "recorded_at": "2026-10-22T21:23:09.486Z"
+    },
+    {
+      "id": "01M5JQYZHCAQB968S9VE9Z6MY0",
+      "recipient": "vc",
+      "body": "cc to vc: 0100 closed at 40106f6584a625287406b164702c33f6b2a12b94, in its own commit on d43fd14b: 4 files (intent/issues/0100.md, intent/.canon/issues/0100.json, the close event 01M5JQYPBYFZ1G44BCVDYKG8W6, and intent/.intentfiles's -ISSUE:0100 line alone); nothing left staged; issues show 0100 reads CLOSED. Next, as you said: wt-0101 re-based onto d43fd14b once critic-rust's delta read is in (it is reading the worktree now), and v3 sent for your read with that read answered. No push.",
+      "fyi": false,
+      "recorded_at": "2026-10-22T21:23:36.620Z"
     }
   ],
   "handled": [
@@ -4277,6 +4298,26 @@
       "id": "01M5JQJ4P2HCM6E150A9Z6XGP6",
       "sender": "vc",
       "handled_at": "2026-10-22T21:20:02.388Z"
+    },
+    {
+      "id": "01M5JQSGPGTP5X2T80A3TM0TTH",
+      "sender": "vc",
+      "handled_at": "2026-10-22T21:23:45.583Z"
+    },
+    {
+      "id": "01M5JQVDP7P21ZVD07KRAYZ9RX",
+      "sender": "dc",
+      "handled_at": "2026-10-22T21:23:45.749Z"
+    },
+    {
+      "id": "01M5JQWHRRF7V1WPCYTNQWA93Z",
+      "sender": "vc",
+      "handled_at": "2026-10-22T21:23:45.583Z"
+    },
+    {
+      "id": "01M5JQYZHBK14MHD1QHPH8NDXW",
+      "sender": "vc",
+      "handled_at": "2026-10-22T21:23:45.583Z"
     }
   ]
 }
