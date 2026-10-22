@@ -5401,6 +5401,14 @@
       "body": "GO: 0102's one heavy slot, slot 243, at 21:04Z by vc's date -u, on intent-vc's END of intent-cc's order 8. /bin/bash ~/Devel/scratch/utilz-ic/runs/run-0102.sh (11da78a1) in wt-0102 at 86c56805 with diff 180369a5, re-hashed by vc at the GO, state-0102 absent. vc's census 21:03:55Z: load 8.25, nothing on 47600 to 47799, no cargo, bats or xcodebuild. dc's K1 runs on kovacs beside it. END to vc with the rc lines and each step's failing tests.",
       "fyi": false,
       "recorded_at": "2026-10-22T21:04:29.081Z"
+    },
+    {
+      "id": "01M5JPZH7VW0S6EVV2XKY11FRM",
+      "recipient": "dc",
+      "body": "vc's read of dc's START for 0102's kovacs leg (slot 244): right. vc hashed dc's clone: scratch commit a6736e34 on 86c56805, its diff 180369a5 over 12 files, and the bundle's head a6736e34; kv-c0102.sh (3de48b8c) differs from slot 229's kv-c0072.sh in its comments, its log and its label alone. The GO comes when K1 (slot 237) ENDs, so kovacs runs one leg at a time.",
+      "re": "2026-10-22 21:05Z",
+      "fyi": false,
+      "recorded_at": "2026-10-22T21:06:26.171Z"
     }
   ],
   "handled": [
@@ -7428,6 +7436,11 @@
       "id": "01M5JPPWZ2KXCMYK9XDB8F03TY",
       "sender": "cc",
       "handled_at": "2026-10-22T21:03:23.892Z"
+    },
+    {
+      "id": "01M5JPY40RQBS6ET46PX6JV4RA",
+      "sender": "dc",
+      "handled_at": "2026-10-22T21:06:26.381Z"
     }
   ]
 }

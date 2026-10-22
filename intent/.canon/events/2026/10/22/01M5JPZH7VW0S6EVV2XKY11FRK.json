@@ -1,0 +1,17 @@
+{
+  "id": "01M5JPZH7VW0S6EVV2XKY11FRK",
+  "ts": "2026-10-22T21:06:26.171Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc's read of dc's START for 0102's kovacs leg (slot 244): right. vc hashed dc's clone: scratch commit a6736e34 on 86c56805, its diff 180369a5 over 12 files, and the bundle's head a6736e34; kv-c0102.sh (3de48b8c) differs from slot 229's kv-c0072.sh in its comments, its log and its label alone. The GO comes when K1 (slot 237) ENDs, so kovacs runs one leg at a time.",
+    "fyi": false,
+    "re": "2026-10-22 21:05Z",
+    "recipient": "dc"
+  }
+}
