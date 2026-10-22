@@ -1,0 +1,15 @@
+{
+  "id": "01M5JJF3DNTR095TZQRADJFH82",
+  "ts": "2026-10-22T19:47:33.429Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "todo",
+    "text": "K1 for 0100 (cc's: showreel video puts a slot's video over a file already at its name, so a video whose HTML was deleted is replaced with nothing said), when cc's START names its bytes: one heavy kovacs leg on them with rust-lint, to cc's spec, fitted into Intent's gaps by vc (hv's decision 53). Size S. (vc, 22 Oct)"
+  }
+}

@@ -3,9 +3,9 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: aa2e759c-f89d-4d9a-8001-e734111bf44b
-heartbeat_at: 2026-10-22 19:13Z
+heartbeat_at: 2026-10-22 19:47Z
 status: active
-focus: "22 Oct: kovacs legs green for 0097 (219), 0096 (222), 0072 (229) and 0098 v3 (232), the ENDs with vc. Next: todo 24 (0099's K1) on cc's START, then todo 18, 2.14.2's final-head gate, once 0098, 0099 and 0072 land. Resume: ~/Devel/scratch/utilz-dc/RESUME.md."
+focus: "22 Oct: kovacs legs green for 0097 (219), 0096 (222), 0072 (229) and 0098 (232). Next, each on cc's START in Intent's gaps: todo 24 (0099), 25 (0100), 26 (0101). Then todo 18, 2.14.2's gate and dry run, after Intent's cut (hv's decision 53). Resume: ~/Devel/scratch/utilz-dc/RESUME.md."
 claims: []
 ---
 
@@ -17,8 +17,10 @@ _(none)_
 
 ## TODO
 
-- 2.14.2's final-head gate, once 0096, 0098, 0099, 0097 and 0072 have landed (0096 and 0097 had by 22 Oct), and vc names the sha (vc, 22 Oct). Its menuz-app phase's text names 0097's job since 22 Oct (runs-on xcode-27, Xcode 27.1 by DEVELOPER_DIR), in both copies. Then final-head-gate.sh's phases, the report and the dry run, then the post-release steps (~/Devel/scratch/utilz-dc/RESUME.md). Size L. (edited)
+- 2.14.2's final-head gate, once 0099, 0100, 0101 (cc's) and 0072 (ic's) have landed and vc names the sha, and after Intent's cut: tonight's host order is Intent first, then this gate and dry run, then hv's 2.14.2 cut (hv's decision 53). 0095, 0096, 0097 and 0098 have landed. The menuz-app phase's text names 0097's job (xcode-27, Xcode 27.1). Then final-head-gate.sh's phases, the report and the dry run, then the post-release steps (~/Devel/scratch/utilz-dc/RESUME.md). Size L. (edited)
 - K1 for 0099 (cc's: showreel's report of unused assets says nothing of a directory under assets/ it cannot read, and counts a size it cannot read as 0; plan.rs's two silences; prez 2.5.7, after 0098), when cc's START names its bytes: one heavy kovacs leg on them, to cc's spec (method in ~/Devel/scratch/utilz-dc/RESUME.md). Size S. (vc, 22 Oct) (edited)
+- K1 for 0100 (cc's: showreel video puts a slot's video over a file already at its name, so a video whose HTML was deleted is replaced with nothing said), when cc's START names its bytes: one heavy kovacs leg on them with rust-lint, to cc's spec, fitted into Intent's gaps by vc (hv's decision 53). Size S. (vc, 22 Oct)
+- K1 for 0101 (cc's: showreel accepts an output pattern that names a directory, so it can name a revision its own listing never counts), when cc's START names its bytes: one heavy kovacs leg on them with rust-lint, to cc's spec, fitted into Intent's gaps by vc (hv's decision 53). Size S. (vc, 22 Oct)
 
 ## Holds
 

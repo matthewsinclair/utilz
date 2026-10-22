@@ -1,0 +1,16 @@
+{
+  "id": "01M5JJF3VBBMEWFRM9QSMGWQ27",
+  "ts": "2026-10-22T19:47:33.867Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "todo",
+    "seq": 18,
+    "text": "2.14.2's final-head gate, once 0099, 0100, 0101 (cc's) and 0072 (ic's) have landed and vc names the sha, and after Intent's cut: tonight's host order is Intent first, then this gate and dry run, then hv's 2.14.2 cut (hv's decision 53). 0095, 0096, 0097 and 0098 have landed. The menuz-app phase's text names 0097's job (xcode-27, Xcode 27.1). Then final-head-gate.sh's phases, the report and the dry run, then the post-release steps (~/Devel/scratch/utilz-dc/RESUME.md). Size L."
+  }
+}

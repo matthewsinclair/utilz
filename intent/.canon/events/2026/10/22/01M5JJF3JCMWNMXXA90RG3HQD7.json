@@ -1,0 +1,15 @@
+{
+  "id": "01M5JJF3JCMWNMXXA90RG3HQD7",
+  "ts": "2026-10-22T19:47:33.580Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "todo",
+    "text": "K1 for 0101 (cc's: showreel accepts an output pattern that names a directory, so it can name a revision its own listing never counts), when cc's START names its bytes: one heavy kovacs leg on them with rust-lint, to cc's spec, fitted into Intent's gaps by vc (hv's decision 53). Size S. (vc, 22 Oct)"
+  }
+}
