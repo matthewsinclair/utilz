@@ -1,0 +1,15 @@
+{
+  "id": "01M5JC133QA9SCHDW0QEHMK70T",
+  "ts": "2026-10-22T17:55:02.903Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "doing",
+    "text": "0096's K1 (todo 21, cc's v4): the START (heavy) is with vc since 17:55Z (its recorded stamp), beside cc's Mac run, waiting for the GO. Bytes: cc's 0096-candidate-v4.diff, 16b414ef, on 8954eee8, as scratch commit 2d9b7b7c (bundle ~/Devel/scratch/utilz-dc/work/kv-c0096-16b414ef). On the GO: /bin/bash ~/Devel/scratch/utilz-dc/work/kv-c0096.sh, with rust-lint unless vc strikes it. Expected: rust rc 0, failed 0, ignored 0, cc's five new tests ok by name, 0 left in TMPDIR or /tmp; kovacs's user not root. Then the END to vc and cc."
+  }
+}
