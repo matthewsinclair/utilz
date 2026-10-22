@@ -1,0 +1,16 @@
+{
+  "id": "01M5JS002SPDRFP2ME12M4Q3Y2",
+  "ts": "2026-10-22T21:41:38.521Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "todo",
+    "seq": 51,
+    "text": "2.14.2 (vc's decisions 49 to 55). Every issue landed and closed: 0095 (d633f4cb), 0096 (e96d86a2), 0097 (1d7a677c), 0098 (b5c588a3), 0072 (26c614dd), 0099 (5e01502f, closed 152e2626), 0102 (adbba439, closed 81953d7d), 0100 (d43fd14b, closed 40106f65) and 0101 (d1fa2f57, closed a647eaac); no open issues. CI green on 7394a2dc (push and dispatch, menuz app included) and 0fc22e5c (push). Intent's 3.2.5 cut is done (decision 53). hv's Mac runs a build of main, menuz 0.4.7 build 1639. Left: vc's push of 0101 and its CI read; dc's final-head gate and dry run on the head vc names; hv's cut; the post-release steps."
+  }
+}

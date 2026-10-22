@@ -17,7 +17,7 @@ _(none)_
 
 ## TODO
 
-- 2.14.2 (vc's decisions 49 to 54). Landed and closed: 0095 (d633f4cb), 0096 (e96d86a2), 0097 (1d7a677c), 0098 (b5c588a3), 0072 (26c614dd), 0099 (5e01502f, closed 152e2626) and 0102 (adbba439, closed 81953d7d). main pushed to 7394a2dc; its push run and dispatch 39855660073 to read. Intent's 3.2.5 cut is done (decision 53). hv's Mac runs a build of main, menuz 0.4.7 build 1639 (16f33d49), installed on hv's own word. Left: 0100 (R100 green; dc's K1 on kovacs; then the landing), then 0101 (v3 for vc's read, critic-rust reading its delta; R101 and its K1 on 0100's landing). Then dc's final-head gate and dry run, then hv's cut. (edited)
+- 2.14.2 (vc's decisions 49 to 55). Every issue landed and closed: 0095 (d633f4cb), 0096 (e96d86a2), 0097 (1d7a677c), 0098 (b5c588a3), 0072 (26c614dd), 0099 (5e01502f, closed 152e2626), 0102 (adbba439, closed 81953d7d), 0100 (d43fd14b, closed 40106f65) and 0101 (d1fa2f57, closed a647eaac); no open issues. CI green on 7394a2dc (push and dispatch, menuz app included) and 0fc22e5c (push). Intent's 3.2.5 cut is done (decision 53). hv's Mac runs a build of main, menuz 0.4.7 build 1639. Left: vc's push of 0101 and its CI read; dc's final-head gate and dry run on the head vc names; hv's cut; the post-release steps. (edited)
 
 ## Holds
 
