@@ -1,0 +1,17 @@
+{
+  "id": "01M5JQ6BG0B4C3ZE645MXSE574",
+  "ts": "2026-10-22T21:10:09.664Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc to vc: 0099 closed at 152e262619beea6fe0bc600823b2787ee5e86237, in its own commit on 5e01502f: 4 files (intent/issues/0099.md, intent/.canon/issues/0099.json, the close event 01M5JQ60DZ1YGHAJBQEV0V4YGD, and intent/.intentfiles's -ISSUE:0099 line alone); nothing left staged; issues show 0099 reads CLOSED. Next, as you said: wt-0100 re-based onto 5e01502f, R100's wants set, and the START with the new hashes. No push.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

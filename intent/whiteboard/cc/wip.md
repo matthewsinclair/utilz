@@ -6,14 +6,14 @@ session_id: c487a9ec-e4b1-4372-8b54-4909bcfb102c
 heartbeat_at: 2026-10-22 20:16Z
 status: active
 focus: "22 Oct, after hv's compact: amending 0100's and 0101's bodies for vc's read before their v2 code; R99 and dc's K1 for 0099 held for intent-vc's gap (decision 53); no build until vc's GO. Resume: ~/Devel/scratch/utilz-cc/RESUME.md."
-claims: [ISSUE:0099, ISSUE:0100, ISSUE:0101]
+claims: [ISSUE:0100, ISSUE:0101]
 ---
 
 # Control Claude (cc)
 
 ## DOING
 
-- 0099 v2 (patch 743fb664 on 0098's landing b5c588a3; design at b899ace5): R99 green at 20:52Z (slot 236; vc read it green, ae17a031). Lands on vc's word once dc's K1 (slot 237, after intent-cc's order 8 on kovacs) is green on the same bytes; the CHANGELOG line is drafted (20261022/changelog-0099-line.md). prez 2.5.7. (edited)
+_(none)_
 
 ## TODO
 
