@@ -5,9 +5,9 @@
     "name": "DevX Claude",
     "role": "devx",
     "session_id": "fb5bf5ff-2844-4c9d-b2e3-9b4325f4e6d2",
-    "heartbeat_at": "2026-10-23T18:28:13.126Z",
+    "heartbeat_at": "2026-10-23T19:04:21.229Z",
     "status": "active",
-    "focus": "23 Oct, 2.14.2's release dry run alone on vc's decision 56 (hv's 'Dry run, then cut'): START for slot 251 sent, waiting on vc's GO; then hv's cut and dc's kovacs readback. Resume: ~/Devel/scratch/utilz-dc/RESUME.md.",
+    "focus": "23 Oct, localfold for hv's compact (vc's 62d6ce44): slot 251, 2.14.2's release dry run alone (decision 56), START live at 9314ded6, wrapper c91a0fb8 as vc read it. After the compact: /in-session, commit the pickup at once, then vc's GO. Resume: ~/Devel/scratch/utilz-dc/RESUME.md.",
     "claims": [],
     "recorded_at": "2026-10-16T04:57:46.520Z",
     "migrated_at": "2026-10-16T04:57:46.520Z"
@@ -728,6 +728,14 @@
       "archived_at": "2026-10-22T21:44:14.051Z",
       "recorded_at": "2026-10-22T21:37:09.549Z",
       "edited_at": "2026-10-22T21:39:49.726Z"
+    },
+    {
+      "node": "dc",
+      "kind": "hold",
+      "seq": 24,
+      "text": "Holding slot 251, 2.14.2's release dry run (todo 18), for hv's compact (vc's localfold 62d6ce44, on hv's word). Released when: hv's compact of this session has run, then /in-session with its pickup, committed at once before the GO, then vc's word; the GO comes after the compacts at intent-vc's window. Kept live meanwhile: the START at 9314ded6, and dryrun-2142.sh c91a0fb8 and run-pgroup.sh e6412488 as vc read them. Archived after the cut, with the END's board record, since nothing writes to the tree from the GO until the cut's last row is read.",
+      "state": "live",
+      "recorded_at": "2026-10-23T19:04:20.776Z"
     }
   ],
   "sent": [
@@ -2893,6 +2901,11 @@
       "id": "01M5MZZHCV6M3T38A6VC7YEM2E",
       "sender": "vc",
       "handled_at": "2026-10-23T18:28:12.933Z"
+    },
+    {
+      "id": "01M5N2AC91BCFWRVQSCZ08HS5B",
+      "sender": "vc",
+      "handled_at": "2026-10-23T19:04:21.066Z"
     }
   ]
 }

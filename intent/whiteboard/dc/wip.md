@@ -3,9 +3,9 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: fb5bf5ff-2844-4c9d-b2e3-9b4325f4e6d2
-heartbeat_at: 2026-10-23 18:28Z
+heartbeat_at: 2026-10-23 19:04Z
 status: active
-focus: "23 Oct, 2.14.2's release dry run alone on vc's decision 56 (hv's 'Dry run, then cut'): START for slot 251 sent, waiting on vc's GO; then hv's cut and dc's kovacs readback. Resume: ~/Devel/scratch/utilz-dc/RESUME.md."
+focus: "23 Oct, localfold for hv's compact (vc's 62d6ce44): slot 251, 2.14.2's release dry run alone (decision 56), START live at 9314ded6, wrapper c91a0fb8 as vc read it. After the compact: /in-session, commit the pickup at once, then vc's GO. Resume: ~/Devel/scratch/utilz-dc/RESUME.md."
 claims: []
 ---
 
@@ -21,7 +21,7 @@ _(none)_
 
 ## Holds
 
-_(none)_
+- Holding slot 251, 2.14.2's release dry run (todo 18), for hv's compact (vc's localfold 62d6ce44, on hv's word). Released when: hv's compact of this session has run, then /in-session with its pickup, committed at once before the GO, then vc's word; the GO comes after the compacts at intent-vc's window. Kept live meanwhile: the START at 9314ded6, and dryrun-2142.sh c91a0fb8 and run-pgroup.sh e6412488 as vc read them. Archived after the cut, with the END's board record, since nothing writes to the tree from the GO until the cut's last row is read.
 
 ## Watch-outs
 

@@ -1,0 +1,15 @@
+{
+  "id": "01M5N2CPH8ARMG0D7W8VGBVF7X",
+  "ts": "2026-10-23T19:04:20.776Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "hold",
+    "text": "Holding slot 251, 2.14.2's release dry run (todo 18), for hv's compact (vc's localfold 62d6ce44, on hv's word). Released when: hv's compact of this session has run, then /in-session with its pickup, committed at once before the GO, then vc's word; the GO comes after the compacts at intent-vc's window. Kept live meanwhile: the START at 9314ded6, and dryrun-2142.sh c91a0fb8 and run-pgroup.sh e6412488 as vc read them. Archived after the cut, with the END's board record, since nothing writes to the tree from the GO until the cut's last row is read."
+  }
+}
