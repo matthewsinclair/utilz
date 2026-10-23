@@ -1,0 +1,16 @@
+{
+  "id": "01M5N2KYZ2T352KE2ZCH5AAXMJ",
+  "ts": "2026-10-23T19:08:18.787Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "todo",
+    "seq": 51,
+    "text": "2.14.2 (vc's decisions 49 to 56). Every issue landed and closed: 0095 (d633f4cb), 0096 (e96d86a2), 0097 (1d7a677c), 0098 (b5c588a3), 0072 (26c614dd), 0099 (5e01502f), 0102 (adbba439), 0100 (d43fd14b) and 0101 (d1fa2f57); no open issues. CI on b3374e73 green on every job (push 39859337814, dispatch 39859347138). hv's call (decision 56): no gate phases. Next, in order: dc's dry run (slot 251) under the freeze; hv's cut; Menuz.app signed, notarised and published; the formula bump and the tap; the readbacks here and on kovacs; done.md's 2.14.2 entry."
+  }
+}

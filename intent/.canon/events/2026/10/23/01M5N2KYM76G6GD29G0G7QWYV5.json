@@ -1,0 +1,15 @@
+{
+  "id": "01M5N2KYM76G6GD29G0G7QWYV5",
+  "ts": "2026-10-23T19:08:18.439Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "doing",
+    "text": "Slot 251, dc's 2.14.2 release dry run (vc's decision 56). vc has read dc's START at 9314ded6: dryrun-2142.sh c91a0fb8, run-pgroup.sh e6412488, and final-head-gate.sh 113fee7e's dry-run branch. The window is Utilz's (intent-vc at 19:05Z; devbin-dc's 0206 run ended green at 19:03Z). The GO comes after hv's compact, once every node's pickup is committed and the tree is clean (text in ~/Devel/scratch/utilz-vc/go-251.txt). Nothing writes to the tree from the GO until the cut's last row is read. Then hv's cut (~/Devel/scratch/utilz-vc/RESUME.md)."
+  }
+}
