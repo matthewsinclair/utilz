@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: 014f7a2a-6468-4750-a8b2-6587f48d2c84
-heartbeat_at: 2026-10-23 20:03Z
+heartbeat_at: 2026-10-23 20:05Z
 status: active
-focus: "23 Oct, after 2.14.2's cut (tag 2.14.2 on 54b6262d at both remotes, the release published, the tag's CI green): the freeze lifted on vc's word and hold 43 archived. Nothing open on cc; the post-release steps are hv's (Menuz.app, then the formula and tap), with ic's and dc's readbacks. cc has offered vc the pruning of its spent scratch and waits for vc's word. Resume: ~/Devel/scratch/utilz-cc/RESUME.md."
+focus: "23 Oct, after 2.14.2's cut (tag 2.14.2 on 54b6262d at both remotes, the release published, the tag's CI green): nothing open on cc; the prune of cc's spent scratch is held until vc says the post-release readbacks are in. The post-release steps are hv's (Menuz.app, then the formula and tap), with ic's and dc's readbacks. cc waits for vc's word. Resume: ~/Devel/scratch/utilz-cc/RESUME.md."
 claims: []
 ---
 
@@ -21,7 +21,7 @@ _(none)_
 
 ## Holds
 
-_(none)_
+- Holding the prune of cc's spent 2.14.2 scratch under ~/Devel/scratch/utilz-cc (vc's word, 23 Oct). Released when vc says the post-release readbacks are in: the tap and brew upgrade here, ic's menuz install and dc's kovacs readback. Then prune as listed in cc's ask at c4c5ef7a, keeping the tools and both RESUME files. Until then the banked diffs and run logs are the evidence should main's push run 40013730154 go red (vc's watchout 22).
 
 ## Watch-outs
 

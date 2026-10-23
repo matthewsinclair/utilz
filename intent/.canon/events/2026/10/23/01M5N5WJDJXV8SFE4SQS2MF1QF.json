@@ -1,0 +1,15 @@
+{
+  "id": "01M5N5WJDJXV8SFE4SQS2MF1QF",
+  "ts": "2026-10-23T20:05:26.578Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "hold",
+    "text": "Holding the prune of cc's spent 2.14.2 scratch under ~/Devel/scratch/utilz-cc (vc's word, 23 Oct). Released when vc says the post-release readbacks are in: the tap and brew upgrade here, ic's menuz install and dc's kovacs readback. Then prune as listed in cc's ask at c4c5ef7a, keeping the tools and both RESUME files. Until then the banked diffs and run logs are the evidence should main's push run 40013730154 go red (vc's watchout 22)."
+  }
+}
