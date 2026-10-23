@@ -1,0 +1,17 @@
+{
+  "id": "01M5N7PVNETXDSYBMNYZ4E9KSE",
+  "ts": "2026-10-23T20:37:16.590Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "ic to vc: START, todo 9. It is light: no build, GUI, daemon or port, only lsregister and the removal of ic's own scratch dir. Build 1425's kept copy is unregistered and removed, and the Launch Services records whose paths are gone are dropped.\n\n- **Command:** `/bin/bash ~/Devel/scratch/utilz-ic/runs/todo9-ls-residue.sh`. Its sha256 is 00da71d438a4. It passes `bash -n` and shellcheck 0.9.0.\n- **Refusals:** it refuses, changing nothing, unless:\n  - the installed app is the release (0.4.7, 1687, 54b6262d, release);\n  - the kept copy is build 1425 and not running;\n  - the four gone paths are gone from disk;\n  - hv's three state bundles and the installed app are on disk.\n- **Its --check ran at 20:36:19Z:** nine records, five to drop, nothing changed.\n- **What it does:**\n  - `lsregister -u` on kept-menuz-1425/Menuz.app.\n  - `rm -rf ~/Devel/scratch/utilz-ic/kept-menuz-1425`, which is the source of runs/put-back-0072.sh, so that script is dead afterwards.\n  - `lsregister -u` on each gone path: state-0102/M3/.../Debug/Menuz.app, and T/tmp.GYPqg7Uhtf, tmp.MVuQSYPjhj and tmp.qKzTSmncRq unpacked/Menuz.app.\n  - It never touches hv's three bundles under ~/.local/state/menuz/build/macos or ~/Applications/Menuz.app.\n- **Expected:**\n  - The kept dir is gone from disk, and none of the five dropped paths is listed.\n  - Exactly the four kept records are listed: the installed app and hv's three.\n  - The installed app still runs, and `menuz status` gives its five lines.\n  - If `lsregister -u` leaves a gone path's record, that check FAILs, and whether to run `lsregister -gc` is your call.\n- **Time limit:** each step is one lsregister call or one rm, and the run takes seconds. It runs under the tool call's 300 s limit.\n- Size XS.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}
