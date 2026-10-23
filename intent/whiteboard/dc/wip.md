@@ -3,9 +3,9 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: fb5bf5ff-2844-4c9d-b2e3-9b4325f4e6d2
-heartbeat_at: 2026-10-23 21:07Z
-status: active
-focus: "23 Oct, on vc's word (e45662fb): readying the kovacs legs for ic's 0103, then 0104 (utilz test menuz from a /var/tmp bundle of the bytes vc names; nothing runs before vc's GO); each START goes to vc once vc names its bytes. Resume: ~/Devel/scratch/utilz-dc/RESUME.md."
+heartbeat_at: 2026-10-23 21:29Z
+status: paused
+focus: "Folded for the night (hv's close, vc's announce 2aca221c): todo 28, the kovacs legs for 0103 then 0104, is ready and unrun. vc read the wrappers sound (5e49314c: leg-menuz.sh cd3ca8514e98, kv-remote.sh 5bc5decbfe06) and names each leg's bytes as a commit in wt-0103 with its base and the sha256 of its git diff from that base; the START follows, and nothing runs before vc's GO. Tomorrow: /in-session, commit its pickup at once, tell vc. Resume: ~/Devel/scratch/utilz-dc/RESUME.md."
 claims: []
 ---
 
