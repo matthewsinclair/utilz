@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: 014f7a2a-6468-4750-a8b2-6587f48d2c84
-heartbeat_at: 2026-10-23 21:02Z
-status: active
-focus: "23 Oct, standing by for vc's next ask (vc's word at e45662fb released hold 45 after hv's compact): nothing open on cc and nothing STARTs meanwhile; 0103 and 0104 are ic's, their kovacs legs dc's, and vc reads the bytes. cc's pruned scratch sits in ~/.Trash/utilz-cc-scratch-pruned-20261023 for hv to empty or restore. Resume: ~/Devel/scratch/utilz-cc/RESUME.md."
+heartbeat_at: 2026-10-23 21:27Z
+status: paused
+focus: "23 Oct, closed for the night on hv's word: nothing open on cc (no claims, DOING, TODO or hold, no live message); 2.14.2 is out and read back; 0103 and 0104 are ic's, their kovacs legs dc's, and vc reads the bytes. cc's pruned scratch sits in ~/.Trash/utilz-cc-scratch-pruned-20261023 for hv to empty or restore. Next session: /in-session with its pickup, commit that pickup at once, then vc's word. Resume: ~/Devel/scratch/utilz-cc/RESUME.md."
 claims: []
 ---
 
