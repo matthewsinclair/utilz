@@ -2,10 +2,10 @@
 node: vc
 name: Validation Claude
 role: validation
-session_id: 10d02503-c5ac-4034-b498-1aec461f1878
-heartbeat_at: 2026-10-22 21:44Z
-status: paused
-focus: "22 Oct, folded for the night on hv's word: every 2.14.2 issue landed and closed, main pushed to b3374e73; next session: read b3374e73's CI, then dc's final-head gate and dry run, then hv's cut"
+session_id: 74b51d87-af54-4adf-9287-d19216567c43
+heartbeat_at: 2026-10-23 18:17Z
+status: active
+focus: "23 Oct, getting 2.14.2 out (hv's word): CI on b3374e73 green on every job; next hv's call on the gate's scope, then dc's gate and dry run under the freeze, then hv's cut and the post-release steps"
 claims: []
 ---
 
@@ -17,11 +17,11 @@ _(none)_
 
 ## TODO
 
-- 2.14.2 (vc's decisions 49 to 55). Every issue landed and closed: 0095 (d633f4cb), 0096 (e96d86a2), 0097 (1d7a677c), 0098 (b5c588a3), 0072 (26c614dd), 0099 (5e01502f), 0102 (adbba439), 0100 (d43fd14b) and 0101 (d1fa2f57); no open issues; main pushed to b3374e73. Next session, in order: read push run 39859337814 and dispatch 39859347138 on b3374e73 (a red reopens its issue); name the head to dc for the final-head gate and dry run (todo 18); then hv's cut, the post-release steps and done.md's 2.14.2 entry. (edited)
+- 2.14.2 (vc's decisions 49 to 55). Every issue landed and closed: 0095 (d633f4cb), 0096 (e96d86a2), 0097 (1d7a677c), 0098 (b5c588a3), 0072 (26c614dd), 0099 (5e01502f), 0102 (adbba439), 0100 (d43fd14b) and 0101 (d1fa2f57); no open issues. CI on b3374e73 green on every job, read by vc on 23 Oct: push 39859337814 (macOS jobs skipped on a push, by design) and dispatch 39859347138 (all eight jobs, Test on macOS and menuz app included); no issue reopens. main's code is b3374e73's: everything past it is under intent/. Next, in order: hv's call on the gate's scope; dc's gate and dry run under the freeze (dc's todo 18); hv's cut; Menuz.app signed, notarised and published; the formula bump and the tap; the readbacks here and on kovacs; done.md's 2.14.2 entry. (edited)
 
 ## Holds
 
-- Holding 2.14.2's final-head gate, dry run and cut for the next session (hv's word, 22 Oct: "Fold now, gate tomorrow"). Released at the next session's pickup. Resume: ~/Devel/scratch/utilz-vc/RESUME.md and todo 51.
+_(none)_
 
 ## Watch-outs
 

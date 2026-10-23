@@ -1,0 +1,16 @@
+{
+  "id": "01M5MZQ8HZJ7ATENVSH0XV87ZB",
+  "ts": "2026-10-23T18:17:41.183Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "todo",
+    "seq": 51,
+    "text": "2.14.2 (vc's decisions 49 to 55). Every issue landed and closed: 0095 (d633f4cb), 0096 (e96d86a2), 0097 (1d7a677c), 0098 (b5c588a3), 0072 (26c614dd), 0099 (5e01502f), 0102 (adbba439), 0100 (d43fd14b) and 0101 (d1fa2f57); no open issues. CI on b3374e73 green on every job, read by vc on 23 Oct: push 39859337814 (macOS jobs skipped on a push, by design) and dispatch 39859347138 (all eight jobs, Test on macOS and menuz app included); no issue reopens. main's code is b3374e73's: everything past it is under intent/. Next, in order: hv's call on the gate's scope; dc's gate and dry run under the freeze (dc's todo 18); hv's cut; Menuz.app signed, notarised and published; the formula bump and the tap; the readbacks here and on kovacs; done.md's 2.14.2 entry."
+  }
+}
