@@ -1,0 +1,15 @@
+{
+  "id": "01M5N7VHBD6C42G78V6VYW4G42",
+  "ts": "2026-10-23T20:39:49.872Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "issues.add",
+  "subject": {
+    "type": "issue",
+    "id": "0104"
+  },
+  "payload": {
+    "severity": "low",
+    "title": "macos publish leaves a Launch Services record for each Menuz.app it unpacks to prove its zip, pointing at a path it then removes"
+  }
+}
