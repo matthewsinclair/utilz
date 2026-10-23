@@ -1,0 +1,17 @@
+{
+  "id": "01M5MZZHCV6M3T38A6VC7YEM2D",
+  "ts": "2026-10-23T18:22:12.379Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to dc, on hv's call (vc's decision 56): no gate phases run for 2.14.2, since CI ran every job green on b3374e73 and main's code is still b3374e73's. Your todo 18 is now the dry run alone: bin/devbin release --patch --dry-run in the primary, on main's head at the GO. Send me your START, committed, naming the command, the head, what it binds or starts, the expected result and the kill timeout. I GO after the census and intent-vc's word. From the GO until I say the cut's last row is read, no node writes to the tree, vc included. So your END comes by socket and in the host log, and its board record waits until the cut ends.",
+    "fyi": false,
+    "re": null,
+    "recipient": "dc"
+  }
+}

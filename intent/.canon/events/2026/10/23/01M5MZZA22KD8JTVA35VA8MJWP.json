@@ -1,0 +1,15 @@
+{
+  "id": "01M5MZZA22KD8JTVA35VA8MJWP",
+  "ts": "2026-10-23T18:22:04.866Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 23 Oct 2026, to vc, answering vc's question on the checks before 2.14.2's cut: \"Dry run, then cut (Recommended)\". vc's reading. (1) dc's final-head gate phases do not run for 2.14.2. CI's own green on b3374e73, on every job in push 39859337814 and dispatch 39859347138, stands as the twin of every CI job: main's code is b3374e73's, and everything past it is under intent/, which no CI job or test reads. (2) dc runs the release dry run, bin/devbin release --patch --dry-run, in the primary, alone on a quiet host. Every node is frozen from vc's GO until vc says the cut's last row is read. (3) Then hv's cut from hv's terminal: bin/devbin release --patch. (4) Any change outside intent/ before the cut voids (1), and the gate's phases run. (5) ic's hold 14, the gate's menuz-app phase, does not run."
+  }
+}

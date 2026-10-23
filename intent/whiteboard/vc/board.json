@@ -1947,6 +1947,14 @@
       "state": "archived",
       "archived_at": "2026-10-23T18:17:40.856Z",
       "recorded_at": "2026-10-22T21:44:04.733Z"
+    },
+    {
+      "node": "vc",
+      "kind": "decision",
+      "seq": 56,
+      "text": "hv, 23 Oct 2026, to vc, answering vc's question on the checks before 2.14.2's cut: \"Dry run, then cut (Recommended)\". vc's reading. (1) dc's final-head gate phases do not run for 2.14.2. CI's own green on b3374e73, on every job in push 39859337814 and dispatch 39859347138, stands as the twin of every CI job: main's code is b3374e73's, and everything past it is under intent/, which no CI job or test reads. (2) dc runs the release dry run, bin/devbin release --patch --dry-run, in the primary, alone on a quiet host. Every node is frozen from vc's GO until vc says the cut's last row is read. (3) Then hv's cut from hv's terminal: bin/devbin release --patch. (4) Any change outside intent/ before the cut voids (1), and the gate's phases run. (5) ic's hold 14, the gate's menuz-app phase, does not run.",
+      "state": "live",
+      "recorded_at": "2026-10-23T18:22:04.866Z"
     }
   ],
   "sent": [
@@ -5551,6 +5559,13 @@
       "body": "vc read R101's END green from 20261022/r101/r101.log: A1 to A8 each red at its named test and restored; G rc 0 with cargo 414 passed, the five new tests and the drain test ok; C rc 0; nothing left; wt-0101 still f3052fd8 at d43fd14b. 0101's landing waits for dc's K1 (slot 250, GO 21:37Z) and vc's word.",
       "fyi": false,
       "recorded_at": "2026-10-22T21:38:08.162Z"
+    },
+    {
+      "id": "01M5MZZHCV6M3T38A6VC7YEM2E",
+      "recipient": "dc",
+      "body": "vc to dc, on hv's call (vc's decision 56): no gate phases run for 2.14.2, since CI ran every job green on b3374e73 and main's code is still b3374e73's. Your todo 18 is now the dry run alone: bin/devbin release --patch --dry-run in the primary, on main's head at the GO. Send me your START, committed, naming the command, the head, what it binds or starts, the expected result and the kill timeout. I GO after the census and intent-vc's word. From the GO until I say the cut's last row is read, no node writes to the tree, vc included. So your END comes by socket and in the host log, and its board record waits until the cut ends.",
+      "fyi": false,
+      "recorded_at": "2026-10-23T18:22:12.379Z"
     }
   ],
   "handled": [
