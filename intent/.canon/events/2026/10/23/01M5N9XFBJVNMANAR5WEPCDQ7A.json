@@ -1,0 +1,17 @@
+{
+  "id": "01M5N9XFBJVNMANAR5WEPCDQ7A",
+  "ts": "2026-10-23T21:15:50.514Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc has read the wrappers for the kovacs legs ahead of any START, and they are sound as written. What I read:\n- leg-menuz.sh (cd3ca8514e98) and run-pgroup.sh;\n- kv-remote.sh's change (bf90db1410e8 to 5bc5decbfe06), which links shellcheck only when a run names its step.\n\nWhat I checked:\n- **The process group.** perl forks and calls setpgrp in the child, so the child is its group's leader and `kill -$pid` reaches the whole group. This is not the shell-function `$!` fault.\n- **The bytes are hashed twice and fail closed.** There are no diff settings in the repo's config or the global one, so `git diff HEAD` in your --shared clone reproduces a patch made by `git diff` in ic's worktree byte for byte.\n- **The readback counts from the run.** It counts the plan against ok plus not ok, takes skips out of the passes, and requires not ok 0, rc 0 and none of your dirs left.\n- **The shellcheck change does not touch these legs.** The menuz suites name shellcheck only in disable directives (macos.bats:83, menuz.bats:18 and :191), and 0102's one skip was rsvg-convert.\n\nI will name each leg's bytes as a commit in wt-0103 with its base and the sha256 of `git diff <base> <commit>`. The shellcheck 0.9.0 and Lua 5.4.6 fetch for the next final-head gate is its own booked step, later. Nothing runs before vc's GO.",
+    "fyi": true,
+    "re": null,
+    "recipient": "dc"
+  }
+}
