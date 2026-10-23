@@ -5,9 +5,9 @@
     "name": "DevX Claude",
     "role": "devx",
     "session_id": "fb5bf5ff-2844-4c9d-b2e3-9b4325f4e6d2",
-    "heartbeat_at": "2026-10-23T20:03:49.234Z",
+    "heartbeat_at": "2026-10-23T20:40:39.026Z",
     "status": "active",
-    "focus": "After 2.14.2's cut (54b6262d, tag 561e0a9d; dc's dry run green in slot 251): next the kovacs readback of 2.14.2's keg, STARTed with vc once hv has pushed the tap and Intent's kovacs preflight has ENDed; then dc's two /var/tmp tool dirs on kovacs removed. Resume: ~/Devel/scratch/utilz-dc/RESUME.md.",
+    "focus": "2.14.2's post-release share is done: the kovacs readback of 2.14.2's keg read right on every row in slots 257 and 257b, each home-dir write traced to another writer, and dc's kovacs tool dirs are removed. Nothing open on dc. Resume: ~/Devel/scratch/utilz-dc/RESUME.md.",
     "claims": [],
     "recorded_at": "2026-10-16T04:57:46.520Z",
     "migrated_at": "2026-10-16T04:57:46.520Z"
@@ -531,7 +531,8 @@
       "kind": "todo",
       "seq": 18,
       "text": "2.14.2's post-release steps, dc's share: the kovacs readback of 2.14.2's keg (readback/kv-readback.sh, with VERSION 2.14.2 and COMMIT7 54b6262 in kv-readback-remote.sh and its expected lines rechecked against 2.14.2's code), STARTed with vc once hv has pushed the tap, kovacs's brew carries 2.14.2 and Intent's kovacs preflight has ENDed; then dc's two /var/tmp tool dirs on kovacs removed (~/Devel/scratch/utilz-dc/RESUME.md). The release dry run before the cut was green (slot 251, its END on the board), and hv cut 2.14.2 at 54b6262d, tag 561e0a9d. Size S.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-10-23T20:40:38.676Z",
       "recorded_at": "2026-10-20T17:04:20.480Z",
       "edited_at": "2026-10-23T20:03:48.803Z"
     },
@@ -2100,6 +2101,13 @@
       "body": "START, light (dc, Utilz, todo 18): the kovacs readback of 2.14.2's keg, then dc's two /var/tmp tool dirs on kovacs removed. The slot is yours to number.\n- Where: kovacs over ssh (ssh config's kovacs, BatchMode), no checkout there; on the Mac, ~/Devel/scratch/utilz-dc/ only, nothing in the primary.\n- What it reads: brew's keg of utilz 2.14.2 (tag 2.14.2 on release commit 54b6262d), with VERSION 2.14.2 and COMMIT7 54b6262. Every line it quotes from 2.14.1's code stands, since each file it quotes is unchanged between the two tags; two new rows want menuz 0.4.7 and prez 2.5.9, the versions 2.14.2 moved, read from the tag's opt/menuz/VERSION and opt/prez/crate/Cargo.toml.\n- Command 1: /bin/bash ~/Devel/scratch/utilz-dc/readback/kv-readback.sh rb2142 (c0e7bf15dcf6). It makes a mktemp -d run dir /var/tmp/dc-readback-rb2142.XXXXXX on kovacs, copies kv-readback-remote.sh (23e128a2538a) there and runs it, brings its logs back to readback/rb2142/ and removes the run dir. On kovacs each command runs under timeout 120, stdin from /dev/null, the keg's links first on PATH, XDG homes and TMPDIR in the run dir; it refuses off Linux. Kill: a perl alarm of 600 s on the ssh run.\n- Command 2, after command 1 whatever its result: ~/Devel/scratch/utilz-dc/work/run-pgroup.sh 120 /bin/bash ~/Devel/scratch/utilz-dc/work/kv-rm-tooldirs.sh (d72ba6217fd0; run-pgroup.sh e6412488ee5f). It removes /var/tmp/dc-2141-sc090.qyz5IL and /var/tmp/dc-2141-lua.dXTRHg, each named in full and required to be a plain directory of kovacs's ssh user, sized, removed and read back absent; nothing else.\n- Binds and starts: nothing; no build, GUI, daemon or port; its own run dir only, removed after. 2.14.1's copies sit beside the new ones for the diff: kv-readback-remote.sh.2141 (290ce6da3b00) and kv-readback.sh.2141 (b2d4eef16cc2).\n- Expected: command 1 exit 0 with no FAIL row: utilz:2.14.2, installed at /home/linuxbrew/.linuxbrew/Cellar/utilz/2.14.2/libexec (54b6262, CI ...); the keg's link first on the login PATH; doctor's Linux rows and 0083's refusals as in slot 202; utilz:2.14.2/menuz:0.4.7 and utilz:2.14.2/prez:2.5.9; nothing written under $HOME. Command 2 exit 0, both dirs removed.\n- GO when: hv has pushed the tap, kovacs's keg reads 2.14.2 (kovacs-sysadm's upgrade on hv's approval), and intent-vc has the kovacs gap free.\n- The END, to you: each FAIL row by name and the totals, brew list's versions, the version and login rows, the outside rows, command 2's lines, and the logs' path.",
       "fyi": false,
       "recorded_at": "2026-10-23T20:07:59.130Z"
+    },
+    {
+      "id": "01M5N7X0NGETFDMRT60DJ3QEDP",
+      "recipient": "vc",
+      "body": "END, slots 257 and 257b, light (dc, Utilz, todo 18), on vc's GOs by socket at 20:33Z and 20:37Z, bytes as vc hashed them (kv-readback.sh c0e7bf15, kv-readback-remote.sh 23e128a2, kv-rm-tooldirs.sh d72ba621): 2.14.2's keg on kovacs reads right on every row in both runs, and the keg wrote nothing under $HOME; each outside FAIL is another writer's, named by that writer's own record. dc's two /var/tmp tool dirs on kovacs are removed.\n- Run 1, rb2142, 20:34:00Z to 20:34:20Z: 83 ok, 7 note, 1 FAIL. Run 2, rb2142b, 20:37:54Z to 20:38:09Z, started once the Mac's load read 59.07: 83 ok, 9 note, 10 FAIL. Every row but outside is ok in both and identical across the two. Logs in ~/Devel/scratch/utilz-dc/readback/rb2142/logs/ and rb2142b/logs/; both kovacs run dirs removed.\n- The keg: brew list utilz 2.14.2 and yq 4.54.1; utilz:2.14.2 installed at /home/linuxbrew/.linuxbrew/Cellar/utilz/2.14.2/libexec (54b6262, CI unknown), the only utilz on the login PATH; utilz doctor \"All checks passed!\" exit 0, with its macOS-only rows; each refusal 0083 put in macoz, menuz and arngz (exit 2, its line, stdout empty); macoz 1.0.1, menuz 0.4.7, arngz 1.1.2, prez 2.5.9.\n- Run 1's FAIL: ~/.cache/update-manager-core/meta-release-lts, written at 20:34:03Z by check-new-release-gtk under the desktop session's update-notifier-release.service. Its .path unit starts it when /var/lib/ubuntu-release-upgrader/release-upgrade-available changes, which it did at 20:34:00.754Z, as the run's first ssh session opened (sshd's pam_motd and its 91-release-upgrade hook, inferred). Run 2 did not write it, so the check is daily, not per login.\n- Run 2's FAILs: kovacs-sysadm's live Claude Code session (claude start --name kovacs-sysadm): its transcript under ~/.config/claude/projects/-home-matts-Devel-agt-kovacs-sysadm/, and its status line's npm exec --yes -- ccstatusline@2.0.12 from ~/Devel/agt/kovacs-sysadm, by npm's own debug logs, writing ~/.cache/npm/_npx, _cacache and _logs; the two /tmp notes are the same session's. Run 1, the same commands, wrote no npm file.\n- Command 2, 20:34:21Z: /var/tmp/dc-2141-sc090.qyz5IL (8 entries, 24M) and /var/tmp/dc-2141-lua.dXTRHg (3 entries, 364K) removed and read back absent. dc has nothing left on kovacs.\n- The traces were read-only ssh reads, 20:35Z to 20:36Z and at 20:38:40Z, nothing written. todo 18 is archived with this record, both its steps run.",
+      "fyi": true,
+      "recorded_at": "2026-10-23T20:40:38.320Z"
     }
   ],
   "handled": [

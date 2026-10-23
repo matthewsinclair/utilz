@@ -3,9 +3,9 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: fb5bf5ff-2844-4c9d-b2e3-9b4325f4e6d2
-heartbeat_at: 2026-10-23 20:03Z
+heartbeat_at: 2026-10-23 20:40Z
 status: active
-focus: "After 2.14.2's cut (54b6262d, tag 561e0a9d; dc's dry run green in slot 251): next the kovacs readback of 2.14.2's keg, STARTed with vc once hv has pushed the tap and Intent's kovacs preflight has ENDed; then dc's two /var/tmp tool dirs on kovacs removed. Resume: ~/Devel/scratch/utilz-dc/RESUME.md."
+focus: "2.14.2's post-release share is done: the kovacs readback of 2.14.2's keg read right on every row in slots 257 and 257b, each home-dir write traced to another writer, and dc's kovacs tool dirs are removed. Nothing open on dc. Resume: ~/Devel/scratch/utilz-dc/RESUME.md."
 claims: []
 ---
 
@@ -17,7 +17,7 @@ _(none)_
 
 ## TODO
 
-- 2.14.2's post-release steps, dc's share: the kovacs readback of 2.14.2's keg (readback/kv-readback.sh, with VERSION 2.14.2 and COMMIT7 54b6262 in kv-readback-remote.sh and its expected lines rechecked against 2.14.2's code), STARTed with vc once hv has pushed the tap, kovacs's brew carries 2.14.2 and Intent's kovacs preflight has ENDed; then dc's two /var/tmp tool dirs on kovacs removed (~/Devel/scratch/utilz-dc/RESUME.md). The release dry run before the cut was green (slot 251, its END on the board), and hv cut 2.14.2 at 54b6262d, tag 561e0a9d. Size S. (edited)
+_(none)_
 
 ## Holds
 
