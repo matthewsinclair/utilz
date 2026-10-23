@@ -3,9 +3,9 @@ node: ic
 name: Interface Claude
 role: interface
 session_id: df390759-f856-41e2-9092-fcba65d2016a
-heartbeat_at: 2026-10-23 19:04Z
+heartbeat_at: 2026-10-23 19:07Z
 status: active
-focus: "23 Oct, localfolded for hv's compact on vc's word: holding for the compact, /in-session with its pickup and vc's word; after the compact, commit the pickup render at once, before dc's dry-run GO; no tree writes from the GO until vc says the cut's last row is read; todos 8 and 9 after the cut. Resume: ~/Devel/scratch/utilz-ic/RESUME.md."
+focus: "23 Oct, after hv's compact: /in-session run and its pickup committed before dc's dry-run GO; holding (hold 15) for vc's word; no tree writes from the GO until vc says the cut's last row is read, intent wb verbs included; after the cut, todo 8 then todo 9, each booked with vc. Resume: ~/Devel/scratch/utilz-ic/RESUME.md."
 claims: []
 ---
 
