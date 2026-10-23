@@ -1,0 +1,15 @@
+{
+  "id": "01M5N9E1ZMB10TAESGPGE25J1W",
+  "ts": "2026-10-23T21:07:25.300Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "todo",
+    "text": "Kovacs legs for ic's 0103, then 0104, on vc's word (e45662fb): one leg each of `utilz test menuz` (tests.yml's Ubuntu loop for menuz: menuz.bats, and macos.bats with its fakes) on the bytes vc names from ic's worktree ~/Devel/scratch/utilz-ic/wt-0103, from a full bundle in the leg's own /var/tmp run dir on kovacs, which goes once its logs are back. One wrapper for both, readied from 0102's leg: it refuses on any diff hash but vc's, runs under a kill timeout, and reads back the bats count from the run with every not ok and skip named. START to vc once vc names each one's bytes; nothing runs before vc's GO. Size XS each."
+  }
+}

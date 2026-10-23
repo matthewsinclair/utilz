@@ -3,9 +3,9 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: fb5bf5ff-2844-4c9d-b2e3-9b4325f4e6d2
-heartbeat_at: 2026-10-23 20:51Z
+heartbeat_at: 2026-10-23 21:07Z
 status: active
-focus: "Localfold for hv's compact (vc's announce 25b4aaed): dc's share of 2.14.2 is done (the dry run in slot 251, the kovacs readback in slots 257 and 257b, dc's kovacs tool dirs removed, todo 18 archived at 7def3bd1); nothing open on dc. After the compact: /in-session, commit the pickup at once, then hold for vc's word. Resume: ~/Devel/scratch/utilz-dc/RESUME.md."
+focus: "23 Oct, on vc's word (e45662fb): readying the kovacs legs for ic's 0103, then 0104 (utilz test menuz from a /var/tmp bundle of the bytes vc names; nothing runs before vc's GO); each START goes to vc once vc names its bytes. Resume: ~/Devel/scratch/utilz-dc/RESUME.md."
 claims: []
 ---
 
@@ -17,11 +17,11 @@ _(none)_
 
 ## TODO
 
-_(none)_
+- Kovacs legs for ic's 0103, then 0104, on vc's word (e45662fb): one leg each of `utilz test menuz` (tests.yml's Ubuntu loop for menuz: menuz.bats, and macos.bats with its fakes) on the bytes vc names from ic's worktree ~/Devel/scratch/utilz-ic/wt-0103, from a full bundle in the leg's own /var/tmp run dir on kovacs, which goes once its logs are back. One wrapper for both, readied from 0102's leg: it refuses on any diff hash but vc's, runs under a kill timeout, and reads back the bats count from the run with every not ok and skip named. START to vc once vc names each one's bytes; nothing runs before vc's GO. Size XS each.
 
 ## Holds
 
-- Holding dc for hv's compact (vc's localfold announce 25b4aaed, on hv's word: "corale a localfold across the nodes, then get this done on the bounce"). Nothing of dc's is open or running: 2.14.2's dry run, readback and kovacs cleanup are done (todo 18 archived at 7def3bd1). Released when: hv's compact of this session has run and /in-session's pickup is committed at once. Then dc holds for vc's word (the announce's step 6), and this hold is archived with dc's next records.
+_(none)_
 
 ## Watch-outs
 
