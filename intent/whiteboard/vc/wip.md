@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 74b51d87-af54-4adf-9287-d19216567c43
-heartbeat_at: 2026-10-23 20:48Z
+heartbeat_at: 2026-10-23 20:51Z
 status: active
-focus: "23 Oct, localfolded for hv's compact after 2.14.2's release (released and read back here and on kovacs; globalfold 851e75cd). On the bounce: ic's 0104 design and 0103's bytes to vc, one worktree, each with its own slot and landing. Resume: ~/Devel/scratch/utilz-vc/RESUME.md"
+focus: "23 Oct, after hv's compact, on the bounce: ic's 0104 design and 0103's bytes to vc, one worktree off main, each with its own light slot and landing, a kovacs leg for macos.bats; cc and dc hold for vc's word; no cut asked. Resume: ~/Devel/scratch/utilz-vc/RESUME.md"
 claims: []
 ---
 
