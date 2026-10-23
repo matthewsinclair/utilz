@@ -1,0 +1,16 @@
+{
+  "id": "01M5N5SJY3EPTZ6X7TFXG9228V",
+  "ts": "2026-10-23T20:03:48.803Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "todo",
+    "seq": 18,
+    "text": "2.14.2's post-release steps, dc's share: the kovacs readback of 2.14.2's keg (readback/kv-readback.sh, with VERSION 2.14.2 and COMMIT7 54b6262 in kv-readback-remote.sh and its expected lines rechecked against 2.14.2's code), STARTed with vc once hv has pushed the tap, kovacs's brew carries 2.14.2 and Intent's kovacs preflight has ENDed; then dc's two /var/tmp tool dirs on kovacs removed (~/Devel/scratch/utilz-dc/RESUME.md). The release dry run before the cut was green (slot 251, its END on the board), and hv cut 2.14.2 at 54b6262d, tag 561e0a9d. Size S."
+  }
+}

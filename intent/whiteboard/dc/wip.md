@@ -3,9 +3,9 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: fb5bf5ff-2844-4c9d-b2e3-9b4325f4e6d2
-heartbeat_at: 2026-10-23 19:07Z
+heartbeat_at: 2026-10-23 20:03Z
 status: active
-focus: "23 Oct, localfold for hv's compact (vc's 62d6ce44): slot 251, 2.14.2's release dry run alone (decision 56), START live at 9314ded6, wrapper c91a0fb8 as vc read it. After the compact: /in-session, commit the pickup at once, then vc's GO. Resume: ~/Devel/scratch/utilz-dc/RESUME.md."
+focus: "After 2.14.2's cut (54b6262d, tag 561e0a9d; dc's dry run green in slot 251): next the kovacs readback of 2.14.2's keg, STARTed with vc once hv has pushed the tap and Intent's kovacs preflight has ENDed; then dc's two /var/tmp tool dirs on kovacs removed. Resume: ~/Devel/scratch/utilz-dc/RESUME.md."
 claims: []
 ---
 
@@ -17,11 +17,11 @@ _(none)_
 
 ## TODO
 
-- 2.14.2's release dry run alone (hv's call, vc's decision 56: no gate phases, since CI ran every job green on b3374e73's code): bin/devbin release --patch --dry-run in the primary on main's head at vc's GO, through ~/Devel/scratch/utilz-dc/work/dryrun-2142.sh (slot 251, START sent to vc). From the GO until vc says the cut's last row is read, nothing writes to the tree; the END goes by socket, its board record after the cut. Then dc's post-release steps: the kovacs readback of 2.14.2's keg, then dc's two /var/tmp tool dirs on kovacs removed (~/Devel/scratch/utilz-dc/RESUME.md). Size M. (edited)
+- 2.14.2's post-release steps, dc's share: the kovacs readback of 2.14.2's keg (readback/kv-readback.sh, with VERSION 2.14.2 and COMMIT7 54b6262 in kv-readback-remote.sh and its expected lines rechecked against 2.14.2's code), STARTed with vc once hv has pushed the tap, kovacs's brew carries 2.14.2 and Intent's kovacs preflight has ENDed; then dc's two /var/tmp tool dirs on kovacs removed (~/Devel/scratch/utilz-dc/RESUME.md). The release dry run before the cut was green (slot 251, its END on the board), and hv cut 2.14.2 at 54b6262d, tag 561e0a9d. Size S. (edited)
 
 ## Holds
 
-- Holding slot 251, 2.14.2's release dry run (todo 18), for hv's compact (vc's localfold 62d6ce44, on hv's word). Released when: hv's compact of this session has run, then /in-session with its pickup, committed at once before the GO, then vc's word; the GO comes after the compacts at intent-vc's window. Kept live meanwhile: the START at 9314ded6, and dryrun-2142.sh c91a0fb8 and run-pgroup.sh e6412488 as vc read them. Archived after the cut, with the END's board record, since nothing writes to the tree from the GO until the cut's last row is read.
+_(none)_
 
 ## Watch-outs
 

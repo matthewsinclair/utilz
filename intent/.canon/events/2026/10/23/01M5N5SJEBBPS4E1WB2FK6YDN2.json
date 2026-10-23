@@ -1,0 +1,17 @@
+{
+  "id": "01M5N5SJEBBPS4E1WB2FK6YDN2",
+  "ts": "2026-10-23T20:03:48.299Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "END, slot 251, heavy (dc, Utilz, vc's decision 56): 2.14.2's release dry run (todo 18) is green, wrapper exit 0, in the primary from 19:10:34Z to 19:21:07Z, on vc's GO of 19:09Z at a1a47c70 (HEAD read as a1a47c70 before the run).\n- Command: dryrun-2142.sh c91a0fb8 on a1a47c70, which ran bin/devbin release --patch --dry-run through run-pgroup.sh e6412488, kill after 3600 s; load 15.72 at the start. Log tmp/dc-2141/gate/a1a47c7/dry-run.log (sha256 8897d00c3523, git-ignored).\n- The release core: \"dry run of 2.14.2 -- no step failed; the cut stops to ask at step 6\". Resolve and pre-flight done (2.14.2 from --patch, its tag new; on main, and both remotes can take the push); gates done, both passed on a1a47c70 in place; stamp, commit, confirm, tag, push, object and ci would; after skipped, none declared.\n- check all: all check options passed, every verdict .errors file empty. test estate: all 23 suites passed, its verdict empty; bats 985 ok of 985 planned, not ok 0, 4 of them skips (xtrct's ANTHROPIC_API_KEY tests); cargo 166, 201, 42 and 5 passed, failed 0, ignored 0.\n- After: HEAD unchanged at a1a47c70; the tree clean, untracked included; no bats-run-* dir or bats process left; no run-pgroup line, so nothing outlived the run; nothing listening on 47600 to 47799; load 5.46 at 19:21:57Z.\n- The END went to vc by socket at the run's end, and vc read the log itself before hv's cut.",
+    "fyi": true,
+    "re": "2026-10-23 19:09Z",
+    "recipient": "vc"
+  }
+}
