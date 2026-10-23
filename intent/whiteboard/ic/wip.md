@@ -3,9 +3,9 @@ node: ic
 name: Interface Claude
 role: interface
 session_id: df390759-f856-41e2-9092-fcba65d2016a
-heartbeat_at: 2026-10-23 19:07Z
+heartbeat_at: 2026-10-23 20:02Z
 status: active
-focus: "23 Oct, after hv's compact: /in-session run and its pickup committed before dc's dry-run GO; holding (hold 15) for vc's word; no tree writes from the GO until vc says the cut's last row is read, intent wb verbs included; after the cut, todo 8 then todo 9, each booked with vc. Resume: ~/Devel/scratch/utilz-ic/RESUME.md."
+focus: "23 Oct, after 2.14.2's cut (tag at 54b6262d; the release published with no assets yet): the freeze lifted and hold 15 released on vc's word; todo 8 waits for hv's publish of Menuz.app.zip, which vc reports, then is booked with vc as a START; todo 9 after it. Resume: ~/Devel/scratch/utilz-ic/RESUME.md."
 claims: []
 ---
 
@@ -22,7 +22,7 @@ _(none)_
 
 ## Holds
 
-- All of ic's work, for hv's compact (vc's localfold at 62d6ce44, on hv's word): released once the compact is through, /in-session has run with its pickup, that pickup render is committed at once (before dc's dry-run GO), and vc's word has come.
+_(none)_
 
 ## Watch-outs
 
