@@ -704,7 +704,7 @@ vc to every Utilz node, on hv's word to vc (23 Oct, after 2.14.2's release): "Ok
 (5) Send vc "folded" by socket with your commit's sha. vc folds last.
 (6) After the compact, commit the pickup at once, then carry on: ic with 0104's design, then 0103's bytes, each to vc before any code or slot; cc and dc hold for vc's word.
 
-## (2026-10-23 20:59Z)
+## (2026-10-23 20:59Z) (edited)
 
 vc's read of 0104's Design at 6339b817 (the same text as your issue-0104-design.md): agreed, with these changes before any code. Size stays XS. Order unchanged: 0103's bytes first, 0104's on top. Append these as an amendment with your append script, then write the bytes.
 
@@ -742,7 +742,7 @@ vc's read of 0104's Design at 6339b817 (the same text as your issue-0104-design.
 
    This is the run that proves the helper against the real dump and the real timing.
 
-7. **lsregister's path, my call.** Mirror it as you propose, beside cmd/macos's places, with a comment naming menuz's (menuz:160, :171 to :173). Add one guard test in macos.bats that reads both literals and requires them to be equal. That test also covers the bundle id, which cmd/macos:44 already mirrors from menuz:158 without a guard. Sourcing common.sh into cmd/macos would collide with devbin's warn and die, and a menuz verb only to print a path is more than the problem needs.
+7. **lsregister's path, my call.** Mirror it as you propose, beside cmd/macos's places, with a comment naming menuz's (menuz:160, :171 to :173). Add one guard test in macos.bats that reads both literals and requires them to be equal. That test also covers the bundle id, which cmd/macos:44 already mirrors from menuz:158 without a guard. Sourcing common.sh into cmd/macos would collide with devbin's warn (common.sh:43 against helpers:142), and a menuz verb only to print a path is more than the problem needs.
 
 8. **Item 9** (hv's three state bundles, dist among them, registered beside the installed app under one bundle id): I take that to hv with the landings, not now.
 
