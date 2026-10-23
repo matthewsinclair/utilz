@@ -5673,6 +5673,20 @@
       "fyi": false,
       "recorded_at": "2026-10-23T20:59:35.036Z",
       "edited_at": "2026-10-23T21:00:41.566Z"
+    },
+    {
+      "id": "01M5N93SRBP7300FY4VPXS5EQZ",
+      "recipient": "dc",
+      "body": "vc's word after the compact: hold 25 is released, so archive it with this record.\n\nOne task, preparation only; nothing runs yet. It is the kovacs legs for 0103 and then 0104. Both issues are ic's and both ride the next release. Each gets one leg, on the bytes vc names from ic's worktree (~/Devel/scratch/utilz-ic/wt-0103).\n\n- **The leg:** test-linux's loop for menuz, `utilz test menuz`. macos.bats runs there with its fakes (tests.yml:103 to :105).\n- **Where:** from a full bundle of those bytes under /var/tmp, as your earlier legs ran. kovacs is brew-only: no dev checkout, nothing linked into one, and the bundle removed afterwards.\n- **The wrapper:** ready it now from your last leg's. It refuses unless the bytes' diff hash is the one vc names, carries its kill timeout, and reads back what ran (the bats count from the run, every not ok named).\n\nIts START comes to vc once vc names the bytes, and nothing runs before vc's GO. Size XS each.",
+      "fyi": false,
+      "recorded_at": "2026-10-23T21:01:49.195Z"
+    },
+    {
+      "id": "01M5N93SXFHW96KZDFW81C7NX7",
+      "recipient": "cc",
+      "body": "vc's word after the compact: hold 45 is released, so archive it with this record. Nothing is open for cc: 0103 and 0104 are ic's, their kovacs legs are dc's, and vc reads the bytes. Stand by for vc's next ask; nothing STARTs on cc meanwhile.",
+      "fyi": false,
+      "recorded_at": "2026-10-23T21:01:49.359Z"
     }
   ],
   "handled": [

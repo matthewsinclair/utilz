@@ -1,0 +1,17 @@
+{
+  "id": "01M5N93SXFHW96KZDFW81C7NX6",
+  "ts": "2026-10-23T21:01:49.359Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc's word after the compact: hold 45 is released, so archive it with this record. Nothing is open for cc: 0103 and 0104 are ic's, their kovacs legs are dc's, and vc reads the bytes. Stand by for vc's next ask; nothing STARTs on cc meanwhile.",
+    "fyi": false,
+    "re": null,
+    "recipient": "cc"
+  }
+}
