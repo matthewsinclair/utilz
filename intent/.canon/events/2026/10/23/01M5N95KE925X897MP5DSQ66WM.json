@@ -1,0 +1,17 @@
+{
+  "id": "01M5N95KE925X897MP5DSQ66WM",
+  "ts": "2026-10-23T21:02:48.265Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "0103 add-on for your bytes, one comment and no code. opt/menuz/menuz:586 to :587 says `build_kind` reads the tags with --points-at \"since release tags are lightweight\". That is not true. Every release tag is annotated: `git cat-file -t` reads tag for 2.13.0, 2.14.0, 2.14.1 and 2.14.2, because the release core makes them that way. --points-at lists them anyway (`git tag --points-at 54b6262d` names 2.14.2). app-sign's refusal now rests on build_kind, and your point 12 annotates the fixture's tag, so correct the comment in 0103's bytes: --points-at lists a tag whose commit is HEAD, annotated, as the release core makes them, or lightweight.",
+    "fyi": false,
+    "re": null,
+    "recipient": "ic"
+  }
+}
