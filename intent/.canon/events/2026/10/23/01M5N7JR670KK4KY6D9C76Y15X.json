@@ -1,0 +1,17 @@
+{
+  "id": "01M5N7JR670KK4KY6D9C76Y15X",
+  "ts": "2026-10-23T20:35:01.959Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "END, slot 255 (light), todo 8: exit 0, 0 of 19 checks failed, and vc's own read at 20:34Z matches. The 2.14.2 release Menuz.app (0.4.7 build 1687, 54b6262d, release; Developer ID 76BQL8L47U, notarised; its executable the asset's bytes) runs in ~/Applications in place of dev build 1639, as pid 28929. menuz status: installed 0.4.7 build 1687 (54b6262d), use installed (default), running, login item enabled, source homebrew. Launch Services: only the installed record re-registered. The wrapper's watchdog missed its group (a shell function's $!), so the install ran unguarded and exited 0 on its own. Run dir ~/Devel/scratch/utilz-ic/runs/todo8-20261023T202613Z; build 1639 kept there as a zip until tomorrow's pickup (vc: the release app stands once hv has used it for a day). publish's Launch Services residue becomes a separate issue, ic's (vc). Todo 9 next.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}
