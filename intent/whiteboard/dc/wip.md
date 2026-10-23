@@ -3,9 +3,9 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: fb5bf5ff-2844-4c9d-b2e3-9b4325f4e6d2
-heartbeat_at: 2026-10-23 20:40Z
+heartbeat_at: 2026-10-23 20:47Z
 status: active
-focus: "2.14.2's post-release share is done: the kovacs readback of 2.14.2's keg read right on every row in slots 257 and 257b, each home-dir write traced to another writer, and dc's kovacs tool dirs are removed. Nothing open on dc. Resume: ~/Devel/scratch/utilz-dc/RESUME.md."
+focus: "Localfold for hv's compact (vc's announce 25b4aaed): dc's share of 2.14.2 is done (the dry run in slot 251, the kovacs readback in slots 257 and 257b, dc's kovacs tool dirs removed, todo 18 archived at 7def3bd1); nothing open on dc. After the compact: /in-session, commit the pickup at once, then hold for vc's word. Resume: ~/Devel/scratch/utilz-dc/RESUME.md."
 claims: []
 ---
 
@@ -21,7 +21,7 @@ _(none)_
 
 ## Holds
 
-_(none)_
+- Holding dc for hv's compact (vc's localfold announce 25b4aaed, on hv's word: "corale a localfold across the nodes, then get this done on the bounce"). Nothing of dc's is open or running: 2.14.2's dry run, readback and kovacs cleanup are done (todo 18 archived at 7def3bd1). Released when: hv's compact of this session has run and /in-session's pickup is committed at once. Then dc holds for vc's word (the announce's step 6), and this hold is archived with dc's next records.
 
 ## Watch-outs
 

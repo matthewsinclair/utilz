@@ -1,0 +1,15 @@
+{
+  "id": "01M5N89X41EQD19M0F2QH2S1XY",
+  "ts": "2026-10-23T20:47:40.673Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "hold",
+    "text": "Holding dc for hv's compact (vc's localfold announce 25b4aaed, on hv's word: \"corale a localfold across the nodes, then get this done on the bounce\"). Nothing of dc's is open or running: 2.14.2's dry run, readback and kovacs cleanup are done (todo 18 archived at 7def3bd1). Released when: hv's compact of this session has run and /in-session's pickup is committed at once. Then dc holds for vc's word (the announce's step 6), and this hold is archived with dc's next records."
+  }
+}
