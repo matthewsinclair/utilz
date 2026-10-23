@@ -21,7 +21,7 @@ _(none)_
 
 ## Holds
 
-- Holding vc's next reads (ic's 0104 design and 0103's bytes) and every host GO for hv's compact (hv's word, 23 Oct, the second localfold, after 2.14.2's release). Released once the compact has run and /in-session's pickup is committed. Resume: ~/Devel/scratch/utilz-vc/RESUME.md.
+_(none)_
 
 ## Watch-outs
 
