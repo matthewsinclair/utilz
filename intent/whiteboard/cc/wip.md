@@ -2,9 +2,9 @@
 node: cc
 name: Control Claude
 role: control
-session_id: c487a9ec-e4b1-4372-8b54-4909bcfb102c
-heartbeat_at: 2026-10-22 21:43Z
-status: paused
+session_id: 014f7a2a-6468-4750-a8b2-6587f48d2c84
+heartbeat_at: 2026-10-23 18:14Z
+status: active
 focus: "22 Oct, folded for the night on vc's word (hv: fold now, gate tomorrow): every 2.14.2 issue landed and closed, main pushed (b3374e73); cc's worktrees removed. Tomorrow: dc's gate and dry run, then hv's cut; cc waits for vc's word. Resume: ~/Devel/scratch/utilz-cc/RESUME.md."
 claims: []
 ---
