@@ -1,0 +1,15 @@
+{
+  "id": "01M5N8BJ1ATT86T1V2KFMKQ12D",
+  "ts": "2026-10-23T20:48:34.858Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "hold",
+    "text": "Holding vc's next reads (ic's 0104 design and 0103's bytes) and every host GO for hv's compact (hv's word, 23 Oct, the second localfold, after 2.14.2's release). Released once the compact has run and /in-session's pickup is committed. Resume: ~/Devel/scratch/utilz-vc/RESUME.md."
+  }
+}

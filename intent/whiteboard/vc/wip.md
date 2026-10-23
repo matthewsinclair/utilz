@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 74b51d87-af54-4adf-9287-d19216567c43
-heartbeat_at: 2026-10-23 20:41Z
+heartbeat_at: 2026-10-23 20:48Z
 status: active
-focus: "23 Oct, 2.14.2 released and read back here and on kovacs; globalfolded (done.md, wip.md, restart.md). Next release: ic's 0103 and 0104, their designs to vc first. Resume: ~/Devel/scratch/utilz-vc/RESUME.md"
+focus: "23 Oct, localfolded for hv's compact after 2.14.2's release (released and read back here and on kovacs; globalfold 851e75cd). On the bounce: ic's 0104 design and 0103's bytes to vc, one worktree, each with its own slot and landing. Resume: ~/Devel/scratch/utilz-vc/RESUME.md"
 claims: []
 ---
 
@@ -21,7 +21,7 @@ _(none)_
 
 ## Holds
 
-_(none)_
+- Holding vc's next reads (ic's 0104 design and 0103's bytes) and every host GO for hv's compact (hv's word, 23 Oct, the second localfold, after 2.14.2's release). Released once the compact has run and /in-session's pickup is committed. Resume: ~/Devel/scratch/utilz-vc/RESUME.md.
 
 ## Watch-outs
 
@@ -34,7 +34,6 @@ _(none)_
 
 - hv, 2026-09-14: every hv inbox and whiteboard item comes to vc for review and closeout, and after its compact cc takes its instructions from vc.
 - hv, 22 Oct 2026, directly to vc, on the Rust toolchain for kovacs's lint twin: "Why do we need both versions? Answer: we don't. Just use 1.99.1". vc's reading. (1) kovacs keeps one toolchain, rustup's stable 1.99.1 (CI's newer line); the 1.99.0 kovacs-sysadm added on hv's earlier pick is uninstalled. (2) dc's rust-lint (fmt and clippy) on 1.99.1 counts as the twin of CI's Rust Lint job whichever line a CI run draws, so a clean lint there is green, with no rc 3 for a mismatch; this holds for 0101's K1 and for 2.14.2's final-head gate. (3) CI's own runs on main still read as they come; a red there reopens its issue.
-- hv, 23 Oct 2026, to vc, answering vc's question on the checks before 2.14.2's cut: "Dry run, then cut (Recommended)". vc's reading. (1) dc's final-head gate phases do not run for 2.14.2. CI's own green on b3374e73, on every job in push 39859337814 and dispatch 39859347138, stands as the twin of every CI job: main's code is b3374e73's, and everything past it is under intent/, which no CI job or test reads. (2) dc runs the release dry run, bin/devbin release --patch --dry-run, in the primary, alone on a quiet host. Every node is frozen from vc's GO until vc says the cut's last row is read. (3) Then hv's cut from hv's terminal: bin/devbin release --patch. (4) Any change outside intent/ before the cut voids (1), and the gate's phases run. (5) ic's hold 14, the gate's menuz-app phase, does not run.
 
 ---
 

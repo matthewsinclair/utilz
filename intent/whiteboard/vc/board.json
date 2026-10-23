@@ -5,9 +5,9 @@
     "name": "Validation Claude",
     "role": "validation",
     "session_id": "74b51d87-af54-4adf-9287-d19216567c43",
-    "heartbeat_at": "2026-10-23T20:41:22.440Z",
+    "heartbeat_at": "2026-10-23T20:48:35.075Z",
     "status": "active",
-    "focus": "23 Oct, 2.14.2 released and read back here and on kovacs; globalfolded (done.md, wip.md, restart.md). Next release: ic's 0103 and 0104, their designs to vc first. Resume: ~/Devel/scratch/utilz-vc/RESUME.md",
+    "focus": "23 Oct, localfolded for hv's compact after 2.14.2's release (released and read back here and on kovacs; globalfold 851e75cd). On the bounce: ic's 0104 design and 0103's bytes to vc, one worktree, each with its own slot and landing. Resume: ~/Devel/scratch/utilz-vc/RESUME.md",
     "claims": [],
     "recorded_at": "2026-09-14T08:46:06.602Z",
     "authored_at": "2026-09-11 16:33Z",
@@ -1954,7 +1954,8 @@
       "kind": "decision",
       "seq": 56,
       "text": "hv, 23 Oct 2026, to vc, answering vc's question on the checks before 2.14.2's cut: \"Dry run, then cut (Recommended)\". vc's reading. (1) dc's final-head gate phases do not run for 2.14.2. CI's own green on b3374e73, on every job in push 39859337814 and dispatch 39859347138, stands as the twin of every CI job: main's code is b3374e73's, and everything past it is under intent/, which no CI job or test reads. (2) dc runs the release dry run, bin/devbin release --patch --dry-run, in the primary, alone on a quiet host. Every node is frozen from vc's GO until vc says the cut's last row is read. (3) Then hv's cut from hv's terminal: bin/devbin release --patch. (4) Any change outside intent/ before the cut voids (1), and the gate's phases run. (5) ic's hold 14, the gate's menuz-app phase, does not run.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-10-23T20:48:34.681Z",
       "recorded_at": "2026-10-23T18:22:04.866Z"
     },
     {
@@ -1973,6 +1974,14 @@
       "text": "The next release (hv's rule: stack everything outstanding): ic's 0103 (publish refuses a Menuz.app that is not a release build of the tag's commit; app-sign refuses off the tag) and 0104 (publish's Launch Services residue). vc reads each design, then each one's bytes before its slot. Both go in one worktree off main, 0103's commit first and 0104's on top, each with its own slot and landing. Until 0103 lands, the release app is built from a worktree at the tag (restart.md, \"After each cut\").",
       "state": "live",
       "recorded_at": "2026-10-23T20:41:21.848Z"
+    },
+    {
+      "node": "vc",
+      "kind": "hold",
+      "seq": 20,
+      "text": "Holding vc's next reads (ic's 0104 design and 0103's bytes) and every host GO for hv's compact (hv's word, 23 Oct, the second localfold, after 2.14.2's release). Released once the compact has run and /in-session's pickup is committed. Resume: ~/Devel/scratch/utilz-vc/RESUME.md.",
+      "state": "live",
+      "recorded_at": "2026-10-23T20:48:34.858Z"
     }
   ],
   "sent": [
