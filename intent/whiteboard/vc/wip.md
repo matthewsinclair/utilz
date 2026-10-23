@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 74b51d87-af54-4adf-9287-d19216567c43
-heartbeat_at: 2026-10-23 21:30Z
-status: paused
-focus: "23 Oct, closed for the night on hv's word (globalfold; every Utilz node folded and released). Tomorrow: ic's 0103 bytes to vc from wt-0103 (its WIP banked, dae819dc), then slot 260, dc's kovacs leg and the landing; 0104's bytes on top, the same flow; the next release's number is hv's. Resume: ~/Devel/scratch/utilz-vc/RESUME.md"
+heartbeat_at: 2026-10-23 21:46Z
+status: active
+focus: "After hv's compact, on the night of the close: nothing starts until hv's word. Then ic's 0103 bytes from wt-0103 to vc's read, slot 260, dc's kovacs leg, the landing and close; 0104's bytes on top, the same flow plus one run against the real Launch Services; the next release's number is hv's. Resume: ~/Devel/scratch/utilz-vc/RESUME.md"
 claims: []
 ---
 
