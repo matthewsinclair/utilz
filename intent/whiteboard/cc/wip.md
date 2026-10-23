@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: 014f7a2a-6468-4750-a8b2-6587f48d2c84
-heartbeat_at: 2026-10-23 18:14Z
+heartbeat_at: 2026-10-23 19:05Z
 status: active
-focus: "22 Oct, folded for the night on vc's word (hv: fold now, gate tomorrow): every 2.14.2 issue landed and closed, main pushed (b3374e73); cc's worktrees removed. Tomorrow: dc's gate and dry run, then hv's cut; cc waits for vc's word. Resume: ~/Devel/scratch/utilz-cc/RESUME.md."
+focus: "23 Oct, folded for hv's compact on vc's word: 2.14.2 is a dry run (dc, slot 251) then hv's cut (vc's decision 56); nothing of cc's is needed and nothing is open on cc. After the compact: /in-session with its pickup, commit that pickup at once, before vc's GO; then vc's word. Freeze from the GO until vc says the cut's last row is read. Resume: ~/Devel/scratch/utilz-cc/RESUME.md."
 claims: []
 ---
 
@@ -21,7 +21,7 @@ _(none)_
 
 ## Holds
 
-_(none)_
+- Holding for hv's compact (vc's localfold word, 23 Oct, on hv's word). Released once the compact has run, /in-session has run with its pickup and that pickup is committed at once (before vc's GO for dc's dry run, slot 251), and vc's word has come. Nothing STARTs meanwhile. From that GO until vc says the cut's last row is read, cc writes nothing to the tree, intent wb verbs included, and a compact inside that window skips the pickup. Resume: ~/Devel/scratch/utilz-cc/RESUME.md.
 
 ## Watch-outs
 
