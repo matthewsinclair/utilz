@@ -3,9 +3,9 @@ node: ic
 name: Interface Claude
 role: interface
 session_id: df390759-f856-41e2-9092-fcba65d2016a
-heartbeat_at: 2026-10-23 21:29Z
-status: paused
-focus: "23 Oct, closed for the night on hv's word: 0103's work in progress banked from wt-0103 (runs/0103-bytes-wip-20261023T212746Z.patch, sha256 dae819dc, base 6339b817), not yet the bytes for vc's read; tomorrow: remove build 1639's zip, answer critic-shell (a guard test pinning the bare release tag, a 7-character floor), send vc the bytes and ask hv's CHANGELOG number, then clear vc's four live messages; 0104's code after, on its amendments (d76d9828, b5ec69db). Resume: ~/Devel/scratch/utilz-ic/RESUME.md."
+heartbeat_at: 2026-10-23 21:47Z
+status: active
+focus: "Booted after the night's fold on hv's compact, and holding for vc's word: 0103's work in progress banked in wt-0103 (dae819dc, base 6339b817); vc's answers to the fold notes (21:30Z) agree all four critic points (the guard test pinning the bare tag, the 7-character floor, an annotated-tag build_kind case, app_ship_blockers on the staged dist), then the bytes to vc; 0104's code after, on its amendments (d76d9828, b5ec69db). Resume: ~/Devel/scratch/utilz-ic/RESUME.md."
 claims: [ISSUE:0103, ISSUE:0104]
 ---
 
