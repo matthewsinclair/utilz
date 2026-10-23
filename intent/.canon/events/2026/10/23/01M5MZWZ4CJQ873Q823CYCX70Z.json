@@ -1,0 +1,15 @@
+{
+  "id": "01M5MZWZ4CJQ873Q823CYCX70Z",
+  "ts": "2026-10-23T18:20:48.140Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "kind": "hold",
+    "text": "The menuz-app phase of 2.14.2's final-head gate (the menuz app built here, the twin of CI's menuz app job): released when hv's call on the gate's scope is the full gate and vc's word gives that phase to ic; archived if the gate is narrower (vc, 23 Oct)."
+  }
+}

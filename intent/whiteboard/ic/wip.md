@@ -2,10 +2,10 @@
 node: ic
 name: Interface Claude
 role: interface
-session_id: a7bb90d9-eca5-4d5e-befc-4788829b75d1
-heartbeat_at: 2026-10-22 21:41Z
-status: paused
-focus: "22 Oct, closed for the night on hv's word: 0102 landed (adbba439), closed (81953d7d) and green on CI (39855660073); hv's Mac runs Menuz 0.4.7 build 1639, a build of main; hv passed the log window's look for now. Nothing open on ic. Resume: ~/Devel/scratch/utilz-ic/RESUME.md."
+session_id: df390759-f856-41e2-9092-fcba65d2016a
+heartbeat_at: 2026-10-23 18:20Z
+status: active
+focus: "23 Oct, 2.14.2's day on vc's word: nothing heavy; the gate's menuz-app phase if hv picks the full gate and vc gives it to ic; no write to the tree from the dry run's GO until vc reads the cut's last row; after the cut, the release asset replaces dev build 1639 on hv's Mac. Resume: ~/Devel/scratch/utilz-ic/RESUME.md."
 claims: []
 ---
 
@@ -17,11 +17,12 @@ _(none)_
 
 ## TODO
 
-_(none)_
+- After 2.14.2's cut, once Menuz.app.zip is attached to the release (hv's app-sign, app-notarize and publish) and brew has 2.14.2 here, booked with vc: the keg's menuz install replaces dev build 1639 (0.4.7, 16f33d49) in ~/Applications with the release asset, read back running (vc's word, 23 Oct). Size S.
+- Once the release asset is read back running in place of build 1639: remove ~/Devel/scratch/utilz-ic/kept-menuz-1425/ (put-back-0072.sh's source) and unregister it from Launch Services, which lists it under the installed copy's bundle id; drop the two stale records dc found for paths that no longer exist (state-0102/M3/.../Debug/Menuz.app and /var/folders/.../tmp.GYPqg7Uhtf/unpacked/Menuz.app); an lsregister read before and after (dc's fold FYI, 22 Oct). Size XS.
 
 ## Holds
 
-_(none)_
+- The menuz-app phase of 2.14.2's final-head gate (the menuz app built here, the twin of CI's menuz app job): released when hv's call on the gate's scope is the full gate and vc's word gives that phase to ic; archived if the gate is narrower (vc, 23 Oct).
 
 ## Watch-outs
 

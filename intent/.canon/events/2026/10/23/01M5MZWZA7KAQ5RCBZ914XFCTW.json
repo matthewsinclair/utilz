@@ -1,0 +1,15 @@
+{
+  "id": "01M5MZWZA7KAQ5RCBZ914XFCTW",
+  "ts": "2026-10-23T18:20:48.327Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "kind": "todo",
+    "text": "After 2.14.2's cut, once Menuz.app.zip is attached to the release (hv's app-sign, app-notarize and publish) and brew has 2.14.2 here, booked with vc: the keg's menuz install replaces dev build 1639 (0.4.7, 16f33d49) in ~/Applications with the release asset, read back running (vc's word, 23 Oct). Size S."
+  }
+}

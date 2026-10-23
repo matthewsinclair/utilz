@@ -1,0 +1,15 @@
+{
+  "id": "01M5MZWZFXAVNARQD9NCM9FFTP",
+  "ts": "2026-10-23T18:20:48.509Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "kind": "todo",
+    "text": "Once the release asset is read back running in place of build 1639: remove ~/Devel/scratch/utilz-ic/kept-menuz-1425/ (put-back-0072.sh's source) and unregister it from Launch Services, which lists it under the installed copy's bundle id; drop the two stale records dc found for paths that no longer exist (state-0102/M3/.../Debug/Menuz.app and /var/folders/.../tmp.GYPqg7Uhtf/unpacked/Menuz.app); an lsregister read before and after (dc's fold FYI, 22 Oct). Size XS."
+  }
+}
