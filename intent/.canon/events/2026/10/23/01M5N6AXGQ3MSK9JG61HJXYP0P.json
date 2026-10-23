@@ -1,0 +1,15 @@
+{
+  "id": "01M5N6AXGQ3MSK9JG61HJXYP0P",
+  "ts": "2026-10-23T20:13:16.697Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "issues.add",
+  "subject": {
+    "type": "issue",
+    "id": "0103"
+  },
+  "payload": {
+    "severity": "medium",
+    "title": "macos publish ships a Menuz.app built off the release tag: app-sign builds whatever HEAD is, and publish checks only the bundle id and version"
+  }
+}
