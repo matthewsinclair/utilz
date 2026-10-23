@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 74b51d87-af54-4adf-9287-d19216567c43
-heartbeat_at: 2026-10-23 19:08Z
+heartbeat_at: 2026-10-23 20:06Z
 status: active
-focus: "23 Oct, getting 2.14.2 out (hv's word): after hv's compact, the GO for dc's dry run (slot 251, the window is Utilz's) once cc's and ic's pickups are committed; then hv's cut and the post-release steps. Resume: ~/Devel/scratch/utilz-vc/RESUME.md"
+focus: "23 Oct, 2.14.2 cut and published (tag on 54b6262d): reading the release commit's last CI job; then hv's Menuz.app, the formula and tap, brew upgrade here, ic's menuz install, dc's kovacs readback, and done.md. Resume: ~/Devel/scratch/utilz-vc/RESUME.md"
 claims: []
 ---
 
@@ -13,11 +13,11 @@ claims: []
 
 ## DOING
 
-- Slot 251, dc's 2.14.2 release dry run (vc's decision 56). vc has read dc's START at 9314ded6: dryrun-2142.sh c91a0fb8, run-pgroup.sh e6412488, and final-head-gate.sh 113fee7e's dry-run branch. The window is Utilz's (intent-vc at 19:05Z; devbin-dc's 0206 run ended green at 19:03Z). The GO comes after hv's compact, once every node's pickup is committed and the tree is clean (text in ~/Devel/scratch/utilz-vc/go-251.txt). Nothing writes to the tree from the GO until the cut's last row is read. Then hv's cut (~/Devel/scratch/utilz-vc/RESUME.md).
+_(none)_
 
 ## TODO
 
-- 2.14.2 (vc's decisions 49 to 56). Every issue landed and closed: 0095 (d633f4cb), 0096 (e96d86a2), 0097 (1d7a677c), 0098 (b5c588a3), 0072 (26c614dd), 0099 (5e01502f), 0102 (adbba439), 0100 (d43fd14b) and 0101 (d1fa2f57); no open issues. CI on b3374e73 green on every job (push 39859337814, dispatch 39859347138). hv's call (decision 56): no gate phases. Next, in order: dc's dry run (slot 251) under the freeze; hv's cut; Menuz.app signed, notarised and published; the formula bump and the tap; the readbacks here and on kovacs; done.md's 2.14.2 entry. (edited)
+- 2.14.2 (vc's decisions 49 to 56) is cut, by hv on 23 Oct: release commit 54b6262d (VERSION and CHANGELOG's date only), annotated tag 2.14.2 (561e0a9d), pushed to local and upstream, and release object 2.14.2 published at 19:44:11Z. The tag's CI run 40013739553 is green on all 8 jobs. The cut's step 11 timed out (ci.wait) on push run 40013730154, whose Rust (ubuntu-latest) job spent 19 minutes installing ffmpeg on GitHub's runner; vc reads its jobs to the end. Next, in order: Menuz.app signed, notarised and published (hv); the formula bump, the tap and its push (hv); brew upgrade and utilz doctor here; ic's todo 8 (menuz install); kovacs's brew at 2.14.2 (kovacs-sysadm on hv's approval), then dc's kovacs readback; cc's hold 44 released; done.md's 2.14.2 entry and the globalfold. (edited)
 
 ## Holds
 

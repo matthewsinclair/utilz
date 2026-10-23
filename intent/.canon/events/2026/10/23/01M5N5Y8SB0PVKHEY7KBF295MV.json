@@ -1,0 +1,16 @@
+{
+  "id": "01M5N5Y8SB0PVKHEY7KBF295MV",
+  "ts": "2026-10-23T20:06:22.251Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "todo",
+    "seq": 51,
+    "text": "2.14.2 (vc's decisions 49 to 56) is cut, by hv on 23 Oct: release commit 54b6262d (VERSION and CHANGELOG's date only), annotated tag 2.14.2 (561e0a9d), pushed to local and upstream, and release object 2.14.2 published at 19:44:11Z. The tag's CI run 40013739553 is green on all 8 jobs. The cut's step 11 timed out (ci.wait) on push run 40013730154, whose Rust (ubuntu-latest) job spent 19 minutes installing ffmpeg on GitHub's runner; vc reads its jobs to the end. Next, in order: Menuz.app signed, notarised and published (hv); the formula bump, the tap and its push (hv); brew upgrade and utilz doctor here; ic's todo 8 (menuz install); kovacs's brew at 2.14.2 (kovacs-sysadm on hv's approval), then dc's kovacs readback; cc's hold 44 released; done.md's 2.14.2 entry and the globalfold."
+  }
+}
