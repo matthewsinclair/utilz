@@ -1,0 +1,15 @@
+{
+  "id": "01M5N7YB5R8D9A3PSYWMKEWXQJ",
+  "ts": "2026-10-23T20:41:21.848Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "todo",
+    "text": "The next release (hv's rule: stack everything outstanding): ic's 0103 (publish refuses a Menuz.app that is not a release build of the tag's commit; app-sign refuses off the tag) and 0104 (publish's Launch Services residue). vc reads each design, then each one's bytes before its slot. Both go in one worktree off main, 0103's commit first and 0104's on top, each with its own slot and landing. Until 0103 lands, the release app is built from a worktree at the tag (restart.md, \"After each cut\")."
+  }
+}

@@ -1,8 +1,43 @@
 ---
-verblock: "19 Oct 2026:v0.16: matts - 2.14.1 released: menuz 0.4.5, Utilz on Linux, and the tests that wrote the user's own state"
+verblock: "23 Oct 2026:v0.17: matts - 2.14.2 released: menuz's own log window, Xcode 27.1, and a showreel that says what it could not do"
 ---
 
 # Done
+
+## 23 Oct 2026 -- 2.14.2 released: menuz's own log window, Xcode 27.1, and a showreel that says what it could not do
+
+**2.14.2 is out**: annotated tag `2.14.2` (`561e0a9`) on `54b6262` ("release: 2.14.2", committed 19:26Z; the tag and the release object 19:44Z), cut by `bin/devbin release --patch` from hv's terminal. It carries everything outstanding after 2.14.1, stacked into one release on hv's standing rule. Each issue was designed in its tracker entry and read by vc before any source edit, then landed and checked by its change. The CHANGELOG entry is the account of what it carries.
+
+**Before the cut.** hv's call, vc's decision 56: no final-head gate phases. CI's own green on `b3374e7`, every job of push run 39859337814 and dispatch 39859347138, stood as the twin, since main's code was `b3374e7`'s and everything after it was under `intent/`. Then dc's dry run alone, slot 251 at `a1a47c7`: no step failed, `check all` passed, and `test estate` passed every suite, with xtrct's API tests skipping as always without a key.
+
+**CI.** The tag run 40013739553 is green on every job, `Test on macOS` and `menuz app (macOS)` among them. The push run 40013730154 is green, its macOS jobs skipped on a push by design. The cut's step 11 timed out at its 20-minute `ci.wait` with that push run still pending, because its `Rust (ubuntu-latest)` job spent 19 minutes installing ffmpeg on GitHub's runner. Nothing was red: hv's `bin/devbin release v2.14.2` resumed the cut, re-read CI without re-running the gates, and closed step 11 green. main's pushed head `6f0b8bf` ran green too.
+
+**Issues closed and shipped** (fix commits):
+
+- **menuz**, 0.4.5 to 0.4.7:
+  - 0072, Log opens menuz's own log window, arca_swift 0.2.0's ArcaLogConsole (`26c614d`);
+  - 0097, menuz builds with Xcode 27.1, and CI builds and tests the app on it (`1d7a677`);
+  - 0102, the log window colours the lines that say something did not happen outside a run (`adbba43`).
+- **prez**, 2.5.3 to 2.5.9:
+  - 0095, the acceptance suite keeps its decks in its own TMPDIR, and a failed `pdf` leaves nothing behind (`d633f4c`);
+  - showreel: 0096, it says what its clean-up and its reads could not do (`e96d86a`); 0098, it never writes over a delivered revision (`b5c588a`); 0099, its unused-assets report says what it could not read (`5e01502`); 0100, it never puts a recording over a file at a slot's video name (`d43fd14`); 0101, it refuses an output pattern whose names it cannot keep apart (`d1fa2f5`).
+
+**Threads closed:** none. **Issues closed:** 0072 and 0095 to 0102. **Opened today, for the next release:** 0103 (utilz-ic), `publish` ships a Menuz.app built off the release tag; and 0104 (utilz-ic), `publish` leaves a Launch Services record for each copy it unpacks to prove its zip.
+
+**Homebrew:** formula `3269732`, and the tap at `fed3097` "utilz 2.14.2", pushed by hv. **Release asset:** `Menuz.app.zip` on release 2.14.2, 1901829 bytes, sha256 `51f93613`: 0.4.7, build 1687, `54b6262d`, kind release; notarised, stapled and passed by Gatekeeper. It was built at the tag from a detached worktree. The first upload, built in the primary at `98651ed1` (build 1693, kind dev), was deleted minutes later, before the tap was pushed.
+
+**Installs:**
+
+- **On this Mac**: `brew upgrade utilz` 2.14.1 to 2.14.2 (slot 254), and `utilz doctor` passed every check with the install matching its manifest. utilz-ic installed the release Menuz.app over dev build 1639 through the keg's `menuz install` (todo 8, slot 255): every check passed, and `menuz status` says `source homebrew`.
+- **On kovacs**: kovacs-sysadm's `brew upgrade utilz` on hv's word (slot 256), which also moved llvm to 23.1.4 and openldap to 2.7.2 through rust; `utilz doctor` passed every check. utilz-dc's readback (slot 257, and a rerun): every row on the keg ok, and identical across the two runs. Only the outside row failed. It reads every write under `$HOME` on the host, and each write it caught was another writer's, named by that writer's own record: Ubuntu's once-a-day release check, set off by the first run's ssh login, and kovacs-sysadm's live Claude Code session during the second. The keg wrote nothing under `$HOME`.
+
+**Worth re-reading.**
+
+- **The release app is built from whatever HEAD the primary holds.** Board commits put main past the tag within minutes of the cut, so `app-sign` there stamped 2.14.2's first `Menuz.app.zip` as a dev build of a whiteboard commit, and `publish` passed it. Until 0103 lands, build the app from a detached worktree at the tag, and read `MenuzKind` before notarising.
+- **A cut's CI step can time out with nothing red.** Read the jobs. `bin/devbin release vX.Y.Z` resumes the cut and re-reads CI without re-running the gates.
+- **A Homebrew upgrade can move more than the formula asked for.** On kovacs, utilz's rust build dependency pulled llvm and openldap. `brew upgrade --dry-run utilz` shows it before anything moves.
+- **A readback on a shared host reads every writer.** Its outside row caught Ubuntu and a live Claude session, not the keg. Running the keg's commands with `HOME` inside the run dir would read the keg's writes alone.
+- **A shell function run in the background hides the process group its perl makes.** `$!` is the subshell, so `kill -- -$!` reaches nothing. ic's todo 8 wrapper ran its install unguarded, and vc's read missed it.
 
 ## 19 Oct 2026 -- 2.14.1 released: menuz's masthead, Utilz on Linux, and the tests that wrote the user's own state
 
