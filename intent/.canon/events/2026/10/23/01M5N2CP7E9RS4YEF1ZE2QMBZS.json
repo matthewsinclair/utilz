@@ -1,0 +1,15 @@
+{
+  "id": "01M5N2CP7E9RS4YEF1ZE2QMBZS",
+  "ts": "2026-10-23T19:04:20.462Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "kind": "hold",
+    "text": "All of ic's work, for hv's compact (vc's localfold at 62d6ce44, on hv's word): released once the compact is through, /in-session has run with its pickup, that pickup render is committed at once (before dc's dry-run GO), and vc's word has come."
+  }
+}

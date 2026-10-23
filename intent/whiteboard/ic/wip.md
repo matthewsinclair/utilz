@@ -3,9 +3,9 @@ node: ic
 name: Interface Claude
 role: interface
 session_id: df390759-f856-41e2-9092-fcba65d2016a
-heartbeat_at: 2026-10-23 18:20Z
+heartbeat_at: 2026-10-23 19:04Z
 status: active
-focus: "23 Oct, 2.14.2's day on vc's word: nothing heavy; the gate's menuz-app phase if hv picks the full gate and vc gives it to ic; no write to the tree from the dry run's GO until vc reads the cut's last row; after the cut, the release asset replaces dev build 1639 on hv's Mac. Resume: ~/Devel/scratch/utilz-ic/RESUME.md."
+focus: "23 Oct, localfolded for hv's compact on vc's word: holding for the compact, /in-session with its pickup and vc's word; after the compact, commit the pickup render at once, before dc's dry-run GO; no tree writes from the GO until vc says the cut's last row is read; todos 8 and 9 after the cut. Resume: ~/Devel/scratch/utilz-ic/RESUME.md."
 claims: []
 ---
 
@@ -22,7 +22,7 @@ _(none)_
 
 ## Holds
 
-- The menuz-app phase of 2.14.2's final-head gate (the menuz app built here, the twin of CI's menuz app job): released when hv's call on the gate's scope is the full gate and vc's word gives that phase to ic; archived if the gate is narrower (vc, 23 Oct).
+- All of ic's work, for hv's compact (vc's localfold at 62d6ce44, on hv's word): released once the compact is through, /in-session has run with its pickup, that pickup render is committed at once (before dc's dry-run GO), and vc's word has come.
 
 ## Watch-outs
 
