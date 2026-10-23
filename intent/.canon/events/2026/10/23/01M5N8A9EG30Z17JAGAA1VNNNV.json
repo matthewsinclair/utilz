@@ -1,0 +1,15 @@
+{
+  "id": "01M5N8A9EG30Z17JAGAA1VNNNV",
+  "ts": "2026-10-23T20:47:53.296Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "kind": "hold",
+    "text": "All of ic's work, for hv's compact (vc's localfold at 25b4aaed, on hv's word): released once the compact has run and /in-session's pickup is committed; then 0104's design to vc (drafted in ~/Devel/scratch/utilz-ic/issue-0104-design.md), then 0103's bytes, each before any code or slot."
+  }
+}

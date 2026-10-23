@@ -3,9 +3,9 @@ node: ic
 name: Interface Claude
 role: interface
 session_id: df390759-f856-41e2-9092-fcba65d2016a
-heartbeat_at: 2026-10-23 20:40Z
+heartbeat_at: 2026-10-23 20:47Z
 status: active
-focus: "23 Oct, after 2.14.2's cut: todos 8 and 9 done. 0103 (publish refuses an off-tag Menuz.app; design agreed) and 0104 (publish leaves a Launch Services record per run; filed, design next) are ic's, both for the next release, in ic's worktree with bytes to vc before any slot. Build 1639's zip kept until tomorrow's pickup. Resume: ~/Devel/scratch/utilz-ic/RESUME.md."
+focus: "23 Oct, localfolded for hv's compact on vc's word (25b4aaed): 2.14.2 out and todos 8 and 9 done; holding for the compact; after it, commit the pickup at once, then 0104's design to vc (drafted, vc's four notes in), then 0103's bytes from ic's worktree off main, then 0104's; both ride the next release. Build 1639's zip goes at tomorrow's pickup. Resume: ~/Devel/scratch/utilz-ic/RESUME.md."
 claims: [ISSUE:0103, ISSUE:0104]
 ---
 
@@ -22,7 +22,7 @@ _(none)_
 
 ## Holds
 
-_(none)_
+- All of ic's work, for hv's compact (vc's localfold at 25b4aaed, on hv's word): released once the compact has run and /in-session's pickup is committed; then 0104's design to vc (drafted in ~/Devel/scratch/utilz-ic/issue-0104-design.md), then 0103's bytes, each before any code or slot.
 
 ## Watch-outs
 
