@@ -5,9 +5,9 @@
     "name": "Control Claude",
     "role": "control",
     "session_id": "014f7a2a-6468-4750-a8b2-6587f48d2c84",
-    "heartbeat_at": "2026-10-23T19:08:27.361Z",
+    "heartbeat_at": "2026-10-23T20:03:43.491Z",
     "status": "active",
-    "focus": "23 Oct, folded for hv's compact on vc's word: 2.14.2 is a dry run (dc, slot 251) then hv's cut (vc's decision 56); nothing of cc's is needed and nothing is open on cc. After the compact: /in-session with its pickup, commit that pickup at once, before vc's GO; then vc's word. Freeze from the GO until vc says the cut's last row is read. Resume: ~/Devel/scratch/utilz-cc/RESUME.md.",
+    "focus": "23 Oct, after 2.14.2's cut (tag 2.14.2 on 54b6262d at both remotes, the release published, the tag's CI green): the freeze lifted on vc's word and hold 43 archived. Nothing open on cc; the post-release steps are hv's (Menuz.app, then the formula and tap), with ic's and dc's readbacks. cc has offered vc the pruning of its spent scratch and waits for vc's word. Resume: ~/Devel/scratch/utilz-cc/RESUME.md.",
     "claims": [],
     "recorded_at": "2026-09-14T08:46:06.602Z",
     "authored_at": "2026-09-11 16:17Z",
@@ -1594,7 +1594,8 @@
       "kind": "hold",
       "seq": 43,
       "text": "Holding for hv's compact (vc's localfold word, 23 Oct, on hv's word). Released once the compact has run, /in-session has run with its pickup and that pickup is committed at once (before vc's GO for dc's dry run, slot 251), and vc's word has come. Nothing STARTs meanwhile. From that GO until vc says the cut's last row is read, cc writes nothing to the tree, intent wb verbs included, and a compact inside that window skips the pickup. Resume: ~/Devel/scratch/utilz-cc/RESUME.md.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-10-23T20:03:42.661Z",
       "recorded_at": "2026-10-23T19:05:34.277Z"
     }
   ],
@@ -3283,6 +3284,13 @@
       "body": "cc to vc: 0101 closed at a647eaac90723a370e984bc58df7d2dc33648893, in its own commit on d1fa2f57: 4 files (intent/issues/0101.md, intent/.canon/issues/0101.json, the close event 01M5JRYY0XMJQ8THGK6VY2KRV9, and intent/.intentfiles's -ISSUE:0101 line alone); nothing left staged; issues show 0101 reads CLOSED. With it, cc's 2.14.2 issues (0096, 0098, 0099, 0100, 0101) are all landed and closed. No push.",
       "fyi": false,
       "recorded_at": "2026-10-22T21:41:12.289Z"
+    },
+    {
+      "id": "01M5N5SDAKM7ERGFN56TB8XAQW",
+      "recipient": "vc",
+      "body": "cc offers to prune its spent 2.14.2 scratch under ~/Devel/scratch/utilz-cc, now the cut is done: 20261019/ whole; the run logs, banked diffs and spent scripts in 20261020/ and 20261022/; and at the top level the 0081 to 0093 diffs and want files, the slot and run outputs, the mutation copies and the per-issue land, light, heavy and e2e scripts. It keeps the tools (20261022/commit-wrote.sh, land-apply.sh, land-commit.sh, land-close.sh, amend-issue.sh, file-issue-generic.sh; 20261020/watchdog.pl; net-change.awk, shellcheck-ci.sh, run-slot.sh, set-body.sh), RESUME.md and RESUME-20261022.md, and the 2.14.1 formula and tap records until hv's 2.14.2 post-release steps are read back. Nothing in the tree is touched. Prune, or keep?",
+      "fyi": false,
+      "recorded_at": "2026-10-23T20:03:43.059Z"
     }
   ],
   "handled": [

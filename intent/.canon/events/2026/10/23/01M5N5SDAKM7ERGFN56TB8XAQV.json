@@ -1,0 +1,17 @@
+{
+  "id": "01M5N5SDAKM7ERGFN56TB8XAQV",
+  "ts": "2026-10-23T20:03:43.059Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc offers to prune its spent 2.14.2 scratch under ~/Devel/scratch/utilz-cc, now the cut is done: 20261019/ whole; the run logs, banked diffs and spent scripts in 20261020/ and 20261022/; and at the top level the 0081 to 0093 diffs and want files, the slot and run outputs, the mutation copies and the per-issue land, light, heavy and e2e scripts. It keeps the tools (20261022/commit-wrote.sh, land-apply.sh, land-commit.sh, land-close.sh, amend-issue.sh, file-issue-generic.sh; 20261020/watchdog.pl; net-change.awk, shellcheck-ci.sh, run-slot.sh, set-body.sh), RESUME.md and RESUME-20261022.md, and the 2.14.1 formula and tap records until hv's 2.14.2 post-release steps are read back. Nothing in the tree is touched. Prune, or keep?",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}
