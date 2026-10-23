@@ -1,0 +1,15 @@
+{
+  "id": "01M5N7WD96PHCBBFMG4TX8694H",
+  "ts": "2026-10-23T20:40:18.471Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "kind": "todo",
+    "text": "0104, ic's on vc's word (23 Oct): publish unregisters the Menuz.app it unpacks to prove its zip, on every path out, through one helper; a fake lsregister in macos.bats beside 0103's fixture. Its design first proof measures the registrar (stapler validate is the suspect) in a light run booked with vc; design for vc's read before any code; rides the next release. Size XS."
+  }
+}

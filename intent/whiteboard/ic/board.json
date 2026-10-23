@@ -5,11 +5,12 @@
     "name": "Interface Claude",
     "role": "interface",
     "session_id": "df390759-f856-41e2-9092-fcba65d2016a",
-    "heartbeat_at": "2026-10-23T20:39:08.163Z",
+    "heartbeat_at": "2026-10-23T20:40:18.917Z",
     "status": "active",
-    "focus": "23 Oct, after 2.14.2's cut: todos 8 and 9 done (the release Menuz.app runs in place of build 1639; Launch Services holds only it and hv's three state bundles). Next: publish's Launch Services residue filed as its own issue, ic's (vc's word), then 0103's code in ic's worktree, bytes to vc before any slot; both ride the next release. Build 1639's zip kept until tomorrow's pickup. Resume: ~/Devel/scratch/utilz-ic/RESUME.md.",
+    "focus": "23 Oct, after 2.14.2's cut: todos 8 and 9 done. 0103 (publish refuses an off-tag Menuz.app; design agreed) and 0104 (publish leaves a Launch Services record per run; filed, design next) are ic's, both for the next release, in ic's worktree with bytes to vc before any slot. Build 1639's zip kept until tomorrow's pickup. Resume: ~/Devel/scratch/utilz-ic/RESUME.md.",
     "claims": [
-      "ISSUE:0103"
+      "ISSUE:0103",
+      "ISSUE:0104"
     ],
     "recorded_at": "2026-10-18T18:52:38.517Z",
     "migrated_at": "2026-10-18T18:52:38.517Z"
@@ -347,6 +348,14 @@
       "text": "0103, ic's on vc's word (23 Oct): publish refuses a Menuz.app whose MenuzKind is not release or whose MenuzCommit is not the tag's commit; app-sign refuses off the VERSION's tag; docs/releasing.md and macos.bats with it. Design for vc's read before any code, then booked runs and vc's check before the landing; rides the next release. Size S.",
       "state": "live",
       "recorded_at": "2026-10-23T20:14:00.459Z"
+    },
+    {
+      "node": "ic",
+      "kind": "todo",
+      "seq": 11,
+      "text": "0104, ic's on vc's word (23 Oct): publish unregisters the Menuz.app it unpacks to prove its zip, on every path out, through one helper; a fake lsregister in macos.bats beside 0103's fixture. Its design first proof measures the registrar (stapler validate is the suspect) in a light run booked with vc; design for vc's read before any code; rides the next release. Size XS.",
+      "state": "live",
+      "recorded_at": "2026-10-23T20:40:18.470Z"
     }
   ],
   "sent": [
