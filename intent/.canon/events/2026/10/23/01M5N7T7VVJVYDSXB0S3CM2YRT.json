@@ -1,0 +1,17 @@
+{
+  "id": "01M5N7T7VVJVYDSXB0S3CM2YRT",
+  "ts": "2026-10-23T20:39:07.387Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "END, slot 258 (light), todo 9: exit 0, 0 of 17 checks failed. Build 1425's kept copy unregistered and removed (~/Devel/scratch/utilz-ic/kept-menuz-1425 gone; put-back-0072.sh dead, its build still on release 2.14.1), and the four records whose paths were gone dropped with lsregister -u (it drops a record whose path is gone; no -gc). Launch Services now holds exactly the installed release app and hv's three state bundles under the bundle id; the installed app runs on, menuz status unchanged. Run dir ~/Devel/scratch/utilz-ic/runs/todo9-20261023T203812Z.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}
